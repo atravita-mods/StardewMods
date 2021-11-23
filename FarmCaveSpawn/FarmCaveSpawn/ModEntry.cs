@@ -119,9 +119,9 @@ namespace FarmCaveSpawn
             FarmCave farmcave = Game1.getLocationFromName("FarmCave") as FarmCave;
             if (config.IgnoreFarmCaveType || Game1.MasterPlayer.caveChoice.Value == 1)
             {
-                foreach (int x in Enumerable.Range(1, farmcave.Map.Layers[0].LayerWidth - 2))
+                foreach (int x in Enumerable.Range(1, farmcave.Map.Layers[0].LayerWidth - 2).OrderBy((x)=> random.Next()))
                 {
-                    foreach (int y in Enumerable.Range(1, farmcave.Map.Layers[0].LayerHeight - 2))
+                    foreach (int y in Enumerable.Range(1, farmcave.Map.Layers[0].LayerHeight - 2).OrderBy((x) => random.Next()))
                     {
                         Vector2 v = new(x, y);
                         if (random.NextDouble() < config.SpawnChance && farmcave.isTileLocationTotallyClearAndPlaceableIgnoreFloors(v) )

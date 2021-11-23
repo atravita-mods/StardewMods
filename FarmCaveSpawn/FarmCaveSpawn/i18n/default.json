@@ -1,0 +1,18 @@
+﻿{
+    "list-fruits.description": "Lists the fruits FarmCaveSpawn can spawn.",
+    "mod.description": "Spawns random fruit tree products into the farm cave.",
+    "max-spawns.title": "Max Daily Spawns",
+    "max-spawns.description": "The maximum amount of fruit per day for this mod to spawn",
+    "spawn-chance.title": "Spawn Chance (Percent)",
+    "spawn-chance.description": "Percent chance any particular empty tile will have a fruit on it.",
+    "tree-fruit-chance.title": "Tree Fruit Chance (Percent)",
+    "tree-fruit-chance.description":  "Percent chance each spawn will be a tree fruit.",
+    "cave-type.title": "Ignore Farm Cave Type",
+    "cave-type.description": "If enabled, spawns fruit in all cave types",
+    "any-category.title": "Allow Any Tree Product",
+    "any-category.dsecription": "If enabled, all products from fruit trees are allowed. If disabled, restricted to just fruit.",
+    "edibles.title": "Restrict to Edible",
+    "edibles.description": "Restrict to only edible items.",
+    "nobananas.title": "No Bananas Before Shrine",
+    "nobananas.description": "Prevents bananas from showing up before one's given to the banana shrine."
+}

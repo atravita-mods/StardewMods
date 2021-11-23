@@ -124,10 +124,10 @@ namespace FarmCaveSpawn
                     foreach (int y in Enumerable.Range(1, farmcave.Map.Layers[0].LayerHeight - 2).OrderBy((x) => random.Next()))
                     {
                         Vector2 v = new(x, y);
-                        if (random.NextDouble() < config.SpawnChance/100f && farmcave.isTileLocationTotallyClearAndPlaceableIgnoreFloors(v) )
+                        if (random.NextDouble() < (config.SpawnChance/100f) && farmcave.isTileLocationTotallyClearAndPlaceableIgnoreFloors(v) )
                         {
                             int fruitToPlace;
-                            if (random.NextDouble() < config.TreeFruitChance/100f)
+                            if (random.NextDouble() < (config.TreeFruitChance/100f))
                             {
                                 fruitToPlace = Utility.GetRandom<int>(TreeFruit, random);
                             }

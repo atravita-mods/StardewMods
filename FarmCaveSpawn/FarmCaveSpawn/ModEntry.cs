@@ -14,8 +14,8 @@ namespace FarmCaveSpawn
     {
         public int MaxDailySpawns { get; set; } = 6; //Maximum number of spawns.
 
-        public float SpawnChance { get; set; } = 0.05f; //probability of any tile spawning a thing.
-        public float TreeFruitChance { get; set; } = 0.5f; //probability of the spawn being a tree fruit.
+        public float SpawnChance { get; set; } = 5f; //probability of any tile spawning a thing.
+        public float TreeFruitChance { get; set; } = 50f; //probability of the spawn being a tree fruit.
         public bool IgnoreFarmCaveType { get; set; } = false; //should I spawn fruits regardless of the farm cave type?
         public bool AllowAnyTreeProduct { get; set; } = true;
         public bool EdiblesOnly { get; set; } = true;
@@ -60,8 +60,8 @@ namespace FarmCaveSpawn
 
             configMenu.AddNumberOption(
                 mod: ModManifest,
-                getValue: () => config.SpawnChance*100f,
-                setValue: value => config.SpawnChance = value/100f,
+                getValue: () => config.SpawnChance,
+                setValue: value => config.SpawnChance = value,
                 name: () => Helper.Translation.Get("spawn-chance.title"),
                 tooltip: () => Helper.Translation.Get("spawn-chance.description"),
                 min: 0.0f
@@ -69,8 +69,8 @@ namespace FarmCaveSpawn
 
             configMenu.AddNumberOption(
                 mod: ModManifest,
-                getValue: () => config.TreeFruitChance * 100f,
-                setValue: value => config.TreeFruitChance = value / 100f,
+                getValue: () => config.TreeFruitChance,
+                setValue: value => config.TreeFruitChance = value,
                 name: () => Helper.Translation.Get("tree-fruit-chance.title"),
                 tooltip: () => Helper.Translation.Get("tree-fruit-chance.description"),
                 min: 0.0f
@@ -124,10 +124,10 @@ namespace FarmCaveSpawn
                     foreach (int y in Enumerable.Range(1, farmcave.Map.Layers[0].LayerHeight - 2).OrderBy((x) => random.Next()))
                     {
                         Vector2 v = new(x, y);
-                        if (random.NextDouble() < config.SpawnChance && farmcave.isTileLocationTotallyClearAndPlaceableIgnoreFloors(v) )
+                        if (random.NextDouble() < config.SpawnChance/100f && farmcave.isTileLocationTotallyClearAndPlaceableIgnoreFloors(v) )
                         {
                             int fruitToPlace;
-                            if (random.NextDouble() < config.TreeFruitChance)
+                            if (random.NextDouble() < config.TreeFruitChance/100f)
                             {
                                 fruitToPlace = Utility.GetRandom<int>(TreeFruit, random);
                             }
@@ -181,19 +181,27 @@ namespace FarmCaveSpawn
                 bool success = int.TryParse(treedata[2].Trim(), out int objectIndex);
                 if (success)
                 {
-                    StardewValley.Object fruit = new(objectIndex, 1);
-                    if (config.AllowAnyTreeProduct || fruit.Category == StardewValley.Object.FruitsCategory)
+                    try
                     {
-                        if (!config.EdiblesOnly || fruit.Edibility >= 0)
+                        StardewValley.Object fruit = new(objectIndex, 1);
+                        if (config.AllowAnyTreeProduct || fruit.Category == StardewValley.Object.FruitsCategory)
                         {
-                            if (config.NoBananasBeforeShrine && fruit.Name.Equals("Banana"))
+                            if (!config.EdiblesOnly || fruit.Edibility >= 0)
                             {
-                                IslandEast islandeast = Game1.getLocationFromName("IslandEast") as IslandEast;
-                                if (!islandeast.bananaShrineComplete.Value) { continue; }
+                                if (config.NoBananasBeforeShrine && fruit.Name.Equals("Banana"))
+                                {
+                                    if (!Context.IsWorldReady) { continue; }
+                                    IslandEast islandeast = Game1.getLocationFromName("IslandEast") as IslandEast;
+                                    if (!islandeast.bananaShrineComplete.Value) { continue; }
+                                }
+                                TreeFruits.Add(objectIndex);
                             }
-                            TreeFruits.Add(objectIndex);
                         }
-                    }    
+                    }
+                    catch (Exception ex)
+                    {
+                        Monitor.Log($"Ran into issue looking up item {objectIndex}\n{ex}", LogLevel.Warn);
+                    }
                 }
             }
             return TreeFruits;

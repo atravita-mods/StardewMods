@@ -117,7 +117,7 @@ namespace FarmCaveSpawn
             List<int> BaseFruit = new() { 296, 396, 406, 410 };
             Random random = new((int)Game1.uniqueIDForThisGame * 2 + (int)Game1.stats.DaysPlayed * 7);
             FarmCave farmcave = Game1.getLocationFromName("FarmCave") as FarmCave;
-            if (config.IgnoreFarmCaveType || Game1.MasterPlayer.caveChoice.Value == 1)
+            if ((config.IgnoreFarmCaveType && Game1.MasterPlayer.caveChoice?.Value >= 0) || Game1.MasterPlayer.caveChoice?.Value == 1)
             {
                 foreach (int x in Enumerable.Range(1, farmcave.Map.Layers[0].LayerWidth - 2).OrderBy((x)=> random.Next()))
                 {

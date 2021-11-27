@@ -18,6 +18,7 @@ namespace FarmCaveSpawn
         public float TreeFruitChance { get; set; } = 50f; //probability of the spawn being a tree fruit.
         public bool IgnoreFarmCaveType { get; set; } = false; //should I spawn fruits regardless of the farm cave type?
         public bool EarlyFarmCave { get; set; } = false; //allow spawn of fruits even before Demetrius shows up.
+        public bool SeasonalOnly { get; set; } = false; //limit to just seasonal tree fruit.
         public bool AllowAnyTreeProduct { get; set; } = true;
         public bool EdiblesOnly { get; set; } = true;
         public bool NoBananasBeforeShrine { get; set; } = true;
@@ -95,6 +96,14 @@ namespace FarmCaveSpawn
                 name: () => Helper.Translation.Get("early-cave.title"),
                 tooltip: ()=> Helper.Translation.Get("early-cave.description")
                 ) ;
+
+            configMenu.AddBoolOption(
+                mod: ModManifest,
+                getValue: () => config.SeasonalOnly,
+                setValue: value => config.SeasonalOnly = value,
+                name: () => Helper.Translation.Get("seasonal-only.title"),
+                tooltip: () => Helper.Translation.Get("seasonal-only.dsecription")
+                );
 
             configMenu.AddBoolOption(
                 mod: ModManifest,
@@ -227,28 +236,42 @@ namespace FarmCaveSpawn
         {
             List<int> TreeFruits = new();
             Dictionary<int, string> fruittrees= Helper.Content.Load<Dictionary<int, string>>("Data/fruitTrees", ContentSource.GameContent);
+            string currentseason = Game1.currentSeason.ToLower().Trim();
             foreach (string tree in fruittrees.Values)
             {
                 string[] treedata = tree.Split('/');
+                if (config.SeasonalOnly && Context.IsWorldReady)
+                {
+                    if(!treedata[1].Contains(currentseason))
+                    {
+                        if(!currentseason.Contains("summer")||!treedata[1].Contains("island"))
+                        {
+                            continue;
+                        }
+                    }
+                }
+
                 bool success = int.TryParse(treedata[2].Trim(), out int objectIndex);
                 if (success)
                 {
                     try
                     {
                         StardewValley.Object fruit = new(objectIndex, 1);
-                        if (config.AllowAnyTreeProduct || fruit.Category == StardewValley.Object.FruitsCategory)
+                        if (!config.AllowAnyTreeProduct && fruit.Category != StardewValley.Object.FruitsCategory)
                         {
-                            if (!config.EdiblesOnly || fruit.Edibility >= 0)
-                            {
-                                if (config.NoBananasBeforeShrine && fruit.Name.Equals("Banana"))
-                                {
-                                    if (!Context.IsWorldReady) { continue; }
-                                    IslandEast islandeast = Game1.getLocationFromName("IslandEast") as IslandEast;
-                                    if (!islandeast.bananaShrineComplete.Value) { continue; }
-                                }
-                                TreeFruits.Add(objectIndex);
-                            }
+                            continue;
                         }
+                        if (config.EdiblesOnly && fruit.Edibility < 0)
+                        {
+                            continue;
+                        }
+                        if (config.NoBananasBeforeShrine && fruit.Name.Equals("Banana"))
+                        {
+                            if (!Context.IsWorldReady) { continue; }
+                            IslandEast islandeast = Game1.getLocationFromName("IslandEast") as IslandEast;
+                            if (!islandeast.bananaShrineComplete.Value) { continue; }
+                        }
+                        TreeFruits.Add(objectIndex);
                     }
                     catch (Exception ex)
                     {

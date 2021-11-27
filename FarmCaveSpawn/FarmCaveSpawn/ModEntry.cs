@@ -17,6 +17,7 @@ namespace FarmCaveSpawn
         public float SpawnChance { get; set; } = 5f; //probability of any tile spawning a thing.
         public float TreeFruitChance { get; set; } = 50f; //probability of the spawn being a tree fruit.
         public bool IgnoreFarmCaveType { get; set; } = false; //should I spawn fruits regardless of the farm cave type?
+        public bool EarlyFarmCave { get; set; } = false; //allow spawn of fruits even before Demetrius shows up.
         public bool AllowAnyTreeProduct { get; set; } = true;
         public bool EdiblesOnly { get; set; } = true;
         public bool NoBananasBeforeShrine { get; set; } = true;
@@ -24,6 +25,9 @@ namespace FarmCaveSpawn
     public class ModEntry: Mod
     {
         private ModConfig config;
+        private readonly List<int> BaseFruit = new() { 296, 396, 406, 410 };
+        private List<int> TreeFruit;
+        private Random random;
         public override void Entry(IModHelper helper)
         {
             config = Helper.ReadConfig<ModConfig>();
@@ -86,6 +90,14 @@ namespace FarmCaveSpawn
 
             configMenu.AddBoolOption(
                 mod: ModManifest,
+                getValue: () => config.EarlyFarmCave,
+                setValue: value => config.EarlyFarmCave = value,
+                name: () => Helper.Translation.Get("early-cave.title"),
+                tooltip: ()=> Helper.Translation.Get("early-cave.description")
+                ) ;
+
+            configMenu.AddBoolOption(
+                mod: ModManifest,
                 getValue: () => config.AllowAnyTreeProduct,
                 setValue: value => config.AllowAnyTreeProduct = value,
                 name: () => Helper.Translation.Get("any-category.title"),
@@ -112,43 +124,83 @@ namespace FarmCaveSpawn
         private void SpawnFruit(object sender, StardewModdingAPI.Events.DayStartedEventArgs e)
         {
             if (!Game1.IsMasterGame) { return; }
+            if (!config.IgnoreFarmCaveType && (Game1.MasterPlayer.caveChoice?.Value == null || Game1.MasterPlayer.caveChoice.Value <= 0)) {return;}
             int count = 0;
-            List<int> TreeFruit = GetTreeFruits();
-            List<int> BaseFruit = new() { 296, 396, 406, 410 };
-            Random random = new((int)Game1.uniqueIDForThisGame * 2 + (int)Game1.stats.DaysPlayed * 7);
+            TreeFruit = GetTreeFruits();
+            random = new((int)Game1.uniqueIDForThisGame * 2 + (int)Game1.stats.DaysPlayed * 7);
             FarmCave farmcave = Game1.getLocationFromName("FarmCave") as FarmCave;
-            if ((config.IgnoreFarmCaveType && Game1.MasterPlayer.caveChoice?.Value >= 0) || Game1.MasterPlayer.caveChoice?.Value == 1)
+
+            foreach (Vector2 v in IterateTiles(farmcave))
             {
-                foreach (int x in Enumerable.Range(1, farmcave.Map.Layers[0].LayerWidth - 2).OrderBy((x)=> random.Next()))
+                PlaceFruit(farmcave, v);
+                count++;
+                if (count >= config.MaxDailySpawns) {break;}
+            }
+            farmcave.UpdateReadyFlag();
+            if (count>=config.MaxDailySpawns) { return; }
+
+            //For SVE:
+            if (Helper.ModRegistry.IsLoaded("FlashShifter.SVECode"))
+            {
+                GameLocation minecartCave = Game1.getLocationFromName("Custom_MinecartCave");
+                if (minecartCave != null)
                 {
-                    foreach (int y in Enumerable.Range(1, farmcave.Map.Layers[0].LayerHeight - 2).OrderBy((x) => random.Next()))
+                    Monitor.Log("Found SVE minecart cave.");
+                    foreach (Vector2 v in IterateTiles(minecartCave))
+                    {
+                        PlaceFruit(minecartCave, v);
+                        count++;
+                        if (count>=config.MaxDailySpawns) { return; }
+                    }
+                }
+
+                GameLocation deepCave = Game1.getLocationFromName("Custom_DeepCave");
+                if (deepCave !=null)
+                {
+                    Monitor.Log("Found SVE deep cave.");
+                    foreach (Vector2 v in IterateTiles(deepCave))
+                    {
+                        PlaceFruit(deepCave, v);
+                        count++;
+                        if (count >= config.MaxDailySpawns) { return; }
+                    }
+                }
+            }
+        }
+
+        public void PlaceFruit(GameLocation location, Vector2 tile)
+        {
+            int fruitToPlace;
+            if (random.NextDouble() < (config.TreeFruitChance / 100f))
+            {
+                fruitToPlace = Utility.GetRandom<int>(TreeFruit, random);
+            }
+            else
+            {
+                fruitToPlace = Utility.GetRandom<int>(BaseFruit, random);
+            }
+            location.setObject(tile, new StardewValley.Object(fruitToPlace, 1)
+            {
+                IsSpawnedObject = true
+            });
+            Monitor.Log($"Spawning item {fruitToPlace} at {tile.X},{tile.Y}");
+        }
+
+        public IEnumerable<Vector2> IterateTiles(GameLocation location)
+        {
+            if (config.IgnoreFarmCaveType || Game1.MasterPlayer.caveChoice?.Value == 1)
+            {
+                foreach (int x in Enumerable.Range(1, location.Map.Layers[0].LayerWidth - 2).OrderBy((x) => random.Next()))
+                {
+                    foreach (int y in Enumerable.Range(1, location.Map.Layers[0].LayerHeight - 2).OrderBy((x) => random.Next()))
                     {
                         Vector2 v = new(x, y);
-                        if (random.NextDouble() < (config.SpawnChance/100f) && farmcave.isTileLocationTotallyClearAndPlaceableIgnoreFloors(v) )
+                        if (random.NextDouble() < (config.SpawnChance / 100f) && location.isTileLocationTotallyClearAndPlaceableIgnoreFloors(v))
                         {
-                            int fruitToPlace;
-                            if (random.NextDouble() < (config.TreeFruitChance/100f))
-                            {
-                                fruitToPlace = Utility.GetRandom<int>(TreeFruit, random);
-                            }
-                            else
-                            {
-                                fruitToPlace = Utility.GetRandom<int>(BaseFruit, random);
-                            }
-                            farmcave.setObject(v, new StardewValley.Object(fruitToPlace, 1)
-                            {
-                                IsSpawnedObject = true
-                            });
-                            Monitor.Log($"Spawning item {fruitToPlace} at {x},{y}");
-                            count++;
-                            if (count >= config.MaxDailySpawns) {
-                                farmcave.UpdateReadyFlag();
-                                return; 
-                            }
+                            yield return v;
                         }
                     }
                 }
-                farmcave.UpdateReadyFlag();
             }
         }
 

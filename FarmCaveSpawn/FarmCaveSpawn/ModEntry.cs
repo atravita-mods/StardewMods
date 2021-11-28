@@ -18,6 +18,7 @@ namespace FarmCaveSpawn
         public float TreeFruitChance { get; set; } = 50f; //probability of the spawn being a tree fruit.
         public bool IgnoreFarmCaveType { get; set; } = false; //should I spawn fruits regardless of the farm cave type?
         public bool EarlyFarmCave { get; set; } = false; //allow spawn of fruits even before Demetrius shows up.
+        public bool UseMineCave { get; set; } = false; //allow spawn of fruits into the mine cave (after fruit cave)
         public bool SeasonalOnly { get; set; } = false; //limit to just seasonal tree fruit.
         public bool AllowAnyTreeProduct { get; set; } = true;
         public bool EdiblesOnly { get; set; } = true;
@@ -99,6 +100,14 @@ namespace FarmCaveSpawn
 
             configMenu.AddBoolOption(
                 mod: ModManifest,
+                getValue: () => config.UseMineCave,
+                setValue: value => config.UseMineCave = value,
+                name: () => Helper.Translation.Get("use-mine.title"),
+                tooltip: () => Helper.Translation.Get("use-mine.description")
+                );
+
+            configMenu.AddBoolOption(
+                mod: ModManifest,
                 getValue: () => config.SeasonalOnly,
                 setValue: value => config.SeasonalOnly = value,
                 name: () => Helper.Translation.Get("seasonal-only.title"),
@@ -175,6 +184,16 @@ namespace FarmCaveSpawn
                     }
                 }
             }
+
+            if (config.UseMineCave && Game1.getLocationFromName("Mine") is Mine mine)
+            {
+                foreach (Vector2 v in IterateTiles(mine, xstart: 11))
+                {
+                    PlaceFruit(mine, v);
+                    count++;
+                    if (count >= config.MaxDailySpawns) { return; }
+                }
+            }
         }
 
         public void PlaceFruit(GameLocation location, Vector2 tile)
@@ -195,13 +214,13 @@ namespace FarmCaveSpawn
             Monitor.Log($"Spawning item {fruitToPlace} at {location.Name}:{tile.X},{tile.Y}");
         }
 
-        public IEnumerable<Vector2> IterateTiles(GameLocation location)
+        public IEnumerable<Vector2> IterateTiles(GameLocation location, int xstart = 1, int xend = -1, int ystart = 1, int yend = -1)
         {
             if (config.IgnoreFarmCaveType || Game1.MasterPlayer.caveChoice?.Value == 1)
             {
-                foreach (int x in Enumerable.Range(1, location.Map.Layers[0].LayerWidth - 2).OrderBy((x) => random.Next()))
+                foreach (int x in Enumerable.Range(xstart, Math.Max(location.Map.Layers[0].LayerWidth - xend-1, xstart)).OrderBy((x) => random.Next()))
                 {
-                    foreach (int y in Enumerable.Range(1, location.Map.Layers[0].LayerHeight - 2).OrderBy((x) => random.Next()))
+                    foreach (int y in Enumerable.Range(ystart, Math.Max(location.Map.Layers[0].LayerHeight - yend-1, ystart)).OrderBy((x) => random.Next()))
                     {
                         Vector2 v = new(x, y);
                         if (random.NextDouble() < (config.SpawnChance / 100f) && location.isTileLocationTotallyClearAndPlaceableIgnoreFloors(v))

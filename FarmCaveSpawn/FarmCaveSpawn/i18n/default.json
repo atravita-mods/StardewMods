@@ -11,6 +11,8 @@
     "cave-type.description": "If enabled, spawns fruit in all cave types",
     "early-cave.title": "Allow Early Fruit Cave",
     "early-cave.description": "Spawns fruit even before the fruit cave cutscene.",
+    "use-mine.title": "Use Mine Entrance",
+    "use-mine.description":  "Allows fruits to spawn in the mine entrance as well (after spawning in the Farm Cave, if Max Daily Spawns is not yet hit.",
     "seasonal-only.title": "Seasonal Fruit Only",
     "seasonal-only.description": "Restrict to this season's fruit only",
     "any-category.title": "Allow Any Tree Product",

@@ -133,7 +133,7 @@ namespace FarmCaveSpawn
         private void SpawnFruit(object sender, StardewModdingAPI.Events.DayStartedEventArgs e)
         {
             if (!Game1.IsMasterGame) { return; }
-            if (!config.IgnoreFarmCaveType && (Game1.MasterPlayer.caveChoice?.Value == null || Game1.MasterPlayer.caveChoice.Value <= 0)) {return;}
+            if (!config.EarlyFarmCave && (Game1.MasterPlayer.caveChoice?.Value == null || Game1.MasterPlayer.caveChoice.Value <= 0)) {return;}
             int count = 0;
             TreeFruit = GetTreeFruits();
             random = new((int)Game1.uniqueIDForThisGame * 2 + (int)Game1.stats.DaysPlayed * 7);
@@ -192,7 +192,7 @@ namespace FarmCaveSpawn
             {
                 IsSpawnedObject = true
             });
-            Monitor.Log($"Spawning item {fruitToPlace} at {tile.X},{tile.Y}");
+            Monitor.Log($"Spawning item {fruitToPlace} at {location.Name}:{tile.X},{tile.Y}");
         }
 
         public IEnumerable<Vector2> IterateTiles(GameLocation location)

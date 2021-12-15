@@ -13,7 +13,8 @@ namespace SpecialOrdersExtended
         Dictionary<string, PropertyInfo> propertyInfos = new();
 
         //remove these stats, they make no sense.
-        private readonly String[] denylist = { "AverageBedtime", "TimesUnconscious" };
+        private readonly String[] denylist = { "AverageBedtime", "TimesUnconscious", "TotalMoneyGifted" };
+
 
         /// <summary>
         /// Populate the propertyInfos cache.
@@ -40,7 +41,7 @@ namespace SpecialOrdersExtended
             }
             catch (Exception ex)
             {
-                ModEntry.ModMonitor.Log($"Failure to use {key}, please take this log to \n\n{ex}", LogLevel.Error);
+                ModEntry.ModMonitor.Log($"Failure to use {key}, please take this log to https://github.com/atravita-mods/SpecialOrdersExtended/issues \n\n{ex}", LogLevel.Error);
             }
             success = stats.stat_dictionary.TryGetValue(key, out uint result);
             if (success) { return result; }

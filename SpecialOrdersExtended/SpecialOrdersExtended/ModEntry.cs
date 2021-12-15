@@ -48,7 +48,7 @@ namespace SpecialOrdersExtended
 
             helper.ConsoleCommands.Add("special_order_pool",I18n.Get("special_order_pool.description"), this.GetAvailableOrders);
             helper.ConsoleCommands.Add("check_tag", "Check the current value of a tag", this.ConsoleCheckTag);
-            helper.ConsoleCommands.Add("list_stats", "List current stats", StatsManager.ConsoleListProperties);
+            helper.ConsoleCommands.Add("list_available_stats", "List current stats", StatsManager.ConsoleListProperties);
 
             helper.Events.GameLoop.SaveCreated += ClearCaches;
         }
@@ -92,29 +92,26 @@ namespace SpecialOrdersExtended
                 }
                 else if (__0.StartsWith("daysplayed_"))
                 {
-                    string remainder = __0["daysplayed_".Length..];
-                    if (!remainder.StartsWith("under_"))
+                    string[] vals = __0.Split('_');
+                    if (vals[1].Equals("under", StringComparison.OrdinalIgnoreCase))
                     {
-                        __result = Game1.stats.DaysPlayed >= int.Parse(remainder);
+                        __result = Game1.stats.DaysPlayed < int.Parse(vals[2]);
                     }
                     else
                     {
-                        __result = Game1.stats.DaysPlayed < int.Parse(remainder["under_".Length..]);
+                        __result = Game1.stats.DaysPlayed >= int.Parse(vals[1]);
                     }
                     return false;
                 }
                 else if (__0.StartsWith("dropboxRoom_"))
                 {
+                    string roomname = __0["dropboxRoom_".Length..];
                     foreach (SpecialOrder specialOrder in Game1.player.team.specialOrders)
                     {
-                        if (specialOrder.questState.Value != SpecialOrder.QuestState.InProgress)
-                        {
-                            continue;
-                        }
-                        string roomname = __0["dropboxRoom_".Length..].Trim();
+                        if (specialOrder.questState.Value != SpecialOrder.QuestState.InProgress) { continue; }
                         foreach (OrderObjective objective in specialOrder.objectives)
                         {
-                            if (objective is DonateObjective && (objective as DonateObjective).dropBoxGameLocation.Value.Equals(roomname))
+                            if (objective is DonateObjective && (objective as DonateObjective).dropBoxGameLocation.Value.Equals(roomname, StringComparison.OrdinalIgnoreCase))
                             {
                                 __result = true;
                                 return false;
@@ -126,33 +123,21 @@ namespace SpecialOrdersExtended
                 }
                 else if (__0.StartsWith("conversation_"))
                 {
-                    __result = false;
                     bool negate = false;
-                    string remainder = __0["conversation_".Length..];
-                    if (remainder.EndsWith("_not"))
-                    {
-                        negate = true;
-                        remainder = remainder[0..^4];
-                    }
-                    foreach (Farmer farmer in Game1.getAllFarmers())
-                    {
-                        if (farmer.activeDialogueEvents.ContainsKey(remainder))
-                        {
-                            __result = true;
-                            break;
-                        }
-                    }
+                    string[] vals = __0.Split('_');
+                    string conversationTopic = vals[1];
+                    if (vals.Length >= 3 && vals[2].Equals("not", StringComparison.OrdinalIgnoreCase)) {negate = true; }
+                    __result = Game1.getAllFarmers().Any((Farmer farmer) => farmer.activeDialogueEvents.ContainsKey(conversationTopic));
                     if (negate) { __result = !__result; }
                     return false;
                 }
                 else if (__0.StartsWith("haskilled_"))
                 {
-                    __result = false;
                     string[] vals = __0.Split('_');
                     string monster = vals[1].Replace('-', ' ');
                     bool negate = false;
                     int kills_needed;
-                    if (vals[2] == "under")
+                    if (vals[2].Equals("under", StringComparison.OrdinalIgnoreCase))
                     {
                         kills_needed = int.Parse(vals[3]);
                         negate = true;
@@ -167,12 +152,10 @@ namespace SpecialOrdersExtended
                 }
                 else if (__0.StartsWith("friendship_")) //Consider marriage?
                 {
-                    __result = false;
                     string[] vals = __0.Split('_');
-                    string friend = vals[1];
                     int friendship;
                     bool negate = false;
-                    if (vals[2].Contains("under"))
+                    if (vals[2].Equals("under", StringComparison.OrdinalIgnoreCase))
                     {
                         friendship = int.Parse(vals[3]);
                         negate = true;
@@ -181,52 +164,46 @@ namespace SpecialOrdersExtended
                     {
                         friendship = int.Parse(vals[2]);
                     }
-                    __result = Game1.getAllFarmers().Any((Farmer farmer) => farmer.getFriendshipLevelForNPC(friend) >= friendship);
+                    __result = Game1.getAllFarmers().Any((Farmer farmer) => farmer.getFriendshipLevelForNPC(vals[1]) >= friendship);
                     if (negate) { __result = !__result; }
                     return false;
                 }
                 else if (__0.StartsWith("minelevel_"))
                 {
-                    string remainder = __0["minelevel_".Length..];
-                    if (!remainder.StartsWith("under_"))
+                    string[] vals = __0.Split('_');
+                    if(vals[1].Equals("under", StringComparison.OrdinalIgnoreCase))
                     {
-                        __result = StardewValley.Locations.MineShaft.lowestLevelReached >= int.Parse(remainder);
+                        __result = Utility.GetAllPlayerDeepestMineLevel() < int.Parse(vals[2]);
                     }
                     else
                     {
-                        __result = StardewValley.Locations.MineShaft.lowestLevelReached < int.Parse(remainder["under_".Length..]);
+                        __result = Utility.GetAllPlayerDeepestMineLevel() >= int.Parse(vals[1]);
                     }
                     return false;
                 }
                 else if (__0.StartsWith("houselevel_"))
                 {
-                    __result = false;
-                    string remainder = __0["houselevel_".Length..];
-                    int houselevel;
-                    bool negate = false;
-                    if (remainder.StartsWith("under_"))
+                    string[] vals = __0.Split('_');
+                    if (vals[1].Equals("under", StringComparison.OrdinalIgnoreCase))
                     {
-                        negate = true;
-                        houselevel = int.Parse(remainder["under_".Length..]);
+                        __result = Game1.getAllFarmers().Any((Farmer farmer) => farmer.HouseUpgradeLevel < int.Parse(vals[2]));
                     }
                     else
                     {
-                        houselevel = int.Parse(remainder);
+                        __result = Game1.getAllFarmers().Any((Farmer farmer) => farmer.HouseUpgradeLevel >= int.Parse(vals[1]));
                     }
-                    __result = Game1.getAllFarmers().Any((Farmer farmer) => farmer.HouseUpgradeLevel >= houselevel);
-                    if (negate) { __result = !__result; }
                     return false;
                 }
                 else if (__0.StartsWith("moneyearned_"))
                 {
-                    string remainder = __0["moneyearned_".Length..];
-                    if (!remainder.StartsWith("under_"))
+                    string[] vals = __0.Split('_');
+                    if (vals[1].Equals("under", StringComparison.OrdinalIgnoreCase))
                     {
-                        __result = Game1.MasterPlayer.totalMoneyEarned >= uint.Parse(remainder);
+                        __result = Game1.MasterPlayer.totalMoneyEarned < uint.Parse(vals[2]);
                     }
                     else
                     {
-                        __result = Game1.MasterPlayer.totalMoneyEarned < uint.Parse(remainder["under_".Length..]);
+                        __result = Game1.MasterPlayer.totalMoneyEarned >= uint.Parse(vals[1]);
                     }
                     return false;
                 }
@@ -235,7 +212,7 @@ namespace SpecialOrdersExtended
                     string[] vals = __0.Split('_');
                     int levelwanted;
                     bool negate = false;
-                    if (vals[2] == "under")
+                    if (vals[2].Equals("under", StringComparison.OrdinalIgnoreCase))
                     {
                         levelwanted = int.Parse(vals[3]);
                         negate = true;
@@ -259,24 +236,17 @@ namespace SpecialOrdersExtended
                 else if (__0.StartsWith("hasspecialitem_"))
                 {
                     bool negate = false;
-                    string searchtag;
-                    if (__0.EndsWith("_not"))
-                    {
-                        negate = true;
-                        searchtag = __0[0..^4];
-                    }
-                    else
-                    {
-                        searchtag = __0;
-                    }
+                    string[] vals = __0.Split('_');
+                    string searchtag = vals[1];
+                    if (vals.Length >= 3 && vals[2].Equals("not", StringComparison.OrdinalIgnoreCase)){ negate = true; }
                     __result = searchtag switch
                     {
-                        "hasspecialitem_clubCard" => Game1.getAllFarmers().Any((Farmer farmer) => farmer.hasClubCard),
-                        "hasspecialitem_specialCharm" => Game1.getAllFarmers().Any((Farmer farmer) => farmer.hasSpecialCharm),
-                        "hasspecialitem_skullKey" => Game1.getAllFarmers().Any((Farmer farmer) => farmer.hasSkullKey),
-                        "hasspecialitem_rustyKey" => Game1.getAllFarmers().Any((Farmer farmer) => farmer.hasRustyKey),
-                        "hasspecialitem_translationGuide" => Game1.getAllFarmers().Any((Farmer farmer) => farmer.canUnderstandDwarves),
-                        "hasspecialitem_townKey" => Game1.getAllFarmers().Any((Farmer farmer) => farmer.HasTownKey),
+                        "clubCard" => Game1.getAllFarmers().Any((Farmer farmer) => farmer.hasClubCard),
+                        "specialCharm" => Game1.getAllFarmers().Any((Farmer farmer) => farmer.hasSpecialCharm),
+                        "skullKey" => Game1.getAllFarmers().Any((Farmer farmer) => farmer.hasSkullKey),
+                        "rustyKey" => Game1.getAllFarmers().Any((Farmer farmer) => farmer.hasRustyKey),
+                        "translationGuide" => Game1.getAllFarmers().Any((Farmer farmer) => farmer.canUnderstandDwarves),
+                        "townKey" => Game1.getAllFarmers().Any((Farmer farmer) => farmer.HasTownKey),
                         _ => false,
                     };
                     if (negate) { __result = !__result; }
@@ -284,38 +254,19 @@ namespace SpecialOrdersExtended
                 }
                 else if (__0.StartsWith("craftingrecipe_"))
                 {
-                    __result = false;
                     bool negate = false;
-                    string remainder = __0["craftingrecipe_".Length..];
-                    string recipe;
-                    if (remainder.EndsWith("_not")){
-                        negate = true;
-                        recipe = remainder[0..^4].Replace('-', ' ');
-                    }
-                    else
-                    {
-                        recipe = remainder.Replace('-', ' ');
-                    }
-                    __result = Game1.getAllFarmers().Any((Farmer farmer) => farmer.craftingRecipes.ContainsKey(recipe));
+                    string[] vals = __0.Split('_');
+                    if (vals.Length >= 3 && vals[2].Equals("not", StringComparison.OrdinalIgnoreCase)) { negate = true; }
+                    __result = Game1.getAllFarmers().Any((Farmer farmer) => farmer.craftingRecipes.ContainsKey(vals[1].Replace('-', ' ')));
                     if (negate) { __result = !__result; }
                     return false;
                 }
                 else if (__0.StartsWith("cookingrecipe_"))
                 {
-                    __result = false;
                     bool negate = false;
-                    string remainder = __0["cookingrecipe_".Length..];
-                    string recipe;
-                    if (remainder.EndsWith("_not"))
-                    {
-                        negate = true;
-                        recipe = remainder[0..^4].Replace('-', ' ');
-                    }
-                    else
-                    {
-                        recipe = remainder.Replace('-', ' ');
-                    }
-                    __result = Game1.getAllFarmers().Any((Farmer farmer) => farmer.cookingRecipes.ContainsKey(recipe));
+                    string[] vals = __0.Split('_');
+                    if (vals.Length >= 3 && vals[2].Equals("not", StringComparison.OrdinalIgnoreCase)) { negate = true; }
+                    __result = Game1.getAllFarmers().Any((Farmer farmer) => farmer.cookingRecipes.ContainsKey(vals[1].Replace('-', ' ')));
                     if (negate) { __result = !__result; }
                     return false;
                 }
@@ -325,7 +276,7 @@ namespace SpecialOrdersExtended
                     string statistic = vals[1];
                     bool negate = false;
                     uint value;
-                    if (vals[2] == "under")
+                    if (vals[2].Equals("under", StringComparison.OrdinalIgnoreCase))
                     {
                         value = uint.Parse(vals[3]);
                         negate = true;
@@ -336,6 +287,19 @@ namespace SpecialOrdersExtended
                     }
                     __result = Game1.getAllFarmers().Any((Farmer farmer) => StatsManager.GrabBasicProperty(statistic, farmer.stats) >= value);
                     if (negate) { __result = !__result; }
+                    return false;
+                }
+                else if (__0.StartsWith("walnutcount_"))
+                {
+                    string [] vals = __0.Split('_');
+                    if (vals[1].Equals("under", StringComparison.OrdinalIgnoreCase))
+                    {
+                        __result = (int)Game1.netWorldState.Value.GoldenWalnutsFound.Value < int.Parse(vals[2]);
+                    }
+                    else
+                    {
+                        __result = (int)Game1.netWorldState.Value.GoldenWalnutsFound.Value >= int.Parse(vals[1]);
+                    }
                     return false;
                 }
             }

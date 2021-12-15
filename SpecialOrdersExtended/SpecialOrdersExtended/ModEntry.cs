@@ -13,11 +13,17 @@ namespace SpecialOrdersExtended
 {
     class ModEntry : Mod
     {
-        private static IMonitor ModMonitor;
+        public static IMonitor ModMonitor;
+        private static StatsManager StatsManager;
+        public static ITranslationHelper I18n;
+        public static IDataHelper DataHelper;
 
         public override void Entry(IModHelper helper)
         {
             ModMonitor = this.Monitor;
+            I18n = Helper.Translation;
+            StatsManager = new();
+            DataHelper = helper.Data;
 
             Harmony harmony = new(this.ModManifest.UniqueID);
 
@@ -27,81 +33,32 @@ namespace SpecialOrdersExtended
                 );
             ModMonitor.Log("Patching SpecialOrder:CheckTag", LogLevel.Debug);
 
-            harmony.Patch(
-                original: AccessTools.Method(typeof(NPC), nameof(NPC.checkForNewCurrentDialogue)),
-                postfix: new HarmonyMethod(typeof(ModEntry), nameof(ModEntry.PostfixCheckDialogue))
-                );
-            ModMonitor.Log("Patching NPC:checkForNewCurrentDialogue for Special Orders Dialogue", LogLevel.Debug);
-
-            helper.ConsoleCommands.Add("special_order_pool", "Lists the available special orders", this.GetAvailableOrders);
-            helper.ConsoleCommands.Add("check_tag", "Check the current value of a tag", this.ConsoleCheckTag);
-        }
-
-        private static void PostfixCheckDialogue(ref bool __result, ref NPC __instance, ref int __0, ref bool __1)
-        {
             try
             {
-                if (__result) { return; } //have already found a New Current Dialogue
-                foreach (SpecialOrder specialOrder in Game1.player.team.specialOrders)
-                {
-                    string baseKey = (__1) ? specialOrder.questKey.Value: Game1.currentSeason + specialOrder.questKey.Value;
-                    switch (specialOrder.questState.Value)
-                    {
-                        case SpecialOrder.QuestState.InProgress:
-                            baseKey += "_InProgress";
-                            break;
-                        case SpecialOrder.QuestState.Failed:
-                            baseKey += "_Failed";
-                            break;
-                        case SpecialOrder.QuestState.Complete:
-                            baseKey += "_Completed";
-                            break;
-                    }
-
-                    string dialogueKey = $"{baseKey}_{Game1.shortDayDisplayNameFromDayOfSeason(Game1.dayOfMonth)}";
-                    if (__instance.Dialogue.ContainsKey(dialogueKey))
-                    {
-                        if (Game1.player.mailReceived.Contains($"{__instance.Name}_{dialogueKey}")) { continue; }
-                        Game1.player.mailReceived.Add($"{__instance.Name}_{dialogueKey}");
-                        __instance.CurrentDialogue.Push(new Dialogue(__instance.Dialogue[dialogueKey], __instance) { removeOnNextMove = true });
-                        ModMonitor.Log($"Found key {dialogueKey}", LogLevel.Trace);
-                        __result = true;
-                        return;
-                    }
-
-                    for (int heartLevel = 14; heartLevel > 0; heartLevel -= 2)
-                    {
-                        dialogueKey = $"{baseKey}{heartLevel}";
-                        if (__0 > heartLevel && __instance.Dialogue.ContainsKey(dialogueKey))
-                        {
-                            if (Game1.player.mailReceived.Contains($"{__instance.Name}_{dialogueKey}")) { continue; }
-                            Game1.player.mailReceived.Add($"{__instance.Name}_{dialogueKey}");
-                            __instance.CurrentDialogue.Push(new Dialogue(__instance.Dialogue[dialogueKey], __instance) { removeOnNextMove = true });
-                            ModMonitor.Log($"Found key {dialogueKey}", LogLevel.Trace);
-                            __result = true;
-                            return;
-                        }
-                    }
-
-                    if (__instance.Dialogue.ContainsKey(baseKey))
-                    {
-                        if (Game1.player.mailReceived.Contains($"{__instance.Name}_{baseKey}")) { continue; }
-                        Game1.player.mailReceived.Add($"{__instance.Name}_{baseKey}");
-                        __instance.CurrentDialogue.Push(new Dialogue(__instance.Dialogue[baseKey], __instance) { removeOnNextMove = true });
-                        ModMonitor.Log($"Found key {baseKey}", LogLevel.Trace);
-                        __result = true;
-                        return;
-                    }
-
-                    ModMonitor.Log($"Did not find dialogue key for special order {baseKey} for NPC {__instance.Name}", LogLevel.Trace);
-                }
+                harmony.Patch(
+                    original: AccessTools.Method(typeof(NPC), nameof(NPC.checkForNewCurrentDialogue)),
+                    postfix: new HarmonyMethod(typeof(DialogueManager), nameof(DialogueManager.PostfixCheckDialogue))
+                    );
+                ModMonitor.Log("Patching NPC:checkForNewCurrentDialogue for Special Orders Dialogue", LogLevel.Debug);
             }
             catch (Exception ex)
             {
-                ModMonitor.Log($"Failed in checking for Special Order dialogue for NPC {__instance.Name}\n{ex}", LogLevel.Error);
+                ModMonitor.Log($"Failed to patch NPC:checkForNewCurrentDialogue for Special Orders Dialogue\n\n{ex}", LogLevel.Error);
             }
+
+            helper.ConsoleCommands.Add("special_order_pool",I18n.Get("special_order_pool.description"), this.GetAvailableOrders);
+            helper.ConsoleCommands.Add("check_tag", "Check the current value of a tag", this.ConsoleCheckTag);
+            helper.ConsoleCommands.Add("list_stats", "List current stats", StatsManager.ConsoleListProperties);
+
+            helper.Events.GameLoop.SaveCreated += ClearCaches;
         }
-        private static bool PrefixCheckTag(ref bool __result, ref string __0)
+
+        private void ClearCaches(object sender, StardewModdingAPI.Events.SaveCreatedEventArgs e)
+        {
+            StatsManager.ClearProperties();
+        }
+
+        private static bool PrefixCheckTag(ref bool __result, string __0)
         {
             ModMonitor.VerboseLog($"Checking tag {__0}");
             try
@@ -377,61 +334,7 @@ namespace SpecialOrdersExtended
                     {
                         value = uint.Parse(vals[2]);
                     }
-                    __result = statistic switch
-                    {
-                        "seedsSown" => Game1.getAllFarmers().Any((Farmer farmer) => farmer.stats.SeedsSown >= value),
-                        "itemsShipped" => Game1.getAllFarmers().Any((Farmer farmer) => farmer.stats.ItemsShipped >= value),
-                        "itemsCooked" => Game1.getAllFarmers().Any((Farmer farmer) => farmer.stats.ItemsCooked >= value),
-                        "itemsCrafted" => Game1.getAllFarmers().Any((Farmer farmer) => farmer.stats.ItemsCrafted >= value),
-                        "chickenEggsLayed" => Game1.getAllFarmers().Any((Farmer farmer) => farmer.stats.ChickenEggsLayed >= value),
-                        "duckEggsLayed" => Game1.getAllFarmers().Any((Farmer farmer) => farmer.stats.DuckEggsLayed >= value),
-                        "cowMilkProduced" => Game1.getAllFarmers().Any((Farmer farmer) => farmer.stats.CowMilkProduced >= value),
-                        "goatMilkProduced" => Game1.getAllFarmers().Any((Farmer farmer) => farmer.stats.GoatMilkProduced >= value),
-                        "rabbitWoolProduced" => Game1.getAllFarmers().Any((Farmer farmer) => farmer.stats.RabbitWoolProduced >= value),
-                        "sheepWoolProduced" => Game1.getAllFarmers().Any((Farmer farmer) => farmer.stats.SheepWoolProduced >= value),
-                        "cheeseMade" => Game1.getAllFarmers().Any((Farmer farmer) => farmer.stats.CheeseMade >= value),
-                        "goatCheeseMade" => Game1.getAllFarmers().Any((Farmer farmer) => farmer.stats.goatCheeseMade >= value),
-                        "trufflesFound" => Game1.getAllFarmers().Any((Farmer farmer) => farmer.stats.TrufflesFound >= value),
-                        "stoneGathered" => Game1.getAllFarmers().Any((Farmer farmer) => farmer.stats.StoneGathered >= value),
-                        "rocksCrushed" => Game1.getAllFarmers().Any((Farmer farmer) => farmer.stats.RocksCrushed >= value),
-                        "dirtHowed" => Game1.getAllFarmers().Any((Farmer farmer) => farmer.stats.DirtHoed >= value),
-                        "giftsGiven" => Game1.getAllFarmers().Any((Farmer farmer) => farmer.stats.GiftsGiven >= value),
-                        "timesUnconscious" => Game1.getAllFarmers().Any((Farmer farmer) => farmer.stats.TimesUnconscious >= value),
-                        "timesFished" => Game1.getAllFarmers().Any((Farmer farmer) => farmer.stats.TimesFished >= value),
-                        "fishCaught" => Game1.getAllFarmers().Any((Farmer farmer) => farmer.stats.FishCaught >= value),
-                        "bouldersCracked" => Game1.getAllFarmers().Any((Farmer farmer) => farmer.stats.BouldersCracked >= value),
-                        "stumpsChopped" => Game1.getAllFarmers().Any((Farmer farmer) => farmer.stats.StumpsChopped >= value),
-                        "stepsTaken" => Game1.getAllFarmers().Any((Farmer farmer) => farmer.stats.StepsTaken >= value),
-                        "monstersKilled" => Game1.getAllFarmers().Any((Farmer farmer) => farmer.stats.MonstersKilled >= value),
-                        "diamondsFound" => Game1.getAllFarmers().Any((Farmer farmer) => farmer.stats.DiamondsFound >= value),
-                        "prismaticShardsFound" => Game1.getAllFarmers().Any((Farmer farmer) => farmer.stats.PrismaticShardsFound >= value),
-                        "otherPreciousGemsFound" => Game1.getAllFarmers().Any((Farmer farmer) => farmer.stats.OtherPreciousGemsFound >= value),
-                        "caveCarrotsFound" => Game1.getAllFarmers().Any((Farmer farmer) => farmer.stats.CaveCarrotsFound >= value),
-                        "copperFound" => Game1.getAllFarmers().Any((Farmer farmer) => farmer.stats.CopperFound >= value),
-                        "ironFound" => Game1.getAllFarmers().Any((Farmer farmer) => farmer.stats.IronFound >= value),
-                        "coalFound" => Game1.getAllFarmers().Any((Farmer farmer) => farmer.stats.CoalFound >= value),
-                        "coinsFound" => Game1.getAllFarmers().Any((Farmer farmer) => farmer.stats.CoinsFound >= value),
-                        "goldFound" => Game1.getAllFarmers().Any((Farmer farmer) => farmer.stats.GoldFound >= value),
-                        "iridiumFound" => Game1.getAllFarmers().Any((Farmer farmer) => farmer.stats.IridiumFound >= value),
-                        "barsSmelted" => Game1.getAllFarmers().Any((Farmer farmer) => farmer.stats.BarsSmelted >= value),
-                        "beveragesMade" => Game1.getAllFarmers().Any((Farmer farmer) => farmer.stats.BeveragesMade >= value),
-                        "preservesMade" => Game1.getAllFarmers().Any((Farmer farmer) => farmer.stats.PreservesMade >= value),
-                        "piecesOfTrashRecycled" => Game1.getAllFarmers().Any((Farmer farmer) => farmer.stats.PiecesOfTrashRecycled >= value),
-                        "mysticStonesCrushed" => Game1.getAllFarmers().Any((Farmer farmer) => farmer.stats.MysticStonesCrushed >= value),
-                        "daysPlayed" => Game1.getAllFarmers().Any((Farmer farmer) => farmer.stats.DaysPlayed >= value),
-                        "weedsEliminated" => Game1.getAllFarmers().Any((Farmer farmer) => farmer.stats.WeedsEliminated >= value),
-                        "sticksChopped" => Game1.getAllFarmers().Any((Farmer farmer) => farmer.stats.SticksChopped >= value),
-                        "notesFound" => Game1.getAllFarmers().Any((Farmer farmer) => farmer.stats.NotesFound >= value),
-                        "questsCompleted" => Game1.getAllFarmers().Any((Farmer farmer) => farmer.stats.QuestsCompleted >= value),
-                        "starLevelCropsShipped" => Game1.getAllFarmers().Any((Farmer farmer) => farmer.stats.StarLevelCropsShipped >= value),
-                        "cropsShipped" => Game1.getAllFarmers().Any((Farmer farmer) => farmer.stats.CropsShipped >= value),
-                        "itemsForaged" => Game1.getAllFarmers().Any((Farmer farmer) => farmer.stats.ItemsForaged >= value),
-                        "slimesKilled" => Game1.getAllFarmers().Any((Farmer farmer) => farmer.stats.SlimesKilled >= value),
-                        "geodesCracked" => Game1.getAllFarmers().Any((Farmer farmer) => farmer.stats.GeodesCracked >= value),
-                        "goodFriends" => Game1.getAllFarmers().Any((Farmer farmer) => farmer.stats.GoodFriends >= value),
-                        "individualMoneyEarned" => Game1.getAllFarmers().Any((Farmer farmer) => farmer.stats.IndividualMoneyEarned >= value),
-                        _ => false,
-                    };
+                    __result = Game1.getAllFarmers().Any((Farmer farmer) => StatsManager.GrabBasicProperty(statistic, farmer.stats) >= value);
                     if (negate) { __result = !__result; }
                     return false;
                 }

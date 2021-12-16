@@ -23,6 +23,7 @@ namespace FarmCaveSpawn
         public bool AllowAnyTreeProduct { get; set; } = true;
         public bool EdiblesOnly { get; set; } = true;
         public bool NoBananasBeforeShrine { get; set; } = true;
+        public int PriceCap { get; set; } = 200;
     }
     public class ModEntry: Mod
     {
@@ -35,7 +36,11 @@ namespace FarmCaveSpawn
             config = Helper.ReadConfig<ModConfig>();
             helper.Events.GameLoop.DayStarted += SpawnFruit;
             helper.Events.GameLoop.GameLaunched += SetUpConfig;
-            helper.ConsoleCommands.Add("list_fruits", helper.Translation.Get("list-fruits.description"), this.ListFruits);
+            helper.ConsoleCommands.Add(
+                name: "list_fruits",
+                documentation: helper.Translation.Get("list-fruits.description"),
+                callback: this.ListFruits
+                );
         }
 
         private void SetUpConfig(object sender, StardewModdingAPI.Events.GameLaunchedEventArgs e)
@@ -54,95 +59,50 @@ namespace FarmCaveSpawn
                 text: () => Helper.Translation.Get("mod.description")
                 );
 
-            configMenu.AddNumberOption(
-                mod: ModManifest,
-                getValue: () => config.MaxDailySpawns,
-                setValue: value => config.MaxDailySpawns = value,
-                name: () => Helper.Translation.Get("max-spawns.title"),
-                tooltip: () => Helper.Translation.Get("max-spawns.description"),
-                min: 0,
-                interval: 1
-                );
-
-            configMenu.AddNumberOption(
-                mod: ModManifest,
-                getValue: () => config.SpawnChance,
-                setValue: value => config.SpawnChance = value,
-                name: () => Helper.Translation.Get("spawn-chance.title"),
-                tooltip: () => Helper.Translation.Get("spawn-chance.description"),
-                min: 0.0f
-                );
-
-            configMenu.AddNumberOption(
-                mod: ModManifest,
-                getValue: () => config.TreeFruitChance,
-                setValue: value => config.TreeFruitChance = value,
-                name: () => Helper.Translation.Get("tree-fruit-chance.title"),
-                tooltip: () => Helper.Translation.Get("tree-fruit-chance.description"),
-                min: 0.0f
-                );
-
-            configMenu.AddBoolOption(
-                mod: ModManifest,
-                getValue: () => config.IgnoreFarmCaveType,
-                setValue: value => config.IgnoreFarmCaveType = value,
-                name: () => Helper.Translation.Get("cave-type.title"),
-                tooltip: () => Helper.Translation.Get("cave-type.description")
-                );
-
-            configMenu.AddBoolOption(
-                mod: ModManifest,
-                getValue: () => config.EarlyFarmCave,
-                setValue: value => config.EarlyFarmCave = value,
-                name: () => Helper.Translation.Get("early-cave.title"),
-                tooltip: ()=> Helper.Translation.Get("early-cave.description")
-                ) ;
-
-            configMenu.AddBoolOption(
-                mod: ModManifest,
-                getValue: () => config.UseMineCave,
-                setValue: value => config.UseMineCave = value,
-                name: () => Helper.Translation.Get("use-mine.title"),
-                tooltip: () => Helper.Translation.Get("use-mine.description")
-                );
-
-            configMenu.AddBoolOption(
-                mod: ModManifest,
-                getValue: () => config.SeasonalOnly,
-                setValue: value => config.SeasonalOnly = value,
-                name: () => Helper.Translation.Get("seasonal-only.title"),
-                tooltip: () => Helper.Translation.Get("seasonal-only.dsecription")
-                );
-
-            configMenu.AddBoolOption(
-                mod: ModManifest,
-                getValue: () => config.AllowAnyTreeProduct,
-                setValue: value => config.AllowAnyTreeProduct = value,
-                name: () => Helper.Translation.Get("any-category.title"),
-                tooltip: () => Helper.Translation.Get("any-category.dsecription")
-                );
-
-            configMenu.AddBoolOption(
-                mod: ModManifest,
-                getValue: () =>config.EdiblesOnly,
-                setValue: value => config.EdiblesOnly = value,
-                name: () => Helper.Translation.Get("edibles.title"),
-                tooltip: () => Helper.Translation.Get("edibles.description")
-                );
-
-            configMenu.AddBoolOption(
-                mod: ModManifest,
-                getValue: () => config.NoBananasBeforeShrine,
-                setValue: value => config.NoBananasBeforeShrine = value,
-                name: () => Helper.Translation.Get("nobananas.title"),
-                tooltip: () => Helper.Translation.Get("nobananas.description")
-                );
+            foreach (System.Reflection.PropertyInfo property in typeof(ModConfig).GetProperties())
+            {
+                if (property.PropertyType.Equals(typeof(bool)))
+                {
+                    configMenu.AddBoolOption(
+                        mod: ModManifest,
+                        getValue: () => (bool)property.GetValue(config),
+                        setValue: value => config.IgnoreFarmCaveType = value,
+                        name: () => Helper.Translation.Get($"{property.Name}.title"),
+                        tooltip: () => Helper.Translation.Get($"{property.Name}.description")
+                       );
+                }
+                else if (property.PropertyType.Equals(typeof(int)))
+                {
+                    configMenu.AddNumberOption(
+                        mod: ModManifest,
+                        getValue: () => (int)property.GetValue(config),
+                        setValue: (int value) => property.SetValue(config, value),
+                        name: () => Helper.Translation.Get($"{property.Name}.title"),
+                        tooltip: () => Helper.Translation.Get($"{property.Name}.description"),
+                        min: 0,
+                        interval: 1
+                    );
+                }
+                else if (property.PropertyType.Equals(typeof(float)))
+                {
+                    configMenu.AddNumberOption(
+                        mod: ModManifest,
+                        getValue: () => config.TreeFruitChance,
+                        setValue: value => config.TreeFruitChance = value,
+                        name: () => Helper.Translation.Get($"{property.Name}.title"),
+                        tooltip: () => Helper.Translation.Get($"{property.Name}.description"),
+                        min: 0.0f
+                    );
+                }
+                else { Monitor.Log($"{property.Name} unaccounted for.", LogLevel.Trace); }
+            }
         }
 
         private void SpawnFruit(object sender, StardewModdingAPI.Events.DayStartedEventArgs e)
         {
             if (!Game1.IsMasterGame) { return; }
             if (!config.EarlyFarmCave && (Game1.MasterPlayer.caveChoice?.Value == null || Game1.MasterPlayer.caveChoice.Value <= 0)) {return;}
+            if (!config.IgnoreFarmCaveType && (Game1.MasterPlayer.caveChoice?.Value == null || Game1.MasterPlayer.caveChoice.Value != 1)) { return; }
             int count = 0;
             TreeFruit = GetTreeFruits();
             random = new((int)Game1.uniqueIDForThisGame * 2 + (int)Game1.stats.DaysPlayed * 7);
@@ -216,17 +176,14 @@ namespace FarmCaveSpawn
 
         public IEnumerable<Vector2> IterateTiles(GameLocation location, int xstart = 1, int xend = -1, int ystart = 1, int yend = -1)
         {
-            if (config.IgnoreFarmCaveType || Game1.MasterPlayer.caveChoice?.Value == 1)
+            foreach (int x in Enumerable.Range(xstart, Math.Max(location.Map.Layers[0].LayerWidth - xend - 1, xstart)).OrderBy((x) => random.Next()))
             {
-                foreach (int x in Enumerable.Range(xstart, Math.Max(location.Map.Layers[0].LayerWidth - xend-1, xstart)).OrderBy((x) => random.Next()))
+                foreach (int y in Enumerable.Range(ystart, Math.Max(location.Map.Layers[0].LayerHeight - yend - 1, ystart)).OrderBy((x) => random.Next()))
                 {
-                    foreach (int y in Enumerable.Range(ystart, Math.Max(location.Map.Layers[0].LayerHeight - yend-1, ystart)).OrderBy((x) => random.Next()))
+                    Vector2 v = new(x, y);
+                    if (random.NextDouble() < (config.SpawnChance / 100f) && location.isTileLocationTotallyClearAndPlaceableIgnoreFloors(v))
                     {
-                        Vector2 v = new(x, y);
-                        if (random.NextDouble() < (config.SpawnChance / 100f) && location.isTileLocationTotallyClearAndPlaceableIgnoreFloors(v))
-                        {
-                            yield return v;
-                        }
+                        yield return v;
                     }
                 }
             }
@@ -281,6 +238,10 @@ namespace FarmCaveSpawn
                             continue;
                         }
                         if (config.EdiblesOnly && fruit.Edibility < 0)
+                        {
+                            continue;
+                        }
+                        if (fruit.Price > config.PriceCap)
                         {
                             continue;
                         }

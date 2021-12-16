@@ -13,4 +13,12 @@ namespace SpecialOrdersExtended
         {
         }
     }
+
+    public class SaveNotLoadedError: Exception
+    {
+        public SaveNotLoadedError() :
+            base("Save not loaded")
+        {
+        }
+    }
 }

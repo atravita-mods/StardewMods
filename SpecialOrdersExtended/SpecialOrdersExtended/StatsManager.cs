@@ -13,7 +13,7 @@ namespace SpecialOrdersExtended
         Dictionary<string, PropertyInfo> propertyInfos = new();
 
         //remove these stats, they make no sense.
-        private readonly String[] denylist = { "AverageBedtime", "TimesUnconscious", "TotalMoneyGifted" };
+        private readonly string[] denylist = { "AverageBedtime", "TimesUnconscious", "TotalMoneyGifted" };
 
 
         /// <summary>

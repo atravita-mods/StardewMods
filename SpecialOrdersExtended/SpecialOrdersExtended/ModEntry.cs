@@ -49,6 +49,7 @@ namespace SpecialOrdersExtended
             helper.ConsoleCommands.Add("special_order_pool",I18n.Get("special_order_pool.description"), this.GetAvailableOrders);
             helper.ConsoleCommands.Add("check_tag", "Check the current value of a tag", this.ConsoleCheckTag);
             helper.ConsoleCommands.Add("list_available_stats", "List current stats", StatsManager.ConsoleListProperties);
+            helper.ConsoleCommands.Add("special_orders_dialogue", "add, delete, or check for whether or not specific special orders dialogue has been seen yet", DialogueManager.ConsoleSpecialOrderDialogue);
 
             helper.Events.GameLoop.SaveCreated += ClearCaches;
         }

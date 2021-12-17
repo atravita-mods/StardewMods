@@ -52,7 +52,7 @@ namespace SpecialOrdersExtended
         public void ConsoleListProperties(string command, string[] args)
         {
             if (propertyInfos.Count.Equals(0)) { GrabProperties(); }
-            ModEntry.ModMonitor.Log($"Current Keys Found: \n    Hardcoded:{String.Join(", ", propertyInfos.Keys)}\n    In Dictionary:{String.Join(", ", Game1.player.stats.stat_dictionary.Keys)}", LogLevel.Info);
+            ModEntry.ModMonitor.Log($"{ModEntry.I18n.Get("current-keys-found")}: \n    {ModEntry.I18n.Get("hardcoded")}:{String.Join(", ", propertyInfos.Keys)}\n    {ModEntry.I18n.Get("dictionary")}:{String.Join(", ", Game1.player.stats.stat_dictionary.Keys)}", LogLevel.Info);
         }
     }
 }

@@ -79,7 +79,7 @@ namespace SpecialOrdersExtended
             if (!Context.IsWorldReady) { throw new SaveNotLoadedError(); }
             DialogueLog dialogueLog = ModEntry.DataHelper.ReadGlobalData<DialogueLog>($"{Constants.SaveFolderName}_{key}") ?? new DialogueLog(key, Constants.SaveFolderName);
             bool success = dialogueLog.Add(characterName);
-            ModEntry.DataHelper.WriteGlobalData<DialogueLog>($"{Constants.SaveFolderName}_{key}", dialogueLog);
+            ModEntry.DataHelper.WriteGlobalData($"{Constants.SaveFolderName}_{key}", dialogueLog);
             return success;
         }
 
@@ -153,7 +153,7 @@ namespace SpecialOrdersExtended
     {
         readonly string key;
         readonly string savefile;
-        List<string> charactersList = new();
+        public List<string> CharactersList { get; set; } = new();
 
         public DialogueLog(string key, string savefile)
         {
@@ -163,22 +163,22 @@ namespace SpecialOrdersExtended
 
         public bool Contains(string characterName)
         {
-            return charactersList.Contains(characterName);
+            return CharactersList.Contains(characterName);
         }
 
         public bool Add(string characterName)
         {
-            if (charactersList.Contains(characterName)) { return false; }
-            else { charactersList.Add(characterName); return true; }
+            if (CharactersList.Contains(characterName)) { return false; }
+            else { CharactersList.Add(characterName); return true; }
         }
 
         public bool Remove(string characterName)
         {
-            return charactersList.Remove(characterName);
+            return CharactersList.Remove(characterName);
         }
         public override string ToString()
         {
-            return $"DialogueLog({savefile}:{key}): {String.Join(", ", charactersList)}";
+            return $"DialogueLog({savefile}:{key}): {String.Join(", ", CharactersList)}";
         }
     }
 

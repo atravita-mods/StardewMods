@@ -67,12 +67,19 @@ namespace SpecialOrdersExtended
                 callback: DialogueManager.ConsoleSpecialOrderDialogue
                 );
 
+            helper.Events.GameLoop.SaveLoaded += SaveLoaded;
             helper.Events.GameLoop.SaveCreated += BeforeSave;
+        }
+
+        private void SaveLoaded(object sender, StardewModdingAPI.Events.SaveLoadedEventArgs e)
+        {
+            DialogueManager.LoadDialogueLog();
         }
 
         private void BeforeSave(object sender, StardewModdingAPI.Events.SaveCreatedEventArgs e)
         {
             StatsManager.ClearProperties();
+            DialogueManager.SaveDialogueLog();
         }
 
         private void ConsoleCheckTag(string command, string[] args)

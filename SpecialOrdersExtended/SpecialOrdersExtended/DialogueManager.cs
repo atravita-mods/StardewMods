@@ -9,6 +9,19 @@ namespace SpecialOrdersExtended
 
     internal class DialogueManager
     {
+        private static DialogueLog DialogueLog;
+
+        public static void LoadDialogueLog()
+        {
+            if (!Context.IsWorldReady) { throw new SaveNotLoadedError(); }
+            DialogueLog = ModEntry.DataHelper.ReadGlobalData<DialogueLog>(Constants.SaveFolderName) ?? new DialogueLog(Constants.SaveFolderName);
+        }
+
+        public static void SaveDialogueLog()
+        {
+            if (!Context.IsWorldReady) { throw new SaveNotLoadedError(); }
+            ModEntry.DataHelper.WriteGlobalData(Constants.SaveFolderName, DialogueLog);
+        }
         public static void ConsoleSpecialOrderDialogue(string command, string[] args)
         {
             if(args.Length<3)
@@ -58,34 +71,27 @@ namespace SpecialOrdersExtended
                     }
                     break;
                 default:
-                    ModEntry.ModMonitor.Log($"{args[0]} is not a valid action (add/remove/hasseen)");
+                    ModEntry.ModMonitor.Log($"{args[0]} is not a valid action (add/remove/hasseen)", LogLevel.Info);
                     break;
             }
         }
 
         public static bool HasSeenDialogue(string key, string characterName)
         {
-            if (!Context.IsWorldReady) { return false; }
-            DialogueLog dialogueLog = ModEntry.DataHelper.ReadGlobalData<DialogueLog>($"{Constants.SaveFolderName}_{key}");
-            if (dialogueLog == null) { return false; }
-            return dialogueLog.Contains(characterName);
+            if (!Context.IsWorldReady) { throw new SaveNotLoadedError(); }
+            return DialogueLog.Contains(key, characterName);
         }
 
         public static bool TryAddSeenDialogue(string key, string characterName)
         {
             if (!Context.IsWorldReady) { throw new SaveNotLoadedError(); }
-            DialogueLog dialogueLog = ModEntry.DataHelper.ReadGlobalData<DialogueLog>($"{Constants.SaveFolderName}_{key}") ?? new DialogueLog(key, Constants.SaveFolderName);
-            bool success = dialogueLog.Add(characterName);
-            ModEntry.DataHelper.WriteGlobalData($"{Constants.SaveFolderName}_{key}", dialogueLog);
-            return success;
+            return DialogueLog.Add(key, characterName);
         }
 
         public static bool TryRemoveSeenDialogue(string key, string characterName)
         {
-            DialogueLog dialogueLog = ModEntry.DataHelper.ReadGlobalData<DialogueLog>($"{Constants.SaveFolderName}_{key}");
-            if (dialogueLog == null) { return false; }
-            return dialogueLog.Remove(characterName);
-
+            if (!Context.IsWorldReady) { throw new SaveNotLoadedError(); }
+            return DialogueLog.Remove(key, characterName);
         }
         public static void PostfixCheckDialogue(ref bool __result, ref NPC __instance, int __0, bool __1)
         {
@@ -148,35 +154,46 @@ namespace SpecialOrdersExtended
 
     internal class DialogueLog
     {
-        readonly string key;
-        readonly string savefile;
-        public List<string> CharactersList { get; set; } = new();
+        public string Savefile { get; set; }
+        public Dictionary<string, List<string>> SeenDialogues { get; set; } = new();
 
-        public DialogueLog(string key, string savefile)
+        public DialogueLog(string savefile)
         {
-            this.key = key;
-            this.savefile = savefile;
+            this.Savefile = savefile;
         }
 
-        public bool Contains(string characterName)
+        public bool Contains(string dialoguekey, string characterName)
         {
-            return CharactersList.Contains(characterName);
+            SeenDialogues.TryGetValue(dialoguekey, out List<string> characterList);
+            if (characterList == null) { return false; }
+            return characterList.Contains(characterName);
         }
 
-        public bool Add(string characterName)
+        public bool Add(string dialoguekey, string characterName)
         {
-            if (CharactersList.Contains(characterName)) { return false; }
-            else { CharactersList.Add(characterName); return true; }
+            SeenDialogues.TryGetValue(dialoguekey, out List<string> characterList);
+            if (characterList==null)
+            {
+                characterList = new();
+                characterList.Add(characterName);
+                SeenDialogues[dialoguekey] = characterList;
+                return true;
+            }
+            if (characterList.Contains(characterName)) { return false; }
+            else { characterList.Add(characterName); return true; }
         }
 
-        public bool Remove(string characterName)
+        public bool Remove(string dialoguekey, string characterName)
         {
-            return CharactersList.Remove(characterName);
+            SeenDialogues.TryGetValue(dialoguekey, out List<string> characterList);
+            if (characterList == null) { return false; }
+            return characterList.Remove(characterName);
         }
-        public override string ToString()
-        {
-            return $"DialogueLog({savefile}:{key}): {String.Join(", ", CharactersList)}";
-        }
+
+        //public override string ToString()
+        //{
+        //    return $"DialogueLog({savefile}:{key}): {String.Join(", ", CharactersList)}";
+        //}
     }
 
 }

@@ -75,7 +75,7 @@ namespace SpecialOrdersExtended
         private void RegisterTokens(object sender, StardewModdingAPI.Events.GameLaunchedEventArgs e)
         {
             var api = this.Helper.ModRegistry.GetApi<Tokens.IContentPatcherAPI>("Pathoschild.ContentPatcher");
-            if (api == null) { ModMonitor.Log("Content Patcher not installed, tokens will not be available", LogLevel.Warn); return; }
+            if (api == null) { ModMonitor.Log(I18n.Get("cp-not-installed"), LogLevel.Warn); return; }
 
             api.RegisterToken(this.ModManifest, "Current", new Tokens.CurrentSpecialOrders());
             api.RegisterToken(this.ModManifest, "Available", new Tokens.AvailableSpecialOrders());
@@ -113,15 +113,8 @@ namespace SpecialOrdersExtended
                 {
                     base_tag = tag.Trim();
                 }
-                bool res = match == Helper.Reflection.GetMethod(typeof(SpecialOrder), "CheckTag").Invoke<bool>(base_tag);
-                if (res)
-                {
-                    ModMonitor.Log($"{tag}: {I18n.Get("true")}", LogLevel.Debug);
-                }
-                else
-                {
-                    ModMonitor.Log($"{tag}: {I18n.Get("false")}", LogLevel.Debug);
-                }
+                bool result = match == Helper.Reflection.GetMethod(typeof(SpecialOrder), "CheckTag").Invoke<bool>(base_tag);
+                ModMonitor.Log($"{tag}: {I18n.Get(result ? "true" : "false")}", LogLevel.Debug);
             }
         }
 

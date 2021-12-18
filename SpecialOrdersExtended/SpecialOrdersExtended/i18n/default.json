@@ -1,4 +1,7 @@
 ﻿{
+  //Warnings
+  "cp-not-installed": "Content Patcher not installed, tokens will not be available.",
+
   //Documentation for console commands
   "special_order_pool.description": "Lists the current special orders. If order is not available, explains why.",
   "check_tag.description": "Checks the current value of one or many tags.",
@@ -27,5 +30,5 @@
 
   "current-keys-found": "Current Keys Found",
   "hardcoded": "Hardcoded",
-  "dictionary":  "In dictionary"
+  "dictionary": "In dictionary"
 }

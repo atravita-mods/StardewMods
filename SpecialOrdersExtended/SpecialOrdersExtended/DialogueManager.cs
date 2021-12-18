@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text;
 using StardewModdingAPI;
 
 using StardewValley;
@@ -20,6 +21,7 @@ namespace SpecialOrdersExtended
         public static void SaveDialogueLog()
         {
             if (!Context.IsWorldReady) { throw new SaveNotLoadedError(); }
+            ModEntry.ModMonitor.Log("I am capable of saving", LogLevel.Error);
             ModEntry.DataHelper.WriteGlobalData(Constants.SaveFolderName, DialogueLog);
         }
         public static void ConsoleSpecialOrderDialogue(string command, string[] args)
@@ -190,10 +192,16 @@ namespace SpecialOrdersExtended
             return characterList.Remove(characterName);
         }
 
-        //public override string ToString()
-        //{
-        //    return $"DialogueLog({savefile}:{key}): {String.Join(", ", CharactersList)}";
-        //}
+        public override string ToString()
+        {
+            StringBuilder stringBuilder = new();
+            stringBuilder.Append($"DialogueLog({Savefile}):");
+            foreach (string key in SeenDialogues.Keys)
+            {
+                stringBuilder.Append($"\n    {key}: {String.Join(", ", SeenDialogues[key])}");
+            }
+            return stringBuilder.ToString();
+        }
     }
 
 }

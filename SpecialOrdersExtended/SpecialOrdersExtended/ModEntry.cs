@@ -67,8 +67,19 @@ namespace SpecialOrdersExtended
                 callback: DialogueManager.ConsoleSpecialOrderDialogue
                 );
 
+            helper.Events.GameLoop.GameLaunched += RegisterTokens;
             helper.Events.GameLoop.SaveLoaded += SaveLoaded;
             helper.Events.GameLoop.Saving += Saving;
+        }
+
+        private void RegisterTokens(object sender, StardewModdingAPI.Events.GameLaunchedEventArgs e)
+        {
+            var api = this.Helper.ModRegistry.GetApi<Tokens.IContentPatcherAPI>("Pathoschild.ContentPatcher");
+            if (api == null) { ModMonitor.Log("Content Patcher not installed, tokens will not be available", LogLevel.Warn); return; }
+
+            api.RegisterToken(this.ModManifest, "Current", new Tokens.CurrentSpecialOrders());
+            api.RegisterToken(this.ModManifest, "Available", new Tokens.AvailableSpecialOrders());
+            api.RegisterToken(this.ModManifest, "Completed", new Tokens.CompletedSpecialOrders());
         }
 
         private void Saving(object sender, StardewModdingAPI.Events.SavingEventArgs e)

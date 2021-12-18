@@ -68,18 +68,18 @@ namespace SpecialOrdersExtended
                 );
 
             helper.Events.GameLoop.SaveLoaded += SaveLoaded;
-            helper.Events.GameLoop.SaveCreated += BeforeSave;
+            helper.Events.GameLoop.Saving += Saving;
+        }
+
+        private void Saving(object sender, StardewModdingAPI.Events.SavingEventArgs e)
+        {
+            StatsManager.ClearProperties();
+            DialogueManager.SaveDialogueLog();
         }
 
         private void SaveLoaded(object sender, StardewModdingAPI.Events.SaveLoadedEventArgs e)
         {
             DialogueManager.LoadDialogueLog();
-        }
-
-        private void BeforeSave(object sender, StardewModdingAPI.Events.SaveCreatedEventArgs e)
-        {
-            StatsManager.ClearProperties();
-            DialogueManager.SaveDialogueLog();
         }
 
         private void ConsoleCheckTag(string command, string[] args)

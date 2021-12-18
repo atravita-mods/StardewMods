@@ -187,6 +187,13 @@ namespace SpecialOrdersExtended
                     if (vals.Length >= 3 && vals[2].Equals("not", StringComparison.OrdinalIgnoreCase)) { __result = !__result; }
                     return false;
                 }
+                else if (__0.StartsWith("achievement_"))
+                {
+                    string[] vals = __0.Split('_');
+                    __result = Game1.getAllFarmers().Any((Farmer farmer) => farmer.achievements.Contains(int.Parse(vals[1])));
+                    if (vals.Length >= 3 && vals[2].Equals("not", StringComparison.OrdinalIgnoreCase)) { __result = !__result; }
+                    return false;
+                }
                 else if (__0.StartsWith("craftingrecipe_"))
                 {
                     string[] vals = __0.Split('_');

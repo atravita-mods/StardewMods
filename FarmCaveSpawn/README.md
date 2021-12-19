@@ -5,7 +5,7 @@ Modded farm caves don't really play well with how the fruit cave spawns its frui
 
 Any fruit tree's products can be spawned. Mod trees, as long as they're registered with Data/fruitTrees, will be used as well. (Tested with RSV and PPJA More Trees). Fruit not associated with a tree will not be produced.
 
-Configuration:
+#### Configuration:
 
 1. `MaxDailySpawns`: the maximum number of fruit that will spawn.
 2. `SpawnChance`: the percent chance any empty square will spawn a fruit, capped by MaxDailySpawns. (Range: 0-100, where 100 means every unoccupied square will have a fruit)

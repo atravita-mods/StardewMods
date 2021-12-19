@@ -26,3 +26,5 @@ The console command `list_fruits` will tell you which tree fruits are available 
 **Multiplayer**: host should install mod. Mod does not do anything for farmhands.
 
 **SVE**: will also spawn in the MinecartCave and the DeepCave. It goes room by room, so if you don't see spawns in MinecartCave and Deepcave try setting the spawn chance lower and the max daily spawns higher.
+
+**Changelog**: https://github.com/atravita-mods/FarmCaveSpawn/blob/master/FarmCaveSpawn/docs/CHANGELOG.MD

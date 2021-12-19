@@ -1,9 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+
 using StardewModdingAPI;
 
 using StardewValley;
+
+using SpecialOrdersExtended.DataModels;
 
 namespace SpecialOrdersExtended
 {
@@ -11,21 +14,21 @@ namespace SpecialOrdersExtended
     internal class DialogueManager
     {
         private static DialogueLog DialogueLog;
-
         public static void LoadDialogueLog()
         {
-            if (!Context.IsWorldReady) { throw new SaveNotLoadedError(); }
-            DialogueLog = ModEntry.DataHelper.ReadGlobalData<DialogueLog>(Constants.SaveFolderName) ?? new DialogueLog(Constants.SaveFolderName);
+            DialogueLog = DialogueLog.Load();
         }
 
         public static void SaveDialogueLog()
         {
-            if (!Context.IsWorldReady) { throw new SaveNotLoadedError(); }
-            ModEntry.ModMonitor.Log("I am capable of saving", LogLevel.Error);
-            ModEntry.DataHelper.WriteGlobalData(Constants.SaveFolderName, DialogueLog);
+            DialogueLog.Save();
         }
         public static void ConsoleSpecialOrderDialogue(string command, string[] args)
         {
+            if(!Context.IsWorldReady)
+            {
+                ModEntry.ModMonitor.Log($"Save must be loaded in order to use this command", LogLevel.Warn);
+            }
             if(args.Length<3)
             {
                 ModEntry.ModMonitor.Log($"{command} requires at least a desired action, a key, and at least one NPC name", LogLevel.Warn);
@@ -154,54 +157,6 @@ namespace SpecialOrdersExtended
         }
     }
 
-    internal class DialogueLog
-    {
-        public string Savefile { get; set; }
-        public Dictionary<string, List<string>> SeenDialogues { get; set; } = new();
 
-        public DialogueLog(string savefile)
-        {
-            this.Savefile = savefile;
-        }
-
-        public bool Contains(string dialoguekey, string characterName)
-        {
-            SeenDialogues.TryGetValue(dialoguekey, out List<string> characterList);
-            if (characterList == null) { return false; }
-            return characterList.Contains(characterName);
-        }
-
-        public bool Add(string dialoguekey, string characterName)
-        {
-            SeenDialogues.TryGetValue(dialoguekey, out List<string> characterList);
-            if (characterList==null)
-            {
-                characterList = new();
-                characterList.Add(characterName);
-                SeenDialogues[dialoguekey] = characterList;
-                return true;
-            }
-            if (characterList.Contains(characterName)) { return false; }
-            else { characterList.Add(characterName); return true; }
-        }
-
-        public bool Remove(string dialoguekey, string characterName)
-        {
-            SeenDialogues.TryGetValue(dialoguekey, out List<string> characterList);
-            if (characterList == null) { return false; }
-            return characterList.Remove(characterName);
-        }
-
-        public override string ToString()
-        {
-            StringBuilder stringBuilder = new();
-            stringBuilder.Append($"DialogueLog({Savefile}):");
-            foreach (string key in SeenDialogues.Keys)
-            {
-                stringBuilder.Append($"\n    {key}: {String.Join(", ", SeenDialogues[key])}");
-            }
-            return stringBuilder.ToString();
-        }
-    }
 
 }

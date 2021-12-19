@@ -34,17 +34,18 @@ namespace SpecialOrdersExtended
         public uint GrabBasicProperty(string key, Stats stats)
         {
             if (propertyInfos.Count.Equals(0)) { GrabProperties(); }
-            bool success = propertyInfos.TryGetValue(key.ToLowerInvariant(), out PropertyInfo property);
             try
             {
-                if (success) { return (uint)property.GetValue(stats); }
+                if (propertyInfos.TryGetValue(key.ToLowerInvariant(), out PropertyInfo property))
+                {
+                    return (uint)property.GetValue(stats);
+                }
             }
             catch (Exception ex)
             {
                 ModEntry.ModMonitor.Log($"Failure to use {key}, please take this log to https://github.com/atravita-mods/SpecialOrdersExtended/issues \n\n{ex}", LogLevel.Error);
             }
-            success = stats.stat_dictionary.TryGetValue(key, out uint result);
-            if (success) { return result; }
+            if (stats.stat_dictionary.TryGetValue(key, out uint result)){ return result;}
             ModEntry.ModMonitor.Log($"{key} is not found in stats.",LogLevel.Trace);
             return 0u;
         }

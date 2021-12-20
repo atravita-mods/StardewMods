@@ -37,6 +37,7 @@ namespace FarmCaveSpawn
 
         public override void Entry(IModHelper helper)
         {
+            I18n.Init(helper.Translation);
             config = Helper.ReadConfig<ModConfig>();
             helper.Events.GameLoop.DayStarted += SpawnFruit;
             helper.Events.GameLoop.GameLaunched += SetUpConfig;
@@ -69,7 +70,7 @@ namespace FarmCaveSpawn
 
             configMenu.AddParagraph(
                 mod: ModManifest,
-                text: () => Helper.Translation.Get("mod.description")
+                text: I18n.Mod_Description
                 );
 
             foreach (System.Reflection.PropertyInfo property in typeof(ModConfig).GetProperties())
@@ -79,9 +80,9 @@ namespace FarmCaveSpawn
                     configMenu.AddBoolOption(
                         mod: ModManifest,
                         getValue: () => (bool)property.GetValue(config),
-                        setValue: value => config.IgnoreFarmCaveType = value,
-                        name: () => Helper.Translation.Get($"{property.Name}.title"),
-                        tooltip: () => Helper.Translation.Get($"{property.Name}.description")
+                        setValue: (bool value) => property.SetValue(config, value),
+                        name: () => I18n.GetByKey($"{property.Name}.title"),
+                        tooltip: () => I18n.GetByKey($"{property.Name}.description")
                        );
                 }
                 else if (property.PropertyType.Equals(typeof(int)))
@@ -90,8 +91,8 @@ namespace FarmCaveSpawn
                         mod: ModManifest,
                         getValue: () => (int)property.GetValue(config),
                         setValue: (int value) => property.SetValue(config, value),
-                        name: () => Helper.Translation.Get($"{property.Name}.title"),
-                        tooltip: () => Helper.Translation.Get($"{property.Name}.description"),
+                        name: () => I18n.GetByKey($"{property.Name}.title"),
+                        tooltip: () => I18n.GetByKey($"{property.Name}.description"),
                         min: 0,
                         interval: 1
                     );
@@ -100,10 +101,10 @@ namespace FarmCaveSpawn
                 {
                     configMenu.AddNumberOption(
                         mod: ModManifest,
-                        getValue: () => config.TreeFruitChance,
-                        setValue: value => config.TreeFruitChance = value,
-                        name: () => Helper.Translation.Get($"{property.Name}.title"),
-                        tooltip: () => Helper.Translation.Get($"{property.Name}.description"),
+                        getValue: () => (float)property.GetValue(config),
+                        setValue: (float value) => property.SetValue(config, value),
+                        name: () => I18n.GetByKey($"{property.Name}.title"),
+                        tooltip: () => I18n.GetByKey($"{property.Name}.description"),
                         min: 0.0f
                     );
                 }

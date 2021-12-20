@@ -2,6 +2,10 @@
 ======
 #### Todo
 
+#### Version 1.0.5
+
+Fix the options, because I screwed them up trying to de-hardcode them...
+
 #### Version 1.0.4
 
 * Fix check for hostplayer

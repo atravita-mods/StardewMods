@@ -2,7 +2,7 @@
 ======
 #### Todo
 
-#### Version 1.0.4 (upcoming)
+#### Version 1.0.4
 
 * Fix check for hostplayer
 * New setting `PriceCap` will limit the value of fruit that can be spawned

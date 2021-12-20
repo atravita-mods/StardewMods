@@ -2,12 +2,11 @@
 ======
 #### Todo
 
-Add way for other mods to prevent this mod from spawning their fruit.
-
 #### Version 1.0.4 (upcoming)
 
 * Fix check for hostplayer
 * New setting `PriceCap` will limit the value of fruit that can be spawned
+* Mods can now prevent this mod from spawning their fruit.
 
 #### Version 1.0.3
 

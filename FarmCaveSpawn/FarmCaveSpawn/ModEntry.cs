@@ -1,5 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using StardewModdingAPI;
+using StardewModdingAPI.Utilities;
 using StardewValley;
 using StardewValley.Locations;
 using System;
@@ -25,12 +26,15 @@ namespace FarmCaveSpawn
         public bool NoBananasBeforeShrine { get; set; } = true;
         public int PriceCap { get; set; } = 200;
     }
-    public class ModEntry: Mod
+    public class ModEntry : Mod, IAssetLoader
     {
         private ModConfig config;
         private readonly List<int> BaseFruit = new() { 296, 396, 406, 410 };
         private List<int> TreeFruit;
         private Random random;
+
+        private readonly string denylistLocation = PathUtilities.NormalizeAssetName("Mods/atravita_FarmCaveSpawn_denylist");
+
         public override void Entry(IModHelper helper)
         {
             config = Helper.ReadConfig<ModConfig>();
@@ -43,6 +47,15 @@ namespace FarmCaveSpawn
                 );
         }
 
+        /// <summary>
+        /// Remove the list TreeFruit when no longer necessary, delete the Random as well
+        /// </summary>
+        private void Cleanup()
+        {
+            TreeFruit.Clear();
+            TreeFruit.TrimExcess();
+            random = null;
+        }
         private void SetUpConfig(object sender, StardewModdingAPI.Events.GameLaunchedEventArgs e)
         {
             var configMenu = this.Helper.ModRegistry.GetApi<IGenericModConfigMenuApi>("spacechase0.GenericModConfigMenu");
@@ -55,7 +68,7 @@ namespace FarmCaveSpawn
                 save: () => Helper.WriteConfig(config));
 
             configMenu.AddParagraph(
-                mod:ModManifest,
+                mod: ModManifest,
                 text: () => Helper.Translation.Get("mod.description")
                 );
 
@@ -100,8 +113,8 @@ namespace FarmCaveSpawn
 
         private void SpawnFruit(object sender, StardewModdingAPI.Events.DayStartedEventArgs e)
         {
-            if (!Game1.IsMasterGame) { return; }
-            if (!config.EarlyFarmCave && (Game1.MasterPlayer.caveChoice?.Value == null || Game1.MasterPlayer.caveChoice.Value <= 0)) {return;}
+            if (!Context.IsMainPlayer) { return; }
+            if (!config.EarlyFarmCave && (Game1.MasterPlayer.caveChoice?.Value == null || Game1.MasterPlayer.caveChoice.Value <= 0)) { return; }
             if (!config.IgnoreFarmCaveType && (Game1.MasterPlayer.caveChoice?.Value == null || Game1.MasterPlayer.caveChoice.Value != 1)) { return; }
             int count = 0;
             TreeFruit = GetTreeFruits();
@@ -112,10 +125,10 @@ namespace FarmCaveSpawn
             {
                 PlaceFruit(farmcave, v);
                 count++;
-                if (count >= config.MaxDailySpawns) {break;}
+                if (count >= config.MaxDailySpawns) { break; }
             }
             farmcave.UpdateReadyFlag();
-            if (count>=config.MaxDailySpawns) { return; }
+            if (count >= config.MaxDailySpawns) { Cleanup(); return; }
 
             //For SVE:
             if (Helper.ModRegistry.IsLoaded("FlashShifter.SVECode"))
@@ -128,19 +141,19 @@ namespace FarmCaveSpawn
                     {
                         PlaceFruit(minecartCave, v);
                         count++;
-                        if (count>=config.MaxDailySpawns) { return; }
+                        if (count >= config.MaxDailySpawns) { Cleanup(); return; }
                     }
                 }
 
                 GameLocation deepCave = Game1.getLocationFromName("Custom_DeepCave");
-                if (deepCave !=null)
+                if (deepCave != null)
                 {
                     Monitor.Log("Found SVE deep cave.");
                     foreach (Vector2 v in IterateTiles(deepCave))
                     {
                         PlaceFruit(deepCave, v);
                         count++;
-                        if (count >= config.MaxDailySpawns) { return; }
+                        if (count >= config.MaxDailySpawns) { Cleanup(); return; }
                     }
                 }
             }
@@ -151,7 +164,7 @@ namespace FarmCaveSpawn
                 {
                     PlaceFruit(mine, v);
                     count++;
-                    if (count >= config.MaxDailySpawns) { return; }
+                    if (count >= config.MaxDailySpawns) { Cleanup(); return; }
                 }
             }
         }
@@ -208,8 +221,26 @@ namespace FarmCaveSpawn
             Monitor.Log($"Possible fruits: {String.Join(", ", FruitNames)}", LogLevel.Info);
         }
 
+        private List<string> GetDenyList()
+        {
+            IDictionary<string, string> rawdenylist = Helper.Content.Load<Dictionary<string, string>>(denylistLocation, ContentSource.GameContent);
+            List<string> denylist = new();
+
+            foreach (string uniqueID in rawdenylist.Keys)
+            {
+                if (Helper.ModRegistry.IsLoaded(uniqueID))
+                {
+                    denylist.AddRange(rawdenylist[uniqueID].Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries));
+                }
+            }
+            return denylist;
+        }
+
         private List<int> GetTreeFruits()
         {
+
+            List<string> denylist = GetDenyList();
+
             List<int> TreeFruits = new();
             Dictionary<int, string> fruittrees= Helper.Content.Load<Dictionary<int, string>>("Data/fruitTrees", ContentSource.GameContent);
             string currentseason = Game1.currentSeason.ToLower().Trim();
@@ -245,6 +276,10 @@ namespace FarmCaveSpawn
                         {
                             continue;
                         }
+                        if (denylist.Contains(fruit.Name))
+                        {
+                            continue;
+                        }
                         if (config.NoBananasBeforeShrine && fruit.Name.Equals("Banana"))
                         {
                             if (!Context.IsWorldReady) { continue; }
@@ -260,6 +295,22 @@ namespace FarmCaveSpawn
                 }
             }
             return TreeFruits;
+        }
+
+        public bool CanLoad<T>(IAssetInfo asset)
+        {
+            return asset.AssetNameEquals(denylistLocation);
+        }
+
+        public T Load<T>(IAssetInfo asset)
+        {
+            if (asset.AssetNameEquals(denylistLocation))
+            {
+                return (T)(object)new Dictionary<string, string>
+                {
+                };
+            }
+            throw new InvalidOperationException($"Should not have tried to load '{asset.AssetName}'.");
         }
     }
 }

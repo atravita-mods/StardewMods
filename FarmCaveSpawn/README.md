@@ -21,6 +21,21 @@ Any fruit tree's products can be spawned. Mod trees, as long as they're register
 
 The console command `list_fruits` will tell you which tree fruits are available for spawning.
 
+**Denylist**: Don't want this mod to spawn *your* fruit? If you use Content Patcher to add an entry to `Mods/atravita_FarmCaveSpawn_denylist` that looks like
+
+```
+{
+    "Action": "EditData",
+    "Target": "Mods/atravita_FarmCaveSpawn_denylist",
+    "Entries": {
+        "your.uniqueID": "Comma,Seperated,List,Of,Fruit,Names"
+    }
+}
+
+```
+
+this mod won't spawn your fruit.
+
 **Installation**: unzip into your mods folder. **Uninstallation**: simply delete from mods folder.
 
 **Multiplayer**: host should install mod. Mod does not do anything for farmhands.

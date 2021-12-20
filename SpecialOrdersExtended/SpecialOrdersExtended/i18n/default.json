@@ -28,7 +28,23 @@
   "tag-failed": "Tag failed",
   "active": "Currently active",
 
+  "dialogue.console-error": "{{command}} requires at least a desired action, a key, and at least one NPC name.",
+  "dialogue.console-action-invalid":  "{{action}} is not a valid action (add/remove/hasseen)",
+  "dialogue.console-add-success": "{{key}}: added {{name}}.",
+  "dialogue.console-add-failure": "{{key}}: could not add {{name}}; already in list.",
+  "dialogue.console-remove-success": "{{key}}: successfully removed {{name}}.",
+  "dialogue.console-remove-failure": "{{key}}: {{name}} not found, could not remove.",
+  "dialogue.console-does-contain": "{{key}} has character {{name}}.",
+  "dialogue.console-does-not-contain":  "{{key}} does NOT have character {{name}}",
+
+  "dialogue.found-key": "Found key {{dialoguekey}}",
+  "dialogue.no-key": "Did not find dialogue key for special order {{baseKey}} for NPC {{Name}}",
+  "dialogue.error-in-patched-function": "Failed in checking for Special Order dialogue for NPC {{Name}}",
+
   "current-keys-found": "Current Keys Found",
   "hardcoded": "Hardcoded",
-  "dictionary": "In dictionary"
+  "dictionary": "In dictionary",
+
+  "stat-not-found": "{{key}} not found in `stats.cs`. Is it provided by a mod that's not currently loaded?'",
+  "stat-cache-fail": "Failure to use {{key}}, please take this log to {{atra}}."
 }

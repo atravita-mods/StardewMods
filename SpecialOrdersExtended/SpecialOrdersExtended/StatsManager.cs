@@ -43,17 +43,17 @@ namespace SpecialOrdersExtended
             }
             catch (Exception ex)
             {
-                ModEntry.ModMonitor.Log($"Failure to use {key}, please take this log to https://github.com/atravita-mods/SpecialOrdersExtended/issues \n\n{ex}", LogLevel.Error);
+                ModEntry.ModMonitor.Log($"{I18n.StatCacheFail(key:key, atra: "https://github.com/atravita-mods/SpecialOrdersExtended/issues")}\n\n{ex}", LogLevel.Error);
             }
             if (stats.stat_dictionary.TryGetValue(key, out uint result)){ return result;}
-            ModEntry.ModMonitor.Log($"{key} is not found in stats.",LogLevel.Trace);
+            ModEntry.ModMonitor.Log(I18n.StatNotFound(key), LogLevel.Trace);
             return 0u;
         }
 
         public void ConsoleListProperties(string command, string[] args)
         {
             if (propertyInfos.Count.Equals(0)) { GrabProperties(); }
-            ModEntry.ModMonitor.Log($"{ModEntry.I18n.Get("current-keys-found")}: \n    {ModEntry.I18n.Get("hardcoded")}:{String.Join(", ", propertyInfos.Keys)}\n    {ModEntry.I18n.Get("dictionary")}:{String.Join(", ", Game1.player.stats.stat_dictionary.Keys)}", LogLevel.Info);
+            ModEntry.ModMonitor.Log($"{I18n.CurrentKeysFound()}: \n    {I18n.Hardcoded()}:{String.Join(", ", propertyInfos.Keys)}\n    {I18n.Dictionary()}:{String.Join(", ", Game1.player.stats.stat_dictionary.Keys)}", LogLevel.Info);
         }
     }
 }

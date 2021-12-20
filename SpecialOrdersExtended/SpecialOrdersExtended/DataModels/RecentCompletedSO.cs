@@ -9,13 +9,19 @@ namespace SpecialOrdersExtended.DataModels
 {
     internal class RecentCompletedSO : AbstractDataModel
     {
-        private new const string identifier = "_SOmemory";
+        private const string identifier = "_SOmemory";
 
         public Dictionary<string, int> RecentOrdersCompleted { get; set; } = new();
 
         public RecentCompletedSO(string savefile)
         {
             this.Savefile = savefile;
+        }
+
+        public static RecentCompletedSO Load()
+        {
+            if (!Context.IsWorldReady) { throw new SaveNotLoadedError(); }
+            return ModEntry.DataHelper.ReadGlobalData<RecentCompletedSO>(Constants.SaveFolderName + identifier) ?? new RecentCompletedSO(Constants.SaveFolderName);
         }
 
         public void Save()
@@ -52,5 +58,7 @@ namespace SpecialOrdersExtended.DataModels
             }
             return false;
         }
+
+        //ToString?
     }
 }

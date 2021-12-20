@@ -9,7 +9,7 @@ namespace SpecialOrdersExtended.DataModels
 {
     internal class DialogueLog : AbstractDataModel
     {
-        private new const string identifier = "_dialogue";
+        private const string identifier = "_dialogue";
 
         public Dictionary<string, List<string>> SeenDialogues { get; set; } = new();
 

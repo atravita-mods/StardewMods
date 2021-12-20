@@ -9,7 +9,6 @@ namespace SpecialOrdersExtended.DataModels
 {
     internal class AbstractDataModel
     {
-        public const string identifier = "";
         public string Savefile { get; set; }
 
         public virtual void Save(string identifier)

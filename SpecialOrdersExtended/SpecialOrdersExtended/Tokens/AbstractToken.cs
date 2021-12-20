@@ -47,8 +47,6 @@ namespace SpecialOrdersExtended.Tokens
         /// <param name="input">The input arguments, if applicable.</param>
         public virtual IEnumerable<string> GetValues(string input)
         {
-
-            ModEntry.ModMonitor.Log($"{input}, {string.Join(", ", SpecialOrdersCache)}", LogLevel.Debug);
             if (SpecialOrdersCache == null) { yield break; }
             else if  (input == null)
             {

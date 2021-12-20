@@ -5,7 +5,6 @@ using System.Text;
 using StardewModdingAPI;
 
 using StardewValley;
-
 using SpecialOrdersExtended.DataModels;
 
 namespace SpecialOrdersExtended
@@ -14,24 +13,19 @@ namespace SpecialOrdersExtended
     internal class DialogueManager
     {
         private static DialogueLog DialogueLog;
-        public static void LoadDialogueLog()
-        {
-            DialogueLog = DialogueLog.Load();
-        }
+        public static void LoadDialogueLog() => DialogueLog = DialogueLog.Load();
 
-        public static void SaveDialogueLog()
-        {
-            DialogueLog.Save();
-        }
+        public static void SaveDialogueLog() => DialogueLog.Save();
+
         public static void ConsoleSpecialOrderDialogue(string command, string[] args)
         {
-            if(!Context.IsWorldReady)
+            if (!Context.IsWorldReady)
             {
-                ModEntry.ModMonitor.Log($"Save must be loaded in order to use this command", LogLevel.Warn);
+                ModEntry.ModMonitor.Log(I18n.LoadSaveFirst(), LogLevel.Warn);
             }
-            if(args.Length<3)
+            if (args.Length < 3)
             {
-                ModEntry.ModMonitor.Log($"{command} requires at least a desired action, a key, and at least one NPC name", LogLevel.Warn);
+                ModEntry.ModMonitor.Log(I18n.Dialogue_ConsoleError(command), LogLevel.Warn);
                 return;
             }
             switch (args[0])
@@ -41,11 +35,11 @@ namespace SpecialOrdersExtended
                     {
                         if(TryAddSeenDialogue(args[1], characterName))
                         {
-                            ModEntry.ModMonitor.Log($"{args[1]}: added {characterName}", LogLevel.Info);
+                            ModEntry.ModMonitor.Log(I18n.Dialogue_ConsoleAddSuccess(args[1], characterName), LogLevel.Info);
                         }
                         else
                         {
-                            ModEntry.ModMonitor.Log($"{args[1]}: could not add {characterName}; already in list", LogLevel.Info);
+                            ModEntry.ModMonitor.Log(I18n.Dialogue_ConsoleAddFailure(args[1], characterName), LogLevel.Info);
                         }
                     }
                     break;
@@ -54,11 +48,11 @@ namespace SpecialOrdersExtended
                     {
                         if(TryRemoveSeenDialogue(args[1], characterName))
                         {
-                            ModEntry.ModMonitor.Log($"{args[1]}: successfully removed {characterName}", LogLevel.Info);
+                            ModEntry.ModMonitor.Log(I18n.Dialogue_ConsoleRemoveSuccess(args[1], characterName), LogLevel.Info);
                         }
                         else
                         {
-                            ModEntry.ModMonitor.Log($"{args[1]}: {characterName} not found, could not remove", LogLevel.Info);
+                            ModEntry.ModMonitor.Log(I18n.Dialogue_ConsoleRemoveFailure(args[1], characterName), LogLevel.Info);
                         }
                     }
                     break;
@@ -67,16 +61,16 @@ namespace SpecialOrdersExtended
                     {
                         if(HasSeenDialogue(args[1], characterName))
                         {
-                            ModEntry.ModMonitor.Log($"{args[1]} has character {characterName}", LogLevel.Info);
+                            ModEntry.ModMonitor.Log(I18n.Dialogue_ConsoleDoesContain(args[1], characterName), LogLevel.Info);
                         }
                         else
                         {
-                            ModEntry.ModMonitor.Log($"{args[1]} does NOT have character {characterName}", LogLevel.Info);
+                            ModEntry.ModMonitor.Log(I18n.Dialogue_ConsoleDoesNotContain(args[1], characterName), LogLevel.Info);
                         }
                     }
                     break;
                 default:
-                    ModEntry.ModMonitor.Log($"{args[0]} is not a valid action (add/remove/hasseen)", LogLevel.Info);
+                    ModEntry.ModMonitor.Log(I18n.Dialogue_ConsoleActionInvalid(args[0]), LogLevel.Info);
                     break;
             }
         }
@@ -120,7 +114,7 @@ namespace SpecialOrdersExtended
                     {
                         if (!TryAddSeenDialogue(dialogueKey, __instance.Name)) { continue; } //I have already said this dialogue
                         __instance.CurrentDialogue.Push(new Dialogue(__instance.Dialogue[dialogueKey], __instance) { removeOnNextMove = true });
-                        ModEntry.ModMonitor.Log($"Found key {dialogueKey}", LogLevel.Trace);
+                        ModEntry.ModMonitor.Log(I18n.Dialogue_FoundKey(dialogueKey), LogLevel.Trace);
                         __result = true;
                         return;
                     }
@@ -132,7 +126,7 @@ namespace SpecialOrdersExtended
                         {
                             if (!TryAddSeenDialogue(dialogueKey, __instance.Name)) { continue; } //I have already said this dialogue
                             __instance.CurrentDialogue.Push(new Dialogue(__instance.Dialogue[dialogueKey], __instance) { removeOnNextMove = true });
-                            ModEntry.ModMonitor.Log($"Found key {dialogueKey}", LogLevel.Trace);
+                            ModEntry.ModMonitor.Log(I18n.Dialogue_FoundKey(dialogueKey), LogLevel.Trace);
                             __result = true;
                             return;
                         }
@@ -142,17 +136,17 @@ namespace SpecialOrdersExtended
                     {
                         if (!TryAddSeenDialogue(baseKey, __instance.Name)) { continue; } //I have already said this dialogue
                         __instance.CurrentDialogue.Push(new Dialogue(__instance.Dialogue[baseKey], __instance) { removeOnNextMove = true });
-                        ModEntry.ModMonitor.Log($"Found key {baseKey}", LogLevel.Trace);
+                        ModEntry.ModMonitor.Log(I18n.Dialogue_FoundKey(baseKey), LogLevel.Trace);
                         __result = true;
                         return;
                     }
 
-                    ModEntry.ModMonitor.Log($"Did not find dialogue key for special order {baseKey} for NPC {__instance.Name}", LogLevel.Trace);
+                    ModEntry.ModMonitor.Log(I18n.Dialogue_NoKey(baseKey, __instance.Name), LogLevel.Trace);
                 }
             }
             catch (Exception ex)
             {
-                ModEntry.ModMonitor.Log($"Failed in checking for Special Order dialogue for NPC {__instance.Name}\n{ex}", LogLevel.Error);
+                ModEntry.ModMonitor.Log($"{I18n.Dialogue_ErrorInPatchedFunction(__instance.Name)}\n{ex}", LogLevel.Error);
             }
         }
     }

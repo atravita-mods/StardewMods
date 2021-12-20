@@ -15,13 +15,12 @@ namespace StopRugRemoval
     public class ModEntry : Mod
     {
         public static IMonitor ModMonitor;
-        public static ITranslationHelper I18n;
         private static ModConfig config;
         public override void Entry(IModHelper helper)
         {
             config = Helper.ReadConfig<ModConfig>();
             ModMonitor = Monitor;
-            I18n = Helper.Translation;
+            I18n.Init(helper.Translation);
 
             Harmony harmony = new(ModManifest.UniqueID);
             ModMonitor.Log("Patching Furniture::CanBeRemoved to prevent accidental rug removal", LogLevel.Debug);
@@ -47,14 +46,14 @@ namespace StopRugRemoval
 
             configMenu.AddParagraph(
                 mod: ModManifest,
-                text: ()=> I18n.Get("mod.description")
+                text: I18n.Mod_Description
                 );
 
             configMenu.AddBoolOption(
                 mod: ModManifest,
                 getValue: () => config.Enabled,
                 setValue: value => config.Enabled = value,
-                name: () => I18n.Get("enabled.title")
+                name: I18n.Enabled_Title
                 ) ;
         }
 
@@ -77,7 +76,7 @@ namespace StopRugRemoval
                     {
                         if (!currentLocation.isTileLocationTotallyClearAndPlaceable(x + bounds.X / 64, y + bounds.Y / 64))
                         {
-                            Game1.showRedMessage(I18n.Get("rug-removal-message"));
+                            Game1.showRedMessage(I18n.RugRemovalMessage());
                             __result = false;
                             return;
                         };

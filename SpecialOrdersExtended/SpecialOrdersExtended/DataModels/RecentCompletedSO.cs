@@ -11,7 +11,7 @@ namespace SpecialOrdersExtended.DataModels
     {
         private const string identifier = "_SOmemory";
 
-        public Dictionary<string, int> RecentOrdersCompleted { get; set; } = new();
+        public Dictionary<string, uint> RecentOrdersCompleted { get; set; } = new();
 
         public RecentCompletedSO(string savefile)
         {
@@ -29,7 +29,7 @@ namespace SpecialOrdersExtended.DataModels
             base.Save(identifier);
         }
 
-        public void dayUpdate(int daysPlayed)
+        public void dayUpdate(uint daysPlayed)
         {
             foreach (string key in RecentOrdersCompleted.Keys)
             {
@@ -40,9 +40,9 @@ namespace SpecialOrdersExtended.DataModels
             }
         }
 
-        public void Add(string orderKey, int daysPlayed)
+        public bool Add(string orderKey, uint daysPlayed)
         {
-            RecentOrdersCompleted[orderKey] = daysPlayed;
+            return RecentOrdersCompleted.TryAdd(orderKey, daysPlayed);
         }
 
         public bool Remove(string orderKey)
@@ -50,9 +50,9 @@ namespace SpecialOrdersExtended.DataModels
             return RecentOrdersCompleted.Remove(orderKey);
         }
 
-        public bool IsWithinXDays(string orderKey, int days)
+        public bool IsWithinXDays(string orderKey, uint days)
         {
-            if (RecentOrdersCompleted.TryGetValue(orderKey, out int dayCompleted))
+            if (RecentOrdersCompleted.TryGetValue(orderKey, out uint dayCompleted))
             {
                 return dayCompleted + days > Game1.stats.daysPlayed;
             }

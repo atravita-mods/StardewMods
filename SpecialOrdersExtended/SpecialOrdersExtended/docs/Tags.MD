@@ -35,3 +35,4 @@ Tags are used to restrict the appearance of special orders. Tags can be negated 
 15. `craftingrecipe_<recipe>`: If any farmer has the recipe. Negate with `craftingrecipe_<recipe>_not`. (Added in 1.0.1)
 16. `cookingrecipe_<recipe>`: Same as above, just for cooking. Also added in 1.0.1.
 17. `stats_<statskey>_<num>`: If any farmer has any of the very long list of stats tracked by the game itself, minus `averageBedTime`, `totalMoneyGifted`, and `timesUnconscious`. `stats_<statskey>_under_<num>` for strictly less than. A list of stats is available from the console command `list_available_stats`. Stats provided by other mods will also be included. Hardcoded stats are not case-sensitive, but the ones in the stats dictionary are.
+18. `walnutcount_<num>`: If the farmer team as at least that many walnuts. Use `walnutcount_under_<num>` for strictly under. Added in 1.0.4.

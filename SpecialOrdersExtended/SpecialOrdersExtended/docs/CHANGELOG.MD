@@ -3,8 +3,10 @@ Changelog
 
 #### Todo
 
-Alter dialogue conditions so `_Completed` is said for the rest of the day instead of being forgotten when the player dismisses the quest
-
+1. Alter dialogue conditions so `_Completed` is said for the rest of the day instead of being forgotten when the player dismisses the quest
+2. Add condition for total number of quests (both Qi and otherwise completed.)
+3. Document tokens.
+4. Document dialogue keys, their storage, and how to use console commands to check that.
 
 #### Version 1.0.4 (upcoming)
 

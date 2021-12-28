@@ -18,6 +18,22 @@ namespace SpecialOrdersExtended
 
         public static void Save() => recentCompletedSO.Save();
 
+        public static bool Add(string questkey)
+        {
+            if (!Context.IsWorldReady) { throw new SaveNotLoadedError(); }
+            return recentCompletedSO.Add(questkey, Game1.stats.DaysPlayed);
+        }
 
+        public static bool Remove(string questkey)
+        {
+            if (!Context.IsWorldReady) { throw new SaveNotLoadedError(); }
+            return recentCompletedSO.Remove(questkey);
+        }
+
+        public static bool IsWithinXDays(string questkey, uint days )
+        {
+            if (!Context.IsWorldReady) { throw new SaveNotLoadedError(); }
+            return recentCompletedSO.IsWithinXDays(questkey, days);
+        }
     }
 }

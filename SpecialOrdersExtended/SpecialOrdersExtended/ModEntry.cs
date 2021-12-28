@@ -84,11 +84,13 @@ namespace SpecialOrdersExtended
         {
             StatsManager.ClearProperties();
             DialogueManager.SaveDialogueLog();
+            RecentSOManager.Save();
         }
 
         private void SaveLoaded(object sender, StardewModdingAPI.Events.SaveLoadedEventArgs e)
         {
             DialogueManager.LoadDialogueLog();
+            RecentSOManager.Load();
         }
 
         private void ConsoleCheckTag(string command, string[] args)

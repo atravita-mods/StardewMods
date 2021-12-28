@@ -115,8 +115,8 @@ namespace FarmCaveSpawn
         private void SpawnFruit(object sender, StardewModdingAPI.Events.DayStartedEventArgs e)
         {
             if (!Context.IsMainPlayer) { return; }
-            if (!config.EarlyFarmCave && (Game1.MasterPlayer.caveChoice?.Value == null || Game1.MasterPlayer.caveChoice.Value <= 0)) { return; }
-            if (!config.IgnoreFarmCaveType && (Game1.MasterPlayer.caveChoice?.Value == null || Game1.MasterPlayer.caveChoice.Value != 1)) { return; }
+            if (!config.EarlyFarmCave && (Game1.MasterPlayer.caveChoice?.Value is null || Game1.MasterPlayer.caveChoice.Value <= 0)) { return; }
+            if (!config.IgnoreFarmCaveType && (Game1.MasterPlayer.caveChoice?.Value is null || Game1.MasterPlayer.caveChoice.Value != 1)) { return; }
             int count = 0;
             TreeFruit = GetTreeFruits();
             random = new((int)Game1.uniqueIDForThisGame * 2 + (int)Game1.stats.DaysPlayed * 7);
@@ -135,7 +135,7 @@ namespace FarmCaveSpawn
             if (Helper.ModRegistry.IsLoaded("FlashShifter.SVECode"))
             {
                 GameLocation minecartCave = Game1.getLocationFromName("Custom_MinecartCave");
-                if (minecartCave != null)
+                if (minecartCave is not null)
                 {
                     Monitor.Log("Found SVE minecart cave.");
                     foreach (Vector2 v in IterateTiles(minecartCave))
@@ -147,7 +147,7 @@ namespace FarmCaveSpawn
                 }
 
                 GameLocation deepCave = Game1.getLocationFromName("Custom_DeepCave");
-                if (deepCave != null)
+                if (deepCave is not null)
                 {
                     Monitor.Log("Found SVE deep cave.");
                     foreach (Vector2 v in IterateTiles(deepCave))

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
 using HarmonyLib;
 
@@ -15,14 +14,12 @@ namespace SpecialOrdersExtended
     {
         public static IMonitor ModMonitor;
         public static StatsManager StatsManager;
-        //public static ITranslationHelper I18n;
         public static IDataHelper DataHelper;
 
         public override void Entry(IModHelper helper)
         {
             I18n.Init(helper.Translation);
-            ModMonitor = this.Monitor;
-            //I18n = Helper.Translation;
+            ModMonitor = Monitor;
             StatsManager = new();
             DataHelper = helper.Data;
 
@@ -76,7 +73,7 @@ namespace SpecialOrdersExtended
         private void RegisterTokens(object sender, StardewModdingAPI.Events.GameLaunchedEventArgs e)
         {
             var api = this.Helper.ModRegistry.GetApi<Tokens.IContentPatcherAPI>("Pathoschild.ContentPatcher");
-            if (api == null) { ModMonitor.Log(I18n.CpNotInstalled(), LogLevel.Warn); return; }
+            if (api is null) { ModMonitor.Log(I18n.CpNotInstalled(), LogLevel.Warn); return; }
 
             api.RegisterToken(this.ModManifest, "Current", new Tokens.CurrentSpecialOrders());
             api.RegisterToken(this.ModManifest, "Available", new Tokens.AvailableSpecialOrders());
@@ -123,7 +120,7 @@ namespace SpecialOrdersExtended
         {
             if (!Context.IsWorldReady) { ModMonitor.Log(I18n.LoadSaveFirst(), LogLevel.Warn); }
             Dictionary<string, SpecialOrderData> order_data = Game1.content.Load <Dictionary<string, SpecialOrderData>>("Data\\SpecialOrders");
-            List<string> keys = new(order_data.Keys);
+            List<string> keys = Utilities.ContextSort(order_data.Keys);
             ModMonitor.Log(I18n.NumberFound(count: keys.Count), LogLevel.Debug);
 
             List<string> validkeys = new();
@@ -138,8 +135,8 @@ namespace SpecialOrdersExtended
                     if (!Game1.MasterPlayer.team.completedSpecialOrders.ContainsKey(key)) { unseenkeys.Add(key); }
                 }
             }
-            ModMonitor.Log($"{validkeys.Count} {I18n.ValidKeys()}: {string.Join(", ", validkeys)}", LogLevel.Debug);
-            ModMonitor.Log($"{unseenkeys.Count} {I18n.UnseenKeys()}: {string.Join(", ", unseenkeys)}", LogLevel.Debug);
+            ModMonitor.Log($"{I18n.ValidKeys(count:validkeys.Count)}: {string.Join(", ", validkeys)}", LogLevel.Debug);
+            ModMonitor.Log($"{I18n.UnseenKeys(count:unseenkeys.Count)}: {string.Join(", ", unseenkeys)}", LogLevel.Debug);
         }
 
         private bool IsAvailableOrder(string key, SpecialOrderData order)

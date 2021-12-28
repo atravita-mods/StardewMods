@@ -21,13 +21,13 @@ namespace SpecialOrdersExtended.Tokens
         /// <returns>Will return one value if given a Special Order, or all Special Orders if not</returns>
         public virtual bool CanHaveMultipleValues(string input = null)
         {
-            return (input == null);
+            return (input is null);
         }
 
         /// <summary>Get whether the token is available for use.</summary>
         public virtual bool IsReady()
         {
-            return SpecialOrdersCache != null;
+            return SpecialOrdersCache is not null;
         }
 
         /// <summary>Validate that the provided input arguments are valid.</summary>
@@ -47,8 +47,8 @@ namespace SpecialOrdersExtended.Tokens
         /// <param name="input">The input arguments, if applicable.</param>
         public virtual IEnumerable<string> GetValues(string input)
         {
-            if (SpecialOrdersCache == null) { yield break; }
-            else if  (input == null)
+            if (SpecialOrdersCache is null) { yield break; }
+            else if  (input is null)
             {
                 foreach (string specialorder in SpecialOrdersCache)
                 {
@@ -68,7 +68,7 @@ namespace SpecialOrdersExtended.Tokens
         public virtual bool HasBoundedValues(string input, out IEnumerable<string> allowedValues)
         {
             allowedValues = new List<string>() { "true", "false" };
-            if (input == null) {return false; }
+            if (input is null) {return false; }
             return true;
         }
     }

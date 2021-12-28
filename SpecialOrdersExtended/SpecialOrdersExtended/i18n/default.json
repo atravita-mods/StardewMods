@@ -16,8 +16,8 @@
   "false": "False",
 
   "number-found": "{{count}} individual special orders found.",
-  "valid-keys": "Valid keys",
-  "unseen-keys": "Unseen keys",
+  "valid-keys": "{{count}} valid keys",
+  "unseen-keys": "{{count}} unseen keys",
   "analyzing": "Analyzing",
   "parsable": "seems parsable",
   "unparsable": "has errors in parsing",

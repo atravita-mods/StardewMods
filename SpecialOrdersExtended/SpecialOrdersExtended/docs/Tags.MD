@@ -31,6 +31,7 @@ Tags are used to restrict the appearance of special orders. Tags can be negated 
 11. `houselevel_<num>`: Whether or not any farmer has the house upgrade referenced. Mostly useful for checking if anyone has a basement, I think. `houselevel_under_<num>` for strictly under.
 12. `moneyearned_<num>`: Whether or not players have earned a certain amount of money.
 13. `skillllevel_<skillname>_<num>`: Whether any farmer has the required skill level (note: three l's). `skilllevel_<skillname>_under_<num>` for strictly under.
+14. `achievement_<key>`: Whether any farmer has the achievement in question, where `key` is the key in `Data/achievements`. Use `achievement_<key>_not` to negate.
 14. `hasspecialitem_<item>`: If any farmer has the special item. Valid items: `clubCard`, `specialCharm`, `skullKey`, `rustyKey`, `translationGuide`, `townKey`. Use `hasspecialitem_<item>_not` for the inverse - if NO farmer has the `clubCard`, etc.
 15. `craftingrecipe_<recipe>`: If any farmer has the recipe. Negate with `craftingrecipe_<recipe>_not`. (Added in 1.0.1)
 16. `cookingrecipe_<recipe>`: Same as above, just for cooking. Also added in 1.0.1.

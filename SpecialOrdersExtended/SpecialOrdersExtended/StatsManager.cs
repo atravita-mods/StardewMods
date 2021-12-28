@@ -53,7 +53,7 @@ namespace SpecialOrdersExtended
         public void ConsoleListProperties(string command, string[] args)
         {
             if (propertyInfos.Count.Equals(0)) { GrabProperties(); }
-            ModEntry.ModMonitor.Log($"{I18n.CurrentKeysFound()}: \n    {I18n.Hardcoded()}:{String.Join(", ", Utilities.ContextSort(propertyInfos.Keys))}\n    {I18n.Dictionary()}:{String.Join(", ", Game1.player.stats.stat_dictionary.Keys)}", LogLevel.Info);
+            ModEntry.ModMonitor.Log($"{I18n.CurrentKeysFound()}: \n    {I18n.Hardcoded()}:{String.Join(", ", Utilities.ContextSort(propertyInfos.Keys))}\n    {I18n.Dictionary()}:{String.Join(", ", Utilities.ContextSort(Game1.player.stats.stat_dictionary.Keys))}", LogLevel.Info);
         }
     }
 }

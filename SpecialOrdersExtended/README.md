@@ -20,7 +20,7 @@ Additionally, adds two console commands to help debug special orders. `check_tag
 
 Finally, adds dialogue keys. Their documentation can be found here: https://github.com/atravita-mods/SpecialOrdersExtended/blob/master/SpecialOrdersExtended/docs/DialogueKeys.MD.
 
-**Technical:** Uses Harmony to patch SpecialOrder.CheckTag and NPC:checkForNewCurrentDialogue. Requires SMAPI.
+**Technical:** Uses Harmony to patch `SpecialOrder.CheckTag` and `NPC:checkForNewCurrentDialogue`. Requires SMAPI.
 
 Changelog: https://github.com/atravita-mods/SpecialOrdersExtended/blob/master/SpecialOrdersExtended/docs/CHANGELOG.MD
 

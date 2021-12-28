@@ -78,6 +78,7 @@ namespace SpecialOrdersExtended
             api.RegisterToken(this.ModManifest, "Current", new Tokens.CurrentSpecialOrders());
             api.RegisterToken(this.ModManifest, "Available", new Tokens.AvailableSpecialOrders());
             api.RegisterToken(this.ModManifest, "Completed", new Tokens.CompletedSpecialOrders());
+            api.RegisterToken(this.ModManifest, "CurrentRules", new Tokens.CurrentSpecialOrderRule());
         }
 
         private void Saving(object sender, StardewModdingAPI.Events.SavingEventArgs e)

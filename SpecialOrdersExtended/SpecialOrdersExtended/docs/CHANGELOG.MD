@@ -7,6 +7,12 @@ Changelog
 2. Add condition for total number of quests (both Qi and otherwise completed.)
 3. Document tokens.
 4. Document dialogue keys, their storage, and how to use console commands to check that.
+5. Move loading of data models to first use and not when the save is loaded, perhaps.
+6. Look into exposing the current active special orders rule as a token. (suggestion from shekurika#8884)
+
+##### In consideration
+
+1. Somehow limit the kill objective to just monsters on a certain (few?) maps. (Perhaps a custom objective, perhaps a Special Rule).
 
 #### Version 1.0.4 (upcoming)
 

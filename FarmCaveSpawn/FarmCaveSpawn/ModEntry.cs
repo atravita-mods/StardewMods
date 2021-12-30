@@ -19,6 +19,7 @@ namespace FarmCaveSpawn
         public float TreeFruitChance { get; set; } = 50f; //probability of the spawn being a tree fruit.
         public bool IgnoreFarmCaveType { get; set; } = false; //should I spawn fruits regardless of the farm cave type?
         public bool EarlyFarmCave { get; set; } = false; //allow spawn of fruits even before Demetrius shows up.
+        public bool UseModCaves { get; set; } = true;//use caves found in the additional locations list!
         public bool UseMineCave { get; set; } = false; //allow spawn of fruits into the mine cave (after fruit cave)
         public bool SeasonalOnly { get; set; } = false; //limit to just seasonal tree fruit.
         public bool AllowAnyTreeProduct { get; set; } = true;

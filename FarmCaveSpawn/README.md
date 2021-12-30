@@ -12,6 +12,7 @@ Any fruit tree's products can be spawned. Mod trees, as long as they're register
 3. `TreeFruitChance`: the percent chance any particular spawn will be fruit tree fruit and not common forage. (Range: 0-100, where 100 means every spawn will be a tree fruit)
 4. `IgnoreFarmCaveType`: if true, will spawn fruit in any farm cave (as long as you've seen the cutscene). If false, requires that the fruit cave be selected.
 5. `EarlyFarmCave`: if true, will spawn even before the cutscene is seen.
+5. `UseModCaves`: if true, will spawn fruit in caves added by mods, if they're registered with this mod. (Upcoming in 1.0.6)
 6. `UseMineCave`: if true, will spawn fruit in the mine cave entrances as well (if `MaxDailySpawns` is not hit.)
 7. `SeasonalOnly`: limits to just the fruits that are in-season. After all, those bats have to be getting the fruit from somewhere, right?
 8. `AllowAnyTreeProduct`: if true, allows any product found for any fruit tree to be spawned. If false, will only spawn items that are categorized as fruit in the game.
@@ -36,10 +37,24 @@ The console command `list_fruits` will tell you which tree fruits are available 
 
 this mod won't spawn your fruit.
 
+**AdditionalLocations**: Want this mod to spawn fruit in a mod-added location? Just use Content patcher to add an entry to `Mods/atravita_FarmCaveSpawn_additionalLocations` that looks like
+
+```
+{
+    "Action": "EditData",
+    "Target": "Mods/atravita_FarmCaveSpawn_additionalLocations",
+    "Entries": {
+        "your.uniqueID": "Comma,Seperated,List,Of,Location,Names"
+    }
+}
+```
+
+to add your location as a location fruit will spawn.
+
 **Installation**: unzip into your mods folder. **Uninstallation**: simply delete from mods folder.
 
 **Multiplayer**: host should install mod. Mod does not do anything for farmhands.
 
-**SVE**: will also spawn in the MinecartCave and the DeepCave. It goes room by room, so if you don't see spawns in MinecartCave and Deepcave try setting the spawn chance lower and the max daily spawns higher.
+**SVE**: will also spawn in the MinecartCave and the DeepCave, if `UseModCaves` is enabled (after 1.0.6). It goes room by room, so if you don't see spawns in MinecartCave and Deepcave try setting the spawn chance lower and the max daily spawns higher.
 
 **Changelog**: https://github.com/atravita-mods/FarmCaveSpawn/blob/master/FarmCaveSpawn/docs/CHANGELOG.MD

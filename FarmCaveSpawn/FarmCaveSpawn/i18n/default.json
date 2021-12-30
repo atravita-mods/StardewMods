@@ -11,6 +11,8 @@
   "IgnoreFarmCaveType.description": "If enabled, spawns fruit in all cave types",
   "EarlyFarmCave.title": "Allow Early Fruit Cave",
   "EarlyFarmCave.description": "Spawns fruit even before the fruit cave cutscene.",
+  "UseModCaves.title": "Use Mod Caves",
+  "UseModCaves.description":  "Allows fruits to spawn in caves added by mods (if registered with this mod.)\n\nSVE included by default.",
   "UseMineCave.title": "Use Mine Entrance",
   "UseMineCave.description": "Allows fruits to spawn in the mine entrance as well (after spawning in the Farm Cave, if Max Daily Spawns is not yet hit.",
   "SeasonalOnly.title": "Seasonal Fruit Only",

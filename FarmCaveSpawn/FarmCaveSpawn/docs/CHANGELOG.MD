@@ -2,6 +2,10 @@
 ======
 #### Todo
 
+#### Version 1.0.6
+
+* Adds ability for other mods to add locations this mod will spawn fruit in. (Move SVE additional farmcave location support to that.)
+
 #### Version 1.0.5
 
 Fix the options, because I screwed them up trying to de-hardcode them...

@@ -34,6 +34,7 @@ namespace FarmCaveSpawn
         private Random random;
 
         private readonly string denylistLocation = PathUtilities.NormalizeAssetName("Mods/atravita_FarmCaveSpawn_denylist");
+        private readonly string additionalLocationsLocation = PathUtilities.NormalizeAssetName("Mods/atravita_FarmCaveSpawn_additionalLocations");
 
         public override void Entry(IModHelper helper)
         {
@@ -131,28 +132,15 @@ namespace FarmCaveSpawn
             farmcave.UpdateReadyFlag();
             if (count >= config.MaxDailySpawns) { Cleanup(); return; }
 
-            //For SVE:
-            if (Helper.ModRegistry.IsLoaded("FlashShifter.SVECode"))
+            foreach (string location in GetData(additionalLocationsLocation))
             {
-                GameLocation minecartCave = Game1.getLocationFromName("Custom_MinecartCave");
-                if (minecartCave is not null)
+                GameLocation gameLocation = Game1.getLocationFromName(location);
+                if (gameLocation is not null)
                 {
-                    Monitor.Log("Found SVE minecart cave.");
-                    foreach (Vector2 v in IterateTiles(minecartCave))
+                    Monitor.Log($"Found {gameLocation}");
+                    foreach (Vector2 v in IterateTiles(gameLocation))
                     {
-                        PlaceFruit(minecartCave, v);
-                        count++;
-                        if (count >= config.MaxDailySpawns) { Cleanup(); return; }
-                    }
-                }
-
-                GameLocation deepCave = Game1.getLocationFromName("Custom_DeepCave");
-                if (deepCave is not null)
-                {
-                    Monitor.Log("Found SVE deep cave.");
-                    foreach (Vector2 v in IterateTiles(deepCave))
-                    {
-                        PlaceFruit(deepCave, v);
+                        PlaceFruit(gameLocation, v);
                         count++;
                         if (count >= config.MaxDailySpawns) { Cleanup(); return; }
                     }
@@ -222,25 +210,25 @@ namespace FarmCaveSpawn
             Monitor.Log($"Possible fruits: {String.Join(", ", FruitNames)}", LogLevel.Info);
         }
 
-        private List<string> GetDenyList()
+        private List<string> GetData(string datalocation)
         {
-            IDictionary<string, string> rawdenylist = Helper.Content.Load<Dictionary<string, string>>(denylistLocation, ContentSource.GameContent);
-            List<string> denylist = new();
+            IDictionary<string, string> rawlist = Helper.Content.Load<Dictionary<string, string>>(datalocation, ContentSource.GameContent);
+            List<string> datalist = new();
 
-            foreach (string uniqueID in rawdenylist.Keys)
+            foreach (string uniqueID in rawlist.Keys)
             {
                 if (Helper.ModRegistry.IsLoaded(uniqueID))
                 {
-                    denylist.AddRange(rawdenylist[uniqueID].Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries));
+                    datalist.AddRange(rawlist[uniqueID].Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries));
                 }
             }
-            return denylist;
+            return datalist;
         }
 
         private List<int> GetTreeFruits()
         {
 
-            List<string> denylist = GetDenyList();
+            List<string> denylist = GetData(denylistLocation);
 
             List<int> TreeFruits = new();
             Dictionary<int, string> fruittrees= Helper.Content.Load<Dictionary<int, string>>("Data/fruitTrees", ContentSource.GameContent);
@@ -300,15 +288,30 @@ namespace FarmCaveSpawn
 
         public bool CanLoad<T>(IAssetInfo asset)
         {
-            return asset.AssetNameEquals(denylistLocation);
+            return asset.AssetNameEquals(denylistLocation) || asset.AssetNameEquals(additionalLocationsLocation);
         }
 
+        /// <summary>
+        /// Load initial blank denylist for other mods to edit later,
+        /// Load initial additional areas list with SVE areas included
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="asset"></param>
+        /// <returns></returns>
+        /// <exception cref="InvalidOperationException"></exception>
         public T Load<T>(IAssetInfo asset)
         {
             if (asset.AssetNameEquals(denylistLocation))
             {
                 return (T)(object)new Dictionary<string, string>
                 {
+                };
+            }
+            else if (asset.AssetNameEquals(additionalLocationsLocation))
+            {
+                return (T)(object)new Dictionary<string, string>
+                {
+                    ["FlashShifter.SVECode"]= "Custom_MinecartCave, Custom_DeepCave",
                 };
             }
             throw new InvalidOperationException($"Should not have tried to load '{asset.AssetName}'.");

@@ -1,7 +1,7 @@
 {
    "Name": "FarmCaveSpawn",
    "Author": "atravita",
-   "Version": "1.0.5",
+   "Version": "1.0.6",
    "Description": "Spawn more tree fruit in the fruit cave",
    "UniqueID": "atravita.FarmCaveSpawn",
    "EntryDll": "FarmCaveSpawn.dll",

@@ -63,9 +63,9 @@ namespace SpecialOrdersExtended.DataModels
         {
             StringBuilder stringBuilder = new();
             stringBuilder.Append($"DialogueLog({Savefile}):");
-            foreach (string key in SeenDialogues.Keys)
+            foreach (string key in Utilities.ContextSort(SeenDialogues.Keys))
             {
-                stringBuilder.Append($"\n    {key}: {String.Join(", ", SeenDialogues[key])}");
+                stringBuilder.AppendLine().Append($"    {key}:").AppendJoin(", ", SeenDialogues[key]);
             }
             return stringBuilder.ToString();
         }

@@ -68,6 +68,7 @@ namespace SpecialOrdersExtended
             helper.Events.GameLoop.GameLaunched += RegisterTokens;
             helper.Events.GameLoop.SaveLoaded += SaveLoaded;
             helper.Events.GameLoop.Saving += Saving;
+            helper.Events.GameLoop.TimeChanged += TimeChanged;
         }
 
         private void RegisterTokens(object sender, StardewModdingAPI.Events.GameLaunchedEventArgs e)
@@ -79,13 +80,19 @@ namespace SpecialOrdersExtended
             api.RegisterToken(this.ModManifest, "Available", new Tokens.AvailableSpecialOrders());
             api.RegisterToken(this.ModManifest, "Completed", new Tokens.CompletedSpecialOrders());
             api.RegisterToken(this.ModManifest, "CurrentRules", new Tokens.CurrentSpecialOrderRule());
+            api.RegisterToken(this.ModManifest, "RecentCompleted", new Tokens.RecentCompletedSO());
         }
 
         private void Saving(object sender, StardewModdingAPI.Events.SavingEventArgs e)
         {
             StatsManager.ClearProperties();
             DialogueManager.SaveDialogueLog();
+            RecentSOManager.DayUpdate(Game1.stats.daysPlayed);
             RecentSOManager.Save();
+        }
+        private void TimeChanged(object sender, StardewModdingAPI.Events.TimeChangedEventArgs e)
+        {
+            RecentSOManager.UpdateCurrentOrderCache();
         }
 
         private void SaveLoaded(object sender, StardewModdingAPI.Events.SaveLoadedEventArgs e)

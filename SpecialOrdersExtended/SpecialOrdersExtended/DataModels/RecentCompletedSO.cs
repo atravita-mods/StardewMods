@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using StardewModdingAPI;
 
+using System.Linq;
 using StardewValley;
 
 namespace SpecialOrdersExtended.DataModels
@@ -40,15 +41,9 @@ namespace SpecialOrdersExtended.DataModels
             }
         }
 
-        public bool Add(string orderKey, uint daysPlayed)
-        {
-            return RecentOrdersCompleted.TryAdd(orderKey, daysPlayed);
-        }
+        public bool Add(string orderKey, uint daysPlayed) => RecentOrdersCompleted.TryAdd(orderKey, daysPlayed);
 
-        public bool Remove(string orderKey)
-        {
-            return RecentOrdersCompleted.Remove(orderKey);
-        }
+        public bool Remove(string orderKey) => RecentOrdersCompleted.Remove(orderKey);
 
         public bool IsWithinXDays(string orderKey, uint days)
         {
@@ -59,6 +54,21 @@ namespace SpecialOrdersExtended.DataModels
             return false;
         }
 
-        //ToString?
+        public IEnumerable<string> GetKeys(uint days)
+        {
+            return RecentOrdersCompleted.Keys
+                .Where(a => RecentOrdersCompleted[a] + days >= Game1.stats.DaysPlayed);
+        }
+
+        public override string ToString()
+        {
+            StringBuilder stringBuilder = new();
+            stringBuilder.AppendLine($"RecentCompletedSO{Savefile}");
+            foreach (string key in Utilities.ContextSort(RecentOrdersCompleted.Keys))
+            {
+                stringBuilder.AppendLine($"{key} completed on Day {RecentOrdersCompleted[key]}");
+            }
+            return stringBuilder.ToString();
+        }
     }
 }

@@ -3,7 +3,7 @@ Changelog
 
 #### Todo
 
-1. Alter dialogue conditions so `_Completed` is said for the rest of the day instead of being forgotten when the player dismisses the quest
+1. Add condition to just randomly reduce the chance of a quest appearing. (May need integrate with that one mod that changes the day special orders appear?)
 2. Add condition for total number of quests (both Qi and otherwise completed.)
 3. Document tokens.
 4. Document dialogue keys, their storage, and how to use console commands to check that.
@@ -17,8 +17,9 @@ Changelog
 #### Version 1.0.4 (upcoming)
 
 * Added tokens (Current, Available, Completed). (Thanks, Lumina, for the suggestion!)
-* Added `achievement`, `walnutcount` to possible tags. De-hardcoded the stats section (and added a console command to list available stats).
+* Added `achievement`, `walnutcount` to possible tags. De-hardcoded the stats section (and added a console command to list available stats). (Thanks, vert, for the suggestion!)
 * Moved saving of previously-said dialogue lines to a custom data class instead of using mailflags.
+* Alter dialogue conditions so `_Completed` is said for the rest of the day instead of being forgotten when the player dismisses the quest
 
 #### Version 1.0.3
 

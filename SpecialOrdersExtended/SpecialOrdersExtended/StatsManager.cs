@@ -26,10 +26,7 @@ namespace SpecialOrdersExtended
                 .ToDictionary((PropertyInfo p)=> p.Name.ToLowerInvariant(), p => p);
         }
 
-        public void ClearProperties()
-        {
-            propertyInfos.Clear();
-        }
+        public void ClearProperties() => propertyInfos.Clear();
 
         public uint GrabBasicProperty(string key, Stats stats)
         {

@@ -108,46 +108,60 @@ namespace SpecialOrdersExtended
                         SpecialOrder.QuestState.Complete => "_Completed",
                         _ => throw new UnexpectedEnumValueException<SpecialOrder.QuestState>(specialOrder.questState.Value),
                     };
-
-                    string dialogueKey = $"{baseKey}_{Game1.shortDayDisplayNameFromDayOfSeason(Game1.dayOfMonth)}";
-                    if (__instance.Dialogue.ContainsKey(dialogueKey))
-                    {
-                        if (!TryAddSeenDialogue(dialogueKey, __instance.Name)) { continue; } //I have already said this dialogue
-                        __instance.CurrentDialogue.Push(new Dialogue(__instance.Dialogue[dialogueKey], __instance) { removeOnNextMove = true });
-                        ModEntry.ModMonitor.Log(I18n.Dialogue_FoundKey(dialogueKey), LogLevel.Trace);
-                        __result = true;
-                        return;
-                    }
-
-                    for (int heartLevel = 14; heartLevel > 0; heartLevel -= 2)
-                    {
-                        dialogueKey = $"{baseKey}{heartLevel}";
-                        if (__0 > heartLevel && __instance.Dialogue.ContainsKey(dialogueKey))
-                        {
-                            if (!TryAddSeenDialogue(dialogueKey, __instance.Name)) { continue; } //I have already said this dialogue
-                            __instance.CurrentDialogue.Push(new Dialogue(__instance.Dialogue[dialogueKey], __instance) { removeOnNextMove = true });
-                            ModEntry.ModMonitor.Log(I18n.Dialogue_FoundKey(dialogueKey), LogLevel.Trace);
-                            __result = true;
-                            return;
-                        }
-                    }
-
-                    if (__instance.Dialogue.ContainsKey(baseKey))
-                    {
-                        if (!TryAddSeenDialogue(baseKey, __instance.Name)) { continue; } //I have already said this dialogue
-                        __instance.CurrentDialogue.Push(new Dialogue(__instance.Dialogue[baseKey], __instance) { removeOnNextMove = true });
-                        ModEntry.ModMonitor.Log(I18n.Dialogue_FoundKey(baseKey), LogLevel.Trace);
-                        __result = true;
-                        return;
-                    }
-
-                    ModEntry.ModMonitor.Log(I18n.Dialogue_NoKey(baseKey, __instance.Name), LogLevel.Trace);
+                    __result = FindBestDialogue(baseKey, __instance, __0);
+                    if (__result) { return; }
+                }
+                foreach (string cacheOrder in RecentSOManager.GetKeys(1u))
+                {
+                    __result = FindBestDialogue(cacheOrder+"_Completed", __instance, __0);
+                    if (__result) { return; }
                 }
             }
             catch (Exception ex)
             {
                 ModEntry.ModMonitor.Log($"{I18n.Dialogue_ErrorInPatchedFunction(__instance.Name)}\n{ex}", LogLevel.Error);
             }
+        }
+
+        /// <summary>
+        /// Checks to see if a dialoguekey has been said already, and if not said, pushes the dialogue
+        /// onto the dialogue stack
+        /// </summary>
+        /// <param name="dialogueKey">Dialogue key to check </param>
+        /// <param name="npc">NPC that says the dialogue</param>
+        /// <returns>true if a dialogue is successfully pushed, false otherwise</returns>
+        private static bool PushAndSaveDialogue(string dialogueKey, NPC npc)
+        {
+            if (!TryAddSeenDialogue(dialogueKey, npc.Name)) { return false; } //I have already said this dialogue
+            npc.CurrentDialogue.Push(new Dialogue(npc.Dialogue[dialogueKey], npc) { removeOnNextMove = true });
+            ModEntry.ModMonitor.Log(I18n.Dialogue_FoundKey(dialogueKey), LogLevel.Trace);
+            return true;
+        }
+
+        public static bool FindBestDialogue(string baseKey, NPC npc, int hearts)
+        {
+            string dialogueKey = $"{baseKey}_{Game1.shortDayDisplayNameFromDayOfSeason(Game1.dayOfMonth)}";
+            if (npc.Dialogue.ContainsKey(dialogueKey))
+            {
+                if (PushAndSaveDialogue(dialogueKey, npc)) { return true; }
+            }
+
+            for (int heartLevel = 14; heartLevel > 0; heartLevel -= 2)
+            {
+                dialogueKey = $"{baseKey}{heartLevel}";
+                if (hearts > heartLevel && npc.Dialogue.ContainsKey(dialogueKey))
+                {
+                    if (PushAndSaveDialogue(dialogueKey, npc)) { return true; }
+                }
+            }
+
+            if (npc.Dialogue.ContainsKey(baseKey))
+            {
+                if (PushAndSaveDialogue(baseKey, npc)) { return true; }
+            }
+
+            ModEntry.ModMonitor.Log(I18n.Dialogue_NoKey(baseKey, npc.Name), LogLevel.Trace);
+            return false;
         }
     }
 

@@ -12,7 +12,7 @@ namespace SpecialOrdersExtended.Tokens
     {
         public bool UpdateContext()
         {
-            List<string> rules; // = (Game1.player?.team?.specialOrders ?? SaveGame.loaded?.specialOrders)....
+            List<string> rules;
             if (Context.IsWorldReady)
             {
                 rules = Game1.player.team.specialOrders
@@ -21,7 +21,8 @@ namespace SpecialOrdersExtended.Tokens
             }
             else
             {
-                rules = SaveGame.loaded?.specialOrders?.SelectMany((SpecialOrder i) => i.specialRule.Value.Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries))
+                rules = SaveGame.loaded?.specialOrders
+                    ?.SelectMany((SpecialOrder i) => i.specialRule.Value.Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries))
                     ?.OrderBy(a => a)?.ToList();
             }
 

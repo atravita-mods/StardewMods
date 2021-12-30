@@ -8,7 +8,7 @@ Changelog
 3. Document tokens.
 4. Document dialogue keys, their storage, and how to use console commands to check that.
 5. Move loading of data models to first use and not when the save is loaded, perhaps.
-6. Look into exposing the current active special orders rule as a token. (suggestion from shekurika#8884)
+
 
 ##### In consideration
 
@@ -16,7 +16,8 @@ Changelog
 
 #### Version 1.0.4 (upcoming)
 
-* Added tokens (Current, Available, Completed). (Thanks, Lumina, for the suggestion!)
+* Added tokens (`Current`, `Available`, `Completed`, `RecentCompleted`). (Thanks, Lumina, for the suggestion!)
+* Added token for the current special order rules (`CurrentRules`) (suggestion from shekurika#8884)
 * Added `achievement`, `walnutcount` to possible tags. De-hardcoded the stats section (and added a console command to list available stats). (Thanks, vert, for the suggestion!)
 * Moved saving of previously-said dialogue lines to a custom data class instead of using mailflags.
 * Alter dialogue conditions so `_Completed` is said for the rest of the day instead of being forgotten when the player dismisses the quest

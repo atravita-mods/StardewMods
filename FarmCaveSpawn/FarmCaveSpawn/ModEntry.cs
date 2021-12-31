@@ -1,25 +1,25 @@
 ﻿using System.Globalization;
 using Microsoft.Xna.Framework;
-using StardewModdingAPI.Utilities;
+
 using StardewValley.Locations;
 
 
 namespace FarmCaveSpawn;
 
-public class ModEntry : Mod, IAssetLoader
+public class ModEntry : Mod
 {
     private ModConfig config;
     private readonly List<int> BaseFruit = new() { 296, 396, 406, 410 };
     private List<int> TreeFruit;
     private Random random;
+    private AssetManager assetManager;
 
-    private readonly string denylistLocation = PathUtilities.NormalizeAssetName("Mods/atravita_FarmCaveSpawn_denylist");
-    private readonly string additionalLocationsLocation = PathUtilities.NormalizeAssetName("Mods/atravita_FarmCaveSpawn_additionalLocations");
 
     public override void Entry(IModHelper helper)
     {
         I18n.Init(helper.Translation);
         config = Helper.ReadConfig<ModConfig>();
+        assetManager = new();
         helper.Events.GameLoop.DayStarted += SpawnFruit;
         helper.Events.GameLoop.GameLaunched += SetUpConfig;
         helper.ConsoleCommands.Add(
@@ -27,6 +27,7 @@ public class ModEntry : Mod, IAssetLoader
             documentation: I18n.ListFruits_Description(),
             callback: this.ListFruits
             );
+        helper.Content.AssetLoaders.Add(assetManager);
     }
 
     /// <summary>
@@ -111,7 +112,7 @@ public class ModEntry : Mod, IAssetLoader
         farmcave.UpdateReadyFlag();
         if (count >= config.MaxDailySpawns) { Cleanup(); return; }
 
-        foreach (string location in GetData(additionalLocationsLocation))
+        foreach (string location in GetData(assetManager.additionalLocationsLocation))
         {
             GameLocation gameLocation = Game1.getLocationFromName(location);
             if (gameLocation is not null)
@@ -145,11 +146,11 @@ public class ModEntry : Mod, IAssetLoader
         Monitor.Log($"Spawning item {fruitToPlace} at {location.Name}:{tile.X},{tile.Y}");
     }
 
-    public IEnumerable<Vector2> IterateTiles(GameLocation location, int xstart = 1, int xend = -1, int ystart = 1, int yend = -1)
+    public IEnumerable<Vector2> IterateTiles(GameLocation location, int xstart = 1, int xend = int.MaxValue, int ystart = 1, int yend = int.MaxValue)
     {
-        foreach (int x in Enumerable.Range(xstart, Math.Max(location.Map.Layers[0].LayerWidth - xend - 1, xstart)).OrderBy((x) => random.Next()))
+        foreach (int x in Enumerable.Range(xstart, Math.Clamp(xend, xstart, location.Map.Layers[0].LayerWidth - 2)).OrderBy((x) => random.Next()))
         {
-            foreach (int y in Enumerable.Range(ystart, Math.Max(location.Map.Layers[0].LayerHeight - yend - 1, ystart)).OrderBy((x) => random.Next()))
+            foreach (int y in Enumerable.Range(ystart, Math.Clamp(yend, ystart, location.Map.Layers[0].LayerHeight - 2)).OrderBy((x) => random.Next()))
             {
                 Vector2 v = new(x, y);
                 if (random.NextDouble() < (config.SpawnChance / 100f) && location.isTileLocationTotallyClearAndPlaceableIgnoreFloors(v))
@@ -197,7 +198,7 @@ public class ModEntry : Mod, IAssetLoader
     private List<int> GetTreeFruits()
     {
 
-        List<string> denylist = GetData(denylistLocation);
+        List<string> denylist = GetData(assetManager.denylistLocation);
 
         List<int> TreeFruits = new();
         Dictionary<int, string> fruittrees = Helper.Content.Load<Dictionary<int, string>>("Data/fruitTrees", ContentSource.GameContent);
@@ -255,34 +256,4 @@ public class ModEntry : Mod, IAssetLoader
         return TreeFruits;
     }
 
-    public bool CanLoad<T>(IAssetInfo asset)
-    {
-        return asset.AssetNameEquals(denylistLocation) || asset.AssetNameEquals(additionalLocationsLocation);
-    }
-
-    /// <summary>
-    /// Load initial blank denylist for other mods to edit later,
-    /// Load initial additional areas list with SVE areas included
-    /// </summary>
-    /// <typeparam name="T"></typeparam>
-    /// <param name="asset"></param>
-    /// <returns></returns>
-    /// <exception cref="InvalidOperationException"></exception>
-    public T Load<T>(IAssetInfo asset)
-    {
-        if (asset.AssetNameEquals(denylistLocation))
-        {
-            return (T)(object)new Dictionary<string, string>
-            {
-            };
-        }
-        else if (asset.AssetNameEquals(additionalLocationsLocation))
-        {
-            return (T)(object)new Dictionary<string, string>
-            {
-                ["FlashShifter.SVECode"] = "Custom_MinecartCave, Custom_DeepCave",
-            };
-        }
-        throw new InvalidOperationException($"Should not have tried to load '{asset.AssetName}'.");
-    }
 }

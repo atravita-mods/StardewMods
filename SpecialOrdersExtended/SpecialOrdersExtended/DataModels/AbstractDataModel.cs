@@ -1,11 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using StardewModdingAPI;
-
-using StardewValley;
-
-namespace SpecialOrdersExtended.DataModels
+﻿namespace SpecialOrdersExtended.DataModels
 {
     internal class AbstractDataModel
     {

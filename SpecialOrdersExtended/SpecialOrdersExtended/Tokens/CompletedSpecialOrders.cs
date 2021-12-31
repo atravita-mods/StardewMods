@@ -1,10 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-
-using StardewValley;
-using StardewModdingAPI;
-
-namespace SpecialOrdersExtended.Tokens
+﻿namespace SpecialOrdersExtended.Tokens
 {
     internal class CompletedSpecialOrders: AbstractToken
     {

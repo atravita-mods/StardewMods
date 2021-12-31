@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using StardewModdingAPI;
-
-namespace SpecialOrdersExtended.Tokens
+﻿namespace SpecialOrdersExtended.Tokens
 {
     /// <summary>The Content Patcher API which other mods can access.</summary>
     public interface IContentPatcherAPI

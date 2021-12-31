@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using StardewModdingAPI;
-
-namespace SpecialOrdersExtended.Tokens
+﻿namespace SpecialOrdersExtended.Tokens
 {
     internal abstract class AbstractToken
     {

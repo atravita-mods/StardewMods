@@ -1,10 +1,4 @@
-﻿using System;
-using System.Linq;
-
-using StardewModdingAPI;
-using StardewValley;
-
-namespace SpecialOrdersExtended
+﻿namespace SpecialOrdersExtended
 {
     internal class TagManager
     {

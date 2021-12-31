@@ -1,7 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-
-namespace SpecialOrdersExtended.Tokens
+﻿namespace SpecialOrdersExtended.Tokens
 {
     internal class RecentCompletedSO: AbstractToken
     {

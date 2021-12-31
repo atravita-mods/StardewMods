@@ -17,7 +17,7 @@ Changelog
 #### Version 1.0.4 (upcoming)
 
 * Added tokens (`Current`, `Available`, `Completed`, `RecentCompleted`). (Thanks, Lumina, for the suggestion!)
-* Added token for the current special order rules (`CurrentRules`) (suggestion from shekurika#8884)
+* Added token for the current special order rules (`CurrentRules`) (Thanks, shekurika, for the suggestion!)
 * Added `achievement`, `walnutcount` to possible tags. De-hardcoded the stats section (and added a console command to list available stats). (Thanks, vert, for the suggestion!)
 * Moved saving of previously-said dialogue lines to a custom data class instead of using mailflags.
 * Alter dialogue conditions so `_Completed` is said for the rest of the day instead of being forgotten when the player dismisses the quest

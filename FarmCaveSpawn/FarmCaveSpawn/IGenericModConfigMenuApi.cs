@@ -1,7 +1,4 @@
-﻿using System;
-using StardewModdingAPI;
-
-namespace FarmCaveSpawn
+﻿namespace FarmCaveSpawn
 {
     /// <summary>The API which lets other mods add a config UI through Generic Mod Config Menu.</summary>
     public interface IGenericModConfigMenuApi

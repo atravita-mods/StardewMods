@@ -1,13 +1,12 @@
-﻿namespace SpecialOrdersExtended.DataModels
+﻿namespace SpecialOrdersExtended.DataModels;
+
+internal abstract class AbstractDataModel
 {
-    internal class AbstractDataModel
+    public string Savefile { get; set; }
+
+    public virtual void Save(string identifier)
     {
-        public string Savefile { get; set; }
-
-        public virtual void Save(string identifier)
-        {
-            ModEntry.DataHelper.WriteGlobalData(Savefile + identifier, this);
-        }
-
+        ModEntry.DataHelper.WriteGlobalData(Savefile + identifier, this);
     }
+
 }

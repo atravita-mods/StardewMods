@@ -1,18 +1,17 @@
-﻿namespace SpecialOrdersExtended
-{
-    public class UnexpectedEnumValueException<T> : Exception
-    {
-        public UnexpectedEnumValueException(T value)
-            : base($"Enum {typeof(T).Name} recieved unexpected value {value}")
-        {
-        }
-    }
+﻿namespace SpecialOrdersExtended;
 
-    public class SaveNotLoadedError: Exception
+public class UnexpectedEnumValueException<T> : Exception
+{
+    public UnexpectedEnumValueException(T value)
+        : base($"Enum {typeof(T).Name} recieved unexpected value {value}")
     {
-        public SaveNotLoadedError() :
-            base("Save not loaded")
-        {
-        }
+    }
+}
+
+public class SaveNotLoadedError : Exception
+{
+    public SaveNotLoadedError() :
+        base("Save not loaded")
+    {
     }
 }

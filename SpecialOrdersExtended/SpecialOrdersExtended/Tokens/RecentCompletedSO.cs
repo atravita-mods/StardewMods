@@ -1,19 +1,18 @@
-﻿namespace SpecialOrdersExtended.Tokens
+﻿namespace SpecialOrdersExtended.Tokens;
+
+internal class RecentCompletedSO : AbstractToken
 {
-    internal class RecentCompletedSO: AbstractToken
+    public override bool UpdateContext()
     {
-        public bool UpdateContext()
+        List<string> recentCompletedSO = RecentSOManager.GetKeys(7u)?.OrderBy(a => a)?.ToList();
+        if (recentCompletedSO == SpecialOrdersCache)
         {
-            List<string> recentCompletedSO = RecentSOManager.GetKeys(7u).OrderBy(a => a).ToList() ;
-            if (recentCompletedSO == SpecialOrdersCache)
-            {
-                return false;
-            }
-            else
-            {
-                SpecialOrdersCache = recentCompletedSO;
-                return true;
-            }
+            return false;
+        }
+        else
+        {
+            SpecialOrdersCache = recentCompletedSO;
+            return true;
         }
     }
 }

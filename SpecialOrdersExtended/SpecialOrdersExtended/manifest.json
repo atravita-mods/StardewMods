@@ -1,7 +1,8 @@
 {
+  "$schema": "https://smapi.io/schemas/manifest.json",
   "Name": "Special Orders Tags Extended",
   "Author": "atravita",
-  "Version": "1.0.4-beta",
+  "Version": "1.0.4-preview",
   "Description": "Extends the number of tags available for special orders",
   "UniqueID": "atravita.SpecialOrdersExtended",
   "EntryDll": "SpecialOrdersExtended.dll",

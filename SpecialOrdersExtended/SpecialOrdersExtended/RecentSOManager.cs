@@ -11,6 +11,11 @@ internal class RecentSOManager
 
     public static void Save() => recentCompletedSO.Save();
 
+    /// <summary>
+    /// Gets all keys that were set within a certain number of days.
+    /// </summary>
+    /// <param name="days"></param>
+    /// <returns>IEnumerable of keys within the given timeframe. May return null.</returns>
     public static IEnumerable<string> GetKeys(uint days) => recentCompletedSO?.GetKeys(days);
 
     public static void DayUpdate(uint daysplayed)

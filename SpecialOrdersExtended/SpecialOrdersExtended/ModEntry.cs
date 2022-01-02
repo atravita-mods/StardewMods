@@ -81,7 +81,7 @@ class ModEntry : Mod
     private void Saving(object sender, StardewModdingAPI.Events.SavingEventArgs e)
     {
         StatsManager.ClearProperties();
-        DialogueManager.SaveDialogueLog();
+        DialogueManager.Save();
         RecentSOManager.DayUpdate(Game1.stats.daysPlayed);
         RecentSOManager.Save();
     }
@@ -92,7 +92,7 @@ class ModEntry : Mod
 
     private void SaveLoaded(object sender, StardewModdingAPI.Events.SaveLoadedEventArgs e)
     {
-        DialogueManager.LoadDialogueLog();
+        DialogueManager.Load();
         RecentSOManager.Load();
     }
 

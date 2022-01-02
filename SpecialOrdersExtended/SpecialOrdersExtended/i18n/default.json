@@ -1,4 +1,5 @@
 ﻿{
+  "$schema": "https://smapi.io/schemas/i18n.json",
   //Warnings
   "cp-not-installed": "Content Patcher not installed, tokens will not be available.",
 
@@ -29,13 +30,13 @@
   "active": "Currently active",
 
   "dialogue.console-error": "{{command}} requires at least a desired action, a key, and at least one NPC name.",
-  "dialogue.console-action-invalid":  "{{action}} is not a valid action (add/remove/hasseen)",
+  "dialogue.console-action-invalid": "{{action}} is not a valid action (add/remove/hasseen)",
   "dialogue.console-add-success": "{{key}}: added {{name}}.",
   "dialogue.console-add-failure": "{{key}}: could not add {{name}}; already in list.",
   "dialogue.console-remove-success": "{{key}}: successfully removed {{name}}.",
   "dialogue.console-remove-failure": "{{key}}: {{name}} not found, could not remove.",
   "dialogue.console-does-contain": "{{key}} has character {{name}}.",
-  "dialogue.console-does-not-contain":  "{{key}} does NOT have character {{name}}",
+  "dialogue.console-does-not-contain": "{{key}} does NOT have character {{name}}",
 
   "dialogue.found-key": "Found key {{dialoguekey}}",
   "dialogue.no-key": "Did not find dialogue key for special order {{baseKey}} for NPC {{Name}}",

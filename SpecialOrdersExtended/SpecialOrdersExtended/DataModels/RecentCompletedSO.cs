@@ -41,6 +41,7 @@ internal class RecentCompletedSO : AbstractDataModel
 
     public bool Remove(string orderKey) => RecentOrdersCompleted.Remove(orderKey);
 
+
     public bool IsWithinXDays(string orderKey, uint days)
     {
         if (RecentOrdersCompleted.TryGetValue(orderKey, out uint dayCompleted))
@@ -50,6 +51,11 @@ internal class RecentCompletedSO : AbstractDataModel
         return false;
     }
 
+    /// <summary>
+    /// Gets all keys that were set within a certain number of days.
+    /// </summary>
+    /// <param name="days"></param>
+    /// <returns>IEnumerable of keys within the given timeframe.</returns>
     public IEnumerable<string> GetKeys(uint days)
     {
         return RecentOrdersCompleted.Keys

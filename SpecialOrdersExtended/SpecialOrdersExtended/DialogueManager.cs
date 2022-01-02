@@ -5,10 +5,15 @@ namespace SpecialOrdersExtended;
 internal class DialogueManager
 {
     private static DialogueLog DialogueLog;
-    public static void LoadDialogueLog() => DialogueLog = DialogueLog.Load();
+    public static void Load() => DialogueLog = DialogueLog.Load();
 
-    public static void SaveDialogueLog() => DialogueLog.Save();
+    public static void Save() => DialogueLog.Save();
 
+    /// <summary>
+    /// Handle the console command to add, remove, or check a seen dialogue
+    /// </summary>
+    /// <param name="command"></param>
+    /// <param name="args"></param>
     public static void ConsoleSpecialOrderDialogue(string command, string[] args)
     {
         if (!Context.IsWorldReady)
@@ -84,11 +89,20 @@ internal class DialogueManager
         if (!Context.IsWorldReady) { throw new SaveNotLoadedError(); }
         return DialogueLog.Remove(key, characterName);
     }
+    /// <summary>
+    /// Harmony patch - shows the dialogue for special orders.
+    /// </summary>
+    /// <param name="__result">Result from the original function</param>
+    /// <param name="__instance">NPC in question</param>
+    /// <param name="__0">NPC heart level</param>
+    /// <param name="__1">Append current season?</param>
+    /// <exception cref="UnexpectedEnumValueException{SpecialOrder.QuestState}"></exception>
     public static void PostfixCheckDialogue(ref bool __result, ref NPC __instance, int __0, bool __1)
     {
         try
         {
             if (__result) { return; } //have already found a New Current Dialogue
+            //Handle dialogue for orders currently active (no matter their state)
             foreach (SpecialOrder specialOrder in Game1.player.team.specialOrders)
             {
 
@@ -103,6 +117,7 @@ internal class DialogueManager
                 __result = FindBestDialogue(baseKey, __instance, __0);
                 if (__result) { return; }
             }
+            //Handle dialogue for recently completed special orders.
             List<string> cacheOrders = RecentSOManager.GetKeys(1u)?.ToList();
             if (cacheOrders is not null)
             {
@@ -134,6 +149,13 @@ internal class DialogueManager
         return true;
     }
 
+    /// <summary>
+    /// Locates the most specific dialogue, given a specific basekey, and pushes it to the NPC's dialogue stack
+    /// </summary>
+    /// <param name="baseKey"></param>
+    /// <param name="npc"></param>
+    /// <param name="hearts"></param>
+    /// <returns>true if a dialogue was successfully found and pushed, false otherwise</returns>
     public static bool FindBestDialogue(string baseKey, NPC npc, int hearts)
     {
         string dialogueKey = $"{baseKey}_{Game1.shortDayDisplayNameFromDayOfSeason(Game1.dayOfMonth)}";

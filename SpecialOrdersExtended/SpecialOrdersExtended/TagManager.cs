@@ -1,7 +1,16 @@
 ﻿namespace SpecialOrdersExtended;
 
+/// <summary>
+/// Static class to hold tag-management functions.
+/// </summary>
 internal class TagManager
 {
+    /// <summary>
+    /// Prefixes CheckTag to handle special mod tags
+    /// </summary>
+    /// <param name="__result"></param>
+    /// <param name="__0"></param>
+    /// <returns></returns>
     public static bool PrefixCheckTag(ref bool __result, string __0)
     {
         ModEntry.ModMonitor.VerboseLog($"Checking tag {__0}");

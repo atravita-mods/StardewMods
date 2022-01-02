@@ -23,13 +23,21 @@ internal class RecentSOManager
         recentCompletedSO.dayUpdate(daysplayed);
     }
 
-    public static bool UpdateCurrentOrderCache()
+    /// <summary>
+    /// Gets the newest recently completed orders. Runs every 10 in-game minutes
+    /// Grabs both the current orders marked as complete and looks for orders dismissed
+    /// </summary>
+    /// <returns>true if an order got added to RecentCompletedSO, false otherwise</returns>
+    public static bool GrabNewRecentlyCompletedOrders()
     {
         Dictionary<string, SpecialOrder> currentOrders = Game1.player?.team?.specialOrders?.ToDictionary(a => a.questKey.Value, a => a)
             ?? SaveGame.loaded?.specialOrders?.ToDictionary(a => a.questKey.Value, a => a);
-        if (currentOrders is null) { return false; }
+        if (currentOrders is null) { return false; } //Save is not loaded
         List<string> currentOrderKeys = currentOrders.Keys.OrderBy(a => a).ToList();
+
         bool updatedCache = false;
+
+        //Check for any completed orders in the current orders.
         foreach (SpecialOrder order in currentOrders.Values)
         {
             if (order.questState.Value == SpecialOrder.QuestState.Complete)
@@ -37,7 +45,9 @@ internal class RecentSOManager
                 if (Add(order.questKey.Value)) { updatedCache = true; }
             }
         }
-        if (currentOrderKeys == currentOrderCache) { return updatedCache; }
+        if (currentOrderKeys == currentOrderCache) { return updatedCache; } //No one has been added or dismissed
+
+        //Grab my completed orders
         HashSet<string> completedOrderKeys = null;
         if (Context.IsWorldReady)
         {
@@ -47,7 +57,9 @@ internal class RecentSOManager
         {
             completedOrderKeys = SaveGame.loaded?.completedSpecialOrders?.OrderBy(a => a)?.ToHashSet();
         }
-        if (completedOrderKeys is null) { return updatedCache; }
+        if (completedOrderKeys is null) { return updatedCache; } //This should not happen, but just in case?
+
+        //Check to see if any quest has been recently dismissed.
         if (currentOrderCache is not null)
         {
             foreach (string cachedOrder in currentOrderCache)
@@ -63,6 +75,13 @@ internal class RecentSOManager
         return updatedCache;
     }
 
+    /// <summary>
+    /// Tries to add a questkey to the RecentCompletedSO data model
+    /// If it's already there, does nothing.
+    /// </summary>
+    /// <param name="questkey"></param>
+    /// <returns></returns>
+    /// <exception cref="SaveNotLoadedError"></exception>
     public static bool Add(string questkey)
     {
         if (!Context.IsWorldReady) { throw new SaveNotLoadedError(); }

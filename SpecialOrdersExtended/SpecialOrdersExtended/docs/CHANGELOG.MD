@@ -13,6 +13,7 @@ Changelog
 ##### In consideration
 
 1. Somehow limit the kill objective to just monsters on a certain (few?) maps. (Perhaps a custom objective, perhaps a Special Rule).
+2. De-hardcode skill levels and consider a way to support mod skills?
 
 #### Version 1.0.4 (upcoming)
 

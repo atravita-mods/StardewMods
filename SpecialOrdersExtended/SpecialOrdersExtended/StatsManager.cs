@@ -2,6 +2,10 @@
 
 namespace SpecialOrdersExtended;
 
+/// <summary>
+/// Manages the handling of stats
+/// Caches the available stats at first use, but clears at the end of each day.
+/// </summary>
 internal class StatsManager
 {
     Dictionary<string, PropertyInfo> propertyInfos = new();
@@ -22,6 +26,14 @@ internal class StatsManager
 
     public void ClearProperties() => propertyInfos.Clear();
 
+    /// <summary>
+    /// Get the value of the stat in the specific stat object.
+    /// Looks through both the hardcoded stats and the stats dictionary
+    /// but ignores the monster dictionary
+    /// </summary>
+    /// <param name="key"></param>
+    /// <param name="stats">the stats to look through (which farmer do I want?)</param>
+    /// <returns>value of the stat</returns>
     public uint GrabBasicProperty(string key, Stats stats)
     {
         if (propertyInfos.Count.Equals(0)) { GrabProperties(); }
@@ -41,6 +53,12 @@ internal class StatsManager
         return 0u;
     }
 
+    /// <summary>
+    /// Console command to list all stats found, both hardcoded and in the stats dictionary.
+    /// Note that this will include stats that other mods add as well.
+    /// </summary>
+    /// <param name="command"></param>
+    /// <param name="args"></param>
     [SuppressMessage("ReSharper", "IDE0060", Justification = "Format expected by console commands")]
     public void ConsoleListProperties(string command, string[] args)
     {

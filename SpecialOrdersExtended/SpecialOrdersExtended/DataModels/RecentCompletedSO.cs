@@ -4,8 +4,14 @@ namespace SpecialOrdersExtended.DataModels;
 
 internal class RecentCompletedSO : AbstractDataModel
 {
+    /// <summary>
+    /// constant identifier in filename.
+    /// </summary>
     private const string identifier = "_SOmemory";
 
+    /// <summary>
+    /// Dictionary of Recent Order questkeys & the day they were completed.
+    /// </summary>
     public Dictionary<string, uint> RecentOrdersCompleted { get; set; } = new();
 
     public RecentCompletedSO(string savefile)
@@ -25,6 +31,10 @@ internal class RecentCompletedSO : AbstractDataModel
         base.Save(identifier);
     }
 
+    /// <summary>
+    /// Removes any quest that was completed more than seven days ago.
+    /// </summary>
+    /// <param name="daysPlayed"></param>
     [SuppressMessage("ReSharper", "IDE1006", Justification = "Method naming follows convention used in-game")]
     public void dayUpdate(uint daysPlayed)
     {
@@ -37,6 +47,12 @@ internal class RecentCompletedSO : AbstractDataModel
         }
     }
 
+    /// <summary>
+    /// Tries to add a quest key to the data model
+    /// </summary>
+    /// <param name="orderKey"></param>
+    /// <param name="daysPlayed"></param>
+    /// <returns>true if the quest key was successfully added, false otherwise</returns>
     public bool Add(string orderKey, uint daysPlayed) => RecentOrdersCompleted.TryAdd(orderKey, daysPlayed);
 
     public bool Remove(string orderKey) => RecentOrdersCompleted.Remove(orderKey);

@@ -87,7 +87,7 @@ class ModEntry : Mod
     }
     private void TimeChanged(object sender, StardewModdingAPI.Events.TimeChangedEventArgs e)
     {
-        RecentSOManager.UpdateCurrentOrderCache();
+        RecentSOManager.GrabNewRecentlyCompletedOrders();
     }
 
     private void SaveLoaded(object sender, StardewModdingAPI.Events.SaveLoadedEventArgs e)

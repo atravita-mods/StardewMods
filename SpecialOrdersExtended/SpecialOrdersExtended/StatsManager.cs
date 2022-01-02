@@ -41,6 +41,7 @@ internal class StatsManager
         return 0u;
     }
 
+    [SuppressMessage("ReSharper", "IDE0060", Justification = "Format expected by console commands")]
     public void ConsoleListProperties(string command, string[] args)
     {
         if (propertyInfos.Count.Equals(0)) { GrabProperties(); }

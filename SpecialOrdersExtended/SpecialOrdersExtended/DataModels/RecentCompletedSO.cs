@@ -25,6 +25,7 @@ internal class RecentCompletedSO : AbstractDataModel
         base.Save(identifier);
     }
 
+    [SuppressMessage("ReSharper", "IDE1006", Justification = "Method naming follows convention used in-game")]
     public void dayUpdate(uint daysPlayed)
     {
         foreach (string key in RecentOrdersCompleted.Keys)

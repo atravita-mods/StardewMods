@@ -103,10 +103,14 @@ internal class DialogueManager
                 __result = FindBestDialogue(baseKey, __instance, __0);
                 if (__result) { return; }
             }
-            foreach (string cacheOrder in RecentSOManager.GetKeys(1u))
+            List<string> cacheOrders = RecentSOManager.GetKeys(1u)?.ToList();
+            if (cacheOrders is not null)
             {
-                __result = FindBestDialogue(cacheOrder + "_Completed", __instance, __0);
-                if (__result) { return; }
+                foreach (string cacheOrder in cacheOrders)
+                {
+                    __result = FindBestDialogue(cacheOrder + "_Completed", __instance, __0);
+                    if (__result) { return; }
+                }
             }
         }
         catch (Exception ex)

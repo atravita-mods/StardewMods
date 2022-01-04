@@ -1,6 +1,6 @@
 ﻿using System.Globalization;
 using Microsoft.Xna.Framework;
-
+using System.Text.RegularExpressions;
 using StardewValley.Locations;
 
 
@@ -13,7 +13,11 @@ public class ModEntry : Mod
     private List<int> TreeFruit;
     private Random random;
     private AssetManager assetManager;
-
+    private readonly Regex regex = new(
+        pattern: @":\[\((?<x1>\d+),(?<y1>\d+)\),\((?<x2>\d+),(?<y2>\d+)\)\]$", 
+        options: RegexOptions.CultureInvariant|RegexOptions.Compiled, 
+        new TimeSpan(1000000)
+        );
 
     public override void Entry(IModHelper helper)
     {
@@ -114,15 +118,57 @@ public class ModEntry : Mod
 
         foreach (string location in GetData(assetManager.additionalLocationsLocation))
         {
-            GameLocation gameLocation = Game1.getLocationFromName(location);
+            string parseloc = location;
+            //initialize default limits
+            Dictionary<string, int> locLimits = new()
+            {
+                ["x1"]= 1,
+                ["x2"]=int.MaxValue,
+                ["y1"]=1,
+                ["y2"]=int.MaxValue,
+            };
+
+            try
+            {
+                MatchCollection matches = regex.Matches(location);
+                if (matches.Count == 1)
+                {
+                    Match match = matches[0];
+                    parseloc = location[..^match.Value.Length];
+                    foreach (Group group in match.Groups)
+                    {
+                        if (int.TryParse(group.Value, out int result))
+                        {
+                            locLimits[match.Name] = result;
+                        }
+                    }
+#if DEBUG
+                    Monitor.Log($"Found and parsed sublocation: {parseloc} + {locLimits}", LogLevel.Debug);
+#endif
+                }
+                else if (matches.Count >= 2)
+                {
+                    Monitor.Log(I18n.ExcessRegexMatches(loc: location), LogLevel.Warn);
+                    continue;
+                }
+            }
+            catch (RegexMatchTimeoutException ex)
+            {
+                Monitor.Log(I18n.RegexTimeout(loc:location, ex:ex), LogLevel.Warn);
+            }
+            GameLocation gameLocation = Game1.getLocationFromName(parseloc);
             if (gameLocation is not null)
             {
                 Monitor.Log($"Found {gameLocation}");
-                foreach (Vector2 v in IterateTiles(gameLocation))
+                foreach (Vector2 v in IterateTiles(gameLocation, xstart: locLimits["x1"], xend: locLimits["x2"], ystart: locLimits["y1"], yend:locLimits["y2"]))
                 {
                     PlaceFruit(gameLocation, v);
                     if (++count >= config.MaxDailySpawns) { Cleanup(); return; }
                 }
+            }
+            else
+            {
+                Monitor.Log(I18n.LocationMissing(loc: location), LogLevel.Info);
             }
         }
 

@@ -8,11 +8,17 @@ namespace FarmCaveSpawn;
 
 public class ModEntry : Mod
 {
+    //These two are set by the Entry method, which is the closest I can get to the constructor
+#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
     private ModConfig config;
-    private readonly List<int> BaseFruit = new() { 296, 396, 406, 410 };
-    private List<int> TreeFruit;
-    private Random random;
     private AssetManager assetManager;
+#pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
+
+    private readonly List<int> BaseFruit = new() { 296, 396, 406, 410 };
+    private List<int> TreeFruit = new();
+
+    private Random? random;
+    
     private readonly Regex regex = new(
         pattern: @":\[\((?<x1>\d+),(?<y1>\d+)\),\((?<x2>\d+),(?<y2>\d+)\)\]$", 
         options: RegexOptions.CultureInvariant|RegexOptions.Compiled, 
@@ -24,8 +30,11 @@ public class ModEntry : Mod
         I18n.Init(helper.Translation);
         config = Helper.ReadConfig<ModConfig>();
         assetManager = new();
+        //Todo: figure out why this is warning is about and why it doesn't like me right now.
+#pragma warning disable CS8622 // Nullability of reference types in type of parameter doesn't match the target delegate (possibly because of nullability attributes).
         helper.Events.GameLoop.DayStarted += SpawnFruit;
         helper.Events.GameLoop.GameLaunched += SetUpConfig;
+#pragma warning restore CS8622 // Nullability of reference types in type of parameter doesn't match the target delegate (possibly because of nullability attributes).
         helper.ConsoleCommands.Add(
             name: "list_fruits",
             documentation: I18n.ListFruits_Description(),
@@ -43,6 +52,14 @@ public class ModEntry : Mod
         TreeFruit.TrimExcess();
         random = null;
     }
+
+#pragma warning disable CS8605 // Unboxing a possibly null value.
+    /// <summary>
+    /// Generates the GMCM for this mod by looking at the structure of the config class.
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
+    /// <remarks>To add a new setting, add the details to the i18n file. Currently handles: bool, int, float</remarks>
     private void SetUpConfig(object sender, StardewModdingAPI.Events.GameLaunchedEventArgs e)
     {
         var configMenu = this.Helper.ModRegistry.GetApi<IGenericModConfigMenuApi>("spacechase0.GenericModConfigMenu");
@@ -97,7 +114,22 @@ public class ModEntry : Mod
             else { Monitor.Log($"{property.Name} unaccounted for.", LogLevel.Trace); }
         }
     }
+#pragma warning restore CS8605 // Unboxing a possibly null value.
 
+    /// <summary>
+    /// gets a seeded random based on uniqueID and days played
+    /// </summary>
+    private Random GetRandom()
+    {
+        random = new((int)Game1.uniqueIDForThisGame * 2 + (int)Game1.stats.DaysPlayed * 7);
+        return random;
+    }
+
+    /// <summary>
+    /// Handle spawning fruit at the start of each day
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
     private void SpawnFruit(object sender, StardewModdingAPI.Events.DayStartedEventArgs e)
     {
         if (!Context.IsMainPlayer) { return; }
@@ -105,16 +137,19 @@ public class ModEntry : Mod
         if (!config.IgnoreFarmCaveType && (Game1.MasterPlayer.caveChoice?.Value is null || Game1.MasterPlayer.caveChoice.Value != 1)) { return; }
         int count = 0;
         TreeFruit = GetTreeFruits();
-        random = new((int)Game1.uniqueIDForThisGame * 2 + (int)Game1.stats.DaysPlayed * 7);
-        FarmCave farmcave = Game1.getLocationFromName("FarmCave") as FarmCave;
+        GetRandom();
+        FarmCave? farmcave = Game1.getLocationFromName("FarmCave") as FarmCave;
 
-        foreach (Vector2 v in IterateTiles(farmcave))
+        if (farmcave is not null)
         {
-            PlaceFruit(farmcave, v);
-            if (++count >= config.MaxDailySpawns) { break; }
+            foreach (Vector2 v in IterateTiles(farmcave))
+            {
+                PlaceFruit(farmcave, v);
+                if (++count >= config.MaxDailySpawns) { break; }
+            }
+            farmcave.UpdateReadyFlag();
+            if (count >= config.MaxDailySpawns) { Cleanup(); return; }
         }
-        farmcave.UpdateReadyFlag();
-        if (count >= config.MaxDailySpawns) { Cleanup(); return; }
 
         foreach (string location in GetData(assetManager.additionalLocationsLocation))
         {
@@ -184,7 +219,8 @@ public class ModEntry : Mod
 
     public void PlaceFruit(GameLocation location, Vector2 tile)
     {
-        int fruitToPlace = Utility.GetRandom<int>(random.NextDouble() < (config.TreeFruitChance / 100f) ? TreeFruit : BaseFruit, random);
+        if (random is null) { GetRandom(); }
+        int fruitToPlace = Utility.GetRandom<int>(random!.NextDouble() < (config.TreeFruitChance / 100f) ? TreeFruit : BaseFruit, random);
         location.setObject(tile, new StardewValley.Object(fruitToPlace, 1)
         {
             IsSpawnedObject = true
@@ -192,14 +228,25 @@ public class ModEntry : Mod
         Monitor.Log($"Spawning item {fruitToPlace} at {location.Name}:{tile.X},{tile.Y}");
     }
 
+    /// <summary>
+    /// Iterate over tiles in a map, with a random chance to pick each tile.
+    /// Will only return clear and placable tiles.
+    /// </summary>
+    /// <param name="location">Map to iterate over</param>
+    /// <param name="xstart"></param>
+    /// <param name="xend"></param>
+    /// <param name="ystart"></param>
+    /// <param name="yend"></param>
+    /// <returns></returns>
     public IEnumerable<Vector2> IterateTiles(GameLocation location, int xstart = 1, int xend = int.MaxValue, int ystart = 1, int yend = int.MaxValue)
     {
-        foreach (int x in Enumerable.Range(xstart, Math.Clamp(xend, xstart, location.Map.Layers[0].LayerWidth - 2)).OrderBy((x) => random.Next()))
+        if (random is null) { GetRandom(); }
+        foreach (int x in Enumerable.Range(xstart, Math.Clamp(xend, xstart, location.Map.Layers[0].LayerWidth - 2)).OrderBy((x) => random!.Next()))
         {
-            foreach (int y in Enumerable.Range(ystart, Math.Clamp(yend, ystart, location.Map.Layers[0].LayerHeight - 2)).OrderBy((x) => random.Next()))
+            foreach (int y in Enumerable.Range(ystart, Math.Clamp(yend, ystart, location.Map.Layers[0].LayerHeight - 2)).OrderBy((x) => random!.Next()))
             {
                 Vector2 v = new(x, y);
-                if (random.NextDouble() < (config.SpawnChance / 100f) && location.isTileLocationTotallyClearAndPlaceableIgnoreFloors(v))
+                if (random!.NextDouble() < (config.SpawnChance / 100f) && location.isTileLocationTotallyClearAndPlaceableIgnoreFloors(v))
                 {
                     yield return v;
                 }
@@ -207,6 +254,11 @@ public class ModEntry : Mod
         }
     }
 
+    /// <summary>
+    /// Console command to list valid fruits for spawning
+    /// </summary>
+    /// <param name="command"></param>
+    /// <param name="args"></param>
     private void ListFruits(string command, string[] args)
     {
         if (!Context.IsWorldReady)
@@ -226,6 +278,11 @@ public class ModEntry : Mod
         Monitor.Log($"Possible fruits: {String.Join(", ", FruitNames)}", LogLevel.Info);
     }
 
+    /// <summary>
+    /// Get data from assets, based on which mods are installed
+    /// </summary>
+    /// <param name="datalocation">asset name</param>
+    /// <returns></returns>
     private List<string> GetData(string datalocation)
     {
         IDictionary<string, string> rawlist = Helper.Content.Load<Dictionary<string, string>>(datalocation, ContentSource.GameContent);
@@ -241,6 +298,10 @@ public class ModEntry : Mod
         return datalist;
     }
 
+    /// <summary>
+    /// Generate list of tree fruits valid for spawning, based on user config/denylist/data in Data/fruitTrees
+    /// </summary>
+    /// <returns></returns>
     private List<int> GetTreeFruits()
     {
 
@@ -288,8 +349,7 @@ public class ModEntry : Mod
                     if (config.NoBananasBeforeShrine && fruit.Name.Equals("Banana"))
                     {
                         if (!Context.IsWorldReady) { continue; }
-                        IslandEast islandeast = Game1.getLocationFromName("IslandEast") as IslandEast;
-                        if (!islandeast.bananaShrineComplete.Value) { continue; }
+                        if (Game1.getLocationFromName("IslandEast") is IslandEast islandeast && !islandeast.bananaShrineComplete.Value) { continue; }
                     }
                     TreeFruits.Add(objectIndex);
                 }

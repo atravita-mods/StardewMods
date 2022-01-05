@@ -39,9 +39,11 @@ internal class StatsManager
         if (propertyInfos.Count.Equals(0)) { GrabProperties(); }
         try
         {
-            if (propertyInfos.TryGetValue(key.ToLowerInvariant(), out PropertyInfo property))
+            if (propertyInfos.TryGetValue(key.ToLowerInvariant(), out var property))
             {
+#pragma warning disable CS8605 // Unboxing a possibly null value.
                 return (uint)property.GetValue(stats);
+#pragma warning restore CS8605 // Unboxing a possibly null value.
             }
         }
         catch (Exception ex)

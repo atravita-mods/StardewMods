@@ -4,7 +4,7 @@ internal class RecentCompletedSO : AbstractToken
 {
     public override bool UpdateContext()
     {
-        List<string> recentCompletedSO = RecentSOManager.GetKeys(7u)?.OrderBy(a => a)?.ToList();
+        List<string>? recentCompletedSO = RecentSOManager.GetKeys(7u)?.OrderBy(a => a)?.ToList();
         if (recentCompletedSO == SpecialOrdersCache)
         {
             return false;

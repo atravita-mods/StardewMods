@@ -2,7 +2,10 @@
 
 internal abstract class AbstractToken
 {
-    public List<string> SpecialOrdersCache = null;
+    /// <summary>
+    /// Internal cache for token. Will be null if not ready
+    /// </summary>
+    public List<string>? SpecialOrdersCache = null;
 
     /// <summary>
     /// Whether or not the token allows input. Default, true
@@ -15,7 +18,7 @@ internal abstract class AbstractToken
     /// </summary>
     /// <param name="input"></param>
     /// <returns>Will return one value if given a Special Order, or all Special Orders if not</returns>
-    public virtual bool CanHaveMultipleValues(string input = null)
+    public virtual bool CanHaveMultipleValues(string? input = null)
     {
         return (input is null);
     }

@@ -26,16 +26,16 @@ internal class DialogueLog : AbstractDataModel
 
     public bool Contains(string dialoguekey, string characterName)
     {
-        if (SeenDialogues.TryGetValue(dialoguekey, out List<string> characterList))
+        if (SeenDialogues.TryGetValue(dialoguekey, out var characterList))
         {
             return characterList.Contains(characterName);
         }
         return false;
     }
 
-    public bool Add(string dialoguekey, string characterName)
+    public bool TryAdd(string dialoguekey, string characterName)
     {
-        if (!SeenDialogues.TryGetValue(dialoguekey, out List<string> characterList))
+        if (!SeenDialogues.TryGetValue(dialoguekey, out var characterList))
         {
             characterList = new();
             characterList.Add(characterName);
@@ -46,9 +46,9 @@ internal class DialogueLog : AbstractDataModel
         else { characterList.Add(characterName); return true; }
     }
 
-    public bool Remove(string dialoguekey, string characterName)
+    public bool TryRemove(string dialoguekey, string characterName)
     {
-        if (SeenDialogues.TryGetValue(dialoguekey, out List<string> characterList))
+        if (SeenDialogues.TryGetValue(dialoguekey, out var characterList))
         {
             return characterList.Remove(characterName);
         }

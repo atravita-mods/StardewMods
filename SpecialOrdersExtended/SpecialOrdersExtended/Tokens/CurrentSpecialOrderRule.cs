@@ -4,7 +4,7 @@ internal class CurrentSpecialOrderRule : AbstractToken
 {
     public override bool UpdateContext()
     {
-        List<string> rules;
+        List<string>? rules;
         if (Context.IsWorldReady)
         {
             rules = Game1.player.team.specialOrders

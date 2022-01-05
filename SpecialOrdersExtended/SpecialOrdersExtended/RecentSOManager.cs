@@ -4,22 +4,27 @@ namespace SpecialOrdersExtended;
 
 internal class RecentSOManager
 {
-    private static RecentCompletedSO recentCompletedSO;
-    private static List<string> currentOrderCache;
+    private static RecentCompletedSO? recentCompletedSO;
+    private static List<string>? currentOrderCache;
 
     public static void Load() => recentCompletedSO = RecentCompletedSO.Load();
 
-    public static void Save() => recentCompletedSO.Save();
+    public static void Save()
+    {
+        if(recentCompletedSO is null) { throw new SaveNotLoadedError(); }
+        recentCompletedSO.Save();
+    }
 
     /// <summary>
     /// Gets all keys that were set within a certain number of days.
     /// </summary>
     /// <param name="days"></param>
     /// <returns>IEnumerable of keys within the given timeframe. May return null.</returns>
-    public static IEnumerable<string> GetKeys(uint days) => recentCompletedSO?.GetKeys(days);
+    public static IEnumerable<string>? GetKeys(uint days) => recentCompletedSO?.GetKeys(days);
 
     public static void DayUpdate(uint daysplayed)
     {
+        if(recentCompletedSO is null) { throw new SaveNotLoadedError(); }
         recentCompletedSO.dayUpdate(daysplayed);
     }
 
@@ -30,7 +35,7 @@ internal class RecentSOManager
     /// <returns>true if an order got added to RecentCompletedSO, false otherwise</returns>
     public static bool GrabNewRecentlyCompletedOrders()
     {
-        Dictionary<string, SpecialOrder> currentOrders = Game1.player?.team?.specialOrders?.ToDictionary(a => a.questKey.Value, a => a)
+        Dictionary<string, SpecialOrder>? currentOrders = Game1.player?.team?.specialOrders?.ToDictionary(a => a.questKey.Value, a => a)
             ?? SaveGame.loaded?.specialOrders?.ToDictionary(a => a.questKey.Value, a => a);
         if (currentOrders is null) { return false; } //Save is not loaded
         List<string> currentOrderKeys = currentOrders.Keys.OrderBy(a => a).ToList();
@@ -42,16 +47,16 @@ internal class RecentSOManager
         {
             if (order.questState.Value == SpecialOrder.QuestState.Complete)
             {
-                if (Add(order.questKey.Value)) { updatedCache = true; }
+                if (TryAdd(order.questKey.Value)) { updatedCache = true; }
             }
         }
         if (currentOrderKeys == currentOrderCache) { return updatedCache; } //No one has been added or dismissed
 
         //Grab my completed orders
-        HashSet<string> completedOrderKeys = null;
+        HashSet<string>? completedOrderKeys = null;
         if (Context.IsWorldReady)
         {
-            completedOrderKeys = Game1.player.team.completedSpecialOrders.Keys.OrderBy(a => a).ToHashSet();
+            completedOrderKeys = Game1.player!.team.completedSpecialOrders.Keys.OrderBy(a => a).ToHashSet();
         }
         else
         {
@@ -67,7 +72,7 @@ internal class RecentSOManager
                 if (!currentOrders.ContainsKey(cachedOrder) && completedOrderKeys.Contains(cachedOrder))
                 {//A quest previously in the current quests is gone now
                  //and seems to have appeared in the completed orders
-                    if (Add(cachedOrder)) { updatedCache = true; }
+                    if (TryAdd(cachedOrder)) { updatedCache = true; }
                 }
             }
         }
@@ -82,22 +87,22 @@ internal class RecentSOManager
     /// <param name="questkey"></param>
     /// <returns></returns>
     /// <exception cref="SaveNotLoadedError"></exception>
-    public static bool Add(string questkey)
+    public static bool TryAdd(string questkey)
     {
         if (!Context.IsWorldReady) { throw new SaveNotLoadedError(); }
-        return recentCompletedSO.Add(questkey, Game1.stats.DaysPlayed);
+        return recentCompletedSO!.TryAdd(questkey, Game1.stats.DaysPlayed);
     }
 
-    public static bool Remove(string questkey)
+    public static bool TryRemove(string questkey)
     {
         if (!Context.IsWorldReady) { throw new SaveNotLoadedError(); }
-        return recentCompletedSO.Remove(questkey);
+        return recentCompletedSO!.TryRemove(questkey);
     }
 
     public static bool IsWithinXDays(string questkey, uint days)
     {
         if (!Context.IsWorldReady) { throw new SaveNotLoadedError(); }
-        return recentCompletedSO.IsWithinXDays(questkey, days);
+        return recentCompletedSO!.IsWithinXDays(questkey, days);
     }
 
 

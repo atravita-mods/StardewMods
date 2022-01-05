@@ -7,9 +7,13 @@ namespace SpecialOrdersExtended;
 
 class ModEntry : Mod
 {
+    //The following fields are set in the Entry method, which is about as close to the constructor as I can get
+#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
     public static IMonitor ModMonitor;
     public static StatsManager StatsManager;
     public static IDataHelper DataHelper;
+#pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
+
 
     public override void Entry(IModHelper helper)
     {
@@ -60,10 +64,13 @@ class ModEntry : Mod
             callback: DialogueManager.ConsoleSpecialOrderDialogue
             );
 
+#pragma warning disable CS8622 // Nullability of reference types in type of parameter doesn't match the target delegate (possibly because of nullability attributes).
         helper.Events.GameLoop.GameLaunched += RegisterTokens;
         helper.Events.GameLoop.SaveLoaded += SaveLoaded;
         helper.Events.GameLoop.Saving += Saving;
         helper.Events.GameLoop.TimeChanged += TimeChanged;
+#pragma warning restore CS8622 // Nullability of reference types in type of parameter doesn't match the target delegate (possibly because of nullability attributes).
+
     }
 
     private void RegisterTokens(object sender, StardewModdingAPI.Events.GameLaunchedEventArgs e)

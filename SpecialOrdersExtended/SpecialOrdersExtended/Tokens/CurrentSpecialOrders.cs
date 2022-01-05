@@ -6,7 +6,7 @@ internal class CurrentSpecialOrders : AbstractToken
     /// <returns>Returns whether the value changed, which may trigger patch updates.</returns>
     public override bool UpdateContext()
     {
-        List<string> specialOrderNames = Game1.player?.team?.specialOrders?.Select((SpecialOrder s) => s.questKey.ToString())?.OrderBy(a => a)?.ToList()
+        List<string>? specialOrderNames = Game1.player?.team?.specialOrders?.Select((SpecialOrder s) => s.questKey.ToString())?.OrderBy(a => a)?.ToList()
             ?? SaveGame.loaded?.specialOrders?.Select((SpecialOrder s) => s.questKey.ToString())?.OrderBy(a => a)?.ToList();
         if (specialOrderNames == SpecialOrdersCache)
         {

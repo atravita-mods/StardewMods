@@ -6,7 +6,7 @@ internal class CompletedSpecialOrders : AbstractToken
     /// <returns>Returns whether the value changed, which may trigger patch updates.</returns>
     public override bool UpdateContext()
     {
-        List<string> specialOrderNames;
+        List<string>? specialOrderNames;
         if (Context.IsWorldReady)
         {
             specialOrderNames = Game1.player.team.completedSpecialOrders.Keys.OrderBy(a => a)?.ToList();

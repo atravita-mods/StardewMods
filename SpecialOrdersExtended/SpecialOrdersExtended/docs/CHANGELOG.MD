@@ -7,13 +7,13 @@ Changelog
 2. Add condition for total number of quests (both Qi and otherwise completed.)
 3. Document tokens.
 4. Document dialogue keys, their storage, and how to use console commands to check that.
-5. Move loading of data models to first use and not when the save is loaded, perhaps.
 
 
 ##### In consideration
 
 1. Somehow limit the kill objective to just monsters on a certain (few?) maps. (Perhaps a custom objective, perhaps a Special Rule).
 2. De-hardcode skill levels and consider a way to support mod skills?
+5. Move loading of data models to first use and not when the save is loaded, perhaps.
 
 #### Version 1.0.4 (upcoming)
 

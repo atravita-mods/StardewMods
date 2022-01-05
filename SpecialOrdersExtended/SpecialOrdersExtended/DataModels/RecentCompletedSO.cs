@@ -53,9 +53,9 @@ internal class RecentCompletedSO : AbstractDataModel
     /// <param name="orderKey"></param>
     /// <param name="daysPlayed"></param>
     /// <returns>true if the quest key was successfully added, false otherwise</returns>
-    public bool Add(string orderKey, uint daysPlayed) => RecentOrdersCompleted.TryAdd(orderKey, daysPlayed);
+    public bool TryAdd(string orderKey, uint daysPlayed) => RecentOrdersCompleted.TryAdd(orderKey, daysPlayed);
 
-    public bool Remove(string orderKey) => RecentOrdersCompleted.Remove(orderKey);
+    public bool TryRemove(string orderKey) => RecentOrdersCompleted.Remove(orderKey);
 
 
     public bool IsWithinXDays(string orderKey, uint days)

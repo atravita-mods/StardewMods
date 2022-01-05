@@ -2,12 +2,19 @@
 
 namespace SpecialOrdersExtended;
 
+/// <summary>
+/// Static. Handles 
+/// </summary>
 internal class DialogueManager
 {
-    private static DialogueLog DialogueLog;
+    private static DialogueLog? DialogueLog;
     public static void Load() => DialogueLog = DialogueLog.Load();
 
-    public static void Save() => DialogueLog.Save();
+    public static void Save()
+    {
+        if (DialogueLog is null) { throw new SaveNotLoadedError(); }
+        DialogueLog.Save();
+    }
 
     /// <summary>
     /// Handle the console command to add, remove, or check a seen dialogue
@@ -75,19 +82,19 @@ internal class DialogueManager
     public static bool HasSeenDialogue(string key, string characterName)
     {
         if (!Context.IsWorldReady) { throw new SaveNotLoadedError(); }
-        return DialogueLog.Contains(key, characterName);
+        return DialogueLog!.Contains(key, characterName);
     }
 
     public static bool TryAddSeenDialogue(string key, string characterName)
     {
         if (!Context.IsWorldReady) { throw new SaveNotLoadedError(); }
-        return DialogueLog.Add(key, characterName);
+        return DialogueLog!.TryAdd(key, characterName);
     }
 
     public static bool TryRemoveSeenDialogue(string key, string characterName)
     {
         if (!Context.IsWorldReady) { throw new SaveNotLoadedError(); }
-        return DialogueLog.Remove(key, characterName);
+        return DialogueLog!.TryRemove(key, characterName);
     }
     /// <summary>
     /// Harmony patch - shows the dialogue for special orders.
@@ -118,7 +125,7 @@ internal class DialogueManager
                 if (__result) { return; }
             }
             //Handle dialogue for recently completed special orders.
-            List<string> cacheOrders = RecentSOManager.GetKeys(1u)?.ToList();
+            List<string>? cacheOrders = RecentSOManager.GetKeys(1u)?.ToList();
             if (cacheOrders is not null)
             {
                 foreach (string cacheOrder in cacheOrders)

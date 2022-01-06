@@ -324,8 +324,7 @@ public class ModEntry : Mod
                 }
             }
 
-            bool success = int.TryParse(treedata[2].Trim(), out int objectIndex);
-            if (success)
+            if (int.TryParse(treedata[2].Trim(), out int objectIndex))
             {
                 try
                 {

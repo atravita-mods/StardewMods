@@ -4,7 +4,7 @@
 
 * Nothing! Awaiting future object updates, but have no more ideas at current.
 
-#### Version 1.0.6
+#### Version 1.0.6 (upcoming)
 
 * Adds ability for other mods to add locations this mod will spawn fruit in, with the ability to limit the spawn area. (Move SVE additional farmcave location support to that.) 
 * Add configuration option that can disable that.

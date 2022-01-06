@@ -8,7 +8,7 @@ Quest key is the key for the quest (as it is in the `SpecialOrders` file). Quest
 Preface/predicate limits when the key can be used, and follows a similar structure as to vanilla's location keys. <Preface> can be any season, and season-specific keys will always take precedence. Predicate can be any of the following values, in priority order:
 
 1. `_<short day of week>`
-2. `<heartlevel>` (with valid heart levels 14,12,10,8,6,4,2, checked in that order)
+2. `<heartlevel>` (with valid heart levels 14,12,10,8,6,4,2, checked in that order) [Note: will change to any valid heart level, counting backwards by 2s, in 1.0.5]
 3. No predicate.
 
 

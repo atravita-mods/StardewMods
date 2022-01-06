@@ -18,7 +18,7 @@ internal abstract class AbstractToken
     /// </summary>
     /// <param name="input"></param>
     /// <returns>Will return one value if given a Special Order, or all Special Orders if not</returns>
-    public virtual bool CanHaveMultipleValues(string? input = null)
+    public virtual bool CanHaveMultipleValues([MaybeNull] string? input = null)
     {
         return (input is null);
     }

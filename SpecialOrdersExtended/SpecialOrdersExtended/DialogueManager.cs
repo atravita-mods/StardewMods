@@ -3,7 +3,7 @@
 namespace SpecialOrdersExtended;
 
 /// <summary>
-/// Static. Handles 
+/// Static. Handles logic, patches, and console commands related to the special order dialogues.
 /// </summary>
 internal class DialogueManager
 {
@@ -171,10 +171,10 @@ internal class DialogueManager
             if (PushAndSaveDialogue(dialogueKey, npc)) { return true; }
         }
 
-        for (int heartLevel = 14; heartLevel > 0; heartLevel -= 2)
+        for (int heartLevel = Math.Max((hearts/2)*2,0); heartLevel > 0; heartLevel -= 2)
         {
             dialogueKey = $"{baseKey}{heartLevel}";
-            if (hearts > heartLevel && npc.Dialogue.ContainsKey(dialogueKey))
+            if (npc.Dialogue.ContainsKey(dialogueKey))
             {
                 if (PushAndSaveDialogue(dialogueKey, npc)) { return true; }
             }

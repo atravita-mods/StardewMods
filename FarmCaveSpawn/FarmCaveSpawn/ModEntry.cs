@@ -30,11 +30,8 @@ public class ModEntry : Mod
         I18n.Init(helper.Translation);
         config = Helper.ReadConfig<ModConfig>();
         assetManager = new();
-        //Todo: figure out why this is warning is about and why it doesn't like me right now.
-#pragma warning disable CS8622 // Nullability of reference types in type of parameter doesn't match the target delegate (possibly because of nullability attributes).
         helper.Events.GameLoop.DayStarted += SpawnFruit;
         helper.Events.GameLoop.GameLaunched += SetUpConfig;
-#pragma warning restore CS8622 // Nullability of reference types in type of parameter doesn't match the target delegate (possibly because of nullability attributes).
         helper.ConsoleCommands.Add(
             name: "list_fruits",
             documentation: I18n.ListFruits_Description(),
@@ -60,7 +57,7 @@ public class ModEntry : Mod
     /// <param name="sender"></param>
     /// <param name="e"></param>
     /// <remarks>To add a new setting, add the details to the i18n file. Currently handles: bool, int, float</remarks>
-    private void SetUpConfig(object sender, StardewModdingAPI.Events.GameLaunchedEventArgs e)
+    private void SetUpConfig(object? sender, StardewModdingAPI.Events.GameLaunchedEventArgs e)
     {
         var configMenu = this.Helper.ModRegistry.GetApi<IGenericModConfigMenuApi>("spacechase0.GenericModConfigMenu");
         if (configMenu is null)
@@ -130,7 +127,7 @@ public class ModEntry : Mod
     /// </summary>
     /// <param name="sender"></param>
     /// <param name="e"></param>
-    private void SpawnFruit(object sender, StardewModdingAPI.Events.DayStartedEventArgs e)
+    private void SpawnFruit(object? sender, StardewModdingAPI.Events.DayStartedEventArgs e)
     {
         if (!Context.IsMainPlayer) { return; }
         if (!config.EarlyFarmCave && (Game1.MasterPlayer.caveChoice?.Value is null || Game1.MasterPlayer.caveChoice.Value <= 0)) { return; }

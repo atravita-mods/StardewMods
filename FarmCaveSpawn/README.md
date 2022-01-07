@@ -3,7 +3,7 @@ Farm Cave Spawns More Tree Fruit
 
 Modded farm caves don't really play well with how the fruit cave spawns its fruits. In vanilla, each tile has an equal chance to be picked for a spawn, and for modded caves that have large amounts of void in order to implement separate "rooms", it's quite likely that the tile picked is a void tile and nothing will be spawned. This is an attempt to help adjust for that by spawning in more fruit - either the four common vanilla forage fruit, or any item that is produced by a fruit tree. Inspired by but very different from Better FarmCave Forage, which uses FTM to spawn in a selection of various fruits.
 
-Any fruit tree's products can be spawned. Mod trees, as long as they're registered with Data/fruitTrees, will be used as well. (Tested with RSV and PPJA More Trees). Fruit not associated with a tree will not be produced.
+Any fruit tree's products can be spawned. Mod trees, as long as they're registered with `Data/fruitTrees`, will be used as well. (Tested with RSV and PPJA More Trees). Fruit not associated with a tree will not be produced.
 
 #### Configuration:
 

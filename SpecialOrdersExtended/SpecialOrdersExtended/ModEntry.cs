@@ -63,17 +63,13 @@ class ModEntry : Mod
             documentation: $"{I18n.SpecialOrdersDialogue_Description()}\n\n{I18n.SpecialOrdersDialogue_Example()}\n    {I18n.SpecialOrdersDialogue_Usage()}",
             callback: DialogueManager.ConsoleSpecialOrderDialogue
             );
-
-#pragma warning disable CS8622 // Nullability of reference types in type of parameter doesn't match the target delegate (possibly because of nullability attributes).
         helper.Events.GameLoop.GameLaunched += RegisterTokens;
         helper.Events.GameLoop.SaveLoaded += SaveLoaded;
         helper.Events.GameLoop.Saving += Saving;
         helper.Events.GameLoop.TimeChanged += TimeChanged;
-#pragma warning restore CS8622 // Nullability of reference types in type of parameter doesn't match the target delegate (possibly because of nullability attributes).
-
     }
 
-    private void RegisterTokens(object sender, StardewModdingAPI.Events.GameLaunchedEventArgs e)
+    private void RegisterTokens(object? sender, StardewModdingAPI.Events.GameLaunchedEventArgs e)
     {
         var api = this.Helper.ModRegistry.GetApi<Tokens.IContentPatcherAPI>("Pathoschild.ContentPatcher");
         if (api is null) { ModMonitor.Log(I18n.CpNotInstalled(), LogLevel.Warn); return; }
@@ -85,19 +81,19 @@ class ModEntry : Mod
         api.RegisterToken(this.ModManifest, "RecentCompleted", new Tokens.RecentCompletedSO());
     }
 
-    private void Saving(object sender, StardewModdingAPI.Events.SavingEventArgs e)
+    private void Saving(object? sender, StardewModdingAPI.Events.SavingEventArgs e)
     {
         StatsManager.ClearProperties();
         DialogueManager.Save();
         RecentSOManager.DayUpdate(Game1.stats.daysPlayed);
         RecentSOManager.Save();
     }
-    private void TimeChanged(object sender, StardewModdingAPI.Events.TimeChangedEventArgs e)
+    private void TimeChanged(object? sender, StardewModdingAPI.Events.TimeChangedEventArgs e)
     {
         RecentSOManager.GrabNewRecentlyCompletedOrders();
     }
 
-    private void SaveLoaded(object sender, StardewModdingAPI.Events.SaveLoadedEventArgs e)
+    private void SaveLoaded(object? sender, StardewModdingAPI.Events.SaveLoadedEventArgs e)
     {
         DialogueManager.Load();
         RecentSOManager.Load();

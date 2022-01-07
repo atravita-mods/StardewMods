@@ -15,7 +15,7 @@ Changelog
 2. De-hardcode skill levels and consider a way to support mod skills?
 5. Move loading of data models to first use and not when the save is loaded, perhaps.
 
-#### Version 1.0.5
+#### Version 1.0.5 (in development)
 
 * Check heart levels for dialogue conditions above 14.
 

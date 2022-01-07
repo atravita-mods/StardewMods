@@ -27,6 +27,9 @@ public class ModEntry : Mod
 
     public override void Entry(IModHelper helper)
     {
+#if DEBUG
+        Monitor.Log("FarmCaveSpawn initializing, DEBUG mode. Do not release this version",LogLevel.Warn);
+#endif
         I18n.Init(helper.Translation);
         config = Helper.ReadConfig<ModConfig>();
         assetManager = new();
@@ -50,6 +53,7 @@ public class ModEntry : Mod
         random = null;
     }
 
+    //config should never be null anyways.
 #pragma warning disable CS8605 // Unboxing a possibly null value.
     /// <summary>
     /// Generates the GMCM for this mod by looking at the structure of the config class.
@@ -174,9 +178,7 @@ public class ModEntry : Mod
                             locLimits[match.Name] = result;
                         }
                     }
-#if DEBUG
-                    Monitor.Log($"Found and parsed sublocation: {parseloc} + {locLimits}", LogLevel.Debug);
-#endif
+                    this.DebugLog($"Found and parsed sublocation: {parseloc} + {locLimits}");
                 }
                 else if (matches.Count >= 2)
                 {
@@ -200,7 +202,7 @@ public class ModEntry : Mod
             }
             else
             {
-                Monitor.Log(I18n.LocationMissing(loc: location), LogLevel.Info);
+                Monitor.Log(I18n.LocationMissing(loc: location), LogLevel.Debug);
             }
         }
 
@@ -222,7 +224,7 @@ public class ModEntry : Mod
         {
             IsSpawnedObject = true
         });
-        Monitor.Log($"Spawning item {fruitToPlace} at {location.Name}:{tile.X},{tile.Y}");
+        this.DebugLog($"Spawning item {fruitToPlace} at {location.Name}:{tile.X},{tile.Y}");
     }
 
     /// <summary>
@@ -356,6 +358,20 @@ public class ModEntry : Mod
             }
         }
         return TreeFruits;
+    }
+
+    /// <summary>
+    /// Log to DEBUG if compiled with DEBUG
+    /// Log to berbose only otherwise.
+    /// </summary>
+    /// <param name="message"></param>
+    private void DebugLog(string message)
+    {
+#if DEBUG
+        Monitor.Log(message, LogLevel.Debug);
+#else
+        Monitor.VerboseLog(message);
+#endif
     }
 
 }

@@ -13,7 +13,7 @@ internal class TagManager
     /// <returns></returns>
     public static bool PrefixCheckTag(ref bool __result, string __0)
     {
-        ModEntry.ModMonitor.VerboseLog($"Checking tag {__0}");
+        ModEntry.ModMonitor.DebugLog($"Checking tag {__0}");
         try
         {
             if (__0.StartsWith("year_"))

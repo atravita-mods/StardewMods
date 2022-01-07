@@ -152,7 +152,7 @@ internal class DialogueManager
     {
         if (!TryAddSeenDialogue(dialogueKey, npc.Name)) { return false; } //I have already said this dialogue
         npc.CurrentDialogue.Push(new Dialogue(npc.Dialogue[dialogueKey], npc) { removeOnNextMove = true });
-        ModEntry.ModMonitor.Log(I18n.Dialogue_FoundKey(dialogueKey), LogLevel.Trace);
+        ModEntry.ModMonitor.DebugLog(I18n.Dialogue_FoundKey(dialogueKey), LogLevel.Trace);
         return true;
     }
 
@@ -185,7 +185,7 @@ internal class DialogueManager
             if (PushAndSaveDialogue(baseKey, npc)) { return true; }
         }
 
-        ModEntry.ModMonitor.Log(I18n.Dialogue_NoKey(baseKey, npc.Name), LogLevel.Trace);
+        ModEntry.ModMonitor.DebugLog(I18n.Dialogue_NoKey(baseKey, npc.Name), LogLevel.Trace);
         return false;
     }
 }

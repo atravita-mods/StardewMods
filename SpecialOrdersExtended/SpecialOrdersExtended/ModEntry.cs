@@ -28,7 +28,7 @@ class ModEntry : Mod
             original: typeof(SpecialOrder).GetMethod("CheckTag", BindingFlags.NonPublic | BindingFlags.Static),
             prefix: new HarmonyMethod(typeof(TagManager), nameof(TagManager.PrefixCheckTag))
             );
-        ModMonitor.Log("Patching SpecialOrder:CheckTag", LogLevel.Debug);
+        ModMonitor.Log("Patching SpecialOrder:CheckTag for Special Orders Dialogue", LogLevel.Debug);
 
         try
         {
@@ -40,7 +40,7 @@ class ModEntry : Mod
         }
         catch (Exception ex)
         {
-            ModMonitor.Log($"Failed to patch NPC:checkForNewCurrentDialogue for Special Orders Dialogue\n\n{ex}", LogLevel.Error);
+            ModMonitor.Log($"Failed to patch NPC:checkForNewCurrentDialogue for Special Orders Dialogue. Dialogue will be disabled\n\n{ex}", LogLevel.Error);
         }
 
         helper.ConsoleCommands.Add(

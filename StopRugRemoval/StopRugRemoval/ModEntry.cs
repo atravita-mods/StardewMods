@@ -4,16 +4,17 @@ using Microsoft.Xna.Framework;
 
 namespace StopRugRemoval;
 
-public class ModConfig
-{
-    public bool Enabled { get; set; } = true;
-    //public bool CanPlaceRugsOutside { get; set; } = false;
-    public bool CanPlaceRugsUnder { get; set; } = true;
-}
+
 public class ModEntry : Mod
 {
+    //the following two lines are set in the entry method, which is approximately as close as I can get to the constructor anyways.
+#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
+    [SuppressMessage("ReSharper", "CA2211", Justification = "This is needed to give harmony patches access to the logger. Also, multithreading is not used anyways.")]
     public static IMonitor ModMonitor;
     private static ModConfig config;
+#pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
+
+
     public override void Entry(IModHelper helper)
     {
         config = Helper.ReadConfig<ModConfig>();
@@ -34,7 +35,7 @@ public class ModEntry : Mod
         helper.Events.GameLoop.GameLaunched += SetUpConfig;
     }
 
-    private void SetUpConfig(object sender, StardewModdingAPI.Events.GameLaunchedEventArgs e)
+    private void SetUpConfig(object? sender, StardewModdingAPI.Events.GameLaunchedEventArgs e)
     {
         var configMenu = Helper.ModRegistry.GetApi<IGenericModConfigMenuApi>("spacechase0.GenericModConfigMenu");
         if (configMenu is null)
@@ -84,6 +85,7 @@ public class ModEntry : Mod
         }
         return true;
     }
+
     //private static void PostfixCanPlaceFurnitureHere(GameLocation __instance, Furniture __0, ref bool __result)
     //{
     //    try

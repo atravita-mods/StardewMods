@@ -1,7 +1,31 @@
-﻿using NotNullAttribute = JetBrains.Annotations.NotNullAttribute;
+﻿
+using NotNullAttribute = System.Diagnostics.CodeAnalysis.NotNullAttribute;
 
 namespace SpecialOrdersExtended;
 
+
+internal static class IEnumerableExtensions
+{
+    [Pure]
+    public static Dictionary<TKey,TValue> ToDictionaryIgnoreDuplicates<TEnumerable,TKey,TValue>(
+        [NotNull] this IEnumerable<TEnumerable> enumerable,
+        [NotNull] Func<TEnumerable, TKey> keyselector,
+        [NotNull] Func<TEnumerable, TValue> valueselector
+        ) where TEnumerable: notnull
+          where TKey : notnull
+          where TValue : notnull
+    {
+        Dictionary<TKey,TValue> result = new();
+        foreach (TEnumerable item in enumerable)
+        {
+            if(!result.TryAdd(keyselector(item), valueselector(item)))
+            {
+                ModEntry.ModMonitor.DebugLog($"Recieved duplicate key {keyselector(item)}, ignoring");
+            }
+        }
+        return result;
+    }
+}
 internal static class LogExtensions
 {
 

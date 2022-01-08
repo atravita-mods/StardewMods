@@ -49,7 +49,7 @@ this mod won't spawn your fruit.
 }
 ```
 
-to add your location as a location fruit will spawn. (To limit the spawn location, add `:[(x1;y1);(x2,y2)]` after the location name - ie `Custom_NewLocation:[(3;4);(57,54)]`)
+to add your location as a location fruit will spawn. (To limit the spawn location, add `:[(x1;y1);(x2;y2)]` after the location name - ie `Custom_NewLocation:[(3;4);(57;54)]`). Note - semicolons, not commas. 
 
 **Installation**: unzip into your mods folder. **Uninstallation**: simply delete from mods folder.
 

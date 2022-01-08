@@ -79,6 +79,7 @@ internal class DialogueManager
         }
     }
 
+    [Pure]
     public static bool HasSeenDialogue(string key, string characterName)
     {
         if (!Context.IsWorldReady) { throw new SaveNotLoadedError(); }

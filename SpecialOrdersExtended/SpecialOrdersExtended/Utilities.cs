@@ -4,6 +4,7 @@ namespace SpecialOrdersExtended;
 
 internal class Utilities
 {
+    [Pure]
     public static List<string> ContextSort(IEnumerable<string> enumerable)
     {
         LocalizedContentManager contextManager = Game1.content;

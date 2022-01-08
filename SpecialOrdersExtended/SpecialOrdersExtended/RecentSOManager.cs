@@ -20,6 +20,7 @@ internal class RecentSOManager
     /// </summary>
     /// <param name="days"></param>
     /// <returns>IEnumerable of keys within the given timeframe. May return null.</returns>
+    [Pure]
     public static IEnumerable<string>? GetKeys(uint days) => recentCompletedSO?.GetKeys(days);
 
     public static void DayUpdate(uint daysplayed)
@@ -35,8 +36,8 @@ internal class RecentSOManager
     /// <returns>true if an order got added to RecentCompletedSO, false otherwise</returns>
     public static bool GrabNewRecentlyCompletedOrders()
     {
-        Dictionary<string, SpecialOrder>? currentOrders = Game1.player?.team?.specialOrders?.ToDictionary(a => a.questKey.Value, a => a)
-            ?? SaveGame.loaded?.specialOrders?.ToDictionary(a => a.questKey.Value, a => a);
+        Dictionary<string, SpecialOrder>? currentOrders = Game1.player?.team?.specialOrders?.ToDictionaryIgnoreDuplicates(a => a.questKey.Value, a => a)
+            ?? SaveGame.loaded?.specialOrders?.ToDictionaryIgnoreDuplicates(a => a.questKey.Value, a => a);
         if (currentOrders is null) { return false; } //Save is not loaded
         List<string> currentOrderKeys = currentOrders.Keys.OrderBy(a => a).ToList();
 
@@ -99,6 +100,7 @@ internal class RecentSOManager
         return recentCompletedSO!.TryRemove(questkey);
     }
 
+    [Pure]
     public static bool IsWithinXDays(string questkey, uint days)
     {
         if (!Context.IsWorldReady) { throw new SaveNotLoadedError(); }

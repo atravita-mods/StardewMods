@@ -11,6 +11,7 @@ internal abstract class AbstractToken
     /// Whether or not the token allows input. Default, true
     /// </summary>
     /// <returns></returns>
+    [Pure]
     public virtual bool AllowsInput() { return true; }
 
     /// <summary>
@@ -18,12 +19,14 @@ internal abstract class AbstractToken
     /// </summary>
     /// <param name="input"></param>
     /// <returns>Will return one value if given a Special Order, or all Special Orders if not</returns>
+    [Pure]
     public virtual bool CanHaveMultipleValues([MaybeNull] string? input = null)
     {
         return (input is null);
     }
 
     /// <summary>Get whether the token is available for use.</summary>
+    [Pure]
     public virtual bool IsReady()
     {
         return SpecialOrdersCache is not null;

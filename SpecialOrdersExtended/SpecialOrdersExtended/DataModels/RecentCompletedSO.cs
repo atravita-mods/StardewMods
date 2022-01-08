@@ -57,7 +57,7 @@ internal class RecentCompletedSO : AbstractDataModel
 
     public bool TryRemove(string orderKey) => RecentOrdersCompleted.Remove(orderKey);
 
-
+    [Pure]
     public bool IsWithinXDays(string orderKey, uint days)
     {
         if (RecentOrdersCompleted.TryGetValue(orderKey, out uint dayCompleted))
@@ -72,12 +72,14 @@ internal class RecentCompletedSO : AbstractDataModel
     /// </summary>
     /// <param name="days"></param>
     /// <returns>IEnumerable of keys within the given timeframe.</returns>
+    [Pure]
     public IEnumerable<string> GetKeys(uint days)
     {
         return RecentOrdersCompleted.Keys
             .Where(a => RecentOrdersCompleted[a] + days >= Game1.stats.DaysPlayed);
     }
 
+    [Pure]
     public override string ToString()
     {
         StringBuilder stringBuilder = new();

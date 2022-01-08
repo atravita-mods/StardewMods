@@ -24,6 +24,7 @@ internal class DialogueLog : AbstractDataModel
         base.Save(identifier);
     }
 
+    [Pure]
     public bool Contains(string dialoguekey, string characterName)
     {
         if (SeenDialogues.TryGetValue(dialoguekey, out var characterList))
@@ -55,6 +56,7 @@ internal class DialogueLog : AbstractDataModel
         return false;
     }
 
+    [Pure]
     public override string ToString()
     {
         StringBuilder stringBuilder = new();

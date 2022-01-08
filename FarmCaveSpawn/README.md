@@ -5,6 +5,20 @@ Modded farm caves don't really play well with how the fruit cave spawns its frui
 
 Any fruit tree's products can be spawned. Mod trees, as long as they're registered with `Data/fruitTrees`, will be used as well. (Tested with RSV and PPJA More Trees). Fruit not associated with a tree will not be produced.
 
+#### Installation
+Unzip into your mods folder. To uninstall, simply delete from mods folder.
+
+#### Multiplayer
+Host should install mod. Mod does not do anything for farmhands.
+
+#### SVE compat
+
+Will also spawn in the MinecartCave and the DeepCave, if `UseModCaves` is enabled (after 1.0.6). It goes room by room, so if you don't see spawns in MinecartCave and Deepcave try setting the spawn chance lower and the max daily spawns higher.
+
+#### Known compatability issues:
+
+None so far, and none expected!
+
 #### Configuration:
 
 1. `MaxDailySpawns`: the maximum number of fruit that will spawn.
@@ -50,11 +64,5 @@ this mod won't spawn your fruit.
 ```
 
 to add your location as a location fruit will spawn. (To limit the spawn location, add `:[(x1;y1);(x2;y2)]` after the location name - ie `Custom_NewLocation:[(3;4);(57;54)]`). Note - semicolons, not commas. 
-
-**Installation**: unzip into your mods folder. **Uninstallation**: simply delete from mods folder.
-
-**Multiplayer**: host should install mod. Mod does not do anything for farmhands.
-
-**SVE**: will also spawn in the MinecartCave and the DeepCave, if `UseModCaves` is enabled (after 1.0.6). It goes room by room, so if you don't see spawns in MinecartCave and Deepcave try setting the spawn chance lower and the max daily spawns higher.
 
 **Changelog**: https://github.com/atravita-mods/FarmCaveSpawn/blob/master/FarmCaveSpawn/docs/CHANGELOG.MD

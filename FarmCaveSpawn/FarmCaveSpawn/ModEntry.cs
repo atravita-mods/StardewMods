@@ -8,19 +8,18 @@ namespace FarmCaveSpawn;
 
 public class ModEntry : Mod
 {
-    //These two are set by the Entry method, which is the closest I can get to the constructor
+    //The config is set by the Entry method, so it should never realistically be null
 #pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
     private ModConfig config;
-    private AssetManager assetManager;
 #pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
-
+    private readonly AssetManager assetManager = new();
     private readonly List<int> BaseFruit = new() { 296, 396, 406, 410 };
     private List<int> TreeFruit = new();
 
     private Random? random;
     
     private readonly Regex regex = new(
-        pattern: @":\[\((?<x1>\d+),(?<y1>\d+)\),\((?<x2>\d+),(?<y2>\d+)\)\]$", 
+        pattern: @":\[\((?<x1>\d+);(?<y1>\d+)\);\((?<x2>\d+);(?<y2>\d+)\)\]$", 
         options: RegexOptions.CultureInvariant|RegexOptions.Compiled, 
         new TimeSpan(1000000)
         );
@@ -32,7 +31,7 @@ public class ModEntry : Mod
 #endif
         I18n.Init(helper.Translation);
         config = Helper.ReadConfig<ModConfig>();
-        assetManager = new();
+        //assetManager = new();
         helper.Events.GameLoop.DayStarted += SpawnFruit;
         helper.Events.GameLoop.GameLaunched += SetUpConfig;
         helper.ConsoleCommands.Add(
@@ -112,7 +111,7 @@ public class ModEntry : Mod
                     min: 0.0f
                 );
             }
-            else { Monitor.Log($"{property.Name} unaccounted for.", LogLevel.Trace); }
+            else { this.DebugLog($"{property.Name} unaccounted for.", LogLevel.Warn); }
         }
     }
 #pragma warning restore CS8605 // Unboxing a possibly null value.
@@ -158,12 +157,11 @@ public class ModEntry : Mod
             //initialize default limits
             Dictionary<string, int> locLimits = new()
             {
-                ["x1"]= 1,
-                ["x2"]=int.MaxValue,
-                ["y1"]=1,
-                ["y2"]=int.MaxValue,
+                ["x1"] = 1,
+                ["x2"] = int.MaxValue,
+                ["y1"] = 1,
+                ["y2"] = int.MaxValue,
             };
-
             try
             {
                 MatchCollection matches = regex.Matches(location);
@@ -175,10 +173,10 @@ public class ModEntry : Mod
                     {
                         if (int.TryParse(group.Value, out int result))
                         {
-                            locLimits[match.Name] = result;
+                            locLimits[group.Name] = result;
                         }
                     }
-                    this.DebugLog($"Found and parsed sublocation: {parseloc} + {locLimits}");
+                    this.DebugLog($"Found and parsed sublocation: {parseloc} + ({locLimits["x1"]};{locLimits["y1"]});({locLimits["x2"]};{locLimits["y2"]})");
                 }
                 else if (matches.Count >= 2)
                 {
@@ -224,7 +222,7 @@ public class ModEntry : Mod
         {
             IsSpawnedObject = true
         });
-        this.DebugLog($"Spawning item {fruitToPlace} at {location.Name}:{tile.X},{tile.Y}");
+        this.DebugLog($"Spawning item {fruitToPlace} at {location.Name}:{tile.X},{tile.Y}", LogLevel.Debug);
     }
 
     /// <summary>
@@ -365,10 +363,10 @@ public class ModEntry : Mod
     /// Log to berbose only otherwise.
     /// </summary>
     /// <param name="message"></param>
-    private void DebugLog(string message)
+    private void DebugLog(string message, LogLevel level = LogLevel.Debug)
     {
 #if DEBUG
-        Monitor.Log(message, LogLevel.Debug);
+        Monitor.Log(message, level);
 #else
         Monitor.VerboseLog(message);
 #endif

@@ -32,7 +32,10 @@ internal class AssetManager : IAssetLoader
         {
             return (T)(object)new Dictionary<string, string>
             {
-                ["FlashShifter.SVECode"] = "Custom_MinecartCave, Custom_DeepCave",
+                ["FlashShifter.SVECode"] = "Custom_MinecartCave, Custom_DeepCave"
+#if DEBUG
+                , ["atravita.FarmCaveSpawn"] = "Town:[(4;5);(34;40)]"
+#endif
             };
         }
         throw new InvalidOperationException($"Should not have tried to load '{asset.AssetName}'.");

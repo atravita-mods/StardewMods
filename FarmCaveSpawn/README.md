@@ -12,7 +12,7 @@ Any fruit tree's products can be spawned. Mod trees, as long as they're register
 3. `TreeFruitChance`: the percent chance any particular spawn will be fruit tree fruit and not common forage. (Range: 0-100, where 100 means every spawn will be a tree fruit)
 4. `IgnoreFarmCaveType`: if true, will spawn fruit in any farm cave (as long as you've seen the cutscene). If false, requires that the fruit cave be selected.
 5. `EarlyFarmCave`: if true, will spawn even before the cutscene is seen.
-5. `UseModCaves`: if true, will spawn fruit in caves added by mods, if they're registered with this mod. (Upcoming in 1.0.6)
+5. `UseModCaves`: if true, will spawn fruit in caves added by mods, if they're registered with this mod.
 6. `UseMineCave`: if true, will spawn fruit in the mine cave entrances as well (if `MaxDailySpawns` is not hit.)
 7. `SeasonalOnly`: limits to just the fruits that are in-season. After all, those bats have to be getting the fruit from somewhere, right?
 8. `AllowAnyTreeProduct`: if true, allows any product found for any fruit tree to be spawned. If false, will only spawn items that are categorized as fruit in the game.
@@ -49,7 +49,7 @@ this mod won't spawn your fruit.
 }
 ```
 
-to add your location as a location fruit will spawn.
+to add your location as a location fruit will spawn. (To limit the spawn location, add `:[(x1;y1);(x2,y2)]` after the location name - ie `Custom_NewLocation:[(3;4);(57,54)]`)
 
 **Installation**: unzip into your mods folder. **Uninstallation**: simply delete from mods folder.
 

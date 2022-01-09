@@ -31,7 +31,7 @@ public class ModEntry : Mod
 #endif
         I18n.Init(helper.Translation);
         config = Helper.ReadConfig<ModConfig>();
-        //assetManager = new();
+
         helper.Events.GameLoop.DayStarted += SpawnFruit;
         helper.Events.GameLoop.GameLaunched += SetUpConfig;
         helper.ConsoleCommands.Add(
@@ -137,8 +137,8 @@ public class ModEntry : Mod
         bool hasFCFbatcave = false;
         if (Game1.CustomData.TryGetValue("smapi/mod-data/aedenthorn.farmcaveframework/farm-cave-framework-choice", out string? farmcavechoice))
         {
-            hasFCFbatcave = (farmcavechoice is not null) && (farmcavechoice.ToLower().Contains("bat") || farmcavechoice.ToLower().Contains("fruit"));
-            this.DebugLog(hasFCFbatcave.ToString());
+            hasFCFbatcave = (farmcavechoice is not null) && (farmcavechoice.ToLowerInvariant().Contains("bat") || farmcavechoice.ToLowerInvariant().Contains("fruit"));
+            this.DebugLog(hasFCFbatcave? "FarmCaveFramework fruit bat cave detected.": "FarmCaveFramework fruit bat cave not detected.");
         }
 
         if (!Context.IsMainPlayer) { return; }
@@ -147,9 +147,8 @@ public class ModEntry : Mod
         int count = 0;
         TreeFruit = GetTreeFruits();
         GetRandom();
-        FarmCave? farmcave = Game1.getLocationFromName("FarmCave") as FarmCave;
 
-        if (farmcave is not null)
+        if (Game1.getLocationFromName("FarmCave") is FarmCave farmcave)
         {
             this.DebugLog($"Spawning in the farmcave");
             foreach (Vector2 v in IterateTiles(farmcave))
@@ -198,8 +197,8 @@ public class ModEntry : Mod
             {
                 Monitor.Log(I18n.RegexTimeout(loc:location, ex:ex), LogLevel.Warn);
             }
-            GameLocation gameLocation = Game1.getLocationFromName(parseloc);
-            if (gameLocation is not null)
+
+            if (Game1.getLocationFromName(parseloc) is GameLocation gameLocation)
             {
                 Monitor.Log($"Found {gameLocation}");
                 foreach (Vector2 v in IterateTiles(gameLocation, xstart: locLimits["x1"], xend: locLimits["x2"], ystart: locLimits["y1"], yend:locLimits["y2"]))
@@ -227,7 +226,7 @@ public class ModEntry : Mod
     public void PlaceFruit(GameLocation location, Vector2 tile)
     {
         if (random is null) { GetRandom(); }
-        int fruitToPlace = Utility.GetRandom<int>(random!.NextDouble() < (config.TreeFruitChance / 100f) ? TreeFruit : BaseFruit, random);
+        int fruitToPlace = Utility.GetRandom(random!.NextDouble() < (config.TreeFruitChance / 100f) ? TreeFruit : BaseFruit, random);
         location.setObject(tile, new StardewValley.Object(fruitToPlace, 1)
         {
             IsSpawnedObject = true

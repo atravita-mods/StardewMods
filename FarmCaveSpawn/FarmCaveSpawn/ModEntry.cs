@@ -19,6 +19,7 @@ public class ModEntry : Mod
     private Random? random;
     
     private readonly Regex regex = new(
+        //":[(x1;y1);(x2;y2)]"
         pattern: @":\[\((?<x1>\d+);(?<y1>\d+)\);\((?<x2>\d+);(?<y2>\d+)\)\]$", 
         options: RegexOptions.CultureInvariant|RegexOptions.Compiled, 
         new TimeSpan(1000000)
@@ -142,8 +143,16 @@ public class ModEntry : Mod
         }
 
         if (!Context.IsMainPlayer) { return; }
-        if (!config.EarlyFarmCave && (Game1.MasterPlayer.caveChoice?.Value is null || Game1.MasterPlayer.caveChoice.Value <= 0) && !hasFCFbatcave) { return; }
-        if (!config.IgnoreFarmCaveType && !config.EarlyFarmCave && (Game1.MasterPlayer.caveChoice?.Value is null || Game1.MasterPlayer.caveChoice.Value != 1) && !hasFCFbatcave) { return; }
+        if (!config.EarlyFarmCave && (Game1.MasterPlayer.caveChoice?.Value is null || Game1.MasterPlayer.caveChoice.Value <= 0) && string.IsNullOrWhiteSpace(farmcavechoice))
+        {
+            this.DebugLog("Demetrius cutscene not seen and config not set to early, skip spawning for today.");
+            return;
+        }
+        if (!config.IgnoreFarmCaveType && !config.EarlyFarmCave && (Game1.MasterPlayer.caveChoice?.Value is null || Game1.MasterPlayer.caveChoice.Value != 1) && !hasFCFbatcave)
+        {
+            this.DebugLog("Fruit bat cave not selected and config not set to ignore that, skip spawning for today.");
+            return;
+        }
         int count = 0;
         TreeFruit = GetTreeFruits();
         GetRandom();
@@ -160,56 +169,59 @@ public class ModEntry : Mod
             if (count >= config.MaxDailySpawns) { Cleanup(); return; }
         }
 
-        foreach (string location in GetData(assetManager.additionalLocationsLocation))
+        if (config.UseModCaves)
         {
-            string parseloc = location;
-            //initialize default limits
-            Dictionary<string, int> locLimits = new()
+            foreach (string location in GetData(assetManager.additionalLocationsLocation))
             {
-                ["x1"] = 1,
-                ["x2"] = int.MaxValue,
-                ["y1"] = 1,
-                ["y2"] = int.MaxValue,
-            };
-            try
-            {
-                MatchCollection matches = regex.Matches(location);
-                if (matches.Count == 1)
+                string parseloc = location;
+                //initialize default limits
+                Dictionary<string, int> locLimits = new()
                 {
-                    Match match = matches[0];
-                    parseloc = location[..^match.Value.Length];
-                    foreach (Group group in match.Groups)
+                    ["x1"] = 1,
+                    ["x2"] = int.MaxValue,
+                    ["y1"] = 1,
+                    ["y2"] = int.MaxValue,
+                };
+                try
+                {
+                    MatchCollection matches = regex.Matches(location);
+                    if (matches.Count == 1)
                     {
-                        if (int.TryParse(group.Value, out int result))
+                        Match match = matches[0];
+                        parseloc = location[..^match.Value.Length];
+                        foreach (Group group in match.Groups)
                         {
-                            locLimits[group.Name] = result;
+                            if (int.TryParse(group.Value, out int result))
+                            {
+                                locLimits[group.Name] = result;
+                            }
                         }
+                        this.DebugLog($"Found and parsed sublocation: {parseloc} + ({locLimits["x1"]};{locLimits["y1"]});({locLimits["x2"]};{locLimits["y2"]})");
                     }
-                    this.DebugLog($"Found and parsed sublocation: {parseloc} + ({locLimits["x1"]};{locLimits["y1"]});({locLimits["x2"]};{locLimits["y2"]})");
+                    else if (matches.Count >= 2)
+                    {
+                        Monitor.Log(I18n.ExcessRegexMatches(loc: location), LogLevel.Warn);
+                        continue;
+                    }
                 }
-                else if (matches.Count >= 2)
+                catch (RegexMatchTimeoutException ex)
                 {
-                    Monitor.Log(I18n.ExcessRegexMatches(loc: location), LogLevel.Warn);
-                    continue;
+                    Monitor.Log(I18n.RegexTimeout(loc: location, ex: ex), LogLevel.Warn);
                 }
-            }
-            catch (RegexMatchTimeoutException ex)
-            {
-                Monitor.Log(I18n.RegexTimeout(loc:location, ex:ex), LogLevel.Warn);
-            }
 
-            if (Game1.getLocationFromName(parseloc) is GameLocation gameLocation)
-            {
-                Monitor.Log($"Found {gameLocation}");
-                foreach (Vector2 v in IterateTiles(gameLocation, xstart: locLimits["x1"], xend: locLimits["x2"], ystart: locLimits["y1"], yend:locLimits["y2"]))
+                if (Game1.getLocationFromName(parseloc) is GameLocation gameLocation)
                 {
-                    PlaceFruit(gameLocation, v);
-                    if (++count >= config.MaxDailySpawns) { Cleanup(); return; }
+                    Monitor.Log($"Found {gameLocation}");
+                    foreach (Vector2 v in IterateTiles(gameLocation, xstart: locLimits["x1"], xend: locLimits["x2"], ystart: locLimits["y1"], yend: locLimits["y2"]))
+                    {
+                        PlaceFruit(gameLocation, v);
+                        if (++count >= config.MaxDailySpawns) { Cleanup(); return; }
+                    }
                 }
-            }
-            else
-            {
-                Monitor.Log(I18n.LocationMissing(loc: location), LogLevel.Debug);
+                else
+                {
+                    Monitor.Log(I18n.LocationMissing(loc: location), LogLevel.Debug);
+                }
             }
         }
 
@@ -369,7 +381,7 @@ public class ModEntry : Mod
 
     /// <summary>
     /// Log to DEBUG if compiled with DEBUG
-    /// Log to berbose only otherwise.
+    /// Log to verbose only otherwise.
     /// </summary>
     /// <param name="message"></param>
     private void DebugLog(string message, LogLevel level = LogLevel.Debug)

@@ -4,6 +4,10 @@
 
 * Nothing! Awaiting future object updates, but have no more ideas at current.
 
+#### Version 1.0.8 (upcoming)
+
+* Corrects `UseModCave` option (would previously always use the additional locations list.)
+
 #### Version 1.0.7
 
 * Adds compat with FarmCaveFramework (https://www.nexusmods.com/stardewvalley/mods/10186).

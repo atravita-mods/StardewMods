@@ -16,13 +16,13 @@ internal class CompletedSpecialOrders : AbstractToken
             specialOrderNames = SaveGame.loaded?.completedSpecialOrders?.OrderBy(a => a)?.ToList();
         }
 
-        if (specialOrderNames == SpecialOrdersCache)
+        if (specialOrderNames == this.SpecialOrdersCache)
         {
             return false;
         }
         else
         {
-            SpecialOrdersCache = specialOrderNames;
+            this.SpecialOrdersCache = specialOrderNames;
             return true;
         }
     }

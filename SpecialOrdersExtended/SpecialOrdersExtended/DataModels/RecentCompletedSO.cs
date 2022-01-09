@@ -26,6 +26,16 @@ internal class RecentCompletedSO : AbstractDataModel
             ?? new RecentCompletedSO(Constants.SaveFolderName);
     }
 
+    public static RecentCompletedSO LoadTempIfAvailable()
+    {
+        throw new NotImplementedException();
+    }
+
+    public void SaveTemp()
+    {
+        base.SaveTemp(identifier);
+    }
+
     public void Save()
     {
         base.Save(identifier);
@@ -38,11 +48,11 @@ internal class RecentCompletedSO : AbstractDataModel
     [SuppressMessage("ReSharper", "IDE1006", Justification = "Method naming follows convention used in-game")]
     public void dayUpdate(uint daysPlayed)
     {
-        foreach (string key in RecentOrdersCompleted.Keys)
+        foreach (string key in this.RecentOrdersCompleted.Keys)
         {
-            if (daysPlayed > RecentOrdersCompleted[key] + 7)
+            if (daysPlayed > this.RecentOrdersCompleted[key] + 7)
             {
-                RecentOrdersCompleted.Remove(key);
+                this.RecentOrdersCompleted.Remove(key);
             }
         }
     }
@@ -53,14 +63,14 @@ internal class RecentCompletedSO : AbstractDataModel
     /// <param name="orderKey"></param>
     /// <param name="daysPlayed"></param>
     /// <returns>true if the quest key was successfully added, false otherwise</returns>
-    public bool TryAdd(string orderKey, uint daysPlayed) => RecentOrdersCompleted.TryAdd(orderKey, daysPlayed);
+    public bool TryAdd(string orderKey, uint daysPlayed) => this.RecentOrdersCompleted.TryAdd(orderKey, daysPlayed);
 
-    public bool TryRemove(string orderKey) => RecentOrdersCompleted.Remove(orderKey);
+    public bool TryRemove(string orderKey) => this.RecentOrdersCompleted.Remove(orderKey);
 
     [Pure]
     public bool IsWithinXDays(string orderKey, uint days)
     {
-        if (RecentOrdersCompleted.TryGetValue(orderKey, out uint dayCompleted))
+        if (this.RecentOrdersCompleted.TryGetValue(orderKey, out uint dayCompleted))
         {
             return dayCompleted + days > Game1.stats.daysPlayed;
         }
@@ -75,18 +85,18 @@ internal class RecentCompletedSO : AbstractDataModel
     [Pure]
     public IEnumerable<string> GetKeys(uint days)
     {
-        return RecentOrdersCompleted.Keys
-            .Where(a => RecentOrdersCompleted[a] + days >= Game1.stats.DaysPlayed);
+        return this.RecentOrdersCompleted.Keys
+            .Where(a => this.RecentOrdersCompleted[a] + days >= Game1.stats.DaysPlayed);
     }
 
     [Pure]
     public override string ToString()
     {
         StringBuilder stringBuilder = new();
-        stringBuilder.AppendLine($"RecentCompletedSO{Savefile}");
-        foreach (string key in Utilities.ContextSort(RecentOrdersCompleted.Keys))
+        stringBuilder.AppendLine($"RecentCompletedSO{this.Savefile}");
+        foreach (string key in Utilities.ContextSort(this.RecentOrdersCompleted.Keys))
         {
-            stringBuilder.AppendLine($"{key} completed on Day {RecentOrdersCompleted[key]}");
+            stringBuilder.AppendLine($"{key} completed on Day {this.RecentOrdersCompleted[key]}");
         }
         return stringBuilder.ToString();
     }

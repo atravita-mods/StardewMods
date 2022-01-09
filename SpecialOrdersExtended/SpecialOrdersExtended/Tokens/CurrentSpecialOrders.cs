@@ -8,13 +8,13 @@ internal class CurrentSpecialOrders : AbstractToken
     {
         List<string>? specialOrderNames = Game1.player?.team?.specialOrders?.Select((SpecialOrder s) => s.questKey.ToString())?.OrderBy(a => a)?.ToList()
             ?? SaveGame.loaded?.specialOrders?.Select((SpecialOrder s) => s.questKey.ToString())?.OrderBy(a => a)?.ToList();
-        if (specialOrderNames == SpecialOrdersCache)
+        if (specialOrderNames == this.SpecialOrdersCache)
         {
             return false;
         }
         else
         {
-            SpecialOrdersCache = specialOrderNames;
+            this.SpecialOrdersCache = specialOrderNames;
             return true;
         }
     }

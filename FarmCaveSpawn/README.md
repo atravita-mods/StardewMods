@@ -48,7 +48,6 @@ The console command `list_fruits` will tell you which tree fruits are available 
         "your.uniqueID": "Comma,Seperated,List,Of,Fruit,Names"
     }
 }
-
 ```
 
 this mod won't spawn your fruit.

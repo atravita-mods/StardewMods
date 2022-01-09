@@ -1,4 +1,6 @@
-﻿namespace SpecialOrdersExtended.DataModels;
+﻿using StardewModdingAPI.Utilities;
+
+namespace SpecialOrdersExtended.DataModels;
 
 internal abstract class AbstractDataModel
 {
@@ -8,7 +10,12 @@ internal abstract class AbstractDataModel
 
     public virtual void Save(string identifier)
     {
-        ModEntry.DataHelper.WriteGlobalData(Savefile + identifier, this);
+        ModEntry.DataHelper.WriteGlobalData(this.Savefile + identifier, this);
+    }
+
+    public virtual void SaveTemp(string identifier)
+    {
+        this.Save($"{identifier}_temp_{SDate.Now().DaysSinceStart}");
     }
 
 }

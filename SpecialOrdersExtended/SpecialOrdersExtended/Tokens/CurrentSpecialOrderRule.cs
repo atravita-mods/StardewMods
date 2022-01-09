@@ -18,13 +18,13 @@ internal class CurrentSpecialOrderRule : AbstractToken
                 ?.OrderBy(a => a)?.ToList();
         }
 
-        if (rules == SpecialOrdersCache)
+        if (rules == this.SpecialOrdersCache)
         {
             return false;
         }
         else
         {
-            SpecialOrdersCache = rules;
+            this.SpecialOrdersCache = rules;
             return true;
         }
     }

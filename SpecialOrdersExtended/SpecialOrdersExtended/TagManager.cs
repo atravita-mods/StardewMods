@@ -64,7 +64,7 @@ internal class TagManager
                     if (specialOrder.questState.Value != SpecialOrder.QuestState.InProgress) { continue; }
                     foreach (OrderObjective objective in specialOrder.objectives)
                     {
-                        if (objective is DonateObjective && (objective as DonateObjective)!.dropBoxGameLocation.Value.Equals(roomname, StringComparison.OrdinalIgnoreCase))
+                        if (objective is DonateObjective donateobjective && donateobjective.dropBoxGameLocation.Value.Equals(roomname, StringComparison.OrdinalIgnoreCase))
                         {
                             __result = true;
                             return false;

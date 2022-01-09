@@ -1,4 +1,5 @@
-﻿using System.Text;
+﻿using StardewModdingAPI.Utilities;
+using System.Text;
 
 namespace SpecialOrdersExtended.DataModels;
 
@@ -19,6 +20,16 @@ internal class DialogueLog : AbstractDataModel
         return ModEntry.DataHelper.ReadGlobalData<DialogueLog>(Constants.SaveFolderName + identifier)
             ?? new DialogueLog(Constants.SaveFolderName);
     }
+
+    public static DialogueLog LoadTempIfAvailable()
+    {
+        throw new NotImplementedException();
+    }
+
+    public void SaveTemp()
+    {
+        base.SaveTemp(identifier);
+    }
     public void Save()
     {
         base.Save(identifier);
@@ -27,7 +38,7 @@ internal class DialogueLog : AbstractDataModel
     [Pure]
     public bool Contains(string dialoguekey, string characterName)
     {
-        if (SeenDialogues.TryGetValue(dialoguekey, out var characterList))
+        if (this.SeenDialogues.TryGetValue(dialoguekey, out var characterList))
         {
             return characterList.Contains(characterName);
         }
@@ -36,11 +47,11 @@ internal class DialogueLog : AbstractDataModel
 
     public bool TryAdd(string dialoguekey, string characterName)
     {
-        if (!SeenDialogues.TryGetValue(dialoguekey, out var characterList))
+        if (!this.SeenDialogues.TryGetValue(dialoguekey, out var characterList))
         {
             characterList = new();
             characterList.Add(characterName);
-            SeenDialogues[dialoguekey] = characterList;
+            this.SeenDialogues[dialoguekey] = characterList;
             return true;
         }
         else if (characterList.Contains(characterName)) { return false; }
@@ -49,7 +60,7 @@ internal class DialogueLog : AbstractDataModel
 
     public bool TryRemove(string dialoguekey, string characterName)
     {
-        if (SeenDialogues.TryGetValue(dialoguekey, out var characterList))
+        if (this.SeenDialogues.TryGetValue(dialoguekey, out var characterList))
         {
             return characterList.Remove(characterName);
         }
@@ -60,10 +71,10 @@ internal class DialogueLog : AbstractDataModel
     public override string ToString()
     {
         StringBuilder stringBuilder = new();
-        stringBuilder.Append($"DialogueLog({Savefile}):");
-        foreach (string key in Utilities.ContextSort(SeenDialogues.Keys))
+        stringBuilder.Append($"DialogueLog({this.Savefile}):");
+        foreach (string key in Utilities.ContextSort(this.SeenDialogues.Keys))
         {
-            stringBuilder.AppendLine().Append($"    {key}:").AppendJoin(", ", SeenDialogues[key]);
+            stringBuilder.AppendLine().Append($"    {key}:").AppendJoin(", ", this.SeenDialogues[key]);
         }
         return stringBuilder.ToString();
     }

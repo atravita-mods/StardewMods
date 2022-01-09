@@ -19,12 +19,12 @@ internal class StatsManager
     /// </summary>
     public void GrabProperties()
     {
-        propertyInfos = typeof(Stats).GetProperties()
-            .Where((PropertyInfo p) => p.CanRead && p.PropertyType.Equals(typeof(uint)) && !denylist.Contains(p.Name))
+        this.propertyInfos = typeof(Stats).GetProperties()
+            .Where((PropertyInfo p) => p.CanRead && p.PropertyType.Equals(typeof(uint)) && !this.denylist.Contains(p.Name))
             .ToDictionary((PropertyInfo p) => p.Name.ToLowerInvariant(), p => p);
     }
 
-    public void ClearProperties() => propertyInfos.Clear();
+    public void ClearProperties() => this.propertyInfos.Clear();
 
     /// <summary>
     /// Get the value of the stat in the specific stat object.
@@ -36,10 +36,10 @@ internal class StatsManager
     /// <returns>value of the stat</returns>
     public uint GrabBasicProperty(string key, Stats stats)
     {
-        if (propertyInfos.Count.Equals(0)) { GrabProperties(); }
+        if (this.propertyInfos.Count.Equals(0)) { this.GrabProperties(); }
         try
         {
-            if (propertyInfos.TryGetValue(key.ToLowerInvariant(), out var property))
+            if (this.propertyInfos.TryGetValue(key.ToLowerInvariant(), out var property))
             {
 #pragma warning disable CS8605 // Unboxing a possibly null value.
                 return (uint)property.GetValue(stats);
@@ -64,7 +64,7 @@ internal class StatsManager
     [SuppressMessage("ReSharper", "IDE0060", Justification = "Format expected by console commands")]
     public void ConsoleListProperties(string command, string[] args)
     {
-        if (propertyInfos.Count.Equals(0)) { GrabProperties(); }
-        ModEntry.ModMonitor.Log($"{I18n.CurrentKeysFound()}: \n    {I18n.Hardcoded()}:{String.Join(", ", Utilities.ContextSort(propertyInfos.Keys))}\n    {I18n.Dictionary()}:{String.Join(", ", Utilities.ContextSort(Game1.player.stats.stat_dictionary.Keys))}", LogLevel.Info);
+        if (this.propertyInfos.Count.Equals(0)) { this.GrabProperties(); }
+        ModEntry.ModMonitor.Log($"{I18n.CurrentKeysFound()}: \n    {I18n.Hardcoded()}:{String.Join(", ", Utilities.ContextSort(this.propertyInfos.Keys))}\n    {I18n.Dictionary()}:{String.Join(", ", Utilities.ContextSort(Game1.player.stats.stat_dictionary.Keys))}", LogLevel.Info);
     }
 }

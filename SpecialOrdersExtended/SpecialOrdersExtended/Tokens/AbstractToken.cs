@@ -29,7 +29,7 @@ internal abstract class AbstractToken
     [Pure]
     public virtual bool IsReady()
     {
-        return SpecialOrdersCache is not null;
+        return this.SpecialOrdersCache is not null;
     }
 
     /// <summary>Validate that the provided input arguments are valid.</summary>
@@ -49,17 +49,17 @@ internal abstract class AbstractToken
     /// <param name="input">The input arguments, if applicable.</param>
     public virtual IEnumerable<string> GetValues(string input)
     {
-        if (SpecialOrdersCache is null) { yield break; }
+        if (this.SpecialOrdersCache is null) { yield break; }
         else if (input is null)
         {
-            foreach (string specialorder in SpecialOrdersCache)
+            foreach (string specialorder in this.SpecialOrdersCache)
             {
                 yield return specialorder;
             }
         }
         else
         {
-            yield return SpecialOrdersCache.Contains(input["|contains=".Length..]) ? "true" : "false";
+            yield return this.SpecialOrdersCache.Contains(input["|contains=".Length..]) ? "true" : "false";
         }
     }
 

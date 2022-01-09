@@ -18,7 +18,7 @@ class ModEntry : Mod
     public override void Entry(IModHelper helper)
     {
         I18n.Init(helper.Translation);
-        ModMonitor = Monitor;
+        ModMonitor = this.Monitor;
         StatsManager = new();
         DataHelper = helper.Data;
 
@@ -28,7 +28,7 @@ class ModEntry : Mod
             original: typeof(SpecialOrder).GetMethod("CheckTag", BindingFlags.NonPublic | BindingFlags.Static),
             prefix: new HarmonyMethod(typeof(TagManager), nameof(TagManager.PrefixCheckTag))
             );
-        ModMonitor.Log("Patching SpecialOrder:CheckTag for Special Orders Extended", LogLevel.Debug);
+        ModMonitor.Log("Patching SpecialOrder::CheckTag for Special Orders Extended", LogLevel.Trace);
 
         try
         {
@@ -36,11 +36,11 @@ class ModEntry : Mod
                 original: AccessTools.Method(typeof(NPC), nameof(NPC.checkForNewCurrentDialogue)),
                 postfix: new HarmonyMethod(typeof(DialogueManager), nameof(DialogueManager.PostfixCheckDialogue))
                 );
-            ModMonitor.Log("Patching NPC:checkForNewCurrentDialogue for Special Orders Dialogue", LogLevel.Debug);
+            ModMonitor.Log("Patching NPC::checkForNewCurrentDialogue for Special Orders Dialogue", LogLevel.Trace);
         }
         catch (Exception ex)
         {
-            ModMonitor.Log($"Failed to patch NPC:checkForNewCurrentDialogue for Special Orders Dialogue. Dialogue will be disabled\n\n{ex}", LogLevel.Error);
+            ModMonitor.Log($"Failed to patch NPC::checkForNewCurrentDialogue for Special Orders Dialogue. Dialogue will be disabled\n\n{ex}", LogLevel.Error);
         }
 
         helper.ConsoleCommands.Add(
@@ -63,10 +63,15 @@ class ModEntry : Mod
             documentation: $"{I18n.SpecialOrdersDialogue_Description()}\n\n{I18n.SpecialOrdersDialogue_Example()}\n    {I18n.SpecialOrdersDialogue_Usage()}",
             callback: DialogueManager.ConsoleSpecialOrderDialogue
             );
-        helper.Events.GameLoop.GameLaunched += RegisterTokens;
-        helper.Events.GameLoop.SaveLoaded += SaveLoaded;
-        helper.Events.GameLoop.Saving += Saving;
-        helper.Events.GameLoop.TimeChanged += TimeChanged;
+        helper.Events.GameLoop.GameLaunched += this.RegisterTokens;
+        helper.Events.GameLoop.SaveLoaded += this.SaveLoaded;
+        helper.Events.GameLoop.Saving += this.Saving;
+        helper.Events.GameLoop.OneSecondUpdateTicking += this.OneSecondUpdateTicking;
+    }
+
+    private void OneSecondUpdateTicking(object? sender, StardewModdingAPI.Events.OneSecondUpdateTickingEventArgs e)
+    {
+        RecentSOManager.GrabNewRecentlyCompletedOrders();
     }
 
     private void RegisterTokens(object? sender, StardewModdingAPI.Events.GameLaunchedEventArgs e)
@@ -83,18 +88,16 @@ class ModEntry : Mod
 
     private void Saving(object? sender, StardewModdingAPI.Events.SavingEventArgs e)
     {
+        this.Monitor.DebugLog("Event Saving raised");
         StatsManager.ClearProperties();
         DialogueManager.Save();
         RecentSOManager.DayUpdate(Game1.stats.daysPlayed);
         RecentSOManager.Save();
     }
-    private void TimeChanged(object? sender, StardewModdingAPI.Events.TimeChangedEventArgs e)
-    {
-        RecentSOManager.GrabNewRecentlyCompletedOrders();
-    }
 
     private void SaveLoaded(object? sender, StardewModdingAPI.Events.SaveLoadedEventArgs e)
     {
+        this.Monitor.DebugLog("Event SaveLoaded raised");
         DialogueManager.Load();
         RecentSOManager.Load();
     }
@@ -119,7 +122,7 @@ class ModEntry : Mod
             {
                 base_tag = tag.Trim();
             }
-            bool result = match == Helper.Reflection.GetMethod(typeof(SpecialOrder), "CheckTag").Invoke<bool>(base_tag);
+            bool result = match == this.Helper.Reflection.GetMethod(typeof(SpecialOrder), "CheckTag").Invoke<bool>(base_tag);
             ModMonitor.Log($"{tag}: {(result ? I18n.True() : I18n.False())}", LogLevel.Debug);
         }
     }
@@ -137,7 +140,7 @@ class ModEntry : Mod
         foreach (string key in keys)
         {
             SpecialOrderData order = order_data[key];
-            if (IsAvailableOrder(key, order))
+            if (this.IsAvailableOrder(key, order))
             {
                 validkeys.Add(key);
                 if (!Game1.MasterPlayer.team.completedSpecialOrders.ContainsKey(key)) { unseenkeys.Add(key); }
@@ -195,7 +198,7 @@ class ModEntry : Mod
                     trimmed_tag = tag;
                 }
 
-                if (!(match == Helper.Reflection.GetMethod(typeof(SpecialOrder), "CheckTag").Invoke<bool>(trimmed_tag)))
+                if (!(match == this.Helper.Reflection.GetMethod(typeof(SpecialOrder), "CheckTag").Invoke<bool>(trimmed_tag)))
                 {
                     ModMonitor.Log($"         {I18n.TagFailed()}: {tag}", LogLevel.Debug);
                 }

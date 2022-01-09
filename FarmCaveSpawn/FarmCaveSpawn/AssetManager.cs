@@ -9,7 +9,7 @@ internal class AssetManager : IAssetLoader
 
     public bool CanLoad<T>(IAssetInfo asset)
     {
-        return asset.AssetNameEquals(denylistLocation) || asset.AssetNameEquals(additionalLocationsLocation);
+        return asset.AssetNameEquals(this.denylistLocation) || asset.AssetNameEquals(this.additionalLocationsLocation);
     }
 
     /// <summary>
@@ -22,13 +22,13 @@ internal class AssetManager : IAssetLoader
     /// <exception cref="InvalidOperationException"></exception>
     public T Load<T>(IAssetInfo asset)
     {
-        if (asset.AssetNameEquals(denylistLocation))
+        if (asset.AssetNameEquals(this.denylistLocation))
         {
             return (T)(object)new Dictionary<string, string>
             {
             };
         }
-        else if (asset.AssetNameEquals(additionalLocationsLocation))
+        else if (asset.AssetNameEquals(this.additionalLocationsLocation))
         {
             return (T)(object)new Dictionary<string, string>
             {

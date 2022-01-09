@@ -1,4 +1,8 @@
 ﻿namespace FarmCaveSpawn;
+
+/// <summary>
+/// Configuration class for this mod.
+/// </summary>
 class ModConfig
 {
     /// <summary>

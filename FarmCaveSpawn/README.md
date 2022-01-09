@@ -17,7 +17,9 @@ Will also spawn in the MinecartCave and the DeepCave, if `UseModCaves` is enable
 
 #### Known compatability issues:
 
-None so far, and none expected!
+I check for `Game1.MasterPlayer.caveChoice` to see what farm cave you've picked. If you're using a mod that causes that flag to never be set (such as [Farm Cave Framework](https://www.nexusmods.com/stardewvalley/mods/10506)), this mod will never think the cave is a fruit bat cave. To get around it, you can set either `Ignore Farm Cave Type` to `true` or `Allow Early Farm Cave` to `true`.
+
+Farm Cave Framework is handled seperately - this mod will check to see if that mod's field for cave type contains the word "bat" or "fruit" and assume that it is a fruit cave. It should be compatible now.
 
 #### Configuration:
 

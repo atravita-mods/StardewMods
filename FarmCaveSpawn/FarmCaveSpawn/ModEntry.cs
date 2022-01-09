@@ -132,9 +132,18 @@ public class ModEntry : Mod
     /// <param name="e"></param>
     private void SpawnFruit(object? sender, StardewModdingAPI.Events.DayStartedEventArgs e)
     {
+        // Compat for Farm Cave Framework: https://www.nexusmods.com/stardewvalley/mods/10506
+        // Which saves the farm cave choice to their own SaveData, and doesn't update the MasterPlayer.caveChoice
+        bool hasFCFbatcave = false;
+        if (Game1.CustomData.TryGetValue("smapi/mod-data/aedenthorn.farmcaveframework/farm-cave-framework-choice", out string? farmcavechoice))
+        {
+            hasFCFbatcave = (farmcavechoice is not null) && (farmcavechoice.ToLower().Contains("bat") || farmcavechoice.ToLower().Contains("fruit"));
+            this.DebugLog(hasFCFbatcave.ToString());
+        }
+
         if (!Context.IsMainPlayer) { return; }
-        if (!config.EarlyFarmCave && (Game1.MasterPlayer.caveChoice?.Value is null || Game1.MasterPlayer.caveChoice.Value <= 0)) { return; }
-        if (!config.IgnoreFarmCaveType && (Game1.MasterPlayer.caveChoice?.Value is null || Game1.MasterPlayer.caveChoice.Value != 1)) { return; }
+        if (!config.EarlyFarmCave && (Game1.MasterPlayer.caveChoice?.Value is null || Game1.MasterPlayer.caveChoice.Value <= 0) && !hasFCFbatcave) { return; }
+        if (!config.IgnoreFarmCaveType && !config.EarlyFarmCave && (Game1.MasterPlayer.caveChoice?.Value is null || Game1.MasterPlayer.caveChoice.Value != 1) && !hasFCFbatcave) { return; }
         int count = 0;
         TreeFruit = GetTreeFruits();
         GetRandom();
@@ -142,6 +151,7 @@ public class ModEntry : Mod
 
         if (farmcave is not null)
         {
+            this.DebugLog($"Spawning in the farmcave");
             foreach (Vector2 v in IterateTiles(farmcave))
             {
                 PlaceFruit(farmcave, v);

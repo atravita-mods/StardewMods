@@ -7,6 +7,7 @@ Changelog
 2. Add condition for total number of quests (both Qi and otherwise completed.)
 3. Document tokens.
 4. Document dialogue keys, their storage, and how to use console commands to check that.
+5. Add `IsAvailableOrder` as a possible dialogue key?
 
 
 ##### In consideration

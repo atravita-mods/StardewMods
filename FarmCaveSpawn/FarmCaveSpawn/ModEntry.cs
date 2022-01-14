@@ -2,7 +2,7 @@
 using Microsoft.Xna.Framework;
 using System.Text.RegularExpressions;
 using StardewValley.Locations;
-
+using System.Reflection;
 
 namespace FarmCaveSpawn;
 
@@ -17,7 +17,7 @@ public class ModEntry : Mod
     /// <summary>
     /// The item IDs for the four basic forage fruit.
     /// </summary>
-    private readonly List<int> BaseFruit = new() { 296, 396, 406, 410 };
+    private readonly List<int> BASE_FRUIT = new() { 296, 396, 406, 410 };
 
     /// <summary>
     /// Item IDs for items produced by trees.
@@ -68,7 +68,6 @@ public class ModEntry : Mod
     }
 
     //config should never be null anyways.
-#pragma warning disable CS8605 // Unboxing a possibly null value.
     /// <summary>
     /// Generates the GMCM for this mod by looking at the structure of the config class.
     /// </summary>
@@ -79,7 +78,9 @@ public class ModEntry : Mod
     {
         var configMenu = this.Helper.ModRegistry.GetApi<IGenericModConfigMenuApi>("spacechase0.GenericModConfigMenu");
         if (configMenu is null)
+        {
             return;
+        }
 
         configMenu.Register(
             mod: this.ModManifest,
@@ -91,24 +92,37 @@ public class ModEntry : Mod
             text: I18n.Mod_Description
             );
 
-        foreach (System.Reflection.PropertyInfo property in typeof(ModConfig).GetProperties())
+        foreach (PropertyInfo property in typeof(ModConfig).GetProperties())
         {
+            MethodInfo? Getter = property.GetGetMethod();
+            MethodInfo? Setter = property.GetSetMethod();
+            if(Getter is null || Setter is null)
+            {
+                this.DebugLog("Config appears to have a mis-formed option?");
+                continue;
+            }
+
             if (property.PropertyType.Equals(typeof(bool)))
             {
+                var getterDelegate = (Func<ModConfig, bool>)Delegate.CreateDelegate(typeof(Func<ModConfig, bool>), Getter);
+                var setterDelegate = (Action<ModConfig, bool>)Delegate.CreateDelegate(typeof(Action<ModConfig, bool>), Setter);
+
                 configMenu.AddBoolOption(
                     mod: this.ModManifest,
-                    getValue: () => (bool)property.GetValue(this.config),
-                    setValue: (bool value) => property.SetValue(this.config, value),
+                    getValue: () => getterDelegate(this.config),
+                    setValue: (bool value) => setterDelegate(this.config, value),
                     name: () => I18n.GetByKey($"{property.Name}.title"),
                     tooltip: () => I18n.GetByKey($"{property.Name}.description")
                    );
             }
             else if (property.PropertyType.Equals(typeof(int)))
             {
+                var getterDelegate = (Func<ModConfig,int>)Delegate.CreateDelegate(typeof(Func<ModConfig,int>), Getter);
+                var setterDelegate = (Action<ModConfig,int>)Delegate.CreateDelegate(typeof (Action<ModConfig,int>), Setter);
                 configMenu.AddNumberOption(
                     mod: this.ModManifest,
-                    getValue: () => (int)property.GetValue(this.config),
-                    setValue: (int value) => property.SetValue(this.config, value),
+                    getValue: () => getterDelegate(this.config),
+                    setValue: (int value) => setterDelegate(this.config, value),
                     name: () => I18n.GetByKey($"{property.Name}.title"),
                     tooltip: () => I18n.GetByKey($"{property.Name}.description"),
                     min: 0,
@@ -117,19 +131,23 @@ public class ModEntry : Mod
             }
             else if (property.PropertyType.Equals(typeof(float)))
             {
+                var getterDelegate = (Func<ModConfig, float>)Delegate.CreateDelegate(typeof(Func<ModConfig, float>), Getter);
+                var setterDelegate = (Action<ModConfig, float>)Delegate.CreateDelegate(typeof(Action<ModConfig, float>), Setter);
                 configMenu.AddNumberOption(
                     mod: this.ModManifest,
-                    getValue: () => (float)property.GetValue(this.config),
-                    setValue: (float value) => property.SetValue(this.config, value),
+                    getValue: () => getterDelegate(this.config),
+                    setValue: (float value) => setterDelegate(this.config, value),
                     name: () => I18n.GetByKey($"{property.Name}.title"),
                     tooltip: () => I18n.GetByKey($"{property.Name}.description"),
                     min: 0.0f
                 );
             }
-            else { this.DebugLog($"{property.Name} unaccounted for.", LogLevel.Warn); }
+            else
+            {
+                this.DebugLog($"{property.Name} unaccounted for.", LogLevel.Warn);
+            }
         }
     }
-#pragma warning restore CS8605 // Unboxing a possibly null value.
 
     /// <summary>
     /// gets a seeded random based on uniqueID and days played
@@ -152,6 +170,7 @@ public class ModEntry : Mod
         bool hasFCFbatcave = false;
         if (Game1.CustomData.TryGetValue("smapi/mod-data/aedenthorn.farmcaveframework/farm-cave-framework-choice", out string? farmcavechoice))
         {
+            //Crosscheck this = probably better to just use the actual value, maybe...
             hasFCFbatcave = (farmcavechoice is not null) && (farmcavechoice.ToLowerInvariant().Contains("bat") || farmcavechoice.ToLowerInvariant().Contains("fruit"));
             this.DebugLog(hasFCFbatcave? "FarmCaveFramework fruit bat cave detected.": "FarmCaveFramework fruit bat cave not detected.");
         }
@@ -185,7 +204,7 @@ public class ModEntry : Mod
 
         if (this.config.UseModCaves)
         {
-            foreach (string location in this.GetData(this.assetManager.additionalLocationsLocation))
+            foreach (string location in this.GetData(this.assetManager.ADDITIONAL_LOCATIONS_LOCATION))
             {
                 string parseloc = location;
                 //initialize default limits
@@ -252,7 +271,7 @@ public class ModEntry : Mod
     public void PlaceFruit(GameLocation location, Vector2 tile)
     {
         if (this.random is null) { this.GetRandom(); }
-        int fruitToPlace = Utility.GetRandom(this.random!.NextDouble() < (this.config.TreeFruitChance / 100f) ? this.TreeFruit : this.BaseFruit, this.random);
+        int fruitToPlace = Utility.GetRandom(this.random!.NextDouble() < (this.config.TreeFruitChance / 100f) ? this.TreeFruit : this.BASE_FRUIT, this.random);
         location.setObject(tile, new StardewValley.Object(fruitToPlace, 1)
         {
             IsSpawnedObject = true
@@ -337,7 +356,7 @@ public class ModEntry : Mod
     private List<int> GetTreeFruits()
     {
 
-        List<string> denylist = this.GetData(this.assetManager.denylistLocation);
+        List<string> denylist = this.GetData(this.assetManager.DENYLIST_LOCATION);
 
         List<int> TreeFruits = new();
         Dictionary<int, string> fruittrees = this.Helper.Content.Load<Dictionary<int, string>>("Data/fruitTrees", ContentSource.GameContent);

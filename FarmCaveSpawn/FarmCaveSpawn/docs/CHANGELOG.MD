@@ -7,10 +7,11 @@
 #### Version 1.0.8 (upcoming)
 
 * Corrects `UseModCave` option (would previously always use the additional locations list.)
+* Use delegates
 
 #### Version 1.0.7
 
-* Adds compat with FarmCaveFramework (https://www.nexusmods.com/stardewvalley/mods/10186).
+* Adds compat with FarmCaveFramework (https://www.nexusmods.com/stardewvalley/mods/10506).
 
 #### Version 1.0.6
 

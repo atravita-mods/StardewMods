@@ -4,31 +4,25 @@ namespace FarmCaveSpawn;
 
 internal class AssetManager : IAssetLoader
 {
-    public readonly string denylistLocation = PathUtilities.NormalizeAssetName("Mods/atravita_FarmCaveSpawn_denylist");
-    public readonly string additionalLocationsLocation = PathUtilities.NormalizeAssetName("Mods/atravita_FarmCaveSpawn_additionalLocations");
+    public readonly string DENYLIST_LOCATION = PathUtilities.NormalizeAssetName("Mods/atravita_FarmCaveSpawn_denylist");
+    public readonly string ADDITIONAL_LOCATIONS_LOCATION = PathUtilities.NormalizeAssetName("Mods/atravita_FarmCaveSpawn_additionalLocations");
 
+    /// <inheritdoc/>
     public bool CanLoad<T>(IAssetInfo asset)
     {
-        return asset.AssetNameEquals(this.denylistLocation) || asset.AssetNameEquals(this.additionalLocationsLocation);
+        return asset.AssetNameEquals(this.DENYLIST_LOCATION) || asset.AssetNameEquals(this.ADDITIONAL_LOCATIONS_LOCATION);
     }
 
-    /// <summary>
-    /// Load initial blank denylist for other mods to edit later,
-    /// Load initial additional areas list with SVE areas included
-    /// </summary>
-    /// <typeparam name="T"></typeparam>
-    /// <param name="asset"></param>
-    /// <returns></returns>
-    /// <exception cref="InvalidOperationException"></exception>
+    /// <inheritdoc/>
     public T Load<T>(IAssetInfo asset)
     {
-        if (asset.AssetNameEquals(this.denylistLocation))
+        if (asset.AssetNameEquals(this.DENYLIST_LOCATION))
         {
             return (T)(object)new Dictionary<string, string>
             {
             };
         }
-        else if (asset.AssetNameEquals(this.additionalLocationsLocation))
+        else if (asset.AssetNameEquals(this.ADDITIONAL_LOCATIONS_LOCATION))
         {
             return (T)(object)new Dictionary<string, string>
             {

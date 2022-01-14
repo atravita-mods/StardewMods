@@ -89,8 +89,11 @@ class ModEntry : Mod
     private void Saving(object? sender, StardewModdingAPI.Events.SavingEventArgs e)
     {
         this.Monitor.DebugLog("Event Saving raised");
-        StatsManager.ClearProperties();
-        DialogueManager.Save();
+
+        StatsManager.ClearProperties(); //clear property cache, repopulate at next use
+        DialogueManager.Save(); //Save dialogue
+
+        RecentSOManager.GrabNewRecentlyCompletedOrders();
         RecentSOManager.DayUpdate(Game1.stats.daysPlayed);
         RecentSOManager.Save();
     }

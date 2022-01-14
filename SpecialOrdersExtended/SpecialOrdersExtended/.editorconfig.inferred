@@ -1,22 +1,9 @@
 # Rules in this file were initially inferred by Visual Studio IntelliCode from the C:\Users\night\source\repos\SpecialOrdersExtended\SpecialOrdersExtended\ codebase based on best match to current usage at 1/9/2022
+# There already existed an .editorconfig file in this directory. Copy rules from this .editorconfig.inferred file to the existing .editorconfig file as desired to have them take effect at this location.
 # You can modify the rules from these initially generated values to suit your own policies
 # You can learn more about editorconfig here: https://docs.microsoft.com/en-us/visualstudio/ide/editorconfig-code-style-settings-reference
 [*.cs]
 
-
-#general style guide
-
-#constants
-dotnet_naming_symbols.constants.applicable_kinds = *
-dotnet_naming_symbols.constants.applicable_accessibilities = *
-dotnet_naming_symbols.constants.required_modifiers = const
-
-dotnet_naming_style.all_upper_underscore.capitalization = all_upper
-dotnet_naming_style.all_upper_underscore.word_separator = _
-
-dotnet_naming_rule.constants_must_be_all_uppercase.symbols = constants
-dotnet_naming_rule.constants_must_be_all_uppercase.style = all_upper_underscore
-dotnet_naming_rule.constants_must_be_all_uppercase.severity = suggestion
 
 #Core editorconfig formatting - indentation
 
@@ -82,9 +69,9 @@ csharp_prefer_braces = true:suggestion
 #Style - expression bodied member options
 
 #prefer block bodies for constructors
-csharp_style_expression_bodied_constructors =when_on_single_line:suggestion
+csharp_style_expression_bodied_constructors = false:suggestion
 #prefer block bodies for methods
-csharp_style_expression_bodied_methods =when_on_single_line:suggestion
+csharp_style_expression_bodied_methods = false:suggestion
 
 #Style - expression level options
 
@@ -123,26 +110,13 @@ csharp_preferred_modifier_order = public,internal,private,static,virtual,overrid
 #Style - Pattern matching
 
 #prefer pattern matching instead of is expression with type casts
-csharp_style_pattern_matching_over_as_with_null_check =true:warning
+csharp_style_pattern_matching_over_as_with_null_check = true:suggestion
 
 #Style - qualification options
 
-#prefer fields not to be prefaced with this. or Me. in Visual Basic
-dotnet_style_qualification_for_field = false:suggestion
-#prefer methods not to be prefaced with this. or Me. in Visual Basic
-dotnet_style_qualification_for_method = false:suggestion
-#prefer properties not to be prefaced with this. or Me. in Visual Basic
-dotnet_style_qualification_for_property = false:suggestion
-csharp_style_pattern_matching_over_is_with_cast_check=true:warning
-csharp_style_prefer_pattern_matching=true:suggestion
-csharp_style_var_when_type_is_apparent=false:suggestion
-csharp_style_namespace_declarations=file_scoped:suggestion
-csharp_style_expression_bodied_operators=when_on_single_line:silent
-csharp_style_expression_bodied_local_functions=true:silent
-
-[*.{cs,vb}]
-dotnet_style_qualification_for_field=true:suggestion
-dotnet_style_qualification_for_property=true:suggestion
-dotnet_style_qualification_for_method=true:suggestion
-dotnet_style_qualification_for_event=true:silent
-dotnet_style_prefer_is_null_check_over_reference_equality_method=true:warning
+#prefer fields to be prefaced with this. in C# or Me. in Visual Basic
+dotnet_style_qualification_for_field = true:suggestion
+#prefer methods to be prefaced with this. in C# or Me. in Visual Basic
+dotnet_style_qualification_for_method = true:suggestion
+#prefer properties to be prefaced with this. in C# or Me. in Visual Basic
+dotnet_style_qualification_for_property = true:suggestion

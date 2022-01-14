@@ -8,11 +8,10 @@ namespace SpecialOrdersExtended;
 /// </summary>
 internal class StatsManager
 {
-    Dictionary<string, PropertyInfo> propertyInfos = new();
+    private Dictionary<string, Func<Stats,uint>> propertyInfos = new();
 
     //remove these stats, they make no sense.
     private readonly string[] denylist = { "AverageBedtime", "TimesUnconscious", "TotalMoneyGifted" };
-
 
     /// <summary>
     /// Populate the propertyInfos cache.
@@ -21,7 +20,7 @@ internal class StatsManager
     {
         this.propertyInfos = typeof(Stats).GetProperties()
             .Where((PropertyInfo p) => p.CanRead && p.PropertyType.Equals(typeof(uint)) && !this.denylist.Contains(p.Name))
-            .ToDictionary((PropertyInfo p) => p.Name.ToLowerInvariant(), p => p);
+            .ToDictionary((PropertyInfo p) => p.Name.ToLowerInvariant(), p => (Func<Stats, uint>)Delegate.CreateDelegate(typeof(Func<Stats,uint>), p.GetGetMethod()));
     }
 
     public void ClearProperties() => this.propertyInfos.Clear();
@@ -36,21 +35,25 @@ internal class StatsManager
     /// <returns>value of the stat</returns>
     public uint GrabBasicProperty(string key, Stats stats)
     {
-        if (this.propertyInfos.Count.Equals(0)) { this.GrabProperties(); }
+        if (this.propertyInfos.Count.Equals(0))
+        {
+            this.GrabProperties();
+        }
         try
         {
-            if (this.propertyInfos.TryGetValue(key.ToLowerInvariant(), out var property))
+            if (this.propertyInfos.TryGetValue(key.ToLowerInvariant(), out Func<Stats, uint>? property))
             {
-#pragma warning disable CS8605 // Unboxing a possibly null value.
-                return (uint)property.GetValue(stats);
-#pragma warning restore CS8605 // Unboxing a possibly null value.
+                return property(stats);
             }
         }
         catch (Exception ex)
         {
             ModEntry.ModMonitor.Log($"{I18n.StatCacheFail(key: key, atra: "https://github.com/atravita-mods/SpecialOrdersExtended/issues")}\n\n{ex}", LogLevel.Error);
         }
-        if (stats.stat_dictionary.TryGetValue(key, out uint result)) { return result; }
+        if (stats.stat_dictionary.TryGetValue(key, out uint result))
+        {
+            return result;
+        }
         ModEntry.ModMonitor.Log(I18n.StatNotFound(key), LogLevel.Trace);
         return 0u;
     }
@@ -64,7 +67,10 @@ internal class StatsManager
     [SuppressMessage("ReSharper", "IDE0060", Justification = "Format expected by console commands")]
     public void ConsoleListProperties(string command, string[] args)
     {
-        if (this.propertyInfos.Count.Equals(0)) { this.GrabProperties(); }
-        ModEntry.ModMonitor.Log($"{I18n.CurrentKeysFound()}: \n    {I18n.Hardcoded()}:{String.Join(", ", Utilities.ContextSort(this.propertyInfos.Keys))}\n    {I18n.Dictionary()}:{String.Join(", ", Utilities.ContextSort(Game1.player.stats.stat_dictionary.Keys))}", LogLevel.Info);
+        if (this.propertyInfos.Count.Equals(0))
+        {
+            this.GrabProperties();
+        }
+        ModEntry.ModMonitor.Log($"{I18n.CurrentKeysFound()}: \n    {I18n.Hardcoded()}:{string.Join(", ", Utilities.ContextSort(this.propertyInfos.Keys))}\n    {I18n.Dictionary()}:{String.Join(", ", Utilities.ContextSort(Game1.player.stats.stat_dictionary.Keys))}", LogLevel.Info);
     }
 }

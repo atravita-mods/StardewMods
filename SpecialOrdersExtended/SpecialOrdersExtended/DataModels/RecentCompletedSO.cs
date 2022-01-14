@@ -14,9 +14,8 @@ internal class RecentCompletedSO : AbstractDataModel
     /// </summary>
     public Dictionary<string, uint> RecentOrdersCompleted { get; set; } = new();
 
-    public RecentCompletedSO(string savefile)
+    public RecentCompletedSO(string savefile): base(savefile)
     {
-        this.Savefile = savefile;
     }
 
     public static RecentCompletedSO Load()
@@ -31,21 +30,14 @@ internal class RecentCompletedSO : AbstractDataModel
         throw new NotImplementedException();
     }
 
-    public void SaveTemp()
-    {
-        base.SaveTemp(identifier);
-    }
+    public void SaveTemp() => base.SaveTemp(identifier);
 
-    public void Save()
-    {
-        base.Save(identifier);
-    }
+    public void Save() => base.Save(identifier);
 
     /// <summary>
     /// Removes any quest that was completed more than seven days ago.
     /// </summary>
     /// <param name="daysPlayed"></param>
-    [SuppressMessage("ReSharper", "IDE1006", Justification = "Method naming follows convention used in-game")]
     public void dayUpdate(uint daysPlayed)
     {
         foreach (string key in this.RecentOrdersCompleted.Keys)

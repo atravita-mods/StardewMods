@@ -82,19 +82,28 @@ internal class DialogueManager
     [Pure]
     public static bool HasSeenDialogue(string key, string characterName)
     {
-        if (!Context.IsWorldReady) { throw new SaveNotLoadedError(); }
+        if (!Context.IsWorldReady)
+        {
+            throw new SaveNotLoadedError();
+        }
         return DialogueLog!.Contains(key, characterName);
     }
 
     public static bool TryAddSeenDialogue(string key, string characterName)
     {
-        if (!Context.IsWorldReady) { throw new SaveNotLoadedError(); }
+        if (!Context.IsWorldReady)
+        {
+            throw new SaveNotLoadedError();
+        }
         return DialogueLog!.TryAdd(key, characterName);
     }
 
     public static bool TryRemoveSeenDialogue(string key, string characterName)
     {
-        if (!Context.IsWorldReady) { throw new SaveNotLoadedError(); }
+        if (!Context.IsWorldReady)
+        {
+            throw new SaveNotLoadedError();
+        }
         return DialogueLog!.TryRemove(key, characterName);
     }
     /// <summary>
@@ -109,7 +118,10 @@ internal class DialogueManager
     {
         try
         {
-            if (__result) { return; } //have already found a New Current Dialogue
+            if (__result) //have already found a New Current Dialogue
+            {
+                return;
+            } 
             //Handle dialogue for orders currently active (no matter their state)
             foreach (SpecialOrder specialOrder in Game1.player.team.specialOrders)
             {
@@ -123,7 +135,10 @@ internal class DialogueManager
                     _ => throw new UnexpectedEnumValueException<SpecialOrder.QuestState>(specialOrder.questState.Value),
                 };
                 __result = FindBestDialogue(baseKey, __instance, __0);
-                if (__result) { return; }
+                if (__result)
+                {
+                    return;
+                }
             }
             //Handle dialogue for recently completed special orders.
             List<string>? cacheOrders = RecentSOManager.GetKeys(1u)?.ToList();
@@ -132,7 +147,18 @@ internal class DialogueManager
                 foreach (string cacheOrder in cacheOrders)
                 {
                     __result = FindBestDialogue(cacheOrder + "_Completed", __instance, __0);
-                    if (__result) { return; }
+                    if (__result)
+                    {
+                        return;
+                    }
+                }
+            }
+            foreach (SpecialOrder specialOrder in Game1.player.team.availableSpecialOrders)
+            {
+                __result = FindBestDialogue(specialOrder.questKey.Value + "_Available", __instance, __0);
+                if (__result)
+                {
+                    return;
                 }
             }
         }
@@ -151,7 +177,10 @@ internal class DialogueManager
     /// <returns>true if a dialogue is successfully pushed, false otherwise</returns>
     private static bool PushAndSaveDialogue(string dialogueKey, NPC npc)
     {
-        if (!TryAddSeenDialogue(dialogueKey, npc.Name)) { return false; } //I have already said this dialogue
+        if (!TryAddSeenDialogue(dialogueKey, npc.Name))
+        {
+            return false;
+        } //I have already said this dialogue
         npc.CurrentDialogue.Push(new Dialogue(npc.Dialogue[dialogueKey], npc) { removeOnNextMove = true });
         ModEntry.ModMonitor.DebugLog(I18n.Dialogue_FoundKey(dialogueKey), LogLevel.Trace);
         return true;
@@ -169,7 +198,10 @@ internal class DialogueManager
         string dialogueKey = $"{baseKey}_{Game1.shortDayDisplayNameFromDayOfSeason(Game1.dayOfMonth)}";
         if (npc.Dialogue.ContainsKey(dialogueKey))
         {
-            if (PushAndSaveDialogue(dialogueKey, npc)) { return true; }
+            if (PushAndSaveDialogue(dialogueKey, npc))
+            {
+                return true;
+            }
         }
 
         for (int heartLevel = Math.Max((hearts/2)*2,0); heartLevel > 0; heartLevel -= 2)

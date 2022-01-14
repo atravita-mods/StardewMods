@@ -11,7 +11,10 @@ internal class RecentSOManager
 
     public static void Save()
     {
-        if(recentCompletedSO is null) { throw new SaveNotLoadedError(); }
+        if(recentCompletedSO is null)
+        {
+            throw new SaveNotLoadedError();
+        }
         recentCompletedSO.Save();
     }
 
@@ -38,12 +41,15 @@ internal class RecentSOManager
     {
         Dictionary<string, SpecialOrder>? currentOrders = Game1.player?.team?.specialOrders?.ToDictionaryIgnoreDuplicates(a => a.questKey.Value, a => a)
             ?? SaveGame.loaded?.specialOrders?.ToDictionaryIgnoreDuplicates(a => a.questKey.Value, a => a);
-        if (currentOrders is null) { return false; } //Save is not loaded
+        if (currentOrders is null)
+        {  // Save is not loaded
+            return false;
+        }
         List<string> currentOrderKeys = currentOrders.Keys.OrderBy(a => a).ToList();
 
         bool updatedCache = false;
 
-        //Check for any completed orders in the current orders.
+        // Check for any completed orders in the current orders.
         foreach (SpecialOrder order in currentOrders.Values)
         {
             if (order.questState.Value == SpecialOrder.QuestState.Complete)
@@ -51,9 +57,9 @@ internal class RecentSOManager
                 if (TryAdd(order.questKey.Value)) { updatedCache = true; }
             }
         }
-        if (currentOrderKeys == currentOrderCache) { return updatedCache; } //No one has been added or dismissed
+        if (currentOrderKeys == currentOrderCache) { return updatedCache; } // No one has been added or dismissed
 
-        //Grab my completed orders
+        // Grab my completed orders
         HashSet<string>? completedOrderKeys = null;
         if (Context.IsWorldReady)
         {
@@ -63,16 +69,16 @@ internal class RecentSOManager
         {
             completedOrderKeys = SaveGame.loaded?.completedSpecialOrders?.OrderBy(a => a)?.ToHashSet();
         }
-        if (completedOrderKeys is null) { return updatedCache; } //This should not happen, but just in case?
+        if (completedOrderKeys is null) { return updatedCache; } // This should not happen, but just in case?
 
-        //Check to see if any quest has been recently dismissed.
+        // Check to see if any quest has been recently dismissed.
         if (currentOrderCache is not null)
         {
             foreach (string cachedOrder in currentOrderCache)
             {
                 if (!currentOrders.ContainsKey(cachedOrder) && completedOrderKeys.Contains(cachedOrder))
-                {//A quest previously in the current quests is gone now
-                 //and seems to have appeared in the completed orders
+                {// A quest previously in the current quests is gone now
+                 // and seems to have appeared in the completed orders
                     if (TryAdd(cachedOrder)) { updatedCache = true; }
                 }
             }
@@ -90,10 +96,19 @@ internal class RecentSOManager
     /// <exception cref="SaveNotLoadedError"></exception>
     public static bool TryAdd(string questkey)
     {
-        if (!Context.IsWorldReady) { throw new SaveNotLoadedError(); }
+        if (!Context.IsWorldReady)
+        {
+            throw new SaveNotLoadedError();
+        }
         return recentCompletedSO!.TryAdd(questkey, Game1.stats.DaysPlayed);
     }
 
+    /// <summary>
+    /// Attempt to remove a questkey from the RecentCompletedSO.
+    /// </summary>
+    /// <param name="questkey">Quest key to search for.</param>
+    /// <returns>True if removed successfully, false otherwise.</returns>
+    /// <exception cref="SaveNotLoadedError">If called when teh save is not loaded.</exception>
     public static bool TryRemove(string questkey)
     {
         if (!Context.IsWorldReady) { throw new SaveNotLoadedError(); }

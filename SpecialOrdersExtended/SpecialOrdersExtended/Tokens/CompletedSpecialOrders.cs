@@ -1,5 +1,8 @@
 ﻿namespace SpecialOrdersExtended.Tokens;
 
+/// <summary>
+/// Token that gets all completed special orders.
+/// </summary>
 internal class CompletedSpecialOrders : AbstractToken
 {
     ///<inheritdoc/>

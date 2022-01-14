@@ -76,8 +76,12 @@ class ModEntry : Mod
 
     private void RegisterTokens(object? sender, StardewModdingAPI.Events.GameLaunchedEventArgs e)
     {
-        var api = this.Helper.ModRegistry.GetApi<Tokens.IContentPatcherAPI>("Pathoschild.ContentPatcher");
-        if (api is null) { ModMonitor.Log(I18n.CpNotInstalled(), LogLevel.Warn); return; }
+        Tokens.IContentPatcherAPI? api = this.Helper.ModRegistry.GetApi<Tokens.IContentPatcherAPI>("Pathoschild.ContentPatcher");
+        if (api is null)
+        {
+            ModMonitor.Log(I18n.CpNotInstalled(), LogLevel.Warn);
+            return;
+        }
 
         api.RegisterToken(this.ModManifest, "Current", new Tokens.CurrentSpecialOrders());
         api.RegisterToken(this.ModManifest, "Available", new Tokens.AvailableSpecialOrders());
@@ -90,8 +94,8 @@ class ModEntry : Mod
     {
         this.Monitor.DebugLog("Event Saving raised");
 
-        StatsManager.ClearProperties(); //clear property cache, repopulate at next use
-        DialogueManager.Save(); //Save dialogue
+        StatsManager.ClearProperties(); // clear property cache, repopulate at next use
+        DialogueManager.Save(); // Save dialogue
 
         RecentSOManager.GrabNewRecentlyCompletedOrders();
         RecentSOManager.DayUpdate(Game1.stats.daysPlayed);
@@ -132,7 +136,10 @@ class ModEntry : Mod
 
     private void GetAvailableOrders(string command, string[] args)
     {
-        if (!Context.IsWorldReady) { ModMonitor.Log(I18n.LoadSaveFirst(), LogLevel.Warn); }
+        if (!Context.IsWorldReady)
+        {
+            ModMonitor.Log(I18n.LoadSaveFirst(), LogLevel.Warn);
+        }
         Dictionary<string, SpecialOrderData> order_data = Game1.content.Load<Dictionary<string, SpecialOrderData>>("Data\\SpecialOrders");
         List<string> keys = Utilities.ContextSort(order_data.Keys);
         ModMonitor.Log(I18n.NumberFound(count: keys.Count), LogLevel.Debug);

@@ -26,6 +26,7 @@ internal class DialogueLog : AbstractDataModel
     }
 
     public void SaveTemp() => base.SaveTemp(identifier);
+
     public void Save() => base.Save(identifier);
 
     [Pure]

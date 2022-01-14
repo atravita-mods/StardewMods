@@ -1,8 +1,11 @@
 ﻿namespace SpecialOrdersExtended.Tokens;
 
+/// <summary>
+/// Token that gets all current special orders.
+/// </summary>
 internal class CurrentSpecialOrders : AbstractToken
 {
-    ///<inheritdoc/>
+    /// <inheritdoc/>
     public override bool UpdateContext()
     {
         List<string>? specialOrderNames = Game1.player?.team?.specialOrders?.Select((SpecialOrder s) => s.questKey.ToString())?.OrderBy(a => a)?.ToList()

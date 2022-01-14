@@ -1,8 +1,11 @@
 ﻿namespace SpecialOrdersExtended.Tokens;
 
+/// <summary>
+/// Token that gets all current active special order rules.
+/// </summary>
 internal class CurrentSpecialOrderRule : AbstractToken
 {
-    ///<inheritdoc/>
+    /// <inheritdoc/>
     public override bool UpdateContext()
     {
         List<string>? rules;

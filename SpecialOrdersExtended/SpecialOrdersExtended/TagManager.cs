@@ -6,11 +6,12 @@
 internal class TagManager
 {
     /// <summary>
-    /// Prefixes CheckTag to handle special mod tags
+    /// Prefixes CheckTag to handle special mod tags.
     /// </summary>
-    /// <param name="__result"></param>
-    /// <param name="__0"></param>
-    /// <returns></returns>
+    /// <param name="__result">the result for the original function.</param>
+    /// <param name="__0">string - tag to check.</param>
+    /// <returns>true to continue to the vanilla function, false otherwise.</returns>
+    [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Naming convention for Harmony")]
     public static bool PrefixCheckTag(ref bool __result, string __0)
     {
         ModEntry.ModMonitor.DebugLog($"Checking tag {__0}");
@@ -35,10 +36,10 @@ internal class TagManager
             {
                 __result = __0 switch
                 {
-                    "week_1" => (1 <= Game1.dayOfMonth) && (Game1.dayOfMonth <= 7),
-                    "week_2" => (8 <= Game1.dayOfMonth) && (Game1.dayOfMonth <= 14),
-                    "week_3" => (15 <= Game1.dayOfMonth) && (Game1.dayOfMonth <= 21),
-                    "week_4" => (22 <= Game1.dayOfMonth) && (Game1.dayOfMonth <= 28),
+                    "week_1" => Game1.dayOfMonth is >= 1 and <= 7,
+                    "week_2" => Game1.dayOfMonth is >= 8 and <= 14,
+                    "week_3" => Game1.dayOfMonth is >= 15 and <= 21,
+                    "week_4" => Game1.dayOfMonth is >= 22 and <= 28,
                     _ => false,
                 };
                 return false;
@@ -96,7 +97,7 @@ internal class TagManager
                 }
                 return false;
             }
-            else if (__0.StartsWith("friendship_")) //Consider marriage?
+            else if (__0.StartsWith("friendship_"))
             {
                 string[] vals = __0.Split('_');
                 if (vals[2].Equals("under", StringComparison.OrdinalIgnoreCase))
@@ -242,7 +243,6 @@ internal class TagManager
         {
             ModEntry.ModMonitor.Log($"Failed while checking tag {__0}\n{ex}", LogLevel.Error);
         }
-        return true; //continue to base code.
-
+        return true; // continue to base code.
     }
 }

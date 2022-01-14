@@ -38,6 +38,12 @@ internal class DialogueLog : AbstractDataModel
         return false;
     }
 
+    /// <summary>
+    /// Tries to add a dialogue key to a character's SeenDialogues, if they haven't seen it before
+    /// </summary>
+    /// <param name="dialoguekey"></param>
+    /// <param name="characterName"></param>
+    /// <returns>True if successfully added, false otherwise</returns>
     public bool TryAdd(string dialoguekey, string characterName)
     {
         if (!this.SeenDialogues.TryGetValue(dialoguekey, out List<string>? characterList))
@@ -47,8 +53,15 @@ internal class DialogueLog : AbstractDataModel
             this.SeenDialogues[dialoguekey] = characterList;
             return true;
         }
-        else if (characterList.Contains(characterName)) { return false; }
-        else { characterList.Add(characterName); return true; }
+        else if (characterList.Contains(characterName))
+        {
+            return false;
+        }
+        else
+        {
+            characterList.Add(characterName);
+            return true;
+        }
     }
 
     public bool TryRemove(string dialoguekey, string characterName)

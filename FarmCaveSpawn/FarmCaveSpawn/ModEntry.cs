@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework;
 using System.Text.RegularExpressions;
 using StardewValley.Locations;
 using System.Reflection;
+using System.Diagnostics.Contracts;
 
 namespace FarmCaveSpawn;
 
@@ -152,10 +153,10 @@ public class ModEntry : Mod
     /// <summary>
     /// gets a seeded random based on uniqueID and days played
     /// </summary>
+    [Pure]
     private Random GetRandom()
     {
-        this.random = new((int)Game1.uniqueIDForThisGame * 2 + (int)Game1.stats.DaysPlayed * 7);
-        return this.random;
+        return new((int)Game1.uniqueIDForThisGame * 2 + (int)Game1.stats.DaysPlayed * 7);
     }
 
     /// <summary>
@@ -188,7 +189,7 @@ public class ModEntry : Mod
         }
         int count = 0;
         this.TreeFruit = this.GetTreeFruits();
-        this.GetRandom();
+        this.random = this.GetRandom();
 
         if (Game1.getLocationFromName("FarmCave") is FarmCave farmcave)
         {
@@ -270,8 +271,11 @@ public class ModEntry : Mod
 
     public void PlaceFruit(GameLocation location, Vector2 tile)
     {
-        if (this.random is null) { this.GetRandom(); }
-        int fruitToPlace = Utility.GetRandom(this.random!.NextDouble() < (this.config.TreeFruitChance / 100f) ? this.TreeFruit : this.BASE_FRUIT, this.random);
+        if (this.random is null)
+        {
+            this.random = this.GetRandom();
+        }
+        int fruitToPlace = Utility.GetRandom(this.random.NextDouble() < (this.config.TreeFruitChance / 100f) ? this.TreeFruit : this.BASE_FRUIT, this.random);
         location.setObject(tile, new StardewValley.Object(fruitToPlace, 1)
         {
             IsSpawnedObject = true
@@ -291,10 +295,13 @@ public class ModEntry : Mod
     /// <returns></returns>
     public IEnumerable<Vector2> IterateTiles(GameLocation location, int xstart = 1, int xend = int.MaxValue, int ystart = 1, int yend = int.MaxValue)
     {
-        if (this.random is null) { this.GetRandom(); }
-        foreach (int x in Enumerable.Range(xstart, Math.Clamp(xend, xstart, location.Map.Layers[0].LayerWidth - 2)).OrderBy((x) => this.random!.Next()))
+        if (this.random is null)
         {
-            foreach (int y in Enumerable.Range(ystart, Math.Clamp(yend, ystart, location.Map.Layers[0].LayerHeight - 2)).OrderBy((x) => this.random!.Next()))
+            this.random = this.GetRandom();
+        }
+        foreach (int x in Enumerable.Range(xstart, Math.Clamp(xend, xstart, location.Map.Layers[0].LayerWidth - 2)).OrderBy((x) => this.random.Next()))
+        {
+            foreach (int y in Enumerable.Range(ystart, Math.Clamp(yend, ystart, location.Map.Layers[0].LayerHeight - 2)).OrderBy((x) => this.random.Next()))
             {
                 Vector2 v = new(x, y);
                 if (this.random!.NextDouble() < (this.config.SpawnChance / 100f) && location.isTileLocationTotallyClearAndPlaceableIgnoreFloors(v))

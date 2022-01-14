@@ -2,8 +2,7 @@
 
 internal class CompletedSpecialOrders : AbstractToken
 {
-    /// <summary>Update the values when the context changes.</summary>
-    /// <returns>Returns whether the value changed, which may trigger patch updates.</returns>
+    ///<inheritdoc/>
     public override bool UpdateContext()
     {
         List<string>? specialOrderNames;
@@ -15,15 +14,6 @@ internal class CompletedSpecialOrders : AbstractToken
         {
             specialOrderNames = SaveGame.loaded?.completedSpecialOrders?.OrderBy(a => a)?.ToList();
         }
-
-        if (specialOrderNames == this.SpecialOrdersCache)
-        {
-            return false;
-        }
-        else
-        {
-            this.SpecialOrdersCache = specialOrderNames;
-            return true;
-        }
+        return this.UpdateCache(specialOrderNames);
     }
 }

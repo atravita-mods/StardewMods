@@ -2,6 +2,7 @@
 
 internal class CurrentSpecialOrderRule : AbstractToken
 {
+    ///<inheritdoc/>
     public override bool UpdateContext()
     {
         List<string>? rules;
@@ -18,14 +19,6 @@ internal class CurrentSpecialOrderRule : AbstractToken
                 ?.OrderBy(a => a)?.ToList();
         }
 
-        if (rules == this.SpecialOrdersCache)
-        {
-            return false;
-        }
-        else
-        {
-            this.SpecialOrdersCache = rules;
-            return true;
-        }
+        return this.UpdateCache(rules);
     }
 }

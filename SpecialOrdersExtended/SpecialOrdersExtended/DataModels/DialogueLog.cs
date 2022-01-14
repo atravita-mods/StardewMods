@@ -9,9 +9,8 @@ internal class DialogueLog : AbstractDataModel
 
     public Dictionary<string, List<string>> SeenDialogues { get; set; } = new();
 
-    public DialogueLog(string savefile)
+    public DialogueLog(string savefile) : base(savefile)
     {
-        this.Savefile = savefile;
     }
 
     public static DialogueLog Load()
@@ -26,19 +25,13 @@ internal class DialogueLog : AbstractDataModel
         throw new NotImplementedException();
     }
 
-    public void SaveTemp()
-    {
-        base.SaveTemp(identifier);
-    }
-    public void Save()
-    {
-        base.Save(identifier);
-    }
+    public void SaveTemp() => base.SaveTemp(identifier);
+    public void Save() => base.Save(identifier);
 
     [Pure]
     public bool Contains(string dialoguekey, string characterName)
     {
-        if (this.SeenDialogues.TryGetValue(dialoguekey, out var characterList))
+        if (this.SeenDialogues.TryGetValue(dialoguekey, out List<string>? characterList))
         {
             return characterList.Contains(characterName);
         }
@@ -47,7 +40,7 @@ internal class DialogueLog : AbstractDataModel
 
     public bool TryAdd(string dialoguekey, string characterName)
     {
-        if (!this.SeenDialogues.TryGetValue(dialoguekey, out var characterList))
+        if (!this.SeenDialogues.TryGetValue(dialoguekey, out List<string>? characterList))
         {
             characterList = new();
             characterList.Add(characterName);
@@ -60,7 +53,7 @@ internal class DialogueLog : AbstractDataModel
 
     public bool TryRemove(string dialoguekey, string characterName)
     {
-        if (this.SeenDialogues.TryGetValue(dialoguekey, out var characterList))
+        if (this.SeenDialogues.TryGetValue(dialoguekey, out List<string>? characterList))
         {
             return characterList.Remove(characterName);
         }

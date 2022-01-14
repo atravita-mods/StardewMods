@@ -8,7 +8,7 @@ Changelog
 3. Document tokens.
 4. Document dialogue keys, their storage, and how to use console commands to check that.
 5. Add `IsAvailableOrder` as a possible dialogue key?
-
+6. Add `_RepeatOrder` as a possible dialogue key, and clear those at quest completion...
 
 ##### In consideration
 
@@ -20,6 +20,7 @@ Changelog
 #### Version 1.0.5 (in development)
 
 * Check heart levels for dialogue conditions above 14.
+* Use delegates instead of PropertyInfos
 
 #### Version 1.0.4 (upcoming)
 

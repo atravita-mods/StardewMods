@@ -1,11 +1,16 @@
 ﻿namespace SpecialOrdersExtended.Tokens;
 
+/// <summary>
+/// Abstract token that keeps a cache that's a list of strings
+/// And can return either the list
+/// or if any item exists in the list.
+/// </summary>
 internal abstract class AbstractToken
 {
     /// <summary>
     /// Internal cache for token. Will be null if not ready
     /// </summary>
-    public List<string>? SpecialOrdersCache = null;
+    public List<string>? TokenCache = null;
 
     /// <summary>
     /// Whether or not the token allows input. Default, true
@@ -20,16 +25,13 @@ internal abstract class AbstractToken
     /// <param name="input"></param>
     /// <returns>Will return one value if given a Special Order, or all Special Orders if not</returns>
     [Pure]
-    public virtual bool CanHaveMultipleValues([MaybeNull] string? input = null)
-    {
-        return (input is null);
-    }
+    public virtual bool CanHaveMultipleValues(string? input = null) => (input is null);
 
     /// <summary>Get whether the token is available for use.</summary>
     [Pure]
     public virtual bool IsReady()
     {
-        return this.SpecialOrdersCache is not null;
+        return this.TokenCache is not null;
     }
 
     /// <summary>Validate that the provided input arguments are valid.</summary>
@@ -49,17 +51,17 @@ internal abstract class AbstractToken
     /// <param name="input">The input arguments, if applicable.</param>
     public virtual IEnumerable<string> GetValues(string input)
     {
-        if (this.SpecialOrdersCache is null) { yield break; }
+        if (this.TokenCache is null) { yield break; }
         else if (input is null)
         {
-            foreach (string specialorder in this.SpecialOrdersCache)
+            foreach (string str in this.TokenCache)
             {
-                yield return specialorder;
+                yield return str;
             }
         }
         else
         {
-            yield return this.SpecialOrdersCache.Contains(input["|contains=".Length..]) ? "true" : "false";
+            yield return this.TokenCache.Contains(input["|contains=".Length..]) ? "true" : "false";
         }
     }
 
@@ -74,5 +76,25 @@ internal abstract class AbstractToken
         return true;
     }
 
+    /// <summary>Update the values when the context changes.</summary>
+    /// <returns>Returns whether the value changed, which may trigger patch updates.</returns>
     public abstract bool UpdateContext();
+
+    /// <summary>
+    /// Checks a List of strings against the cache, updates the cache if necessary
+    /// </summary>
+    /// <param name="newValues"></param>
+    /// <returns>true if cache updated, false otherwise</returns>
+    protected bool UpdateCache(List<string>? newValues)
+    {
+        if (newValues == this.TokenCache)
+        {
+            return false;
+        }
+        else
+        {
+            this.TokenCache = newValues;
+            return true;
+        }
+    }
 }

@@ -9,7 +9,6 @@ Changelog
 4. Document dialogue keys, their storage, and how to use console commands to check that.
 5. Add `IsAvailableOrder` as a possible dialogue key?
 6. Add `_RepeatOrder` as a possible dialogue key, and clear those at quest completion...
-7. Add `married` tag (to see if any NPC is married at all...)
 8. Fix bug where an order will appear as "available" in the token even when the board is not available....
 
 ##### In consideration
@@ -23,8 +22,9 @@ Changelog
 
 * Check heart levels for dialogue conditions above 14.
 * Use delegates instead of PropertyInfos
+* Added tags: `married`.
 
-#### Version 1.0.4 (upcoming)
+#### Version 1.0.4
 
 * Added tokens (`Current`, `Available`, `Completed`, `RecentCompleted`). (Thanks, Lumina, for the suggestion!)
 * Added token for the current special order rules (`CurrentRules`) (Thanks, shekurika, for the suggestion!)

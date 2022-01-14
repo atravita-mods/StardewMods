@@ -12,7 +12,10 @@ internal class DialogueManager
 
     public static void Save()
     {
-        if (DialogueLog is null) { throw new SaveNotLoadedError(); }
+        if (DialogueLog is null)
+        {
+            throw new SaveNotLoadedError();
+        }
         DialogueLog.Save();
     }
 

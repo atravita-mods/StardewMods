@@ -5,7 +5,7 @@
 /// </summary>
 internal class CompletedSpecialOrders : AbstractToken
 {
-    ///<inheritdoc/>
+    /// <inheritdoc/>
     public override bool UpdateContext()
     {
         List<string>? specialOrderNames;

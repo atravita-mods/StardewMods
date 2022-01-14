@@ -153,7 +153,10 @@ class ModEntry : Mod
             if (this.IsAvailableOrder(key, order))
             {
                 validkeys.Add(key);
-                if (!Game1.MasterPlayer.team.completedSpecialOrders.ContainsKey(key)) { unseenkeys.Add(key); }
+                if (!Game1.MasterPlayer.team.completedSpecialOrders.ContainsKey(key))
+                {
+                    unseenkeys.Add(key);
+                }
             }
         }
         ModMonitor.Log($"{I18n.ValidKeys(count: validkeys.Count)}: {string.Join(", ", validkeys)}", LogLevel.Debug);

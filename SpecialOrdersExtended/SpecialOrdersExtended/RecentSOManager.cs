@@ -42,7 +42,7 @@ internal class RecentSOManager
         Dictionary<string, SpecialOrder>? currentOrders = Game1.player?.team?.specialOrders?.ToDictionaryIgnoreDuplicates(a => a.questKey.Value, a => a)
             ?? SaveGame.loaded?.specialOrders?.ToDictionaryIgnoreDuplicates(a => a.questKey.Value, a => a);
         if (currentOrders is null)
-        {  // Save is not loaded
+        { // Save is not loaded
             return false;
         }
         List<string> currentOrderKeys = currentOrders.Keys.OrderBy(a => a).ToList();

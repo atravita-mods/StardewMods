@@ -30,5 +30,6 @@
   //Errors
   "ExcessRegexMatches": "Do not recognize pattern {{loc}}; skipping for now.",
   "RegexTimeout": "Regex is timing out for {{loc}}. Will attempt to continue.\n\n{{ex}}",
-  "LocationMissing": "Location {{loc}} missing, will not spawn here."
+  "LocationMissing": "Location {{loc}} missing, will not spawn here.",
+  "IllFormatedConfig":  "Config file seems ill-formated, using default. Please use Generic Mod Config Menu to configure."
 }

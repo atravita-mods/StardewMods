@@ -8,6 +8,7 @@
 
 * Corrects `UseModCave` option (would previously always use the additional locations list.)
 * Use delegates
+* Add error checking for badly formatted logs.
 
 #### Version 1.0.7
 

@@ -46,7 +46,15 @@ public class ModEntry : Mod
         this.Monitor.Log("FarmCaveSpawn initializing, DEBUG mode. Do not release this version", LogLevel.Warn);
 #endif
         I18n.Init(helper.Translation);
-        this.config = this.Helper.ReadConfig<ModConfig>();
+        try
+        {
+            this.config = this.Helper.ReadConfig<ModConfig>();
+        }
+        catch
+        {
+            this.Monitor.Log(I18n.IllFormatedConfig(), LogLevel.Warn);
+            this.config = new();
+        }
 
         helper.Events.GameLoop.DayStarted += this.SpawnFruit;
         helper.Events.GameLoop.GameLaunched += this.SetUpConfig;
@@ -154,7 +162,7 @@ public class ModEntry : Mod
     /// gets a seeded random based on uniqueID and days played
     /// </summary>
     [Pure]
-    private Random GetRandom()
+    private static Random GetRandom()
     {
         return new((int)Game1.uniqueIDForThisGame * 2 + (int)Game1.stats.DaysPlayed * 7);
     }
@@ -189,7 +197,7 @@ public class ModEntry : Mod
         }
         int count = 0;
         this.TreeFruit = this.GetTreeFruits();
-        this.random = this.GetRandom();
+        this.random = GetRandom();
 
         if (Game1.getLocationFromName("FarmCave") is FarmCave farmcave)
         {
@@ -249,7 +257,11 @@ public class ModEntry : Mod
                     foreach (Vector2 v in this.IterateTiles(gameLocation, xstart: locLimits["x1"], xend: locLimits["x2"], ystart: locLimits["y1"], yend: locLimits["y2"]))
                     {
                         this.PlaceFruit(gameLocation, v);
-                        if (++count >= this.config.MaxDailySpawns) { this.Cleanup(); return; }
+                        if (++count >= this.config.MaxDailySpawns)
+                        {
+                            this.Cleanup();
+                            return;
+                        }
                     }
                 }
                 else
@@ -264,7 +276,11 @@ public class ModEntry : Mod
             foreach (Vector2 v in this.IterateTiles(mine, xstart: 11))
             {
                 this.PlaceFruit(mine, v);
-                if (++count >= this.config.MaxDailySpawns) { this.Cleanup(); return; }
+                if (++count >= this.config.MaxDailySpawns)
+                {
+                    this.Cleanup();
+                    return;
+                }
             }
         }
     }
@@ -273,7 +289,7 @@ public class ModEntry : Mod
     {
         if (this.random is null)
         {
-            this.random = this.GetRandom();
+            this.random = GetRandom();
         }
         int fruitToPlace = Utility.GetRandom(this.random.NextDouble() < (this.config.TreeFruitChance / 100f) ? this.TreeFruit : this.BASE_FRUIT, this.random);
         location.setObject(tile, new StardewValley.Object(fruitToPlace, 1)
@@ -297,7 +313,7 @@ public class ModEntry : Mod
     {
         if (this.random is null)
         {
-            this.random = this.GetRandom();
+            this.random = GetRandom();
         }
         foreach (int x in Enumerable.Range(xstart, Math.Clamp(xend, xstart, location.Map.Layers[0].LayerWidth - 2)).OrderBy((x) => this.random.Next()))
         {
@@ -367,7 +383,7 @@ public class ModEntry : Mod
 
         List<int> TreeFruits = new();
         Dictionary<int, string> fruittrees = this.Helper.Content.Load<Dictionary<int, string>>("Data/fruitTrees", ContentSource.GameContent);
-        string currentseason = Game1.currentSeason.ToLower().Trim();
+        string currentseason = Game1.currentSeason.ToLowerInvariant().Trim();
         foreach (string tree in fruittrees.Values)
         {
             string[] treedata = tree.Split('/');

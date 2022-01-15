@@ -36,6 +36,9 @@ internal class DialogueLog : AbstractDataModel
 
     public void SaveTemp() => base.SaveTemp(identifier + this.multiplayerID.ToString());
 
+    /// <summary>
+    /// Saves the DialogueLog.
+    /// </summary>
     public void Save() => base.Save(identifier + this.multiplayerID.ToString());
 
     [Pure]
@@ -49,11 +52,11 @@ internal class DialogueLog : AbstractDataModel
     }
 
     /// <summary>
-    /// Tries to add a dialogue key to a character's SeenDialogues, if they haven't seen it before
+    /// Tries to add a dialogue key to a character's SeenDialogues, if they haven't seen it before.
     /// </summary>
-    /// <param name="dialoguekey"></param>
-    /// <param name="characterName"></param>
-    /// <returns>True if successfully added, false otherwise</returns>
+    /// <param name="dialoguekey">Dialogue key in question.</param>
+    /// <param name="characterName">NPC name.</param>
+    /// <returns>True if successfully added, false otherwise.</returns>
     public bool TryAdd(string dialoguekey, string characterName)
     {
         if (!this.SeenDialogues.TryGetValue(dialoguekey, out List<string>? characterList))

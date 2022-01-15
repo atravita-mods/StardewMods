@@ -189,13 +189,16 @@ internal class DialogueManager
                 }
             }
 
-            // Handle available order dialogue
-            foreach (SpecialOrder specialOrder in Game1.player.team.availableSpecialOrders)
+            if (SpecialOrder.IsSpecialOrdersBoardUnlocked())
             {
-                __result = FindBestDialogue(specialOrder.questKey.Value + "_Available", __instance, __0);
-                if (__result)
+                // Handle available order dialogue
+                foreach (SpecialOrder specialOrder in Game1.player.team.availableSpecialOrders)
                 {
-                    return;
+                    __result = FindBestDialogue(specialOrder.questKey.Value + "_Available", __instance, __0);
+                    if (__result)
+                    {
+                        return;
+                    }
                 }
             }
         }

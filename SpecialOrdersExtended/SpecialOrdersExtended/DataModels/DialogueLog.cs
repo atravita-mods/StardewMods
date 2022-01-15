@@ -6,28 +6,37 @@ namespace SpecialOrdersExtended.DataModels;
 internal class DialogueLog : AbstractDataModel
 {
     private const string identifier = "_dialogue";
+    private readonly long multiplayerID;
+
+    public DialogueLog(string savefile, long multiplayerID)
+    : base(savefile)
+    {
+        this.multiplayerID = multiplayerID;
+    }
 
     public Dictionary<string, List<string>> SeenDialogues { get; set; } = new();
 
-    public DialogueLog(string savefile) : base(savefile)
-    {
-    }
-
-    public static DialogueLog Load()
+    /// <summary>
+    /// Loads a dialogueLog.
+    /// </summary>
+    /// <param name="multiplayerID">Multiplayer ID of the player who requested it.</param>
+    /// <returns>The dialogueLog in question.</returns>
+    /// <exception cref="SaveNotLoadedError"></exception>
+    public static DialogueLog Load(long multiplayerID)
     {
         if (!Context.IsWorldReady) { throw new SaveNotLoadedError(); }
-        return ModEntry.DataHelper.ReadGlobalData<DialogueLog>(Constants.SaveFolderName + identifier)
-            ?? new DialogueLog(Constants.SaveFolderName);
+        return ModEntry.DataHelper.ReadGlobalData<DialogueLog>($"{Constants.SaveFolderName}{identifier}{multiplayerID}")
+            ?? new DialogueLog(Constants.SaveFolderName, multiplayerID);
     }
 
-    public static DialogueLog LoadTempIfAvailable()
+    public static DialogueLog LoadTempIfAvailable(long multiplayerID)
     {
         throw new NotImplementedException();
     }
 
-    public void SaveTemp() => base.SaveTemp(identifier);
+    public void SaveTemp() => base.SaveTemp(identifier + this.multiplayerID.ToString());
 
-    public void Save() => base.Save(identifier);
+    public void Save() => base.Save(identifier + this.multiplayerID.ToString());
 
     [Pure]
     public bool Contains(string dialoguekey, string characterName)

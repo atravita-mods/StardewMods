@@ -2,6 +2,9 @@
 
 namespace SpecialOrdersExtended;
 
+/// <summary>
+/// Handles all references to recently completed special orders.
+/// </summary>
 internal class RecentSOManager
 {
     private static RecentCompletedSO? recentCompletedSO;
@@ -21,11 +24,17 @@ internal class RecentSOManager
     /// <summary>
     /// Gets all keys that were set within a certain number of days.
     /// </summary>
-    /// <param name="days"></param>
+    /// <param name="days">current number of days played.</param>
     /// <returns>IEnumerable of keys within the given timeframe. May return null.</returns>
     [Pure]
     public static IEnumerable<string>? GetKeys(uint days) => recentCompletedSO?.GetKeys(days);
 
+    /// <summary>
+    /// Run at the end of a day, in order to remove older completed orders.
+    /// </summary>
+    /// <param name="daysplayed">current number of days played.</param>
+    /// <exception cref="SaveNotLoadedError">Raised whenver the field is null and should not be. (Save not loaded)</exception>
+    /// <remarks>Should remove orders more than seven days old.</remarks>
     public static void DayUpdate(uint daysplayed)
     {
         if(recentCompletedSO is null) { throw new SaveNotLoadedError(); }
@@ -39,6 +48,7 @@ internal class RecentSOManager
     /// <returns>true if an order got added to RecentCompletedSO, false otherwise</returns>
     public static bool GrabNewRecentlyCompletedOrders()
     {
+
         Dictionary<string, SpecialOrder>? currentOrders = Game1.player?.team?.specialOrders?.ToDictionaryIgnoreDuplicates(a => a.questKey.Value, a => a)
             ?? SaveGame.loaded?.specialOrders?.ToDictionaryIgnoreDuplicates(a => a.questKey.Value, a => a);
         if (currentOrders is null)

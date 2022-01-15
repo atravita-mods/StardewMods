@@ -6,6 +6,7 @@ namespace SpecialOrdersExtended;
 /// Manages the handling of stats
 /// Caches the available stats at first use, but clears at the end of each day.
 /// </summary>
+/// <remarks>Clearing the cache should only be handled by one player in splitscreen.</remarks>
 internal class StatsManager
 {
     // Remove these stats, they make no sense.

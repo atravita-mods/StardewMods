@@ -6,6 +6,8 @@ Adds additional tags that can be used to constrain the appearance of special ord
 
 Just download the .zip and unzip into your Mods file. That's it!
 
+**NOTICE**: The current version - 1.0.4 - has a few minor issues in how it handles splitscreen multiplayer. In particular: dialogue seen is accidentally saved for all players playing locally, and recently-completed SOs should only be handled by one player.
+
 #### For modders:
 
 tl;dr Special orders are cached on Sunday night, making it hard to use CP tokens to control how Special Orders show up. I wanted to write a special order that would challenge you to gather a certain number of blackberries, and wrote this so that one special order would only show up in the one week in the year where it's actually, you know, possible.

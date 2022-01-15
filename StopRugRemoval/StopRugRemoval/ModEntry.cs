@@ -32,7 +32,16 @@ public class ModEntry : Mod
     /// <inheritdoc/>
     public override void Entry(IModHelper helper)
     {
-        Config = this.Helper.ReadConfig<ModConfig>();
+        try
+        {
+            Config = this.Helper.ReadConfig<ModConfig>();
+        }
+        catch
+        {
+            this.Monitor.Log(I18n.IllFormatedConfig(), LogLevel.Warn);
+            Config = new();
+        }
+
         ModMonitor = this.Monitor;
         I18n.Init(helper.Translation);
 

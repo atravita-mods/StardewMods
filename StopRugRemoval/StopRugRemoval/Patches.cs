@@ -60,7 +60,7 @@ internal class FurniturePatches
     }
 
     [SuppressMessage("StyleCop", "SA1313", Justification = "Style prefered by Harmony")]
-    private static bool PrefixCanBePlacedHere(Furniture __instance, GameLocation __0, Vector2 tile, bool __result)
+    private static bool PrefixCanBePlacedHere(Furniture __instance, GameLocation __0, Vector2 tile, ref bool __result)
     {
         try
         {

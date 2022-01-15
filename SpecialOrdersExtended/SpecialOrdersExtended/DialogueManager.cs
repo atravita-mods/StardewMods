@@ -193,8 +193,8 @@ internal class DialogueManager
     /// Locates the most specific dialogue, given a specific basekey, and pushes it to the NPC's dialogue stack
     /// </summary>
     /// <param name="baseKey"></param>
-    /// <param name="npc"></param>
-    /// <param name="hearts"></param>
+    /// <param name="npc">The NPC who is talking.</param>
+    /// <param name="hearts">The current heart level of the NPC.</param>
     /// <returns>true if a dialogue was successfully found and pushed, false otherwise</returns>
     public static bool FindBestDialogue(string baseKey, NPC npc, int hearts)
     {
@@ -212,13 +212,19 @@ internal class DialogueManager
             dialogueKey = $"{baseKey}{heartLevel}";
             if (npc.Dialogue.ContainsKey(dialogueKey))
             {
-                if (PushAndSaveDialogue(dialogueKey, npc)) { return true; }
+                if (PushAndSaveDialogue(dialogueKey, npc))
+                {
+                    return true;
+                }
             }
         }
 
         if (npc.Dialogue.ContainsKey(baseKey))
         {
-            if (PushAndSaveDialogue(baseKey, npc)) { return true; }
+            if (PushAndSaveDialogue(baseKey, npc))
+            {
+                return true;
+            }
         }
 
         ModEntry.ModMonitor.DebugLog(I18n.Dialogue_NoKey(baseKey, npc.Name), LogLevel.Trace);

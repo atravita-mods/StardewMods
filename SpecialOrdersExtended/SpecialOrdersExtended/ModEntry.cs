@@ -94,9 +94,14 @@ class ModEntry : Mod
     {
         this.Monitor.DebugLog("Event Saving raised");
 
-        StatsManager.ClearProperties(); // clear property cache, repopulate at next use
         DialogueManager.Save(); // Save dialogue
 
+        if (Context.IsSplitScreen && Context.ScreenId != 0)
+        {// Some properties only make sense for a single player to handle in splitscreen.
+            return;
+        }
+
+        StatsManager.ClearProperties(); // clear property cache, repopulate at next use
         RecentSOManager.GrabNewRecentlyCompletedOrders();
         RecentSOManager.DayUpdate(Game1.stats.daysPlayed);
         RecentSOManager.Save();
@@ -105,7 +110,7 @@ class ModEntry : Mod
     private void SaveLoaded(object? sender, StardewModdingAPI.Events.SaveLoadedEventArgs e)
     {
         this.Monitor.DebugLog("Event SaveLoaded raised");
-        DialogueManager.Load();
+        DialogueManager.Load(Game1.player.UniqueMultiplayerID);
         RecentSOManager.Load();
     }
 

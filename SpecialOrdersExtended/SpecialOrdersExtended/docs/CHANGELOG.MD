@@ -1,10 +1,6 @@
 Changelog
 ============
 
-#### Major Bugs
-
-1. ***Fix mechanism for looking at recently-completed SOs and dialogue-seen in splitscreen multiplayer***. Recently-completed SOs should *only* be updated by one player in splitscreen, and Dialogue-Seen needs to be properly PerScreened.
-
 #### Todo
 
 1. Add condition to just randomly reduce the chance of a quest appearing. (May need integrate with that one mod that changes the day special orders appear?)
@@ -24,6 +20,7 @@ Changelog
 
 #### Version 1.0.5 (in development)
 
+* In theory: fixes splitscreen. (Still need to test).
 * Check heart levels for dialogue conditions above 14.
 * Use delegates instead of PropertyInfos
 * Added tags: `married`.

@@ -28,7 +28,6 @@ class ModEntry : Mod
             original: typeof(SpecialOrder).GetMethod("CheckTag", BindingFlags.NonPublic | BindingFlags.Static),
             prefix: new HarmonyMethod(typeof(TagManager), nameof(TagManager.PrefixCheckTag))
             );
-
         ModMonitor.Log("Patching SpecialOrder::CheckTag for Special Orders Extended", LogLevel.Trace);
 
         try

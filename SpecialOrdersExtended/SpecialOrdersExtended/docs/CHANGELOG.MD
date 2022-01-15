@@ -1,6 +1,4 @@
 Changelog
-============
-
 #### Todo
 
 1. Add condition to just randomly reduce the chance of a quest appearing. (May need integrate with that one mod that changes the day special orders appear?)

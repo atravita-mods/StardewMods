@@ -194,12 +194,18 @@ internal class TagManager
                         "townKey" => Game1.getAllFarmers().Any((Farmer farmer) => farmer.HasTownKey),
                         _ => false,
                     };
-                    if (vals.Length >= 3 && vals[2].Equals("not", StringComparison.OrdinalIgnoreCase)) { __result = !__result; }
+                    if (vals.Length >= 3 && vals[2].Equals("not", StringComparison.OrdinalIgnoreCase))
+                    {
+                        __result = !__result;
+                    }
                     return false;
                 case "achievement":
                     // achievement_X, achievement_X_not
                     __result = Game1.getAllFarmers().Any((Farmer farmer) => farmer.achievements.Contains(int.Parse(vals[1])));
-                    if (vals.Length >= 3 && vals[2].Equals("not", StringComparison.OrdinalIgnoreCase)) { __result = !__result; }
+                    if (vals.Length >= 3 && vals[2].Equals("not", StringComparison.OrdinalIgnoreCase))
+                    {
+                        __result = !__result;
+                    }
                     return false;
                 case "craftingrecipe":
                     // craftingrecipe_X, craftingrecipe_X_not

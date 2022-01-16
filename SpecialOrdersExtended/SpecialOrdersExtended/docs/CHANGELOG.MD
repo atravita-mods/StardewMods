@@ -5,7 +5,6 @@ Changelog
 2. Add condition for total number of quests (both Qi and otherwise completed.)
 3. Document tokens.
 4. Document dialogue keys, their storage, and how to use console commands to check that.
-6. Add `_RepeatOrder` as a possible dialogue key, and clear those at quest completion...
 
 ##### In consideration
 
@@ -16,7 +15,8 @@ Changelog
 #### Version 1.0.5 (in development)
 
 * In theory: fixes splitscreen. (Still need to test).
-* `Available` token now correctly returns no entries if the special orders board is not unliked. Also, adds `_IsAvailable` as a possible dialogue option.)
+* `Available` token now correctly returns no entries if the special orders board is not unliked. Also, adds `_IsAvailable` as a possible dialogue option.
+* Adds dialogue key `_RepeatOrder`, which is cleared seven days after the completion of the order.
 * Check heart levels for dialogue conditions above 14.
 * Added tags: `married`.
 * (Internal) Use delegates instead of PropertyInfos

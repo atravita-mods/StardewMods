@@ -32,7 +32,7 @@ internal class DialogueManager
     /// <summary>
     /// Save a dialoguelog for a specific player.
     /// </summary>
-    /// <exception cref="SaveNotLoadedError"></exception>
+    /// <exception cref="SaveNotLoadedError">Save is not loaded.</exception>
     public static void Save()
     {
         if (PerscreenedDialogueLog is null)
@@ -43,10 +43,10 @@ internal class DialogueManager
     }
 
     /// <summary>
-    /// Handle the console command to add, remove, or check a seen dialogue
+    /// Handle the console command to add, remove, or check a seen dialogue.
     /// </summary>
-    /// <param name="command"></param>
-    /// <param name="args"></param>
+    /// <param name="command">Name of console command.</param>
+    /// <param name="args">Arguments for the console coomand.</param>
     public static void ConsoleSpecialOrderDialogue(string command, string[] args)
     {
         if (!Context.IsWorldReady)
@@ -105,6 +105,13 @@ internal class DialogueManager
         }
     }
 
+    /// <summary>
+    /// Whether or not a character has said the particular key.
+    /// </summary>
+    /// <param name="key">Exact dialogue key.</param>
+    /// <param name="characterName">Name of character.</param>
+    /// <returns>True if key has been said, false otherwise.</returns>
+    /// <exception cref="SaveNotLoadedError">Save is not loaded.</exception>
     [Pure]
     public static bool HasSeenDialogue(string key, string characterName)
     {
@@ -131,6 +138,13 @@ internal class DialogueManager
         return PerscreenedDialogueLog!.TryAdd(key, characterName);
     }
 
+    /// <summary>
+    /// Attempts to remove a dialogue key from someone's SeenDialogue.
+    /// </summary>
+    /// <param name="key">Dialogue key.</param>
+    /// <param name="characterName">Name of the NPC to check.</param>
+    /// <returns>True if successful, false otherwise.</returns>
+    /// <exception cref="SaveNotLoadedError">Save is not loaded.</exception>
     public static bool TryRemoveSeenDialogue(string key, string characterName)
     {
         if (!Context.IsWorldReady)
@@ -139,6 +153,30 @@ internal class DialogueManager
         }
         return PerscreenedDialogueLog!.TryRemove(key, characterName);
     }
+
+    /// <summary>
+    /// Clear any memory of RepeatOrder keys when needed.
+    /// </summary>
+    /// <param name="removedKeys">List of keys to remove.</param>
+    public static void ClearRepeated(List<string> removedKeys)
+    {
+        if (PerscreenedDialogueLog is null) { return; }
+        foreach (string key in removedKeys)
+        {
+            if (key.Contains("_RepeatOrder"))
+            {
+                foreach (string dialogueKey in PerscreenedDialogueLog.SeenDialogues.Keys)
+                {
+                    if(dialogueKey.Contains(key))
+                    {
+                        ModEntry.ModMonitor.DebugLog($"Removing key {key}");
+                        PerscreenedDialogueLog.SeenDialogues.Remove(dialogueKey);
+                    }
+                }
+            }
+        }
+    }
+
     /// <summary>
     /// Harmony patch - shows the dialogue for special orders.
     /// </summary>
@@ -147,6 +185,7 @@ internal class DialogueManager
     /// <param name="__0">NPC heart level</param>
     /// <param name="__1">Append current season?</param>
     /// <exception cref="UnexpectedEnumValueException{SpecialOrder.QuestState}"></exception>
+    [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Convention used by Harmony")]
     public static void PostfixCheckDialogue(ref bool __result, ref NPC __instance, int __0, bool __1)
     {
         try
@@ -159,8 +198,7 @@ internal class DialogueManager
             // Handle dialogue for orders currently active (no matter their state)
             foreach (SpecialOrder specialOrder in Game1.player.team.specialOrders)
             {
-
-                string baseKey = (__1) ? specialOrder.questKey.Value : Game1.currentSeason + specialOrder.questKey.Value;
+                string baseKey = __1 ? specialOrder.questKey.Value : Game1.currentSeason + specialOrder.questKey.Value;
                 baseKey += specialOrder.questState.Value switch
                 {
                     SpecialOrder.QuestState.InProgress => "_InProgress",
@@ -172,6 +210,16 @@ internal class DialogueManager
                 if (__result)
                 {
                     return;
+                }
+
+                // Handle repeat orders!
+                if (specialOrder.questState.Value == SpecialOrder.QuestState.InProgress && Game1.player.team.completedSpecialOrders.ContainsKey(specialOrder.questKey.Value))
+                {
+                    __result = FindBestDialogue((__1 ? specialOrder.questKey.Value : Game1.currentSeason + specialOrder.questKey.Value) + "_RepeatOrder", __instance, __0);
+                    if (__result)
+                    {
+                        return;
+                    }
                 }
             }
 
@@ -194,7 +242,7 @@ internal class DialogueManager
                 // Handle available order dialogue
                 foreach (SpecialOrder specialOrder in Game1.player.team.availableSpecialOrders)
                 {
-                    __result = FindBestDialogue(specialOrder.questKey.Value + "_Available", __instance, __0);
+                    __result = FindBestDialogue(specialOrder.questKey.Value + "_IsAvailable", __instance, __0);
                     if (__result)
                     {
                         return;

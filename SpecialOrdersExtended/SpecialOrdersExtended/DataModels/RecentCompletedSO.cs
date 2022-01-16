@@ -34,19 +34,25 @@ internal class RecentCompletedSO : AbstractDataModel
 
     public void Save() => base.Save(identifier);
 
+
     /// <summary>
     /// Removes any quest that was completed more than seven days ago.
     /// </summary>
-    /// <param name="daysPlayed"></param>
-    public void dayUpdate(uint daysPlayed)
+    /// <param name="daysPlayed">Total number of days played.</param>
+    /// <returns>A list of removed keys.</returns>
+    [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1300:Element should begin with upper-case letter", Justification = "Follows convention used in game.")]
+    public List<string> dayUpdate(uint daysPlayed)
     {
+        List<string> keysRemoved = new();
         foreach (string key in this.RecentOrdersCompleted.Keys)
         {
             if (daysPlayed > this.RecentOrdersCompleted[key] + 7)
             {
                 this.RecentOrdersCompleted.Remove(key);
+                keysRemoved.Add(key);
             }
         }
+        return keysRemoved;
     }
 
     /// <summary>

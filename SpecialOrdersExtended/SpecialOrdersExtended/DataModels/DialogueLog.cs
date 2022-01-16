@@ -14,6 +14,9 @@ internal class DialogueLog : AbstractDataModel
         this.multiplayerID = multiplayerID;
     }
 
+    /// <summary>
+    /// Backing field that contains all the SeenDialogues.
+    /// </summary>
     public Dictionary<string, List<string>> SeenDialogues { get; set; } = new();
 
     /// <summary>
@@ -21,7 +24,7 @@ internal class DialogueLog : AbstractDataModel
     /// </summary>
     /// <param name="multiplayerID">Multiplayer ID of the player who requested it.</param>
     /// <returns>The dialogueLog in question.</returns>
-    /// <exception cref="SaveNotLoadedError"></exception>
+    /// <exception cref="SaveNotLoadedError">Save not loaded.</exception>
     public static DialogueLog Load(long multiplayerID)
     {
         if (!Context.IsWorldReady) { throw new SaveNotLoadedError(); }
@@ -41,6 +44,12 @@ internal class DialogueLog : AbstractDataModel
     /// </summary>
     public void Save() => base.Save(identifier + this.multiplayerID.ToString());
 
+    /// <summary>
+    /// Whether or not the dialogueLog contains the key.
+    /// </summary>
+    /// <param name="dialoguekey">Exact dialogue key.</param>
+    /// <param name="characterName">Which character to check.</param>
+    /// <returns>True if found, false otheerwise.</returns>
     [Pure]
     public bool Contains(string dialoguekey, string characterName)
     {

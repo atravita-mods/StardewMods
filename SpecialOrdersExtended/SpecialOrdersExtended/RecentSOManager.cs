@@ -37,8 +37,12 @@ internal class RecentSOManager
     /// <remarks>Should remove orders more than seven days old.</remarks>
     public static void DayUpdate(uint daysplayed)
     {
-        if(recentCompletedSO is null) { throw new SaveNotLoadedError(); }
-        recentCompletedSO.dayUpdate(daysplayed);
+        if(recentCompletedSO is null)
+        {
+            throw new SaveNotLoadedError();
+        }
+        List<string> keysRemoved = recentCompletedSO.dayUpdate(daysplayed);
+        DialogueManager.ClearRepeated(keysRemoved);
     }
 
     /// <summary>
@@ -102,8 +106,8 @@ internal class RecentSOManager
     /// If it's already there, does nothing.
     /// </summary>
     /// <param name="questkey"></param>
-    /// <returns></returns>
-    /// <exception cref="SaveNotLoadedError"></exception>
+    /// <returns>True if successfully added, false otherwise.</returns>
+    /// <exception cref="SaveNotLoadedError">Save is not loaded.</exception>
     public static bool TryAdd(string questkey)
     {
         if (!Context.IsWorldReady)
@@ -121,14 +125,20 @@ internal class RecentSOManager
     /// <exception cref="SaveNotLoadedError">If called when teh save is not loaded.</exception>
     public static bool TryRemove(string questkey)
     {
-        if (!Context.IsWorldReady) { throw new SaveNotLoadedError(); }
+        if (!Context.IsWorldReady)
+        {
+            throw new SaveNotLoadedError();
+        }
         return recentCompletedSO!.TryRemove(questkey);
     }
 
     [Pure]
     public static bool IsWithinXDays(string questkey, uint days)
     {
-        if (!Context.IsWorldReady) { throw new SaveNotLoadedError(); }
+        if (!Context.IsWorldReady)
+        {
+            throw new SaveNotLoadedError();
+        }
         return recentCompletedSO!.IsWithinXDays(questkey, days);
     }
 

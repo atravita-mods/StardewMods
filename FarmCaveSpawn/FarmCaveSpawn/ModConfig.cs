@@ -5,20 +5,36 @@
 /// </summary>
 class ModConfig
 {
+
+    private int maxDailySpawns = 6;
     /// <summary>
     /// Maximum number of spawns per day.
     /// </summary>
-    public int MaxDailySpawns { get; set; } = 6;
+    public int MaxDailySpawns
+    {
+        get => this.maxDailySpawns;
+        set => this.maxDailySpawns = Math.Clamp(value, 0, 100);
+    }
 
+    private float spawnChance = 3f;
     /// <summary>
     /// Probability of any tile spawning an object, capped by max daily spawns
     /// </summary>
-    public float SpawnChance { get; set; } = 3f;
+    public float SpawnChance
+    {
+        get => this.spawnChance;
+        set => this.spawnChance = Math.Clamp(value, 0f, 100f);
+    }
 
+    private float treeFruitChance = 20f;
     /// <summary>
     /// Probability of any particular spawn being a tree fruit item.
     /// </summary>
-    public float TreeFruitChance { get; set; } = 20f;
+    public float TreeFruitChance
+    {
+        get => this.treeFruitChance;
+        set => this.treeFruitChance = Math.Clamp(value, 0f, 100f);
+    }
 
     /// <summary>
     /// Should spawn in fruit after the Demetrius cutscene is seen, regardless of choice.

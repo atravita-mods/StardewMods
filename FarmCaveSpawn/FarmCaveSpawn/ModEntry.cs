@@ -135,6 +135,7 @@ public class ModEntry : Mod
                     name: () => I18n.GetByKey($"{property.Name}.title"),
                     tooltip: () => I18n.GetByKey($"{property.Name}.description"),
                     min: 0,
+                    max: property.Name.Equals("MaxDailySpawns", StringComparison.OrdinalIgnoreCase) ? 100:1000,
                     interval: 1
                 );
             }
@@ -148,7 +149,8 @@ public class ModEntry : Mod
                     setValue: (float value) => setterDelegate(this.config, value),
                     name: () => I18n.GetByKey($"{property.Name}.title"),
                     tooltip: () => I18n.GetByKey($"{property.Name}.description"),
-                    min: 0.0f
+                    min: 0.0f,
+                    max: 100f
                 );
             }
             else

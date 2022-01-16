@@ -5,37 +5,46 @@ using StardewValley.GameData;
 
 namespace SpecialOrdersExtended;
 
+/// <inheritdoc />
 class ModEntry : Mod
 {
-    //The following fields are set in the Entry method, which is about as close to the constructor as I can get
+    // The following fields are set in the Entry method, which is about as close to the constructor as I can get
 #pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
+    /// <summary>
+    /// Holds methods to analyze the stats class/dictionary for the game.
+    /// </summary>
+    public static readonly StatsManager StatsManager = new();
+
+    /// <summary>
+    /// Logger for SMAPI.
+    /// </summary>
     public static IMonitor ModMonitor;
-    public static StatsManager StatsManager;
+
+    /// <summary>
+    /// SMAPI's data writer.
+    /// </summary>
     public static IDataHelper DataHelper;
 #pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
 
-
+    /// <inheritdoc/>
     public override void Entry(IModHelper helper)
     {
         I18n.Init(helper.Translation);
         ModMonitor = this.Monitor;
-        StatsManager = new();
         DataHelper = helper.Data;
 
         Harmony harmony = new(this.ModManifest.UniqueID);
 
         harmony.Patch(
             original: typeof(SpecialOrder).GetMethod("CheckTag", BindingFlags.NonPublic | BindingFlags.Static),
-            prefix: new HarmonyMethod(typeof(TagManager), nameof(TagManager.PrefixCheckTag))
-            );
+            prefix: new HarmonyMethod(typeof(TagManager), nameof(TagManager.PrefixCheckTag)));
         ModMonitor.Log("Patching SpecialOrder::CheckTag for Special Orders Extended", LogLevel.Trace);
 
         try
         {
             harmony.Patch(
                 original: AccessTools.Method(typeof(NPC), nameof(NPC.checkForNewCurrentDialogue)),
-                postfix: new HarmonyMethod(typeof(DialogueManager), nameof(DialogueManager.PostfixCheckDialogue))
-                );
+                postfix: new HarmonyMethod(typeof(DialogueManager), nameof(DialogueManager.PostfixCheckDialogue)));
             ModMonitor.Log("Patching NPC::checkForNewCurrentDialogue for Special Orders Dialogue", LogLevel.Trace);
         }
         catch (Exception ex)
@@ -46,23 +55,19 @@ class ModEntry : Mod
         helper.ConsoleCommands.Add(
             name: "special_order_pool",
             documentation: I18n.SpecialOrderPool_Description(),
-            callback: this.GetAvailableOrders
-            ); ;
+            callback: this.GetAvailableOrders);
         helper.ConsoleCommands.Add(
             name: "check_tag",
             documentation: I18n.CheckTag_Description(),
-            callback: this.ConsoleCheckTag
-            );
+            callback: this.ConsoleCheckTag);
         helper.ConsoleCommands.Add(
             name: "list_available_stats",
             documentation: I18n.ListAvailableStats_Description(),
-            callback: StatsManager.ConsoleListProperties
-            );
+            callback: StatsManager.ConsoleListProperties);
         helper.ConsoleCommands.Add(
             name: "special_orders_dialogue",
             documentation: $"{I18n.SpecialOrdersDialogue_Description()}\n\n{I18n.SpecialOrdersDialogue_Example()}\n    {I18n.SpecialOrdersDialogue_Usage()}",
-            callback: DialogueManager.ConsoleSpecialOrderDialogue
-            );
+            callback: DialogueManager.ConsoleSpecialOrderDialogue);
         helper.Events.GameLoop.GameLaunched += this.RegisterTokens;
         helper.Events.GameLoop.SaveLoaded += this.SaveLoaded;
         helper.Events.GameLoop.Saving += this.Saving;
@@ -204,7 +209,10 @@ class ModEntry : Mod
             foreach (string tag in tags)
             {
                 bool match = true;
-                if (tag.Length == 0) { continue; }
+                if (tag.Length == 0)
+                {
+                    continue;
+                }
                 string trimmed_tag;
                 if (tag.StartsWith("!"))
                 {

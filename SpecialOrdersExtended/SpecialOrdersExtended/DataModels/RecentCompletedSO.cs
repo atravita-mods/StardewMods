@@ -2,26 +2,42 @@
 
 namespace SpecialOrdersExtended.DataModels;
 
+/// <summary>
+/// Internal data model that keeps track of recently completed Special Orders.
+/// </summary>
 internal class RecentCompletedSO : AbstractDataModel
 {
     /// <summary>
     /// constant identifier in filename.
     /// </summary>
-    private const string identifier = "_SOmemory";
+    private const string IDENTIFIER = "_SOmemory";
 
     /// <summary>
-    /// Dictionary of Recent Order questkeys & the day they were completed.
+    /// Initializes a new instance of the <see cref="RecentCompletedSO"/> class.
     /// </summary>
-    public Dictionary<string, uint> RecentOrdersCompleted { get; set; } = new();
-
-    public RecentCompletedSO(string savefile): base(savefile)
+    /// <param name="savefile">String that corresponds to the directory name for the save.</param>
+    public RecentCompletedSO(string savefile)
+        : base(savefile)
     {
     }
 
+    /// <summary>
+    /// Gets or sets dictionary of Recent Order questkeys & the day they were completed.
+    /// </summary>
+    public Dictionary<string, uint> RecentOrdersCompleted { get; set; } = new();
+
+    /// <summary>
+    /// Loads the RecentCompletedSO data model. Generates a blank one if none exist.
+    /// </summary>
+    /// <returns>RecentCompletedSO data model.</returns>
+    /// <exception cref="SaveNotLoadedError">Save is not loaded.</exception>
     public static RecentCompletedSO Load()
     {
-        if (!Context.IsWorldReady) { throw new SaveNotLoadedError(); }
-        return ModEntry.DataHelper.ReadGlobalData<RecentCompletedSO>(Constants.SaveFolderName + identifier)
+        if (!Context.IsWorldReady)
+        {
+            throw new SaveNotLoadedError();
+        }
+        return ModEntry.DataHelper.ReadGlobalData<RecentCompletedSO>(Constants.SaveFolderName + IDENTIFIER)
             ?? new RecentCompletedSO(Constants.SaveFolderName);
     }
 
@@ -30,10 +46,12 @@ internal class RecentCompletedSO : AbstractDataModel
         throw new NotImplementedException();
     }
 
-    public void SaveTemp() => base.SaveTemp(identifier);
+    public void SaveTemp() => base.SaveTemp(IDENTIFIER);
 
-    public void Save() => base.Save(identifier);
-
+    /// <summary>
+    /// Saves recently completed SO data model.
+    /// </summary>
+    public void Save() => base.Save(IDENTIFIER);
 
     /// <summary>
     /// Removes any quest that was completed more than seven days ago.
@@ -56,11 +74,11 @@ internal class RecentCompletedSO : AbstractDataModel
     }
 
     /// <summary>
-    /// Tries to add a quest key to the data model
+    /// Tries to add a quest key to the data model.
     /// </summary>
-    /// <param name="orderKey"></param>
-    /// <param name="daysPlayed"></param>
-    /// <returns>true if the quest key was successfully added, false otherwise</returns>
+    /// <param name="orderKey">Quest key.</param>
+    /// <param name="daysPlayed">Total number of days played when quest was completed.</param>
+    /// <returns>true if the quest key was successfully added, false otherwise.</returns>
     public bool TryAdd(string orderKey, uint daysPlayed) => this.RecentOrdersCompleted.TryAdd(orderKey, daysPlayed);
 
     public bool TryRemove(string orderKey) => this.RecentOrdersCompleted.Remove(orderKey);
@@ -78,7 +96,7 @@ internal class RecentCompletedSO : AbstractDataModel
     /// <summary>
     /// Gets all keys that were set within a certain number of days.
     /// </summary>
-    /// <param name="days"></param>
+    /// <param name="days">Number of days to look at.</param>
     /// <returns>IEnumerable of keys within the given timeframe.</returns>
     [Pure]
     public IEnumerable<string> GetKeys(uint days)

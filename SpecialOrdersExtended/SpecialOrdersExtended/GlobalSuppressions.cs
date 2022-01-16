@@ -8,3 +8,4 @@
 [assembly: SuppressMessage("StyleCop.CSharp.LayoutRules", "SA1501:StatementMustNotBeOnSingleLine", Justification = "Preference.")]
 [assembly: SuppressMessage("StyleCop.CSharp.SpacingRules", "SA1000:Keywords should be spaced correctly", Justification = "Preference.")]
 [assembly: SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1100:Do not prefix calls with base unless local implementation exists", Justification = "Preference")]
+[assembly: SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1633:File should have header", Justification = "Preference.")]

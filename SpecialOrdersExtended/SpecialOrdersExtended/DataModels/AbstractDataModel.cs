@@ -3,7 +3,7 @@
 namespace SpecialOrdersExtended.DataModels;
 
 /// <summary>
-/// Base data model class
+/// Base data model class.
 /// </summary>
 internal abstract class AbstractDataModel
 {
@@ -20,8 +20,16 @@ internal abstract class AbstractDataModel
     /// <remarks>Savefile name is farmname + unique ID in 1.5+.</remarks>
     public virtual string Savefile { get; set; }
 
+    /// <summary>
+    /// Handles saving.
+    /// </summary>
+    /// <param name="identifier">An identifier token to add to the filename.</param>
     public virtual void Save(string identifier) => ModEntry.DataHelper.WriteGlobalData(this.Savefile + identifier, this);
 
+    /// <summary>
+    /// A way to save a temporary file.
+    /// </summary>
+    /// <param name="identifier">An identifier token to add to the filename.</param>
+    /// <remarks>NOT IMPLEMENTED YET.</remarks>
     public virtual void SaveTemp(string identifier) => this.Save($"{identifier}_temp_{SDate.Now().DaysSinceStart}");
-
 }

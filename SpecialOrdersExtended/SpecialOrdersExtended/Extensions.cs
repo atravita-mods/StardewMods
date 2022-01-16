@@ -1,5 +1,4 @@
-﻿
-using NotNullAttribute = System.Diagnostics.CodeAnalysis.NotNullAttribute;
+﻿using NotNullAttribute = System.Diagnostics.CodeAnalysis.NotNullAttribute;
 
 namespace SpecialOrdersExtended;
 
@@ -11,13 +10,13 @@ internal static class IEnumerableExtensions
     /// <summary>
     /// Similar to LINQ's ToDictionary, but ignores duplicates instead of erroring.
     /// </summary>
-    /// <typeparam name="TEnumerable"></typeparam>
-    /// <typeparam name="TKey"></typeparam>
-    /// <typeparam name="TValue"></typeparam>
-    /// <param name="enumerable"></param>
-    /// <param name="keyselector"></param>
-    /// <param name="valueselector"></param>
-    /// <returns></returns>
+    /// <typeparam name="TEnumerable">The type of elements in the enumerable.</typeparam>
+    /// <typeparam name="TKey">The type of the keys in the resulting dictionary.</typeparam>
+    /// <typeparam name="TValue">They type of the values in the resulting dictionary.</typeparam>
+    /// <param name="enumerable">The enumerable to look at.</param>
+    /// <param name="keyselector">Function that maps enumerable to key.</param>
+    /// <param name="valueselector">Function that maps enumerable to value.</param>
+    /// <returns>The dictionary.</returns>
     [Pure]
     public static Dictionary<TKey, TValue> ToDictionaryIgnoreDuplicates<TEnumerable, TKey, TValue>(
         [NotNull] this IEnumerable<TEnumerable> enumerable,

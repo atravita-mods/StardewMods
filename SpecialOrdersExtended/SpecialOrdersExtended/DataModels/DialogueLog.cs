@@ -1,21 +1,25 @@
-﻿using StardewModdingAPI.Utilities;
-using System.Text;
+﻿using System.Text;
 
 namespace SpecialOrdersExtended.DataModels;
 
+/// <summary>
+/// Storage structure for previously seen dialogues.
+/// </summary>
 internal class DialogueLog : AbstractDataModel
 {
-    private const string identifier = "_dialogue";
+    private const string IDENTIFIER = "_dialogue";
     private readonly long multiplayerID;
 
+    /// <summary>
+    /// Initializes a new instance of the <see cref="DialogueLog"/> class.
+    /// </summary>
+    /// <param name="savefile">Save directory name. (Includes farm name + game random seed.).</param>
+    /// <param name="multiplayerID">Unique multiplayer ID of player.</param>
     public DialogueLog(string savefile, long multiplayerID)
-    : base(savefile)
-    {
-        this.multiplayerID = multiplayerID;
-    }
+    : base(savefile) => this.multiplayerID = multiplayerID;
 
     /// <summary>
-    /// Backing field that contains all the SeenDialogues.
+    /// Gets or sets backing field that contains all the SeenDialogues.
     /// </summary>
     public Dictionary<string, List<string>> SeenDialogues { get; set; } = new();
 
@@ -27,22 +31,32 @@ internal class DialogueLog : AbstractDataModel
     /// <exception cref="SaveNotLoadedError">Save not loaded.</exception>
     public static DialogueLog Load(long multiplayerID)
     {
-        if (!Context.IsWorldReady) { throw new SaveNotLoadedError(); }
-        return ModEntry.DataHelper.ReadGlobalData<DialogueLog>($"{Constants.SaveFolderName}{identifier}{multiplayerID}")
+        if (!Context.IsWorldReady)
+        {
+            throw new SaveNotLoadedError();
+        }
+        return ModEntry.DataHelper.ReadGlobalData<DialogueLog>($"{Constants.SaveFolderName}{IDENTIFIER}{multiplayerID}")
             ?? new DialogueLog(Constants.SaveFolderName, multiplayerID);
     }
 
+    /// <summary>
+    /// Load from temporary storage.
+    /// </summary>
+    /// <param name="multiplayerID">Unique ID per player.</param>
+    /// <returns>A dialogueLog object.</returns>
+    /// <exception cref="NotImplementedException">Not implemented, do not call.</exception>
+    /// <remarks>NOT IMPLEMENTED YET.</remarks>
     public static DialogueLog LoadTempIfAvailable(long multiplayerID)
     {
         throw new NotImplementedException();
     }
 
-    public void SaveTemp() => base.SaveTemp(identifier + this.multiplayerID.ToString());
+    public void SaveTemp() => base.SaveTemp(IDENTIFIER + this.multiplayerID.ToString());
 
     /// <summary>
     /// Saves the DialogueLog.
     /// </summary>
-    public void Save() => base.Save(identifier + this.multiplayerID.ToString());
+    public void Save() => base.Save(IDENTIFIER + this.multiplayerID.ToString());
 
     /// <summary>
     /// Whether or not the dialogueLog contains the key.
@@ -86,6 +100,12 @@ internal class DialogueLog : AbstractDataModel
         }
     }
 
+    /// <summary>
+    /// Tries to remove a specific dialogue key for a character.
+    /// </summary>
+    /// <param name="dialoguekey">Dialogue key, exact.</param>
+    /// <param name="characterName">Name of character.</param>
+    /// <returns>True if successfully removed, false otherwise.</returns>
     public bool TryRemove(string dialoguekey, string characterName)
     {
         if (this.SeenDialogues.TryGetValue(dialoguekey, out List<string>? characterList))
@@ -95,6 +115,7 @@ internal class DialogueLog : AbstractDataModel
         return false;
     }
 
+    /// <inheritdoc/>
     [Pure]
     public override string ToString()
     {

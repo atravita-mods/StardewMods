@@ -24,10 +24,11 @@ internal class DialogueManager
         }
     }
 
-    public static void Load(long multiplayerID)
-    {
-        InternalDialogueLog.Value = DialogueLog.Load(multiplayerID);
-    }
+    /// <summary>
+    /// Load the PerScreened Dialogue log.
+    /// </summary>
+    /// <param name="multiplayerID">The player's unique ID.</param>
+    public static void Load(long multiplayerID) => InternalDialogueLog.Value = DialogueLog.Load(multiplayerID);
 
     /// <summary>
     /// Save a dialoguelog for a specific player.
@@ -125,7 +126,7 @@ internal class DialogueManager
     /// <summary>
     /// Attempts to add a SeenDialogue.
     /// </summary>
-    /// <param name="key">Dialogue key</param>
+    /// <param name="key">Dialogue key.</param>
     /// <param name="characterName">Character.</param>
     /// <returns>True if added succesfully, false otherwise.</returns>
     /// <exception cref="SaveNotLoadedError">Save is not loaded.</exception>
@@ -160,7 +161,10 @@ internal class DialogueManager
     /// <param name="removedKeys">List of keys to remove.</param>
     public static void ClearRepeated(List<string> removedKeys)
     {
-        if (PerscreenedDialogueLog is null) { return; }
+        if (PerscreenedDialogueLog is null)
+        {
+            return;
+        }
         foreach (string key in removedKeys)
         {
             if (key.Contains("_RepeatOrder"))
@@ -180,11 +184,11 @@ internal class DialogueManager
     /// <summary>
     /// Harmony patch - shows the dialogue for special orders.
     /// </summary>
-    /// <param name="__result">Result from the original function</param>
-    /// <param name="__instance">NPC in question</param>
-    /// <param name="__0">NPC heart level</param>
-    /// <param name="__1">Append current season?</param>
-    /// <exception cref="UnexpectedEnumValueException{SpecialOrder.QuestState}"></exception>
+    /// <param name="__result">Result from the original function.</param>
+    /// <param name="__instance">NPC in question.</param>
+    /// <param name="__0">NPC heart level.</param>
+    /// <param name="__1">Whether or not to append the current season.</param>
+    /// <exception cref="UnexpectedEnumValueException{SpecialOrder.QuestState}">Recieved unexpected enum value.</exception>
     [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Convention used by Harmony")]
     public static void PostfixCheckDialogue(ref bool __result, ref NPC __instance, int __0, bool __1)
     {
@@ -260,9 +264,9 @@ internal class DialogueManager
     /// Checks to see if a dialoguekey has been said already, and if not said, pushes the dialogue
     /// onto the dialogue stack.
     /// </summary>
-    /// <param name="dialogueKey">Dialogue key to check </param>
-    /// <param name="npc">NPC that says the dialogue</param>
-    /// <returns>true if a dialogue is successfully pushed, false otherwise</returns>
+    /// <param name="dialogueKey">Dialogue key to check.</param>
+    /// <param name="npc">NPC that says the dialogue.</param>
+    /// <returns>true if a dialogue is successfully pushed, false otherwise.</returns>
     private static bool PushAndSaveDialogue(string dialogueKey, NPC npc)
     {
         if (!TryAddSeenDialogue(dialogueKey, npc.Name))
@@ -275,7 +279,7 @@ internal class DialogueManager
     }
 
     /// <summary>
-    /// Locates the most specific dialogue, given a specific basekey, and pushes it to the NPC's dialogue stack
+    /// Locates the most specific dialogue, given a specific basekey, and pushes it to the NPC's dialogue stack.
     /// </summary>
     /// <param name="baseKey">The base key, without friendship or time modifiers.</param>
     /// <param name="npc">The NPC who is talking.</param>
@@ -292,7 +296,7 @@ internal class DialogueManager
             }
         }
 
-        for (int heartLevel = Math.Max((hearts/2)*2,0); heartLevel > 0; heartLevel -= 2)
+        for (int heartLevel = Math.Max((hearts / 2) * 2, 0); heartLevel > 1; heartLevel -= 2)
         {
             dialogueKey = $"{baseKey}{heartLevel}";
             if (npc.Dialogue.ContainsKey(dialogueKey))

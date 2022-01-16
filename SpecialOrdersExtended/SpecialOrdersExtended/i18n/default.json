@@ -7,7 +7,7 @@
   "special_order_pool.description": "Lists the current special orders. If order is not available, explains why.",
   "check_tag.description": "Checks the current value of one or many tags.",
   "list_available_stats.description": "List the stats available. Includes both stats listed as properties in Stats.cs and stats added to Stats.stats_dictionary, including stats added by other mods",
-  "special_orders_dialogue.description": "Add, delete, or check for whether or not a specific special-order-dialogue-key has been said yet",
+  "special_orders_dialogue.description": "Add, delete, or check for whether or not a specific special order dialogue key has been said yet",
   "special_orders_dialogue.usage": "Usage: special_orders_dialogue <add/remove/hasseen> <dialogue key> <one or more character names>",
   "special_orders_dialogue.example": "ie: special_orders_dialogue hasseen atravita.PamApology_InProgress Penny Pam",
 

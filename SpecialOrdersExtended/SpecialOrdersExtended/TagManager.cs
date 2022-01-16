@@ -210,12 +210,18 @@ internal class TagManager
                 case "craftingrecipe":
                     // craftingrecipe_X, craftingrecipe_X_not
                     __result = Game1.getAllFarmers().Any((Farmer farmer) => farmer.craftingRecipes.ContainsKey(vals[1].Replace('-', ' ')));
-                    if (vals.Length >= 3 && vals[2].Equals("not", StringComparison.OrdinalIgnoreCase)) { __result = !__result; }
+                    if (vals.Length >= 3 && vals[2].Equals("not", StringComparison.OrdinalIgnoreCase))
+                    {
+                        __result = !__result;
+                    }
                     return false;
                 case "cookingrecipe":
                     // cookingrecipe_X, cookingrecipe_X_not
                     __result = Game1.getAllFarmers().Any((Farmer farmer) => farmer.cookingRecipes.ContainsKey(vals[1].Replace('-', ' ')));
-                    if (vals.Length >= 3 && vals[2].Equals("not", StringComparison.OrdinalIgnoreCase)) { __result = !__result; }
+                    if (vals.Length >= 3 && vals[2].Equals("not", StringComparison.OrdinalIgnoreCase))
+                    {
+                        __result = !__result;
+                    }
                     return false;
                 case "stats":
                     // stats_statsname_X, stats_statsname_under_X

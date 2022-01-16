@@ -33,7 +33,7 @@ internal class RecentSOManager
     /// Run at the end of a day, in order to remove older completed orders.
     /// </summary>
     /// <param name="daysplayed">current number of days played.</param>
-    /// <exception cref="SaveNotLoadedError">Raised whenver the field is null and should not be. (Save not loaded)</exception>
+    /// <exception cref="SaveNotLoadedError">Raised whenver the field is null and should not be. (Save not loaded).</exception>
     /// <remarks>Should remove orders more than seven days old.</remarks>
     public static void DayUpdate(uint daysplayed)
     {
@@ -43,16 +43,16 @@ internal class RecentSOManager
         }
         List<string> keysRemoved = recentCompletedSO.dayUpdate(daysplayed);
         DialogueManager.ClearRepeated(keysRemoved);
+        ModEntry.ModMonitor.DebugLog($"Keys removed from Recent Completed SOs: {string.Join(", ", keysRemoved)}");
     }
 
     /// <summary>
     /// Gets the newest recently completed orders. Runs every 10 in-game minutes
-    /// Grabs both the current orders marked as complete and looks for orders dismissed
+    /// Grabs both the current orders marked as complete and looks for orders dismissed.
     /// </summary>
-    /// <returns>true if an order got added to RecentCompletedSO, false otherwise</returns>
+    /// <returns>true if an order got added to RecentCompletedSO, false otherwise.</returns>
     public static bool GrabNewRecentlyCompletedOrders()
     {
-
         Dictionary<string, SpecialOrder>? currentOrders = Game1.player?.team?.specialOrders?.ToDictionaryIgnoreDuplicates(a => a.questKey.Value, a => a)
             ?? SaveGame.loaded?.specialOrders?.ToDictionaryIgnoreDuplicates(a => a.questKey.Value, a => a);
         if (currentOrders is null)
@@ -68,10 +68,16 @@ internal class RecentSOManager
         {
             if (order.questState.Value == SpecialOrder.QuestState.Complete)
             {
-                if (TryAdd(order.questKey.Value)) { updatedCache = true; }
+                if (TryAdd(order.questKey.Value))
+                {
+                    updatedCache = true;
+                }
             }
         }
-        if (currentOrderKeys == currentOrderCache) { return updatedCache; } // No one has been added or dismissed
+        if (currentOrderKeys == currentOrderCache)
+        {// No one has been added or dismissed
+            return updatedCache;
+        }
 
         // Grab my completed orders
         HashSet<string>? completedOrderKeys = null;
@@ -83,7 +89,10 @@ internal class RecentSOManager
         {
             completedOrderKeys = SaveGame.loaded?.completedSpecialOrders?.OrderBy(a => a)?.ToHashSet();
         }
-        if (completedOrderKeys is null) { return updatedCache; } // This should not happen, but just in case?
+        if (completedOrderKeys is null)
+        { // This should not happen, but just in case?
+            return updatedCache;
+        }
 
         // Check to see if any quest has been recently dismissed.
         if (currentOrderCache is not null)
@@ -93,7 +102,10 @@ internal class RecentSOManager
                 if (!currentOrders.ContainsKey(cachedOrder) && completedOrderKeys.Contains(cachedOrder))
                 {// A quest previously in the current quests is gone now
                  // and seems to have appeared in the completed orders
-                    if (TryAdd(cachedOrder)) { updatedCache = true; }
+                    if (TryAdd(cachedOrder))
+                    {
+                        updatedCache = true;
+                    }
                 }
             }
         }
@@ -105,7 +117,7 @@ internal class RecentSOManager
     /// Tries to add a questkey to the RecentCompletedSO data model
     /// If it's already there, does nothing.
     /// </summary>
-    /// <param name="questkey"></param>
+    /// <param name="questkey">Quest key (exact).</param>
     /// <returns>True if successfully added, false otherwise.</returns>
     /// <exception cref="SaveNotLoadedError">Save is not loaded.</exception>
     public static bool TryAdd(string questkey)
@@ -132,6 +144,14 @@ internal class RecentSOManager
         return recentCompletedSO!.TryRemove(questkey);
     }
 
+    /// <summary>
+    /// Returns whether the specific questkey was completed in the last X days.
+    /// </summary>
+    /// <param name="questkey">Quest Key.</param>
+    /// <param name="days">number of days to check.</param>
+    /// <returns>True if questkey found and was completed in X days, false otherwise.</returns>
+    /// <exception cref="SaveNotLoadedError">Save not loaded.</exception>
+    /// <remarks>The data model will delete any entries older than 7 days, so beyond that it just won't know.</remarks>
     [Pure]
     public static bool IsWithinXDays(string questkey, uint days)
     {
@@ -141,6 +161,4 @@ internal class RecentSOManager
         }
         return recentCompletedSO!.IsWithinXDays(questkey, days);
     }
-
-
 }

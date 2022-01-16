@@ -76,7 +76,6 @@ public class ModEntry : Mod
         this.random = null;
     }
 
-    //config should never be null anyways.
     /// <summary>
     /// Generates the GMCM for this mod by looking at the structure of the config class.
     /// </summary>
@@ -85,6 +84,17 @@ public class ModEntry : Mod
     /// <remarks>To add a new setting, add the details to the i18n file. Currently handles: bool, int, float</remarks>
     private void SetUpConfig(object? sender, StardewModdingAPI.Events.GameLaunchedEventArgs e)
     {
+        IModInfo gmcm = this.Helper.ModRegistry.Get("spacechase0.GenericModConfigMenu");
+        if (gmcm is null)
+        {
+            this.Monitor.Log(I18n.GmcmNotFound(), LogLevel.Debug);
+            return;
+        }
+        if (gmcm.Manifest.Version.IsOlderThan("1.6.0"))
+        {
+            this.Monitor.Log(I18n.GmcmVersionMessage(version: "1.6.0", currentversion: gmcm.Manifest.Version), LogLevel.Info);
+            return;
+        }
         var configMenu = this.Helper.ModRegistry.GetApi<IGenericModConfigMenuApi>("spacechase0.GenericModConfigMenu");
         if (configMenu is null)
         {
@@ -186,7 +196,10 @@ public class ModEntry : Mod
             this.DebugLog(hasFCFbatcave? "FarmCaveFramework fruit bat cave detected.": "FarmCaveFramework fruit bat cave not detected.");
         }
 
-        if (!Context.IsMainPlayer) { return; }
+        if (!Context.IsMainPlayer)
+        {
+            return;
+        }
         if (!this.config.EarlyFarmCave && (Game1.MasterPlayer.caveChoice?.Value is null || Game1.MasterPlayer.caveChoice.Value <= 0) && string.IsNullOrWhiteSpace(farmcavechoice))
         {
             this.DebugLog("Demetrius cutscene not seen and config not set to early, skip spawning for today.");
@@ -207,10 +220,17 @@ public class ModEntry : Mod
             foreach (Vector2 v in this.IterateTiles(farmcave))
             {
                 this.PlaceFruit(farmcave, v);
-                if (++count >= this.config.MaxDailySpawns) { break; }
+                if (++count >= this.config.MaxDailySpawns)
+                {
+                    break;
+                }
             }
             farmcave.UpdateReadyFlag();
-            if (count >= this.config.MaxDailySpawns) { this.Cleanup(); return; }
+            if (count >= this.config.MaxDailySpawns)
+            {
+                this.Cleanup();
+                return;
+            }
         }
 
         if (this.config.UseModCaves)
@@ -423,8 +443,10 @@ public class ModEntry : Mod
                     }
                     if (this.config.NoBananasBeforeShrine && fruit.Name.Equals("Banana"))
                     {
-                        if (!Context.IsWorldReady) { continue; }
-                        if (Game1.getLocationFromName("IslandEast") is IslandEast islandeast && !islandeast.bananaShrineComplete.Value) { continue; }
+                        if (!Context.IsWorldReady && Game1.getLocationFromName("IslandEast") is IslandEast islandeast && !islandeast.bananaShrineComplete.Value)
+                        {
+                            continue;
+                        }
                     }
                     TreeFruits.Add(objectIndex);
                 }
@@ -450,5 +472,4 @@ public class ModEntry : Mod
         Monitor.VerboseLog(message);
 #endif
     }
-
 }

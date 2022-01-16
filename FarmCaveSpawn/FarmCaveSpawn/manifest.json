@@ -6,13 +6,6 @@
    "Description": "Spawn more tree fruit in the fruit cave",
    "UniqueID": "atravita.FarmCaveSpawn",
    "EntryDll": "FarmCaveSpawn.dll",
-  "UpdateKeys": [ "Nexus:10186", "ModDrop:1068205", "Github:atravita-mods/FarmCaveSpawn" ],
-  "Dependencies": [
-    {
-      "UniqueID": "spacechase0.GenericModConfigMenu",
-      "MinimumVersion": "1.6.0", // uses the new API
-      "IsRequired":  "false"
-    }
-   ],
+   "UpdateKeys": [ "Nexus:10186", "ModDrop:1068205", "Github:atravita-mods/FarmCaveSpawn" ],
    "MinimumApiVersion": "3.13.0"
 }

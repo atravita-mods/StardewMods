@@ -6,6 +6,7 @@ Changelog
 3. Document tokens.
 4. Document dialogue keys, their storage, and how to use console commands to check that.
 6. Add `_RepeatOrder` as a possible dialogue key, and clear those at quest completion...
+7. Add `isbirthdayweek_NPC` token?
 
 ##### In consideration
 

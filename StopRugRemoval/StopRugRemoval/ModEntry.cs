@@ -100,6 +100,18 @@ public class ModEntry : Mod
 
     private void SetUpConfig(object? sender, GameLaunchedEventArgs e)
     {
+        IModInfo gmcm = this.Helper.ModRegistry.Get("spacechase0.GenericModConfigMenu");
+        if (gmcm is null)
+        {
+            this.Monitor.Log(I18n.GmcmNotFound(), LogLevel.Debug);
+            return;
+        }
+        if (gmcm.Manifest.Version.IsOlderThan("1.6.0"))
+        {
+            this.Monitor.Log(I18n.GmcmVersionMessage(version: "1.6.0", currentversion: gmcm.Manifest.Version), LogLevel.Info);
+            return;
+        }
+
         var configMenu = this.Helper.ModRegistry.GetApi<IGenericModConfigMenuApi>("spacechase0.GenericModConfigMenu");
         if (configMenu is null)
         {

@@ -306,8 +306,11 @@ internal class GingerIslandTimeSlot
                 basechance: 0.5),
             // pier points
             new PossibleIslandActivity(
-                new List<Point> { new Point(22, 43), new Point(22, 41) },
-                direction: 1),
+                new List<Point> { new Point(22, 43), new Point(22, 40) },
+                dialogueKey: "Resort_Pier",
+                basechance: 0.5,
+                direction: 1,
+                chanceMap: (NPC npc) => npc.Age == 0 ? 0.5 : 0),
         };
     }
 }

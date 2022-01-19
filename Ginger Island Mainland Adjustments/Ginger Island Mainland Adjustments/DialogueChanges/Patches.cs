@@ -88,7 +88,7 @@ internal class Patches
         try
         {
             Game1.netWorldState.Value.IslandVisitors.TryGetValue(__instance.Name, out bool atIsland);
-            if (atIsland)
+            if (!atIsland)
             {
                 return;
             }

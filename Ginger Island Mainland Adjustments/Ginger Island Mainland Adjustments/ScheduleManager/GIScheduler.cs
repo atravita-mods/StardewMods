@@ -116,6 +116,10 @@ internal class GIScheduler
         Dictionary<string, string> animationDescriptions = Globals.ContentHelper.Load<Dictionary<string, string>>("Data/animationDescriptions", ContentSource.GameContent);
 
         HashSet<NPC> explorers = GenerateExplorerGroup(random);
+        if (explorers.Any())
+        {
+            Globals.ModMonitor.DebugLog($"Found explorer group: {string.Join(", ", explorers.Select((NPC npc) => npc.Name))}.");
+        }
 
         List<NPC> visitors = GenerateVistorList(random, Globals.Config.Capacity, explorers);
 
@@ -211,7 +215,7 @@ internal class GIScheduler
         NPC? gus = Game1.getCharacterFromName("Gus");
         if (gus is not null && !visitors.Contains(gus) && !explorers.Contains(gus)
             && Globals.Config.GusDayAsShortString().Equals(Game1.shortDayNameFromDayOfSeason(Game1.dayOfMonth), StringComparison.OrdinalIgnoreCase)
-            && Globals.Config.GusChance < random.NextDouble())
+            && Globals.Config.GusChance > random.NextDouble())
         {
             Globals.ModMonitor.DebugLog($"Forcibly adding Gus");
             if (!visitors.Contains(gus))

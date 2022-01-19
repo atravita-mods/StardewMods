@@ -10,12 +10,22 @@
         "FromFile": "marriage_dialogue.json",
     },
     {
+        "LogName": "Explorers",
+        "Action": "EditData",
+        "Target": "Mods/atravita_Ginger_Island_Adjustments_explorers",
+        "Entries": {
+            "ScienceGroup": "Maru, Demetrius",
+            "BandKids": "Abigail, Sebastian, Sam",
+            "ArtsyGroup": "Leah, Elliott"
+        }
+    },
+    {
         "LogName": "Abby dialogue",
         "Action": "EditData",
         "Target": "Characters/Dialogue/Abigail",
         "Entries":{
             "Resort_Approach": "Lookin' forward to exploring the island today!",
-            "Resort_Left": "Ahh, nothing like a nice relaxing vacation...$h",
+            "Resort_Left": "Ahh, nothing like a nice relaxing vacation...$h"
         }
     },
     {
@@ -24,8 +34,8 @@
         "Target": "Characters/Dialogue/Jodi",
         "Entries": {
             "Resort_Approach": "I'm definitely looking forward to going to the Resort today!$h",
-            "Resort_Left": "Ahhh...I had a great day at the Resort!$h",
-        },
+            "Resort_Left": "Ahhh...I had a great day at the Resort!$h"
+        }
     },
     {
         "LogName": "Pierre dialogue",
@@ -36,5 +46,13 @@
             "Resort_Left": "Ah, nothing like a nice relaxing vacation...$h"
         }
     },
+    {
+        "LogName": "Pam dialogue",
+        "Action": "EditData",
+        "Target": "Characters/Dialogue/Pam",
+        "Entries": {
+            "Resort_Pier": "Look at all the fish swimming in these waters!"
+        }
+    }
 	]
 }

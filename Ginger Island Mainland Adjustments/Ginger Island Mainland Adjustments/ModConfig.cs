@@ -41,7 +41,6 @@ public enum DayOfWeek
     /// Sunday.
     /// </summary>
     Sunday,
-
 }
 
 #pragma warning disable SA1201 // Elements should appear in the correct order. Fields appear close to their properties for this class.
@@ -100,6 +99,7 @@ public class ModConfig
     /// Gets or sets which day of the week Gus should go to Ginger Island.
     /// </summary>
     public DayOfWeek GusDay { get; set; } = DEFAULT_GUS_VISIT_DAY;
+
     /// <summary>
     /// Probability Gus will go the resort on his assigned day of the week.
     /// </summary>

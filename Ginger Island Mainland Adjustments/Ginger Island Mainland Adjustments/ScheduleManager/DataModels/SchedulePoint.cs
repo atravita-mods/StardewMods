@@ -50,6 +50,9 @@ public class SchedulePoint
         this.direction = direction;
         this.animation = animation;
         this.dialoguekey = npc.GetRandomDialogue(basekey, random);
+#if DEBUG
+        Globals.ModMonitor.Log($"Assigned new GI schedule point: {this}");
+#endif
     }
 
     /// <summary>

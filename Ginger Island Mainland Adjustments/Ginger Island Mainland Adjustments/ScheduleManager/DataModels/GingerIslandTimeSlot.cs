@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics.CodeAnalysis;
+using GingerIslandMainlandAdjustments.Utils;
 using Microsoft.Xna.Framework;
 
 namespace GingerIslandMainlandAdjustments.ScheduleManager.DataModels;
@@ -186,6 +187,7 @@ internal class GingerIslandTimeSlot
             {
                 continue;
             }
+            bool foundactivity = false;
             foreach (PossibleIslandActivity possibleIslandActivity in PossibleActivities)
             {
                 SchedulePoint? schedulePoint = possibleIslandActivity.TryAssign(
@@ -198,7 +200,14 @@ internal class GingerIslandTimeSlot
                 if (schedulePoint is not null)
                 {
                     this.AssignSchedulePoint(visitor, schedulePoint);
+                    foundactivity = true;
+                    break;
                 }
+            }
+
+            if (foundactivity)
+            {
+                continue;
             }
 
             // now iterate backwards through the list, forcibly assigning people to places....
@@ -215,7 +224,13 @@ internal class GingerIslandTimeSlot
                 if (schedulePoint is not null)
                 {
                     this.AssignSchedulePoint(visitor, schedulePoint);
+                    foundactivity = true;
+                    break;
                 }
+            }
+            if (!foundactivity)
+            {
+                Globals.ModMonitor.DebugLog($"Warning: No activity found for {visitor.Name} at {this.timeslot}", LogLevel.Warn);
             }
         }
         return this.animations;

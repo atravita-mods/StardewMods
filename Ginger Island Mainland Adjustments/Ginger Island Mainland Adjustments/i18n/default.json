@@ -1,13 +1,19 @@
 ﻿{
-  "found-key": "Found key {{key}} for {{NPC}}",
-  "no-key-found": "No key found for {{NPC}} using basekey {{key}}",
-
   // Documentation for console commands.
   "getSchedule.documentation": "Gets the schedule of the NPC in question",
   "getIslanders.documentation": "Gets the villagers headed off to the resort today",
 
   "islanders": "Islanders",
   "npc-not-found": "{{NPC}} not found.",
+
+  // Asset manager
+  "assetmanager.specialchar-not-found": "{{specialCharacterType}} {{name}} not found - do they come from a mod not installed?",
+  "assetmanager.groupchar-not-found": "{{specialGroupType}} {{name}} in {{groupname}} not found - do they come from a mod not installed?",
+  "assetmanager.exclusions-not-found": "Exclusions for {{name}} cannot be proccessed, cannot find NPC - do they come from a mod not installed?",
+
+  // Dialogue manager
+  "found-key": "Found key {{key}} for {{NPC}}",
+  "no-key-found": "No key found for {{NPC}} using basekey {{key}}",
 
   // DisplaySchedule strings
   "display-schedule.checkNPC": "Checking schedule of {{name}}.",
@@ -58,10 +64,7 @@
   "GOTO_SCHEDULE_FRIENDSHIP": "Skipping due to friendship limit for {{npc}}: {{scheduleKey}}",
   "GOTO_ILL_FORMED_FRIENDSHIP": "Ill-formed friendship requirment {{requirment}} for {{npc}}: {{scheduleKey}}",
   "GOTO_INFINITE_LOOP": "Infinite loop detected, skipping this schedule",
-
   "NO_GI_SCHEDULE_FOUND": "Did not find a GI remainder schedule for {{npc}}",
-
-  //Scheduling code
   "REGEX_TIMEOUT_ERROR": "Regex for schedule entry {{schedulePoint}} timed out:\n\n{{ex}}",
   "TOO_TIGHT_TIMELINE": "{{time}} position in schedule {{scheduleKey}} for {{npc}} is too tight. Will be skipped.",
   "NO_REPLACEMENT_LOCATION": "Location replacement for {{location}} requested but not found for {{npc}}"

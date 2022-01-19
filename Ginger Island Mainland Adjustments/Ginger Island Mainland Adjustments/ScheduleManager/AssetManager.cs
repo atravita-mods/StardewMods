@@ -139,7 +139,7 @@ internal class AssetManager : IAssetLoader
             }
             else
             {
-                Globals.ModMonitor.DebugLog($"{specialCharacterType} {specialChar} not found.");
+                Globals.ModMonitor.Log(I18n.Assetmanager_SpecialcharNotFound(specialCharacterType, specialChar), LogLevel.Debug);
             }
         }
         return specialCharacters;
@@ -178,7 +178,7 @@ internal class AssetManager : IAssetLoader
                 }
                 else
                 {
-                    Globals.ModMonitor.Log($"{specialGroupType} {charname} in {groupname} not found - do they come from a mod not installed?", LogLevel.Debug);
+                    Globals.ModMonitor.Log(I18n.Assetmanager_GroupcharNotFound(specialGroupType, charname, groupname), LogLevel.Debug);
                 }
             }
             characterGroups[groupname] = group;
@@ -205,7 +205,7 @@ internal class AssetManager : IAssetLoader
             }
             else
             {
-                Globals.ModMonitor.DebugLog($"Exclusions for {npcname} cannot be proccessed, cannot find NP.");
+                Globals.ModMonitor.Log(I18n.Assetmanager_ExclusionsNotFound(npcname), LogLevel.Debug);
             }
         }
         return exclusions;

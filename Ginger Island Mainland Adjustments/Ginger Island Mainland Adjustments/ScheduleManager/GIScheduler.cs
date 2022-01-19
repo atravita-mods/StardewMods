@@ -113,7 +113,7 @@ internal class GIScheduler
             return;
         }
         Random random = new((int)((float)Game1.uniqueIDForThisGame * 1.21f) + (int)((float)Game1.stats.DaysPlayed * 2.5f));
-        Dictionary<string, string> animationDescriptions = Globals.ContentHelper.Load<Dictionary<string, string>>("Data/animationDescriptions");
+        Dictionary<string, string> animationDescriptions = Globals.ContentHelper.Load<Dictionary<string, string>>("Data/animationDescriptions", ContentSource.GameContent);
 
         HashSet<NPC> explorers = GenerateExplorerGroup(random);
 
@@ -201,6 +201,9 @@ internal class GIScheduler
                 }
             }
             CurrentGroup = Utility.GetRandom(groupkeys, random);
+#if DEBUG
+            Globals.ModMonitor.Log($"Group {CurrentGroup} headed to Island.", LogLevel.Debug);
+#endif
             HashSet<NPC> possiblegroup = IslandGroups[CurrentGroup];
             visitors = possiblegroup.OrderBy(a => random.Next()).Take(capacity).ToList();
             valid_visitors.ExceptWith(visitors);
@@ -219,6 +222,9 @@ internal class GIScheduler
         }
         if (visitors.Count < capacity)
         {
+#if DEBUG
+            Globals.ModMonitor.Log($"{capacity} not yet reached, attempting to add more.", LogLevel.Debug);
+#endif
             foreach (NPC newvisitor in valid_visitors.OrderBy(a => random.Next()).Take(capacity - visitors.Count))
             {
                 visitors.Add(newvisitor);
@@ -228,7 +234,7 @@ internal class GIScheduler
         {
             visitors[i].scheduleDelaySeconds = Math.Min(i * 0.4f, 7f);
         }
-        Globals.ModMonitor.DebugLog($"{visitors.Count} vistors: {string.Join(", ", visitors)}");
+        Globals.ModMonitor.DebugLog($"{visitors.Count} vistors: {string.Join(", ", visitors.Select((NPC npc) => npc.Name))}");
         return visitors;
     }
 

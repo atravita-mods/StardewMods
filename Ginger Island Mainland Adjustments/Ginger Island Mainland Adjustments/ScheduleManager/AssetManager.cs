@@ -1,0 +1,213 @@
+﻿using System.Diagnostics.CodeAnalysis;
+using GingerIslandMainlandAdjustments.Utils;
+using StardewModdingAPI.Utilities;
+
+namespace GingerIslandMainlandAdjustments.ScheduleManager;
+
+/// <summary>
+/// Enum that represents the special roles on Ginger Island.
+/// </summary>
+public enum SpecialCharacterType
+{
+    /// <summary>
+    /// Musician.
+    /// </summary>
+    Musician,
+
+    /// <summary>
+    /// Bartender.
+    /// </summary>
+    Bartender,
+}
+
+/// <summary>
+/// Enum that represents groups of people who might want to explore GI together.
+/// </summary>
+public enum SpecialGroupType
+{
+    /// <summary>
+    /// Groups of people who might go to Ginger Island together.
+    /// </summary>
+    Groups,
+
+    /// <summary>
+    /// Groups of characters who might want to explore Ginger Island more.
+    /// </summary>
+    Explorers,
+}
+
+/// <summary>
+/// Class to manage assets.
+/// </summary>
+internal class AssetManager : IAssetLoader
+{
+    /// <summary>
+    /// Primary asset path for this mod. All assets should start with this.
+    /// </summary>
+    public const string AssetPath = "Mods/atravita_Ginger_Island_Adjustments";
+
+    /// <summary>
+    /// Fake asset location for bartenders.
+    /// </summary>
+    public static readonly string BartenderLocation = PathUtilities.NormalizeAssetName(AssetPath + "_bartenders");
+
+    /// <summary>
+    /// Fake asset location for explorers.
+    /// </summary>
+    public static readonly string ExplorerLocation = PathUtilities.NormalizeAssetName(AssetPath + "_explorers");
+
+    /// <summary>
+    /// Fake asset location for musicians.
+    /// </summary>
+    public static readonly string MusicianLocation = PathUtilities.NormalizeAssetName(AssetPath + "_musicians");
+
+    /// <summary>
+    /// Fake asset location for groups.
+    /// </summary>
+    public static readonly string GroupsLocations = PathUtilities.NormalizeAssetName(AssetPath + "_groups");
+
+    /// <summary>
+    /// Fake asset location for exclusions.
+    /// </summary>
+    public static readonly string ExclusionLocations = PathUtilities.NormalizeAssetName(AssetPath + "_exclusions");
+
+    /// <summary>
+    /// Full list of fake assets.
+    /// </summary>
+    private readonly List<string> myAssets = new() { BartenderLocation, ExplorerLocation, MusicianLocation, GroupsLocations, ExclusionLocations };
+
+    /// <inheritdoc />
+    public bool CanLoad<T>(IAssetInfo asset)
+    {
+        return this.myAssets.Any((string assetpath) => asset.AssetNameEquals(assetpath));
+    }
+
+    /// <inheritdoc />
+    public T Load<T>(IAssetInfo asset)
+    {
+        // default vanilla groupings
+        if (asset.AssetNameEquals(GroupsLocations))
+        {
+            Dictionary<string, string> defaultgroups = Globals.ContentHelper.Load<Dictionary<string, string>>("assets/defaultGroupings.json", ContentSource.ModFolder);
+            if (Game1.year > 2)
+            {
+                Globals.ModMonitor.DebugLog($"Kent is home, adding Kent");
+                if (defaultgroups.ContainsKey("JodiFamily"))
+                {
+                    defaultgroups["JodiFamily"] += ", Kent";
+                }
+            }
+            return (T)(object)defaultgroups;
+        }
+        // Load an empty document for everything else
+        else if (this.myAssets.Any((string assetpath) => asset.AssetNameEquals(assetpath)))
+        {
+            return (T)(object)new Dictionary<string, string>
+            {
+            };
+        }
+        throw new InvalidOperationException($"Should not have tried to load '{asset.AssetName}'");
+    }
+
+    /// <summary>
+    /// Get the special characters for specific scheduling positions.
+    /// </summary>
+    /// <param name="specialCharacterType">Which type of special position am I looking for.</param>
+    /// <returns>HashSet of possible special characters.</returns>
+    /// <exception cref="UnexpectedEnumValueException{SpecialCharacterType}">Recieved an unexpected enum value.</exception>
+    [SuppressMessage("StyleCop.CSharp.OrderingRules", "SA1204:Static elements should appear before instance elements", Justification = "Reviewed")]
+    public static HashSet<NPC> GetSpecialCharacter(SpecialCharacterType specialCharacterType)
+    {
+        HashSet<NPC> specialCharacters = new();
+        string assetLocation = specialCharacterType switch
+        {
+            SpecialCharacterType.Musician => MusicianLocation,
+            SpecialCharacterType.Bartender => BartenderLocation,
+            _ => throw new UnexpectedEnumValueException<SpecialCharacterType>(specialCharacterType)
+        };
+        Globals.ContentHelper.InvalidateCache(assetLocation);
+        foreach (string? specialChar in Globals.ContentHelper.Load<Dictionary<string, string>>(assetLocation, ContentSource.GameContent).Keys)
+        {
+            if (specialChar is null)
+            {
+                continue;
+            }
+            NPC? npc = Game1.getCharacterFromName(specialChar);
+            if (npc is not null)
+            {
+                specialCharacters.Add(npc);
+            }
+            else
+            {
+                Globals.ModMonitor.DebugLog($"{specialCharacterType} {specialChar} not found.");
+            }
+        }
+        return specialCharacters;
+    }
+
+    /// <summary>
+    /// Fetches a special group type from fake asset.
+    /// </summary>
+    /// <param name="specialGroupType">Which type of special group am I looking for.</param>
+    /// <returns>Dictionary of specialGroupName=>Special Group.</returns>
+    /// <exception cref="UnexpectedEnumValueException{SpecialGroupType}">Received an unexpected enum value.</exception>
+    public static Dictionary<string, HashSet<NPC>> GetCharacterGroup(SpecialGroupType specialGroupType)
+    {
+        Dictionary<string, HashSet<NPC>> characterGroups = new();
+        string assetLocation = specialGroupType switch
+        {
+            SpecialGroupType.Explorers => ExplorerLocation,
+            SpecialGroupType.Groups => GroupsLocations,
+            _ => throw new UnexpectedEnumValueException<SpecialGroupType>(specialGroupType)
+        };
+        Globals.ContentHelper.InvalidateCache(assetLocation);
+        Dictionary<string, string> data = Globals.ContentHelper.Load<Dictionary<string, string>>(assetLocation, ContentSource.GameContent);
+        foreach (string? groupname in data.Keys)
+        {
+            if (groupname is null)
+            {
+                continue;
+            }
+            HashSet<NPC> group = new();
+            foreach (string charname in data[groupname].Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries))
+            {
+                NPC? npc = Game1.getCharacterFromName(charname);
+                if (npc is not null)
+                {
+                    group.Add(npc);
+                }
+                else
+                {
+                    Globals.ModMonitor.Log($"{specialGroupType} {charname} in {groupname} not found - do they come from a mod not installed?", LogLevel.Debug);
+                }
+            }
+            characterGroups[groupname] = group;
+        }
+        return characterGroups;
+    }
+
+    /// <summary>
+    /// Fetches an exclusions dictionary from fake asset.
+    /// </summary>
+    /// <returns>Exclusions dictionary.</returns>
+    /// <remarks>Will invalidate the cache every time, so cache it if you need it stored.</remarks>
+    public static Dictionary<NPC, string[]> GetExclusions()
+    {
+        Dictionary<NPC, string[]> exclusions = new();
+        Globals.ContentHelper.InvalidateCache(ExclusionLocations);
+        Dictionary<string, string> data = Globals.ContentHelper.Load<Dictionary<string, string>>(ExclusionLocations, ContentSource.GameContent);
+        foreach (string npcname in data.Keys)
+        {
+            NPC npc = Game1.getCharacterFromName(npcname);
+            if (npc is not null)
+            {
+                exclusions[npc] = data[npcname].Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
+            }
+            else
+            {
+                Globals.ModMonitor.DebugLog($"Exclusions for {npcname} cannot be proccessed, cannot find NP.");
+            }
+        }
+        return exclusions;
+    }
+}

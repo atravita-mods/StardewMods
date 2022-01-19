@@ -1,0 +1,68 @@
+﻿{
+  "found-key": "Found key {{key}} for {{NPC}}",
+  "no-key-found": "No key found for {{NPC}} using basekey {{key}}",
+
+  // Documentation for console commands.
+  "getSchedule.documentation": "Gets the schedule of the NPC in question",
+  "getIslanders.documentation": "Gets the villagers headed off to the resort today",
+
+  "islanders": "Islanders",
+  "npc-not-found": "{{NPC}} not found.",
+
+  // DisplaySchedule strings
+  "display-schedule.checkNPC": "Checking schedule of {{name}}.",
+  "display-schedule.isInvisible": "{{name}} is invisible.",
+  "display-schedule.noSchedule": "{{name}} is not set to follow a schedule today.",
+  "display-schedule.toIsland": "{{name}} is headed to the Island.",
+
+  "display-schedule.expectedTime": "With expected trave time: ",
+  "display-schedule.direction": "With final facing direction: ",
+  "display-schedule.animation": "With animation: ",
+  "display-schedule.message": "With message: ",
+
+  // Config and GMCM
+  "IllFormatedConfig": "Config file seems ill-formated, using default. Please use Generic Mod Config Menu to configure.",
+  "GmcmNotFound": "Generic Mod Config Menu (https://www.nexusmods.com/stardewvalley/mods/5098) not found, integration disabled.",
+  "GmcmVersionMessage": "Please update Generic Mod Config Menu (https://www.nexusmods.com/stardewvalley/mods/5098) to at least version {{version}} (Current version: {{currentversion}}). GMCM integration disabled.",
+
+  "mod-description": "Alters Ginger Island schedules so villagers don't proceed direct to bed. Alternatively, handles GI schedules.",
+  "config.enforceGITiming.title": "Enforce GI schedule timing.",
+  "config.enforceGITiming.description": "If schedule points are too closely spaced, skip over them (with warning).",
+  "config.scheduler.title": "Use Mod's Scheduler",
+  "config.scheduler.description": "Use this mod's Ginger Island Scheduler (instead of vanilla game's).'",
+  "config.capacity.title": "Ginger Island Capacity.",
+  "config.capacity.description": "If using this mod's scheduler, the maximum number of people allowed on Ginger Island.",
+  "config.explorer_chance.title": "Explorer Group Chance.",
+  "config.explorer_chance.description": "Chance that a group will explorer the remainder of Ginger Island.",
+  "config.gus_day.title": "Gus's Ginger Island Day.",
+  "config.gus_day.description": "Day of week Gus is more likely to go to Ginger Island.",
+  "config.gus_chance.title": "Gus's Ginger Island Chances.",
+  "config.gus_chance.description": "Chance that Gus will go to Ginger Island on his assigned day.",
+
+  // Gane doesn't have translations for full days of the week.
+  "Monday": "Monday",
+  "Tuesday": "Tuesday",
+  "Wednesday": "Wednesday",
+  "Thursday": "Thursday",
+  "Friday": "Friday",
+  "Saturday": "Saturday",
+  "Sunday": "Sunday",
+
+  //MidDayScheduleEditor messages
+  "middayScheduleEditor.npc-found-for-adjustment": "NPC {{name}} with Island Schedule, will set up for schedule alternation",
+  "middayScheduleEditor.npc-not-islander": "Recieved NPC {{name}}, who is not headed to Ginger Island",
+  "middayScheduleEditor.npc-has-no-schedule": "NPC {{name}} has no schedule",
+
+  //Scheduling code errors:
+  "GOTO_SCHEDULE_NOT_FOUND": "GOTO {{scheduleKey}} not found for NPC {{npc}}",
+  "GOTO_SCHEDULE_FRIENDSHIP": "Skipping due to friendship limit for {{npc}}: {{scheduleKey}}",
+  "GOTO_ILL_FORMED_FRIENDSHIP": "Ill-formed friendship requirment {{requirment}} for {{npc}}: {{scheduleKey}}",
+  "GOTO_INFINITE_LOOP": "Infinite loop detected, skipping this schedule",
+
+  "NO_GI_SCHEDULE_FOUND": "Did not find a GI remainder schedule for {{npc}}",
+
+  //Scheduling code
+  "REGEX_TIMEOUT_ERROR": "Regex for schedule entry {{schedulePoint}} timed out:\n\n{{ex}}",
+  "TOO_TIGHT_TIMELINE": "{{time}} position in schedule {{scheduleKey}} for {{npc}} is too tight. Will be skipped.",
+  "NO_REPLACEMENT_LOCATION": "Location replacement for {{location}} requested but not found for {{npc}}"
+}

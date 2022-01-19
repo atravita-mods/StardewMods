@@ -1,0 +1,10 @@
+{"Changes":[
+    {
+        "Action": "EditData",
+        "Target": "Characters/Dialogue/MarriageDialogueLeah",
+        "Entries": {
+            "GILeave_Leah": "Honey, I'm headed off to Ginger Island for today. Will I see you there?$l",
+            "GIReturn_Leah": "That was an relaxing vacation! But I'm glad to be home.$h",
+        }
+    }
+]}

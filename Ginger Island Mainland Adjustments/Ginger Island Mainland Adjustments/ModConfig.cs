@@ -147,7 +147,7 @@ public class ModConfig
         {
             return dayofWeek;
         }
-        return DayOfWeek.Tuesday;
+        return DEFAULT_GUS_VISIT_DAY;
     }
 }
 #pragma warning restore SA1201 // Elements should appear in the correct order

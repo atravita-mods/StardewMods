@@ -1,0 +1,40 @@
+{
+	"Format": "1.23.0",
+	"Changes":[
+    {
+        "Action": "Include",
+        "FromFile": "schedules.json"
+    },
+    {
+        "Action": "Include",
+        "FromFile": "marriage_dialogue.json",
+    },
+    {
+        "LogName": "Abby dialogue",
+        "Action": "EditData",
+        "Target": "Characters/Dialogue/Abigail",
+        "Entries":{
+            "Resort_Approach": "Lookin' forward to exploring the island today!",
+            "Resort_Left": "Ahh, nothing like a nice relaxing vacation...$h",
+        }
+    },
+    {
+        "LogName": "Jodi dialogue",
+        "Action": "EditData",
+        "Target": "Characters/Dialogue/Jodi",
+        "Entries": {
+            "Resort_Approach": "I'm definitely looking forward to going to the Resort today!$h",
+            "Resort_Left": "Ahhh...I had a great day at the Resort!$h",
+        },
+    },
+    {
+        "LogName": "Pierre dialogue",
+        "Action": "EditData",
+        "Target": "Characters/Dialogue/Pierre",
+        "Entries": {
+            "Resort_Approach": "I'm headed off to the Island today. Looking forward to going on vacation!",
+            "Resort_Left": "Ah, nothing like a nice relaxing vacation...$h"
+        }
+    },
+	]
+}

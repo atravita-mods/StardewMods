@@ -18,7 +18,7 @@ Changelog
 * Adds dialogue key `_RepeatOrder`, which is cleared seven days after the completion of the order.
 * Check heart levels for dialogue conditions above 14.
 * Added tags: `married`.
-* (Internal) Use delegates instead of PropertyInfos
+* (Internal) Use delegates instead of `PropertyInfo`s.
 
 #### Version 1.0.4
 

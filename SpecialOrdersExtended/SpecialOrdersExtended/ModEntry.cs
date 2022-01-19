@@ -162,6 +162,9 @@ class ModEntry : Mod
             SpecialOrderData order = order_data[key];
             if (this.IsAvailableOrder(key, order))
             {
+#if DEBUG
+                ModMonitor.DebugLog($"    {key} is valid");
+#endif
                 validkeys.Add(key);
                 if (!Game1.MasterPlayer.team.completedSpecialOrders.ContainsKey(key))
                 {

@@ -12,11 +12,13 @@ public enum SpecialCharacterType
     /// <summary>
     /// Musician.
     /// </summary>
+    /// <remarks>requires a beach_towel animation, will cause characters with dance animations to dance near them.</remarks>
     Musician,
 
     /// <summary>
-    /// Bartender.
+    /// Bartender, who can tend bar at Ginger Island.
     /// </summary>
+    /// <remarks>No shop functionality for anyone not Gus though.</remarks>
     Bartender,
 }
 

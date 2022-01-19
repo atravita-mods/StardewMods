@@ -290,6 +290,7 @@ internal class GingerIslandTimeSlot
             // sitting on chair
             new PossibleIslandActivity(
                 new List<Point> { new Point(20, 24), new Point(30, 29) },
+                dialogueKey: "Resort_Chair",
                 basechance: 0.3,
                 chanceMap: (NPC npc) => npc.Age == 0 ? 0.4 : 0,
                 animation: "beach_chair",
@@ -297,12 +298,14 @@ internal class GingerIslandTimeSlot
             // antisocial point
             new PossibleIslandActivity(
                 new List<Point> { new Point(3, 29) },
+                dialogueKey: "Resort_Antisocial",
                 basechance: 0,
                 chanceMap: (NPC npc) => npc.SocialAnxiety == 1 && npc.Optimism == 1 ? 0.3 : 0,
                 map: "IslandSouthEast"),
             // shore points
             new PossibleIslandActivity(
                 new List<Point> { new Point(9, 33), new Point(13, 33), new Point(17, 33), new Point(24, 33), new Point(28, 32), new Point(32, 31) },
+                dialogueKey: "Resort_Shore",
                 basechance: 0.5),
             // pier points
             new PossibleIslandActivity(

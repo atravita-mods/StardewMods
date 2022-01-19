@@ -1,5 +1,7 @@
 ﻿using System.Text;
+using GingerIslandMainlandAdjustments.ScheduleManager;
 using GingerIslandMainlandAdjustments.Utils;
+using StardewModdingAPI.Utilities;
 
 namespace GingerIslandMainlandAdjustments.CustomConsoleCommands;
 
@@ -52,7 +54,8 @@ internal class ConsoleCommands
         }
         else
         {
-            Globals.ModMonitor.Log($"\t{npc.dayScheduleName.Value}\n\t\t{npc.getMasterScheduleEntry(npc.dayScheduleName.Value)}", level);
+            ScheduleUtilities.TryFindGOTOschedule(npc, SDate.Now(), npc.getMasterScheduleEntry(npc.dayScheduleName.Value), out string schedulestring);
+            Globals.ModMonitor.Log($"\t{npc.dayScheduleName.Value}\n\t\t{schedulestring}", level);
         }
         List<int> keys = new(npc.Schedule.Keys);
         keys.Sort();

@@ -41,11 +41,5 @@ internal class Globals
     /// </summary>
     public static IModHelper Helper;
 #pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
-
-    /// <summary>
-    /// Instance of class that handles middle of the day edits.
-    /// </summary>
-    public static MidDayScheduleEditor MidDayScheduleEditor = new();
-
 #pragma warning restore SA1401 // Fields should be private
 }

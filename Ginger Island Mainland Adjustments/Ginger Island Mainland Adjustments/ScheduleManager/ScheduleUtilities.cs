@@ -6,7 +6,7 @@ namespace GingerIslandMainlandAdjustments.ScheduleManager;
 /// <summary>
 /// Class that helps select the right GI remainder schedule.
 /// </summary>
-internal class ScheduleManager
+internal class ScheduleUtilities
 {
     private const string BASE_SCHEDULE_KEY = "GIRemainder";
     private const string POST_GI_START_TIME = "1800"; // all GI schedules must start at 1800
@@ -18,7 +18,7 @@ internal class ScheduleManager
     /// <param name="npc">NPC to look for.</param>
     /// <param name="date">Date to search.</param>
     /// <returns>A schedule string if it can, null if it can't find one.</returns>
-    public string? FindProperGISchedule(NPC npc, SDate date)
+    public static string? FindProperGISchedule(NPC npc, SDate date)
     {
         string? scheduleEntry = null;
         string scheduleKey = BASE_SCHEDULE_KEY;
@@ -31,7 +31,7 @@ internal class ScheduleManager
         // GIRemainder_Season_Day
         string checkKey = $"{scheduleKey}_{date.Season}_{date.Day}";
         if (npc.hasMasterScheduleEntry(checkKey)
-            && this.TryFindGOTOschedule(npc, date, npc.getMasterScheduleEntry(checkKey), out scheduleEntry)
+            && TryFindGOTOschedule(npc, date, npc.getMasterScheduleEntry(checkKey), out scheduleEntry)
             && scheduleEntry.StartsWith(POST_GI_START_TIME))
         {
             return scheduleEntry;
@@ -42,7 +42,7 @@ internal class ScheduleManager
         {
             checkKey = $"{BASE_SCHEDULE_KEY}_{date.Day}_{heartLevel}";
             if (npc.hasMasterScheduleEntry(checkKey)
-                && this.TryFindGOTOschedule(npc, date, npc.getMasterScheduleEntry(checkKey), out scheduleEntry)
+                && TryFindGOTOschedule(npc, date, npc.getMasterScheduleEntry(checkKey), out scheduleEntry)
                 && scheduleEntry.StartsWith(POST_GI_START_TIME))
             {
                 return scheduleEntry;
@@ -52,7 +52,7 @@ internal class ScheduleManager
         // GIRemainder_Day
         checkKey = $"{BASE_SCHEDULE_KEY}_{Game1.dayOfMonth}";
         if (npc.hasMasterScheduleEntry(checkKey)
-            && this.TryFindGOTOschedule(npc, date, npc.getMasterScheduleEntry(checkKey), out scheduleEntry)
+            && TryFindGOTOschedule(npc, date, npc.getMasterScheduleEntry(checkKey), out scheduleEntry)
             && scheduleEntry.StartsWith(POST_GI_START_TIME))
         {
             return scheduleEntry;
@@ -63,7 +63,7 @@ internal class ScheduleManager
         {
             checkKey = $"{BASE_SCHEDULE_KEY}_rain";
             if (npc.hasMasterScheduleEntry(checkKey)
-                && this.TryFindGOTOschedule(npc, date, npc.getMasterScheduleEntry(checkKey), out scheduleEntry)
+                && TryFindGOTOschedule(npc, date, npc.getMasterScheduleEntry(checkKey), out scheduleEntry)
                 && scheduleEntry.StartsWith(POST_GI_START_TIME))
             {
                 return scheduleEntry;
@@ -75,7 +75,7 @@ internal class ScheduleManager
         {
             checkKey = $"{BASE_SCHEDULE_KEY}_{date.Day}_{heartLevel}";
             if (npc.hasMasterScheduleEntry(checkKey)
-                && this.TryFindGOTOschedule(npc, date, npc.getMasterScheduleEntry(checkKey), out scheduleEntry)
+                && TryFindGOTOschedule(npc, date, npc.getMasterScheduleEntry(checkKey), out scheduleEntry)
                 && scheduleEntry.StartsWith(POST_GI_START_TIME))
             {
                 return scheduleEntry;
@@ -85,7 +85,7 @@ internal class ScheduleManager
         // GIRemainder_DayOfWeek
         checkKey = $"{BASE_SCHEDULE_KEY}_{Game1.shortDayNameFromDayOfSeason(date.Day)}";
         if (npc.hasMasterScheduleEntry(checkKey)
-            && this.TryFindGOTOschedule(npc, date, npc.getMasterScheduleEntry(checkKey), out scheduleEntry)
+            && TryFindGOTOschedule(npc, date, npc.getMasterScheduleEntry(checkKey), out scheduleEntry)
             && scheduleEntry.StartsWith(POST_GI_START_TIME))
         {
             return scheduleEntry;
@@ -93,7 +93,7 @@ internal class ScheduleManager
 
         // GIREmainder
         if (npc.hasMasterScheduleEntry(BASE_SCHEDULE_KEY)
-            && this.TryFindGOTOschedule(npc, date, npc.getMasterScheduleEntry(BASE_SCHEDULE_KEY), out scheduleEntry)
+            && TryFindGOTOschedule(npc, date, npc.getMasterScheduleEntry(BASE_SCHEDULE_KEY), out scheduleEntry)
             && scheduleEntry.StartsWith(POST_GI_START_TIME))
         {
             return scheduleEntry;
@@ -111,7 +111,7 @@ internal class ScheduleManager
     /// <param name="rawData">The raw schedule string.</param>
     /// <param name="scheduleString">A raw schedule string, stripped of MAIL/GOTO/NOT elements. Ready to be parsed.</param>
     /// <returns>True if successful, false for error (skip to next schedule entry).</returns>
-    private bool TryFindGOTOschedule(NPC npc, SDate date, string rawData, out string scheduleString)
+    public static bool TryFindGOTOschedule(NPC npc, SDate date, string rawData, out string scheduleString)
     {
         scheduleString = string.Empty;
         string[] splits = rawData.Split(
@@ -142,7 +142,7 @@ internal class ScheduleManager
                         Globals.ModMonitor.Log(I18n.GOTOINFINITELOOP(), LogLevel.Warn);
                         return false;
                     }
-                    return this.TryFindGOTOschedule(npc, date, newscheduleKey, out scheduleString);
+                    return TryFindGOTOschedule(npc, date, newscheduleKey, out scheduleString);
                 }
                 else
                 {
@@ -172,8 +172,8 @@ internal class ScheduleManager
             case "MAIL":
                 // MAIL mailkey
                 return Game1.MasterPlayer.mailReceived.Contains(command[1]) || NetWorldState.checkAnywhereForWorldStateID(command[1])
-                    ? this.TryFindGOTOschedule(npc, date, splits[2], out scheduleString)
-                    : this.TryFindGOTOschedule(npc, date, splits[1], out scheduleString);
+                    ? TryFindGOTOschedule(npc, date, splits[2], out scheduleString)
+                    : TryFindGOTOschedule(npc, date, splits[1], out scheduleString);
             default:
                 scheduleString = rawData;
                 return true;

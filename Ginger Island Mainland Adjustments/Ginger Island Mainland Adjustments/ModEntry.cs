@@ -41,7 +41,7 @@ public class ModEntry : Mod
 
         // Register events
         helper.Events.GameLoop.GameLaunched += this.OnGameLaunched;
-        helper.Events.GameLoop.TimeChanged += Globals.MidDayScheduleEditor.AttemptAdjustGISchedule;
+        helper.Events.GameLoop.TimeChanged += MidDayScheduleEditor.AttemptAdjustGISchedule;
         helper.Events.GameLoop.DayEnding += this.DayEnding;
         helper.Events.GameLoop.ReturnedToTitle += this.ReturnedToTitle;
 
@@ -56,7 +56,7 @@ public class ModEntry : Mod
     /// <param name="e">Possible parameters.</param>
     private void ReturnedToTitle(object? sender, ReturnedToTitleEventArgs e)
     {
-        Globals.MidDayScheduleEditor.Reset();
+        MidDayScheduleEditor.Reset();
         IslandSouthPatches.ClearCache();
         GIScheduler.ClearCache();
     }
@@ -68,7 +68,7 @@ public class ModEntry : Mod
     /// <param name="e">Possible parameters.</param>
     private void DayEnding(object? sender, DayEndingEventArgs e)
     {
-        Globals.MidDayScheduleEditor.Reset();
+        MidDayScheduleEditor.Reset();
         IslandSouthPatches.ClearCache();
         GIScheduler.ClearCache();
     }

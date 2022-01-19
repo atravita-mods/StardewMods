@@ -24,18 +24,13 @@ internal class MidDayScheduleEditor
     /// <summary>
     /// Keep track of the NPCs I've edited already, so I don't edit anyone twice.
     /// </summary>
-    private readonly Dictionary<string, bool> scheduleAltered = new();
-
-    /// <summary>
-    /// Instance of a class than handles finding the schedules.
-    /// </summary>
-    private readonly ScheduleManager scheduleManager = new();
+    private static readonly Dictionary<string, bool> ScheduleAltered = new();
 
     /// <summary>
     /// Regex for a schedulepoint format.
     /// </summary>
     [RegexPattern]
-    private readonly Regex scheduleRegex = new(
+    private static readonly Regex ScheduleRegex = new(
         // <time> [location] <tileX> <tileY> [facingDirection] [animation] \"[dialogue]\"
         pattern: @"(?<arrival>a)?(?<time>\d{1,4})(?<location> \S+)*?(?<x> \d{1,4})(?<y> \d{1,4})(?<direction> \d)?(?<animation> [^\s\""]+)?(?<dialogue> \"".*\"")?",
         options: RegexOptions.CultureInvariant | RegexOptions.Compiled,
@@ -44,9 +39,9 @@ internal class MidDayScheduleEditor
     /// <summary>
     /// Clears the ScheduleAltered dictionary.
     /// </summary>
-    public void Reset()
+    public static void Reset()
     {
-        this.scheduleAltered.Clear();
+        ScheduleAltered.Clear();
         Globals.ModMonitor.Log("Reset scheduleAltered", LogLevel.Trace);
     }
 
@@ -57,7 +52,7 @@ internal class MidDayScheduleEditor
     /// </summary>
     /// <param name="sender">Unknown, never used.</param>
     /// <param name="e">Time Changed Parameters from SMAPI.</param>
-    public void AttemptAdjustGISchedule(object? sender, TimeChangedEventArgs e)
+    public static void AttemptAdjustGISchedule(object? sender, TimeChangedEventArgs e)
     {
         if (e.NewTime >= 900)
         { // skip after 9AM.
@@ -77,16 +72,16 @@ internal class MidDayScheduleEditor
             {
                 continue;
             }
-            if (this.scheduleAltered.TryGetValue(name, out bool hasbeenaltered) && hasbeenaltered)
+            if (ScheduleAltered.TryGetValue(name, out bool hasbeenaltered) && hasbeenaltered)
             {
                 continue;
             }
             Globals.ModMonitor.Log(I18n.MiddayScheduleEditor_NpcFoundForAdjustment(name), LogLevel.Trace);
-            this.scheduleAltered[name] = true;
+            ScheduleAltered[name] = true;
             NPC npc = Game1.getCharacterFromName(name);
             if (npc is not null)
             {
-                this.AdjustSpecificSchedule(npc);
+                AdjustSpecificSchedule(npc);
                 break; // Do the next person at the next ten minute tick.
             }
         }
@@ -97,7 +92,7 @@ internal class MidDayScheduleEditor
     /// </summary>
     /// <param name="npc">NPC who's schedule may need adjusting.</param>
     /// <returns>True if successful, false otherwise.</returns>
-    public bool AdjustSpecificSchedule(NPC npc)
+    public static bool AdjustSpecificSchedule(NPC npc)
     {
         if (npc.islandScheduleName?.Value is null || npc.islandScheduleName?.Value == string.Empty)
         {
@@ -128,8 +123,8 @@ internal class MidDayScheduleEditor
             Globals.ModMonitor.DebugLog($"Recieved {npc.Name} to adjust but last schedule key is not {GIEndTime}");
             return false;
         }
-        string? schedule = this.scheduleManager.FindProperGISchedule(npc, SDate.Now());
-        Dictionary<int, SchedulePathDescription>? remainderSchedule = this.ParseSchedule(schedule, npc);
+        string? schedule = ScheduleUtilities.FindProperGISchedule(npc, SDate.Now());
+        Dictionary<int, SchedulePathDescription>? remainderSchedule = ParseSchedule(schedule, npc);
 
         if (remainderSchedule is not null)
         {
@@ -146,7 +141,7 @@ internal class MidDayScheduleEditor
     /// <param name="npc">NPC.</param>
     /// <returns>null if the schedule could not be parsed, a schedule otherwise.</returns>
     [ContractAnnotation("schedule:null => null")]
-    public Dictionary<int, SchedulePathDescription>? ParseSchedule(string? schedule, NPC npc)
+    public static Dictionary<int, SchedulePathDescription>? ParseSchedule(string? schedule, NPC npc)
     {
         if (schedule is null)
         {
@@ -164,7 +159,7 @@ internal class MidDayScheduleEditor
         {
             try
             {
-                Match match = this.scheduleRegex.Match(schedulepoint);
+                Match match = ScheduleRegex.Match(schedulepoint);
                 Dictionary<string, string> matchDict = match.MatchGroupsToDictionary((key) => key, (value) => value.Trim());
                 int time = int.Parse(matchDict["time"]);
                 if (time <= lasttime)

@@ -11,11 +11,6 @@ namespace GingerIslandMainlandAdjustments.ScheduleManager;
 /// </summary>
 internal class GIScheduler
 {
-    /// <summary>
-    /// Instance of a class than handles finding the schedules.
-    /// </summary>
-    private static readonly ScheduleManager ScheduleManager = new();
-
     private static readonly int[] TIMESLOTS = new int[] { 1200, 1400, 1600 };
 
     /// <summary>
@@ -143,7 +138,7 @@ internal class GIScheduler
                     isarrivaltime: true,
                     basekey: "Resort_Adventure",
                     direction: explorerIndex);
-                schedules[explorer] = schedulePoint.ToString() + "/" + (ScheduleManager.FindProperGISchedule(explorer, SDate.Now()) ?? "1800 bed");
+                schedules[explorer] = schedulePoint.ToString() + "/" + (ScheduleUtilities.FindProperGISchedule(explorer, SDate.Now()) ?? "1800 bed");
             }
         }
 
@@ -365,7 +360,7 @@ internal class GIScheduler
             else
             {
                 // Try to find a GI remainder schedule, if any.
-                schedPointString.Add(ScheduleManager.FindProperGISchedule(visitor, SDate.Now()) ?? "1800 bed");
+                schedPointString.Add(ScheduleUtilities.FindProperGISchedule(visitor, SDate.Now()) ?? "1800 bed");
             }
             completedSchedules[visitor] = string.Join("/", schedPointString);
             Globals.ModMonitor.DebugLog($"For {visitor.Name}, created island schedule {completedSchedules[visitor]}");

@@ -1,4 +1,5 @@
 ﻿{
+  // GMCM
   "list-fruits.description": "Lists the fruits FarmCaveSpawn can spawn.",
   "mod.description": "Spawns random fruit tree products into the farm cave.",
   "MaxDailySpawns.title": "Max Daily Spawns",

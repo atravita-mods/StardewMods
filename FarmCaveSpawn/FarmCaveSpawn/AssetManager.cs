@@ -27,7 +27,7 @@ internal class AssetManager : IAssetLoader
             return (T)(object)new Dictionary<string, string>
             {
                 ["FlashShifter.SVECode"] = "Custom_MinecartCave, Custom_DeepCave"
-#if DEBUG
+#if DEBUG // Regex's test!
                 , ["atravita.FarmCaveSpawn"] = "Town:[(4;5);(34;40)]"
 #endif
             };

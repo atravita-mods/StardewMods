@@ -337,15 +337,15 @@ public class ModEntry : Mod
         {
             this.random = GetRandom();
         }
-        foreach (int x in Enumerable.Range(xstart, Math.Clamp(xend, xstart, location.Map.Layers[0].LayerWidth - 2)).OrderBy((x) => this.random.Next()))
+
+        List<Vector2> points = Enumerable.Range(xstart, Math.Clamp(xend, xstart, location.Map.Layers[0].LayerWidth - 2))
+            .SelectMany(x => Enumerable.Range(ystart, Math.Clamp(yend, ystart, location.Map.Layers[0].LayerHeight - 2)), (x, y) => new Vector2(x, y)).ToList();
+        Utility.Shuffle(this.random, points);
+        foreach (Vector2 v in points)
         {
-            foreach (int y in Enumerable.Range(ystart, Math.Clamp(yend, ystart, location.Map.Layers[0].LayerHeight - 2)).OrderBy((x) => this.random.Next()))
+            if (this.random!.NextDouble() < (this.config.SpawnChance / 100f) && location.isTileLocationTotallyClearAndPlaceableIgnoreFloors(v))
             {
-                Vector2 v = new(x, y);
-                if (this.random!.NextDouble() < (this.config.SpawnChance / 100f) && location.isTileLocationTotallyClearAndPlaceableIgnoreFloors(v))
-                {
-                    yield return v;
-                }
+                yield return v;
             }
         }
     }
@@ -381,6 +381,7 @@ public class ModEntry : Mod
     /// <returns></returns>
     private List<string> GetData(string datalocation)
     {
+        this.Helper.Content.InvalidateCache(datalocation);
         IDictionary<string, string> rawlist = this.Helper.Content.Load<Dictionary<string, string>>(datalocation, ContentSource.GameContent);
         List<string> datalist = new();
 
@@ -408,7 +409,7 @@ public class ModEntry : Mod
         string currentseason = Game1.currentSeason.ToLowerInvariant().Trim();
         foreach (string tree in fruittrees.Values)
         {
-            string[] treedata = tree.Split('/');
+            string[] treedata = tree.Split('/', StringSplitOptions.TrimEntries);
             if (this.config.SeasonalOnly && Context.IsWorldReady)
             {
                 if (!treedata[1].Contains(currentseason))
@@ -420,7 +421,7 @@ public class ModEntry : Mod
                 }
             }
 
-            if (int.TryParse(treedata[2].Trim(), out int objectIndex))
+            if (int.TryParse(treedata[2], out int objectIndex))
             {
                 try
                 {

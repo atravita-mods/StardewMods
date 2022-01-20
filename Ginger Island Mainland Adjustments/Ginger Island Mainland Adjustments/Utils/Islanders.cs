@@ -3,7 +3,7 @@
 /// <summary>
 /// Methods to handle the current set of Islanders.
 /// </summary>
-internal class Islanders
+internal static class Islanders
 {
     /// <summary>
     /// Gets a list of Islanders.

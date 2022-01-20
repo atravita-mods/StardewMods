@@ -1,11 +1,9 @@
-﻿using GingerIslandMainlandAdjustments.ScheduleManager;
-
-namespace GingerIslandMainlandAdjustments;
+﻿namespace GingerIslandMainlandAdjustments;
 
 /// <summary>
 /// Class to handle global variables.
 /// </summary>
-internal class Globals
+internal static class Globals
 {
     // This would defeat the whole purpose of *having* a globals class, eh?
 #pragma warning disable SA1401 // Fields should be private

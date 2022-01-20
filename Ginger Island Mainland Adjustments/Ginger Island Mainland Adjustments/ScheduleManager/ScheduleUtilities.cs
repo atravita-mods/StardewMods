@@ -6,7 +6,7 @@ namespace GingerIslandMainlandAdjustments.ScheduleManager;
 /// <summary>
 /// Class that helps select the right GI remainder schedule.
 /// </summary>
-internal class ScheduleUtilities
+internal static class ScheduleUtilities
 {
     private const string BASE_SCHEDULE_KEY = "GIRemainder";
     private const string POST_GI_START_TIME = "1800"; // all GI schedules must start at 1800

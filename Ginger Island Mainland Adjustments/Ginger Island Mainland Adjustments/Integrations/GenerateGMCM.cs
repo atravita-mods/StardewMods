@@ -3,7 +3,7 @@
 /// <summary>
 /// Class that generates the GMCM for this mod.
 /// </summary>
-internal class GenerateGMCM
+internal static class GenerateGMCM
 {
     /// <summary>
     /// Minimum version of GMCM to look for.

@@ -1,6 +1,7 @@
 ﻿using System.Reflection;
 using System.Text;
 using GingerIslandMainlandAdjustments.CustomConsoleCommands;
+using GingerIslandMainlandAdjustments.DialogueChanges;
 using GingerIslandMainlandAdjustments.Integrations;
 using GingerIslandMainlandAdjustments.ScheduleManager;
 using GingerIslandMainlandAdjustments.Tokens;
@@ -34,8 +35,7 @@ public class ModEntry : Mod
         Globals.ModRegistry = this.Helper.ModRegistry;
         Globals.Helper = this.Helper;
 
-        ConsoleCommands commands = new();
-        commands.Register(this.Helper.ConsoleCommands);
+        ConsoleCommands.Register(this.Helper.ConsoleCommands);
 
         this.ApplyPatches(new Harmony(this.ModManifest.UniqueID));
 
@@ -59,6 +59,7 @@ public class ModEntry : Mod
         MidDayScheduleEditor.Reset();
         IslandSouthPatches.ClearCache();
         GIScheduler.ClearCache();
+        DialogueUtilities.ClearDialogueLog();
     }
 
     /// <summary>
@@ -71,6 +72,7 @@ public class ModEntry : Mod
         MidDayScheduleEditor.Reset();
         IslandSouthPatches.ClearCache();
         GIScheduler.ClearCache();
+        DialogueUtilities.ClearDialogueLog();
     }
 
     /// <summary>

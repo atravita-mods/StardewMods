@@ -9,7 +9,7 @@ namespace GingerIslandMainlandAdjustments.ScheduleManager;
 /// <summary>
 /// Class that handles middle of the day schedule editing.
 /// </summary>
-internal class MidDayScheduleEditor
+internal static class MidDayScheduleEditor
 {
     /// <summary>
     /// When Ginger Island schedules end.

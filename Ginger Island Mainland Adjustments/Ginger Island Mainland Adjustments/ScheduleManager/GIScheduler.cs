@@ -9,7 +9,7 @@ namespace GingerIslandMainlandAdjustments.ScheduleManager;
 /// <summary>
 /// Class that handles scheduling if the <see cref="ModConfig.UseThisScheduler"/> option is set.
 /// </summary>
-internal class GIScheduler
+internal static class GIScheduler
 {
     private static readonly int[] TIMESLOTS = new int[] { 1200, 1400, 1600 };
 

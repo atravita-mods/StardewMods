@@ -9,7 +9,7 @@ namespace GingerIslandMainlandAdjustments.ScheduleManager;
 /// Patches for the IslandSouth class.
 /// </summary>
 [HarmonyPatch(typeof(IslandSouth))]
-internal class IslandSouthPatches
+internal static class IslandSouthPatches
 {
     /// <summary>
     /// Dictionary of NPCs and custom exclusions.

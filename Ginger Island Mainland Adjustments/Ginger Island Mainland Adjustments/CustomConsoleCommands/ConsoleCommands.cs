@@ -8,22 +8,22 @@ namespace GingerIslandMainlandAdjustments.CustomConsoleCommands;
 /// <summary>
 /// Class that handles this mod's console commands.
 /// </summary>
-internal class ConsoleCommands
+internal static class ConsoleCommands
 {
     /// <summary>
     /// Register the console commands for this mod.
     /// </summary>
     /// <param name="commandHelper">SMAPI's console command helper.</param>
-    public void Register(ICommandHelper commandHelper)
+    public static void Register(ICommandHelper commandHelper)
     {
         commandHelper.Add(
             name: "get_schedule",
             documentation: I18n.GetSchedule_Documentation(),
-            callback: this.ConsoleSchedule);
+            callback: ConsoleSchedule);
         commandHelper.Add(
             name: "get_islanders",
             documentation: I18n.GetIslanders_Documentation(),
-            callback: this.ConsoleGetIslanders);
+            callback: ConsoleGetIslanders);
     }
 
     /// <summary>
@@ -79,14 +79,14 @@ internal class ConsoleCommands
     /// </summary>
     /// <param name="command">Name of command.</param>
     /// <param name="args">Arguments, if any.</param>
-    private void ConsoleGetIslanders(string command, string[] args) => Globals.ModMonitor.Log($"{I18n.Islanders()}: {string.Join(", ", Islanders.Get())}", LogLevel.Debug);
+    private static void ConsoleGetIslanders(string command, string[] args) => Globals.ModMonitor.Log($"{I18n.Islanders()}: {string.Join(", ", Islanders.Get())}", LogLevel.Debug);
 
     /// <summary>
     /// Yields the schedule for one or more characters.
     /// </summary>
     /// <param name="command">Name of command.</param>
     /// <param name="args">List of islanders.</param>
-    private void ConsoleSchedule(string command, string[] args)
+    private static void ConsoleSchedule(string command, string[] args)
     {
         foreach (string name in args)
         {

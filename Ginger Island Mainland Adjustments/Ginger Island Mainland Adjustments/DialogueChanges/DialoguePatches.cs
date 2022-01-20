@@ -8,7 +8,7 @@ namespace GingerIslandMainlandAdjustments.DialogueChanges;
 /// Class to handle patching of NPCs for dialogue.
 /// </summary>
 [HarmonyPatch(typeof(NPC))]
-internal class Patches
+internal class DialoguePatches
 {
     /// <summary>
     /// Appends checkForNewCurrentDialogue to look for GI-specific dialogue.

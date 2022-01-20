@@ -334,7 +334,7 @@ internal class GingerIslandTimeSlot
                 new List<Point> { new Point(22, 43), new Point(22, 40) },
                 dialogueKey: "Resort_Pier",
                 basechance: 0.5,
-                direction: 1,
+                direction: Game1.right,
                 chanceMap: (NPC npc) => npc.Age == NPC.adult ? 0.5 : 0),
         };
     }

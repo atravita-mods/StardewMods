@@ -1,8 +1,12 @@
-﻿using Microsoft.Xna.Framework;
+﻿using GingerIslandMainlandAdjustments.Utils;
+using Microsoft.Xna.Framework;
 using StardewModdingAPI.Utilities;
 
 namespace GingerIslandMainlandAdjustments.ScheduleManager.DataModels;
 
+/// <summary>
+/// Handles scheduling some islanders in IslandNorth.
+/// </summary>
 internal static class IslandNorthScheduler
 {
     /// <summary>
@@ -17,7 +21,6 @@ internal static class IslandNorthScheduler
 
     private static readonly List<Point> TentAdventurousPoint = new()
     {
-
         new Point(44, 51),
         new Point(47, 49),
         new Point(50, 51),
@@ -30,6 +33,11 @@ internal static class IslandNorthScheduler
         new Point(51, 28),
     };
 
+    /// <summary>
+    /// Makes schedules for the.
+    /// </summary>
+    /// <param name="random">Seeded random.</param>
+    /// <param name="explorers">Hashset of explorers.</param>
     public static void Schedule(Random random, HashSet<NPC> explorers)
     {
         if (explorers.Any())
@@ -84,8 +92,8 @@ internal static class IslandNorthScheduler
                     basekey: "Resort_AdventureReturn",
                     direction: explorerIndex));
 
-                string renderedSchedule = string.Join("/", schedules[explorer]) + '/' + ScheduleUtilities.FindProperGISchedule(explorer, SDate.Now()) ?? "1800 bed";
-                Globals.ModMonitor.Log($"Calculated island north schedule for {explorer.Name}");
+                string renderedSchedule = string.Join("/", schedules[explorer]) + '/' + (ScheduleUtilities.FindProperGISchedule(explorer, SDate.Now()) ?? "1800 bed");
+                Globals.ModMonitor.DebugLog($"Calculated island north schedule for {explorer.Name}");
                 explorer.islandScheduleName.Value = "island";
                 explorer.Schedule = explorer.parseMasterSchedule(renderedSchedule);
                 Game1.netWorldState.Value.IslandVisitors[explorer.Name] = true;

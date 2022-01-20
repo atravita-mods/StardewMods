@@ -38,7 +38,7 @@ public class SchedulePoint
         int time,
         Point point,
         bool isarrivaltime = false,
-        int direction = 2,
+        int direction = Game1.down,
         string? animation = null,
         string? basekey = null)
     {

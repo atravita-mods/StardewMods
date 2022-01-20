@@ -174,7 +174,7 @@ internal static class MidDayScheduleEditor
                 string direction_str = matchDict.GetValueOrDefault("direction", "2");
                 if (!int.TryParse(direction_str, out int direction))
                 {
-                    direction = 2;
+                    direction = Game1.down;
                 }
 
                 // Adjust schedules for locations not being open....
@@ -188,7 +188,7 @@ internal static class MidDayScheduleEditor
                         y = int.Parse(replacementdata[1]);
                         if (!int.TryParse(replacementdata[2], out direction))
                         {
-                            direction = 2;
+                            direction = Game1.down;
                         }
                     }
                     else

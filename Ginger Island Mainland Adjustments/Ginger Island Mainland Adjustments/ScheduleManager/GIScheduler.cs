@@ -104,6 +104,7 @@ internal static class GIScheduler
         if (explorers.Any())
         {
             Globals.ModMonitor.DebugLog($"Found explorer group: {string.Join(", ", explorers.Select((NPC npc) => npc.Name))}.");
+            IslandNorthScheduler.Schedule(random, explorers);
         }
 
         List<NPC> visitors = GenerateVistorList(random, Globals.Config.Capacity, explorers);

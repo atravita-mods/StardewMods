@@ -14,16 +14,6 @@ internal static class GIScheduler
     private static readonly int[] TIMESLOTS = new int[] { 1200, 1400, 1600 };
 
     /// <summary>
-    /// IslandNorth points for the adventurous.
-    /// </summary>
-    private static readonly List<Point> AdventurousPoint = new()
-    {
-        new Point(33, 83),
-        new Point(41, 74),
-        new Point(48, 81),
-    };
-
-    /// <summary>
     /// Dictionary of possible island groups. Null is a cache miss.
     /// </summary>
     /// <remarks>Use the getter, which will automatically grab from fake asset.</remarks>
@@ -107,7 +97,7 @@ internal static class GIScheduler
         {
             return;
         }
-        Random random = new((int)((float)Game1.uniqueIDForThisGame * 1.21f) + (int)((float)Game1.stats.DaysPlayed * 2.5f));
+        Random random = new((int)(Game1.uniqueIDForThisGame * 1.21f) + (int)(Game1.stats.DaysPlayed * 2.5f));
         Dictionary<string, string> animationDescriptions = Globals.ContentHelper.Load<Dictionary<string, string>>("Data/animationDescriptions", ContentSource.GameContent);
 
         HashSet<NPC> explorers = GenerateExplorerGroup(random);
@@ -123,24 +113,6 @@ internal static class GIScheduler
 
         List<GingerIslandTimeSlot> activities = AssignIslandSchedules(random, visitors, animationDescriptions);
         Dictionary<NPC, string> schedules = RenderIslandSchedules(random, visitors, activities);
-
-        int explorerIndex = 0;
-        if (explorers.Any())
-        {
-            foreach (NPC explorer in explorers)
-            {
-                SchedulePoint schedulePoint = new(
-                    random: random,
-                    npc: explorer,
-                    map: "IslandNorth",
-                    time: 1400,
-                    point: GIScheduler.AdventurousPoint[explorerIndex++],
-                    isarrivaltime: true,
-                    basekey: "Resort_Adventure",
-                    direction: explorerIndex);
-                schedules[explorer] = schedulePoint.ToString() + "/" + (ScheduleUtilities.FindProperGISchedule(explorer, SDate.Now()) ?? "1800 bed");
-            }
-        }
 
         foreach (NPC visitor in schedules.Keys)
         {

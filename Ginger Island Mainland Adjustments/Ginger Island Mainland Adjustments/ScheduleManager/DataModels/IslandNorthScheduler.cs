@@ -1,0 +1,95 @@
+﻿using Microsoft.Xna.Framework;
+using StardewModdingAPI.Utilities;
+
+namespace GingerIslandMainlandAdjustments.ScheduleManager.DataModels;
+
+internal static class IslandNorthScheduler
+{
+    /// <summary>
+    /// IslandNorth points for the adventurous.
+    /// </summary>
+    private static readonly List<Point> CloseAdventurousPoint = new()
+    {
+        new Point(33, 83),
+        new Point(41, 74),
+        new Point(48, 81),
+    };
+
+    private static readonly List<Point> TentAdventurousPoint = new()
+    {
+
+        new Point(44, 51),
+        new Point(47, 49),
+        new Point(50, 51),
+    };
+
+    private static readonly List<Point> VolcanoAdventurousPoint = new()
+    {
+        new Point(46, 29),
+        new Point(48, 26),
+        new Point(51, 28),
+    };
+
+    public static void Schedule(Random random, HashSet<NPC> explorers)
+    {
+        if (explorers.Any())
+        {
+            bool whichFarpoint = random.NextDouble() < 0.5;
+            List<Point> farPoints = whichFarpoint ? TentAdventurousPoint : VolcanoAdventurousPoint;
+            string whichDialogue = whichFarpoint ? "Tent" : "Volcano";
+            List<NPC> explorerList = explorers.ToList();
+            Dictionary<NPC, List<SchedulePoint>> schedules = new();
+            int explorerIndex = 0;
+
+            foreach (NPC explorer in explorers)
+            {
+                schedules[explorer] = new List<SchedulePoint>()
+                {
+                    new SchedulePoint(
+                    random: random,
+                    npc: explorer,
+                    map: "IslandNorth",
+                    time: 1200,
+                    point: CloseAdventurousPoint[explorerIndex++],
+                    isarrivaltime: true,
+                    basekey: "Resort_Adventure",
+                    direction: explorerIndex), // this little hackish thing makes them face in different directions.
+                };
+            }
+
+            explorerIndex = 0;
+            Utility.Shuffle(random, explorerList);
+            foreach (NPC explorer in explorerList)
+            {
+                schedules[explorer].Add(new SchedulePoint(
+                    random: random,
+                    npc: explorer,
+                    map: "IslandNorth",
+                    time: 1430,
+                    point: farPoints[explorerIndex++],
+                    basekey: $"Resort_{whichDialogue}",
+                    direction: explorerIndex));
+            }
+
+            explorerIndex = 0;
+            Utility.Shuffle(random, explorerList);
+            foreach (NPC explorer in explorerList)
+            {
+                schedules[explorer].Add(new SchedulePoint(
+                    random: random,
+                    npc: explorer,
+                    map: "IslandNorth",
+                    time: 1700,
+                    point: CloseAdventurousPoint[explorerIndex++],
+                    basekey: "Resort_AdventureReturn",
+                    direction: explorerIndex));
+
+                string renderedSchedule = string.Join("/", schedules[explorer]) + '/' + ScheduleUtilities.FindProperGISchedule(explorer, SDate.Now()) ?? "1800 bed";
+                Globals.ModMonitor.Log($"Calculated island north schedule for {explorer.Name}");
+                explorer.islandScheduleName.Value = "island";
+                explorer.Schedule = explorer.parseMasterSchedule(renderedSchedule);
+                Game1.netWorldState.Value.IslandVisitors[explorer.Name] = true;
+            }
+        }
+    }
+}

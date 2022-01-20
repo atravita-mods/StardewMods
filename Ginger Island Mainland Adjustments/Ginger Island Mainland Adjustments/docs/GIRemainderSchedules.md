@@ -6,7 +6,7 @@ Next, keys are checked in the following order
 
 1. `<base>_<season>_<day>` (ie `GIRemainder_winter_19`. Note that NPCs can't go to GI on their annual checkup day. They also can't go during the Night Market)
 2. `<base>_<day>_<hearts>` (ie `GIRemainder_19_8`)
-3. `<base>_<day>` (ie GIRemainder_19)
+3. `<base>_<day>` (ie `GIRemainder_19`)
 4. `<base>_rain` (for rainy days)
 5. `<base>_<season>_<short day of week><hearts>` (ie `GIRemainder_winter_Fri6`)
 6. `<base>_<season>_<short day of week>` (ie `GIRemainder_winter_Fri`)

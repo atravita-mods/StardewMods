@@ -40,6 +40,12 @@ internal class GingerIslandTimeSlot
     private static readonly PossibleIslandActivity Music = PossibleActivities[0];
     private static readonly PossibleIslandActivity Dance = PossibleActivities[1];
 
+    private static readonly PossibleIslandActivity Adventure = new(new() { new Point(33, 83), new Point(41, 74), new Point(48, 81) },
+        map: "IslandNorth",
+        basechance: 0.5,
+        dialogueKey: "Resort_Adventure",
+        chanceMap: (NPC npc) => npc.Age == NPC.adult && npc.Optimism == NPC.positive ? 0.5 : 0);
+
     /// <summary>
     /// Time this timeslot takes place in.
     /// </summary>
@@ -119,7 +125,7 @@ internal class GingerIslandTimeSlot
 
             foreach (NPC possibledrinker in this.visitors)
             {
-                if (!this.assignments.ContainsKey(possibledrinker) && possibledrinker.Age != 2 && !dancers.Contains(possibledrinker) && possibledrinker != this.musician)
+                if (!this.assignments.ContainsKey(possibledrinker) && possibledrinker.Age != NPC.child && !dancers.Contains(possibledrinker) && possibledrinker != this.musician)
                 {
                     SchedulePoint? schedulePoint = Drinking.TryAssign(
                         random: this.random,
@@ -210,6 +216,22 @@ internal class GingerIslandTimeSlot
                 continue;
             }
 
+            if (this.timeslot == 1400)
+            {
+                SchedulePoint? schedulePoint = Adventure.TryAssign(
+                    random: this.random,
+                    character: visitor,
+                    time: this.timeslot,
+                    usedPoints: this.usedPoints,
+                    lastAssignment: lastAssignment,
+                    animation_descriptions: animationDescriptions);
+                if (schedulePoint is not null)
+                {
+                    this.AssignSchedulePoint(visitor, schedulePoint);
+                    continue;
+                }
+            }
+
             // now iterate backwards through the list, forcibly assigning people to places....
             for (int i = PossibleActivities.Count - 1; i >= 0; i--)
             {
@@ -292,7 +314,7 @@ internal class GingerIslandTimeSlot
                 new List<Point> { new Point(20, 24), new Point(30, 29) },
                 dialogueKey: "Resort_Chair",
                 basechance: 0.3,
-                chanceMap: (NPC npc) => npc.Age == 0 ? 0.4 : 0,
+                chanceMap: (NPC npc) => npc.Age == NPC.adult ? 0.4 : 0,
                 animation: "beach_chair",
                 animation_required: false),
             // antisocial point
@@ -300,7 +322,7 @@ internal class GingerIslandTimeSlot
                 new List<Point> { new Point(3, 29) },
                 dialogueKey: "Resort_Antisocial",
                 basechance: 0,
-                chanceMap: (NPC npc) => npc.SocialAnxiety == 1 && npc.Optimism == 1 ? 0.3 : 0,
+                chanceMap: (NPC npc) => npc.SocialAnxiety == NPC.shy && npc.Optimism == NPC.positive ? 0.3 : 0,
                 map: "IslandSouthEast"),
             // shore points
             new PossibleIslandActivity(
@@ -313,7 +335,7 @@ internal class GingerIslandTimeSlot
                 dialogueKey: "Resort_Pier",
                 basechance: 0.5,
                 direction: 1,
-                chanceMap: (NPC npc) => npc.Age == 0 ? 0.5 : 0),
+                chanceMap: (NPC npc) => npc.Age == NPC.adult ? 0.5 : 0),
         };
     }
 }

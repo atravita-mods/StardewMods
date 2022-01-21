@@ -17,15 +17,15 @@ internal abstract class AbstractToken
     /// </summary>
     /// <returns>true - all derived tokens should allow input.</returns>
     [Pure]
-    public virtual bool AllowsInput() => true;
+    public virtual bool AllowsInput() => false;
 
     /// <summary>
     /// Whether or not the token will produce multiple outputs, depending on the input to the token.
     /// </summary>
-    /// <param name="input"></param>
-    /// <returns>Will return one value if given a Special Order, or all Special Orders if not.</returns>
+    /// <param name="input">Input to token</param>
+    /// <returns>False (no need for my own inputs).</returns>
     [Pure]
-    public virtual bool CanHaveMultipleValues(string? input = null) => input is null;
+    public virtual bool CanHaveMultipleValues(string? input = null) => true;
 
     /// <summary>Get whether the token is available for use.</summary>
     /// <returns>True if token ready, false otherwise.</returns>
@@ -36,15 +36,10 @@ internal abstract class AbstractToken
     /// <param name="input">The input arguments, if any.</param>
     /// <param name="error">The validation error, if any.</param>
     /// <returns>Returns whether validation succeeded.</returns>
-    /// <remarks>Expect zero arguments or single argument |contains=.</remarks>
-    public virtual bool TryValidateInput(string input, out string error)
+    /// <remarks>Expect zero arguments.</remarks>
+    public virtual bool TryValidateInput(string? input, out string error)
     {
-        error = "Expected zero arguments or single argument |contains=";
-        string[] vals = input.Split('|', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
-        if (vals.Length >= 2 || (vals.Length == 1 && !vals[0].StartsWith("contains_")))
-        {
-            return false;
-        }
+        error = string.Empty;
         return true;
     }
 
@@ -64,10 +59,6 @@ internal abstract class AbstractToken
                 yield return str;
             }
         }
-        else
-        {
-            yield return this.tokenCache.Contains(input["|contains=".Length..]) ? "true" : "false";
-        }
     }
 
     /// <summary>Get whether the token always chooses from a set of known values for the given input. Mutually exclusive with <see cref="HasBoundedRangeValues"/>.</summary>
@@ -77,11 +68,7 @@ internal abstract class AbstractToken
     public virtual bool HasBoundedValues(string input, out IEnumerable<string> allowedValues)
     {
         allowedValues = new List<string>() { "true", "false" };
-        if (input is null)
-        {
-            return false;
-        }
-        return true;
+        return false;
     }
 
     /// <summary>Update the values when the context changes.</summary>

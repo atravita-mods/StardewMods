@@ -6,24 +6,24 @@ using StardewValley.GameData;
 namespace SpecialOrdersExtended;
 
 /// <inheritdoc />
-class ModEntry : Mod
+internal class ModEntry : Mod
 {
     // The following fields are set in the Entry method, which is about as close to the constructor as I can get
 #pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
     /// <summary>
     /// Holds methods to analyze the stats class/dictionary for the game.
     /// </summary>
-    public static readonly StatsManager StatsManager = new();
+    internal static readonly StatsManager StatsManager = new();
 
     /// <summary>
     /// Logger for SMAPI.
     /// </summary>
-    public static IMonitor ModMonitor;
+    internal static IMonitor ModMonitor;
 
     /// <summary>
     /// SMAPI's data writer.
     /// </summary>
-    public static IDataHelper DataHelper;
+    internal static IDataHelper DataHelper;
 #pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
 
     /// <inheritdoc/>

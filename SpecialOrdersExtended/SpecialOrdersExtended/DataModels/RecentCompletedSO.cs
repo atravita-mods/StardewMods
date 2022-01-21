@@ -81,6 +81,11 @@ internal class RecentCompletedSO : AbstractDataModel
     /// <returns>true if the quest key was successfully added, false otherwise.</returns>
     public bool TryAdd(string orderKey, uint daysPlayed) => this.RecentOrdersCompleted.TryAdd(orderKey, daysPlayed);
 
+    /// <summary>
+    /// Try to remove an order key from the recent order completed dictionary.
+    /// </summary>
+    /// <param name="orderKey">order to remove.</param>
+    /// <returns>True if successfully removed, false otherwise.</returns>
     public bool TryRemove(string orderKey) => this.RecentOrdersCompleted.Remove(orderKey);
 
     [Pure]
@@ -105,6 +110,7 @@ internal class RecentCompletedSO : AbstractDataModel
             .Where(a => this.RecentOrdersCompleted[a] + days >= Game1.stats.DaysPlayed);
     }
 
+    /// <inheritdoc/>
     [Pure]
     public override string ToString()
     {

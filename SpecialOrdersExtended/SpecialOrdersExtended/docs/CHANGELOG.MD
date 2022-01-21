@@ -3,7 +3,6 @@ Changelog
 
 1. Add condition to just randomly reduce the chance of a quest appearing. (May need integrate with that one mod that changes the day special orders appear?)
 2. Add condition for total number of quests (both Qi and otherwise completed.)
-3. Document tokens.
 
 ##### In consideration
 
@@ -11,9 +10,9 @@ Changelog
 2. De-hardcode skill levels and consider a way to support mod skills?
 6. Implement a temporary saving mechanism for Save Anywhere (look into their API?)
 
-#### Version 1.0.5 (in development)
+#### Version 1.0.5
 
-* In theory: fixes splitscreen. (Still need to test).
+* In theory: fixes splitscreen.
 * `Available` token now correctly returns no entries if the special orders board is not unliked. Also, adds `_IsAvailable` as a possible dialogue option.
 * Adds dialogue key `_RepeatOrder`, which is cleared seven days after the completion of the order.
 * Check heart levels for dialogue conditions above 14.

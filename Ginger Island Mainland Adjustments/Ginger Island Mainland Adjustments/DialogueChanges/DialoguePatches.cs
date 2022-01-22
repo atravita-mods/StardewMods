@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics.CodeAnalysis;
+using GingerIslandMainlandAdjustments.ScheduleManager;
 using HarmonyLib;
 using StardewValley.Locations;
 
@@ -56,6 +57,15 @@ internal class DialoguePatches
             else
             {
                 return;
+            }
+
+            if (GIScheduler.CurrentVisitingGroup?.Contains(__instance) == true)
+            {
+                if (GIScheduler.CurrentGroup is not null && DialogueUtilities.TryGetIslandDialogue(__instance, $"{baseKey}_{GIScheduler.CurrentGroup}", __0))
+                {
+                    __result = true;
+                    return;
+                }
             }
 
             Farmer spouse = __instance.getSpouse();

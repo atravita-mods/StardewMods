@@ -5,39 +5,72 @@
 /// </summary>
 internal static class Globals
 {
-    // This would defeat the whole purpose of *having* a globals class, eh?
-#pragma warning disable SA1401 // Fields should be private
     // Values are set in the Mod.Entry method, so should never be null.
 #pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
-    /// <summary>
-    /// SMAPI's logging service.
-    /// </summary>
-    public static IMonitor ModMonitor;
+
+    private static IMonitor modMonitor;
+    private static ModConfig config;
+    private static IReflectionHelper reflectionHelper;
+    private static IContentHelper contentHelper;
+    private static IModRegistry modRegistry;
+    private static IModHelper helper;
 
     /// <summary>
-    /// Mod configuration class.
+    /// Gets SMAPI's logging service.
     /// </summary>
-    public static ModConfig Config;
+    internal static IMonitor ModMonitor => modMonitor;
 
     /// <summary>
-    /// SMAPI's reflection helper.
+    /// Gets or sets mod configuration class.
     /// </summary>
-    public static IReflectionHelper ReflectionHelper;
+    internal static ModConfig Config
+    {
+        get => config;
+        set => config = value;
+    }
 
     /// <summary>
-    /// SMAPI's Content helper.
+    /// Gets SMAPI's reflection helper.
     /// </summary>
-    public static IContentHelper ContentHelper;
+    internal static IReflectionHelper ReflectionHelper => reflectionHelper;
 
     /// <summary>
-    /// SMAPI's mod registry helper.
+    /// Gets SMAPI's Content helper.
     /// </summary>
-    public static IModRegistry ModRegistry;
+    internal static IContentHelper ContentHelper => contentHelper;
 
     /// <summary>
-    /// SMAPI's helper class.
+    /// Gets SMAPI's mod registry helper.
     /// </summary>
-    public static IModHelper Helper;
+    internal static IModRegistry ModRegistry => modRegistry;
+
+    /// <summary>
+    /// Gets SMAPI's helper class.
+    /// </summary>
+    internal static IModHelper Helper => helper;
 #pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
-#pragma warning restore SA1401 // Fields should be private
+
+    /// <summary>
+    /// Initialize globals.
+    /// </summary>
+    /// <param name="helper">SMAPI's IModHelper.</param>
+    /// <param name="monitor">SMAPI's logging service.</param>
+    internal static void Initialize(IModHelper helper, IMonitor monitor)
+    {
+        modMonitor = monitor;
+        reflectionHelper = helper.Reflection;
+        contentHelper = helper.Content;
+        modRegistry = helper.ModRegistry;
+        Globals.helper = helper;
+
+        try
+        {
+            Config = helper.ReadConfig<ModConfig>();
+        }
+        catch
+        {
+            modMonitor.Log(I18n.IllFormatedConfig(), LogLevel.Warn);
+            config = new();
+        }
+    }
 }

@@ -29,11 +29,21 @@ internal static class GIScheduler
 
     private static NPC? musician;
 
+    private static string? currentGroup = null;
+
+    private static HashSet<NPC>? currentVisitingGroup = null;
+
     /// <summary>
-    /// Gets or sets the current group headed off to the island.
+    /// Gets the current group headed off to the island.
     /// </summary>
     /// <remarks>null means no current group.</remarks>
-    public static string? CurrentGroup { get; set; }
+    public static string? CurrentGroup => GIScheduler.currentGroup;
+
+    /// <summary>
+    /// Gets the current visting group.
+    /// </summary>
+    /// <remarks>Used primarily for setting group-based dialogue...</remarks>
+    public static HashSet<NPC>? CurrentVisitingGroup => GIScheduler.currentVisitingGroup;
 
     /// <summary>
     /// Gets the current bartender.
@@ -152,6 +162,9 @@ internal static class GIScheduler
     /// <remarks>For a deterministic island list, use a Random seeded with the uniqueID + number of days played.</remarks>
     private static List<NPC> GenerateVistorList(Random random, int capacity, HashSet<NPC> explorers)
     {
+        currentGroup = null;
+        currentVisitingGroup = null;
+
         List<NPC> visitors = new();
         HashSet<NPC> valid_visitors = new();
 
@@ -172,12 +185,13 @@ internal static class GIScheduler
                     groupkeys.Add(key);
                 }
             }
-            CurrentGroup = Utility.GetRandom(groupkeys, random);
+            currentGroup = Utility.GetRandom(groupkeys, random);
 #if DEBUG
-            Globals.ModMonitor.Log($"Group {CurrentGroup} headed to Island.", LogLevel.Debug);
+            Globals.ModMonitor.Log($"Group {currentGroup} headed to Island.", LogLevel.Debug);
 #endif
-            HashSet<NPC> possiblegroup = IslandGroups[CurrentGroup];
-            visitors = possiblegroup.OrderBy(a => random.Next()).Take(capacity).ToList();
+            HashSet<NPC> possiblegroup = IslandGroups[currentGroup];
+            visitors = possiblegroup.OrderBy(a => random.Next()).Take(capacity).ToList(); // limit group size if there's too many people...
+            currentVisitingGroup = visitors.ToHashSet();
             valid_visitors.ExceptWith(visitors);
         }
         NPC? gus = Game1.getCharacterFromName("Gus");

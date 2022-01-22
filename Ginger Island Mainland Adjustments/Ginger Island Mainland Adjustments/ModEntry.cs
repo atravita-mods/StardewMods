@@ -17,23 +17,8 @@ public class ModEntry : Mod
     /// <inheritdoc />
     public override void Entry(IModHelper helper)
     {
-        // Bind globals
-        try
-        {
-            Globals.Config = this.Helper.ReadConfig<ModConfig>();
-        }
-        catch
-        {
-            this.Monitor.Log(I18n.IllFormatedConfig(), LogLevel.Warn);
-            Globals.Config = new();
-        }
-
-        Globals.ModMonitor = this.Monitor;
         I18n.Init(helper.Translation);
-        Globals.ReflectionHelper = this.Helper.Reflection;
-        Globals.ContentHelper = this.Helper.Content;
-        Globals.ModRegistry = this.Helper.ModRegistry;
-        Globals.Helper = this.Helper;
+        Globals.Initialize(helper, this.Monitor);
 
         ConsoleCommands.Register(this.Helper.ConsoleCommands);
 

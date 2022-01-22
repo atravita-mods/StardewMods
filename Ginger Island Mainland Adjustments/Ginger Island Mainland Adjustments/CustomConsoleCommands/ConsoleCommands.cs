@@ -11,17 +11,22 @@ namespace GingerIslandMainlandAdjustments.CustomConsoleCommands;
 internal static class ConsoleCommands
 {
     /// <summary>
+    /// All console commands in this will start with the following.
+    /// </summary>
+    private const string PrePendCommand = "av.gima.";
+
+    /// <summary>
     /// Register the console commands for this mod.
     /// </summary>
     /// <param name="commandHelper">SMAPI's console command helper.</param>
     public static void Register(ICommandHelper commandHelper)
     {
         commandHelper.Add(
-            name: "get_schedule",
+            name: PrePendCommand + "get_schedule",
             documentation: I18n.GetSchedule_Documentation(),
             callback: ConsoleSchedule);
         commandHelper.Add(
-            name: "get_islanders",
+            name: PrePendCommand + "get_islanders",
             documentation: I18n.GetIslanders_Documentation(),
             callback: ConsoleGetIslanders);
     }

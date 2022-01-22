@@ -65,7 +65,7 @@ public class ModConfig
     /// Gets or sets a value indicating whether whether to use the game's GI scheduler
     /// or mine.
     /// </summary>
-    public bool UseThisScheduler { get; set; } = false;
+    public bool UseThisScheduler { get; set; } = true;
 
     /// <summary>
     /// Maximum number of people allowed on Ginger island.
@@ -134,7 +134,7 @@ public class ModConfig
     }
 
     /// <summary>
-    /// Attempts to parse a string into a boolean value.
+    /// Attempts to parse a string into a DayOfWeek.
     /// Returns the default if not possible.
     /// </summary>
     /// <param name="rawstring">Raw string to parse.</param>

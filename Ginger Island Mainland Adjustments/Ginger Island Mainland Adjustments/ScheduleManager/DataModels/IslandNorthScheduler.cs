@@ -73,7 +73,7 @@ internal static class IslandNorthScheduler
                     random: random,
                     npc: explorer,
                     map: "IslandNorth",
-                    time: 1430,
+                    time: 1330,
                     point: farPoints[explorerIndex++],
                     basekey: $"Resort_{whichDialogue}",
                     direction: explorerIndex));
@@ -90,6 +90,7 @@ internal static class IslandNorthScheduler
                     time: 1700,
                     point: CloseAdventurousPoint[explorerIndex++],
                     basekey: "Resort_AdventureReturn",
+                    isarrivaltime: true,
                     direction: explorerIndex));
 
                 string renderedSchedule = string.Join("/", schedules[explorer]) + '/' + (ScheduleUtilities.FindProperGISchedule(explorer, SDate.Now()) ?? "1800 bed");

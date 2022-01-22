@@ -74,7 +74,7 @@ internal class GingerIslandTimeSlot
     /// <param name="musician">Musician, if I have one.</param>
     /// <param name="random">Seeded random.</param>
     /// <param name="visitors">List of NPC visitors.</param>
-    public GingerIslandTimeSlot(int timeslot, NPC? bartender, NPC? musician, Random random, List<NPC> visitors)
+    internal GingerIslandTimeSlot(int timeslot, NPC? bartender, NPC? musician, Random random, List<NPC> visitors)
     {
         this.timeslot = timeslot;
         this.bartender = bartender;
@@ -87,17 +87,17 @@ internal class GingerIslandTimeSlot
     /// <summary>
     /// Gets dictionary of animations NPCs may be using for this GITimeSlot.
     /// </summary>
-    public Dictionary<NPC, string> Animations => this.animations;
+    internal Dictionary<NPC, string> Animations => this.animations;
 
     /// <summary>
     /// Gets which time this Timeslot should happen at.
     /// </summary>
-    public int TimeSlot => this.timeslot;
+    internal int TimeSlot => this.timeslot;
 
     /// <summary>
     /// Gets a dictionary of current assignment (as a <see cref="SchedulePoint"/>) per NPC.
     /// </summary>
-    public Dictionary<NPC, SchedulePoint> Assignments => this.assignments;
+    internal Dictionary<NPC, SchedulePoint> Assignments => this.assignments;
 
     /// <summary>
     /// Tries to assign all characters to an activity.
@@ -105,7 +105,7 @@ internal class GingerIslandTimeSlot
     /// <param name="lastAssignment">The previous set of animations, to avoid repeating.</param>
     /// <param name="animationDescriptions">The animation dictionary of the game.</param>
     /// <returns>The animations used, so the next time slot has that information.</returns>
-    public Dictionary<NPC, string> AssignActivities(Dictionary<NPC, string> lastAssignment, Dictionary<string, string> animationDescriptions)
+    internal Dictionary<NPC, string> AssignActivities(Dictionary<NPC, string> lastAssignment, Dictionary<string, string> animationDescriptions)
     {
         // Get a list of possible dancers (who have _beach_dance as a possible animation).
         HashSet<NPC> dancers = (this.musician is not null)
@@ -125,7 +125,8 @@ internal class GingerIslandTimeSlot
 
             foreach (NPC possibledrinker in this.visitors)
             {
-                if (!this.assignments.ContainsKey(possibledrinker) && possibledrinker.Age != NPC.child && !dancers.Contains(possibledrinker) && possibledrinker != this.musician)
+                if (!this.assignments.ContainsKey(possibledrinker) && possibledrinker.Age != NPC.child
+                    && !dancers.Contains(possibledrinker) && possibledrinker != this.musician)
                 {
                     SchedulePoint? schedulePoint = Drinking.TryAssign(
                         random: this.random,
@@ -151,11 +152,12 @@ internal class GingerIslandTimeSlot
                 time: this.timeslot,
                 usedPoints: this.usedPoints,
                 lastAssignment: lastAssignment,
+                overrideChanceMap: (NPC npc) => 0.8,
                 animation_descriptions: animationDescriptions);
             if (musicianPoint is not null)
             {
 #if DEBUG
-                Globals.ModMonitor.Log($"Assigned musician:{this.musician}", LogLevel.Debug);
+                Globals.ModMonitor.Log($"Assigned musician:{this.musician.Name}", LogLevel.Debug);
 #endif
                 this.AssignSchedulePoint(this.musician, musicianPoint);
                 Point musician_loc = musicianPoint.Point;
@@ -182,7 +184,7 @@ internal class GingerIslandTimeSlot
                     if (dancerPoint is not null)
                     {
 #if DEBUG
-                        Globals.ModMonitor.Log($"Assigned dancer {dancer}", LogLevel.Debug);
+                        Globals.ModMonitor.Log($"Assigned dancer {dancer.Name}", LogLevel.Debug);
 #endif
                         this.AssignSchedulePoint(dancer, dancerPoint);
                         dancer.currentScheduleDelay = 0f;
@@ -190,6 +192,12 @@ internal class GingerIslandTimeSlot
                     }
                 }
             }
+#if DEBUG
+            else
+            {
+                Globals.ModMonitor.Log($"Musician {this.musician.Name} skipped for MusicianPoint", LogLevel.Info);
+            }
+#endif
         }
 
         // assign the rest of the NPCs

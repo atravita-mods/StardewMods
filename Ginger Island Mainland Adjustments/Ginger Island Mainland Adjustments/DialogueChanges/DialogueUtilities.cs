@@ -15,7 +15,7 @@ internal static class DialogueUtilities
     /// <summary>
     /// Clears the dialogue log.
     /// </summary>
-    public static void ClearDialogueLog()
+    internal static void ClearDialogueLog()
     {
         DialogueLog.Clear();
     }
@@ -28,7 +28,7 @@ internal static class DialogueUtilities
     /// <param name="baseKey">Base dialogue key.</param>
     /// <param name="hearts">heartlevel of the NPC.</param>
     /// <returns>True if dialogue found, false otherwise.</returns>
-    public static bool TryGetIslandDialogue(NPC npc, string baseKey, int hearts)
+    internal static bool TryGetIslandDialogue(NPC npc, string baseKey, int hearts)
     {
         string dialogueKey;
         // basekey_DayOfWeek

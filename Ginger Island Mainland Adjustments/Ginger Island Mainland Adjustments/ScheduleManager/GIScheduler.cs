@@ -231,13 +231,13 @@ internal static class GIScheduler
     /// <returns>Bartender if it can find one, null otherwise.</returns>
     private static NPC? SetBartender(List<NPC> visitors)
     {
-        NPC? bartender = visitors.Find((NPC npc) => npc.Name.Equals("Gus"));
+        NPC? bartender = visitors.Find((NPC npc) => npc.Name.Equals("Gus", StringComparison.OrdinalIgnoreCase));
         if (bartender is null)
         { // Gus not visiting, go find another bartender
             HashSet<NPC> bartenders = AssetManager.GetSpecialCharacter(SpecialCharacterType.Bartender);
             bartender = visitors.Find((NPC npc) => bartenders.Contains(npc));
         }
-        if (bartender != null)
+        if (bartender is not null)
         {
             bartender.currentScheduleDelay = 0f;
         }
@@ -253,18 +253,24 @@ internal static class GIScheduler
     /// <returns>Musician if it finds one.</returns>
     private static NPC? SetMusician(Random random, List<NPC> visitors, Dictionary<string, string> animationDescriptions)
     {
-        NPC? musician = visitors.Find((NPC npc) => npc.Name.Equals("Sam") && animationDescriptions.ContainsKey("sam_beach_towel"));
+        NPC? musician = null;
+        if (animationDescriptions.ContainsKey("sam_beach_towel"))
+        {
+            musician = visitors.Find((NPC npc) => npc.Name.Equals("Sam", StringComparison.OrdinalIgnoreCase));
+        }
         if (musician is null || random.NextDouble() < 0.25)
         {
             HashSet<NPC> musicians = AssetManager.GetSpecialCharacter(SpecialCharacterType.Musician);
-            musician = visitors.Find((NPC npc) => musicians.Contains(npc) && animationDescriptions.ContainsKey($"{npc.Name.ToLowerInvariant()}_beach_towel"));
+            musician = visitors.Find((NPC npc) => musicians.Contains(npc) && animationDescriptions.ContainsKey($"{npc.Name.ToLowerInvariant()}_beach_towel")) ?? musician;
         }
         if (musician is not null && !musician.Name.Equals("Gus", StringComparison.OrdinalIgnoreCase))
         {
             musician.currentScheduleDelay = 0f;
-            return musician;
+#if DEBUG
+            Globals.ModMonitor.Log($"Found musician {musician.Name}", LogLevel.Debug);
+#endif
         }
-        return null;
+        return musician;
     }
 
     /// <summary>
@@ -280,7 +286,7 @@ internal static class GIScheduler
 
         foreach (GingerIslandTimeSlot activity in activities)
         {
-            activity.AssignActivities(lastactivity, animationDescriptions);
+            lastactivity = activity.AssignActivities(lastactivity, animationDescriptions);
         }
 
         return activities;

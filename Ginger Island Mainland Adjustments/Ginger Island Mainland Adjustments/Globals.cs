@@ -51,7 +51,7 @@ internal static class Globals
 #pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
 
     /// <summary>
-    /// Initialize globals.
+    /// Initialize globals, including reading config file.
     /// </summary>
     /// <param name="helper">SMAPI's IModHelper.</param>
     /// <param name="monitor">SMAPI's logging service.</param>

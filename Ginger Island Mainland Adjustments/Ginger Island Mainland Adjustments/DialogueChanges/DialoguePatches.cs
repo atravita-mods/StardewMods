@@ -59,13 +59,12 @@ internal class DialoguePatches
                 return;
             }
 
-            if (GIScheduler.CurrentVisitingGroup?.Contains(__instance) == true)
+            if (GIScheduler.CurrentVisitingGroup?.Contains(__instance) == true
+                && GIScheduler.CurrentGroup is not null
+                && DialogueUtilities.TryGetIslandDialogue(__instance, $"{baseKey}_{GIScheduler.CurrentGroup}", __0))
             {
-                if (GIScheduler.CurrentGroup is not null && DialogueUtilities.TryGetIslandDialogue(__instance, $"{baseKey}_{GIScheduler.CurrentGroup}", __0))
-                {
-                    __result = true;
-                    return;
-                }
+                __result = true;
+                return;
             }
 
             Farmer spouse = __instance.getSpouse();

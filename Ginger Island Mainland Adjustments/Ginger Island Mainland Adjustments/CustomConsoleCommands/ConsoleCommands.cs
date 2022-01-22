@@ -19,7 +19,7 @@ internal static class ConsoleCommands
     /// Register the console commands for this mod.
     /// </summary>
     /// <param name="commandHelper">SMAPI's console command helper.</param>
-    public static void Register(ICommandHelper commandHelper)
+    internal static void Register(ICommandHelper commandHelper)
     {
         commandHelper.Add(
             name: PrePendCommand + "get_schedule",

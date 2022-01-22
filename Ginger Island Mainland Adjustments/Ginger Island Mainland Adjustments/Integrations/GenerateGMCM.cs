@@ -9,13 +9,13 @@ internal static class GenerateGMCM
     /// Minimum version of GMCM to look for.
     /// </summary>
     /// <remarks>Integration will be disabled for lower version numbers.</remarks>
-    public const string MINVERSION = "1.8.0";
+    private const string MINVERSION = "1.8.0";
 
     /// <summary>
     /// Generates the GMCM for this mod.
     /// </summary>
     /// <param name="manifest">The mod's manifest.</param>
-    public static void Build(IManifest manifest)
+    internal static void Build(IManifest manifest)
     {
         IModInfo gmcm = Globals.ModRegistry.Get("spacechase0.GenericModConfigMenu");
         if (gmcm is null)

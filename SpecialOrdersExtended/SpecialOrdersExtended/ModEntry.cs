@@ -20,6 +20,11 @@ internal class ModEntry : Mod
     /// SMAPI's data writer.
     /// </summary>
     private static IDataHelper dataHelper;
+
+    /// <summary>
+    /// Configuration instance for this mod.
+    /// </summary>
+    private static ModConfig config;
 #pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
 
     /// <summary>
@@ -32,12 +37,27 @@ internal class ModEntry : Mod
     /// </summary>
     internal static IDataHelper DataHelper => dataHelper;
 
+    /// <summary>
+    /// Gets the config class for this mod.
+    /// </summary>
+    internal static ModConfig Config => config;
+
     /// <inheritdoc/>
     public override void Entry(IModHelper helper)
     {
         I18n.Init(helper.Translation);
         modMonitor = this.Monitor;
         dataHelper = helper.Data;
+
+        try
+        {
+            config = this.Helper.ReadConfig<ModConfig>();
+        }
+        catch
+        {
+            this.Monitor.Log(I18n.IllFormatedConfig(), LogLevel.Warn);
+            config = new();
+        }
 
         Harmony harmony = new(this.ModManifest.UniqueID);
 

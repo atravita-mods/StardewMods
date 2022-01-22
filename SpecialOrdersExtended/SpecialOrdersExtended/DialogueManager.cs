@@ -187,7 +187,7 @@ internal class DialogueManager
     /// <param name="__result">Result from the original function.</param>
     /// <param name="__instance">NPC in question.</param>
     /// <param name="__0">NPC heart level.</param>
-    /// <param name="__1">Whether or not to append the current season.</param>
+    /// <param name="__1">NoPreface in vanilla code - to preface with season or not.</param>
     /// <exception cref="UnexpectedEnumValueException{SpecialOrder.QuestState}">Recieved unexpected enum value.</exception>
     [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Convention used by Harmony")]
     public static void PostfixCheckDialogue(ref bool __result, ref NPC __instance, int __0, bool __1)

@@ -1,4 +1,5 @@
 ﻿using System.Reflection;
+using System.Text;
 
 namespace SpecialOrdersExtended;
 
@@ -7,29 +8,37 @@ namespace SpecialOrdersExtended;
 /// Caches the available stats at first use, but clears at the end of each day.
 /// </summary>
 /// <remarks>Clearing the cache should only be handled by one player in splitscreen.</remarks>
-internal class StatsManager
+internal static class StatsManager
 {
     // Remove these stats, they make no sense.
-    private readonly string[] denylist = { "AverageBedtime", "TimesUnconscious", "TotalMoneyGifted" };
-
-    private Dictionary<string, Func<Stats, uint>> propertyGetters = new();
+    private static readonly string[] DENYLIST = { "AverageBedtime", "TimesUnconscious", "TotalMoneyGifted" };
 
     /// <summary>
-    /// Populate the propertyInfos cache.
+    /// Internal dictionary to store the getters on the Stats dictionary.
     /// </summary>
-    public void GrabProperties()
+    /// <remarks>Use the getter, that will autopopulate the cache if empty.</remarks>
+    private static Dictionary<string, Func<Stats, uint>> propertyGetters = new();
+
+    /// <summary>
+    /// Gets the propertyGetters dictionary.
+    /// </summary>
+    /// <remarks>Grabs properties if needed (if the dictionary is empty)</remarks>
+    public static Dictionary<string, Func<Stats, uint>> PropertyGetters
     {
-#pragma warning disable CS8604 // Possible null reference argument.  - Not actually possible, the Where should filter out any that don't have a Get.
-        this.propertyGetters = typeof(Stats).GetProperties()
-            .Where((PropertyInfo p) => p.CanRead && p.PropertyType.Equals(typeof(uint)) && !this.denylist.Contains(p.Name))
-            .ToDictionary((PropertyInfo p) => p.Name.ToLowerInvariant(), p => (Func<Stats, uint>)Delegate.CreateDelegate(typeof(Func<Stats, uint>), p.GetGetMethod()));
-#pragma warning restore CS8604 // Possible null reference argument.
+        get
+        {
+            if (propertyGetters.Count.Equals(0))
+            {
+                GrabProperties();
+            }
+            return propertyGetters;
+        }
     }
 
     /// <summary>
     /// Clears the list of possible stats.
     /// </summary>
-    public void ClearProperties() => this.propertyGetters.Clear();
+    public static void ClearProperties() => propertyGetters.Clear();
 
     /// <summary>
     /// Get the value of the stat in the specific stat object.
@@ -39,15 +48,11 @@ internal class StatsManager
     /// <param name="key">The key of the stat to search for.</param>
     /// <param name="stats">The stats to look through (which farmer do I want?).</param>
     /// <returns>Value of the stat.</returns>
-    public uint GrabBasicProperty(string key, Stats stats)
+    public static uint GrabBasicProperty(string key, Stats stats)
     {
-        if (this.propertyGetters.Count.Equals(0))
-        {
-            this.GrabProperties();
-        }
         try
         {
-            if (this.propertyGetters.TryGetValue(key.ToLowerInvariant(), out Func<Stats, uint>? property))
+            if (PropertyGetters.TryGetValue(key.ToLowerInvariant(), out Func<Stats, uint>? property))
             {
                 return property(stats);
             }
@@ -71,12 +76,24 @@ internal class StatsManager
     /// <param name="command">The name of the command.</param>
     /// <param name="args">Any arguments (none for this command).</param>
     [SuppressMessage("ReSharper", "IDE0060", Justification = "Format expected by console commands")]
-    public void ConsoleListProperties(string command, string[] args)
+    public static void ConsoleListProperties(string command, string[] args)
     {
-        if (this.propertyGetters.Count.Equals(0))
-        {
-            this.GrabProperties();
-        }
-        ModEntry.ModMonitor.Log($"{I18n.CurrentKeysFound()}: \n    {I18n.Hardcoded()}:{string.Join(", ", Utilities.ContextSort(this.propertyGetters.Keys))}\n    {I18n.Dictionary()}:{string.Join(", ", Utilities.ContextSort(Game1.player.stats.stat_dictionary.Keys))}", LogLevel.Info);
+        StringBuilder sb = new();
+        sb.AppendLine(I18n.CurrentKeysFound());
+        sb.Append('\t').Append(I18n.Hardcoded()).AppendJoin(", ", Utilities.ContextSort(PropertyGetters.Keys)).AppendLine();
+        sb.Append('\t').Append(I18n.Dictionary()).AppendJoin(", ", Utilities.ContextSort(Game1.player.stats.stat_dictionary.Keys));
+        ModEntry.ModMonitor.Log(sb.ToString(), LogLevel.Info);
+    }
+
+    /// <summary>
+    /// Populate the propertyInfos cache.
+    /// </summary>
+    private static void GrabProperties()
+    {
+#pragma warning disable CS8604 // Possible null reference argument.  - Not actually possible, the Where should filter out any that don't have a Get.
+        propertyGetters = typeof(Stats).GetProperties()
+            .Where((PropertyInfo p) => p.CanRead && p.PropertyType.Equals(typeof(uint)) && !DENYLIST.Contains(p.Name))
+            .ToDictionary((PropertyInfo p) => p.Name.ToLowerInvariant(), p => (Func<Stats, uint>)Delegate.CreateDelegate(typeof(Func<Stats, uint>), p.GetGetMethod()));
+#pragma warning restore CS8604 // Possible null reference argument.
     }
 }

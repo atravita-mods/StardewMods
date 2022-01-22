@@ -10,28 +10,34 @@ internal class ModEntry : Mod
 {
     // The following fields are set in the Entry method, which is about as close to the constructor as I can get
 #pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
-    /// <summary>
-    /// Holds methods to analyze the stats class/dictionary for the game.
-    /// </summary>
-    internal static readonly StatsManager StatsManager = new();
 
     /// <summary>
     /// Logger for SMAPI.
     /// </summary>
-    internal static IMonitor ModMonitor;
+    private static IMonitor modMonitor;
 
     /// <summary>
     /// SMAPI's data writer.
     /// </summary>
-    internal static IDataHelper DataHelper;
+    private static IDataHelper dataHelper;
 #pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
+
+    /// <summary>
+    /// Gets the logger for this mod.
+    /// </summary>
+    internal static IMonitor ModMonitor => modMonitor;
+
+    /// <summary>
+    /// Gets SMAPI's data helper for this mod.
+    /// </summary>
+    internal static IDataHelper DataHelper => dataHelper;
 
     /// <inheritdoc/>
     public override void Entry(IModHelper helper)
     {
         I18n.Init(helper.Translation);
-        ModMonitor = this.Monitor;
-        DataHelper = helper.Data;
+        modMonitor = this.Monitor;
+        dataHelper = helper.Data;
 
         Harmony harmony = new(this.ModManifest.UniqueID);
 

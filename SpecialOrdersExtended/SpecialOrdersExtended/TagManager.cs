@@ -227,11 +227,11 @@ internal class TagManager
                     // stats_statsname_X, stats_statsname_under_X
                     if (vals[2].Equals("under", StringComparison.OrdinalIgnoreCase))
                     {
-                        __result = uint.TryParse(vals[3], out uint stat) && Game1.getAllFarmers().Any((Farmer farmer) => ModEntry.StatsManager.GrabBasicProperty(vals[1], farmer.stats) < stat);
+                        __result = uint.TryParse(vals[3], out uint stat) && Game1.getAllFarmers().Any((Farmer farmer) => StatsManager.GrabBasicProperty(vals[1], farmer.stats) < stat);
                     }
                     else
                     {
-                        __result = uint.TryParse(vals[3], out uint stat) && Game1.getAllFarmers().Any((Farmer farmer) => ModEntry.StatsManager.GrabBasicProperty(vals[1], farmer.stats) >= stat);
+                        __result = uint.TryParse(vals[3], out uint stat) && Game1.getAllFarmers().Any((Farmer farmer) => StatsManager.GrabBasicProperty(vals[1], farmer.stats) >= stat);
                     }
                     return false;
                 case "walnutcount":

@@ -42,9 +42,9 @@
   "dialogue.no-key": "Did not find dialogue key for special order {{baseKey}} for NPC {{Name}}",
   "dialogue.error-in-patched-function": "Failed in checking for Special Order dialogue for NPC {{Name}}",
 
-  "current-keys-found": "Current Keys Found",
-  "hardcoded": "Hardcoded",
-  "dictionary": "In dictionary",
+  "current-keys-found": "Current Keys Found: ",
+  "hardcoded": "Hardcoded: ",
+  "dictionary": "In dictionary: ",
 
   "stat-not-found": "{{key}} not found in `stats.cs`. Is it provided by a mod that's not currently loaded?'",
   "stat-cache-fail": "Failure to use {{key}}, please take this log to {{atra}}."

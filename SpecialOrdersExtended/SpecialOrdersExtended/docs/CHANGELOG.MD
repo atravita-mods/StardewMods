@@ -3,6 +3,9 @@ Changelog
 
 1. Add condition to just randomly reduce the chance of a quest appearing. (May need integrate with that one mod that changes the day special orders appear?)
 2. Add condition for total number of quests (both Qi and otherwise completed.)
+3. Add dialogue condition for Recently Completed Order, for use with repeat orders....somehow.
+3. Add tag for professions (and handle prestige mods as well?)
+3. Alter `week_X` tag to handle extended months.
 
 ##### In consideration
 
@@ -13,7 +16,7 @@ Changelog
 #### Version 1.0.5
 
 * In theory: fixes splitscreen.
-* `Available` token now correctly returns no entries if the special orders board is not unliked. Also, adds `_IsAvailable` as a possible dialogue option.
+* `Available` token now correctly returns no entries if the special orders board is not unlocked. Also, adds `_IsAvailable` as a possible dialogue option.
 * Adds dialogue key `_RepeatOrder`, which is cleared seven days after the completion of the order.
 * Check heart levels for dialogue conditions above 14.
 * Added tags: `married`.

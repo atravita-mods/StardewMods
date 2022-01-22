@@ -1,4 +1,4 @@
-﻿namespace SpecialOrdersExtended.Tokens;
+﻿namespace SpecialOrdersExtended.Integrations;
 
 /// <summary>The Content Patcher API which other mods can access.</summary>
 public interface IContentPatcherAPI

@@ -6,6 +6,17 @@
 internal class TagManager
 {
     /// <summary>
+    /// A list of custom skills.
+    /// </summary>
+    private static string[]? customSkills;
+
+    /// <summary>
+    /// Gets the list of custom skills.
+    /// </summary>
+    /// <remarks>Null means uninitialized.</remarks>
+    internal static string[]? CustomSkills => customSkills;
+
+    /// <summary>
     /// Prefixes CheckTag to handle special mod tags.
     /// </summary>
     /// <param name="__result">the result for the original function.</param>
@@ -22,26 +33,19 @@ internal class TagManager
             {
                 case "year":
                     // year_X
-                    __result = Game1.year == int.Parse(__0["year_".Length..]);
+                    __result = int.TryParse(vals[1], out int yearval) && Game1.year == yearval;
                     return false;
                 case "atleastyear":
                     // atleastyear_X
-                    __result = Game1.year >= int.Parse(__0["atleastyear_".Length..]);
+                    __result = int.TryParse(vals[1], out int yearnum) && Game1.year >= yearnum;
                     return false;
                 case "yearunder":
                     // yearunder_X
-                    __result = Game1.year < int.Parse(__0["yearunder_".Length..]);
+                    __result = int.TryParse(vals[1], out int yearint) && Game1.year < yearint;
                     return false;
                 case "week":
                     // week_X
-                    __result = __0 switch
-                    {
-                        "week_1" => Game1.dayOfMonth is >= 1 and <= 7,
-                        "week_2" => Game1.dayOfMonth is >= 8 and <= 14,
-                        "week_3" => Game1.dayOfMonth is >= 15 and <= 21,
-                        "week_4" => Game1.dayOfMonth is >= 22 and <= 28,
-                        _ => false,
-                    };
+                    __result = int.TryParse(vals[1], out int weeknum) && (Game1.dayOfMonth - 1) / 7 == weeknum;
                     return false;
                 case "daysplayed":
                     // daysplayed_X, daysplayed_under_X
@@ -168,28 +172,48 @@ internal class TagManager
                             return false;
                         }
                     }
-                    __result = vals[1] switch
+                    bool? passedlevelcheck = vals[1] switch
                     {
                         "mining" => Game1.getAllFarmers().Any((Farmer farmer) => farmer.MiningLevel >= levelwanted),
                         "farming" => Game1.getAllFarmers().Any((Farmer farmer) => farmer.FarmingLevel >= levelwanted),
                         "fishing" => Game1.getAllFarmers().Any((Farmer farmer) => farmer.FishingLevel >= levelwanted),
                         "foraging" => Game1.getAllFarmers().Any((Farmer farmer) => farmer.ForagingLevel >= levelwanted),
                         "combat" => Game1.getAllFarmers().Any((Farmer farmer) => farmer.CombatLevel >= levelwanted),
-                        _ => false,
+                        _ => null,
                     };
+                    if (passedlevelcheck is null && ModEntry.SpaceCoreAPI is not null) {
+                        passedlevelcheck = Game1.getAllFarmers().Any((Farmer farmer) => ModEntry.SpaceCoreAPI.GetLevelForCustomSkill(farmer, vals[1]) >= levelwanted);
+                    }
+                    __result = passedlevelcheck == true;
                     if (negate)
                     {
                         __result = !__result;
                     }
                     return false;
+                case "profession":
+                    // profession_name_skill, profession_name_skill_not
+                    int? profession = GetProfession(vals[1], vals[2]);
+                    if (profession is not null)
+                    {
+                        __result = Game1.getAllFarmers().Any((Farmer farmer) => farmer.professions.Contains(profession.Value));
+                        if (vals.Length >= 4 && vals[3].Equals("not", StringComparison.OrdinalIgnoreCase))
+                        {
+                            __result = !__result;
+                        }
+                        return false;
+                    }
+                    __result = false;
+                    return false;
                 case "hasspecialitem":
                     // hasspecialitem_X, hasspecialitem_X_not
                     __result = vals[1] switch
                     {
+                        "bearsKnowledge" => Game1.getAllFarmers().Any((Farmer farmer) => farmer.eventsSeen.Contains(2120303)),
                         "clubCard" => Game1.getAllFarmers().Any((Farmer farmer) => farmer.hasClubCard),
-                        "specialCharm" => Game1.getAllFarmers().Any((Farmer farmer) => farmer.hasSpecialCharm),
-                        "skullKey" => Game1.getAllFarmers().Any((Farmer farmer) => farmer.hasSkullKey),
                         "rustyKey" => Game1.getAllFarmers().Any((Farmer farmer) => farmer.hasRustyKey),
+                        "skullKey" => Game1.getAllFarmers().Any((Farmer farmer) => farmer.hasSkullKey),
+                        "specialCharm" => Game1.getAllFarmers().Any((Farmer farmer) => farmer.hasSpecialCharm),
+                        "springOnion" => Game1.getAllFarmers().Any((Farmer farmer) => farmer.eventsSeen.Contains(3910979)),
                         "translationGuide" => Game1.getAllFarmers().Any((Farmer farmer) => farmer.canUnderstandDwarves),
                         "townKey" => Game1.getAllFarmers().Any((Farmer farmer) => farmer.HasTownKey),
                         _ => false,
@@ -255,5 +279,54 @@ internal class TagManager
             ModEntry.ModMonitor.Log($"Failed while checking tag {__0}\n{ex}", LogLevel.Error);
         }
         return true; // continue to base code.
+    }
+
+    /// <summary>
+    /// Returns the integer ID of a profession.
+    /// </summary>
+    /// <param name="profession">Profession name.</param>
+    /// <param name="skill">Skill name (leave null for vanilla skill).</param>
+    /// <returns>Integer profession, null for not found.</returns>
+    private static int? GetProfession(string profession, string? skill = null)
+    {
+        int? professionNumber = profession switch
+        {
+            "rancher" => 0,
+            "tiller" => 1,
+            "coopmaster" => 2,
+            "shepherd" => 3,
+            "artisan" => 4,
+            "agriculturist" => 5,
+            "fisher" => 6,
+            "trapper" => 7,
+            "angler" => 8,
+            "pirate" => 9,
+            "mariner" => 10,
+            "luremaster" => 11,
+            "forester" => 12,
+            "gatherer" => 13,
+            "lumberjack" => 14,
+            "tapper" => 15,
+            "botanist" => 16,
+            "tracker" => 17,
+            "miner" => 18,
+            "geologist" => 19,
+            "blacksmith" => 20,
+            "prospector" => 21,
+            "excavator" => 22,
+            "gemologist" => 23,
+            "fighter" => 24,
+            "scout" => 25,
+            "brute" => 26,
+            "defender" => 27,
+            "acrobat" => 28,
+            "desperado" => 29,
+            _ => null
+        };
+        if (professionNumber is null && skill is not null)
+        {
+            professionNumber = ModEntry.SpaceCoreAPI?.GetProfessionId(skill, profession);
+        }
+        return professionNumber;
     }
 }

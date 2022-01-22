@@ -28,7 +28,11 @@ internal class DialogueManager
     /// Load the PerScreened Dialogue log.
     /// </summary>
     /// <param name="multiplayerID">The player's unique ID.</param>
-    public static void Load(long multiplayerID) => InternalDialogueLog.Value = DialogueLog.Load(multiplayerID);
+    public static void Load(long multiplayerID)
+    {
+        ModEntry.ModMonitor.DebugLog($"Loading dialogue log for  {multiplayerID}");
+        InternalDialogueLog.Value = DialogueLog.Load(multiplayerID);
+    }
 
     /// <summary>
     /// Save a dialoguelog for a specific player.
@@ -274,7 +278,10 @@ internal class DialogueManager
             return false;
         }
         npc.CurrentDialogue.Push(new Dialogue(npc.Dialogue[dialogueKey], npc) { removeOnNextMove = true });
-        ModEntry.ModMonitor.DebugLog(I18n.Dialogue_FoundKey(dialogueKey), LogLevel.Trace);
+        if (ModEntry.Config.Verbose)
+        {
+            ModEntry.ModMonitor.Log(I18n.Dialogue_FoundKey(dialogueKey), LogLevel.Debug);
+        }
         return true;
     }
 

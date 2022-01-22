@@ -7,11 +7,22 @@ Changelog
 3. Add tag for professions (and handle prestige mods as well?)
 3. Alter `week_X` tag to handle extended months.
 
+#### Stardew 1.6 todo
+
+1. Register anything not included in Game State Queries as GSQ
+2. Push people towards GSQ
+
 ##### In consideration
 
 1. Somehow limit the kill objective to just monsters on a certain (few?) maps. (Perhaps a custom objective, perhaps a Special Rule).
 2. De-hardcode skill levels and consider a way to support mod skills?
 6. Implement a temporary saving mechanism for Save Anywhere (look into their API?)
+
+#### Version 1.0.6
+
+* Add verbosity config option. Intended mostly for mod authors.
+* `week_X` now handles extended months (in theory.)
+* Add `profession` tag. Makes `skilllevel` tag take into account Spacecore skills, if that's installed (in theory. Memo to self: test that).<!-- todo: document professions tag -->
 
 #### Version 1.0.5
 

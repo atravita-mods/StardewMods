@@ -1,6 +1,6 @@
 ﻿using System.Reflection;
 using HarmonyLib;
-
+using SpecialOrdersExtended.Integrations;
 using StardewValley.GameData;
 
 namespace SpecialOrdersExtended;
@@ -28,6 +28,12 @@ internal class ModEntry : Mod
 #pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
 
     /// <summary>
+    /// Spacecore API handle.
+    /// </summary>
+    /// <remarks>If null, means API not loaded.</remarks>
+    private static ISpaceCoreAPI? spaceCoreAPI;
+
+    /// <summary>
     /// Gets the logger for this mod.
     /// </summary>
     internal static IMonitor ModMonitor => modMonitor;
@@ -42,13 +48,21 @@ internal class ModEntry : Mod
     /// </summary>
     internal static ModConfig Config => config;
 
+    /// <summary>
+    /// Gets the Spacecore API instance.
+    /// </summary>
+    /// <remarks>If null, was not able to be loaded.</remarks>
+    internal static ISpaceCoreAPI? SpaceCoreAPI => spaceCoreAPI;
+
     /// <inheritdoc/>
     public override void Entry(IModHelper helper)
     {
+        // Bind useful SMAPI features.
         I18n.Init(helper.Translation);
         modMonitor = this.Monitor;
         dataHelper = helper.Data;
 
+        // Read config file.
         try
         {
             config = this.Helper.ReadConfig<ModConfig>();
@@ -57,6 +71,13 @@ internal class ModEntry : Mod
         {
             this.Monitor.Log(I18n.IllFormatedConfig(), LogLevel.Warn);
             config = new();
+        }
+
+        // Bind Spacecore API
+        IModInfo spacecore = this.Helper.ModRegistry.Get("spacechase0.SpaceCore");
+        if (spacecore is not null && spacecore.Manifest.Version.IsNewerThan("1.5.10"))
+        {
+            spaceCoreAPI = this.Helper.ModRegistry.GetApi<ISpaceCoreAPI>("spacechase0.SpaceCore");
         }
 
         Harmony harmony = new(this.ModManifest.UniqueID);
@@ -107,7 +128,7 @@ internal class ModEntry : Mod
 
     private void RegisterTokens(object? sender, StardewModdingAPI.Events.GameLaunchedEventArgs e)
     {
-        Tokens.IContentPatcherAPI? api = this.Helper.ModRegistry.GetApi<Tokens.IContentPatcherAPI>("Pathoschild.ContentPatcher");
+        IContentPatcherAPI? api = this.Helper.ModRegistry.GetApi<IContentPatcherAPI>("Pathoschild.ContentPatcher");
         if (api is null)
         {
             ModMonitor.Log(I18n.CpNotInstalled(), LogLevel.Warn);

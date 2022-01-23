@@ -21,6 +21,11 @@ public class ModEntry : Mod
     private readonly List<int> BASE_FRUIT = new() { 296, 396, 406, 410 };
 
     /// <summary>
+    /// A list of vanilla fruit.
+    /// </summary>
+    private readonly List<int> VANILLA_FRUIT = new() {613,634,635,636,637,638};
+
+    /// <summary>
     /// Item IDs for items produced by trees.
     /// </summary>
     private List<int> TreeFruit = new();
@@ -200,12 +205,12 @@ public class ModEntry : Mod
         {
             return;
         }
-        if (!this.config.EarlyFarmCave && (Game1.MasterPlayer.caveChoice?.Value is null || Game1.MasterPlayer.caveChoice.Value <= 0) && string.IsNullOrWhiteSpace(farmcavechoice))
+        if (!this.config.EarlyFarmCave && (Game1.MasterPlayer.caveChoice?.Value is null || Game1.MasterPlayer.caveChoice.Value <= Farmer.caveNothing) && string.IsNullOrWhiteSpace(farmcavechoice))
         {
             this.DebugLog("Demetrius cutscene not seen and config not set to early, skip spawning for today.");
             return;
         }
-        if (!this.config.IgnoreFarmCaveType && !this.config.EarlyFarmCave && (Game1.MasterPlayer.caveChoice?.Value is null || Game1.MasterPlayer.caveChoice.Value != 1) && !hasFCFbatcave)
+        if (!this.config.IgnoreFarmCaveType && !this.config.EarlyFarmCave && (Game1.MasterPlayer.caveChoice?.Value is null || Game1.MasterPlayer.caveChoice.Value != Farmer.caveBats) && !hasFCFbatcave)
         {
             this.DebugLog("Fruit bat cave not selected and config not set to ignore that, skip spawning for today.");
             return;
@@ -399,11 +404,16 @@ public class ModEntry : Mod
     /// Generate list of tree fruits valid for spawning, based on user config/denylist/data in Data/fruitTrees
     /// </summary>
     /// <returns></returns>
+    [Pure]
     private List<int> GetTreeFruits()
     {
 
-        List<string> denylist = this.GetData(this.assetManager.DENYLIST_LOCATION);
+        if (this.config.UseVanillaFruitOnly)
+        {
+            return this.VANILLA_FRUIT;
+        }
 
+        List<string> denylist = this.GetData(this.assetManager.DENYLIST_LOCATION);
         List<int> TreeFruits = new();
         Dictionary<int, string> fruittrees = this.Helper.Content.Load<Dictionary<int, string>>("Data/fruitTrees", ContentSource.GameContent);
         string currentseason = Game1.currentSeason.ToLowerInvariant().Trim();

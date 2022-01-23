@@ -9,6 +9,7 @@
 * Corrects `UseModCave` option (would previously always use the additional locations list.)
 * Use delegates
 * Add error checking for badly formatted config files, and clamps the possible values for the config files. Adds version checking for GMCM, and disables GMCM integration if the version is too old.
+* (Internal) Fixes tile shuffling logic.
 
 #### Version 1.0.7
 

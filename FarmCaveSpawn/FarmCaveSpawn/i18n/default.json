@@ -16,6 +16,8 @@
   "UseModCaves.description": "Allows fruits to spawn in caves added by mods (if registered with this mod.)\n\nSVE included by default.",
   "UseMineCave.title": "Use Mine Entrance",
   "UseMineCave.description": "Allows fruits to spawn in the mine entrance as well (after spawning in the Farm Cave, if Max Daily Spawns is not yet hit.",
+  "UseVanillaFruitOnly.title": "Use Vanilla Fruit Only",
+  "UseVanillaFruitOnly.description": "If true, will cause mod to only spawn the six vanilla tree fruit usually spawned in the fruit cave (and the four vanilla forage fruit).",
   "SeasonalOnly.title": "Seasonal Fruit Only",
   "SeasonalOnly.description": "Restrict to this season's fruit only",
   "AllowAnyTreeProduct.title": "Allow Any Tree Product",

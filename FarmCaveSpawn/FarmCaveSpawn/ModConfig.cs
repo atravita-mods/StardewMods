@@ -58,6 +58,8 @@ class ModConfig
     /// </summary>
     public bool UseMineCave { get; set; } = false;
 
+    public bool UseVanillaFruitOnly { get; set; } = false;
+
     /// <summary>
     /// Should I limit myself to just fruits in season?
     /// </summary>

@@ -6,17 +6,6 @@
 internal class TagManager
 {
     /// <summary>
-    /// A list of custom skills.
-    /// </summary>
-    private static string[]? customSkills;
-
-    /// <summary>
-    /// Gets the list of custom skills.
-    /// </summary>
-    /// <remarks>Null means uninitialized.</remarks>
-    internal static string[]? CustomSkills => customSkills;
-
-    /// <summary>
     /// Prefixes CheckTag to handle special mod tags.
     /// </summary>
     /// <param name="__result">the result for the original function.</param>
@@ -189,7 +178,7 @@ internal class TagManager
                     return false;
                 case "profession":
                     // profession_name_skill, profession_name_skill_not
-                    int? profession = GetProfession(vals[1], vals[2]);
+                    int? profession = GetProfession(vals[1], vals.Length >= 3 ? vals[2] : null);
                     if (profession is not null)
                     {
                         __result = Game1.getAllFarmers().Any((Farmer farmer) => farmer.professions.Contains(profession.Value));
@@ -322,7 +311,18 @@ internal class TagManager
         };
         if (professionNumber is null && skill is not null)
         {
-            professionNumber = ModEntry.SpaceCoreAPI?.GetProfessionId(skill, profession);
+            try
+            {
+                professionNumber = ModEntry.SpaceCoreAPI?.GetProfessionId(skill, profession);
+            }
+            catch (InvalidOperationException)
+            {
+                ModEntry.ModMonitor.Log(I18n.SkillNotFound(profession, skill), LogLevel.Debug);
+            }
+            catch (NullReferenceException)
+            {
+                ModEntry.ModMonitor.Log(I18n.SkillNotFound(profession, skill), LogLevel.Debug);
+            }
         }
         return professionNumber;
     }

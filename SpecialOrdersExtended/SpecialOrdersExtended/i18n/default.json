@@ -48,5 +48,7 @@
   "dictionary": "In dictionary: ",
 
   "stat-not-found": "{{key}} not found in `stats.cs`. Is it provided by a mod that's not currently loaded?'",
-  "stat-cache-fail": "Failure to use {{key}}, please take this log to {{atra}}."
+  "stat-cache-fail": "Failure to use {{key}}, please take this log to {{atra}}.",
+
+  "skill-not-found": "${{profession}} for {{skill}} not found; perhaps it's from a mod not installed?"
 }

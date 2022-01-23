@@ -172,19 +172,16 @@ internal class TagManager
                             return false;
                         }
                     }
-                    bool? passedlevelcheck = vals[1] switch
+                    __result = vals[1] switch
                     {
-                        "mining" => Game1.getAllFarmers().Any((Farmer farmer) => farmer.MiningLevel >= levelwanted),
-                        "farming" => Game1.getAllFarmers().Any((Farmer farmer) => farmer.FarmingLevel >= levelwanted),
-                        "fishing" => Game1.getAllFarmers().Any((Farmer farmer) => farmer.FishingLevel >= levelwanted),
-                        "foraging" => Game1.getAllFarmers().Any((Farmer farmer) => farmer.ForagingLevel >= levelwanted),
-                        "combat" => Game1.getAllFarmers().Any((Farmer farmer) => farmer.CombatLevel >= levelwanted),
-                        _ => null,
+                        "mining" => Game1.getAllFarmers().Any((Farmer farmer) => farmer.miningLevel.Value >= levelwanted),
+                        "farming" => Game1.getAllFarmers().Any((Farmer farmer) => farmer.farmingLevel.Value >= levelwanted),
+                        "fishing" => Game1.getAllFarmers().Any((Farmer farmer) => farmer.fishingLevel.Value >= levelwanted),
+                        "foraging" => Game1.getAllFarmers().Any((Farmer farmer) => farmer.foragingLevel.Value >= levelwanted),
+                        "combat" => Game1.getAllFarmers().Any((Farmer farmer) => farmer.combatLevel.Value >= levelwanted),
+                        "luck" => Game1.getAllFarmers().Any((Farmer farmer) => farmer.luckLevel.Value >= levelwanted),
+                        _ => ModEntry.SpaceCoreAPI is not null && Game1.getAllFarmers().Any((Farmer farmer) => ModEntry.SpaceCoreAPI.GetLevelForCustomSkill(farmer, vals[1]) >= levelwanted),
                     };
-                    if (passedlevelcheck is null && ModEntry.SpaceCoreAPI is not null) {
-                        passedlevelcheck = Game1.getAllFarmers().Any((Farmer farmer) => ModEntry.SpaceCoreAPI.GetLevelForCustomSkill(farmer, vals[1]) >= levelwanted);
-                    }
-                    __result = passedlevelcheck == true;
                     if (negate)
                     {
                         __result = !__result;

@@ -34,7 +34,7 @@ internal class TagManager
                     return false;
                 case "week":
                     // week_X
-                    __result = int.TryParse(vals[1], out int weeknum) && (Game1.dayOfMonth - 1) / 7 == weeknum;
+                    __result = int.TryParse(vals[1], out int weeknum) && (Game1.dayOfMonth + 6) / 7 == weeknum;
                     return false;
                 case "daysplayed":
                     // daysplayed_X, daysplayed_under_X

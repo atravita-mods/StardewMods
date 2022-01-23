@@ -248,7 +248,9 @@ internal class DialogueManager
             if (SpecialOrder.IsSpecialOrdersBoardUnlocked())
             {
                 // Handle available order dialogue
-                foreach (SpecialOrder specialOrder in Game1.player.team.availableSpecialOrders)
+                HashSet<SpecialOrder> availableOrders = Game1.player.team.availableSpecialOrders.ToHashSet();
+                availableOrders.ExceptWith(Game1.player.team.specialOrders);
+                foreach (SpecialOrder specialOrder in availableOrders)
                 {
                     __result = FindBestDialogue(specialOrder.questKey.Value + "_IsAvailable", __instance, __0);
                     if (__result)

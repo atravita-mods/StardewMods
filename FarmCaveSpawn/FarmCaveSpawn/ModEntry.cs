@@ -415,6 +415,10 @@ public class ModEntry : Mod
 
         List<string> denylist = this.GetData(this.assetManager.DENYLIST_LOCATION);
         List<int> TreeFruits = new();
+        if (this.config.UseVanillaFruitOnly)
+        {
+            return this.VANILLA_FRUIT;
+        }
         Dictionary<int, string> fruittrees = this.Helper.Content.Load<Dictionary<int, string>>("Data/fruitTrees", ContentSource.GameContent);
         string currentseason = Game1.currentSeason.ToLowerInvariant().Trim();
         foreach (string tree in fruittrees.Values)

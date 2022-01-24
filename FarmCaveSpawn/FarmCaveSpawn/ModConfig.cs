@@ -1,12 +1,14 @@
 ﻿namespace FarmCaveSpawn;
 
+#pragma warning disable SA1623 // Property summary documentation should match accessors
+#pragma warning disable SA1201 // Elements should appear in the correct order - fields are kept next to their accessors for this class.
 /// <summary>
 /// Configuration class for this mod.
 /// </summary>
-class ModConfig
+public class ModConfig
 {
-
     private int maxDailySpawns = 6;
+
     /// <summary>
     /// Maximum number of spawns per day.
     /// </summary>
@@ -17,8 +19,9 @@ class ModConfig
     }
 
     private float spawnChance = 3f;
+
     /// <summary>
-    /// Probability of any tile spawning an object, capped by max daily spawns
+    /// Probability of any tile spawning an object, capped by max daily spawns.
     /// </summary>
     public float SpawnChance
     {
@@ -27,6 +30,7 @@ class ModConfig
     }
 
     private float treeFruitChance = 20f;
+
     /// <summary>
     /// Probability of any particular spawn being a tree fruit item.
     /// </summary>
@@ -39,34 +43,37 @@ class ModConfig
     /// <summary>
     /// Should spawn in fruit after the Demetrius cutscene is seen, regardless of choice.
     /// </summary>
-    /// <remarks>Checks for caveChoice, but also FarmCaveFarmework</remarks>
+    /// <remarks>Checks for caveChoice, but also FarmCaveFarmework.</remarks>
     public bool IgnoreFarmCaveType { get; set; } = false;
 
     /// <summary>
     /// Should I allow fruit spawning even before Demeterius shows up.
     /// </summary>
-    /// <remarks>Checks for caveChoice, but also FarmCaveFramework</remarks>
+    /// <remarks>Checks for caveChoice, but also FarmCaveFramework.</remarks>
     public bool EarlyFarmCave { get; set; } = false;
-    
+
     /// <summary>
-    /// Should I check the additional locations list?
+    /// Should I check the additional locations list.
     /// </summary>
     public bool UseModCaves { get; set; } = true;
 
     /// <summary>
-    /// Should I use the mine cave entrance as well?
+    /// Should I use the mine cave entrance as well.
     /// </summary>
     public bool UseMineCave { get; set; } = false;
 
+    /// <summary>
+    /// Use only the six vanilla tree fruit + the four vanilla forage fruit.
+    /// </summary>
     public bool UseVanillaFruitOnly { get; set; } = false;
 
     /// <summary>
-    /// Should I limit myself to just fruits in season?
+    /// Should I limit myself to just fruits in season?.
     /// </summary>
     public bool SeasonalOnly { get; set; } = false;
 
     /// <summary>
-    /// Should I allow any fruit tree product, even if it's not categorized as fruit?
+    /// Should I allow any fruit tree product, even if it's not categorized as fruit.
     /// </summary>
     public bool AllowAnyTreeProduct { get; set; } = true;
 
@@ -82,7 +89,9 @@ class ModConfig
     public bool NoBananasBeforeShrine { get; set; } = true;
 
     /// <summary>
-    /// Caps the price of fruit you can get
+    /// Caps the price of fruit you can get.
     /// </summary>
     public int PriceCap { get; set; } = 200;
 }
+#pragma warning restore SA1623 // Property summary documentation should match accessors
+#pragma warning restore SA1201 // Elements should appear in the correct order

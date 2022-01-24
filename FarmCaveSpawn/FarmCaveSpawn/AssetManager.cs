@@ -2,10 +2,23 @@
 
 namespace FarmCaveSpawn;
 
+/// <summary>
+/// Handles the fake assets for this mod.
+/// </summary>
 internal class AssetManager : IAssetLoader
 {
+#pragma warning disable SA1401 // Fields should be private. This is intentional.
+
+    /// <summary>
+    /// Fake asset location for the denylist.
+    /// </summary>
     public readonly string DENYLIST_LOCATION = PathUtilities.NormalizeAssetName("Mods/atravita_FarmCaveSpawn_denylist");
+
+    /// <summary>
+    /// Fake asset location for more locations that can spawn in fruit.
+    /// </summary>
     public readonly string ADDITIONAL_LOCATIONS_LOCATION = PathUtilities.NormalizeAssetName("Mods/atravita_FarmCaveSpawn_additionalLocations");
+#pragma warning restore SA1401 // Fields should be private
 
     /// <inheritdoc/>
     public bool CanLoad<T>(IAssetInfo asset)
@@ -26,9 +39,9 @@ internal class AssetManager : IAssetLoader
         {
             return (T)(object)new Dictionary<string, string>
             {
-                ["FlashShifter.SVECode"] = "Custom_MinecartCave, Custom_DeepCave"
+                ["FlashShifter.SVECode"] = "Custom_MinecartCave, Custom_DeepCave",
 #if DEBUG // Regex's test!
-                , ["atravita.FarmCaveSpawn"] = "Town:[(4;5);(34;40)]"
+                ["atravita.FarmCaveSpawn"] = "Town:[(4;5);(34;40)]",
 #endif
             };
         }

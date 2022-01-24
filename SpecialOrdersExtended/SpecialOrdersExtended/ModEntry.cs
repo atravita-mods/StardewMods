@@ -72,14 +72,6 @@ internal class ModEntry : Mod
             this.Monitor.Log(I18n.IllFormatedConfig(), LogLevel.Warn);
             config = new();
         }
-
-        // Bind Spacecore API
-        IModInfo spacecore = this.Helper.ModRegistry.Get("spacechase0.SpaceCore");
-        if (spacecore is not null && spacecore.Manifest.Version.IsNewerThan("1.5.10"))
-        {
-            spaceCoreAPI = this.Helper.ModRegistry.GetApi<ISpaceCoreAPI>("spacechase0.SpaceCore");
-        }
-
         Harmony harmony = new(this.ModManifest.UniqueID);
 
         harmony.Patch(
@@ -115,7 +107,7 @@ internal class ModEntry : Mod
             name: "special_orders_dialogue",
             documentation: $"{I18n.SpecialOrdersDialogue_Description()}\n\n{I18n.SpecialOrdersDialogue_Example()}\n    {I18n.SpecialOrdersDialogue_Usage()}",
             callback: DialogueManager.ConsoleSpecialOrderDialogue);
-        helper.Events.GameLoop.GameLaunched += this.RegisterTokens;
+        helper.Events.GameLoop.GameLaunched += this.OnGameLaunched;
         helper.Events.GameLoop.SaveLoaded += this.SaveLoaded;
         helper.Events.GameLoop.Saving += this.Saving;
         helper.Events.GameLoop.OneSecondUpdateTicking += this.OneSecondUpdateTicking;
@@ -126,8 +118,15 @@ internal class ModEntry : Mod
         RecentSOManager.GrabNewRecentlyCompletedOrders();
     }
 
-    private void RegisterTokens(object? sender, StardewModdingAPI.Events.GameLaunchedEventArgs e)
+    private void OnGameLaunched(object? sender, StardewModdingAPI.Events.GameLaunchedEventArgs e)
     {
+        // Bind Spacecore API
+        IModInfo spacecore = this.Helper.ModRegistry.Get("spacechase0.SpaceCore");
+        if (spacecore is not null && spacecore.Manifest.Version.IsNewerThan("1.5.10"))
+        {
+            spaceCoreAPI = this.Helper.ModRegistry.GetApi<ISpaceCoreAPI>("spacechase0.SpaceCore");
+        }
+
         IContentPatcherAPI? api = this.Helper.ModRegistry.GetApi<IContentPatcherAPI>("Pathoschild.ContentPatcher");
         if (api is null)
         {

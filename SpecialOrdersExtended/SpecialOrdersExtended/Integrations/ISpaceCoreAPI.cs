@@ -3,7 +3,7 @@
 /// <summary>
 /// API to interface with Spacecore's custom skills.
 /// </summary>
-internal interface ISpaceCoreAPI
+public interface ISpaceCoreAPI
 {
     /// <summary>
     /// Gets a list of custom skills.

@@ -30,7 +30,7 @@ internal class DialogueManager
     /// <param name="multiplayerID">The player's unique ID.</param>
     public static void Load(long multiplayerID)
     {
-        ModEntry.ModMonitor.DebugLog($"Loading dialogue log for  {multiplayerID}");
+        ModEntry.ModMonitor.DebugLog($"Loading dialogue log for {multiplayerID:X8}");
         InternalDialogueLog.Value = DialogueLog.Load(multiplayerID);
     }
 
@@ -57,6 +57,15 @@ internal class DialogueManager
         if (!Context.IsWorldReady)
         {
             ModEntry.ModMonitor.Log(I18n.LoadSaveFirst(), LogLevel.Warn);
+            return;
+        }
+        if (args[0].Equals("save", StringComparison.OrdinalIgnoreCase))
+        {
+            foreach ((int _, DialogueLog log) in InternalDialogueLog.GetActiveValues())
+            {
+                log.Save();
+            }
+            return;
         }
         if (args.Length < 3)
         {
@@ -198,8 +207,9 @@ internal class DialogueManager
     {
         try
         {
+            // have already found a New Current Dialogue
             if (__result)
-            { // have already found a New Current Dialogue
+            {
                 return;
             }
 
@@ -232,7 +242,7 @@ internal class DialogueManager
             }
 
             // Handle dialogue for recently completed special orders.
-            List<string>? cacheOrders = RecentSOManager.GetKeys(1u)?.ToList();
+            IEnumerable<string>? cacheOrders = RecentSOManager.GetKeys(1u);
             if (cacheOrders is not null)
             {
                 foreach (string cacheOrder in cacheOrders)
@@ -245,17 +255,19 @@ internal class DialogueManager
                 }
             }
 
+            // Handle available order dialogue.
             if (SpecialOrder.IsSpecialOrdersBoardUnlocked())
             {
-                // Handle available order dialogue
-                HashSet<SpecialOrder> availableOrders = Game1.player.team.availableSpecialOrders.ToHashSet();
-                availableOrders.ExceptWith(Game1.player.team.specialOrders);
-                foreach (SpecialOrder specialOrder in availableOrders)
+                HashSet<string> currentOrders = Game1.player.team.specialOrders.Select((SpecialOrder s) => s.questKey.Value).ToHashSet();
+                foreach (SpecialOrder specialOrder in Game1.player.team.availableSpecialOrders)
                 {
-                    __result = FindBestDialogue(specialOrder.questKey.Value + "_IsAvailable", __instance, __0);
-                    if (__result)
+                    if (!currentOrders.Contains(specialOrder.questKey.Value))
                     {
-                        return;
+                        __result = FindBestDialogue(specialOrder.questKey.Value + "_IsAvailable", __instance, __0);
+                        if (__result)
+                        {
+                            return;
+                        }
                     }
                 }
             }

@@ -105,7 +105,7 @@ internal class ModEntry : Mod
             callback: StatsManager.ConsoleListProperties);
         helper.ConsoleCommands.Add(
             name: "special_orders_dialogue",
-            documentation: $"{I18n.SpecialOrdersDialogue_Description()}\n\n{I18n.SpecialOrdersDialogue_Example()}\n    {I18n.SpecialOrdersDialogue_Usage()}",
+            documentation: $"{I18n.SpecialOrdersDialogue_Description()}\n\n{I18n.SpecialOrdersDialogue_Example()}\n    {I18n.SpecialOrdersDialogue_Usage()}\n    {I18n.SpecialOrdersDialogue_Save()}",
             callback: DialogueManager.ConsoleSpecialOrderDialogue);
         helper.Events.GameLoop.GameLaunched += this.OnGameLaunched;
         helper.Events.GameLoop.SaveLoaded += this.SaveLoaded;

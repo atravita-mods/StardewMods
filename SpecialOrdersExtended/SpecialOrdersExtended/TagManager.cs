@@ -14,7 +14,9 @@ internal class TagManager
     [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Naming convention for Harmony")]
     public static bool PrefixCheckTag(ref bool __result, string __0)
     {
-        ModEntry.ModMonitor.DebugLog($"Checking tag {__0}");
+#if DEBUG
+        ModEntry.ModMonitor.Log($"Checking tag {__0}", LogLevel.Trace);
+#endif
         try
         {
             string[] vals = __0.Split('_');
@@ -178,17 +180,16 @@ internal class TagManager
                     return false;
                 case "profession":
                     // profession_name_skill, profession_name_skill_not
+                    __result = false;
                     int? profession = GetProfession(vals[1], vals.Length >= 3 ? vals[2] : null);
                     if (profession is not null)
                     {
                         __result = Game1.getAllFarmers().Any((Farmer farmer) => farmer.professions.Contains(profession.Value));
-                        if (vals.Length >= 4 && vals[3].Equals("not", StringComparison.OrdinalIgnoreCase))
-                        {
-                            __result = !__result;
-                        }
-                        return false;
                     }
-                    __result = false;
+                    if (vals.Length >= 4 && vals[3].Equals("not", StringComparison.OrdinalIgnoreCase))
+                    {
+                        __result = !__result;
+                    }
                     return false;
                 case "hasspecialitem":
                     // hasspecialitem_X, hasspecialitem_X_not

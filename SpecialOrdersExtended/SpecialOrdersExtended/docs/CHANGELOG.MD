@@ -22,8 +22,9 @@ Changelog
 
 * Add verbosity config option. Intended mostly for mod authors.
 * `week_X` now handles extended months (in theory.)
-* Add `profession` tag. Makes `skilllevel` tag take into account Spacecore skills, if that's installed (in theory. Memo to self: test that).<!-- todo: document professions tag -->
+* Add `profession` tag. Makes `skilllevel` tag take into account Spacecore skills, if that's installed (in theory. Memo to self: test that).
 * For the `_IsAvailable` dialogue series, remove from possible pool if quest is already accepted.
+* Fixes splitscreen, but for real this time.
 
 #### Version 1.0.5
 

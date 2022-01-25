@@ -8,7 +8,7 @@ namespace SpecialOrdersExtended.DataModels;
 internal class DialogueLog : AbstractDataModel
 {
     private const string IDENTIFIER = "_dialogue";
-    private readonly long multiplayerID;
+    private long multiplayerID;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="DialogueLog"/> class.
@@ -35,8 +35,10 @@ internal class DialogueLog : AbstractDataModel
         {
             throw new SaveNotLoadedError();
         }
-        return ModEntry.DataHelper.ReadGlobalData<DialogueLog>($"{Constants.SaveFolderName}{IDENTIFIER}{multiplayerID}")
+        DialogueLog log = ModEntry.DataHelper.ReadGlobalData<DialogueLog>($"{Constants.SaveFolderName}{IDENTIFIER}{multiplayerID:X8}")
             ?? new DialogueLog(Constants.SaveFolderName, multiplayerID);
+        log.multiplayerID = multiplayerID;
+        return log;
     }
 
     /// <summary>
@@ -51,12 +53,12 @@ internal class DialogueLog : AbstractDataModel
         throw new NotImplementedException();
     }
 
-    public void SaveTemp() => base.SaveTemp(IDENTIFIER + this.multiplayerID.ToString());
+    public void SaveTemp() => base.SaveTemp(IDENTIFIER + this.multiplayerID.ToString("X8"));
 
     /// <summary>
     /// Saves the DialogueLog.
     /// </summary>
-    public void Save() => base.Save(IDENTIFIER + this.multiplayerID.ToString());
+    public void Save() => base.Save(IDENTIFIER + this.multiplayerID.ToString("X8"));
 
     /// <summary>
     /// Whether or not the dialogueLog contains the key.

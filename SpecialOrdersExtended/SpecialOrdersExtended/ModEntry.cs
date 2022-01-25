@@ -152,6 +152,7 @@ internal class ModEntry : Mod
             return;
         }
 
+        TagManager.ResetRandom();
         StatsManager.ClearProperties(); // clear property cache, repopulate at next use
         RecentSOManager.GrabNewRecentlyCompletedOrders();
         RecentSOManager.DayUpdate(Game1.stats.daysPlayed);

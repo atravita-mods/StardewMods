@@ -2,10 +2,7 @@ Changelog
 #### Todo
 
 1. Add condition to just randomly reduce the chance of a quest appearing. (May need integrate with that one mod that changes the day special orders appear?)
-2. Add condition for total number of quests (both Qi and otherwise completed.)
-3. Add dialogue condition for Recently Completed Order, for use with repeat orders....somehow.
-3. Add tag for professions (and handle prestige mods as well?)
-3. Alter `week_X` tag to handle extended months.
+2. Add condition for total number of quests completed, per board.
 
 #### Stardew 1.6 todo
 
@@ -15,7 +12,6 @@ Changelog
 ##### In consideration
 
 1. Somehow limit the kill objective to just monsters on a certain (few?) maps. (Perhaps a custom objective, perhaps a Special Rule).
-2. De-hardcode skill levels and consider a way to support mod skills?
 6. Implement a temporary saving mechanism for Save Anywhere (look into their API?)
 
 #### Version 1.0.6
@@ -25,6 +21,8 @@ Changelog
 * Add `profession` tag. Makes `skilllevel` tag take into account Spacecore skills, if that's installed (in theory. Memo to self: test that).
 * For the `_IsAvailable` dialogue series, remove from possible pool if quest is already accepted.
 * Fixes splitscreen, but for real this time.
+* Adds condition for total number of Special Orders completed.
+* Adds a `random` tag.
 
 #### Version 1.0.5
 

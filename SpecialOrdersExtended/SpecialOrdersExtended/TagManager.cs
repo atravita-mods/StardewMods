@@ -5,6 +5,31 @@
 /// </summary>
 internal class TagManager
 {
+
+    private static Random? random;
+
+    /// <summary>
+    /// Gets a seeded random that changes once per in-game week.
+    /// </summary>
+    internal static Random Random
+    {
+        get {
+            if (random is null)
+            {
+                random = new Random(((int)Game1.uniqueIDForThisGame * 26) + (int)(Game1.stats.DaysPlayed / 7 * 36));
+            }
+            return random;
+        }
+    }
+
+    /// <summary>
+    /// Delete's the random so it can be reset later.
+    /// </summary>
+    public static void ResetRandom()
+    {
+        random = null;
+    }
+
     /// <summary>
     /// Prefixes CheckTag to handle special mod tags.
     /// </summary>
@@ -256,6 +281,20 @@ internal class TagManager
                         __result = int.TryParse(vals[1], out int walnutcount) && Game1.netWorldState.Value.GoldenWalnutsFound.Value >= walnutcount;
                     }
                     return false;
+                case "specialorderscompleted":
+                    // specialorderscompleted_X, specialorderscompleted_under_X
+                    if (vals[1].Equals("under", StringComparison.OrdinalIgnoreCase))
+                    {
+                        __result = int.TryParse(vals[2], out int required) && Game1.player.team.completedSpecialOrders.Count() < required;
+                    }
+                    else
+                    {
+                        __result = int.TryParse(vals[1], out int required) && Game1.player.team.completedSpecialOrders.Count() >= required;
+                    }
+                    return false;
+                case "random":
+                    // random_x
+                    return float.TryParse(vals[1], out float result) && Random.NextDouble() < result; // not convinced on this implementation. Should I save values instead?
                 default:
                     // Not a tag I recognize, return true.
                     return true;

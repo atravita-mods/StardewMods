@@ -4,10 +4,53 @@ using StardewModdingAPI.Utilities;
 namespace SpecialOrdersExtended;
 
 /// <summary>
+/// A dialogue to delay.
+/// </summary>
+internal struct DelayedDialogue
+{
+    private readonly int time;
+    private readonly Dialogue dialogue;
+    private readonly NPC npc;
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="DelayedDialogue"/> struct.
+    /// </summary>
+    /// <param name="time">Time to delay to.</param>
+    /// <param name="dialogue">Dialogue to delay.</param>
+    /// <param name="npc">Speaking NPC.</param>
+    public DelayedDialogue(int time, Dialogue dialogue, NPC npc)
+    {
+        this.time = time;
+        this.dialogue = dialogue;
+        this.npc = npc;
+    }
+
+    /// <summary>
+    /// Pushes the delayed dialogue onto the NPC's stack if it's past time to do so..
+    /// </summary>
+    /// <param name="currenttime">The current in-game time.</param>
+    /// <returns>True if pushed, false otherwise.</returns>
+    public bool PushIfPastTime(int currenttime)
+    {
+        if (currenttime > this.time)
+        {
+            this.npc.CurrentDialogue.Push(this.dialogue);
+            return true;
+        }
+        return false;
+    }
+}
+
+/// <summary>
 /// Static. Handles logic, patches, and console commands related to the special order dialogues.
 /// </summary>
 internal class DialogueManager
 {
+    /// <summary>
+    /// A queue of delayed dialogues.
+    /// </summary>
+    private static readonly PerScreen<Queue<DelayedDialogue>> DelayedDialogues = new(createNewState: () => new Queue<DelayedDialogue>());
+
     /// <summary>
     /// Backing field for PerScreened Dialogue Logs.
     /// </summary>
@@ -303,6 +346,29 @@ internal class DialogueManager
     }
 
     /// <summary>
+    /// Clears the Delayed Dialogue queue. Call at end of day.
+    /// </summary>
+    public static void ClearDelayedDialogue() => DelayedDialogues.Value.Clear();
+
+    /// <summary>
+    /// Push any available dialogues to the NPC's dialogue stacks.
+    /// </summary>
+    public static void PushPossibleDelayedDialogues()
+    {
+        while (DelayedDialogues.Value.TryPeek(out DelayedDialogue result))
+        {
+            if (result.PushIfPastTime(Game1.timeOfDay))
+            {
+                _ = DelayedDialogues.Value.Dequeue();
+            }
+            else
+            {
+                return;
+            }
+        }
+    }
+
+    /// <summary>
     /// Checks to see if a dialoguekey has been said already, and if not said, pushes the dialogue
     /// onto the dialogue stack.
     /// </summary>
@@ -314,6 +380,13 @@ internal class DialogueManager
         if (!TryAddSeenDialogue(dialogueKey, npc.Name))
         {// I have already said this dialogue
             return false;
+        }
+        while (npc.CurrentDialogue.TryPop(out Dialogue? result))
+        {
+            DelayedDialogues.Value.Enqueue(new DelayedDialogue(
+                time: Game1.timeOfDay + 100,
+                npc: npc,
+                dialogue: result));
         }
         npc.CurrentDialogue.Push(new Dialogue(npc.Dialogue[dialogueKey], npc) { removeOnNextMove = true });
         if (ModEntry.Config.Verbose)

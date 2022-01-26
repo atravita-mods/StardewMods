@@ -1,6 +1,7 @@
 ﻿using System.Reflection;
 using HarmonyLib;
 using SpecialOrdersExtended.Integrations;
+using StardewModdingAPI.Events;
 using StardewValley.GameData;
 
 namespace SpecialOrdersExtended;
@@ -110,15 +111,21 @@ internal class ModEntry : Mod
         helper.Events.GameLoop.GameLaunched += this.OnGameLaunched;
         helper.Events.GameLoop.SaveLoaded += this.SaveLoaded;
         helper.Events.GameLoop.Saving += this.Saving;
+        helper.Events.GameLoop.TimeChanged += this.OnTimeChanged;
         helper.Events.GameLoop.OneSecondUpdateTicking += this.OneSecondUpdateTicking;
     }
 
-    private void OneSecondUpdateTicking(object? sender, StardewModdingAPI.Events.OneSecondUpdateTickingEventArgs e)
+    private void OnTimeChanged(object? sender, TimeChangedEventArgs e)
+    {
+        DialogueManager.PushPossibleDelayedDialogues();
+    }
+
+    private void OneSecondUpdateTicking(object? sender, OneSecondUpdateTickingEventArgs e)
     {
         RecentSOManager.GrabNewRecentlyCompletedOrders();
     }
 
-    private void OnGameLaunched(object? sender, StardewModdingAPI.Events.GameLaunchedEventArgs e)
+    private void OnGameLaunched(object? sender, GameLaunchedEventArgs e)
     {
         // Bind Spacecore API
         IModInfo spacecore = this.Helper.ModRegistry.Get("spacechase0.SpaceCore");
@@ -141,11 +148,12 @@ internal class ModEntry : Mod
         api.RegisterToken(this.ModManifest, "RecentCompleted", new Tokens.RecentCompletedSO());
     }
 
-    private void Saving(object? sender, StardewModdingAPI.Events.SavingEventArgs e)
+    private void Saving(object? sender, SavingEventArgs e)
     {
         this.Monitor.DebugLog("Event Saving raised");
 
         DialogueManager.Save(); // Save dialogue
+        DialogueManager.ClearDelayedDialogue();
 
         if (Context.IsSplitScreen && Context.ScreenId != 0)
         {// Some properties only make sense for a single player to handle in splitscreen.
@@ -159,7 +167,7 @@ internal class ModEntry : Mod
         RecentSOManager.Save();
     }
 
-    private void SaveLoaded(object? sender, StardewModdingAPI.Events.SaveLoadedEventArgs e)
+    private void SaveLoaded(object? sender, SaveLoadedEventArgs e)
     {
         this.Monitor.DebugLog("Event SaveLoaded raised");
         DialogueManager.Load(Game1.player.UniqueMultiplayerID);

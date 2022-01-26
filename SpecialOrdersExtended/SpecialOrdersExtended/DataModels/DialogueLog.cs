@@ -1,4 +1,5 @@
 ﻿using System.Text;
+using StardewModdingAPI.Utilities;
 
 namespace SpecialOrdersExtended.DataModels;
 
@@ -42,7 +43,7 @@ internal class DialogueLog : AbstractDataModel
     }
 
     /// <summary>
-    /// Load from temporary storage.
+    /// Load from temporary storage if available. Load the usual dialogue log if not.
     /// </summary>
     /// <param name="multiplayerID">Unique ID per player.</param>
     /// <returns>A dialogueLog object.</returns>
@@ -50,9 +51,29 @@ internal class DialogueLog : AbstractDataModel
     /// <remarks>NOT IMPLEMENTED YET.</remarks>
     public static DialogueLog LoadTempIfAvailable(long multiplayerID)
     {
-        throw new NotImplementedException();
+        if (!Context.IsWorldReady)
+        {
+            throw new SaveNotLoadedError();
+        }
+        DialogueLog log = ModEntry.DataHelper.ReadGlobalData<DialogueLog>($"{Constants.SaveFolderName}{IDENTIFIER}{multiplayerID:X8}_temp_{SDate.Now().DaysSinceStart}");
+        if (log is not null)
+        {
+            // Delete temporary file
+#pragma warning disable CS8625 // Cannot convert null literal to non-nullable reference type. This is a valid call, SMAPI just doesn't use nullable.
+            ModEntry.DataHelper.WriteGlobalData<DialogueLog>($"{Constants.SaveFolderName}{IDENTIFIER}{multiplayerID:X8}_temp_{SDate.Now().DaysSinceStart}", null);
+#pragma warning restore CS8625 // Cannot convert null literal to non-nullable reference type.
+            log.multiplayerID = multiplayerID;
+            return log;
+        }
+        log = ModEntry.DataHelper.ReadGlobalData<DialogueLog>($"{Constants.SaveFolderName}{IDENTIFIER}{multiplayerID:X8}")
+            ?? new DialogueLog(Constants.SaveFolderName, multiplayerID);
+        log.multiplayerID = multiplayerID;
+        return log;
     }
 
+    /// <summary>
+    /// Saves a temporary DialogueLog file.
+    /// </summary>
     public void SaveTemp() => base.SaveTemp(IDENTIFIER + this.multiplayerID.ToString("X8"));
 
     /// <summary>

@@ -1,4 +1,5 @@
 ﻿using System.Text;
+using StardewModdingAPI.Utilities;
 
 namespace SpecialOrdersExtended.DataModels;
 
@@ -41,11 +42,33 @@ internal class RecentCompletedSO : AbstractDataModel
             ?? new RecentCompletedSO(Constants.SaveFolderName);
     }
 
+    /// <summary>
+    /// Load the temporary file if available. If not, load the usual file.
+    /// </summary>
+    /// <returns>The Recent Completed SO log.</returns>
+    /// <exception cref="SaveNotLoadedError">Save not loaded when expected.</exception>
     public static RecentCompletedSO LoadTempIfAvailable()
     {
-        throw new NotImplementedException();
+        if (!Context.IsWorldReady)
+        {
+            throw new SaveNotLoadedError();
+        }
+        RecentCompletedSO log = ModEntry.DataHelper.ReadGlobalData<RecentCompletedSO>($"{Constants.SaveFolderName}{IDENTIFIER}_temp_{SDate.Now().DaysSinceStart}");
+        if (log is not null)
+        {
+            // Delete the temporary file.
+#pragma warning disable CS8625 // Cannot convert null literal to non-nullable reference type. This is a valid call, SMAPI just doesn't use nullable.
+            ModEntry.DataHelper.WriteGlobalData<RecentCompletedSO>($"{Constants.SaveFolderName}{IDENTIFIER}_temp_{SDate.Now().DaysSinceStart}", null);
+#pragma warning restore CS8625 // Cannot convert null literal to non-nullable reference type.
+            return log;
+        }
+        return ModEntry.DataHelper.ReadGlobalData<RecentCompletedSO>(Constants.SaveFolderName + IDENTIFIER)
+            ?? new RecentCompletedSO(Constants.SaveFolderName);
     }
 
+    /// <summary>
+    /// Save a temporary file.
+    /// </summary>
     public void SaveTemp() => base.SaveTemp(IDENTIFIER);
 
     /// <summary>
@@ -88,6 +111,13 @@ internal class RecentCompletedSO : AbstractDataModel
     /// <returns>True if successfully removed, false otherwise.</returns>
     public bool TryRemove(string orderKey) => this.RecentOrdersCompleted.Remove(orderKey);
 
+    /// <summary>
+    /// Whether or not an order was completed in the last X days.
+    /// </summary>
+    /// <param name="orderKey">Order key.</param>
+    /// <param name="days">Days to check.</param>
+    /// <returns>True if order found and completed in the last X days, false otherwise.</returns>
+    /// <remarks>Orders are removed from the list after seven days.</remarks>
     [Pure]
     public bool IsWithinXDays(string orderKey, uint days)
     {

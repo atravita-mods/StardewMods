@@ -10,15 +10,40 @@ internal class RecentSOManager
     private static RecentCompletedSO? recentCompletedSO;
     private static List<string>? currentOrderCache;
 
+    /// <summary>
+    /// Load the recently completed SO log.
+    /// </summary>
     public static void Load() => recentCompletedSO = RecentCompletedSO.Load();
 
+    /// <summary>
+    /// Load the temp version of the recently completed SO log if available.
+    /// </summary>
+    public static void LoadTemp() => recentCompletedSO = RecentCompletedSO.LoadTempIfAvailable();
+
+    /// <summary>
+    /// Saves the recently completed SO log.
+    /// </summary>
+    /// <exception cref="SaveNotLoadedError">Save not loaded.</exception>
     public static void Save()
     {
-        if(recentCompletedSO is null)
+        if (recentCompletedSO is null)
         {
             throw new SaveNotLoadedError();
         }
         recentCompletedSO.Save();
+    }
+
+    /// <summary>
+    /// Saves the recently completed SO log to a temp file.
+    /// </summary>
+    /// <exception cref="SaveNotLoadedError">Save not loaded.</exception>
+    public static void SaveTemp()
+    {
+        if (recentCompletedSO is null)
+        {
+            throw new SaveNotLoadedError();
+        }
+        recentCompletedSO.SaveTemp();
     }
 
     /// <summary>

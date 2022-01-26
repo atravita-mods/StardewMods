@@ -22,7 +22,7 @@ internal static class StatsManager
     /// <summary>
     /// Gets the propertyGetters dictionary.
     /// </summary>
-    /// <remarks>Grabs properties if needed (if the dictionary is empty)</remarks>
+    /// <remarks>Grabs properties if needed (if the dictionary is empty).</remarks>
     public static Dictionary<string, Func<Stats, uint>> PropertyGetters
     {
         get

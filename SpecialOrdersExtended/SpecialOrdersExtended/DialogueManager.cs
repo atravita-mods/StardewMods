@@ -35,6 +35,17 @@ internal class DialogueManager
     }
 
     /// <summary>
+    /// Loads the PerScreened Dialogue log from a temporary file if available.
+    /// Else loads from the usual file.
+    /// </summary>
+    /// <param name="multiplayerID">The player's unique ID.</param>
+    public static void LoadTemp(long multiplayerID)
+    {
+        ModEntry.ModMonitor.DebugLog($"Loading temp dialogue log for {multiplayerID:X8}");
+        InternalDialogueLog.Value = DialogueLog.LoadTempIfAvailable(multiplayerID);
+    }
+
+    /// <summary>
     /// Save a dialoguelog for a specific player.
     /// </summary>
     /// <exception cref="SaveNotLoadedError">Save is not loaded.</exception>
@@ -45,6 +56,19 @@ internal class DialogueManager
             throw new SaveNotLoadedError();
         }
         PerscreenedDialogueLog.Save();
+    }
+
+    /// <summary>
+    /// Save temporary Dialogue Log file.
+    /// </summary>
+    /// <exception cref="SaveNotLoadedError">Save not loaded.</exception>
+    public static void SaveTemp()
+    {
+        if (PerscreenedDialogueLog is null)
+        {
+            throw new SaveNotLoadedError();
+        }
+        PerscreenedDialogueLog.SaveTemp();
     }
 
     /// <summary>

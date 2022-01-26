@@ -5,7 +5,6 @@
 /// </summary>
 internal class TagManager
 {
-
     private static Random? random;
 
     /// <summary>
@@ -13,7 +12,8 @@ internal class TagManager
     /// </summary>
     internal static Random Random
     {
-        get {
+        get
+        {
             if (random is null)
             {
                 random = new Random(((int)Game1.uniqueIDForThisGame * 26) + (int)(Game1.stats.DaysPlayed / 7 * 36));
@@ -25,10 +25,7 @@ internal class TagManager
     /// <summary>
     /// Delete's the random so it can be reset later.
     /// </summary>
-    public static void ResetRandom()
-    {
-        random = null;
-    }
+    public static void ResetRandom() => random = null;
 
     /// <summary>
     /// Prefixes CheckTag to handle special mod tags.

@@ -41,7 +41,7 @@ public enum SpecialGroupType
 /// <summary>
 /// Class to manage assets.
 /// </summary>
-internal class AssetManager : IAssetLoader
+internal class AssetManager : IAssetLoader, IAssetEditor
 {
     /// <summary>
     /// Primary asset path for this mod. All assets should start with this.
@@ -73,10 +73,43 @@ internal class AssetManager : IAssetLoader
     /// </summary>
     public static readonly string ExclusionLocations = PathUtilities.NormalizeAssetName(AssetPath + "_exclusions");
 
+    private static readonly string GeorgeDialogueLocation = PathUtilities.NormalizeAssetName("Characters/Dialogue/George");
+    private static readonly string EvelynDialogueLocation = PathUtilities.NormalizeAssetName("Characters/Dialogue/Evelyn");
+    private static readonly string SandyDialogueLocation = PathUtilities.NormalizeAssetName("Characters/Dialogue/Sandy");
+
     /// <summary>
     /// Full list of fake assets.
     /// </summary>
     private readonly List<string> myAssets = new() { BartenderLocation, ExplorerLocation, MusicianLocation, GroupsLocations, ExclusionLocations };
+
+    private readonly List<string> dialogueToEdit = new() { GeorgeDialogueLocation, EvelynDialogueLocation, SandyDialogueLocation };
+
+    /// <inheritdoc />
+    public bool CanEdit<T>(IAssetInfo asset)
+    {
+        return this.dialogueToEdit.Any((string assetpath) => asset.AssetNameEquals(assetpath));
+    }
+
+    /// <inheritdoc />
+    public void Edit<T>(IAssetData asset)
+    {
+        IAssetDataForDictionary<string, string>? editor = asset.AsDictionary<string, string>();
+        if (asset.AssetNameEquals(GeorgeDialogueLocation))
+        {
+            editor.Data["Resort"] = I18n.GeorgeResort();
+        }
+        else if (asset.AssetNameEquals(EvelynDialogueLocation))
+        {
+            editor.Data["Resort"] = I18n.EvelynResort();
+        }
+        else if (asset.AssetNameEquals(SandyDialogueLocation))
+        {
+            foreach (string key in new string[] { "Resort", "Resort_Bar", "Resort_Bar_2", "Resort_Wander", "Resort_Shore", "Resort_Pier", "Resort_Approach", "Resort_Left" })
+            {
+                editor.Data[key] = I18n.GetByKey("Sandy_" + key);
+            }
+        }
+    }
 
     /// <inheritdoc />
     public bool CanLoad<T>(IAssetInfo asset)

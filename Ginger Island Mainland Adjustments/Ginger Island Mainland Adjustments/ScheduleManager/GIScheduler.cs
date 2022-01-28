@@ -221,6 +221,23 @@ internal static class GIScheduler
                 visitors.Add(newvisitor);
             }
         }
+
+        // If George in visitors, add Evelyn.
+        if (visitors.Any((NPC npc) => npc.Name.Equals("George", StringComparison.OrdinalIgnoreCase))
+            && visitors.All((NPC npc) => !npc.Name.Equals("Evelyn", StringComparison.OrdinalIgnoreCase))
+            && Game1.getCharacterFromName("Evelyn") is NPC evelyn)
+        {
+            for (int i = visitors.Count - 1; i >= 0; i--)
+            {
+                if (!visitors[i].Name.Equals("Gus", StringComparison.OrdinalIgnoreCase) && !visitors[i].Name.Equals("George", StringComparison.OrdinalIgnoreCase))
+                {
+                    Globals.ModMonitor.DebugLog($"Replacing one visitor {visitors[i].Name} with Evelyn");
+                    visitors[i] = evelyn;
+                    break;
+                }
+            }
+        }
+
         for (int i = 0; i < visitors.Count; i++)
         {
             visitors[i].scheduleDelaySeconds = Math.Min(i * 0.4f, 7f);

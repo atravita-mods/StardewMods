@@ -78,8 +78,20 @@ internal static class IslandSouthPatches
         try
         {
             if (!__result)
-            { // already false in code, ignore me.
-                return;
+            {
+                if (npc.Name.Equals("Sandy", StringComparison.OrdinalIgnoreCase))
+                {
+                    __result = true; // let Sandy come to the resort!
+                }
+                else if (npc.Name.Equals("George", StringComparison.OrdinalIgnoreCase) || npc.Name.Equals("Evelyn", StringComparison.OrdinalIgnoreCase))
+                {
+                    __result = true; // let George & Evelyn come too!
+                }
+                else
+                {
+                    // already false in code, ignore me for everyone else
+                    return;
+                }
             }
             if (!Exclusions.ContainsKey(npc))
             { // I don't have an entry for you.

@@ -14,14 +14,6 @@ Next, you can limit the times the key will be used with the `<remainder>`. Remai
 2. `<base><hearts>`, where `<hearts>` is any even number - the code will use the highest value it can find where the friendship requirement is satisfied. IE - `Resort_Left6`
 3. `<base>`. IE Resort_Left
 
-#### Marriage keys
-
-The keys `GILeave_<NPCname>` and `GIReturn_<NPCname>` will be used by married characters, similar to how `FunLeave_<NPCname>` and `FunReturn_<NPCname>` work.
-
-#### Additional Resort keys.
-
-* `Resort_Pier`: Said while standing on the pier, facing right.
-
 #### Examples of keys
 
 * `winterResort_Left_Saloon_Fri` - said at the Saloon, in winter on Fridays, after coming back from the Resort.
@@ -32,3 +24,12 @@ The keys `GILeave_<NPCname>` and `GIReturn_<NPCname>` will be used by married ch
 * `Resort_Approach` - said before heading to the resort in the morning, always, indoors or outdoors.
 
 (Why is this not consistent? It's because characters in general do not do things before heading to Ginger Island, while `GIRemainder` schedule keys allow for characters to do things *after* returning.)
+
+### Marriage keys
+
+The keys `GILeave_<NPCname>` and `GIReturn_<NPCname>` will be used by married characters, similar to how `FunLeave_<NPCname>` and `FunReturn_<NPCname>` work.
+
+### Additional Resort keys.
+
+* `Resort_Antisocial`: Said while standing on IslandSouthEast.
+* `Resort_Pier`: Said while standing on the pier, facing right.

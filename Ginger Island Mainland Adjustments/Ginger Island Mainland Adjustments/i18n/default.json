@@ -1,4 +1,7 @@
 ﻿{
+  // Content stuff
+  "SandyAwayShopMessage":  "Hey! I'll be away on vacation today, but I trust you to not do me wrong! Just leave the money on the counter.",
+
   // Documentation for console commands.
   "getSchedule.documentation": "Gets the schedule of the NPC in question",
   "getIslanders.documentation": "Gets the villagers headed off to the resort today",
@@ -47,9 +50,9 @@
   "config.gus_chance.title": "Gus's Ginger Island Chances",
   "config.gus_chance.description": "Chance that Gus will go to Ginger Island on his assigned day.",
   "config.allow_sandy.title": "Allow Sandy",
-  "config.allow_sandy.description": "If enabled, allows Sandy to go to the resort. Note that while she's there, her store is not availble.",
+  "config.allow_sandy.description": "If enabled, allows Sandy to go to the resort. (Her store will remain available).",
   "config.allow_george_and_evelyn.title": "Allow George and Evelyn",
-  "config.allow_george_and_evelyn.description":  "If enabled, allows George and Evelyn access to the resort.",
+  "config.allow_george_and_evelyn.description": "If enabled, allows George and Evelyn access to the resort.",
 
   // Game doesn't have translations for full days of the week.
   "None": "None", // for no dedicated Gus-to-GI day.

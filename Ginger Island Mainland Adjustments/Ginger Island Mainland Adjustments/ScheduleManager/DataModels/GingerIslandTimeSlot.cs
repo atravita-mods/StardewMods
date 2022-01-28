@@ -32,7 +32,7 @@ internal class GingerIslandTimeSlot
     /// Activity for drinking (The adults only!). Should only happen if a bartender is around.
     /// </summary>
     private static readonly PossibleIslandActivity Drinking = new(new List<Point>() { new Point(12, 23), new Point(15, 23) },
-        basechance: 0.5,
+        chanceMap: (NPC npc) => npc.Age == NPC.adult ? 0.5 : 0,
         animation: "beach_drink",
         animation_required: false,
         dialogueKey: "Resort_Bar");
@@ -40,10 +40,10 @@ internal class GingerIslandTimeSlot
     private static readonly PossibleIslandActivity Music = PossibleActivities[0];
     private static readonly PossibleIslandActivity Dance = PossibleActivities[1];
 
-    private static readonly PossibleIslandActivity Adventure = new(new() { new Point(33, 83), new Point(41, 74), new Point(48, 81) },
+    private static readonly PossibleIslandActivity IslandNorth = new(new() { new Point(33, 83), new Point(41, 74), new Point(48, 81) },
         map: "IslandNorth",
         basechance: 0.5,
-        dialogueKey: "Resort_Adventure",
+        dialogueKey: "Resort_IslandNorth",
         chanceMap: (NPC npc) => npc.Age == NPC.adult && npc.Optimism == NPC.positive ? 0.5 : 0);
 
     /// <summary>
@@ -234,7 +234,7 @@ internal class GingerIslandTimeSlot
 
             if (this.timeslot == 1400)
             {
-                SchedulePoint? schedulePoint = Adventure.TryAssign(
+                SchedulePoint? schedulePoint = IslandNorth.TryAssign(
                     random: this.random,
                     character: visitor,
                     time: this.timeslot,

@@ -1,4 +1,4 @@
-﻿Ginger-Island specific Dialogue Keys
+﻿Ginger-Island Specific Dialogue Keys
 =========================================
 
 Characters who have island schedules and are not currently on `IslandSouth` can call upon vacation dialogue keys in the usual dialogue file for each character
@@ -12,7 +12,7 @@ Next, you can limit the times the key will be used with the `<remainder>`. Remai
 
 1. `<base>_<ShortDayOfWeek>`. IE - `Resort_Left_Fri`
 2. `<base><hearts>`, where `<hearts>` is any even number - the code will use the highest value it can find where the friendship requirement is satisfied. IE - `Resort_Left6`
-3. `<base>`. IE Resort_Left
+3. `<base>`. IE `Resort_Left`
 
 #### Examples of keys
 
@@ -33,3 +33,4 @@ The keys `GILeave_<NPCname>` and `GIReturn_<NPCname>` will be used by married ch
 
 * `Resort_Antisocial`: Said while standing on IslandSouthEast.
 * `Resort_Pier`: Said while standing on the pier, facing right.
+* `Resort_IslandNorth`: Said by NPCs who make a quick visit to Island North.

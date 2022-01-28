@@ -7,6 +7,7 @@ using GingerIslandMainlandAdjustments.ScheduleManager;
 using GingerIslandMainlandAdjustments.Utils;
 using HarmonyLib;
 using StardewModdingAPI.Events;
+using StardewValley.Menus;
 
 namespace GingerIslandMainlandAdjustments;
 
@@ -29,8 +30,15 @@ public class ModEntry : Mod
         helper.Events.GameLoop.DayEnding += this.DayEnding;
         helper.Events.GameLoop.ReturnedToTitle += this.ReturnedToTitle;
 
+        helper.Events.Input.ButtonPressed += this.Input_ButtonPressed;
+
         // Add my asset manager
         helper.Content.AssetLoaders.Add(new AssetManager());
+    }
+
+    private void Input_ButtonPressed(object? sender, ButtonPressedEventArgs e)
+    {
+        SandyShop.HandleShop(e);
     }
 
     /// <summary>

@@ -4,7 +4,6 @@ using GingerIslandMainlandAdjustments.CustomConsoleCommands;
 using GingerIslandMainlandAdjustments.DialogueChanges;
 using GingerIslandMainlandAdjustments.Integrations;
 using GingerIslandMainlandAdjustments.ScheduleManager;
-using GingerIslandMainlandAdjustments.Tokens;
 using GingerIslandMainlandAdjustments.Utils;
 using HarmonyLib;
 using StardewModdingAPI.Events;
@@ -107,26 +106,5 @@ public class ModEntry : Mod
     {
         // Generate the GMCM for this mod.
         GenerateGMCM.Build(this.ModManifest);
-
-        // Load custom CP tokens?
-        IContentPatcherAPI? CPapi = this.Helper.ModRegistry.GetApi<IContentPatcherAPI>("Pathoschild.ContentPatcher");
-
-        if (CPapi is not null)
-        {
-            CPapi.RegisterToken(this.ModManifest, "Islanders", () =>
-            {
-                // save is loaded
-                if (Context.IsWorldReady)
-                {
-                    string[] islanders = Islanders.Get().ToArray();
-                    if (islanders.Length != 0)
-                    {
-                        return islanders;
-                    }
-                }
-                return null;
-            });
-            Globals.ModMonitor.Log("Tokens Loaded", LogLevel.Trace);
-        }
     }
 }

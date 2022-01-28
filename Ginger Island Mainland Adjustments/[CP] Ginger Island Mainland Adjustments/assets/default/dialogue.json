@@ -1,0 +1,62 @@
+{"Changes":[
+    {
+        "LogName": "Abby dialogue",
+        "Action": "EditData",
+        "Target": "Characters/Dialogue/Abigail",
+        "Entries":{
+            "Resort_Approach": "Lookin' forward to exploring the island today!",
+            "Resort_Left": "Ahh, nothing like a nice relaxing vacation...$h"
+        }
+    },
+    {
+        "LogName": "Jodi dialogue",
+        "Action": "EditData",
+        "Target": "Characters/Dialogue/Jodi",
+        "Entries": {
+            "Resort_Approach": "I'm definitely looking forward to going to the Resort today!$h",
+            "Resort_Left": "Ahhh...I had a great day at the Resort!$h"
+        }
+    },
+    {
+        "LogName": "Pierre dialogue",
+        "Action": "EditData",
+        "Target": "Characters/Dialogue/Pierre",
+        "Entries": {
+            "Resort_Approach": "I'm headed off to the Island today. Looking forward to going on vacation!",
+            "Resort_Left": "Ah, nothing like a nice relaxing vacation...$h"
+        }
+    },
+    {
+        "LogName": "Pam dialogue",
+        "Action": "EditData",
+        "Target": "Characters/Dialogue/Pam",
+        "Entries": {
+            "Resort_Pier": "Look at all the fish swimming in these waters!",
+            "Resort_Approach": "@, I'm gonna be headed to Ginger Island today! Got a nice vacation day from the bus company."
+        }
+    },
+    {
+        "LogName": "Sam dialogue",
+        "Action": "EditData",
+        "Target": "Characters/Dialogue/Sam",
+        "Entries":
+        {
+            "Resort": "Man, I love coming here! So many interesting things to explore!$h",
+            "Resort_Approach": "@, I'll be off to Ginger Island today! You coming too?"
+        }
+    },
+    {
+        "LogName": "Sandy dialogue",
+        "Action": "EditData",
+        "Target": "Characters/Dialogue/Sandy",
+        "Entries": { //much thanks to Elizabeth for help with Sandy's dialogue.
+            "Resort": "Ah, it's so nice getting away from the shop for once!",
+            "Resort_Bar": "Ooooh....I must get this Piña Colada recipe! I've never had anything so tasty!",
+            "Resort_Wander": "This sand is so pretty! So different from the sand at home.",
+            "Resort_Shore": "So much water is a sight for sore eyes! I've been living in the desert for so long...$s",
+            "Resort_Approach": "Oooh @, I'm going to be going to Ginger Island today. Definitely looking forward to a good vacation!",
+            "Resort_Left": "Ah, that was relaxing. Back to work, I guess....",
+            "Resort_Pier": "Isn't that water beautiful?"
+        }
+    }
+]}

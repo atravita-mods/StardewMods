@@ -134,6 +134,16 @@ public class ModConfig
     }
 
     /// <summary>
+    /// Gets or sets a value indicating whether Sandy has access to the resort.
+    /// </summary>
+    public bool AllowSandy { get; set; } = true;
+
+    /// <summary>
+    /// Gets or sets a value indicating whether George and Evelyn have access to the resort.
+    /// </summary>
+    public bool AllowGeorgeAndEvelyn { get; set; } = true;
+
+    /// <summary>
     /// Returns the enum value DayOfWeek as a short string.
     /// </summary>
     /// <returns>Short day of week string.</returns>

@@ -92,5 +92,19 @@ internal static class GenerateGMCM
             tooltip: I18n.Config_GusChance_Description,
             min: 0f,
             max: 1f);
+
+        configMenu.AddBoolOption(
+            mod: manifest,
+            name: I18n.Config_AllowSandy_Title,
+            getValue: () => Globals.Config.AllowSandy,
+            setValue: value => Globals.Config.AllowSandy = value,
+            tooltip: I18n.Config_AllowSandy_Description);
+
+        configMenu.AddBoolOption(
+            mod: manifest,
+            name: I18n.Config_AllowGeorgeAndEvelyn_Title,
+            getValue: () => Globals.Config.AllowGeorgeAndEvelyn,
+            setValue: value => Globals.Config.AllowGeorgeAndEvelyn = value,
+            tooltip: I18n.Config_AllowGeorgeAndEvelyn_Description);
     }
 }

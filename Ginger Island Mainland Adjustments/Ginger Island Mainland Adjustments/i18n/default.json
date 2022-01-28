@@ -39,16 +39,20 @@
   "config.capacity.title": "Ginger Island Capacity",
   "config.capacity.description": "If using this mod's scheduler, the maximum number of people allowed on Ginger Island.",
   "config.group_chance.title": "Group Chance.",
-  "config.group_chance.description":  "Probability a (pre-defined) group will be selected to visit Ginger Island.",
+  "config.group_chance.description": "Probability a (pre-defined) group will be selected to visit Ginger Island.",
   "config.explorer_chance.title": "Explorer Group Chance",
   "config.explorer_chance.description": "Chance that a group will explorer the remainder of Ginger Island.",
   "config.gus_day.title": "Gus's Ginger Island Day",
   "config.gus_day.description": "Day of week Gus is more likely to go to Ginger Island.",
   "config.gus_chance.title": "Gus's Ginger Island Chances",
   "config.gus_chance.description": "Chance that Gus will go to Ginger Island on his assigned day.",
+  "config.allow_sandy.title": "Allow Sandy",
+  "config.allow_sandy.description": "If enabled, allows Sandy to go to the resort. Note that while she's there, her store is not availble.",
+  "config.allow_george_and_evelyn.title": "Allow George and Evelyn",
+  "config.allow_george_and_evelyn.description":  "If enabled, allows George and Evelyn access to the resort.",
 
-  // Gane doesn't have translations for full days of the week.
-  "None":  "None", // for no dedicated Gus-to-GI day.
+  // Game doesn't have translations for full days of the week.
+  "None": "None", // for no dedicated Gus-to-GI day.
   "Monday": "Monday",
   "Tuesday": "Tuesday",
   "Wednesday": "Wednesday",

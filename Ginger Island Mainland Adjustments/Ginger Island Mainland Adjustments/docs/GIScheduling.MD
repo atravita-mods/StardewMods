@@ -7,4 +7,4 @@ todo
 
 #### Bartenders
 
-Gus, whenever he visits, will tend bar.
+Gus, whenever he visits, will tend bar. When he does so, other characters (if they are adults) will crowd around him and drink.

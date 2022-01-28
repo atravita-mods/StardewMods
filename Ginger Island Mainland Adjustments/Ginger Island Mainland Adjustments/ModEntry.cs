@@ -6,8 +6,8 @@ using GingerIslandMainlandAdjustments.Integrations;
 using GingerIslandMainlandAdjustments.ScheduleManager;
 using GingerIslandMainlandAdjustments.Utils;
 using HarmonyLib;
+using Microsoft.Xna.Framework;
 using StardewModdingAPI.Events;
-using StardewValley.Menus;
 
 namespace GingerIslandMainlandAdjustments;
 
@@ -32,8 +32,15 @@ public class ModEntry : Mod
 
         helper.Events.Input.ButtonPressed += this.Input_ButtonPressed;
 
+        helper.Events.Player.Warped += this.OnPlayerWarped;
+
         // Add my asset manager
         helper.Content.AssetLoaders.Add(new AssetManager());
+    }
+
+    private void OnPlayerWarped(object? sender, WarpedEventArgs e)
+    {
+        SandyShop.AddBoxToShop(e);
     }
 
     private void Input_ButtonPressed(object? sender, ButtonPressedEventArgs e)

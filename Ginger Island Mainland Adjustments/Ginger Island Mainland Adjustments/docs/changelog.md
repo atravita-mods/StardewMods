@@ -6,7 +6,7 @@
 1. Make groups more meaningful.
 2. Nonreplacing dialogue for the Resort keys? (flatten the ones that already exist, but add a way to add more that's less likely to clobber).
 3. Handle roommates, like actually.
-4. Add a way to shop at Sandy's even if she's gone.
+4. Handle Sandy's shop for controllers.
 
 ### Version 1.1.0
 

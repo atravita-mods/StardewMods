@@ -59,6 +59,15 @@ internal static class GenerateGMCM
 
         configMenu.AddNumberOption(
             mod: manifest,
+            name: I18n.Config_GroupChance_Title,
+            getValue: () => Globals.Config.GroupChance,
+            setValue: value => Globals.Config.GroupChance = value,
+            tooltip: I18n.Config_GroupChance_Description,
+            min: 0f,
+            max: 1f);
+
+        configMenu.AddNumberOption(
+            mod: manifest,
             name: I18n.Config_ExplorerChance_Title,
             getValue: () => Globals.Config.ExplorerChance,
             setValue: value => Globals.Config.ExplorerChance = value,

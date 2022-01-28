@@ -185,6 +185,25 @@ internal class AssetManager : IAssetLoader
             }
             characterGroups[groupname] = group;
         }
+
+        // Add all the spouses as a possible group if there are multiple spouses.
+        // (This is mostly for Free Love. Your poly commune can all go to Ginger Island together!)
+        if (specialGroupType == SpecialGroupType.Groups)
+        {
+            HashSet<NPC> allSpouses = new();
+            foreach (NPC npc in Utility.getAllCharacters())
+            {
+                if (npc?.getSpouse() is not null)
+                {
+                    allSpouses.Add(npc);
+                }
+            }
+            if (allSpouses.Count > 1)
+            {
+                characterGroups["allSpouses"] = allSpouses;
+            }
+        }
+
         return characterGroups;
     }
 

@@ -195,10 +195,12 @@ internal class GingerIslandTimeSlot
 #if DEBUG
             else
             {
-                Globals.ModMonitor.Log($"Musician {this.musician.Name} skipped for MusicianPoint", LogLevel.Info);
+                Globals.ModMonitor.Log($"Musician {this.musician.Name} skipped for MusicianPoint", LogLevel.Trace);
             }
 #endif
         }
+
+        // consider assigning NPC groups?
 
         // assign the rest of the NPCs
         foreach (NPC visitor in this.visitors)

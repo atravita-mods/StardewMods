@@ -8,6 +8,11 @@ namespace GingerIslandMainlandAdjustments;
 public enum DayOfWeek
 {
     /// <summary>
+    /// None.
+    /// </summary>
+    None,
+
+    /// <summary>
     /// Monday.
     /// </summary>
     Monday,
@@ -82,6 +87,20 @@ public class ModConfig
     }
 
     /// <summary>
+    /// PRobability for a group to visit over just individuals.
+    /// </summary>
+    private float groupChance = 0.6f;
+
+    /// <summary>
+    /// Gets or sets the probability a group will visit over just individuals.
+    /// </summary>
+    public float GroupChance
+    {
+        get => this.groupChance;
+        set => this.groupChance = Math.Clamp(value, 0f, 1f);
+    }
+
+    /// <summary>
     /// Probability for a group of explorers to try to explore the rest of the island.
     /// </summary>
     private float explorerChance = 0.05f;
@@ -122,6 +141,7 @@ public class ModConfig
     {
         return this.GusDay switch
         {
+            DayOfWeek.None => "None",
             DayOfWeek.Monday => "Mon",
             DayOfWeek.Tuesday => "Tue",
             DayOfWeek.Wednesday => "Wed",

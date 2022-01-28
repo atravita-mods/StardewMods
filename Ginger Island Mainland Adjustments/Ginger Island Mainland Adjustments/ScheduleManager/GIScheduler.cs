@@ -1,6 +1,5 @@
 ﻿using GingerIslandMainlandAdjustments.ScheduleManager.DataModels;
 using GingerIslandMainlandAdjustments.Utils;
-using Microsoft.Xna.Framework;
 using StardewModdingAPI.Utilities;
 using StardewValley.Locations;
 
@@ -117,6 +116,12 @@ internal static class GIScheduler
             IslandNorthScheduler.Schedule(random, explorers);
         }
 
+        // Resort capacity set to zero, can skip everything else.
+        if (Globals.Config.Capacity == 0)
+        {
+            return;
+        }
+
         List<NPC> visitors = GenerateVistorList(random, Globals.Config.Capacity, explorers);
 
         GIScheduler.bartender = SetBartender(visitors);
@@ -175,7 +180,7 @@ internal static class GIScheduler
                 valid_visitors.Add(npc);
             }
         }
-        if (random.NextDouble() < 0.6)
+        if (random.NextDouble() < Globals.Config.GroupChance)
         {
             List<string> groupkeys = new();
             foreach (string key in IslandGroups.Keys)
@@ -269,8 +274,9 @@ internal static class GIScheduler
 #if DEBUG
             Globals.ModMonitor.Log($"Found musician {musician.Name}", LogLevel.Debug);
 #endif
+            return musician;
         }
-        return musician;
+        return null;
     }
 
     /// <summary>

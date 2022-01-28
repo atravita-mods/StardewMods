@@ -14,7 +14,15 @@ Next, you can limit the times the key will be used with the `<remainder>`. Remai
 2. `<base><hearts>`, where `<hearts>` is any even number - the code will use the highest value it can find where the friendship requirement is satisfied. IE - `Resort_Left6`
 3. `<base>`. IE Resort_Left
 
-Examples of keys
+#### Marriage keys
+
+The keys `GILeave_<NPCname>` and `GIReturn_<NPCname>` will be used by married characters, similar to how `FunLeave_<NPCname>` and `FunReturn_<NPCname>` work.
+
+#### Additional Resort keys.
+
+* `Resort_Pier`: Said while standing on the pier, facing right.
+
+#### Examples of keys
 
 * `winterResort_Left_Saloon_Fri` - said at the Saloon, in winter on Fridays, after coming back from the Resort.
 * `winterResort_Left_Saloon_marriage_Fri` - said by married characters, at the Saloon, in winter on Fridays, after coming back from the Resort. (If this key is omitted, the married character will say the `winterResort_Left_Saloon_Fri` dialogue.

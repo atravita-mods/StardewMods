@@ -59,6 +59,7 @@ internal class DialoguePatches
                 return;
             }
 
+            // Handle group-specific dialogue.
             if (GIScheduler.CurrentVisitingGroup?.Contains(__instance) == true
                 && GIScheduler.CurrentGroup is not null
                 && DialogueUtilities.TryGetIslandDialogue(__instance, $"{baseKey}_{GIScheduler.CurrentGroup}", __0))

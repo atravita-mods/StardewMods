@@ -132,6 +132,10 @@ internal class AssetManager : IAssetLoader, IAssetEditor
                     defaultgroups["JodiFamily"] += ", Kent";
                 }
             }
+            if (Globals.Config.AllowGeorgeAndEvelyn)
+            {
+                defaultgroups["GeorgeFamily"] = "George, Evelyn, Alex";
+            }
             return (T)(object)defaultgroups;
         }
         // Load an empty document for everything else

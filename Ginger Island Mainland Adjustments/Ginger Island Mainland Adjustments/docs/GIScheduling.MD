@@ -3,7 +3,11 @@
 
 todo
 
-### Specific roles.
+### Custom Groups
+
+#### Explorer Groups
+
+### Specific roles
 
 #### Bartenders
 

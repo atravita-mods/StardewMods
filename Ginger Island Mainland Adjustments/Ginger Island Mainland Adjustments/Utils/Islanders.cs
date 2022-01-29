@@ -14,12 +14,11 @@ internal static class Islanders
         List<string> islanders = new();
         foreach (string name in Game1.netWorldState.Value.IslandVisitors.Keys)
         {
-            if (Game1.netWorldState.Value.IslandVisitors[name])
+            if (Game1.IsVisitingIslandToday(name))
             {
                 islanders.Add(name);
             }
         }
-        islanders.Sort();
-        return islanders;
+        return Utils.ContextSort(islanders);
     }
 }

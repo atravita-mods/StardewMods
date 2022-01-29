@@ -40,10 +40,12 @@ internal class GingerIslandTimeSlot
     private static readonly PossibleIslandActivity Music = PossibleActivities[0];
     private static readonly PossibleIslandActivity Dance = PossibleActivities[1];
 
-    private static readonly PossibleIslandActivity IslandNorth = new(new() { new Point(33, 83), new Point(41, 74), new Point(48, 81) },
+    private static readonly PossibleIslandActivity IslandNorth = new(new() { new Point(33, 83), new Point(34, 73), new Point(48, 81), new Point(52, 73) },
         map: "IslandNorth",
         basechance: 0.5,
         dialogueKey: "Resort_IslandNorth",
+        animation: "square_3_3",
+        animation_required: false,
         chanceMap: (NPC npc) => npc.Age == NPC.adult && npc.Optimism == NPC.positive ? 0.5 : 0);
 
     /// <summary>
@@ -248,7 +250,7 @@ internal class GingerIslandTimeSlot
                 }
             }
 #if DEBUG
-            Globals.ModMonitor.Log("Now using fallback spot assignment", LogLevel.Trace);
+            Globals.ModMonitor.Log($"Now using fallback spot assignment for {visitor.Name} at {this.timeslot}", LogLevel.Warn);
 #endif
             // now iterate backwards through the list, forcibly assigning people to places....
             for (int i = PossibleActivities.Count - 1; i >= 0; i--)
@@ -338,11 +340,11 @@ internal class GingerIslandTimeSlot
                 new List<Point> { new Point(3, 29) },
                 dialogueKey: "Resort_Antisocial",
                 basechance: 0,
-                chanceMap: (NPC npc) => npc.SocialAnxiety == NPC.shy && npc.Optimism == NPC.negative ? 0.6 : 0,
+                chanceMap: (NPC npc) => npc.SocialAnxiety == NPC.shy && npc.Optimism == NPC.negative ? 0.6 : 0.1,
                 map: "IslandSouthEast"),
             // shore points
             new PossibleIslandActivity(
-                new List<Point> { new Point(9, 33), new Point(13, 33), new Point(17, 33), new Point(24, 33), new Point(28, 32), new Point(32, 31) },
+                new List<Point> { new Point(6, 34), new Point(9, 33), new Point(13, 33), new Point(17, 33), new Point(24, 33), new Point(28, 32), new Point(32, 31), new Point(37, 31) },
                 dialogueKey: "Resort_Shore",
                 basechance: 0.25),
             // pier points

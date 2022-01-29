@@ -15,8 +15,8 @@ internal static class IslandNorthScheduler
     private static readonly List<Point> CloseAdventurousPoint = new()
     {
         new Point(33, 83),
-        new Point(41, 74),
-        new Point(48, 81),
+        new Point(36, 81),
+        new Point(39, 83),
     };
 
     private static readonly List<Point> TentAdventurousPoint = new()

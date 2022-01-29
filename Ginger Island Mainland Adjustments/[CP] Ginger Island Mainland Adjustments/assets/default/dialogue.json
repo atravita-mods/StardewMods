@@ -5,7 +5,42 @@
         "Target": "Characters/Dialogue/Abigail",
         "Entries":{
             "Resort_Approach": "Lookin' forward to exploring the island today!",
-            "Resort_Left": "Ahh, nothing like a nice relaxing vacation...$h"
+            "Resort_Left": "Ahh, nothing like a nice relaxing vacation...$h",
+            "Resort_Adventure": "Looking forward to a day spent wandering in the wilderness...er, for some defintions of 'wilderness'.",
+            "Resort_Volcano": "Wow! I wonder what monsters I can find in there?",
+            "Resort_Tent": "Professor Snail showed me a bunch of really interesting fossils!",
+            "Resort_AdventureReturn": "I can't wait to come back here! Wonder what else I'll find next?"
+        }
+    },
+    {
+        "LogName": "Sam dialogue",
+        "Action": "EditData",
+        "Target": "Characters/Dialogue/Sam",
+        "Entries":
+        {
+            "Resort": "Man, I love coming here! So many interesting things to explore!$h",
+            "Resort_Approach": "@, I'll be off to Ginger Island today! You coming too?",
+            "Resort_Adventure": "Dude, this place is super cool!",
+            "Resort_Tent": "Man, I can see myself becoming an archeologist...maybe...",
+            "Resort_AdventureReturn": "That was fun! But I'm glad to be headed home. I'm whacked!"
+        }
+    },
+    {
+        "LogName": "Sebastian dialogue",
+        "Action": "EditData",
+        "Target": "Characters/Dialogue/Sebastian",
+        "Entries":{
+            "Resort_Antisocial": "Heya @, whatcha up to?#$b#Me? Just taking a break from all those people...#$b#Vacations are fun, but they're also tiring.",
+            "Resort_Antisocial_2": ""
+        }
+    },
+    {
+        "LogName": "Demetrius dialogue",
+        "Action": "EditData",
+        "Target": "Characters/Dialogue/Demetrius",
+        "Entries": {
+            "Resort_IslandNorth": "@, I wish I had some time to study the unique folliage of this island today....",
+            "Resort_Adventure": "I'm looking forward to analyzing the ecology of the island today!"
         }
     },
     {
@@ -23,7 +58,16 @@
         "Target": "Characters/Dialogue/Pierre",
         "Entries": {
             "Resort_Approach": "I'm headed off to the Island today. Looking forward to going on vacation!",
-            "Resort_Left": "Ah, nothing like a nice relaxing vacation...$h"
+            "Resort_Left": "Ah, nothing like a nice relaxing vacation...$h",
+            "Resort_Pier": "The water's so blue here, isn't it?"
+        }
+    },
+    {
+        "LogName": "Haley dialogue",
+        "Action": "EditData",
+        "Target": "Characters/Dialogue/Haley",
+        "Entries": {
+            "Resort_Pier": "Wish I brought my camera...#$e#Say, do you think Willy will let us go snorkeling?"
         }
     },
     {
@@ -36,27 +80,11 @@
         }
     },
     {
-        "LogName": "Sam dialogue",
+        "LogName": "Emily dialogue",
         "Action": "EditData",
-        "Target": "Characters/Dialogue/Sam",
-        "Entries":
-        {
-            "Resort": "Man, I love coming here! So many interesting things to explore!$h",
-            "Resort_Approach": "@, I'll be off to Ginger Island today! You coming too?"
-        }
-    },
-    {
-        "LogName": "Sandy dialogue",
-        "Action": "EditData",
-        "Target": "Characters/Dialogue/Sandy",
-        "Entries": { //much thanks to Elizabeth for help with Sandy's dialogue.
-            "Resort": "Ah, it's so nice getting away from the shop for once!",
-            "Resort_Bar": "Ooooh....I must get this Piña Colada recipe! I've never had anything so tasty!",
-            "Resort_Wander": "This sand is so pretty! So different from the sand at home.",
-            "Resort_Shore": "So much water is a sight for sore eyes! I've been living in the desert for so long...$s",
-            "Resort_Approach": "Oooh @, I'm going to be going to Ginger Island today. Definitely looking forward to a good vacation!",
-            "Resort_Left": "Ah, that was relaxing. Back to work, I guess....",
-            "Resort_Pier": "Isn't that water beautiful?"
+        "Target": "Characters/Dialogue/Emily",
+        "Entries":{
+            "Resort_IslandNorth": "Did you see those birds? Aren't they lovely?"
         }
     }
 ]}

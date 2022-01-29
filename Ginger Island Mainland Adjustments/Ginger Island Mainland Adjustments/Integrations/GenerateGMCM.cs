@@ -63,6 +63,7 @@ internal static class GenerateGMCM
             getValue: () => Globals.Config.GroupChance,
             setValue: value => Globals.Config.GroupChance = value,
             tooltip: I18n.Config_GroupChance_Description,
+            formatValue: TwoPlaceFixedPoint,
             min: 0f,
             max: 1f);
 
@@ -72,6 +73,7 @@ internal static class GenerateGMCM
             getValue: () => Globals.Config.ExplorerChance,
             setValue: value => Globals.Config.ExplorerChance = value,
             tooltip: I18n.Config_ExplorerChance_Description,
+            formatValue: TwoPlaceFixedPoint,
             min: 0f,
             max: 1f);
 
@@ -90,6 +92,7 @@ internal static class GenerateGMCM
             getValue: () => Globals.Config.GusChance,
             setValue: value => Globals.Config.GusChance = value,
             tooltip: I18n.Config_GusChance_Description,
+            formatValue: TwoPlaceFixedPoint,
             min: 0f,
             max: 1f);
 
@@ -106,5 +109,10 @@ internal static class GenerateGMCM
             getValue: () => Globals.Config.AllowGeorgeAndEvelyn,
             setValue: value => Globals.Config.AllowGeorgeAndEvelyn = value,
             tooltip: I18n.Config_AllowGeorgeAndEvelyn_Description);
+    }
+
+    private static string TwoPlaceFixedPoint(float f)
+    {
+        return $"{f:f2}";
     }
 }

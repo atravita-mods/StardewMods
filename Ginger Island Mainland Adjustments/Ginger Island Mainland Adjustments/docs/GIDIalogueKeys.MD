@@ -34,3 +34,5 @@ The keys `GILeave_<NPCname>` and `GIReturn_<NPCname>` will be used by married ch
 * `Resort_Antisocial`: Said while standing on IslandSouthEast.
 * `Resort_Pier`: Said while standing on the pier, facing right.
 * `Resort_IslandNorth`: Said by NPCs who make a quick visit to Island North.
+* `Resort_Adventure`
+* `Resort_Volcano`

@@ -6,7 +6,6 @@ using GingerIslandMainlandAdjustments.Integrations;
 using GingerIslandMainlandAdjustments.ScheduleManager;
 using GingerIslandMainlandAdjustments.Utils;
 using HarmonyLib;
-using Microsoft.Xna.Framework;
 using StardewModdingAPI.Events;
 
 namespace GingerIslandMainlandAdjustments;

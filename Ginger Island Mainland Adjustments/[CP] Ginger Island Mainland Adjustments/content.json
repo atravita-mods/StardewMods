@@ -16,7 +16,7 @@
     {
         "LogName": "Explorers",
         "Action": "EditData",
-        "Target": "Mods/atravita_Ginger_Island_Adjustments_explorers",
+        "Target": "Mods/atravita_Ginger_Island_Adjustments_explorers", // Explorers go to IslandNorth and either the tent or the volcano
         "Entries": {
             "ScienceGroup": "Maru, Demetrius, Robin",
             "BandKids": "Abigail, Sebastian, Sam",

@@ -37,6 +37,14 @@ Note: you will need to run the mod at least once to generate the `config.json` f
 
 `GroupChance` sets the probability a group of NPCs will be picked to visit the Resort. 
 
+`ExplorerChance` sets the probability a smaller group of NPCs.
+
+`GusDay` and `GusChance` set a day that Gus is more likely to go to the Resort, and the chance that he'll be there.
+
+`AllowSandy` allows Sandy access to the Resort. <!-- link Elizabeth's Sandy Beach outfit if she publishes! -->
+
+`AllowGeorgeAndEvelyn` allows George and Evelyn access to the resort.
+
 **Additionally:**
 
 Two console commands: `av.gima.get_schedule <NPCname>` shows you their schedule of the day, and `av.gima.get_islanders` tells you who is going to the island. Do note that if `UseThisScheduler` is set to false, GIRemainder schedules are added one per ten minutes starting from 610, and thus they may not be in until 7AM or so.

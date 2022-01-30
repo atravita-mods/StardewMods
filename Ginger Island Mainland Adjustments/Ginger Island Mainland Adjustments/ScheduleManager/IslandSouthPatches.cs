@@ -109,18 +109,22 @@ internal static class IslandSouthPatches
                 if (Game1.dayOfMonth.ToString().Equals(condition, StringComparison.InvariantCultureIgnoreCase))
                 {
                     __result = false;
+                    return;
                 }
                 else if (Game1.currentSeason.Equals(condition, StringComparison.InvariantCultureIgnoreCase))
                 {
                     __result = false;
+                    return;
                 }
                 else if (Game1.shortDayNameFromDayOfSeason(Game1.dayOfMonth).Equals(condition, StringComparison.InvariantCultureIgnoreCase))
                 {
                     __result = false;
+                    return;
                 }
                 else if ($"{Game1.currentSeason} {Game1.shortDayNameFromDayOfSeason(Game1.dayOfMonth)}".Equals(condition, StringComparison.InvariantCultureIgnoreCase))
                 {
                     __result = false;
+                    return;
                 }
             }
         }

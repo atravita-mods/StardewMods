@@ -10,7 +10,7 @@
   "Sandy_Resort_Left": "Ah, that was relaxing. Back to work, I guess....",
   "Sandy_Resort_Pier": "Isn't that water beautiful? I could stare at it all day!",
   "George_Resort": "Well, ain't this place different! This warm sun feels so nice today.",
-  "Evelyn_Resort":  "",
+  "Evelyn_Resort":  "My dear @, it's great seeing you here today!#$e#Make sure to take some time for rest and relaxation! Can't have you working yourself too hard.",
 
   // Documentation for console commands.
   "getSchedule.documentation": "Gets the schedule of the NPC in question",

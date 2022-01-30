@@ -1,4 +1,5 @@
-﻿using GingerIslandMainlandAdjustments.ScheduleManager.DataModels;
+﻿using GingerIslandMainlandAdjustments.CustomConsoleCommands;
+using GingerIslandMainlandAdjustments.ScheduleManager.DataModels;
 using GingerIslandMainlandAdjustments.Utils;
 using StardewModdingAPI.Utilities;
 using StardewValley.Locations;
@@ -136,7 +137,11 @@ internal static class GIScheduler
             visitor.islandScheduleName.Value = "island";
             visitor.Schedule = visitor.parseMasterSchedule(schedules[visitor]);
             Game1.netWorldState.Value.IslandVisitors[visitor.Name] = true;
+            ConsoleCommands.IslandSchedules[visitor.Name] = schedules[visitor];
         }
+
+        IslandSouthPatches.ClearCache();
+        GIScheduler.ClearCache();
     }
 
     /// <summary>
@@ -195,7 +200,7 @@ internal static class GIScheduler
             {
                 currentGroup = Utility.GetRandom(groupkeys, random);
 #if DEBUG
-            Globals.ModMonitor.Log($"Group {currentGroup} headed to Island.", LogLevel.Debug);
+                Globals.ModMonitor.Log($"Group {currentGroup} headed to Island.", LogLevel.Debug);
 #endif
                 HashSet<NPC> possiblegroup = IslandGroups[currentGroup];
                 visitors = possiblegroup.ToList(); // limit group size if there's too many people...
@@ -226,7 +231,7 @@ internal static class GIScheduler
             }
         }
 
-        // If George in visitors, add Evelyn.
+        // If George in visitors, add Evelyn. TODO: set their delay times so they appear to travel together.
         if (visitors.Any((NPC npc) => npc.Name.Equals("George", StringComparison.OrdinalIgnoreCase))
             && visitors.All((NPC npc) => !npc.Name.Equals("Evelyn", StringComparison.OrdinalIgnoreCase))
             && Game1.getCharacterFromName("Evelyn") is NPC evelyn)
@@ -246,6 +251,15 @@ internal static class GIScheduler
         for (int i = 0; i < visitors.Count; i++)
         {
             visitors[i].scheduleDelaySeconds = Math.Min(i * 0.4f, 7f);
+        }
+
+        // set schedule Delay for George and Evelyn so they arrive together (in theory)?
+        NPC? george = visitors.FirstOrDefault((NPC npc) => npc.Name.Equals("George", StringComparison.OrdinalIgnoreCase));
+        NPC? evelyn2 = visitors.FirstOrDefault((NPC npc) => npc.Name.Equals("Evelyn", StringComparison.OrdinalIgnoreCase));
+        if (george is not null && evelyn2 is not null)
+        {
+            george.scheduleDelaySeconds = 7f;
+            evelyn2.scheduleDelaySeconds = 6.8f;
         }
 
         Globals.ModMonitor.DebugLog($"{visitors.Count} vistors: {string.Join(", ", visitors.Select((NPC npc) => npc.Name))}");

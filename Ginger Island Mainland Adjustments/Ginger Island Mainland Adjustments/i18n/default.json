@@ -10,7 +10,7 @@
   "Sandy_Resort_Left": "Ah, that was relaxing. Back to work, I guess....",
   "Sandy_Resort_Pier": "Isn't that water beautiful? I could stare at it all day!",
   "George_Resort": "Well, ain't this place different! This warm sun feels so nice today.",
-  "Evelyn_Resort":  "My dear @, it's great seeing you here today!#$e#Make sure to take some time for rest and relaxation! Can't have you working yourself too hard.",
+  "Evelyn_Resort": "My dear @, it's great seeing you here today!#$e#Make sure to take some time for rest and relaxation! Can't have you working yourself too hard.",
 
   // Documentation for console commands.
   "getSchedule.documentation": "Gets the schedule of the NPC in question",
@@ -34,7 +34,9 @@
   "display-schedule.noSchedule": "{{name}} is not set to follow a schedule today.",
   "display-schedule.toIsland": "{{name}} is headed to the Island.",
 
-  "display-schedule.expectedTime": "With expected trave time: ",
+  "display-schedule.expectedTime": "With expected travel time: ",
+  "display-schedule.expectedTime.minutes": " minutes",
+  "display-schedule.expectedArrival": "With expected arrival time: ",
   "display-schedule.direction": "With final facing direction: ",
   "display-schedule.animation": "With animation: ",
   "display-schedule.message": "With message: ",

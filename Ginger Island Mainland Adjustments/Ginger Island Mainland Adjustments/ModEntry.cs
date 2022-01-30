@@ -1,4 +1,5 @@
-﻿using System.Reflection;
+﻿using System.Diagnostics.CodeAnalysis;
+using System.Reflection;
 using System.Text;
 using GingerIslandMainlandAdjustments.CustomConsoleCommands;
 using GingerIslandMainlandAdjustments.DialogueChanges;
@@ -39,14 +40,17 @@ public class ModEntry : Mod
         helper.Content.AssetEditors.Add(manager);
     }
 
-    private void OnPlayerWarped(object? sender, WarpedEventArgs e)
+    /// <summary>
+    /// Clear all caches at the end of the day and if the player exits to menu.
+    /// </summary>
+    [SuppressMessage("StyleCop.CSharp.OrderingRules", "SA1204:Static elements should appear before instance elements", Justification = "Reviewed")]
+    private static void ClearCaches()
     {
-        SandyShop.AddBoxToShop(e);
-    }
-
-    private void Input_ButtonPressed(object? sender, ButtonPressedEventArgs e)
-    {
-        SandyShop.HandleShop(e);
+        MidDayScheduleEditor.Reset();
+        IslandSouthPatches.ClearCache();
+        GIScheduler.ClearCache();
+        DialogueUtilities.ClearDialogueLog();
+        ConsoleCommands.ClearCache();
     }
 
     /// <summary>
@@ -56,10 +60,7 @@ public class ModEntry : Mod
     /// <param name="e">Possible parameters.</param>
     private void ReturnedToTitle(object? sender, ReturnedToTitleEventArgs e)
     {
-        MidDayScheduleEditor.Reset();
-        IslandSouthPatches.ClearCache();
-        GIScheduler.ClearCache();
-        DialogueUtilities.ClearDialogueLog();
+        ClearCaches();
     }
 
     /// <summary>
@@ -69,10 +70,7 @@ public class ModEntry : Mod
     /// <param name="e">Possible parameters.</param>
     private void DayEnding(object? sender, DayEndingEventArgs e)
     {
-        MidDayScheduleEditor.Reset();
-        IslandSouthPatches.ClearCache();
-        GIScheduler.ClearCache();
-        DialogueUtilities.ClearDialogueLog();
+        ClearCaches();
     }
 
     /// <summary>
@@ -122,5 +120,15 @@ public class ModEntry : Mod
     {
         // Generate the GMCM for this mod.
         GenerateGMCM.Build(this.ModManifest);
+    }
+
+    private void OnPlayerWarped(object? sender, WarpedEventArgs e)
+    {
+        SandyShop.AddBoxToShop(e);
+    }
+
+    private void Input_ButtonPressed(object? sender, ButtonPressedEventArgs e)
+    {
+        SandyShop.HandleShop(e);
     }
 }

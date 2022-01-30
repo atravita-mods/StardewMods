@@ -41,37 +41,37 @@ public enum SpecialGroupType
 /// <summary>
 /// Class to manage assets.
 /// </summary>
-internal class AssetManager : IAssetLoader, IAssetEditor
+public class AssetManager : IAssetLoader, IAssetEditor
 {
     /// <summary>
     /// Primary asset path for this mod. All assets should start with this.
     /// </summary>
-    public const string AssetPath = "Mods/atravita_Ginger_Island_Adjustments";
+    private const string AssetPath = "Mods/atravita_Ginger_Island_Adjustments";
 
     /// <summary>
     /// Fake asset location for bartenders.
     /// </summary>
-    public static readonly string BartenderLocation = PathUtilities.NormalizeAssetName(AssetPath + "_bartenders");
+    private static readonly string BartenderLocation = PathUtilities.NormalizeAssetName(AssetPath + "_bartenders");
 
     /// <summary>
     /// Fake asset location for explorers.
     /// </summary>
-    public static readonly string ExplorerLocation = PathUtilities.NormalizeAssetName(AssetPath + "_explorers");
+    private static readonly string ExplorerLocation = PathUtilities.NormalizeAssetName(AssetPath + "_explorers");
 
     /// <summary>
     /// Fake asset location for musicians.
     /// </summary>
-    public static readonly string MusicianLocation = PathUtilities.NormalizeAssetName(AssetPath + "_musicians");
+    private static readonly string MusicianLocation = PathUtilities.NormalizeAssetName(AssetPath + "_musicians");
 
     /// <summary>
     /// Fake asset location for groups.
     /// </summary>
-    public static readonly string GroupsLocations = PathUtilities.NormalizeAssetName(AssetPath + "_groups");
+    private static readonly string GroupsLocations = PathUtilities.NormalizeAssetName(AssetPath + "_groups");
 
     /// <summary>
     /// Fake asset location for exclusions.
     /// </summary>
-    public static readonly string ExclusionLocations = PathUtilities.NormalizeAssetName(AssetPath + "_exclusions");
+    private static readonly string ExclusionLocations = PathUtilities.NormalizeAssetName(AssetPath + "_exclusions");
 
     private static readonly string GeorgeDialogueLocation = PathUtilities.NormalizeAssetName("Characters/Dialogue/George");
     private static readonly string EvelynDialogueLocation = PathUtilities.NormalizeAssetName("Characters/Dialogue/Evelyn");

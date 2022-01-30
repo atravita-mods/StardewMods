@@ -35,9 +35,9 @@ The keys `GILeave_<NPCname>` and `GIReturn_<NPCname>` will be used by married ch
 
 ### Additional Resort keys.
 
-* `Resort_Antisocial`: Said while standing on IslandSouthEast.
+* `Resort_Antisocial`: Said while standing on IslandSouthEast. **Temporarily removed until I figure out why NPCs sometimes vanish after going to IslandSouthEast**
 * `Resort_Pier`: Said while standing on the pier, facing right.
-* `Resort_IslandNorth`: Said by NPCs who make a quick visit to Island North.
-* `Resort_Adventure`: 
-* `Resort_Volcano`:
-* `Resort_Tent`:
+* `Resort_IslandNorth`: Said by NPCs on IslandNorth.
+* `Resort_Adventure`: Said by NPCs headed off towards either the volcano or Professor Snail's tent.
+* `Resort_Volcano`: Said by NPCs standing near the volcano.
+* `Resort_Tent`: Said by NPCs standing Professor Snail's tent.

@@ -1,4 +1,5 @@
-﻿using GingerIslandMainlandAdjustments.Utils;
+﻿using GingerIslandMainlandAdjustments.CustomConsoleCommands;
+using GingerIslandMainlandAdjustments.Utils;
 using Microsoft.Xna.Framework;
 using StardewModdingAPI.Utilities;
 
@@ -98,6 +99,7 @@ internal static class IslandNorthScheduler
                 explorer.islandScheduleName.Value = "island";
                 explorer.Schedule = explorer.parseMasterSchedule(renderedSchedule);
                 Game1.netWorldState.Value.IslandVisitors[explorer.Name] = true;
+                ConsoleCommands.IslandSchedules[explorer.Name] = renderedSchedule;
             }
         }
     }

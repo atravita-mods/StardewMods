@@ -23,4 +23,6 @@ GI schedules are constructed similarly to normal schedules. You can use `MAIL`/`
 
 For GI keys, the first time *has* to be 1800. In general, it takes quite a while for NPCs to cross the map after getting home from GI, so I wouldn't recommend putting the next key any closer than 2100.
 
-For examples, please check out the [example pack](https://github.com/atravita-mods/Ginger-Island-Mainland-Adjustments/blob/master/%5BCP%5D%20Ginger%20Island%20Mainland%20Adjustments/schedules.json) or the [wiki's documentation on schedules](https://stardewvalleywiki.com/Modding:Schedule_data)!
+For examples, please check out the [example pack](https://github.com/atravita-mods/Ginger-Island-Mainland-Adjustments/blob/master/%5BCP%5D%20Ginger%20Island%20Mainland%20Adjustments/schedules.json).
+
+See also: [the wiki's documentation on schedules](https://stardewvalleywiki.com/Modding:Schedule_data)!

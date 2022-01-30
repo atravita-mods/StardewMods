@@ -1,7 +1,7 @@
 ﻿Ginger-Island Scheduling
 =======================
 
-todo
+If the setting `UseThisScheduler` is enabled, 
 
 ### Custom Groups
 

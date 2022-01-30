@@ -11,6 +11,11 @@ namespace GingerIslandMainlandAdjustments.CustomConsoleCommands;
 internal static class ConsoleCommands
 {
     /// <summary>
+    /// Holds the raw island schedule strings.
+    /// </summary>
+    internal static readonly Dictionary<string, string> IslandSchedules = new();
+
+    /// <summary>
     /// All console commands in this will start with the following.
     /// </summary>
     private const string PrePendCommand = "av.gima.";
@@ -29,6 +34,14 @@ internal static class ConsoleCommands
             name: PrePendCommand + "get_islanders",
             documentation: I18n.GetIslanders_Documentation(),
             callback: ConsoleGetIslanders);
+    }
+
+    /// <summary>
+    /// Clear the island schedules at the end of the day.
+    /// </summary>
+    internal static void ClearCache()
+    {
+        IslandSchedules.Clear();
     }
 
     /// <summary>
@@ -56,6 +69,10 @@ internal static class ConsoleCommands
         if (atIsland)
         {
             Globals.ModMonitor.Log('\t' + I18n.DisplaySchedule_ToIsland(npc.Name), level);
+            if (IslandSchedules.TryGetValue(npc.Name, out string? schedulestring))
+            {
+                Globals.ModMonitor.Log($"\t{npc.dayScheduleName.Value}\n\t\t{schedulestring}", level);
+            }
         }
         else
         {
@@ -68,9 +85,11 @@ internal static class ConsoleCommands
         foreach (int key in keys)
         {
             SchedulePathDescription schedulePathDescription = npc.Schedule[key];
+            int expectedRouteTime = schedulePathDescription.GetExpectedRouteTime();
             sb.Append('\t').Append(key).Append(": ");
             sb.AppendJoin(", ", schedulePathDescription.route).AppendLine();
-            sb.Append("\t\t").Append(I18n.DisplaySchedule_ExpectedTime()).Append(schedulePathDescription.GetExpectedRouteTime()).AppendLine(" minutes");
+            sb.Append("\t\t").Append(I18n.DisplaySchedule_ExpectedTime()).Append(expectedRouteTime).AppendLine(I18n.DisplaySchedule_ExpectedTime_Minutes());
+            sb.Append("\t\t").Append(I18n.DisplaySchedule_ExpectedArrival()).AppendLine(Utility.ModifyTime(key, expectedRouteTime).ToString());
             sb.Append("\t\t").Append(I18n.DisplaySchedule_Direction()).AppendLine(schedulePathDescription.facingDirection.ToString());
             sb.Append("\t\t").Append(I18n.DisplaySchedule_Animation()).AppendLine(schedulePathDescription.endOfRouteBehavior);
             sb.Append("\t\t").Append(I18n.DisplaySchedule_Message()).AppendLine(schedulePathDescription.endOfRouteMessage);

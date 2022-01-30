@@ -29,21 +29,14 @@ The original point of this mod was to change those two things. A little scope cr
 
 Note: you will need to run the mod at least once to generate the `config.json` file. [Generic Mod Config Menu](https://www.nexusmods.com/stardewvalley/mods/5098) integration is supported if you want to edit the values from inside the game.
 
-`EnforceGITiming` will output warnings if schedule points are placed too closely to each other and skip that schedule point, but only if `UseThisScheduler` is **false**. Recommended while setting up/debugging schedules.
-
-`UseThisScheduler` will cause the mod to generate Ginger Island schedules. **The remaining settings will only have affect if this is enabled**.
-
-`Capacity` sets the maximum number of visitors to the Ginger Island Resort. Will allow values up to twelve.
-
-`GroupChance` sets the probability a group of NPCs will be picked to visit the Resort. 
-
-`ExplorerChance` sets the probability a smaller group of NPCs.
-
-`GusDay` and `GusChance` set a day that Gus is more likely to go to the Resort, and the chance that he'll be there.
-
-`AllowSandy` allows Sandy access to the Resort. <!-- link Elizabeth's Sandy Beach outfit if she publishes! -->
-
-`AllowGeorgeAndEvelyn` allows George and Evelyn access to the resort.
+1. `EnforceGITiming` will output warnings if schedule points are placed too closely to each other and skip that schedule point, but only if `UseThisScheduler` is **false**. Recommended while setting up/debugging schedules.
+2. `UseThisScheduler` will cause the mod to generate Ginger Island schedules. **The remaining settings will only have affect if this is enabled**.
+3. `Capacity` sets the maximum number of visitors to the Ginger Island Resort. Will allow values up to twelve.
+4. `GroupChance` sets the probability a group of NPCs will be picked to visit the Resort. 
+5. `ExplorerChance` sets the probability a smaller group of NPCs.
+6. `GusDay` and `GusChance` set a day that Gus is more likely to go to the Resort, and the chance that he'll be there.
+7. `AllowSandy` allows Sandy access to the Resort. <!-- link Elizabeth's Sandy Beach outfit if she publishes! -->
+8. `AllowGeorgeAndEvelyn` allows George and Evelyn access to the resort.
 
 **Additionally:**
 

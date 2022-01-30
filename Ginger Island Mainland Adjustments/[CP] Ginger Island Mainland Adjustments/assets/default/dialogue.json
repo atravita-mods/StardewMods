@@ -10,7 +10,8 @@
             "Resort_Adventure": "Looking forward to a day spent wandering in the wilderness...er, for some defintions of 'wilderness'.",
             "Resort_Volcano": "Wow! I wonder what monsters I can find in there?",
             "Resort_Tent": "Professor Snail showed me a bunch of really interesting fossils!",
-            "Resort_AdventureReturn": "I can't wait to come back here! Wonder what else I'll find next?"
+            "Resort_AdventureReturn": "I can't wait to come back here! Wonder what else I'll find next?",
+            "Resort_Approach_PierreFamily": "Heya @, I'm going to be headed to Ginger Island with my family today. Not sure I'm looking forward to spending the day with my dad..."
         }
     },
     {
@@ -32,7 +33,8 @@
         "Target": "Characters/Dialogue/Sebastian",
         "Entries":{
             "Resort_Antisocial": "Heya @, whatcha up to?#$b#Me? Just taking a break from all those people...#$b#Vacations are fun, but they're also tiring.",
-            "Resort_Antisocial_2": "Glad I'm wearing this shirt. Otherwise, I'd definitely be sunburning right about now."
+            "Resort_Antisocial_2": "Glad I'm wearing this shirt. Otherwise, I'd definitely be sunburning right about now.",
+            "Resort_Approach_RobinFamily": "@, I'll be headed to Ginger Island today with my family. I'm...not sure I'm looking forward to it.",
         }
     },
     {
@@ -46,7 +48,8 @@
             "Resort_Volcano_2": "Volcanos can also form on other planets! The biggest one in the solar system is Olympus Mons on Mars.",
             "Resort_Tent": "Professor Snail was just telling me about all the unique shells he's collected over the years!",
             "Resort_Tent_2": "Oh, look at all these amazing mushrooms!",
-            "Resort_AdventureReturn": "I can't wait to come back! So much more data to gather!"
+            "Resort_AdventureReturn": "I can't wait to come back! So much more data to gather!",
+            "Resort_Approach_RobinFamily": "Looking forward to a nice vacation with my wife and kids!" // This key will only get called if the group RobinFamily is headed to the Resort.
         }
     },
     {
@@ -94,6 +97,7 @@
         {
             "Resort_Leaving": "Well, that was deeply relaxing. I'll see you at home, dear.$l",
             "Resort_Adventure": "Oh, hi, @! What are you planning on doing today?#$b#Me, I'm planning on drawing some of the birds on this island.",
+            "Resort_Adventure_2": "Oh, @! It's so nice seeing you here. Look at how the light comes through those trees, isn't it so beautiful?",
             "Resort_Antisocial": "Oh, @, you've found me here. How are you today? The Resort is just a little too busy for me right now.",
             "Resort_Pier": "This water is such a pretty shade of blue. @, would you be interested in going snorkeling one day?"
         },
@@ -101,7 +105,17 @@
 	    {
 				"Relationship:Leah": "Married",
 				"Hearts:Leah": "12,13,14"
-		},
+		}
+    },
+    {
+        "LogName": "Elliot dialogue",
+        "Action": "EditData",
+        "Target": "Characters/Dialogue/Elliot",
+        "Entries":{
+            "Resort_Approach": "@, I'll be taking a vacation today! Care to join me?",
+            "Resort Pier": "Nothing like basking in the nice warm sun, surrounded by such beautiful waters.",
+            "Resort_IslandNorth": "Ah, this place stimulates the creative spirit! Nothing like a nice tropical mango to get the writing brain in gear."
+        }
     },
     {
         "LogName": "Jodi dialogue",
@@ -127,7 +141,8 @@
         "Action": "EditData",
         "Target": "Characters/Dialogue/Haley",
         "Entries": {
-            "Resort_Pier": "Wish I brought my camera...#$e#Say, do you think Willy will let us go snorkeling?"
+            "Resort_Pier": "Wish I brought my camera...#$e#Say, do you think Willy will let us go snorkeling?",
+            "Resort_Approach": "I'm going to be going on vacation today! Gonna be spending all day soaking up the sun.$h"
         }
     },
     {
@@ -144,7 +159,10 @@
         "Action": "EditData",
         "Target": "Characters/Dialogue/Emily",
         "Entries":{
-            "Resort_IslandNorth": "Did you see those birds? Aren't they lovely?"
+            "Resort_IslandNorth": "Did you see those birds? Aren't they lovely?",
+            "Resort_Left": "Ah, I'm so glad I got to go on vacation today!",
+            "Resort_Left4": "I had a great time today at Ginger Island. @, you should consider relaxing and taking a break more often?",
+            "winterResort_Left": "Brr! Town seems so cold after spending all day on Ginger Island!"
         }
     }
 ]}

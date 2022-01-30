@@ -185,28 +185,32 @@ internal static class GIScheduler
             List<string> groupkeys = new();
             foreach (string key in IslandGroups.Keys)
             {
-                if (IslandGroups[key].All((NPC npc) => IslandSouth.CanVisitIslandToday(npc)))
+                // Filter out groups where one member can't make it or are too big
+                if (IslandGroups[key].All((NPC npc) => IslandSouth.CanVisitIslandToday(npc)) && IslandGroups[key].Count <= capacity)
                 {
                     groupkeys.Add(key);
                 }
             }
-            currentGroup = Utility.GetRandom(groupkeys, random);
+            if (groupkeys.Count > 0)
+            {
+                currentGroup = Utility.GetRandom(groupkeys, random);
 #if DEBUG
             Globals.ModMonitor.Log($"Group {currentGroup} headed to Island.", LogLevel.Debug);
 #endif
-            HashSet<NPC> possiblegroup = IslandGroups[currentGroup];
-            visitors = possiblegroup.OrderBy(a => random.Next()).Take(capacity).ToList(); // limit group size if there's too many people...
-            currentVisitingGroup = visitors.ToHashSet();
-            valid_visitors.ExceptWith(visitors);
+                HashSet<NPC> possiblegroup = IslandGroups[currentGroup];
+                visitors = possiblegroup.ToList(); // limit group size if there's too many people...
+                currentVisitingGroup = possiblegroup;
+                valid_visitors.ExceptWith(visitors);
+            }
         }
         NPC? gus = Game1.getCharacterFromName("Gus");
         if (gus is not null && !visitors.Contains(gus) && !explorers.Contains(gus)
             && Globals.Config.GusDayAsShortString().Equals(Game1.shortDayNameFromDayOfSeason(Game1.dayOfMonth), StringComparison.OrdinalIgnoreCase)
             && Globals.Config.GusChance > random.NextDouble())
         {
-            Globals.ModMonitor.DebugLog($"Forcibly adding Gus");
             if (!visitors.Contains(gus))
             {
+                Globals.ModMonitor.DebugLog($"Forcibly adding Gus");
                 visitors.Add(gus);
                 valid_visitors.Remove(gus);
             }
@@ -227,6 +231,7 @@ internal static class GIScheduler
             && visitors.All((NPC npc) => !npc.Name.Equals("Evelyn", StringComparison.OrdinalIgnoreCase))
             && Game1.getCharacterFromName("Evelyn") is NPC evelyn)
         {
+            // counting backwards to avoid kicking out a group member.
             for (int i = visitors.Count - 1; i >= 0; i--)
             {
                 if (!visitors[i].Name.Equals("Gus", StringComparison.OrdinalIgnoreCase) && !visitors[i].Name.Equals("George", StringComparison.OrdinalIgnoreCase))
@@ -242,6 +247,7 @@ internal static class GIScheduler
         {
             visitors[i].scheduleDelaySeconds = Math.Min(i * 0.4f, 7f);
         }
+
         Globals.ModMonitor.DebugLog($"{visitors.Count} vistors: {string.Join(", ", visitors.Select((NPC npc) => npc.Name))}");
         return visitors;
     }

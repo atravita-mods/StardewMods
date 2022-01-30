@@ -57,6 +57,10 @@ internal static class GenerateGMCM
             setValue: value => Globals.Config.UseThisScheduler = value,
             tooltip: I18n.Config_Scheduler_Description);
 
+        configMenu.AddParagraph(
+            mod: manifest,
+            text: I18n.Config_Scheduler_Otheroptions);
+
         configMenu.AddNumberOption(
             mod: manifest,
             name: I18n.Config_GroupChance_Title,

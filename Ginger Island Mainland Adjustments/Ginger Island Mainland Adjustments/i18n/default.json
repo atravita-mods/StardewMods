@@ -49,6 +49,7 @@
   "config.enforceGITiming.description": "If schedule points are too closely spaced, skip over them (with warning).",
   "config.scheduler.title": "Use Mod's Scheduler",
   "config.scheduler.description": "Use this mod's Ginger Island Scheduler (instead of vanilla game's).'",
+  "config.scheduler.otheroptions": "The remaining options will only take affect if this mod's scheduler is used.",
   "config.capacity.title": "Ginger Island Capacity",
   "config.capacity.description": "If using this mod's scheduler, the maximum number of people allowed on Ginger Island.",
   "config.group_chance.title": "Group Chance.",

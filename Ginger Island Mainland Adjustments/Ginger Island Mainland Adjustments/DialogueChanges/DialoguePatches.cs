@@ -34,7 +34,7 @@ internal class DialoguePatches
             { // am not headed to island today.
                 return;
             }
-            if (__instance.currentLocation is (IslandSouth or IslandNorth or IslandSouthEast or FarmHouse))
+            if (__instance.currentLocation is (IslandLocation or FarmHouse))
             { // Currently on island, skip me.
                 return;
             }

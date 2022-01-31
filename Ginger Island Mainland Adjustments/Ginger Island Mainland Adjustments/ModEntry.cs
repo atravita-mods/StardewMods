@@ -50,7 +50,6 @@ public class ModEntry : Mod
         GIScheduler.ClearCache();
         DialogueUtilities.ClearDialogueLog();
         ConsoleCommands.ClearCache();
-        NPCPatches.ResetAllFishers();
     }
 
     /// <summary>
@@ -71,6 +70,7 @@ public class ModEntry : Mod
     private void DayEnding(object? sender, DayEndingEventArgs e)
     {
         ClearCaches();
+        NPCPatches.ResetAllFishers();
     }
 
     /// <summary>

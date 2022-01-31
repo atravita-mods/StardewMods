@@ -336,13 +336,15 @@ internal class GingerIslandTimeSlot
                 chanceMap: (NPC npc) => npc.Age == NPC.adult ? 0.6 : 0,
                 animation: "beach_chair",
                 animation_required: false),
+#if DEBUG
             // antisocial point
-            //new PossibleIslandActivity(
-            //    new List<Point> { new Point(3, 29) },
-            //    dialogueKey: "Resort_Antisocial",
-            //    basechance: 0,
-            //    chanceMap: (NPC npc) => npc.SocialAnxiety == NPC.shy && npc.Optimism == NPC.negative ? 0.6 : 0.1,
-            //    map: "IslandSouthEast"),
+            new PossibleIslandActivity(
+                new List<Point> { new Point(3, 29) },
+                dialogueKey: "Resort_Antisocial",
+                basechance: 0,
+                chanceMap: (NPC npc) => npc.SocialAnxiety == NPC.shy && npc.Optimism == NPC.negative ? 0.6 : 0.1,
+                map: "IslandSouthEast"),
+#endif
             // shore points
             new PossibleIslandActivity(
                 new List<Point> { new Point(6, 34), new Point(9, 33), new Point(13, 33), new Point(17, 33), new Point(24, 33), new Point(28, 32), new Point(32, 31), new Point(37, 31) },

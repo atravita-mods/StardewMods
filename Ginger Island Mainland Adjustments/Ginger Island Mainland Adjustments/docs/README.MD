@@ -72,7 +72,7 @@ If this mod's Ginger Island scheduler is enabled, the mod will look at specific 
 ### FAQ
 #### Do I need to list this this mod as a dependency?
 
-Actually not....unless you try to edit any of this mod's data files (see `.\GIScheduling.MD`), and even then you could use a [HasMod](https://github.com/Pathoschild/StardewMods/blob/develop/ContentPatcher/docs/author-guide/tokens.md#HasMod). This is because extra keys in the schedule and dialogue files are just simply ignored by the game, which makes this mod pretty good as an optional dependency.
+Actually not....unless you try to edit any of this mod's data files (see [scheduling](.\GIScheduling.MD)), and even then you could use a [HasMod](https://github.com/Pathoschild/StardewMods/blob/develop/ContentPatcher/docs/author-guide/tokens.md#HasMod). This is because extra keys in the schedule and dialogue files are just simply ignored by the game, which makes this mod pretty good as an optional dependency.
 
 ### See Also:
 

@@ -1,6 +1,8 @@
 ﻿Ginger Island Remainder Schedules
 =================================
 
+[← back to readme](../../README.md) [← back to main guide](../README.md)
+
 GIRemainder schedules work very similarly to how normal schedule keys work and should be placed in the usual schedule file `Characters/schedules/<NPCname>`.
 
 All GIRemainder keys must start with `GIRemainder`. If an NPC is married, they'll use `GIRemainder_marriage` as their base key instead, and the non-marriage keys are entirely ignored.

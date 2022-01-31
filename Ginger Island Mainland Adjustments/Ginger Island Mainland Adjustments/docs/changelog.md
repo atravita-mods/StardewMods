@@ -1,7 +1,7 @@
 ﻿Changelog
 ===================
 
-[← back to readme](../README.md)
+[← back to readme](../../README.md)
 
 #### Todo
 

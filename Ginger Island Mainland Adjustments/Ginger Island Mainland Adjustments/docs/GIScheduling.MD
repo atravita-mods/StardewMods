@@ -2,7 +2,7 @@
 =======================
 
 [← back to readme](../../README.md) <br/>
-[← back to main guide](./README.md)
+[← back to main guide](./README.MD)
 
 If the setting `UseThisScheduler` is enabled, this mod will try to schedule NPCs at Ginger Island using the below data:
 

@@ -66,7 +66,7 @@ A full list of possible dialogue keys can be found [here](./GIDialogueKeys.MD), 
 
 #### Data in specific files this mod looks for.
 
-If this mod's Ginger Island scheduler is enabled, 
+If this mod's Ginger Island scheduler is enabled, the mod will look at specific data files to find roles and groups. Please see the full documentation for this [here](.\GIScheduling.MD)
 
 
 ### FAQ

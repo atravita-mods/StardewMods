@@ -13,17 +13,17 @@ The original point of this mod was to change those two things. A little scope cr
 * **Gus has a dedicated day**. Set the config options `GusDay` and `GusChance`, and he'll have specific days where he's more likely to go to Ginger Island...
 * **Sandy, George, and Evelyn can go to Ginger Island**. (Configurable). Sandy will even leave a box on her counter so you can still shop!
 
-#### Install
+### Install
 
 1. Install the latest version of [SMAPI](https://smapi.io).
 2. Download this mod and unzip it into `Stardew Valley/Mods`.
 3. Run the game using SMAPI.
 4. Optionally: download the small example content pack, which has `GIRemainder` schedules and a *few* dialogue keys, mostly just replacing lines I felt were most egregious. 
 
-#### Uninstall
+### Uninstall
 1. Simply delete this mod from your mods directory.
 
-#### How to use
+### How to use
 
 **Configuration settings:**
 
@@ -44,7 +44,7 @@ Two console commands: `av.gima.get_schedule <NPCname>` shows you their schedule 
 
 For more documentation, see the [author guide](https://github.com/atravita-mods/Ginger-Island-Mainland-Adjustments/tree/master/Ginger%20Island%20Mainland%20Adjustments/docs).
 
-#### Compatibility
+### Compatibility
 
 * Works with Stardew Valley 1.5.6 on Linux/macOS/Windows.
 * Works in single player, multiplayer, and split-screen mode. 
@@ -53,7 +53,7 @@ Compatibility with other mods: mostly unknown. It should be relatively independe
 
 If you have a mod that changes the Ginger Island maps, this mod may be incompatible, since both it (and the vanilla game) hardcode locations for NPCs to stand on. I might do something about that in the future, but it's not on the top of my list.
 
-#### Additionally...
+### Additionally...
 
 * Translations would be very welcome! DM me or send me a pull request!
 * [Change log](https://github.com/atravita-mods/Ginger-Island-Mainland-Adjustments/blob/master/Ginger%20Island%20Mainland%20Adjustments/docs/changelog.md)

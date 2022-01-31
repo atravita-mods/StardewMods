@@ -124,11 +124,16 @@ public class ModEntry : Mod
 
     private void OnPlayerWarped(object? sender, WarpedEventArgs e)
     {
-        SandyShop.AddBoxToShop(e);
+        ShopHandler.AddBoxToShop(e);
     }
 
     private void Input_ButtonPressed(object? sender, ButtonPressedEventArgs e)
     {
-        SandyShop.HandleShop(e);
+        if (!Context.IsWorldReady)
+        {
+            return;
+        }
+        ShopHandler.HandleWillyShop(e);
+        ShopHandler.HandleSandyShop(e);
     }
 }

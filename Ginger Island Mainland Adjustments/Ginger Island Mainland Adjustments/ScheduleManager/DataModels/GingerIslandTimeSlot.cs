@@ -349,7 +349,7 @@ internal class GingerIslandTimeSlot
                 new List<Point> { new Point(3, 29) },
                 dialogueKey: "Resort_Antisocial",
                 basechance: 0,
-                chanceMap: (NPC npc) => npc.SocialAnxiety == NPC.shy && npc.Optimism == NPC.negative && !npc.Name.Equals("George", StringComparison.OrdinalIgnoreCase) ? 0.6 : 0.1,
+                chanceMap: (NPC npc) => npc.SocialAnxiety == NPC.shy && npc.Optimism == NPC.negative && !npc.Name.Equals("George", StringComparison.OrdinalIgnoreCase) ? 0.6 : 0.0,
                 map: "IslandSouthEast"),
 #endif
             // shore points

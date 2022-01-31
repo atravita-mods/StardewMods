@@ -28,7 +28,9 @@ internal static class ShopHandler
         {
             return;
         }
-        if (!Utils.YieldSurroundingTiles(Game1.player.getTileLocation()).Any((Point v) => sandyHouse.doesTileHaveProperty(v.X, v.Y, "Action", "Buildings")?.Contains("Buy") == true))
+        Vector2 cursorTile = Globals.Helper.Input.GetCursorPosition().GrabTile;
+        // Checking nine tiles here - there's usually not much around Sandy's buy tile.
+        if (!Utils.YieldSurroundingTiles(cursorTile).Any((Point v) => sandyHouse.doesTileHaveProperty(v.X, v.Y, "Action", "Buildings")?.Contains("Buy") == true))
         {
             return;
         }
@@ -63,7 +65,8 @@ internal static class ShopHandler
         {
             return;
         }
-        if (!Utils.YieldSurroundingTiles(Game1.player.getTileLocation()).Any((Point v) => fishShop.doesTileHaveProperty(v.X, v.Y, "Action", "Buildings")?.Contains("Buy") == true))
+        Vector2 cursorTile = Globals.Helper.Input.GetCursorPosition().GrabTile;
+        if (!fishShop.doesTileHaveProperty((int)cursorTile.X, (int)cursorTile.Y, "Action", "Buildings")?.Contains("Buy") == true)
         {
             return;
         }

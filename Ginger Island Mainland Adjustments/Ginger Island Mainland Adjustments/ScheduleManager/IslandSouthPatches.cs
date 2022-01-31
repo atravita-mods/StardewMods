@@ -82,16 +82,22 @@ internal static class IslandSouthPatches
                 if (!Game1.currentSeason.Equals("fall", StringComparison.OrdinalIgnoreCase)
                     && !(Game1.dayOfMonth == 15)
                     && Globals.Config.AllowSandy
-                    && npc.Name.Equals("Sandy", StringComparison.OrdinalIgnoreCase)
-                    && Globals.Config.UseThisScheduler)
+                    && Globals.Config.UseThisScheduler
+                    && npc.Name.Equals("Sandy", StringComparison.OrdinalIgnoreCase))
                 {
                     __result = true; // let Sandy come to the resort!
                 }
-                else if ((npc.Name.Equals("George", StringComparison.OrdinalIgnoreCase) || npc.Name.Equals("Evelyn", StringComparison.OrdinalIgnoreCase))
-                    && Globals.Config.AllowGeorgeAndEvelyn
-                    && Globals.Config.UseThisScheduler)
+                else if (Globals.Config.AllowGeorgeAndEvelyn
+                    && Globals.Config.UseThisScheduler
+                    && (npc.Name.Equals("George", StringComparison.OrdinalIgnoreCase) || npc.Name.Equals("Evelyn", StringComparison.OrdinalIgnoreCase)))
                 {
                     __result = true; // let George & Evelyn come too!
+                }
+                else if (Globals.Config.UseThisScheduler
+                    && Globals.Config.AllowWilly
+                    && npc.Name.Equals("Willy", StringComparison.OrdinalIgnoreCase))
+                {
+                    __result = true; // Allow Willy access to resort as well.
                 }
                 else
                 {

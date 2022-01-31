@@ -134,6 +134,11 @@ public class ModConfig
     }
 
     /// <summary>
+    /// Gets or sets a value indiciating whether Willy has access to the Resort.
+    /// </summary>
+    public bool AllowWilly { get; set; } = true;
+
+    /// <summary>
     /// Gets or sets a value indicating whether Sandy has access to the resort.
     /// </summary>
     public bool AllowSandy { get; set; } = true;

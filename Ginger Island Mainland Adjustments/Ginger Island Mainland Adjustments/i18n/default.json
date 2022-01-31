@@ -66,6 +66,8 @@
   "config.gus_day.description": "Day of week Gus is more likely to go to Ginger Island.",
   "config.gus_chance.title": "Gus's Ginger Island Chances",
   "config.gus_chance.description": "Chance that Gus will go to Ginger Island on his assigned day.",
+  "config.allow_willy.title": "Allow Willy",
+  "config.allow_willy.description":  "If enabled, allows Willy to attend the resort. (His shop will remain available).",
   "config.allow_sandy.title": "Allow Sandy",
   "config.allow_sandy.description": "If enabled, allows Sandy to go to the resort. (Her store will remain available).",
   "config.allow_george_and_evelyn.title": "Allow George and Evelyn",

@@ -2,7 +2,7 @@
 
 One of the things I've noticed is that Ginger Island is not particularly well integrated with the rest of NPC scheduling and dialogue. Pierre can tell you that he'd rather be outside than running his shop one minute, and the next you'll find him enjoying the Resort. Or Jodi would tell you to wipe your feet off when she was outside on the beach. For that, this mod implements *specific dialogue keys* that are only used while an NPC is (a) on the mainland and (b) headed to and away from Ginger Island. I was going to write dialogue lines for everyone but honestly I couldn't come up with lines for...a lot of characters, actually. So a few have lines, but for the rest, I hope the included content pack and documentation are clear enough.
 
-Additionally, NPCs would just head directly to bed after going to Ginger Island (with the exception of Gus), skipping their usual evening schedule points, leaving, say, Demetrius dancing alone if Robin went to Ginger Island. `GIRemainder` schedules now take over for the evening instead, so characters might make a stop or two before going home. These **are** included in the optional CP pack. Instructions to adding more can be found [here](https://github.com/atravita-mods/Ginger-Island-Mainland-Adjustments/blob/master/Ginger%20Island%20Mainland%20Adjustments/docs/GIRemainderSchedules.md).
+Additionally, NPCs would just head directly to bed after going to Ginger Island (with the exception of Gus), skipping their usual evening schedule points, leaving, say, Demetrius dancing alone if Robin went to Ginger Island. `GIRemainder` schedules now take over for the evening instead, so characters might make a stop or two before going home. These **are** included in the optional CP pack. Instructions to adding more can be found [here](./Ginger%20Island%20Mainland%20Adjustments/docs/GIRemainderSchedules.md).
 
 The original point of this mod was to change those two things. A little scope creep may have happened. This mod has an option to completely replace the usual Ginger Island scheduling to handle the following:
 
@@ -42,7 +42,7 @@ Note: you will need to run the mod at least once to generate the `config.json` f
 
 Two console commands: `av.gima.get_schedule <NPCname>` shows you their schedule of the day, and `av.gima.get_islanders` tells you who is going to the island. Do note that if `UseThisScheduler` is set to false, GIRemainder schedules are added one per ten minutes starting from 610, and thus they may not be in until 7AM or so.
 
-For more documentation, see the [author guide](.Ginger Island Mainland Adjustments/docs/README.MD).
+For more documentation, see the [author guide](./Ginger Island Mainland Adjustments/docs/README.MD).
 
 ### Compatibility
 

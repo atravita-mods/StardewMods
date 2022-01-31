@@ -36,7 +36,7 @@ internal static class ConsoleCommands
             callback: ConsoleGetIslanders);
         commandHelper.Add(
             name: PrePendCommand + "get_location_list",
-            documentation: "Gets NPC::routesFromLocationToLocation",
+            documentation: I18n.GetLocations_Documentation(),
             callback: ConsoleGetLocations);
     }
 
@@ -139,7 +139,7 @@ internal static class ConsoleCommands
         List<List<string>>? locations = Globals.ReflectionHelper.GetField<List<List<string>>>(typeof(NPC), "routesFromLocationToLocation").GetValue();
         if (locations is null)
         {
-            Globals.ModMonitor.Log("Location list appears to be empty or not found", LogLevel.Info);
+            Globals.ModMonitor.Log(I18n.GetLocations_NoneFound(), LogLevel.Info);
             return;
         }
         foreach (List<string>? locList in locations)

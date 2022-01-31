@@ -2,7 +2,7 @@
 =========================================
 
 [← back to readme](../../README.md) <br/>
-[← back to main guide](/README.md)
+[← back to main guide](./README.md)
 
 Characters who have island schedules and are not currently on `IslandSouth` can call upon vacation dialogue keys in the usual dialogue file for each character
 `Characters/Dialogue/<NPCname>`. These dialogue keys are said at most once per day.

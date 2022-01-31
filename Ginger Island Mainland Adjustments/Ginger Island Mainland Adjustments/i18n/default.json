@@ -16,6 +16,9 @@
   "getSchedule.documentation": "Gets the schedule of the NPC in question",
   "getIslanders.documentation": "Gets the villagers headed off to the resort today",
 
+  "getLocations.documentation": "Gets the current NPC::routesFromLocationToLocation. Warning: probably long.",
+  "getLocations.noneFound": "Location list appears to be empty or not found (did the field name change?)",
+
   "islanders": "Islanders",
   "npc-not-found": "{{NPC}} not found.",
 

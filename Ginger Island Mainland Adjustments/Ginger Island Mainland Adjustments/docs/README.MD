@@ -55,21 +55,24 @@ For a full list of possible schedule keys, please see the [schedule documentatio
         "Action": "EditData",
         "Target": "Characters/Dialogue/Pam",
         "Entries": {
-            "Resort_Pier": "Look at all the fish swimming in these waters!",
             "Resort_Approach": "@, I'm gonna be headed to Ginger Island today! Got a nice vacation day from the bus company."
         }
     }
 ```
 
+will cause Pam to tell you that she's headed to Ginger Island for the day.
+
+A full list of possible dialogue keys can be found [here](./GIDialogueKeys.MD), and there are examples in the [example pack](https://github.com/atravita-mods/Ginger-Island-Mainland-Adjustments/tree/master/%5BCP%5D%20Ginger%20Island%20Mainland%20Adjustments/assets/default).
+
 #### Data in specific files this mod looks for.
 
-
+If this mod's Ginger Island scheduler is enabled, 
 
 
 ### FAQ
 #### Do I need to list this this mod as a dependency?
 
-Actually not....unless you try to edit any of this mod's data files (see `.\GIScheduling.MD`), and even then you could use a [HasMod](https://github.com/Pathoschild/StardewMods/blob/develop/ContentPatcher/docs/author-guide/tokens.md#HasMod). This is because extra keys in the schedule and dialogue files are just simply ignored.
+Actually not....unless you try to edit any of this mod's data files (see `.\GIScheduling.MD`), and even then you could use a [HasMod](https://github.com/Pathoschild/StardewMods/blob/develop/ContentPatcher/docs/author-guide/tokens.md#HasMod). This is because extra keys in the schedule and dialogue files are just simply ignored by the game, which makes this mod pretty good as an optional dependency.
 
 ### See Also:
 

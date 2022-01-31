@@ -20,9 +20,10 @@ internal class DialogueLog : AbstractDataModel
     : base(savefile) => this.multiplayerID = multiplayerID;
 
     /// <summary>
-    /// Gets or sets backing field that contains all the SeenDialogues.
+    /// Gets backing field that contains all the SeenDialogues.
     /// </summary>
-    public Dictionary<string, List<string>> SeenDialogues { get; set; } = new();
+    /// <remarks>Avoid using this directly; use the TryAdd/TryRemove/Contains methods instead if possible.</remarks>
+    public Dictionary<string, List<string>> SeenDialogues { get; private set; } = new();
 
     /// <summary>
     /// Loads a dialogueLog.
@@ -38,7 +39,7 @@ internal class DialogueLog : AbstractDataModel
         }
         DialogueLog log = ModEntry.DataHelper.ReadGlobalData<DialogueLog>($"{Constants.SaveFolderName}{IDENTIFIER}{multiplayerID:X8}")
             ?? new DialogueLog(Constants.SaveFolderName, multiplayerID);
-        log.multiplayerID = multiplayerID;
+        log.multiplayerID = multiplayerID; // fix the multiplayer ID since ReadGlobalData will use the default zero-parameter constructor.
         return log;
     }
 
@@ -87,7 +88,6 @@ internal class DialogueLog : AbstractDataModel
     /// <param name="dialoguekey">Exact dialogue key.</param>
     /// <param name="characterName">Which character to check.</param>
     /// <returns>True if found, false otheerwise.</returns>
-    [Pure]
     public bool Contains(string dialoguekey, string characterName)
     {
         if (this.SeenDialogues.TryGetValue(dialoguekey, out List<string>? characterList))
@@ -139,7 +139,6 @@ internal class DialogueLog : AbstractDataModel
     }
 
     /// <inheritdoc/>
-    [Pure]
     public override string ToString()
     {
         StringBuilder stringBuilder = new();

@@ -193,7 +193,6 @@ internal class DialogueManager
     /// <param name="characterName">Name of character.</param>
     /// <returns>True if key has been said, false otherwise.</returns>
     /// <exception cref="SaveNotLoadedError">Save is not loaded.</exception>
-    [Pure]
     public static bool HasSeenDialogue(string key, string characterName)
     {
         if (!Context.IsWorldReady)
@@ -359,10 +358,12 @@ internal class DialogueManager
         {
             if (result.PushIfPastTime(Game1.timeOfDay))
             {
+                // Successfully pushed, remove from queue.
                 _ = DelayedDialogues.Value.Dequeue();
             }
             else
             {
+                // Everyone else should be behind me in time, so skip to next timeslot.
                 return;
             }
         }
@@ -381,13 +382,17 @@ internal class DialogueManager
         {// I have already said this dialogue
             return false;
         }
+
+        // Empty NPC's current dialogue stack and keep it in a queue for now.
         while (npc.CurrentDialogue.TryPop(out Dialogue? result))
         {
             DelayedDialogues.Value.Enqueue(new DelayedDialogue(
-                time: Game1.timeOfDay + 100,
+                time: Game1.timeOfDay + 100, // delay by one hour.
                 npc: npc,
                 dialogue: result));
         }
+
+        // Push my dialogue onto their stack.
         npc.CurrentDialogue.Push(new Dialogue(npc.Dialogue[dialogueKey], npc) { removeOnNextMove = true });
         if (ModEntry.Config.Verbose)
         {
@@ -434,7 +439,10 @@ internal class DialogueManager
             }
         }
 
-        ModEntry.ModMonitor.DebugLog(I18n.Dialogue_NoKey(baseKey, npc.Name), LogLevel.Trace);
+        if (ModEntry.Config.Verbose)
+        {
+            ModEntry.ModMonitor.Log(I18n.Dialogue_NoKey(baseKey, npc.Name), LogLevel.Trace);
+        }
         return false;
     }
 }

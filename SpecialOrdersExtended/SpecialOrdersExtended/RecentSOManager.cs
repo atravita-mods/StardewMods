@@ -51,7 +51,6 @@ internal class RecentSOManager
     /// </summary>
     /// <param name="days">current number of days played.</param>
     /// <returns>IEnumerable of keys within the given timeframe. May return null.</returns>
-    [Pure]
     public static IEnumerable<string>? GetKeys(uint days) => recentCompletedSO?.GetKeys(days);
 
     /// <summary>
@@ -177,7 +176,6 @@ internal class RecentSOManager
     /// <returns>True if questkey found and was completed in X days, false otherwise.</returns>
     /// <exception cref="SaveNotLoadedError">Save not loaded.</exception>
     /// <remarks>The data model will delete any entries older than 7 days, so beyond that it just won't know.</remarks>
-    [Pure]
     public static bool IsWithinXDays(string questkey, uint days)
     {
         if (!Context.IsWorldReady)

@@ -16,7 +16,6 @@ internal abstract class AbstractToken
     /// Whether or not the token allows input. Default, true.
     /// </summary>
     /// <returns>true - all derived tokens should allow input.</returns>
-    [Pure]
     public virtual bool AllowsInput() => false;
 
     /// <summary>
@@ -24,12 +23,10 @@ internal abstract class AbstractToken
     /// </summary>
     /// <param name="input">Input to token.</param>
     /// <returns>False (no need for my own inputs).</returns>
-    [Pure]
     public virtual bool CanHaveMultipleValues(string? input = null) => true;
 
     /// <summary>Get whether the token is available for use.</summary>
     /// <returns>True if token ready, false otherwise.</returns>
-    [Pure]
     public virtual bool IsReady() => this.tokenCache is not null;
 
     /// <summary>Validate that the provided input arguments are valid.</summary>

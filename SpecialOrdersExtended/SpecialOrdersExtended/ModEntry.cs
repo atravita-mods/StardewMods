@@ -92,6 +92,7 @@ internal class ModEntry : Mod
             ModMonitor.Log($"Failed to patch NPC::checkForNewCurrentDialogue for Special Orders Dialogue. Dialogue will be disabled\n\n{ex}", LogLevel.Error);
         }
 
+        // Register console commands.
         helper.ConsoleCommands.Add(
             name: "special_order_pool",
             documentation: I18n.SpecialOrderPool_Description(),
@@ -108,6 +109,8 @@ internal class ModEntry : Mod
             name: "special_orders_dialogue",
             documentation: $"{I18n.SpecialOrdersDialogue_Description()}\n\n{I18n.SpecialOrdersDialogue_Example()}\n    {I18n.SpecialOrdersDialogue_Usage()}\n    {I18n.SpecialOrdersDialogue_Save()}",
             callback: DialogueManager.ConsoleSpecialOrderDialogue);
+
+        // Register event handlers.
         helper.Events.GameLoop.GameLaunched += this.OnGameLaunched;
         helper.Events.GameLoop.SaveLoaded += this.SaveLoaded;
         helper.Events.GameLoop.Saving += this.Saving;
@@ -115,16 +118,34 @@ internal class ModEntry : Mod
         helper.Events.GameLoop.OneSecondUpdateTicking += this.OneSecondUpdateTicking;
     }
 
+    /// <summary>
+    /// Raised every 10 in game minutes.
+    /// </summary>
+    /// <param name="sender">Unknown, used by SMAPI.</param>
+    /// <param name="e">TimeChanged params.</param>
+    /// <remarks>Currently handles: pushing delayed dialogue back onto the stack.</remarks>
     private void OnTimeChanged(object? sender, TimeChangedEventArgs e)
     {
         DialogueManager.PushPossibleDelayedDialogues();
     }
 
+    /// <summary>
+    /// Raised every second.
+    /// </summary>
+    /// <param name="sender">Unknown, used by SMAPI.</param>
+    /// <param name="e">OneSecondUpdate params.</param>
+    /// <remarks>Currently handles: grabbing new recently completed special orders.</remarks>
     private void OneSecondUpdateTicking(object? sender, OneSecondUpdateTickingEventArgs e)
     {
         RecentSOManager.GrabNewRecentlyCompletedOrders();
     }
 
+    /// <summary>
+    /// Raised on game launch.
+    /// </summary>
+    /// <param name="sender">Unknown, used by SMAPI.</param>
+    /// <param name="e">Game Launched arguments.</param>
+    /// <remarks>Used to bind APIs and register CP tokens.</remarks>
     private void OnGameLaunched(object? sender, GameLaunchedEventArgs e)
     {
         // Bind Spacecore API
@@ -148,6 +169,12 @@ internal class ModEntry : Mod
         api.RegisterToken(this.ModManifest, "RecentCompleted", new Tokens.RecentCompletedSO());
     }
 
+    /// <summary>
+    /// Raised right before the game is saved.
+    /// </summary>
+    /// <param name="sender">Unknown, used by SMAPI.</param>
+    /// <param name="e">Event arguments.</param>
+    /// <remarks>Used to handle day-end events.</remarks>
     private void Saving(object? sender, SavingEventArgs e)
     {
         this.Monitor.DebugLog("Event Saving raised");
@@ -167,6 +194,12 @@ internal class ModEntry : Mod
         RecentSOManager.Save();
     }
 
+    /// <summary>
+    /// Raised when save is loaded.
+    /// </summary>
+    /// <param name="sender">Unknown, used by SMAPI.</param>
+    /// <param name="e">Parameters.</param>
+    /// <remarks>Used to load in this mod's data models.</remarks>
     private void SaveLoaded(object? sender, SaveLoadedEventArgs e)
     {
         this.Monitor.DebugLog("Event SaveLoaded raised");
@@ -174,6 +207,11 @@ internal class ModEntry : Mod
         RecentSOManager.Load();
     }
 
+    /// <summary>
+    /// Console commands to check the value of a tag.
+    /// </summary>
+    /// <param name="command">Name of the command.</param>
+    /// <param name="args">List of tags to check.</param>
     private void ConsoleCheckTag(string command, string[] args)
     {
         if (!Context.IsWorldReady)
@@ -199,6 +237,11 @@ internal class ModEntry : Mod
         }
     }
 
+    /// <summary>
+    /// Console command to get all available orders.
+    /// </summary>
+    /// <param name="command">Name of command.</param>
+    /// <param name="args">Arguments for command.</param>
     private void GetAvailableOrders(string command, string[] args)
     {
         if (!Context.IsWorldReady)

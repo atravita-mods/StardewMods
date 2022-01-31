@@ -3,6 +3,7 @@ Changelog
 
 1. Add condition to just randomly reduce the chance of a quest appearing. (May need integrate with that one mod that changes the day special orders appear?)
 2. Add condition for total number of quests completed, per board.
+<!-- Better documentation for the dialogue tags? -->
 
 #### Stardew 1.6 todo
 
@@ -17,7 +18,8 @@ Changelog
 #### Version 1.0.6
 
 * Add verbosity config option. Intended mostly for mod authors.
-* `week_X` now handles extended months (in theory.)
+* Special Order Dialogue will now cause the NPC's original dialogue to be delayed by one in-game hour. (Previously, dialogue from this mod would just be added on top of the dialogue stack.)
+* `week_X` now handles extended months.
 * Add `profession` tag. Makes `skilllevel` tag take into account Spacecore skills, if that's installed (in theory. Memo to self: test that).
 * For the `_IsAvailable` dialogue series, remove from possible pool if quest is already accepted.
 * Fixes splitscreen, but for real this time.

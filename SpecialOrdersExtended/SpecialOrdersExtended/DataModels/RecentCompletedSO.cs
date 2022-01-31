@@ -118,7 +118,6 @@ internal class RecentCompletedSO : AbstractDataModel
     /// <param name="days">Days to check.</param>
     /// <returns>True if order found and completed in the last X days, false otherwise.</returns>
     /// <remarks>Orders are removed from the list after seven days.</remarks>
-    [Pure]
     public bool IsWithinXDays(string orderKey, uint days)
     {
         if (this.RecentOrdersCompleted.TryGetValue(orderKey, out uint dayCompleted))
@@ -133,7 +132,6 @@ internal class RecentCompletedSO : AbstractDataModel
     /// </summary>
     /// <param name="days">Number of days to look at.</param>
     /// <returns>IEnumerable of keys within the given timeframe.</returns>
-    [Pure]
     public IEnumerable<string> GetKeys(uint days)
     {
         return this.RecentOrdersCompleted.Keys
@@ -141,7 +139,6 @@ internal class RecentCompletedSO : AbstractDataModel
     }
 
     /// <inheritdoc/>
-    [Pure]
     public override string ToString()
     {
         StringBuilder stringBuilder = new();

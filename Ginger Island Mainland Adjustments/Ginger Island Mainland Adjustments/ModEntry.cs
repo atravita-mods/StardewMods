@@ -43,7 +43,6 @@ public class ModEntry : Mod
     /// <summary>
     /// Clear all caches at the end of the day and if the player exits to menu.
     /// </summary>
-    [SuppressMessage("StyleCop.CSharp.OrderingRules", "SA1204:Static elements should appear before instance elements", Justification = "Reviewed")]
     private static void ClearCaches()
     {
         MidDayScheduleEditor.Reset();
@@ -51,6 +50,7 @@ public class ModEntry : Mod
         GIScheduler.ClearCache();
         DialogueUtilities.ClearDialogueLog();
         ConsoleCommands.ClearCache();
+        NPCPatches.ResetAllFishers();
     }
 
     /// <summary>

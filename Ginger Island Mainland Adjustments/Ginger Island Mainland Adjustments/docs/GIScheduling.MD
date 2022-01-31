@@ -7,9 +7,53 @@ If the setting `UseThisScheduler` is enabled, this mod will try to schedule NPCs
 
 ### Custom Groups
 
-Vanilla NPCs may go to Ginger Island in groups. They're typically family groups, although all the bachelors and all the bachelorettes are a possible group.
+Vanilla NPCs may go to Ginger Island in groups. They're typically family groups, although all the bachelors and all the bachelorettes are a possible group. A full list of groups in this mod can be found here [here](https://github.com/atravita-mods/Ginger-Island-Mainland-Adjustments/blob/master/Ginger%20Island%20Mainland%20Adjustments/assets/defaultGroupings.json), but more can be added by adding them to `Mods/atravita_Ginger_Island_Adjustments_groups`. For example:
+
+```js
+{
+	"Format": "1.24.0",
+	"Changes": [
+		{
+			"Action": "EditData",
+			"Target": "Mods/atravita_Ginger_Island_Adjustments_groups",
+			"Entries": {
+				"GoldenTrio": "Harry, Hermione, Ron"
+			}
+		}
+	]
+}
+```
+
+Groups will sometimes be picked to attend the Resort together.
+
+Note: the keys are global, so prepending them with your mod's uniqueID may help reduce conflicts. You can also use [Content Patcher's `TextOperations`](https://github.com/Pathoschild/StardewMods/blob/develop/ContentPatcher/docs/author-guide.md#text-operations) to append here.
 
 #### Explorer Groups
+
+Some NPCs may want to explore the rest of the island. 
+
+```js
+    {
+        "LogName": "Explorers",
+        "Action": "EditData",
+        "Target": "Mods/atravita_Ginger_Island_Adjustments_explorers", // Explorers go to IslandNorth and either the tent or the volcano
+        "Entries": {
+            "ScienceGroup": "Maru, Demetrius, Robin",
+            "BandKids": "Abigail, Sebastian, Sam",
+            "ArtsyGroup": "Leah, Elliott"
+        }
+    }
+```
+
+would add three explorer groups. Explorer groups will make either a stop at the volcano or a stop by Professor Snail's. They'll use the following dialogue keys:
+
+* `Resort_IslandNorth`: Said whenever they're on IslandNorth and moving from point to point.
+* `Resort_Adventure`: Said while they're standing just south of the Island Trader, preparing to head north.
+* `Resort_Tent`: Said while they're standing next to Professor Snail's tent.
+* `Resort_Volcano`: Said while they're standing next to the volcano.
+* `Resort_AdventureReturn`: Said while they're standing south of the Island Trader, ready to head home.
+
+You can append numbers to the end of these keys as well, in which case one key will be picked randomly - ie if an NPC has `Resort_Tent_2` and `Resort_Tent`, they'll say one or the other with equal probability. (This is the same way `Resort` keys work in vanilla). (The marriage variant, however, probably won't work.)
 
 ### Specific roles
 
@@ -17,7 +61,7 @@ Vanilla NPCs may go to Ginger Island in groups. They're typically family groups,
 
 Gus, whenever he visits, will tend bar. When he does so, other characters (if they are adults) will crowd around him and drink. You can assign another NPC the bartender role by patching `Mods/atravita_Ginger_Island_Adjustments_bartenders` and using the internal name of the NPC as the key. (The value is ignored and can be anything).
 
-'''js
+```js
 {
 	"Format": "1.24.0",
 	"Changes": [
@@ -30,9 +74,38 @@ Gus, whenever he visits, will tend bar. When he does so, other characters (if th
 		}
 	]
 }
-'''
+```
 
 (Note: the Resort shop still requires Gus's presence. You can use Shop Tile Framework if you'd like your bartender to have a shop of their own, I suspect.)
 
 #### Musicians
 
+Sam, whenever he visits, has a chance of standing on a towel and playing his guitar, and Emily will dance around him. Using the `Mods/atravita_Ginger_Island_Adjustments_musicians` data asset, you can allow someone else music-playing. 
+
+```js
+{
+	"Format": "1.24.0",
+	"Changes": [
+		{
+			"Action": "EditData",
+			"Target": "Mods/atravita_Ginger_Island_Adjustments_musicians",
+			"Entries": {
+				"NPCname": null,
+			}
+		},
+		{
+			"Action": "EditData",
+			"Target": "Data/animationDescriptions",
+			"Entries": {
+				"npcname_beach_towel": //some sort of music-playing animation.
+			}
+		}
+	]
+}
+```
+
+(Any NPC with an animation description of `npcname_beach_dance` can be chosen as a dancer.) 
+
+See also:
+
+* [Wiki on schedules and animations](https://stardewvalleywiki.com/Modding:Schedule_data#Schedule_points)

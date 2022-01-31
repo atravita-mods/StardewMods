@@ -35,7 +35,7 @@ internal class DialoguePatches
                 return;
             }
             if (__instance.currentLocation is (IslandLocation or FarmHouse))
-            { // Currently on island, skip me.
+            { // Currently on island or is spouse in Farmhouse, skip me.
                 return;
             }
             string preface = __1 ? string.Empty : Game1.currentSeason;

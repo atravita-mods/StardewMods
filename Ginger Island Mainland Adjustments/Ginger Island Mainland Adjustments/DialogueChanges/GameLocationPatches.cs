@@ -24,20 +24,27 @@ internal class GameLocationPatches
     [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Harmony convention.")]
     public static void PostfixHasLocationDialogue(GameLocation __instance, NPC character, ref bool __result)
     {
-        if (__instance is (IslandNorth or IslandSouthEast))
+        try
         {
-            if (Game1.player.friendshipData.TryGetValue(character.Name, out Friendship? friendship) && friendship.IsDivorced())
+            if (__instance is (IslandNorth or IslandSouthEast))
             {
-                __result = false;
+                if (Game1.player.friendshipData.TryGetValue(character.Name, out Friendship? friendship) && friendship.IsDivorced())
+                {
+                    __result = false;
+                }
+                else if (__instance is IslandNorth)
+                {
+                    __result = Game1.IsVisitingIslandToday(character.Name) && character.Dialogue.ContainsKey(ISLANDNORTH);
+                }
+                else if (__instance is IslandSouthEast)
+                {
+                    __result = Game1.IsVisitingIslandToday(character.Name) && character.Dialogue.ContainsKey(ANTISOCIAL);
+                }
             }
-            else if (__instance is IslandNorth)
-            {
-                __result = Game1.IsVisitingIslandToday(character.Name) && character.Dialogue.ContainsKey(ISLANDNORTH);
-            }
-            else if (__instance is IslandSouthEast)
-            {
-                __result = Game1.IsVisitingIslandToday(character.Name) && character.Dialogue.ContainsKey(ANTISOCIAL);
-            }
+        }
+        catch (Exception ex)
+        {
+            Globals.ModMonitor.Log($"Ran into errors in postfix for HasLocationOverrideDialogue\n\n{ex}", LogLevel.Error);
         }
     }
 
@@ -52,16 +59,23 @@ internal class GameLocationPatches
     [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Harmony Convention")]
     public static void PostfixGetLocationOverrideDialogue(GameLocation __instance, NPC character, ref string? __result)
     {
-        if (__instance is (IslandNorth or IslandSouthEast))
+        try
         {
-            if (__instance is IslandNorth)
+            if (__instance is (IslandNorth or IslandSouthEast))
             {
-                __result = $"Characters\\Dialogue\\{character.Name}:{ISLANDNORTH}";
+                if (__instance is IslandNorth)
+                {
+                    __result = $"Characters\\Dialogue\\{character.Name}:{ISLANDNORTH}";
+                }
+                else if (__instance is IslandSouthEast)
+                {
+                    __result = $"Characters\\Dialogue\\{character.Name}:{ANTISOCIAL}";
+                }
             }
-            else if (__instance is IslandSouthEast)
-            {
-                __result = $"Characters\\Dialogue\\{character.Name}:{ANTISOCIAL}";
-            }
+        }
+        catch (Exception ex)
+        {
+            Globals.ModMonitor.Log($"Ran into errors in postfix for GetLocationOverrideDialogue\n\n{ex}", LogLevel.Error);
         }
     }
 }

@@ -26,20 +26,19 @@ internal static class SandyShop
             && Game1.currentLocation.Name.Equals("SandyHouse", StringComparison.OrdinalIgnoreCase))
         {
             GameLocation sandyHouse = Game1.currentLocation;
-            Globals.ModMonitor.DebugLog(sandyHouse.doesTileHaveProperty((int)e.Cursor.Tile.X, (int)e.Cursor.Tile.Y, "Action", "Buildings"));
             if (!Utils.YieldSurroundingTiles(Game1.player.getTileLocation()).Any((Point v) => sandyHouse.doesTileHaveProperty(v.X, v.Y, "Action", "Buildings")?.Contains("Buy") == true))
             {
                 Globals.ModMonitor.DebugLog($"Too far away, skip");
                 return;
             }
-            if (Game1.IsVisitingIslandToday("Sandy") && sandyHouse.getCharacterFromName("Sandy") is null)
+            if (Game1.IsVisitingIslandToday("Sandy") && sandyHouse.getCharacterFromName("Sandy") is null && !HandlingShop.Value)
             {
-                Game1.player.FacingDirection = Game1.up;
                 IReflectedMethod? onSandyShop = Globals.ReflectionHelper.GetMethod(sandyHouse, "onSandyShopPurchase");
                 IReflectedMethod? getSandyStock = Globals.ReflectionHelper.GetMethod(sandyHouse, "sandyShopStock");
-                if (onSandyShop is not null && getSandyStock is not null && !HandlingShop.Value)
+                if (onSandyShop is not null && getSandyStock is not null)
                 {
                     HandlingShop.Value = true; // Do not want to intercept any more clicks until shop menu is finished.
+                    Game1.player.FacingDirection = Game1.up;
                     Game1.drawObjectDialogue(I18n.SandyAwayShopMessage());
                     Game1.afterDialogues = () =>
                     {

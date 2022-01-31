@@ -26,7 +26,7 @@ Certain behaviors of the mod can be altered by using Content Patcher to patch in
 
 The following data is what this mod will look for:
 
-#### Specific GIRemainder schedules located in the NPC's usual schedule file
+#### (1) Specific GIRemainder schedules located in the NPC's usual schedule file
 
 ```js
 {
@@ -47,7 +47,7 @@ causes Leah to wander around in her house before she turns in for the night. The
 
 For a full list of possible schedule keys, please see the [schedule documentation](./GIRemainderSchedules.md). There are also examples in the [example pack](https://github.com/atravita-mods/Ginger-Island-Mainland-Adjustments/blob/master/%5BCP%5D%20Ginger%20Island%20Mainland%20Adjustments/schedules.json).
 
-#### Specific dialogue lines in the NPC's usual dialogue file
+#### (2) Specific dialogue lines in the NPC's usual dialogue file
 
 ```js
     {
@@ -64,7 +64,7 @@ will cause Pam to tell you that she's headed to Ginger Island for the day.
 
 A full list of possible dialogue keys can be found [here](./GIDialogueKeys.MD), and there are examples in the [example pack](https://github.com/atravita-mods/Ginger-Island-Mainland-Adjustments/tree/master/%5BCP%5D%20Ginger%20Island%20Mainland%20Adjustments/assets/default).
 
-#### Data in specific files this mod looks for.
+#### (3) Data in specific files this mod looks for.
 
 If this mod's Ginger Island scheduler is enabled, the mod will look at specific data files to find roles and groups. Please see the full documentation for this [here](.\GIScheduling.MD)
 

@@ -34,7 +34,7 @@ Note: you will need to run the mod at least once to generate the `config.json` f
 3. `Capacity` sets the maximum number of visitors to the Ginger Island Resort. Will allow values up to twelve.
 4. `GroupChance` sets the probability a group of NPCs will be picked to visit the Resort. 
 5. `ExplorerChance` sets the probability a smaller group of NPCs.
-6. `GusDay` and `GusChance` set a day that Gus is more likely to go to the Resort, and the chance that he'll be there.
+6. `GusDay` and `GusChance` set a day that Gus is more likely to go to the Resort, and the chance that he'll be there. (set `GusDay` to `None` to disable this feature.)
 7. `AllowSandy` allows Sandy access to the Resort. <!-- link Elizabeth's Sandy Beach outfit if she publishes! -->
 8. `AllowGeorgeAndEvelyn` allows George and Evelyn access to the resort.
 

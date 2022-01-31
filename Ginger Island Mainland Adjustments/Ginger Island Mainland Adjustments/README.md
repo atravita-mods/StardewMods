@@ -42,7 +42,7 @@ Note: you will need to run the mod at least once to generate the `config.json` f
 
 Two console commands: `av.gima.get_schedule <NPCname>` shows you their schedule of the day, and `av.gima.get_islanders` tells you who is going to the island. Do note that if `UseThisScheduler` is set to false, GIRemainder schedules are added one per ten minutes starting from 610, and thus they may not be in until 7AM or so.
 
-For more documentation, see the [author guide](https://github.com/atravita-mods/Ginger-Island-Mainland-Adjustments/tree/master/Ginger%20Island%20Mainland%20Adjustments/docs).
+For more documentation, see the [author guide](./docs/README.MD).
 
 ### Compatibility
 

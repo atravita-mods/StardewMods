@@ -46,7 +46,7 @@ internal class GingerIslandTimeSlot
         dialogueKey: "Resort_IslandNorth",
         animation: "square_3_3",
         animation_required: false,
-        chanceMap: (NPC npc) => npc.Age == NPC.adult && npc.Optimism == NPC.positive ? 0.5 : 0);
+        chanceMap: (NPC npc) => npc.Age == NPC.adult && npc.Optimism == NPC.positive && !npc.Name.Equals("George", StringComparison.OrdinalIgnoreCase) ? 0.5 : 0);
 
     /// <summary>
     /// Time this timeslot takes place in.
@@ -323,6 +323,13 @@ internal class GingerIslandTimeSlot
                 basechance: 0.4,
                 dialogueKey: "Resort_Wander",
                 animation: "square_3_3"),
+            // fishing
+            new PossibleIslandActivity(
+                new List<Point> { new Point(21, 44) },
+                basechance: 0.4,
+                dialogueKey: "Resort_Fish",
+                animation_required: true,
+                animation: "beach_fish"),
             // under umberella
             new PossibleIslandActivity(
                 new List<Point> { new Point(26, 26), new Point(28, 29), new Point(10, 27) },
@@ -342,7 +349,7 @@ internal class GingerIslandTimeSlot
                 new List<Point> { new Point(3, 29) },
                 dialogueKey: "Resort_Antisocial",
                 basechance: 0,
-                chanceMap: (NPC npc) => npc.SocialAnxiety == NPC.shy && npc.Optimism == NPC.negative ? 0.6 : 0.1,
+                chanceMap: (NPC npc) => npc.SocialAnxiety == NPC.shy && npc.Optimism == NPC.negative && !npc.Name.Equals("George", StringComparison.OrdinalIgnoreCase) ? 0.6 : 0.1,
                 map: "IslandSouthEast"),
 #endif
             // shore points

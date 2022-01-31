@@ -1,7 +1,7 @@
 ﻿Ginger-Island Specific Dialogue Keys
 =========================================
 
-[← back to readme](../../README.md) <br/>
+[← back to readme](../README.md) <br/>
 [← back to main guide](./README.MD)
 
 Characters who have island schedules and are not currently on `IslandSouth` can call upon vacation dialogue keys in the usual dialogue file for each character
@@ -41,6 +41,7 @@ Next, you can limit the times the key will be used with the `<remainder>`. Remai
 * `Resort_Volcano`: Said by NPCs standing near the volcano.
 * `Resort_Tent`: Said by NPCs standing Professor Snail's tent.
 * `Resort_Bartend`: While bartending.
+<!-- *`Resort_Fish`: While fishing -->
 
 The vanilla resort keys are as following, documented here for easy access
 

@@ -9,6 +9,7 @@
 2. Nonreplacing dialogue for the Resort keys? (flatten the ones that already exist, but add a way to add more that's less likely to clobber).
 3. Handle roommates, like actually.
 4. Let Pam fish. (tile 21,44 seems reasonable)
+<!-- Finish the locations console command -->
 
 ##### Known Issues
 

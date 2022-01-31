@@ -45,24 +45,33 @@ The following data is what this mod will look for:
 
 causes Leah to wander around in her house before she turns in for the night. The code will find the schedule, parse it, and append it to the end of Leah's schedule if she goes to Ginger Island.
 
-For a full list of possible schedule keys, please see the [schedule documentation](../GIRemainderSchedules.md). There are also examples in the [example pack](https://github.com/atravita-mods/Ginger-Island-Mainland-Adjustments/blob/master/%5BCP%5D%20Ginger%20Island%20Mainland%20Adjustments/schedules.json).
+For a full list of possible schedule keys, please see the [schedule documentation](./GIRemainderSchedules.md). There are also examples in the [example pack](https://github.com/atravita-mods/Ginger-Island-Mainland-Adjustments/blob/master/%5BCP%5D%20Ginger%20Island%20Mainland%20Adjustments/schedules.json).
 
 #### Specific dialogue lines in the NPC's usual dialogue file
 
 ```js
-{
-	"Format": "1.24.0",
-	"Changes": [
-		{
-			"Action": "EditData",
-			"Target": "Characters/schedules/Leah",
-			"Entries": {
-				"GIRemainder": "1800 LeahHouse 8 5 0/2200 LeahHouse 13 10 2/2400 LeahHouse 2 4 3 leah_sleep"
-			}
-		}
-	]
-}
+    {
+        "LogName": "Pam dialogue",
+        "Action": "EditData",
+        "Target": "Characters/Dialogue/Pam",
+        "Entries": {
+            "Resort_Pier": "Look at all the fish swimming in these waters!",
+            "Resort_Approach": "@, I'm gonna be headed to Ginger Island today! Got a nice vacation day from the bus company."
+        }
+    }
 ```
+
+#### Data in specific files this mod looks for.
+
+
+
+
+### FAQ
+#### Do I need to list this this mod as a dependency?
+
+Actually not....unless you try to edit any of this mod's data files (see `.\GIScheduling.MD`), and even then you could use a [HasMod](https://github.com/Pathoschild/StardewMods/blob/develop/ContentPatcher/docs/author-guide/tokens.md#HasMod). This is because extra keys in the schedule and dialogue files are just simply ignored.
+
+### See Also:
 
 (For more examples, please see [the example pack!](https://github.com/atravita-mods/Ginger-Island-Mainland-Adjustments/tree/master/%5BCP%5D%20Ginger%20Island%20Mainland%20Adjustments)). 
 

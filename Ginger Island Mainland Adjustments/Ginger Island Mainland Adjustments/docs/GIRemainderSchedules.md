@@ -1,7 +1,7 @@
 ﻿Ginger Island Remainder Schedules
 =================================
 
-[← back to readme](../../README.md) 
+[← back to readme](../../README.md) <br/>
 [← back to main guide](../README.md)
 
 GIRemainder schedules work very similarly to how normal schedule keys work and should be placed in the usual schedule file `Characters/schedules/<NPCname>`.

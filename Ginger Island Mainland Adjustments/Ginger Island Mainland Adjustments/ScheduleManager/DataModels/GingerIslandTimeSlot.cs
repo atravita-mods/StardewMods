@@ -314,6 +314,7 @@ internal class GingerIslandTimeSlot
             new PossibleIslandActivity(
                 new List<Point> { new Point(22, 21), new Point(23, 21) },
                 chanceMap: (NPC npc) => npc.Name.Equals("Emily", StringComparison.OrdinalIgnoreCase) ? 0.7 : 0.5,
+                dialogueKey: "Resort_Dance",
                 animation: "beach_dance",
                 animation_required: true),
             // wandering

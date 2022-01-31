@@ -14,7 +14,7 @@
         "Action": "EditData",
         "Target": "Characters/schedules/Alex",
         "Entries": {
-            "GIRemainder": "1800 JoshHouse 8 19 2/2200 JoshHouse 21 4 1 alex_sleep",
+            "GIRemainder": "1800 JoshHouse 8 19 2/2200 JoshHouse 21 4 1 alex_sleep"
         }
     },
     {
@@ -22,7 +22,7 @@
         "Action": "EditData",
         "Target": "Characters/schedules/Caroline",
         "Entries": {
-            "GIRemainder": "1800 SeedShop 25 18 2 square_9_9/2100 SeedShop 25 4 1 caroline_sleep",
+            "GIRemainder": "1800 SeedShop 25 18 2 square_9_9/2100 SeedShop 25 4 1 caroline_sleep"
         }
     },
     {
@@ -30,7 +30,7 @@
         "Action": "EditData",
         "Target": "Characters/schedules/Clint",
         "Entries": {
-            "GIRemainder": "1800 Saloon 19 23 3/2400 Blacksmith 10 4 1 clint_sleep",
+            "GIRemainder": "1800 Saloon 19 23 3/2400 Blacksmith 10 4 1 clint_sleep"
         }
     },
     {
@@ -38,7 +38,7 @@
         "Action": "EditData",
         "Target": "Characters/schedules/Demetrius",
         "Entries": {
-            "GIRemainder_Fri": "1800 Saloon 24 22 3 demetrius_dance/2100 ScienceHouse 20 4 1 demetrius_sleep",
+            "GIRemainder_Fri": "1800 Saloon 24 22 3 demetrius_dance/2100 ScienceHouse 20 4 1 demetrius_sleep"
         }
     },
     {
@@ -49,7 +49,7 @@
             "GIRemainder": "1800 ElliottHouse 1 5 0/2400 ElliottHouse 13 4 1 elliott_sleep",
             "GIRemainder_Fri": "NOT friendship Leah 6/1800 Saloon 4 19 2 elliott_drink/2340 ElliottHouse 13 4 1 elliott_sleep",
             "GIRemainder_Fri6": "GOTO GIRemainder",
-            "GIRemainder_Sun": "GOTO GIRemainder_Fri",
+            "GIRemainder_Sun": "GOTO GIRemainder_Fri"
         }
     },
     {
@@ -57,7 +57,7 @@
         "Action": "EditData", 
         "Target": "Characters/schedules/Emily",
         "Entries": {
-            "GIRemainder": "1800 HaleyHouse 16 5 0 emily_exercise/2300 HaleyHouse 21 4 1 emily_sleep",
+            "GIRemainder": "1800 HaleyHouse 16 5 0 emily_exercise/2300 HaleyHouse 21 4 1 emily_sleep"
         }
     },
     {
@@ -65,7 +65,7 @@
         "Action": "EditData",
         "Target": "Characters/schedules/Haley",
         "Entries": {
-            "GIRemainder": "1800 HaleyHouse 5 7 0 square_5_5/2230 HaleyHouse 1 5 3 haley_sleep",
+            "GIRemainder": "1800 HaleyHouse 5 7 0 square_5_5/2230 HaleyHouse 1 5 3 haley_sleep"
         }
     },
     {
@@ -83,7 +83,7 @@
         "Target": "Characters/schedules/Kent",
         "Entries": {
             "GIRemainder": "1800 SamHouse 8 5 3/2300 SamHouse 21 5 3 kent_sleep",
-            "GIRemainder_Fri": "1800 Saloon 3 23 3/2350 SamHouse 21 5 3 kent_sleep",
+            "GIRemainder_Fri": "1800 Saloon 3 23 3/2350 SamHouse 21 5 3 kent_sleep"
         }
     },
     {
@@ -91,7 +91,7 @@
         "Action": "EditData",
         "Target": "Characters/schedules/Jodi",
         "Entries" :{
-            "GIRemainder": "1800 SamHouse 2 17 3/2200 SamHouse 22 5 1 jodi_sleep",
+            "GIRemainder": "1800 SamHouse 2 17 3/2200 SamHouse 22 5 1 jodi_sleep"
         }
     },
     {
@@ -101,7 +101,7 @@
         "Entries": {
             "GIRemainder_Fri": "1800 Saloon 2 20 1/2340 LeahHouse 2 4 3 leah_sleep",
             "GIRemainder_Sat": "GOTO GIRemainder_Fri",
-            "GIRemainder": "1800 LeahHouse 8 5 0/2200 LeahHouse 13 10 2/2400 LeahHouse 2 4 3 leah_sleep",
+            "GIRemainder": "1800 LeahHouse 8 5 0/2200 LeahHouse 13 10 2/2400 LeahHouse 2 4 3 leah_sleep"
         }
     }, //Leo?
     {
@@ -131,7 +131,7 @@
         "Action": "EditData",
         "Target": "Characters/schedules/Pam",
         "Entries": {
-            "GIRemainder": "1800 Saloon 7 18 1/2400 Trailer 15 4 2 pam_sleep",
+            "GIRemainder": "1800 Saloon 7 18 1/2400 Trailer 15 4 2 pam_sleep"
         }
     },
     {
@@ -140,7 +140,7 @@
         "Target": "Characters/schedules/Pierre",
         "Entries": {
             "GIRemainder": "1800 SeedShop 37 5 0/2300 SeedShop 24 4 1 pierre_sleep",
-            "GIRemainder_Fri": "1800 Saloon 16 20 0 \"Strings\\schedules\\Pierre:Fri.000\"/2250 SeedShop 24 4 1 pierre_sleep",
+            "GIRemainder_Fri": "1800 Saloon 16 20 0 \"Strings\\schedules\\Pierre:Fri.000\"/2250 SeedShop 24 4 1 pierre_sleep"
         }
     },
     {
@@ -148,7 +148,7 @@
         "Action": "EditData",
         "Target": "Characters/schedules/Robin",
         "Entries": {
-            "GIRemainder_Fri": "1800 Saloon 23 22 1 robin_dance/2100 ScienceHouse 21 4 1 robin_sleep",
+            "GIRemainder_Fri": "1800 Saloon 23 22 1 robin_dance/2100 ScienceHouse 21 4 1 robin_sleep"
         }
     },
     {
@@ -157,7 +157,7 @@
         "Target": "Charcters/schedules/Sam",
         "Entries": {
             "GIRemainder_Fri": "1800 Saloon 36 21 3 sam_pool/2130 SamHouse 22 13 1 sam_sleep",
-            "GIRemainder_marriage_Fri": "1800 Saloon 36 21 3 sam_pool \"Strings\\schedules\\Sam:marriage_Fri.001\"/2130 BusStop -1 23 3",
+            "GIRemainder_marriage_Fri": "1800 Saloon 36 21 3 sam_pool \"Strings\\schedules\\Sam:marriage_Fri.001\"/2130 BusStop -1 23 3"
         }
     },
     {
@@ -166,7 +166,7 @@
         "Target": "Characters/schedules/Sebastian",
         "Entries": {
             "GIRemainder_Fri": "1800 Saloon 42 21 3 \"Strings\\schedules\\Sebastian:Fri.000\"/2130 SebastianRoom 11 9 1 sebastian_sleep",
-            "GIRemainder_marriage_Fri": "1800 Saloon 42 21 3 \"Strings\\schedules\\Sebastian:marriage_Fri.001\"/2130 BusStop -1 23 3",
+            "GIRemainder_marriage_Fri": "1800 Saloon 42 21 3 \"Strings\\schedules\\Sebastian:marriage_Fri.001\"/2130 BusStop -1 23 3"
         }
     },
     {
@@ -174,7 +174,7 @@
         "Action": "EditData",
         "Target": "Characters/schedules/Shane",
         "Entries": {
-            "GIRemainder": "1800 Saloon 21 17 2 shane_drink/2300 AnimalShop 27 4 1 shane_sleep",
+            "GIRemainder": "1800 Saloon 21 17 2 shane_drink/2300 AnimalShop 27 4 1 shane_sleep"
         }
     }
 ]}

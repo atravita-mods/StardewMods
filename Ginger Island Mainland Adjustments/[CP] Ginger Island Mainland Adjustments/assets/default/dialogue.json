@@ -4,14 +4,16 @@
         "Action": "EditData",
         "Target": "Characters/Dialogue/Abigail",
         "Entries":{
-            "Resort_Approach": "Lookin' forward to exploring the island today!",
             "Resort": "Wish I could go wandering around a bit more today...brought my sword and everything...",
-            "Resort_Left": "Ahh, nothing like a nice relaxing vacation...$h",
             "Resort_Adventure": "Looking forward to a day spent wandering in the wilderness...er, for some defintions of 'wilderness'.",
             "Resort_Volcano": "Wow! I wonder what monsters I can find in there?",
             "Resort_Tent": "Professor Snail showed me a bunch of really interesting fossils!",
             "Resort_AdventureReturn": "I can't wait to come back here! Wonder what else I'll find next?",
-            "Resort_Approach_PierreFamily": "Heya @, I'm going to be headed to Ginger Island with my family today. Not sure I'm looking forward to spending the day with my dad..."
+
+            "Resort_Approach": "Lookin' forward to exploring the island today!",
+            "Resort_Approach_PierreFamily": "Heya @, I'm going to be headed to Ginger Island with my family today. Not sure I'm looking forward to spending the day with my dad...",
+            "Resort_Left": "Ahh, nothing like a nice relaxing vacation...$h"
+                // This key will only be called if the **group** PierreFamily goes to the Resort.
         }
     },
     {
@@ -21,10 +23,12 @@
         "Entries":
         {
             "Resort": "Man, I love coming here! So many interesting things to explore!$h",
-            "Resort_Approach": "@, I'll be off to Ginger Island today! You coming too?",
             "Resort_Adventure": "Dude, this place is super cool!",
             "Resort_Tent": "Man, I can see myself becoming an archeologist...maybe...",
-            "Resort_AdventureReturn": "That was fun! But I'm glad to be headed home. I'm whacked!"
+            "Resort_AdventureReturn": "That was fun! But I'm glad to be headed home. I'm whacked!",
+
+            "Resort_Approach": "@, I'll be off to Ginger Island today! You coming too?",
+            "Resort_Left_Saloon": "#$c .5#@! Wanna join us for a game of pool?#Spent the day at the Resort, spending my evening playing pool, what could be better?#"
         }
     },
     {
@@ -32,6 +36,7 @@
         "Action": "EditData",
         "Target": "Characters/Dialogue/Sebastian",
         "Entries":{
+            //Resort_Antisocial temporarily removed until I can figure out what about IslandSoutheast makes NPCs vanish... :(
             "Resort_Antisocial": "Heya @, whatcha up to?#$b#Me? Just taking a break from all those people...#$b#Vacations are fun, but they're also tiring.",
             "Resort_Antisocial_2": "Glad I'm wearing this shirt. Otherwise, I'd definitely be sunburning right about now.",
             "Resort_Approach_RobinFamily": "@, I'll be headed to Ginger Island today with my family. I'm...not sure I'm looking forward to it.",
@@ -42,14 +47,15 @@
         "Action": "EditData",
         "Target": "Characters/Dialogue/Demetrius",
         "Entries": {
-            "Resort_IslandNorth": "@, I wish I had some time to study the unique folliage of this island today....",
+            "Resort_IslandNorth": "@, I wish I had some more time to study the unique folliage of this island today....",
             "Resort_Adventure": "I'm looking forward to analyzing the ecology of the island today!",
             "Resort_Volcano": "@, did you know that this volcano only appeared here about ten thousand years back?",
             "Resort_Volcano_2": "Volcanos can also form on other planets! The biggest one in the solar system is Olympus Mons on Mars.",
             "Resort_Tent": "Professor Snail was just telling me about all the unique shells he's collected over the years!",
             "Resort_Tent_2": "Oh, look at all these amazing mushrooms!",
             "Resort_AdventureReturn": "I can't wait to come back! So much more data to gather!",
-            "Resort_Approach_RobinFamily": "Looking forward to a nice vacation with my wife and kids!" // This key will only get called if the group RobinFamily is headed to the Resort.
+            "Resort_Approach_RobinFamily": "Looking forward to a nice vacation with my wife and kids!"
+                // This key will only get called if the group RobinFamily is headed to the Resort.
         }
     },
     {
@@ -86,6 +92,8 @@
             "Resort_Tent": "Professor Snail has such a wonderful collection of flowers!",
             "Resort_Tent_2": "Oh, look at how beautiful these old biology diagrams are!",
             "Resort_Pier": "This water is such a pretty shade of blue.",
+
+            //Resort_Antisocial temporarily removed until I can figure out what about IslandSoutheast makes NPCs vanish... :(
             "Resort_Antisocial": "Heya @, how are you today? I'm just observing the sea. This would be so lovely to draw."
         }
     },
@@ -98,6 +106,8 @@
             "Resort_Leaving": "Well, that was deeply relaxing. I'll see you at home, dear.$l",
             "Resort_Adventure": "Oh, hi, @! What are you planning on doing today?#$b#Me, I'm planning on drawing some of the birds on this island.",
             "Resort_Adventure_2": "Oh, @! It's so nice seeing you here. Look at how the light comes through those trees, isn't it so beautiful?",
+            
+            //Resort_Antisocial temporarily removed until I can figure out what about IslandSoutheast makes NPCs vanish... :(
             "Resort_Antisocial": "Oh, @, you've found me here. How are you today? The Resort is just a little too busy for me right now.",
             "Resort_Pier": "This water is such a pretty shade of blue. @, would you be interested in going snorkeling one day?"
         },

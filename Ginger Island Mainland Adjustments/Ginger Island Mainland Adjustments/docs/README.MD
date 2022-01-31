@@ -28,8 +28,41 @@ The following data is what this mod will look for:
 
 #### Specific GIRemainder schedules located in the NPC's usual schedule file
 
+```js
+{
+	"Format": "1.24.0",
+	"Changes": [
+		{
+			"Action": "EditData",
+			"Target": "Characters/schedules/Leah",
+			"Entries": {
+				"GIRemainder": "1800 LeahHouse 8 5 0/2200 LeahHouse 13 10 2/2400 LeahHouse 2 4 3 leah_sleep"
+			}
+		}
+	]
+}
+```
 
+causes Leah to wander around in her house before she turns in for the night. The code will find the schedule, parse it, and append it to the end of Leah's schedule if she goes to Ginger Island.
 
+For a full list of possible schedule keys, please see the [schedule documentation](../GIRemainderSchedules.md). There are also examples in the [example pack](https://github.com/atravita-mods/Ginger-Island-Mainland-Adjustments/blob/master/%5BCP%5D%20Ginger%20Island%20Mainland%20Adjustments/schedules.json).
+
+#### Specific dialogue lines in the NPC's usual dialogue file
+
+```js
+{
+	"Format": "1.24.0",
+	"Changes": [
+		{
+			"Action": "EditData",
+			"Target": "Characters/schedules/Leah",
+			"Entries": {
+				"GIRemainder": "1800 LeahHouse 8 5 0/2200 LeahHouse 13 10 2/2400 LeahHouse 2 4 3 leah_sleep"
+			}
+		}
+	]
+}
+```
 
 (For more examples, please see [the example pack!](https://github.com/atravita-mods/Ginger-Island-Mainland-Adjustments/tree/master/%5BCP%5D%20Ginger%20Island%20Mainland%20Adjustments)). 
 

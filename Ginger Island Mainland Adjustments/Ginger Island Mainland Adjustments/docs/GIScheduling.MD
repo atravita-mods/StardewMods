@@ -1,7 +1,7 @@
 ﻿Ginger-Island Scheduling
 =======================
 
-[← back to readme](../../README.md)
+[← back to readme](../../README.md) <br/>
 [← back to main guide](../README.md)
 
 If the setting `UseThisScheduler` is enabled, this mod will try to schedule NPCs at Ginger Island using the below data:

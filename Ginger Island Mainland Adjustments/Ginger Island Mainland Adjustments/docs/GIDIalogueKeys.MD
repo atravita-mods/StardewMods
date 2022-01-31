@@ -1,7 +1,8 @@
 ﻿Ginger-Island Specific Dialogue Keys
 =========================================
 
-[← back to readme](../../README.md) [← back to main guide](../README.md)
+[← back to readme](../../README.md) <br/>
+[← back to main guide](../README.md)
 
 Characters who have island schedules and are not currently on `IslandSouth` can call upon vacation dialogue keys in the usual dialogue file for each character
 `Characters/Dialogue/<NPCname>`. These dialogue keys are said at most once per day.
@@ -39,10 +40,20 @@ Next, you can limit the times the key will be used with the `<remainder>`. Remai
 * `Resort_Adventure`: Said by NPCs headed off towards either the volcano or Professor Snail's tent.
 * `Resort_Volcano`: Said by NPCs standing near the volcano.
 * `Resort_Tent`: Said by NPCs standing Professor Snail's tent.
+* `Resort_Bartend`: While bartending.
 
 The vanilla resort keys are as following, documented here for easy access
 
-
+* `Resort_Bar`: said while standing next to the bar, drinking.
+* `Resort_Towel`: said while standing or lying on a towel. (Note: musicians also use this while playing music)
+* `Resort_Dance`: said while dancing.
+* `Resort_Wander`: said while wandering around in the northern part of IslandSouth.
+* `Resort_Umbrella`: said while standing under an umbrella.
+* `Resort_Chair`: said while standing in front of various chairs scatterd around IslandSouth.
+* `Resort_Shore`: said while standing at the shore.
+* `Resort_Entering`: said before 1200 while at the Resort.
+* `Resort_Leaving`: said after 1800 while alt the Resort.
+* `Resort`: fallback, said while on the Island South map.
 
 
 ### Marriage keys

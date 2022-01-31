@@ -24,6 +24,13 @@ Certain behaviors of the mod can be altered by using Content Patcher to patch in
 }
 ```
 
+The following data is what this mod will look for:
+
+#### Specific GIRemainder schedules located in the NPC's usual schedule file
+
+
+
+
 (For more examples, please see [the example pack!](https://github.com/atravita-mods/Ginger-Island-Mainland-Adjustments/tree/master/%5BCP%5D%20Ginger%20Island%20Mainland%20Adjustments)). 
 
 See also: [Content Patcher documentation](https://github.com/Pathoschild/StardewMods/blob/develop/ContentPatcher/docs/author-guide.md).

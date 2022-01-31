@@ -33,12 +33,17 @@ Next, you can limit the times the key will be used with the `<remainder>`. Remai
 
 ### Additional Resort keys.
 
-* `Resort_Antisocial`: Said while standing on IslandSouthEast. **Temporarily removed until I figure out why NPCs sometimes vanish after going to IslandSouthEast**
+* ~~`Resort_Antisocial`: Said while standing on IslandSouthEast.~~ **Temporarily removed until I figure out why NPCs sometimes vanish after going to IslandSouthEast**
 * `Resort_Pier`: Said while standing on the pier, facing right.
 * `Resort_IslandNorth`: Said by NPCs on IslandNorth.
 * `Resort_Adventure`: Said by NPCs headed off towards either the volcano or Professor Snail's tent.
 * `Resort_Volcano`: Said by NPCs standing near the volcano.
 * `Resort_Tent`: Said by NPCs standing Professor Snail's tent.
+
+The vanilla resort keys are as following, documented here for easy access
+
+
+
 
 ### Marriage keys
 

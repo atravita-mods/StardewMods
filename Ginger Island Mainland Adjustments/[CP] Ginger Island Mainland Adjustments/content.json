@@ -31,6 +31,20 @@
             "Bookworms": "Penny, Maru",
             "SistersAndSandy": "Emily, Haley, Sandy" // Groups can only go when all members can go, so thisgroup will only be possible if Sandy is allowed.
         }
+    },
+    {
+        "LogName": "Pam Fishing",
+        "Action": "EditImage",
+        "Target": "Characters/Pam_Beach",
+        "FromFile": "assets/Pam_fishing.png"
+    },
+    {
+        "LogName": "Fishing animation for Pam",
+        "Action": "EditData",
+        "Target": "Data/animationDescriptions",
+        "Entries":{
+            "pam_beach_fish": "8/8 8 9 9 10 10 11 11/8"
+        }
     }
 	]
 }

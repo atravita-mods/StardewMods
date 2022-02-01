@@ -11,6 +11,9 @@ namespace GingerIslandMainlandAdjustments.Utils;
 /// </summary>
 internal static class ShopHandler
 {
+    /// <summary>
+    /// True if I'm already handling a shop.
+    /// </summary>
     private static readonly PerScreen<bool> HandlingShop = new(createNewState: () => false);
 
     /// <summary>

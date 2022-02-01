@@ -11,6 +11,7 @@
 4. Let Pam fish. (tile 21,44 seems reasonable)
 <!-- Finish the locations console command: take a location as the argument and filter to just locations that match at the first/last location?-->
 <!-- Finish adding GMCM for Willy attending the resort, and add in basic resort dialogue for him. Also, add in a resort line for Leo.... -->
+<!-- More schedule debugging tools: get arbitrary schedule from X day? -->
 
 ##### Known Issues
 

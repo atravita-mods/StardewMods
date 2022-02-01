@@ -42,6 +42,7 @@
         "LogName": "Fishing animation for Pam",
         "Action": "EditData",
         "Target": "Data/animationDescriptions",
+        "ToArea": {"X":0, "Y": 128, "Width":64, "Height":64},
         "Entries":{
             "pam_beach_fish": "8/8 8 9 9 10 10 11 11/8"
         }

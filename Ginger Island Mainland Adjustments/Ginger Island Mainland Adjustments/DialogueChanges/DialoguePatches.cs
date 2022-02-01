@@ -1,5 +1,6 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 using GingerIslandMainlandAdjustments.ScheduleManager;
+using GingerIslandMainlandAdjustments.Utils;
 using HarmonyLib;
 using StardewValley.Locations;
 
@@ -29,8 +30,7 @@ internal class DialoguePatches
             { // game code has returned a value, therefore skip me.
                 return;
             }
-            if (!Game1.netWorldState.Value.IslandVisitors.ContainsKey(__instance.Name)
-                || !Game1.netWorldState.Value.IslandVisitors[__instance.Name])
+            if (!Game1.IsVisitingIslandToday(__instance.Name))
             { // am not headed to island today.
                 return;
             }
@@ -87,36 +87,6 @@ internal class DialoguePatches
     }
 
     /// <summary>
-    /// Append the marriageDuties function to replace dialogue with GI-specific dialogue.
-    /// </summary>
-    /// <param name="__instance">NPC instance.</param>
-    [HarmonyPostfix]
-    [HarmonyPatch(nameof(NPC.marriageDuties))]
-    [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Convention used by Harmony")]
-    public static void AppendMarriageDuties(ref NPC __instance)
-    {
-        try
-        {
-            Game1.netWorldState.Value.IslandVisitors.TryGetValue(__instance.Name, out bool atIsland);
-            if (!atIsland)
-            {
-                return;
-            }
-            if (__instance.getSpouse() is null)
-            {
-                return;
-            }
-            __instance.currentMarriageDialogue.Clear();
-            __instance.setNewDialogue("MarriageDialogue", "GILeave_", -1, add: false, clearOnMovement: true);
-            Globals.ModMonitor.Log($"Setting GILeave_{__instance.Name}.", LogLevel.Trace);
-        }
-        catch (Exception ex)
-        {
-            Globals.ModMonitor.Log($"Error in setting GILeave dialogue for {__instance.Name}:\n{ex}", LogLevel.Error);
-        }
-    }
-
-    /// <summary>
     /// Appends spouse arrival back at farmhouse to replace with GI-specific dialogue.
     /// </summary>
     /// <param name="__instance">NPC instance.</param>
@@ -127,8 +97,7 @@ internal class DialoguePatches
     {
         try
         {
-            Game1.netWorldState.Value.IslandVisitors.TryGetValue(__instance.Name, out bool atIsland);
-            if (!atIsland)
+            if (!Game1.IsVisitingIslandToday(__instance.Name))
             {
                 return;
             }
@@ -139,6 +108,36 @@ internal class DialoguePatches
         catch (Exception ex)
         {
             Globals.ModMonitor.Log($"Error in setting GIReturn dialogue for {__instance.Name}:\n{ex}", LogLevel.Error);
+        }
+    }
+}
+
+/// <summary>
+/// Class that holds patches against IslandSouth, for dialogue.
+/// </summary>
+[HarmonyPatch(typeof(IslandSouth))]
+internal class IslandSouthDialoguePatches
+{
+    /// <summary>
+    /// Postfix SetupIslandSchedules to add marriage-specific dialogue.
+    /// </summary>
+    /// <remarks>DayStarted, unfortunately, runs *before* SetupIslandSchedules.</remarks>
+    [HarmonyPostfix]
+    [HarmonyPatch(nameof(IslandSouth.SetupIslandSchedules))]
+    public static void AppendMarriageDialogue()
+    {
+        try
+        {
+            NPC? spouse = Game1.player?.getSpouse();
+            if (spouse is not null && Game1.IsVisitingIslandToday(spouse.Name))
+            {
+                spouse.setNewDialogue("MarriageDialogue", "GILeave_", -1, add: false, clearOnMovement: true);
+                Globals.ModMonitor.Log($"Setting GILeave_{spouse?.Name}", LogLevel.Warn);
+            }
+        }
+        catch (Exception ex)
+        {
+            Globals.ModMonitor.Log($"Error in setting GILeave dialogue:\n{ex}", LogLevel.Error);
         }
     }
 }

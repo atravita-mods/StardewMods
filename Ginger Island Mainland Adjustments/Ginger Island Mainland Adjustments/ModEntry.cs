@@ -69,6 +69,7 @@ public class ModEntry : Mod
     /// <param name="e">Possible parameters.</param>
     private void DayEnding(object? sender, DayEndingEventArgs e)
     {
+        Game1.netWorldState.Value.IslandVisitors.Clear();
         ClearCaches();
         NPCPatches.ResetAllFishers();
     }

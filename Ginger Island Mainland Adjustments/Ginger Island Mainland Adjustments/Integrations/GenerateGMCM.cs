@@ -102,6 +102,13 @@ internal static class GenerateGMCM
 
         configMenu.AddBoolOption(
             mod: manifest,
+            name: I18n.Config_AllowWilly_Title,
+            getValue: () => Globals.Config.AllowWilly,
+            setValue: value => Globals.Config.AllowWilly = value,
+            tooltip: I18n.Config_AllowWilly_Description);
+
+        configMenu.AddBoolOption(
+            mod: manifest,
             name: I18n.Config_AllowSandy_Title,
             getValue: () => Globals.Config.AllowSandy,
             setValue: value => Globals.Config.AllowSandy = value,

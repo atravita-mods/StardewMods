@@ -1,7 +1,7 @@
 ﻿{
   // Content stuff
   "SandyAwayShopMessage": "Hey! I'll be away on vacation today, but I trust you to not do me wrong! Just leave the money on the counter.",
-  "WillyAwayShopMessage":  "@! I'll be on the Island today, so just leave money in the box!",
+  "WillyAwayShopMessage":  "I'll be on the Island today, so just leave money in the box!",
   "Sandy_Resort": "Ah, it's so nice getting away from the shop for once!",
   "Sandy_Resort_Bar": "Ooooh....I must get this Piña Colada recipe! I've never had anything so tasty!$h",
   "Sandy_Resort_Bar_2": "Mmmm. Nothing like a nice cold drink on a hot, hot day.",
@@ -12,6 +12,7 @@
   "Sandy_Resort_Pier": "Isn't that water beautiful? I could stare at it all day!",
   "George_Resort": "Well, ain't this place different! This warm sun feels so nice today.",
   "Evelyn_Resort": "My dear @, it's great seeing you here today!#$e#Make sure to take some time for rest and relaxation! Can't have you working yourself too hard.",
+  "Willy_Resort":  "Ah, nothing like a day spent under the sun and by the sea....",
 
   // Documentation for console commands.
   "getSchedule.documentation": "Gets the schedule of the NPC in question",

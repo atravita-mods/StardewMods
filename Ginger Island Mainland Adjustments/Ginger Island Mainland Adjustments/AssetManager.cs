@@ -76,13 +76,14 @@ public class AssetManager : IAssetLoader, IAssetEditor
     private static readonly string GeorgeDialogueLocation = PathUtilities.NormalizeAssetName("Characters/Dialogue/George");
     private static readonly string EvelynDialogueLocation = PathUtilities.NormalizeAssetName("Characters/Dialogue/Evelyn");
     private static readonly string SandyDialogueLocation = PathUtilities.NormalizeAssetName("Characters/Dialogue/Sandy");
+    private static readonly string WillyDialogueLocation = PathUtilities.NormalizeAssetName("Characters/Dialogue/Willy");
 
     /// <summary>
     /// Full list of fake assets.
     /// </summary>
     private readonly List<string> myAssets = new() { BartenderLocation, ExplorerLocation, MusicianLocation, GroupsLocations, ExclusionLocations };
 
-    private readonly List<string> dialogueToEdit = new() { GeorgeDialogueLocation, EvelynDialogueLocation, SandyDialogueLocation };
+    private readonly List<string> dialogueToEdit = new() { GeorgeDialogueLocation, EvelynDialogueLocation, SandyDialogueLocation, WillyDialogueLocation };
 
     /// <inheritdoc />
     public bool CanEdit<T>(IAssetInfo asset)
@@ -101,6 +102,10 @@ public class AssetManager : IAssetLoader, IAssetEditor
         else if (asset.AssetNameEquals(EvelynDialogueLocation))
         {
             editor.Data["Resort"] = I18n.EvelynResort();
+        }
+        else if (asset.AssetNameEquals(WillyDialogueLocation))
+        {
+            editor.Data["Resort"] = I18n.WillyResort();
         }
         else if (asset.AssetNameEquals(SandyDialogueLocation))
         {

@@ -8,8 +8,8 @@
   "PamFamily": "Pam, Penny",
   "aerobicsClub": "Caroline, Marnie, Robin, Jodi",
   "bachelorettes": "Haley, Penny, Leah, Emily, Maru, Abigail",
-  "bachelors": "Alex, Sam, Sebastian, Elliott, Shane, Harvey"
+  "bachelors": "Alex, Sam, Sebastian, Elliott, Shane, Harvey",
 }
-// two more are added in the code:
+// three more are added in the code:
 // "allSpouses": all NPCs that are married to the farmer or farmhand, if there is more than one.
 // "GeorgeFamily": "George, Evelyn, Alex" but only if George and Evelyn can go to the Resort.

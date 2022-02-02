@@ -192,7 +192,7 @@ internal static class GIScheduler
             foreach (string key in IslandGroups.Keys)
             {
                 // Filter out groups where one member can't make it or are too big
-                if (IslandGroups[key].All((NPC npc) => IslandSouth.CanVisitIslandToday(npc)) && IslandGroups[key].Count <= capacity)
+                if (IslandGroups[key].All((NPC npc) => valid_visitors.Contains(npc)) && IslandGroups[key].Count <= capacity)
                 {
                     groupkeys.Add(key);
                 }

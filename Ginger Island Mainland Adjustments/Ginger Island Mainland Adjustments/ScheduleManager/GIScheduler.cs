@@ -23,7 +23,7 @@ internal static class GIScheduler
     /// Dictionary of possible explorer groups. Null is a cache miss.
     /// </summary>
     /// <remarks>Use the getter, which will automatically grab from fake asset.</remarks>
-    private static Dictionary<string, HashSet<NPC>>? explorers = null;
+    private static Dictionary<string, HashSet<NPC>>? explorerGroups = null;
 
     private static NPC? bartender;
 
@@ -73,15 +73,15 @@ internal static class GIScheduler
     /// <summary>
     /// Gets explorer groups. Will automatically load if null.
     /// </summary>
-    private static Dictionary<string, HashSet<NPC>> Explorers
+    private static Dictionary<string, HashSet<NPC>> ExplorerGroups
     {
         get
         {
-            if (explorers is null)
+            if (explorerGroups is null)
             {
-                explorers = AssetManager.GetCharacterGroup(SpecialGroupType.Explorers);
+                explorerGroups = AssetManager.GetCharacterGroup(SpecialGroupType.Explorers);
             }
-            return explorers;
+            return explorerGroups;
         }
     }
 
@@ -91,7 +91,7 @@ internal static class GIScheduler
     public static void ClearCache()
     {
         islandGroups = null;
-        explorers = null;
+        explorerGroups = null;
     }
 
     /// <summary>
@@ -100,10 +100,10 @@ internal static class GIScheduler
     public static void GenerateAllSchedules()
     {
         Game1.netWorldState.Value.IslandVisitors.Clear();
-        if (Utility.isFestivalDay(Game1.Date.DayOfMonth, Game1.Date.Season)
-            || (Game1.Date.Season.Equals("winter", StringComparison.OrdinalIgnoreCase) && Game1.Date.DayOfMonth >= 15 && Game1.Date.DayOfMonth <= 17)
-            || Game1.getLocationFromName("IslandSouth") is not IslandSouth island || !island.resortRestored.Value
-            || Game1.IsRainingHere(island) || !island.resortOpenToday.Value)
+        if (Game1.getLocationFromName("IslandSouth") is not IslandSouth island || !island.resortRestored.Value
+            || Game1.IsRainingHere(island) || !island.resortOpenToday.Value
+            || Utility.isFestivalDay(Game1.Date.DayOfMonth, Game1.Date.Season)
+            || (Game1.Date.DayOfMonth >= 15 && Game1.Date.DayOfMonth <= 17 && Game1.Date.Season.Equals("winter", StringComparison.OrdinalIgnoreCase)))
         {
             return;
         }
@@ -121,6 +121,8 @@ internal static class GIScheduler
         // Resort capacity set to zero, can skip everything else.
         if (Globals.Config.Capacity == 0)
         {
+            IslandSouthPatches.ClearCache();
+            GIScheduler.ClearCache();
             return;
         }
 
@@ -149,16 +151,16 @@ internal static class GIScheduler
     /// Yields a group of valid explorers.
     /// </summary>
     /// <param name="random">Seeded random.</param>
-    /// <returns>An explorer group, or an empty hashset if there's no group today.</returns>
+    /// <returns>An explorer group (of up to three explorers), or an empty hashset if there's no group today.</returns>
     private static HashSet<NPC> GenerateExplorerGroup(Random random)
     {
         if (random.NextDouble() <= Globals.Config.ExplorerChance)
         {
-            List<string> explorerGroups = Explorers.Keys.ToList();
+            List<string> explorerGroups = ExplorerGroups.Keys.ToList();
             if (explorerGroups.Count > 0)
             {
                 string explorerGroup = explorerGroups[random.Next(explorerGroups.Count)];
-                return Explorers[explorerGroup].Where((NPC npc) => IslandSouth.CanVisitIslandToday(npc)).Take(3).ToHashSet();
+                return ExplorerGroups[explorerGroup].Where((NPC npc) => IslandSouth.CanVisitIslandToday(npc)).Take(3).ToHashSet();
             }
         }
         return new HashSet<NPC>(); // just return an empty hashset.
@@ -210,29 +212,23 @@ internal static class GIScheduler
             }
         }
         NPC? gus = Game1.getCharacterFromName("Gus");
-        if (gus is not null && !visitors.Contains(gus) && !explorers.Contains(gus)
+        if (gus is not null && !visitors.Contains(gus) && valid_visitors.Contains(gus)
             && Globals.Config.GusDayAsShortString().Equals(Game1.shortDayNameFromDayOfSeason(Game1.dayOfMonth), StringComparison.OrdinalIgnoreCase)
             && Globals.Config.GusChance > random.NextDouble())
         {
-            if (!visitors.Contains(gus))
-            {
-                Globals.ModMonitor.DebugLog($"Forcibly adding Gus");
-                visitors.Add(gus);
-                valid_visitors.Remove(gus);
-            }
+            Globals.ModMonitor.DebugLog($"Forcibly adding Gus");
+            visitors.Add(gus);
+            valid_visitors.Remove(gus);
         }
         if (visitors.Count < capacity)
         {
 #if DEBUG
             Globals.ModMonitor.Log($"{capacity} not yet reached, attempting to add more.", LogLevel.Debug);
 #endif
-            foreach (NPC newvisitor in valid_visitors.OrderBy(a => random.Next()).Take(capacity - visitors.Count))
-            {
-                visitors.Add(newvisitor);
-            }
+            visitors.AddRange(valid_visitors.OrderBy(a => random.Next()).Take(capacity - visitors.Count));
         }
 
-        // If George in visitors, add Evelyn. TODO: set their delay times so they appear to travel together.
+        // If George in visitors, add Evelyn.
         if (visitors.Any((NPC npc) => npc.Name.Equals("George", StringComparison.OrdinalIgnoreCase))
             && visitors.All((NPC npc) => !npc.Name.Equals("Evelyn", StringComparison.OrdinalIgnoreCase))
             && Game1.getCharacterFromName("Evelyn") is NPC evelyn)
@@ -389,7 +385,7 @@ internal static class GIScheduler
             // render the schedule points to strings before appending the remainder schedules
             // which are already strings.
             List<string> schedPointString = scheduleList.Select((SchedulePoint pt) => pt.ToString()).ToList();
-            if (visitor.Name.Equals("Gus", StringComparison.InvariantCultureIgnoreCase))
+            if (visitor.Name.Equals("Gus", StringComparison.OrdinalIgnoreCase))
             {
                 // Gus needs to tend bar. Hardcoded same as vanilla.
                 schedPointString.Add("1800 Saloon 10 18 2/2430 bed");

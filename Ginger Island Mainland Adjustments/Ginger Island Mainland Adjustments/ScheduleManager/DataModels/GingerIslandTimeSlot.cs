@@ -282,7 +282,7 @@ internal class GingerIslandTimeSlot
     /// Adds a schedulepoint to the usedPoints dictionary, the animations log, and the character's assignment.
     /// </summary>
     /// <param name="npc">NPC in question.</param>
-    /// <param name="schedulePoint">SchedulePoint to assign. Null to skip.</param>
+    /// <param name="schedulePoint">SchedulePoint to assign.</param>
     private void AssignSchedulePoint(NPC npc, SchedulePoint schedulePoint)
     {
         this.usedPoints.Add(schedulePoint.Point);
@@ -326,7 +326,11 @@ internal class GingerIslandTimeSlot
             // fishing
             new PossibleIslandActivity(
                 new List<Point> { new Point(21, 44) },
+#if DEBUG
+                basechance: 1,
+#else
                 basechance: 0.4,
+#endif
                 dialogueKey: "Resort_Fish",
                 animation_required: true,
                 animation: "beach_fish"),

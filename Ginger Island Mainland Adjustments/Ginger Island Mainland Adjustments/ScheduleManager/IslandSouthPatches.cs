@@ -79,11 +79,11 @@ internal static class IslandSouthPatches
         {
             if (!__result)
             {
-                if (!Game1.currentSeason.Equals("fall", StringComparison.OrdinalIgnoreCase)
-                    && !(Game1.dayOfMonth == 15)
-                    && Globals.Config.AllowSandy
+                if (Globals.Config.AllowSandy
                     && Globals.Config.UseThisScheduler
-                    && npc.Name.Equals("Sandy", StringComparison.OrdinalIgnoreCase))
+                    && npc.Name.Equals("Sandy", StringComparison.OrdinalIgnoreCase)
+                    && !(Game1.dayOfMonth == 15)
+                    && !Game1.currentSeason.Equals("fall", StringComparison.OrdinalIgnoreCase))
                 {
                     __result = true; // let Sandy come to the resort!
                 }

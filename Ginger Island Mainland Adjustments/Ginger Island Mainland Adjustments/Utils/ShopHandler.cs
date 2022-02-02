@@ -22,12 +22,12 @@ internal static class ShopHandler
     /// <param name="e">Button pressed event arguments.</param>
     public static void HandleSandyShop(ButtonPressedEventArgs e)
     {
-        if (!e.Button.IsActionButton() || !Game1.currentLocation.Name.Equals("SandyHouse", StringComparison.OrdinalIgnoreCase))
+        if (HandlingShop.Value || !e.Button.IsActionButton() || !Game1.currentLocation.Name.Equals("SandyHouse", StringComparison.OrdinalIgnoreCase))
         {
             return;
         }
         GameLocation sandyHouse = Game1.currentLocation;
-        if (HandlingShop.Value || !Game1.IsVisitingIslandToday("Sandy") || sandyHouse.getCharacterFromName("Sandy") is not null)
+        if (!Game1.IsVisitingIslandToday("Sandy") || sandyHouse.getCharacterFromName("Sandy") is not null)
         {
             return;
         }
@@ -60,11 +60,11 @@ internal static class ShopHandler
     /// <param name="e">Button pressed event arguments.</param>
     public static void HandleWillyShop(ButtonPressedEventArgs e)
     {
-        if (!e.Button.IsActionButton() || Game1.currentLocation is not FishShop fishShop)
+        if (HandlingShop.Value || !e.Button.IsActionButton() || Game1.currentLocation is not FishShop fishShop)
         {
             return;
         }
-        if (HandlingShop.Value || !Game1.IsVisitingIslandToday("Willy") || fishShop.getCharacterFromName("Willy") is not null)
+        if (!Game1.IsVisitingIslandToday("Willy") || fishShop.getCharacterFromName("Willy") is not null)
         {
             return;
         }

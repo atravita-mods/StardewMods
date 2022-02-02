@@ -8,46 +8,35 @@ internal static class Globals
     // Values are set in the Mod.Entry method, so should never be null.
 #pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
 
-    private static IMonitor modMonitor;
-    private static ModConfig config;
-    private static IReflectionHelper reflectionHelper;
-    private static IContentHelper contentHelper;
-    private static IModRegistry modRegistry;
-    private static IModHelper helper;
-
     /// <summary>
     /// Gets SMAPI's logging service.
     /// </summary>
-    internal static IMonitor ModMonitor => modMonitor;
+    internal static IMonitor ModMonitor { get; private set; }
 
     /// <summary>
     /// Gets or sets mod configuration class.
     /// </summary>
-    internal static ModConfig Config
-    {
-        get => config;
-        set => config = value;
-    }
+    internal static ModConfig Config { get; set; }
 
     /// <summary>
     /// Gets SMAPI's reflection helper.
     /// </summary>
-    internal static IReflectionHelper ReflectionHelper => reflectionHelper;
+    internal static IReflectionHelper ReflectionHelper { get; private set; }
 
     /// <summary>
     /// Gets SMAPI's Content helper.
     /// </summary>
-    internal static IContentHelper ContentHelper => contentHelper;
+    internal static IContentHelper ContentHelper { get; private set; }
 
     /// <summary>
     /// Gets SMAPI's mod registry helper.
     /// </summary>
-    internal static IModRegistry ModRegistry => modRegistry;
+    internal static IModRegistry ModRegistry { get; private set; }
 
     /// <summary>
     /// Gets SMAPI's helper class.
     /// </summary>
-    internal static IModHelper Helper => helper;
+    internal static IModHelper Helper { get; private set; }
 #pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
 
     /// <summary>
@@ -57,20 +46,20 @@ internal static class Globals
     /// <param name="monitor">SMAPI's logging service.</param>
     internal static void Initialize(IModHelper helper, IMonitor monitor)
     {
-        modMonitor = monitor;
-        reflectionHelper = helper.Reflection;
-        contentHelper = helper.Content;
-        modRegistry = helper.ModRegistry;
-        Globals.helper = helper;
+        Globals.ModMonitor = monitor;
+        Globals.ReflectionHelper = helper.Reflection;
+        Globals.ContentHelper = helper.Content;
+        Globals.ModRegistry = helper.ModRegistry;
+        Globals.Helper = helper;
 
         try
         {
-            Config = helper.ReadConfig<ModConfig>();
+            Globals.Config = helper.ReadConfig<ModConfig>();
         }
         catch
         {
-            modMonitor.Log(I18n.IllFormatedConfig(), LogLevel.Warn);
-            config = new();
+            Globals.ModMonitor.Log(I18n.IllFormatedConfig(), LogLevel.Warn);
+            Globals.Config = new();
         }
     }
 }

@@ -49,7 +49,7 @@ internal class DialoguePatches
             else if (Game1.timeOfDay >= 1800)
             {
                 baseKey = preface + "Resort_Left";
-                if (!__instance.currentLocation.IsOutdoors && !(__instance.currentLocation.Name == "FishShop"))
+                if (!__instance.currentLocation.IsOutdoors && __instance.currentLocation is not FishShop)
                 {
                     baseKey += __instance.currentLocation.Name; // use specific INDOOR keys.
                 }
@@ -132,7 +132,9 @@ internal class IslandSouthDialoguePatches
             if (spouse is not null && Game1.IsVisitingIslandToday(spouse.Name))
             {
                 spouse.setNewDialogue("MarriageDialogue", "GILeave_", -1, add: false, clearOnMovement: true);
-                Globals.ModMonitor.Log($"Setting GILeave_{spouse?.Name}", LogLevel.Warn);
+#if DEBUG
+                Globals.ModMonitor.Log($"Setting GILeave_{spouse?.Name}", LogLevel.Trace);
+#endif
             }
         }
         catch (Exception ex)

@@ -100,7 +100,7 @@ internal static class ScheduleUtilities
         }
 
         Globals.ModMonitor.Log(I18n.NOGISCHEDULEFOUND(npc: npc.Name));
-        return scheduleEntry;
+        return null;
     }
 
     /// <summary>
@@ -151,7 +151,7 @@ internal static class ScheduleUtilities
                 }
             case "NOT":
                 // NOT friendship NPCName heartLevel
-                if (command[1].Equals("friendship"))
+                if (command[1].Equals("friendship", StringComparison.Ordinal))
                 {
                     int hearts = Utility.GetAllPlayerFriendshipLevel(Game1.getCharacterFromName(command[2])) / 250;
                     if (!int.TryParse(command[3], out int heartLevel))

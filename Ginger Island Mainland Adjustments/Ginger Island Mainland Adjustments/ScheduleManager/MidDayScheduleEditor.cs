@@ -154,6 +154,8 @@ internal static class MidDayScheduleEditor
         int lasttime = GIEndTime - 10;
 
         Dictionary<int, SchedulePathDescription> remainderSchedule = new();
+        IReflectedMethod pathfinder = Globals.ReflectionHelper.GetMethod(npc, "pathfindToNextScheduleLocation")
+            ?? throw new MethodNotFoundException("NPC::pathfindToNextScheduleLocation");
 
         foreach (string schedulepoint in schedule.Split('/'))
         {
@@ -204,7 +206,7 @@ internal static class MidDayScheduleEditor
                 matchDict.TryGetValue("animation", out string? animation);
                 matchDict.TryGetValue("message", out string? message);
 
-                SchedulePathDescription newpath = Globals.ReflectionHelper.GetMethod(npc, "pathfindToNextScheduleLocation").Invoke<SchedulePathDescription>(
+                SchedulePathDescription newpath = pathfinder.Invoke<SchedulePathDescription>(
                     previousMap,
                     lastx,
                     lasty,

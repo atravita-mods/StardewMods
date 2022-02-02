@@ -1,4 +1,5 @@
-﻿using HarmonyLib;
+﻿using System.Diagnostics.CodeAnalysis;
+using HarmonyLib;
 using Microsoft.Xna.Framework;
 
 namespace GingerIslandMainlandAdjustments.ScheduleManager;
@@ -13,6 +14,7 @@ internal class NPCPatches
     /// <summary>
     /// resets the sprites of all people who went fishing.
     /// </summary>
+    /// <remarks>Call at DayEnding.</remarks>
     public static void ResetAllFishers()
     {
         foreach (NPC npc in Fishers)
@@ -26,8 +28,14 @@ internal class NPCPatches
         Fishers.Clear();
     }
 
+    /// <summary>
+    /// Extends sprite to allow for fishing sprites, which are 64px tall.
+    /// </summary>
+    /// <param name="__instance">NPC.</param>
+    /// <param name="__0">animation key.</param>
     [HarmonyPostfix]
     [HarmonyPatch("startRouteBehavior")]
+    [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Convention set by Harmony")]
     public static void StartFishBehavior(NPC __instance, string __0)
     {
         try
@@ -51,8 +59,14 @@ internal class NPCPatches
         }
     }
 
+    /// <summary>
+    /// Resets sprite when NPCs are done fishing.
+    /// </summary>
+    /// <param name="__instance">NPC.</param>
+    /// <param name="__0">animation key.</param>
     [HarmonyPostfix]
     [HarmonyPatch("endRouteBehavior")]
+    [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Convention set by Harmony")]
     public static void EndFishBehavior(NPC __instance, string __0)
     {
         try

@@ -61,17 +61,16 @@ internal class GameLocationPatches
     {
         try
         {
-            if (__instance is (IslandNorth or IslandSouthEast))
+
+            if (__instance is IslandNorth)
             {
-                if (__instance is IslandNorth)
-                {
-                    __result = $"Characters\\Dialogue\\{character.Name}:{ISLANDNORTH}";
-                }
-                else if (__instance is IslandSouthEast)
-                {
-                    __result = $"Characters\\Dialogue\\{character.Name}:{ANTISOCIAL}";
-                }
+                __result = @$"Characters\Dialogue\{character.Name}:{ISLANDNORTH}";
             }
+            else if (__instance is IslandSouthEast)
+            {
+                __result = @$"Characters\Dialogue\{character.Name}:{ANTISOCIAL}";
+            }
+
         }
         catch (Exception ex)
         {

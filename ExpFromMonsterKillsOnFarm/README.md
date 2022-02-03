@@ -3,7 +3,7 @@ Farm Combat Grant XP Too
 
 In vanilla, when you kill a monster on the farm, you get no XP from it. This mod makes it so you do.
 
-**NOTE: THE XP NUMBERS ARE FROM [UI INFO SUITE 2](https://github.com/Annosz/UIInfoSuite2/releases). THIS MOD DOES NOT ADD XP NUMBERS, IT JUST RESTORES THE ABILITY TO GET XP ON THE FARM.[/size][/b]
+**NOTE: THE XP NUMBERS ARE FROM [UI INFO SUITE 2](https://github.com/Annosz/UIInfoSuite2/releases). THIS MOD DOES NOT ADD XP NUMBERS, IT JUST RESTORES THE ABILITY TO GET XP ON THE FARM.
 
 ### Install
 
@@ -19,3 +19,5 @@ In vanilla, when you kill a monster on the farm, you get no XP from it. This mod
 ### See Also:
 
 * [Release Notes](https://github.com/atravita-mods/ExpFromMonsterKillsOnFarm/blob/master/ExpFromMonsterKillsOnFarm/docs/CHANGELOG.MD)
+
+Requires SMAPI, uses harmony.

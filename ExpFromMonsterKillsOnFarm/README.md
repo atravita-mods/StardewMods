@@ -1,4 +1,4 @@
-Farm Combat Grant XP Too
+Farm Combat Grants XP Too
 ==========================
 
 In vanilla, when you kill a monster on the farm, you get no XP from it. This mod makes it so you do.

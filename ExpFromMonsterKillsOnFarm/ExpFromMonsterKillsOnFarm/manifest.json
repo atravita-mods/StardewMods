@@ -1,0 +1,9 @@
+﻿{
+  "Name": "EXP From Monster Kills On Farm",
+  "Author": "atravita",
+  "Version": "0.1.0",
+  "Description": "Grants XP for monster kills on the farm.",
+  "UniqueID": "atravita.ExpFromMonsterKillsOnFarm",
+  "EntryDll": "ExpFromMonsterKillsOnFarm.dll",
+  "MinimumApiVersion": "3.0"
+}

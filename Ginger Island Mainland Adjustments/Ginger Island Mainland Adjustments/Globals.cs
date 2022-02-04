@@ -1,4 +1,7 @@
-﻿namespace GingerIslandMainlandAdjustments;
+﻿using System.Diagnostics.CodeAnalysis;
+using System.Text.RegularExpressions;
+
+namespace GingerIslandMainlandAdjustments;
 
 /// <summary>
 /// Class to handle global variables.
@@ -38,6 +41,17 @@ internal static class Globals
     /// </summary>
     internal static IModHelper Helper { get; private set; }
 #pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
+
+    /// <summary>
+    /// Regex for a schedulepoint format.
+    /// </summary>
+    [RegexPattern]
+    [SuppressMessage("StyleCop.CSharp.OrderingRules", "SA1201:Elements should appear in the correct order", Justification = "Reviewed")]
+    internal static readonly Regex ScheduleRegex = new(
+        // <time> [location] <tileX> <tileY> [facingDirection] [animation] \"[dialogue]\"
+        pattern: @"(?<arrival>a)?(?<time>\d{1,4})(?<location> \S+)*?(?<x> \d{1,4})(?<y> \d{1,4})(?<direction> \d)?(?<animation> [^\s\""]+)?(?<dialogue> \"".*\"")?",
+        options: RegexOptions.CultureInvariant | RegexOptions.Compiled,
+        new TimeSpan(1000000));
 
     /// <summary>
     /// Initialize globals, including reading config file.

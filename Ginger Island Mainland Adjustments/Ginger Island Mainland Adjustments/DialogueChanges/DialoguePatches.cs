@@ -131,6 +131,7 @@ internal class IslandSouthDialoguePatches
             NPC? spouse = Game1.player?.getSpouse();
             if (spouse is not null && Game1.IsVisitingIslandToday(spouse.Name))
             {
+                spouse.currentMarriageDialogue.Clear();
                 spouse.setNewDialogue("MarriageDialogue", "GILeave_", -1, add: false, clearOnMovement: true);
 #if DEBUG
                 Globals.ModMonitor.Log($"Setting GILeave_{spouse?.Name}", LogLevel.Trace);

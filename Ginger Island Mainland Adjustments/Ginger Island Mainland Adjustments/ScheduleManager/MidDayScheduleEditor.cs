@@ -27,16 +27,6 @@ internal static class MidDayScheduleEditor
     private static readonly Dictionary<string, bool> ScheduleAltered = new();
 
     /// <summary>
-    /// Regex for a schedulepoint format.
-    /// </summary>
-    [RegexPattern]
-    private static readonly Regex ScheduleRegex = new(
-        // <time> [location] <tileX> <tileY> [facingDirection] [animation] \"[dialogue]\"
-        pattern: @"(?<arrival>a)?(?<time>\d{1,4})(?<location> \S+)*?(?<x> \d{1,4})(?<y> \d{1,4})(?<direction> \d)?(?<animation> [^\s\""]+)?(?<dialogue> \"".*\"")?",
-        options: RegexOptions.CultureInvariant | RegexOptions.Compiled,
-        new TimeSpan(1000000));
-
-    /// <summary>
     /// Clears the ScheduleAltered dictionary.
     /// </summary>
     public static void Reset()
@@ -161,7 +151,7 @@ internal static class MidDayScheduleEditor
         {
             try
             {
-                Match match = ScheduleRegex.Match(schedulepoint);
+                Match match = Globals.ScheduleRegex.Match(schedulepoint);
                 Dictionary<string, string> matchDict = match.MatchGroupsToDictionary((key) => key, (value) => value.Trim());
                 int time = int.Parse(matchDict["time"]);
                 if (time <= lasttime)

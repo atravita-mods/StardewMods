@@ -75,7 +75,7 @@ internal static class ConsoleCommands
             Globals.ModMonitor.Log('\t' + I18n.DisplaySchedule_ToIsland(npc.Name), level);
             if (IslandSchedules.TryGetValue(npc.Name, out string? schedulestring))
             {
-                Globals.ModMonitor.Log($"\t{npc.dayScheduleName.Value}\n\t\t{schedulestring}", level);
+                Globals.ModMonitor.Log($"\t{npc.islandScheduleName.Value}\n\t\t{schedulestring}", level);
             }
         }
         else

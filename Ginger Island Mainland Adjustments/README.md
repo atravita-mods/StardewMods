@@ -11,7 +11,7 @@ The original point of this mod was to change those two things. A little scope cr
 * **More NPCs visit Ginger Island**. If you, like me, enjoy having large numbers of NPCs, it's sometimes hard to catch a specific NPC going to the resort. This mod will let you increase the cap to up to 12 per day by setting the configuration option `Capacity`. Great for running around gifting people!
 * **NPCs** can wander onto `IslandSouthEast` and `IslandNorth`. **Most won't get too far**, but some might be a little more...adventurous.
 * **Gus has a dedicated day**. Set the config options `GusDay` and `GusChance`, and he'll have specific days where he's more likely to go to Ginger Island...
-* **Sandy, George, and Evelyn can go to Ginger Island**. (Configurable). Sandy will even leave a box on her counter so you can still shop!
+* **Willy, Sandy, George, and Evelyn can go to Ginger Island**. (Configurable). Sandy and Willy will even leave a box on their counters so you can still shop!
 
 ### Install
 

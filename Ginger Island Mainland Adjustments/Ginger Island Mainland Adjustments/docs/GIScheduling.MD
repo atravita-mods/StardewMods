@@ -107,6 +107,10 @@ Sam, whenever he visits, has a chance of standing on a towel and playing his gui
 
 (Any NPC with an animation description of `npcname_beach_dance` can be chosen as a dancer.) 
 
+#### Fishers
+
+Fishers do not need to be specified; they just need a `<name>_beach_fish` animation (ie `pam_beach_fish` for Pam.)
+
 See also:
 
 * [Wiki on schedules and animations](https://stardewvalleywiki.com/Modding:Schedule_data#Schedule_points)

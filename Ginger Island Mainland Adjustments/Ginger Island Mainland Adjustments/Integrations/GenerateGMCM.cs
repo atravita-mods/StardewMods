@@ -63,6 +63,15 @@ internal static class GenerateGMCM
 
         configMenu.AddNumberOption(
             mod: manifest,
+            name: I18n.Config_Capacity_Title,
+            getValue: () => Globals.Config.Capacity,
+            setValue: value => Globals.Config.Capacity = value,
+            tooltip: I18n.Config_Capacity_Description,
+            min: 0,
+            max: 12);
+
+        configMenu.AddNumberOption(
+            mod: manifest,
             name: I18n.Config_GroupChance_Title,
             getValue: () => Globals.Config.GroupChance,
             setValue: value => Globals.Config.GroupChance = value,

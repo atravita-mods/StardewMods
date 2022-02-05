@@ -18,7 +18,7 @@ internal static class ConsoleCommands
     /// <summary>
     /// All console commands in this will start with the following.
     /// </summary>
-    private const string PrePendCommand = "av.gima.";
+    private const string PrePendCommand = "av.gima";
 
     /// <summary>
     /// Register the console commands for this mod.
@@ -27,15 +27,24 @@ internal static class ConsoleCommands
     internal static void Register(ICommandHelper commandHelper)
     {
         commandHelper.Add(
-            name: PrePendCommand + "get_schedule",
+            name: PrePendCommand,
+            documentation: I18n.BaseCommand_Documentation(),
+            callback: (string command, string[] args) => Globals.ModMonitor.Log(
+                I18n.BaseCommand()
+                + $"\n\t{PrePendCommand}.get_schedule"
+                + $"\n\t{PrePendCommand}.get_islanders"
+                + $"\n\t{PrePendCommand}.get_locations_list",
+                LogLevel.Info));
+        commandHelper.Add(
+            name: PrePendCommand + ".get_schedule",
             documentation: I18n.GetSchedule_Documentation(),
             callback: ConsoleSchedule);
         commandHelper.Add(
-            name: PrePendCommand + "get_islanders",
+            name: PrePendCommand + ".get_islanders",
             documentation: I18n.GetIslanders_Documentation(),
             callback: ConsoleGetIslanders);
         commandHelper.Add(
-            name: PrePendCommand + "get_location_list",
+            name: PrePendCommand + ".get_locations_list",
             documentation: I18n.GetLocations_Documentation(),
             callback: ConsoleGetLocations);
     }
@@ -142,11 +151,26 @@ internal static class ConsoleCommands
             Globals.ModMonitor.Log(I18n.GetLocations_NoneFound(), LogLevel.Info);
             return;
         }
-        foreach (List<string>? locList in locations)
+        if (args.Length == 0)
         {
-            if (locList is not null)
+            foreach (List<string>? locList in locations)
             {
-                Globals.ModMonitor.Log(string.Join(", ", locList), LogLevel.Info);
+                if (locList is not null)
+                {
+                    Globals.ModMonitor.Log(string.Join(", ", locList), LogLevel.Info);
+                }
+            }
+        }
+        else
+        {
+            HashSet<string> locations_to_find = new(args);
+            Globals.ModMonitor.Log($"Looking for {string.Join(", ", args)} in routesFromLocationToLocation", LogLevel.Info);
+            foreach (List<string>? loclist in locations)
+            {
+                if (loclist is not null && locations_to_find.Intersect(loclist).Any())
+                {
+                    Globals.ModMonitor.Log(string.Join(", ", loclist), LogLevel.Info);
+                }
             }
         }
     }

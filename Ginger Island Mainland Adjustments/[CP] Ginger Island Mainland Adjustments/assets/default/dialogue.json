@@ -28,7 +28,8 @@
                 "Resort_Tent": "Man, I can see myself becoming an archeologist...maybe...",
                 "Resort_AdventureReturn": "That was fun! But I'm glad to be headed home. I'm whacked!",
                 "Resort_Approach": "@, I'll be off to Ginger Island today! You coming too?",
-                "Resort_Left_Saloon": "#$c .5#@! Wanna join us for a game of pool?#Spent the day at the Resort, spending my evening playing pool, what could be better?#"
+                "Resort_Left_Saloon": "#$c .5#@! Wanna join us for a game of pool?#Spent the day at the Resort, spending my evening playing pool, what could be better?#",
+                "Resort_Left_Saloon_bandKids": "@! How're ya doing today?#$b#Me? Got to spend the day at Ginger Island with my friends!$h"
             }
         },
         {
@@ -88,6 +89,7 @@
             "Entries": {
                 "Resort_IslandNorth": "Oh, @, I love the foliage here! Look at how the light shines through the trees!",
                 "Resort_Adventure": "I brought my sketchbook and I'm definitely looking forward to getting some drawing done!",
+                "Resort_Volcano": "Look at these rocks, @! Aren't they beautiful? The way they reflect the light!",
                 "Resort_Tent": "Professor Snail has such a wonderful collection of flowers!",
                 "Resort_Tent_2": "Oh, look at how beautiful these old biology diagrams are!",
                 "Resort_AdventureReturn": "Today was lovely! But I'm definitely ready to return home now.$h",
@@ -115,13 +117,13 @@
             }
         },
         {
-            "LogName": "Elliot dialogue",
+            "LogName": "Elliott dialogue",
             "Action": "EditData",
             "Target": "Characters/Dialogue/Elliott",
             "Entries": {
                 "Resort_Approach": "@, I'll be taking a vacation today! Care to join me?",
                 "Resort Pier": "Nothing like basking in the nice warm sun, surrounded by such beautiful waters.",
-                "Resort_IslandNorth": "Ah, this place stimulates the creative spirit! Nothing like a nice tropical mango to get the writing brain in gear."
+                "Resort_IslandNorth": "Ah, this place stimulates the creative spirit! Nothing like a nice tropical mango to get the writing brain in gear.",
             }
         },
         {
@@ -151,6 +153,14 @@
                 "winterResort_Approach": "@! I'm looking forward to going to Ginger Island today.$h#$b#Will be so nice to get some sun...", 
                 "Resort_Approach_PierreFamily": "Finally convinced Caroline to come to Ginger Island with us. Looking forward to a family vacation!$h",
                 "Resort_Approach_aerobicsClub": "The aerobics club are going to Ginger Island today! Hope my effort pays off!$h",
+            }
+        },
+        {
+            "LogName": "Alex dialogue",
+            "Action": "EditData",
+            "Target": "Characters/Dialogue/Alex",
+            "Entries":{
+                "winterResort_Approach": "Lookin' forward to basking in the sun on the Island today! Hey, @, you wanna come with?",
             }
         },
         {

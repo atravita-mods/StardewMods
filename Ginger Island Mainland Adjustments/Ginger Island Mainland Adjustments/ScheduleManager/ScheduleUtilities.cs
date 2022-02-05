@@ -23,7 +23,7 @@ internal static class ScheduleUtilities
     {
         string? scheduleEntry;
         string scheduleKey = BASE_SCHEDULE_KEY;
-        if (npc.getSpouse() is not null)
+        if (npc.isMarried())
         {
             Globals.ModMonitor.DebugLog($"{npc.Name} is married, using married GI schedules");
             scheduleKey += "_married";
@@ -139,7 +139,7 @@ internal static class ScheduleUtilities
                 if (npc.hasMasterScheduleEntry(newKey))
                 {
                     string newscheduleKey = npc.getMasterScheduleEntry(newKey);
-                    if(newscheduleKey.Equals(rawData, StringComparison.InvariantCulture))
+                    if(newscheduleKey.Equals(rawData, StringComparison.Ordinal))
                     {
                         Globals.ModMonitor.Log(I18n.GOTOINFINITELOOP(), LogLevel.Warn);
                         return false;

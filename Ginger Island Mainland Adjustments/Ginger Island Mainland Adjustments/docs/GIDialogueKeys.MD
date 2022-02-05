@@ -41,7 +41,7 @@ Next, you can limit the times the key will be used with the `<remainder>`. Remai
 * `Resort_Volcano`: Said by NPCs standing near the volcano.
 * `Resort_Tent`: Said by NPCs standing Professor Snail's tent.
 * `Resort_Bartend`: While bartending.
-<!-- *`Resort_Fish`: While fishing -->
+* `Resort_Fish`: While fishing (off the pier on IslandSouth). Requires a fishing animation.
 
 The vanilla resort keys are as following, documented here for easy access
 

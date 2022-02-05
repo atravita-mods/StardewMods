@@ -80,7 +80,7 @@ internal class DialoguePatches
             }
 
             Farmer spouse = __instance.getSpouse();
-            if (spouse != null && spouse == Game1.player)
+            if (spouse is not null && spouse == Game1.player)
             {
                 if (DialogueUtilities.TryGetIslandDialogue(__instance, baseKey + "_marriage", __0))
                 {

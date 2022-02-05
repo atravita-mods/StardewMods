@@ -42,9 +42,9 @@
         }
     },
     {
-        "LogName": "Elliot Schedule",
+        "LogName": "Elliott Schedule",
         "Action": "EditData",
-        "Target": "Characters/schedules/Elliot",
+        "Target": "Characters/schedules/Elliott",
         "Entries": {
             "GIRemainder": "1800 ElliottHouse 1 5 0/2400 ElliottHouse 13 4 1 elliott_sleep",
             "GIRemainder_Fri": "NOT friendship Leah 6/1800 Saloon 4 19 2 elliott_drink/2340 ElliottHouse 13 4 1 elliott_sleep",

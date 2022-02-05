@@ -350,7 +350,7 @@ internal class GingerIslandTimeSlot
 #if DEBUG
             // antisocial point
             new PossibleIslandActivity(
-                new List<Point> { new Point(3, 29) },
+                new List<Point> { new Point(3, 28) },
                 dialogueKey: "Resort_Antisocial",
                 basechance: 0,
                 chanceMap: (NPC npc) => npc.SocialAnxiety == NPC.shy && npc.Optimism == NPC.negative && !npc.Name.Equals("George", StringComparison.OrdinalIgnoreCase) ? 0.6 : 0.0,

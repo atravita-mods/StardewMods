@@ -1,4 +1,5 @@
-﻿using StardewModdingAPI.Utilities;
+﻿using GingerIslandMainlandAdjustments.Utils;
+using StardewModdingAPI.Utilities;
 using StardewValley.Network;
 
 namespace GingerIslandMainlandAdjustments.ScheduleManager;
@@ -20,10 +21,11 @@ internal static class ScheduleUtilities
     /// <returns>A schedule string if it can, null if it can't find one.</returns>
     public static string? FindProperGISchedule(NPC npc, SDate date)
     {
-        string? scheduleEntry = null;
+        string? scheduleEntry;
         string scheduleKey = BASE_SCHEDULE_KEY;
-        if (npc.isMarried())
+        if (npc.getSpouse() is not null)
         {
+            Globals.ModMonitor.DebugLog($"{npc.Name} is married, using married GI schedules");
             scheduleKey += "_married";
         }
         int hearts = Utility.GetAllPlayerFriendshipLevel(npc) / 250;
@@ -40,7 +42,7 @@ internal static class ScheduleUtilities
         // GIRemainder_intDay_heartlevel
         for (int heartLevel = Math.Max((hearts / 2) * 2, 0); heartLevel > 0; heartLevel -= 2)
         {
-            checkKey = $"{BASE_SCHEDULE_KEY}_{date.Day}_{heartLevel}";
+            checkKey = $"{scheduleKey}_{date.Day}_{heartLevel}";
             if (npc.hasMasterScheduleEntry(checkKey)
                 && TryFindGOTOschedule(npc, date, npc.getMasterScheduleEntry(checkKey), out scheduleEntry)
                 && scheduleEntry.StartsWith(POST_GI_START_TIME))
@@ -50,7 +52,7 @@ internal static class ScheduleUtilities
         }
 
         // GIRemainder_Day
-        checkKey = $"{BASE_SCHEDULE_KEY}_{Game1.dayOfMonth}";
+        checkKey = $"{scheduleKey}_{Game1.dayOfMonth}";
         if (npc.hasMasterScheduleEntry(checkKey)
             && TryFindGOTOschedule(npc, date, npc.getMasterScheduleEntry(checkKey), out scheduleEntry)
             && scheduleEntry.StartsWith(POST_GI_START_TIME))
@@ -61,7 +63,7 @@ internal static class ScheduleUtilities
         // GIRemainder_rain
         if (Game1.IsRainingHere(npc.currentLocation))
         {
-            checkKey = $"{BASE_SCHEDULE_KEY}_rain";
+            checkKey = $"{scheduleKey}_rain";
             if (npc.hasMasterScheduleEntry(checkKey)
                 && TryFindGOTOschedule(npc, date, npc.getMasterScheduleEntry(checkKey), out scheduleEntry)
                 && scheduleEntry.StartsWith(POST_GI_START_TIME))
@@ -73,7 +75,7 @@ internal static class ScheduleUtilities
         // GIRemainderHearts
         for (int heartLevel = Math.Max((hearts / 2) * 2, 0); heartLevel > 0; heartLevel -= 2)
         {
-            checkKey = $"{BASE_SCHEDULE_KEY}_{date.Day}_{heartLevel}";
+            checkKey = $"{scheduleKey}_{date.Day}_{heartLevel}";
             if (npc.hasMasterScheduleEntry(checkKey)
                 && TryFindGOTOschedule(npc, date, npc.getMasterScheduleEntry(checkKey), out scheduleEntry)
                 && scheduleEntry.StartsWith(POST_GI_START_TIME))
@@ -83,7 +85,7 @@ internal static class ScheduleUtilities
         }
 
         // GIRemainder_DayOfWeek
-        checkKey = $"{BASE_SCHEDULE_KEY}_{Game1.shortDayNameFromDayOfSeason(date.Day)}";
+        checkKey = $"{scheduleKey}_{Game1.shortDayNameFromDayOfSeason(date.Day)}";
         if (npc.hasMasterScheduleEntry(checkKey)
             && TryFindGOTOschedule(npc, date, npc.getMasterScheduleEntry(checkKey), out scheduleEntry)
             && scheduleEntry.StartsWith(POST_GI_START_TIME))
@@ -92,8 +94,8 @@ internal static class ScheduleUtilities
         }
 
         // GIREmainder
-        if (npc.hasMasterScheduleEntry(BASE_SCHEDULE_KEY)
-            && TryFindGOTOschedule(npc, date, npc.getMasterScheduleEntry(BASE_SCHEDULE_KEY), out scheduleEntry)
+        if (npc.hasMasterScheduleEntry(scheduleKey)
+            && TryFindGOTOschedule(npc, date, npc.getMasterScheduleEntry(scheduleKey), out scheduleEntry)
             && scheduleEntry.StartsWith(POST_GI_START_TIME))
         {
             return scheduleEntry;

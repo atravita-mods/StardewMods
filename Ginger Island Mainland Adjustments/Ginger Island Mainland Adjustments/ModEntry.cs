@@ -48,6 +48,7 @@ public class ModEntry : Mod
         MidDayScheduleEditor.Reset();
         IslandSouthPatches.ClearCache();
         GIScheduler.ClearCache();
+        GIScheduler.DayEndReset();
         DialogueUtilities.ClearDialogueLog();
         ConsoleCommands.ClearCache();
     }

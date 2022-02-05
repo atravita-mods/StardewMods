@@ -110,3 +110,28 @@ Sam, whenever he visits, has a chance of standing on a towel and playing his gui
 See also:
 
 * [Wiki on schedules and animations](https://stardewvalleywiki.com/Modding:Schedule_data#Schedule_points)
+
+### Exclusions
+
+You can also exclude characters from the resort based on various conditions by patching into `Mods/atravita_Ginger_Island_Adjustments_exclusions`.
+
+```js
+{
+	"Format": "1.24.0",
+	"Changes": [
+		{
+			"Action": "EditData",
+			"Target": "Mods/atravita_Ginger_Island_Adjustments_exclusions",
+			"Entries": {
+				"NPCname": "spring,17,mon,spring_mon,spring_17,neveralone",
+			}
+		}
+	]
+}
+```
+
+Possible values include: `<season>`, `<day>`, `<dayofweek>`, `<season>_<dayofweek>`, `<season>_<day>`, and `neveralone`. The first five should be self-explanatory, but `neveralone` prevents NPCs from attending the resort EXCEPT as [part of a group](#custom-groups). 
+
+As an aside: NPCs already cannot go to Ginger Island on their hospital visit days, and no one goes to the Resort during the Winter Market. 
+
+**Note:** I haven't actually tested this with conditional patching (using Content Patcher's `When` field.) [CustomNPCExclusions](https://www.nexusmods.com/stardewvalley/mods/7089), which does a very similar thing, forces `IslandSouth.SetUpIslandSchedules` to [run after Content Patcher is done updating patches](https://github.com/Esca-MMC/CustomNPCExclusions/blob/master/CustomNPCExclusions/HarmonyPatch_IslandVisit.cs).

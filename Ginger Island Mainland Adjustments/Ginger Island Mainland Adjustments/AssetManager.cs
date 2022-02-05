@@ -138,6 +138,10 @@ public class AssetManager : IAssetLoader, IAssetEditor
             {
                 defaultgroups["GeorgeFamily"] = "George, Evelyn, Alex";
             }
+            if (Globals.Config.AllowWilly)
+            {
+                defaultgroups["barfolk"] = "Clint, Willy";
+            }
             return (T)(object)defaultgroups;
         }
         // Load an empty document for everything else

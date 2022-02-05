@@ -95,6 +95,15 @@ internal static class GIScheduler
     }
 
     /// <summary>
+    /// Deletes references to the current group at the end of the day.
+    /// </summary>
+    public static void DayEndReset()
+    {
+        currentGroup = null;
+        currentVisitingGroup = null;
+    }
+
+    /// <summary>
     /// Generates schedules for everyone.
     /// </summary>
     public static void GenerateAllSchedules()
@@ -143,7 +152,6 @@ internal static class GIScheduler
             ConsoleCommands.IslandSchedules[visitor.Name] = schedules[visitor];
         }
 
-        IslandSouthPatches.ClearCache();
         GIScheduler.ClearCache();
     }
 
@@ -220,6 +228,12 @@ internal static class GIScheduler
             visitors.Add(gus);
             valid_visitors.Remove(gus);
         }
+
+        // Prevent children and anyone with the neveralone exclusion from going alone.
+        int kidsremoved = valid_visitors.RemoveWhere((NPC npc) => npc.Age == NPC.child);
+        int neveralone = valid_visitors.RemoveWhere((NPC npc) => IslandSouthPatches.Exclusions.TryGetValue(npc, out string[]? exclusions) && exclusions.Contains("neveralone"));
+        Globals.ModMonitor.DebugLog($"Excluded {kidsremoved} kids and {neveralone} never alone villagers from the valid villagers list");
+
         if (visitors.Count < capacity)
         {
 #if DEBUG
@@ -260,6 +274,7 @@ internal static class GIScheduler
         }
 
         Globals.ModMonitor.DebugLog($"{visitors.Count} vistors: {string.Join(", ", visitors.Select((NPC npc) => npc.Name))}");
+        IslandSouthPatches.ClearCache();
         return visitors;
     }
 

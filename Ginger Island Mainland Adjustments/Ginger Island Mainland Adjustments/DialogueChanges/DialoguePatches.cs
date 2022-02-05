@@ -12,6 +12,9 @@ namespace GingerIslandMainlandAdjustments.DialogueChanges;
 [HarmonyPatch(typeof(NPC))]
 internal class DialoguePatches
 {
+    private const string ANTISOCIAL = "Resort_Antisocial";
+    private const string ISLANDNORTH = "Resort_IslandNorth";
+
     /// <summary>
     /// Appends checkForNewCurrentDialogue to look for GI-specific dialogue.
     /// </summary>
@@ -22,7 +25,7 @@ internal class DialoguePatches
     [HarmonyPostfix]
     [HarmonyPatch(nameof(NPC.checkForNewCurrentDialogue))]
     [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Convention used by Harmony")]
-    public static void DoCheckIslandDialogue(ref NPC __instance, ref int __0, ref bool __1, ref bool __result)
+    public static void DoCheckIslandDialogue(NPC __instance, int __0, bool __1, ref bool __result)
     { // __0 = heartlevel, as int. __1 = whether or not to have a season prefix?
         try
         {
@@ -35,7 +38,15 @@ internal class DialoguePatches
                 return;
             }
             if (__instance.currentLocation is (IslandLocation or FarmHouse))
-            { // Currently on island or is spouse in Farmhouse, skip me.
+            { // Currently on island or is spouse in Farmhouse, handle IslandNorth/IslandSoutheast
+                if (__instance.currentLocation is IslandEast && __instance.Dialogue.ContainsKey(ANTISOCIAL))
+                {
+                    __instance.ClearAndPushDialogue(ANTISOCIAL);
+                }
+                else if (__instance.currentLocation is IslandNorth && __instance.Dialogue.ContainsKey(ISLANDNORTH))
+                {
+                    __instance.ClearAndPushDialogue(ISLANDNORTH);
+                }
                 return;
             }
             string preface = __1 ? string.Empty : Game1.currentSeason;
@@ -93,7 +104,7 @@ internal class DialoguePatches
     [HarmonyPostfix]
     [HarmonyPatch(nameof(NPC.arriveAtFarmHouse))]
     [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Convention used by Harmony")]
-    public static void AppendArrival(ref NPC __instance)
+    public static void AppendArrival(NPC __instance)
     {
         try
         {

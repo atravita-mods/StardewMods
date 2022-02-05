@@ -14,6 +14,7 @@
 
                 // This key will only be called if the **group** PierreFamily goes to the Resort.
                 "Resort_Approach_PierreFamily": "Heya @, I'm going to be headed to Ginger Island with my family today. Not sure I'm looking forward to spending the day with my dad...",
+                "Resort_Approach_bandKids": "@! I'll be going to Ginger Island today with Sam and Sebastian! You wanna join us?",
                 "Resort_Left": "Ahh, nothing like a nice relaxing vacation...$h"
             }
         },
@@ -89,6 +90,7 @@
                 "Resort_Adventure": "I brought my sketchbook and I'm definitely looking forward to getting some drawing done!",
                 "Resort_Tent": "Professor Snail has such a wonderful collection of flowers!",
                 "Resort_Tent_2": "Oh, look at how beautiful these old biology diagrams are!",
+                "Resort_AdventureReturn": "Today was lovely! But I'm definitely ready to return home now.$h",
                 "Resort_Pier": "This water is such a pretty shade of blue.",
                 //Resort_Antisocial temporarily removed until I can figure out what about IslandSoutheast makes NPCs vanish... :(
                 "Resort_Antisocial": "Heya @, how are you today? I'm just observing the sea. This would be so lovely to draw."
@@ -102,6 +104,7 @@
                 "Resort_Leaving": "Well, that was deeply relaxing. I'll see you at home, dear.$l",
                 "Resort_Adventure": "Oh, hi, @! What are you planning on doing today?#$b#Me, I'm planning on drawing some of the birds on this island.",
                 "Resort_Adventure_2": "Oh, @! It's so nice seeing you here. Look at how the light comes through those trees, isn't it so beautiful?",
+                "Resort_AdventureReturn": "@! I had a great day today, did you? I'll see you at home!$l#$b#Don't stay out too late!",
                 //Resort_Antisocial temporarily removed until I can figure out what about IslandSoutheast makes NPCs vanish... :(
                 "Resort_Antisocial": "Oh, @, you've found me here. How are you today? The Resort is just a little too busy for me right now.",
                 "Resort_Pier": "This water is such a pretty shade of blue. @, would you be interested in going snorkeling one day?"
@@ -114,7 +117,7 @@
         {
             "LogName": "Elliot dialogue",
             "Action": "EditData",
-            "Target": "Characters/Dialogue/Elliot",
+            "Target": "Characters/Dialogue/Elliott",
             "Entries": {
                 "Resort_Approach": "@, I'll be taking a vacation today! Care to join me?",
                 "Resort Pier": "Nothing like basking in the nice warm sun, surrounded by such beautiful waters.",
@@ -141,6 +144,16 @@
             }
         },
         {
+            "LogName": "Caroline dialogue",
+            "Action": "EditData",
+            "Target": "Characters/Dialogue/Caroline",
+            "Entries": {
+                "winterResort_Approach": "@! I'm looking forward to going to Ginger Island today.$h#$b#Will be so nice to get some sun...", 
+                "Resort_Approach_PierreFamily": "Finally convinced Caroline to come to Ginger Island with us. Looking forward to a family vacation!$h",
+                "Resort_Approach_aerobicsClub": "The aerobics club are going to Ginger Island today! Hope my effort pays off!$h",
+            }
+        },
+        {
             "LogName": "Haley dialogue",
             "Action": "EditData",
             "Target": "Characters/Dialogue/Haley",
@@ -156,6 +169,14 @@
             "Entries": {
                 "Resort_Pier": "Look at all the fish swimming in these waters!",
                 "Resort_Approach": "@, I'm gonna be headed to Ginger Island today! Got a nice vacation day from the bus company."
+            }
+        },
+        {
+            "LogName": "Penny dialogue",
+            "Action": "EditData",
+            "Target": "Characters/Dialogue/Penny",
+            "Entries": {
+                "Resort_Approach_PamFamily": "Convinced mom to go to Ginger Island with me today! I'm looking forward to spending some time with her."
             }
         },
         {

@@ -21,7 +21,7 @@ internal static class IslandSouthPatches
     /// Gets dictionary of NPCs and custom exclusions.
     /// </summary>
     /// <remarks>Cached, will reload automatically if not currently cached.</remarks>
-    private static Dictionary<NPC, string[]> Exclusions
+    internal static Dictionary<NPC, string[]> Exclusions
     {
         get
         {
@@ -112,22 +112,27 @@ internal static class IslandSouthPatches
             string[] checkset = Exclusions[npc];
             foreach (string condition in checkset)
             {
-                if (Game1.dayOfMonth.ToString().Equals(condition, StringComparison.InvariantCultureIgnoreCase))
+                if (Game1.dayOfMonth.ToString().Equals(condition, StringComparison.OrdinalIgnoreCase))
                 {
                     __result = false;
                     return;
                 }
-                else if (Game1.currentSeason.Equals(condition, StringComparison.InvariantCultureIgnoreCase))
+                else if (Game1.currentSeason.Equals(condition, StringComparison.OrdinalIgnoreCase))
                 {
                     __result = false;
                     return;
                 }
-                else if (Game1.shortDayNameFromDayOfSeason(Game1.dayOfMonth).Equals(condition, StringComparison.InvariantCultureIgnoreCase))
+                else if (Game1.shortDayNameFromDayOfSeason(Game1.dayOfMonth).Equals(condition, StringComparison.OrdinalIgnoreCase))
                 {
                     __result = false;
                     return;
                 }
-                else if ($"{Game1.currentSeason} {Game1.shortDayNameFromDayOfSeason(Game1.dayOfMonth)}".Equals(condition, StringComparison.InvariantCultureIgnoreCase))
+                else if ($"{Game1.currentSeason}_{Game1.shortDayNameFromDayOfSeason(Game1.dayOfMonth)}".Equals(condition, StringComparison.OrdinalIgnoreCase))
+                {
+                    __result = false;
+                    return;
+                }
+                else if($"{Game1.currentSeason}_{Game1.dayOfMonth}".Equals(condition, StringComparison.OrdinalIgnoreCase))
                 {
                     __result = false;
                     return;

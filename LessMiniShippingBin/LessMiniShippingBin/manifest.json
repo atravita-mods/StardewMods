@@ -1,0 +1,10 @@
+﻿{
+  "Name": "Less Mini Shipping Bin",
+  "Author": "atravita",
+  "Version": "0.1.0",
+  "Description": "Lets you make the mini shipping bin bigger.",
+  "UniqueID": "atravita.LessMiniShippingBin",
+  "EntryDll": "LessMiniShippingBin.dll",
+  //"UpdateKeys": [ "Nexus:10924", "ModDrop:1099838", "Github:atravita-mods/ExpFromMonsterKillsOnFarm" ],
+  "MinimumApiVersion": "3.0"
+}

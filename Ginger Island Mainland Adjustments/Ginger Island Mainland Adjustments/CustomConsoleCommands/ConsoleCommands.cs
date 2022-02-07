@@ -89,8 +89,24 @@ internal static class ConsoleCommands
         }
         else
         {
-            ScheduleUtilities.TryFindGOTOschedule(npc, SDate.Now(), npc.getMasterScheduleEntry(npc.dayScheduleName.Value), out string schedulestring);
-            Globals.ModMonitor.Log($"\t{npc.dayScheduleName.Value}\n\t\t{schedulestring}", level);
+            if (npc.dayScheduleName.Value is null)
+            {
+                Globals.ModMonitor.Log($"\t{npc.Name} lacks a npc.dayScheduleName.Value", LogLevel.Error);
+            }
+            else if (npc.hasMasterScheduleEntry(npc.dayScheduleName.Value))
+            {
+                ScheduleUtilities.TryFindGOTOschedule(npc, SDate.Now(), npc.getMasterScheduleEntry(npc.dayScheduleName.Value), out string schedulestring);
+                Globals.ModMonitor.Log($"\t{npc.dayScheduleName.Value}\n\t\t{schedulestring}", level);
+            }
+            else
+            {
+                Globals.ModMonitor.Log($"\t{npc.Name} claims to be using {npc.dayScheduleName.Value} but that was not found!", LogLevel.Error);
+            }
+        }
+        if (npc.Schedule is null)
+        {
+            Globals.ModMonitor.Log($"Something very odd has happened to the schedule of {npc.Name} - it appears to have been nulled since generation", LogLevel.Error);
+            return;
         }
         List<int> keys = new(npc.Schedule.Keys);
         keys.Sort();

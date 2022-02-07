@@ -13,6 +13,8 @@ namespace GingerIslandMainlandAdjustments;
 /// <inheritdoc />
 public class ModEntry : Mod
 {
+    private bool haveFixedSchedulesToday = false;
+
     /// <inheritdoc />
     public override void Entry(IModHelper helper)
     {
@@ -25,7 +27,7 @@ public class ModEntry : Mod
 
         // Register events
         helper.Events.GameLoop.GameLaunched += this.OnGameLaunched;
-        helper.Events.GameLoop.TimeChanged += MidDayScheduleEditor.AttemptAdjustGISchedule;
+        helper.Events.GameLoop.TimeChanged += this.OnTimeChanged;
         helper.Events.GameLoop.DayEnding += this.DayEnding;
         helper.Events.GameLoop.ReturnedToTitle += this.ReturnedToTitle;
 
@@ -39,10 +41,20 @@ public class ModEntry : Mod
         helper.Content.AssetEditors.Add(manager);
     }
 
+    private void OnTimeChanged(object? sender, TimeChangedEventArgs e)
+    {
+        MidDayScheduleEditor.AttemptAdjustGISchedule(e);
+        if (e.NewTime > 615 && !this.haveFixedSchedulesToday)
+        {
+            ScheduleUtilities.FixUpSchedules();
+            this.haveFixedSchedulesToday = true;
+        }
+    }
+
     /// <summary>
     /// Clear all caches at the end of the day and if the player exits to menu.
     /// </summary>
-    private static void ClearCaches()
+    private void ClearCaches()
     {
         MidDayScheduleEditor.Reset();
         IslandSouthPatches.ClearCache();
@@ -50,6 +62,8 @@ public class ModEntry : Mod
         GIScheduler.DayEndReset();
         DialogueUtilities.ClearDialogueLog();
         ConsoleCommands.ClearCache();
+        ScheduleUtilities.ClearCache();
+        this.haveFixedSchedulesToday = false;
     }
 
     /// <summary>
@@ -59,7 +73,7 @@ public class ModEntry : Mod
     /// <param name="e">Possible parameters.</param>
     private void ReturnedToTitle(object? sender, ReturnedToTitleEventArgs e)
     {
-        ClearCaches();
+        this.ClearCaches();
     }
 
     /// <summary>
@@ -70,7 +84,7 @@ public class ModEntry : Mod
     private void DayEnding(object? sender, DayEndingEventArgs e)
     {
         Game1.netWorldState.Value.IslandVisitors.Clear();
-        ClearCaches();
+        this.ClearCaches();
         NPCPatches.ResetAllFishers();
     }
 

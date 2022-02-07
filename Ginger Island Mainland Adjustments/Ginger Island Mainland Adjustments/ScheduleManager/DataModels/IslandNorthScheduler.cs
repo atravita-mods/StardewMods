@@ -101,7 +101,9 @@ internal static class IslandNorthScheduler
 
                 Globals.ModMonitor.DebugLog($"Calculated island north schedule for {explorer.Name}");
                 explorer.islandScheduleName.Value = "island";
-                explorer.Schedule = explorer.parseMasterSchedule(renderedSchedule);
+
+                ScheduleUtilities.ParseMasterScheduleAdjustedForChild2NPC(explorer, renderedSchedule);
+
                 Game1.netWorldState.Value.IslandVisitors[explorer.Name] = true;
                 ConsoleCommands.IslandSchedules[explorer.Name] = renderedSchedule;
             }

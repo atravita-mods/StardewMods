@@ -1,4 +1,6 @@
-﻿using GingerIslandMainlandAdjustments.Utils;
+﻿using System.Text.RegularExpressions;
+using GingerIslandMainlandAdjustments.Utils;
+using Microsoft.Xna.Framework;
 using StardewModdingAPI.Utilities;
 using StardewValley.Network;
 
@@ -11,6 +13,16 @@ internal static class ScheduleUtilities
 {
     private const string BASE_SCHEDULE_KEY = "GIRemainder";
     private const string POST_GI_START_TIME = "1800"; // all GI schedules must start at 1800
+
+    private static readonly Dictionary<string, Dictionary<int, SchedulePathDescription>> Schedules = new();
+
+    /// <summary>
+    /// Removes schedule cache.
+    /// </summary>
+    public static void ClearCache()
+    {
+        Schedules.Clear();
+    }
 
     /// <summary>
     /// Find the correct schedule for an NPC for a given date. Looks into the schedule assets first
@@ -179,6 +191,241 @@ internal static class ScheduleUtilities
             default:
                 scheduleString = rawData;
                 return true;
+        }
+    }
+
+    /// <summary>
+    /// Handles parsing a schedule for s chedule string already stripped of GOTO/MAIL/NOT.
+    /// </summary>
+    /// <param name="schedule">Raw schedule string.</param>
+    /// <param name="npc">NPC.</param>
+    /// <param name="prevMap">Map NPC starts on.</param>
+    /// <param name="prevStop">Start location.</param>
+    /// <param name="prevtime">Start time of scheduler.</param>
+    /// <returns>null if the schedule could not be parsed, a schedule otherwise.</returns>
+    /// <exception cref="MethodNotFoundException">Reflection to get game methods failed.</exception>
+    public static Dictionary<int, SchedulePathDescription>? ParseSchedule(string? schedule, NPC npc, string prevMap, Point prevStop, int prevtime)
+    {
+        if (schedule is null)
+        {
+            return null;
+        }
+
+        string previousMap = prevMap;
+        Point lastStop = prevStop;
+        int lastx = lastStop.X;
+        int lasty = lastStop.Y;
+        int lasttime = prevtime;
+
+        Dictionary<int, SchedulePathDescription> remainderSchedule = new();
+        IReflectedMethod pathfinder = Globals.ReflectionHelper.GetMethod(npc, "pathfindToNextScheduleLocation")
+            ?? throw new MethodNotFoundException("NPC::pathfindToNextScheduleLocation");
+
+        foreach (string schedulepoint in schedule.Split('/'))
+        {
+            try
+            {
+                Match match = Globals.ScheduleRegex.Match(schedulepoint);
+                string originaltime = schedulepoint.Split(' ', count: 2)[0]; // grab the time off this entry
+                if (!match.Success && schedulepoint.Contains("bed", StringComparison.OrdinalIgnoreCase))
+                {
+                    if (npc.hasMasterScheduleEntry("default"))
+                    {
+                        string lastentry = originaltime + npc.getMasterScheduleEntry("default").Split('/')[^1].Split(' ', count: 2)[1];
+                        match = Globals.ScheduleRegex.Match(lastentry);
+                    }
+                    else if (npc.hasMasterScheduleEntry("spring"))
+                    {
+                        string lastentry = originaltime + npc.getMasterScheduleEntry("spring").Split('/')[^1].Split(' ', count: 2)[1];
+                        match = Globals.ScheduleRegex.Match(lastentry);
+                    }
+                }
+                if (!match.Success)
+                { // I still have issues...
+                    Globals.ModMonitor.Log($"{schedulepoint} seems unparsable by regex, sending NPC {npc.Name} home to sleep", LogLevel.Info);
+                    Dictionary<string, string> animationData = Globals.ContentHelper.Load<Dictionary<string, string>>("Data\\animationDescriptions", ContentSource.GameContent);
+                    animationData.TryGetValue(npc.Name.ToLowerInvariant() + "_sleep", out string? sleepanimation);
+                    SchedulePathDescription path2bed = pathfinder.Invoke<SchedulePathDescription>(
+                        previousMap,
+                        lastx,
+                        lasty,
+                        npc.DefaultMap,
+                        npc.DefaultPosition.X,
+                        npc.DefaultPosition.Y,
+                        Game1.up,
+                        sleepanimation,
+                        null); // no message.
+                    if (int.TryParse(originaltime, out int path2bedtime))
+                    {
+                        remainderSchedule[path2bedtime] = path2bed;
+                        return remainderSchedule;
+                    }
+                    else if (originaltime.Length > 0 && originaltime.StartsWith('a') && int.TryParse(originaltime[1..], out path2bedtime))
+                    {
+                        int expectedpath2bedtime = path2bed.GetExpectedRouteTime();
+                        Utility.ModifyTime(path2bedtime, 0 - (expectedpath2bedtime * 10) / 10);
+                        remainderSchedule[path2bedtime] = path2bed;
+                        return remainderSchedule;
+                    }
+                    else
+                    {
+                        Globals.ModMonitor.Log($"Failed in parsing schedulepoint {schedulepoint} for NPC {npc.Name}", LogLevel.Warn);
+                        return null; // to try next schedule for GIMA, to null out NPC schedule and give them no schedule for vanilla.
+                    }
+                }
+                Dictionary<string, string> matchDict = match.MatchGroupsToDictionary((key) => key, (value) => value.Trim());
+                int time = int.Parse(matchDict["time"]);
+                if (time <= lasttime)
+                {
+                    Globals.ModMonitor.Log(I18n.TOOTIGHTTIMELINE(time, schedule, npc.Name), LogLevel.Warn);
+                    continue;
+                }
+
+                string location = matchDict.GetValueOrDefaultOverrideNull("location", previousMap);
+                int x = int.Parse(matchDict["x"]);
+                int y = int.Parse(matchDict["y"]);
+                string direction_str = matchDict.GetValueOrDefault("direction", "2");
+                if (!int.TryParse(direction_str, out int direction))
+                {
+                    direction = Game1.down;
+                }
+
+                // Adjust schedules for locations not being open....
+                if (!Game1.isLocationAccessible(location))
+                {
+                    string replacement_loc = location + "_Replacement";
+                    if (npc.hasMasterScheduleEntry(replacement_loc))
+                    {
+                        string[] replacementdata = npc.getMasterScheduleEntry(replacement_loc).Split();
+                        x = int.Parse(replacementdata[0]);
+                        y = int.Parse(replacementdata[1]);
+                        if (!int.TryParse(replacementdata[2], out direction))
+                        {
+                            direction = Game1.down;
+                        }
+                    }
+                    else
+                    {
+                        if (Globals.Config.EnforceGITiming)
+                        {
+                            Globals.ModMonitor.Log(I18n.NOREPLACEMENTLOCATION(location, npc.Name), LogLevel.Warn);
+                        }
+                        continue; // skip this schedule point
+                    }
+                }
+
+                matchDict.TryGetValue("animation", out string? animation);
+                matchDict.TryGetValue("message", out string? message);
+
+                SchedulePathDescription newpath = pathfinder.Invoke<SchedulePathDescription>(
+                    previousMap,
+                    lastx,
+                    lasty,
+                    location,
+                    x,
+                    y,
+                    direction,
+                    animation,
+                    message);
+
+                if (matchDict.TryGetValue("arrival", out string? arrival) && arrival.Equals("a", StringComparison.OrdinalIgnoreCase))
+                {
+                    time = Utility.ModifyTime(time, 0 - (newpath.GetExpectedRouteTime() * 10 / 10));
+                }
+                if (time <= lasttime)
+                {
+                    Globals.ModMonitor.Log(I18n.TOOTIGHTTIMELINE(time, schedule, npc.Name), LogLevel.Warn);
+                    continue;
+                }
+                Globals.ModMonitor.DebugLog($"Adding GI schedule for {npc.Name}", LogLevel.Debug);
+                remainderSchedule.Add(time, newpath);
+                previousMap = location;
+                lasttime = time;
+                lastx = x;
+                lasty = y;
+                if (Globals.Config.EnforceGITiming)
+                {
+                    int expectedTravelTime = newpath.GetExpectedRouteTime();
+                    Utility.ModifyTime(time, expectedTravelTime);
+                    Globals.ModMonitor.DebugLog($"Expected travel time of {expectedTravelTime} minutes", LogLevel.Debug);
+                }
+            }
+            catch (RegexMatchTimeoutException ex)
+            {
+                Globals.ModMonitor.Log(I18n.REGEXTIMEOUTERROR(schedulepoint, ex), LogLevel.Trace);
+                continue;
+            }
+        }
+
+        if (remainderSchedule.Count > 0)
+        {
+            return remainderSchedule;
+        }
+
+        return null;
+    }
+
+    /// <summary>
+    /// Wraps npc.parseMasterSchedule to lie to it about the start location of the NPC, if the NPC lives in the farmhouse.
+    /// </summary>
+    /// <param name="npc">NPC in question.</param>
+    /// <param name="rawData">Raw schedule string.</param>
+    public static void ParseMasterScheduleAdjustedForChild2NPC(NPC npc, string rawData)
+    {
+        if (npc.DefaultMap.Contains("FarmHouse", StringComparison.OrdinalIgnoreCase) && !npc.isMarried())
+        {
+            // lie to parse master schedule
+            string prevmap = npc.DefaultMap;
+            Vector2 prevposition = npc.DefaultPosition;
+
+            if (rawData.EndsWith("bed"))
+            {
+                rawData = rawData.Replace("bed", "BusStop -1 23 3");
+            }
+
+            npc.DefaultMap = "BusStop";
+            npc.DefaultPosition = new Vector2(0, 23) * 64;
+
+            npc.Schedule = npc.parseMasterSchedule(rawData);
+
+            npc.DefaultMap = prevmap;
+            npc.DefaultPosition = prevposition;
+
+            ScheduleUtilities.Schedules[npc.Name] = npc.Schedule;
+        }
+        else if (Globals.IsChildToNPC?.Invoke(npc) == true)
+        {
+            // For a Child2NPC, we must handle their scheuling ourselves.
+            if (TryFindGOTOschedule(npc, SDate.Now(), rawData, out string scheduleString))
+            {
+                npc.Schedule = ParseSchedule(scheduleString, npc, "BusStop", new Point(0, 23), 610);
+            }
+            else
+            {
+                Globals.ModMonitor.Log("TryFindGOTOschedule failed for Child2NPC, setting schedule to null", LogLevel.Warn);
+                npc.Schedule = null;
+            }
+        }
+        else
+        {
+            npc.Schedule = npc.parseMasterSchedule(rawData);
+        }
+    }
+
+    /// <summary>
+    /// Goes around at about 620 and fixes up schedules if they've been nulled.
+    /// </summary>
+    public static void FixUpSchedules()
+    {
+        foreach (NPC npc in Game1.getLocationFromName("FarmHouse").getCharacters())
+        {
+            if (Globals.IsChildToNPC?.Invoke(npc) == true && npc.Schedule is null
+                && ScheduleUtilities.Schedules.TryGetValue(npc.Name, out Dictionary<int, SchedulePathDescription>? schedule))
+            {
+                Globals.ModMonitor.Log($"Fixing up schedule for {npc.Name}, which appears to have been nulled.", LogLevel.Warn);
+                npc.Schedule = schedule;
+                ScheduleUtilities.Schedules.Remove(npc.Name);
+            }
         }
     }
 }

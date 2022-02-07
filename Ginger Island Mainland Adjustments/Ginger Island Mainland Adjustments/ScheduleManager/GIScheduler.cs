@@ -147,7 +147,9 @@ internal static class GIScheduler
         {
             Globals.ModMonitor.Log($"Calculated island schedule for {visitor.Name}");
             visitor.islandScheduleName.Value = "island";
-            visitor.Schedule = visitor.parseMasterSchedule(schedules[visitor]);
+
+            ScheduleUtilities.ParseMasterScheduleAdjustedForChild2NPC(visitor, schedules[visitor]);
+
             Game1.netWorldState.Value.IslandVisitors[visitor.Name] = true;
             ConsoleCommands.IslandSchedules[visitor.Name] = schedules[visitor];
         }

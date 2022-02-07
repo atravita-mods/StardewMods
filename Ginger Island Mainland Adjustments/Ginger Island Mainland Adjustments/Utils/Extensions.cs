@@ -16,9 +16,9 @@ public static class DictionaryExtensions
     /// <param name="dictionary">Dictionary to update.</param>
     /// <param name="updateDict">Dictionary containing values to add to the first dictionary.</param>
     /// <returns>the dictionary (for chaining).</returns>
-    public static Dictionary<TKey, TValue> Update<TKey, TValue>(
+    public static IDictionary<TKey, TValue> Update<TKey, TValue>(
         [NotNull] this Dictionary<TKey, TValue> dictionary,
-        Dictionary<TKey, TValue>? updateDict)
+        IDictionary<TKey, TValue>? updateDict)
         where TKey : notnull
         where TValue : notnull
     {
@@ -43,7 +43,7 @@ public static class DictionaryExtensions
     /// <returns>Value from dictionary if one exists, else default value.</returns>
     /// <remarks>Function both sets state and returns value.</remarks>
     public static TValue? SetDefault<TKey, TValue>(
-        [NotNull] this Dictionary<TKey, TValue> dictionary,
+        [NotNull] this IDictionary<TKey, TValue> dictionary,
         [NotNull] TKey key,
         [NotNull] TValue defaultValue)
         where TKey : notnull
@@ -64,7 +64,7 @@ public static class DictionaryExtensions
     /// <param name="defaultValue">Value to use.</param>
     /// <returns>Value from dictionary if it exists and is not null, defaultValue otherwise.</returns>
     public static TValue SetDefaultOverrideNull<TKey, TValue>(
-        [NotNull] this Dictionary<TKey, TValue> dictionary,
+        [NotNull] this IDictionary<TKey, TValue> dictionary,
         [NotNull] TKey key,
         [NotNull] TValue defaultValue)
         where TKey : notnull
@@ -93,7 +93,7 @@ public static class DictionaryExtensions
     /// <returns>Value from dictionary if not null, or else defaultValue.</returns>
     [Pure]
     public static TValue GetValueOrDefaultOverrideNull<TKey, TValue>(
-        [NotNull] this Dictionary<TKey, TValue> dictionary,
+        [NotNull] this IDictionary<TKey, TValue> dictionary,
         [NotNull] TKey key,
         [NotNull] TValue defaultValue)
       where TKey : notnull

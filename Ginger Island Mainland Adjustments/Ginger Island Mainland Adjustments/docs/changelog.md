@@ -14,6 +14,7 @@
 <!-- More schedule debugging tools: get arbitrary schedule from X day? -->
 <!-- Telephone: Rig the phone code so Pam will *tell you* if she's headed to the Island. -->
 <!-- Figure out why Emily dances *in* the changing room? -->
+<!-- IslandNorth and AntiSocial lines for George/Evelyn/Willy-->
 
 ##### Known Issues
 

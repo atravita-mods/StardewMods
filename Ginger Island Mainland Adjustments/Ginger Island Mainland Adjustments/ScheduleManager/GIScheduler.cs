@@ -229,10 +229,12 @@ internal static class GIScheduler
             valid_visitors.Remove(gus);
         }
 
+#if !DEBUG
         // Prevent children and anyone with the neveralone exclusion from going alone.
         int kidsremoved = valid_visitors.RemoveWhere((NPC npc) => npc.Age == NPC.child);
         int neveralone = valid_visitors.RemoveWhere((NPC npc) => IslandSouthPatches.Exclusions.TryGetValue(npc, out string[]? exclusions) && exclusions.Contains("neveralone"));
         Globals.ModMonitor.DebugLog($"Excluded {kidsremoved} kids and {neveralone} never alone villagers from the valid villagers list");
+#endif
 
         if (visitors.Count < capacity)
         {
@@ -408,7 +410,8 @@ internal static class GIScheduler
             else
             {
                 // Try to find a GI remainder schedule, if any.
-                schedPointString.Add(ScheduleUtilities.FindProperGISchedule(visitor, SDate.Now()) ?? "1800 bed");
+                schedPointString.Add(ScheduleUtilities.FindProperGISchedule(visitor, SDate.Now())
+                    ?? (Globals.IsChildToNPC(visitor) ? "1800 BusStop -1 23 3" : "1800 bed"));
             }
             completedSchedules[visitor] = string.Join("/", schedPointString);
             Globals.ModMonitor.DebugLog($"For {visitor.Name}, created island schedule {completedSchedules[visitor]}");

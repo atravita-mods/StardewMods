@@ -1,6 +1,7 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 using HarmonyLib;
 using Microsoft.Xna.Framework;
+using StardewValley.Locations;
 
 namespace GingerIslandMainlandAdjustments.ScheduleManager;
 
@@ -40,7 +41,7 @@ internal class NPCPatches
     {
         try
         {
-            if (__0.Equals(__instance.Name.ToLowerInvariant() + "_beach_fish"))
+            if (__instance.currentLocation is IslandLocation && __0.Equals(__instance.Name.ToLowerInvariant() + "_beach_fish"))
             {
                 __instance.extendSourceRect(0, 32);
                 __instance.Sprite.tempSpriteHeight = 64;
@@ -64,6 +65,7 @@ internal class NPCPatches
     /// </summary>
     /// <param name="__instance">NPC.</param>
     /// <param name="__0">animation key.</param>
+    /// <remarks>Force the reset no matter which map the NPC is currently on.</remarks>
     [HarmonyPostfix]
     [HarmonyPatch("endRouteBehavior")]
     [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Convention set by Harmony")]

@@ -96,7 +96,9 @@ internal static class IslandNorthScheduler
 
                 string renderedSchedule = string.Join("/", schedules[explorer]) + '/'
                     + (ScheduleUtilities.FindProperGISchedule(explorer, SDate.Now())
-                    ?? (Globals.IsChildToNPC(explorer) ? "1800  BusStop -1 23 3" : "1800 bed"));
+                    // Child2NPC NPCs don't understand "bed", must send them to the bus stop spouse dropoff.
+                    ?? (Globals.IsChildToNPC?.Invoke(explorer) == true ? "1800 BusStop -1 23 3" : "1800 bed"));
+
                 Globals.ModMonitor.DebugLog($"Calculated island north schedule for {explorer.Name}");
                 explorer.islandScheduleName.Value = "island";
                 explorer.Schedule = explorer.parseMasterSchedule(renderedSchedule);

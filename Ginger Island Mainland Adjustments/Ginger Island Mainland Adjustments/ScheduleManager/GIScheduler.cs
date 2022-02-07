@@ -411,7 +411,8 @@ internal static class GIScheduler
             {
                 // Try to find a GI remainder schedule, if any.
                 schedPointString.Add(ScheduleUtilities.FindProperGISchedule(visitor, SDate.Now())
-                    ?? (Globals.IsChildToNPC(visitor) ? "1800 BusStop -1 23 3" : "1800 bed"));
+                    // Child2NPC NPCs don't understand "bed", must send them to the bus stop spouse dropoff.
+                    ?? (Globals.IsChildToNPC?.Invoke(visitor) == true ? "1800 BusStop -1 23 3" : "1800 bed"));
             }
             completedSchedules[visitor] = string.Join("/", schedPointString);
             Globals.ModMonitor.DebugLog($"For {visitor.Name}, created island schedule {completedSchedules[visitor]}");

@@ -44,9 +44,10 @@ internal static class Globals
 #pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
 
     /// <summary>
-    /// Gets a reference to the ModEntry of Child2NPC's IsChildNPC.
+    /// Gets a reference to  of Child2NPC's ModEntry.IsChildNPC.
     /// </summary>
-    internal static Func<NPC, bool> IsChildToNPC { get; private set; }
+    /// <remarks>Null if C2NPC is not installed or method not found.</remarks>
+    internal static Func<NPC, bool>? IsChildToNPC { get; private set; }
 
     /// <summary>
     /// Regex for a schedulepoint format.

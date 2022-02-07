@@ -15,11 +15,16 @@
 <!-- Telephone: Rig the phone code so Pam will *tell you* if she's headed to the Island. -->
 <!-- Figure out why Emily dances *in* the changing room? -->
 <!-- IslandNorth and AntiSocial lines for George/Evelyn/Willy-->
+<!-- ATTENTION: REMOVE THE #if DEBUG letting children go to the resort! -->
 
 ##### Known Issues
 
 1. NPCs may vanish if they go to `IslandSouthEast`. They reappear the next day. Therefore, that's been tempoarily removed until I figure out why they disappear from `IslandSouthEast`. `IslandNorth` is fine.
 2. If you pause time, NPCs will tend to get stuck at schedule points. Unfortunately for Ginger Island, this usually ends with NPCs trapped in the changing room. If you go to Ginger Island and see no one there, try unpausing time. Or just leave them trapped in the changing room....
+
+### Version 1.1.3
+ 
+* In theory: integration with Child2NPC.
 
 ### Version 1.1.2
 

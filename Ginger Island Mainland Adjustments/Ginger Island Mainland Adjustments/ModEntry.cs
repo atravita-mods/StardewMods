@@ -1,5 +1,4 @@
-﻿using System.Diagnostics.CodeAnalysis;
-using System.Reflection;
+﻿using System.Reflection;
 using System.Text;
 using GingerIslandMainlandAdjustments.CustomConsoleCommands;
 using GingerIslandMainlandAdjustments.DialogueChanges;
@@ -122,6 +121,12 @@ public class ModEntry : Mod
     {
         // Generate the GMCM for this mod.
         GenerateGMCM.Build(this.ModManifest);
+
+        // Bind Child2NPC's IsChildNPC method
+        if (Globals.GetIsChildToNPC())
+        {
+            Globals.ModMonitor.Log("Successfully grabbed Child2NPC for integration", LogLevel.Debug);
+        }
     }
 
     private void OnPlayerWarped(object? sender, WarpedEventArgs e)

@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics.CodeAnalysis;
+using System.Reflection;
 using System.Text.RegularExpressions;
 
 namespace GingerIslandMainlandAdjustments;
@@ -43,6 +44,11 @@ internal static class Globals
 #pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
 
     /// <summary>
+    /// Gets a reference to the ModEntry of Child2NPC's IsChildNPC.
+    /// </summary>
+    internal static Func<NPC, bool> IsChildToNPC { get; private set; }
+
+    /// <summary>
     /// Regex for a schedulepoint format.
     /// </summary>
     [RegexPattern]
@@ -75,5 +81,34 @@ internal static class Globals
             Globals.ModMonitor.Log(I18n.IllFormatedConfig(), LogLevel.Warn);
             Globals.Config = new();
         }
+    }
+
+    /// <summary>
+    /// Tries to get a handle on Child2NPC's IsChildNPC.
+    /// </summary>
+    /// <returns>True if successful, false otherwise.</returns>
+    internal static bool GetIsChildToNPC()
+    {
+        if (ModRegistry.Get("Loe2run.ChildToNPC") is null)
+        {
+            ModMonitor.Log($"Child2NPC not installed - no need to adjust for that.", LogLevel.Trace);
+            return false;
+        }
+        Type? childToNPC = Type.GetType("ChildToNPC.ModEntry, ChildToNPC");
+        if (childToNPC is not null)
+        {
+            MethodInfo? childToNPCMethod = childToNPC.GetMethod("IsChildNPC", new Type[] { typeof(Character) });
+            if (childToNPCMethod is not null)
+            {
+                IsChildToNPC = (Func<NPC, bool>)Delegate.CreateDelegate(typeof(Func<NPC, bool>), childToNPCMethod);
+                return true;
+            }
+            else
+            {
+                ModMonitor.Log("IsChildNPC method not found - integration with Child2NPC failed.", LogLevel.Warn);
+                return false;
+            }
+        }
+        return false;
     }
 }

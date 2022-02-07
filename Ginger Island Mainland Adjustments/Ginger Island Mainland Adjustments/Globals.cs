@@ -96,49 +96,17 @@ internal static class Globals
             return false;
         }
         Type? childToNPC = Type.GetType("ChildToNPC.ModEntry, ChildToNPC");
-        if (childToNPC is not null)
+        if (childToNPC is null)
         {
-            MethodInfo? childToNPCMethod = childToNPC.GetMethod("IsChildNPC", new Type[] { typeof(Character) });
-            if (childToNPCMethod is not null)
-            {
-                IsChildToNPC = (Func<NPC, bool>)Delegate.CreateDelegate(typeof(Func<NPC, bool>), childToNPCMethod);
-                return true;
-            }
-            else
-            {
-                ModMonitor.Log("IsChildNPC method not found - integration with Child2NPC failed.", LogLevel.Warn);
-                return false;
-            }
-        }
-        return false;
-    }
-
-    /// <summary>
-    /// Tries to get a handle on Child2NPC's IsChildNPC.
-    /// </summary>
-    /// <returns>True if successful, false otherwise.</returns>
-    internal static bool GetIsChildToNPC()
-    {
-        if (ModRegistry.Get("Loe2run.ChildToNPC") is null)
-        {
-            ModMonitor.Log($"Child2NPC not installed - no need to adjust for that.", LogLevel.Trace);
             return false;
         }
-        Type? childToNPC = Type.GetType("ChildToNPC.ModEntry, ChildToNPC");
-        if (childToNPC is not null)
+        MethodInfo? childToNPCMethod = childToNPC.GetMethod("IsChildNPC", new Type[] { typeof(Character) });
+        if (childToNPCMethod is not null)
         {
-            MethodInfo? childToNPCMethod = childToNPC.GetMethod("IsChildNPC", new Type[] { typeof(Character) });
-            if (childToNPCMethod is not null)
-            {
-                IsChildToNPC = (Func<NPC, bool>)Delegate.CreateDelegate(typeof(Func<NPC, bool>), childToNPCMethod);
-                return true;
-            }
-            else
-            {
-                ModMonitor.Log("IsChildNPC method not found - integration with Child2NPC failed.", LogLevel.Warn);
-                return false;
-            }
+            IsChildToNPC = (Func<NPC, bool>)Delegate.CreateDelegate(typeof(Func<NPC, bool>), childToNPCMethod);
+            return true;
         }
+        ModMonitor.Log("IsChildNPC method not found - integration with Child2NPC failed.", LogLevel.Warn);
         return false;
     }
 }

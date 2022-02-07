@@ -11,7 +11,7 @@ The original point of this mod was to change those two things. A little scope cr
 * **More NPCs visit Ginger Island**. If you, like me, enjoy having large numbers of NPCs, it's sometimes hard to catch a specific NPC going to the resort. This mod will let you increase the cap to up to 12 per day by setting the configuration option `Capacity`. Great for running around gifting people!
 * **NPCs** can wander onto `IslandSouthEast` and `IslandNorth`. **Most won't get too far**, but some might be a little more...adventurous.
 * **Gus has a dedicated day**. Set the config options `GusDay` and `GusChance`, and he'll have specific days where he's more likely to go to Ginger Island...
-* **Willy, Sandy, George, and Evelyn can go to Ginger Island**. (Configurable). Sandy and Willy will even leave a box on their counters so you can still shop!
+* **Willy, Sandy, George, and Evelyn can go to Ginger Island**. (Configurable). Sandy and Willy will even leave a box on their counters so you can still shop! My friend [Elizabeth](https://www.nexusmods.com/stardewvalley/users/120958053?tab=user+files) has made her these excellent beach sprites, [available here](https://www.nexusmods.com/stardewvalley/mods/10960)!
 
 ### Install
 
@@ -33,10 +33,10 @@ Note: you will need to run the mod at least once to generate the `config.json` f
 2. `UseThisScheduler` will cause the mod to generate Ginger Island schedules. **The remaining settings will only have affect if this is enabled**.
 3. `Capacity` sets the maximum number of visitors to the Ginger Island Resort. Will allow values up to twelve.
 4. `GroupChance` sets the probability a group of NPCs will be picked to visit the Resort. 
-5. `ExplorerChance` sets the probability a smaller group of NPCs.
+5. `ExplorerChance` sets the probability a smaller group of NPCs will explore Island North.
 6. `GusDay` and `GusChance` set a day that Gus is more likely to go to the Resort, and the chance that he'll be there. (set `GusDay` to `None` to disable this feature.)
 6. `AllowWilly` allows Willy access to the Resort.
-7. `AllowSandy` allows Sandy access to the Resort. <!-- link Elizabeth's Sandy Beach outfit if she publishes! -->
+7. `AllowSandy` allows Sandy access to the Resort. (Psst! If you want her to have beach sprites, check out [violetlizabet](https://www.nexusmods.com/stardewvalley/users/120958053?tab=user+files)'s mod [here](https://www.nexusmods.com/stardewvalley/mods/10960)!)
 8. `AllowGeorgeAndEvelyn` allows George and Evelyn access to the resort.
 
 **Additionally:**

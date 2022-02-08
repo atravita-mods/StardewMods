@@ -13,6 +13,16 @@ dotnet_style_qualification_for_field=true:warning
 dotnet_style_qualification_for_property=true:silent
 dotnet_style_qualification_for_method=true:warning
 dotnet_style_qualification_for_event=true:warning
+
+# IDE0047: Remove unnecessary parentheses
+dotnet_style_parentheses_in_arithmetic_binary_operators = always_for_clarity
+
+# IDE0047: Remove unnecessary parentheses
+dotnet_style_parentheses_in_other_binary_operators = always_for_clarity
+
+# IDE0048: Add parentheses for clarity
+dotnet_style_parentheses_in_relational_binary_operators = always_for_clarity
+
 [*.cs]
 csharp_style_var_for_built_in_types=false:suggestion
 csharp_style_var_when_type_is_apparent=false:suggestion

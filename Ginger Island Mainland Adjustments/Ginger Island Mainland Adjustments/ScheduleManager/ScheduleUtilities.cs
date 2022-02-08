@@ -226,22 +226,27 @@ internal static class ScheduleUtilities
             try
             {
                 Match match = Globals.ScheduleRegex.Match(schedulepoint);
+
+                // We need to handle the case where `bed` is provided as a location
                 string originaltime = schedulepoint.Split(' ', count: 2)[0]; // grab the time off this entry
                 if (!match.Success && schedulepoint.Contains("bed", StringComparison.OrdinalIgnoreCase))
                 {
                     if (npc.hasMasterScheduleEntry("default"))
                     {
+                        // Replace time with the original time, but keep the rest of the default ending entry.
                         string lastentry = originaltime + npc.getMasterScheduleEntry("default").Split('/')[^1].Split(' ', count: 2)[1];
                         match = Globals.ScheduleRegex.Match(lastentry);
                     }
                     else if (npc.hasMasterScheduleEntry("spring"))
                     {
+                        // Replace time with the original time, but keep the rest of the spring ending entry.
+                        // Spring is often used as a default in scheduling code.
                         string lastentry = originaltime + npc.getMasterScheduleEntry("spring").Split('/')[^1].Split(' ', count: 2)[1];
                         match = Globals.ScheduleRegex.Match(lastentry);
                     }
                 }
                 if (!match.Success)
-                { // I still have issues...
+                { // I still have issues, try sending the NPC straight home to bed.
                     Globals.ModMonitor.Log($"{schedulepoint} seems unparsable by regex, sending NPC {npc.Name} home to sleep", LogLevel.Info);
                     Dictionary<string, string> animationData = Globals.ContentHelper.Load<Dictionary<string, string>>("Data\\animationDescriptions", ContentSource.GameContent);
                     animationData.TryGetValue(npc.Name.ToLowerInvariant() + "_sleep", out string? sleepanimation);
@@ -372,7 +377,7 @@ internal static class ScheduleUtilities
     /// <param name="rawData">Raw schedule string.</param>
     public static void ParseMasterScheduleAdjustedForChild2NPC(NPC npc, string rawData)
     {
-        if (npc.DefaultMap.Contains("FarmHouse", StringComparison.OrdinalIgnoreCase) && !npc.isMarried())
+        if (npc.DefaultMap.Equals("FarmHouse", StringComparison.OrdinalIgnoreCase) && !npc.isMarried())
         {
             // lie to parse master schedule
             string prevmap = npc.DefaultMap;
@@ -414,6 +419,7 @@ internal static class ScheduleUtilities
 
     /// <summary>
     /// Goes around at about 620 and fixes up schedules if they've been nulled.
+    /// Child2NPC may try to fix up their children around ~610 AM. Sadly, that nulls the schedules.
     /// </summary>
     public static void FixUpSchedules()
     {

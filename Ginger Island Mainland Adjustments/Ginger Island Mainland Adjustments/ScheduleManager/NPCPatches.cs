@@ -8,6 +8,7 @@ namespace GingerIslandMainlandAdjustments.ScheduleManager;
 /// <summary>
 /// Handles patches on the NPC class to allow beach fishing.
 /// </summary>
+[HarmonyPatch(typeof(NPC))]
 internal class NPCPatches
 {
     private static readonly List<NPC> Fishers = new();
@@ -67,7 +68,7 @@ internal class NPCPatches
     /// <param name="__0">animation key.</param>
     /// <remarks>Force the reset no matter which map the NPC is currently on.</remarks>
     [HarmonyPostfix]
-    [HarmonyPatch("endRouteBehavior")]
+    [HarmonyPatch("finishRouteBehavior")]
     [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Convention set by Harmony")]
     public static void EndFishBehavior(NPC __instance, string __0)
     {

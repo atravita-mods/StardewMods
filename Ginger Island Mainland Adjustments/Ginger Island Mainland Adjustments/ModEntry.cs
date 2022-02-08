@@ -41,16 +41,6 @@ public class ModEntry : Mod
         helper.Content.AssetEditors.Add(manager);
     }
 
-    private void OnTimeChanged(object? sender, TimeChangedEventArgs e)
-    {
-        MidDayScheduleEditor.AttemptAdjustGISchedule(e);
-        if (e.NewTime > 615 && !this.haveFixedSchedulesToday)
-        {
-            ScheduleUtilities.FixUpSchedules();
-            this.haveFixedSchedulesToday = true;
-        }
-    }
-
     /// <summary>
     /// Clear all caches at the end of the day and if the player exits to menu.
     /// </summary>
@@ -96,6 +86,10 @@ public class ModEntry : Mod
     {
         // handle patches from annotations.
         harmony.PatchAll();
+        harmony.Patch(
+            original: typeof(GameLocation).GetMethod(nameof(GameLocation.createQuestionDialogue), new Type[] { typeof(string), typeof(Response[]), typeof(string) }),
+            prefix: new HarmonyMethod(typeof(PhoneHandler), nameof(PhoneHandler.PrefixQuestionDialogue)));
+
         foreach (MethodBase? method in harmony.GetPatchedMethods())
         {
             if (method is null)
@@ -156,5 +150,15 @@ public class ModEntry : Mod
         }
         ShopHandler.HandleWillyShop(e);
         ShopHandler.HandleSandyShop(e);
+    }
+
+    private void OnTimeChanged(object? sender, TimeChangedEventArgs e)
+    {
+        MidDayScheduleEditor.AttemptAdjustGISchedule(e);
+        if (e.NewTime > 615 && !this.haveFixedSchedulesToday)
+        {
+            ScheduleUtilities.FixUpSchedules();
+            this.haveFixedSchedulesToday = true;
+        }
     }
 }

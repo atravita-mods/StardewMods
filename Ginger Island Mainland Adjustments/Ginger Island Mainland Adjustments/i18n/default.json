@@ -14,10 +14,21 @@
   "Evelyn_Resort": "My dear @, it's great seeing you here today!#$e#Make sure to take some time for rest and relaxation! Can't have you working yourself too hard.",
   "Willy_Resort": "Ah, nothing like a day spent under the sun and by the sea....",
 
+  // Pam on the phone
+  "Pam_Island_1": "Hey @! How're ya doing today? Me? I'll be headed to Ginger Island today. The bus? No service today, bus company couldn't send replacements.",
+  "Pam_Island_2": "Oh, @! How're ya? I'll be headed to the Resort today, so there's no bus service.",
+  "Pam_Island_3": "Hey...@, guess what? I'll be on vacation today. Ain't drivin' that bus today, nosiree!",
+  "Pam_Bus_1": "Heya @, Yeah yeah yeah, I'll be at work today. Just another long workday, nothin' special.",
+  "Pam_Bus_2": "Oh @, how are ya? Me? Just gettin' ready to go to work! Gotta pay my bills, you know.",
+  "Pam_Bus_3": "Hey....@....how ya doing? Just headed to work myself, yeah yeah yeah....",
+  "Pam_Voicemail_Island": "*beep* Hey.....you've reached me, Pam! I'm gonna be on vacation today, so the bus won't be open! Sorry! *click*",
+  "Pam_Voicemail_Bus":  "*beep* Heya...you've reached me, Pam! I dunno why you're calling me, just find me by the bus stop if you wanna chat. *click*",
+  "Pam_Bus_Late":  "Aye, @, why ya callin' me this late? *slams phone*$u",
+
   // Documentation for console commands.
 
   "baseCommand": "A list of console commands added by this mod:",
-  "baseCommand.documentation":  "Lists all commands added by this mod.",
+  "baseCommand.documentation": "Lists all commands added by this mod.",
   "getSchedule.documentation": "Gets the schedule of the NPC in question",
   "getIslanders.documentation": "Gets the villagers headed off to the resort today",
 

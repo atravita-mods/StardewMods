@@ -25,6 +25,7 @@
 ### Version 1.1.3
  
 * In theory: integration with Child2NPC.
+* You can now call Pam, who will tell you if she's headed to Ginger Island.
 
 ### Version 1.1.2
 

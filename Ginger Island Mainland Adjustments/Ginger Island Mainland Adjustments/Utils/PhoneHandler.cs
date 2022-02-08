@@ -17,9 +17,11 @@ internal class PhoneHandler
     /// <param name="question">Question (displayed to player).</param>
     /// <param name="answerChoices">Responses.</param>
     /// <param name="dialogKey">Question key, used to keep track of which question set.</param>
+    [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Harmony convention")]
     public static void PrefixQuestionDialogue(GameLocation __instance, string question, ref Response[] answerChoices, string dialogKey)
     {
         if (dialogKey.Equals("telephone", StringComparison.OrdinalIgnoreCase)
+            && Game1.getAllFarmers().Any((Farmer f) => f.eventsSeen.Contains(503180)) // replace with something better than just her nine heart.
             && answerChoices.Any((Response r) => r.responseKey.Equals("Carpenter", StringComparison.OrdinalIgnoreCase)))
         {
             List<Response> responseList = new() { new Response("PamBus", Game1.getCharacterFromName("Pam")?.displayName ?? "Pam") };
@@ -43,15 +45,18 @@ internal class PhoneHandler
         Globals.ModMonitor.DebugLog(__0);
         if (__0.Equals("telephone_PamBus"))
         {
-            Globals.ModMonitor.DebugLog("Caught telephone_Pam");
-
             Globals.ReflectionHelper.GetMethod(__instance, "playShopPhoneNumberSounds").Invoke(__0);
             Game1.player.freezePause = 4950;
             DelayedAction.functionAfterDelay(
             () =>
             {
                 Game1.playSound("bigSelect");
-                NPC pam = Game1.getCharacterFromName("Pam");
+                NPC? pam = Game1.getCharacterFromName("Pam");
+                if (pam is null)
+                {
+                    Globals.ModMonitor.Log($"Pam cannot be found, ending phone call.", LogLevel.Warn);
+                    return;
+                }
                 if (Game1.timeOfDay > 2200)
                 {
                     Game1.drawDialogue(pam, I18n.PamBusLate());
@@ -59,9 +64,13 @@ internal class PhoneHandler
                 }
                 if (Game1.timeOfDay < 900)
                 {
-                    if (Game1.IsVisitingIslandToday("Pam"))
+                    if (Game1.IsVisitingIslandToday(pam.Name))
                     {
                         Game1.drawDialogue(pam, I18n.GetByKey($"Pam_Island_{Game1.random.Next(1, 4)}"));
+                    }
+                    else if (Utility.IsHospitalVisitDay(pam.Name))
+                    {
+                        Game1.drawDialogue(pam, I18n.PamDoctor());
                     }
                     else
                     {
@@ -70,9 +79,13 @@ internal class PhoneHandler
                 }
                 else
                 {
-                    if (Game1.IsVisitingIslandToday("Pam"))
+                    if (Game1.IsVisitingIslandToday(pam.Name))
                     {
                         Game1.drawDialogue(pam, I18n.PamVoicemailIsland(), Game1.temporaryContent.Load<Texture2D>("Portraits\\AnsweringMachine"));
+                    }
+                    else if (Utility.IsHospitalVisitDay(pam.Name))
+                    {
+                        Game1.drawDialogue(pam, I18n.PamVoicemailDoctor());
                     }
                     else
                     {

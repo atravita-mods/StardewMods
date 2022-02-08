@@ -87,7 +87,7 @@ public class ModConfig
     }
 
     /// <summary>
-    /// PRobability for a group to visit over just individuals.
+    /// Probability for a group to visit over just individuals.
     /// </summary>
     private float groupChance = 0.6f;
 

@@ -12,7 +12,7 @@
 <!-- Move this mod's scheduler earlier so I can add in CP tokens. (so OnDayStarted or before?). Sadly, this is not feasible because CustomNPCExclusions expects the island schedules to be generated *after* CP is done updating tokens, and I would need to move it *before*. Would be a compat nightmare. see: https://github.com/Esca-MMC/CustomNPCExclusions/blob/master/CustomNPCExclusions/HarmonyPatch_IslandVisit.cs -->
 <!-- Finish the locations console command: https://docs.microsoft.com/en-us/windows/console/console-virtual-terminal-sequences to add bold -->
 <!-- More schedule debugging tools: get arbitrary schedule from X day? -->
-<!-- Telephone: Rig the phone code so Pam will *tell you* if she's headed to the Island. -->
+<!-- Telephone: Lock behind a 10 heart event or something. Move phone dialogue to go through Strings/Characters -->
 <!-- Figure out why Emily dances *in* the changing room? -->
 <!-- IslandNorth and AntiSocial lines for George/Evelyn/Willy-->
 <!-- ATTENTION: REMOVE THE #if DEBUG letting children go to the resort! -->

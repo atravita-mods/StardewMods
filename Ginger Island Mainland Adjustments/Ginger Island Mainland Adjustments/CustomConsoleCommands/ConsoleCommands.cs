@@ -89,7 +89,7 @@ internal static class ConsoleCommands
         }
         else
         {
-            if (npc.dayScheduleName.Value is null)
+            if (npc.dayScheduleName?.Value is null)
             {
                 Globals.ModMonitor.Log($"\t{npc.Name} lacks a npc.dayScheduleName.Value", LogLevel.Error);
             }

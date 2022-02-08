@@ -231,25 +231,33 @@ internal static class ScheduleUtilities
                 string originaltime = schedulepoint.Split(' ', count: 2)[0]; // grab the time off this entry
                 if (!match.Success && schedulepoint.Contains("bed", StringComparison.OrdinalIgnoreCase))
                 {
-                    if (npc.hasMasterScheduleEntry("default"))
+                    if (npc.isMarried() || npc.DefaultMap.Equals("FarmHouse", StringComparison.OrdinalIgnoreCase))
                     {
-                        // Replace time with the original time, but keep the rest of the default ending entry.
-                        string lastentry = originaltime + npc.getMasterScheduleEntry("default").Split('/')[^1].Split(' ', count: 2)[1];
-                        match = Globals.ScheduleRegex.Match(lastentry);
+                        match = Globals.ScheduleRegex.Match(originaltime + " BusStop -1 23 3");
                     }
-                    else if (npc.hasMasterScheduleEntry("spring"))
+                    else
                     {
-                        // Replace time with the original time, but keep the rest of the spring ending entry.
-                        // Spring is often used as a default in scheduling code.
-                        string lastentry = originaltime + npc.getMasterScheduleEntry("spring").Split('/')[^1].Split(' ', count: 2)[1];
-                        match = Globals.ScheduleRegex.Match(lastentry);
+                        if (npc.hasMasterScheduleEntry("default"))
+                        {
+                            // Replace time with the original time, but keep the rest of the default ending entry.
+                            string lastentry = originaltime + ' ' + npc.getMasterScheduleEntry("default").Split('/')[^1].Split(' ', count: 2)[1];
+                            match = Globals.ScheduleRegex.Match(lastentry);
+                        }
+                        if (!match.Success && npc.hasMasterScheduleEntry("spring"))
+                        {
+                            // Replace time with the original time, but keep the rest of the spring ending entry.
+                            // Spring is often used as a default in scheduling code.
+                            string lastentry = originaltime + ' ' + npc.getMasterScheduleEntry("spring").Split('/')[^1].Split(' ', count: 2)[1];
+                            match = Globals.ScheduleRegex.Match(lastentry);
+                        }
                     }
                 }
                 if (!match.Success)
                 { // I still have issues, try sending the NPC straight home to bed.
                     Globals.ModMonitor.Log($"{schedulepoint} seems unparsable by regex, sending NPC {npc.Name} home to sleep", LogLevel.Info);
                     Dictionary<string, string> animationData = Globals.ContentHelper.Load<Dictionary<string, string>>("Data\\animationDescriptions", ContentSource.GameContent);
-                    animationData.TryGetValue(npc.Name.ToLowerInvariant() + "_sleep", out string? sleepanimation);
+                    string? sleepanimation = npc.Name.ToLowerInvariant() + "_sleep";
+                    sleepanimation = animationData.ContainsKey(sleepanimation) ? sleepanimation : null;
                     SchedulePathDescription path2bed = pathfinder.Invoke<SchedulePathDescription>(
                         previousMap,
                         lastx,
@@ -262,6 +270,17 @@ internal static class ScheduleUtilities
                         null); // no message.
                     if (int.TryParse(originaltime, out int path2bedtime))
                     {
+                        if (path2bedtime < lasttime)
+                        {
+                            if (!Globals.Config.EnforceGITiming)
+                            { // I've already adjusted the last time parameter to account for travel time
+                                path2bedtime = Utility.ConvertMinutesToTime((Utility.ConvertTimeToMinutes(lasttime) * 10) / 10 + 10);
+                            }
+                            else if (remainderSchedule.TryGetValue(lasttime, out SchedulePathDescription? lastschedpoint))
+                            {
+                                path2bedtime = Utility.ConvertMinutesToTime((Utility.ConvertTimeToMinutes(lasttime) + lastschedpoint.GetExpectedRouteTime()) * 10 / 10 + 10);
+                            }
+                        }
                         remainderSchedule[path2bedtime] = path2bed;
                         return remainderSchedule;
                     }
@@ -269,6 +288,18 @@ internal static class ScheduleUtilities
                     {
                         int expectedpath2bedtime = path2bed.GetExpectedRouteTime();
                         Utility.ModifyTime(path2bedtime, 0 - (expectedpath2bedtime * 10) / 10);
+                        if (path2bedtime < lasttime) // a little sanity checking, force the bed time to be sufficiently after the previous point.
+                        {
+                            if (!Globals.Config.EnforceGITiming)
+                            { // I've already adjusted the last time parameter to account for travel time
+                                path2bedtime = Utility.ConvertMinutesToTime((Utility.ConvertTimeToMinutes(lasttime) * 10) / 10 + 10);
+                            }
+                            else if (remainderSchedule.TryGetValue(lasttime, out SchedulePathDescription? lastschedpoint))
+                            {
+
+                                path2bedtime = Utility.ConvertMinutesToTime((Utility.ConvertTimeToMinutes(lasttime) + lastschedpoint.GetExpectedRouteTime()) * 10 / 10 + 10);
+                            }
+                        }
                         remainderSchedule[path2bedtime] = path2bed;
                         return remainderSchedule;
                     }
@@ -351,7 +382,7 @@ internal static class ScheduleUtilities
                 if (Globals.Config.EnforceGITiming)
                 {
                     int expectedTravelTime = newpath.GetExpectedRouteTime();
-                    Utility.ModifyTime(time, expectedTravelTime);
+                    Utility.ModifyTime(lasttime, expectedTravelTime);
                     Globals.ModMonitor.DebugLog($"Expected travel time of {expectedTravelTime} minutes", LogLevel.Debug);
                 }
             }
@@ -385,7 +416,7 @@ internal static class ScheduleUtilities
 
             if (rawData.EndsWith("bed"))
             {
-                rawData = rawData.Replace("bed", "BusStop -1 23 3");
+                rawData = rawData[..^3] + "BusStop -1 23 3";
             }
 
             npc.DefaultMap = "BusStop";

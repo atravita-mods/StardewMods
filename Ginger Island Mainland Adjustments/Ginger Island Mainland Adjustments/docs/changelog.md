@@ -9,13 +9,16 @@
 2. Nonreplacing dialogue for the Resort keys? (flatten the ones that already exist, but add a way to add more that's less likely to clobber).
 3. Handle roommates, like actually.
 4. See if NPCs can go *into* Professor Snail's Tent?
+5. Add in tokens for islanders/current bartender/musicians. You won't be able to use these on day start, but may prevent clobbering on the resort shop tile? <!-- does this matter when 1.6 will fix the issue for good?-->
 <!-- Move this mod's scheduler earlier so I can add in CP tokens. (so OnDayStarted or before?). Sadly, this is not feasible because CustomNPCExclusions expects the island schedules to be generated *after* CP is done updating tokens, and I would need to move it *before*. Would be a compat nightmare. see: https://github.com/Esca-MMC/CustomNPCExclusions/blob/master/CustomNPCExclusions/HarmonyPatch_IslandVisit.cs -->
 <!-- Finish the locations console command: https://docs.microsoft.com/en-us/windows/console/console-virtual-terminal-sequences to add bold -->
 <!-- More schedule debugging tools: get arbitrary schedule from X day? -->
-<!-- Telephone: Lock behind a 10 heart event or something. Move phone dialogue to go through Strings/Characters -->
+<!-- Telephone: Lock behind a 10 heart event or something.-->
 <!-- Figure out why Emily dances *in* the changing room? -->
 <!-- IslandNorth and AntiSocial lines for George/Evelyn/Willy-->
 <!-- ATTENTION: REMOVE THE #if DEBUG letting children go to the resort! -->
+<!-- Implement schedule key start time 0 for warping a character...-->
+<!-- Get spouses into Island Farmhouse -->
 
 ##### Known Issues
 

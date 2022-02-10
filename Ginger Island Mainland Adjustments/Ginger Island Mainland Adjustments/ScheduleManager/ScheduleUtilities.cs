@@ -52,7 +52,7 @@ internal static class ScheduleUtilities
         }
 
         // GIRemainder_intDay_heartlevel
-        for (int heartLevel = Math.Max((hearts / 2) * 2, 0); heartLevel > 0; heartLevel -= 2)
+        for (int heartLevel = Math.Max((hearts / 2) * 2, 0); heartLevel > 0; heartLevel--)
         {
             checkKey = $"{scheduleKey}_{date.Day}_{heartLevel}";
             if (npc.hasMasterScheduleEntry(checkKey)
@@ -137,7 +137,7 @@ internal static class ScheduleUtilities
         {
             case "GOTO":
                 // GOTO NO_SCHEDULE
-                if (command[1].Equals("NO_SCHEDULE", StringComparison.Ordinal))
+                if (command[1].Equals("NO_SCHEDULE", StringComparison.OrdinalIgnoreCase))
                 {
                     return false;
                 }
@@ -204,6 +204,7 @@ internal static class ScheduleUtilities
     /// <param name="prevtime">Start time of scheduler.</param>
     /// <returns>null if the schedule could not be parsed, a schedule otherwise.</returns>
     /// <exception cref="MethodNotFoundException">Reflection to get game methods failed.</exception>
+    /// <remarks>Does NOT set NPC.daySchedule - still need to set that manually if that's wanted.</remarks>
     public static Dictionary<int, SchedulePathDescription>? ParseSchedule(string? schedule, NPC npc, string prevMap, Point prevStop, int prevtime)
     {
         if (schedule is null)
@@ -225,10 +226,21 @@ internal static class ScheduleUtilities
         {
             try
             {
+                // We need to handle the case where `bed` is provided as a location
+                int timeindex = schedulepoint.IndexOf(' ');
+                string originaltime;
+                if (timeindex > 0)
+                {
+                    originaltime = schedulepoint[..timeindex]; // grab the time off this entry
+                }
+                else
+                {
+                    Globals.ModMonitor.Log(I18n.ILLFORMEDSCHEDULEPOINT(schedulepoint), LogLevel.Warn);
+                    continue; // skip this point
+                }
+
                 Match match = Globals.ScheduleRegex.Match(schedulepoint);
 
-                // We need to handle the case where `bed` is provided as a location
-                string originaltime = schedulepoint.Split(' ', count: 2)[0]; // grab the time off this entry
                 if (!match.Success && schedulepoint.Contains("bed", StringComparison.OrdinalIgnoreCase))
                 {
                     if (npc.isMarried() || npc.DefaultMap.Equals("FarmHouse", StringComparison.OrdinalIgnoreCase))
@@ -240,6 +252,7 @@ internal static class ScheduleUtilities
                         if (npc.hasMasterScheduleEntry("default"))
                         {
                             // Replace time with the original time, but keep the rest of the default ending entry.
+                            string defaultschedule = npc.getMasterScheduleEntry("default");
                             string lastentry = originaltime + ' ' + npc.getMasterScheduleEntry("default").Split('/')[^1].Split(' ', count: 2)[1];
                             match = Globals.ScheduleRegex.Match(lastentry);
                         }
@@ -247,6 +260,7 @@ internal static class ScheduleUtilities
                         {
                             // Replace time with the original time, but keep the rest of the spring ending entry.
                             // Spring is often used as a default in scheduling code.
+                            string springschedule = npc.getMasterScheduleEntry("spring");
                             string lastentry = originaltime + ' ' + npc.getMasterScheduleEntry("spring").Split('/')[^1].Split(' ', count: 2)[1];
                             match = Globals.ScheduleRegex.Match(lastentry);
                         }
@@ -288,8 +302,8 @@ internal static class ScheduleUtilities
                     {
                         int expectedpath2bedtime = path2bed.GetExpectedRouteTime();
                         Utility.ModifyTime(path2bedtime, 0 - (expectedpath2bedtime * 10) / 10);
-                        if (path2bedtime < lasttime) // a little sanity checking, force the bed time to be sufficiently after the previous point.
-                        {
+                        if (path2bedtime < lasttime)
+                        { // a little sanity checking, force the bed time to be sufficiently after the previous point.
                             if (!Globals.Config.EnforceGITiming)
                             { // I've already adjusted the last time parameter to account for travel time
                                 path2bedtime = Utility.ConvertMinutesToTime((Utility.ConvertTimeToMinutes(lasttime) * 10) / 10 + 10);
@@ -371,7 +385,7 @@ internal static class ScheduleUtilities
                 if (time <= lasttime)
                 {
                     Globals.ModMonitor.Log(I18n.TOOTIGHTTIMELINE(time, schedule, npc.Name), LogLevel.Warn);
-                    continue;
+                    continue; // skip to next point.
                 }
                 Globals.ModMonitor.DebugLog($"Adding GI schedule for {npc.Name}", LogLevel.Debug);
                 remainderSchedule.Add(time, newpath);
@@ -421,17 +435,21 @@ internal static class ScheduleUtilities
 
             npc.DefaultMap = "BusStop";
             npc.DefaultPosition = new Vector2(0, 23) * 64;
-
-            npc.Schedule = npc.parseMasterSchedule(rawData);
-
-            npc.DefaultMap = prevmap;
-            npc.DefaultPosition = prevposition;
+            try
+            {
+                npc.Schedule = npc.parseMasterSchedule(rawData);
+            }
+            finally
+            {
+                npc.DefaultMap = prevmap;
+                npc.DefaultPosition = prevposition;
+            }
 
             ScheduleUtilities.Schedules[npc.Name] = npc.Schedule;
         }
         else if (Globals.IsChildToNPC?.Invoke(npc) == true)
         {
-            // For a Child2NPC, we must handle their scheuling ourselves.
+            // For a Child2NPC, we must handle their scheduling ourselves.
             if (TryFindGOTOschedule(npc, SDate.Now(), rawData, out string scheduleString))
             {
                 npc.Schedule = ParseSchedule(scheduleString, npc, "BusStop", new Point(0, 23), 610);

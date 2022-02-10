@@ -15,15 +15,17 @@
   "Willy_Resort": "Ah, nothing like a day spent under the sun and by the sea....",
 
   // Pam on the phone
-  "Pam_Island_1": "Hey @! How're ya doing today? Me? I'll be headed to Ginger Island today. The bus? No service today, bus company couldn't send replacements.",
+  "Pam_Island_1": "Hey @! How're ya doing today? Me? I'll be headed to Ginger Island today.$h#$b#The bus? No service today, bus company couldn't send replacements.",
   "Pam_Island_2": "Oh, @! How're ya? I'll be headed to the Resort today, so there's no bus service.",
-  "Pam_Island_3": "Hey...@, guess what? I'll be on vacation today. Ain't drivin' that bus today, nosiree!",
-  "Pam_Doctor":  "Oh...hey, @? You've caught me at a bad time. Gotta doc's appointment today, not looking forward to it.",
+  "Pam_Island_3": "Hey...@, guess what? I'll be on vacation today. Ain't drivin' that bus today, nosiree!$h",
+  "Pam_Doctor": "Oh...hey, @? You've caught me at a bad time. Got a doc's appointment today, not looking forward to it.$s",
+  "Pam_Other":  "Oh, hi @! Whatcha calling about?#$b#Listen, I ain't gonna be drivin' the bus today, got other plans...#$b#No, they couldn't send a replacemnt, I'm sorry...",
   "Pam_Bus_1": "Heya @, Yeah yeah yeah, I'll be at work today. Just another long workday, nothin' special.",
   "Pam_Bus_2": "Oh @, how are ya? Me? Just gettin' ready to go to work! Gotta pay my bills, you know.",
-  "Pam_Bus_3": "Hey....@....how ya doing? Just headed to work myself, yeah yeah yeah....",
+  "Pam_Bus_3": "Hey....@....how ya doing? Just headed to work myself, yeah yeah yeah....just another long day to look forward to.$s",
   "Pam_Voicemail_Island": "*beep* Hey.....you've reached me, Pam! I'm gonna be on vacation today, so the bus won't be open! Sorry! *click*",
-  "Pam_Voicemail_Doctor":  "*beep* I won't be at work today. Got some personal business to deal with. Sorry about that. *click*",
+  "Pam_Voicemail_Doctor": "*beep* I won't be at work today. Got some personal business to deal with. Sorry about that. *click*",
+  "Pam_Voicemail_Other":  "*beep* Hey...you've reached me, Pam. Not driving the bus today, took a day off!*click*",
   "Pam_Voicemail_Bus":  "*beep* Heya...you've reached me, Pam! I dunno why you're calling me, just find me by the bus stop if you wanna chat. *click*",
   "Pam_Bus_Late":  "Aye, @, why ya callin' me this late? *slams phone*$u",
 
@@ -113,5 +115,6 @@
   "NO_GI_SCHEDULE_FOUND": "Did not find a GI remainder schedule for {{npc}}",
   "REGEX_TIMEOUT_ERROR": "Regex for schedule entry {{schedulePoint}} timed out:\n\n{{ex}}",
   "TOO_TIGHT_TIMELINE": "{{time}} position in schedule {{scheduleKey}} for {{npc}} is too tight. Will be skipped.",
-  "NO_REPLACEMENT_LOCATION": "Location replacement for {{location}} requested but not found for {{npc}}"
+  "NO_REPLACEMENT_LOCATION": "Location replacement for {{location}} requested but not found for {{npc}}",
+  "ILL_FORMED_SCHEDULE_POINT":  "Schedule point {{point}} seems malformed.",
 }

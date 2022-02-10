@@ -22,9 +22,10 @@ internal class PhoneHandler
     {
         if (dialogKey.Equals("telephone", StringComparison.OrdinalIgnoreCase)
             && Game1.getAllFarmers().Any((Farmer f) => f.eventsSeen.Contains(503180)) // replace with something better than just her nine heart.
+            && Game1.getCharacterFromName("Pam") is NPC pam // omit if Pam inexplicably vanished.
             && answerChoices.Any((Response r) => r.responseKey.Equals("Carpenter", StringComparison.OrdinalIgnoreCase)))
         {
-            List<Response> responseList = new() { new Response("PamBus", Game1.getCharacterFromName("Pam")?.displayName ?? "Pam") };
+            List<Response> responseList = new() { new Response("PamBus", pam.displayName) };
             responseList.AddRange(answerChoices);
             answerChoices = responseList.ToArray();
         }
@@ -50,49 +51,64 @@ internal class PhoneHandler
             DelayedAction.functionAfterDelay(
             () =>
             {
-                Game1.playSound("bigSelect");
-                NPC? pam = Game1.getCharacterFromName("Pam");
-                if (pam is null)
+                try
                 {
-                    Globals.ModMonitor.Log($"Pam cannot be found, ending phone call.", LogLevel.Warn);
-                    return;
-                }
-                if (Game1.timeOfDay > 2200)
-                {
-                    Game1.drawDialogue(pam, I18n.PamBusLate());
-                    return;
-                }
-                if (Game1.timeOfDay < 900)
-                {
-                    if (Game1.IsVisitingIslandToday(pam.Name))
+                    Game1.playSound("bigSelect");
+                    NPC? pam = Game1.getCharacterFromName("Pam");
+                    if (pam is null)
                     {
-                        Game1.drawDialogue(pam, I18n.GetByKey($"Pam_Island_{Game1.random.Next(1, 4)}"));
+                        Globals.ModMonitor.Log($"Pam cannot be found, ending phone call.", LogLevel.Warn);
+                        return;
                     }
-                    else if (Utility.IsHospitalVisitDay(pam.Name))
+                    if (Game1.timeOfDay > 2200)
                     {
-                        Game1.drawDialogue(pam, I18n.PamDoctor());
+                        Game1.drawDialogue(pam, Game1.content.LoadString("Strings\\Characters:Pam_Bus_Late"));
+                        return;
+                    }
+                    if (Game1.timeOfDay < 900)
+                    {
+                        if (Game1.IsVisitingIslandToday(pam.Name))
+                        {
+                            Game1.drawDialogue(pam, Game1.content.LoadString($"Strings\\Characters:Pam_Island_{Game1.random.Next(1, 4)}"));
+                        }
+                        else if (Utility.IsHospitalVisitDay(pam.Name))
+                        {
+                            Game1.drawDialogue(pam, Game1.content.LoadString("Strings\\Characters:Pam_Doctor"));
+                        }
+                        else if (pam.hasMasterScheduleEntry(pam.dayScheduleName.Value) && pam.getMasterScheduleEntry(pam.dayScheduleName.Value).Contains("BusStop 11 10"))
+                        {
+                            Game1.drawDialogue(pam, Game1.content.LoadString($"Strings\\Characters:Pam_Bus_{Game1.random.Next(1, 4)}"));
+                        }
+                        else
+                        {
+                            Game1.drawDialogue(pam, Game1.content.LoadString("Strings\\Characters:Pam_Other"));
+                        }
                     }
                     else
                     {
-                        Game1.drawDialogue(pam, I18n.GetByKey($"Pam_Bus_{Game1.random.Next(1, 4)}"));
+                        if (Game1.IsVisitingIslandToday(pam.Name))
+                        {
+                            Game1.drawDialogue(pam, Game1.content.LoadString("Strings\\Characters:Pam_Voicemail_Island"), Game1.temporaryContent.Load<Texture2D>("Portraits\\AnsweringMachine"));
+                        }
+                        else if (Utility.IsHospitalVisitDay(pam.Name))
+                        {
+                            Game1.drawDialogue(pam, Game1.content.LoadString("Strings\\Characters:Pam_Voicemail_Doctor"));
+                        }
+                        else if (pam.hasMasterScheduleEntry(pam.dayScheduleName.Value) && pam.getMasterScheduleEntry(pam.dayScheduleName.Value).Contains("BusStop 11 10"))
+                        {
+                            Game1.drawDialogue(pam, Game1.content.LoadString("Strings\\Characters:Pam_Voicemail_Bus"), Game1.temporaryContent.Load<Texture2D>("Portraits\\AnsweringMachine"));
+                        }
+                        else
+                        {
+                            Game1.drawDialogue(pam, Game1.content.LoadString("Strings\\Characters:Pam_Voicemail_Other"), Game1.temporaryContent.Load<Texture2D>("Portraits\\AnsweringMachine"));
+                        }
                     }
+                    __instance.answerDialogueAction("HangUp", Array.Empty<string>());
                 }
-                else
+                catch (Exception ex)
                 {
-                    if (Game1.IsVisitingIslandToday(pam.Name))
-                    {
-                        Game1.drawDialogue(pam, I18n.PamVoicemailIsland(), Game1.temporaryContent.Load<Texture2D>("Portraits\\AnsweringMachine"));
-                    }
-                    else if (Utility.IsHospitalVisitDay(pam.Name))
-                    {
-                        Game1.drawDialogue(pam, I18n.PamVoicemailDoctor());
-                    }
-                    else
-                    {
-                        Game1.drawDialogue(pam, I18n.PamVoicemailBus(), Game1.temporaryContent.Load<Texture2D>("Portraits\\AnsweringMachine"));
-                    }
+                    Globals.ModMonitor.Log($"Error handling Pam's phone call {ex}", LogLevel.Error);
                 }
-                __instance.answerDialogueAction("HangUp", Array.Empty<string>());
             },
             4950);
             __result = true;

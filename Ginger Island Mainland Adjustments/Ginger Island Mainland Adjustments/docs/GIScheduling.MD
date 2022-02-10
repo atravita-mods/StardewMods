@@ -70,14 +70,14 @@ Gus, whenever he visits, will tend bar. When he does so, other characters (if th
 			"Action": "EditData",
 			"Target": "Mods/atravita_Ginger_Island_Adjustments_bartenders",
 			"Entries": {
-				"NPCname": null,
+				"NPCname": "any value not null",
 			}
 		}
 	]
 }
 ```
 
-(Note: the Resort shop still requires Gus's presence. You can use Shop Tile Framework if you'd like your bartender to have a shop of their own, I suspect.)
+(Note: the Resort shop still requires Gus's presence. You can use Shop Tile Framework if you'd like your bartender to have a shop of their own, I suspect. Note that you will need to patch your shop tile into `Island_Resort`, not `Island_S`)
 
 #### Musicians
 
@@ -91,7 +91,7 @@ Sam, whenever he visits, has a chance of standing on a towel and playing his gui
 			"Action": "EditData",
 			"Target": "Mods/atravita_Ginger_Island_Adjustments_musicians",
 			"Entries": {
-				"NPCname": null,
+				"NPCname": "any value not null",
 			}
 		},
 		{

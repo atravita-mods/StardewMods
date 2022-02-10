@@ -7,31 +7,30 @@ using StardewValley.Network;
 namespace GingerIslandMainlandAdjustments.ScheduleManager;
 
 /// <summary>
-/// Struct to hold a warp location.
+/// Holds a warp location.
 /// </summary>
-internal readonly struct WarpPoint
+public class WarpPoint
 {
     /// <summary>
-    /// Map name as string.
-    /// </summary>
-    internal readonly string MapName;
-
-    /// <summary>
-    /// Tile to warp to as Vector2.
-    /// </summary>
-    internal readonly Vector2 Location;
-
-    /// <summary>
-    /// Initializes a new instance of the <see cref="WarpPoint"/> struct.
+    /// Initializes a new instance of the <see cref="WarpPoint"/> class.
     /// </summary>
     /// <param name="mapName">Map name as string.</param>
     /// <param name="location">Vector2 location to warp to.</param>
-    internal WarpPoint(string mapName, Vector2 location)
+    public WarpPoint(string mapName, Vector2 location)
     {
         this.MapName = mapName;
         this.Location = location;
-
     }
+
+    /// <summary>
+    /// Gets map name as string.
+    /// </summary>
+    public string MapName { get; private set; }
+
+    /// <summary>
+    /// Gets tile to warp to as Vector2.
+    /// </summary>
+    public Vector2 Location { get; private set; }
 }
 
 /// <summary>

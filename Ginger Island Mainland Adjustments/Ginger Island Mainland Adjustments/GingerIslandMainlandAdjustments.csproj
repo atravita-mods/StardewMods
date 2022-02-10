@@ -29,4 +29,6 @@
     <Using Include="StardewModdingAPI" />
     <Using Include="JetBrains.Annotations" />
   </ItemGroup>
+
+  <ProjectExtensions><VisualStudio><UserProperties /></VisualStudio></ProjectExtensions>
 </Project>

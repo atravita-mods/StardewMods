@@ -7,6 +7,34 @@ using StardewValley.Network;
 namespace GingerIslandMainlandAdjustments.ScheduleManager;
 
 /// <summary>
+/// Struct to hold a warp location.
+/// </summary>
+internal readonly struct WarpPoint
+{
+    /// <summary>
+    /// Map name as string.
+    /// </summary>
+    internal readonly string MapName;
+
+    /// <summary>
+    /// Tile to warp to as Vector2.
+    /// </summary>
+    internal readonly Vector2 Location;
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="WarpPoint"/> struct.
+    /// </summary>
+    /// <param name="mapName">Map name as string.</param>
+    /// <param name="location">Vector2 location to warp to.</param>
+    internal WarpPoint(string mapName, Vector2 location)
+    {
+        this.MapName = mapName;
+        this.Location = location;
+
+    }
+}
+
+/// <summary>
 /// Class that helps select the right GI remainder schedule.
 /// </summary>
 internal static class ScheduleUtilities
@@ -222,6 +250,8 @@ internal static class ScheduleUtilities
         IReflectedMethod pathfinder = Globals.ReflectionHelper.GetMethod(npc, "pathfindToNextScheduleLocation")
             ?? throw new MethodNotFoundException("NPC::pathfindToNextScheduleLocation");
 
+        WarpPoint? warpPoint = null;
+
         foreach (string schedulepoint in schedule.Split('/'))
         {
             try
@@ -325,16 +355,21 @@ internal static class ScheduleUtilities
                 }
                 Dictionary<string, string> matchDict = match.MatchGroupsToDictionary((key) => key, (value) => value.Trim());
                 int time = int.Parse(matchDict["time"]);
-                if (time <= lasttime)
+                string location = matchDict.GetValueOrDefaultOverrideNull("location", previousMap);
+                int x = int.Parse(matchDict["x"]);
+                int y = int.Parse(matchDict["y"]);
+                string direction_str = matchDict.GetValueOrDefault("direction", "2");
+
+                if (time == 0)
+                {
+                    warpPoint = new(location, new Vector2(x, y));
+                }
+                else if (time <= lasttime)
                 {
                     Globals.ModMonitor.Log(I18n.TOOTIGHTTIMELINE(time, schedule, npc.Name), LogLevel.Warn);
                     continue;
                 }
 
-                string location = matchDict.GetValueOrDefaultOverrideNull("location", previousMap);
-                int x = int.Parse(matchDict["x"]);
-                int y = int.Parse(matchDict["y"]);
-                string direction_str = matchDict.GetValueOrDefault("direction", "2");
                 if (!int.TryParse(direction_str, out int direction))
                 {
                     direction = Game1.down;
@@ -380,7 +415,7 @@ internal static class ScheduleUtilities
 
                 if (matchDict.TryGetValue("arrival", out string? arrival) && arrival.Equals("a", StringComparison.OrdinalIgnoreCase))
                 {
-                    time = Utility.ModifyTime(time, 0 - (newpath.GetExpectedRouteTime() * 10 / 10));
+                    time = Utility.ModifyTime(time, -(newpath.GetExpectedRouteTime() * 10 / 10));
                 }
                 if (time <= lasttime)
                 {
@@ -409,6 +444,10 @@ internal static class ScheduleUtilities
 
         if (remainderSchedule.Count > 0)
         {
+            if (warpPoint is not null)
+            {
+                Game1.warpCharacter(npc, warpPoint.MapName, warpPoint.Location);
+            }
             return remainderSchedule;
         }
 

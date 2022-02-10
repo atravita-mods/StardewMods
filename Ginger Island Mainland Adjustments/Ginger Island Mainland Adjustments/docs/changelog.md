@@ -17,7 +17,6 @@
 <!-- Figure out why Emily dances *in* the changing room? -->
 <!-- IslandNorth and AntiSocial lines for George/Evelyn/Willy-->
 <!-- ATTENTION: REMOVE THE #if DEBUG letting children go to the resort! -->
-<!-- Implement schedule key start time 0 for warping a character...-->
 <!-- Get spouses into Island Farmhouse -->
 
 ##### Known Issues

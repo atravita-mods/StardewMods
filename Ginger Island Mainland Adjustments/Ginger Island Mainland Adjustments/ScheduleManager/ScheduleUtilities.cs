@@ -282,16 +282,24 @@ internal static class ScheduleUtilities
                         {
                             // Replace time with the original time, but keep the rest of the default ending entry.
                             string defaultschedule = npc.getMasterScheduleEntry("default");
-                            string lastentry = originaltime + ' ' + npc.getMasterScheduleEntry("default").Split('/')[^1].Split(' ', count: 2)[1];
-                            match = Globals.ScheduleRegex.Match(lastentry);
+                            int slashloc = defaultschedule.LastIndexOf('/');
+                            if (slashloc > 0)
+                            {
+                                string lastentry = originaltime + ' ' + defaultschedule[(slashloc + 1)..].Split(' ', count: 2)[1];
+                                match = Globals.ScheduleRegex.Match(lastentry);
+                            }
                         }
                         if (!match.Success && npc.hasMasterScheduleEntry("spring"))
                         {
                             // Replace time with the original time, but keep the rest of the spring ending entry.
                             // Spring is often used as a default in scheduling code.
                             string springschedule = npc.getMasterScheduleEntry("spring");
-                            string lastentry = originaltime + ' ' + npc.getMasterScheduleEntry("spring").Split('/')[^1].Split(' ', count: 2)[1];
-                            match = Globals.ScheduleRegex.Match(lastentry);
+                            int slashloc = springschedule.LastIndexOf('/');
+                            if (slashloc > 0)
+                            {
+                                string lastentry = originaltime + ' ' + springschedule[(slashloc + 1)..].Split(' ', count: 2)[1];
+                                match = Globals.ScheduleRegex.Match(lastentry);
+                            }
                         }
                     }
                 }
@@ -491,6 +499,11 @@ internal static class ScheduleUtilities
             if (TryFindGOTOschedule(npc, SDate.Now(), rawData, out string scheduleString))
             {
                 npc.Schedule = ParseSchedule(scheduleString, npc, "BusStop", new Point(0, 23), 610);
+                if (Context.IsMainPlayer && npc.Schedule is not null
+                    && Globals.ReflectionHelper.GetField<string>(npc, "_lastLoadedScheduleKey", false)?.GetValue() is string lastschedulekey)
+                {
+                    npc.dayScheduleName.Value = lastschedulekey;
+                }
             }
             else
             {

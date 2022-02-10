@@ -12,16 +12,16 @@ Vanilla NPCs may go to Ginger Island in groups. They're typically family groups,
 
 ```js
 {
-	"Format": "1.24.0",
-	"Changes": [
-		{
-			"Action": "EditData",
-			"Target": "Mods/atravita_Ginger_Island_Adjustments_groups",
-			"Entries": {
-				"GoldenTrio": "Harry, Hermione, Ron"
-			}
-		}
-	]
+    "Format": "1.24.0",
+    "Changes": [
+        {
+            "Action": "EditData",
+            "Target": "Mods/atravita_Ginger_Island_Adjustments_groups",
+            "Entries": {
+                "GoldenTrio": "Harry, Hermione, Ron"
+            }
+        }
+    ]
 }
 ```
 
@@ -34,16 +34,21 @@ Note: the keys are global, so prepending them with your mod's uniqueID may help 
 Some NPCs may want to explore the rest of the island. 
 
 ```js
-    {
-        "LogName": "Explorers",
-        "Action": "EditData",
-        "Target": "Mods/atravita_Ginger_Island_Adjustments_explorers", // Explorers go to IslandNorth and either the tent or the volcano
-        "Entries": {
-            "ScienceGroup": "Maru, Demetrius, Robin",
-            "BandKids": "Abigail, Sebastian, Sam",
-            "ArtsyGroup": "Leah, Elliott"
+{
+    "Format": "1.24.0",
+    "Changes": [
+        {
+            "LogName": "Explorers",
+            "Action": "EditData",
+            "Target": "Mods/atravita_Ginger_Island_Adjustments_explorers", // Explorers go to IslandNorth and either the tent or the volcano
+            "Entries": {
+                "ScienceGroup": "Maru, Demetrius, Robin",
+                "BandKids": "Abigail, Sebastian, Sam",
+                "ArtsyGroup": "Leah, Elliott"
+            }
         }
-    }
+    ]
+}
 ```
 
 would add three explorer groups. Explorer groups will make either a stop at the volcano or a stop by Professor Snail's. They'll use the following dialogue keys:
@@ -64,16 +69,16 @@ Gus, whenever he visits, will tend bar. When he does so, other characters (if th
 
 ```js
 {
-	"Format": "1.24.0",
-	"Changes": [
-		{
-			"Action": "EditData",
-			"Target": "Mods/atravita_Ginger_Island_Adjustments_bartenders",
-			"Entries": {
-				"NPCname": "any value not null",
-			}
-		}
-	]
+    "Format": "1.24.0",
+    "Changes": [
+        {
+            "Action": "EditData",
+            "Target": "Mods/atravita_Ginger_Island_Adjustments_bartenders",
+            "Entries": {
+                "NPCname": "any value not null",
+            }
+        }
+    ]
 }
 ```
 
@@ -85,23 +90,23 @@ Sam, whenever he visits, has a chance of standing on a towel and playing his gui
 
 ```js
 {
-	"Format": "1.24.0",
-	"Changes": [
-		{
-			"Action": "EditData",
-			"Target": "Mods/atravita_Ginger_Island_Adjustments_musicians",
-			"Entries": {
-				"NPCname": "any value not null",
-			}
-		},
-		{
-			"Action": "EditData",
-			"Target": "Data/animationDescriptions",
-			"Entries": {
-				"npcname_beach_towel": //some sort of music-playing animation.
-			}
-		}
-	]
+    "Format": "1.24.0",
+    "Changes": [
+        {
+            "Action": "EditData",
+            "Target": "Mods/atravita_Ginger_Island_Adjustments_musicians",
+            "Entries": {
+                "NPCname": "any value not null",
+            }
+        },
+        {
+            "Action": "EditData",
+            "Target": "Data/animationDescriptions",
+            "Entries": {
+                "npcname_beach_towel": //some sort of music-playing animation.
+            }
+        }
+    ]
 }
 ```
 
@@ -121,16 +126,16 @@ You can also exclude characters from the resort based on various conditions by p
 
 ```js
 {
-	"Format": "1.24.0",
-	"Changes": [
-		{
-			"Action": "EditData",
-			"Target": "Mods/atravita_Ginger_Island_Adjustments_exclusions",
-			"Entries": {
-				"NPCname": "spring,17,mon,spring_mon,spring_17,neveralone",
-			}
-		}
-	]
+    "Format": "1.24.0",
+    "Changes": [
+        {
+            "Action": "EditData",
+            "Target": "Mods/atravita_Ginger_Island_Adjustments_exclusions",
+            "Entries": {
+                "NPCname": "spring,17,mon,spring_mon,spring_17,neveralone",
+            }
+        }
+    ]
 }
 ```
 

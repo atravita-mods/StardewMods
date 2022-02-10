@@ -1,8 +1,9 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 using HarmonyLib;
 using Microsoft.Xna.Framework.Graphics;
+using GingerIslandMainlandAdjustments.Utils;
 
-namespace GingerIslandMainlandAdjustments.Utils;
+namespace GingerIslandMainlandAdjustments.Niceties;
 
 /// <summary>
 /// Class that handles patches against GameLocation...to handle the phone.

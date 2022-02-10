@@ -3,6 +3,7 @@ using System.Text;
 using GingerIslandMainlandAdjustments.CustomConsoleCommands;
 using GingerIslandMainlandAdjustments.DialogueChanges;
 using GingerIslandMainlandAdjustments.Integrations;
+using GingerIslandMainlandAdjustments.Niceties;
 using GingerIslandMainlandAdjustments.ScheduleManager;
 using GingerIslandMainlandAdjustments.Utils;
 using HarmonyLib;

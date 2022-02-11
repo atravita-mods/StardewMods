@@ -183,8 +183,8 @@ public class AssetManager : IAssetLoader, IAssetEditor
             Dictionary<string, string> defaultgroups = Globals.ContentHelper.Load<Dictionary<string, string>>("assets/defaultGroupings.json", ContentSource.ModFolder);
             if (Game1.year > 2 && defaultgroups.ContainsKey("JodiFamily"))
             {
-                    Globals.ModMonitor.DebugLog($"Kent is home, adding Kent");
-                    defaultgroups["JodiFamily"] += ", Kent";
+                Globals.ModMonitor.DebugLog($"Kent is home, adding Kent");
+                defaultgroups["JodiFamily"] += ", Kent";
             }
             if (Globals.Config.AllowGeorgeAndEvelyn)
             {

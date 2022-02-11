@@ -178,7 +178,7 @@ internal static class ScheduleUtilities
                 if (npc.hasMasterScheduleEntry(newKey))
                 {
                     string newscheduleKey = npc.getMasterScheduleEntry(newKey);
-                    if(newscheduleKey.Equals(rawData, StringComparison.Ordinal))
+                    if (newscheduleKey.Equals(rawData, StringComparison.Ordinal))
                     {
                         Globals.ModMonitor.Log(I18n.GOTOINFINITELOOP(), LogLevel.Warn);
                         return false;
@@ -255,57 +255,39 @@ internal static class ScheduleUtilities
         {
             try
             {
-                // We need to handle the case where `bed` is provided as a location
-                int timeindex = schedulepoint.IndexOf(' ');
-                string originaltime;
-                if (timeindex > 0)
-                {
-                    originaltime = schedulepoint[..timeindex]; // grab the time off this entry
-                }
-                else
-                {
-                    Globals.ModMonitor.Log(I18n.ILLFORMEDSCHEDULEPOINT(schedulepoint), LogLevel.Warn);
-                    continue; // skip this point
-                }
-
                 Match match = Globals.ScheduleRegex.Match(schedulepoint);
 
-                if (!match.Success && schedulepoint.Contains("bed", StringComparison.OrdinalIgnoreCase))
+                if (!match.Success)
                 {
-                    if (npc.isMarried() || npc.DefaultMap.Equals("FarmHouse", StringComparison.OrdinalIgnoreCase))
+                    // Handle the case of <time> bed.
+                    Match bedmatch = Globals.BedRegex.Match(schedulepoint);
+                    if (bedmatch.Success)
                     {
-                        match = Globals.ScheduleRegex.Match(originaltime + " BusStop -1 23 3");
-                    }
-                    else
-                    {
-                        if (npc.hasMasterScheduleEntry("default"))
+                        Dictionary<string, string> bedmatchDict = bedmatch.MatchGroupsToDictionary((string key) => key, (string value) => value.Trim());
+
+                        // grab the original time.
+                        string bedtime = (bedmatchDict.TryGetValue("arrival", out string? bedarrival) && bedarrival.Equals("a", StringComparison.OrdinalIgnoreCase)) ?
+                                bedarrival + bedmatchDict["time"] : bedmatchDict["time"];
+                        if (npc.isMarried() || npc.DefaultMap.Equals("FarmHouse", StringComparison.OrdinalIgnoreCase))
                         {
-                            // Replace time with the original time, but keep the rest of the default ending entry.
-                            string defaultschedule = npc.getMasterScheduleEntry("default");
-                            int slashloc = defaultschedule.LastIndexOf('/');
-                            if (slashloc > 0)
-                            {
-                                string lastentry = originaltime + ' ' + defaultschedule[(slashloc + 1)..].Split(' ', count: 2)[1];
-                                match = Globals.ScheduleRegex.Match(lastentry);
-                            }
+                            match = Globals.ScheduleRegex.Match(bedtime + " BusStop -1 23 3");
                         }
-                        if (!match.Success && npc.hasMasterScheduleEntry("spring"))
+                        else if (npc.hasMasterScheduleEntry("default") && GetLastPointWithoutTime(npc.getMasterScheduleEntry("default")) is string defaultbed)
                         {
-                            // Replace time with the original time, but keep the rest of the spring ending entry.
-                            // Spring is often used as a default in scheduling code.
-                            string springschedule = npc.getMasterScheduleEntry("spring");
-                            int slashloc = springschedule.LastIndexOf('/');
-                            if (slashloc > 0)
-                            {
-                                string lastentry = originaltime + ' ' + springschedule[(slashloc + 1)..].Split(' ', count: 2)[1];
-                                match = Globals.ScheduleRegex.Match(lastentry);
-                            }
+                            match = Globals.ScheduleRegex.Match(bedtime + ' ' + defaultbed);
+                        }
+                        else if (npc.hasMasterScheduleEntry("spring") && GetLastPointWithoutTime(npc.getMasterScheduleEntry("spring")) is string springbed)
+                        {
+                            match = Globals.ScheduleRegex.Match(bedtime + ' ' + springbed);
                         }
                     }
                 }
+
                 if (!match.Success)
                 { // I still have issues, try sending the NPC straight home to bed.
                     Globals.ModMonitor.Log($"{schedulepoint} seems unparsable by regex, sending NPC {npc.Name} home to sleep", LogLevel.Info);
+
+                    // If the NPC has a sleep animation, ues it.
                     Dictionary<string, string> animationData = Globals.ContentHelper.Load<Dictionary<string, string>>("Data\\animationDescriptions", ContentSource.GameContent);
                     string? sleepanimation = npc.Name.ToLowerInvariant() + "_sleep";
                     sleepanimation = animationData.ContainsKey(sleepanimation) ? sleepanimation : null;
@@ -319,6 +301,17 @@ internal static class ScheduleUtilities
                         Game1.up,
                         sleepanimation,
                         null); // no message.
+                    string originaltime;
+                    int spaceloc = schedulepoint.IndexOf(' ');
+                    if (spaceloc == -1)
+                    {
+                        Globals.ModMonitor.Log($"Failed in parsing schedulepoint {schedulepoint} for NPC {npc.Name}", LogLevel.Warn);
+                        return null; // to try next schedule for GIMA, to null out NPC schedule and give them no schedule for vanilla.
+                    }
+                    else
+                    {
+                        originaltime = schedulepoint[(spaceloc + 1)..];
+                    }
                     if (int.TryParse(originaltime, out int path2bedtime))
                     {
                         if (path2bedtime < lasttime)
@@ -347,7 +340,6 @@ internal static class ScheduleUtilities
                             }
                             else if (remainderSchedule.TryGetValue(lasttime, out SchedulePathDescription? lastschedpoint))
                             {
-
                                 path2bedtime = Utility.ConvertMinutesToTime((Utility.ConvertTimeToMinutes(lasttime) + lastschedpoint.GetExpectedRouteTime()) * 10 / 10 + 10);
                             }
                         }
@@ -360,6 +352,8 @@ internal static class ScheduleUtilities
                         return null; // to try next schedule for GIMA, to null out NPC schedule and give them no schedule for vanilla.
                     }
                 }
+
+                // Process a successful match
                 Dictionary<string, string> matchDict = match.MatchGroupsToDictionary((key) => key, (value) => value.Trim());
                 int time = int.Parse(matchDict["time"]);
                 string location = matchDict.GetValueOrDefaultOverrideNull("location", previousMap);
@@ -533,5 +527,25 @@ internal static class ScheduleUtilities
                 ScheduleUtilities.Schedules.Remove(npc.Name);
             }
         }
+    }
+
+    /// <summary>
+    /// Given an schedule, returns the last schedule point without the time.
+    /// </summary>
+    /// <param name="rawSchedule">Raw schedule string.</param>
+    /// <returns>Last schedule point without the time, or null for failure.</returns>
+    private static string? GetLastPointWithoutTime(string rawSchedule)
+    {
+        int slashloc = rawSchedule.LastIndexOf('/');
+        if (slashloc > 0)
+        {
+            string lastentry = rawSchedule[(slashloc + 1)..];
+            int spaceloc = lastentry.IndexOf(' ');
+            if (spaceloc > 0)
+            {
+                return lastentry[(spaceloc + 1)..];
+            }
+        }
+        return null;
     }
 }

@@ -72,7 +72,7 @@ public static class DictionaryExtensions
     {
         if (dictionary.TryGetValue(key, out TValue? value) && value is not null)
         {
-                return value;
+            return value;
         }
         else
         {

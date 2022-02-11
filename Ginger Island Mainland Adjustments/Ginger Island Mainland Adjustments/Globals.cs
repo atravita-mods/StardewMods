@@ -56,8 +56,18 @@ internal static class Globals
     [SuppressMessage("StyleCop.CSharp.OrderingRules", "SA1201:Elements should appear in the correct order", Justification = "Reviewed")]
     internal static readonly Regex ScheduleRegex = new(
         // <time> [location] <tileX> <tileY> [facingDirection] [animation] \"[dialogue]\"
-        pattern: @"(?<arrival>a)?(?<time>\d{1,4})(?<location> \S+)*?(?<x> \d{1,4})(?<y> \d{1,4})(?<direction> \d)?(?<animation> [^\s\""]+)?(?<dialogue> \"".*\"")?",
+        pattern: @"(?<arrival>a)?(?<time>[0-9]{1,4})(?<location> \S+)*?(?<x> [0-9]{1,4})(?<y> [0-9]{1,4})(?<direction> [0-9])?(?<animation> [^\s\""]+)?(?<dialogue> \"".*\"")?",
         options: RegexOptions.CultureInvariant | RegexOptions.Compiled,
+        new TimeSpan(1000000));
+
+    /// <summary>
+    /// Regex that handles the bed location special case.
+    /// </summary>
+    [RegexPattern]
+    internal static readonly Regex BedRegex = new(
+        // <time> bed
+        pattern: @"(?<arrival>a)?(?<time>[0-9]{1,4}) bed",
+        options: RegexOptions.Compiled | RegexOptions.Compiled,
         new TimeSpan(1000000));
 
     /// <summary>

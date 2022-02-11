@@ -41,10 +41,10 @@ internal static class IslandSouthPatches
         exclusions = null;
     }
 
-   /// <summary>
-   /// Override the vanilla schedules if told to.
-   /// </summary>
-   /// <returns>False to skip vanilla function, true otherwise.</returns>
+    /// <summary>
+    /// Override the vanilla schedules if told to.
+    /// </summary>
+    /// <returns>False to skip vanilla function, true otherwise.</returns>
     [HarmonyPrefix]
     [HarmonyPatch(nameof(IslandSouth.SetupIslandSchedules))]
     public static bool OverRideSetUpIslandSchedules()
@@ -132,7 +132,7 @@ internal static class IslandSouthPatches
                     __result = false;
                     return;
                 }
-                else if($"{Game1.currentSeason}_{Game1.dayOfMonth}".Equals(condition, StringComparison.OrdinalIgnoreCase))
+                else if ($"{Game1.currentSeason}_{Game1.dayOfMonth}".Equals(condition, StringComparison.OrdinalIgnoreCase))
                 {
                     __result = false;
                     return;

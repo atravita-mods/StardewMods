@@ -60,6 +60,16 @@ public class ModConfig
     public const DayOfWeek DEFAULT_GUS_VISIT_DAY = DayOfWeek.Tuesday;
 
     /// <summary>
+    /// Attempts to parse a string into a DayOfWeek.
+    /// Returns the default if not possible.
+    /// </summary>
+    /// <param name="rawstring">Raw string to parse.</param>
+    /// <returns>Day of week as enum.</returns>
+    [Pure]
+    public static DayOfWeek TryParseDayOfWeekOrGetDefault(string rawstring)
+        => Enum.TryParse(rawstring, true, out DayOfWeek dayOfWeek) ? dayOfWeek : DEFAULT_GUS_VISIT_DAY;
+
+    /// <summary>
     /// Gets or sets a value indicating whether EnforceGITiming is enabled.
     /// When enabled, rejects time points too close together.
     /// And warns for them.
@@ -166,23 +176,6 @@ public class ModConfig
             DayOfWeek.Sunday => "Sun",
             _ => "Tue",
         };
-    }
-
-    /// <summary>
-    /// Attempts to parse a string into a DayOfWeek.
-    /// Returns the default if not possible.
-    /// </summary>
-    /// <param name="rawstring">Raw string to parse.</param>
-    /// <returns>Day of week as enum.</returns>
-    [Pure]
-    [SuppressMessage("StyleCop.CSharp.OrderingRules", "SA1204:Static elements should appear before instance elements", Justification = "Reviewed")]
-    public static DayOfWeek TryParseDayOfWeekOrGetDefault(string rawstring)
-    {
-        if (Enum.TryParse(typeof(DayOfWeek), rawstring, true, out object? value) && value is DayOfWeek dayofWeek)
-        {
-            return dayofWeek;
-        }
-        return DEFAULT_GUS_VISIT_DAY;
     }
 }
 #pragma warning restore SA1201 // Elements should appear in the correct order

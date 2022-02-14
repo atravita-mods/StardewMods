@@ -15,18 +15,14 @@ public class ModEntry : Mod
     // the following two fields are set in the entry method, which is approximately as close as I can get to the constructor anyways.
 #pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
     /// <summary>
-    /// Instance that holds the logger for this file.
+    /// Gets the logger for this file.
     /// </summary>
-    [SuppressMessage("ReSharper", "CA2211", Justification = "This is needed to give harmony patches access to the logger. Also, multithreading is not used anyways.")]
-    [SuppressMessage("StyleCop", "SA1401", Justification = "The logger, so unlikely to change in the future")]
-    public static IMonitor ModMonitor;
+    public static IMonitor ModMonitor { get; private set; }
 
     /// <summary>
-    /// Instance that holds the configuration for this mod.
+    /// Gets instance that holds the configuration for this mod.
     /// </summary>
-    [SuppressMessage("ReSharper", "CA2211", Justification = "This is needed to give harmony patches access to the configuration. Also, multithreading is not used anyways.")]
-    [SuppressMessage("StyleCop", "SA1401", Justification = "The config file, unlikely to change in the future")]
-    public static ModConfig Config;
+    public static ModConfig Config { get; private set; }
 #pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
 
     /// <inheritdoc/>
@@ -149,6 +145,5 @@ public class ModEntry : Mod
             setValue: value => Config.FurniturePlacementKey = value,
             name: I18n.FurniturePlacementKey_Title,
             tooltip: I18n.FurniturePlacementKey_Description);
-
     }
 }

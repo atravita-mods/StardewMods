@@ -19,20 +19,10 @@ internal class FurniturePatches
     {
         try
         {
-            if (!ModEntry.Config.Enabled)
-            { // mod disabled
-                return;
-            }
-            if (!__result)
-            { // can't be removed already
-                return;
-            }
-            if (!__instance.furniture_type.Value.Equals(Furniture.rug))
-            { // only want to deal with rugs
-                return;
-            }
-            GameLocation currentLocation = __0.currentLocation; // get location of farmer
-            if (currentLocation is null)
+            if (!ModEntry.Config.Enabled
+                || !__result
+                || !__instance.furniture_type.Value.Equals(Furniture.rug)
+                || __0.currentLocation is not GameLocation currentLocation)
             {
                 return;
             }
@@ -66,16 +56,11 @@ internal class FurniturePatches
     {
         try
         {
-            if (!ModEntry.Config.Enabled || !ModEntry.Config.CanPlaceRugsUnder)
+            if (!ModEntry.Config.Enabled || !ModEntry.Config.CanPlaceRugsUnder
+                || !__instance.furniture_type.Value.Equals(Furniture.rug)
+                || __instance.placementRestriction != 0 // someone requested a custom placement restriction, respect that.
+                )
             {
-                return true;
-            }
-            if (__instance.furniture_type.Value.Equals(Furniture.rug))
-            {
-                return true;
-            }
-            if (__instance.placementRestriction != 0)
-            { // someone requested a custom placement restriction, respect that.
                 return true;
             }
             Rectangle bounds = __instance.boundingBox.Value;
@@ -133,48 +118,3 @@ internal class FurniturePatches
         }
     }
 }
-
-#if DEBUG // not yet finished implementing....
-/// <summary>
-/// Patches on GameLocation to allow me to place rugs anywhere.
-/// </summary>
-[HarmonyPatch(typeof(GameLocation))]
-internal class GameLocationPatches
-{
-    [SuppressMessage("StyleCop", "SA1313", Justification = "Style prefered by Harmony")]
-    [HarmonyPostfix]
-    [HarmonyPatch(nameof(GameLocation.CanPlaceThisFurnitureHere))]
-    private static void PostfixCanPlaceFurnitureHere(GameLocation __instance, Furniture __0, ref bool __result)
-    {
-        try
-        {
-            if (__result)
-            { // can already be placed
-                return;
-            }
-            if (__0.placementRestriction != 0)
-            { // someone requested a custom placement restriction, respect that.
-                return;
-            }
-            if (!ModEntry.Config.Enabled || !ModEntry.Config.CanPlaceRugsOutside)
-            { // mod disabled
-                return;
-            }
-            if (__instance is MineShaft || __instance is VolcanoDungeon)
-            { // do not want to affect mines
-                return;
-            }
-            if (__0.furniture_type.Value.Equals(Furniture.rug))
-            {// Let me place rug
-                __result = true;
-                return;
-            }
-        }
-        catch (Exception ex)
-        {
-            ModEntry.ModMonitor.Log($"Failed in attempting to place rug outside in PostfixCanPlaceFurnitureHere.\n{ex}", LogLevel.Error);
-        }
-    }
-}
-
-#endif

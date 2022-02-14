@@ -131,6 +131,9 @@ public class ModEntry : Mod
         // Generate the GMCM for this mod.
         GenerateGMCM.Build(this.ModManifest);
 
+        // Add CP tokens for this mod.
+        GenerateCPTokens.AddTokens(this.ModManifest);
+
         // Bind Child2NPC's IsChildNPC method
         if (Globals.GetIsChildToNPC())
         {
@@ -158,6 +161,9 @@ public class ModEntry : Mod
         MidDayScheduleEditor.AttemptAdjustGISchedule(e);
         if (e.NewTime > 615 && !this.haveFixedSchedulesToday)
         {
+            // No longer need the exclusions cache.
+            IslandSouthPatches.ClearCache();
+
             ScheduleUtilities.FixUpSchedules();
             this.haveFixedSchedulesToday = true;
         }

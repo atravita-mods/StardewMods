@@ -12,6 +12,7 @@
 5. Add in tokens for islanders/current bartender/musicians. You won't be able to use these on day start, but may prevent clobbering on the resort shop tile? <!-- does this matter when 1.6 will fix the issue for good?-->
 <!-- Move this mod's scheduler earlier so I can add in CP tokens. (so OnDayStarted or before?). Sadly, this is not feasible because CustomNPCExclusions expects the island schedules to be generated *after* CP is done updating tokens, and I would need to move it *before*. Would be a compat nightmare. see: https://github.com/Esca-MMC/CustomNPCExclusions/blob/master/CustomNPCExclusions/HarmonyPatch_IslandVisit.cs -->
 <!-- Finish the locations console command: https://docs.microsoft.com/en-us/windows/console/console-virtual-terminal-sequences to add bold -->
+<!-- Write a function to get the villager's schedule for today, that takes into account that if a location replacement is needed, the villager's daySchedule.Value will be X_Replacement -->
 <!-- More schedule debugging tools: get arbitrary schedule from X day? -->
 <!-- Telephone: Lock behind a 10 heart event or something.-->
 <!-- Figure out why Emily dances *in* the changing room? -->

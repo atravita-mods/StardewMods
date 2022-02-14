@@ -1,7 +1,8 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 using HarmonyLib;
 using Microsoft.Xna.Framework.Graphics;
-using GingerIslandMainlandAdjustments.Utils;
+using GingerIslandMainlandAdjustments.ScheduleManager;
+using StardewModdingAPI.Utilities;
 
 namespace GingerIslandMainlandAdjustments.Niceties;
 
@@ -44,7 +45,6 @@ internal class PhoneHandler
     [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Harmony convention")]
     private static void PostfixAnswerDialogueAction(GameLocation __instance, string __0, string[] __1, ref bool __result)
     {
-        Globals.ModMonitor.DebugLog(__0);
         if (__0.Equals("telephone_PamBus"))
         {
             Globals.ReflectionHelper.GetMethod(__instance, "playShopPhoneNumberSounds").Invoke(__0);
@@ -76,7 +76,9 @@ internal class PhoneHandler
                         {
                             Game1.drawDialogue(pam, Game1.content.LoadString("Strings\\Characters:Pam_Doctor"));
                         }
-                        else if (pam.hasMasterScheduleEntry(pam.dayScheduleName.Value) && pam.getMasterScheduleEntry(pam.dayScheduleName.Value).Contains("BusStop 11 10"))
+                        else if (pam.hasMasterScheduleEntry(pam.dayScheduleName.Value)
+                            && ScheduleUtilities.TryFindGOTOschedule(pam, SDate.Now(), pam.getMasterScheduleEntry(pam.dayScheduleName.Value), out string rawstring)
+                            && rawstring.Contains("BusStop 11 10"))
                         {
                             Game1.drawDialogue(pam, Game1.content.LoadString($"Strings\\Characters:Pam_Bus_{Game1.random.Next(1, 4)}"));
                         }
@@ -95,7 +97,9 @@ internal class PhoneHandler
                         {
                             Game1.drawDialogue(pam, Game1.content.LoadString("Strings\\Characters:Pam_Voicemail_Doctor"));
                         }
-                        else if (pam.hasMasterScheduleEntry(pam.dayScheduleName.Value) && pam.getMasterScheduleEntry(pam.dayScheduleName.Value).Contains("BusStop 11 10"))
+                        else if (pam.hasMasterScheduleEntry(pam.dayScheduleName.Value)
+                            && ScheduleUtilities.TryFindGOTOschedule(pam, SDate.Now(), pam.getMasterScheduleEntry(pam.dayScheduleName.Value), out string rawstring)
+                            && rawstring.Contains("BusStop 11 10"))
                         {
                             Game1.drawDialogue(pam, Game1.content.LoadString("Strings\\Characters:Pam_Voicemail_Bus"), Game1.temporaryContent.Load<Texture2D>("Portraits\\AnsweringMachine"));
                         }

@@ -150,7 +150,7 @@ public class AssetManager : IAssetLoader, IAssetEditor
         }
         else if (asset.AssetNameEquals(DataEventsTrailerBig))
         { // Insert mail flags into the vanilla event
-            if (editor.Data.TryGetValue("positive", out string val))
+            if (editor.Data.TryGetValue("positive", out string? val))
             {
                 editor.Data["positive"] = "addMailReceived atravita_GIMA_PamPositive/" + val;
             }
@@ -292,7 +292,7 @@ public class AssetManager : IAssetLoader, IAssetEditor
             HashSet<NPC> allSpouses = new();
             foreach (NPC npc in Utility.getAllCharacters())
             {
-                if (npc?.getSpouse() is not null)
+                if (npc?.isMarried() == true)
                 {
                     allSpouses.Add(npc);
                 }

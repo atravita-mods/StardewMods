@@ -272,11 +272,11 @@ internal static class ScheduleUtilities
                         {
                             match = Globals.ScheduleRegex.Match(bedtime + " BusStop -1 23 3");
                         }
-                        else if (npc.hasMasterScheduleEntry("default") && GetLastPointWithoutTime(npc.getMasterScheduleEntry("default")) is string defaultbed)
+                        else if (npc.TryGetScheduleEntry("default", out string? defaultSchedule) && GetLastPointWithoutTime(defaultSchedule) is string defaultbed)
                         {
                             match = Globals.ScheduleRegex.Match(bedtime + ' ' + defaultbed);
                         }
-                        else if (npc.hasMasterScheduleEntry("spring") && GetLastPointWithoutTime(npc.getMasterScheduleEntry("spring")) is string springbed)
+                        else if (npc.TryGetScheduleEntry("spring", out string? springSchedule) && GetLastPointWithoutTime(springSchedule) is string springbed)
                         {
                             match = Globals.ScheduleRegex.Match(bedtime + ' ' + springbed);
                         }
@@ -287,7 +287,7 @@ internal static class ScheduleUtilities
                 { // I still have issues, try sending the NPC straight home to bed.
                     Globals.ModMonitor.Log($"{schedulepoint} seems unparsable by regex, sending NPC {npc.Name} home to sleep", LogLevel.Info);
 
-                    // If the NPC has a sleep animation, ues it.
+                    // If the NPC has a sleep animation, use it.
                     Dictionary<string, string> animationData = Globals.ContentHelper.Load<Dictionary<string, string>>("Data\\animationDescriptions", ContentSource.GameContent);
                     string? sleepanimation = npc.Name.ToLowerInvariant() + "_sleep";
                     sleepanimation = animationData.ContainsKey(sleepanimation) ? sleepanimation : null;
@@ -361,16 +361,6 @@ internal static class ScheduleUtilities
                 int y = int.Parse(matchDict["y"]);
                 string direction_str = matchDict.GetValueOrDefault("direction", "2");
 
-                if (time == 0)
-                {
-                    warpPoint = new(location, new Vector2(x, y));
-                }
-                else if (time <= lasttime)
-                {
-                    Globals.ModMonitor.Log(I18n.TOOTIGHTTIMELINE(time, schedule, npc.Name), LogLevel.Warn);
-                    continue;
-                }
-
                 if (!int.TryParse(direction_str, out int direction))
                 {
                     direction = Game1.down;
@@ -379,10 +369,9 @@ internal static class ScheduleUtilities
                 // Adjust schedules for locations not being open....
                 if (!Game1.isLocationAccessible(location))
                 {
-                    string replacement_loc = location + "_Replacement";
-                    if (npc.hasMasterScheduleEntry(replacement_loc))
+                    if (npc.TryGetScheduleEntry(location + "_Replacement", out string? replacement))
                     {
-                        string[] replacementdata = npc.getMasterScheduleEntry(replacement_loc).Split();
+                        string[] replacementdata = replacement.Split();
                         x = int.Parse(replacementdata[0]);
                         y = int.Parse(replacementdata[1]);
                         if (!int.TryParse(replacementdata[2], out direction))
@@ -398,6 +387,17 @@ internal static class ScheduleUtilities
                         }
                         continue; // skip this schedule point
                     }
+                }
+
+                if (time == 0)
+                {
+                    warpPoint = new(location, new Vector2(x, y));
+                    continue; // zero points are just to set warps, do not add to schedule.
+                }
+                else if (time <= lasttime)
+                {
+                    Globals.ModMonitor.Log(I18n.TOOTIGHTTIMELINE(time, schedule, npc.Name), LogLevel.Warn);
+                    continue;
                 }
 
                 matchDict.TryGetValue("animation", out string? animation);

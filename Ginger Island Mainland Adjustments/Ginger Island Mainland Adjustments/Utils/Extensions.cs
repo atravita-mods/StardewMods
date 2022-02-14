@@ -1,5 +1,7 @@
-﻿using System.Reflection;
+﻿using System.Diagnostics.CodeAnalysis;
+using System.Reflection;
 using System.Text.RegularExpressions;
+using NotNullAttribute = System.Diagnostics.CodeAnalysis.NotNullAttribute;
 
 namespace GingerIslandMainlandAdjustments.Utils;
 
@@ -253,6 +255,28 @@ internal static class NPCExtensions
             return (selection == 1) ? basekey : $"{basekey}_{selection}";
         }
         return null;
+    }
+
+    /// <summary>
+    /// Helper method to get an NPC's raw schedule string for a specific key.
+    /// </summary>
+    /// <param name="npc">NPC in question.</param>
+    /// <param name="scheduleKey">Schedule key to look for.</param>
+    /// <param name="rawData">Raw schedule string.</param>
+    /// <returns>True if successful, false otherwise.</returns>
+    /// <remarks>Does **not** set _lastLoadedScheduleKey.</remarks>
+    public static bool TryGetScheduleEntry(
+        [NotNull] this NPC npc,
+        [NotNull] string scheduleKey,
+        [NotNullWhen(returnValue: true)] out string? rawData)
+    {
+        rawData = null;
+        Dictionary<string,string> scheduleData = npc.getMasterScheduleRawData();
+        if (scheduleData is null)
+        {
+            return false;
+        }
+        return scheduleData.TryGetValue(scheduleKey, out rawData);
     }
 }
 

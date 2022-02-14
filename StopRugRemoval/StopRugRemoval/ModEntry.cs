@@ -106,9 +106,9 @@ public class ModEntry : Mod
             this.Monitor.Log(I18n.GmcmNotFound(), LogLevel.Debug);
             return;
         }
-        if (gmcm.Manifest.Version.IsOlderThan("1.6.0"))
+        if (gmcm.Manifest.Version.IsOlderThan("1.8.0"))
         {
-            this.Monitor.Log(I18n.GmcmVersionMessage(version: "1.6.0", currentversion: gmcm.Manifest.Version), LogLevel.Info);
+            this.Monitor.Log(I18n.GmcmVersionMessage(version: "1.8.0", currentversion: gmcm.Manifest.Version), LogLevel.Info);
             return;
         }
 
@@ -135,5 +135,20 @@ public class ModEntry : Mod
             setValue: value => Config.Enabled = value,
             name: I18n.Enabled_Title
             );
+
+        configMenu.AddBoolOption(
+            mod: this.ModManifest,
+            getValue: () => Config.PreventRemovalFromTable,
+            setValue: value => Config.PreventRemovalFromTable = value,
+            name: I18n.TableRemoval_Title,
+            tooltip: I18n.TableRemoval_Description);
+
+        configMenu.AddKeybindList(
+            mod: this.ModManifest,
+            getValue: () => Config.FurniturePlacementKey,
+            setValue: value => Config.FurniturePlacementKey = value,
+            name: I18n.FurniturePlacementKey_Title,
+            tooltip: I18n.FurniturePlacementKey_Description);
+
     }
 }

@@ -60,6 +60,7 @@ internal class FurniturePatches
         }
     }
 
+#if DEBUG
     [SuppressMessage("StyleCop", "SA1313", Justification = "Style prefered by Harmony")]
     private static bool PrefixCanBePlacedHere(Furniture __instance, GameLocation __0, Vector2 tile, ref bool __result)
     {
@@ -95,6 +96,7 @@ internal class FurniturePatches
         }
         return true;
     }
+#endif
 
     /// <summary>
     /// Prefix to prevent objects from accidentally being removed from tables.

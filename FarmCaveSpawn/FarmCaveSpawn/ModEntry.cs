@@ -492,10 +492,50 @@ public class ModEntry : Mod
 
     private void BellsAndWhistles(object? sender, OneSecondUpdateTickingEventArgs e)
     {
-        if (Game1.currentLocation is Mine mine)
-        {
-            // add in blinky bat eyes if appropriate?
-            
+        if (Game1.currentLocation is Mine mine && this.SpawnedFruitToday)
+        { // The following code is copied out of the game and adds the bat sprites to the mines.
+            if (Game1.random.NextDouble() < 0.12)
+            {
+                TemporaryAnimatedSprite redbat = new(
+                    textureName: @"LooseSprites\Cursors",
+                    sourceRect: new Rectangle(640, 1644, 16, 16),
+                    animationInterval: 80f,
+                    animationLength: 4,
+                    numberOfLoops: 9999,
+                    position: new Vector2(Game1.random.Next(mine.map.Layers[0].LayerWidth), Game1.random.Next(mine.map.Layers[0].LayerHeight)),
+                    flicker: false,
+                    flipped: false,
+                    layerDepth: 1f,
+                    alphaFade: 0f,
+                    color: Color.Black,
+                    scale: 4f,
+                    scaleChange: 0f,
+                    rotation: 0f,
+                    rotationChange: 0f)
+                {
+                    xPeriodic = true,
+                    xPeriodicLoopTime = 2000f,
+                    xPeriodicRange = 64f,
+                    motion = new Vector2(0f, -8f),
+                };
+                mine.TemporarySprites.Add(redbat);
+                if (Game1.random.NextDouble() < 0.15)
+                {
+                    mine.localSound("batScreech");
+                }
+                for (int i = 0; i < 4; i++)
+                {
+                    DelayedAction.playSoundAfterDelay("batFlap", (320 * i) + 240);
+                }
+            }
+            else if (Game1.random.NextDouble() < 0.24)
+            {
+                BatTemporarySprite batsprite = new(
+                    new Vector2(
+                        Game1.random.NextDouble() < 0.5 ? 0 : mine.map.DisplayWidth - 64,
+                        mine.map.DisplayHeight - 64));
+                mine.TemporarySprites.Add(batsprite);
+            }
         }
     }
 

@@ -7,6 +7,7 @@
 #### 1.6 todo
 * Switch all ID lookup to the new system.
 * Figure out DGA fruit trees.
+<!-- bat eyes for custom locations? -->
 
 #### Version 1.0.8 (upcoming)
 

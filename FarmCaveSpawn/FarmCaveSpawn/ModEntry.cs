@@ -62,7 +62,12 @@ public class ModEntry : Mod
         }
     }
 
-    /// <inheritdoc />/>
+    /// <summary>
+    /// Gets a value indicating whether or not I've spawned fruit today.
+    /// </summary>
+    internal bool SpawnedFruitToday { get; private set; }
+
+    /// <inheritdoc />
     public override void Entry(IModHelper helper)
     {
 #if DEBUG
@@ -81,6 +86,7 @@ public class ModEntry : Mod
 
         helper.Events.GameLoop.DayStarted += this.SpawnFruit;
         helper.Events.GameLoop.GameLaunched += this.SetUpConfig;
+        helper.Events.GameLoop.OneSecondUpdateTicking += this.BellsAndWhistles;
         helper.ConsoleCommands.Add(
             name: "list_fruits",
             documentation: I18n.ListFruits_Description(),
@@ -190,11 +196,10 @@ public class ModEntry : Mod
     }
 
     /// <summary>
-    /// Handle spawning fruit at the start of each day.
+    /// Whether or not I should spawn fruit (according to config + game state).
     /// </summary>
-    /// <param name="sender">Unknown, unused.</param>
-    /// <param name="e">Arguments.</param>
-    private void SpawnFruit(object? sender, DayStartedEventArgs e)
+    /// <returns>True if I should spawn fruit, false otherwise.</returns>
+    private bool ShouldSpawnFruit()
     {
         // Compat for Farm Cave Framework: https://www.nexusmods.com/stardewvalley/mods/10506
         // Which saves the farm cave choice to their own SaveData, and doesn't update the MasterPlayer.caveChoice
@@ -206,20 +211,43 @@ public class ModEntry : Mod
             this.DebugLog(hasFCFbatcave ? "FarmCaveFramework fruit bat cave detected." : "FarmCaveFramework fruit bat cave not detected.");
         }
 
+        if (!this.config.EarlyFarmCave
+            && (Game1.MasterPlayer.caveChoice?.Value is null || Game1.MasterPlayer.caveChoice.Value <= Farmer.caveNothing)
+            && string.IsNullOrWhiteSpace(farmcavechoice))
+        {
+            this.DebugLog("Demetrius cutscene not seen and config not set to early, skip spawning for today.");
+            return false;
+        }
+        if (!this.config.IgnoreFarmCaveType && !this.config.EarlyFarmCave
+            && (Game1.MasterPlayer.caveChoice?.Value is null || Game1.MasterPlayer.caveChoice.Value != Farmer.caveBats)
+            && !hasFCFbatcave)
+        {
+            this.DebugLog("Fruit bat cave not selected and config not set to ignore that, skip spawning for today.");
+            return false;
+        }
+        return true;
+    }
+
+    /// <summary>
+    /// Handle spawning fruit at the start of each day.
+    /// </summary>
+    /// <param name="sender">Unknown, unused.</param>
+    /// <param name="e">Arguments.</param>
+    private void SpawnFruit(object? sender, DayStartedEventArgs e)
+    {
+        if (!this.ShouldSpawnFruit())
+        {
+            this.SpawnedFruitToday = false;
+            return;
+        }
+
+        this.SpawnedFruitToday = true;
+
         if (!Context.IsMainPlayer)
         {
             return;
         }
-        if (!this.config.EarlyFarmCave && (Game1.MasterPlayer.caveChoice?.Value is null || Game1.MasterPlayer.caveChoice.Value <= Farmer.caveNothing) && string.IsNullOrWhiteSpace(farmcavechoice))
-        {
-            this.DebugLog("Demetrius cutscene not seen and config not set to early, skip spawning for today.");
-            return;
-        }
-        if (!this.config.IgnoreFarmCaveType && !this.config.EarlyFarmCave && (Game1.MasterPlayer.caveChoice?.Value is null || Game1.MasterPlayer.caveChoice.Value != Farmer.caveBats) && !hasFCFbatcave)
-        {
-            this.DebugLog("Fruit bat cave not selected and config not set to ignore that, skip spawning for today.");
-            return;
-        }
+
         int count = 0;
         this.TreeFruit = this.GetTreeFruits();
 
@@ -425,12 +453,10 @@ public class ModEntry : Mod
             string[] treedata = tree.Split('/', StringSplitOptions.TrimEntries);
             if (this.config.SeasonalOnly && Context.IsWorldReady)
             {
-                if (!treedata[1].Contains(currentseason))
+                if (!treedata[1].Contains(currentseason)
+                    && (!currentseason.Contains("summer") || !treedata[1].Contains("island")))
                 {
-                    if (!currentseason.Contains("summer") || !treedata[1].Contains("island"))
-                    {
-                        continue;
-                    }
+                    continue;
                 }
             }
 
@@ -439,19 +465,10 @@ public class ModEntry : Mod
                 try
                 {
                     StardewValley.Object fruit = new(objectIndex, 1);
-                    if (!this.config.AllowAnyTreeProduct && fruit.Category != StardewValley.Object.FruitsCategory)
-                    {
-                        continue;
-                    }
-                    if (this.config.EdiblesOnly && fruit.Edibility < 0)
-                    {
-                        continue;
-                    }
-                    if (fruit.Price > this.config.PriceCap)
-                    {
-                        continue;
-                    }
-                    if (denylist.Contains(fruit.Name))
+                    if ((!this.config.AllowAnyTreeProduct && fruit.Category != StardewValley.Object.FruitsCategory)
+                        || (this.config.EdiblesOnly && fruit.Edibility < 0 )
+                        || fruit.Price > this.config.PriceCap
+                        || denylist.Contains(fruit.Name))
                     {
                         continue;
                     }
@@ -473,6 +490,15 @@ public class ModEntry : Mod
         return treeFruits;
     }
 
+    private void BellsAndWhistles(object? sender, OneSecondUpdateTickingEventArgs e)
+    {
+        if (Game1.currentLocation is Mine mine)
+        {
+            // add in blinky bat eyes if appropriate?
+            
+        }
+    }
+
     /// <summary>
     /// Log to DEBUG if compiled with DEBUG
     /// Log to verbose only otherwise.
@@ -483,7 +509,7 @@ public class ModEntry : Mod
 #if DEBUG
         this.Monitor.Log(message, level);
 #else
-        Monitor.VerboseLog(message);
+        this.Monitor.VerboseLog(message);
 #endif
     }
 }

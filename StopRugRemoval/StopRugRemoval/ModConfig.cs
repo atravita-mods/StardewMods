@@ -1,4 +1,6 @@
-﻿namespace StopRugRemoval;
+﻿using StardewModdingAPI.Utilities;
+
+namespace StopRugRemoval;
 
 /// <summary>
 /// Configuration class for this mod.
@@ -20,5 +22,8 @@ public class ModConfig
     /// </summary>
     public bool CanPlaceRugsUnder { get; set; } = true;
 
+    public bool PreventRemovalFromTable { get; set; } = true;
+
     // Keybind for the place rugs under?
+    public KeybindList FurniturePlacementKey { get; set; } = KeybindList.Parse("LeftShift + Z");
 }

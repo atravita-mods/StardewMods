@@ -38,8 +38,9 @@ internal class FurniturePatches
             }
 
             Rectangle bounds = __instance.boundingBox.Value;
+#if DEBUG
             ModEntry.ModMonitor.Log($"Checking rug: {bounds.X / 64f}, {bounds.Y / 64f}, W/H {bounds.Width / 64f}/{bounds.Height / 64f}");
-
+#endif
             for (int x = 0; x < bounds.Width / 64; x++)
             {
                 for (int y = 0; y < bounds.Height / 64; y++)
@@ -94,8 +95,44 @@ internal class FurniturePatches
         }
         return true;
     }
+
+    /// <summary>
+    /// Prefix to prevent objects from accidentally being removed from tables.
+    /// </summary>
+    /// <param name="__instance">The table.</param>
+    /// <param name="who">The farmer who clicked.</param>
+    /// <param name="__result">The result of the original function.</param>
+    /// <returns>Return true to continue to the original function, false otherwise.</returns>
+    [HarmonyPrefix]
+    [HarmonyPatch(nameof(Furniture.clicked))]
+    [SuppressMessage("StyleCop", "SA1313", Justification = "Style prefered by Harmony")]
+    private static bool PrefixClicked(Furniture __instance, Farmer who, ref bool __result)
+    {
+        try
+        {
+            if (!ModEntry.Config.Enabled
+                || !ModEntry.Config.PreventRemovalFromTable
+                || ModEntry.Config.FurniturePlacementKey.IsDown()
+                || __instance.furniture_type.Value != Furniture.table)
+            {
+                return true;
+            }
+            else
+            {
+                Game1.showRedMessage(I18n.TableRemovalMessage(keybind: ModEntry.Config.FurniturePlacementKey));
+                __result = false;
+                return false;
+            }
+        }
+        catch (Exception ex)
+        {
+            ModEntry.ModMonitor.Log($"Ran into errors preventing removal of item from table for {who.Name}\n\n{ex}", LogLevel.Error);
+            return true;
+        }
+    }
 }
 
+#if DEBUG // not yet finished implementing....
 /// <summary>
 /// Patches on GameLocation to allow me to place rugs anywhere.
 /// </summary>
@@ -109,20 +146,20 @@ internal class GameLocationPatches
     {
         try
         {
-            if (!ModEntry.Config.Enabled || !ModEntry.Config.CanPlaceRugsOutside)
-            { // mod disabled
-                return;
-            }
-            if (__instance is MineShaft || __instance is VolcanoDungeon)
-            { // do not want to affect mines
-                return;
-            }
             if (__result)
             { // can already be placed
                 return;
             }
             if (__0.placementRestriction != 0)
             { // someone requested a custom placement restriction, respect that.
+                return;
+            }
+            if (!ModEntry.Config.Enabled || !ModEntry.Config.CanPlaceRugsOutside)
+            { // mod disabled
+                return;
+            }
+            if (__instance is MineShaft || __instance is VolcanoDungeon)
+            { // do not want to affect mines
                 return;
             }
             if (__0.furniture_type.Value.Equals(Furniture.rug))
@@ -137,3 +174,5 @@ internal class GameLocationPatches
         }
     }
 }
+
+#endif

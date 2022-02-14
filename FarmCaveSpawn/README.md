@@ -13,7 +13,7 @@ Host should install mod. Mod does not do anything for farmhands.
 
 #### SVE compat
 
-Will also spawn in the MinecartCave and the DeepCave, if `UseModCaves` is enabled (after 1.0.6). It goes room by room, so if you don't see spawns in MinecartCave and Deepcave try setting the spawn chance lower and the max daily spawns higher.
+Will also spawn in the MinecartCave and the DeepCave, if `UseModCaves` is enabled (after 1.0.8). It goes room by room, so if you don't see spawns in MinecartCave and Deepcave try setting the spawn chance lower and the max daily spawns higher.
 
 #### Known compatability issues:
 
@@ -30,6 +30,7 @@ Farm Cave Framework is handled seperately - this mod will check to see if that m
 5. `EarlyFarmCave`: if true, will spawn even before the cutscene is seen.
 5. `UseModCaves`: if true, will spawn fruit in caves added by mods, if they're registered with this mod.
 6. `UseMineCave`: if true, will spawn fruit in the mine cave entrances as well (if `MaxDailySpawns` is not hit.)
+6. `UseVanillaFruitOnly`: use only the four tree fruit that will appear in the fruit bat cave in vanilla. (Yes, this will exlude mangos and bananas.)
 7. `SeasonalOnly`: limits to just the fruits that are in-season. After all, those bats have to be getting the fruit from somewhere, right?
 8. `AllowAnyTreeProduct`: if true, allows any product found for any fruit tree to be spawned. If false, will only spawn items that are categorized as fruit in the game.
 9. `EdiblesOnly`: If true, will only spawn items with a positive value for edibility. Do note that this field is not always perfect; some items that do not seem like they should be edible have positive values for edibility.

@@ -492,7 +492,9 @@ public class ModEntry : Mod
 
     private void BellsAndWhistles(object? sender, OneSecondUpdateTickingEventArgs e)
     {
-        if (Game1.currentLocation is Mine mine && this.SpawnedFruitToday)
+        if (Game1.currentLocation is Mine mine
+            && this.SpawnedFruitToday
+            && this.config.UseMineCave)
         { // The following code is copied out of the game and adds the bat sprites to the mines.
             if (Game1.random.NextDouble() < 0.12)
             {

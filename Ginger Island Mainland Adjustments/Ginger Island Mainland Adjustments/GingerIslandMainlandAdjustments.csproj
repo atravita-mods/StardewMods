@@ -30,5 +30,5 @@
     <Using Include="JetBrains.Annotations" />
   </ItemGroup>
 
-  <ProjectExtensions><VisualStudio><UserProperties /></VisualStudio></ProjectExtensions>
+  <ProjectExtensions><VisualStudio><UserProperties i18n_4default_1json__JsonSchema="https://smapi.io/schemas/i18n.json" manifest_1json__JsonSchema="https://smapi.io/schemas/manifest.json" /></VisualStudio></ProjectExtensions>
 </Project>

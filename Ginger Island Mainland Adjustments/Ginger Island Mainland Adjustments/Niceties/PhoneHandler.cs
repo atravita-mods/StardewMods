@@ -1,7 +1,7 @@
 ﻿using System.Diagnostics.CodeAnalysis;
+using GingerIslandMainlandAdjustments.ScheduleManager;
 using HarmonyLib;
 using Microsoft.Xna.Framework.Graphics;
-using GingerIslandMainlandAdjustments.ScheduleManager;
 using StardewModdingAPI.Utilities;
 
 namespace GingerIslandMainlandAdjustments.Niceties;

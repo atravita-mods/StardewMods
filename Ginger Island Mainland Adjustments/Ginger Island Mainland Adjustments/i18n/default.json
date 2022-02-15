@@ -116,5 +116,5 @@
   "REGEX_TIMEOUT_ERROR": "Regex for schedule entry {{schedulePoint}} timed out:\n\n{{ex}}",
   "TOO_TIGHT_TIMELINE": "{{time}} position in schedule {{scheduleKey}} for {{npc}} is too tight. Will be skipped.",
   "NO_REPLACEMENT_LOCATION": "Location replacement for {{location}} requested but not found for {{npc}}",
-  "ILL_FORMED_SCHEDULE_POINT":  "Schedule point {{point}} seems malformed.",
+  "ILL_FORMED_SCHEDULE_POINT":  "Schedule point {{point}} seems malformed."
 }

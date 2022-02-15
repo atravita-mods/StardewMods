@@ -186,17 +186,9 @@ public class AssetManager : IAssetLoader, IAssetEditor
                 Globals.ModMonitor.DebugLog($"Kent is home, adding Kent");
                 defaultgroups["JodiFamily"] += ", Kent";
             }
-            if (Globals.Config.AllowGeorgeAndEvelyn)
+            if (Game1.getAllFarmers().Any((Farmer farmer) => farmer.eventsSeen.Contains(99210002)) && defaultgroups.ContainsKey("barfolk"))
             {
-                defaultgroups["GeorgeFamily"] = "George, Evelyn, Alex";
-            }
-            if (Globals.Config.AllowWilly)
-            {
-                defaultgroups["barfolk"] = "Clint, Willy";
-                if (Game1.getAllFarmers().Any((Farmer farmer) => farmer.eventsSeen.Contains(99210002)))
-                {
-                    defaultgroups["barfolk"] += "Pam"; // A little Pam Tries tie-in?
-                }
+                defaultgroups["barfolk"] += "Pam"; // A little Pam Tries tie-in?
             }
             return (T)(object)defaultgroups;
         }

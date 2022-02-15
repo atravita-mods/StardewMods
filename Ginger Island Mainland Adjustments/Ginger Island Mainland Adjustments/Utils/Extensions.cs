@@ -271,7 +271,7 @@ internal static class NPCExtensions
         [NotNullWhen(returnValue: true)] out string? rawData)
     {
         rawData = null;
-        Dictionary<string,string> scheduleData = npc.getMasterScheduleRawData();
+        Dictionary<string, string> scheduleData = npc.getMasterScheduleRawData();
         if (scheduleData is null)
         {
             return false;

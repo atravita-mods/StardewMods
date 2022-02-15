@@ -3,7 +3,6 @@ using StardewModdingAPI.Events;
 using StardewModdingAPI.Utilities;
 using StardewValley.Locations;
 using StardewValley.Menus;
-using GingerIslandMainlandAdjustments.Utils;
 
 namespace GingerIslandMainlandAdjustments.Niceties;
 

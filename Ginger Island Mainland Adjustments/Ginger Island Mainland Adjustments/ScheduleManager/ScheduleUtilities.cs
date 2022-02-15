@@ -60,7 +60,6 @@ internal static class ScheduleUtilities
     /// <returns>A schedule string if it can, null if it can't find one.</returns>
     public static string? FindProperGISchedule(NPC npc, SDate date)
     {
-        string? scheduleEntry;
         string scheduleKey = BASE_SCHEDULE_KEY;
         if (npc.isMarried())
         {
@@ -71,6 +70,7 @@ internal static class ScheduleUtilities
 
         // GIRemainder_Season_Day
         string checkKey = $"{scheduleKey}_{date.Season}_{date.Day}";
+        string? scheduleEntry;
         if (npc.hasMasterScheduleEntry(checkKey)
             && TryFindGOTOschedule(npc, date, npc.getMasterScheduleEntry(checkKey), out scheduleEntry)
             && scheduleEntry.StartsWith(POST_GI_START_TIME))
@@ -318,11 +318,11 @@ internal static class ScheduleUtilities
                         {
                             if (!Globals.Config.EnforceGITiming)
                             { // I've already adjusted the last time parameter to account for travel time
-                                path2bedtime = Utility.ConvertMinutesToTime((Utility.ConvertTimeToMinutes(lasttime) * 10) / 10 + 10);
+                                path2bedtime = Utility.ConvertMinutesToTime(((Utility.ConvertTimeToMinutes(lasttime) * 10) / 10) + 10);
                             }
                             else if (remainderSchedule.TryGetValue(lasttime, out SchedulePathDescription? lastschedpoint))
                             {
-                                path2bedtime = Utility.ConvertMinutesToTime((Utility.ConvertTimeToMinutes(lasttime) + lastschedpoint.GetExpectedRouteTime()) * 10 / 10 + 10);
+                                path2bedtime = Utility.ConvertMinutesToTime(((Utility.ConvertTimeToMinutes(lasttime) + lastschedpoint.GetExpectedRouteTime()) * 10 / 10) + 10);
                             }
                         }
                         remainderSchedule[path2bedtime] = path2bed;
@@ -331,16 +331,16 @@ internal static class ScheduleUtilities
                     else if (originaltime.Length > 0 && originaltime.StartsWith('a') && int.TryParse(originaltime[1..], out path2bedtime))
                     {
                         int expectedpath2bedtime = path2bed.GetExpectedRouteTime();
-                        Utility.ModifyTime(path2bedtime, 0 - (expectedpath2bedtime * 10) / 10);
+                        Utility.ModifyTime(path2bedtime, 0 - ((expectedpath2bedtime * 10) / 10));
                         if (path2bedtime < lasttime)
                         { // a little sanity checking, force the bed time to be sufficiently after the previous point.
                             if (!Globals.Config.EnforceGITiming)
                             { // I've already adjusted the last time parameter to account for travel time
-                                path2bedtime = Utility.ConvertMinutesToTime((Utility.ConvertTimeToMinutes(lasttime) * 10) / 10 + 10);
+                                path2bedtime = Utility.ConvertMinutesToTime(((Utility.ConvertTimeToMinutes(lasttime) * 10) / 10) + 10);
                             }
                             else if (remainderSchedule.TryGetValue(lasttime, out SchedulePathDescription? lastschedpoint))
                             {
-                                path2bedtime = Utility.ConvertMinutesToTime((Utility.ConvertTimeToMinutes(lasttime) + lastschedpoint.GetExpectedRouteTime()) * 10 / 10 + 10);
+                                path2bedtime = Utility.ConvertMinutesToTime(((Utility.ConvertTimeToMinutes(lasttime) + lastschedpoint.GetExpectedRouteTime()) * 10 / 10) + 10);
                             }
                         }
                         remainderSchedule[path2bedtime] = path2bed;

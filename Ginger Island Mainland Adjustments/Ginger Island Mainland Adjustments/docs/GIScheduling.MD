@@ -139,8 +139,8 @@ You can also exclude characters from the resort based on various conditions by p
 }
 ```
 
-Possible values include: `<season>`, `<day>`, `<dayofweek>`, `<season>_<dayofweek>`, `<season>_<day>`, and `neveralone`. The first five should be self-explanatory, but `neveralone` prevents NPCs from attending the resort EXCEPT as [part of a group](#custom-groups). 
+Possible values include: `<season>`, `<day>`, `<dayofweek>`, `<season>_<dayofweek>`, `<season>_<day>`, `freerange` and `neveralone`. The first five should be self-explanatory, but `neveralone` prevents NPCs from attending the resort EXCEPT as [part of a group](#custom-groups), and `freerange` allows a kid to attend the resort when not part of a custom group.
 
-As an aside: NPCs already cannot go to Ginger Island on their hospital visit days, and no one goes to the Resort during the Winter Market. 
+As an aside: NPCs already cannot go to Ginger Island on their hospital visit days, and no one goes to the Resort during the Winter Market, or if there's a festival going on.
 
 **Note:** I haven't actually tested this with conditional patching (using Content Patcher's `When` field.) [CustomNPCExclusions](https://www.nexusmods.com/stardewvalley/mods/7089), which does a very similar thing, forces `IslandSouth.SetUpIslandSchedules` to [run after Content Patcher is done updating patches](https://github.com/Esca-MMC/CustomNPCExclusions/blob/master/CustomNPCExclusions/HarmonyPatch_IslandVisit.cs).

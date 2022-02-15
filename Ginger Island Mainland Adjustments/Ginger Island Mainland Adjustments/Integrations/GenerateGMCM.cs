@@ -88,7 +88,8 @@ internal static class GenerateGMCM
             tooltip: I18n.Config_ExplorerChance_Description,
             formatValue: TwoPlaceFixedPoint,
             min: 0f,
-            max: 1f);
+            max: 1f,
+            interval: 0.01f);
 
         configMenu.AddTextOption(
             mod: manifest,
@@ -107,7 +108,8 @@ internal static class GenerateGMCM
             tooltip: I18n.Config_GusChance_Description,
             formatValue: TwoPlaceFixedPoint,
             min: 0f,
-            max: 1f);
+            max: 1f,
+            interval: 0.01f);
 
         configMenu.AddBoolOption(
             mod: manifest,

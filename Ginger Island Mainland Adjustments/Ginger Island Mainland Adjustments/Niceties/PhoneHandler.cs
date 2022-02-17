@@ -76,6 +76,11 @@ internal class PhoneHandler
                         {
                             Game1.drawDialogue(pam, Game1.content.LoadString("Strings\\Characters:Pam_Doctor"));
                         }
+                        else if (pam.dayScheduleName?.Value is null)
+                        {
+                            Globals.ModMonitor.Log("Something very odd has happened. Pam's dayScheduleName is null", LogLevel.Debug);
+                            Game1.drawDialogue(pam, Game1.content.LoadString("Strings\\Characters:Pam_Other"));
+                        }
                         else if (pam.hasMasterScheduleEntry(pam.dayScheduleName.Value)
                             && ScheduleUtilities.TryFindGOTOschedule(pam, SDate.Now(), pam.getMasterScheduleEntry(pam.dayScheduleName.Value), out string rawstring)
                             && rawstring.Contains("BusStop 11 10"))
@@ -96,6 +101,11 @@ internal class PhoneHandler
                         else if (Utility.IsHospitalVisitDay(pam.Name))
                         {
                             Game1.drawDialogue(pam, Game1.content.LoadString("Strings\\Characters:Pam_Voicemail_Doctor"), Game1.temporaryContent.Load<Texture2D>("Portraits\\AnsweringMachine"));
+                        }
+                        else if (pam.dayScheduleName?.Value is null)
+                        {
+                            Globals.ModMonitor.Log("Something very odd has happened. Pam's dayScheduleName is null", LogLevel.Debug);
+                            Game1.drawDialogue(pam, Game1.content.LoadString("Strings\\Characters:Pam_Voicemail_Other"), Game1.temporaryContent.Load<Texture2D>("Portraits\\AnsweringMachine"));
                         }
                         else if (pam.hasMasterScheduleEntry(pam.dayScheduleName.Value)
                             && ScheduleUtilities.TryFindGOTOschedule(pam, SDate.Now(), pam.getMasterScheduleEntry(pam.dayScheduleName.Value), out string rawstring)

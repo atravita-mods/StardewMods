@@ -89,7 +89,7 @@ internal static class ShopHandler
     /// <param name="e">On Warped event arguments.</param>
     public static void AddBoxToShop(WarpedEventArgs e)
     {
-        if ((e.NewLocation.Name.Equals("SandyHouse", StringComparison.OrdinalIgnoreCase) && Game1.IsVisitingIslandToday("Sandy")
+        if ((Game1.IsVisitingIslandToday("Sandy") && e.NewLocation.Name.Equals("SandyHouse", StringComparison.OrdinalIgnoreCase)
             && e.NewLocation.getCharacterFromName("Sandy") is null) // Sandy has left already
             || (e.NewLocation is FishShop fishShop && Game1.IsVisitingIslandToday("Willy") && fishShop.getCharacterFromName("Willy") is null))
         {

@@ -29,22 +29,25 @@ internal class DialoguePatches
     { // __0 = heartlevel, as int. __1 = whether or not to have a season prefix?
         try
         {
-            if (__result || !Game1.IsVisitingIslandToday(__instance.Name))
+            if (__result || !Game1.IsVisitingIslandToday(__instance.Name) || __instance.currentLocation is FarmHouse)
             { // game code has returned a value, therefore skip me.
                 return;
             }
-            if (__instance.currentLocation is IslandLocation or FarmHouse)
-            { // Currently on island or is spouse in Farmhouse, handle IslandNorth/IslandSoutheast
-                if (__instance.currentLocation is IslandEast && __instance.Dialogue.ContainsKey(ANTISOCIAL))
-                {
-                    __instance.ClearAndPushDialogue(ANTISOCIAL);
-                }
-                else if (__instance.currentLocation is IslandNorth && __instance.Dialogue.ContainsKey(ISLANDNORTH))
-                {
-                    __instance.ClearAndPushDialogue(ISLANDNORTH);
-                }
+            if (__instance.currentLocation is IslandEast && __instance.Dialogue.ContainsKey(ANTISOCIAL))
+            {
+                __instance.ClearAndPushDialogue(ANTISOCIAL);
                 return;
             }
+            else if (__instance.currentLocation is IslandNorth && __instance.Dialogue.ContainsKey(ISLANDNORTH))
+            {
+                __instance.ClearAndPushDialogue(ISLANDNORTH);
+                return;
+            }
+            else if (__instance.currentLocation is IslandLocation)
+            {
+                return;
+            }
+
             string preface = __1 ? string.Empty : Game1.currentSeason;
 
             string baseKey;
@@ -67,8 +70,8 @@ internal class DialoguePatches
             }
 
             // Handle group-specific dialogue.
-            if (GIScheduler.CurrentVisitingGroup?.Contains(__instance) == true
-                && GIScheduler.CurrentGroup is not null
+            if (GIScheduler.CurrentGroup is not null
+                && GIScheduler.CurrentVisitingGroup?.Contains(__instance) == true
                 && DialogueUtilities.TryGetIslandDialogue(__instance, $"{baseKey}_{GIScheduler.CurrentGroup}", __0))
             {
                 __result = true;

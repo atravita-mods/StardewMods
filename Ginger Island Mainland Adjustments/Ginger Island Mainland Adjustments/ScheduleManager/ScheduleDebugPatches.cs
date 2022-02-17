@@ -1,21 +1,60 @@
-﻿using HarmonyLib;
+﻿using System.Diagnostics.CodeAnalysis;
+using HarmonyLib;
 using Microsoft.Xna.Framework;
 
 namespace GingerIslandMainlandAdjustments.ScheduleManager;
 
+/// <summary>
+/// Class that handles patches for debugging schedules.
+/// These will only be active if DebugMode is set to true.
+/// And thus: no harmony annotations.
+/// </summary>
 internal class ScheduleDebugPatches
 {
 
     private static List<NPC> failedNPCs = new();
 
+    /// <summary>
+    /// Applies the patches for this class.
+    /// </summary>
+    /// <param name="harmony">My harmony instance.</param>
     public static void ApplyPatches(Harmony harmony)
     {
         harmony.Patch(
             original: AccessTools.Method(typeof(NPC), "pathfindToNextScheduleLocation"),
-            finalizer: new HarmonyMethod(typeof(ScheduleDebugPatches), nameof(ScheduleDebugPatches.FinalizePathfinder))
-            );
+            finalizer: new HarmonyMethod(typeof(ScheduleDebugPatches), nameof(ScheduleDebugPatches.FinalizePathfinder)));
     }
 
+    /// <summary>
+    /// Nulls out the schedules for problem NPCs.
+    /// </summary>
+    public static void FixNPCs()
+    {
+        foreach (NPC npc in failedNPCs)
+        {
+            npc.Schedule = null;
+            npc.followSchedule = false;
+        }
+        failedNPCs.Clear();
+    }
+
+    /// <summary>
+    /// Finalizer on NPC pathfindToNextScheduleLocation.
+    /// </summary>
+    /// <param name="__instance">NPC.</param>
+    /// <param name="startingLocation">The starting map.</param>
+    /// <param name="startingX">Starting X.</param>
+    /// <param name="startingY">Starting Y.</param>
+    /// <param name="endingLocation">Ending map.</param>
+    /// <param name="endingX">Ending X.</param>
+    /// <param name="endingY">Ending Y.</param>
+    /// <param name="finalFacingDirection">Facing direction for NPC.</param>
+    /// <param name="endBehavior">End animation.</param>
+    /// <param name="endMessage">End message for NPC to say.</param>
+    /// <param name="__exception">Exception raised, if any.</param>
+    /// <param name="__result">The result of the function (an empty schedulePoint).</param>
+    /// <returns>null to surpress the exception.</returns>
+    [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Harmony convention")]
     private static Exception? FinalizePathfinder(
         NPC __instance,
         string startingLocation,

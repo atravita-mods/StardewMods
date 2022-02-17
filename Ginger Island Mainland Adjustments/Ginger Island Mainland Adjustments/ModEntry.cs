@@ -170,6 +170,10 @@ public class ModEntry : Mod
             IslandSouthPatches.ClearCache();
 
             ScheduleUtilities.FixUpSchedules();
+            if (Globals.Config.DebugMode)
+            {
+                ScheduleDebugPatches.FixNPCs();
+            }
             this.haveFixedSchedulesToday = true;
         }
     }

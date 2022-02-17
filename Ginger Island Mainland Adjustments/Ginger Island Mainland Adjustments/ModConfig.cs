@@ -159,6 +159,12 @@ public class ModConfig
     public bool AllowGeorgeAndEvelyn { get; set; } = true;
 
     /// <summary>
+    /// Gets or sets a value indicating whether harmony debugging patches are enabled.
+    /// MUST BE SET IN CONFIG.JSON, NOT IN GMCM.
+    /// </summary>
+    public bool DebugMode { get; set; } = true;
+
+    /// <summary>
     /// Returns the enum value DayOfWeek as a short string.
     /// </summary>
     /// <returns>Short day of week string.</returns>

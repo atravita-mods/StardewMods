@@ -95,7 +95,7 @@ internal class PhoneHandler
                         }
                         else if (Utility.IsHospitalVisitDay(pam.Name))
                         {
-                            Game1.drawDialogue(pam, Game1.content.LoadString("Strings\\Characters:Pam_Voicemail_Doctor"));
+                            Game1.drawDialogue(pam, Game1.content.LoadString("Strings\\Characters:Pam_Voicemail_Doctor"), Game1.temporaryContent.Load<Texture2D>("Portraits\\AnsweringMachine"));
                         }
                         else if (pam.hasMasterScheduleEntry(pam.dayScheduleName.Value)
                             && ScheduleUtilities.TryFindGOTOschedule(pam, SDate.Now(), pam.getMasterScheduleEntry(pam.dayScheduleName.Value), out string rawstring)

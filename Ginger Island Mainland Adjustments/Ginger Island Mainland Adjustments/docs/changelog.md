@@ -19,6 +19,8 @@
 <!-- IslandNorth and AntiSocial lines for George/Evelyn/Willy-->
 <!-- ATTENTION: REMOVE THE #if DEBUG letting children go to the resort! -->
 <!-- Get spouses into Island Farmhouse -->
+    <!--Patch GameLocation.characterTrampleTile to prevent it from happening on IslandWest-->
+<!-- GI Remainder schedules for Penny, George, Evelyn, Willy -->
 
 ##### Known Issues
 

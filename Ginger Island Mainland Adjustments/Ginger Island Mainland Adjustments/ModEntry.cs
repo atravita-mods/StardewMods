@@ -29,10 +29,10 @@ public class ModEntry : Mod
         // Register events
         helper.Events.GameLoop.GameLaunched += this.OnGameLaunched;
         helper.Events.GameLoop.TimeChanged += this.OnTimeChanged;
-        helper.Events.GameLoop.DayEnding += this.DayEnding;
+        helper.Events.GameLoop.DayEnding += this.OnDayEnding;
         helper.Events.GameLoop.ReturnedToTitle += this.ReturnedToTitle;
 
-        helper.Events.Input.ButtonPressed += this.Input_ButtonPressed;
+        helper.Events.Input.ButtonPressed += this.OnButtonPressed;
 
         helper.Events.Player.Warped += this.OnPlayerWarped;
 
@@ -72,7 +72,7 @@ public class ModEntry : Mod
     /// </summary>
     /// <param name="sender">Unknown, never used.</param>
     /// <param name="e">Possible parameters.</param>
-    private void DayEnding(object? sender, DayEndingEventArgs e)
+    private void OnDayEnding(object? sender, DayEndingEventArgs e)
     {
         Game1.netWorldState.Value.IslandVisitors.Clear();
         this.ClearCaches();
@@ -90,6 +90,11 @@ public class ModEntry : Mod
         harmony.Patch( // there are multiple GameLocation.createQuestionDialogue. So I have to specify.
             original: typeof(GameLocation).GetMethod(nameof(GameLocation.createQuestionDialogue), new Type[] { typeof(string), typeof(Response[]), typeof(string) }),
             prefix: new HarmonyMethod(typeof(PhoneHandler), nameof(PhoneHandler.PrefixQuestionDialogue)));
+
+        if (Globals.Config.DebugMode)
+        {
+            ScheduleDebugPatches.ApplyPatches(harmony);
+        }
 
         foreach (MethodBase? method in harmony.GetPatchedMethods())
         {
@@ -146,7 +151,7 @@ public class ModEntry : Mod
         ShopHandler.AddBoxToShop(e);
     }
 
-    private void Input_ButtonPressed(object? sender, ButtonPressedEventArgs e)
+    private void OnButtonPressed(object? sender, ButtonPressedEventArgs e)
     {
         if (!Context.IsWorldReady)
         {

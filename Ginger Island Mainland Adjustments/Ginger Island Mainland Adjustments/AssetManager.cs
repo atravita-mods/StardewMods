@@ -156,7 +156,7 @@ public class AssetManager : IAssetLoader, IAssetEditor
             }
             foreach ((string key, string value) in editor.Data)
             {
-                if (key.StartsWith("503180"))
+                if (key.StartsWith("503180/"))
                 {
                     int lastslash = value.LastIndexOf('/');
                     if (lastslash > 0)
@@ -188,7 +188,7 @@ public class AssetManager : IAssetLoader, IAssetEditor
             }
             if (Game1.getAllFarmers().Any((Farmer farmer) => farmer.eventsSeen.Contains(99210002)) && defaultgroups.ContainsKey("barfolk"))
             {
-                defaultgroups["barfolk"] += "Pam"; // A little Pam Tries tie-in?
+                defaultgroups["barfolk"] += ", Pam"; // A little Pam Tries tie-in?
             }
             return (T)(object)defaultgroups;
         }

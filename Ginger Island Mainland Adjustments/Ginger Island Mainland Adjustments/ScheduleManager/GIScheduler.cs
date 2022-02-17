@@ -154,6 +154,7 @@ internal static class GIScheduler
             ConsoleCommands.IslandSchedules[visitor.Name] = schedules[visitor];
         }
 
+        IslandSouthPatches.ClearCache();
         GIScheduler.ClearCache();
     }
 
@@ -204,7 +205,7 @@ internal static class GIScheduler
             foreach (string key in IslandGroups.Keys)
             {
                 // Filter out groups where one member can't make it or are too big
-                if (IslandGroups[key].All((NPC npc) => valid_visitors.Contains(npc)) && IslandGroups[key].Count <= capacity)
+                if (IslandGroups[key].Count <= capacity && IslandGroups[key].All((NPC npc) => valid_visitors.Contains(npc)))
                 {
                     groupkeys.Add(key);
                 }

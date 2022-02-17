@@ -111,7 +111,7 @@
                 "Resort_AdventureReturn": "@! I had a great day today, did you? I'll see you at home!$l#$b#Don't stay out too late!",
                 //Resort_Antisocial temporarily removed until I can figure out what about IslandSoutheast makes NPCs vanish... :(
                 "Resort_Antisocial": "Oh, @, you've found me here. How are you today? The Resort is just a little too busy for me right now.",
-                "Resort_Pier": "This water is such a pretty shade of blue. @, would you be interested in going snorkeling one day?"
+                "Resort_Pier": "This water is such a pretty shade of blue. Say....@, would you be interested in going snorkeling one day?"
             },
             "When": {
                 "Relationship:Leah": "Married",

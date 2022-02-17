@@ -23,7 +23,6 @@ internal static class Utils
         {
             for (int ydiff = -radius; ydiff <= radius; ydiff++)
             {
-                Globals.ModMonitor.Log($"{x + xdiff} {y + ydiff}");
                 yield return new Point(x + xdiff, y + ydiff);
             }
         }

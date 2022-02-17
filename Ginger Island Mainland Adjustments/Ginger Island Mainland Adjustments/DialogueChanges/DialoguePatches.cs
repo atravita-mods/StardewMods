@@ -29,15 +29,11 @@ internal class DialoguePatches
     { // __0 = heartlevel, as int. __1 = whether or not to have a season prefix?
         try
         {
-            if (__result)
+            if (__result || !Game1.IsVisitingIslandToday(__instance.Name))
             { // game code has returned a value, therefore skip me.
                 return;
             }
-            if (!Game1.IsVisitingIslandToday(__instance.Name))
-            { // am not headed to island today.
-                return;
-            }
-            if (__instance.currentLocation is (IslandLocation or FarmHouse))
+            if (__instance.currentLocation is IslandLocation or FarmHouse)
             { // Currently on island or is spouse in Farmhouse, handle IslandNorth/IslandSoutheast
                 if (__instance.currentLocation is IslandEast && __instance.Dialogue.ContainsKey(ANTISOCIAL))
                 {
@@ -62,7 +58,7 @@ internal class DialoguePatches
                 baseKey = preface + "Resort_Left";
                 if (!__instance.currentLocation.IsOutdoors && __instance.currentLocation is not FishShop)
                 {
-                    baseKey += __instance.currentLocation.Name; // use specific INDOOR keys.
+                    baseKey = $"{baseKey}_{__instance.currentLocation.Name}"; // use specific INDOOR keys.
                 }
             }
             else
@@ -114,7 +110,9 @@ internal class DialoguePatches
             }
             __instance.currentMarriageDialogue.Clear();
             __instance.setNewDialogue("MarriageDialogue", "GIReturn_", -1, add: false, clearOnMovement: true);
+#if DEBUG
             Globals.ModMonitor.Log($"Setting GIReturn_{__instance.Name}.", LogLevel.Debug);
+#endif
         }
         catch (Exception ex)
         {

@@ -1,6 +1,7 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 using GingerIslandMainlandAdjustments.Utils;
 using HarmonyLib;
+using Microsoft.Xna.Framework.Graphics;
 using StardewValley.Locations;
 
 namespace GingerIslandMainlandAdjustments.ScheduleManager;
@@ -144,5 +145,52 @@ internal static class IslandSouthPatches
             Globals.ModMonitor.Log($"Error in postfix for CanVisitIslandToday for {npc.Name}: \n\n{ex}", LogLevel.Warn);
         }
         return;
+    }
+
+    /// <summary>
+    /// Prefixes HasIslandAttire to allow the player choice in whether the NPCs should wear their island attire.
+    /// </summary>
+    /// <param name="character">NPC in question.</param>
+    /// <param name="__result">Result returned to original function.</param>
+    /// <returns>True to continue to the vanilla function, false otherwise.</returns>
+    /// <exception cref="UnexpectedEnumValueException{WearIslandClothing}">Unexpected enum value.</exception>
+    [HarmonyPrefix]
+    [HarmonyPatch(nameof(IslandSouth.HasIslandAttire))]
+    [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Convention used by Harmony")]
+    public static bool PrefixHasIslandAttire(NPC character, ref bool __result)
+    {
+        try
+        {
+            switch (Globals.Config.WearIslandClothing)
+            {
+                case WearIslandClothing.Default:
+                    return true;
+                case WearIslandClothing.All:
+                    if (character.Name.Equals("Lewis", StringComparison.OrdinalIgnoreCase))
+                    {
+                        try
+                        {
+                            Game1.temporaryContent.Load<Texture2D>($"Characters\\{NPC.getTextureNameForCharacter(character.Name)}_Beach");
+                            __result = true;
+                            return false;
+                        }
+                        catch (Exception)
+                        {
+                        }
+                        return true;
+                    }
+                    return true;
+                case WearIslandClothing.None:
+                    __result = false;
+                    return false;
+                default:
+                    throw new UnexpectedEnumValueException<WearIslandClothing>(Globals.Config.WearIslandClothing);
+            }
+        }
+        catch (Exception ex)
+        {
+            Globals.ModMonitor.Log($"Error in prefix for HasIslandAttire for {character.Name}: \n\n{ex}", LogLevel.Warn);
+        }
+        return true;
     }
 }

@@ -48,6 +48,27 @@ public enum DayOfWeek
     Sunday,
 }
 
+/// <summary>
+/// Whether or not NPCs should wear their beach outfits.
+/// </summary>
+public enum WearIslandClothing
+{
+    /// <summary>
+    /// Follow game defaults for who wears island clothing.
+    /// </summary>
+    Default,
+
+    /// <summary>
+    /// Everyone, if they have the island outfit, should wear it.
+    /// </summary>
+    All,
+
+    /// <summary>
+    /// No one should wear island clothing.
+    /// </summary>
+    None,
+}
+
 #pragma warning disable SA1201 // Elements should appear in the correct order. Fields appear close to their properties for this class.
 /// <summary>
 /// Configuration class for mod.
@@ -70,11 +91,24 @@ public class ModConfig
         => Enum.TryParse(rawstring, true, out DayOfWeek dayOfWeek) ? dayOfWeek : DEFAULT_GUS_VISIT_DAY;
 
     /// <summary>
+    /// Attempts to parse a raw string into a WearIslandClothing. Returns default if not parsable.
+    /// </summary>
+    /// <param name="rawstring">Raw string to parse.</param>
+    /// <returns>WearIslandClothing as enum.</returns>
+    public static WearIslandClothing TryParseWearIslandClothingOrGetDefault(string rawstring)
+        => Enum.TryParse(rawstring, true, out WearIslandClothing islandclothing) ? islandclothing : WearIslandClothing.Default;
+
+    /// <summary>
     /// Gets or sets a value indicating whether EnforceGITiming is enabled.
     /// When enabled, rejects time points too close together.
     /// And warns for them.
     /// </summary>
     public bool EnforceGITiming { get; set; } = false;
+
+    /// <summary>
+    /// Gets or sets a value indicating whether or not Islanders should wear their beach outfits.
+    /// </summary>
+    public WearIslandClothing WearIslandClothing { get; set; } = WearIslandClothing.Default;
 
     /// <summary>
     /// Gets or sets a value indicating whether whether to use the game's GI scheduler
@@ -162,7 +196,7 @@ public class ModConfig
     /// Gets or sets a value indicating whether harmony debugging patches are enabled.
     /// MUST BE SET IN CONFIG.JSON, NOT IN GMCM.
     /// </summary>
-    public bool DebugMode { get; set; } = false;
+    public bool DebugMode { get; set; } = true;
 
     /// <summary>
     /// Returns the enum value DayOfWeek as a short string.

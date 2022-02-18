@@ -19,6 +19,8 @@ internal class PhoneHandler
     /// <param name="question">Question (displayed to player).</param>
     /// <param name="answerChoices">Responses.</param>
     /// <param name="dialogKey">Question key, used to keep track of which question set.</param>
+    [HarmonyPrefix]
+    [HarmonyPatch(nameof(GameLocation.createQuestionDialogue), new Type[] { typeof(string), typeof(Response[]), typeof(string) })]
     [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Harmony convention")]
     public static void PrefixQuestionDialogue(GameLocation __instance, string question, ref Response[] answerChoices, string dialogKey)
     {

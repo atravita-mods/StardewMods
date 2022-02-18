@@ -50,6 +50,15 @@ internal static class GenerateGMCM
             setValue: value => Globals.Config.EnforceGITiming = value,
             tooltip: I18n.Config_EnforceGITiming_Description);
 
+        configMenu.AddTextOption(
+            mod: manifest,
+            name: I18n.Config_WearIslandClothing_Title,
+            getValue: () => Globals.Config.WearIslandClothing.ToString(),
+            setValue: value => Globals.Config.WearIslandClothing = ModConfig.TryParseWearIslandClothingOrGetDefault(value),
+            tooltip: I18n.Config_WearIslandClothing_Description,
+            allowedValues: Enum.GetNames(typeof(WearIslandClothing)),
+            formatAllowedValue: value => I18n.GetByKey(value));
+
         configMenu.AddBoolOption(
             mod: manifest,
             name: I18n.Config_Scheduler_Title,

@@ -22,7 +22,7 @@ internal static class ShopHandler
     /// <param name="e">Button pressed event arguments.</param>
     public static void HandleSandyShop(ButtonPressedEventArgs e)
     {
-        if (HandlingShop.Value || !e.Button.IsActionButton() || !Game1.currentLocation.Name.Equals("SandyHouse", StringComparison.OrdinalIgnoreCase))
+        if (HandlingShop.Value || !e.Button.IsActionButton() || !(Game1.currentLocation?.Name?.Equals("SandyHouse", StringComparison.OrdinalIgnoreCase) == true))
         {
             return;
         }

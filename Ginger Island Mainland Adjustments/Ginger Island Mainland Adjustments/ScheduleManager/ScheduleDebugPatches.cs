@@ -11,8 +11,7 @@ namespace GingerIslandMainlandAdjustments.ScheduleManager;
 /// </summary>
 internal class ScheduleDebugPatches
 {
-
-    private static List<NPC> failedNPCs = new();
+    private static readonly List<NPC> FailedNPCs = new();
 
     /// <summary>
     /// Applies the patches for this class.
@@ -30,12 +29,12 @@ internal class ScheduleDebugPatches
     /// </summary>
     public static void FixNPCs()
     {
-        foreach (NPC npc in failedNPCs)
+        foreach (NPC npc in FailedNPCs)
         {
             npc.Schedule = null;
             npc.followSchedule = false;
         }
-        failedNPCs.Clear();
+        FailedNPCs.Clear();
     }
 
     /// <summary>
@@ -74,7 +73,7 @@ internal class ScheduleDebugPatches
         {
             Globals.ModMonitor.Log($"Encountered error parsing schedule for {__instance.Name}, {startingLocation} {startingX} {startingY} to {endingLocation} {endingX} {endingY}.\n\n{__exception}", LogLevel.Error);
             __result = new SchedulePathDescription(new Stack<Point>(), 2, null, null);
-            failedNPCs.Add(__instance);
+            FailedNPCs.Add(__instance);
         }
         return null;
     }

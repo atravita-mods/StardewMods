@@ -72,6 +72,8 @@
   "mod-description": "Alters Ginger Island schedules so villagers don't proceed direct to bed. Alternatively, handles GI schedules.",
   "config.enforceGITiming.title": "Enforce GI schedule timing",
   "config.enforceGITiming.description": "If schedule points are too closely spaced, skip over them (with warning).",
+  "config.wear_island_clothing.title": "Wear Island Outfits",
+  "config.wear_island_clothing.description":  "Select whether or not island outfits should be worn",
   "config.scheduler.title": "Use Mod's Scheduler",
   "config.scheduler.description": "Use this mod's Ginger Island Scheduler (instead of vanilla game's).'",
   "config.scheduler.otheroptions": "The remaining options will only take affect if this mod's scheduler is used.",
@@ -101,6 +103,10 @@
   "Friday": "Friday",
   "Saturday": "Saturday",
   "Sunday": "Sunday",
+
+  // Used for translating the choices for WearIslandClothing.
+  "Default": "Default",
+  "All": "All",
 
   //MidDayScheduleEditor messages
   "middayScheduleEditor.npc-found-for-adjustment": "NPC {{name}} with Island Schedule, will set up for schedule alternation",

@@ -87,10 +87,6 @@ public class ModEntry : Mod
     {
         // handle patches from annotations.
         harmony.PatchAll();
-        harmony.Patch( // there are multiple GameLocation.createQuestionDialogue. So I have to specify.
-            original: typeof(GameLocation).GetMethod(nameof(GameLocation.createQuestionDialogue), new Type[] { typeof(string), typeof(Response[]), typeof(string) }),
-            prefix: new HarmonyMethod(typeof(PhoneHandler), nameof(PhoneHandler.PrefixQuestionDialogue)));
-
         if (Globals.Config.DebugMode)
         {
             ScheduleDebugPatches.ApplyPatches(harmony);

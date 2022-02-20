@@ -11,6 +11,9 @@ namespace GingerIslandMainlandAdjustments.ScheduleManager;
 [HarmonyPatch(typeof(NPC))]
 internal class NPCPatches
 {
+    /// <summary>
+    /// Keep a list of fishers to reset their sprites at day end.
+    /// </summary>
     private static readonly List<NPC> Fishers = new();
 
     /// <summary>

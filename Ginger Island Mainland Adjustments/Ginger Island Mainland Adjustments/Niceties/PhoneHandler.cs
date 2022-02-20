@@ -22,7 +22,7 @@ internal class PhoneHandler
     [HarmonyPrefix]
     [HarmonyPatch(nameof(GameLocation.createQuestionDialogue), new Type[] { typeof(string), typeof(Response[]), typeof(string) })]
     [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Harmony convention")]
-    public static void PrefixQuestionDialogue(GameLocation __instance, string question, ref Response[] answerChoices, string dialogKey)
+    public static void PrefixQuestionDialogue(string question, ref Response[] answerChoices, string dialogKey)
     {
         if (dialogKey.Equals("telephone", StringComparison.OrdinalIgnoreCase)
             && Game1.getAllFarmers().Any((Farmer f) => f.eventsSeen.Contains(503180)) // replace with something better than just her nine heart.

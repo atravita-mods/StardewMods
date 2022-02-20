@@ -85,11 +85,18 @@ public class ModEntry : Mod
     /// <param name="harmony">My harmony instance.</param>
     private void ApplyPatches(Harmony harmony)
     {
-        // handle patches from annotations.
-        harmony.PatchAll();
-        if (Globals.Config.DebugMode)
+        try
         {
-            ScheduleDebugPatches.ApplyPatches(harmony);
+            // handle patches from annotations.
+            harmony.PatchAll();
+            if (Globals.Config.DebugMode)
+            {
+                ScheduleDebugPatches.ApplyPatches(harmony);
+            }
+        }
+        catch (Exception ex)
+        {
+            Globals.ModMonitor.Log($"Mod crashed while applying harmony patches. Please upload this log to smapi.io/log and take the log to the mod's Nexus page.\n\n{ex}", LogLevel.Error);
         }
 
         foreach (MethodBase? method in harmony.GetPatchedMethods())

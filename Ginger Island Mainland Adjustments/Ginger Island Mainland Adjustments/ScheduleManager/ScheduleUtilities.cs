@@ -462,32 +462,7 @@ internal static class ScheduleUtilities
     /// <param name="rawData">Raw schedule string.</param>
     public static void ParseMasterScheduleAdjustedForChild2NPC(NPC npc, string rawData)
     {
-        if (npc.DefaultMap.Equals("FarmHouse", StringComparison.OrdinalIgnoreCase) && !npc.isMarried())
-        {
-            // lie to parse master schedule
-            string prevmap = npc.DefaultMap;
-            Vector2 prevposition = npc.DefaultPosition;
-
-            if (rawData.EndsWith("bed"))
-            {
-                rawData = rawData[..^3] + "BusStop -1 23 3";
-            }
-
-            npc.DefaultMap = "BusStop";
-            npc.DefaultPosition = new Vector2(0, 23) * 64;
-            try
-            {
-                npc.Schedule = npc.parseMasterSchedule(rawData);
-            }
-            finally
-            {
-                npc.DefaultMap = prevmap;
-                npc.DefaultPosition = prevposition;
-            }
-
-            ScheduleUtilities.Schedules[npc.Name] = npc.Schedule;
-        }
-        else if (Globals.IsChildToNPC?.Invoke(npc) == true)
+        if (Globals.IsChildToNPC?.Invoke(npc) == true)
         {
             // For a Child2NPC, we must handle their scheduling ourselves.
             if (TryFindGOTOschedule(npc, SDate.Now(), rawData, out string scheduleString))
@@ -504,6 +479,35 @@ internal static class ScheduleUtilities
                 Globals.ModMonitor.Log("TryFindGOTOschedule failed for Child2NPC, setting schedule to null", LogLevel.Warn);
                 npc.Schedule = null;
             }
+        }
+        else if (npc.DefaultMap.Equals("FarmHouse", StringComparison.OrdinalIgnoreCase) && !npc.isMarried())
+        {
+            // lie to parse master schedule
+            string prevmap = npc.DefaultMap;
+            Vector2 prevposition = npc.DefaultPosition;
+
+            if (rawData.EndsWith("bed"))
+            {
+                rawData = rawData[..^3] + "BusStop -1 23 3";
+            }
+
+            npc.DefaultMap = "BusStop";
+            npc.DefaultPosition = new Vector2(0, 23) * 64;
+            try
+            {
+                npc.Schedule = npc.parseMasterSchedule(rawData);
+            }
+            catch (Exception ex)
+            {
+                Globals.ModMonitor.Log($"Ran into issues parsing schedule {rawData} for {npc.Name}.\n\n{ex}", LogLevel.Error);
+            }
+            finally
+            {
+                npc.DefaultMap = prevmap;
+                npc.DefaultPosition = prevposition;
+            }
+
+            ScheduleUtilities.Schedules[npc.Name] = npc.Schedule;
         }
         else
         {

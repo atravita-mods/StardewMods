@@ -10,7 +10,7 @@ internal static class DialogueUtilities
     /// <summary>
     /// Stores whether or not a particular dialogue string has been said today.
     /// </summary>
-    private static readonly HashSet<string> DialogueLog = new();
+    private static readonly List<string> DialogueLog = new();
 
     /// <summary>
     /// Clears the dialogue log.

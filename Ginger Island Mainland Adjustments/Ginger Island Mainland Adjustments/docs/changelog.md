@@ -17,10 +17,10 @@
 <!-- Telephone: Lock behind a 10 heart event or something.-->
 <!-- Figure out why Emily dances *in* the changing room? -->
 <!-- IslandNorth and AntiSocial lines for George/Evelyn/Willy-->
-<!-- ATTENTION: REMOVE THE #if DEBUG letting children go to the resort! -->
 <!-- Get spouses into Island Farmhouse -->
     <!--Patch GameLocation.characterTrampleTile to prevent it from happening on IslandWest-->
 <!-- GI Remainder schedules for Penny, George, Evelyn, Willy -->
+<!-- Get Willy to change in his bedroom? -->
 
 ##### Known Issues
 
@@ -31,6 +31,7 @@
  
 * In theory: integration with Child2NPC.
 * You can now call Pam, who will tell you if she's headed to Ginger Island.
+* You can now toggle beach outfits.
 
 ### Version 1.1.2
 

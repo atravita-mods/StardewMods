@@ -58,7 +58,7 @@ internal static class Globals
         // <time> [location] <tileX> <tileY> [facingDirection] [animation] \"[dialogue]\"
         pattern: @"(?<arrival>a)?(?<time>[0-9]{1,4})(?<location> \S+)*?(?<x> [0-9]{1,4})(?<y> [0-9]{1,4})(?<direction> [0-9])?(?<animation> [^\s\""]+)?(?<dialogue> \"".*\"")?",
         options: RegexOptions.CultureInvariant | RegexOptions.Compiled,
-        new TimeSpan(1000000));
+        matchTimeout: TimeSpan.FromMilliseconds(250));
 
     /// <summary>
     /// Regex that handles the bed location special case.
@@ -67,8 +67,8 @@ internal static class Globals
     internal static readonly Regex BedRegex = new(
         // <time> bed
         pattern: @"(?<arrival>a)?(?<time>[0-9]{1,4}) bed",
-        options: RegexOptions.Compiled | RegexOptions.Compiled,
-        new TimeSpan(1000000));
+        options: RegexOptions.CultureInvariant | RegexOptions.Compiled,
+        matchTimeout: TimeSpan.FromMilliseconds(250));
 
     /// <summary>
     /// Initialize globals, including reading config file.
@@ -105,13 +105,7 @@ internal static class Globals
             ModMonitor.Log($"Child2NPC not installed - no need to adjust for that.", LogLevel.Trace);
             return false;
         }
-        Type? childToNPC = Type.GetType("ChildToNPC.ModEntry, ChildToNPC");
-        if (childToNPC is null)
-        {
-            return false;
-        }
-        MethodInfo? childToNPCMethod = childToNPC.GetMethod("IsChildNPC", new Type[] { typeof(Character) });
-        if (childToNPCMethod is not null)
+        if (Type.GetType("ChildToNPC.ModEntry, ChildToNPC")?.GetMethod("IsChildNPC", new Type[] { typeof(Character) }) is MethodInfo childToNPCMethod)
         {
             IsChildToNPC = (Func<NPC, bool>)Delegate.CreateDelegate(typeof(Func<NPC, bool>), childToNPCMethod);
             return true;

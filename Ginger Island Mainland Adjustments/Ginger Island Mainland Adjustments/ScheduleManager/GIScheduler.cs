@@ -1,4 +1,5 @@
-﻿using GingerIslandMainlandAdjustments.CustomConsoleCommands;
+﻿using System.Runtime;
+using GingerIslandMainlandAdjustments.CustomConsoleCommands;
 using GingerIslandMainlandAdjustments.ScheduleManager.DataModels;
 using GingerIslandMainlandAdjustments.Utils;
 using StardewModdingAPI.Utilities;
@@ -25,35 +26,28 @@ internal static class GIScheduler
     /// <remarks>Use the getter, which will automatically grab from fake asset.</remarks>
     private static Dictionary<string, HashSet<NPC>>? explorerGroups = null;
 
-    private static NPC? bartender;
-
-    private static NPC? musician;
-
-    private static string? currentGroup = null;
-
-    private static HashSet<NPC>? currentVisitingGroup = null;
 
     /// <summary>
     /// Gets the current group headed off to the island.
     /// </summary>
     /// <remarks>null means no current group.</remarks>
-    public static string? CurrentGroup => GIScheduler.currentGroup;
+    public static string? CurrentGroup { get; private set; }
 
     /// <summary>
     /// Gets the current visting group.
     /// </summary>
     /// <remarks>Used primarily for setting group-based dialogue...</remarks>
-    public static HashSet<NPC>? CurrentVisitingGroup => GIScheduler.currentVisitingGroup;
+    public static HashSet<NPC>? CurrentVisitingGroup { get; private set; }
 
     /// <summary>
     /// Gets the current bartender.
     /// </summary>
-    public static NPC? Bartender => bartender;
+    public static NPC? Bartender { get; private set; }
 
     /// <summary>
     /// Gets the current musician.
     /// </summary>
-    public static NPC? Musician => musician;
+    public static NPC? Musician {get; private set; }
 
     /// <summary>
     /// Gets island groups. Will automatically load if null.
@@ -99,8 +93,8 @@ internal static class GIScheduler
     /// </summary>
     public static void DayEndReset()
     {
-        currentGroup = null;
-        currentVisitingGroup = null;
+        CurrentGroup = null;
+        CurrentVisitingGroup = null;
     }
 
     /// <summary>
@@ -110,7 +104,7 @@ internal static class GIScheduler
     {
         Game1.netWorldState.Value.IslandVisitors.Clear();
         if (Game1.getLocationFromName("IslandSouth") is not IslandSouth island || !island.resortRestored.Value
-            || Game1.IsRainingHere(island) || !island.resortOpenToday.Value
+            || !island.resortOpenToday.Value || Game1.IsRainingHere(island)
             || Utility.isFestivalDay(Game1.Date.DayOfMonth, Game1.Date.Season)
             || (Game1.Date.DayOfMonth >= 15 && Game1.Date.DayOfMonth <= 17 && Game1.Date.Season.Equals("winter", StringComparison.OrdinalIgnoreCase)))
         {
@@ -118,7 +112,6 @@ internal static class GIScheduler
         }
 
         Random random = new((int)(Game1.uniqueIDForThisGame * 1.21f) + (int)(Game1.stats.DaysPlayed * 2.5f));
-        Dictionary<string, string> animationDescriptions = Globals.ContentHelper.Load<Dictionary<string, string>>("Data/animationDescriptions", ContentSource.GameContent);
 
         HashSet<NPC> explorers = GenerateExplorerGroup(random);
         if (explorers.Any())
@@ -136,9 +129,10 @@ internal static class GIScheduler
         }
 
         List<NPC> visitors = GenerateVistorList(random, Globals.Config.Capacity, explorers);
+        Dictionary<string, string> animationDescriptions = Globals.ContentHelper.Load<Dictionary<string, string>>("Data/animationDescriptions", ContentSource.GameContent);
 
-        GIScheduler.bartender = SetBartender(visitors);
-        GIScheduler.musician = SetMusician(random, visitors, animationDescriptions);
+        GIScheduler.Bartender = SetBartender(visitors);
+        GIScheduler.Musician = SetMusician(random, visitors, animationDescriptions);
 
         List<GingerIslandTimeSlot> activities = AssignIslandSchedules(random, visitors, animationDescriptions);
         Dictionary<NPC, string> schedules = RenderIslandSchedules(random, visitors, activities);
@@ -156,6 +150,11 @@ internal static class GIScheduler
 
         IslandSouthPatches.ClearCache();
         GIScheduler.ClearCache();
+
+        Globals.ModMonitor.Log($"Current memory usage {GC.GetTotalMemory(false):N0}", LogLevel.Alert);
+        GCSettings.LargeObjectHeapCompactionMode = GCLargeObjectHeapCompactionMode.CompactOnce;
+        GC.Collect();
+        Globals.ModMonitor.Log($"Post-collection memory usage {GC.GetTotalMemory(true):N0}", LogLevel.Alert);
     }
 
     /// <summary>
@@ -186,8 +185,8 @@ internal static class GIScheduler
     /// <remarks>For a deterministic island list, use a Random seeded with the uniqueID + number of days played.</remarks>
     private static List<NPC> GenerateVistorList(Random random, int capacity, HashSet<NPC> explorers)
     {
-        currentGroup = null;
-        currentVisitingGroup = null;
+        CurrentGroup = null;
+        CurrentVisitingGroup = null;
 
         List<NPC> visitors = new();
         HashSet<NPC> valid_visitors = new();
@@ -212,13 +211,13 @@ internal static class GIScheduler
             }
             if (groupkeys.Count > 0)
             {
-                currentGroup = Utility.GetRandom(groupkeys, random);
+                CurrentGroup = Utility.GetRandom(groupkeys, random);
 #if DEBUG
-                Globals.ModMonitor.Log($"Group {currentGroup} headed to Island.", LogLevel.Debug);
+                Globals.ModMonitor.Log($"Group {CurrentGroup} headed to Island.", LogLevel.Debug);
 #endif
-                HashSet<NPC> possiblegroup = IslandGroups[currentGroup];
+                HashSet<NPC> possiblegroup = IslandGroups[CurrentGroup];
                 visitors = possiblegroup.ToList(); // limit group size if there's too many people...
-                currentVisitingGroup = possiblegroup;
+                CurrentVisitingGroup = possiblegroup;
                 valid_visitors.ExceptWith(visitors);
             }
         }

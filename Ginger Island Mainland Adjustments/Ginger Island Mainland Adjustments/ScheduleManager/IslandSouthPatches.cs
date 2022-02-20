@@ -177,7 +177,6 @@ internal static class IslandSouthPatches
                         catch (Exception)
                         {
                         }
-                        return true;
                     }
                     return true;
                 case WearIslandClothing.None:

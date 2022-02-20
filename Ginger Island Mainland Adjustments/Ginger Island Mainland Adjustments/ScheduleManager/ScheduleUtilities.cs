@@ -310,7 +310,7 @@ internal static class ScheduleUtilities
                     }
                     else
                     {
-                        originaltime = schedulepoint[(spaceloc + 1)..];
+                        originaltime = schedulepoint[(spaceloc + 1) .. ];
                     }
                     if (int.TryParse(originaltime, out int path2bedtime))
                     {
@@ -543,11 +543,11 @@ internal static class ScheduleUtilities
         int slashloc = rawSchedule.LastIndexOf('/');
         if (slashloc > 0)
         {
-            string lastentry = rawSchedule[(slashloc + 1)..];
+            string lastentry = rawSchedule[(slashloc + 1) .. ];
             int spaceloc = lastentry.IndexOf(' ');
             if (spaceloc > 0)
             {
-                return lastentry[(spaceloc + 1)..];
+                return lastentry[(spaceloc + 1) .. ];
             }
         }
         return null;

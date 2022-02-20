@@ -36,10 +36,9 @@ public class ModEntry : Mod
 
         helper.Events.Player.Warped += this.OnPlayerWarped;
 
-        AssetManager manager = new();
-        // Add my asset manager
-        helper.Content.AssetLoaders.Add(manager);
-        helper.Content.AssetEditors.Add(manager);
+        // Add my asset loader and editor.
+        helper.Content.AssetLoaders.Add(AssetLoader.Instance);
+        helper.Content.AssetEditors.Add(AssetEditor.Instance);
     }
 
     /// <summary>

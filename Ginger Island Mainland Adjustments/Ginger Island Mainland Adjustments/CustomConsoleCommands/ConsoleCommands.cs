@@ -91,12 +91,18 @@ internal static class ConsoleCommands
         {
             if (npc.dayScheduleName?.Value is null)
             {
-                Globals.ModMonitor.Log($"\t{npc.Name} lacks a npc.dayScheduleName.Value", LogLevel.Error);
+                Globals.ModMonitor.Log($"\t{npc.Name} lacks a npc.dayScheduleName.Value yet claims to be following a schedule today.", LogLevel.Error);
             }
             else if (npc.hasMasterScheduleEntry(npc.dayScheduleName.Value))
             {
-                ScheduleUtilities.TryFindGOTOschedule(npc, SDate.Now(), npc.getMasterScheduleEntry(npc.dayScheduleName.Value), out string schedulestring);
-                Globals.ModMonitor.Log($"\t{npc.dayScheduleName.Value}\n\t\t{schedulestring}", level);
+                if (ScheduleUtilities.TryFindGOTOschedule(npc, SDate.Now(), npc.getMasterScheduleEntry(npc.dayScheduleName.Value), out string schedulestring))
+                {
+                    Globals.ModMonitor.Log($"\t{npc.dayScheduleName.Value}\n\t\t{schedulestring}", level);
+                }
+                else
+                {
+                    Globals.ModMonitor.Log($"Schedule lookup for {npc.Name} failed!", LogLevel.Error);
+                }
             }
             else
             {

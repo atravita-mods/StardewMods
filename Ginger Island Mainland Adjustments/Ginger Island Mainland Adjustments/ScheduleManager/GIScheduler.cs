@@ -26,7 +26,6 @@ internal static class GIScheduler
     /// <remarks>Use the getter, which will automatically grab from fake asset.</remarks>
     private static Dictionary<string, HashSet<NPC>>? explorerGroups = null;
 
-
     /// <summary>
     /// Gets the current group headed off to the island.
     /// </summary>
@@ -47,7 +46,7 @@ internal static class GIScheduler
     /// <summary>
     /// Gets the current musician.
     /// </summary>
-    public static NPC? Musician {get; private set; }
+    public static NPC? Musician { get; private set; }
 
     /// <summary>
     /// Gets island groups. Will automatically load if null.
@@ -58,7 +57,7 @@ internal static class GIScheduler
         {
             if (islandGroups is null)
             {
-                islandGroups = AssetManager.GetCharacterGroup(SpecialGroupType.Groups);
+                islandGroups = AssetLoader.GetCharacterGroup(SpecialGroupType.Groups);
             }
             return islandGroups;
         }
@@ -73,7 +72,7 @@ internal static class GIScheduler
         {
             if (explorerGroups is null)
             {
-                explorerGroups = AssetManager.GetCharacterGroup(SpecialGroupType.Explorers);
+                explorerGroups = AssetLoader.GetCharacterGroup(SpecialGroupType.Explorers);
             }
             return explorerGroups;
         }
@@ -291,7 +290,7 @@ internal static class GIScheduler
         NPC? bartender = visitors.Find((NPC npc) => npc.Name.Equals("Gus", StringComparison.OrdinalIgnoreCase));
         if (bartender is null)
         { // Gus not visiting, go find another bartender
-            HashSet<NPC> bartenders = AssetManager.GetSpecialCharacter(SpecialCharacterType.Bartender);
+            HashSet<NPC> bartenders = AssetLoader.GetSpecialCharacter(SpecialCharacterType.Bartender);
             bartender = visitors.Find((NPC npc) => bartenders.Contains(npc));
         }
         if (bartender is not null)
@@ -317,7 +316,7 @@ internal static class GIScheduler
         }
         if (musician is null || random.NextDouble() < 0.25)
         {
-            HashSet<NPC> musicians = AssetManager.GetSpecialCharacter(SpecialCharacterType.Musician);
+            HashSet<NPC> musicians = AssetLoader.GetSpecialCharacter(SpecialCharacterType.Musician);
             musician = visitors.Find((NPC npc) => musicians.Contains(npc) && animationDescriptions.ContainsKey($"{npc.Name.ToLowerInvariant()}_beach_towel")) ?? musician;
         }
         if (musician is not null && !musician.Name.Equals("Gus", StringComparison.OrdinalIgnoreCase))

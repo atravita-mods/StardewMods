@@ -5,14 +5,24 @@
 /// </summary>
 public class ModConfig
 {
-    private int capacity = 36;
+    private int minishippingcapacity = 36;
+    private int juminocapcity = 36;
 
     /// <summary>
     /// Gets or sets capacity of the mini shipping bin.
     /// </summary>
-    public int Capacity
+    public int MiniShippingCapacity
     {
-        get => this.capacity;
-        set => this.capacity = Math.Clamp(value, 9, 48);
+        get => this.minishippingcapacity;
+        set => this.minishippingcapacity = Math.Clamp(value, 9, 48);
+    }
+
+    /// <summary>
+    /// Gets or sets the capacity of the jumino chest.
+    /// </summary>
+    public int JuminoCapcaity
+    {
+        get => this.juminocapcity;
+        set => this.juminocapcity = Math.Clamp(value, 9, 48);
     }
 }

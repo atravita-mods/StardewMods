@@ -22,14 +22,22 @@ internal class ChestPatches
     {
         try
         {
-            if (__instance.specialChestType?.Value == Chest.SpecialChestTypes.MiniShippingBin)
+            switch (__instance.SpecialChestType)
             {
-                __result = ModEntry.Config.Capacity;
+                case Chest.SpecialChestTypes.MiniShippingBin:
+                    __result = ModEntry.Config.MiniShippingCapacity;
+                    break;
+                case Chest.SpecialChestTypes.JunimoChest:
+                    __result = ModEntry.Config.JuminoCapcaity;
+                    break;
+                default:
+                    // do nothing.
+                    break;
             }
         }
         catch (Exception ex)
         {
-            ModEntry.ModMonitor.Log($"Failed in overwriting mini shipping bin capacity\n\n{ex}", LogLevel.Error);
+            ModEntry.ModMonitor.Log($"Failed in overwriting {__instance.SpecialChestType} capacity\n\n{ex}", LogLevel.Error);
         }
     }
 }

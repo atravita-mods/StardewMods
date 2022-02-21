@@ -114,12 +114,23 @@ public class ModEntry : Mod
 
         configMenu.AddNumberOption(
             mod: this.ModManifest,
-            getValue: () => Config.Capacity,
-            setValue: value => Config.Capacity = value,
+            getValue: () => Config.MiniShippingCapacity,
+            setValue: value => Config.MiniShippingCapacity = value,
             name: I18n.Config_Capacity_Title,
             tooltip: I18n.Config_Capacity_Description,
             min: 9,
-            max: 48);
+            max: 48,
+            interval: 9);
+
+        configMenu.AddNumberOption(
+            mod: this.ModManifest,
+            getValue: () => Config.JuminoCapcaity,
+            setValue: value => Config.JuminoCapcaity = value,
+            name: I18n.Config_Junimo_Title,
+            tooltip: I18n.Config_Junimo_Description,
+            min: 9,
+            max: 48,
+            interval: 9);
     }
 
     /// <summary>

@@ -135,6 +135,14 @@
         }
     },
     {
+        "LogName": "Penny schedule",
+        "Action": "EditData",
+        "Target": "Characters/schedules/Penny",
+        "Entries": {
+            "GIRemainder": "1800 Trailer 12 6 0 penny_dishes/2100 Trailer 4 9 1 penny_sleep",
+        }
+    },
+    {
         "LogName": "Pierre schedule",
         "Action": "EditData",
         "Target": "Characters/schedules/Pierre",
@@ -176,5 +184,25 @@
         "Entries": {
             "GIRemainder": "1800 Saloon 21 17 2 shane_drink/2300 AnimalShop 27 4 1 shane_sleep"
         }
+    },
+    {
+        "LogName": "Willy schedule",
+        "Action": "EditData",
+        "Target": "Characters/schedules/Willy",
+        "Entries": {
+            "GIRemainder": "1800 Beach 25 36 2 dick_fish/2200 FishShop 5 4 2",
+            "GIRemainder_rain": "1800 Saloon 17 22 2 \"Strings\\schedules\\Willy:winter.000\"/2320 FishShop 5 4 2",
+            "GIRemainder_Fri": "1800 Saloon 17 22 2 \"Strings\\schedules\\Willy:Fri.000\"/2320 FishShop 5 4 2",
+            "GIRemainder_Sat": "1800 Saloon 17 22 2 \"Strings\\schedules\\Willy:Sat.000\"/2300 FishShop 5 4 2"
+        }
+    },
+    {
+        "LogName": "Willy schedule, winter",
+        "Action": "EditData",
+        "Target": "Characters/schedules/Willy",
+        "Entries": {
+            "GIRemainder": "1800 Saloon 17 22 2 \"Strings\\schedules\\Willy:winter.000\"/2320 FishShop 5 4 2"
+        },
+        "When": {"Season": "winter"}
     }
 ]}

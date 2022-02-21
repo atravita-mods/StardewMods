@@ -1,4 +1,6 @@
-﻿namespace GingerIslandMainlandAdjustments.Utils;
+﻿using AtraUtils = AtraShared.Utils.Utils;
+
+namespace GingerIslandMainlandAdjustments.Utils;
 
 /// <summary>
 /// Methods to handle the current set of Islanders.
@@ -19,6 +21,6 @@ internal static class Islanders
                 islanders.Add(name);
             }
         }
-        return Utils.ContextSort(islanders);
+        return AtraUtils.ContextSort(islanders);
     }
 }

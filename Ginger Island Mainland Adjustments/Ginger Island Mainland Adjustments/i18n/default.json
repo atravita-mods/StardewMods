@@ -33,7 +33,7 @@
 
   // Strings for Pam's mail
   "Pam.mail.title": "Pam's Thank You Note",
-  "Pam.mail.text":  "Heya @,^^Thanks for hearin' an old woman out. ",
+  "Pam.mail.text": "Heya @,^^Thanks for hearin' an old woman out. ",
 
   // Documentation for console commands.
 
@@ -128,5 +128,7 @@
   "REGEX_TIMEOUT_ERROR": "Regex for schedule entry {{schedulePoint}} timed out:\n\n{{ex}}",
   "TOO_TIGHT_TIMELINE": "{{time}} position in schedule {{scheduleKey}} for {{npc}} is too tight. Will be skipped.",
   "NO_REPLACEMENT_LOCATION": "Location replacement for {{location}} requested but not found for {{npc}}",
-  "ILL_FORMED_SCHEDULE_POINT": "Schedule point {{point}} seems malformed."
+  "ILL_FORMED_SCHEDULE_POINT": "Schedule point {{point}} seems malformed.",
+  "SCHEDULE_PARSE_FAILURE": "Failed in parsing schedulepoint {{schedulepoint}} for NPC {{npc}}",
+  "SCHEDULE_REGEX_FAILURE": "{{schedulepoint}} seems unparsable by regex, sending NPC {{npc}} home to sleep"
 }

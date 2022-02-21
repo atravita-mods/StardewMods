@@ -1,4 +1,6 @@
 ﻿using System.Diagnostics.CodeAnalysis;
+using AtraShared;
+using AtraShared.Utils.Extensions;
 using GingerIslandMainlandAdjustments.Utils;
 using StardewModdingAPI.Utilities;
 

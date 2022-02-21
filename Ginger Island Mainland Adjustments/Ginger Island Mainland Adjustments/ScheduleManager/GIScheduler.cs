@@ -1,7 +1,7 @@
 ﻿using System.Runtime;
+using AtraShared.Utils.Extensions;
 using GingerIslandMainlandAdjustments.CustomConsoleCommands;
 using GingerIslandMainlandAdjustments.ScheduleManager.DataModels;
-using GingerIslandMainlandAdjustments.Utils;
 using StardewModdingAPI.Utilities;
 using StardewValley.Locations;
 

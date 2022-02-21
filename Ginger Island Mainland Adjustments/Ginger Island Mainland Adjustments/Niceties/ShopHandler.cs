@@ -3,6 +3,7 @@ using StardewModdingAPI.Events;
 using StardewModdingAPI.Utilities;
 using StardewValley.Locations;
 using StardewValley.Menus;
+using AtraUtils = AtraShared.Utils.Utils;
 
 namespace GingerIslandMainlandAdjustments.Niceties;
 
@@ -33,7 +34,7 @@ internal static class ShopHandler
         }
         Vector2 cursorTile = Globals.Helper.Input.GetCursorPosition().GrabTile;
         // Checking nine tiles here - there's usually not much around Sandy's buy tile.
-        if (!Utils.Utils.YieldSurroundingTiles(cursorTile).Any((Point v) => sandyHouse.doesTileHaveProperty(v.X, v.Y, "Action", "Buildings")?.Contains("Buy") == true))
+        if (!AtraUtils.YieldSurroundingTiles(cursorTile).Any((Point v) => sandyHouse.doesTileHaveProperty(v.X, v.Y, "Action", "Buildings")?.Contains("Buy") == true))
         {
             return;
         }
@@ -94,7 +95,7 @@ internal static class ShopHandler
             || (e.NewLocation is FishShop fishShop && Game1.IsVisitingIslandToday("Willy") && fishShop.getCharacterFromName("Willy") is null))
         {
             Vector2 tile = e.NewLocation is FishShop ? new Vector2(5f, 5f) : new Vector2(2f, 6f); // default location of shop.
-            foreach (Vector2 v in Utils.Utils.YieldAllTiles(e.NewLocation))
+            foreach (Vector2 v in AtraUtils.YieldAllTiles(e.NewLocation))
             { // find the shop tile - a mod may have moved it.
                 if (e.NewLocation.doesTileHaveProperty((int)v.X, (int)v.Y, "Action", "Buildings")?.Contains("Buy") == true)
                 {

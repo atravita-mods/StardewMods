@@ -1,6 +1,5 @@
-﻿using System.Diagnostics.CodeAnalysis;
-using System.Reflection;
-using System.Text.RegularExpressions;
+﻿using System.Reflection;
+using AtraShared.Schedules;
 
 namespace GingerIslandMainlandAdjustments;
 
@@ -41,6 +40,11 @@ internal static class Globals
     /// Gets SMAPI's helper class.
     /// </summary>
     internal static IModHelper Helper { get; private set; }
+
+    /// <summary>
+    /// Gets the instance of the schedule utility functions.
+    /// </summary>
+    internal static ScheduleUtilityFunctions UtilityFunctions { get; private set; }
 #pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
 
     /// <summary>
@@ -48,27 +52,6 @@ internal static class Globals
     /// </summary>
     /// <remarks>Null if C2NPC is not installed or method not found.</remarks>
     internal static Func<NPC, bool>? IsChildToNPC { get; private set; }
-
-    /// <summary>
-    /// Regex for a schedulepoint format.
-    /// </summary>
-    [RegexPattern]
-    [SuppressMessage("StyleCop.CSharp.OrderingRules", "SA1201:Elements should appear in the correct order", Justification = "Reviewed")]
-    internal static readonly Regex ScheduleRegex = new(
-        // <time> [location] <tileX> <tileY> [facingDirection] [animation] \"[dialogue]\"
-        pattern: @"(?<arrival>a)?(?<time>[0-9]{1,4})(?<location> \S+)*?(?<x> [0-9]{1,4})(?<y> [0-9]{1,4})(?<direction> [0-9])?(?<animation> [^\s\""]+)?(?<dialogue> \"".*\"")?",
-        options: RegexOptions.CultureInvariant | RegexOptions.Compiled,
-        matchTimeout: TimeSpan.FromMilliseconds(250));
-
-    /// <summary>
-    /// Regex that handles the bed location special case.
-    /// </summary>
-    [RegexPattern]
-    internal static readonly Regex BedRegex = new(
-        // <time> bed
-        pattern: @"(?<arrival>a)?(?<time>[0-9]{1,4}) bed",
-        options: RegexOptions.CultureInvariant | RegexOptions.Compiled,
-        matchTimeout: TimeSpan.FromMilliseconds(250));
 
     /// <summary>
     /// Initialize globals, including reading config file.
@@ -92,6 +75,20 @@ internal static class Globals
             Globals.ModMonitor.Log(I18n.IllFormatedConfig(), LogLevel.Warn);
             Globals.Config = new();
         }
+
+        UtilityFunctions = new(
+            monitor: Globals.ModMonitor,
+            reflectionHelper: Globals.ReflectionHelper,
+            getStrictTiming: Globals.GetStrictTiming,
+            gOTOINFINITELOOP: I18n.GOTOINFINITELOOP,
+            gOTOSCHEDULENOTFOUND: I18n.GOTOSCHEDULENOTFOUND,
+            gOTOILLFORMEDFRIENDSHIP: I18n.GOTOILLFORMEDFRIENDSHIP,
+            gOTOSCHEDULEFRIENDSHIP: I18n.GOTOSCHEDULEFRIENDSHIP,
+            sCHEDULEPARSEFAILURE: I18n.SCHEDULEPARSEFAILURE,
+            sCHEDULEREGEXFAILURE: I18n.SCHEDULEREGEXFAILURE,
+            nOREPLACEMENTLOCATION: I18n.NOREPLACEMENTLOCATION,
+            tOOTIGHTTIMELINE: I18n.TOOTIGHTTIMELINE,
+            rEGEXTIMEOUTERROR: I18n.REGEXTIMEOUTERROR);
     }
 
     /// <summary>
@@ -113,4 +110,11 @@ internal static class Globals
         ModMonitor.Log("IsChildNPC method not found - integration with Child2NPC failed.", LogLevel.Warn);
         return false;
     }
+
+    /// <summary>
+    /// Gets whether or not strict timing is desired here.
+    /// </summary>
+    /// <returns>True for use strict timing, false otherwise.</returns>
+    internal static bool GetStrictTiming()
+        => Globals.Config.EnforceGITiming;
 }

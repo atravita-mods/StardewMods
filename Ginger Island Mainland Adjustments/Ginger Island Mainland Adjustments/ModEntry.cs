@@ -1,5 +1,6 @@
 ﻿using System.Reflection;
 using System.Text;
+using AtraBase.Utils.Extensions;
 using GingerIslandMainlandAdjustments.CustomConsoleCommands;
 using GingerIslandMainlandAdjustments.DialogueChanges;
 using GingerIslandMainlandAdjustments.Integrations;
@@ -12,6 +13,7 @@ using StardewModdingAPI.Events;
 namespace GingerIslandMainlandAdjustments;
 
 /// <inheritdoc />
+[UsedImplicitly]
 public class ModEntry : Mod
 {
     private bool haveFixedSchedulesToday = false;

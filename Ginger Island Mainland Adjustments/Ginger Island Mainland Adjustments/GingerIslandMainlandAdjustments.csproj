@@ -1,4 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
+  <Import Project="..\..\AtraBase\AtraBase.projitems" Label="Shared"/>
+  <Import Project="..\..\AtraShared\AtraShared.projitems" Label="Shared"/>
+  
   <PropertyGroup>
     <AssemblyName>GingerIslandMainlandAdjustments</AssemblyName>
     <RootNamespace>GingerIslandMainlandAdjustments</RootNamespace>

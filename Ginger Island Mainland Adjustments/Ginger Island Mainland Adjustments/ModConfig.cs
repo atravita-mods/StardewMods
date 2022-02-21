@@ -1,6 +1,4 @@
-﻿using System.Diagnostics.CodeAnalysis;
-
-namespace GingerIslandMainlandAdjustments;
+﻿namespace GingerIslandMainlandAdjustments;
 
 /// <summary>
 /// Enum for day of week, for the settings.

@@ -1,4 +1,5 @@
-﻿using GingerIslandMainlandAdjustments.Utils;
+﻿using AtraShared.Utils.Extensions;
+using GingerIslandMainlandAdjustments.Utils;
 
 namespace GingerIslandMainlandAdjustments.DialogueChanges;
 

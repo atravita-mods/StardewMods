@@ -7,6 +7,8 @@ namespace GingerIslandMainlandAdjustments;
 /// </summary>
 internal class AssetEditor : IAssetEditor
 {
+    private const string MAILKEY = "atravita_GingerIslandMainlandAdjustments_PamMail";
+
     // The following dialogue is edited from the code side so each NPC has at least the Resort dialogue.
     // A CP pack will override, since my asset managers are registered in Entry and CP registers in GameLaunched.
     private static readonly string GeorgeDialogueLocation = PathUtilities.NormalizeAssetName("Characters/Dialogue/George");
@@ -48,12 +50,14 @@ internal class AssetEditor : IAssetEditor
     public static AssetEditor Instance => Lazy.Value;
 
     /// <inheritdoc />
+    [UsedImplicitly]
     public bool CanEdit<T>(IAssetInfo asset)
     {
         return FilesToEdit.Any((string assetpath) => asset.AssetNameEquals(assetpath));
     }
 
     /// <inheritdoc />
+    [UsedImplicitly]
     public void Edit<T>(IAssetData asset)
     {
         IAssetDataForDictionary<string, string>? editor = asset.AsDictionary<string, string>();
@@ -98,8 +102,13 @@ internal class AssetEditor : IAssetEditor
                     {
                         editor.Data[key] = value.Insert(lastslash, "/addMailReceived atravita_GIMA_PamInsulted");
                     }
+                    break;
                 }
             }
+        }
+        else if (asset.AssetNameEquals(DataMail))
+        {
+            editor.Data[MAILKEY] = $"{I18n.Pam_Mail_Text()}[#]{I18n.Pam_Mail_Title()}";
         }
     }
 }

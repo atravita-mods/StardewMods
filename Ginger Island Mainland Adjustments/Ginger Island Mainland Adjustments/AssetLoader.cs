@@ -97,12 +97,14 @@ public sealed class AssetLoader : IAssetLoader
     public static AssetLoader Instance => Lazy.Value;
 
     /// <inheritdoc />
+    [UsedImplicitly]
     public bool CanLoad<T>(IAssetInfo asset)
     {
         return MyAssets.Any((string assetpath) => asset.AssetNameEquals(assetpath));
     }
 
     /// <inheritdoc />
+    [UsedImplicitly]
     public T Load<T>(IAssetInfo asset)
     {
         // default vanilla groupings

@@ -1,6 +1,6 @@
 ﻿using System.Diagnostics.CodeAnalysis;
+using AtraShared.Utils.Extensions;
 using GingerIslandMainlandAdjustments.ScheduleManager;
-using GingerIslandMainlandAdjustments.Utils;
 using HarmonyLib;
 using StardewValley.Locations;
 

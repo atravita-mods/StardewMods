@@ -19,15 +19,21 @@
   "Pam_Island_2": "Oh, @! How're ya? I'll be headed to the Resort today, so there's no bus service.",
   "Pam_Island_3": "Hey...@, guess what? I'll be on vacation today. Ain't drivin' that bus today, nosiree!$h",
   "Pam_Doctor": "Oh...hey, @? You've caught me at a bad time. Got a doc's appointment today, not looking forward to it.$s",
-  "Pam_Other":  "Oh, hi @! Whatcha calling about?#$b#Listen, I ain't gonna be drivin' the bus today, got other plans...#$b#No, they couldn't send a replacemnt, I'm sorry...",
+  "Pam_Other": "Oh, hi @! Whatcha calling about?#$b#Listen, I ain't gonna be drivin' the bus today, got other plans...#$b#No, they couldn't send a replacemnt, I'm sorry...",
   "Pam_Bus_1": "Heya @, Yeah yeah yeah, I'll be at work today. Just another long workday, nothin' special.",
   "Pam_Bus_2": "Oh @, how are ya? Me? Just gettin' ready to go to work! Gotta pay my bills, you know.",
   "Pam_Bus_3": "Hey....@....how ya doing? Just headed to work myself, yeah yeah yeah....just another long day to look forward to.$s",
   "Pam_Voicemail_Island": "*beep* Hey.....you've reached me, Pam! I'm gonna be on vacation today, so the bus won't be open! Sorry! *click*",
   "Pam_Voicemail_Doctor": "*beep* I won't be at work today. Got some personal business to deal with. Sorry about that. *click*",
-  "Pam_Voicemail_Other":  "*beep* Hey...you've reached me, Pam. Not driving the bus today, took a day off!*click*",
-  "Pam_Voicemail_Bus":  "*beep* Heya...you've reached me, Pam! I dunno why you're calling me, just find me by the bus stop if you wanna chat. *click*",
-  "Pam_Bus_Late":  "Aye, @, why ya callin' me this late? *slams phone*$u",
+  "Pam_Voicemail_Other": "*beep* Hey...you've reached me, Pam. Not driving the bus today, took a day off!*click*",
+  "Pam_Voicemail_Bus": "*beep* Heya...you've reached me, Pam! I dunno why you're calling me, just find me by the bus stop if you wanna chat. *click*",
+  "Pam_Bus_Late": "Aye, @, why ya callin' me this late? *slams phone*$u",
+
+  // Strings for Pam's event
+
+  // Strings for Pam's mail
+  "Pam.mail.title": "Pam's Thank You Note",
+  "Pam.mail.text":  "Heya @,^^Thanks for hearin' an old woman out. ",
 
   // Documentation for console commands.
 
@@ -73,7 +79,7 @@
   "config.enforceGITiming.title": "Enforce GI schedule timing",
   "config.enforceGITiming.description": "If schedule points are too closely spaced, skip over them (with warning).",
   "config.wear_island_clothing.title": "Wear Island Outfits",
-  "config.wear_island_clothing.description":  "Select whether or not island outfits should be worn",
+  "config.wear_island_clothing.description": "Select whether or not island outfits should be worn",
   "config.scheduler.title": "Use Mod's Scheduler",
   "config.scheduler.description": "Use this mod's Ginger Island Scheduler (instead of vanilla game's).'",
   "config.scheduler.otheroptions": "The remaining options will only take affect if this mod's scheduler is used.",
@@ -122,5 +128,5 @@
   "REGEX_TIMEOUT_ERROR": "Regex for schedule entry {{schedulePoint}} timed out:\n\n{{ex}}",
   "TOO_TIGHT_TIMELINE": "{{time}} position in schedule {{scheduleKey}} for {{npc}} is too tight. Will be skipped.",
   "NO_REPLACEMENT_LOCATION": "Location replacement for {{location}} requested but not found for {{npc}}",
-  "ILL_FORMED_SCHEDULE_POINT":  "Schedule point {{point}} seems malformed."
+  "ILL_FORMED_SCHEDULE_POINT": "Schedule point {{point}} seems malformed."
 }

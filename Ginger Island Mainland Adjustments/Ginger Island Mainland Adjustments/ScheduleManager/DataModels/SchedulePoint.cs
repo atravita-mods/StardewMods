@@ -1,4 +1,4 @@
-﻿using GingerIslandMainlandAdjustments.Utils;
+﻿using AtraShared.Utils.Extensions;
 using Microsoft.Xna.Framework;
 
 namespace GingerIslandMainlandAdjustments.ScheduleManager.DataModels;

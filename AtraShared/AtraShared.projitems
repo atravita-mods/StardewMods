@@ -9,7 +9,11 @@
     <Import_RootNamespace>AtraShared</Import_RootNamespace>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)CustomExceptions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Schedules\ScheduleUtilityFunctions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Utils\Extensions\LogExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Utils\Extensions\NPCExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Utils\Extensions\ScheduleExtensions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Utils\Utils.cs" />
   </ItemGroup>
 </Project>

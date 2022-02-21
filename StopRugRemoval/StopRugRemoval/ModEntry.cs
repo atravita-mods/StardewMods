@@ -28,6 +28,8 @@ public class ModEntry : Mod
     /// <inheritdoc/>
     public override void Entry(IModHelper helper)
     {
+        I18n.Init(helper.Translation);
+        ModMonitor = this.Monitor;
         try
         {
             Config = this.Helper.ReadConfig<ModConfig>();
@@ -37,9 +39,6 @@ public class ModEntry : Mod
             this.Monitor.Log(I18n.IllFormatedConfig(), LogLevel.Warn);
             Config = new();
         }
-
-        ModMonitor = this.Monitor;
-        I18n.Init(helper.Translation);
 
         this.ApplyPatches(new Harmony(this.ModManifest.UniqueID));
 
@@ -108,7 +107,7 @@ public class ModEntry : Mod
             return;
         }
 
-        var configMenu = this.Helper.ModRegistry.GetApi<IGenericModConfigMenuApi>("spacechase0.GenericModConfigMenu");
+        IGenericModConfigMenuApi? configMenu = this.Helper.ModRegistry.GetApi<IGenericModConfigMenuApi>("spacechase0.GenericModConfigMenu");
         if (configMenu is null)
         {
             return;

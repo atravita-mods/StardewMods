@@ -80,6 +80,10 @@ internal class ModEntry : Mod
             prefix: new HarmonyMethod(typeof(TagManager), nameof(TagManager.PrefixCheckTag)));
         ModMonitor.Log("Patching SpecialOrder::CheckTag for Special Orders Extended", LogLevel.Trace);
 
+        harmony.Patch(
+            original: AccessTools.Method(typeof(SpecialOrder), nameof(SpecialOrder.GetSpecialOrder)),
+            finalizer: new HarmonyMethod(typeof(Utilities), nameof(Utilities.FinalizeGetSpecialOrder)));
+
         try
         {
             harmony.Patch(

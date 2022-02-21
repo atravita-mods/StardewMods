@@ -26,27 +26,28 @@ internal class GameLocationPatches
     {
         try
         {
-            if (__instance.IsFarm && __3 is not null)
+            if (__3 is null || !__instance.IsFarm)
             {
-                if (ModEntry.Config.GainExp)
+                return;
+            }
+            if (ModEntry.Config.GainExp)
+            {
+                __3.gainExperience(Farmer.combatSkill, __0.ExperienceGained);
+                ModEntry.ModMonitor.Log($"Granting {__3.displayName} {__0.ExperienceGained} combat XP for monster kill on farm");
+            }
+            if (ModEntry.Config.QuestCompletion)
+            {
+                __3.checkForQuestComplete(null, 1, 1, null, __0.Name, 4);
+                ModEntry.ModMonitor.Log($"Granting {__3.displayName} one kill of {__0.Name} towards billboard.");
+            }
+            if (ModEntry.Config.SpecialOrderCompletion && Game1.player.team.specialOrders is not null)
+            {
+                foreach (SpecialOrder order in Game1.player.team.specialOrders)
                 {
-                    __3.gainExperience(Farmer.combatSkill, __0.ExperienceGained);
-                    ModEntry.ModMonitor.Log($"Granting {__3.displayName} {__0.ExperienceGained} combat XP for monster kill on farm");
-                }
-                if (ModEntry.Config.QuestCompletion)
-                {
-                    __3.checkForQuestComplete(null, 1, 1, null, __0.Name, 4);
-                    ModEntry.ModMonitor.Log($"Granting {__3.displayName} one kill of {__0.Name} towards billboard.");
-                }
-                if (ModEntry.Config.SpecialOrderCompletion && Game1.player.team.specialOrders is not null)
-                {
-                    foreach (SpecialOrder order in Game1.player.team.specialOrders)
+                    if (order.onMonsterSlain is not null)
                     {
-                        if (order.onMonsterSlain is not null)
-                        {
-                            order.onMonsterSlain(Game1.player, __0);
-                            ModEntry.ModMonitor.Log($"Granting {__3.displayName} one kill of {__0.Name} towards special order {order.questKey}");
-                        }
+                        order.onMonsterSlain(Game1.player, __0);
+                        ModEntry.ModMonitor.Log($"Granting {__3.displayName} one kill of {__0.Name} towards special order {order.questKey}");
                     }
                 }
             }

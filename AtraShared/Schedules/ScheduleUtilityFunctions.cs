@@ -10,14 +10,14 @@ namespace AtraShared.Schedules;
 /// <summary>
 /// Holds a warp location.
 /// </summary>
-public class WarpPoint
+public class QualLoc
 {
     /// <summary>
-    /// Initializes a new instance of the <see cref="WarpPoint"/> class.
+    /// Initializes a new instance of the <see cref="QualLoc"/> class.
     /// </summary>
     /// <param name="mapName">Map name as string.</param>
     /// <param name="location">Vector2 location to warp to.</param>
-    public WarpPoint(string mapName, Vector2 location)
+    public QualLoc(string mapName, Vector2 location)
     {
         this.MapName = mapName;
         this.Location = location;
@@ -220,6 +220,8 @@ internal class ScheduleUtilityFunctions
         int lasttime = prevtime;
 
         Dictionary<int, SchedulePathDescription> remainderSchedule = new();
+
+        // Grabbing the method here and turning it into a delegate because it's used in the loop.
         IReflectedMethod pathfinder = this.reflectionHelper.GetMethod(npc, "pathfindToNextScheduleLocation")
             ?? throw new MethodNotFoundException("NPC::pathfindToNextScheduleLocation");
 
@@ -227,7 +229,7 @@ internal class ScheduleUtilityFunctions
             (Func<string, int, int, string, int, int, int, string?, string?, SchedulePathDescription>)Delegate
             .CreateDelegate(typeof(Func<string, int, int, string, int, int, int, string?, string?, SchedulePathDescription>), pathfinder.MethodInfo);
 
-        WarpPoint? warpPoint = null;
+        QualLoc? warpPoint = null;
 
         foreach (string schedulepoint in schedule.Split('/'))
         {

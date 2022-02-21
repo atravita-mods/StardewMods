@@ -19,14 +19,13 @@
 <!-- IslandNorth and AntiSocial lines for George/Evelyn/Willy-->
 <!-- Get spouses into Island Farmhouse -->
     <!--Patch GameLocation.characterTrampleTile to prevent it from happening on IslandWest-->
-<!-- GI Remainder schedules for Penny, George, Evelyn -->
 <!-- Get Willy to change in his bedroom? -->
 <!-- Make sure the GI schedule keys are right.... -->
 
 ##### Known Issues
 
 1. NPCs may vanish if they go to `IslandSouthEast`. They reappear the next day. Therefore, that's been tempoarily removed until I figure out why they disappear from `IslandSouthEast`. `IslandNorth` is fine.
-2. If you pause time, NPCs will tend to get stuck at schedule points. Unfortunately for Ginger Island, this usually ends with NPCs trapped in the changing room. If you go to Ginger Island and see no one there, try unpausing time. Or just leave them trapped in the changing room....
+2. If you pause time, NPCs will tend to get stuck at schedule points. Unfortunately for Ginger Island, this usually ends with NPCs trapped in the changing room. If you go to Ginger Island and see no one there, try unpausing time. Or just leave them trapped in the changing room....(or I guess, disable changing)
 
 ### Version 1.1.3
  

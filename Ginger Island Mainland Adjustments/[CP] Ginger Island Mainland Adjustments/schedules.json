@@ -193,16 +193,8 @@
             "GIRemainder": "1800 Beach 25 36 2 dick_fish/2200 FishShop 5 4 2",
             "GIRemainder_rain": "1800 Saloon 17 22 2 \"Strings\\schedules\\Willy:winter.000\"/2320 FishShop 5 4 2",
             "GIRemainder_Fri": "1800 Saloon 17 22 2 \"Strings\\schedules\\Willy:Fri.000\"/2320 FishShop 5 4 2",
-            "GIRemainder_Sat": "1800 Saloon 17 22 2 \"Strings\\schedules\\Willy:Sat.000\"/2300 FishShop 5 4 2"
+            "GIRemainder_Sat": "1800 Saloon 17 22 2 \"Strings\\schedules\\Willy:Sat.000\"/2300 FishShop 5 4 2",
+            "GIRemainder_winter": "1800 Saloon 17 22 2 \"Strings\\schedules\\Willy:winter.000\"/2320 FishShop 5 4 2"
         }
-    },
-    {
-        "LogName": "Willy schedule, winter",
-        "Action": "EditData",
-        "Target": "Characters/schedules/Willy",
-        "Entries": {
-            "GIRemainder": "1800 Saloon 17 22 2 \"Strings\\schedules\\Willy:winter.000\"/2320 FishShop 5 4 2"
-        },
-        "When": {"Season": "winter"}
     }
 ]}

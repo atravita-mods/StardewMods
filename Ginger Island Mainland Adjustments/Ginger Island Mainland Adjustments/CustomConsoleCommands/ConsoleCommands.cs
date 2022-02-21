@@ -96,7 +96,7 @@ internal static class ConsoleCommands
             }
             else if (npc.hasMasterScheduleEntry(npc.dayScheduleName.Value))
             {
-                if (Globals.UtilityFunctions.TryFindGOTOschedule(npc, SDate.Now(), npc.getMasterScheduleEntry(npc.dayScheduleName.Value), out string schedulestring))
+                if (Globals.UtilitySchedulingFunctions.TryFindGOTOschedule(npc, SDate.Now(), npc.getMasterScheduleEntry(npc.dayScheduleName.Value), out string schedulestring))
                 {
                     Globals.ModMonitor.Log($"\t{npc.dayScheduleName.Value}\n\t\t{schedulestring}", level);
                 }

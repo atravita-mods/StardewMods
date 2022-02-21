@@ -1,4 +1,6 @@
-﻿namespace GingerIslandMainlandAdjustments.Integrations;
+﻿using AtraShared.Integrations;
+
+namespace GingerIslandMainlandAdjustments.Integrations;
 
 /// <summary>
 /// Class that generates the GMCM for this mod.

@@ -44,7 +44,7 @@ internal static class Globals
     /// <summary>
     /// Gets the instance of the schedule utility functions.
     /// </summary>
-    internal static ScheduleUtilityFunctions UtilityFunctions { get; private set; }
+    internal static ScheduleUtilityFunctions UtilitySchedulingFunctions { get; private set; }
 #pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
 
     /// <summary>
@@ -76,7 +76,7 @@ internal static class Globals
             Globals.Config = new();
         }
 
-        UtilityFunctions = new(
+        UtilitySchedulingFunctions = new(
             monitor: Globals.ModMonitor,
             reflectionHelper: Globals.ReflectionHelper,
             getStrictTiming: Globals.GetStrictTiming,

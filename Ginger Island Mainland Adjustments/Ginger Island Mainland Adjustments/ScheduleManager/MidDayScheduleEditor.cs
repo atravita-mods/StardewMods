@@ -141,6 +141,6 @@ internal static class MidDayScheduleEditor
         Point lastStop = npc.Schedule[GIEndTime].route.Peek();
         int lasttime = GIEndTime - 10;
 
-        return Globals.UtilityFunctions.ParseSchedule(schedule, npc, GIMap, lastStop, lasttime);
+        return Globals.UtilitySchedulingFunctions.ParseSchedule(schedule, npc, GIMap, lastStop, lasttime);
     }
 }

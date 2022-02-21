@@ -19,7 +19,8 @@ Next, keys are checked in the following order
 7. `<base>_<short day of week><hearts>` (ie `GIRemainder_Fri6`)
 8. `<base>_<short day of week>` (ie `GIRemainder_Fri`)
 9. `<base><hearts>` (ie `GIRemainder6`)
-10. `<base>` (`GIRemainder`)
+10. `<base>_<season>` (ie `GIRemainder_winter`)
+11. `<base>` (`GIRemainder`)
 
 `<hearts>` is any valid integer - it'll handle even values above 14.
 

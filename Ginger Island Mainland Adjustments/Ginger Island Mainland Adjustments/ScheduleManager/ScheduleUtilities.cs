@@ -63,7 +63,7 @@ internal static class ScheduleUtilities
         }
 
         // GIRemainder_Day
-        checkKey = $"{scheduleKey}_{Game1.dayOfMonth}";
+        checkKey = $"{scheduleKey}_{date.Day}";
         if (npc.hasMasterScheduleEntry(checkKey)
             && Globals.UtilityFunctions.TryFindGOTOschedule(npc, date, npc.getMasterScheduleEntry(checkKey), out scheduleEntry)
             && scheduleEntry.StartsWith(POST_GI_START_TIME))
@@ -83,10 +83,31 @@ internal static class ScheduleUtilities
             }
         }
 
-        // GIRemainderHearts
+        // GIRemainder_season_DayOfWeekHearts
         for (int heartLevel = Math.Max((hearts / 2) * 2, 0); heartLevel > 0; heartLevel -= 2)
         {
-            checkKey = $"{scheduleKey}_{date.Day}_{heartLevel}";
+            checkKey = $"{scheduleKey}_{date.Season}_{Game1.shortDayNameFromDayOfSeason(date.Day)}{heartLevel}";
+            if (npc.hasMasterScheduleEntry(checkKey)
+                && Globals.UtilityFunctions.TryFindGOTOschedule(npc, date, npc.getMasterScheduleEntry(checkKey), out scheduleEntry)
+                && scheduleEntry.StartsWith(POST_GI_START_TIME))
+            {
+                return scheduleEntry;
+            }
+        }
+
+        // GIRemainder_season_DayOfWeek
+        checkKey = $"{scheduleKey}_{date.Season}_{Game1.shortDayNameFromDayOfSeason(date.Day)}";
+        if (npc.hasMasterScheduleEntry(checkKey)
+            && Globals.UtilityFunctions.TryFindGOTOschedule(npc, date, npc.getMasterScheduleEntry(checkKey), out scheduleEntry)
+            && scheduleEntry.StartsWith(POST_GI_START_TIME))
+        {
+            return scheduleEntry;
+        }
+
+        // GIRemainder_DayOfWeekHearts
+        for (int heartLevel = Math.Max((hearts / 2) * 2, 0); heartLevel > 0; heartLevel -= 2)
+        {
+            checkKey = $"{scheduleKey}_{Game1.shortDayNameFromDayOfSeason(date.Day)}{heartLevel}";
             if (npc.hasMasterScheduleEntry(checkKey)
                 && Globals.UtilityFunctions.TryFindGOTOschedule(npc, date, npc.getMasterScheduleEntry(checkKey), out scheduleEntry)
                 && scheduleEntry.StartsWith(POST_GI_START_TIME))
@@ -97,6 +118,27 @@ internal static class ScheduleUtilities
 
         // GIRemainder_DayOfWeek
         checkKey = $"{scheduleKey}_{Game1.shortDayNameFromDayOfSeason(date.Day)}";
+        if (npc.hasMasterScheduleEntry(checkKey)
+            && Globals.UtilityFunctions.TryFindGOTOschedule(npc, date, npc.getMasterScheduleEntry(checkKey), out scheduleEntry)
+            && scheduleEntry.StartsWith(POST_GI_START_TIME))
+        {
+            return scheduleEntry;
+        }
+
+        // GIRemainderHearts
+        for (int heartLevel = Math.Max((hearts / 2) * 2, 0); heartLevel > 0; heartLevel -= 2)
+        {
+            checkKey = $"{scheduleKey}_{heartLevel}";
+            if (npc.hasMasterScheduleEntry(checkKey)
+                && Globals.UtilityFunctions.TryFindGOTOschedule(npc, date, npc.getMasterScheduleEntry(checkKey), out scheduleEntry)
+                && scheduleEntry.StartsWith(POST_GI_START_TIME))
+            {
+                return scheduleEntry;
+            }
+        }
+
+        // GIREmainder_season
+        checkKey = $"{scheduleKey}_{date.Season}";
         if (npc.hasMasterScheduleEntry(checkKey)
             && Globals.UtilityFunctions.TryFindGOTOschedule(npc, date, npc.getMasterScheduleEntry(checkKey), out scheduleEntry)
             && scheduleEntry.StartsWith(POST_GI_START_TIME))

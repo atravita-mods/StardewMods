@@ -34,6 +34,9 @@
 * You can now call Pam, who will tell you if she's headed to Ginger Island.
 * You can now toggle beach outfits.
 
+Fixes:
+* Fixed schedule choices function.
+
 ### Version 1.1.2
 
 * Adds Willy as a possible resort attendee.

@@ -1,7 +1,7 @@
-﻿using System.Diagnostics.Contracts;
-using System.Globalization;
+﻿using System.Globalization;
 using System.Reflection;
 using System.Text.RegularExpressions;
+using AtraShared.Utils.Extensions;
 using Microsoft.Xna.Framework;
 using StardewModdingAPI.Events;
 using StardewValley.Locations;
@@ -18,9 +18,9 @@ public class ModEntry : Mod
     /// </summary>
     private readonly Regex regex = new(
         // ":[(x1;y1);(x2;y2)]"
-        pattern: @":\[\((?<x1>\d+);(?<y1>\d+)\);\((?<x2>\d+);(?<y2>\d+)\)\]$",
+        pattern: @":\[\((?<x1>[0-9]+);(?<y1>[0-9]+)\);\((?<x2>[0-9]+);(?<y2>[0-9]+)\)\]$",
         options: RegexOptions.CultureInvariant | RegexOptions.Compiled,
-        new TimeSpan(1000000));
+        matchTimeout: TimeSpan.FromMilliseconds(250));
 
     /// <summary>
     /// The item IDs for the four basic forage fruit.
@@ -88,7 +88,7 @@ public class ModEntry : Mod
         helper.Events.GameLoop.GameLaunched += this.SetUpConfig;
         helper.Events.GameLoop.OneSecondUpdateTicking += this.BellsAndWhistles;
         helper.ConsoleCommands.Add(
-            name: "list_fruits",
+            name: "av.fcs.list_fruits",
             documentation: I18n.ListFruits_Description(),
             callback: this.ListFruits);
 
@@ -124,8 +124,8 @@ public class ModEntry : Mod
             this.Monitor.Log(I18n.GmcmVersionMessage(version: "1.6.0", currentversion: gmcm.Manifest.Version), LogLevel.Info);
             return;
         }
-        var configMenu = this.Helper.ModRegistry.GetApi<IGenericModConfigMenuApi>("spacechase0.GenericModConfigMenu");
-        if (configMenu is null)
+
+        if (this.Helper.ModRegistry.GetApi<IGenericModConfigMenuApi>("spacechase0.GenericModConfigMenu") is not IGenericModConfigMenuApi configMenu)
         {
             return;
         }
@@ -141,18 +141,16 @@ public class ModEntry : Mod
 
         foreach (PropertyInfo property in typeof(ModConfig).GetProperties())
         {
-            MethodInfo? getter = property.GetGetMethod();
-            MethodInfo? setter = property.GetSetMethod();
-            if(getter is null || setter is null)
+            if(property.GetGetMethod() is not MethodInfo getter || property.GetSetMethod() is not MethodInfo setter)
             {
-                this.DebugLog("Config appears to have a mis-formed option?");
+                this.Monitor.DebugLog("Config appears to have a mis-formed option?");
                 continue;
             }
 
             if (property.PropertyType.Equals(typeof(bool)))
             {
-                var getterDelegate = (Func<ModConfig, bool>)Delegate.CreateDelegate(typeof(Func<ModConfig, bool>), getter);
-                var setterDelegate = (Action<ModConfig, bool>)Delegate.CreateDelegate(typeof(Action<ModConfig, bool>), setter);
+                Func<ModConfig, bool>? getterDelegate = getter.CreateDelegate<Func<ModConfig, bool>>();
+                Action<ModConfig, bool>? setterDelegate = setter.CreateDelegate<Action<ModConfig, bool>>();
 
                 configMenu.AddBoolOption(
                     mod: this.ModManifest,
@@ -163,8 +161,8 @@ public class ModEntry : Mod
             }
             else if (property.PropertyType.Equals(typeof(int)))
             {
-                var getterDelegate = (Func<ModConfig, int>)Delegate.CreateDelegate(typeof(Func<ModConfig, int>), getter);
-                var setterDelegate = (Action<ModConfig, int>)Delegate.CreateDelegate(typeof (Action<ModConfig, int>), setter);
+                Func<ModConfig, int>? getterDelegate = getter.CreateDelegate<Func<ModConfig, int>>();
+                Action<ModConfig, int>? setterDelegate = setter.CreateDelegate<Action<ModConfig, int>>();
                 configMenu.AddNumberOption(
                     mod: this.ModManifest,
                     getValue: () => getterDelegate(this.config),
@@ -177,8 +175,8 @@ public class ModEntry : Mod
             }
             else if (property.PropertyType.Equals(typeof(float)))
             {
-                var getterDelegate = (Func<ModConfig, float>)Delegate.CreateDelegate(typeof(Func<ModConfig, float>), getter);
-                var setterDelegate = (Action<ModConfig, float>)Delegate.CreateDelegate(typeof(Action<ModConfig, float>), setter);
+                Func<ModConfig, float>? getterDelegate = getter.CreateDelegate<Func<ModConfig, float>>();
+                Action<ModConfig, float>? setterDelegate = setter.CreateDelegate<Action<ModConfig, float>>();
                 configMenu.AddNumberOption(
                     mod: this.ModManifest,
                     getValue: () => getterDelegate(this.config),
@@ -190,7 +188,7 @@ public class ModEntry : Mod
             }
             else
             {
-                this.DebugLog($"{property.Name} unaccounted for.", LogLevel.Warn);
+                this.Monitor.DebugLog($"{property.Name} unaccounted for.", LogLevel.Warn);
             }
         }
     }
@@ -208,21 +206,21 @@ public class ModEntry : Mod
         {
             // Crosscheck this = probably better to just use the actual value, maybe...
             hasFCFbatcave = (farmcavechoice is not null) && (farmcavechoice.ToLowerInvariant().Contains("bat") || farmcavechoice.ToLowerInvariant().Contains("fruit"));
-            this.DebugLog(hasFCFbatcave ? "FarmCaveFramework fruit bat cave detected." : "FarmCaveFramework fruit bat cave not detected.");
+            this.Monitor.DebugLog(hasFCFbatcave ? "FarmCaveFramework fruit bat cave detected." : "FarmCaveFramework fruit bat cave not detected.");
         }
 
         if (!this.config.EarlyFarmCave
             && (Game1.MasterPlayer.caveChoice?.Value is null || Game1.MasterPlayer.caveChoice.Value <= Farmer.caveNothing)
             && string.IsNullOrWhiteSpace(farmcavechoice))
         {
-            this.DebugLog("Demetrius cutscene not seen and config not set to early, skip spawning for today.");
+            this.Monitor.DebugLog("Demetrius cutscene not seen and config not set to early, skip spawning for today.");
             return false;
         }
         if (!this.config.IgnoreFarmCaveType && !this.config.EarlyFarmCave
             && (Game1.MasterPlayer.caveChoice?.Value is null || Game1.MasterPlayer.caveChoice.Value != Farmer.caveBats)
             && !hasFCFbatcave)
         {
-            this.DebugLog("Fruit bat cave not selected and config not set to ignore that, skip spawning for today.");
+            this.Monitor.DebugLog("Fruit bat cave not selected and config not set to ignore that, skip spawning for today.");
             return false;
         }
         return true;
@@ -253,7 +251,7 @@ public class ModEntry : Mod
 
         if (Game1.getLocationFromName("FarmCave") is FarmCave farmcave)
         {
-            this.DebugLog($"Spawning in the farmcave");
+            this.Monitor.DebugLog($"Spawning in the farmcave");
             foreach (Vector2 v in this.IterateTiles(farmcave))
             {
                 this.PlaceFruit(farmcave, v);
@@ -297,7 +295,7 @@ public class ModEntry : Mod
                                 locLimits[group.Name] = result;
                             }
                         }
-                        this.DebugLog($"Found and parsed sublocation: {parseloc} + ({locLimits["x1"]};{locLimits["y1"]});({locLimits["x2"]};{locLimits["y2"]})");
+                        this.Monitor.DebugLog($"Found and parsed sublocation: {parseloc} + ({locLimits["x1"]};{locLimits["y1"]});({locLimits["x2"]};{locLimits["y2"]})");
                     }
                     else if (matches.Count >= 2)
                     {
@@ -356,7 +354,7 @@ public class ModEntry : Mod
         {
             IsSpawnedObject = true,
         });
-        this.DebugLog($"Spawning item {fruitToPlace} at {location.Name}:{tile.X},{tile.Y}", LogLevel.Debug);
+        this.Monitor.DebugLog($"Spawning item {fruitToPlace} at {location.Name}:{tile.X},{tile.Y}", LogLevel.Debug);
     }
 
     /// <summary>
@@ -435,7 +433,6 @@ public class ModEntry : Mod
     /// Generate list of tree fruits valid for spawning, based on user config/denylist/data in Data/fruitTrees.
     /// </summary>
     /// <returns>A list of tree fruit.</returns>
-    [Pure]
     private List<int> GetTreeFruits()
     {
         if (this.config.UseVanillaFruitOnly)
@@ -466,7 +463,7 @@ public class ModEntry : Mod
                 {
                     StardewValley.Object fruit = new(objectIndex, 1);
                     if ((!this.config.AllowAnyTreeProduct && fruit.Category != StardewValley.Object.FruitsCategory)
-                        || (this.config.EdiblesOnly && fruit.Edibility < 0 )
+                        || (this.config.EdiblesOnly && fruit.Edibility < 0)
                         || fruit.Price > this.config.PriceCap
                         || denylist.Contains(fruit.Name))
                     {
@@ -539,19 +536,5 @@ public class ModEntry : Mod
                 mine.TemporarySprites.Add(batsprite);
             }
         }
-    }
-
-    /// <summary>
-    /// Log to DEBUG if compiled with DEBUG
-    /// Log to verbose only otherwise.
-    /// </summary>
-    /// <param name="message">Message to log.</param>
-    private void DebugLog(string message, LogLevel level = LogLevel.Debug)
-    {
-#if DEBUG
-        this.Monitor.Log(message, level);
-#else
-        this.Monitor.VerboseLog(message);
-#endif
     }
 }

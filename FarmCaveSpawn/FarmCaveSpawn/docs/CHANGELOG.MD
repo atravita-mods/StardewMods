@@ -12,10 +12,10 @@
 #### Version 1.0.8
 
 * Corrects `UseModCave` option (would previously always use the additional locations list.) Adds new option to only use the six usual vanilla tree fruit.
-* Use delegates
 * Add error checking for badly formatted config files, and clamps the possible values for the config files. Adds version checking for GMCM, and disables GMCM integration if the version is too old.
 * Add bats to mine entrance if spawning there is enabled.
 * (Internal) Fixes tile shuffling logic.
+* (Internal) Use delegates
 
 #### Version 1.0.7
 

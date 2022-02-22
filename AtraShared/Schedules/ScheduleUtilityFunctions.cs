@@ -1,5 +1,7 @@
-﻿using System.Text.RegularExpressions;
-using AtraBase.Utils.Extensions;
+﻿using System.Reflection;
+using System.Text.RegularExpressions;
+using AtraBase.Toolkit.Extensions;
+using AtraBase.Toolkit.Reflection;
 using AtraShared.Utils.Extensions;
 using Microsoft.Xna.Framework;
 using StardewModdingAPI.Utilities;
@@ -8,7 +10,7 @@ using StardewValley.Network;
 namespace AtraShared.Schedules;
 
 /// <summary>
-/// Holds a warp location.
+/// Holds a map + location.
 /// </summary>
 public class QualLoc
 {
@@ -59,64 +61,39 @@ internal class ScheduleUtilityFunctions
         options: RegexOptions.CultureInvariant | RegexOptions.Compiled,
         matchTimeout: TimeSpan.FromMilliseconds(250));
 
+    /// <summary>
+    /// Stardew's NPC::pathfindToNextScheduleLocation method.
+    /// </summary>
+    internal static readonly MethodInfo PathFindMethod = typeof(NPC).InstanceMethodNamed("pathfindToNextScheduleLocation");
+
 #pragma warning disable SA1306 // Field names should begin with lower-case letter
     private readonly IMonitor monitor;
-    private readonly IReflectionHelper reflectionHelper;
-    private readonly Func<bool> GetStrictTiming;
-
-    private readonly Func<string> GOTOINFINITELOOP;
-    private readonly Func<string, string, string> GOTOSCHEDULENOTFOUND;
-    private readonly Func<string, string, string, string> GOTOILLFORMEDFRIENDSHIP;
-    private readonly Func<string, string, string> GOTOSCHEDULEFRIENDSHIP;
-    private readonly Func<string, string, string> SCHEDULEPARSEFAILURE;
-    private readonly Func<string, string, string> SCHEDULEREGEXFAILURE;
-    private readonly Func<string, string, string> NOREPLACEMENTLOCATION;
-    private readonly Func<string, string, string, string> TOOTIGHTTIMELINE;
-    private readonly Func<string, string, string> REGEXTIMEOUTERROR;
+    private readonly ITranslationHelper translation;
 #pragma warning restore SA1306 // Field names should begin with lower-case letter
 
     /// <summary>
     /// Initializes a new instance of the <see cref="ScheduleUtilityFunctions"/> class.
     /// </summary>
     /// <param name="monitor">The logger.</param>
-    /// <param name="reflectionHelper">The reflection helper.</param>
-    /// <param name="getStrictTiming">Delegate: get whether strict timing is wanted.</param>
-    /// <param name="gOTOINFINITELOOP">Translation delegate.</param>
-    /// <param name="gOTOSCHEDULENOTFOUND">Translation delegate - schedule not found.</param>
-    /// <param name="gOTOILLFORMEDFRIENDSHIP">Translation delegate - friendship unparsable.</param>
-    /// <param name="gOTOSCHEDULEFRIENDSHIP">Translation delegate - skipping schedule due to friendship requiement.</param>
-    /// <param name="sCHEDULEPARSEFAILURE">Translation delegate - schedule can't be parsed.</param>
-    /// <param name="sCHEDULEREGEXFAILURE">Translation delegate - regex parsing failed.</param>
-    /// <param name="nOREPLACEMENTLOCATION">Translation delegate - can't find a replacement location.</param>
-    /// <param name="tOOTIGHTTIMELINE">Translation delegate - too tight timeline.</param>
-    /// <param name="rEGEXTIMEOUTERROR">Translation delegate - regex timed out.</param>
+    /// <param name="translation">The translation helper.</param>
     public ScheduleUtilityFunctions(
         IMonitor monitor,
-        IReflectionHelper reflectionHelper,
-        Func<bool> getStrictTiming,
-        Func<string> gOTOINFINITELOOP,
-        Func<string, string, string> gOTOSCHEDULENOTFOUND,
-        Func<string, string, string, string> gOTOILLFORMEDFRIENDSHIP,
-        Func<string, string, string> gOTOSCHEDULEFRIENDSHIP,
-        Func<string, string, string> sCHEDULEPARSEFAILURE,
-        Func<string, string, string> sCHEDULEREGEXFAILURE,
-        Func<string, string, string> nOREPLACEMENTLOCATION,
-        Func<string, string, string, string> tOOTIGHTTIMELINE,
-        Func<string, string, string> rEGEXTIMEOUTERROR)
+        ITranslationHelper translation)
     {
         this.monitor = monitor;
-        this.reflectionHelper = reflectionHelper;
-        this.GetStrictTiming = getStrictTiming;
-        this.GOTOINFINITELOOP = gOTOINFINITELOOP;
-        this.GOTOSCHEDULENOTFOUND = gOTOSCHEDULENOTFOUND;
-        this.GOTOILLFORMEDFRIENDSHIP = gOTOILLFORMEDFRIENDSHIP;
-        this.GOTOSCHEDULEFRIENDSHIP = gOTOSCHEDULEFRIENDSHIP;
-        this.SCHEDULEPARSEFAILURE = sCHEDULEPARSEFAILURE;
-        this.SCHEDULEREGEXFAILURE = sCHEDULEREGEXFAILURE;
-        this.NOREPLACEMENTLOCATION = nOREPLACEMENTLOCATION;
-        this.TOOTIGHTTIMELINE = tOOTIGHTTIMELINE;
-        this.REGEXTIMEOUTERROR = rEGEXTIMEOUTERROR;
+        this.translation = translation;
     }
+
+    private delegate SchedulePathDescription PathFinderDelegate(
+        string startMap,
+        int startX,
+        int startY,
+        string endMap,
+        int endX,
+        int endY,
+        int facing,
+        string? animation,
+        string? message);
 
     /// <summary>
     /// Given a raw schedule string, returns a new raw schedule string, after following the GOTO/MAIL/NOT friendship keys in the game.
@@ -154,14 +131,17 @@ internal class ScheduleUtilityFunctions
                     string newscheduleKey = npc.getMasterScheduleEntry(newKey);
                     if (newscheduleKey.Equals(rawData, StringComparison.Ordinal))
                     {
-                        this.monitor.Log(this.GOTOINFINITELOOP(), LogLevel.Warn);
+                        this.monitor.Log(this.translation.Get("GOTO_INFINITE_LOOP").Default("Infinite loop detected, skipping this schedule."), LogLevel.Warn);
                         return false;
                     }
                     return this.TryFindGOTOschedule(npc, date, newscheduleKey, out scheduleString);
                 }
                 else
                 {
-                    this.monitor.Log(this.GOTOSCHEDULENOTFOUND(newKey, npc.Name), LogLevel.Warn);
+                    this.monitor.Log(
+                        this.translation.Get("GOTO_SCHEDULE_NOT_FOUND")
+                        .Default("GOTO {{scheduleKey}} not found for NPC {{npc}}")
+                        .Tokens( new { scheduleKey = newKey,npc = npc.Name }), LogLevel.Warn);
                     return false;
                 }
             case "NOT":
@@ -172,13 +152,19 @@ internal class ScheduleUtilityFunctions
                     if (!int.TryParse(command[3], out int heartLevel))
                     {
                         // ill formed friendship check string, warn
-                        this.monitor.Log(this.GOTOILLFORMEDFRIENDSHIP(splits[0], npc.Name, rawData), LogLevel.Warn);
+                        this.monitor.Log(
+                            this.translation.Get("GOTO_ILL_FORMED_FRIENDSHIP")
+                            .Default("Ill-formed friendship requirment {{requirment}} for {{npc}}: {{scheduleKey}}")
+                            .Tokens(new {requirment = splits[0], npc = npc.Name, scheduleKey = rawData }), LogLevel.Warn);
                         return false;
                     }
                     else if (hearts > heartLevel)
                     {
                         // hearts above what's allowed, skip to next schedule.
-                        this.monitor.Log(this.GOTOSCHEDULEFRIENDSHIP(npc.Name, rawData), LogLevel.Trace);
+                        this.monitor.Log(
+                            this.translation.Get("GOTO_SCHEDULE_FRIENDSHIP")
+                            .Default("Skipping due to friendship limit for {{npc}}: {{scheduleKey}}")
+                            .Tokens( new { npc = npc.Name, scheduleKey = rawData }), LogLevel.Trace);
                         return false;
                     }
                 }
@@ -203,32 +189,31 @@ internal class ScheduleUtilityFunctions
     /// <param name="prevMap">Map NPC starts on.</param>
     /// <param name="prevStop">Start location.</param>
     /// <param name="prevtime">Start time of scheduler.</param>
+    /// <param name="enforceStrictTiming">Whether or not to emit warnings and skip too-tight schedule points.</param>
     /// <returns>null if the schedule could not be parsed, a schedule otherwise.</returns>
     /// <exception cref="MethodNotFoundException">Reflection to get game methods failed.</exception>
     /// <remarks>Does NOT set NPC.daySchedule - still need to set that manually if that's wanted.</remarks>
-    public Dictionary<int, SchedulePathDescription>? ParseSchedule(string? schedule, NPC npc, string prevMap, Point prevStop, int prevtime)
+    public Dictionary<int, SchedulePathDescription>? ParseSchedule(
+        string? schedule,
+        NPC npc,
+        string? prevMap = null,
+        Point? prevStop = null,
+        int prevtime = 610,
+        bool enforceStrictTiming = false)
     {
         if (schedule is null)
         {
             return null;
         }
 
-        string previousMap = prevMap;
-        Point lastStop = prevStop;
+        string previousMap = prevMap ?? npc.DefaultMap;
+        Point lastStop = prevStop ?? (npc.DefaultPosition / 64f).ToPoint();
         int lastx = lastStop.X;
         int lasty = lastStop.Y;
         int lasttime = prevtime;
 
         Dictionary<int, SchedulePathDescription> remainderSchedule = new();
-
-        // Grabbing the method here and turning it into a delegate because it's used in the loop.
-        IReflectedMethod pathfinder = this.reflectionHelper.GetMethod(npc, "pathfindToNextScheduleLocation")
-            ?? throw new MethodNotFoundException("NPC::pathfindToNextScheduleLocation");
-
-        Func<string, int, int, string, int, int, int, string?, string?, SchedulePathDescription> pathfinderDelegate =
-            (Func<string, int, int, string, int, int, int, string?, string?, SchedulePathDescription>)Delegate
-            .CreateDelegate(typeof(Func<string, int, int, string, int, int, int, string?, string?, SchedulePathDescription>), pathfinder.MethodInfo);
-
+        PathFinderDelegate pathfinderDelegate = PathFindMethod.CreateDelegate<PathFinderDelegate>(npc);
         QualLoc? warpPoint = null;
 
         foreach (string schedulepoint in schedule.Split('/'))
@@ -265,7 +250,10 @@ internal class ScheduleUtilityFunctions
 
                 if (!match.Success)
                 { // I still have issues, try sending the NPC straight home to bed.
-                    this.monitor.Log(this.SCHEDULEREGEXFAILURE(schedulepoint, npc.Name), LogLevel.Info);
+                    this.monitor.Log(
+                        this.translation.Get("SCHEDULE_REGEX_FAILURE")
+                        .Default("{{schedulepoint}} seems unparsable by regex, sending NPC {{npc}} home to sleep")
+                        .Tokens(new { schedulepoint, npc = npc.Name }), LogLevel.Info);
 
                     // If the NPC has a sleep animation, use it.
                     Dictionary<string, string> animationData = Game1.content.Load<Dictionary<string, string>>("Data\\animationDescriptions");
@@ -276,8 +264,8 @@ internal class ScheduleUtilityFunctions
                         lastx,
                         lasty,
                         npc.DefaultMap,
-                        (int)npc.DefaultPosition.X/64,
-                        (int)npc.DefaultPosition.Y/64,
+                        (int)npc.DefaultPosition.X / 64,
+                        (int)npc.DefaultPosition.Y / 64,
                         Game1.up,
                         sleepanimation,
                         null); // no message.
@@ -285,7 +273,10 @@ internal class ScheduleUtilityFunctions
                     int spaceloc = schedulepoint.IndexOf(' ');
                     if (spaceloc == -1)
                     {
-                        this.monitor.Log(this.SCHEDULEPARSEFAILURE(schedulepoint, npc.Name), LogLevel.Warn);
+                        this.monitor.Log(
+                            this.translation.Get("SCHEDULE_PARSE_FAILURE")
+                            .Default("Failed in parsing schedulepoint {{schedulepoint}} for NPC {{npc}}")
+                            .Tokens(new { schedulepoint, npc = npc.Name }), LogLevel.Warn);
                         return null; // to try next schedule for GIMA, to null out NPC schedule and give them no schedule for vanilla.
                     }
                     else
@@ -296,7 +287,7 @@ internal class ScheduleUtilityFunctions
                     {
                         if (path2bedtime < lasttime)
                         {
-                            if (!this.GetStrictTiming())
+                            if (!enforceStrictTiming)
                             { // I've already adjusted the last time parameter to account for travel time
                                 path2bedtime = Utility.ConvertMinutesToTime(((Utility.ConvertTimeToMinutes(lasttime) * 10) / 10) + 10);
                             }
@@ -314,7 +305,7 @@ internal class ScheduleUtilityFunctions
                         Utility.ModifyTime(path2bedtime, 0 - ((expectedpath2bedtime * 10) / 10));
                         if (path2bedtime < lasttime)
                         { // a little sanity checking, force the bed time to be sufficiently after the previous point.
-                            if (!this.GetStrictTiming())
+                            if (!enforceStrictTiming)
                             { // I've already adjusted the last time parameter to account for travel time
                                 path2bedtime = Utility.ConvertMinutesToTime(((Utility.ConvertTimeToMinutes(lasttime) * 10) / 10) + 10);
                             }
@@ -328,7 +319,10 @@ internal class ScheduleUtilityFunctions
                     }
                     else
                     {
-                        this.monitor.Log(this.SCHEDULEPARSEFAILURE(schedulepoint, npc.Name), LogLevel.Warn);
+                        this.monitor.Log(
+                            this.translation.Get("SCHEDULE_PARSE_FAILURE")
+                            .Default("Failed in parsing schedulepoint {{schedulepoint}} for NPC {{npc}}")
+                            .Tokens(new { schedulepoint, npc = npc.Name }), LogLevel.Warn);
                         return null; // to try next schedule for GIMA, to null out NPC schedule and give them no schedule for vanilla.
                     }
                 }
@@ -361,9 +355,12 @@ internal class ScheduleUtilityFunctions
                     }
                     else
                     {
-                        if (this.GetStrictTiming())
+                        if (enforceStrictTiming)
                         {
-                            this.monitor.Log(this.NOREPLACEMENTLOCATION(location, npc.Name), LogLevel.Warn);
+                            this.monitor.Log(
+                                this.translation.Get("NO_REPLACEMENT_LOCATION")
+                                .Default("Location replacement for {{location}} requested but not found for {{npc}}")
+                                .Tokens( new { location, npc=npc.Name }), LogLevel.Warn); ;
                         }
                         continue; // skip this schedule point
                     }
@@ -376,7 +373,10 @@ internal class ScheduleUtilityFunctions
                 }
                 else if (time <= lasttime)
                 {
-                    this.monitor.Log(this.TOOTIGHTTIMELINE(time.ToString(), schedule, npc.Name), LogLevel.Warn);
+                    this.monitor.Log(
+                        this.translation.Get("TOO_TIGHT_TIMELINE")
+                        .Default("{{time}} position in schedule {{scheduleKey}} for {{npc}} is too tight. Will be skipped.")
+                        .Tokens( new { time, scheduleKey = schedule, npc = npc.Name }), LogLevel.Warn);
                     continue;
                 }
 
@@ -400,7 +400,10 @@ internal class ScheduleUtilityFunctions
                 }
                 if (time <= lasttime)
                 {
-                    this.monitor.Log(this.TOOTIGHTTIMELINE(time.ToString(), schedule, npc.Name), LogLevel.Warn);
+                    this.monitor.Log(
+                        this.translation.Get("TOO_TIGHT_TIMELINE")
+                        .Default("{{time}} position in schedule {{scheduleKey}} for {{npc}} is too tight. Will be skipped.")
+                        .Tokens(new { time, scheduleKey = schedule, npc = npc.Name }), LogLevel.Warn);
                     continue; // skip to next point.
                 }
                 this.monitor.DebugLog($"Adding GI schedule for {npc.Name}", LogLevel.Debug);
@@ -409,7 +412,7 @@ internal class ScheduleUtilityFunctions
                 lasttime = time;
                 lastx = x;
                 lasty = y;
-                if (this.GetStrictTiming())
+                if (enforceStrictTiming)
                 {
                     int expectedTravelTime = newpath.GetExpectedRouteTime();
                     Utility.ModifyTime(lasttime, expectedTravelTime);
@@ -418,7 +421,10 @@ internal class ScheduleUtilityFunctions
             }
             catch (RegexMatchTimeoutException ex)
             {
-                this.monitor.Log(this.REGEXTIMEOUTERROR(schedulepoint, ex.ToString()), LogLevel.Trace);
+                this.monitor.Log(
+                    this.translation.Get("REGEX_TIMEOUT_ERROR")
+                    .Default("Regex for schedule entry {{schedulePoint}} timed out:\n\n{{ex}}")
+                    .Tokens( new { schedulePoint = schedulepoint, ex }), LogLevel.Warn);
                 continue;
             }
         }

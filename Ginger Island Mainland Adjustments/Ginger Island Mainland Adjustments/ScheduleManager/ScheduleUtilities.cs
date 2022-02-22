@@ -1,5 +1,4 @@
-﻿using AtraShared.Schedules;
-using AtraShared.Utils.Extensions;
+﻿using AtraShared.Utils.Extensions;
 using Microsoft.Xna.Framework;
 using StardewModdingAPI.Utilities;
 
@@ -170,7 +169,7 @@ internal static class ScheduleUtilities
             // For a Child2NPC, we must handle their scheduling ourselves.
             if (Globals.UtilitySchedulingFunctions.TryFindGOTOschedule(npc, SDate.Now(), rawData, out string scheduleString))
             {
-                npc.Schedule = Globals.UtilitySchedulingFunctions.ParseSchedule(scheduleString, npc, "BusStop", new Point(0, 23), 610);
+                npc.Schedule = Globals.UtilitySchedulingFunctions.ParseSchedule(scheduleString, npc, "BusStop", new Point(0, 23), 610, Globals.Config.EnforceGITiming);
                 if (Context.IsMainPlayer && npc.Schedule is not null
                     && Globals.ReflectionHelper.GetField<string>(npc, "_lastLoadedScheduleKey", false)?.GetValue() is string lastschedulekey)
                 {

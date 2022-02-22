@@ -123,7 +123,7 @@
   "GOTO_SCHEDULE_NOT_FOUND": "GOTO {{scheduleKey}} not found for NPC {{npc}}",
   "GOTO_SCHEDULE_FRIENDSHIP": "Skipping due to friendship limit for {{npc}}: {{scheduleKey}}",
   "GOTO_ILL_FORMED_FRIENDSHIP": "Ill-formed friendship requirment {{requirment}} for {{npc}}: {{scheduleKey}}",
-  "GOTO_INFINITE_LOOP": "Infinite loop detected, skipping this schedule",
+  "GOTO_INFINITE_LOOP": "Infinite loop detected, skipping this schedule.",
   "NO_GI_SCHEDULE_FOUND": "Did not find a GI remainder schedule for {{npc}}",
   "REGEX_TIMEOUT_ERROR": "Regex for schedule entry {{schedulePoint}} timed out:\n\n{{ex}}",
   "TOO_TIGHT_TIMELINE": "{{time}} position in schedule {{scheduleKey}} for {{npc}} is too tight. Will be skipped.",

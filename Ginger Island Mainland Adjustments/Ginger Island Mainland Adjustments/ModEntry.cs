@@ -1,12 +1,11 @@
 ﻿using System.Reflection;
 using System.Text;
-using AtraBase.Utils.Extensions;
+using AtraBase.Toolkit.Extensions;
 using GingerIslandMainlandAdjustments.CustomConsoleCommands;
 using GingerIslandMainlandAdjustments.DialogueChanges;
 using GingerIslandMainlandAdjustments.Integrations;
 using GingerIslandMainlandAdjustments.Niceties;
 using GingerIslandMainlandAdjustments.ScheduleManager;
-using GingerIslandMainlandAdjustments.Utils;
 using HarmonyLib;
 using StardewModdingAPI.Events;
 

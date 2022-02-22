@@ -1,6 +1,5 @@
-﻿using AtraBase.Utils.Extensions;
+﻿using AtraBase.Toolkit.Extensions;
 using AtraShared.Utils.Extensions;
-using GingerIslandMainlandAdjustments.Utils;
 using Microsoft.Xna.Framework;
 using StardewModdingAPI.Events;
 using StardewModdingAPI.Utilities;
@@ -141,6 +140,6 @@ internal static class MidDayScheduleEditor
         Point lastStop = npc.Schedule[GIEndTime].route.Peek();
         int lasttime = GIEndTime - 10;
 
-        return Globals.UtilitySchedulingFunctions.ParseSchedule(schedule, npc, GIMap, lastStop, lasttime);
+        return Globals.UtilitySchedulingFunctions.ParseSchedule(schedule, npc, GIMap, lastStop, lasttime, Globals.Config.EnforceGITiming);
     }
 }

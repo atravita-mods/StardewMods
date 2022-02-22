@@ -78,17 +78,7 @@ internal static class Globals
 
         UtilitySchedulingFunctions = new(
             monitor: Globals.ModMonitor,
-            reflectionHelper: Globals.ReflectionHelper,
-            getStrictTiming: Globals.GetStrictTiming,
-            gOTOINFINITELOOP: I18n.GOTOINFINITELOOP,
-            gOTOSCHEDULENOTFOUND: I18n.GOTOSCHEDULENOTFOUND,
-            gOTOILLFORMEDFRIENDSHIP: I18n.GOTOILLFORMEDFRIENDSHIP,
-            gOTOSCHEDULEFRIENDSHIP: I18n.GOTOSCHEDULEFRIENDSHIP,
-            sCHEDULEPARSEFAILURE: I18n.SCHEDULEPARSEFAILURE,
-            sCHEDULEREGEXFAILURE: I18n.SCHEDULEREGEXFAILURE,
-            nOREPLACEMENTLOCATION: I18n.NOREPLACEMENTLOCATION,
-            tOOTIGHTTIMELINE: I18n.TOOTIGHTTIMELINE,
-            rEGEXTIMEOUTERROR: I18n.REGEXTIMEOUTERROR);
+            translation: Globals.Helper.Translation);
     }
 
     /// <summary>
@@ -104,17 +94,10 @@ internal static class Globals
         }
         if (Type.GetType("ChildToNPC.ModEntry, ChildToNPC")?.GetMethod("IsChildNPC", new Type[] { typeof(Character) }) is MethodInfo childToNPCMethod)
         {
-            IsChildToNPC = (Func<NPC, bool>)Delegate.CreateDelegate(typeof(Func<NPC, bool>), childToNPCMethod);
+            IsChildToNPC = childToNPCMethod.CreateDelegate<Func<NPC, bool>>();
             return true;
         }
         ModMonitor.Log("IsChildNPC method not found - integration with Child2NPC failed.", LogLevel.Warn);
         return false;
     }
-
-    /// <summary>
-    /// Gets whether or not strict timing is desired here.
-    /// </summary>
-    /// <returns>True for use strict timing, false otherwise.</returns>
-    internal static bool GetStrictTiming()
-        => Globals.Config.EnforceGITiming;
 }

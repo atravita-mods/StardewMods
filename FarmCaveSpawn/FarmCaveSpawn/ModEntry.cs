@@ -136,16 +136,16 @@ public class ModEntry : Mod
                 helper.AddIntOption(
                     property: property,
                     getConfig: () => this.config,
-                    min: (property) => 0,
-                    max: (property) => property.Name == "MaxDailySpawns" ? 100 : 1000);
+                    min: 0,
+                    max: property.Name == "MaxDailySpawns" ? 100 : 1000);
             }
             else if (property.PropertyType.Equals(typeof(float)))
             {
                 helper.AddFloatOption(
                     property: property,
                     getConfig: () => this.config,
-                    min: (property) => 0f,
-                    max: (property) => 100f);
+                    min: 0f,
+                    max: 100f);
             }
             else
             {

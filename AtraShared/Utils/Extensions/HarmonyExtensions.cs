@@ -18,15 +18,7 @@ internal static class HarmonyExtensions
     /// <param name="uniqueID">Unique ID to look for. Leave null to not filter.</param>
     internal static void Snitch(this Harmony harmony, IMonitor monitor, string? uniqueID = null)
     {
-        Func<Patch, bool> filter;
-        if (uniqueID is null)
-        {
-            filter = (p) => true;
-        }
-        else
-        {
-            filter = (p) => p.owner.Equals(uniqueID, StringComparison.OrdinalIgnoreCase);
-        }
+        Func<Patch, bool> filter = uniqueID is null ? (p) => true : (p) => p.owner == uniqueID;
 
         foreach (MethodBase? method in harmony.GetPatchedMethods())
         {

@@ -66,10 +66,8 @@ internal class ScheduleUtilityFunctions
     /// </summary>
     internal static readonly MethodInfo PathFindMethod = typeof(NPC).InstanceMethodNamed("pathfindToNextScheduleLocation");
 
-#pragma warning disable SA1306 // Field names should begin with lower-case letter
     private readonly IMonitor monitor;
     private readonly ITranslationHelper translation;
-#pragma warning restore SA1306 // Field names should begin with lower-case letter
 
     /// <summary>
     /// Initializes a new instance of the <see cref="ScheduleUtilityFunctions"/> class.
@@ -141,7 +139,7 @@ internal class ScheduleUtilityFunctions
                     this.monitor.Log(
                         this.translation.Get("GOTO_SCHEDULE_NOT_FOUND")
                         .Default("GOTO {{scheduleKey}} not found for NPC {{npc}}")
-                        .Tokens( new { scheduleKey = newKey,npc = npc.Name }), LogLevel.Warn);
+                        .Tokens(new { scheduleKey = newKey, npc = npc.Name }), LogLevel.Warn);
                     return false;
                 }
             case "NOT":
@@ -155,7 +153,7 @@ internal class ScheduleUtilityFunctions
                         this.monitor.Log(
                             this.translation.Get("GOTO_ILL_FORMED_FRIENDSHIP")
                             .Default("Ill-formed friendship requirment {{requirment}} for {{npc}}: {{scheduleKey}}")
-                            .Tokens(new {requirment = splits[0], npc = npc.Name, scheduleKey = rawData }), LogLevel.Warn);
+                            .Tokens(new { requirment = splits[0], npc = npc.Name, scheduleKey = rawData }), LogLevel.Warn);
                         return false;
                     }
                     else if (hearts > heartLevel)
@@ -360,7 +358,7 @@ internal class ScheduleUtilityFunctions
                             this.monitor.Log(
                                 this.translation.Get("NO_REPLACEMENT_LOCATION")
                                 .Default("Location replacement for {{location}} requested but not found for {{npc}}")
-                                .Tokens( new { location, npc=npc.Name }), LogLevel.Warn); ;
+                                .Tokens(new { location, npc=npc.Name }), LogLevel.Warn);
                         }
                         continue; // skip this schedule point
                     }
@@ -376,7 +374,7 @@ internal class ScheduleUtilityFunctions
                     this.monitor.Log(
                         this.translation.Get("TOO_TIGHT_TIMELINE")
                         .Default("{{time}} position in schedule {{scheduleKey}} for {{npc}} is too tight. Will be skipped.")
-                        .Tokens( new { time, scheduleKey = schedule, npc = npc.Name }), LogLevel.Warn);
+                        .Tokens(new { time, scheduleKey = schedule, npc = npc.Name }), LogLevel.Warn);
                     continue;
                 }
 

@@ -117,14 +117,14 @@ internal class GMCMHelper : IntegrationHelper
     /// <summary>
     /// Adds a boolean option at a specific location.
     /// </summary>
-    /// <typeparam name="T">Type of the ModConfig.</typeparam>
+    /// <typeparam name="TModConfig">Type of the ModConfig.</typeparam>
     /// <param name="property">Property to process.</param>
     /// <param name="getConfig">Function that gets the *current config instance*.</param>
     /// <param name="fieldId">FieldId.</param>
     /// <returns>this.</returns>
-    public GMCMHelper AddBoolOption<T>(
+    public GMCMHelper AddBoolOption<TModConfig>(
         PropertyInfo property,
-        Func<T> getConfig,
+        Func<TModConfig> getConfig,
         string? fieldId = null)
     {
         if (property.GetGetMethod() is not MethodInfo getter || property.GetSetMethod() is not MethodInfo setter)
@@ -133,8 +133,8 @@ internal class GMCMHelper : IntegrationHelper
         }
         else
         {
-            Func<T, bool> getterDelegate = getter.CreateDelegate<Func<T, bool>>();
-            Action<T, bool>? setterDelegate = setter.CreateDelegate<Action<T, bool>>();
+            Func<TModConfig, bool> getterDelegate = getter.CreateDelegate<Func<TModConfig, bool>>();
+            Action<TModConfig, bool> setterDelegate = setter.CreateDelegate<Action<TModConfig, bool>>();
             this.AddBoolOption(
                 name: () => this.Translation.Get($"{property.Name}.title"),
                 tooltip: () => this.Translation.Get($"{property.Name}.description"),
@@ -180,16 +180,16 @@ internal class GMCMHelper : IntegrationHelper
     /// <summary>
     /// Adds a text option at the given location.
     /// </summary>
-    /// <typeparam name="T">ModConfig's type.</typeparam>
+    /// <typeparam name="TModConfig">ModConfig's type.</typeparam>
     /// <param name="property">Property to process.</param>
     /// <param name="getConfig">Function that gets the *current config instance*</param>
     /// <param name="allowedValues">Allowed values.</param>
     /// <param name="formatAllowedValue">Formatter.</param>
     /// <param name="fieldId">fieldId.</param>
     /// <returns>this.</returns>
-    public GMCMHelper AddTextOption<T>(
+    public GMCMHelper AddTextOption<TModConfig>(
         PropertyInfo property,
-        Func<T> getConfig,
+        Func<TModConfig> getConfig,
         string[]? allowedValues = null,
         Func<string, string>? formatAllowedValue = null,
         string? fieldId = null)
@@ -200,8 +200,8 @@ internal class GMCMHelper : IntegrationHelper
         }
         else
         {
-            Func<T, string> getterDelegate = getter.CreateDelegate<Func<T, string>>();
-            Action<T, string>? setterDelegate = setter.CreateDelegate<Action<T, string>>();
+            Func<TModConfig, string> getterDelegate = getter.CreateDelegate<Func<TModConfig, string>>();
+            Action<TModConfig, string> setterDelegate = setter.CreateDelegate<Action<TModConfig, string>>();
             this.AddTextOption(
                 name: () => this.Translation.Get($"{property.Name}.title"),
                 tooltip: () => this.Translation.Get($"{property.Name}.description"),
@@ -271,6 +271,44 @@ internal class GMCMHelper : IntegrationHelper
     }
 
     /// <summary>
+    /// Adds an enum option at this location.
+    /// </summary>
+    /// <typeparam name="TModConfig">Mod config's type.</typeparam>
+    /// <typeparam name="TEnum">Enum's type.</typeparam>
+    /// <param name="property">Property to process.</param>
+    /// <param name="getConfig">Gets the current instance of the config.</param>
+    /// <param name="fieldID">Field ID, if desired.</param>
+    /// <returns>this.</returns>
+    /// <exception cref="ArgumentException">The property does not match the type of the enum.</exception>
+    public GMCMHelper AddEnumOption<TModConfig, TEnum>(
+        PropertyInfo property,
+        Func<TModConfig> getConfig,
+        string? fieldID)
+        where TEnum : struct, Enum
+    {
+        if (!property.PropertyType.Equals(typeof(TEnum)))
+        {
+            throw new ArgumentException($"Property {property.Name} is type {property.PropertyType.Name}, not {typeof(TEnum).Name}");
+        }
+        if (property.GetGetMethod() is not MethodInfo getter || property.GetSetMethod() is not MethodInfo setter)
+        {
+            this.Monitor.DebugLog($"{property.Name} appears to be a misconfigured option!", LogLevel.Warn);
+        }
+        else
+        {
+            Func<TModConfig, TEnum> getterDelegate = getter.CreateDelegate<Func<TModConfig, TEnum>>();
+            Action<TModConfig, TEnum> setterDelegate = setter.CreateDelegate<Action<TModConfig, TEnum>>();
+            this.AddEnumOption(
+                name: () => this.Translation.Get($"{property.Name}.title"),
+                tooltip: () => this.Translation.Get($"{property.Name}.description"),
+                getValue: () => getterDelegate(getConfig()),
+                setValue: value => setterDelegate(getConfig(), value),
+                fieldId: fieldID);
+        }
+        return this;
+    }
+
+    /// <summary>
     /// Adds a float option at this point in the form.
     /// </summary>
     /// <param name="name">Function to get the name of the option.</param>
@@ -311,7 +349,7 @@ internal class GMCMHelper : IntegrationHelper
     /// <summary>
     /// Adds a float option at this point in the form.
     /// </summary>
-    /// <typeparam name="T">ModConfig's type.</typeparam>
+    /// <typeparam name="TModConfig">ModConfig's type.</typeparam>
     /// <param name="property">Property to process.</param>
     /// <param name="getConfig">Function that gets the current config instance.</param>
     /// <param name="min">Min.</param>
@@ -320,9 +358,9 @@ internal class GMCMHelper : IntegrationHelper
     /// <param name="formatValue">Formmater.</param>
     /// <param name="fieldID">fieldId.</param>
     /// <returns>this.</returns>
-    public GMCMHelper AddFloatOption<T>(
+    public GMCMHelper AddFloatOption<TModConfig>(
         PropertyInfo property,
-        Func<T> getConfig,
+        Func<TModConfig> getConfig,
         float? min = null,
         float? max = null,
         float? interval = null,
@@ -335,8 +373,8 @@ internal class GMCMHelper : IntegrationHelper
         }
         else
         {
-            Func<T, float> getterDelegate = getter.CreateDelegate<Func<T, float>>();
-            Action<T, float>? setterDelegate = setter.CreateDelegate<Action<T, float>>();
+            Func<TModConfig, float> getterDelegate = getter.CreateDelegate<Func<TModConfig, float>>();
+            Action<TModConfig, float>? setterDelegate = setter.CreateDelegate<Action<TModConfig, float>>();
             this.AddNumberOption(
                 name: () => this.Translation.Get($"{property.Name}.title"),
                 tooltip: () => this.Translation.Get($"{property.Name}.description"),
@@ -392,7 +430,7 @@ internal class GMCMHelper : IntegrationHelper
     /// <summary>
     /// Adds an int option at this point in the form.
     /// </summary>
-    /// <typeparam name="T">ModConfig's type.</typeparam>
+    /// <typeparam name="TModConfig">ModConfig's type.</typeparam>
     /// <param name="property">Property to process.</param>
     /// <param name="getConfig">Function that gets the current config instance.</param>
     /// <param name="min">Min value.</param>
@@ -401,9 +439,9 @@ internal class GMCMHelper : IntegrationHelper
     /// <param name="formatValue">Formats values.</param>
     /// <param name="fieldId">fieldId.</param>
     /// <returns>this.</returns>
-    public GMCMHelper AddIntOption<T>(
+    public GMCMHelper AddIntOption<TModConfig>(
         PropertyInfo property,
-        Func<T> getConfig,
+        Func<TModConfig> getConfig,
         int? min = null,
         int? max = null,
         int? interval = null,
@@ -416,8 +454,8 @@ internal class GMCMHelper : IntegrationHelper
         }
         else
         {
-            Func<T, int> getterDelegate = getter.CreateDelegate<Func<T, int>>();
-            Action<T, int>? setterDelegate = setter.CreateDelegate<Action<T, int>>();
+            Func<TModConfig, int> getterDelegate = getter.CreateDelegate<Func<TModConfig, int>>();
+            Action<TModConfig, int> setterDelegate = setter.CreateDelegate<Action<TModConfig, int>>();
             this.AddNumberOption(
                 name: () => this.Translation.Get($"{property.Name}.title"),
                 tooltip: () => this.Translation.Get($"{property.Name}.description"),
@@ -461,14 +499,14 @@ internal class GMCMHelper : IntegrationHelper
     /// <summary>
     /// Adds a keybindlist option at this point in the form.
     /// </summary>
-    /// <typeparam name="T">ModConfig's type.</typeparam>
+    /// <typeparam name="TModConfig">ModConfig's type.</typeparam>
     /// <param name="property">Property to process.</param>
     /// <param name="getConfig">Function that gets the current config instance.</param>
     /// <param name="fieldID">fieldId.</param>
     /// <returns>this.</returns>
-    public GMCMHelper AddKeybindList<T>(
+    public GMCMHelper AddKeybindList<TModConfig>(
         PropertyInfo property,
-        Func<T> getConfig,
+        Func<TModConfig> getConfig,
         string? fieldID = null)
     {
         if (property.GetGetMethod() is not MethodInfo getter || property.GetSetMethod() is not MethodInfo setter)
@@ -477,8 +515,8 @@ internal class GMCMHelper : IntegrationHelper
         }
         else
         {
-            Func<T, KeybindList> getterDelegate = getter.CreateDelegate<Func<T, KeybindList>>();
-            Action<T, KeybindList>? setterDelegate = setter.CreateDelegate<Action<T, KeybindList>>();
+            Func<TModConfig, KeybindList> getterDelegate = getter.CreateDelegate<Func<TModConfig, KeybindList>>();
+            Action<TModConfig, KeybindList> setterDelegate = setter.CreateDelegate<Action<TModConfig, KeybindList>>();
             this.AddKeybindList(
                 name: () => this.Translation.Get($"{property.Name}.title"),
                 tooltip: () => this.Translation.Get($"{property.Name}.description"),

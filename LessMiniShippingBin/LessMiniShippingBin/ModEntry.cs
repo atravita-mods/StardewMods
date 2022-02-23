@@ -1,5 +1,5 @@
-﻿using System.Reflection;
-using System.Text;
+﻿using AtraShared.Integrations;
+using AtraShared.Utils.Extensions;
 using HarmonyLib;
 using StardewModdingAPI.Events;
 
@@ -48,34 +48,7 @@ public class ModEntry : Mod
     {
         // handle patches from annotations.
         harmony.PatchAll();
-        foreach (MethodBase? method in harmony.GetPatchedMethods())
-        {
-            if (method is null)
-            {
-                continue;
-            }
-            Patches patches = Harmony.GetPatchInfo(method);
-
-            StringBuilder sb = new();
-            sb.Append("Patched method ").Append(method.GetFullName());
-            foreach (Patch patch in patches.Prefixes.Where((Patch p) => p.owner.Equals(this.ModManifest.UniqueID)))
-            {
-                sb.AppendLine().Append("\tPrefixed with method: ").Append(patch.PatchMethod.GetFullName());
-            }
-            foreach (Patch patch in patches.Postfixes.Where((Patch p) => p.owner.Equals(this.ModManifest.UniqueID)))
-            {
-                sb.AppendLine().Append("\tPostfixed with method: ").Append(patch.PatchMethod.GetFullName());
-            }
-            foreach (Patch patch in patches.Transpilers.Where((Patch p) => p.owner.Equals(this.ModManifest.UniqueID)))
-            {
-                sb.AppendLine().Append("\tTranspiled with method: ").Append(patch.PatchMethod.GetFullName());
-            }
-            foreach (Patch patch in patches.Finalizers.Where((Patch p) => p.owner.Equals(this.ModManifest.UniqueID)))
-            {
-                sb.AppendLine().Append("\tFinalized with method: ").Append(patch.PatchMethod.GetFullName());
-            }
-            ModMonitor.Log(sb.ToString(), LogLevel.Trace);
-        }
+        harmony.Snitch(this.Monitor, this.ModManifest.UniqueID);
     }
 
     /// <summary>
@@ -86,64 +59,32 @@ public class ModEntry : Mod
     /// <remarks>To add a new setting, add the details to the i18n file. Currently handles: bool.</remarks>
     private void SetUpConfig(object? sender, GameLaunchedEventArgs e)
     {
-        IModInfo gmcm = this.Helper.ModRegistry.Get("spacechase0.GenericModConfigMenu");
-        if (gmcm is null)
-        {
-            this.Monitor.Log(I18n.GmcmNotFound(), LogLevel.Debug);
-            return;
-        }
-        if (gmcm.Manifest.Version.IsOlderThan("1.6.0"))
-        {
-            this.Monitor.Log(I18n.GmcmVersionMessage(version: "1.6.0", currentversion: gmcm.Manifest.Version), LogLevel.Info);
-            return;
-        }
-        var configMenu = this.Helper.ModRegistry.GetApi<IGenericModConfigMenuApi>("spacechase0.GenericModConfigMenu");
-        if (configMenu is null)
+
+        GMCMHelper helper = new(this.Monitor, this.Helper.Translation, this.Helper.ModRegistry, this.ModManifest);
+        if (!helper.TryGetAPI())
         {
             return;
         }
 
-        configMenu.Register(
-            mod: this.ModManifest,
-            reset: () => Config = new ModConfig(),
-            save: () => this.Helper.WriteConfig(Config));
-
-        configMenu.AddParagraph(
-            mod: this.ModManifest,
-            text: I18n.Mod_Description);
-
-        configMenu.AddNumberOption(
-            mod: this.ModManifest,
-            getValue: () => Config.MiniShippingCapacity,
-            setValue: value => Config.MiniShippingCapacity = value,
-            name: I18n.Config_Capacity_Title,
-            tooltip: I18n.Config_Capacity_Description,
-            min: 9,
-            max: 48,
-            interval: 9);
-
-        configMenu.AddNumberOption(
-            mod: this.ModManifest,
-            getValue: () => Config.JuminoCapcaity,
-            setValue: value => Config.JuminoCapcaity = value,
-            name: I18n.Config_Junimo_Title,
-            tooltip: I18n.Config_Junimo_Description,
-            min: 9,
-            max: 48,
-            interval: 9);
-    }
-
-    /// <summary>
-    /// Log to DEBUG if compiled with DEBUG
-    /// Log to verbose only otherwise.
-    /// </summary>
-    /// <param name="message">Message to log.</param>
-    private void DebugLog(string message, LogLevel level = LogLevel.Debug)
-    {
-#if DEBUG
-        this.Monitor.Log(message, level);
-#else
-        this.Monitor.VerboseLog(message);
-#endif
+        helper.Register(
+                reset: () => Config = new ModConfig(),
+                save: () => this.Helper.WriteConfig(Config))
+            .AddParagraph(I18n.Mod_Description)
+            .AddNumberOption(
+                getValue: () => Config.MiniShippingCapacity,
+                setValue: value => Config.MiniShippingCapacity = value,
+                name: I18n.Config_Capacity_Title,
+                tooltip: I18n.Config_Capacity_Description,
+                min: 9,
+                max: 48,
+                interval: 9)
+            .AddNumberOption(
+                getValue: () => Config.JuminoCapcaity,
+                setValue: value => Config.JuminoCapcaity = value,
+                name: I18n.Config_Junimo_Title,
+                tooltip: I18n.Config_Junimo_Description,
+                min: 9,
+                max: 48,
+                interval: 9);
     }
 }

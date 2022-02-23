@@ -1,4 +1,4 @@
-﻿namespace SpecialOrdersExtended;
+﻿namespace SpecialOrdersExtended.Managers;
 
 /// <summary>
 /// Static class to hold tag-management functions.
@@ -10,8 +10,10 @@ internal class TagManager
     /// <summary>
     /// Gets a seeded random that changes once per in-game week.
     /// </summary>
-    internal static Random Random {
-        get {
+    internal static Random Random
+    {
+        get
+        {
             if (random is null)
             {
                 random = new Random(((int)Game1.uniqueIDForThisGame * 26) + (int)(Game1.stats.DaysPlayed / 7 * 36));

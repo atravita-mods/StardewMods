@@ -1,5 +1,7 @@
 ﻿using System.Text;
+using AtraShared;
 using StardewModdingAPI.Utilities;
+using AtraUtils = AtraShared.Utils.Utils;
 
 namespace SpecialOrdersExtended.DataModels;
 
@@ -143,7 +145,7 @@ internal class DialogueLog : AbstractDataModel
     {
         StringBuilder stringBuilder = new();
         stringBuilder.Append($"DialogueLog({this.Savefile}):");
-        foreach (string key in Utilities.ContextSort(this.SeenDialogues.Keys))
+        foreach (string key in AtraUtils.ContextSort(this.SeenDialogues.Keys))
         {
             stringBuilder.AppendLine().Append($"    {key}:").AppendJoin(", ", this.SeenDialogues[key]);
         }

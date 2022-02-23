@@ -1,5 +1,7 @@
 ﻿using System.Text;
+using AtraShared;
 using StardewModdingAPI.Utilities;
+using AtraUtils = AtraShared.Utils.Utils;
 
 namespace SpecialOrdersExtended.DataModels;
 
@@ -143,7 +145,7 @@ internal class RecentCompletedSO : AbstractDataModel
     {
         StringBuilder stringBuilder = new();
         stringBuilder.AppendLine($"RecentCompletedSO{this.Savefile}");
-        foreach (string key in Utilities.ContextSort(this.RecentOrdersCompleted.Keys))
+        foreach (string key in AtraUtils.ContextSort(this.RecentOrdersCompleted.Keys))
         {
             stringBuilder.AppendLine($"{key} completed on Day {this.RecentOrdersCompleted[key]}");
         }

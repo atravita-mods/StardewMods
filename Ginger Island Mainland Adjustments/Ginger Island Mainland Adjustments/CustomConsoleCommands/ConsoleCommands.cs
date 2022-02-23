@@ -1,6 +1,5 @@
 ﻿using System.Text;
 using AtraShared.Utils.Extensions;
-using GingerIslandMainlandAdjustments.ScheduleManager;
 using GingerIslandMainlandAdjustments.Utils;
 using StardewModdingAPI.Utilities;
 

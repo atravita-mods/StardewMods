@@ -1,6 +1,4 @@
-﻿using System.Reflection;
-using System.Text;
-using AtraBase.Toolkit.Extensions;
+﻿using AtraShared.Utils.Extensions;
 using GingerIslandMainlandAdjustments.CustomConsoleCommands;
 using GingerIslandMainlandAdjustments.DialogueChanges;
 using GingerIslandMainlandAdjustments.Integrations;
@@ -99,34 +97,7 @@ public class ModEntry : Mod
             Globals.ModMonitor.Log($"Mod crashed while applying harmony patches. Please upload this log to smapi.io/log and take the log to the mod's Nexus page.\n\n{ex}", LogLevel.Error);
         }
 
-        foreach (MethodBase? method in harmony.GetPatchedMethods())
-        {
-            if (method is null)
-            {
-                continue;
-            }
-            Patches patches = Harmony.GetPatchInfo(method);
-
-            StringBuilder sb = new();
-            sb.Append("Patched method ").Append(method.GetFullName());
-            foreach (Patch patch in patches.Prefixes.Where((Patch p) => p.owner.Equals(this.ModManifest.UniqueID)))
-            {
-                sb.AppendLine().Append("\tPrefixed with method: ").Append(patch.PatchMethod.GetFullName());
-            }
-            foreach (Patch patch in patches.Postfixes.Where((Patch p) => p.owner.Equals(this.ModManifest.UniqueID)))
-            {
-                sb.AppendLine().Append("\tPostfixed with method: ").Append(patch.PatchMethod.GetFullName());
-            }
-            foreach (Patch patch in patches.Transpilers.Where((Patch p) => p.owner.Equals(this.ModManifest.UniqueID)))
-            {
-                sb.AppendLine().Append("\tTranspiled with method: ").Append(patch.PatchMethod.GetFullName());
-            }
-            foreach (Patch patch in patches.Finalizers.Where((Patch p) => p.owner.Equals(this.ModManifest.UniqueID)))
-            {
-                sb.AppendLine().Append("\tFinalized with method: ").Append(patch.PatchMethod.GetFullName());
-            }
-            Globals.ModMonitor.Log(sb.ToString(), LogLevel.Trace);
-        }
+        harmony.Snitch(Globals.ModMonitor, this.ModManifest.UniqueID);
     }
 
     /// <summary>

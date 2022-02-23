@@ -1,5 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
-
+  <Import Project="..\..\AtraBase\AtraBase.projitems" Label="Shared" />
+  <Import Project="..\..\AtraShared\AtraShared.projitems" Label="Shared" />
+  
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
     <EnableHarmony>true</EnableHarmony>
@@ -28,5 +30,6 @@
     <Using Include="StardewValley" />
     <Using Include="StardewModdingAPI" />
     <Using Include="JetBrains.Annotations" />
+    <Using Include="System.Diagnostics.CodeAnalysis" />
   </ItemGroup>
 </Project>

@@ -1,5 +1,6 @@
 ﻿using System.Reflection;
-using System.Text;
+using AtraShared.Integrations;
+using AtraShared.Utils.Extensions;
 using HarmonyLib;
 using StardewModdingAPI.Events;
 
@@ -48,34 +49,7 @@ public class ModEntry : Mod
     {
         // handle patches from annotations.
         harmony.PatchAll();
-        foreach (MethodBase? method in harmony.GetPatchedMethods())
-        {
-            if (method is null)
-            {
-                continue;
-            }
-            Patches patches = Harmony.GetPatchInfo(method);
-
-            StringBuilder sb = new();
-            sb.Append("Patched method ").Append(method.GetFullName());
-            foreach (Patch patch in patches.Prefixes.Where((Patch p) => p.owner.Equals(this.ModManifest.UniqueID)))
-            {
-                sb.AppendLine().Append("\tPrefixed with method: ").Append(patch.PatchMethod.GetFullName());
-            }
-            foreach (Patch patch in patches.Postfixes.Where((Patch p) => p.owner.Equals(this.ModManifest.UniqueID)))
-            {
-                sb.AppendLine().Append("\tPostfixed with method: ").Append(patch.PatchMethod.GetFullName());
-            }
-            foreach (Patch patch in patches.Transpilers.Where((Patch p) => p.owner.Equals(this.ModManifest.UniqueID)))
-            {
-                sb.AppendLine().Append("\tTranspiled with method: ").Append(patch.PatchMethod.GetFullName());
-            }
-            foreach (Patch patch in patches.Finalizers.Where((Patch p) => p.owner.Equals(this.ModManifest.UniqueID)))
-            {
-                sb.AppendLine().Append("\tFinalized with method: ").Append(patch.PatchMethod.GetFullName());
-            }
-            ModMonitor.Log(sb.ToString(), LogLevel.Trace);
-        }
+        harmony.Snitch(this.Monitor, this.ModManifest.UniqueID);
     }
 
     /// <summary>
@@ -86,73 +60,27 @@ public class ModEntry : Mod
     /// <remarks>To add a new setting, add the details to the i18n file. Currently handles: bool.</remarks>
     private void SetUpConfig(object? sender, GameLaunchedEventArgs e)
     {
-        IModInfo gmcm = this.Helper.ModRegistry.Get("spacechase0.GenericModConfigMenu");
-        if (gmcm is null)
-        {
-            this.Monitor.Log(I18n.GmcmNotFound(), LogLevel.Debug);
-            return;
-        }
-        if (gmcm.Manifest.Version.IsOlderThan("1.6.0"))
-        {
-            this.Monitor.Log(I18n.GmcmVersionMessage(version: "1.6.0", currentversion: gmcm.Manifest.Version), LogLevel.Info);
-            return;
-        }
-        var configMenu = this.Helper.ModRegistry.GetApi<IGenericModConfigMenuApi>("spacechase0.GenericModConfigMenu");
-        if (configMenu is null)
-        {
-            return;
-        }
 
-        configMenu.Register(
-            mod: this.ModManifest,
-            reset: () => Config = new ModConfig(),
-            save: () => this.Helper.WriteConfig(Config));
-
-        configMenu.AddParagraph(
-            mod: this.ModManifest,
-            text: I18n.Mod_Description);
+        GMCMHelper helper = new(this.Monitor, this.Helper.Translation, this.Helper.ModRegistry, this.ModManifest);
+        if (!helper.TryGetAPI())
+        {
+            return;
+        }
+        helper.Register(
+                reset: () => Config = new ModConfig(),
+                save: () => this.Helper.WriteConfig(Config))
+            .AddParagraph(I18n.Mod_Description);
 
         foreach (PropertyInfo property in typeof(ModConfig).GetProperties())
         {
-            MethodInfo? getter = property.GetGetMethod();
-            MethodInfo? setter = property.GetSetMethod();
-            if (getter is null || setter is null)
-            {
-                this.DebugLog("Config appears to have a mis-formed option?");
-                continue;
-            }
-
             if (property.PropertyType.Equals(typeof(bool)))
             {
-                var getterDelegate = (Func<ModConfig, bool>)Delegate.CreateDelegate(typeof(Func<ModConfig, bool>), getter);
-                var setterDelegate = (Action<ModConfig, bool>)Delegate.CreateDelegate(typeof(Action<ModConfig, bool>), setter);
-
-                configMenu.AddBoolOption(
-                    mod: this.ModManifest,
-                    getValue: () => getterDelegate(Config),
-                    setValue: (bool value) => setterDelegate(Config, value),
-                    name: () => I18n.GetByKey($"config.{property.Name}.title"),
-                    tooltip: () => I18n.GetByKey($"config.{property.Name}.description"));
+                helper.AddBoolOption(property, () => Config);
             }
             else
             {
-                this.DebugLog($"{property.Name} unaccounted for.", LogLevel.Warn);
+                this.Monitor.DebugLog($"{property.Name} unaccounted for.", LogLevel.Warn);
             }
         }
-    }
-
-
-    /// <summary>
-    /// Log to DEBUG if compiled with DEBUG
-    /// Log to verbose only otherwise.
-    /// </summary>
-    /// <param name="message">Message to log.</param>
-    private void DebugLog(string message, LogLevel level = LogLevel.Debug)
-    {
-#if DEBUG
-        this.Monitor.Log(message, level);
-#else
-        Monitor.VerboseLog(message);
-#endif
     }
 }

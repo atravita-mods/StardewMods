@@ -1,6 +1,7 @@
 ﻿using System.Globalization;
 using System.Reflection;
 using System.Text.RegularExpressions;
+using AtraShared.Integrations;
 using AtraShared.Utils.Extensions;
 using Microsoft.Xna.Framework;
 using StardewModdingAPI.Events;
@@ -113,78 +114,38 @@ public class ModEntry : Mod
     /// <remarks>To add a new setting, add the details to the i18n file. Currently handles: bool, int, float.</remarks>
     private void SetUpConfig(object? sender, GameLaunchedEventArgs e)
     {
-        IModInfo gmcm = this.Helper.ModRegistry.Get("spacechase0.GenericModConfigMenu");
-        if (gmcm is null)
-        {
-            this.Monitor.Log(I18n.GmcmNotFound(), LogLevel.Debug);
-            return;
-        }
-        if (gmcm.Manifest.Version.IsOlderThan("1.6.0"))
-        {
-            this.Monitor.Log(I18n.GmcmVersionMessage(version: "1.6.0", currentversion: gmcm.Manifest.Version), LogLevel.Info);
-            return;
-        }
-
-        if (this.Helper.ModRegistry.GetApi<IGenericModConfigMenuApi>("spacechase0.GenericModConfigMenu") is not IGenericModConfigMenuApi configMenu)
+        GMCMHelper helper = new(this.Monitor, this.Helper.Translation, this.Helper.ModRegistry, this.ModManifest);
+        if (!helper.TryGetAPI())
         {
             return;
         }
 
-        configMenu.Register(
-            mod: this.ModManifest,
-            reset: () => this.config = new ModConfig(),
-            save: () => this.Helper.WriteConfig(this.config));
-
-        configMenu.AddParagraph(
-            mod: this.ModManifest,
-            text: I18n.Mod_Description);
+        helper.Register(
+                reset: () => this.config = new ModConfig(),
+                save: () => this.Helper.WriteConfig(this.config))
+            .AddParagraph(I18n.Mod_Description);
 
         foreach (PropertyInfo property in typeof(ModConfig).GetProperties())
         {
-            if(property.GetGetMethod() is not MethodInfo getter || property.GetSetMethod() is not MethodInfo setter)
-            {
-                this.Monitor.DebugLog("Config appears to have a mis-formed option?");
-                continue;
-            }
-
             if (property.PropertyType.Equals(typeof(bool)))
             {
-                Func<ModConfig, bool>? getterDelegate = getter.CreateDelegate<Func<ModConfig, bool>>();
-                Action<ModConfig, bool>? setterDelegate = setter.CreateDelegate<Action<ModConfig, bool>>();
-
-                configMenu.AddBoolOption(
-                    mod: this.ModManifest,
-                    getValue: () => getterDelegate(this.config),
-                    setValue: (bool value) => setterDelegate(this.config, value),
-                    name: () => I18n.GetByKey($"{property.Name}.title"),
-                    tooltip: () => I18n.GetByKey($"{property.Name}.description"));
+                helper.AddBoolOption(property, () => this.config);
             }
             else if (property.PropertyType.Equals(typeof(int)))
             {
-                Func<ModConfig, int>? getterDelegate = getter.CreateDelegate<Func<ModConfig, int>>();
-                Action<ModConfig, int>? setterDelegate = setter.CreateDelegate<Action<ModConfig, int>>();
-                configMenu.AddNumberOption(
-                    mod: this.ModManifest,
-                    getValue: () => getterDelegate(this.config),
-                    setValue: (int value) => setterDelegate(this.config, value),
-                    name: () => I18n.GetByKey($"{property.Name}.title"),
-                    tooltip: () => I18n.GetByKey($"{property.Name}.description"),
-                    min: 0,
-                    max: property.Name.Equals("MaxDailySpawns", StringComparison.OrdinalIgnoreCase) ? 100 : 1000,
-                    interval: 1);
+                helper.AddIntOption(
+                    property: property,
+                    getConfig: () => this.config,
+                    min: (property) => 0,
+                    max: (property) => property.Name == "MaxDailySpawns" ? 100 : 1000);
             }
             else if (property.PropertyType.Equals(typeof(float)))
             {
-                Func<ModConfig, float>? getterDelegate = getter.CreateDelegate<Func<ModConfig, float>>();
-                Action<ModConfig, float>? setterDelegate = setter.CreateDelegate<Action<ModConfig, float>>();
-                configMenu.AddNumberOption(
-                    mod: this.ModManifest,
-                    getValue: () => getterDelegate(this.config),
-                    setValue: (float value) => setterDelegate(this.config, value),
-                    name: () => I18n.GetByKey($"{property.Name}.title"),
-                    tooltip: () => I18n.GetByKey($"{property.Name}.description"),
-                    min: 0.0f,
-                    max: 100f);
+                helper.AddFloatOption(
+                    property: property,
+                    getConfig: () => this.config,
+                    min: (property) => 0f,
+                    max: (property) => 100f);
             }
             else
             {

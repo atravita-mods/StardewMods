@@ -1,5 +1,6 @@
 ﻿using System.Reflection;
 using AtraShared.Utils.Extensions;
+using StardewModdingAPI.Utilities;
 
 namespace AtraShared.Integrations;
 
@@ -273,6 +274,32 @@ internal class GMCMHelper : IntegrationHelper
             max: max,
             interval: interval,
             formatValue: formatValue,
+            fieldId: fieldId);
+        return this;
+    }
+
+    /// <summary>
+    /// Adds a KeyBindList at this position in the form.
+    /// </summary>
+    /// <param name="name">Function to get the name.</param>
+    /// <param name="getValue">GetValue callback</param>
+    /// <param name="setValue">SetValue callback.</param>
+    /// <param name="tooltip">Function to get the tooltip.</param>
+    /// <param name="fieldId">FieldID.</param>
+    /// <returns>this.</returns>
+    public GMCMHelper AddKeybindList(
+        Func<string> name,
+        Func<KeybindList> getValue,
+        Action<KeybindList> setValue,
+        Func<string>? tooltip = null,
+        string? fieldId = null)
+    {
+        this.modMenuApi!.AddKeybindList(
+            mod: this.manifest,
+            name: name,
+            getValue: getValue,
+            setValue: setValue,
+            tooltip: tooltip,
             fieldId: fieldId);
         return this;
     }

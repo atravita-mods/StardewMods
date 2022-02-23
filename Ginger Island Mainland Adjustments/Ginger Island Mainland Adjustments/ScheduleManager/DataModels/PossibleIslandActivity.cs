@@ -1,4 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
+using NotNullAttribute = System.Diagnostics.CodeAnalysis.NotNullAttribute;
 
 namespace GingerIslandMainlandAdjustments.ScheduleManager.DataModels;
 

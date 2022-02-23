@@ -14,8 +14,7 @@ internal class GenerateCPTokens
     /// <param name="manifest">This mod's manifest.</param>
     public static void AddTokens(IManifest manifest)
     {
-        IContentPatcherAPI? api = Globals.ModRegistry.GetApi<IContentPatcherAPI>("Pathoschild.ContentPatcher");
-        if (api is null)
+        if (Globals.ModRegistry.GetApi<IContentPatcherAPI>("Pathoschild.ContentPatcher") is not IContentPatcherAPI api)
         {
             return;
         }

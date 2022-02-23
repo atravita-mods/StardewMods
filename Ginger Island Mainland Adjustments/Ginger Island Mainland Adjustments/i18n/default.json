@@ -101,18 +101,19 @@
   "config.allow_george_and_evelyn.description": "If enabled, allows George and Evelyn access to the resort.",
 
   // Game doesn't have translations for full days of the week.
-  "None": "None", // for no dedicated Gus-to-GI day.
-  "Monday": "Monday",
-  "Tuesday": "Tuesday",
-  "Wednesday": "Wednesday",
-  "Thursday": "Thursday",
-  "Friday": "Friday",
-  "Saturday": "Saturday",
-  "Sunday": "Sunday",
+  "config.DayOfWeek.None": "None", // for no dedicated Gus-to-GI day.
+  "config.DayOfWeek.Monday": "Monday",
+  "config.DayOfWeek.Tuesday": "Tuesday",
+  "config.DayOfWeek.Wednesday": "Wednesday",
+  "config.DayOfWeek.Thursday": "Thursday",
+  "config.DayOfWeek.Friday": "Friday",
+  "config.DayOfWeek.Saturday": "Saturday",
+  "config.DayOfWeek.Sunday": "Sunday",
 
   // Used for translating the choices for WearIslandClothing.
-  "Default": "Default",
-  "All": "All",
+  "config.WearIslandClothing.Default": "Default",
+  "config.WearIslandClothing.All": "All",
+  "config.WearIslandClothing.None": "None",
 
   //MidDayScheduleEditor messages
   "middayScheduleEditor.npc-found-for-adjustment": "NPC {{name}} with Island Schedule, will set up for schedule alternation",

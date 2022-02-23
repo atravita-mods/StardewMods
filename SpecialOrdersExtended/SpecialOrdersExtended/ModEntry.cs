@@ -1,4 +1,5 @@
 ﻿using System.Reflection;
+using AtraShared.Integrations;
 using HarmonyLib;
 using SpecialOrdersExtended.Integrations;
 using StardewModdingAPI.Events;
@@ -149,11 +150,9 @@ internal class ModEntry : Mod
     private void OnGameLaunched(object? sender, GameLaunchedEventArgs e)
     {
         // Bind Spacecore API
-        IModInfo spacecore = this.Helper.ModRegistry.Get("spacechase0.SpaceCore");
-        if (spacecore is not null && spacecore.Manifest.Version.IsNewerThan("1.5.10"))
-        {
-            spaceCoreAPI = this.Helper.ModRegistry.GetApi<ISpaceCoreAPI>("spacechase0.SpaceCore");
-        }
+
+        IntegrationHelper helper = new(this.Monitor, this.Helper.Translation, this.Helper.ModRegistry);
+        helper.TryGetAPI("spacechase0.SpaceCore", "1.5.10", out spaceCoreAPI);
 
         IContentPatcherAPI? api = this.Helper.ModRegistry.GetApi<IContentPatcherAPI>("Pathoschild.ContentPatcher");
         if (api is null)

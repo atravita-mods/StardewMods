@@ -14,6 +14,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Integrations\IContentPatcherAPI.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Integrations\IGenericModConfigMenuAPI.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Integrations\IntegrationHelper.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Integrations\ISpaceCoreAPI.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Schedules\ScheduleUtilityFunctions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Utils\Extensions\HarmonyExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Utils\Extensions\LogExtensions.cs" />

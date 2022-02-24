@@ -1,11 +1,12 @@
 ﻿using AtraBase.Toolkit.Reflection;
 using AtraShared.Integrations;
 using AtraShared.Utils.Extensions;
-using AtraUtils = AtraShared.Utils.Utils;
 using HarmonyLib;
+using SpecialOrdersExtended.HarmonyPatches;
 using SpecialOrdersExtended.Managers;
 using StardewModdingAPI.Events;
 using StardewValley.GameData;
+using AtraUtils = AtraShared.Utils.Utils;
 
 namespace SpecialOrdersExtended;
 
@@ -71,7 +72,7 @@ internal class ModEntry : Mod
 
         harmony.Patch(
             original: AccessTools.Method(typeof(SpecialOrder), nameof(SpecialOrder.GetSpecialOrder)),
-            finalizer: new HarmonyMethod(typeof(Utilities), nameof(Utilities.FinalizeGetSpecialOrder)));
+            finalizer: new HarmonyMethod(typeof(Finalizers), nameof(Finalizers.FinalizeGetSpecialOrder)));
 
         try
         {

@@ -6,9 +6,9 @@
   "QuestCompletion.title": "Billboard Quest Completion",
   "QuestCompletion.description": "Count monster kills on the farm towards billboard quest completion?",
   "SpecialOrderCompletion.title": "Special Order Completion",
-  "SpecialOrderCompletion.description":  "Count monster kills on the farm towards special order objectives?",
+  "SpecialOrderCompletion.description": "Count monster kills on the farm towards special order objectives?",
 
   "IllFormatedConfig": "Config file seems ill-formated, using default. Please use Generic Mod Config Menu to configure.",
-  "GmcmNotFound": "Generic Mod Config Menu (https://www.nexusmods.com/stardewvalley/mods/5098) not found, integration disabled.",
-  "GmcmVersionMessage": "Please update Generic Mod Config Menu (https://www.nexusmods.com/stardewvalley/mods/5098) to at least version {{version}} (Current version: {{currentversion}}). GMCM integration disabled."
+  "api-not-found": "{{APIID}} not found, integration disabled.",
+  "api-too-old": "Please update {{APIID}} to at least version {{minversion}}. Current version {{currentversion}}. Integration disabled."
 }

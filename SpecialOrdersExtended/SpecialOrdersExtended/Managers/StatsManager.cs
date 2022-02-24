@@ -1,7 +1,8 @@
 ﻿using System.Reflection;
 using System.Text;
+using AtraUtils = AtraShared.Utils.Utils;
 
-namespace SpecialOrdersExtended;
+namespace SpecialOrdersExtended.Managers;
 
 /// <summary>
 /// Manages the handling of stats
@@ -80,8 +81,8 @@ internal static class StatsManager
     {
         StringBuilder sb = new();
         sb.AppendLine(I18n.CurrentKeysFound());
-        sb.Append('\t').Append(I18n.Hardcoded()).AppendJoin(", ", Utilities.ContextSort(PropertyGetters.Keys)).AppendLine();
-        sb.Append('\t').Append(I18n.Dictionary()).AppendJoin(", ", Utilities.ContextSort(Game1.player.stats.stat_dictionary.Keys));
+        sb.Append('\t').Append(I18n.Hardcoded()).AppendJoin(", ", AtraUtils.ContextSort(PropertyGetters.Keys)).AppendLine();
+        sb.Append('\t').Append(I18n.Dictionary()).AppendJoin(", ", AtraUtils.ContextSort(Game1.player.stats.stat_dictionary.Keys));
         ModEntry.ModMonitor.Log(sb.ToString(), LogLevel.Info);
     }
 

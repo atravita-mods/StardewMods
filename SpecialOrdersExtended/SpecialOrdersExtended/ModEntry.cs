@@ -1,6 +1,9 @@
-﻿using System.Reflection;
+﻿using AtraBase.Toolkit.Reflection;
+using AtraShared.Integrations;
+using AtraShared.Utils.Extensions;
+using AtraUtils = AtraShared.Utils.Utils;
 using HarmonyLib;
-using SpecialOrdersExtended.Integrations;
+using SpecialOrdersExtended.Managers;
 using StardewModdingAPI.Events;
 using StardewValley.GameData;
 
@@ -9,25 +12,6 @@ namespace SpecialOrdersExtended;
 /// <inheritdoc />
 internal class ModEntry : Mod
 {
-    // The following fields are set in the Entry method, which is about as close to the constructor as I can get
-#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
-
-    /// <summary>
-    /// Logger for SMAPI.
-    /// </summary>
-    private static IMonitor modMonitor;
-
-    /// <summary>
-    /// SMAPI's data writer.
-    /// </summary>
-    private static IDataHelper dataHelper;
-
-    /// <summary>
-    /// Configuration instance for this mod.
-    /// </summary>
-    private static ModConfig config;
-#pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
-
     /// <summary>
     /// Spacecore API handle.
     /// </summary>
@@ -35,50 +19,55 @@ internal class ModEntry : Mod
     private static ISpaceCoreAPI? spaceCoreAPI;
 
     /// <summary>
-    /// Gets the logger for this mod.
-    /// </summary>
-    internal static IMonitor ModMonitor => modMonitor;
-
-    /// <summary>
-    /// Gets SMAPI's data helper for this mod.
-    /// </summary>
-    internal static IDataHelper DataHelper => dataHelper;
-
-    /// <summary>
-    /// Gets the config class for this mod.
-    /// </summary>
-    internal static ModConfig Config => config;
-
-    /// <summary>
     /// Gets the Spacecore API instance.
     /// </summary>
     /// <remarks>If null, was not able to be loaded.</remarks>
     internal static ISpaceCoreAPI? SpaceCoreAPI => spaceCoreAPI;
+
+    // The following fields are set in the Entry method, which is about as close to the constructor as I can get
+#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
+
+    /// <summary>
+    /// Gets the logger for this mod.
+    /// </summary>
+    internal static IMonitor ModMonitor { get; private set; }
+
+    /// <summary>
+    /// Gets SMAPI's data helper for this mod.
+    /// </summary>
+    internal static IDataHelper DataHelper { get; private set; }
+
+    /// <summary>
+    /// Gets the config class for this mod.
+    /// </summary>
+    internal static ModConfig Config { get; private set; }
+#pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
+
+    private static Func<string, bool>? CheckTagDelegate { get; set; } = null;
 
     /// <inheritdoc/>
     public override void Entry(IModHelper helper)
     {
         // Bind useful SMAPI features.
         I18n.Init(helper.Translation);
-        modMonitor = this.Monitor;
-        dataHelper = helper.Data;
+        ModMonitor = this.Monitor;
+        DataHelper = helper.Data;
 
         // Read config file.
         try
         {
-            config = this.Helper.ReadConfig<ModConfig>();
+            Config = this.Helper.ReadConfig<ModConfig>();
         }
         catch
         {
             this.Monitor.Log(I18n.IllFormatedConfig(), LogLevel.Warn);
-            config = new();
+            Config = new();
         }
         Harmony harmony = new(this.ModManifest.UniqueID);
 
         harmony.Patch(
-            original: typeof(SpecialOrder).GetMethod("CheckTag", BindingFlags.NonPublic | BindingFlags.Static),
+            original: typeof(SpecialOrder).StaticMethodNamed("CheckTag"),
             prefix: new HarmonyMethod(typeof(TagManager), nameof(TagManager.PrefixCheckTag)));
-        ModMonitor.Log("Patching SpecialOrder::CheckTag for Special Orders Extended", LogLevel.Trace);
 
         harmony.Patch(
             original: AccessTools.Method(typeof(SpecialOrder), nameof(SpecialOrder.GetSpecialOrder)),
@@ -152,25 +141,21 @@ internal class ModEntry : Mod
     /// <remarks>Used to bind APIs and register CP tokens.</remarks>
     private void OnGameLaunched(object? sender, GameLaunchedEventArgs e)
     {
+        // Get a delegate on SpecialOrder.CheckTag.
+        CheckTagDelegate = typeof(SpecialOrder).StaticMethodNamed("CheckTag").CreateDelegate<Func<string, bool>>();
+
         // Bind Spacecore API
-        IModInfo spacecore = this.Helper.ModRegistry.Get("spacechase0.SpaceCore");
-        if (spacecore is not null && spacecore.Manifest.Version.IsNewerThan("1.5.10"))
-        {
-            spaceCoreAPI = this.Helper.ModRegistry.GetApi<ISpaceCoreAPI>("spacechase0.SpaceCore");
-        }
+        IntegrationHelper helper = new(this.Monitor, this.Helper.Translation, this.Helper.ModRegistry);
+        helper.TryGetAPI("spacechase0.SpaceCore", "1.5.10", out spaceCoreAPI);
 
-        IContentPatcherAPI? api = this.Helper.ModRegistry.GetApi<IContentPatcherAPI>("Pathoschild.ContentPatcher");
-        if (api is null)
+        if (helper.TryGetAPI("Pathoschild.ContentPatcher", "1.20.0", out IContentPatcherAPI? api))
         {
-            ModMonitor.Log(I18n.CpNotInstalled(), LogLevel.Warn);
-            return;
+            api.RegisterToken(this.ModManifest, "Current", new Tokens.CurrentSpecialOrders());
+            api.RegisterToken(this.ModManifest, "Available", new Tokens.AvailableSpecialOrders());
+            api.RegisterToken(this.ModManifest, "Completed", new Tokens.CompletedSpecialOrders());
+            api.RegisterToken(this.ModManifest, "CurrentRules", new Tokens.CurrentSpecialOrderRule());
+            api.RegisterToken(this.ModManifest, "RecentCompleted", new Tokens.RecentCompletedSO());
         }
-
-        api.RegisterToken(this.ModManifest, "Current", new Tokens.CurrentSpecialOrders());
-        api.RegisterToken(this.ModManifest, "Available", new Tokens.AvailableSpecialOrders());
-        api.RegisterToken(this.ModManifest, "Completed", new Tokens.CompletedSpecialOrders());
-        api.RegisterToken(this.ModManifest, "CurrentRules", new Tokens.CurrentSpecialOrderRule());
-        api.RegisterToken(this.ModManifest, "RecentCompleted", new Tokens.RecentCompletedSO());
     }
 
     /// <summary>
@@ -218,7 +203,7 @@ internal class ModEntry : Mod
     /// <param name="args">List of tags to check.</param>
     private void ConsoleCheckTag(string command, string[] args)
     {
-        if (!Context.IsWorldReady)
+        if (!Context.IsWorldReady || CheckTagDelegate is null)
         {
             ModMonitor.Log(I18n.LoadSaveFirst(), LogLevel.Debug);
             return;
@@ -236,8 +221,7 @@ internal class ModEntry : Mod
             {
                 base_tag = tag.Trim();
             }
-            bool result = match == this.Helper.Reflection.GetMethod(typeof(SpecialOrder), "CheckTag").Invoke<bool>(base_tag);
-            ModMonitor.Log($"{tag}: {(result ? I18n.True() : I18n.False())}", LogLevel.Debug);
+            ModMonitor.Log($"{tag}: {(match == CheckTagDelegate(base_tag) ? I18n.True() : I18n.False())}", LogLevel.Debug);
         }
     }
 
@@ -253,7 +237,7 @@ internal class ModEntry : Mod
             ModMonitor.Log(I18n.LoadSaveFirst(), LogLevel.Warn);
         }
         Dictionary<string, SpecialOrderData> order_data = Game1.content.Load<Dictionary<string, SpecialOrderData>>("Data\\SpecialOrders");
-        List<string> keys = Utilities.ContextSort(order_data.Keys);
+        List<string> keys = AtraUtils.ContextSort(order_data.Keys);
         ModMonitor.Log(I18n.NumberFound(count: keys.Count), LogLevel.Debug);
 
         List<string> validkeys = new();
@@ -329,7 +313,7 @@ internal class ModEntry : Mod
                     trimmed_tag = tag;
                 }
 
-                if (!(match == this.Helper.Reflection.GetMethod(typeof(SpecialOrder), "CheckTag").Invoke<bool>(trimmed_tag)))
+                if (!(CheckTagDelegate?.Invoke(trimmed_tag) == match))
                 {
                     ModMonitor.Log($"         {I18n.TagFailed()}: {tag}", LogLevel.Debug);
                 }

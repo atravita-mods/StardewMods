@@ -1,4 +1,5 @@
-﻿using StardewModdingAPI.Utilities;
+﻿using AtraShared.Utils.Extensions;
+using StardewModdingAPI.Utilities;
 
 namespace SpecialOrdersExtended.DataModels;
 

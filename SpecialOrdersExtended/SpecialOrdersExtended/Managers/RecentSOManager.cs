@@ -1,6 +1,9 @@
-﻿using SpecialOrdersExtended.DataModels;
+﻿using AtraBase.Toolkit.Extensions;
+using AtraShared;
+using AtraShared.Utils.Extensions;
+using SpecialOrdersExtended.DataModels;
 
-namespace SpecialOrdersExtended;
+namespace SpecialOrdersExtended.Managers;
 
 /// <summary>
 /// Handles all references to recently completed special orders.

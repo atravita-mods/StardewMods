@@ -1,7 +1,9 @@
-﻿using SpecialOrdersExtended.DataModels;
+﻿using AtraShared;
+using AtraShared.Utils.Extensions;
+using SpecialOrdersExtended.DataModels;
 using StardewModdingAPI.Utilities;
 
-namespace SpecialOrdersExtended;
+namespace SpecialOrdersExtended.Managers;
 
 /// <summary>
 /// A dialogue to delay.

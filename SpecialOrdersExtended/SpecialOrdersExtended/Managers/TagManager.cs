@@ -1,4 +1,4 @@
-﻿namespace SpecialOrdersExtended;
+﻿namespace SpecialOrdersExtended.Managers;
 
 /// <summary>
 /// Static class to hold tag-management functions.
@@ -193,7 +193,8 @@ internal class TagManager
                         "foraging" => Game1.getAllFarmers().Any((Farmer farmer) => farmer.foragingLevel.Value >= levelwanted),
                         "combat" => Game1.getAllFarmers().Any((Farmer farmer) => farmer.combatLevel.Value >= levelwanted),
                         "luck" => Game1.getAllFarmers().Any((Farmer farmer) => farmer.luckLevel.Value >= levelwanted),
-                        _ => ModEntry.SpaceCoreAPI is not null && Game1.getAllFarmers().Any((Farmer farmer) => ModEntry.SpaceCoreAPI.GetLevelForCustomSkill(farmer, vals[1]) >= levelwanted),
+                        _ => ModEntry.SpaceCoreAPI is not null && ModEntry.SpaceCoreAPI.GetCustomSkills().Contains(vals[1])
+                                && Game1.getAllFarmers().Any((Farmer farmer) => ModEntry.SpaceCoreAPI.GetLevelForCustomSkill(farmer, vals[1]) >= levelwanted),
                     };
                     if (negate)
                     {
@@ -350,7 +351,10 @@ internal class TagManager
         {
             try
             {
-                professionNumber = ModEntry.SpaceCoreAPI?.GetProfessionId(skill, profession);
+                if (ModEntry.SpaceCoreAPI is not null && ModEntry.SpaceCoreAPI.GetCustomSkills().Contains(skill))
+                {
+                    professionNumber = ModEntry.SpaceCoreAPI.GetProfessionId(skill, profession);
+                }
             }
             catch (InvalidOperationException)
             {

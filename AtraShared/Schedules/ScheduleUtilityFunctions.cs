@@ -162,7 +162,7 @@ internal class ScheduleUtilityFunctions
                         this.monitor.Log(
                             this.translation.Get("GOTO_SCHEDULE_FRIENDSHIP")
                             .Default("Skipping due to friendship limit for {{npc}}: {{scheduleKey}}")
-                            .Tokens( new { npc = npc.Name, scheduleKey = rawData }), LogLevel.Trace);
+                            .Tokens(new { npc = npc.Name, scheduleKey = rawData }), LogLevel.Trace);
                         return false;
                     }
                 }
@@ -185,7 +185,7 @@ internal class ScheduleUtilityFunctions
     /// <param name="schedule">Raw schedule string.</param>
     /// <param name="npc">NPC.</param>
     /// <param name="prevMap">Map NPC starts on.</param>
-    /// <param name="prevStop">Start location.</param>
+    /// <param name="prevStop">Start location. (if null, is the NPC's default map.)</param>
     /// <param name="prevtime">Start time of scheduler.</param>
     /// <param name="enforceStrictTiming">Whether or not to emit warnings and skip too-tight schedule points.</param>
     /// <returns>null if the schedule could not be parsed, a schedule otherwise.</returns>

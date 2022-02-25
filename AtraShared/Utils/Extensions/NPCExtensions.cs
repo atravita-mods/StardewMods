@@ -1,7 +1,4 @@
-﻿using System.Diagnostics.CodeAnalysis;
-using NotNullAttribute = System.Diagnostics.CodeAnalysis.NotNullAttribute;
-
-namespace AtraShared.Utils.Extensions;
+﻿namespace AtraShared.Utils.Extensions;
 
 /// <summary>
 /// Small extensions to Stardew's NPC class.
@@ -19,6 +16,37 @@ internal static class NPCExtensions
     {
         npc.CurrentDialogue.Clear();
         npc.CurrentDialogue.Push(new Dialogue(npc.Dialogue[dialogueKey], npc) { removeOnNextMove = true });
+    }
+
+    /// <summary>
+    /// Tries to apply the marriage dialogue if it exists.
+    /// </summary>
+    /// <param name="npc">NPC in question.</param>
+    /// <param name="dialogueKey">Dialogue key to search for.</param>
+    /// <param name="add">To add to the stack instead of replacing.</param>
+    /// <param name="clearOnMovement">To clear dialogue if the NPC moves.</param>
+    /// <returns>True if successfully applied.</returns>
+    public static bool TryApplyMarriageDialogueIfExisting(
+        [NotNull] this NPC npc,
+        [NotNull] string dialogueKey,
+        [NotNull] bool add = false,
+        [NotNull] bool clearOnMovement = false)
+    {
+        string dialogue = npc.tryToGetMarriageSpecificDialogueElseReturnDefault(dialogueKey);
+        if (string.IsNullOrEmpty(dialogue))
+        {
+            return false;
+        }
+        else
+        {
+            if (!add)
+            {
+                npc.CurrentDialogue.Clear();
+                npc.currentMarriageDialogue.Clear();
+            }
+            npc.CurrentDialogue.Push(new Dialogue(dialogue, npc) { removeOnNextMove = clearOnMovement });
+            return true;
+        }
     }
 
     /// <summary>

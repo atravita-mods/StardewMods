@@ -1,6 +1,4 @@
-﻿using NotNullAttribute = System.Diagnostics.CodeAnalysis.NotNullAttribute;
-
-namespace AtraShared.Utils.Extensions;
+﻿namespace AtraShared.Utils.Extensions;
 
 /// <summary>
 /// Extension methods for SMAPI's logging service.

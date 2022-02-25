@@ -1,13 +1,14 @@
-﻿using NotNullAttribute = System.Diagnostics.CodeAnalysis.NotNullAttribute;
+﻿namespace AtraShared.Integrations;
 
-namespace AtraShared.Integrations;
-
+/// <summary>
+/// Base class for integration management.
+/// </summary>
 internal class IntegrationHelper
 {
     /// <summary>
     /// Initializes a new instance of the <see cref="IntegrationHelper"/> class.
     /// </summary>
-    /// <param name="monitor"></param>
+    /// <param name="monitor">Logger instance.</param>
     /// <param name="translation">Translation helper.</param>
     /// <param name="modRegistry">Mod registery.</param>
     public IntegrationHelper(IMonitor monitor, ITranslationHelper translation, IModRegistry modRegistry)
@@ -17,12 +18,29 @@ internal class IntegrationHelper
         this.ModRegistry = modRegistry;
     }
 
-    public IMonitor Monitor { get; private set; }
+    /// <summary>
+    /// Gets the logger instance.
+    /// </summary>
+    protected IMonitor Monitor { get; private set; }
 
-    public ITranslationHelper Translation { get; private set; }
+    /// <summary>
+    /// Gets the translation helper instance.
+    /// </summary>
+    protected ITranslationHelper Translation { get; private set; }
 
-    public IModRegistry ModRegistry { get; private set; }
+    /// <summary>
+    /// Gets the modregistry instance.
+    /// </summary>
+    protected IModRegistry ModRegistry { get; private set; }
 
+    /// <summary>
+    /// Attempts to get the API from a different mod.
+    /// </summary>
+    /// <typeparam name="T">Interface to map to.</typeparam>
+    /// <param name="apiid">UniqueID of the other mod.</param>
+    /// <param name="minversion">Minimum semantic version.</param>
+    /// <param name="api">An instance of the api.</param>
+    /// <returns>True if successful, false otherwise.</returns>
     public bool TryGetAPI<T>(
         [NotNull] string apiid,
         [NotNull] string minversion,
@@ -42,8 +60,8 @@ internal class IntegrationHelper
         {
             this.Monitor.Log(
                 this.Translation.Get("api-too-old")
-                .Default("Please update {{APIID}} to at least version {{minversion}}. Current version {{currentversion}}. Integration disabled")
-                .Tokens(new { apiid, minversion, currentversion = modInfo.Manifest.Version }), LogLevel.Info);
+                .Default("Please update {{apiName}}({{APIID}}) to at least version {{minversion}}. Current version {{currentversion}}. Integration disabled")
+                .Tokens(new { apiName = modInfo.Manifest.Name, APIID = apiid, minversion, currentversion = modInfo.Manifest.Version }), LogLevel.Info);
             api = default;
             return false;
         }

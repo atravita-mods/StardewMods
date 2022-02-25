@@ -25,5 +25,8 @@
     <Using Include="StardewModdingAPI" />
     <Using Include="System.Diagnostics.CodeAnalysis" />
     <Using Include="JetBrains.Annotations" />
+    <Using Alias="NotNullAttribute" Include="System.Diagnostics.CodeAnalysis.NotNullAttribute"/>
+    <Using Alias="Object" Include="System.Object"/>
+    <Using Alias="SObject" Include="StardewValley.Object"/>
   </ItemGroup>
 </Project>

@@ -79,12 +79,13 @@ internal class ModEntry : Mod
             harmony.Patch(
                 original: AccessTools.Method(typeof(NPC), nameof(NPC.checkForNewCurrentDialogue)),
                 postfix: new HarmonyMethod(typeof(DialogueManager), nameof(DialogueManager.PostfixCheckDialogue)));
-            ModMonitor.Log("Patching NPC::checkForNewCurrentDialogue for Special Orders Dialogue", LogLevel.Trace);
         }
         catch (Exception ex)
         {
             ModMonitor.Log($"Failed to patch NPC::checkForNewCurrentDialogue for Special Orders Dialogue. Dialogue will be disabled\n\n{ex}", LogLevel.Error);
         }
+
+        harmony.Snitch(this.Monitor, this.ModManifest.UniqueID);
 
         // Register console commands.
         helper.ConsoleCommands.Add(

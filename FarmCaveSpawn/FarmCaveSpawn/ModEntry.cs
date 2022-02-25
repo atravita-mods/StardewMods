@@ -1,11 +1,11 @@
-﻿using System.Globalization;
-using System.Reflection;
+﻿using System.Reflection;
 using System.Text.RegularExpressions;
 using AtraShared.Integrations;
 using AtraShared.Utils.Extensions;
 using Microsoft.Xna.Framework;
 using StardewModdingAPI.Events;
 using StardewValley.Locations;
+using AtraUtils = AtraShared.Utils.Utils;
 
 namespace FarmCaveSpawn;
 
@@ -363,10 +363,7 @@ public class ModEntry : Mod
             fruitNames.Add(obj.DisplayName);
         }
 
-        LocalizedContentManager contextManager = Game1.content;
-        string langcode = contextManager.LanguageCodeString(contextManager.GetCurrentLanguage());
-        fruitNames.Sort(StringComparer.Create(new CultureInfo(langcode), true));
-        this.Monitor.Log($"Possible fruits: {string.Join(", ", fruitNames)}", LogLevel.Info);
+        this.Monitor.Log($"Possible fruits: {string.Join(", ", AtraUtils.ContextSort(fruitNames))}", LogLevel.Info);
     }
 
     /// <summary>

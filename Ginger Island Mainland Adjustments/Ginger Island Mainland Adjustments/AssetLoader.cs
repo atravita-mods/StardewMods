@@ -1,7 +1,5 @@
-﻿using System.Diagnostics.CodeAnalysis;
-using AtraShared;
+﻿using AtraShared;
 using AtraShared.Utils.Extensions;
-using GingerIslandMainlandAdjustments.Utils;
 using StardewModdingAPI.Utilities;
 
 namespace GingerIslandMainlandAdjustments.ScheduleManager;
@@ -150,7 +148,6 @@ public sealed class AssetLoader : IAssetLoader
             SpecialCharacterType.Bartender => BartenderLocation,
             _ => throw new UnexpectedEnumValueException<SpecialCharacterType>(specialCharacterType)
         };
-        Globals.ContentHelper.InvalidateCache(assetLocation);
         foreach (string? specialChar in Globals.ContentHelper.Load<Dictionary<string, string>>(assetLocation, ContentSource.GameContent).Keys)
         {
             if (specialChar is null)
@@ -185,7 +182,6 @@ public sealed class AssetLoader : IAssetLoader
             SpecialGroupType.Groups => GroupsLocations,
             _ => throw new UnexpectedEnumValueException<SpecialGroupType>(specialGroupType)
         };
-        Globals.ContentHelper.InvalidateCache(assetLocation);
         Dictionary<string, string> data = Globals.ContentHelper.Load<Dictionary<string, string>>(assetLocation, ContentSource.GameContent);
         foreach (string? groupname in data.Keys)
         {
@@ -238,7 +234,6 @@ public sealed class AssetLoader : IAssetLoader
     public static Dictionary<NPC, string[]> GetExclusions()
     {
         Dictionary<NPC, string[]> exclusions = new();
-        Globals.ContentHelper.InvalidateCache(ExclusionLocations);
         Dictionary<string, string> data = Globals.ContentHelper.Load<Dictionary<string, string>>(ExclusionLocations, ContentSource.GameContent);
         foreach (string npcname in data.Keys)
         {

@@ -1,4 +1,4 @@
-﻿using System.Diagnostics.CodeAnalysis;
+﻿using AtraShared.Schedules.DataModels;
 using AtraShared.Utils.Extensions;
 using Microsoft.Xna.Framework;
 

@@ -32,6 +32,9 @@
     <Using Include="StardewModdingAPI" />
     <Using Include="JetBrains.Annotations" />
     <Using Include="System.Diagnostics.CodeAnalysis"/>
+    <Using Alias="NotNullAttribute" Include="System.Diagnostics.CodeAnalysis.NotNullAttribute"/>
+    <Using Alias="Object" Include="System.Object"/>
+    <Using Alias="SObject" Include="StardewValley.Object"/>
   </ItemGroup>
 
   <ProjectExtensions><VisualStudio><UserProperties i18n_4default_1json__JsonSchema="https://smapi.io/schemas/i18n.json" manifest_1json__JsonSchema="https://smapi.io/schemas/manifest.json" /></VisualStudio></ProjectExtensions>

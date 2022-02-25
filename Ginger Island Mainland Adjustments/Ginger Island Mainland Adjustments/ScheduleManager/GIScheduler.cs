@@ -1,4 +1,5 @@
 ﻿using System.Runtime;
+using AtraShared.Schedules.DataModels;
 using AtraShared.Utils.Extensions;
 using GingerIslandMainlandAdjustments.CustomConsoleCommands;
 using GingerIslandMainlandAdjustments.ScheduleManager.DataModels;

@@ -1,5 +1,5 @@
-﻿using Microsoft.Xna.Framework;
-using NotNullAttribute = System.Diagnostics.CodeAnalysis.NotNullAttribute;
+﻿using AtraShared.Schedules.DataModels;
+using Microsoft.Xna.Framework;
 
 namespace GingerIslandMainlandAdjustments.ScheduleManager.DataModels;
 

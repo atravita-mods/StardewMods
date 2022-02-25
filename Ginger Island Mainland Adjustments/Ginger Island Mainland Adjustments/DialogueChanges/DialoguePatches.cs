@@ -1,5 +1,4 @@
-﻿using System.Diagnostics.CodeAnalysis;
-using AtraShared.Utils.Extensions;
+﻿using AtraShared.Utils.Extensions;
 using GingerIslandMainlandAdjustments.ScheduleManager;
 using HarmonyLib;
 using StardewValley.Locations;
@@ -111,11 +110,25 @@ internal class DialoguePatches
             {
                 return;
             }
-            __instance.currentMarriageDialogue.Clear();
-            __instance.setNewDialogue("MarriageDialogue", "GIReturn_", -1, add: false, clearOnMovement: true);
+            if (__instance.TryApplyMarriageDialogueIfExisting("GIReturn_" + __instance.Name, clearOnMovement: true))
+            {
 #if DEBUG
             Globals.ModMonitor.Log($"Setting GIReturn_{__instance.Name}.", LogLevel.Debug);
 #endif
+            }
+            else
+            {
+                __instance.CurrentDialogue.Clear();
+                __instance.currentMarriageDialogue.Clear();
+                if (Game1.player.getFriendshipHeartLevelForNPC(__instance.Name) > 9)
+                {
+                    __instance.CurrentDialogue.Push(new Dialogue(I18n.GILeaveDefaultHappy(__instance.getTermOfSpousalEndearment()), __instance));
+                }
+                else
+                {
+                    __instance.CurrentDialogue.Push(new Dialogue(I18n.GILeaveDefaultUnhappy(), __instance));
+                }
+            }
         }
         catch (Exception ex)
         {
@@ -127,7 +140,7 @@ internal class DialoguePatches
 /// <summary>
 /// Class that holds patches against IslandSouth, for dialogue.
 /// </summary>
-[HarmonyPatch(typeof(IslandSouth))]
+[HarmonyPatch(typeof(Game1))]
 internal class IslandSouthDialoguePatches
 {
     /// <summary>
@@ -135,7 +148,7 @@ internal class IslandSouthDialoguePatches
     /// </summary>
     /// <remarks>DayStarted, unfortunately, runs *before* SetupIslandSchedules.</remarks>
     [HarmonyPostfix]
-    [HarmonyPatch(nameof(IslandSouth.SetupIslandSchedules))]
+    [HarmonyPatch(nameof(Game1.updateWeatherIcon))]
     public static void AppendMarriageDialogue()
     {
         try
@@ -143,11 +156,25 @@ internal class IslandSouthDialoguePatches
             NPC? spouse = Game1.player?.getSpouse();
             if (spouse is not null && Game1.IsVisitingIslandToday(spouse.Name))
             {
-                spouse.currentMarriageDialogue.Clear();
-                spouse.setNewDialogue("MarriageDialogue", "GILeave_", -1, add: false, clearOnMovement: true);
+                if (spouse.TryApplyMarriageDialogueIfExisting("GILeave_" + spouse.Name))
+                {
 #if DEBUG
                 Globals.ModMonitor.Log($"Setting GILeave_{spouse?.Name}", LogLevel.Trace);
 #endif
+                }
+                else if (Game1.player is not null)
+                {
+                    spouse.CurrentDialogue.Clear();
+                    spouse.currentMarriageDialogue.Clear();
+                    if (Game1.player.getFriendshipHeartLevelForNPC(spouse.Name) > 9)
+                    {
+                        spouse.CurrentDialogue.Push(new Dialogue(I18n.GILeaveDefaultHappy(spouse.getTermOfSpousalEndearment()), spouse));
+                    }
+                    else
+                    {
+                        spouse.CurrentDialogue.Push(new Dialogue(I18n.GILeaveDefaultUnhappy(), spouse));
+                    }
+                }
             }
         }
         catch (Exception ex)

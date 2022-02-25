@@ -1,6 +1,6 @@
-﻿using AtraShared.Utils.Extensions;
+﻿using AtraShared.Schedules.DataModels;
+using AtraShared.Utils.Extensions;
 using GingerIslandMainlandAdjustments.CustomConsoleCommands;
-using GingerIslandMainlandAdjustments.Utils;
 using Microsoft.Xna.Framework;
 using StardewModdingAPI.Utilities;
 

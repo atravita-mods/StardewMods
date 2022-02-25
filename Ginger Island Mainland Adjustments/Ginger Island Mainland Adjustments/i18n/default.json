@@ -14,6 +14,12 @@
   "Evelyn_Resort": "My dear @, it's great seeing you here today!#$e#Make sure to take some time for rest and relaxation! Can't have you working yourself too hard.",
   "Willy_Resort": "Ah, nothing like a day spent under the sun and by the sea....",
 
+  "GILeave_Default_Happy": "Heya, {{endearment}}, I'll be off to Ginger Island today! Will you consider joining me?$h",
+  "GIReturn_Default_Happy": "Oh, {{endearment}}, I had a great day at Ginger Island today!$h",
+
+  "GILeave_Default_Unhappy": "Oh, @! I'm gonna be off to Ginger Island today.",
+  "GIReturn_Default_Unhappy":  "@, I'm back from vacation. How have you been?",
+
   // Pam on the phone
   "Pam_Island_1": "Hey @! How're ya doing today? Me? I'll be headed to Ginger Island today.$h#$b#The bus? No service today, bus company couldn't send replacements.",
   "Pam_Island_2": "Oh, @! How're ya? I'll be headed to the Resort today, so there's no bus service.",

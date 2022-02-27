@@ -9,6 +9,12 @@
 * Figure out DGA fruit trees.
 <!-- bat eyes for custom locations? -->
 
+#### Version 1.0.9
+
+* Fixes error items spawning in whenever no tree fruits are possible.
+* Adds in a setting to exclude winter from Seasonal Only.
+* Renames console command.
+
 #### Version 1.0.8
 
 * Corrects `UseModCave` option (would previously always use the additional locations list.) Adds new option to only use the six usual vanilla tree fruit.

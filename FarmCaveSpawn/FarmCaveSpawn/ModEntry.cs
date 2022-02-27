@@ -147,6 +147,12 @@ public class ModEntry : Mod
                     min: 0f,
                     max: 100f);
             }
+            else if (property.PropertyType.Equals(typeof(SeasonalBehavior)))
+            {
+                helper.AddEnumOption<ModConfig, SeasonalBehavior>(
+                    property: property,
+                    getConfig: () => this.config);
+            }
             else
             {
                 this.Monitor.DebugLog($"{property.Name} unaccounted for.", LogLevel.Warn);
@@ -310,7 +316,7 @@ public class ModEntry : Mod
     /// <param name="tile">Tile to place fruit on.</param>
     private void PlaceFruit(GameLocation location, Vector2 tile)
     {
-        int fruitToPlace = Utility.GetRandom(this.Random.NextDouble() < (this.config.TreeFruitChance / 100f) ? this.TreeFruit : this.BASE_FRUIT, this.Random);
+        int fruitToPlace = Utility.GetRandom(this.Random.NextDouble() < (this.config.TreeFruitChance / 100f) && this.TreeFruit.Count > 0 ? this.TreeFruit : this.BASE_FRUIT, this.Random);
         location.setObject(tile, new SObject(fruitToPlace, 1)
         {
             IsSpawnedObject = true,
@@ -348,6 +354,7 @@ public class ModEntry : Mod
     /// </summary>
     /// <param name="command">Name of command.</param>
     /// <param name="args">Arguments for command.</param>
+    [SuppressMessage("Style", "IDE0060:Remove unused parameter", Justification = "Console command format.")]
     private void ListFruits(string command, string[] args)
     {
         if (!Context.IsWorldReady)
@@ -406,13 +413,13 @@ public class ModEntry : Mod
         foreach (string tree in fruittrees.Values)
         {
             string[] treedata = tree.Split('/', StringSplitOptions.TrimEntries);
-            if (this.config.SeasonalOnly && Context.IsWorldReady)
+
+            if ((this.config.SeasonalOnly == SeasonalBehavior.SeasonalOnly
+                    || (this.config.SeasonalOnly == SeasonalBehavior.SeasonalExceptWinter && !currentseason.Contains("winter")))
+                && !treedata[1].Contains(currentseason)
+                && (!currentseason.Contains("summer") || !treedata[1].Contains("island")))
             {
-                if (!treedata[1].Contains(currentseason)
-                    && (!currentseason.Contains("summer") || !treedata[1].Contains("island")))
-                {
-                    continue;
-                }
+                continue;
             }
 
             if (int.TryParse(treedata[2], out int objectIndex))
@@ -442,15 +449,7 @@ public class ModEntry : Mod
                 }
             }
         }
-        if (treeFruits.Count > 0)
-        {
-            return treeFruits;
-        }
-        else
-        {
-            this.Monitor.Log($"All fruits were eliminated, defaulting to vanilla fruit list.", LogLevel.Info);
-            return this.VANILLA_FRUIT;
-        }
+        return treeFruits;
     }
 
     private void BellsAndWhistles(object? sender, OneSecondUpdateTickingEventArgs e)

@@ -311,7 +311,7 @@ public class ModEntry : Mod
     private void PlaceFruit(GameLocation location, Vector2 tile)
     {
         int fruitToPlace = Utility.GetRandom(this.Random.NextDouble() < (this.config.TreeFruitChance / 100f) ? this.TreeFruit : this.BASE_FRUIT, this.Random);
-        location.setObject(tile, new StardewValley.Object(fruitToPlace, 1)
+        location.setObject(tile, new SObject(fruitToPlace, 1)
         {
             IsSpawnedObject = true,
         });
@@ -352,14 +352,14 @@ public class ModEntry : Mod
     {
         if (!Context.IsWorldReady)
         {
-            this.Monitor.Log("World is not ready. Please load save first.");
+            this.Monitor.Log("World is not ready. Please load save first.", LogLevel.Info);
             return;
         }
 
         List<string> fruitNames = new();
         foreach (int objectID in this.GetTreeFruits())
         {
-            StardewValley.Object obj = new(objectID, 1);
+            SObject obj = new(objectID, 1);
             fruitNames.Add(obj.DisplayName);
         }
 
@@ -419,8 +419,8 @@ public class ModEntry : Mod
             {
                 try
                 {
-                    StardewValley.Object fruit = new(objectIndex, 1);
-                    if ((!this.config.AllowAnyTreeProduct && fruit.Category != StardewValley.Object.FruitsCategory)
+                    SObject fruit = new(objectIndex, 1);
+                    if ((!this.config.AllowAnyTreeProduct && fruit.Category != SObject.FruitsCategory)
                         || (this.config.EdiblesOnly && fruit.Edibility < 0)
                         || fruit.Price > this.config.PriceCap
                         || denylist.Contains(fruit.Name))
@@ -442,7 +442,15 @@ public class ModEntry : Mod
                 }
             }
         }
-        return treeFruits;
+        if (treeFruits.Count > 0)
+        {
+            return treeFruits;
+        }
+        else
+        {
+            this.Monitor.Log($"All fruits were eliminated, defaulting to vanilla fruit list.", LogLevel.Info);
+            return this.VANILLA_FRUIT;
+        }
     }
 
     private void BellsAndWhistles(object? sender, OneSecondUpdateTickingEventArgs e)

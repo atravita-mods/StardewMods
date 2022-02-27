@@ -37,7 +37,7 @@ Farm Cave Framework is handled seperately - this mod will check to see if that m
 10. `NoBananasBeforeShrine`: there's an objective in vanilla that requires getting a hold of a banana, which is typically quite hard to do. To avoid trivializing that objective, this setting will prevent bananas from spawning until that objective is complete.
 11. `PriceCap`: Caps the value of the fruit that can be spawned.
 
-The console command `list_fruits` will tell you which tree fruits are available for spawning.
+The console command `av.fcs.list_fruits` will tell you which tree fruits are available for spawning.
 
 **Denylist**: Don't want this mod to spawn *your* fruit? If you use Content Patcher to add an entry to `Mods/atravita_FarmCaveSpawn_denylist` that looks like
 

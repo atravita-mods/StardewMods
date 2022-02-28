@@ -42,7 +42,7 @@ internal class TagManager
         try
         {
             string[] vals = __0.Split('_');
-            switch(vals[0])
+            switch(vals[0].ToLowerInvariant())
             {
                 case "year":
                     // year_X
@@ -71,9 +71,9 @@ internal class TagManager
                         __result = int.TryParse(vals[1], out int daysplayed) && Game1.stats.DaysPlayed >= daysplayed;
                     }
                     return false;
-                case "dropboxRoom":
+                case "dropboxroom":
                     // dropboxRoom_roomName
-                    string roomname = __0["dropboxRoom_".Length..];
+                    string roomname = vals[1];
                     foreach (SpecialOrder specialOrder in Game1.player.team.specialOrders)
                     {
                         if (specialOrder.questState.Value != SpecialOrder.QuestState.InProgress)

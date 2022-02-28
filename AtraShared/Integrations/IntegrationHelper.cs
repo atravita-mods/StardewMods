@@ -60,7 +60,7 @@ internal class IntegrationHelper
         {
             this.Monitor.Log(
                 this.Translation.Get("api-too-old")
-                .Default("Please update {{apiName}}({{APIID}}) to at least version {{minversion}}. Current version {{currentversion}}. Integration disabled")
+                .Default("Please update {{apiName}}({{APIID}}) to at least version {{minversion}}. Current version {{currentversion}}. Integration disabled.")
                 .Tokens(new { apiName = modInfo.Manifest.Name, APIID = apiid, minversion, currentversion = modInfo.Manifest.Version }), LogLevel.Info);
             api = default;
             return false;

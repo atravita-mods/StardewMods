@@ -1,6 +1,7 @@
-﻿namespace AtraShared.Integrations;
+﻿namespace AtraShared.Integrations.Interfaces;
 
 /// <summary>The Content Patcher API which other mods can access.</summary>
+/// <remarks>Copied from https://github.com/Pathoschild/StardewMods/blob/stable/ContentPatcher/IContentPatcherAPI.cs. </remarks>
 public interface IContentPatcherAPI
 {
     /*********

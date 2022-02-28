@@ -1,8 +1,9 @@
-﻿namespace AtraShared.Integrations;
+﻿namespace AtraShared.Integrations.Interfaces;
 
 /// <summary>
 /// API to interface with Spacecore's custom skills.
 /// </summary>
+/// <remarks> Copied from https://github.com/spacechase0/StardewValleyMods/blob/main/SpaceCore/Api.cs. </remarks>
 public interface ISpaceCoreAPI
 {
     /// <summary>

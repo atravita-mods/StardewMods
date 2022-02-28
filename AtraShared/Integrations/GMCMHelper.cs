@@ -1,4 +1,5 @@
 ﻿using System.Reflection;
+using AtraShared.Integrations.Interfaces;
 using AtraShared.Utils.Extensions;
 using StardewModdingAPI.Utilities;
 
@@ -283,7 +284,7 @@ internal class GMCMHelper : IntegrationHelper
     public GMCMHelper AddEnumOption<TModConfig, TEnum>(
         PropertyInfo property,
         Func<TModConfig> getConfig,
-        string? fieldID)
+        string? fieldID = null)
         where TEnum : struct, Enum
     {
         if (!property.PropertyType.Equals(typeof(TEnum)))

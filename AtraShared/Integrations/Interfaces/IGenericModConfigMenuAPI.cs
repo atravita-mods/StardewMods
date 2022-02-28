@@ -1,8 +1,9 @@
 ﻿using StardewModdingAPI.Utilities;
 
-namespace AtraShared.Integrations;
+namespace AtraShared.Integrations.Interfaces;
 
 /// <summary>The API which lets other mods add a config UI through Generic Mod Config Menu.</summary>
+/// <remarks>Copied from https://github.com/spacechase0/StardewValleyMods/blob/main/GenericModConfigMenu/IGenericModConfigMenuApi.cs. </remarks>
 public interface IGenericModConfigMenuApi
 {
     /*********

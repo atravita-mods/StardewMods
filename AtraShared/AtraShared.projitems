@@ -11,16 +11,20 @@
   <ItemGroup>
     <Compile Include="$(MSBuildThisFileDirectory)CustomExceptions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Integrations\GMCMHelper.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Integrations\IContentPatcherAPI.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Integrations\IGenericModConfigMenuAPI.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Integrations\Interfaces\IContentPatcherAPI.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Integrations\Interfaces\IGenericModConfigMenuAPI.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Integrations\IntegrationHelper.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Integrations\ISpaceCoreAPI.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Integrations\Interfaces\ISpaceCoreAPI.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Schedules\DataModels\SchedulePoint.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Schedules\ScheduleUtilityFunctions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Utils\Extensions\HarmonyExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Utils\Extensions\LogExtensions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Utils\Extensions\ModDataExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Utils\Extensions\NPCExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Utils\Extensions\ScheduleExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Utils\Utils.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="$(MSBuildThisFileDirectory)Integrations\Interfaces\" />
   </ItemGroup>
 </Project>

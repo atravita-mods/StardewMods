@@ -15,6 +15,13 @@ Changelog
 1. Somehow limit the kill objective to just monsters on a certain (few?) maps. (Perhaps a custom objective, perhaps a Special Rule).
 6. Implement a temporary saving mechanism for Save Anywhere (look into their API?)
 
+#### Version 1.0.7 (upcoming)
+
+* Adds tags for `anyplayermail` and `anyplayerseenevent`.
+* Makes my (but **not** game tags) mostly case-insensitive.
+* Fixes multiplayer logic.
+* Hopefully removes Sunday night crashes that can happen if a special order is unparsable.
+
 #### Version 1.0.6
 
 * Add verbosity config option. Intended mostly for mod authors.

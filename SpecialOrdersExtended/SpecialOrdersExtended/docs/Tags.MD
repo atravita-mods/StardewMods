@@ -5,18 +5,22 @@ Tags are used to restrict the appearance of special orders. Tags can be negated 
 
 #### Vanilla tags:
 
+Vanilla tags should be assumed case sensitive unless proven otherwise.
+
 1. `NOT_IMPLEMENTED`: Always false
 2. `dropbox_<dropboxName>`: Whether or not the dropbox with the specific name is in use by a quest already.
 3. `rule_<ruleName>`: Whether or not the specific special order rule is active.
-4. `completed_<specialOrderKey>`: Whether or not the special order has been completed yet.
-5. `season_<season>`: Restricts quest to only a specific season.
-6. `mail_<mailKey>`: Does the master player have a specific mail key. Mail keys are used for far more than just for mail; they also keep track of a lot of game state.
-7. `event_<eventID>`: Has the master player seen a specific event?
+4. `completed_<specialOrderKey>`: In theory, whether or not the special order has been completed yet. This is bugged and doesn't actually work though.
+5. `season_<season>`: Restricts quest to only a specific season. 
+6. `mail_<mailKey>`: Does the **master player** have a specific mail key. Mail keys are used for far more than just for mail; they also keep track of a lot of game state.
+7. `event_<eventID>`: Has the **master player** seen a specific event?
 8. `island`: Has the island been unlocked?
 9. `knows_<NPCname>`: Has *any* farmer met the NPC?
 
 
 #### Mod tags:
+
+I've tried to make these tags as case-insensitive as possible, but probably best to assume case-sensitivity too.
 
 1. `year_<num>`: Is it currently the specified year? Best used negated - ie `!year_1` for quests that should not appear the first year.
 2. `atleastyear_<num>`: if it's at least the specified year.

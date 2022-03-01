@@ -1,5 +1,6 @@
 ﻿using AtraBase.Toolkit.Reflection;
 using AtraShared.Integrations;
+using AtraShared.Integrations.Interfaces;
 using AtraShared.Utils.Extensions;
 using HarmonyLib;
 using SpecialOrdersExtended.HarmonyPatches;

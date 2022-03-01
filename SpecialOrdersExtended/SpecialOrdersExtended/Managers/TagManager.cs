@@ -72,6 +72,7 @@ internal class TagManager
                     }
                     return false;
                 case "anyplayermail":
+                    // anyplayermail_mailkey, anyplayermail_mailkey_not
                     __result = Game1.getAllFarmers().Any((Farmer f) => f.mailReceived.Contains(vals[1]));
                     if (vals.Length >= 2 && vals[2].Equals("not", StringComparison.OrdinalIgnoreCase))
                     {
@@ -79,6 +80,7 @@ internal class TagManager
                     }
                     return false;
                 case "anyplayerseenevent":
+                    // anyplayerseenevent_eventID, anyplayerseenevent_eventID_not
                     if (vals.Length >= 2 && vals[2].Equals("not", StringComparison.OrdinalIgnoreCase))
                     {
                         __result = int.TryParse(vals[1], out int eventid) && Game1.getAllFarmers().All((Farmer f) => !f.eventsSeen.Contains(eventid));

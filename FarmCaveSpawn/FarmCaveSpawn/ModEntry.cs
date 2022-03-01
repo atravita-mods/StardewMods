@@ -1,5 +1,6 @@
 ﻿using System.Reflection;
 using System.Text.RegularExpressions;
+using AtraBase.Toolkit.Extensions;
 using AtraShared.Integrations;
 using AtraShared.Utils.Extensions;
 using Microsoft.Xna.Framework;
@@ -12,8 +13,6 @@ namespace FarmCaveSpawn;
 /// <inheritdoc />
 public class ModEntry : Mod
 {
-    private readonly AssetManager assetManager = new();
-
     /// <summary>
     /// Sublocation-parsing regex.
     /// </summary>
@@ -93,7 +92,7 @@ public class ModEntry : Mod
             documentation: I18n.ListFruits_Description(),
             callback: this.ListFruits);
 
-        helper.Content.AssetLoaders.Add(this.assetManager);
+        helper.Content.AssetLoaders.Add(AssetManager.Instance);
     }
 
     /// <summary>
@@ -172,7 +171,7 @@ public class ModEntry : Mod
         if (Game1.CustomData.TryGetValue("smapi/mod-data/aedenthorn.farmcaveframework/farm-cave-framework-choice", out string? farmcavechoice))
         {
             // Crosscheck this = probably better to just use the actual value, maybe...
-            hasFCFbatcave = (farmcavechoice is not null) && (farmcavechoice.ToLowerInvariant().Contains("bat") || farmcavechoice.ToLowerInvariant().Contains("fruit"));
+            hasFCFbatcave = (farmcavechoice is not null) && (farmcavechoice.Contains("bat", StringComparison.OrdinalIgnoreCase) || farmcavechoice.Contains("fruit", StringComparison.OrdinalIgnoreCase));
             this.Monitor.DebugLog(hasFCFbatcave ? "FarmCaveFramework fruit bat cave detected." : "FarmCaveFramework fruit bat cave not detected.");
         }
 
@@ -237,7 +236,7 @@ public class ModEntry : Mod
 
         if (this.config.UseModCaves)
         {
-            foreach (string location in this.GetData(this.assetManager.ADDITIONAL_LOCATIONS_LOCATION))
+            foreach (string location in this.GetData(AssetManager.ADDITIONAL_LOCATIONS_LOCATION))
             {
                 string parseloc = location;
                 // initialize default limits
@@ -255,13 +254,7 @@ public class ModEntry : Mod
                     {
                         Match match = matches[0];
                         parseloc = location[..^match.Value.Length];
-                        foreach (Group group in match.Groups)
-                        {
-                            if (int.TryParse(group.Value, out int result))
-                            {
-                                locLimits[group.Name] = result;
-                            }
-                        }
+                        locLimits.Update(match);
                         this.Monitor.DebugLog($"Found and parsed sublocation: {parseloc} + ({locLimits["x1"]};{locLimits["y1"]});({locLimits["x2"]};{locLimits["y2"]})");
                     }
                     else if (matches.Count >= 2)
@@ -277,7 +270,7 @@ public class ModEntry : Mod
 
                 if (Game1.getLocationFromName(parseloc) is GameLocation gameLocation)
                 {
-                    this.Monitor.Log($"Found {gameLocation}");
+                    this.Monitor.DebugLog($"Found {gameLocation}");
                     foreach (Vector2 v in this.IterateTiles(gameLocation, xstart: locLimits["x1"], xend: locLimits["x2"], ystart: locLimits["y1"], yend: locLimits["y2"]))
                     {
                         this.PlaceFruit(gameLocation, v);
@@ -290,7 +283,7 @@ public class ModEntry : Mod
                 }
                 else
                 {
-                    this.Monitor.Log(I18n.LocationMissing(loc: location), LogLevel.Debug);
+                    this.Monitor.Log(I18n.LocationMissing(loc: location), LogLevel.Info);
                 }
             }
         }
@@ -405,7 +398,7 @@ public class ModEntry : Mod
             return this.VANILLA_FRUIT;
         }
 
-        List<string> denylist = this.GetData(this.assetManager.DENYLIST_LOCATION);
+        List<string> denylist = this.GetData(AssetManager.DENYLIST_LOCATION);
         List<int> treeFruits = new();
 
         Dictionary<int, string> fruittrees = this.Helper.Content.Load<Dictionary<int, string>>("Data/fruitTrees", ContentSource.GameContent);
@@ -414,10 +407,9 @@ public class ModEntry : Mod
         {
             string[] treedata = tree.Split('/', StringSplitOptions.TrimEntries);
 
-            if ((this.config.SeasonalOnly == SeasonalBehavior.SeasonalOnly
-                    || (this.config.SeasonalOnly == SeasonalBehavior.SeasonalExceptWinter && !currentseason.Contains("winter")))
+            if ((this.config.SeasonalOnly == SeasonalBehavior.SeasonalOnly || (this.config.SeasonalOnly == SeasonalBehavior.SeasonalExceptWinter && !Game1.IsWinter))
                 && !treedata[1].Contains(currentseason)
-                && (!currentseason.Contains("summer") || !treedata[1].Contains("island")))
+                && (!Game1.IsSummer || !treedata[1].Contains("island")))
             {
                 continue;
             }

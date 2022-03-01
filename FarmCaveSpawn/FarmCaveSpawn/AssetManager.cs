@@ -7,37 +7,39 @@ namespace FarmCaveSpawn;
 /// </summary>
 internal class AssetManager : IAssetLoader
 {
-#pragma warning disable SA1401 // Fields should be private. This is intentional.
+    private AssetManager()
+    {
+    }
 
     /// <summary>
-    /// Fake asset location for the denylist.
+    /// Gets the instance of the assetmanager for this mod.
     /// </summary>
-    public readonly string DENYLIST_LOCATION = PathUtilities.NormalizeAssetName("Mods/atravita_FarmCaveSpawn_denylist");
+    public static AssetManager Instance { get; } = new();
 
     /// <summary>
-    /// Fake asset location for more locations that can spawn in fruit.
+    /// Gets fake asset location for the denylist.
     /// </summary>
-    public readonly string ADDITIONAL_LOCATIONS_LOCATION = PathUtilities.NormalizeAssetName("Mods/atravita_FarmCaveSpawn_additionalLocations");
-#pragma warning restore SA1401 // Fields should be private
+    public static string DENYLIST_LOCATION { get; } = PathUtilities.NormalizeAssetName("Mods/atravita_FarmCaveSpawn_denylist");
 
-
+    /// <summary>
+    /// Gets fake asset location for more locations that can spawn in fruit.
+    /// </summary>
+    public static string ADDITIONAL_LOCATIONS_LOCATION { get; } = PathUtilities.NormalizeAssetName("Mods/atravita_FarmCaveSpawn_additionalLocations");
 
     /// <inheritdoc/>
     public bool CanLoad<T>(IAssetInfo asset)
-    {
-        return asset.AssetNameEquals(this.DENYLIST_LOCATION) || asset.AssetNameEquals(this.ADDITIONAL_LOCATIONS_LOCATION);
-    }
+        => asset.AssetNameEquals(DENYLIST_LOCATION) || asset.AssetNameEquals(ADDITIONAL_LOCATIONS_LOCATION);
 
     /// <inheritdoc/>
     public T Load<T>(IAssetInfo asset)
     {
-        if (asset.AssetNameEquals(this.DENYLIST_LOCATION))
+        if (asset.AssetNameEquals(DENYLIST_LOCATION))
         {
             return (T)(object)new Dictionary<string, string>
             {
             };
         }
-        else if (asset.AssetNameEquals(this.ADDITIONAL_LOCATIONS_LOCATION))
+        else if (asset.AssetNameEquals(ADDITIONAL_LOCATIONS_LOCATION))
         {
             return (T)(object)new Dictionary<string, string>
             {

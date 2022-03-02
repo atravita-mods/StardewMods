@@ -1,4 +1,4 @@
-﻿using AtraShared.Integrations;
+﻿using AtraShared.Integrations.Interfaces;
 using StardewValley.Locations;
 
 namespace GingerIslandMainlandAdjustments.Integrations;

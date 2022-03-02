@@ -85,8 +85,6 @@ public sealed class AssetLoader : IAssetLoader
         ExclusionLocations,
     };
 
-    private static readonly Lazy<AssetLoader> Lazy = new(() => new AssetLoader());
-
     private AssetLoader()
     {
     }
@@ -94,7 +92,7 @@ public sealed class AssetLoader : IAssetLoader
     /// <summary>
     /// Gets the instance of the AssetLoader.
     /// </summary>
-    public static AssetLoader Instance => Lazy.Value;
+    public static AssetLoader Instance { get; } = new();
 
     /// <inheritdoc />
     [UsedImplicitly]

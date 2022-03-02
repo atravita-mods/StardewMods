@@ -94,7 +94,7 @@ public class ModEntry : Mod
         }
         catch (Exception ex)
         {
-            Globals.ModMonitor.Log($"Mod crashed while applying harmony patches. Please upload this log to smapi.io/log and take the log to the mod's Nexus page.\n\n{ex}", LogLevel.Error);
+            Globals.ModMonitor.Log($"{I18n.HarmonyCrash()} {Globals.GithubLocation}{Environment.NewLine}{ex}", LogLevel.Error);
         }
 
         harmony.Snitch(Globals.ModMonitor, this.ModManifest.UniqueID);

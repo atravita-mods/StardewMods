@@ -32,7 +32,7 @@
 ### Version 1.1.3
  
 * In theory: integration with Child2NPC.
-* You can now call Pam, who will tell you if she's headed to Ginger Island.
+* After a certain heart event, you'll can now call Pam, who will tell you if she's headed to Ginger Island. Assuming, that is, you didn't decide to insult her.
 * You can now toggle beach outfits.
 
 Fixes:

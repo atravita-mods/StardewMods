@@ -48,6 +48,12 @@ internal static class Globals
 #pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
 
     /// <summary>
+    /// Gets the github location for this mod.
+    /// </summary>
+    /// <remarks>Used to direct bug reports.</remarks>
+    internal static string GithubLocation { get; } = "https://github.com/atravita-mods/Ginger-Island-Mainland-Adjustments/issues";
+
+    /// <summary>
     /// Gets a reference to  of Child2NPC's ModEntry.IsChildNPC.
     /// </summary>
     /// <remarks>Null if C2NPC is not installed or method not found.</remarks>

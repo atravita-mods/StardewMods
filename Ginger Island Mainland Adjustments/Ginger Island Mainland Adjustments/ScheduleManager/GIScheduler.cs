@@ -278,6 +278,7 @@ internal static class GIScheduler
 
         Globals.ModMonitor.DebugLog($"{visitors.Count} vistors: {string.Join(", ", visitors.Select((NPC npc) => npc.Name))}");
         IslandSouthPatches.ClearCache();
+
         return visitors;
     }
 

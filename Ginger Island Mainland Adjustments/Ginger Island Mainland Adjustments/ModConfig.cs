@@ -93,6 +93,7 @@ public class ModConfig
     /// </summary>
     /// <param name="rawstring">Raw string to parse.</param>
     /// <returns>WearIslandClothing as enum.</returns>
+    [Pure]
     public static WearIslandClothing TryParseWearIslandClothingOrGetDefault(string rawstring)
         => Enum.TryParse(rawstring, true, out WearIslandClothing islandclothing) ? islandclothing : WearIslandClothing.Default;
 

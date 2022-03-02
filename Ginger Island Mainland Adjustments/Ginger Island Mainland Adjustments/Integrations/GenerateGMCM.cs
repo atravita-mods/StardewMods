@@ -95,8 +95,5 @@ internal static class GenerateGMCM
                 tooltip: I18n.Config_AllowGeorgeAndEvelyn_Description);
     }
 
-    private static string TwoPlaceFixedPoint(float f)
-    {
-        return $"{f:f2}";
-    }
+    private static string TwoPlaceFixedPoint(float f) => $"{f:f2}";
 }

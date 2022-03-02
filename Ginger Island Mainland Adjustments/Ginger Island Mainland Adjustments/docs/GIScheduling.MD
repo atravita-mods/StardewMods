@@ -114,7 +114,7 @@ Sam, whenever he visits, has a chance of standing on a towel and playing his gui
 
 #### Fishers
 
-Fishers do not need to be specified; they just need a `<name>_beach_fish` animation (ie `pam_beach_fish` for Pam.)
+Fishers do not need to be specified; they just need a `<name>_beach_fish` animation (ie `pam_beach_fish` for Pam.) They will fish downwards - like Willy and Pam - and not side-to-side.
 
 See also:
 

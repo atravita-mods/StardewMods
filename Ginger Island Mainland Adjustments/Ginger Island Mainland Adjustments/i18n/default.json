@@ -18,7 +18,7 @@
   "GIReturn_Default_Happy": "Oh, {{endearment}}, I had a great day at Ginger Island today!$h",
 
   "GILeave_Default_Unhappy": "Oh, @! I'm gonna be off to Ginger Island today.",
-  "GIReturn_Default_Unhappy":  "@, I'm back from vacation. How have you been?",
+  "GIReturn_Default_Unhappy": "@, I'm back from vacation. How have you been?",
 
   // Pam on the phone
   "Pam_Island_1": "Hey @! How're ya doing today? Me? I'll be headed to Ginger Island today.$h#$b#The bus? No service today, bus company couldn't send replacements.",
@@ -39,7 +39,7 @@
 
   // Strings for Pam's mail
   "Pam.mail.title": "Pam's Thank You Note",
-  "Pam.mail.text": "Heya @,^^Thanks for hearin' an old woman out. ",
+  "Pam.mail.text": "Heya @,^^Thanks for hearin' an old woman out. I really do appreciate the ear. Here's my number, feel free to call me. My therapist says I should be talkin' to more people anyways.",
 
   // Documentation for console commands.
 
@@ -78,8 +78,8 @@
 
   // Config and GMCM
   "IllFormatedConfig": "Config file seems ill-formated, using default. Please use Generic Mod Config Menu to configure.",
-  "GmcmNotFound": "Generic Mod Config Menu (https://www.nexusmods.com/stardewvalley/mods/5098) not found, integration disabled.",
-  "GmcmVersionMessage": "Please update Generic Mod Config Menu (https://www.nexusmods.com/stardewvalley/mods/5098) to at least version {{version}} (Current version: {{currentversion}}). GMCM integration disabled.",
+  "api-not-found": "{{APIID}} not found, integration disabled.",
+  "api-too-old": "Please update {{apiName}}({{APIID}}) to at least version {{minversion}}. Current version {{currentversion}}. Integration disabled",
 
   "mod-description": "Alters Ginger Island schedules so villagers don't proceed direct to bed. Alternatively, handles GI schedules.",
   "config.enforceGITiming.title": "Enforce GI schedule timing",
@@ -137,5 +137,7 @@
   "NO_REPLACEMENT_LOCATION": "Location replacement for {{location}} requested but not found for {{npc}}",
   "ILL_FORMED_SCHEDULE_POINT": "Schedule point {{point}} seems malformed.",
   "SCHEDULE_PARSE_FAILURE": "Failed in parsing schedulepoint {{schedulepoint}} for NPC {{npc}}",
-  "SCHEDULE_REGEX_FAILURE": "{{schedulepoint}} seems unparsable by regex, sending NPC {{npc}} home to sleep"
+  "SCHEDULE_REGEX_FAILURE": "{{schedulepoint}} seems unparsable by regex, sending NPC {{npc}} home to sleep",
+
+  "harmony_crash": "Mod crashed while applying harmony patches. Please upload this log to smapi.io/log and take the log to the mod's Github page:"
 }

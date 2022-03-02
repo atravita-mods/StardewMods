@@ -7,7 +7,10 @@ namespace GingerIslandMainlandAdjustments;
 /// </summary>
 internal class AssetEditor : IAssetEditor
 {
-    private const string MAILKEY = "atravita_GingerIslandMainlandAdjustments_PamMail";
+    /// <summary>
+    /// Pam's mail key.
+    /// </summary>
+    public const string PAMMAILKEY = "atravita_GingerIslandMainlandAdjustments_PamMail";
 
     // The following dialogue is edited from the code side so each NPC has at least the Resort dialogue.
     // A CP pack will override, since my asset managers are registered in Entry and CP registers in GameLaunched.
@@ -38,8 +41,6 @@ internal class AssetEditor : IAssetEditor
         DataMail,
     };
 
-    private static readonly Lazy<AssetEditor> Lazy = new(() => new AssetEditor());
-
     private AssetEditor()
     {
     }
@@ -47,14 +48,12 @@ internal class AssetEditor : IAssetEditor
     /// <summary>
     /// Gets the instance of the AssetEditor.
     /// </summary>
-    public static AssetEditor Instance => Lazy.Value;
+    public static AssetEditor Instance { get; } = new();
 
     /// <inheritdoc />
     [UsedImplicitly]
     public bool CanEdit<T>(IAssetInfo asset)
-    {
-        return FilesToEdit.Any((string assetpath) => asset.AssetNameEquals(assetpath));
-    }
+        => FilesToEdit.Any((string assetpath) => asset.AssetNameEquals(assetpath));
 
     /// <inheritdoc />
     [UsedImplicitly]
@@ -108,7 +107,7 @@ internal class AssetEditor : IAssetEditor
         }
         else if (asset.AssetNameEquals(DataMail))
         {
-            editor.Data[MAILKEY] = $"{I18n.Pam_Mail_Text()}[#]{I18n.Pam_Mail_Title()}";
+            editor.Data[PAMMAILKEY] = $"{I18n.Pam_Mail_Text()}[#]{I18n.Pam_Mail_Title()}";
         }
     }
 }

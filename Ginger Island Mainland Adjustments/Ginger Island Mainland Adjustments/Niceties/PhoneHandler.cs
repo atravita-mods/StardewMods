@@ -13,15 +13,14 @@ internal class PhoneHandler
     /// <summary>
     /// Prefix that lets me inject Pam into the phone menu.
     /// </summary>
-    /// <param name="question">Question (displayed to player).</param>
     /// <param name="answerChoices">Responses.</param>
     /// <param name="dialogKey">Question key, used to keep track of which question set.</param>
     [HarmonyPrefix]
     [HarmonyPatch(nameof(GameLocation.createQuestionDialogue), new Type[] { typeof(string), typeof(Response[]), typeof(string) })]
-    public static void PrefixQuestionDialogue(string question, ref Response[] answerChoices, string dialogKey)
+    public static void PrefixQuestionDialogue(ref Response[] answerChoices, string dialogKey)
     {
         if (dialogKey.Equals("telephone", StringComparison.OrdinalIgnoreCase)
-            && Game1.getAllFarmers().Any((Farmer f) => f.eventsSeen.Contains(503180)) // replace with something better than just her nine heart.
+            && Game1.player.mailReceived.Contains(AssetEditor.PAMMAILKEY)
             && Game1.getCharacterFromName("Pam") is NPC pam // omit if Pam inexplicably vanished.
             && answerChoices.Any((Response r) => r.responseKey.Equals("Carpenter", StringComparison.OrdinalIgnoreCase)))
         {
@@ -35,17 +34,16 @@ internal class PhoneHandler
     /// Postfixing answerDialogueAction to handle Pam's phone calls.
     /// </summary>
     /// <param name="__instance">Location we're calling from.</param>
-    /// <param name="__0">questionAndAnswer.</param>
-    /// <param name="__1">questionParams[].</param>
+    /// <param name="questionAndAnswer">questionAndAnswer.</param>
     /// <param name="__result">Result.</param>
     [HarmonyPostfix]
-    [HarmonyPatch(nameof(GameLocation.answerDialogueAction))]
+    [HarmonyPatch(nameof(GameLocation.answerDialogueAction), new Type[] { typeof(string), typeof(string[]) })]
     [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Harmony convention")]
-    private static void PostfixAnswerDialogueAction(GameLocation __instance, string __0, string[] __1, ref bool __result)
+    private static void PostfixAnswerDialogueAction(GameLocation __instance, string questionAndAnswer, ref bool __result)
     {
-        if (__0.Equals("telephone_PamBus"))
+        if (questionAndAnswer.Equals("telephone_PamBus"))
         {
-            Globals.ReflectionHelper.GetMethod(__instance, "playShopPhoneNumberSounds").Invoke(__0);
+            Globals.ReflectionHelper.GetMethod(__instance, "playShopPhoneNumberSounds").Invoke(questionAndAnswer);
             Game1.player.freezePause = 4950;
             DelayedAction.functionAfterDelay(
             () =>

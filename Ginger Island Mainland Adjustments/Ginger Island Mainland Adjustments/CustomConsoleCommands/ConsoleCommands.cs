@@ -138,7 +138,8 @@ internal static class ConsoleCommands
     /// </summary>
     /// <param name="command">Name of command.</param>
     /// <param name="args">Arguments, if any.</param>
-    private static void ConsoleGetIslanders(string command, string[] args) => Globals.ModMonitor.Log($"{I18n.Islanders()}: {string.Join(", ", Islanders.Get())}", LogLevel.Debug);
+    private static void ConsoleGetIslanders(string command, string[] args)
+        => Globals.ModMonitor.Log($"{I18n.Islanders()}: {string.Join(", ", Islanders.Get())}", LogLevel.Debug);
 
     /// <summary>
     /// Yields the schedule for one or more characters.

@@ -2,7 +2,7 @@
 using AtraShared.Utils.Extensions;
 using StardewModdingAPI.Utilities;
 
-namespace GingerIslandMainlandAdjustments.ScheduleManager;
+namespace GingerIslandMainlandAdjustments.AssetManagers;
 
 /// <summary>
 /// Enum that represents the special roles on Ginger Island.
@@ -97,9 +97,7 @@ public sealed class AssetLoader : IAssetLoader
     /// <inheritdoc />
     [UsedImplicitly]
     public bool CanLoad<T>(IAssetInfo asset)
-    {
-        return MyAssets.Any((string assetpath) => asset.AssetNameEquals(assetpath));
-    }
+        => MyAssets.Any((string assetpath) => asset.AssetNameEquals(assetpath));
 
     /// <inheritdoc />
     [UsedImplicitly]

@@ -1,5 +1,6 @@
 ﻿using AtraShared;
 using AtraShared.Utils.Extensions;
+using GingerIslandMainlandAdjustments.AssetManagers;
 using HarmonyLib;
 using Microsoft.Xna.Framework.Graphics;
 using StardewValley.Locations;

@@ -1,4 +1,5 @@
-﻿using HarmonyLib;
+﻿using GingerIslandMainlandAdjustments.AssetManagers;
+using HarmonyLib;
 using Microsoft.Xna.Framework.Graphics;
 using StardewModdingAPI.Utilities;
 

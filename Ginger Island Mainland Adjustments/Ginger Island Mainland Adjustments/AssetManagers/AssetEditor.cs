@@ -1,6 +1,6 @@
 ﻿using StardewModdingAPI.Utilities;
 
-namespace GingerIslandMainlandAdjustments;
+namespace GingerIslandMainlandAdjustments.AssetManagers;
 
 /// <summary>
 /// Manages asset editing for this mod.

@@ -1,4 +1,6 @@
-﻿using System.Reflection;
+﻿#if HARMONY
+
+using System.Reflection;
 using System.Text;
 using AtraBase.Toolkit.Extensions;
 using HarmonyLib;
@@ -50,3 +52,5 @@ internal static class HarmonyExtensions
         }
     }
 }
+
+#endif

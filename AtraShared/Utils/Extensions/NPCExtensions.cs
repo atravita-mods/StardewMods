@@ -11,8 +11,8 @@ internal static class NPCExtensions
     /// <param name="npc">NPC.</param>
     /// <param name="dialogueKey">Dialogue key.</param>
     public static void ClearAndPushDialogue(
-        [NotNull] this NPC npc,
-        [NotNull] string dialogueKey)
+        this NPC npc,
+        string dialogueKey)
     {
         npc.CurrentDialogue.Clear();
         npc.CurrentDialogue.Push(new Dialogue(npc.Dialogue[dialogueKey], npc) { removeOnNextMove = true });
@@ -27,10 +27,10 @@ internal static class NPCExtensions
     /// <param name="clearOnMovement">To clear dialogue if the NPC moves.</param>
     /// <returns>True if successfully applied.</returns>
     public static bool TryApplyMarriageDialogueIfExisting(
-        [NotNull] this NPC npc,
-        [NotNull] string dialogueKey,
-        [NotNull] bool add = false,
-        [NotNull] bool clearOnMovement = false)
+        this NPC npc,
+        string dialogueKey,
+        bool add = false,
+        bool clearOnMovement = false)
     {
         string dialogue = npc.tryToGetMarriageSpecificDialogueElseReturnDefault(dialogueKey);
         if (string.IsNullOrEmpty(dialogue))
@@ -57,7 +57,7 @@ internal static class NPCExtensions
     /// <param name="random">Random to use, defaults to Game1.random if null.</param>
     /// <returns>null if no dialogue key found, a random dialogue key otherwise.</returns>
     public static string? GetRandomDialogue(
-        [NotNull] this NPC npc,
+        this NPC npc,
         string? basekey,
         Random? random)
     {
@@ -90,8 +90,8 @@ internal static class NPCExtensions
     /// <returns>True if successful, false otherwise.</returns>
     /// <remarks>Does **not** set _lastLoadedScheduleKey.</remarks>
     public static bool TryGetScheduleEntry(
-        [NotNull] this NPC npc,
-        [NotNull] string scheduleKey,
+        this NPC npc,
+        string scheduleKey,
         [NotNullWhen(returnValue: true)] out string? rawData)
     {
         rawData = null;

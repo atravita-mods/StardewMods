@@ -1,5 +1,5 @@
 ﻿using System.Globalization;
-using System.Runtime.CompilerServices;
+using AtraBase.Toolkit.Extensions;
 
 namespace AtraShared.Utils.Extensions;
 
@@ -16,10 +16,10 @@ internal static class ModDataExtensions
     /// </summary>
     /// <param name="modData">ModData.</param>
     /// <param name="key">Key.</param>
+    /// <param name="defaultVal">default value.</param>
     /// <returns>Boolean value, or null if not found/not parseable.</returns>
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static bool? GetBool(this ModDataDictionary modData, string key)
-        => modData.TryGetValue(key, out string val) ? !(val == "0") : null;
+    public static bool? GetBool(this ModDataDictionary modData, string key, bool? defaultVal = null)
+        => modData.TryGetValue(key, out string val) ? !(val == "0") : defaultVal;
 
     /// <summary>
     /// Sets a boolean value into modData.
@@ -27,19 +27,28 @@ internal static class ModDataExtensions
     /// <param name="modData">ModData.</param>
     /// <param name="key">Key.</param>
     /// <param name="val">Value.</param>
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static void SetBool(this ModDataDictionary modData, string key, bool val)
-        => modData[key] = val ? "1" : "0";
+    /// <param name="defaultVal">default value - not saved if matches.</param>
+    public static void SetBool(this ModDataDictionary modData, string key, bool val, bool? defaultVal = null)
+    {
+        if (val == defaultVal)
+        {
+            modData.Remove(key);
+        }
+        else
+        {
+            modData[key] = val ? "1" : "0";
+        }
+    }
 
     /// <summary>
     /// Gets a float value out of ModData.
     /// </summary>
     /// <param name="modData">ModData.</param>
     /// <param name="key">Key.</param>
+    /// <param name="defaultVal">default value.</param>
     /// <returns>Float value, or null of not found/not parseable.</returns>
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static float? GetFloat(this ModDataDictionary modData, string key)
-        => modData.TryGetValue(key, out string val) && float.TryParse(val, out float result) ? result : null;
+    public static float? GetFloat(this ModDataDictionary modData, string key, float? defaultVal)
+        => modData.TryGetValue(key, out string val) && float.TryParse(val, out float result) ? result : defaultVal;
 
     /// <summary>
     /// Sets a float value into modData. To reduce reads/writes, rounds.
@@ -49,19 +58,28 @@ internal static class ModDataExtensions
     /// <param name="val">Value.</param>
     /// <param name="decimals">Decimal points to round to.</param>
     /// <param name="format">Format string.</param>
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static void SetFloat(this ModDataDictionary modData, string key, float val, int decimals = 2, string? format = "G")
-        => modData[key] = Math.Round(val, decimals, MidpointRounding.ToEven).ToString(format, CultureInfo.InvariantCulture);
+    /// <param name="defaultVal">default value - not saved if matches.</param>
+    public static void SetFloat(this ModDataDictionary modData, string key, float val, int decimals = 2, string format = "G", float? defaultVal = null)
+    {
+        if (defaultVal is not null && val.WithinMargin(defaultVal.Value, 0.501f * (float)Math.Pow(0.1, -decimals)))
+        {
+            modData.Remove(key);
+        }
+        else
+        {
+            modData[key] = Math.Round(val, decimals, MidpointRounding.ToEven).ToString(format, CultureInfo.InvariantCulture);
+        }
+    }
 
     /// <summary>
     /// Gets a int value out of ModData.
     /// </summary>
     /// <param name="modData">ModData.</param>
     /// <param name="key">Key.</param>
+    /// <param name="defaultVal">default value.</param>
     /// <returns>Int value, or null of not found/not parseable.</returns>
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static int? GetInt(this ModDataDictionary modData, string key)
-        => modData.TryGetValue(key, out string val) && int.TryParse(val, out int result) ? result : null;
+    public static int? GetInt(this ModDataDictionary modData, string key, int? defaultVal = null)
+        => modData.TryGetValue(key, out string val) && int.TryParse(val, out int result) ? result : defaultVal;
 
     /// <summary>
     /// Sets a int value into modData.
@@ -69,7 +87,17 @@ internal static class ModDataExtensions
     /// <param name="modData">ModData.</param>
     /// <param name="key">Key.</param>
     /// <param name="val">Value.</param>
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static void SetInt(this ModDataDictionary modData, string key, int val)
-        => modData[key] = val.ToString(CultureInfo.InvariantCulture);
+    /// /// <param name="format">Format string.</param>
+    /// <param name="defaultVal">default value - not saved if matches.</param>
+    public static void SetInt(this ModDataDictionary modData, string key, int val, string format = "G", int? defaultVal = null)
+    {
+        if (defaultVal is not null && defaultVal.Value == val)
+        {
+            modData.Remove(key);
+        }
+        else
+        {
+            modData[key] = val.ToString(format, CultureInfo.InvariantCulture);
+        }
+    }
 }

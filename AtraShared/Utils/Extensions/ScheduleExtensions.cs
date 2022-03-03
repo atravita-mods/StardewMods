@@ -11,8 +11,6 @@ internal static class SchedulePointDescriptionExtensions
     /// <param name="schedulePathDescription">Schedule Path Description.</param>
     /// <returns>Time in in-game minutes, not rounded.</returns>
     [Pure]
-    public static int GetExpectedRouteTime([NotNull] this SchedulePathDescription schedulePathDescription)
-    {
-        return schedulePathDescription.route.Count * 32 / 42;
-    }
+    public static int GetExpectedRouteTime(this SchedulePathDescription schedulePathDescription)
+        => schedulePathDescription.route.Count * 32 / 42;
 }

@@ -49,7 +49,6 @@ internal static class Utils
     /// </summary>
     /// <param name="enumerable">IEnumerable of strings to sort.</param>
     /// <returns>A sorted list of strings.</returns>
-    [Pure]
     internal static List<string> ContextSort(IEnumerable<string> enumerable)
     {
         LocalizedContentManager contextManager = Game1.content;

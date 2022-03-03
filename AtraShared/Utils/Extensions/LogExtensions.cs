@@ -13,9 +13,9 @@ internal static class LogExtensions
     /// <param name="message">Message to log.</param>
     /// <param name="level">Level to log at.</param>
     public static void DebugLog(
-        [NotNull] this IMonitor monitor,
-        [NotNull] string message,
-        [NotNull] LogLevel level = LogLevel.Debug)
+        this IMonitor monitor,
+        string message,
+        LogLevel level = LogLevel.Debug)
     {
 #if DEBUG
         monitor.Log(message, level);

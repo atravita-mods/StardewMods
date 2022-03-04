@@ -28,6 +28,8 @@ internal class FurniturePatches
             }
 
             Rectangle bounds = __instance.boundingBox.Value;
+            int tileX = (int)__instance.TileLocation.X;
+            int tileY = (int)__instance.TileLocation.Y;
 #if DEBUG
             ModEntry.ModMonitor.Log($"Checking rug: {bounds.X / 64f}, {bounds.Y / 64f}, W/H {bounds.Width / 64f}/{bounds.Height / 64f}");
 #endif
@@ -35,7 +37,7 @@ internal class FurniturePatches
             {
                 for (int y = 0; y < bounds.Height / 64; y++)
                 {
-                    if (!currentLocation.isTileLocationTotallyClearAndPlaceable(x + (bounds.X / 64), y + (bounds.Y / 64)))
+                    if (!currentLocation.isTileLocationTotallyClearAndPlaceable(x + tileX, y + tileY))
                     {
                         Game1.showRedMessage(I18n.RugRemovalMessage());
                         __result = false;

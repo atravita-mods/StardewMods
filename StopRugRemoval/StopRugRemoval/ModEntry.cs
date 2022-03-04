@@ -1,7 +1,9 @@
-﻿using AtraShared.Integrations;
+﻿using System.Reflection;
+using AtraShared.Integrations;
 using AtraShared.Utils.Extensions;
 using HarmonyLib;
 using StardewModdingAPI.Events;
+using StardewModdingAPI.Utilities;
 
 namespace StopRugRemoval;
 
@@ -41,9 +43,13 @@ public class ModEntry : Mod
         this.ApplyPatches(new Harmony(this.ModManifest.UniqueID));
 
         helper.Events.GameLoop.GameLaunched += this.SetUpConfig;
+        helper.Events.GameLoop.SaveLoaded += this.OnSaveLoaded;
         //helper.Events.GameLoop.Saving += this.BeforeSave;
         //saved as well?
     }
+
+    private void OnSaveLoaded(object? sender, SaveLoadedEventArgs e)
+        => OutdoorRugs.ApplyNoSpawns();
 
     /// <summary>
     /// Applies and logs this mod's harmony patches.
@@ -82,20 +88,18 @@ public class ModEntry : Mod
         helper.Register(
                 reset: () => Config = new ModConfig(),
                 save: () => this.Helper.WriteConfig(Config))
-            .AddParagraph(I18n.Mod_Description)
-            .AddBoolOption(
-                getValue: () => Config.Enabled,
-                setValue: value => Config.Enabled = value,
-                name: I18n.Enabled_Title)
-            .AddBoolOption(
-                getValue: () => Config.PreventRemovalFromTable,
-                setValue: value => Config.PreventRemovalFromTable = value,
-                name: I18n.TableRemoval_Title,
-                tooltip: I18n.TableRemoval_Description)
-            .AddKeybindList(
-                getValue: () => Config.FurniturePlacementKey,
-                setValue: value => Config.FurniturePlacementKey = value,
-                name: I18n.FurniturePlacementKey_Title,
-                tooltip: I18n.FurniturePlacementKey_Description);
+            .AddParagraph(I18n.Mod_Description);
+
+        foreach (PropertyInfo property in typeof(ModConfig).GetProperties())
+        {
+            if (property.PropertyType == typeof(bool))
+            {
+                helper.AddBoolOption(property, () => Config);
+            }
+            else if (property.PropertyType == typeof(KeybindList))
+            {
+                helper.AddKeybindList(property, () => Config);
+            }
+        }
     }
 }

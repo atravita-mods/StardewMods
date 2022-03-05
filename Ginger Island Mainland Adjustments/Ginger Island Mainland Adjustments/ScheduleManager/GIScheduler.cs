@@ -107,7 +107,7 @@ internal static class GIScheduler
         if (Game1.getLocationFromName("IslandSouth") is not IslandSouth island || !island.resortRestored.Value
             || !island.resortOpenToday.Value || Game1.IsRainingHere(island)
             || Utility.isFestivalDay(Game1.Date.DayOfMonth, Game1.Date.Season)
-            || (Game1.Date.DayOfMonth >= 15 && Game1.Date.DayOfMonth <= 17 && Game1.Date.Season.Equals("winter", StringComparison.OrdinalIgnoreCase)))
+            || (Game1.Date.DayOfMonth >= 15 && Game1.Date.DayOfMonth <= 17 && Game1.IsWinter))
         {
             return;
         }
@@ -115,14 +115,14 @@ internal static class GIScheduler
         Random random = new((int)(Game1.uniqueIDForThisGame * 1.21f) + (int)(Game1.stats.DaysPlayed * 2.5f));
 
         HashSet<NPC> explorers = GenerateExplorerGroup(random);
-        if (explorers.Any())
+        if (explorers.Count > 0)
         {
             Globals.ModMonitor.DebugLog($"Found explorer group: {string.Join(", ", explorers.Select((NPC npc) => npc.Name))}.");
             IslandNorthScheduler.Schedule(random, explorers);
         }
 
         // Resort capacity set to zero, can skip everything else.
-        if (Globals.Config.Capacity == 0)
+        if (Globals.Config.Capacity == 0 && Globals.saveDataModel.NPCsForTomorrow.Count == 0)
         {
             IslandSouthPatches.ClearCache();
             GIScheduler.ClearCache();
@@ -152,10 +152,12 @@ internal static class GIScheduler
         IslandSouthPatches.ClearCache();
         GIScheduler.ClearCache();
 
+#if DEBUG
         Globals.ModMonitor.Log($"Current memory usage {GC.GetTotalMemory(false):N0}", LogLevel.Alert);
         GCSettings.LargeObjectHeapCompactionMode = GCLargeObjectHeapCompactionMode.CompactOnce;
         GC.Collect();
         Globals.ModMonitor.Log($"Post-collection memory usage {GC.GetTotalMemory(true):N0}", LogLevel.Alert);
+#endif
     }
 
     /// <summary>
@@ -199,13 +201,25 @@ internal static class GIScheduler
                 valid_visitors.Add(npc);
             }
         }
+
+        foreach (string npcname in Globals.saveDataModel.NPCsForTomorrow)
+        {
+            NPC npc = Game1.getCharacterFromName(npcname);
+            visitors.Add(npc);
+            if (!valid_visitors.Contains(npc))
+            {
+                Globals.ModMonitor.Log($"{npcname} queued for Island DESPITE exclusion!", LogLevel.Warn);
+            }
+        }
+        Globals.saveDataModel.NPCsForTomorrow.Clear();
+
         if (random.NextDouble() < Globals.Config.GroupChance)
         {
             List<string> groupkeys = new();
             foreach (string key in IslandGroups.Keys)
             {
                 // Filter out groups where one member can't make it or are too big
-                if (IslandGroups[key].Count <= capacity && IslandGroups[key].All((NPC npc) => valid_visitors.Contains(npc)))
+                if (IslandGroups[key].Count <= capacity - visitors.Count && IslandGroups[key].All((NPC npc) => valid_visitors.Contains(npc)))
                 {
                     groupkeys.Add(key);
                 }
@@ -217,13 +231,12 @@ internal static class GIScheduler
                 Globals.ModMonitor.Log($"Group {CurrentGroup} headed to Island.", LogLevel.Debug);
 #endif
                 HashSet<NPC> possiblegroup = IslandGroups[CurrentGroup];
-                visitors = possiblegroup.ToList(); // limit group size if there's too many people...
+                visitors.AddRange(possiblegroup.Where((npc) => !visitors.Contains(npc))); // limit group size if there's too many people...
                 CurrentVisitingGroup = possiblegroup;
                 valid_visitors.ExceptWith(visitors);
             }
         }
-        NPC? gus = Game1.getCharacterFromName("Gus");
-        if (gus is not null && !visitors.Contains(gus) && valid_visitors.Contains(gus)
+        if (Game1.getCharacterFromName("Gus") is NPC gus && !visitors.Contains(gus) && valid_visitors.Contains(gus)
             && Globals.Config.GusDayAsShortString().Equals(Game1.shortDayNameFromDayOfSeason(Game1.dayOfMonth), StringComparison.OrdinalIgnoreCase)
             && Globals.Config.GusChance > random.NextDouble())
         {
@@ -269,9 +282,8 @@ internal static class GIScheduler
         }
 
         // set schedule Delay for George and Evelyn so they arrive together (in theory)?
-        NPC? george = visitors.FirstOrDefault((NPC npc) => npc.Name.Equals("George", StringComparison.OrdinalIgnoreCase));
-        NPC? evelyn2 = visitors.FirstOrDefault((NPC npc) => npc.Name.Equals("Evelyn", StringComparison.OrdinalIgnoreCase));
-        if (george is not null && evelyn2 is not null)
+        if (visitors.FirstOrDefault((NPC npc) => npc.Name.Equals("George", StringComparison.OrdinalIgnoreCase)) is NPC george
+            && visitors.FirstOrDefault((NPC npc) => npc.Name.Equals("Evelyn", StringComparison.OrdinalIgnoreCase)) is NPC evelyn2)
         {
             george.scheduleDelaySeconds = 7f;
             evelyn2.scheduleDelaySeconds = 6.8f;

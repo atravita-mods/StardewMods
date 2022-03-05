@@ -47,6 +47,15 @@ internal static class ConsoleCommands
             name: PrePendCommand + ".get_locations_list",
             documentation: I18n.GetLocations_Documentation(),
             callback: ConsoleGetLocations);
+#if !DEBUG
+        if (Globals.Config.DebugMode)
+#endif
+        {
+            commandHelper.Add(
+                name: PrePendCommand + ".queue_npc",
+                documentation: "Queues an NPC for visit to Ginger Island on next valid day",
+                callback: QueueNPC);
+        }
     }
 
     /// <summary>
@@ -55,6 +64,34 @@ internal static class ConsoleCommands
     internal static void ClearCache()
     {
         IslandSchedules.Clear();
+    }
+
+    /// <summary>Queues NPCs up for a visit to Ginger Island.</summary>
+    /// <remarks>Note that this will override exclusions! It'll also only be available if the DEBUG config is set.</remarks>
+    private static void QueueNPC(string command, string[] args)
+    {
+        List<string> npcsFound = new();
+        List<string> npcsNotFound = new();
+        foreach (string npcname in args)
+        {
+            if (Game1.getCharacterFromName(npcname, mustBeVillager: true) is NPC npc)
+            {
+                Globals.saveDataModel.NPCsForTomorrow.Add(npcname);
+                npcsFound.Add(npcname);
+            }
+            else
+            {
+                npcsNotFound.Add(npcname);
+            }
+            if (npcsFound.Count > 0)
+            {
+                Globals.ModMonitor.Log($"Queued for Ginger Island: {string.Join(", ", npcsFound)}", LogLevel.Info);
+            }
+            if (npcsNotFound.Count > 0)
+            {
+                Globals.ModMonitor.Log($"Not found for queuing: {string.Join(", ", npcsNotFound)}", LogLevel.Warn);
+            }
+        }
     }
 
     /// <summary>
@@ -73,7 +110,7 @@ internal static class ConsoleCommands
         if (!npc.followSchedule)
         {
             Globals.ModMonitor.Log('\t' + I18n.DisplaySchedule_NoSchedule(npc.Name), level);
-            if (npc.Schedule == null || npc.Schedule.Keys.Count == 0)
+            if (npc.Schedule is null || npc.Schedule.Count == 0)
             { // For some reason, sometimes even when followSchedule is not set, the NPC goes through their schedule anyways?
                 return;
             }
@@ -150,8 +187,7 @@ internal static class ConsoleCommands
     {
         foreach (string name in args)
         {
-            NPC? npc = Game1.getCharacterFromName(name, true);
-            if (npc is not null)
+            if (Game1.getCharacterFromName(name, mustBeVillager: true) is NPC npc)
             {
                 DisplaySchedule(npc, LogLevel.Debug);
             }
@@ -174,26 +210,17 @@ internal static class ConsoleCommands
             Globals.ModMonitor.Log(I18n.GetLocations_NoneFound(), LogLevel.Info);
             return;
         }
-        if (args.Length == 0)
+        HashSet<string> locations_to_find = new(args);
+        if (args.Length > 0)
         {
-            foreach (List<string>? locList in locations)
-            {
-                if (locList is not null)
-                {
-                    Globals.ModMonitor.Log(string.Join(", ", locList), LogLevel.Info);
-                }
-            }
-        }
-        else
-        {
-            HashSet<string> locations_to_find = new(args);
             Globals.ModMonitor.Log($"Looking for {string.Join(", ", args)} in routesFromLocationToLocation", LogLevel.Info);
-            foreach (List<string>? loclist in locations)
+        }
+        Func<List<string>, bool> filter = args.Length == 0 ? (_) => true : (List<string> loclist) => locations_to_find.Intersect(loclist).Any();
+        foreach (List<string>? loclist in locations)
+        {
+            if (loclist is not null && filter(loclist))
             {
-                if (loclist is not null && locations_to_find.Intersect(loclist).Any())
-                {
-                    Globals.ModMonitor.Log(string.Join(", ", loclist), LogLevel.Info);
-                }
+                Globals.ModMonitor.Log(string.Join(", ", loclist), LogLevel.Info);
             }
         }
     }

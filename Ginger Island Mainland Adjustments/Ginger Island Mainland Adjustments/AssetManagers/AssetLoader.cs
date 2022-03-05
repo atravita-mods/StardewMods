@@ -188,8 +188,7 @@ public sealed class AssetLoader : IAssetLoader
             HashSet<NPC> group = new();
             foreach (string charname in data[groupname].Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries))
             {
-                NPC? npc = Game1.getCharacterFromName(charname);
-                if (npc is not null)
+                if (Game1.getCharacterFromName(charname) is NPC npc)
                 {
                     group.Add(npc);
                 }
@@ -233,8 +232,7 @@ public sealed class AssetLoader : IAssetLoader
         Dictionary<string, string> data = Globals.ContentHelper.Load<Dictionary<string, string>>(ExclusionLocations, ContentSource.GameContent);
         foreach (string npcname in data.Keys)
         {
-            NPC npc = Game1.getCharacterFromName(npcname);
-            if (npc is not null)
+            if (Game1.getCharacterFromName(npcname) is NPC npc)
             {
                 exclusions[npc] = data[npcname].Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
             }

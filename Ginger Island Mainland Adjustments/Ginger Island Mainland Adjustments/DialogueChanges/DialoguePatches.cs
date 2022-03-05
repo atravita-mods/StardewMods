@@ -77,14 +77,11 @@ internal class DialoguePatches
                 return;
             }
 
-            Farmer spouse = __instance.getSpouse();
-            if (spouse is not null && spouse == Game1.player)
+            if (__instance.getSpouse() is Farmer spouse && spouse == Game1.player
+                && DialogueUtilities.TryGetIslandDialogue(__instance, baseKey + "_marriage", __0))
             {
-                if (DialogueUtilities.TryGetIslandDialogue(__instance, baseKey + "_marriage", __0))
-                {
-                    __result = true;
-                    return;
-                }
+                __result = true;
+                return;
             }
             __result = DialogueUtilities.TryGetIslandDialogue(__instance, baseKey, __0);
             return;
@@ -153,8 +150,7 @@ internal class IslandSouthDialoguePatches
     {
         try
         {
-            NPC? spouse = Game1.player?.getSpouse();
-            if (spouse is not null && Game1.IsVisitingIslandToday(spouse.Name))
+            if (Game1.player?.getSpouse() is NPC spouse && Game1.IsVisitingIslandToday(spouse.Name))
             {
                 if (spouse.TryApplyMarriageDialogueIfExisting("GILeave_" + spouse.Name))
                 {

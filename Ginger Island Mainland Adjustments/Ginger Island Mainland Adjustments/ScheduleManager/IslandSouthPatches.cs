@@ -114,27 +114,11 @@ internal static class IslandSouthPatches
             string[] checkset = Exclusions[npc];
             foreach (string condition in checkset)
             {
-                if (Game1.dayOfMonth.ToString().Equals(condition, StringComparison.OrdinalIgnoreCase))
-                {
-                    __result = false;
-                    return;
-                }
-                else if (Game1.currentSeason.Equals(condition, StringComparison.OrdinalIgnoreCase))
-                {
-                    __result = false;
-                    return;
-                }
-                else if (Game1.shortDayNameFromDayOfSeason(Game1.dayOfMonth).Equals(condition, StringComparison.OrdinalIgnoreCase))
-                {
-                    __result = false;
-                    return;
-                }
-                else if ($"{Game1.currentSeason}_{Game1.shortDayNameFromDayOfSeason(Game1.dayOfMonth)}".Equals(condition, StringComparison.OrdinalIgnoreCase))
-                {
-                    __result = false;
-                    return;
-                }
-                else if ($"{Game1.currentSeason}_{Game1.dayOfMonth}".Equals(condition, StringComparison.OrdinalIgnoreCase))
+                if (Game1.dayOfMonth.ToString().Equals(condition, StringComparison.OrdinalIgnoreCase)
+                    || Game1.currentSeason.Equals(condition, StringComparison.OrdinalIgnoreCase)
+                    || Game1.shortDayNameFromDayOfSeason(Game1.dayOfMonth).Equals(condition, StringComparison.OrdinalIgnoreCase)
+                    || $"{Game1.currentSeason}_{Game1.shortDayNameFromDayOfSeason(Game1.dayOfMonth)}".Equals(condition, StringComparison.OrdinalIgnoreCase)
+                    || $"{Game1.currentSeason}_{Game1.dayOfMonth}".Equals(condition, StringComparison.OrdinalIgnoreCase))
                 {
                     __result = false;
                     return;

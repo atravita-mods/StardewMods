@@ -1,5 +1,6 @@
 ﻿using System.Reflection;
 using AtraShared.Schedules;
+using GingerIslandMainlandAdjustments.CustomConsoleCommands;
 
 namespace GingerIslandMainlandAdjustments;
 
@@ -8,6 +9,8 @@ namespace GingerIslandMainlandAdjustments;
 /// </summary>
 internal static class Globals
 {
+    private const string SaveDataKey = "GIMA_SAVE_KEY";
+
     // Values are set in the Mod.Entry method, so should never be null.
 #pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
 
@@ -45,6 +48,12 @@ internal static class Globals
     /// Gets the instance of the schedule utility functions.
     /// </summary>
     internal static ScheduleUtilityFunctions UtilitySchedulingFunctions { get; private set; }
+
+    /// <summary>
+    /// Gets the instance of the class used for custom save data for this mod.
+    /// </summary>
+    /// <remarks>Only accessible by the MasterPlayer.</remarks>
+    internal static SaveDataModel saveDataModel { get; private set; }
 #pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
 
     /// <summary>
@@ -106,4 +115,16 @@ internal static class Globals
         ModMonitor.Log("IsChildNPC method not found - integration with Child2NPC failed.", LogLevel.Warn);
         return false;
     }
+
+    /// <summary>
+    /// Loads data out of save.
+    /// </summary>
+    internal static void LoadDataFromSave()
+        => saveDataModel = Helper.Data.ReadGlobalData<SaveDataModel>(SaveDataKey) ?? new();
+
+    /// <summary>
+    /// Saves custom data.
+    /// </summary>
+    internal static void SaveCustomData()
+        => Helper.Data.WriteSaveData(SaveDataKey, saveDataModel);
 }

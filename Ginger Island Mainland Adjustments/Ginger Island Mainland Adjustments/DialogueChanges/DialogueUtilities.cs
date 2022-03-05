@@ -15,10 +15,7 @@ internal static class DialogueUtilities
     /// <summary>
     /// Clears the dialogue log.
     /// </summary>
-    internal static void ClearDialogueLog()
-    {
-        DialogueLog.Clear();
-    }
+    internal static void ClearDialogueLog() => DialogueLog.Clear();
 
     /// <summary>
     /// Grabs a specific island dialogue for an NPC based on heart level and baseKey.

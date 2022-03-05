@@ -131,7 +131,7 @@
         "Action": "EditData",
         "Target": "Characters/schedules/Pam",
         "Entries": {
-            "GIRemainder": "1800 Saloon 7 18 1/2400 Trailer 15 4 2 pam_sleep"
+            "GIRemainder": "1800 Saloon 7 18 1/2400 bed"
         }
     },
     {
@@ -190,11 +190,11 @@
         "Action": "EditData",
         "Target": "Characters/schedules/Willy",
         "Entries": {
-            "GIRemainder": "1800 Beach 25 36 2 dick_fish/2200 FishShop 5 4 2",
-            "GIRemainder_rain": "1800 Saloon 17 22 2 \"Strings\\schedules\\Willy:winter.000\"/2320 FishShop 5 4 2",
-            "GIRemainder_Fri": "1800 Saloon 17 22 2 \"Strings\\schedules\\Willy:Fri.000\"/2320 FishShop 5 4 2",
-            "GIRemainder_Sat": "1800 Saloon 17 22 2 \"Strings\\schedules\\Willy:Sat.000\"/2300 FishShop 5 4 2",
-            "GIRemainder_winter": "1800 Saloon 17 22 2 \"Strings\\schedules\\Willy:winter.000\"/2320 FishShop 5 4 2"
+            "GIRemainder": "1800 Beach 25 36 2 dick_fish/2200 bed",
+            "GIRemainder_rain": "1800 Saloon 17 22 2 \"Strings\\schedules\\Willy:winter.000\"/2320 bed",
+            "GIRemainder_Fri": "1800 Saloon 17 22 2 \"Strings\\schedules\\Willy:Fri.000\"/2320 bed",
+            "GIRemainder_Sat": "1800 Saloon 17 22 2 \"Strings\\schedules\\Willy:Sat.000\"/2300 bed",
+            "GIRemainder_winter": "1800 Saloon 17 22 2 \"Strings\\schedules\\Willy:winter.000\"/2320 bed"
         }
     }
 ]}

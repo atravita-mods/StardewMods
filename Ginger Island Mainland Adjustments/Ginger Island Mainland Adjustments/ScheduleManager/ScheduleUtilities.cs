@@ -17,10 +17,7 @@ internal static class ScheduleUtilities
     /// <summary>
     /// Removes schedule cache.
     /// </summary>
-    public static void ClearCache()
-    {
-        Schedules.Clear();
-    }
+    public static void ClearCache() => Schedules.Clear();
 
     /// <summary>
     /// Find the correct schedule for an NPC for a given date. Looks into the schedule assets first

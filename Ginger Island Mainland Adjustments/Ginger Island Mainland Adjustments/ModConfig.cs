@@ -195,7 +195,12 @@ public class ModConfig
     /// Gets or sets a value indicating whether harmony debugging patches are enabled.
     /// MUST BE SET IN CONFIG.JSON, NOT IN GMCM.
     /// </summary>
-    public bool DebugMode { get; set; } = true;
+    public bool DebugMode { get; set; }
+#if DEBUG
+       = true;
+#else
+       = false;
+#endif
 
     /// <summary>
     /// Returns the enum value DayOfWeek as a short string.

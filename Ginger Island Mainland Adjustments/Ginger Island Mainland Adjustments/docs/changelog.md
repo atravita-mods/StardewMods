@@ -23,6 +23,7 @@
     <!--Patch GameLocation.characterTrampleTile to prevent it from happening on IslandWest?-->
 <!-- Get Willy to change in his bedroom? -->
 <!-- Make sure the GI schedule keys are right.... -->
+<!-- Document animations -->
 
 ##### Known Issues
 
@@ -38,6 +39,7 @@
 Fixes:
 * Schedules are now selected correctly.
 * Fix GILeave/Return dialogue not happening for farmhands. Spouses now have default GILeave/Return lines, although I would recommend still giving your favorite spouse a line or two.
+* `bed` is supported for `GIRemainder` schedules.
 
 ### Version 1.1.2
 

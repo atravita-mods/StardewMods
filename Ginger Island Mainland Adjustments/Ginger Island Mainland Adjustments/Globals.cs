@@ -49,12 +49,14 @@ internal static class Globals
     /// </summary>
     internal static ScheduleUtilityFunctions UtilitySchedulingFunctions { get; private set; }
 
+
+#pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
+
     /// <summary>
     /// Gets the instance of the class used for custom save data for this mod.
     /// </summary>
     /// <remarks>Only accessible by the MasterPlayer.</remarks>
-    internal static SaveDataModel saveDataModel { get; private set; }
-#pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
+    internal static SaveDataModel? SaveDataModel { get; private set; }
 
     /// <summary>
     /// Gets the github location for this mod.
@@ -120,11 +122,21 @@ internal static class Globals
     /// Loads data out of save.
     /// </summary>
     internal static void LoadDataFromSave()
-        => saveDataModel = Helper.Data.ReadGlobalData<SaveDataModel>(SaveDataKey) ?? new();
+    {
+        if (Context.IsWorldReady && Context.IsMainPlayer)
+        {
+            SaveDataModel = Helper.Data.ReadGlobalData<SaveDataModel>(SaveDataKey) ?? new();
+        }
+    }
 
     /// <summary>
     /// Saves custom data.
     /// </summary>
     internal static void SaveCustomData()
-        => Helper.Data.WriteSaveData(SaveDataKey, saveDataModel);
+    {
+        if (Context.IsWorldReady && Context.IsMainPlayer)
+        {
+            Helper.Data.WriteSaveData(SaveDataKey, SaveDataModel);
+        }
+    }
 }

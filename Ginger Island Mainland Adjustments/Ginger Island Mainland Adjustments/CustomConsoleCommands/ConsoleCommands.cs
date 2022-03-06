@@ -61,22 +61,24 @@ internal static class ConsoleCommands
     /// <summary>
     /// Clear the island schedules at the end of the day.
     /// </summary>
-    internal static void ClearCache()
-    {
-        IslandSchedules.Clear();
-    }
+    internal static void ClearCache() => IslandSchedules.Clear();
 
     /// <summary>Queues NPCs up for a visit to Ginger Island.</summary>
     /// <remarks>Note that this will override exclusions! It'll also only be available if the DEBUG config is set.</remarks>
     private static void QueueNPC(string command, string[] args)
     {
+        if (!Context.IsWorldReady || !Context.IsMainPlayer || Globals.SaveDataModel is null)
+        {
+            Globals.ModMonitor.Log("NPCs can only be queued by the main player, and from within a save.", LogLevel.Info);
+            return;
+        }
         List<string> npcsFound = new();
         List<string> npcsNotFound = new();
         foreach (string npcname in args)
         {
-            if (Game1.getCharacterFromName(npcname, mustBeVillager: true) is NPC npc)
+            if (Game1.getCharacterFromName(npcname, mustBeVillager: true) is not null)
             {
-                Globals.saveDataModel.NPCsForTomorrow.Add(npcname);
+                Globals.SaveDataModel.NPCsForTomorrow.Add(npcname);
                 npcsFound.Add(npcname);
             }
             else
@@ -204,18 +206,17 @@ internal static class ConsoleCommands
         {
             return;
         }
-        List<List<string>>? locations = Globals.ReflectionHelper.GetField<List<List<string>>>(typeof(NPC), "routesFromLocationToLocation").GetValue();
-        if (locations is null)
+        if (Globals.ReflectionHelper.GetField<List<List<string>>>(typeof(NPC), "routesFromLocationToLocation").GetValue() is not List<List<string>> locations)
         {
             Globals.ModMonitor.Log(I18n.GetLocations_NoneFound(), LogLevel.Info);
             return;
         }
-        HashSet<string> locations_to_find = new(args);
+        HashSet<string> locations_to_find = new(args, StringComparer.OrdinalIgnoreCase);
         if (args.Length > 0)
         {
             Globals.ModMonitor.Log($"Looking for {string.Join(", ", args)} in routesFromLocationToLocation", LogLevel.Info);
         }
-        Func<List<string>, bool> filter = args.Length == 0 ? (_) => true : (List<string> loclist) => locations_to_find.Intersect(loclist).Any();
+        Func<List<string>, bool> filter = args.Length == 0 ? (_) => true : (List<string> loclist) => locations_to_find.Intersect(loclist, StringComparer.OrdinalIgnoreCase).Any();
         foreach (List<string>? loclist in locations)
         {
             if (loclist is not null && filter(loclist))

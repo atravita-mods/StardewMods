@@ -122,7 +122,7 @@ internal static class GIScheduler
         }
 
         // Resort capacity set to zero, can skip everything else.
-        if (Globals.Config.Capacity == 0 && Globals.saveDataModel.NPCsForTomorrow.Count == 0)
+        if (Globals.Config.Capacity == 0 && (Globals.SaveDataModel is null || Globals.SaveDataModel.NPCsForTomorrow.Count == 0))
         {
             IslandSouthPatches.ClearCache();
             GIScheduler.ClearCache();
@@ -202,16 +202,19 @@ internal static class GIScheduler
             }
         }
 
-        foreach (string npcname in Globals.saveDataModel.NPCsForTomorrow)
+        if (Globals.SaveDataModel is not null)
         {
-            NPC npc = Game1.getCharacterFromName(npcname);
-            visitors.Add(npc);
-            if (!valid_visitors.Contains(npc))
+            foreach (string npcname in Globals.SaveDataModel.NPCsForTomorrow)
             {
-                Globals.ModMonitor.Log($"{npcname} queued for Island DESPITE exclusion!", LogLevel.Warn);
+                NPC npc = Game1.getCharacterFromName(npcname);
+                visitors.Add(npc);
+                if (!valid_visitors.Contains(npc))
+                {
+                    Globals.ModMonitor.Log($"{npcname} queued for Island DESPITE exclusion!", LogLevel.Warn);
+                }
             }
+            Globals.SaveDataModel.NPCsForTomorrow.Clear();
         }
-        Globals.saveDataModel.NPCsForTomorrow.Clear();
 
         if (random.NextDouble() < Globals.Config.GroupChance)
         {

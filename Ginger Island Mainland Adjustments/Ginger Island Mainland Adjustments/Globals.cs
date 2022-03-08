@@ -48,8 +48,6 @@ internal static class Globals
     /// Gets the instance of the schedule utility functions.
     /// </summary>
     internal static ScheduleUtilityFunctions UtilitySchedulingFunctions { get; private set; }
-
-
 #pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
 
     /// <summary>

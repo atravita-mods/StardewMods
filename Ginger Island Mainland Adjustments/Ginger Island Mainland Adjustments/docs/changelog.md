@@ -24,6 +24,7 @@
 <!-- Get Willy to change in his bedroom? -->
 <!-- Make sure the GI schedule keys are right.... -->
 <!-- Document animations -->
+<!-- Consider not allowing spouses to go to Ginger Island if they have a defined marriage_Season_day key?-->
 
 ##### Known Issues
 

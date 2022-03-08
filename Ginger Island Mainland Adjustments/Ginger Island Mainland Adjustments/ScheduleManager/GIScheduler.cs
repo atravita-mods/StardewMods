@@ -57,10 +57,7 @@ internal static class GIScheduler
     {
         get
         {
-            if (islandGroups is null)
-            {
-                islandGroups = AssetLoader.GetCharacterGroup(SpecialGroupType.Groups);
-            }
+            islandGroups ??= AssetLoader.GetCharacterGroup(SpecialGroupType.Groups);
             return islandGroups;
         }
     }
@@ -72,10 +69,7 @@ internal static class GIScheduler
     {
         get
         {
-            if (explorerGroups is null)
-            {
-                explorerGroups = AssetLoader.GetCharacterGroup(SpecialGroupType.Explorers);
-            }
+            explorerGroups ??= AssetLoader.GetCharacterGroup(SpecialGroupType.Explorers);
             return explorerGroups;
         }
     }

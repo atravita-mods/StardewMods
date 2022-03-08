@@ -1,6 +1,7 @@
 ﻿using AtraShared;
 using AtraShared.Utils.Extensions;
 using StardewModdingAPI.Utilities;
+using StardewValley.Locations;
 
 namespace GingerIslandMainlandAdjustments.AssetManagers;
 
@@ -207,7 +208,7 @@ public sealed class AssetLoader : IAssetLoader
             HashSet<NPC> allSpouses = new();
             foreach (NPC npc in Utility.getAllCharacters())
             {
-                if (npc?.isMarried() == true)
+                if (npc?.isMarried() == true && IslandSouth.CanVisitIslandToday(npc))
                 {
                     allSpouses.Add(npc);
                 }

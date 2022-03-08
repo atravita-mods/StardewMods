@@ -27,10 +27,7 @@ internal static class IslandSouthPatches
     {
         get
         {
-            if (exclusions is null)
-            {
-                exclusions = AssetLoader.GetExclusions();
-            }
+            exclusions ??= AssetLoader.GetExclusions();
             return exclusions;
         }
     }

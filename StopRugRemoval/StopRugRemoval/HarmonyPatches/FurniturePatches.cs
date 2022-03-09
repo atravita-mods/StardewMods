@@ -1,9 +1,8 @@
 ﻿using HarmonyLib;
 using Microsoft.Xna.Framework;
-using StardewValley.Locations;
 using StardewValley.Objects;
 
-namespace StopRugRemoval;
+namespace StopRugRemoval.HarmonyPatches;
 
 /// <summary>
 /// Class to hold patches for the Furniture class, to allow me to place rugs under other furniture
@@ -28,10 +27,10 @@ internal class FurniturePatches
             }
 
             Rectangle bounds = __instance.boundingBox.Value;
-            int tileX = (int)__instance.TileLocation.X;
-            int tileY = (int)__instance.TileLocation.Y;
+            int tileX = bounds.X / 64;
+            int tileY = bounds.Y / 64;
 #if DEBUG
-            ModEntry.ModMonitor.Log($"Checking rug: {bounds.X / 64f}, {bounds.Y / 64f}, W/H {bounds.Width / 64f}/{bounds.Height / 64f}");
+            ModEntry.ModMonitor.Log($"Checking rug: {bounds.X / 64f}, {bounds.Y / 64f}, W/H {bounds.Width / 64f}/{bounds.Height / 64f}", LogLevel.Debug);
 #endif
             for (int x = 0; x < bounds.Width / 64; x++)
             {

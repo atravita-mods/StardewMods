@@ -30,6 +30,11 @@ public class ModConfig
     public bool PreventRemovalFromTable { get; set; } = true;
 
     /// <summary>
+    /// Gets or sets a value indicating whether hoeing rugs should be allowed.
+    /// </summary>
+    public bool PreventHoeingRugs { get; set; } = true;
+
+    /// <summary>
     /// Gets or sets keybind to use to remove an item from a table.
     /// </summary>
     public KeybindList FurniturePlacementKey { get; set; } = KeybindList.Parse("LeftShift + Z");

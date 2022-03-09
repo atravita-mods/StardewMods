@@ -334,36 +334,41 @@ internal class TagManager
     {
         int? professionNumber = profession switch
         {
-            "rancher" => 0,
-            "tiller" => 1,
-            "coopmaster" => 2,
-            "shepherd" => 3,
-            "artisan" => 4,
-            "agriculturist" => 5,
-            "fisher" => 6,
-            "trapper" => 7,
-            "angler" => 8,
-            "pirate" => 9,
-            "mariner" => 10,
-            "luremaster" => 11,
-            "forester" => 12,
-            "gatherer" => 13,
-            "lumberjack" => 14,
-            "tapper" => 15,
-            "botanist" => 16,
-            "tracker" => 17,
-            "miner" => 18,
-            "geologist" => 19,
-            "blacksmith" => 20,
-            "prospector" => 21,
-            "excavator" => 22,
-            "gemologist" => 23,
-            "fighter" => 24,
-            "scout" => 25,
-            "brute" => 26,
-            "defender" => 27,
-            "acrobat" => 28,
-            "desperado" => 29,
+            /* Farming professions */
+            "rancher" => Farmer.rancher,
+            "tiller" => Farmer.tiller,
+            "coopmaster" => Farmer.butcher, // [sic]
+            "shepherd" => Farmer.shepherd,
+            "artisan" => Farmer.artisan,
+            "agriculturist" => Farmer.agriculturist,
+            /* Fishing professions */
+            "fisher" => Farmer.fisher,
+            "trapper" => Farmer.trapper,
+            "angler" => Farmer.angler,
+            "pirate" => Farmer.pirate,
+            "mariner" => Farmer.baitmaster, // [sic]
+            "luremaster" => Farmer.mariner, // [sic]
+            /* Foraging professions */
+            "forester" => Farmer.forester,
+            "gatherer" => Farmer.gatherer,
+            "lumberjack" => Farmer.lumberjack,
+            "tapper" => Farmer.tapper,
+            "botanist" => Farmer.botanist,
+            "tracker" => Farmer.tracker,
+            /* Mining professions */
+            "miner" => Farmer.miner,
+            "geologist" => Farmer.geologist,
+            "blacksmith" => Farmer.blacksmith,
+            "prospector" => Farmer.burrower, // [sic]
+            "excavator" => Farmer.excavator,
+            "gemologist" => Farmer.gemologist,
+            /* Combat professions */
+            "fighter" => Farmer.fighter,
+            "scout" => Farmer.scout,
+            "brute" => Farmer.brute,
+            "defender" => Farmer.defender,
+            "acrobat" => Farmer.acrobat,
+            "desperado" => Farmer.desperado,
             _ => null
         };
         if (professionNumber is null && skill is not null)

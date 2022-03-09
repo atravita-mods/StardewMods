@@ -9,5 +9,5 @@ public class SaveDataModel
     /// <summary>
     /// List of NPCS queued for the next day for Ginger Island.
     /// </summary>
-    public List<string> NPCsForTomorrow { get; set; }
+    public List<string> NPCsForTomorrow { get; set; } = new();
 }

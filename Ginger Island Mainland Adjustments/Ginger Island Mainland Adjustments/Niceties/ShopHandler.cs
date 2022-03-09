@@ -28,13 +28,8 @@ internal static class ShopHandler
             return;
         }
         GameLocation sandyHouse = Game1.currentLocation;
-        if (!Game1.IsVisitingIslandToday("Sandy") || sandyHouse.getCharacterFromName("Sandy") is not null)
-        {
-            return;
-        }
-        Vector2 cursorTile = Globals.Helper.Input.GetCursorPosition().GrabTile;
-        // Checking nine tiles here - there's usually not much around Sandy's buy tile.
-        if (!AtraUtils.YieldSurroundingTiles(cursorTile).Any((Point v) => sandyHouse.doesTileHaveProperty(v.X, v.Y, "Action", "Buildings")?.Contains("Buy") == true))
+        if (!Game1.IsVisitingIslandToday("Sandy") || sandyHouse.getCharacterFromName("Sandy") is not null // Sandy has not left the building.
+            || !AtraUtils.YieldSurroundingTiles(Globals.Helper.Input.GetCursorPosition().GrabTile).Any((Point v) => sandyHouse.doesTileHaveProperty(v.X, v.Y, "Action", "Buildings")?.Contains("Buy") == true))
         {
             return;
         }

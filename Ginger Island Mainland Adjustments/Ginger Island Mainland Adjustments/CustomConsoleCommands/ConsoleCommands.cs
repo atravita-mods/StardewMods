@@ -85,14 +85,14 @@ internal static class ConsoleCommands
             {
                 npcsNotFound.Add(npcname);
             }
-            if (npcsFound.Count > 0)
-            {
-                Globals.ModMonitor.Log($"Queued for Ginger Island: {string.Join(", ", npcsFound)}", LogLevel.Info);
-            }
-            if (npcsNotFound.Count > 0)
-            {
-                Globals.ModMonitor.Log($"Not found for queuing: {string.Join(", ", npcsNotFound)}", LogLevel.Warn);
-            }
+        }
+        if (npcsFound.Count > 0)
+        {
+            Globals.ModMonitor.Log($"Queued for Ginger Island: {string.Join(", ", npcsFound)}", LogLevel.Info);
+        }
+        if (npcsNotFound.Count > 0)
+        {
+            Globals.ModMonitor.Log($"Not found for queuing: {string.Join(", ", npcsNotFound)}", LogLevel.Warn);
         }
     }
 

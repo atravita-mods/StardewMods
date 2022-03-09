@@ -52,8 +52,7 @@ internal class PhoneHandler
                 try
                 {
                     Game1.playSound("bigSelect");
-                    NPC? pam = Game1.getCharacterFromName("Pam");
-                    if (pam is null)
+                    if (Game1.getCharacterFromName("Pam") is not NPC pam)
                     {
                         Globals.ModMonitor.Log($"Pam cannot be found, ending phone call.", LogLevel.Warn);
                         return;

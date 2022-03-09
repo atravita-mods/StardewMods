@@ -20,7 +20,6 @@
 <!-- Figure out why Emily dances *in* the changing room? -->
 <!-- IslandNorth and AntiSocial lines for George/Evelyn/Willy-->
 <!-- Get spouses into Island Farmhouse -->
-    <!--Patch GameLocation.characterTrampleTile to prevent it from happening on IslandWest?-->
 <!-- Get Willy to change in his bedroom? -->
 <!-- Make sure the GI schedule keys are right.... -->
 <!-- Document animations -->

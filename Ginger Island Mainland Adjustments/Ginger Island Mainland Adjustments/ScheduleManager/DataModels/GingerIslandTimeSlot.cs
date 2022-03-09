@@ -358,7 +358,7 @@ internal class GingerIslandTimeSlot
                 chanceMap: (NPC npc) => npc.SocialAnxiety == NPC.shy && npc.Optimism == NPC.negative && !npc.Name.Equals("George", StringComparison.OrdinalIgnoreCase) ? 0.6 : 0.0,
                 map: "IslandSouthEast",
                 animation: "beach_antisocial",
-                animation_required:false),
+                animation_required: false),
 #endif
             // shore points
             new PossibleIslandActivity(

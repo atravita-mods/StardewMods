@@ -41,7 +41,7 @@ internal class GameLocationPatches
     [SuppressMessage("StyleCop", "SA1313", Justification = "Style prefered by Harmony")]
     private static bool PrefixMakeHoeDirt(GameLocation __instance, Vector2 tileLocation, bool ignoreChecks = false)
     {
-        if (ignoreChecks || !ModEntry.Config.PreventHoeingRugs)
+        if (ignoreChecks || !ModEntry.Config.PreventPlantingOnRugs)
         {
             return true;
         }

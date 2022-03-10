@@ -43,13 +43,9 @@ public class ModEntry : Mod
         this.ApplyPatches(new Harmony(this.ModManifest.UniqueID));
 
         helper.Events.GameLoop.GameLaunched += this.SetUpConfig;
-        helper.Events.GameLoop.SaveLoaded += this.OnSaveLoaded;
         //helper.Events.GameLoop.Saving += this.BeforeSave;
         //saved as well?
     }
-
-    private void OnSaveLoaded(object? sender, SaveLoadedEventArgs e)
-        => OutdoorRugs.ApplyNoSpawns();
 
     /// <summary>
     /// Applies and logs this mod's harmony patches.

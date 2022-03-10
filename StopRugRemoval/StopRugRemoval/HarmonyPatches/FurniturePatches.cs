@@ -118,4 +118,27 @@ internal class FurniturePatches
             return true;
         }
     }
+
+    [HarmonyPrefix]
+    [HarmonyPatch(nameof(Furniture.DoesTileHaveProperty))]
+    [SuppressMessage("StyleCop", "SA1313", Justification = "Style prefered by Harmony")]
+    private static bool PrefixDoesTileHaveProperty(Furniture __instance, int tile_x, int tile_y, string property_name, string layer_name, ref string property_value, ref bool __result)
+    {
+        try
+        {
+            if (__instance.getBoundingBox(__instance.TileLocation).Contains((tile_x * 64) + 32, (tile_y * 64) + 32)
+                && layer_name.Equals("Back", StringComparison.OrdinalIgnoreCase)
+                && property_name.Equals("NoSpawn", StringComparison.OrdinalIgnoreCase))
+            {
+                property_value = "All";
+                __result = true;
+                return false;
+            }
+        }
+        catch (Exception ex)
+        {
+            ModEntry.ModMonitor.Log($"Failed in preventing spawning on rugs at {tile_x} {tile_y}\n\n{ex}", LogLevel.Error);
+        }
+        return true;
+    }
 }

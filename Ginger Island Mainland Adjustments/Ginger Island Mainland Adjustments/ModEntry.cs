@@ -15,6 +15,7 @@ namespace GingerIslandMainlandAdjustments;
 public class ModEntry : Mod
 {
     private bool haveFixedSchedulesToday = false;
+    private int countdown = 5; // used to register my late asset editor.
 
     /// <inheritdoc />
     public override void Entry(IModHelper helper)
@@ -64,7 +65,7 @@ public class ModEntry : Mod
         GIScheduler.DayEndReset();
         ConsoleCommands.ClearCache();
         ScheduleUtilities.ClearCache();
-        
+
         this.haveFixedSchedulesToday = false;
     }
 
@@ -121,6 +122,9 @@ public class ModEntry : Mod
     /// <param name="e">Possible parameters.</param>
     private void OnGameLaunched(object? sender, GameLaunchedEventArgs e)
     {
+        // Start countdown for the late asset editor
+        this.Helper.Events.GameLoop.UpdateTicked += this.FiveTicksPostGameLaunched;
+
         // Generate the GMCM for this mod.
         GenerateGMCM.Build(this.ModManifest, this.Helper.Translation);
 
@@ -131,6 +135,20 @@ public class ModEntry : Mod
         if (Globals.GetIsChildToNPC())
         {
             Globals.ModMonitor.Log("Successfully grabbed Child2NPC for integration", LogLevel.Debug);
+        }
+    }
+
+    /// <summary>
+    /// Adds in the late asset editor, five ticks after GameLaunched.
+    /// </summary>
+    /// <param name="sender">Smapi thing, unknown.</param>
+    /// <param name="e">UpdateTickedEventArgs.</param>
+    private void FiveTicksPostGameLaunched(object? sender, UpdateTickedEventArgs e)
+    {
+        if (--this.countdown <= 0)
+        {
+            this.Helper.Content.AssetEditors.Add(LateAssetEditor.Instance);
+            this.Helper.Events.GameLoop.UpdateTicked -= this.FiveTicksPostGameLaunched;
         }
     }
 

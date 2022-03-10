@@ -22,9 +22,6 @@ internal class AssetEditor : IAssetEditor
     // We edit Pam's phone dialogue into Strings/Characters so content packs can target that.
     private static readonly string PhoneStringLocation = PathUtilities.NormalizeAssetName("Strings/Characters");
 
-    // We edit Pam's nine heart event to set flags to remember which path the player chose.
-    private static readonly string DataEventsTrailerBig = PathUtilities.NormalizeAssetName("Data/Events/Trailer_Big");
-
     // A ten heart event and letter are included to unlock the phone.
     private static readonly string DataEventsSeedshop = PathUtilities.NormalizeAssetName("Data/Events/SeedShop");
     private static readonly string DataMail = PathUtilities.NormalizeAssetName("Data/mail");
@@ -36,7 +33,6 @@ internal class AssetEditor : IAssetEditor
         SandyDialogueLocation,
         WillyDialogueLocation,
         PhoneStringLocation,
-        DataEventsTrailerBig,
         DataEventsSeedshop,
         DataMail,
     };
@@ -87,25 +83,6 @@ internal class AssetEditor : IAssetEditor
             foreach (string key in new string[] { "Pam_Island_1", "Pam_Island_2", "Pam_Island_3", "Pam_Doctor", "Pam_Other", "Pam_Bus_1", "Pam_Bus_2", "Pam_Bus_3", "Pam_Voicemail_Island", "Pam_Voicemail_Doctor", "Pam_Voicemail_Other", "Pam_Voicemail_Bus", "Pam_Bus_Late" })
             {
                 editor.Data[key] = I18n.GetByKey(key);
-            }
-        }
-        else if (asset.AssetNameEquals(DataEventsTrailerBig))
-        { // Insert mail flags into the vanilla event
-            if (editor.Data.TryGetValue("positive", out string? val))
-            {
-                editor.Data["positive"] = "addMailReceived atravita_GIMA_PamPositive/" + val;
-            }
-            foreach ((string key, string value) in editor.Data)
-            {
-                if (key.StartsWith("503180/"))
-                {
-                    int lastslash = value.LastIndexOf('/');
-                    if (lastslash > 0)
-                    {
-                        editor.Data[key] = value.Insert(lastslash, "/addMailReceived atravita_GIMA_PamInsulted");
-                    }
-                    break;
-                }
             }
         }
         else if (asset.AssetNameEquals(DataMail))

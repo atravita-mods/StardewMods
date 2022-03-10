@@ -5,7 +5,7 @@
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
     <EnableHarmony>True</EnableHarmony>
-    <DefineConstants>COLLECTIONS; HARMONY; TRANSPILERS;</DefineConstants>
+    <DefineConstants>HARMONY;</DefineConstants>
     <LangVersion>latest</LangVersion>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>

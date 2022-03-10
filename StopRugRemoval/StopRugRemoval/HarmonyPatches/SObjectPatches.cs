@@ -7,8 +7,10 @@ namespace StopRugRemoval.HarmonyPatches;
 [HarmonyPatch(typeof(SObject))]
 internal class SObjectPatches
 {
+    [HarmonyPrefix]
     [HarmonyPatch("canPlaceWildTreeSeed")]
-    private static bool Prefix(GameLocation location, Vector2 tile, ref bool __result)
+    [SuppressMessage("StyleCop", "SA1313", Justification = "Style prefered by Harmony")]
+    public static bool PrefixWildTrees(GameLocation location, Vector2 tile, ref bool __result)
     {
         try
         {
@@ -29,6 +31,42 @@ internal class SObjectPatches
         catch (Exception ex)
         {
             ModEntry.ModMonitor.Log($"Errored while trying to prevent tree growth\n\n{ex}.", LogLevel.Error);
+        }
+        return true;
+    }
+
+    /// <summary>
+    /// Prefix on placement to prevent planting of fruit trees and tea saplings on rugs, hopefully.
+    /// </summary>
+    /// <param name="__instance"></param>
+    /// <param name="location"></param>
+    /// <param name="x">X placement location in pixel coordinates.</param>
+    /// <param name="y">Y placement location in pixel coordinates.</param>
+    /// <param name="__result">Result of the function.</param>
+    /// <returns></returns>
+    [HarmonyPrefix]
+    [HarmonyPatch(nameof(SObject.placementAction))]
+    [SuppressMessage("StyleCop", "SA1313", Justification = "Style prefered by Harmony")]
+    public static bool PrefixPlacementAction(SObject __instance, GameLocation location, int x, int y, ref bool __result)
+    {
+        try
+        {
+            if (ModEntry.Config.PreventPlantingOnRugs && __instance.isSapling())
+            {
+                foreach (Furniture f in location.furniture)
+                {
+                    if (f.getBoundingBox(f.TileLocation).Contains(x,y))
+                    {
+                        Game1.showRedMessage(I18n.RugPlantingMessage());
+                        __result = false;
+                        return false;
+                    }
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            ModEntry.ModMonitor.Log($"Mod failed while trying to prevent tree planting\n\n{ex}", LogLevel.Error);
         }
         return true;
     }

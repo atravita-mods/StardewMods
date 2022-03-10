@@ -1,6 +1,7 @@
 ﻿using HarmonyLib;
 using Microsoft.Xna.Framework;
 using StardewValley.Objects;
+using StardewValley.TerrainFeatures;
 
 namespace StopRugRemoval.HarmonyPatches;
 
@@ -52,33 +53,42 @@ internal class FurniturePatches
     }
 
 #if DEBUG
+    [HarmonyPrefix]
+    [HarmonyPatch(nameof(Furniture.canBePlacedHere))]
     [SuppressMessage("StyleCop", "SA1313", Justification = "Style prefered by Harmony")]
-    private static bool PrefixCanBePlacedHere(Furniture __instance, GameLocation __0, Vector2 tile, ref bool __result)
+    private static bool PrefixCanBePlacedHere(Furniture __instance, GameLocation l, Vector2 tile, ref bool __result)
     {
         try
         {
             if (!ModEntry.Config.Enabled || !ModEntry.Config.CanPlaceRugsUnder
                 || !__instance.furniture_type.Value.Equals(Furniture.rug)
                 || __instance.placementRestriction != 0 // someone requested a custom placement restriction, respect that.
-                )
+                || l.CanPlaceThisFurnitureHere(__instance)
+                /*|| __instance.GetAdditionalFurniturePlacementStatus(l, (int)tile.X * 64, (int)tile.Y * 64) != 0*/)
             {
                 return true;
             }
             Rectangle bounds = __instance.boundingBox.Value;
-            bool okaytoplace = true;
+            (int tileX, int tileY) = tile.ToPoint();
             for (int x = 0; x < bounds.Width / 64; x++)
             {
                 for (int y = 0; y < bounds.Height / 64; y++)
                 {
-                    // check for large terrain+terrain, refuse placement.
-                    // check for is placeable everywhere, and if the thing that's blocking placement is an
-                    // another furniture item, I'm still okay to place.
+                    Vector2 currentTile = new(tileX + x, tileY + y);
+                    if ((l.terrainFeatures.TryGetValue(currentTile, out TerrainFeature possibletree) && possibletree is Tree)
+                        || l.isTerrainFeatureAt((int)currentTile.X, (int)currentTile.Y))
+                    {
+                        __result = false;
+                        return false;
+                    }
                 }
             }
+            __result = true;
+            return false;
         }
         catch (Exception ex)
         {
-            ModEntry.ModMonitor.Log($"Ran into errors in PrefixCanBePlacedHere for {__instance.Name} at {__0.NameOrUniqueName} ({tile.X}, {tile.Y})\n\n{ex}", LogLevel.Error);
+            ModEntry.ModMonitor.Log($"Ran into errors in PrefixCanBePlacedHere for {__instance.Name} at {l.NameOrUniqueName} ({tile.X}, {tile.Y})\n\n{ex}", LogLevel.Error);
         }
         return true;
     }

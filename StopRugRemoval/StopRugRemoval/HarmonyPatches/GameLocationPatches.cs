@@ -12,9 +12,9 @@ namespace StopRugRemoval.HarmonyPatches;
 [HarmonyPatch(typeof(GameLocation))]
 internal class GameLocationPatches
 {
-    [SuppressMessage("StyleCop", "SA1313", Justification = "Style prefered by Harmony")]
     [HarmonyPostfix]
     [HarmonyPatch(nameof(GameLocation.CanPlaceThisFurnitureHere))]
+    [SuppressMessage("StyleCop", "SA1313", Justification = "Style prefered by Harmony")]
     private static void PostfixCanPlaceFurnitureHere(GameLocation __instance, Furniture __0, ref bool __result)
     {
         try
@@ -41,17 +41,50 @@ internal class GameLocationPatches
     [SuppressMessage("StyleCop", "SA1313", Justification = "Style prefered by Harmony")]
     private static bool PrefixMakeHoeDirt(GameLocation __instance, Vector2 tileLocation, bool ignoreChecks = false)
     {
-        if (ignoreChecks || !ModEntry.Config.PreventPlantingOnRugs)
+        try
         {
-            return true;
-        }
-        (int posX, int posY) = ((tileLocation * 64f) + new Vector2(32f, 32f)).ToPoint();
-        foreach (Furniture f in __instance.furniture)
-        {
-            if (f.furniture_type.Value == Furniture.rug && f.getBoundingBox(f.TileLocation).Contains(posX, posY))
+            if (ignoreChecks || !ModEntry.Config.PreventPlantingOnRugs)
             {
-                return false;
+                return true;
             }
+            (int posX, int posY) = ((tileLocation * 64f) + new Vector2(32f, 32f)).ToPoint();
+            foreach (Furniture f in __instance.furniture)
+            {
+                if (f.furniture_type.Value == Furniture.rug && f.getBoundingBox(f.TileLocation).Contains(posX, posY))
+                {
+                    return false;
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            ModEntry.ModMonitor.Log($"Encountered error trying to prevent hoeing on rugs.\n\n{ex}", LogLevel.Error);
+        }
+        return true;
+    }
+
+    [HarmonyPrefix]
+    [HarmonyPatch(nameof(GameLocation.doesTileHavePropertyNoNull))]
+    [SuppressMessage("StyleCop", "SA1313", Justification = "Style prefered by Harmony")]
+    private static bool PrefixDoesTileHavePropertyNoNull(GameLocation __instance, int xTile, int yTile, string propertyName, string layerName, ref string __result)
+    {
+        try
+        {
+            if (propertyName.Equals("NoSpawn", StringComparison.OrdinalIgnoreCase) && layerName.Equals("Back", StringComparison.OrdinalIgnoreCase))
+            {
+                foreach (Furniture f in __instance.furniture)
+                {
+                    if (f.furniture_type.Value == Furniture.rug && f.getBoundingBox(f.TileLocation).Contains((xTile * 64) + 32, (yTile * 64) + 32))
+                    {
+                        __result = "All";
+                        return false;
+                    }
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            ModEntry.ModMonitor.Log($"Error encountered trying to prevent grass growth\n\n{ex}", LogLevel.Error);
         }
         return true;
     }

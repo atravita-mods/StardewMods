@@ -16,7 +16,7 @@ internal class GameLocationPatches
     /// <param name="__instance">Gamelocation.</param>
     /// <returns>True to continue to original function, false to skip original function.</returns>
     [HarmonyPrefix]
-    [HarmonyPatch(nameof(GameLocation.characterTrampleTile), new Type[] { typeof(Vector2)})]
+    [HarmonyPatch(nameof(GameLocation.characterTrampleTile), new Type[] { typeof(Vector2) })]
     [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Harmony convention")]
     private static bool PrefixCharacterTrample(GameLocation __instance)
     {

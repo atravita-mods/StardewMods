@@ -1,4 +1,6 @@
 ﻿using AtraShared.Integrations.Interfaces;
+using GingerIslandMainlandAdjustments.ScheduleManager;
+using GingerIslandMainlandAdjustments.Utils;
 using StardewValley.Locations;
 
 namespace GingerIslandMainlandAdjustments.Integrations;
@@ -27,6 +29,25 @@ internal class GenerateCPTokens
                 return new[] { island.resortOpenToday.Value.ToString() };
             }
 
+            return null;
+        });
+
+        /***********
+         * The following tokens are never ready at DayStart.
+         * Use a higher refresh rate if you want to use them.
+         ***********/
+        api.RegisterToken(manifest, "Bartender", () => GIScheduler.Bartender is null ? null : new[] { GIScheduler.Bartender.displayName });
+        api.RegisterToken(manifest, "Musician", () => GIScheduler.Musician is null ? null : new[] { GIScheduler.Musician.displayName });
+        api.RegisterToken(manifest, "Islanders", () =>
+        {
+            if (Context.IsWorldReady)
+            {
+                List<string> islanders = Islanders.Get();
+                if (islanders.Count > 0)
+                {
+                    return islanders.ToArray();
+                }
+            }
             return null;
         });
     }

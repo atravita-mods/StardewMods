@@ -1,4 +1,5 @@
 ﻿using AtraShared.Integrations;
+using GingerIslandMainlandAdjustments.Configuration;
 
 namespace GingerIslandMainlandAdjustments.Integrations;
 
@@ -54,7 +55,8 @@ internal static class GenerateGMCM
                 tooltip: I18n.Config_GroupChance_Description,
                 formatValue: TwoPlaceFixedPoint,
                 min: 0f,
-                max: 1f)
+                max: 1f,
+                interval: 0.01f)
             .AddNumberOption(
                 name: I18n.Config_ExplorerChance_Title,
                 getValue: () => Globals.Config.ExplorerChance,

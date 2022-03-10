@@ -43,8 +43,8 @@ internal static class MidDayScheduleEditor
     /// <param name="e">Time Changed Parameters from SMAPI.</param>
     public static void AttemptAdjustGISchedule(TimeChangedEventArgs e)
     {
-        if (e.NewTime >= 900)
-        { // skip after 9AM.
+        if ((Context.IsSplitScreen && Context.ScreenId != 0) || e.NewTime >= 900)
+        { // skip after 9AM, or if is farmhand on splitscreen.
             return;
         }
         if (Globals.Config.UseThisScheduler)

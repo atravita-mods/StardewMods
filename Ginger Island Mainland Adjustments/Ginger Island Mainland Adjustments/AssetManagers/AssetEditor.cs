@@ -63,18 +63,21 @@ internal class AssetEditor : IAssetEditor
         if (asset.AssetNameEquals(GeorgeDialogueLocation))
         {
             editor.Data["Resort"] = I18n.GeorgeResort();
+            editor.Data["Resort_IslandNorth"] = I18n.GeorgeResortIslandNorth();
         }
         else if (asset.AssetNameEquals(EvelynDialogueLocation))
         {
             editor.Data["Resort"] = I18n.EvelynResort();
+            editor.Data["Resort_IslandNorth"] = I18n.EvelynResortIslandNorth();
         }
         else if (asset.AssetNameEquals(WillyDialogueLocation))
         {
             editor.Data["Resort"] = I18n.WillyResort();
+            editor.Data["Resort_IslandNorth"] = I18n.WillyResortIslandNorth();
         }
         else if (asset.AssetNameEquals(SandyDialogueLocation))
         {
-            foreach (string key in new string[] { "Resort", "Resort_Bar", "Resort_Bar_2", "Resort_Wander", "Resort_Shore", "Resort_Pier", "Resort_Approach", "Resort_Left" })
+            foreach (string key in new string[] { "Resort", "Resort_Bar", "Resort_Bar_2", "Resort_Wander", "Resort_Shore", "Resort_Pier", "Resort_Approach", "Resort_Left", "Resort_IslandNorth" })
             {
                 editor.Data[key] = I18n.GetByKey("Sandy_" + key);
             }

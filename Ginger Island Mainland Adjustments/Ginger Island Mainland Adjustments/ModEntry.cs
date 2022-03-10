@@ -51,13 +51,20 @@ public class ModEntry : Mod
     /// </summary>
     private void ClearCaches()
     {
+        DialoguePatches.ClearTalkRecord();
+        DialogueUtilities.ClearDialogueLog();
+
+        if (Context.IsSplitScreen && Context.ScreenId != 0)
+        {
+            return;
+        }
         MidDayScheduleEditor.Reset();
         IslandSouthPatches.ClearCache();
         GIScheduler.ClearCache();
         GIScheduler.DayEndReset();
-        DialogueUtilities.ClearDialogueLog();
         ConsoleCommands.ClearCache();
         ScheduleUtilities.ClearCache();
+        
         this.haveFixedSchedulesToday = false;
     }
 

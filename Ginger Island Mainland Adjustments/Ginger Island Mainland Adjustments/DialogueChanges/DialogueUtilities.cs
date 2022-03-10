@@ -1,4 +1,5 @@
 ﻿using AtraShared.Utils.Extensions;
+using StardewModdingAPI.Utilities;
 
 namespace GingerIslandMainlandAdjustments.DialogueChanges;
 
@@ -7,13 +8,15 @@ namespace GingerIslandMainlandAdjustments.DialogueChanges;
 /// </summary>
 internal static class DialogueUtilities
 {
-    /// <summary>
-    /// Stores whether or not a particular dialogue string has been said today.
-    /// </summary>
-    private static readonly List<string> DialogueLog = new();
+    private static readonly PerScreen<List<string>> DialogueLogPerScreen = new(createNewState: () => new List<string>());
 
     /// <summary>
-    /// Clears the dialogue log.
+    /// Gets storage for whether or not a particular dialogue string has been said today.
+    /// </summary>
+    private static List<string> DialogueLog => DialogueLogPerScreen.Value;
+
+    /// <summary>
+    /// Clears the dialogue log. Needs to be call per-player in splitscreen.
     /// </summary>
     internal static void ClearDialogueLog() => DialogueLog.Clear();
 

@@ -1,5 +1,6 @@
 ﻿using System.Reflection;
 using AtraShared.Schedules;
+using GingerIslandMainlandAdjustments.Configuration;
 using GingerIslandMainlandAdjustments.CustomConsoleCommands;
 
 namespace GingerIslandMainlandAdjustments;

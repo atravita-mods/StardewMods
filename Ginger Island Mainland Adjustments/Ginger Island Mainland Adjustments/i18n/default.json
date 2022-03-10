@@ -10,9 +10,13 @@
   "Sandy_Resort_Approach": "Oooh @, I'm going to be going to Ginger Island today. Definitely looking forward to a good vacation!$h",
   "Sandy_Resort_Left": "Ah, that was relaxing. Back to work, I guess....",
   "Sandy_Resort_Pier": "Isn't that water beautiful? I could stare at it all day!",
+  "Sandy_Resort_IslandNorth":  "Oh, what pretty trees! We don't get foliage this dense in the desert!$h",
   "George_Resort": "Well, ain't this place different! This warm sun feels so nice today.",
+  "George_Resort_IslandNorth":  "Hrmmph.",
   "Evelyn_Resort": "My dear @, it's great seeing you here today!#$e#Make sure to take some time for rest and relaxation! Can't have you working yourself too hard.",
+  "Evelyn_Resort_IslandNorth": "My dear, isn't this place so pretty?$h",
   "Willy_Resort": "Ah, nothing like a day spent under the sun and by the sea....",
+  "Willy_Resort_IslandNorth":  "Be careful out there! Try not to get hurt in that volcano.",
 
   "GILeave_Default_Happy": "Heya, {{endearment}}, I'll be off to Ginger Island today! Will you consider joining me?$h",
   "GIReturn_Default_Happy": "Oh, {{endearment}}, I had a great day at Ginger Island today!$h",
@@ -139,5 +143,5 @@
   "SCHEDULE_PARSE_FAILURE": "Failed in parsing schedulepoint {{schedulepoint}} for NPC {{npc}}",
   "SCHEDULE_REGEX_FAILURE": "{{schedulepoint}} seems unparsable by regex, sending NPC {{npc}} home to sleep",
 
-  "harmony_crash": "Mod crashed while applying harmony patches. Please upload this log to smapi.io/log and take the log to the mod's Github page:"
+  "harmony_crash": "Mod crashed while applying harmony patches. Please upload this log to https://smapi.io/log and take the log to the mod's Github page:"
 }

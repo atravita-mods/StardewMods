@@ -1,6 +1,7 @@
 ﻿using AtraShared.Utils.Extensions;
 using GingerIslandMainlandAdjustments.ScheduleManager;
 using HarmonyLib;
+using StardewModdingAPI.Utilities;
 using StardewValley.Locations;
 
 namespace GingerIslandMainlandAdjustments.DialogueChanges;
@@ -13,6 +14,15 @@ internal class DialoguePatches
 {
     private const string ANTISOCIAL = "Resort_Antisocial";
     private const string ISLANDNORTH = "Resort_IslandNorth";
+
+    private static readonly PerScreen<HashSet<string>> TalkedToTodayPerScreen = new(createNewState: () => new HashSet<string>());
+
+    private static HashSet<string> TalkedToToday => TalkedToTodayPerScreen.Value;
+
+    /// <summary>
+    /// Clears the record of whether or not you've talked to your spouse on the Island today.
+    /// </summary>
+    public static void ClearTalkRecord() => TalkedToToday.Clear();
 
     /// <summary>
     /// Appends checkForNewCurrentDialogue to look for GI-specific dialogue.
@@ -28,6 +38,10 @@ internal class DialoguePatches
     { // __0 = heartlevel, as int. __1 = whether or not to have a season prefix?
         try
         {
+            if (__instance.currentLocation is IslandLocation)
+            {
+                TalkedToToday.Add(__instance.Name);
+            }
             if (__result || !Game1.IsVisitingIslandToday(__instance.Name) || __instance.currentLocation is FarmHouse)
             { // game code has returned a value, therefore skip me.
                 return;
@@ -107,7 +121,13 @@ internal class DialoguePatches
             {
                 return;
             }
-            if (__instance.TryApplyMarriageDialogueIfExisting("GIReturn_" + __instance.Name, clearOnMovement: true))
+            if (TalkedToToday.Contains(__instance.Name) && __instance.TryApplyMarriageDialogueIfExisting("GIReturn_Talked_" + __instance.Name, clearOnMovement: true))
+            {
+#if DEBUG
+                Globals.ModMonitor.Log($"Setting GIReturn_Talked_{__instance.Name}.", LogLevel.Debug);
+#endif
+            }
+            else if (__instance.TryApplyMarriageDialogueIfExisting("GIReturn_" + __instance.Name, clearOnMovement: true))
             {
 #if DEBUG
             Globals.ModMonitor.Log($"Setting GIReturn_{__instance.Name}.", LogLevel.Debug);
@@ -138,7 +158,7 @@ internal class DialoguePatches
 /// Class that holds patches against IslandSouth, for dialogue.
 /// </summary>
 [HarmonyPatch(typeof(Game1))]
-internal class IslandSouthDialoguePatches
+internal class Game1DialoguePatches
 {
     /// <summary>
     /// Postfix SetupIslandSchedules to add marriage-specific dialogue.

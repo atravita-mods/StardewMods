@@ -77,7 +77,7 @@ internal static class GIScheduler
     /// <summary>
     /// Clears the cached values for this class.
     /// </summary>
-    public static void ClearCache()
+    internal static void ClearCache()
     {
         islandGroups = null;
         explorerGroups = null;
@@ -86,7 +86,7 @@ internal static class GIScheduler
     /// <summary>
     /// Deletes references to the current group at the end of the day.
     /// </summary>
-    public static void DayEndReset()
+    internal static void DayEndReset()
     {
         CurrentGroup = null;
         CurrentVisitingGroup = null;
@@ -95,7 +95,7 @@ internal static class GIScheduler
     /// <summary>
     /// Generates schedules for everyone.
     /// </summary>
-    public static void GenerateAllSchedules()
+    internal static void GenerateAllSchedules()
     {
         Game1.netWorldState.Value.IslandVisitors.Clear();
         if (Game1.getLocationFromName("IslandSouth") is not IslandSouth island || !island.resortRestored.Value

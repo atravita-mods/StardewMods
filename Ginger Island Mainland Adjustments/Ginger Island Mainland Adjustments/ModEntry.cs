@@ -1,4 +1,5 @@
-﻿using AtraShared.Utils.Extensions;
+﻿using AtraShared.MigrationManager;
+using AtraShared.Utils.Extensions;
 using GingerIslandMainlandAdjustments.AssetManagers;
 using GingerIslandMainlandAdjustments.CustomConsoleCommands;
 using GingerIslandMainlandAdjustments.DialogueChanges;
@@ -17,6 +18,8 @@ public class ModEntry : Mod
     private bool haveFixedSchedulesToday = false;
     private int countdown = 5; // used to register my late asset editor.
 
+    private MigrationManager? migrator;
+
     /// <inheritdoc />
     public override void Entry(IModHelper helper)
     {
@@ -32,11 +35,9 @@ public class ModEntry : Mod
         helper.Events.GameLoop.TimeChanged += this.OnTimeChanged;
         helper.Events.GameLoop.DayEnding += this.OnDayEnding;
         helper.Events.GameLoop.ReturnedToTitle += this.ReturnedToTitle;
-
         helper.Events.GameLoop.SaveLoaded += this.OnSaveLoaded;
-
+        helper.Events.GameLoop.Saving += this.WriteMigrationData;
         helper.Events.Input.ButtonPressed += this.OnButtonPressed;
-
         helper.Events.Player.Warped += this.OnPlayerWarped;
 
         // Add my asset loader and editor.
@@ -45,7 +46,26 @@ public class ModEntry : Mod
     }
 
     private void OnSaveLoaded(object? sender, SaveLoadedEventArgs e)
-        => Globals.LoadDataFromSave();
+    {
+        this.migrator = new(this.ModManifest, this.Helper, this.Monitor);
+        this.migrator.ReadVersionInfo();
+        Globals.LoadDataFromSave();
+    }
+
+    /// <summary>
+    /// Writes migration data then detaches the migrator.
+    /// </summary>
+    /// <param name="sender">Smapi thing.</param>
+    /// <param name="e">Arguments for just-before-saving.</param>
+    private void WriteMigrationData(object? sender, SavingEventArgs e)
+    {
+        if (this.migrator is not null)
+        {
+            this.migrator.SaveVersionInfo();
+            this.migrator = null;
+        }
+        this.Helper.Events.GameLoop.Saving -= this.WriteMigrationData;
+    }
 
     /// <summary>
     /// Clear all caches at the end of the day and if the player exits to menu.
@@ -75,9 +95,7 @@ public class ModEntry : Mod
     /// <param name="sender">Unknown, never used.</param>
     /// <param name="e">Possible parameters.</param>
     private void ReturnedToTitle(object? sender, ReturnedToTitleEventArgs e)
-    {
-        this.ClearCaches();
-    }
+        => this.ClearCaches();
 
     /// <summary>
     /// Clear cache at day end.
@@ -86,10 +104,19 @@ public class ModEntry : Mod
     /// <param name="e">Possible parameters.</param>
     private void OnDayEnding(object? sender, DayEndingEventArgs e)
     {
-        Game1.netWorldState.Value.IslandVisitors.Clear();
         this.ClearCaches();
         NPCPatches.ResetAllFishers();
+
+        if (Context.IsSplitScreen && Context.ScreenId != 0)
+        {
+            return;
+        }
+
         Globals.SaveCustomData();
+        if (Context.IsMainPlayer)
+        {
+            Game1.netWorldState.Value.IslandVisitors.Clear();
+        }
     }
 
     /// <summary>

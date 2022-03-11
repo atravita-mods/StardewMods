@@ -11,7 +11,7 @@ internal static class Islanders
     /// Gets a list of Islanders.
     /// </summary>
     /// <returns>Sorted list of Islanders by name.</returns>
-    public static List<string> Get()
+    internal static List<string> Get()
     {
         List<string> islanders = new();
         foreach (string name in Game1.netWorldState.Value.IslandVisitors.Keys)

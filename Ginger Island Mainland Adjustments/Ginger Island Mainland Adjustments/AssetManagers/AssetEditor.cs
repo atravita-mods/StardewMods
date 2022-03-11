@@ -5,7 +5,7 @@ namespace GingerIslandMainlandAdjustments.AssetManagers;
 /// <summary>
 /// Manages asset editing for this mod.
 /// </summary>
-internal class AssetEditor : IAssetEditor
+public sealed class AssetEditor : IAssetEditor
 {
     /// <summary>
     /// Pam's mail key.
@@ -55,7 +55,7 @@ internal class AssetEditor : IAssetEditor
     [UsedImplicitly]
     public void Edit<T>(IAssetData asset)
     {
-        IAssetDataForDictionary<string, string>? editor = asset.AsDictionary<string, string>();
+        IAssetDataForDictionary<string, string> editor = asset.AsDictionary<string, string>();
         if (asset.AssetNameEquals(GeorgeDialogueLocation))
         {
             editor.Data["Resort"] = I18n.GeorgeResort();

@@ -8,7 +8,7 @@ namespace GingerIslandMainlandAdjustments.ScheduleManager;
 /// These will only be active if DebugMode is set to true.
 /// And thus: no harmony annotations.
 /// </summary>
-internal class ScheduleDebugPatches
+internal static class ScheduleDebugPatches
 {
     private static readonly List<NPC> FailedNPCs = new();
 
@@ -16,7 +16,7 @@ internal class ScheduleDebugPatches
     /// Applies the patches for this class.
     /// </summary>
     /// <param name="harmony">My harmony instance.</param>
-    public static void ApplyPatches(Harmony harmony)
+    internal static void ApplyPatches(Harmony harmony)
     {
         harmony.Patch(
             original: AccessTools.Method(typeof(NPC), "pathfindToNextScheduleLocation"),
@@ -26,7 +26,7 @@ internal class ScheduleDebugPatches
     /// <summary>
     /// Nulls out the schedules for problem NPCs.
     /// </summary>
-    public static void FixNPCs()
+    internal static void FixNPCs()
     {
         foreach (NPC npc in FailedNPCs)
         {

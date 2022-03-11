@@ -5,7 +5,7 @@ namespace GingerIslandMainlandAdjustments.AssetManagers;
 /// <summary>
 /// Class to hold asset editing that has to be done **after** CP.
 /// </summary>
-class LateAssetEditor : IAssetEditor
+public sealed class LateAssetEditor : IAssetEditor
 {
     // We edit Pam's nine heart event to set flags to remember which path the player chose.
     private static readonly string DataEventsTrailerBig = PathUtilities.NormalizeAssetName("Data/Events/Trailer_Big");
@@ -34,9 +34,9 @@ class LateAssetEditor : IAssetEditor
             {
                 editor.Data["positive"] = "addMailReceived atravita_GIMA_PamPositive/" + val;
             }
-            foreach ((string key, string value) in editor.Data)
+            foreach (string key in editor.Data.Keys)
             {
-                if (key.StartsWith("503180/"))
+                if (key.StartsWith("503180/") && editor.Data[key] is string value)
                 {
                     int lastslash = value.LastIndexOf('/');
                     if (lastslash > 0)

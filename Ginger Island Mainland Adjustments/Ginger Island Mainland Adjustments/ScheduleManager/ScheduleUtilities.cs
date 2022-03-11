@@ -17,7 +17,7 @@ internal static class ScheduleUtilities
     /// <summary>
     /// Removes schedule cache.
     /// </summary>
-    public static void ClearCache() => Schedules.Clear();
+    internal static void ClearCache() => Schedules.Clear();
 
     /// <summary>
     /// Find the correct schedule for an NPC for a given date. Looks into the schedule assets first
@@ -26,7 +26,7 @@ internal static class ScheduleUtilities
     /// <param name="npc">NPC to look for.</param>
     /// <param name="date">Date to search.</param>
     /// <returns>A schedule string if it can, null if it can't find one.</returns>
-    public static string? FindProperGISchedule(NPC npc, SDate date)
+    internal static string? FindProperGISchedule(NPC npc, SDate date)
     {
         string scheduleKey = BASE_SCHEDULE_KEY;
         if (npc.isMarried())
@@ -159,7 +159,7 @@ internal static class ScheduleUtilities
     /// </summary>
     /// <param name="npc">NPC in question.</param>
     /// <param name="rawData">Raw schedule string.</param>
-    public static void ParseMasterScheduleAdjustedForChild2NPC(NPC npc, string rawData)
+    internal static void ParseMasterScheduleAdjustedForChild2NPC(NPC npc, string rawData)
     {
         if (Globals.IsChildToNPC?.Invoke(npc) == true)
         {
@@ -218,7 +218,7 @@ internal static class ScheduleUtilities
     /// Goes around at about 620 and fixes up schedules if they've been nulled.
     /// Child2NPC may try to fix up their children around ~610 AM. Sadly, that nulls the schedules.
     /// </summary>
-    public static void FixUpSchedules()
+    internal static void FixUpSchedules()
     {
         foreach (NPC npc in Game1.getLocationFromName("FarmHouse").getCharacters())
         {

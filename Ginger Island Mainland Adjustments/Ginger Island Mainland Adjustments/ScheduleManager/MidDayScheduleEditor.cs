@@ -41,7 +41,7 @@ internal static class MidDayScheduleEditor
     /// Does one per ten minutes.
     /// </summary>
     /// <param name="e">Time Changed Parameters from SMAPI.</param>
-    public static void AttemptAdjustGISchedule(TimeChangedEventArgs e)
+    internal static void AttemptAdjustGISchedule(TimeChangedEventArgs e)
     {
         if ((Context.IsSplitScreen && Context.ScreenId != 0) || e.NewTime >= 900)
         { // skip after 9AM, or if is farmhand on splitscreen.
@@ -81,7 +81,7 @@ internal static class MidDayScheduleEditor
     /// </summary>
     /// <param name="npc">NPC who's schedule may need adjusting.</param>
     /// <returns>True if successful, false otherwise.</returns>
-    public static bool AdjustSpecificSchedule(NPC npc)
+    internal static bool AdjustSpecificSchedule(NPC npc)
     {
         if (npc.islandScheduleName?.Value is null || npc.islandScheduleName?.Value == string.Empty)
         {
@@ -130,7 +130,7 @@ internal static class MidDayScheduleEditor
     /// <param name="npc">NPC.</param>
     /// <returns>null if the schedule could not be parsed, a schedule otherwise.</returns>
     [ContractAnnotation("schedule:null => null")]
-    public static Dictionary<int, SchedulePathDescription>? ParseGIRemainderSchedule(string? schedule, NPC npc)
+    internal static Dictionary<int, SchedulePathDescription>? ParseGIRemainderSchedule(string? schedule, NPC npc)
     {
         if (schedule is null)
         {

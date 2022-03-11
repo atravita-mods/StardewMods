@@ -18,7 +18,7 @@ internal class PhoneHandler
     /// <param name="dialogKey">Question key, used to keep track of which question set.</param>
     [HarmonyPrefix]
     [HarmonyPatch(nameof(GameLocation.createQuestionDialogue), new Type[] { typeof(string), typeof(Response[]), typeof(string) })]
-    public static void PrefixQuestionDialogue(ref Response[] answerChoices, string dialogKey)
+    private static void PrefixQuestionDialogue(ref Response[] answerChoices, string dialogKey)
     {
         if (dialogKey.Equals("telephone", StringComparison.OrdinalIgnoreCase)
             && Game1.player.mailReceived.Contains(AssetEditor.PAMMAILKEY)

@@ -33,10 +33,10 @@
 
 ### Version 1.1.3
  
-* In theory: integration with Child2NPC.
+* Integration with Child2NPC.
 * After a certain heart event, you'll can now call Pam, who will tell you if she's headed to Ginger Island. Assuming, that is, you didn't decide to insult her.
 * You can now toggle beach outfits.
-* Adds `GIReturn_Talked_<NPCname>` key, so your spouse can acknowledge that you've talked to them 
+* Adds `GIReturn_Talked_<NPCname>` key, so your spouse can acknowledge that you've talked to them.
 
 Fixes:
 * Schedules are now selected correctly.

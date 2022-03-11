@@ -40,7 +40,7 @@ internal static class IslandNorthScheduler
     /// </summary>
     /// <param name="random">Seeded random.</param>
     /// <param name="explorers">Hashset of explorers.</param>
-    public static void Schedule(Random random, HashSet<NPC> explorers)
+    internal static void Schedule(Random random, HashSet<NPC> explorers)
     {
         if (explorers.Any())
         {

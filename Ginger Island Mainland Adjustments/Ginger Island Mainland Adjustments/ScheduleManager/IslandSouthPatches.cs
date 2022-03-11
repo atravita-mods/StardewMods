@@ -36,7 +36,7 @@ internal static class IslandSouthPatches
     /// <summary>
     /// Clears/resets the Exclusions cache.
     /// </summary>
-    public static void ClearCache()
+    internal static void ClearCache()
     {
         exclusions = null;
     }
@@ -47,7 +47,7 @@ internal static class IslandSouthPatches
     /// <returns>False to skip vanilla function, true otherwise.</returns>
     [HarmonyPrefix]
     [HarmonyPatch(nameof(IslandSouth.SetupIslandSchedules))]
-    public static bool OverRideSetUpIslandSchedules()
+    private static bool OverRideSetUpIslandSchedules()
     {
         if (Globals.Config.UseThisScheduler)
         {
@@ -73,7 +73,7 @@ internal static class IslandSouthPatches
     [HarmonyPostfix]
     [HarmonyPatch(nameof(IslandSouth.CanVisitIslandToday))]
     [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Convention used by Harmony")]
-    public static void ExtendCanGoToIsland(NPC npc, ref bool __result)
+    private static void ExtendCanGoToIsland(NPC npc, ref bool __result)
     {
         try
         {
@@ -140,7 +140,7 @@ internal static class IslandSouthPatches
     [HarmonyPrefix]
     [HarmonyPatch(nameof(IslandSouth.HasIslandAttire))]
     [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Convention used by Harmony")]
-    public static bool PrefixHasIslandAttire(NPC character, ref bool __result)
+    private static bool PrefixHasIslandAttire(NPC character, ref bool __result)
     {
         try
         {

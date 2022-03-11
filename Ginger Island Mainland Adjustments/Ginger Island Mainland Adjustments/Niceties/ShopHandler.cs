@@ -21,7 +21,7 @@ internal static class ShopHandler
     /// Handles running Sandy's shop if she's not there.
     /// </summary>
     /// <param name="e">Button pressed event arguments.</param>
-    public static void HandleSandyShop(ButtonPressedEventArgs e)
+    internal static void HandleSandyShop(ButtonPressedEventArgs e)
     {
         if (HandlingShop.Value || !e.Button.IsActionButton() || !(Game1.currentLocation?.Name?.Equals("SandyHouse", StringComparison.OrdinalIgnoreCase) == true))
         {
@@ -54,7 +54,7 @@ internal static class ShopHandler
     /// Handles running Willy's shop if he's not there.
     /// </summary>
     /// <param name="e">Button pressed event arguments.</param>
-    public static void HandleWillyShop(ButtonPressedEventArgs e)
+    internal static void HandleWillyShop(ButtonPressedEventArgs e)
     {
         if (HandlingShop.Value || !e.Button.IsActionButton() || Game1.currentLocation is not FishShop fishShop
             || !Game1.IsVisitingIslandToday("Willy") || fishShop.getCharacterFromName("Willy") is not null)
@@ -80,7 +80,7 @@ internal static class ShopHandler
     /// Handles adding a box to Sandy's shop if she's gone.
     /// </summary>
     /// <param name="e">On Warped event arguments.</param>
-    public static void AddBoxToShop(WarpedEventArgs e)
+    internal static void AddBoxToShop(WarpedEventArgs e)
     {
         if ((Game1.IsVisitingIslandToday("Sandy") && e.NewLocation.Name.Equals("SandyHouse", StringComparison.OrdinalIgnoreCase)
             && e.NewLocation.getCharacterFromName("Sandy") is null) // Sandy has left already

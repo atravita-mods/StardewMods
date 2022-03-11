@@ -4,10 +4,10 @@
 /// Model to save custom data into the save.
 /// </summary>
 /// <remarks>Only available for the main player.</remarks>
-public class SaveDataModel
+public sealed class SaveDataModel
 {
     /// <summary>
-    /// List of NPCS queued for the next day for Ginger Island.
+    /// Gets or sets list of NPCS queued for the next day for Ginger Island.
     /// </summary>
     public List<string> NPCsForTomorrow { get; set; } = new();
 }

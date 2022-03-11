@@ -10,7 +10,7 @@
     <LangVersion>latest</LangVersion>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
-    <DefineConstants>HARMONY; REGEX; SCHEDULES;</DefineConstants>
+    <DefineConstants>HARMONY; REGEX; SCHEDULES</DefineConstants>
   </PropertyGroup>
 
   <PropertyGroup>

@@ -4,7 +4,7 @@
 /// <summary>
 /// Configuration class for mod.
 /// </summary>
-public class ModConfig
+public sealed class ModConfig
 {
     /// <summary>
     /// Default day for Gus's visit.

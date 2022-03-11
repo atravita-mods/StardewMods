@@ -1,18 +1,10 @@
-﻿namespace GingerIslandMainlandAdjustments; 
-
-class _
-{
-
-}
-
-
-[*.{cs,vb}]
+﻿[*.{cs,vb}]
 dotnet_style_prefer_is_null_check_over_reference_equality_method=true:warning
 dotnet_style_null_propagation=true:warning
-dotnet_style_qualification_for_field=true:warning
-dotnet_style_qualification_for_property=true:silent
-dotnet_style_qualification_for_method=true:warning
-dotnet_style_qualification_for_event=true:warning
+dotnet_style_qualification_for_field=true:error
+dotnet_style_qualification_for_property=true:error
+dotnet_style_qualification_for_method=true:error
+dotnet_style_qualification_for_event=true:error
 
 # IDE0047: Remove unnecessary parentheses
 dotnet_style_parentheses_in_arithmetic_binary_operators = always_for_clarity

@@ -10,7 +10,7 @@ namespace GingerIslandMainlandAdjustments.DialogueChanges;
 /// Class to handle patching of NPCs for dialogue.
 /// </summary>
 [HarmonyPatch(typeof(NPC))]
-internal class DialoguePatches
+internal static class DialoguePatches
 {
     private const string ANTISOCIAL = "Resort_Antisocial";
     private const string ISLANDNORTH = "Resort_IslandNorth";
@@ -22,7 +22,7 @@ internal class DialoguePatches
     /// <summary>
     /// Clears the record of whether or not you've talked to your spouse on the Island today.
     /// </summary>
-    public static void ClearTalkRecord() => TalkedToToday.Clear();
+    internal static void ClearTalkRecord() => TalkedToToday.Clear();
 
     /// <summary>
     /// Appends checkForNewCurrentDialogue to look for GI-specific dialogue.
@@ -34,7 +34,7 @@ internal class DialoguePatches
     [HarmonyPostfix]
     [HarmonyPatch(nameof(NPC.checkForNewCurrentDialogue))]
     [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Convention used by Harmony")]
-    public static void DoCheckIslandDialogue(NPC __instance, int __0, bool __1, ref bool __result)
+    private static void DoCheckIslandDialogue(NPC __instance, int __0, bool __1, ref bool __result)
     { // __0 = heartlevel, as int. __1 = whether or not to have a season prefix?
         try
         {
@@ -113,7 +113,7 @@ internal class DialoguePatches
     [HarmonyPostfix]
     [HarmonyPatch(nameof(NPC.arriveAtFarmHouse))]
     [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Convention used by Harmony")]
-    public static void AppendArrival(NPC __instance)
+    private static void AppendArrival(NPC __instance)
     {
         try
         {
@@ -166,7 +166,7 @@ internal class Game1DialoguePatches
     /// <remarks>DayStarted, unfortunately, runs *before* SetupIslandSchedules.</remarks>
     [HarmonyPostfix]
     [HarmonyPatch(nameof(Game1.updateWeatherIcon))]
-    public static void AppendMarriageDialogue()
+    private static void AppendMarriageDialogue()
     {
         try
         {

@@ -2,6 +2,7 @@
 using System.Text.RegularExpressions;
 using AtraBase.Toolkit.Extensions;
 using AtraShared.Integrations;
+using AtraShared.MigrationManager;
 using AtraShared.Utils.Extensions;
 using Microsoft.Xna.Framework;
 using StardewModdingAPI.Events;
@@ -37,6 +38,8 @@ public class ModEntry : Mod
     /// </summary>
     private List<int> TreeFruit = new();
 
+    private MigrationManager? migrator;
+
     // The config is set by the Entry method, so it should never realistically be null
 #pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
     private ModConfig config;
@@ -67,6 +70,13 @@ public class ModEntry : Mod
     /// </summary>
     internal bool SpawnedFruitToday { get; private set; }
 
+    /// <summary>
+    /// Formats a float as a percent value.
+    /// </summary>
+    /// <param name="val">Value to format.</param>
+    /// <returns>Formatted string.</returns>
+    public static string FormatPercentValue(float val) => $"{val:f0}%";
+
     /// <inheritdoc />
     public override void Entry(IModHelper helper)
     {
@@ -87,6 +97,8 @@ public class ModEntry : Mod
         helper.Events.GameLoop.DayStarted += this.SpawnFruit;
         helper.Events.GameLoop.GameLaunched += this.SetUpConfig;
         helper.Events.GameLoop.OneSecondUpdateTicking += this.BellsAndWhistles;
+        helper.Events.GameLoop.SaveLoaded += this.SaveLoaded;
+
         helper.ConsoleCommands.Add(
             name: "av.fcs.list_fruits",
             documentation: I18n.ListFruits_Description(),
@@ -144,7 +156,8 @@ public class ModEntry : Mod
                     property: property,
                     getConfig: () => this.config,
                     min: 0f,
-                    max: 100f);
+                    max: 100f,
+                    formatValue: FormatPercentValue);
             }
             else if (property.PropertyType.Equals(typeof(SeasonalBehavior)))
             {
@@ -309,7 +322,7 @@ public class ModEntry : Mod
     /// <param name="tile">Tile to place fruit on.</param>
     private void PlaceFruit(GameLocation location, Vector2 tile)
     {
-        int fruitToPlace = Utility.GetRandom(this.Random.NextDouble() < (this.config.TreeFruitChance / 100f) && this.TreeFruit.Count > 0 ? this.TreeFruit : this.BASE_FRUIT, this.Random);
+        int fruitToPlace = Utility.GetRandom(this.TreeFruit.Count > 0 && this.Random.NextDouble() < (this.config.TreeFruitChance / 100f) ? this.TreeFruit : this.BASE_FRUIT, this.Random);
         location.setObject(tile, new SObject(fruitToPlace, 1)
         {
             IsSpawnedObject = true,
@@ -347,7 +360,6 @@ public class ModEntry : Mod
     /// </summary>
     /// <param name="command">Name of command.</param>
     /// <param name="args">Arguments for command.</param>
-    [SuppressMessage("Style", "IDE0060:Remove unused parameter", Justification = "Console command format.")]
     private void ListFruits(string command, string[] args)
     {
         if (!Context.IsWorldReady)
@@ -422,16 +434,11 @@ public class ModEntry : Mod
                     if ((!this.config.AllowAnyTreeProduct && fruit.Category != SObject.FruitsCategory)
                         || (this.config.EdiblesOnly && fruit.Edibility < 0)
                         || fruit.Price > this.config.PriceCap
-                        || denylist.Contains(fruit.Name))
+                        || denylist.Contains(fruit.Name)
+                        || (this.config.NoBananasBeforeShrine && fruit.Name.Equals("Banana", StringComparison.OrdinalIgnoreCase)
+                            && !Context.IsWorldReady && Game1.getLocationFromName("IslandEast") is IslandEast islandeast && !islandeast.bananaShrineComplete.Value))
                     {
                         continue;
-                    }
-                    if (this.config.NoBananasBeforeShrine && fruit.Name.Equals("Banana"))
-                    {
-                        if (!Context.IsWorldReady && Game1.getLocationFromName("IslandEast") is IslandEast islandeast && !islandeast.bananaShrineComplete.Value)
-                        {
-                            continue;
-                        }
                     }
                     treeFruits.Add(objectIndex);
                 }
@@ -493,5 +500,38 @@ public class ModEntry : Mod
                 mine.TemporarySprites.Add(batsprite);
             }
         }
+    }
+
+    /// <summary>
+    /// Raised when save is loaded.
+    /// </summary>
+    /// <param name="sender">Unknown, used by SMAPI.</param>
+    /// <param name="e">Parameters.</param>
+    /// <remarks>Used to load in this mod's data models.</remarks>
+    private void SaveLoaded(object? sender, SaveLoadedEventArgs e)
+    {
+        if (Context.IsSplitScreen && Context.ScreenId != 0)
+        {
+            return;
+        }
+        this.migrator = new(this.ModManifest, this.Helper, this.Monitor);
+        this.migrator.ReadVersionInfo();
+
+        this.Helper.Events.GameLoop.Saved += this.WriteMigrationData;
+    }
+
+    /// <summary>
+    /// Writes migration data then detaches the migrator.
+    /// </summary>
+    /// <param name="sender">Smapi thing.</param>
+    /// <param name="e">Arguments for just-before-saving.</param>
+    private void WriteMigrationData(object? sender, SavedEventArgs e)
+    {
+        if (this.migrator is not null)
+        {
+            this.migrator.SaveVersionInfo();
+            this.migrator = null;
+        }
+        this.Helper.Events.GameLoop.Saved -= this.WriteMigrationData;
     }
 }

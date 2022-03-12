@@ -14,6 +14,7 @@ Changelog
 
 1. Somehow limit the kill objective to just monsters on a certain (few?) maps. (Perhaps a custom objective, perhaps a Special Rule).
 6. Implement a temporary saving mechanism for Save Anywhere (look into their API?)
+<!-- Handle WoL professions? -->
 
 #### Version 1.0.7 (upcoming)
 

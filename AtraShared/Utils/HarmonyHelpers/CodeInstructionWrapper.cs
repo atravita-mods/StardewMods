@@ -58,9 +58,7 @@ public class CodeInstructionWrapper
         => this.CodeInstruction = instrution;
 
     public CodeInstructionWrapper(SpecialCodeInstructionCases specialcase)
-    {
-        this.SpecialInstructionCase = specialcase;
-    }
+        => this.SpecialInstructionCase = specialcase;
 
     public CodeInstructionWrapper(SpecialCodeInstructionCases specialcase, int argument)
     {

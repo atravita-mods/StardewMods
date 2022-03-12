@@ -1,9 +1,10 @@
 ﻿#if TRANSPILERS
 
-// Don't forget to reference System.Collections.NonGeneric!
+// Todo: RemoveUntil
 
 using System.Reflection;
 using System.Reflection.Emit;
+using System.Text;
 using AtraShared.Utils.HarmonyHelpers;
 using HarmonyLib;
 
@@ -64,12 +65,39 @@ public class ILHelper
     /// Gets the current instruction pointer stack.
     /// </summary>
     public Stack<int> PointerStack { get; private set; } = new();
-    
 
     /// <summary>
     /// Points to the current location in the instructions list.
     /// </summary>
+    [SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1623:Property summary documentation should match accessors", Justification = "Reviewed.")]
     public int Pointer { get; private set; } = -1;
+
+    /// <summary>
+    /// Pushes the pointer onto the pointerstack.
+    /// </summary>
+    /// <returns>this.</returns>
+    public ILHelper Push()
+    {
+        this.PointerStack.Push(this.Pointer);
+        return this;
+    }
+
+    /// <summary>
+    /// Pops the a pointer from the pointerstack.
+    /// </summary>
+    /// <returns>this.</returns>
+    public ILHelper Pop()
+    {
+        this.Pointer = this.PointerStack.Pop();
+        return this;
+    }
+
+    /// <summary>
+    /// The list of codes as an enumerable.
+    /// </summary>
+    /// <returns>Returns the list of codes as an enumerable.</returns>
+    public IEnumerable<CodeInstruction> Render() =>
+        this.Codes.AsEnumerable();
 
     /// <summary>
     /// Finds the first occurance of the following pattern between the indexes given.
@@ -105,6 +133,17 @@ public class ILHelper
             }
         }
         throw new IndexOutOfRangeException($"The desired pattern wasn't found:\n\n" + string.Join('\n', instructions.Select(i => i.ToString())));
+    }
+
+    /// <summary>
+    /// Finds the next occurance of the code instruction.
+    /// </summary>
+    /// <param name="instructions">Instructions to serach for.</param>
+    /// <returns>this.</returns>
+    public ILHelper FindNext(CodeInstructionWrapper[] instructions)
+    {
+        this.FindFirst(instructions, this.Pointer, this.Codes.Count);
+        return this;
     }
 
     /// <summary>
@@ -144,7 +183,18 @@ public class ILHelper
     }
 
     /// <summary>
-    /// Inserts the followin code instructions at this location.
+    /// Finds the previous occurance of the code instruction.
+    /// </summary>
+    /// <param name="instructions">Instructions to serach for.</param>
+    /// <returns>this.</returns>
+    public ILHelper FindPrev(CodeInstructionWrapper[] instructions)
+    {
+        this.FindLast(instructions, 0, this.Pointer);
+        return this;
+    }
+
+    /// <summary>
+    /// Inserts the following code instructions at this location.
     /// </summary>
     /// <param name="instructions">Instructions to insert.</param>
     /// <returns>this.</returns>
@@ -152,6 +202,39 @@ public class ILHelper
     {
         this.Codes.InsertRange(this.Pointer, instructions);
         this.Pointer += instructions.Length;
+        return this;
+    }
+
+    /// <summary>
+    /// Removes the following number of instructions.
+    /// </summary>
+    /// <param name="count">Number to remove.</param>
+    /// <returns>this.</returns>
+    /// <exception cref="InvalidOperationException">Attempted to remove an important label, stopping.</exception>
+    public ILHelper Remove(int count)
+    {
+        // This logic isn't correct. Multiple branches may go to the same label. Will probably need to make
+        // this a counter of sorts. Reconsider.
+        for (int i = this.Pointer; i < this.Pointer + count - 1; i++)
+        {
+            if (this.Codes[i].Branches(out Label? label))
+            {
+                this.importantLabels.Remove(label!.Value);
+            }
+        }
+        for (int i = this.Pointer; i < this.Pointer + count - 1; i++)
+        {
+            if (this.Codes[i].labels.Intersect(this.importantLabels).Any())
+            {
+                StringBuilder sb = new();
+                sb.Append("Attempted to remove an important label!\n\nThis code's labels ")
+                    .AppendJoin(", ", this.Codes[i].labels.Select(l => l.ToString()))
+                    .Append(".\n\nImportant labels")
+                    .AppendJoin(", ", this.importantLabels.Select(l => l.ToString()));
+                throw new InvalidOperationException(sb.ToString());
+            }
+        }
+        this.Codes.RemoveRange(this.Pointer, count);
         return this;
     }
 
@@ -173,6 +256,8 @@ public class ILHelper
         }
         return -1;
     }
+
+    // 90% sure this is in Harmony already.....
 
     /// <summary>
     /// Gets the instruction for loading a local at the index.

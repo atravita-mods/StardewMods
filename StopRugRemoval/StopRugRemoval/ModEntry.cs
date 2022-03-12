@@ -1,4 +1,5 @@
 ﻿using System.Reflection;
+using AtraShared.MigrationManager;
 using AtraShared.Integrations;
 using AtraShared.Utils.Extensions;
 using HarmonyLib;
@@ -25,6 +26,8 @@ public class ModEntry : Mod
     public static ModConfig Config { get; private set; }
 #pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
 
+    private MigrationManager? migrator;
+
     /// <inheritdoc/>
     public override void Entry(IModHelper helper)
     {
@@ -43,6 +46,7 @@ public class ModEntry : Mod
         this.ApplyPatches(new Harmony(this.ModManifest.UniqueID));
 
         helper.Events.GameLoop.GameLaunched += this.SetUpConfig;
+        helper.Events.GameLoop.SaveLoaded += this.SaveLoaded;
     }
 
     /// <summary>
@@ -62,14 +66,6 @@ public class ModEntry : Mod
         }
         harmony.Snitch(this.Monitor, this.ModManifest.UniqueID);
     }
-
-    /// <summary>
-    /// Clear all NoSpawn tiles before saving.
-    /// </summary>
-    /// <param name="sender">From SMAPI.</param>
-    /// <param name="e">Saving Event arguments...</param>
-    /// <exception cref="NotImplementedException">Haven't finished writing this yet.</exception>
-    private void BeforeSave(object? sender, SavingEventArgs e) => throw new NotImplementedException();
 
     private void SetUpConfig(object? sender, GameLaunchedEventArgs e)
     {
@@ -95,5 +91,38 @@ public class ModEntry : Mod
                 helper.AddKeybindList(property, () => Config);
             }
         }
+    }
+
+    /// <summary>
+    /// Raised when save is loaded.
+    /// </summary>
+    /// <param name="sender">Unknown, used by SMAPI.</param>
+    /// <param name="e">Parameters.</param>
+    /// <remarks>Used to load in this mod's data models.</remarks>
+    private void SaveLoaded(object? sender, SaveLoadedEventArgs e)
+    {
+        if (Context.IsSplitScreen && Context.ScreenId != 0)
+        {
+            return;
+        }
+        this.migrator = new(this.ModManifest, this.Helper, this.Monitor);
+        this.migrator.ReadVersionInfo();
+
+        this.Helper.Events.GameLoop.Saved += this.WriteMigrationData;
+    }
+
+    /// <summary>
+    /// Writes migration data then detaches the migrator.
+    /// </summary>
+    /// <param name="sender">Smapi thing.</param>
+    /// <param name="e">Arguments for just-before-saving.</param>
+    private void WriteMigrationData(object? sender, SavedEventArgs e)
+    {
+        if (this.migrator is not null)
+        {
+            this.migrator.SaveVersionInfo();
+            this.migrator = null;
+        }
+        this.Helper.Events.GameLoop.Saved -= this.WriteMigrationData;
     }
 }

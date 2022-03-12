@@ -1,10 +1,9 @@
 ﻿#if TRANSPILERS
 
-// Todo: RemoveUntil
-
 using System.Reflection;
 using System.Reflection.Emit;
 using System.Text;
+using AtraBase.Collections;
 using AtraShared.Utils.HarmonyHelpers;
 using HarmonyLib;
 
@@ -17,19 +16,21 @@ public class ILHelper
 {
     private readonly SortedList<int, LocalBuilder> builtLocals = new();
 
-    private readonly HashSet<Label> importantLabels = new();
+    private readonly Counter<Label> importantLabels = new();
 
     /// <summary>
     /// Initializes a new instance of the <see cref="ILHelper"/> class.
     /// </summary>
     /// <param name="original">Original method's methodbase.</param>
     /// <param name="codes">IEnumerable of codes.</param>
+    /// <param name="monitor">Logger.</param>
     /// <param name="generator">ILGenerator.</param>
-    public ILHelper(MethodBase original, IEnumerable<CodeInstruction> codes, ILGenerator? generator = null)
+    public ILHelper(MethodBase original, IEnumerable<CodeInstruction> codes, IMonitor monitor, ILGenerator? generator = null)
     {
         this.Original = original;
         this.Codes = codes.ToList();
         this.Generator = generator;
+        this.Monitor = monitor;
 
         foreach (CodeInstruction code in this.Codes)
         {
@@ -40,7 +41,7 @@ public class ILHelper
             }
             if (code.Branches(out Label? label) && label is not null)
             {
-                this.importantLabels.Add(label.Value);
+                this.importantLabels[label.Value]++;
             }
         }
     }
@@ -71,6 +72,11 @@ public class ILHelper
     /// </summary>
     [SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1623:Property summary documentation should match accessors", Justification = "Reviewed.")]
     public int Pointer { get; private set; } = -1;
+
+    /// <summary>
+    /// Gets the logger for this instance.
+    /// </summary>
+    protected IMonitor Monitor { get; init; }
 
     /// <summary>
     /// Pushes the pointer onto the pointerstack.
@@ -140,6 +146,8 @@ public class ILHelper
     /// </summary>
     /// <param name="instructions">Instructions to serach for.</param>
     /// <returns>this.</returns>
+    /// <exception cref="ArgumentException">Fewer codes remain than the length of the instructions to search for.</exception>
+    /// <exception cref="IndexOutOfRangeException">No match found.</exception>
     public ILHelper FindNext(CodeInstructionWrapper[] instructions)
     {
         this.FindFirst(instructions, this.Pointer, this.Codes.Count);
@@ -187,6 +195,8 @@ public class ILHelper
     /// </summary>
     /// <param name="instructions">Instructions to serach for.</param>
     /// <returns>this.</returns>
+    /// <exception cref="ArgumentException">Fewer codes remain than the length of the instructions to search for.</exception>
+    /// <exception cref="IndexOutOfRangeException">No match found.</exception>
     public ILHelper FindPrev(CodeInstructionWrapper[] instructions)
     {
         this.FindLast(instructions, 0, this.Pointer);
@@ -213,28 +223,45 @@ public class ILHelper
     /// <exception cref="InvalidOperationException">Attempted to remove an important label, stopping.</exception>
     public ILHelper Remove(int count)
     {
-        // This logic isn't correct. Multiple branches may go to the same label. Will probably need to make
-        // this a counter of sorts. Reconsider.
         for (int i = this.Pointer; i < this.Pointer + count - 1; i++)
         {
             if (this.Codes[i].Branches(out Label? label))
             {
-                this.importantLabels.Remove(label!.Value);
+                this.importantLabels[label!.Value]--;
             }
         }
+        this.importantLabels.RemoveZeros();
+        HashSet<Label> labels = this.importantLabels.Keys.ToHashSet();
         for (int i = this.Pointer; i < this.Pointer + count - 1; i++)
         {
-            if (this.Codes[i].labels.Intersect(this.importantLabels).Any())
+            if (this.Codes[i].labels.Intersect(labels).Any())
             {
                 StringBuilder sb = new();
                 sb.Append("Attempted to remove an important label!\n\nThis code's labels ")
                     .AppendJoin(", ", this.Codes[i].labels.Select(l => l.ToString()))
                     .Append(".\n\nImportant labels")
                     .AppendJoin(", ", this.importantLabels.Select(l => l.ToString()));
-                throw new InvalidOperationException(sb.ToString());
+                this.Monitor.Log(sb.ToString(), LogLevel.Error);
+                throw new InvalidOperationException();
             }
         }
         this.Codes.RemoveRange(this.Pointer, count);
+        return this;
+    }
+
+    /// <summary>
+    /// Removes instructions until it encounters the *first* instruction of a specific pattern.
+    /// </summary>
+    /// <param name="instructions">List of instructions to search for.</param>
+    /// <returns>this.</returns>
+    /// <exception cref="InvalidOperationException">Attempted to remove an important label, stopping.</exception>
+    public ILHelper RemoveUntil(CodeInstructionWrapper[] instructions)
+    {
+        this.Push();
+        this.FindNext(instructions);
+        int finalpos = this.Pointer;
+        this.Pop();
+        this.Remove(finalpos - this.Pointer);
         return this;
     }
 

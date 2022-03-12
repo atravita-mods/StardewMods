@@ -38,7 +38,7 @@ public static class HarmonyExtensions
     /// <param name="method">Method to look at.</param>
     /// <param name="monitor">Logger.</param>
     /// <param name="filter">Filter. Leave null to not filter.</param>
-    public static void Snitch(this MethodBase method, IMonitor monitor, Func<Patch, bool> filter = null)
+    public static void Snitch(this MethodBase method, IMonitor monitor, Func<Patch, bool>? filter = null)
     {
         filter ??= (_) => true;
         Patches patches = Harmony.GetPatchInfo(method);

@@ -1,5 +1,10 @@
 ﻿#if TRANSPILERS
 
+/* **********************************
+ * Don't forget to include COLLECTIONS!
+ * **********************************/
+
+using System.Diagnostics;
 using System.Reflection;
 using System.Reflection.Emit;
 using System.Text;
@@ -106,7 +111,23 @@ public class ILHelper
         this.Codes.AsEnumerable();
 
     /// <summary>
-    /// Finds the first occurance of the following pattern between the indexes given.
+    /// Prints out the current codes to console.
+    /// Only works in DEBUG.
+    /// </summary>
+    [Conditional("DEBUG")]
+    public void Print()
+    {
+        StringBuilder sb = new();
+        sb.Append(this.Original.FullDescription());
+        foreach (CodeInstruction code in this.Codes)
+        {
+            sb.AppendLine().Append(code);
+        }
+        this.Monitor.Log(sb.ToString(), LogLevel.Info);
+    }
+
+    /// <summary>
+    /// Finds the first occurrence of the following pattern between the indexes given.
     /// </summary>
     /// <param name="instructions">Instructions to search for.</param>
     /// <param name="startindex">Index to start searching at (inclusive).</param>
@@ -138,13 +159,14 @@ public class ILHelper
                 return this;
             }
         }
-        throw new IndexOutOfRangeException($"The desired pattern wasn't found:\n\n" + string.Join('\n', instructions.Select(i => i.ToString())));
+        this.Monitor.Log($"The desired pattern wasn't found:\n\n" + string.Join('\n', instructions.Select(i => i.ToString())), LogLevel.Error);
+        throw new IndexOutOfRangeException();
     }
 
     /// <summary>
-    /// Finds the next occurance of the code instruction.
+    /// Finds the next occurrence of the code instruction.
     /// </summary>
-    /// <param name="instructions">Instructions to serach for.</param>
+    /// <param name="instructions">Instructions to search for.</param>
     /// <returns>this.</returns>
     /// <exception cref="ArgumentException">Fewer codes remain than the length of the instructions to search for.</exception>
     /// <exception cref="IndexOutOfRangeException">No match found.</exception>
@@ -155,7 +177,7 @@ public class ILHelper
     }
 
     /// <summary>
-    /// Finds the last occurance of the following pattern between the indexes given.
+    /// Finds the last occurrence of the following pattern between the indexes given.
     /// </summary>
     /// <param name="instructions">Instructions to search for.</param>
     /// <param name="startindex">Index to start searching at (inclusive).</param>
@@ -187,13 +209,14 @@ public class ILHelper
                 return this;
             }
         }
-        throw new IndexOutOfRangeException($"The desired pattern wasn't found:\n\n" + string.Join('\n', instructions.Select(i => i.ToString())));
+        this.Monitor.Log($"The desired pattern wasn't found:\n\n" + string.Join('\n', instructions.Select(i => i.ToString())), LogLevel.Error);
+        throw new IndexOutOfRangeException();
     }
 
     /// <summary>
-    /// Finds the previous occurance of the code instruction.
+    /// Finds the previous occurrence of the code instruction.
     /// </summary>
-    /// <param name="instructions">Instructions to serach for.</param>
+    /// <param name="instructions">Instructions to search for.</param>
     /// <returns>this.</returns>
     /// <exception cref="ArgumentException">Fewer codes remain than the length of the instructions to search for.</exception>
     /// <exception cref="IndexOutOfRangeException">No match found.</exception>
@@ -231,15 +254,14 @@ public class ILHelper
             }
         }
         this.importantLabels.RemoveZeros();
-        HashSet<Label> labels = this.importantLabels.Keys.ToHashSet();
         for (int i = this.Pointer; i < this.Pointer + count - 1; i++)
         {
-            if (this.Codes[i].labels.Intersect(labels).Any())
+            if (this.Codes[i].labels.Intersect(this.importantLabels.Keys).Any())
             {
                 StringBuilder sb = new();
-                sb.Append("Attempted to remove an important label!\n\nThis code's labels ")
+                sb.Append("Attempted to remove an important label!\n\nThis code's labels: ")
                     .AppendJoin(", ", this.Codes[i].labels.Select(l => l.ToString()))
-                    .Append(".\n\nImportant labels")
+                    .AppendLine().Append("Important labels: ")
                     .AppendJoin(", ", this.importantLabels.Select(l => l.ToString()));
                 this.Monitor.Log(sb.ToString(), LogLevel.Error);
                 throw new InvalidOperationException();

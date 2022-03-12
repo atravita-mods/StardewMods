@@ -17,20 +17,24 @@ public static class HarmonyExtensions
     /// </summary>
     /// <param name="harmony">Harmony instance.</param>
     /// <param name="monitor">Logger.</param>
-    /// <param name="uniqueID">Unique ID to look for. Leave null to not filter.</param>
-    public static void Snitch(this Harmony harmony, IMonitor monitor, string? uniqueID = null)
+    /// <param name="filter">Filter to use. Leave null to not filter.</param>
+    public static void Snitch(this Harmony harmony, IMonitor monitor, Func<Patch, bool>? filter = null)
     {
-        Func<Patch, bool> filter = uniqueID is null ? (_) => true : (p) => p.owner == uniqueID;
-
+        filter ??= (_) => true;
         foreach (MethodBase? method in harmony.GetPatchedMethods())
         {
-            if (method is null)
-            {
-                continue;
-            }
-            method.Snitch(monitor, filter);
+            method?.Snitch(monitor, filter);
         }
     }
+
+    /// <summary>
+    /// Snitch on all the functions patched.
+    /// </summary>
+    /// <param name="harmony">Harmony instance.</param>
+    /// <param name="monitor">Logger.</param>
+    /// <param name="uniqueID">Unique ID to look for.</param>
+    public static void Snitch(this Harmony harmony, IMonitor monitor, string uniqueID)
+        => harmony.Snitch(monitor, (p) => p.owner == uniqueID);
 
     /// <summary>
     /// Snitch on patches from a single function.

@@ -1,4 +1,6 @@
-﻿namespace AtraShared.Utils.Extensions;
+﻿using System.Diagnostics;
+
+namespace AtraShared.Utils.Extensions;
 
 /// <summary>
 /// Extension methods for SMAPI's logging service.
@@ -23,4 +25,8 @@ public static class LogExtensions
         monitor.VerboseLog(message);
 #endif
     }
+
+    [Conditional("DEBUG")]
+    public static void DebugOnlyLog(this IMonitor monitor, string message, LogLevel level = LogLevel.Debug)
+        => monitor.Log(message, level);
 }

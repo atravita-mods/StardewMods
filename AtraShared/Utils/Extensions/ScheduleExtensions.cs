@@ -3,7 +3,7 @@
 /// <summary>
 /// Extension methods on Stardew's SchedulePathDescription class.
 /// </summary>
-internal static class SchedulePointDescriptionExtensions
+public static class SchedulePointDescriptionExtensions
 {
     /// <summary>
     /// Gets the expected travel time of a SchedulePathDescription.

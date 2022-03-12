@@ -7,7 +7,7 @@ namespace AtraShared.Utils.Extensions;
 /// Extensions to more easily interact with the ModData <see cref="ModDataDictionary" /> dictionary.
 /// </summary>
 /// <remarks>Inspired by https://github.com/spacechase0/StardewValleyMods/blob/main/SpaceShared/ModDataHelper.cs. </remarks>
-internal static class ModDataExtensions
+public static class ModDataExtensions
 {
     // Instead of storing a real bool, just store 0 or 1
 
@@ -30,7 +30,7 @@ internal static class ModDataExtensions
     /// <param name="defaultVal">default value - not saved if matches.</param>
     public static void SetBool(this ModDataDictionary modData, string key, bool val, bool? defaultVal = null)
     {
-        if (val == defaultVal)
+        if (defaultVal == val)
         {
             modData.Remove(key);
         }
@@ -61,13 +61,13 @@ internal static class ModDataExtensions
     /// <param name="defaultVal">default value - not saved if matches.</param>
     public static void SetFloat(this ModDataDictionary modData, string key, float val, int decimals = 2, string format = "G", float? defaultVal = null)
     {
-        if (defaultVal is not null && val.WithinMargin(defaultVal.Value, 0.501f * (float)Math.Pow(0.1, -decimals)))
+        if (defaultVal is not null && val.WithinMargin(defaultVal.Value, 0.499f * (float)Math.Pow(0.1, -decimals)))
         {
             modData.Remove(key);
         }
         else
         {
-            modData[key] = Math.Round(val, decimals, MidpointRounding.ToEven).ToString(format, CultureInfo.InvariantCulture);
+            modData[key] = MathF.Round(val, decimals, MidpointRounding.ToEven).ToString(format, CultureInfo.InvariantCulture);
         }
     }
 

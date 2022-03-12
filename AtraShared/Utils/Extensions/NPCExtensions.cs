@@ -3,7 +3,7 @@
 /// <summary>
 /// Small extensions to Stardew's NPC class.
 /// </summary>
-internal static class NPCExtensions
+public static class NPCExtensions
 {
     /// <summary>
     /// Clears the NPC's current dialogue stack and pushes a new dialogue onto that stack.

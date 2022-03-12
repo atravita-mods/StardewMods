@@ -3,7 +3,7 @@
 /// <summary>
 /// Base class for integration management.
 /// </summary>
-internal class IntegrationHelper
+public class IntegrationHelper
 {
     /// <summary>
     /// Initializes a new instance of the <see cref="IntegrationHelper"/> class.
@@ -11,27 +11,34 @@ internal class IntegrationHelper
     /// <param name="monitor">Logger instance.</param>
     /// <param name="translation">Translation helper.</param>
     /// <param name="modRegistry">Mod registery.</param>
-    public IntegrationHelper(IMonitor monitor, ITranslationHelper translation, IModRegistry modRegistry)
+    /// <param name="loglevel">Level to log issues to.</param>
+    public IntegrationHelper(IMonitor monitor, ITranslationHelper translation, IModRegistry modRegistry, LogLevel loglevel = LogLevel.Info)
     {
         this.Monitor = monitor;
         this.Translation = translation;
         this.ModRegistry = modRegistry;
+        this.LogLevel = loglevel;
     }
 
     /// <summary>
     /// Gets the logger instance.
     /// </summary>
-    protected IMonitor Monitor { get; private set; }
+    protected IMonitor Monitor { get; init; }
 
     /// <summary>
     /// Gets the translation helper instance.
     /// </summary>
-    protected ITranslationHelper Translation { get; private set; }
+    protected ITranslationHelper Translation { get; init; }
 
     /// <summary>
     /// Gets the modregistry instance.
     /// </summary>
-    protected IModRegistry ModRegistry { get; private set; }
+    protected IModRegistry ModRegistry { get; init; }
+
+    /// <summary>
+    /// Gets the level to log at.
+    /// </summary>
+    protected LogLevel LogLevel { get; init; }
 
     /// <summary>
     /// Attempts to get the API from a different mod.
@@ -52,7 +59,7 @@ internal class IntegrationHelper
             this.Monitor.Log(
                 this.Translation.Get("api-not-found")
                 .Default("{{APIID}} not found, integration disabled.")
-                .Tokens(new { apiid }), LogLevel.Info);
+                .Tokens(new { apiid }), this.LogLevel);
             api = default;
             return false;
         }
@@ -61,7 +68,7 @@ internal class IntegrationHelper
             this.Monitor.Log(
                 this.Translation.Get("api-too-old")
                 .Default("Please update {{apiName}}({{APIID}}) to at least version {{minversion}}. Current version {{currentversion}}. Integration disabled.")
-                .Tokens(new { apiName = modInfo.Manifest.Name, APIID = apiid, minversion, currentversion = modInfo.Manifest.Version }), LogLevel.Info);
+                .Tokens(new { apiName = modInfo.Manifest.Name, APIID = apiid, minversion, currentversion = modInfo.Manifest.Version }), this.LogLevel);
             api = default;
             return false;
         }

@@ -8,12 +8,13 @@ namespace AtraShared.Integrations;
 /// <summary>
 /// Helper class that generates the GMCM for a project.
 /// </summary>
-internal class GMCMHelper : IntegrationHelper
+public sealed class GMCMHelper : IntegrationHelper
 {
     private const string MINVERSION = "1.8.0";
     private const string APIID = "spacechase0.GenericModConfigMenu";
 
     private readonly IManifest manifest;
+    private readonly List<string> pages = new();
 
     private IGenericModConfigMenuApi? modMenuApi;
 
@@ -183,7 +184,7 @@ internal class GMCMHelper : IntegrationHelper
     /// </summary>
     /// <typeparam name="TModConfig">ModConfig's type.</typeparam>
     /// <param name="property">Property to process.</param>
-    /// <param name="getConfig">Function that gets the *current config instance*</param>
+    /// <param name="getConfig">Function that gets the *current config instance*.</param>
     /// <param name="allowedValues">Allowed values.</param>
     /// <param name="formatAllowedValue">Formatter.</param>
     /// <param name="fieldId">fieldId.</param>
@@ -475,7 +476,7 @@ internal class GMCMHelper : IntegrationHelper
     /// Adds a KeyBindList at this position in the form.
     /// </summary>
     /// <param name="name">Function to get the name.</param>
-    /// <param name="getValue">GetValue callback</param>
+    /// <param name="getValue">GetValue callback.</param>
     /// <param name="setValue">SetValue callback.</param>
     /// <param name="tooltip">Function to get the tooltip.</param>
     /// <param name="fieldId">FieldID.</param>
@@ -525,6 +526,49 @@ internal class GMCMHelper : IntegrationHelper
                 setValue: value => setterDelegate(getConfig(), value),
                 fieldId: fieldID);
         }
+        return this;
+    }
+
+    /// <summary>
+    /// Adds a new page and a link for it at the current location in the form.
+    /// </summary>
+    /// <param name="pageId">The page's ID.</param>
+    /// <param name="linkText">Function to get the link text.</param>
+    /// <param name="tooltip">Function to get a tooltip, if wanted.</param>
+    /// <param name="pageTitle">Function to get the page's title.</param>
+    /// <returns>this.</returns>
+    public GMCMHelper AddPageHere(
+        string pageId,
+        Func<string> linkText,
+        Func<string>? tooltip = null,
+        Func<string>? pageTitle = null)
+    {
+        this.pages.Add(pageId);
+        this.modMenuApi!.AddPageLink(
+            mod: this.manifest,
+            pageId: pageId,
+            text: linkText,
+            tooltip: tooltip);
+        this.modMenuApi!.AddPage(
+            mod: this.manifest,
+            pageId: pageId,
+            pageTitle: pageTitle);
+        return this;
+    }
+
+    /// <summary>
+    /// Switches to a previously-defined page.
+    /// </summary>
+    /// <param name="pageId">ID of page to switch to.</param>
+    /// <returns>this.</returns>
+    /// <exception cref="ArgumentException">Page not defined.</exception>
+    public GMCMHelper SwitchPage(string pageId)
+    {
+        if (!this.pages.Contains(pageId))
+        {
+            throw new ArgumentException($"{pageId} has not been defined yet!");
+        }
+        this.modMenuApi!.AddPage(this.manifest, pageId);
         return this;
     }
 }

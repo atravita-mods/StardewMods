@@ -10,7 +10,7 @@ namespace AtraShared.Utils.Extensions;
 /// <summary>
 /// Extensions for Harmony.
 /// </summary>
-internal static class HarmonyExtensions
+public static class HarmonyExtensions
 {
     /// <summary>
     /// Snitch on all the functions patched.
@@ -18,7 +18,7 @@ internal static class HarmonyExtensions
     /// <param name="harmony">Harmony instance.</param>
     /// <param name="monitor">Logger.</param>
     /// <param name="uniqueID">Unique ID to look for. Leave null to not filter.</param>
-    internal static void Snitch(this Harmony harmony, IMonitor monitor, string? uniqueID = null)
+    public static void Snitch(this Harmony harmony, IMonitor monitor, string? uniqueID = null)
     {
         Func<Patch, bool> filter = uniqueID is null ? (p) => true : (p) => p.owner == uniqueID;
 

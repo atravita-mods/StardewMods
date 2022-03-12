@@ -41,7 +41,7 @@ public class QualLoc
 /// <summary>
 /// Class that holds scheduling uility functions.
 /// </summary>
-internal class ScheduleUtilityFunctions
+public class ScheduleUtilityFunctions
 {
     /// <summary>
     /// Regex for a schedulepoint format.
@@ -424,7 +424,7 @@ internal class ScheduleUtilityFunctions
                 this.monitor.Log(
                     this.translation.Get("REGEX_TIMEOUT_ERROR")
                     .Default("Regex for schedule entry {{schedulePoint}} timed out:\n\n{{ex}}")
-                    .Tokens( new { schedulePoint = schedulepoint, ex }), LogLevel.Warn);
+                    .Tokens(new { schedulePoint = schedulepoint, ex }), LogLevel.Warn);
                 continue;
             }
         }

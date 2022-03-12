@@ -3,7 +3,7 @@
 /// <summary>
 /// Extension methods for SMAPI's logging service.
 /// </summary>
-internal static class LogExtensions
+public static class LogExtensions
 {
     /// <summary>
     /// Logs to level (DEBUG by default) if compiled with the DEBUG flag

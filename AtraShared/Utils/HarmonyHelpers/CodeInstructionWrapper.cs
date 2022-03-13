@@ -3,7 +3,7 @@
 using System.Reflection.Emit;
 using HarmonyLib;
 
-namespace AtraShared.Utils.HarmonyHelpers;
+namespace AtraShared.Utils.HarmonyHelper;
 
 /// <summary>
 /// Special cases for code instructions to match against.
@@ -57,7 +57,7 @@ public class CodeInstructionWrapper
     /// to wrap this specific <see cref="OpCode"/> operand pair.
     /// </summary>
     /// <param name="opcode">Opcode.</param>
-    /// <param name="operand">Operand.</param>
+    /// <param name="operand">Operand. Use null to match any operand.</param>
     public CodeInstructionWrapper(OpCode opcode, object? operand = null)
         => this.codeInstruction = new CodeInstruction(opcode, operand);
 
@@ -66,6 +66,7 @@ public class CodeInstructionWrapper
     /// to wrap this specific <see cref="CodeInstruction"/>.
     /// </summary>
     /// <param name="instrution">instruction to wrap.</param>
+    /// <remarks>A null operand matches any operand.</remarks>
     public CodeInstructionWrapper(CodeInstruction instrution)
         => this.codeInstruction = instrution;
 

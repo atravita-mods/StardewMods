@@ -5,13 +5,15 @@
  * **********************************/
 
 // TODO: AssertIs?
+// Label stuff?
+// LocalBuilders don't seem to have all the locals...why?
 
 using System.Diagnostics;
 using System.Reflection;
 using System.Reflection.Emit;
 using System.Text;
 using AtraBase.Collections;
-using AtraShared.Utils.HarmonyHelpers;
+using AtraShared.Utils.Extensions;
 using HarmonyLib;
 
 namespace AtraShared.Utils.HarmonyHelper;
@@ -22,6 +24,7 @@ namespace AtraShared.Utils.HarmonyHelper;
 public class ILHelper
 {
     private readonly SortedList<int, LocalBuilder> builtLocals = new();
+    private readonly Type[] locals;
 
     private readonly Counter<Label> importantLabels = new();
 
@@ -40,13 +43,13 @@ public class ILHelper
         this.Codes = codes.ToList();
         this.Generator = generator;
         this.Monitor = monitor;
+        this.locals = original.GetMethodBody()!.LocalVariables.Select((LocalVariableInfo l) => l.LocalType).ToArray();
 
         foreach (CodeInstruction code in this.Codes)
         {
             if (code.operand is LocalBuilder builder)
             {
                 this.builtLocals.TryAdd(builder.LocalIndex, builder);
-                Console.WriteLine(builder.ToString());
             }
             if (code.Branches(out Label? label) && label is not null)
             {
@@ -82,6 +85,9 @@ public class ILHelper
     [SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1623:Property summary documentation should match accessors", Justification = "Reviewed.")]
     public int Pointer { get; private set; } = -1;
 
+    /// <summary>
+    /// Gets the current instruction.
+    /// </summary>
     public CodeInstruction CurrentInstruction =>
         this.Codes[this.Pointer];
 
@@ -127,7 +133,7 @@ public class ILHelper
     public void Print()
     {
         StringBuilder sb = new();
-        sb.Append(this.Original.FullDescription());
+        sb.AppendLine(this.Original.FullDescription());
         foreach (CodeInstruction code in this.Codes)
         {
             sb.AppendLine().Append(code);
@@ -135,10 +141,16 @@ public class ILHelper
         this.Monitor.Log(sb.ToString(), LogLevel.Info);
     }
 
+    /// <summary>
+    /// Moves the pointer forward the number of steps.
+    /// </summary>
+    /// <param name="steps">Number of steps.</param>
+    /// <returns>this.</returns>
+    /// <exception cref="IndexOutOfRangeException">Pointer tried to move to an invalid location.</exception>
     public ILHelper Advance(int steps)
     {
         this.Pointer += steps;
-        if (this.Pointer < 0 || this.Pointer  >= this.Codes.Count)
+        if (this.Pointer < 0 || this.Pointer >= this.Codes.Count)
         {
             throw new IndexOutOfRangeException("New location for pointer is out of bounds.");
         }
@@ -156,7 +168,7 @@ public class ILHelper
     /// <exception cref="IndexOutOfRangeException">No match found.</exception>
     public ILHelper FindFirst(CodeInstructionWrapper[] instructions, int startindex, int endindex)
     {
-        if (startindex >= endindex - instructions.Length || startindex < 0 || endindex >= this.Codes.Count)
+        if (startindex >= (endindex - instructions.Length) || startindex < 0 || endindex > this.Codes.Count)
         {
             throw new ArgumentException($"Either startindex {startindex} or endindex {endindex} are invalid. ");
         }
@@ -206,7 +218,7 @@ public class ILHelper
     /// <exception cref="IndexOutOfRangeException">No match found.</exception>
     public ILHelper FindLast(CodeInstructionWrapper[] instructions, int startindex, int endindex)
     {
-        if (startindex >= endindex - instructions.Length || startindex < 0 || endindex >= this.Codes.Count)
+        if (startindex >= endindex - instructions.Length || startindex < 0 || endindex > this.Codes.Count)
         {
             throw new ArgumentException($"Either startindex {startindex} or endindex {endindex} are invalid. ");
         }
@@ -249,10 +261,15 @@ public class ILHelper
     /// Inserts the following code instructions at this location.
     /// </summary>
     /// <param name="instructions">Instructions to insert.</param>
+    /// <param name="withLabels">Labels to attach to the first instruction.</param>
     /// <returns>this.</returns>
-    public ILHelper Insert(CodeInstruction[] instructions)
+    public ILHelper Insert(CodeInstruction[] instructions, Label[]? withLabels = null)
     {
         this.Codes.InsertRange(this.Pointer, instructions);
+        if (withLabels is not null)
+        {
+            this.CurrentInstruction.labels.AddRange(withLabels);
+        }
         this.Pointer += instructions.Length;
         return this;
     }

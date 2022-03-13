@@ -1,5 +1,6 @@
 ﻿#if TRANSPILERS
 
+using System.Reflection;
 using System.Reflection.Emit;
 using HarmonyLib;
 
@@ -46,7 +47,8 @@ public enum SpecialCodeInstructionCases
 /// </summary>
 public class CodeInstructionWrapper
 {
-    private readonly LocalBuilder? builder;
+    private readonly LocalVariableInfo? local;
+    private readonly Type? localType;
     private readonly int? argumentPos;
     private readonly SpecialCodeInstructionCases? specialInstructionCase;
 
@@ -83,14 +85,24 @@ public class CodeInstructionWrapper
         throw new ArgumentException("Argument position can only be used with LdArg or StArg");
     }
 
-    public CodeInstructionWrapper(SpecialCodeInstructionCases specialcase, LocalBuilder builder)
+    public CodeInstructionWrapper(SpecialCodeInstructionCases specialcase, LocalVariableInfo local)
     {
         if (specialcase is SpecialCodeInstructionCases.LdLoc or SpecialCodeInstructionCases.StLoc)
         {
             this.specialInstructionCase = specialcase;
-            this.builder = builder;
+            this.local = local;
         }
         throw new ArgumentException("Localbuilders can only be used with LdLoc or StLoc");
+    }
+
+    public CodeInstructionWrapper(SpecialCodeInstructionCases specialcase, Type localType)
+    {
+        if (specialcase is SpecialCodeInstructionCases.LdLoc or SpecialCodeInstructionCases.StLoc)
+        {
+            this.specialInstructionCase = specialcase;
+            this.localType = localType;
+        }
+        throw new ArgumentException("Matching by type can only be used with LdLoc or StLoc");
     }
 
     /// <summary>
@@ -104,8 +116,8 @@ public class CodeInstructionWrapper
         if (this.specialInstructionCase is null)
         {
             return this.codeInstruction is not null &&
-                ( (this.codeInstruction.operand is null && this.codeInstruction.opcode == instruction.opcode)
-                  || this.codeInstruction.Is(instruction.opcode, instruction.operand) );
+                ((this.codeInstruction.operand is null && this.codeInstruction.opcode == instruction.opcode)
+                  || this.codeInstruction.Is(instruction.opcode, instruction.operand));
         }
         return this.specialInstructionCase switch
         {
@@ -113,8 +125,12 @@ public class CodeInstructionWrapper
             SpecialCodeInstructionCases.LdArg => this.argumentPos is null ? instruction.IsLdarg() : instruction.IsLdarg(this.argumentPos),
             SpecialCodeInstructionCases.StArg => this.argumentPos is null ? instruction.IsStarg() : instruction.IsStarg(this.argumentPos),
             SpecialCodeInstructionCases.LdArgA => this.argumentPos is null ? instruction.IsLdarga() : instruction.IsLdarga(this.argumentPos),
-            SpecialCodeInstructionCases.LdLoc => this.builder is null ? instruction.IsLdloc() : instruction.IsLdloc(this.builder),
-            SpecialCodeInstructionCases.StLoc => this.builder is null ? instruction.IsStloc() : instruction.IsStloc(this.builder),
+            SpecialCodeInstructionCases.LdLoc => this.local is null
+                                                    ? (instruction.IsLdloc() && (this.localType is null || LocalBuilderOperandIsOfType(this.localType, instruction.operand)))
+                                                    : (instruction.IsLdloc() && IsMatchingLocal(this.local, instruction.operand)),
+            SpecialCodeInstructionCases.StLoc => this.local is null
+                                                    ? (instruction.IsStloc() && (this.localType is null || LocalBuilderOperandIsOfType(this.localType, instruction.operand)))
+                                                    : (instruction.IsStloc() && IsMatchingLocal(this.local, instruction.operand)),
             _ => throw new UnexpectedEnumValueException<SpecialCodeInstructionCases>(this.specialInstructionCase.Value),
         };
     }
@@ -130,7 +146,7 @@ public class CodeInstructionWrapper
             }
             else
             {
-                return this.codeInstruction.opcode.Name + this.codeInstruction.operand.ToString();
+                return this.codeInstruction.ToString();
             }
         }
         else
@@ -138,6 +154,12 @@ public class CodeInstructionWrapper
             return this.specialInstructionCase.Value.ToString();
         }
     }
+
+    private static bool IsMatchingLocal(LocalVariableInfo loc, object other)
+        => other is LocalVariableInfo otherloc && loc.LocalIndex == otherloc.LocalIndex && loc.LocalType == otherloc.LocalType;
+
+    private static bool LocalBuilderOperandIsOfType(Type type, object other)
+        => other is LocalVariableInfo otherloc && otherloc.LocalType == type;
 }
 
 #endif

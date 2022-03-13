@@ -6,7 +6,6 @@
 
 // TODO: AssertIs?
 // Label stuff?
-// LocalBuilders don't seem to have all the locals...why?
 
 using System.Diagnostics;
 using System.Reflection;
@@ -23,8 +22,11 @@ namespace AtraShared.Utils.HarmonyHelper;
 /// </summary>
 public class ILHelper
 {
+    // Locals found via inspecting LocalBuilders.
     private readonly SortedList<int, LocalBuilder> builtLocals = new();
-    private readonly Type[] locals;
+
+    // All locals.
+    private readonly SortedList<int, LocalVariableInfo> locals = new();
 
     private readonly Counter<Label> importantLabels = new();
 
@@ -39,21 +41,32 @@ public class ILHelper
     /// <param name="generator">ILGenerator.</param>
     public ILHelper(MethodBase original, IEnumerable<CodeInstruction> codes, IMonitor monitor, ILGenerator? generator = null)
     {
+        if (original.GetMethodBody() is MethodBody body)
+        {
+            foreach (LocalVariableInfo loc in body.LocalVariables)
+            {
+                this.locals[loc.LocalIndex] = loc;
+            }
+        }
+        else
+        {
+            throw new InvalidOperationException($"Attempted to transpile a method without a body: {original.FullDescription()}");
+        }
         this.Original = original;
         this.Codes = codes.ToList();
         this.Generator = generator;
         this.Monitor = monitor;
-        this.locals = original.GetMethodBody()!.LocalVariables.Select((LocalVariableInfo l) => l.LocalType).ToArray();
 
         foreach (CodeInstruction code in this.Codes)
         {
             if (code.operand is LocalBuilder builder)
             {
                 this.builtLocals.TryAdd(builder.LocalIndex, builder);
+                this.locals.TryAdd(builder.LocalIndex, builder); // LocalBuilder inherits from LocalVariableInfo
             }
-            if (code.Branches(out Label? label) && label is not null)
+            if (code.Branches(out Label? label))
             {
-                this.importantLabels[label.Value]++;
+                this.importantLabels[label!.Value]++;
             }
         }
     }
@@ -88,8 +101,19 @@ public class ILHelper
     /// <summary>
     /// Gets the current instruction.
     /// </summary>
-    public CodeInstruction CurrentInstruction =>
-        this.Codes[this.Pointer];
+    public CodeInstruction CurrentInstruction
+    {
+        get
+        {
+            return this.Codes[this.Pointer];
+        }
+
+        private set
+        {
+            this.Codes[this.Pointer] = value;
+        }
+    }
+
 
     /// <summary>
     /// Gets the logger for this instance.
@@ -133,10 +157,18 @@ public class ILHelper
     public void Print()
     {
         StringBuilder sb = new();
-        sb.AppendLine(this.Original.FullDescription());
-        foreach (CodeInstruction code in this.Codes)
+        sb.Append("ILHelper for: ").AppendLine(this.Original.FullDescription());
+        for (int i = 0; i < this.Codes.Count; i++)
         {
-            sb.AppendLine().Append(code);
+            sb.AppendLine().Append(this.Codes[i]);
+            if (this.Pointer == i)
+            {
+                sb.Append("       <----");
+            }
+            if (this.PointerStack.Contains(i))
+            {
+                sb.Append("       <----- stack point.");
+            }
         }
         this.Monitor.Log(sb.ToString(), LogLevel.Info);
     }
@@ -162,12 +194,13 @@ public class ILHelper
     /// </summary>
     /// <param name="instructions">Instructions to search for.</param>
     /// <param name="startindex">Index to start searching at (inclusive).</param>
-    /// <param name="endindex">Index to end search (exclusive).</param>
+    /// <param name="intendedendindex">Index to end search (exclusive). Null for "end of instruction list"</param>
     /// <returns>this.</returns>
     /// <exception cref="ArgumentException">Startindex or Endindex are invalid.</exception>
     /// <exception cref="IndexOutOfRangeException">No match found.</exception>
-    public ILHelper FindFirst(CodeInstructionWrapper[] instructions, int startindex, int endindex)
+    public ILHelper FindFirst(CodeInstructionWrapper[] instructions, int startindex = 0, int? intendedendindex = null)
     {
+        int endindex = intendedendindex ?? this.Codes.Count;
         if (startindex >= (endindex - instructions.Length) || startindex < 0 || endindex > this.Codes.Count)
         {
             throw new ArgumentException($"Either startindex {startindex} or endindex {endindex} are invalid. ");
@@ -212,12 +245,13 @@ public class ILHelper
     /// </summary>
     /// <param name="instructions">Instructions to search for.</param>
     /// <param name="startindex">Index to start searching at (inclusive).</param>
-    /// <param name="endindex">Index to end search (exclusive).</param>
+    /// <param name="intendedendindex">Index to end search (exclusive). Leave null to mean "last code".</param>
     /// <returns>this.</returns>
     /// <exception cref="ArgumentException">Startindex or Endindex are invalid.</exception>
     /// <exception cref="IndexOutOfRangeException">No match found.</exception>
-    public ILHelper FindLast(CodeInstructionWrapper[] instructions, int startindex, int endindex)
+    public ILHelper FindLast(CodeInstructionWrapper[] instructions, int startindex = 0, int? intendedendindex = null)
     {
+        int endindex = intendedendindex ?? this.Codes.Count;
         if (startindex >= endindex - instructions.Length || startindex < 0 || endindex > this.Codes.Count)
         {
             throw new ArgumentException($"Either startindex {startindex} or endindex {endindex} are invalid. ");
@@ -323,6 +357,52 @@ public class ILHelper
         return this;
     }
 
+    public ILHelper RemoveIncluding(CodeInstructionWrapper[] instructions)
+    {
+        this.Push();
+        this.FindNext(instructions);
+        int finalpos = this.Pointer + instructions.Length;
+        this.Pop();
+        this.Remove(finalpos - this.Pointer);
+        return this;
+    }
+
+    public ILHelper ReplaceInstruction(CodeInstruction instruction, Label[]? withLabels = null)
+    {
+        this.CurrentInstruction = instruction;
+        if (withLabels is not null)
+        {
+            this.CurrentInstruction.labels.AddRange(withLabels);
+        }
+        return this;
+    }
+
+    public ILHelper ReplaceInstruction(OpCode opcode, object operand, Label[]? withLabels = null)
+    {
+        return this.ReplaceInstruction(new CodeInstruction(opcode, operand));
+    }
+
+    public ILHelper ReplaceInstruction(CodeInstruction instruction, bool keepLabels)
+    {
+        if (keepLabels)
+        {
+            instruction.labels.AddRange(this.CurrentInstruction.labels);
+        }
+        this.CurrentInstruction = instruction;
+        return this;
+    }
+
+    public ILHelper ReplaceInstruction(OpCode opcode, object operand, bool keepLabels)
+    {
+        return this.ReplaceInstruction(new CodeInstruction(opcode, operand), keepLabels);
+    }
+
+    public ILHelper ReplaceOperand(object operand)
+    {
+        this.CurrentInstruction.operand = operand;
+        return this;
+    }
+
     /// <summary>
     /// Gets the index of the local of a specifc type.
     /// </summary>
@@ -332,7 +412,7 @@ public class ILHelper
     public int GetIndexOfLocal(Type type, int which = 1)
     {
         int counter = 0;
-        foreach ((int key, LocalBuilder local) in this.builtLocals)
+        foreach ((int key, LocalVariableInfo local) in this.locals)
         {
             if (local.LocalType == type && ++counter == which)
             {

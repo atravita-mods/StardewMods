@@ -11,17 +11,17 @@ public class ModConfig
     /// Gets or sets a value indicating whether whether or not the entire mod is enabled.
     /// </summary>
     public bool Enabled { get; set; } = true;
-#if DEBUG
+
     /// <summary>
     /// Gets or sets a value indicating whether whether or not I should be able to place rugs outside.
     /// </summary>
     public bool CanPlaceRugsOutside { get; set; } = false;
 
+#if DEBUG
     /// <summary>
     /// Gets or sets a value indicating whether whether or not I should be able to place rugs under things.
     /// </summary>
     public bool CanPlaceRugsUnder { get; set; } = true;
-
 #endif
 
     /// <summary>

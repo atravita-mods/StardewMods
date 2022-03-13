@@ -5,7 +5,6 @@ using StardewValley.Objects;
 
 namespace StopRugRemoval.HarmonyPatches;
 
-#if DEBUG // not yet finished implementing....
 /// <summary>
 /// Patches on GameLocation to allow me to place rugs anywhere.
 /// </summary>
@@ -89,5 +88,3 @@ internal class GameLocationPatches
         return true;
     }
 }
-
-#endif

@@ -1,6 +1,6 @@
 ﻿using System.Reflection;
-using AtraShared.MigrationManager;
 using AtraShared.Integrations;
+using AtraShared.MigrationManager;
 using AtraShared.Utils.Extensions;
 using HarmonyLib;
 using StardewModdingAPI.Events;
@@ -13,7 +13,9 @@ namespace StopRugRemoval;
 /// </summary>
 public class ModEntry : Mod
 {
-    // the following two fields are set in the entry method, which is approximately as close as I can get to the constructor anyways.
+    private MigrationManager? migrator;
+
+    // the following two properties are set in the entry method, which is approximately as close as I can get to the constructor anyways.
 #pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
     /// <summary>
     /// Gets the logger for this file.
@@ -25,8 +27,6 @@ public class ModEntry : Mod
     /// </summary>
     public static ModConfig Config { get; private set; }
 #pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
-
-    private MigrationManager? migrator;
 
     /// <inheritdoc/>
     public override void Entry(IModHelper helper)
@@ -43,10 +43,10 @@ public class ModEntry : Mod
             Config = new();
         }
 
-        this.ApplyPatches(new Harmony(this.ModManifest.UniqueID));
-
         helper.Events.GameLoop.GameLaunched += this.SetUpConfig;
         helper.Events.GameLoop.SaveLoaded += this.SaveLoaded;
+
+        this.ApplyPatches(new Harmony(this.ModManifest.UniqueID));
     }
 
     /// <summary>
@@ -98,7 +98,6 @@ public class ModEntry : Mod
     /// </summary>
     /// <param name="sender">Unknown, used by SMAPI.</param>
     /// <param name="e">Parameters.</param>
-    /// <remarks>Used to load in this mod's data models.</remarks>
     private void SaveLoaded(object? sender, SaveLoadedEventArgs e)
     {
         if (Context.IsSplitScreen && Context.ScreenId != 0)

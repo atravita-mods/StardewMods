@@ -5,9 +5,17 @@ using StardewValley.Objects;
 
 namespace StopRugRemoval.HarmonyPatches;
 
+/// <summary>
+/// I think this prevents the cursor from turning green when trying to place a tree on a rug.
+/// </summary>
 [HarmonyPatch]
 internal static class CanPlantTreesHerePatches
 {
+    /// <summary>
+    /// Defines the methods for which to patch.
+    /// </summary>
+    /// <returns>Methods to patch.</returns>
+    [UsedImplicitly]
     public static IEnumerable<MethodBase> TargetMethods()
     {
         foreach (Type type in typeof(GameLocation).GetAssignableTypes(publiconly: true, includeAbstract: false))
@@ -20,6 +28,14 @@ internal static class CanPlantTreesHerePatches
         }
     }
 
+    /// <summary>
+    /// Prefix to prevent planting trees on rugs.
+    /// </summary>
+    /// <param name="__instance">Game location.</param>
+    /// <param name="tile_x">Tile X.</param>
+    /// <param name="tile_y">Tile Y.</param>
+    /// <param name="__result">Result to replace the original with.</param>
+    /// <returns>True to continue to original, false to skip.</returns>
     [SuppressMessage("StyleCop", "SA1313", Justification = "Style prefered by Harmony")]
     public static bool Prefix(GameLocation __instance, int tile_x, int tile_y, ref bool __result)
     {

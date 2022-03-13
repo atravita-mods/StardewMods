@@ -38,12 +38,12 @@ internal class SObjectPatches
     /// <summary>
     /// Prefix on placement to prevent planting of fruit trees and tea saplings on rugs, hopefully.
     /// </summary>
-    /// <param name="__instance"></param>
-    /// <param name="location"></param>
+    /// <param name="__instance">SObject instance to check.</param>
+    /// <param name="location">Gamelocation being placed in.</param>
     /// <param name="x">X placement location in pixel coordinates.</param>
     /// <param name="y">Y placement location in pixel coordinates.</param>
     /// <param name="__result">Result of the function.</param>
-    /// <returns></returns>
+    /// <returns>True to continue to vanilla function, false otherwise.</returns>
     [HarmonyPrefix]
     [HarmonyPatch(nameof(SObject.placementAction))]
     [SuppressMessage("StyleCop", "SA1313", Justification = "Style prefered by Harmony")]
@@ -55,7 +55,7 @@ internal class SObjectPatches
             {
                 foreach (Furniture f in location.furniture)
                 {
-                    if (f.getBoundingBox(f.TileLocation).Contains(x,y))
+                    if (f.getBoundingBox(f.TileLocation).Contains(x, y))
                     {
                         Game1.showRedMessage(I18n.RugPlantingMessage());
                         __result = false;

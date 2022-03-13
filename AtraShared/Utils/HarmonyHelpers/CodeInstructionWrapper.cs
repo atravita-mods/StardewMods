@@ -102,7 +102,9 @@ public class CodeInstructionWrapper
     {
         if (this.specialInstructionCase is null)
         {
-            return this.codeInstruction is not null && this.codeInstruction.Is(instruction.opcode, instruction.operand);
+            return this.codeInstruction is not null &&
+                ( (this.codeInstruction.operand is null && this.codeInstruction.opcode == instruction.opcode)
+                  || this.codeInstruction.Is(instruction.opcode, instruction.operand) );
         }
         return this.specialInstructionCase switch
         {

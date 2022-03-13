@@ -5,7 +5,7 @@
 /// </summary>
 public class MigrationManager
 {
-    private const string SUFFIX = "_migration";
+    private const string FILENAME = "migration_data";
     private string? oldversion;
 
     /// <summary>
@@ -33,7 +33,7 @@ public class MigrationManager
     protected IDataHelper DataHelper { get; init; }
 
     /// <summary>
-    /// Gets sMAPI's helper.
+    /// Gets SMAPI's helper.
     /// </summary>
     protected IModHelper Helper { get; init; }
 
@@ -47,9 +47,7 @@ public class MigrationManager
     /// </summary>
     public void ReadVersionInfo()
     {
-        string globalDataKey = this.Manifest.UniqueID + SUFFIX;
-
-        if (this.DataHelper.ReadGlobalData<MigrationDataClass>(globalDataKey) is MigrationDataClass migrationData
+        if (this.DataHelper.ReadGlobalData<MigrationDataClass>(FILENAME) is MigrationDataClass migrationData
             && migrationData.VersionMap.TryGetValue(Constants.SaveFolderName, out this.oldversion))
         {
             this.Monitor.Log($"Migrator found old version {this.oldversion} for {this.Manifest.UniqueID}", LogLevel.Trace);
@@ -65,11 +63,10 @@ public class MigrationManager
     /// </summary>
     public void SaveVersionInfo()
     {
-        string globalDataKey = this.Manifest.UniqueID + SUFFIX;
-        MigrationDataClass migrationData = this.DataHelper.ReadGlobalData<MigrationDataClass>(globalDataKey) ?? new();
-        this.Monitor.Log($"Writing version info into global data for {Constants.SaveFolderName} for {this.Manifest.UniqueID}", LogLevel.Trace);
+        MigrationDataClass migrationData = this.DataHelper.ReadGlobalData<MigrationDataClass>(FILENAME) ?? new();
+        this.Monitor.Log($"Writing version info {this.Manifest.Version} into global data for {Constants.SaveFolderName} for {this.Manifest.UniqueID}", LogLevel.Trace);
         migrationData.VersionMap[Constants.SaveFolderName] = this.Manifest.Version.ToString();
-        this.DataHelper.WriteGlobalData(globalDataKey, migrationData);
+        this.DataHelper.WriteGlobalData(FILENAME, migrationData);
     }
 
     /// <summary>

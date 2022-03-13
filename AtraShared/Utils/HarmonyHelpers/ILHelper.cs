@@ -4,6 +4,8 @@
  * Don't forget to include COLLECTIONS!
  * **********************************/
 
+// TODO: AssertIs?
+
 using System.Diagnostics;
 using System.Reflection;
 using System.Reflection.Emit;
@@ -22,6 +24,8 @@ public class ILHelper
     private readonly SortedList<int, LocalBuilder> builtLocals = new();
 
     private readonly Counter<Label> importantLabels = new();
+
+    private Label? label;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="ILHelper"/> class.
@@ -78,6 +82,9 @@ public class ILHelper
     [SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1623:Property summary documentation should match accessors", Justification = "Reviewed.")]
     public int Pointer { get; private set; } = -1;
 
+    public CodeInstruction CurrentInstruction =>
+        this.Codes[this.Pointer];
+
     /// <summary>
     /// Gets the logger for this instance.
     /// </summary>
@@ -103,6 +110,8 @@ public class ILHelper
         return this;
     }
 
+    // Todo: Consider doing basic stack checking here.
+
     /// <summary>
     /// The list of codes as an enumerable.
     /// </summary>
@@ -124,6 +133,16 @@ public class ILHelper
             sb.AppendLine().Append(code);
         }
         this.Monitor.Log(sb.ToString(), LogLevel.Info);
+    }
+
+    public ILHelper Advance(int steps)
+    {
+        this.Pointer += steps;
+        if (this.Pointer < 0 || this.Pointer  >= this.Codes.Count)
+        {
+            throw new IndexOutOfRangeException("New location for pointer is out of bounds.");
+        }
+        return this;
     }
 
     /// <summary>
@@ -172,7 +191,7 @@ public class ILHelper
     /// <exception cref="IndexOutOfRangeException">No match found.</exception>
     public ILHelper FindNext(CodeInstructionWrapper[] instructions)
     {
-        this.FindFirst(instructions, this.Pointer, this.Codes.Count);
+        this.FindFirst(instructions, this.Pointer + 1, this.Codes.Count);
         return this;
     }
 
@@ -246,7 +265,7 @@ public class ILHelper
     /// <exception cref="InvalidOperationException">Attempted to remove an important label, stopping.</exception>
     public ILHelper Remove(int count)
     {
-        for (int i = this.Pointer; i < this.Pointer + count - 1; i++)
+        for (int i = this.Pointer; i < this.Pointer + count; i++)
         {
             if (this.Codes[i].Branches(out Label? label))
             {
@@ -254,7 +273,7 @@ public class ILHelper
             }
         }
         this.importantLabels.RemoveZeros();
-        for (int i = this.Pointer; i < this.Pointer + count - 1; i++)
+        for (int i = this.Pointer; i < this.Pointer + count; i++)
         {
             if (this.Codes[i].labels.Intersect(this.importantLabels.Keys).Any())
             {

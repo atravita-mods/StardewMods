@@ -1,70 +1,86 @@
-﻿using StardewModdingAPI;
-using StardewValley;
-using System.Linq;
-using System.Collections.Generic;
+﻿namespace PamTries;
 
-namespace PamTries
+class PTUtilities
 {
-    class PTUtilities
+    public static IDictionary<string, string>? Lexicon { get; set; }
+
+    public static void PopulateLexicon(IContentHelper ContentHelper)
     {
-        public static IDictionary<string, string> Lexicon { get; set; }
+        Lexicon = ContentHelper.Load<Dictionary<string, string>>("Strings/Lexicon", ContentSource.GameContent);
+    }
 
-        public static void PopulateLexicon(IContentHelper ContentHelper)
+    public static string GetLexicon(string key, string? defaultresponse = null)
+    {
+        string? value = null;
+        if (Lexicon is not null)
         {
-            Lexicon = ContentHelper.Load<Dictionary<string, string>>("Strings/Lexicon", ContentSource.GameContent);
+            Lexicon.TryGetValue(key, out value);
         }
-
-        public static string GetLexicon(string key, string defaultresponse = "")
+        if (value is null)
         {
-            string value = null;
-            if (Lexicon != null)
+            if (string.IsNullOrWhiteSpace(defaultresponse))
             {
-                Lexicon.TryGetValue(key, out value);
+                value = key;
             }
-            if (value == null)
+            else
             {
-                if(defaultresponse == ""){ value = key; }
-                else { value = defaultresponse; }
+                value = defaultresponse;
             }
-            return value;
         }
+        return value;
+    }
 
-        /// <summary>
-        /// Checks to see if any player has a specific conversation topic. If so, gives everyone the conversation topic.
-        /// </summary>
-        /// <param name="ConversationTopic"></param>
-        public static void SyncConversationTopics(string ConversationTopic)
+    /// <summary>
+    /// Checks to see if any player has a specific conversation topic. If so, gives everyone the conversation topic.
+    /// </summary>
+    /// <param name="conversationTopic"></param>
+    public static void SyncConversationTopics(string conversationTopic)
+    {
+        if (!Game1.IsMultiplayer) { return; }
+        // Rewrite this. If host has it, everyone has host's amount of days. Else, find player with it.
+        if (Game1.player.activeDialogueEvents.ContainsKey(conversationTopic))
         {
-            if (!Game1.IsMultiplayer) { return; }
-            if (!Game1.player.activeDialogueEvents.ContainsKey(ConversationTopic))
+            return;
+        }
+        if (Game1.MasterPlayer.activeDialogueEvents.TryGetValue(conversationTopic, out int conversationdays))
+        {
+            Game1.player.activeDialogueEvents[conversationTopic] = conversationdays;
+        }
+        else
+        {
+            foreach (Farmer farmer in Game1.getAllFarmers())
             {
-                int conversationdays = -1;
-                foreach (Farmer farmer in Game1.getAllFarmers())
+                if (farmer.activeDialogueEvents.TryGetValue(conversationTopic, out conversationdays))
                 {
-                    if (farmer.activeDialogueEvents.ContainsKey(ConversationTopic))
-                    {
-                        conversationdays = farmer.activeDialogueEvents[ConversationTopic];
-                        break;
-                    }
+                    Game1.player.activeDialogueEvents[conversationTopic] = conversationdays;
                 }
-                if (conversationdays > 0) { Game1.player.activeDialogueEvents[ConversationTopic] = conversationdays; }
             }
         }
+    }
 
-        public static void LocalEventSyncs(IMonitor ModMonitor)
-        {   //Sets Pam's home event as seen for everyone if any farmer has seen it.
-            //but only if the mail flag isn't set.
-            if (!Game1.IsMultiplayer) { return; }
-            if (Game1.getAllFarmers().Any((Farmer farmer) => farmer.mailForTomorrow.Contains("atravita_PamTries_PennyThanks")))
-            {
-                Game1.player.eventsSeen.Add(99210001);
-                ModMonitor.Log("Syncing event 9921001");
-            }
-            if (Game1.getAllFarmers().Any((Farmer farmer) => farmer.eventsSeen.Contains(99210002)))
-            {
-                Game1.player.eventsSeen.Add(99210002);
-                ModMonitor.Log("Syncing event 99210002");
-            }
+    public static void SyncConversationTopics(IEnumerable<string> conversationTopics)
+    {
+        foreach (string conversationTopic in conversationTopics)
+        {
+            SyncConversationTopics(conversationTopic);
+        }
+    }
+    public static void LocalEventSyncs(IMonitor modMonitor)
+    { // Sets Pam's home event as seen for everyone if any farmer has seen it.
+      // but only if the mail flag isn't set.
+        if (!Game1.IsMultiplayer)
+        {
+            return;
+        }
+        if (Game1.getAllFarmers().Any((Farmer farmer) => farmer.mailForTomorrow.Contains("atravita_PamTries_PennyThanks")))
+        {
+            Game1.player.eventsSeen.Add(99210001);
+            modMonitor.Log("Syncing event 9921001");
+        }
+        if (Game1.getAllFarmers().Any((Farmer farmer) => farmer.eventsSeen.Contains(99210002)))
+        {
+            Game1.player.eventsSeen.Add(99210002);
+            modMonitor.Log("Syncing event 99210002");
         }
     }
 }

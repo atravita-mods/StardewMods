@@ -4,13 +4,23 @@ using StardewValley.Objects;
 
 namespace StopRugRemoval.HarmonyPatches;
 
+/// <summary>
+/// Patches against SObject.
+/// </summary>
 [HarmonyPatch(typeof(SObject))]
 internal class SObjectPatches
 {
+    /// <summary>
+    /// Prefix to prevent planting of wild trees on rugs.
+    /// </summary>
+    /// <param name="location">Game location.</param>
+    /// <param name="tile">Tile to look at.</param>
+    /// <param name="__result">the replacement result.</param>
+    /// <returns>True to continue to vanilla function, false otherwise.</returns>
     [HarmonyPrefix]
     [HarmonyPatch("canPlaceWildTreeSeed")]
     [SuppressMessage("StyleCop", "SA1313", Justification = "Style prefered by Harmony")]
-    public static bool PrefixWildTrees(GameLocation location, Vector2 tile, ref bool __result)
+    private static bool PrefixWildTrees(GameLocation location, Vector2 tile, ref bool __result)
     {
         try
         {
@@ -47,7 +57,7 @@ internal class SObjectPatches
     [HarmonyPrefix]
     [HarmonyPatch(nameof(SObject.placementAction))]
     [SuppressMessage("StyleCop", "SA1313", Justification = "Style prefered by Harmony")]
-    public static bool PrefixPlacementAction(SObject __instance, GameLocation location, int x, int y, ref bool __result)
+    private static bool PrefixPlacementAction(SObject __instance, GameLocation location, int x, int y, ref bool __result)
     {
         try
         {
@@ -70,6 +80,4 @@ internal class SObjectPatches
         }
         return true;
     }
-
-
 }

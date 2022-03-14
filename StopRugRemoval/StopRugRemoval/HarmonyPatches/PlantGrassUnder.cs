@@ -6,10 +6,16 @@ using StardewValley.TerrainFeatures;
 
 namespace StopRugRemoval.HarmonyPatches;
 
+/// <summary>
+/// Class to hold patches to place grass.
+/// </summary>
 [HarmonyPatch]
-internal class PlantGrassUnderFences
+internal class PlantGrassUnder
 {
-
+    /// <summary>
+    /// Gets the methods to patch.
+    /// </summary>
+    /// <returns>An IEnumerable of methods to patch.</returns>
     public static IEnumerable<MethodBase> TargetMethods()
     {
         foreach (Type t in typeof(SObject).GetAssignableTypes(publiconly: true, includeAbstract: false))
@@ -37,7 +43,8 @@ internal class PlantGrassUnderFences
         if (__result // Placed something already
            || __1 // just checking!
            || __2.currentLocation is null
-           || !ModEntry.Config.Enabled)
+           || !ModEntry.Config.Enabled
+           || !ModEntry.Config.PlaceGrassUnder)
         {
             return;
         }
@@ -51,7 +58,7 @@ internal class PlantGrassUnderFences
 
                 if (!location.terrainFeatures.ContainsKey(placementTile) && !location.isWaterTile((int)placementTile.X, (int)placementTile.Y))
                 {
-                    location.terrainFeatures.Add(placementTile, new Grass(1, 4));
+                    location.terrainFeatures.Add(placementTile, new Grass(Grass.springGrass, 4));
                     location.playSound("dirtyHit");
                     __result = true;
                 }

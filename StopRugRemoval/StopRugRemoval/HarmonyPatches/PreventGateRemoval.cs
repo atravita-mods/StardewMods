@@ -4,27 +4,43 @@ using AtraBase.Toolkit.Reflection;
 using AtraShared.Utils.HarmonyHelper;
 using HarmonyLib;
 using Microsoft.Xna.Framework;
+using StardewModdingAPI.Utilities;
 using xTile.Dimensions;
 
 namespace StopRugRemoval.HarmonyPatches;
 
+/// <summary>
+/// Patches to prevent gate removal.
+/// </summary>
 [HarmonyPatch(typeof(GameLocation))]
 internal static class PreventGateRemoval
 {
-
-    private static int attempts = 0;
+    private static readonly PerScreen<int> PerscreenedAttempts = new(createNewState: () => 0);
     private static int ticks = 0;
 
+    private static int Attempts
+    {
+        get => PerscreenedAttempts.Value;
+        set => PerscreenedAttempts.Value = value;
+    }
+
+    /// <summary>
+    /// Checks to see if the FurniturePlacementKey is held.
+    /// Also shows the message if needed.
+    /// </summary>
+    /// <param name="gameLocation">Game location.</param>
+    /// <param name="tile">Tile.</param>
+    /// <returns>true if held down, false otherwise.</returns>
     public static bool AreFurnitureKeysHeld(GameLocation gameLocation, Location tile)
     {
         if (Game1.ticks > ticks + 120)
         {
-            attempts = 0;
+            Attempts = 0;
             ticks = Game1.ticks;
         }
         else
         {
-            attempts++;
+            Attempts++;
         }
         if (ModEntry.Config.FurniturePlacementKey.IsDown() || !ModEntry.Config.Enabled)
         {
@@ -33,9 +49,9 @@ internal static class PreventGateRemoval
         else
         {
             Vector2 v = new(tile.X, tile.Y);
-            if (attempts > 12 && gameLocation.objects.TryGetValue(v, out SObject obj) && obj is Fence fence && fence.isGate.Value)
+            if (Attempts > 12 && gameLocation.objects.TryGetValue(v, out SObject obj) && obj is Fence fence && fence.isGate.Value)
             {
-                attempts -= 5;
+                Attempts -= 5;
                 Game1.showRedMessage(I18n.GateRemovalMessage(ModEntry.Config.FurniturePlacementKey));
             }
             return false;

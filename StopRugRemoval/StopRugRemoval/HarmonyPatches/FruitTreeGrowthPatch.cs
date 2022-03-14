@@ -13,6 +13,7 @@ internal static class FruitTreeGrowthPatch
 {
     // Removing rugs from the possible check list.
     // Original method: if (o == null) { return true;}
+    // New methods: if (o == null || (o is Furniture f && f.furniture_type.Value == Furniture.rug)) { return true;}
 
     [HarmonyPatch(nameof(FruitTree.IsGrowthBlocked))]
     private static IEnumerable<CodeInstruction>? Transpiler(IEnumerable<CodeInstruction> instructions, ILGenerator gen, MethodBase original)

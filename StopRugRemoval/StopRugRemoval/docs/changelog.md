@@ -3,11 +3,11 @@
 
 #### ToDo
 [] Catch input to place rug under things.
-[] Alter how the rug sapling thing works?
 
-#### Version 1.1.0
+#### Version 1.0.3
 
 * Allows outdoor rugs.
+* Gates no longer pop off when right click is held near them.
 
 #### Version 1.0.2
 

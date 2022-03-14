@@ -30,7 +30,7 @@ public class ILHelper
 
     private readonly Counter<Label> importantLabels = new();
 
-    private Label? label;
+    private Label? label = null;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="ILHelper"/> class.
@@ -39,7 +39,7 @@ public class ILHelper
     /// <param name="codes">IEnumerable of codes.</param>
     /// <param name="monitor">Logger.</param>
     /// <param name="generator">ILGenerator.</param>
-    public ILHelper(MethodBase original, IEnumerable<CodeInstruction> codes, IMonitor monitor, ILGenerator? generator = null)
+    public ILHelper(MethodBase original, IEnumerable<CodeInstruction> codes, IMonitor monitor, ILGenerator generator)
     {
         if (original.GetMethodBody() is MethodBody body)
         {
@@ -85,7 +85,7 @@ public class ILHelper
     /// <summary>
     /// Gets the ILGenerator.
     /// </summary>
-    public ILGenerator? Generator { get; init; }
+    public ILGenerator Generator { get; init; }
 
     /// <summary>
     /// Gets the current instruction pointer stack.
@@ -401,6 +401,65 @@ public class ILHelper
     {
         this.CurrentInstruction.operand = operand;
         return this;
+    }
+
+    public ILHelper GrabBranchDest(out Label? label)
+    {
+        if (!this.CurrentInstruction.Branches(out label))
+        {
+            throw new InvalidOperationException($"Attempted to grab label from something that's not a branch.");
+        }
+        return this;
+    }
+
+    public ILHelper StoreBranchDest()
+    {
+        return this.GrabBranchDest(out this.label);
+    }
+
+    public ILHelper GetLabels(out IList<Label> labels, bool clear = false)
+    {
+        labels = this.CurrentInstruction.labels.ToList();
+        if (clear)
+        {
+            this.CurrentInstruction.labels.Clear();
+        }
+        return this;
+    }
+
+    public ILHelper AttachLabel(params Label[] labels)
+    {
+        this.CurrentInstruction.labels.AddRange(labels);
+        return this;
+    }
+
+    public ILHelper DefineAndAttachLabel(out Label label)
+    {
+        label = this.Generator.DefineLabel();
+        this.CurrentInstruction.labels.Add(label);
+        return this;
+    }
+
+    public ILHelper AdvanceToLabel(Label label)
+    {
+        for (int i = this.Pointer; i < this.Codes.Count; i++)
+        {
+            if (this.Codes[i].labels.Contains(label))
+            {
+                this.Pointer = i;
+                return this;
+            }
+        }
+        throw new IndexOutOfRangeException($"label {label} could not be found after index {this.Pointer}");
+    }
+
+    public ILHelper AdvanceToStoredLabel()
+    {
+        if (this.label is null)
+        {
+            throw new InvalidOperationException("Attempted to advance to label, but there is not one stored!");
+        }
+        return this.AdvanceToLabel(this.label.Value);
     }
 
     /// <summary>

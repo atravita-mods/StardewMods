@@ -10,6 +10,8 @@
   "PreventRemovalFromTable.description": "If enabled, objects will not be able to be removed from tables unless the furniture placement key is held down.",
   "PreventPlantingOnRugs.title": "Prevent Planting On Rugs",
   "PreventPlantingOnRugs.description": "Prevents hoeing on rugs and planting saplings on rugs.",
+  "PlaceGrassUnder.title": "Place Grass Under",
+  "PlaceGrassUnder.description": "Allow placing grass under other objects",
 
   "FurniturePlacementKey.title": "Furniture Placement Key",
   "FurniturePlacementKey.description": "The keybind used to allow objects to be removed from tables.",

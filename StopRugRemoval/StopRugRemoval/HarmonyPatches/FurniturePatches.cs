@@ -12,6 +12,8 @@ namespace StopRugRemoval.HarmonyPatches;
 [HarmonyPatch(typeof(Furniture))]
 internal class FurniturePatches
 {
+    private static int ticks;
+
     [SuppressMessage("StyleCop", "SA1313", Justification = "Style prefered by Harmony")]
     [HarmonyPostfix]
     [HarmonyPatch(nameof(Furniture.canBeRemoved))]
@@ -117,7 +119,11 @@ internal class FurniturePatches
             }
             else
             {
-                Game1.showRedMessage(I18n.TableRemovalMessage(keybind: ModEntry.Config.FurniturePlacementKey));
+                if (Game1.ticks > ticks + 60)
+                {
+                    Game1.showRedMessage(I18n.TableRemovalMessage(keybind: ModEntry.Config.FurniturePlacementKey));
+                    ticks = Game1.ticks;
+                }
                 __result = false;
                 return false;
             }

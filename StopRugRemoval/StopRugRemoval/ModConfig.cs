@@ -35,6 +35,11 @@ public class ModConfig
     public bool PreventPlantingOnRugs { get; set; } = true;
 
     /// <summary>
+    /// Gets or sets a value indicating whether grass should be placed under objects.
+    /// </summary>
+    public bool PlaceGrassUnder { get; set; } = true;
+
+    /// <summary>
     /// Gets or sets keybind to use to remove an item from a table.
     /// </summary>
     public KeybindList FurniturePlacementKey { get; set; } = KeybindList.Parse("LeftShift + Z");

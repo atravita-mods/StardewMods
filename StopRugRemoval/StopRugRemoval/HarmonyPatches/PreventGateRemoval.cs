@@ -49,6 +49,7 @@ internal static class PreventGateRemoval
     *
     * if (AreFurnitureKeysHeld() && vect.Equals(who.getTileLocation()) && !this.objects[vect].isPassable())
     ********************************************/
+#pragma warning disable SA1116 // Split parameters should start on line after declaration. Reviewed.
     [HarmonyPatch(nameof(GameLocation.checkAction))]
     private static IEnumerable<CodeInstruction>? Transpiler(IEnumerable<CodeInstruction> instructions, ILGenerator gen, MethodBase original)
     {
@@ -71,7 +72,6 @@ internal static class PreventGateRemoval
                         new(OpCodes.Callvirt, typeof(Character).InstanceMethodNamed(nameof(Character.getTileLocation))),
                         new(OpCodes.Call),
                     })
-                .GetLabels(out IList<Label> labels, clear: true)
                 .Push()
                 .FindNext(new CodeInstructionWrapper[]
                     {
@@ -84,6 +84,7 @@ internal static class PreventGateRemoval
                 .AdvanceToStoredLabel()
                 .DefineAndAttachLabel(out Label newLabel)
                 .Pop()
+                .GetLabels(out IList<Label> labels, clear: true)
                 .Insert(new CodeInstruction[]
                     {
                         new(OpCodes.Ldarg_0),
@@ -100,4 +101,5 @@ internal static class PreventGateRemoval
         }
         return null;
     }
+#pragma warning restore SA1116 // Split parameters should start on line after declaration
 }

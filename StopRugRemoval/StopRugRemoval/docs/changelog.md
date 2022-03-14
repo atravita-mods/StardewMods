@@ -4,6 +4,10 @@
 #### ToDo
 [] Catch input to place rug under things.
 
+#### Version 1.0.4
+
+* Makes the gate message less spammy.
+
 #### Version 1.0.3
 
 * Allows outdoor rugs.

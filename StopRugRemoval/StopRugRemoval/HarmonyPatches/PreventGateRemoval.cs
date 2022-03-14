@@ -1,5 +1,4 @@
-﻿
-using System.Reflection;
+﻿using System.Reflection;
 using System.Reflection.Emit;
 using AtraBase.Toolkit.Reflection;
 using AtraShared.Utils.HarmonyHelper;
@@ -12,18 +11,32 @@ namespace StopRugRemoval.HarmonyPatches;
 [HarmonyPatch(typeof(GameLocation))]
 internal static class PreventGateRemoval
 {
+
+    private static int attempts = 0;
+    private static int ticks = 0;
+
     public static bool AreFurnitureKeysHeld(GameLocation gameLocation, Location tile)
     {
-        if (ModEntry.Config.FurniturePlacementKey.IsDown())
+        if (Game1.ticks > ticks + 120)
+        {
+            attempts = 0;
+            ticks = Game1.ticks;
+        }
+        else
+        {
+            attempts++;
+        }
+        if (ModEntry.Config.FurniturePlacementKey.IsDown() || !ModEntry.Config.Enabled)
         {
             return true;
         }
         else
         {
             Vector2 v = new(tile.X, tile.Y);
-            if (gameLocation.objects.TryGetValue(v, out SObject obj) && obj is Fence fence && fence.isGate.Value)
+            if (attempts > 12 && gameLocation.objects.TryGetValue(v, out SObject obj) && obj is Fence fence && fence.isGate.Value)
             {
-                Game1.showRedMessage($"Hold down {ModEntry.Config.FurniturePlacementKey} to remove gates easily");
+                attempts -= 5;
+                Game1.showRedMessage(I18n.GateRemovalMessage(ModEntry.Config.FurniturePlacementKey));
             }
             return false;
         }
@@ -31,9 +44,9 @@ internal static class PreventGateRemoval
 
     /**********************
     * if (vect.Equals(who.getTileLocation()) && !this.objects[vect].isPassable())
-    * 
+    *
     * to
-    * 
+    *
     * if (AreFurnitureKeysHeld() && vect.Equals(who.getTileLocation()) && !this.objects[vect].isPassable())
     ********************************************/
     [HarmonyPatch(nameof(GameLocation.checkAction))]
@@ -78,8 +91,7 @@ internal static class PreventGateRemoval
                         new(OpCodes.Call, typeof(PreventGateRemoval).StaticMethodNamed(nameof(PreventGateRemoval.AreFurnitureKeysHeld))),
                         new(OpCodes.Brfalse, newLabel),
                     },
-                    withLabels: labels.ToArray())
-                .Print();
+                    withLabels: labels.ToArray());
             return helper.Render();
         }
         catch (Exception ex)

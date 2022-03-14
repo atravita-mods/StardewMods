@@ -103,17 +103,9 @@ public class ILHelper
     /// </summary>
     public CodeInstruction CurrentInstruction
     {
-        get
-        {
-            return this.Codes[this.Pointer];
-        }
-
-        private set
-        {
-            this.Codes[this.Pointer] = value;
-        }
+        get => this.Codes[this.Pointer];
+        private set => this.Codes[this.Pointer] = value;
     }
-
 
     /// <summary>
     /// Gets the logger for this instance.
@@ -194,7 +186,7 @@ public class ILHelper
     /// </summary>
     /// <param name="instructions">Instructions to search for.</param>
     /// <param name="startindex">Index to start searching at (inclusive).</param>
-    /// <param name="intendedendindex">Index to end search (exclusive). Null for "end of instruction list"</param>
+    /// <param name="intendedendindex">Index to end search (exclusive). Null for "end of instruction list".</param>
     /// <returns>this.</returns>
     /// <exception cref="ArgumentException">Startindex or Endindex are invalid.</exception>
     /// <exception cref="IndexOutOfRangeException">No match found.</exception>
@@ -235,10 +227,7 @@ public class ILHelper
     /// <exception cref="ArgumentException">Fewer codes remain than the length of the instructions to search for.</exception>
     /// <exception cref="IndexOutOfRangeException">No match found.</exception>
     public ILHelper FindNext(CodeInstructionWrapper[] instructions)
-    {
-        this.FindFirst(instructions, this.Pointer + 1, this.Codes.Count);
-        return this;
-    }
+        => this.FindFirst(instructions, this.Pointer + 1, this.Codes.Count);
 
     /// <summary>
     /// Finds the last occurrence of the following pattern between the indexes given.
@@ -286,10 +275,7 @@ public class ILHelper
     /// <exception cref="ArgumentException">Fewer codes remain than the length of the instructions to search for.</exception>
     /// <exception cref="IndexOutOfRangeException">No match found.</exception>
     public ILHelper FindPrev(CodeInstructionWrapper[] instructions)
-    {
-        this.FindLast(instructions, 0, this.Pointer);
-        return this;
-    }
+        => this.FindLast(instructions, 0, this.Pointer);
 
     /// <summary>
     /// Inserts the following code instructions at this location.
@@ -357,6 +343,12 @@ public class ILHelper
         return this;
     }
 
+    /// <summary>
+    /// Removes instructions, up to and including the match pattern.
+    /// </summary>
+    /// <param name="instructions">List of instructions to search for.</param>
+    /// <returns>this.</returns>
+    /// <exception cref="InvalidOperationException">Attempted to remove an important label, stopping.</exception>
     public ILHelper RemoveIncluding(CodeInstructionWrapper[] instructions)
     {
         this.Push();
@@ -367,22 +359,30 @@ public class ILHelper
         return this;
     }
 
-    public ILHelper ReplaceInstruction(CodeInstruction instruction, Label[]? withLabels = null)
+    /// <summary>
+    /// Replace the current instruction with the given instruction.
+    /// </summary>
+    /// <param name="instruction">Instruction to replace.</param>
+    /// <param name="withLabels">Labels to attach, if any.</param>
+    /// <param name="keepLabels">Whether or not to keep the original labels. Default: true.</param>
+    /// <returns>this.</returns>
+    public ILHelper ReplaceInstruction(CodeInstruction instruction, Label[] withLabels, bool keepLabels = true)
     {
-        this.CurrentInstruction = instruction;
-        if (withLabels is not null)
+        if (keepLabels)
         {
-            this.CurrentInstruction.labels.AddRange(withLabels);
+            instruction.labels.AddRange(this.CurrentInstruction.labels);
         }
+        this.CurrentInstruction = instruction;
+        this.CurrentInstruction.labels.AddRange(withLabels);
         return this;
     }
 
-    public ILHelper ReplaceInstruction(OpCode opcode, object operand, Label[]? withLabels = null)
+    public ILHelper ReplaceInstruction(OpCode opcode, object operand, Label[] withLabels, bool keepLabels = true)
     {
-        return this.ReplaceInstruction(new CodeInstruction(opcode, operand));
+        return this.ReplaceInstruction(new CodeInstruction(opcode, operand), withLabels, keepLabels);
     }
 
-    public ILHelper ReplaceInstruction(CodeInstruction instruction, bool keepLabels)
+    public ILHelper ReplaceInstruction(CodeInstruction instruction, bool keepLabels = true)
     {
         if (keepLabels)
         {
@@ -392,7 +392,7 @@ public class ILHelper
         return this;
     }
 
-    public ILHelper ReplaceInstruction(OpCode opcode, object operand, bool keepLabels)
+    public ILHelper ReplaceInstruction(OpCode opcode, object operand, bool keepLabels = true)
     {
         return this.ReplaceInstruction(new CodeInstruction(opcode, operand), keepLabels);
     }

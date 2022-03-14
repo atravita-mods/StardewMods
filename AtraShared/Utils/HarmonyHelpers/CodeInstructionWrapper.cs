@@ -82,7 +82,10 @@ public class CodeInstructionWrapper
             this.specialInstructionCase = specialcase;
             this.argumentPos = argument;
         }
-        throw new ArgumentException("Argument position can only be used with LdArg or StArg");
+        else
+        {
+            throw new ArgumentException("Argument position can only be used with LdArg or StArg");
+        }
     }
 
     public CodeInstructionWrapper(SpecialCodeInstructionCases specialcase, LocalVariableInfo local)
@@ -92,7 +95,10 @@ public class CodeInstructionWrapper
             this.specialInstructionCase = specialcase;
             this.local = local;
         }
-        throw new ArgumentException("Localbuilders can only be used with LdLoc or StLoc");
+        else
+        {
+            throw new ArgumentException("Localbuilders can only be used with LdLoc or StLoc");
+        }
     }
 
     public CodeInstructionWrapper(SpecialCodeInstructionCases specialcase, Type localType)
@@ -102,7 +108,10 @@ public class CodeInstructionWrapper
             this.specialInstructionCase = specialcase;
             this.localType = localType;
         }
-        throw new ArgumentException("Matching by type can only be used with LdLoc or StLoc");
+        else
+        {
+            throw new ArgumentException("Matching by type can only be used with LdLoc or StLoc");
+        }
     }
 
     /// <summary>

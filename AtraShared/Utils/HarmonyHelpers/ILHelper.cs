@@ -6,6 +6,7 @@
 
 // TODO: AssertIs?
 // Label stuff?
+// MAKE SURE THE LABEL COUNTS ARE RIGHT. Inserting codes should add to the Important Labels! Check **any time** labels are removed.
 
 using System.Diagnostics;
 using System.Reflection;
@@ -283,12 +284,19 @@ public class ILHelper
     /// <param name="instructions">Instructions to insert.</param>
     /// <param name="withLabels">Labels to attach to the first instruction.</param>
     /// <returns>this.</returns>
-    public ILHelper Insert(CodeInstruction[] instructions, Label[]? withLabels = null)
+    public ILHelper Insert(CodeInstruction[] instructions, IList<Label>? withLabels = null)
     {
         this.Codes.InsertRange(this.Pointer, instructions);
         if (withLabels is not null)
         {
             this.CurrentInstruction.labels.AddRange(withLabels);
+        }
+        foreach (CodeInstruction instruction in instructions)
+        {
+            if (instruction.Branches(out Label? label))
+            {
+                this.importantLabels[label!.Value]++;
+            }
         }
         this.Pointer += instructions.Length;
         return this;
@@ -368,11 +376,7 @@ public class ILHelper
     /// <returns>this.</returns>
     public ILHelper ReplaceInstruction(CodeInstruction instruction, Label[] withLabels, bool keepLabels = true)
     {
-        if (keepLabels)
-        {
-            instruction.labels.AddRange(this.CurrentInstruction.labels);
-        }
-        this.CurrentInstruction = instruction;
+        this.ReplaceInstruction(instruction, keepLabels);
         this.CurrentInstruction.labels.AddRange(withLabels);
         return this;
     }
@@ -387,6 +391,24 @@ public class ILHelper
         if (keepLabels)
         {
             instruction.labels.AddRange(this.CurrentInstruction.labels);
+        }
+        else
+        {
+            this.importantLabels.RemoveZeros();
+            if (this.CurrentInstruction.labels.Intersect(this.importantLabels.Keys).Any())
+            {
+                StringBuilder sb = new();
+                sb.Append("Attempted to remove an important label!\n\nThis code's labels: ")
+                    .AppendJoin(", ", this.CurrentInstruction.labels.Select(l => l.ToString()))
+                    .AppendLine().Append("Important labels: ")
+                    .AppendJoin(", ", this.importantLabels.Select(l => l.ToString()));
+                this.Monitor.Log(sb.ToString(), LogLevel.Error);
+                throw new InvalidOperationException();
+            }
+        }
+        if (instruction.Branches(out Label? label))
+        {
+            this.importantLabels[label!.Value]++;
         }
         this.CurrentInstruction = instruction;
         return this;
@@ -417,6 +439,13 @@ public class ILHelper
         return this.GrabBranchDest(out this.label);
     }
 
+    /// <summary>
+    /// Gets the labels from a certain instruction. (Primarily used for moving labels).
+    /// </summary>
+    /// <param name="labels">out labels.</param>
+    /// <param name="clear">whether or not to clear the labels.</param>
+    /// <returns>this.</returns>
+    /// <remarks>DOES NOT CHECK LABELS! YOU SHOULD PROBABLY PUT THEM BACK SOMEWHERE if cleared.</remarks>
     public ILHelper GetLabels(out IList<Label> labels, bool clear = false)
     {
         labels = this.CurrentInstruction.labels.ToList();

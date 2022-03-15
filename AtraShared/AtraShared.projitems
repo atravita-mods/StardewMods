@@ -19,6 +19,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)MigrationManager\MigrationManager.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Schedules\DataModels\SchedulePoint.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Schedules\ScheduleUtilityFunctions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Utils\Extensions\GameLocationExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Utils\Extensions\HarmonyExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Utils\Extensions\LogExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Utils\Extensions\ModDataExtensions.cs" />

@@ -108,7 +108,7 @@ internal static class PreventGateRemoval
                         new(OpCodes.Call, typeof(PreventGateRemoval).StaticMethodNamed(nameof(PreventGateRemoval.AreFurnitureKeysHeld))),
                         new(OpCodes.Brfalse, newLabel),
                     },
-                    withLabels: labels.ToArray());
+                    withLabels: labels);
             return helper.Render();
         }
         catch (Exception ex)

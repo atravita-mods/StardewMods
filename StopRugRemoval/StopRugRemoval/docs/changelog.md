@@ -10,6 +10,7 @@
 
 * Allows placement of grass under things.
 * Bomb confirm: Bombs placed in "non dangerous" areas will ask for a confirmation first. Definitely safe areas: farm, greenhouse, town and Ginger Island farm. Definitely unsafe areas: mines, skull caverns, and volcano dungeon. Everywhere else is unsafe if there's a single monster on the map. (Configurable)
+* Fix splitscreen issues.
 
 #### Version 1.0.4
 

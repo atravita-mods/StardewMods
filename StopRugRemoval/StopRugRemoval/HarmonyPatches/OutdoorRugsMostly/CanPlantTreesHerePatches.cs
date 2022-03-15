@@ -16,11 +16,11 @@ internal static class CanPlantTreesHerePatches
     /// </summary>
     /// <returns>Methods to patch.</returns>
     [UsedImplicitly]
-    public static IEnumerable<MethodBase> TargetMethods()
+    internal static IEnumerable<MethodBase> TargetMethods()
     {
         foreach (Type type in typeof(GameLocation).GetAssignableTypes(publiconly: true, includeAbstract: false))
         {
-            if (AccessTools.Method(type, nameof(GameLocation.CanPlantTreesHere), new Type[] { typeof(int), typeof(int), typeof(int) }) is MethodBase method
+            if (type.DeclaredInstanceMethodNamedOrNull(nameof(GameLocation.CanPlantTreesHere), new Type[] { typeof(int), typeof(int), typeof(int) }) is MethodBase method
                 && method.DeclaringType == type)
             {
                 yield return method;
@@ -37,7 +37,7 @@ internal static class CanPlantTreesHerePatches
     /// <param name="__result">Result to replace the original with.</param>
     /// <returns>True to continue to original, false to skip.</returns>
     [SuppressMessage("StyleCop", "SA1313", Justification = "Style prefered by Harmony")]
-    public static bool Prefix(GameLocation __instance, int tile_x, int tile_y, ref bool __result)
+    internal static bool Prefix(GameLocation __instance, int tile_x, int tile_y, ref bool __result)
     {
         try
         {

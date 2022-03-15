@@ -12,8 +12,10 @@
   "PreventPlantingOnRugs.description": "Prevents hoeing on rugs and planting saplings on rugs.",
   "PlaceGrassUnder.title": "Place Grass Under",
   "PlaceGrassUnder.description": "Allow placing grass under other objects",
-  "ConfirmBomb.title": "Confirm Bombs",
-  "ConfirmBomb.dsecription":  "Require bomb placement be confirmed in 'safe' areas.",
+  "ConfirmBombs.title": "Confirm Bombs",
+  "ConfirmBombs.dsecription": "Require bomb placement be confirmed in 'safe' areas, like the farm and greenhouse.",
+  "JukeboxesEverywhere.title": "Jukeboxes Everywhere",
+  "JukeboxesEverywhere.description": "Allows jukeboxes to be played anywhere!",
 
   "FurniturePlacementKey.title": "Furniture Placement Key",
   "FurniturePlacementKey.description": "The keybind used to allow objects to be removed from tables.",
@@ -29,8 +31,8 @@
   "GmcmVersionMessage": "Please update Generic Mod Config Menu (https://www.nexusmods.com/stardewvalley/mods/5098) to at least version {{version}} (Current version: {{currentversion}}). GMCM integration disabled.",
 
   // Confirm bombs?
-  "ConfirmBombs":  "Place bomb?",
-  "Yes": "Yes",
+  "ConfirmBombs": "Place bomb?",
+  "Yes": "Yes (one)",
   "YesArea": "Yes (for this map)",
-  "No": "No",
+  "No": "No"
 }

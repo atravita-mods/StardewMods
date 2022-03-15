@@ -1,8 +1,8 @@
 ﻿using AtraShared.Utils.Extensions;
 using HarmonyLib;
 using Microsoft.Xna.Framework;
-using StardewModdingAPI.Utilities;
 using StardewValley.Objects;
+using StopRugRemoval.HarmonyPatches.BombHandling;
 
 namespace StopRugRemoval.HarmonyPatches;
 
@@ -12,10 +12,6 @@ namespace StopRugRemoval.HarmonyPatches;
 [HarmonyPatch(typeof(SObject))]
 internal static class SObjectPatches
 {
-    internal static readonly PerScreen<bool> HaveConfirmed = new(createNewState: () => false);
-    internal static readonly PerScreen<Vector2> BombLocation = new(createNewState: () => Vector2.Zero);
-    internal static readonly PerScreen<int> whichBomb = new(createNewState: () => 0);
-
     /// <summary>
     /// Prefix to prevent planting of wild trees on rugs.
     /// </summary>
@@ -79,7 +75,7 @@ internal static class SObjectPatches
                     }
                 }
             }
-            if (!HaveConfirmed.Value && ModEntry.Config.ConfirmBombs
+            if (!ConfirmBomb.HaveConfirmed.Value && ModEntry.Config.ConfirmBombs
                 && !__instance.bigCraftable.Value && __instance is not Furniture
                 && __instance.ParentSheetIndex is 286 or 287 or 288
                 && !location.IsDangerousLocation())
@@ -103,8 +99,8 @@ internal static class SObjectPatches
                 };
 
                 location.createQuestionDialogue(I18n.ConfirmBombs(), responses, "atravitaInteractionTweaksBombs");
-                BombLocation.Value = loc;
-                whichBomb.Value = __instance.ParentSheetIndex;
+                ConfirmBomb.BombLocation.Value = loc;
+                ConfirmBomb.WhichBomb.Value = __instance.ParentSheetIndex;
                 __result = false;
                 return false;
             }

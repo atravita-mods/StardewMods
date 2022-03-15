@@ -1,12 +1,11 @@
 ﻿using System.Reflection;
-using AtraBase.Toolkit.Reflection;
 using AtraShared.Integrations;
 using AtraShared.MigrationManager;
 using AtraShared.Utils.Extensions;
 using HarmonyLib;
 using StardewModdingAPI.Events;
 using StardewModdingAPI.Utilities;
-using StopRugRemoval.HarmonyPatches;
+using StopRugRemoval.HarmonyPatches.BombHandling;
 
 namespace StopRugRemoval;
 
@@ -19,7 +18,7 @@ public class ModEntry : Mod
 
     private static readonly Lazy<IReflectedField<Multiplayer>> multiplayer = new(() => ReflectionHelper!.GetField<Multiplayer>(typeof(Game1), "multiplayer"));
 
-    internal static Multiplayer MultiPlayer => multiplayer.Value.GetValue();
+    internal static Multiplayer Multiplayer => multiplayer.Value.GetValue();
 
     // the following two properties are set in the entry method, which is approximately as close as I can get to the constructor anyways.
 #pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
@@ -60,7 +59,7 @@ public class ModEntry : Mod
     }
 
     private void Player_Warped(object? sender, WarpedEventArgs e)
-        => SObjectPatches.HaveConfirmed.Value = false;
+        => ConfirmBomb.HaveConfirmed.Value = false;
 
     /// <summary>
     /// Applies and logs this mod's harmony patches.

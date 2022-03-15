@@ -2,6 +2,7 @@
 using AtraBase.Toolkit.Reflection;
 using HarmonyLib;
 using Microsoft.Xna.Framework;
+using StardewValley.Objects;
 using StardewValley.TerrainFeatures;
 
 namespace StopRugRemoval.HarmonyPatches;
@@ -20,7 +21,8 @@ internal class PlantGrassUnder
     {
         foreach (Type t in typeof(SObject).GetAssignableTypes(publiconly: true, includeAbstract: false))
         {
-            if (AccessTools.Method(t, nameof(SObject.performObjectDropInAction), new Type[] { typeof(Item), typeof(bool), typeof(Farmer) }) is MethodBase method
+            if (t != typeof(CrabPot) // does not make sense to place under crab pots.
+                && t.DeclaredInstanceMethodNamedOrNull(nameof(SObject.performObjectDropInAction), new Type[] { typeof(Item), typeof(bool), typeof(Farmer) }) is MethodBase method
                 && method.DeclaringType == t)
             {
                 yield return method;

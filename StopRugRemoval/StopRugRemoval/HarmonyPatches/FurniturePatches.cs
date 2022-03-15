@@ -1,5 +1,6 @@
 ﻿using HarmonyLib;
 using Microsoft.Xna.Framework;
+using StardewValley.BellsAndWhistles;
 using StardewValley.Objects;
 using StardewValley.TerrainFeatures;
 
@@ -112,12 +113,11 @@ internal class FurniturePatches
         {
             if (!ModEntry.Config.Enabled
                 || !ModEntry.Config.PreventRemovalFromTable
-                || ModEntry.Config.FurniturePlacementKey.IsDown()
-                || __instance.furniture_type.Value != Furniture.table)
+                || ModEntry.Config.FurniturePlacementKey.IsDown())
             {
                 return true;
             }
-            else
+            if (__instance.furniture_type.Value == Furniture.table)
             {
                 if (Game1.ticks > ticks + 60)
                 {
@@ -127,6 +127,14 @@ internal class FurniturePatches
                 __result = false;
                 return false;
             }
+            else if (__instance.ParentSheetIndex == 1971 && who.currentLocation is GameLocation loc)
+            {
+                // clicked on a butterfly hutch!
+                Vector2 v = new(Game1.random.Next(-2, 4), Game1.random.Next(-1, 1));
+                loc.instantiateCrittersList();
+                loc.addCritter(new Butterfly(__instance.TileLocation + v).setStayInbounds(stayInbounds: true));
+            }
+            return true;
         }
         catch (Exception ex)
         {

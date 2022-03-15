@@ -9,25 +9,18 @@ using StardewValley.Locations;
 
 namespace StopRugRemoval.HarmonyPatches.Beverages;
 
+/// <summary>
+/// Replaces the coffee at the night market with a random beverage.
+/// </summary>
 [HarmonyPatch(typeof(BeachNightMarket))]
 internal static class ReplaceBeverage
 {
     private static readonly Lazy<List<int>> LazyBeverages = new(GetBeverageIDs);
 
-    public static List<int> GetBeverageIDs()
-    {
-        List<int> beverageIds = new();
-        foreach ((int key, string value) in Game1.objectInformation)
-        {
-            string[] splitvals = value.Split('/');
-            if (splitvals.Length > 6 && splitvals[6].Contains("drink", StringComparison.OrdinalIgnoreCase))
-            {
-                beverageIds.Add(key);
-            }
-        }
-        return beverageIds;
-    }
-
+    /// <summary>
+    /// Gets the item ID of a random beverage.
+    /// </summary>
+    /// <returns>int ID of beverage.</returns>
     public static int GetRandomBeverageId()
     {
         return Utility.GetRandom(LazyBeverages.Value);
@@ -55,6 +48,20 @@ internal static class ReplaceBeverage
             ModEntry.ModMonitor.Log($"Transpiler for Night Market Beverages failed with error {ex}", LogLevel.Error);
         }
         return null;
+    }
+
+    private static List<int> GetBeverageIDs()
+    {
+        List<int> beverageIds = new();
+        foreach ((int key, string value) in Game1.objectInformation)
+        {
+            string[] splitvals = value.Split('/');
+            if (splitvals.Length > 6 && splitvals[6].Contains("drink", StringComparison.OrdinalIgnoreCase))
+            {
+                beverageIds.Add(key);
+            }
+        }
+        return beverageIds;
     }
 }
 #endif

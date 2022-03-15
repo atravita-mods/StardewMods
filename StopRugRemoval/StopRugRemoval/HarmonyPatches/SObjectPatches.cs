@@ -1,5 +1,7 @@
-﻿using HarmonyLib;
+﻿using AtraShared.Utils.Extensions;
+using HarmonyLib;
 using Microsoft.Xna.Framework;
+using StardewModdingAPI.Utilities;
 using StardewValley.Objects;
 
 namespace StopRugRemoval.HarmonyPatches;
@@ -8,8 +10,12 @@ namespace StopRugRemoval.HarmonyPatches;
 /// Patches against SObject.
 /// </summary>
 [HarmonyPatch(typeof(SObject))]
-internal class SObjectPatches
+internal static class SObjectPatches
 {
+    internal static readonly PerScreen<bool> HaveConfirmed = new(createNewState: () => false);
+    internal static readonly PerScreen<Vector2> BombLocation = new(createNewState: () => Vector2.Zero);
+    internal static readonly PerScreen<int> whichBomb = new(createNewState: () => 0);
+
     /// <summary>
     /// Prefix to prevent planting of wild trees on rugs.
     /// </summary>
@@ -72,6 +78,35 @@ internal class SObjectPatches
                         return false;
                     }
                 }
+            }
+            if (!HaveConfirmed.Value && ModEntry.Config.ConfirmBombs
+                && !__instance.bigCraftable.Value && __instance is not Furniture
+                && __instance.ParentSheetIndex is 286 or 287 or 288
+                && !location.IsDangerousLocation())
+            {
+                // handle the case where a bomb has already been placed?
+                Vector2 loc = new(x, y);
+                foreach (TemporaryAnimatedSprite tas in location.temporarySprites)
+                {
+                    if (tas.position.Equals(loc))
+                    {
+                        __result = false;
+                        return false;
+                    }
+                }
+
+                Response[] responses = new Response[]
+                {
+                    new Response("BombsYes", I18n.Yes()),
+                    new Response("BombsArea", I18n.YesArea()),
+                    new Response("BombsNo", I18n.No()),
+                };
+
+                location.createQuestionDialogue(I18n.ConfirmBombs(), responses, "atravitaInteractionTweaksBombs");
+                BombLocation.Value = loc;
+                whichBomb.Value = __instance.ParentSheetIndex;
+                __result = false;
+                return false;
             }
         }
         catch (Exception ex)

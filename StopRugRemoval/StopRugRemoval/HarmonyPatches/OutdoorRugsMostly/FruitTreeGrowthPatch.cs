@@ -6,7 +6,7 @@ using HarmonyLib;
 using StardewValley.Objects;
 using StardewValley.TerrainFeatures;
 
-namespace StopRugRemoval.HarmonyPatches;
+namespace StopRugRemoval.HarmonyPatches.OutdoorRugsMostly;
 
 /// <summary>
 /// Patches against fruit trees to allow for growth near rugs.

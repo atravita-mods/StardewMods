@@ -22,6 +22,11 @@ public class ModConfig
     /// Gets or sets a value indicating whether whether or not I should be able to place rugs under things.
     /// </summary>
     public bool CanPlaceRugsUnder { get; set; } = true;
+
+    /// <summary>
+    /// Gets or sets a value indicating whether or not bombs should be confirmed.
+    /// </summary>
+    public bool ConfirmBombs { get; set; } = true;
 #endif
 
     /// <summary>

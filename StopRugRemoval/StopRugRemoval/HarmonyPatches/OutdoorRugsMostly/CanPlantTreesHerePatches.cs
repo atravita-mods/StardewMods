@@ -3,7 +3,7 @@ using AtraBase.Toolkit.Reflection;
 using HarmonyLib;
 using StardewValley.Objects;
 
-namespace StopRugRemoval.HarmonyPatches;
+namespace StopRugRemoval.HarmonyPatches.OutdoorRugsMostly;
 
 /// <summary>
 /// I think this prevents the cursor from turning green when trying to place a tree on a rug.

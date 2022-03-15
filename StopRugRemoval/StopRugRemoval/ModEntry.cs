@@ -1,10 +1,12 @@
 ﻿using System.Reflection;
+using AtraBase.Toolkit.Reflection;
 using AtraShared.Integrations;
 using AtraShared.MigrationManager;
 using AtraShared.Utils.Extensions;
 using HarmonyLib;
 using StardewModdingAPI.Events;
 using StardewModdingAPI.Utilities;
+using StopRugRemoval.HarmonyPatches;
 
 namespace StopRugRemoval;
 
@@ -15,17 +17,23 @@ public class ModEntry : Mod
 {
     private MigrationManager? migrator;
 
+    private static readonly Lazy<IReflectedField<Multiplayer>> multiplayer = new(() => ReflectionHelper!.GetField<Multiplayer>(typeof(Game1), "multiplayer"));
+
+    internal static Multiplayer MultiPlayer => multiplayer.Value.GetValue();
+
     // the following two properties are set in the entry method, which is approximately as close as I can get to the constructor anyways.
 #pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
     /// <summary>
     /// Gets the logger for this file.
     /// </summary>
-    public static IMonitor ModMonitor { get; private set; }
+    internal static IMonitor ModMonitor { get; private set; }
 
     /// <summary>
     /// Gets instance that holds the configuration for this mod.
     /// </summary>
-    public static ModConfig Config { get; private set; }
+    internal static ModConfig Config { get; private set; }
+
+    internal static IReflectionHelper ReflectionHelper { get; private set; }
 #pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
 
     /// <inheritdoc/>
@@ -33,6 +41,7 @@ public class ModEntry : Mod
     {
         I18n.Init(helper.Translation);
         ModMonitor = this.Monitor;
+        ReflectionHelper = this.Helper.Reflection;
         try
         {
             Config = this.Helper.ReadConfig<ModConfig>();
@@ -45,9 +54,13 @@ public class ModEntry : Mod
 
         helper.Events.GameLoop.GameLaunched += this.SetUpConfig;
         helper.Events.GameLoop.SaveLoaded += this.SaveLoaded;
+        helper.Events.Player.Warped += this.Player_Warped;
 
         this.ApplyPatches(new Harmony(this.ModManifest.UniqueID));
     }
+
+    private void Player_Warped(object? sender, WarpedEventArgs e)
+        => SObjectPatches.HaveConfirmed.Value = false;
 
     /// <summary>
     /// Applies and logs this mod's harmony patches.

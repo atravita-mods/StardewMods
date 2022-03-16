@@ -29,6 +29,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Utils\GameLocationUtils.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Utils\HarmonyHelpers\CodeInstructionWrapper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Utils\HarmonyHelpers\ILHelper.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Utils\MultiplayerHelpers.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Utils\Utils.cs" />
   </ItemGroup>
   <ItemGroup>

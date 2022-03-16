@@ -96,7 +96,7 @@ public static class NPCExtensions
     {
         rawData = null;
         Dictionary<string, string> scheduleData = npc.getMasterScheduleRawData();
-        if (scheduleData is null)
+        if (scheduleData is null || scheduleKey is null)
         {
             return false;
         }

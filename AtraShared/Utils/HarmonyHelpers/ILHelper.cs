@@ -382,9 +382,7 @@ public class ILHelper
     }
 
     public ILHelper ReplaceInstruction(OpCode opcode, object operand, Label[] withLabels, bool keepLabels = true)
-    {
-        return this.ReplaceInstruction(new CodeInstruction(opcode, operand), withLabels, keepLabels);
-    }
+        => this.ReplaceInstruction(new CodeInstruction(opcode, operand), withLabels, keepLabels);
 
     public ILHelper ReplaceInstruction(CodeInstruction instruction, bool keepLabels = true)
     {
@@ -394,6 +392,10 @@ public class ILHelper
         }
         else
         {
+            if (this.CurrentInstruction.Branches(out Label? currlabel))
+            {
+                this.importantLabels[currlabel!.Value]--;
+            }
             this.importantLabels.RemoveZeros();
             if (this.CurrentInstruction.labels.Intersect(this.importantLabels.Keys).Any())
             {
@@ -421,10 +423,25 @@ public class ILHelper
 
     public ILHelper ReplaceOperand(object operand)
     {
+        if (this.CurrentInstruction.Branches(out Label? label))
+        {
+            this.importantLabels[label!.Value]--;
+        }
+        if (operand is Label newlabel)
+        {
+            this.importantLabels[newlabel]++;
+        }
+        this.importantLabels.RemoveZeros();
         this.CurrentInstruction.operand = operand;
         return this;
     }
 
+    /// <summary>
+    /// Grab branch destination.
+    /// </summary>
+    /// <param name="label">Label branches to.</param>
+    /// <returns>this.</returns>
+    /// <exception cref="InvalidOperationException">Attempted to call this not on a branch.</exception>
     public ILHelper GrabBranchDest(out Label? label)
     {
         if (!this.CurrentInstruction.Branches(out label))
@@ -434,10 +451,12 @@ public class ILHelper
         return this;
     }
 
+    /// <summary>
+    /// When called on a branch, stores the label branched to.
+    /// </summary>
+    /// <returns>this.</returns>
     public ILHelper StoreBranchDest()
-    {
-        return this.GrabBranchDest(out this.label);
-    }
+        => this.GrabBranchDest(out this.label);
 
     /// <summary>
     /// Gets the labels from a certain instruction. (Primarily used for moving labels).
@@ -469,9 +488,23 @@ public class ILHelper
         return this;
     }
 
-    public ILHelper AdvanceToLabel(Label label)
+    /// <summary>
+    /// Finds the first usage of a label in the following section.
+    /// </summary>
+    /// <param name="label">Label to search for.</param>
+    /// <param name="startindex">Index to start searching at (inclusive).</param>
+    /// <param name="intendedendindex">Index to end search (exclusive). Leave null to mean "last code".</param>
+    /// <returns>this.</returns>
+    /// <exception cref="ArgumentException">Startindex or Endindex are invalid.</exception>
+    /// <exception cref="IndexOutOfRangeException">No match found.</exception>
+    public ILHelper FindFirstLabel(Label label, int startindex, int? intendedendindex = null)
     {
-        for (int i = this.Pointer; i < this.Codes.Count; i++)
+        int endindex = intendedendindex ?? this.Codes.Count;
+        if (startindex >= endindex || startindex < 0 || endindex > this.Codes.Count)
+        {
+            throw new ArgumentException($"Either startindex {startindex} or endindex {endindex} are invalid. ");
+        }
+        for (int i = startindex; i < endindex; i++)
         {
             if (this.Codes[i].labels.Contains(label))
             {
@@ -479,9 +512,24 @@ public class ILHelper
                 return this;
             }
         }
-        throw new IndexOutOfRangeException($"label {label} could not be found after index {this.Pointer}");
+        throw new IndexOutOfRangeException($"label {label} could not be found between {startindex} and {endindex}");
     }
 
+    /// <summary>
+    /// Moves pointer to the label.
+    /// </summary>
+    /// <param name="label">Label to search for.</param>
+    /// <returns>this.</returns>
+    /// <exception cref="IndexOutOfRangeException">No match found.</exception>
+    public ILHelper AdvanceToLabel(Label label)
+        => this.FindFirstLabel(label, this.Pointer + 1, this.Codes.Count);
+
+    /// <summary>
+    /// Advances to the stored label.
+    /// </summary>
+    /// <returns>this.</returns>
+    /// <exception cref="InvalidOperationException">No label stored.</exception>
+    /// <exception cref="IndexOutOfRangeException">No match found.</exception>
     public ILHelper AdvanceToStoredLabel()
     {
         if (this.label is null)
@@ -489,6 +537,45 @@ public class ILHelper
             throw new InvalidOperationException("Attempted to advance to label, but there is not one stored!");
         }
         return this.AdvanceToLabel(this.label.Value);
+    }
+
+    /// <summary>
+    /// Finds the last usage of a label in the following section.
+    /// </summary>
+    /// <param name="label">Label to search for.</param>
+    /// <param name="startindex">Index to start searching at (inclusive).</param>
+    /// <param name="intendedendindex">Index to end search (exclusive). Leave null to mean "last code".</param>
+    /// <returns>this.</returns>
+    /// <exception cref="ArgumentException">Startindex or Endindex are invalid.</exception>
+    /// <exception cref="IndexOutOfRangeException">No match found.</exception>
+    public ILHelper FindLastLabel(Label label, int startindex, int? intendedendindex = null)
+    {
+        int endindex = intendedendindex ?? this.Codes.Count;
+        if (startindex >= endindex || startindex < 0 || endindex > this.Codes.Count)
+        {
+            throw new ArgumentException($"Either startindex {startindex} or endindex {endindex} are invalid. ");
+        }
+        for (int i = endindex - 1; i >= startindex; i--)
+        {
+            if (this.Codes[i].labels.Contains(label))
+            {
+                this.Pointer = i;
+                return this;
+            }
+        }
+        throw new IndexOutOfRangeException($"label {label} could not be found between {startindex} and {endindex}");
+    }
+
+    public ILHelper RetreatToLabel(Label label)
+    => this.FindLastLabel(label, 0, this.Pointer);
+
+    public ILHelper RetreatToStoredLabel()
+    {
+        if (this.label is null)
+        {
+            throw new InvalidOperationException("Attempted to advance to label, but there is not one stored!");
+        }
+        return this.RetreatToLabel(this.label.Value);
     }
 
     /// <summary>

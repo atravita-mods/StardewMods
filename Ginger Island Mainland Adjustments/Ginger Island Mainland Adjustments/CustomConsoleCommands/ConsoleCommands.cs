@@ -159,6 +159,11 @@ internal static class ConsoleCommands
         foreach (int key in keys)
         {
             SchedulePathDescription schedulePathDescription = npc.Schedule[key];
+            if (schedulePathDescription is null)
+            {
+                Globals.ModMonitor.Log("Found a null schedule description?", LogLevel.Error);
+                continue;
+            }
             int expectedRouteTime = schedulePathDescription.GetExpectedRouteTime();
             sb.Append('\t').Append(key).Append(": ");
             sb.AppendJoin(", ", schedulePathDescription.route).AppendLine();

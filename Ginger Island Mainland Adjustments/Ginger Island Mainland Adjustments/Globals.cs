@@ -16,6 +16,11 @@ internal static class Globals
 #pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
 
     /// <summary>
+    /// Gets this mod's manifest.
+    /// </summary>
+    internal static IManifest Manifest { get; private set; }
+
+    /// <summary>
     /// Gets SMAPI's logging service.
     /// </summary>
     internal static IMonitor ModMonitor { get; private set; }
@@ -74,13 +79,14 @@ internal static class Globals
     /// </summary>
     /// <param name="helper">SMAPI's IModHelper.</param>
     /// <param name="monitor">SMAPI's logging service.</param>
-    internal static void Initialize(IModHelper helper, IMonitor monitor)
+    internal static void Initialize(IModHelper helper, IMonitor monitor, IManifest manifest)
     {
         Globals.ModMonitor = monitor;
         Globals.ReflectionHelper = helper.Reflection;
         Globals.ContentHelper = helper.Content;
         Globals.ModRegistry = helper.ModRegistry;
         Globals.Helper = helper;
+        Globals.Manifest = manifest;
 
         try
         {

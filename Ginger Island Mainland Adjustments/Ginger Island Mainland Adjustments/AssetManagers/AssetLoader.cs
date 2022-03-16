@@ -108,14 +108,14 @@ public sealed class AssetLoader : IAssetLoader
         if (asset.AssetNameEquals(GroupsLocations))
         {
             Dictionary<string, string> defaultgroups = Globals.ContentHelper.Load<Dictionary<string, string>>("assets/defaultGroupings.json", ContentSource.ModFolder);
-            if (Game1.year > 2 && defaultgroups.ContainsKey("JodiFamily"))
+            if (Game1.year > 2 && defaultgroups.TryGetValue("JodiFamily", out string? val))
             {
                 Globals.ModMonitor.DebugLog($"Kent is home, adding Kent");
-                defaultgroups["JodiFamily"] += ", Kent";
+                defaultgroups["JodiFamily"] = val + ", Kent";
             }
-            if (Game1.getAllFarmers().Any((Farmer farmer) => farmer.eventsSeen.Contains(99210002)) && defaultgroups.ContainsKey("barfolk"))
+            if (defaultgroups.TryGetValue("barfolk", out string? value) && Game1.getAllFarmers().Any((Farmer farmer) => farmer.eventsSeen.Contains(99210002)))
             {
-                defaultgroups["barfolk"] += ", Pam"; // A little Pam Tries tie-in?
+                defaultgroups["barfolk"] = value + ", Pam"; // A little Pam Tries tie-in?
             }
             return (T)(object)defaultgroups;
         }
@@ -151,8 +151,7 @@ public sealed class AssetLoader : IAssetLoader
             {
                 continue;
             }
-            NPC? npc = Game1.getCharacterFromName(specialChar);
-            if (npc is not null)
+            if (Game1.getCharacterFromName(specialChar) is NPC npc)
             {
                 specialCharacters.Add(npc);
             }

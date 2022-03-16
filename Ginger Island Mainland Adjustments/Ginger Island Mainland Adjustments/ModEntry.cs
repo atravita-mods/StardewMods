@@ -4,6 +4,7 @@ using GingerIslandMainlandAdjustments.AssetManagers;
 using GingerIslandMainlandAdjustments.CustomConsoleCommands;
 using GingerIslandMainlandAdjustments.DialogueChanges;
 using GingerIslandMainlandAdjustments.Integrations;
+using GingerIslandMainlandAdjustments.MultiplayerHandler;
 using GingerIslandMainlandAdjustments.Niceties;
 using GingerIslandMainlandAdjustments.ScheduleManager;
 using HarmonyLib;
@@ -24,7 +25,7 @@ public class ModEntry : Mod
     public override void Entry(IModHelper helper)
     {
         I18n.Init(helper.Translation);
-        Globals.Initialize(helper, this.Monitor);
+        Globals.Initialize(helper, this.Monitor, this.ModManifest);
 
         ConsoleCommands.Register(this.Helper.ConsoleCommands);
 
@@ -36,20 +37,34 @@ public class ModEntry : Mod
         helper.Events.GameLoop.DayEnding += this.OnDayEnding;
         helper.Events.GameLoop.ReturnedToTitle += this.ReturnedToTitle;
         helper.Events.GameLoop.SaveLoaded += this.OnSaveLoaded;
-        helper.Events.GameLoop.Saving += this.WriteMigrationData;
         helper.Events.Input.ButtonPressed += this.OnButtonPressed;
         helper.Events.Player.Warped += this.OnPlayerWarped;
+
+        helper.Events.Multiplayer.PeerConnected += this.PeerConnected;
+        helper.Events.Multiplayer.ModMessageReceived += this.ModMessageReceived;
 
         // Add my asset loader and editor.
         helper.Content.AssetLoaders.Add(AssetLoader.Instance);
         helper.Content.AssetEditors.Add(AssetEditor.Instance);
     }
 
+    private void PeerConnected(object? sender, PeerConnectedEventArgs e)
+        => MultiplayerSharedState.ReSendMultiplayerMessage(e);
+
+    private void ModMessageReceived(object? sender, ModMessageReceivedEventArgs e)
+        => MultiplayerSharedState.UpdateFromMessage(e);
+
     private void OnSaveLoaded(object? sender, SaveLoadedEventArgs e)
     {
+        if (Context.IsSplitScreen && Context.ScreenId != 0)
+        {
+            return;
+        }
         this.migrator = new(this.ModManifest, this.Helper, this.Monitor);
         this.migrator.ReadVersionInfo();
         Globals.LoadDataFromSave();
+
+        this.Helper.Events.GameLoop.Saved += this.WriteMigrationData;
     }
 
     /// <summary>
@@ -57,14 +72,14 @@ public class ModEntry : Mod
     /// </summary>
     /// <param name="sender">Smapi thing.</param>
     /// <param name="e">Arguments for just-before-saving.</param>
-    private void WriteMigrationData(object? sender, SavingEventArgs e)
+    private void WriteMigrationData(object? sender, SavedEventArgs e)
     {
         if (this.migrator is not null)
         {
             this.migrator.SaveVersionInfo();
             this.migrator = null;
         }
-        this.Helper.Events.GameLoop.Saving -= this.WriteMigrationData;
+        this.Helper.Events.GameLoop.Saved -= this.WriteMigrationData;
     }
 
     /// <summary>
@@ -79,14 +94,13 @@ public class ModEntry : Mod
         {
             return;
         }
+        this.haveFixedSchedulesToday = false;
         MidDayScheduleEditor.Reset();
         IslandSouthPatches.ClearCache();
         GIScheduler.ClearCache();
         GIScheduler.DayEndReset();
         ConsoleCommands.ClearCache();
         ScheduleUtilities.ClearCache();
-
-        this.haveFixedSchedulesToday = false;
     }
 
     /// <summary>
@@ -107,15 +121,10 @@ public class ModEntry : Mod
         this.ClearCaches();
         NPCPatches.ResetAllFishers();
 
-        if (Context.IsSplitScreen && Context.ScreenId != 0)
-        {
-            return;
-        }
-
-        Globals.SaveCustomData();
         if (Context.IsMainPlayer)
         {
             Game1.netWorldState.Value.IslandVisitors.Clear();
+            Globals.SaveCustomData();
         }
     }
 

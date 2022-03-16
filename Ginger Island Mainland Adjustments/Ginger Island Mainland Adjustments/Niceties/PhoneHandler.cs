@@ -1,4 +1,5 @@
 ﻿using GingerIslandMainlandAdjustments.AssetManagers;
+using GingerIslandMainlandAdjustments.MultiplayerHandler;
 using HarmonyLib;
 using Microsoft.Xna.Framework.Graphics;
 using StardewModdingAPI.Utilities;
@@ -72,14 +73,12 @@ internal class PhoneHandler
                         {
                             Game1.drawDialogue(pam, Game1.content.LoadString("Strings\\Characters:Pam_Doctor"));
                         }
-                        else if (pam.dayScheduleName?.Value is null)
+                        else if (MultiplayerSharedState.PamsSchedule is null)
                         {
                             Globals.ModMonitor.Log("Something very odd has happened. Pam's dayScheduleName is null", LogLevel.Debug);
                             Game1.drawDialogue(pam, Game1.content.LoadString("Strings\\Characters:Pam_Other"));
                         }
-                        else if (pam.hasMasterScheduleEntry(pam.dayScheduleName.Value)
-                            && Globals.UtilitySchedulingFunctions.TryFindGOTOschedule(pam, SDate.Now(), pam.getMasterScheduleEntry(pam.dayScheduleName.Value), out string rawstring)
-                            && rawstring.Contains("BusStop 11 10"))
+                        else if (MultiplayerSharedState.PamsSchedule.Contains("BusStop 11 10"))
                         {
                             Game1.drawDialogue(pam, Game1.content.LoadString($"Strings\\Characters:Pam_Bus_{Game1.random.Next(1, 4)}"));
                         }
@@ -98,14 +97,12 @@ internal class PhoneHandler
                         {
                             Game1.drawDialogue(pam, Game1.content.LoadString("Strings\\Characters:Pam_Voicemail_Doctor"), Game1.temporaryContent.Load<Texture2D>("Portraits\\AnsweringMachine"));
                         }
-                        else if (pam.dayScheduleName?.Value is null)
+                        else if (MultiplayerSharedState.PamsSchedule is null)
                         {
-                            Globals.ModMonitor.Log("Something very odd has happened. Pam's dayScheduleName is null", LogLevel.Debug);
+                            Globals.ModMonitor.Log("Something very odd has happened. Pam's dayScheduleName is not found?", LogLevel.Debug);
                             Game1.drawDialogue(pam, Game1.content.LoadString("Strings\\Characters:Pam_Voicemail_Other"), Game1.temporaryContent.Load<Texture2D>("Portraits\\AnsweringMachine"));
                         }
-                        else if (pam.hasMasterScheduleEntry(pam.dayScheduleName.Value)
-                            && Globals.UtilitySchedulingFunctions.TryFindGOTOschedule(pam, SDate.Now(), pam.getMasterScheduleEntry(pam.dayScheduleName.Value), out string rawstring)
-                            && rawstring.Contains("BusStop 11 10"))
+                        else if (MultiplayerSharedState.PamsSchedule.Contains("BusStop 11 10"))
                         {
                             Game1.drawDialogue(pam, Game1.content.LoadString("Strings\\Characters:Pam_Voicemail_Bus"), Game1.temporaryContent.Load<Texture2D>("Portraits\\AnsweringMachine"));
                         }

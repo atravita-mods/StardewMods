@@ -36,16 +36,15 @@ internal static class IslandSouthPatches
     /// <summary>
     /// Clears/resets the Exclusions cache.
     /// </summary>
-    internal static void ClearCache()
-    {
-        exclusions = null;
-    }
+    internal static void ClearCache() => exclusions = null;
 
     /// <summary>
     /// Override the vanilla schedules if told to.
     /// </summary>
     /// <returns>False to skip vanilla function, true otherwise.</returns>
+    /// <remarks>Setting my harmony priority low to try to be run **after** Custom NPC Exclusions.</remarks>
     [HarmonyPrefix]
+    [HarmonyPriority(Priority.LowerThanNormal)]
     [HarmonyPatch(nameof(IslandSouth.SetupIslandSchedules))]
     private static bool OverRideSetUpIslandSchedules()
     {

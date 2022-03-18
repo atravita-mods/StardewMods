@@ -1,7 +1,18 @@
 ﻿namespace AtraShared.Utils;
 
+/// <summary>
+/// Functions to help with handling multiplayer.
+/// </summary>
 internal static class MultiplayerHelpers
 {
+    /// <summary>
+    /// Checks if the versions installed of the mod are the same for farmhands.
+    /// Prints errors to console if wrong.
+    /// </summary>
+    /// <param name="multi">Multiplayer helper.</param>
+    /// <param name="manifest">Manifest of mod.</param>
+    /// <param name="monitor">Logger.</param>
+    /// <param name="translation">Translation helper.</param>
     internal static void AssertMultiplayerVersions(IMultiplayerHelper multi, IManifest manifest, IMonitor monitor, ITranslationHelper translation)
     {
         if (Context.IsMultiplayer && !Context.IsMainPlayer && !Context.IsSplitScreen)
@@ -22,6 +33,5 @@ internal static class MultiplayerHelpers
                     LogLevel.Warn);
             }
         }
-
     }
 }

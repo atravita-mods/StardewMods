@@ -7,6 +7,8 @@
 // TODO: AssertIs?
 // Label stuff?
 // MAKE SURE THE LABEL COUNTS ARE RIGHT. Inserting codes should add to the Important Labels! Check **any time** labels are removed.
+// Insert should probably just have a pattern that moves over the labels....
+// A select & transform for all occurances of a pattern.
 
 using System.Diagnostics;
 using System.Reflection;
@@ -133,6 +135,16 @@ public class ILHelper
         return this;
     }
 
+    public ILHelper JumpTo(int index)
+    {
+        if (index < 0 || index >= this.Codes.Count)
+        {
+            throw new IndexOutOfRangeException("New location for pointer is out of bounds.");
+        }
+        this.Pointer = index;
+        return this;
+    }
+
     // Todo: Consider doing basic stack checking here.
 
     /// <summary>
@@ -151,6 +163,7 @@ public class ILHelper
     {
         StringBuilder sb = new();
         sb.Append("ILHelper for: ").AppendLine(this.Original.FullDescription());
+        sb.Append("With locals: ").AppendJoin(", ", this.locals.Values.Select((LocalVariableInfo loc) => $"{loc.LocalIndex}+{loc.LocalType.Name}"));
         for (int i = 0; i < this.Codes.Count; i++)
         {
             sb.AppendLine().Append(this.Codes[i]);
@@ -417,9 +430,7 @@ public class ILHelper
     }
 
     public ILHelper ReplaceInstruction(OpCode opcode, object operand, bool keepLabels = true)
-    {
-        return this.ReplaceInstruction(new CodeInstruction(opcode, operand), keepLabels);
-    }
+        => this.ReplaceInstruction(new CodeInstruction(opcode, operand), keepLabels);
 
     public ILHelper ReplaceOperand(object operand)
     {
@@ -481,6 +492,11 @@ public class ILHelper
         return this;
     }
 
+    /// <summary>
+    /// Defines a new label and attaches it to the current instruction.
+    /// </summary>
+    /// <param name="label">The label produced.</param>
+    /// <returns>this.</returns>
     public ILHelper DefineAndAttachLabel(out Label label)
     {
         label = this.Generator.DefineLabel();
@@ -497,12 +513,12 @@ public class ILHelper
     /// <returns>this.</returns>
     /// <exception cref="ArgumentException">Startindex or Endindex are invalid.</exception>
     /// <exception cref="IndexOutOfRangeException">No match found.</exception>
-    public ILHelper FindFirstLabel(Label label, int startindex, int? intendedendindex = null)
+    public ILHelper FindFirstLabel(Label label, int startindex = 0, int? intendedendindex = null)
     {
         int endindex = intendedendindex ?? this.Codes.Count;
         if (startindex >= endindex || startindex < 0 || endindex > this.Codes.Count)
         {
-            throw new ArgumentException($"Either startindex {startindex} or endindex {endindex} are invalid. ");
+            throw new ArgumentException($"Either startindex {startindex} or endindex {endindex} are invalid.");
         }
         for (int i = startindex; i < endindex; i++)
         {
@@ -548,12 +564,12 @@ public class ILHelper
     /// <returns>this.</returns>
     /// <exception cref="ArgumentException">Startindex or Endindex are invalid.</exception>
     /// <exception cref="IndexOutOfRangeException">No match found.</exception>
-    public ILHelper FindLastLabel(Label label, int startindex, int? intendedendindex = null)
+    public ILHelper FindLastLabel(Label label, int startindex = 0, int? intendedendindex = null)
     {
         int endindex = intendedendindex ?? this.Codes.Count;
         if (startindex >= endindex || startindex < 0 || endindex > this.Codes.Count)
         {
-            throw new ArgumentException($"Either startindex {startindex} or endindex {endindex} are invalid. ");
+            throw new ArgumentException($"Either startindex {startindex} or endindex {endindex} are invalid.");
         }
         for (int i = endindex - 1; i >= startindex; i--)
         {
@@ -567,7 +583,7 @@ public class ILHelper
     }
 
     public ILHelper RetreatToLabel(Label label)
-    => this.FindLastLabel(label, 0, this.Pointer);
+        => this.FindLastLabel(label, 0, this.Pointer);
 
     public ILHelper RetreatToStoredLabel()
     {
@@ -576,6 +592,64 @@ public class ILHelper
             throw new InvalidOperationException("Attempted to advance to label, but there is not one stored!");
         }
         return this.RetreatToLabel(this.label.Value);
+    }
+
+    // transformer should return true to continue and false to stop?
+    // and throw errors if it runs into issues.
+    // todo: consider checking the state of the stack. Transformers should match pops and pushes...
+
+    /// <summary>
+    /// For each match found, run the transformer given.
+    /// Transformer should take the helper as the sole argument and either return true (to continue matching) or false (to end).
+    /// Be careful with the pointerstack and make sure to restore it.
+    /// </summary>
+    /// <param name="instructions">Instruction set to match against.</param>
+    /// <param name="transformer">
+    /// Lambda to apply after each match. The lambda should take in the helper as the only parameter.
+    /// It can return true to continue or return false to end this command.
+    /// </param>
+    /// <param name="startindex">Index to start at.</param>
+    /// <param name="intendedendindex">Index to end search at. Leave as null to mean "end of instructions".</param>
+    /// <param name="maxCount">Maximum number of times to apply the lambda.</param>
+    /// <returns>this.</returns>
+    /// <exception cref="ArgumentException">Indexes are out of bounds.</exception>
+    public ILHelper ForEachMatch(
+        CodeInstructionWrapper[] instructions,
+        Func<ILHelper, bool> transformer,
+        int startindex = 0,
+        int? intendedendindex = null,
+        int maxCount = int.MaxValue) // if I have to repeat more than int.MaxValue times something has gone very wrong.
+    {
+        int count = 0;
+        int endindex = intendedendindex ?? this.Codes.Count;
+        if (startindex >= endindex - instructions.Length || startindex < 0 || endindex > this.Codes.Count)
+        {
+            throw new ArgumentException($"Either startindex {startindex} or endindex {endindex} are invalid. ");
+        }
+        this.Push();
+        for (int i = startindex; i < endindex; i++)
+        {
+            bool found = true;
+            for (int j = 0; j < instructions.Length; j++)
+            {
+                if (!instructions[j].Matches(this.Codes[i + j]))
+                {
+                    found = false;
+                    break;
+                }
+            }
+            if (found)
+            {
+                this.Pointer = i;
+                if (!transformer(this) || ++count >= maxCount)
+                {
+                    break;
+                }
+            }
+        }
+        this.Monitor.Log($"ForEachMatch found {count} occurances for {string.Join(", ", instructions.Select(i => i.ToString()))} for {this.Original.FullDescription()}.", LogLevel.Trace);
+        this.Pop();
+        return this;
     }
 
     /// <summary>

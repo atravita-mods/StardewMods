@@ -1,5 +1,6 @@
 ﻿using System.Globalization;
 using Microsoft.Xna.Framework;
+using StardewModdingAPI.Utilities;
 
 namespace AtraShared.Utils;
 
@@ -56,5 +57,16 @@ public static class Utils
         List<string> outputlist = enumerable.ToList();
         outputlist.Sort(StringComparer.Create(new CultureInfo(langcode), true));
         return outputlist;
+    }
+
+    public static IEnumerable<NPC> GetBirthdayNPCs(SDate day)
+    {
+        foreach (NPC npc in Utility.getAllCharacters())
+        {
+            if (npc.isBirthday(day.Season, day.Day))
+            {
+                yield return npc;
+            }
+        }
     }
 }

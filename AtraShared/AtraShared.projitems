@@ -12,6 +12,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)CustomExceptions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Integrations\GMCMHelper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Integrations\Interfaces\IContentPatcherAPI.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Integrations\Interfaces\IFlexibleSprinklerAPI.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Integrations\Interfaces\IGenericModConfigMenuAPI.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Integrations\IntegrationHelper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Integrations\Interfaces\ISpaceCoreAPI.cs" />
@@ -31,8 +32,5 @@
     <Compile Include="$(MSBuildThisFileDirectory)Utils\HarmonyHelpers\ILHelper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Utils\MultiplayerHelpers.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Utils\Utils.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="$(MSBuildThisFileDirectory)Integrations\Interfaces\" />
   </ItemGroup>
 </Project>

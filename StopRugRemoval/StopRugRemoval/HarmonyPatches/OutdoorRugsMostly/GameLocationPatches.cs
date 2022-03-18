@@ -3,7 +3,7 @@ using Microsoft.Xna.Framework;
 using StardewValley.Locations;
 using StardewValley.Objects;
 
-namespace StopRugRemoval.HarmonyPatches;
+namespace StopRugRemoval.HarmonyPatches.OutdoorRugsMostly;
 
 /// <summary>
 /// Patches on GameLocation to allow me to place rugs anywhere.

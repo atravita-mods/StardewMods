@@ -13,8 +13,19 @@ namespace StopRugRemoval.HarmonyPatches.BombHandling;
 [HarmonyPatch]
 internal static class ConfirmBomb
 {
+    /// <summary>
+    /// Saves whether or not the user has confirmed that they want to place bombs for the map.
+    /// </summary>
     internal static readonly PerScreen<bool> HaveConfirmed = new(createNewState: () => false);
+
+    /// <summary>
+    /// Saves the location the user was trying to place the bomb.
+    /// </summary>
     internal static readonly PerScreen<Vector2> BombLocation = new(createNewState: () => Vector2.Zero);
+
+    /// <summary>
+    /// Saves which bomb the user was trying to place.
+    /// </summary>
     internal static readonly PerScreen<int> WhichBomb = new(createNewState: () => 0);
 
     /// <summary>

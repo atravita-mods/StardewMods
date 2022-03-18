@@ -18,6 +18,10 @@ public class ModEntry : Mod
 
     private static readonly Lazy<IReflectedField<Multiplayer>> multiplayer = new(() => ReflectionHelper!.GetField<Multiplayer>(typeof(Game1), "multiplayer"));
 
+    /// <summary>
+    /// Gets Game1.multiplayer.
+    /// </summary>
+    /// <remarks>This still requires reflection and is likely slow.</remarks>
     internal static Multiplayer Multiplayer => multiplayer.Value.GetValue();
 
     // the following two properties are set in the entry method, which is approximately as close as I can get to the constructor anyways.

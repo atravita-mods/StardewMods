@@ -50,6 +50,11 @@ public class ModConfig
     public bool JukeboxesEverywhere { get; set; } = true;
 
     /// <summary>
+    /// Allows golden coconuts to appear off the island, if you've cracked at least one before.
+    /// </summary>
+    public bool GoldenCoconutsOffIsland { get; set; } = false;
+
+    /// <summary>
     /// Gets or sets keybind to use to remove an item from a table.
     /// </summary>
     public KeybindList FurniturePlacementKey { get; set; } = KeybindList.Parse("LeftShift + Z");

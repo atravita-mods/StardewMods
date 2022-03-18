@@ -111,13 +111,13 @@ internal class FurniturePatches
     {
         try
         {
-            if (!ModEntry.Config.Enabled
-                || !ModEntry.Config.PreventRemovalFromTable
-                || ModEntry.Config.FurniturePlacementKey.IsDown())
+            if (!ModEntry.Config.Enabled)
             {
                 return true;
             }
-            if (__instance.furniture_type.Value == Furniture.table)
+            if (__instance.furniture_type.Value == Furniture.table
+                && ModEntry.Config.PreventRemovalFromTable
+                && !ModEntry.Config.FurniturePlacementKey.IsDown())
             {
                 if (Game1.ticks > ticks + 60)
                 {

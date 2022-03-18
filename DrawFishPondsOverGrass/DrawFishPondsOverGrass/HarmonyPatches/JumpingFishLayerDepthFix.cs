@@ -6,6 +6,9 @@ using StardewValley.Buildings;
 
 namespace DrawFishPondsOverGrass.HarmonyPatches;
 
+/// <summary>
+/// Patch that handles drawing jumping fish a little forward.
+/// </summary>
 [HarmonyPatch(typeof(JumpingFish))]
 internal static class JumpingFishLayerDepthFix
 {
@@ -46,6 +49,9 @@ internal static class JumpingFishLayerDepthFix
     }
 }
 
+/// <summary>
+/// Patch that holds patches to get fish ponds fish silhouettes to draw at a good location.
+/// </summary>
 [HarmonyPatch(typeof(PondFishSilhouette))]
 internal static class PondFishLayerDepthFix
 {

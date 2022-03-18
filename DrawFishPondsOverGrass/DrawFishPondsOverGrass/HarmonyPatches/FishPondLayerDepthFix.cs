@@ -6,6 +6,9 @@ using StardewValley.Buildings;
 
 namespace DrawFishPondsOverGrass.HarmonyPatches;
 
+/// <summary>
+/// Class that holds patches against the fish pond's draw function.
+/// </summary>
 [HarmonyPatch(typeof(FishPond))]
 internal static class FishPondLayerDepthFix
 {

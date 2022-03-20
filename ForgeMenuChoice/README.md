@@ -15,6 +15,9 @@ A small note: the small enchantment choice menu wanders a bit around the screen.
 2. Download this mod and unzip it into `Stardew Valley/Mods`.
 3. Run the game using SMAPI.
 
+## Uninstall
+Simply delete the mod from your Mods directory.
+
 ## Compatibility
 
 * Works with Stardew Valley 1.5.6 on Linux/macOS/Windows.

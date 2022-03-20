@@ -52,11 +52,21 @@ public static class Utils
     /// <returns>A sorted list of strings.</returns>
     public static List<string> ContextSort(IEnumerable<string> enumerable)
     {
+        List<string> outputlist = enumerable.ToList();
+        outputlist.Sort(GetCurrentLanguageComparer(ignoreCase: true));
+        return outputlist;
+    }
+
+    /// <summary>
+    /// Returns a StringComparer for the current language the player is using.
+    /// </summary>
+    /// <param name="ignoreCase">Whether or not to ignore case.</param>
+    /// <returns>A string comparer.</returns>
+    public static StringComparer GetCurrentLanguageComparer(bool ignoreCase = false)
+    {
         LocalizedContentManager contextManager = Game1.content;
         string langcode = contextManager.LanguageCodeString(contextManager.GetCurrentLanguage());
-        List<string> outputlist = enumerable.ToList();
-        outputlist.Sort(StringComparer.Create(new CultureInfo(langcode), true));
-        return outputlist;
+        return StringComparer.Create(new CultureInfo(langcode), ignoreCase);
     }
 
     public static IEnumerable<NPC> GetBirthdayNPCs(SDate day)

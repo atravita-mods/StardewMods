@@ -9,7 +9,6 @@
 // MAKE SURE THE LABEL COUNTS ARE RIGHT. Inserting codes should add to the Important Labels! Check **any time** labels are removed.
 // Insert should probably just have a pattern that moves over the labels....
 // A select & transform for all occurances of a pattern.
-
 using System.Diagnostics;
 using System.Reflection;
 using System.Reflection.Emit;
@@ -135,6 +134,12 @@ public class ILHelper
         return this;
     }
 
+    /// <summary>
+    /// Moves the pointer to a specific index.
+    /// </summary>
+    /// <param name="index">Index to move to.</param>
+    /// <returns>this.</returns>
+    /// <exception cref="IndexOutOfRangeException">Tried to move to an invalid location.</exception>
     public ILHelper JumpTo(int index)
     {
         if (index < 0 || index >= this.Codes.Count)
@@ -397,6 +402,13 @@ public class ILHelper
     public ILHelper ReplaceInstruction(OpCode opcode, object operand, Label[] withLabels, bool keepLabels = true)
         => this.ReplaceInstruction(new CodeInstruction(opcode, operand), withLabels, keepLabels);
 
+    /// <summary>
+    /// Replaces an instruction with a different instruction.
+    /// </summary>
+    /// <param name="instruction">Instruction to replace with.</param>
+    /// <param name="keepLabels">Whether or not to keep the labels.</param>
+    /// <returns>this.</returns>
+    /// <exception cref="InvalidOperationException">Tried to remove an important label.</exception>
     public ILHelper ReplaceInstruction(CodeInstruction instruction, bool keepLabels = true)
     {
         if (keepLabels)

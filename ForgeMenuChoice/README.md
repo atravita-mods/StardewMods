@@ -7,7 +7,7 @@ This mod lets you pick your enchantment at the forge. No longer do you have to s
 
 Much thanks to Khloe Leclair for the UI textures! I do strongly recommend you check out [her mods](https://www.nexusmods.com/stardewvalley/users/138772588?tab=user+files). Especially [Almanac](https://www.nexusmods.com/stardewvalley/mods/11022), which is downright gorgeous.
 
-A small note: the small enchantment choice menu wanders a bit around the screen. This is because I had to implement it as an entirely seperate menu, not connected to the forge menu at all, and I don't actually know how to do UI in a way that isn't jank. It works, but isn't going to win awards for pretty. This is 100% my lack of UI skills and I apologize.
+A small note: the small enchantment choice menu wanders a bit around the screen if you resize the screen or change your zoom settings. This is because I had to implement it as an entirely seperate menu, not connected to the forge menu at all, and I don't actually know how to do UI in a way that isn't jank. It works, but isn't going to win awards for pretty. This is 100% my lack of UI skills and I apologize.
 
 ## Install
 

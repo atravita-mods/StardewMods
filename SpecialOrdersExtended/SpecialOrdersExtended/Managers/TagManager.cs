@@ -14,10 +14,7 @@ internal class TagManager
     {
         get
         {
-            if (random is null)
-            {
-                random = new Random(((int)Game1.uniqueIDForThisGame * 26) + (int)(Game1.stats.DaysPlayed / 7 * 36));
-            }
+            random ??= new Random(((int)Game1.uniqueIDForThisGame * 26) + (int)(Game1.stats.DaysPlayed / 7 * 36));
             return random;
         }
     }

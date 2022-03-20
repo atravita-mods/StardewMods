@@ -8,6 +8,7 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <DefineConstants>HARMONY;</DefineConstants>
     <Nullable>enable</Nullable>
+    <WarningsAsErrors>Nullable</WarningsAsErrors>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="JetBrains.Annotations" Version="2021.3.0" />

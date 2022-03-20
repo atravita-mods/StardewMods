@@ -2,6 +2,7 @@
 using AtraShared.Integrations;
 using AtraShared.Integrations.Interfaces;
 using AtraShared.MigrationManager;
+using AtraShared.Utils;
 using AtraShared.Utils.Extensions;
 using HarmonyLib;
 using SpecialOrdersExtended.HarmonyPatches;
@@ -15,8 +16,6 @@ namespace SpecialOrdersExtended;
 /// <inheritdoc />
 internal class ModEntry : Mod
 {
-    private MigrationManager? migrator;
-
     /// <summary>
     /// Spacecore API handle.
     /// </summary>
@@ -28,6 +27,8 @@ internal class ModEntry : Mod
     /// </summary>
     /// <remarks>If null, was not able to be loaded.</remarks>
     internal static ISpaceCoreAPI? SpaceCoreAPI => spaceCoreAPI;
+
+    private MigrationManager? migrator;
 
     // The following fields are set in the Entry method, which is about as close to the constructor as I can get
 #pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
@@ -199,6 +200,7 @@ internal class ModEntry : Mod
     {
         this.Monitor.DebugLog("Event SaveLoaded raised");
         DialogueManager.Load(Game1.player.UniqueMultiplayerID);
+        MultiplayerHelpers.AssertMultiplayerVersions(this.Helper.Multiplayer, this.ModManifest, this.Monitor, this.Helper.Translation);
 
         if (Context.IsSplitScreen && Context.ScreenId != 0)
         {

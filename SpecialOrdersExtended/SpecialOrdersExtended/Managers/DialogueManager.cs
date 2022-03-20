@@ -62,12 +62,7 @@ internal class DialogueManager
     /// Gets the current perscreened dialogue log.
     /// </summary>
     public static DialogueLog? PerscreenedDialogueLog
-    {
-        get
-        {
-            return InternalDialogueLog.Value;
-        }
-    }
+        => InternalDialogueLog.Value;
 
     /// <summary>
     /// Load the PerScreened Dialogue log.
@@ -310,8 +305,7 @@ internal class DialogueManager
             }
 
             // Handle dialogue for recently completed special orders.
-            IEnumerable<string>? cacheOrders = RecentSOManager.GetKeys(1u);
-            if (cacheOrders is not null)
+            if (RecentSOManager.GetKeys(2u) is IEnumerable<string> cacheOrders)
             {
                 foreach (string cacheOrder in cacheOrders)
                 {
@@ -426,19 +420,13 @@ internal class DialogueManager
             dialogueKey = $"{baseKey}{heartLevel}";
             if (npc.Dialogue.ContainsKey(dialogueKey))
             {
-                if (PushAndSaveDialogue(dialogueKey, npc))
-                {
-                    return true;
-                }
+                return PushAndSaveDialogue(dialogueKey, npc);
             }
         }
 
         if (npc.Dialogue.ContainsKey(baseKey))
         {
-            if (PushAndSaveDialogue(baseKey, npc))
-            {
-                return true;
-            }
+            return PushAndSaveDialogue(baseKey, npc);
         }
 
         if (ModEntry.Config.Verbose)

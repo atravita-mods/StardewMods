@@ -3,7 +3,7 @@ Pick Your Enchantment/ForgeMenuChoice
 
 ![Header image](ForgeMenuChoice/docs/tools.gif)
 
-This mod lets you pick your enchantment at the forge. No longer do you have to save scum to get the enchantment you wanted!
+This mod lets you pick your enchantment at the forge. No longer do you have to save scum to get the enchantment you wanted! Just place your tool or weapon in the left slot, and a prismatic shard in the right, and use the little arrows to select your new enchantment! 
 
 Much thanks to Khloe Leclair for the UI textures! I do strongly recommend you check out [her mods](https://www.nexusmods.com/stardewvalley/users/138772588?tab=user+files). Especially [Almanac](https://www.nexusmods.com/stardewvalley/mods/11022), which is downright gorgeous.
 

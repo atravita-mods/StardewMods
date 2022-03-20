@@ -1,0 +1,209 @@
+﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+using StardewValley.Menus;
+
+namespace ForgeMenuChoice;
+
+/// <summary>
+/// Menu to allow choice of enchantments at the forge.
+/// </summary>
+internal sealed class ForgeSelectionMenu : IClickableMenu
+{
+    // These numbers are used for controllers in theory.
+    private const int RegionBackButton = 101345;
+    private const int RegionForwardButton = 1024323;
+
+    private const int Width = 300; // px
+    private const int Height = 188; // px
+
+    private static readonly Lazy<Texture2D> graphics = new(ModEntry.ContentHelper.Load<Texture2D>("assets/Forge-Buttons.png", ContentSource.ModFolder));
+
+    private readonly List<BaseEnchantment> options = new();
+
+    private ClickableTextureComponent backButton;
+    private ClickableTextureComponent forwardButton;
+
+    private int index = 0;
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="ForgeSelectionMenu"/> class.
+    /// </summary>
+    /// <param name="options">A list of possible enchantments.</param>
+    internal ForgeSelectionMenu(List<BaseEnchantment> options)
+        : base(GetXPosFromViewport(Game1.uiViewport.Width), GetYPosFromViewport(Game1.viewport.Height), Width, Height)
+    {
+        this.options = options;
+
+        this.backButton = this.GetBackButton();
+        this.forwardButton = this.GetForwardButton();
+    }
+
+    private static Texture2D Graphics => graphics.Value;
+
+    /// <summary>
+    /// Gets the currently selected enchantment.
+    /// </summary>
+    internal BaseEnchantment CurrentSelectedOption => this.options[this.Index % this.options.Count];
+
+    /// <summary>
+    /// Gets the display name of the currently selected enchantment.
+    /// </summary>
+    private string CurrentSelectedTranslatedOption => this.CurrentSelectedOption.GetDisplayName();
+
+    private int Index
+    {
+        get
+        {
+            return this.index;
+        }
+
+        set
+        {
+            if (value < 0)
+            {
+                value += this.options.Count;
+            }
+            this.index = value % this.options.Count;
+        }
+    }
+
+    /// <summary>
+    /// Processes a right click. (In this case, does nothing.
+    /// </summary>
+    /// <param name="x">X location.</param>
+    /// <param name="y">Y location.</param>
+    /// <param name="playSound">Whether or not to play sounds.</param>
+    public override void receiveRightClick(int x, int y, bool playSound = true)
+    {
+    }
+
+    /// <summary>
+    /// Processes a left click.
+    /// </summary>
+    /// <param name="x">X location clicked.</param>
+    /// <param name="y">Y location clicked.</param>
+    /// <param name="playSound">Whether or not to play sounds.</param>
+    public override void receiveLeftClick(int x, int y, bool playSound = true)
+    {
+        try
+        {
+            base.receiveLeftClick(x, y, playSound);
+            if (this.backButton.containsPoint(x, y))
+            {
+                this.Index--;
+                this.backButton.scale = this.backButton.baseScale - 1;
+                if (playSound)
+                {
+                    Game1.playSound("shwip");
+                }
+            }
+            else if (this.forwardButton.containsPoint(x, y))
+            {
+                this.Index++;
+                this.forwardButton.scale = this.forwardButton.baseScale + 1;
+                if (playSound)
+                {
+                    Game1.playSound("shwip");
+                }
+            }
+            else
+            {
+                this.backButton.scale = this.backButton.baseScale;
+                this.forwardButton.scale = this.forwardButton.baseScale;
+            }
+        }
+        catch (Exception ex)
+        {
+            ModEntry.ModMonitor.Log($"Failed while trying to process a left click on smol menu.\n\n{ex}", LogLevel.Error);
+        }
+    }
+
+    /// <summary>
+    /// Handles a change in window size.
+    /// </summary>
+    /// <param name="oldBounds">Old size.</param>
+    /// <param name="newBounds">New size.</param>
+    public override void gameWindowSizeChanged(Rectangle oldBounds, Rectangle newBounds)
+    {
+        try
+        {
+            base.gameWindowSizeChanged(oldBounds, newBounds);
+            this.xPositionOnScreen = GetXPosFromViewport(Game1.uiViewport.Width);
+            this.yPositionOnScreen = GetYPosFromViewport(Game1.uiViewport.Height);
+            this.backButton = this.GetBackButton();
+            this.forwardButton = this.GetForwardButton();
+        }
+        catch (Exception ex)
+        {
+            ModEntry.ModMonitor.Log($"Failed in trying to adjust window size for smol menu\n{ex}", LogLevel.Error);
+        }
+    }
+
+    /// <summary>
+    /// Draws the menu to the screen.
+    /// </summary>
+    /// <param name="b">The spritebatch to draw with.</param>
+    public override void draw(SpriteBatch b)
+    {
+        try
+        {
+            base.draw(b);
+            int stringWidth = (int)Game1.dialogueFont.MeasureString("Archaeologist").X;
+            drawTextureBox(
+                b,
+                texture: Graphics,
+                sourceRect: new Rectangle(0, 0, 15, 15),
+                x: this.xPositionOnScreen + ((Width - stringWidth - 64) / 2),
+                y: this.yPositionOnScreen + (Height / 2) - 40,
+                width: stringWidth + 64,
+                height: 80,
+                color: Color.White,
+                scale: 4f
+                );
+            Vector2 thisOptionSizeOffset = Game1.dialogueFont.MeasureString(this.CurrentSelectedTranslatedOption);
+            Utility.drawTextWithShadow(
+                b,
+                this.CurrentSelectedTranslatedOption,
+                Game1.dialogueFont,
+                new Vector2(this.xPositionOnScreen + (Width / 2) - ((int)thisOptionSizeOffset.X / 2), this.yPositionOnScreen + (Height / 2) - ((int)thisOptionSizeOffset.Y / 2)),
+                Game1.textColor);
+            this.backButton.draw(b);
+            this.forwardButton.draw(b);
+            this.backButton.scale = this.backButton.baseScale;
+            this.forwardButton.scale = this.forwardButton.baseScale;
+            this.drawMouse(b);
+        }
+        catch (Exception ex)
+        {
+            ModEntry.ModMonitor.Log($"Ran into difficulties trying to draw smol menu!\n{ex}", LogLevel.Error);
+        }
+    }
+
+    private static int GetXPosFromViewport(int viewportX)
+        => Math.Max(((viewportX - (int)(Width * Game1.options.baseUIScale)) / 2) - (int)(64 * Game1.options.baseUIScale), 0);
+
+    private static int GetYPosFromViewport(int viewportY)
+        => Math.Max(((viewportY - (int)(Height * Game1.options.baseUIScale)) / 2) - (int)(320 * Game1.options.baseUIScale), 0);
+
+    private ClickableTextureComponent GetBackButton()
+        => new(
+            bounds: new Rectangle(this.xPositionOnScreen - 80, this.yPositionOnScreen + (Height / 2) - 22, 48, 44),
+            texture: Graphics,
+            sourceRect: new Rectangle(18, 3, 12, 11),
+            scale: 4f)
+        {
+            myID = RegionBackButton,
+            rightNeighborID = RegionForwardButton,
+        };
+
+    private ClickableTextureComponent GetForwardButton()
+        => new(
+            bounds: new Rectangle(this.xPositionOnScreen + Width + 36, this.yPositionOnScreen + (Height / 2) - 22, 48, 44),
+            texture: Graphics,
+            sourceRect: new Rectangle(34, 3, 12, 11),
+            scale: 4f)
+        {
+            myID = RegionForwardButton,
+            leftNeighborID = RegionBackButton,
+        };
+}

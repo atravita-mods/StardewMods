@@ -1,7 +1,7 @@
 Pick Your Enchantment/ForgeMenuChoice
 ===========================
 
-![Header image](ForgeMenuChoice/docs/header.jpg)
+![Header image](ForgeMenuChoice/docs/tools.gif)
 
 This mod lets you pick your enchantment at the forge. No longer do you have to save scum to get the enchantment you wanted!
 

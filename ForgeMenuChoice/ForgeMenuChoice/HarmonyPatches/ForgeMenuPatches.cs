@@ -130,4 +130,9 @@ internal static class ForgeMenuPatches
     [HarmonyPatch(nameof(ForgeMenu.gameWindowSizeChanged))]
     internal static void PostfixGameWindowSizeChanged(Rectangle oldBounds, Rectangle newBounds)
         => menu?.gameWindowSizeChanged(oldBounds, newBounds);
+
+    [HarmonyPostfix]
+    [HarmonyPatch(nameof(ForgeMenu.performHoverAction))]
+    internal static void PostfixPerformHoverAction(int x, int y)
+        => menu?.performHoverAction(x, y);
 }

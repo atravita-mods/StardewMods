@@ -27,9 +27,26 @@ internal class ModEntry : Mod
     {
         ModMonitor = this.Monitor;
         ContentHelper = helper.Content;
+
         helper.Events.GameLoop.GameLaunched += this.OnGameLaunched;
+        helper.Events.GameLoop.DayEnding += this.OnDayEnd;
+        helper.Events.GameLoop.ReturnedToTitle += this.OnReturnToTitle;
+        helper.Content.AssetLoaders.Add(AssetLoader.Instance);
     }
 
+    private void OnReturnToTitle(object? sender, ReturnedToTitleEventArgs e)
+        => AssetLoader.Refresh();
+
+    private void OnDayEnd(object? sender, DayEndingEventArgs e)
+        => AssetLoader.Refresh();
+
+    /// <summary>
+    /// Things to run after all mods are initialized.
+    /// And the game is launched.
+    /// </summary>
+    /// <param name="sender">SMAPI.</param>
+    /// <param name="e">Event arguments.</param>
+    /// <remarks>We must wait until GameLaunched to patch in order to patch Spacecore.</remarks>
     private void OnGameLaunched(object? sender, GameLaunchedEventArgs e)
         => this.ApplyPatches(new Harmony(this.ModManifest.UniqueID));
 
@@ -66,6 +83,9 @@ internal class ModEntry : Mod
                     harmony.Patch(
                         original: spaceforge.InstanceMethodNamed("gameWindowSizeChanged"),
                         postfix: new HarmonyMethod(typeof(ForgeMenuPatches), nameof(ForgeMenuPatches.PostfixGameWindowSizeChanged)));
+                    harmony.Patch(
+                        original: spaceforge.InstanceMethodNamed("performHoverAction"),
+                        postfix: new HarmonyMethod(typeof(ForgeMenuPatches), nameof(ForgeMenuPatches.PostfixPerformHoverAction)));
                 }
                 else
                 {

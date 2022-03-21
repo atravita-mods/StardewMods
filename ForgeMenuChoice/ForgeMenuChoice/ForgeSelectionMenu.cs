@@ -16,14 +16,18 @@ internal sealed class ForgeSelectionMenu : IClickableMenu
     private const int Width = 300; // px
     private const int Height = 188; // px
 
-    private static readonly Lazy<Texture2D> graphics = new(ModEntry.ContentHelper.Load<Texture2D>("assets/Forge-Buttons.png", ContentSource.ModFolder));
-
     private readonly List<BaseEnchantment> options = new();
 
     private ClickableTextureComponent backButton;
     private ClickableTextureComponent forwardButton;
 
+    private Rectangle hoverrect;
+
     private int index = 0;
+
+    private bool isHovered = false;
+
+    private readonly bool shouldShowTooltip = true; // make config properly later.
 
     /// <summary>
     /// Initializes a new instance of the <see cref="ForgeSelectionMenu"/> class.
@@ -36,9 +40,9 @@ internal sealed class ForgeSelectionMenu : IClickableMenu
 
         this.backButton = this.GetBackButton();
         this.forwardButton = this.GetForwardButton();
-    }
 
-    private static Texture2D Graphics => graphics.Value;
+        this.hoverrect = this.GetHoverRect();
+    }
 
     /// <summary>
     /// Gets the currently selected enchantment.
@@ -49,6 +53,8 @@ internal sealed class ForgeSelectionMenu : IClickableMenu
     /// Gets the display name of the currently selected enchantment.
     /// </summary>
     private string CurrentSelectedTranslatedOption => this.CurrentSelectedOption.GetDisplayName();
+
+    private static Texture2D Graphics => AssetLoader.UIElement;
 
     private int Index
     {
@@ -132,10 +138,36 @@ internal sealed class ForgeSelectionMenu : IClickableMenu
             this.yPositionOnScreen = GetYPosFromViewport(Game1.uiViewport.Height);
             this.backButton = this.GetBackButton();
             this.forwardButton = this.GetForwardButton();
+            this.hoverrect = this.GetHoverRect();
         }
         catch (Exception ex)
         {
             ModEntry.ModMonitor.Log($"Failed in trying to adjust window size for smol menu\n{ex}", LogLevel.Error);
+        }
+    }
+
+    /// <summary>
+    /// Handles hovering over menu elements.
+    /// </summary>
+    /// <param name="x">x location.</param>
+    /// <param name="y">y location.</param>
+    public override void performHoverAction(int x, int y)
+    {
+        try
+        {
+            base.performHoverAction(x, y);
+            if (this.hoverrect.Contains(x, y))
+            {
+                this.isHovered = true;
+            }
+            else
+            {
+                this.isHovered = false;
+            }
+        }
+        catch (Exception ex)
+        {
+            ModEntry.ModMonitor.Log($"Ran into errors handling hover on smol menu.\n{ex}", LogLevel.Error);
         }
     }
 
@@ -148,7 +180,7 @@ internal sealed class ForgeSelectionMenu : IClickableMenu
         try
         {
             base.draw(b);
-            int stringWidth = (int)Game1.dialogueFont.MeasureString("Archaeologist").X;
+            int stringWidth = Math.Max((int)Game1.dialogueFont.MeasureString("Archaeologist").X, (int)Game1.dialogueFont.MeasureString(this.CurrentSelectedTranslatedOption).X);
             drawTextureBox(
                 b,
                 texture: Graphics,
@@ -171,6 +203,11 @@ internal sealed class ForgeSelectionMenu : IClickableMenu
             this.forwardButton.draw(b);
             this.backButton.scale = this.backButton.baseScale;
             this.forwardButton.scale = this.forwardButton.baseScale;
+            if (this.shouldShowTooltip && this.isHovered)
+            {
+                int xloc = Game1.getOldMouseX();
+                int yloc = Game1.getOldMouseY();
+            }
             this.drawMouse(b);
         }
         catch (Exception ex)
@@ -206,4 +243,15 @@ internal sealed class ForgeSelectionMenu : IClickableMenu
             myID = RegionForwardButton,
             leftNeighborID = RegionBackButton,
         };
+
+    private Rectangle GetHoverRect()
+    {
+        int stringWidth = (int)Game1.dialogueFont.MeasureString("Archaeologist").X;
+        return new Rectangle(
+                   x: this.xPositionOnScreen + ((Width - stringWidth - 64) / 2),
+                   y: this.yPositionOnScreen + (Height / 2) - 40,
+                   width: stringWidth + 64,
+                   height: 80
+                   );
+    }
 }

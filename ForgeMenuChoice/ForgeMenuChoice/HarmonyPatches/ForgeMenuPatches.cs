@@ -122,6 +122,11 @@ internal static class ForgeMenuPatches
     internal static void PostfixGameWindowSizeChanged(Rectangle oldBounds, Rectangle newBounds)
         => menu?.gameWindowSizeChanged(oldBounds, newBounds);
 
+    /// <summary>
+    /// Postfixes the forge menu's hovering to handle hovering in the smol menu.
+    /// </summary>
+    /// <param name="x">Pixel hovered over (X).</param>
+    /// <param name="y">Pixel hovered over (Y).</param>
     [HarmonyPostfix]
     [HarmonyPatch(nameof(ForgeMenu.performHoverAction))]
     internal static void PostfixPerformHoverAction(int x, int y)

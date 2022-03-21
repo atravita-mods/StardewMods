@@ -116,11 +116,6 @@ internal sealed class ForgeSelectionMenu : IClickableMenu
                     Game1.playSound("shwip");
                 }
             }
-            else
-            {
-                this.backButton.scale = this.backButton.baseScale;
-                this.forwardButton.scale = this.forwardButton.baseScale;
-            }
         }
         catch (Exception ex)
         {
@@ -205,8 +200,8 @@ internal sealed class ForgeSelectionMenu : IClickableMenu
                 Game1.textColor);
             this.backButton.draw(b);
             this.forwardButton.draw(b);
-            this.backButton.scale = this.backButton.baseScale;
-            this.forwardButton.scale = this.forwardButton.baseScale;
+            this.backButton.scale = Math.Min(this.backButton.scale + 0.05f, this.backButton.baseScale);
+            this.forwardButton.scale = Math.Min(this.forwardButton.scale + 0.05f, this.forwardButton.baseScale);
             if (this.shouldShowTooltip && this.isHovered && TooltipData.TryGetValue(this.CurrentSelectedOption.GetName(), out string? tooltip))
             {
                 IClickableMenu.drawHoverText(b, Game1.parseText(tooltip, Game1.smallFont, Width), Game1.smallFont);
@@ -219,11 +214,15 @@ internal sealed class ForgeSelectionMenu : IClickableMenu
         }
     }
 
-    private static int GetXPosFromViewport(int viewportX)
-        => Math.Max(((viewportX - (int)(Width * Game1.options.baseUIScale)) / 2) - (int)(80 * Game1.options.baseUIScale), 0);
+    private static int GetXPosFromViewport(int uiViewportX)
+        => Game1.activeClickableMenu is not null
+            ? Game1.activeClickableMenu.xPositionOnScreen + 120
+            : Math.Max(((uiViewportX - (int)(Width * Game1.options.baseUIScale)) / 2) - (int)(80 * Game1.options.baseUIScale), 0);
 
-    private static int GetYPosFromViewport(int viewportY)
-        => Math.Max(((viewportY - (int)(Height * Game1.options.baseUIScale)) / 2) - (int)(360 * Game1.options.baseUIScale), 0);
+    private static int GetYPosFromViewport(int uiViewportY)
+        => Game1.activeClickableMenu is not null
+            ? Game1.activeClickableMenu.yPositionOnScreen - 40
+            : Math.Max(((uiViewportY - (int)(Height * Game1.options.baseUIScale)) / 2) - (int)(360 * Game1.options.baseUIScale), 0);
 
     private ClickableTextureComponent GetBackButton()
         => new(

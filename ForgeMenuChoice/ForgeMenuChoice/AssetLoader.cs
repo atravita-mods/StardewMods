@@ -115,7 +115,7 @@ public class AssetLoader : IAssetLoader
             }
             catch (Exception ex)
             {
-                ModEntry.ModMonitor.Log($"Error: secret note 9 not found.\n\n{ex}", LogLevel.Error);
+                ModEntry.ModMonitor.Log($"Error: journal scrap 9 not found.\n\n{ex}", LogLevel.Error);
             }
             return (T)(object)tooltipdata;
         }

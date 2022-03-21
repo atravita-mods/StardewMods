@@ -1,4 +1,5 @@
 ﻿using AtraBase.Toolkit.Reflection;
+using AtraShared.Integrations;
 using AtraShared.Utils.Extensions;
 using ForgeMenuChoice.HarmonyPatches;
 using HarmonyLib;
@@ -20,6 +21,11 @@ internal class ModEntry : Mod
     /// Gets the content helper for this mod.
     /// </summary>
     internal static IContentHelper ContentHelper { get; private set; }
+
+    /// <summary>
+    /// Gets the configuration class for this mod.
+    /// </summary>
+    internal static ModConfig Config { get; private set; }
 #pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
 
     /// <inheritdoc/>
@@ -27,13 +33,27 @@ internal class ModEntry : Mod
     {
         ModMonitor = this.Monitor;
         ContentHelper = helper.Content;
+        I18n.Init(helper.Translation);
+
+        try
+        {
+            Config = this.Helper.ReadConfig<ModConfig>();
+        }
+        catch
+        {
+            this.Monitor.Log(I18n.IllFormatedConfig(), LogLevel.Warn);
+            Config = new();
+        }
 
         helper.Events.GameLoop.GameLaunched += this.OnGameLaunched;
+        helper.Events.GameLoop.SaveLoaded += this.OnSaveLoaded;
         helper.Events.GameLoop.DayEnding += this.OnDayEnd;
         helper.Events.GameLoop.ReturnedToTitle += this.OnReturnToTitle;
         helper.Content.AssetLoaders.Add(AssetLoader.Instance);
     }
 
+    private void OnSaveLoaded(object? sender, SaveLoadedEventArgs e)
+        => AssetLoader.Refresh();
     private void OnReturnToTitle(object? sender, ReturnedToTitleEventArgs e)
         => AssetLoader.Refresh();
 
@@ -48,7 +68,29 @@ internal class ModEntry : Mod
     /// <param name="e">Event arguments.</param>
     /// <remarks>We must wait until GameLaunched to patch in order to patch Spacecore.</remarks>
     private void OnGameLaunched(object? sender, GameLaunchedEventArgs e)
-        => this.ApplyPatches(new Harmony(this.ModManifest.UniqueID));
+    {
+        this.ApplyPatches(new Harmony(this.ModManifest.UniqueID));
+
+        GMCMHelper helper = new(this.Monitor, this.Helper.Translation, this.Helper.ModRegistry, this.ModManifest);
+        if (!helper.TryGetAPI())
+        {
+            return;
+        }
+        helper.Register(
+            reset: () => Config = new ModConfig(),
+            save: () => this.Helper.WriteConfig(Config))
+        .AddParagraph(I18n.ModDescription)
+        .AddEnumOption(
+            name: I18n.TooltipBehavior_Title,
+            getValue: () => Config.TooltipBehavior,
+            setValue: (value) => Config.TooltipBehavior = value,
+            tooltip: I18n.TooltipBehavior_Description)
+        .AddBoolOption(
+            name: I18n.EnableTooltipAutogeneration_Title,
+            getValue: () => Config.EnableTooltipAutogeneration,
+            setValue: (value) => Config.EnableTooltipAutogeneration = value,
+            tooltip: I18n.EnableTooltipAutogeneration_Description);
+    }
 
     private void ApplyPatches(Harmony harmony)
     {

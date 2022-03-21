@@ -56,6 +56,8 @@ internal sealed class ForgeSelectionMenu : IClickableMenu
 
     private static Texture2D Graphics => AssetLoader.UIElement;
 
+    private static IDictionary<string, string> TooltipData => AssetLoader.TooltipData;
+
     private int Index
     {
         get
@@ -203,10 +205,9 @@ internal sealed class ForgeSelectionMenu : IClickableMenu
             this.forwardButton.draw(b);
             this.backButton.scale = this.backButton.baseScale;
             this.forwardButton.scale = this.forwardButton.baseScale;
-            if (this.shouldShowTooltip && this.isHovered)
+            if (this.shouldShowTooltip && this.isHovered && TooltipData.TryGetValue(this.CurrentSelectedOption.GetName(), out string? tooltip))
             {
-                int xloc = Game1.getOldMouseX();
-                int yloc = Game1.getOldMouseY();
+                IClickableMenu.drawHoverText(b, Game1.parseText(tooltip, Game1.smallFont, Width), Game1.smallFont);
             }
             this.drawMouse(b);
         }

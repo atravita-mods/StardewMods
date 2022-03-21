@@ -48,6 +48,14 @@ public class AssetLoader: IAssetLoader
         {
             Dictionary<string, string> tooltipdata = new();
 
+            // Do nothing if the world is not ready yet.
+            // For some reason trying to load the translations too early jacks them up
+            // and suddenly enchantments aren't translated in other languages.
+            if (!ModEntry.Config.EnableTooltipAutogeneration || Context.IsWorldReady)
+            {
+                return (T)(object)tooltipdata;
+            }
+
             // the journal scrap 1008 is the only in-game descriptions of enchantments. We'll need to grab data from there.
             try
             {
@@ -64,6 +72,7 @@ public class AssetLoader: IAssetLoader
                     {
                         tooltipmap[splits[0]] = splits[1];
                     }
+                    ModEntry.ModMonitor.Log(splits[0], LogLevel.Info);
                 }
 
                 // For each enchantment, look up its description from the secret note and

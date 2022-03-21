@@ -1,0 +1,12 @@
+﻿{
+  "IllFormatedConfig": "Config file seems ill-formated, using default. Please use Generic Mod Config Menu to configure.",
+
+  // GMCM
+  "mod-description": "Allows you to pick your enchantment at the forge.",
+  "EnableTooltipAutogeneration.title": "Enables tooltip autogeneration.",
+  "EnableTooltipAutogeneration.description": "Enables tooltip autogeneration from journal scrap 9. Disable this if you have an mod that edits that.",
+
+  "TooltipBehavior.title": "Tooltip Behavior.",
+  "TooltipBehavior.description": "Whether or not to display tooltips that.",
+
+}

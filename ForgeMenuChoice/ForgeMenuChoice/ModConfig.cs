@@ -1,5 +1,8 @@
 ﻿namespace ForgeMenuChoice;
 
+/// <summary>
+/// Defines enums on how to show the tooltips.
+/// </summary>
 public enum TooltipBehavior
 {
     /// <summary>
@@ -18,7 +21,6 @@ public enum TooltipBehavior
     Immersive,
 }
 
-
 #pragma warning disable SA1623 // Property summary documentation should match accessors. Reviewed.
 /// <summary>
 /// Configuration class for this mod.
@@ -26,13 +28,13 @@ public enum TooltipBehavior
 public class ModConfig
 {
     /// <summary>
-    /// Whether to enable automatic generation of tooltips from Journal Scrap 9.
-    /// </summary>
-    public bool EnableTooltipAutogeneration { get; set; } = true;
-
-    /// <summary>
     /// Whether or not to show tooltips.
     /// </summary>
     public TooltipBehavior TooltipBehavior { get; set; } = TooltipBehavior.Immersive;
+
+    /// <summary>
+    /// Whether to enable automatic generation of tooltips from Journal Scrap 9.
+    /// </summary>
+    public bool EnableTooltipAutogeneration { get; set; } = true;
 }
 #pragma warning restore SA1623 // Property summary documentation should match accessors

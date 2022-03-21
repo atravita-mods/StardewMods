@@ -5,18 +5,21 @@ using AtraUtils = AtraShared.Utils.Utils;
 
 namespace ForgeMenuChoice;
 
-public class AssetLoader: IAssetLoader
+/// <summary>
+/// Loads and manages assets used by this mod.
+/// </summary>
+public class AssetLoader : IAssetLoader
 {
     private const string ASSETPREFIX = "Mods/atravita_ForgeMenuChoice_";
 
-    internal static readonly string ENCHANTMENT_NAMES_LOCATION = PathUtilities.NormalizeAssetName("Strings/EnchantmentNames");
-
+#pragma warning disable SA1310 // Field names should not contain underscore. Reviewed.
     private static readonly string UI_ELEMENT_LOCATION = PathUtilities.NormalizeAssetName("assets/Forge-Buttons.png");
     private static readonly string UI_ASSET_PATH = PathUtilities.NormalizeAssetName(ASSETPREFIX + "Forge_Buttons");
     private static readonly string TOOLTIP_DATA_PATH = PathUtilities.NormalizeAssetName(ASSETPREFIX + "Tooltip_Data");
+#pragma warning restore SA1310 // Field names should not contain underscore
 
-    private static Lazy<Texture2D> UIElementLazy = new(() => ModEntry.ContentHelper.Load<Texture2D>(UI_ASSET_PATH, ContentSource.GameContent));
-    private static Lazy<Dictionary<string, string>> TooltipDataLazy = new(() => ModEntry.ContentHelper.Load<Dictionary<string, string>>(TOOLTIP_DATA_PATH, ContentSource.GameContent));
+    private static Lazy<Texture2D> uiElementLazy = new(() => ModEntry.ContentHelper.Load<Texture2D>(UI_ASSET_PATH, ContentSource.GameContent));
+    private static Lazy<Dictionary<string, string>> tooltipDataLazy = new(GrabAndWrapTooltips);
 
     /// <summary>
     /// Gets the instance of the AssetLoader.
@@ -26,12 +29,17 @@ public class AssetLoader: IAssetLoader
     /// <summary>
     /// Gets the textures for the UI elements used by this mod.
     /// </summary>
-    internal static Texture2D UIElement => UIElementLazy.Value;
+    internal static Texture2D UIElement => uiElementLazy.Value;
 
     /// <summary>
     /// Gets a dictionary for the tooltip data.
     /// </summary>
-    internal static Dictionary<string, string> TooltipData => TooltipDataLazy.Value;
+    internal static Dictionary<string, string> TooltipData => tooltipDataLazy.Value;
+
+    /// <summary>
+    /// Gets the location of enchantment names.
+    /// </summary>
+    internal static string ENCHANTMENT_NAMES_LOCATION { get; } = PathUtilities.NormalizeAssetName("Strings/EnchantmentNames");
 
     /// <inheritdoc/>
     [UsedImplicitly]
@@ -80,11 +88,6 @@ public class AssetLoader: IAssetLoader
                     if (splits.Length >= 2)
                     {
                         tooltipmap[splits[0]] = splits[1];
-                        int spaceindex = splits[0].IndexOf(' ');
-                        if (spaceindex != -1)
-                        {
-                            tooltipmap[splits[0][..spaceindex]] = splits[1];
-                        }
                     }
                 }
 
@@ -109,7 +112,6 @@ public class AssetLoader: IAssetLoader
                         }
                     }
                 }
-
             }
             catch (Exception ex)
             {
@@ -125,7 +127,17 @@ public class AssetLoader: IAssetLoader
     /// </summary>
     internal static void Refresh()
     {
-        UIElementLazy = new(() => ModEntry.ContentHelper.Load<Texture2D>(UI_ASSET_PATH, ContentSource.GameContent));
-        TooltipDataLazy = new(() => ModEntry.ContentHelper.Load<Dictionary<string, string>>(TOOLTIP_DATA_PATH, ContentSource.GameContent));
+        uiElementLazy = new(() => ModEntry.ContentHelper.Load<Texture2D>(UI_ASSET_PATH, ContentSource.GameContent));
+        tooltipDataLazy = new(() => ModEntry.ContentHelper.Load<Dictionary<string, string>>(TOOLTIP_DATA_PATH, ContentSource.GameContent));
+    }
+
+    private static Dictionary<string,string> GrabAndWrapTooltips()
+    {
+        Dictionary<string, string> tooltips = ModEntry.ContentHelper.Load<Dictionary<string, string>>(TOOLTIP_DATA_PATH, ContentSource.GameContent);
+        foreach ((string k, string v) in tooltips)
+        {
+            tooltips[k] = Game1.parseText(v);
+        }
+        return tooltips;
     }
 }

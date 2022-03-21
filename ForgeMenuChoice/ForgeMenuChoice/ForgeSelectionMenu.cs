@@ -110,7 +110,7 @@ internal sealed class ForgeSelectionMenu : IClickableMenu
             else if (this.forwardButton.containsPoint(x, y))
             {
                 this.Index++;
-                this.forwardButton.scale = this.forwardButton.baseScale + 1;
+                this.forwardButton.scale = this.forwardButton.baseScale - 1;
                 if (playSound)
                 {
                     Game1.playSound("shwip");
@@ -184,7 +184,7 @@ internal sealed class ForgeSelectionMenu : IClickableMenu
         try
         {
             base.draw(b);
-            int stringWidth = Math.Max((int)Game1.dialogueFont.MeasureString("Matador de Insetos").X, (int)Game1.dialogueFont.MeasureString(this.CurrentSelectedTranslatedOption).X);
+            int stringWidth = Math.Max((int)Game1.dialogueFont.MeasureString("Matador de Insetos").X + 12, (int)Game1.dialogueFont.MeasureString(this.CurrentSelectedTranslatedOption).X);
             drawTextureBox(
                 b,
                 texture: Graphics,
@@ -249,7 +249,7 @@ internal sealed class ForgeSelectionMenu : IClickableMenu
 
     private Rectangle GetHoverRect()
     {
-        int stringWidth = (int)Game1.dialogueFont.MeasureString("Matador de Insetos").X;
+        int stringWidth = (int)Game1.dialogueFont.MeasureString("Matador de Insetos").X + 12;
         return new Rectangle(
                    x: this.xPositionOnScreen + ((Width - stringWidth - 64) / 2),
                    y: this.yPositionOnScreen + (Height / 2) - 40,

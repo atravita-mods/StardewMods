@@ -12,7 +12,7 @@
 
 #### Version 1.0.1
 * Added tooltips: hover over the name of the enchantment to get a description. (You may need to find a certain journal scrap first.)
-* Slightly adjust the menu for longer enchantment languages in some languages. Fix issue where the enchantment names would not change if you switched languages.
+* Slightly adjust the menu for longer enchantment names in some languages. Fix issue where the enchantment names would not change if you switched languages.
 * Made this mod's textures targetable in Content Patcher.
 
 #### Version 1.0.0

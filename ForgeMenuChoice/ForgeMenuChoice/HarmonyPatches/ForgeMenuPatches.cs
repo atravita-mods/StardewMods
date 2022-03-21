@@ -88,16 +88,7 @@ internal static class ForgeMenuPatches
     [HarmonyPostfix]
     [HarmonyPatch(nameof(ForgeMenu.draw))]
     internal static void PostfixDraw(SpriteBatch b)
-    {
-        try
-        {
-            menu?.draw(b);
-        }
-        catch (Exception ex)
-        {
-            ModEntry.ModMonitor.Log($"Ran into errors drawing the choice menu\n{ex}", LogLevel.Error);
-        }
-    }
+        => menu?.draw(b);
 
     /// <summary>
     /// Postfixes the forge menu's left click to also process left clicks for the smol menu.

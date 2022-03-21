@@ -51,7 +51,6 @@ internal class ModEntry : Mod
         helper.Events.GameLoop.GameLaunched += this.OnGameLaunched;
         helper.Events.GameLoop.SaveLoaded += this.OnSaveLoaded;
         helper.Events.GameLoop.DayEnding += this.OnDayEnd;
-        helper.Events.GameLoop.ReturnedToTitle += this.OnReturnToTitle;
         helper.Content.AssetLoaders.Add(AssetLoader.Instance);
     }
 
@@ -64,9 +63,6 @@ internal class ModEntry : Mod
 #pragma warning restore CS8625 // Cannot convert null literal to non-nullable reference type.
         AssetLoader.Refresh();
     }
-
-    private void OnReturnToTitle(object? sender, ReturnedToTitleEventArgs e)
-        => AssetLoader.Refresh();
 
     private void OnDayEnd(object? sender, DayEndingEventArgs e)
         => AssetLoader.Refresh();

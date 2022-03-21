@@ -9,9 +9,11 @@ public class AssetLoader: IAssetLoader
 {
     private const string ASSETPREFIX = "Mods/atravita_ForgeMenuChoice_";
 
-    private static string UI_ELEMENT_LOCATION = PathUtilities.NormalizeAssetName("assets/Forge-Buttons.png");
-    private static string UI_ASSET_PATH = PathUtilities.NormalizeAssetName(ASSETPREFIX + "Forge_Buttons");
-    private static string TOOLTIP_DATA_PATH = PathUtilities.NormalizeAssetName(ASSETPREFIX + "Tooltip_Data");
+    internal static readonly string ENCHANTMENT_NAMES_LOCATION = PathUtilities.NormalizeAssetName("Strings/EnchantmentNames");
+
+    private static readonly string UI_ELEMENT_LOCATION = PathUtilities.NormalizeAssetName("assets/Forge-Buttons.png");
+    private static readonly string UI_ASSET_PATH = PathUtilities.NormalizeAssetName(ASSETPREFIX + "Forge_Buttons");
+    private static readonly string TOOLTIP_DATA_PATH = PathUtilities.NormalizeAssetName(ASSETPREFIX + "Tooltip_Data");
 
     private static Lazy<Texture2D> UIElementLazy = new(() => ModEntry.ContentHelper.Load<Texture2D>(UI_ASSET_PATH, ContentSource.GameContent));
     private static Lazy<Dictionary<string, string>> TooltipDataLazy = new(() => ModEntry.ContentHelper.Load<Dictionary<string, string>>(TOOLTIP_DATA_PATH, ContentSource.GameContent));
@@ -51,7 +53,7 @@ public class AssetLoader: IAssetLoader
             // Do nothing if the world is not ready yet.
             // For some reason trying to load the translations too early jacks them up
             // and suddenly enchantments aren't translated in other languages.
-            if (!ModEntry.Config.EnableTooltipAutogeneration || Context.IsWorldReady)
+            if (!ModEntry.Config.EnableTooltipAutogeneration || !Context.IsWorldReady)
             {
                 return (T)(object)tooltipdata;
             }
@@ -59,31 +61,55 @@ public class AssetLoader: IAssetLoader
             // the journal scrap 1008 is the only in-game descriptions of enchantments. We'll need to grab data from there.
             try
             {
+                ModEntry.ContentHelper.InvalidateCache(ENCHANTMENT_NAMES_LOCATION);
                 IDictionary<int, string> secretnotes = ModEntry.ContentHelper.Load<Dictionary<int, string>>("Data\\SecretNotes", ContentSource.GameContent);
                 string[] secretNote8 = secretnotes[1008].Split("^^");
 
                 // The secret note, of course, has its data in the localized name. We'll need to map that to the internal name.
                 // Using a dictionary with a StringComparer for the user's current language to make that a little easier.
-                Dictionary<string, string> tooltipmap = new(AtraUtils.GetCurrentLanguageComparer(ignoreCase: true));
+                StringComparer comparer = AtraUtils.GetCurrentLanguageComparer(ignoreCase: true);
+                Dictionary<string, string> tooltipmap = new(comparer);
                 foreach (string str in secretNote8)
                 {
                     string[] splits = str.Split(':', count: 2, options: StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
+                    if (splits.Length < 2)
+                    {
+                        // Chinese uses a different character to split by.
+                        splits = str.Split('：', count: 2, options: StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
+                    }
                     if (splits.Length >= 2)
                     {
                         tooltipmap[splits[0]] = splits[1];
+                        int spaceindex = splits[0].IndexOf(' ');
+                        if (spaceindex != -1)
+                        {
+                            tooltipmap[splits[0][..spaceindex]] = splits[1];
+                        }
                     }
-                    ModEntry.ModMonitor.Log(splits[0], LogLevel.Info);
                 }
 
                 // For each enchantment, look up its description from the secret note and
                 // and prepopulate the data file with that.
+                // Russian needs to be handled seperately.
                 foreach (BaseEnchantment enchantment in BaseEnchantment.GetAvailableEnchantments())
                 {
                     if (tooltipmap.TryGetValue(enchantment.GetDisplayName(), out string? val))
                     {
                         tooltipdata[enchantment.GetName()] = val;
                     }
+                    else if (Game1.content.GetCurrentLanguage() == LocalizedContentManager.LanguageCode.ru)
+                    {
+                        string[] splits = enchantment.GetDisplayName().Split();
+                        foreach (string i in splits)
+                        {
+                            if (i != "чары" && tooltipmap.TryGetValue(i, out string? value))
+                            {
+                                tooltipdata[enchantment.GetName()] = value;
+                            }
+                        }
+                    }
                 }
+
             }
             catch (Exception ex)
             {

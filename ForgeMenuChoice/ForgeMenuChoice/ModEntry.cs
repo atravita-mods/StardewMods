@@ -22,6 +22,8 @@ internal class ModEntry : Mod
     /// </summary>
     internal static IContentHelper ContentHelper { get; private set; }
 
+    internal static IReflectionHelper ReflectionHelper { get; private set; }
+
     /// <summary>
     /// Gets the configuration class for this mod.
     /// </summary>
@@ -33,6 +35,7 @@ internal class ModEntry : Mod
     {
         ModMonitor = this.Monitor;
         ContentHelper = helper.Content;
+        ReflectionHelper = helper.Reflection;
         I18n.Init(helper.Translation);
 
         try
@@ -53,7 +56,15 @@ internal class ModEntry : Mod
     }
 
     private void OnSaveLoaded(object? sender, SaveLoadedEventArgs e)
-        => AssetLoader.Refresh();
+    {
+        ContentHelper.InvalidateCache(AssetLoader.ENCHANTMENT_NAMES_LOCATION);
+#pragma warning disable CS8625 // Cannot convert null literal to non-nullable reference type.
+        // This is the games cache of enchantment names. I null it here to clear it, in case the user changes languages.
+        ReflectionHelper.GetField<List<BaseEnchantment>>(typeof(BaseEnchantment), "_enchantments").SetValue(null);
+#pragma warning restore CS8625 // Cannot convert null literal to non-nullable reference type.
+        AssetLoader.Refresh();
+    }
+
     private void OnReturnToTitle(object? sender, ReturnedToTitleEventArgs e)
         => AssetLoader.Refresh();
 

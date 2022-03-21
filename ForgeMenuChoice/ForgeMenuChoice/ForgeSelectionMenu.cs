@@ -13,9 +13,10 @@ internal sealed class ForgeSelectionMenu : IClickableMenu
     private const int RegionBackButton = 101345;
     private const int RegionForwardButton = 1024323;
 
-    private const int Width = 300; // px
+    private const int Width = 400; // px
     private const int Height = 188; // px
 
+    private readonly bool shouldShowTooltip; // make config properly later.
     private readonly List<BaseEnchantment> options = new();
 
     private ClickableTextureComponent backButton;
@@ -26,8 +27,6 @@ internal sealed class ForgeSelectionMenu : IClickableMenu
     private int index = 0;
 
     private bool isHovered = false;
-
-    private readonly bool shouldShowTooltip = true; // make config properly later.
 
     /// <summary>
     /// Initializes a new instance of the <see cref="ForgeSelectionMenu"/> class.
@@ -42,6 +41,9 @@ internal sealed class ForgeSelectionMenu : IClickableMenu
         this.forwardButton = this.GetForwardButton();
 
         this.hoverrect = this.GetHoverRect();
+
+        this.shouldShowTooltip = ModEntry.Config.TooltipBehavior == TooltipBehavior.On
+            || (ModEntry.Config.TooltipBehavior == TooltipBehavior.Immersive && Utility.HasAnyPlayerSeenSecretNote(1008));
     }
 
     /// <summary>
@@ -182,7 +184,7 @@ internal sealed class ForgeSelectionMenu : IClickableMenu
         try
         {
             base.draw(b);
-            int stringWidth = Math.Max((int)Game1.dialogueFont.MeasureString("Archaeologist").X, (int)Game1.dialogueFont.MeasureString(this.CurrentSelectedTranslatedOption).X);
+            int stringWidth = Math.Max((int)Game1.dialogueFont.MeasureString("Matador de Insetos").X, (int)Game1.dialogueFont.MeasureString(this.CurrentSelectedTranslatedOption).X);
             drawTextureBox(
                 b,
                 texture: Graphics,
@@ -218,10 +220,10 @@ internal sealed class ForgeSelectionMenu : IClickableMenu
     }
 
     private static int GetXPosFromViewport(int viewportX)
-        => Math.Max(((viewportX - (int)(Width * Game1.options.baseUIScale)) / 2) - (int)(64 * Game1.options.baseUIScale), 0);
+        => Math.Max(((viewportX - (int)(Width * Game1.options.baseUIScale)) / 2) - (int)(80 * Game1.options.baseUIScale), 0);
 
     private static int GetYPosFromViewport(int viewportY)
-        => Math.Max(((viewportY - (int)(Height * Game1.options.baseUIScale)) / 2) - (int)(320 * Game1.options.baseUIScale), 0);
+        => Math.Max(((viewportY - (int)(Height * Game1.options.baseUIScale)) / 2) - (int)(360 * Game1.options.baseUIScale), 0);
 
     private ClickableTextureComponent GetBackButton()
         => new(
@@ -247,7 +249,7 @@ internal sealed class ForgeSelectionMenu : IClickableMenu
 
     private Rectangle GetHoverRect()
     {
-        int stringWidth = (int)Game1.dialogueFont.MeasureString("Archaeologist").X;
+        int stringWidth = (int)Game1.dialogueFont.MeasureString("Matador de Insetos").X;
         return new Rectangle(
                    x: this.xPositionOnScreen + ((Width - stringWidth - 64) / 2),
                    y: this.yPositionOnScreen + (Height / 2) - 40,

@@ -1,12 +1,37 @@
 ﻿using StardewModdingAPI.Utilities;
+using StardewValley.Locations;
 
-namespace StopRugRemoval;
+namespace StopRugRemoval.Configuration;
 
 /// <summary>
 /// Configuration class for this mod.
 /// </summary>
 public class ModConfig
 {
+    /// <summary>
+    /// Initializes a new instance of the <see cref="ModConfig"/> class.
+    /// </summary>
+    public ModConfig()
+    {
+        this.SafeLocationMap = new();
+        foreach (GameLocation loc in Game1.locations)
+        {
+            ModEntry.ModMonitor.Log(loc.NameOrUniqueName, LogLevel.Info);
+            if (loc is SlimeHutch or Town or IslandWest || loc.IsFarm || loc.IsGreenhouse)
+            {
+                this.SafeLocationMap.TryAdd(loc.NameOrUniqueName, IsSafeLocationEnum.Safe);
+            }
+            else if (loc is MineShaft or VolcanoDungeon)
+            {
+                this.SafeLocationMap.TryAdd(loc.NameOrUniqueName, IsSafeLocationEnum.Dangerous);
+            }
+            else
+            {
+                this.SafeLocationMap.TryAdd(loc.NameOrUniqueName, IsSafeLocationEnum.Dynamic);
+            }
+        }
+    }
+
     /// <summary>
     /// Gets or sets a value indicating whether whether or not the entire mod is enabled.
     /// </summary>
@@ -23,11 +48,6 @@ public class ModConfig
     /// </summary>
     public bool CanPlaceRugsUnder { get; set; } = true;
 #endif
-
-    /// <summary>
-    /// Gets or sets a value indicating whether or not bombs should be confirmed.
-    /// </summary>
-    public bool ConfirmBombs { get; set; } = true;
 
     /// <summary>
     /// Gets or sets a value indicating whether whether or not to prevent the removal of items from a table.
@@ -50,7 +70,7 @@ public class ModConfig
     public bool JukeboxesEverywhere { get; set; } = true;
 
     /// <summary>
-    /// Allows golden coconuts to appear off the island, if you've cracked at least one before.
+    /// Gets or sets a value indicating whether golden coconuts should be allowed to appear off the island, if you've cracked at least one before.
     /// </summary>
     public bool GoldenCoconutsOffIsland { get; set; } = false;
 
@@ -58,4 +78,19 @@ public class ModConfig
     /// Gets or sets keybind to use to remove an item from a table.
     /// </summary>
     public KeybindList FurniturePlacementKey { get; set; } = KeybindList.Parse("LeftShift + Z");
+
+    /// <summary>
+    /// Gets or sets a value indicating whether or not to confirm bomb placement in safe areas.
+    /// </summary>
+    public ConfirmBombEnum InSafeAreas { get; set; } = ConfirmBombEnum.On;
+
+    /// <summary>
+    /// Gets or sets a value indicating whether or not to confirm bomb placement in dangerous areas.
+    /// </summary>
+    public ConfirmBombEnum InDangerousAreas { get; set; } = ConfirmBombEnum.Off;
+
+    /// <summary>
+    /// Map to which locations are considered safe.
+    /// </summary>
+    public Dictionary<string, IsSafeLocationEnum> SafeLocationMap { get; set; }
 }

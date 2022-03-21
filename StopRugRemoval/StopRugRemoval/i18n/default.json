@@ -12,8 +12,10 @@
   "PreventPlantingOnRugs.description": "Prevents hoeing on rugs and planting saplings on rugs.",
   "PlaceGrassUnder.title": "Place Grass Under",
   "PlaceGrassUnder.description": "Allow placing grass under other objects",
-  "ConfirmBombs.title": "Confirm Bombs",
-  "ConfirmBombs.dsecription": "Require bomb placement be confirmed in 'safe' areas, like the farm and greenhouse.",
+  "InSafeAreas.title": "In Safe Areas",
+  "InSafeAreas.description": "Whether bomb confirmation should be enabled in safe area.",
+  "InDangerousAreas.title": "In Dangerous Areas",
+  "InDangerousAreas.description":  "Whether bombs should be confirmed in dangerous areas.",
   "JukeboxesEverywhere.title": "Jukeboxes Everywhere",
   "JukeboxesEverywhere.description": "Allows jukeboxes to be played anywhere!",
 

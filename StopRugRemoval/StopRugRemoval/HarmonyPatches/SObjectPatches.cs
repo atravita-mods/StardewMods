@@ -2,6 +2,7 @@
 using HarmonyLib;
 using Microsoft.Xna.Framework;
 using StardewValley.Objects;
+using StopRugRemoval.Configuration;
 using StopRugRemoval.HarmonyPatches.BombHandling;
 
 namespace StopRugRemoval.HarmonyPatches;
@@ -75,10 +76,11 @@ internal static class SObjectPatches
                     }
                 }
             }
-            if (!ConfirmBomb.HaveConfirmed.Value && ModEntry.Config.ConfirmBombs
+            if (!ConfirmBomb.HaveConfirmed.Value
+                && (IsLocationConsideredDangerous(location) ? ModEntry.Config.InDangerousAreas : ModEntry.Config.InSafeAreas)
+                    .HasFlag(Context.IsMultiplayer ? ConfirmBombEnum.InMultiplayerOnly : ConfirmBombEnum.NotInMultiplayer)
                 && !__instance.bigCraftable.Value && __instance is not Furniture
-                && __instance.ParentSheetIndex is 286 or 287 or 288
-                && !location.IsDangerousLocation())
+                && __instance.ParentSheetIndex is 286 or 287 or 288)
             {
                 // handle the case where a bomb has already been placed?
                 Vector2 loc = new(x, y);
@@ -110,5 +112,10 @@ internal static class SObjectPatches
             ModEntry.ModMonitor.Log($"Mod failed while trying to prevent tree planting\n\n{ex}", LogLevel.Error);
         }
         return true;
+    }
+
+    private static bool IsLocationConsideredDangerous(GameLocation location)
+    {
+        return location.IsDangerousLocation();
     }
 }

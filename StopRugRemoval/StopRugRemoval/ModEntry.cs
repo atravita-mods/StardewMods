@@ -5,6 +5,7 @@ using AtraShared.Utils.Extensions;
 using HarmonyLib;
 using StardewModdingAPI.Events;
 using StardewModdingAPI.Utilities;
+using StopRugRemoval.Configuration;
 using StopRugRemoval.HarmonyPatches.BombHandling;
 
 namespace StopRugRemoval;
@@ -14,17 +15,17 @@ namespace StopRugRemoval;
 /// </summary>
 public class ModEntry : Mod
 {
-    private MigrationManager? migrator;
+    private static readonly Lazy<IReflectedField<Multiplayer>> MultiplayerLazy = new(() => ReflectionHelper!.GetField<Multiplayer>(typeof(Game1), "multiplayer"));
 
-    private static readonly Lazy<IReflectedField<Multiplayer>> multiplayer = new(() => ReflectionHelper!.GetField<Multiplayer>(typeof(Game1), "multiplayer"));
+    private MigrationManager? migrator;
 
     /// <summary>
     /// Gets Game1.multiplayer.
     /// </summary>
     /// <remarks>This still requires reflection and is likely slow.</remarks>
-    internal static Multiplayer Multiplayer => multiplayer.Value.GetValue();
+    internal static Multiplayer Multiplayer => MultiplayerLazy.Value.GetValue();
 
-    // the following two properties are set in the entry method, which is approximately as close as I can get to the constructor anyways.
+    // the following three properties are set in the entry method, which is approximately as close as I can get to the constructor anyways.
 #pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
     /// <summary>
     /// Gets the logger for this file.
@@ -36,6 +37,9 @@ public class ModEntry : Mod
     /// </summary>
     internal static ModConfig Config { get; private set; }
 
+    /// <summary>
+    /// Gets the reflection helper for this mod.
+    /// </summary>
     internal static IReflectionHelper ReflectionHelper { get; private set; }
 #pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
 
@@ -55,7 +59,7 @@ public class ModEntry : Mod
             Config = new();
         }
 
-        helper.Events.GameLoop.GameLaunched += this.SetUpConfig;
+        helper.Events.GameLoop.GameLaunched += this.OnGameLaunch;
         helper.Events.GameLoop.SaveLoaded += this.SaveLoaded;
         helper.Events.Player.Warped += this.Player_Warped;
 
@@ -83,7 +87,52 @@ public class ModEntry : Mod
         harmony.Snitch(this.Monitor, this.ModManifest.UniqueID);
     }
 
-    private void SetUpConfig(object? sender, GameLaunchedEventArgs e)
+    private void OnGameLaunch(object? sender, GameLaunchedEventArgs e)
+        => this.SetUpBasicConfig();
+
+    /// <summary>
+    /// Raised when save is loaded.
+    /// </summary>
+    /// <param name="sender">Unknown, used by SMAPI.</param>
+    /// <param name="e">Parameters.</param>
+    private void SaveLoaded(object? sender, SaveLoadedEventArgs e)
+    {
+        if (Context.IsSplitScreen && Context.ScreenId != 0)
+        {
+            return;
+        }
+        try
+        {
+            Config = this.Helper.ReadConfig<ModConfig>();
+        }
+        catch
+        {
+            this.Monitor.Log(I18n.IllFormatedConfig(), LogLevel.Warn);
+            Config = new();
+        }
+        this.Helper.WriteConfig(Config);
+        this.migrator = new(this.ModManifest, this.Helper, this.Monitor);
+        this.migrator.ReadVersionInfo();
+
+        this.Helper.Events.GameLoop.Saved += this.WriteMigrationData;
+    }
+
+    /// <summary>
+    /// Writes migration data then detaches the migrator.
+    /// </summary>
+    /// <param name="sender">Smapi thing.</param>
+    /// <param name="e">Arguments for just-before-saving.</param>
+    private void WriteMigrationData(object? sender, SavedEventArgs e)
+    {
+        if (this.migrator is not null)
+        {
+            this.migrator.SaveVersionInfo();
+            this.migrator = null;
+        }
+        this.Helper.Events.GameLoop.Saved -= this.WriteMigrationData;
+    }
+
+    private void SetUpBasicConfig()
     {
         GMCMHelper helper = new(this.Monitor, this.Helper.Translation, this.Helper.ModRegistry, this.ModManifest);
         if (!helper.TryGetAPI())
@@ -106,38 +155,10 @@ public class ModEntry : Mod
             {
                 helper.AddKeybindList(property, () => Config);
             }
+            else if (property.PropertyType == typeof(ConfirmBombEnum))
+            {
+                helper.AddEnumOption<ModConfig, ConfirmBombEnum>(property, () => Config);
+            }
         }
-    }
-
-    /// <summary>
-    /// Raised when save is loaded.
-    /// </summary>
-    /// <param name="sender">Unknown, used by SMAPI.</param>
-    /// <param name="e">Parameters.</param>
-    private void SaveLoaded(object? sender, SaveLoadedEventArgs e)
-    {
-        if (Context.IsSplitScreen && Context.ScreenId != 0)
-        {
-            return;
-        }
-        this.migrator = new(this.ModManifest, this.Helper, this.Monitor);
-        this.migrator.ReadVersionInfo();
-
-        this.Helper.Events.GameLoop.Saved += this.WriteMigrationData;
-    }
-
-    /// <summary>
-    /// Writes migration data then detaches the migrator.
-    /// </summary>
-    /// <param name="sender">Smapi thing.</param>
-    /// <param name="e">Arguments for just-before-saving.</param>
-    private void WriteMigrationData(object? sender, SavedEventArgs e)
-    {
-        if (this.migrator is not null)
-        {
-            this.migrator.SaveVersionInfo();
-            this.migrator = null;
-        }
-        this.Helper.Events.GameLoop.Saved -= this.WriteMigrationData;
     }
 }

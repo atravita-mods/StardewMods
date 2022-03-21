@@ -1,4 +1,5 @@
 ﻿using AtraShared.MigrationManager;
+using AtraShared.Utils;
 using AtraShared.Utils.Extensions;
 using GingerIslandMainlandAdjustments.AssetManagers;
 using GingerIslandMainlandAdjustments.CustomConsoleCommands;
@@ -29,8 +30,6 @@ public class ModEntry : Mod
 
         ConsoleCommands.Register(this.Helper.ConsoleCommands);
 
-        this.ApplyPatches(new Harmony(this.ModManifest.UniqueID));
-
         // Register events
         helper.Events.GameLoop.GameLaunched += this.OnGameLaunched;
         helper.Events.GameLoop.TimeChanged += this.OnTimeChanged;
@@ -46,16 +45,13 @@ public class ModEntry : Mod
         // Add my asset loader and editor.
         helper.Content.AssetLoaders.Add(AssetLoader.Instance);
         helper.Content.AssetEditors.Add(AssetEditor.Instance);
+
+        this.ApplyPatches(new Harmony(this.ModManifest.UniqueID));
     }
-
-    private void PeerConnected(object? sender, PeerConnectedEventArgs e)
-        => MultiplayerSharedState.ReSendMultiplayerMessage(e);
-
-    private void ModMessageReceived(object? sender, ModMessageReceivedEventArgs e)
-        => MultiplayerSharedState.UpdateFromMessage(e);
 
     private void OnSaveLoaded(object? sender, SaveLoadedEventArgs e)
     {
+        MultiplayerHelpers.AssertMultiplayerVersions(this.Helper.Multiplayer, Globals.Manifest, Globals.ModMonitor, this.Helper.Translation);
         if (Context.IsSplitScreen && Context.ScreenId != 0)
         {
             return;
@@ -222,4 +218,10 @@ public class ModEntry : Mod
             this.haveFixedSchedulesToday = true;
         }
     }
+
+    private void PeerConnected(object? sender, PeerConnectedEventArgs e)
+        => MultiplayerSharedState.ReSendMultiplayerMessage(e);
+
+    private void ModMessageReceived(object? sender, ModMessageReceivedEventArgs e)
+        => MultiplayerSharedState.UpdateFromMessage(e);
 }

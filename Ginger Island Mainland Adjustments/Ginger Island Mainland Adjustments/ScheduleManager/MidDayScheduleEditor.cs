@@ -43,32 +43,23 @@ internal static class MidDayScheduleEditor
     /// <param name="e">Time Changed Parameters from SMAPI.</param>
     internal static void AttemptAdjustGISchedule(TimeChangedEventArgs e)
     {
-        if ((Context.IsSplitScreen && Context.ScreenId != 0) || e.NewTime >= 900)
-        { // skip after 9AM, or if is farmhand on splitscreen.
-            return;
-        }
-        if (Globals.Config.UseThisScheduler)
-        {// fancy scheduler is on.
+        if (!Context.IsMainPlayer
+            || e.NewTime >= 900
+            || Globals.Config.UseThisScheduler)
+        { // skip after 9AM, or if is not the main player, or if the fancy scheduler is on.
             return;
         }
         foreach (string name in Game1.netWorldState.Value.IslandVisitors.Keys)
         {
-            if (name.Equals("Gus", StringComparison.OrdinalIgnoreCase))
-            { // Gus runs saloon, skip.
-                continue;
-            }
-            if (!Game1.netWorldState.Value.IslandVisitors[name])
-            {
-                continue;
-            }
-            if (ScheduleAltered.TryGetValue(name, out bool hasbeenaltered) && hasbeenaltered)
+            if (name.Equals("Gus", StringComparison.OrdinalIgnoreCase) // Gus runs saloon, skip.
+                || !Game1.netWorldState.Value.IslandVisitors[name]
+                || (ScheduleAltered.TryGetValue(name, out bool hasbeenaltered) && hasbeenaltered))
             {
                 continue;
             }
             Globals.ModMonitor.Log(I18n.MiddayScheduleEditor_NpcFoundForAdjustment(name), LogLevel.Trace);
             ScheduleAltered[name] = true;
-            NPC npc = Game1.getCharacterFromName(name);
-            if (npc is not null)
+            if (Game1.getCharacterFromName(name) is NPC npc)
             {
                 AdjustSpecificSchedule(npc);
                 break; // Do the next person at the next ten minute tick.
@@ -85,7 +76,7 @@ internal static class MidDayScheduleEditor
     {
         if (npc.islandScheduleName?.Value is null || npc.islandScheduleName?.Value == string.Empty)
         {
-            if (Globals.Config.EnforceGITiming)
+            if (Globals.Config.EnforceGITiming || Globals.Config.DebugMode)
             {
                 Globals.ModMonitor.Log(I18n.MiddayScheduleEditor_NpcNotIslander(npc.Name), LogLevel.Warn);
             }
@@ -98,7 +89,7 @@ internal static class MidDayScheduleEditor
         }
         if (npc.Schedule is null)
         {
-            if (Globals.Config.EnforceGITiming)
+            if (Globals.Config.EnforceGITiming || Globals.Config.DebugMode)
             {
                 Globals.ModMonitor.Log(I18n.MiddayScheduleEditor_NpcHasNoSchedule(npc.Name), LogLevel.Warn);
             }

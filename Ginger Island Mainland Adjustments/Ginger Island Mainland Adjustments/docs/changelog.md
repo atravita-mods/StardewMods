@@ -30,7 +30,7 @@
 
 1. NPCs may vanish if they go to `IslandSouthEast`. They reappear the next day. Therefore, that's been tempoarily removed until I figure out why they disappear from `IslandSouthEast`. `IslandNorth` is fine.
 2. If you pause time, NPCs will tend to get stuck at schedule points. Unfortunately for Ginger Island, this usually ends with NPCs trapped in the changing room. If you go to Ginger Island and see no one there, try unpausing time. Or just leave them trapped in the changing room....(or I guess, disable changing)
-3. Pam's phone call may not work in multiplayer (due to how daySchedule.Value works). TODO: multiplayer message this. <!-- postfix getMasterSchedule to send the raw schedule string out. -->
+3. The debugging console commands basically only work for the host in multiplayer.
 
 ### Version 1.1.3
  
@@ -44,6 +44,7 @@ Fixes:
 * Fix GILeave/Return dialogue not happening for farmhands. Spouses now have default GILeave/Return lines, although I would recommend still giving your favorite spouse a line or two.
 * `bed` is supported for `GIRemainder` schedules.
 * Fixes for splitscreen.
+* Fixed fishing on Ginger Island.
 
 ### Version 1.1.2
 

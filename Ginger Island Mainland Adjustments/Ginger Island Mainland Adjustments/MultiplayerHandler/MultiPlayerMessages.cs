@@ -5,16 +5,23 @@ using StardewModdingAPI.Utilities;
 
 namespace GingerIslandMainlandAdjustments.MultiplayerHandler;
 
+/// <summary>
+/// Class to handle multiplayer shared state.
+/// </summary>
 [HarmonyPatch(typeof(NPC))]
 public static class MultiplayerSharedState
 {
     private const string SCHEDULEMESSAGE = "GIMAScheduleUpdateMessage";
+
+    /// <summary>
+    /// Gets or sets pam's current schedule string.
+    /// </summary>
     internal static string? PamsSchedule { get; set; }
 
     /// <summary>
     /// Updates entry for Pam's schedule whenever a person joins in multiplayer.
     /// </summary>
-    /// <param name="e">arguments?</param>
+    /// <param name="e">arguments.</param>
     internal static void ReSendMultiplayerMessage(PeerConnectedEventArgs e)
     {
         if (Context.IsMainPlayer && Context.IsWorldReady && Game1.getCharacterFromName("Pam") is NPC pam 
@@ -27,6 +34,10 @@ public static class MultiplayerSharedState
         }
     }
 
+    /// <summary>
+    /// Updates entry for Pam's schedule from a multiplayer message.
+    /// </summary>
+    /// <param name="e">arguments.</param>
     internal static void UpdateFromMessage(ModMessageReceivedEventArgs e)
     {
         if (e.FromModID == Globals.Manifest.UniqueID && e.Type == SCHEDULEMESSAGE)
@@ -38,6 +49,7 @@ public static class MultiplayerSharedState
 
     [HarmonyPostfix]
     [HarmonyPatch(nameof(NPC.parseMasterSchedule))]
+    [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Harmony convention")]
     private static void PostfixGetMasterSchedule(NPC __instance)
     {
         try

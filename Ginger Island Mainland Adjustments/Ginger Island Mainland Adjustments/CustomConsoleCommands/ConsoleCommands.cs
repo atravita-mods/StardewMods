@@ -76,7 +76,7 @@ internal static class ConsoleCommands
         List<string> npcsNotFound = new();
         foreach (string npcname in args)
         {
-            if (Game1.getCharacterFromName(npcname, mustBeVillager: true) is not null)
+            if (Utility.fuzzyCharacterSearch(npcname, must_be_villager: true) is not null)
             {
                 Globals.SaveDataModel.NPCsForTomorrow.Add(npcname);
                 npcsFound.Add(npcname);
@@ -194,7 +194,7 @@ internal static class ConsoleCommands
     {
         foreach (string name in args)
         {
-            if (Game1.getCharacterFromName(name, mustBeVillager: true) is NPC npc)
+            if (Utility.fuzzyCharacterSearch(name, must_be_villager: true) is NPC npc)
             {
                 DisplaySchedule(npc, LogLevel.Debug);
             }

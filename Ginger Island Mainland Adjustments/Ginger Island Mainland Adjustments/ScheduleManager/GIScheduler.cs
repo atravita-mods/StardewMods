@@ -40,6 +40,9 @@ internal static class GIScheduler
     /// <remarks>Used primarily for setting group-based dialogue...</remarks>
     public static HashSet<NPC>? CurrentVisitingGroup { get; private set; }
 
+    public static string? CurrentAdventureGroup { get; private set; }
+    public static HashSet<NPC>? CurrentAdventurers { get; private set; }
+
     /// <summary>
     /// Gets the current bartender.
     /// </summary>
@@ -90,6 +93,8 @@ internal static class GIScheduler
     {
         CurrentGroup = null;
         CurrentVisitingGroup = null;
+        CurrentAdventureGroup = null;
+        CurrentAdventurers = null;
     }
 
     /// <summary>
@@ -166,8 +171,9 @@ internal static class GIScheduler
             List<string> explorerGroups = ExplorerGroups.Keys.ToList();
             if (explorerGroups.Count > 0)
             {
-                string explorerGroup = explorerGroups[random.Next(explorerGroups.Count)];
-                return ExplorerGroups[explorerGroup].Where((NPC npc) => IslandSouth.CanVisitIslandToday(npc)).Take(3).ToHashSet();
+                CurrentAdventureGroup = explorerGroups[random.Next(explorerGroups.Count)];
+                CurrentAdventurers = ExplorerGroups[CurrentAdventureGroup].Where((NPC npc) => IslandSouth.CanVisitIslandToday(npc)).Take(3).ToHashSet();
+                return CurrentAdventurers;
             }
         }
         return new HashSet<NPC>(); // just return an empty hashset.
@@ -184,6 +190,8 @@ internal static class GIScheduler
     {
         CurrentGroup = null;
         CurrentVisitingGroup = null;
+        CurrentAdventureGroup = null;
+        CurrentAdventurers = null;
 
         List<NPC> visitors = new();
         HashSet<NPC> valid_visitors = new();

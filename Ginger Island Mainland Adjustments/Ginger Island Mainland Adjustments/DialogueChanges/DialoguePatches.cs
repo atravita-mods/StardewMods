@@ -14,6 +14,8 @@ internal static class DialoguePatches
 {
     private const string ANTISOCIAL = "Resort_Antisocial";
     private const string ISLANDNORTH = "Resort_IslandNorth";
+    private const string TOADVENTURE = "Resort_Adventure";
+    private const string FROMADVENTURE = "Resort_AdventureReturn";
 
     private static readonly PerScreen<HashSet<string>> TalkedToTodayPerScreen = new(createNewState: () => new HashSet<string>());
 
@@ -45,6 +47,19 @@ internal static class DialoguePatches
             if (__result || !Game1.IsVisitingIslandToday(__instance.Name) || __instance.currentLocation is FarmHouse)
             { // game code has returned a value, therefore skip me.
                 return;
+            }
+            if (__instance.currentLocation is IslandLocation && GIScheduler.CurrentAdventurers?.Contains(__instance) == true)
+            {
+                if (Game1.timeOfDay < 1200 && __instance.Dialogue.ContainsKey(TOADVENTURE))
+                {
+                    __instance.ClearAndPushDialogue(TOADVENTURE);
+                    return;
+                }
+                else if (Game1.timeOfDay > 1700 && __instance.Dialogue.ContainsKey(FROMADVENTURE))
+                {
+                    __instance.ClearAndPushDialogue(FROMADVENTURE);
+                    return;
+                }
             }
             if (__instance.currentLocation is IslandEast && __instance.Dialogue.ContainsKey(ANTISOCIAL))
             {

@@ -94,7 +94,12 @@ public class AssetLoader : IAssetLoader
                 // Russian needs to be handled seperately.
                 foreach (BaseEnchantment enchantment in BaseEnchantment.GetAvailableEnchantments())
                 {
-                    if (tooltipmap.TryGetValue(enchantment.GetDisplayName(), out string? val))
+                    if (ModEntry.TranslationHelper.Get("enchantment." + enchantment.GetName()) is Translation i18nname
+                        && i18nname.HasValue())
+                    {
+                        tooltipdata[enchantment.GetName()] = i18nname;
+                    }
+                    else if (tooltipmap.TryGetValue(enchantment.GetDisplayName(), out string? val))
                     {
                         tooltipdata[enchantment.GetName()] = val;
                     }

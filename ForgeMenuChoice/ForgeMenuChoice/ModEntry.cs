@@ -23,6 +23,11 @@ internal class ModEntry : Mod
     internal static IContentHelper ContentHelper { get; private set; }
 
     /// <summary>
+    /// Gets the translation helper for this mod.
+    /// </summary>
+    internal static ITranslationHelper TranslationHelper { get; private set; }
+
+    /// <summary>
     /// Gets the configuration class for this mod.
     /// </summary>
     internal static ModConfig Config { get; private set; }
@@ -33,6 +38,7 @@ internal class ModEntry : Mod
     {
         ModMonitor = this.Monitor;
         ContentHelper = helper.Content;
+        TranslationHelper = helper.Translation;
         I18n.Init(helper.Translation);
 
         try

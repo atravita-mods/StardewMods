@@ -31,6 +31,8 @@ public sealed class GMCMHelper : IntegrationHelper
         this.manifest = manifest;
     }
 
+    public bool HasGottenAPI => this.modMenuApi is not null;
+
     /// <summary>
     /// Tries to grab a copy of the API.
     /// </summary>
@@ -51,6 +53,21 @@ public sealed class GMCMHelper : IntegrationHelper
             reset: reset,
             save: save,
             titleScreenOnly: titleScreenOnly);
+        return this;
+    }
+
+    /// <summary>
+    /// Adds a section title at this location.
+    /// </summary>
+    /// <param name="title">Function that gets the title.</param>
+    /// <param name="tooltip">Function, if any, for a tooltip.</param>
+    /// <returns>this.</returns>
+    public GMCMHelper AddSectionTitle(Func<string> title, Func<string>? tooltip = null)
+    {
+        this.modMenuApi!.AddSectionTitle(
+            mod: this.manifest,
+            text: title,
+            tooltip: tooltip);
         return this;
     }
 
@@ -569,6 +586,39 @@ public sealed class GMCMHelper : IntegrationHelper
             throw new ArgumentException($"{pageId} has not been defined yet!");
         }
         this.modMenuApi!.AddPage(this.manifest, pageId);
+        return this;
+    }
+
+    /// <summary>
+    /// Switches to a previously-defined page.
+    /// </summary>
+    /// <param name="index">Which page to switch to (in order defined).</param>
+    /// <returns>this.</returns>
+    /// <exception cref="ArgumentException">The page is not defined.</exception>
+    public GMCMHelper SwitchPatch(int index)
+    {
+        if (index < 0 || index >= this.pages.Count)
+        {
+            throw new ArgumentException($"Attempted to access a page not defined!");
+        }
+        this.modMenuApi!.AddPage(this.manifest, this.pages[index]);
+        return this;
+    }
+
+    /// <summary>
+    /// Sets whether the following options should be title screen only.
+    /// </summary>
+    /// <param name="titleScreenOnly">should be title screen only.</param>
+    /// <returns>this.</returns>
+    public GMCMHelper SetTitleScreenOnly(bool titleScreenOnly)
+    {
+        this.modMenuApi!.SetTitleScreenOnlyForNextOptions(this.manifest, titleScreenOnly);
+        return this;
+    }
+
+    public GMCMHelper Unregister()
+    {
+        this.modMenuApi!.Unregister(this.manifest);
         return this;
     }
 }

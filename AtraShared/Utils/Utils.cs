@@ -1,5 +1,4 @@
-﻿using System.Globalization;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using StardewModdingAPI.Utilities;
 
 namespace AtraShared.Utils;
@@ -63,11 +62,7 @@ public static class Utils
     /// <param name="ignoreCase">Whether or not to ignore case.</param>
     /// <returns>A string comparer.</returns>
     public static StringComparer GetCurrentLanguageComparer(bool ignoreCase = false)
-    {
-        LocalizedContentManager contextManager = Game1.content;
-        string langcode = contextManager.LanguageCodeString(contextManager.GetCurrentLanguage());
-        return StringComparer.Create(new CultureInfo(langcode), ignoreCase);
-    }
+        => StringComparer.Create(Game1.content.CurrentCulture, ignoreCase);
 
     public static IEnumerable<NPC> GetBirthdayNPCs(SDate day)
     {

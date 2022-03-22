@@ -139,4 +139,14 @@ public interface IGenericModConfigMenuApi
     /// <param name="pageTitle">The page title shown in its UI, or <c>null</c> to show the <paramref name="pageId"/> value.</param>
     /// <remarks>You must also call <see cref="AddPageLink"/> to make the page accessible. This is only needed to set up a multi-page config UI. If you don't call this method, all options will be part of the mod's main config UI instead.</remarks>
     void AddPage(IManifest mod, string pageId, Func<string>? pageTitle = null);
+
+    /// <summary>Set whether the options registered after this point can only be edited from the title screen.</summary>
+    /// <param name="mod">The mod's manifest.</param>
+    /// <param name="titleScreenOnly">Whether the options can only be edited from the title screen.</param>
+    /// <remarks>This lets you have different values per-field. Most mods should just set it once in <see cref="Register"/>.</remarks>
+    void SetTitleScreenOnlyForNextOptions(IManifest mod, bool titleScreenOnly);
+
+    /// <summary>Remove a mod from the config UI and delete all its options and pages.</summary>
+    /// <param name="mod">The mod's manifest.</param>
+    void Unregister(IManifest mod);
 }

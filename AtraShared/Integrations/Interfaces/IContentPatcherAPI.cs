@@ -1,7 +1,7 @@
 ﻿/******************************************
  * The following file was copied from https://github.com/Pathoschild/StardewMods/blob/stable/ContentPatcher/IContentPatcherAPI.cs.
  * 
- * The original licensed is as below:
+ * The original license is as below:
  * 
  * The MIT License (MIT)
  * 

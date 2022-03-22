@@ -9,11 +9,10 @@ namespace StopRugRemoval.Configuration;
 public class ModConfig
 {
     /// <summary>
-    /// Initializes a new instance of the <see cref="ModConfig"/> class.
+    /// Pre-populates locations.
     /// </summary>
-    public ModConfig()
+    public void PrePopulateLocations()
     {
-        this.SafeLocationMap = new();
         foreach (GameLocation loc in Game1.locations)
         {
             ModEntry.ModMonitor.Log(loc.NameOrUniqueName, LogLevel.Info);
@@ -92,5 +91,5 @@ public class ModConfig
     /// <summary>
     /// Map to which locations are considered safe.
     /// </summary>
-    public Dictionary<string, IsSafeLocationEnum> SafeLocationMap { get; set; }
+    public Dictionary<string, IsSafeLocationEnum> SafeLocationMap { get; set; } = new();
 }

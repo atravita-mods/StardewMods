@@ -16,6 +16,7 @@ namespace StopRugRemoval;
 public class ModEntry : Mod
 {
     private static readonly Lazy<IReflectedField<Multiplayer>> MultiplayerLazy = new(() => ReflectionHelper!.GetField<Multiplayer>(typeof(Game1), "multiplayer"));
+    private static GMCMHelper? GMCM = null;
 
     private MigrationManager? migrator;
 
@@ -88,7 +89,14 @@ public class ModEntry : Mod
     }
 
     private void OnGameLaunch(object? sender, GameLaunchedEventArgs e)
-        => this.SetUpBasicConfig();
+    {
+        GMCM = new(this.Monitor, this.Helper.Translation, this.Helper.ModRegistry, this.ModManifest);
+        if (!GMCM.TryGetAPI())
+        {
+            return;
+        }
+        this.SetUpBasicConfig();
+    }
 
     /// <summary>
     /// Raised when save is loaded.
@@ -101,20 +109,32 @@ public class ModEntry : Mod
         {
             return;
         }
-        try
-        {
-            Config = this.Helper.ReadConfig<ModConfig>();
-        }
-        catch
-        {
-            this.Monitor.Log(I18n.IllFormatedConfig(), LogLevel.Warn);
-            Config = new();
-        }
+        // Have to wait until here to populate locations
+        Config.PrePopulateLocations();
         this.Helper.WriteConfig(Config);
+
         this.migrator = new(this.ModManifest, this.Helper, this.Monitor);
         this.migrator.ReadVersionInfo();
 
+        this.Monitor.Log(Config.SafeLocationMap["Town"].ToString(), LogLevel.Alert);
+
         this.Helper.Events.GameLoop.Saved += this.WriteMigrationData;
+
+        if (GMCM?.HasGottenAPI == true)
+        {
+            GMCM.Unregister();
+            this.SetUpBasicConfig();
+            GMCM.AddPageHere("Bombs", I18n.BombLocationDetailed)
+                .AddParagraph(I18n.BombLocationDetailed_Description);
+
+            foreach (GameLocation loc in Game1.locations)
+            {
+                GMCM.AddEnumOption(
+                    name: () => loc.NameOrUniqueName,
+                    getValue: () => Config.SafeLocationMap.TryGetValue(loc.NameOrUniqueName, out IsSafeLocationEnum val) ? val : IsSafeLocationEnum.Dynamic,
+                    setValue: (value) => Config.SafeLocationMap[loc.NameOrUniqueName] = value);
+            }
+        }
     }
 
     /// <summary>
@@ -134,14 +154,12 @@ public class ModEntry : Mod
 
     private void SetUpBasicConfig()
     {
-        GMCMHelper helper = new(this.Monitor, this.Helper.Translation, this.Helper.ModRegistry, this.ModManifest);
-        if (!helper.TryGetAPI())
-        {
-            return;
-        }
-
-        helper.Register(
-                reset: () => Config = new ModConfig(),
+        GMCM!.Register(
+                reset: () =>
+                {
+                    Config = new ModConfig();
+                    Config.PrePopulateLocations();
+                },
                 save: () => this.Helper.WriteConfig(Config))
             .AddParagraph(I18n.Mod_Description);
 
@@ -149,16 +167,24 @@ public class ModEntry : Mod
         {
             if (property.PropertyType == typeof(bool))
             {
-                helper.AddBoolOption(property, () => Config);
+                GMCM.AddBoolOption(property, () => Config);
             }
             else if (property.PropertyType == typeof(KeybindList))
             {
-                helper.AddKeybindList(property, () => Config);
-            }
-            else if (property.PropertyType == typeof(ConfirmBombEnum))
-            {
-                helper.AddEnumOption<ModConfig, ConfirmBombEnum>(property, () => Config);
+                GMCM.AddKeybindList(property, () => Config);
             }
         }
+        GMCM!.AddSectionTitle(I18n.ConfirmBomb_Title)
+            .AddParagraph(I18n.ConfirmBomb_Description)
+            .AddEnumOption(
+                name: I18n.InSafeAreas_Title,
+                getValue: () => Config.InSafeAreas,
+                setValue: (value) => Config.InSafeAreas = value,
+                tooltip: I18n.InSafeAreas_Description)
+            .AddEnumOption(
+                name: I18n.InDangerousAreas_Title,
+                getValue: () => Config.InDangerousAreas,
+                setValue: (value) => Config.InDangerousAreas = value,
+                tooltip: I18n.InDangerousAreas_Description);
     }
 }

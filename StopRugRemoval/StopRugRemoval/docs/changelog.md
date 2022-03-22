@@ -5,6 +5,10 @@
 [] Catch input to place rug under things.
 <!-- Figure out how to replace the reference to coffee in the night market dialogue?-->
 
+#### Version 1.0.6
+
+* Remove excess debugging statements accidentally left in. My apologies.
+
 #### Version 1.0.5 : Rebrand to Atra's Interaction Tweaks
 
 * Allows placement of grass under things.

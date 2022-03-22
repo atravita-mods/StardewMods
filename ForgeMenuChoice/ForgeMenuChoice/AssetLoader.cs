@@ -69,14 +69,12 @@ public class AssetLoader : IAssetLoader
             // the journal scrap 1008 is the only in-game descriptions of enchantments. We'll need to grab data from there.
             try
             {
-                ModEntry.ContentHelper.InvalidateCache(ENCHANTMENT_NAMES_LOCATION);
                 IDictionary<int, string> secretnotes = ModEntry.ContentHelper.Load<Dictionary<int, string>>("Data\\SecretNotes", ContentSource.GameContent);
-                string[] secretNote8 = secretnotes[1008].Split("^^");
+                string[] secretNote8 = secretnotes[1008].Split("^^", StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
 
                 // The secret note, of course, has its data in the localized name. We'll need to map that to the internal name.
                 // Using a dictionary with a StringComparer for the user's current language to make that a little easier.
-                StringComparer comparer = AtraUtils.GetCurrentLanguageComparer(ignoreCase: true);
-                Dictionary<string, string> tooltipmap = new(comparer);
+                Dictionary<string, string> tooltipmap = new(AtraUtils.GetCurrentLanguageComparer(ignoreCase: true));
                 foreach (string str in secretNote8)
                 {
                     string[] splits = str.Split(':', count: 2, options: StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
@@ -128,15 +126,15 @@ public class AssetLoader : IAssetLoader
     internal static void Refresh()
     {
         uiElementLazy = new(() => ModEntry.ContentHelper.Load<Texture2D>(UI_ASSET_PATH, ContentSource.GameContent));
-        tooltipDataLazy = new(() => ModEntry.ContentHelper.Load<Dictionary<string, string>>(TOOLTIP_DATA_PATH, ContentSource.GameContent));
+        tooltipDataLazy = new(GrabAndWrapTooltips);
     }
 
-    private static Dictionary<string,string> GrabAndWrapTooltips()
+    private static Dictionary<string, string> GrabAndWrapTooltips()
     {
         Dictionary<string, string> tooltips = ModEntry.ContentHelper.Load<Dictionary<string, string>>(TOOLTIP_DATA_PATH, ContentSource.GameContent);
         foreach ((string k, string v) in tooltips)
         {
-            tooltips[k] = Game1.parseText(v);
+            tooltips[k] = Game1.parseText(v, Game1.smallFont, 300);
         }
         return tooltips;
     }

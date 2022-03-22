@@ -46,6 +46,10 @@ internal sealed class ForgeSelectionMenu : IClickableMenu
             || (ModEntry.Config.TooltipBehavior == TooltipBehavior.Immersive && Utility.HasAnyPlayerSeenSecretNote(1008));
     }
 
+    private static Texture2D Graphics => AssetLoader.UIElement;
+
+    private static IDictionary<string, string> TooltipData => AssetLoader.TooltipData;
+
     /// <summary>
     /// Gets the currently selected enchantment.
     /// </summary>
@@ -55,10 +59,6 @@ internal sealed class ForgeSelectionMenu : IClickableMenu
     /// Gets the display name of the currently selected enchantment.
     /// </summary>
     private string CurrentSelectedTranslatedOption => this.CurrentSelectedOption.GetDisplayName();
-
-    private static Texture2D Graphics => AssetLoader.UIElement;
-
-    private static IDictionary<string, string> TooltipData => AssetLoader.TooltipData;
 
     private int Index
     {
@@ -78,14 +78,13 @@ internal sealed class ForgeSelectionMenu : IClickableMenu
     }
 
     /// <summary>
-    /// Processes a right click. (In this case, does nothing.
+    /// Processes a right click. (In this case, same as left click).
     /// </summary>
     /// <param name="x">X location.</param>
     /// <param name="y">Y location.</param>
     /// <param name="playSound">Whether or not to play sounds.</param>
     public override void receiveRightClick(int x, int y, bool playSound = true)
-    {
-    }
+        => this.receiveLeftClick(x, y, playSound);
 
     /// <summary>
     /// Processes a left click.
@@ -204,7 +203,8 @@ internal sealed class ForgeSelectionMenu : IClickableMenu
             this.forwardButton.scale = Math.Min(this.forwardButton.scale + 0.05f, this.forwardButton.baseScale);
             if (this.shouldShowTooltip && this.isHovered && TooltipData.TryGetValue(this.CurrentSelectedOption.GetName(), out string? tooltip))
             {
-                IClickableMenu.drawHoverText(b, Game1.parseText(tooltip, Game1.smallFont, Width), Game1.smallFont);
+                // The tooltip should be previously wrapped.
+                IClickableMenu.drawHoverText(b, tooltip, Game1.smallFont);
             }
             this.drawMouse(b);
         }

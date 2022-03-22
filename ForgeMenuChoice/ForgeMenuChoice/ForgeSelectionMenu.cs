@@ -16,7 +16,7 @@ internal sealed class ForgeSelectionMenu : IClickableMenu
     private const int Width = 400; // px
     private const int Height = 188; // px
 
-    private readonly bool shouldShowTooltip; // make config properly later.
+    private readonly bool shouldShowTooltip;
     private readonly List<BaseEnchantment> options = new();
 
     private ClickableTextureComponent backButton;

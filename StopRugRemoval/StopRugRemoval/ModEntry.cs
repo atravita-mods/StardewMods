@@ -109,14 +109,13 @@ public class ModEntry : Mod
         {
             return;
         }
+
         // Have to wait until here to populate locations
         Config.PrePopulateLocations();
         this.Helper.WriteConfig(Config);
 
         this.migrator = new(this.ModManifest, this.Helper, this.Monitor);
         this.migrator.ReadVersionInfo();
-
-        this.Monitor.Log(Config.SafeLocationMap["Town"].ToString(), LogLevel.Alert);
 
         this.Helper.Events.GameLoop.Saved += this.WriteMigrationData;
 

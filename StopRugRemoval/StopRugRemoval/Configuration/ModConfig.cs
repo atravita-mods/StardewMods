@@ -82,7 +82,6 @@ public class ModConfig
     {
         foreach (GameLocation loc in Game1.locations)
         {
-            ModEntry.ModMonitor.Log(loc.NameOrUniqueName, LogLevel.Info);
             if (loc is SlimeHutch or Town or IslandWest || loc.IsFarm || loc.IsGreenhouse)
             {
                 this.SafeLocationMap.TryAdd(loc.NameOrUniqueName, IsSafeLocationEnum.Safe);

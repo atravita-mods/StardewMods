@@ -1,6 +1,7 @@
 ﻿using HarmonyLib;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using StardewModdingAPI.Utilities;
 using StardewValley.Menus;
 
 namespace ForgeMenuChoice.HarmonyPatches;
@@ -12,23 +13,30 @@ namespace ForgeMenuChoice.HarmonyPatches;
 [HarmonyPatch(typeof(ForgeMenu))]
 internal static class ForgeMenuPatches
 {
-    private static readonly List<BaseEnchantment> PossibleEnchantments = new();
-
-    private static ForgeSelectionMenu? menu;
+    private static readonly PerScreen<List<BaseEnchantment>> PossibleEnchantmentPerscreen = new(() => new());
+    private static readonly PerScreen<ForgeSelectionMenu?> MenuPerscreen = new();
 
     /// <summary>
     /// Gets the current selected enchantment from the menu, if the menu exists.
     /// </summary>
     public static BaseEnchantment? CurrentSelection
-        => menu?.CurrentSelectedOption;
+        => Menu?.CurrentSelectedOption;
+
+    private static List<BaseEnchantment> PossibleEnchantments => PossibleEnchantmentPerscreen.Value;
+
+    private static ForgeSelectionMenu? Menu
+    {
+        get => MenuPerscreen.Value;
+        set => MenuPerscreen.Value = value;
+    }
 
     /// <summary>
     /// Exits and trashes the minimenu.
     /// </summary>
     internal static void TrashMenu()
     {
-        menu?.exitThisMenu(false);
-        menu = null;
+        Menu?.exitThisMenu(false);
+        Menu = null;
     }
 
     /// <summary>
@@ -66,7 +74,7 @@ internal static class ForgeMenuPatches
                 }
                 if (PossibleEnchantments.Count > 0)
                 {
-                    menu ??= new(options: PossibleEnchantments);
+                    Menu ??= new(options: PossibleEnchantments);
                     __result = true;
                     return false;
                 }
@@ -88,7 +96,7 @@ internal static class ForgeMenuPatches
     [HarmonyPostfix]
     [HarmonyPatch(nameof(ForgeMenu.draw))]
     internal static void PostfixDraw(SpriteBatch b)
-        => menu?.draw(b);
+        => Menu?.draw(b);
 
     /// <summary>
     /// Postfixes the forge menu's left click to also process left clicks for the smol menu.
@@ -99,7 +107,7 @@ internal static class ForgeMenuPatches
     [HarmonyPostfix]
     [HarmonyPatch(nameof(ForgeMenu.receiveLeftClick))]
     internal static void PostFixLeftClick(int x, int y, bool playSound)
-        => menu?.receiveLeftClick(x, y, playSound);
+        => Menu?.receiveLeftClick(x, y, playSound);
 
     /// <summary>
     /// Postfixes the forge menu's right click to also process right clicks for the smol menu.
@@ -110,7 +118,7 @@ internal static class ForgeMenuPatches
     [HarmonyPostfix]
     [HarmonyPatch(nameof(ForgeMenu.receiveRightClick))]
     internal static void PostfixRightClick(int x, int y, bool playSound)
-        => menu?.receiveRightClick(x, y, playSound);
+        => Menu?.receiveRightClick(x, y, playSound);
 
     /// <summary>
     /// Postfixes the forge menu's resizing to also move the smol menu.
@@ -120,7 +128,7 @@ internal static class ForgeMenuPatches
     [HarmonyPostfix]
     [HarmonyPatch(nameof(ForgeMenu.gameWindowSizeChanged))]
     internal static void PostfixGameWindowSizeChanged(Rectangle oldBounds, Rectangle newBounds)
-        => menu?.gameWindowSizeChanged(oldBounds, newBounds);
+        => Menu?.gameWindowSizeChanged(oldBounds, newBounds);
 
     /// <summary>
     /// Postfixes the forge menu's hovering to handle hovering in the smol menu.
@@ -130,5 +138,5 @@ internal static class ForgeMenuPatches
     [HarmonyPostfix]
     [HarmonyPatch(nameof(ForgeMenu.performHoverAction))]
     internal static void PostfixPerformHoverAction(int x, int y)
-        => menu?.performHoverAction(x, y);
+        => Menu?.performHoverAction(x, y);
 }

@@ -11,7 +11,7 @@ namespace ForgeMenuChoice.HarmonyPatches;
 /// This has to be a transpiler - I need only this call to GetEnchantmentFromItem to be different.
 /// </summary>
 [HarmonyPatch(typeof(Tool))]
-internal class GetEnchantmentPatch
+internal static class GetEnchantmentPatch
 {
     /// <summary>
     /// Function that substitutes in an enchantment.

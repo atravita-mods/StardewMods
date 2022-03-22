@@ -54,7 +54,7 @@ internal class ModEntry : Mod
     private void OnSaveLoaded(object? sender, SaveLoadedEventArgs e)
     {
         ContentHelper.InvalidateCache(AssetLoader.ENCHANTMENT_NAMES_LOCATION);
-#pragma warning disable CS8625 // Cannot convert null literal to non-nullable reference type.
+#pragma warning disable CS8625 // Cannot convert null literal to non-nullable reference type. This is a valid call, SMAPI just doesn't use nullable.
         // This is the games cache of enchantment names. I null it here to clear it, in case the user changes languages.
         this.Helper.Reflection.GetField<List<BaseEnchantment>>(typeof(BaseEnchantment), "_enchantments").SetValue(null);
 #pragma warning restore CS8625 // Cannot convert null literal to non-nullable reference type.

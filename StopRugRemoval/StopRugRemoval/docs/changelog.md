@@ -3,14 +3,16 @@
 
 #### ToDo
 [] Catch input to place rug under things.
-[] Catch bombs, add confirmation, and handle placing said bomb myself....
 <!-- Figure out how to replace the reference to coffee in the night market dialogue?-->
 
-#### Version 1.0.5
+#### Version 1.0.5 : Rebrand to Atra's Interaction Tweaks
 
 * Allows placement of grass under things.
 * Bomb confirm: Bombs placed in "non dangerous" areas will ask for a confirmation first. Definitely safe areas: farm, greenhouse, town and Ginger Island farm. Definitely unsafe areas: mines, skull caverns, and volcano dungeon. Everywhere else is unsafe if there's a single monster on the map. (Configurable)
 * Fix splitscreen issues.
+* Clicking on a butterfly hutch spawns a butterfly.
+* Jukeboxes can be placed anywhere.
+* Config to allow coconuts to be dropped by palm trees off island.
 
 #### Version 1.0.4
 

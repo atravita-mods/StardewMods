@@ -2,6 +2,8 @@
   "mod.description": "Prevents rugs from being removed if there's something on the rug. Also some other things.",
   "Enabled.title": "Enabled",
   "Enabled.description": "Whether to enable or diable this mod.",
+  "PreventRugRemoval.title": "Prevent Rug Removal",
+  "PreventRugRemoval.description": "Whether rugs should be prevented from being removed when things are on them.",
   "CanPlaceRugsOutside.title": "Can Place Rug Outside",
   "CanPlaceRugsOutside.description": "Whether or not to allow outdoor rug placement",
   "CanPlaceRugsUnder.title": "Can Place Rugs Under",
@@ -38,7 +40,7 @@
   "config.ConfirmBombEnum.InMultiplayerOnly": "In MultiplayerOnly",
 
   "ConfirmBomb.title": "Bomb confirmation settings",
-  "ConfirmBomb.description":  "Whether or not to ask for confirmation before using a bomb.",
+  "ConfirmBomb.description": "Whether or not to ask for confirmation before using a bomb.",
 
   "rug-removal-message": "Remove all items on rug before removing rug!",
   "table-removal-message": "Hold down {{keybind}} to remove object from table.",

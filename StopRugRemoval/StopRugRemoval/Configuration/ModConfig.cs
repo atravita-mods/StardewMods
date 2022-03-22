@@ -9,32 +9,14 @@ namespace StopRugRemoval.Configuration;
 public class ModConfig
 {
     /// <summary>
-    /// Pre-populates locations.
-    /// </summary>
-    public void PrePopulateLocations()
-    {
-        foreach (GameLocation loc in Game1.locations)
-        {
-            ModEntry.ModMonitor.Log(loc.NameOrUniqueName, LogLevel.Info);
-            if (loc is SlimeHutch or Town or IslandWest || loc.IsFarm || loc.IsGreenhouse)
-            {
-                this.SafeLocationMap.TryAdd(loc.NameOrUniqueName, IsSafeLocationEnum.Safe);
-            }
-            else if (loc is MineShaft or VolcanoDungeon)
-            {
-                this.SafeLocationMap.TryAdd(loc.NameOrUniqueName, IsSafeLocationEnum.Dangerous);
-            }
-            else
-            {
-                this.SafeLocationMap.TryAdd(loc.NameOrUniqueName, IsSafeLocationEnum.Dynamic);
-            }
-        }
-    }
-
-    /// <summary>
-    /// Gets or sets a value indicating whether whether or not the entire mod is enabled.
+    /// Gets or sets a value indicating whether or not the entire mod is enabled.
     /// </summary>
     public bool Enabled { get; set; } = true;
+
+    /// <summary>
+    /// Gets or sets a value indicating whether or not rugs should not be removed from under things.
+    /// </summary>
+    public bool PreventRugRemoval { get; set; } = true;
 
     /// <summary>
     /// Gets or sets a value indicating whether whether or not I should be able to place rugs outside.
@@ -89,7 +71,30 @@ public class ModConfig
     public ConfirmBombEnum InDangerousAreas { get; set; } = ConfirmBombEnum.Off;
 
     /// <summary>
-    /// Map to which locations are considered safe.
+    /// Gets or sets map to which locations are considered safe.
     /// </summary>
     public Dictionary<string, IsSafeLocationEnum> SafeLocationMap { get; set; } = new();
+
+    /// <summary>
+    /// Pre-populates locations.
+    /// </summary>
+    public void PrePopulateLocations()
+    {
+        foreach (GameLocation loc in Game1.locations)
+        {
+            ModEntry.ModMonitor.Log(loc.NameOrUniqueName, LogLevel.Info);
+            if (loc is SlimeHutch or Town or IslandWest || loc.IsFarm || loc.IsGreenhouse)
+            {
+                this.SafeLocationMap.TryAdd(loc.NameOrUniqueName, IsSafeLocationEnum.Safe);
+            }
+            else if (loc is MineShaft or VolcanoDungeon)
+            {
+                this.SafeLocationMap.TryAdd(loc.NameOrUniqueName, IsSafeLocationEnum.Dangerous);
+            }
+            else
+            {
+                this.SafeLocationMap.TryAdd(loc.NameOrUniqueName, IsSafeLocationEnum.Dynamic);
+            }
+        }
+    }
 }

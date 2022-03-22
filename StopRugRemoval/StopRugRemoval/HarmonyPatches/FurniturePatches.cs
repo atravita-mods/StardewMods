@@ -22,7 +22,7 @@ internal class FurniturePatches
     {
         try
         {
-            if (!ModEntry.Config.Enabled
+            if (!ModEntry.Config.Enabled || !ModEntry.Config.PreventRugRemoval
                 || !__result
                 || !__instance.furniture_type.Value.Equals(Furniture.rug)
                 || __0.currentLocation is not GameLocation currentLocation)

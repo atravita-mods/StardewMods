@@ -16,12 +16,18 @@ namespace StopRugRemoval.HarmonyPatches;
 internal static class PreventGateRemoval
 {
     private static readonly PerScreen<int> PerscreenedAttempts = new(createNewState: () => 0);
-    private static int ticks = 0;
+    private static readonly PerScreen<int> PerscreenedTicks = new(createNewState: () => 0);
 
     private static int Attempts
     {
         get => PerscreenedAttempts.Value;
         set => PerscreenedAttempts.Value = value;
+    }
+
+    private static int Ticks
+    {
+        get => PerscreenedTicks.Value;
+        set => PerscreenedTicks.Value = value;
     }
 
     /// <summary>
@@ -33,10 +39,10 @@ internal static class PreventGateRemoval
     /// <returns>true if held down, false otherwise.</returns>
     public static bool AreFurnitureKeysHeld(GameLocation gameLocation, Location tile)
     {
-        if (Game1.ticks > ticks + 120)
+        if (Game1.ticks > Ticks + 120)
         {
             Attempts = 0;
-            ticks = Game1.ticks;
+            Ticks = Game1.ticks;
         }
         else
         {

@@ -77,10 +77,10 @@ internal static class SObjectPatches
                 }
             }
             if (!ConfirmBomb.HaveConfirmed.Value
-                && (IsLocationConsideredDangerous(location) ? ModEntry.Config.InDangerousAreas : ModEntry.Config.InSafeAreas)
-                    .HasFlag(Context.IsMultiplayer ? ConfirmBombEnum.InMultiplayerOnly : ConfirmBombEnum.NotInMultiplayer)
                 && !__instance.bigCraftable.Value && __instance is not Furniture
-                && __instance.ParentSheetIndex is 286 or 287 or 288)
+                && __instance.ParentSheetIndex is 286 or 287 or 288
+                && (IsLocationConsideredDangerous(location) ? ModEntry.Config.InDangerousAreas : ModEntry.Config.InSafeAreas)
+                    .HasFlag(Context.IsMultiplayer ? ConfirmBombEnum.InMultiplayerOnly : ConfirmBombEnum.NotInMultiplayer))
             {
                 // handle the case where a bomb has already been placed?
                 Vector2 loc = new(x, y);
@@ -95,9 +95,9 @@ internal static class SObjectPatches
 
                 Response[] responses = new Response[]
                 {
+                    new Response("BombsNo", I18n.No()),
                     new Response("BombsYes", I18n.Yes()),
                     new Response("BombsArea", I18n.YesArea()),
-                    new Response("BombsNo", I18n.No()),
                 };
 
                 location.createQuestionDialogue(I18n.ConfirmBombs(), responses, "atravitaInteractionTweaksBombs");

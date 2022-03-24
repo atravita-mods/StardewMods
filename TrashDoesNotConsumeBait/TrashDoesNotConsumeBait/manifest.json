@@ -1,0 +1,10 @@
+﻿{
+  "Name": "Trash Does Not Consume Bait",
+  "Author": "atravita",
+  "Version": "0.1.0",
+  "Description": "Prevents trash from consuming bait.",
+  "UniqueID": "atravita.TrashDoesNotConsumeBait",
+  "EntryDll": "TrashDoesNotConsumeBait.dll",
+  //"UpdateKeys": [ "Nexus:11376", "GitHub:atravita-mods/ForgeMenuChoice" ],
+  "MinimumApiVersion": "3.13"
+}

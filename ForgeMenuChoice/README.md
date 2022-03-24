@@ -15,6 +15,14 @@ A small note: the small enchantment choice menu wanders a bit around the screen 
 2. Download this mod and unzip it into `Stardew Valley/Mods`.
 3. Run the game using SMAPI.
 
+## Configuration
+Run SMAPI with the mod installed at least once to generate the config.json file, or use Generic Mod Config Menu to configure.
+
+1. `TooltipBehavior` adjusts whether or not the tooltips exist. Options are: On, Off, or Immersive, where Immersive only makes the tooltips appear if any farmer has seen Journal Scrap 9.
+2. `EnableTooltipAutogeneration`: the data for the tooltips is parsed from Journal Scrap 9; if you have a mod that edits that, you may want to disable tooltips or remove automatic tooltip generation.
+
+For mod-added enchantments: please let me know about them! The easiest way to make this mod show tooltips for your enchantment is by patching [`Mods/atravita_ForgeMenuChoice_Tooltip_Data`](ForgeMenuChoice/README.md). 
+
 ## Uninstall
 Simply delete the mod from your Mods directory.
 

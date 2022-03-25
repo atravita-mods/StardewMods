@@ -8,7 +8,8 @@
 // Label stuff?
 // MAKE SURE THE LABEL COUNTS ARE RIGHT. Inserting codes should add to the Important Labels! Check **any time** labels are removed.
 // Insert should probably just have a pattern that moves over the labels....
-// A select & transform for all occurances of a pattern.
+// Adjust matching logic to handle locals-by-type when they **don't** have a localbuilder?
+// Handle scenario when someone adds a local in the middle? (Is that even possible?)
 using System.Diagnostics;
 using System.Reflection;
 using System.Reflection.Emit;
@@ -687,7 +688,6 @@ public class ILHelper
 
     /// <summary>
     /// Gets the instruction for loading a local at the index.
-    /// Short form only. (so less than 255 local variables).
     /// </summary>
     /// <param name="localindex">Index of the local to get.</param>
     /// <returns>The proper local instruction.</returns>
@@ -709,7 +709,6 @@ public class ILHelper
 
     /// <summary>
     /// Gets the instruction for storing to a local at the index.
-    /// Short form only. (so less than 255 local variables).
     /// </summary>
     /// <param name="localindex">Index of the local to get.</param>
     /// <returns>The proper local instruction.</returns>

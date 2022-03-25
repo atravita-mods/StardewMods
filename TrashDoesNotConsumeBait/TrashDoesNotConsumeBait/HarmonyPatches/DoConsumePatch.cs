@@ -18,6 +18,12 @@ internal static class DoConsumePatch
 
     private static float GetPresveringChance() => ModEntry.Config.ConsumeChancePreserving;
 
+    /// <summary>
+    /// Gets the replacement bait stack, or returns null for not found.
+    /// Also handles messaging the player.
+    /// </summary>
+    /// <param name="original">Original bait.</param>
+    /// <returns>Replacement bait, or null if not found.</returns>
     private static SObject? GetReplacementBait(SObject original)
     {
         try
@@ -27,17 +33,18 @@ internal static class DoConsumePatch
                 int? replacementIndex = null;
                 for (int i = 0; i < Game1.player.Items.Count; i++)
                 {
-                    if (Game1.player.Items[i] is SObject obj && !obj.bigCraftable.Value && obj.Category == SObject.baitCategory)
+                    if (Game1.player.Items[i] is not SObject obj || obj.bigCraftable.Value || obj.Category != SObject.baitCategory)
                     {
-                        if (Utility.IsNormalObjectAtParentSheetIndex(obj, original.ParentSheetIndex))
-                        {
-                            replacementIndex = i;
-                            break;
-                        }
-                        else if (!ModEntry.Config.SameBaitOnly)
-                        {
-                            replacementIndex ??= i;
-                        }
+                        continue;
+                    }
+                    else if (Utility.IsNormalObjectAtParentSheetIndex(obj, original.ParentSheetIndex))
+                    {
+                        replacementIndex = i;
+                        break;
+                    }
+                    else if (!ModEntry.Config.SameBaitOnly)
+                    {
+                        replacementIndex ??= i;
                     }
                 }
                 if (replacementIndex is not null && Game1.player.Items[replacementIndex.Value] is SObject returnObj)
@@ -58,6 +65,12 @@ internal static class DoConsumePatch
         return null;
     }
 
+    /// <summary>
+    /// Gets the replacement tackle, or returns null for not found.
+    /// Also handles messaging the player.
+    /// </summary>
+    /// <param name="original">Original tackle.</param>
+    /// <returns>Replacement tackle, or null if not found.</returns>
     private static SObject? GetReplacementTackle(SObject original)
     {
         try
@@ -67,17 +80,18 @@ internal static class DoConsumePatch
                 int? replacementIndex = null;
                 for (int i = 0; i < Game1.player.Items.Count; i++)
                 {
-                    if (Game1.player.Items[i] is SObject obj && !obj.bigCraftable.Value && obj.Category == SObject.tackleCategory)
+                    if (Game1.player.Items[i] is not SObject obj || obj.bigCraftable.Value || obj.Category != SObject.tackleCategory)
                     {
-                        if (Utility.IsNormalObjectAtParentSheetIndex(obj, original.ParentSheetIndex))
-                        {
-                            replacementIndex = i;
-                            break;
-                        }
-                        else if (!ModEntry.Config.SameTackleOnly)
-                        {
-                            replacementIndex ??= i;
-                        }
+                        continue;
+                    }
+                    else if (Utility.IsNormalObjectAtParentSheetIndex(obj, original.ParentSheetIndex))
+                    {
+                        replacementIndex = i;
+                        break;
+                    }
+                    else if (!ModEntry.Config.SameTackleOnly)
+                    {
+                        replacementIndex ??= i;
                     }
                 }
                 if (replacementIndex is not null && Game1.player.Items[replacementIndex.Value] is SObject returnObj)

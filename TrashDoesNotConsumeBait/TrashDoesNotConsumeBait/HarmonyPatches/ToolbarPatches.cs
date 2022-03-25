@@ -32,13 +32,13 @@ internal static class ToolbarPatches
                 if (button.containsPoint(x, y) && int.TryParse(button.name, out int val) && Game1.player.Items[val] is FishingRod fishingRod)
                 {
                     SObject activeObj = Game1.player.ActiveObject;
-                    Game1.player.ActiveObject = null;
+                    Game1.player.ActiveObject = null; // setting ActiveObject to null removes the active object from inventory.
                     switch (activeObj.Category)
                     {
                         case SObject.baitCategory:
                             if (fishingRod.attachments[0] is SObject bait)
                             {
-                                Game1.player.ActiveObject = bait;
+                                Game1.player.ActiveObject = bait; // settting the ActiveObject to an item adds it to inventory.
                             }
                             fishingRod.attachments[0] = activeObj;
                             return;

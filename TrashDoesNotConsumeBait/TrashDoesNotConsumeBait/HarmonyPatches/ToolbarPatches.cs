@@ -10,6 +10,11 @@ namespace TrashDoesNotConsumeBait.HarmonyPatches;
 [HarmonyPatch(typeof(Toolbar))]
 internal static class ToolbarPatches
 {
+
+    /***********
+     * ATTENTION: Before you try refactoring this, look at how farmer.ActiveObject works.
+     * Cuz it's real weird.
+     * *********/
     [HarmonyPostfix]
     [HarmonyPatch(nameof(Toolbar.receiveRightClick))]
     [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Harmony convention")]

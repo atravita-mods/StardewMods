@@ -1,0 +1,51 @@
+﻿using HarmonyLib;
+using StardewValley.Menus;
+using StardewValley.Tools;
+
+namespace TrashDoesNotConsumeBait.HarmonyPatches;
+
+/// <summary>
+/// Class that holds patches against the toolbar.
+/// </summary>
+[HarmonyPatch(typeof(Toolbar))]
+internal static class ToolbarPatches
+{
+    [HarmonyPostfix]
+    [HarmonyPatch(nameof(Toolbar.receiveRightClick))]
+    [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Harmony convention")]
+    private static void PostfixRightClick(List<ClickableComponent> ___buttons, int x, int y)
+    {
+        if (Game1.player.UsingTool || Game1.IsChatting
+            || (Game1.player.ActiveObject?.Category is not SObject.baitCategory && Game1.player.ActiveObject?.Category is not SObject.tackleCategory))
+        {
+            return;
+        }
+        foreach (ClickableComponent button in ___buttons)
+        {
+            if (button.containsPoint(x, y) && int.TryParse(button.name, out int val) && Game1.player.Items[val] is FishingRod fishingRod)
+            {
+                SObject activeObj = Game1.player.ActiveObject;
+                Game1.player.ActiveObject = null;
+                switch (activeObj.Category)
+                {
+                    case SObject.baitCategory:
+                        if (fishingRod.attachments[0] is SObject bait)
+                        {
+                            Game1.player.ActiveObject = bait;
+                        }
+                        fishingRod.attachments[0] = activeObj;
+                        return;
+                    case SObject.tackleCategory:
+                        if (fishingRod.attachments[1] is SObject tackle)
+                        {
+                            Game1.player.ActiveObject = tackle;
+                        }
+                        fishingRod.attachments[1] = activeObj;
+                        return;
+                    default:
+                        return;
+                }
+            }
+        }
+    }
+}

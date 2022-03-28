@@ -29,12 +29,26 @@ public class AssetEditor : IAssetEditor
         if (asset.AssetNameEquals(FORGE_MENU_CHOICE))
         {
             IAssetDataForDictionary<string, string> data = asset.AsDictionary<string, string>();
-            data.Data["Preserving"] = data.Data["Preserving"].Replace("50", ((1 - ModEntry.Config.ConsumeChancePreserving) * 100).ToString());
+            if (data.Data.TryGetValue("Preserving", out string? val))
+            {
+                data.Data["Preserving"] = val.Replace("50", ((1 - ModEntry.Config.ConsumeChancePreserving) * 100).ToString());
+            }
+            else
+            {
+                ModEntry.ModMonitor.Log("ForgeMenuChoice's Preserving key not found....", LogLevel.Debug);
+            }
         }
         else
         {
             IAssetDataForDictionary<int, string> data = asset.AsDictionary<int, string>();
-            data.Data[1008] = data.Data[1008].Replace("50", ((1 - ModEntry.Config.ConsumeChancePreserving) * 100).ToString());
+            if (data.Data.TryGetValue(1008, out string? val))
+            {
+                data.Data[1008] = val.Replace("50", ((1 - ModEntry.Config.ConsumeChancePreserving) * 100).ToString());
+            }
+            else
+            {
+                ModEntry.ModMonitor.Log("Data for secret note 1008 not found?", LogLevel.Debug);
+            }
         }
     }
 

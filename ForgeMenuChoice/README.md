@@ -7,8 +7,6 @@ This mod lets you pick your enchantment at the forge. No longer do you have to s
 
 Much thanks to Khloe Leclair for the UI textures! I do strongly recommend you check out [her mods](https://www.nexusmods.com/stardewvalley/users/138772588?tab=user+files). Especially [Almanac](https://www.nexusmods.com/stardewvalley/mods/11022), which is downright gorgeous.
 
-A small note: the small enchantment choice menu wanders a bit around the screen if you resize the screen or change your zoom settings. This is because I had to implement it as an entirely seperate menu, not connected to the forge menu at all, and I don't actually know how to do UI in a way that isn't jank. It works, but isn't going to win awards for pretty. This is 100% my lack of UI skills and I apologize.
-
 ## Install
 
 1. Install the latest version of [SMAPI](https://smapi.io).
@@ -18,7 +16,7 @@ A small note: the small enchantment choice menu wanders a bit around the screen 
 ## Configuration
 Run SMAPI with the mod installed at least once to generate the config.json file, or use Generic Mod Config Menu to configure.
 
-1. `TooltipBehavior` adjusts whether or not the tooltips exist. Options are: On, Off, or Immersive, where Immersive only makes the tooltips appear if any farmer has seen Journal Scrap 9.
+1. `TooltipBehavior` adjusts whether or not the tooltips exist. Options are: On, Off, or Immersive, where Immersive only makes the tooltips appear if any farmer has seen Journal Scrap 8.
 2. `EnableTooltipAutogeneration`: the data for the tooltips is parsed from Journal Scrap 9; if you have a mod that edits that, you may want to disable tooltips or remove automatic tooltip generation.
 
 For mod-added enchantments: please let me know about them! The easiest way to make this mod show tooltips for your enchantment is by patching [`Mods/atravita_ForgeMenuChoice_Tooltip_Data`](ForgeMenuChoice/README.md). 

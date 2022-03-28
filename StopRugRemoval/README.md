@@ -4,14 +4,19 @@ A collection of little tweaks: don't pick up rugs if there's something on them! 
 
 #### Installation
 
-Simply unzip and place in Mods folder.
+1. Install the latest version of [SMAPI](https://smapi.io).
+2. Download this mod and unzip it into `Stardew Valley/Mods`.
+3. Run the game using SMAPI.
 
 #### Uninstallation
 
 Simply delete from Mods folder.
 
 #### Configuration
+
 Either run this SMAPI with this mod installed once or use [Generic Mod Config Menu](https://www.nexusmods.com/stardewvalley/mods/5098). *You will need to load into a save to edit some options with GMCM.*
+
+Configuration option `Enable` disables the whole mod if needed.
 
 `PreventRugRemoval` prevents accidental removal of rugs if there's something on the rug.
 

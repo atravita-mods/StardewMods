@@ -31,6 +31,9 @@ public sealed class GMCMHelper : IntegrationHelper
         this.manifest = manifest;
     }
 
+    /// <summary>
+    /// Gets a value indicating whether or not the helper has gotten a copy of the API.
+    /// </summary>
     public bool HasGottenAPI => this.modMenuApi is not null;
 
     /// <summary>
@@ -616,6 +619,10 @@ public sealed class GMCMHelper : IntegrationHelper
         return this;
     }
 
+    /// <summary>
+    /// Unregisters the GMCM menu.
+    /// </summary>
+    /// <returns>this.</returns>
     public GMCMHelper Unregister()
     {
         this.modMenuApi!.Unregister(this.manifest);

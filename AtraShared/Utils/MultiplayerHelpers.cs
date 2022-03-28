@@ -21,7 +21,7 @@ internal static class MultiplayerHelpers
             {
                 monitor.Log(
                     translation.Get("host-not-installed")
-                        .Default("The host does not seem to have this mod installed. Some features may not be available"),
+                        .Default("The host does not seem to have this mod installed. Some features may not be available."),
                     LogLevel.Warn);
             }
             else if (!hostMod.Version.Equals(manifest.Version))

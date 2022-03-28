@@ -27,6 +27,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Utils\Extensions\NetFieldDictionaryExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Utils\Extensions\NPCExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Utils\Extensions\ScheduleExtensions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Utils\Extensions\TranslationHelperExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Utils\GameLocationUtils.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Utils\HarmonyHelpers\CodeInstructionWrapper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Utils\HarmonyHelpers\ILHelper.cs" />

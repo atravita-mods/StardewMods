@@ -67,7 +67,7 @@ internal static class ForgeMenuPatches
                 PossibleEnchantments.Clear();
                 foreach (BaseEnchantment enchantment in BaseEnchantment.GetAvailableEnchantments())
                 {
-                    if (enchantment.CanApplyTo(tool) && !tool.enchantments.Contains(enchantment))
+                    if (enchantment.CanApplyTo(tool) && !tool.enchantments.Any((enchantOnTool) => enchantOnTool.GetType() == enchantment.GetType()))
                     {
                         PossibleEnchantments.Add(enchantment);
                     }

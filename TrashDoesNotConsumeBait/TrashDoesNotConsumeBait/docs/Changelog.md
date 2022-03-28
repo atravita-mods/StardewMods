@@ -1,9 +1,9 @@
 ﻿Changelog
 ===============
 
-### TODO
-1. Update the secret note with the bait/tackle consumption chances from this mod.
-2. Update ForgeMenuChoice's tooltips as well.
+## Version 0.1.2
+
+Updates Journal Scrap 9 + Pick Your Enchantment's tooltips with the bait/tackle consumption chances from this mod.
 
 ### Version 0.1.1
 

@@ -22,12 +22,18 @@ internal class ModEntry : Mod
     /// Gets or sets the config instance for this mod.
     /// </summary>
     internal static ModConfig Config { get; set; }
+
+    /// <summary>
+    /// Gets the content helper for this mod.
+    /// </summary>
+    internal static IContentHelper ContentHelper { get; private set; }
 #pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
 
     /// <inheritdoc/>
     public override void Entry(IModHelper helper)
     {
         ModMonitor = this.Monitor;
+        ContentHelper = helper.Content;
         I18n.Init(helper.Translation);
 
         try
@@ -43,6 +49,8 @@ internal class ModEntry : Mod
         helper.Events.GameLoop.GameLaunched += this.SetUpConfig;
         helper.Events.GameLoop.SaveLoaded += this.OnSaveLoaded;
         this.ApplyPatches(new Harmony(this.ModManifest.UniqueID));
+
+        helper.Content.AssetEditors.Add(AssetEditor.Instance);
     }
 
     /// <summary>
@@ -53,13 +61,20 @@ internal class ModEntry : Mod
     private void SetUpConfig(object? sender, GameLaunchedEventArgs e)
     {
         GMCMHelper helper = new(this.Monitor, this.Helper.Translation, this.Helper.ModRegistry, this.ModManifest);
-        if(!helper.TryGetAPI())
+        if (!helper.TryGetAPI())
         {
             return;
         }
         helper.Register(
-            reset: () => Config = new(),
-            save: () => this.Helper.WriteConfig(Config));
+            reset: () =>
+            {
+                Config = new();
+                AssetEditor.Invalidate();
+            },
+            save: () => {
+                this.Helper.WriteConfig(Config);
+                AssetEditor.Invalidate();
+            });
         foreach (PropertyInfo property in typeof(ModConfig).GetProperties())
         {
 

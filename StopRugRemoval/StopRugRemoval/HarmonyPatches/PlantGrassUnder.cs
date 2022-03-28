@@ -11,8 +11,10 @@ namespace StopRugRemoval.HarmonyPatches;
 /// Class to hold patches to place grass.
 /// </summary>
 [HarmonyPatch]
-internal class PlantGrassUnder
+internal static class PlantGrassUnder
 {
+    private static Func<bool>? IsSmartBuildingInBuildMode = null;
+
     /// <summary>
     /// Gets the methods to patch.
     /// </summary>
@@ -53,7 +55,7 @@ internal class PlantGrassUnder
         try
         {
             // Grass starter = 297
-            if (Utility.IsNormalObjectAtParentSheetIndex(__0, 297))
+            if (Utility.IsNormalObjectAtParentSheetIndex(__0, 297) && !(IsSmartBuildingInBuildMode?.Invoke() == true))
             {
                 GameLocation location = __2.currentLocation;
                 Vector2 placementTile = __instance.TileLocation;
@@ -69,6 +71,28 @@ internal class PlantGrassUnder
         catch (Exception ex)
         {
             ModEntry.ModMonitor.Log($"Rain into errors attempting to place grass under object at {__instance.TileLocation}.\n\n{ex}", LogLevel.Error);
+        }
+    }
+
+    /// <summary>
+    /// Grabs a reference to Smart Building's CurrentlyInBuildMode.
+    /// </summary>
+    /// <param name="registry">ModRegistry.</param>
+    internal static void GetSmartBuildingBuildMode(IModRegistry registry)
+    {
+        if (registry.Get("DecidedlyHuman.SmartBuilding") is not IModInfo info || info.Manifest.Version.IsOlderThan("1.3.2"))
+        {
+            ModEntry.ModMonitor.Log("SmartBuilding not installed, no need to adjust for that", LogLevel.Trace);
+        }
+        else if (Type.GetType("SmartBuilding.HarmonyPatches.Patches, SmartBuilding") is Type type
+            && AccessTools.DeclaredPropertyGetter(type, "CurrentlyInBuildMode") is MethodInfo method)
+        {
+            ModEntry.ModMonitor.Log("SmartBuilding found! " + method.FullDescription(), LogLevel.Trace);
+            IsSmartBuildingInBuildMode = method.CreateDelegate<Func<bool>>();
+        }
+        else
+        {
+            ModEntry.ModMonitor.Log("SmartBuilding is installed BUT compat unsuccessful. You may see issues, please bring this log to atravita!", LogLevel.Info);
         }
     }
 }

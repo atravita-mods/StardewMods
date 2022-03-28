@@ -5,6 +5,10 @@
 [] Catch input to place rug under things.
 <!-- Figure out how to replace the reference to coffee in the night market dialogue?-->
 
+#### Version 1.0.7
+
+* Just-in-case compatability adjustments for Smart Building - disables this mod's ability to place grass under things whenever Smart Building's build mode is on, which IMO makes it easier to place things anyways....
+
 #### Version 1.0.6
 
 * Remove excess debugging statements accidentally left in. My apologies.

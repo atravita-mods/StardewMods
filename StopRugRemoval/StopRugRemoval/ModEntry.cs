@@ -6,6 +6,7 @@ using HarmonyLib;
 using StardewModdingAPI.Events;
 using StardewModdingAPI.Utilities;
 using StopRugRemoval.Configuration;
+using StopRugRemoval.HarmonyPatches;
 using StopRugRemoval.HarmonyPatches.BombHandling;
 
 namespace StopRugRemoval;
@@ -16,9 +17,13 @@ namespace StopRugRemoval;
 public class ModEntry : Mod
 {
     private static readonly Lazy<IReflectedField<Multiplayer>> MultiplayerLazy = new(() => ReflectionHelper!.GetField<Multiplayer>(typeof(Game1), "multiplayer"));
+
+    [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1306:Field names should begin with lower-case letter", Justification = "Reviewed.")]
     private static GMCMHelper? GMCM = null;
 
     private MigrationManager? migrator;
+
+    
 
     /// <summary>
     /// Gets Game1.multiplayer.
@@ -90,6 +95,7 @@ public class ModEntry : Mod
 
     private void OnGameLaunch(object? sender, GameLaunchedEventArgs e)
     {
+        PlantGrassUnder.GetSmartBuildingBuildMode(this.Helper.ModRegistry);
         GMCM = new(this.Monitor, this.Helper.Translation, this.Helper.ModRegistry, this.ModManifest);
         if (!GMCM.TryGetAPI())
         {

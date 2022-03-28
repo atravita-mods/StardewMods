@@ -2,7 +2,8 @@
 ==============
 
 #### ToDo
-[] Catch input to place rug under things.
+1. Catch input to place rug under things.
+2. Prevent grass from being placed under things when SmartBuilding's building mode is on.
 <!-- Figure out how to replace the reference to coffee in the night market dialogue?-->
 
 #### Version 1.0.6

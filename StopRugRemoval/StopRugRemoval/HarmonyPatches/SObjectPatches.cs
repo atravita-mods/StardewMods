@@ -115,9 +115,7 @@ internal static class SObjectPatches
     }
 
     private static bool IsLocationConsideredDangerous(GameLocation location)
-    {
-        return ModEntry.Config.SafeLocationMap.TryGetValue(location.NameOrUniqueName, out IsSafeLocationEnum val)
+        => ModEntry.Config.SafeLocationMap.TryGetValue(location.NameOrUniqueName, out IsSafeLocationEnum val)
             ? (val == IsSafeLocationEnum.Dangerous) || (val == IsSafeLocationEnum.Dynamic && location.IsDangerousLocation())
             : location.IsDangerousLocation();
-    }
 }

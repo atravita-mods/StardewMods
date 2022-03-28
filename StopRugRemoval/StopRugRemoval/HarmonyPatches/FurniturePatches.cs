@@ -115,7 +115,7 @@ internal class FurniturePatches
             {
                 return true;
             }
-            if (__instance.furniture_type.Value == Furniture.table
+            if ((__instance.furniture_type.Value == Furniture.table || __instance is StorageFurniture)
                 && ModEntry.Config.PreventRemovalFromTable
                 && !ModEntry.Config.FurniturePlacementKey.IsDown())
             {

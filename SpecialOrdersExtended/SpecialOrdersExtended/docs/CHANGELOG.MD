@@ -4,6 +4,7 @@ Changelog
 1. Add condition to just randomly reduce the chance of a quest appearing. (May need integrate with that one mod that changes the day special orders appear?)
 2. Add condition for total number of quests completed, per board.
 <!-- Better documentation for the dialogue tags? -->
+3. Clear the inProgress dialogue log when a player *fails* a quest.
 
 #### Stardew 1.6 todo
 
@@ -16,7 +17,7 @@ Changelog
 6. Implement a temporary saving mechanism for Save Anywhere (look into their API?)
 <!-- Handle WoL professions? -->
 
-#### Version 1.0.7 (upcoming)
+#### Version 1.0.7
 
 * Adds tags for `anyplayermail` and `anyplayerseenevent`.
 * Makes my (but **not** game tags) mostly case-insensitive.

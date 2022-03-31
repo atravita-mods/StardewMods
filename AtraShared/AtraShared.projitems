@@ -15,6 +15,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Integrations\Interfaces\IFlexibleSprinklerAPI.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Integrations\Interfaces\IGenericModConfigMenuAPI.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Integrations\IntegrationHelper.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Integrations\Interfaces\IJsonAssetsAPI.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Integrations\Interfaces\ISpaceCoreAPI.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MigrationManager\MigrationDataClass.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MigrationManager\MigrationManager.cs" />

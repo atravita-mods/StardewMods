@@ -81,7 +81,7 @@ public class MigrationManager
         {
             return false;
         }
-        else if (version.IsOlderThan(this.oldversion))
+        else if (!version.IsOlderThan(this.oldversion))
         {
             return migration.Invoke(this.Helper, this.Monitor);
         }

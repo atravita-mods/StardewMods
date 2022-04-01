@@ -14,6 +14,7 @@
 
   <PropertyGroup>
     <TranslationClassBuilder_AddGetByKey>true</TranslationClassBuilder_AddGetByKey>
+    <EnableModZip Condition="$(Configuration) != 'Release'">False</EnableModZip>
   </PropertyGroup>
 
   <ItemGroup>

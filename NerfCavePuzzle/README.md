@@ -1,4 +1,4 @@
-Trash Does Not Consume Bait
+Nerf Cave Puzzle
 =================================
 
 This mod makes that one cave puzzle easier.

@@ -1,6 +1,8 @@
 Trash Does Not Consume Bait
 =================================
 
+![Crystals gif](NerfCavePuzzle/docs/crystals2.gif)
+
 This mod makes that one cave puzzle easier.
 
 By default, it simply requires the player interact with the statue again before the next round plays; this allows you to take a breather between rounds. But optionally, you can slow down the patterns (by increasing the `SpeedModifier`) or make the flashes last longer (by increasing `FlashScale`). You can also cap the maximum number of notes in eacn round with `MaxNotes`.

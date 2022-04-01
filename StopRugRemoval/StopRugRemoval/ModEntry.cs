@@ -90,7 +90,7 @@ public class ModEntry : Mod
         {
             ModMonitor.Log($"Mod crashed while applying harmony patches\n\n{ex}", LogLevel.Error);
         }
-        harmony.Snitch(this.Monitor, this.ModManifest.UniqueID);
+        harmony.Snitch(this.Monitor, this.ModManifest.UniqueID, transpilersOnly: true);
     }
 
     private void OnGameLaunch(object? sender, GameLaunchedEventArgs e)

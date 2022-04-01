@@ -60,6 +60,8 @@ public class ModConfig
     /// </summary>
     public KeybindList FurniturePlacementKey { get; set; } = KeybindList.Parse("LeftShift + Z");
 
+    public bool HideCrabPots { get; set; } = true;
+
     /// <summary>
     /// Gets or sets a value indicating whether or not to confirm bomb placement in safe areas.
     /// </summary>

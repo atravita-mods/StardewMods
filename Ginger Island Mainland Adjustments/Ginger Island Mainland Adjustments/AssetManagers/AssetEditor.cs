@@ -87,7 +87,26 @@ public sealed class AssetEditor : IAssetEditor
         }
         else if (asset.AssetNameEquals(DataMail))
         {
-            editor.Data[PAMMAILKEY] = $"{I18n.Pam_Mail_Text()}[#]{I18n.Pam_Mail_Title()}";
+            editor.Data[PAMMAILKEY] = $"{I18n.Pam_Mail_Text()}^^   --{Game1.getCharacterFromName("Pam")?.displayName ?? I18n.Pam()}[#]{I18n.Pam_Mail_Title()}";
+        }
+        else if (asset.AssetNameEquals(DataEventsSeedshop))
+        {
+            editor.Data["99219999/e 503180/f Pam 2500/v Pam/w rainy/t 1700 2600"] = string.Join(
+                separator: string.Empty,
+                "sadpiano/-1000 -1000/farmer 35 21 0 Pam 37 18 0/ignoreCollisions farmer/",
+                "ignoreCollisions Pam/viewport 37 21 true/move farmer 0 -3 1/faceDirection Pam 3/",
+                $"speak Pam \"{I18n._999Pam01a()}\"/faceDirection Pam 0/pause 250/faceDirection Pam 3/",
+                $"speak Pam \"{I18n._999Pam01b()}#$b#{I18n._999Pam01c()}\"/pause 500/",
+                $"question fork1 \"{I18n._999PamAsk()}#{I18n._999Validate()}#{I18n._999Confront()}\"/",
+                "fork atravita_GIMA_PamInsulted/mail atravita_GingerIslandMainlandAdjustments_PamMail/",
+                "emote Pam 20/friendship Pam 200/faceDirection Pam 0/pause 250/faceDirection Pam 3/",
+                $"speak Pam \"{I18n._999Pam02()}\"/pause 500/faceDirection Pam 0/",
+                $"speak Pam \"{I18n._999Pam03()}$s\"/pause 500/faceDirection Pam 3/",
+                $"speak Pam \"{I18n._999Pam04()}$s#$b#{I18n._999Pam05()}$u\"/pause 500/faceDirection Pam 2/",
+                $"pause 500/faceDirection Pam 3/textAboveHead Pam \"{I18n.Sigh()}\"/speak Pam \"{I18n._999Pam06()}\"/pause 500/",
+                $"speak Pam \"{I18n._999Pam07()}\"/pause 500/textAboveHead Pam \"{I18n.Sigh()}\"/pause 1000/",
+                $"speak Pam \"{I18n._999Pam08()}\"/pause 1000/fade/viewport -100 -100/end dialogue Pam \"{I18n._999Pam30()}\"");
+            editor.Data["atravita_GIMA_PamInsulted"] = $"friendship Pam -250/emote Pam 12/speak Pam \"{I18n._999Pam99()}\"/fade/viewport -100 -100/end invisible Pam";
         }
     }
 }

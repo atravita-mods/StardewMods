@@ -144,7 +144,7 @@ public class ModEntry : Mod
             Globals.ModMonitor.Log($"{I18n.HarmonyCrash()} {Globals.GithubLocation}{Environment.NewLine}{ex}", LogLevel.Error);
         }
 
-        harmony.Snitch(Globals.ModMonitor, this.ModManifest.UniqueID);
+        harmony.Snitch(Globals.ModMonitor, this.ModManifest.UniqueID, transpilersOnly: true);
     }
 
     /// <summary>

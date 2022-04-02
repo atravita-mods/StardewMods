@@ -38,6 +38,7 @@ internal static class ShopHandler
         if (onSandyShop is not null && getSandyStock is not null)
         {
             HandlingShop.Value = true; // Do not want to intercept any more clicks until shop menu is finished.
+            Globals.InputHelper.Suppress(e.Button);
             Game1.player.FacingDirection = Game1.up;
             Game1.drawObjectDialogue(I18n.SandyAwayShopMessage());
             Game1.afterDialogues = () =>
@@ -67,6 +68,7 @@ internal static class ShopHandler
             return;
         }
         HandlingShop.Value = true; // Do not want to intercept any more clicks until shop menu is finished.
+        Globals.InputHelper.Suppress(e.Button);
         Game1.player.FacingDirection = Game1.up;
         Game1.drawObjectDialogue(I18n.WillyAwayShopMessage());
         Game1.afterDialogues = () =>

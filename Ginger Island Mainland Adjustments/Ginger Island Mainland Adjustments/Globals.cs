@@ -51,6 +51,11 @@ internal static class Globals
     internal static IModHelper Helper { get; private set; }
 
     /// <summary>
+    /// Gets the input helper.
+    /// </summary>
+    internal static IInputHelper InputHelper { get; private set; }
+
+    /// <summary>
     /// Gets the instance of the schedule utility functions.
     /// </summary>
     internal static ScheduleUtilityFunctions UtilitySchedulingFunctions { get; private set; }

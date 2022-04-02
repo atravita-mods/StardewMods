@@ -2,7 +2,6 @@
 using GingerIslandMainlandAdjustments.MultiplayerHandler;
 using HarmonyLib;
 using Microsoft.Xna.Framework.Graphics;
-using StardewModdingAPI.Utilities;
 
 namespace GingerIslandMainlandAdjustments.Niceties;
 
@@ -10,7 +9,7 @@ namespace GingerIslandMainlandAdjustments.Niceties;
 /// Class that handles patches against GameLocation...to handle the phone.
 /// </summary>
 [HarmonyPatch(typeof(GameLocation))]
-internal class PhoneHandler
+internal static class PhoneHandler
 {
     /// <summary>
     /// Prefix that lets me inject Pam into the phone menu.
@@ -43,7 +42,7 @@ internal class PhoneHandler
     [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Harmony convention")]
     private static void PostfixAnswerDialogueAction(GameLocation __instance, string questionAndAnswer, ref bool __result)
     {
-        if (questionAndAnswer.Equals("telephone_PamBus"))
+        if (questionAndAnswer.Equals("telephone_PamBus", StringComparison.OrdinalIgnoreCase))
         {
             Globals.ReflectionHelper.GetMethod(__instance, "playShopPhoneNumberSounds").Invoke(questionAndAnswer);
             Game1.player.freezePause = 4950;

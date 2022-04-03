@@ -77,6 +77,7 @@ internal static class StringUtils
             }
             string[] split = paragraph.Split(' ');
             float current_width = -whichFont.Spacing;
+            float spacewidth = whichFont.MeasureString(" ").X + whichFont.Spacing;
             foreach (string word in split)
             {
                 if (LocalizedContentManager.CurrentLanguageCode is LocalizedContentManager.LanguageCode.fr && word.StartsWith("\n-"))
@@ -85,7 +86,7 @@ internal static class StringUtils
                     sb.Append(Environment.NewLine);
                     break;
                 }
-                float wordwidth = whichFont.MeasureString(word).X;
+                float wordwidth = whichFont.MeasureString(word).X + spacewidth;
                 current_width += whichFont.Spacing + wordwidth;
                 if (current_width > width)
                 {

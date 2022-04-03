@@ -8,7 +8,7 @@ namespace AtraShared.Integrations;
 /// <summary>
 /// Helper class that generates the GMCM for a project.
 /// </summary>
-public sealed class GMCMHelper : IntegrationHelper
+internal sealed class GMCMHelper : IntegrationHelper
 {
     private const string MINVERSION = "1.8.0";
     private const string APIID = "spacechase0.GenericModConfigMenu";
@@ -25,7 +25,7 @@ public sealed class GMCMHelper : IntegrationHelper
     /// <param name="translation">Translation helper.</param>
     /// <param name="modRegistry">Mod registry helper.</param>
     /// <param name="manifest">Mod's manifest.</param>
-    public GMCMHelper(IMonitor monitor, ITranslationHelper translation, IModRegistry modRegistry, IManifest manifest)
+    internal GMCMHelper(IMonitor monitor, ITranslationHelper translation, IModRegistry modRegistry, IManifest manifest)
         : base(monitor, translation, modRegistry)
     {
         this.manifest = manifest;
@@ -34,13 +34,13 @@ public sealed class GMCMHelper : IntegrationHelper
     /// <summary>
     /// Gets a value indicating whether or not the helper has gotten a copy of the API.
     /// </summary>
-    public bool HasGottenAPI => this.modMenuApi is not null;
+    internal bool HasGottenAPI => this.modMenuApi is not null;
 
     /// <summary>
     /// Tries to grab a copy of the API.
     /// </summary>
     /// <returns>True if successful, false otherwise.</returns>
-    public bool TryGetAPI() => this.TryGetAPI(APIID, MINVERSION, out this.modMenuApi);
+    internal bool TryGetAPI() => this.TryGetAPI(APIID, MINVERSION, out this.modMenuApi);
 
     /// <summary>
     /// Register mod with GMCM.
@@ -49,7 +49,7 @@ public sealed class GMCMHelper : IntegrationHelper
     /// <param name="save">Save callback.</param>
     /// <param name="titleScreenOnly">Whether or not the config should only be availble from the title screen.</param>
     /// <returns>this.</returns>
-    public GMCMHelper Register(Action reset, Action save, bool titleScreenOnly = false)
+    internal GMCMHelper Register(Action reset, Action save, bool titleScreenOnly = false)
     {
         this.modMenuApi!.Register(
             mod: this.manifest,
@@ -65,7 +65,7 @@ public sealed class GMCMHelper : IntegrationHelper
     /// <param name="title">Function that gets the title.</param>
     /// <param name="tooltip">Function, if any, for a tooltip.</param>
     /// <returns>this.</returns>
-    public GMCMHelper AddSectionTitle(Func<string> title, Func<string>? tooltip = null)
+    internal GMCMHelper AddSectionTitle(Func<string> title, Func<string>? tooltip = null)
     {
         this.modMenuApi!.AddSectionTitle(
             mod: this.manifest,
@@ -79,7 +79,7 @@ public sealed class GMCMHelper : IntegrationHelper
     /// </summary>
     /// <param name="paragraph">Delegate to get the text.</param>
     /// <returns>this.</returns>
-    public GMCMHelper AddParagraph(Func<string> paragraph)
+    internal GMCMHelper AddParagraph(Func<string> paragraph)
     {
         this.modMenuApi!.AddParagraph(
             mod: this.manifest,
@@ -92,7 +92,7 @@ public sealed class GMCMHelper : IntegrationHelper
     /// </summary>
     /// <param name="translationKey">Translation key to use.</param>
     /// <returns>this.</returns>
-    public GMCMHelper AddParagraph(string translationKey)
+    internal GMCMHelper AddParagraph(string translationKey)
     {
         this.AddParagraph(() => this.Translation.Get(translationKey));
         return this;
@@ -104,7 +104,7 @@ public sealed class GMCMHelper : IntegrationHelper
     /// <param name="translationKey">translation key.</param>
     /// <param name="tokens">tokens for translation.</param>
     /// <returns>this.</returns>
-    public GMCMHelper AddParagraph(string translationKey, object tokens)
+    internal GMCMHelper AddParagraph(string translationKey, object tokens)
     {
         this.AddParagraph(() => this.Translation.Get(translationKey, tokens));
         return this;
@@ -119,7 +119,7 @@ public sealed class GMCMHelper : IntegrationHelper
     /// <param name="tooltip">Function to get the tooltip for the option.</param>
     /// <param name="fieldId">FieldID.</param>
     /// <returns>this.</returns>
-    public GMCMHelper AddBoolOption(
+    internal GMCMHelper AddBoolOption(
         Func<string> name,
         Func<bool> getValue,
         Action<bool> setValue,
@@ -144,7 +144,7 @@ public sealed class GMCMHelper : IntegrationHelper
     /// <param name="getConfig">Function that gets the *current config instance*.</param>
     /// <param name="fieldId">FieldId.</param>
     /// <returns>this.</returns>
-    public GMCMHelper AddBoolOption<TModConfig>(
+    internal GMCMHelper AddBoolOption<TModConfig>(
         PropertyInfo property,
         Func<TModConfig> getConfig,
         string? fieldId = null)
@@ -178,7 +178,7 @@ public sealed class GMCMHelper : IntegrationHelper
     /// <param name="formatAllowedValue">Format map for allowed values.</param>
     /// <param name="fieldId">FieldID.</param>
     /// <returns>this.</returns>
-    public GMCMHelper AddTextOption(
+    internal GMCMHelper AddTextOption(
         Func<string> name,
         Func<string> getValue,
         Action<string> setValue,
@@ -209,7 +209,7 @@ public sealed class GMCMHelper : IntegrationHelper
     /// <param name="formatAllowedValue">Formatter.</param>
     /// <param name="fieldId">fieldId.</param>
     /// <returns>this.</returns>
-    public GMCMHelper AddTextOption<TModConfig>(
+    internal GMCMHelper AddTextOption<TModConfig>(
         PropertyInfo property,
         Func<TModConfig> getConfig,
         string[]? allowedValues = null,
@@ -246,7 +246,7 @@ public sealed class GMCMHelper : IntegrationHelper
     /// <param name="tooltip">Function to get the tooltip of the option.</param>
     /// <param name="fieldId">FieldID.</param>
     /// <returns>this.</returns>
-    public GMCMHelper AddEnumOption<TEnum>(
+    internal GMCMHelper AddEnumOption<TEnum>(
         Func<string> name,
         Func<string> getValue,
         Action<string> setValue,
@@ -275,7 +275,7 @@ public sealed class GMCMHelper : IntegrationHelper
     /// <param name="tooltip">Function to get the tooltip.</param>
     /// <param name="fieldId">FieldId.</param>
     /// <returns>this.</returns>
-    public GMCMHelper AddEnumOption<TEnum>(
+    internal GMCMHelper AddEnumOption<TEnum>(
         Func<string> name,
         Func<TEnum> getValue,
         Action<TEnum> setValue,
@@ -302,7 +302,7 @@ public sealed class GMCMHelper : IntegrationHelper
     /// <param name="fieldID">Field ID, if desired.</param>
     /// <returns>this.</returns>
     /// <exception cref="ArgumentException">The property does not match the type of the enum.</exception>
-    public GMCMHelper AddEnumOption<TModConfig, TEnum>(
+    internal GMCMHelper AddEnumOption<TModConfig, TEnum>(
         PropertyInfo property,
         Func<TModConfig> getConfig,
         string? fieldID = null)
@@ -343,7 +343,7 @@ public sealed class GMCMHelper : IntegrationHelper
     /// <param name="formatValue">Format function.</param>
     /// <param name="fieldId">FieldId.</param>
     /// <returns>this.</returns>
-    public GMCMHelper AddNumberOption(
+    internal GMCMHelper AddNumberOption(
         Func<string> name,
         Func<float> getValue,
         Action<float> setValue,
@@ -380,7 +380,7 @@ public sealed class GMCMHelper : IntegrationHelper
     /// <param name="formatValue">Formmater.</param>
     /// <param name="fieldID">fieldId.</param>
     /// <returns>this.</returns>
-    public GMCMHelper AddFloatOption<TModConfig>(
+    internal GMCMHelper AddFloatOption<TModConfig>(
         PropertyInfo property,
         Func<TModConfig> getConfig,
         float? min = null,
@@ -424,7 +424,7 @@ public sealed class GMCMHelper : IntegrationHelper
     /// <param name="formatValue">Format function.</param>
     /// <param name="fieldId">FieldId.</param>
     /// <returns>this.</returns>
-    public GMCMHelper AddNumberOption(
+    internal GMCMHelper AddNumberOption(
         Func<string> name,
         Func<int> getValue,
         Action<int> setValue,
@@ -461,7 +461,7 @@ public sealed class GMCMHelper : IntegrationHelper
     /// <param name="formatValue">Formats values.</param>
     /// <param name="fieldId">fieldId.</param>
     /// <returns>this.</returns>
-    public GMCMHelper AddIntOption<TModConfig>(
+    internal GMCMHelper AddIntOption<TModConfig>(
         PropertyInfo property,
         Func<TModConfig> getConfig,
         int? min = null,
@@ -501,7 +501,7 @@ public sealed class GMCMHelper : IntegrationHelper
     /// <param name="tooltip">Function to get the tooltip.</param>
     /// <param name="fieldId">FieldID.</param>
     /// <returns>this.</returns>
-    public GMCMHelper AddKeybindList(
+    internal GMCMHelper AddKeybindList(
         Func<string> name,
         Func<KeybindList> getValue,
         Action<KeybindList> setValue,
@@ -526,7 +526,7 @@ public sealed class GMCMHelper : IntegrationHelper
     /// <param name="getConfig">Function that gets the current config instance.</param>
     /// <param name="fieldID">fieldId.</param>
     /// <returns>this.</returns>
-    public GMCMHelper AddKeybindList<TModConfig>(
+    internal GMCMHelper AddKeybindList<TModConfig>(
         PropertyInfo property,
         Func<TModConfig> getConfig,
         string? fieldID = null)
@@ -557,7 +557,7 @@ public sealed class GMCMHelper : IntegrationHelper
     /// <param name="tooltip">Function to get a tooltip, if wanted.</param>
     /// <param name="pageTitle">Function to get the page's title.</param>
     /// <returns>this.</returns>
-    public GMCMHelper AddPageHere(
+    internal GMCMHelper AddPageHere(
         string pageId,
         Func<string> linkText,
         Func<string>? tooltip = null,
@@ -582,7 +582,7 @@ public sealed class GMCMHelper : IntegrationHelper
     /// <param name="pageId">ID of page to switch to.</param>
     /// <returns>this.</returns>
     /// <exception cref="ArgumentException">Page not defined.</exception>
-    public GMCMHelper SwitchPage(string pageId)
+    internal GMCMHelper SwitchPage(string pageId)
     {
         if (!this.pages.Contains(pageId))
         {
@@ -598,7 +598,7 @@ public sealed class GMCMHelper : IntegrationHelper
     /// <param name="index">Which page to switch to (in order defined).</param>
     /// <returns>this.</returns>
     /// <exception cref="ArgumentException">The page is not defined.</exception>
-    public GMCMHelper SwitchPatch(int index)
+    internal GMCMHelper SwitchPatch(int index)
     {
         if (index < 0 || index >= this.pages.Count)
         {
@@ -613,7 +613,7 @@ public sealed class GMCMHelper : IntegrationHelper
     /// </summary>
     /// <param name="titleScreenOnly">should be title screen only.</param>
     /// <returns>this.</returns>
-    public GMCMHelper SetTitleScreenOnly(bool titleScreenOnly)
+    internal GMCMHelper SetTitleScreenOnly(bool titleScreenOnly)
     {
         this.modMenuApi!.SetTitleScreenOnlyForNextOptions(this.manifest, titleScreenOnly);
         return this;
@@ -623,7 +623,7 @@ public sealed class GMCMHelper : IntegrationHelper
     /// Unregisters the GMCM menu.
     /// </summary>
     /// <returns>this.</returns>
-    public GMCMHelper Unregister()
+    internal GMCMHelper Unregister()
     {
         this.pages.Clear();
         this.modMenuApi!.Unregister(this.manifest);

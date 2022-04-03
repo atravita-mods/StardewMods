@@ -23,7 +23,7 @@ namespace AtraShared.Utils.HarmonyHelper;
 /// <summary>
 /// Helper class for transpilers.
 /// </summary>
-public class ILHelper
+internal class ILHelper
 {
     // Locals found via inspecting LocalBuilders.
     private readonly SortedList<int, LocalBuilder> builtLocals = new();
@@ -42,7 +42,7 @@ public class ILHelper
     /// <param name="codes">IEnumerable of codes.</param>
     /// <param name="monitor">Logger.</param>
     /// <param name="generator">ILGenerator.</param>
-    public ILHelper(MethodBase original, IEnumerable<CodeInstruction> codes, IMonitor monitor, ILGenerator generator)
+    internal ILHelper(MethodBase original, IEnumerable<CodeInstruction> codes, IMonitor monitor, ILGenerator generator)
     {
         if (original.GetMethodBody() is MethodBody body)
         {
@@ -77,34 +77,34 @@ public class ILHelper
     /// <summary>
     /// Gets the original methodbase.
     /// </summary>
-    public MethodBase Original { get; init; }
+    internal MethodBase Original { get; init; }
 
     /// <summary>
     /// Gets the list of codes.
     /// </summary>
     /// <remarks>Try not to use this.</remarks>
-    public List<CodeInstruction> Codes { get; init; }
+    internal List<CodeInstruction> Codes { get; init; }
 
     /// <summary>
     /// Gets the ILGenerator.
     /// </summary>
-    public ILGenerator Generator { get; init; }
+    internal ILGenerator Generator { get; init; }
 
     /// <summary>
     /// Gets the current instruction pointer stack.
     /// </summary>
-    public Stack<int> PointerStack { get; private set; } = new();
+    internal Stack<int> PointerStack { get; private set; } = new();
 
     /// <summary>
     /// Points to the current location in the instructions list.
     /// </summary>
     [SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1623:Property summary documentation should match accessors", Justification = "Reviewed.")]
-    public int Pointer { get; private set; } = -1;
+    internal int Pointer { get; private set; } = -1;
 
     /// <summary>
     /// Gets the current instruction.
     /// </summary>
-    public CodeInstruction CurrentInstruction
+    internal CodeInstruction CurrentInstruction
     {
         get => this.Codes[this.Pointer];
         private set => this.Codes[this.Pointer] = value;
@@ -119,7 +119,7 @@ public class ILHelper
     /// Pushes the pointer onto the pointerstack.
     /// </summary>
     /// <returns>this.</returns>
-    public ILHelper Push()
+    internal ILHelper Push()
     {
         this.PointerStack.Push(this.Pointer);
         return this;
@@ -129,7 +129,7 @@ public class ILHelper
     /// Pops the a pointer from the pointerstack.
     /// </summary>
     /// <returns>this.</returns>
-    public ILHelper Pop()
+    internal ILHelper Pop()
     {
         this.Pointer = this.PointerStack.Pop();
         return this;
@@ -141,7 +141,7 @@ public class ILHelper
     /// <param name="index">Index to move to.</param>
     /// <returns>this.</returns>
     /// <exception cref="IndexOutOfRangeException">Tried to move to an invalid location.</exception>
-    public ILHelper JumpTo(int index)
+    internal ILHelper JumpTo(int index)
     {
         if (index < 0 || index >= this.Codes.Count)
         {
@@ -157,7 +157,7 @@ public class ILHelper
     /// The list of codes as an enumerable.
     /// </summary>
     /// <returns>Returns the list of codes as an enumerable.</returns>
-    public IEnumerable<CodeInstruction> Render() =>
+    internal IEnumerable<CodeInstruction> Render() =>
         this.Codes.AsEnumerable();
 
     /// <summary>
@@ -165,7 +165,7 @@ public class ILHelper
     /// Only works in DEBUG.
     /// </summary>
     [Conditional("DEBUG")]
-    public void Print()
+    internal void Print()
     {
         StringBuilder sb = new();
         sb.Append("ILHelper for: ").AppendLine(this.Original.FullDescription());
@@ -191,7 +191,7 @@ public class ILHelper
     /// <param name="steps">Number of steps.</param>
     /// <returns>this.</returns>
     /// <exception cref="IndexOutOfRangeException">Pointer tried to move to an invalid location.</exception>
-    public ILHelper Advance(int steps)
+    internal ILHelper Advance(int steps)
     {
         this.Pointer += steps;
         if (this.Pointer < 0 || this.Pointer >= this.Codes.Count)
@@ -210,7 +210,7 @@ public class ILHelper
     /// <returns>this.</returns>
     /// <exception cref="ArgumentException">Startindex or Endindex are invalid.</exception>
     /// <exception cref="IndexOutOfRangeException">No match found.</exception>
-    public ILHelper FindFirst(CodeInstructionWrapper[] instructions, int startindex = 0, int? intendedendindex = null)
+    internal ILHelper FindFirst(CodeInstructionWrapper[] instructions, int startindex = 0, int? intendedendindex = null)
     {
         int endindex = intendedendindex ?? this.Codes.Count;
         if (startindex >= (endindex - instructions.Length) || startindex < 0 || endindex > this.Codes.Count)
@@ -246,7 +246,7 @@ public class ILHelper
     /// <returns>this.</returns>
     /// <exception cref="ArgumentException">Fewer codes remain than the length of the instructions to search for.</exception>
     /// <exception cref="IndexOutOfRangeException">No match found.</exception>
-    public ILHelper FindNext(CodeInstructionWrapper[] instructions)
+    internal ILHelper FindNext(CodeInstructionWrapper[] instructions)
         => this.FindFirst(instructions, this.Pointer + 1, this.Codes.Count);
 
     /// <summary>
@@ -258,7 +258,7 @@ public class ILHelper
     /// <returns>this.</returns>
     /// <exception cref="ArgumentException">Startindex or Endindex are invalid.</exception>
     /// <exception cref="IndexOutOfRangeException">No match found.</exception>
-    public ILHelper FindLast(CodeInstructionWrapper[] instructions, int startindex = 0, int? intendedendindex = null)
+    internal ILHelper FindLast(CodeInstructionWrapper[] instructions, int startindex = 0, int? intendedendindex = null)
     {
         int endindex = intendedendindex ?? this.Codes.Count;
         if (startindex >= endindex - instructions.Length || startindex < 0 || endindex > this.Codes.Count)
@@ -294,7 +294,7 @@ public class ILHelper
     /// <returns>this.</returns>
     /// <exception cref="ArgumentException">Fewer codes remain than the length of the instructions to search for.</exception>
     /// <exception cref="IndexOutOfRangeException">No match found.</exception>
-    public ILHelper FindPrev(CodeInstructionWrapper[] instructions)
+    internal ILHelper FindPrev(CodeInstructionWrapper[] instructions)
         => this.FindLast(instructions, 0, this.Pointer);
 
     /// <summary>
@@ -303,7 +303,7 @@ public class ILHelper
     /// <param name="instructions">Instructions to insert.</param>
     /// <param name="withLabels">Labels to attach to the first instruction.</param>
     /// <returns>this.</returns>
-    public ILHelper Insert(CodeInstruction[] instructions, IList<Label>? withLabels = null)
+    internal ILHelper Insert(CodeInstruction[] instructions, IList<Label>? withLabels = null)
     {
         this.Codes.InsertRange(this.Pointer, instructions);
         if (withLabels is not null)
@@ -327,7 +327,7 @@ public class ILHelper
     /// <param name="count">Number to remove.</param>
     /// <returns>this.</returns>
     /// <exception cref="InvalidOperationException">Attempted to remove an important label, stopping.</exception>
-    public ILHelper Remove(int count)
+    internal ILHelper Remove(int count)
     {
         for (int i = this.Pointer; i < this.Pointer + count; i++)
         {
@@ -360,7 +360,7 @@ public class ILHelper
     /// <param name="instructions">List of instructions to search for.</param>
     /// <returns>this.</returns>
     /// <exception cref="InvalidOperationException">Attempted to remove an important label, stopping.</exception>
-    public ILHelper RemoveUntil(CodeInstructionWrapper[] instructions)
+    internal ILHelper RemoveUntil(CodeInstructionWrapper[] instructions)
     {
         this.Push();
         this.FindNext(instructions);
@@ -376,7 +376,7 @@ public class ILHelper
     /// <param name="instructions">List of instructions to search for.</param>
     /// <returns>this.</returns>
     /// <exception cref="InvalidOperationException">Attempted to remove an important label, stopping.</exception>
-    public ILHelper RemoveIncluding(CodeInstructionWrapper[] instructions)
+    internal ILHelper RemoveIncluding(CodeInstructionWrapper[] instructions)
     {
         this.Push();
         this.FindNext(instructions);
@@ -393,14 +393,14 @@ public class ILHelper
     /// <param name="withLabels">Labels to attach, if any.</param>
     /// <param name="keepLabels">Whether or not to keep the original labels. Default: true.</param>
     /// <returns>this.</returns>
-    public ILHelper ReplaceInstruction(CodeInstruction instruction, Label[] withLabels, bool keepLabels = true)
+    internal ILHelper ReplaceInstruction(CodeInstruction instruction, Label[] withLabels, bool keepLabels = true)
     {
         this.ReplaceInstruction(instruction, keepLabels);
         this.CurrentInstruction.labels.AddRange(withLabels);
         return this;
     }
 
-    public ILHelper ReplaceInstruction(OpCode opcode, object operand, Label[] withLabels, bool keepLabels = true)
+    internal ILHelper ReplaceInstruction(OpCode opcode, object operand, Label[] withLabels, bool keepLabels = true)
         => this.ReplaceInstruction(new CodeInstruction(opcode, operand), withLabels, keepLabels);
 
     /// <summary>
@@ -410,7 +410,7 @@ public class ILHelper
     /// <param name="keepLabels">Whether or not to keep the labels.</param>
     /// <returns>this.</returns>
     /// <exception cref="InvalidOperationException">Tried to remove an important label.</exception>
-    public ILHelper ReplaceInstruction(CodeInstruction instruction, bool keepLabels = true)
+    internal ILHelper ReplaceInstruction(CodeInstruction instruction, bool keepLabels = true)
     {
         if (keepLabels)
         {
@@ -442,10 +442,10 @@ public class ILHelper
         return this;
     }
 
-    public ILHelper ReplaceInstruction(OpCode opcode, object operand, bool keepLabels = true)
+    internal ILHelper ReplaceInstruction(OpCode opcode, object operand, bool keepLabels = true)
         => this.ReplaceInstruction(new CodeInstruction(opcode, operand), keepLabels);
 
-    public ILHelper ReplaceOperand(object operand)
+    internal ILHelper ReplaceOperand(object operand)
     {
         if (this.CurrentInstruction.Branches(out Label? label))
         {
@@ -466,7 +466,7 @@ public class ILHelper
     /// <param name="label">Label branches to.</param>
     /// <returns>this.</returns>
     /// <exception cref="InvalidOperationException">Attempted to call this not on a branch.</exception>
-    public ILHelper GrabBranchDest(out Label? label)
+    internal ILHelper GrabBranchDest(out Label? label)
     {
         if (!this.CurrentInstruction.Branches(out label))
         {
@@ -479,7 +479,7 @@ public class ILHelper
     /// When called on a branch, stores the label branched to.
     /// </summary>
     /// <returns>this.</returns>
-    public ILHelper StoreBranchDest()
+    internal ILHelper StoreBranchDest()
         => this.GrabBranchDest(out this.label);
 
     /// <summary>
@@ -489,7 +489,7 @@ public class ILHelper
     /// <param name="clear">whether or not to clear the labels.</param>
     /// <returns>this.</returns>
     /// <remarks>DOES NOT CHECK LABELS! YOU SHOULD PROBABLY PUT THEM BACK SOMEWHERE if cleared.</remarks>
-    public ILHelper GetLabels(out IList<Label> labels, bool clear = false)
+    internal ILHelper GetLabels(out IList<Label> labels, bool clear = false)
     {
         labels = this.CurrentInstruction.labels.ToList();
         if (clear)
@@ -499,7 +499,7 @@ public class ILHelper
         return this;
     }
 
-    public ILHelper AttachLabel(params Label[] labels)
+    internal ILHelper AttachLabel(params Label[] labels)
     {
         this.CurrentInstruction.labels.AddRange(labels);
         return this;
@@ -510,7 +510,7 @@ public class ILHelper
     /// </summary>
     /// <param name="label">The label produced.</param>
     /// <returns>this.</returns>
-    public ILHelper DefineAndAttachLabel(out Label label)
+    internal ILHelper DefineAndAttachLabel(out Label label)
     {
         label = this.Generator.DefineLabel();
         this.CurrentInstruction.labels.Add(label);
@@ -526,7 +526,7 @@ public class ILHelper
     /// <returns>this.</returns>
     /// <exception cref="ArgumentException">Startindex or Endindex are invalid.</exception>
     /// <exception cref="IndexOutOfRangeException">No match found.</exception>
-    public ILHelper FindFirstLabel(Label label, int startindex = 0, int? intendedendindex = null)
+    internal ILHelper FindFirstLabel(Label label, int startindex = 0, int? intendedendindex = null)
     {
         int endindex = intendedendindex ?? this.Codes.Count;
         if (startindex >= endindex || startindex < 0 || endindex > this.Codes.Count)
@@ -550,7 +550,7 @@ public class ILHelper
     /// <param name="label">Label to search for.</param>
     /// <returns>this.</returns>
     /// <exception cref="IndexOutOfRangeException">No match found.</exception>
-    public ILHelper AdvanceToLabel(Label label)
+    internal ILHelper AdvanceToLabel(Label label)
         => this.FindFirstLabel(label, this.Pointer + 1, this.Codes.Count);
 
     /// <summary>
@@ -559,7 +559,7 @@ public class ILHelper
     /// <returns>this.</returns>
     /// <exception cref="InvalidOperationException">No label stored.</exception>
     /// <exception cref="IndexOutOfRangeException">No match found.</exception>
-    public ILHelper AdvanceToStoredLabel()
+    internal ILHelper AdvanceToStoredLabel()
     {
         if (this.label is null)
         {
@@ -577,7 +577,7 @@ public class ILHelper
     /// <returns>this.</returns>
     /// <exception cref="ArgumentException">Startindex or Endindex are invalid.</exception>
     /// <exception cref="IndexOutOfRangeException">No match found.</exception>
-    public ILHelper FindLastLabel(Label label, int startindex = 0, int? intendedendindex = null)
+    internal ILHelper FindLastLabel(Label label, int startindex = 0, int? intendedendindex = null)
     {
         int endindex = intendedendindex ?? this.Codes.Count;
         if (startindex >= endindex || startindex < 0 || endindex > this.Codes.Count)
@@ -595,10 +595,10 @@ public class ILHelper
         throw new IndexOutOfRangeException($"label {label} could not be found between {startindex} and {endindex}");
     }
 
-    public ILHelper RetreatToLabel(Label label)
+    internal ILHelper RetreatToLabel(Label label)
         => this.FindLastLabel(label, 0, this.Pointer);
 
-    public ILHelper RetreatToStoredLabel()
+    internal ILHelper RetreatToStoredLabel()
     {
         if (this.label is null)
         {
@@ -626,7 +626,7 @@ public class ILHelper
     /// <param name="maxCount">Maximum number of times to apply the lambda.</param>
     /// <returns>this.</returns>
     /// <exception cref="ArgumentException">Indexes are out of bounds.</exception>
-    public ILHelper ForEachMatch(
+    internal ILHelper ForEachMatch(
         CodeInstructionWrapper[] instructions,
         Func<ILHelper, bool> transformer,
         int startindex = 0,
@@ -671,7 +671,7 @@ public class ILHelper
     /// <param name="type">Type to search for.</param>
     /// <param name="which">If there's multiple locals of a single type, which one.</param>
     /// <returns>Index of the local, -1 if not found.</returns>
-    public int GetIndexOfLocal(Type type, int which = 1)
+    internal int GetIndexOfLocal(Type type, int which = 1)
     {
         int counter = 0;
         foreach ((int key, LocalVariableInfo local) in this.locals)
@@ -691,7 +691,7 @@ public class ILHelper
     /// </summary>
     /// <param name="localindex">Index of the local to get.</param>
     /// <returns>The proper local instruction.</returns>
-    public static CodeInstruction GetLdLoc(int localindex)
+    internal static CodeInstruction GetLdLoc(int localindex)
     {
         if (localindex > byte.MaxValue)
         {
@@ -712,7 +712,7 @@ public class ILHelper
     /// </summary>
     /// <param name="localindex">Index of the local to get.</param>
     /// <returns>The proper local instruction.</returns>
-    public static CodeInstruction GetStLoc(int localindex)
+    internal static CodeInstruction GetStLoc(int localindex)
     {
         if (localindex > byte.MaxValue)
         {

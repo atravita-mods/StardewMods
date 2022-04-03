@@ -10,7 +10,7 @@ namespace AtraShared.Utils.Extensions;
 /// <summary>
 /// Extensions for Harmony.
 /// </summary>
-public static class HarmonyExtensions
+internal static class HarmonyExtensions
 {
     /// <summary>
     /// Snitch on all the functions patched.
@@ -18,7 +18,7 @@ public static class HarmonyExtensions
     /// <param name="harmony">Harmony instance.</param>
     /// <param name="monitor">Logger.</param>
     /// <param name="filter">Filter to use. Leave null to not filter.</param>
-    public static void Snitch(this Harmony harmony, IMonitor monitor, Func<Patch, bool>? filter = null, bool transpilersOnly = false)
+    internal static void Snitch(this Harmony harmony, IMonitor monitor, Func<Patch, bool>? filter = null, bool transpilersOnly = false)
     {
         filter ??= (_) => true;
         foreach (MethodBase? method in harmony.GetPatchedMethods())
@@ -33,7 +33,7 @@ public static class HarmonyExtensions
     /// <param name="harmony">Harmony instance.</param>
     /// <param name="monitor">Logger.</param>
     /// <param name="uniqueID">Unique ID to look for.</param>
-    public static void Snitch(this Harmony harmony, IMonitor monitor, string uniqueID, bool transpilersOnly = false)
+    internal static void Snitch(this Harmony harmony, IMonitor monitor, string uniqueID, bool transpilersOnly = false)
         => harmony.Snitch(monitor, (p) => p.owner == uniqueID, transpilersOnly);
 
     /// <summary>
@@ -42,7 +42,7 @@ public static class HarmonyExtensions
     /// <param name="method">Method to look at.</param>
     /// <param name="monitor">Logger.</param>
     /// <param name="filter">Filter. Leave null to not filter.</param>
-    public static void Snitch(this MethodBase method, IMonitor monitor, Func<Patch, bool>? filter = null, bool transpilersOnly = false)
+    internal static void Snitch(this MethodBase method, IMonitor monitor, Func<Patch, bool>? filter = null, bool transpilersOnly = false)
     {
         filter ??= (_) => true;
         Patches patches = Harmony.GetPatchInfo(method);
@@ -89,7 +89,7 @@ public static class HarmonyExtensions
     /// <param name="method">Method to look at.</param>
     /// <param name="monitor">Logger.</param>
     /// <param name="uniqueID">UniqueID to filter for.</param>
-    public static void Snitch(this MethodBase method, IMonitor monitor, string uniqueID, bool transpilersOnly = false)
+    internal static void Snitch(this MethodBase method, IMonitor monitor, string uniqueID, bool transpilersOnly = false)
         => method.Snitch(monitor, (Patch p) => p.owner == uniqueID, transpilersOnly);
 }
 

@@ -1,8 +1,8 @@
 ﻿/************************************************
  * The following file was copied from: https://github.com/Shockah/Stardew-Valley-Mods/blob/master/FlexibleSprinklers/IFlexibleSprinklersApi.cs
- * 
+ *
  * The original license is as follows:
- * 
+ *
  *                                  Apache License
                            Version 2.0, January 2004
                         http://www.apache.org/licenses/

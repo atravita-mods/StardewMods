@@ -3,14 +3,14 @@
 /// <summary>
 /// Small extensions to Stardew's NPC class.
 /// </summary>
-public static class NPCExtensions
+internal static class NPCExtensions
 {
     /// <summary>
     /// Clears the NPC's current dialogue stack and pushes a new dialogue onto that stack.
     /// </summary>
     /// <param name="npc">NPC.</param>
     /// <param name="dialogueKey">Dialogue key.</param>
-    public static void ClearAndPushDialogue(
+    internal static void ClearAndPushDialogue(
         this NPC npc,
         string dialogueKey)
     {
@@ -26,7 +26,7 @@ public static class NPCExtensions
     /// <param name="add">To add to the stack instead of replacing.</param>
     /// <param name="clearOnMovement">To clear dialogue if the NPC moves.</param>
     /// <returns>True if successfully applied.</returns>
-    public static bool TryApplyMarriageDialogueIfExisting(
+    internal static bool TryApplyMarriageDialogueIfExisting(
         this NPC npc,
         string dialogueKey,
         bool add = false,
@@ -56,7 +56,7 @@ public static class NPCExtensions
     /// <param name="basekey">Basekey to use.</param>
     /// <param name="random">Random to use, defaults to Game1.random if null.</param>
     /// <returns>null if no dialogue key found, a random dialogue key otherwise.</returns>
-    public static string? GetRandomDialogue(
+    internal static string? GetRandomDialogue(
         this NPC npc,
         string? basekey,
         Random? random)
@@ -89,7 +89,7 @@ public static class NPCExtensions
     /// <param name="rawData">Raw schedule string.</param>
     /// <returns>True if successful, false otherwise.</returns>
     /// <remarks>Does **not** set _lastLoadedScheduleKey.</remarks>
-    public static bool TryGetScheduleEntry(
+    internal static bool TryGetScheduleEntry(
         this NPC npc,
         string scheduleKey,
         [NotNullWhen(returnValue: true)] out string? rawData)

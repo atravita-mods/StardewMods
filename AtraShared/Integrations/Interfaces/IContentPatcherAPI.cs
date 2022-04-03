@@ -1,12 +1,12 @@
 ﻿/******************************************
  * The following file was copied from https://github.com/Pathoschild/StardewMods/blob/stable/ContentPatcher/IContentPatcherAPI.cs.
- * 
+ *
  * The original license is as below:
- * 
+ *
  * The MIT License (MIT)
- * 
+ *
  * Copyright 2016–2021 Jesse Plamondon-Willard (Pathoschild)
- * 
+ *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
 in the Software without restriction, including without limitation the rights

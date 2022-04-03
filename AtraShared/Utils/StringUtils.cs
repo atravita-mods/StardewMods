@@ -12,6 +12,9 @@ namespace AtraShared.Utils;
  * Consider moving to pointers for the character-based languages.
  * ***********/
 
+/// <summary>
+/// Handles methods for dealing with strings.
+/// </summary>
 internal static class StringUtils
 {
     private static readonly Lazy<Func<SpriteFont, char, int>> GetGlyphLazy = new(() =>
@@ -44,7 +47,7 @@ internal static class StringUtils
     /// <param name="width">Maximum width.</param>
     /// <returns>String with wrapped text.</returns>
     /// <remarks>This is meant to be a more performant Game1.parseText.</remarks>
-    internal static unsafe string ParseAndWrapText(string? text, SpriteFont whichFont, float width)
+    internal static string ParseAndWrapText(string? text, SpriteFont whichFont, float width)
     {
         if (string.IsNullOrEmpty(text))
         {
@@ -101,37 +104,40 @@ internal static class StringUtils
         }
         else
         {
-            float current_width = -whichFont.Spacing;
-            float charwidth = 0;
-            float proposedcharwidth = 0;
-            fixed (SpriteFont.Glyph* pointerToGlyphs = whichFont.Glyphs)
+            unsafe
             {
-                foreach (char ch in text)
+                float current_width = -whichFont.Spacing;
+                float charwidth = 0;
+                float proposedcharwidth = 0;
+                fixed (SpriteFont.Glyph* pointerToGlyphs = whichFont.Glyphs)
                 {
-                    switch (ch)
+                    foreach (char ch in text)
                     {
-                        case '\r':
-                            continue;
-                        case '\n':
-                            current_width = -whichFont.Spacing;
-                            sb.Append(Environment.NewLine);
-                            break;
-                        default:
-                            int glyph = GetGlyph(whichFont, ch);
-                            if (glyph > 0)
-                            {
-                                SpriteFont.Glyph* pWhichGlyph = pointerToGlyphs + glyph;
-                                charwidth = pWhichGlyph->LeftSideBearing + pWhichGlyph->Width + pWhichGlyph->RightSideBearing;
-                                proposedcharwidth = pWhichGlyph->RightSideBearing < 0 ? pWhichGlyph->LeftSideBearing + pWhichGlyph->Width : charwidth;
-                                if (current_width + proposedcharwidth > width)
+                        switch (ch)
+                        {
+                            case '\r':
+                                continue;
+                            case '\n':
+                                current_width = -whichFont.Spacing;
+                                sb.Append(Environment.NewLine);
+                                break;
+                            default:
+                                int glyph = GetGlyph(whichFont, ch);
+                                if (glyph > 0)
                                 {
-                                    sb.Append(Environment.NewLine);
-                                    current_width = charwidth;
+                                    SpriteFont.Glyph* pWhichGlyph = pointerToGlyphs + glyph;
+                                    charwidth = pWhichGlyph->LeftSideBearing + pWhichGlyph->Width + pWhichGlyph->RightSideBearing;
+                                    proposedcharwidth = pWhichGlyph->RightSideBearing < 0 ? pWhichGlyph->LeftSideBearing + pWhichGlyph->Width : charwidth;
+                                    if (current_width + proposedcharwidth > width)
+                                    {
+                                        sb.Append(Environment.NewLine);
+                                        current_width = charwidth;
+                                    }
+                                    sb.Append(ch);
+                                    current_width += charwidth;
                                 }
-                                sb.Append(ch);
-                                current_width += charwidth;
-                            }
-                            break;
+                                break;
+                        }
                     }
                 }
             }

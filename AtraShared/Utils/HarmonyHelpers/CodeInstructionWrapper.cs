@@ -9,7 +9,7 @@ namespace AtraShared.Utils.HarmonyHelper;
 /// <summary>
 /// Special cases for code instructions to match against.
 /// </summary>
-public enum SpecialCodeInstructionCases
+internal enum SpecialCodeInstructionCases
 {
     /// <summary>
     /// WildCard matches all codes.
@@ -45,7 +45,7 @@ public enum SpecialCodeInstructionCases
 /// <summary>
 /// Wraps the code instruction class of Harmony to allow for looser comparisons.
 /// </summary>
-public class CodeInstructionWrapper
+internal class CodeInstructionWrapper
 {
     private readonly LocalVariableInfo? local;
     private readonly Type? localType;
@@ -60,7 +60,7 @@ public class CodeInstructionWrapper
     /// </summary>
     /// <param name="opcode">Opcode.</param>
     /// <param name="operand">Operand. Use null to match any operand.</param>
-    public CodeInstructionWrapper(OpCode opcode, object? operand = null)
+    internal CodeInstructionWrapper(OpCode opcode, object? operand = null)
         => this.codeInstruction = new CodeInstruction(opcode, operand);
 
     /// <summary>
@@ -69,13 +69,13 @@ public class CodeInstructionWrapper
     /// </summary>
     /// <param name="instrution">instruction to wrap.</param>
     /// <remarks>A null operand matches any operand.</remarks>
-    public CodeInstructionWrapper(CodeInstruction instrution)
+    internal CodeInstructionWrapper(CodeInstruction instrution)
         => this.codeInstruction = instrution;
 
-    public CodeInstructionWrapper(SpecialCodeInstructionCases specialcase)
+    internal CodeInstructionWrapper(SpecialCodeInstructionCases specialcase)
         => this.specialInstructionCase = specialcase;
 
-    public CodeInstructionWrapper(SpecialCodeInstructionCases specialcase, int argument)
+    internal CodeInstructionWrapper(SpecialCodeInstructionCases specialcase, int argument)
     {
         if (specialcase is SpecialCodeInstructionCases.LdArg or SpecialCodeInstructionCases.StArg)
         {
@@ -88,7 +88,7 @@ public class CodeInstructionWrapper
         }
     }
 
-    public CodeInstructionWrapper(SpecialCodeInstructionCases specialcase, LocalVariableInfo local)
+    internal CodeInstructionWrapper(SpecialCodeInstructionCases specialcase, LocalVariableInfo local)
     {
         if (specialcase is SpecialCodeInstructionCases.LdLoc or SpecialCodeInstructionCases.StLoc)
         {
@@ -101,7 +101,7 @@ public class CodeInstructionWrapper
         }
     }
 
-    public CodeInstructionWrapper(SpecialCodeInstructionCases specialcase, Type localType)
+    internal CodeInstructionWrapper(SpecialCodeInstructionCases specialcase, Type localType)
     {
         if (specialcase is SpecialCodeInstructionCases.LdLoc or SpecialCodeInstructionCases.StLoc)
         {
@@ -120,7 +120,7 @@ public class CodeInstructionWrapper
     /// <param name="instruction">Instruction to check against.</param>
     /// <returns>True for a match.</returns>
     /// <exception cref="UnexpectedEnumValueException{SpecialCodeInstructionCases}">Recieved an unexpeced enum value.</exception>
-    public bool Matches(CodeInstruction instruction)
+    internal bool Matches(CodeInstruction instruction)
     {
         if (this.specialInstructionCase is null)
         {
@@ -144,7 +144,9 @@ public class CodeInstructionWrapper
         };
     }
 
+
     /// <inheritdoc/>
+    [SuppressMessage("StyleCop.CSharp.OrderingRules", "SA1202:Elements should be ordered by access", Justification = "Reviewed.")]
     public override string ToString()
     {
         if (this.specialInstructionCase is null)

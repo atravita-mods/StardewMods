@@ -7,7 +7,7 @@ namespace AtraShared.Utils.Extensions;
 /// Extensions to more easily interact with the ModData <see cref="ModDataDictionary" /> dictionary.
 /// </summary>
 /// <remarks>Inspired by https://github.com/spacechase0/StardewValleyMods/blob/main/SpaceShared/ModDataHelper.cs. </remarks>
-public static class ModDataExtensions
+internal static class ModDataExtensions
 {
     // Instead of storing a real bool, just store 0 or 1
 
@@ -18,7 +18,7 @@ public static class ModDataExtensions
     /// <param name="key">Key.</param>
     /// <param name="defaultVal">default value.</param>
     /// <returns>Boolean value, or null if not found/not parseable.</returns>
-    public static bool? GetBool(this ModDataDictionary modData, string key, bool? defaultVal = null)
+    internal static bool? GetBool(this ModDataDictionary modData, string key, bool? defaultVal = null)
         => modData.TryGetValue(key, out string val) ? !(val == "0") : defaultVal;
 
     /// <summary>
@@ -28,7 +28,7 @@ public static class ModDataExtensions
     /// <param name="key">Key.</param>
     /// <param name="val">Value.</param>
     /// <param name="defaultVal">default value - not saved if matches.</param>
-    public static void SetBool(this ModDataDictionary modData, string key, bool val, bool? defaultVal = null)
+    internal static void SetBool(this ModDataDictionary modData, string key, bool val, bool? defaultVal = null)
     {
         if (defaultVal == val)
         {
@@ -47,7 +47,7 @@ public static class ModDataExtensions
     /// <param name="key">Key.</param>
     /// <param name="defaultVal">default value.</param>
     /// <returns>Float value, or null of not found/not parseable.</returns>
-    public static float? GetFloat(this ModDataDictionary modData, string key, float? defaultVal)
+    internal static float? GetFloat(this ModDataDictionary modData, string key, float? defaultVal)
         => modData.TryGetValue(key, out string val) && float.TryParse(val, out float result) ? result : defaultVal;
 
     /// <summary>
@@ -59,7 +59,7 @@ public static class ModDataExtensions
     /// <param name="decimals">Decimal points to round to.</param>
     /// <param name="format">Format string.</param>
     /// <param name="defaultVal">default value - not saved if matches.</param>
-    public static void SetFloat(this ModDataDictionary modData, string key, float val, int decimals = 2, string format = "G", float? defaultVal = null)
+    internal static void SetFloat(this ModDataDictionary modData, string key, float val, int decimals = 2, string format = "G", float? defaultVal = null)
     {
         if (defaultVal is not null && val.WithinMargin(defaultVal.Value, 0.499f * (float)Math.Pow(0.1, -decimals)))
         {
@@ -78,7 +78,7 @@ public static class ModDataExtensions
     /// <param name="key">Key.</param>
     /// <param name="defaultVal">default value.</param>
     /// <returns>Int value, or null of not found/not parseable.</returns>
-    public static int? GetInt(this ModDataDictionary modData, string key, int? defaultVal = null)
+    internal static int? GetInt(this ModDataDictionary modData, string key, int? defaultVal = null)
         => modData.TryGetValue(key, out string val) && int.TryParse(val, out int result) ? result : defaultVal;
 
     /// <summary>
@@ -89,7 +89,7 @@ public static class ModDataExtensions
     /// <param name="val">Value.</param>
     /// /// <param name="format">Format string.</param>
     /// <param name="defaultVal">default value - not saved if matches.</param>
-    public static void SetInt(this ModDataDictionary modData, string key, int val, string format = "G", int? defaultVal = null)
+    internal static void SetInt(this ModDataDictionary modData, string key, int val, string format = "G", int? defaultVal = null)
     {
         if (defaultVal is not null && defaultVal.Value == val)
         {

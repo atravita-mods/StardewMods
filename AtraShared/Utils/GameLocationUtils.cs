@@ -9,7 +9,7 @@ namespace AtraShared.Utils;
 /// <summary>
 /// Utility for gamelocations.
 /// </summary>
-public static class GameLocationUtils
+internal static class GameLocationUtils
 {
     /// <summary>
     /// The code in this function is effectively copied from the game, and explodes a bomb on this tile.
@@ -18,7 +18,7 @@ public static class GameLocationUtils
     /// <param name="whichBomb">Which bomb to explode.</param>
     /// <param name="tileloc">Tile to explode bomb on.</param>
     /// <param name="mp">Multiplayer instance - used to broadcast sprites.</param>
-    public static void ExplodeBomb(GameLocation loc, int whichBomb, Vector2 tileloc, Multiplayer mp)
+    internal static void ExplodeBomb(GameLocation loc, int whichBomb, Vector2 tileloc, Multiplayer mp)
     {
         int bombID = Game1.random.Next();
         loc.playSound("thudStep");
@@ -108,7 +108,7 @@ public static class GameLocationUtils
     /// Yields all game locations.
     /// </summary>
     /// <returns>IEnumerable of all game locations.</returns>
-    public static IEnumerable<GameLocation> YieldAllLocations()
+    internal static IEnumerable<GameLocation> YieldAllLocations()
     {
         foreach (GameLocation location in Game1.locations)
         {

@@ -137,7 +137,7 @@ internal static class StringUtils
                         break;
                     default:
                         int glyph = GetGlyph(whichFont, ch);
-                        if (glyph > 0)
+                        if (glyph > -1 && glyph < whichFont.Glyphs.Length)
                         {
                             SpriteFont.Glyph* pWhichGlyph = pointerToGlyphs + glyph;
                             charwidth = pWhichGlyph->LeftSideBearing + pWhichGlyph->Width + pWhichGlyph->RightSideBearing;

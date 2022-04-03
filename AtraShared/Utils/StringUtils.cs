@@ -90,7 +90,7 @@ internal static class StringUtils
                             sb.Append(Environment.NewLine);
                             current_width = wordwidth;
                         }
-                        sb.Append(word);
+                        sb.Append(word).Append(' ');
                         break;
                 }
             }
@@ -116,7 +116,7 @@ internal static class StringUtils
                         {
                             SpriteFont.Glyph whichGlyph = whichFont.Glyphs[glyph];
                             charwidth = whichGlyph.LeftSideBearing + whichGlyph.Width + whichGlyph.RightSideBearing;
-                            proposedcharwidth = whichGlyph.RightSideBearing < 0 ? whichGlyph.LeftSideBearing + whichGlyph.Width : whichGlyph.RightSideBearing;
+                            proposedcharwidth = whichGlyph.RightSideBearing < 0 ? whichGlyph.LeftSideBearing + whichGlyph.Width : charwidth;
                             if (current_width + proposedcharwidth > width)
                             {
                                 sb.Append(Environment.NewLine);

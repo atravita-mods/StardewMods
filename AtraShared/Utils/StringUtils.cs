@@ -74,6 +74,7 @@ internal static class StringUtils
     internal static string WrapTextByWords(string text, SpriteFont whichFont, float width)
     {
         StringBuilder sb = new();
+        float spacewidth = whichFont.MeasureString(" ").X + whichFont.Spacing;
         string[] paragraphs = text.Split(new string[] { "\n", "\r\n", "\r" }, StringSplitOptions.None);
         foreach (string? paragraph in paragraphs)
         {
@@ -84,20 +85,19 @@ internal static class StringUtils
             }
             string[] split = paragraph.Split(' ');
             float current_width = -whichFont.Spacing;
-            float spacewidth = whichFont.MeasureString(" ").X + whichFont.Spacing;
             foreach (string word in split)
             {
                 if (LocalizedContentManager.CurrentLanguageCode is LocalizedContentManager.LanguageCode.fr && word.StartsWith("\n-"))
                 {
                     current_width = -whichFont.Spacing;
-                    sb.Append(Environment.NewLine);
-                    break;
+                    sb.AppendLine();
+                    continue;
                 }
                 float wordwidth = whichFont.MeasureString(word).X + spacewidth;
                 current_width += whichFont.Spacing + wordwidth;
                 if (current_width > width)
                 {
-                    sb.Append(Environment.NewLine);
+                    sb.AppendLine();
                     current_width = wordwidth;
                 }
                 sb.Append(word).Append(' ');
@@ -146,7 +146,7 @@ internal static class StringUtils
                                 : charwidth;
                             if (current_width + proposedcharwidth + whichFont.Spacing > width)
                             {
-                                sb.Append(Environment.NewLine);
+                                sb.AppendLine();
                                 current_width = charwidth;
                             }
                             sb.Append(ch);

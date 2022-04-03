@@ -126,8 +126,8 @@ internal static class StringUtils
                                 if (glyph > 0)
                                 {
                                     SpriteFont.Glyph* pWhichGlyph = pointerToGlyphs + glyph;
-                                    charwidth = pWhichGlyph->LeftSideBearing + pWhichGlyph->Width + pWhichGlyph->RightSideBearing;
-                                    proposedcharwidth = pWhichGlyph->RightSideBearing < 0 ? pWhichGlyph->LeftSideBearing + pWhichGlyph->Width : charwidth;
+                                    charwidth = pWhichGlyph->LeftSideBearing + pWhichGlyph->Width + pWhichGlyph->RightSideBearing + whichFont.Spacing;
+                                    proposedcharwidth = pWhichGlyph->RightSideBearing < 0 ? pWhichGlyph->LeftSideBearing + pWhichGlyph->Width + whichFont.Spacing: charwidth;
                                     if (current_width + proposedcharwidth > width)
                                     {
                                         sb.Append(Environment.NewLine);

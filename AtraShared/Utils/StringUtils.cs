@@ -73,9 +73,14 @@ internal static class StringUtils
         StringBuilder sb = new();
         if (splitbyspaces)
         {
-            string[] paragraphs = text.Split(new string[] { "\n", "\r\n", "\r" }, StringSplitOptions.RemoveEmptyEntries);
+            string[] paragraphs = text.Split(new string[] { "\n", "\r\n", "\r" }, StringSplitOptions.None);
             foreach (string? paragraph in paragraphs)
             {
+                if (string.IsNullOrEmpty(paragraph))
+                {
+                    sb.AppendLine();
+                    continue;
+                }
                 string[] split = paragraph.Split(' ');
                 float current_width = -whichFont.Spacing;
                 float wordwidth = 0;
@@ -127,7 +132,9 @@ internal static class StringUtils
                                 {
                                     SpriteFont.Glyph* pWhichGlyph = pointerToGlyphs + glyph;
                                     charwidth = pWhichGlyph->LeftSideBearing + pWhichGlyph->Width + pWhichGlyph->RightSideBearing + whichFont.Spacing;
-                                    proposedcharwidth = pWhichGlyph->RightSideBearing < 0 ? pWhichGlyph->LeftSideBearing + pWhichGlyph->Width + whichFont.Spacing: charwidth;
+                                    proposedcharwidth = pWhichGlyph->RightSideBearing < 0
+                                        ? pWhichGlyph->LeftSideBearing + pWhichGlyph->Width + whichFont.Spacing
+                                        : charwidth;
                                     if (current_width + proposedcharwidth > width)
                                     {
                                         sb.Append(Environment.NewLine);

@@ -8,6 +8,7 @@ using StardewModdingAPI.Utilities;
 using StopRugRemoval.Configuration;
 using StopRugRemoval.HarmonyPatches;
 using StopRugRemoval.HarmonyPatches.BombHandling;
+using StopRugRemoval.HarmonyPatches.Niceties;
 
 namespace StopRugRemoval;
 
@@ -90,12 +91,32 @@ public class ModEntry : Mod
         {
             ModMonitor.Log($"Mod crashed while applying harmony patches\n\n{ex}", LogLevel.Error);
         }
-        harmony.Snitch(this.Monitor, this.ModManifest.UniqueID, transpilersOnly: true);
+        harmony.Snitch(this.Monitor, harmony.Id, transpilersOnly: true);
+    }
+
+    /// <summary>
+    /// Applies the patches that must be applied after all mods are initialized.
+    /// IE - patches on other mods.
+    /// </summary>
+    /// <param name="harmony">A harmony instance.</param>
+    private void ApplyLatePatches(Harmony harmony)
+    {
+        try
+        {
+            FruitTreesAvoidHoe.ApplyPatches(harmony, this.Helper.ModRegistry);
+        }
+        catch (Exception ex)
+        {
+            ModMonitor.Log($"Mod crashed while applying harmony patches\n\n{ex}", LogLevel.Error);
+        }
+        harmony.Snitch(this.Monitor, harmony.Id, transpilersOnly: true);
     }
 
     private void OnGameLaunch(object? sender, GameLaunchedEventArgs e)
     {
         PlantGrassUnder.GetSmartBuildingBuildMode(this.Helper.ModRegistry);
+        this.ApplyLatePatches(new Harmony(this.ModManifest.UniqueID + "+latepatches"));
+
         GMCM = new(this.Monitor, this.Helper.Translation, this.Helper.ModRegistry, this.ModManifest);
         if (!GMCM.TryGetAPI())
         {

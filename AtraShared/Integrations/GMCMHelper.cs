@@ -625,6 +625,7 @@ public sealed class GMCMHelper : IntegrationHelper
     /// <returns>this.</returns>
     public GMCMHelper Unregister()
     {
+        this.pages.Clear();
         this.modMenuApi!.Unregister(this.manifest);
         return this;
     }

@@ -38,6 +38,11 @@ namespace AtraShared.Integrations.Interfaces;
 /// <remarks>Copied from: https://github.com/spacechase0/StardewValleyMods/blob/develop/JsonAssets/IApi.cs .</remarks>
 internal interface IJsonAssetsAPI
 {
+    event EventHandler ItemsRegistered;
+    event EventHandler IdsAssigned;
+    event EventHandler AddedItemsToShop;
+    event EventHandler IdsFixed;
+
     /// <summary>Load a folder as a Json Assets content pack.</summary>
     /// <param name="path">The absolute path to the content pack folder.</param>
     void LoadAssets(string path);
@@ -62,13 +67,23 @@ internal interface IJsonAssetsAPI
     /// Gets the ID of an crop declared through Json Assets.
     /// </summary>
     /// <param name="name">Name of crop.</param>
-    /// <returns>Integer group ID, or -1 if not found.</returns>
+    /// <returns>Integer crop ID, or -1 if not found.</returns>
     int GetCropId(string name);
+
+    /// <summary>
+    /// Gets the ID of a fruit tree declared through Json Assets.
+    /// </summary>
+    /// <param name="name">Name of fruit tree.</param>
+    /// <returns>Integer fruit tree ID, or -1 if not found.</returns>
     int GetFruitTreeId(string name);
     int GetBigCraftableId(string name);
     int GetHatId(string name);
     int GetWeaponId(string name);
     int GetClothingId(string name);
+
+    /******************
+     * Section GET ALL IDs.
+     ******************/
 
     IDictionary<string, int> GetAllObjectIds();
     IDictionary<string, int> GetAllCropIds();
@@ -86,11 +101,6 @@ internal interface IJsonAssetsAPI
     List<string> GetAllWeaponsFromContentPack(string cp);
     List<string> GetAllClothingFromContentPack(string cp);
     List<string> GetAllBootsFromContentPack(string cp);
-
-    event EventHandler ItemsRegistered;
-    event EventHandler IdsAssigned;
-    event EventHandler AddedItemsToShop;
-    event EventHandler IdsFixed;
 
     bool FixIdsInItem(Item item);
     void FixIdsInItemList(List<Item> items);

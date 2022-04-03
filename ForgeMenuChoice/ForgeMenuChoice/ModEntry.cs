@@ -18,9 +18,9 @@ internal class ModEntry : Mod
     internal static IMonitor ModMonitor { get; private set; }
 
     /// <summary>
-    /// Gets the content helper for this mod.
+    /// Gets the game content helper for this mod.
     /// </summary>
-    internal static IContentHelper ContentHelper { get; private set; }
+    internal static IGameContentHelper GameContentHelper { get; private set; }
 
     /// <summary>
     /// Gets the translation helper for this mod.
@@ -37,7 +37,7 @@ internal class ModEntry : Mod
     public override void Entry(IModHelper helper)
     {
         ModMonitor = this.Monitor;
-        ContentHelper = helper.Content;
+        GameContentHelper = helper.GameContent;
         TranslationHelper = helper.Translation;
         I18n.Init(helper.Translation);
 
@@ -52,15 +52,19 @@ internal class ModEntry : Mod
         }
 
         helper.Events.GameLoop.GameLaunched += this.OnGameLaunched;
-        helper.Events.GameLoop.SaveLoaded += this.OnSaveLoaded;
         helper.Events.GameLoop.DayEnding += this.OnDayEnd;
-        helper.Content.AssetLoaders.Add(AssetLoader.Instance);
+        helper.Events.Content.AssetRequested += this.OnAssetRequested;
+        helper.Events.Content.LocaleChanged += this.OnLocaleChanged;
     }
 
-    private void OnSaveLoaded(object? sender, SaveLoadedEventArgs e)
+    private void OnAssetRequested(object? sender, AssetRequestedEventArgs e)
+        => AssetLoader.OnLoadAsset(e);
+
+    private void OnLocaleChanged(object? sender, LocaleChangedEventArgs e)
     {
-        ContentHelper.InvalidateCache(AssetLoader.ENCHANTMENT_NAMES_LOCATION);
+        GameContentHelper.InvalidateCache(AssetLoader.ENCHANTMENT_NAMES_LOCATION);
 #pragma warning disable CS8625 // Cannot convert null literal to non-nullable reference type. This is a valid call, SMAPI just doesn't use nullable.
+
         // This is the games cache of enchantment names. I null it here to clear it, in case the user changes languages.
         this.Helper.Reflection.GetField<List<BaseEnchantment>>(typeof(BaseEnchantment), "_enchantments").SetValue(null);
 #pragma warning restore CS8625 // Cannot convert null literal to non-nullable reference type.
@@ -149,6 +153,6 @@ internal class ModEntry : Mod
         {
             ModMonitor.Log($"Mod failed while applying patches:\n{ex}", LogLevel.Error);
         }
-        harmony.Snitch(this.Monitor, this.ModManifest.UniqueID);
+        harmony.Snitch(this.Monitor, this.ModManifest.UniqueID, transpilersOnly: true);
     }
 }

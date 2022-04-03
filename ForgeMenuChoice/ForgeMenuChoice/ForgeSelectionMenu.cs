@@ -46,14 +46,14 @@ internal sealed class ForgeSelectionMenu : IClickableMenu
             || (ModEntry.Config.TooltipBehavior == TooltipBehavior.Immersive && Utility.HasAnyPlayerSeenSecretNote(1008));
     }
 
-    private static Texture2D Graphics => AssetLoader.UIElement;
-
-    private static IDictionary<string, string> TooltipData => AssetLoader.TooltipData;
-
     /// <summary>
     /// Gets the currently selected enchantment.
     /// </summary>
     internal BaseEnchantment CurrentSelectedOption => this.options[this.Index % this.options.Count];
+
+    private static Texture2D Graphics => AssetLoader.UIElement;
+
+    private static IDictionary<string, string> TooltipData => AssetLoader.TooltipData;
 
     /// <summary>
     /// Gets the display name of the currently selected enchantment.

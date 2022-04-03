@@ -1,16 +1,45 @@
-﻿using System.Text;
+﻿using System.Linq.Expressions;
+using System.Text;
+using AtraBase.Toolkit.Reflection;
 using Microsoft.Xna.Framework.Graphics;
 
 namespace AtraShared.Utils;
 
 internal static class StringUtils
 {
+    private static readonly Lazy<Func<SpriteFont, char, int>> GetGlyphLazy = new(() =>
+    {
+        ParameterExpression? spriteinstance = Expression.Variable(typeof(SpriteFont));
+        ParameterExpression? charinstance = Expression.Variable(typeof(char));
+        MethodCallExpression? call = Expression.Call(
+            spriteinstance,
+            typeof(SpriteFont).InstanceMethodNamed("GetGlyphIndexOrDefault"),
+            charinstance);
+        return (Func<SpriteFont, char, int>)Expression.Lambda(call, spriteinstance, charinstance).Compile();
+    });
+
+    private static Func<SpriteFont, char, int> GetGlyph => GetGlyphLazy.Value;
+
+    /// <summary>
+    /// Parses and wraps text, defaulting to Game1.dialogueFont and Game1.dialogueWidth.
+    /// </summary>
+    /// <param name="text">Text to process.</param>
+    /// <returns>String with wrapped text.</returns>
+    /// <remarks>This is meant to be a more performant Game1.parseText.</remarks>
     internal static string ParseAndWrapText(string? text)
         => text is null ? string.Empty : ParseAndWrapText(text, Game1.dialogueFont, Game1.dialogueWidth);
 
+    /// <summary>
+    /// Parses and wraps text.
+    /// </summary>
+    /// <param name="text">Text to process.</param>
+    /// <param name="whichFont">Font to use.</param>
+    /// <param name="width">Maximum width.</param>
+    /// <returns>String with wrapped text.</returns>
+    /// <remarks>This is meant to be a more performant Game1.parseText.</remarks>
     internal static string ParseAndWrapText(string? text, SpriteFont whichFont, float width)
     {
-        if (text is null)
+        if (string.IsNullOrEmpty(text))
         {
             return string.Empty;
         }
@@ -48,14 +77,21 @@ internal static class StringUtils
                         sb.Append(Environment.NewLine);
                         break;
                     default:
-                        wordwidth += whichFont.MeasureString(word);
+                        if (LocalizedContentManager.CurrentLanguageCode is LocalizedContentManager.LanguageCode.fr && word.StartsWith("\n-"))
+                        {
+                            current_width = -whichFont.Spacing;
+                            sb.Append(Environment.NewLine);
+                            break;
+                        }
+                        wordwidth = whichFont.MeasureString(word).X;
                         current_width += whichFont.Spacing + wordwidth;
                         if (current_width > width)
                         {
                             sb.Append(Environment.NewLine);
-                            width = wordwidth;
+                            current_width = wordwidth;
                         }
                         sb.Append(word);
+                        break;
                 }
             }
         }
@@ -63,6 +99,7 @@ internal static class StringUtils
         {
             float current_width = -whichFont.Spacing;
             float charwidth = 0;
+            float proposedcharwidth = 0;
             foreach (char ch in text)
             {
                 switch (ch)
@@ -74,14 +111,20 @@ internal static class StringUtils
                         sb.Append(Environment.NewLine);
                         break;
                     default:
-                        charwidth = whichFont.MeasureString(ch.ToString()).X;
-                        current_width += whichFont.Spacing + charwidth;
-                        if (current_width > width)
+                        int glyph = GetGlyph(whichFont, ch);
+                        if (glyph > 0)
                         {
-                            sb.Append(Environment.NewLine);
-                            width = charwidth;
+                            SpriteFont.Glyph whichGlyph = whichFont.Glyphs[glyph];
+                            charwidth = whichGlyph.LeftSideBearing + whichGlyph.Width + whichGlyph.RightSideBearing;
+                            proposedcharwidth = whichGlyph.RightSideBearing < 0 ? whichGlyph.LeftSideBearing + whichGlyph.Width : whichGlyph.RightSideBearing;
+                            if (current_width + proposedcharwidth > width)
+                            {
+                                sb.Append(Environment.NewLine);
+                                current_width = charwidth;
+                            }
+                            sb.Append(ch);
+                            current_width += charwidth;
                         }
-                        sb.Append(ch);
                         break;
                 }
             }

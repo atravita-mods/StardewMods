@@ -34,6 +34,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Utils\HarmonyHelpers\CodeInstructionWrapper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Utils\HarmonyHelpers\ILHelper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Utils\MultiplayerHelpers.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Utils\StringUtils.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Utils\Utils.cs" />
   </ItemGroup>
 </Project>

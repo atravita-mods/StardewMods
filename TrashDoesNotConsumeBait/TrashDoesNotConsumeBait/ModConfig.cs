@@ -40,4 +40,6 @@ public class ModConfig
         get => this.consumeChancePreserving;
         set => this.consumeChancePreserving = Math.Clamp(value, 0f, 1f);
     }
+
+    public bool CrabPotTrashDoesNotEatBait { get; set; } = true;
 }

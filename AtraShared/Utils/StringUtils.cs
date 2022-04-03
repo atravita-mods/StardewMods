@@ -7,11 +7,6 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace AtraShared.Utils;
 
-/************
- * Todo: fix newlines in word-based languages
- * Consider moving to pointers for the character-based languages.
- * ***********/
-
 /// <summary>
 /// Handles methods for dealing with strings.
 /// </summary>
@@ -57,95 +52,92 @@ internal static class StringUtils
         {
             text = Game1.player.IsMale ? text[..genderseperator] : text[(genderseperator + 1)..];
         }
-        bool splitbyspaces;
         switch (LocalizedContentManager.CurrentLanguageCode)
         {
             case LocalizedContentManager.LanguageCode.ja:
             case LocalizedContentManager.LanguageCode.zh:
             case LocalizedContentManager.LanguageCode.th:
             case LocalizedContentManager.LanguageCode.mod when Game1.dialogueFont.Glyphs.Length > 4000:
-                splitbyspaces = false;
-                break;
+                return ParseAndWrapTextByChar(text, whichFont, width);
             default:
-                splitbyspaces = true;
-                break;
+                return ParseAndWrapTextByWords(text, whichFont, width);
         }
+    }
+
+    private static string ParseAndWrapTextByWords(string text, SpriteFont whichFont, float width)
+    {
         StringBuilder sb = new();
-        if (splitbyspaces)
+        string[] paragraphs = text.Split(new string[] { "\n", "\r\n", "\r" }, StringSplitOptions.None);
+        foreach (string? paragraph in paragraphs)
         {
-            string[] paragraphs = text.Split(new string[] { "\n", "\r\n", "\r" }, StringSplitOptions.None);
-            foreach (string? paragraph in paragraphs)
+            if (string.IsNullOrEmpty(paragraph))
             {
-                if (string.IsNullOrEmpty(paragraph))
+                sb.AppendLine();
+                continue;
+            }
+            string[] split = paragraph.Split(' ');
+            float current_width = -whichFont.Spacing;
+            foreach (string word in split)
+            {
+                if (LocalizedContentManager.CurrentLanguageCode is LocalizedContentManager.LanguageCode.fr && word.StartsWith("\n-"))
                 {
-                    sb.AppendLine();
-                    continue;
+                    current_width = -whichFont.Spacing;
+                    sb.Append(Environment.NewLine);
+                    break;
                 }
-                string[] split = paragraph.Split(' ');
-                float current_width = -whichFont.Spacing;
-                float wordwidth = 0;
-                foreach (string word in split)
+                float wordwidth = whichFont.MeasureString(word).X;
+                current_width += whichFont.Spacing + wordwidth;
+                if (current_width > width)
                 {
-                    if (LocalizedContentManager.CurrentLanguageCode is LocalizedContentManager.LanguageCode.fr && word.StartsWith("\n-"))
-                    {
+                    sb.Append(Environment.NewLine);
+                    current_width = wordwidth;
+                }
+                sb.Append(word).Append(' ');
+            }
+            sb.AppendLine();
+        }
+
+        // remove the last newline, that wasn't necessary.
+        sb.Remove(sb.Length - Environment.NewLine.Length, Environment.NewLine.Length);
+        return sb.ToString();
+    }
+
+    private static unsafe string ParseAndWrapTextByChar(string text, SpriteFont whichFont, float width)
+    {
+        StringBuilder sb = new();
+        float current_width = -whichFont.Spacing;
+        float charwidth = 0;
+        float proposedcharwidth = 0;
+        fixed (SpriteFont.Glyph* pointerToGlyphs = whichFont.Glyphs)
+        {
+            foreach (char ch in text)
+            {
+                switch (ch)
+                {
+                    case '\r':
+                        continue;
+                    case '\n':
                         current_width = -whichFont.Spacing;
                         sb.Append(Environment.NewLine);
                         break;
-                    }
-                    wordwidth = whichFont.MeasureString(word).X;
-                    current_width += whichFont.Spacing + wordwidth;
-                    if (current_width > width)
-                    {
-                        sb.Append(Environment.NewLine);
-                        current_width = wordwidth;
-                    }
-                    sb.Append(word).Append(' ');
-                }
-                sb.AppendLine();
-            }
-
-            // remove the last newline, that wasn't necessary.
-            sb.Remove(sb.Length - Environment.NewLine.Length, Environment.NewLine.Length);
-        }
-        else
-        {
-            unsafe
-            {
-                float current_width = -whichFont.Spacing;
-                float charwidth = 0;
-                float proposedcharwidth = 0;
-                fixed (SpriteFont.Glyph* pointerToGlyphs = whichFont.Glyphs)
-                {
-                    foreach (char ch in text)
-                    {
-                        switch (ch)
+                    default:
+                        int glyph = GetGlyph(whichFont, ch);
+                        if (glyph > 0)
                         {
-                            case '\r':
-                                continue;
-                            case '\n':
-                                current_width = -whichFont.Spacing;
+                            SpriteFont.Glyph* pWhichGlyph = pointerToGlyphs + glyph;
+                            charwidth = pWhichGlyph->LeftSideBearing + pWhichGlyph->Width + pWhichGlyph->RightSideBearing;
+                            proposedcharwidth = pWhichGlyph->RightSideBearing < 0
+                                ? pWhichGlyph->LeftSideBearing + pWhichGlyph->Width
+                                : charwidth;
+                            if (current_width + proposedcharwidth + whichFont.Spacing > width)
+                            {
                                 sb.Append(Environment.NewLine);
-                                break;
-                            default:
-                                int glyph = GetGlyph(whichFont, ch);
-                                if (glyph > 0)
-                                {
-                                    SpriteFont.Glyph* pWhichGlyph = pointerToGlyphs + glyph;
-                                    charwidth = pWhichGlyph->LeftSideBearing + pWhichGlyph->Width + pWhichGlyph->RightSideBearing + whichFont.Spacing;
-                                    proposedcharwidth = pWhichGlyph->RightSideBearing < 0
-                                        ? pWhichGlyph->LeftSideBearing + pWhichGlyph->Width + whichFont.Spacing
-                                        : charwidth;
-                                    if (current_width + proposedcharwidth > width)
-                                    {
-                                        sb.Append(Environment.NewLine);
-                                        current_width = charwidth;
-                                    }
-                                    sb.Append(ch);
-                                    current_width += charwidth;
-                                }
-                                break;
+                                current_width = charwidth;
+                            }
+                            sb.Append(ch);
+                            current_width += charwidth + whichFont.Spacing;
                         }
-                    }
+                        break;
                 }
             }
         }

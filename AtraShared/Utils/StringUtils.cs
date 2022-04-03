@@ -58,13 +58,20 @@ internal static class StringUtils
             case LocalizedContentManager.LanguageCode.zh:
             case LocalizedContentManager.LanguageCode.th:
             case LocalizedContentManager.LanguageCode.mod when Game1.dialogueFont.Glyphs.Length > 4000:
-                return ParseAndWrapTextByChar(text, whichFont, width);
+                return WrapTextByChar(text, whichFont, width);
             default:
-                return ParseAndWrapTextByWords(text, whichFont, width);
+                return WrapTextByWords(text, whichFont, width);
         }
     }
 
-    private static string ParseAndWrapTextByWords(string text, SpriteFont whichFont, float width)
+    /// <summary>
+    /// Wraps text, using spaces as word boundaries.
+    /// </summary>
+    /// <param name="text">Text to wrap.</param>
+    /// <param name="whichFont">Which font to use.</param>
+    /// <param name="width">Maximum width.</param>
+    /// <returns>Wrapped text.</returns>
+    internal static string WrapTextByWords(string text, SpriteFont whichFont, float width)
     {
         StringBuilder sb = new();
         string[] paragraphs = text.Split(new string[] { "\n", "\r\n", "\r" }, StringSplitOptions.None);
@@ -103,7 +110,14 @@ internal static class StringUtils
         return sb.ToString();
     }
 
-    private static unsafe string ParseAndWrapTextByChar(string text, SpriteFont whichFont, float width)
+    /// <summary>
+    /// Wraps text one character at time.
+    /// </summary>
+    /// <param name="text">Text to wrap.</param>
+    /// <param name="whichFont">Which font to use.</param>
+    /// <param name="width">Maximum width.</param>
+    /// <returns>Wrapped text.</returns>
+    internal static unsafe string WrapTextByChar(string text, SpriteFont whichFont, float width)
     {
         StringBuilder sb = new();
         float current_width = -whichFont.Spacing;

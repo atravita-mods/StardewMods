@@ -45,7 +45,7 @@ internal static class StringUtils
         }
         if (text.IndexOf(Dialogue.genderDialogueSplitCharacter) is int genderseperator && genderseperator > 0)
         {
-            text = Game1.player.IsMale ? text[..genderseperator] : text[genderseperator..];
+            text = Game1.player.IsMale ? text[..genderseperator] : text[(genderseperator + 1)..];
         }
         bool splitbyspaces;
         switch (LocalizedContentManager.CurrentLanguageCode)
@@ -68,6 +68,7 @@ internal static class StringUtils
             float wordwidth = 0;
             foreach (string word in split)
             {
+                // This isn't quite right. I have no assurances on where the newline characters may fall.
                 switch (word)
                 {
                     case "\r\n":

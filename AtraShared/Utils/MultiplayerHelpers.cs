@@ -1,10 +1,24 @@
-﻿namespace AtraShared.Utils;
+﻿using System.Linq.Expressions;
+using AtraBase.Toolkit.Reflection;
+
+namespace AtraShared.Utils;
 
 /// <summary>
 /// Functions to help with handling multiplayer.
 /// </summary>
 internal static class MultiplayerHelpers
 {
+    private static readonly Lazy<Func<Multiplayer>> MultiplayerLazy = new(() =>
+    {
+        MemberExpression? expression = Expression.Field(null, typeof(Game1).StaticFieldNamed("multiplayer"));
+        return Expression.Lambda<Func<Multiplayer>>(expression).Compile();
+    });
+
+    /// <summary>
+    /// Gets a function that returns the current multiplayer instance.
+    /// </summary>
+    internal static Func<Multiplayer> GetMultiplayer => MultiplayerLazy.Value;
+
     /// <summary>
     /// Checks if the versions installed of the mod are the same for farmhands.
     /// Prints errors to console if wrong.

@@ -34,6 +34,10 @@ internal static class FruitTreesAvoidHoe
                     original: dgaTree.InstanceMethodNamed("performToolAction"),
                     transpiler: new HarmonyMethod(typeof(FruitTreesAvoidHoe), nameof(FruitTreesAvoidHoe.Transpiler)));
             }
+            else
+            {
+                ModEntry.ModMonitor.Log("Cannot find dga fruit trees; they will still be affected by hoes.", LogLevel.Info);
+            }
         }
         catch (Exception ex)
         {
@@ -55,7 +59,6 @@ internal static class FruitTreesAvoidHoe
                 new(OpCodes.Brtrue_S),
                 new(OpCodes.Ldarg_1),
                 new(OpCodes.Isinst, typeof(MeleeWeapon)),
-                new(OpCodes.Brfalse_S),
             })
             .Remove(6)
             .FindNext(new CodeInstructionWrapper[]

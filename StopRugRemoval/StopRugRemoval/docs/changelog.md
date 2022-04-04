@@ -9,6 +9,7 @@
 #### Version 1.0.8 - alpha
 Compiled for SMAPI 3.14.0
 * Removes damage to fruit trees from hoes and scythes.
+* Hides crab pots during festivals and events.
 
 #### Version 1.0.7
 

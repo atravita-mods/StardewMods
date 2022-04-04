@@ -65,7 +65,7 @@ internal static class ConfirmBomb
                     goto case "atravitaInteractionTweaksBombs_BombsYes";
                 case "atravitaInteractionTweaksBombs_BombsYes":
                     Game1.player.reduceActiveItemByOne();
-                    GameLocationUtils.ExplodeBomb(__instance, WhichBomb.Value, BombLocation.Value, ModEntry.Multiplayer);
+                    GameLocationUtils.ExplodeBomb(__instance, WhichBomb.Value, BombLocation.Value, ModEntry.Multiplayer());
                     break;
                 case "atravitaInteractionTweaksBombs_BombsNo":
                     break;

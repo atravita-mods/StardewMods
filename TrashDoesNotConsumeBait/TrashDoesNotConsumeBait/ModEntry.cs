@@ -24,16 +24,16 @@ internal class ModEntry : Mod
     internal static ModConfig Config { get; set; }
 
     /// <summary>
-    /// Gets the content helper for this mod.
+    /// Gets the game content helper for this mod.
     /// </summary>
-    internal static IContentHelper ContentHelper { get; private set; }
+    internal static IGameContentHelper GameContentHelper { get; private set; }
 #pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
 
     /// <inheritdoc/>
     public override void Entry(IModHelper helper)
     {
         ModMonitor = this.Monitor;
-        ContentHelper = helper.Content;
+        GameContentHelper = helper.GameContent;
         I18n.Init(helper.Translation);
 
         try
@@ -48,10 +48,13 @@ internal class ModEntry : Mod
 
         helper.Events.GameLoop.GameLaunched += this.SetUpConfig;
         helper.Events.GameLoop.SaveLoaded += this.OnSaveLoaded;
-        this.ApplyPatches(new Harmony(this.ModManifest.UniqueID));
 
-        helper.Content.AssetEditors.Add(AssetEditor.Instance);
+        helper.Events.Content.AssetRequested += this.OnAssetRequested;
+        this.ApplyPatches(new Harmony(this.ModManifest.UniqueID));
     }
+
+    private void OnAssetRequested(object? sender, AssetRequestedEventArgs e)
+        => AssetEditor.EditAssets(e);
 
     /// <summary>
     /// Sets up the GMCM for this mod.
@@ -114,7 +117,7 @@ internal class ModEntry : Mod
         {
             ModMonitor.Log($"Mod crashed while applying harmony patches:\n\n{ex}", LogLevel.Error);
         }
-        harmony.Snitch(this.Monitor, this.ModManifest.UniqueID);
+        harmony.Snitch(this.Monitor, this.ModManifest.UniqueID, transpilersOnly: true);
     }
 
     /// <summary>

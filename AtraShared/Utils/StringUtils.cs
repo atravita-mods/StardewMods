@@ -12,6 +12,8 @@ namespace AtraShared.Utils;
 /// </summary>
 internal static class StringUtils
 {
+    internal static IMonitor? monitor { get; private set; }
+
     private static readonly Lazy<Func<SpriteFont, char, int>> GetGlyphLazy = new(() =>
     {
         ParameterExpression? spriteinstance = Expression.Variable(typeof(SpriteFont));
@@ -20,10 +22,15 @@ internal static class StringUtils
             spriteinstance,
             typeof(SpriteFont).InstanceMethodNamed("GetGlyphIndexOrDefault"),
             charinstance);
-        return (Func<SpriteFont, char, int>)Expression.Lambda(call, spriteinstance, charinstance).Compile();
+        return Expression.Lambda<Func<SpriteFont, char, int>>(call, spriteinstance, charinstance).Compile();
     });
 
     private static Func<SpriteFont, char, int> GetGlyph => GetGlyphLazy.Value;
+
+    internal static void Initialize(IMonitor monitor)
+    {
+        StringUtils.monitor = monitor;
+    }
 
     /// <summary>
     /// Parses and wraps text, defaulting to Game1.dialogueFont and Game1.dialogueWidth.
@@ -151,6 +158,10 @@ internal static class StringUtils
                             }
                             sb.Append(ch);
                             current_width += charwidth + whichFont.Spacing;
+                        }
+                        else
+                        {
+                            monitor?.Log($"Glyph {ch} not accounted for!", LogLevel.Error);
                         }
                         break;
                 }

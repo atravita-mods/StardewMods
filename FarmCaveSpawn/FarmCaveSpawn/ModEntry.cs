@@ -99,13 +99,16 @@ public class ModEntry : Mod
         helper.Events.GameLoop.OneSecondUpdateTicking += this.BellsAndWhistles;
         helper.Events.GameLoop.SaveLoaded += this.SaveLoaded;
 
+        helper.Events.Content.AssetRequested += this.OnAssetRequested;
+
         helper.ConsoleCommands.Add(
             name: "av.fcs.list_fruits",
             documentation: I18n.ListFruits_Description(),
             callback: this.ListFruits);
-
-        helper.Content.AssetLoaders.Add(AssetManager.Instance);
     }
+
+    private void OnAssetRequested(object? sender, AssetRequestedEventArgs e)
+        => AssetManager.Load(e);
 
     /// <summary>
     /// Remove the list TreeFruit when no longer necessary, delete the Random as well.
@@ -385,8 +388,8 @@ public class ModEntry : Mod
     /// <returns>List of data, split by commas.</returns>
     private List<string> GetData(string datalocation)
     {
-        this.Helper.Content.InvalidateCache(datalocation);
-        IDictionary<string, string> rawlist = this.Helper.Content.Load<Dictionary<string, string>>(datalocation, ContentSource.GameContent);
+        this.Helper.GameContent.InvalidateCache(datalocation);
+        IDictionary<string, string> rawlist = this.Helper.GameContent.Load<Dictionary<string, string>>(datalocation);
         List<string> datalist = new();
 
         foreach (string uniqueID in rawlist.Keys)
@@ -413,7 +416,7 @@ public class ModEntry : Mod
         List<string> denylist = this.GetData(AssetManager.DENYLIST_LOCATION);
         List<int> treeFruits = new();
 
-        Dictionary<int, string> fruittrees = this.Helper.Content.Load<Dictionary<int, string>>("Data/fruitTrees", ContentSource.GameContent);
+        Dictionary<int, string> fruittrees = this.Helper.GameContent.Load<Dictionary<int, string>>("Data/fruitTrees");
         string currentseason = Game1.currentSeason.ToLowerInvariant().Trim();
         foreach (string tree in fruittrees.Values)
         {

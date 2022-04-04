@@ -1,21 +1,15 @@
-﻿using StardewModdingAPI.Utilities;
+﻿using AtraBase.Collections;
+
+using StardewModdingAPI.Events;
+using StardewModdingAPI.Utilities;
 
 namespace FarmCaveSpawn;
 
 /// <summary>
 /// Handles the fake assets for this mod.
 /// </summary>
-internal class AssetManager : IAssetLoader
+internal static class AssetManager
 {
-    private AssetManager()
-    {
-    }
-
-    /// <summary>
-    /// Gets the instance of the assetmanager for this mod.
-    /// </summary>
-    public static AssetManager Instance { get; } = new();
-
     /// <summary>
     /// Gets fake asset location for the denylist.
     /// </summary>
@@ -26,29 +20,28 @@ internal class AssetManager : IAssetLoader
     /// </summary>
     public static string ADDITIONAL_LOCATIONS_LOCATION { get; } = PathUtilities.NormalizeAssetName("Mods/atravita_FarmCaveSpawn_additionalLocations");
 
-    /// <inheritdoc/>
-    public bool CanLoad<T>(IAssetInfo asset)
-        => asset.AssetNameEquals(DENYLIST_LOCATION) || asset.AssetNameEquals(ADDITIONAL_LOCATIONS_LOCATION);
-
-    /// <inheritdoc/>
-    public T Load<T>(IAssetInfo asset)
+    /// <summary>
+    /// Loads assets for this mod.
+    /// </summary>
+    /// <param name="e">Event args.</param>
+    public static void Load(AssetRequestedEventArgs e)
     {
-        if (asset.AssetNameEquals(DENYLIST_LOCATION))
+        if (e.Name.IsEquivalentTo(DENYLIST_LOCATION))
         {
-            return (T)(object)new Dictionary<string, string>
-            {
-            };
+            e.LoadFrom(EmptyContainers.GetEmptyDictionary<string, string>, AssetLoadPriority.Medium);
         }
-        else if (asset.AssetNameEquals(ADDITIONAL_LOCATIONS_LOCATION))
+        else if (e.Name.IsEquivalentTo(ADDITIONAL_LOCATIONS_LOCATION))
         {
-            return (T)(object)new Dictionary<string, string>
-            {
-                ["FlashShifter.SVECode"] = "Custom_MinecartCave, Custom_DeepCave",
+            e.LoadFrom(GetInitialAdditionalLocations, AssetLoadPriority.High);
+        }
+    }
+
+    private static Dictionary<string, string> GetInitialAdditionalLocations()
+        => new()
+        {
+            ["FlashShifter.SVECode"] = "Custom_MinecartCave, Custom_DeepCave",
 #if DEBUG // Regex's test!
                 ["atravita.FarmCaveSpawn"] = "Town:[(4;5);(34;40)]",
 #endif
-            };
-        }
-        throw new InvalidOperationException($"Should not have tried to load '{asset.AssetName}'.");
-    }
+        };
 }

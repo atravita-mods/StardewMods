@@ -9,6 +9,10 @@
 * Figure out DGA fruit trees.
 <!-- bat eyes for custom locations? -->
 
+#### Version 1.0.10-alpha
+
+* Updates for SMAPI 3.14.0.
+
 #### Version 1.0.9
 
 * Fixes error items spawning in whenever no tree fruits are possible.

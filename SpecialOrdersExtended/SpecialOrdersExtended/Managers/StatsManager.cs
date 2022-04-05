@@ -53,7 +53,7 @@ internal static class StatsManager
     {
         try
         {
-            if (PropertyGetters.TryGetValue(key.ToLowerInvariant(), out Func<Stats, uint>? property))
+            if (PropertyGetters.TryGetValue(key, out Func<Stats, uint>? property))
             {
                 return property(stats);
             }
@@ -95,8 +95,9 @@ internal static class StatsManager
         propertyGetters = typeof(Stats).GetProperties()
             .Where((PropertyInfo p) => p.CanRead && p.PropertyType.Equals(typeof(uint)) && !DENYLIST.Contains(p.Name))
             .ToDictionary(
-                (PropertyInfo p) => p.Name.ToLowerInvariant(),
-                p => (Func<Stats, uint>)Delegate.CreateDelegate(typeof(Func<Stats, uint>), p.GetGetMethod()));
+                (PropertyInfo p) => p.Name,
+                p => (Func<Stats, uint>)Delegate.CreateDelegate(typeof(Func<Stats, uint>), p.GetGetMethod()),
+                StringComparer.OrdinalIgnoreCase);
 #pragma warning restore CS8604 // Possible null reference argument.
     }
 }

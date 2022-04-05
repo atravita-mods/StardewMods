@@ -2,12 +2,12 @@
   "$schema": "https://smapi.io/schemas/manifest.json",
   "Name": "Special Orders Tags Extended",
   "Author": "atravita",
-  "Version": "1.0.7",
+  "Version": "1.0.8-alpha",
   "Description": "Extends the number of tags available for special orders",
   "UniqueID": "atravita.SpecialOrdersExtended",
   "EntryDll": "SpecialOrdersExtended.dll",
   "UpdateKeys": [ "Nexus:9855", "ModDrop:1086743", "GitHub:atravita-mods/SpecialOrdersExtended" ],
-  "MinimumApiVersion": "3.0",
+  "MinimumApiVersion": "3.14",
   "Dependencies": [
     {
       "UniqueID": "Pathoschild.ContentPatcher",

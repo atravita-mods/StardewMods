@@ -16,6 +16,8 @@ namespace SpecialOrdersExtended;
 /// <inheritdoc />
 internal class ModEntry : Mod
 {
+    private MigrationManager? migrator;
+
     /// <summary>
     /// Spacecore API handle.
     /// </summary>
@@ -27,8 +29,6 @@ internal class ModEntry : Mod
     /// </summary>
     /// <remarks>If null, was not able to be loaded.</remarks>
     internal static ISpaceCoreAPI? SpaceCoreAPI => spaceCoreAPI;
-
-    private MigrationManager? migrator;
 
     // The following fields are set in the Entry method, which is about as close to the constructor as I can get
 #pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.

@@ -1,10 +1,13 @@
 ﻿using AtraBase.Toolkit.Reflection;
+using AtraShared.ConstantsAndEnums;
 using AtraShared.Integrations;
+using AtraShared.Utils;
 using AtraShared.Utils.Extensions;
 using ForgeMenuChoice.HarmonyPatches;
 using HarmonyLib;
 using Microsoft.Xna.Framework.Graphics;
 using StardewModdingAPI.Events;
+using AtraUtils = AtraShared.Utils.Utils;
 
 namespace ForgeMenuChoice;
 
@@ -37,42 +40,29 @@ internal class ModEntry : Mod
     public override void Entry(IModHelper helper)
     {
         ModMonitor = this.Monitor;
+
+        StringUtils.Initialize(this.Monitor);
         GameContentHelper = helper.GameContent;
         TranslationHelper = helper.Translation;
-        I18n.Init(helper.Translation);
 
-        try
-        {
-            Config = this.Helper.ReadConfig<ModConfig>();
-        }
-        catch
-        {
-            this.Monitor.Log(I18n.IllFormatedConfig(), LogLevel.Warn);
-            Config = new();
-        }
+        I18n.Init(helper.Translation);
+        Config = AtraUtils.GetConfigOrDefault<ModConfig>(helper, this.Monitor);
 
         helper.Events.GameLoop.GameLaunched += this.OnGameLaunched;
-        helper.Events.GameLoop.DayEnding += this.OnDayEnd;
+        helper.Events.Player.Warped += this.Player_Warped;
         helper.Events.Content.AssetRequested += this.OnAssetRequested;
         helper.Events.Content.LocaleChanged += this.OnLocaleChanged;
+        helper.Events.Content.AssetsInvalidated += this.OnAssetInvalidated;
     }
-
-    private void OnAssetRequested(object? sender, AssetRequestedEventArgs e)
-        => AssetLoader.OnLoadAsset(e);
 
     private void OnLocaleChanged(object? sender, LocaleChangedEventArgs e)
     {
         GameContentHelper.InvalidateCache(AssetLoader.ENCHANTMENT_NAMES_LOCATION);
-#pragma warning disable CS8625 // Cannot convert null literal to non-nullable reference type. This is a valid call, SMAPI just doesn't use nullable.
 
         // This is the games cache of enchantment names. I null it here to clear it, in case the user changes languages.
-        this.Helper.Reflection.GetField<List<BaseEnchantment>>(typeof(BaseEnchantment), "_enchantments").SetValue(null);
-#pragma warning restore CS8625 // Cannot convert null literal to non-nullable reference type.
+        this.Helper.Reflection.GetField<List<BaseEnchantment>?>(typeof(BaseEnchantment), "_enchantments").SetValue(null);
         AssetLoader.Refresh();
     }
-
-    private void OnDayEnd(object? sender, DayEndingEventArgs e)
-        => AssetLoader.Refresh();
 
     /// <summary>
     /// Things to run after all mods are initialized.
@@ -151,8 +141,26 @@ internal class ModEntry : Mod
         }
         catch (Exception ex)
         {
-            ModMonitor.Log($"Mod failed while applying patches:\n{ex}", LogLevel.Error);
+            ModMonitor.Log(string.Format(ErrorMessageConsts.HARMONYCRASH, ex), LogLevel.Error);
         }
         harmony.Snitch(this.Monitor, this.ModManifest.UniqueID, transpilersOnly: true);
     }
+
+    /*****************
+     * REGION ASSET MANAGEMENT
+     * ************/
+
+    private void Player_Warped(object? sender, WarpedEventArgs e)
+    {
+        if (e.IsLocalPlayer)
+        {
+            AssetLoader.Refresh();
+        }
+    }
+
+    private void OnAssetInvalidated(object? sender, AssetsInvalidatedEventArgs e)
+        => AssetLoader.Refresh(e.NamesWithoutLocale);
+
+    private void OnAssetRequested(object? sender, AssetRequestedEventArgs e)
+        => AssetLoader.OnLoadAsset(e);
 }

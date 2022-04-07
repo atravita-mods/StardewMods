@@ -19,6 +19,9 @@ public static class AssetLoader
     private static readonly string TOOLTIP_DATA_PATH = PathUtilities.NormalizeAssetName(ASSETPREFIX + "Tooltip_Data");
 #pragma warning restore SA1310 // Field names should not contain underscore
 
+    private static IAssetName? uiAssetName = null;
+    private static IAssetName? tooltipAssetName = null;
+
     private static Lazy<Texture2D> uiElementLazy = new(() => ModEntry.GameContentHelper.Load<Texture2D>(UI_ASSET_PATH));
     private static Lazy<Dictionary<string, string>> tooltipDataLazy = new(GrabAndWrapTooltips);
 
@@ -37,13 +40,27 @@ public static class AssetLoader
     /// </summary>
     internal static string ENCHANTMENT_NAMES_LOCATION { get; } = PathUtilities.NormalizeAssetName("Strings/EnchantmentNames");
 
+    private static IAssetName UI_ASSET_NAME
+        => uiAssetName ??= ModEntry.GameContentHelper.ParseAssetName(UI_ASSET_PATH);
+
+    private static IAssetName TOOLTIP_DATA_NAME
+        => tooltipAssetName ??= ModEntry.GameContentHelper.ParseAssetName(TOOLTIP_DATA_PATH);
+
     /// <summary>
     /// Refreshes the Lazys.
     /// </summary>
-    internal static void Refresh()
+    /// <param name="assets">Which assets to refresh? Leave null to refresh all.</param>
+    internal static void Refresh(IReadOnlySet<IAssetName>? assets = null)
     {
-        uiElementLazy = new(() => ModEntry.GameContentHelper.Load<Texture2D>(UI_ASSET_PATH));
-        tooltipDataLazy = new(GrabAndWrapTooltips);
+        ModEntry.ModMonitor.Log("Refresh Requested", LogLevel.Info);
+        if (uiElementLazy.IsValueCreated && (assets is null || assets.Contains(UI_ASSET_NAME)))
+        {
+            uiElementLazy = new(() => ModEntry.GameContentHelper.Load<Texture2D>(UI_ASSET_PATH));
+        }
+        if (tooltipDataLazy.IsValueCreated && (assets is null || assets.Contains(TOOLTIP_DATA_NAME)))
+        {
+            tooltipDataLazy = new(GrabAndWrapTooltips);
+        }
     }
 
     /// <summary>
@@ -52,13 +69,13 @@ public static class AssetLoader
     /// <param name="e">Event args.</param>
     internal static void OnLoadAsset(AssetRequestedEventArgs e)
     {
-        if (e.NameWithoutLocale.IsEquivalentTo(UI_ASSET_PATH))
+        if (e.NameWithoutLocale.Equals(UI_ASSET_NAME))
         {
-            e.LoadFromModFile<Texture2D>(UI_ELEMENT_LOCATION, AssetLoadPriority.Medium);
+            e.LoadFromModFile<Texture2D>(UI_ELEMENT_LOCATION, AssetLoadPriority.Low);
         }
-        else if (e.NameWithoutLocale.IsEquivalentTo(TOOLTIP_DATA_PATH))
+        else if (e.NameWithoutLocale.Equals(TOOLTIP_DATA_NAME))
         {
-            e.LoadFrom(GenerateToolTips, AssetLoadPriority.Medium);
+            e.LoadFrom(GenerateToolTips, AssetLoadPriority.Low);
         }
     }
 

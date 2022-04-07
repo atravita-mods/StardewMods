@@ -60,6 +60,9 @@ public class ModConfig
     /// </summary>
     public KeybindList FurniturePlacementKey { get; set; } = KeybindList.Parse("LeftShift + Z");
 
+    /// <summary>
+    /// Gets or sets a value indicating whether or not to hide crab pots during events.
+    /// </summary>
     public bool HideCrabPots { get; set; } = true;
 
     /// <summary>

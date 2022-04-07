@@ -1,4 +1,5 @@
 ﻿using System.Reflection;
+using AtraShared.ConstantsAndEnums;
 using AtraShared.Integrations;
 using AtraShared.MigrationManager;
 using AtraShared.Utils;
@@ -10,6 +11,8 @@ using StopRugRemoval.Configuration;
 using StopRugRemoval.HarmonyPatches;
 using StopRugRemoval.HarmonyPatches.BombHandling;
 using StopRugRemoval.HarmonyPatches.Niceties;
+
+using AtraUtils = AtraShared.Utils.Utils;
 
 namespace StopRugRemoval;
 
@@ -52,15 +55,7 @@ public class ModEntry : Mod
         I18n.Init(helper.Translation);
         ModMonitor = this.Monitor;
         ReflectionHelper = this.Helper.Reflection;
-        try
-        {
-            Config = this.Helper.ReadConfig<ModConfig>();
-        }
-        catch
-        {
-            this.Monitor.Log(I18n.IllFormatedConfig(), LogLevel.Warn);
-            Config = new();
-        }
+        Config = AtraUtils.GetConfigOrDefault<ModConfig>(helper, this.Monitor);
 
         helper.Events.GameLoop.GameLaunched += this.OnGameLaunch;
         helper.Events.GameLoop.SaveLoaded += this.SaveLoaded;
@@ -85,7 +80,7 @@ public class ModEntry : Mod
         }
         catch (Exception ex)
         {
-            ModMonitor.Log($"Mod crashed while applying harmony patches\n\n{ex}", LogLevel.Error);
+            ModMonitor.Log(string.Format(ErrorMessageConsts.HARMONYCRASH, ex), LogLevel.Error);
         }
         harmony.Snitch(this.Monitor, harmony.Id, transpilersOnly: true);
     }
@@ -103,7 +98,7 @@ public class ModEntry : Mod
         }
         catch (Exception ex)
         {
-            ModMonitor.Log($"Mod crashed while applying harmony patches\n\n{ex}", LogLevel.Error);
+            ModMonitor.Log(string.Format(ErrorMessageConsts.HARMONYCRASH, ex), LogLevel.Error);
         }
         harmony.Snitch(this.Monitor, harmony.Id, transpilersOnly: true);
     }

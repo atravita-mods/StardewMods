@@ -1,9 +1,11 @@
 ﻿using System.Reflection;
+using AtraShared.ConstantsAndEnums;
 using AtraShared.Integrations;
 using AtraShared.MigrationManager;
 using AtraShared.Utils.Extensions;
 using HarmonyLib;
 using StardewModdingAPI.Events;
+using AtraUtils = AtraShared.Utils.Utils;
 
 namespace TrashDoesNotConsumeBait;
 
@@ -35,16 +37,7 @@ internal class ModEntry : Mod
         ModMonitor = this.Monitor;
         GameContentHelper = helper.GameContent;
         I18n.Init(helper.Translation);
-
-        try
-        {
-            Config = this.Helper.ReadConfig<ModConfig>();
-        }
-        catch
-        {
-            this.Monitor.Log(I18n.IllFormatedConfig(), LogLevel.Warn);
-            Config = new();
-        }
+        Config = AtraUtils.GetConfigOrDefault<ModConfig>(helper, this.Monitor);
 
         helper.Events.GameLoop.GameLaunched += this.SetUpConfig;
         helper.Events.GameLoop.SaveLoaded += this.OnSaveLoaded;
@@ -74,7 +67,8 @@ internal class ModEntry : Mod
                 Config = new();
                 AssetEditor.Invalidate();
             },
-            save: () => {
+            save: () =>
+            {
                 this.Helper.WriteConfig(Config);
                 AssetEditor.Invalidate();
             });
@@ -115,7 +109,7 @@ internal class ModEntry : Mod
         }
         catch (Exception ex)
         {
-            ModMonitor.Log($"Mod crashed while applying harmony patches:\n\n{ex}", LogLevel.Error);
+            ModMonitor.Log(string.Format(ErrorMessageConsts.HARMONYCRASH, ex), LogLevel.Error);
         }
         harmony.Snitch(this.Monitor, this.ModManifest.UniqueID, transpilersOnly: true);
     }

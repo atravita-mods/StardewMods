@@ -34,12 +34,14 @@ internal sealed class GMCMHelper : IntegrationHelper
     /// <summary>
     /// Gets a value indicating whether or not the helper has gotten a copy of the API.
     /// </summary>
+    [MemberNotNullWhen(returnValue: true, members: nameof(modMenuApi))]
     internal bool HasGottenAPI => this.modMenuApi is not null;
 
     /// <summary>
     /// Tries to grab a copy of the API.
     /// </summary>
     /// <returns>True if successful, false otherwise.</returns>
+    [MemberNotNullWhen(returnValue: true, members: nameof(modMenuApi))]
     internal bool TryGetAPI() => this.TryGetAPI(APIID, MINVERSION, out this.modMenuApi);
 
     /// <summary>

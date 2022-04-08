@@ -451,11 +451,10 @@ public class ScheduleUtilityFunctions
         int slashloc = rawSchedule.LastIndexOf('/');
         if (slashloc > 0)
         {
-            string lastentry = rawSchedule[(slashloc + 1) .. ];
-            int spaceloc = lastentry.IndexOf(' ');
+            int spaceloc = rawSchedule.IndexOf(' ', slashloc + 1);
             if (spaceloc > 0)
             {
-                return lastentry[(spaceloc + 1) .. ];
+                return rawSchedule[(spaceloc + 1) .. ];
             }
         }
         return null;

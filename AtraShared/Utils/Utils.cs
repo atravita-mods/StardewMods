@@ -8,6 +8,31 @@ namespace AtraShared.Utils;
 /// </summary>
 internal static class Utils
 {
+
+    /// <summary>
+    /// Gets the configuration instance, or returns a default one.
+    /// </summary>
+    /// <typeparam name="T">Type of config.</typeparam>
+    /// <param name="helper">Smapi's helper.</param>
+    /// <param name="monitor">Logger.</param>
+    /// <returns>Config.</returns>
+    internal static T GetConfigOrDefault<T>(IModHelper helper, IMonitor monitor)
+        where T : class, new()
+    {
+        try
+        {
+            return helper.ReadConfig<T>();
+        }
+        catch
+        {
+            monitor.Log(
+                helper.Translation.Get("IllFormatedConfig")
+                    .Default("Config file seems ill-formated, using default. Please use Generic Mod Config Menu to configure."),
+                LogLevel.Warn);
+            return new();
+        }
+    }
+
     /// <summary>
     /// Yields all tiles around a specific tile.
     /// </summary>

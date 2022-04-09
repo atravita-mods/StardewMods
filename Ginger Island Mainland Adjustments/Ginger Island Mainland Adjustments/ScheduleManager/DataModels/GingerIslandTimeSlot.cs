@@ -272,7 +272,7 @@ internal class GingerIslandTimeSlot
             }
             if (!foundactivity)
             {
-                Globals.ModMonitor.DebugLog($"Warning: No activity found for {visitor.Name} at {this.timeslot}", LogLevel.Warn);
+                Globals.ModMonitor.DebugOnlyLog($"Warning: No activity found for {visitor.Name} at {this.timeslot}", LogLevel.Warn);
             }
         }
         return this.animations;

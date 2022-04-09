@@ -53,7 +53,7 @@ internal static class DialogueUtilities
             // basekey
             return PushIfNotSaidAlready(npc, baseKey);
         }
-        Globals.ModMonitor.DebugLog($"No key found for {npc.Name} using basekey {baseKey}", LogLevel.Trace);
+        Globals.ModMonitor.DebugOnlyLog($"No key found for {npc.Name} using basekey {baseKey}", LogLevel.Trace);
         return false;
     }
 

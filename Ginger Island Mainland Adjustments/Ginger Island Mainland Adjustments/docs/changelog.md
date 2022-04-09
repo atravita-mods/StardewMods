@@ -45,6 +45,7 @@ Fixes:
 * `bed` is supported for `GIRemainder` schedules.
 * Fixes for splitscreen.
 * Fixed fishing on Ginger Island.
+* Internal optimizations.
 
 ### Version 1.1.2
 

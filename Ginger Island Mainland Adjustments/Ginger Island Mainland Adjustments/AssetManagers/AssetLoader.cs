@@ -110,7 +110,7 @@ public sealed class AssetLoader : IAssetLoader
             Dictionary<string, string> defaultgroups = Globals.ContentHelper.Load<Dictionary<string, string>>("assets/defaultGroupings.json", ContentSource.ModFolder);
             if (Game1.year > 2 && defaultgroups.TryGetValue("JodiFamily", out string? val))
             {
-                Globals.ModMonitor.DebugLog($"Kent is home, adding Kent");
+                Globals.ModMonitor.DebugOnlyLog($"Kent is home, adding Kent");
                 defaultgroups["JodiFamily"] = val + ", Kent";
             }
             if (defaultgroups.TryGetValue("barfolk", out string? value) && Game1.getAllFarmers().Any((Farmer farmer) => farmer.eventsSeen.Contains(99210002)))

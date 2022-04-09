@@ -116,7 +116,7 @@ internal static class GIScheduler
         HashSet<NPC> explorers = GenerateExplorerGroup(random);
         if (explorers.Count > 0)
         {
-            Globals.ModMonitor.DebugLog($"Found explorer group: {string.Join(", ", explorers.Select((NPC npc) => npc.Name))}.");
+            Globals.ModMonitor.DebugOnlyLog($"Found explorer group: {string.Join(", ", explorers.Select((NPC npc) => npc.Name))}.");
             IslandNorthScheduler.Schedule(random, explorers);
         }
 
@@ -245,7 +245,7 @@ internal static class GIScheduler
             && Globals.Config.GusDayAsShortString().Equals(Game1.shortDayNameFromDayOfSeason(Game1.dayOfMonth), StringComparison.OrdinalIgnoreCase)
             && Globals.Config.GusChance > random.NextDouble())
         {
-            Globals.ModMonitor.DebugLog($"Forcibly adding Gus");
+            Globals.ModMonitor.DebugOnlyLog($"Forcibly adding Gus.");
             visitors.Add(gus);
             valid_visitors.Remove(gus);
         }
@@ -278,7 +278,7 @@ internal static class GIScheduler
             {
                 if (!visitors[i].Name.Equals("Gus", StringComparison.OrdinalIgnoreCase) && !visitors[i].Name.Equals("George", StringComparison.OrdinalIgnoreCase))
                 {
-                    Globals.ModMonitor.DebugLog($"Replacing one visitor {visitors[i].Name} with Evelyn");
+                    Globals.ModMonitor.DebugOnlyLog($"Replacing one visitor {visitors[i].Name} with Evelyn");
                     visitors[i] = evelyn;
                     break;
                 }
@@ -298,7 +298,7 @@ internal static class GIScheduler
             evelyn2.scheduleDelaySeconds = 6.8f;
         }
 
-        Globals.ModMonitor.DebugLog($"{visitors.Count} vistors: {string.Join(", ", visitors.Select((NPC npc) => npc.Name))}");
+        Globals.ModMonitor.DebugOnlyLog($"{visitors.Count} vistors: {string.Join(", ", visitors.Select((NPC npc) => npc.Name))}");
         IslandSouthPatches.ClearCache();
 
         return visitors;
@@ -439,7 +439,7 @@ internal static class GIScheduler
                     ?? (Globals.IsChildToNPC?.Invoke(visitor) == true ? "1800 BusStop -1 23 3" : "1800 bed"));
             }
             completedSchedules[visitor] = string.Join("/", schedPointString);
-            Globals.ModMonitor.DebugLog($"For {visitor.Name}, created island schedule {completedSchedules[visitor]}");
+            Globals.ModMonitor.DebugOnlyLog($"For {visitor.Name}, created island schedule {completedSchedules[visitor]}");
         }
         return completedSchedules;
     }

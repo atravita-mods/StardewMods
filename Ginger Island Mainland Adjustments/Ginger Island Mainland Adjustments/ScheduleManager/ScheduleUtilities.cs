@@ -31,7 +31,7 @@ internal static class ScheduleUtilities
         string scheduleKey = BASE_SCHEDULE_KEY;
         if (npc.isMarried())
         {
-            Globals.ModMonitor.DebugLog($"{npc.Name} is married, using married GI schedules");
+            Globals.ModMonitor.DebugOnlyLog($"{npc.Name} is married, using married GI schedules");
             scheduleKey += "_married";
         }
         int hearts = Utility.GetAllPlayerFriendshipLevel(npc) / 250;

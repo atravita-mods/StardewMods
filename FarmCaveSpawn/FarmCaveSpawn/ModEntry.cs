@@ -1,6 +1,7 @@
 ﻿using System.Reflection;
 using System.Text.RegularExpressions;
 using AtraBase.Toolkit.Extensions;
+using AtraBase.Toolkit.StringHandler;
 using AtraShared.Integrations;
 using AtraShared.MigrationManager;
 using AtraShared.Utils.Extensions;
@@ -417,10 +418,10 @@ public class ModEntry : Mod
         List<int> treeFruits = new();
 
         Dictionary<int, string> fruittrees = this.Helper.GameContent.Load<Dictionary<int, string>>("Data/fruitTrees");
-        string currentseason = Game1.currentSeason.ToLowerInvariant().Trim();
+        string currentseason = Game1.currentSeason.Trim().ToLowerInvariant();
         foreach (string tree in fruittrees.Values)
         {
-            string[] treedata = tree.Split('/', StringSplitOptions.TrimEntries);
+            SpanSplit treedata = tree.SpanSplit('/', StringSplitOptions.TrimEntries);
 
             if ((this.config.SeasonalOnly == SeasonalBehavior.SeasonalOnly || (this.config.SeasonalOnly == SeasonalBehavior.SeasonalExceptWinter && !Game1.IsWinter))
                 && !treedata[1].Contains(currentseason)
@@ -429,16 +430,17 @@ public class ModEntry : Mod
                 continue;
             }
 
-            if (int.TryParse(treedata[2], out int objectIndex))
+            if (treedata.TryGetAtIndex(2, out SpanSplitEntry val) && int.TryParse(val, out int objectIndex))
             {
                 try
                 {
-                    SObject fruit = new(objectIndex, 1);
-                    if ((!this.config.AllowAnyTreeProduct && fruit.Category != SObject.FruitsCategory)
-                        || (this.config.EdiblesOnly && fruit.Edibility < 0)
-                        || fruit.Price > this.config.PriceCap
-                        || denylist.Contains(fruit.Name)
-                        || (this.config.NoBananasBeforeShrine && fruit.Name.Equals("Banana", StringComparison.OrdinalIgnoreCase)
+                    SpanSplit fruit = Game1.objectInformation[objectIndex].SpanSplit('/');
+                    string fruitname = fruit[0].ToString();
+                    if ((!this.config.AllowAnyTreeProduct && (!fruit[3].SpanSplit().TryGetAtIndex(1, out SpanSplitEntry cat) || !int.TryParse(cat, out int category) || category != SObject.FruitsCategory))
+                        || (this.config.EdiblesOnly && int.Parse(fruit[2]) < 0)
+                        || int.Parse(fruit[1]) > this.config.PriceCap
+                        || denylist.Contains(fruitname)
+                        || (this.config.NoBananasBeforeShrine && fruitname.Equals("Banana", StringComparison.OrdinalIgnoreCase)
                             && !Context.IsWorldReady && Game1.getLocationFromName("IslandEast") is IslandEast islandeast && !islandeast.bananaShrineComplete.Value))
                     {
                         continue;

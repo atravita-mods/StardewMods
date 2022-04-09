@@ -59,7 +59,7 @@ internal class ModEntry : Mod
     {
         GameContentHelper.InvalidateCache(AssetLoader.ENCHANTMENT_NAMES_LOCATION);
 
-        // This is the games cache of enchantment names. I null it here to clear it, in case the user changes languages.
+        // This is the games cache of enchantment names. I null it here to clear it.
         this.Helper.Reflection.GetField<List<BaseEnchantment>?>(typeof(BaseEnchantment), "_enchantments").SetValue(null);
         AssetLoader.Refresh();
     }

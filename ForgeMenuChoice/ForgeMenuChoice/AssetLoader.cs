@@ -1,4 +1,5 @@
-﻿using AtraShared.Utils;
+﻿using AtraBase.Toolkit.StringHandler;
+using AtraShared.Utils;
 using Microsoft.Xna.Framework.Graphics;
 using StardewModdingAPI.Events;
 using StardewModdingAPI.Utilities;
@@ -11,7 +12,7 @@ namespace ForgeMenuChoice;
 /// </summary>
 public static class AssetLoader
 {
-    private const string ASSETPREFIX = "Mods/atravita_ForgeMenuChoice_";
+    private const string ASSETPREFIX = "Mods/atravita_ForgeMenuChoice/";
 
 #pragma warning disable SA1310 // Field names should not contain underscore. Reviewed.
     private static readonly string UI_ELEMENT_LOCATION = PathUtilities.NormalizeAssetName("assets/Forge-Buttons.png");
@@ -52,7 +53,6 @@ public static class AssetLoader
     /// <param name="assets">Which assets to refresh? Leave null to refresh all.</param>
     internal static void Refresh(IReadOnlySet<IAssetName>? assets = null)
     {
-        ModEntry.ModMonitor.Log("Refresh Requested", LogLevel.Info);
         if (uiElementLazy.IsValueCreated && (assets is null || assets.Contains(UI_ASSET_NAME)))
         {
             uiElementLazy = new(() => ModEntry.GameContentHelper.Load<Texture2D>(UI_ASSET_PATH));
@@ -95,22 +95,17 @@ public static class AssetLoader
         try
         {
             IDictionary<int, string> secretnotes = ModEntry.GameContentHelper.Load<Dictionary<int, string>>("Data\\SecretNotes");
-            string[] secretNote8 = secretnotes[1008].Split("^^", StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
+            SpanSplit secretNote8 = secretnotes[1008].SpanSplit('^', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
 
             // The secret note, of course, has its data in the localized name. We'll need to map that to the internal name.
             // Using a dictionary with a StringComparer for the user's current language to make that a little easier.
             Dictionary<string, string> tooltipmap = new(AtraUtils.GetCurrentLanguageComparer(ignoreCase: true));
-            foreach (string str in secretNote8)
+            foreach (ReadOnlySpan<char> str in secretNote8)
             {
-                string[] splits = str.Split(':', count: 2, options: StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
-                if (splits.Length < 2)
+                int index = str.IndexOfAny(':', '：');
+                if (index > 0)
                 {
-                    // Chinese uses a different character to split by.
-                    splits = str.Split('：', count: 2, options: StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
-                }
-                if (splits.Length >= 2)
-                {
-                    tooltipmap[splits[0]] = splits[1];
+                    tooltipmap[str[..index].ToString()] = str[(index + 1)..].Trim().ToString();
                 }
             }
 

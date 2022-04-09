@@ -1,4 +1,5 @@
 ﻿using AtraBase.Toolkit.Reflection;
+using AtraBase.Toolkit.StringHandler;
 using AtraShared.Integrations;
 using AtraShared.Integrations.Interfaces;
 using AtraShared.MigrationManager;
@@ -30,6 +31,10 @@ internal class ModEntry : Mod
     /// <remarks>If null, was not able to be loaded.</remarks>
     internal static ISpaceCoreAPI? SpaceCoreAPI => spaceCoreAPI;
 
+    private static Lazy<Func<string, bool>> CheckTagLazy = new(typeof(SpecialOrder).StaticMethodNamed("CheckTag").CreateDelegate<Func<string, bool>>);
+
+    private static Func<string, bool> CheckTagDelegate => CheckTagLazy.Value;
+
     // The following fields are set in the Entry method, which is about as close to the constructor as I can get
 #pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
 
@@ -48,8 +53,6 @@ internal class ModEntry : Mod
     /// </summary>
     internal static ModConfig Config { get; private set; }
 #pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
-
-    private static Func<string, bool>? CheckTagDelegate { get; set; } = null;
 
     /// <inheritdoc/>
     public override void Entry(IModHelper helper)
@@ -148,9 +151,6 @@ internal class ModEntry : Mod
     /// <remarks>Used to bind APIs and register CP tokens.</remarks>
     private void OnGameLaunched(object? sender, GameLaunchedEventArgs e)
     {
-        // Get a delegate on SpecialOrder.CheckTag.
-        CheckTagDelegate = typeof(SpecialOrder).StaticMethodNamed("CheckTag").CreateDelegate<Func<string, bool>>();
-
         // Bind Spacecore API
         IntegrationHelper helper = new(this.Monitor, this.Helper.Translation, this.Helper.ModRegistry, LogLevel.Debug);
         helper.TryGetAPI("spacechase0.SpaceCore", "1.5.10", out spaceCoreAPI);
@@ -173,7 +173,7 @@ internal class ModEntry : Mod
     /// <remarks>Used to handle day-end events.</remarks>
     private void Saving(object? sender, SavingEventArgs e)
     {
-        this.Monitor.DebugLog("Event Saving raised");
+        this.Monitor.DebugOnlyLog("Event Saving raised");
 
         DialogueManager.Save(); // Save dialogue
         DialogueManager.ClearDelayedDialogue();
@@ -198,7 +198,7 @@ internal class ModEntry : Mod
     /// <remarks>Used to load in this mod's data models.</remarks>
     private void SaveLoaded(object? sender, SaveLoadedEventArgs e)
     {
-        this.Monitor.DebugLog("Event SaveLoaded raised");
+        this.Monitor.DebugOnlyLog("Event SaveLoaded raised");
         DialogueManager.Load(Game1.player.UniqueMultiplayerID);
         MultiplayerHelpers.AssertMultiplayerVersions(this.Helper.Multiplayer, this.ModManifest, this.Monitor, this.Helper.Translation);
 
@@ -326,8 +326,8 @@ internal class ModEntry : Mod
         if (!SpecialOrder.CheckTags(order.RequiredTags))
         {
             ModMonitor.Log($"    {I18n.HasInvalidTags()}:", LogLevel.Debug);
-            string[] tags = order.RequiredTags.Split(',', StringSplitOptions.TrimEntries | StringSplitOptions.RemoveEmptyEntries);
-            foreach (string tag in tags)
+            var tags = order.RequiredTags.SpanSplit(',', StringSplitOptions.TrimEntries | StringSplitOptions.RemoveEmptyEntries);
+            foreach (ReadOnlySpan<char> tag in tags)
             {
                 bool match = true;
                 if (tag.Length == 0)
@@ -338,16 +338,16 @@ internal class ModEntry : Mod
                 if (tag.StartsWith("!"))
                 {
                     match = false;
-                    trimmed_tag = tag[1..];
+                    trimmed_tag = tag.Trim()[1..].ToString();
                 }
                 else
                 {
-                    trimmed_tag = tag;
+                    trimmed_tag = tag.Trim().ToString();
                 }
 
-                if (!(CheckTagDelegate?.Invoke(trimmed_tag) == match))
+                if (CheckTagDelegate(trimmed_tag) != match)
                 {
-                    ModMonitor.Log($"         {I18n.TagFailed()}: {tag}", LogLevel.Debug);
+                    ModMonitor.Log($"         {I18n.TagFailed()}: {tag.ToString()}", LogLevel.Debug);
                 }
             }
             return false;

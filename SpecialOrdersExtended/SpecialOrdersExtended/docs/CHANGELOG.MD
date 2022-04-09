@@ -17,6 +17,10 @@ Changelog
 6. Implement a temporary saving mechanism for Save Anywhere (look into their API?)
 <!-- Handle WoL professions? -->
 
+#### Version 1.0.8
+
+* Internal optimizations.
+
 #### Version 1.0.7
 
 * Adds tags for `anyplayermail` and `anyplayerseenevent`.

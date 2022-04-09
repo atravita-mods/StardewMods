@@ -10,6 +10,9 @@
 * The menu may wander a bit if you resize the window or change the zoom. I'm not good at UI, this is literally two different Stardew menus forcibly hacked together.
 * I apply the chosen enchantment when forging, not before. So if you're using a predictor, it'll just show what the game would have picked. (This goes for Many Enchantment's debug logging as well.)
 
+#### Version 1.0.3 - alpha
+Updates to SMAPI 3.14.0. Internal optimizations.
+
 #### Version 1.0.2
 * Fixes the check for duplicate enchantments.
 

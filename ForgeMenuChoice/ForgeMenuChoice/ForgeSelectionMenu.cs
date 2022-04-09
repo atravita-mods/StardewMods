@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using AtraShared.Utils;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using StardewValley.Menus;
 
@@ -18,6 +19,8 @@ internal sealed class ForgeSelectionMenu : IClickableMenu
 
     private readonly bool shouldShowTooltip;
     private readonly List<BaseEnchantment> options = new();
+
+    private static readonly int inherent_width = (int)Game1.dialogueFont.MeasureWord("Matador de Insetos") + 12;
 
     private ClickableTextureComponent backButton;
     private ClickableTextureComponent forwardButton;
@@ -178,7 +181,7 @@ internal sealed class ForgeSelectionMenu : IClickableMenu
         try
         {
             base.draw(b);
-            int stringWidth = Math.Max((int)Game1.dialogueFont.MeasureString("Matador de Insetos").X + 12, (int)Game1.dialogueFont.MeasureString(this.CurrentSelectedTranslatedOption).X);
+            int stringWidth = Math.Max(inherent_width, (int)Game1.dialogueFont.MeasureWord(this.CurrentSelectedTranslatedOption));
             drawTextureBox(
                 b,
                 texture: Graphics,
@@ -248,11 +251,10 @@ internal sealed class ForgeSelectionMenu : IClickableMenu
 
     private Rectangle GetHoverRect()
     {
-        int stringWidth = (int)Game1.dialogueFont.MeasureString("Matador de Insetos").X + 12;
         return new Rectangle(
-                   x: this.xPositionOnScreen + ((Width - stringWidth - 64) / 2),
+                   x: this.xPositionOnScreen + ((Width - inherent_width - 64) / 2),
                    y: this.yPositionOnScreen + (Height / 2) - 40,
-                   width: stringWidth + 64,
+                   width: inherent_width + 64,
                    height: 80
                    );
     }

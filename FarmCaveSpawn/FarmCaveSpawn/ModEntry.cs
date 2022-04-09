@@ -441,7 +441,7 @@ public class ModEntry : Mod
                         || int.Parse(fruit[1]) > this.config.PriceCap
                         || denylist.Contains(fruitname)
                         || (this.config.NoBananasBeforeShrine && fruitname.Equals("Banana", StringComparison.OrdinalIgnoreCase)
-                            && !Context.IsWorldReady && Game1.getLocationFromName("IslandEast") is IslandEast islandeast && !islandeast.bananaShrineComplete.Value))
+                            && (!Context.IsWorldReady || Game1.getLocationFromName("IslandEast") is not IslandEast islandeast || !islandeast.bananaShrineComplete.Value)))
                     {
                         continue;
                     }

@@ -153,7 +153,7 @@ internal sealed class GMCMHelper : IntegrationHelper
     {
         if (property.GetGetMethod() is not MethodInfo getter || property.GetSetMethod() is not MethodInfo setter)
         {
-            this.Monitor.DebugLog($"{property.Name} appears to be a misconfigured option!", LogLevel.Warn);
+            this.Monitor.DebugOnlyLog($"{property.Name} appears to be a misconfigured option!", LogLevel.Warn);
         }
         else
         {
@@ -220,7 +220,7 @@ internal sealed class GMCMHelper : IntegrationHelper
     {
         if (property.GetGetMethod() is not MethodInfo getter || property.GetSetMethod() is not MethodInfo setter)
         {
-            this.Monitor.DebugLog($"{property.Name} appears to be a misconfigured option!", LogLevel.Warn);
+            this.Monitor.DebugOnlyLog($"{property.Name} appears to be a misconfigured option!", LogLevel.Warn);
         }
         else
         {
@@ -316,7 +316,7 @@ internal sealed class GMCMHelper : IntegrationHelper
         }
         if (property.GetGetMethod() is not MethodInfo getter || property.GetSetMethod() is not MethodInfo setter)
         {
-            this.Monitor.DebugLog($"{property.Name} appears to be a misconfigured option!", LogLevel.Warn);
+            this.Monitor.DebugOnlyLog($"{property.Name} appears to be a misconfigured option!", LogLevel.Warn);
         }
         else
         {
@@ -393,7 +393,7 @@ internal sealed class GMCMHelper : IntegrationHelper
     {
         if (property.GetGetMethod() is not MethodInfo getter || property.GetSetMethod() is not MethodInfo setter)
         {
-            this.Monitor.DebugLog($"{property.Name} appears to be a misconfigured option!", LogLevel.Warn);
+            this.Monitor.DebugOnlyLog($"{property.Name} appears to be a misconfigured option!", LogLevel.Warn);
         }
         else
         {
@@ -474,7 +474,7 @@ internal sealed class GMCMHelper : IntegrationHelper
     {
         if (property.GetGetMethod() is not MethodInfo getter || property.GetSetMethod() is not MethodInfo setter)
         {
-            this.Monitor.DebugLog($"{property.Name} appears to be a misconfigured option!", LogLevel.Warn);
+            this.Monitor.DebugOnlyLog($"{property.Name} appears to be a misconfigured option!", LogLevel.Warn);
         }
         else
         {
@@ -535,7 +535,7 @@ internal sealed class GMCMHelper : IntegrationHelper
     {
         if (property.GetGetMethod() is not MethodInfo getter || property.GetSetMethod() is not MethodInfo setter)
         {
-            this.Monitor.DebugLog($"{property.Name} appears to be a misconfigured option!", LogLevel.Warn);
+            this.Monitor.DebugOnlyLog($"{property.Name} appears to be a misconfigured option!", LogLevel.Warn);
         }
         else
         {

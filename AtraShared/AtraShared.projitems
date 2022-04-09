@@ -9,8 +9,8 @@
     <Import_RootNamespace>AtraShared</Import_RootNamespace>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="$(MSBuildThisFileDirectory)ErrorMessageConsts.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)CustomExceptions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ConstantsAndEnums\ErrorMessageConsts.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Integrations\GMCMHelper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Integrations\Interfaces\IContentPatcherAPI.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Integrations\Interfaces\IFlexibleSprinklerAPI.cs" />

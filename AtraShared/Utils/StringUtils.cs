@@ -3,6 +3,7 @@
 using System.Linq.Expressions;
 using System.Text;
 using AtraBase.Toolkit.Reflection;
+using AtraBase.Toolkit.StringHandler;
 using Microsoft.Xna.Framework.Graphics;
 
 namespace AtraShared.Utils;
@@ -96,55 +97,64 @@ internal static class StringUtils
     {
         int maxlines = height is null ? 1000 : (int)height / whichFont.LineSpacing;
         StringBuilder sb = new();
-        float spacewidth = whichFont.MeasureString(" ").X + whichFont.Spacing;
-        string[] paragraphs = text.Split(new string[] { "\n", "\r\n", "\r" }, StringSplitOptions.None);
-        foreach (string? paragraph in paragraphs)
+        float spacewidth = whichFont.MeasureWord(" ") + whichFont.Spacing;
+        float current_width = -whichFont.Spacing;
+        StringBuilder replacement_word = new();
+        bool use_replacement_word = false;
+        foreach ((ReadOnlySpan<char> word, ReadOnlySpan<char> splitchar) in text.SpanSplit())
         {
-            if (string.IsNullOrEmpty(paragraph))
-            {
+            if (LocalizedContentManager.CurrentLanguageCode is LocalizedContentManager.LanguageCode.fr && word.StartsWith("\n-"))
+            { // This is from vanilla code, I dunno why French is special.
+                if (--maxlines <= 0)
+                {
+                    return sb.ToString();
+                }
+                current_width = -whichFont.Spacing;
                 sb.AppendLine();
                 continue;
             }
-            string[] split = paragraph.Split(' ');
-            float current_width = -whichFont.Spacing;
-            string replacement_word = string.Empty;
-            bool use_replacement_word = false;
-            foreach (string word in split)
-            {
-                if (LocalizedContentManager.CurrentLanguageCode is LocalizedContentManager.LanguageCode.fr && word.StartsWith("\n-"))
-                { // This is from vanilla code, I dunno why French is special.
-                    if (--maxlines <= 0)
-                    {
-                        return sb.ToString();
-                    }
-                    current_width = -whichFont.Spacing;
-                    sb.AppendLine();
-                    continue;
-                }
-                float wordwidth = whichFont.MeasureString(word).X + spacewidth;
-                if (wordwidth > width)
-                { // if the word itself is **longer** than the width, we must truncate. It'll get its own line.
-                    (replacement_word, wordwidth) = TruncateWord(word, whichFont, width);
-                    use_replacement_word = true;
-                }
-                current_width += whichFont.Spacing + wordwidth;
-                if (current_width > width)
-                {
-                    if (--maxlines <= 0)
-                    {
-                        return sb.ToString();
-                    }
-                    sb.AppendLine();
-                    current_width = wordwidth;
-                }
-                sb.Append(use_replacement_word ? replacement_word : word).Append(' ');
-                use_replacement_word = false;
+            float wordwidth = whichFont.MeasureWord(word) + spacewidth;
+            if (wordwidth > width)
+            { // if the word itself is **longer** than the width, we must truncate. It'll get its own line.
+                replacement_word = TruncateWord(word, whichFont, width, out wordwidth);
+                use_replacement_word = true;
             }
-            sb.AppendLine();
+            current_width += whichFont.Spacing + wordwidth;
+            if (current_width > width)
+            {
+                if (--maxlines <= 0)
+                {
+                    return sb.ToString();
+                }
+                sb.AppendLine();
+                current_width = wordwidth;
+            }
+            if (use_replacement_word)
+            {
+                sb.Append(replacement_word);
+            }
+            else
+            {
+                sb.Append(word);
+            }
+            use_replacement_word = false;
+            if (splitchar == "\r")
+            {
+                continue;
+            }
+            else if (splitchar == "\n")
+            {
+                if (--maxlines <= 0)
+                {
+                    return sb.ToString();
+                }
+                sb.AppendLine();
+            }
+            else
+            {
+                sb.Append(splitchar);
+            }
         }
-
-        // remove the last newline, that wasn't necessary.
-        sb.Remove(sb.Length - Environment.NewLine.Length, Environment.NewLine.Length);
         return sb.ToString();
     }
 
@@ -177,7 +187,7 @@ internal static class StringUtils
                             return sb.ToString();
                         }
                         current_width = -whichFont.Spacing;
-                        sb.Append(Environment.NewLine);
+                        sb.AppendLine();
                         break;
                     default:
                         int glyph = GetGlyph(whichFont, ch);
@@ -212,6 +222,34 @@ internal static class StringUtils
     }
 
     /// <summary>
+    /// Measures the width of a word. (Does not handle newlines).
+    /// </summary>
+    /// <param name="whichFont">Which font to use.</param>
+    /// <param name="word">Word.</param>
+    /// <returns>Float width.</returns>
+    internal static unsafe float MeasureWord(this SpriteFont whichFont, ReadOnlySpan<char> word)
+    {
+        float width = -whichFont.LineSpacing;
+        fixed (SpriteFont.Glyph* pointerToGlyphs = whichFont.Glyphs)
+        {
+            foreach (char ch in word)
+            {
+                int glyph = GetGlyph(whichFont, ch);
+                if (glyph > -1 && glyph < whichFont.Glyphs.Length)
+                {
+                    SpriteFont.Glyph* pWhichGlyph = pointerToGlyphs + glyph;
+                    width += pWhichGlyph->LeftSideBearing + pWhichGlyph->Width + pWhichGlyph->RightSideBearing + whichFont.Spacing;
+                }
+                else
+                {
+                    Monitor?.Log($"Glyph {ch} not accounted for!", LogLevel.Error);
+                }
+            }
+        }
+        return width;
+    }
+
+    /// <summary>
     /// Truncates a word to a given length, replacing the rest with "...".
     /// </summary>
     /// <param name="word">Word to truncate.</param>
@@ -219,10 +257,10 @@ internal static class StringUtils
     /// <param name="width">Width to wrap to.</param>
     /// <param name="trunchars">Characters to use to truncate with.</param>
     /// <returns>Truncated string + width.</returns>
-    private static unsafe (string trucword, float width) TruncateWord(string word, SpriteFont whichFont, float width, string trunchars = "...")
+    private static unsafe StringBuilder TruncateWord(ReadOnlySpan<char> word, SpriteFont whichFont, float width, out float current_width, string trunchars = "...")
     {
         StringBuilder sb = new();
-        float current_width = -whichFont.Spacing + whichFont.MeasureString(trunchars).X;
+        current_width = -whichFont.Spacing + whichFont.MeasureString(trunchars).X;
         float charwidth = 0;
         float proposedcharwidth = 0;
         fixed (SpriteFont.Glyph* pointerToGlyphs = whichFont.Glyphs)
@@ -240,7 +278,8 @@ internal static class StringUtils
                     if (current_width + proposedcharwidth + whichFont.Spacing > width)
                     {
                         sb.Append(trunchars);
-                        return (sb.ToString(), current_width + charwidth + whichFont.Spacing);
+                        current_width += charwidth + whichFont.Spacing;
+                        return sb;
                     }
                     sb.Append(ch);
                     current_width += charwidth + whichFont.Spacing;
@@ -251,7 +290,7 @@ internal static class StringUtils
                 }
             }
         }
-        return (sb.ToString(), current_width);
+        return sb;
     }
 }
 

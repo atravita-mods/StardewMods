@@ -218,7 +218,7 @@ internal class ILHelper
             throw new ArgumentException($"Either startindex {startindex} or endindex {endindex} are invalid. ");
         }
 
-        for (int i = startindex; i < endindex - instructions.Length; i++)
+        for (int i = startindex; i < endindex - instructions.Length + 1; i++)
         {
             bool found = true;
             for (int j = 0; j < instructions.Length; j++)

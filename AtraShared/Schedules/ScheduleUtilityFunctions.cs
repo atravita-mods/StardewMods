@@ -4,6 +4,7 @@ using System.Reflection;
 using System.Text.RegularExpressions;
 using AtraBase.Toolkit.Extensions;
 using AtraBase.Toolkit.Reflection;
+using AtraBase.Toolkit.StringHandler;
 using AtraShared.Utils.Extensions;
 using Microsoft.Xna.Framework;
 using StardewModdingAPI.Utilities;
@@ -345,10 +346,10 @@ public class ScheduleUtilityFunctions
                 {
                     if (npc.TryGetScheduleEntry(location + "_Replacement", out string? replacement))
                     {
-                        string[] replacementdata = replacement.Split();
+                        SpanSplit replacementdata = replacement.SpanSplit();
                         x = int.Parse(replacementdata[0]);
                         y = int.Parse(replacementdata[1]);
-                        if (!int.TryParse(replacementdata[2], out direction))
+                        if (!replacementdata.TryGetAtIndex(2, out SpanSplitEntry val) || !int.TryParse(val, out direction))
                         {
                             direction = Game1.down;
                         }
@@ -406,7 +407,7 @@ public class ScheduleUtilityFunctions
                         .Tokens(new { time, scheduleKey = schedule, npc = npc.Name }), LogLevel.Warn);
                     continue; // skip to next point.
                 }
-                this.monitor.DebugLog($"Adding GI schedule for {npc.Name}", LogLevel.Debug);
+                this.monitor.DebugOnlyLog($"Adding GI schedule for {npc.Name}", LogLevel.Debug);
                 remainderSchedule.Add(time, newpath);
                 previousMap = location;
                 lasttime = time;
@@ -416,7 +417,7 @@ public class ScheduleUtilityFunctions
                 {
                     int expectedTravelTime = newpath.GetExpectedRouteTime();
                     Utility.ModifyTime(lasttime, expectedTravelTime);
-                    this.monitor.DebugLog($"Expected travel time of {expectedTravelTime} minutes", LogLevel.Debug);
+                    this.monitor.DebugOnlyLog($"Expected travel time of {expectedTravelTime} minutes", LogLevel.Debug);
                 }
             }
             catch (RegexMatchTimeoutException ex)

@@ -1,4 +1,4 @@
-Pick Your Enchantment/ForgeMenuChoice
+Giant Crop Fertilizer
 ===========================
 
 ![Header image](GiantCropFertilizer/docs/fertilizer.jpg)

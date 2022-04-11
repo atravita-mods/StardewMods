@@ -5,7 +5,7 @@
   "Description": "Adds a fertilizer that forces giant crops.",
   "UniqueID": "atravita.GiantCropFertilizer",
   "EntryDll": "GiantCropFertilizer.dll",
-  //"UpdateKeys": [ "Nexus:11426", "GitHub:atravita-mods/TrashDoesNotConsumeBait" ],
+  "UpdateKeys": [ "Nexus:11620", "GitHub:atravita-mods/GiantCropFertilizer" ],
   "MinimumApiVersion": "3.13",
   "Dependencies": [
     {

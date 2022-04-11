@@ -58,7 +58,7 @@ internal class ModEntry : Mod
         {
             ModMonitor.Log(string.Format(ErrorMessageConsts.HARMONYCRASH, ex), LogLevel.Error);
         }
-        harmony.Snitch(this.Monitor, harmony.Id, transpilersOnly: false);
+        harmony.Snitch(this.Monitor, harmony.Id, transpilersOnly: true);
     }
 
     private void OnGameLaunched(object? sender, GameLaunchedEventArgs e)
@@ -69,6 +69,11 @@ internal class ModEntry : Mod
         if (helper.TryGetAPI("spacechase0.JsonAssets", "1.10.3", out jsonAssets))
         {
             jsonAssets.LoadAssets(Path.Combine(this.Helper.DirectoryPath, "assets", "json-assets"), this.Helper.Translation);
+            this.Monitor.Log("Loaded packs!");
+        }
+        else
+        {
+            this.Monitor.Log("Packs could not be loaded! This mod will probably not function.", LogLevel.Error);
         }
 
         this.Helper.Events.GameLoop.UpdateTicked += this.FiveTicksPostGameLaunched;

@@ -11,7 +11,7 @@ This mod uses SMAPI's i18n feature for translations. I'd love to get translation
 
 1. Fork [AtraBase](https://github.com/atravita-mods/AtraBase). (This repository contains my general C# utilties).
 2. Fork [AtraShared](https://github.com/atravita-mods/AtraShared). (This repository contains my Stardew-specific C# utilities).
-3. Fork [this repository](https://github.com/atravita-mods/NerfCavePuzzle).
+3. Fork [this repository](https://github.com/atravita-mods/GiantCropFertilizer).
 4. Make sure you have [dotnet-5.0-sdk](https://dotnet.microsoft.com/en-us/download/dotnet/5.0) installed.
 5. If your copy of the game is not in the standard STEAM or Gog install locations, you may need to edit the csproj to point at it. [Instructions here](https://github.com/Pathoschild/SMAPI/blob/develop/docs/technical/mod-package.md#available-properties).
 

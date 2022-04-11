@@ -30,6 +30,10 @@ internal class AssetEditor : IAssetEditor
             {
                 editor.Data[ModEntry.GiantCropFertilizerID] = val.Replace("Basic -20", "Basic -19");
             }
+            else
+            {
+                ModEntry.ModMonitor.Log($"Could not find {ModEntry.GiantCropFertilizerID} in ObjectInformation to edit! This mod may not function properly.", LogLevel.Error);
+            }
         }
     }
 }

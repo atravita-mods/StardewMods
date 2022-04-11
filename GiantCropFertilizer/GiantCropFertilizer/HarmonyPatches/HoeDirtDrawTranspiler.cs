@@ -11,9 +11,9 @@ namespace GiantCropFertilizer.HarmonyPatches;
 /// <summary>
 /// Holds transpiler to draw the fertilizer.
 /// </summary>
-[HarmonyPatch(typeof(HoeDirt))]
 internal static class HoeDirtDrawTranspiler
 {
+
     /// <summary>
     /// Gets the correct color for the fertilizer.
     /// </summary>
@@ -22,8 +22,19 @@ internal static class HoeDirtDrawTranspiler
     public static Color GetColor(int fertilizer)
         => ModEntry.GiantCropFertilizerID != -1 && ModEntry.GiantCropFertilizerID == fertilizer ? Color.Purple : Color.White;
 
+    /// <summary>
+    /// Applies patches to draw this fertilizer slightly different.
+    /// </summary>
+    /// <param name="harmony">Harmony instance.</param>
+    /// <remarks>Should avoid this one firing if Multifertilizers is installed.</remarks>
+    internal static void ApplyPatches(Harmony harmony)
+    {
+        harmony.Patch(
+            original: typeof(HoeDirt).InstanceMethodNamed(nameof(HoeDirt.DrawOptimized)),
+            transpiler: new HarmonyMethod(typeof(HoeDirtDrawTranspiler).StaticMethodNamed(nameof(HoeDirtDrawTranspiler.Transpiler))));
+    }
+
 #pragma warning disable SA1116 // Split parameters should start on line after declaration. Reviewed.
-    [HarmonyPatch(nameof(HoeDirt.DrawOptimized))]
     private static IEnumerable<CodeInstruction>? Transpiler(IEnumerable<CodeInstruction> instructions, ILGenerator gen, MethodBase original)
     {
         try

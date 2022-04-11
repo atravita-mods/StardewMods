@@ -56,9 +56,16 @@ internal static class MultiFertilizerDrawTranspiler
         Vector2 pos,
         HoeDirt dirt)
     {
-        if (ModEntry.GiantCropFertilizerID != -1 && ModEntry.GiantCropFertilizerID == dirt.fertilizer.Value)
+        try
         {
-            spriteBatch.Draw(Game1.mouseCursors, pos, new Rectangle(173, 462, 16, 16), Color.Purple, 0f, Vector2.Zero, 4f, SpriteEffects.None, 1.92e-08f);
+            if (ModEntry.GiantCropFertilizerID != -1 && ModEntry.GiantCropFertilizerID == dirt.fertilizer.Value)
+            {
+                spriteBatch.Draw(Game1.mouseCursors, pos, new Rectangle(173, 462, 16, 16), Color.Purple, 0f, Vector2.Zero, 4f, SpriteEffects.None, 1.92e-08f);
+            }
+        }
+        catch (Exception ex)
+        {
+            ModEntry.ModMonitor.Log($"Mod failed while trying to draw fertlizer in MultiFertilizer compat patch!\n\n{ex}", LogLevel.Error);
         }
     }
 }

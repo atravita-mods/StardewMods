@@ -21,11 +21,12 @@ Remove every instance of the giant crop fertilizer you have in your inventory an
 
 * Works with Stardew Valley 1.5.6 on Linux/macOS/Windows.
 * Works in single player, multiplayer, and split-screen mode. Should be fine if installed for one player only.
-* Should be compatible with most other mods. Tested with [MultiFertilizer](https://www.nexusmods.com/stardewvalley/mods/7436) and [More Giant Crops](https://www.nexusmods.com/stardewvalley/mods/5263). A small note: when MultiFertilizer is installed, the check that looks for whether or not a tile has already been fertilized doesn't quite work right with this fertilizer. Try to not accidentally apply two to the same square...
+* Should be compatible with most other mods. Tested with [MultiFertilizer](https://www.nexusmods.com/stardewvalley/mods/7436), [Json Assets](https://www.nexusmods.com/stardewvalley/mods/1720)'s giant crops and [More Giant Crops](https://www.nexusmods.com/stardewvalley/mods/5263). A small note: when MultiFertilizer is installed, the check that looks for whether or not a tile has already been fertilized doesn't quite work right with this fertilizer. Try to not accidentally apply two to the same square...
 
 (Yes, the picture is from Ginger Island! More Giant Crops allows giant crops on any map, that's where that's from!)
 
 * A note: this fertilizer does NOT work with [CJB Cheats Menu](https://www.nexusmods.com/stardewvalley/mods/4)'s instant crop growth. But realistically, if you have that mod, you can actually just stand somewhere and spam that button, and eventually your crops will grow big....
+* Additionally, this mod currently does not work with DGA giant crops. Will fix that!
 
 ## See also
 

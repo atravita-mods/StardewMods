@@ -1,0 +1,62 @@
+﻿using System.Reflection;
+using System.Reflection.Emit;
+using AtraBase.Toolkit.Reflection;
+using AtraShared.Utils.HarmonyHelper;
+using HarmonyLib;
+using Microsoft.Xna.Framework;
+using StardewValley.TerrainFeatures;
+
+namespace GiantCropFertilizer.HarmonyPatches;
+
+/// <summary>
+/// Holds transpiler to draw the fertilizer.
+/// </summary>
+[HarmonyPatch(typeof(HoeDirt))]
+internal static class HoeDirtDrawTranspiler
+{
+    /// <summary>
+    /// Gets the correct color for the fertilizer.
+    /// </summary>
+    /// <param name="fertilizer">Fertilizer ID.</param>
+    /// <returns>A color.</returns>
+    public static Color GetColor(int fertilizer)
+        => ModEntry.GiantCropFertilizerID != -1 && ModEntry.GiantCropFertilizerID == fertilizer ? Color.Purple : Color.White;
+
+#pragma warning disable SA1116 // Split parameters should start on line after declaration. Reviewed.
+    [HarmonyPatch(nameof(HoeDirt.DrawOptimized))]
+    private static IEnumerable<CodeInstruction>? Transpiler(IEnumerable<CodeInstruction> instructions, ILGenerator gen, MethodBase original)
+    {
+        try
+        {
+            ILHelper helper = new(original, instructions, ModEntry.ModMonitor, gen);
+            helper.FindNext(new CodeInstructionWrapper[]
+                {
+                    new(OpCodes.Ldarg_0),
+                    new(SpecialCodeInstructionCases.LdLoc),
+                    new(OpCodes.Call, typeof(HoeDirt).InstanceMethodNamed(nameof(HoeDirt.GetFertilizerSourceRect))),
+                })
+            .Advance(1);
+
+            // Grab the relevant local.
+            CodeInstruction local = helper.CurrentInstruction.Clone();
+
+            helper.FindNext(new CodeInstructionWrapper[]
+                {
+                    new(OpCodes.Call, typeof(Color).StaticPropertyNamed("White").GetGetMethod()),
+                })
+            .GetLabels(out IList<Label> labels, clear: true)
+            .ReplaceInstruction(OpCodes.Call, typeof(HoeDirtDrawTranspiler).StaticMethodNamed(nameof(HoeDirtDrawTranspiler.GetColor)))
+            .Insert(new CodeInstruction[]
+            {
+                local,
+            }, withLabels: labels);
+            return helper.Render();
+        }
+        catch (Exception ex)
+        {
+            ModEntry.ModMonitor.Log($"Mod crashed while transpiling Hoedirt.Draw:\n\n{ex}", LogLevel.Error);
+        }
+        return null;
+    }
+#pragma warning restore SA1116 // Split parameters should start on line after declaration
+}

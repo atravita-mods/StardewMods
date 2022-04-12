@@ -33,8 +33,6 @@ internal class ModEntry : Mod
 {
     private static IJsonAssetsAPI? jsonAssets;
 
-    private int countdown = 5;
-
     private MigrationManager? migrator;
 
     /// <summary>
@@ -55,10 +53,16 @@ internal class ModEntry : Mod
     {
         I18n.Init(helper.Translation);
         ModMonitor = this.Monitor;
+
+        helper.Events.Content.AssetRequested += this.OnAssetRequested;
+
         helper.Events.GameLoop.GameLaunched += this.OnGameLaunched;
         helper.Events.GameLoop.SaveLoaded += this.OnSaveLoaded;
         helper.Events.GameLoop.Saving += this.OnSaving;
     }
+
+    private void OnAssetRequested(object? sender, AssetRequestedEventArgs e)
+        => AssetEditor.HandleAssetRequested(e);
 
     private void OnSaving(object? sender, SavingEventArgs e)
     {
@@ -105,17 +109,6 @@ internal class ModEntry : Mod
         else
         {
             this.Monitor.Log("Packs could not be loaded! This mod will probably not function.", LogLevel.Error);
-        }
-
-        this.Helper.Events.GameLoop.UpdateTicked += this.FiveTicksPostGameLaunched;
-    }
-
-    private void FiveTicksPostGameLaunched(object? sender, UpdateTickedEventArgs e)
-    {
-        if (--this.countdown <= 0)
-        {
-            this.Helper.Content.AssetEditors.Add(AssetEditor.Instance);
-            this.Helper.Events.GameLoop.UpdateTicked -= this.FiveTicksPostGameLaunched;
         }
     }
 

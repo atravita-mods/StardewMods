@@ -4,29 +4,12 @@ using AtraShared.Integrations.Interfaces;
 using AtraShared.MigrationManager;
 using AtraShared.Utils;
 using AtraShared.Utils.Extensions;
+using GiantCropFertilizer.DataModels;
 using GiantCropFertilizer.HarmonyPatches;
 using HarmonyLib;
 using StardewModdingAPI.Events;
 
 namespace GiantCropFertilizer;
-
-/// <summary>
-/// Data model used to save the ID number, to protect against shuffling...
-/// </summary>
-public class GiantCropFertilizerIDStorage
-{
-    /// <summary>
-    /// Gets or sets the ID number to store.
-    /// </summary>
-    public int ID { get; set; } = 0;
-
-    public GiantCropFertilizerIDStorage()
-    {
-    }
-
-    public GiantCropFertilizerIDStorage(int id)
-        => this.ID = id;
-}
 
 /// <inheritdoc />
 internal class ModEntry : Mod
@@ -65,14 +48,15 @@ internal class ModEntry : Mod
         => AssetEditor.HandleAssetRequested(e);
 
     private void OnSaving(object? sender, SavingEventArgs e)
-    {
-        this.Helper.Data.WriteGlobalData(Constants.SaveFolderName + "_SavedObjectID", new GiantCropFertilizerIDStorage(GiantCropFertilizerID));
-    }
+        => this.Helper.Data.WriteGlobalData(
+            Constants.SaveFolderName + "_SavedObjectID",
+            new GiantCropFertilizerIDStorage(GiantCropFertilizerID));
 
     /// <summary>
     /// Applies the patches for this mod.
     /// </summary>
     /// <param name="harmony">This mod's harmony instance.</param>
+    /// <remarks>Delay until GameLaunched in order to patch other mods....</remarks>
     private void ApplyPatches(Harmony harmony)
     {
         try

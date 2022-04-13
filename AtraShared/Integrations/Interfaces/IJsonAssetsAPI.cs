@@ -68,6 +68,12 @@ public interface IJsonAssetsAPI
     /// <param name="name">Name of fruit tree.</param>
     /// <returns>Integer fruit tree ID, or -1 if not found.</returns>
     int GetFruitTreeId(string name);
+
+    /// <summary>
+    /// Gets the ID of a bigCraftable declared through Json Assets.
+    /// </summary>
+    /// <param name="name">Name of the BigCraftable.</param>
+    /// <returns>Integer BigCraftable ID, or -1 if not found.</returns>
     int GetBigCraftableId(string name);
     int GetHatId(string name);
     int GetWeaponId(string name);

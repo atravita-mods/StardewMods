@@ -15,8 +15,10 @@ internal sealed class GMCMHelper : IntegrationHelper
     private const string MINVERSION = "1.8.0";
     private const string APIID = "spacechase0.GenericModConfigMenu";
 
+#pragma warning disable SA1310 // Field names should not contain underscore. Reviewed
     private const string GMCM_OPTIONS_ID = "jltaylor-us.GMCMOptions";
     private const string GMCM_OPTIONS_MINVERSION = "1.1.0";
+#pragma warning restore SA1310 // Field names should not contain underscore
 
     private readonly IManifest manifest;
     private readonly List<string> pages = new();
@@ -51,6 +53,10 @@ internal sealed class GMCMHelper : IntegrationHelper
     [MemberNotNullWhen(returnValue: true, members: nameof(modMenuApi))]
     internal bool TryGetAPI() => this.TryGetAPI(APIID, MINVERSION, out this.modMenuApi);
 
+    /// <summary>
+    /// Tries to grab a copy of GMCM Option's API.
+    /// </summary>
+    /// <returns>True if successful, false otherwise.</returns>
     internal bool TryGetOptionsAPI() => this.TryGetAPI(GMCM_OPTIONS_ID, GMCM_OPTIONS_MINVERSION, out this.gmcmOptionsApi);
 
     /// <summary>
@@ -560,6 +566,18 @@ internal sealed class GMCMHelper : IntegrationHelper
         return this;
     }
 
+    /// <summary>
+    /// Adds a color picking option at this point in the form.
+    /// </summary>
+    /// <param name="name">Function to get the name.</param>
+    /// <param name="getValue">GetValue callback.</param>
+    /// <param name="setValue">SetValue callback.</param>
+    /// <param name="tooltip">Function to get the tooltip.</param>
+    /// <param name="showAlpha">If GMCM Options is installed, show the alpha picker or not.</param>
+    /// <param name="colorPickerStyle">GMCM Option's picker style.</param>
+    /// <param name="fieldID">field ID.</param>
+    /// <param name="defaultColor">Default color.</param>
+    /// <returns>this.</returns>
     internal GMCMHelper AddColorPicker(
         Func<string> name,
         Func<Color> getValue,
@@ -594,6 +612,17 @@ internal sealed class GMCMHelper : IntegrationHelper
         return this;
     }
 
+    /// <summary>
+    /// Adds a color picking option at this point of the form.
+    /// </summary>
+    /// <typeparam name="TModConfig">Type of the config.</typeparam>
+    /// <param name="property">Property.</param>
+    /// <param name="getConfig">Delegate that gets the config instance.</param>
+    /// <param name="showAlpha">If GMCM Options is installed, show the alpha picker or not.</param>
+    /// <param name="colorPickerStyle">GMCM Option's picker style.</param>
+    /// <param name="fieldID">field ID.</param>
+    /// <param name="defaultColor">Default color.</param>
+    /// <returns>this.</returns>
     internal GMCMHelper AddColorPicker<TModConfig>(
         PropertyInfo property,
         Func<TModConfig> getConfig,

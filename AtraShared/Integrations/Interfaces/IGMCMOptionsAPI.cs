@@ -36,6 +36,8 @@
 // OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
+#pragma warning disable SA1201 // Elements should appear in the correct order
+
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
@@ -51,9 +53,10 @@ public interface IGMCMOptionsAPI
     /// <param name="setValue">Set a new value in the mod config.</param>
     /// <param name="name">The label text to show in the form.</param>
     /// <param name="tooltip">The tooltip text shown when the cursor hovers on the field, or <c>null</c> to disable the tooltip.</param>
-    /// <param name="showAlpha">Whether the color picker should allow setting the Alpha channel</param>
-    /// <param name="colorPickerStyle">Flags to control how the color picker is rendered.  <see cref="ColorPickerStyle"/></param>
+    /// <param name="showAlpha">Whether the color picker should allow setting the Alpha channel.</param>
+    /// <param name="colorPickerStyle">Flags to control how the color picker is rendered.  <see cref="ColorPickerStyle"/>.</param>
     /// <param name="fieldId">The unique field ID for use with GMCM's <c>OnFieldChanged</c>, or <c>null</c> to auto-generate a randomized ID.</param>
+    [SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1117:Parameters should be on same line or separate lines", Justification = "Reviewed.")]
     void AddColorOption(IManifest mod, Func<Color> getValue, Action<Color> setValue, Func<string> name,
         Func<string>? tooltip = null, bool showAlpha = true, uint colorPickerStyle = 0, string? fieldId = null);
 
@@ -98,7 +101,7 @@ public interface IGMCMOptionsAPI
     /// <param name="maxImageWidth">
     ///   A function that returns the maximum image width.  This is used to place the arrows and label.
     /// </param>
-    /// <param name="drawImage">A function which draws the image for the given index at the given location</param>
+    /// <param name="drawImage">A function which draws the image for the given index at the given location.</param>
     /// <param name="tooltip">The tooltip text shown when the cursor hovers on the field, or <c>null</c> to disable the tooltip.</param>
     /// <param name="label">A function to return the string to display given the image index, or <c>null</c> to disable that display.</param>
     /// <param name="arrowLocation">Where to render the arrows.  Use a value from the <c cref="ImageOptionArrowLocation">ImageOptionArrowLocation</c> enum.</param>
@@ -152,14 +155,15 @@ public interface IGMCMOptionsAPI
         int labelLocation = (int)ImageOptionLabelLocation.Top,
         string? fieldId = null);
 
+#pragma warning disable SA1602 // Enumeration items should be documented. Self-evident.
     /// <summary>
-    /// Valid values for the <c>arrowLocation</c> parameter of <c>AddImageOption.</c>
+    /// Valid values for the <c>arrowLocation</c> parameter of <c>AddImageOption</c>.
     /// </summary>
     public enum ImageOptionArrowLocation
     {
         Top = -1,
         Sides = 0,
-        Bottom = 1
+        Bottom = 1,
     }
 
     /// <summary>
@@ -169,6 +173,9 @@ public interface IGMCMOptionsAPI
     {
         Top = -1,
         None = 0,
-        Bottom = 1
+        Bottom = 1,
     }
+#pragma warning restore SA1602 // Enumeration items should be documented
 }
+
+#pragma warning restore SA1201 // Elements should appear in the correct order

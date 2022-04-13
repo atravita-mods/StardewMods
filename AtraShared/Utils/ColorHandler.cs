@@ -2,6 +2,7 @@
 using System.Globalization;
 using System.Text.RegularExpressions;
 using AtraBase.Toolkit.Extensions;
+using AtraBase.Toolkit.StringHandler;
 using XNAColor = Microsoft.Xna.Framework.Color;
 
 namespace AtraShared.Utils;
@@ -27,7 +28,7 @@ internal static class ColorHandler
         colorname = colorname.Trim();
 
         // Try to see if it's a valid KnownColor enum?
-        if (Enum.TryParse(colorname, out KnownColor result))
+        if (Enum.TryParse(colorname, ignoreCase: true, out KnownColor result))
         {
             color = Color.FromKnownColor(result).ToXNAColor();
             return true;
@@ -36,8 +37,6 @@ internal static class ColorHandler
         // Process as HTML color code?
         if (ColorCode.Match(colorname) is Match match && match.Success)
         {
-            Console.WriteLine(string.Join("; ", match.Groups.Keys));
-            Console.WriteLine(int.Parse("FF", NumberStyles.HexNumber));
             Dictionary<string, int> matchdict = match.MatchGroupsToDictionary((name) => name, (value) => int.Parse(value, NumberStyles.HexNumber), namedOnly: true);
             color = matchdict.ContainsKey("A")
                 ? new(matchdict["R"], matchdict["G"], matchdict["B"], matchdict["A"])
@@ -46,13 +45,13 @@ internal static class ColorHandler
         }
 
         // Try to split and process it that way?
-        string[] splits = colorname.Split(new[] { '/', ',', ';' }, StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
-        if (splits.Length < 3)
+        SpanSplit splits = colorname.SpanSplit(new[] { '/', ',', ';' }, StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
+        if (!splits.TryGetAtIndex(2, out _))
         {
             goto ColorParseFail;
         }
 
-        int[] vals = new int[splits.Length];
+        int[] vals = new int[splits.TryGetAtIndex(3, out _) ? 4 : 3];
         for (int i = 0; i < vals.Length; i++)
         {
             if (int.TryParse(splits[i], out int parsed) && parsed < 256)

@@ -1,5 +1,6 @@
 ﻿using AtraBase.Toolkit.StringHandler;
 using AtraShared.Utils;
+using AtraShared.Utils.Extensions;
 using Microsoft.Xna.Framework.Graphics;
 using StardewModdingAPI.Events;
 using StardewModdingAPI.Utilities;
@@ -105,7 +106,7 @@ public static class AssetLoader
                 int index = str.IndexOfAny(':', '：');
                 if (index > 0)
                 {
-                    tooltipmap[str[..index].ToString()] = str[(index + 1)..].Trim().ToString();
+                    tooltipmap[str[..index].Trim().ToString()] = str[(index + 1)..].Trim().ToString();
                 }
             }
 
@@ -114,8 +115,7 @@ public static class AssetLoader
             // Russian needs to be handled seperately.
             foreach (BaseEnchantment enchantment in BaseEnchantment.GetAvailableEnchantments())
             {
-                if (ModEntry.TranslationHelper.Get("enchantment." + enchantment.GetName()) is Translation i18nname
-                    && i18nname.HasValue())
+                if (ModEntry.TranslationHelper.TryGetTranslation("enchantment." + enchantment.GetName(), out Translation i18nname))
                 {
                     tooltipdata[enchantment.GetName()] = i18nname;
                 }

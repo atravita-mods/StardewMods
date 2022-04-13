@@ -1,6 +1,8 @@
 ﻿using System.Reflection;
 using AtraShared.Integrations.Interfaces;
+using AtraShared.Utils;
 using AtraShared.Utils.Extensions;
+using Microsoft.Xna.Framework;
 using StardewModdingAPI.Utilities;
 
 namespace AtraShared.Integrations;
@@ -13,10 +15,15 @@ internal sealed class GMCMHelper : IntegrationHelper
     private const string MINVERSION = "1.8.0";
     private const string APIID = "spacechase0.GenericModConfigMenu";
 
+    private const string GMCM_OPTIONS_ID = "jltaylor-us.GMCMOptions";
+    private const string GMCM_OPTIONS_MINVERSION = "1.1.0";
+
     private readonly IManifest manifest;
     private readonly List<string> pages = new();
 
     private IGenericModConfigMenuApi? modMenuApi;
+
+    private IGMCMOptionsAPI? gmcmOptionsApi;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="GMCMHelper"/> class.
@@ -43,6 +50,8 @@ internal sealed class GMCMHelper : IntegrationHelper
     /// <returns>True if successful, false otherwise.</returns>
     [MemberNotNullWhen(returnValue: true, members: nameof(modMenuApi))]
     internal bool TryGetAPI() => this.TryGetAPI(APIID, MINVERSION, out this.modMenuApi);
+
+    internal bool TryGetOptionsAPI() => this.TryGetAPI(GMCM_OPTIONS_ID, GMCM_OPTIONS_MINVERSION, out this.gmcmOptionsApi);
 
     /// <summary>
     /// Register mod with GMCM.
@@ -551,6 +560,69 @@ internal sealed class GMCMHelper : IntegrationHelper
         return this;
     }
 
+    internal GMCMHelper AddColorPicker(
+        Func<string> name,
+        Func<Color> getValue,
+        Action<Color> setValue,
+        Func<string>? tooltip = null,
+        bool showAlpha = true,
+        uint colorPickerStyle = 0,
+        string? fieldID = null,
+        Color? defaultColor = null)
+    {
+        if (this.gmcmOptionsApi is not null)
+        {
+            this.gmcmOptionsApi.AddColorOption(
+                mod: this.manifest,
+                getValue: getValue,
+                setValue: setValue,
+                name: name,
+                tooltip: tooltip,
+                showAlpha: showAlpha,
+                colorPickerStyle: colorPickerStyle,
+                fieldId: fieldID);
+        }
+        else
+        {
+            this.AddTextOption(
+                name,
+                getValue: () => getValue().ToHexString(),
+                setValue: (val) => setValue(ColorHandler.TryParseColor(val, out Color color) ? color : defaultColor.GetValueOrDefault()),
+                tooltip: tooltip,
+                fieldId: fieldID);
+        }
+        return this;
+    }
+
+    internal GMCMHelper AddColorPicker<TModConfig>(
+        PropertyInfo property,
+        Func<TModConfig> getConfig,
+        bool showAlpha = true,
+        uint colorPickerStyle = 0,
+        string? fieldID = null,
+        Color? defaultColor = null)
+    {
+        if (property.GetGetMethod() is not MethodInfo getter || property.GetSetMethod() is not MethodInfo setter)
+        {
+            this.Monitor.DebugOnlyLog($"{property.Name} appears to be a misconfigured option!", LogLevel.Warn);
+        }
+        else
+        {
+            Func<TModConfig, Color> getterDelegate = getter.CreateDelegate<Func<TModConfig, Color>>();
+            Action<TModConfig, Color> setterDelegate = setter.CreateDelegate<Action<TModConfig, Color>>();
+            this.AddColorPicker(
+                name: () => this.Translation.Get($"{property.Name}.title"),
+                tooltip: () => this.Translation.Get($"{property.Name}.description"),
+                getValue: () => getterDelegate(getConfig()),
+                setValue: value => setterDelegate(getConfig(), value),
+                showAlpha: showAlpha,
+                colorPickerStyle: colorPickerStyle,
+                fieldID: fieldID,
+                defaultColor: defaultColor);
+        }
+        return this;
+    }
+
     /// <summary>
     /// Adds a new page and a link for it at the current location in the form.
     /// </summary>
@@ -600,7 +672,7 @@ internal sealed class GMCMHelper : IntegrationHelper
     /// <param name="index">Which page to switch to (in order defined).</param>
     /// <returns>this.</returns>
     /// <exception cref="ArgumentException">The page is not defined.</exception>
-    internal GMCMHelper SwitchPatch(int index)
+    internal GMCMHelper SwitchPage(int index)
     {
         if (index < 0 || index >= this.pages.Count)
         {

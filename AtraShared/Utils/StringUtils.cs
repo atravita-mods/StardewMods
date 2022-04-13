@@ -13,7 +13,6 @@ namespace AtraShared.Utils;
  *
  * 1. Handle the case where the **word** is longer than the box. (Done, I think?)
  * 2. Handle the max height param. (Done, I think, except still need to handle adding ...).
- * 3. Figure out Span? Am I allocating by passing around strings here?
  * 4. This probably could do with unit tests.
  * 5. Hyphens are valid word-splitting characters
  * *********/

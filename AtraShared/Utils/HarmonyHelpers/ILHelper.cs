@@ -400,6 +400,14 @@ internal class ILHelper
         return this;
     }
 
+    /// <summary>
+    /// Replaces the current instruction with the given instruction.
+    /// </summary>
+    /// <param name="opcode">Opcode.</param>
+    /// <param name="operand">Operand.</param>
+    /// <param name="withLabels">Labels to attach.</param>
+    /// <param name="keepLabels">Whether or not to keep the original labels. Default: true.</param>
+    /// <returns>this.</returns>
     internal ILHelper ReplaceInstruction(OpCode opcode, object operand, Label[] withLabels, bool keepLabels = true)
         => this.ReplaceInstruction(new CodeInstruction(opcode, operand), withLabels, keepLabels);
 
@@ -442,9 +450,22 @@ internal class ILHelper
         return this;
     }
 
+    /// <summary>
+    /// Replaces an instruction with a different instruction.
+    /// </summary>
+    /// <param name="opcode">Opcode.</param>
+    /// <param name="operand">Operand.</param>
+    /// <param name="keepLabels">Whether or not to keep the labels.</param>
+    /// <returns>this.</returns>
+    /// <exception cref="InvalidOperationException">Tried to remove an important label.</exception>
     internal ILHelper ReplaceInstruction(OpCode opcode, object operand, bool keepLabels = true)
         => this.ReplaceInstruction(new CodeInstruction(opcode, operand), keepLabels);
 
+    /// <summary>
+    /// Replaces the operand.
+    /// </summary>
+    /// <param name="operand">New operand.</param>
+    /// <returns>this.</returns>
     internal ILHelper ReplaceOperand(object operand)
     {
         if (this.CurrentInstruction.Branches(out Label? label))

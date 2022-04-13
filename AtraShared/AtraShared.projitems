@@ -9,6 +9,7 @@
     <Import_RootNamespace>AtraShared</Import_RootNamespace>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)ConstantsAndEnums\Seasons.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)CustomExceptions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ConstantsAndEnums\ErrorMessageConsts.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Integrations\GMCMHelper.cs" />
@@ -16,12 +17,15 @@
     <Compile Include="$(MSBuildThisFileDirectory)Integrations\Interfaces\IFlexibleSprinklerAPI.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Integrations\Interfaces\IGenericModConfigMenuAPI.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Integrations\IntegrationHelper.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Integrations\Interfaces\IGMCMOptionsAPI.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Integrations\Interfaces\IJsonAssetsAPI.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Integrations\Interfaces\IProducerFrameworkModAPI.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Integrations\Interfaces\ISpaceCoreAPI.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MigrationManager\MigrationDataClass.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MigrationManager\MigrationManager.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Schedules\DataModels\SchedulePoint.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Schedules\ScheduleUtilityFunctions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Utils\ColorHandler.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Utils\Extensions\GameLocationExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Utils\Extensions\HarmonyExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Utils\Extensions\LogExtensions.cs" />

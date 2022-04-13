@@ -27,22 +27,14 @@ SOFTWARE.
  *
  * *******************************************/
 
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-
 namespace AtraShared.Integrations.Interfaces;
 
 /// <summary>
 /// API to interface with Json Assets.
 /// </summary>
 /// <remarks>Copied from: https://github.com/spacechase0/StardewValleyMods/blob/develop/JsonAssets/IApi.cs .</remarks>
-internal interface IJsonAssetsAPI
+public interface IJsonAssetsAPI
 {
-    event EventHandler ItemsRegistered;
-    event EventHandler IdsAssigned;
-    event EventHandler AddedItemsToShop;
-    event EventHandler IdsFixed;
-
     /// <summary>Load a folder as a Json Assets content pack.</summary>
     /// <param name="path">The absolute path to the content pack folder.</param>
     void LoadAssets(string path);
@@ -80,32 +72,4 @@ internal interface IJsonAssetsAPI
     int GetHatId(string name);
     int GetWeaponId(string name);
     int GetClothingId(string name);
-
-    /******************
-     * Section GET ALL IDs.
-     ******************/
-
-    IDictionary<string, int> GetAllObjectIds();
-    IDictionary<string, int> GetAllCropIds();
-    IDictionary<string, int> GetAllFruitTreeIds();
-    IDictionary<string, int> GetAllBigCraftableIds();
-    IDictionary<string, int> GetAllHatIds();
-    IDictionary<string, int> GetAllWeaponIds();
-    IDictionary<string, int> GetAllClothingIds();
-
-    List<string> GetAllObjectsFromContentPack(string cp);
-    List<string> GetAllCropsFromContentPack(string cp);
-    List<string> GetAllFruitTreesFromContentPack(string cp);
-    List<string> GetAllBigCraftablesFromContentPack(string cp);
-    List<string> GetAllHatsFromContentPack(string cp);
-    List<string> GetAllWeaponsFromContentPack(string cp);
-    List<string> GetAllClothingFromContentPack(string cp);
-    List<string> GetAllBootsFromContentPack(string cp);
-
-    bool FixIdsInItem(Item item);
-    void FixIdsInItemList(List<Item> items);
-    void FixIdsInLocation(GameLocation location);
-
-    bool TryGetCustomSprite(object entity, out Texture2D? texture, out Rectangle? sourceRect);
-    bool TryGetCustomSpriteSheet(object entity, out Texture2D? texture, out Rectangle? sourceRect);
 }

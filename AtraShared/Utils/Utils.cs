@@ -8,7 +8,6 @@ namespace AtraShared.Utils;
 /// </summary>
 internal static class Utils
 {
-
     /// <summary>
     /// Gets the configuration instance, or returns a default one.
     /// </summary>

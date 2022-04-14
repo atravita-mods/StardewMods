@@ -8,6 +8,8 @@ using GiantCropFertilizer.HarmonyPatches;
 using HarmonyLib;
 using StardewModdingAPI.Events;
 
+using AtraUtils = AtraShared.Utils.Utils;
+
 namespace GiantCropFertilizer;
 
 /// <summary>
@@ -48,6 +50,11 @@ internal class ModEntry : Mod
     /// Gets the logger for this mod.
     /// </summary>
     internal static IMonitor ModMonitor { get; private set; }
+
+    /// <summary>
+    /// The config instance for this mod.
+    /// </summary>
+    internal static ModConfig Config { get; private set; }
 #pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
 
     /// <inheritdoc />
@@ -55,6 +62,9 @@ internal class ModEntry : Mod
     {
         I18n.Init(helper.Translation);
         ModMonitor = this.Monitor;
+
+        Config = AtraUtils.GetConfigOrDefault<ModConfig>(helper, this.Monitor);
+
         helper.Events.GameLoop.GameLaunched += this.OnGameLaunched;
         helper.Events.GameLoop.SaveLoaded += this.OnSaveLoaded;
         helper.Events.GameLoop.Saving += this.OnSaving;

@@ -5,5 +5,9 @@
   "api-too-old": "Please update {{apiName}}({{APIID}}) to at least version {{minversion}}. Current version {{currentversion}}. Integration disabled.",
 
   "giant-crop-fertilizer.name": "Giant Crop Fertilizer",
-  "giant-crop-fertilizer.description": "Greatly increases the chances of giant crops!"
+  "giant-crop-fertilizer.description": "Greatly increases the chances of giant crops!",
+
+  //GMCM
+  "GiantCropChance.title": "Giant Crop Chance",
+  "GiantCropChance.description": "The probability a fertilized square will produce a giant crop, if all other conditions are met.",
 }

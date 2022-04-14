@@ -22,7 +22,7 @@ internal static class CropTranspiler
     public static double GetChanceForFertilizer(int fertilizer)
     {
         ModEntry.ModMonitor.DebugOnlyLog($"Testing fertilizer {fertilizer} with {ModEntry.GiantCropFertilizerID}", LogLevel.Info);
-        return ModEntry.GiantCropFertilizerID != -1 && ModEntry.GiantCropFertilizerID == fertilizer ? 1.1d : 0.01;
+        return ModEntry.GiantCropFertilizerID != -1 && ModEntry.GiantCropFertilizerID == fertilizer ? ModEntry.Config.GiantCropChance : 0.01;
     }
 
     /// <summary>

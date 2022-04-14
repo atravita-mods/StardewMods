@@ -13,33 +13,6 @@ using AtraUtils = AtraShared.Utils.Utils;
 
 namespace GiantCropFertilizer;
 
-/// <summary>
-/// Data model used to save the ID number, to protect against shuffling...
-/// </summary>
-public class GiantCropFertilizerIDStorage
-{
-    /// <summary>
-    /// Initializes a new instance of the <see cref="GiantCropFertilizerIDStorage"/> class.
-    /// Primarily for serializer, should avoid using this one.
-    /// </summary>
-    public GiantCropFertilizerIDStorage()
-    {
-    }
-
-    /// <summary>
-    /// Initializes a new instance of the <see cref="GiantCropFertilizerIDStorage"/> class.
-    /// </summary>
-    /// <param name="id">ID to store.</param>
-    public GiantCropFertilizerIDStorage(int id)
-        => this.ID = id;
-
-    /// <summary>
-    /// Gets or sets the ID number to store.
-    /// </summary>
-    public int ID { get; set; } = 0;
-}
-
-
 /// <inheritdoc />
 internal class ModEntry : Mod
 {

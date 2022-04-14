@@ -566,6 +566,7 @@ internal sealed class GMCMHelper : IntegrationHelper
         return this;
     }
 
+#if COLORS
     /// <summary>
     /// Adds a color picking option at this point in the form.
     /// </summary>
@@ -651,6 +652,7 @@ internal sealed class GMCMHelper : IntegrationHelper
         }
         return this;
     }
+#endif
 
     /// <summary>
     /// Adds a new page and a link for it at the current location in the form.

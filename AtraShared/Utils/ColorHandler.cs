@@ -1,4 +1,6 @@
-﻿using System.Drawing;
+﻿#if COLORS
+
+using System.Drawing;
 using System.Globalization;
 using System.Text.RegularExpressions;
 using AtraBase.Toolkit.Extensions;
@@ -51,10 +53,10 @@ internal static class ColorHandler
             goto ColorParseFail;
         }
 
-        int[] vals = new int[splits.TryGetAtIndex(3, out _) ? 4 : 3];
+        byte[] vals = new byte[splits.TryGetAtIndex(3, out _) ? 4 : 3];
         for (int i = 0; i < vals.Length; i++)
         {
-            if (int.TryParse(splits[i], out int parsed) && parsed < 256)
+            if (byte.TryParse(splits[i], out byte parsed) && parsed <= byte.MaxValue)
             {
                 vals[i] = parsed;
             }
@@ -105,3 +107,5 @@ ColorParseFail:
     internal static string ToHexString(this Color color)
     => $"#{color.R:X2}{color.G:X2}{color.B:X2}{color.A:X2}";
 }
+
+#endif

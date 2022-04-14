@@ -220,20 +220,17 @@ internal class ILHelper
 
         for (int i = startindex; i < endindex - instructions.Length + 1; i++)
         {
-            bool found = true;
             for (int j = 0; j < instructions.Length; j++)
             {
                 if (!instructions[j].Matches(this.Codes[i + j]))
                 {
-                    found = false;
-                    break;
+                    goto ContinueSearchForward;
                 }
             }
-            if (found)
-            {
-                this.Pointer = i;
-                return this;
-            }
+            this.Pointer = i;
+            return this;
+ContinueSearchForward:
+            ;
         }
         this.Monitor.Log($"The desired pattern wasn't found:\n\n" + string.Join('\n', instructions.Select(i => i.ToString())), LogLevel.Error);
         throw new IndexOutOfRangeException();
@@ -265,23 +262,19 @@ internal class ILHelper
         {
             throw new ArgumentException($"Either startindex {startindex} or endindex {endindex} are invalid. ");
         }
-
         for (int i = endindex - instructions.Length - 1; i >= startindex; i--)
         {
-            bool found = true;
             for (int j = 0; j < instructions.Length; j++)
             {
                 if (!instructions[j].Matches(this.Codes[i + j]))
                 {
-                    found = false;
-                    break;
+                    goto ContinueSearchBackwards;
                 }
             }
-            if (found)
-            {
-                this.Pointer = i;
-                return this;
-            }
+            this.Pointer = i;
+            return this;
+ContinueSearchBackwards:
+            ;
         }
         this.Monitor.Log($"The desired pattern wasn't found:\n\n" + string.Join('\n', instructions.Select(i => i.ToString())), LogLevel.Error);
         throw new IndexOutOfRangeException();
@@ -566,7 +559,7 @@ internal class ILHelper
     }
 
     /// <summary>
-    /// Moves pointer to the label.
+    /// Moves pointer forward to the label.
     /// </summary>
     /// <param name="label">Label to search for.</param>
     /// <returns>this.</returns>
@@ -616,9 +609,21 @@ internal class ILHelper
         throw new IndexOutOfRangeException($"label {label} could not be found between {startindex} and {endindex}");
     }
 
+    /// <summary>
+    /// Moves pointer backwards to the label.
+    /// </summary>
+    /// <param name="label">Label to search for.</param>
+    /// <returns>this.</returns>
+    /// <exception cref="IndexOutOfRangeException">No match found.</exception>
     internal ILHelper RetreatToLabel(Label label)
         => this.FindLastLabel(label, 0, this.Pointer);
 
+    /// <summary>
+    /// Retreat to the stored label.
+    /// </summary>
+    /// <returns>this.</returns>
+    /// <exception cref="InvalidOperationException">No label stored.</exception>
+    /// <exception cref="IndexOutOfRangeException">No match found.</exception>
     internal ILHelper RetreatToStoredLabel()
     {
         if (this.label is null)
@@ -663,23 +668,20 @@ internal class ILHelper
         this.Push();
         for (int i = startindex; i < endindex; i++)
         {
-            bool found = true;
             for (int j = 0; j < instructions.Length; j++)
             {
                 if (!instructions[j].Matches(this.Codes[i + j]))
                 {
-                    found = false;
-                    break;
+                    goto ContinueSearch;
                 }
             }
-            if (found)
+            this.Pointer = i;
+            if (!transformer(this) || ++count >= maxCount)
             {
-                this.Pointer = i;
-                if (!transformer(this) || ++count >= maxCount)
-                {
-                    break;
-                }
+                break;
             }
+ContinueSearch:
+            ;
         }
         this.Monitor.Log($"ForEachMatch found {count} occurances for {string.Join(", ", instructions.Select(i => i.ToString()))} for {this.Original.FullDescription()}.", LogLevel.Trace);
         this.Pop();

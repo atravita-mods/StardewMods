@@ -17,6 +17,10 @@ This mod adds a fertilizer that greatly boosts the chance of getting a giant cro
 ## Uninstall
 Remove every instance of the giant crop fertilizer you have in your inventory and any chest, and then remove this mod from your Mods folder.
 
+## Configuration
+
+`GiantCropChance` sets the chance a crop will grow big. Note: to ensure that the crop will become giant, probably best to set this slightly above `1`, which is why the default is `1.1`.
+
 ## Compatibility
 
 * Works with Stardew Valley 1.5.6 on Linux/macOS/Windows.
@@ -25,7 +29,7 @@ Remove every instance of the giant crop fertilizer you have in your inventory an
 
 (Yes, the picture is from Ginger Island! More Giant Crops allows giant crops on any map, that's where that's from!)
 
-* A note: this fertilizer does NOT work with [CJB Cheats Menu](https://www.nexusmods.com/stardewvalley/mods/4)'s instant crop growth. But realistically, if you have that mod, you can actually just stand somewhere and spam that button, and eventually your crops will grow big....
+* A note: this fertilizer does NOT work with [CJB Cheats Menu](https://www.nexusmods.com/stardewvalley/mods/4)'s instant crop growth. You can use that to grow the crops, but you'll need to sleep into the next day for this fertilizer to take effect.
 * Additionally, this mod currently does not work with DGA giant crops. Will fix that!
 
 ## See also

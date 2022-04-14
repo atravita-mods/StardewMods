@@ -8,12 +8,43 @@ using GiantCropFertilizer.DataModels;
 using GiantCropFertilizer.HarmonyPatches;
 using HarmonyLib;
 using StardewModdingAPI.Events;
+using StardewValley.TerrainFeatures;
+using AtraUtils = AtraShared.Utils.Utils;
 
 namespace GiantCropFertilizer;
+
+/// <summary>
+/// Data model used to save the ID number, to protect against shuffling...
+/// </summary>
+public class GiantCropFertilizerIDStorage
+{
+    /// <summary>
+    /// Initializes a new instance of the <see cref="GiantCropFertilizerIDStorage"/> class.
+    /// Primarily for serializer, should avoid using this one.
+    /// </summary>
+    public GiantCropFertilizerIDStorage()
+    {
+    }
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="GiantCropFertilizerIDStorage"/> class.
+    /// </summary>
+    /// <param name="id">ID to store.</param>
+    public GiantCropFertilizerIDStorage(int id)
+        => this.ID = id;
+
+    /// <summary>
+    /// Gets or sets the ID number to store.
+    /// </summary>
+    public int ID { get; set; } = 0;
+}
+
 
 /// <inheritdoc />
 internal class ModEntry : Mod
 {
+    private const string SAVESUFFIX = "_SavedObjectID";
+
     private static IJsonAssetsAPI? jsonAssets;
 
     private MigrationManager? migrator;
@@ -29,6 +60,11 @@ internal class ModEntry : Mod
     /// Gets the logger for this mod.
     /// </summary>
     internal static IMonitor ModMonitor { get; private set; }
+
+    /// <summary>
+    /// Gets the config instance for this mod.
+    /// </summary>
+    internal static ModConfig Config { get; private set; }
 #pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
 
     /// <inheritdoc />
@@ -38,6 +74,7 @@ internal class ModEntry : Mod
         ModMonitor = this.Monitor;
 
         helper.Events.Content.AssetRequested += this.OnAssetRequested;
+        Config = AtraUtils.GetConfigOrDefault<ModConfig>(helper, this.Monitor);
 
         helper.Events.GameLoop.GameLaunched += this.OnGameLaunched;
         helper.Events.GameLoop.SaveLoaded += this.OnSaveLoaded;
@@ -49,7 +86,7 @@ internal class ModEntry : Mod
 
     private void OnSaving(object? sender, SavingEventArgs e)
         => this.Helper.Data.WriteGlobalData(
-            Constants.SaveFolderName + "_SavedObjectID",
+            Constants.SaveFolderName + SAVESUFFIX,
             new GiantCropFertilizerIDStorage(GiantCropFertilizerID));
 
     /// <summary>
@@ -84,16 +121,76 @@ internal class ModEntry : Mod
     {
         this.ApplyPatches(new Harmony(this.ModManifest.UniqueID));
 
-        IntegrationHelper helper = new(this.Monitor, this.Helper.Translation, this.Helper.ModRegistry, LogLevel.Warn);
-        if (helper.TryGetAPI("spacechase0.JsonAssets", "1.10.3", out jsonAssets))
+        // JSON ASSETS integration
         {
-            jsonAssets.LoadAssets(Path.Combine(this.Helper.DirectoryPath, "assets", "json-assets"), this.Helper.Translation);
-            this.Monitor.Log("Loaded packs!");
+            IntegrationHelper helper = new(this.Monitor, this.Helper.Translation, this.Helper.ModRegistry, LogLevel.Warn);
+            if (helper.TryGetAPI("spacechase0.JsonAssets", "1.10.3", out jsonAssets))
+            {
+                jsonAssets.LoadAssets(Path.Combine(this.Helper.DirectoryPath, "assets", "json-assets"), this.Helper.Translation);
+                jsonAssets.IdsFixed += this.JsonAssets_IdsFixed;
+                this.Monitor.Log("Loaded packs!");
+            }
+            else
+            {
+                this.Monitor.Log("Packs could not be loaded! This mod will probably not function.", LogLevel.Error);
+            }
         }
-        else
+
+        // GMCM integration
         {
-            this.Monitor.Log("Packs could not be loaded! This mod will probably not function.", LogLevel.Error);
+            GMCMHelper gmcmHelper = new(this.Monitor, this.Helper.Translation, this.Helper.ModRegistry, this.ModManifest);
+            if (gmcmHelper.TryGetAPI())
+            {
+                gmcmHelper.Register(
+                    reset: () => Config = new(),
+                    save: () => this.Helper.WriteConfig(Config))
+                .AddParagraph(I18n.ModDescription)
+                .AddNumberOption(
+                    name: I18n.GiantCropChance_Title,
+                    getValue: () => (float)Config.GiantCropChance,
+                    setValue: (float val) => Config.GiantCropChance = (double)val,
+                    tooltip: I18n.GiantCropChance_Description, 
+                    min: 0f,
+                    max: 1.1f,
+                    interval: 0.01f);
+            }
         }
+    }
+
+    private void JsonAssets_IdsFixed(object? sender, EventArgs e)
+    {
+        int newID = GiantCropFertilizerID;
+        if (newID == -1)
+        {
+            return;
+        }
+
+        if (this.Helper.Data.ReadGlobalData<GiantCropFertilizerIDStorage>(Constants.SaveFolderName + SAVESUFFIX) is not GiantCropFertilizerIDStorage storedIDCls)
+        {
+            ModMonitor.Log("No need to fix IDs, not installed before.");
+            return;
+        }
+
+        int storedID = storedIDCls.ID;
+
+        if (storedID == newID)
+        {
+            ModMonitor.Log("No need to fix IDs, nothing has changed.");
+            return;
+        }
+
+        Utility.ForAllLocations((GameLocation loc) =>
+        {
+            foreach (TerrainFeature terrainfeature in loc.terrainFeatures.Values)
+            {
+                if (terrainfeature is HoeDirt dirt && dirt.fertilizer.Value == storedID)
+                {
+                    dirt.fertilizer.Value = newID;
+                }
+            }
+        });
+
+        ModMonitor.Log($"Fixed IDs! {storedID} => {newID}");
     }
 
     private void OnSaveLoaded(object? sender, SaveLoadedEventArgs e)

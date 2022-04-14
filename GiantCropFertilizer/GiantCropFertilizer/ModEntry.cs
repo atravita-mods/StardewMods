@@ -52,7 +52,7 @@ internal class ModEntry : Mod
     internal static IMonitor ModMonitor { get; private set; }
 
     /// <summary>
-    /// The config instance for this mod.
+    /// Gets the config instance for this mod.
     /// </summary>
     internal static ModConfig Config { get; private set; }
 #pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.

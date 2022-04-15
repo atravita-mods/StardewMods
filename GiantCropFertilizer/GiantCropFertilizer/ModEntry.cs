@@ -163,6 +163,8 @@ internal class ModEntry : Mod
             }
         });
 
+        storedIDCls.ID = newID;
+        this.Helper.Data.WriteGlobalData(Constants.SaveFolderName + SAVESUFFIX, storedIDCls);
         ModMonitor.Log($"Fixed IDs! {storedID} => {newID}");
     }
 

@@ -35,6 +35,15 @@ namespace AtraShared.Integrations.Interfaces;
 /// <remarks>Copied from: https://github.com/spacechase0/StardewValleyMods/blob/develop/JsonAssets/IApi.cs .</remarks>
 public interface IJsonAssetsAPI
 {
+    /**********************
+     * EVENTS
+     * *******************/
+
+    /// <summary>
+    /// Raised when JA tries to fix IDs.
+    /// </summary>
+    event EventHandler IdsFixed;
+
     /// <summary>Load a folder as a Json Assets content pack.</summary>
     /// <param name="path">The absolute path to the content pack folder.</param>
     void LoadAssets(string path);
@@ -75,7 +84,4 @@ public interface IJsonAssetsAPI
     /// <param name="name">Name of the BigCraftable.</param>
     /// <returns>Integer BigCraftable ID, or -1 if not found.</returns>
     int GetBigCraftableId(string name);
-    int GetHatId(string name);
-    int GetWeaponId(string name);
-    int GetClothingId(string name);
 }

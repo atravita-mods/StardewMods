@@ -100,7 +100,7 @@ internal static class StringUtils
         float current_width = -whichFont.Spacing;
         StringBuilder replacement_word = new();
         bool use_replacement_word = false;
-        foreach ((ReadOnlySpan<char> word, ReadOnlySpan<char> splitchar) in text.SpanSplit())
+        foreach ((ReadOnlySpan<char> word, ReadOnlySpan<char> splitchar) in text.SpanSplit(null, StringSplitOptions.RemoveEmptyEntries))
         {
             if (LocalizedContentManager.CurrentLanguageCode is LocalizedContentManager.LanguageCode.fr && word.StartsWith("\n-"))
             { // This is from vanilla code, I dunno why French is special.
@@ -228,7 +228,11 @@ internal static class StringUtils
     /// <returns>Float width.</returns>
     internal static unsafe float MeasureWord(this SpriteFont whichFont, ReadOnlySpan<char> word)
     {
-        float width = -whichFont.LineSpacing;
+        if (word.Length == 0)
+        {
+            return 0;
+        }
+        float width = -whichFont.Spacing;
         fixed (SpriteFont.Glyph* pointerToGlyphs = whichFont.Glyphs)
         {
             foreach (char ch in word)

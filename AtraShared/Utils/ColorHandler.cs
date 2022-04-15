@@ -56,7 +56,7 @@ internal static class ColorHandler
         byte[] vals = new byte[splits.TryGetAtIndex(3, out _) ? 4 : 3];
         for (int i = 0; i < vals.Length; i++)
         {
-            if (byte.TryParse(splits[i], out byte parsed) && parsed <= byte.MaxValue)
+            if (byte.TryParse(splits[i], out byte parsed))
             {
                 vals[i] = parsed;
             }

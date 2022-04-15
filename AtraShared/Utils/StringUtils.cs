@@ -91,6 +91,7 @@ internal static class StringUtils
     /// <param name="text">Text to wrap.</param>
     /// <param name="whichFont">Which font to use.</param>
     /// <param name="width">Maximum width.</param>
+    /// <param name="height">Maximum height.</param>
     /// <returns>Wrapped text.</returns>
     internal static string WrapTextByWords(string text, SpriteFont whichFont, float width, float? height = null)
     {
@@ -100,7 +101,7 @@ internal static class StringUtils
         float current_width = -whichFont.Spacing;
         StringBuilder replacement_word = new();
         bool use_replacement_word = false;
-        foreach ((ReadOnlySpan<char> word, ReadOnlySpan<char> splitchar) in text.SpanSplit(null, StringSplitOptions.RemoveEmptyEntries))
+        foreach ((ReadOnlySpan<char> word, ReadOnlySpan<char> splitchar) in text.SpanSplit())
         {
             if (LocalizedContentManager.CurrentLanguageCode is LocalizedContentManager.LanguageCode.fr && word.StartsWith("\n-"))
             { // This is from vanilla code, I dunno why French is special.

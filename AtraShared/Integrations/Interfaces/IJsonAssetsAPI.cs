@@ -40,6 +40,11 @@ public interface IJsonAssetsAPI
      * *******************/
 
     /// <summary>
+    /// Raised when JA assigns IDs.
+    /// </summary>
+    event EventHandler IdsAssigned;
+
+    /// <summary>
     /// Raised when JA tries to fix IDs.
     /// </summary>
     event EventHandler IdsFixed;

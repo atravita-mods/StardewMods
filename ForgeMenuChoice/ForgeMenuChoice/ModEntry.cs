@@ -49,6 +49,7 @@ internal class ModEntry : Mod
         Config = AtraUtils.GetConfigOrDefault<ModConfig>(helper, this.Monitor);
 
         helper.Events.GameLoop.GameLaunched += this.OnGameLaunched;
+
         helper.Events.Player.Warped += this.Player_Warped;
         helper.Events.Content.AssetRequested += this.OnAssetRequested;
         helper.Events.Content.LocaleChanged += this.OnLocaleChanged;
@@ -143,7 +144,7 @@ internal class ModEntry : Mod
         {
             ModMonitor.Log(string.Format(ErrorMessageConsts.HARMONYCRASH, ex), LogLevel.Error);
         }
-        harmony.Snitch(this.Monitor, this.ModManifest.UniqueID, transpilersOnly: true);
+        harmony.Snitch(this.Monitor, harmony.Id, transpilersOnly: true);
     }
 
     /*****************

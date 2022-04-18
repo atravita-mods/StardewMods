@@ -1,4 +1,5 @@
 ﻿using System.Reflection;
+using System.Text;
 using System.Text.RegularExpressions;
 using AtraBase.Toolkit.Extensions;
 using AtraBase.Toolkit.StringHandler;
@@ -171,7 +172,7 @@ public class ModEntry : Mod
             }
             else
             {
-                this.Monitor.DebugLog($"{property.Name} unaccounted for.", LogLevel.Warn);
+                this.Monitor.DebugOnlyLog($"{property.Name} unaccounted for.", LogLevel.Warn);
             }
         }
     }
@@ -189,21 +190,21 @@ public class ModEntry : Mod
         {
             // Crosscheck this = probably better to just use the actual value, maybe...
             hasFCFbatcave = (farmcavechoice is not null) && (farmcavechoice.Contains("bat", StringComparison.OrdinalIgnoreCase) || farmcavechoice.Contains("fruit", StringComparison.OrdinalIgnoreCase));
-            this.Monitor.DebugLog(hasFCFbatcave ? "FarmCaveFramework fruit bat cave detected." : "FarmCaveFramework fruit bat cave not detected.");
+            this.Monitor.DebugOnlyLog(hasFCFbatcave ? "FarmCaveFramework fruit bat cave detected." : "FarmCaveFramework fruit bat cave not detected.");
         }
 
         if (!this.config.EarlyFarmCave
             && (Game1.MasterPlayer.caveChoice?.Value is null || Game1.MasterPlayer.caveChoice.Value <= Farmer.caveNothing)
             && string.IsNullOrWhiteSpace(farmcavechoice))
         {
-            this.Monitor.DebugLog("Demetrius cutscene not seen and config not set to early, skip spawning for today.");
+            this.Monitor.DebugOnlyLog("Demetrius cutscene not seen and config not set to early, skip spawning for today.");
             return false;
         }
         if (!this.config.IgnoreFarmCaveType && !this.config.EarlyFarmCave
             && (Game1.MasterPlayer.caveChoice?.Value is null || Game1.MasterPlayer.caveChoice.Value != Farmer.caveBats)
             && !hasFCFbatcave)
         {
-            this.Monitor.DebugLog("Fruit bat cave not selected and config not set to ignore that, skip spawning for today.");
+            this.Monitor.DebugOnlyLog("Fruit bat cave not selected and config not set to ignore that, skip spawning for today.");
             return false;
         }
         return true;
@@ -234,7 +235,7 @@ public class ModEntry : Mod
 
         if (Game1.getLocationFromName("FarmCave") is FarmCave farmcave)
         {
-            this.Monitor.DebugLog($"Spawning in the farmcave");
+            this.Monitor.DebugOnlyLog($"Spawning in the farmcave");
             foreach (Vector2 v in this.IterateTiles(farmcave))
             {
                 this.PlaceFruit(farmcave, v);
@@ -246,8 +247,7 @@ public class ModEntry : Mod
             farmcave.UpdateReadyFlag();
             if (count >= this.config.MaxDailySpawns)
             {
-                this.Cleanup();
-                return;
+                goto END;
             }
         }
 
@@ -271,8 +271,8 @@ public class ModEntry : Mod
                     {
                         Match match = matches[0];
                         parseloc = location[..^match.Value.Length];
-                        locLimits.Update(match);
-                        this.Monitor.DebugLog($"Found and parsed sublocation: {parseloc} + ({locLimits["x1"]};{locLimits["y1"]});({locLimits["x2"]};{locLimits["y2"]})");
+                        locLimits.Update(match, namedOnly: true);
+                        this.Monitor.DebugOnlyLog($"Found and parsed sublocation: {parseloc} + ({locLimits["x1"]};{locLimits["y1"]});({locLimits["x2"]};{locLimits["y2"]})");
                     }
                     else if (matches.Count >= 2)
                     {
@@ -287,14 +287,13 @@ public class ModEntry : Mod
 
                 if (Game1.getLocationFromName(parseloc) is GameLocation gameLocation)
                 {
-                    this.Monitor.DebugLog($"Found {gameLocation}");
+                    this.Monitor.DebugOnlyLog($"Found {gameLocation}");
                     foreach (Vector2 v in this.IterateTiles(gameLocation, xstart: locLimits["x1"], xend: locLimits["x2"], ystart: locLimits["y1"], yend: locLimits["y2"]))
                     {
                         this.PlaceFruit(gameLocation, v);
                         if (++count >= this.config.MaxDailySpawns)
                         {
-                            this.Cleanup();
-                            return;
+                            goto END;
                         }
                     }
                 }
@@ -312,11 +311,14 @@ public class ModEntry : Mod
                 this.PlaceFruit(mine, v);
                 if (++count >= this.config.MaxDailySpawns)
                 {
-                    this.Cleanup();
-                    return;
+                    goto END;
                 }
             }
         }
+
+END:
+        this.Cleanup();
+        return;
     }
 
     /// <summary>
@@ -331,7 +333,7 @@ public class ModEntry : Mod
         {
             IsSpawnedObject = true,
         });
-        this.Monitor.DebugLog($"Spawning item {fruitToPlace} at {location.Name}:{tile.X},{tile.Y}", LogLevel.Debug);
+        this.Monitor.DebugOnlyLog($"Spawning item {fruitToPlace} at {location.Name}:{tile.X},{tile.Y}", LogLevel.Debug);
     }
 
     /// <summary>
@@ -375,11 +377,15 @@ public class ModEntry : Mod
         List<string> fruitNames = new();
         foreach (int objectID in this.GetTreeFruits())
         {
-            SObject obj = new(objectID, 1);
-            fruitNames.Add(obj.DisplayName);
+            if (Game1.objectInformation.TryGetValue(objectID, out string? val)
+                && val.SpanSplit('/').TryGetAtIndex(SObject.objectInfoDisplayNameIndex, out SpanSplitEntry name))
+            {
+                fruitNames.Add(name);
+            }
         }
-
-        this.Monitor.Log($"Possible fruits: {string.Join(", ", AtraUtils.ContextSort(fruitNames))}", LogLevel.Info);
+        StringBuilder sb = new("Possible fruits: ");
+        sb.AppendJoin(", ", AtraUtils.ContextSort(fruitNames));
+        this.Monitor.Log(sb.ToString(), LogLevel.Info);
     }
 
     /// <summary>
@@ -435,17 +441,16 @@ public class ModEntry : Mod
                 try
                 {
                     SpanSplit fruit = Game1.objectInformation[objectIndex].SpanSplit('/');
-                    string fruitname = fruit[0].ToString();
-                    if ((!this.config.AllowAnyTreeProduct && (!fruit[3].SpanSplit().TryGetAtIndex(1, out SpanSplitEntry cat) || !int.TryParse(cat, out int category) || category != SObject.FruitsCategory))
-                        || (this.config.EdiblesOnly && int.Parse(fruit[2]) < 0)
-                        || int.Parse(fruit[1]) > this.config.PriceCap
-                        || denylist.Contains(fruitname)
-                        || (this.config.NoBananasBeforeShrine && fruitname.Equals("Banana", StringComparison.OrdinalIgnoreCase)
-                            && (!Context.IsWorldReady || Game1.getLocationFromName("IslandEast") is not IslandEast islandeast || !islandeast.bananaShrineComplete.Value)))
+                    string fruitname = fruit[SObject.objectInfoNameIndex].ToString();
+                    if ((this.config.AllowAnyTreeProduct || (fruit[SObject.objectInfoTypeIndex].SpanSplit().TryGetAtIndex(1, out SpanSplitEntry cat) && int.TryParse(cat, out int category) && category == SObject.FruitsCategory))
+                        && (!this.config.EdiblesOnly || int.Parse(fruit[SObject.objectInfoEdibilityIndex]) >= 0)
+                        && int.Parse(fruit[SObject.objectInfoPriceIndex]) <= this.config.PriceCap
+                        && !denylist.Contains(fruitname)
+                        && (!this.config.NoBananasBeforeShrine || !fruitname.Equals("Banana", StringComparison.OrdinalIgnoreCase)
+                            || (Context.IsWorldReady && Game1.getLocationFromName("IslandEast") is IslandEast islandeast && islandeast.bananaShrineComplete.Value)))
                     {
-                        continue;
+                        treeFruits.Add(objectIndex);
                     }
-                    treeFruits.Add(objectIndex);
                 }
                 catch (Exception ex)
                 {

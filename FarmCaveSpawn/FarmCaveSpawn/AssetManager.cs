@@ -41,7 +41,7 @@ internal static class AssetManager
         {
             ["FlashShifter.SVECode"] = "Custom_MinecartCave, Custom_DeepCave",
 #if DEBUG // Regex's test!
-                ["atravita.FarmCaveSpawn"] = "Town:[(4;5);(34;40)]",
+            ["atravita.FarmCaveSpawn"] = "Town:[(4;5);(34;40)]",
 #endif
         };
 }

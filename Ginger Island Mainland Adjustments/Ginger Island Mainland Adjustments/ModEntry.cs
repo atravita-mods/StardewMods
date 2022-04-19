@@ -18,7 +18,6 @@ namespace GingerIslandMainlandAdjustments;
 public class ModEntry : Mod
 {
     private bool haveFixedSchedulesToday = false;
-    private int countdown = 5; // used to register my late asset editor.
 
     private MigrationManager? migrator;
 
@@ -42,11 +41,15 @@ public class ModEntry : Mod
         helper.Events.Multiplayer.PeerConnected += this.PeerConnected;
         helper.Events.Multiplayer.ModMessageReceived += this.ModMessageReceived;
 
-        // Add my asset loader and editor.
-        helper.Content.AssetLoaders.Add(AssetLoader.Instance);
-        helper.Content.AssetEditors.Add(AssetEditor.Instance);
+        helper.Events.Content.AssetRequested += this.OnAssetRequested;
 
         this.ApplyPatches(new Harmony(this.ModManifest.UniqueID));
+    }
+
+    private void OnAssetRequested(object? sender, AssetRequestedEventArgs e)
+    {
+        AssetLoader.Load(e);
+        AssetEditor.Edit(e);
     }
 
     private void OnSaveLoaded(object? sender, SaveLoadedEventArgs e)
@@ -154,9 +157,6 @@ public class ModEntry : Mod
     /// <param name="e">Possible parameters.</param>
     private void OnGameLaunched(object? sender, GameLaunchedEventArgs e)
     {
-        // Start countdown for the late asset editor
-        this.Helper.Events.GameLoop.UpdateTicked += this.FiveTicksPostGameLaunched;
-
         // Generate the GMCM for this mod.
         GenerateGMCM.Build(this.ModManifest, this.Helper.Translation);
 
@@ -170,24 +170,8 @@ public class ModEntry : Mod
         }
     }
 
-    /// <summary>
-    /// Adds in the late asset editor, five ticks after GameLaunched.
-    /// </summary>
-    /// <param name="sender">Smapi thing, unknown.</param>
-    /// <param name="e">UpdateTickedEventArgs.</param>
-    private void FiveTicksPostGameLaunched(object? sender, UpdateTickedEventArgs e)
-    {
-        if (--this.countdown <= 0)
-        {
-            this.Helper.Content.AssetEditors.Add(LateAssetEditor.Instance);
-            this.Helper.Events.GameLoop.UpdateTicked -= this.FiveTicksPostGameLaunched;
-        }
-    }
-
     private void OnPlayerWarped(object? sender, WarpedEventArgs e)
-    {
-        ShopHandler.AddBoxToShop(e);
-    }
+        => ShopHandler.AddBoxToShop(e);
 
     private void OnButtonPressed(object? sender, ButtonPressedEventArgs e)
     {
@@ -205,7 +189,7 @@ public class ModEntry : Mod
     private void OnTimeChanged(object? sender, TimeChangedEventArgs e)
     {
         MidDayScheduleEditor.AttemptAdjustGISchedule(e);
-        if (e.NewTime > 615 && !this.haveFixedSchedulesToday)
+        if (!this.haveFixedSchedulesToday && e.NewTime > 615)
         {
             // No longer need the exclusions cache.
             IslandSouthPatches.ClearCache();

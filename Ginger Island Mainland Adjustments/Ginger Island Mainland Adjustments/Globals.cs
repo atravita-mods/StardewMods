@@ -2,6 +2,7 @@
 using AtraShared.Schedules;
 using GingerIslandMainlandAdjustments.Configuration;
 using GingerIslandMainlandAdjustments.CustomConsoleCommands;
+using AtraUtils = AtraShared.Utils.Utils;
 
 namespace GingerIslandMainlandAdjustments;
 
@@ -36,9 +37,14 @@ internal static class Globals
     internal static IReflectionHelper ReflectionHelper { get; private set; }
 
     /// <summary>
-    /// Gets SMAPI's Content helper.
+    /// Gets SMAPI's mod content helper.
     /// </summary>
-    internal static IContentHelper ContentHelper { get; private set; }
+    internal static IModContentHelper ModContentHelper { get; private set; }
+
+    /// <summary>
+    /// Gets SMAPI's game content helper.
+    /// </summary>
+    internal static IGameContentHelper GameContentHelper { get; private set; }
 
     /// <summary>
     /// Gets SMAPI's mod registry helper.
@@ -54,6 +60,11 @@ internal static class Globals
     /// Gets the input helper.
     /// </summary>
     internal static IInputHelper InputHelper { get; private set; }
+
+    /// <summary>
+    /// Gets the translation helper.
+    /// </summary>
+    internal static ITranslationHelper TranslationHelper { get; private set; }
 
     /// <summary>
     /// Gets the instance of the schedule utility functions.
@@ -84,24 +95,19 @@ internal static class Globals
     /// </summary>
     /// <param name="helper">SMAPI's IModHelper.</param>
     /// <param name="monitor">SMAPI's logging service.</param>
+    /// <param name="manifest">The manifest for this mod.</param>
     internal static void Initialize(IModHelper helper, IMonitor monitor, IManifest manifest)
     {
         Globals.ModMonitor = monitor;
         Globals.ReflectionHelper = helper.Reflection;
-        Globals.ContentHelper = helper.Content;
+
+        Globals.ModContentHelper = helper.ModContent;
+        Globals.GameContentHelper = helper.GameContent;
         Globals.ModRegistry = helper.ModRegistry;
         Globals.Helper = helper;
         Globals.Manifest = manifest;
 
-        try
-        {
-            Globals.Config = helper.ReadConfig<ModConfig>();
-        }
-        catch
-        {
-            Globals.ModMonitor.Log(I18n.IllFormatedConfig(), LogLevel.Warn);
-            Globals.Config = new();
-        }
+        Globals.Config = AtraUtils.GetConfigOrDefault<ModConfig>(helper, monitor);
 
         UtilitySchedulingFunctions = new(
             monitor: Globals.ModMonitor,

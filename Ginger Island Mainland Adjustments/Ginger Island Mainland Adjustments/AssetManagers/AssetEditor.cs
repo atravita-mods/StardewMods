@@ -1,11 +1,12 @@
-﻿using StardewModdingAPI.Utilities;
+﻿using StardewModdingAPI.Events;
+using StardewModdingAPI.Utilities;
 
 namespace GingerIslandMainlandAdjustments.AssetManagers;
 
 /// <summary>
 /// Manages asset editing for this mod.
 /// </summary>
-public sealed class AssetEditor : IAssetEditor
+public static class AssetEditor
 {
     /// <summary>
     /// Pam's mail key.
@@ -26,7 +27,7 @@ public sealed class AssetEditor : IAssetEditor
     private static readonly string DataEventsSeedshop = PathUtilities.NormalizeAssetName("Data/Events/SeedShop");
     private static readonly string DataMail = PathUtilities.NormalizeAssetName("Data/mail");
 
-    private static readonly string[] FilesToEdit = new string[]
+    private static readonly string[] EarlyFilesToEdit = new string[]
     {
         GeorgeDialogueLocation,
         EvelynDialogueLocation,
@@ -37,59 +38,62 @@ public sealed class AssetEditor : IAssetEditor
         DataMail,
     };
 
-    private AssetEditor()
-    {
-    }
+    // We edit Pam's nine heart event to set flags to remember which path the player chose.
+    private static readonly string DataEventsTrailerBig = PathUtilities.NormalizeAssetName("Data/Events/Trailer_Big");
 
     /// <summary>
-    /// Gets the instance of the AssetEditor.
+    /// Handles editing assets for this mod.
     /// </summary>
-    public static AssetEditor Instance { get; } = new();
-
-    /// <inheritdoc />
-    [UsedImplicitly]
-    public bool CanEdit<T>(IAssetInfo asset)
-        => FilesToEdit.Any((string assetpath) => asset.AssetNameEquals(assetpath));
-
-    /// <inheritdoc />
-    [UsedImplicitly]
-    public void Edit<T>(IAssetData asset)
+    /// <param name="e">Asset event arguments.</param>
+    internal static void Edit(AssetRequestedEventArgs e)
     {
-        IAssetDataForDictionary<string, string> editor = asset.AsDictionary<string, string>();
-        if (asset.AssetNameEquals(GeorgeDialogueLocation))
+        if (EarlyFilesToEdit.Any((string assetName) => e.NameWithoutLocale.IsEquivalentTo(assetName)))
+        {
+            e.Edit(EditAssetEarly, AssetEditPriority.Early);
+        }
+        else if (e.NameWithoutLocale.IsEquivalentTo(DataEventsTrailerBig))
+        {
+            e.Edit(EditAssetLate, AssetEditPriority.Late);
+        }
+    }
+
+    private static void EditAssetEarly(IAssetData e)
+    {
+        IAssetDataForDictionary<string, string>? editor = e.AsDictionary<string, string>();
+        if (e.NameWithoutLocale.IsEquivalentTo(GeorgeDialogueLocation))
         {
             editor.Data["Resort"] = I18n.GeorgeResort();
             editor.Data["Resort_IslandNorth"] = I18n.GeorgeResortIslandNorth();
         }
-        else if (asset.AssetNameEquals(EvelynDialogueLocation))
+        else if (e.NameWithoutLocale.IsEquivalentTo(EvelynDialogueLocation))
         {
             editor.Data["Resort"] = I18n.EvelynResort();
             editor.Data["Resort_IslandNorth"] = I18n.EvelynResortIslandNorth();
         }
-        else if (asset.AssetNameEquals(WillyDialogueLocation))
+        else if (e.NameWithoutLocale.IsEquivalentTo(WillyDialogueLocation))
         {
             editor.Data["Resort"] = I18n.WillyResort();
             editor.Data["Resort_IslandNorth"] = I18n.WillyResortIslandNorth();
         }
-        else if (asset.AssetNameEquals(SandyDialogueLocation))
+        else if (e.NameWithoutLocale.IsEquivalentTo(SandyDialogueLocation))
         {
             foreach (string key in new string[] { "Resort", "Resort_Bar", "Resort_Bar_2", "Resort_Wander", "Resort_Shore", "Resort_Pier", "Resort_Approach", "Resort_Left", "Resort_IslandNorth" })
             {
                 editor.Data[key] = I18n.GetByKey("Sandy_" + key);
             }
         }
-        else if (asset.AssetNameEquals(PhoneStringLocation))
+        else if (e.NameWithoutLocale.IsEquivalentTo(PhoneStringLocation))
         {
             foreach (string key in new string[] { "Pam_Island_1", "Pam_Island_2", "Pam_Island_3", "Pam_Doctor", "Pam_Other", "Pam_Bus_1", "Pam_Bus_2", "Pam_Bus_3", "Pam_Voicemail_Island", "Pam_Voicemail_Doctor", "Pam_Voicemail_Other", "Pam_Voicemail_Bus", "Pam_Bus_Late" })
             {
                 editor.Data[key] = I18n.GetByKey(key);
             }
         }
-        else if (asset.AssetNameEquals(DataMail))
+        else if (e.NameWithoutLocale.IsEquivalentTo(DataMail))
         {
             editor.Data[PAMMAILKEY] = $"{I18n.Pam_Mail_Text()}^^   --{Game1.getCharacterFromName("Pam")?.displayName ?? I18n.Pam()}[#]{I18n.Pam_Mail_Title()}";
         }
-        else if (asset.AssetNameEquals(DataEventsSeedshop))
+        else if (e.NameWithoutLocale.IsEquivalentTo(DataEventsSeedshop))
         {
             editor.Data["99219999/e 503180/f Pam 2500/v Pam/w rainy/t 1700 2600"] = string.Join(
                 separator: string.Empty,
@@ -107,6 +111,28 @@ public sealed class AssetEditor : IAssetEditor
                 $"speak Pam \"{I18n._999Pam07()}\"/pause 500/textAboveHead Pam \"{I18n.Sigh()}\"/pause 1000/",
                 $"speak Pam \"{I18n._999Pam08()}\"/pause 1000/fade/viewport -100 -100/end dialogue Pam \"{I18n._999Pam30()}\"");
             editor.Data["atravita_GIMA_PamInsulted"] = $"friendship Pam -250/emote Pam 12/speak Pam \"{I18n._999Pam99()}\"/fade/viewport -100 -100/end invisible Pam";
+        }
+    }
+
+    private static void EditAssetLate(IAssetData e)
+    {
+        // Insert mail flags into the vanilla event
+        IAssetDataForDictionary<string, string>? editor = e.AsDictionary<string, string>();
+        if (editor.Data.TryGetValue("positive", out string? val))
+        {
+            editor.Data["positive"] = "addMailReceived atravita_GIMA_PamPositive/" + val;
+        }
+        foreach (string key in editor.Data.Keys)
+        {
+            if (key.StartsWith("503180/") && editor.Data[key] is string value)
+            {
+                int lastslash = value.LastIndexOf('/');
+                if (lastslash > 0)
+                {
+                    editor.Data[key] = value.Insert(lastslash, "/addMailReceived atravita_GIMA_PamInsulted");
+                }
+                break;
+            }
         }
     }
 }

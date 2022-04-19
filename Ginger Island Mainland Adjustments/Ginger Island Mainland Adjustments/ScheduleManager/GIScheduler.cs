@@ -129,7 +129,7 @@ internal static class GIScheduler
         }
 
         List<NPC> visitors = GenerateVistorList(random, Globals.Config.Capacity, explorers);
-        Dictionary<string, string> animationDescriptions = Globals.ContentHelper.Load<Dictionary<string, string>>("Data/animationDescriptions", ContentSource.GameContent);
+        Dictionary<string, string> animationDescriptions = Globals.GameContentHelper.Load<Dictionary<string, string>>("Data/animationDescriptions");
 
         GIScheduler.Bartender = SetBartender(visitors);
         GIScheduler.Musician = SetMusician(random, visitors, animationDescriptions);

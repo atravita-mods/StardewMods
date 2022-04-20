@@ -44,14 +44,14 @@ internal static class PhoneHandler
     {
         if (questionAndAnswer.Equals("telephone_PamBus", StringComparison.OrdinalIgnoreCase))
         {
-            Globals.ReflectionHelper.GetMethod(__instance, "playShopPhoneNumberSounds").Invoke(questionAndAnswer);
-            Game1.player.freezePause = 4950;
+            Globals.ReflectionHelper.GetMethod(__instance, "playShopPhoneNumberSounds", required: false)?.Invoke(questionAndAnswer);
+            Game1.player.freezePause = GameLocation.PHONE_RING_DURATION;
             DelayedAction.functionAfterDelay(
             () =>
             {
                 try
                 {
-                    Game1.playSound("bigSelect");
+                    Game1.playSound(GameLocation.PHONE_PICKUP_SOUND);
                     if (Game1.getCharacterFromName("Pam") is not NPC pam)
                     {
                         Globals.ModMonitor.Log($"Pam cannot be found, ending phone call.", LogLevel.Warn);
@@ -110,14 +110,14 @@ internal static class PhoneHandler
                             Game1.drawDialogue(pam, Game1.content.LoadString("Strings\\Characters:Pam_Voicemail_Other"), Game1.temporaryContent.Load<Texture2D>("Portraits\\AnsweringMachine"));
                         }
                     }
-                    __instance.answerDialogueAction("HangUp", Array.Empty<string>());
+                    __instance.answerDialogueAction(GameLocation.PHONE_HANGUP_SOUND, Array.Empty<string>());
                 }
                 catch (Exception ex)
                 {
                     Globals.ModMonitor.Log($"Error handling Pam's phone call {ex}", LogLevel.Error);
                 }
             },
-            4950);
+            GameLocation.PHONE_RING_DURATION);
             __result = true;
         }
     }

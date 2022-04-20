@@ -26,6 +26,8 @@
 <!-- Consider not allowing spouses to go to Ginger Island if they have a defined marriage_Season_day key?-->
 <!-- Document new tokens -->
 
+<!-- finish adding _GroupName to the resort keys?-->
+
 ##### Known Issues
 
 1. NPCs may vanish if they go to `IslandSouthEast`. They reappear the next day. Therefore, that's been tempoarily removed until I figure out why they disappear from `IslandSouthEast`. `IslandNorth` is fine.

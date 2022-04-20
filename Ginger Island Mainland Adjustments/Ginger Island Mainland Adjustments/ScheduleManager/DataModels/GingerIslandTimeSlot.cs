@@ -21,6 +21,8 @@ internal class GingerIslandTimeSlot
     {
         new Point(1, 1),
         new Point(-1, -1),
+        new Point(2, 0),
+        new Point(0, -2),
     };
 
     /// <summary>
@@ -117,13 +119,19 @@ internal class GingerIslandTimeSlot
         // assign bartenders and drinkers.
         if (this.bartender is not null)
         {
-            this.AssignSchedulePoint(this.bartender, new SchedulePoint(
-                random: this.random,
-                npc: this.bartender,
-                map: "IslandSouth",
-                time: this.timeslot,
-                point: BartendPoint,
-                basekey: "Resort_Bartend"));
+            {
+                string? varkey = GIScheduler.CurrentVisitingGroup?.Contains(this.bartender) == true
+                    ? $"Resort_Bartend_{GIScheduler.CurrentGroup}"
+                    : null;
+                this.AssignSchedulePoint(this.bartender, new SchedulePoint(
+                    random: this.random,
+                    npc: this.bartender,
+                    map: "IslandSouth",
+                    time: this.timeslot,
+                    point: BartendPoint,
+                    basekey: "Resort_Bartend",
+                    varKey: varkey));
+            }
 
             foreach (NPC possibledrinker in this.visitors)
             {
@@ -136,7 +144,8 @@ internal class GingerIslandTimeSlot
                         time: this.timeslot,
                         usedPoints: this.usedPoints,
                         lastAssignment: lastAssignment,
-                        animation_descriptions: animationDescriptions);
+                        animation_descriptions: animationDescriptions,
+                        groupName: GIScheduler.CurrentVisitingGroup?.Contains(possibledrinker) == true ? GIScheduler.CurrentGroup : null);
                     if (schedulePoint is not null)
                     {
                         this.AssignSchedulePoint(possibledrinker, schedulePoint);
@@ -155,12 +164,11 @@ internal class GingerIslandTimeSlot
                 usedPoints: this.usedPoints,
                 lastAssignment: lastAssignment,
                 overrideChanceMap: (NPC npc) => 0.8,
-                animation_descriptions: animationDescriptions);
+                animation_descriptions: animationDescriptions,
+                groupName: GIScheduler.CurrentVisitingGroup?.Contains(this.musician) == true ? GIScheduler.CurrentGroup : null);
             if (musicianPoint is not null)
             {
-#if DEBUG
-                Globals.ModMonitor.Log($"Assigned musician:{this.musician.Name}", LogLevel.Debug);
-#endif
+                Globals.ModMonitor.DebugOnlyLog($"Assigned musician:{this.musician.Name}", LogLevel.Debug);
                 this.AssignSchedulePoint(this.musician, musicianPoint);
                 Point musician_loc = musicianPoint.Point;
                 PossibleIslandActivity closeDancePoint = new(DanceDeltas.Select((Point pt) => new Point(musician_loc.X + pt.X, musician_loc.Y + pt.Y)).ToList(),
@@ -175,19 +183,19 @@ internal class GingerIslandTimeSlot
                         time: this.timeslot,
                         usedPoints: this.usedPoints,
                         lastAssignment: lastAssignment,
-                        animation_descriptions: animationDescriptions)
+                        animation_descriptions: animationDescriptions,
+                        groupName: GIScheduler.CurrentVisitingGroup?.Contains(dancer) == true ? GIScheduler.CurrentGroup : null)
                         ?? Dance.TryAssign(
                             this.random,
                             character: dancer,
                             time: this.timeslot,
                             usedPoints: this.usedPoints,
                             lastAssignment: lastAssignment,
-                            animation_descriptions: animationDescriptions);
+                            animation_descriptions: animationDescriptions,
+                            groupName: GIScheduler.CurrentVisitingGroup?.Contains(dancer) == true ? GIScheduler.CurrentGroup : null);
                     if (dancerPoint is not null)
                     {
-#if DEBUG
-                        Globals.ModMonitor.Log($"Assigned dancer {dancer.Name}", LogLevel.Debug);
-#endif
+                        Globals.ModMonitor.DebugOnlyLog($"Assigned dancer {dancer.Name}", LogLevel.Debug);
                         this.AssignSchedulePoint(dancer, dancerPoint);
                         dancer.currentScheduleDelay = 0f;
                         this.musician.currentScheduleDelay = 0f;
@@ -211,7 +219,6 @@ internal class GingerIslandTimeSlot
             {
                 continue;
             }
-            bool foundactivity = false;
             foreach (PossibleIslandActivity possibleIslandActivity in PossibleActivities)
             {
                 SchedulePoint? schedulePoint = possibleIslandActivity.TryAssign(
@@ -220,18 +227,13 @@ internal class GingerIslandTimeSlot
                     time: this.timeslot,
                     usedPoints: this.usedPoints,
                     lastAssignment: lastAssignment,
-                    animation_descriptions: animationDescriptions);
+                    animation_descriptions: animationDescriptions,
+                    groupName: GIScheduler.CurrentVisitingGroup?.Contains(visitor) == true ? GIScheduler.CurrentGroup : null);
                 if (schedulePoint is not null)
                 {
                     this.AssignSchedulePoint(visitor, schedulePoint);
-                    foundactivity = true;
-                    break;
+                    goto CONTINUELOOP;
                 }
-            }
-
-            if (foundactivity)
-            {
-                continue;
             }
 
             if (this.timeslot == 1400)
@@ -242,16 +244,17 @@ internal class GingerIslandTimeSlot
                     time: this.timeslot,
                     usedPoints: this.usedPoints,
                     lastAssignment: lastAssignment,
-                    animation_descriptions: animationDescriptions);
+                    animation_descriptions: animationDescriptions,
+                    groupName: GIScheduler.CurrentVisitingGroup?.Contains(visitor) == true ? GIScheduler.CurrentGroup : null);
                 if (schedulePoint is not null)
                 {
                     this.AssignSchedulePoint(visitor, schedulePoint);
-                    continue;
+                    goto CONTINUELOOP;
                 }
             }
-#if DEBUG
-            Globals.ModMonitor.Log($"Now using fallback spot assignment for {visitor.Name} at {this.timeslot}", LogLevel.Warn);
-#endif
+
+            Globals.ModMonitor.DebugOnlyLog($"Now using fallback spot assignment for {visitor.Name} at {this.timeslot}", LogLevel.Warn);
+
             // now iterate backwards through the list, forcibly assigning people to places....
             for (int i = PossibleActivities.Count - 1; i >= 0; i--)
             {
@@ -262,18 +265,17 @@ internal class GingerIslandTimeSlot
                     usedPoints: this.usedPoints,
                     lastAssignment: lastAssignment,
                     animation_descriptions: animationDescriptions,
-                    overrideChanceMap: (NPC npc) => 1.0);
+                    overrideChanceMap: (NPC npc) => 1.0,
+                    groupName: GIScheduler.CurrentVisitingGroup?.Contains(visitor) == true ? GIScheduler.CurrentGroup : null);
                 if (schedulePoint is not null)
                 {
                     this.AssignSchedulePoint(visitor, schedulePoint);
-                    foundactivity = true;
-                    break;
+                    goto CONTINUELOOP;
                 }
             }
-            if (!foundactivity)
-            {
-                Globals.ModMonitor.DebugOnlyLog($"Warning: No activity found for {visitor.Name} at {this.timeslot}", LogLevel.Warn);
-            }
+            Globals.ModMonitor.DebugOnlyLog($"Warning: No activity found for {visitor.Name} at {this.timeslot}", LogLevel.Warn);
+CONTINUELOOP:
+            ;
         }
         return this.animations;
     }

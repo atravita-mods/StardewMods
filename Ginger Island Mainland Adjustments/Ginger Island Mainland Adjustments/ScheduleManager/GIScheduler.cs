@@ -40,7 +40,14 @@ internal static class GIScheduler
     /// <remarks>Used primarily for setting group-based dialogue...</remarks>
     public static HashSet<NPC>? CurrentVisitingGroup { get; private set; }
 
+    /// <summary>
+    /// Gets the name of the current adventure group.
+    /// </summary>
     public static string? CurrentAdventureGroup { get; private set; }
+
+    /// <summary>
+    /// Gets the current adventure group.
+    /// </summary>
     public static HashSet<NPC>? CurrentAdventurers { get; private set; }
 
     /// <summary>
@@ -113,11 +120,11 @@ internal static class GIScheduler
 
         Random random = new((int)(Game1.uniqueIDForThisGame * 1.21f) + (int)(Game1.stats.DaysPlayed * 2.5f));
 
-        HashSet<NPC> explorers = GenerateExplorerGroup(random);
+        (HashSet<NPC> explorers, string explorerGroupName) = GenerateExplorerGroup(random);
         if (explorers.Count > 0)
         {
             Globals.ModMonitor.DebugOnlyLog($"Found explorer group: {string.Join(", ", explorers.Select((NPC npc) => npc.Name))}.");
-            IslandNorthScheduler.Schedule(random, explorers);
+            IslandNorthScheduler.Schedule(random, explorers, explorerGroupName);
         }
 
         // Resort capacity set to zero, can skip everything else.
@@ -164,7 +171,7 @@ internal static class GIScheduler
     /// </summary>
     /// <param name="random">Seeded random.</param>
     /// <returns>An explorer group (of up to three explorers), or an empty hashset if there's no group today.</returns>
-    private static HashSet<NPC> GenerateExplorerGroup(Random random)
+    private static (HashSet<NPC> group, string groupname) GenerateExplorerGroup(Random random)
     {
         if (random.NextDouble() <= Globals.Config.ExplorerChance)
         {
@@ -173,10 +180,10 @@ internal static class GIScheduler
             {
                 CurrentAdventureGroup = explorerGroups[random.Next(explorerGroups.Count)];
                 CurrentAdventurers = ExplorerGroups[CurrentAdventureGroup].Where((NPC npc) => IslandSouth.CanVisitIslandToday(npc)).Take(3).ToHashSet();
-                return CurrentAdventurers;
+                return (CurrentAdventurers, CurrentAdventureGroup);
             }
         }
-        return new HashSet<NPC>(); // just return an empty hashset.
+        return (new HashSet<NPC>(), string.Empty); // just return an empty hashset.
     }
 
     /// <summary>
@@ -232,12 +239,9 @@ internal static class GIScheduler
             if (groupkeys.Count > 0)
             {
                 CurrentGroup = Utility.GetRandom(groupkeys, random);
-#if DEBUG
-                Globals.ModMonitor.Log($"Group {CurrentGroup} headed to Island.", LogLevel.Debug);
-#endif
-                HashSet<NPC> possiblegroup = IslandGroups[CurrentGroup];
-                visitors.AddRange(possiblegroup.Where((npc) => !visitors.Contains(npc))); // limit group size if there's too many people...
-                CurrentVisitingGroup = possiblegroup;
+                Globals.ModMonitor.DebugOnlyLog($"Group {CurrentGroup} headed to Island.", LogLevel.Debug);
+                visitors.AddRange(IslandGroups[CurrentGroup]);
+                CurrentVisitingGroup = IslandGroups[CurrentGroup];
                 valid_visitors.ExceptWith(visitors);
             }
         }
@@ -253,7 +257,8 @@ internal static class GIScheduler
         // Prevent children and anyone with the neveralone exclusion from going alone.
         int kidsremoved = valid_visitors.RemoveWhere((NPC npc) => npc.Age == NPC.child
             && (!IslandSouthPatches.Exclusions.TryGetValue(npc, out string[]? exclusions) || !exclusions.Contains("freerange")));
-        int neveralone = valid_visitors.RemoveWhere((NPC npc) => IslandSouthPatches.Exclusions.TryGetValue(npc, out string[]? exclusions) && exclusions.Contains("neveralone"));
+        int neveralone = valid_visitors.RemoveWhere((NPC npc) => IslandSouthPatches.Exclusions.TryGetValue(npc, out string[]? exclusions)
+            && exclusions.Contains("neveralone"));
 
         if (Globals.Config.DebugMode)
         {
@@ -262,25 +267,25 @@ internal static class GIScheduler
 
         if (visitors.Count < capacity)
         {
-#if DEBUG
-            Globals.ModMonitor.Log($"{capacity} not yet reached, attempting to add more.", LogLevel.Debug);
-#endif
+            Globals.ModMonitor.DebugOnlyLog($"{capacity} not yet reached, attempting to add more.", LogLevel.Debug);
             visitors.AddRange(valid_visitors.OrderBy(a => random.Next()).Take(capacity - visitors.Count));
         }
 
-        // If George in visitors, add Evelyn.
-        if (visitors.Any((NPC npc) => npc.Name.Equals("George", StringComparison.OrdinalIgnoreCase))
-            && visitors.All((NPC npc) => !npc.Name.Equals("Evelyn", StringComparison.OrdinalIgnoreCase))
-            && Game1.getCharacterFromName("Evelyn") is NPC evelyn)
         {
-            // counting backwards to avoid kicking out a group member.
-            for (int i = visitors.Count - 1; i >= 0; i--)
+            // If George in visitors, add Evelyn.
+            if (visitors.Any((NPC npc) => npc.Name.Equals("George", StringComparison.OrdinalIgnoreCase))
+                && visitors.All((NPC npc) => !npc.Name.Equals("Evelyn", StringComparison.OrdinalIgnoreCase))
+                && Game1.getCharacterFromName("Evelyn") is NPC evelyn)
             {
-                if (!visitors[i].Name.Equals("Gus", StringComparison.OrdinalIgnoreCase) && !visitors[i].Name.Equals("George", StringComparison.OrdinalIgnoreCase))
+                // counting backwards to avoid kicking out a group member.
+                for (int i = visitors.Count - 1; i >= 0; i--)
                 {
-                    Globals.ModMonitor.DebugOnlyLog($"Replacing one visitor {visitors[i].Name} with Evelyn");
-                    visitors[i] = evelyn;
-                    break;
+                    if (!visitors[i].Name.Equals("Gus", StringComparison.OrdinalIgnoreCase) && !visitors[i].Name.Equals("George", StringComparison.OrdinalIgnoreCase))
+                    {
+                        Globals.ModMonitor.DebugOnlyLog($"Replacing one visitor {visitors[i].Name} with Evelyn");
+                        visitors[i] = evelyn;
+                        break;
+                    }
                 }
             }
         }
@@ -290,12 +295,14 @@ internal static class GIScheduler
             visitors[i].scheduleDelaySeconds = Math.Min(i * 0.4f, 7f);
         }
 
-        // set schedule Delay for George and Evelyn so they arrive together (in theory)?
-        if (visitors.FirstOrDefault((NPC npc) => npc.Name.Equals("George", StringComparison.OrdinalIgnoreCase)) is NPC george
-            && visitors.FirstOrDefault((NPC npc) => npc.Name.Equals("Evelyn", StringComparison.OrdinalIgnoreCase)) is NPC evelyn2)
         {
-            george.scheduleDelaySeconds = 7f;
-            evelyn2.scheduleDelaySeconds = 6.8f;
+            // set schedule Delay for George and Evelyn so they arrive together (in theory)?
+            if (visitors.FirstOrDefault((NPC npc) => npc.Name.Equals("George", StringComparison.OrdinalIgnoreCase)) is NPC george
+                && visitors.FirstOrDefault((NPC npc) => npc.Name.Equals("Evelyn", StringComparison.OrdinalIgnoreCase)) is NPC evelyn)
+            {
+                george.scheduleDelaySeconds = 7f;
+                evelyn.scheduleDelaySeconds = 6.8f;
+            }
         }
 
         Globals.ModMonitor.DebugOnlyLog($"{visitors.Count} vistors: {string.Join(", ", visitors.Select((NPC npc) => npc.Name))}");
@@ -346,9 +353,7 @@ internal static class GIScheduler
         if (musician is not null && !musician.Name.Equals("Gus", StringComparison.OrdinalIgnoreCase))
         {
             musician.currentScheduleDelay = 0f;
-#if DEBUG
-            Globals.ModMonitor.Log($"Found musician {musician.Name}", LogLevel.Debug);
-#endif
+            Globals.ModMonitor.DebugLog($"Found musician {musician.Name}", LogLevel.Debug);
             return musician;
         }
         return null;

@@ -40,7 +40,8 @@ internal static class IslandNorthScheduler
     /// </summary>
     /// <param name="random">Seeded random.</param>
     /// <param name="explorers">Hashset of explorers.</param>
-    internal static void Schedule(Random random, HashSet<NPC> explorers)
+    /// <param name="explorergroup">The name of the explorer group.</param>
+    internal static void Schedule(Random random, HashSet<NPC> explorers, string explorergroup)
     {
         if (explorers.Any())
         {
@@ -63,6 +64,7 @@ internal static class IslandNorthScheduler
                     point: CloseAdventurousPoint[explorerIndex++],
                     isarrivaltime: true,
                     basekey: "Resort_Adventure",
+                    varKey: $"Resort_Adventure_{explorergroup}",
                     direction: explorerIndex), // this little hackish thing makes them face in different directions.
                 };
             }
@@ -78,6 +80,7 @@ internal static class IslandNorthScheduler
                     time: 1330,
                     point: farPoints[explorerIndex++],
                     basekey: $"Resort_{whichDialogue}",
+                    varKey: $"Resort_{whichDialogue}_{explorergroup}",
                     direction: explorerIndex));
             }
 
@@ -92,6 +95,7 @@ internal static class IslandNorthScheduler
                     time: 1700,
                     point: CloseAdventurousPoint[explorerIndex++],
                     basekey: "Resort_AdventureReturn",
+                    varKey: $"Resort_AdventureReturn_{explorergroup}",
                     isarrivaltime: true,
                     direction: explorerIndex));
 

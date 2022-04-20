@@ -48,7 +48,7 @@ internal class MigrationManager
     internal void ReadVersionInfo()
     {
         if (this.DataHelper.ReadGlobalData<MigrationDataClass>(FILENAME) is MigrationDataClass migrationData
-            && migrationData.VersionMap.TryGetValue(Constants.SaveFolderName, out this.oldversion))
+            && migrationData.VersionMap.TryGetValue(Constants.SaveFolderName!, out this.oldversion))
         {
             this.Monitor.Log($"Migrator found old version {this.oldversion} for {this.Manifest.UniqueID}", LogLevel.Trace);
         }
@@ -65,7 +65,7 @@ internal class MigrationManager
     {
         MigrationDataClass migrationData = this.DataHelper.ReadGlobalData<MigrationDataClass>(FILENAME) ?? new();
         this.Monitor.Log($"Writing version info {this.Manifest.Version} into global data for {Constants.SaveFolderName} for {this.Manifest.UniqueID}", LogLevel.Trace);
-        migrationData.VersionMap[Constants.SaveFolderName] = this.Manifest.Version.ToString();
+        migrationData.VersionMap[Constants.SaveFolderName!] = this.Manifest.Version.ToString();
         this.DataHelper.WriteGlobalData(FILENAME, migrationData);
     }
 

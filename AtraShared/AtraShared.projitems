@@ -36,6 +36,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Utils\Extensions\SObjectExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Utils\Extensions\TranslationHelperExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Utils\GameLocationUtils.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Utils\HarmonyHelpers\AdditionalCodeInstructionExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Utils\HarmonyHelpers\CodeInstructionWrapper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Utils\HarmonyHelpers\ILHelper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Utils\MultiplayerHelpers.cs" />

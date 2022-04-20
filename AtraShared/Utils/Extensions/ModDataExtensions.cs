@@ -18,6 +18,7 @@ internal static class ModDataExtensions
     /// <param name="key">Key.</param>
     /// <param name="defaultVal">default value.</param>
     /// <returns>Boolean value, or null if not found/not parseable.</returns>
+    [return: NotNullIfNotNull("defaultVal")]
     internal static bool? GetBool(this ModDataDictionary modData, string key, bool? defaultVal = null)
         => modData.TryGetValue(key, out string val) ? !(val == "0") : defaultVal;
 
@@ -47,7 +48,8 @@ internal static class ModDataExtensions
     /// <param name="key">Key.</param>
     /// <param name="defaultVal">default value.</param>
     /// <returns>Float value, or null of not found/not parseable.</returns>
-    internal static float? GetFloat(this ModDataDictionary modData, string key, float? defaultVal)
+    [return: NotNullIfNotNull("defaultVal")]
+    internal static float? GetFloat(this ModDataDictionary modData, string key, float? defaultVal = null)
         => modData.TryGetValue(key, out string val) && float.TryParse(val, out float result) ? result : defaultVal;
 
     /// <summary>
@@ -78,6 +80,7 @@ internal static class ModDataExtensions
     /// <param name="key">Key.</param>
     /// <param name="defaultVal">default value.</param>
     /// <returns>Int value, or null of not found/not parseable.</returns>
+    [return: NotNullIfNotNull("defaultVal")]
     internal static int? GetInt(this ModDataDictionary modData, string key, int? defaultVal = null)
         => modData.TryGetValue(key, out string val) && int.TryParse(val, out int result) ? result : defaultVal;
 

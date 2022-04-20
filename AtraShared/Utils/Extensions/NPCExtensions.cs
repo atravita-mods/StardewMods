@@ -55,6 +55,7 @@ internal static class NPCExtensions
     /// <param name="npc">NPC.</param>
     /// <param name="basekey">Basekey to use.</param>
     /// <param name="random">Random to use, defaults to Game1.random if null.</param>
+    /// <param name="varKey">Variant key = try to use this if there.</param>
     /// <returns>null if no dialogue key found, a random dialogue key otherwise.</returns>
     internal static string? GetRandomDialogue(
         this NPC npc,

@@ -18,5 +18,5 @@ internal static class GameLocationExtensions
     /// <returns>Whether the location should be considered dangerous.</returns>
     internal static bool IsDangerousLocation(this GameLocation location)
         => !location.IsFarm && !location.IsGreenhouse && location is not SlimeHutch && location is not Town && location is not IslandWest
-            && (location is MineShaft or VolcanoDungeon || location.characters.Any((character) => character is Monster));
+            && (location is MineShaft or VolcanoDungeon or BugLand || location.characters.Any((character) => character is Monster));
 }

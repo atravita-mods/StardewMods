@@ -1,5 +1,4 @@
-﻿using System.Linq.Expressions;
-using AtraBase.Toolkit.Reflection;
+﻿using AtraBase.Toolkit.Reflection;
 
 namespace AtraShared.Utils;
 
@@ -8,11 +7,7 @@ namespace AtraShared.Utils;
 /// </summary>
 internal static class MultiplayerHelpers
 {
-    private static readonly Lazy<Func<Multiplayer>> MultiplayerLazy = new(() =>
-    {
-        MemberExpression? expression = Expression.Field(null, typeof(Game1).StaticFieldNamed("multiplayer"));
-        return Expression.Lambda<Func<Multiplayer>>(expression).Compile();
-    });
+    private static readonly Lazy<Func<Multiplayer>> MultiplayerLazy = new(() => typeof(Game1).StaticFieldNamed("multiplayer").GetStaticFieldGetter<Multiplayer>());
 
     /// <summary>
     /// Gets a function that returns the current multiplayer instance.

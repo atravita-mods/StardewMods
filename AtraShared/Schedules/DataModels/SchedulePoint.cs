@@ -32,6 +32,7 @@ public class SchedulePoint
     /// <param name="direction">Direction to face after arriving.</param>
     /// <param name="animation">Which animation to use after arrival.</param>
     /// <param name="basekey">Base dialogue key.</param>
+    /// <param name="varKey">Variant dialogue key</param>
     /// <remarks>If a dialogue key that isn't in the NPC's dialogue is given, will simply convert  to `null`.</remarks>
     public SchedulePoint(
         Random random,
@@ -42,7 +43,8 @@ public class SchedulePoint
         bool isarrivaltime = false,
         int direction = Game1.down,
         string? animation = null,
-        string? basekey = null)
+        string? basekey = null,
+        string? varKey = null)
     {
         this.npc = npc;
         this.map = map;
@@ -51,7 +53,14 @@ public class SchedulePoint
         this.point = point;
         this.direction = direction;
         this.animation = animation;
-        this.dialoguekey = npc.GetRandomDialogue(basekey, random);
+        if (npc.GetRandomDialogue(varKey, random) is string dialogueKey)
+        {
+            this.dialoguekey = dialogueKey;
+        }
+        else
+        {
+            this.dialoguekey = npc.GetRandomDialogue(basekey, random);
+        }
     }
 
     /// <summary>

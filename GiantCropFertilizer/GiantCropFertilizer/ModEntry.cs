@@ -121,8 +121,8 @@ internal class ModEntry : Mod
                 .AddNumberOption(
                     name: I18n.GiantCropChance_Title,
                     getValue: () => (float)Config.GiantCropChance,
-                    setValue: (float val) => Config.GiantCropChance = (double)val,
-                    tooltip: I18n.GiantCropChance_Description, 
+                    setValue: (float val) => Config.GiantCropChance = val,
+                    tooltip: I18n.GiantCropChance_Description,
                     min: 0f,
                     max: 1.1f,
                     interval: 0.01f);

@@ -27,6 +27,7 @@ internal static class ColorHandler
     /// <returns>True if successful, false otherwise.</returns>
     internal static bool TryParseColor(string colorname, out XNAColor color)
     {
+        // Enum.TryParse doesn't accept a ReadOnlySpan<char> until NET 6.
         colorname = colorname.Trim();
 
         // Try to see if it's a valid KnownColor enum?
@@ -39,7 +40,7 @@ internal static class ColorHandler
         // Process as HTML color code?
         if (ColorCode.Match(colorname) is Match match && match.Success)
         {
-            Dictionary<string, int> matchdict = match.MatchGroupsToDictionary((name) => name, (value) => int.Parse(value, NumberStyles.HexNumber), namedOnly: true);
+            Dictionary<string, byte> matchdict = match.MatchGroupsToDictionary((name) => name, (value) => byte.Parse(value, NumberStyles.HexNumber), namedOnly: true);
             color = matchdict.ContainsKey("A")
                 ? new(matchdict["R"], matchdict["G"], matchdict["B"], matchdict["A"])
                 : new(matchdict["R"], matchdict["G"], matchdict["B"]);

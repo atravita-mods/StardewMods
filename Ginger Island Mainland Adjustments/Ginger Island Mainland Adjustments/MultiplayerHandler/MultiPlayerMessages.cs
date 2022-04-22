@@ -24,13 +24,13 @@ public static class MultiplayerSharedState
     /// <param name="e">arguments.</param>
     internal static void ReSendMultiplayerMessage(PeerConnectedEventArgs e)
     {
-        if (Context.IsMainPlayer && Context.IsWorldReady && Game1.getCharacterFromName("Pam") is NPC pam 
+        if (Context.IsMainPlayer && Context.IsWorldReady && Game1.getCharacterFromName("Pam") is NPC pam
             && pam.TryGetScheduleEntry(pam.dayScheduleName.Value, out string? rawstring)
             && Globals.UtilitySchedulingFunctions.TryFindGOTOschedule(pam, SDate.Now(), rawstring, out string redirectedstring))
         {
             PamsSchedule = redirectedstring;
             Globals.ModMonitor.Log($"Grabbing Pam's rawSchedule for phone: {redirectedstring}");
-            Globals.Helper.Multiplayer.SendMessage(redirectedstring, SCHEDULEMESSAGE, modIDs: new[] { Globals.Manifest.UniqueID });
+            Globals.Helper.Multiplayer.SendMessage(redirectedstring, SCHEDULEMESSAGE, modIDs: new[] { Globals.Manifest.UniqueID }, playerIDs: new[] { e.Peer.PlayerID });
         }
     }
 
@@ -43,7 +43,7 @@ public static class MultiplayerSharedState
         if (e.FromModID == Globals.Manifest.UniqueID && e.Type == SCHEDULEMESSAGE)
         {
             PamsSchedule = e.ReadAs<string>();
-            Globals.ModMonitor.Log($"Recieved Pam's schedule {PamsSchedule}", LogLevel.Debug);
+            Globals.ModMonitor.Log($"Recieved Pam's schedule {PamsSchedule}");
         }
     }
 

@@ -16,7 +16,6 @@
 <!-- Finish the locations console command: https://docs.microsoft.com/en-us/windows/console/console-virtual-terminal-sequences to add bold -->
 <!-- Write a function to get the villager's schedule for today, that takes into account that if a location replacement is needed, the villager's daySchedule.Value will be X_Replacement -->
 <!-- More schedule debugging tools: get arbitrary schedule from X day? -->
-<!-- Telephone: Lock behind a 10 heart event or something.-->
 <!-- Figure out why Emily dances *in* the changing room? -->
 <!-- AntiSocial lines for George/Evelyn/Willy-->
 <!-- Get spouses into Island Farmhouse -->
@@ -25,8 +24,6 @@
 <!-- Document animations -->
 <!-- Consider not allowing spouses to go to Ginger Island if they have a defined marriage_Season_day key?-->
 <!-- Document new tokens -->
-
-<!-- finish adding _GroupName to the resort keys?-->
 
 ##### Known Issues
 
@@ -37,6 +34,7 @@
 ### Version 1.1.4-beta
 
 * Update to SMAPI 3.14.0
+* Add `_groupname` suffix to GI `Resort` keys (ie `Resort_groupname`).
 
 ### Version 1.1.3
  

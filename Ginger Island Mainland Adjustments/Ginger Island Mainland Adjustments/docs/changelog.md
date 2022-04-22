@@ -5,7 +5,7 @@
 
 #### Todo
 
-1. Make groups more meaningful. (for one, make Resort_ dialogue reference the grous....)
+1. Make groups more meaningful. (for one, make `Resort_` dialogue reference the groups....)
 2. Nonreplacing dialogue for the Resort keys? (flatten the ones that already exist, but add a way to add more that's less likely to clobber).
 3. Handle roommates, like actually.
 4. See if NPCs can go *into* Professor Snail's Tent?
@@ -30,6 +30,10 @@
 1. NPCs may vanish if they go to `IslandSouthEast`. They reappear the next day. Therefore, that's been tempoarily removed until I figure out why they disappear from `IslandSouthEast`. `IslandNorth` is fine.
 2. If you pause time, NPCs will tend to get stuck at schedule points. Unfortunately for Ginger Island, this usually ends with NPCs trapped in the changing room. If you go to Ginger Island and see no one there, try unpausing time. Or just leave them trapped in the changing room....(or I guess, disable changing)
 3. The debugging console commands basically only work for the host in multiplayer.
+
+### Version 1.1.4
+
+* Fix error for shops.
 
 ### Version 1.1.3
  

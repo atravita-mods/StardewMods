@@ -88,6 +88,7 @@ internal static class Globals
     {
         Globals.ModMonitor = monitor;
         Globals.ReflectionHelper = helper.Reflection;
+        Globals.InputHelper = helper.Input;
         Globals.ContentHelper = helper.Content;
         Globals.ModRegistry = helper.ModRegistry;
         Globals.Helper = helper;

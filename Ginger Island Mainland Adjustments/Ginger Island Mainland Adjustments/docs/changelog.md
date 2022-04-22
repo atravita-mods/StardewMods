@@ -5,12 +5,11 @@
 
 #### Todo
 
-1. Make groups more meaningful.
+1. Make groups more meaningful. (for one, make `Resort_` dialogue reference the groups....)
 2. Nonreplacing dialogue for the Resort keys? (flatten the ones that already exist, but add a way to add more that's less likely to clobber).
 3. Handle roommates, like actually.
 4. See if NPCs can go *into* Professor Snail's Tent?
 5. Add in tokens for islanders/current bartender/musicians. You won't be able to use these on day start, but may prevent clobbering on the resort shop tile? <!-- does this matter when 1.6 will fix the issue for good?-->
-6. Fix spouse dialogue so they (a) either have a default line or (b) don't delete their dialogue if they don't have GILeave/Return lines...<!--Maybe...record whether or not the spouse was talked to on Ginger Island?-->
 7. Handle children better. Should they go with the spouse?
 <!-- Move this mod's scheduler earlier so I can add in CP tokens. (so OnDayStarted or before?). Sadly, this is not feasible because CustomNPCExclusions expects the island schedules to be generated *after* CP is done updating tokens, and I would need to move it *before*. Would be a compat nightmare. see: https://github.com/Esca-MMC/CustomNPCExclusions/blob/master/CustomNPCExclusions/HarmonyPatch_IslandVisit.cs -->
 <!-- Finish the locations console command: https://docs.microsoft.com/en-us/windows/console/console-virtual-terminal-sequences to add bold -->
@@ -31,10 +30,14 @@
 2. If you pause time, NPCs will tend to get stuck at schedule points. Unfortunately for Ginger Island, this usually ends with NPCs trapped in the changing room. If you go to Ginger Island and see no one there, try unpausing time. Or just leave them trapped in the changing room....(or I guess, disable changing)
 3. The debugging console commands basically only work for the host in multiplayer.
 
-### Version 1.1.4-beta
+### Version 1.1.5-beta
 
 * Update to SMAPI 3.14.0
 * Add `_groupname` suffix to GI `Resort` keys (ie `Resort_groupname`).
+
+### Version 1.1.4
+
+* Fix error for shops.
 
 ### Version 1.1.3
  

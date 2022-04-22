@@ -100,9 +100,9 @@ internal static class Globals
     {
         Globals.ModMonitor = monitor;
         Globals.ReflectionHelper = helper.Reflection;
-
         Globals.ModContentHelper = helper.ModContent;
         Globals.GameContentHelper = helper.GameContent;
+        Globals.InputHelper = helper.Input;
         Globals.ModRegistry = helper.ModRegistry;
         Globals.Helper = helper;
         Globals.Manifest = manifest;

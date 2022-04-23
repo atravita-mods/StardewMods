@@ -27,6 +27,9 @@ SOFTWARE.
  *
  * *******************************************/
 
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+
 namespace AtraShared.Integrations.Interfaces;
 
 /// <summary>
@@ -89,4 +92,13 @@ public interface IJsonAssetsAPI
     /// <param name="name">Name of the BigCraftable.</param>
     /// <returns>Integer BigCraftable ID, or -1 if not found.</returns>
     int GetBigCraftableId(string name);
+
+    /// <summary>
+    /// Tries to get the custom sprite for a JA-registered item.
+    /// </summary>
+    /// <param name="entity"></param>
+    /// <param name="texture"></param>
+    /// <param name="sourceRect"></param>
+    /// <returns>True if successful, false otherwise.</returns>
+    bool TryGetCustomSprite(object entity, out Texture2D texture, out Rectangle sourceRect);
 }

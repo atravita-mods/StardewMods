@@ -54,7 +54,7 @@ internal static class AdditionalCodeInstructionExtensions
         {
             return new CodeInstruction(OpCodes.Ldloc, instruction.operand);
         }
-        else if (code == OpCodes.Ldloc_S || code == OpCodes.Ldloc_S)
+        else if (code == OpCodes.Ldloc_S || code == OpCodes.Stloc_S)
         {
             return new CodeInstruction(OpCodes.Ldloc_S, instruction.operand);
         }
@@ -94,7 +94,7 @@ internal static class AdditionalCodeInstructionExtensions
         {
             return new CodeInstruction(OpCodes.Stloc, instruction.operand);
         }
-        else if (code == OpCodes.Ldloc_S || code == OpCodes.Ldloc_S)
+        else if (code == OpCodes.Ldloc_S || code == OpCodes.Stloc_S)
         {
             return new CodeInstruction(OpCodes.Stloc_S, instruction.operand);
         }

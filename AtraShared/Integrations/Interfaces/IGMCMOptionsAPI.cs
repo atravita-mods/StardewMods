@@ -36,7 +36,7 @@
 // OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-#pragma warning disable SA1201 // Elements should appear in the correct order
+#pragma warning disable SA1201 // Elements should appear in the correct order. Reviewed.
 
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -60,7 +60,8 @@ public interface IGMCMOptionsAPI
     void AddColorOption(IManifest mod, Func<Color> getValue, Action<Color> setValue, Func<string> name,
         Func<string>? tooltip = null, bool showAlpha = true, uint colorPickerStyle = 0, string? fieldId = null);
 
-    #pragma warning disable format
+#pragma warning disable SA1025 // Code should not contain multiple whitespace in a row. ManInBlack's style here.
+#pragma warning disable format
     /// <summary>
     /// Flags to control how the <c cref="ColorPickerOption">ColorPickerOption</c> widget is displayed.
     /// </summary>
@@ -76,7 +77,8 @@ public interface IGMCMOptionsAPI
         RadioChooser  = 0b01 << 8,
         ToggleChooser = 0b10 << 8,
     }
-    #pragma warning restore format
+#pragma warning restore format
+#pragma warning restore SA1025 // Code should not contain multiple whitespace in a row
 
     /// <summary>
     /// Add an image picker option.  This is really an "array index picker" where you can specify what to draw

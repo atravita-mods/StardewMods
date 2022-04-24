@@ -21,7 +21,6 @@ internal static class PostfixBigSlimeConstructor
         }
         try
         {
-            ModEntry.ModMonitor.Log("Hi!");
             if (__instance.heldObject is not null
                 && mineArea >= 120
                 && Game1.mine?.GetAdditionalDifficulty() is > 0

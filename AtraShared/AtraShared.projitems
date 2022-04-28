@@ -20,6 +20,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Integrations\Interfaces\IGMCMOptionsAPI.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Integrations\Interfaces\IJsonAssetsAPI.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Integrations\Interfaces\IProducerFrameworkModAPI.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Integrations\Interfaces\ISimplifiedFishingAPI.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Integrations\Interfaces\ISpaceCoreAPI.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MigrationManager\MigrationDataClass.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MigrationManager\MigrationManager.cs" />

@@ -1,6 +1,7 @@
 ﻿namespace AtraShared.ConstantsAndEnums;
 
 #pragma warning disable SA1602 // Enumeration items should be documented. Should be obvious enough
+
 /// <summary>
 /// Seasons as flags.
 /// </summary>

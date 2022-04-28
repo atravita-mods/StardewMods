@@ -1,11 +1,11 @@
 ﻿{
   "Name": "More Fertilizers",
   "Author": "atravita",
-  "Version": "0.1.0",
+  "Version": "0.1.1",
   "Description": "Adds more fertilizers to the game.",
   "UniqueID": "atravita.MoreFertilizers",
   "EntryDll": "MoreFertilizers.dll",
-  //"UpdateKeys": [ "Nexus:11620", "GitHub:atravita-mods/GiantCropFertilizer" ],
+  "UpdateKeys": [ "Nexus:11837", "GitHub:atravita-mods/MoreFertilizers" ],
   "MinimumApiVersion": "3.13",
   "Dependencies": [
     {

@@ -25,20 +25,7 @@ internal static class GameLocationPatches
             int passes = 1;
             do
             {
-                int fertilizerToDrop = Game1.random.Next(who.combatLevel.Value + 1) switch
-                {
-                    0 => ModEntry.LuckyFertilizerID,
-                    1 => ModEntry.JojaFertilizerID,
-                    2 => ModEntry.PaddyCropFertilizerID,
-                    3 => ModEntry.OrganicFertilizerID,
-                    4 => ModEntry.FruitTreeFertilizerID,
-                    5 => ModEntry.FishFoodID,
-                    6 => ModEntry.DeluxeFishFoodID,
-                    7 => ModEntry.DomesticatedFishFoodID,
-                    8 => ModEntry.DeluxeJojaFertilizerID,
-                    9 => ModEntry.DeluxeFruitTreeFertilizerID,
-                    _ => ModEntry.BountifulFertilizerID,
-                };
+                int fertilizerToDrop = who.combatLevel.Value.GetRandomFertilizerFromLevel();
                 if (fertilizerToDrop != -1)
                 {
                     __instance.debris.Add(

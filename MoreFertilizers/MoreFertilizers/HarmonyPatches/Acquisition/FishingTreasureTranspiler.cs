@@ -17,20 +17,7 @@ internal static class FishingTreasureTranspiler
     {
         if (Game1.random.NextDouble() < 0.10)
         {
-            int fertilizerToDrop = Game1.random.Next(Game1.player.fishingLevel.Value + 1) switch
-            {
-                0 => ModEntry.LuckyFertilizerID,
-                1 => ModEntry.JojaFertilizerID,
-                2 => ModEntry.PaddyCropFertilizerID,
-                3 => ModEntry.OrganicFertilizerID,
-                4 => ModEntry.FruitTreeFertilizerID,
-                5 => ModEntry.FishFoodID,
-                6 => ModEntry.DeluxeFishFoodID,
-                7 => ModEntry.DomesticatedFishFoodID,
-                8 => ModEntry.DeluxeJojaFertilizerID,
-                9 => ModEntry.DeluxeFruitTreeFertilizerID,
-                _ => ModEntry.BountifulFertilizerID,
-            };
+            int fertilizerToDrop = Game1.player.fishingLevel.Value.GetRandomFertilizerFromLevel();
             if (fertilizerToDrop != -1)
             {
                 return new SObject(fertilizerToDrop, Game1.random.Next(1, 4));

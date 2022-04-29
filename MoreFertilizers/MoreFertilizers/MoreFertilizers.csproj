@@ -40,4 +40,8 @@
     <Using Alias="SObject" Include="StardewValley.Object" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="HarmonyPatches\Compat\Automate\" />
+  </ItemGroup>
+
 </Project>

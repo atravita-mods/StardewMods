@@ -1,7 +1,7 @@
 Avoid Losing Specter
 ===========================
 
-![Header image](AvoidLosingSpecter/docs/banner.jpg)
+![Header image](AvoidLosingScepter/docs/banner.jpg)
 
 This mod prevents you from losing the Return Specter on death.
 

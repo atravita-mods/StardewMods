@@ -1,15 +1,15 @@
 {
-  "mod-description": "Ìí¼ÓÁËÒ»ÖÖÄÜ¹»Ìá¸ß¾Ş´ó×÷Îï³öÏÖ¼¸ÂÊµÄ·ÊÁÏ£¡",
+  "mod-description": "æ·»åŠ äº†ä¸€ç§èƒ½å¤Ÿæé«˜å·¨å¤§ä½œç‰©å‡ºç°å‡ ç‡çš„è‚¥æ–™ï¼",
 
   "IllFormatedConfig": "Config file seems ill-formated, using default. Please use Generic Mod Config Menu to configure.",
 
-  "api-not-found": "Î´·¢ÏÖ{{APIID}}£¬¼¯³ÉÒÑÍ£Ö¹¡£",
-  "api-too-old": "Çë¸üĞÂ{{apiName}}£¨{{APIID}}£©µ½ÖÁÉÙ{{minversion}}°æ±¾£¬µ±Ç°°æ±¾Îª{{currentversion}}¡£¼¯³ÉÒÑÍ£Ö¹¡£",
+  "api-not-found": "æœªå‘ç°{{APIID}}ï¼Œé›†æˆå·²åœæ­¢ã€‚",
+  "api-too-old": "è¯·æ›´æ–°{{apiName}}ï¼ˆ{{APIID}}ï¼‰åˆ°è‡³å°‘{{minversion}}ç‰ˆæœ¬ï¼Œå½“å‰ç‰ˆæœ¬ä¸º{{currentversion}}ã€‚é›†æˆå·²åœæ­¢ã€‚",
 
-  "giant-crop-fertilizer.name": "¾Ş´ó×÷Îï·ÊÁÏ",
-  "giant-crop-fertilizer.description": "ÏÔÖøÌá¸ß¾Ş´ó×÷ÎïµÄ³öÏÖ¼¸ÂÊ£¡",
+  "giant-crop-fertilizer.name": "å·¨å¤§ä½œç‰©è‚¥æ–™",
+  "giant-crop-fertilizer.description": "æ˜¾è‘—æé«˜å·¨å¤§ä½œç‰©çš„å‡ºç°å‡ ç‡ï¼",
 
   //GMCM
-  "GiantCropChance.title": "¾Ş´ó×÷Îï¼¸ÂÊ",
-  "GiantCropChance.description": "ÔÚËùÓĞÌõ¼ş¶¼Âú×ãÊ±£¬Ò»¸ö3x3²ú³ö¾Ş´ó×÷ÎïµÄ°Ù·Ö±È¼¸ÂÊ¡£"
+  "GiantCropChance.title": "å·¨å¤§ä½œç‰©å‡ ç‡",
+  "GiantCropChance.description": "åœ¨æ‰€æœ‰æ¡ä»¶éƒ½æ»¡è¶³æ—¶ï¼Œä¸€ä¸ª3x3äº§å‡ºå·¨å¤§ä½œç‰©çš„ç™¾åˆ†æ¯”å‡ ç‡ã€‚"
 }

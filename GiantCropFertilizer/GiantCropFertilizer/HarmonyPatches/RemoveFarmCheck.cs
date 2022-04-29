@@ -22,8 +22,8 @@ internal static class RemoveFarmCheck
             transpiler: new HarmonyMethod(typeof(RemoveFarmCheck).StaticMethodNamed(nameof(Transpiler)), Priority.LowerThanNormal));
     }
 
-    private static GameLocation? IsFarmOrSetOtherwise(GameLocation? location)
-        => location is Farm || ModEntry.Config.AllowGiantCropsOffFarm ? location : null;
+    private static bool IsFarmOrSetOtherwise(GameLocation? location)
+        => location is Farm || ModEntry.Config.AllowGiantCropsOffFarm;
 
     private static IEnumerable<CodeInstruction>? Transpiler(IEnumerable<CodeInstruction> instructions, ILGenerator gen, MethodBase original)
     {
@@ -51,7 +51,7 @@ internal static class RemoveFarmCheck
                 new(OpCodes.Isinst, typeof(Farm)),
             })
             .Remove(1);
-            helper.Print();
+
             return helper.Render();
         }
         catch (Exception ex)

@@ -14,10 +14,6 @@ This mod prevents you from losing the Return Specter on death.
 ## Uninstall
 Simply remove this mod from your Mods folder.
 
-## Configuration
-
-`GiantCropChance` sets the chance a crop will grow big. Note: to ensure that the crop will become giant, probably best to set this slightly above `1`, which is why the default is `1.1`.
-
 ## Compatibility
 
 * Works with Stardew Valley 1.5.6 on Linux/macOS/Windows.

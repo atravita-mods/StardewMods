@@ -82,6 +82,10 @@ internal class ModEntry : Mod
             {
                 HoeDirtDrawTranspiler.ApplyPatches(harmony);
             }
+            if (!this.Helper.ModRegistry.IsLoaded("spacechase0.MoreGiantCrops"))
+            {
+                RemoveFarmCheck.ApplyPatches(harmony);
+            }
         }
         catch (Exception ex)
         {
@@ -126,6 +130,19 @@ internal class ModEntry : Mod
                     min: 0f,
                     max: 1.1f,
                     interval: 0.01f);
+
+                if (this.Helper.ModRegistry.IsLoaded("spacechase0.MoreGiantCrops"))
+                {
+                    gmcmHelper.AddParagraph(I18n.AllowGiantCropsParagraph);
+                }
+                else
+                {
+                    gmcmHelper.AddBoolOption(
+                        name: I18n.AllowGiantCropsOffFarm_Title,
+                        getValue: () => Config.AllowGiantCropsOffFarm,
+                        setValue: (val) => Config.AllowGiantCropsOffFarm = val,
+                        tooltip: I18n.AllowGiantCropsOffFarm_Description);
+                }
             }
         }
     }

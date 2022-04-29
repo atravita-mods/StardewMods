@@ -5,8 +5,9 @@ TODO: Transpile DGA to support DGA crops tooo (https://github.com/spacechase0/St
 
 #### Version 0.1.3
 
-* Added Chinese translation, much thanks to Becks723!
+* Added Chinese translation, much thanks to [Becks723](https://github.com/Becks723)!
 * Added a slight chance for the fertilizer to appear in big slimes in the dangerous skull caverns.
+* Optionally allow giant crops on every map (note that More Giant Crops will also allow this, so the setting is not in GMCM if More Giant Crops is installed).
 * Migrated to SMAPI 3.14.0
 
 #### Version 0.1.2

@@ -28,4 +28,4 @@ Simply remove this mod from your Mods folder.
 
 ## See also
 
-[Changelog](AvoidLosingSpecter/docs/Changelog.md)
+[Changelog](AvoidLosingScepter/docs/Changelog.md)

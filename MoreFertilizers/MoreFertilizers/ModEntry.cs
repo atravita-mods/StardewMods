@@ -132,10 +132,15 @@ internal class ModEntry : Mod
         helper.Events.GameLoop.DayEnding += this.OnDayEnd;
         helper.Events.Input.ButtonPressed += this.OnButtonPressed;
 
+        helper.Events.Content.AssetRequested += this.OnAssetRequested;
+
 #if DEBUG
         helper.Events.Input.ButtonPressed += this.DebugOutput;
 #endif
     }
+
+    private void OnAssetRequested(object? sender, AssetRequestedEventArgs e)
+        => AssetEditor.Edit(e);
 
     /// <inheritdoc />
     [UsedImplicitly]
@@ -262,17 +267,6 @@ internal class ModEntry : Mod
                     return chance;
                 });
             }
-        }
-
-        this.Helper.Events.GameLoop.UpdateTicked += this.FiveTicksPostGameLaunched;
-    }
-
-    private void FiveTicksPostGameLaunched(object? sender, UpdateTickedEventArgs e)
-    {
-        if (--this.countdown < 0)
-        {
-            this.Helper.Content.AssetEditors.Add(AssetEditor.Instance);
-            this.Helper.Events.GameLoop.UpdateTicked -= this.FiveTicksPostGameLaunched;
         }
     }
 

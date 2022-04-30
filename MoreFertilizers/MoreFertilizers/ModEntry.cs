@@ -188,19 +188,22 @@ internal class ModEntry : Mod
     private void OnSaved(object? sender, SavedEventArgs e)
     {
         // TODO: This should be doable with expression trees in a less dumb way.
-        MoreFertilizerIDs fertilizerIDs = new();
-        fertilizerIDs.FruitTreeFertilizerID = FruitTreeFertilizerID;
-        fertilizerIDs.DeluxeFruitTreeFertilizerID = DeluxeFruitTreeFertilizerID;
-        fertilizerIDs.FishFoodID = FishFoodID;
-        fertilizerIDs.DeluxeFishFoodID = DeluxeFishFoodID;
-        fertilizerIDs.DomesticatedFishFoodID = DomesticatedFishFoodID;
-        fertilizerIDs.PaddyFertilizerID = PaddyCropFertilizerID;
-        fertilizerIDs.LuckyFertilizerID = LuckyFertilizerID;
-        fertilizerIDs.BountifulFertilizerID = BountifulFertilizerID;
-        fertilizerIDs.JojaFertilizerID = JojaFertilizerID;
-        fertilizerIDs.DeluxeJojaFertilizerID = DeluxeJojaFertilizerID;
-        fertilizerIDs.OrganicFertilizerID = OrganicFertilizerID;
-        this.Helper.Data.WriteGlobalData(Constants.SaveFolderName + SAVESUFFIX, fertilizerIDs);
+        if (this.storedIDs is null)
+        {
+            this.storedIDs = new();
+            this.storedIDs.FruitTreeFertilizerID = FruitTreeFertilizerID;
+            this.storedIDs.DeluxeFruitTreeFertilizerID = DeluxeFruitTreeFertilizerID;
+            this.storedIDs.FishFoodID = FishFoodID;
+            this.storedIDs.DeluxeFishFoodID = DeluxeFishFoodID;
+            this.storedIDs.DomesticatedFishFoodID = DomesticatedFishFoodID;
+            this.storedIDs.PaddyFertilizerID = PaddyCropFertilizerID;
+            this.storedIDs.LuckyFertilizerID = LuckyFertilizerID;
+            this.storedIDs.BountifulFertilizerID = BountifulFertilizerID;
+            this.storedIDs.JojaFertilizerID = JojaFertilizerID;
+            this.storedIDs.DeluxeJojaFertilizerID = DeluxeJojaFertilizerID;
+            this.storedIDs.OrganicFertilizerID = OrganicFertilizerID;
+        }
+        this.Helper.Data.WriteGlobalData(Constants.SaveFolderName + SAVESUFFIX, this.storedIDs);
     }
 
     /// <summary>

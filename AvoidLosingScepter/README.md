@@ -1,7 +1,7 @@
 Avoid Losing Specter
 ===========================
 
-![Header image](AvoidLosingSpecter/docs/banner.jpg)
+![Header image](AvoidLosingScepter/docs/banner.jpg)
 
 This mod prevents you from losing the Return Specter on death. Also prevents loss of the horse flute, and golden scythe.
 
@@ -14,10 +14,6 @@ This mod prevents you from losing the Return Specter on death. Also prevents los
 ## Uninstall
 Simply remove this mod from your Mods folder.
 
-## Configuration
-
-`GiantCropChance` sets the chance a crop will grow big. Note: to ensure that the crop will become giant, probably best to set this slightly above `1`, which is why the default is `1.1`.
-
 ## Compatibility
 
 * Works with Stardew Valley 1.5.6 on Linux/macOS/Windows.
@@ -28,4 +24,4 @@ Simply remove this mod from your Mods folder.
 
 ## See also
 
-[Changelog](AvoidLosingSpecter/docs/Changelog.md)
+[Changelog](AvoidLosingScepter/docs/Changelog.md)

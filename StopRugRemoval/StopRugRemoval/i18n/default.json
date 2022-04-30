@@ -26,6 +26,12 @@
   "FurniturePlacementKey.title": "Furniture Placement Key",
   "FurniturePlacementKey.description": "The keybind used to allow objects to be removed from tables.",
 
+  "HideCrabPots.title": "Hide Crab Pots",
+  "HideCrabPots.description": "Hides crab pots during events.",
+
+  "SaveBombedForage.title": "Save Bombed Forage",
+  "SaveBombedForage.description": "Bombed forage is automatically collected",
+
   "BombLocationDetailed": "Bomb confirmation per location",
 
   "BombLocationDetailed.description": "Sets whether or not a location should be considered safe or dangerous when it comes to bomb confirmation. A dynamic location is considered dangerous if there is a single enemy on it.",

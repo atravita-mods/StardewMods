@@ -61,8 +61,13 @@ public class ModEntry : Mod
         helper.Events.GameLoop.SaveLoaded += this.SaveLoaded;
         helper.Events.Player.Warped += this.Player_Warped;
 
+        helper.Events.Content.AssetRequested += this.OnAssetRequested;
+
         this.ApplyPatches(new Harmony(this.ModManifest.UniqueID));
     }
+
+    private void OnAssetRequested(object? sender, AssetRequestedEventArgs e)
+        => AssetEditor.Edit(e);
 
     private void Player_Warped(object? sender, WarpedEventArgs e)
         => ConfirmBomb.HaveConfirmed.Value = false;

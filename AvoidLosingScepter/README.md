@@ -3,7 +3,7 @@ Avoid Losing Specter
 
 ![Header image](AvoidLosingSpecter/docs/banner.jpg)
 
-This mod prevents you from losing the Return Specter on death.
+This mod prevents you from losing the Return Specter on death. Also prevents loss of the horse flute, and golden scythe.
 
 ## Install
 

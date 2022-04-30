@@ -52,6 +52,10 @@ internal class ModEntry : Mod
         harmony.Snitch(this.Monitor, harmony.Id, transpilersOnly: true);
     }
 
+    private static bool ProhibitLosingThisItem(Item item)
+        => item is Wand || (item is SObject obj && obj.ParentSheetIndex == 911 && !obj.bigCraftable.Value)
+        || item.HasContextTag("atravita_no_loss_on_death") || (item is MeleeWeapon weapon && weapon.isScythe());
+
     private static IEnumerable<CodeInstruction>? Transpiler(IEnumerable<CodeInstruction> instructions, ILGenerator gen, MethodBase original)
     {
         try
@@ -84,11 +88,11 @@ internal class ModEntry : Mod
             int endindex = helper.Pointer;
 
             List<CodeInstruction>? copylist = new();
-            foreach (CodeInstruction? code in helper.Codes.GetRange(startindex, endindex - startindex - 2))
+            foreach (CodeInstruction? code in helper.Codes.GetRange(startindex, endindex - startindex - 3))
             {
                 copylist.Add(code.Clone());
             }
-            copylist[^1].operand = typeof(Wand);
+            copylist.Add(new(OpCodes.Call, typeof(ModEntry).StaticMethodNamed(nameof(ProhibitLosingThisItem))));
             copylist.Add(new(OpCodes.Brtrue_S, label));
             CodeInstruction[]? copy = copylist.ToArray();
 

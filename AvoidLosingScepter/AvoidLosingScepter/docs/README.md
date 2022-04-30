@@ -3,6 +3,10 @@
 
 Most users should download the mod from the [Nexus page](https://www.nexusmods.com/stardewvalley/mods/11856). That said, if you'd like to contribute:
 
+### Extending a mod.
+
+Have an item you don't want to lose on death? Simply add the context tag `atravita_no_loss_on_death` to it!
+
 ### Translations:
 
 This mod uses SMAPI's i18n feature for translations. I'd love to get translations! Please see the wiki's guide [here](https://stardewvalleywiki.com/Modding:Translations), and feel free to message me, contact me on Discord (@atravita#9505) or send me a pull request!

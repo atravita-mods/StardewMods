@@ -24,7 +24,7 @@ internal class ModEntry : Mod
 
     private MigrationManager? migrator;
 
-    private bool fixedIDs = false;
+    private MoreFertilizerIDs? storedIDs;
 
     /// <summary>
     /// Gets the integer ID of the fruit tree fertilizer. -1 if not found/not loaded yet.
@@ -350,61 +350,63 @@ internal class ModEntry : Mod
             return;
         }
 
-        if (this.fixedIDs)
-        {
-            return;
-        }
-
         if (this.Helper.Data.ReadGlobalData<MoreFertilizerIDs>(Constants.SaveFolderName + SAVESUFFIX) is not MoreFertilizerIDs storedIDCls)
         {
             ModMonitor.Log("No need to fix IDs, not installed before.");
             return;
         }
 
-        this.fixedIDs = true;
+        this.storedIDs ??= storedIDCls;
+
         Dictionary<int, int> idMapping = new();
 
         // Have to update the planted ones.
         if (LuckyFertilizerID != -1
-            && storedIDCls.LuckyFertilizerID != -1
-            && storedIDCls.LuckyFertilizerID != LuckyFertilizerID)
+            && this.storedIDs.LuckyFertilizerID != -1
+            && this.storedIDs.LuckyFertilizerID != LuckyFertilizerID)
         {
-            idMapping.Add(storedIDCls.LuckyFertilizerID, LuckyFertilizerID);
+            idMapping.Add(this.storedIDs.LuckyFertilizerID, LuckyFertilizerID);
+            this.storedIDs.LuckyFertilizerID = LuckyFertilizerID;
         }
 
         if (PaddyCropFertilizerID != -1
-            && storedIDCls.PaddyFertilizerID != -1
-            && storedIDCls.PaddyFertilizerID != PaddyCropFertilizerID)
+            && this.storedIDs.PaddyFertilizerID != -1
+            && this.storedIDs.PaddyFertilizerID != PaddyCropFertilizerID)
         {
-            idMapping.Add(storedIDCls.PaddyFertilizerID, PaddyCropFertilizerID);
+            idMapping.Add(this.storedIDs.PaddyFertilizerID, PaddyCropFertilizerID);
+            this.storedIDs.PaddyFertilizerID = PaddyCropFertilizerID;
         }
 
         if (BountifulFertilizerID != -1
-            && storedIDCls.BountifulFertilizerID != -1
-            && storedIDCls.BountifulFertilizerID != BountifulFertilizerID)
+            && this.storedIDs.BountifulFertilizerID != -1
+            && this.storedIDs.BountifulFertilizerID != BountifulFertilizerID)
         {
-            idMapping.Add(storedIDCls.BountifulFertilizerID, BountifulFertilizerID);
+            idMapping.Add(this.storedIDs.BountifulFertilizerID, BountifulFertilizerID);
+            this.storedIDs.BountifulFertilizerID = BountifulFertilizerID;
         }
 
         if (JojaFertilizerID != -1
-            && storedIDCls.JojaFertilizerID != -1
-            && storedIDCls.JojaFertilizerID != JojaFertilizerID)
+            && this.storedIDs.JojaFertilizerID != -1
+            && this.storedIDs.JojaFertilizerID != JojaFertilizerID)
         {
-            idMapping.Add(storedIDCls.JojaFertilizerID, JojaFertilizerID);
+            idMapping.Add(this.storedIDs.JojaFertilizerID, JojaFertilizerID);
+            this.storedIDs.JojaFertilizerID = JojaFertilizerID;
         }
 
         if (DeluxeJojaFertilizerID != -1
-            && storedIDCls.DeluxeJojaFertilizerID != -1
-            && storedIDCls.DeluxeJojaFertilizerID != DeluxeJojaFertilizerID)
+            && this.storedIDs.DeluxeJojaFertilizerID != -1
+            && this.storedIDs.DeluxeJojaFertilizerID != DeluxeJojaFertilizerID)
         {
-            idMapping.Add(storedIDCls.DeluxeJojaFertilizerID, DeluxeJojaFertilizerID);
+            idMapping.Add(this.storedIDs.DeluxeJojaFertilizerID, DeluxeJojaFertilizerID);
+            this.storedIDs.DeluxeFruitTreeFertilizerID = DeluxeFruitTreeFertilizerID;
         }
 
         if (OrganicFertilizerID != -1
-            && storedIDCls.OrganicFertilizerID != -1
-            && storedIDCls.OrganicFertilizerID != OrganicFertilizerID)
+            && this.storedIDs.OrganicFertilizerID != -1
+            && this.storedIDs.OrganicFertilizerID != OrganicFertilizerID)
         {
-            idMapping.Add(storedIDCls.OrganicFertilizerID, OrganicFertilizerID);
+            idMapping.Add(this.storedIDs.OrganicFertilizerID, OrganicFertilizerID);
+            this.storedIDs.OrganicFertilizerID = OrganicFertilizerID;
         }
 
         if (idMapping.Count <= 0 )

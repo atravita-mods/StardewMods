@@ -22,8 +22,6 @@ internal class ModEntry : Mod
 
     private static IJsonAssetsAPI? jsonAssets;
 
-    private int countdown = 5;
-
     private MigrationManager? migrator;
 
     /// <summary>
@@ -139,12 +137,12 @@ internal class ModEntry : Mod
 #endif
     }
 
-    private void OnAssetRequested(object? sender, AssetRequestedEventArgs e)
-        => AssetEditor.Edit(e);
-
     /// <inheritdoc />
     [UsedImplicitly]
     public override object GetApi() => new CanPlaceHandler();
+
+    private void OnAssetRequested(object? sender, AssetRequestedEventArgs e)
+        => AssetEditor.Edit(e);
 
     private void OnButtonPressed(object? sender, ButtonPressedEventArgs e)
         => SpecialFertilizerApplication.ApplyFertilizer(e, this.Helper.Input);

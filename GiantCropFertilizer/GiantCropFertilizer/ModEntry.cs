@@ -22,6 +22,8 @@ internal class ModEntry : Mod
 
     private MigrationManager? migrator;
 
+    private GiantCropFertilizerIDStorage? storedID;
+
     /// <summary>
     /// Gets the integer ID of the giant crop fertilizer. -1 if not found/not loaded yet.
     /// </summary>
@@ -51,16 +53,16 @@ internal class ModEntry : Mod
 
         helper.Events.GameLoop.GameLaunched += this.OnGameLaunched;
         helper.Events.GameLoop.SaveLoaded += this.OnSaveLoaded;
-        helper.Events.GameLoop.Saving += this.OnSaving;
+        helper.Events.GameLoop.Saved += this.OnSaved;
     }
 
     private void OnAssetRequested(object? sender, AssetRequestedEventArgs e)
         => AssetEditor.HandleAssetRequested(e);
 
-    private void OnSaving(object? sender, SavingEventArgs e)
+    private void OnSaved(object? sender, SavedEventArgs e)
         => this.Helper.Data.WriteGlobalData(
             Constants.SaveFolderName + SAVESUFFIX,
-            new GiantCropFertilizerIDStorage(GiantCropFertilizerID));
+            this.storedID ?? new GiantCropFertilizerIDStorage(GiantCropFertilizerID));
 
     /// <summary>
     /// Applies the patches for this mod.
@@ -161,7 +163,8 @@ internal class ModEntry : Mod
             return;
         }
 
-        int storedID = storedIDCls.ID;
+        this.storedID ??= storedIDCls;
+        int storedID = this.storedID.ID;
 
         if (storedID == newID)
         {
@@ -180,8 +183,7 @@ internal class ModEntry : Mod
             }
         });
 
-        storedIDCls.ID = newID;
-        this.Helper.Data.WriteGlobalData(Constants.SaveFolderName + SAVESUFFIX, storedIDCls);
+        this.storedID.ID = newID;
         ModMonitor.Log($"Fixed IDs! {storedID} => {newID}");
     }
 

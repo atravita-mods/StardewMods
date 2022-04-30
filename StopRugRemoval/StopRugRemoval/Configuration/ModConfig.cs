@@ -66,6 +66,11 @@ public class ModConfig
     public bool HideCrabPots { get; set; } = true;
 
     /// <summary>
+    /// Gets or sets a value indicating whether SObjects that are bombed that are forage should be saved.
+    /// </summary>
+    public bool SaveBombedForage { get; set; } = true;
+
+    /// <summary>
     /// Gets or sets a value indicating whether or not to confirm bomb placement in safe areas.
     /// </summary>
     public ConfirmBombEnum InSafeAreas { get; set; } = ConfirmBombEnum.On;
@@ -91,7 +96,7 @@ public class ModConfig
             {
                 this.SafeLocationMap.TryAdd(loc.NameOrUniqueName, IsSafeLocationEnum.Safe);
             }
-            else if (loc is MineShaft or VolcanoDungeon)
+            else if (loc is MineShaft or VolcanoDungeon or BugLand)
             {
                 this.SafeLocationMap.TryAdd(loc.NameOrUniqueName, IsSafeLocationEnum.Dangerous);
             }

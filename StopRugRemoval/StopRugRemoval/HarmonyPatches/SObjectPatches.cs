@@ -48,6 +48,26 @@ internal static class SObjectPatches
         return true;
     }
 
+    [HarmonyPrefix]
+    [HarmonyPatch(nameof(SObject.onExplosion))]
+    [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "HarmonyConvention")]
+    private static void PrefixOnExplosion(SObject __instance, Farmer who, GameLocation location)
+    {
+        try
+        {
+            if (__instance.IsSpawnedObject && ModEntry.Config.SaveBombedForage)
+            {
+                // The SObject does not have its location anymore. Just spawn near the farmer, I guess?
+                location.debris.Add(new Debris(__instance, who.Position + new Vector2(Game1.random.Next(-128,128), Game1.random.Next(-128,128))));
+                ModEntry.ModMonitor.Log(__instance.DisplayName + ' ' + __instance.TileLocation.ToString(), LogLevel.Warn);
+            }
+        }
+        catch (Exception ex)
+        {
+            ModEntry.ModMonitor.Log($"Error while creating debris.{ex}", LogLevel.Error);
+        }
+    }
+
     /// <summary>
     /// Prefix on placement to prevent planting of fruit trees and tea saplings on rugs, hopefully.
     /// </summary>

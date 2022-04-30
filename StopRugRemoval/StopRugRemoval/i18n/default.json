@@ -56,5 +56,11 @@
   "ConfirmBombs": "Place bomb?",
   "Yes": "Yes (one)",
   "YesArea": "Yes (for this map)",
-  "No": "No"
+  "No": "No",
+
+  // For editing Elliott's event
+
+  "drink": "Oh, I'd love a drink!",
+  "nondrink": "Actually, could I have a coffee?"
+
 }

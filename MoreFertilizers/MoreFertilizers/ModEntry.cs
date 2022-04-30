@@ -24,6 +24,8 @@ internal class ModEntry : Mod
 
     private MigrationManager? migrator;
 
+    private bool fixedIDs = false;
+
     /// <summary>
     /// Gets the integer ID of the fruit tree fertilizer. -1 if not found/not loaded yet.
     /// </summary>
@@ -348,12 +350,18 @@ internal class ModEntry : Mod
             return;
         }
 
+        if (this.fixedIDs)
+        {
+            return;
+        }
+
         if (this.Helper.Data.ReadGlobalData<MoreFertilizerIDs>(Constants.SaveFolderName + SAVESUFFIX) is not MoreFertilizerIDs storedIDCls)
         {
             ModMonitor.Log("No need to fix IDs, not installed before.");
             return;
         }
 
+        this.fixedIDs = true;
         Dictionary<int, int> idMapping = new();
 
         // Have to update the planted ones.

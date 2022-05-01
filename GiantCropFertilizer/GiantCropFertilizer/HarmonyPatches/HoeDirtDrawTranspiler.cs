@@ -59,6 +59,8 @@ internal static class HoeDirtDrawTranspiler
             .GetLabels(out IList<Label> labels, clear: true)
             .ReplaceInstruction(OpCodes.Call, typeof(HoeDirtDrawTranspiler).StaticMethodNamed(nameof(HoeDirtDrawTranspiler.GetColor)))
             .Insert(new CodeInstruction[] { local }, withLabels: labels);
+
+            helper.Print();
             return helper.Render();
         }
         catch (Exception ex)

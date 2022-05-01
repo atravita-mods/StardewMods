@@ -74,7 +74,8 @@ internal class ModEntry : Mod
         try
         {
             harmony.PatchAll();
-            if (this.Helper.ModRegistry.IsLoaded("spacechase0.MultiFertilizer"))
+            if (this.Helper.ModRegistry.Get("spacechase0.MultiFertilizer") is IModInfo info
+                && info.Manifest.Version.IsOlderThan("1.0.6"))
             {
                 this.Monitor.Log("Found MultiFertilizer, applying compat patches", LogLevel.Info);
                 HoeDirtPatcher.ApplyPatches(harmony);

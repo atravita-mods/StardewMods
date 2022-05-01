@@ -47,6 +47,7 @@ Additionally, fertilizers may be found by breaking barrels in the mines, while p
 * [Json Assets](https://www.nexusmods.com/stardewvalley/mods/1720) and any crops/fruit trees added through JA.
 * [Teh's Fishing Overhaul](https://www.nexusmods.com/stardewvalley/mods/866).
 * [More Rings](https://www.nexusmods.com/stardewvalley/mods/2054?tab=description). The Quality+ ring will increase the quality of joja-crops.
+* * [Smart Building](https://www.nexusmods.com/stardewvalley/mods/11158?tab=description) supports these fertilizers. Thank you so much, DecidedlyHuman!
 * The large framework mods (CP/BFAV/PFM/FTM/MFM, etc.) work with this mod.
 * Any of my other mods - I try not to cause **myself** compat issues.
 * Honestly most other mods should work fine, not many actually use transpilers.
@@ -64,7 +65,6 @@ Additionally, fertilizers may be found by breaking barrels in the mines, while p
 * [Multi Yield Crops](https://www.nexusmods.com/stardewvalley/mods/6069) - fertilizers from this mod will not affect crops produced by Multi Yield Crops. Otherwise compatible.
 * [Lookup Anything](https://www.nexusmods.com/stardewvalley/mods/541) will only show these fertilizers as a possible output of the Bone Mill if PFM is installed. The bone mill will produce these fertilizers anyways. Otherwise fine.
 * [Fish Wells](https://www.nexusmods.com/stardewvalley/mods/7651) do not work with Domesticated Fish Food, as they do not preserve mod data. The remaining fertilizers should work, and that mod has settings that let you adjust the fish spawn time.
-* [Smart Building](https://www.nexusmods.com/stardewvalley/mods/11158?tab=description) as of 1.4.0 will place the fertilizers that go into hoedirt fine, but the fruit tree fertilizers and the fish foods it won't handle yet. Should be in the next version!
 * No mod will include the Fruit Tree Fertilizers while calculating the age of fruit trees. You'll just see the days required decrement by two occasionally.
 
 **Reporting an incompatibility**

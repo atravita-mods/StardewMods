@@ -9,7 +9,7 @@
     "Nexus:11620",
     "GitHub:atravita-mods/GiantCropFertilizer"
   ],
-  "MinimumApiVersion": "3.13",
+  "MinimumApiVersion": "3.14",
   "Dependencies": [
     {
       "UniqueID": "spacechase0.JsonAssets",

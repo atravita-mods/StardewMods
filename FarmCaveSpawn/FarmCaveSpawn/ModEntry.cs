@@ -72,13 +72,6 @@ public class ModEntry : Mod
     /// </summary>
     internal bool SpawnedFruitToday { get; private set; }
 
-    /// <summary>
-    /// Formats a float as a percent value.
-    /// </summary>
-    /// <param name="val">Value to format.</param>
-    /// <returns>Formatted string.</returns>
-    public static string FormatPercentValue(float val) => $"{val:f0}%";
-
     /// <inheritdoc />
     public override void Entry(IModHelper helper)
     {
@@ -86,15 +79,8 @@ public class ModEntry : Mod
         this.Monitor.Log("FarmCaveSpawn initializing, DEBUG mode. Do not release this version", LogLevel.Warn);
 #endif
         I18n.Init(helper.Translation);
-        try
-        {
-            this.config = this.Helper.ReadConfig<ModConfig>();
-        }
-        catch
-        {
-            this.Monitor.Log(I18n.IllFormatedConfig(), LogLevel.Warn);
-            this.config = new();
-        }
+
+        this.config = AtraUtils.GetConfigOrDefault<ModConfig>(helper, this.Monitor);
 
         helper.Events.GameLoop.DayStarted += this.SpawnFruit;
         helper.Events.GameLoop.GameLaunched += this.SetUpConfig;
@@ -544,4 +530,11 @@ END:
         }
         this.Helper.Events.GameLoop.Saved -= this.WriteMigrationData;
     }
+
+    /// <summary>
+    /// Formats a float as a percent value.
+    /// </summary>
+    /// <param name="val">Value to format.</param>
+    /// <returns>Formatted string.</returns>
+    private static string FormatPercentValue(float val) => $"{val:f0}%";
 }

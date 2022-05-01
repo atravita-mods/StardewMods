@@ -9,9 +9,11 @@
 * Figure out DGA fruit trees.
 <!-- bat eyes for custom locations? -->
 
-#### Version 1.0.10-alpha
+#### Version 1.0.10-beta
 
 * Updates for SMAPI 3.14.0.
+* Internal optimizations.
+* Fixes the no-bananas-before-shrine option.
 
 #### Version 1.0.9
 

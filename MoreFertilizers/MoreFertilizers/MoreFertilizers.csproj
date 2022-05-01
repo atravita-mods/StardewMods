@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <Import Project="..\..\AtraBase\AtraBase.projitems" Label="Shared" />
   <Import Project="..\..\AtraShared\AtraShared.projitems" Label="Shared" />
 
@@ -21,7 +21,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="JetBrains.Annotations" Version="2021.3.0" />
+    <PackageReference Include="JetBrains.Annotations" Version="2022.1.0" />
+    <PackageReference Include="Leclair.Stardew.ModManifestBuilder" Version="1.0.3" />
     <PackageReference Include="Pathoschild.Stardew.ModBuildConfig" Version="4.0.1" />
     <PackageReference Include="Pathoschild.Stardew.ModTranslationClassBuilder" Version="2.0.0" />
     <PackageReference Include="StyleCop.Analyzers" Version="1.1.118">

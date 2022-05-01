@@ -9,7 +9,7 @@
 * Figure out DGA fruit trees.
 <!-- bat eyes for custom locations? -->
 
-#### Version 1.0.10-beta
+#### Version 1.0.10
 
 * Updates for SMAPI 3.14.0.
 * Internal optimizations.

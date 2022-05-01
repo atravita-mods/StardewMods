@@ -19,8 +19,8 @@ Remove every instance of the giant crop fertilizer you have in your inventory an
 
 ## Configuration
 
-*`GiantCropChance` sets the chance a crop will grow big. Note: to ensure that the crop will become giant, probably best to set this slightly above `1`, which is why the default is `1.1`.
-*`AllowGiantCropsOffFarm` will allow giant crops off the farm. Note that [More Giant Crops](https://www.nexusmods.com/stardewvalley/mods/5263) will always allow giant crops off the farm, so if you have that mod installed, this configuration option will do nothing.
+* `GiantCropChance` sets the chance a crop will grow big. Note: to ensure that the crop will become giant, probably best to set this slightly above `1`, which is why the default is `1.1`.
+* `AllowGiantCropsOffFarm` will allow giant crops off the farm. Note that [More Giant Crops](https://www.nexusmods.com/stardewvalley/mods/5263) will always allow giant crops off the farm, so if you have that mod installed, this configuration option will do nothing.
 
 ## Compatibility
 

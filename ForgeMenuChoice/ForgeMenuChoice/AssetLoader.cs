@@ -13,7 +13,7 @@ namespace ForgeMenuChoice;
 /// </summary>
 public static class AssetLoader
 {
-    private const string ASSETPREFIX = "Mods/atravita_ForgeMenuChoice/";
+    private const string ASSETPREFIX = "Mods/atravita_ForgeMenuChoice_";
 
 #pragma warning disable SA1310 // Field names should not contain underscore. Reviewed.
     private static readonly string UI_ELEMENT_LOCATION = PathUtilities.NormalizeAssetName("assets/Forge-Buttons.png");

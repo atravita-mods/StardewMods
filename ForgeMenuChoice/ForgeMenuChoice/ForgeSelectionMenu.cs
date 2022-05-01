@@ -17,10 +17,10 @@ internal sealed class ForgeSelectionMenu : IClickableMenu
     private const int Width = 400; // px
     private const int Height = 188; // px
 
+    private static readonly int InherentWidth = (int)Game1.dialogueFont.MeasureWord("Matador de Insetos") + 12;
+
     private readonly bool shouldShowTooltip;
     private readonly List<BaseEnchantment> options = new();
-
-    private static readonly int inherent_width = (int)Game1.dialogueFont.MeasureWord("Matador de Insetos") + 12;
 
     private ClickableTextureComponent backButton;
     private ClickableTextureComponent forwardButton;
@@ -181,7 +181,7 @@ internal sealed class ForgeSelectionMenu : IClickableMenu
         try
         {
             base.draw(b);
-            int stringWidth = Math.Max(inherent_width, (int)Game1.dialogueFont.MeasureWord(this.CurrentSelectedTranslatedOption));
+            int stringWidth = Math.Max(InherentWidth, (int)Game1.dialogueFont.MeasureWord(this.CurrentSelectedTranslatedOption));
             drawTextureBox(
                 b,
                 texture: Graphics,
@@ -252,9 +252,9 @@ internal sealed class ForgeSelectionMenu : IClickableMenu
     private Rectangle GetHoverRect()
     {
         return new Rectangle(
-                   x: this.xPositionOnScreen + ((Width - inherent_width - 64) / 2),
+                   x: this.xPositionOnScreen + ((Width - InherentWidth - 64) / 2),
                    y: this.yPositionOnScreen + (Height / 2) - 40,
-                   width: inherent_width + 64,
+                   width: InherentWidth + 64,
                    height: 80
                    );
     }

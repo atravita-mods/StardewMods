@@ -74,6 +74,7 @@ internal class ModEntry : Mod
         try
         {
             harmony.PatchAll();
+
             if (this.Helper.ModRegistry.Get("spacechase0.MultiFertilizer") is IModInfo info
                 && info.Manifest.Version.IsOlderThan("1.0.6"))
             {
@@ -85,9 +86,17 @@ internal class ModEntry : Mod
             {
                 HoeDirtDrawTranspiler.ApplyPatches(harmony);
             }
+
             if (!this.Helper.ModRegistry.IsLoaded("spacechase0.MoreGiantCrops"))
             {
                 RemoveFarmCheck.ApplyPatches(harmony);
+            }
+
+            if (this.Helper.ModRegistry.Get("spacechase0.DynamicGameAssets") is IModInfo dga
+                && dga.Manifest.Version.IsNewerThan("1.4.1"))
+            {
+                this.Monitor.Log("Found Dynamic Game Assets, applying compat patches", LogLevel.Info);
+                CropTranspiler.ApplyDGAPatches(harmony);
             }
         }
         catch (Exception ex)

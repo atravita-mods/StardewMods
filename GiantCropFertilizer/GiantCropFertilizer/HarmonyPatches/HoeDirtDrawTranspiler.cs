@@ -60,7 +60,7 @@ internal static class HoeDirtDrawTranspiler
             .ReplaceInstruction(OpCodes.Call, typeof(HoeDirtDrawTranspiler).StaticMethodNamed(nameof(HoeDirtDrawTranspiler.GetColor)))
             .Insert(new CodeInstruction[] { local }, withLabels: labels);
 
-            helper.Print();
+            // helper.Print();
             return helper.Render();
         }
         catch (Exception ex)

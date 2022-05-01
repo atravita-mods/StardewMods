@@ -1,7 +1,7 @@
 ﻿Changelog
 ===============
 
-### Version 0.1.3-alpha
+### Version 0.1.3
 
 Updates for SMAPI 3.14.0. Mod can also now optionally prevent crab pot trash from eating bait.
 

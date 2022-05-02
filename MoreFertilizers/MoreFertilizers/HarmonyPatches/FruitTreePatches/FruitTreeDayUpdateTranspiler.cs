@@ -16,6 +16,14 @@ namespace MoreFertilizers.HarmonyPatches.FruitTreePatches;
 [HarmonyPatch(typeof(FruitTree))]
 internal static class FruitTreeDayUpdateTranspiler
 {
+    internal static void ApplyDGAPatch(Harmony harmony)
+    {
+        Type dgaFruitTree = AccessTools.TypeByName("DynamicGameAssets.Game.CustomFruitTree") ?? throw new("DGA Fruit trees not found!");
+        harmony.Patch(
+            original: dgaFruitTree.InstanceMethodNamed("dayUpdate"),
+            transpiler: new HarmonyMethod(typeof(FruitTreeDayUpdateTranspiler), nameof(Transpiler)));
+    }
+
     private static int CalculateExtraGrowth(FruitTree tree)
     {
         try

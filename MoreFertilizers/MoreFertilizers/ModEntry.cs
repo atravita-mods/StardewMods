@@ -10,6 +10,7 @@ using MoreFertilizers.Framework;
 using MoreFertilizers.HarmonyPatches;
 using MoreFertilizers.HarmonyPatches.Acquisition;
 using MoreFertilizers.HarmonyPatches.Compat;
+using MoreFertilizers.HarmonyPatches.FruitTreePatches;
 using StardewModdingAPI.Events;
 using StardewValley.TerrainFeatures;
 
@@ -238,6 +239,9 @@ internal class ModEntry : Mod
                 && dga.Manifest.Version.IsNewerThan("1.4.1"))
             {
                 this.Monitor.Log("Found Dynamic Game Assets, applying compat patches", LogLevel.Info);
+                FruitTreeDayUpdateTranspiler.ApplyDGAPatch(harmony);
+                FruitTreeDrawTranspiler.ApplyDGAPatch(harmony);
+                CropHarvestTranspiler.ApplyDGAPatch(harmony);
             }
 
             if (this.Helper.ModRegistry.Get("Cherry.MultiYieldCrops") is IModInfo multiYield

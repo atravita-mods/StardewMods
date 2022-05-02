@@ -113,7 +113,7 @@ internal static class MultiYieldCropsCompat
                 new(OpCodes.Pop),
             }, withLabels: labelsToMove)
             .FindNext(new CodeInstructionWrapper[]
-            {
+            { // find just before adding the item to the hut.
                 new(SpecialCodeInstructionCases.LdArg),
                 new(SpecialCodeInstructionCases.LdLoc, typeof(Item)),
                 new(OpCodes.Callvirt, typeof(JunimoHarvester).InstanceMethodNamed(nameof(JunimoHarvester.tryToAddItemToHut))),
@@ -121,7 +121,7 @@ internal static class MultiYieldCropsCompat
             .Advance(2)
             .DefineAndAttachLabel(out Label juminoLabel)
             .Insert(new CodeInstruction[]
-            {
+            { // Increase the stack to 2 if our check passes.
                 new(OpCodes.Ldarg_3),
                 new(OpCodes.Call, typeof(MultiYieldCropsCompat).StaticMethodNamed(nameof(IsBountifulFertilizer))),
                 new(OpCodes.Brfalse_S, juminoLabel),
@@ -130,12 +130,12 @@ internal static class MultiYieldCropsCompat
                 new(OpCodes.Callvirt, typeof(Item).InstancePropertyNamed(nameof(Item.Stack)).GetSetMethod()),
             });
 
-            helper.Print();
+            // helper.Print();
             return helper.Render();
         }
         catch (Exception ex)
         {
-            ModEntry.ModMonitor.Log($"Mod crashed while transpiling Crop.harvest:\n\n{ex}", LogLevel.Error);
+            ModEntry.ModMonitor.Log($"Mod crashed while transpiling MultiYieldCrops:\n\n{ex}", LogLevel.Error);
         }
         return null;
     }

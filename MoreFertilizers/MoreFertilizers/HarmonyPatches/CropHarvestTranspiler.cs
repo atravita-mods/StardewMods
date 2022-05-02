@@ -19,15 +19,22 @@ namespace MoreFertilizers.HarmonyPatches;
 internal static class CropHarvestTranspiler
 {
     /// <summary>
-    /// Applies a matching patch to 
+    /// Applies a matching patch to DGA's crop.Harvest.
     /// </summary>
     /// <param name="harmony">Harmony instance.</param>
     internal static void ApplyDGAPatch(Harmony harmony)
     {
-        Type dgaCrop = AccessTools.TypeByName("DynamicGameAssets.Game.CustomCrop") ?? throw new("DGA crops not found!");
-        harmony.Patch(
-            original: dgaCrop.InstanceMethodNamed("Harvest"),
-            transpiler: new HarmonyMethod(typeof(CropHarvestTranspiler), nameof(TranspileDGA)));
+        try
+        {
+            Type dgaCrop = AccessTools.TypeByName("DynamicGameAssets.Game.CustomCrop") ?? throw new("DGA crops not found!");
+            harmony.Patch(
+                original: dgaCrop.InstanceMethodNamed("Harvest"),
+                transpiler: new HarmonyMethod(typeof(CropHarvestTranspiler), nameof(TranspileDGA)));
+        }
+        catch (Exception ex)
+        {
+            ModEntry.ModMonitor.Log($"Mod crashed while transpiling DGA. Integration may not work correctly.\n\n{ex}", LogLevel.Error);
+        }
     }
 
     private static int GetQualityForJojaFert(int prevQual, HoeDirt? dirt)
@@ -222,7 +229,6 @@ internal static class CropHarvestTranspiler
 
     private static IEnumerable<CodeInstruction>? TranspileDGA(IEnumerable<CodeInstruction> instructions, ILGenerator gen, MethodBase original)
     {
-
         try
         {
             ILHelper helper = new(original, instructions, ModEntry.ModMonitor, gen);

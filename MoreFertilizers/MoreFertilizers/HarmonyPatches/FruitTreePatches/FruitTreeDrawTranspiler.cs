@@ -24,10 +24,17 @@ internal static class FruitTreeDrawTranspiler
     /// <param name="harmony">Harmony instance.</param>
     internal static void ApplyDGAPatch(Harmony harmony)
     {
-        Type dgaFruitTree = AccessTools.TypeByName("DynamicGameAssets.Game.CustomFruitTree") ?? throw new("DGA Fruit trees not found!");
-        harmony.Patch(
-            original: dgaFruitTree.InstanceMethodNamed("draw"),
-            transpiler: new HarmonyMethod(typeof(FruitTreeDrawTranspiler), nameof(Transpiler)));
+        try
+        {
+            Type dgaFruitTree = AccessTools.TypeByName("DynamicGameAssets.Game.CustomFruitTree") ?? throw new("DGA Fruit trees not found!");
+            harmony.Patch(
+                original: dgaFruitTree.InstanceMethodNamed("draw"),
+                transpiler: new HarmonyMethod(typeof(FruitTreeDrawTranspiler), nameof(Transpiler)));
+        }
+        catch (Exception ex)
+        {
+            ModEntry.ModMonitor.Log($"Mod crashed while transpiling DGA. Integration may not work correctly.\n\n{ex}", LogLevel.Error);
+        }
     }
 
     [MethodImpl(TKConstants.Hot)]

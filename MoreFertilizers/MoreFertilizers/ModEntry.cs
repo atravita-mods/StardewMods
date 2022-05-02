@@ -261,7 +261,6 @@ internal class ModEntry : Mod
     private void OnGameLaunched(object? sender, GameLaunchedEventArgs e)
     {
         this.ApplyPatches(new Harmony(this.ModManifest.UniqueID));
-
         {
             IntegrationHelper helper = new(this.Monitor, this.Helper.Translation, this.Helper.ModRegistry, LogLevel.Warn);
             if (helper.TryGetAPI("spacechase0.JsonAssets", "1.10.3", out jsonAssets))
@@ -276,7 +275,6 @@ internal class ModEntry : Mod
                 this.Monitor.Log("Packs could not be loaded! This mod will probably not function.", LogLevel.Error);
             }
         }
-
         {
             IntegrationHelper helper = new(this.Monitor, this.Helper.Translation, this.Helper.ModRegistry);
             if (helper.TryGetAPI("TehPers.FishingOverhaul", "3.2.7", out ISimplifiedFishingApi? fishingAPI))

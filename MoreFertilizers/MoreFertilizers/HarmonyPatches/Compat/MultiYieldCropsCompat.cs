@@ -9,14 +9,29 @@ using StardewValley.Characters;
 
 namespace MoreFertilizers.HarmonyPatches.Compat;
 
+/// <summary>
+/// Class that holds a patch against MultiYieldCrops to apply my fertilizers.
+/// </summary>
 internal static class MultiYieldCropsCompat
 {
+    /// <summary>
+    /// Applies the patch against MultiYieldCrops.
+    /// </summary>
+    /// <param name="harmony">Harmony instance.</param>
+    /// <exception cref="MethodNotFoundException">Some method was not found?</exception>
     internal static void ApplyPatches(Harmony harmony)
     {
-        Type multi = AccessTools.TypeByName("MultiYieldCrop.MultiYieldCrops") ?? throw new MethodNotFoundException("Multi Yield Crops not found!");
-        harmony.Patch(
-            original: multi.InstanceMethodNamed("SpawnHarvest"), 
-            transpiler: new HarmonyMethod(typeof(MultiYieldCropsCompat).StaticMethodNamed(nameof(Transpiler))));
+        try
+        {
+            Type multi = AccessTools.TypeByName("MultiYieldCrop.MultiYieldCrops") ?? throw new MethodNotFoundException("Multi Yield Crops not found!");
+            harmony.Patch(
+                original: multi.InstanceMethodNamed("SpawnHarvest"),
+                transpiler: new HarmonyMethod(typeof(MultiYieldCropsCompat).StaticMethodNamed(nameof(Transpiler))));
+        }
+        catch (Exception ex)
+        {
+            ModEntry.ModMonitor.Log($"Mod crashed while transpiling MultiYieldCrops. Integration may not work correctly.\n\n{ex}", LogLevel.Error);
+        }
     }
 
     /// <summary>

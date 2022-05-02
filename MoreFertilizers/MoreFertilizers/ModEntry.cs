@@ -233,6 +233,19 @@ internal class ModEntry : Mod
             {
                 PerformObjectDropInTranspiler.ApplyPatches(harmony);
             }
+
+            if (this.Helper.ModRegistry.Get("spacechase0.DynamicGameAssets") is IModInfo dga
+                && dga.Manifest.Version.IsNewerThan("1.4.1"))
+            {
+                this.Monitor.Log("Found Dynamic Game Assets, applying compat patches", LogLevel.Info);
+            }
+
+            if (this.Helper.ModRegistry.Get("Cherry.MultiYieldCrops") is IModInfo multiYield
+                && multiYield.Manifest.Version.IsNewerThan("1.0.1"))
+            {
+                this.Monitor.Log("Found MultiYieldCrops, applying compat patches", LogLevel.Info);
+                MultiYieldCropsCompat.ApplyPatches(harmony);
+            }
         }
         catch (Exception ex)
         {

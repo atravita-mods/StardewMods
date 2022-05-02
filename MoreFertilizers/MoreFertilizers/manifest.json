@@ -9,7 +9,7 @@
     "Nexus:11837",
     "GitHub:atravita-mods/MoreFertilizers"
   ],
-  "MinimumApiVersion": "3.13",
+  "MinimumApiVersion": "3.14",
   "Dependencies": [
     {
       "UniqueID": "spacechase0.JsonAssets"

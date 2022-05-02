@@ -48,6 +48,7 @@ internal static class CropHarvestTranspiler
             else if (dirt.fertilizer.Value == ModEntry.DeluxeJojaFertilizerID || dirt.fertilizer.Value == ModEntry.JojaFertilizerID)
             {
                 obj.modData?.SetBool(CanPlaceHandler.Joja, true);
+                obj.MarkContextTagsDirty();
             }
         }
         return obj;

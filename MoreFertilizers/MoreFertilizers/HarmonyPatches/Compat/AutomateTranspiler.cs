@@ -92,7 +92,7 @@ internal static class AutomateTranspiler
                 new(OpCodes.Callvirt, typeof(NetFieldBase<SObject, NetRef<SObject>>).InstancePropertyNamed("Value").GetSetMethod()),
             });
 
-            helper.Print();
+            // helper.Print();
             return helper.Render();
         }
         catch (Exception ex)

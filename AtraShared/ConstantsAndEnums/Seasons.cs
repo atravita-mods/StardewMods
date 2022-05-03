@@ -6,7 +6,7 @@
 /// Seasons as flags.
 /// </summary>
 [Flags]
-internal enum StardewSeasons : uint
+public enum StardewSeasons : uint
 {
     None = 0,
     Spring = 0b1,
@@ -60,7 +60,7 @@ internal static class SeasonExtensions
 /// Weathers as flags....
 /// </summary>
 [Flags]
-internal enum StardewWeather : uint
+public enum StardewWeather : uint
 {
     None = 0,
     Sunny = 0b1,

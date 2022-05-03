@@ -50,6 +50,7 @@ internal class CodeInstructionWrapper
     private readonly LocalVariableInfo? local;
     private readonly Type? localType;
     private readonly int? argumentPos;
+    private readonly Func<CodeInstruction, bool>? predicate;
     private readonly SpecialCodeInstructionCases? specialInstructionCase;
 
     private readonly CodeInstruction? codeInstruction;
@@ -72,6 +73,10 @@ internal class CodeInstructionWrapper
     internal CodeInstructionWrapper(CodeInstruction instrution)
         => this.codeInstruction = instrution;
 
+    /// <summary>
+    /// Initializes a new instance of the <see cref="CodeInstructionWrapper"/> class.
+    /// </summary>
+    /// <param name="specialcase">The special code instruction case.</param>
     internal CodeInstructionWrapper(SpecialCodeInstructionCases specialcase)
         => this.specialInstructionCase = specialcase;
 
@@ -114,6 +119,19 @@ internal class CodeInstructionWrapper
         }
     }
 
+    internal CodeInstructionWrapper(SpecialCodeInstructionCases specialcase, Func<CodeInstruction, bool> predicate)
+    {
+        if (specialcase is SpecialCodeInstructionCases.Wildcard)
+        {
+            this.specialInstructionCase = specialcase;
+            this.predicate = predicate;
+        }
+        else
+        {
+            throw new ArgumentException("Use Wildcard for predicate-based matching.");
+        }
+    }
+
     /// <summary>
     /// Whether or not this CodeInstructionWrapper is a valid match to the code instruction.
     /// </summary>
@@ -130,7 +148,7 @@ internal class CodeInstructionWrapper
         }
         return this.specialInstructionCase switch
         {
-            SpecialCodeInstructionCases.Wildcard => true,
+            SpecialCodeInstructionCases.Wildcard => this.predicate is null || this.predicate(instruction),
             SpecialCodeInstructionCases.LdArg => this.argumentPos is null ? instruction.IsLdarg() : instruction.IsLdarg(this.argumentPos),
             SpecialCodeInstructionCases.StArg => this.argumentPos is null ? instruction.IsStarg() : instruction.IsStarg(this.argumentPos),
             SpecialCodeInstructionCases.LdArgA => this.argumentPos is null ? instruction.IsLdarga() : instruction.IsLdarga(this.argumentPos),

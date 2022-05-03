@@ -451,7 +451,7 @@ ContinueSearchBackwards:
     /// <param name="keepLabels">Whether or not to keep the labels.</param>
     /// <returns>this.</returns>
     /// <exception cref="InvalidOperationException">Tried to remove an important label.</exception>
-    internal ILHelper ReplaceInstruction(OpCode opcode, object operand, bool keepLabels = true)
+    internal ILHelper ReplaceInstruction(OpCode opcode, object? operand, bool keepLabels = true)
         => this.ReplaceInstruction(new CodeInstruction(opcode, operand), keepLabels);
 
     /// <summary>

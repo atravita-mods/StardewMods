@@ -13,11 +13,12 @@
   </PropertyGroup>
 
   <PropertyGroup>
-    <Version>0.1.1-beta</Version>
+    <Version>0.1.1</Version>
   </PropertyGroup>
   
   <PropertyGroup>
     <IgnoreModFilePatterns>\.xcf$</IgnoreModFilePatterns>
+    <EnableModZip Condition="$(Configuration) != 'Release'">False</EnableModZip>
   </PropertyGroup>
 
   <PropertyGroup>

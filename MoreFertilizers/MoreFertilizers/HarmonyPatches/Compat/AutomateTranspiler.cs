@@ -57,7 +57,6 @@ internal static class AutomateTranspiler
         return obj;
     }
 
-#pragma warning disable SA1116 // Split parameters should start on line after declaration
     private static IEnumerable<CodeInstruction>? Transpiler(IEnumerable<CodeInstruction> instructions, ILGenerator gen, MethodBase original)
     {
         try
@@ -101,5 +100,4 @@ internal static class AutomateTranspiler
         }
         return null;
     }
-#pragma warning restore SA1116 // Split parameters should start on line after declaration
 }

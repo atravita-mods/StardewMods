@@ -15,7 +15,7 @@ internal static class GameLocationPatches
     [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Harmony Convention")]
     private static void Postfix(GameLocation __instance, Monster monster, int x, int y, Farmer who)
     {
-        if(__instance is not Farm || who is null || Game1.random.NextDouble() > 0.75)
+        if(__instance is not Farm || who is null || Game1.random.NextDouble() > 0.20 || monster.MaxHealth < 10)
         {
             return;
         }
@@ -31,7 +31,11 @@ internal static class GameLocationPatches
                     __instance.debris.Add(
                         monster.ModifyMonsterLoot(
                             new Debris(
-                                new SObject(fertilizerToDrop, Game1.random.Next(1, 4)), new Vector2(x, y), who.Position)));
+                                new SObject(
+                                    fertilizerToDrop,
+                                    Game1.random.Next(1, Math.Clamp(monster.MaxHealth / 10, 1, 4))),
+                                new Vector2(x, y),
+                                who.Position)));
                 }
             }
             while(passes-- > 0 && who.isWearingRing(Ring.burglarsRing));

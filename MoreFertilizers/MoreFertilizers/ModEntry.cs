@@ -242,6 +242,7 @@ internal class ModEntry : Mod
                 FruitTreeDayUpdateTranspiler.ApplyDGAPatch(harmony);
                 FruitTreeDrawTranspiler.ApplyDGAPatch(harmony);
                 CropHarvestTranspiler.ApplyDGAPatch(harmony);
+                SObjectPatches.ApplyDGAPatch(harmony);
             }
 
             if (this.Helper.ModRegistry.Get("Cherry.MultiYieldCrops") is IModInfo multiYield

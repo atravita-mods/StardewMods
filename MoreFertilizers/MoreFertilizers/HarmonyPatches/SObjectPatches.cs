@@ -1,4 +1,5 @@
-﻿using AtraShared.Utils.Extensions;
+﻿using AtraBase.Toolkit.Reflection;
+using AtraShared.Utils.Extensions;
 using HarmonyLib;
 using MoreFertilizers.Framework;
 
@@ -10,6 +11,25 @@ namespace MoreFertilizers.HarmonyPatches;
 [HarmonyPatch(typeof(SObject))]
 internal static class SObjectPatches
 {
+    /// <summary>
+    /// Applies patches for objects against DGA as well.
+    /// </summary>
+    /// <param name="harmony">Harmony instance.</param>
+    internal static void ApplyDGAPatch(Harmony harmony)
+    {
+        try
+        {
+            Type dgaObject = AccessTools.TypeByName("DynamicGameAssets.Game.CustomObject") ?? throw new("DGA SObject");
+            harmony.Patch(
+                original: dgaObject.InstanceMethodNamed("loadDisplayName"),
+                postfix: new HarmonyMethod(typeof(SObjectPatches), nameof(PostfixLoadDisplayName)));
+        }
+        catch (Exception ex)
+        {
+            ModEntry.ModMonitor.Log($"Mod crashed while transpiling DGA. Integration may not work correctly.\n\n{ex}", LogLevel.Error);
+        }
+    }
+
     [HarmonyPostfix]
     [HarmonyPatch(nameof(SObject.performObjectDropInAction))]
     [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Harmony Convention")]

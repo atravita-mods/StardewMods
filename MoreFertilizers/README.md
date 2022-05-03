@@ -81,7 +81,7 @@ A `harmony_summary` would be greatly appreciated! If you go to the console and t
 
 ## Acknowledgements
 
-Many thanks to [Violetlizabet](https://www.nexusmods.com/stardewvalley/users/120958053) for helping me with the fertilizer sprites!
+Many thanks to [Violetlizabet](https://www.nexusmods.com/stardewvalley/users/120958053) for helping me with the fertilizer sprites, Schneitizel for the French translation, and [CopperSun](https://www.nexusmods.com/stardewvalley/users/114762643) for helping me with the text!
 
 ## See also
 

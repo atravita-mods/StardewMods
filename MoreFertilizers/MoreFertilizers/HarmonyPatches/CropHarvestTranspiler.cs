@@ -26,7 +26,7 @@ internal static class CropHarvestTranspiler
     {
         try
         {
-            Type dgaCrop = AccessTools.TypeByName("DynamicGameAssets.Game.CustomCrop") ?? throw new("DGA crops not found!");
+            Type dgaCrop = AccessTools.TypeByName("DynamicGameAssets.Game.CustomCrop") ?? throw new("DGA crops");
             harmony.Patch(
                 original: dgaCrop.InstanceMethodNamed("Harvest"),
                 transpiler: new HarmonyMethod(typeof(CropHarvestTranspiler), nameof(TranspileDGA)));
@@ -319,7 +319,7 @@ internal static class CropHarvestTranspiler
                 new(OpCodes.Call, typeof(CropHarvestTranspiler).StaticMethodNamed(nameof(MakeItemOrganic))),
             });
 
-            helper.Print();
+            // helper.Print();
             return helper.Render();
         }
         catch (Exception ex)

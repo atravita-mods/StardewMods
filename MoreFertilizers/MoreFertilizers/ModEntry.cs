@@ -250,6 +250,13 @@ internal class ModEntry : Mod
                 this.Monitor.Log("Found MultiYieldCrops, applying compat patches", LogLevel.Info);
                 MultiYieldCropsCompat.ApplyPatches(harmony);
             }
+
+            if (this.Helper.ModRegistry.Get("Pathoschild.Automate") is IModInfo automate
+                && automate.Manifest.Version.IsNewerThan("1.25.2"))
+            {
+                this.Monitor.Log("Found Automate, applying compat patches", LogLevel.Info);
+                AutomateTranspiler.ApplyPatches(harmony);
+            }
         }
         catch (Exception ex)
         {

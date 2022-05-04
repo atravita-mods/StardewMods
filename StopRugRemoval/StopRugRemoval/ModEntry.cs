@@ -72,6 +72,7 @@ public class ModEntry : Mod
     private void Player_Warped(object? sender, WarpedEventArgs e)
     {
         SObjectPatches.HaveConfirmedBomb.Value = false;
+        ConfirmWarp.HaveConfirmed.Value = false;
     }
 
     /// <summary>
@@ -84,6 +85,9 @@ public class ModEntry : Mod
         {
             // handle patches from annotations.
             harmony.PatchAll();
+            
+            // Find the right mods to exempt....
+            ConfirmWarp.ApplyPatches(harmony);
         }
         catch (Exception ex)
         {

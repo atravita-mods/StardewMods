@@ -32,7 +32,7 @@ internal static class UtilityShopPatcher
     }
 
     [HarmonyPostfix]
-    [HarmonyPatch(nameof(Utility.getShopStock))]
+    [HarmonyPatch(nameof(Utility.getQiShopStock))]
     [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Harmony convention")]
     private static void PostfixGetCasinoShop(Dictionary<ISalable, int[]> __result)
     {
@@ -40,7 +40,7 @@ internal static class UtilityShopPatcher
         {
             if (ModEntry.LuckyFertilizerID != -1 && Game1.player.team.AverageDailyLuck() > 0.05)
             {
-                __result.Add(new SObject(ModEntry.LuckyFertilizerID, 1), new[] { 100, int.MaxValue });
+                __result.Add(new SObject(ModEntry.LuckyFertilizerID, 1), new[] { 300, int.MaxValue });
             }
         }
         catch (Exception ex)

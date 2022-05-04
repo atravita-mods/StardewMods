@@ -284,7 +284,7 @@ internal class ModEntry : Mod
             }
         }
         {
-            IntegrationHelper helper = new(this.Monitor, this.Helper.Translation, this.Helper.ModRegistry);
+            IntegrationHelper helper = new(this.Monitor, this.Helper.Translation, this.Helper.ModRegistry, LogLevel.Trace);
             if (helper.TryGetAPI("TehPers.FishingOverhaul", "3.2.7", out ISimplifiedFishingApi? fishingAPI))
             {
                 fishingAPI.ModifyChanceForFish((Farmer who, double chance) =>
@@ -379,13 +379,15 @@ internal class ModEntry : Mod
             return;
         }
 
-        if (this.Helper.Data.ReadGlobalData<MoreFertilizerIDs>(Constants.SaveFolderName + SAVESUFFIX) is not MoreFertilizerIDs storedIDCls)
+        if (this.storedIDs is null)
         {
-            ModMonitor.Log("No need to fix IDs, not installed before.");
-            return;
+            if (this.Helper.Data.ReadGlobalData<MoreFertilizerIDs>(Constants.SaveFolderName + SAVESUFFIX) is not MoreFertilizerIDs storedIDCls)
+            {
+                ModMonitor.Log("No need to fix IDs, not installed before.");
+                return;
+            }
+            this.storedIDs = storedIDCls;
         }
-
-        this.storedIDs ??= storedIDCls;
 
         Dictionary<int, int> idMapping = new();
 

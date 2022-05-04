@@ -1,9 +1,12 @@
-﻿using AtraShared.Utils.Extensions;
+﻿using AtraShared.Menuing;
+using AtraShared.Utils;
+using AtraShared.Utils.Extensions;
 using HarmonyLib;
 using Microsoft.Xna.Framework;
+using StardewModdingAPI.Utilities;
 using StardewValley.Objects;
 using StopRugRemoval.Configuration;
-using StopRugRemoval.HarmonyPatches.BombHandling;
+using StopRugRemoval.HarmonyPatches.Confirmations;
 
 namespace StopRugRemoval.HarmonyPatches;
 
@@ -13,6 +16,9 @@ namespace StopRugRemoval.HarmonyPatches;
 [HarmonyPatch(typeof(SObject))]
 internal static class SObjectPatches
 {
+
+    internal static readonly PerScreen<bool> HaveConfirmedBomb = new(createNewState: () => false);
+
     /// <summary>
     /// Prefix to prevent planting of wild trees on rugs.
     /// </summary>
@@ -96,11 +102,11 @@ internal static class SObjectPatches
                     }
                 }
             }
-            if (!ConfirmBomb.HaveConfirmed.Value
+            if (!HaveConfirmedBomb.Value
                 && !__instance.bigCraftable.Value && __instance is not Furniture
                 && __instance.ParentSheetIndex is 286 or 287 or 288
-                && (IsLocationConsideredDangerous(location) ? ModEntry.Config.InDangerousAreas : ModEntry.Config.InSafeAreas)
-                    .HasFlag(Context.IsMultiplayer ? ConfirmBombEnum.InMultiplayerOnly : ConfirmBombEnum.NotInMultiplayer))
+                && (IsLocationConsideredDangerous(location) ? ModEntry.Config.BombsInDangerousAreas : ModEntry.Config.BombsInSafeAreas)
+                    .HasFlag(Context.IsMultiplayer ? ConfirmationEnum.InMultiplayerOnly : ConfirmationEnum.NotInMultiplayer))
             {
                 // handle the case where a bomb has already been placed?
                 Vector2 loc = new(x, y);
@@ -113,17 +119,32 @@ internal static class SObjectPatches
                     }
                 }
 
-                Response[] responses = new Response[]
+                List<Response> responses = new()
                 {
                     new Response("BombsNo", I18n.No()),
-                    new Response("BombsYes", I18n.Yes()),
+                    new Response("BombsYes", I18n.YesOne()),
                     new Response("BombsArea", I18n.YesArea()),
                 };
 
-                location.createQuestionDialogue(I18n.ConfirmBombs(), responses, "atravitaInteractionTweaksBombs");
-                ConfirmBomb.BombLocation.Value = loc;
-                ConfirmBomb.WhichBomb.Value = __instance.ParentSheetIndex;
+                List<Action> actions = new()
+                {
+                    () => { },
+                    () =>
+                    {
+                        Game1.player.reduceActiveItemByOne();
+                        GameLocationUtils.ExplodeBomb(Game1.player.currentLocation, __instance.ParentSheetIndex, loc, ModEntry.Multiplayer());
+                    },
+                    () =>
+                    {
+                        HaveConfirmedBomb.Value = true;
+                        Game1.player.reduceActiveItemByOne();
+                        GameLocationUtils.ExplodeBomb(Game1.player.currentLocation, __instance.ParentSheetIndex, loc, ModEntry.Multiplayer());
+                    },
+                };
+
                 __result = false;
+
+                Game1.activeClickableMenu = new DialogueAndAction(I18n.ConfirmBombs(), responses, actions);
                 return false;
             }
         }

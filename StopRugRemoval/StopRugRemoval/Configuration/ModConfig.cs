@@ -73,12 +73,22 @@ public class ModConfig
     /// <summary>
     /// Gets or sets a value indicating whether or not to confirm bomb placement in safe areas.
     /// </summary>
-    public ConfirmBombEnum InSafeAreas { get; set; } = ConfirmBombEnum.On;
+    public ConfirmationEnum BombsInSafeAreas { get; set; } = ConfirmationEnum.On;
 
     /// <summary>
     /// Gets or sets a value indicating whether or not to confirm bomb placement in dangerous areas.
     /// </summary>
-    public ConfirmBombEnum InDangerousAreas { get; set; } = ConfirmBombEnum.Off;
+    public ConfirmationEnum BombsInDangerousAreas { get; set; } = ConfirmationEnum.Off;
+
+    /// <summary>
+    /// Gets or sets a value indicating whether or not to confirm warps in safe areas.
+    /// </summary>
+    public ConfirmationEnum WarpsInSafeAreas { get; set; } = ConfirmationEnum.On;
+
+    /// <summary>
+    /// Gets or sets a value indiciating whether or not to confirm 
+    /// </summary>
+    public ConfirmationEnum WarpsInDangerousAreas { get; set; } = ConfirmationEnum.Off;
 
     /// <summary>
     /// Gets or sets map to which locations are considered safe.

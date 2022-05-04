@@ -9,7 +9,7 @@ using StardewModdingAPI.Events;
 using StardewModdingAPI.Utilities;
 using StopRugRemoval.Configuration;
 using StopRugRemoval.HarmonyPatches;
-using StopRugRemoval.HarmonyPatches.BombHandling;
+using StopRugRemoval.HarmonyPatches.Confirmations;
 using StopRugRemoval.HarmonyPatches.Niceties;
 
 using AtraUtils = AtraShared.Utils.Utils;
@@ -67,10 +67,12 @@ public class ModEntry : Mod
     }
 
     private void OnAssetRequested(object? sender, AssetRequestedEventArgs e)
-        => AssetEditor.Edit(e);
+        => AssetEditor.Edit(e, this.Helper.ModRegistry);
 
     private void Player_Warped(object? sender, WarpedEventArgs e)
-        => ConfirmBomb.HaveConfirmed.Value = false;
+    {
+        SObjectPatches.HaveConfirmedBomb.Value = false;
+    }
 
     /// <summary>
     /// Applies and logs this mod's harmony patches.
@@ -196,17 +198,30 @@ public class ModEntry : Mod
                 GMCM.AddKeybindList(property, () => Config);
             }
         }
+
+        GMCM!.AddSectionTitle(I18n.ConfirmWarps_Title)
+            .AddParagraph(I18n.ConfirmWarps_Description)
+            .AddEnumOption(
+                name: I18n.WarpsInSafeAreas_Title,
+                getValue: () => Config.WarpsInSafeAreas,
+                setValue: (value) => Config.WarpsInSafeAreas = value,
+                tooltip: I18n.WarpsInSafeAreas_Description)
+            .AddEnumOption(
+                name: I18n.WarpsInDangerousAreas_Title,
+                getValue: () => Config.WarpsInDangerousAreas,
+                setValue: (value) => Config.WarpsInDangerousAreas = value,
+                tooltip: I18n.WarpsInDangerousAreas_Description);
         GMCM!.AddSectionTitle(I18n.ConfirmBomb_Title)
             .AddParagraph(I18n.ConfirmBomb_Description)
             .AddEnumOption(
-                name: I18n.InSafeAreas_Title,
-                getValue: () => Config.InSafeAreas,
-                setValue: (value) => Config.InSafeAreas = value,
-                tooltip: I18n.InSafeAreas_Description)
+                name: I18n.BombsInSafeAreas_Title,
+                getValue: () => Config.BombsInSafeAreas,
+                setValue: (value) => Config.BombsInSafeAreas = value,
+                tooltip: I18n.BombsInSafeAreas_Description)
             .AddEnumOption(
-                name: I18n.InDangerousAreas_Title,
-                getValue: () => Config.InDangerousAreas,
-                setValue: (value) => Config.InDangerousAreas = value,
-                tooltip: I18n.InDangerousAreas_Description);
+                name: I18n.BombsInDangerousAreas_Title,
+                getValue: () => Config.BombsInDangerousAreas,
+                setValue: (value) => Config.BombsInDangerousAreas = value,
+                tooltip: I18n.BombsInDangerousAreas_Description);
     }
 }

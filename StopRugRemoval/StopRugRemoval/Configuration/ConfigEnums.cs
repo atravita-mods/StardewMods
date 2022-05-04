@@ -4,7 +4,7 @@
 /// Whether or not to confirm bombs.
 /// </summary>
 [Flags]
-public enum ConfirmBombEnum
+public enum ConfirmationEnum
 {
     /// <summary>
     /// Always confirm bombs in this area.

@@ -16,15 +16,15 @@ internal static class AssetEditor
     /// Applies edits.
     /// </summary>
     /// <param name="e">Event args.</param>
-    internal static void Edit(AssetRequestedEventArgs e)
+    internal static void Edit(AssetRequestedEventArgs e, IModRegistry registry)
     {
-        if (e.NameWithoutLocale.IsEquivalentTo(SALOON_EVENTS))
+        if (e.NameWithoutLocale.IsEquivalentTo(SALOON_EVENTS) && !registry.IsLoaded("violetlizabet.CP.NoAlcohol"))
         {
-            e.Edit(EditImpl, AssetEditPriority.Late);
+            e.Edit(EditSaloon, AssetEditPriority.Late);
         }
     }
 
-    private static void EditImpl(IAssetData asset)
+    private static void EditSaloon(IAssetData asset)
     {
         IAssetDataForDictionary<string, string>? editor = asset.AsDictionary<string, string>();
 
@@ -44,7 +44,7 @@ internal static class AssetEditor
                     string initial = value[..nextslash] + $"/question fork1 \"#{I18n.Drink()}#{I18n.Nondrink()}/fork atravita_elliott_nodrink/";
                     string remainder = value[(nextslash + 1)..];
 
-                    editor.Data["atravita_elliott_nodrink"] = remainder.Replace("346", "253");
+                    editor.Data["atravita_elliott_nodrink"] = remainder.Replace("346", "350");
                     editor.Data[key] = initial + remainder;
                 }
                 return;

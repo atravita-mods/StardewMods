@@ -14,10 +14,14 @@
   "PreventPlantingOnRugs.description": "Prevents hoeing on rugs and planting saplings on rugs.",
   "PlaceGrassUnder.title": "Place Grass Under",
   "PlaceGrassUnder.description": "Allow placing grass under other objects",
-  "InSafeAreas.title": "In Safe Areas",
-  "InSafeAreas.description": "Whether bomb confirmation should be enabled in safe area.",
-  "InDangerousAreas.title": "In Dangerous Areas",
-  "InDangerousAreas.description": "Whether bombs should be confirmed in dangerous areas.",
+  "BombsInSafeAreas.title": "Bombs in Safe Areas",
+  "BombsInSafeAreas.description": "Whether bomb confirmation should be enabled in safe area.",
+  "BombsInDangerousAreas.title": "Bombs in Dangerous Areas",
+  "BombsInDangerousAreas.description": "Whether bombs should be confirmed in dangerous areas.",
+  "WarpsInSafeAreas.title": "Warps In Safe Areas",
+  "WarpsInSafeAreas.description": "Whether warp confirmation should be enabled in safe area.",
+  "WarpsInDangerousAreas.title": "Warps In Dangerous Areas",
+  "WarpsInDangerousAreas.description": "Whether warps should be confirmed in dangerous areas.",
   "JukeboxesEverywhere.title": "Jukeboxes Everywhere",
   "JukeboxesEverywhere.description": "Allows jukeboxes to be played anywhere!",
   "GoldenCoconutsOffIsland.title": "Golden Coconuts Off Island",
@@ -48,6 +52,9 @@
   "ConfirmBomb.title": "Bomb confirmation settings",
   "ConfirmBomb.description": "Whether or not to ask for confirmation before using a bomb.",
 
+  "ConfirmWarps.title": "Warp confirmation settings",
+  "ConfirmWarps.description": "Whether or not to ask for confirmation before using a warp.",
+
   "rug-removal-message": "Remove all items on rug before removing rug!",
   "table-removal-message": "Hold down {{keybind}} to remove object from table.",
   "rug-planting-message": "Planting on rugs is not allowed!",
@@ -60,13 +67,19 @@
 
   // Confirm bombs?
   "ConfirmBombs": "Place bomb?",
-  "Yes": "Yes (one)",
+  "YesOne": "Yes (one)",
   "YesArea": "Yes (for this map)",
   "No": "No",
 
+  // Confirm warps:
+  "ConfirmWarps": "Confirm warp?",
+  "Yes": "Yes",
+
   // For editing Elliott's event
-
   "drink": "Oh, I'd love a drink!",
-  "nondrink": "Actually, could I have a coffee?"
+  "nondrink": "Actually, could I have some juice?",
 
+  // Casino!
+  "bet1k": "Bet1000",
+  "bet10k": "Bet10000"
 }

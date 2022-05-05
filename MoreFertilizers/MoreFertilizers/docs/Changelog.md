@@ -4,6 +4,9 @@
 * Make organic seeds put down organic fertilizer?
 * Crosscheck PFMAutomate.....
 
+#### Version 0.1.2
+* Adjusted radius check for specially-placed fertilizers to allow for more distance.
+
 #### Version 0.1.1
 
 * Update to SMAPI 3.14.0

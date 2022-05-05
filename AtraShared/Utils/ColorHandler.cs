@@ -82,9 +82,16 @@ internal static class ColorHandler
         byte[] vals = new byte[splits.TryGetAtIndex(3, out _) ? 4 : 3];
         for (int i = 0; i < vals.Length; i++)
         {
-            if (byte.TryParse(splits[i], out byte parsed))
+            ReadOnlySpan<char> split = splits[i].Word.Trim();
+            bool percent = false;
+            if (split.EndsWith("%"))
             {
-                vals[i] = parsed;
+                split = split[0..^1];
+                percent = true;
+            }
+            if (byte.TryParse(split, out byte parsed))
+            {
+                vals[i] = percent ? (byte)(parsed * 2.55) : parsed;
             }
             else
             {

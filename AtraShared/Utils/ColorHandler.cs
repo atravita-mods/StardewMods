@@ -14,11 +14,6 @@ namespace AtraShared.Utils;
 /// </summary>
 internal static class ColorHandler
 {
-    private static readonly Regex ColorCode = new(
-        @"^#(?<R>[0-9a-fA-F]{2})(?<G>[0-9a-fA-F]{2})(?<B>[0-9a-fA-F]{2})(?<A>[0-9a-fA-F]{2})?$",
-        options: RegexOptions.CultureInvariant | RegexOptions.Compiled,
-        matchTimeout: TimeSpan.FromMilliseconds(250));
-
     /// <summary>
     /// Tries to parse a user string to an XNAcolor.
     /// </summary>
@@ -38,12 +33,42 @@ internal static class ColorHandler
         }
 
         // Process as HTML color code?
-        if (ColorCode.Match(colorname) is Match match && match.Success)
+        if (colorname.StartsWith('#'))
         {
-            Dictionary<string, byte> matchdict = match.MatchGroupsToDictionary((name) => name, (value) => byte.Parse(value, NumberStyles.HexNumber), namedOnly: true);
-            color = matchdict.ContainsKey("A")
-                ? new(matchdict["R"], matchdict["G"], matchdict["B"], matchdict["A"])
-                : new(matchdict["R"], matchdict["G"], matchdict["B"]);
+            int len;
+            switch (colorname.Length)
+            {
+                case 4:
+                case 5:
+                    len = 1;
+                    break;
+                case 7:
+                case 9:
+                    len = 2;
+                    break;
+                default:
+                    goto ColorParseFail;
+            }
+            ReadOnlySpan<char> span = colorname.AsSpan();
+            byte[] array = { 255, 255, 255, 255 };
+            for (int i = 0; i < 4; i++)
+            {
+                if (i == 3 && colorname.Length is 4 or 7)
+                {
+                    break;
+                }
+
+                // 1 <- the offset for the # at the start
+                if (byte.TryParse(span.Slice((i * len) + 1, len), NumberStyles.HexNumber, CultureInfo.InvariantCulture, out byte parsed))
+                {
+                    array[i] = len == 2 ? parsed : (byte)(parsed * 0x11);
+                }
+                else
+                {
+                    goto ColorParseFail;
+                }
+            }
+            color = new(array[0], array[1], array[2], array[3]);
             return true;
         }
 

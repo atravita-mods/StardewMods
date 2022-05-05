@@ -170,7 +170,7 @@ internal class CodeInstructionWrapper
         {
             if (this.codeInstruction is null)
             {
-                return "null CodeInstructionWrapper";
+                return "null CodeInstructionWrapper (this should never happen)";
             }
             else
             {

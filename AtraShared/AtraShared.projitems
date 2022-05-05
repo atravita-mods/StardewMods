@@ -23,6 +23,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Integrations\Interfaces\IProducerFrameworkModAPI.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Integrations\Interfaces\ISimplifiedFishingAPI.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Integrations\Interfaces\ISpaceCoreAPI.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Menuing\DialogueAndAction.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MigrationManager\MigrationDataClass.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MigrationManager\MigrationManager.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Schedules\DataModels\SchedulePoint.cs" />

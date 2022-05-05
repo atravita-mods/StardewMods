@@ -50,7 +50,7 @@ internal static class HarmonyExtensions
         filter ??= (_) => true;
         Patches patches = Harmony.GetPatchInfo(method);
 
-        if (transpilersOnly && patches.Transpilers.Count == 0)
+        if (transpilersOnly && patches.Transpilers.Any((patch) => filter(patch)))
         {
             return;
         }

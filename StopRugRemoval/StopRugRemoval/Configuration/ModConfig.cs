@@ -68,7 +68,7 @@ public class ModConfig
     /// <summary>
     /// Gets or sets a value indicating whether SObjects that are bombed that are forage should be saved.
     /// </summary>
-    public bool SaveBombedForage { get; set; } = true;
+    public bool SaveBombedForage { get; set; } = false;
 
     /// <summary>
     /// Gets or sets a value indicating whether or not to confirm bomb placement in safe areas.

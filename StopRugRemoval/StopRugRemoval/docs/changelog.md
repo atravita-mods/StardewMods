@@ -5,9 +5,10 @@
 1. Catch input to place rug under things.
 <!-- Figure out how to replace the reference to coffee in the night market dialogue?-->
 
-#### Version 1.0.8 - alpha
+#### Version 1.0.8
 Compiled for SMAPI 3.14.0
 * Removes damage to fruit trees from hoes and scythes.
+* Option to save bombed forage.
 * Hides crab pots during festivals and events.
 * Add bet 1k and bet 10k to the casino
 * Adds confirmation to warps.

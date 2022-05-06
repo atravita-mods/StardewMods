@@ -27,17 +27,6 @@ public static class AssetEditor
     private static readonly string DataEventsSeedshop = PathUtilities.NormalizeAssetName("Data/Events/SeedShop");
     private static readonly string DataMail = PathUtilities.NormalizeAssetName("Data/mail");
 
-    private static readonly string[] EarlyFilesToEdit = new string[]
-    {
-        GeorgeDialogueLocation,
-        EvelynDialogueLocation,
-        SandyDialogueLocation,
-        WillyDialogueLocation,
-        PhoneStringLocation,
-        DataEventsSeedshop,
-        DataMail,
-    };
-
     // We edit Pam's nine heart event to set flags to remember which path the player chose.
     private static readonly string DataEventsTrailerBig = PathUtilities.NormalizeAssetName("Data/Events/Trailer_Big");
 
@@ -47,74 +36,107 @@ public static class AssetEditor
     /// <param name="e">Asset event arguments.</param>
     internal static void Edit(AssetRequestedEventArgs e)
     {
-        if (EarlyFilesToEdit.Any((string assetName) => e.NameWithoutLocale.IsEquivalentTo(assetName)))
-        {
-            e.Edit(EditAssetEarly, AssetEditPriority.Early);
-        }
-        else if (e.NameWithoutLocale.IsEquivalentTo(DataEventsTrailerBig))
-        {
-            e.Edit(EditAssetLate, AssetEditPriority.Late);
-        }
-    }
-
-    private static void EditAssetEarly(IAssetData e)
-    {
-        IAssetDataForDictionary<string, string>? editor = e.AsDictionary<string, string>();
         if (e.NameWithoutLocale.IsEquivalentTo(GeorgeDialogueLocation))
         {
-            editor.Data["Resort"] = I18n.GeorgeResort();
-            editor.Data["Resort_IslandNorth"] = I18n.GeorgeResortIslandNorth();
+            e.Edit(EditGeorgeDialogue, AssetEditPriority.Early);
         }
         else if (e.NameWithoutLocale.IsEquivalentTo(EvelynDialogueLocation))
         {
-            editor.Data["Resort"] = I18n.EvelynResort();
-            editor.Data["Resort_IslandNorth"] = I18n.EvelynResortIslandNorth();
-        }
-        else if (e.NameWithoutLocale.IsEquivalentTo(WillyDialogueLocation))
-        {
-            editor.Data["Resort"] = I18n.WillyResort();
-            editor.Data["Resort_IslandNorth"] = I18n.WillyResortIslandNorth();
+            e.Edit(EditEvelynDialogue, AssetEditPriority.Early);
         }
         else if (e.NameWithoutLocale.IsEquivalentTo(SandyDialogueLocation))
         {
-            foreach (string key in new string[] { "Resort", "Resort_Bar", "Resort_Bar_2", "Resort_Wander", "Resort_Shore", "Resort_Pier", "Resort_Approach", "Resort_Left", "Resort_IslandNorth" })
-            {
-                editor.Data[key] = I18n.GetByKey("Sandy_" + key);
-            }
+            e.Edit(EditSandyDialogue, AssetEditPriority.Early);
+        }
+        else if (e.NameWithoutLocale.IsEquivalentTo(WillyDialogueLocation))
+        {
+            e.Edit(EditWillyDialogue, AssetEditPriority.Early);
         }
         else if (e.NameWithoutLocale.IsEquivalentTo(PhoneStringLocation))
         {
-            foreach (string key in new string[] { "Pam_Island_1", "Pam_Island_2", "Pam_Island_3", "Pam_Doctor", "Pam_Other", "Pam_Bus_1", "Pam_Bus_2", "Pam_Bus_3", "Pam_Voicemail_Island", "Pam_Voicemail_Doctor", "Pam_Voicemail_Other", "Pam_Voicemail_Bus", "Pam_Bus_Late" })
-            {
-                editor.Data[key] = I18n.GetByKey(key);
-            }
-        }
-        else if (e.NameWithoutLocale.IsEquivalentTo(DataMail))
-        {
-            editor.Data[PAMMAILKEY] = $"{I18n.Pam_Mail_Text()}^^   --{Game1.getCharacterFromName("Pam")?.displayName ?? I18n.Pam()}[#]{I18n.Pam_Mail_Title()}";
+            e.Edit(EditPhone, AssetEditPriority.Early);
         }
         else if (e.NameWithoutLocale.IsEquivalentTo(DataEventsSeedshop))
         {
-            editor.Data["99219999/e 503180/f Pam 2500/v Pam/w rainy/t 1700 2600"] = string.Join(
-                separator: string.Empty,
-                "sadpiano/-1000 -1000/farmer 35 21 0 Pam 37 18 0/ignoreCollisions farmer/",
-                "ignoreCollisions Pam/viewport 37 21 true/move farmer 0 -3 1/faceDirection Pam 3/",
-                $"speak Pam \"{I18n._999Pam01a()}\"/faceDirection Pam 0/pause 250/faceDirection Pam 3/",
-                $"speak Pam \"{I18n._999Pam01b()}#$b#{I18n._999Pam01c()}\"/pause 500/",
-                $"question fork1 \"{I18n._999PamAsk()}#{I18n._999Validate()}#{I18n._999Confront()}\"/",
-                "fork atravita_GIMA_PamInsulted/mail atravita_GingerIslandMainlandAdjustments_PamMail/",
-                "emote Pam 20/friendship Pam 200/faceDirection Pam 0/pause 250/faceDirection Pam 3/",
-                $"speak Pam \"{I18n._999Pam02()}\"/pause 500/faceDirection Pam 0/",
-                $"speak Pam \"{I18n._999Pam03()}$s\"/pause 500/faceDirection Pam 3/",
-                $"speak Pam \"{I18n._999Pam04()}$s#$b#{I18n._999Pam05()}$u\"/pause 500/faceDirection Pam 2/",
-                $"pause 500/faceDirection Pam 3/textAboveHead Pam \"{I18n.Sigh()}\"/speak Pam \"{I18n._999Pam06()}\"/pause 500/",
-                $"speak Pam \"{I18n._999Pam07()}\"/pause 500/textAboveHead Pam \"{I18n.Sigh()}\"/pause 1000/",
-                $"speak Pam \"{I18n._999Pam08()}\"/pause 1000/fade/viewport -100 -100/end dialogue Pam \"{I18n._999Pam30()}\"");
-            editor.Data["atravita_GIMA_PamInsulted"] = $"friendship Pam -250/emote Pam 12/speak Pam \"{I18n._999Pam99()}\"/fade/viewport -100 -100/end invisible Pam";
+            e.Edit(EditSeedShopEvent, AssetEditPriority.Early);
+        }
+        else if (e.NameWithoutLocale.IsEquivalentTo(DataMail))
+        {
+            e.Edit(EditMail, AssetEditPriority.Early);
+        }
+        else if (e.NameWithoutLocale.IsEquivalentTo(DataEventsTrailerBig))
+        {
+            e.Edit(EditTrailerBig, AssetEditPriority.Late);
         }
     }
 
-    private static void EditAssetLate(IAssetData e)
+    private static void EditGeorgeDialogue(IAssetData e)
+    {
+        IAssetDataForDictionary<string, string>? editor = e.AsDictionary<string, string>();
+        editor.Data["Resort"] = I18n.GeorgeResort();
+        editor.Data["Resort_IslandNorth"] = I18n.GeorgeResortIslandNorth();
+    }
+
+    private static void EditEvelynDialogue(IAssetData e)
+    {
+        IAssetDataForDictionary<string, string>? editor = e.AsDictionary<string, string>();
+        editor.Data["Resort"] = I18n.EvelynResort();
+        editor.Data["Resort_IslandNorth"] = I18n.EvelynResortIslandNorth();
+    }
+
+    private static void EditWillyDialogue(IAssetData e)
+    {
+        IAssetDataForDictionary<string, string>? editor = e.AsDictionary<string, string>();
+        editor.Data["Resort"] = I18n.WillyResort();
+        editor.Data["Resort_IslandNorth"] = I18n.WillyResortIslandNorth();
+    }
+
+    private static void EditSandyDialogue(IAssetData e)
+    {
+        IAssetDataForDictionary<string, string>? editor = e.AsDictionary<string, string>();
+        foreach (string key in new string[] { "Resort", "Resort_Bar", "Resort_Bar_2", "Resort_Wander", "Resort_Shore", "Resort_Pier", "Resort_Approach", "Resort_Left", "Resort_IslandNorth" })
+        {
+            editor.Data[key] = I18n.GetByKey("Sandy_" + key);
+        }
+    }
+
+    private static void EditPhone(IAssetData e)
+    {
+        IAssetDataForDictionary<string, string>? editor = e.AsDictionary<string, string>();
+        foreach (string key in new string[] { "Pam_Island_1", "Pam_Island_2", "Pam_Island_3", "Pam_Doctor", "Pam_Other", "Pam_Bus_1", "Pam_Bus_2", "Pam_Bus_3", "Pam_Voicemail_Island", "Pam_Voicemail_Doctor", "Pam_Voicemail_Other", "Pam_Voicemail_Bus", "Pam_Bus_Late" })
+        {
+            editor.Data[key] = I18n.GetByKey(key);
+        }
+    }
+
+    private static void EditMail(IAssetData e)
+    {
+        IAssetDataForDictionary<string, string>? editor = e.AsDictionary<string, string>();
+        editor.Data[PAMMAILKEY] = $"{I18n.Pam_Mail_Text()}^^   --{Game1.getCharacterFromName("Pam")?.displayName ?? I18n.Pam()}[#]{I18n.Pam_Mail_Title()}";
+    }
+
+    private static void EditSeedShopEvent(IAssetData e)
+    {
+        IAssetDataForDictionary<string, string>? editor = e.AsDictionary<string, string>();
+        editor.Data["99219999/e 503180/f Pam 2500/v Pam/w rainy/t 1700 2600"] = string.Join(
+            separator: string.Empty,
+            "sadpiano/-1000 -1000/farmer 35 21 0 Pam 37 18 0/ignoreCollisions farmer/",
+            "ignoreCollisions Pam/viewport 37 21 true/move farmer 0 -3 1/faceDirection Pam 3/",
+            $"speak Pam \"{I18n._999Pam01a()}\"/faceDirection Pam 0/pause 250/faceDirection Pam 3/",
+            $"speak Pam \"{I18n._999Pam01b()}#$b#{I18n._999Pam01c()}\"/pause 500/",
+            $"question fork1 \"{I18n._999PamAsk()}#{I18n._999Validate()}#{I18n._999Confront()}\"/",
+            "fork atravita_GIMA_PamInsulted/mail atravita_GingerIslandMainlandAdjustments_PamMail/",
+            "emote Pam 20/friendship Pam 200/faceDirection Pam 0/pause 250/faceDirection Pam 3/",
+            $"speak Pam \"{I18n._999Pam02()}\"/pause 500/faceDirection Pam 0/",
+            $"speak Pam \"{I18n._999Pam03()}$s\"/pause 500/faceDirection Pam 3/",
+            $"speak Pam \"{I18n._999Pam04()}$s#$b#{I18n._999Pam05()}$u\"/pause 500/faceDirection Pam 2/",
+            $"pause 500/faceDirection Pam 3/textAboveHead Pam \"{I18n.Sigh()}\"/speak Pam \"{I18n._999Pam06()}\"/pause 500/",
+            $"speak Pam \"{I18n._999Pam07()}\"/pause 500/textAboveHead Pam \"{I18n.Sigh()}\"/pause 1000/",
+            $"speak Pam \"{I18n._999Pam08()}\"/pause 1000/fade/viewport -100 -100/end dialogue Pam \"{I18n._999Pam30()}\"");
+        editor.Data["atravita_GIMA_PamInsulted"] = $"friendship Pam -250/emote Pam 12/speak Pam \"{I18n._999Pam99()}\"/fade/viewport -100 -100/end invisible Pam";
+    }
+
+    private static void EditTrailerBig(IAssetData e)
     {
         // Insert mail flags into the vanilla event
         IAssetDataForDictionary<string, string>? editor = e.AsDictionary<string, string>();

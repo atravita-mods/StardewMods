@@ -33,7 +33,7 @@
 ### Version 1.1.5-beta
 
 * Update to SMAPI 3.14.0
-* Add `_groupname` suffix to GI `Resort` keys (ie `Resort_groupname`).
+* Add `_groupname` suffix to GI `Resort` keys (ie `Resort_groupname`). <!-- test this?-->
 
 ### Version 1.1.4
 

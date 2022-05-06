@@ -1,6 +1,5 @@
 ﻿using AtraShared.Schedules.DataModels;
 using Microsoft.Xna.Framework;
-using StardewModdingAPI.Utilities;
 
 namespace GingerIslandMainlandAdjustments.ScheduleManager.DataModels;
 
@@ -126,8 +125,6 @@ internal readonly struct PossibleIslandActivity
     /// </summary>
     /// <returns>true if animation is unique, false otherwise.</returns>
     private bool IsAnimationUnique()
-    {
-        return !string.IsNullOrEmpty(this.animation)
+        => !string.IsNullOrEmpty(this.animation)
             && !this.animation.StartsWith("square_");
-    }
 }

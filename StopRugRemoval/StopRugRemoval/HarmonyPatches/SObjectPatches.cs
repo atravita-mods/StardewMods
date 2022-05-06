@@ -3,6 +3,7 @@ using AtraShared.Utils;
 using AtraShared.Utils.Extensions;
 using HarmonyLib;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Input;
 using StardewModdingAPI.Utilities;
 using StardewValley.Objects;
 using StopRugRemoval.Configuration;
@@ -121,14 +122,14 @@ internal static class SObjectPatches
 
                 List<Response> responses = new()
                 {
-                    new Response("BombsNo", I18n.No()),
-                    new Response("BombsYes", I18n.YesOne()),
+                    new Response("BombsNo", I18n.No()).SetHotKey(Keys.Escape),
+                    new Response("BombsYes", I18n.YesOne()).SetHotKey(Keys.Y),
                     new Response("BombsArea", I18n.YesArea()),
                 };
 
-                List<Action> actions = new()
+                List<Action?> actions = new()
                 {
-                    () => { },
+                    null,
                     () =>
                     {
                         Game1.player.reduceActiveItemByOne();

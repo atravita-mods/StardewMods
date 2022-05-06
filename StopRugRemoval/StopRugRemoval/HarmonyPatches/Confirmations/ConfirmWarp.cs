@@ -3,10 +3,13 @@ using AtraShared.Menuing;
 using AtraShared.Utils.Extensions;
 using HarmonyLib;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Input;
 using StardewModdingAPI.Utilities;
 using StardewValley.Buildings;
+using StardewValley.Locations;
 using StardewValley.Tools;
 using StopRugRemoval.Configuration;
+using xTile.Dimensions;
 
 namespace StopRugRemoval.HarmonyPatches.Confirmations;
 
@@ -15,14 +18,11 @@ internal static class ConfirmWarp
 {
     internal static readonly PerScreen<bool> HaveConfirmed = new(createNewState: () => false);
 
-    internal static readonly PerScreen<bool> HaveConfirmedWand = new(createNewState: () => false);
-
     /// <summary>
     /// The location to warp to.
     /// </summary>
     internal enum WarpLocation
     {
-
         None = -1,
         Farm = 688,
         Mountain = 689,
@@ -32,7 +32,7 @@ internal static class ConfirmWarp
     }
 
 #warning - find DH's mod's uniqueID to exlude this patch, also patch the IslandWest obelisk
-    internal static void ApplyPatches(Harmony harmony)
+    internal static void ApplyWandPatches(Harmony harmony)
     {
         harmony.Patch(
             original: typeof(Wand).InstanceMethodNamed(nameof(Wand.DoFunction)),
@@ -68,18 +68,19 @@ internal static class ConfirmWarp
         {
             List<Response> responses = new()
             {
-                new Response("WarpsNo", I18n.No()),
-                new Response("WarpsYes", I18n.Yes()),
+                new Response("WarpsNo", I18n.No()).SetHotKey(Keys.Escape),
+                new Response("WarpsYes", I18n.Yes()).SetHotKey(Keys.Y),
             };
 
-            List<Action> actions = new()
+            List<Action?> actions = new()
             {
-                () => { },
+                null,
                 () =>
                 {
                     HaveConfirmed.Value = true;
                     __instance.performUseAction(location);
                     Game1.player.reduceActiveItemByOne();
+                    HaveConfirmed.Value = false;
                 },
             };
 
@@ -125,17 +126,18 @@ internal static class ConfirmWarp
         {
             List<Response> responses = new()
             {
-                new Response("WarpsNo", I18n.No()),
-                new Response("WarpsYes", I18n.Yes()),
+                new Response("WarpsNo", I18n.No()).SetHotKey(Keys.Escape),
+                new Response("WarpsYes", I18n.Yes()).SetHotKey(Keys.Y),
             };
 
-            List<Action> actions = new()
+            List<Action?> actions = new()
             {
-                () => { },
+                null,
                 () =>
                 {
                     HaveConfirmed.Value = true;
                     __instance.doAction(tileLocation, who);
+                    HaveConfirmed.Value = false;
                 },
             };
 
@@ -146,29 +148,62 @@ internal static class ConfirmWarp
         return true;
     }
 
+    [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Harmony Convention")]
     private static bool PrefixWand(Wand __instance, GameLocation location, int x, int y, int power, Farmer who)
     {
         if (!who.IsLocalPlayer)
         {
             return true;
         }
-        if (!HaveConfirmedWand.Value
+        if (!HaveConfirmed.Value
              && (IsLocationConsideredDangerous(location) ? ModEntry.Config.WarpsInDangerousAreas : ModEntry.Config.WarpsInSafeAreas)
                  .HasFlag(Context.IsMultiplayer ? ConfirmationEnum.InMultiplayerOnly : ConfirmationEnum.NotInMultiplayer))
         {
             List<Response> responses = new()
             {
-                new Response("WarpsNo", I18n.No()),
-                new Response("WarpsYes", I18n.Yes()),
+                new Response("WarpsNo", I18n.No()).SetHotKey(Keys.Escape),
+                new Response("WarpsYes", I18n.Yes()).SetHotKey(Keys.Y),
             };
 
-            List<Action> actions = new()
+            List<Action?> actions = new()
             {
-                () => { },
+                null,
                 () =>
                 {
-                    HaveConfirmedWand.Value = true;
+                    HaveConfirmed.Value = true;
                     __instance.DoFunction(location, x, y, power, who);
+                    HaveConfirmed.Value = false;
+                },
+            };
+            Game1.activeClickableMenu = new DialogueAndAction(I18n.ConfirmWarps(), responses, actions);
+            return false;
+        }
+        return true;
+    }
+
+    [HarmonyPrefix]
+    [HarmonyPatch(typeof(IslandWest), nameof(IslandWest.performAction))]
+    [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Harmony Convention")]
+    private static bool PrefixIslandWest(IslandWest __instance, string action, Farmer who, Location tileLocation)
+    {
+        if (action == "FarmObelisk" && !HaveConfirmed.Value
+            && (IsLocationConsideredDangerous(__instance) ? ModEntry.Config.WarpsInDangerousAreas : ModEntry.Config.WarpsInSafeAreas)
+                 .HasFlag(Context.IsMultiplayer ? ConfirmationEnum.InMultiplayerOnly : ConfirmationEnum.NotInMultiplayer))
+        {
+            List<Response> responses = new()
+            {
+                new Response("WarpsNo", I18n.No()).SetHotKey(Keys.Escape),
+                new Response("WarpsYes", I18n.Yes()).SetHotKey(Keys.Y),
+            };
+
+            List<Action?> actions = new()
+            {
+                null,
+                () =>
+                {
+                    HaveConfirmed.Value = true;
+                    __instance.performAction(action, who, tileLocation);
+                    HaveConfirmed.Value = false;
                 },
             };
             Game1.activeClickableMenu = new DialogueAndAction(I18n.ConfirmWarps(), responses, actions);

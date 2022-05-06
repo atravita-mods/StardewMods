@@ -86,7 +86,7 @@ public class ModConfig
     public ConfirmationEnum WarpsInSafeAreas { get; set; } = ConfirmationEnum.On;
 
     /// <summary>
-    /// Gets or sets a value indiciating whether or not to confirm 
+    /// Gets or sets a value indiciating whether or not to confirm warps in dangerous areas.
     /// </summary>
     public ConfirmationEnum WarpsInDangerousAreas { get; set; } = ConfirmationEnum.Off;
 

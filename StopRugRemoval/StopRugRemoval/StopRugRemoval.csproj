@@ -16,6 +16,11 @@
     <TranslationClassBuilder_AddGetByKey>true</TranslationClassBuilder_AddGetByKey>
   </PropertyGroup>
 
+  <PropertyGroup>
+    <IgnoreModFilePatterns>\.xcf$</IgnoreModFilePatterns>
+    <EnableModZip Condition="$(Configuration) != 'Release'">False</EnableModZip>
+  </PropertyGroup>
+
   <ItemGroup>
     <PackageReference Include="JetBrains.Annotations" Version="2021.3.0" />
     <PackageReference Include="Microsoft.Win32.Registry" Version="6.0.0-preview.5.21301.5" />

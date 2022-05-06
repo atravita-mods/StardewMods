@@ -47,6 +47,11 @@ public class ModEntry : Mod
     /// Gets the reflection helper for this mod.
     /// </summary>
     internal static IReflectionHelper ReflectionHelper { get; private set; }
+
+    /// <summary>
+    /// Gets the game content helper for this mod.
+    /// </summary>
+    internal static IGameContentHelper GameContentHelper { get; private set; }
 #pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
 
     /// <inheritdoc/>
@@ -55,6 +60,7 @@ public class ModEntry : Mod
         I18n.Init(helper.Translation);
         ModMonitor = this.Monitor;
         ReflectionHelper = this.Helper.Reflection;
+        GameContentHelper = this.Helper.GameContent;
         Config = AtraUtils.GetConfigOrDefault<ModConfig>(helper, this.Monitor);
 
         helper.Events.GameLoop.GameLaunched += this.OnGameLaunch;
@@ -62,12 +68,20 @@ public class ModEntry : Mod
         helper.Events.Player.Warped += this.Player_Warped;
 
         helper.Events.Content.AssetRequested += this.OnAssetRequested;
+        helper.Events.Content.AssetsInvalidated += this.OnAssetInvalidated;
+        helper.Events.Content.LocaleChanged += this.OnLocaleChange;
 
         this.ApplyPatches(new Harmony(this.ModManifest.UniqueID));
     }
 
+    private void OnLocaleChange(object? sender, LocaleChangedEventArgs e)
+        => AssetEditor.Refresh();
+
+    private void OnAssetInvalidated(object? sender, AssetsInvalidatedEventArgs e)
+        => AssetEditor.Refresh(e.NamesWithoutLocale);
+
     private void OnAssetRequested(object? sender, AssetRequestedEventArgs e)
-        => AssetEditor.Edit(e, this.Helper.ModRegistry);
+        => AssetEditor.Edit(e, this.Helper.ModRegistry, this.Helper.DirectoryPath);
 
     private void Player_Warped(object? sender, WarpedEventArgs e)
     {
@@ -85,9 +99,11 @@ public class ModEntry : Mod
         {
             // handle patches from annotations.
             harmony.PatchAll();
-            
-            // Find the right mods to exempt....
-            ConfirmWarp.ApplyPatches(harmony);
+
+            if (!this.Helper.ModRegistry.IsLoaded("DecidedlyHuman.BetterReturnScepter"))
+            {
+                ConfirmWarp.ApplyWandPatches(harmony);
+            }
         }
         catch (Exception ex)
         {

@@ -3,13 +3,14 @@
 
 #### ToDo
 1. Catch input to place rug under things.
-2. Prevent grass from being placed under things when SmartBuilding's building mode is on.
 <!-- Figure out how to replace the reference to coffee in the night market dialogue?-->
 
 #### Version 1.0.8 - alpha
 Compiled for SMAPI 3.14.0
 * Removes damage to fruit trees from hoes and scythes.
 * Hides crab pots during festivals and events.
+* Add bet 1k and bet 10k to the casino
+* Adds confirmation to warps.
 
 #### Version 1.0.7
 

@@ -36,7 +36,7 @@
   "SaveBombedForage.title": "Save Bombed Forage",
   "SaveBombedForage.description": "Bombed forage is automatically collected",
 
-  "BombLocationDetailed": "Bomb confirmation per location",
+  "BombLocationDetailed": "Bomb and warp confirmation per location",
 
   "BombLocationDetailed.description": "Sets whether or not a location should be considered safe or dangerous when it comes to bomb confirmation. A dynamic location is considered dangerous if there is a single enemy on it.",
 
@@ -44,10 +44,10 @@
   "config.IsSafeLocationEnum.Dangerous": "Dangerous",
   "config.IsSafeLocationEnum.Dynamic": "Dynamic",
 
-  "config.ConfirmBombEnum.Off": "Off",
-  "config.ConfirmBombEnum.NotInMultiplayer": "Not In Multiplayer",
-  "config.ConfirmBombEnum.On": "On",
-  "config.ConfirmBombEnum.InMultiplayerOnly": "In MultiplayerOnly",
+  "config.ConfirmationEnum.Off": "Off",
+  "config.ConfirmationEnum.NotInMultiplayer": "Not In Multiplayer",
+  "config.ConfirmationEnum.On": "On",
+  "config.ConfirmationEnum.InMultiplayerOnly": "In MultiplayerOnly",
 
   "ConfirmBomb.title": "Bomb confirmation settings",
   "ConfirmBomb.description": "Whether or not to ask for confirmation before using a bomb.",
@@ -81,5 +81,6 @@
 
   // Casino!
   "bet1k": "Bet1000",
-  "bet10k": "Bet10000"
+  "bet10k": "Bet10000",
+  "BuyCasino":  "Buy casino coins? 10 g each!"
 }

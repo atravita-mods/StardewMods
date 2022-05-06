@@ -1,4 +1,5 @@
-﻿using StardewValley.Menus;
+﻿using Microsoft.Xna.Framework.Input;
+using StardewValley.Menus;
 
 namespace AtraShared.Menuing;
 
@@ -16,13 +17,32 @@ internal class DialogueAndAction : DialogueBox
         this.actions = actions;
     }
 
+    public override void receiveKeyPress(Keys key)
+    {
+        base.receiveKeyPress(key);
+        if (this.safetyTimer > 0)
+        {
+            return;
+        }
+        for (int i = 0; i < this.responses.Count; i++)
+        {
+            if (this.responses[i].hotkey == key)
+            {
+                if (i < this.actions.Count)
+                {
+                    this.actions[i]?.Invoke();
+                    this.closeDialogue();
+                }
+            }
+        }
+    }
+
     public override void receiveLeftClick(int x, int y, bool playSound = true)
     {
-        int responseIndex = this.selectedResponse;
-        base.receiveLeftClick(x, y, playSound);
-        if (this.safetyTimer <= 0 && responseIndex > -1 && responseIndex < this.actions.Count)
+        if (this.safetyTimer <= 0 && this.selectedResponse > -1 && this.selectedResponse < this.actions.Count)
         {
-            this.actions[responseIndex]?.Invoke();
+            this.actions[this.selectedResponse]?.Invoke();
         }
+        base.receiveLeftClick(x, y, playSound);
     }
 }

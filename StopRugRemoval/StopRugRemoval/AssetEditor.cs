@@ -16,6 +16,9 @@ internal static class AssetEditor
 
     private static Lazy<Texture2D> betIconLazy = new(() => Game1.content.Load<Texture2D>(BET_ICONS));
 
+    /// <summary>
+    /// Gets the bet button textures.
+    /// </summary>
     internal static Texture2D BetIcon => betIconLazy.Value;
 
 #pragma warning disable SA1201 // Elements should appear in the correct order. Keeping field near property.
@@ -24,6 +27,10 @@ internal static class AssetEditor
     private static IAssetName BET_ICONS_ASSET => betIconsAsset ??= ModEntry.GameContentHelper.ParseAssetName(BET_ICONS);
 #pragma warning restore SA1201 // Elements should appear in the correct order
 
+    /// <summary>
+    /// Refreshes lazies.
+    /// </summary>
+    /// <param name="assets">IReadOnlySet of assets to refresh.</param>
     internal static void Refresh(IReadOnlySet<IAssetName>? assets = null)
     {
         if (betIconLazy.IsValueCreated && (assets is null || assets.Contains(BET_ICONS_ASSET)))
@@ -55,7 +62,7 @@ internal static class AssetEditor
             }
             e.LoadFromModFile<Texture2D>(Path.Combine("i18n", filename), AssetLoadPriority.Low);
         }
-        else if (e.NameWithoutLocale.IsEquivalentTo(SALOON_EVENTS) && !registry.IsLoaded("violetlizabet.CP.NoAlcohol"))
+        else if (e.NameWithoutLocale.IsEquivalentTo(SALOON_EVENTS) && !registry.IsLoaded("violetlizabet.CP.NoAlcohol") && ModEntry.Config.Enabled)
         {
             e.Edit(EditSaloon, AssetEditPriority.Late);
         }

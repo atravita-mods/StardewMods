@@ -13,11 +13,18 @@ using xTile.Dimensions;
 
 namespace StopRugRemoval.HarmonyPatches.Confirmations;
 
+/// <summary>
+/// Holds patches about confirming warps.
+/// </summary>
 [HarmonyPatch]
 internal static class ConfirmWarp
 {
+    /// <summary>
+    /// Whether or not the warp has been confirmed.
+    /// </summary>
     internal static readonly PerScreen<bool> HaveConfirmed = new(createNewState: () => false);
 
+#pragma warning disable SA1602 // Enumeration items should be documented. Reviewed
     /// <summary>
     /// The location to warp to.
     /// </summary>
@@ -30,8 +37,12 @@ internal static class ConfirmWarp
         Desert = 261,
         IslandSouth = 886,
     }
+#pragma warning restore SA1602 // Enumeration items should be documented
 
-#warning - find DH's mod's uniqueID to exlude this patch, also patch the IslandWest obelisk
+    /// <summary>
+    /// Applies the patch to the wand.
+    /// </summary>
+    /// <param name="harmony">Harmony instance.</param>
     internal static void ApplyWandPatches(Harmony harmony)
     {
         harmony.Patch(
@@ -44,8 +55,7 @@ internal static class ConfirmWarp
     [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Harmony convention.")]
     private static bool PrefixTotemWarp(SObject __instance, GameLocation location, ref bool __result)
     {
-
-        if (Game1.eventUp || Game1.isFestival() || Game1.fadeToBlack || Game1.player.swimming.Value || Game1.player.onBridge.Value)
+        if (Game1.eventUp || Game1.isFestival() || Game1.fadeToBlack || Game1.player.swimming.Value || Game1.player.onBridge.Value || !ModEntry.Config.Enabled)
         {
             return true;
         }
@@ -101,7 +111,7 @@ internal static class ConfirmWarp
     [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Harmony Convention")]
     private static bool PrefixBuildingAction(Building __instance, Vector2 tileLocation, Farmer who, ref bool __result)
     {
-        if (Game1.eventUp || Game1.isFestival() || Game1.fadeToBlack || Game1.player.swimming.Value || Game1.player.onBridge.Value)
+        if (Game1.eventUp || Game1.isFestival() || Game1.fadeToBlack || Game1.player.swimming.Value || Game1.player.onBridge.Value || !ModEntry.Config.Enabled)
         {
             return true;
         }
@@ -164,7 +174,7 @@ internal static class ConfirmWarp
         {
             return true;
         }
-        if (Game1.eventUp || Game1.isFestival() || Game1.fadeToBlack || Game1.player.swimming.Value || Game1.player.onBridge.Value)
+        if (Game1.eventUp || Game1.isFestival() || Game1.fadeToBlack || Game1.player.swimming.Value || Game1.player.onBridge.Value || !ModEntry.Config.Enabled)
         {
             return true;
         }
@@ -199,7 +209,7 @@ internal static class ConfirmWarp
     [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Harmony Convention")]
     private static bool PrefixIslandWest(IslandWest __instance, string action, Farmer who, Location tileLocation)
     {
-        if (Game1.eventUp || Game1.isFestival() || Game1.fadeToBlack || Game1.player.swimming.Value || Game1.player.onBridge.Value)
+        if (Game1.eventUp || Game1.isFestival() || Game1.fadeToBlack || Game1.player.swimming.Value || Game1.player.onBridge.Value || !ModEntry.Config.Enabled)
         {
             return true;
         }

@@ -16,5 +16,5 @@ internal static class CrabPotPatches
     [HarmonyPrefix]
     [HarmonyPatch(nameof(CrabPot.draw))]
     private static bool PrefixDraw()
-        => !ModEntry.Config.HideCrabPots || !(Game1.eventUp || Game1.isFestival());
+        => !ModEntry.Config.HideCrabPots || !(Game1.eventUp || Game1.isFestival()) || !ModEntry.Config.Enabled;
 }

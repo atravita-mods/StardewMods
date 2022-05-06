@@ -44,7 +44,7 @@ internal static class TokenPurchasePatch
     [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Harmony Convention")]
     private static bool Prefix(string action, Farmer who, ref bool __result)
     {
-        if (action == "BuyQiCoins" && who.IsLocalPlayer)
+        if (action == "BuyQiCoins" && who.IsLocalPlayer && ModEntry.Config.Enabled)
         {
             try
             {
@@ -158,7 +158,7 @@ internal static class SlotMenuPatches
             helper.FindNext(new CodeInstructionWrapper[]
             {
                 new(OpCodes.Ldc_I4, 160),
-                new(OpCodes.Call, typeof(Utility).StaticMethodNamed(nameof(Utility.getTopLeftPositionForCenteringOnScreen), new[]{typeof(xTile.Dimensions.Rectangle), typeof(int), typeof(int), typeof(int), typeof(int)})),
+                new(OpCodes.Call, typeof(Utility).StaticMethodNamed(nameof(Utility.getTopLeftPositionForCenteringOnScreen), new[]{ typeof(xTile.Dimensions.Rectangle), typeof(int), typeof(int), typeof(int), typeof(int) })),
             })
             .ReplaceOperand(288);
 

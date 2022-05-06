@@ -17,7 +17,9 @@ namespace StopRugRemoval.HarmonyPatches;
 [HarmonyPatch(typeof(SObject))]
 internal static class SObjectPatches
 {
-
+    /// <summary>
+    /// Whether or not bombs have been confirmed.
+    /// </summary>
     internal static readonly PerScreen<bool> HaveConfirmedBomb = new(createNewState: () => false);
 
     /// <summary>
@@ -62,7 +64,7 @@ internal static class SObjectPatches
     {
         try
         {
-            if (__instance.IsSpawnedObject && ModEntry.Config.SaveBombedForage)
+            if (__instance.IsSpawnedObject && ModEntry.Config.SaveBombedForage && ModEntry.Config.Enabled)
             {
                 // The SObject does not have its location anymore. Just spawn near the farmer, I guess?
                 location.debris.Add(new Debris(__instance, who.Position + new Vector2(Game1.random.Next(-128,128), Game1.random.Next(-128,128))));
@@ -103,7 +105,7 @@ internal static class SObjectPatches
                     }
                 }
             }
-            if (!HaveConfirmedBomb.Value
+            if (!HaveConfirmedBomb.Value && ModEntry.Config.Enabled
                 && !__instance.bigCraftable.Value && __instance is not Furniture
                 && __instance.ParentSheetIndex is 286 or 287 or 288
                 && (IsLocationConsideredDangerous(location) ? ModEntry.Config.BombsInDangerousAreas : ModEntry.Config.BombsInSafeAreas)

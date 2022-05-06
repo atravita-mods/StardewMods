@@ -8,15 +8,25 @@ namespace AtraShared.Menuing;
 /// </summary>
 internal class DialogueAndAction : DialogueBox
 {
+    private readonly List<Action?> actions;
 
-    private List<Action?> actions;
-
+    /// <summary>
+    /// Initializes a new instance of the <see cref="DialogueAndAction"/> class.
+    /// </summary>
+    /// <param name="dialogue">Initial dialogue.</param>
+    /// <param name="responses">List of responses.</param>
+    /// <param name="actions">List of associated actions.</param>
     internal DialogueAndAction(string dialogue, List<Response> responses, List<Action?> actions)
         : base(dialogue, responses)
     {
         this.actions = actions;
     }
 
+    /// <summary>
+    /// Handles a key press.
+    /// </summary>
+    /// <param name="key">Key.</param>
+    [UsedImplicitly]
     public override void receiveKeyPress(Keys key)
     {
         base.receiveKeyPress(key);
@@ -37,12 +47,22 @@ internal class DialogueAndAction : DialogueBox
         }
     }
 
+    /// <summary>
+    /// Handles a left click.
+    /// </summary>
+    /// <param name="x">x location clicked.</param>
+    /// <param name="y">y location clicked.</param>
+    /// <param name="playSound">whether or not to play sounds.</param>
+    [UsedImplicitly]
     public override void receiveLeftClick(int x, int y, bool playSound = true)
     {
         if (this.safetyTimer <= 0 && this.selectedResponse > -1 && this.selectedResponse < this.actions.Count)
         {
             this.actions[this.selectedResponse]?.Invoke();
         }
-        base.receiveLeftClick(x, y, playSound);
+        if (Game1.activeClickableMenu is not null)
+        {
+            base.receiveLeftClick(x, y, playSound);
+        }
     }
 }

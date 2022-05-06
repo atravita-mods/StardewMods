@@ -107,10 +107,10 @@ internal static class GameLocationUtils
     /// <summary>
     /// Adds a splash at the indicated location.
     /// </summary>
-    /// <param name="loc"></param>
-    /// <param name="nonTileLocation"></param>
-    /// <param name="mp"></param>
-    /// <param name="delayTime"></param>
+    /// <param name="loc">Map.</param>
+    /// <param name="nonTileLocation">Location in pixels.</param>
+    /// <param name="mp">Multiplayer instance.</param>
+    /// <param name="delayTime">How long to wait before splashing.</param>
     /// <remarks>Mostly copied from FishPond.showObjectThrownIntoPondAnimation.</remarks>
     internal static void DrawWaterSplash(GameLocation loc, Vector2 nonTileLocation, Multiplayer mp, int delayTime)
     {

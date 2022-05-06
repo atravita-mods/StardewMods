@@ -88,6 +88,11 @@ internal static class Utils
     internal static StringComparer GetCurrentLanguageComparer(bool ignoreCase = false)
         => StringComparer.Create(Game1.content.CurrentCulture, ignoreCase);
 
+    /// <summary>
+    /// Gets all birthday NPCs.
+    /// </summary>
+    /// <param name="day">Current date.</param>
+    /// <returns>IEnumerable of birthday npcs.</returns>
     internal static IEnumerable<NPC> GetBirthdayNPCs(SDate day)
     {
         foreach (NPC npc in Utility.getAllCharacters())

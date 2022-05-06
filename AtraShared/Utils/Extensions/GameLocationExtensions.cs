@@ -34,7 +34,16 @@ internal static class GameLocationExtensions
         {
             if (Game1.weatherIcon == 1)
             {
-                Dictionary<string, string>? festivalData = Game1.temporaryContent.Load<Dictionary<string, string>>($@"Data\Festivals\{Game1.currentSeason}{Game1.dayOfMonth}");
+                Dictionary<string, string>? festivalData;
+                try
+                {
+                    festivalData = Game1.temporaryContent.Load<Dictionary<string, string>>($@"Data\Festivals\{Game1.currentSeason}{Game1.dayOfMonth}");
+                }
+                catch (Exception ex)
+                {
+                    monitor.Log($"No festival file found for today....did someone screw with the time?\n\n{ex}", LogLevel.Debug);
+                    return false;
+                }
                 if (festivalData.TryGetValue("conditions", out string? val))
                 {
                     SpanSplit splits = val.SpanSplit('/');

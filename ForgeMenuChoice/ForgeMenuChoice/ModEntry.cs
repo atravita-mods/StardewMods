@@ -82,18 +82,18 @@ internal class ModEntry : Mod
             return;
         }
         helper.Register(
-            reset: () => Config = new ModConfig(),
+            reset: static () => Config = new ModConfig(),
             save: () => this.Helper.WriteConfig(Config))
         .AddParagraph(I18n.ModDescription)
         .AddEnumOption(
             name: I18n.TooltipBehavior_Title,
-            getValue: () => Config.TooltipBehavior,
-            setValue: (value) => Config.TooltipBehavior = value,
+            getValue: static () => Config.TooltipBehavior,
+            setValue: static (value) => Config.TooltipBehavior = value,
             tooltip: I18n.TooltipBehavior_Description)
         .AddBoolOption(
             name: I18n.EnableTooltipAutogeneration_Title,
-            getValue: () => Config.EnableTooltipAutogeneration,
-            setValue: (value) => Config.EnableTooltipAutogeneration = value,
+            getValue: static () => Config.EnableTooltipAutogeneration,
+            setValue: static (value) => Config.EnableTooltipAutogeneration = value,
             tooltip: I18n.EnableTooltipAutogeneration_Description);
     }
 

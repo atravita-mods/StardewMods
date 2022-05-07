@@ -4,6 +4,10 @@
 * Make organic seeds put down organic fertilizer?
 * Crosscheck PFMAutomate.....
 
+#### Version 0.1.4
+
+* Fix organic artisan goods not stacking when they should stack.
+
 #### Version 0.1.3
 * Fix issue for bigcraftables that don't set their held item?
 

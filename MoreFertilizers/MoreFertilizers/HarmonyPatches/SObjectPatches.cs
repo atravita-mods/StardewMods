@@ -39,16 +39,19 @@ internal static class SObjectPatches
         {
             try
             {
-                if (dropInItem.modData?.GetBool(CanPlaceHandler.Organic) == true && __instance.heldObject.Value is not null)
+                if (__instance.heldObject?.Value is not null && dropInItem.modData?.GetBool(CanPlaceHandler.Organic) == true)
                 {
                     __instance.heldObject.Value.modData?.SetBool(CanPlaceHandler.Organic, true);
-                    __instance.heldObject.Value.Name += " (Organic)";
+                    if (!__instance.heldObject.Value.Name.Contains("(Organic)"))
+                    {
+                        __instance.heldObject.Value.Name += " (Organic)";
+                    }
                     __instance.heldObject.Value.MarkContextTagsDirty();
                 }
             }
             catch (Exception ex)
             {
-                ModEntry.ModMonitor.Log($"Failed in setting organic for {dropInItem.Name}\n\n{ex}", LogLevel.Error);
+                ModEntry.ModMonitor.Log($"Failed in setting organic for {dropInItem.Name} for machine {__instance.Name}\n\n{ex}", LogLevel.Error);
             }
         }
     }

@@ -32,14 +32,14 @@ internal static class SpecialFertilizerApplication
         }
 
         Vector2 placementtile;
-        if (PlaceHandler.CanPlaceFertilizer(obj, Game1.currentLocation, e.Cursor.GrabTile))
-        {
-            placementtile = e.Cursor.GrabTile;
-        }
-        else if (PlaceHandler.CanPlaceFertilizer(obj, Game1.currentLocation, e.Cursor.Tile)
+        if (PlaceHandler.CanPlaceFertilizer(obj, Game1.currentLocation, e.Cursor.Tile)
             && Utility.withinRadiusOfPlayer(((int)e.Cursor.Tile.X * 64) + 32, ((int)e.Cursor.Tile.Y * 64) + 32, PLACEMENTRADIUS, Game1.player))
         {
             placementtile = e.Cursor.Tile;
+        }
+        else if (PlaceHandler.CanPlaceFertilizer(obj, Game1.currentLocation, e.Cursor.GrabTile))
+        {
+            placementtile = e.Cursor.GrabTile;
         }
         else
         {
@@ -100,7 +100,7 @@ internal static class SpecialFertilizerApplication
             if (obj.ParentSheetIndex != ModEntry.DomesticatedFishFoodID)
             {
                 DelayedAction.functionAfterDelay(
-                    () => Game1.currentLocation.waterColor.Value = FedFishWaterColor(),
+                    static () => Game1.currentLocation.waterColor.Value = FedFishWaterColor(),
                     (int)time);
             }
 

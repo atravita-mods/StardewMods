@@ -39,7 +39,7 @@ internal static class SObjectPatches
         {
             try
             {
-                if (dropInItem.modData?.GetBool(CanPlaceHandler.Organic) == true)
+                if (dropInItem.modData?.GetBool(CanPlaceHandler.Organic) == true && __instance.heldObject.Value is not null)
                 {
                     __instance.heldObject.Value.modData?.SetBool(CanPlaceHandler.Organic, true);
                     __instance.heldObject.Value.Name += " (Organic)";

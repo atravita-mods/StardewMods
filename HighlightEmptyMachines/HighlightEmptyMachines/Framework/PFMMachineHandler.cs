@@ -148,16 +148,15 @@ internal static class PFMMachineHandler
             {
                 foreach (PFMMachineData recipe in Recipes[machine])
                 {
-                    if ((!isOutDoors && recipe.OutdoorsOnly)
-                        || !recipe.AllowedSeasons.HasFlag(season)
-                        || !recipe.AllowedWeathers.HasFlag(weather)
-                        || (recipe.ValidLocations is not null && !recipe.ValidLocations.Contains(location.Name)))
+                    if ((isOutDoors || !recipe.OutdoorsOnly)
+                        && recipe.AllowedSeasons.HasFlag(season)
+                        && recipe.AllowedWeathers.HasFlag(weather)
+                        && (recipe.ValidLocations is null || recipe.ValidLocations.Contains(location.Name)))
                     {
-                        continue;
+                        ValidMachines[machine] = PFMMachineStatus.Enabled;
+                        ModEntry.ModMonitor.DebugOnlyLog($"{machine.GetBigCraftableName()} is enabled");
+                        goto Continue;
                     }
-                    ValidMachines[machine] = PFMMachineStatus.Enabled;
-                    ModEntry.ModMonitor.DebugOnlyLog($"{machine.GetBigCraftableName()} is enabled");
-                    goto ProcessNextMachine;
                 }
                 ModEntry.ModMonitor.DebugOnlyLog($"{machine.GetBigCraftableName()} is invalid");
                 ValidMachines[machine] = PFMMachineStatus.Invalid;
@@ -167,45 +166,9 @@ internal static class PFMMachineHandler
                 ModEntry.ModMonitor.DebugOnlyLog($"{machine.GetBigCraftableName()} is disabled in config.");
                 ValidMachines[machine] = PFMMachineStatus.Disabled;
             }
-ProcessNextMachine:
+Continue:
             ;
         }
-    }
-
-    /// <summary>
-    /// Gets the translated name of a bigcraftable.
-    /// </summary>
-    /// <param name="bigCraftableIndex">Index of the bigcraftable.</param>
-    /// <returns>Name of the bigcraftable.</returns>
-    internal static string GetTranslatedName(this int bigCraftableIndex)
-    {
-        if (Game1.bigCraftablesInformation.TryGetValue(bigCraftableIndex, out string? value))
-        {
-            int index = value.LastIndexOf('/');
-            if (index >= 0)
-            {
-                return value[(index + 1)..];
-            }
-        }
-        return "ERROR - PFM big craftable not found!";
-    }
-
-    /// <summary>
-    /// Gets the internal name of a bigcraftable.
-    /// </summary>
-    /// <param name="bigCraftableIndex">Bigcraftable.</param>
-    /// <returns>Internal name if found.</returns>
-    internal static string GetBigCraftableName(this int bigCraftableIndex)
-    {
-        if (Game1.bigCraftablesInformation.TryGetValue(bigCraftableIndex, out string? value))
-        {
-            int index = value.IndexOf('/');
-            if (index >= 0)
-            {
-                return value[..index];
-            }
-        }
-        return "ERROR - PFM big craftable not found!";
     }
 
     /// <summary>

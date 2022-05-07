@@ -192,7 +192,7 @@ internal class ModEntry : Mod
                 {
                     // Add an option for it.
                     this.gmcmHelper.AddBoolOption(
-                        name: () => machineID.GetTranslatedName(),
+                        name: () => machineID.GetBigCraftableTranslatedName(),
                         getValue: () => !Config.ProducerFrameworkModMachines.TryGetValue(machineID.GetBigCraftableName(), out bool val) || val,
                         setValue: (val) => Config.ProducerFrameworkModMachines[machineID.GetBigCraftableName()] = val);
                 }

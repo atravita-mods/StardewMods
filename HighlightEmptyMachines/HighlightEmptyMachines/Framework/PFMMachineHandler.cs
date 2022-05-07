@@ -69,7 +69,7 @@ internal static class PFMMachineHandler
         ModEntry.ModMonitor.Log("PFM Machine Recipes", LogLevel.Info);
         foreach ((int id, HashSet<PFMMachineData> v) in Recipes)
         {
-            ModEntry.ModMonitor.Log($"Looking at machine {id.GetName()}", LogLevel.Info);
+            ModEntry.ModMonitor.Log($"Looking at machine {id.GetBigCraftableName()}", LogLevel.Info);
             foreach (PFMMachineData recipe in v)
             {
                 ModEntry.ModMonitor.Log('\t' + recipe.ToString(), LogLevel.Info);
@@ -144,7 +144,7 @@ internal static class PFMMachineHandler
         bool isOutDoors = location.IsOutdoors;
         foreach (int machine in PFMMachines)
         {
-            if (ModEntry.Config.ProducerFrameworkModMachines.TryGetValue(machine.GetName(), out bool setting) && setting)
+            if (ModEntry.Config.ProducerFrameworkModMachines.TryGetValue(machine.GetBigCraftableName(), out bool setting) && setting)
             {
                 foreach (PFMMachineData recipe in Recipes[machine])
                 {
@@ -156,15 +156,15 @@ internal static class PFMMachineHandler
                         continue;
                     }
                     ValidMachines[machine] = PFMMachineStatus.Enabled;
-                    ModEntry.ModMonitor.DebugOnlyLog($"{machine.GetName()} is enabled");
+                    ModEntry.ModMonitor.DebugOnlyLog($"{machine.GetBigCraftableName()} is enabled");
                     goto ProcessNextMachine;
                 }
-                ModEntry.ModMonitor.DebugOnlyLog($"{machine.GetName()} is invalid");
+                ModEntry.ModMonitor.DebugOnlyLog($"{machine.GetBigCraftableName()} is invalid");
                 ValidMachines[machine] = PFMMachineStatus.Invalid;
             }
             else
             {
-                ModEntry.ModMonitor.DebugOnlyLog($"{machine.GetName()} is disabled in config.");
+                ModEntry.ModMonitor.DebugOnlyLog($"{machine.GetBigCraftableName()} is disabled in config.");
                 ValidMachines[machine] = PFMMachineStatus.Disabled;
             }
 ProcessNextMachine:
@@ -195,7 +195,7 @@ ProcessNextMachine:
     /// </summary>
     /// <param name="bigCraftableIndex">Bigcraftable.</param>
     /// <returns>Internal name if found.</returns>
-    internal static string GetName(this int bigCraftableIndex)
+    internal static string GetBigCraftableName(this int bigCraftableIndex)
     {
         if (Game1.bigCraftablesInformation.TryGetValue(bigCraftableIndex, out string? value))
         {

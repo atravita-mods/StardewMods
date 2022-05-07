@@ -4,6 +4,9 @@
 * Make organic seeds put down organic fertilizer?
 * Crosscheck PFMAutomate.....
 
+#### Version 0.1.3
+* Fix issue for bigcraftables that don't set their held item?
+
 #### Version 0.1.2
 * Adjusted radius check for specially-placed fertilizers to allow for more distance.
 

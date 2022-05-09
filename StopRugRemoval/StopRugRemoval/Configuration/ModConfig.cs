@@ -88,7 +88,11 @@ public class ModConfig
     /// <summary>
     /// Gets or sets a value indiciating whether or not to confirm warps in dangerous areas.
     /// </summary>
-    public ConfirmationEnum WarpsInDangerousAreas { get; set; } = ConfirmationEnum.Off;
+    public ConfirmationEnum WarpsInDangerousAreas { get; set; } = ConfirmationEnum.NotInMultiplayer;
+
+    public ConfirmationEnum ReturnScepterInSafeAreas { get; set; } = ConfirmationEnum.On;
+
+    public ConfirmationEnum ReturnScepterInDangerousAreas { get; set; } = ConfirmationEnum.NotInMultiplayer;
 
     /// <summary>
     /// Gets or sets map to which locations are considered safe.

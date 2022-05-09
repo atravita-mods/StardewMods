@@ -26,11 +26,18 @@ internal static class ConfirmWarp
 
 #pragma warning disable SA1602 // Enumeration items should be documented. Reviewed
     /// <summary>
-    /// The location to warp to.
+    /// The location to warp to. IDs are the ParentSheetIndex of the totem.
     /// </summary>
     internal enum WarpLocation
     {
+        /// <summary>
+        /// No warp location found. Do nothing.
+        /// </summary>
         None = -1,
+
+        /// <summary>
+        /// Warp to farm.
+        /// </summary>
         Farm = 688,
         Mountain = 689,
         Beach = 690,
@@ -68,6 +75,7 @@ internal static class ConfirmWarp
 
         if (Game1.getLocationFromName(locationEnum.ToString()) is not GameLocation loc)
         { // Something went very wrong. I cannot find the location at all....
+            ModEntry.ModMonitor.Log($"Failed to find {locationEnum}!", LogLevel.Error);
             return true;
         }
 
@@ -83,13 +91,12 @@ internal static class ConfirmWarp
         {
             List<Response> responses = new()
             {
-                new Response("WarpsNo", I18n.No()).SetHotKey(Keys.Escape),
                 new Response("WarpsYes", I18n.Yes()).SetHotKey(Keys.Y),
+                new Response("WarpsNo", I18n.No()).SetHotKey(Keys.Escape),
             };
 
             List<Action?> actions = new()
             {
-                null,
                 () =>
                 {
                     HaveConfirmed.Value = true;
@@ -115,7 +122,7 @@ internal static class ConfirmWarp
         {
             return true;
         }
-        if (__instance.isTilePassable(tileLocation) || !__instance.buildingType.Contains("Obelisk") || !who.IsLocalPlayer)
+        if (__instance.isTilePassable(tileLocation) || !__instance.buildingType.Contains("Obelisk", StringComparer.OrdinalIgnoreCase) || !who.IsLocalPlayer)
         {
             return true;
         }
@@ -145,13 +152,12 @@ internal static class ConfirmWarp
         {
             List<Response> responses = new()
             {
-                new Response("WarpsNo", I18n.No()).SetHotKey(Keys.Escape),
                 new Response("WarpsYes", I18n.Yes()).SetHotKey(Keys.Y),
+                new Response("WarpsNo", I18n.No()).SetHotKey(Keys.Escape),
             };
 
             List<Action?> actions = new()
             {
-                null,
                 () =>
                 {
                     HaveConfirmed.Value = true;
@@ -179,18 +185,17 @@ internal static class ConfirmWarp
             return true;
         }
         if (!HaveConfirmed.Value
-             && (IsLocationConsideredDangerous(location) ? ModEntry.Config.WarpsInDangerousAreas : ModEntry.Config.WarpsInSafeAreas)
+             && (IsLocationConsideredDangerous(location) ? ModEntry.Config.ReturnScepterInDangerousAreas : ModEntry.Config.ReturnScepterInSafeAreas)
                  .HasFlag(Context.IsMultiplayer ? ConfirmationEnum.InMultiplayerOnly : ConfirmationEnum.NotInMultiplayer))
         {
             List<Response> responses = new()
             {
-                new Response("WarpsNo", I18n.No()).SetHotKey(Keys.Escape),
                 new Response("WarpsYes", I18n.Yes()).SetHotKey(Keys.Y),
+                new Response("WarpsNo", I18n.No()).SetHotKey(Keys.Escape),
             };
 
             List<Action?> actions = new()
             {
-                null,
                 () =>
                 {
                     HaveConfirmed.Value = true;
@@ -219,13 +224,12 @@ internal static class ConfirmWarp
         {
             List<Response> responses = new()
             {
-                new Response("WarpsNo", I18n.No()).SetHotKey(Keys.Escape),
                 new Response("WarpsYes", I18n.Yes()).SetHotKey(Keys.Y),
+                new Response("WarpsNo", I18n.No()).SetHotKey(Keys.Escape),
             };
 
             List<Action?> actions = new()
             {
-                null,
                 () =>
                 {
                     HaveConfirmed.Value = true;

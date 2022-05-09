@@ -14,14 +14,6 @@
   "PreventPlantingOnRugs.description": "Prevents hoeing on rugs and planting saplings on rugs.",
   "PlaceGrassUnder.title": "Place Grass Under",
   "PlaceGrassUnder.description": "Allow placing grass under other objects",
-  "BombsInSafeAreas.title": "Bombs in Safe Areas",
-  "BombsInSafeAreas.description": "Whether bomb confirmation should be enabled in safe area.",
-  "BombsInDangerousAreas.title": "Bombs in Dangerous Areas",
-  "BombsInDangerousAreas.description": "Whether bombs should be confirmed in dangerous areas.",
-  "WarpsInSafeAreas.title": "Warps In Safe Areas",
-  "WarpsInSafeAreas.description": "Whether warp confirmation should be enabled in safe area.",
-  "WarpsInDangerousAreas.title": "Warps In Dangerous Areas",
-  "WarpsInDangerousAreas.description": "Whether warps should be confirmed in dangerous areas.",
   "JukeboxesEverywhere.title": "Jukeboxes Everywhere",
   "JukeboxesEverywhere.description": "Allows jukeboxes to be played anywhere!",
   "GoldenCoconutsOffIsland.title": "Golden Coconuts Off Island",
@@ -36,8 +28,9 @@
   "SaveBombedForage.title": "Save Bombed Forage",
   "SaveBombedForage.description": "Bombed forage is automatically collected",
 
-  "BombLocationDetailed": "Bomb and warp confirmation per location",
+  // Handle the confirmation GMCM stuff....
 
+  "BombLocationDetailed": "Bomb and warp confirmation per location",
   "BombLocationDetailed.description": "Sets whether or not a location should be considered safe or dangerous when it comes to bomb confirmation. A dynamic location is considered dangerous if there is a single enemy on it.",
 
   "config.IsSafeLocationEnum.Safe": "Safe",
@@ -52,9 +45,30 @@
   "ConfirmBomb.title": "Bomb confirmation settings",
   "ConfirmBomb.description": "Whether or not to ask for confirmation before using a bomb.",
 
+  "BombsInSafeAreas.title": "Bombs in Safe Areas",
+  "BombsInSafeAreas.description": "Whether bomb confirmation should be enabled in safe area.",
+  "BombsInDangerousAreas.title": "Bombs in Dangerous Areas",
+  "BombsInDangerousAreas.description": "Whether bombs should be confirmed in dangerous areas.",
+
   "ConfirmWarps.title": "Warp confirmation settings",
   "ConfirmWarps.description": "Whether or not to ask for confirmation before using a warp.",
 
+  "WarpsInSafeAreas.title": "Warps In Safe Areas",
+  "WarpsInSafeAreas.description": "Whether warp confirmation should be enabled in safe areas.",
+  "WarpsInDangerousAreas.title": "Warps In Dangerous Areas",
+  "WarpsInDangerousAreas.description": "Whether warps should be confirmed in dangerous areas.",
+
+  "ConfirmScepter.title": "Return Scepter confirmation settings",
+  "ConfirmScepter.description": "Whether or not to ask for confirmation before using the return scepter",
+
+  "BetterReturnScepter":  "Since you have Better Return Scepter installed, the return scepter settings for this mod have been disabled.",
+
+  "ReturnScepterInSafeAreas.title": "Return Scepter in Safe Areas",
+  "ReturnScepterInSafeAreas.description": "Whether return scepter confirmation should be enabled in safe areas.",
+  "ReturnScepterInDangerousAreas.title": "WReturn Scepter In Dangerous Areas",
+  "ReturnScepterInDangerousAreas.description": "Whether return scepter confirmation should be enabled in dangerous areas.",
+
+  // Messages to the player.
   "rug-removal-message": "Remove all items on rug before removing rug!",
   "table-removal-message": "Hold down {{keybind}} to remove object from table.",
   "rug-planting-message": "Planting on rugs is not allowed!",
@@ -82,5 +96,5 @@
   // Casino!
   "bet1k": "Bet1000",
   "bet10k": "Bet10000",
-  "BuyCasino":  "Buy casino coins? 10 g each!"
+  "BuyCasino": "Buy casino coins? 10 g each!"
 }

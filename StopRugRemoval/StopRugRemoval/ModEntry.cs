@@ -223,25 +223,46 @@ public class ModEntry : Mod
             .AddParagraph(I18n.ConfirmWarps_Description)
             .AddEnumOption(
                 name: I18n.WarpsInSafeAreas_Title,
-                getValue: () => Config.WarpsInSafeAreas,
-                setValue: (value) => Config.WarpsInSafeAreas = value,
+                getValue: static () => Config.WarpsInSafeAreas,
+                setValue: static (value) => Config.WarpsInSafeAreas = value,
                 tooltip: I18n.WarpsInSafeAreas_Description)
             .AddEnumOption(
                 name: I18n.WarpsInDangerousAreas_Title,
-                getValue: () => Config.WarpsInDangerousAreas,
-                setValue: (value) => Config.WarpsInDangerousAreas = value,
+                getValue: static () => Config.WarpsInDangerousAreas,
+                setValue: static (value) => Config.WarpsInDangerousAreas = value,
                 tooltip: I18n.WarpsInDangerousAreas_Description);
+
+        GMCM!.AddSectionTitle(I18n.ConfirmScepter_Title);
+        if (this.Helper.ModRegistry.IsLoaded("DecidedlyHuman.BetterReturnScepter"))
+        {
+            GMCM!.AddParagraph(I18n.BetterReturnScepter);
+        }
+        else
+        {
+            GMCM!.AddParagraph(I18n.ConfirmScepter_Description)
+                .AddEnumOption(
+                    name: I18n.ReturnScepterInSafeAreas_Title,
+                    getValue: static () => Config.ReturnScepterInSafeAreas,
+                    setValue: static (value) => Config.ReturnScepterInSafeAreas = value,
+                    tooltip: I18n.ReturnScepterInSafeAreas_Description)
+                .AddEnumOption(
+                    name: I18n.ReturnScepterInDangerousAreas_Title,
+                    getValue: static () => Config.ReturnScepterInDangerousAreas,
+                    setValue: static (value) => Config.ReturnScepterInDangerousAreas = value,
+                    tooltip: I18n.ReturnScepterInDangerousAreas_Description);
+        }
+
         GMCM!.AddSectionTitle(I18n.ConfirmBomb_Title)
             .AddParagraph(I18n.ConfirmBomb_Description)
             .AddEnumOption(
                 name: I18n.BombsInSafeAreas_Title,
-                getValue: () => Config.BombsInSafeAreas,
-                setValue: (value) => Config.BombsInSafeAreas = value,
+                getValue: static () => Config.BombsInSafeAreas,
+                setValue: static (value) => Config.BombsInSafeAreas = value,
                 tooltip: I18n.BombsInSafeAreas_Description)
             .AddEnumOption(
                 name: I18n.BombsInDangerousAreas_Title,
-                getValue: () => Config.BombsInDangerousAreas,
-                setValue: (value) => Config.BombsInDangerousAreas = value,
+                getValue: static () => Config.BombsInDangerousAreas,
+                setValue: static (value) => Config.BombsInDangerousAreas = value,
                 tooltip: I18n.BombsInDangerousAreas_Description);
     }
 }

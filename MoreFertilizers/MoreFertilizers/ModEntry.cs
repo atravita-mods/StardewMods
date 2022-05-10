@@ -10,6 +10,7 @@ using MoreFertilizers.Framework;
 using MoreFertilizers.HarmonyPatches;
 using MoreFertilizers.HarmonyPatches.Acquisition;
 using MoreFertilizers.HarmonyPatches.Compat;
+using MoreFertilizers.HarmonyPatches.FishFood;
 using MoreFertilizers.HarmonyPatches.FruitTreePatches;
 using StardewModdingAPI.Events;
 using StardewValley.TerrainFeatures;
@@ -287,11 +288,11 @@ internal class ModEntry : Mod
             IntegrationHelper helper = new(this.Monitor, this.Helper.Translation, this.Helper.ModRegistry, LogLevel.Trace);
             if (helper.TryGetAPI("TehPers.FishingOverhaul", "3.2.7", out ISimplifiedFishingApi? fishingAPI))
             {
-                fishingAPI.ModifyChanceForFish((Farmer who, double chance) =>
+                fishingAPI.ModifyChanceForFish(static (Farmer who, double chance) =>
                 {
-                    if (who.currentLocation?.modData?.GetBool(CanPlaceHandler.FishFood) == true && chance < 0.3)
+                    if (who.currentLocation is not null)
                     {
-                        return Math.Sqrt(Math.Clamp(chance, 0, 1));
+                        return GetFishTranspiler.AlterFishChance(chance, who.currentLocation);
                     }
                     return chance;
                 });

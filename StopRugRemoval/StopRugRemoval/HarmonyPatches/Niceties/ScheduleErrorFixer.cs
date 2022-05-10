@@ -1,5 +1,6 @@
 ﻿using AtraBase.Toolkit.StringHandler;
 using HarmonyLib;
+using Microsoft.Xna.Framework;
 using StardewModdingAPI.Utilities;
 
 namespace StopRugRemoval.HarmonyPatches.Niceties;
@@ -16,23 +17,48 @@ internal static class ScheduleErrorFixer
     [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Harmony Convention")]
     private static void Prefix(string rawData, NPC __instance)
     {
-        if (__instance.currentLocation is null)
+        if (__instance.currentLocation is not null)
         {
-            ModEntry.ModMonitor.Log($"{__instance.Name} seems to have a null current location, attempting to fix. Please inform their author! The current day is {SDate.Now()}", LogLevel.Warn);
-            if (__instance.DefaultMap is not null && Game1.getLocationFromName(__instance.DefaultMap) is GameLocation location)
+            return;
+        }
+        ModEntry.ModMonitor.Log($"{__instance.Name} seems to have a null current location, attempting to fix. Please inform their author! The current day is {SDate.Now()}, their attempted schedule string was {rawData}", LogLevel.Warn);
+        if (__instance.DefaultMap is not null && Game1.getLocationFromName(__instance.DefaultMap) is GameLocation location)
+        { // Attempt to first just assign their position from their default map.
+            __instance.currentLocation = location;
+        }
+        else if (Game1.content.Load<Dictionary<string, string>>(@"Data\NPCDispositions").TryGetValue(__instance.Name, out string? dispo)
+            && dispo.SpanSplit('/').TryGetAtIndex(10, out SpanSplitEntry pos))
+        { // Okay, if that didn't work, try getting from NPCDispositions.
+            SpanSplit locParts = pos.SpanSplit();
+            string defaultMap = locParts[0].ToString();
+            if (Game1.getLocationFromName(defaultMap) is GameLocation loc)
             {
-                __instance.currentLocation = location;
+                __instance.DefaultMap = defaultMap;
+                __instance.currentLocation = loc;
+            }
+            if (locParts.TryGetAtIndex(1, out SpanSplitEntry strX) && int.TryParse(strX, out int x)
+                && locParts.TryGetAtIndex(2, out SpanSplitEntry strY) && int.TryParse(strY, out int y))
+            {
+                __instance.DefaultPosition = new Vector2(x * 64, y * 64);
                 return;
             }
-            else
-            {
-                if (rawData.SpanSplit().TryGetAtIndex(1, out SpanSplitEntry locName) && Game1.getLocationFromName(locName) is GameLocation loc)
-                {
-                    __instance.currentLocation = loc;
-                    return;
-                }
-            }
-            ModEntry.ModMonitor.Log($"Failed to fix current location for NPC {__instance.Name}", LogLevel.Error);
         }
+
+        // Still no go, let's try parsing from the first schedule entry.
+        if (__instance.currentLocation is null)
+        {
+            SpanSplit splits = rawData.SpanSplit();
+            if (splits.TryGetAtIndex(1, out SpanSplitEntry locName) && Game1.getLocationFromName(locName.ToString()) is GameLocation loc)
+            {
+                __instance.currentLocation = loc;
+                if (splits.TryGetAtIndex(2, out SpanSplitEntry strX) && int.TryParse(strX, out int x)
+                    && splits.TryGetAtIndex(3, out SpanSplitEntry strY) && int.TryParse(strY, out int y))
+                {
+                    __instance.DefaultPosition = new Vector2(x * 64, y * 64);
+                }
+                return;
+            }
+        }
+        ModEntry.ModMonitor.Log($"Failed to fix current location for NPC {__instance.Name}", LogLevel.Error);
     }
 }

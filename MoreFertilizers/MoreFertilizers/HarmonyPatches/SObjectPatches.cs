@@ -42,7 +42,7 @@ internal static class SObjectPatches
                 if (__instance.heldObject?.Value is not null && dropInItem.modData?.GetBool(CanPlaceHandler.Organic) == true)
                 {
                     __instance.heldObject.Value.modData?.SetBool(CanPlaceHandler.Organic, true);
-                    if (!__instance.heldObject.Value.Name.Contains("(Organic)"))
+                    if (!__instance.heldObject.Value.Name.Contains(" (Organic)"))
                     {
                         __instance.heldObject.Value.Name += " (Organic)";
                     }

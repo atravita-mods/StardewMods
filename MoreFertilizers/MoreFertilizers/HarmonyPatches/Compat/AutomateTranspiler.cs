@@ -1,5 +1,7 @@
 ﻿using System.Reflection;
 using System.Reflection.Emit;
+using System.Runtime.CompilerServices;
+using AtraBase.Toolkit;
 using AtraBase.Toolkit.Reflection;
 using AtraShared.Utils.Extensions;
 using AtraShared.Utils.HarmonyHelper;
@@ -39,6 +41,7 @@ internal static class AutomateTranspiler
         }
     }
 
+    [MethodImpl(TKConstants.Hot)]
     private static SObject? MakeOrganic(SObject? obj, Item? input)
     {
         if (obj is not null && input?.modData?.GetBool(CanPlaceHandler.Organic) == true)
@@ -46,7 +49,10 @@ internal static class AutomateTranspiler
             try
             {
                 obj.modData?.SetBool(CanPlaceHandler.Organic, true);
-                obj.Name += " (Organic)";
+                if (!obj.Name.Contains("Organic"))
+                {
+                    obj.Name += " (Organic)";
+                }
                 obj.MarkContextTagsDirty();
             }
             catch (Exception ex)

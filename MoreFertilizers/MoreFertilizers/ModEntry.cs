@@ -289,7 +289,7 @@ internal class ModEntry : Mod
             {
                 fishingAPI.ModifyChanceForFish((Farmer who, double chance) =>
                 {
-                    if (who.currentLocation?.modData?.GetBool(CanPlaceHandler.FishFood) == true)
+                    if (who.currentLocation?.modData?.GetBool(CanPlaceHandler.FishFood) == true && chance < 0.3)
                     {
                         return Math.Sqrt(Math.Clamp(chance, 0, 1));
                     }

@@ -15,7 +15,7 @@ internal static class GetFishTranspiler
     {
         try
         {
-            if (loc.modData?.GetInt(CanPlaceHandler.FishFood) is > 0 && prevChance < 0.25)
+            if (loc.modData?.GetBool(CanPlaceHandler.FishFood) == true && prevChance < 0.3)
             {
                 double newChance = Math.Sqrt(Math.Clamp(prevChance, 0, 1));
                 ModEntry.ModMonitor.DebugOnlyLog($"Adjusting fish chance at {loc.NameOrUniqueName}: {prevChance} => {newChance}", LogLevel.Debug);

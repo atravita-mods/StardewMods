@@ -80,6 +80,12 @@ internal class CodeInstructionWrapper
     internal CodeInstructionWrapper(SpecialCodeInstructionCases specialcase)
         => this.specialInstructionCase = specialcase;
 
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="CodeInstructionWrapper"/> class.
+    /// </summary>
+    /// <param name="specialcase">either LdArg or StArg.</param>
+    /// <param name="argument">The argument number.</param>
     internal CodeInstructionWrapper(SpecialCodeInstructionCases specialcase, int argument)
     {
         if (specialcase is SpecialCodeInstructionCases.LdArg or SpecialCodeInstructionCases.StArg)
@@ -93,6 +99,11 @@ internal class CodeInstructionWrapper
         }
     }
 
+    /// <summary>
+    /// Initializes a new instance of the <see cref="CodeInstructionWrapper"/> class.
+    /// </summary>
+    /// <param name="specialcase">LdLoc or StLoc.</param>
+    /// <param name="local">A localvariableinfo.</param>
     internal CodeInstructionWrapper(SpecialCodeInstructionCases specialcase, LocalVariableInfo local)
     {
         if (specialcase is SpecialCodeInstructionCases.LdLoc or SpecialCodeInstructionCases.StLoc)
@@ -131,6 +142,18 @@ internal class CodeInstructionWrapper
             throw new ArgumentException("Use Wildcard for predicate-based matching.");
         }
     }
+
+    // the following two are just for ILHelper, so it can match certain early locals.
+
+    /// <summary>
+    /// Gets the special case enum.
+    /// </summary>
+    internal SpecialCodeInstructionCases? SpecialCase => this.specialInstructionCase;
+
+    /// <summary>
+    /// Gets the local type.
+    /// </summary>
+    internal Type? LocalType => this.localType;
 
     /// <summary>
     /// Whether or not this CodeInstructionWrapper is a valid match to the code instruction.

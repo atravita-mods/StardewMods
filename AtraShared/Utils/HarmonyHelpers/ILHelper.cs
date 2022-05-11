@@ -8,7 +8,7 @@
 // Label stuff?
 // MAKE SURE THE LABEL COUNTS ARE RIGHT. Inserting codes should add to the Important Labels! Check **any time** labels are removed.
 // Insert should probably just have a pattern that moves over the labels....
-// Adjust matching logic to handle locals-by-type when they **don't** have a localbuilder?
+// Adjust matching logic to handle locals-by-type when they **don't** have a localbuilder? (ie the first four locals)
 // Handle scenario when someone adds a local in the middle? (Is that even possible?)
 using System.Diagnostics;
 using System.Reflection;
@@ -151,7 +151,7 @@ internal class ILHelper
         return this;
     }
 
-    // Todo: Consider doing basic stack checking here.
+    // TODO: Consider doing basic stack checking here.
 
     /// <summary>
     /// The list of codes as an enumerable.
@@ -222,7 +222,7 @@ internal class ILHelper
         {
             for (int j = 0; j < instructions.Length; j++)
             {
-                if (!instructions[j].Matches(this.Codes[i + j]))
+                if (!this.IsMatch(instructions[j], this.Codes[i + j]))
                 {
                     goto ContinueSearchForward;
                 }
@@ -266,7 +266,7 @@ ContinueSearchForward:
         {
             for (int j = 0; j < instructions.Length; j++)
             {
-                if (!instructions[j].Matches(this.Codes[i + j]))
+                if (!this.IsMatch(instructions[j], this.Codes[i + j]))
                 {
                     goto ContinueSearchBackwards;
                 }
@@ -513,6 +513,11 @@ ContinueSearchBackwards:
         return this;
     }
 
+    /// <summary>
+    /// Attaches the labels to the current instruction.
+    /// </summary>
+    /// <param name="labels">Labels to attach.</param>
+    /// <returns>this.</returns>
     internal ILHelper AttachLabel(params Label[] labels)
     {
         this.CurrentInstruction.labels.AddRange(labels);
@@ -633,6 +638,21 @@ ContinueSearchBackwards:
         return this.RetreatToLabel(this.label.Value);
     }
 
+    /// <summary>
+    /// Declares a local and adds it to the list to be tracked.
+    /// </summary>
+    /// <param name="type">The type.</param>
+    /// <param name="local">Out param - the local.</param>
+    /// <param name="pinned">Whether to pinn the local or not.</param>
+    /// <returns>this.</returns>
+    internal ILHelper DeclareLocal(Type type, out LocalBuilder local, bool pinned = false)
+    {
+        local = this.Generator.DeclareLocal(type, pinned);
+        this.builtLocals.Add(this.builtLocals.Count, local);
+        this.locals.Add(this.locals.Count, local);
+        return this;
+    }
+
     // transformer should return true to continue and false to stop?
     // and throw errors if it runs into issues.
     // todo: consider checking the state of the stack. Transformers should match pops and pushes...
@@ -670,7 +690,7 @@ ContinueSearchBackwards:
         {
             for (int j = 0; j < instructions.Length; j++)
             {
-                if (!instructions[j].Matches(this.Codes[i + j]))
+                if (!this.IsMatch(instructions[j], this.Codes[i + j]))
                 {
                     goto ContinueSearch;
                 }
@@ -749,6 +769,68 @@ ContinueSearch:
             3 => new(OpCodes.Stloc_3),
             _ => new(OpCodes.Stloc, localindex)
         };
+    }
+
+    /// <summary>
+    /// Handles matching wrappers against instructions. Has special handling for the first three locals.
+    /// </summary>
+    /// <param name="wrapper">The CodeInstructionWrapper.</param>
+    /// <param name="instruction">The instruction to match against.</param>
+    /// <returns>True if matches, false otherwise.</returns>
+    private bool IsMatch(CodeInstructionWrapper wrapper, CodeInstruction instruction)
+    {
+        if (wrapper.Matches(instruction))
+        {
+            return true;
+        }
+        else if (wrapper.LocalType is not null)
+        {
+            int locCount;
+            if (instruction.opcode == OpCodes.Ldloc_0 || instruction.opcode == OpCodes.Stloc_0)
+            {
+                locCount = 0;
+                if (this.locals.Count <= 0)
+                {
+                    return false;
+                }
+            }
+            else if (instruction.opcode == OpCodes.Ldloc_1 || instruction.opcode == OpCodes.Stloc_1)
+            {
+                locCount = 1;
+                if (this.locals.Count <= 1)
+                {
+                    return false;
+                }
+            }
+            else if (instruction.opcode == OpCodes.Ldloc_2 || instruction.opcode == OpCodes.Stloc_2)
+            {
+                locCount = 2;
+                if (this.locals.Count <= 2)
+                {
+                    return false;
+                }
+            }
+            else if (instruction.opcode == OpCodes.Ldloc_3 || instruction.opcode == OpCodes.Stloc_3)
+            {
+                locCount = 3;
+                if (this.locals.Count <= 3)
+                {
+                    return false;
+                }
+            }
+            else
+            { // wrapper Matches would have matched it if it matched.
+                return false;
+            }
+
+            return wrapper.SpecialCase switch
+            {
+                SpecialCodeInstructionCases.LdLoc => instruction.IsLdloc() && this.locals[locCount].LocalType == wrapper.LocalType,
+                SpecialCodeInstructionCases.StLoc => instruction.IsStloc() && this.locals[locCount].LocalType == wrapper.LocalType,
+                _ => false,
+            };
+        }
+        return false;
     }
 }
 

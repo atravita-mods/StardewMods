@@ -2,6 +2,7 @@
 using StardewValley.Menus;
 
 namespace AtraShared.Menuing;
+#warning - fix controller support.
 
 /// <summary>
 /// Shamelessly stolen from RSV: https://github.com/Rafseazz/Ridgeside-Village-Mod/blob/main/Ridgeside%20SMAPI%20Component%202.0/RidgesideVillage/DialogueMenu.cs.

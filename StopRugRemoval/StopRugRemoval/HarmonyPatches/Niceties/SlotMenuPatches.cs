@@ -7,6 +7,7 @@ using HarmonyLib;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using StardewModdingAPI.Utilities;
 using StardewValley.Locations;
 using StardewValley.Menus;
 using StardewValley.Minigames;
@@ -95,9 +96,9 @@ internal static class SlotMenuPatches
     private static readonly Lazy<Action<Slots, int>> SpinsCountSetterLazy = new(() => typeof(Slots).InstanceFieldNamed("spinsCount").GetInstanceFieldSetter<Slots, int>());
     private static readonly Lazy<Action<Slots, bool>> ShowResultSetterLazy = new(() => typeof(Slots).InstanceFieldNamed("showResult").GetInstanceFieldSetter<Slots, bool>());
 
-    private static ClickableComponent? bet1000;
+    private static PerScreen<ClickableComponent?> bet1000 = new();
 
-    private static ClickableComponent? bet10000;
+    private static PerScreen<ClickableComponent?> bet10000 = new();
 
     [HarmonyPostfix]
     [HarmonyPatch(nameof(Slots.receiveLeftClick))]
@@ -108,13 +109,13 @@ internal static class SlotMenuPatches
         {
             return;
         }
-        if (Game1.player.clubCoins >= 1000 && bet1000?.bounds.Contains(x, y) == true)
+        if (Game1.player.clubCoins >= 1000 && bet1000.Value?.bounds.Contains(x, y) == true)
         {
             CurrentBetSetterLazy.Value(__instance, 1000);
             StartSpin(__instance);
             Game1.player.clubCoins -= 1000;
         }
-        else if (Game1.player.clubCoins >= 10000 && bet10000?.bounds.Contains(x, y) == true)
+        else if (Game1.player.clubCoins >= 10000 && bet10000.Value?.bounds.Contains(x, y) == true)
         {
             CurrentBetSetterLazy.Value(__instance, 10000);
             StartSpin(__instance);
@@ -140,11 +141,11 @@ internal static class SlotMenuPatches
     {
         Vector2 position = Utility.getTopLeftPositionForCenteringOnScreen(Game1.viewport, 104, HEIGHT, -16, 160);
         (int x, int y) = position.ToPoint();
-        bet1000 = new ClickableComponent(new Rectangle(x, y, 104, HEIGHT), I18n.Bet1k());
+        bet1000.Value = new ClickableComponent(new Rectangle(x, y, 104, HEIGHT), I18n.Bet1k());
 
         position = Utility.getTopLeftPositionForCenteringOnScreen(Game1.viewport, 124, HEIGHT, -16, 224);
         (x, y) = position.ToPoint();
-        bet10000 = new ClickableComponent(new Rectangle(x, y, 124, HEIGHT), I18n.Bet10k());
+        bet10000.Value = new ClickableComponent(new Rectangle(x, y, 124, HEIGHT), I18n.Bet10k());
     }
 
 #pragma warning disable SA1116 // Split parameters should start on line after declaration
@@ -209,30 +210,30 @@ internal static class SlotMenuPatches
 
     private static void DrawImpl(Slots slots, SpriteBatch b)
     {
-        if (bet1000 is not null)
+        if (bet1000.Value is not null)
         {
             b.Draw(
                 texture: AssetEditor.BetIcon,
-                position: new Vector2(bet1000.bounds.X, bet1000.bounds.Y),
+                position: new Vector2(bet1000.Value.bounds.X, bet1000.Value.bounds.Y),
                 sourceRectangle: new Rectangle(0, 0, 26, 13),
                 color: Color.White * (!SpinningGetterLazy.Value(slots) && Game1.player.clubCoins >= 1000 ? 1f : 0.5f),
                 rotation: 0f,
                 origin: Vector2.Zero,
-                scale: Game1.pixelZoom * bet1000.scale,
+                scale: Game1.pixelZoom * bet1000.Value.scale,
                 effects: SpriteEffects.None,
                 layerDepth: 0.99f);
         }
 
-        if (bet10000 is not null)
+        if (bet10000.Value is not null)
         {
             b.Draw(
                 texture: AssetEditor.BetIcon,
-                position: new Vector2(bet10000.bounds.X, bet10000.bounds.Y),
+                position: new Vector2(bet10000.Value.bounds.X, bet10000.Value.bounds.Y),
                 sourceRectangle: new Rectangle(0, 13, 31, 13),
                 color: Color.White * ((!SpinningGetterLazy.Value(slots) && Game1.player.clubCoins >= 10000) ? 1f : 0.5f),
                 rotation: 0f,
                 origin: Vector2.Zero,
-                scale: Game1.pixelZoom * bet10000.scale,
+                scale: Game1.pixelZoom * bet10000.Value.scale,
                 effects: SpriteEffects.None,
                 layerDepth: 0.99f);
         }
@@ -242,7 +243,7 @@ internal static class SlotMenuPatches
     [HarmonyPatch(nameof(Slots.unload))]
     private static void BeforeQuit()
     {
-        bet1000 = null;
-        bet10000 = null;
+        bet1000.Value = null;
+        bet10000.Value = null;
     }
 }

@@ -21,6 +21,7 @@ internal static class StorageFurniturePatches
 #if DEBUG
     [HarmonyPrefix]
     [HarmonyPatch(nameof(StorageFurniture.checkForAction))]
+    [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Harmony Convention")]
     private static bool PrefixCheckedAction(StorageFurniture  __instance)
     {
         if (ModEntry.Config.FurniturePlacementKey.IsDown() && Game1.player.ActiveObject is SObject obj && __instance.heldObject.Value is null)

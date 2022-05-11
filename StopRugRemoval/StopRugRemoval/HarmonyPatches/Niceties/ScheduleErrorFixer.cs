@@ -21,7 +21,7 @@ internal static class ScheduleErrorFixer
         {
             return;
         }
-        ModEntry.ModMonitor.Log($"{__instance.Name} seems to have a null current location, attempting to fix. Please inform their author! The current day is {SDate.Now()}, their attempted schedule string was {rawData}", LogLevel.Warn);
+        ModEntry.ModMonitor.Log($"{__instance.Name} seems to have a null current location, attempting to fix. Please inform their author! The current day is {SDate.Now()}, their attempted schedule string was {rawData}", LogLevel.Info);
         if (__instance.DefaultMap is not null && Game1.getLocationFromName(__instance.DefaultMap) is GameLocation location)
         { // Attempt to first just assign their position from their default map.
             __instance.currentLocation = location;
@@ -59,6 +59,5 @@ internal static class ScheduleErrorFixer
                 return;
             }
         }
-        ModEntry.ModMonitor.Log($"Failed to fix current location for NPC {__instance.Name}", LogLevel.Error);
     }
 }

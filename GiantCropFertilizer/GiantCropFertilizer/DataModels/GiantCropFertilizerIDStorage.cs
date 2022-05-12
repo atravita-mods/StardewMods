@@ -18,10 +18,16 @@ public class GiantCropFertilizerIDStorage
     /// </summary>
     /// <param name="id">ID to save.</param>
     public GiantCropFertilizerIDStorage(int id)
-        => this.ID = id;
+        => this.IDMap[Constants.SaveFolderName!] = id;
 
     /// <summary>
     /// Gets or sets the ID number to store.
     /// </summary>
-    public int ID { get; set; } = 0;
+    public Dictionary<string, int> IDMap { get; set; } = new();
+
+    internal int ID
+    {
+        get => this.IDMap[Constants.SaveFolderName!];
+        set => this.IDMap[Constants.SaveFolderName!] = value;
+    }
 }

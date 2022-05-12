@@ -1,4 +1,10 @@
 ﻿{
+  "mod.description": "Adds a bunch of new fertilizers!",
+
+  "MillProducesOrganic.title": "Mill Produces Organic",
+  "MillProducesOrganic.description": "Organic goods fed into the mill will produce organic products.",
+
+  // For GMCM
   "IllFormatedConfig": "Config file seems ill-formated, using default. Please use Generic Mod Config Menu to configure.",
 
   "api-not-found": "{{APIID}} not found, integration disabled.",

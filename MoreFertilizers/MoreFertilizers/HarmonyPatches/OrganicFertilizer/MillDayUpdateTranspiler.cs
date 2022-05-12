@@ -19,7 +19,7 @@ internal static class MillDayUpdateTranspiler
 {
     private static SObject? MakeOrganic(Item? input, SObject? output)
     {
-        if (input is null || output is null)
+        if (input is null || output is null || !ModEntry.Config.MillProducesOrganic)
         {
             return output;
         }
@@ -28,6 +28,7 @@ internal static class MillDayUpdateTranspiler
             if (input.modData?.GetBool(CanPlaceHandler.Organic) == true)
             {
                 output.modData?.SetBool(CanPlaceHandler.Organic, true);
+                output.Price = (int)(output.Price * 1.1);
                 if (!output.Name.Contains("Organic"))
                 {
                     output.Name += " (Organic)";

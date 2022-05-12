@@ -1,4 +1,5 @@
-﻿using AtraShared.ConstantsAndEnums;
+﻿using System.Reflection;
+using AtraShared.ConstantsAndEnums;
 using AtraShared.Integrations;
 using AtraShared.Integrations.Interfaces;
 using AtraShared.MigrationManager;
@@ -13,14 +14,17 @@ using MoreFertilizers.HarmonyPatches.Compat;
 using MoreFertilizers.HarmonyPatches.FishFood;
 using MoreFertilizers.HarmonyPatches.FruitTreePatches;
 using StardewModdingAPI.Events;
+using StardewValley.Objects;
 using StardewValley.TerrainFeatures;
+
+using AtraUtils = AtraShared.Utils.Utils;
 
 namespace MoreFertilizers;
 
 /// <inheritdoc />
 internal class ModEntry : Mod
 {
-    private const string SAVESUFFIX = "_SavedObjectID";
+    private const string SavedIDKey = "MFSavedObjectID";
 
     private static IJsonAssetsAPI? jsonAssets;
 
@@ -111,6 +115,11 @@ internal class ModEntry : Mod
     /// Gets this mod's uniqueID.
     /// </summary>
     internal static string UNIQUEID { get; private set; }
+
+    /// <summary>
+    /// Gets the config instance for this mod.
+    /// </summary>
+    internal static ModConfig Config { get; private set; }
 #pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
 
     /// <inheritdoc />
@@ -120,10 +129,11 @@ internal class ModEntry : Mod
         MultiplayerHelper = this.Helper.Multiplayer;
         ModMonitor = this.Monitor;
         UNIQUEID = this.ModManifest.UniqueID;
+        Config = AtraUtils.GetConfigOrDefault<ModConfig>(helper, this.Monitor);
 
         helper.Events.GameLoop.GameLaunched += this.OnGameLaunched;
         helper.Events.GameLoop.SaveLoaded += this.OnSaveLoaded;
-        helper.Events.GameLoop.Saved += this.OnSaved;
+        helper.Events.GameLoop.Saving += this.OnSaving;
         helper.Events.GameLoop.ReturnedToTitle += this.OnReturnedToTitle;
 
         helper.Events.Multiplayer.ModMessageReceived += this.Multiplayer_ModMessageReceived;
@@ -187,7 +197,7 @@ internal class ModEntry : Mod
     /// </summary>
     /// <param name="sender">SMAPI.</param>
     /// <param name="e">Event arguments.</param>
-    private void OnSaved(object? sender, SavedEventArgs e)
+    private void OnSaving(object? sender, SavingEventArgs e)
     {
         // TODO: This should be doable with expression trees in a less dumb way.
         if (storedIDs is null)
@@ -205,7 +215,7 @@ internal class ModEntry : Mod
             storedIDs.DeluxeJojaFertilizerID = DeluxeJojaFertilizerID;
             storedIDs.OrganicFertilizerID = OrganicFertilizerID;
         }
-        this.Helper.Data.WriteGlobalData(Constants.SaveFolderName + SAVESUFFIX, storedIDs);
+        this.Helper.Data.WriteSaveData(SavedIDKey, storedIDs);
     }
 
     /// <summary>
@@ -267,15 +277,31 @@ internal class ModEntry : Mod
         harmony.Snitch(this.Monitor, harmony.Id, transpilersOnly: true);
     }
 
+    [SuppressMessage("StyleCop.CSharp.OrderingRules", "SA1204:Static elements should appear before instance elements", Justification = "Reviewed.")]
+    private static ModConfig GetConfig() => Config;
+
     private void OnGameLaunched(object? sender, GameLaunchedEventArgs e)
     {
         this.ApplyPatches(new Harmony(this.ModManifest.UniqueID));
+        {
+            GMCMHelper helper = new(this.Monitor, this.Helper.Translation, this.Helper.ModRegistry, this.ModManifest);
+            if (helper.TryGetAPI())
+            {
+                helper.Register(
+                    reset: static () => Config = new(),
+                    save: () => this.Helper.WriteConfig(Config))
+                    .AddParagraph(I18n.Mod_Description);
+                foreach (PropertyInfo property in typeof(ModConfig).GetProperties())
+                {
+                    helper.AddBoolOption(property, GetConfig);
+                }
+            }
+        }
         {
             IntegrationHelper helper = new(this.Monitor, this.Helper.Translation, this.Helper.ModRegistry, LogLevel.Warn);
             if (helper.TryGetAPI("spacechase0.JsonAssets", "1.10.3", out jsonAssets))
             {
                 jsonAssets.LoadAssets(Path.Combine(this.Helper.DirectoryPath, "assets", "json-assets"), this.Helper.Translation);
-                jsonAssets.IdsAssigned += this.JsonAssets_IdsAssigned;
                 jsonAssets.IdsFixed += this.JsonAssets_IdsFixed;
                 this.Monitor.Log("Loaded packs!");
             }
@@ -309,8 +335,6 @@ internal class ModEntry : Mod
     /************
      * REGION JA
      * *********/
-
-    private void JsonAssets_IdsAssigned(object? sender, EventArgs e) => this.FixIDs();
 
     private void JsonAssets_IdsFixed(object? sender, EventArgs e) => this.FixIDs();
 
@@ -380,9 +404,14 @@ internal class ModEntry : Mod
             return;
         }
 
+        if (!Context.IsMainPlayer)
+        {
+            return;
+        }
+
         if (storedIDs is null)
         {
-            if (this.Helper.Data.ReadGlobalData<MoreFertilizerIDs>(Constants.SaveFolderName + SAVESUFFIX) is not MoreFertilizerIDs storedIDCls)
+            if (this.Helper.Data.ReadSaveData<MoreFertilizerIDs>(SavedIDKey) is not MoreFertilizerIDs storedIDCls)
             {
                 ModMonitor.Log("No need to fix IDs, not installed before.");
                 return;
@@ -456,6 +485,16 @@ internal class ModEntry : Mod
                     if (idMapping.TryGetValue(dirt.fertilizer.Value, out int newval))
                     {
                         dirt.fertilizer.Value = newval;
+                    }
+                }
+            }
+            foreach (SObject obj in loc.Objects.Values)
+            {
+                if (obj is IndoorPot pot && pot.hoeDirt?.Value?.fertilizer?.Value is int value && value != 0)
+                {
+                    if (idMapping.TryGetValue(value, out int newvalue))
+                    {
+                        pot.hoeDirt.Value.fertilizer.Value = newvalue;
                     }
                 }
             }

@@ -102,7 +102,7 @@ internal static class AutomateTranspiler
         }
         catch (Exception ex)
         {
-            ModEntry.ModMonitor.Log($"Mod crashed while transpiling MultiYieldCrops:\n\n{ex}", LogLevel.Error);
+            ModEntry.ModMonitor.Log($"Mod crashed while transpiling Automate:\n\n{ex}", LogLevel.Error);
         }
         return null;
     }

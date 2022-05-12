@@ -1,56 +1,45 @@
 ﻿using System.Reflection;
 using System.Reflection.Emit;
+using System.Runtime.CompilerServices;
+using AtraBase.Toolkit;
 using AtraBase.Toolkit.Reflection;
 using AtraShared.Utils.Extensions;
 using AtraShared.Utils.HarmonyHelper;
 using HarmonyLib;
 using MoreFertilizers.Framework;
+using MoreFertilizers.HarmonyPatches.OrganicFertilizer;
 using Netcode;
 using StardewValley.Buildings;
 using StardewValley.Objects;
 
-namespace MoreFertilizers.HarmonyPatches.OrganicFertilizer;
+namespace MoreFertilizers.HarmonyPatches.Compat;
 
 /// <summary>
-/// Transpiles the mill.
+/// Holds transpiler patches against Miller Time to handle organic crops.
 /// </summary>
-[HarmonyPatch(typeof(Mill))]
-internal static class MillDayUpdateTranspiler
+internal static class MillerTimeDayUpdateTranspiler
 {
     /// <summary>
-    /// Makes a mill object organic.
+    /// Applies patches against Miller Time.
     /// </summary>
-    /// <param name="input">Input item.</param>
-    /// <param name="output">Output item.</param>
-    /// <returns>Output item, adjusted if needed.</returns>
-    internal static SObject? MakeMillOutputOrganic(Item? input, SObject? output)
+    /// <param name="harmony">Harmony reference.</param>
+    /// <exception cref="MethodNotFoundException">Some type or something wasn't found.</exception>
+    internal static void ApplyPatches(Harmony harmony)
     {
-        if (input is null || output is null || !ModEntry.Config.MillProducesOrganic)
-        {
-            return output;
-        }
         try
         {
-            if (input.modData?.GetBool(CanPlaceHandler.Organic) == true)
-            {
-                output.modData?.SetBool(CanPlaceHandler.Organic, true);
-                output.Price = (int)(output.Price * 1.1);
-                if (!output.Name.Contains("Organic"))
-                {
-                    output.Name += " (Organic)";
-                }
-                output.MarkContextTagsDirty();
-            }
+            Type millerpatches = AccessTools.TypeByName("MillerTime.Patches.MillPatch") ?? throw new MethodNotFoundException("MillerTime Patches");
+            harmony.Patch(
+                original: millerpatches.StaticMethodNamed("DayUpdatePrefix"),
+                transpiler: new HarmonyMethod(typeof(MillerTimeDayUpdateTranspiler), nameof(Transpiler)));
         }
         catch (Exception ex)
         {
-            ModEntry.ModMonitor.Log($"Error in making mill item organic!\n\n{ex}", LogLevel.Error);
+            ModEntry.ModMonitor.Log($"Mod failed while transpiling Miller Time. Integration may not work.\n\n{ex}", LogLevel.Error);
         }
-        return output;
     }
 
 #pragma warning disable SA1116 // Split parameters should start on line after declaration
-    [HarmonyPatch(nameof(Mill.dayUpdate))]
     private static IEnumerable<CodeInstruction>? Transpiler(IEnumerable<CodeInstruction> instructions, ILGenerator gen, MethodBase original)
     {
         try
@@ -67,6 +56,7 @@ internal static class MillDayUpdateTranspiler
             .Advance(4)
             .Insert(new CodeInstruction[]
             { // This is sufficiently annoying we're just going to create a local to store it.
+              // I'm so confused as to why this is a weird ass field and not a local. Can't understand the compiler's decisions here.
                 new(OpCodes.Stloc, inputlocal),
                 new(OpCodes.Ldloc, inputlocal),
             })
@@ -74,37 +64,35 @@ internal static class MillDayUpdateTranspiler
             { // find and store the output's local.
                 new(OpCodes.Newobj, typeof(SObject).GetConstructor(new[] { typeof(int), typeof(int), typeof(bool), typeof(int), typeof(int) })),
                 new(SpecialCodeInstructionCases.StLoc),
-                new(SpecialCodeInstructionCases.Wildcard, (inst) => inst.Branches(out _)),
             }).Advance(1);
 
             CodeInstruction? stoutput = helper.CurrentInstruction.Clone();
             CodeInstruction? ldoutput = helper.CurrentInstruction.ToLdLoc();
 
-            // Advance to the end of the switch case.
-            helper.Advance(1)
-            .StoreBranchDest()
-            .AdvanceToStoredLabel()
-            .FindNext(new CodeInstructionWrapper[]
-            { // Skip past the null check to the next block.
-                new(SpecialCodeInstructionCases.LdLoc),
-                new(OpCodes.Ldarg_0),
-                new(OpCodes.Ldfld, typeof(Mill).InstanceFieldNamed(nameof(Mill.output))),
+            helper.FindNext(new CodeInstructionWrapper[]
+            {
+                new(OpCodes.Call, typeof(Utility).StaticMethodNamed(nameof(Utility.canItemBeAddedToThisInventoryList), new[] { typeof(Item), typeof(IList<Item>), typeof(int) })),
             })
-            .GetLabels(out IList<Label>? labelsToMove, clear: true)
+            .FindNext(new CodeInstructionWrapper[]
+            {
+                new(OpCodes.Ldarg_1),
+                new(OpCodes.Ldfld, typeof(Mill).InstanceFieldNamed(nameof(Mill.input))),
+            })
+            .GetLabels(out IList<Label> labelsToMove)
             .Insert(new CodeInstruction[]
             { // Place our function call here.
                 new(OpCodes.Ldloc, inputlocal),
                 ldoutput,
-                new(OpCodes.Call, typeof(MillDayUpdateTranspiler).StaticMethodNamed(nameof(MakeMillOutputOrganic))),
+                new(OpCodes.Call, typeof(MillDayUpdateTranspiler).StaticMethodNamed(nameof(MillDayUpdateTranspiler.MakeMillOutputOrganic))),
                 stoutput,
             }, withLabels: labelsToMove);
 
-            // helper.Print();
+            helper.Print();
             return helper.Render();
         }
         catch (Exception ex)
         {
-            ModEntry.ModMonitor.Log($"Mod crashed while transpiling Crop.harvest:\n\n{ex}", LogLevel.Error);
+            ModEntry.ModMonitor.Log($"Mod crashed while transpiling Miller Time:\n\n{ex}", LogLevel.Error);
         }
         return null;
     }

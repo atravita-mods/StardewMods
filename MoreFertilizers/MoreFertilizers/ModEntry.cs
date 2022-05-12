@@ -269,6 +269,13 @@ internal class ModEntry : Mod
                 this.Monitor.Log("Found Automate, applying compat patches", LogLevel.Info);
                 AutomateTranspiler.ApplyPatches(harmony);
             }
+
+            if (this.Helper.ModRegistry.Get("Satozaki.MillerTime") is IModInfo millerTime
+                && millerTime.Manifest.Version.IsNewerThan("0.99.0"))
+            {
+                this.Monitor.Log("Found Miller Time, applying compat patches", LogLevel.Info);
+                MillerTimeDayUpdateTranspiler.ApplyPatches(harmony);
+            }
         }
         catch (Exception ex)
         {
@@ -303,7 +310,6 @@ internal class ModEntry : Mod
             {
                 jsonAssets.LoadAssets(Path.Combine(this.Helper.DirectoryPath, "assets", "json-assets"), this.Helper.Translation);
                 jsonAssets.IdsFixed += this.JsonAssets_IdsFixed;
-                this.Monitor.Log("Loaded packs!");
             }
             else
             {

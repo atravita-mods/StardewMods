@@ -141,7 +141,7 @@ internal static class Globals
     {
         if (Context.IsWorldReady && Context.IsMainPlayer)
         {
-            SaveDataModel = Helper.Data.ReadGlobalData<SaveDataModel>(SaveDataKey + Constants.SaveFolderName!) ?? new();
+            SaveDataModel = Helper.Data.ReadSaveData<SaveDataModel>(SaveDataKey) ?? new();
         }
     }
 
@@ -152,7 +152,7 @@ internal static class Globals
     {
         if (Context.IsWorldReady && Context.IsMainPlayer)
         {
-            Helper.Data.WriteSaveData(SaveDataKey + Constants.SaveFolderName!, SaveDataModel);
+            Helper.Data.WriteSaveData(SaveDataKey, SaveDataModel);
         }
     }
 }

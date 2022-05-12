@@ -6,12 +6,12 @@ namespace GingerIslandMainlandAdjustments.AssetManagers;
 /// <summary>
 /// Manages asset editing for this mod.
 /// </summary>
-public static class AssetEditor
+internal static class AssetEditor
 {
     /// <summary>
     /// Pam's mail key.
     /// </summary>
-    public const string PAMMAILKEY = "atravita_GingerIslandMainlandAdjustments_PamMail";
+    internal const string PAMMAILKEY = "atravita_GingerIslandMainlandAdjustments_PamMail";
 
     // The following dialogue is edited from the code side so each NPC has at least the Resort dialogue.
     // A CP pack will override, since my asset managers are registered in Entry and CP registers in GameLaunched.

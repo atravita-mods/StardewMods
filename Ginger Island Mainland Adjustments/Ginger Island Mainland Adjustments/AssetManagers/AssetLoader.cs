@@ -10,7 +10,7 @@ namespace GingerIslandMainlandAdjustments.AssetManagers;
 /// <summary>
 /// Enum that represents the special roles on Ginger Island.
 /// </summary>
-public enum SpecialCharacterType
+internal enum SpecialCharacterType
 {
     /// <summary>
     /// Musician.
@@ -28,7 +28,7 @@ public enum SpecialCharacterType
 /// <summary>
 /// Enum that represents groups of people who might want to explore GI together.
 /// </summary>
-public enum SpecialGroupType
+internal enum SpecialGroupType
 {
     /// <summary>
     /// Groups of people who might go to Ginger Island together.
@@ -44,7 +44,7 @@ public enum SpecialGroupType
 /// <summary>
 /// Class to manage asset loading.
 /// </summary>
-public static class AssetLoader
+internal static class AssetLoader
 {
     /// <summary>
     /// Primary asset path for this mod. All assets should start with this.
@@ -89,29 +89,12 @@ public static class AssetLoader
     };
 
     /// <summary>
-    /// Loads default files for this mod.
-    /// </summary>
-    /// <param name="e">AssetRequestedEventArguments.</param>
-    public static void Load(AssetRequestedEventArgs e)
-    {
-        if (e.NameWithoutLocale.IsEquivalentTo(GroupsLocations))
-        {
-            e.LoadFrom(GetDefaultGroups, AssetLoadPriority.Low);
-        }
-        else if (MyAssets.Any((string assetpath) => e.NameWithoutLocale.IsEquivalentTo(assetpath)))
-        {
-            e.LoadFrom(EmptyContainers.GetEmptyDictionary<string, string>, AssetLoadPriority.Low);
-        }
-    }
-
-    /// <summary>
     /// Get the special characters for specific scheduling positions.
     /// </summary>
     /// <param name="specialCharacterType">Which type of special position am I looking for.</param>
     /// <returns>HashSet of possible special characters.</returns>
     /// <exception cref="UnexpectedEnumValueException{SpecialCharacterType}">Recieved an unexpected enum value.</exception>
-    [SuppressMessage("StyleCop.CSharp.OrderingRules", "SA1204:Static elements should appear before instance elements", Justification = "Reviewed")]
-    public static HashSet<NPC> GetSpecialCharacter(SpecialCharacterType specialCharacterType)
+    internal static HashSet<NPC> GetSpecialCharacter(SpecialCharacterType specialCharacterType)
     {
         HashSet<NPC> specialCharacters = new();
         string assetLocation = specialCharacterType switch
@@ -144,7 +127,7 @@ public static class AssetLoader
     /// <param name="specialGroupType">Which type of special group am I looking for.</param>
     /// <returns>Dictionary of specialGroupName=>Special Group.</returns>
     /// <exception cref="UnexpectedEnumValueException{SpecialGroupType}">Received an unexpected enum value.</exception>
-    public static Dictionary<string, HashSet<NPC>> GetCharacterGroup(SpecialGroupType specialGroupType)
+    internal static Dictionary<string, HashSet<NPC>> GetCharacterGroup(SpecialGroupType specialGroupType)
     {
         Dictionary<string, HashSet<NPC>> characterGroups = new();
         string assetLocation = specialGroupType switch
@@ -217,6 +200,22 @@ public static class AssetLoader
             }
         }
         return exclusions;
+    }
+
+    /// <summary>
+    /// Loads default files for this mod.
+    /// </summary>
+    /// <param name="e">AssetRequestedEventArguments.</param>
+    internal static void Load(AssetRequestedEventArgs e)
+    {
+        if (e.NameWithoutLocale.IsEquivalentTo(GroupsLocations))
+        {
+            e.LoadFrom(GetDefaultGroups, AssetLoadPriority.Low);
+        }
+        else if (MyAssets.Any((string assetpath) => e.NameWithoutLocale.IsEquivalentTo(assetpath)))
+        {
+            e.LoadFrom(EmptyContainers.GetEmptyDictionary<string, string>, AssetLoadPriority.Low);
+        }
     }
 
     private static Dictionary<string, string> GetDefaultGroups()

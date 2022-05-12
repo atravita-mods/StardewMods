@@ -1,4 +1,5 @@
-﻿using AtraShared.Integrations;
+﻿using System.Reflection;
+using AtraShared.Integrations;
 using GingerIslandMainlandAdjustments.Configuration;
 
 namespace GingerIslandMainlandAdjustments.Integrations;
@@ -22,36 +23,36 @@ internal static class GenerateGMCM
         }
 
         helper.Register(
-                reset: () => Globals.Config = new ModConfig(),
-                save: () => Globals.Helper.WriteConfig(Globals.Config))
+                reset: static () => Globals.Config = new ModConfig(),
+                save: static () => Globals.Helper.WriteConfig(Globals.Config))
             .AddParagraph(I18n.ModDescription)
             .AddBoolOption(
                 name: I18n.Config_EnforceGITiming_Title,
-                getValue: () => Globals.Config.EnforceGITiming,
-                setValue: value => Globals.Config.EnforceGITiming = value,
+                getValue: static () => Globals.Config.EnforceGITiming,
+                setValue: static value => Globals.Config.EnforceGITiming = value,
                 tooltip: I18n.Config_EnforceGITiming_Description)
             .AddEnumOption(
                 name: I18n.Config_WearIslandClothing_Title,
-                getValue: () => Globals.Config.WearIslandClothing,
-                setValue: value => Globals.Config.WearIslandClothing = value,
+                getValue: static () => Globals.Config.WearIslandClothing,
+                setValue: static value => Globals.Config.WearIslandClothing = value,
                 tooltip: I18n.Config_WearIslandClothing_Description)
             .AddBoolOption(
                 name: I18n.Config_Scheduler_Title,
-                getValue: () => Globals.Config.UseThisScheduler,
-                setValue: value => Globals.Config.UseThisScheduler = value,
+                getValue: static () => Globals.Config.UseThisScheduler,
+                setValue: static value => Globals.Config.UseThisScheduler = value,
                 tooltip: I18n.Config_Scheduler_Description)
             .AddParagraph(I18n.Config_Scheduler_Otheroptions)
             .AddNumberOption(
                 name: I18n.Config_Capacity_Title,
-                getValue: () => Globals.Config.Capacity,
-                setValue: value => Globals.Config.Capacity = value,
+                getValue: static () => Globals.Config.Capacity,
+                setValue: static value => Globals.Config.Capacity = value,
                 tooltip: I18n.Config_Capacity_Description,
                 min: 0,
                 max: 12)
             .AddNumberOption(
                 name: I18n.Config_GroupChance_Title,
-                getValue: () => Globals.Config.GroupChance,
-                setValue: value => Globals.Config.GroupChance = value,
+                getValue: static () => Globals.Config.GroupChance,
+                setValue: static value => Globals.Config.GroupChance = value,
                 tooltip: I18n.Config_GroupChance_Description,
                 formatValue: TwoPlaceFixedPoint,
                 min: 0f,
@@ -59,8 +60,8 @@ internal static class GenerateGMCM
                 interval: 0.01f)
             .AddNumberOption(
                 name: I18n.Config_ExplorerChance_Title,
-                getValue: () => Globals.Config.ExplorerChance,
-                setValue: value => Globals.Config.ExplorerChance = value,
+                getValue: static () => Globals.Config.ExplorerChance,
+                setValue: static value => Globals.Config.ExplorerChance = value,
                 tooltip: I18n.Config_ExplorerChance_Description,
                 formatValue: TwoPlaceFixedPoint,
                 min: 0f,
@@ -68,33 +69,26 @@ internal static class GenerateGMCM
                 interval: 0.01f)
             .AddEnumOption(
                 name: I18n.Config_GusDay_Title,
-                getValue: () => Globals.Config.GusDay,
-                setValue: value => Globals.Config.GusDay = value,
+                getValue: static () => Globals.Config.GusDay,
+                setValue: static value => Globals.Config.GusDay = value,
                 tooltip: I18n.Config_GusDay_Description)
             .AddNumberOption(
                 name: I18n.Config_GusChance_Title,
-                getValue: () => Globals.Config.GusChance,
-                setValue: value => Globals.Config.GusChance = value,
+                getValue: static () => Globals.Config.GusChance,
+                setValue: static value => Globals.Config.GusChance = value,
                 tooltip: I18n.Config_GusChance_Description,
                 formatValue: TwoPlaceFixedPoint,
                 min: 0f,
                 max: 1f,
-                interval: 0.01f)
-            .AddBoolOption(
-                name: I18n.Config_AllowWilly_Title,
-                getValue: () => Globals.Config.AllowWilly,
-                setValue: value => Globals.Config.AllowWilly = value,
-                tooltip: I18n.Config_AllowWilly_Description)
-            .AddBoolOption(
-                name: I18n.Config_AllowSandy_Title,
-                getValue: () => Globals.Config.AllowSandy,
-                setValue: value => Globals.Config.AllowSandy = value,
-                tooltip: I18n.Config_AllowSandy_Description)
-            .AddBoolOption(
-                name: I18n.Config_AllowGeorgeAndEvelyn_Title,
-                getValue: () => Globals.Config.AllowGeorgeAndEvelyn,
-                setValue: value => Globals.Config.AllowGeorgeAndEvelyn = value,
-                tooltip: I18n.Config_AllowGeorgeAndEvelyn_Description);
+                interval: 0.01f);
+
+        foreach (PropertyInfo property in typeof(ModConfig).GetProperties())
+        {
+            if (property.Name.StartsWith("Allow"))
+            {
+                helper.AddBoolOption(property, () => Globals.Config);
+            }
+        }
     }
 
     private static string TwoPlaceFixedPoint(float f) => $"{f:f2}";

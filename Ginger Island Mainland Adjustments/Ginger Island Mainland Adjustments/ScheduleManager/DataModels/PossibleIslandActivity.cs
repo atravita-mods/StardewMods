@@ -84,7 +84,7 @@ internal readonly struct PossibleIslandActivity
         {
             return null;
         }
- 
+
 #pragma warning disable CS8604 // Possible null reference argument. IsAnimationUnique() prevents animation from being null
         // Check I have the animation to play if there's one specified
         if (this.IsAnimationUnique() && animation_descriptions?.ContainsKey(schedule_animation) == false)

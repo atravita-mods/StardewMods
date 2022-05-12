@@ -45,7 +45,7 @@ internal static class DialoguePatches
                 TalkedToToday.Add(__instance.Name);
             }
             if (__result || !Game1.IsVisitingIslandToday(__instance.Name) || __instance.currentLocation is FarmHouse)
-            { // game code has returned a value, therefore skip me.
+            {
                 return;
             }
             if (__instance.currentLocation is IslandLocation && GIScheduler.CurrentAdventurers?.Contains(__instance) == true)

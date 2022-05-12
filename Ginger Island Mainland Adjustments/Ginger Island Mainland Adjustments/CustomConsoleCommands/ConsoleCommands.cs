@@ -29,7 +29,7 @@ internal static class ConsoleCommands
         commandHelper.Add(
             name: PrePendCommand,
             documentation: I18n.BaseCommand_Documentation(),
-            callback: (string command, string[] args) => Globals.ModMonitor.Log(
+            callback: static (string command, string[] args) => Globals.ModMonitor.Log(
                 I18n.BaseCommand()
                 + $"\n\t{PrePendCommand}.get_schedule"
                 + $"\n\t{PrePendCommand}.get_islanders"
@@ -117,8 +117,7 @@ internal static class ConsoleCommands
                 return;
             }
         }
-        Game1.netWorldState.Value.IslandVisitors.TryGetValue(npc.Name, out bool atIsland);
-        if (atIsland)
+        if (Game1.netWorldState.Value.IslandVisitors.TryGetValue(npc.Name, out bool atIsland) && atIsland)
         {
             Globals.ModMonitor.Log('\t' + I18n.DisplaySchedule_ToIsland(npc.Name), level);
             if (IslandSchedules.TryGetValue(npc.Name, out string? schedulestring))

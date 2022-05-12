@@ -8,6 +8,7 @@ using GiantCropFertilizer.DataModels;
 using GiantCropFertilizer.HarmonyPatches;
 using HarmonyLib;
 using StardewModdingAPI.Events;
+using StardewValley.Objects;
 using StardewValley.TerrainFeatures;
 using AtraUtils = AtraShared.Utils.Utils;
 
@@ -16,7 +17,7 @@ namespace GiantCropFertilizer;
 /// <inheritdoc />
 internal class ModEntry : Mod
 {
-    private const string SAVESUFFIX = "_SavedObjectID";
+    private const string SAVESTRING = "SavedObjectID";
 
     private static IJsonAssetsAPI? jsonAssets;
 
@@ -61,7 +62,7 @@ internal class ModEntry : Mod
 
     private void OnSaved(object? sender, SavedEventArgs e)
         => this.Helper.Data.WriteGlobalData(
-            Constants.SaveFolderName + SAVESUFFIX,
+            SAVESTRING,
             this.storedID ?? new GiantCropFertilizerIDStorage(GiantCropFertilizerID));
 
     /// <summary>
@@ -116,7 +117,7 @@ internal class ModEntry : Mod
             if (helper.TryGetAPI("spacechase0.JsonAssets", "1.10.3", out jsonAssets))
             {
                 jsonAssets.LoadAssets(Path.Combine(this.Helper.DirectoryPath, "assets", "json-assets"), this.Helper.Translation);
-                jsonAssets.IdsFixed += this.JsonAssets_IdsFixed;
+                jsonAssets.IdsFixed += this.JAIdsFixed;
                 this.Monitor.Log("Loaded packs!");
             }
             else
@@ -159,7 +160,39 @@ internal class ModEntry : Mod
         }
     }
 
-    private void JsonAssets_IdsFixed(object? sender, EventArgs e)
+    private void OnSaveLoaded(object? sender, SaveLoadedEventArgs e)
+    {
+        this.FixIds();
+        MultiplayerHelpers.AssertMultiplayerVersions(this.Helper.Multiplayer, this.ModManifest, this.Monitor, this.Helper.Translation);
+
+        this.migrator = new(this.ModManifest, this.Helper, this.Monitor);
+        this.migrator.ReadVersionInfo();
+        this.Helper.Events.GameLoop.Saved += this.WriteMigrationData;
+    }
+
+    /// <summary>
+    /// Writes migration data then detaches the migrator.
+    /// </summary>
+    /// <param name="sender">Smapi thing.</param>
+    /// <param name="e">Arguments for just-before-saving.</param>
+    private void WriteMigrationData(object? sender, SavedEventArgs e)
+    {
+        if (this.migrator is not null)
+        {
+            this.migrator.SaveVersionInfo();
+            this.migrator = null;
+        }
+        this.Helper.Events.GameLoop.Saved -= this.WriteMigrationData;
+    }
+
+    /*********
+     * REGION JSON ASSETS
+     * *******/
+
+    private void JAIdsFixed(object? sender, EventArgs e)
+        => this.FixIds();
+
+    private void FixIds()
     {
         int newID = GiantCropFertilizerID;
         if (newID == -1)
@@ -167,7 +200,7 @@ internal class ModEntry : Mod
             return;
         }
 
-        if (this.Helper.Data.ReadGlobalData<GiantCropFertilizerIDStorage>(Constants.SaveFolderName + SAVESUFFIX) is not GiantCropFertilizerIDStorage storedIDCls)
+        if (this.Helper.Data.ReadGlobalData<GiantCropFertilizerIDStorage>(SAVESTRING) is not GiantCropFertilizerIDStorage storedIDCls)
         {
             ModMonitor.Log("No need to fix IDs, not installed before.");
             return;
@@ -191,33 +224,16 @@ internal class ModEntry : Mod
                     dirt.fertilizer.Value = newID;
                 }
             }
+            foreach (SObject obj in loc.Objects.Values)
+            {
+                if (obj is IndoorPot pot && pot.hoeDirt?.Value?.fertilizer?.Value == storedID)
+                {
+                    pot.hoeDirt.Value.fertilizer.Value = newID;
+                }
+            }
         });
 
         this.storedID.ID = newID;
         ModMonitor.Log($"Fixed IDs! {storedID} => {newID}");
-    }
-
-    private void OnSaveLoaded(object? sender, SaveLoadedEventArgs e)
-    {
-        MultiplayerHelpers.AssertMultiplayerVersions(this.Helper.Multiplayer, this.ModManifest, this.Monitor, this.Helper.Translation);
-
-        this.migrator = new(this.ModManifest, this.Helper, this.Monitor);
-        this.migrator.ReadVersionInfo();
-        this.Helper.Events.GameLoop.Saved += this.WriteMigrationData;
-    }
-
-    /// <summary>
-    /// Writes migration data then detaches the migrator.
-    /// </summary>
-    /// <param name="sender">Smapi thing.</param>
-    /// <param name="e">Arguments for just-before-saving.</param>
-    private void WriteMigrationData(object? sender, SavedEventArgs e)
-    {
-        if (this.migrator is not null)
-        {
-            this.migrator.SaveVersionInfo();
-            this.migrator = null;
-        }
-        this.Helper.Events.GameLoop.Saved -= this.WriteMigrationData;
     }
 }

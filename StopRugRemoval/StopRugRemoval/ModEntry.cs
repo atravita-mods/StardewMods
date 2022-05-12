@@ -150,6 +150,9 @@ public class ModEntry : Mod
     /// <param name="e">Parameters.</param>
     private void SaveLoaded(object? sender, SaveLoadedEventArgs e)
     {
+        // This allows NPCs to say hi to the player. Yes, I'm that petty.
+        Game1.player.displayName = Game1.player.Name;
+
         if (Context.IsSplitScreen && Context.ScreenId != 0)
         {
             return;
@@ -196,10 +199,14 @@ public class ModEntry : Mod
         this.Helper.Events.GameLoop.Saved -= this.WriteMigrationData;
     }
 
+    // Favor a single defined function that gets the config, instead of defining the lambda over and over again.
+    [SuppressMessage("StyleCop.CSharp.OrderingRules", "SA1204:Static elements should appear before instance elements", Justification = "Reviewed.")]
+    private static ModConfig GetConfig() => Config;
+
     private void SetUpBasicConfig()
     {
         GMCM!.Register(
-                reset: () =>
+                reset: static () =>
                 {
                     Config = new ModConfig();
                     Config.PrePopulateLocations();
@@ -211,11 +218,11 @@ public class ModEntry : Mod
         {
             if (property.PropertyType == typeof(bool))
             {
-                GMCM.AddBoolOption(property, () => Config);
+                GMCM.AddBoolOption(property, GetConfig);
             }
             else if (property.PropertyType == typeof(KeybindList))
             {
-                GMCM.AddKeybindList(property, () => Config);
+                GMCM.AddKeybindList(property, GetConfig);
             }
         }
 

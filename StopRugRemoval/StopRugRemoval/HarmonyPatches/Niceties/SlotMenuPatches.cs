@@ -148,6 +148,7 @@ internal static class SlotMenuPatches
         bet10000.Value = new ClickableComponent(new Rectangle(x, y, 124, HEIGHT), I18n.Bet10k());
     }
 
+    // Move the DONE button down to make room for the bet 1k and bet 10k buttons.
 #pragma warning disable SA1116 // Split parameters should start on line after declaration
     [HarmonyTranspiler]
     [HarmonyPatch(typeof(Slots), MethodType.Constructor, new[] { typeof(int), typeof(bool) })]
@@ -159,7 +160,7 @@ internal static class SlotMenuPatches
             helper.FindNext(new CodeInstructionWrapper[]
             {
                 new(OpCodes.Ldc_I4, 160),
-                new(OpCodes.Call, typeof(Utility).StaticMethodNamed(nameof(Utility.getTopLeftPositionForCenteringOnScreen), new[]{ typeof(xTile.Dimensions.Rectangle), typeof(int), typeof(int), typeof(int), typeof(int) })),
+                new(OpCodes.Call, typeof(Utility).StaticMethodNamed(nameof(Utility.getTopLeftPositionForCenteringOnScreen), new[] { typeof(xTile.Dimensions.Rectangle), typeof(int), typeof(int), typeof(int), typeof(int) })),
             })
             .ReplaceOperand(288);
 

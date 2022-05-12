@@ -69,15 +69,7 @@ internal static class MillerTimeDayUpdateTranspiler
             CodeInstruction? stoutput = helper.CurrentInstruction.Clone();
             CodeInstruction? ldoutput = helper.CurrentInstruction.ToLdLoc();
 
-            helper.FindNext(new CodeInstructionWrapper[]
-            {
-                new(OpCodes.Call, typeof(Utility).StaticMethodNamed(nameof(Utility.canItemBeAddedToThisInventoryList), new[] { typeof(Item), typeof(IList<Item>), typeof(int) })),
-            })
-            .FindNext(new CodeInstructionWrapper[]
-            {
-                new(OpCodes.Ldarg_1),
-                new(OpCodes.Ldfld, typeof(Mill).InstanceFieldNamed(nameof(Mill.input))),
-            })
+            helper.Advance(1)
             .GetLabels(out IList<Label> labelsToMove)
             .Insert(new CodeInstruction[]
             { // Place our function call here.

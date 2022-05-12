@@ -1,5 +1,7 @@
 ﻿using System.Reflection;
 using System.Reflection.Emit;
+using System.Runtime.CompilerServices;
+using AtraBase.Toolkit;
 using AtraBase.Toolkit.Reflection;
 using AtraShared.Utils.Extensions;
 using AtraShared.Utils.HarmonyHelper;
@@ -23,6 +25,7 @@ internal static class MillDayUpdateTranspiler
     /// <param name="input">Input item.</param>
     /// <param name="output">Output item.</param>
     /// <returns>Output item, adjusted if needed.</returns>
+    [MethodImpl(TKConstants.Hot)]
     internal static SObject? MakeMillOutputOrganic(Item? input, SObject? output)
     {
         if (input is null || output is null || !ModEntry.Config.MillProducesOrganic)

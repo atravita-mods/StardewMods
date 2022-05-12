@@ -32,60 +32,240 @@ internal class ModEntry : Mod
 
     private MigrationManager? migrator;
 
+#pragma warning disable SA1204 // Static elements should appear before instance elements. Keep backing fields near properties.
+#pragma warning disable SA1201 // Elements should appear in the correct order
+    private static int fruitTreeFertilizerID = -1;
+
     /// <summary>
     /// Gets the integer ID of the fruit tree fertilizer. -1 if not found/not loaded yet.
     /// </summary>
-    internal static int FruitTreeFertilizerID => jsonAssets?.GetObjectId("Fruit Tree Fertilizer") ?? -1;
+    internal static int FruitTreeFertilizerID
+    {
+        get
+        {
+            if (fruitTreeFertilizerID != -1)
+            {
+                return fruitTreeFertilizerID;
+            }
+            else
+            {
+                fruitTreeFertilizerID = jsonAssets?.GetObjectId("Fruit Tree Fertilizer") ?? -1;
+                return fruitTreeFertilizerID;
+            }
+        }
+    }
+
+    private static int deluxeFruitTreeFertilizerID = -1;
 
     /// <summary>
     /// Gets the integer ID of the deluxe fruit tree fertilizer. -1 if not found/not loaded yet.
     /// </summary>
-    internal static int DeluxeFruitTreeFertilizerID => jsonAssets?.GetObjectId("Deluxe Fruit Tree Fertilizer") ?? -1;
+    internal static int DeluxeFruitTreeFertilizerID
+    {
+        get
+        {
+            if (deluxeFruitTreeFertilizerID != -1)
+            {
+                return deluxeFruitTreeFertilizerID;
+            }
+            else
+            {
+                deluxeFruitTreeFertilizerID = jsonAssets?.GetObjectId("Deluxe Fruit Tree Fertilizer") ?? -1;
+                return deluxeFruitTreeFertilizerID;
+            }
+        }
+    }
+
+    private static int fishfoodID = -1;
 
     /// <summary>
     /// Gets the integer ID of the fish food. -1 if not found/not loaded yet.
     /// </summary>
-    internal static int FishFoodID => jsonAssets?.GetObjectId("Fish Food Fertilizer") ?? -1;
+    internal static int FishFoodID
+    {
+        get
+        {
+            if (fishfoodID != -1)
+            {
+                return fishfoodID;
+            }
+            else
+            {
+                fishfoodID = jsonAssets?.GetObjectId("Fish Food Fertilizer") ?? -1;
+                return fishfoodID;
+            }
+        }
+    }
+
+    private static int deluxeFishFoodID = -1;
 
     /// <summary>
     /// Gets the integer ID of the deluxe fish food. -1 if not found/not loaded yet.
     /// </summary>
-    internal static int DeluxeFishFoodID => jsonAssets?.GetObjectId("Deluxe Fish Food Fertilizer") ?? -1;
+    internal static int DeluxeFishFoodID
+    {
+        get
+        {
+            if (deluxeFishFoodID != -1)
+            {
+                return deluxeFishFoodID;
+            }
+            else
+            {
+                deluxeFishFoodID = jsonAssets?.GetObjectId("Deluxe Fish Food Fertilizer") ?? -1;
+                return deluxeFishFoodID;
+            }
+        }
+    }
+
+    private static int domesticatedFishFoodID = -1;
 
     /// <summary>
     /// Gets the integer ID of the domesticated fish food. -1 if not found/not loaded yet.
     /// </summary>
-    internal static int DomesticatedFishFoodID => jsonAssets?.GetObjectId("Domesticated Fish Food Fertilizer") ?? -1;
+    internal static int DomesticatedFishFoodID
+    {
+        get
+        {
+            if (domesticatedFishFoodID != -1)
+            {
+                return domesticatedFishFoodID;
+            }
+            else
+            {
+                domesticatedFishFoodID = jsonAssets?.GetObjectId("Domesticated Fish Food Fertilizer") ?? -1;
+                return domesticatedFishFoodID;
+            }
+        }
+    }
+
+    private static int paddyCropFertilizerID = -1;
 
     /// <summary>
     /// Gets the integer ID of the paddy crop fertilizer. -1 if not found/not loaded yet.
     /// </summary>
-    internal static int PaddyCropFertilizerID => jsonAssets?.GetObjectId("Waterlogged Fertilizer") ?? -1;
+    internal static int PaddyCropFertilizerID
+    {
+        get
+        {
+            if (paddyCropFertilizerID != -1)
+            {
+                return paddyCropFertilizerID;
+            }
+            else
+            {
+                paddyCropFertilizerID = jsonAssets?.GetObjectId("Waterlogged Fertilizer") ?? -1;
+                return paddyCropFertilizerID;
+            }
+        }
+    }
+
+    private static int luckyFertilizerID = -1;
 
     /// <summary>
     /// Gets the interger ID of the lucky fertiizer. -1 if not found/not loaded yet.
     /// </summary>
-    internal static int LuckyFertilizerID => jsonAssets?.GetObjectId("Maebys Good-Luck Fertilizer") ?? -1;
+    internal static int LuckyFertilizerID
+    {
+        get
+        {
+            if (luckyFertilizerID != -1)
+            {
+                return luckyFertilizerID;
+            }
+            else
+            {
+                luckyFertilizerID = jsonAssets?.GetObjectId("Maebys Good-Luck Fertilizer") ?? -1;
+                return luckyFertilizerID;
+            }
+        }
+    }
+
+    private static int bountifulFertilizerID = -1;
 
     /// <summary>
     /// Gets the integer ID of the bountiful fertilizer. -1 if not found/not loaded yet.
     /// </summary>
-    internal static int BountifulFertilizerID => jsonAssets?.GetObjectId("Bountiful Fertilizer") ?? -1;
+    internal static int BountifulFertilizerID
+    {
+        get
+        {
+            if (bountifulFertilizerID != -1)
+            {
+                return bountifulFertilizerID;
+            }
+            else
+            {
+                bountifulFertilizerID = jsonAssets?.GetObjectId("Bountiful Fertilizer") ?? -1;
+                return bountifulFertilizerID;
+            }
+        }
+    }
+
+    private static int jojaFertilizerID = -1;
 
     /// <summary>
     /// Gets the integer ID of Joja's fertilizer. -1 if not found/not loaded yet.
     /// </summary>
-    internal static int JojaFertilizerID => jsonAssets?.GetObjectId("Joja Fertilizer - More Fertilizers") ?? -1;
+    internal static int JojaFertilizerID
+    {
+        get
+        {
+            if (jojaFertilizerID != -1)
+            {
+                return jojaFertilizerID;
+            }
+            else
+            {
+                jojaFertilizerID = jsonAssets?.GetObjectId("Joja Fertilizer - More Fertilizers") ?? -1;
+                return jojaFertilizerID;
+            }
+        }
+    }
+
+    private static int deluxeJojaFertilizerID = -1;
 
     /// <summary>
     /// Gets the integer ID of the Deluxe Joja's fertilizer. -1 if not found/not loaded yet.
     /// </summary>
-    internal static int DeluxeJojaFertilizerID => jsonAssets?.GetObjectId("Deluxe Joja Fertilizer - More Fertilizers") ?? -1;
+    internal static int DeluxeJojaFertilizerID
+    {
+        get
+        {
+            if (deluxeJojaFertilizerID != -1)
+            {
+                return deluxeJojaFertilizerID;
+            }
+            else
+            {
+                deluxeJojaFertilizerID = jsonAssets?.GetObjectId("Deluxe Joja Fertilizer - More Fertilizers") ?? -1;
+                return deluxeJojaFertilizerID;
+            }
+        }
+    }
+
+    private static int organicFertilizerID = -1;
 
     /// <summary>
     /// Gets the integer ID of the organic fertilzer. -1 if not found/not loaded yet.
     /// </summary>
-    internal static int OrganicFertilizerID => jsonAssets?.GetObjectId("Organic Fertilizer - More Fertilizers") ?? -1;
+    internal static int OrganicFertilizerID
+    {
+        get
+        {
+            if (organicFertilizerID != -1)
+            {
+                return organicFertilizerID;
+            }
+            else
+            {
+                organicFertilizerID = jsonAssets?.GetObjectId("Organic Fertilizer - More Fertilizers") ?? -1;
+                return organicFertilizerID;
+            }
+        }
+    }
+#pragma warning restore SA1201 // Elements should appear in the correct order
+#pragma warning restore SA1204 // Static elements should appear before instance elements
 
     /// <summary>
     /// Gets a list of fertilizer IDs for fertilizers that are meant to be planted into HoeDirt.

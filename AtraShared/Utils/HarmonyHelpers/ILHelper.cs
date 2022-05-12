@@ -315,7 +315,7 @@ ContinueSearchBackwards:
     }
 
     /// <summary>
-    /// Removes the following number of instructions.
+    /// Removes the following number of instructions, starting from and including the current instruction.
     /// </summary>
     /// <param name="count">Number to remove.</param>
     /// <returns>this.</returns>
@@ -376,6 +376,65 @@ ContinueSearchBackwards:
         int finalpos = this.Pointer + instructions.Length;
         this.Pop();
         this.Remove(finalpos - this.Pointer);
+        return this;
+    }
+
+    /// <summary>
+    /// Grabs a copy of the instructions, starting at the startpos.
+    /// </summary>
+    /// <param name="startpos">Starting position (inclusive).</param>
+    /// <param name="count">Number of codes to grab.</param>
+    /// <param name="codes">The codes.</param>
+    /// <returns>this.</returns>
+    /// <remarks>All labels and exception blocks are removed.</remarks>
+    internal ILHelper Copy(int startpos, int count, out IEnumerable<CodeInstruction> codes)
+    {
+        codes = this.Codes.GetRange(startpos, count).Select((code) => code.Clone());
+        return this;
+    }
+
+    /// <summary>
+    /// Grabs a copy of the instructions, starting at the current pointer location (inclusive).
+    /// </summary>
+    /// <param name="count">Number of codes to grab.</param>
+    /// <param name="codes">The codes.</param>
+    /// <returns>this.</returns>
+    /// <remarks>All labels and exception blocks are removed.</remarks>
+    internal ILHelper Copy(int count, out IEnumerable<CodeInstruction> codes)
+        => this.Copy(this.Pointer, count, out codes);
+
+    /// <summary>
+    /// Grabs a copy of the instructions, starting at the current pointer location, and going to the search pattern.
+    /// Does not include the search pattern.
+    /// </summary>
+    /// <param name="instructions">Pattern to search for.</param>
+    /// <param name="codes">Copied codes.</param>
+    /// <returns>this.</returns>
+    /// <remarks>All labels and exception blocks are removed.</remarks>
+    internal ILHelper CopyUntil(CodeInstructionWrapper[] instructions, out IEnumerable<CodeInstruction> codes)
+    {
+        this.Push();
+        this.FindNext(instructions);
+        int finalpos = this.Pointer;
+        this.Pop();
+        this.Copy(finalpos - this.Pointer, out codes);
+        return this;
+    }
+
+    /// <summary>
+    /// Copies a block that starts from the current instruction and includes the search instructions.
+    /// </summary>
+    /// <param name="instructions">Instructions to search for.</param>
+    /// <param name="codes">Copied codes.</param>
+    /// <returns>this.</returns>
+    /// <remarks>All labels and exception blocks are removed.</remarks>
+    internal ILHelper CopyIncluding(CodeInstructionWrapper[] instructions, out IEnumerable<CodeInstruction> codes)
+    {
+        this.Push();
+        this.FindNext(instructions);
+        int finalpos = this.Pointer + instructions.Length;
+        this.Pop();
+        this.Copy(finalpos - this.Pointer, out codes);
         return this;
     }
 
@@ -648,8 +707,8 @@ ContinueSearchBackwards:
     internal ILHelper DeclareLocal(Type type, out LocalBuilder local, bool pinned = false)
     {
         local = this.Generator.DeclareLocal(type, pinned);
-        this.builtLocals.Add(this.builtLocals.Count, local);
-        this.locals.Add(this.locals.Count, local);
+        this.builtLocals.Add(local.LocalIndex, local);
+        this.locals.Add(local.LocalIndex, local);
         return this;
     }
 

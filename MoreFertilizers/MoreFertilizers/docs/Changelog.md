@@ -2,7 +2,12 @@
 =============
 #### Todo:
 * Make organic seeds put down organic fertilizer?
-* Crosscheck PFMAutomate.....
+* Crosscheck PFMAutomate + Miller time.
+* Fix migration errors.
+
+#### Version 0.1.5
+* Joja crops no longer can become organic.
+* Mill preserves organic
 
 #### Version 0.1.4
 

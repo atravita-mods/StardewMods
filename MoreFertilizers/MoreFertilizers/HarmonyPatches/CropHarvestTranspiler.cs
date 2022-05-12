@@ -60,7 +60,7 @@ internal static class CropHarvestTranspiler
     {
         if (dirt is not null && dirt.fertilizer.Value != -1)
         {
-            if (dirt.fertilizer.Value == ModEntry.OrganicFertilizerID)
+            if (dirt.fertilizer.Value == ModEntry.OrganicFertilizerID && !obj.Name.Contains("Joja", StringComparison.OrdinalIgnoreCase))
             {
                 obj.modData?.SetBool(CanPlaceHandler.Organic, true);
                 obj.Price = (int)(obj.Price * 1.1);

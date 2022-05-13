@@ -38,9 +38,29 @@ public sealed class CanPlaceHandler : IMoreFertilizersAPI
     public const string Joja = "atravita.MoreFertilizer.Joja";
 
     /// <summary>
-    /// ModData string to make trees fertilized with tree fertilizers.
+    /// ModData string to track trees fertilized with tree fertilizers.
     /// </summary>
     public const string TreeFertilizer = "atravita.MoreFertilizer.TreeFertilizer";
+
+    /// <summary>
+    /// ModData string to track trees fertilized with the tree tapper fertilizer.
+    /// </summary>
+    public const string TreeTapperFertilizer = "atravita.MoreFertilizer.TreeTapper";
+
+    /// <summary>
+    /// ModData string for the Bountiful Bush fertilizer.
+    /// </summary>
+    public const string BountifulBush = "atravita.MoreFertilizer.BountifulBush";
+
+    /// <summary>
+    /// ModData string for the Rapid Bush fertilizer.
+    /// </summary>
+    public const string RapidBush = "atravita.MoreFertilizer.RapidBush";
+
+    /// <summary>
+    /// ModData string marking fertilized mushroom boxen.
+    /// </summary>
+    public const string MushroomFertilizer = "atravita.MoreFertilzier.MushroomFertilizer";
 
     /// <inheritdoc />
     public bool CanPlaceFertilizer(SObject obj, GameLocation loc, Vector2 tile)
@@ -50,10 +70,23 @@ public sealed class CanPlaceHandler : IMoreFertilizersAPI
             return false;
         }
 
-        if (loc.terrainFeatures.TryGetValue(tile, out TerrainFeature? terrain) && terrain is FruitTree tree
-            && (obj.ParentSheetIndex == ModEntry.FruitTreeFertilizerID || obj.ParentSheetIndex == ModEntry.DeluxeFruitTreeFertilizerID))
+        if (loc.terrainFeatures.TryGetValue(tile, out TerrainFeature? terrain))
         {
-            return !tree.modData.ContainsKey(FruitTreeFertilizer);
+            if (terrain is FruitTree fruitTree
+                && (obj.ParentSheetIndex == ModEntry.FruitTreeFertilizerID || obj.ParentSheetIndex == ModEntry.DeluxeFruitTreeFertilizerID))
+            {
+                return !fruitTree.modData.ContainsKey(FruitTreeFertilizer);
+            }
+            else if (terrain is Bush bush
+                && (obj.ParentSheetIndex == ModEntry.RapidBushFertilizrID || obj.ParentSheetIndex == ModEntry.BountifulBushID))
+            {
+                return !bush.modData.ContainsKey(BountifulBush) && !bush.modData.ContainsKey(RapidBush);
+            }
+            else if (terrain is Tree tree
+                && (obj.ParentSheetIndex == ModEntry.TreeTapperFertilizerID))
+            {
+                return !tree.modData.ContainsKey(TreeFertilizer) && !tree.modData.ContainsKey(TreeTapperFertilizer);
+            }
         }
 
         if (loc.canFishHere() && loc.doesTileHaveProperty((int)tile.X, (int)tile.Y, "Water", "Back") is not null

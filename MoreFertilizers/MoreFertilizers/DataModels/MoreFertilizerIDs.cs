@@ -58,9 +58,19 @@ public class MoreFertilizerIDs
     public int BountifulFertilizerID { get; set; } = -1;
 
     /// <summary>
+    /// Gets or sets the ID number to store for the tree tapper fertilizer...
+    /// </summary>
+    public int TreeTapperFertilizerID { get; set; } = -1;
+
+    /// <summary>
     /// Gets or sets the ID number to store for the bountiful bush fertilizer.
     /// </summary>
     public int BountifulBushID { get; set; } = -1;
+
+    /// <summary>
+    /// Gets or sets the ID number to store for the rapid bush fertilizer.
+    /// </summary>
+    public int RapidBushFertilizerID { get; set; } = -1;
 
     /// <summary>
     /// Gets or sets the ID number to store for joja fertilizer.

@@ -245,6 +245,27 @@ internal class ModEntry : Mod
         }
     }
 
+    private static int secretJojaFertilizerID = -1;
+
+    /// <summary>
+    /// Gets the integer ID of the Secret Joja's fertilizer. -1 if not found/not loaded yet.
+    /// </summary>
+    internal static int SecretJojaFertilizerID
+    {
+        get
+        {
+            if (secretJojaFertilizerID != -1)
+            {
+                return secretJojaFertilizerID;
+            }
+            else
+            {
+                secretJojaFertilizerID = jsonAssets?.GetObjectId("Secret Joja Fertilizer - More Fertilizers") ?? -1;
+                return secretJojaFertilizerID;
+            }
+        }
+    }
+
     private static int organicFertilizerID = -1;
 
     /// <summary>
@@ -394,6 +415,7 @@ internal class ModEntry : Mod
             storedIDs.BountifulFertilizerID = BountifulFertilizerID;
             storedIDs.JojaFertilizerID = JojaFertilizerID;
             storedIDs.DeluxeJojaFertilizerID = DeluxeJojaFertilizerID;
+            storedIDs.SecretJojaFertilizerID = SecretJojaFertilizerID;
             storedIDs.OrganicFertilizerID = OrganicFertilizerID;
         }
         this.Helper.Data.WriteSaveData(SavedIDKey, storedIDs);
@@ -596,6 +618,11 @@ internal class ModEntry : Mod
             PlantableFertilizerIDs.Add(DeluxeJojaFertilizerID);
         }
 
+        if (SecretJojaFertilizerID != -1)
+        {
+            PlantableFertilizerIDs.Add(SecretJojaFertilizerID);
+        }
+
         if (OrganicFertilizerID != -1)
         {
             PlantableFertilizerIDs.Add(OrganicFertilizerID);
@@ -662,6 +689,14 @@ internal class ModEntry : Mod
         {
             idMapping.Add(storedIDs.DeluxeJojaFertilizerID, DeluxeJojaFertilizerID);
             storedIDs.DeluxeJojaFertilizerID = DeluxeJojaFertilizerID;
+        }
+
+        if (SecretJojaFertilizerID != -1
+            && storedIDs.SecretJojaFertilizerID != -1
+            && storedIDs.SecretJojaFertilizerID != SecretJojaFertilizerID)
+        {
+            idMapping.Add(storedIDs.SecretJojaFertilizerID, SecretJojaFertilizerID);
+            storedIDs.SecretJojaFertilizerID = SecretJojaFertilizerID;
         }
 
         if (OrganicFertilizerID != -1

@@ -63,6 +63,11 @@ public class MoreFertilizerIDs
     public int DeluxeJojaFertilizerID { get; set; } = -1;
 
     /// <summary>
+    /// Gets or sets the ID number to store for the secret joja fertilizer.
+    /// </summary>
+    public int SecretJojaFertilizerID { get; set; } = -1;
+
+    /// <summary>
     /// Gets or sets the ID number for the organic fertilizer.
     /// </summary>
     public int OrganicFertilizerID { get; set; } = -1;

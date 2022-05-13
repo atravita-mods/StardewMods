@@ -49,6 +49,10 @@ internal static class CropHarvestTranspiler
             {
                 return Game1.random.NextDouble() < 0.2 ? 2 : 1;
             }
+            else if (dirt.fertilizer.Value == ModEntry.SecretJojaFertilizerID)
+            {
+                return 0;
+            }
         }
         return prevQual;
     }
@@ -67,7 +71,9 @@ internal static class CropHarvestTranspiler
                 obj.Name += " (Organic)";
                 obj.MarkContextTagsDirty();
             }
-            else if (dirt.fertilizer.Value == ModEntry.DeluxeJojaFertilizerID || dirt.fertilizer.Value == ModEntry.JojaFertilizerID)
+            else if (dirt.fertilizer.Value == ModEntry.DeluxeJojaFertilizerID
+                || dirt.fertilizer.Value == ModEntry.JojaFertilizerID
+                || dirt.fertilizer.Value == ModEntry.SecretJojaFertilizerID)
             {
                 obj.modData?.SetBool(CanPlaceHandler.Joja, true);
                 obj.MarkContextTagsDirty();

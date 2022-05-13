@@ -34,7 +34,9 @@ internal static class GetFertilizerSourceRectTranspiler
         {
             return 7;
         }
-        else if (fertilizer == ModEntry.JojaFertilizerID || fertilizer == ModEntry.DeluxeJojaFertilizerID)
+        else if (fertilizer == ModEntry.JojaFertilizerID
+            || fertilizer == ModEntry.DeluxeJojaFertilizerID
+            || fertilizer == ModEntry.SecretJojaFertilizerID)
         {
             return 4;
         }

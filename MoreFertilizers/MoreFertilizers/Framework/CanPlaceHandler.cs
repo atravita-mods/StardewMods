@@ -35,7 +35,12 @@ public sealed class CanPlaceHandler : IMoreFertilizersAPI
     /// <summary>
     /// ModData string for joja crops.
     /// </summary>
-    internal const string Joja = "atravita.MoreFertilizer.Joja";
+    public const string Joja = "atravita.MoreFertilizer.Joja";
+
+    /// <summary>
+    /// ModData string to make trees fertilized with tree fertilizers.
+    /// </summary>
+    public const string TreeFertilizer = "atravita.MoreFertilizer.TreeFertilizer";
 
     /// <inheritdoc />
     public bool CanPlaceFertilizer(SObject obj, GameLocation loc, Vector2 tile)

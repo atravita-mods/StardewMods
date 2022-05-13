@@ -353,9 +353,13 @@ internal class ModEntry : Mod
                 {
                     this.Monitor.Log($"{e.Cursor.Tile} has fertilizer {dirt.fertilizer.Value}, state {dirt.state.Value} and {dirt.nearWaterForPaddy.Value}", LogLevel.Info);
                 }
-                else if (terrainFeature is FruitTree tree)
+                else if (terrainFeature is FruitTree fruitTree)
                 {
-                    this.Monitor.Log($"{e.Cursor.Tile} is on {tree.treeType.Value} with {tree.daysUntilMature.Value}.", LogLevel.Info);
+                    this.Monitor.Log($"{e.Cursor.Tile} is on {fruitTree.treeType.Value} with {fruitTree.daysUntilMature.Value}.", LogLevel.Info);
+                }
+                else if (terrainFeature is Tree tree)
+                {
+                    this.Monitor.Log($"{e.Cursor.Tile} {(tree?.modData?.GetBool(CanPlaceHandler.TreeFertilizer) == true ? "had" : "did not have" )} tree fertilizer.", LogLevel.Info);
                 }
             }
             if (Game1.currentLocation?.modData?.GetInt(CanPlaceHandler.FishFood) is > 0)

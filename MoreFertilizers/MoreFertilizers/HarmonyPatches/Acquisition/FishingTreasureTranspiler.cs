@@ -39,7 +39,7 @@ internal static class FishingTreasureTranspiler
             })
             .FindNext(new CodeInstructionWrapper[]
             { // find the constructor for List<Item>, which is used to hold the treasure.
-                new(OpCodes.Newobj, typeof(List<Item>).GetConstructor(Type.EmptyTypes)),
+                new(OpCodes.Newobj, typeof(List<Item>).Constructor(Type.EmptyTypes)),
                 new(SpecialCodeInstructionCases.StLoc),
             })
             .Advance(1);

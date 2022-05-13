@@ -425,6 +425,11 @@ internal class ModEntry : Mod
             {
                 PerformObjectDropInTranspiler.ApplyPatches(harmony);
             }
+            else if (this.Helper.ModRegistry.Get("Digus.PFMAutomate") is IModInfo pfmAutomate
+                && pfmAutomate.Manifest.Version.IsNewerThan("1.4.1"))
+            {
+                PFMAutomateTranspilers.ApplyPatches(harmony);
+            }
 
             if (this.Helper.ModRegistry.Get("spacechase0.DynamicGameAssets") is IModInfo dga
                 && dga.Manifest.Version.IsNewerThan("1.4.1"))
@@ -710,6 +715,7 @@ internal class ModEntry : Mod
         this.Helper.Events.GameLoop.Saved += this.WriteMigrationData;
 
         this.FixIDs();
+        this.Helper.GameContent.InvalidateCache("Data/ObjectInformation");
 
         if (Context.IsMainPlayer)
         {

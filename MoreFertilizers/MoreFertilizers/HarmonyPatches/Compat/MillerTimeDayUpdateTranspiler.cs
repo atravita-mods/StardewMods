@@ -1,15 +1,10 @@
 ﻿using System.Reflection;
 using System.Reflection.Emit;
-using System.Runtime.CompilerServices;
-using AtraBase.Toolkit;
 using AtraBase.Toolkit.Reflection;
-using AtraShared.Utils.Extensions;
 using AtraShared.Utils.HarmonyHelper;
 using HarmonyLib;
-using MoreFertilizers.Framework;
 using MoreFertilizers.HarmonyPatches.OrganicFertilizer;
 using Netcode;
-using StardewValley.Buildings;
 using StardewValley.Objects;
 
 namespace MoreFertilizers.HarmonyPatches.Compat;
@@ -62,7 +57,7 @@ internal static class MillerTimeDayUpdateTranspiler
             })
             .FindNext(new CodeInstructionWrapper[]
             { // find and store the output's local.
-                new(OpCodes.Newobj, typeof(SObject).GetConstructor(new[] { typeof(int), typeof(int), typeof(bool), typeof(int), typeof(int) })),
+                new(OpCodes.Newobj, typeof(SObject).Constructor(new[] { typeof(int), typeof(int), typeof(bool), typeof(int), typeof(int) })),
                 new(SpecialCodeInstructionCases.StLoc),
             }).Advance(1);
 
@@ -79,7 +74,7 @@ internal static class MillerTimeDayUpdateTranspiler
                 stoutput,
             }, withLabels: labelsToMove);
 
-            helper.Print();
+            // helper.Print();
             return helper.Render();
         }
         catch (Exception ex)

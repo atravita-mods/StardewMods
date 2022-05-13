@@ -39,7 +39,7 @@ internal static class MultiYieldCropsCompat
     /// </summary>
     /// <param name="item">The item to adjust.</param>
     /// <param name="fertilizer">The fertilizer on that square.</param>
-    private static Item? AdjustItem(Item? item, int fertilizer)
+    internal static Item? AdjustItem(Item? item, int fertilizer)
     {
         if (item is not SObject obj || obj.bigCraftable.Value || fertilizer == -1)
         {

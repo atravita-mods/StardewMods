@@ -75,7 +75,7 @@ internal static class MillDayUpdateTranspiler
             })
             .FindNext(new CodeInstructionWrapper[]
             { // find and store the output's local.
-                new(OpCodes.Newobj, typeof(SObject).GetConstructor(new[] { typeof(int), typeof(int), typeof(bool), typeof(int), typeof(int) })),
+                new(OpCodes.Newobj, typeof(SObject).Constructor(new[] { typeof(int), typeof(int), typeof(bool), typeof(int), typeof(int) })),
                 new(SpecialCodeInstructionCases.StLoc),
                 new(SpecialCodeInstructionCases.Wildcard, (inst) => inst.Branches(out _)),
             }).Advance(1);

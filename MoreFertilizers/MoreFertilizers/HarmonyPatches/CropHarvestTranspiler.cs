@@ -193,7 +193,7 @@ internal static class CropHarvestTranspiler
             })
             .FindNext(new CodeInstructionWrapper[]
             { // Find the place where the second creation of an SObject/ColoredSObject is saved.
-                new (OpCodes.Newobj, typeof(ColoredObject).GetConstructor(new[] { typeof(int), typeof(int), typeof(Color) } )),
+                new (OpCodes.Newobj, typeof(ColoredObject).Constructor(new[] { typeof(int), typeof(int), typeof(Color) } )),
                 new (SpecialCodeInstructionCases.StLoc, typeof(SObject)),
             })
             .Advance(1);

@@ -47,7 +47,7 @@ internal static class FairShopTranspiler
             })
             .FindNext(new CodeInstructionWrapper[]
             {
-                new(OpCodes.Newobj, typeof(Dictionary<ISalable, int[]>).GetConstructor(Array.Empty<Type>())),
+                new(OpCodes.Newobj, typeof(Dictionary<ISalable, int[]>).Constructor(Array.Empty<Type>())),
                 new(SpecialCodeInstructionCases.StLoc),
             })
             .Advance(1);

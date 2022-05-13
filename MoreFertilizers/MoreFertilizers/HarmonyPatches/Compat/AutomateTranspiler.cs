@@ -42,7 +42,7 @@ internal static class AutomateTranspiler
     }
 
     [MethodImpl(TKConstants.Hot)]
-    private static SObject? MakeOrganic(SObject? obj, Item? input)
+    internal static SObject? MakeOrganic(SObject? obj, Item? input)
     {
         if (obj is not null && input?.modData?.GetBool(CanPlaceHandler.Organic) == true)
         {

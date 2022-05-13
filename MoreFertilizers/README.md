@@ -46,7 +46,7 @@ Additionally, fertilizers may be found by breaking barrels in the mines, while p
 * [Walk of Life](https://www.nexusmods.com/stardewvalley/mods/8111). 
 * [Json Assets](https://www.nexusmods.com/stardewvalley/mods/1720) and any crops/fruit trees added through JA.
 * [Multi Yield Crops](https://www.nexusmods.com/stardewvalley/mods/6069) - fully supported.
-* [Automate](https://www.nexusmods.com/stardewvalley/mods/1063) - supported. (Still working on supporting PFMAutomate.)
+* [Automate](https://www.nexusmods.com/stardewvalley/mods/1063) and [PFMAutomate](https://www.nexusmods.com/stardewvalley/mods/5038).
 * [Teh's Fishing Overhaul](https://www.nexusmods.com/stardewvalley/mods/866).
 * [More Rings](https://www.nexusmods.com/stardewvalley/mods/2054?tab=description). The Quality+ ring will increase the quality of joja-crops.
 * [Smart Building](https://www.nexusmods.com/stardewvalley/mods/11158?tab=description) supports these fertilizers. Thank you so much, DecidedlyHuman!
@@ -62,7 +62,7 @@ Additionally, fertilizers may be found by breaking barrels in the mines, while p
 
 **Minor incompatibilities**:
 
-* [PFMAutomate](https://www.nexusmods.com/stardewvalley/mods/5038) - organic crops that go through a machine handled by PFM-automate will lose their organic-ness. Still trying to figure out how to change this.
+
 * [Dynamic Game Assets](https://www.nexusmods.com/stardewvalley/mods/9365) - fertilizers from this mod may or may not affect DGA crops. Still trying to figure out why. (DGA fruit trees are supported.)
 * [Lookup Anything](https://www.nexusmods.com/stardewvalley/mods/541) will only show these fertilizers as a possible output of the Bone Mill if PFM is installed. The bone mill will produce these fertilizers anyways. Otherwise fine.
 * [Fish Wells](https://www.nexusmods.com/stardewvalley/mods/7651) do not work with Domesticated Fish Food, as they do not preserve mod data. The remaining fertilizers should work, and that mod has settings that let you adjust the fish spawn time.

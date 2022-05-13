@@ -21,7 +21,7 @@ This mod adds eleven fertilizers that do the following things:
 
 fertilizer                      | effect                                         | purchase from
 :------------------------------ | :------------------------------------          | :---------------------- 
-Bountiful Fertilizer            | 10% chance of a double harvest.                | Pierre on Wednesdays and Sundays, year 2 or later, after completing Pierre's special order. (Also at the Stardew Valley Fair.)
+Bountiful Fertilizer            | 10% chance of a double harvest.                | Pierre on Wednesdays and Sundays, year 2 or later, after completing Pierre's special order. (Also at the Stardew Valley Fair, unless you've finished the JojaMart.)
 Fish Food                       | Increases the chances of rare fish spawning    | Willy on Wednesdays, Saturdays and Sundays, after completing the CC fish tank. Not available to Joja members. 
 Deluxe Fish Food                | Same as the fish food, but lasts three times as long| Traded for five magma caps from the Island Traders after at least 50% of unique available fish are caught. Not available to joja members. 
 Domesticated Fish Food          | Chance to make fish in fish ponds reproduce faster| Willy on Saturdays and Sundays, after finishing his special order. Year 2 or later. 
@@ -30,7 +30,7 @@ Deluxe Fruit Tree Fertilizer    | 20% increase in fruit tree growth speed       
 Joja's Patented Fertilizer      | Crops are silver quality.                      | JojaMart, after earning 10k g.
 Joja's Deluxe Fertilizer        | Crops have a 20% chance to be gold; the remaining are silver. | JojaMart, on Wednesdays, Saturdays, and Sundays only. Only available to Joja members, and only after earning 1,000,000g.
 Maeby's Good-Luck Fertilizer     | Protects crops from crows and lightning strikes| Pierre's, after spring year 1, on lucky days only.
-Organic Fertilizer              | Increases the value of crops by 10% (carries over to Artisan products made with those crops.) | Pierre on Wednesdays and Sundays, year 2 or later, after completing Pierre's special order. (Also at the Stardew Valley Fair.)
+Organic Fertilizer              | Increases the value of crops by 10% (carries over to Artisan products made with those crops.) | Pierre on Wednesdays and Sundays, year 2 or later, after completing Pierre's special order. (Also at the Stardew Valley Fair, unless you've finished the JojaMart.)
 Waterlogged Fertilizer.         | Paddy crops planted with this fertilizer will always be considered irrigated. **Does nothing for non-paddy crops**. | Krobus (no other requirements)
 
 Additionally, fertilizers may be found by breaking barrels in the mines, while panning, while killing monsters on the farm, and in fishing treasure chests. Some may rarely be found in big slimes. 

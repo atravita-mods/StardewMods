@@ -78,7 +78,9 @@ internal static class IslandSouthPatches
         {
             if (!__result)
             {
-                if (Globals.Config.AllowSandy
+                Farmer? spouse = npc.getSpouse();
+                if ((Globals.Config.AllowSandy == VillagerExclusionOverride.Yes
+                        || (Globals.Config.AllowSandy == VillagerExclusionOverride.IfMarried && spouse is not null))
                     && Globals.Config.UseThisScheduler
                     && npc.Name.Equals("Sandy", StringComparison.OrdinalIgnoreCase)
                     && !(Game1.dayOfMonth == 15)
@@ -93,10 +95,18 @@ internal static class IslandSouthPatches
                     __result = true; // let George & Evelyn come too!
                 }
                 else if (Globals.Config.UseThisScheduler
-                    && Globals.Config.AllowWilly
+                    && (Globals.Config.AllowWilly == VillagerExclusionOverride.Yes
+                        || (Globals.Config.AllowWilly == VillagerExclusionOverride.IfMarried && spouse is not null))
                     && npc.Name.Equals("Willy", StringComparison.OrdinalIgnoreCase))
                 {
                     __result = true; // Allow Willy access to resort as well.
+                }
+                else if (Globals.Config.UseThisScheduler
+                    && (Globals.Config.AllowWizard == VillagerExclusionOverride.Yes
+                        || (Globals.Config.AllowWizard == VillagerExclusionOverride.IfMarried && spouse is not null))
+                    && npc.Name.Equals("Wizard", StringComparison.OrdinalIgnoreCase))
+                {
+                    __result = true; // Allow the Wizard access to the result.
                 }
                 else
                 {

@@ -158,7 +158,8 @@ public class ModEntry : Mod
     private void OnGameLaunched(object? sender, GameLaunchedEventArgs e)
     {
         // Generate the GMCM for this mod.
-        GenerateGMCM.Build(this.ModManifest, this.Helper.Translation);
+        GenerateGMCM.Initialize(this.ModManifest, this.Helper.Translation);
+        GenerateGMCM.Build();
 
         // Add CP tokens for this mod.
         GenerateCPTokens.AddTokens(this.ModManifest);

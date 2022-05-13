@@ -112,17 +112,22 @@ public sealed class ModConfig
     /// <summary>
     /// Gets or sets a value indicating whether Willy has access to the Resort.
     /// </summary>
-    public bool AllowWilly { get; set; } = true;
+    public VillagerExclusionOverride AllowWilly { get; set; } = VillagerExclusionOverride.Yes;
 
     /// <summary>
     /// Gets or sets a value indicating whether Sandy has access to the resort.
     /// </summary>
-    public bool AllowSandy { get; set; } = true;
+    public VillagerExclusionOverride AllowSandy { get; set; } = VillagerExclusionOverride.Yes;
 
     /// <summary>
     /// Gets or sets a value indicating whether George and Evelyn have access to the resort.
     /// </summary>
     public bool AllowGeorgeAndEvelyn { get; set; } = true;
+
+    /// <summary>
+    /// Gets or sets a value indicating whether the Wizard has access to the resort.
+    /// </summary>
+    public VillagerExclusionOverride AllowWizard { get; set; } = VillagerExclusionOverride.IfMarried;
 
     /// <summary>
     /// Gets or sets a value indicating whether harmony debugging patches are enabled.

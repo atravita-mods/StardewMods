@@ -20,6 +20,8 @@ internal static class ConsoleCommands
     /// </summary>
     private const string PrePendCommand = "av.gima";
 
+    private const string Antisocial = "Data/AntiSocialNPCs";
+
     /// <summary>
     /// Register the console commands for this mod.
     /// </summary>
@@ -150,6 +152,11 @@ internal static class ConsoleCommands
         if (npc.Schedule is null)
         {
             Globals.ModMonitor.Log($"Something very odd has happened to the schedule of {npc.Name} - it appears to have been nulled since generation", LogLevel.Error);
+            if (!npc.CanSocialize)
+            {
+                var antisocial = Game1.content.Load<Dictionary<string, string>>(Antisocial);
+                Globals.ModMonitor.Log($"\t{npc.Name} appears to be antsocial: they { (antisocial.ContainsKey(npc.Name) ? "are" : "aren't" )} registered with AntisocialNPCs.", LogLevel.Info);
+            }
             return;
         }
         List<int> keys = new(npc.Schedule.Keys);

@@ -87,3 +87,10 @@ public enum ScheduleStrictness
     /// </summary>
     Loose,
 }
+
+public enum VillagerExclusionOverride
+{
+    Yes,
+    No,
+    IfMarried,
+}

@@ -130,6 +130,8 @@
   "AllowSandy.description": "If enabled, allows Sandy to go to the resort. (Her store will remain available).",
   "AllowGeorgeAndEvelyn.title": "Allow George and Evelyn",
   "AllowGeorgeAndEvelyn.description": "If enabled, allows George and Evelyn access to the resort.",
+  "AllowWizard.title": "Allow the Wizard",
+  "AllowWizard.description": "If enabled, allows the wizard access to the resort.",
 
   // Game doesn't have translations for full days of the week.
   "config.DayOfWeek.None": "None", // for no dedicated Gus-to-GI day.
@@ -145,6 +147,10 @@
   "config.WearIslandClothing.Default": "Default",
   "config.WearIslandClothing.All": "All",
   "config.WearIslandClothing.None": "None",
+
+  "config.VillagerExclusionOverride.Yes": "Yes",
+  "config.VillagerExclusionOverride.No": "No",
+  "config.VillagerExclusionOverride.IfMarried": "IfMarried",
 
   //MidDayScheduleEditor messages
   "middayScheduleEditor.npc-found-for-adjustment": "NPC {{name}} with Island Schedule, will set up for schedule alternation",

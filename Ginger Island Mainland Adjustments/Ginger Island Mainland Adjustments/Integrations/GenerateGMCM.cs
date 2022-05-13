@@ -9,15 +9,22 @@ namespace GingerIslandMainlandAdjustments.Integrations;
 /// </summary>
 internal static class GenerateGMCM
 {
+    private static GMCMHelper? helper;
+
+    internal static void Initialize(IManifest manifest, ITranslationHelper translation)
+    {
+        helper = new(Globals.ModMonitor, translation, Globals.ModRegistry, manifest);
+        helper.TryGetAPI();
+    }
+
     /// <summary>
     /// Generates the GMCM for this mod.
     /// </summary>
     /// <param name="manifest">The mod's manifest.</param>
     /// <param name="translation">The translation helper.</param>
-    internal static void Build(IManifest manifest, ITranslationHelper translation)
+    internal static void Build()
     {
-        GMCMHelper helper = new(Globals.ModMonitor, translation, Globals.ModRegistry, manifest);
-        if (!helper.TryGetAPI())
+        if (!(helper?.HasGottenAPI == true))
         {
             return;
         }
@@ -86,7 +93,14 @@ internal static class GenerateGMCM
         {
             if (property.Name.StartsWith("Allow"))
             {
-                helper.AddBoolOption(property, () => Globals.Config);
+                if (property.PropertyType == typeof(bool))
+                {
+                    helper.AddBoolOption(property, () => Globals.Config);
+                }
+                else if (property.PropertyType == typeof(VillagerExclusionOverride))
+                {
+                    helper.AddEnumOption<ModConfig, VillagerExclusionOverride>(property, () => Globals.Config);
+                }
             }
         }
     }

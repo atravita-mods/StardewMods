@@ -100,7 +100,7 @@ internal static class SpecialFertilizerApplication
             if (obj.ParentSheetIndex != ModEntry.DomesticatedFishFoodID)
             {
                 DelayedAction.functionAfterDelay(
-                    static () => Game1.currentLocation.waterColor.Value = FedFishWaterColor(),
+                    static () => Game1.currentLocation.waterColor.Value = ModEntry.Config.WaterOverlayColor,
                     (int)time);
             }
 
@@ -119,17 +119,6 @@ internal static class SpecialFertilizerApplication
             helper.Suppress(e.Button);
             return;
         }
-    }
-
-    /// <summary>
-    /// Gets the color to tint the water for fed fish.
-    /// </summary>
-    /// <returns>The color.</returns>
-    internal static Color FedFishWaterColor()
-    {
-        Color color = Color.MediumPurple;
-        color.A = 155;
-        return color;
     }
 
     [HarmonyPrefix]

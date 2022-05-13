@@ -6,6 +6,7 @@ using AtraShared.MigrationManager;
 using AtraShared.Utils;
 using AtraShared.Utils.Extensions;
 using HarmonyLib;
+using Microsoft.Xna.Framework;
 using MoreFertilizers.DataModels;
 using MoreFertilizers.Framework;
 using MoreFertilizers.HarmonyPatches;
@@ -428,6 +429,7 @@ internal class ModEntry : Mod
             else if (this.Helper.ModRegistry.Get("Digus.PFMAutomate") is IModInfo pfmAutomate
                 && pfmAutomate.Manifest.Version.IsNewerThan("1.4.1"))
             {
+                this.Monitor.Log("Found PFMAutomate, transpiling PFM to support that.", LogLevel.Info);
                 PFMAutomateTranspilers.ApplyPatches(harmony);
             }
 
@@ -479,13 +481,22 @@ internal class ModEntry : Mod
             GMCMHelper helper = new(this.Monitor, this.Helper.Translation, this.Helper.ModRegistry, this.ModManifest);
             if (helper.TryGetAPI())
             {
+                helper.TryGetOptionsAPI();
+
                 helper.Register(
                     reset: static () => Config = new(),
                     save: () => this.Helper.WriteConfig(Config))
                     .AddParagraph(I18n.Mod_Description);
                 foreach (PropertyInfo property in typeof(ModConfig).GetProperties())
                 {
-                    helper.AddBoolOption(property, GetConfig);
+                    if (property.PropertyType == typeof(bool))
+                    {
+                        helper.AddBoolOption(property, GetConfig);
+                    }
+                    else if (property.PropertyType == typeof(Color))
+                    {
+                        helper.AddColorPicker(property, GetConfig, defaultColor: new(147, 112, 219, 155));
+                    }
                 }
             }
         }

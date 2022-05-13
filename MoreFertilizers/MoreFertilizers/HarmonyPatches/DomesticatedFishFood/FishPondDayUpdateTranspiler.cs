@@ -10,6 +10,9 @@ using StardewValley.Buildings;
 
 namespace MoreFertilizers.HarmonyPatches.DomesticatedFishFood;
 
+/// <summary>
+/// Holds transpilers against FishPond.dayUpdate.
+/// </summary>
 [HarmonyPatch(typeof(FishPond))]
 internal static class FishPondDayUpdateTranspiler
 {

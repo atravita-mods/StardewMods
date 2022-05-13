@@ -3,6 +3,8 @@
 
   "MillProducesOrganic.title": "Mill Produces Organic",
   "MillProducesOrganic.description": "Organic goods fed into the mill will produce organic products.",
+  "WaterOverlayColor.title": "Water Overlay Color",
+  "WaterOverlayColor.description": "The color used to tint the water after fish food has been applied to it.",
 
   // For GMCM
   "IllFormatedConfig": "Config file seems ill-formated, using default. Please use Generic Mod Config Menu to configure.",

@@ -159,7 +159,7 @@ public sealed class CanPlaceHandler : IMoreFertilizersAPI
             if (obj.ParentSheetIndex != ModEntry.DomesticatedFishFoodID)
             {
                 DelayedAction.functionAfterDelay(
-                    () => Game1.currentLocation.waterColor.Value = SpecialFertilizerApplication.FedFishWaterColor(),
+                    () => Game1.currentLocation.waterColor.Value = ModEntry.Config.WaterOverlayColor,
                     (int)time);
             }
         }

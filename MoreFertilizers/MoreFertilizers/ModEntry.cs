@@ -245,6 +245,27 @@ internal class ModEntry : Mod
         }
     }
 
+    private static int rapidBushFertilizerID = -1;
+
+    /// <summary>
+    /// Gets the integer ID of the rapid bush fertilizer. -1 if not found/not loaded yet.
+    /// </summary>
+    internal static int RapidBushFertilizrID
+    {
+        get
+        {
+            if (rapidBushFertilizerID != -1)
+            {
+                return rapidBushFertilizerID;
+            }
+            else
+            {
+                rapidBushFertilizerID = jsonAssets?.GetObjectId("Rapid BushFertilizer") ?? -1;
+                return rapidBushFertilizerID;
+            }
+        }
+    }
+
     private static int jojaFertilizerID = -1;
 
     /// <summary>
@@ -461,6 +482,7 @@ internal class ModEntry : Mod
             storedIDs.LuckyFertilizerID = LuckyFertilizerID;
             storedIDs.BountifulFertilizerID = BountifulFertilizerID;
             storedIDs.BountifulBushID = BountifulBushID;
+            storedIDs.RapidBushFertilizerID = RapidBushFertilizrID;
             storedIDs.JojaFertilizerID = JojaFertilizerID;
             storedIDs.DeluxeJojaFertilizerID = DeluxeJojaFertilizerID;
             storedIDs.SecretJojaFertilizerID = SecretJojaFertilizerID;
@@ -643,6 +665,11 @@ internal class ModEntry : Mod
         if (BountifulBushID != -1)
         {
             SpecialFertilizerIDs.Add(BountifulBushID);
+        }
+
+        if (RapidBushFertilizrID != -1)
+        {
+            SpecialFertilizerIDs.Add(RapidBushFertilizrID);
         }
 
         // Plantable ones begin here.

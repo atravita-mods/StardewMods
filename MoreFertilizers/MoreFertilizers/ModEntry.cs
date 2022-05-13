@@ -35,6 +35,27 @@ internal class ModEntry : Mod
 
 #pragma warning disable SA1204 // Static elements should appear before instance elements. Keep backing fields near properties.
 #pragma warning disable SA1201 // Elements should appear in the correct order
+    private static int wisdomFertilizerID = -1;
+
+    /// <summary>
+    /// Gets the integer ID of the Wisdom Fertilizer. Returns -1 if not found/not loaded yet.
+    /// </summary>
+    internal static int WisdomFertilizerID
+    {
+        get
+        {
+            if (wisdomFertilizerID != -1)
+            {
+                return wisdomFertilizerID;
+            }
+            else
+            {
+                wisdomFertilizerID = jsonAssets?.GetObjectId("Wisdom Fertilizer - More Fertilizers") ?? -1;
+                return wisdomFertilizerID;
+            }
+        }
+    }
+
     private static int fruitTreeFertilizerID = -1;
 
     /// <summary>
@@ -199,6 +220,27 @@ internal class ModEntry : Mod
             {
                 bountifulFertilizerID = jsonAssets?.GetObjectId("Bountiful Fertilizer") ?? -1;
                 return bountifulFertilizerID;
+            }
+        }
+    }
+
+    private static int bountifulBushID = -1;
+
+    /// <summary>
+    /// Gets the integer ID of the bountiful bush fertilizer. -1 if not found/not loaded yet.
+    /// </summary>
+    internal static int BountifulBushID
+    {
+        get
+        {
+            if (bountifulBushID != -1)
+            {
+                return bountifulBushID;
+            }
+            else
+            {
+                bountifulBushID = jsonAssets?.GetObjectId("Bountiful Bush Fertilizer") ?? -1;
+                return bountifulBushID;
             }
         }
     }
@@ -405,6 +447,7 @@ internal class ModEntry : Mod
         if (storedIDs is null)
         {
             storedIDs = new();
+            storedIDs.WisdomFertilizerID = WisdomFertilizerID;
             storedIDs.FruitTreeFertilizerID = FruitTreeFertilizerID;
             storedIDs.DeluxeFruitTreeFertilizerID = DeluxeFruitTreeFertilizerID;
             storedIDs.FishFoodID = FishFoodID;
@@ -413,6 +456,7 @@ internal class ModEntry : Mod
             storedIDs.PaddyFertilizerID = PaddyCropFertilizerID;
             storedIDs.LuckyFertilizerID = LuckyFertilizerID;
             storedIDs.BountifulFertilizerID = BountifulFertilizerID;
+            storedIDs.BountifulBushID = BountifulBushID;
             storedIDs.JojaFertilizerID = JojaFertilizerID;
             storedIDs.DeluxeJojaFertilizerID = DeluxeJojaFertilizerID;
             storedIDs.SecretJojaFertilizerID = SecretJojaFertilizerID;
@@ -592,7 +636,17 @@ internal class ModEntry : Mod
             SpecialFertilizerIDs.Add(DomesticatedFishFoodID);
         }
 
+        if (BountifulBushID != -1)
+        {
+            SpecialFertilizerIDs.Add(BountifulBushID);
+        }
+
         // Plantable ones begin here.
+        if (WisdomFertilizerID != -1)
+        {
+            PlantableFertilizerIDs.Add(WisdomFertilizerID);
+        }
+
         if (PaddyCropFertilizerID != -1)
         {
             PlantableFertilizerIDs.Add(PaddyCropFertilizerID);
@@ -651,6 +705,14 @@ internal class ModEntry : Mod
         Dictionary<int, int> idMapping = new();
 
         // Have to update the planted ones.
+        if (WisdomFertilizerID != -1
+            && storedIDs.WisdomFertilizerID != -1
+            && storedIDs.WisdomFertilizerID != WisdomFertilizerID)
+        {
+            idMapping.Add(storedIDs.WisdomFertilizerID, WisdomFertilizerID);
+            storedIDs.WisdomFertilizerID = WisdomFertilizerID;
+        }
+
         if (LuckyFertilizerID != -1
             && storedIDs.LuckyFertilizerID != -1
             && storedIDs.LuckyFertilizerID != LuckyFertilizerID)

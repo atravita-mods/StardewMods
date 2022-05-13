@@ -13,6 +13,11 @@ public class MoreFertilizerIDs
     }
 
     /// <summary>
+    /// Gets or sets the ID number to store for the wisdom fertilizer.
+    /// </summary>
+    public int WisdomFertilizerID { get; set; } = -1;
+
+    /// <summary>
     /// Gets or sets the ID number to store for fruit tree fertilizer.
     /// </summary>
     public int FruitTreeFertilizerID { get; set; } = -1;
@@ -51,6 +56,11 @@ public class MoreFertilizerIDs
     /// Gets or sets the ID number to store for the bountiful fertilizer.
     /// </summary>
     public int BountifulFertilizerID { get; set; } = -1;
+
+    /// <summary>
+    /// Gets or sets the ID number to store for the bountiful bush fertilizer.
+    /// </summary>
+    public int BountifulBushID { get; set; } = -1;
 
     /// <summary>
     /// Gets or sets the ID number to store for joja fertilizer.

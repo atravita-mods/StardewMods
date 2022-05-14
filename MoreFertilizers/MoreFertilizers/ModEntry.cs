@@ -827,6 +827,32 @@ internal class ModEntry : Mod
             storedIDs.OrganicFertilizerID = OrganicFertilizerID;
         }
 
+        // Update stored IDs for the special ones.
+        if (FruitTreeFertilizerID != -1)
+        {
+            storedIDs.FruitTreeFertilizerID = FruitTreeFertilizerID;
+        }
+
+        if (DeluxeFruitTreeFertilizerID != -1)
+        {
+            storedIDs.DeluxeFruitTreeFertilizerID = DeluxeFruitTreeFertilizerID;
+        }
+
+        if (FishFoodID != -1)
+        {
+            storedIDs.FishFoodID = FishFoodID;
+        }
+
+        if (DeluxeFishFoodID != -1)
+        {
+            storedIDs.DeluxeFishFoodID = DeluxeFishFoodID;
+        }
+
+        if (DomesticatedFishFoodID != -1)
+        {
+            storedIDs.DomesticatedFishFoodID = DomesticatedFishFoodID;
+        }
+
         if (idMapping.Count <= 0 )
         {
             ModMonitor.Log("No need to fix IDs, nothing has changed.");

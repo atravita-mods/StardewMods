@@ -159,7 +159,8 @@ internal static class PFMAutomateTranspilers
                 new(OpCodes.Ldarg_S, 6), // Input SObject
                 new(OpCodes.Call, typeof(AutomateTranspiler).StaticMethodNamed(nameof(AutomateTranspiler.MakeOrganic))),
             });
-            helper.Print();
+
+            // helper.Print();
             return helper.Render();
         }
         catch (Exception ex)

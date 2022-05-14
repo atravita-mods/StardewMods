@@ -124,14 +124,13 @@ internal static class SObjectPatches
 
                 List<Response> responses = new()
                 {
-                    new Response("BombsNo", I18n.No()).SetHotKey(Keys.Escape),
                     new Response("BombsYes", I18n.YesOne()).SetHotKey(Keys.Y),
                     new Response("BombsArea", I18n.YesArea()),
+                    new Response("BombsNo", I18n.No()).SetHotKey(Keys.Escape),
                 };
 
                 List<Action?> actions = new()
                 {
-                    null,
                     () =>
                     {
                         Game1.player.reduceActiveItemByOne();

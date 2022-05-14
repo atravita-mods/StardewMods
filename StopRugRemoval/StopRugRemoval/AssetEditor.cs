@@ -53,8 +53,16 @@ internal static class AssetEditor
 
             if (Game1.content.GetCurrentLanguage() is not LocalizedContentManager.LanguageCode.en)
             {
+                string localeFilename;
                 LocalizedContentManager.LanguageCode locale = Game1.content.GetCurrentLanguage();
-                string localeFilename = $"BetIcons.{Game1.content.LanguageCodeString(locale)}.png";
+                if (locale != LocalizedContentManager.LanguageCode.mod)
+                {
+                    localeFilename = $"BetIcons.{Game1.content.LanguageCodeString(locale)}.png";
+                }
+                else
+                {
+                    localeFilename = $"BetIcons.{LocalizedContentManager.CurrentModLanguage.LanguageCode}.png";
+                }
                 if (File.Exists(Path.Combine(directoryPath, "i18n", localeFilename)))
                 {
                     filename = localeFilename;

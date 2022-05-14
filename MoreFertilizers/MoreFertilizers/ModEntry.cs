@@ -250,7 +250,7 @@ internal class ModEntry : Mod
     /// <summary>
     /// Gets the integer ID of the rapid bush fertilizer. -1 if not found/not loaded yet.
     /// </summary>
-    internal static int RapidBushFertilizrID
+    internal static int RapidBushFertilizerID
     {
         get
         {
@@ -524,7 +524,7 @@ internal class ModEntry : Mod
             storedIDs.LuckyFertilizerID = LuckyFertilizerID;
             storedIDs.BountifulFertilizerID = BountifulFertilizerID;
             storedIDs.BountifulBushID = BountifulBushID;
-            storedIDs.RapidBushFertilizerID = RapidBushFertilizrID;
+            storedIDs.RapidBushFertilizerID = RapidBushFertilizerID;
             storedIDs.TreeTapperFertilizerID = TreeTapperFertilizerID;
             storedIDs.JojaFertilizerID = JojaFertilizerID;
             storedIDs.DeluxeJojaFertilizerID = DeluxeJojaFertilizerID;
@@ -711,9 +711,9 @@ internal class ModEntry : Mod
             SpecialFertilizerIDs.Add(BountifulBushID);
         }
 
-        if (RapidBushFertilizrID != -1)
+        if (RapidBushFertilizerID != -1)
         {
-            SpecialFertilizerIDs.Add(RapidBushFertilizrID);
+            SpecialFertilizerIDs.Add(RapidBushFertilizerID);
         }
 
         if (TreeTapperFertilizerID != -1)
@@ -886,6 +886,16 @@ internal class ModEntry : Mod
         if (DomesticatedFishFoodID != -1)
         {
             storedIDs.DomesticatedFishFoodID = DomesticatedFishFoodID;
+        }
+
+        if (RapidBushFertilizerID != -1)
+        {
+            storedIDs.RapidBushFertilizerID = RapidBushFertilizerID;
+        }
+
+        if (BountifulBushID != -1)
+        {
+            storedIDs.BountifulBushID = BountifulBushID;
         }
 
         if (idMapping.Count <= 0 )

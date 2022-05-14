@@ -83,8 +83,8 @@ public sealed class CanPlaceHandler : IMoreFertilizersAPI
                 return !fruitTree.modData.ContainsKey(FruitTreeFertilizer);
             }
             else if (terrain is Bush bush
-                && (obj.ParentSheetIndex == ModEntry.RapidBushFertilizrID || obj.ParentSheetIndex == ModEntry.BountifulBushID
-                    || obj.ParentSheetIndex == ModEntry.MiraculousBeveragesID))
+                && (obj.ParentSheetIndex == ModEntry.RapidBushFertilizerID || obj.ParentSheetIndex == ModEntry.BountifulBushID
+                    || (obj.ParentSheetIndex == ModEntry.MiraculousBeveragesID && bush.size.Value == Bush.greenTeaBush)))
             {
                 return !bush.modData.ContainsKey(BountifulBush) && !bush.modData.ContainsKey(RapidBush) && !bush.modData.ContainsKey(MiraculousBeverages);
             }
@@ -131,11 +131,38 @@ public sealed class CanPlaceHandler : IMoreFertilizersAPI
             }
             return true;
         }
-        if (loc.terrainFeatures.TryGetValue(tile, out TerrainFeature? terrain) && terrain is FruitTree tree &&
-            (obj.ParentSheetIndex == ModEntry.FruitTreeFertilizerID || obj.ParentSheetIndex == ModEntry.DeluxeFruitTreeFertilizerID))
+        if (loc.terrainFeatures.TryGetValue(tile, out TerrainFeature? terrain))
         {
-            tree.modData?.SetInt(FruitTreeFertilizer, obj.ParentSheetIndex == ModEntry.DeluxeFruitTreeFertilizerID ? 2 : 1);
-            return true;
+            if (terrain is FruitTree fruitTree &&
+                (obj.ParentSheetIndex == ModEntry.FruitTreeFertilizerID || obj.ParentSheetIndex == ModEntry.DeluxeFruitTreeFertilizerID))
+            {
+                fruitTree.modData?.SetInt(FruitTreeFertilizer, obj.ParentSheetIndex == ModEntry.DeluxeFruitTreeFertilizerID ? 2 : 1);
+                return true;
+            }
+            if (terrain is Bush bush)
+            {
+                if (obj.ParentSheetIndex == ModEntry.RapidBushFertilizerID)
+                {
+                    bush.modData?.SetBool(RapidBush, true);
+                    return true;
+                }
+                else if (obj.ParentSheetIndex == ModEntry.BountifulBushID)
+                {
+                    bush.modData?.SetBool(BountifulBush, true);
+                    return true;
+                }
+                else if (obj.ParentSheetIndex == ModEntry.MiraculousBeveragesID && bush.size.Value == Bush.greenTeaBush)
+                {
+                    bush.modData?.SetBool(MiraculousBeverages, true);
+                    return true;
+                }
+            }
+            if (terrain is Tree tree
+                && (obj.ParentSheetIndex == ModEntry.TreeTapperFertilizerID))
+            {
+                tree.modData?.SetBool(TreeTapperFertilizer, true);
+                return true;
+            }
         }
 
         if (loc is BuildableGameLocation buildableLoc && obj.ParentSheetIndex == ModEntry.DomesticatedFishFoodID)

@@ -105,7 +105,7 @@ internal static class CropHarvestTranspiler
 
     private static int AdjustRegrow(int prevValue, HoeDirt? dirt)
     {
-        if (ModEntry.SecretJojaFertilizerID != -1 && dirt?.fertilizer?.Value == ModEntry.SecretJojaFertilizerID)
+        if (ModEntry.SecretJojaFertilizerID != -1 && dirt?.fertilizer?.Value == ModEntry.SecretJojaFertilizerID && Game1.random.NextDouble() < 0.5)
         {
             return Math.Max(1, (int)(0.9 * prevValue));
         }

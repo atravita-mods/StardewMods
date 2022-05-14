@@ -22,7 +22,7 @@ internal static class HoeDirtSpeedIncreases
     {
         if (dirt.fertilizer.Value == ModEntry.SecretJojaFertilizerID)
         {
-            prev += 0.3f;
+            prev += 0.2f;
         }
         else if (dirt.fertilizer.Value == ModEntry.PaddyCropFertilizerID && dirt.hasPaddyCrop())
         {

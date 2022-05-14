@@ -27,7 +27,7 @@ public class GiantCropFertilizerIDStorage
 
     internal int ID
     {
-        get => this.IDMap[Constants.SaveFolderName!];
+        get => this.IDMap.TryGetValue(Constants.SaveFolderName!, out int val) ? val : -1;
         set => this.IDMap[Constants.SaveFolderName!] = value;
     }
 }

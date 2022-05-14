@@ -61,9 +61,14 @@ internal class ModEntry : Mod
         => AssetEditor.HandleAssetRequested(e);
 
     private void OnSaved(object? sender, SavedEventArgs e)
-        => this.Helper.Data.WriteGlobalData(
-            SAVESTRING,
-            this.storedID ?? new GiantCropFertilizerIDStorage(GiantCropFertilizerID));
+    {
+        if (Context.IsMainPlayer)
+        {
+            this.Helper.Data.WriteGlobalData(
+                  SAVESTRING,
+                  this.storedID ?? new GiantCropFertilizerIDStorage(GiantCropFertilizerID));
+        }
+    }
 
     /// <summary>
     /// Applies the patches for this mod.
@@ -195,7 +200,7 @@ internal class ModEntry : Mod
     private void FixIds()
     {
         int newID = GiantCropFertilizerID;
-        if (newID == -1)
+        if (newID == -1 || !Context.IsMainPlayer)
         {
             return;
         }

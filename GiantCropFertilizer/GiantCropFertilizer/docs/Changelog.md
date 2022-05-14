@@ -1,5 +1,7 @@
 ﻿Changelog
 =============
+#### Version 0.1.5
+* Fix migration code. Again.
 
 #### Version 0.1.4
 * Fix errors in migration code for saves using Unicode in the save name.

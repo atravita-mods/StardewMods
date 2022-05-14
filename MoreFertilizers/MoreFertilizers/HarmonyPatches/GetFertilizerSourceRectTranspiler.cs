@@ -22,6 +22,10 @@ internal static class GetFertilizerSourceRectTranspiler
         {
             return 0;
         }
+        else if (fertilizer == ModEntry.MiraculousBeveragesID)
+        {
+            return 1;
+        }
         else if (fertilizer == ModEntry.PaddyCropFertilizerID)
         {
             return 3;

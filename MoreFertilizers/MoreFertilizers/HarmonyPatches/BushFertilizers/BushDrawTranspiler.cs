@@ -76,7 +76,7 @@ internal static class BushDrawTranspiler
                 new(OpCodes.Call, typeof(BushDrawTranspiler).StaticMethodNamed(nameof(AdjustColorForBush))),
             });
 
-            helper.Print();
+            // helper.Print();
             return helper.Render();
         }
         catch (Exception ex)

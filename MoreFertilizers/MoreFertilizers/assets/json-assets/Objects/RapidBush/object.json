@@ -7,5 +7,5 @@
   "PurchasePrice": 150,
   "PurchaseFrom": "Pierre",
   "CanPurchase": true,
-  "PurchaseRequirements": [ "y 2", "Hn MSB_Pierre", "d Mon Tue Thu Fri Sat" ]
+  "PurchaseRequirements": [ "y 2", "e 2120303", "d Mon Tue Thu Fri Sat" ]
 }

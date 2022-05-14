@@ -21,6 +21,9 @@ internal static class KrobusShopStockPostfix
         {
             __result.TryAdd(new SObject(ModEntry.WisdomFertilizerID, 1), new[] { 80, int.MaxValue });
         }
-
+        if (ModEntry.MiraculousBeveragesID != -1)
+        {
+            __result.TryAdd(new SObject(ModEntry.MiraculousBeveragesID, 1), new[] { 150, int.MaxValue });
+        }
     }
 }

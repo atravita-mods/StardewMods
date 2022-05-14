@@ -7,6 +7,9 @@ using StardewValley.TerrainFeatures;
 
 namespace MoreFertilizers.HarmonyPatches;
 
+/// <summary>
+/// Patches for HoeDirt.applySpeedIncreases.
+/// </summary>
 [HarmonyPatch(typeof(HoeDirt))]
 internal static class HoeDirtSpeedIncreases
 {

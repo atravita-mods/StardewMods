@@ -33,7 +33,7 @@ internal static class PostfixBigSlimeConstructor
                 {
                     __instance.heldObject.Value = new SObject(ModEntry.DeluxeFishFoodID, 1);
                 }
-                else if (ModEntry.SecretJojaFertilizerID != -1 && Game1.random.NextDouble() < (Utility.hasFinishedJojaRoute() ? 1.0 : 0.2))
+                else if (ModEntry.SecretJojaFertilizerID != -1 && (Utility.hasFinishedJojaRoute() || Game1.random.NextDouble() < 0.2))
                 {
                     __instance.heldObject.Value = new SObject(ModEntry.SecretJojaFertilizerID, 1);
                 }
@@ -49,8 +49,8 @@ internal static class PostfixBigSlimeConstructor
             }
             if (ModEntry.WisdomFertilizerID != -1
                 && mineArea <= 120
-                && Game1.random.NextDouble() < 0.05)
-            {
+                && Game1.random.NextDouble() < 0.15)
+            { // big slimes are exceptionally rare in the normal mines.
                 __instance.heldObject.Value = new SObject(ModEntry.WisdomFertilizerID, 1);
                 return;
             }

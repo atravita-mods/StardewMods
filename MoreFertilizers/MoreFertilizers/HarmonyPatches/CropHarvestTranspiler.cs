@@ -406,7 +406,8 @@ internal static class CropHarvestTranspiler
                 new(OpCodes.Ldarg_3),
                 new(OpCodes.Call, typeof(CropHarvestTranspiler).StaticMethodNamed(nameof(AdjustRegrow))),
             });
-            helper.Print();
+
+            // helper.Print();
             return helper.Render();
         }
         catch (Exception ex)

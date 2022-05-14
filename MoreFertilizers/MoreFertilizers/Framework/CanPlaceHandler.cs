@@ -3,6 +3,7 @@ using AtraShared.Utils.Extensions;
 using Microsoft.Xna.Framework;
 using StardewValley.Buildings;
 using StardewValley.Locations;
+using StardewValley.Objects;
 using StardewValley.TerrainFeatures;
 
 namespace MoreFertilizers.Framework;
@@ -82,8 +83,8 @@ public sealed class CanPlaceHandler : IMoreFertilizersAPI
             {
                 return !fruitTree.modData.ContainsKey(FruitTreeFertilizer);
             }
-            else if (terrain is Bush bush
-                && (obj.ParentSheetIndex == ModEntry.RapidBushFertilizerID || obj.ParentSheetIndex == ModEntry.BountifulBushID
+            else if (terrain is Bush bush && (bush.size.Value == Bush.greenTeaBush || bush.size.Value == Bush.mediumBush) && !bush.townBush.Value
+                && ((obj.ParentSheetIndex == ModEntry.RapidBushFertilizerID && bush.size.Value == Bush.greenTeaBush) || obj.ParentSheetIndex == ModEntry.BountifulBushID
                     || (obj.ParentSheetIndex == ModEntry.MiraculousBeveragesID && bush.size.Value == Bush.greenTeaBush)))
             {
                 return !bush.modData.ContainsKey(BountifulBush) && !bush.modData.ContainsKey(RapidBush) && !bush.modData.ContainsKey(MiraculousBeverages);
@@ -92,6 +93,24 @@ public sealed class CanPlaceHandler : IMoreFertilizersAPI
                 && (obj.ParentSheetIndex == ModEntry.TreeTapperFertilizerID))
             {
                 return !tree.modData.ContainsKey(TreeFertilizer) && !tree.modData.ContainsKey(TreeTapperFertilizer);
+            }
+        }
+
+        if (loc.Objects.TryGetValue(tile, out SObject @object) && @object is IndoorPot pot && pot.bush?.Value is Bush pottedBush && pottedBush.size?.Value == Bush.greenTeaBush
+            && (obj.ParentSheetIndex == ModEntry.RapidBushFertilizerID || obj.ParentSheetIndex == ModEntry.BountifulBushID || obj.ParentSheetIndex == ModEntry.MiraculousBeveragesID ))
+        {
+            return !pottedBush.modData.ContainsKey(BountifulBush) && !pottedBush.modData.ContainsKey(RapidBush) && !pottedBush.modData.ContainsKey(MiraculousBeverages);
+        }
+
+        if (obj.ParentSheetIndex == ModEntry.BountifulBushID)
+        {
+            Rectangle pos = new((int)tile.X * 64, (int)tile.Y * 64, 16, 16);
+            foreach (LargeTerrainFeature largeterrainfeature in loc.largeTerrainFeatures)
+            {
+                if (largeterrainfeature is Bush bigBush && bigBush.getBoundingBox().Intersects(pos))
+                {
+                    return !bigBush.modData.ContainsKey(BountifulBush) && !bigBush.modData.ContainsKey(RapidBush) && !bigBush.modData.ContainsKey(MiraculousBeverages);
+                }
             }
         }
 
@@ -141,7 +160,7 @@ public sealed class CanPlaceHandler : IMoreFertilizersAPI
             }
             if (terrain is Bush bush)
             {
-                if (obj.ParentSheetIndex == ModEntry.RapidBushFertilizerID)
+                if (obj.ParentSheetIndex == ModEntry.RapidBushFertilizerID && bush.size.Value == Bush.greenTeaBush)
                 {
                     bush.modData?.SetBool(RapidBush, true);
                     return true;
@@ -162,6 +181,38 @@ public sealed class CanPlaceHandler : IMoreFertilizersAPI
             {
                 tree.modData?.SetBool(TreeTapperFertilizer, true);
                 return true;
+            }
+        }
+
+        if (loc.Objects.TryGetValue(tile, out SObject @object) && @object is IndoorPot pot && pot.bush?.Value is Bush pottedBush && pottedBush.size?.Value == Bush.greenTeaBush)
+        {
+            if (obj.ParentSheetIndex == ModEntry.BountifulBushID)
+            {
+                pottedBush.modData?.SetBool(BountifulBush, true);
+                return true;
+            }
+            if (obj.ParentSheetIndex == ModEntry.RapidBushFertilizerID)
+            {
+                pottedBush.modData?.SetBool(RapidBush, true);
+                return true;
+            }
+            if (obj.ParentSheetIndex == ModEntry.MiraculousBeveragesID)
+            {
+                pottedBush.modData?.SetBool(MiraculousBeverages, true);
+                return true;
+            }
+        }
+
+        if (obj.ParentSheetIndex == ModEntry.BountifulBushID)
+        {
+            Rectangle pos = new((int)tile.X * 64, (int)tile.Y * 64, 16, 16);
+            foreach (LargeTerrainFeature largeterrainfeature in loc.largeTerrainFeatures)
+            {
+                if (largeterrainfeature is Bush bigBush && bigBush.size.Value == Bush.mediumBush && bigBush.getBoundingBox().Intersects(pos))
+                {
+                    bigBush.modData?.SetBool(BountifulBush, true);
+                    return true;
+                }
             }
         }
 

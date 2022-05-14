@@ -1,9 +1,9 @@
 ﻿{
-  "Name": "Bountiful Fertilizer",
+  "Name": "Rapid Bush Fertilizer",
   "Price": "50",
   "Category": "Junk",
   "Edibility": -300,
-  "TranslationKey": "bountiful-fertilizer",
+  "TranslationKey": "rapid-bush-fertilizer",
   "PurchasePrice": 150,
   "PurchaseFrom": "Pierre",
   "CanPurchase": true,

@@ -6,6 +6,7 @@ using AtraShared.Utils.HarmonyHelper;
 using HarmonyLib;
 using Microsoft.Xna.Framework;
 using MoreFertilizers.Framework;
+using Netcode;
 using StardewValley.Objects;
 using StardewValley.TerrainFeatures;
 
@@ -89,6 +90,24 @@ internal static class CropHarvestTranspiler
         {
             ModEntry.ModMonitor.DebugOnlyLog("IncrementedOnceForBountiful", LogLevel.Info);
             return prevValue * 2;
+        }
+        return prevValue;
+    }
+
+    private static int AdjustExperience(int prevValue, HoeDirt? dirt)
+    {
+        if (ModEntry.WisdomFertilizerID != -1 && dirt?.fertilizer?.Value == ModEntry.WisdomFertilizerID)
+        {
+            return (int)(1.5 * prevValue);
+        }
+        return prevValue;
+    }
+
+    private static int AdjustRegrow(int prevValue, HoeDirt? dirt)
+    {
+        if (ModEntry.SecretJojaFertilizerID != -1 && dirt?.fertilizer?.Value == ModEntry.SecretJojaFertilizerID)
+        {
+            return Math.Max(1, (int)(0.9 * prevValue));
         }
         return prevValue;
     }
@@ -221,6 +240,35 @@ internal static class CropHarvestTranspiler
                 new(OpCodes.Ldarg_3),
                 new(OpCodes.Call, typeof(CropHarvestTranspiler).StaticMethodNamed(nameof(GetQualityForJojaFert))),
                 new(OpCodes.Callvirt, typeof(SObject).InstancePropertyNamed(nameof(SObject.Quality)).GetSetMethod()),
+            })
+            .FindNext(new CodeInstructionWrapper[]
+            { // Find the block where the player is given XP
+                new(OpCodes.Call, typeof(Game1).StaticPropertyNamed(nameof(Game1.player)).GetGetMethod()),
+                new(OpCodes.Ldc_I4_0),
+                new(SpecialCodeInstructionCases.LdLoc),
+            })
+            .FindNext(new CodeInstructionWrapper[]
+            {
+                new(OpCodes.Conv_I4),
+                new(OpCodes.Callvirt, typeof(Farmer).InstanceMethodNamed(nameof(Farmer.gainExperience))),
+            })
+            .Advance(1)
+            .Insert(new CodeInstruction[]
+            { // insert a call to a function that changes the experience gained.
+                new(OpCodes.Ldarg_3),
+                new(OpCodes.Call, typeof(CropHarvestTranspiler).StaticMethodNamed(nameof(AdjustExperience))),
+            })
+            .FindNext(new CodeInstructionWrapper[]
+            {
+                new(OpCodes.Ldfld, typeof(Crop).InstanceFieldNamed(nameof(Crop.regrowAfterHarvest))),
+                new(OpCodes.Call),
+                new(OpCodes.Callvirt, typeof(NetFieldBase<int, NetInt>).InstancePropertyNamed("Value").GetSetMethod()),
+            })
+            .Advance(2)
+            .Insert(new CodeInstruction[]
+            {
+                new(OpCodes.Ldarg_3),
+                new(OpCodes.Call, typeof(CropHarvestTranspiler).StaticMethodNamed(nameof(AdjustRegrow))),
             });
 
             // helper.Print();
@@ -228,7 +276,7 @@ internal static class CropHarvestTranspiler
         }
         catch (Exception ex)
         {
-            ModEntry.ModMonitor.Log($"Mod crashed while transpiling Crop.harvest:\n\n{ex}", LogLevel.Error);
+            ModEntry.ModMonitor.Log($"Mod crashed while transpiling DGA.harvest:\n\n{ex}", LogLevel.Error);
         }
         return null;
     }
@@ -273,8 +321,8 @@ internal static class CropHarvestTranspiler
                 qualityStLoc,
             }, withLabels: qualityLabels);
 
-            Type cropPackData = AccessTools.TypeByName("DynamicGameAssets.PackData.CropPackData") ?? throw new MethodNotFoundException("DGA crop data not found");
-            Type harvestData = cropPackData.GetNestedType("HarvestedDropData") ?? throw new MethodNotFoundException("Harvested data not found!");
+            Type cropPackData = AccessTools.TypeByName("DynamicGameAssets.PackData.CropPackData") ?? throw new MethodNotFoundException("DGA crop data");
+            Type harvestData = cropPackData.GetNestedType("HarvestedDropData") ?? throw new MethodNotFoundException("Harvested data");
 
             helper.FindNext(new CodeInstructionWrapper[]
             { // data.MaximumHarvestedQuantity > 1
@@ -323,9 +371,42 @@ internal static class CropHarvestTranspiler
             {
                 new(OpCodes.Ldarg_3),
                 new(OpCodes.Call, typeof(CropHarvestTranspiler).StaticMethodNamed(nameof(MakeItemOrganic))),
+            })
+            .FindNext(new CodeInstructionWrapper[]
+            { // Find the block where the player is given XP
+                new(OpCodes.Call, typeof(Game1).StaticPropertyNamed(nameof(Game1.player)).GetGetMethod()),
+                new(OpCodes.Ldc_I4_0),
+                new(SpecialCodeInstructionCases.LdLoc),
+            })
+            .FindNext(new CodeInstructionWrapper[]
+            {
+                new(OpCodes.Conv_I4),
+                new(OpCodes.Callvirt, typeof(Farmer).InstanceMethodNamed(nameof(Farmer.gainExperience))),
+            })
+            .Advance(1)
+            .Insert(new CodeInstruction[]
+            { // insert a call to a function that changes the experience gained.
+                new(OpCodes.Ldarg_3),
+                new(OpCodes.Call, typeof(CropHarvestTranspiler).StaticMethodNamed(nameof(AdjustExperience))),
             });
 
-            // helper.Print();
+            Type phasedata = cropPackData.GetNestedType("PhaseData") ?? throw new MethodNotFoundException("DGA phase data");
+
+            helper.FindNext(new CodeInstructionWrapper[]
+            {
+                new(OpCodes.Ldarg_0),
+                new(OpCodes.Ldfld, typeof(Crop).InstanceFieldNamed(nameof(Crop.currentPhase))),
+                new(SpecialCodeInstructionCases.LdLoc),
+                new(OpCodes.Callvirt, phasedata.InstancePropertyNamed("HarvestedNewPhase").GetGetMethod()),
+                new(OpCodes.Callvirt, typeof(NetFieldBase<int, NetInt>).InstancePropertyNamed("Value").GetSetMethod()),
+            })
+            .Advance(4)
+            .Insert(new CodeInstruction[]
+            {
+                new(OpCodes.Ldarg_3),
+                new(OpCodes.Call, typeof(CropHarvestTranspiler).StaticMethodNamed(nameof(AdjustRegrow))),
+            });
+            helper.Print();
             return helper.Render();
         }
         catch (Exception ex)

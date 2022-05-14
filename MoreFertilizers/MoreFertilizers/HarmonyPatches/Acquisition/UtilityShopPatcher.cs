@@ -62,5 +62,9 @@ internal static class UtilityShopPatcher
                 __result.Add(new SObject(ModEntry.SecretJojaFertilizerID, 1), new[] { 150, 20 });
             }
         }
+        catch (Exception ex)
+        {
+            ModEntry.ModMonitor.Log($"Failed while trying to add Secret Joja Fertilizer to JojaMart.\n\n{ex}", LogLevel.Error);
+        }
     }
 }

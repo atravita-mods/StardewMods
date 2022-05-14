@@ -6,7 +6,10 @@
 #### Version 0.2.0 TODO items
 * Secret Joja Fertilizer:
     - Increase both growth speed and regrowth speed.
-    - Actually implement the JA item.
+
+* Added new fertilizers: Secret Joja Fertilizer, Wisdom Fertilizer.
+
+* Adjusted previous fertilizers: Waterlogged now increases the growth speed of paddy crops a little.
 
 #### Version 0.1.5
 * Joja crops no longer can become organic.

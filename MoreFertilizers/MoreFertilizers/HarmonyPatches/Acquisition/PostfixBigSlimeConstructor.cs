@@ -47,6 +47,13 @@ internal static class PostfixBigSlimeConstructor
                 __instance.heldObject.Value = new SObject(ModEntry.LuckyFertilizerID, 1);
                 return;
             }
+            if (ModEntry.WisdomFertilizerID != -1
+                && mineArea <= 120
+                && Game1.random.NextDouble() < 0.05)
+            {
+                __instance.heldObject.Value = new SObject(ModEntry.WisdomFertilizerID, 1);
+                return;
+            }
         }
         catch (Exception ex)
         {

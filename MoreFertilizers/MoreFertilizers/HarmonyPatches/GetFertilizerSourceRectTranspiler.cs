@@ -44,6 +44,10 @@ internal static class GetFertilizerSourceRectTranspiler
         {
             return 2;
         }
+        else if (fertilizer == ModEntry.WisdomFertilizerID)
+        {
+            return 8;
+        }
         return 0;
     }
 

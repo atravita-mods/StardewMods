@@ -23,6 +23,9 @@
   // Pierre event?
 
   // Item names and descriptions.
+  "wisdom-fertilizer.name": "Wisdom Fertilizer",
+  "wisdom-fertilizer.description": "Promises to make you wiser. Are you sure this isn't a scam?",
+
   "waterlogged-fertilizer.name": "Waterlogged Fertilizer",
   "waterlogged-fertilizer.description": "Retains water so well, anywhere can be a paddy! (for paddy crops only)",
 
@@ -43,6 +46,9 @@
 
   "joja-fertilizer-deluxe.name": "Joja's Deluxe Fertilizer",
   "joja-fertilizer-deluxe.description": "Significantly more expensive than the Patented Fertilizer and even more guaranteed.",
+
+  "secret-joja-fertilizer.name": "Joja's Secret Fertilizer",
+  "secret-joja-fertilizer.description": "Joja's scientists have been keeping this one under wraps for some reason.",
 
   "good-luck-fertilizer.name": "Maeby's Good-Luck Fertilizer.",
   "good-luck-fertilizer.description": "Proudly in production for 50+ years! Promises to keep your crops safe from crows and lighting.",

@@ -54,6 +54,10 @@ internal static class HoeDirtDrawTranspiler
         {
             return Color.PaleGoldenrod;
         }
+        if (ModEntry.WisdomFertilizerID == fertilizer)
+        {
+            return Color.LightCoral;
+        }
         return prevColor;
     }
 

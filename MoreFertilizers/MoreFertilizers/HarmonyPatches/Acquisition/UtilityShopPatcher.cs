@@ -48,4 +48,19 @@ internal static class UtilityShopPatcher
             ModEntry.ModMonitor.Log($"Failed in adding to casino's stock!{ex}", LogLevel.Error);
         }
     }
+
+    [HarmonyPostfix]
+    [HarmonyPatch(nameof(Utility.getJojaStock))]
+    [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Harmony convention")]
+    private static void PostfixJojaStock(Dictionary<ISalable, int[]> __result)
+    {
+        try
+        {
+            if (ModEntry.SecretJojaFertilizerID != -1 && Utility.doesMasterPlayerHaveMailReceivedButNotMailForTomorrow("ccMovieTheaterJoja")
+                && Game1.player.stats.IndividualMoneyEarned > 1_000_000 && Game1.random.NextDouble() < 0.15)
+            {
+                __result.Add(new SObject(ModEntry.SecretJojaFertilizerID, 1), new[] { 150, 20 });
+            }
+        }
+    }
 }

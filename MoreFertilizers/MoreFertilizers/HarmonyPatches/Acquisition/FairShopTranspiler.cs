@@ -26,6 +26,10 @@ internal static class FairShopTranspiler
                 {
                     shopStock.TryAdd(new SObject(ModEntry.DeluxeJojaFertilizerID, 1), new[] { 400, 20 });
                 }
+                if (ModEntry.SecretJojaFertilizerID != -1)
+                {
+                    shopStock.TryAdd(new SObject(ModEntry.SecretJojaFertilizerID, 1), new[] { 1000, 4 });
+                }
             }
             else
             {

@@ -1,13 +1,9 @@
 ﻿using System.Reflection;
 using System.Reflection.Emit;
-using System.Runtime.CompilerServices;
-using AtraBase.Toolkit;
 using AtraBase.Toolkit.Reflection;
-using AtraShared.Utils.Extensions;
 using AtraShared.Utils.HarmonyHelper;
 using HarmonyLib;
 using Microsoft.Xna.Framework;
-using MoreFertilizers.Framework;
 using Netcode;
 using StardewValley.Objects;
 using StardewValley.TerrainFeatures;
@@ -66,7 +62,7 @@ internal static class PFMAutomateTranspilers
                 new(OpCodes.Callvirt, typeof(HoeDirt).InstancePropertyNamed(nameof(HoeDirt.crop)).GetGetMethod()),
                 new(SpecialCodeInstructionCases.StLoc),
             })
-            .GetLabels(out IList<Label>? firstLabelsToMove)
+            .GetLabels(out IList<Label>? firstLabelsToMove, clear: true)
             .Insert(new CodeInstruction[]
             { // Insert codes that save the fertilizer into our local.
                 hoedirt,
@@ -95,7 +91,7 @@ internal static class PFMAutomateTranspilers
                 new(OpCodes.Callvirt, typeof(HoeDirt).InstancePropertyNamed(nameof(HoeDirt.crop)).GetGetMethod()),
                 new(SpecialCodeInstructionCases.StLoc),
             })
-            .GetLabels(out IList<Label>? secondLabelsToMove)
+            .GetLabels(out IList<Label>? secondLabelsToMove, clear: true)
             .Insert(new CodeInstruction[]
             { // Save the fertilizer into the local. (Either this path or the previous will be taken, but not both.)
                 secondHoeDirt,
@@ -110,7 +106,7 @@ internal static class PFMAutomateTranspilers
             })
             .FindNext(new CodeInstructionWrapper[]
             {
-                new(OpCodes.Newobj, typeof(SObject).Constructor(new[] { typeof(int), typeof(int), typeof(bool), typeof(int), typeof(int)})),
+                new(OpCodes.Newobj, typeof(SObject).Constructor(new[] { typeof(int), typeof(int), typeof(bool), typeof(int), typeof(int) })),
                 new(SpecialCodeInstructionCases.StLoc),
             })
             .Advance(1)
@@ -159,7 +155,8 @@ internal static class PFMAutomateTranspilers
                 new(OpCodes.Ldarg_S, 6), // Input SObject
                 new(OpCodes.Call, typeof(AutomateTranspiler).StaticMethodNamed(nameof(AutomateTranspiler.MakeOrganic))),
             });
-            helper.Print();
+
+            //helper.Print();
             return helper.Render();
         }
         catch (Exception ex)

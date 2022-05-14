@@ -91,4 +91,9 @@ public class MoreFertilizerIDs
     /// Gets or sets the ID number for the organic fertilizer.
     /// </summary>
     public int OrganicFertilizerID { get; set; } = -1;
+
+    /// <summary>
+    /// Gets or sets the ID number for the miraculous beverages ID.
+    /// </summary>
+    public int MiraculousBeveragesID { get; set; } = -1;
 }

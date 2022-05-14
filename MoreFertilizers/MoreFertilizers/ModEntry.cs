@@ -370,6 +370,27 @@ internal class ModEntry : Mod
             }
         }
     }
+
+    private static int miraculousBeverages = -1;
+
+    /// <summary>
+    /// Gets the integer ID of the miraculous beverages fertilizer. -1 if not found/not loaded...
+    /// </summary>
+    internal static int MiraculousBeveragesID
+    {
+        get
+        {
+            if (miraculousBeverages != -1)
+            {
+                return miraculousBeverages;
+            }
+            else
+            {
+                miraculousBeverages = jsonAssets?.GetObjectId("Miraculous Beverages - More Fertilizers") ?? -1;
+                return miraculousBeverages;
+            }
+        }
+    }
 #pragma warning restore SA1201 // Elements should appear in the correct order
 #pragma warning restore SA1204 // Static elements should appear before instance elements
 
@@ -509,6 +530,7 @@ internal class ModEntry : Mod
             storedIDs.DeluxeJojaFertilizerID = DeluxeJojaFertilizerID;
             storedIDs.SecretJojaFertilizerID = SecretJojaFertilizerID;
             storedIDs.OrganicFertilizerID = OrganicFertilizerID;
+            storedIDs.MiraculousBeveragesID = MiraculousBeveragesID;
         }
         this.Helper.Data.WriteSaveData(SavedIDKey, storedIDs);
     }
@@ -740,6 +762,11 @@ internal class ModEntry : Mod
             PlantableFertilizerIDs.Add(OrganicFertilizerID);
         }
 
+        if (MiraculousBeveragesID != -1)
+        {
+            PlantableFertilizerIDs.Add(MiraculousBeveragesID);
+        }
+
         if (SpecialFertilizerIDs.Count <= 0 && PlantableFertilizerIDs.Count <= 0)
         { // I have found no valid fertilizers. Just return.
             return;
@@ -825,6 +852,14 @@ internal class ModEntry : Mod
         {
             idMapping.Add(storedIDs.OrganicFertilizerID, OrganicFertilizerID);
             storedIDs.OrganicFertilizerID = OrganicFertilizerID;
+        }
+
+        if (MiraculousBeveragesID != -1
+            && storedIDs.MiraculousBeveragesID != -1
+            && storedIDs.MiraculousBeveragesID != MiraculousBeveragesID)
+        {
+            idMapping.Add(storedIDs.MiraculousBeveragesID, MiraculousBeveragesID);
+            storedIDs.MiraculousBeveragesID = MiraculousBeveragesID;
         }
 
         // Update stored IDs for the special ones.

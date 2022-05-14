@@ -61,7 +61,7 @@ internal static class FishPondDayUpdateTranspiler
             {
                 new(OpCodes.Ldc_I4_1),
             })
-            .GetLabels(out IList<Label>? labelsToMove)
+            .GetLabels(out IList<Label>? labelsToMove, clear: true)
             .ReplaceInstruction(OpCodes.Call, typeof(FishPondDayUpdateTranspiler).StaticMethodNamed(nameof(GetAdditionalGrowthFactor)))
             .Insert(new CodeInstruction[]
             {

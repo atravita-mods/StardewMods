@@ -28,7 +28,7 @@ internal static class BreakableContainerPostfix
                 ? ModEntry.DeluxeFruitTreeFertilizerID
                 : ModEntry.OrganicFertilizerID,
             BreakableContainer.darkBarrel => location is MineShaft shaft && shaft.GetAdditionalDifficulty() > 0
-                ? ModEntry.DeluxeJojaFertilizerID
+                ? (Utility.hasFinishedJojaRoute() && Game1.random.NextDouble() < 0.1 ? ModEntry.SecretJojaFertilizerID : ModEntry.DeluxeJojaFertilizerID)
                 : ModEntry.JojaFertilizerID,
             BreakableContainer.desertBarrel => Game1.random.NextDouble() < 0.5
                 ? ModEntry.BountifulFertilizerID

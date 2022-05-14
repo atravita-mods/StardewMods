@@ -12,6 +12,7 @@ internal static class SeedShopPatches
 {
     [HarmonyPostfix]
     [HarmonyPatch(nameof(SeedShop.shopStock))]
+    [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Harmony Convention.")]
     private static void PostfixSeedShop(ref Dictionary<ISalable, int[]> __result)
     {
         try

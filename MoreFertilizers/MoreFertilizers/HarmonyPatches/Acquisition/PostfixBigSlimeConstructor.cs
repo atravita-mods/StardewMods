@@ -23,15 +23,19 @@ internal static class PostfixBigSlimeConstructor
         {
             if (mineArea >= 120
                 && Game1.mine?.GetAdditionalDifficulty() is > 0
-                && Game1.random.NextDouble() < 0.10)
+                && Game1.random.NextDouble() < 0.15)
             {
-                if (ModEntry.DeluxeFruitTreeFertilizerID != -1 && Game1.random.NextDouble() < 0.5)
+                if (ModEntry.DeluxeFruitTreeFertilizerID != -1 && Game1.random.NextDouble() < 0.33)
                 {
                     __instance.heldObject.Value = new SObject(ModEntry.DeluxeFruitTreeFertilizerID, 1);
                 }
-                else if (ModEntry.DeluxeFishFoodID != -1)
+                else if (ModEntry.DeluxeFishFoodID != -1 && Game1.random.NextDouble() < 0.5)
                 {
                     __instance.heldObject.Value = new SObject(ModEntry.DeluxeFishFoodID, 1);
+                }
+                else if (ModEntry.SecretJojaFertilizerID != -1 && Game1.random.NextDouble() < (Utility.hasFinishedJojaRoute() ? 1.0 : 0.2))
+                {
+                    __instance.heldObject.Value = new SObject(ModEntry.SecretJojaFertilizerID, 1);
                 }
                 return;
             }

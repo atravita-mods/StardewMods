@@ -60,7 +60,12 @@ public sealed class CanPlaceHandler : IMoreFertilizersAPI
     /// <summary>
     /// ModData string marking fertilized mushroom boxen.
     /// </summary>
-    public const string MushroomFertilizer = "atravita.MoreFertilzier.MushroomFertilizer";
+    public const string MushroomFertilizer = "atravita.MoreFertilizer.MushroomFertilizer";
+
+    /// <summary>
+    /// ModData string marking miraculous beverages.
+    /// </summary>
+    public const string MiraculousBeverages = "atravita.MoreFertilizer.MiraculousBeverages";
 
     /// <inheritdoc />
     public bool CanPlaceFertilizer(SObject obj, GameLocation loc, Vector2 tile)
@@ -78,9 +83,10 @@ public sealed class CanPlaceHandler : IMoreFertilizersAPI
                 return !fruitTree.modData.ContainsKey(FruitTreeFertilizer);
             }
             else if (terrain is Bush bush
-                && (obj.ParentSheetIndex == ModEntry.RapidBushFertilizrID || obj.ParentSheetIndex == ModEntry.BountifulBushID))
+                && (obj.ParentSheetIndex == ModEntry.RapidBushFertilizrID || obj.ParentSheetIndex == ModEntry.BountifulBushID
+                    || obj.ParentSheetIndex == ModEntry.MiraculousBeveragesID))
             {
-                return !bush.modData.ContainsKey(BountifulBush) && !bush.modData.ContainsKey(RapidBush);
+                return !bush.modData.ContainsKey(BountifulBush) && !bush.modData.ContainsKey(RapidBush) && !bush.modData.ContainsKey(MiraculousBeverages);
             }
             else if (terrain is Tree tree
                 && (obj.ParentSheetIndex == ModEntry.TreeTapperFertilizerID))

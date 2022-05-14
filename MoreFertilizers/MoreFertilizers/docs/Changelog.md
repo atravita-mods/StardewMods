@@ -4,15 +4,16 @@
 #### Version 0.2.0 TODO items
 * Bush fertilizers
     - Handle adding to shops and other aquisition methods.
-    - Bountiful Bush fertilizer: actually implement.
 
 #### Version 0.2.0
 * Added new fertilizers:
     - Secret Joja Fertilizer: decreases growth time, has a chance of decreasing regrowth time, but forces the crop to be base quality.
     - Wisdom Fertilizer: increases farming XP by 10%.
     - Rapid Bush Fertilizer: makes tea tree bushes grow 20% faster.
+    - Bountiful Bush Fertilizer: increases the production periods of tea and berry bushes.
 
-* Adjusted previous fertilizers: Waterlogged now increases the growth speed of paddy crops a little.
+* Adjusted previous fertilizers:
+    - Waterlogged now increases the growth speed of paddy crops a little.
 
 #### Version 0.1.6
 * Organic seeds now apply the organic fertilizer.

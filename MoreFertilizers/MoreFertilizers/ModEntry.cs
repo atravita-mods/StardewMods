@@ -514,6 +514,7 @@ internal class ModEntry : Mod
         {
             return;
         }
+
         // TODO: This should be doable with expression trees in a less dumb way.
         if (storedIDs is null)
         {
@@ -942,6 +943,7 @@ internal class ModEntry : Mod
     private void OnSaveLoaded(object? sender, SaveLoadedEventArgs e)
     {
         JojaSample.Reset();
+        MiraculousFertilizerHandler.Initialize();
 
         IntegrationHelper pfmHelper = new(this.Monitor, this.Helper.Translation, this.Helper.ModRegistry, LogLevel.Trace);
         if (pfmHelper.TryGetAPI("Digus.ProducerFrameworkMod", "1.7.4", out IProducerFrameworkModAPI? pfmAPI))

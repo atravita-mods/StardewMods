@@ -19,6 +19,10 @@ internal static class BushDrawTranspiler
 {
     private static Color AdjustColorForBush(Color prevColor, Bush bush)
     {
+        if (!ModEntry.Config.RecolorBushes)
+        {
+            return prevColor;
+        }
         if (bush.size.Value == Bush.greenTeaBush)
         {
             if (bush.getAge() < Bush.daysToMatureGreenTeaBush && bush.modData?.GetBool(CanPlaceHandler.RapidBush) == true)
@@ -39,7 +43,10 @@ internal static class BushDrawTranspiler
 #warning - fix this to be less dumb in 1.6
             if (bush.modData?.GetBool(CanPlaceHandler.BountifulBush) == true)
             {
-                string season = (bush.overrideSeason.Value == -1) ? Game1.GetSeasonForLocation(bush.currentLocation) : Utility.getSeasonNameFromNumber(bush.overrideSeason);
+                string season = (bush.overrideSeason.Value == -1)
+                    ? Game1.GetSeasonForLocation(bush.currentLocation)
+                    : Utility.getSeasonNameFromNumber(bush.overrideSeason.Value);
+
                 if (season.Equals("spring", StringComparison.OrdinalIgnoreCase))
                 {
                     return Color.LawnGreen;

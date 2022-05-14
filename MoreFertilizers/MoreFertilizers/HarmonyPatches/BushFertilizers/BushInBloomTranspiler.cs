@@ -92,7 +92,7 @@ internal static class BushInBloomTranspiler
                 new(OpCodes.Call, typeof(BushInBloomTranspiler).StaticMethodNamed(nameof(ReplaceEndFall))),
             });
 
-            helper.Print();
+            // helper.Print();
             return helper.Render();
         }
         catch (Exception ex)

@@ -8,6 +8,9 @@ using StardewValley.Locations;
 
 namespace MoreFertilizers.HarmonyPatches.FishFood;
 
+/// <summary>
+/// A transpiler against Caldera.getFish.
+/// </summary>
 [HarmonyPatch(typeof(Caldera))]
 internal static class CalderaGetFishTranspiler
 {

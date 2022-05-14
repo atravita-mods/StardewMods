@@ -384,6 +384,10 @@ internal class ModEntry : Mod
     /// <param name="e">Event arguments.</param>
     private void OnSaving(object? sender, SavingEventArgs e)
     {
+        if (!Context.IsMainPlayer)
+        {
+            return;
+        }
         // TODO: This should be doable with expression trees in a less dumb way.
         if (storedIDs is null)
         {

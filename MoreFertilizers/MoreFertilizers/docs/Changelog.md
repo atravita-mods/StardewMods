@@ -1,7 +1,6 @@
 ﻿Changelog
 =============
-#### Todo:
-* Make organic seeds put down organic fertilizer?
+
 
 #### Version 0.2.0 TODO items
 * Bush fertilizers
@@ -13,6 +12,10 @@
     - Wisdom Fertilizer: increases farming XP by 10%.
 
 * Adjusted previous fertilizers: Waterlogged now increases the growth speed of paddy crops a little.
+
+#### Version 0.1.6
+* Organic seeds now apply the organic fertilizer.
+* Fixed deshuffling code. Again.
 
 #### Version 0.1.5
 * Joja crops no longer can become organic.

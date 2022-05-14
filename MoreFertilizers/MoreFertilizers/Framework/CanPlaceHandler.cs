@@ -79,9 +79,10 @@ public sealed class CanPlaceHandler : IMoreFertilizersAPI
         if (loc.terrainFeatures.TryGetValue(tile, out TerrainFeature? terrain))
         {
             if (terrain is FruitTree fruitTree
-                && (obj.ParentSheetIndex == ModEntry.FruitTreeFertilizerID || obj.ParentSheetIndex == ModEntry.DeluxeFruitTreeFertilizerID))
+                && (obj.ParentSheetIndex == ModEntry.FruitTreeFertilizerID || obj.ParentSheetIndex == ModEntry.DeluxeFruitTreeFertilizerID
+                || obj.ParentSheetIndex == ModEntry.MiraculousBeveragesID))
             {
-                return !fruitTree.modData.ContainsKey(FruitTreeFertilizer);
+                return !fruitTree.modData.ContainsKey(FruitTreeFertilizer) && !fruitTree.modData.ContainsKey(MiraculousBeverages);
             }
             else if (terrain is Bush bush && (bush.size.Value == Bush.greenTeaBush || bush.size.Value == Bush.mediumBush) && !bush.townBush.Value
                 && ((obj.ParentSheetIndex == ModEntry.RapidBushFertilizerID && bush.size.Value == Bush.greenTeaBush) || obj.ParentSheetIndex == ModEntry.BountifulBushID
@@ -152,11 +153,18 @@ public sealed class CanPlaceHandler : IMoreFertilizersAPI
         }
         if (loc.terrainFeatures.TryGetValue(tile, out TerrainFeature? terrain))
         {
-            if (terrain is FruitTree fruitTree &&
-                (obj.ParentSheetIndex == ModEntry.FruitTreeFertilizerID || obj.ParentSheetIndex == ModEntry.DeluxeFruitTreeFertilizerID))
+            if (terrain is FruitTree fruitTree)
             {
-                fruitTree.modData?.SetInt(FruitTreeFertilizer, obj.ParentSheetIndex == ModEntry.DeluxeFruitTreeFertilizerID ? 2 : 1);
-                return true;
+                if (obj.ParentSheetIndex == ModEntry.FruitTreeFertilizerID || obj.ParentSheetIndex == ModEntry.DeluxeFruitTreeFertilizerID)
+                {
+                    fruitTree.modData?.SetInt(FruitTreeFertilizer, obj.ParentSheetIndex == ModEntry.DeluxeFruitTreeFertilizerID ? 2 : 1);
+                    return true;
+                }
+                if (obj.ParentSheetIndex == ModEntry.MiraculousBeveragesID)
+                {
+                    fruitTree.modData?.SetBool(MiraculousBeverages, true);
+                    return true;
+                }
             }
             if (terrain is Bush bush)
             {

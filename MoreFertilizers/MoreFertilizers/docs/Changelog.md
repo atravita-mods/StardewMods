@@ -4,6 +4,9 @@
 #### Version 0.2.0 TODO items
 * Bush fertilizers
     - Handle adding to shops and other aquisition methods.
+* Beverage fertilizer
+    - Crops
+    - Fruit trees
 
 #### Version 0.2.0
 * Added new fertilizers:

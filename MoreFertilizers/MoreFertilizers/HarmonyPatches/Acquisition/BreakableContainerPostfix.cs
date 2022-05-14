@@ -21,12 +21,12 @@ internal static class BreakableContainerPostfix
         }
         int objectID = ___containerType.Value switch
         {
-            BreakableContainer.barrel => Game1.random.NextDouble() < 0.5
-                ? ModEntry.LuckyFertilizerID
-                : ModEntry.PaddyCropFertilizerID,
+            BreakableContainer.barrel => location is MineShaft shaft && shaft.GetAdditionalDifficulty() > 0
+                ? ModEntry.MiraculousBeveragesID
+                : (Game1.random.NextDouble() < 0.5 ? ModEntry.LuckyFertilizerID : ModEntry.PaddyCropFertilizerID),
             BreakableContainer.frostBarrel => location is MineShaft shaft && shaft.GetAdditionalDifficulty() > 0
-                ? ModEntry.DeluxeFruitTreeFertilizerID
-                : ModEntry.OrganicFertilizerID,
+                ? (Game1.random.NextDouble() < 0.3 ? ModEntry.RapidBushFertilizerID : ModEntry.DeluxeFruitTreeFertilizerID)
+                : (Game1.random.NextDouble() < 0.3 ? ModEntry.BountifulBushID : ModEntry.OrganicFertilizerID),
             BreakableContainer.darkBarrel => location is MineShaft shaft && shaft.GetAdditionalDifficulty() > 0
                 ? (Utility.hasFinishedJojaRoute() && Game1.random.NextDouble() < 0.1 ? ModEntry.SecretJojaFertilizerID : ModEntry.DeluxeJojaFertilizerID)
                 : ModEntry.JojaFertilizerID,

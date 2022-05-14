@@ -4,10 +4,13 @@
 * Make organic seeds put down organic fertilizer?
 
 #### Version 0.2.0 TODO items
-* Secret Joja Fertilizer:
-    - Increase both growth speed and regrowth speed.
+* Bush fertilizers
+    - Handle adding to shops and other aquisition methods.
 
-* Added new fertilizers: Secret Joja Fertilizer, Wisdom Fertilizer.
+#### Version 0.2.0
+* Added new fertilizers:
+    - Secret Joja Fertilizer: decreases growth time, has a chance of decreasing regrowth time, but forces the crop to be base quality.
+    - Wisdom Fertilizer: increases farming XP by 10%.
 
 * Adjusted previous fertilizers: Waterlogged now increases the growth speed of paddy crops a little.
 

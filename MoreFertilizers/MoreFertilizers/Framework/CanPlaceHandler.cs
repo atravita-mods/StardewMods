@@ -107,7 +107,7 @@ public sealed class CanPlaceHandler : IMoreFertilizersAPI
             Rectangle pos = new((int)tile.X * 64, (int)tile.Y * 64, 16, 16);
             foreach (LargeTerrainFeature largeterrainfeature in loc.largeTerrainFeatures)
             {
-                if (largeterrainfeature is Bush bigBush && bigBush.getBoundingBox().Intersects(pos))
+                if (largeterrainfeature is Bush bigBush && !bigBush.townBush.Value && bigBush.getBoundingBox().Intersects(pos))
                 {
                     return !bigBush.modData.ContainsKey(BountifulBush) && !bigBush.modData.ContainsKey(RapidBush) && !bigBush.modData.ContainsKey(MiraculousBeverages);
                 }

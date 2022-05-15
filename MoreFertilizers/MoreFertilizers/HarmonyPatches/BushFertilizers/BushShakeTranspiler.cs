@@ -9,6 +9,9 @@ using StardewValley.TerrainFeatures;
 
 namespace MoreFertilizers.HarmonyPatches.BushFertilizers;
 
+/// <summary>
+/// Transpiles Bush.shake to add a beverage sometimes....
+/// </summary>
 [HarmonyPatch(typeof(Bush))]
 internal static class BushShakeTranspiler
 {
@@ -47,7 +50,7 @@ internal static class BushShakeTranspiler
 
             helper.Insert(codes.ToArray(), labels);
 
-            //helper.Print();
+            // helper.Print();
             return helper.Render();
         }
         catch (Exception ex)

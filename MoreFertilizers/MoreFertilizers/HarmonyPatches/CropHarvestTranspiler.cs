@@ -52,7 +52,7 @@ internal static class CropHarvestTranspiler
             }
             else if (dirt.fertilizer.Value == ModEntry.SecretJojaFertilizerID)
             {
-                return 0;
+                return (Game1.random.NextDouble() < 0.5 && dirt.HasJojaCrop()) ? 1 : 0;
             }
         }
         return prevQual;
@@ -78,6 +78,11 @@ internal static class CropHarvestTranspiler
             {
                 obj.modData?.SetBool(CanPlaceHandler.Joja, true);
                 obj.MarkContextTagsDirty();
+            }
+            else if (dirt.fertilizer.Value == ModEntry.MiraculousBeveragesID
+                && MiraculousFertilizerHandler.GetBeverage(obj.ParentSheetIndex) is SObject beverage)
+            {
+                Game1.createItemDebris(beverage, dirt.currentTileLocation * 64f, -1);
             }
         }
         return obj;
@@ -105,7 +110,8 @@ internal static class CropHarvestTranspiler
 
     private static int AdjustRegrow(int prevValue, HoeDirt? dirt)
     {
-        if (ModEntry.SecretJojaFertilizerID != -1 && dirt?.fertilizer?.Value == ModEntry.SecretJojaFertilizerID && Game1.random.NextDouble() < 0.5)
+        if (ModEntry.SecretJojaFertilizerID != -1 && dirt?.fertilizer?.Value == ModEntry.SecretJojaFertilizerID
+            && (Game1.random.NextDouble() < 0.5 || dirt.HasJojaCrop()))
         {
             return Math.Max(1, (int)(0.9 * prevValue));
         }

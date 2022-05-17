@@ -3,6 +3,9 @@ using StardewValley.Objects;
 
 namespace StopRugRemoval.HarmonyPatches.StorageFurnitureAdjustments;
 
+/// <summary>
+/// Patches against StorageFurniture (ie dressers).
+/// </summary>
 [HarmonyPatch(typeof(StorageFurniture))]
 internal static class StorageFurniturePatches
 {
@@ -22,7 +25,7 @@ internal static class StorageFurniturePatches
     [HarmonyPrefix]
     [HarmonyPatch(nameof(StorageFurniture.checkForAction))]
     [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Harmony Convention")]
-    private static bool PrefixCheckedAction(StorageFurniture  __instance)
+    private static bool PrefixCheckedAction(StorageFurniture __instance)
     {
         if (ModEntry.Config.FurniturePlacementKey.IsDown() && Game1.player.ActiveObject is SObject obj && __instance.heldObject.Value is null)
         {

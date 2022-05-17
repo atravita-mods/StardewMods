@@ -1,6 +1,7 @@
 ﻿using System.Reflection;
 using System.Reflection.Emit;
 using AtraBase.Toolkit.Reflection;
+using AtraShared.Utils.Extensions;
 using AtraShared.Utils.HarmonyHelper;
 using HarmonyLib;
 using StardewValley.TerrainFeatures;
@@ -76,6 +77,7 @@ internal static class FruitTreesAvoidHoe
         catch (Exception ex)
         {
             ModEntry.ModMonitor.Log($"Ran into error transpiling fruit trees to avoid hoe damage.\n\n{ex}", LogLevel.Error);
+            original.Snitch(ModEntry.ModMonitor);
         }
         return null;
     }

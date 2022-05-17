@@ -7,11 +7,12 @@ using AtraShared.Utils.Extensions;
 using HarmonyLib;
 using StardewModdingAPI.Events;
 using StardewModdingAPI.Utilities;
+using StardewValley.Objects;
 using StopRugRemoval.Configuration;
 using StopRugRemoval.HarmonyPatches;
 using StopRugRemoval.HarmonyPatches.Confirmations;
 using StopRugRemoval.HarmonyPatches.Niceties;
-
+using StopRugRemoval.HarmonyPatches.Volcano;
 using AtraUtils = AtraShared.Utils.Utils;
 
 namespace StopRugRemoval;
@@ -44,14 +45,24 @@ public class ModEntry : Mod
     internal static ModConfig Config { get; private set; }
 
     /// <summary>
-    /// Gets the reflection helper for this mod.
-    /// </summary>
-    internal static IReflectionHelper ReflectionHelper { get; private set; }
-
-    /// <summary>
     /// Gets the game content helper for this mod.
     /// </summary>
     internal static IGameContentHelper GameContentHelper { get; private set; }
+
+    /// <summary>
+    /// Gets the multiplayer helper for this mod.
+    /// </summary>
+    internal static IMultiplayerHelper MultiplayerHelper { get; private set; }
+
+    /// <summary>
+    /// Gets the input helper for this mod.
+    /// </summary>
+    internal static IInputHelper InputHelper { get; private set; }
+
+    /// <summary>
+    /// Gets the unique id for this mod.
+    /// </summary>
+    internal static string UNIQUEID { get; private set; }
 #pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
 
     /// <inheritdoc/>
@@ -59,20 +70,30 @@ public class ModEntry : Mod
     {
         I18n.Init(helper.Translation);
         ModMonitor = this.Monitor;
-        ReflectionHelper = this.Helper.Reflection;
         GameContentHelper = this.Helper.GameContent;
+        MultiplayerHelper = this.Helper.Multiplayer;
+        InputHelper = this.Helper.Input;
+        UNIQUEID = this.ModManifest.UniqueID;
         Config = AtraUtils.GetConfigOrDefault<ModConfig>(helper, this.Monitor);
 
         helper.Events.GameLoop.GameLaunched += this.OnGameLaunch;
         helper.Events.GameLoop.SaveLoaded += this.SaveLoaded;
+        helper.Events.GameLoop.Saving += this.BeforeSaving;
         helper.Events.Player.Warped += this.Player_Warped;
 
         helper.Events.Content.AssetRequested += this.OnAssetRequested;
         helper.Events.Content.AssetsInvalidated += this.OnAssetInvalidated;
         helper.Events.Content.LocaleChanged += this.OnLocaleChange;
 
+        helper.Events.Multiplayer.ModMessageReceived += this.OnModMessageRecieved;
+        helper.Events.Multiplayer.PeerConnected += this.OnPlayerConnected;
+
         this.ApplyPatches(new Harmony(this.ModManifest.UniqueID));
     }
+
+    /*************
+     * REGION ASSET MANAGEMENT
+     * **********/
 
     private void OnLocaleChange(object? sender, LocaleChangedEventArgs e)
         => AssetEditor.Refresh();
@@ -88,6 +109,10 @@ public class ModEntry : Mod
         SObjectPatches.HaveConfirmedBomb.Value = false;
         ConfirmWarp.HaveConfirmed.Value = false;
     }
+
+    /***************
+     * REGION HARMONY
+     * *************/
 
     /// <summary>
     /// Applies and logs this mod's harmony patches.
@@ -143,6 +168,14 @@ public class ModEntry : Mod
         this.SetUpBasicConfig();
     }
 
+    private void BeforeSaving(object? sender, SavingEventArgs e)
+    {
+        if (Context.IsMainPlayer)
+        {
+            VolcanoChestAdjuster.SaveData(this.Helper.Data, this.Helper.Multiplayer);
+        }
+    }
+
     /// <summary>
     /// Raised when save is loaded.
     /// </summary>
@@ -152,6 +185,11 @@ public class ModEntry : Mod
     {
         // This allows NPCs to say hi to the player. Yes, I'm that petty.
         Game1.player.displayName = Game1.player.Name;
+
+        if (Context.IsMainPlayer)
+        {
+            VolcanoChestAdjuster.LoadData(this.Helper.Data, this.Helper.Multiplayer);
+        }
 
         if (Context.IsSplitScreen && Context.ScreenId != 0)
         {
@@ -182,6 +220,18 @@ public class ModEntry : Mod
                     setValue: (value) => Config.SafeLocationMap[loc.NameOrUniqueName] = value);
             }
         }
+
+        // Make an attempt to clear all nulls from chests.
+        Utility.ForAllLocations(action: (GameLocation loc) =>
+        {
+            foreach (SObject obj in loc.Objects.Values)
+            {
+                if (obj is Chest chest)
+                {
+                    chest.clearNulls();
+                }
+            }
+        });
     }
 
     /// <summary>
@@ -271,5 +321,31 @@ public class ModEntry : Mod
                 getValue: static () => Config.BombsInDangerousAreas,
                 setValue: static (value) => Config.BombsInDangerousAreas = value,
                 tooltip: I18n.BombsInDangerousAreas_Description);
+    }
+
+    /**************
+     * REGION MULTIPLAYER
+     * ***********/
+
+    private void OnModMessageRecieved(object? sender, ModMessageReceivedEventArgs e)
+    {
+        if (e.FromModID != ModEntry.UNIQUEID)
+        {
+            return;
+        }
+        VolcanoChestAdjuster.RecieveData(e);
+    }
+
+    /// <summary>
+    /// Sends out the volcano data manager whenever a new player connects.
+    /// </summary>
+    /// <param name="sender">SMAPI.</param>
+    /// <param name="e">Event args.</param>
+    private void OnPlayerConnected(object? sender, PeerConnectedEventArgs e)
+    {
+        if(e.Peer.ScreenID == 0 && Context.IsWorldReady && Context.IsMainPlayer)
+        {
+            VolcanoChestAdjuster.BroadcastData(this.Helper.Multiplayer, new[] { e.Peer.PlayerID });
+        }
     }
 }

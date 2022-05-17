@@ -89,6 +89,7 @@ internal static class ConfirmWarp
             && (IsLocationConsideredDangerous(location) ? ModEntry.Config.WarpsInDangerousAreas : ModEntry.Config.WarpsInSafeAreas)
                 .HasFlag(Context.IsMultiplayer ? ConfirmationEnum.InMultiplayerOnly : ConfirmationEnum.NotInMultiplayer))
         {
+            ModEntry.InputHelper.SurpressClickInput();
             List<Response> responses = new()
             {
                 new Response("WarpsYes", I18n.Yes()).SetHotKey(Keys.Y),
@@ -114,6 +115,7 @@ internal static class ConfirmWarp
     }
 
     [HarmonyPrefix]
+    [HarmonyPriority(Priority.First)]
     [HarmonyPatch(typeof(Building), nameof(Building.doAction))]
     [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Harmony Convention")]
     private static bool PrefixBuildingAction(Building __instance, Vector2 tileLocation, Farmer who, ref bool __result)
@@ -122,7 +124,7 @@ internal static class ConfirmWarp
         {
             return true;
         }
-        if (__instance.isTilePassable(tileLocation) || !__instance.buildingType.Contains("Obelisk", StringComparer.OrdinalIgnoreCase) || !who.IsLocalPlayer)
+        if (!__instance.occupiesTile(tileLocation) || !__instance.buildingType.Value.EndsWith("Obelisk", StringComparison.OrdinalIgnoreCase) || !who.IsLocalPlayer)
         {
             return true;
         }
@@ -150,6 +152,7 @@ internal static class ConfirmWarp
             && (IsLocationConsideredDangerous(who.currentLocation) ? ModEntry.Config.WarpsInDangerousAreas : ModEntry.Config.WarpsInSafeAreas)
                 .HasFlag(Context.IsMultiplayer ? ConfirmationEnum.InMultiplayerOnly : ConfirmationEnum.NotInMultiplayer))
         {
+            ModEntry.InputHelper.SurpressClickInput();
             List<Response> responses = new()
             {
                 new Response("WarpsYes", I18n.Yes()).SetHotKey(Keys.Y),
@@ -188,6 +191,7 @@ internal static class ConfirmWarp
              && (IsLocationConsideredDangerous(location) ? ModEntry.Config.ReturnScepterInDangerousAreas : ModEntry.Config.ReturnScepterInSafeAreas)
                  .HasFlag(Context.IsMultiplayer ? ConfirmationEnum.InMultiplayerOnly : ConfirmationEnum.NotInMultiplayer))
         {
+            ModEntry.InputHelper.SurpressClickInput();
             List<Response> responses = new()
             {
                 new Response("WarpsYes", I18n.Yes()).SetHotKey(Keys.Y),

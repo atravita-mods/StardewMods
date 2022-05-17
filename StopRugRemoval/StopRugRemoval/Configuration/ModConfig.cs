@@ -90,8 +90,14 @@ public class ModConfig
     /// </summary>
     public ConfirmationEnum WarpsInDangerousAreas { get; set; } = ConfirmationEnum.NotInMultiplayer;
 
+    /// <summary>
+    /// Gets or sets a value indiciating whether or not to confirm the return scepter in safe areas.
+    /// </summary>
     public ConfirmationEnum ReturnScepterInSafeAreas { get; set; } = ConfirmationEnum.On;
 
+    /// <summary>
+    /// Gets or sets a value indiciating whether or not to confirm the return scepter in dangerous areas.
+    /// </summary>
     public ConfirmationEnum ReturnScepterInDangerousAreas { get; set; } = ConfirmationEnum.NotInMultiplayer;
 
     /// <summary>

@@ -2,6 +2,7 @@
 using System.Reflection.Emit;
 using AtraBase.Toolkit.Reflection;
 using AtraShared.Menuing;
+using AtraShared.Utils.Extensions;
 using AtraShared.Utils.HarmonyHelper;
 using HarmonyLib;
 using Microsoft.Xna.Framework;
@@ -96,9 +97,9 @@ internal static class SlotMenuPatches
     private static readonly Lazy<Action<Slots, int>> SpinsCountSetterLazy = new(() => typeof(Slots).InstanceFieldNamed("spinsCount").GetInstanceFieldSetter<Slots, int>());
     private static readonly Lazy<Action<Slots, bool>> ShowResultSetterLazy = new(() => typeof(Slots).InstanceFieldNamed("showResult").GetInstanceFieldSetter<Slots, bool>());
 
-    private static PerScreen<ClickableComponent?> bet1000 = new();
+    private static readonly PerScreen<ClickableComponent?> Bet1000 = new();
 
-    private static PerScreen<ClickableComponent?> bet10000 = new();
+    private static readonly PerScreen<ClickableComponent?> Bet10000 = new();
 
     [HarmonyPostfix]
     [HarmonyPatch(nameof(Slots.receiveLeftClick))]
@@ -109,13 +110,13 @@ internal static class SlotMenuPatches
         {
             return;
         }
-        if (Game1.player.clubCoins >= 1000 && bet1000.Value?.bounds.Contains(x, y) == true)
+        if (Game1.player.clubCoins >= 1000 && Bet1000.Value?.bounds.Contains(x, y) == true)
         {
             CurrentBetSetterLazy.Value(__instance, 1000);
             StartSpin(__instance);
             Game1.player.clubCoins -= 1000;
         }
-        else if (Game1.player.clubCoins >= 10000 && bet10000.Value?.bounds.Contains(x, y) == true)
+        else if (Game1.player.clubCoins >= 10000 && Bet10000.Value?.bounds.Contains(x, y) == true)
         {
             CurrentBetSetterLazy.Value(__instance, 10000);
             StartSpin(__instance);
@@ -141,11 +142,11 @@ internal static class SlotMenuPatches
     {
         Vector2 position = Utility.getTopLeftPositionForCenteringOnScreen(Game1.viewport, 104, HEIGHT, -16, 160);
         (int x, int y) = position.ToPoint();
-        bet1000.Value = new ClickableComponent(new Rectangle(x, y, 104, HEIGHT), I18n.Bet1k());
+        Bet1000.Value = new ClickableComponent(new Rectangle(x, y, 104, HEIGHT), I18n.Bet1k());
 
         position = Utility.getTopLeftPositionForCenteringOnScreen(Game1.viewport, 124, HEIGHT, -16, 224);
         (x, y) = position.ToPoint();
-        bet10000.Value = new ClickableComponent(new Rectangle(x, y, 124, HEIGHT), I18n.Bet10k());
+        Bet10000.Value = new ClickableComponent(new Rectangle(x, y, 124, HEIGHT), I18n.Bet10k());
     }
 
     // Move the DONE button down to make room for the bet 1k and bet 10k buttons.
@@ -170,6 +171,7 @@ internal static class SlotMenuPatches
         catch (Exception ex)
         {
             ModEntry.ModMonitor.Log($"Ran into error transpiling Slots.ctor!\n\n{ex}", LogLevel.Error);
+            original.Snitch(ModEntry.ModMonitor);
         }
         return null;
     }
@@ -204,6 +206,7 @@ internal static class SlotMenuPatches
         catch (Exception ex)
         {
             ModEntry.ModMonitor.Log($"Ran into error transpiling Slots.draw!\n\n{ex}", LogLevel.Error);
+            original.Snitch(ModEntry.ModMonitor);
         }
         return null;
     }
@@ -211,30 +214,30 @@ internal static class SlotMenuPatches
 
     private static void DrawImpl(Slots slots, SpriteBatch b)
     {
-        if (bet1000.Value is not null)
+        if (Bet1000.Value is not null)
         {
             b.Draw(
                 texture: AssetEditor.BetIcon,
-                position: new Vector2(bet1000.Value.bounds.X, bet1000.Value.bounds.Y),
+                position: new Vector2(Bet1000.Value.bounds.X, Bet1000.Value.bounds.Y),
                 sourceRectangle: new Rectangle(0, 0, 26, 13),
                 color: Color.White * (!SpinningGetterLazy.Value(slots) && Game1.player.clubCoins >= 1000 ? 1f : 0.5f),
                 rotation: 0f,
                 origin: Vector2.Zero,
-                scale: Game1.pixelZoom * bet1000.Value.scale,
+                scale: Game1.pixelZoom * Bet1000.Value.scale,
                 effects: SpriteEffects.None,
                 layerDepth: 0.99f);
         }
 
-        if (bet10000.Value is not null)
+        if (Bet10000.Value is not null)
         {
             b.Draw(
                 texture: AssetEditor.BetIcon,
-                position: new Vector2(bet10000.Value.bounds.X, bet10000.Value.bounds.Y),
+                position: new Vector2(Bet10000.Value.bounds.X, Bet10000.Value.bounds.Y),
                 sourceRectangle: new Rectangle(0, 13, 31, 13),
                 color: Color.White * ((!SpinningGetterLazy.Value(slots) && Game1.player.clubCoins >= 10000) ? 1f : 0.5f),
                 rotation: 0f,
                 origin: Vector2.Zero,
-                scale: Game1.pixelZoom * bet10000.Value.scale,
+                scale: Game1.pixelZoom * Bet10000.Value.scale,
                 effects: SpriteEffects.None,
                 layerDepth: 0.99f);
         }
@@ -244,7 +247,7 @@ internal static class SlotMenuPatches
     [HarmonyPatch(nameof(Slots.unload))]
     private static void BeforeQuit()
     {
-        bet1000.Value = null;
-        bet10000.Value = null;
+        Bet1000.Value = null;
+        Bet10000.Value = null;
     }
 }

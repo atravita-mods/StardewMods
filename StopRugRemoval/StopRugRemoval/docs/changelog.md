@@ -4,6 +4,14 @@
 #### ToDo
 1. Catch input to place rug under things.
 <!-- Figure out how to replace the reference to coffee in the night market dialogue?-->
+<!-- Make it so notifications do not go away until dismissed? -->
+
+#### Version 1.0.9
+* Splitscreen fixes.
+* Reorder confirmation dialogue to more match eating dialogue
+* Break Return Scepter into individual settings.
+* Bugfixes.
+<!-- Volcano chest thing -->
 
 #### Version 1.0.8
 Compiled for SMAPI 3.14.0

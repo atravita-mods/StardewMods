@@ -12,6 +12,7 @@ internal static class EventPassthroughSetter
     [UsedImplicitly]
     [HarmonyPatch("setUpCharacters")]
     [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Harmony convention.")]
+    [SuppressMessage("CodeQuality", "IDE0051:Remove unused private members", Justification = "Used implicitly.")]
     private static void Postfix(Event __instance)
     {
         foreach (Farmer f in __instance.farmerActors)

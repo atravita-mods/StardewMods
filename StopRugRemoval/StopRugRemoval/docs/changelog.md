@@ -12,6 +12,7 @@
 * Break Return Scepter into individual settings.
 * Bugfixes.
 * Volcano chests will now avoid giving you the same thing twice in a row.
+* Russian translation, thanks to [Angel4Killer](https://github.com/angel4killer)!
 
 #### Version 1.0.8
 Compiled for SMAPI 3.14.0

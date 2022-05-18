@@ -48,4 +48,6 @@ Additional features: baby fruit trees will no longer be killed by the hoe. The v
 
 Translations would be very welcome! DM me or submit a pull request.
 
-* Much thanks to Vigor for the Portuguese translation! 
+* Much thanks to
+    - Vigor for the Portuguese translation! 
+    - [Angel4Killer](https://github.com/angel4killer) for the Russian translation!

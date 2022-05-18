@@ -80,6 +80,7 @@ public class ModEntry : Mod
         helper.Events.GameLoop.SaveLoaded += this.SaveLoaded;
         helper.Events.GameLoop.Saving += this.BeforeSaving;
         helper.Events.Player.Warped += this.Player_Warped;
+        helper.Events.GameLoop.ReturnedToTitle += this.ReturnedToTitle;
 
         helper.Events.Content.AssetRequested += this.OnAssetRequested;
         helper.Events.Content.AssetsInvalidated += this.OnAssetInvalidated;
@@ -124,11 +125,6 @@ public class ModEntry : Mod
         {
             // handle patches from annotations.
             harmony.PatchAll();
-
-            if (!this.Helper.ModRegistry.IsLoaded("DecidedlyHuman.BetterReturnScepter"))
-            {
-                ConfirmWarp.ApplyWandPatches(harmony);
-            }
         }
         catch (Exception ex)
         {
@@ -147,6 +143,10 @@ public class ModEntry : Mod
         try
         {
             FruitTreesAvoidHoe.ApplyPatches(harmony, this.Helper.ModRegistry);
+            if (!this.Helper.ModRegistry.IsLoaded("DecidedlyHuman.BetterReturnScepter"))
+            {
+                ConfirmWarp.ApplyWandPatches(harmony);
+            }
         }
         catch (Exception ex)
         {
@@ -161,18 +161,18 @@ public class ModEntry : Mod
         this.ApplyLatePatches(new Harmony(this.ModManifest.UniqueID + "+latepatches"));
 
         GMCM = new(this.Monitor, this.Helper.Translation, this.Helper.ModRegistry, this.ModManifest);
-        if (!GMCM.TryGetAPI())
+        if (GMCM.TryGetAPI())
         {
-            return;
+            this.SetUpBasicConfig();
         }
-        this.SetUpBasicConfig();
     }
 
-    private void BeforeSaving(object? sender, SavingEventArgs e)
+    private void ReturnedToTitle(object? sender, ReturnedToTitleEventArgs e)
     {
-        if (Context.IsMainPlayer)
+        if (GMCM?.HasGottenAPI == true)
         {
-            VolcanoChestAdjuster.SaveData(this.Helper.Data, this.Helper.Multiplayer);
+            GMCM.Unregister();
+            this.SetUpBasicConfig();
         }
     }
 
@@ -185,11 +185,6 @@ public class ModEntry : Mod
     {
         // This allows NPCs to say hi to the player. Yes, I'm that petty.
         Game1.player.displayName = Game1.player.Name;
-
-        if (Context.IsMainPlayer)
-        {
-            VolcanoChestAdjuster.LoadData(this.Helper.Data, this.Helper.Multiplayer);
-        }
 
         if (Context.IsSplitScreen && Context.ScreenId != 0)
         {
@@ -207,8 +202,6 @@ public class ModEntry : Mod
 
         if (GMCM?.HasGottenAPI == true)
         {
-            GMCM.Unregister();
-            this.SetUpBasicConfig();
             GMCM.AddPageHere("Bombs", I18n.BombLocationDetailed)
                 .AddParagraph(I18n.BombLocationDetailed_Description);
 
@@ -222,6 +215,8 @@ public class ModEntry : Mod
         }
         if (Context.IsMainPlayer)
         {
+            VolcanoChestAdjuster.LoadData(this.Helper.Data, this.Helper.Multiplayer);
+
             // Make an attempt to clear all nulls from chests.
             Utility.ForAllLocations(action: (GameLocation loc) =>
             {
@@ -233,6 +228,14 @@ public class ModEntry : Mod
                     }
                 }
             });
+        }
+    }
+
+    private void BeforeSaving(object? sender, SavingEventArgs e)
+    {
+        if (Context.IsMainPlayer)
+        {
+            VolcanoChestAdjuster.SaveData(this.Helper.Data, this.Helper.Multiplayer);
         }
     }
 

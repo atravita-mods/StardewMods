@@ -11,7 +11,7 @@
 * Reorder confirmation dialogue to more match eating dialogue
 * Break Return Scepter into individual settings.
 * Bugfixes.
-<!-- Volcano chest thing -->
+* Volcano chests will now avoid giving you the same thing twice in a row.
 
 #### Version 1.0.8
 Compiled for SMAPI 3.14.0

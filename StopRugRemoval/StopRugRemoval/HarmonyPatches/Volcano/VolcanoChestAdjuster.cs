@@ -1,5 +1,7 @@
 ﻿using System.Reflection;
 using System.Reflection.Emit;
+using System.Runtime.CompilerServices;
+using AtraBase.Toolkit;
 using AtraBase.Toolkit.Reflection;
 using AtraShared.Utils.Extensions;
 using AtraShared.Utils.HarmonyHelper;
@@ -42,7 +44,12 @@ internal static class VolcanoChestAdjuster
     /// <param name="multiplayer">SMAPI's multiplayer helper.</param>
     /// <param name="playerIDs">Player IDs to send to. Leave null to mean everyone.</param>
     internal static void BroadcastData(IMultiplayerHelper multiplayer, long[]? playerIDs = null)
-        => multiplayer.SendMessage(data, RecieveDataValue, new[] { ModEntry.UNIQUEID }, playerIDs);
+    {
+        if (Context.IsMultiplayer)
+        {
+            multiplayer.SendMessage(data, RecieveDataValue, new[] { ModEntry.UNIQUEID }, playerIDs);
+        }
+    }
 
     /// <summary>
     /// Handles recieving the data from another player.
@@ -78,6 +85,12 @@ internal static class VolcanoChestAdjuster
         BroadcastData(multiplayerHelper);
     }
 
+    /// <summary>
+    /// Adjusts the value given by the random for a common chest.
+    /// </summary>
+    /// <param name="prevValue">Value given by the random.</param>
+    /// <returns>True to continue, false to loop back.</returns>
+    [MethodImpl(TKConstants.Hot)]
     private static bool AdjustCommonChest(int prevValue)
     {
         if (data is null)
@@ -98,6 +111,12 @@ internal static class VolcanoChestAdjuster
         }
     }
 
+    /// <summary>
+    /// Adjusts the value given by the random for a rare chest.
+    /// </summary>
+    /// <param name="prevValue">Value given by the random.</param>
+    /// <returns>True to continue, false to loop back.</returns>
+    [MethodImpl(TKConstants.Hot)]
     private static bool AdjustRareChest(int prevValue)
     {
         if (data is null)

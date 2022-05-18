@@ -220,18 +220,20 @@ public class ModEntry : Mod
                     setValue: (value) => Config.SafeLocationMap[loc.NameOrUniqueName] = value);
             }
         }
-
-        // Make an attempt to clear all nulls from chests.
-        Utility.ForAllLocations(action: (GameLocation loc) =>
+        if (Context.IsMainPlayer)
         {
-            foreach (SObject obj in loc.Objects.Values)
+            // Make an attempt to clear all nulls from chests.
+            Utility.ForAllLocations(action: (GameLocation loc) =>
             {
-                if (obj is Chest chest)
+                foreach (SObject obj in loc.Objects.Values)
                 {
-                    chest.clearNulls();
+                    if (obj is Chest chest)
+                    {
+                        chest.clearNulls();
+                    }
                 }
-            }
-        });
+            });
+        }
     }
 
     /// <summary>

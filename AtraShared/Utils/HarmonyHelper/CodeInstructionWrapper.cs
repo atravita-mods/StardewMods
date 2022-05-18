@@ -80,7 +80,6 @@ internal class CodeInstructionWrapper
     internal CodeInstructionWrapper(SpecialCodeInstructionCases specialcase)
         => this.specialInstructionCase = specialcase;
 
-
     /// <summary>
     /// Initializes a new instance of the <see cref="CodeInstructionWrapper"/> class.
     /// </summary>

@@ -32,7 +32,7 @@ public class SchedulePoint
     /// <param name="direction">Direction to face after arriving.</param>
     /// <param name="animation">Which animation to use after arrival.</param>
     /// <param name="basekey">Base dialogue key.</param>
-    /// <param name="varKey">Variant dialogue key</param>
+    /// <param name="varKey">Variant dialogue key.</param>
     /// <remarks>If a dialogue key that isn't in the NPC's dialogue is given, will simply convert  to `null`.</remarks>
     public SchedulePoint(
         Random random,

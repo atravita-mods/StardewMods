@@ -562,7 +562,7 @@ ContinueSearchBackwards:
     /// <param name="clear">whether or not to clear the labels.</param>
     /// <returns>this.</returns>
     /// <remarks>DOES NOT CHECK LABELS! YOU SHOULD PROBABLY PUT THEM BACK SOMEWHERE if cleared.</remarks>
-    internal ILHelper GetLabels(out IList<Label> labels, bool clear = false)
+    internal ILHelper GetLabels(out IList<Label> labels, bool clear = true)
     {
         labels = this.CurrentInstruction.labels.ToList();
         if (clear)

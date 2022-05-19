@@ -53,7 +53,8 @@ internal static class FishTimePatch
                 new(OpCodes.Call, typeof(FishTimePatch).StaticMethodNamed(nameof(AdjustTimeToBite))),
                 stloc,
             }, withLabels: labels);
-            helper.Print();
+
+            // helper.Print();
             return helper.Render();
         }
         catch (Exception ex)

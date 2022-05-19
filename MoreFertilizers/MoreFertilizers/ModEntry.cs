@@ -584,6 +584,13 @@ internal class ModEntry : Mod
                 SObjectPatches.ApplyDGAPatch(harmony);
             }
 
+            if (this.Helper.ModRegistry.Get("PeacefulEnd.AlternativeTextures") is IModInfo at
+                && at.Manifest.Version.IsNewerThan("6.0.0"))
+            {
+                this.Monitor.Log("Found Alternative Textures, applying compat patches", LogLevel.Info);
+                FruitTreeDrawTranspiler.ApplyATPatch(harmony);
+            }
+
             if (this.Helper.ModRegistry.Get("Cherry.MultiYieldCrops") is IModInfo multiYield
                 && multiYield.Manifest.Version.IsNewerThan("1.0.1"))
             {

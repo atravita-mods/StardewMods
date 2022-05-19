@@ -17,6 +17,7 @@
 
 * Adjusted previous fertilizers:
     - Waterlogged now increases the growth speed of paddy crops a little.
+    - Fish food reduces fish bite time by a tad.
 
 #### Version 0.1.6
 * Organic seeds now apply the organic fertilizer.

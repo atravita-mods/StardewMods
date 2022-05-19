@@ -21,15 +21,15 @@ internal static class MiraculousFertilizerHandler
     /// <summary>
     /// Gets the relevant index for the crop fertilizer.
     /// </summary>
-    /// <param name="cropindex">The index of the crop.</param>
+    /// <param name="objindex">The index of the crop.</param>
     /// <returns>The beverage, if any.</returns>
-    internal static SObject? GetBeverage(int cropindex)
+    internal static SObject? GetBeverage(int objindex)
     {
         if (keg is null)
         {
             return null;
         }
-        SObject crop = new(cropindex, 999);
+        SObject crop = new(objindex, 999);
         keg.heldObject.Value = null;
         keg.performObjectDropInAction(crop, false, Game1.player);
         SObject? heldobj = keg.heldObject.Value;

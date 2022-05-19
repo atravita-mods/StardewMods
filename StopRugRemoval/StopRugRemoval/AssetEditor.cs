@@ -86,7 +86,7 @@ internal static class AssetEditor
         }
         foreach ((string key, string value) in editor.Data)
         {
-            if (key.StartsWith("40", StringComparison.OrdinalIgnoreCase))
+            if (key.StartsWith("40/", StringComparison.OrdinalIgnoreCase))
             {
                 int index = value.IndexOf("speak Elliott");
                 int second = value.IndexOf("speak Elliott", index + 1);

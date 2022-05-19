@@ -1,5 +1,4 @@
 ﻿using AtraBase.Toolkit.Reflection;
-using AtraBase.Toolkit.StringHandler;
 using AtraShared.Integrations;
 using AtraShared.Integrations.Interfaces;
 using AtraShared.MigrationManager;
@@ -31,7 +30,7 @@ internal class ModEntry : Mod
     /// <remarks>If null, was not able to be loaded.</remarks>
     internal static ISpaceCoreAPI? SpaceCoreAPI => spaceCoreAPI;
 
-    private static Lazy<Func<string, bool>> CheckTagLazy = new(typeof(SpecialOrder).StaticMethodNamed("CheckTag").CreateDelegate<Func<string, bool>>);
+    private static readonly Lazy<Func<string, bool>> CheckTagLazy = new(typeof(SpecialOrder).StaticMethodNamed("CheckTag").CreateDelegate<Func<string, bool>>);
 
     private static Func<string, bool> CheckTagDelegate => CheckTagLazy.Value;
 
@@ -62,16 +61,8 @@ internal class ModEntry : Mod
         ModMonitor = this.Monitor;
         DataHelper = helper.Data;
 
-        // Read config file.
-        try
-        {
-            Config = this.Helper.ReadConfig<ModConfig>();
-        }
-        catch
-        {
-            this.Monitor.Log(I18n.IllFormatedConfig(), LogLevel.Warn);
-            Config = new();
-        }
+        Config = AtraUtils.GetConfigOrDefault<ModConfig>(helper, this.Monitor);
+
         Harmony harmony = new(this.ModManifest.UniqueID);
 
         harmony.Patch(
@@ -81,6 +72,8 @@ internal class ModEntry : Mod
         harmony.Patch(
             original: AccessTools.Method(typeof(SpecialOrder), nameof(SpecialOrder.GetSpecialOrder)),
             finalizer: new HarmonyMethod(typeof(Finalizers), nameof(Finalizers.FinalizeGetSpecialOrder)));
+
+        harmony.PatchAll();
 
         try
         {
@@ -244,7 +237,7 @@ internal class ModEntry : Mod
         {
             string base_tag;
             bool match = true;
-            if (tag.StartsWith("!"))
+            if (tag.StartsWith('!'))
             {
                 match = false;
                 base_tag = tag.Trim()[1..];
@@ -280,9 +273,7 @@ internal class ModEntry : Mod
             SpecialOrderData order = order_data[key];
             if (this.IsAvailableOrder(key, order))
             {
-#if DEBUG
-                ModMonitor.DebugLog($"    {key} is valid");
-#endif
+                ModMonitor.DebugOnlyLog($"    {key} is valid");
                 validkeys.Add(key);
                 if (!Game1.MasterPlayer.team.completedSpecialOrders.ContainsKey(key))
                 {

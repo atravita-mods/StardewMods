@@ -363,12 +363,12 @@ internal class DialogueManager
     /// <summary>
     /// Clears the Delayed Dialogue queue. Call at end of day.
     /// </summary>
-    public static void ClearDelayedDialogue() => DelayedDialogues.Value.Clear();
+    internal static void ClearDelayedDialogue() => DelayedDialogues.Value.Clear();
 
     /// <summary>
     /// Push any available dialogues to the NPC's dialogue stacks.
     /// </summary>
-    public static void PushPossibleDelayedDialogues()
+    internal static void PushPossibleDelayedDialogues()
     {
         while (DelayedDialogues.Value.TryPeek(out DelayedDialogue result))
         {

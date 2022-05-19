@@ -40,8 +40,8 @@ internal class RecentCompletedSO : AbstractDataModel
         {
             throw new SaveNotLoadedError();
         }
-        return ModEntry.DataHelper.ReadGlobalData<RecentCompletedSO>(Constants.SaveFolderName! + IDENTIFIER)
-            ?? new RecentCompletedSO(Constants.SaveFolderName!);
+        return ModEntry.DataHelper.ReadGlobalData<RecentCompletedSO>($"{Game1.uniqueIDForThisGame}{IDENTIFIER}")
+            ?? new RecentCompletedSO(Game1.uniqueIDForThisGame.ToString());
     }
 
     /// <summary>
@@ -55,15 +55,15 @@ internal class RecentCompletedSO : AbstractDataModel
         {
             throw new SaveNotLoadedError();
         }
-        RecentCompletedSO? log = ModEntry.DataHelper.ReadGlobalData<RecentCompletedSO>($"{Constants.SaveFolderName}{IDENTIFIER}_temp_{SDate.Now().DaysSinceStart}");
+        RecentCompletedSO? log = ModEntry.DataHelper.ReadGlobalData<RecentCompletedSO>($"{Game1.uniqueIDForThisGame}{IDENTIFIER}_temp_{SDate.Now().DaysSinceStart}");
         if (log is not null)
         {
             // Delete the temporary file.
-            ModEntry.DataHelper.WriteGlobalData<RecentCompletedSO>($"{Constants.SaveFolderName}{IDENTIFIER}_temp_{SDate.Now().DaysSinceStart}", null);
+            ModEntry.DataHelper.WriteGlobalData<RecentCompletedSO>($"{Game1.uniqueIDForThisGame}{IDENTIFIER}_temp_{SDate.Now().DaysSinceStart}", null);
             return log;
         }
-        return ModEntry.DataHelper.ReadGlobalData<RecentCompletedSO>(Constants.SaveFolderName + IDENTIFIER)
-            ?? new RecentCompletedSO(Constants.SaveFolderName);
+        return ModEntry.DataHelper.ReadGlobalData<RecentCompletedSO>(Game1.uniqueIDForThisGame + IDENTIFIER)
+            ?? new RecentCompletedSO(Game1.uniqueIDForThisGame.ToString());
     }
 
     /// <summary>

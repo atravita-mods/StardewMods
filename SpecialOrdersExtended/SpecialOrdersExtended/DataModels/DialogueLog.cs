@@ -11,7 +11,6 @@ namespace SpecialOrdersExtended.DataModels;
 internal class DialogueLog : AbstractDataModel
 {
     private const string IDENTIFIER = "_dialogue";
-    private long multiplayerID;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="DialogueLog"/> class.
@@ -19,13 +18,18 @@ internal class DialogueLog : AbstractDataModel
     /// <param name="savefile">Save directory name. (Includes farm name + game random seed.).</param>
     /// <param name="multiplayerID">Unique multiplayer ID of player.</param>
     public DialogueLog(string savefile, long multiplayerID)
-    : base(savefile) => this.multiplayerID = multiplayerID;
+    : base(savefile) => this.MultiplayerID = multiplayerID;
 
     /// <summary>
-    /// Gets backing field that contains all the SeenDialogues.
+    /// Gets or sets the backing field that gets the multiplayer ID.
+    /// </summary>
+    public long MultiplayerID { get; set; }
+
+    /// <summary>
+    /// Gets or sets the backing field that contains all the SeenDialogues.
     /// </summary>
     /// <remarks>Avoid using this directly; use the TryAdd/TryRemove/Contains methods instead if possible.</remarks>
-    public Dictionary<string, List<string>> SeenDialogues { get; private set; } = new();
+    public Dictionary<string, List<string>> SeenDialogues { get; set; } = new();
 
     /// <summary>
     /// Loads a dialogueLog.
@@ -39,9 +43,9 @@ internal class DialogueLog : AbstractDataModel
         {
             throw new SaveNotLoadedError();
         }
-        DialogueLog log = ModEntry.DataHelper.ReadGlobalData<DialogueLog>($"{Constants.SaveFolderName}{IDENTIFIER}{multiplayerID:X8}")
-            ?? new DialogueLog(Constants.SaveFolderName, multiplayerID);
-        log.multiplayerID = multiplayerID; // fix the multiplayer ID since ReadGlobalData will use the default zero-parameter constructor.
+        DialogueLog log = ModEntry.DataHelper.ReadGlobalData<DialogueLog>($"{Game1.uniqueIDForThisGame}{IDENTIFIER}{multiplayerID:X8}")
+            ?? new DialogueLog(Game1.uniqueIDForThisGame.ToString(), multiplayerID);
+        log.MultiplayerID = multiplayerID; // fix the multiplayer ID since ReadGlobalData will use the default zero-parameter constructor.
         return log;
     }
 
@@ -58,29 +62,29 @@ internal class DialogueLog : AbstractDataModel
         {
             throw new SaveNotLoadedError();
         }
-        DialogueLog? log = ModEntry.DataHelper.ReadGlobalData<DialogueLog>($"{Constants.SaveFolderName}{IDENTIFIER}{multiplayerID:X8}_temp_{SDate.Now().DaysSinceStart}");
+        DialogueLog? log = ModEntry.DataHelper.ReadGlobalData<DialogueLog>($"{Game1.uniqueIDForThisGame}{IDENTIFIER}{multiplayerID:X8}_temp_{SDate.Now().DaysSinceStart}");
         if (log is not null)
         {
             // Delete temporary file
-            ModEntry.DataHelper.WriteGlobalData<DialogueLog>($"{Constants.SaveFolderName}{IDENTIFIER}{multiplayerID:X8}_temp_{SDate.Now().DaysSinceStart}", null);
-            log.multiplayerID = multiplayerID;
+            ModEntry.DataHelper.WriteGlobalData<DialogueLog>($"{Game1.uniqueIDForThisGame}{IDENTIFIER}{multiplayerID:X8}_temp_{SDate.Now().DaysSinceStart}", null);
+            log.MultiplayerID = multiplayerID;
             return log;
         }
-        log = ModEntry.DataHelper.ReadGlobalData<DialogueLog>($"{Constants.SaveFolderName}{IDENTIFIER}{multiplayerID:X8}")
-            ?? new DialogueLog(Constants.SaveFolderName, multiplayerID);
-        log.multiplayerID = multiplayerID;
+        log = ModEntry.DataHelper.ReadGlobalData<DialogueLog>($"{Game1.uniqueIDForThisGame}{IDENTIFIER}{multiplayerID:X8}")
+            ?? new DialogueLog(Game1.uniqueIDForThisGame.ToString(), multiplayerID);
+        log.MultiplayerID = multiplayerID;
         return log;
     }
 
     /// <summary>
     /// Saves a temporary DialogueLog file.
     /// </summary>
-    public void SaveTemp() => base.SaveTemp(IDENTIFIER + this.multiplayerID.ToString("X8"));
+    public void SaveTemp() => base.SaveTemp(IDENTIFIER + this.MultiplayerID.ToString("X8"));
 
     /// <summary>
     /// Saves the DialogueLog.
     /// </summary>
-    public void Save() => base.Save(IDENTIFIER + this.multiplayerID.ToString("X8"));
+    public void Save() => base.Save(IDENTIFIER + this.MultiplayerID.ToString("X8"));
 
     /// <summary>
     /// Whether or not the dialogueLog contains the key.

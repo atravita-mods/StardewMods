@@ -38,7 +38,7 @@ internal class TagManager
 #endif
         try
         {
-            string[] vals = __0.Split('_');
+            string[] vals = __0.Split('_', StringSplitOptions.TrimEntries | StringSplitOptions.RemoveEmptyEntries);
             switch(vals[0].ToLowerInvariant())
             {
                 case "year":

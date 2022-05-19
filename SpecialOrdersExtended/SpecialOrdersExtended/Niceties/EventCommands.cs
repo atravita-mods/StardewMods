@@ -4,6 +4,9 @@ using Microsoft.Xna.Framework;
 
 namespace SpecialOrdersExtended.Niceties;
 
+/// <summary>
+/// Holds event commands.
+/// </summary>
 [HarmonyPatch(typeof(Event))]
 internal static class EventCommands
 {
@@ -25,7 +28,7 @@ internal static class EventCommands
     }
 
     [HarmonyPrefix]
-    [HarmonyPriority(Priority.VeryHigh)]
+    [HarmonyPriority(Priority.VeryHigh)] // Need a high priority to slide in before spacecore, which has an unconditional prefix false.
     [HarmonyPatch(nameof(Event.tryEventCommand))]
     [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Harmony convention.")]
     private static bool PrefixTryGetCommand(Event __instance, GameLocation location, GameTime time, string[] split)

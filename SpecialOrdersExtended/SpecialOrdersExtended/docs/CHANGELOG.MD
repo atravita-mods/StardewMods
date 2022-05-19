@@ -19,6 +19,7 @@ Changelog
 
 #### Version 1.0.8
 
+* Adds the `atravita_addSpecialOrder` event command.
 * Internal optimizations.
 
 #### Version 1.0.7

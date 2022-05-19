@@ -20,7 +20,7 @@ internal struct DelayedDialogue
     /// <param name="time">Time to delay to.</param>
     /// <param name="dialogue">Dialogue to delay.</param>
     /// <param name="npc">Speaking NPC.</param>
-    public DelayedDialogue(int time, Dialogue dialogue, NPC npc)
+    internal DelayedDialogue(int time, Dialogue dialogue, NPC npc)
     {
         this.time = time;
         this.dialogue = dialogue;
@@ -32,7 +32,7 @@ internal struct DelayedDialogue
     /// </summary>
     /// <param name="currenttime">The current in-game time.</param>
     /// <returns>True if pushed, false otherwise.</returns>
-    public bool PushIfPastTime(int currenttime)
+    internal bool PushIfPastTime(int currenttime)
     {
         if (currenttime > this.time)
         {
@@ -68,7 +68,7 @@ internal class DialogueManager
     /// Load the PerScreened Dialogue log.
     /// </summary>
     /// <param name="multiplayerID">The player's unique ID.</param>
-    public static void Load(long multiplayerID)
+    internal static void Load(long multiplayerID)
     {
         ModEntry.ModMonitor.DebugLog($"Loading dialogue log for {multiplayerID:X8}");
         InternalDialogueLog.Value = DialogueLog.Load(multiplayerID);
@@ -79,7 +79,7 @@ internal class DialogueManager
     /// Else loads from the usual file.
     /// </summary>
     /// <param name="multiplayerID">The player's unique ID.</param>
-    public static void LoadTemp(long multiplayerID)
+    internal static void LoadTemp(long multiplayerID)
     {
         ModEntry.ModMonitor.DebugLog($"Loading temp dialogue log for {multiplayerID:X8}");
         InternalDialogueLog.Value = DialogueLog.LoadTempIfAvailable(multiplayerID);
@@ -89,7 +89,7 @@ internal class DialogueManager
     /// Save a dialoguelog for a specific player.
     /// </summary>
     /// <exception cref="SaveNotLoadedError">Save is not loaded.</exception>
-    public static void Save()
+    internal static void Save()
     {
         if (PerscreenedDialogueLog is null)
         {
@@ -102,7 +102,7 @@ internal class DialogueManager
     /// Save temporary Dialogue Log file.
     /// </summary>
     /// <exception cref="SaveNotLoadedError">Save not loaded.</exception>
-    public static void SaveTemp()
+    internal static void SaveTemp()
     {
         if (PerscreenedDialogueLog is null)
         {
@@ -116,7 +116,7 @@ internal class DialogueManager
     /// </summary>
     /// <param name="command">Name of console command.</param>
     /// <param name="args">Arguments for the console coomand.</param>
-    public static void ConsoleSpecialOrderDialogue(string command, string[] args)
+    internal static void ConsoleSpecialOrderDialogue(string command, string[] args)
     {
         if (!Context.IsWorldReady)
         {
@@ -190,7 +190,7 @@ internal class DialogueManager
     /// <param name="characterName">Name of character.</param>
     /// <returns>True if key has been said, false otherwise.</returns>
     /// <exception cref="SaveNotLoadedError">Save is not loaded.</exception>
-    public static bool HasSeenDialogue(string key, string characterName)
+    internal static bool HasSeenDialogue(string key, string characterName)
     {
         if (!Context.IsWorldReady)
         {
@@ -206,7 +206,7 @@ internal class DialogueManager
     /// <param name="characterName">Character.</param>
     /// <returns>True if added succesfully, false otherwise.</returns>
     /// <exception cref="SaveNotLoadedError">Save is not loaded.</exception>
-    public static bool TryAddSeenDialogue(string key, string characterName)
+    internal static bool TryAddSeenDialogue(string key, string characterName)
     {
         if (!Context.IsWorldReady)
         {
@@ -222,7 +222,7 @@ internal class DialogueManager
     /// <param name="characterName">Name of the NPC to check.</param>
     /// <returns>True if successful, false otherwise.</returns>
     /// <exception cref="SaveNotLoadedError">Save is not loaded.</exception>
-    public static bool TryRemoveSeenDialogue(string key, string characterName)
+    internal static bool TryRemoveSeenDialogue(string key, string characterName)
     {
         if (!Context.IsWorldReady)
         {
@@ -235,7 +235,7 @@ internal class DialogueManager
     /// Clear any memory of RepeatOrder keys when needed.
     /// </summary>
     /// <param name="removedKeys">List of keys to remove.</param>
-    public static void ClearRepeated(List<string> removedKeys)
+    internal static void ClearRepeated(List<string> removedKeys)
     {
         if (PerscreenedDialogueLog is null)
         {
@@ -249,10 +249,30 @@ internal class DialogueManager
                 {
                     if(dialogueKey.Contains(key))
                     {
-                        ModEntry.ModMonitor.DebugLog($"Removing key {key}");
+                        ModEntry.ModMonitor.DebugOnlyLog($"Removing key {dialogueKey}");
                         PerscreenedDialogueLog.SeenDialogues.Remove(dialogueKey);
                     }
                 }
+            }
+        }
+    }
+
+    /// <summary>
+    /// Clears dialogue related to a special order if failed.
+    /// </summary>
+    /// <param name="specialOrderKey">The key for the order failed.</param>
+    internal static void ClearOnFail(string specialOrderKey)
+    {
+        if (PerscreenedDialogueLog is null)
+        {
+            return;
+        }
+        foreach (string dialogueKey in PerscreenedDialogueLog.SeenDialogues.Keys)
+        {
+            if (dialogueKey.Contains(specialOrderKey))
+            {
+                ModEntry.ModMonitor.DebugOnlyLog($"Removing key {dialogueKey}");
+                PerscreenedDialogueLog.SeenDialogues.Remove(dialogueKey);
             }
         }
     }
@@ -266,7 +286,7 @@ internal class DialogueManager
     /// <param name="__1">NoPreface in vanilla code - to preface with season or not.</param>
     /// <exception cref="UnexpectedEnumValueException{SpecialOrder.QuestState}">Recieved unexpected enum value.</exception>
     [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Convention used by Harmony")]
-    public static void PostfixCheckDialogue(ref bool __result, ref NPC __instance, int __0, bool __1)
+    internal static void PostfixCheckDialogue(ref bool __result, ref NPC __instance, int __0, bool __1)
     {
         try
         {

@@ -73,6 +73,7 @@
   "table-removal-message": "Hold down {{keybind}} to remove object from table.",
   "rug-planting-message": "Planting on rugs is not allowed!",
   "gate-removal-message": "Hold down {{keybind}} to remove gates easily",
+  "invalid-special-order": "Special Order {{order}} seems to be invalid; was not added to your quest log.",
 
   // Config errors and messages
   "IllFormatedConfig": "Config file seems ill-formated, using default. Please use Generic Mod Config Menu to configure.",

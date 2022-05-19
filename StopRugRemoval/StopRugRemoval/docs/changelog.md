@@ -6,6 +6,10 @@
 <!-- Figure out how to replace the reference to coffee in the night market dialogue?-->
 <!-- Make it so notifications do not go away until dismissed? -->
 
+#### Version 1.0.10
+* Bugfixes
+* Add code that prevents broken special orders from crashing the quest menu.
+
 #### Version 1.0.9
 * Splitscreen fixes.
 * Reorder confirmation dialogue to more match eating dialogue

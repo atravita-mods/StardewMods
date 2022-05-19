@@ -14,20 +14,22 @@ internal static class AssetEditor
     internal const string PAMMAILKEY = "atravita_GingerIslandMainlandAdjustments_PamMail";
 
     // The following dialogue is edited from the code side so each NPC has at least the Resort dialogue.
-    // A CP pack will override, since my asset managers are registered in Entry and CP registers in GameLaunched.
+    // A CP pack will override as these are set to edit early.
     private static readonly string GeorgeDialogueLocation = PathUtilities.NormalizeAssetName("Characters/Dialogue/George");
     private static readonly string EvelynDialogueLocation = PathUtilities.NormalizeAssetName("Characters/Dialogue/Evelyn");
     private static readonly string SandyDialogueLocation = PathUtilities.NormalizeAssetName("Characters/Dialogue/Sandy");
     private static readonly string WillyDialogueLocation = PathUtilities.NormalizeAssetName("Characters/Dialogue/Willy");
+    private static readonly string WizardDialogueLocation = PathUtilities.NormalizeAssetName("Characters/Dialogue/Wizard");
 
     // We edit Pam's phone dialogue into Strings/Characters so content packs can target that.
     private static readonly string PhoneStringLocation = PathUtilities.NormalizeAssetName("Strings/Characters");
 
-    // A ten heart event and letter are included to unlock the phone.
+    // A ten heart event and letter are included to unlock the phone. Edit late - I don't really want CP packs changing this.
     private static readonly string DataEventsSeedshop = PathUtilities.NormalizeAssetName("Data/Events/SeedShop");
     private static readonly string DataMail = PathUtilities.NormalizeAssetName("Data/mail");
 
     // We edit Pam's nine heart event to set flags to remember which path the player chose.
+    // This currently isn't used for anything.
     private static readonly string DataEventsTrailerBig = PathUtilities.NormalizeAssetName("Data/Events/Trailer_Big");
 
     /// <summary>
@@ -52,17 +54,21 @@ internal static class AssetEditor
         {
             e.Edit(EditWillyDialogue, AssetEditPriority.Early);
         }
+        else if (e.NameWithoutLocale.IsEquivalentTo(WizardDialogueLocation))
+        {
+            e.Edit(EditWizardDialogue, AssetEditPriority.Early);
+        }
         else if (e.NameWithoutLocale.IsEquivalentTo(PhoneStringLocation))
         {
             e.Edit(EditPhone, AssetEditPriority.Early);
         }
         else if (e.NameWithoutLocale.IsEquivalentTo(DataEventsSeedshop))
         {
-            e.Edit(EditSeedShopEvent, AssetEditPriority.Early);
+            e.Edit(EditSeedShopEvent, AssetEditPriority.Late);
         }
         else if (e.NameWithoutLocale.IsEquivalentTo(DataMail))
         {
-            e.Edit(EditMail, AssetEditPriority.Early);
+            e.Edit(EditMail, AssetEditPriority.Late);
         }
         else if (e.NameWithoutLocale.IsEquivalentTo(DataEventsTrailerBig))
         {
@@ -100,6 +106,12 @@ internal static class AssetEditor
         }
     }
 
+    private static void EditWizardDialogue(IAssetData e)
+    {
+        IAssetDataForDictionary<string, string>? editor = e.AsDictionary<string, string>();
+        editor.Data["Resort"] = I18n.WizardResort();
+    }
+
     private static void EditPhone(IAssetData e)
     {
         IAssetDataForDictionary<string, string>? editor = e.AsDictionary<string, string>();
@@ -125,7 +137,7 @@ internal static class AssetEditor
             $"speak Pam \"{I18n._999Pam01a()}\"/faceDirection Pam 0/pause 250/faceDirection Pam 3/",
             $"speak Pam \"{I18n._999Pam01b()}#$b#{I18n._999Pam01c()}\"/pause 500/",
             $"question fork1 \"{I18n._999PamAsk()}#{I18n._999Validate()}#{I18n._999Confront()}\"/",
-            "fork atravita_GIMA_PamInsulted/mail atravita_GingerIslandMainlandAdjustments_PamMail/",
+            $"fork atravita_GIMA_PamInsulted/mail {PAMMAILKEY}/",
             "emote Pam 20/friendship Pam 200/faceDirection Pam 0/pause 250/faceDirection Pam 3/",
             $"speak Pam \"{I18n._999Pam02()}\"/pause 500/faceDirection Pam 0/",
             $"speak Pam \"{I18n._999Pam03()}$s\"/pause 500/faceDirection Pam 3/",

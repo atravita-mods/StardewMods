@@ -23,6 +23,7 @@
 <!-- Document animations -->
 <!-- Consider not allowing spouses to go to Ginger Island if they have a defined marriage_Season_day key?-->
 <!-- Document new tokens -->
+<!-- Dialogue lines for the Wizard -->
 
 ##### Known Issues
 
@@ -33,7 +34,7 @@
 ### Version 1.1.5-beta
 
 * Update to SMAPI 3.14.0
-* Add `_groupname` suffix to GI `Resort` keys (ie `Resort_groupname`). <!-- test this?-->
+* Add `_groupname` suffix to GI `Resort` keys (ie `Resort_groupname`). <!-- test this? -->
 
 ### Version 1.1.4
 

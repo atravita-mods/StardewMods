@@ -59,6 +59,8 @@ public class ModEntry : Mod
         {
             return;
         }
+        GenerateGMCM.BuildNPCDictionary();
+
         this.migrator = new(this.ModManifest, this.Helper, this.Monitor);
         this.migrator.ReadVersionInfo();
         Globals.LoadDataFromSave();
@@ -108,7 +110,10 @@ public class ModEntry : Mod
     /// <param name="sender">Unknown, never used.</param>
     /// <param name="e">Possible parameters.</param>
     private void ReturnedToTitle(object? sender, ReturnedToTitleEventArgs e)
-        => this.ClearCaches();
+    {
+        this.ClearCaches();
+        GenerateGMCM.Build();
+    }
 
     /// <summary>
     /// Clear cache at day end.

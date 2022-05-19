@@ -59,7 +59,7 @@ public sealed class ModConfig
     public int Capacity
     {
         get => this.capacity;
-        set => this.capacity = Math.Clamp(value, 0, 12);
+        set => this.capacity = Math.Clamp(value, 0, 15);
     }
 
     /// <summary>
@@ -130,6 +130,11 @@ public sealed class ModConfig
     public VillagerExclusionOverride AllowWizard { get; set; } = VillagerExclusionOverride.IfMarried;
 
     /// <summary>
+    /// Gets or sets a value indicating the schedule strictness for each villager.
+    /// </summary>
+    public Dictionary<string, ScheduleStrictness> ScheduleStrictness { get; set; } = new();
+
+    /// <summary>
     /// Gets or sets a value indicating whether harmony debugging patches are enabled.
     /// MUST BE SET IN CONFIG.JSON, NOT IN GMCM.
     /// </summary>
@@ -158,6 +163,20 @@ public sealed class ModConfig
             DayOfWeek.Sunday => "Sun",
             _ => "Tue",
         };
+    }
+
+    /// <summary>
+    /// Populates the NPC schedule strictness dictionary.
+    /// </summary>
+    internal void PopulateScheduleStrictness()
+    {
+        foreach (NPC? character in Utility.getAllCharacters())
+        {
+            if (character.CanSocialize)
+            {
+                this.ScheduleStrictness.TryAdd(character.Name, Configuration.ScheduleStrictness.Default);
+            }
+        }
     }
 }
 #pragma warning restore SA1201 // Elements should appear in the correct order

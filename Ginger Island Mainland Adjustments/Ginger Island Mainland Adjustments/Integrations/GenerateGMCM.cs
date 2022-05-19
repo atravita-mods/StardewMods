@@ -11,6 +11,11 @@ internal static class GenerateGMCM
 {
     private static GMCMHelper? helper;
 
+    /// <summary>
+    /// Grabs the GMCM api for this mod.
+    /// </summary>
+    /// <param name="manifest">The mod's manifest.</param>
+    /// <param name="translation">The translation helper.</param>
     internal static void Initialize(IManifest manifest, ITranslationHelper translation)
     {
         helper = new(Globals.ModMonitor, translation, Globals.ModRegistry, manifest);
@@ -20,8 +25,6 @@ internal static class GenerateGMCM
     /// <summary>
     /// Generates the GMCM for this mod.
     /// </summary>
-    /// <param name="manifest">The mod's manifest.</param>
-    /// <param name="translation">The translation helper.</param>
     internal static void Build()
     {
         if (!(helper?.HasGottenAPI == true))
@@ -29,6 +32,7 @@ internal static class GenerateGMCM
             return;
         }
 
+        helper.Unregister();
         helper.Register(
                 reset: static () => Globals.Config = new ModConfig(),
                 save: static () => Globals.Helper.WriteConfig(Globals.Config))
@@ -102,6 +106,24 @@ internal static class GenerateGMCM
                     helper.AddEnumOption<ModConfig, VillagerExclusionOverride>(property, () => Globals.Config);
                 }
             }
+        }
+    }
+
+    internal static void BuildNPCDictionary()
+    {
+        if (!(helper?.HasGottenAPI == true))
+        {
+            return;
+        }
+
+        Globals.Config.PopulateScheduleStrictness();
+
+        foreach ((string k, ScheduleStrictness v) in Globals.Config.ScheduleStrictness)
+        {
+            helper.AddEnumOption(
+                () => Game1.getCharacterFromName(k)?.displayName ?? k,
+                () => Globals.Config.ScheduleStrictness.TryGetValue(k, out ScheduleStrictness val) ? val : ScheduleStrictness.Default,
+                (value) => Globals.Config.ScheduleStrictness[k] = value);
         }
     }
 

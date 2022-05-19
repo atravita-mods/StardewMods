@@ -154,8 +154,16 @@ internal static class ConsoleCommands
             Globals.ModMonitor.Log($"Something very odd has happened to the schedule of {npc.Name} - it appears to have been nulled since generation", LogLevel.Error);
             if (!npc.CanSocialize)
             {
-                var antisocial = Game1.content.Load<Dictionary<string, string>>(Antisocial);
-                Globals.ModMonitor.Log($"\t{npc.Name} appears to be antsocial: they { (antisocial.ContainsKey(npc.Name) ? "are" : "aren't" )} registered with AntisocialNPCs.", LogLevel.Info);
+                Dictionary<string, string>? antisocial;
+                try
+                {
+                    antisocial = Game1.content.Load<Dictionary<string, string>>(Antisocial);
+                }
+                catch (Exception)
+                {
+                    antisocial = new();
+                }
+                Globals.ModMonitor.Log($"\t{npc.Name} appears to be antisocial: they { ( antisocial.ContainsKey(npc.Name) ? "are" : "aren't" )} registered with AntisocialNPCs.", LogLevel.Info);
             }
             return;
         }
@@ -179,7 +187,7 @@ internal static class ConsoleCommands
             sb.Append("\t\t").Append(I18n.DisplaySchedule_Animation()).AppendLine(schedulePathDescription.endOfRouteBehavior);
             sb.Append("\t\t").Append(I18n.DisplaySchedule_Message()).AppendLine(schedulePathDescription.endOfRouteMessage);
         }
-
+        sb.AppendLine();
         Globals.ModMonitor.Log(sb.ToString(), level);
     }
 

@@ -1,4 +1,5 @@
-﻿using HarmonyLib;
+﻿using AtraShared.Utils.Extensions;
+using HarmonyLib;
 using Microsoft.Xna.Framework;
 using StardewValley.BellsAndWhistles;
 using StardewValley.Objects;
@@ -104,6 +105,7 @@ internal class FurniturePatches
     /// <param name="__result">The result of the original function.</param>
     /// <returns>Return true to continue to the original function, false otherwise.</returns>
     [HarmonyPrefix]
+    [HarmonyPriority(Priority.First)]
     [HarmonyPatch(nameof(Furniture.clicked))]
     [SuppressMessage("StyleCop", "SA1313", Justification = "Style prefered by Harmony")]
     private static bool PrefixClicked(Furniture __instance, Farmer who, ref bool __result)

@@ -42,7 +42,7 @@ Bomb confirmation: By default safe areas require confirmation, and dangerous are
 
 Warp confirmation: works similarly to bomb confirmation. Note: the return specter confirm is disabled if you have [Better Return Specter](https://www.nexusmods.com/stardewvalley/mods/11610) to avoid mod conflicts - you can just use that mod to return if you accidentally warp anyways.
 
-Additional features: baby fruit trees will no longer be killed by the hoe. The volcano chests will not give out the same item twice in a row. Slot machine has bet1k and bet10k buttons.
+Additional features: baby fruit trees will no longer be killed by the hoe. The volcano chests will not give out the same item twice in a row. Slot machine has bet1k and bet10k buttons. Badly formatted special orders are less likely to crash the quest menu. You can ask Elliott for a non-alcoholic drink, a feature I think only I care about.
 
 #### Additionally
 

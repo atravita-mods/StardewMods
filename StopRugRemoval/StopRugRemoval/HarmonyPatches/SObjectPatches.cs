@@ -7,7 +7,6 @@ using Microsoft.Xna.Framework.Input;
 using StardewModdingAPI.Utilities;
 using StardewValley.Objects;
 using StopRugRemoval.Configuration;
-using StopRugRemoval.HarmonyPatches.Confirmations;
 
 namespace StopRugRemoval.HarmonyPatches;
 
@@ -67,8 +66,8 @@ internal static class SObjectPatches
             if (__instance.IsSpawnedObject && ModEntry.Config.SaveBombedForage && ModEntry.Config.Enabled)
             {
                 // The SObject does not have its location anymore. Just spawn near the farmer, I guess?
-                location.debris.Add(new Debris(__instance, who.Position + new Vector2(Game1.random.Next(-128,128), Game1.random.Next(-128,128))));
-                ModEntry.ModMonitor.Log(__instance.DisplayName + ' ' + __instance.TileLocation.ToString(), LogLevel.Warn);
+                location.debris.Add(new Debris(__instance, who.Position + new Vector2(Game1.random.Next(-128, 128), Game1.random.Next(-128, 128))));
+                ModEntry.ModMonitor.DebugOnlyLog(__instance.DisplayName + ' ' + __instance.TileLocation.ToString(), LogLevel.Warn);
             }
         }
         catch (Exception ex)

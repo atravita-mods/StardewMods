@@ -39,6 +39,10 @@ internal static class ConfirmWarp
         /// Warp to farm.
         /// </summary>
         Farm = 688,
+
+        /// <summary>
+        /// Warp to mountain.
+        /// </summary>
         Mountain = 689,
         Beach = 690,
         Desert = 261,
@@ -50,6 +54,7 @@ internal static class ConfirmWarp
     /// Applies the patch to the wand.
     /// </summary>
     /// <param name="harmony">Harmony instance.</param>
+    /// <remarks>Seperate so these patches are not applied if player is using Better Return Scepter.</remarks>
     internal static void ApplyWandPatches(Harmony harmony)
     {
         harmony.Patch(

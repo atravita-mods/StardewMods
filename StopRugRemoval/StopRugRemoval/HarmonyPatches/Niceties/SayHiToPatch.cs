@@ -34,8 +34,10 @@ internal static class SayHiToPatch
     private static void PostfixTenMinuteUpdate(NPC __instance, GameLocation l, int ___textAboveHeadTimer)
     {
         if (Game1.player.currentLocation == l && ___textAboveHeadTimer < 0 && !l.Name.Equals("Saloon", StringComparison.OrdinalIgnoreCase)
-            && __instance.isMoving() && Game1.random.NextDouble() < 0.5)
+            && __instance.isVillager() && __instance.isMoving() && Game1.random.NextDouble() < 0.5)
         {
+            // Invert the check here to favor the farmer. :(
+            // Goddamnit greet me more often plz.
             Character? c = Utility.isThereAFarmerWithinDistance(__instance.getTileLocation(), 4, l);
             if (c is null)
             {

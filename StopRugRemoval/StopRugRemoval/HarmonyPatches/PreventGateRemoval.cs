@@ -9,6 +9,7 @@ using xTile.Dimensions;
 
 namespace StopRugRemoval.HarmonyPatches;
 
+#warning - remove in 1.6
 /// <summary>
 /// Patches to prevent gate removal.
 /// </summary>

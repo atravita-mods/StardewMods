@@ -33,9 +33,8 @@ internal class FurniturePatches
             Rectangle bounds = __instance.boundingBox.Value;
             int tileX = bounds.X / 64;
             int tileY = bounds.Y / 64;
-#if DEBUG
-            ModEntry.ModMonitor.Log($"Checking rug: {bounds.X / 64f}, {bounds.Y / 64f}, W/H {bounds.Width / 64f}/{bounds.Height / 64f}", LogLevel.Debug);
-#endif
+            ModEntry.ModMonitor.DebugOnlyLog($"Checking rug: {bounds.X / 64f}, {bounds.Y / 64f}, W/H {bounds.Width / 64f}/{bounds.Height / 64f}", LogLevel.Debug);
+
             for (int x = 0; x < bounds.Width / 64; x++)
             {
                 for (int y = 0; y < bounds.Height / 64; y++)

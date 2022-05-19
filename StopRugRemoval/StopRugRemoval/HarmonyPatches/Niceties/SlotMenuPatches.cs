@@ -64,7 +64,6 @@ internal static class TokenPurchasePatch
                 }
 
                 responses.Add(new Response("No", Game1.content.LoadString(@"Strings\Lexicon:QuestionDialogue_No")).SetHotKey(Keys.Escape));
-                actions.Add(null);
 
                 Game1.activeClickableMenu = new DialogueAndAction(I18n.BuyCasino(), responses, actions);
                 __result = true;
@@ -176,6 +175,7 @@ internal static class SlotMenuPatches
         return null;
     }
 
+    // Stick my draw at the right location in the middle of this function. Gotta do this since the spritebatch is opened and closed in this function.
     [HarmonyTranspiler]
     [HarmonyPatch(nameof(Slots.draw))]
     private static IEnumerable<CodeInstruction>? TranspileDraw(IEnumerable<CodeInstruction> instructions, ILGenerator gen, MethodBase original)

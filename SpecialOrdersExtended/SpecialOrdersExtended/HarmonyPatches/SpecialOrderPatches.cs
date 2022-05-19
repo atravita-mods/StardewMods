@@ -17,5 +17,28 @@ internal static class SpecialOrderPatches
     [HarmonyPrefix]
     [HarmonyPriority(Priority.Last)]
     [HarmonyPatch(nameof(SpecialOrder.UpdateAvailableSpecialOrders))]
-    private static bool PrefixUpdate() => !SpecialOrder.IsSpecialOrdersBoardUnlocked();
+    private static bool PrefixUpdate() => SpecialOrder.IsSpecialOrdersBoardUnlocked();
+
+    [HarmonyPrefix]
+    [HarmonyPriority(Priority.HigherThanNormal)]
+    [HarmonyPatch(nameof(SpecialOrder.SetDuration))]
+    [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Harmony convention.")]
+    private static bool PrefixSetDuration(SpecialOrder __instance)
+    {
+        try
+        {
+            Dictionary<string, int> overrides = AssetManager.GetDurationOverride();
+            if (overrides.TryGetValue(__instance.questKey.Value, out int duration))
+            {
+                WorldDate? date = new(Game1.year, Game1.currentSeason, Game1.dayOfMonth);
+                __instance.dueDate.Value = date.TotalDays + (duration == -1 ? 99 : duration);
+                return true;
+            }
+        }
+        catch (Exception ex)
+        {
+            ModEntry.ModMonitor.Log($"Mod failed while trying to override special order duration!\n\n{ex}");
+        }
+        return false;
+    }
 }

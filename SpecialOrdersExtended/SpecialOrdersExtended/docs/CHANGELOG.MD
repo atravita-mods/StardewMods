@@ -23,6 +23,7 @@ Changelog
 * Adds the `atravita_addSpecialOrder` event command.
 * Internal optimizations.
 * Clear the relevant dialogue log when a player *fails* a quest.
+* Add a method for content packs to more easily add untimed orders.
 
 #### Version 1.0.7
 

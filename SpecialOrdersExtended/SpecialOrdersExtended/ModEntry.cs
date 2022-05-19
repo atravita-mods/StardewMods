@@ -1,11 +1,11 @@
 ﻿using AtraBase.Toolkit.Reflection;
+using AtraShared.ConstantsAndEnums;
 using AtraShared.Integrations;
 using AtraShared.Integrations.Interfaces;
 using AtraShared.MigrationManager;
 using AtraShared.Utils;
 using AtraShared.Utils.Extensions;
 using HarmonyLib;
-using SpecialOrdersExtended.HarmonyPatches;
 using SpecialOrdersExtended.Managers;
 using StardewModdingAPI.Events;
 using StardewValley.GameData;
@@ -63,30 +63,7 @@ internal class ModEntry : Mod
 
         Config = AtraUtils.GetConfigOrDefault<ModConfig>(helper, this.Monitor);
 
-        Harmony harmony = new(this.ModManifest.UniqueID);
-
-        harmony.Patch(
-            original: typeof(SpecialOrder).StaticMethodNamed("CheckTag"),
-            prefix: new HarmonyMethod(typeof(TagManager), nameof(TagManager.PrefixCheckTag)));
-
-        harmony.Patch(
-            original: AccessTools.Method(typeof(SpecialOrder), nameof(SpecialOrder.GetSpecialOrder)),
-            finalizer: new HarmonyMethod(typeof(Finalizers), nameof(Finalizers.FinalizeGetSpecialOrder)));
-
-        harmony.PatchAll();
-
-        try
-        {
-            harmony.Patch(
-                original: AccessTools.Method(typeof(NPC), nameof(NPC.checkForNewCurrentDialogue)),
-                postfix: new HarmonyMethod(typeof(DialogueManager), nameof(DialogueManager.PostfixCheckDialogue)));
-        }
-        catch (Exception ex)
-        {
-            ModMonitor.Log($"Failed to patch NPC::checkForNewCurrentDialogue for Special Orders Dialogue. Dialogue will be disabled\n\n{ex}", LogLevel.Error);
-        }
-
-        harmony.Snitch(this.Monitor, harmony.Id, transpilersOnly: true);
+        this.ApplyPatches(new Harmony(this.ModManifest.UniqueID));
 
         // Register console commands.
         helper.ConsoleCommands.Add(
@@ -110,8 +87,35 @@ internal class ModEntry : Mod
         helper.Events.GameLoop.GameLaunched += this.OnGameLaunched;
         helper.Events.GameLoop.SaveLoaded += this.SaveLoaded;
         helper.Events.GameLoop.Saving += this.Saving;
+        helper.Events.GameLoop.DayEnding += this.OnDayEnd;
         helper.Events.GameLoop.TimeChanged += this.OnTimeChanged;
         helper.Events.GameLoop.OneSecondUpdateTicking += this.OneSecondUpdateTicking;
+        helper.Events.Content.AssetRequested += this.OnAssetRequested;
+    }
+
+    private void ApplyPatches(Harmony harmony)
+    {
+        try
+        {
+            harmony.PatchAll();
+        }
+        catch (Exception ex)
+        {
+            this.Monitor.Log(string.Format(ErrorMessageConsts.HARMONYCRASH, ex), LogLevel.Error);
+        }
+
+        try
+        {
+            harmony.Patch(
+                original: AccessTools.Method(typeof(NPC), nameof(NPC.checkForNewCurrentDialogue)),
+                postfix: new HarmonyMethod(typeof(DialogueManager), nameof(DialogueManager.PostfixCheckDialogue)));
+        }
+        catch (Exception ex)
+        {
+            ModMonitor.Log($"Failed to patch NPC::checkForNewCurrentDialogue for Special Orders Dialogue. Dialogue will be disabled\n\n{ex}", LogLevel.Error);
+        }
+
+        harmony.Snitch(this.Monitor, harmony.Id, transpilersOnly: true);
     }
 
     /// <summary>
@@ -121,9 +125,7 @@ internal class ModEntry : Mod
     /// <param name="e">TimeChanged params.</param>
     /// <remarks>Currently handles: pushing delayed dialogue back onto the stack.</remarks>
     private void OnTimeChanged(object? sender, TimeChangedEventArgs e)
-    {
-        DialogueManager.PushPossibleDelayedDialogues();
-    }
+        => DialogueManager.PushPossibleDelayedDialogues();
 
     /// <summary>
     /// Raised every second.
@@ -132,9 +134,7 @@ internal class ModEntry : Mod
     /// <param name="e">OneSecondUpdate params.</param>
     /// <remarks>Currently handles: grabbing new recently completed special orders.</remarks>
     private void OneSecondUpdateTicking(object? sender, OneSecondUpdateTickingEventArgs e)
-    {
-        RecentSOManager.GrabNewRecentlyCompletedOrders();
-    }
+        => RecentSOManager.GrabNewRecentlyCompletedOrders();
 
     /// <summary>
     /// Raised on game launch.
@@ -352,4 +352,28 @@ internal class ModEntry : Mod
         }
         return true;
     }
+
+    /********
+     * REGION UNTIMED ORDERS. 
+     ********/
+
+    private void OnAssetRequested(object? sender, AssetRequestedEventArgs e)
+        => AssetManager.OnLoadAsset(e);
+
+    private void OnDayEnd(object? sender, DayEndingEventArgs e)
+    {
+        if (Context.IsMainPlayer && Game1.player.team.specialOrders.Count > 0)
+        {
+            HashSet<string> overrides = AssetManager.GetDurationOverride().Where(kvp => kvp.Value == -1).Select(kvp => kvp.Key).ToHashSet();
+            WorldDate? date = new(Game1.year, Game1.currentSeason, Game1.dayOfMonth);
+            foreach (SpecialOrder specialOrder in Game1.player.team.specialOrders)
+            {
+                if (overrides.Contains(specialOrder.questKey.Value) && specialOrder.GetDaysLeft() < 50)
+                {
+                    specialOrder.dueDate.Value = date.TotalDays + 99;
+                }
+            }
+        }
+    }
+
 }

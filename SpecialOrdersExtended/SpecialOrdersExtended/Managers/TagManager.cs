@@ -1,8 +1,11 @@
-﻿namespace SpecialOrdersExtended.Managers;
+﻿using HarmonyLib;
+
+namespace SpecialOrdersExtended.Managers;
 
 /// <summary>
 /// Static class to hold tag-management functions.
 /// </summary>
+[HarmonyPatch(typeof(SpecialOrder))]
 internal class TagManager
 {
     private static Random? random;
@@ -30,6 +33,9 @@ internal class TagManager
     /// <param name="__result">the result for the original function.</param>
     /// <param name="__0">string - tag to check.</param>
     /// <returns>true to continue to the vanilla function, false otherwise.</returns>
+    [HarmonyPrefix]
+    [HarmonyPatch("CheckTag")]
+    [HarmonyPriority(Priority.High)]
     [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Naming convention for Harmony")]
     public static bool PrefixCheckTag(ref bool __result, string __0)
     {

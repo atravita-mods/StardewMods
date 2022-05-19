@@ -86,7 +86,7 @@ internal class ModEntry : Mod
             ModMonitor.Log($"Failed to patch NPC::checkForNewCurrentDialogue for Special Orders Dialogue. Dialogue will be disabled\n\n{ex}", LogLevel.Error);
         }
 
-        harmony.Snitch(this.Monitor, this.ModManifest.UniqueID);
+        harmony.Snitch(this.Monitor, harmony.Id, transpilersOnly: true);
 
         // Register console commands.
         helper.ConsoleCommands.Add(

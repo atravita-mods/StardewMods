@@ -13,4 +13,9 @@ internal static class SpecialOrderPatches
     [HarmonyPatch(nameof(SpecialOrder.OnFail))]
     [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Harmony Convention.")]
     private static void PostfixOnFail(SpecialOrder __instance) => DialogueManager.ClearOnFail(__instance.questKey.Value);
+
+    [HarmonyPrefix]
+    [HarmonyPriority(Priority.Last)]
+    [HarmonyPatch(nameof(SpecialOrder.UpdateAvailableSpecialOrders))]
+    private static bool PrefixUpdate() => !SpecialOrder.IsSpecialOrdersBoardUnlocked();
 }

@@ -7,7 +7,7 @@
   "UniqueID": "atravita.SpecialOrdersExtended",
   "EntryDll": "SpecialOrdersExtended.dll",
   "UpdateKeys": [ "Nexus:9855", "ModDrop:1086743", "GitHub:atravita-mods/SpecialOrdersExtended" ],
-  "MinimumApiVersion": "3.14",
+  "MinimumApiVersion": "3.13",
   "Dependencies": [
     {
       "UniqueID": "Pathoschild.ContentPatcher",

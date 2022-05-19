@@ -35,7 +35,7 @@ internal class DialogueLog : AbstractDataModel
     /// <exception cref="SaveNotLoadedError">Save not loaded.</exception>
     public static DialogueLog Load(long multiplayerID)
     {
-        if (!Context.IsWorldReady)
+        if (!Context.IsWorldReady || Constants.SaveFolderName is null)
         {
             throw new SaveNotLoadedError();
         }
@@ -54,17 +54,15 @@ internal class DialogueLog : AbstractDataModel
     /// <remarks>NOT IMPLEMENTED YET.</remarks>
     public static DialogueLog LoadTempIfAvailable(long multiplayerID)
     {
-        if (!Context.IsWorldReady)
+        if (!Context.IsWorldReady || Constants.SaveFolderName is null)
         {
             throw new SaveNotLoadedError();
         }
-        DialogueLog log = ModEntry.DataHelper.ReadGlobalData<DialogueLog>($"{Constants.SaveFolderName}{IDENTIFIER}{multiplayerID:X8}_temp_{SDate.Now().DaysSinceStart}");
+        DialogueLog? log = ModEntry.DataHelper.ReadGlobalData<DialogueLog>($"{Constants.SaveFolderName}{IDENTIFIER}{multiplayerID:X8}_temp_{SDate.Now().DaysSinceStart}");
         if (log is not null)
         {
             // Delete temporary file
-#pragma warning disable CS8625 // Cannot convert null literal to non-nullable reference type. This is a valid call, SMAPI just doesn't use nullable.
             ModEntry.DataHelper.WriteGlobalData<DialogueLog>($"{Constants.SaveFolderName}{IDENTIFIER}{multiplayerID:X8}_temp_{SDate.Now().DaysSinceStart}", null);
-#pragma warning restore CS8625 // Cannot convert null literal to non-nullable reference type.
             log.multiplayerID = multiplayerID;
             return log;
         }

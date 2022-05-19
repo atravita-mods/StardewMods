@@ -235,7 +235,7 @@ internal class ModEntry : Mod
     /// <param name="args">List of tags to check.</param>
     private void ConsoleCheckTag(string command, string[] args)
     {
-        if (!Context.IsWorldReady || CheckTagDelegate is null)
+        if (!Context.IsWorldReady)
         {
             ModMonitor.Log(I18n.LoadSaveFirst(), LogLevel.Debug);
             return;
@@ -326,8 +326,7 @@ internal class ModEntry : Mod
         if (!SpecialOrder.CheckTags(order.RequiredTags))
         {
             ModMonitor.Log($"    {I18n.HasInvalidTags()}:", LogLevel.Debug);
-            var tags = order.RequiredTags.SpanSplit(',', StringSplitOptions.TrimEntries | StringSplitOptions.RemoveEmptyEntries);
-            foreach (ReadOnlySpan<char> tag in tags)
+            foreach (string tag in order.RequiredTags.Split(',', StringSplitOptions.TrimEntries | StringSplitOptions.RemoveEmptyEntries))
             {
                 bool match = true;
                 if (tag.Length == 0)
@@ -338,16 +337,16 @@ internal class ModEntry : Mod
                 if (tag.StartsWith("!"))
                 {
                     match = false;
-                    trimmed_tag = tag.Trim()[1..].ToString();
+                    trimmed_tag = tag[1..];
                 }
                 else
                 {
-                    trimmed_tag = tag.Trim().ToString();
+                    trimmed_tag = tag;
                 }
 
                 if (CheckTagDelegate(trimmed_tag) != match)
                 {
-                    ModMonitor.Log($"         {I18n.TagFailed()}: {tag.ToString()}", LogLevel.Debug);
+                    ModMonitor.Log($"         {I18n.TagFailed()}: {tag}", LogLevel.Debug);
                 }
             }
             return false;

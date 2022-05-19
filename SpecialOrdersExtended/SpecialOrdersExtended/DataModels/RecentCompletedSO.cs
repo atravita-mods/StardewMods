@@ -36,12 +36,12 @@ internal class RecentCompletedSO : AbstractDataModel
     /// <exception cref="SaveNotLoadedError">Save is not loaded.</exception>
     public static RecentCompletedSO Load()
     {
-        if (!Context.IsWorldReady)
+        if (!Context.IsWorldReady || Constants.SaveFolderName is null)
         {
             throw new SaveNotLoadedError();
         }
-        return ModEntry.DataHelper.ReadGlobalData<RecentCompletedSO>(Constants.SaveFolderName + IDENTIFIER)
-            ?? new RecentCompletedSO(Constants.SaveFolderName);
+        return ModEntry.DataHelper.ReadGlobalData<RecentCompletedSO>(Constants.SaveFolderName! + IDENTIFIER)
+            ?? new RecentCompletedSO(Constants.SaveFolderName!);
     }
 
     /// <summary>
@@ -51,17 +51,15 @@ internal class RecentCompletedSO : AbstractDataModel
     /// <exception cref="SaveNotLoadedError">Save not loaded when expected.</exception>
     public static RecentCompletedSO LoadTempIfAvailable()
     {
-        if (!Context.IsWorldReady)
+        if (!Context.IsWorldReady || Constants.SaveFolderName is null)
         {
             throw new SaveNotLoadedError();
         }
-        RecentCompletedSO log = ModEntry.DataHelper.ReadGlobalData<RecentCompletedSO>($"{Constants.SaveFolderName}{IDENTIFIER}_temp_{SDate.Now().DaysSinceStart}");
+        RecentCompletedSO? log = ModEntry.DataHelper.ReadGlobalData<RecentCompletedSO>($"{Constants.SaveFolderName}{IDENTIFIER}_temp_{SDate.Now().DaysSinceStart}");
         if (log is not null)
         {
             // Delete the temporary file.
-#pragma warning disable CS8625 // Cannot convert null literal to non-nullable reference type. This is a valid call, SMAPI just doesn't use nullable.
             ModEntry.DataHelper.WriteGlobalData<RecentCompletedSO>($"{Constants.SaveFolderName}{IDENTIFIER}_temp_{SDate.Now().DaysSinceStart}", null);
-#pragma warning restore CS8625 // Cannot convert null literal to non-nullable reference type.
             return log;
         }
         return ModEntry.DataHelper.ReadGlobalData<RecentCompletedSO>(Constants.SaveFolderName + IDENTIFIER)

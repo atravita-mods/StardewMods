@@ -761,6 +761,7 @@ internal class ModEntry : Mod
 
         this.FixIDs();
         this.Helper.GameContent.InvalidateCache("Data/ObjectInformation");
+        this.Helper.GameContent.InvalidateCache($"Data/ObjectInformation.{this.Helper.Translation.Locale}");
 
         if (Context.IsMainPlayer)
         {

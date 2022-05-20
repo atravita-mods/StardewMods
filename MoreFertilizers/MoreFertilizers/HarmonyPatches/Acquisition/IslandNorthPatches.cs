@@ -25,6 +25,10 @@ internal static class IslandNorthPatches
             { // 909 - radioactive ore
                 __result.TryAdd(new SObject(ModEntry.SecretJojaFertilizerID, 1), new[] { 0, int.MaxValue, 909, Utility.hasFinishedJojaRoute() ? 1 : 5 });
             }
+            else if (ModEntry.MiraculousBeveragesID != -1)
+            {
+                __result.TryAdd(new SObject(ModEntry.MiraculousBeveragesID, 1), new[] { 0, int.MaxValue, 253, 5 });
+            }
         }
         catch (Exception ex)
         {

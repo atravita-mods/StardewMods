@@ -69,7 +69,7 @@ internal static class ScheduleErrorFixer
 internal static class ScheduleNullWarp
 {
     [HarmonyPrefix]
-    [HarmonyPatch(nameof(Game1.warpCharacter))]
+    [HarmonyPatch(nameof(Game1.warpCharacter), new[] { typeof(NPC), typeof(GameLocation), typeof(Vector2) })]
     private static bool PrefixCharacterWarp(NPC character, GameLocation? targetLocation)
     {
         if (targetLocation is null)

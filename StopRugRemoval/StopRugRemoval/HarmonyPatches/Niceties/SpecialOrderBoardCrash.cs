@@ -9,6 +9,9 @@ using StardewValley.Menus;
 
 namespace StopRugRemoval.HarmonyPatches.Niceties;
 
+/// <summary>
+/// Holds patches to make special orders less fragile.
+/// </summary>
 [HarmonyPatch(typeof(SpecialOrder))]
 internal static class SpecialOrderCrash
 {

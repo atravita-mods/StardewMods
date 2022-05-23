@@ -465,6 +465,7 @@ internal class ModEntry : Mod
     private void OnAssetRequested(object? sender, AssetRequestedEventArgs e)
         => AssetEditor.Edit(e);
 
+    [EventPriority(EventPriority.High)]
     private void OnButtonPressed(object? sender, ButtonPressedEventArgs e)
         => SpecialFertilizerApplication.ApplyFertilizer(e, this.Helper.Input);
 
@@ -992,7 +993,7 @@ internal class ModEntry : Mod
     /*******************
      * REGION MINESHAFT AND MULTIPLAYER
      ********************/
-
+    [EventPriority(EventPriority.Low)]
     private void OnPlayerWarp(object? sender, WarpedEventArgs e)
     {
         JojaSample.JojaSampleEvent(e);

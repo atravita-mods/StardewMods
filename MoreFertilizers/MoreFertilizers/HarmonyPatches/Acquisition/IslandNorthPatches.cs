@@ -26,8 +26,8 @@ internal static class IslandNorthPatches
                 __result.TryAdd(new SObject(ModEntry.SecretJojaFertilizerID, 1), new[] { 0, int.MaxValue, 909, Utility.hasFinishedJojaRoute() ? 1 : 5 });
             }
             if (ModEntry.MiraculousBeveragesID != -1)
-            {
-                __result.TryAdd(new SObject(ModEntry.MiraculousBeveragesID, 1), new[] { 0, int.MaxValue, 253, 5 });
+            { // 253 - triple shot espresso
+                __result.TryAdd(new SObject(ModEntry.MiraculousBeveragesID, 1), new[] { 0, int.MaxValue, 253, 1 });
             }
         }
         catch (Exception ex)

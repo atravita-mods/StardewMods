@@ -273,7 +273,7 @@ internal class ModEntry : Mod
             SpecialOrderData order = order_data[key];
             if (this.IsAvailableOrder(key, order))
             {
-                ModMonitor.DebugOnlyLog($"    {key} is valid");
+                ModMonitor.DebugOnlyLog($"\t{key} is valid");
                 validkeys.Add(key);
                 if (!Game1.MasterPlayer.team.completedSpecialOrders.ContainsKey(key))
                 {
@@ -291,32 +291,32 @@ internal class ModEntry : Mod
         try
         {
             SpecialOrder.GetSpecialOrder(key, Game1.random.Next());
-            ModMonitor.Log($"    {key} {I18n.Parsable()}", LogLevel.Debug);
+            ModMonitor.Log($"\t{key} {I18n.Parsable()}", LogLevel.Debug);
         }
         catch (Exception ex)
         {
-            ModMonitor.Log($"    {key} {I18n.Unparsable()}\n{ex}", LogLevel.Error);
+            ModMonitor.Log($"\t{key} {I18n.Unparsable()}\n{ex}", LogLevel.Error);
             return false;
         }
 
         bool seen = Game1.MasterPlayer.team.completedSpecialOrders.ContainsKey(key);
         if (order.Repeatable != "True" && seen)
         {
-            ModMonitor.Log($"    {I18n.Nonrepeatable()}", LogLevel.Debug);
+            ModMonitor.Log($"\t{I18n.Nonrepeatable()}", LogLevel.Debug);
             return false;
         }
         else if (seen)
         {
-            ModMonitor.Log($"    {I18n.RepeatableSeen()}", LogLevel.Debug);
+            ModMonitor.Log($"\t{I18n.RepeatableSeen()}", LogLevel.Debug);
         }
         if (Game1.dayOfMonth >= 16 && order.Duration == "Month")
         {
-            ModMonitor.Log($"    {I18n.MonthLongLate(cutoff: 16)}");
+            ModMonitor.Log($"\t{I18n.MonthLongLate(cutoff: 16)}");
             return false;
         }
         if (!SpecialOrder.CheckTags(order.RequiredTags))
         {
-            ModMonitor.Log($"    {I18n.HasInvalidTags()}:", LogLevel.Debug);
+            ModMonitor.Log($"\t{I18n.HasInvalidTags()}:", LogLevel.Debug);
             foreach (string tag in order.RequiredTags.Split(',', StringSplitOptions.TrimEntries | StringSplitOptions.RemoveEmptyEntries))
             {
                 bool match = true;
@@ -325,7 +325,7 @@ internal class ModEntry : Mod
                     continue;
                 }
                 string trimmed_tag;
-                if (tag.StartsWith("!"))
+                if (tag.StartsWith('!'))
                 {
                     match = false;
                     trimmed_tag = tag[1..];
@@ -337,7 +337,7 @@ internal class ModEntry : Mod
 
                 if (CheckTagDelegate(trimmed_tag) != match)
                 {
-                    ModMonitor.Log($"         {I18n.TagFailed()}: {tag}", LogLevel.Debug);
+                    ModMonitor.Log($"\t\t{I18n.TagFailed()}: {tag}", LogLevel.Debug);
                 }
             }
             return false;
@@ -346,7 +346,7 @@ internal class ModEntry : Mod
         {
             if (specialOrder.questKey.Value == key)
             {
-                ModMonitor.Log($"    {I18n.Active()}", LogLevel.Debug);
+                ModMonitor.Log($"\t{I18n.Active()}", LogLevel.Debug);
                 return false;
             }
         }
@@ -354,7 +354,7 @@ internal class ModEntry : Mod
     }
 
     /********
-     * REGION UNTIMED ORDERS. 
+     * REGION UNTIMED ORDERS.
      ********/
 
     private void OnAssetRequested(object? sender, AssetRequestedEventArgs e)
@@ -365,11 +365,16 @@ internal class ModEntry : Mod
         if (Context.IsMainPlayer && Game1.player.team.specialOrders.Count > 0)
         {
             HashSet<string> overrides = AssetManager.GetDurationOverride().Where(kvp => kvp.Value == -1).Select(kvp => kvp.Key).ToHashSet();
+            if (overrides.Count == 0)
+            {
+                return;
+            }
             WorldDate? date = new(Game1.year, Game1.currentSeason, Game1.dayOfMonth);
             foreach (SpecialOrder specialOrder in Game1.player.team.specialOrders)
             {
                 if (overrides.Contains(specialOrder.questKey.Value) && specialOrder.GetDaysLeft() < 50)
                 {
+                    this.Monitor.Log($"Overriding duration of untimed special order {specialOrder.questKey.Value}");
                     specialOrder.dueDate.Value = date.TotalDays + 99;
                 }
             }

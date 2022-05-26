@@ -7,6 +7,7 @@
 * Beverage fertilizer
     - Crops
     - Fruit trees
+* Acquisition: maybee have fertilizer appear in big slimes outside the mines?
 
 #### Version 0.2.0
 * Added new fertilizers:

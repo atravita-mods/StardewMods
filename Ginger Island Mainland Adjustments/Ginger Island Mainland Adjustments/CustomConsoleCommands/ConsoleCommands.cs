@@ -206,6 +206,15 @@ internal static class ConsoleCommands
     /// <param name="args">List of islanders.</param>
     private static void ConsoleSchedule(string command, string[] args)
     {
+        if (!Context.IsWorldReady)
+        {
+            Globals.ModMonitor.Log("This command can only be run while in a save!", LogLevel.Error);
+            return;
+        }
+        if (!Context.IsMainPlayer)
+        {
+            Globals.ModMonitor.Log("This command may return inaccurate results for farmhands!", LogLevel.Warn);
+        }
         foreach (string name in args)
         {
             if (Utility.fuzzyCharacterSearch(name, must_be_villager: true) is NPC npc)

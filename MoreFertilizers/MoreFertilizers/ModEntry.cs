@@ -448,6 +448,7 @@ internal class ModEntry : Mod
 
         helper.Events.Player.Warped += this.OnPlayerWarp;
 
+        helper.Events.GameLoop.DayStarted += this.OnDayStart;
         helper.Events.GameLoop.DayEnding += this.OnDayEnd;
         helper.Events.Input.ButtonPressed += this.OnButtonPressed;
 
@@ -519,24 +520,26 @@ internal class ModEntry : Mod
         // TODO: This should be doable with expression trees in a less dumb way.
         if (storedIDs is null)
         {
-            storedIDs = new();
-            storedIDs.WisdomFertilizerID = WisdomFertilizerID;
-            storedIDs.FruitTreeFertilizerID = FruitTreeFertilizerID;
-            storedIDs.DeluxeFruitTreeFertilizerID = DeluxeFruitTreeFertilizerID;
-            storedIDs.FishFoodID = FishFoodID;
-            storedIDs.DeluxeFishFoodID = DeluxeFishFoodID;
-            storedIDs.DomesticatedFishFoodID = DomesticatedFishFoodID;
-            storedIDs.PaddyFertilizerID = PaddyCropFertilizerID;
-            storedIDs.LuckyFertilizerID = LuckyFertilizerID;
-            storedIDs.BountifulFertilizerID = BountifulFertilizerID;
-            storedIDs.BountifulBushID = BountifulBushID;
-            storedIDs.RapidBushFertilizerID = RapidBushFertilizerID;
-            storedIDs.TreeTapperFertilizerID = TreeTapperFertilizerID;
-            storedIDs.JojaFertilizerID = JojaFertilizerID;
-            storedIDs.DeluxeJojaFertilizerID = DeluxeJojaFertilizerID;
-            storedIDs.SecretJojaFertilizerID = SecretJojaFertilizerID;
-            storedIDs.OrganicFertilizerID = OrganicFertilizerID;
-            storedIDs.MiraculousBeveragesID = MiraculousBeveragesID;
+            storedIDs = new()
+            {
+                WisdomFertilizerID = WisdomFertilizerID,
+                FruitTreeFertilizerID = FruitTreeFertilizerID,
+                DeluxeFruitTreeFertilizerID = DeluxeFruitTreeFertilizerID,
+                FishFoodID = FishFoodID,
+                DeluxeFishFoodID = DeluxeFishFoodID,
+                DomesticatedFishFoodID = DomesticatedFishFoodID,
+                PaddyFertilizerID = PaddyCropFertilizerID,
+                LuckyFertilizerID = LuckyFertilizerID,
+                BountifulFertilizerID = BountifulFertilizerID,
+                BountifulBushID = BountifulBushID,
+                RapidBushFertilizerID = RapidBushFertilizerID,
+                TreeTapperFertilizerID = TreeTapperFertilizerID,
+                JojaFertilizerID = JojaFertilizerID,
+                DeluxeJojaFertilizerID = DeluxeJojaFertilizerID,
+                SecretJojaFertilizerID = SecretJojaFertilizerID,
+                OrganicFertilizerID = OrganicFertilizerID,
+                MiraculousBeveragesID = MiraculousBeveragesID,
+            };
         }
         this.Helper.Data.WriteSaveData(SavedIDKey, storedIDs);
     }
@@ -676,6 +679,9 @@ internal class ModEntry : Mod
             }
         }
     }
+
+    private void OnDayStart(object? sender, DayStartedEventArgs e)
+        => GameLocationPatches.Reinitialize();
 
     private void OnDayEnd(object? sender, DayEndingEventArgs e)
     {

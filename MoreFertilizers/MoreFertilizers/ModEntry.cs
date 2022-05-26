@@ -322,6 +322,7 @@ internal class ModEntry : Mod
 
         helper.Events.Player.Warped += this.OnPlayerWarp;
 
+        helper.Events.GameLoop.DayStarted += this.OnDayStart;
         helper.Events.GameLoop.DayEnding += this.OnDayEnd;
         helper.Events.Input.ButtonPressed += this.OnButtonPressed;
 
@@ -535,6 +536,9 @@ internal class ModEntry : Mod
             }
         }
     }
+
+    private void OnDayStart(object? sender, DayStartedEventArgs e)
+        => GameLocationPatches.Reinitialize();
 
     private void OnDayEnd(object? sender, DayEndingEventArgs e)
     {

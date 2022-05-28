@@ -464,6 +464,7 @@ internal class ModEntry : Mod
             {
                 this.Monitor.Log("Found Automate, applying compat patches", LogLevel.Info);
                 AutomateTranspiler.ApplyPatches(harmony);
+                PerformObjectDropInTranspiler.ApplyAutomateTranspiler(harmony);
             }
 
             if (this.Helper.ModRegistry.Get("Satozaki.MillerTime") is IModInfo millerTime

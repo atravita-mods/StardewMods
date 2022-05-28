@@ -72,11 +72,6 @@ internal static class CropHarvestTranspiler
                 obj.modData?.SetBool(CanPlaceHandler.Joja, true);
                 obj.MarkContextTagsDirty();
             }
-            else if (dirt.fertilizer.Value == ModEntry.MiraculousBeveragesID
-                && MiraculousFertilizerHandler.GetBeverage(obj.ParentSheetIndex) is SObject beverage)
-            {
-                Game1.createItemDebris(beverage, dirt.currentTileLocation * 64f, -1);
-            }
         }
         return obj;
     }

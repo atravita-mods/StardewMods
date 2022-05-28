@@ -22,12 +22,5 @@ internal static class VolcanoDungeonChest
                 items.Add(new SObject(fertilizerToDrop, Game1.random.Next(1, 4)));
             }
         }
-        else if (chest_random.NextDouble() < 0.5)
-        {
-            if (ModEntry.MiraculousBeveragesID != -1)
-            {
-                items.Add(new SObject(ModEntry.MiraculousBeveragesID, Game1.random.Next(2, 5)));
-            }
-        }
     }
 }

@@ -4,8 +4,6 @@
     "Requester": "Lewis",
     "Duration": "Month",
     "Repeatable": "False",
-    //because of the way Special Orders are coded, using CP's "When" field is fragile.
-    //using mail flags to delay these quests
     "RequiredTags": "mail_gotMissingStocklist",
     "OrderType": "",
     "SpecialRule": "",

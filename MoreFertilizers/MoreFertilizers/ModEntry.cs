@@ -338,6 +338,10 @@ internal class ModEntry : Mod
     private void OnAssetRequested(object? sender, AssetRequestedEventArgs e)
         => AssetEditor.Edit(e);
 
+    // Only hook if SpecialOrdersExtended is installed.
+    private void OnSpecialOrderDialogueRequested(object? sender, AssetRequestedEventArgs e)
+        => AssetEditor.EditSpecialOrderDialogue(e);
+
     private void OnButtonPressed(object? sender, ButtonPressedEventArgs e)
         => SpecialFertilizerApplication.ApplyFertilizer(e, this.Helper.Input);
 
@@ -514,6 +518,11 @@ internal class ModEntry : Mod
         this.Helper.Events.Input.ButtonPressed += this.OnButtonPressed;
 
         this.Helper.Events.Content.AssetRequested += this.OnAssetRequested;
+
+        if (this.Helper.ModRegistry.IsLoaded("atravita.SpecialOrdersExtended"))
+        {
+            this.Helper.Events.Content.AssetRequested += this.OnSpecialOrderDialogueRequested;
+        }
 
         this.ApplyPatches(new Harmony(this.ModManifest.UniqueID));
 

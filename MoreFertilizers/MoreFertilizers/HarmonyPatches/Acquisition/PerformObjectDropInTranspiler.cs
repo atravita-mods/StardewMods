@@ -209,7 +209,7 @@ internal static class PerformObjectDropInTranspiler
             jumpPoints.AddRange(new[] { jumpPoint8, jumpPoint7, jumpPoint6, jumpPoint5 });
             helper.ReplaceOperand(jumpPoints.ToArray());
 
-            helper.Print();
+            // helper.Print();
             return helper.Render();
         }
         catch (Exception ex)

@@ -8,8 +8,7 @@
 // Label stuff?
 // MAKE SURE THE LABEL COUNTS ARE RIGHT. Inserting codes should add to the Important Labels! Check **any time** labels are removed.
 // Insert should probably just have a pattern that moves over the labels....
-// Adjust matching logic to handle locals-by-type when they **don't** have a localbuilder? (ie the first four locals)
-// Handle scenario when someone adds a local in the middle? (Is that even possible?)
+// BIG TODO: Branch logic doesn't handle jump tables at all!!! Do that.
 using System.Diagnostics;
 using System.Reflection;
 using System.Reflection.Emit;
@@ -25,9 +24,6 @@ namespace AtraShared.Utils.HarmonyHelper;
 /// </summary>
 internal class ILHelper
 {
-    // Locals found via inspecting LocalBuilders.
-    private readonly SortedList<int, LocalBuilder> builtLocals = new();
-
     // All locals.
     private readonly SortedList<int, LocalVariableInfo> locals = new();
 
@@ -64,12 +60,18 @@ internal class ILHelper
         {
             if (code.operand is LocalBuilder builder)
             {
-                this.builtLocals.TryAdd(builder.LocalIndex, builder);
                 this.locals.TryAdd(builder.LocalIndex, builder); // LocalBuilder inherits from LocalVariableInfo
             }
             if (code.Branches(out Label? label))
             {
                 this.importantLabels[label!.Value]++;
+            }
+            if (code.opcode == OpCodes.Switch)
+            {
+                foreach (Label switchLabel in (Label[])code.operand)
+                {
+                    this.importantLabels[switchLabel]++;
+                }
             }
         }
     }
@@ -328,6 +330,13 @@ ContinueSearchBackwards:
             {
                 this.importantLabels[label!.Value]--;
             }
+            else if (this.Codes[i].opcode == OpCodes.Switch)
+            {
+                foreach (var switchLabel in (Label[])this.Codes[i].operand)
+                {
+                    this.importantLabels[switchLabel]--;
+                }
+            }
         }
         this.importantLabels.RemoveZeros();
         for (int i = this.Pointer; i < this.Pointer + count; i++)
@@ -482,6 +491,13 @@ ContinueSearchBackwards:
             {
                 this.importantLabels[currlabel!.Value]--;
             }
+            else if (this.CurrentInstruction.opcode == OpCodes.Switch)
+            {
+                foreach (var switchLabel in (Label[])this.CurrentInstruction.operand)
+                {
+                    this.importantLabels[switchLabel]--;
+                }
+            }
             this.importantLabels.RemoveZeros();
             if (this.CurrentInstruction.labels.Intersect(this.importantLabels.Keys).Any())
             {
@@ -497,6 +513,13 @@ ContinueSearchBackwards:
         if (instruction.Branches(out Label? label))
         {
             this.importantLabels[label!.Value]++;
+        }
+        else if (this.CurrentInstruction.opcode == OpCodes.Switch)
+        {
+            foreach (var switchLabel in (Label[])this.CurrentInstruction.operand)
+            {
+                this.importantLabels[switchLabel]++;
+            }
         }
         this.CurrentInstruction = instruction;
         return this;
@@ -524,9 +547,24 @@ ContinueSearchBackwards:
         {
             this.importantLabels[label!.Value]--;
         }
+        else if (this.CurrentInstruction.opcode == OpCodes.Switch)
+        {
+            foreach (var switchLabel in (Label[])this.CurrentInstruction.operand)
+            {
+                this.importantLabels[switchLabel]--;
+            }
+        }
+
         if (operand is Label newlabel)
         {
             this.importantLabels[newlabel]++;
+        }
+        else if (operand is Label[] newlabels)
+        {
+            foreach (var newSwitchLabel in newlabels)
+            {
+                this.importantLabels[newSwitchLabel]++;
+            }
         }
         this.importantLabels.RemoveZeros();
         this.CurrentInstruction.operand = operand;
@@ -707,7 +745,6 @@ ContinueSearchBackwards:
     internal ILHelper DeclareLocal(Type type, out LocalBuilder local, bool pinned = false)
     {
         local = this.Generator.DeclareLocal(type, pinned);
-        this.builtLocals.Add(local.LocalIndex, local);
         this.locals.Add(local.LocalIndex, local);
         return this;
     }

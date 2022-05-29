@@ -41,7 +41,7 @@ internal static class GameLocationExtensions
                 }
                 catch (Exception ex)
                 {
-                    monitor.Log($"No festival file found for today....did someone screw with the time?\n\n{ex}", LogLevel.Debug);
+                    monitor.Log($"No festival file found for today....did someone screw with the time?\n\n{ex}", LogLevel.Warn);
                     return false;
                 }
                 if (festivalData.TryGetValue("conditions", out string? val))

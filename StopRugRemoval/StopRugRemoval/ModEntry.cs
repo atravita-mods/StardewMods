@@ -157,14 +157,18 @@ public class ModEntry : Mod
 
     private void OnGameLaunch(object? sender, GameLaunchedEventArgs e)
     {
-        PlantGrassUnder.GetSmartBuildingBuildMode(this.Helper.ModRegistry);
-        this.ApplyLatePatches(new Harmony(this.ModManifest.UniqueID + "+latepatches"));
+        Task task = Task.Run(() =>
+        {
+            PlantGrassUnder.GetSmartBuildingBuildMode(this.Helper.ModRegistry);
+            this.ApplyLatePatches(new Harmony(this.ModManifest.UniqueID + "+latepatches"));
+        });
 
         GMCM = new(this.Monitor, this.Helper.Translation, this.Helper.ModRegistry, this.ModManifest);
         if (GMCM.TryGetAPI())
         {
             this.SetUpBasicConfig();
         }
+        task.Wait();
     }
 
     private void ReturnedToTitle(object? sender, ReturnedToTitleEventArgs e)
@@ -193,10 +197,10 @@ public class ModEntry : Mod
 
         // Have to wait until here to populate locations
         Config.PrePopulateLocations();
-        this.Helper.WriteConfig(Config);
+        Task write = Task.Run(() => this.Helper.WriteConfig(Config));
 
         this.migrator = new(this.ModManifest, this.Helper, this.Monitor);
-        this.migrator.ReadVersionInfo();
+        Task read = Task.Run(() => this.migrator.ReadVersionInfo());
 
         this.Helper.Events.GameLoop.Saved += this.WriteMigrationData;
 
@@ -213,9 +217,12 @@ public class ModEntry : Mod
                     setValue: (value) => Config.SafeLocationMap[loc.NameOrUniqueName] = value);
             }
         }
+
+        Task.WaitAll(write, read);
+
         if (Context.IsMainPlayer)
         {
-            VolcanoChestAdjuster.LoadData(this.Helper.Data, this.Helper.Multiplayer);
+            Task task = Task.Run(() => VolcanoChestAdjuster.LoadData(this.Helper.Data, this.Helper.Multiplayer));
 
             // Make an attempt to clear all nulls from chests.
             Utility.ForAllLocations(action: (GameLocation loc) =>
@@ -228,6 +235,8 @@ public class ModEntry : Mod
                     }
                 }
             });
+
+            task.Wait();
         }
     }
 

@@ -89,9 +89,11 @@ internal static class FishFoodHandler
             }
         }
         UnsavedLocHandler = newHandler;
-        BroadcastHandler(multiplayer);
 
-        helper.WriteSaveData(FISHFOODSAVESTRING, newHandler);
+        Task broadcast = Task.Run(() => BroadcastHandler(multiplayer));
+
+        Task write = Task.Run(() => helper.WriteSaveData(FISHFOODSAVESTRING, newHandler));
+
         Utility.ForAllLocations((GameLocation loc) =>
         {
             if (loc.modData?.GetInt(CanPlaceHandler.FishFood) is int value)
@@ -100,6 +102,8 @@ internal static class FishFoodHandler
                 loc.modData.SetInt(CanPlaceHandler.FishFood, Math.Max(value - 1, 0), defaultVal: 0);
             }
         });
+
+        Task.WaitAll(broadcast, write);
     }
 
     /// <summary>

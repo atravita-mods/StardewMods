@@ -70,7 +70,8 @@ internal static class PerformObjectDropInTranspiler
             {
                 new(OpCodes.Switch),
                 new(OpCodes.Br_S),
-            }).Push()
+            })
+            .Push()
             .Advance(1)
             .StoreBranchDest()
             .FindNext(new CodeInstructionWrapper[]
@@ -153,7 +154,8 @@ internal static class PerformObjectDropInTranspiler
             {
                 new(OpCodes.Switch),
                 new(OpCodes.Br_S),
-            }).Push()
+            })
+            .Push()
             .Advance(1)
             .StoreBranchDest()
             .FindNext(new CodeInstructionWrapper[]

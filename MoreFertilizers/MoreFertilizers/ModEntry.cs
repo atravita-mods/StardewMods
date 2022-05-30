@@ -491,16 +491,13 @@ internal class ModEntry : Mod
     {
         {
             IntegrationHelper helper = new(this.Monitor, this.Helper.Translation, this.Helper.ModRegistry, LogLevel.Warn);
-            if (helper.TryGetAPI("spacechase0.JsonAssets", "1.10.3", out jsonAssets))
-            {
-                jsonAssets.LoadAssets(Path.Combine(this.Helper.DirectoryPath, "assets", "json-assets"), this.Helper.Translation);
-                jsonAssets.IdsFixed += this.JsonAssets_IdsFixed;
-            }
-            else
+            if (!helper.TryGetAPI("spacechase0.JsonAssets", "1.10.3", out jsonAssets))
             {
                 this.Monitor.Log("Packs could not be loaded! This mod will probably not function.", LogLevel.Error);
                 return;
             }
+            jsonAssets.LoadAssets(Path.Combine(this.Helper.DirectoryPath, "assets", "json-assets"), this.Helper.Translation);
+            jsonAssets.IdsFixed += this.JsonAssets_IdsFixed;
         }
 
         // Only register for events if JA pack loading was successful.
@@ -524,9 +521,8 @@ internal class ModEntry : Mod
             this.Helper.Events.Content.AssetRequested += this.OnSpecialOrderDialogueRequested;
         }
 
-        this.ApplyPatches(new Harmony(this.ModManifest.UniqueID));
-
         // Handle optional integrations.
+        Task task = Task.Run(() =>
         {
             GMCMHelper helper = new(this.Monitor, this.Helper.Translation, this.Helper.ModRegistry, this.ModManifest);
             if (helper.TryGetAPI())
@@ -549,7 +545,10 @@ internal class ModEntry : Mod
                     }
                 }
             }
-        }
+        });
+
+        this.ApplyPatches(new Harmony(this.ModManifest.UniqueID));
+        task.Wait();
         {
             IntegrationHelper helper = new(this.Monitor, this.Helper.Translation, this.Helper.ModRegistry, LogLevel.Trace);
             if (helper.TryGetAPI("TehPers.FishingOverhaul", "3.2.7", out ISimplifiedFishingApi? fishingAPI))

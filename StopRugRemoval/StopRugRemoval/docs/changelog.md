@@ -8,6 +8,7 @@
 
 #### Version 1.0.11
 * Fix issues with the night market warp home.
+* Some internal improvements.
 
 #### Version 1.0.10
 * Bugfixes

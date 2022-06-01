@@ -419,6 +419,16 @@ internal class ModEntry : Mod
     internal static IMultiplayerHelper MultiplayerHelper { get; private set; }
 
     /// <summary>
+    /// Gets the mod content helper for this mod.
+    /// </summary>
+    internal static IModContentHelper ModContentHelper { get; private set; }
+
+    /// <summary>
+    /// Gets the location of this mod.
+    /// </summary>
+    internal static string DIRPATH { get; private set; }
+
+    /// <summary>
     /// Gets this mod's uniqueID.
     /// </summary>
     internal static string UNIQUEID { get; private set; }
@@ -434,25 +444,13 @@ internal class ModEntry : Mod
     {
         I18n.Init(this.Helper.Translation);
         MultiplayerHelper = this.Helper.Multiplayer;
+        ModContentHelper = this.Helper.ModContent;
         ModMonitor = this.Monitor;
+        DIRPATH = this.Helper.DirectoryPath;
         UNIQUEID = this.ModManifest.UniqueID;
         Config = AtraUtils.GetConfigOrDefault<ModConfig>(helper, this.Monitor);
 
         helper.Events.GameLoop.GameLaunched += this.OnGameLaunched;
-        helper.Events.GameLoop.SaveLoaded += this.OnSaveLoaded;
-        helper.Events.GameLoop.Saving += this.OnSaving;
-        helper.Events.GameLoop.ReturnedToTitle += this.OnReturnedToTitle;
-
-        helper.Events.Multiplayer.ModMessageReceived += this.Multiplayer_ModMessageReceived;
-        helper.Events.Multiplayer.PeerConnected += this.Multiplayer_PeerConnected;
-
-        helper.Events.Player.Warped += this.OnPlayerWarp;
-
-        helper.Events.GameLoop.DayStarted += this.OnDayStart;
-        helper.Events.GameLoop.DayEnding += this.OnDayEnd;
-        helper.Events.Input.ButtonPressed += this.OnButtonPressed;
-
-        helper.Events.Content.AssetRequested += this.OnAssetRequested;
 
 #if DEBUG
         helper.Events.Input.ButtonPressed += this.DebugOutput;
@@ -467,6 +465,10 @@ internal class ModEntry : Mod
         => AssetEditor.Edit(e);
 
     [EventPriority(EventPriority.High)]
+    // Only hook if SpecialOrdersExtended is installed.
+    private void OnSpecialOrderDialogueRequested(object? sender, AssetRequestedEventArgs e)
+        => AssetEditor.EditSpecialOrderDialogue(e);
+
     private void OnButtonPressed(object? sender, ButtonPressedEventArgs e)
         => SpecialFertilizerApplication.ApplyFertilizer(e, this.Helper.Input);
 
@@ -607,6 +609,7 @@ internal class ModEntry : Mod
             {
                 this.Monitor.Log("Found Automate, applying compat patches", LogLevel.Info);
                 AutomateTranspiler.ApplyPatches(harmony);
+                PerformObjectDropInTranspiler.ApplyAutomateTranspiler(harmony);
             }
 
             if (this.Helper.ModRegistry.Get("Satozaki.MillerTime") is IModInfo millerTime
@@ -628,7 +631,40 @@ internal class ModEntry : Mod
 
     private void OnGameLaunched(object? sender, GameLaunchedEventArgs e)
     {
-        this.ApplyPatches(new Harmony(this.ModManifest.UniqueID));
+        {
+            IntegrationHelper helper = new(this.Monitor, this.Helper.Translation, this.Helper.ModRegistry, LogLevel.Warn);
+            if (!helper.TryGetAPI("spacechase0.JsonAssets", "1.10.3", out jsonAssets))
+            {
+                this.Monitor.Log("Packs could not be loaded! This mod will probably not function.", LogLevel.Error);
+                return;
+            }
+            jsonAssets.LoadAssets(Path.Combine(this.Helper.DirectoryPath, "assets", "json-assets"), this.Helper.Translation);
+            jsonAssets.IdsFixed += this.JsonAssets_IdsFixed;
+        }
+
+        // Only register for events if JA pack loading was successful.
+        this.Helper.Events.GameLoop.SaveLoaded += this.OnSaveLoaded;
+        this.Helper.Events.GameLoop.Saving += this.OnSaving;
+        this.Helper.Events.GameLoop.ReturnedToTitle += this.OnReturnedToTitle;
+
+        this.Helper.Events.Multiplayer.ModMessageReceived += this.Multiplayer_ModMessageReceived;
+        this.Helper.Events.Multiplayer.PeerConnected += this.Multiplayer_PeerConnected;
+
+        this.Helper.Events.Player.Warped += this.OnPlayerWarp;
+
+        this.Helper.Events.GameLoop.DayStarted += this.OnDayStart;
+        this.Helper.Events.GameLoop.DayEnding += this.OnDayEnd;
+        this.Helper.Events.Input.ButtonPressed += this.OnButtonPressed;
+
+        this.Helper.Events.Content.AssetRequested += this.OnAssetRequested;
+
+        if (this.Helper.ModRegistry.IsLoaded("atravita.SpecialOrdersExtended"))
+        {
+            this.Helper.Events.Content.AssetRequested += this.OnSpecialOrderDialogueRequested;
+        }
+
+        // Handle optional integrations.
+        Task task = Task.Run(() =>
         {
             GMCMHelper helper = new(this.Monitor, this.Helper.Translation, this.Helper.ModRegistry, this.ModManifest);
             if (helper.TryGetAPI())
@@ -651,19 +687,10 @@ internal class ModEntry : Mod
                     }
                 }
             }
-        }
-        {
-            IntegrationHelper helper = new(this.Monitor, this.Helper.Translation, this.Helper.ModRegistry, LogLevel.Warn);
-            if (helper.TryGetAPI("spacechase0.JsonAssets", "1.10.3", out jsonAssets))
-            {
-                jsonAssets.LoadAssets(Path.Combine(this.Helper.DirectoryPath, "assets", "json-assets"), this.Helper.Translation);
-                jsonAssets.IdsFixed += this.JsonAssets_IdsFixed;
-            }
-            else
-            {
-                this.Monitor.Log("Packs could not be loaded! This mod will probably not function.", LogLevel.Error);
-            }
-        }
+        });
+
+        this.ApplyPatches(new Harmony(this.ModManifest.UniqueID));
+        task.Wait();
         {
             IntegrationHelper helper = new(this.Monitor, this.Helper.Translation, this.Helper.ModRegistry, LogLevel.Trace);
             if (helper.TryGetAPI("TehPers.FishingOverhaul", "3.2.7", out ISimplifiedFishingApi? fishingAPI))

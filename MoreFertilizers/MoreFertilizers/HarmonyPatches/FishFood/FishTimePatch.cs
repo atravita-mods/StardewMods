@@ -59,7 +59,7 @@ internal static class FishTimePatch
         }
         catch (Exception ex)
         {
-            ModEntry.ModMonitor.Log($"Mod crashed while transpiling Caldera.GetFish:\n\n{ex}", LogLevel.Error);
+            ModEntry.ModMonitor.Log($"Mod crashed while transpiling time to bite for fish:\n\n{ex}", LogLevel.Error);
         }
         return null;
     }

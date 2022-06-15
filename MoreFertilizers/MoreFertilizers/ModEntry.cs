@@ -214,7 +214,7 @@ internal class ModEntry : Mod
     {
         get
         {
-            if (organicFertilizerID != -1)
+            if (organicFertilizerID == -1)
             {
                 organicFertilizerID = jsonAssets?.GetObjectId("Organic Fertilizer - More Fertilizers") ?? -1;
             }

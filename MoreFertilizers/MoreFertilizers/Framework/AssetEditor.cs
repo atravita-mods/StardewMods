@@ -48,6 +48,11 @@ internal static class AssetEditor
         }
     }
 
+    /// <summary>
+    /// Handles editing special order dialogue. This is seperate so it's only
+    /// registed if necessary.
+    /// </summary>
+    /// <param name="e">event args.</param>
     internal static void EditSpecialOrderDialogue(AssetRequestedEventArgs e)
     {
         if (e.NameWithoutLocale.IsEquivalentTo(LEWIS_DIALOGUE))

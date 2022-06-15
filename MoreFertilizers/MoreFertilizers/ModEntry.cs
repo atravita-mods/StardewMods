@@ -65,15 +65,11 @@ internal class ModEntry : Mod
     {
         get
         {
-            if (fruitTreeFertilizerID != -1)
-            {
-                return fruitTreeFertilizerID;
-            }
-            else
+            if (fruitTreeFertilizerID == -1)
             {
                 fruitTreeFertilizerID = jsonAssets?.GetObjectId("Fruit Tree Fertilizer") ?? -1;
-                return fruitTreeFertilizerID;
             }
+            return fruitTreeFertilizerID;
         }
     }
 
@@ -86,15 +82,11 @@ internal class ModEntry : Mod
     {
         get
         {
-            if (deluxeFruitTreeFertilizerID != -1)
-            {
-                return deluxeFruitTreeFertilizerID;
-            }
-            else
+            if (deluxeFruitTreeFertilizerID == -1)
             {
                 deluxeFruitTreeFertilizerID = jsonAssets?.GetObjectId("Deluxe Fruit Tree Fertilizer") ?? -1;
-                return deluxeFruitTreeFertilizerID;
             }
+            return deluxeFruitTreeFertilizerID;
         }
     }
 
@@ -107,15 +99,11 @@ internal class ModEntry : Mod
     {
         get
         {
-            if (fishfoodID != -1)
-            {
-                return fishfoodID;
-            }
-            else
+            if (fishfoodID == -1)
             {
                 fishfoodID = jsonAssets?.GetObjectId("Fish Food Fertilizer") ?? -1;
-                return fishfoodID;
             }
+            return fishfoodID;
         }
     }
 
@@ -128,15 +116,11 @@ internal class ModEntry : Mod
     {
         get
         {
-            if (deluxeFishFoodID != -1)
-            {
-                return deluxeFishFoodID;
-            }
-            else
+            if (deluxeFishFoodID == -1)
             {
                 deluxeFishFoodID = jsonAssets?.GetObjectId("Deluxe Fish Food Fertilizer") ?? -1;
-                return deluxeFishFoodID;
             }
+            return deluxeFishFoodID;
         }
     }
 
@@ -149,15 +133,11 @@ internal class ModEntry : Mod
     {
         get
         {
-            if (domesticatedFishFoodID != -1)
-            {
-                return domesticatedFishFoodID;
-            }
-            else
+            if (domesticatedFishFoodID == -1)
             {
                 domesticatedFishFoodID = jsonAssets?.GetObjectId("Domesticated Fish Food Fertilizer") ?? -1;
-                return domesticatedFishFoodID;
             }
+            return domesticatedFishFoodID;
         }
     }
 
@@ -170,15 +150,11 @@ internal class ModEntry : Mod
     {
         get
         {
-            if (paddyCropFertilizerID != -1)
-            {
-                return paddyCropFertilizerID;
-            }
-            else
+            if (paddyCropFertilizerID == -1)
             {
                 paddyCropFertilizerID = jsonAssets?.GetObjectId("Waterlogged Fertilizer") ?? -1;
-                return paddyCropFertilizerID;
             }
+            return paddyCropFertilizerID;
         }
     }
 
@@ -191,15 +167,11 @@ internal class ModEntry : Mod
     {
         get
         {
-            if (luckyFertilizerID != -1)
-            {
-                return luckyFertilizerID;
-            }
-            else
+            if (luckyFertilizerID == -1)
             {
                 luckyFertilizerID = jsonAssets?.GetObjectId("Maebys Good-Luck Fertilizer") ?? -1;
-                return luckyFertilizerID;
             }
+            return luckyFertilizerID;
         }
     }
 
@@ -212,15 +184,11 @@ internal class ModEntry : Mod
     {
         get
         {
-            if (bountifulFertilizerID != -1)
-            {
-                return bountifulFertilizerID;
-            }
-            else
+            if (bountifulFertilizerID == -1)
             {
                 bountifulFertilizerID = jsonAssets?.GetObjectId("Bountiful Fertilizer") ?? -1;
-                return bountifulFertilizerID;
             }
+            return bountifulFertilizerID;
         }
     }
 
@@ -296,15 +264,11 @@ internal class ModEntry : Mod
     {
         get
         {
-            if (jojaFertilizerID != -1)
-            {
-                return jojaFertilizerID;
-            }
-            else
+            if (jojaFertilizerID == -1)
             {
                 jojaFertilizerID = jsonAssets?.GetObjectId("Joja Fertilizer - More Fertilizers") ?? -1;
-                return jojaFertilizerID;
             }
+            return jojaFertilizerID;
         }
     }
 
@@ -317,15 +281,11 @@ internal class ModEntry : Mod
     {
         get
         {
-            if (deluxeJojaFertilizerID != -1)
-            {
-                return deluxeJojaFertilizerID;
-            }
-            else
+            if (deluxeJojaFertilizerID == -1)
             {
                 deluxeJojaFertilizerID = jsonAssets?.GetObjectId("Deluxe Joja Fertilizer - More Fertilizers") ?? -1;
-                return deluxeJojaFertilizerID;
             }
+            return deluxeJojaFertilizerID;
         }
     }
 
@@ -361,13 +321,9 @@ internal class ModEntry : Mod
         {
             if (organicFertilizerID != -1)
             {
-                return organicFertilizerID;
-            }
-            else
-            {
                 organicFertilizerID = jsonAssets?.GetObjectId("Organic Fertilizer - More Fertilizers") ?? -1;
-                return organicFertilizerID;
             }
+            return organicFertilizerID;
         }
     }
 
@@ -503,6 +459,21 @@ internal class ModEntry : Mod
     [EventPriority(EventPriority.High)]
     private void OnReturnedToTitle(object? sender, ReturnedToTitleEventArgs e)
     {
+        // JA will reassign us IDs when it returns to title.
+        // (I'm not quite sure why?)
+        // But we need to drop our IDs too.
+        fruitTreeFertilizerID = -1;
+        deluxeFruitTreeFertilizerID = -1;
+        fishfoodID = -1;
+        deluxeFishFoodID = -1;
+        domesticatedFishFoodID = -1;
+        paddyCropFertilizerID = -1;
+        luckyFertilizerID = -1;
+        bountifulFertilizerID = -1;
+        jojaFertilizerID = -1;
+        deluxeJojaFertilizerID = -1;
+        organicFertilizerID = -1;
+
         PlantableFertilizerIDs.Clear();
         SpecialFertilizerIDs.Clear();
     }

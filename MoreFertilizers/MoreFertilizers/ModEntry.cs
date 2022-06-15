@@ -376,6 +376,21 @@ internal class ModEntry : Mod
     [EventPriority(EventPriority.High)]
     private void OnReturnedToTitle(object? sender, ReturnedToTitleEventArgs e)
     {
+        // JA will reassign us IDs when it returns to title.
+        // (I'm not quite sure why?)
+        // But we need to drop our IDs too.
+        fruitTreeFertilizerID = -1;
+        deluxeFruitTreeFertilizerID = -1;
+        fishfoodID = -1;
+        deluxeFishFoodID = -1;
+        domesticatedFishFoodID = -1;
+        paddyCropFertilizerID = -1;
+        luckyFertilizerID = -1;
+        bountifulFertilizerID = -1;
+        jojaFertilizerID = -1;
+        deluxeJojaFertilizerID = -1;
+        organicFertilizerID = -1;
+
         PlantableFertilizerIDs.Clear();
         SpecialFertilizerIDs.Clear();
     }

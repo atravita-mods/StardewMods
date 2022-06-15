@@ -12,13 +12,14 @@ namespace MoreFertilizers.HarmonyPatches.Acquisition;
 [HarmonyPatch(typeof(GameLocation))]
 internal static class GameLocationPatches
 {
-    private const int MIN_MONSTER_HEALTH = 35;
-    private static readonly PerScreen<double> DropChance = new(() => 0.3);
+    private const int MIN_MONSTER_HEALTH = 40;
+    private const double DEFAULT_DROP_CHANCE = 0.25;
+    private static readonly PerScreen<double> DropChance = new(() => DEFAULT_DROP_CHANCE);
 
     /// <summary>
     /// Resets the dropchance, once per day.
     /// </summary>
-    internal static void Reinitialize() => DropChance.Value = 0.3;
+    internal static void Reinitialize() => DropChance.Value = DEFAULT_DROP_CHANCE;
 
     [HarmonyPatch(nameof(GameLocation.monsterDrop))]
     [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Harmony Convention")]

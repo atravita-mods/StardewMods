@@ -1,6 +1,7 @@
 ﻿Changelog
 =============
 
+
 #### Version 0.2.0 TODO items
 * Bush fertilizers
     - Handle adding to shops and other aquisition methods.
@@ -18,8 +19,13 @@
 
 * Adjusted previous fertilizers:
     - Waterlogged now increases the growth speed of paddy crops a little.
-    - Fish food reduces fish bite time by a tad.
-    - Monsters drop less fertilizer on the farm.
+
+#### Version 0.1.7
+* Some efficiency improvements
+* Drop IDs when returning to title, because JA does also.
+* A bit of rebalancing - fish food now slightly reduces time to bite, and the drop rates of fertilizers on the farm have been adjusted.
+* Bone mill now produces fertilizers when Automate is installed.
+* Volcano dungeon chests may now contain fertilizers.
 
 #### Version 0.1.6
 * Organic seeds now apply the organic fertilizer.

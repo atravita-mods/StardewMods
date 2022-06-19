@@ -571,6 +571,8 @@ internal class ModEntry : Mod
                 this.Monitor.Log("Found Miller Time, applying compat patches", LogLevel.Info);
                 MillerTimeDayUpdateTranspiler.ApplyPatches(harmony);
             }
+
+            ExtendedToolsMods.ApplyPatches(harmony);
         }
         catch (Exception ex)
         {

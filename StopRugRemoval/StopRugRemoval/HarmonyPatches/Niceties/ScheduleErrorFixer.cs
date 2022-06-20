@@ -22,7 +22,12 @@ internal static class ScheduleErrorFixer
             return;
         }
         ModEntry.ModMonitor.Log($"{__instance.Name} seems to have a null current location, attempting to fix. Please inform their author! The current day is {SDate.Now()}, their attempted schedule string was {rawData}", LogLevel.Info);
-        if (__instance.DefaultMap is not null && Game1.getLocationFromName(__instance.DefaultMap) is GameLocation location)
+        if (__instance.Name is "Leo" && Game1.MasterPlayer.hasOrWillReceiveMail("leoMoved") && Game1.getLocationFromName("LeoTreeHouse") is GameLocation leohouse)
+        {
+            __instance.currentLocation = leohouse;
+            __instance.DefaultPosition = new Vector2(5f, 4f) * 64f;
+        }
+        else if (__instance.DefaultMap is not null && Game1.getLocationFromName(__instance.DefaultMap) is GameLocation location)
         { // Attempt to first just assign their position from their default map.
             __instance.currentLocation = location;
         }

@@ -2,6 +2,7 @@
 
 using System.Reflection;
 using System.Reflection.Emit;
+using AtraBase.Toolkit;
 using HarmonyLib;
 
 namespace AtraShared.Utils.HarmonyHelper;

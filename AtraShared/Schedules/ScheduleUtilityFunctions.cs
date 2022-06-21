@@ -149,7 +149,7 @@ public class ScheduleUtilityFunctions
                 // NOT friendship NPCName heartLevel
                 if (command[1].Equals("friendship", StringComparison.Ordinal))
                 {
-                    int hearts = Utility.GetAllPlayerFriendshipLevel(Game1.getCharacterFromName(command[2])) / 250;
+                    int hearts = Utility.GetAllPlayerFriendshipLevel(Game1.getCharacterFromName(command[2], mustBeVillager: true)) / 250;
                     if (!int.TryParse(command[3], out int heartLevel))
                     {
                         // ill formed friendship check string, warn

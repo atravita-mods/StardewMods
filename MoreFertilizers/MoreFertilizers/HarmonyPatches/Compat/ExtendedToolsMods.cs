@@ -1,9 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Reflection;
+using AtraShared.Utils.Extensions;
 using HarmonyLib;
 
 namespace MoreFertilizers.HarmonyPatches.Compat;
@@ -16,6 +12,10 @@ namespace MoreFertilizers.HarmonyPatches.Compat;
 /// <remarks>This is why atra doesn't like prefixing false unnecessarily, guys.</remarks>
 internal static class ExtendedToolsMods
 {
+    /// <summary>
+    /// Applies patches against Prismatic Tools and Radioactive Tools.
+    /// </summary>
+    /// <param name="harmony">My harmony instance.</param>
     internal static void ApplyPatches(Harmony harmony)
     {
         HarmonyMethod prefix = new(typeof(ExtendedToolsMods), nameof(Prefix));
@@ -38,9 +38,10 @@ internal static class ExtendedToolsMods
         }
     }
 
+    [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Harmony convention.")]
     private static bool Prefix(ref bool __result)
     {
-        ModEntry.ModMonitor.Log("Disabling addCrows prefix for Prismatic Tools and Radioactive tools");
+        ModEntry.ModMonitor.DebugOnlyLog("Disabling addCrows prefix for Prismatic Tools and Radioactive tools", LogLevel.Info);
         __result = true;
         return false;
     }

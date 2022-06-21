@@ -35,6 +35,37 @@ internal class ModEntry : Mod
 
 #pragma warning disable SA1204 // Static elements should appear before instance elements. Keep backing fields near properties.
 #pragma warning disable SA1201 // Elements should appear in the correct order
+    private static int prismaticFertilizerID = -1;
+
+    internal static int PrismaticFertilizerID
+    {
+        get
+        {
+            if (prismaticFertilizerID == -1)
+            {
+                prismaticFertilizerID = jsonAssets?.GetObjectId("Prismatic Fertilizer - More Fertilizers") ?? -1;
+            }
+            return prismaticFertilizerID;
+        }
+    }
+
+    private static int everlastingFertilizerID = -1;
+
+    /// <summary>
+    /// Gets the integer ID of the Everlasting Fertilizer. Returns -1 if not found/not loaded yet.
+    /// </summary>
+    internal static int EverlastingFertilizerID
+    {
+        get
+        {
+            if (everlastingFertilizerID == -1)
+            {
+                everlastingFertilizerID = jsonAssets?.GetObjectId("Everlasting Fertilizer - More Fertilizers") ?? -1;
+            }
+            return everlastingFertilizerID;
+        }
+    }
+
     private static int wisdomFertilizerID = -1;
 
     /// <summary>
@@ -438,6 +469,8 @@ internal class ModEntry : Mod
         // JA will reassign us IDs when it returns to title.
         // (I'm not quite sure why?)
         // But we need to drop our IDs too.
+        prismaticFertilizerID = -1;
+        everlastingFertilizerID = -1;
         wisdomFertilizerID = -1;
         fruitTreeFertilizerID = -1;
         deluxeFruitTreeFertilizerID = -1;
@@ -477,6 +510,8 @@ internal class ModEntry : Mod
         {
             storedIDs = new()
             {
+                PrismaticFertilizerID = PrismaticFertilizerID,
+                EverlastingFertilizerID = EverlastingFertilizerID,
                 WisdomFertilizerID = WisdomFertilizerID,
                 FruitTreeFertilizerID = FruitTreeFertilizerID,
                 DeluxeFruitTreeFertilizerID = DeluxeFruitTreeFertilizerID,
@@ -723,6 +758,16 @@ internal class ModEntry : Mod
         }
 
         // Plantable ones begin here.
+        if (PrismaticFertilizerID != -1)
+        {
+            PlantableFertilizerIDs.Add(PrismaticFertilizerID);
+        }
+
+        if (EverlastingFertilizerID != -1)
+        {
+            PlantableFertilizerIDs.Add(EverlastingFertilizerID);
+        }
+
         if (WisdomFertilizerID != -1)
         {
             PlantableFertilizerIDs.Add(WisdomFertilizerID);
@@ -791,6 +836,34 @@ internal class ModEntry : Mod
         Dictionary<int, int> idMapping = new();
 
         // Have to update the planted ones.
+        if (PrismaticFertilizerID != -1
+            && storedIDs.PrismaticFertilizerID != -1
+            && PrismaticFertilizerID != storedIDs.PrismaticFertilizerID)
+        {
+            // special case! Update the museum reward tracking too...
+            string oldkey = $"museumCollectedRewardO_{storedIDs.PrismaticFertilizerID}_1";
+            string newkey = $"museumCollectedRewardO_{PrismaticFertilizerID}_1";
+
+            foreach (Farmer player in Game1.getAllFarmers())
+            {
+                if (player.mailReceived.Remove(oldkey))
+                {
+                    player.mailReceived.Add(newkey);
+                }
+            }
+
+            idMapping.Add(storedIDs.PrismaticFertilizerID, PrismaticFertilizerID);
+            storedIDs.PrismaticFertilizerID = PrismaticFertilizerID;
+        }
+
+        if (EverlastingFertilizerID != -1
+            && storedIDs.EverlastingFertilizerID != -1
+            && EverlastingFertilizerID != storedIDs.EverlastingFertilizerID)
+        {
+            idMapping.Add(storedIDs.EverlastingFertilizerID, EverlastingFertilizerID);
+            storedIDs.EverlastingFertilizerID = EverlastingFertilizerID;
+        }
+
         if (WisdomFertilizerID != -1
             && storedIDs.WisdomFertilizerID != -1
             && storedIDs.WisdomFertilizerID != WisdomFertilizerID)

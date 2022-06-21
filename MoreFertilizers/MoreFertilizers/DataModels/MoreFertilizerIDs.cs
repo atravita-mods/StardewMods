@@ -13,6 +13,16 @@ public class MoreFertilizerIDs
     }
 
     /// <summary>
+    /// Gets or sets the ID number to store for the prismatic fertilizer.
+    /// </summary>
+    public int PrismaticFertilizerID { get; set; } = -1;
+
+    /// <summary>
+    /// Gets or sets the ID number to store for the everlasting fertilizer.
+    /// </summary>
+    public int EverlastingFertilizerID { get; set; } = -1;
+
+    /// <summary>
     /// Gets or sets the ID number to store for the wisdom fertilizer.
     /// </summary>
     public int WisdomFertilizerID { get; set; } = -1;

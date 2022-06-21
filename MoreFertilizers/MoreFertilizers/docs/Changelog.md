@@ -9,6 +9,7 @@
     - Crops
     - Fruit trees
 * Acquisition: maybee have fertilizer appear in big slimes outside the mines?
+* Items and all the implementation for the prismatic and everlasting fertilizers (don't forget that JA and Winter Star also transpile in this space)
 
 #### Version 0.2.0
 * Added new fertilizers:

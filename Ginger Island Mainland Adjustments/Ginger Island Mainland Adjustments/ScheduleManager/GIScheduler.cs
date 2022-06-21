@@ -156,15 +156,24 @@ internal static class GIScheduler
             schedules,
             (kvp) =>
             {
-                Globals.ModMonitor.Log($"Calculated island schedule for {kvp.Key.Name}");
-                kvp.Key.islandScheduleName.Value = "island";
-                ScheduleUtilities.ParseMasterScheduleAdjustedForChild2NPC(kvp.Key, kvp.Value);
+                if (ScheduleUtilities.ParseMasterScheduleAdjustedForChild2NPC(kvp.Key, kvp.Value))
+                {
+                    Globals.ModMonitor.Log($"Calculated island schedule for {kvp.Key.Name}");
+                    kvp.Key.islandScheduleName.Value = "island";
+                }
+                else
+                {
+                    kvp.Key.islandScheduleName.Value = string.Empty;
+                }
             });
 
         foreach (NPC visitor in schedules.Keys)
         {
-            Game1.netWorldState.Value.IslandVisitors[visitor.Name] = true;
-            ConsoleCommands.IslandSchedules[visitor.Name] = schedules[visitor];
+            if (visitor.islandScheduleName.Value is "island")
+            {
+                Game1.netWorldState.Value.IslandVisitors[visitor.Name] = true;
+                ConsoleCommands.IslandSchedules[visitor.Name] = schedules[visitor];
+            }
         }
 
         IslandSouthPatches.ClearCache();
@@ -218,11 +227,15 @@ internal static class GIScheduler
         List<NPC> visitors = new();
         HashSet<NPC> valid_visitors = new();
 
-        foreach (NPC npc in Utility.getAllCharacters())
+        // For some reason, Utility.GetAllCharacters searches the farm too.
+        foreach (GameLocation loc in Game1.locations)
         {
-            if (IslandSouth.CanVisitIslandToday(npc) && !explorers.Contains(npc))
+            foreach (NPC npc in loc.characters)
             {
-                valid_visitors.Add(npc);
+                if (IslandSouth.CanVisitIslandToday(npc) && !explorers.Contains(npc))
+                {
+                    valid_visitors.Add(npc);
+                }
             }
         }
 
@@ -230,7 +243,7 @@ internal static class GIScheduler
         {
             foreach (string npcname in Globals.SaveDataModel.NPCsForTomorrow)
             {
-                NPC npc = Game1.getCharacterFromName(npcname);
+                NPC npc = Game1.getCharacterFromName(npcname, mustBeVillager: true);
                 visitors.Add(npc);
                 if (!valid_visitors.Contains(npc))
                 {

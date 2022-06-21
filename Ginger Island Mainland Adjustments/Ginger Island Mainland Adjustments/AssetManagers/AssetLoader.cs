@@ -109,7 +109,7 @@ internal static class AssetLoader
             {
                 continue;
             }
-            if (Game1.getCharacterFromName(specialChar) is NPC npc)
+            if (Game1.getCharacterFromName(specialChar, mustBeVillager: true) is NPC npc)
             {
                 specialCharacters.Add(npc);
             }

@@ -159,27 +159,39 @@ internal static class ScheduleUtilities
     /// </summary>
     /// <param name="npc">NPC in question.</param>
     /// <param name="rawData">Raw schedule string.</param>
-    internal static void ParseMasterScheduleAdjustedForChild2NPC(NPC npc, string rawData)
+    /// <returns>True if successful, false otherwise.</returns>
+    internal static bool ParseMasterScheduleAdjustedForChild2NPC(NPC npc, string rawData)
     {
         if (Globals.IsChildToNPC?.Invoke(npc) == true)
         {
             // For a Child2NPC, we must handle their scheduling ourselves.
             if (Globals.UtilitySchedulingFunctions.TryFindGOTOschedule(npc, SDate.Now(), rawData, out string scheduleString))
             {
-                npc.Schedule = Globals.UtilitySchedulingFunctions.ParseSchedule(scheduleString, npc, "BusStop", new Point(0, 23), 610, Globals.Config.EnforceGITiming);
-                if (Context.IsMainPlayer && npc.Schedule is not null
-                    && Globals.ReflectionHelper.GetField<string>(npc, "_lastLoadedScheduleKey", false)?.GetValue() is string lastschedulekey)
+                Dictionary<int, SchedulePathDescription>? schedule = Globals.UtilitySchedulingFunctions.ParseSchedule(scheduleString, npc, "BusStop", new Point(0, 23), 610, Globals.Config.EnforceGITiming);
+                if (schedule is not null)
                 {
-                    npc.dayScheduleName.Value = lastschedulekey;
+                    npc.Schedule = schedule;
+                    if (Context.IsMainPlayer && npc.Schedule is not null
+                        && Globals.ReflectionHelper.GetField<string>(npc, "_lastLoadedScheduleKey", false)?.GetValue() is string lastschedulekey)
+                    {
+                        npc.dayScheduleName.Value = lastschedulekey;
+                    }
+                    return true;
+                }
+                else
+                {
+                    Globals.ModMonitor.Log($"Failed to generate schedule for {npc.Name}: {rawData}");
+                    return false;
                 }
             }
             else
             {
-                Globals.ModMonitor.Log("TryFindGOTOschedule failed for Child2NPC, setting schedule to null", LogLevel.Warn);
-                npc.Schedule = null;
+                Globals.ModMonitor.Log("TryFindGOTOschedule failed for Child2NPC!", LogLevel.Warn);
+                return false;
             }
         }
-        else if (npc.DefaultMap.Equals("FarmHouse", StringComparison.OrdinalIgnoreCase) && !npc.isMarried())
+        else if ((npc.DefaultMap.Equals("FarmHouse", StringComparison.OrdinalIgnoreCase) || npc.DefaultMap.Contains("Cabin", StringComparison.OrdinalIgnoreCase))
+                  && !npc.isMarried())
         {
             // lie to parse master schedule
             string prevmap = npc.DefaultMap;
@@ -192,25 +204,50 @@ internal static class ScheduleUtilities
 
             npc.DefaultMap = "BusStop";
             npc.DefaultPosition = new Vector2(0, 23) * 64;
+            Dictionary<int, SchedulePathDescription>? schedule = null;
             try
             {
-                npc.Schedule = npc.parseMasterSchedule(rawData);
+                schedule = npc.parseMasterSchedule(rawData);
             }
             catch (Exception ex)
             {
                 Globals.ModMonitor.Log($"Ran into issues parsing schedule {rawData} for {npc.Name}.\n\n{ex}", LogLevel.Error);
             }
-            finally
-            {
-                npc.DefaultMap = prevmap;
-                npc.DefaultPosition = prevposition;
-            }
+            npc.DefaultMap = prevmap;
+            npc.DefaultPosition = prevposition;
 
-            ScheduleUtilities.Schedules[npc.Name] = npc.Schedule;
+            if (schedule is not null)
+            {
+                npc.Schedule = schedule;
+                ScheduleUtilities.Schedules[npc.Name] = npc.Schedule;
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
         else
         {
-            npc.Schedule = npc.parseMasterSchedule(rawData);
+            Dictionary<int, SchedulePathDescription>? schedule = null;
+
+            try
+            {
+                npc.parseMasterSchedule(rawData);
+            }
+            catch (Exception ex)
+            {
+                Globals.ModMonitor.Log($"parseMasterSchedule failed for npc {npc.Name} with rawdata {rawData}: {ex}");
+            }
+            if (schedule is not null)
+            {
+                npc.Schedule = schedule;
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
     }
 

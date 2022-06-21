@@ -30,9 +30,15 @@
   "specialorder.organic.mail.title": "Organic Crops Needed - Thank you!",
   "specialorder.organic.mail.text": "Ah, much thanks for providing the organic crops! I'm sure they'll fetch a pretty penny in Zuzu City. In thanks, I've attached this little gift I've found in storage...",
   "specialorder.organic.lewis_inprogress": "Ah, @, just in time! You'll do a good job providing us with excellent crops, I'm sure...",
-  "Lewis":  "Lewis",
+  "Lewis": "Lewis",
 
   // Item names and descriptions.
+  "prismatic-fertilizer.name": "Prismatic Fertilizer",
+  "prismatic-fertilizer.description": "The label simply says: 'Ohhhh! Pretty colors!'.",
+
+  "everlasting-fertilizer.name": "Everlasting Fertilizer",
+  "everlasting-fertilizer.description": "Claims to let your plants survive out of season.",
+
   "wisdom-fertilizer.name": "Wisdom Fertilizer",
   "wisdom-fertilizer.description": "Promises to make you wiser. Are you sure this isn't a scam?",
 
@@ -79,5 +85,5 @@
   "rapid-bush-fertilizer.description": "Makes your bushes grow faster!",
 
   "miraculous-beverages.title": "Fertilizer of Miraculous Beverages",
-  "miraculous-beverages.description":  "Makes....beverages appear? What? How does this even work?"
+  "miraculous-beverages.description": "Makes....beverages appear? What? How does this even work?"
 }

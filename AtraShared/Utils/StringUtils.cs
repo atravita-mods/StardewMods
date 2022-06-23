@@ -20,7 +20,7 @@ namespace AtraShared.Utils;
 /// <summary>
 /// Handles methods for dealing with strings.
 /// </summary>
-internal static class StringUtils
+public static class StringUtils
 {
     private static readonly Lazy<Func<SpriteFont, char, int>> GetGlyphLazy = new(() =>
     {
@@ -41,7 +41,7 @@ internal static class StringUtils
     /// Attaches the monitor to the StringUtils.
     /// </summary>
     /// <param name="monitor">Monitor to attach.</param>
-    internal static void Initialize(IMonitor monitor)
+    public static void Initialize(IMonitor monitor)
         => Monitor = monitor;
 
     /// <summary>
@@ -51,7 +51,7 @@ internal static class StringUtils
     /// <param name="height">Max height of text.</param>
     /// <returns>String with wrapped text.</returns>
     /// <remarks>This is meant to be a more performant Game1.parseText.</remarks>
-    internal static string ParseAndWrapText(string? text, float? height = null)
+    public static string ParseAndWrapText(string? text, float? height = null)
         => text is null ? string.Empty : ParseAndWrapText(text, Game1.dialogueFont, Game1.dialogueWidth, height);
 
     /// <summary>
@@ -63,7 +63,7 @@ internal static class StringUtils
     /// <param name="height">Max height.</param>
     /// <returns>String with wrapped text.</returns>
     /// <remarks>This is meant to be a more performant Game1.parseText.</remarks>
-    internal static string ParseAndWrapText(string? text, SpriteFont whichFont, float width, float? height = null)
+    public static string ParseAndWrapText(string? text, SpriteFont whichFont, float width, float? height = null)
     {
         if (string.IsNullOrEmpty(text))
         {
@@ -93,7 +93,7 @@ internal static class StringUtils
     /// <param name="width">Maximum width.</param>
     /// <param name="height">Maximum height.</param>
     /// <returns>Wrapped text.</returns>
-    internal static string WrapTextByWords(string text, SpriteFont whichFont, float width, float? height = null)
+    public static string WrapTextByWords(string text, SpriteFont whichFont, float width, float? height = null)
     {
         int maxlines = height is null ? 1000 : (int)height / whichFont.LineSpacing;
         StringBuilder sb = new();
@@ -166,7 +166,7 @@ internal static class StringUtils
     /// <param name="width">Maximum width.</param>
     /// <param name="height">Maximum height.</param>
     /// <returns>Wrapped text.</returns>
-    internal static unsafe string WrapTextByChar(string text, SpriteFont whichFont, float width, float? height = null)
+    public static unsafe string WrapTextByChar(string text, SpriteFont whichFont, float width, float? height = null)
     {
         int maxlines = height is null ? 1000 : (int)height / whichFont.LineSpacing;
         StringBuilder sb = new();
@@ -227,7 +227,7 @@ internal static class StringUtils
     /// <param name="whichFont">Which font to use.</param>
     /// <param name="word">Word.</param>
     /// <returns>Float width.</returns>
-    internal static unsafe float MeasureWord(this SpriteFont whichFont, ReadOnlySpan<char> word)
+    public static unsafe float MeasureWord(this SpriteFont whichFont, ReadOnlySpan<char> word)
     {
         if (word.Length == 0)
         {

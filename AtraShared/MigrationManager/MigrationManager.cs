@@ -3,7 +3,7 @@
 /// <summary>
 /// Class to faciliate handling migrations.
 /// </summary>
-internal class MigrationManager
+public class MigrationManager
 {
     private const string FILENAME = "migration_data";
     private string? oldversion;
@@ -14,7 +14,7 @@ internal class MigrationManager
     /// <param name="manifest">The mod's manifest.</param>
     /// <param name="helper">SMAPI's helper.</param>
     /// <param name="monitor">The mod's logger.</param>
-    internal MigrationManager(IManifest manifest, IModHelper helper, IMonitor monitor)
+    public MigrationManager(IManifest manifest, IModHelper helper, IMonitor monitor)
     {
         this.Manifest = manifest;
         this.DataHelper = helper.Data;
@@ -45,7 +45,7 @@ internal class MigrationManager
     /// <summary>
     /// Reads the version info from global data.
     /// </summary>
-    internal void ReadVersionInfo()
+    public void ReadVersionInfo()
     {
         if (this.DataHelper.ReadGlobalData<MigrationDataClass>(FILENAME) is MigrationDataClass migrationData
             && migrationData.VersionMap.TryGetValue(Constants.SaveFolderName!, out this.oldversion))
@@ -61,7 +61,7 @@ internal class MigrationManager
     /// <summary>
     /// Writes the version info into global data.
     /// </summary>
-    internal void SaveVersionInfo()
+    public void SaveVersionInfo()
     {
         MigrationDataClass migrationData = this.DataHelper.ReadGlobalData<MigrationDataClass>(FILENAME) ?? new();
         this.Monitor.Log($"Writing version info {this.Manifest.Version} into global data for {Constants.SaveFolderName} for {this.Manifest.UniqueID}", LogLevel.Trace);
@@ -75,7 +75,7 @@ internal class MigrationManager
     /// <param name="version">The <see cref="ISemanticVersion"/> for which this migration belongs.</param>
     /// <param name="migration">A function that runs the migration.</param>
     /// <returns>True if successfully run (or not relevant), false otherwise.</returns>
-    internal bool RunMigration(ISemanticVersion version, Func<IModHelper, IMonitor, bool> migration)
+    public bool RunMigration(ISemanticVersion version, Func<IModHelper, IMonitor, bool> migration)
     {
         if (this.oldversion is null)
         {

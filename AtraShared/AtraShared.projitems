@@ -13,6 +13,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)ConstantsAndEnums\Seasons.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)CustomExceptions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ConstantsAndEnums\ErrorMessageConsts.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Utils\DateHelper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Integrations\GMCMHelper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Integrations\Interfaces\IBetterSprinklersAPI.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Integrations\Interfaces\IContentPatcherAPI.cs" />

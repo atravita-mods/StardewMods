@@ -3,22 +3,22 @@
 /// <summary>
 /// Extensions for SObject.
 /// </summary>
-internal static class SObjectExtensions
+public static class SObjectExtensions
 {
     /// <summary>
     /// Gets whether or not an SObject is a trash item.
     /// </summary>
     /// <param name="obj">SObject to check.</param>
     /// <returns>true if it's a trash item, false otherwise.</returns>
-    internal static bool IsTrashItem(this SObject obj)
+    public static bool IsTrashItem(this SObject obj)
         => obj is not null && !obj.bigCraftable.Value && (obj.ParentSheetIndex >= 168 && obj.ParentSheetIndex < 173);
 
     /// <summary>
-    /// Gets the internal name of a bigcraftable.
+    /// Gets the public name of a bigcraftable.
     /// </summary>
     /// <param name="bigCraftableIndex">Bigcraftable.</param>
-    /// <returns>Internal name if found.</returns>
-    internal static string GetBigCraftableName(this int bigCraftableIndex)
+    /// <returns>public name if found.</returns>
+    public static string GetBigCraftableName(this int bigCraftableIndex)
     {
         if (Game1.bigCraftablesInformation.TryGetValue(bigCraftableIndex, out string? value))
         {
@@ -36,7 +36,7 @@ internal static class SObjectExtensions
     /// </summary>
     /// <param name="bigCraftableIndex">Index of the bigcraftable.</param>
     /// <returns>Name of the bigcraftable.</returns>
-    internal static string GetBigCraftableTranslatedName(this int bigCraftableIndex)
+    public static string GetBigCraftableTranslatedName(this int bigCraftableIndex)
     {
         if (Game1.bigCraftablesInformation.TryGetValue(bigCraftableIndex, out string? value))
         {

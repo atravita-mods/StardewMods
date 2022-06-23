@@ -6,7 +6,7 @@ namespace AtraShared.Utils;
 /// <summary>
 /// Utility methods.
 /// </summary>
-internal static class Utils
+public static class Utils
 {
     /// <summary>
     /// Gets the configuration instance, or returns a default one.
@@ -15,7 +15,7 @@ internal static class Utils
     /// <param name="helper">Smapi's helper.</param>
     /// <param name="monitor">Logger.</param>
     /// <returns>Config.</returns>
-    internal static T GetConfigOrDefault<T>(IModHelper helper, IMonitor monitor)
+    public static T GetConfigOrDefault<T>(IModHelper helper, IMonitor monitor)
         where T : class, new()
     {
         try
@@ -39,7 +39,7 @@ internal static class Utils
     /// <param name="radius">A radius to search in.</param>
     /// <returns>All tiles within radius.</returns>
     /// <remarks>This actually returns a square, not a circle.</remarks>
-    internal static IEnumerable<Point> YieldSurroundingTiles(Vector2 tile, int radius = 1)
+    public static IEnumerable<Point> YieldSurroundingTiles(Vector2 tile, int radius = 1)
     {
         int x = (int)tile.X;
         int y = (int)tile.Y;
@@ -57,7 +57,7 @@ internal static class Utils
     /// </summary>
     /// <param name="location">Location to check.</param>
     /// <returns>IEnumerable of all tiles.</returns>
-    internal static IEnumerable<Vector2> YieldAllTiles(GameLocation location)
+    public static IEnumerable<Vector2> YieldAllTiles(GameLocation location)
     {
         for (int x = 0; x < location.Map.Layers[0].LayerWidth; x++)
         {
@@ -73,7 +73,7 @@ internal static class Utils
     /// </summary>
     /// <param name="enumerable">IEnumerable of strings to sort.</param>
     /// <returns>A sorted list of strings.</returns>
-    internal static List<string> ContextSort(IEnumerable<string> enumerable)
+    public static List<string> ContextSort(IEnumerable<string> enumerable)
     {
         List<string> outputlist = enumerable.ToList();
         outputlist.Sort(GetCurrentLanguageComparer(ignoreCase: true));
@@ -85,7 +85,7 @@ internal static class Utils
     /// </summary>
     /// <param name="ignoreCase">Whether or not to ignore case.</param>
     /// <returns>A string comparer.</returns>
-    internal static StringComparer GetCurrentLanguageComparer(bool ignoreCase = false)
+    public static StringComparer GetCurrentLanguageComparer(bool ignoreCase = false)
         => StringComparer.Create(Game1.content.CurrentCulture, ignoreCase);
 
     /// <summary>
@@ -93,7 +93,7 @@ internal static class Utils
     /// </summary>
     /// <param name="day">Current date.</param>
     /// <returns>IEnumerable of birthday npcs.</returns>
-    internal static IEnumerable<NPC> GetBirthdayNPCs(SDate day)
+    public static IEnumerable<NPC> GetBirthdayNPCs(SDate day)
     {
         foreach (NPC npc in Utility.getAllCharacters())
         {

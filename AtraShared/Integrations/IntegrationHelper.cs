@@ -3,7 +3,7 @@
 /// <summary>
 /// Base class for integration management.
 /// </summary>
-internal class IntegrationHelper
+public class IntegrationHelper
 {
     /// <summary>
     /// Initializes a new instance of the <see cref="IntegrationHelper"/> class.
@@ -12,7 +12,7 @@ internal class IntegrationHelper
     /// <param name="translation">Translation helper.</param>
     /// <param name="modRegistry">Mod registery.</param>
     /// <param name="loglevel">Level to log issues to.</param>
-    internal IntegrationHelper(IMonitor monitor, ITranslationHelper translation, IModRegistry modRegistry, LogLevel loglevel = LogLevel.Info)
+    public IntegrationHelper(IMonitor monitor, ITranslationHelper translation, IModRegistry modRegistry, LogLevel loglevel = LogLevel.Info)
     {
         this.Monitor = monitor;
         this.Translation = translation;
@@ -48,7 +48,7 @@ internal class IntegrationHelper
     /// <param name="minversion">Minimum semantic version.</param>
     /// <param name="api">An instance of the api.</param>
     /// <returns>True if successful, false otherwise.</returns>
-    internal bool TryGetAPI<T>(
+    public bool TryGetAPI<T>(
         [NotNull] string apiid,
         [NotNull] string minversion,
         [NotNullWhen(returnValue: true)] out T? api)

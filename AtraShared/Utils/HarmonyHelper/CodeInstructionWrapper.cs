@@ -10,7 +10,7 @@ namespace AtraShared.Utils.HarmonyHelper;
 /// <summary>
 /// Special cases for code instructions to match against.
 /// </summary>
-internal enum SpecialCodeInstructionCases
+public enum SpecialCodeInstructionCases
 {
     /// <summary>
     /// WildCard matches all codes.
@@ -46,7 +46,7 @@ internal enum SpecialCodeInstructionCases
 /// <summary>
 /// Wraps the code instruction class of Harmony to allow for looser comparisons.
 /// </summary>
-internal class CodeInstructionWrapper
+public class CodeInstructionWrapper
 {
     private readonly LocalVariableInfo? local;
     private readonly Type? localType;
@@ -62,7 +62,7 @@ internal class CodeInstructionWrapper
     /// </summary>
     /// <param name="opcode">Opcode.</param>
     /// <param name="operand">Operand. Use null to match any operand.</param>
-    internal CodeInstructionWrapper(OpCode opcode, object? operand = null)
+    public CodeInstructionWrapper(OpCode opcode, object? operand = null)
         => this.codeInstruction = new CodeInstruction(opcode, operand);
 
     /// <summary>
@@ -71,14 +71,14 @@ internal class CodeInstructionWrapper
     /// </summary>
     /// <param name="instrution">instruction to wrap.</param>
     /// <remarks>A null operand matches any operand.</remarks>
-    internal CodeInstructionWrapper(CodeInstruction instrution)
+    public CodeInstructionWrapper(CodeInstruction instrution)
         => this.codeInstruction = instrution;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="CodeInstructionWrapper"/> class.
     /// </summary>
     /// <param name="specialcase">The special code instruction case.</param>
-    internal CodeInstructionWrapper(SpecialCodeInstructionCases specialcase)
+    public CodeInstructionWrapper(SpecialCodeInstructionCases specialcase)
         => this.specialInstructionCase = specialcase;
 
     /// <summary>
@@ -86,7 +86,7 @@ internal class CodeInstructionWrapper
     /// </summary>
     /// <param name="specialcase">either LdArg or StArg.</param>
     /// <param name="argument">The argument number.</param>
-    internal CodeInstructionWrapper(SpecialCodeInstructionCases specialcase, int argument)
+    public CodeInstructionWrapper(SpecialCodeInstructionCases specialcase, int argument)
     {
         if (specialcase is SpecialCodeInstructionCases.LdArg or SpecialCodeInstructionCases.StArg)
         {
@@ -104,7 +104,7 @@ internal class CodeInstructionWrapper
     /// </summary>
     /// <param name="specialcase">LdLoc or StLoc.</param>
     /// <param name="local">A localvariableinfo.</param>
-    internal CodeInstructionWrapper(SpecialCodeInstructionCases specialcase, LocalVariableInfo local)
+    public CodeInstructionWrapper(SpecialCodeInstructionCases specialcase, LocalVariableInfo local)
     {
         if (specialcase is SpecialCodeInstructionCases.LdLoc or SpecialCodeInstructionCases.StLoc)
         {
@@ -117,7 +117,7 @@ internal class CodeInstructionWrapper
         }
     }
 
-    internal CodeInstructionWrapper(SpecialCodeInstructionCases specialcase, Type localType)
+    public CodeInstructionWrapper(SpecialCodeInstructionCases specialcase, Type localType)
     {
         if (specialcase is SpecialCodeInstructionCases.LdLoc or SpecialCodeInstructionCases.StLoc)
         {
@@ -130,7 +130,7 @@ internal class CodeInstructionWrapper
         }
     }
 
-    internal CodeInstructionWrapper(SpecialCodeInstructionCases specialcase, Func<CodeInstruction, bool> predicate)
+    public CodeInstructionWrapper(SpecialCodeInstructionCases specialcase, Func<CodeInstruction, bool> predicate)
     {
         if (specialcase is SpecialCodeInstructionCases.Wildcard)
         {
@@ -148,12 +148,12 @@ internal class CodeInstructionWrapper
     /// <summary>
     /// Gets the special case enum.
     /// </summary>
-    internal SpecialCodeInstructionCases? SpecialCase => this.specialInstructionCase;
+    public SpecialCodeInstructionCases? SpecialCase => this.specialInstructionCase;
 
     /// <summary>
     /// Gets the local type.
     /// </summary>
-    internal Type? LocalType => this.localType;
+    public Type? LocalType => this.localType;
 
     /// <summary>
     /// Whether or not this CodeInstructionWrapper is a valid match to the code instruction.
@@ -161,7 +161,7 @@ internal class CodeInstructionWrapper
     /// <param name="instruction">Instruction to check against.</param>
     /// <returns>True for a match.</returns>
     /// <exception cref="UnexpectedEnumValueException{SpecialCodeInstructionCases}">Recieved an unexpeced enum value.</exception>
-    internal bool Matches(CodeInstruction instruction)
+    public bool Matches(CodeInstruction instruction)
     {
         if (this.specialInstructionCase is null)
         {

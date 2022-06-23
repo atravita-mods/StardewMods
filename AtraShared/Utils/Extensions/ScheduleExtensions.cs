@@ -3,7 +3,7 @@
 /// <summary>
 /// Extension methods on Stardew's SchedulePathDescription class.
 /// </summary>
-internal static class SchedulePointDescriptionExtensions
+public static class SchedulePointDescriptionExtensions
 {
     /// <summary>
     /// Gets the expected travel time of a SchedulePathDescription.
@@ -11,6 +11,6 @@ internal static class SchedulePointDescriptionExtensions
     /// <param name="schedulePathDescription">Schedule Path Description.</param>
     /// <returns>Time in in-game minutes, not rounded.</returns>
     [Pure]
-    internal static int GetExpectedRouteTime(this SchedulePathDescription schedulePathDescription)
+    public static int GetExpectedRouteTime(this SchedulePathDescription schedulePathDescription)
         => schedulePathDescription.route.Count * 32 / 42;
 }

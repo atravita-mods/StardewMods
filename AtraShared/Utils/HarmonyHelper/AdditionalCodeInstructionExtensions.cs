@@ -8,13 +8,13 @@ namespace AtraShared.Utils.HarmonyHelper;
 /// <summary>
 /// ILHelper was, for some reason, used incorrectly.
 /// </summary>
-internal class InvalidILHelperCommand : InvalidOperationException
+public class InvalidILHelperCommand : InvalidOperationException
 {
     /// <summary>
     /// Initializes a new instance of the <see cref="InvalidILHelperCommand"/> class.
     /// </summary>
     /// <param name="text">The text to show with the error.</param>
-    internal InvalidILHelperCommand(string text)
+    public InvalidILHelperCommand(string text)
         : base(text)
     {
     }
@@ -23,7 +23,7 @@ internal class InvalidILHelperCommand : InvalidOperationException
 /// <summary>
 /// Code instruction extensions on top of Harmony's included ones.
 /// </summary>
-internal static class AdditionalCodeInstructionExtensions
+public static class AdditionalCodeInstructionExtensions
 {
     /// <summary>
     /// Converts an instruction to the matching load local instruction.
@@ -31,7 +31,7 @@ internal static class AdditionalCodeInstructionExtensions
     /// <param name="instruction">Instruction to convert.</param>
     /// <returns>Ldloc command.</returns>
     /// <exception cref="InvalidILHelperCommand">Could not convert to the ldloc.</exception>
-    internal static CodeInstruction ToLdLoc(this CodeInstruction instruction)
+    public static CodeInstruction ToLdLoc(this CodeInstruction instruction)
     {
         OpCode code = instruction.opcode;
         if (code == OpCodes.Ldloc_0 || code == OpCodes.Stloc_0)
@@ -71,7 +71,7 @@ internal static class AdditionalCodeInstructionExtensions
     /// <param name="instruction">Instruction to convert.</param>
     /// <returns>Stloc command.</returns>
     /// <exception cref="InvalidILHelperCommand">Could not convert to the ldloc.</exception>
-    internal static CodeInstruction ToStLoc(this CodeInstruction instruction)
+    public static CodeInstruction ToStLoc(this CodeInstruction instruction)
     {
         OpCode code = instruction.opcode;
         if (code == OpCodes.Ldloc_0 || code == OpCodes.Stloc_0)

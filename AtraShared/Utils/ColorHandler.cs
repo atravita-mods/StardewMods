@@ -12,7 +12,7 @@ namespace AtraShared.Utils;
 /// <summary>
 /// Helper functions to deal with parsing colors from user input.
 /// </summary>
-internal static class ColorHandler
+public static class ColorHandler
 {
     /// <summary>
     /// Tries to parse a user string to an XNAcolor.
@@ -20,7 +20,7 @@ internal static class ColorHandler
     /// <param name="colorname">user string.</param>
     /// <param name="color">XNAcolor.</param>
     /// <returns>True if successful, false otherwise.</returns>
-    internal static bool TryParseColor(string colorname, out XNAColor color)
+    public static bool TryParseColor(string colorname, out XNAColor color)
     {
         // Enum.TryParse doesn't accept a ReadOnlySpan<char> until NET 6.
         colorname = colorname.Trim();
@@ -113,7 +113,7 @@ ColorParseFail:
     /// </summary>
     /// <param name="color">XNA color.</param>
     /// <returns>System color.</returns>
-    internal static Color ToSystemColor(this XNAColor color)
+    public static Color ToSystemColor(this XNAColor color)
         => Color.FromArgb(color.R, color.G, color.B, color.A);
 
     /// <summary>
@@ -121,7 +121,7 @@ ColorParseFail:
     /// </summary>
     /// <param name="color">System color.</param>
     /// <returns>XNA color.</returns>
-    internal static XNAColor ToXNAColor(this Color color)
+    public static XNAColor ToXNAColor(this Color color)
         => new(color.R, color.G, color.B, color.A);
 
     /// <summary>
@@ -129,7 +129,7 @@ ColorParseFail:
     /// </summary>
     /// <param name="color">XNA color.</param>
     /// <returns>Hex string.</returns>
-    internal static string ToHexString(this XNAColor color)
+    public static string ToHexString(this XNAColor color)
         => $"#{color.R:X2}{color.G:X2}{color.B:X2}{color.A:X2}";
 
     /// <summary>
@@ -137,7 +137,7 @@ ColorParseFail:
     /// </summary>
     /// <param name="color">System color.</param>
     /// <returns>Hex string.</returns>
-    internal static string ToHexString(this Color color)
+    public static string ToHexString(this Color color)
     => $"#{color.R:X2}{color.G:X2}{color.B:X2}{color.A:X2}";
 }
 

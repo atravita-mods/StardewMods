@@ -5,7 +5,7 @@ namespace AtraShared.Utils.Extensions;
 /// <summary>
 /// Extension methods for SMAPI's logging service.
 /// </summary>
-internal static class LogExtensions
+public static class LogExtensions
 {
     /// <summary>
     /// Logs to level (DEBUG by default) if compiled with the DEBUG flag
@@ -14,7 +14,7 @@ internal static class LogExtensions
     /// <param name="monitor">SMAPI's logger.</param>
     /// <param name="message">Message to log.</param>
     /// <param name="level">Level to log at.</param>
-    internal static void DebugLog(this IMonitor monitor, string message, LogLevel level = LogLevel.Debug) =>
+    public static void DebugLog(this IMonitor monitor, string message, LogLevel level = LogLevel.Debug) =>
 #if DEBUG
         monitor.Log(message, level);
 #else
@@ -28,6 +28,6 @@ internal static class LogExtensions
     /// <param name="message">Message to log.</param>
     /// <param name="level">Level to log at.</param>
     [Conditional("DEBUG")]
-    internal static void DebugOnlyLog(this IMonitor monitor, string message, LogLevel level = LogLevel.Debug)
+    public static void DebugOnlyLog(this IMonitor monitor, string message, LogLevel level = LogLevel.Debug)
         => monitor.Log(message, level);
 }

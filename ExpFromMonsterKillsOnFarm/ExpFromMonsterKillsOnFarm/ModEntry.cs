@@ -79,7 +79,7 @@ public class ModEntry : Mod
             }
             else
             {
-                this.Monitor.DebugLog($"{property.Name} unaccounted for.", LogLevel.Warn);
+                this.Monitor.DebugOnlyLog($"{property.Name} unaccounted for.", LogLevel.Warn);
             }
         }
     }

@@ -7,8 +7,12 @@
   "EntryDll": "StopRugRemoval.dll",
   "UpdateKeys": [
     "Nexus:10192",
-    "ModDrop:1068101",
-    "GitHub:atravita-mods/StopRugRemoval"
+    "ModDrop:1068101"
   ],
-  "MinimumApiVersion": "3.14"
+  "Dependencies": [
+    {
+      "UniqueID": "atravita.AtraCore"
+    }
+  ],
+  "MinimumApiVersion": "3.15"
 }

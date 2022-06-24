@@ -40,7 +40,7 @@ internal class DialogueLog : AbstractDataModel
             throw new SaveNotLoadedError();
         }
         DialogueLog log = ModEntry.DataHelper.ReadGlobalData<DialogueLog>($"{Constants.SaveFolderName}{IDENTIFIER}{multiplayerID:X8}")
-            ?? new DialogueLog(Constants.SaveFolderName, multiplayerID);
+            ?? new DialogueLog(Constants.SaveFolderName!, multiplayerID);
         log.multiplayerID = multiplayerID; // fix the multiplayer ID since ReadGlobalData will use the default zero-parameter constructor.
         return log;
     }
@@ -58,7 +58,7 @@ internal class DialogueLog : AbstractDataModel
         {
             throw new SaveNotLoadedError();
         }
-        DialogueLog log = ModEntry.DataHelper.ReadGlobalData<DialogueLog>($"{Constants.SaveFolderName}{IDENTIFIER}{multiplayerID:X8}_temp_{SDate.Now().DaysSinceStart}");
+        DialogueLog? log = ModEntry.DataHelper.ReadGlobalData<DialogueLog>($"{Constants.SaveFolderName!}{IDENTIFIER}{multiplayerID:X8}_temp_{SDate.Now()!.DaysSinceStart}");
         if (log is not null)
         {
             // Delete temporary file
@@ -69,7 +69,7 @@ internal class DialogueLog : AbstractDataModel
             return log;
         }
         log = ModEntry.DataHelper.ReadGlobalData<DialogueLog>($"{Constants.SaveFolderName}{IDENTIFIER}{multiplayerID:X8}")
-            ?? new DialogueLog(Constants.SaveFolderName, multiplayerID);
+            ?? new DialogueLog(Constants.SaveFolderName!, multiplayerID);
         log.multiplayerID = multiplayerID;
         return log;
     }

@@ -41,7 +41,7 @@ internal class RecentCompletedSO : AbstractDataModel
             throw new SaveNotLoadedError();
         }
         return ModEntry.DataHelper.ReadGlobalData<RecentCompletedSO>(Constants.SaveFolderName + IDENTIFIER)
-            ?? new RecentCompletedSO(Constants.SaveFolderName);
+            ?? new RecentCompletedSO(Constants.SaveFolderName!);
     }
 
     /// <summary>
@@ -55,7 +55,7 @@ internal class RecentCompletedSO : AbstractDataModel
         {
             throw new SaveNotLoadedError();
         }
-        RecentCompletedSO log = ModEntry.DataHelper.ReadGlobalData<RecentCompletedSO>($"{Constants.SaveFolderName}{IDENTIFIER}_temp_{SDate.Now().DaysSinceStart}");
+        RecentCompletedSO? log = ModEntry.DataHelper.ReadGlobalData<RecentCompletedSO>($"{Constants.SaveFolderName}{IDENTIFIER}_temp_{SDate.Now().DaysSinceStart}");
         if (log is not null)
         {
             // Delete the temporary file.
@@ -65,7 +65,7 @@ internal class RecentCompletedSO : AbstractDataModel
             return log;
         }
         return ModEntry.DataHelper.ReadGlobalData<RecentCompletedSO>(Constants.SaveFolderName + IDENTIFIER)
-            ?? new RecentCompletedSO(Constants.SaveFolderName);
+            ?? new RecentCompletedSO(Constants.SaveFolderName!);
     }
 
     /// <summary>

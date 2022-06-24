@@ -13,6 +13,11 @@
   <PropertyGroup>
     <Version>1.0.5</Version>
   </PropertyGroup>
+
+  <PropertyGroup>
+    <BundleExtraAssemblies>System</BundleExtraAssemblies>
+    <IgnoreModFilePatterns>System.*.dll$, Microsoft.(?!.*(Toolkit.Diagnostics.dll)), ^runtimes/.*, ^JetBrains.*</IgnoreModFilePatterns>
+  </PropertyGroup>
   
   <ItemGroup>
     <PackageReference Include="JetBrains.Annotations" Version="2022.1.0" />

@@ -16,8 +16,8 @@
   </PropertyGroup>
   
   <PropertyGroup>
-    <BundleExtraAssemblies>System</BundleExtraAssemblies>
-    <IgnoreModFilePatterns>\.xcf$, System.*.dll$, ^Microsoft.(?!.*(Toolkit.Diagnostics.dll)), ^runtimes/.*</IgnoreModFilePatterns>
+    <BundleExtraAssemblies>System, ThirdParty</BundleExtraAssemblies>
+    <IgnoreModFilePatterns>\.xcf$, System.*.dll$, ^Microsoft.(?!.*(Toolkit.Diagnostics.dll)), ^runtimes/.*, */Microsft.*</IgnoreModFilePatterns>
     <EnableModZip Condition="$(Configuration) != 'Release'">False</EnableModZip>
   </PropertyGroup>
 
@@ -53,7 +53,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Pintail\Pintail\Pintail.csproj" private="true"/>
+    <ProjectReference Include="..\Pintail\Pintail\Pintail.csproj" private="true" />
   </ItemGroup>
 
   <ProjectExtensions><VisualStudio><UserProperties manifest_1json__JsonSchema="https://smapi.io/schemas/manifest.json" /></VisualStudio></ProjectExtensions>

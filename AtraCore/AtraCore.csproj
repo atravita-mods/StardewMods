@@ -15,7 +15,7 @@
   
   <PropertyGroup>
     <BundleExtraAssemblies>System,ThirdParty</BundleExtraAssemblies>
-    <IgnoreModFilePatterns>\.xcf$, System.*.dll$, ^Microsoft.(?!.*(Toolkit.Diagnostics.dll)), ^runtimes/.*</IgnoreModFilePatterns>
+    <IgnoreModFilePatterns>.xcf$, System.*.dll$, ^Microsoft.(?!.*(Toolkit.Diagnostics.dll)), ^runtimes[/\\].*, .*[/\\]Microsoft.*, ^JetBrains</IgnoreModFilePatterns>
     <EnableModZip Condition="$(Configuration) != 'Release'">False</EnableModZip>
   </PropertyGroup>
 

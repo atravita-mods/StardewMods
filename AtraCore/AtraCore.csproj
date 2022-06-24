@@ -16,7 +16,7 @@
   </PropertyGroup>
   
   <PropertyGroup>
-    <BundleExtraAssemblies>System,ThirdParty</BundleExtraAssemblies>
+    <BundleExtraAssemblies>System</BundleExtraAssemblies>
     <IgnoreModFilePatterns>\.xcf$, System.*.dll$, ^Microsoft.(?!.*(Toolkit.Diagnostics.dll)), ^runtimes/.*</IgnoreModFilePatterns>
     <EnableModZip Condition="$(Configuration) != 'Release'">False</EnableModZip>
   </PropertyGroup>
@@ -52,12 +52,11 @@
     <Folder Include="HarmonyPatches\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Pintail\Pintail\Pintail.csproj" private="true"/>
+  </ItemGroup>
+
   <ProjectExtensions><VisualStudio><UserProperties manifest_1json__JsonSchema="https://smapi.io/schemas/manifest.json" /></VisualStudio></ProjectExtensions>
-
-  <Import Project="..\AtraBase\AtraBase\AtraBase.projitems" Label="Shared" />
-
-  <Import Project="..\AtraShared\AtraShared.projitems" Label="Shared" />
-  
   
 
 </Project>

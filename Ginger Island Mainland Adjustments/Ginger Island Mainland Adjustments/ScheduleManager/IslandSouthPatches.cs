@@ -1,4 +1,5 @@
-﻿using AtraShared;
+﻿using AtraBase.Toolkit;
+using AtraShared;
 using AtraShared.Utils.Extensions;
 using GingerIslandMainlandAdjustments.AssetManagers;
 using GingerIslandMainlandAdjustments.Configuration;
@@ -174,7 +175,8 @@ internal static class IslandSouthPatches
                     __result = false;
                     return false;
                 default:
-                    throw new UnexpectedEnumValueException<WearIslandClothing>(Globals.Config.WearIslandClothing);
+                    TKThrowHelper.ThrowUnexpectedEnumValueException(Globals.Config.WearIslandClothing);
+                    return true; // this will never get hit.
             }
         }
         catch (Exception ex)

@@ -1,5 +1,5 @@
 ﻿using AtraBase.Collections;
-using AtraShared;
+using AtraBase.Toolkit;
 using AtraShared.Utils.Extensions;
 using StardewModdingAPI.Events;
 using StardewModdingAPI.Utilities;
@@ -101,7 +101,7 @@ internal static class AssetLoader
         {
             SpecialCharacterType.Musician => MusicianLocation,
             SpecialCharacterType.Bartender => BartenderLocation,
-            _ => throw new UnexpectedEnumValueException<SpecialCharacterType>(specialCharacterType)
+            _ => TKThrowHelper.ThrowUnexpectedEnumValueException<SpecialCharacterType, string>(specialCharacterType)
         };
         foreach (string? specialChar in Globals.GameContentHelper.Load<Dictionary<string, string>>(assetLocation).Keys)
         {
@@ -134,7 +134,7 @@ internal static class AssetLoader
         {
             SpecialGroupType.Explorers => ExplorerLocation,
             SpecialGroupType.Groups => GroupsLocations,
-            _ => throw new UnexpectedEnumValueException<SpecialGroupType>(specialGroupType)
+            _ => TKThrowHelper.ThrowUnexpectedEnumValueException<SpecialGroupType, string>(specialGroupType)
         };
         Dictionary<string, string> data = Globals.GameContentHelper.Load<Dictionary<string, string>>(assetLocation);
         foreach (string? groupname in data.Keys)

@@ -1,7 +1,5 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-  <Import Project="..\..\AtraBase\AtraBase.projitems" Label="Shared" />
-  <Import Project="..\..\AtraShared\AtraShared.projitems" Label="Shared" />
-  
+
   <PropertyGroup>
     <AssemblyName>GingerIslandMainlandAdjustments</AssemblyName>
     <RootNamespace>GingerIslandMainlandAdjustments</RootNamespace>
@@ -10,8 +8,7 @@
     <LangVersion>latest</LangVersion>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
-    <DefineConstants>HARMONY; REGEX; SCHEDULES</DefineConstants>
-    <Version>1.1.5</Version>
+    <Version>1.1.5-experimental</Version>
   </PropertyGroup>
 
   <PropertyGroup>
@@ -28,6 +25,11 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\AtraCore\AtraCore\AtraCore.csproj" Private="false" />
+    <ProjectReference Include="..\..\Pintail\Pintail\Pintail.csproj" Private="false" />
   </ItemGroup>
 
   <ItemGroup>

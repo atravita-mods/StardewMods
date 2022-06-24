@@ -1,6 +1,4 @@
-﻿#if UNSAFE
-
-using System.Linq.Expressions;
+﻿using System.Linq.Expressions;
 using System.Text;
 using AtraBase.Toolkit.Reflection;
 using AtraBase.Toolkit.StringHandler;
@@ -297,5 +295,3 @@ public static class StringUtils
         return sb;
     }
 }
-
-#endif

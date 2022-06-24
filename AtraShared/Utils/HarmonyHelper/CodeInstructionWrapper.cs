@@ -1,6 +1,4 @@
-﻿#if TRANSPILERS
-
-using System.Reflection;
+﻿using System.Reflection;
 using System.Reflection.Emit;
 using AtraBase.Toolkit;
 using HarmonyLib;
@@ -212,5 +210,3 @@ public class CodeInstructionWrapper
     private static bool LocalBuilderOperandIsOfType(Type type, object other)
         => other is LocalVariableInfo otherloc && otherloc.LocalType == type;
 }
-
-#endif

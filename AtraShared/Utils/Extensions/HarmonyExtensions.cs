@@ -1,6 +1,4 @@
-﻿#if HARMONY
-
-using System.Reflection;
+﻿using System.Reflection;
 using System.Text;
 using AtraBase.Toolkit.Extensions;
 using HarmonyLib;
@@ -96,5 +94,3 @@ public static class HarmonyExtensions
     public static void Snitch(this MethodBase method, IMonitor monitor, string uniqueID, bool transpilersOnly = false)
         => method.Snitch(monitor, (Patch p) => p.owner == uniqueID, transpilersOnly);
 }
-
-#endif

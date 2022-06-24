@@ -1,0 +1,10 @@
+﻿{
+  "Name": "Easier Dart Puzzle",
+  "Author": "atravita",
+  "Version": "0.1.0",
+  "Description": "Allows you to pick which enchantment you get.",
+  "UniqueID": "atravita.EasierDartPuzzle",
+  "EntryDll": "EasierDartPuzzle.dll",
+  //"UpdateKeys": [ "Nexus:11376", "GitHub:atravita-mods/ForgeMenuChoice" ],
+  "MinimumApiVersion": "3.13"
+}

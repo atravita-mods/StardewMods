@@ -26,7 +26,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\AtraCore\AtraCore\AtraCore.csproj" Private="false" />
+    <ProjectReference Include="..\..\AtraCore\AtraCore.csproj" Private ="false"/>
     <ProjectReference Include="..\..\Pintail\Pintail\Pintail.csproj" Private="false" />
   </ItemGroup>
 

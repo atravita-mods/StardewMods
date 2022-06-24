@@ -1,6 +1,4 @@
-﻿#if TRANSPILERS
-
-/* **********************************
+﻿/* **********************************
  * Don't forget to include COLLECTIONS!
  * **********************************/
 
@@ -929,5 +927,3 @@ ContinueSearch:
         return false;
     }
 }
-
-#endif

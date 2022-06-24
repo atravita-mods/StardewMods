@@ -1,6 +1,4 @@
-﻿#if TRANSPILERS
-
-using System.Reflection.Emit;
+﻿using System.Reflection.Emit;
 using HarmonyLib;
 
 namespace AtraShared.Utils.HarmonyHelper;
@@ -101,5 +99,3 @@ public static class AdditionalCodeInstructionExtensions
         throw new InvalidILHelperCommand($"Could not make stloc from {instruction}");
     }
 }
-
-#endif

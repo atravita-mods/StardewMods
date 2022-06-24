@@ -1,6 +1,4 @@
-﻿#if COLORS
-
-using System.Drawing;
+﻿using System.Drawing;
 using System.Globalization;
 using System.Text.RegularExpressions;
 using AtraBase.Toolkit.Extensions;
@@ -140,5 +138,3 @@ ColorParseFail:
     public static string ToHexString(this Color color)
     => $"#{color.R:X2}{color.G:X2}{color.B:X2}{color.A:X2}";
 }
-
-#endif

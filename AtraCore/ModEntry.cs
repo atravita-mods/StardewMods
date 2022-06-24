@@ -34,6 +34,6 @@ internal class ModEntry : Mod
         {
             ModMonitor.Log(string.Format(ErrorMessageConsts.HARMONYCRASH, ex), LogLevel.Error);
         }
-        harmony.Snitch(this.Monitor, harmony.Id, transpilersOnly: true);
+        //harmony.Snitch(this.Monitor, uniqueID: harmony.Id, transpilersOnly: true);
     }
 }

@@ -6,9 +6,9 @@ using StardewValley.TerrainFeatures;
 
 namespace AtraShared.Niceties;
 
-internal static class IsWithinSprinklerRadius
+public static class IsWithinSprinklerRadius
 {
-    internal readonly record struct Tile (string Map, Vector2 Pos);
+    public readonly record struct Tile (string Map, Vector2 Pos);
 
     private static HashSet<Tile> wateredTiles = new();
     private static HashSet<string> processedMaps = new();
@@ -21,7 +21,7 @@ internal static class IsWithinSprinklerRadius
     private static ILineSprinklersApi? lineSprinklersApi;
     private static IBetterSprinklersApi? betterSprinklersApi;
 
-    internal static void Init(IMonitor monitor, ITranslationHelper translation, IModRegistry registry)
+    public static void Init(IMonitor monitor, ITranslationHelper translation, IModRegistry registry)
     {
         Monitor = monitor;
         IntegrationHelper helper = new(monitor, translation, registry);
@@ -30,13 +30,13 @@ internal static class IsWithinSprinklerRadius
             || helper.TryGetAPI("Speeder.BetterSprinklers", "2.5.0", out betterSprinklersApi);
     }
 
-    internal static void Reset()
+    public static void Reset()
     {
         wateredTiles.Clear();
         processedMaps.Clear();
     }
 
-    internal static bool IsTileInWateringRange(GameLocation location, Vector2 pos)
+    public static bool IsTileInWateringRange(GameLocation location, Vector2 pos)
     {
         if (location is null)
         {
@@ -46,10 +46,10 @@ internal static class IsWithinSprinklerRadius
         return wateredTiles.Contains(new Tile(location.NameOrUniqueName, pos));
     }
 
-    internal static bool IsTileInWateringRange(string locname, Vector2 pos)
+    public static bool IsTileInWateringRange(string locname, Vector2 pos)
         => IsTileInWateringRange(new Tile(locname, pos));
 
-    internal static bool IsTileInWateringRange(Tile tile)
+    public static bool IsTileInWateringRange(Tile tile)
     {
         if (!processedMaps.Contains(tile.Map))
         {

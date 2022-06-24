@@ -5,7 +5,7 @@ namespace AtraShared.Utils.Extensions;
 /// <summary>
 /// Class that holds extension methods for NetFieldDictionary.
 /// </summary>
-internal static class NetFieldDictionaryExtensions
+public static class NetFieldDictionaryExtensions
 {
     /// <summary>
     /// Helper method to try to add a value to a Stardew NetFieldDictionary.
@@ -20,7 +20,7 @@ internal static class NetFieldDictionaryExtensions
     /// <param name="value">Value.</param>
     /// <returns>True if value added, false otherwise.</returns>
     /// <remarks>.Add throws an error if the item is already in the dictionary. This doesn't.</remarks>
-    internal static bool TryAdd<TKey, TValue, TField, TSerialDict, TSelf>(
+    public static bool TryAdd<TKey, TValue, TField, TSerialDict, TSelf>(
         this NetFieldDictionary<TKey, TValue, TField, TSerialDict, TSelf> dictionary,
         TKey key,
         TValue value)
@@ -36,7 +36,7 @@ internal static class NetFieldDictionaryExtensions
         return true;
     }
 
-    internal static void Update<TKey, TValue, TField, TSerialDict, TSelf>(
+    public static void Update<TKey, TValue, TField, TSerialDict, TSelf>(
         this NetFieldDictionary<TKey, TValue, TField, TSerialDict, TSelf> dictionary,
         IDictionary<TKey, TValue> other)
             where TField : NetField<TValue, TField>, new()
@@ -49,7 +49,7 @@ internal static class NetFieldDictionaryExtensions
         }
     }
 
-    internal static void Update<TKey, TValue, TField, TSerialDict, TSelf>(
+    public static void Update<TKey, TValue, TField, TSerialDict, TSelf>(
         this NetFieldDictionary<TKey, TValue, TField, TSerialDict, TSelf> dictionary,
         IEnumerable<KeyValuePair<TKey, TValue>> other)
             where TField : NetField<TValue, TField>, new()

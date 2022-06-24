@@ -7,9 +7,9 @@ using StardewValley.Tools;
 
 namespace AtraShared.ItemManagement;
 
-internal static class ItemUtils
+public static class ItemUtils
 {
-    internal static Item? GetItemFromIdentifier(string type, int id)
+    public static Item? GetItemFromIdentifier(string type, int id)
     {
         switch (type)
         {

@@ -7,7 +7,7 @@ namespace AtraShared.Utils.Extensions;
 /// <summary>
 /// Extensions on GameLocation.
 /// </summary>
-internal static class GameLocationExtensions
+public static class GameLocationExtensions
 {
     /// <summary>
     /// Should this location be considered dangerous?
@@ -17,7 +17,7 @@ internal static class GameLocationExtensions
     /// </summary>
     /// <param name="location">Location to check.</param>
     /// <returns>Whether the location should be considered dangerous.</returns>
-    internal static bool IsDangerousLocation(this GameLocation location)
+    public static bool IsDangerousLocation(this GameLocation location)
         => !location.IsFarm && !location.IsGreenhouse && location is not (SlimeHutch or Town or IslandWest)
             && (location is MineShaft or VolcanoDungeon or BugLand || location.characters.Any((character) => character is Monster));
 
@@ -28,7 +28,7 @@ internal static class GameLocationExtensions
     /// <param name="monitor">Logger.</param>
     /// <param name="alertPlayer">Whether or not to show a notification.</param>
     /// <returns>True if there's a festival at this location and it's before the start time, false otherwise.</returns>
-    internal static bool IsBeforeFestivalAtLocation(this GameLocation location, IMonitor monitor, bool alertPlayer = false)
+    public static bool IsBeforeFestivalAtLocation(this GameLocation location, IMonitor monitor, bool alertPlayer = false)
     {
         try
         {

@@ -7,7 +7,7 @@ namespace AtraShared.Menuing;
 /// <summary>
 /// Shamelessly stolen from RSV: https://github.com/Rafseazz/Ridgeside-Village-Mod/blob/main/Ridgeside%20SMAPI%20Component%202.0/RidgesideVillage/DialogueMenu.cs.
 /// </summary>
-internal class DialogueAndAction : DialogueBox
+public class DialogueAndAction : DialogueBox
 {
     private readonly List<Action?> actions;
 
@@ -17,7 +17,7 @@ internal class DialogueAndAction : DialogueBox
     /// <param name="dialogue">Initial dialogue.</param>
     /// <param name="responses">List of responses.</param>
     /// <param name="actions">List of associated actions.</param>
-    internal DialogueAndAction(string dialogue, List<Response> responses, List<Action?> actions)
+    public DialogueAndAction(string dialogue, List<Response> responses, List<Action?> actions)
         : base(dialogue, responses)
     {
         this.actions = actions;

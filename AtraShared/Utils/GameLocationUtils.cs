@@ -9,7 +9,7 @@ namespace AtraShared.Utils;
 /// <summary>
 /// Utility for gamelocations.
 /// </summary>
-internal static class GameLocationUtils
+public static class GameLocationUtils
 {
     /// <summary>
     /// The code in this function is effectively copied from the game, and explodes a bomb on this tile.
@@ -18,7 +18,7 @@ internal static class GameLocationUtils
     /// <param name="whichBomb">Which bomb to explode.</param>
     /// <param name="tileloc">Tile to explode bomb on.</param>
     /// <param name="mp">Multiplayer instance - used to broadcast sprites.</param>
-    internal static void ExplodeBomb(GameLocation loc, int whichBomb, Vector2 tileloc, Multiplayer mp)
+    public static void ExplodeBomb(GameLocation loc, int whichBomb, Vector2 tileloc, Multiplayer mp)
     {
         int bombID = Game1.random.Next();
         loc.playSound("thudStep");
@@ -112,7 +112,7 @@ internal static class GameLocationUtils
     /// <param name="mp">Multiplayer instance.</param>
     /// <param name="delayTime">How long to wait before splashing.</param>
     /// <remarks>Mostly copied from FishPond.showObjectThrownIntoPondAnimation.</remarks>
-    internal static void DrawWaterSplash(GameLocation loc, Vector2 nonTileLocation, Multiplayer mp, int delayTime)
+    public static void DrawWaterSplash(GameLocation loc, Vector2 nonTileLocation, Multiplayer mp, int delayTime)
     {
         mp.broadcastSprites(
             loc,
@@ -200,7 +200,7 @@ internal static class GameLocationUtils
     /// Yields all game locations.
     /// </summary>
     /// <returns>IEnumerable of all game locations.</returns>
-    internal static IEnumerable<GameLocation> YieldAllLocations()
+    public static IEnumerable<GameLocation> YieldAllLocations()
     {
         foreach (GameLocation location in Game1.locations)
         {

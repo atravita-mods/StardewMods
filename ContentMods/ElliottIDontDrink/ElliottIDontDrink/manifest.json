@@ -1,0 +1,10 @@
+﻿{
+  "Name": "Elliott, I Don't Drink",
+  "Author": "atravita",
+  "Version": "0.1.0",
+  "Description": "Lets you pick a coffee instead of a drink.",
+  "UniqueID": "atravita.ElliottIDontDrink",
+  "EntryDll": "ElliottIDontDrink.dll",
+  "UpdateKeys": [ "Nexus:11871" ],
+  "MinimumApiVersion": "3.13"
+}

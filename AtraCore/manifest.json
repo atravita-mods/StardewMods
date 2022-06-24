@@ -1,0 +1,9 @@
+{
+  "Name": "AtraCore",
+  "Author": "atravita",
+  "Version": "0.1.0-Debug",
+  "Description": "A core library mod some of my other mods depend on.",
+  "UniqueID": "atravita.AtraCore",
+  "EntryDll": "AtraCore.dll",
+  "MinimumApiVersion": "3.15"
+}

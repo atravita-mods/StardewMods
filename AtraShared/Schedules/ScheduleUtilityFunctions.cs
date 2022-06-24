@@ -1,6 +1,4 @@
-﻿#if SCHEDULES
-
-using System.Reflection;
+﻿using System.Reflection;
 using System.Text.RegularExpressions;
 using AtraBase.Toolkit.Extensions;
 using AtraBase.Toolkit.Reflection;
@@ -461,5 +459,3 @@ public class ScheduleUtilityFunctions
         return null;
     }
 }
-
-#endif

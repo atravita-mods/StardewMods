@@ -1,6 +1,4 @@
-﻿#if SCHEDULES
-
-using AtraShared.Utils.Extensions;
+﻿using AtraShared.Utils.Extensions;
 using Microsoft.Xna.Framework;
 
 namespace AtraShared.Schedules.DataModels;
@@ -107,5 +105,3 @@ public class SchedulePoint
         return string.Join(" ", schedulestring);
     }
 }
-
-#endif

@@ -1,3 +1,6 @@
 [submodule "Pintail"]
 	path = Pintail
-	url = https://github.com/atravita-mods/Pintail
+	url = https://github.com/atravita-mods/Pintail
+[submodule "AtraBase"]
+	path = AtraBase
+	url = https://github.com/atravita-mods/AtraBase

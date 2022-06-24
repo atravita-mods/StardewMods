@@ -55,22 +55,13 @@ public class ModEntry : Mod
     /// <summary>
     /// Gets the seeded random for this mod.
     /// </summary>
-    internal Random Random
-    {
-        get
-        {
-            if (this.random is null)
-            {
-                this.random = new Random(((int)Game1.uniqueIDForThisGame * 2) + ((int)Game1.stats.DaysPlayed * 7));
-            }
-            return this.random;
-        }
-    }
+    private Random Random
+        => this.random ?? new Random(((int)Game1.uniqueIDForThisGame * 2) + ((int)Game1.stats.DaysPlayed * 7));
 
     /// <summary>
     /// Gets a value indicating whether or not I've spawned fruit today.
     /// </summary>
-    internal bool SpawnedFruitToday { get; private set; }
+    private bool SpawnedFruitToday { get; set; }
 
     /// <inheritdoc />
     public override void Entry(IModHelper helper)
@@ -285,7 +276,7 @@ public class ModEntry : Mod
                 }
                 else
                 {
-                    this.Monitor.Log(I18n.LocationMissing(loc: location), LogLevel.Info);
+                    this.Monitor.Log(I18n.LocationMissing(loc: location), LogLevel.Trace);
                 }
             }
         }

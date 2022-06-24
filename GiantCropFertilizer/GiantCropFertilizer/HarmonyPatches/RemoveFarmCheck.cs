@@ -17,6 +17,7 @@ internal static class RemoveFarmCheck
     /// <param name="harmony">Harmony instance.</param>
     internal static void ApplyPatches(Harmony harmony)
     {
+        // use a lower priority to slot after other mods that might want to transpile this ethod as well.
         harmony.Patch(
             original: typeof(Crop).InstanceMethodNamed(nameof(Crop.newDay)),
             transpiler: new HarmonyMethod(typeof(RemoveFarmCheck).StaticMethodNamed(nameof(Transpiler)), Priority.LowerThanNormal));

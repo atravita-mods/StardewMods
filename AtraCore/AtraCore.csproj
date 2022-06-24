@@ -1,14 +1,12 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
+  <Import Project="..\csproj_common" />
   <Import Project="..\AtraBase\AtraBase\AtraBase.projitems" Label="Shared" />
   <Import Project="..\AtraShared\AtraShared.projitems" Label="Shared" />
 
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
     <EnableHarmony>True</EnableHarmony>
-    <LangVersion>latest</LangVersion>
     <ImplicitUsings>enable</ImplicitUsings>
-    <Nullable>enable</Nullable>
-    <WarningsAsErrors>Nullable</WarningsAsErrors>
   </PropertyGroup>
 
   <PropertyGroup>
@@ -17,8 +15,7 @@
   
   <PropertyGroup>
     <BundleExtraAssemblies>System,ThirdParty</BundleExtraAssemblies>
-    <IgnoreModFilePatterns>.xcf$, System.*.dll$, ^Microsoft.(?!.*(Toolkit.Diagnostics.dll)), ^runtimes[/\\].*, .*[/\\]Microsoft.*, ^JetBrains</IgnoreModFilePatterns>
-    <EnableModZip Condition="$(Configuration) != 'Release'">False</EnableModZip>
+    <IgnoreModFilePatterns>\.xcf$, System.*\.dll$, ^Microsoft.(?!.*(Toolkit.Diagnostics.dll)), ^runtimes[/\\].*, .*[/\\]Microsoft.*, ^JetBrains</IgnoreModFilePatterns>
   </PropertyGroup>
 
   <PropertyGroup>
@@ -28,14 +25,7 @@
 
   <ItemGroup>
     <PackageReference Include="JetBrains.Annotations" Version="2022.1.0" />
-    <PackageReference Include="Leclair.Stardew.ModManifestBuilder" Version="1.0.3" />
     <PackageReference Include="Microsoft.Toolkit.Diagnostics" Version="7.1.2" />
-    <PackageReference Include="Pathoschild.Stardew.ModBuildConfig" Version="4.0.1" />
-    <PackageReference Include="Pathoschild.Stardew.ModTranslationClassBuilder" Version="2.0.1" />
-    <PackageReference Include="StyleCop.Analyzers" Version="1.1.118">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-    </PackageReference>
   </ItemGroup>
 
   <ItemGroup>
@@ -51,12 +41,5 @@
   <ItemGroup>
     <Folder Include="HarmonyPatches\" />
   </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\Pintail\Pintail\Pintail.csproj" private="true" />
-  </ItemGroup>
-
-  <ProjectExtensions><VisualStudio><UserProperties manifest_1json__JsonSchema="https://smapi.io/schemas/manifest.json" /></VisualStudio></ProjectExtensions>
   
-
-</Project>
+</Project></Project>

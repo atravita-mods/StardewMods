@@ -21,7 +21,8 @@ internal static class MultiFertilizerDrawTranspiler
     /// <exception cref="MethodNotFoundException">A method was not found.</exception>
     internal static void ApplyPatches(Harmony harmony)
     {
-        Type multidraw = AccessTools.TypeByName("MultiFertilizer.Patches.HoeDirtPatcher") ?? throw new MethodNotFoundException("MultiFert's draw not found!");
+        Type multidraw = AccessTools.TypeByName("MultiFertilizer.Patches.HoeDirtPatcher")
+            ?? ReflectionThrowHelper.ThrowMethodNotFoundException<Type>("MultiFertilizer HoeDirtPatcher");
         harmony.Patch(
             original: multidraw.StaticMethodNamed("DrawMultiFertilizer"),
             transpiler: new HarmonyMethod(typeof(MultiFertilizerDrawTranspiler), nameof(MultiFertilizerDrawTranspiler.Transpiler)));

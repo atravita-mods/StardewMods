@@ -8,13 +8,15 @@
   "UpdateKeys": [
     "Nexus:9855",
     "ModDrop:1086743",
-    "GitHub:atravita-mods/SpecialOrdersExtended"
   ],
-  "MinimumApiVersion": "3.14",
+  "MinimumApiVersion": "3.15",
   "Dependencies": [
     {
       "UniqueID": "Pathoschild.ContentPatcher",
       "IsRequired": false
+    },
+    {
+      "UniqueID": "atravita.AtraCore"
     }
   ]
 }

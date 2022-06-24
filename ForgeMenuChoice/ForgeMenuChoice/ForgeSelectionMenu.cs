@@ -1,5 +1,4 @@
-﻿using AtraShared.Utils;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using StardewValley.Menus;
 
@@ -17,7 +16,7 @@ internal sealed class ForgeSelectionMenu : IClickableMenu
     private const int Width = 400; // px
     private const int Height = 188; // px
 
-    private static readonly int InherentWidth = (int)Game1.dialogueFont.MeasureWord("Matador de Insetos") + 12;
+    private readonly int inherentWidth;
 
     private readonly bool shouldShowTooltip;
     private readonly List<BaseEnchantment> options = new();
@@ -39,6 +38,8 @@ internal sealed class ForgeSelectionMenu : IClickableMenu
         : base(GetXPosFromViewport(Game1.uiViewport.Width), GetYPosFromViewport(Game1.viewport.Height), Width, Height)
     {
         this.options = options;
+
+        this.inherentWidth = (int)ModEntry.StringUtils.MeasureWord(Game1.dialogueFont, "Matador de Insetos") + 12;
 
         this.backButton = this.GetBackButton();
         this.forwardButton = this.GetForwardButton();
@@ -181,7 +182,7 @@ internal sealed class ForgeSelectionMenu : IClickableMenu
         try
         {
             base.draw(b);
-            int stringWidth = Math.Max(InherentWidth, (int)Game1.dialogueFont.MeasureWord(this.CurrentSelectedTranslatedOption));
+            int stringWidth = Math.Max(this.inherentWidth, (int)ModEntry.StringUtils.MeasureWord(Game1.dialogueFont, this.CurrentSelectedTranslatedOption));
             drawTextureBox(
                 b,
                 texture: Graphics,
@@ -196,10 +197,12 @@ internal sealed class ForgeSelectionMenu : IClickableMenu
             Vector2 thisOptionSizeOffset = Game1.dialogueFont.MeasureString(this.CurrentSelectedTranslatedOption);
             Utility.drawTextWithShadow(
                 b,
-                this.CurrentSelectedTranslatedOption,
-                Game1.dialogueFont,
-                new Vector2(this.xPositionOnScreen + (Width / 2) - ((int)thisOptionSizeOffset.X / 2), this.yPositionOnScreen + (Height / 2) - ((int)thisOptionSizeOffset.Y / 2)),
-                Game1.textColor);
+                text: this.CurrentSelectedTranslatedOption,
+                font: Game1.dialogueFont,
+                position: new Vector2(
+                    this.xPositionOnScreen + (Width / 2) - ((int)thisOptionSizeOffset.X / 2),
+                    this.yPositionOnScreen + (Height / 2) - ((int)thisOptionSizeOffset.Y / 2)),
+                color: Game1.textColor);
             this.backButton.draw(b);
             this.forwardButton.draw(b);
             this.backButton.scale = Math.Min(this.backButton.scale + 0.05f, this.backButton.baseScale);
@@ -252,9 +255,9 @@ internal sealed class ForgeSelectionMenu : IClickableMenu
     private Rectangle GetHoverRect()
     {
         return new Rectangle(
-                   x: this.xPositionOnScreen + ((Width - InherentWidth - 64) / 2),
+                   x: this.xPositionOnScreen + ((Width - this.inherentWidth - 64) / 2),
                    y: this.yPositionOnScreen + (Height / 2) - 40,
-                   width: InherentWidth + 64,
+                   width: this.inherentWidth + 64,
                    height: 80
                    );
     }

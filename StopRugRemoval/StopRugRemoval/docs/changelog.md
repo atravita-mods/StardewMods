@@ -6,6 +6,9 @@
 <!-- Figure out how to replace the reference to coffee in the night market dialogue?-->
 <!-- Make it so notifications do not go away until dismissed? -->
 
+#### Version 1.0.12
+* Spanish translation, thanks to [Mistyspring](https://github.com/misty-spring)!
+
 #### Version 1.0.11
 * Fix issues with the night market warp home.
 * Some internal improvements.

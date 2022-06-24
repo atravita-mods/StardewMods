@@ -7,8 +7,12 @@
   "EntryDll": "ForgeMenuChoice.dll",
   "UpdateKeys": [
     "Nexus:11376",
-    "GitHub:atravita-mods/ForgeMenuChoice",
     "ModDrop:1125882"
   ],
-  "MinimumApiVersion": "3.14"
+  "Dependencies": [
+    {
+      "UniqueID": "atravita.AtraCore"
+    }
+  ],
+  "MinimumApiVersion": "3.15"
 }

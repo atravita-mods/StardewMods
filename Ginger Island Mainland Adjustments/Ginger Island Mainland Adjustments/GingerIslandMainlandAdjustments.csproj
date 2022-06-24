@@ -1,6 +1,4 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-  <Import Project="..\..\AtraBase\AtraBase.projitems" Label="Shared" />
-  <Import Project="..\..\AtraShared\AtraShared.projitems" Label="Shared" />
   
   <PropertyGroup>
     <AssemblyName>GingerIslandMainlandAdjustments</AssemblyName>
@@ -19,14 +17,19 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="JetBrains.Annotations" Version="2021.3.0" />
+    <PackageReference Include="JetBrains.Annotations" Version="2022.1.0" />
     <PackageReference Include="Microsoft.Win32.Registry" Version="5.0.0" /> <!-- Makes warnings go away, not sure what it does...-->
-    <PackageReference Include="Pathoschild.Stardew.ModBuildConfig" Version="4.0.0" />
-    <PackageReference Include="Pathoschild.Stardew.ModTranslationClassBuilder" Version="2.0.0" />
+    <PackageReference Include="Pathoschild.Stardew.ModBuildConfig" Version="4.0.1" />
+    <PackageReference Include="Pathoschild.Stardew.ModTranslationClassBuilder" Version="2.0.1" />
     <PackageReference Include="StyleCop.Analyzers" Version="1.1.118">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\AtraCore\AtraCore.csproj" private="false" />
+    <ProjectReference Include="..\..\Pintail\Pintail\Pintail.csproj" private="false" />
   </ItemGroup>
 
   <ItemGroup>

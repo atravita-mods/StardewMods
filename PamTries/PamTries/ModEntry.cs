@@ -5,15 +5,16 @@ using AtraShared.MigrationManager;
 using AtraShared.Utils.Extensions;
 using HarmonyLib;
 using Microsoft.Xna.Framework;
+using PamTries.HarmonyPatches;
 using StardewModdingAPI.Events;
 
 namespace PamTries;
 
 public enum PamMood
 {
-    Bad,
-    Neutral,
-    Good,
+    bad,
+    neutral,
+    good,
 }
 
 /// <inheritdoc />
@@ -21,20 +22,20 @@ public class ModEntry : Mod
 {
     private static readonly string[] SyncedConversationTopics = new string[2] { "PamTriesRehab", "PamTriesRehabHoneymoon" };
     private Random? random;
-    private PamMood mood = PamMood.Neutral;
+    private PamMood mood = PamMood.neutral;
     private MigrationManager? migrator;
 
     // set in Entry, which is as close as I can get to the constructor
 #pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
     internal static IMonitor ModMonitor { get; private set; }
-    internal static IContentHelper ContentHelper { get; private set; }
 #pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
 
     /// <inheritdoc />
     public override void Entry(IModHelper helper)
     {
+        I18n.Init(helper.Translation);
+        
         ModMonitor = this.Monitor;
-        ContentHelper = helper.Content;
 
         helper.Events.GameLoop.GameLaunched += this.OnGameLaunch;
         helper.Events.GameLoop.DayStarted += this.DayStarted;
@@ -49,24 +50,27 @@ public class ModEntry : Mod
     {
         try
         {
+#if DEBUG
+            BusDriverTranspile.ApplyPatch(harmony);
+#endif
             harmony.PatchAll();
         }
         catch (Exception ex)
         {
             ModMonitor.Log($"Mod crashed while applying Harmony patches.\n\n{ex}", LogLevel.Error);
         }
-        harmony.Snitch(this.Monitor, this.ModManifest.UniqueID);
+        harmony.Snitch(this.Monitor, uniqueID: harmony.Id, transpilersOnly: true);
     }
 
     private void DayStarted(object? sender, DayStartedEventArgs e)
-        => PTUtilities.PopulateLexicon(ContentHelper);
+        => PTUtilities.PopulateLexicon(this.Helper.GameContent);
 
     private void SaveLoaded(object? sender, SaveLoadedEventArgs e)
     {
         this.SetPamMood((int)Game1.stats.DaysPlayed);
         PTUtilities.SyncConversationTopics(SyncedConversationTopics);
         PTUtilities.LocalEventSyncs(ModMonitor);
-        PTUtilities.PopulateLexicon(ContentHelper);
+        PTUtilities.PopulateLexicon(this.Helper.GameContent);
 
         if (Context.IsSplitScreen && Context.ScreenId != 0)
         {
@@ -138,7 +142,7 @@ public class ModEntry : Mod
     }
 
     private string GetPamMood()
-        => this.mood.ToString().ToLowerInvariant();
+        => this.mood.ToString();
 
     private void SetPamMood(int daysPlayed)
     {
@@ -175,15 +179,15 @@ public class ModEntry : Mod
         double chance = this.random.NextDouble();
         if (chance < moodchances[0])
         {
-            this.mood = PamMood.Bad;
+            this.mood = PamMood.bad;
         }
         else if (chance < moodchances[1])
         {
-            this.mood = PamMood.Neutral;
+            this.mood = PamMood.neutral;
         }
         else
         {
-            this.mood = PamMood.Good;
+            this.mood = PamMood.good;
         }
     }
 
@@ -193,28 +197,29 @@ public class ModEntry : Mod
     /// <param name="sender">SMAPI.</param>
     /// <param name="args">Day end argmuments.</param>
     private void DayEnd(object? sender, DayEndingEventArgs args)
-    {//reset Pam's sprite
-        NPC? Pam = Game1.getCharacterFromName("Pam");
-        Pam.Sprite.SpriteHeight = 32;
-        Pam.Sprite.SpriteWidth = 16;
-        Pam.Sprite.ignoreSourceRectUpdates = false;
-        Pam.Sprite.UpdateSourceRect();
-        Pam.drawOffset.Value = Vector2.Zero;
-        Pam.IsInvisible = false;
+    {
+        // reset Pam's sprite
+        NPC? pam = Game1.getCharacterFromName("Pam");
+        pam.Sprite.SpriteHeight = 32;
+        pam.Sprite.SpriteWidth = 16;
+        pam.Sprite.ignoreSourceRectUpdates = false;
+        pam.Sprite.UpdateSourceRect();
+        pam.drawOffset.Value = Vector2.Zero;
+        pam.IsInvisible = false;
 
         PTUtilities.SyncConversationTopics(SyncedConversationTopics);
 
-        if (Game1.player.activeDialogueEvents.ContainsKey("PamTriesRehab") && Game1.player.activeDialogueEvents["PamTriesRehab"] > 1)
+        if (Game1.player.activeDialogueEvents.TryGetValue("PamTriesRehab", out int days) && days > 1)
         {
             ModMonitor.Log("Pam set to invisible for rehab", LogLevel.Debug);
-            Pam.daysUntilNotInvisible = 2;
+            pam.daysUntilNotInvisible = 2;
         }
         // bad marriage penalty. Consider implementing divorce.
         if (Context.IsMainPlayer)
         {
             if (Game1.getCharacterFromName("Penny").getSpouse() is Farmer pennySpouse && pennySpouse.friendshipData["Penny"].Points <= 2000)
             {
-                pennySpouse.changeFriendship(-50, Pam);
+                pennySpouse.changeFriendship(-50, pam);
                 ModMonitor.Log("Bad marriage penalty, 50 friendship lost with Pam", LogLevel.Trace);
             }
         }

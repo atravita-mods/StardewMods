@@ -4,9 +4,9 @@ class PTUtilities
 {
     public static IDictionary<string, string>? Lexicon { get; set; }
 
-    public static void PopulateLexicon(IContentHelper ContentHelper)
+    public static void PopulateLexicon(IGameContentHelper contentHelper)
     {
-        Lexicon = ContentHelper.Load<Dictionary<string, string>>("Strings/Lexicon", ContentSource.GameContent);
+        Lexicon = contentHelper.Load<Dictionary<string, string>>("Strings/Lexicon");
     }
 
     public static string GetLexicon(string key, string? defaultresponse = null)
@@ -33,7 +33,7 @@ class PTUtilities
     /// <summary>
     /// Checks to see if any player has a specific conversation topic. If so, gives everyone the conversation topic.
     /// </summary>
-    /// <param name="conversationTopic"></param>
+    /// <param name="conversationTopic">conversation topic to sync.</param>
     public static void SyncConversationTopics(string conversationTopic)
     {
         if (!Game1.IsMultiplayer) { return; }

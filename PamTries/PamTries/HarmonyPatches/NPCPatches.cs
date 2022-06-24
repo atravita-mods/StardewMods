@@ -1,7 +1,7 @@
 ﻿using HarmonyLib;
 using Microsoft.Xna.Framework;
 
-namespace PamTries;
+namespace PamTries.HarmonyPatches;
 
 /// <summary>
 /// Class that holds patches against NPC so Pam can fish.

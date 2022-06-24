@@ -24,39 +24,43 @@ class Dialogue
     }
 
     public static string ChildCount()
-    {
-        return $"{Game1.player.getChildrenCount()}";
-    }
+        => $"{Game1.player.getChildrenCount()}";
 
     public static string? ListChildren()
     {
-        if (!Context.IsWorldReady) { return null; }
+        if (!Context.IsWorldReady)
+        {
+            return null;
+        }
 
-        List<Child> Children = Game1.player.getChildren();
+        List<Child> children = Game1.player.getChildren();
         string and = PTUtilities.GetLexicon("and");
 
-        if (Children is null || Children.Count == 0)
+        if (children is null || children.Count == 0)
         {
             return string.Empty;
         }
-        else if (Children.Count == 1)
+        else if (children.Count == 1)
         {
-            return Children[0].displayName;
+            return children[0].displayName;
         }
-        else if (Children.Count == 2)
+        else if (children.Count == 2)
         {
-            return $"{Children[0].displayName} {and} {Children[1].displayName}";
+            return $"{children[0].displayName} {and} {children[1].displayName}";
         }
         else
         {
-            List<string> kidnames = Children.Select((Child child) => child.displayName).ToList();
+            List<string> kidnames = children.Select((Child child) => child.displayName).ToList();
             return $"{string.Join(", ", kidnames, 0, kidnames.Count - 1)}, {and} {kidnames[kidnames.Count]}";
         }// deal with the possibility other countries have different grammer later.
     }
 
     public static NPC? GetChildbyGender(string gender)
     {
-        if (!Context.IsWorldReady) { return null; }
+        if (!Context.IsWorldReady)
+        {
+            return null;
+        }
         int gender_int;
         switch (gender)
         {

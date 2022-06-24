@@ -5,14 +5,14 @@ namespace AtraShared.Utils;
 /// <summary>
 /// Functions to help with handling multiplayer.
 /// </summary>
-internal static class MultiplayerHelpers
+public static class MultiplayerHelpers
 {
     private static readonly Lazy<Func<Multiplayer>> MultiplayerLazy = new(() => typeof(Game1).StaticFieldNamed("multiplayer").GetStaticFieldGetter<Multiplayer>());
 
     /// <summary>
     /// Gets a function that returns the current multiplayer instance.
     /// </summary>
-    internal static Func<Multiplayer> GetMultiplayer => MultiplayerLazy.Value;
+    public static Func<Multiplayer> GetMultiplayer => MultiplayerLazy.Value;
 
     /// <summary>
     /// Checks if the versions installed of the mod are the same for farmhands.
@@ -22,7 +22,7 @@ internal static class MultiplayerHelpers
     /// <param name="manifest">Manifest of mod.</param>
     /// <param name="monitor">Logger.</param>
     /// <param name="translation">Translation helper.</param>
-    internal static void AssertMultiplayerVersions(IMultiplayerHelper multi, IManifest manifest, IMonitor monitor, ITranslationHelper translation)
+    public static void AssertMultiplayerVersions(IMultiplayerHelper multi, IManifest manifest, IMonitor monitor, ITranslationHelper translation)
     {
         if (Context.IsMultiplayer && !Context.IsMainPlayer && !Context.IsSplitScreen)
         {

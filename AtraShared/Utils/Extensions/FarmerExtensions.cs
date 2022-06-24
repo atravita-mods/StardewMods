@@ -2,9 +2,9 @@
 
 namespace AtraShared.Utils.Extensions;
 
-internal static class FarmerExtensions
+public static class FarmerExtensions
 {
-    internal static void FaceFarmerTowardsPosition(this Farmer farmer, Vector2 nonTilePosition)
+    public static void FaceFarmerTowardsPosition(this Farmer farmer, Vector2 nonTilePosition)
     {
         Vector2 delta = nonTilePosition - farmer.Position;
         if (Math.Abs(delta.X) < Math.Abs(delta.Y))

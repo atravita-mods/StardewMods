@@ -48,7 +48,7 @@ public class ScheduleUtilityFunctions
     /// Regex for a schedulepoint format.
     /// </summary>
     [RegexPattern]
-    internal static readonly Regex ScheduleRegex = new(
+    public static readonly Regex ScheduleRegex = new(
         // <time> [location] <tileX> <tileY> [facingDirection] [animation] \"[dialogue]\"
         pattern: @"(?<arrival>a)?(?<time>[0-9]{1,4})(?<location> \S+)*?(?<x> [0-9]{1,4})(?<y> [0-9]{1,4})(?<direction> [0-9])?(?<animation> [^\s\""]+)?(?<dialogue> \"".*\"")?",
         options: RegexOptions.CultureInvariant | RegexOptions.Compiled,
@@ -58,7 +58,7 @@ public class ScheduleUtilityFunctions
     /// Regex that handles the bed location special case.
     /// </summary>
     [RegexPattern]
-    internal static readonly Regex BedRegex = new(
+    public static readonly Regex BedRegex = new(
         // <time> bed
         pattern: @"(?<arrival>a)?(?<time>[0-9]{1,4}) bed",
         options: RegexOptions.CultureInvariant | RegexOptions.Compiled,
@@ -67,7 +67,7 @@ public class ScheduleUtilityFunctions
     /// <summary>
     /// Stardew's NPC::pathfindToNextScheduleLocation method.
     /// </summary>
-    internal static readonly MethodInfo PathFindMethod = typeof(NPC).InstanceMethodNamed("pathfindToNextScheduleLocation");
+    public static readonly MethodInfo PathFindMethod = typeof(NPC).InstanceMethodNamed("pathfindToNextScheduleLocation");
 
     private readonly IMonitor monitor;
     private readonly ITranslationHelper translation;

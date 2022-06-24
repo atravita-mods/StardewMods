@@ -19,14 +19,14 @@ public enum StardewSeasons : uint
 /// <summary>
 /// Extensions for the seasons enum.
 /// </summary>
-internal static class SeasonExtensions
+public static class SeasonExtensions
 {
     /// <summary>
     /// Parses a list of strings into the season enum.
     /// </summary>
     /// <param name="seasonList">List of strings of seasons...</param>
     /// <returns>Stardew Seasons.</returns>
-    internal static StardewSeasons ParseSeasonList(this List<string> seasonList)
+    public static StardewSeasons ParseSeasonList(this List<string> seasonList)
     {
         StardewSeasons season = StardewSeasons.None;
         foreach (string? seasonstring in seasonList)
@@ -45,7 +45,7 @@ internal static class SeasonExtensions
     /// <param name="loc">GameLocation.</param>
     /// <returns>Season.</returns>
 #warning - need to fix in Stardew 1.6.
-    internal static StardewSeasons GetSeasonFromGame(GameLocation? loc)
+    public static StardewSeasons GetSeasonFromGame(GameLocation? loc)
         => Utility.getSeasonNumber(Game1.GetSeasonForLocation(loc)) switch
         {
             0 => StardewSeasons.Spring,
@@ -75,14 +75,14 @@ public enum StardewWeather : uint
 /// <summary>
 /// Extensions for the weather enum.
 /// </summary>
-internal static class WeatherExtensions
+public static class WeatherExtensions
 {
     /// <summary>
     /// Gets a list of strings and parses them to the weatherenum.
     /// </summary>
     /// <param name="weatherList">List of strings of weathers....</param>
     /// <returns>Enum.</returns>
-    internal static StardewWeather ParseWeatherList(this List<string> weatherList)
+    public static StardewWeather ParseWeatherList(this List<string> weatherList)
     {
         StardewWeather weather = StardewWeather.None;
         foreach (string? weatherstring in weatherList)

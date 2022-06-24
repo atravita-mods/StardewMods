@@ -1,11 +1,8 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-  <Import Project="..\..\AtraBase\AtraBase.projitems" Label="Shared" />
-  <Import Project="..\..\AtraShared\AtraShared.projitems" Label="Shared" />
 
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
     <EnableHarmony>True</EnableHarmony>
-    <DefineConstants>HARMONY; TRANSPILERS; COLLECTIONS; UNSAFE</DefineConstants>
     <LangVersion>latest</LangVersion>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
@@ -26,6 +23,11 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\AtraCore\AtraCore.csproj" Private="true" />
+    <ProjectReference Include="..\..\Pintail\Pintail\Pintail.csproj" Private="true" />
   </ItemGroup>
 
   <ItemGroup>

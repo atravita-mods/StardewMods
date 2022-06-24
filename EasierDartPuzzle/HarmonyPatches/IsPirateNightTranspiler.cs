@@ -30,7 +30,8 @@ internal static class IsPirateNightTranspiler
             })
             .Advance(1)
             .ReplaceInstruction(OpCodes.Call, typeof(IsPirateNightTranspiler).StaticMethodNamed(nameof(IsPirateNightTranspiler.GetPirateArrivalTime)), keepLabels: true);
-            helper.Print();
+
+            // helper.Print();
             return helper.Render();
         }
         catch (Exception ex)

@@ -21,7 +21,8 @@ internal static class CropTranspiler
     /// <exception cref="MethodNotFoundException">Could not find DGA's methods.</exception>
     internal static void ApplyDGAPatches(Harmony harmony)
     {
-        Type dgaCrop = AccessTools.TypeByName("DynamicGameAssets.Game.CustomCrop") ?? throw new MethodNotFoundException("DGA's custom crops not found!");
+        Type dgaCrop = AccessTools.TypeByName("DynamicGameAssets.Game.CustomCrop, DynamicGameAssets")
+            ?? ReflectionThrowHelper.ThrowMethodNotFoundException<Type>("DGA CustomCrop");
         harmony.Patch(
             original: dgaCrop.InstanceMethodNamed("NewDay"),
             transpiler: new HarmonyMethod(typeof(CropTranspiler).StaticMethodNamed(nameof(TranspileDGA))));
@@ -57,7 +58,8 @@ internal static class CropTranspiler
         try
         {
             ILHelper helper = new(original, instructions, ModEntry.ModMonitor, gen);
-            Type random = AccessTools.TypeByName("StardewValley.OneTimeRandom") ?? throw new MethodNotFoundException("StardewValley.OneTimeRandom not found");
+            Type random = AccessTools.TypeByName("StardewValley.OneTimeRandom, StardewValley")
+                ?? ReflectionThrowHelper.ThrowMethodNotFoundException<Type>("StardewValley.OneTimeRandom");
             helper.FindNext(new CodeInstructionWrapper[]
             { // Locate the randomness check for a giant crop.
                 new(OpCodes.Call, random.StaticMethodNamed("GetDouble")),
@@ -101,8 +103,10 @@ internal static class CropTranspiler
     {
         try
         {
-            Type dgaCrop = AccessTools.TypeByName("DynamicGameAssets.Game.CustomCrop") ?? throw new MethodNotFoundException("DGA's custom crops not found!");
-            Type dgaCropPack = AccessTools.TypeByName("DynamicGameAssets.PackData.CropPackData") ?? throw new MethodNotFoundException("DGA's custom crops data not found!");
+            Type dgaCrop = AccessTools.TypeByName("DynamicGameAssets.Game.CustomCrop, DynamicGameAssets")
+                ?? ReflectionThrowHelper.ThrowMethodNotFoundException<Type>("DGA CustomCrop");
+            Type dgaCropPack = AccessTools.TypeByName("DynamicGameAssets.PackData.CropPackData")
+                ?? ReflectionThrowHelper.ThrowMethodNotFoundException<Type>("DGA CustomCropPackData, DynamicGameAssets");
 
             ILHelper helper = new(original, instructions, ModEntry.ModMonitor, gen);
             helper.FindNext(new CodeInstructionWrapper[]

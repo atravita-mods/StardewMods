@@ -148,7 +148,7 @@ public static class AssetLoader
         Dictionary<string, string> tooltips = ModEntry.GameContentHelper.Load<Dictionary<string, string>>(TOOLTIP_DATA_PATH);
         foreach ((string k, string v) in tooltips)
         {
-            tooltips[k] = StringUtils.ParseAndWrapText(v, Game1.smallFont, 300);
+            tooltips[k] = ModEntry.StringUtils.ParseAndWrapText(v, Game1.smallFont, 300);
         }
         return tooltips;
     }

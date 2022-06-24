@@ -18,7 +18,7 @@ namespace AtraShared.Utils;
 /// <summary>
 /// Handles methods for dealing with strings.
 /// </summary>
-public static class StringUtils
+public class StringUtils
 {
     private static readonly Lazy<Func<SpriteFont, char, int>> GetGlyphLazy = new(() =>
     {
@@ -33,14 +33,13 @@ public static class StringUtils
 
     private static Func<SpriteFont, char, int> GetGlyph => GetGlyphLazy.Value;
 
-    private static IMonitor? Monitor { get; set; }
+    private IMonitor? Monitor { get; set; }
 
     /// <summary>
-    /// Attaches the monitor to the StringUtils.
+    /// Initializes a new instance of the <see cref="StringUtils"/> class.
     /// </summary>
-    /// <param name="monitor">Monitor to attach.</param>
-    public static void Initialize(IMonitor monitor)
-        => Monitor = monitor;
+    /// <param name="monitor">The Monitor instance to use to log for these utils.</param>
+    public StringUtils(IMonitor? monitor) => this.Monitor = monitor;
 
     /// <summary>
     /// Parses and wraps text, defaulting to Game1.dialogueFont and Game1.dialogueWidth.
@@ -49,8 +48,8 @@ public static class StringUtils
     /// <param name="height">Max height of text.</param>
     /// <returns>String with wrapped text.</returns>
     /// <remarks>This is meant to be a more performant Game1.parseText.</remarks>
-    public static string ParseAndWrapText(string? text, float? height = null)
-        => text is null ? string.Empty : ParseAndWrapText(text, Game1.dialogueFont, Game1.dialogueWidth, height);
+    public string ParseAndWrapText(string? text, float? height = null)
+        => text is null ? string.Empty : this.ParseAndWrapText(text, Game1.dialogueFont, Game1.dialogueWidth, height);
 
     /// <summary>
     /// Parses and wraps text.
@@ -61,7 +60,7 @@ public static class StringUtils
     /// <param name="height">Max height.</param>
     /// <returns>String with wrapped text.</returns>
     /// <remarks>This is meant to be a more performant Game1.parseText.</remarks>
-    public static string ParseAndWrapText(string? text, SpriteFont whichFont, float width, float? height = null)
+    public string ParseAndWrapText(string? text, SpriteFont whichFont, float width, float? height = null)
     {
         if (string.IsNullOrEmpty(text))
         {
@@ -77,9 +76,9 @@ public static class StringUtils
             case LocalizedContentManager.LanguageCode.zh:
             case LocalizedContentManager.LanguageCode.th:
             case LocalizedContentManager.LanguageCode.mod when Game1.dialogueFont.Glyphs.Length > 4000:
-                return WrapTextByChar(text, whichFont, width, height);
+                return this.WrapTextByChar(text, whichFont, width, height);
             default:
-                return WrapTextByWords(text, whichFont, width, height);
+                return this.WrapTextByWords(text, whichFont, width, height);
         }
     }
 
@@ -91,11 +90,11 @@ public static class StringUtils
     /// <param name="width">Maximum width.</param>
     /// <param name="height">Maximum height.</param>
     /// <returns>Wrapped text.</returns>
-    public static string WrapTextByWords(string text, SpriteFont whichFont, float width, float? height = null)
+    public string WrapTextByWords(string text, SpriteFont whichFont, float width, float? height = null)
     {
         int maxlines = height is null ? 1000 : (int)height / whichFont.LineSpacing;
         StringBuilder sb = new();
-        float spacewidth = whichFont.MeasureWord(" ") + whichFont.Spacing;
+        float spacewidth = this.MeasureWord(whichFont, " ") + whichFont.Spacing;
         float current_width = -whichFont.Spacing;
         StringBuilder replacement_word = new();
         bool use_replacement_word = false;
@@ -111,10 +110,10 @@ public static class StringUtils
                 sb.AppendLine();
                 continue;
             }
-            float wordwidth = whichFont.MeasureWord(word) + spacewidth;
+            float wordwidth = this.MeasureWord(whichFont, word) + spacewidth;
             if (wordwidth > width)
             { // if the word itself is **longer** than the width, we must truncate. It'll get its own line.
-                replacement_word = TruncateWord(word, whichFont, width, out wordwidth);
+                replacement_word = this.TruncateWord(word, whichFont, width, out wordwidth);
                 use_replacement_word = true;
             }
             current_width += whichFont.Spacing + wordwidth;
@@ -164,7 +163,7 @@ public static class StringUtils
     /// <param name="width">Maximum width.</param>
     /// <param name="height">Maximum height.</param>
     /// <returns>Wrapped text.</returns>
-    public static unsafe string WrapTextByChar(string text, SpriteFont whichFont, float width, float? height = null)
+    public unsafe string WrapTextByChar(string text, SpriteFont whichFont, float width, float? height = null)
     {
         int maxlines = height is null ? 1000 : (int)height / whichFont.LineSpacing;
         StringBuilder sb = new();
@@ -210,7 +209,7 @@ public static class StringUtils
                         }
                         else
                         {
-                            Monitor?.Log($"Glyph {ch} not accounted for!", LogLevel.Error);
+                            this.Monitor?.Log($"Glyph {ch} not accounted for!", LogLevel.Error);
                         }
                         break;
                 }
@@ -225,7 +224,7 @@ public static class StringUtils
     /// <param name="whichFont">Which font to use.</param>
     /// <param name="word">Word.</param>
     /// <returns>Float width.</returns>
-    public static unsafe float MeasureWord(this SpriteFont whichFont, ReadOnlySpan<char> word)
+    public unsafe float MeasureWord(SpriteFont whichFont, ReadOnlySpan<char> word)
     {
         if (word.Length == 0)
         {
@@ -244,7 +243,7 @@ public static class StringUtils
                 }
                 else
                 {
-                    Monitor?.Log($"Glyph {ch} not accounted for!", LogLevel.Error);
+                    this.Monitor?.Log($"Glyph {ch} not accounted for!", LogLevel.Error);
                 }
             }
         }
@@ -259,7 +258,7 @@ public static class StringUtils
     /// <param name="width">Width to wrap to.</param>
     /// <param name="trunchars">Characters to use to truncate with.</param>
     /// <returns>Truncated string + width.</returns>
-    private static unsafe StringBuilder TruncateWord(ReadOnlySpan<char> word, SpriteFont whichFont, float width, out float current_width, string trunchars = "...")
+    private unsafe StringBuilder TruncateWord(ReadOnlySpan<char> word, SpriteFont whichFont, float width, out float current_width, string trunchars = "...")
     {
         StringBuilder sb = new();
         current_width = -whichFont.Spacing + whichFont.MeasureString(trunchars).X;
@@ -288,7 +287,7 @@ public static class StringUtils
                 }
                 else
                 {
-                    Monitor?.Log($"Glyph {ch} not accounted for!", LogLevel.Error);
+                    this.Monitor?.Log($"Glyph {ch} not accounted for!", LogLevel.Error);
                 }
             }
         }

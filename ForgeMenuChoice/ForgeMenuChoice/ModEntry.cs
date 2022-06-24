@@ -34,6 +34,8 @@ internal class ModEntry : Mod
     /// Gets the configuration class for this mod.
     /// </summary>
     internal static ModConfig Config { get; private set; }
+
+    internal static StringUtils StringUtils { get; private set; }
 #pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
 
     /// <inheritdoc/>
@@ -41,7 +43,7 @@ internal class ModEntry : Mod
     {
         ModMonitor = this.Monitor;
 
-        StringUtils.Initialize(this.Monitor);
+        StringUtils = new(this.Monitor);
         GameContentHelper = helper.GameContent;
         TranslationHelper = helper.Translation;
 

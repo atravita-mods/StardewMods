@@ -51,7 +51,7 @@ public class IntegrationHelper
     public bool TryGetAPI<T>(
         [NotNull] string apiid,
         [NotNull] string minversion,
-        [NotNullWhen(returnValue: true)] out T? api)
+        [NotNullWhen(returnValue: true )] out T? api)
         where T : class
     {
         if (this.ModRegistry.Get(apiid) is not IModInfo modInfo)

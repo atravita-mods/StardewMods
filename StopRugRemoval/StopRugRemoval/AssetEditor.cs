@@ -93,7 +93,7 @@ internal static class AssetEditor
                 int nextslash = value.IndexOf('/', second);
                 if (nextslash > -1)
                 {
-                    string initial = value[..nextslash] + $"/question fork1 \"#{I18n.Drink()}#{I18n.Nondrink()}/fork atravita_elliott_nodrink/";
+                    string initial = value[..nextslash] + $"/question fork1 \"#{I18n.Drink()}#{I18n.Nondrink()}\"/fork atravita_elliott_nodrink/";
                     string remainder = value[(nextslash + 1)..];
 
                     editor.Data["atravita_elliott_nodrink"] = remainder.Replace("346", "350");

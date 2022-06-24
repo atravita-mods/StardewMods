@@ -14,17 +14,18 @@ internal static class HoeDirtPatcher
 {
 
     /// <summary>
-    /// Applies the patches for this class.
+    /// Applies the hoedirt compat patches for multifertilizer.
     /// </summary>
     /// <param name="harmony">Harmony instance.</param>
+    /// <remarks>This is only needed for certain versions of multifertilizer.</remarks>
     internal static void ApplyPatches(Harmony harmony)
     {
         HarmonyMethod? prefix = new(
             typeof(HoeDirtPatcher).StaticMethodNamed(nameof(HoeDirtPatcher.PrefixMulti)),
-            priority: Priority.First);
+            priority: Priority.VeryHigh);
         HarmonyMethod? postfix = new(
             typeof(HoeDirtPatcher).StaticMethodNamed(nameof(HoeDirtPatcher.PostfixMulti)),
-            priority: Priority.Last);
+            priority: Priority.VeryLow);
 
         harmony.Patch(
             typeof(HoeDirt).InstanceMethodNamed("applySpeedIncreases"),

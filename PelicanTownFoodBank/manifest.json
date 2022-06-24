@@ -1,0 +1,10 @@
+﻿{
+  "Name": "Pelican Town Food Bank",
+  "Author": "atravita",
+  "Version": "0.1.0",
+  "Description": "Provides a food bank for Pelican Town after the Community Cener is completed.",
+  "UniqueID": "atravita.PelicanTownFoodBank",
+  "EntryDll": "PelicanTownFoodBank.dll",
+  //"UpdateKeys": [ "Nexus:11426", "GitHub:atravita-mods/TrashDoesNotConsumeBait" ],
+  "MinimumApiVersion": "3.13"
+}

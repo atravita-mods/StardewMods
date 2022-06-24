@@ -5,6 +5,8 @@
   "MillProducesOrganic.description": "Organic goods fed into the mill will produce organic products.",
   "WaterOverlayColor.title": "Water Overlay Color",
   "WaterOverlayColor.description": "The color used to tint the water after fish food has been applied to it.",
+  "RecolorBushes.title": "Recolor Bushes",
+  "RecolorBushes.description": "If enabled, bushes will change color when they're fertilized.",
 
   // For GMCM
   "IllFormatedConfig": "Config file seems ill-formated, using default. Please use Generic Mod Config Menu to configure.",
@@ -28,9 +30,18 @@
   "specialorder.organic.mail.title": "Organic Crops Needed - Thank you!",
   "specialorder.organic.mail.text": "Ah, much thanks for providing the organic crops! I'm sure they'll fetch a pretty penny in Zuzu City. In thanks, I've attached this little gift I've found in storage...",
   "specialorder.organic.lewis_inprogress": "Ah, @, just in time! You'll do a good job providing us with excellent crops, I'm sure...",
-  "Lewis":  "Lewis",
+  "Lewis": "Lewis",
 
   // Item names and descriptions.
+  "prismatic-fertilizer.name": "Prismatic Fertilizer",
+  "prismatic-fertilizer.description": "The label simply says: 'Ohhhh! Pretty colors!'.",
+
+  "everlasting-fertilizer.name": "Everlasting Fertilizer",
+  "everlasting-fertilizer.description": "Claims to let your plants survive out of season.",
+
+  "wisdom-fertilizer.name": "Wisdom Fertilizer",
+  "wisdom-fertilizer.description": "Promises to make you wiser. Are you sure this isn't a scam?",
+
   "waterlogged-fertilizer.name": "Waterlogged Fertilizer",
   "waterlogged-fertilizer.description": "Retains water so well, anywhere can be a paddy! (for paddy crops only)",
 
@@ -52,6 +63,9 @@
   "joja-fertilizer-deluxe.name": "Joja's Deluxe Fertilizer",
   "joja-fertilizer-deluxe.description": "Significantly more expensive than the Patented Fertilizer and even more guaranteed.",
 
+  "secret-joja-fertilizer.name": "Joja's Secret Fertilizer",
+  "secret-joja-fertilizer.description": "Joja's scientists have been keeping this one under wraps for some reason.",
+
   "good-luck-fertilizer.name": "Maeby's Good-Luck Fertilizer.",
   "good-luck-fertilizer.description": "Proudly in production for 50+ years! Promises to keep your crops safe from crows and lighting.",
 
@@ -62,5 +76,14 @@
   "deluxe-fish-food.description": "Quite good at attracting fish. Lasts for a few days. Toss into water",
 
   "domesticated-fish-food.name": "Domesticated Fish Food",
-  "domesticated-fish-food.description": "Makes your domesticated fish grow faster!"
+  "domesticated-fish-food.description": "Makes your domesticated fish grow faster!",
+
+  "bountiful-bush-fertilizer.title": "Bountiful Bush Fertilizer.",
+  "bountiful-bush-fertilizer.description": "Your bushes will produce like they've never done before!",
+
+  "rapid-bush-fertilizer.title": "Murph's Quik-Grow-Bush Fertilizer",
+  "rapid-bush-fertilizer.description": "Makes your bushes grow faster!",
+
+  "miraculous-beverages.title": "Fertilizer of Miraculous Beverages",
+  "miraculous-beverages.description": "Makes....beverages appear? What? How does this even work?"
 }

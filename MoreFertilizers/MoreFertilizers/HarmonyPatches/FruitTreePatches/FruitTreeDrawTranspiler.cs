@@ -26,7 +26,7 @@ internal static class FruitTreeDrawTranspiler
     {
         try
         {
-            Type dgaFruitTree = AccessTools.TypeByName("DynamicGameAssets.Game.CustomFruitTree") ?? throw new("DGA Fruit trees not found!");
+            Type dgaFruitTree = AccessTools.TypeByName("DynamicGameAssets.Game.CustomFruitTree") ?? throw new("DGA Fruit trees");
             harmony.Patch(
                 original: dgaFruitTree.InstanceMethodNamed("draw"),
                 transpiler: new HarmonyMethod(typeof(FruitTreeDrawTranspiler), nameof(Transpiler)));
@@ -34,6 +34,25 @@ internal static class FruitTreeDrawTranspiler
         catch (Exception ex)
         {
             ModEntry.ModMonitor.Log($"Mod crashed while transpiling DGA. Integration may not work correctly.\n\n{ex}", LogLevel.Error);
+        }
+    }
+
+    /// <summary>
+    /// Applies this patch to AT.
+    /// </summary>
+    /// <param name="harmony">Harmony instance.</param>
+    internal static void ApplyATPatch(Harmony harmony)
+    {
+        try
+        {
+            Type atFruitTree = AccessTools.TypeByName("AlternativeTextures.Framework.Patches.StandardObjects.FruitTreePatch") ?? throw new("AT Fruit tree");
+            harmony.Patch(
+                original: atFruitTree.StaticMethodNamed("DrawPrefix"),
+                transpiler: new HarmonyMethod(typeof(FruitTreeDrawTranspiler), nameof(Transpiler)));
+        }
+        catch (Exception ex)
+        {
+            ModEntry.ModMonitor.Log($"Mod crashed while transpiling AT. Integration may not work correctly.\n\n{ex}", LogLevel.Error);
         }
     }
 
@@ -66,7 +85,6 @@ internal static class FruitTreeDrawTranspiler
                 new(OpCodes.Ldfld, typeof(FruitTree).InstanceFieldNamed(nameof(FruitTree.growthStage))),
                 new(OpCodes.Call),
                 new(OpCodes.Ldc_I4_4),
-                new(OpCodes.Bge),
             })
             .FindNext(new CodeInstructionWrapper[]
             {

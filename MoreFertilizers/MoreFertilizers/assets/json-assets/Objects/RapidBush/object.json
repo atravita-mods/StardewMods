@@ -1,0 +1,11 @@
+﻿{
+  "Name": "Rapid Bush Fertilizer",
+  "Price": "50",
+  "Category": "Junk",
+  "Edibility": -300,
+  "TranslationKey": "rapid-bush-fertilizer",
+  "PurchasePrice": 150,
+  "PurchaseFrom": "Pierre",
+  "CanPurchase": true,
+  "PurchaseRequirements": [ "y 2", "e 2120303", "d Mon Tue Thu Fri Sat" ]
+}

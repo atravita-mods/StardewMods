@@ -62,7 +62,7 @@ internal static class PFMAutomateTranspilers
                 new(OpCodes.Callvirt, typeof(HoeDirt).InstancePropertyNamed(nameof(HoeDirt.crop)).GetGetMethod()),
                 new(SpecialCodeInstructionCases.StLoc),
             })
-            .GetLabels(out IList<Label>? firstLabelsToMove)
+            .GetLabels(out IList<Label>? firstLabelsToMove, clear: true)
             .Insert(new CodeInstruction[]
             { // Insert codes that save the fertilizer into our local.
                 hoedirt,
@@ -91,7 +91,7 @@ internal static class PFMAutomateTranspilers
                 new(OpCodes.Callvirt, typeof(HoeDirt).InstancePropertyNamed(nameof(HoeDirt.crop)).GetGetMethod()),
                 new(SpecialCodeInstructionCases.StLoc),
             })
-            .GetLabels(out IList<Label>? secondLabelsToMove)
+            .GetLabels(out IList<Label>? secondLabelsToMove, clear: true)
             .Insert(new CodeInstruction[]
             { // Save the fertilizer into the local. (Either this path or the previous will be taken, but not both.)
                 secondHoeDirt,
@@ -106,7 +106,7 @@ internal static class PFMAutomateTranspilers
             })
             .FindNext(new CodeInstructionWrapper[]
             {
-                new(OpCodes.Newobj, typeof(SObject).Constructor(new[] { typeof(int), typeof(int), typeof(bool), typeof(int), typeof(int)})),
+                new(OpCodes.Newobj, typeof(SObject).Constructor(new[] { typeof(int), typeof(int), typeof(bool), typeof(int), typeof(int) })),
                 new(SpecialCodeInstructionCases.StLoc),
             })
             .Advance(1)

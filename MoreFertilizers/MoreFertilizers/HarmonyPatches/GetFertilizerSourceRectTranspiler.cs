@@ -22,6 +22,10 @@ internal static class GetFertilizerSourceRectTranspiler
         {
             return 0;
         }
+        else if (fertilizer == ModEntry.MiraculousBeveragesID)
+        {
+            return 1;
+        }
         else if (fertilizer == ModEntry.PaddyCropFertilizerID)
         {
             return 3;
@@ -34,13 +38,19 @@ internal static class GetFertilizerSourceRectTranspiler
         {
             return 7;
         }
-        else if (fertilizer == ModEntry.JojaFertilizerID || fertilizer == ModEntry.DeluxeJojaFertilizerID)
+        else if (fertilizer == ModEntry.JojaFertilizerID
+            || fertilizer == ModEntry.DeluxeJojaFertilizerID
+            || fertilizer == ModEntry.SecretJojaFertilizerID)
         {
             return 4;
         }
         else if (fertilizer == ModEntry.OrganicFertilizerID)
         {
             return 2;
+        }
+        else if (fertilizer == ModEntry.WisdomFertilizerID)
+        {
+            return 8;
         }
         return 0;
     }

@@ -3,6 +3,7 @@ using AtraShared.Utils.Extensions;
 using Microsoft.Xna.Framework;
 using StardewValley.Buildings;
 using StardewValley.Locations;
+using StardewValley.Objects;
 using StardewValley.TerrainFeatures;
 
 namespace MoreFertilizers.Framework;
@@ -38,9 +39,34 @@ public sealed class CanPlaceHandler : IMoreFertilizersAPI
     public const string Joja = "atravita.MoreFertilizer.Joja";
 
     /// <summary>
-    /// ModData string to make trees fertilized with tree fertilizers.
+    /// ModData string to track trees fertilized with tree fertilizers.
     /// </summary>
     public const string TreeFertilizer = "atravita.MoreFertilizer.TreeFertilizer";
+
+    /// <summary>
+    /// ModData string to track trees fertilized with the tree tapper fertilizer.
+    /// </summary>
+    public const string TreeTapperFertilizer = "atravita.MoreFertilizer.TreeTapper";
+
+    /// <summary>
+    /// ModData string for the Bountiful Bush fertilizer.
+    /// </summary>
+    public const string BountifulBush = "atravita.MoreFertilizer.BountifulBush";
+
+    /// <summary>
+    /// ModData string for the Rapid Bush fertilizer.
+    /// </summary>
+    public const string RapidBush = "atravita.MoreFertilizer.RapidBush";
+
+    /// <summary>
+    /// ModData string marking fertilized mushroom boxen.
+    /// </summary>
+    public const string MushroomFertilizer = "atravita.MoreFertilizer.MushroomFertilizer";
+
+    /// <summary>
+    /// ModData string marking miraculous beverages.
+    /// </summary>
+    public const string MiraculousBeverages = "atravita.MoreFertilizer.MiraculousBeverages";
 
     /// <inheritdoc />
     public bool CanPlaceFertilizer(SObject obj, GameLocation loc, Vector2 tile)
@@ -50,10 +76,43 @@ public sealed class CanPlaceHandler : IMoreFertilizersAPI
             return false;
         }
 
-        if (loc.terrainFeatures.TryGetValue(tile, out TerrainFeature? terrain) && terrain is FruitTree tree
-            && (obj.ParentSheetIndex == ModEntry.FruitTreeFertilizerID || obj.ParentSheetIndex == ModEntry.DeluxeFruitTreeFertilizerID))
+        if (loc.terrainFeatures.TryGetValue(tile, out TerrainFeature? terrain))
         {
-            return !tree.modData.ContainsKey(FruitTreeFertilizer);
+            if (terrain is FruitTree fruitTree
+                && (obj.ParentSheetIndex == ModEntry.FruitTreeFertilizerID || obj.ParentSheetIndex == ModEntry.DeluxeFruitTreeFertilizerID
+                || obj.ParentSheetIndex == ModEntry.MiraculousBeveragesID))
+            {
+                return !fruitTree.modData.ContainsKey(FruitTreeFertilizer) && !fruitTree.modData.ContainsKey(MiraculousBeverages);
+            }
+            else if (terrain is Bush bush && (bush.size.Value == Bush.greenTeaBush || bush.size.Value == Bush.mediumBush) && !bush.townBush.Value
+                && ((obj.ParentSheetIndex == ModEntry.RapidBushFertilizerID && bush.size.Value == Bush.greenTeaBush) || obj.ParentSheetIndex == ModEntry.BountifulBushID
+                    || (obj.ParentSheetIndex == ModEntry.MiraculousBeveragesID && bush.size.Value == Bush.greenTeaBush)))
+            {
+                return !bush.modData.ContainsKey(BountifulBush) && !bush.modData.ContainsKey(RapidBush) && !bush.modData.ContainsKey(MiraculousBeverages);
+            }
+            else if (terrain is Tree tree
+                && (obj.ParentSheetIndex == ModEntry.TreeTapperFertilizerID))
+            {
+                return !tree.modData.ContainsKey(TreeFertilizer) && !tree.modData.ContainsKey(TreeTapperFertilizer);
+            }
+        }
+
+        if (loc.Objects.TryGetValue(tile, out SObject @object) && @object is IndoorPot pot && pot.bush?.Value is Bush pottedBush && pottedBush.size?.Value == Bush.greenTeaBush
+            && (obj.ParentSheetIndex == ModEntry.RapidBushFertilizerID || obj.ParentSheetIndex == ModEntry.BountifulBushID || obj.ParentSheetIndex == ModEntry.MiraculousBeveragesID ))
+        {
+            return !pottedBush.modData.ContainsKey(BountifulBush) && !pottedBush.modData.ContainsKey(RapidBush) && !pottedBush.modData.ContainsKey(MiraculousBeverages);
+        }
+
+        if (obj.ParentSheetIndex == ModEntry.BountifulBushID)
+        {
+            Rectangle pos = new((int)tile.X * 64, (int)tile.Y * 64, 16, 16);
+            foreach (LargeTerrainFeature largeterrainfeature in loc.largeTerrainFeatures)
+            {
+                if (largeterrainfeature is Bush bigBush && !bigBush.townBush.Value && bigBush.getBoundingBox().Intersects(pos))
+                {
+                    return !bigBush.modData.ContainsKey(BountifulBush) && !bigBush.modData.ContainsKey(RapidBush) && !bigBush.modData.ContainsKey(MiraculousBeverages);
+                }
+            }
         }
 
         if (loc.canFishHere() && loc.doesTileHaveProperty((int)tile.X, (int)tile.Y, "Water", "Back") is not null
@@ -92,11 +151,77 @@ public sealed class CanPlaceHandler : IMoreFertilizersAPI
             }
             return true;
         }
-        if (loc.terrainFeatures.TryGetValue(tile, out TerrainFeature? terrain) && terrain is FruitTree tree &&
-            (obj.ParentSheetIndex == ModEntry.FruitTreeFertilizerID || obj.ParentSheetIndex == ModEntry.DeluxeFruitTreeFertilizerID))
+        if (loc.terrainFeatures.TryGetValue(tile, out TerrainFeature? terrain))
         {
-            tree.modData?.SetInt(FruitTreeFertilizer, obj.ParentSheetIndex == ModEntry.DeluxeFruitTreeFertilizerID ? 2 : 1);
-            return true;
+            if (terrain is FruitTree fruitTree)
+            {
+                if (obj.ParentSheetIndex == ModEntry.FruitTreeFertilizerID || obj.ParentSheetIndex == ModEntry.DeluxeFruitTreeFertilizerID)
+                {
+                    fruitTree.modData?.SetInt(FruitTreeFertilizer, obj.ParentSheetIndex == ModEntry.DeluxeFruitTreeFertilizerID ? 2 : 1);
+                    return true;
+                }
+                if (obj.ParentSheetIndex == ModEntry.MiraculousBeveragesID)
+                {
+                    fruitTree.modData?.SetBool(MiraculousBeverages, true);
+                    return true;
+                }
+            }
+            if (terrain is Bush bush)
+            {
+                if (obj.ParentSheetIndex == ModEntry.RapidBushFertilizerID && bush.size.Value == Bush.greenTeaBush)
+                {
+                    bush.modData?.SetBool(RapidBush, true);
+                    return true;
+                }
+                else if (obj.ParentSheetIndex == ModEntry.BountifulBushID)
+                {
+                    bush.modData?.SetBool(BountifulBush, true);
+                    return true;
+                }
+                else if (obj.ParentSheetIndex == ModEntry.MiraculousBeveragesID && bush.size.Value == Bush.greenTeaBush)
+                {
+                    bush.modData?.SetBool(MiraculousBeverages, true);
+                    return true;
+                }
+            }
+            if (terrain is Tree tree
+                && (obj.ParentSheetIndex == ModEntry.TreeTapperFertilizerID))
+            {
+                tree.modData?.SetBool(TreeTapperFertilizer, true);
+                return true;
+            }
+        }
+
+        if (loc.Objects.TryGetValue(tile, out SObject @object) && @object is IndoorPot pot && pot.bush?.Value is Bush pottedBush && pottedBush.size?.Value == Bush.greenTeaBush)
+        {
+            if (obj.ParentSheetIndex == ModEntry.BountifulBushID)
+            {
+                pottedBush.modData?.SetBool(BountifulBush, true);
+                return true;
+            }
+            if (obj.ParentSheetIndex == ModEntry.RapidBushFertilizerID)
+            {
+                pottedBush.modData?.SetBool(RapidBush, true);
+                return true;
+            }
+            if (obj.ParentSheetIndex == ModEntry.MiraculousBeveragesID)
+            {
+                pottedBush.modData?.SetBool(MiraculousBeverages, true);
+                return true;
+            }
+        }
+
+        if (obj.ParentSheetIndex == ModEntry.BountifulBushID)
+        {
+            Rectangle pos = new((int)tile.X * 64, (int)tile.Y * 64, 16, 16);
+            foreach (LargeTerrainFeature largeterrainfeature in loc.largeTerrainFeatures)
+            {
+                if (largeterrainfeature is Bush bigBush && bigBush.size.Value == Bush.mediumBush && bigBush.getBoundingBox().Intersects(pos))
+                {
+                    bigBush.modData?.SetBool(BountifulBush, true);
+                    return true;
+                }
+            }
         }
 
         if (loc is BuildableGameLocation buildableLoc && obj.ParentSheetIndex == ModEntry.DomesticatedFishFoodID)

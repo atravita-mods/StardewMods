@@ -16,4 +16,9 @@ public class ModConfig
     /// Gets or sets a value for what color to make the water overlay for fish food.
     /// </summary>
     public Color WaterOverlayColor { get; set; } = new(147, 112, 219, 155);
+
+    /// <summary>
+    /// Gets or sets a value indicating whether or not bushes should change color to indicate whether or not they've been fertilized.
+    /// </summary>
+    public bool RecolorBushes { get; set; } = true;
 }

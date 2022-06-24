@@ -8,8 +8,9 @@
   "UpdateKeys": [
     "Nexus:11837",
     "GitHub:atravita-mods/MoreFertilizers"
+
   ],
-  "MinimumApiVersion": "3.14",
+  "MinimumApiVersion": "3.15",
   "Dependencies": [
     {
       "UniqueID": "spacechase0.JsonAssets",
@@ -17,6 +18,9 @@
     },
     {
       "UniqueID": "spacechase0.SpaceCore"
+    },
+    {
+      "UniqueID":  "atravita.AtraCore"
     }
   ]
 }

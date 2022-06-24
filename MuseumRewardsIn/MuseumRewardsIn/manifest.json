@@ -6,8 +6,12 @@
   "UniqueID": "atravita.MuseumStore",
   "EntryDll": "MuseumRewardsIn.dll",
   "UpdateKeys": [
-    "Nexus:12598",
-    "GitHub:atravita-mods/MuseumRewardsIn"
+    "Nexus:12598"
   ],
-  "MinimumApiVersion": "3.15"
+  "MinimumApiVersion": "3.15",
+  "Dependencies": [
+    {
+      "UniqueID": "atravita.AtraCore"
+    }
+  ]
 }

@@ -7,13 +7,15 @@
   "EntryDll": "HighlightEmptyMachines.dll",
   "UpdateKeys": [
     "Nexus:11664",
-    "GitHub:atravita-mods/HighlightEmptyMachines"
   ],
-  "MinimumApiVersion": "3.14",
+  "MinimumApiVersion": "3.15",
   "Dependencies": [
     {
       "UniqueID": "Digus.ProducerFrameworkMod",
       "IsRequired": false
+    },
+    {
+      "UniqueID": "atravita.AtraCore",
     }
   ]
 }

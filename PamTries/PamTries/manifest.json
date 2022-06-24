@@ -8,11 +8,14 @@
   "UpdateKeys": [
     "Nexus:9921"
   ],
-  "MinimumApiVersion": "3.0",
+  "MinimumApiVersion": "3.15",
   "Dependencies": [
     {
       "UniqueID": "Pathoschild.ContentPatcher",
       "IsRequired": true
+    },
+    {
+      "UniqueID":  "atravita.AtraCore"
     }
   ]
 }

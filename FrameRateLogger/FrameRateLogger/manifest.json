@@ -5,6 +5,5 @@
   "Description": "mumble gripe annoyed",
   "UniqueID": "atravita.FrameRateLogger",
   "EntryDll": "FrameRateLogger.dll",
-  //"UpdateKeys": [ "Nexus:11856", "GitHub:atravita-mods/AvoidLosingSpecter" ],
   "MinimumApiVersion": "3.14"
 }

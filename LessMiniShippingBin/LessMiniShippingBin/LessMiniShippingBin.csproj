@@ -8,6 +8,10 @@
   </PropertyGroup>
 
   <PropertyGroup>
+    <Version>0.3.0</Version>
+  </PropertyGroup>
+
+  <PropertyGroup>
     <TranslationClassBuilder_AddGetByKey>true</TranslationClassBuilder_AddGetByKey>
   </PropertyGroup>
 

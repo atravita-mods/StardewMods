@@ -1,0 +1,22 @@
+{
+  "Name": "More Fertilizers",
+  "Author": "atravita",
+  "Version": "0.1.7",
+  "Description": "Adds more fertilizers to the game.",
+  "UniqueID": "atravita.MoreFertilizers",
+  "EntryDll": "MoreFertilizers.dll",
+  "UpdateKeys": [
+    "Nexus:11837",
+    "GitHub:atravita-mods/MoreFertilizers"
+  ],
+  "MinimumApiVersion": "3.14",
+  "Dependencies": [
+    {
+      "UniqueID": "spacechase0.JsonAssets",
+      "MinimumVersion": "1.10.3"
+    },
+    {
+      "UniqueID": "spacechase0.SpaceCore"
+    }
+  ]
+}

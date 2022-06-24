@@ -1,0 +1,15 @@
+{"Changes": [
+    {
+        "Action": "EditMap",
+        "Target": "Maps/SandyHouse",
+        "MapTiles": [
+        {
+            "Position": {"X": 1, "Y": 6},
+            "Layer": "Buildings",
+            "SetProperties": {
+                "Action": "DropBox SandyBox"
+            }
+        }
+        ]
+    }
+]}

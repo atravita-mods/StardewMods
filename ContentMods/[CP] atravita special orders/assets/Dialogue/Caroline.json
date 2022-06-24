@@ -1,0 +1,11 @@
+{"Changes":[
+    {
+		"LogName": "DeckTheHalls - Caroline dialogue",
+		"Action": "EditData",
+		"Target": "Characters/Dialogue/Caroline",
+		"Entries": {
+			"atravita.deckTheHalls_InProgress": "{{i18n:atravita.deck_the_halls_inprogress.000}}$h#$b#{{i18n:atravita.deck_the_halls_inprogress.001}}$s",
+			"atravita.deckTheHalls_Completed": "{{i18n:atravita.deck_the_halls_completed.000}}$h#$e#{{i18n:atravita.deck_the_halls_completed.001}}"
+		}
+	},
+]}

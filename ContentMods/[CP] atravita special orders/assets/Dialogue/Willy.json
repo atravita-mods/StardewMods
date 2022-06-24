@@ -1,0 +1,11 @@
+{"Changes":[
+{
+    "LogName": "Catfish Challenge - Willy Dialogue",
+    "Target": "Characters/Dialogue/Willy",
+    "Action": "EditData",
+    "Entries": {
+        "atravita.CatfishChallenge_IsAvailable": "{{i18n:atravita.catfish_challenge_isavailable.000}}#$e#{{i18n:atravita.catfish_challenge_isavailable.001}}",
+        "atravita.CatfishChallenge_Completed": "@! {{i18n:atravita.catfish_challenge_completed.000}}#$b#{{i18n:atravita.catfish_challenge_completed.001}}$h"
+    }
+},
+]}

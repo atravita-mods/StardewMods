@@ -6,7 +6,7 @@
   "UniqueID": "atravita.HighlightEmptyMachines",
   "EntryDll": "HighlightEmptyMachines.dll",
   "UpdateKeys": [
-    "Nexus:11664",
+    "Nexus:11664"
   ],
   "MinimumApiVersion": "3.15",
   "Dependencies": [
@@ -15,7 +15,7 @@
       "IsRequired": false
     },
     {
-      "UniqueID": "atravita.AtraCore",
+      "UniqueID": "atravita.AtraCore"
     }
   ]
 }

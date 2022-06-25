@@ -1,12 +1,12 @@
 {
   "Name": "Less Mini Shipping Bin",
   "Author": "atravita",
-  "Version": "1.0.0",
+  "Version": "0.3.0",
   "Description": "Lets you make the mini shipping bin bigger.",
   "UniqueID": "atravita.LessMiniShippingBin",
   "EntryDll": "LessMiniShippingBin.dll",
   "UpdateKeys": [
-    "Nexus:10959",
+    "Nexus:10959"
   ],
   "MinimumApiVersion": "3.15",
   "Dependencies": [

@@ -41,7 +41,7 @@ internal class DialogueLog : AbstractDataModel
     {
         if (!Context.IsWorldReady || Constants.SaveFolderName is null)
         {
-            throw new SaveNotLoadedError();
+            ASThrowHelper.ThrowSaveNotLoaded();
         }
         DialogueLog log = ModEntry.DataHelper.ReadGlobalData<DialogueLog>($"{Game1.uniqueIDForThisGame}{IDENTIFIER}{multiplayerID:X8}")
             ?? new DialogueLog(Game1.uniqueIDForThisGame.ToString(), multiplayerID);
@@ -111,8 +111,10 @@ internal class DialogueLog : AbstractDataModel
     {
         if (!this.SeenDialogues.TryGetValue(dialoguekey, out List<string>? characterList))
         {
-            characterList = new();
-            characterList.Add(characterName);
+            characterList = new()
+            {
+                characterName,
+            };
             this.SeenDialogues[dialoguekey] = characterList;
             return true;
         }

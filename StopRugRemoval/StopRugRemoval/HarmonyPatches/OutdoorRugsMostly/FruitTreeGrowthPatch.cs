@@ -1,6 +1,7 @@
 ﻿using System.Reflection;
 using System.Reflection.Emit;
 using AtraBase.Toolkit.Reflection;
+using AtraShared.Utils.Extensions;
 using AtraShared.Utils.HarmonyHelper;
 using HarmonyLib;
 using StardewValley.Objects;
@@ -53,6 +54,7 @@ internal static class FruitTreeGrowthPatch
         catch (Exception ex)
         {
             ModEntry.ModMonitor.Log($"Transpiler for {nameof(FruitTree.IsGrowthBlocked)} failed with error {ex}", LogLevel.Error);
+            original.Snitch(ModEntry.ModMonitor);
         }
         return null;
     }

@@ -58,7 +58,7 @@ internal static class TokenPurchasePatch
                     {
                         break;
                     }
-                    int copy = i;
+                    int copy = i; // prevent accidental capture. There's no explicit notation for that in C#
                     responses.Add(new Response(i.ToString(), i.ToString()));
                     actions.Add(() => AttemptBuyTokens(copy));
                 }

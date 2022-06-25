@@ -38,7 +38,7 @@ internal class RecentCompletedSO : AbstractDataModel
     {
         if (!Context.IsWorldReady || Constants.SaveFolderName is null)
         {
-            throw new SaveNotLoadedError();
+            ASThrowHelper.ThrowSaveNotLoaded();
         }
         return ModEntry.DataHelper.ReadGlobalData<RecentCompletedSO>($"{Game1.uniqueIDForThisGame}{IDENTIFIER}")
             ?? new RecentCompletedSO(Game1.uniqueIDForThisGame.ToString());
@@ -53,7 +53,7 @@ internal class RecentCompletedSO : AbstractDataModel
     {
         if (!Context.IsWorldReady || Constants.SaveFolderName is null)
         {
-            throw new SaveNotLoadedError();
+            ASThrowHelper.ThrowSaveNotLoaded();
         }
         RecentCompletedSO? log = ModEntry.DataHelper.ReadGlobalData<RecentCompletedSO>($"{Game1.uniqueIDForThisGame}{IDENTIFIER}_temp_{SDate.Now().DaysSinceStart}");
         if (log is not null)

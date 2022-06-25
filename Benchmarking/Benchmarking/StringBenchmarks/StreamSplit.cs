@@ -1,11 +1,7 @@
-﻿using System;
-using System.Security.Cryptography;
-using AtraBase.Toolkit.StringHandler;
+﻿using AtraBase.Toolkit.StringHandler;
 using BenchmarkDotNet.Attributes;
-using BenchmarkDotNet.Running;
 
-namespace Benchmarking;
-
+namespace Benchmarking.StringBenchmarks;
 public class Splitter
 {
 
@@ -30,13 +26,5 @@ public class Splitter
         foreach (var s in new StreamSplit(lori.AsSpan()))
         {
         }
-    }
-}
-
-public class Program
-{
-    public static void Main(string[] args)
-    {
-        var summary = BenchmarkRunner.Run(typeof(Program).Assembly);
     }
 }

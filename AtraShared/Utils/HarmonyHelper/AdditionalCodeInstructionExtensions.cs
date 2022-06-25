@@ -1,4 +1,5 @@
 ﻿using System.Reflection.Emit;
+using System.Runtime.CompilerServices;
 using HarmonyLib;
 
 namespace AtraShared.Utils.HarmonyHelper;
@@ -15,6 +16,38 @@ public class InvalidILHelperCommand : InvalidOperationException
     public InvalidILHelperCommand(string text)
         : base(text)
     {
+    }
+}
+
+/// <summary>
+/// Throw helper for the ILHelper.
+/// </summary>
+public static class ILHelperThrowHelper
+{
+    /// <summary>
+    /// Throws an error that means the ILHelper was used incorrectly.
+    /// </summary>
+    /// <param name="text">text to include.</param>
+    /// <exception cref="InvalidILHelperCommand">ILHelper used incorrectly.</exception>
+    [DoesNotReturn]
+    [MethodImpl(MethodImplOptions.NoInlining)]
+    public static void ThrowInvalidILHelperCommand(string text)
+    {
+        throw new InvalidILHelperCommand(text);
+    }
+
+    /// <summary>
+    /// Throws an error that means the ILHelper was used incorrectly.
+    /// </summary>
+    /// <typeparam name="T">A fake return type.</typeparam>
+    /// <param name="text">text to include.</param>
+    /// <returns>nothing.</returns>
+    /// <exception cref="InvalidILHelperCommand">ILHelper used incorrectly.</exception>
+    [DoesNotReturn]
+    [MethodImpl(MethodImplOptions.NoInlining)]
+    public static T ThrowInvalidILHelperCommand<T>(string text)
+    {
+        throw new InvalidILHelperCommand(text);
     }
 }
 
@@ -60,7 +93,7 @@ public static class AdditionalCodeInstructionExtensions
         {
             return instruction.Clone();
         }
-        throw new InvalidILHelperCommand($"Could not make ldloc from {instruction}");
+        return ILHelperThrowHelper.ThrowInvalidILHelperCommand<CodeInstruction>($"Could not make ldloc from {instruction}");
     }
 
     /// <summary>
@@ -96,6 +129,6 @@ public static class AdditionalCodeInstructionExtensions
         {
             return new CodeInstruction(OpCodes.Stloc_S, instruction.operand);
         }
-        throw new InvalidILHelperCommand($"Could not make stloc from {instruction}");
+        return ILHelperThrowHelper.ThrowInvalidILHelperCommand<CodeInstruction>($"Could not make stloc from {instruction}");
     }
 }

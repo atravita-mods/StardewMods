@@ -4,6 +4,9 @@ using StardewModdingAPI.Utilities;
 
 namespace SpecialOrdersExtended.Managers;
 
+/// <summary>
+/// Handles asset management for this mod.
+/// </summary>
 internal static class AssetManager
 {
     private static readonly string AssetLocation = PathUtilities.NormalizeAssetName("Mods/atravita_SpecialOrdersExtended_DurationOverride");

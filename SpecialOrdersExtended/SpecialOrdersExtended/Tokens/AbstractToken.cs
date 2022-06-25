@@ -7,6 +7,8 @@
 /// </summary>
 internal abstract class AbstractToken
 {
+    private static readonly string[] booleans = new[] { "true", "false" };
+
     /// <summary>
     /// Internal cache for token. Will be null if not ready.
     /// </summary>
@@ -64,7 +66,7 @@ internal abstract class AbstractToken
     /// <returns>True if the inputs are bounded, false otherwise.</returns>
     public virtual bool HasBoundedValues(string input, out IEnumerable<string> allowedValues)
     {
-        allowedValues = new List<string>() { "true", "false" };
+        allowedValues = booleans;
         return false;
     }
 

@@ -59,7 +59,7 @@ public class ModEntry : Mod
         => this.random ?? new Random(((int)Game1.uniqueIDForThisGame * 2) + ((int)Game1.stats.DaysPlayed * 7));
 
     /// <summary>
-    /// Gets a value indicating whether or not I've spawned fruit today.
+    /// Gets or sets a value indicating whether or not I've spawned fruit today.
     /// </summary>
     private bool SpawnedFruitToday { get; set; }
 

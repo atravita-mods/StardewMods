@@ -58,7 +58,7 @@ internal static class CropTranspiler
         try
         {
             ILHelper helper = new(original, instructions, ModEntry.ModMonitor, gen);
-            Type random = AccessTools.TypeByName("StardewValley.OneTimeRandom, StardewValley")
+            Type random = AccessTools.TypeByName("StardewValley.OneTimeRandom")
                 ?? ReflectionThrowHelper.ThrowMethodNotFoundException<Type>("StardewValley.OneTimeRandom");
             helper.FindNext(new CodeInstructionWrapper[]
             { // Locate the randomness check for a giant crop.

@@ -2,6 +2,7 @@
 using System.Reflection.Emit;
 using AtraBase.Toolkit;
 using HarmonyLib;
+using Microsoft.Toolkit.Diagnostics;
 
 namespace AtraShared.Utils.HarmonyHelper;
 
@@ -93,7 +94,7 @@ public class CodeInstructionWrapper
         }
         else
         {
-            throw new ArgumentException("Argument position can only be used with LdArg or StArg");
+            ThrowHelper.ThrowArgumentException("Argument position can only be used with LdArg or StArg");
         }
     }
 
@@ -111,10 +112,15 @@ public class CodeInstructionWrapper
         }
         else
         {
-            throw new ArgumentException("Localbuilders can only be used with LdLoc or StLoc");
+            ThrowHelper.ThrowArgumentException("Localbuilders can only be used with LdLoc or StLoc");
         }
     }
 
+    /// <summary>
+    /// Initializes a new instance of the <see cref="CodeInstructionWrapper"/> class.
+    /// </summary>
+    /// <param name="specialcase">Ldloc or Stloc.</param>
+    /// <param name="localType">A type to compare the local against.</param>
     public CodeInstructionWrapper(SpecialCodeInstructionCases specialcase, Type localType)
     {
         if (specialcase is SpecialCodeInstructionCases.LdLoc or SpecialCodeInstructionCases.StLoc)
@@ -124,10 +130,15 @@ public class CodeInstructionWrapper
         }
         else
         {
-            throw new ArgumentException("Matching by type can only be used with LdLoc or StLoc");
+            ThrowHelper.ThrowArgumentException("Matching by type can only be used with LdLoc or StLoc");
         }
     }
 
+    /// <summary>
+    /// Initializes a new instance of the <see cref="CodeInstructionWrapper"/> class.
+    /// </summary>
+    /// <param name="specialcase">Wildcard.</param>
+    /// <param name="predicate">a predicate to use for matching.</param>
     public CodeInstructionWrapper(SpecialCodeInstructionCases specialcase, Func<CodeInstruction, bool> predicate)
     {
         if (specialcase is SpecialCodeInstructionCases.Wildcard)
@@ -137,7 +148,7 @@ public class CodeInstructionWrapper
         }
         else
         {
-            throw new ArgumentException("Use Wildcard for predicate-based matching.");
+            ThrowHelper.ThrowArgumentException("Use Wildcard for predicate-based matching.");
         }
     }
 
@@ -179,12 +190,11 @@ public class CodeInstructionWrapper
             SpecialCodeInstructionCases.StLoc => this.local is null
                                                     ? (instruction.IsStloc() && (this.localType is null || LocalBuilderOperandIsOfType(this.localType, instruction.operand)))
                                                     : (instruction.IsStloc() && IsMatchingLocal(this.local, instruction.operand)),
-            _ => throw new UnexpectedEnumValueException<SpecialCodeInstructionCases>(this.specialInstructionCase.Value),
+            _ => TKThrowHelper.ThrowUnexpectedEnumValueException<SpecialCodeInstructionCases, bool>(this.specialInstructionCase.Value),
         };
     }
 
     /// <inheritdoc/>
-    [SuppressMessage("StyleCop.CSharp.OrderingRules", "SA1202:Elements should be ordered by access", Justification = "Reviewed.")]
     public override string ToString()
     {
         if (this.specialInstructionCase is null)

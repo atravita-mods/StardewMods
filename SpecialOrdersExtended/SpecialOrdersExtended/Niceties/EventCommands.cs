@@ -33,11 +33,11 @@ internal static class EventCommands
     [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Harmony convention.")]
     private static bool PrefixTryGetCommand(Event __instance, GameLocation location, GameTime time, string[] split)
     {
-        if (split.Length == 0)
+        if (split.Length < 2)
         {
             return true;
         }
-        else if (split[0].Equals("atravita_addSpecialOrder"))
+        else if (split[0].Equals("atravita_addSpecialOrder", StringComparison.OrdinalIgnoreCase))
         {
             AddSpecialOrder(__instance, location, time, split);
             return false;

@@ -1,11 +1,7 @@
 ﻿{
-  "Name": "Bountiful Bush Fertilizer",
-  "Price": "50",
+  "Name": "Everlasting Fertilizer - More Fertilizers",
+  "Price": "150",
   "Category": "Junk",
   "Edibility": -300,
-  "TranslationKey": "bountiful-bush-fertilizer",
-  "PurchasePrice": 150,
-  "PurchaseFrom": "Pierre",
-  "CanPurchase": true,
-  "PurchaseRequirements": [ "y 2", "e 2120303", "d Mon Tue Thu Fri Sat" ]
+  "TranslationKey": "everlasting-fertilizer",
 }

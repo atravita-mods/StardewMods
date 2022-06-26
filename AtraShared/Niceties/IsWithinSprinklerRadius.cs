@@ -1,5 +1,6 @@
 ﻿using AtraShared.Integrations;
 using AtraShared.Integrations.Interfaces;
+using AtraShared.Utils.Extensions;
 using Microsoft.Xna.Framework;
 using StardewValley.Objects;
 using StardewValley.TerrainFeatures;
@@ -8,7 +9,6 @@ namespace AtraShared.Niceties;
 
 public static class IsWithinSprinklerRadius
 {
-    public readonly record struct Tile (string Map, Vector2 Pos);
 
     private static HashSet<Tile> wateredTiles = new();
     private static HashSet<string> processedMaps = new();
@@ -34,6 +34,7 @@ public static class IsWithinSprinklerRadius
     {
         wateredTiles.Clear();
         processedMaps.Clear();
+        Monitor?.DebugOnlyLog("Clearing sprinkler-handled tiles", LogLevel.Info);
     }
 
     public static bool IsTileInWateringRange(GameLocation location, Vector2 pos)
@@ -67,6 +68,7 @@ public static class IsWithinSprinklerRadius
 
         processedMaps.Add(location.NameOrUniqueName);
 
+        Monitor?.DebugOnlyLog($"Calculating sprinkler-handled tiles for {location.NameOrUniqueName}", LogLevel.Info);
         if (flexibleSprinklersApi is not null)
         {
             foreach (Vector2 vec in flexibleSprinklersApi.GetAllTilesInRangeOfSprinklers(location))

@@ -46,7 +46,7 @@ internal static class SpecialFertilizerApplication
             return;
         }
 
-        // Handle the special case of tossing the fish food fertilizer.
+        // Handle the graphics for the special case of tossing the fish food fertilizer.
         if (obj.ParentSheetIndex == ModEntry.FishFoodID || obj.ParentSheetIndex == ModEntry.DeluxeFishFoodID || obj.ParentSheetIndex == ModEntry.DomesticatedFishFoodID)
         {
             Vector2 placementpixel = (placementtile * 64f) + new Vector2(32f, 32f);
@@ -54,7 +54,7 @@ internal static class SpecialFertilizerApplication
             {
                 foreach (Building b in loc.buildings)
                 {
-                    if (b is FishPond fishPond && b.occupiesTile(e.Cursor.GrabTile))
+                    if (b is FishPond fishPond && b.occupiesTile(placementtile))
                     {
                         placementpixel = fishPond.GetCenterTile() * 64f;
                         break;
@@ -103,16 +103,9 @@ internal static class SpecialFertilizerApplication
                     static () => Game1.currentLocation.waterColor.Value = ModEntry.Config.WaterOverlayColor,
                     (int)time);
             }
-
-            if (PlaceHandler.TryPlaceFertilizer(obj, Game1.currentLocation, placementtile))
-            {
-                Game1.player.reduceActiveItemByOne();
-                helper.Suppress(e.Button);
-                return;
-            }
         }
 
-        // Handle placing the other fertilizers.
+        // The actual placement.
         if (PlaceHandler.TryPlaceFertilizer(obj, Game1.currentLocation, placementtile))
         {
             Game1.player.reduceActiveItemByOne();

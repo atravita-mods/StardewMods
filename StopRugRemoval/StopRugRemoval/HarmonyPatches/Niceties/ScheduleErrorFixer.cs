@@ -1,4 +1,5 @@
-﻿using AtraBase.Toolkit.StringHandler;
+﻿using AtraBase.Toolkit.Extensions;
+using AtraBase.Toolkit.StringHandler;
 using HarmonyLib;
 using Microsoft.Xna.Framework;
 using StardewModdingAPI.Utilities;
@@ -31,9 +32,9 @@ internal static class ScheduleErrorFixer
         { // Attempt to first just assign their position from their default map.
             __instance.currentLocation = location;
         }
-        else if (Game1.content.Load<Dictionary<string, string>>(@"Data\NPCDispositions").TryGetValue(__instance.Name, out string? dispo)
-            && dispo.SpanSplit('/').TryGetAtIndex(10, out SpanSplitEntry pos))
+        else if (Game1.content.Load<Dictionary<string, string>>(@"Data\NPCDispositions").TryGetValue(__instance.Name, out string? dispo))
         { // Okay, if that didn't work, try getting from NPCDispositions.
+            var pos = dispo.GetNthChunk('/', 10);
             SpanSplit locParts = pos.SpanSplit();
             string defaultMap = locParts[0].ToString();
             if (Game1.getLocationFromName(defaultMap) is GameLocation loc)

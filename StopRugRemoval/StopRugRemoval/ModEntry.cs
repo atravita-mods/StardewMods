@@ -7,6 +7,7 @@ using AtraShared.Utils.Extensions;
 using HarmonyLib;
 using StardewModdingAPI.Events;
 using StardewModdingAPI.Utilities;
+using StardewValley.Locations;
 using StardewValley.Objects;
 using StopRugRemoval.Configuration;
 using StopRugRemoval.HarmonyPatches;
@@ -157,18 +158,14 @@ public class ModEntry : Mod
 
     private void OnGameLaunch(object? sender, GameLaunchedEventArgs e)
     {
-        Task task = Task.Run(() =>
-        {
-            PlantGrassUnder.GetSmartBuildingBuildMode(this.Helper.ModRegistry);
-            this.ApplyLatePatches(new Harmony(this.ModManifest.UniqueID + "+latepatches"));
-        });
+        PlantGrassUnder.GetSmartBuildingBuildMode(this.Helper.ModRegistry);
+        this.ApplyLatePatches(new Harmony(this.ModManifest.UniqueID + "+latepatches"));
 
         GMCM = new(this.Monitor, this.Helper.Translation, this.Helper.ModRegistry, this.ModManifest);
         if (GMCM.TryGetAPI())
         {
             this.SetUpBasicConfig();
         }
-        task.Wait();
     }
 
     private void ReturnedToTitle(object? sender, ReturnedToTitleEventArgs e)
@@ -222,7 +219,7 @@ public class ModEntry : Mod
 
         if (Context.IsMainPlayer)
         {
-            Task task = Task.Run(() => VolcanoChestAdjuster.LoadData(this.Helper.Data, this.Helper.Multiplayer));
+            VolcanoChestAdjuster.LoadData(this.Helper.Data, this.Helper.Multiplayer);
 
             // Make an attempt to clear all nulls from chests.
             Utility.ForAllLocations(action: (GameLocation loc) =>
@@ -234,9 +231,16 @@ public class ModEntry : Mod
                         chest.clearNulls();
                     }
                 }
-            });
 
-            task.Wait();
+                if (loc is FarmHouse house)
+                {
+                    house.fridge?.Value?.clearNulls();
+                }
+                else if (loc is IslandFarmHouse islandHouse)
+                {
+                    islandHouse.fridge?.Value?.clearNulls();
+                }
+            });
         }
     }
 

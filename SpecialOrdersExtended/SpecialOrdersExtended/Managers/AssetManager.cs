@@ -11,6 +11,10 @@ internal static class AssetManager
 {
     private static readonly string AssetLocation = PathUtilities.NormalizeAssetName("Mods/atravita_SpecialOrdersExtended_DurationOverride");
 
+    /// <summary>
+    /// Called when assets are loaded.
+    /// </summary>
+    /// <param name="e">event args.</param>
     internal static void OnLoadAsset(AssetRequestedEventArgs e)
     {
         if (e.NameWithoutLocale.IsEquivalentTo(AssetLocation))

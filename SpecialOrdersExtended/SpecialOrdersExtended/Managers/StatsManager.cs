@@ -91,13 +91,11 @@ internal static class StatsManager
     /// </summary>
     private static void GrabProperties()
     {
-#pragma warning disable CS8604 // Possible null reference argument.  - Not actually possible, the Where should filter out any that don't have a Get.
         propertyGetters = typeof(Stats).GetProperties()
             .Where((PropertyInfo p) => p.CanRead && p.PropertyType.Equals(typeof(uint)) && !DENYLIST.Contains(p.Name))
             .ToDictionary(
                 (PropertyInfo p) => p.Name,
-                p => (Func<Stats, uint>)Delegate.CreateDelegate(typeof(Func<Stats, uint>), p.GetGetMethod()),
+                p => p.GetGetMethod()!.CreateDelegate<Func<Stats, uint>>(),
                 StringComparer.OrdinalIgnoreCase);
-#pragma warning restore CS8604 // Possible null reference argument.
     }
 }

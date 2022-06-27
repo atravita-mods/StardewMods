@@ -7,6 +7,8 @@ using HarmonyLib;
 using NerfCavePuzzle.HarmonyPatches;
 using StardewModdingAPI.Events;
 
+using AtraUtils = AtraShared.Utils.Utils;
+
 namespace NerfCavePuzzle;
 
 /// <inheritdoc />
@@ -55,15 +57,7 @@ internal class ModEntry : Mod
 
         helper.Events.Multiplayer.ModMessageReceived += this.MultiMessageRecieved;
 
-        try
-        {
-            Config = this.Helper.ReadConfig<ModConfig>();
-        }
-        catch
-        {
-            this.Monitor.Log(I18n.IllFormatedConfig(), LogLevel.Warn);
-            Config = new();
-        }
+        Config = AtraUtils.GetConfigOrDefault<ModConfig>(helper, this.Monitor);
         this.ApplyPatches(new Harmony(UniqueID));
     }
 
@@ -77,21 +71,23 @@ internal class ModEntry : Mod
         {
             return;
         }
-        helper.Register(() => Config = new(), () => this.Helper.WriteConfig(Config))
+        helper.Register(
+            static () => Config = new(),
+            () => Task.Run(() => this.Helper.WriteConfig(Config)))
             .AddParagraph(I18n.ModDescription);
         foreach (PropertyInfo property in typeof(ModConfig).GetProperties())
         {
             if (property.PropertyType == typeof(bool))
             {
-                helper.AddBoolOption(property, () => Config);
+                helper.AddBoolOption(property, static () => Config);
             }
             else if (property.PropertyType == typeof(float))
             {
-                helper.AddFloatOption(property, () => Config, min: 0.1f, max: 10f, interval: 0.1f);
+                helper.AddFloatOption(property, static () => Config, min: 0.1f, max: 10f, interval: 0.1f);
             }
             else if (property.PropertyType == typeof(int))
             {
-                helper.AddIntOption(property, () => Config, min: 5, max: 7);
+                helper.AddIntOption(property, static () => Config, min: 5, max: 7);
             }
         }
     }

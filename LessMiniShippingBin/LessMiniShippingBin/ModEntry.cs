@@ -1,7 +1,7 @@
 ﻿using AtraShared.Integrations;
-using AtraShared.Utils.Extensions;
 using HarmonyLib;
 using StardewModdingAPI.Events;
+using AtraUtils = AtraShared.Utils.Utils;
 
 namespace LessMiniShippingBin;
 
@@ -27,15 +27,7 @@ public class ModEntry : Mod
     {
         ModMonitor = this.Monitor;
         I18n.Init(helper.Translation);
-        try
-        {
-            Config = this.Helper.ReadConfig<ModConfig>();
-        }
-        catch
-        {
-            ModMonitor.Log(I18n.IllFormatedConfig(), LogLevel.Warn);
-            Config = new();
-        }
+        Config = AtraUtils.GetConfigOrDefault<ModConfig>(helper, this.Monitor);
         this.ApplyPatches(new Harmony(this.ModManifest.UniqueID));
         helper.Events.GameLoop.GameLaunched += this.SetUpConfig;
     }
@@ -48,15 +40,13 @@ public class ModEntry : Mod
     {
         // handle patches from annotations.
         harmony.PatchAll();
-        harmony.Snitch(this.Monitor, this.ModManifest.UniqueID);
     }
 
     /// <summary>
-    /// Generates the GMCM for this mod by looking at the structure of the config class.
+    /// Generates the GMCM for this mod.
     /// </summary>
-    /// <param name="sender">Unknown, expected by SMAPI.</param>
-    /// <param name="e">Arguments for eevnt.</param>
-    /// <remarks>To add a new setting, add the details to the i18n file. Currently handles: bool.</remarks>
+    /// <param name="sender">SMAPI</param>
+    /// <param name="e">Arguments for event.</param>
     private void SetUpConfig(object? sender, GameLaunchedEventArgs e)
     {
         GMCMHelper helper = new(this.Monitor, this.Helper.Translation, this.Helper.ModRegistry, this.ModManifest);
@@ -66,20 +56,20 @@ public class ModEntry : Mod
         }
 
         helper.Register(
-                reset: () => Config = new ModConfig(),
+                reset: static () => Config = new ModConfig(),
                 save: () => this.Helper.WriteConfig(Config))
             .AddParagraph(I18n.Mod_Description)
             .AddNumberOption(
-                getValue: () => Config.MiniShippingCapacity,
-                setValue: value => Config.MiniShippingCapacity = value,
+                getValue: static () => Config.MiniShippingCapacity,
+                setValue: static value => Config.MiniShippingCapacity = value,
                 name: I18n.Config_Capacity_Title,
                 tooltip: I18n.Config_Capacity_Description,
                 min: 9,
                 max: 48,
                 interval: 9)
             .AddNumberOption(
-                getValue: () => Config.JuminoCapcaity,
-                setValue: value => Config.JuminoCapcaity = value,
+                getValue: static () => Config.JuminoCapcaity,
+                setValue: static value => Config.JuminoCapcaity = value,
                 name: I18n.Config_Junimo_Title,
                 tooltip: I18n.Config_Junimo_Description,
                 min: 9,

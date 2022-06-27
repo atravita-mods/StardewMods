@@ -493,7 +493,6 @@ internal class ModEntry : Mod
         }
 
         // Handle optional integrations.
-        Task task = Task.Run(() =>
         {
             GMCMHelper helper = new(this.Monitor, this.Helper.Translation, this.Helper.ModRegistry, this.ModManifest);
             if (helper.TryGetAPI())
@@ -516,10 +515,9 @@ internal class ModEntry : Mod
                     }
                 }
             }
-        });
+        }
 
         this.ApplyPatches(new Harmony(this.ModManifest.UniqueID));
-        task.Wait();
         {
             IntegrationHelper helper = new(this.Monitor, this.Helper.Translation, this.Helper.ModRegistry, LogLevel.Trace);
             if (helper.TryGetAPI("TehPers.FishingOverhaul", "3.2.7", out ISimplifiedFishingApi? fishingAPI))

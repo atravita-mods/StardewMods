@@ -5,6 +5,7 @@ using AtraShared.MigrationManager;
 using AtraShared.Utils;
 using AtraShared.Utils.Extensions;
 using HarmonyLib;
+using StardewModdingAPI.Enums;
 using StardewModdingAPI.Events;
 using StardewModdingAPI.Utilities;
 using StardewValley.Locations;
@@ -90,7 +91,33 @@ public class ModEntry : Mod
         helper.Events.Multiplayer.ModMessageReceived += this.OnModMessageRecieved;
         helper.Events.Multiplayer.PeerConnected += this.OnPlayerConnected;
 
+        helper.Events.Specialized.LoadStageChanged += this.OnLoadStageChanged;
+
         this.ApplyPatches(new Harmony(this.ModManifest.UniqueID));
+    }
+
+    /// <summary>
+    /// Unfucks the inventory size.
+    /// Which I might have fucked up in a PR to JA.
+    /// </summary>
+    /// <param name="sender">SMAPI.</param>
+    /// <param name="e">event args.</param>
+    [EventPriority(EventPriority.Low)]
+    private void OnLoadStageChanged(object? sender, LoadStageChangedEventArgs e)
+    {
+        if (e.NewStage is LoadStage.SaveLoadedLocations)
+        {
+            foreach (Farmer player in Game1.getAllFarmers())
+            {
+                if (player.Items.Count < player.MaxItems)
+                {
+                    for (int i = player.Items.Count; i < player.MaxItems; i++)
+                    {
+                        player.Items.Add(null);
+                    }
+                }
+            }
+        }
     }
 
     /*************

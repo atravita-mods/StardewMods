@@ -34,26 +34,29 @@ internal static class ScheduleErrorFixer
         }
         else if (Game1.content.Load<Dictionary<string, string>>(@"Data\NPCDispositions").TryGetValue(__instance.Name, out string? dispo))
         { // Okay, if that didn't work, try getting from NPCDispositions.
-            var pos = dispo.GetNthChunk('/', 10);
-            SpanSplit locParts = pos.SpanSplit();
-            string defaultMap = locParts[0].ToString();
-            if (Game1.getLocationFromName(defaultMap) is GameLocation loc)
+            ReadOnlySpan<char> pos = dispo.GetNthChunk('/', 10);
+            if (pos.Length != 0)
             {
-                __instance.DefaultMap = defaultMap;
-                __instance.currentLocation = loc;
-            }
-            if (locParts.TryGetAtIndex(1, out SpanSplitEntry strX) && int.TryParse(strX, out int x)
-                && locParts.TryGetAtIndex(2, out SpanSplitEntry strY) && int.TryParse(strY, out int y))
-            {
-                __instance.DefaultPosition = new Vector2(x * 64, y * 64);
-                return;
+                SpanSplit locParts = pos.SpanSplit(expectedCount:3);
+                string defaultMap = locParts[0].ToString();
+                if (Game1.getLocationFromName(defaultMap) is GameLocation loc)
+                {
+                    __instance.DefaultMap = defaultMap;
+                    __instance.currentLocation = loc;
+                }
+                if (locParts.TryGetAtIndex(1, out SpanSplitEntry strX) && int.TryParse(strX, out int x)
+                    && locParts.TryGetAtIndex(2, out SpanSplitEntry strY) && int.TryParse(strY, out int y))
+                {
+                    __instance.DefaultPosition = new Vector2(x * 64, y * 64);
+                    return;
+                }
             }
         }
 
         // Still no go, let's try parsing from the first schedule entry.
         if (__instance.currentLocation is null)
         {
-            SpanSplit splits = rawData.SpanSplit();
+            SpanSplit splits = rawData.SpanSplit(expectedCount: 3);
             if (splits.TryGetAtIndex(1, out SpanSplitEntry locName) && Game1.getLocationFromName(locName.ToString()) is GameLocation loc)
             {
                 __instance.currentLocation = loc;

@@ -8,11 +8,12 @@ using StardewValley.Locations;
 using StardewValley.Menus;
 using xTile.Dimensions;
 using xTile.ObjectModel;
-
 using AtraUtils = AtraShared.Utils.Utils;
+using XTile = xTile.Tiles.Tile;
 
 namespace MuseumRewardsIn;
 
+/// <inheritdoc />
 [HarmonyPatch(typeof(Utility))]
 internal class ModEntry : Mod
 {
@@ -21,12 +22,14 @@ internal class ModEntry : Mod
 
     private static readonly Regex MuseumObject = new("museumCollectedReward(?<type>[a-zA-Z]+)_(?<id>[0-9]+)_", RegexOptions.Compiled, TimeSpan.FromMilliseconds(250));
 
-    private static IMonitor ModMonitor = null!;
+    private static IMonitor modMonitor = null!;
+
+    private static Vector2 shopLoc = new(4, 9);
 
     /// <inheritdoc />
     public override void Entry(IModHelper helper)
     {
-        ModMonitor = this.Monitor;
+        modMonitor = this.Monitor;
         helper.Events.Input.ButtonPressed += this.Input_ButtonPressed;
         helper.Events.Player.Warped += this.OnWarped;
         helper.Events.Content.AssetRequested += this.OnAssetRequested;
@@ -55,11 +58,11 @@ internal class ModEntry : Mod
                 {
                     if (__result.TryAdd(item, new int[] { 0, int.MaxValue }))
                     {
-                        ModMonitor.DebugOnlyLog($"Adding {item.Name} to catalogue!", LogLevel.Info);
+                        modMonitor.DebugOnlyLog($"Adding {item.Name} to catalogue!", LogLevel.Info);
                     }
                     else
                     {
-                        ModMonitor.Log($"Could not add {item.Name} to catalogue, may be a duplicate!", LogLevel.Warn);
+                        modMonitor.Log($"Could not add {item.Name} to catalogue, may be a duplicate!", LogLevel.Warn);
                     }
                 }
             }
@@ -123,13 +126,19 @@ internal class ModEntry : Mod
         if (e.NameWithoutLocale.IsEquivalentTo("Maps/ArchaeologyHouse"))
         {
             e.Edit(
-                (asset) =>
+                static (asset) =>
                 {
-                    var map = asset.AsMap();
-                    var tile = map.Data.GetLayer(BUILDING).PickTile(new Location(4 * 64, 9 * 64), Game1.viewport.Size);
+                    IAssetDataForMap? map = asset.AsMap();
+                    (int locX, int locY) = (shopLoc * 64).ToPoint();
+                    XTile? tile = map.Data.GetLayer(BUILDING).PickTile(new Location(locX, locY), Game1.viewport.Size);
+                    if (tile is null)
+                    {
+                        modMonitor.Log($"Tile could not be edited for shop, please let atra know!", LogLevel.Warn);
+                        return;
+                    }
                     tile.Properties.Add("Action", new PropertyValue(SHOPNAME));
                 },
-                AssetEditPriority.Early);
+                AssetEditPriority.Late);
         }
     }
 
@@ -137,7 +146,7 @@ internal class ModEntry : Mod
     {
         if (e.NewLocation is LibraryMuseum)
         {
-            Vector2 tile = new(4f, 9f); // default location of shop.
+            Vector2 tile = shopLoc; // default location of shop.
             foreach (Vector2 v in AtraUtils.YieldAllTiles(e.NewLocation))
             { // find the shop tile - a mod may have moved it.
                 if (e.NewLocation.doesTileHaveProperty((int)v.X, (int)v.Y, "Action", BUILDING)?.Contains(SHOPNAME) == true)

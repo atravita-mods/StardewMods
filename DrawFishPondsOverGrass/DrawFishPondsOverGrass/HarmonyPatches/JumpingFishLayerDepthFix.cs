@@ -1,5 +1,6 @@
 ﻿using System.Reflection;
 using System.Reflection.Emit;
+using AtraShared.Utils.Extensions;
 using AtraShared.Utils.HarmonyHelper;
 using HarmonyLib;
 using StardewValley.Buildings;
@@ -44,6 +45,7 @@ internal static class JumpingFishLayerDepthFix
         catch (Exception ex)
         {
             ModEntry.ModMonitor.Log($"Failed while trying to transpile jumping fish layer depth\n{ex}", LogLevel.Error);
+            original.Snitch(ModEntry.ModMonitor);
         }
         return null;
     }
@@ -87,6 +89,7 @@ internal static class PondFishLayerDepthFix
         catch (Exception ex)
         {
             ModEntry.ModMonitor.Log($"Failed while trying to transpile shadow fish layer depth\n{ex}", LogLevel.Error);
+            original.Snitch(ModEntry.ModMonitor);
         }
 
         return null;

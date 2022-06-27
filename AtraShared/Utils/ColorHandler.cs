@@ -18,21 +18,21 @@ public static class ColorHandler
     /// <remarks>There's probably a lot of repeats, but hey, this runs once.</remarks>
     private static readonly Lazy<Dictionary<string, XNAColor>> colors = new(() =>
     {
-        var colors = new Dictionary<string, XNAColor>();
+        Dictionary<string, XNAColor>? colors = new();
 
-        foreach (var color in typeof(SKColors).GetProperties(BindingFlags.Static | BindingFlags.Public)
+        foreach (PropertyInfo? color in typeof(SKColors).GetProperties(BindingFlags.Static | BindingFlags.Public)
                       .Where((prop) => prop.PropertyType == typeof(SKColor)))
         {
             colors[color.Name] = ((SKColor)color.GetValue(null)!).ToXNAColor();
         }
 
-        foreach (var color in typeof(Color).GetProperties(BindingFlags.Static|BindingFlags.Public)
+        foreach (PropertyInfo? color in typeof(Color).GetProperties(BindingFlags.Static | BindingFlags.Public)
                       .Where((prop) => prop.PropertyType == typeof(Color)))
         {
             colors[color.Name] = ((Color)color.GetValue(null)!).ToXNAColor();
         }
 
-        foreach (var color in typeof(XNAColor).GetProperties(BindingFlags.Static | BindingFlags.Public)
+        foreach (PropertyInfo? color in typeof(XNAColor).GetProperties(BindingFlags.Static | BindingFlags.Public)
                       .Where((prop) => prop.PropertyType == typeof(XNAColor)))
         {
             colors[color.Name] = (XNAColor)color.GetValue(null)!;

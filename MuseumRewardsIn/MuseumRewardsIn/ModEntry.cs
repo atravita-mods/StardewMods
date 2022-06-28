@@ -26,10 +26,17 @@ internal class ModEntry : Mod
 
     private static Vector2 shopLoc = new(4, 9);
 
+    /// <summary>
+    /// The config class for this mod.
+    /// </summary>
+    /// <remarks>WARNING: NOT SET IN ENTRY.</remarks>
+    private static ModConfig config = null!;
+
     /// <inheritdoc />
     public override void Entry(IModHelper helper)
     {
         modMonitor = this.Monitor;
+        helper.Events.GameLoop.GameLaunched += this.OnGameLaunched;
         helper.Events.Input.ButtonPressed += this.Input_ButtonPressed;
         helper.Events.Player.Warped += this.OnWarped;
         helper.Events.Content.AssetRequested += this.OnAssetRequested;
@@ -38,6 +45,22 @@ internal class ModEntry : Mod
 
         Harmony harmony = new(this.ModManifest.UniqueID);
         harmony.PatchAll();
+    }
+
+    private void OnGameLaunched(object? sender, GameLaunchedEventArgs e)
+    {
+        // move the default one to the left for SVE.
+        if (this.Helper.ModRegistry.IsLoaded("FlashShifter.SVECode"))
+        {
+            shopLoc = new(3, 9);
+        }
+
+        config = AtraUtils.GetConfigOrDefault<ModConfig>(this.Helper, this.Monitor);
+        if (config.BoxLocation == new Vector2(-1, -1))
+        {
+            config.BoxLocation = shopLoc;
+            Task.Run(() => this.Helper.WriteConfig(config));
+        }
     }
 
     /// <summary>
@@ -129,7 +152,7 @@ internal class ModEntry : Mod
                 static (asset) =>
                 {
                     IAssetDataForMap? map = asset.AsMap();
-                    (int locX, int locY) = (shopLoc * 64).ToPoint();
+                    (int locX, int locY) = (config.BoxLocation * 64).ToPoint();
                     XTile? tile = map.Data.GetLayer(BUILDING).PickTile(new Location(locX, locY), Game1.viewport.Size);
                     if (tile is null)
                     {
@@ -146,7 +169,7 @@ internal class ModEntry : Mod
     {
         if (e.NewLocation is LibraryMuseum)
         {
-            Vector2 tile = shopLoc; // default location of shop.
+            Vector2 tile = config.BoxLocation; // default location of shop.
             foreach (Vector2 v in AtraUtils.YieldAllTiles(e.NewLocation))
             { // find the shop tile - a mod may have moved it.
                 if (e.NewLocation.doesTileHaveProperty((int)v.X, (int)v.Y, "Action", BUILDING)?.Contains(SHOPNAME) == true)

@@ -1,7 +1,7 @@
 {
   "Name": "Avoid Losing Scepter",
   "Author": "atravita",
-  "Version": "1.0.0",
+  "Version": "1.0.0-Debug",
   "Description": "Prevents the Return Scepter from being lost on death.",
   "UniqueID": "atravita.AvoidLosingScepter",
   "EntryDll": "AvoidLosingScepter.dll",

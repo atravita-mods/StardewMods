@@ -1,7 +1,7 @@
 {
   "Name": "Easier Cave Puzzle",
   "Author": "atravita",
-  "Version": "1.0.0",
+  "Version": "1.0.0-Debug",
   "Description": "Makes the cave puzzle a little easier.",
   "UniqueID": "atravita.NerfCavePuzzle",
   "EntryDll": "NerfCavePuzzle.dll",

@@ -13,6 +13,12 @@
     <Compile Include="$(MSBuildThisFileDirectory)ConstantsAndEnums\Seasons.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)CustomExceptions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ConstantsAndEnums\ErrorMessageConsts.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Integrations\Interfaces\Fluent\IFluent.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Integrations\Interfaces\Fluent\IFluentAPI.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Integrations\Interfaces\Fluent\IFluentEnum.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Integrations\Interfaces\Fluent\IGameLocale.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Niceties\Records.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Niceties\VanillaMachinesEnum.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Utils\DateHelper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Integrations\GMCMHelper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Integrations\Interfaces\IBetterSprinklersAPI.cs" />

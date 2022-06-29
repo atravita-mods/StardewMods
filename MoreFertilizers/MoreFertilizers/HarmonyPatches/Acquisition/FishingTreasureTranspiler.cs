@@ -1,6 +1,8 @@
 ﻿using System.Reflection;
 using System.Reflection.Emit;
 using AtraBase.Toolkit.Reflection;
+using AtraCore.Framework.ReflectionManager;
+using AtraShared.Utils.Extensions;
 using AtraShared.Utils.HarmonyHelper;
 using HarmonyLib;
 using StardewValley.Tools;
@@ -35,7 +37,7 @@ internal static class FishingTreasureTranspiler
             ILHelper helper = new(original, instructions, ModEntry.ModMonitor, gen);
             helper.FindNext(new CodeInstructionWrapper[]
             { // find this.doneFishing
-                new(OpCodes.Call, typeof(FishingRod).InstanceMethodNamed(nameof(FishingRod.doneFishing))),
+                new(OpCodes.Call, typeof(FishingRod).GetCachedMethod(nameof(FishingRod.doneFishing), ReflectionCache.FlagTypes.InstanceFlags)),
             })
             .FindNext(new CodeInstructionWrapper[]
             { // find the constructor for List<Item>, which is used to hold the treasure.
@@ -68,6 +70,7 @@ internal static class FishingTreasureTranspiler
         catch (Exception ex)
         {
             ModEntry.ModMonitor.Log($"Mod crashed while transpiling FishingRod.openTreasureMenuEndFunction:\n\n{ex}", LogLevel.Error);
+            original.Snitch(ModEntry.ModMonitor);
         }
         return null;
     }

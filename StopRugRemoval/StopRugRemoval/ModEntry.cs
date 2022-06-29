@@ -111,6 +111,7 @@ public class ModEntry : Mod
             {
                 if (player.Items.Count < player.MaxItems)
                 {
+                    this.Monitor.Log("Detected broken inventory, fixing.", LogLevel.Warn);
                     for (int i = player.Items.Count; i < player.MaxItems; i++)
                     {
                         player.Items.Add(null);

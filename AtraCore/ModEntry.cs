@@ -1,18 +1,14 @@
-﻿using AtraBase.Toolkit.Extensions;
-using AtraBase.Toolkit.Reflection;
-using AtraBase.Toolkit.StringHandler;
-using AtraShared.ConstantsAndEnums;
+﻿using AtraShared.ConstantsAndEnums;
 using AtraShared.Utils.Extensions;
 using HarmonyLib;
 using StardewModdingAPI.Events;
-using StardewValley.Menus;
 
 namespace AtraCore;
 
 /// <inheritdoc />
-internal class ModEntry : Mod
+internal sealed class ModEntry : Mod
 {
-    internal static IMonitor ModMonitor = null!;
+    internal static IMonitor ModMonitor { get; private set; } = null!;
 
     /// <inheritdoc />
     public override void Entry(IModHelper helper)

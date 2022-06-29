@@ -74,7 +74,7 @@ internal static class GetFertilizerSourceRectTranspiler
                 ldloc,
                 new(OpCodes.Brtrue_S, branchpast), // The  previous code has already returned a value, I don't need to.
                 new(OpCodes.Ldarg_1),
-                new(OpCodes.Call, typeof(GetFertilizerSourceRectTranspiler).StaticMethodNamed(nameof(GetFertilizerSourceRectTranspiler.GetIndexForFertilizer))),
+                new(OpCodes.Call, typeof(GetFertilizerSourceRectTranspiler).StaticMethodNamed(nameof(GetIndexForFertilizer))),
                 stloc,
             }, withLabels: labels);
             return helper.Render();

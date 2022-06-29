@@ -212,7 +212,7 @@ internal class ModEntry : Mod
             }
 
             this.Monitor.Log("PFM compat set up!", LogLevel.Trace);
-            this.Helper.WriteConfig(Config);
+            Task.Run(() =>  this.Helper.WriteConfig(Config));
         }
         else
         {

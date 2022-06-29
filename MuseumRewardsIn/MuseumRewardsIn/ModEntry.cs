@@ -161,7 +161,7 @@ internal class ModEntry : Mod
                     }
                     tile.Properties.Add("Action", new PropertyValue(SHOPNAME));
                 },
-                AssetEditPriority.Late);
+                AssetEditPriority.Default);
         }
     }
 

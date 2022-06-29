@@ -3,6 +3,7 @@ using System.Reflection.Emit;
 using System.Runtime.CompilerServices;
 using AtraBase.Toolkit;
 using AtraBase.Toolkit.Reflection;
+using AtraCore.Framework.ReflectionManager;
 using AtraShared.Utils.Extensions;
 using AtraShared.Utils.HarmonyHelper;
 using HarmonyLib;
@@ -148,7 +149,7 @@ internal static class VolcanoChestAdjuster
             { // Find the first call to Random.Next and the local it stores to.
                 new(SpecialCodeInstructionCases.LdArg),
                 new(SpecialCodeInstructionCases.LdLoc),
-                new(OpCodes.Callvirt, typeof(Random).InstanceMethodNamed(nameof(Random.Next), new[] { typeof(int) } )),
+                new(OpCodes.Callvirt, typeof(Random).GetCachedMethod(nameof(Random.Next), ReflectionCache.FlagTypes.InstanceFlags, new[] { typeof(int) } )),
                 new(SpecialCodeInstructionCases.StLoc),
             });
 
@@ -168,8 +169,8 @@ internal static class VolcanoChestAdjuster
 
             helper.FindNext(new CodeInstructionWrapper[]
             { // Find the block just after the while loop
-                new(OpCodes.Ldsfld, typeof(Game1).StaticFieldNamed(nameof(Game1.random))),
-                new(OpCodes.Callvirt, typeof(Random).InstanceMethodNamed(nameof(Random.NextDouble), Type.EmptyTypes)),
+                new(OpCodes.Ldsfld, typeof(Game1).GetCachedField(nameof(Game1.random), ReflectionCache.FlagTypes.StaticFlags)),
+                new(OpCodes.Callvirt, typeof(Random).GetCachedMethod(nameof(Random.NextDouble), ReflectionCache.FlagTypes.InstanceFlags, Type.EmptyTypes)),
             })
             .GetLabels(out IList<Label> secondLabelsToMove)
             .DefineAndAttachLabel(out Label firstNoRepeat)
@@ -199,7 +200,7 @@ internal static class VolcanoChestAdjuster
             { // Find the call to Random.Next and the local it stores to for rare chests.
                 new(SpecialCodeInstructionCases.LdArg),
                 new(SpecialCodeInstructionCases.LdLoc),
-                new(OpCodes.Callvirt, typeof(Random).InstanceMethodNamed(nameof(Random.Next), new[] { typeof(int) } )),
+                new(OpCodes.Callvirt, typeof(Random).GetCachedMethod(nameof(Random.Next), ReflectionCache.FlagTypes.InstanceFlags, new[] { typeof(int) } )),
                 new(SpecialCodeInstructionCases.StLoc),
             });
 
@@ -218,8 +219,8 @@ internal static class VolcanoChestAdjuster
 
             helper.FindNext(new CodeInstructionWrapper[]
             { // Find the block just after the while loop
-                new(OpCodes.Ldsfld, typeof(Game1).StaticFieldNamed(nameof(Game1.random))),
-                new(OpCodes.Callvirt, typeof(Random).InstanceMethodNamed(nameof(Random.NextDouble), Type.EmptyTypes)),
+                new(OpCodes.Ldsfld, typeof(Game1).GetCachedField(nameof(Game1.random), ReflectionCache.FlagTypes.StaticFlags)),
+                new(OpCodes.Callvirt, typeof(Random).GetCachedMethod(nameof(Random.NextDouble), ReflectionCache.FlagTypes.InstanceFlags, Type.EmptyTypes)),
             })
             .GetLabels(out IList<Label> fourthLabelsToMove)
             .DefineAndAttachLabel(out Label secondNoRepeat)

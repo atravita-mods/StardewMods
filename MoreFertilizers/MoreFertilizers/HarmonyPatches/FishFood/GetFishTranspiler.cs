@@ -1,6 +1,7 @@
 ﻿using System.Reflection;
 using System.Reflection.Emit;
 using AtraBase.Toolkit.Reflection;
+using AtraCore.Framework.ReflectionManager;
 using AtraShared.Utils.Extensions;
 using AtraShared.Utils.HarmonyHelper;
 using HarmonyLib;
@@ -49,7 +50,7 @@ internal static class GetFishTranspiler
             .FindNext(new CodeInstructionWrapper[]
             { // find the loading of the fish data.
                 new (OpCodes.Ldsfld),
-                new (OpCodes.Ldstr, "Data\\Fish"),
+                new (OpCodes.Ldstr, @"Data\Fish"),
             })
             .FindNext(new CodeInstructionWrapper[]
             { // Finding chance *= 1.1 (from the beginner's rod). We'll get our locals here.
@@ -67,7 +68,7 @@ internal static class GetFishTranspiler
             { // we'll insert our adjustment just before the chance = Math.Min(chance, 0.9); statement.
                 new (SpecialCodeInstructionCases.LdLoc, typeof(double)),
                 new (OpCodes.Ldc_R8),
-                new (OpCodes.Call, typeof(Math).StaticMethodNamed(nameof(Math.Min), new[] { typeof(double), typeof(double) } )),
+                new (OpCodes.Call, typeof(Math).GetCachedMethod(nameof(Math.Min), ReflectionCache.FlagTypes.StaticFlags, new[] { typeof(double), typeof(double) } )),
                 new (SpecialCodeInstructionCases.StLoc, typeof(double)),
             })
             .GetLabels(out IList<Label>? labelsToMove, clear: true)
@@ -75,7 +76,7 @@ internal static class GetFishTranspiler
             {
                 ldloc,
                 new (OpCodes.Ldarg_0),
-                new (OpCodes.Call, typeof(GetFishTranspiler).StaticMethodNamed(nameof(GetFishTranspiler.AlterFishChance))),
+                new (OpCodes.Call, typeof(GetFishTranspiler).GetCachedMethod(nameof(GetFishTranspiler.AlterFishChance), ReflectionCache.FlagTypes.StaticFlags)),
                 stloc,
             }, withLabels: labelsToMove);
             return helper.Render();
@@ -83,6 +84,7 @@ internal static class GetFishTranspiler
         catch (Exception ex)
         {
             ModEntry.ModMonitor.Log($"Mod crashed while transpiling GameLocation.GetFish:\n\n{ex}", LogLevel.Error);
+            original.Snitch(ModEntry.ModMonitor);
         }
         return null;
     }

@@ -3,6 +3,7 @@ using System.Reflection.Emit;
 using System.Runtime.CompilerServices;
 using AtraBase.Toolkit;
 using AtraBase.Toolkit.Reflection;
+using AtraCore.Framework.ReflectionManager;
 using AtraShared.Utils.Extensions;
 using AtraShared.Utils.HarmonyHelper;
 using HarmonyLib;
@@ -27,10 +28,10 @@ internal static class CaveCrystalTranspiler
                 ?? ReflectionThrowHelper.ThrowMethodNotFoundException<Type>("IslandWestCave1+CaveCrystal");
             harmony.Patch(
                 original: cavecrystal.InstanceMethodNamed("activate"),
-                transpiler: new HarmonyMethod(typeof(CaveCrystalTranspiler).StaticMethodNamed(nameof(CaveCrystalTranspiler.ActivateTranspiler))));
+                transpiler: new HarmonyMethod(typeof(CaveCrystalTranspiler).StaticMethodNamed(nameof(ActivateTranspiler))));
             harmony.Patch(
                 original: cavecrystal.InstanceMethodNamed("update"),
-                transpiler: new HarmonyMethod(typeof(CaveCrystalTranspiler).StaticMethodNamed(nameof(CaveCrystalTranspiler.UpdateTranspiler))));
+                transpiler: new HarmonyMethod(typeof(CaveCrystalTranspiler).StaticMethodNamed(nameof(UpdateTranspiler))));
         }
         catch (Exception ex)
         {
@@ -56,7 +57,7 @@ internal static class CaveCrystalTranspiler
             .Advance(2)
             .Insert(new CodeInstruction[]
             {
-                new(OpCodes.Call, typeof(CaveCrystalTranspiler).StaticMethodNamed(nameof(CaveCrystalTranspiler.GetFlashScale))),
+                new(OpCodes.Call, typeof(CaveCrystalTranspiler).GetCachedMethod(nameof(GetFlashScale), ReflectionCache.FlagTypes.StaticFlags)),
                 new(OpCodes.Mul),
             });
             return helper.Render();
@@ -79,14 +80,14 @@ internal static class CaveCrystalTranspiler
                 {
                     new(OpCodes.Ldc_R4, 1000f),
                     new(OpCodes.Div),
-                    new(OpCodes.Call, typeof(Utility).StaticMethodNamed(nameof(Utility.Lerp))),
+                    new(OpCodes.Call, typeof(Utility).GetCachedMethod(nameof(Utility.Lerp), ReflectionCache.FlagTypes.StaticFlags)),
                 },
                 transformer: (helper) =>
                 {
                     helper.Advance(1)
                         .Insert(new CodeInstruction[]
                         {
-                            new(OpCodes.Call, typeof(CaveCrystalTranspiler).StaticMethodNamed(nameof(CaveCrystalTranspiler.GetFlashScale))),
+                            new(OpCodes.Call, typeof(CaveCrystalTranspiler).GetCachedMethod(nameof(GetFlashScale), ReflectionCache.FlagTypes.StaticFlags)),
                             new(OpCodes.Mul),
                         });
                     return true;

@@ -1,6 +1,5 @@
 using AtraBase.Collections;
 using AtraBase.Toolkit;
-using AtraShared;
 using AtraShared.Utils.Extensions;
 using StardewModdingAPI.Events;
 using StardewModdingAPI.Utilities;

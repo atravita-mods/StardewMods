@@ -1,6 +1,6 @@
 ﻿using System.Reflection;
 using System.Reflection.Emit;
-using AtraBase.Toolkit.Reflection;
+using AtraCore.Framework.ReflectionManager;
 using AtraShared.Utils.HarmonyHelper;
 using HarmonyLib;
 using Microsoft.Xna.Framework;
@@ -14,7 +14,12 @@ namespace MoreFertilizers.HarmonyPatches.LuckyFertilizer;
 [HarmonyPatch(typeof(Farm))]
 internal static class FarmAddCrowTranspiler
 {
-    private static bool HasFertilizer(HoeDirt? dirt)
+    /// <summary>
+    /// Gets a value indiciating whether or not this tile has the lucky fertilizer on it.
+    /// </summary>
+    /// <param name="dirt">The hoedirt instance.</param>
+    /// <returns>true if has fertilizer, false otherwise.</returns>
+    internal static bool HasLuckyFertilizer(HoeDirt? dirt)
         => ModEntry.LuckyFertilizerID != -1 && dirt is not null && dirt.fertilizer.Value.Equals(ModEntry.LuckyFertilizerID);
 
 #pragma warning disable SA1116 // Split parameters should start on line after declaration. Reviewed.
@@ -27,7 +32,7 @@ internal static class FarmAddCrowTranspiler
             helper.FindNext(new CodeInstructionWrapper[]
             {
                 new (OpCodes.Ldloca_S),
-                new (OpCodes.Call, typeof(KeyValuePair<Vector2, TerrainFeature>).InstancePropertyNamed("Value").GetGetMethod()),
+                new (OpCodes.Call, typeof(KeyValuePair<Vector2, TerrainFeature>).GetCachedProperty("Value", ReflectionCache.FlagTypes.InstanceFlags).GetGetMethod()),
                 new (OpCodes.Isinst, typeof(HoeDirt)),
                 new (OpCodes.Brfalse_S),
             }).Push();
@@ -43,9 +48,9 @@ internal static class FarmAddCrowTranspiler
             .Insert(new CodeInstruction[]
             {
                 local,
-                new (OpCodes.Call, typeof(KeyValuePair<Vector2, TerrainFeature>).InstancePropertyNamed("Value").GetGetMethod()),
+                new (OpCodes.Call, typeof(KeyValuePair<Vector2, TerrainFeature>).GetCachedProperty("Value", ReflectionCache.FlagTypes.InstanceFlags).GetGetMethod()),
                 new (OpCodes.Isinst, typeof(HoeDirt)),
-                new (OpCodes.Call, typeof(FarmAddCrowTranspiler).StaticMethodNamed(nameof(HasFertilizer))),
+                new (OpCodes.Call, typeof(FarmAddCrowTranspiler).GetCachedMethod(nameof(HasLuckyFertilizer), ReflectionCache.FlagTypes.StaticFlags)),
                 new (OpCodes.Brtrue_S, label),
             }, withLabels: labelsToMove);
             return helper.Render();

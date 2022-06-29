@@ -1,6 +1,7 @@
 ﻿using System.Reflection;
 using System.Reflection.Emit;
 using AtraBase.Toolkit.Reflection;
+using AtraCore.Framework.ReflectionManager;
 using AtraShared.Utils.HarmonyHelper;
 using HarmonyLib;
 using Microsoft.Xna.Framework;
@@ -14,9 +15,6 @@ namespace MoreFertilizers.HarmonyPatches.LuckyFertilizer;
 [HarmonyPatch(typeof(Utility))]
 internal static class FarmLightningTranspiler
 {
-    private static bool HasFertilizer(HoeDirt? dirt)
-        => ModEntry.LuckyFertilizerID != -1 && dirt is not null && dirt.fertilizer.Value.Equals(ModEntry.LuckyFertilizerID);
-
 #pragma warning disable SA1116 // Split parameters should start on line after declaration. Reviewed.
     [HarmonyPatch(nameof(Utility.performLightningUpdate))]
     private static IEnumerable<CodeInstruction>? Transpiler(IEnumerable<CodeInstruction> instructions, ILGenerator gen, MethodBase original)
@@ -27,7 +25,7 @@ internal static class FarmLightningTranspiler
             helper.FindNext(new CodeInstructionWrapper[]
             {
                 new(OpCodes.Ldloca_S),
-                new(OpCodes.Call, typeof(KeyValuePair<Vector2, TerrainFeature>).InstancePropertyNamed("Value").GetGetMethod()),
+                new(OpCodes.Call, typeof(KeyValuePair<Vector2, TerrainFeature>).GetCachedProperty("Value", ReflectionCache.FlagTypes.InstanceFlags).GetGetMethod()),
                 new(OpCodes.Isinst, typeof(FruitTree)),
                 new(OpCodes.Brtrue),
             }).Push();
@@ -43,9 +41,9 @@ internal static class FarmLightningTranspiler
             .Insert(new CodeInstruction[]
             {
                 local,
-                new(OpCodes.Call, typeof(KeyValuePair<Vector2, TerrainFeature>).InstancePropertyNamed("Value").GetGetMethod()),
+                new(OpCodes.Call, typeof(KeyValuePair<Vector2, TerrainFeature>).GetCachedProperty("Value", ReflectionCache.FlagTypes.InstanceFlags).GetGetMethod()),
                 new(OpCodes.Isinst, typeof(HoeDirt)),
-                new(OpCodes.Call, typeof(FarmLightningTranspiler).StaticMethodNamed(nameof(HasFertilizer))),
+                new(OpCodes.Call, typeof(FarmAddCrowTranspiler).GetCachedMethod(nameof(FarmAddCrowTranspiler.HasLuckyFertilizer), ReflectionCache.FlagTypes.StaticFlags)),
                 new(OpCodes.Brtrue, label),
             }, withLabels: labelsToMove);
 

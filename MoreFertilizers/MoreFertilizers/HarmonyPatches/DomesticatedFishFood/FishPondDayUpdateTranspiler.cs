@@ -1,6 +1,6 @@
 ﻿using System.Reflection;
 using System.Reflection.Emit;
-using AtraBase.Toolkit.Reflection;
+using AtraCore.Framework.ReflectionManager;
 using AtraShared.Utils.Extensions;
 using AtraShared.Utils.HarmonyHelper;
 using HarmonyLib;
@@ -43,7 +43,7 @@ internal static class FishPondDayUpdateTranspiler
             ILHelper helper = new(original, instructions, ModEntry.ModMonitor, gen);
             helper.FindNext(new CodeInstructionWrapper[]
             {
-                new(OpCodes.Newobj, typeof(Random).Constructor(new[] { typeof(int) })),
+                new(OpCodes.Newobj, typeof(Random).GetCachedConstructor(ReflectionCache.FlagTypes.InstanceFlags, new[] { typeof(int) })),
                 new(SpecialCodeInstructionCases.StLoc),
             }).Advance(1);
 
@@ -52,8 +52,8 @@ internal static class FishPondDayUpdateTranspiler
             helper.FindNext(new CodeInstructionWrapper[]
             {
                 new(OpCodes.Ldarg_0),
-                new(OpCodes.Ldfld, typeof(FishPond).InstanceFieldNamed(nameof(FishPond.daysSinceSpawn))),
-                new(OpCodes.Callvirt, typeof(NetFieldBase<int, NetInt>).InstancePropertyNamed("Value").GetGetMethod()),
+                new(OpCodes.Ldfld, typeof(FishPond).GetCachedField(nameof(FishPond.daysSinceSpawn), ReflectionCache.FlagTypes.InstanceFlags)),
+                new(OpCodes.Callvirt, typeof(NetFieldBase<int, NetInt>).GetCachedProperty("Value", ReflectionCache.FlagTypes.InstanceFlags).GetGetMethod()),
                 new(OpCodes.Ldc_I4_1),
                 new(OpCodes.Add),
             })
@@ -62,7 +62,7 @@ internal static class FishPondDayUpdateTranspiler
                 new(OpCodes.Ldc_I4_1),
             })
             .GetLabels(out IList<Label>? labelsToMove)
-            .ReplaceInstruction(OpCodes.Call, typeof(FishPondDayUpdateTranspiler).StaticMethodNamed(nameof(GetAdditionalGrowthFactor)))
+            .ReplaceInstruction(OpCodes.Call, typeof(FishPondDayUpdateTranspiler).GetCachedMethod(nameof(GetAdditionalGrowthFactor), ReflectionCache.FlagTypes.StaticFlags))
             .Insert(new CodeInstruction[]
             {
                 local,

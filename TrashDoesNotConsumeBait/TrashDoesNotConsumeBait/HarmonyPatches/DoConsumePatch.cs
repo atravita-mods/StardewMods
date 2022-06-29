@@ -2,7 +2,9 @@
 using System.Reflection.Emit;
 using AtraBase.Toolkit.Reflection;
 using AtraShared.Utils.HarmonyHelper;
+using AtraCore.Framework.ReflectionManager;
 using HarmonyLib;
+using Microsoft.Toolkit.Diagnostics;
 using Netcode;
 using StardewValley.Tools;
 
@@ -133,14 +135,15 @@ internal static class DoConsumePatch
             int index = helper.GetIndexOfLocal(typeof(float));
             if (index == -1)
             {
-                throw new InvalidOperationException($"Tried to find first float local, failed.");
+                ThrowHelper.ThrowInvalidOperationException($"Tried to find first float local, failed.");
+                return null;
             }
             CodeInstruction stloc = ILHelper.GetStLoc(index);
             helper.FindNext(new CodeInstructionWrapper[]
                 {
                     new(OpCodes.Ldarg_0),
                     new(OpCodes.Ldfld),
-                    new(OpCodes.Callvirt, typeof(Farmer).InstancePropertyNamed(nameof(Farmer.IsLocalPlayer)).GetGetMethod()),
+                    new(OpCodes.Callvirt, typeof(Farmer).GetCachedProperty(nameof(Farmer.IsLocalPlayer), ReflectionCache.FlagTypes.InstanceFlags).GetGetMethod()),
                     new(OpCodes.Brfalse),
                 })
                 .FindNext(new CodeInstructionWrapper[]
@@ -148,7 +151,7 @@ internal static class DoConsumePatch
                     new(OpCodes.Ldc_R4, 1f),
                     new(stloc),
                 })
-                .ReplaceInstruction(new(OpCodes.Call, typeof(DoConsumePatch).StaticMethodNamed(nameof(DoConsumePatch.GetNormalChance))), keepLabels: true)
+                .ReplaceInstruction(new(OpCodes.Call, typeof(DoConsumePatch).GetCachedMethod(nameof(DoConsumePatch.GetNormalChance), ReflectionCache.FlagTypes.StaticFlags)), keepLabels: true)
                 .FindNext(new CodeInstructionWrapper[]
                 {
                     new(OpCodes.Ldc_R4, 0.5f),

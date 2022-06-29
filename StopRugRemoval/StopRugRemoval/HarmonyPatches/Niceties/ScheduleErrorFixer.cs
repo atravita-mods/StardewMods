@@ -37,7 +37,7 @@ internal static class ScheduleErrorFixer
             ReadOnlySpan<char> pos = dispo.GetNthChunk('/', 10);
             if (pos.Length != 0)
             {
-                SpanSplit locParts = pos.SpanSplit(expectedCount:3);
+                SpanSplit locParts = pos.SpanSplit(expectedCount: 3);
                 string defaultMap = locParts[0].ToString();
                 if (Game1.getLocationFromName(defaultMap) is GameLocation loc)
                 {

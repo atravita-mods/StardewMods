@@ -3,6 +3,8 @@ using System.Reflection.Emit;
 using System.Runtime.CompilerServices;
 using AtraBase.Toolkit;
 using AtraBase.Toolkit.Reflection;
+using AtraCore.Framework.ReflectionManager;
+using AtraShared.Utils.Extensions;
 using AtraShared.Utils.HarmonyHelper;
 using HarmonyLib;
 using Microsoft.Xna.Framework;
@@ -45,7 +47,7 @@ internal static class HoeDirtDrawTranspiler
                 {
                     new(OpCodes.Ldarg_0),
                     new(SpecialCodeInstructionCases.LdLoc),
-                    new(OpCodes.Call, typeof(HoeDirt).InstanceMethodNamed(nameof(HoeDirt.GetFertilizerSourceRect))),
+                    new(OpCodes.Call, typeof(HoeDirt).GetCachedMethod(nameof(HoeDirt.GetFertilizerSourceRect), ReflectionCache.FlagTypes.InstanceFlags)),
                 })
             .Advance(1);
 
@@ -54,10 +56,10 @@ internal static class HoeDirtDrawTranspiler
 
             helper.FindNext(new CodeInstructionWrapper[]
                 {
-                    new(OpCodes.Call, typeof(Color).StaticPropertyNamed("White").GetGetMethod()),
+                    new(OpCodes.Call, typeof(Color).GetCachedProperty("White", ReflectionCache.FlagTypes.StaticFlags).GetGetMethod()),
                 })
             .GetLabels(out IList<Label> labels, clear: true)
-            .ReplaceInstruction(OpCodes.Call, typeof(HoeDirtDrawTranspiler).StaticMethodNamed(nameof(HoeDirtDrawTranspiler.GetColor)))
+            .ReplaceInstruction(OpCodes.Call, typeof(HoeDirtDrawTranspiler).GetCachedMethod(nameof(GetColor), ReflectionCache.FlagTypes.StaticFlags))
             .Insert(new CodeInstruction[] { local }, withLabels: labels);
 
             // helper.Print();
@@ -66,6 +68,7 @@ internal static class HoeDirtDrawTranspiler
         catch (Exception ex)
         {
             ModEntry.ModMonitor.Log($"Mod crashed while transpiling Hoedirt.Draw:\n\n{ex}", LogLevel.Error);
+            original.Snitch(ModEntry.ModMonitor);
         }
         return null;
     }

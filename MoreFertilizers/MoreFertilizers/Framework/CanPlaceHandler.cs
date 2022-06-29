@@ -85,7 +85,7 @@ public sealed class CanPlaceHandler : IMoreFertilizersAPI
         if (obj.ParentSheetIndex == ModEntry.FishFoodID || obj.ParentSheetIndex == ModEntry.DeluxeFishFoodID)
         {
             loc.modData?.SetInt(FishFood, obj.ParentSheetIndex == ModEntry.DeluxeFishFoodID ? 3 : 1);
-            if (loc is MineShaft or VolcanoDungeon)
+            if (loc.IsUnsavedLocation())
             {
                 FishFoodHandler.UnsavedLocHandler.FishFoodLocationMap[Game1.currentLocation.NameOrUniqueName] = obj.ParentSheetIndex == ModEntry.DeluxeFishFoodID ? 3 : 1;
                 FishFoodHandler.BroadcastHandler(ModEntry.MultiplayerHelper);
@@ -164,7 +164,7 @@ public sealed class CanPlaceHandler : IMoreFertilizersAPI
             if (obj.ParentSheetIndex != ModEntry.DomesticatedFishFoodID)
             {
                 DelayedAction.functionAfterDelay(
-                    () => Game1.currentLocation.waterColor.Value = ModEntry.Config.WaterOverlayColor,
+                    static () => Game1.currentLocation.waterColor.Value = ModEntry.Config.WaterOverlayColor,
                     (int)time);
             }
         }

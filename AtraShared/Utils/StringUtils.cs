@@ -98,7 +98,7 @@ public class StringUtils
         float current_width = -whichFont.Spacing;
         StringBuilder replacement_word = new();
         bool use_replacement_word = false;
-        foreach ((ReadOnlySpan<char> word, ReadOnlySpan<char> splitchar) in text.SpanSplit())
+        foreach ((ReadOnlySpan<char> word, ReadOnlySpan<char> splitchar) in text.StreamSplit())
         {
             if (LocalizedContentManager.CurrentLanguageCode is LocalizedContentManager.LanguageCode.fr && word.StartsWith("\n-"))
             { // This is from vanilla code, I dunno why French is special.
@@ -139,7 +139,7 @@ public class StringUtils
             {
                 continue;
             }
-            else if (splitchar == "\n")
+            else if (splitchar == "\n" || splitchar == "\r\n")
             {
                 if (--maxlines <= 0)
                 {

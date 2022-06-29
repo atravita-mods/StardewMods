@@ -1,6 +1,7 @@
 ﻿using System.Reflection;
 using System.Reflection.Emit;
 using AtraBase.Toolkit.Reflection;
+using AtraCore.Framework.ReflectionManager;
 using AtraShared.Utils.HarmonyHelper;
 using HarmonyLib;
 using Microsoft.Xna.Framework;
@@ -24,8 +25,8 @@ internal static class MultiFertilizerDrawTranspiler
         Type multidraw = AccessTools.TypeByName("MultiFertilizer.Patches.HoeDirtPatcher")
             ?? ReflectionThrowHelper.ThrowMethodNotFoundException<Type>("MultiFertilizer HoeDirtPatcher");
         harmony.Patch(
-            original: multidraw.StaticMethodNamed("DrawMultiFertilizer"),
-            transpiler: new HarmonyMethod(typeof(MultiFertilizerDrawTranspiler), nameof(MultiFertilizerDrawTranspiler.Transpiler)));
+            original: multidraw.GetCachedMethod("DrawMultiFertilizer", ReflectionCache.FlagTypes.StaticFlags),
+            transpiler: new HarmonyMethod(typeof(MultiFertilizerDrawTranspiler), nameof(Transpiler)));
     }
 
     private static IEnumerable<CodeInstruction>? Transpiler(IEnumerable<CodeInstruction> instructions, ILGenerator gen, MethodBase original)
@@ -41,7 +42,7 @@ internal static class MultiFertilizerDrawTranspiler
                 new (OpCodes.Ldarg_0),
                 new (OpCodes.Ldarg_2),
                 new (OpCodes.Ldarg_S, 10),
-                new (OpCodes.Call, typeof(MultiFertilizerDrawTranspiler).StaticMethodNamed(nameof(MultiFertilizerDrawTranspiler.DrawThisFertilzer))),
+                new (OpCodes.Call, typeof(MultiFertilizerDrawTranspiler).GetCachedMethod(nameof(DrawThisFertilizer), ReflectionCache.FlagTypes.StaticFlags)),
             }, withLabels: labels);
             return helper.Render();
         }
@@ -52,7 +53,7 @@ internal static class MultiFertilizerDrawTranspiler
         return null;
     }
 
-    private static void DrawThisFertilzer(
+    private static void DrawThisFertilizer(
         SpriteBatch spriteBatch,
         Vector2 pos,
         HoeDirt dirt)

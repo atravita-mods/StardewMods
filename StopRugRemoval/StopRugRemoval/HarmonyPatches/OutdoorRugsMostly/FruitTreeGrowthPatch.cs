@@ -1,6 +1,7 @@
 ﻿using System.Reflection;
 using System.Reflection.Emit;
 using AtraBase.Toolkit.Reflection;
+using AtraCore.Framework.ReflectionManager;
 using AtraShared.Utils.Extensions;
 using AtraShared.Utils.HarmonyHelper;
 using HarmonyLib;
@@ -36,7 +37,7 @@ internal static class FruitTreeGrowthPatch
                     new (SpecialCodeInstructionCases.LdLoc),
                     new (OpCodes.Ldfld),
                     new (OpCodes.Conv_I4),
-                    new (OpCodes.Callvirt, typeof(GameLocation).InstanceMethodNamed(nameof(GameLocation.getObjectAtTile), new Type[] { typeof(int), typeof(int) })),
+                    new (OpCodes.Callvirt, typeof(GameLocation).GetCachedMethod(nameof(GameLocation.getObjectAtTile), ReflectionCache.FlagTypes.InstanceFlags, new Type[] { typeof(int), typeof(int) })),
                     })
                 .FindNext(new CodeInstructionWrapper[]
                     {

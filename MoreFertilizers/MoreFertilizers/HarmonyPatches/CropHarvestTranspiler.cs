@@ -1,6 +1,9 @@
 ﻿using System.Reflection;
 using System.Reflection.Emit;
+using System.Runtime.CompilerServices;
+using AtraBase.Toolkit;
 using AtraBase.Toolkit.Reflection;
+using AtraCore.Framework.ReflectionManager;
 using AtraShared.Utils.Extensions;
 using AtraShared.Utils.HarmonyHelper;
 using HarmonyLib;
@@ -26,9 +29,10 @@ internal static class CropHarvestTranspiler
     {
         try
         {
-            Type dgaCrop = AccessTools.TypeByName("DynamicGameAssets.Game.CustomCrop") ?? throw new("DGA crops");
+            Type dgaCrop = AccessTools.TypeByName("DynamicGameAssets.Game.CustomCrop")
+                ?? ReflectionThrowHelper.ThrowMethodNotFoundException<Type>("DGA Crop");
             harmony.Patch(
-                original: dgaCrop.InstanceMethodNamed("Harvest"),
+                original: dgaCrop.GetCachedMethod("Harvest", ReflectionCache.FlagTypes.InstanceFlags),
                 transpiler: new HarmonyMethod(typeof(CropHarvestTranspiler), nameof(TranspileDGA)));
         }
         catch (Exception ex)
@@ -37,6 +41,7 @@ internal static class CropHarvestTranspiler
         }
     }
 
+    [MethodImpl(TKConstants.Hot)]
     private static int GetQualityForJojaFert(int prevQual, HoeDirt? dirt)
     {
         if(dirt is not null && dirt.fertilizer.Value != -1)
@@ -53,9 +58,11 @@ internal static class CropHarvestTranspiler
         return prevQual;
     }
 
+    [MethodImpl(TKConstants.Hot)]
     private static Item? MakeItemOrganic(Item? item, HoeDirt? dirt)
         => item is SObject obj ? MakeObjectOrganic(obj, dirt) : item;
 
+    [MethodImpl(TKConstants.Hot)]
     private static SObject MakeObjectOrganic(SObject obj, HoeDirt? dirt)
     {
         if (dirt is not null && dirt.fertilizer.Value != -1)
@@ -76,6 +83,7 @@ internal static class CropHarvestTranspiler
         return obj;
     }
 
+    [MethodImpl(TKConstants.Hot)]
     private static int IncrementForBountiful(int prevValue, HoeDirt? dirt)
     {
         if (ModEntry.BountifulFertilizerID != -1 && dirt?.fertilizer?.Value == ModEntry.BountifulFertilizerID
@@ -97,7 +105,7 @@ internal static class CropHarvestTranspiler
             helper.FindNext(new CodeInstructionWrapper[]
             {// if (this.forageCrop) and advance past this
                 new(OpCodes.Ldarg_0),
-                new(OpCodes.Ldfld, typeof(Crop).InstanceFieldNamed(nameof(Crop.forageCrop))),
+                new(OpCodes.Ldfld, typeof(Crop).GetCachedField(nameof(Crop.forageCrop), ReflectionCache.FlagTypes.InstanceFlags)),
                 new(OpCodes.Call),
                 new(OpCodes.Brfalse),
             })
@@ -107,7 +115,7 @@ internal static class CropHarvestTranspiler
             .FindNext(new CodeInstructionWrapper[]
             { // find if (this.minHarvest > 1 || this.maxHarvest < 1)
                 new(OpCodes.Ldarg_0),
-                new(OpCodes.Ldfld, typeof(Crop).InstanceFieldNamed(nameof(Crop.maxHarvest))),
+                new(OpCodes.Ldfld, typeof(Crop).GetCachedField(nameof(Crop.maxHarvest), ReflectionCache.FlagTypes.InstanceFlags)),
                 new(OpCodes.Call),
                 new(OpCodes.Ldc_I4_1),
                 new(OpCodes.Ble_S),
@@ -117,8 +125,8 @@ internal static class CropHarvestTranspiler
             .FindNext(new CodeInstructionWrapper[]
             {// Advance into that block, find num = random2.Next(this.minHarvest + ...). This lets us grab the right local.
                 new(OpCodes.Add),
-                new(OpCodes.Call, typeof(Math).StaticMethodNamed(nameof(Math.Max), new[] { typeof(int), typeof(int) } )),
-                new(OpCodes.Callvirt, typeof(Random).InstanceMethodNamed(nameof(Random.Next), new[] { typeof(int), typeof(int) })),
+                new(OpCodes.Call, typeof(Math).GetCachedMethod(nameof(Math.Max), ReflectionCache.FlagTypes.StaticFlags, new[] { typeof(int), typeof(int) } )),
+                new(OpCodes.Callvirt, typeof(Random).GetCachedMethod(nameof(Random.Next), ReflectionCache.FlagTypes.InstanceFlags, new[] { typeof(int), typeof(int) })),
                 new(SpecialCodeInstructionCases.StLoc),
             })
             .FindNext(new CodeInstructionWrapper[]
@@ -136,7 +144,7 @@ internal static class CropHarvestTranspiler
             { // and insert our incrementer.
                 numberToHarvestLdLoc,
                 new(OpCodes.Ldarg_3),
-                new(OpCodes.Call, typeof(CropHarvestTranspiler).StaticMethodNamed(nameof(IncrementForBountiful))),
+                new(OpCodes.Call, typeof(CropHarvestTranspiler).GetCachedMethod(nameof(IncrementForBountiful), ReflectionCache.FlagTypes.StaticFlags)),
                 numberToHarvestStLoc,
             }, withLabels: numAdjustLabels)
             .FindNext(new CodeInstructionWrapper[]
@@ -163,19 +171,19 @@ internal static class CropHarvestTranspiler
             {
                 qualityLdLoc,
                 new(OpCodes.Ldarg_3), // HoeDirt soil
-                new(OpCodes.Call, typeof(CropHarvestTranspiler).StaticMethodNamed(nameof(GetQualityForJojaFert))),
+                new(OpCodes.Call, typeof(CropHarvestTranspiler).GetCachedMethod(nameof(GetQualityForJojaFert), ReflectionCache.FlagTypes.StaticFlags)),
                 qualityStLoc,
             }, withLabels: jojaLabels)
             .FindNext(new CodeInstructionWrapper[]
             { // if (this.programColored)
                 new(OpCodes.Ldarg_0),
-                new(OpCodes.Ldfld, typeof(Crop).InstanceFieldNamed(nameof(Crop.programColored))),
+                new(OpCodes.Ldfld, typeof(Crop).GetCachedField(nameof(Crop.programColored), ReflectionCache.FlagTypes.InstanceFlags)),
                 new(OpCodes.Call),
             })
             .FindNext(new CodeInstructionWrapper[]
             {
                 new(SpecialCodeInstructionCases.LdLoc),
-                new(OpCodes.Callvirt, typeof(SObject).InstancePropertyNamed(nameof(SObject.Quality)).GetSetMethod()),
+                new(OpCodes.Callvirt, typeof(SObject).GetCachedProperty(nameof(SObject.Quality), ReflectionCache.FlagTypes.InstanceFlags).GetSetMethod()),
                 new(SpecialCodeInstructionCases.StLoc, typeof(SObject)),
             })
             .Advance(2)
@@ -183,17 +191,17 @@ internal static class CropHarvestTranspiler
             .Insert(new CodeInstruction[]
             { // Insert function to make the object organic if needed.
                 new(OpCodes.Ldarg_3),
-                new (OpCodes.Call, typeof(CropHarvestTranspiler).StaticMethodNamed(nameof(MakeObjectOrganic))),
+                new (OpCodes.Call, typeof(CropHarvestTranspiler).GetCachedMethod(nameof(MakeObjectOrganic), ReflectionCache.FlagTypes.StaticFlags)),
             }, withLabels: firstSObjectCreationLabels)
             .FindNext(new CodeInstructionWrapper[]
             {// if (this.programColored), the second instance.
                 new(OpCodes.Ldarg_0),
-                new(OpCodes.Ldfld, typeof(Crop).InstanceFieldNamed(nameof(Crop.programColored))),
+                new(OpCodes.Ldfld, typeof(Crop).GetCachedField(nameof(Crop.programColored), ReflectionCache.FlagTypes.InstanceFlags)),
                 new(OpCodes.Call),
             })
             .FindNext(new CodeInstructionWrapper[]
             { // Find the place where the second creation of an SObject/ColoredSObject is saved.
-                new (OpCodes.Newobj, typeof(ColoredObject).Constructor(new[] { typeof(int), typeof(int), typeof(Color) } )),
+                new (OpCodes.Newobj, typeof(ColoredObject).GetCachedConstructor(ReflectionCache.FlagTypes.InstanceFlags, new[] { typeof(int), typeof(int), typeof(Color) } )),
                 new (SpecialCodeInstructionCases.StLoc, typeof(SObject)),
             })
             .Advance(1);
@@ -205,7 +213,7 @@ internal static class CropHarvestTranspiler
             .Insert(new CodeInstruction[]
             { // Insert function to make the object organic if needed.
                 new(OpCodes.Ldarg_3),
-                new(OpCodes.Call, typeof(CropHarvestTranspiler).StaticMethodNamed(nameof(MakeObjectOrganic))),
+                new(OpCodes.Call, typeof(CropHarvestTranspiler).GetCachedMethod(nameof(MakeObjectOrganic), ReflectionCache.FlagTypes.StaticFlags)),
             }, withLabels: secondSObjectCreationLabels)
             .Advance(1)
             .Insert(new CodeInstruction[]
@@ -213,8 +221,8 @@ internal static class CropHarvestTranspiler
                 secondSObjectLdLoc,
                 new(OpCodes.Ldc_I4_0),
                 new(OpCodes.Ldarg_3),
-                new(OpCodes.Call, typeof(CropHarvestTranspiler).StaticMethodNamed(nameof(GetQualityForJojaFert))),
-                new(OpCodes.Callvirt, typeof(SObject).InstancePropertyNamed(nameof(SObject.Quality)).GetSetMethod()),
+                new(OpCodes.Call, typeof(CropHarvestTranspiler).GetCachedMethod(nameof(GetQualityForJojaFert), ReflectionCache.FlagTypes.StaticFlags)),
+                new(OpCodes.Callvirt, typeof(SObject).GetCachedProperty(nameof(SObject.Quality), ReflectionCache.FlagTypes.InstanceFlags).GetSetMethod()),
             });
 
             // helper.Print();
@@ -223,6 +231,7 @@ internal static class CropHarvestTranspiler
         catch (Exception ex)
         {
             ModEntry.ModMonitor.Log($"Mod crashed while transpiling Crop.harvest:\n\n{ex}", LogLevel.Error);
+            original.Snitch(ModEntry.ModMonitor);
         }
         return null;
     }
@@ -236,7 +245,7 @@ internal static class CropHarvestTranspiler
             { // match the second half of if (fertilizerQualityLevel >= 3 && r.NextDobule() < chanceForGoldQuality/2
               // DaLion might take out the first half. Dunno.
                 new(SpecialCodeInstructionCases.LdLoc),
-                new(OpCodes.Callvirt, typeof(Random).InstanceMethodNamed(nameof(Random.NextDouble))),
+                new(OpCodes.Callvirt, typeof(Random).GetCachedMethod(nameof(Random.NextDouble), ReflectionCache.FlagTypes.InstanceFlags)),
                 new(SpecialCodeInstructionCases.LdLoc),
                 new(OpCodes.Ldc_R8, 2d),
                 new(OpCodes.Div),
@@ -263,17 +272,19 @@ internal static class CropHarvestTranspiler
             {
                 qualityLdLoc,
                 new(OpCodes.Ldarg_3), // HoeDirt soil
-                new(OpCodes.Call, typeof(CropHarvestTranspiler).StaticMethodNamed(nameof(GetQualityForJojaFert))),
+                new(OpCodes.Call, typeof(CropHarvestTranspiler).GetCachedMethod(nameof(GetQualityForJojaFert), ReflectionCache.FlagTypes.StaticFlags)),
                 qualityStLoc,
             }, withLabels: qualityLabels);
 
-            Type cropPackData = AccessTools.TypeByName("DynamicGameAssets.PackData.CropPackData") ?? throw new MethodNotFoundException("DGA crop data not found");
-            Type harvestData = cropPackData.GetNestedType("HarvestedDropData") ?? throw new MethodNotFoundException("Harvested data not found!");
+            Type cropPackData = AccessTools.TypeByName("DynamicGameAssets.PackData.CropPackData")
+                ?? ReflectionThrowHelper.ThrowMethodNotFoundException<Type>("DGA crop data");
+            Type harvestData = cropPackData.GetNestedType("HarvestedDropData")
+                ?? ReflectionThrowHelper.ThrowMethodNotFoundException<Type>("Harvested data!");
 
             helper.FindNext(new CodeInstructionWrapper[]
             { // data.MaximumHarvestedQuantity > 1
                 new(SpecialCodeInstructionCases.LdLoc),
-                new(OpCodes.Callvirt, harvestData.InstancePropertyNamed("MaximumHarvestedQuantity").GetGetMethod()),
+                new(OpCodes.Callvirt, harvestData.GetCachedProperty("MaximumHarvestedQuantity", ReflectionCache.FlagTypes.InstanceFlags).GetGetMethod()),
                 new(OpCodes.Ldc_I4_1),
                 new(OpCodes.Ble_S),
             })
@@ -282,8 +293,8 @@ internal static class CropHarvestTranspiler
             .FindNext(new CodeInstructionWrapper[]
             {// Advance into that block, find num = random2.Next(data.MininumHarvestedQuality + ...). This lets us grab the right local.
                 new(OpCodes.Add),
-                new(OpCodes.Call, typeof(Math).StaticMethodNamed(nameof(Math.Max), new[] { typeof(int), typeof(int) } )),
-                new(OpCodes.Callvirt, typeof(Random).InstanceMethodNamed(nameof(Random.Next), new[] { typeof(int), typeof(int) })),
+                new(OpCodes.Call, typeof(Math).GetCachedMethod(nameof(Math.Max), ReflectionCache.FlagTypes.StaticFlags, new[] { typeof(int), typeof(int) } )),
+                new(OpCodes.Callvirt, typeof(Random).GetCachedMethod(nameof(Random.Next), ReflectionCache.FlagTypes.InstanceFlags, new[] { typeof(int), typeof(int) })),
                 new(SpecialCodeInstructionCases.StLoc),
             })
             .FindNext(new CodeInstructionWrapper[]
@@ -301,22 +312,23 @@ internal static class CropHarvestTranspiler
             { // and insert our incrementer.
                 numberToHarvestLdLoc,
                 new(OpCodes.Ldarg_3),
-                new(OpCodes.Call, typeof(CropHarvestTranspiler).StaticMethodNamed(nameof(IncrementForBountiful))),
+                new(OpCodes.Call, typeof(CropHarvestTranspiler).GetCachedMethod(nameof(IncrementForBountiful), ReflectionCache.FlagTypes.StaticFlags)),
                 numberToHarvestStLoc,
             }, withLabels: numAdjustLabels);
 
-            Type itemAbstraction = AccessTools.TypeByName("DynamicGameAssets.ItemAbstraction") ?? throw new MethodNotFoundException("Item Abstraction not found!");
+            Type itemAbstraction = AccessTools.TypeByName("DynamicGameAssets.ItemAbstraction")
+                ?? ReflectionThrowHelper.ThrowMethodNotFoundException<Type>("Item Abstraction");
 
             helper.FindNext(new CodeInstructionWrapper[]
             {
-                new(OpCodes.Call, itemAbstraction.InstanceMethodNamed("Create")),
+                new(OpCodes.Call, itemAbstraction.GetCachedMethod("Create", ReflectionCache.FlagTypes.InstanceFlags)),
                 new(SpecialCodeInstructionCases.StLoc, typeof(Item)),
             })
             .Advance(1)
             .Insert(new CodeInstruction[]
             {
                 new(OpCodes.Ldarg_3),
-                new(OpCodes.Call, typeof(CropHarvestTranspiler).StaticMethodNamed(nameof(MakeItemOrganic))),
+                new(OpCodes.Call, typeof(CropHarvestTranspiler).GetCachedMethod(nameof(MakeItemOrganic), ReflectionCache.FlagTypes.StaticFlags)),
             });
 
             // helper.Print();
@@ -325,6 +337,7 @@ internal static class CropHarvestTranspiler
         catch (Exception ex)
         {
             ModEntry.ModMonitor.Log($"Mod crashed while transpiling Crop.harvest:\n\n{ex}", LogLevel.Error);
+            original.Snitch(ModEntry.ModMonitor);
         }
         return null;
     }

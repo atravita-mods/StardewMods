@@ -1,6 +1,7 @@
 ﻿using System.Reflection;
 using System.Reflection.Emit;
 using AtraBase.Toolkit.Reflection;
+using AtraCore.Framework.ReflectionManager;
 using AtraShared.Utils.HarmonyHelper;
 using HarmonyLib;
 using StardewValley.Locations;
@@ -33,8 +34,8 @@ internal static class JukeboxesEverywhere
             helper.FindNext(new CodeInstructionWrapper[]
                 {
                     new (SpecialCodeInstructionCases.LdArg),
-                    new (OpCodes.Callvirt, typeof(Character).InstancePropertyNamed(nameof(Character.currentLocation)).GetGetMethod()),
-                    new (OpCodes.Callvirt, typeof(GameLocation).InstancePropertyNamed(nameof(GameLocation.IsFarm)).GetGetMethod()),
+                    new (OpCodes.Callvirt, typeof(Character).GetCachedProperty(nameof(Character.currentLocation), ReflectionCache.FlagTypes.InstanceFlags).GetGetMethod()),
+                    new (OpCodes.Callvirt, typeof(GameLocation).GetCachedProperty(nameof(GameLocation.IsFarm), ReflectionCache.FlagTypes.InstanceFlags).GetGetMethod()),
                     new (OpCodes.Brtrue_S),
                 })
                 .Advance(2)

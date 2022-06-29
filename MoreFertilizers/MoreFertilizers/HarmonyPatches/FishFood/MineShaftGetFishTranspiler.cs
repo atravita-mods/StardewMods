@@ -1,6 +1,7 @@
 ﻿using System.Reflection;
 using System.Reflection.Emit;
-using AtraBase.Toolkit.Reflection;
+using AtraCore.Framework.ReflectionManager;
+using AtraShared.Utils.Extensions;
 using AtraShared.Utils.HarmonyHelper;
 using HarmonyLib;
 using StardewValley.Locations;
@@ -29,7 +30,7 @@ internal static class MineShaftGetFishTranspiler
             {
                 new(OpCodes.Ldarg_0),
                 new(OpCodes.Ldc_I4_M1),
-                new(OpCodes.Call, typeof(MineShaft).InstanceMethodNamed(nameof(MineShaft.getMineArea))),
+                new(OpCodes.Call, typeof(MineShaft).GetCachedMethod(nameof(MineShaft.getMineArea), ReflectionCache.FlagTypes.InstanceFlags)),
             });
 
             int startindex = helper.Pointer;
@@ -37,15 +38,15 @@ internal static class MineShaftGetFishTranspiler
             helper.FindNext(new CodeInstructionWrapper[]
             {
                 new(SpecialCodeInstructionCases.LdArg),
-                new(OpCodes.Callvirt, typeof(Farmer).InstancePropertyNamed(nameof(Farmer.FishingLevel)).GetGetMethod()),
+                new(OpCodes.Callvirt, typeof(Farmer).GetCachedProperty(nameof(Farmer.FishingLevel), ReflectionCache.FlagTypes.InstanceFlags).GetGetMethod()),
             });
 
             int endindex = helper.Pointer + 4; // since I'm adding instructions, the end point will move up.
 
             helper.ForEachMatch(new CodeInstructionWrapper[]
             {
-                new(OpCodes.Ldsfld, typeof(Game1).StaticFieldNamed(nameof(Game1.random))),
-                new(OpCodes.Callvirt, typeof(Random).InstanceMethodNamed(nameof(Random.NextDouble))),
+                new(OpCodes.Ldsfld, typeof(Game1).GetCachedField(nameof(Game1.random), ReflectionCache.FlagTypes.StaticFlags)),
+                new(OpCodes.Callvirt, typeof(Random).GetCachedMethod(nameof(Random.NextDouble), ReflectionCache.FlagTypes.InstanceFlags)),
             },
             transformer: (helper) =>
             {
@@ -60,18 +61,21 @@ internal static class MineShaftGetFishTranspiler
                 .Insert(new CodeInstruction[]
                 {
                     new(OpCodes.Ldarg_0),
-                    new(OpCodes.Call, typeof(GetFishTranspiler).StaticMethodNamed(nameof(GetFishTranspiler.AlterFishChance))),
+                    new(OpCodes.Call, typeof(GetFishTranspiler).GetCachedMethod(nameof(GetFishTranspiler.AlterFishChance), ReflectionCache.FlagTypes.StaticFlags)),
                 });
                 return true;
             },
             startindex: startindex,
             intendedendindex: endindex,
             maxCount: 3);
+
+            // helper.Print();
             return helper.Render();
         }
         catch (Exception ex)
         {
             ModEntry.ModMonitor.Log($"Mod crashed while transpiling MineShaft.GetFish:\n\n{ex}", LogLevel.Error);
+            original.Snitch(ModEntry.ModMonitor);
         }
         return null;
     }

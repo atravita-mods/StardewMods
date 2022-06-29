@@ -1,7 +1,7 @@
 {
   "Name": "Highlight Empty Machines",
   "Author": "atravita",
-  "Version": "0.1.1",
+  "Version": "0.1.1-Debug",
   "Description": "Highlights empty machines to make them a little more obvious.",
   "UniqueID": "atravita.HighlightEmptyMachines",
   "EntryDll": "HighlightEmptyMachines.dll",

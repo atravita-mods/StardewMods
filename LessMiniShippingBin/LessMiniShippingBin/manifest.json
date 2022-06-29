@@ -1,7 +1,7 @@
 {
   "Name": "Less Mini Shipping Bin",
   "Author": "atravita",
-  "Version": "0.3.0",
+  "Version": "0.3.0-Debug",
   "Description": "Lets you make the mini shipping bin bigger.",
   "UniqueID": "atravita.LessMiniShippingBin",
   "EntryDll": "LessMiniShippingBin.dll",

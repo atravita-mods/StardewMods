@@ -1,4 +1,5 @@
 ﻿using HarmonyLib;
+using StardewValley.Locations;
 
 namespace SpecialOrdersExtended.Managers;
 
@@ -310,6 +311,28 @@ internal class TagManager
                     else
                     {
                         __result = int.TryParse(vals[1], out int required) && Game1.player.team.completedSpecialOrders.Count() >= required;
+                    }
+                    return false;
+                case "slots":
+                    // slots_X, slots_under_X
+                    if (vals[1].Equals("under", StringComparison.OrdinalIgnoreCase))
+                    {
+                        __result = int.TryParse(vals[2], out int required) && Club.timesPlayedSlots < required;
+                    }
+                    else
+                    {
+                        __result = int.TryParse(vals[1], out int required) && Club.timesPlayedSlots >= required;
+                    }
+                    return false;
+                case "blackjack":
+                    // blackjack_X, blackjac_under_X
+                    if (vals[1].Equals("under", StringComparison.OrdinalIgnoreCase))
+                    {
+                        __result = int.TryParse(vals[2], out int required) && Club.timesPlayedCalicoJack < required;
+                    }
+                    else
+                    {
+                        __result = int.TryParse(vals[1], out int required) && Club.timesPlayedCalicoJack >= required;
                     }
                     return false;
                 case "random":

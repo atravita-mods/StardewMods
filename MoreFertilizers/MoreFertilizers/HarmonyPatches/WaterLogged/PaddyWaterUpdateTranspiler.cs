@@ -1,6 +1,7 @@
 ﻿using System.Reflection;
 using System.Reflection.Emit;
 using AtraBase.Toolkit.Reflection;
+using AtraCore.Framework.ReflectionManager;
 using AtraShared.Utils.HarmonyHelper;
 using HarmonyLib;
 using Microsoft.Xna.Framework;
@@ -35,7 +36,7 @@ internal static class PaddyWaterUpdateTranspiler
             {
                 new(OpCodes.Ldarg_0),
                 new(OpCodes.Ldarg_S),
-                new(OpCodes.Call, typeof(HoeDirt).InstanceMethodNamed("applySpeedIncreases")),
+                new(OpCodes.Call, typeof(HoeDirt).GetCachedMethod("applySpeedIncreases", ReflectionCache.FlagTypes.InstanceFlags)),
             })
             .Advance(3)
             .Insert(new CodeInstruction[]
@@ -44,7 +45,7 @@ internal static class PaddyWaterUpdateTranspiler
                 new(OpCodes.Ldarg_2),
                 new(OpCodes.Ldarg_3),
                 new(OpCodes.Ldarg_S, 6),
-                new(OpCodes.Call, typeof(PaddyWaterUpdateTranspiler).StaticMethodNamed(nameof(PaddyWaterUpdateTranspiler.UpdateNeighbors))),
+                new(OpCodes.Call, typeof(PaddyWaterUpdateTranspiler).StaticMethodNamed(nameof(UpdateNeighbors))),
             });
             return helper.Render();
         }

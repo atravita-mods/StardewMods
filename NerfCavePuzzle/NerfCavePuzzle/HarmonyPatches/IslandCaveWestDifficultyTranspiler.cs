@@ -1,6 +1,8 @@
 ﻿using System.Reflection;
 using System.Reflection.Emit;
 using AtraBase.Toolkit.Reflection;
+using AtraCore.Framework.ReflectionManager;
+using AtraShared.Utils.Extensions;
 using AtraShared.Utils.HarmonyHelper;
 using HarmonyLib;
 using Netcode;
@@ -164,7 +166,7 @@ internal static class IslandCaveWestDifficultyTranspiler
             helper.FindNext(new CodeInstructionWrapper[]
             { // Match switch (this.localPhase)
                 new (OpCodes.Ldarg_0),
-                new (OpCodes.Ldfld, typeof(IslandWestCave1).InstanceFieldNamed(nameof(IslandWestCave1.localPhase))),
+                new (OpCodes.Ldfld, typeof(IslandWestCave1).GetCachedField(nameof(IslandWestCave1.localPhase), ReflectionCache.FlagTypes.InstanceFlags)),
                 new (SpecialCodeInstructionCases.StLoc),
             })
             .FindNext(new CodeInstructionWrapper[]
@@ -180,29 +182,29 @@ internal static class IslandCaveWestDifficultyTranspiler
             { // for (int i = 0; i < this.currentDifficulty; i++) to for (int i = 0; i < Math.Min(this.currentDifficulty, Config.MaxNotes); i++)
                 new (SpecialCodeInstructionCases.LdLoc),
                 new (OpCodes.Ldarg_0),
-                new (OpCodes.Ldfld, typeof(IslandWestCave1).InstanceFieldNamed(nameof(IslandWestCave1.currentDifficulty))),
+                new (OpCodes.Ldfld, typeof(IslandWestCave1).GetCachedField(nameof(IslandWestCave1.currentDifficulty), ReflectionCache.FlagTypes.InstanceFlags)),
                 new (OpCodes.Call),
                 new (OpCodes.Blt_S),
             })
             .Advance(4)
             .Insert(new CodeInstruction[]
             {
-                new(OpCodes.Call, typeof(IslandCaveWestDifficultyTranspiler).StaticMethodNamed(nameof(IslandCaveWestDifficultyTranspiler.GetAdjustedDifficulty))),
+                new(OpCodes.Call, typeof(IslandCaveWestDifficultyTranspiler).GetCachedMethod(nameof(GetAdjustedDifficulty), ReflectionCache.FlagTypes.StaticFlags)),
             })
             .FindNext(new CodeInstructionWrapper[]
             { // this.netPhase.Value = 1;
                 new (OpCodes.Ldarg_0),
-                new (OpCodes.Ldfld, typeof(IslandWestCave1).InstanceFieldNamed(nameof(IslandWestCave1.netPhase))),
+                new (OpCodes.Ldfld, typeof(IslandWestCave1).GetCachedField(nameof(IslandWestCave1.netPhase), ReflectionCache.FlagTypes.InstanceFlags)),
                 new (OpCodes.Ldc_I4_1),
-                new (OpCodes.Callvirt, typeof(NetFieldBase<int, NetInt>).InstancePropertyNamed("Value").GetSetMethod()),
+                new (OpCodes.Callvirt, typeof(NetFieldBase<int, NetInt>).GetCachedProperty("Value", ReflectionCache.FlagTypes.InstanceFlags).GetSetMethod()),
             })
             .Advance(2)
             .GetLabels(out IList<Label> labelsToMove)
-            .ReplaceInstruction(OpCodes.Call, typeof(IslandCaveWestDifficultyTranspiler).StaticMethodNamed(nameof(IslandCaveWestDifficultyTranspiler.SetCorrectPhaseForPause)))
+            .ReplaceInstruction(OpCodes.Call, typeof(IslandCaveWestDifficultyTranspiler).GetCachedMethod(nameof(SetCorrectPhaseForPause), ReflectionCache.FlagTypes.StaticFlags))
             .Insert(new CodeInstruction[]
             { // get the current phase, I need that to skip the pause on the first segment.
                 new (OpCodes.Ldarg_0),
-                new (OpCodes.Ldfld, typeof(IslandWestCave1).InstanceFieldNamed(nameof(IslandWestCave1.localPhase))),
+                new (OpCodes.Ldfld, typeof(IslandWestCave1).GetCachedField(nameof(IslandWestCave1.localPhase), ReflectionCache.FlagTypes.InstanceFlags)),
             }, withLabels: labelsToMove)
             .FindNext(new CodeInstructionWrapper[]
             { // this.betweenNotesTimer = 1500f/betweenNotesDivisor to this.betweenNotesTimer = 1500f/betweenNotesDivisor * DifficultyModifer
@@ -211,12 +213,12 @@ internal static class IslandCaveWestDifficultyTranspiler
                 new (SpecialCodeInstructionCases.LdLoc),
                 new (OpCodes.Conv_R4),
                 new (OpCodes.Div),
-                new (OpCodes.Stfld, typeof(IslandWestCave1).InstanceFieldNamed(nameof(IslandWestCave1.betweenNotesTimer))),
+                new (OpCodes.Stfld, typeof(IslandWestCave1).GetCachedField(nameof(IslandWestCave1.betweenNotesTimer), ReflectionCache.FlagTypes.InstanceFlags)),
             })
             .Advance(5)
             .Insert(new CodeInstruction[]
             {
-                new (OpCodes.Call, typeof(IslandCaveWestDifficultyTranspiler).StaticMethodNamed(nameof(IslandCaveWestDifficultyTranspiler.GetSpeedModifier))),
+                new (OpCodes.Call, typeof(IslandCaveWestDifficultyTranspiler).GetCachedMethod(nameof(GetSpeedModifier), ReflectionCache.FlagTypes.StaticFlags)),
                 new (OpCodes.Mul),
             });
             return helper.Render();
@@ -224,6 +226,7 @@ internal static class IslandCaveWestDifficultyTranspiler
         catch (Exception ex)
         {
             ModEntry.ModMonitor.Log($"Ran into errors transpiling IslandWestCave1.UpdateWhenCurrentLocation.\n\n{ex}", LogLevel.Error);
+            original.Snitch(ModEntry.ModMonitor);
         }
         return null;
     }
@@ -270,31 +273,32 @@ internal static class IslandCaveWestDifficultyTranspiler
             helper.FindNext(new CodeInstructionWrapper[]
             { // just after this.timesFailed++ insert a call that writes the value to the save.
                 new(OpCodes.Ldarg_0),
-                new(OpCodes.Ldfld, typeof(IslandWestCave1).InstanceFieldNamed(nameof(IslandWestCave1.timesFailed))),
+                new(OpCodes.Ldfld, typeof(IslandWestCave1).GetCachedField(nameof(IslandWestCave1.timesFailed), ReflectionCache.FlagTypes.InstanceFlags)),
                 new(OpCodes.Dup),
                 new(OpCodes.Callvirt),
                 new(SpecialCodeInstructionCases.StLoc),
                 new(SpecialCodeInstructionCases.LdLoc),
                 new(OpCodes.Ldc_I4_1),
                 new(OpCodes.Add),
-                new(OpCodes.Callvirt, typeof(NetFieldBase<int, NetInt>).InstancePropertyNamed("Value").GetSetMethod()),
+                new(OpCodes.Callvirt, typeof(NetFieldBase<int, NetInt>).GetCachedProperty("Value", ReflectionCache.FlagTypes.InstanceFlags).GetSetMethod()),
             })
             .FindNext(new CodeInstructionWrapper[]
             {
                 new(OpCodes.Add),
-                new(OpCodes.Callvirt, typeof(NetFieldBase<int, NetInt>).InstancePropertyNamed("Value").GetSetMethod()),
+                new(OpCodes.Callvirt, typeof(NetFieldBase<int, NetInt>).GetCachedProperty("Value", ReflectionCache.FlagTypes.InstanceFlags).GetSetMethod()),
             })
             .Advance(1)
             .Insert(new CodeInstruction[]
             {
                 new(OpCodes.Dup),
-                new(OpCodes.Call, typeof(IslandCaveWestDifficultyTranspiler).StaticMethodNamed(nameof(IslandCaveWestDifficultyTranspiler.SaveFailureCount))),
+                new(OpCodes.Call, typeof(IslandCaveWestDifficultyTranspiler).StaticMethodNamed(nameof(SaveFailureCount))),
             });
             return helper.Render();
         }
         catch (Exception ex)
         {
             ModEntry.ModMonitor.Log($"Ran into errors transpiling IslandWestCave1.enterValue.\n\n{ex}", LogLevel.Error);
+            original.Snitch(ModEntry.ModMonitor);
         }
         return null;
     }

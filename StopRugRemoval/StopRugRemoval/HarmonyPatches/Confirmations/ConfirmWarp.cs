@@ -99,7 +99,7 @@ internal static class ConfirmWarp
             { // new SObject(688,1)
                 new(OpCodes.Ldc_I4, 688),
             })
-            .GetLabels(out var labels)
+            .GetLabels(out IList<Label>? labels)
             .Insert(new CodeInstruction[]
             {
                 new(OpCodes.Ldc_I4_1),
@@ -110,7 +110,7 @@ internal static class ConfirmWarp
                 new(OpCodes.Ldc_I4_1),
                 new(OpCodes.Ret),
             })
-            .GetLabels(out var secondLabels)
+            .GetLabels(out IList<Label>? secondLabels)
             .Insert(new CodeInstruction[]
             {
                 new(OpCodes.Ldc_I4_0),
@@ -196,7 +196,8 @@ internal static class ConfirmWarp
         {
             return true;
         }
-        if (!__instance.occupiesTile(tileLocation) || !__instance.buildingType.Value.EndsWith("Obelisk", StringComparison.OrdinalIgnoreCase) || !who.IsLocalPlayer)
+        if (!__instance.occupiesTile(tileLocation) || !__instance.buildingType.Value.EndsWith("Obelisk", StringComparison.OrdinalIgnoreCase)
+            || !who.IsLocalPlayer || __instance.daysOfConstructionLeft.Value > 0)
         {
             return true;
         }

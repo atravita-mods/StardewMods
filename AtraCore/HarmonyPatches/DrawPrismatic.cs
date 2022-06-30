@@ -66,14 +66,14 @@ internal static class DrawPrismatic
     }
 
     /// <summary>
-    /// Prefixes SObject's draw functions in order to draw things prismatically.
+    /// Prefixes SObject's drawInMenu function in order to draw things prismatically.
     /// </summary>
     /// <param name="__instance">SObject instance.</param>
     /// <param name="color">Color to make things.</param>
     [UsedImplicitly]
     [HarmonyPrefix]
-    [HarmonyPatch(typeof(SObject), "drawInMenu")]
-    private static void PrefixSObjectDraw(SObject __instance, ref Color color)
+    [HarmonyPatch(typeof(SObject), nameof(SObject.drawInMenu))]
+    private static void PrefixSObjectDrawInMenu(SObject __instance, ref Color color)
     {
         try
         {

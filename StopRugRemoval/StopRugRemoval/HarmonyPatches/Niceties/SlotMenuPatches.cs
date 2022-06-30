@@ -182,7 +182,7 @@ internal static class SlotMenuPatches
         catch (Exception ex)
         {
             ModEntry.ModMonitor.Log($"Ran into error transpiling Slots.ctor!\n\n{ex}", LogLevel.Error);
-            original.Snitch(ModEntry.ModMonitor);
+            original?.Snitch(ModEntry.ModMonitor);
         }
         return null;
     }
@@ -218,7 +218,7 @@ internal static class SlotMenuPatches
         catch (Exception ex)
         {
             ModEntry.ModMonitor.Log($"Ran into error transpiling Slots.draw!\n\n{ex}", LogLevel.Error);
-            original.Snitch(ModEntry.ModMonitor);
+            original?.Snitch(ModEntry.ModMonitor);
         }
         return null;
     }

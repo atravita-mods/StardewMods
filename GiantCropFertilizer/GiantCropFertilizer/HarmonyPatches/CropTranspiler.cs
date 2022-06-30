@@ -96,7 +96,7 @@ internal static class CropTranspiler
         catch (Exception ex)
         {
             ModEntry.ModMonitor.Log($"Mod crashed while transpiling Crop.newDay:\n\n{ex}", LogLevel.Error);
-            original.Snitch(ModEntry.ModMonitor);
+            original?.Snitch(ModEntry.ModMonitor);
         }
         return null;
     }
@@ -147,7 +147,7 @@ internal static class CropTranspiler
         catch (Exception ex)
         {
             ModEntry.ModMonitor.Log($"Failed while trying to transpile DGA's CustomCrop.NewDay.\n\n{ex}", LogLevel.Error);
-            original.Snitch(ModEntry.ModMonitor);
+            original?.Snitch(ModEntry.ModMonitor);
         }
         return null;
     }

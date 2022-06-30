@@ -77,7 +77,7 @@ internal static class FishPondLayerDepthFix
         catch (Exception ex)
         {
             ModEntry.ModMonitor.Log($"Failed while trying to transpile fish pond layer depth\n{ex}", LogLevel.Error);
-            original.Snitch(ModEntry.ModMonitor);
+            original?.Snitch(ModEntry.ModMonitor);
         }
         return null;
     }

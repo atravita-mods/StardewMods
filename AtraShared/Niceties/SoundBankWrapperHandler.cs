@@ -49,7 +49,7 @@ public static class SoundBankWrapperHandler
 
         // call the ContainsKey
         var containsKey = typeof(Dictionary<string, CueDefinition>).GetCachedMethod(nameof(Dictionary<string, CueDefinition>.ContainsKey), ReflectionCache.FlagTypes.InstanceFlags);
-        var express = Expression.Call(containsKey, fieldgetter, name);
+        var express = Expression.Call(fieldgetter, containsKey, name);
         return Expression.Lambda<Func<SoundBank, string, bool>>(express, param, name).Compile();
     });
 

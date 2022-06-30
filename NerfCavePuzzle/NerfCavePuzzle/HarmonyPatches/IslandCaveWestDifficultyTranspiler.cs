@@ -226,7 +226,7 @@ internal static class IslandCaveWestDifficultyTranspiler
         catch (Exception ex)
         {
             ModEntry.ModMonitor.Log($"Ran into errors transpiling IslandWestCave1.UpdateWhenCurrentLocation.\n\n{ex}", LogLevel.Error);
-            original.Snitch(ModEntry.ModMonitor);
+            original?.Snitch(ModEntry.ModMonitor);
         }
         return null;
     }
@@ -298,7 +298,7 @@ internal static class IslandCaveWestDifficultyTranspiler
         catch (Exception ex)
         {
             ModEntry.ModMonitor.Log($"Ran into errors transpiling IslandWestCave1.enterValue.\n\n{ex}", LogLevel.Error);
-            original.Snitch(ModEntry.ModMonitor);
+            original?.Snitch(ModEntry.ModMonitor);
         }
         return null;
     }

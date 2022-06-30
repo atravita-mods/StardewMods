@@ -245,7 +245,7 @@ internal static class VolcanoChestAdjuster
         catch (Exception ex)
         {
             ModEntry.ModMonitor.Log($"Ran into error transpiling volcano dungeon to avoid repeat chest rewards..\n\n{ex}", LogLevel.Error);
-            original.Snitch(ModEntry.ModMonitor);
+            original?.Snitch(ModEntry.ModMonitor);
         }
         return null;
     }

@@ -13,9 +13,10 @@ internal static class PreventJukeboxCrash
 {
     [HarmonyPatch(nameof(ChooseFromListMenu.IsValidJukeboxSong))]
     [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Harmony Convention")]
-    private static void Postfix(string name, ref bool __result)
+    private static bool Prefix(string name, ref bool __result)
     {
-        if (__result)
+        if (Context.IsWorldReady && !name.Equals("random", StringComparison.OrdinalIgnoreCase)
+            && !name.Equals("turn_off", StringComparison.OrdinalIgnoreCase) && !name.Equals("title_day", StringComparison.OrdinalIgnoreCase))
         {
             if (Game1.soundBank is SoundBankWrapper soundBank)
             {
@@ -26,11 +27,12 @@ internal static class PreventJukeboxCrash
                     {
                         ModEntry.ModMonitor.Log($"Overwriting IsValidJukeboxSong for invalid cue {name}");
                         __result = false;
+                        return false;
                     }
                 }
                 catch (Exception ex)
                 {
-                    ModEntry.ModMonitor.Log($"Failed in checking jukebox songs for invalid cues for cue {name}\n\n{ex}");
+                    ModEntry.ModMonitor.Log($"Failed in checking jukebox songs for invalid cues for cue {name}\n\n{ex}", LogLevel.Error);
                 }
             }
             else
@@ -38,5 +40,6 @@ internal static class PreventJukeboxCrash
                 ModEntry.ModMonitor.LogOnce($"Stardew's implementation of soundbank seems to have changed since I wrote this. Please report this as an error to the mod page.", LogLevel.Error);
             }
         }
+        return true;
     }
 }

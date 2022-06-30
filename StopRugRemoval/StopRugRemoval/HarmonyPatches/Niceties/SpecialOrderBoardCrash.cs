@@ -81,7 +81,7 @@ internal static class SpecialOrderCrash
         catch (Exception ex)
         {
             ModEntry.ModMonitor.Log($"Ran into error transpiling special order board update code to avoid a crash.\n\n{ex}", LogLevel.Error);
-            original.Snitch(ModEntry.ModMonitor);
+            original?.Snitch(ModEntry.ModMonitor);
         }
         return null;
     }
@@ -167,7 +167,7 @@ internal static class SpecialOrderBoardCrash
         catch (Exception ex)
         {
             ModEntry.ModMonitor.Log($"Ran into error transpiling special order board to avoid crash.\n\n{ex}", LogLevel.Error);
-            original.Snitch(ModEntry.ModMonitor);
+            original?.Snitch(ModEntry.ModMonitor);
         }
         return null;
     }

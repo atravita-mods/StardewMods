@@ -65,7 +65,7 @@ internal static class CaveCrystalTranspiler
         catch (Exception ex)
         {
             ModEntry.ModMonitor.Log($"Ran into errors transpiling CaveCrystal.activate.\n\n{ex}", LogLevel.Error);
-            original.Snitch(ModEntry.ModMonitor);
+            original?.Snitch(ModEntry.ModMonitor);
         }
         return null;
     }
@@ -97,7 +97,7 @@ internal static class CaveCrystalTranspiler
         catch (Exception ex)
         {
             ModEntry.ModMonitor.Log($"Ran into errors transpiling CaveCrystal.update.\n\n{ex}", LogLevel.Error);
-            original.Snitch(ModEntry.ModMonitor);
+            original?.Snitch(ModEntry.ModMonitor);
         }
         return null;
     }

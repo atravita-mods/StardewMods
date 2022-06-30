@@ -18,6 +18,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Integrations\Interfaces\Fluent\IFluentEnum.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Integrations\Interfaces\Fluent\IGameLocale.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Niceties\Records.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Niceties\SoundBankWrapperHandler.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Niceties\VanillaMachinesEnum.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Utils\DateHelper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Integrations\GMCMHelper.cs" />

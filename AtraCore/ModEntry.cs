@@ -1,8 +1,6 @@
 ﻿using AtraCore.Framework.ItemManagement;
 using AtraCore.HarmonyPatches;
 using AtraShared.ConstantsAndEnums;
-using AtraShared.Integrations;
-using AtraShared.Integrations.Interfaces;
 using AtraShared.Utils.Extensions;
 using HarmonyLib;
 using StardewModdingAPI.Events;

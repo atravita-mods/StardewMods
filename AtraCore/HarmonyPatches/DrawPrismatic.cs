@@ -13,6 +13,10 @@ internal static class DrawPrismatic
     internal static SortedList<ItemTypeEnum, Dictionary<int, Lazy<Texture2D>>> PrismaticMasks = new();
     internal static SortedList<ItemTypeEnum, HashSet<int>> PrismaticFull = new();
 
+    /// <summary>
+    /// Load the prismatic data.
+    /// Called on SaveLoaded.
+    /// </summary>
     internal static void LoadPrismaticData()
     {
         List<DrawPrismaticModel>? models = AssetManager.GetPrismaticModels();
@@ -20,6 +24,10 @@ internal static class DrawPrismatic
         {
             return;
         }
+
+        PrismaticFull.Clear();
+        PrismaticMasks.Clear();
+
         foreach (DrawPrismaticModel? model in models)
         {
             if (!int.TryParse(model.Identifier, out int id))
@@ -57,7 +65,13 @@ internal static class DrawPrismatic
         }
     }
 
+    /// <summary>
+    /// Prefixes SObject's draw functions in order to draw things prismatically.
+    /// </summary>
+    /// <param name="__instance">SObject instance.</param>
+    /// <param name="color">Color to make things.</param>
     [UsedImplicitly]
+    [HarmonyPrefix]
     [HarmonyPatch(typeof(SObject), "drawInMenu")]
     private static void PrefixSObjectDraw(SObject __instance, ref Color color)
     {

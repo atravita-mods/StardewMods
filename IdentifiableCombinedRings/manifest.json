@@ -2,7 +2,7 @@
   "$schema": "https://smapi.io/schemas/manifest.json",
   "Name": "Identifiable Combined Rings",
   "Author": "atravita",
-  "Version": "0.1.0-Debug",
+  "Version": "0.1.0",
   "Description": "Makes it easier to identify the rings within a combined ring.",
   "UniqueID": "atravita.IdentifiableCombinedRings",
   "EntryDll": "IdentifiableCombinedRings.dll",

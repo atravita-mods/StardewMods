@@ -20,7 +20,10 @@ internal class ModEntry : Mod
     private const string BUILDING = "Buildings";
     private const string SHOPNAME = "atravita.MuseumShop";
 
-    private static readonly Regex MuseumObject = new("museumCollectedReward(?<type>[a-zA-Z]+)_(?<id>[0-9]+)_", RegexOptions.Compiled, TimeSpan.FromMilliseconds(250));
+    private static readonly Regex MuseumObject = new(
+        pattern: "museumCollectedReward(?<type>[a-zA-Z]+)_(?<id>[0-9]+)_",
+        options: RegexOptions.Compiled,
+        matchTimeout: TimeSpan.FromMilliseconds(250));
 
     private static IMonitor modMonitor = null!;
 
@@ -161,7 +164,7 @@ internal class ModEntry : Mod
                     }
                     tile.Properties.Add("Action", new PropertyValue(SHOPNAME));
                 },
-                AssetEditPriority.Default);
+                AssetEditPriority.Default + 10);
         }
     }
 

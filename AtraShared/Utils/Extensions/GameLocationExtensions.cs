@@ -1,4 +1,5 @@
-﻿using AtraBase.Toolkit.StringHandler;
+﻿using AtraBase.Toolkit.Extensions;
+using AtraBase.Toolkit.StringHandler;
 using StardewValley.Locations;
 using StardewValley.Monsters;
 
@@ -46,14 +47,14 @@ public static class GameLocationExtensions
                 }
                 if (festivalData.TryGetValue("conditions", out string? val))
                 {
-                    SpanSplit splits = val.SpanSplit('/');
-                    if (splits.CountIsAtLeast(2))
+                    string[]? splits = val.Split('/');
+                    if (splits.Length >= 2)
                     {
-                        if (!location.Name.Equals(splits[0].Word.ToString(), StringComparison.OrdinalIgnoreCase))
+                        if (!location.Name.Equals(splits[0], StringComparison.OrdinalIgnoreCase))
                         {
                             return false;
                         }
-                        if (int.TryParse(splits[1].SpanSplit()[0], out int startTime) && Game1.timeOfDay < startTime)
+                        if (int.TryParse(splits[1].GetNthChunk(' ', 0), out int startTime) && Game1.timeOfDay < startTime)
                         {
                             if (alertPlayer)
                             {

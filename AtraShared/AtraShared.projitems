@@ -32,12 +32,10 @@
     <Compile Include="$(MSBuildThisFileDirectory)Integrations\Interfaces\IProducerFrameworkModAPI.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Integrations\Interfaces\ISimplifiedFishingAPI.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Integrations\Interfaces\ISpaceCoreAPI.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)ItemManagement\ItemHandler.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ItemManagement\ItemUtils.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Menuing\DialogueAndAction.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MigrationManager\MigrationDataClass.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MigrationManager\MigrationManager.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Niceties\IsWithinSprinklerRadius.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Schedules\DataModels\SchedulePoint.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Schedules\ScheduleUtilityFunctions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Utils\ColorHandler.cs" />
@@ -60,5 +58,8 @@
     <Compile Include="$(MSBuildThisFileDirectory)Utils\MultiplayerHelpers.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Utils\StringUtils.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Utils\Utils.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="$(MSBuildThisFileDirectory)Integrations\Interfaces\Fluent\README.TXT" />
   </ItemGroup>
 </Project>

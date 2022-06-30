@@ -1,7 +1,7 @@
 {
   "Name": "DrawFishPondsOverGrass",
   "Author": "atravita",
-  "Version": "0.2.0-Debug",
+  "Version": "0.2.0",
   "Description": "Draws fish ponds **over** grass placed under it.",
   "UniqueID": "atravita.DrawFishPondsOverGrass",
   "EntryDll": "DrawFishPondsOverGrass.dll",

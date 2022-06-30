@@ -15,8 +15,12 @@ internal static class DataToItemMap
     /// <param name="type">type of the item.</param>
     /// <param name="name">name of the item.</param>
     /// <returns>Integer ID, or -1 if not found.</returns>
-    public static int GetID(ItemTypeEnum type, string name)
+    public static int GetID(ItemTypeEnum type, string name, bool resolveRecipesSeperately = false)
     {
+        if (!resolveRecipesSeperately)
+        {
+            type &= ~ItemTypeEnum.Recipe;
+        }
         if (!_nameToIDMap.TryGetValue(type, out Lazy<Dictionary<string, int>>? asset))
         {
             if (!type.HasFlag(ItemTypeEnum.SObject) || !_nameToIDMap.TryGetValue(ItemTypeEnum.SObject, out asset))
@@ -43,7 +47,7 @@ internal static class DataToItemMap
         _map.Add(ItemTypeEnum.BigCraftable, helper.ParseAssetName(@"Data\BigCraftablesInformation"));
         _map.Add(ItemTypeEnum.Boots, helper.ParseAssetName(@"Data\Boots"));
         _map.Add(ItemTypeEnum.Clothing, helper.ParseAssetName(@"Data\ClothingInformation"));
-        _map.Add(ItemTypeEnum.Furniture, helper.ParseAssetName(@"Data/Furniture"));
+        _map.Add(ItemTypeEnum.Furniture, helper.ParseAssetName(@"Data\Furniture"));
         _map.Add(ItemTypeEnum.Hat, helper.ParseAssetName(@"Data\hats"));
         _map.Add(ItemTypeEnum.SObject, helper.ParseAssetName(@"Data\ObjectInformation"));
         _map.Add(ItemTypeEnum.Weapon, helper.ParseAssetName(@"Data\weapons"));
@@ -52,6 +56,10 @@ internal static class DataToItemMap
         Reset();
     }
 
+    /// <summary>
+    /// Resets the requested name-to-id maps.
+    /// </summary>
+    /// <param name="assets">Assets to reset, or null for all.</param>
     internal static void Reset(IReadOnlySet<IAssetName>? assets = null)
     {
         bool ShouldReset(IAssetName name) => assets is null || assets.Contains(name);
@@ -67,8 +75,19 @@ internal static class DataToItemMap
                     Dictionary<string, int> mapping = new();
                     foreach ((int id, string data) in Game1.objectInformation)
                     {
-                        var name = data.GetNthChunk('/', 0);
+                        // category asdf should never end up in the player inventory.
+                        var cat = data.GetNthChunk('/', SObject.objectInfoTypeIndex);
+                        if (cat.Equals("asdf", StringComparison.OrdinalIgnoreCase))
+                        {
+                            continue;
+                        }
+
+                        var name = data.GetNthChunk('/', SObject.objectInfoNameIndex);
                         if (name.Equals("Stone", StringComparison.OrdinalIgnoreCase) && id != 390)
+                        {
+                            continue;
+                        }
+                        if (name.Equals("Weeds", StringComparison.OrdinalIgnoreCase))
                         {
                             continue;
                         }

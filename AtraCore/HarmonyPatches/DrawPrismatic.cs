@@ -4,6 +4,7 @@ using AtraShared.ConstantsAndEnums;
 using HarmonyLib;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using StardewValley.Objects;
 
 namespace AtraCore.HarmonyPatches;
 
@@ -35,7 +36,7 @@ internal static class DrawPrismatic
                 id = DataToItemMap.GetID(model.itemType, model.Identifier);
                 if (id == -1)
                 {
-                    ModEntry.ModMonitor.Log($"Could not resolve", LogLevel.Warn);
+                    ModEntry.ModMonitor.Log($"Could not resolve {model.itemType}, {model.Identifier}", LogLevel.Warn);
                     continue;
                 }
             }
@@ -52,6 +53,7 @@ internal static class DrawPrismatic
             }
             else
             {
+                // handle the ones that have masks.
                 if (!PrismaticMasks.TryGetValue(model.itemType, out var masks))
                 {
                     masks = new();
@@ -73,6 +75,7 @@ internal static class DrawPrismatic
     [UsedImplicitly]
     [HarmonyPrefix]
     [HarmonyPatch(typeof(SObject), nameof(SObject.drawInMenu))]
+    [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Harmony Convention.")]
     private static void PrefixSObjectDrawInMenu(SObject __instance, ref Color color)
     {
         try
@@ -86,6 +89,27 @@ internal static class DrawPrismatic
         catch (Exception ex)
         {
             ModEntry.ModMonitor.Log($"Failed in drawing prismatic item\b\b{ex}", LogLevel.Error);
+        }
+        return;
+    }
+
+    [UsedImplicitly]
+    [HarmonyPrefix]
+    [HarmonyPatch(typeof(Ring), nameof(Ring.drawInMenu))]
+    [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Harmony Convention.")]
+    private static void PrefixRingDrawInMenu(Ring __instance, ref Color color)
+    {
+        try
+        {
+            if (__instance.GetItemType() is ItemTypeEnum type && PrismaticFull.TryGetValue(type, out var set)
+                && set.Contains(__instance.ParentSheetIndex))
+            {
+                color = Utility.GetPrismaticColor();
+            }
+        }
+        catch (Exception ex)
+        {
+            ModEntry.ModMonitor.Log($"Failed in drawing prismatic ring\b\b{ex}", LogLevel.Error);
         }
         return;
     }

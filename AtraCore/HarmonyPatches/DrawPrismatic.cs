@@ -36,7 +36,7 @@ internal static class DrawPrismatic
                 id = DataToItemMap.GetID(model.itemType, model.Identifier);
                 if (id == -1)
                 {
-                    ModEntry.ModMonitor.Log($"Could not resolve {model.itemType}, {model.Identifier}", LogLevel.Warn);
+                    ModEntry.ModMonitor.Log($"Could not resolve {model.itemType}, {model.Identifier}, skipping.", LogLevel.Warn);
                     continue;
                 }
             }
@@ -54,7 +54,7 @@ internal static class DrawPrismatic
             else
             {
                 // handle the ones that have masks.
-                if (!PrismaticMasks.TryGetValue(model.itemType, out var masks))
+                if (!PrismaticMasks.TryGetValue(model.itemType, out Dictionary<int, Lazy<Texture2D>>? masks))
                 {
                     masks = new();
                 }
@@ -88,7 +88,7 @@ internal static class DrawPrismatic
         }
         catch (Exception ex)
         {
-            ModEntry.ModMonitor.Log($"Failed in drawing prismatic item\b\b{ex}", LogLevel.Error);
+            ModEntry.ModMonitor.Log($"Failed in drawing prismatic item\n\n{ex}", LogLevel.Error);
         }
         return;
     }
@@ -109,7 +109,24 @@ internal static class DrawPrismatic
         }
         catch (Exception ex)
         {
-            ModEntry.ModMonitor.Log($"Failed in drawing prismatic ring\b\b{ex}", LogLevel.Error);
+            ModEntry.ModMonitor.Log($"Failed in drawing prismatic ring\n\n{ex}", LogLevel.Error);
+        }
+        return;
+    }
+
+    private static void PostfixRingDrawInMenu(Ring __instance)
+    {
+        try
+        {
+            if (__instance.GetItemType() is ItemTypeEnum type && PrismaticFull.TryGetValue(type, out var set)
+                && set.Contains(__instance.ParentSheetIndex))
+            {
+                // draw the thing.
+            }
+        }
+        catch (Exception ex)
+        {
+            ModEntry.ModMonitor.Log($"Failed in drawing prismatic mask\n\n{ex}", LogLevel.Error);
         }
         return;
     }

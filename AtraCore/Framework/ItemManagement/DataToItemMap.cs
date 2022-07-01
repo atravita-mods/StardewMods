@@ -134,7 +134,7 @@ internal static class DataToItemMap
                 Dictionary<string, int> mapping = new();
                 foreach ((int id, string data) in Game1.content.Load<Dictionary<int, string>>(_map[ItemTypeEnum.Boots].BaseName))
                 {
-                    string name = data.GetNthChunk('/', 0).ToString();
+                    string name = data.GetNthChunk('/', SObject.objectInfoNameIndex).ToString();
                     if (!mapping.TryAdd(name, id))
                     {
                         ModEntry.ModMonitor.Log($"{name} with {id} seems to be a duplicate Boots and may not be resolved correctly.", LogLevel.Warn);
@@ -152,7 +152,7 @@ internal static class DataToItemMap
                 Dictionary<string, int> mapping = new();
                 foreach ((int id, string data) in Game1.bigCraftablesInformation)
                 {
-                    string name = data.GetNthChunk('/', 0).ToString();
+                    string name = data.GetNthChunk('/', SObject.objectInfoNameIndex).ToString();
                     if (!mapping.TryAdd(name, id))
                     {
                         ModEntry.ModMonitor.Log($"{name} with {id} seems to be a duplicate BigCraftable and may not be resolved correctly.", LogLevel.Warn);
@@ -170,7 +170,7 @@ internal static class DataToItemMap
                 Dictionary<string, int> mapping = new();
                 foreach ((int id, string data) in Game1.clothingInformation)
                 {
-                    string name = data.GetNthChunk('/', 0).ToString();
+                    string name = data.GetNthChunk('/', SObject.objectInfoNameIndex).ToString();
                     if (!mapping.TryAdd(name, id))
                     {
                         ModEntry.ModMonitor.Log($"{name} with {id} seems to be a duplicate ClothingItem and may not be resolved correctly.", LogLevel.Warn);
@@ -188,7 +188,7 @@ internal static class DataToItemMap
                 Dictionary<string, int> mapping = new();
                 foreach ((int id, string data) in Game1.content.Load<Dictionary<int, string>>(_map[ItemTypeEnum.Furniture].BaseName))
                 {
-                    string name = data.GetNthChunk('/', 0).ToString();
+                    string name = data.GetNthChunk('/', SObject.objectInfoNameIndex).ToString();
                     if (!mapping.TryAdd(name, id))
                     {
                         ModEntry.ModMonitor.Log($"{name} with {id} seems to be a duplicate Furniture Item and may not be resolved correctly.", LogLevel.Warn);
@@ -206,7 +206,7 @@ internal static class DataToItemMap
                 Dictionary<string, int> mapping = new();
                 foreach ((int id, string data) in Game1.content.Load<Dictionary<int, string>>(_map[ItemTypeEnum.Hat].BaseName))
                 {
-                    string name = data.GetNthChunk('/', 0).ToString();
+                    string name = data.GetNthChunk('/', SObject.objectInfoNameIndex).ToString();
                     if (!mapping.TryAdd(name, id))
                     {
                         ModEntry.ModMonitor.Log($"{name} with {id} seems to be a duplicate Hat and may not be resolved correctly.", LogLevel.Warn);

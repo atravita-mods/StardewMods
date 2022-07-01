@@ -23,7 +23,7 @@ internal static class SlingshotStackAmmo
     {
         try
         {
-            var prev = __instance.attachments[0];
+            SObject? prev = __instance.attachments[0];
 
             if (prev is not null && prev.canStackWith(o))
             {

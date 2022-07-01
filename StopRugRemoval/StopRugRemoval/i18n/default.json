@@ -19,6 +19,8 @@
   "GoldenCoconutsOffIsland.title": "Golden Coconuts Off Island",
   "GoldenCoconutsOffIsland.description": "Golden coconuts can drop from palm trees off the island too! It's quite rare though.",
 
+
+
   "FurniturePlacementKey.title": "Furniture Placement Key",
   "FurniturePlacementKey.description": "The keybind used to allow objects to be removed from tables.",
 
@@ -27,6 +29,9 @@
 
   "SaveBombedForage.title": "Save Bombed Forage",
   "SaveBombedForage.description": "Bombed forage is automatically collected",
+
+  "FilterJukeboxSongs.title": "Filter Jukebox Songs",
+  "FilterJukeboxSongs.description": "If set to true, songs currently not available for play will be removed. (The most common reason for a song not being available is that it belonged to a mod that was later removed.)",
 
   // Handle the confirmation GMCM stuff....
 
@@ -61,7 +66,7 @@
   "ConfirmScepter.title": "Return Scepter confirmation settings",
   "ConfirmScepter.description": "Whether or not to ask for confirmation before using the return scepter",
 
-  "BetterReturnScepter":  "Since you have Better Return Scepter installed, the return scepter settings for this mod have been disabled.",
+  "BetterReturnScepter": "Since you have Better Return Scepter installed, the return scepter settings for this mod have been disabled.",
 
   "ReturnScepterInSafeAreas.title": "Return Scepter\nin Safe Areas",
   "ReturnScepterInSafeAreas.description": "Whether return scepter confirmation should be enabled in safe areas.",

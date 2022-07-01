@@ -71,6 +71,12 @@ public class ModConfig
     public bool SaveBombedForage { get; set; } = false;
 
     /// <summary>
+    /// Gets or sets a value indicating whether jukebox songs should be removed from the menu if they're not
+    /// actually currently accessible.
+    /// </summary>
+    public bool FilterJukeboxSongs { get; set; } = true;
+
+    /// <summary>
     /// Gets or sets a value indicating whether or not to confirm bomb placement in safe areas.
     /// </summary>
     public ConfirmationEnum BombsInSafeAreas { get; set; } = ConfirmationEnum.On;

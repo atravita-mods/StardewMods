@@ -45,8 +45,12 @@ internal static class AssetEditor
     /// <param name="e">Event args.</param>
     /// <param name="registry">The mod registry.</param>
     /// <param name="directoryPath">The absolute path to the mod.</param>
-    internal static void Edit(AssetRequestedEventArgs e, IModRegistry registry, string directoryPath)
+    internal static void Edit(AssetRequestedEventArgs e, string directoryPath)
     {
+        if (!Context.IsWorldReady)
+        {
+            return;
+        }
         if (e.NameWithoutLocale.IsEquivalentTo(BET_ICONS))
         { // The BET1k/10k icons have to be localized, so they're in the i18n folder.
             string filename = "BetIcons.png";
@@ -70,13 +74,21 @@ internal static class AssetEditor
             }
             e.LoadFromModFile<Texture2D>(Path.Combine("i18n", filename), AssetLoadPriority.Low);
         }
-        else if (e.NameWithoutLocale.IsEquivalentTo(SALOON_EVENTS) && !registry.IsLoaded("violetlizabet.CP.NoAlcohol") && ModEntry.Config.Enabled)
+    }
+
+    /// <summary>
+    /// Handles editing the saloon event to give the player a choice about alcohol.
+    /// </summary>
+    /// <param name="e">Event args.</param>
+    internal static void EditSaloonEvent(AssetRequestedEventArgs e)
+    {
+        if (e.NameWithoutLocale.IsEquivalentTo(SALOON_EVENTS) && ModEntry.Config.Enabled)
         {
-            e.Edit(EditSaloon, AssetEditPriority.Late);
+            e.Edit(EditSaloonImpl, AssetEditPriority.Late);
         }
     }
 
-    private static void EditSaloon(IAssetData asset)
+    private static void EditSaloonImpl(IAssetData asset)
     {
         IAssetDataForDictionary<string, string>? editor = asset.AsDictionary<string, string>();
 

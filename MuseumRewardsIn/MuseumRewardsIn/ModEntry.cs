@@ -72,6 +72,7 @@ internal class ModEntry : Mod
     /// <param name="__result">shop inventory to add to.</param>
     [HarmonyPatch(nameof(Utility.getAllFurnituresForFree))]
     [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Harmony convention.")]
+    [SuppressMessage("StyleCop.CSharp.OrderingRules", "SA1204:Static elements should appear before instance elements", Justification = "Reviewed.")]
     private static void Postfix(Dictionary<ISalable, int[]> __result)
     {
         foreach (string mailflag in Game1.player.mailReceived)

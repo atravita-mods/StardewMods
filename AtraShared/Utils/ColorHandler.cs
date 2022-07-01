@@ -102,7 +102,7 @@ public static class ColorHandler
         }
 
         // Try to split and process it that way?
-        SpanSplit splits = colorname.SpanSplit(new[] { '/', ',', ';' }, StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
+        SpanSplit splits = colorname.SpanSplit(new[] { '/', ',', ';' }, StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries, 4);
         if (!splits.TryGetAtIndex(2, out _))
         {
             goto ColorParseFail;

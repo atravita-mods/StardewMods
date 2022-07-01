@@ -132,7 +132,16 @@ public class ModEntry : Mod
         => AssetEditor.Refresh(e.NamesWithoutLocale);
 
     private void OnAssetRequested(object? sender, AssetRequestedEventArgs e)
-        => AssetEditor.Edit(e, this.Helper.ModRegistry, this.Helper.DirectoryPath);
+        => AssetEditor.Edit(e, this.Helper.DirectoryPath);
+
+    /// <summary>
+    /// Edits the saloon event.
+    /// </summary>
+    /// <param name="sender">SMAPI.</param>
+    /// <param name="e">event args.</param>
+    /// <remarks>Not hooked if specific other mods are installed.</remarks>
+    private void OnSaloonEventRequested(object? sender, AssetRequestedEventArgs e)
+        => AssetEditor.EditSaloonEvent(e);
 
     private void Player_Warped(object? sender, WarpedEventArgs e)
     {
@@ -193,6 +202,15 @@ public class ModEntry : Mod
         if (GMCM.TryGetAPI())
         {
             this.SetUpBasicConfig();
+        }
+
+        if (this.Helper.ModRegistry.IsLoaded("violetlizabet.CP.NoAlcohol"))
+        {
+            this.Helper.Events.Content.AssetRequested += this.OnSaloonEventRequested;
+        }
+        else
+        {
+            this.Monitor.Log("violetlizabet.CP.NoAlcohol detected, not editing saloon event.");
         }
     }
 

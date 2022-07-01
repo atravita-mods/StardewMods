@@ -1,7 +1,7 @@
-﻿using System.Linq.Expressions;
-using System.Text;
+﻿using System.Text;
 using AtraBase.Toolkit.Reflection;
 using AtraBase.Toolkit.StringHandler;
+using FastExpressionCompiler.LightExpression;
 using Microsoft.Xna.Framework.Graphics;
 
 namespace AtraShared.Utils;
@@ -28,7 +28,7 @@ public class StringUtils
             spriteinstance,
             typeof(SpriteFont).InstanceMethodNamed("GetGlyphIndexOrDefault"),
             charinstance);
-        return Expression.Lambda<Func<SpriteFont, char, int>>(call, spriteinstance, charinstance).Compile();
+        return Expression.Lambda<Func<SpriteFont, char, int>>(call, spriteinstance, charinstance).CompileFast();
     });
 
     private static Func<SpriteFont, char, int> GetGlyph => GetGlyphLazy.Value;

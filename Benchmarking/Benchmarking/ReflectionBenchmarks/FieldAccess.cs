@@ -1,4 +1,4 @@
-﻿using System.Linq.Expressions;
+﻿using FastExpressionCompiler.LightExpression;
 using System.Reflection;
 
 using BenchmarkDotNet.Attributes;
@@ -17,7 +17,7 @@ public class FieldAccess
 
         for (int i = 0; i < interations; i++)
         {
-        field.SetValue(person, "Sam");
+            field.SetValue(person, "Sam");
         }
     }
 
@@ -34,7 +34,7 @@ public class FieldAccess
         MemberExpression? fieldsetter = Expression.Field(param, field);
         BinaryExpression? assignexpress = Expression.Assign(fieldsetter, val);
 
-        var del =  Expression.Lambda<Action<Person, string>>(assignexpress, param, val).Compile();
+        var del =  Expression.Lambda<Action<Person, string>>(assignexpress, param, val).CompileFast();
         for (int i = 0; i < interations; i++)
         {
             del(person, "Sam");

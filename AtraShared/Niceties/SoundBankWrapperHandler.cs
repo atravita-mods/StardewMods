@@ -1,7 +1,7 @@
-﻿using System.Linq.Expressions;
-using System.Reflection;
+﻿using System.Reflection;
 using AtraBase.Toolkit.Reflection;
 using AtraCore.Framework.ReflectionManager;
+using FastExpressionCompiler.LightExpression;
 using Microsoft.Xna.Framework.Audio;
 
 namespace AtraShared.Niceties;
@@ -30,7 +30,7 @@ public static class SoundBankWrapperHandler
         // Call the .Keys property.
         var getter = typeof(Dictionary<string, CueDefinition>).GetCachedProperty(nameof(Dictionary<string, CueDefinition>.Keys), ReflectionCache.FlagTypes.InstanceFlags).GetGetMethod()!;
         var express = Expression.Call(fieldgetter, getter);
-        return Expression.Lambda<Func<SoundBank, ICollection<string>>>(express, param).Compile();
+        return Expression.Lambda<Func<SoundBank, ICollection<string>>>(express, param).CompileFast();
     });
 
     /// <summary>
@@ -50,7 +50,7 @@ public static class SoundBankWrapperHandler
         // call the ContainsKey
         var containsKey = typeof(Dictionary<string, CueDefinition>).GetCachedMethod(nameof(Dictionary<string, CueDefinition>.ContainsKey), ReflectionCache.FlagTypes.InstanceFlags);
         var express = Expression.Call(fieldgetter, containsKey, name);
-        return Expression.Lambda<Func<SoundBank, string, bool>>(express, param, name).Compile();
+        return Expression.Lambda<Func<SoundBank, string, bool>>(express, param, name).CompileFast();
     });
 
     /// <summary>

@@ -68,7 +68,7 @@ public class ModEntry : Mod
         }
         helper.Register(
                 reset: () => Config = new ModConfig(),
-                save: () => this.Helper.WriteConfig(Config))
+                save: () => Task.Run(() => this.Helper.WriteConfig(Config)))
             .AddParagraph(I18n.Mod_Description);
 
         foreach (PropertyInfo property in typeof(ModConfig).GetProperties())

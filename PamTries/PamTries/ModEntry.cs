@@ -34,7 +34,7 @@ public class ModEntry : Mod
     public override void Entry(IModHelper helper)
     {
         I18n.Init(helper.Translation);
-        
+
         ModMonitor = this.Monitor;
 
         helper.Events.GameLoop.GameLaunched += this.OnGameLaunch;

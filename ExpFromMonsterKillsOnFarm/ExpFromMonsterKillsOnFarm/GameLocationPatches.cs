@@ -1,4 +1,4 @@
-﻿using System.Diagnostics.CodeAnalysis;
+﻿using AtraShared.Utils.Extensions;
 using HarmonyLib;
 using StardewValley.Monsters;
 
@@ -33,12 +33,12 @@ internal class GameLocationPatches
             if (ModEntry.Config.GainExp)
             {
                 __3.gainExperience(Farmer.combatSkill, __0.ExperienceGained);
-                ModEntry.ModMonitor.Log($"Granting {__3.Name} {__0.ExperienceGained} combat XP for monster kill on farm");
+                ModEntry.ModMonitor.DebugOnlyLog($"Granting {__3.Name} {__0.ExperienceGained} combat XP for monster kill on farm");
             }
             if (ModEntry.Config.QuestCompletion)
             {
                 __3.checkForQuestComplete(null, 1, 1, null, __0.Name, 4);
-                ModEntry.ModMonitor.Log($"Granting {__3.Name} one kill of {__0.Name} towards billboard.");
+                ModEntry.ModMonitor.DebugOnlyLog($"Granting {__3.Name} one kill of {__0.Name} towards billboard.");
             }
             if (ModEntry.Config.SpecialOrderCompletion && Game1.player.team.specialOrders is not null)
             {
@@ -47,7 +47,7 @@ internal class GameLocationPatches
                     if (order.onMonsterSlain is not null)
                     {
                         order.onMonsterSlain(Game1.player, __0);
-                        ModEntry.ModMonitor.Log($"Granting {__3.Name} one kill of {__0.Name} towards special order {order.questKey}");
+                        ModEntry.ModMonitor.DebugOnlyLog($"Granting {__3.Name} one kill of {__0.Name} towards special order {order.questKey}");
                     }
                 }
             }

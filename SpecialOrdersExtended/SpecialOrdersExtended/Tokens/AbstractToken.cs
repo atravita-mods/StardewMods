@@ -7,6 +7,8 @@
 /// </summary>
 internal abstract class AbstractToken
 {
+    private static readonly string[] booleans = new[] { "true", "false" };
+
     /// <summary>
     /// Internal cache for token. Will be null if not ready.
     /// </summary>
@@ -15,14 +17,14 @@ internal abstract class AbstractToken
     /// <summary>
     /// Whether or not the token allows input. Default, true.
     /// </summary>
-    /// <returns>true - all derived tokens should allow input.</returns>
+    /// <returns>false - we don't need input.</returns>
     public virtual bool AllowsInput() => false;
 
     /// <summary>
     /// Whether or not the token will produce multiple outputs, depending on the input to the token.
     /// </summary>
     /// <param name="input">Input to token.</param>
-    /// <returns>False (no need for my own inputs).</returns>
+    /// <returns>True - every token can have multiple outputs.</returns>
     public virtual bool CanHaveMultipleValues(string? input = null) => true;
 
     /// <summary>Get whether the token is available for use.</summary>
@@ -64,7 +66,7 @@ internal abstract class AbstractToken
     /// <returns>True if the inputs are bounded, false otherwise.</returns>
     public virtual bool HasBoundedValues(string input, out IEnumerable<string> allowedValues)
     {
-        allowedValues = new List<string>() { "true", "false" };
+        allowedValues = booleans;
         return false;
     }
 

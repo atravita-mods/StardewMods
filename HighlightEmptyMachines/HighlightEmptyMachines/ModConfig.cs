@@ -1,4 +1,4 @@
-﻿using HighlightEmptyMachines.Framework;
+﻿using AtraShared.Niceties;
 using Microsoft.Xna.Framework;
 
 namespace HighlightEmptyMachines;

@@ -6,5 +6,10 @@
   "UniqueID": "atravita.PelicanTownFoodBank",
   "EntryDll": "PelicanTownFoodBank.dll",
   //"UpdateKeys": [ "Nexus:11426", "GitHub:atravita-mods/TrashDoesNotConsumeBait" ],
-  "MinimumApiVersion": "3.13"
+  "MinimumApiVersion": "3.15",
+  "Dependencies": [
+    {
+      "UniqueID": "atravita.AtraCore"
+    }
+  ]
 }

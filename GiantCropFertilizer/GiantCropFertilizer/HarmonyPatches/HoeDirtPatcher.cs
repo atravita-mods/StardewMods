@@ -1,4 +1,5 @@
 ﻿using AtraBase.Toolkit.Reflection;
+using AtraCore.Framework.ReflectionManager;
 using AtraShared.Utils.Extensions;
 using HarmonyLib;
 using StardewValley.TerrainFeatures;
@@ -14,25 +15,26 @@ internal static class HoeDirtPatcher
 {
 
     /// <summary>
-    /// Applies the patches for this class.
+    /// Applies the hoedirt compat patches for multifertilizer.
     /// </summary>
     /// <param name="harmony">Harmony instance.</param>
+    /// <remarks>This is only needed for certain versions of multifertilizer.</remarks>
     internal static void ApplyPatches(Harmony harmony)
     {
         HarmonyMethod? prefix = new(
-            typeof(HoeDirtPatcher).StaticMethodNamed(nameof(HoeDirtPatcher.PrefixMulti)),
-            priority: Priority.First);
+            typeof(HoeDirtPatcher).GetCachedMethod(nameof(PrefixMulti), ReflectionCache.FlagTypes.StaticFlags),
+            priority: Priority.VeryHigh);
         HarmonyMethod? postfix = new(
-            typeof(HoeDirtPatcher).StaticMethodNamed(nameof(HoeDirtPatcher.PostfixMulti)),
-            priority: Priority.Last);
+            typeof(HoeDirtPatcher).GetCachedMethod(nameof(HoeDirtPatcher.PostfixMulti), ReflectionCache.FlagTypes.StaticFlags),
+            priority: Priority.VeryLow);
 
         harmony.Patch(
-            typeof(HoeDirt).InstanceMethodNamed("applySpeedIncreases"),
+            typeof(HoeDirt).GetCachedMethod("applySpeedIncreases", ReflectionCache.FlagTypes.InstanceFlags),
             prefix: prefix,
             postfix: postfix);
 
         harmony.Patch(
-            typeof(HoeDirt).InstanceMethodNamed(nameof(HoeDirt.dayUpdate)),
+            typeof(HoeDirt).GetCachedMethod(nameof(HoeDirt.dayUpdate), ReflectionCache.FlagTypes.InstanceFlags),
             prefix: prefix,
             postfix: postfix);
     }

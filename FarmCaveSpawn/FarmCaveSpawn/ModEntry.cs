@@ -55,22 +55,13 @@ public class ModEntry : Mod
     /// <summary>
     /// Gets the seeded random for this mod.
     /// </summary>
-    internal Random Random
-    {
-        get
-        {
-            if (this.random is null)
-            {
-                this.random = new Random(((int)Game1.uniqueIDForThisGame * 2) + ((int)Game1.stats.DaysPlayed * 7));
-            }
-            return this.random;
-        }
-    }
+    private Random Random
+        => this.random ?? new Random(((int)Game1.uniqueIDForThisGame * 2) + ((int)Game1.stats.DaysPlayed * 7));
 
     /// <summary>
-    /// Gets a value indicating whether or not I've spawned fruit today.
+    /// Gets or sets a value indicating whether or not I've spawned fruit today.
     /// </summary>
-    internal bool SpawnedFruitToday { get; private set; }
+    private bool SpawnedFruitToday { get; set; }
 
     /// <inheritdoc />
     public override void Entry(IModHelper helper)
@@ -285,7 +276,7 @@ public class ModEntry : Mod
                 }
                 else
                 {
-                    this.Monitor.Log(I18n.LocationMissing(loc: location), LogLevel.Info);
+                    this.Monitor.Log(I18n.LocationMissing(loc: location), LogLevel.Trace);
                 }
             }
         }
@@ -335,8 +326,8 @@ END:
     /// <remarks>The start and end coordinates are clamped to the size of the map, so there shouldn't be a way to give this function invalid values.</remarks>
     private IEnumerable<Vector2> IterateTiles(GameLocation location, int xstart = 1, int xend = int.MaxValue, int ystart = 1, int yend = int.MaxValue)
     {
-        List<Vector2> points = Enumerable.Range(Math.Max(xstart, 1), Math.Clamp(xend, xstart, location.Map.Layers[0].LayerWidth - 2))
-            .SelectMany(x => Enumerable.Range(Math.Max(ystart, 1), Math.Clamp(yend, ystart, location.Map.Layers[0].LayerHeight - 2)), (x, y) => new Vector2(x, y)).ToList();
+        Vector2[] points = Enumerable.Range(Math.Max(xstart, 1), Math.Clamp(xend, xstart, location.Map.Layers[0].LayerWidth - 2))
+            .SelectMany(x => Enumerable.Range(Math.Max(ystart, 1), Math.Clamp(yend, ystart, location.Map.Layers[0].LayerHeight - 2)), (x, y) => new Vector2(x, y)).ToArray();
         Utility.Shuffle(this.Random, points);
         foreach (Vector2 v in points)
         {
@@ -363,10 +354,13 @@ END:
         List<string> fruitNames = new();
         foreach (int objectID in this.GetTreeFruits())
         {
-            if (Game1.objectInformation.TryGetValue(objectID, out string? val)
-                && val.SpanSplit('/').TryGetAtIndex(SObject.objectInfoDisplayNameIndex, out SpanSplitEntry name))
+            if (Game1.objectInformation.TryGetValue(objectID, out string? val))
             {
-                fruitNames.Add(name);
+                ReadOnlySpan<char> name = val.GetNthChunk('/', SObject.objectInfoDisplayNameIndex);
+                if (name.Length > 0)
+                {
+                    fruitNames.Add(name.ToString());
+                }
             }
         }
         StringBuilder sb = new("Possible fruits: ");
@@ -413,7 +407,7 @@ END:
         string currentseason = Game1.currentSeason.Trim().ToLowerInvariant();
         foreach (string tree in fruittrees.Values)
         {
-            SpanSplit treedata = tree.SpanSplit('/', StringSplitOptions.TrimEntries);
+            SpanSplit treedata = tree.SpanSplit('/', StringSplitOptions.TrimEntries, expectedCount: 3);
 
             if ((this.config.SeasonalOnly == SeasonalBehavior.SeasonalOnly || (this.config.SeasonalOnly == SeasonalBehavior.SeasonalExceptWinter && !Game1.IsWinter))
                 && !treedata[1].Contains(currentseason)
@@ -426,7 +420,7 @@ END:
             {
                 try
                 {
-                    SpanSplit fruit = Game1.objectInformation[objectIndex].SpanSplit('/');
+                    SpanSplit fruit = Game1.objectInformation[objectIndex].SpanSplit('/', expectedCount: 5);
                     string fruitname = fruit[SObject.objectInfoNameIndex].ToString();
                     if ((this.config.AllowAnyTreeProduct || (fruit[SObject.objectInfoTypeIndex].SpanSplit().TryGetAtIndex(1, out SpanSplitEntry cat) && int.TryParse(cat, out int category) && category == SObject.FruitsCategory))
                         && (!this.config.EdiblesOnly || int.Parse(fruit[SObject.objectInfoEdibilityIndex]) >= 0)

@@ -46,7 +46,16 @@ public static class HarmonyExtensions
     public static void Snitch(this MethodBase method, IMonitor monitor, Func<Patch, bool>? filter = null, bool transpilersOnly = false)
     {
         filter ??= (_) => true;
-        Patches patches = Harmony.GetPatchInfo(method);
+        Patches? patches = Harmony.GetPatchInfo(method);
+
+        if (patches is null)
+        {
+            if (!transpilersOnly)
+            {
+                monitor.Log($"No patches found for {method.GetFullName()} when attempting to snitch");
+            }
+            return;
+        }
 
         if (transpilersOnly && !patches.Transpilers.Any((patch) => filter(patch)))
         {

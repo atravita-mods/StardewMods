@@ -2,6 +2,7 @@
 using AtraShared.Integrations;
 using AtraShared.Integrations.Interfaces;
 using AtraShared.MigrationManager;
+using AtraShared.Niceties;
 using AtraShared.Utils.Extensions;
 using HarmonyLib;
 using HighlightEmptyMachines.Framework;
@@ -48,6 +49,7 @@ internal class ModEntry : Mod
 
         helper.Events.GameLoop.GameLaunched += this.OnGameLaunched;
         helper.Events.GameLoop.SaveLoaded += this.OnSaveLoaded;
+        helper.Events.GameLoop.ReturnedToTitle += this.OnReturnedToTitle;
     }
 
     /// <summary>
@@ -91,6 +93,20 @@ internal class ModEntry : Mod
         }
     }
 
+    /// <summary>
+    /// Resets the GMCM when the player has returned to the title.
+    /// </summary>
+    /// <param name="sender">SMAPI</param>
+    /// <param name="e">event args.</param>
+    private void OnReturnedToTitle(object? sender, ReturnedToTitleEventArgs e)
+    {
+        if (this.gmcmHelper?.HasGottenAPI == true)
+        {
+            this.gmcmHelper.Unregister();
+            this.SetUpBasicConfig();
+        }
+    }
+
     private void OnDayStarted(object? sender, DayStartedEventArgs e)
         => PFMMachineHandler.RefreshValidityList(Game1.currentLocation);
 
@@ -114,7 +130,7 @@ internal class ModEntry : Mod
                     },
                     save: () =>
                     {
-                        this.Helper.WriteConfig(Config);
+                        Task.Run(() => this.Helper.WriteConfig(Config));
                         PFMMachineHandler.RefreshValidityList(Game1.currentLocation);
                     });
             }
@@ -122,7 +138,7 @@ internal class ModEntry : Mod
             {
                 this.gmcmHelper.Register(
                 reset: static () => Config = new(),
-                save: () => this.Helper.WriteConfig(Config));
+                save: () => Task.Run(() => this.Helper.WriteConfig(Config)));
             }
             this.gmcmHelper.AddParagraph(I18n.ModDescription)
             .AddColorPicker(
@@ -182,9 +198,6 @@ internal class ModEntry : Mod
 
             if (this.gmcmHelper?.HasGottenAPI == true)
             {
-                this.gmcmHelper.Unregister();
-                this.SetUpBasicConfig();
-
                 this.gmcmHelper.AddSectionTitle(I18n.PFM_Section)
                     .AddParagraph(I18n.PFM_Description);
 
@@ -199,7 +212,7 @@ internal class ModEntry : Mod
             }
 
             this.Monitor.Log("PFM compat set up!", LogLevel.Trace);
-            this.Helper.WriteConfig(Config);
+            Task.Run(() =>  this.Helper.WriteConfig(Config));
         }
         else
         {

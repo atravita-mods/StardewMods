@@ -20,7 +20,7 @@ internal static class ConsoleCommands
     /// </summary>
     private const string PrePendCommand = "av.gima";
 
-    private const string Antisocial = "Data/AntiSocialNPCs";
+    private static readonly string Antisocial = PathUtilities.NormalizeAssetName("Data/AntiSocialNPCs");
 
     /// <summary>
     /// Register the console commands for this mod.
@@ -163,7 +163,7 @@ internal static class ConsoleCommands
                 {
                     antisocial = new();
                 }
-                Globals.ModMonitor.Log($"\t{npc.Name} appears to be antisocial: they { ( antisocial.ContainsKey(npc.Name) ? "are" : "aren't" )} registered with AntisocialNPCs.", LogLevel.Info);
+                Globals.ModMonitor.Log($"\t{npc.Name} appears to be antisocial: they {(antisocial.ContainsKey(npc.Name) ? "are" : "aren't")} registered with AntisocialNPCs.", LogLevel.Info);
             }
             return;
         }

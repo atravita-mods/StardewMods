@@ -1,6 +1,6 @@
-﻿using AtraBase.Toolkit.StringHandler;
+﻿using AtraBase.Toolkit.Extensions;
 
-namespace HighlightEmptyMachines.Framework;
+namespace AtraShared.Niceties;
 
 /// <summary>
 /// Enum for all the vanilla machines that require input.
@@ -36,20 +36,21 @@ public enum VanillaMachinesEnum
 /// <summary>
 /// Holds extension methods against this enum.
 /// </summary>
-internal static class VanillaMachinesEnumExtensions
+public static class VanillaMachinesEnumExtensions
 {
     /// <summary>
     /// Tries to find the correct translation string for this machine.
     /// </summary>
     /// <param name="machine">VanillaMachineEnum.</param>
     /// <returns>A string, hopefully the translation.</returns>
-    internal static string GetBestTranslatedString(this VanillaMachinesEnum machine)
+    public static string GetBestTranslatedString(this VanillaMachinesEnum machine)
     {
         if (machine < 0 && Game1.objectInformation.TryGetValue(-(int)machine, out string? val))
         {
-            if (val.SpanSplit('/').TryGetAtIndex(SObject.objectInfoDisplayNameIndex, out SpanSplitEntry translatedName))
+            var translatedName = val.GetNthChunk('/', SObject.objectInfoDisplayNameIndex);
+            if (translatedName.Length > 0)
             {
-                return translatedName;
+                return translatedName.ToString();
             }
         }
         else if (machine > 0 && Game1.bigCraftablesInformation.TryGetValue((int)machine, out string? value))
@@ -60,6 +61,6 @@ internal static class VanillaMachinesEnumExtensions
                 return value[(index + 1)..];
             }
         }
-        return ModEntry.TranslationHelper.Get($"{machine}.title");
+        return string.Empty;
     }
 }

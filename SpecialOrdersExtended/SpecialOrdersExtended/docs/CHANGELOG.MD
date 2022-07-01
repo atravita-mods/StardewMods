@@ -3,8 +3,9 @@ Changelog
 
 1. Add condition to just randomly reduce the chance of a quest appearing. (May need integrate with that one mod that changes the day special orders appear?)
 2. Add condition for total number of quests completed, per board.
+3. Fix issue where unicode in the save name will cause issues while saving.
 <!-- Better documentation for the dialogue tags? -->
-3. Clear the inProgress dialogue log when a player *fails* a quest.
+
 
 #### Stardew 1.6 todo
 
@@ -16,6 +17,13 @@ Changelog
 1. Somehow limit the kill objective to just monsters on a certain (few?) maps. (Perhaps a custom objective, perhaps a Special Rule).
 6. Implement a temporary saving mechanism for Save Anywhere (look into their API?)
 <!-- Handle WoL professions? -->
+
+#### Version 1.0.8
+
+* Adds the `atravita_addSpecialOrder` event command.
+* Internal optimizations.
+* Clear the relevant dialogue log when a player *fails* a quest.
+* Add a method for content packs to more easily add untimed orders.
 
 #### Version 1.0.7
 

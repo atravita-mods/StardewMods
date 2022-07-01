@@ -3,6 +3,7 @@ using System.Reflection.Emit;
 using System.Runtime.CompilerServices;
 using AtraBase.Toolkit;
 using AtraBase.Toolkit.Reflection;
+using AtraCore.Framework.ReflectionManager;
 using AtraShared.Utils.Extensions;
 using AtraShared.Utils.HarmonyHelper;
 using HarmonyLib;
@@ -26,7 +27,8 @@ internal static class FruitTreeDrawTranspiler
     {
         try
         {
-            Type dgaFruitTree = AccessTools.TypeByName("DynamicGameAssets.Game.CustomFruitTree") ?? throw new("DGA Fruit trees");
+            Type dgaFruitTree = AccessTools.TypeByName("DynamicGameAssets.Game.CustomFruitTree")
+                ?? ReflectionThrowHelper.ThrowMethodNotFoundException<Type>("DGA Fruit Trees");
             harmony.Patch(
                 original: dgaFruitTree.InstanceMethodNamed("draw"),
                 transpiler: new HarmonyMethod(typeof(FruitTreeDrawTranspiler), nameof(Transpiler)));
@@ -82,19 +84,19 @@ internal static class FruitTreeDrawTranspiler
             helper.FindNext(new CodeInstructionWrapper[]
             {
                 new(OpCodes.Ldarg_0),
-                new(OpCodes.Ldfld, typeof(FruitTree).InstanceFieldNamed(nameof(FruitTree.growthStage))),
+                new(OpCodes.Ldfld, typeof(FruitTree).GetCachedField(nameof(FruitTree.growthStage), ReflectionCache.FlagTypes.InstanceFlags)),
                 new(OpCodes.Call),
                 new(OpCodes.Ldc_I4_4),
             })
             .FindNext(new CodeInstructionWrapper[]
             {
-                new(OpCodes.Call, typeof(Color).StaticPropertyNamed(nameof(Color.White)).GetGetMethod()),
+                new(OpCodes.Call, typeof(Color).GetCachedProperty(nameof(Color.White), ReflectionCache.FlagTypes.StaticFlags).GetGetMethod()),
             })
             .Advance(1)
             .Insert(new CodeInstruction[]
             {
                 new(OpCodes.Ldarg_0),
-                new(OpCodes.Call, typeof(FruitTreeDrawTranspiler).StaticMethodNamed(nameof(FruitTreeDrawTranspiler.ReplaceColorIfNeeded))),
+                new(OpCodes.Call, typeof(FruitTreeDrawTranspiler).GetCachedMethod(nameof(FruitTreeDrawTranspiler.ReplaceColorIfNeeded), ReflectionCache.FlagTypes.StaticFlags)),
             });
 
             // helper.Print();
@@ -103,6 +105,7 @@ internal static class FruitTreeDrawTranspiler
         catch (Exception ex)
         {
             ModEntry.ModMonitor.Log($"Mod crashed while transpiling FruitTree.Draw:\n\n{ex}", LogLevel.Error);
+            original?.Snitch(ModEntry.ModMonitor);
         }
         return null;
     }

@@ -1,12 +1,10 @@
 ﻿using System.Reflection;
 using System.Reflection.Emit;
-using AtraBase.Toolkit.Reflection;
+using AtraCore.Framework.ReflectionManager;
 using AtraShared.Utils.Extensions;
 using AtraShared.Utils.HarmonyHelper;
 using HarmonyLib;
-using Microsoft.Xna.Framework;
 using MoreFertilizers.Framework;
-using StardewValley.Locations;
 using StardewValley.Tools;
 
 namespace MoreFertilizers.HarmonyPatches.FishFood;
@@ -36,7 +34,7 @@ internal static class FishTimePatch
             ILHelper helper = new(original, instructions, ModEntry.ModMonitor, gen);
             helper.FindNext(new CodeInstructionWrapper[]
             {
-                new(OpCodes.Callvirt, typeof(Random).InstanceMethodNamed(nameof(Random.Next), new[] { typeof(int), typeof(int) } )),
+                new(OpCodes.Callvirt, typeof(Random).GetCachedMethod(nameof(Random.Next), ReflectionCache.FlagTypes.InstanceFlags, new[] { typeof(int), typeof(int) } )),
                 new(OpCodes.Conv_R4),
                 new(SpecialCodeInstructionCases.StLoc),
             })
@@ -50,7 +48,7 @@ internal static class FishTimePatch
             .Insert(new CodeInstruction[]
             {
                 ldloc,
-                new(OpCodes.Call, typeof(FishTimePatch).StaticMethodNamed(nameof(AdjustTimeToBite))),
+                new(OpCodes.Call, typeof(FishTimePatch).GetCachedMethod(nameof(AdjustTimeToBite), ReflectionCache.FlagTypes.StaticFlags)),
                 stloc,
             }, withLabels: labels);
 
@@ -60,6 +58,7 @@ internal static class FishTimePatch
         catch (Exception ex)
         {
             ModEntry.ModMonitor.Log($"Mod crashed while transpiling time to bite for fish:\n\n{ex}", LogLevel.Error);
+            original?.Snitch(ModEntry.ModMonitor);
         }
         return null;
     }

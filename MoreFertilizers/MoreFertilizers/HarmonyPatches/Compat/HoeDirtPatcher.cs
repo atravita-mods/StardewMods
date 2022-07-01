@@ -1,4 +1,5 @@
 ﻿using AtraBase.Toolkit.Reflection;
+using AtraCore.Framework.ReflectionManager;
 using AtraShared.Utils.Extensions;
 using HarmonyLib;
 using StardewValley.TerrainFeatures;
@@ -19,24 +20,24 @@ internal static class HoeDirtPatcher
     internal static void ApplyPatches(Harmony harmony)
     {
         HarmonyMethod? prefix = new(
-            typeof(HoeDirtPatcher).StaticMethodNamed(nameof(HoeDirtPatcher.PrefixMulti)),
+            typeof(HoeDirtPatcher).StaticMethodNamed(nameof(PrefixMulti)),
             priority: Priority.VeryHigh);
         HarmonyMethod? postfix = new(
-            typeof(HoeDirtPatcher).StaticMethodNamed(nameof(HoeDirtPatcher.PostfixMulti)),
+            typeof(HoeDirtPatcher).StaticMethodNamed(nameof(PostfixMulti)),
             priority: Priority.VeryLow);
 
         harmony.Patch(
-            typeof(HoeDirt).InstanceMethodNamed("applySpeedIncreases"),
+            typeof(HoeDirt).GetCachedMethod("applySpeedIncreases", ReflectionCache.FlagTypes.InstanceFlags),
             prefix: prefix,
             postfix: postfix);
 
         harmony.Patch(
-            typeof(HoeDirt).InstanceMethodNamed(nameof(HoeDirt.dayUpdate)),
+            typeof(HoeDirt).GetCachedMethod(nameof(HoeDirt.dayUpdate), ReflectionCache.FlagTypes.InstanceFlags),
             prefix: prefix,
             postfix: postfix);
 
         harmony.Patch(
-            typeof(Crop).InstanceMethodNamed(nameof(Crop.harvest)),
+            typeof(Crop).GetCachedMethod(nameof(Crop.harvest), ReflectionCache.FlagTypes.InstanceFlags),
             prefix: prefix,
             postfix: postfix);
     }

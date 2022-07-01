@@ -1,6 +1,7 @@
 ﻿using System.Reflection;
 using System.Reflection.Emit;
 using AtraBase.Toolkit.Reflection;
+using AtraCore.Framework.ReflectionManager;
 using AtraShared.Utils.Extensions;
 using AtraShared.Utils.HarmonyHelper;
 using HarmonyLib;
@@ -40,8 +41,8 @@ internal static class SpecialOrderCrash
             { // r.Next(typed_keys.Count);
                 new(SpecialCodeInstructionCases.LdLoc),
                 new(SpecialCodeInstructionCases.LdLoc),
-                new(OpCodes.Callvirt, typeof(List<string>).InstancePropertyNamed(nameof(List<string>.Count)).GetGetMethod()),
-                new(OpCodes.Callvirt, typeof(Random).InstanceMethodNamed(nameof(Random.Next), new[] { typeof(int) } )),
+                new(OpCodes.Callvirt, typeof(List<string>).GetCachedProperty(nameof(List<string>.Count), ReflectionCache.FlagTypes.InstanceFlags).GetGetMethod()),
+                new(OpCodes.Callvirt, typeof(Random).GetCachedMethod(nameof(Random.Next), ReflectionCache.FlagTypes.InstanceFlags, new[] { typeof(int) } )),
                 new(SpecialCodeInstructionCases.StLoc),
             })
             .GetLabels(out IList<Label>? labelsToMove, clear: true)
@@ -53,8 +54,8 @@ internal static class SpecialOrderCrash
             }, withLabels: labelsToMove)
             .FindNext(new CodeInstructionWrapper[]
             { // Find spot to jump back from.
-                new(OpCodes.Call, typeof(SpecialOrder).StaticMethodNamed(nameof(SpecialOrder.GetSpecialOrder))),
-                new(OpCodes.Callvirt, typeof(NetList<SpecialOrder, NetRef<SpecialOrder>>).InstanceMethodNamed("Add")),
+                new(OpCodes.Call, typeof(SpecialOrder).GetCachedMethod(nameof(SpecialOrder.GetSpecialOrder), ReflectionCache.FlagTypes.StaticFlags)),
+                new(OpCodes.Callvirt, typeof(NetList<SpecialOrder, NetRef<SpecialOrder>>).GetCachedMethod("Add", ReflectionCache.FlagTypes.InstanceFlags)),
             })
             .Advance(1)
             .DefineAndAttachLabel(out Label notnull)
@@ -80,7 +81,7 @@ internal static class SpecialOrderCrash
         catch (Exception ex)
         {
             ModEntry.ModMonitor.Log($"Ran into error transpiling special order board update code to avoid a crash.\n\n{ex}", LogLevel.Error);
-            original.Snitch(ModEntry.ModMonitor);
+            original?.Snitch(ModEntry.ModMonitor);
         }
         return null;
     }
@@ -107,7 +108,7 @@ internal static class SpecialOrderBoardCrash
             helper.FindNext(new CodeInstructionWrapper[]
             {
                 new(OpCodes.Ldarg_0),
-                new(OpCodes.Ldfld, typeof(SpecialOrdersBoard).InstanceFieldNamed(nameof(SpecialOrdersBoard.leftOrder))),
+                new(OpCodes.Ldfld, typeof(SpecialOrdersBoard).GetCachedField(nameof(SpecialOrdersBoard.leftOrder), ReflectionCache.FlagTypes.InstanceFlags)),
                 new(SpecialCodeInstructionCases.StLoc),
             })
             .Advance(2);
@@ -116,8 +117,8 @@ internal static class SpecialOrderBoardCrash
 
             helper.FindNext(new CodeInstructionWrapper[]
             {
-                new(OpCodes.Call, typeof(SpecialOrder).StaticMethodNamed(nameof(SpecialOrder.GetSpecialOrder))),
-                new(OpCodes.Callvirt, typeof(NetList<SpecialOrder, NetRef<SpecialOrder>>).InstanceMethodNamed("Add")),
+                new(OpCodes.Call, typeof(SpecialOrder).GetCachedMethod(nameof(SpecialOrder.GetSpecialOrder), ReflectionCache.FlagTypes.StaticFlags)),
+                new(OpCodes.Callvirt, typeof(NetList<SpecialOrder, NetRef<SpecialOrder>>).GetCachedMethod("Add", ReflectionCache.FlagTypes.InstanceFlags)),
             })
             .Advance(1)
             .DefineAndAttachLabel(out Label leftJumpPast)
@@ -126,7 +127,7 @@ internal static class SpecialOrderBoardCrash
                 new(OpCodes.Dup),
                 new(OpCodes.Brtrue_S, leftJumpPast),
                 leftorder,
-                new(OpCodes.Call, typeof(SpecialOrderBoardCrash).StaticMethodNamed(nameof(ShowWarning))),
+                new(OpCodes.Call, typeof(SpecialOrderBoardCrash).GetCachedMethod(nameof(ShowWarning), ReflectionCache.FlagTypes.StaticFlags)),
                 new(OpCodes.Pop),
                 new(OpCodes.Pop),
                 new(OpCodes.Ret),
@@ -135,7 +136,7 @@ internal static class SpecialOrderBoardCrash
             helper.FindNext(new CodeInstructionWrapper[]
             {
                 new(OpCodes.Ldarg_0),
-                new(OpCodes.Ldfld, typeof(SpecialOrdersBoard).InstanceFieldNamed(nameof(SpecialOrdersBoard.rightOrder))),
+                new(OpCodes.Ldfld, typeof(SpecialOrdersBoard).GetCachedField(nameof(SpecialOrdersBoard.rightOrder), ReflectionCache.FlagTypes.InstanceFlags)),
                 new(SpecialCodeInstructionCases.StLoc),
             })
             .Advance(2);
@@ -144,8 +145,8 @@ internal static class SpecialOrderBoardCrash
 
             helper.FindNext(new CodeInstructionWrapper[]
             {
-                new(OpCodes.Call, typeof(SpecialOrder).StaticMethodNamed(nameof(SpecialOrder.GetSpecialOrder))),
-                new(OpCodes.Callvirt, typeof(NetList<SpecialOrder, NetRef<SpecialOrder>>).InstanceMethodNamed("Add")),
+                new(OpCodes.Call, typeof(SpecialOrder).GetCachedMethod(nameof(SpecialOrder.GetSpecialOrder), ReflectionCache.FlagTypes.StaticFlags)),
+                new(OpCodes.Callvirt, typeof(NetList<SpecialOrder, NetRef<SpecialOrder>>).GetCachedMethod("Add", ReflectionCache.FlagTypes.InstanceFlags)),
             })
             .Advance(1)
             .DefineAndAttachLabel(out Label rightJumpPast)
@@ -154,7 +155,7 @@ internal static class SpecialOrderBoardCrash
                 new(OpCodes.Dup),
                 new(OpCodes.Brtrue_S, rightJumpPast),
                 rightorder,
-                new(OpCodes.Call, typeof(SpecialOrderBoardCrash).StaticMethodNamed(nameof(ShowWarning))),
+                new(OpCodes.Call, typeof(SpecialOrderBoardCrash).GetCachedMethod(nameof(ShowWarning), ReflectionCache.FlagTypes.StaticFlags)),
                 new(OpCodes.Pop),
                 new(OpCodes.Pop),
                 new(OpCodes.Ret),
@@ -166,7 +167,7 @@ internal static class SpecialOrderBoardCrash
         catch (Exception ex)
         {
             ModEntry.ModMonitor.Log($"Ran into error transpiling special order board to avoid crash.\n\n{ex}", LogLevel.Error);
-            original.Snitch(ModEntry.ModMonitor);
+            original?.Snitch(ModEntry.ModMonitor);
         }
         return null;
     }

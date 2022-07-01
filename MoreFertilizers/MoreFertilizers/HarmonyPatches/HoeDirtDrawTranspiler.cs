@@ -1,6 +1,10 @@
 ﻿using System.Reflection;
 using System.Reflection.Emit;
+using System.Runtime.CompilerServices;
+using AtraBase.Toolkit;
 using AtraBase.Toolkit.Reflection;
+using AtraCore.Framework.ReflectionManager;
+using AtraShared.Utils.Extensions;
 using AtraShared.Utils.HarmonyHelper;
 using HarmonyLib;
 using Microsoft.Xna.Framework;
@@ -20,6 +24,7 @@ internal static class HoeDirtDrawTranspiler
     /// <param name="prevColor">The previous color.</param>
     /// <param name="fertilizer">Fertilizer ID.</param>
     /// <returns>A color.</returns>
+    [MethodImpl(TKConstants.Hot)]
     public static Color GetColor(Color prevColor, int fertilizer)
     {
         if (fertilizer == -1)
@@ -73,8 +78,8 @@ internal static class HoeDirtDrawTranspiler
     internal static void ApplyPatches(Harmony harmony)
     {
         harmony.Patch(
-            original: typeof(HoeDirt).InstanceMethodNamed(nameof(HoeDirt.DrawOptimized)),
-            transpiler: new HarmonyMethod(typeof(HoeDirtDrawTranspiler).StaticMethodNamed(nameof(HoeDirtDrawTranspiler.Transpiler))));
+            original: typeof(HoeDirt).GetCachedMethod(nameof(HoeDirt.DrawOptimized), ReflectionCache.FlagTypes.InstanceFlags),
+            transpiler: new HarmonyMethod(typeof(HoeDirtDrawTranspiler).StaticMethodNamed(nameof(Transpiler))));
     }
 
     private static IEnumerable<CodeInstruction>? Transpiler(IEnumerable<CodeInstruction> instructions, ILGenerator gen, MethodBase original)
@@ -86,7 +91,7 @@ internal static class HoeDirtDrawTranspiler
                 {
                     new(OpCodes.Ldarg_0),
                     new(SpecialCodeInstructionCases.LdLoc),
-                    new(OpCodes.Call, typeof(HoeDirt).InstanceMethodNamed(nameof(HoeDirt.GetFertilizerSourceRect))),
+                    new(OpCodes.Call, typeof(HoeDirt).GetCachedMethod(nameof(HoeDirt.GetFertilizerSourceRect), ReflectionCache.FlagTypes.InstanceFlags)),
                 })
             .Advance(1);
 
@@ -96,7 +101,7 @@ internal static class HoeDirtDrawTranspiler
             helper.FindNext(new CodeInstructionWrapper[]
                 {
                     new(OpCodes.Ldarg_2),
-                    new(OpCodes.Ldsfld, typeof(Game1).StaticFieldNamed(nameof(Game1.mouseCursors))),
+                    new(OpCodes.Ldsfld, typeof(Game1).GetCachedField(nameof(Game1.mouseCursors), ReflectionCache.FlagTypes.StaticFlags)),
                     new(SpecialCodeInstructionCases.LdLoc),
                     new(SpecialCodeInstructionCases.LdLoc),
                     new(OpCodes.Newobj),
@@ -114,7 +119,8 @@ internal static class HoeDirtDrawTranspiler
         }
         catch (Exception ex)
         {
-            ModEntry.ModMonitor.Log($"Mod crashed while transpiling Hoedirt.Draw:\n\n{ex}", LogLevel.Error);
+            ModEntry.ModMonitor.Log($"Mod crashed while transpiling Hoedirt.DrawOptimized:\n\n{ex}", LogLevel.Error);
+            original?.Snitch(ModEntry.ModMonitor);
         }
         return null;
     }

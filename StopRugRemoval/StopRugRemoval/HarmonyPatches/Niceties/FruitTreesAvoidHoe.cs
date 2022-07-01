@@ -1,6 +1,7 @@
 ﻿using System.Reflection;
 using System.Reflection.Emit;
 using AtraBase.Toolkit.Reflection;
+using AtraCore.Framework.ReflectionManager;
 using AtraShared.Utils.Extensions;
 using AtraShared.Utils.HarmonyHelper;
 using HarmonyLib;
@@ -66,9 +67,9 @@ internal static class FruitTreesAvoidHoe
             {
                 new(OpCodes.Brtrue_S),
                 new(OpCodes.Ldarg_1),
-                new(OpCodes.Callvirt, typeof(Tool).InstancePropertyNamed(nameof(Tool.BaseName)).GetGetMethod()),
+                new(OpCodes.Callvirt, typeof(Tool).GetCachedProperty(nameof(Tool.BaseName), ReflectionCache.FlagTypes.InstanceFlags).GetGetMethod()),
                 new(OpCodes.Ldstr, "Hoe"),
-                new(OpCodes.Callvirt, typeof(string).InstanceMethodNamed(nameof(string.Contains), new Type[] { typeof(string) })),
+                new(OpCodes.Callvirt, typeof(string).GetCachedMethod(nameof(string.Contains), ReflectionCache.FlagTypes.InstanceFlags, new Type[] { typeof(string) })),
                 new(OpCodes.Brfalse_S),
             })
             .Remove(5);
@@ -77,7 +78,7 @@ internal static class FruitTreesAvoidHoe
         catch (Exception ex)
         {
             ModEntry.ModMonitor.Log($"Ran into error transpiling fruit trees to avoid hoe damage.\n\n{ex}", LogLevel.Error);
-            original.Snitch(ModEntry.ModMonitor);
+            original?.Snitch(ModEntry.ModMonitor);
         }
         return null;
     }

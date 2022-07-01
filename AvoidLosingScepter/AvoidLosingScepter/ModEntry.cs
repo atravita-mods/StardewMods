@@ -1,6 +1,7 @@
 ﻿using System.Reflection;
 using System.Reflection.Emit;
 using AtraBase.Toolkit.Reflection;
+using AtraCore.Framework.ReflectionManager;
 using AtraShared.ConstantsAndEnums;
 using AtraShared.Utils.Extensions;
 using AtraShared.Utils.HarmonyHelper;
@@ -39,10 +40,10 @@ internal class ModEntry : Mod
         {
             HarmonyMethod transpiler = new(typeof(ModEntry), nameof(Transpiler));
             harmony.Patch(
-                original: typeof(Event).InstanceMethodNamed(nameof(Event.command_minedeath)),
+                original: typeof(Event).GetCachedMethod(nameof(Event.command_minedeath), ReflectionCache.FlagTypes.InstanceFlags),
                 transpiler: transpiler);
             harmony.Patch(
-                original: typeof(Event).InstanceMethodNamed(nameof(Event.command_hospitaldeath)),
+                original: typeof(Event).GetCachedMethod(nameof(Event.command_hospitaldeath), ReflectionCache.FlagTypes.InstanceFlags),
                 transpiler: transpiler);
         }
         catch (Exception ex)
@@ -52,6 +53,7 @@ internal class ModEntry : Mod
         harmony.Snitch(this.Monitor, harmony.Id, transpilersOnly: true);
     }
 
+    [SuppressMessage("StyleCop.CSharp.OrderingRules", "SA1204:Static elements should appear before instance elements", Justification = "Reviewed.")]
     private static bool ProhibitLosingThisItem(Item item)
         => item is Wand || (item is SObject obj && obj.ParentSheetIndex == 911 && !obj.bigCraftable.Value)
         || item.HasContextTag("atravita_no_loss_on_death") || (item is MeleeWeapon weapon && weapon.isScythe());
@@ -63,10 +65,10 @@ internal class ModEntry : Mod
             ILHelper helper = new(original, instructions, ModMonitor, gen);
             helper.FindNext(new CodeInstructionWrapper[]
             {
-                new(OpCodes.Call, typeof(Game1).StaticPropertyNamed(nameof(Game1.player)).GetGetMethod()),
+                new(OpCodes.Call, typeof(Game1).GetCachedProperty(nameof(Game1.player), ReflectionCache.FlagTypes.StaticFlags).GetGetMethod()),
                 new(OpCodes.Callvirt),
                 new(SpecialCodeInstructionCases.LdLoc),
-                new(OpCodes.Callvirt, typeof(IList<Item>).InstancePropertyNamed("Item").GetGetMethod()),
+                new(OpCodes.Callvirt, typeof(IList<Item>).GetCachedProperty("Item", ReflectionCache.FlagTypes.InstanceFlags).GetGetMethod()),
                 new(OpCodes.Isinst, typeof(MeleeWeapon)),
                 new(OpCodes.Callvirt),
                 new(OpCodes.Ldc_I4_S, 47),
@@ -92,7 +94,7 @@ internal class ModEntry : Mod
             {
                 copylist.Add(code.Clone());
             }
-            copylist.Add(new(OpCodes.Call, typeof(ModEntry).StaticMethodNamed(nameof(ProhibitLosingThisItem))));
+            copylist.Add(new(OpCodes.Call, typeof(ModEntry).GetCachedMethod(nameof(ProhibitLosingThisItem), ReflectionCache.FlagTypes.StaticFlags)));
             copylist.Add(new(OpCodes.Brtrue_S, label));
             CodeInstruction[]? copy = copylist.ToArray();
 
@@ -104,6 +106,7 @@ internal class ModEntry : Mod
         catch (Exception ex)
         {
             ModMonitor.Log($"Mod crashed while transpiling mine death methods:\n\n{ex}", LogLevel.Error);
+            original?.Snitch(ModEntry.ModMonitor);
         }
         return null;
     }

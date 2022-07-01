@@ -1,4 +1,5 @@
 ﻿using AtraBase.Toolkit.Reflection;
+using AtraCore.Framework.ReflectionManager;
 using AtraShared.ConstantsAndEnums;
 using AtraShared.Integrations;
 using AtraShared.Utils;
@@ -34,6 +35,8 @@ internal class ModEntry : Mod
     /// Gets the configuration class for this mod.
     /// </summary>
     internal static ModConfig Config { get; private set; }
+
+    internal static StringUtils StringUtils { get; private set; }
 #pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
 
     /// <inheritdoc/>
@@ -41,7 +44,7 @@ internal class ModEntry : Mod
     {
         ModMonitor = this.Monitor;
 
-        StringUtils.Initialize(this.Monitor);
+        StringUtils = new(this.Monitor);
         GameContentHelper = helper.GameContent;
         TranslationHelper = helper.Translation;
 
@@ -113,25 +116,25 @@ internal class ModEntry : Mod
                 {
                     this.Monitor.Log($"Got spacecore's forge for compat patching.", LogLevel.Debug);
                     harmony.Patch(
-                        original: spaceforge.InstanceMethodNamed("cleanupBeforeExit"),
+                        original: spaceforge.GetCachedMethod("cleanupBeforeExit", ReflectionCache.FlagTypes.InstanceFlags),
                         prefix: new HarmonyMethod(typeof(ForgeMenuPatches), nameof(ForgeMenuPatches.PrefixBeforeExit)));
                     harmony.Patch(
-                        original: spaceforge.InstanceMethodNamed("IsValidCraft"),
+                        original: spaceforge.GetCachedMethod("IsValidCraft", ReflectionCache.FlagTypes.InstanceFlags),
                         prefix: new HarmonyMethod(typeof(ForgeMenuPatches), nameof(ForgeMenuPatches.PrefixIsValidCraft)));
                     harmony.Patch(
-                        original: spaceforge.InstanceMethodNamed("draw", new Type[] { typeof(SpriteBatch) }),
+                        original: spaceforge.GetCachedMethod("draw", ReflectionCache.FlagTypes.InstanceFlags, new Type[] { typeof(SpriteBatch) }),
                         postfix: new HarmonyMethod(typeof(ForgeMenuPatches), nameof(ForgeMenuPatches.PostfixDraw)));
                     harmony.Patch(
-                        original: spaceforge.InstanceMethodNamed("receiveLeftClick"),
+                        original: spaceforge.GetCachedMethod("receiveLeftClick", ReflectionCache.FlagTypes.InstanceFlags),
                         postfix: new HarmonyMethod(typeof(ForgeMenuPatches), nameof(ForgeMenuPatches.PostFixLeftClick)));
                     harmony.Patch(
-                        original: spaceforge.InstanceMethodNamed("receiveRightClick"),
+                        original: spaceforge.GetCachedMethod("receiveRightClick", ReflectionCache.FlagTypes.InstanceFlags),
                         postfix: new HarmonyMethod(typeof(ForgeMenuPatches), nameof(ForgeMenuPatches.PostfixRightClick)));
                     harmony.Patch(
-                        original: spaceforge.InstanceMethodNamed("gameWindowSizeChanged"),
+                        original: spaceforge.GetCachedMethod("gameWindowSizeChanged", ReflectionCache.FlagTypes.InstanceFlags),
                         postfix: new HarmonyMethod(typeof(ForgeMenuPatches), nameof(ForgeMenuPatches.PostfixGameWindowSizeChanged)));
                     harmony.Patch(
-                        original: spaceforge.InstanceMethodNamed("performHoverAction"),
+                        original: spaceforge.GetCachedMethod("performHoverAction", ReflectionCache.FlagTypes.InstanceFlags),
                         postfix: new HarmonyMethod(typeof(ForgeMenuPatches), nameof(ForgeMenuPatches.PostfixPerformHoverAction)));
                 }
                 else

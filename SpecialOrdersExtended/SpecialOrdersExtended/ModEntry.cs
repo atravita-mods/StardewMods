@@ -1,11 +1,11 @@
 ﻿using AtraBase.Toolkit.Reflection;
+using AtraShared.ConstantsAndEnums;
 using AtraShared.Integrations;
 using AtraShared.Integrations.Interfaces;
 using AtraShared.MigrationManager;
 using AtraShared.Utils;
 using AtraShared.Utils.Extensions;
 using HarmonyLib;
-using SpecialOrdersExtended.HarmonyPatches;
 using SpecialOrdersExtended.Managers;
 using StardewModdingAPI.Events;
 using StardewValley.GameData;
@@ -16,6 +16,8 @@ namespace SpecialOrdersExtended;
 /// <inheritdoc />
 internal class ModEntry : Mod
 {
+    private MigrationManager? migrator;
+
     /// <summary>
     /// Spacecore API handle.
     /// </summary>
@@ -28,7 +30,9 @@ internal class ModEntry : Mod
     /// <remarks>If null, was not able to be loaded.</remarks>
     internal static ISpaceCoreAPI? SpaceCoreAPI => spaceCoreAPI;
 
-    private MigrationManager? migrator;
+    private static readonly Lazy<Func<string, bool>> CheckTagLazy = new(typeof(SpecialOrder).StaticMethodNamed("CheckTag").CreateDelegate<Func<string, bool>>);
+
+    private static Func<string, bool> CheckTagDelegate => CheckTagLazy.Value;
 
     // The following fields are set in the Entry method, which is about as close to the constructor as I can get
 #pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
@@ -49,8 +53,6 @@ internal class ModEntry : Mod
     internal static ModConfig Config { get; private set; }
 #pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
 
-    private static Func<string, bool>? CheckTagDelegate { get; set; } = null;
-
     /// <inheritdoc/>
     public override void Entry(IModHelper helper)
     {
@@ -59,38 +61,9 @@ internal class ModEntry : Mod
         ModMonitor = this.Monitor;
         DataHelper = helper.Data;
 
-        // Read config file.
-        try
-        {
-            Config = this.Helper.ReadConfig<ModConfig>();
-        }
-        catch
-        {
-            this.Monitor.Log(I18n.IllFormatedConfig(), LogLevel.Warn);
-            Config = new();
-        }
-        Harmony harmony = new(this.ModManifest.UniqueID);
+        Config = AtraUtils.GetConfigOrDefault<ModConfig>(helper, this.Monitor);
 
-        harmony.Patch(
-            original: typeof(SpecialOrder).StaticMethodNamed("CheckTag"),
-            prefix: new HarmonyMethod(typeof(TagManager), nameof(TagManager.PrefixCheckTag)));
-
-        harmony.Patch(
-            original: AccessTools.Method(typeof(SpecialOrder), nameof(SpecialOrder.GetSpecialOrder)),
-            finalizer: new HarmonyMethod(typeof(Finalizers), nameof(Finalizers.FinalizeGetSpecialOrder)));
-
-        try
-        {
-            harmony.Patch(
-                original: AccessTools.Method(typeof(NPC), nameof(NPC.checkForNewCurrentDialogue)),
-                postfix: new HarmonyMethod(typeof(DialogueManager), nameof(DialogueManager.PostfixCheckDialogue)));
-        }
-        catch (Exception ex)
-        {
-            ModMonitor.Log($"Failed to patch NPC::checkForNewCurrentDialogue for Special Orders Dialogue. Dialogue will be disabled\n\n{ex}", LogLevel.Error);
-        }
-
-        harmony.Snitch(this.Monitor, this.ModManifest.UniqueID);
+        this.ApplyPatches(new Harmony(this.ModManifest.UniqueID));
 
         // Register console commands.
         helper.ConsoleCommands.Add(
@@ -114,8 +87,35 @@ internal class ModEntry : Mod
         helper.Events.GameLoop.GameLaunched += this.OnGameLaunched;
         helper.Events.GameLoop.SaveLoaded += this.SaveLoaded;
         helper.Events.GameLoop.Saving += this.Saving;
+        helper.Events.GameLoop.DayEnding += this.OnDayEnd;
         helper.Events.GameLoop.TimeChanged += this.OnTimeChanged;
         helper.Events.GameLoop.OneSecondUpdateTicking += this.OneSecondUpdateTicking;
+        helper.Events.Content.AssetRequested += this.OnAssetRequested;
+    }
+
+    private void ApplyPatches(Harmony harmony)
+    {
+        try
+        {
+            harmony.PatchAll();
+        }
+        catch (Exception ex)
+        {
+            this.Monitor.Log(string.Format(ErrorMessageConsts.HARMONYCRASH, ex), LogLevel.Error);
+        }
+
+        try
+        {
+            harmony.Patch(
+                original: AccessTools.Method(typeof(NPC), nameof(NPC.checkForNewCurrentDialogue)),
+                postfix: new HarmonyMethod(typeof(DialogueManager), nameof(DialogueManager.PostfixCheckDialogue)));
+        }
+        catch (Exception ex)
+        {
+            ModMonitor.Log($"Failed to patch NPC::checkForNewCurrentDialogue for Special Orders Dialogue. Dialogue will be disabled\n\n{ex}", LogLevel.Error);
+        }
+
+        harmony.Snitch(this.Monitor, harmony.Id, transpilersOnly: true);
     }
 
     /// <summary>
@@ -125,9 +125,7 @@ internal class ModEntry : Mod
     /// <param name="e">TimeChanged params.</param>
     /// <remarks>Currently handles: pushing delayed dialogue back onto the stack.</remarks>
     private void OnTimeChanged(object? sender, TimeChangedEventArgs e)
-    {
-        DialogueManager.PushPossibleDelayedDialogues();
-    }
+        => DialogueManager.PushPossibleDelayedDialogues();
 
     /// <summary>
     /// Raised every second.
@@ -136,9 +134,7 @@ internal class ModEntry : Mod
     /// <param name="e">OneSecondUpdate params.</param>
     /// <remarks>Currently handles: grabbing new recently completed special orders.</remarks>
     private void OneSecondUpdateTicking(object? sender, OneSecondUpdateTickingEventArgs e)
-    {
-        RecentSOManager.GrabNewRecentlyCompletedOrders();
-    }
+        => RecentSOManager.GrabNewRecentlyCompletedOrders();
 
     /// <summary>
     /// Raised on game launch.
@@ -148,9 +144,6 @@ internal class ModEntry : Mod
     /// <remarks>Used to bind APIs and register CP tokens.</remarks>
     private void OnGameLaunched(object? sender, GameLaunchedEventArgs e)
     {
-        // Get a delegate on SpecialOrder.CheckTag.
-        CheckTagDelegate = typeof(SpecialOrder).StaticMethodNamed("CheckTag").CreateDelegate<Func<string, bool>>();
-
         // Bind Spacecore API
         IntegrationHelper helper = new(this.Monitor, this.Helper.Translation, this.Helper.ModRegistry, LogLevel.Debug);
         helper.TryGetAPI("spacechase0.SpaceCore", "1.5.10", out spaceCoreAPI);
@@ -173,7 +166,7 @@ internal class ModEntry : Mod
     /// <remarks>Used to handle day-end events.</remarks>
     private void Saving(object? sender, SavingEventArgs e)
     {
-        this.Monitor.DebugLog("Event Saving raised");
+        this.Monitor.DebugOnlyLog("Event Saving raised");
 
         DialogueManager.Save(); // Save dialogue
         DialogueManager.ClearDelayedDialogue();
@@ -198,7 +191,7 @@ internal class ModEntry : Mod
     /// <remarks>Used to load in this mod's data models.</remarks>
     private void SaveLoaded(object? sender, SaveLoadedEventArgs e)
     {
-        this.Monitor.DebugLog("Event SaveLoaded raised");
+        this.Monitor.DebugOnlyLog("Event SaveLoaded raised");
         DialogueManager.Load(Game1.player.UniqueMultiplayerID);
         MultiplayerHelpers.AssertMultiplayerVersions(this.Helper.Multiplayer, this.ModManifest, this.Monitor, this.Helper.Translation);
 
@@ -235,7 +228,7 @@ internal class ModEntry : Mod
     /// <param name="args">List of tags to check.</param>
     private void ConsoleCheckTag(string command, string[] args)
     {
-        if (!Context.IsWorldReady || CheckTagDelegate is null)
+        if (!Context.IsWorldReady)
         {
             ModMonitor.Log(I18n.LoadSaveFirst(), LogLevel.Debug);
             return;
@@ -244,7 +237,7 @@ internal class ModEntry : Mod
         {
             string base_tag;
             bool match = true;
-            if (tag.StartsWith("!"))
+            if (tag.StartsWith('!'))
             {
                 match = false;
                 base_tag = tag.Trim()[1..];
@@ -280,9 +273,7 @@ internal class ModEntry : Mod
             SpecialOrderData order = order_data[key];
             if (this.IsAvailableOrder(key, order))
             {
-#if DEBUG
-                ModMonitor.DebugLog($"    {key} is valid");
-#endif
+                ModMonitor.DebugOnlyLog($"\t{key} is valid");
                 validkeys.Add(key);
                 if (!Game1.MasterPlayer.team.completedSpecialOrders.ContainsKey(key))
                 {
@@ -300,34 +291,33 @@ internal class ModEntry : Mod
         try
         {
             SpecialOrder.GetSpecialOrder(key, Game1.random.Next());
-            ModMonitor.Log($"    {key} {I18n.Parsable()}", LogLevel.Debug);
+            ModMonitor.Log($"\t{key} {I18n.Parsable()}", LogLevel.Debug);
         }
         catch (Exception ex)
         {
-            ModMonitor.Log($"    {key} {I18n.Unparsable()}\n{ex}", LogLevel.Error);
+            ModMonitor.Log($"\t{key} {I18n.Unparsable()}\n{ex}", LogLevel.Error);
             return false;
         }
 
         bool seen = Game1.MasterPlayer.team.completedSpecialOrders.ContainsKey(key);
         if (order.Repeatable != "True" && seen)
         {
-            ModMonitor.Log($"    {I18n.Nonrepeatable()}", LogLevel.Debug);
+            ModMonitor.Log($"\t{I18n.Nonrepeatable()}", LogLevel.Debug);
             return false;
         }
         else if (seen)
         {
-            ModMonitor.Log($"    {I18n.RepeatableSeen()}", LogLevel.Debug);
+            ModMonitor.Log($"\t{I18n.RepeatableSeen()}", LogLevel.Debug);
         }
         if (Game1.dayOfMonth >= 16 && order.Duration == "Month")
         {
-            ModMonitor.Log($"    {I18n.MonthLongLate(cutoff: 16)}");
+            ModMonitor.Log($"\t{I18n.MonthLongLate(cutoff: 16)}");
             return false;
         }
         if (!SpecialOrder.CheckTags(order.RequiredTags))
         {
-            ModMonitor.Log($"    {I18n.HasInvalidTags()}:", LogLevel.Debug);
-            string[] tags = order.RequiredTags.Split(',', StringSplitOptions.TrimEntries | StringSplitOptions.RemoveEmptyEntries);
-            foreach (string tag in tags)
+            ModMonitor.Log($"\t{I18n.HasInvalidTags()}:", LogLevel.Debug);
+            foreach (string tag in order.RequiredTags.Split(',', StringSplitOptions.TrimEntries | StringSplitOptions.RemoveEmptyEntries))
             {
                 bool match = true;
                 if (tag.Length == 0)
@@ -335,7 +325,7 @@ internal class ModEntry : Mod
                     continue;
                 }
                 string trimmed_tag;
-                if (tag.StartsWith("!"))
+                if (tag.StartsWith('!'))
                 {
                     match = false;
                     trimmed_tag = tag[1..];
@@ -345,9 +335,9 @@ internal class ModEntry : Mod
                     trimmed_tag = tag;
                 }
 
-                if (!(CheckTagDelegate?.Invoke(trimmed_tag) == match))
+                if (CheckTagDelegate(trimmed_tag) != match)
                 {
-                    ModMonitor.Log($"         {I18n.TagFailed()}: {tag}", LogLevel.Debug);
+                    ModMonitor.Log($"\t\t{I18n.TagFailed()}: {tag}", LogLevel.Debug);
                 }
             }
             return false;
@@ -356,10 +346,39 @@ internal class ModEntry : Mod
         {
             if (specialOrder.questKey.Value == key)
             {
-                ModMonitor.Log($"    {I18n.Active()}", LogLevel.Debug);
+                ModMonitor.Log($"\t{I18n.Active()}", LogLevel.Debug);
                 return false;
             }
         }
         return true;
     }
+
+    /********
+     * REGION UNTIMED ORDERS.
+     ********/
+
+    private void OnAssetRequested(object? sender, AssetRequestedEventArgs e)
+        => AssetManager.OnLoadAsset(e);
+
+    private void OnDayEnd(object? sender, DayEndingEventArgs e)
+    {
+        if (Context.IsMainPlayer && Game1.player.team.specialOrders.Count > 0)
+        {
+            HashSet<string> overrides = AssetManager.GetDurationOverride().Where(kvp => kvp.Value == -1).Select(kvp => kvp.Key).ToHashSet();
+            if (overrides.Count == 0)
+            {
+                return;
+            }
+            WorldDate? date = new(Game1.year, Game1.currentSeason, Game1.dayOfMonth);
+            foreach (SpecialOrder specialOrder in Game1.player.team.specialOrders)
+            {
+                if (overrides.Contains(specialOrder.questKey.Value) && specialOrder.GetDaysLeft() < 50)
+                {
+                    this.Monitor.Log($"Overriding duration of untimed special order {specialOrder.questKey.Value}");
+                    specialOrder.dueDate.Value = date.TotalDays + 99;
+                }
+            }
+        }
+    }
+
 }

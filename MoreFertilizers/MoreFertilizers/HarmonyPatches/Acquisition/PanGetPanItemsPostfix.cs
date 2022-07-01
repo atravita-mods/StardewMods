@@ -10,7 +10,7 @@ namespace MoreFertilizers.HarmonyPatches.Acquisition;
 [HarmonyPatch(typeof(Pan))]
 internal static class PanGetPanItemsPostfix
 {
-    [HarmonyPriority(Priority.VeryLow)]
+    [HarmonyPriority(Priority.VeryLow)] // behind other panning mods
     [HarmonyPatch(nameof(Pan.getPanItems))]
     [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Harmony Convention")]
     private static void Postfix(GameLocation location, ref List<Item> __result)

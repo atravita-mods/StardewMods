@@ -1,13 +1,17 @@
 {
   "Name": "Museum Store",
   "Author": "atravita",
-  "Version": "0.1.0",
+  "Version": "0.2.0",
   "Description": "Adds museum rewards to a store.",
   "UniqueID": "atravita.MuseumStore",
   "EntryDll": "MuseumRewardsIn.dll",
   "UpdateKeys": [
-    "Nexus:12598",
-    "GitHub:atravita-mods/MuseumRewardsIn"
+    "Nexus:12598"
   ],
-  "MinimumApiVersion": "3.15"
+  "MinimumApiVersion": "3.15",
+  "Dependencies": [
+    {
+      "UniqueID": "atravita.AtraCore"
+    }
+  ]
 }

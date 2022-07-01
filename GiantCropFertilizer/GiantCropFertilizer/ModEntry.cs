@@ -130,14 +130,12 @@ internal class ModEntry : Mod
 
     private void OnGameLaunched(object? sender, GameLaunchedEventArgs e)
     {
-        // JSON ASSETS integration
-        {
+        { // JSON ASSETS integration
             IntegrationHelper helper = new(this.Monitor, this.Helper.Translation, this.Helper.ModRegistry, LogLevel.Warn);
             if (helper.TryGetAPI("spacechase0.JsonAssets", "1.10.3", out jsonAssets))
             {
                 jsonAssets.LoadAssets(Path.Combine(this.Helper.DirectoryPath, "assets", "json-assets"), this.Helper.Translation);
                 jsonAssets.IdsFixed += this.JAIdsFixed;
-                this.Monitor.Log("Loaded packs!");
             }
             else
             {
@@ -146,19 +144,18 @@ internal class ModEntry : Mod
             }
         }
 
-        Task gmcm = Task.Run(() =>
         { // GMCM integration
             GMCMHelper gmcmHelper = new(this.Monitor, this.Helper.Translation, this.Helper.ModRegistry, this.ModManifest);
             if (gmcmHelper.TryGetAPI())
             {
                 gmcmHelper.Register(
-                    reset: () => Config = new(),
+                    reset: static () => Config = new(),
                     save: () => this.Helper.WriteConfig(Config))
                 .AddParagraph(I18n.ModDescription)
                 .AddNumberOption(
                     name: I18n.GiantCropChance_Title,
-                    getValue: () => (float)Config.GiantCropChance,
-                    setValue: (float val) => Config.GiantCropChance = val,
+                    getValue: static () => (float)Config.GiantCropChance,
+                    setValue: static (float val) => Config.GiantCropChance = val,
                     tooltip: I18n.GiantCropChance_Description,
                     min: 0f,
                     max: 1.1f,
@@ -172,15 +169,14 @@ internal class ModEntry : Mod
                 {
                     gmcmHelper.AddBoolOption(
                         name: I18n.AllowGiantCropsOffFarm_Title,
-                        getValue: () => Config.AllowGiantCropsOffFarm,
-                        setValue: (val) => Config.AllowGiantCropsOffFarm = val,
+                        getValue: static () => Config.AllowGiantCropsOffFarm,
+                        setValue: static (val) => Config.AllowGiantCropsOffFarm = val,
                         tooltip: I18n.AllowGiantCropsOffFarm_Description);
                 }
             }
-        });
+        }
 
         this.ApplyPatches(new Harmony(this.ModManifest.UniqueID));
-        gmcm.Wait();
     }
 
     private void OnSaveLoaded(object? sender, SaveLoadedEventArgs e)

@@ -1,4 +1,6 @@
-﻿namespace AtraShared;
+﻿using System.Runtime.CompilerServices;
+
+namespace AtraShared;
 
 /// <summary>
 /// Thrown when a save is not loaded but I expect one to be.
@@ -11,5 +13,33 @@ public class SaveNotLoadedError : Exception
     public SaveNotLoadedError()
         : base("Save not loaded")
     {
+    }
+}
+
+/// <summary>
+/// ThrowHelper for AtraShared exceptions.
+/// </summary>
+public static class ASThrowHelper
+{
+    /// <summary>
+    /// Throws a new SaveNotLoadedError.
+    /// </summary>
+    /// <exception cref="SaveNotLoadedError">always.</exception>
+    [DoesNotReturn]
+    [MethodImpl(MethodImplOptions.NoInlining)]
+    public static void ThrowSaveNotLoaded()
+    {
+        throw new SaveNotLoadedError();
+    }
+
+    /// <summary>
+    /// Throws a new SaveNotLoadedError.
+    /// </summary>
+    /// <exception cref="SaveNotLoadedError">always.</exception>
+    [DoesNotReturn]
+    [MethodImpl(MethodImplOptions.NoInlining)]
+    public static T ThrowSaveNotLoaded<T>()
+    {
+        throw new SaveNotLoadedError();
     }
 }

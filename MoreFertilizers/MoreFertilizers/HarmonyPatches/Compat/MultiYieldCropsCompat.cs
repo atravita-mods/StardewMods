@@ -1,6 +1,7 @@
 ﻿using System.Reflection;
 using System.Reflection.Emit;
 using AtraBase.Toolkit.Reflection;
+using AtraCore.Framework.ReflectionManager;
 using AtraShared.Utils.Extensions;
 using AtraShared.Utils.HarmonyHelper;
 using HarmonyLib;
@@ -18,12 +19,13 @@ internal static class MultiYieldCropsCompat
     /// Applies the patch against MultiYieldCrops.
     /// </summary>
     /// <param name="harmony">Harmony instance.</param>
-    /// <exception cref="MethodNotFoundException">Some method was not found?</exception>
+    /// <exception cref="MethodNotFoundException">Some method was not found.</exception>
     internal static void ApplyPatches(Harmony harmony)
     {
         try
         {
-            Type multi = AccessTools.TypeByName("MultiYieldCrop.MultiYieldCrops") ?? throw new MethodNotFoundException("Multi Yield Crops not found!");
+            Type multi = AccessTools.TypeByName("MultiYieldCrop.MultiYieldCrops")
+                ?? ReflectionThrowHelper.ThrowMethodNotFoundException<Type>("Multi Yield Crops");
             harmony.Patch(
                 original: multi.InstanceMethodNamed("SpawnHarvest"),
                 transpiler: new HarmonyMethod(typeof(MultiYieldCropsCompat).StaticMethodNamed(nameof(Transpiler))));
@@ -94,14 +96,14 @@ internal static class MultiYieldCropsCompat
             helper.FindNext(new CodeInstructionWrapper[]
             { // Find the creation of the Item and where it's stored.
                 new(SpecialCodeInstructionCases.LdLoc),
-                new(OpCodes.Callvirt, typeof(IEnumerator<Item>).InstancePropertyNamed("Current").GetGetMethod()),
+                new(OpCodes.Callvirt, typeof(IEnumerator<Item>).GetCachedProperty("Current", ReflectionCache.FlagTypes.InstanceFlags).GetGetMethod()),
                 new(SpecialCodeInstructionCases.StLoc, typeof(Item)),
             })
             .Advance(2)
             .Insert(new CodeInstruction[]
             { // Stick in our function that adjusts it for organic and joja.
                 new(OpCodes.Ldarg_3),
-                new(OpCodes.Call, typeof(MultiYieldCropsCompat).StaticMethodNamed(nameof(AdjustItem))),
+                new(OpCodes.Call, typeof(MultiYieldCropsCompat).GetCachedMethod(nameof(AdjustItem), ReflectionCache.FlagTypes.StaticFlags)),
             })
             .FindNext(new CodeInstructionWrapper[]
             { // find the creation of debris
@@ -110,7 +112,7 @@ internal static class MultiYieldCropsCompat
                 new(OpCodes.Ldc_I4_M1),
                 new(OpCodes.Ldnull),
                 new(OpCodes.Ldc_I4_M1),
-                new(OpCodes.Call, typeof(Game1).StaticMethodNamed(nameof(Game1.createItemDebris))),
+                new(OpCodes.Call, typeof(Game1).GetCachedMethod(nameof(Game1.createItemDebris), ReflectionCache.FlagTypes.StaticFlags)),
                 new(OpCodes.Pop),
             });
 
@@ -124,32 +126,32 @@ internal static class MultiYieldCropsCompat
             .Insert(new CodeInstruction[]
             { // Insert a second debris creation just before if our check passes.
                 new(OpCodes.Ldarg_3),
-                new(OpCodes.Call, typeof(MultiYieldCropsCompat).StaticMethodNamed(nameof(IsBountifulFertilizer))),
+                new(OpCodes.Call, typeof(MultiYieldCropsCompat).GetCachedMethod(nameof(IsBountifulFertilizer), ReflectionCache.FlagTypes.StaticFlags)),
                 new(OpCodes.Brfalse_S, label),
                 itemLocal,
                 locationLocal,
                 new(OpCodes.Ldc_I4_1),
                 new(OpCodes.Ldnull),
                 new(OpCodes.Ldc_I4_M1),
-                new(OpCodes.Call, typeof(Game1).StaticMethodNamed(nameof(Game1.createItemDebris))),
+                new(OpCodes.Call, typeof(Game1).GetCachedMethod(nameof(Game1.createItemDebris), ReflectionCache.FlagTypes.StaticFlags)),
                 new(OpCodes.Pop),
             }, withLabels: labelsToMove)
             .FindNext(new CodeInstructionWrapper[]
             { // find just before adding the item to the hut.
                 new(SpecialCodeInstructionCases.LdArg),
                 new(SpecialCodeInstructionCases.LdLoc, typeof(Item)),
-                new(OpCodes.Callvirt, typeof(JunimoHarvester).InstanceMethodNamed(nameof(JunimoHarvester.tryToAddItemToHut))),
+                new(OpCodes.Callvirt, typeof(JunimoHarvester).GetCachedMethod(nameof(JunimoHarvester.tryToAddItemToHut), ReflectionCache.FlagTypes.InstanceFlags)),
             })
             .Advance(2)
             .DefineAndAttachLabel(out Label juminoLabel)
             .Insert(new CodeInstruction[]
             { // Increase the stack to 2 if our check passes.
                 new(OpCodes.Ldarg_3),
-                new(OpCodes.Call, typeof(MultiYieldCropsCompat).StaticMethodNamed(nameof(IsBountifulFertilizer))),
+                new(OpCodes.Call, typeof(MultiYieldCropsCompat).GetCachedMethod(nameof(IsBountifulFertilizer), ReflectionCache.FlagTypes.StaticFlags)),
                 new(OpCodes.Brfalse_S, juminoLabel),
                 new(OpCodes.Dup),
                 new(OpCodes.Ldc_I4_2),
-                new(OpCodes.Callvirt, typeof(Item).InstancePropertyNamed(nameof(Item.Stack)).GetSetMethod()),
+                new(OpCodes.Callvirt, typeof(Item).GetCachedProperty(nameof(Item.Stack), ReflectionCache.FlagTypes.InstanceFlags).GetSetMethod()),
             });
 
             // helper.Print();

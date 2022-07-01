@@ -1,10 +1,17 @@
 {
-   "Name": "DrawFishPondsOverGrass",
-   "Author": "atravita",
-   "Version": "0.1.0",
-   "Description": "Draws fish ponds **over** grass placed under it.",
-   "UniqueID": "atravita.DrawFishPondsOverGrass",
-   "EntryDll": "DrawFishPondsOverGrass.dll",
-   "UpdateKeys": [],
-   "MinimumApiVersion": "3.13"
+  "Name": "DrawFishPondsOverGrass",
+  "Author": "atravita",
+  "Version": "0.2.0",
+  "Description": "Draws fish ponds **over** grass placed under it.",
+  "UniqueID": "atravita.DrawFishPondsOverGrass",
+  "EntryDll": "DrawFishPondsOverGrass.dll",
+  "UpdateKeys": [
+    "Nexus:11352"
+  ],
+  "Dependencies": [
+    {
+      "UniqueID": "atravita.AtraCore"
+    }
+  ],
+  "MinimumApiVersion": "3.15"
 }

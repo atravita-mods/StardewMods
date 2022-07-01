@@ -1,6 +1,6 @@
 ﻿using System.Reflection;
 using System.Reflection.Emit;
-using AtraBase.Toolkit.Reflection;
+using AtraCore.Framework.ReflectionManager;
 using AtraShared.Utils.Extensions;
 using AtraShared.Utils.HarmonyHelper;
 using HarmonyLib;
@@ -30,7 +30,7 @@ internal static class PaddyWaterCheckTranspiler
 
             helper.FindNext(new CodeInstructionWrapper[]
             { // Match and advance past the is IndoorPot check.
-                new (OpCodes.Callvirt, typeof(GameLocation).InstanceMethodNamed(nameof(GameLocation.getObjectAtTile))),
+                new (OpCodes.Callvirt, typeof(GameLocation).GetCachedMethod(nameof(GameLocation.getObjectAtTile), ReflectionCache.FlagTypes.InstanceFlags)),
                 new (OpCodes.Isinst, typeof(IndoorPot)),
                 new (OpCodes.Brfalse_S),
             })
@@ -42,12 +42,12 @@ internal static class PaddyWaterCheckTranspiler
             .Insert(new CodeInstruction[]
             { // Insert a check for the Waterlogged fertilizer to set the field and return true.
                 new (OpCodes.Ldarg_0),
-                new (OpCodes.Call, typeof(PaddyWaterCheckTranspiler).StaticMethodNamed(nameof(PaddyWaterCheckTranspiler.HasPaddyFertilizer))),
+                new (OpCodes.Call, typeof(PaddyWaterCheckTranspiler).GetCachedMethod(nameof(HasPaddyFertilizer), ReflectionCache.FlagTypes.StaticFlags)),
                 new (OpCodes.Brfalse, label),
                 new (OpCodes.Ldarg_0),
-                new (OpCodes.Ldfld, typeof(HoeDirt).InstanceFieldNamed(nameof(HoeDirt.nearWaterForPaddy))),
+                new (OpCodes.Ldfld, typeof(HoeDirt).GetCachedField(nameof(HoeDirt.nearWaterForPaddy), ReflectionCache.FlagTypes.InstanceFlags)),
                 new (OpCodes.Ldc_I4_1),
-                new (OpCodes.Callvirt, typeof(NetFieldBase<int, NetInt>).InstancePropertyNamed("Value").GetSetMethod()),
+                new (OpCodes.Callvirt, typeof(NetFieldBase<int, NetInt>).GetCachedProperty("Value", ReflectionCache.FlagTypes.InstanceFlags).GetSetMethod()),
                 new (OpCodes.Ldc_I4_1),
                 new (OpCodes.Ret),
             }, withLabels: labels);

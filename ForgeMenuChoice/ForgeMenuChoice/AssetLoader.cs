@@ -95,8 +95,8 @@ public static class AssetLoader
         // the journal scrap 1008 is the only in-game descriptions of enchantments. We'll need to grab data from there.
         try
         {
-            IDictionary<int, string> secretnotes = ModEntry.GameContentHelper.Load<Dictionary<int, string>>("Data\\SecretNotes");
-            SpanSplit secretNote8 = secretnotes[1008].SpanSplit('^', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
+            IDictionary<int, string> secretnotes = ModEntry.GameContentHelper.Load<Dictionary<int, string>>(@"Data\SecretNotes");
+            StreamSplit secretNote8 = secretnotes[1008].StreamSplit('^', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
 
             // The secret note, of course, has its data in the localized name. We'll need to map that to the internal name.
             // Using a dictionary with a StringComparer for the user's current language to make that a little easier.
@@ -148,7 +148,7 @@ public static class AssetLoader
         Dictionary<string, string> tooltips = ModEntry.GameContentHelper.Load<Dictionary<string, string>>(TOOLTIP_DATA_PATH);
         foreach ((string k, string v) in tooltips)
         {
-            tooltips[k] = StringUtils.ParseAndWrapText(v, Game1.smallFont, 300);
+            tooltips[k] = ModEntry.StringUtils.ParseAndWrapText(v, Game1.smallFont, 300);
         }
         return tooltips;
     }

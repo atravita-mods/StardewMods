@@ -1,10 +1,18 @@
-﻿{
+{
   "Name": "EXP From Monster Kills On Farm",
   "Author": "atravita",
-  "Version": "0.2.0",
+  "Version": "0.3.0",
   "Description": "Grants XP for monster kills on the farm.",
   "UniqueID": "atravita.ExpFromMonsterKillsOnFarm",
   "EntryDll": "ExpFromMonsterKillsOnFarm.dll",
-  "UpdateKeys": [ "Nexus:10924", "ModDrop:1099838", "Github:atravita-mods/ExpFromMonsterKillsOnFarm" ],
-  "MinimumApiVersion": "3.0"
+  "UpdateKeys": [
+    "Nexus:10924",
+    "ModDrop:1099838"
+  ],
+  "Dependencies": [
+    {
+      "UniqueID": "atravita.AtraCore"
+    }
+  ],
+  "MinimumApiVersion": "3.15"
 }

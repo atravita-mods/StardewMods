@@ -1,6 +1,8 @@
 ﻿using System.Reflection;
 using System.Reflection.Emit;
 using AtraBase.Toolkit.Reflection;
+using AtraCore.Framework.ReflectionManager;
+using AtraShared.Utils.Extensions;
 using AtraShared.Utils.HarmonyHelper;
 using HarmonyLib;
 using MoreFertilizers.HarmonyPatches.OrganicFertilizer;
@@ -23,7 +25,8 @@ internal static class MillerTimeDayUpdateTranspiler
     {
         try
         {
-            Type millerpatches = AccessTools.TypeByName("MillerTime.Patches.MillPatch") ?? throw new MethodNotFoundException("MillerTime Patches");
+            Type millerpatches = AccessTools.TypeByName("MillerTime.Patches.MillPatch")
+                ?? ReflectionThrowHelper.ThrowMethodNotFoundException<Type>("MillerTime Patches");
             harmony.Patch(
                 original: millerpatches.StaticMethodNamed("DayUpdatePrefix"),
                 transpiler: new HarmonyMethod(typeof(MillerTimeDayUpdateTranspiler), nameof(Transpiler)));
@@ -43,21 +46,21 @@ internal static class MillerTimeDayUpdateTranspiler
             helper.DeclareLocal(typeof(Item), out LocalBuilder? inputlocal)
             .FindNext(new CodeInstructionWrapper[]
             { // Find the call to get_Item.
-                new(OpCodes.Callvirt, typeof(NetFieldBase<Chest, NetRef<Chest>>).InstancePropertyNamed("Value").GetGetMethod()),
-                new(OpCodes.Ldfld, typeof(Chest).InstanceFieldNamed(nameof(Chest.items))),
+                new(OpCodes.Callvirt, typeof(NetFieldBase<Chest, NetRef<Chest>>).GetCachedProperty("Value", ReflectionCache.FlagTypes.InstanceFlags).GetGetMethod()),
+                new(OpCodes.Ldfld, typeof(Chest).GetCachedField(nameof(Chest.items), ReflectionCache.FlagTypes.InstanceFlags)),
                 new(SpecialCodeInstructionCases.LdLoc),
-                new(OpCodes.Callvirt, typeof(NetList<Item, NetRef<Item>>).InstancePropertyNamed("Item").GetGetMethod()),
+                new(OpCodes.Callvirt, typeof(NetList<Item, NetRef<Item>>).GetCachedProperty("Item", ReflectionCache.FlagTypes.InstanceFlags).GetGetMethod()),
             })
             .Advance(4)
             .Insert(new CodeInstruction[]
             { // This is sufficiently annoying we're just going to create a local to store it.
-              // I'm so confused as to why this is a weird ass field and not a local. Can't understand the compiler's decisions here.
+              // Bloody hoisted fields.
                 new(OpCodes.Stloc, inputlocal),
                 new(OpCodes.Ldloc, inputlocal),
             })
             .FindNext(new CodeInstructionWrapper[]
             { // find and store the output's local.
-                new(OpCodes.Newobj, typeof(SObject).Constructor(new[] { typeof(int), typeof(int), typeof(bool), typeof(int), typeof(int) })),
+                new(OpCodes.Newobj, typeof(SObject).GetCachedConstructor(ReflectionCache.FlagTypes.InstanceFlags, new[] { typeof(int), typeof(int), typeof(bool), typeof(int), typeof(int) })),
                 new(SpecialCodeInstructionCases.StLoc),
             }).Advance(1);
 
@@ -70,7 +73,7 @@ internal static class MillerTimeDayUpdateTranspiler
             { // Place our function call here.
                 new(OpCodes.Ldloc, inputlocal),
                 ldoutput,
-                new(OpCodes.Call, typeof(MillDayUpdateTranspiler).StaticMethodNamed(nameof(MillDayUpdateTranspiler.MakeMillOutputOrganic))),
+                new(OpCodes.Call, typeof(MillDayUpdateTranspiler).GetCachedMethod(nameof(MillDayUpdateTranspiler.MakeMillOutputOrganic), ReflectionCache.FlagTypes.StaticFlags)),
                 stoutput,
             }, withLabels: labelsToMove);
 
@@ -80,6 +83,7 @@ internal static class MillerTimeDayUpdateTranspiler
         catch (Exception ex)
         {
             ModEntry.ModMonitor.Log($"Mod crashed while transpiling Miller Time:\n\n{ex}", LogLevel.Error);
+            original?.Snitch(ModEntry.ModMonitor);
         }
         return null;
     }

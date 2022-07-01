@@ -7,14 +7,16 @@
   "EntryDll": "GingerIslandMainlandAdjustments.dll",
   "UpdateKeys": [
     "Nexus:10004@CodePack",
-    "GitHub:atravita-mods/Ginger-Island-Mainland-Adjustments",
     "ModDrop:1098263@CodePack"
   ],
-  "MinimumApiVersion": "3.0",
+  "MinimumApiVersion": "3.15",
   "Dependencies": [
     {
       "UniqueID": "Pathoschild.ContentPatcher",
       "IsRequired": false
+    },
+    {
+      "UniqueID": "atravita.AtraCore"
     }
   ]
 }

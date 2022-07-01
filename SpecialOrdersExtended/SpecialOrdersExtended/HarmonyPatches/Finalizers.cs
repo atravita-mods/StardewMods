@@ -1,8 +1,11 @@
-﻿namespace SpecialOrdersExtended.HarmonyPatches;
+﻿using HarmonyLib;
+
+namespace SpecialOrdersExtended.HarmonyPatches;
 
 /// <summary>
 /// Holds the finalizers for this project.
 /// </summary>
+[HarmonyPatch(typeof(SpecialOrder))]
 internal class Finalizers
 {
     /// <summary>
@@ -13,6 +16,8 @@ internal class Finalizers
     /// <param name="__result">The parsed special order, set to null to remove.</param>
     /// <param name="__exception">The observed exception.</param>
     /// <returns>null to surpress the error.</returns>
+    [HarmonyFinalizer]
+    [HarmonyPatch(nameof(SpecialOrder.GetSpecialOrder))]
     [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Harmony convention")]
     public static Exception? FinalizeGetSpecialOrder(string key, int? generation_seed, ref SpecialOrder? __result, Exception? __exception)
     {

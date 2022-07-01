@@ -1,6 +1,6 @@
 ﻿using System.Reflection;
 using System.Reflection.Emit;
-using AtraBase.Toolkit.Reflection;
+using AtraCore.Framework.ReflectionManager;
 using AtraShared.Utils.HarmonyHelper;
 using HarmonyLib;
 
@@ -47,12 +47,12 @@ internal static class GetEnchantmentPatch
             {
                 new(OpCodes.Ldarg_0),
                 new(SpecialCodeInstructionCases.LdArg),
-                new(OpCodes.Call, typeof(BaseEnchantment).StaticMethodNamed(nameof(BaseEnchantment.GetEnchantmentFromItem))),
+                new(OpCodes.Call, typeof(BaseEnchantment).GetCachedMethod(nameof(BaseEnchantment.GetEnchantmentFromItem), ReflectionCache.FlagTypes.StaticFlags)),
                 new(SpecialCodeInstructionCases.StLoc),
                 new(SpecialCodeInstructionCases.LdLoc),
             })
             .Advance(2)
-            .ReplaceOperand(typeof(GetEnchantmentPatch).StaticMethodNamed(nameof(GetEnchantmentPatch.SubstituteEnchantment)));
+            .ReplaceOperand(typeof(GetEnchantmentPatch).GetCachedMethod(nameof(GetEnchantmentPatch.SubstituteEnchantment), ReflectionCache.FlagTypes.StaticFlags));
             return helper.Render();
         }
         catch (Exception ex)

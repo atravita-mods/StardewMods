@@ -63,10 +63,13 @@ public class MigrationManager
     /// </summary>
     public void SaveVersionInfo()
     {
-        MigrationDataClass migrationData = this.DataHelper.ReadGlobalData<MigrationDataClass>(FILENAME) ?? new();
-        this.Monitor.Log($"Writing version info {this.Manifest.Version} into global data for {Constants.SaveFolderName} for {this.Manifest.UniqueID}", LogLevel.Trace);
-        migrationData.VersionMap[Constants.SaveFolderName!] = this.Manifest.Version.ToString();
-        this.DataHelper.WriteGlobalData(FILENAME, migrationData);
+        Task.Run(() =>
+        {
+            MigrationDataClass migrationData = this.DataHelper.ReadGlobalData<MigrationDataClass>(FILENAME) ?? new();
+            this.Monitor.Log($"Writing version info {this.Manifest.Version} into global data for {Constants.SaveFolderName} for {this.Manifest.UniqueID}", LogLevel.Trace);
+            migrationData.VersionMap[Constants.SaveFolderName!] = this.Manifest.Version.ToString();
+            this.DataHelper.WriteGlobalData(FILENAME, migrationData);
+        });
     }
 
     /// <summary>

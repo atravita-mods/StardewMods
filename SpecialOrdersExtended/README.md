@@ -16,6 +16,8 @@ Because the vanilla game is programmed to return "false" for any tag it doesn't 
 
 If you think it'd be nice if players had, say, experience killing serpents before embarking on your quest, but it's not vital, use something like `!haskilled_Serpent_under_50`. If this mod's installed, the special order will not appear before 50 serpents are killed. If this mod isn't, it'll show up regardless.
 
+Adds a single event command: `"atravita_addSpecialOrder <specialordername>"`, which lets you add a special order in an event.
+
 Additionally, adds two console commands to help debug special orders. `check_tag` will tell you the current value of the tag in question, and `special_order_pool` will list every special order and tell you if the special order can currently be selected and why if not. `list_available_stats` will also list all the stats available to the `stats` tag.
 
 Finally, adds dialogue keys. Their documentation can be found here: https://github.com/atravita-mods/SpecialOrdersExtended/blob/master/SpecialOrdersExtended/docs/DialogueKeys.MD.

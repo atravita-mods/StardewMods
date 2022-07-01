@@ -1,4 +1,5 @@
-﻿using AtraShared.Utils.Extensions;
+﻿using System.Runtime.CompilerServices;
+using AtraShared.Utils.Extensions;
 using StardewModdingAPI.Events;
 using StardewValley.Locations;
 
@@ -56,12 +57,22 @@ internal static class FishFoodHandler
     }
 
     /// <summary>
+    /// Whether or not it's a location the game saves.
+    /// </summary>
+    /// <param name="loc">Game location.</param>
+    /// <returns>true if it's not persisted.</returns>
+    /// <remarks>Carries the no-inlining flag so other mods can patch this if necessary.</remarks>
+    [MethodImpl(MethodImplOptions.NoInlining)]
+    internal static bool IsUnsavedLocation(this GameLocation loc)
+        => loc is MineShaft or VolcanoDungeon;
+
+    /// <summary>
     /// Re-adds location data for places that get wiped, like the MineShaft and VolcanoDungeon.
     /// </summary>
     /// <param name="e">OnWapred event args.</param>
     internal static void HandleWarp(WarpedEventArgs e)
     {
-        if (e.IsLocalPlayer && e.NewLocation is MineShaft or VolcanoDungeon
+        if (e.IsLocalPlayer && e.NewLocation.IsUnsavedLocation()
             && UnsavedLocHandler.FishFoodLocationMap.TryGetValue(e.NewLocation.NameOrUniqueName, out int val) && val > 0)
         {
             e.NewLocation.modData?.SetInt(CanPlaceHandler.FishFood, val);

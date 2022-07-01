@@ -179,5 +179,6 @@ Global
 		AtraBase\AtraBase\AtraBase.projitems*{3b016280-a267-4c67-affe-999c2b25e527}*SharedItemsImports = 5
 		AtraShared\AtraShared.projitems*{3b016280-a267-4c67-affe-999c2b25e527}*SharedItemsImports = 5
 		AtraShared\AtraShared.projitems*{7119b285-0356-4ce5-adca-cc008e9315da}*SharedItemsImports = 13
+		AtraBase\AtraBase\AtraBase.projitems*{db57d7be-53c6-4744-a446-499203da907a}*SharedItemsImports = 5
 	EndGlobalSection
 EndGlobal

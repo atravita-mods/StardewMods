@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using Microsoft.Toolkit.Diagnostics;
+using Microsoft.Xna.Framework;
 using StardewModdingAPI.Utilities;
 
 namespace AtraShared.Utils;
@@ -101,6 +102,32 @@ public static class Utils
             {
                 yield return npc;
             }
+        }
+    }
+
+#warning - fix in Stardew 1.6
+    /// <summary>
+    /// Gets the next day, given the specific season and day.
+    /// </summary>
+    /// <param name="season">Season as string.</param>
+    /// <param name="day">Day as int.</param>
+    /// <returns>ValueTuple containing the next day.</returns>
+    public static (string season, int day) GetTomorrow(string season, int day)
+    {
+        if (day == 28)
+        {
+            return season switch
+            {
+                "spring" => ("summer", 1),
+                "summer" => ("fall", 1),
+                "fall" => ("winter", 1),
+                "winter" => ("spring", 1),
+                _ => ThrowHelper.ThrowArgumentException<ValueTuple<string, int>>($"Unexpected season {season}!"),
+            };
+        }
+        else
+        {
+            return (season, day + 1);
         }
     }
 }

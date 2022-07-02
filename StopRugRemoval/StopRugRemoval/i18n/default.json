@@ -19,8 +19,6 @@
   "GoldenCoconutsOffIsland.title": "Golden Coconuts Off Island",
   "GoldenCoconutsOffIsland.description": "Golden coconuts can drop from palm trees off the island too! It's quite rare though.",
 
-
-
   "FurniturePlacementKey.title": "Furniture Placement Key",
   "FurniturePlacementKey.description": "The keybind used to allow objects to be removed from tables.",
 
@@ -79,6 +77,7 @@
   "rug-planting-message": "Planting on rugs is not allowed!",
   "gate-removal-message": "Hold down {{keybind}} to remove gates easily",
   "invalid-special-order": "Special Order {{order}} seems to be invalid; was not added to your quest log.",
+  "rain-totem.message":  "Mayor Lewis wouldn't appreciate rain tomorrow...",
 
   // Config errors and messages
   "IllFormatedConfig": "Config file seems ill-formated, using default. Please use Generic Mod Config Menu to configure.",

@@ -150,7 +150,7 @@ internal static class ConfirmWarp
             {
                 __result = false;
                 Game1.showRedMessage(I18n.RainTotem_Message());
-                return true;
+                return false;
             }
         }
 

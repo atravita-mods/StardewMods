@@ -1,6 +1,8 @@
-﻿using AtraCore.Framework.ItemManagement;
+﻿using AtraCore.Framework.DialogueManagement;
+using AtraCore.Framework.ItemManagement;
 using AtraCore.HarmonyPatches;
 using AtraShared.ConstantsAndEnums;
+using AtraShared.MigrationManager;
 using AtraShared.Utils.Extensions;
 using HarmonyLib;
 using StardewModdingAPI.Events;
@@ -10,6 +12,11 @@ namespace AtraCore;
 /// <inheritdoc />
 internal sealed class ModEntry : Mod
 {
+    private MigrationManager? migrator;
+
+    /// <summary>
+    /// Gets the logger for this mod.
+    /// </summary>
     internal static IMonitor ModMonitor { get; private set; } = null!;
 
     /// <inheritdoc />
@@ -21,11 +28,17 @@ internal sealed class ModEntry : Mod
         helper.Events.GameLoop.GameLaunched += this.OnGameLaunched;
         helper.Events.Content.AssetRequested += this.OnAssetRequested;
         helper.Events.GameLoop.SaveLoaded += this.OnSaveLoaded;
+        helper.Events.GameLoop.TimeChanged += this.OnTimeChanged;
+        helper.Events.GameLoop.DayEnding += this.OnDayEnd;
     }
 
     private void OnSaveLoaded(object? sender, SaveLoadedEventArgs e)
     {
         DrawPrismatic.LoadPrismaticData();
+
+        this.migrator = new(this.ModManifest, this.Helper, this.Monitor);
+        this.migrator.ReadVersionInfo();
+        this.Helper.Events.GameLoop.Saved += this.WriteMigrationData;
     }
 
     private void OnGameLaunched(object? sender, GameLaunchedEventArgs e)
@@ -37,11 +50,35 @@ internal sealed class ModEntry : Mod
         this.ApplyPatches(new Harmony(this.ModManifest.UniqueID));
     }
 
+    /********
+     * Dialogue region
+     * *******/
+
+    /// <summary>
+    /// Raised every 10 in game minutes.
+    /// </summary>
+    /// <param name="sender">Unknown, used by SMAPI.</param>
+    /// <param name="e">TimeChanged params.</param>
+    /// <remarks>Currently handles: pushing delayed dialogue back onto the stack.</remarks>
+    private void OnTimeChanged(object? sender, TimeChangedEventArgs e)
+        => QueuedDialogueManager.PushPossibleDelayedDialogues();
+
+    private void OnDayEnd(object? sender, DayEndingEventArgs e)
+        => QueuedDialogueManager.PushPossibleDelayedDialogues();
+
+    /**************
+     * Assets
+     * ************/
+
     private void OnAssetInvalidation(object? sender, AssetsInvalidatedEventArgs e)
         => DataToItemMap.Reset(e.NamesWithoutLocale);
 
     private void OnAssetRequested(object? sender, AssetRequestedEventArgs e)
         => AssetManager.Apply(e);
+
+    /*************
+    * Harmony
+    * *************/
 
     private void ApplyPatches(Harmony harmony)
     {
@@ -54,5 +91,24 @@ internal sealed class ModEntry : Mod
             ModMonitor.Log(string.Format(ErrorMessageConsts.HARMONYCRASH, ex), LogLevel.Error);
         }
         harmony.Snitch(this.Monitor, uniqueID: harmony.Id, transpilersOnly: true);
+    }
+
+    /***********
+     * Migrations
+     * ********/
+
+    /// <summary>
+    /// Writes migration data then detaches the migrator.
+    /// </summary>
+    /// <param name="sender">Smapi thing.</param>
+    /// <param name="e">Arguments for just-before-saving.</param>
+    private void WriteMigrationData(object? sender, SavedEventArgs e)
+    {
+        if (this.migrator is not null)
+        {
+            this.migrator.SaveVersionInfo();
+            this.migrator = null;
+        }
+        this.Helper.Events.GameLoop.Saved -= this.WriteMigrationData;
     }
 }

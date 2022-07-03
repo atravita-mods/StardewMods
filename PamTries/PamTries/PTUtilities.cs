@@ -53,6 +53,7 @@ class PTUtilities
                 if (farmer.activeDialogueEvents.TryGetValue(conversationTopic, out conversationdays))
                 {
                     Game1.player.activeDialogueEvents[conversationTopic] = conversationdays;
+                    break;
                 }
             }
         }

@@ -109,6 +109,7 @@ internal static class HSUtils
                 Dictionary<string, string>? festivaldata = Game1.temporaryContent.Load<Dictionary<string, string>>($@"Data\Festivals\{s}");
                 if (festivaldata.TryGetValue("conditions", out string? conditions))
                 {
+                    ModEntry.ModMonitor.Log($"Testing {conditions} against {mapRegion}");
                     if (conditions.StartsWith(mapRegion, StringComparison.Ordinal))
                     {
                         return true;

@@ -88,7 +88,6 @@ internal class ModEntry : Mod
         helper.Events.GameLoop.SaveLoaded += this.SaveLoaded;
         helper.Events.GameLoop.Saving += this.Saving;
         helper.Events.GameLoop.DayEnding += this.OnDayEnd;
-        helper.Events.GameLoop.TimeChanged += this.OnTimeChanged;
         helper.Events.GameLoop.OneSecondUpdateTicking += this.OneSecondUpdateTicking;
         helper.Events.Content.AssetRequested += this.OnAssetRequested;
     }
@@ -117,15 +116,6 @@ internal class ModEntry : Mod
 
         harmony.Snitch(this.Monitor, harmony.Id, transpilersOnly: true);
     }
-
-    /// <summary>
-    /// Raised every 10 in game minutes.
-    /// </summary>
-    /// <param name="sender">Unknown, used by SMAPI.</param>
-    /// <param name="e">TimeChanged params.</param>
-    /// <remarks>Currently handles: pushing delayed dialogue back onto the stack.</remarks>
-    private void OnTimeChanged(object? sender, TimeChangedEventArgs e)
-        => DialogueManager.PushPossibleDelayedDialogues();
 
     /// <summary>
     /// Raised every second.
@@ -169,7 +159,6 @@ internal class ModEntry : Mod
         this.Monitor.DebugOnlyLog("Event Saving raised");
 
         DialogueManager.Save(); // Save dialogue
-        DialogueManager.ClearDelayedDialogue();
 
         if (Context.IsSplitScreen && Context.ScreenId != 0)
         {// Some properties only make sense for a single player to handle in splitscreen.

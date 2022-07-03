@@ -11,11 +11,11 @@ internal class ModEntry : Mod
     /// <summary>
     /// Gets the logger for this mod.
     /// </summary>
-    internal static IMonitor ModMonitor { get; private set; }
+    private static IMonitor ModMonitor { get; private set; }
 
-    Func<FrameRateCounter, int>? framerateGetter { get; set; }
+    private Func<FrameRateCounter, int>? framerateGetter { get; set; }
 
-    FrameRateCounter? frameRateCounter { get; set; }
+    private FrameRateCounter? frameRateCounter { get; set; }
 #pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
 
     /// <inheritdoc />

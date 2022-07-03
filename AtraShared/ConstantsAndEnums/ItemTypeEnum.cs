@@ -1,4 +1,6 @@
-﻿using Microsoft.Xna.Framework;
+﻿using AtraBase.Toolkit.Reflection;
+using HarmonyLib;
+using Microsoft.Xna.Framework;
 using StardewValley.Objects;
 using StardewValley.Tools;
 
@@ -88,7 +90,20 @@ public enum ItemTypeEnum : uint
 /// </summary>
 public static class ItemExtensions
 {
-#warning - TODO: generate all the isinst methods for DGA objects.
+    /// <summary>
+    /// Gets whether or not something is a DGA item.
+    /// </summary>
+    private static Lazy<Func<object, bool>?> isDGAItem = new(() =>
+    {
+        Type? type = AccessTools.TypeByName("DynamicGameAssets.Game.IDGAItem, DynamicGameAssets");
+        return type?.GetTypeIs();
+    });
+
+    /// <summary>
+    /// Gets whether or not something is a DGA item.
+    /// (note - if null, DGA was not installed or could not be found.)
+    /// </summary>
+    public static Func<object, bool>? IsDGAItem => isDGAItem.Value;
 
     /// <summary>
     /// Tries to get the ItemTypeEnum for a specific item.
@@ -140,6 +155,12 @@ public static class ItemExtensions
             default:
                 return null;
         }
+
+        if (IsDGAItem?.Invoke(item) == true)
+        {
+            ret |= ItemTypeEnum.DGAItem;
+        }
+
         return ret;
     }
 }

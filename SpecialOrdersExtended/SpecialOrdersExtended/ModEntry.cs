@@ -1,4 +1,4 @@
-﻿using AtraBase.Toolkit.Reflection;
+﻿using AtraCore.Framework.ReflectionManager;
 using AtraShared.ConstantsAndEnums;
 using AtraShared.Integrations;
 using AtraShared.Integrations.Interfaces;
@@ -30,10 +30,6 @@ internal class ModEntry : Mod
     /// <remarks>If null, was not able to be loaded.</remarks>
     internal static ISpaceCoreAPI? SpaceCoreAPI => spaceCoreAPI;
 
-    private static readonly Lazy<Func<string, bool>> CheckTagLazy = new(typeof(SpecialOrder).StaticMethodNamed("CheckTag").CreateDelegate<Func<string, bool>>);
-
-    private static Func<string, bool> CheckTagDelegate => CheckTagLazy.Value;
-
     // The following fields are set in the Entry method, which is about as close to the constructor as I can get
 #pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
 
@@ -52,6 +48,14 @@ internal class ModEntry : Mod
     /// </summary>
     internal static ModConfig Config { get; private set; }
 #pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
+
+    [SuppressMessage("StyleCop.CSharp.OrderingRules", "SA1201:Elements should appear in the correct order", Justification = "Field kept near accessor.")]
+    private static readonly Lazy<Func<string, bool>> CheckTagLazy = new(
+    typeof(SpecialOrder)
+        .GetCachedMethod("CheckTag", ReflectionCache.FlagTypes.StaticFlags)
+        .CreateDelegate<Func<string, bool>>);
+
+    private static Func<string, bool> CheckTagDelegate => CheckTagLazy.Value;
 
     /// <inheritdoc/>
     public override void Entry(IModHelper helper)

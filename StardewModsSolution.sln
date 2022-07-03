@@ -63,7 +63,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MuseumRewardsIn", "MuseumRe
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QualityRings", "QualityRings\QualityRings.csproj", "{ED8AD8FC-061F-4F58-82D4-7FE255AFD1CE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HolidaySales", "HolidaySales\HolidaySales.csproj", "{8F84A6B4-A93B-48F4-A785-49998D40983D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HolidaySales", "HolidaySales\HolidaySales.csproj", "{8F84A6B4-A93B-48F4-A785-49998D40983D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExperimentalLagReduction", "ExperimentalLagReduction\ExperimentalLagReduction.csproj", "{EBE7DA5A-E418-4A44-987D-393E2C4244CA}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -179,6 +181,10 @@ Global
 		{8F84A6B4-A93B-48F4-A785-49998D40983D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8F84A6B4-A93B-48F4-A785-49998D40983D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8F84A6B4-A93B-48F4-A785-49998D40983D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EBE7DA5A-E418-4A44-987D-393E2C4244CA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EBE7DA5A-E418-4A44-987D-393E2C4244CA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EBE7DA5A-E418-4A44-987D-393E2C4244CA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EBE7DA5A-E418-4A44-987D-393E2C4244CA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

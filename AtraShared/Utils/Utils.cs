@@ -1,5 +1,6 @@
 ﻿using Microsoft.Toolkit.Diagnostics;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using StardewModdingAPI.Utilities;
 
 namespace AtraShared.Utils;
@@ -9,6 +10,23 @@ namespace AtraShared.Utils;
 /// </summary>
 public static class Utils
 {
+    /// <summary>
+    /// A Lazy that contains a single pixel, useful for drawing geometric shapes.
+    /// </summary>
+    /// <remarks>Taken from https://github.com/Pathoschild/StardewMods/blob/develop/Common/CommonHelper.cs 
+    /// Thanks so much!</remarks>
+    private static readonly Lazy<Texture2D> LazyPixel = new(() =>
+    {
+        Texture2D pixel = new(Game1.graphics.GraphicsDevice, 1, 1);
+        pixel.SetData(new[] { Color.White });
+        return pixel;
+    });
+
+    /// <summary>
+    /// Gets a Pixel that can be used for drawing arbitrary geometric shapes.
+    /// </summary>
+    public static Texture2D Pixel => LazyPixel.Value;
+
     /// <summary>
     /// Gets the configuration instance, or returns a default one.
     /// </summary>

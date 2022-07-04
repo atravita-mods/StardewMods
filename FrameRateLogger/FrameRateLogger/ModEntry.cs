@@ -11,7 +11,7 @@ internal class ModEntry : Mod
     /// <summary>
     /// Gets the logger for this mod.
     /// </summary>
-    private static IMonitor ModMonitor { get; private set; }
+    private static IMonitor ModMonitor { get; set; }
 
     private Func<FrameRateCounter, int>? framerateGetter { get; set; }
 

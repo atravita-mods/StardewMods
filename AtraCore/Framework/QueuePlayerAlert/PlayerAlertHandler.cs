@@ -11,12 +11,12 @@ public static class PlayerAlertHandler
     }
 
     /// <summary>
-    /// Called every ten-in game minutes - loads up to five messages to the player.
+    /// Called every ten-in game minutes - loads up to three messages to the player.
     /// </summary>
     internal static void DisplayFromQueue()
     {
         int i = 0;
-        while (queuedMessages.Value.TryDequeue(out HUDMessage? message) && i++ < 4)
+        while (queuedMessages.Value.TryDequeue(out HUDMessage? message) && ++i < 3)
         {
             Game1.addHUDMessage(message);
         }

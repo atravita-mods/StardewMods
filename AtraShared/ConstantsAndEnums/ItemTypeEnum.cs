@@ -13,6 +13,11 @@ namespace AtraShared.ConstantsAndEnums;
 public enum ItemTypeEnum : uint
 {
     /// <summary>
+    /// An item type that I don't know about.
+    /// </summary>
+    Unknown = 0,
+
+    /// <summary>
     /// A big craftable - <see cref="Game1.bigCraftablesInformation"/>
     /// Use the Vector2 constructor.
     /// </summary>
@@ -66,17 +71,22 @@ public enum ItemTypeEnum : uint
     /// <summary>
     /// Any tool. <see cref="StardewValley.Tool"/>, excluding MeleeWeapons.
     /// </summary>
-    Tool = 0b1 << 9,
+    Tool = 0b1 << 10,
 
     /// <summary>
-    /// Any wallpaper or flooring item. <see cref="StardewValley.Objects.Wallpaper"/>
+    /// Any wallpaper <see cref="StardewValley.Objects.Wallpaper"/>
     /// </summary>
-    WallpaperAndFlooring = 0b1 << 8,
+    Wallpaper = 0b1 << 8,
+
+    /// <summary>
+    /// Any flooring item <see cref="StardewValley.Objects.Wallpaper"/>
+    /// </summary>
+    Flooring = 0b1 << 9,
 
     /// <summary>
     /// Any member of the class <see cref="StardewValley.Tools.MeleeWeapon"/>
     /// </summary>
-    Weapon = 0b1 << 10,
+    Weapon = 0b1 << 11,
 
     /// <summary>
     /// Any item that should actually be the recipe form.
@@ -107,11 +117,10 @@ public static class ItemExtensions
 
     /// <summary>
     /// Tries to get the ItemTypeEnum for a specific item.
-    /// Returns null if not possible.
     /// </summary>
     /// <param name="item">Item to check.</param>
     /// <returns>The ItemTypeEnum.</returns>
-    public static ItemTypeEnum? GetItemType(this Item item)
+    public static ItemTypeEnum GetItemType(this Item item)
     {
         ItemTypeEnum ret;
         switch (item)
@@ -137,8 +146,8 @@ public static class ItemExtensions
             case Tool:
                 ret = ItemTypeEnum.Tool;
                 break;
-            case Wallpaper:
-                ret = ItemTypeEnum.WallpaperAndFlooring;
+            case Wallpaper wallpaper:
+                ret = wallpaper.isFloor.Value ? ItemTypeEnum.Flooring : ItemTypeEnum.Wallpaper;
                 break;
             case Furniture:
                 ret = ItemTypeEnum.Furniture;
@@ -153,7 +162,7 @@ public static class ItemExtensions
                 break;
             }
             default:
-                return null;
+                return ItemTypeEnum.Unknown;
         }
 
         if (IsDGAItem?.Invoke(item) == true)

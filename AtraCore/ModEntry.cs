@@ -1,5 +1,6 @@
 ﻿using AtraCore.Framework.DialogueManagement;
 using AtraCore.Framework.ItemManagement;
+using AtraCore.Framework.QueuePlayerAlert;
 using AtraCore.HarmonyPatches;
 using AtraShared.ConstantsAndEnums;
 using AtraShared.MigrationManager;
@@ -61,7 +62,10 @@ internal sealed class ModEntry : Mod
     /// <param name="e">TimeChanged params.</param>
     /// <remarks>Currently handles: pushing delayed dialogue back onto the stack.</remarks>
     private void OnTimeChanged(object? sender, TimeChangedEventArgs e)
-        => QueuedDialogueManager.PushPossibleDelayedDialogues();
+    {
+        QueuedDialogueManager.PushPossibleDelayedDialogues();
+        PlayerAlertHandler.DisplayFromQueue();
+    }
 
     private void OnDayEnd(object? sender, DayEndingEventArgs e)
         => QueuedDialogueManager.PushPossibleDelayedDialogues();

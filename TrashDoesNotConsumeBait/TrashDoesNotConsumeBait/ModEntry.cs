@@ -62,14 +62,14 @@ internal class ModEntry : Mod
             return;
         }
         helper.Register(
-            reset: () =>
+            reset: static () =>
             {
                 Config = new();
                 AssetEditor.Invalidate();
             },
             save: () =>
             {
-                this.Helper.WriteConfig(Config);
+                Task.Run(() => this.Helper.WriteConfig(Config));
                 AssetEditor.Invalidate();
             });
         foreach (PropertyInfo property in typeof(ModConfig).GetProperties())

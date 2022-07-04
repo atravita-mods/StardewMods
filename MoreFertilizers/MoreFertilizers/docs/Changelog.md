@@ -1,6 +1,9 @@
 ﻿Changelog
 =============
 
+#### Version 0.2.0
+* Move to using AtraCore.
+
 #### Version 0.1.7
 * Some efficiency improvements
 * Drop IDs when returning to title, because JA does also.

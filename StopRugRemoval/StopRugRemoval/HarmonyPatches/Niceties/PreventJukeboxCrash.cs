@@ -25,7 +25,7 @@ internal static class PreventJukeboxCrash
                     SoundBank? soundBankImpl = SoundBankWrapperHandler.GetActualSoundBank(soundBank);
                     if (!SoundBankWrapperHandler.HasCue(soundBankImpl, name))
                     {
-                        ModEntry.ModMonitor.Log($"Overwriting IsValidJukeboxSong for invalid cue {name}");
+                        ModEntry.ModMonitor.Log($"Overwriting IsValidJukeboxSong for invalid cue {name}", LogLevel.Debug);
                         __result = false;
                         return false;
                     }

@@ -119,11 +119,13 @@ public class ScheduleUtilityFunctions
                     return false;
                 }
                 string newKey = command[1];
+
                 // GOTO season
                 if (newKey.Equals("Season", StringComparison.OrdinalIgnoreCase))
                 {
                     newKey = date.Season.ToLowerInvariant();
                 }
+
                 // GOTO newKey
                 if (npc.hasMasterScheduleEntry(newKey))
                 {

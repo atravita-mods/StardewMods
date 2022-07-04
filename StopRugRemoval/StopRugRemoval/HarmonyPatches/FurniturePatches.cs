@@ -97,6 +97,8 @@ internal class FurniturePatches
     }
 #endif
 
+#warning - remember DGA?
+
     /// <summary>
     /// Prefix to prevent objects from accidentally being removed from tables.
     /// </summary>
@@ -116,7 +118,9 @@ internal class FurniturePatches
             {
                 return true;
             }
-            if ((__instance.furniture_type.Value == Furniture.table || __instance is StorageFurniture)
+            if ((__instance.furniture_type.Value == Furniture.table
+                    || __instance.furniture_type.Value == Furniture.longTable
+                    || __instance is StorageFurniture)
                 && ModEntry.Config.PreventRemovalFromTable
                 && !ModEntry.Config.FurniturePlacementKey.IsDown())
             {

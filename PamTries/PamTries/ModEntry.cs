@@ -1,11 +1,9 @@
-﻿using AtraBase.Toolkit.Reflection;
-using AtraShared.Integrations;
+﻿using AtraShared.Integrations;
 using AtraShared.Integrations.Interfaces;
 using AtraShared.MigrationManager;
 using AtraShared.Utils.Extensions;
 using HarmonyLib;
 using Microsoft.Xna.Framework;
-using PamTries.HarmonyPatches;
 using StardewModdingAPI.Events;
 
 namespace PamTries;
@@ -27,6 +25,9 @@ public class ModEntry : Mod
 
     // set in Entry, which is as close as I can get to the constructor
 #pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
+    /// <summary>
+    /// The logger for this mod.
+    /// </summary>
     internal static IMonitor ModMonitor { get; private set; }
 #pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
 

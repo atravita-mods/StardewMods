@@ -505,9 +505,14 @@ END:
             return;
         }
         this.migrator = new(this.ModManifest, this.Helper, this.Monitor);
-        this.migrator.ReadVersionInfo();
-
-        this.Helper.Events.GameLoop.Saved += this.WriteMigrationData;
+        if (!this.migrator.CheckVersionInfo())
+        {
+            this.Helper.Events.GameLoop.Saved += this.WriteMigrationData;
+        }
+        else
+        {
+            this.migrator = null;
+        }
     }
 
     /// <summary>

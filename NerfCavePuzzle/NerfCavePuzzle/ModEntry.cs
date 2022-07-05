@@ -95,10 +95,22 @@ internal class ModEntry : Mod
     private void OnSaveLoaded(object? sender, SaveLoadedEventArgs e)
     {
         MultiplayerHelpers.AssertMultiplayerVersions(this.Helper.Multiplayer, this.ModManifest, this.Monitor, this.Helper.Translation);
-        this.migrator = new(this.ModManifest, this.Helper, this.Monitor);
-        this.migrator.ReadVersionInfo();
 
-        this.Helper.Events.GameLoop.Saved += this.WriteMigrationData;
+        if (Context.IsSplitScreen && Context.ScreenId != 0)
+        {
+            return;
+        }
+
+        this.migrator = new(this.ModManifest, this.Helper, this.Monitor);
+
+        if (!this.migrator.CheckVersionInfo())
+        {
+            this.Helper.Events.GameLoop.Saved += this.WriteMigrationData;
+        }
+        else
+        {
+            this.migrator = null;
+        }
     }
 
     /// <summary>

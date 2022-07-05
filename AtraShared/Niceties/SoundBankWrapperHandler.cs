@@ -6,6 +6,9 @@ using Microsoft.Xna.Framework.Audio;
 
 namespace AtraShared.Niceties;
 
+/// <summary>
+/// Holds methods that help with looking at the soundbank.
+/// </summary>
 public static class SoundBankWrapperHandler
 {
     private static readonly Lazy<Func<SoundBankWrapper, SoundBank>> getActualSoundBank = new(() =>

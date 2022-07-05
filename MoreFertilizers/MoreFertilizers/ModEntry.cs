@@ -748,17 +748,29 @@ internal class ModEntry : Mod
     {
         JojaSample.Reset();
 
+        MultiplayerHelpers.AssertMultiplayerVersions(this.Helper.Multiplayer, this.ModManifest, this.Monitor, this.Helper.Translation);
+
+        if (Context.IsSplitScreen && Context.ScreenId != 0)
+        {
+            return;
+        }
+
         IntegrationHelper pfmHelper = new(this.Monitor, this.Helper.Translation, this.Helper.ModRegistry, LogLevel.Trace);
         if (pfmHelper.TryGetAPI("Digus.ProducerFrameworkMod", "1.7.4", out IProducerFrameworkModAPI? pfmAPI))
         {
             pfmAPI.AddContentPack(Path.Combine(this.Helper.DirectoryPath, "assets", "pfm-assets"));
         }
 
-        MultiplayerHelpers.AssertMultiplayerVersions(this.Helper.Multiplayer, this.ModManifest, this.Monitor, this.Helper.Translation);
-
         this.migrator = new(this.ModManifest, this.Helper, this.Monitor);
-        this.migrator.ReadVersionInfo();
-        this.Helper.Events.GameLoop.Saved += this.WriteMigrationData;
+
+        if (!this.migrator.CheckVersionInfo())
+        {
+            this.Helper.Events.GameLoop.Saved += this.WriteMigrationData;
+        }
+        else
+        {
+            this.migrator = null;
+        }
 
         this.FixIDs();
         this.Helper.GameContent.InvalidateCache("Data/ObjectInformation");

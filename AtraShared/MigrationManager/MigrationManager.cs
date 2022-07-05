@@ -45,16 +45,19 @@ public class MigrationManager
     /// <summary>
     /// Reads the version info from global data.
     /// </summary>
-    public void ReadVersionInfo()
+    /// <returns>true if the version is the same as previous, false otherwise.</returns>
+    public bool CheckVersionInfo()
     {
         if (this.DataHelper.ReadGlobalData<MigrationDataClass>(FILENAME) is MigrationDataClass migrationData
             && migrationData.VersionMap.TryGetValue(Constants.SaveFolderName!, out this.oldversion))
         {
             this.Monitor.Log($"Migrator found old version {this.oldversion} for {this.Manifest.UniqueID}", LogLevel.Trace);
+            return this.Manifest.Version.ToString() == this.oldversion;
         }
         else
         {
             this.Monitor.Log($"{this.Manifest.UniqueID} not used previously on this save.", LogLevel.Trace);
+            return false;
         }
     }
 

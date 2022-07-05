@@ -1,4 +1,6 @@
 ﻿using System.Diagnostics;
+using System.Runtime.CompilerServices;
+using AtraBase.Toolkit;
 
 namespace AtraShared.Utils.Extensions;
 
@@ -40,6 +42,7 @@ public static class LogExtensions
     /// <param name="level">Level to log at.</param>
     /// <remarks>This is meant to prevent the creation of a bunch of strings if they're just going to be ignored anyways.
     /// Must weigh the delegate against string creation, use sparingly.</remarks>
+    [MethodImpl(TKConstants.Hot)]
     public static void LogOnlyIf(this IMonitor monitor, Func<string> message, bool shouldLog, LogLevel level = LogLevel.Trace)
     {
         if (shouldLog)
@@ -56,6 +59,7 @@ public static class LogExtensions
     /// <param name="level">Level to log at.</param>
     /// <remarks>This is meant to prevent the creation of a bunch of strings if they're just going to be ignored anyways.
     /// Must weigh the delegate against string creation, use sparingly.</remarks>
+    [MethodImpl(TKConstants.Hot)]
     public static void LogIfVerbose(this IMonitor monitor, Func<string> message, LogLevel level = LogLevel.Trace)
     {
         if (monitor.IsVerbose)

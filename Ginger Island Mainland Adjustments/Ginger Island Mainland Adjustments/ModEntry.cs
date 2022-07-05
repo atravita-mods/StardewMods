@@ -61,11 +61,17 @@ public class ModEntry : Mod
         }
         GenerateGMCM.BuildNPCDictionary();
 
-        this.migrator = new(this.ModManifest, this.Helper, this.Monitor);
-        this.migrator.ReadVersionInfo();
         Globals.LoadDataFromSave();
 
-        this.Helper.Events.GameLoop.Saved += this.WriteMigrationData;
+        this.migrator = new(this.ModManifest, this.Helper, this.Monitor);
+        if (!this.migrator.CheckVersionInfo())
+        {
+            this.Helper.Events.GameLoop.Saved += this.WriteMigrationData;
+        }
+        else
+        {
+            this.migrator = null;
+        }
     }
 
     /// <summary>

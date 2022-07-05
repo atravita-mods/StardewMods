@@ -71,16 +71,22 @@ public class ModEntry : Mod
         this.SetPamMood((int)Game1.stats.DaysPlayed);
         PTUtilities.SyncConversationTopics(SyncedConversationTopics);
         PTUtilities.LocalEventSyncs(ModMonitor);
-        PTUtilities.PopulateLexicon(this.Helper.GameContent);
 
         if (Context.IsSplitScreen && Context.ScreenId != 0)
         {
             return;
         }
-        this.migrator = new(this.ModManifest, this.Helper, this.Monitor);
-        this.migrator.ReadVersionInfo();
 
-        this.Helper.Events.GameLoop.Saved += this.WriteMigrationData;
+        PTUtilities.PopulateLexicon(this.Helper.GameContent);
+        this.migrator = new(this.ModManifest, this.Helper, this.Monitor);
+        if (!this.migrator.CheckVersionInfo())
+        {
+            this.Helper.Events.GameLoop.Saved += this.WriteMigrationData;
+        }
+        else
+        {
+            this.migrator = null;
+        }
     }
 
     /// <summary>

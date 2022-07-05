@@ -1,4 +1,5 @@
 ﻿using System.Reflection;
+using AtraBase.Toolkit.Extensions;
 using AtraShared.ConstantsAndEnums;
 using AtraShared.Integrations;
 using AtraShared.MigrationManager;
@@ -243,9 +244,14 @@ public class ModEntry : Mod
         Task write = Task.Run(() => this.Helper.WriteConfig(Config));
 
         this.migrator = new(this.ModManifest, this.Helper, this.Monitor);
-        Task read = Task.Run(() => this.migrator.ReadVersionInfo());
-
-        this.Helper.Events.GameLoop.Saved += this.WriteMigrationData;
+        if (!this.migrator.CheckVersionInfo())
+        {
+            this.Helper.Events.GameLoop.Saved += this.WriteMigrationData;
+        }
+        else
+        {
+            this.migrator = null;
+        }
 
         if (GMCM?.HasGottenAPI == true)
         {
@@ -261,7 +267,7 @@ public class ModEntry : Mod
             }
         }
 
-        Task.WaitAll(write, read);
+        write.Wait();
 
         if (Context.IsMainPlayer)
         {

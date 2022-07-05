@@ -4,6 +4,7 @@ using AtraCore.Framework.QueuePlayerAlert;
 using AtraCore.HarmonyPatches;
 using AtraShared.ConstantsAndEnums;
 using AtraShared.MigrationManager;
+using AtraShared.Utils;
 using AtraShared.Utils.Extensions;
 using HarmonyLib;
 using StardewModdingAPI.Events;
@@ -35,11 +36,24 @@ internal sealed class ModEntry : Mod
 
     private void OnSaveLoaded(object? sender, SaveLoadedEventArgs e)
     {
+        MultiplayerHelpers.AssertMultiplayerVersions(this.Helper.Multiplayer, this.ModManifest, this.Monitor, this.Helper.Translation);
+
+        if (Context.IsSplitScreen && Context.ScreenId != 0)
+        {
+            return;
+        }
+
         DrawPrismatic.LoadPrismaticData();
 
         this.migrator = new(this.ModManifest, this.Helper, this.Monitor);
-        this.migrator.ReadVersionInfo();
-        this.Helper.Events.GameLoop.Saved += this.WriteMigrationData;
+        if (!this.migrator.CheckVersionInfo())
+        {
+            this.Helper.Events.GameLoop.Saved += this.WriteMigrationData;
+        }
+        else
+        {
+            this.migrator = null;
+        }
     }
 
     private void OnGameLaunched(object? sender, GameLaunchedEventArgs e)

@@ -1,13 +1,17 @@
 ﻿using StardewModdingAPI.Utilities;
 
 namespace AtraCore.Framework.QueuePlayerAlert;
+
+/// <summary>
+/// Handles queuing alerts to the player.
+/// </summary>
 public static class PlayerAlertHandler
 {
-    private static PerScreen<Queue<HUDMessage>> queuedMessages = new(() => new());
+    private static readonly PerScreen<Queue<HUDMessage>> QueuedMessages = new(() => new());
 
     public static void AddMessage(HUDMessage message)
     {
-        queuedMessages.Value.Enqueue(message);
+        QueuedMessages.Value.Enqueue(message);
     }
 
     /// <summary>
@@ -16,7 +20,7 @@ public static class PlayerAlertHandler
     internal static void DisplayFromQueue()
     {
         int i = 0;
-        while (queuedMessages.Value.TryDequeue(out HUDMessage? message) && ++i < 3)
+        while (QueuedMessages.Value.TryDequeue(out HUDMessage? message) && ++i < 3)
         {
             Game1.addHUDMessage(message);
         }

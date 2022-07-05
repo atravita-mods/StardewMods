@@ -121,10 +121,21 @@ internal class ModEntry : Mod
     /// <param name="e">Save loaded event arguments.</param>
     private void OnSaveLoaded(object? sender, SaveLoadedEventArgs e)
     {
-        this.migrator = new(this.ModManifest, this.Helper, this.Monitor);
-        this.migrator.ReadVersionInfo();
+        if (Context.IsSplitScreen && Context.ScreenId != 0)
+        {
+            return;
+        }
 
-        this.Helper.Events.GameLoop.Saved += this.WriteMigrationData;
+        this.migrator = new(this.ModManifest, this.Helper, this.Monitor);
+
+        if (!this.migrator.CheckVersionInfo())
+        {
+            this.Helper.Events.GameLoop.Saved += this.WriteMigrationData;
+        }
+        else
+        {
+            this.migrator = null;
+        }
     }
 
     /// <summary>

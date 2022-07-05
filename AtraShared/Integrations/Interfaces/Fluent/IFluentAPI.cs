@@ -1,11 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using StardewValley.GameData;
+﻿using StardewValley.GameData;
 
 namespace AtraShared.Integrations.Interfaces.Fluent;
 
 #pragma warning disable SA1124 // Do not use regions - copied from API.
+#pragma warning disable SA1314 // Type parameter names should begin with T
 /// <summary>
 /// The API for ProjectFluent.
 /// </summary>
@@ -55,14 +53,17 @@ public interface IFluentApi
     /// <typeparam name="EnumType">The <see cref="Enum"/> type to retrieve translations for.</typeparam>
     /// <param name="baseFluent">The underlying <see cref="IFluent{}"/> instance.</param>
     /// <param name="keyPrefix">The prefix all of the <see cref="Enum"/> values are prefixed with.</param>
-    IEnumFluent<EnumType> GetEnumFluent<EnumType>(IFluent<string> baseFluent, string keyPrefix) where EnumType : struct, Enum;
+    IEnumFluent<EnumType> GetEnumFluent<EnumType>(IFluent<string> baseFluent, string keyPrefix)
+        where EnumType : struct, Enum;
 
     /// <summary>Get a specialized <see cref="IFluent{}"/> instance that allows retrieving Project Fluent translations for values of a given generic type Input.</summary>
     /// <typeparam name="T">The type to retrieve translations for.</typeparam>
     /// <param name="baseFluent">The underlying <see cref="IFluent{}"/> instance.</param>
     /// <param name="mapper">The (Input -> Output) mapper.</param>
+
     IFluent<Input> GetMappingFluent<Input, Output>(IFluent<Output> baseFluent, Func<Input, Output> mapper);
 
     #endregion
 }
+#pragma warning restore SA1314 // Type parameter names should begin with T
 #pragma warning restore SA1124 // Do not use regions

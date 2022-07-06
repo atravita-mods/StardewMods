@@ -6,5 +6,9 @@
   "mod-description": "Shopkeeps don't close for festivals out of town anymore!",
 
   "StoreFestivalBehavior.title": "Store Fertival Behavior",
-  "StoreFestivalBehavior.description": "Should stores be closed for festivals?"
+  "StoreFestivalBehavior.description": "Should stores be closed for festivals?",
+
+  "FestivalShopBehavior.Open": "Open",
+  "FestivalShopBehavior.Closed": "Closed",
+  "FestivalShopBheavior.MapDependent": "Map Dependent",
 }

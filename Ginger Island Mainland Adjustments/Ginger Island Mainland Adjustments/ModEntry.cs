@@ -1,5 +1,5 @@
-﻿using AtraShared.MigrationManager;
-using AtraShared.Utils;
+﻿using AtraCore.Utilities;
+using AtraShared.MigrationManager;
 using AtraShared.Utils.Extensions;
 using GingerIslandMainlandAdjustments.AssetManagers;
 using GingerIslandMainlandAdjustments.CustomConsoleCommands;

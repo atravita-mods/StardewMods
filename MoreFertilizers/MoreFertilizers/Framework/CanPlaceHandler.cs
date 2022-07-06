@@ -1,4 +1,5 @@
-﻿using AtraShared.Utils;
+﻿using AtraCore.Utilities;
+using AtraShared.Utils;
 using AtraShared.Utils.Extensions;
 using Microsoft.Xna.Framework;
 using StardewValley.Buildings;

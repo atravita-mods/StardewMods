@@ -2,9 +2,9 @@
 using AtraCore.Framework.ItemManagement;
 using AtraCore.Framework.QueuePlayerAlert;
 using AtraCore.HarmonyPatches;
+using AtraCore.Utilities;
 using AtraShared.ConstantsAndEnums;
 using AtraShared.MigrationManager;
-using AtraShared.Utils;
 using AtraShared.Utils.Extensions;
 using HarmonyLib;
 using StardewModdingAPI.Events;

@@ -1,8 +1,8 @@
-﻿using AtraShared.ConstantsAndEnums;
+﻿using AtraCore.Utilities;
+using AtraShared.ConstantsAndEnums;
 using AtraShared.Integrations;
 using AtraShared.Integrations.Interfaces;
 using AtraShared.MigrationManager;
-using AtraShared.Utils;
 using AtraShared.Utils.Extensions;
 using GiantCropFertilizer.DataModels;
 using GiantCropFertilizer.HarmonyPatches;

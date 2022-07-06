@@ -101,7 +101,7 @@ internal static class DrawPrismatic
     {
         try
         {
-            if (__instance.GetItemType() is ItemTypeEnum type && PrismaticFull.TryGetValue(type, out var set)
+            if (__instance.GetItemType() is ItemTypeEnum type && PrismaticFull.TryGetValue(type, out HashSet<int>? set)
                 && set.Contains(__instance.ParentSheetIndex))
             {
                 color = Utility.GetPrismaticColor();
@@ -114,14 +114,30 @@ internal static class DrawPrismatic
         return;
     }
 
-    private static void PostfixRingDrawInMenu(Ring __instance)
+    [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "<Pending>")]
+    private static void PostfixRingDrawInMenu(
+        Ring __instance,
+        SpriteBatch spriteBatch,
+        Vector2 location,
+        float scaleSize,
+        float transparency,
+        float layerDepth)
     {
         try
         {
-            if (__instance.GetItemType() is ItemTypeEnum type && PrismaticFull.TryGetValue(type, out var set)
-                && set.Contains(__instance.ParentSheetIndex))
+            if (__instance.GetItemType() is ItemTypeEnum type && PrismaticMasks.TryGetValue(type, out var masks)
+                && masks.TryGetValue(__instance.ParentSheetIndex, out var texture))
             {
-                // draw the thing.
+                spriteBatch.Draw(
+                    texture: texture.Value,
+                    position: location + (new Vector2(32f, 32f) * scaleSize),
+                    sourceRectangle: new Rectangle(0, 0, 16, 16),
+                    color: Utility.GetPrismaticColor() * transparency,
+                    rotation: 0f,
+                    origin: new Vector2(8f, 8f) * scaleSize,
+                    scale: scaleSize * 4f,
+                    effects: SpriteEffects.None,
+                    layerDepth: layerDepth);
             }
         }
         catch (Exception ex)

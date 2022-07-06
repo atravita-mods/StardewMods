@@ -45,7 +45,7 @@ public enum SpecialCodeInstructionCases
 /// <summary>
 /// Wraps the code instruction class of Harmony to allow for looser comparisons.
 /// </summary>
-public class CodeInstructionWrapper
+public sealed class CodeInstructionWrapper
 {
     private readonly LocalVariableInfo? local;
     private readonly Type? localType;

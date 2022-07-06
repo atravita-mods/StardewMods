@@ -123,6 +123,8 @@ internal class ModEntry : Mod
             return;
         }
 
+        this.Helper.Input.SurpressClickInput();
+
         Dictionary<ISalable, int[]> sellables = new();
 
         foreach (string mailflag in Game1.player.mailReceived)
@@ -133,6 +135,10 @@ internal class ModEntry : Mod
                 if (ItemUtils.GetItemFromIdentifier(match.Groups["type"].Value, id) is Item item
                     && !(item is SObject obj && (obj.Category == SObject.SeedsCategory || obj.IsRecipe)))
                 {
+                    if (item.Name.StartsWith("Dwarvish Translation Guide"))
+                    {
+                        continue;
+                    }
                     int[] selldata = new int[] { Math.Max(item.salePrice() * 2, 2000), int.MaxValue };
                     sellables.Add(item, selldata);
                 }
@@ -176,7 +182,7 @@ internal class ModEntry : Mod
             Vector2 tile = config.BoxLocation; // default location of shop.
             foreach (Vector2 v in AtraUtils.YieldAllTiles(e.NewLocation))
             { // find the shop tile - a mod may have moved it.
-                if (e.NewLocation.doesTileHaveProperty((int)v.X, (int)v.Y, "Action", BUILDING)?.Contains(SHOPNAME) == true)
+                if (e.NewLocation.doesTileHaveProperty((int)v.X, (int)v.Y, "Action", BUILDING)?.Equals(SHOPNAME, StringComparison.OrdinalIgnoreCase) == true)
                 {
                     tile = v;
                     break;
@@ -194,7 +200,7 @@ internal class ModEntry : Mod
                 totalNumberOfLoops = 9999,
                 position = (new Vector2(tile.X, tile.Y - 1) * Game1.tileSize) + (new Vector2(3f, 0f) * 4f),
                 scale = 4f,
-                layerDepth = (((tile.Y - 0.5f) * Game1.tileSize) / 10000f) + 0.01f, // a little offset so it doesn't show up on the floor.
+                layerDepth = (((tile.Y - 0.5f) * Game1.tileSize) / 10000f) + 0.015f, // a little offset so it doesn't show up on the floor.
                 id = 777f,
             });
         }

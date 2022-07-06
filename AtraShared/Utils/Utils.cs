@@ -1,4 +1,5 @@
-﻿using Microsoft.Toolkit.Diagnostics;
+﻿using System.Runtime.CompilerServices;
+using Microsoft.Toolkit.Diagnostics;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using StardewModdingAPI.Utilities;
@@ -34,6 +35,7 @@ public static class Utils
     /// <param name="helper">Smapi's helper.</param>
     /// <param name="monitor">Logger.</param>
     /// <returns>Config.</returns>
+    [MethodImpl(MethodImplOptions.NoInlining)]
     public static T GetConfigOrDefault<T>(IModHelper helper, IMonitor monitor)
         where T : class, new()
     {

@@ -4,6 +4,8 @@ using AtraShared.Utils.Extensions;
 using HarmonyLib;
 using StardewModdingAPI.Events;
 
+using AtraUtils = AtraShared.Utils.Utils;
+
 namespace ExpFromMonsterKillsOnFarm;
 
 /// <inheritdoc />
@@ -28,15 +30,8 @@ public class ModEntry : Mod
     {
         ModMonitor = this.Monitor;
         I18n.Init(helper.Translation);
-        try
-        {
-            Config = this.Helper.ReadConfig<ModConfig>();
-        }
-        catch
-        {
-            ModMonitor.Log(I18n.IllFormatedConfig(), LogLevel.Warn);
-            Config = new();
-        }
+
+        Config = AtraUtils.GetConfigOrDefault<ModConfig>(helper, this.Monitor);
         this.ApplyPatches(new Harmony(this.ModManifest.UniqueID));
         helper.Events.GameLoop.GameLaunched += this.SetUpConfig;
     }
@@ -67,7 +62,7 @@ public class ModEntry : Mod
             return;
         }
         helper.Register(
-                reset: () => Config = new ModConfig(),
+                reset: static () => Config = new ModConfig(),
                 save: () => Task.Run(() => this.Helper.WriteConfig(Config)))
             .AddParagraph(I18n.Mod_Description);
 
@@ -75,7 +70,7 @@ public class ModEntry : Mod
         {
             if (property.PropertyType.Equals(typeof(bool)))
             {
-                helper.AddBoolOption(property, () => Config);
+                helper.AddBoolOption(property, static () => Config);
             }
             else
             {

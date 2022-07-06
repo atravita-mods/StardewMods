@@ -4,7 +4,7 @@ using AtraShared.ConstantsAndEnums;
 namespace AtraCore.Models;
 
 [DebuggerDisplay("{itemType} - {Identifier} - {Mask}")]
-public class DrawPrismaticModel
+public sealed class DrawPrismaticModel
 {
     public ItemTypeEnum itemType { get; set; } = ItemTypeEnum.SObject;
 

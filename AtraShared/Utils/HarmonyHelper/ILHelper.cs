@@ -20,7 +20,7 @@ namespace AtraShared.Utils.HarmonyHelper;
 /// <summary>
 /// Helper class for transpilers.
 /// </summary>
-public class ILHelper
+public sealed class ILHelper
 {
     // All locals.
     private readonly SortedList<int, LocalVariableInfo> locals = new();

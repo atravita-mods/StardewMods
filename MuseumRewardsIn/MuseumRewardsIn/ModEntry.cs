@@ -169,7 +169,7 @@ internal class ModEntry : Mod
                         modMonitor.Log($"Tile could not be edited for shop, please let atra know!", LogLevel.Warn);
                         return;
                     }
-                    tile.Properties.Add("Action", new PropertyValue(SHOPNAME));
+                    tile.Properties["Action"] = new PropertyValue(SHOPNAME);
                 },
                 AssetEditPriority.Default + 10);
         }
@@ -200,7 +200,7 @@ internal class ModEntry : Mod
                 totalNumberOfLoops = 9999,
                 position = (new Vector2(tile.X, tile.Y - 1) * Game1.tileSize) + (new Vector2(3f, 0f) * 4f),
                 scale = 4f,
-                layerDepth = (((tile.Y - 0.5f) * Game1.tileSize) / 10000f) + 0.015f, // a little offset so it doesn't show up on the floor.
+                layerDepth = (((tile.Y - 0.5f) * Game1.tileSize) / 10000f) + 0.05f, // a little offset so it doesn't show up on the floor.
                 id = 777f,
             });
         }

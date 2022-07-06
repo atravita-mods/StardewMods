@@ -11,7 +11,7 @@ namespace StopRugRemoval.HarmonyPatches.Niceties;
 [HarmonyPatch(typeof(ShopMenu))]
 internal static class StoreDelay
 {
-    private const int TICKS_TO_DELAY = 30;
+    private const int TICKS_TO_DELAY = 20;
     private static PerScreen<int> OpenedTick = new(() => 0);
 
     [HarmonyPatch(nameof(ShopMenu.setUpStoreForContext))]

@@ -1,4 +1,5 @@
 ﻿using System.Text.RegularExpressions;
+using AtraShared.Integrations;
 using AtraShared.ItemManagement;
 using AtraShared.Utils.Extensions;
 using HarmonyLib;
@@ -40,7 +41,7 @@ internal class ModEntry : Mod
     {
         modMonitor = this.Monitor;
         helper.Events.GameLoop.GameLaunched += this.OnGameLaunched;
-        helper.Events.Input.ButtonPressed += this.Input_ButtonPressed;
+        helper.Events.Input.ButtonPressed += this.OnButtonPressed;
         helper.Events.Player.Warped += this.OnWarped;
         helper.Events.Content.AssetRequested += this.OnAssetRequested;
 
@@ -63,6 +64,19 @@ internal class ModEntry : Mod
         {
             config.BoxLocation = shopLoc;
             Task.Run(() => this.Helper.WriteConfig(config));
+        }
+
+        GMCMHelper gmcm = new(this.Monitor, this.Helper.Translation, this.Helper.ModRegistry, this.ModManifest);
+        if (gmcm.TryGetAPI())
+        {
+            gmcm.Register(
+                reset: static () => config = new(),
+                save: () => Task.Run(() => this.Helper.WriteConfig(config)))
+            .AddTextOption(
+                name: I18n.BoxLocation_Name,
+                getValue: static () => config.BoxLocation.X + ", " + config.BoxLocation.Y,
+                setValue: static (str) => config.BoxLocation = str.TryParseVector2(out Vector2 vec) ? vec : shopLoc,
+                tooltip: I18n.BoxLocation_Description);
         }
     }
 
@@ -101,7 +115,7 @@ internal class ModEntry : Mod
     /// </summary>
     /// <param name="sender">SMAPI.</param>
     /// <param name="e">event args.</param>
-    private void Input_ButtonPressed(object? sender, ButtonPressedEventArgs e)
+    private void OnButtonPressed(object? sender, ButtonPressedEventArgs e)
     {
         if (!e.Button.IsActionButton() && !e.Button.IsUseToolButton())
         {
@@ -189,6 +203,8 @@ internal class ModEntry : Mod
                 }
             }
 
+            this.Monitor.DebugOnlyLog($"Adding boxen to {tile}", LogLevel.Info);
+
             // add box
             e.NewLocation.temporarySprites.Add(new TemporaryAnimatedSprite
             {
@@ -198,9 +214,9 @@ internal class ModEntry : Mod
                 sourceRectStartingPos = new Vector2(129f, 210f),
                 interval = 50000f,
                 totalNumberOfLoops = 9999,
-                position = (new Vector2(tile.X, tile.Y - 1) * Game1.tileSize) + (new Vector2(3f, 0f) * 4f),
-                scale = 4f,
-                layerDepth = (((tile.Y - 0.5f) * Game1.tileSize) / 10000f) + 0.05f, // a little offset so it doesn't show up on the floor.
+                position = (new Vector2(tile.X, tile.Y - 1) * Game1.tileSize) + (new Vector2(3f, 0f) * Game1.pixelZoom),
+                scale = Game1.pixelZoom,
+                layerDepth = Math.Clamp((((tile.Y - 0.5f) * Game1.tileSize) / 10000f) + 0.15f, 0f, 1.0f), // a little offset so it doesn't show up on the floor.
                 id = 777f,
             });
         }

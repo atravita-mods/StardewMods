@@ -51,6 +51,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Utils\Extensions\ScheduleExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Utils\Extensions\SObjectExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Utils\Extensions\TranslationHelperExtensions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Utils\Extensions\Vector2Extensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Utils\GameLocationUtils.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Utils\HarmonyHelper\AdditionalCodeInstructionExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Utils\HarmonyHelper\CodeInstructionWrapper.cs" />

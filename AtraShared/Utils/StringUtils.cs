@@ -18,7 +18,7 @@ namespace AtraShared.Utils;
 /// <summary>
 /// Handles methods for dealing with strings.
 /// </summary>
-public class StringUtils
+public sealed class StringUtils
 {
     private static readonly Lazy<Func<SpriteFont, char, int>> GetGlyphLazy = new(() =>
     {
@@ -31,15 +31,15 @@ public class StringUtils
         return Expression.Lambda<Func<SpriteFont, char, int>>(call, spriteinstance, charinstance).CompileFast();
     });
 
-    private static Func<SpriteFont, char, int> GetGlyph => GetGlyphLazy.Value;
-
-    private IMonitor? Monitor { get; set; }
-
     /// <summary>
     /// Initializes a new instance of the <see cref="StringUtils"/> class.
     /// </summary>
     /// <param name="monitor">The Monitor instance to use to log for these utils.</param>
     public StringUtils(IMonitor? monitor) => this.Monitor = monitor;
+
+    private static Func<SpriteFont, char, int> GetGlyph => GetGlyphLazy.Value;
+
+    private IMonitor? Monitor { get; set; }
 
     /// <summary>
     /// Parses and wraps text, defaulting to Game1.dialogueFont and Game1.dialogueWidth.

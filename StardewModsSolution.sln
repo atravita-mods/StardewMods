@@ -69,6 +69,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExperimentalLagReduction", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WhyAreMacs", "WhyAreMacs\WhyAreMacs.csproj", "{475A9E44-3A6B-4E3E-927D-7626AFD10A7C}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PrismaticClothing", "PrismaticClothing\PrismaticClothing.csproj", "{A7F5E995-F627-4987-8F20-FAB1E4866691}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -191,6 +193,10 @@ Global
 		{475A9E44-3A6B-4E3E-927D-7626AFD10A7C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{475A9E44-3A6B-4E3E-927D-7626AFD10A7C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{475A9E44-3A6B-4E3E-927D-7626AFD10A7C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A7F5E995-F627-4987-8F20-FAB1E4866691}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A7F5E995-F627-4987-8F20-FAB1E4866691}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A7F5E995-F627-4987-8F20-FAB1E4866691}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A7F5E995-F627-4987-8F20-FAB1E4866691}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

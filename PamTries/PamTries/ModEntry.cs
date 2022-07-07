@@ -4,6 +4,7 @@ using AtraShared.MigrationManager;
 using AtraShared.Utils.Extensions;
 using HarmonyLib;
 using Microsoft.Xna.Framework;
+using PamTries.HarmonyPatches;
 using StardewModdingAPI.Events;
 
 namespace PamTries;

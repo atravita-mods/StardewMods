@@ -71,6 +71,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WhyAreMacs", "WhyAreMacs\Wh
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PrismaticClothing", "PrismaticClothing\PrismaticClothing.csproj", "{A7F5E995-F627-4987-8F20-FAB1E4866691}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PrismaticSlime", "PrismaticSlime\PrismaticSlime.csproj", "{7127755B-9473-4FF9-B736-8DD46DE1E0BF}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -197,6 +199,10 @@ Global
 		{A7F5E995-F627-4987-8F20-FAB1E4866691}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A7F5E995-F627-4987-8F20-FAB1E4866691}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A7F5E995-F627-4987-8F20-FAB1E4866691}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7127755B-9473-4FF9-B736-8DD46DE1E0BF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7127755B-9473-4FF9-B736-8DD46DE1E0BF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7127755B-9473-4FF9-B736-8DD46DE1E0BF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7127755B-9473-4FF9-B736-8DD46DE1E0BF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

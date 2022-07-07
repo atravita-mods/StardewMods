@@ -20,7 +20,7 @@ internal static class DrawPrismatic
     /// </summary>
     internal static void LoadPrismaticData()
     {
-        List<DrawPrismaticModel>? models = AssetManager.GetPrismaticModels();
+        Dictionary<int, DrawPrismaticModel>? models = AssetManager.GetPrismaticModels();
         if (models is null)
         {
             return;
@@ -29,14 +29,14 @@ internal static class DrawPrismatic
         PrismaticFull.Clear();
         PrismaticMasks.Clear();
 
-        foreach (DrawPrismaticModel? model in models)
+        foreach (DrawPrismaticModel? model in models.Values)
         {
             if (!int.TryParse(model.Identifier, out int id))
             {
-                id = DataToItemMap.GetID(model.itemType, model.Identifier);
+                id = DataToItemMap.GetID(model.ItemType, model.Identifier);
                 if (id == -1)
                 {
-                    ModEntry.ModMonitor.Log($"Could not resolve {model.itemType}, {model.Identifier}, skipping.", LogLevel.Warn);
+                    ModEntry.ModMonitor.Log($"Could not resolve {model.ItemType}, {model.Identifier}, skipping.", LogLevel.Warn);
                     continue;
                 }
             }
@@ -44,25 +44,25 @@ internal static class DrawPrismatic
             // Handle the full prismatics.
             if (string.IsNullOrWhiteSpace(model.Mask))
             {
-                if (!PrismaticFull.TryGetValue(model.itemType, out HashSet<int>? set))
+                if (!PrismaticFull.TryGetValue(model.ItemType, out HashSet<int>? set))
                 {
                     set = new();
                 }
                 set.Add(id);
-                PrismaticFull[model.itemType] = set;
+                PrismaticFull[model.ItemType] = set;
             }
             else
             {
                 // handle the ones that have masks.
-                if (!PrismaticMasks.TryGetValue(model.itemType, out Dictionary<int, Lazy<Texture2D>>? masks))
+                if (!PrismaticMasks.TryGetValue(model.ItemType, out Dictionary<int, Lazy<Texture2D>>? masks))
                 {
                     masks = new();
                 }
                 if (!masks.TryAdd(id, new(() => Game1.content.Load<Texture2D>(model.Mask))))
                 {
-                    ModEntry.ModMonitor.Log($"{model.itemType} - {model.Identifier} appears to be a duplicate, ignoring", LogLevel.Warn);
+                    ModEntry.ModMonitor.Log($"{model.ItemType} - {model.Identifier} appears to be a duplicate, ignoring", LogLevel.Warn);
                 }
-                PrismaticMasks[model.itemType] = masks;
+                PrismaticMasks[model.ItemType] = masks;
             }
         }
     }
@@ -114,7 +114,10 @@ internal static class DrawPrismatic
         return;
     }
 
-    [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "<Pending>")]
+    [UsedImplicitly]
+    [HarmonyPostfix]
+    [HarmonyPatch(typeof(Ring), nameof(Ring.drawInMenu))]
+    [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Harmony Convention.")]
     private static void PostfixRingDrawInMenu(
         Ring __instance,
         SpriteBatch spriteBatch,

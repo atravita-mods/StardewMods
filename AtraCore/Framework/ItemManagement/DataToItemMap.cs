@@ -87,7 +87,10 @@ internal static class DataToItemMap
                         {
                             continue;
                         }
-                        if (name.Equals("Weeds", StringComparison.OrdinalIgnoreCase))
+                        if (name.Equals("Weeds", StringComparison.OrdinalIgnoreCase)
+                            || name.Equals("SupplyCrate", StringComparison.OrdinalIgnoreCase)
+                            || name.Equals("Twig", StringComparison.OrdinalIgnoreCase)
+                            || name.Equals("Rotten Plant", StringComparison.OrdinalIgnoreCase))
                         {
                             continue;
                         }
@@ -99,7 +102,7 @@ internal static class DataToItemMap
                     return mapping;
                 });
             }
-            if (!_nameToIDMap.TryGetValue(ItemTypeEnum.Ring, out var rings) || rings.IsValueCreated)
+            if (!_nameToIDMap.TryGetValue(ItemTypeEnum.Ring, out Lazy<Dictionary<string, int>>? rings) || rings.IsValueCreated)
             {
                 _nameToIDMap[ItemTypeEnum.Ring] = new(() =>
                 {
@@ -108,13 +111,16 @@ internal static class DataToItemMap
                     Dictionary<string, int> mapping = new();
                     foreach ((int id, string data) in Game1.objectInformation)
                     {
+                        var cat = data.GetNthChunk('/', 3);
+
                         // wedding ring (801) isn't a real ring.
-                        if (id == 801 || !data.GetNthChunk('/',3).Equals("Ring", StringComparison.Ordinal))
+                        // JA rings are registered as "Basic -96"
+                        if (id == 801 || (!cat.Equals("Ring", StringComparison.Ordinal) && !cat.Equals("Basic -96", StringComparison.Ordinal)))
                         {
                             continue;
                         }
 
-                        var name = data.GetNthChunk('/', 0).ToString();
+                        var name = data.GetNthChunk('/', SObject.objectInfoNameIndex).ToString();
                         if (!mapping.TryAdd(name, id))
                         {
                             ModEntry.ModMonitor.Log($"{name} with {id} seems to be a duplicate Ring and may not be resolved correctly.", LogLevel.Warn);

@@ -1,5 +1,6 @@
 ﻿using StardewModdingAPI.Events;
 using StardewModdingAPI.Utilities;
+using StardewValley.Locations;
 
 namespace GingerIslandMainlandAdjustments.AssetManagers;
 
@@ -38,27 +39,7 @@ internal static class AssetEditor
     /// <param name="e">Asset event arguments.</param>
     internal static void Edit(AssetRequestedEventArgs e)
     {
-        if (e.NameWithoutLocale.IsEquivalentTo(GeorgeDialogueLocation))
-        {
-            e.Edit(EditGeorgeDialogue, AssetEditPriority.Early);
-        }
-        else if (e.NameWithoutLocale.IsEquivalentTo(EvelynDialogueLocation))
-        {
-            e.Edit(EditEvelynDialogue, AssetEditPriority.Early);
-        }
-        else if (e.NameWithoutLocale.IsEquivalentTo(SandyDialogueLocation))
-        {
-            e.Edit(EditSandyDialogue, AssetEditPriority.Early);
-        }
-        else if (e.NameWithoutLocale.IsEquivalentTo(WillyDialogueLocation))
-        {
-            e.Edit(EditWillyDialogue, AssetEditPriority.Early);
-        }
-        else if (e.NameWithoutLocale.IsEquivalentTo(WizardDialogueLocation))
-        {
-            e.Edit(EditWizardDialogue, AssetEditPriority.Early);
-        }
-        else if (e.NameWithoutLocale.IsEquivalentTo(PhoneStringLocation))
+        if (e.NameWithoutLocale.IsEquivalentTo(PhoneStringLocation))
         {
             e.Edit(EditPhone, AssetEditPriority.Early);
         }
@@ -73,6 +54,30 @@ internal static class AssetEditor
         else if (e.NameWithoutLocale.IsEquivalentTo(DataEventsTrailerBig))
         {
             e.Edit(EditTrailerBig, AssetEditPriority.Late);
+        }
+        else if (e.NameWithoutLocale.IsDirectlyUnderPath("Characters/Dialogue")
+            && Game1.getLocationFromName("IslandSouth") is IslandSouth island && island.resortRestored.Value)
+        {
+            if (e.NameWithoutLocale.IsEquivalentTo(GeorgeDialogueLocation))
+            {
+                e.Edit(EditGeorgeDialogue, AssetEditPriority.Early);
+            }
+            else if (e.NameWithoutLocale.IsEquivalentTo(EvelynDialogueLocation))
+            {
+                e.Edit(EditEvelynDialogue, AssetEditPriority.Early);
+            }
+            else if (e.NameWithoutLocale.IsEquivalentTo(SandyDialogueLocation))
+            {
+                e.Edit(EditSandyDialogue, AssetEditPriority.Early);
+            }
+            else if (e.NameWithoutLocale.IsEquivalentTo(WillyDialogueLocation))
+            {
+                e.Edit(EditWillyDialogue, AssetEditPriority.Early);
+            }
+            else if (e.NameWithoutLocale.IsEquivalentTo(WizardDialogueLocation))
+            {
+                e.Edit(EditWizardDialogue, AssetEditPriority.Early);
+            }
         }
     }
 

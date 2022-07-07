@@ -381,7 +381,7 @@ internal static class GIScheduler
         if (musician is not null && !musician.Name.Equals("Gus", StringComparison.OrdinalIgnoreCase))
         {
             musician.currentScheduleDelay = 0f;
-            Globals.ModMonitor.DebugLog($"Found musician {musician.Name}", LogLevel.Debug);
+            Globals.ModMonitor.DebugOnlyLog($"Found musician {musician.Name}", LogLevel.Debug);
             return musician;
         }
         return null;

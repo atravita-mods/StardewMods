@@ -113,7 +113,7 @@ internal class GingerIslandTimeSlot
     {
         // Get a list of possible dancers (who have _beach_dance as a possible animation).
         HashSet<NPC> dancers = (this.musician is not null)
-            ? this.visitors.FindAll((NPC npc) => animationDescriptions.ContainsKey($"{npc.Name.ToLowerInvariant()}_beach_dance")).ToHashSet()
+            ? this.visitors.Where((NPC npc) => animationDescriptions.ContainsKey($"{npc.Name.ToLowerInvariant()}_beach_dance")).ToHashSet()
             : new HashSet<NPC>();
 
         // assign bartenders and drinkers.

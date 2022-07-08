@@ -16,5 +16,8 @@ internal sealed class ModConfig
         set => this.giantCropChance = Math.Clamp(value, 0, 1.1d);
     }
 
+    /// <summary>
+    /// Gets or sets a value indicating whether giant crops should be allowed off-farm.
+    /// </summary>
     public bool AllowGiantCropsOffFarm { get; set; } = false;
 }

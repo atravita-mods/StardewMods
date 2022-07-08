@@ -48,7 +48,7 @@ internal sealed class ModEntry : Mod
 #if DEBUG
         helper.Events.GameLoop.DayStarted += this.OnDayStart;
 #endif
-        helper.Events.GameLoop.GameLaunched += this.LateGameLaunched;
+        helper.Events.GameLoop.SaveLoaded += this.LateSaveLoaded;
     }
 
     private void OnGameLaunched(object? sender, GameLaunchedEventArgs e)
@@ -165,7 +165,7 @@ internal sealed class ModEntry : Mod
 #endif
 
     [EventPriority(EventPriority.Low - 1000)]
-    private void LateGameLaunched(object? sender, GameLaunchedEventArgs e)
+    private void LateSaveLoaded(object? sender, SaveLoadedEventArgs e)
     {
         this.Monitor.DebugOnlyLog($"Current memory usage {GC.GetTotalMemory(false):N0}", LogLevel.Info);
         GCHelperFunctions.RequestFullGC();

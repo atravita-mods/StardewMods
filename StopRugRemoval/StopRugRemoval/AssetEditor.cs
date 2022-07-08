@@ -35,6 +35,7 @@ internal static class AssetEditor
     {
         if (betIconLazy.IsValueCreated && (assets is null || assets.Contains(BET_ICONS_ASSET)))
         {
+            betIconLazy.Value.Dispose();
             betIconLazy = new(() => Game1.content.Load<Texture2D>(BET_ICONS));
         }
     }
@@ -43,7 +44,6 @@ internal static class AssetEditor
     /// Applies edits.
     /// </summary>
     /// <param name="e">Event args.</param>
-    /// <param name="registry">The mod registry.</param>
     /// <param name="directoryPath">The absolute path to the mod.</param>
     internal static void Edit(AssetRequestedEventArgs e, string directoryPath)
     {

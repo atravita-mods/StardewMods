@@ -56,6 +56,7 @@ public static class AssetLoader
     {
         if (uiElementLazy.IsValueCreated && (assets is null || assets.Contains(UI_ASSET_NAME)))
         {
+            uiElementLazy.Value.Dispose();
             uiElementLazy = new(() => ModEntry.GameContentHelper.Load<Texture2D>(UI_ASSET_PATH));
         }
         if (tooltipDataLazy.IsValueCreated && (assets is null || assets.Contains(TOOLTIP_DATA_NAME)))
@@ -103,6 +104,7 @@ public static class AssetLoader
             Dictionary<string, string> tooltipmap = new(AtraUtils.GetCurrentLanguageComparer(ignoreCase: true));
             foreach (ReadOnlySpan<char> str in secretNote8)
             {
+                // Asian languages use a different colon.
                 int index = str.IndexOfAny(':', '：');
                 if (index > 0)
                 {

@@ -6,6 +6,8 @@ using Microsoft.Xna.Framework.Audio;
 
 namespace AtraShared.Niceties;
 
+#pragma warning disable SA1201 // Elements should appear in the correct order. Fields kept near their accessors.
+
 /// <summary>
 /// Holds methods that help with looking at the soundbank.
 /// </summary>
@@ -61,3 +63,5 @@ public static class SoundBankWrapperHandler
     /// </summary>
     public static Func<SoundBank, string, bool> HasCue => hasCue.Value;
 }
+
+#pragma warning restore SA1201 // Elements should appear in the correct order

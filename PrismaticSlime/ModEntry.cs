@@ -7,13 +7,18 @@ using PrismaticSlime.Framework;
 using StardewModdingAPI.Events;
 
 namespace PrismaticSlime;
+
 /// <inheritdoc/>
 internal class ModEntry : Mod
 {
-    internal static IMonitor ModMonitor = null!;
-
     private static IJsonAssetsAPI? jsonAssets;
 
+    /// <summary>
+    /// Gets the logger for this mod.
+    /// </summary>
+    internal static IMonitor ModMonitor { get; private set; } = null!;
+
+#pragma warning disable SA1201 // Elements should appear in the correct order - keeping fields near their accessors.
     private static int prismaticSlimeEgg = -1;
 
     /// <summary>
@@ -47,7 +52,7 @@ internal class ModEntry : Mod
             return prismaticSlimeRing;
         }
     }
-
+#pragma warning restore SA1201 // Elements should appear in the correct order
 
     /// <inheritdoc/>
     public override void Entry(IModHelper helper)
@@ -91,5 +96,4 @@ internal class ModEntry : Mod
 
         harmony.Snitch(this.Monitor, harmony.Id, transpilersOnly: true);
     }
-
 }

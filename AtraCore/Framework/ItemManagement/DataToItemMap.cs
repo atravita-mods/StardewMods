@@ -90,7 +90,9 @@ internal static class DataToItemMap
                         if (name.Equals("Weeds", StringComparison.OrdinalIgnoreCase)
                             || name.Equals("SupplyCrate", StringComparison.OrdinalIgnoreCase)
                             || name.Equals("Twig", StringComparison.OrdinalIgnoreCase)
-                            || name.Equals("Rotten Plant", StringComparison.OrdinalIgnoreCase))
+                            || name.Equals("Rotten Plant", StringComparison.OrdinalIgnoreCase)
+                            || name.Equals("???", StringComparison.OrdinalIgnoreCase)
+                            || name.Equals("DGA Dummy Object", StringComparison.OrdinalIgnoreCase))
                         {
                             continue;
                         }

@@ -9,11 +9,11 @@ namespace AtraCore;
 /// </summary>
 internal static class AssetManager
 {
-    internal static Dictionary<int, DrawPrismaticModel>? GetPrismaticModels()
+    internal static Dictionary<string, DrawPrismaticModel>? GetPrismaticModels()
     {
         try
         {
-            return Game1.content.Load<Dictionary<int, DrawPrismaticModel>>(AtraCoreConstants.PrismaticMaskData);
+            return Game1.content.Load<Dictionary<string, DrawPrismaticModel>>(AtraCoreConstants.PrismaticMaskData);
         }
         catch
         {
@@ -26,7 +26,7 @@ internal static class AssetManager
     {
         if (e.NameWithoutLocale.IsEquivalentTo(AtraCoreConstants.PrismaticMaskData))
         {
-            e.LoadFrom(EmptyContainers.GetEmptyDictionary<int, DrawPrismaticModel>, AssetLoadPriority.Low);
+            e.LoadFrom(EmptyContainers.GetEmptyDictionary<string, DrawPrismaticModel>, AssetLoadPriority.Low);
         }
     }
 

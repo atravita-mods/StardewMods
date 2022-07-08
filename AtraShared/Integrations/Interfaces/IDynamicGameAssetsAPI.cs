@@ -51,7 +51,7 @@ public interface IDynamicGameAssetsApi
     /// </summary>
     /// <param name="fullId">The full ID of the item to spawn.</param>
     /// <param name="color">The color of the item.</param>
-    /// <returns></returns>
+    /// <returns>The DGA item.</returns>
     object SpawnDGAItem(string fullId, Color? color);
 
     /// <summary>
@@ -59,7 +59,7 @@ public interface IDynamicGameAssetsApi
     /// Some items, such as crafting recipes or crops, don't have an item representation.
     /// </summary>
     /// <param name="fullId">The full ID of the item to spawn.</param>
-    /// <returns></returns>
+    /// <returns>The DGA item.</returns>
     object SpawnDGAItem(string fullId);
 
     /// <summary>

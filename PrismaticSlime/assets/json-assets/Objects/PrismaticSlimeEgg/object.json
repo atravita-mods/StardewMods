@@ -2,7 +2,7 @@
   "Name": "atravita.PrismaticSlimeEgg",
   "Category": "Junk",
   "Edibility": -300,
-  "Price": 1000,
+  "Price": 10000,
   "TranslationKey": "prismatic-slime-egg",
   "CanSell": false
 }

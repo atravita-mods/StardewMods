@@ -16,3 +16,9 @@ This mod currently has no translations.
 5. If your copy of the game is not in the standard STEAM or Gog install locations, you may need to edit the csproj to point at it. [Instructions here](https://github.com/Pathoschild/SMAPI/blob/develop/docs/technical/mod-package.md#available-properties).
 
 This project uses Pathos' multiplatform nuget, so it **should** build on any platform, although admittedly I've only tried it with Windows.
+
+### Using AtraCore for other mods.
+
+....is not recommended, since AtraCore is still under development and features may change without warning.
+
+(Most of the useful stuff is in AtraBase anyways, which I'm keeping as its own [seperate repo](https://github.com/atravita-mods/AtraBase), so you could just [submodule that](https://git-scm.com/book/en/v2/Git-Tools-Submodules) :P)

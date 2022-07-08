@@ -117,7 +117,7 @@ public sealed class ILHelper
     /// <summary>
     /// Gets the logger for this instance.
     /// </summary>
-    protected IMonitor Monitor { get; init; }
+    private IMonitor Monitor { get; init; }
 
     /// <summary>
     /// Pushes the pointer onto the pointerstack.

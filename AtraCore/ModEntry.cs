@@ -1,4 +1,6 @@
-﻿using AtraCore.Framework.DialogueManagement;
+﻿using AtraBase.Toolkit;
+using AtraCore.Config;
+using AtraCore.Framework.DialogueManagement;
 using AtraCore.Framework.ItemManagement;
 using AtraCore.Framework.QueuePlayerAlert;
 using AtraCore.HarmonyPatches;
@@ -8,6 +10,8 @@ using AtraShared.MigrationManager;
 using AtraShared.Utils.Extensions;
 using HarmonyLib;
 using StardewModdingAPI.Events;
+
+using AtraUtils = AtraShared.Utils.Utils;
 
 namespace AtraCore;
 
@@ -21,17 +25,39 @@ internal sealed class ModEntry : Mod
     /// </summary>
     internal static IMonitor ModMonitor { get; private set; } = null!;
 
+    /// <summary>
+    /// Gets the config for this mod.
+    /// </summary>
+    internal static ModConfig Config { get; private set; } = null!;
+
     /// <inheritdoc />
     public override void Entry(IModHelper helper)
     {
         I18n.Init(helper.Translation);
         ModMonitor = this.Monitor;
 
-        helper.Events.GameLoop.GameLaunched += this.OnGameLaunched;
+        Config = AtraUtils.GetConfigOrDefault<ModConfig>(helper, this.Monitor);
+
         helper.Events.Content.AssetRequested += this.OnAssetRequested;
+
+        helper.Events.GameLoop.GameLaunched += this.OnGameLaunched;
         helper.Events.GameLoop.SaveLoaded += this.OnSaveLoaded;
-        helper.Events.GameLoop.TimeChanged += this.OnTimeChanged;
         helper.Events.GameLoop.DayEnding += this.OnDayEnd;
+        helper.Events.GameLoop.TimeChanged += this.OnTimeChanged;
+
+#if DEBUG
+        helper.Events.GameLoop.DayStarted += this.OnDayStart;
+#endif
+        helper.Events.GameLoop.GameLaunched += this.LateGameLaunched;
+    }
+
+    private void OnGameLaunched(object? sender, GameLaunchedEventArgs e)
+    {
+        // initialize data caches
+        DataToItemMap.Init(this.Helper.GameContent);
+        this.Helper.Events.Content.AssetsInvalidated += this.OnAssetInvalidation;
+
+        this.ApplyPatches(new Harmony(this.ModManifest.UniqueID));
     }
 
     private void OnSaveLoaded(object? sender, SaveLoadedEventArgs e)
@@ -56,15 +82,6 @@ internal sealed class ModEntry : Mod
         }
     }
 
-    private void OnGameLaunched(object? sender, GameLaunchedEventArgs e)
-    {
-        // initialize data caches
-        DataToItemMap.Init(this.Helper.GameContent);
-        this.Helper.Events.Content.AssetsInvalidated += this.OnAssetInvalidation;
-
-        this.ApplyPatches(new Harmony(this.ModManifest.UniqueID));
-    }
-
     /********
      * Dialogue region
      * *******/
@@ -74,7 +91,7 @@ internal sealed class ModEntry : Mod
     /// </summary>
     /// <param name="sender">Unknown, used by SMAPI.</param>
     /// <param name="e">TimeChanged params.</param>
-    /// <remarks>Currently handles: pushing delayed dialogue back onto the stack.</remarks>
+    /// <remarks>Currently handles: pushing delayed dialogue back onto the stack, and player alerts.</remarks>
     private void OnTimeChanged(object? sender, TimeChangedEventArgs e)
     {
         QueuedDialogueManager.PushPossibleDelayedDialogues();
@@ -82,7 +99,7 @@ internal sealed class ModEntry : Mod
     }
 
     private void OnDayEnd(object? sender, DayEndingEventArgs e)
-        => QueuedDialogueManager.PushPossibleDelayedDialogues();
+        => QueuedDialogueManager.ClearDelayedDialogue();
 
     /**************
      * Assets
@@ -128,5 +145,25 @@ internal sealed class ModEntry : Mod
             this.migrator = null;
         }
         this.Helper.Events.GameLoop.Saved -= this.WriteMigrationData;
+    }
+
+    /*************
+     * Misc
+     ***********/
+
+    [EventPriority(EventPriority.Low - 1000)]
+    private void OnDayStart(object? sender, DayStartedEventArgs e)
+    {
+        this.Monitor.DebugOnlyLog($"Current memory usage {GC.GetTotalMemory(false):N0}", LogLevel.Info);
+        GC.Collect();
+        this.Monitor.DebugOnlyLog($"Post-collection memory usage {GC.GetTotalMemory(true):N0}", LogLevel.Info);
+    }
+
+    [EventPriority(EventPriority.Low - 1000)]
+    private void LateGameLaunched(object? sender, GameLaunchedEventArgs e)
+    {
+        this.Monitor.DebugOnlyLog($"Current memory usage {GC.GetTotalMemory(false):N0}", LogLevel.Info);
+        GCHelperFunctions.RequestFullGC();
+        this.Monitor.DebugOnlyLog($"Post-collection memory usage {GC.GetTotalMemory(true):N0}", LogLevel.Info);
     }
 }

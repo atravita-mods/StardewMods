@@ -8,9 +8,6 @@ using StardewModdingAPI.Utilities;
 namespace PrismaticSlime.Framework;
 internal static class AssetManager
 {
-    private static readonly int ringHash = "atravita.PrismaticSlimeRing".GetHashCode();
-    private static readonly int eggHash = "atravita.PrismaticSlimeEgg".GetHashCode();
-
     private static readonly string OBJECTDATA = PathUtilities.NormalizeAssetName("Data/ObjectInformation");
     private static readonly string RINGMASK = PathUtilities.NormalizeAssetName("Mods/atravita_Prismatic_Ring/Texture");
 
@@ -48,7 +45,7 @@ internal static class AssetManager
 
     private static void EditPrismaticMasks(IAssetData asset)
     {
-        IAssetDataForDictionary<int, DrawPrismaticModel>? editor = asset.AsDictionary<int, DrawPrismaticModel>();
+        IAssetDataForDictionary<string, DrawPrismaticModel>? editor = asset.AsDictionary<string, DrawPrismaticModel>();
 
         DrawPrismaticModel? ring = new()
         {
@@ -63,16 +60,14 @@ internal static class AssetManager
             Identifier = "atravita.PrismaticSlimeEgg",
         };
 
-        int index = ringHash;
-        while (!editor.Data.TryAdd(index, ring))
+        if (!editor.Data.TryAdd(ring.Identifier, ring))
         {
-            index++;
+            ModEntry.ModMonitor.Log("Could not add prismatic slime ring to DrawPrismatic", LogLevel.Warn);
         }
 
-        index = eggHash;
-        while (!editor.Data.TryAdd(index, egg))
+        if (!editor.Data.TryAdd(egg.Identifier, egg))
         {
-            index++;
+            ModEntry.ModMonitor.Log("Could not add prismatic slime egg to DrawPrismatic", LogLevel.Warn);
         }
     }
 }

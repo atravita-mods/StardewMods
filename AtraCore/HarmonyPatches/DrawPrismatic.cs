@@ -8,19 +8,24 @@ using StardewValley.Objects;
 
 namespace AtraCore.HarmonyPatches;
 
+#pragma warning disable SA1124 // Do not use regions. Reviewed.
+/// <summary>
+/// Draws things with a prismatic tint or overlay.
+/// </summary>
 [HarmonyPatch]
 internal static class DrawPrismatic
 {
-    internal static SortedList<ItemTypeEnum, Dictionary<int, Lazy<Texture2D>>> PrismaticMasks = new();
-    internal static SortedList<ItemTypeEnum, HashSet<int>> PrismaticFull = new();
+    private static readonly SortedList<ItemTypeEnum, Dictionary<int, Lazy<Texture2D>>> PrismaticMasks = new();
+    private static readonly SortedList<ItemTypeEnum, HashSet<int>> PrismaticFull = new();
 
+#region LOADDATA
     /// <summary>
     /// Load the prismatic data.
     /// Called on SaveLoaded.
     /// </summary>
     internal static void LoadPrismaticData()
     {
-        Dictionary<int, DrawPrismaticModel>? models = AssetManager.GetPrismaticModels();
+        Dictionary<string, DrawPrismaticModel>? models = AssetManager.GetPrismaticModels();
         if (models is null)
         {
             return;
@@ -66,6 +71,9 @@ internal static class DrawPrismatic
             }
         }
     }
+#endregion
+
+#region SOBJECT
 
     /// <summary>
     /// Prefixes SObject's drawInMenu function in order to draw things prismatically.
@@ -92,6 +100,46 @@ internal static class DrawPrismatic
         }
         return;
     }
+
+    [UsedImplicitly]
+    [HarmonyPostfix]
+    [HarmonyPatch(typeof(SObject), nameof(SObject.drawInMenu))]
+    [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Harmony Convention.")]
+    private static void PostfixSObjectDrawInMenu(
+        SObject __instance,
+        SpriteBatch spriteBatch,
+        Vector2 location,
+        float scaleSize,
+        float transparency,
+        float layerDepth)
+    {
+        try
+        {
+            if (__instance.GetItemType() is ItemTypeEnum type && PrismaticMasks.TryGetValue(type, out var masks)
+                && masks.TryGetValue(__instance.ParentSheetIndex, out var texture))
+            {
+                spriteBatch.Draw(
+                    texture: texture.Value,
+                    position: location + (new Vector2(32f, 32f) * scaleSize),
+                    sourceRectangle: new Rectangle(0, 0, 16, 16),
+                    color: Utility.GetPrismaticColor() * transparency,
+                    rotation: 0f,
+                    origin: new Vector2(8f, 8f) * scaleSize,
+                    scale: scaleSize * 4f,
+                    effects: SpriteEffects.None,
+                    layerDepth: layerDepth);
+            }
+        }
+        catch (Exception ex)
+        {
+            ModEntry.ModMonitor.Log($"Failed in drawing prismatic mask\n\n{ex}", LogLevel.Error);
+        }
+        return;
+    }
+
+#endregion
+
+#region RING
 
     [UsedImplicitly]
     [HarmonyPrefix]
@@ -149,4 +197,7 @@ internal static class DrawPrismatic
         }
         return;
     }
+
+#endregion
+#pragma warning restore SA1124 // Do not use regions
 }

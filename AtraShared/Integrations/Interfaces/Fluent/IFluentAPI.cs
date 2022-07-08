@@ -4,6 +4,7 @@ namespace AtraShared.Integrations.Interfaces.Fluent;
 
 #pragma warning disable SA1124 // Do not use regions - copied from API.
 #pragma warning disable SA1314 // Type parameter names should begin with T
+#pragma warning disable SA1623 // Property summary documentation should match accessors
 /// <summary>
 /// The API for ProjectFluent.
 /// </summary>
@@ -60,10 +61,10 @@ public interface IFluentApi
     /// <typeparam name="T">The type to retrieve translations for.</typeparam>
     /// <param name="baseFluent">The underlying <see cref="IFluent{}"/> instance.</param>
     /// <param name="mapper">The (Input -> Output) mapper.</param>
-
     IFluent<Input> GetMappingFluent<Input, Output>(IFluent<Output> baseFluent, Func<Input, Output> mapper);
 
     #endregion
 }
 #pragma warning restore SA1314 // Type parameter names should begin with T
 #pragma warning restore SA1124 // Do not use regions
+#pragma warning restore SA1623 // Property summary documentation should match accessors

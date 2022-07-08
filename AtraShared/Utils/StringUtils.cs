@@ -163,7 +163,7 @@ public sealed class StringUtils
     /// <param name="width">Maximum width.</param>
     /// <param name="height">Maximum height.</param>
     /// <returns>Wrapped text.</returns>
-    public unsafe string WrapTextByChar(string text, SpriteFont whichFont, float width, float? height = null)
+    public string WrapTextByChar(string text, SpriteFont whichFont, float width, float? height = null)
     {
         int maxlines = height is null ? 1000 : (int)height / whichFont.LineSpacing;
         StringBuilder sb = new();
@@ -223,7 +223,7 @@ public sealed class StringUtils
     /// <param name="whichFont">Which font to use.</param>
     /// <param name="word">Word.</param>
     /// <returns>Float width.</returns>
-    public unsafe float MeasureWord(SpriteFont whichFont, ReadOnlySpan<char> word)
+    public float MeasureWord(SpriteFont whichFont, ReadOnlySpan<char> word)
     {
         if (word.Length == 0)
         {
@@ -256,37 +256,35 @@ public sealed class StringUtils
     /// <param name="width">Width to wrap to.</param>
     /// <param name="trunchars">Characters to use to truncate with.</param>
     /// <returns>Truncated string + width.</returns>
-    private unsafe StringBuilder TruncateWord(ReadOnlySpan<char> word, SpriteFont whichFont, float width, out float current_width, string trunchars = "...")
+    private StringBuilder TruncateWord(ReadOnlySpan<char> word, SpriteFont whichFont, float width, out float current_width, string trunchars = "...")
     {
         StringBuilder sb = new();
         current_width = -whichFont.Spacing + whichFont.MeasureString(trunchars).X;
         float charwidth = 0;
         float proposedcharwidth = 0;
-        fixed (SpriteFont.Glyph* pointerToGlyphs = whichFont.Glyphs)
+
+        foreach (char ch in word)
         {
-            foreach (char ch in word)
+            int glyph = GetGlyph(whichFont, ch);
+            if (glyph > -1 && glyph < whichFont.Glyphs.Length)
             {
-                int glyph = GetGlyph(whichFont, ch);
-                if (glyph > -1 && glyph < whichFont.Glyphs.Length)
+                ref SpriteFont.Glyph whichGlyph = ref whichFont.Glyphs[glyph];
+                charwidth = whichGlyph.LeftSideBearing + whichGlyph.Width + whichGlyph.RightSideBearing;
+                proposedcharwidth = whichGlyph.RightSideBearing < 0
+                    ? whichGlyph.LeftSideBearing + whichGlyph.Width
+                    : charwidth;
+                if (current_width + proposedcharwidth + whichFont.Spacing > width)
                 {
-                    SpriteFont.Glyph* pWhichGlyph = pointerToGlyphs + glyph;
-                    charwidth = pWhichGlyph->LeftSideBearing + pWhichGlyph->Width + pWhichGlyph->RightSideBearing;
-                    proposedcharwidth = pWhichGlyph->RightSideBearing < 0
-                        ? pWhichGlyph->LeftSideBearing + pWhichGlyph->Width
-                        : charwidth;
-                    if (current_width + proposedcharwidth + whichFont.Spacing > width)
-                    {
-                        sb.Append(trunchars);
-                        current_width += charwidth + whichFont.Spacing;
-                        return sb;
-                    }
-                    sb.Append(ch);
+                    sb.Append(trunchars);
                     current_width += charwidth + whichFont.Spacing;
+                    return sb;
                 }
-                else
-                {
-                    this.Monitor?.Log($"Glyph {ch} not accounted for!", LogLevel.Error);
-                }
+                sb.Append(ch);
+                current_width += charwidth + whichFont.Spacing;
+            }
+            else
+            {
+                this.Monitor?.Log($"Glyph {ch} not accounted for!", LogLevel.Error);
             }
         }
         return sb;

@@ -14,7 +14,7 @@ using AtraUtils = AtraShared.Utils.Utils;
 namespace SpecialOrdersExtended;
 
 /// <inheritdoc />
-internal class ModEntry : Mod
+internal sealed class ModEntry : Mod
 {
     private MigrationManager? migrator;
 
@@ -150,6 +150,21 @@ internal class ModEntry : Mod
             api.RegisterToken(this.ModManifest, "CurrentRules", new Tokens.CurrentSpecialOrderRule());
             api.RegisterToken(this.ModManifest, "RecentCompleted", new Tokens.RecentCompletedSO());
         }
+
+        {
+            GMCMHelper gmcmHelper = new(this.Monitor, this.Helper.Translation, this.Helper.ModRegistry, this.ModManifest);
+            if (gmcmHelper.TryGetAPI())
+            {
+                gmcmHelper.Register(
+                    reset: static () => Config = new(),
+                    save: () => Task.Run(() => this.Helper.WriteConfig(Config)))
+                .AddBoolOption(
+                    name: I18n.SurpressUnnecessaryBoardUpdates_Name,
+                    getValue: () => Config.SurpressUnnecessaryBoardUpdates,
+                    setValue: (value) => Config.SurpressUnnecessaryBoardUpdates = value,
+                    tooltip: I18n.SurpressUnnecessaryBoardUpdates_Description);
+            }
+        }
     }
 
     /// <summary>
@@ -260,7 +275,7 @@ internal class ModEntry : Mod
         {
             ModMonitor.Log(I18n.LoadSaveFirst(), LogLevel.Warn);
         }
-        Dictionary<string, SpecialOrderData> order_data = Game1.content.Load<Dictionary<string, SpecialOrderData>>("Data\\SpecialOrders");
+        Dictionary<string, SpecialOrderData> order_data = Game1.content.Load<Dictionary<string, SpecialOrderData>>(@"Data\SpecialOrders");
         List<string> keys = AtraUtils.ContextSort(order_data.Keys);
         ModMonitor.Log(I18n.NumberFound(count: keys.Count), LogLevel.Debug);
 
@@ -270,7 +285,7 @@ internal class ModEntry : Mod
         foreach (string key in keys)
         {
             SpecialOrderData order = order_data[key];
-            if (this.IsAvailableOrder(key, order))
+            if (IsAvailableOrder(key, order))
             {
                 ModMonitor.DebugOnlyLog($"\t{key} is valid");
                 validkeys.Add(key);
@@ -284,7 +299,7 @@ internal class ModEntry : Mod
         ModMonitor.Log($"{I18n.UnseenKeys(count: unseenkeys.Count)}: {string.Join(", ", unseenkeys)}", LogLevel.Debug);
     }
 
-    private bool IsAvailableOrder(string key, SpecialOrderData order)
+    private static bool IsAvailableOrder(string key, SpecialOrderData order)
     {
         ModMonitor.Log($"{I18n.Analyzing()} {key}", LogLevel.Debug);
         try

@@ -3,7 +3,7 @@
 /// <summary>
 /// The configuration class for this mod.
 /// </summary>
-internal class ModConfig
+internal sealed class ModConfig
 {
     /// <summary>
     /// Gets or sets a value indicating whether to grant monster kill xp on the farm.

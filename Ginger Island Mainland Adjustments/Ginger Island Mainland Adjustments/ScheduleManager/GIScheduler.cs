@@ -183,6 +183,11 @@ internal static class GIScheduler
         stopwatch.Stop();
         Globals.ModMonitor.Log($"Schedule generation took {stopwatch.ElapsedMilliseconds} ms.", LogLevel.Info);
 
+        if (Context.IsSplitScreen && Context.ScreenId != 0)
+        {
+            return;
+        }
+
         Globals.ModMonitor.Log($"Current memory usage {GC.GetTotalMemory(false):N0}", LogLevel.Alert);
         GCSettings.LargeObjectHeapCompactionMode = GCLargeObjectHeapCompactionMode.CompactOnce;
         GC.Collect();

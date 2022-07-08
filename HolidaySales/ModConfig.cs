@@ -1,5 +1,9 @@
 ﻿namespace HolidaySales;
-internal class ModConfig
+
+/// <summary>
+/// The config class for this mod.
+/// </summary>
+internal sealed class ModConfig
 {
     public FestivalsShopBehavior StoreFestivalBehavior { get; set; } = FestivalsShopBehavior.MapDependent;
 }

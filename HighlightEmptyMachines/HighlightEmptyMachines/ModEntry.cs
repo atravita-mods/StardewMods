@@ -14,29 +14,26 @@ using AtraUtils = AtraShared.Utils.Utils;
 namespace HighlightEmptyMachines;
 
 /// <inheritdoc />
-internal class ModEntry : Mod
+internal sealed class ModEntry : Mod
 {
     private MigrationManager? migrator;
 
     private GMCMHelper? gmcmHelper = null;
 
-#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
-
     /// <summary>
     /// Gets the logger for this mod.
     /// </summary>
-    internal static IMonitor ModMonitor { get; private set; }
+    internal static IMonitor ModMonitor { get; private set; } = null!;
 
     /// <summary>
     /// Gets the config instance for this mod.
     /// </summary>
-    internal static ModConfig Config { get; private set; }
+    internal static ModConfig Config { get; private set; } = null!;
 
     /// <summary>
     /// Gets the translation helper for this mod.
     /// </summary>
-    internal static ITranslationHelper TranslationHelper { get; private set; }
-#pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
+    internal static ITranslationHelper TranslationHelper { get; private set; } = null!;
 
     /// <inheritdoc />
     public override void Entry(IModHelper helper)

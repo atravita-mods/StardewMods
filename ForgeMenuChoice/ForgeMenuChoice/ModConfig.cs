@@ -25,7 +25,7 @@ public enum TooltipBehavior
 /// <summary>
 /// Configuration class for this mod.
 /// </summary>
-public class ModConfig
+internal sealed class ModConfig
 {
     /// <summary>
     /// Whether or not to show tooltips.

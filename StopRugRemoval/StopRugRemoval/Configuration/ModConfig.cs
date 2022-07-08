@@ -6,7 +6,7 @@ namespace StopRugRemoval.Configuration;
 /// <summary>
 /// Configuration class for this mod.
 /// </summary>
-public class ModConfig
+internal sealed class ModConfig
 {
     /// <summary>
     /// Gets or sets a value indicating whether or not the entire mod is enabled.
@@ -114,7 +114,7 @@ public class ModConfig
     /// <summary>
     /// Pre-populates locations.
     /// </summary>
-    public void PrePopulateLocations()
+    internal void PrePopulateLocations()
     {
         foreach (GameLocation loc in Game1.locations)
         {

@@ -10,26 +10,24 @@ using AtraUtils = AtraShared.Utils.Utils;
 namespace TrashDoesNotConsumeBait;
 
 /// <inheritdoc/>
-internal class ModEntry : Mod
+internal sealed class ModEntry : Mod
 {
     private MigrationManager? migrator;
 
-#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
     /// <summary>
     /// Gets the logger for this mod.
     /// </summary>
-    internal static IMonitor ModMonitor { get; private set; }
+    internal static IMonitor ModMonitor { get; private set; } = null!;
 
     /// <summary>
     /// Gets or sets the config instance for this mod.
     /// </summary>
-    internal static ModConfig Config { get; set; }
+    internal static ModConfig Config { get; set; } = null!;
 
     /// <summary>
     /// Gets the game content helper for this mod.
     /// </summary>
-    internal static IGameContentHelper GameContentHelper { get; private set; }
-#pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
+    internal static IGameContentHelper GameContentHelper { get; private set; } = null!;
 
     /// <inheritdoc/>
     public override void Entry(IModHelper helper)

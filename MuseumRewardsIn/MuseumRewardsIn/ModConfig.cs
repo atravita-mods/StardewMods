@@ -5,7 +5,7 @@ namespace MuseumRewardsIn;
 /// <summary>
 /// The config class for this mod.
 /// </summary>
-internal class ModConfig
+internal sealed class ModConfig
 {
     /// <summary>
     /// Gets or sets a value indicating where to stick

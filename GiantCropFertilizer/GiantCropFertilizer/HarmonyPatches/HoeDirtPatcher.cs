@@ -13,7 +13,6 @@ namespace GiantCropFertilizer.HarmonyPatches;
 [HarmonyPatch]
 internal static class HoeDirtPatcher
 {
-
     /// <summary>
     /// Applies the hoedirt compat patches for multifertilizer.
     /// </summary>

@@ -30,10 +30,10 @@ internal static class AdjustQuestOfTheDay
                 }
 
                 // else, check if today or tomorrow is a festival day for vanilla locations.
-                if (!HSUtils.isFestivalDayForMap(Game1.dayOfMonth, Game1.currentSeason, "Town"))
+                if (!HSUtils.IsFestivalDayForMap(Game1.dayOfMonth, Game1.currentSeason, "Town"))
                 {
                     (string season, int day) = AtraUtils.GetTomorrow(Game1.currentSeason, Game1.dayOfMonth);
-                    if (!HSUtils.isFestivalDayForMap(day, season, "Town"))
+                    if (!HSUtils.IsFestivalDayForMap(day, season, "Town"))
                     {
                         Game1.questOfTheDay = Utility.getQuestOfTheDay();
                     }

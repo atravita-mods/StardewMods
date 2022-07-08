@@ -9,7 +9,7 @@ using AtraUtils = AtraShared.Utils.Utils;
 namespace ExpFromMonsterKillsOnFarm;
 
 /// <inheritdoc />
-public class ModEntry : Mod
+internal sealed class ModEntry : Mod
 {
 #pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
     // ModMonitor is set in Entry, which is as close I can reasonaby get to the constructor.

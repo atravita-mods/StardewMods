@@ -3,8 +3,9 @@ using AtraShared.Utils.Extensions;
 using HarmonyLib;
 
 namespace PrismaticClothing;
+
 /// <inheritdoc/>
-internal class ModEntry : Mod
+internal sealed class ModEntry : Mod
 {
     internal static IMonitor ModMonitor = null!;
 
@@ -26,7 +27,7 @@ internal class ModEntry : Mod
         }
         catch (Exception ex)
         {
-            ModMonitor.Log(string.Format(ErrorMessageConsts.HARMONYCRASH, ex), LogLevel.Error);
+            this.Monitor.Log(string.Format(ErrorMessageConsts.HARMONYCRASH, ex), LogLevel.Error);
         }
 
         harmony.Snitch(this.Monitor, harmony.Id, transpilersOnly: true);

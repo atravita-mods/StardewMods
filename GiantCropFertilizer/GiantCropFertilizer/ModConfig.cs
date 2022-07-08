@@ -3,7 +3,7 @@
 /// <summary>
 /// The config class for this mod.
 /// </summary>
-public class ModConfig
+internal sealed class ModConfig
 {
     private double giantCropChance = 1.1d;
 

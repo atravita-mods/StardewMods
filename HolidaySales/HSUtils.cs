@@ -25,7 +25,7 @@ internal static class HSUtils
             },
             (helper) =>
             {
-                helper.ReplaceOperand(typeof(HSUtils).GetCachedMethod(nameof(isFestivalDayAdjustedForConfig), ReflectionCache.FlagTypes.StaticFlags));
+                helper.ReplaceOperand(typeof(HSUtils).GetCachedMethod(nameof(IsFestivalDayAdjustedForConfig), ReflectionCache.FlagTypes.StaticFlags));
                 helper.Insert(new CodeInstruction[]
                 {
                     new(OpCodes.Call, typeof(Game1).GetCachedProperty(nameof(Game1.currentLocation), ReflectionCache.FlagTypes.StaticFlags).GetGetMethod()),
@@ -48,7 +48,7 @@ internal static class HSUtils
             },
             (helper) =>
             {
-                helper.ReplaceOperand(typeof(HSUtils).GetCachedMethod(nameof(isFestivalDayAdjustedForConfig), ReflectionCache.FlagTypes.StaticFlags));
+                helper.ReplaceOperand(typeof(HSUtils).GetCachedMethod(nameof(IsFestivalDayAdjustedForConfig), ReflectionCache.FlagTypes.StaticFlags));
                 helper.Insert(new CodeInstruction[]
             {
                     new(OpCodes.Ldstr, "Town"),
@@ -63,7 +63,7 @@ internal static class HSUtils
     /// <returns>true if the store is closed, false otherwise.</returns>
     internal static bool StoresClosedForFestival()
     {
-        if (isFestivalDayAdjustedForConfig(Game1.dayOfMonth, Game1.currentSeason, "Town"))
+        if (IsFestivalDayAdjustedForConfig(Game1.dayOfMonth, Game1.currentSeason, "Town"))
         {
             return Utility.getStartTimeOfFestival() < 1900;
         }
@@ -73,22 +73,22 @@ internal static class HSUtils
     /// <summary>
     /// Whether or not the festival should be open or something.
     /// </summary>
-    /// <param name="day"></param>
-    /// <param name="season"></param>
-    /// <param name="mapname"></param>
-    /// <returns></returns>
-    internal static bool isFestivalDayAdjustedForConfig(int day, string season, string mapname)
+    /// <param name="day">Day of month.</param>
+    /// <param name="season">Season (as string).</param>
+    /// <param name="mapname">Map to search for.</param>
+    /// <returns>If it should be considered a festival day for this specific config.</returns>
+    internal static bool IsFestivalDayAdjustedForConfig(int day, string season, string mapname)
     {
         return ModEntry.Config.StoreFestivalBehavior switch
         {
             FestivalsShopBehavior.Open => false,
             FestivalsShopBehavior.Closed => Utility.isFestivalDay(day, season),
-            FestivalsShopBehavior.MapDependent => isFestivalDayForMap(day, season, mapname),
+            FestivalsShopBehavior.MapDependent => IsFestivalDayForMap(day, season, mapname),
             _ => TKThrowHelper.ThrowUnexpectedEnumValueException<FestivalsShopBehavior, bool>(ModEntry.Config.StoreFestivalBehavior),
         };
     }
 
-    internal static bool isFestivalDayForMap(int day, string season, string mapname)
+    internal static bool IsFestivalDayForMap(int day, string season, string mapname)
     {
         string? s = season + day;
         if (Game1.temporaryContent.Load<Dictionary<string, string>>(@"Data\Festivals\FestivalDates").ContainsKey(s))

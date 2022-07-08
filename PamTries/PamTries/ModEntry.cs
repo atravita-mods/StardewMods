@@ -17,7 +17,7 @@ public enum PamMood
 }
 
 /// <inheritdoc />
-public class ModEntry : Mod
+internal class ModEntry : Mod
 {
     private static readonly string[] SyncedConversationTopics = new string[2] { "PamTriesRehab", "PamTriesRehabHoneymoon" };
     private Random? random;
@@ -42,7 +42,7 @@ public class ModEntry : Mod
         helper.Events.GameLoop.GameLaunched += this.OnGameLaunch;
         helper.Events.GameLoop.DayStarted += this.DayStarted;
         helper.Events.GameLoop.SaveLoaded += this.SaveLoaded;
-        helper.Events.GameLoop.DayStarted += Dialogue.GrandKidsDialogue;
+        helper.Events.GameLoop.DayStarted += DialogueManager.GrandKidsDialogue;
         helper.Events.GameLoop.DayEnding += this.DayEnd;
 
         this.ApplyPatches(new Harmony(this.ModManifest.UniqueID));
@@ -118,7 +118,7 @@ public class ModEntry : Mod
             // save is loaded
             if (Context.IsWorldReady)
             {
-                return new[] { Dialogue.CurrentMovie() };
+                return new[] { DialogueManager.CurrentMovie() };
             }
             return null;
         });
@@ -127,7 +127,7 @@ public class ModEntry : Mod
             // save is loaded
             if (Context.IsWorldReady)
             {
-                return new[] { Dialogue.ChildCount() };
+                return new[] { DialogueManager.ChildCount() };
             }
             return null;
         });
@@ -135,7 +135,7 @@ public class ModEntry : Mod
         {
             if (Context.IsWorldReady)
             {
-                return new[] { Dialogue.ListChildren() };
+                return new[] { DialogueManager.ListChildren() };
             }
             return null;
         });

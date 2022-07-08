@@ -60,7 +60,7 @@ internal static class RedirectToLazyLoad
     /// </summary>
     /// <param name="sprite">sprite to reset.</param>
     /// <param name="textureName">Name of the new texture.</param>
-    internal static void ResetSprite(this AnimatedSprite sprite, string textureName)
+    private static void ResetSprite(this AnimatedSprite sprite, string textureName)
     {
         sprite.textureName.Value = textureName;
     }

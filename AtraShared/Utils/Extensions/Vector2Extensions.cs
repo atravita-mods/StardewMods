@@ -38,6 +38,5 @@ public static class Vector2Extensions
 
         vector = new Vector2(x, y);
         return true;
-
     }
 }

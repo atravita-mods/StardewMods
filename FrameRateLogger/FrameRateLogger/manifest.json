@@ -5,5 +5,5 @@
   "Description": "mumble gripe annoyed",
   "UniqueID": "atravita.FrameRateLogger",
   "EntryDll": "FrameRateLogger.dll",
-  "MinimumApiVersion": "3.14"
+  "MinimumApiVersion": "3.15"
 }

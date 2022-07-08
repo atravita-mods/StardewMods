@@ -37,7 +37,6 @@ namespace AtraShared.Integrations.Interfaces;
 /// <remarks>Copied from https://github.com/spacechase0/StardewValleyMods/blob/develop/DynamicGameAssets/IDynamicGameAssetsApi.cs .</remarks>
 public interface IDynamicGameAssetsApi
 {
-
     /// <summary>
     /// Get the DGA item ID of this item, if it has one.
     /// </summary>
@@ -76,7 +75,7 @@ public interface IDynamicGameAssetsApi
     string[]? GetItemsByPack(string packname);
 
     /// <summary>
-    /// Gets all the items (namespaced names)
+    /// Gets all the items (namespaced names).
     /// </summary>
     /// <returns>A list of all items.</returns>
     string[] GetAllItems();

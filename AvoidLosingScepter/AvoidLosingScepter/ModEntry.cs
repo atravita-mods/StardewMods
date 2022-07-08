@@ -10,7 +10,7 @@ using StardewValley.Tools;
 namespace AvoidLosingScepter;
 
 /// <inheritdoc />
-internal class ModEntry : Mod
+internal sealed class ModEntry : Mod
 {
 #pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
 

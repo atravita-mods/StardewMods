@@ -62,13 +62,12 @@ internal sealed class ModEntry : Mod
 
     private void OnSaveLoaded(object? sender, SaveLoadedEventArgs e)
     {
-        MultiplayerHelpers.AssertMultiplayerVersions(this.Helper.Multiplayer, this.ModManifest, this.Monitor, this.Helper.Translation);
-
         if (Context.IsSplitScreen && Context.ScreenId != 0)
         {
             return;
         }
 
+        MultiplayerHelpers.AssertMultiplayerVersions(this.Helper.Multiplayer, this.ModManifest, this.Monitor, this.Helper.Translation);
         DrawPrismatic.LoadPrismaticData();
 
         this.migrator = new(this.ModManifest, this.Helper, this.Monitor);
@@ -150,14 +149,20 @@ internal sealed class ModEntry : Mod
     /*************
      * Misc
      ***********/
-
+#if DEBUG
     [EventPriority(EventPriority.Low - 1000)]
     private void OnDayStart(object? sender, DayStartedEventArgs e)
     {
+        if (Context.IsSplitScreen && Context.ScreenId != 0)
+        {
+            return;
+        }
+
         this.Monitor.DebugOnlyLog($"Current memory usage {GC.GetTotalMemory(false):N0}", LogLevel.Info);
         GC.Collect();
         this.Monitor.DebugOnlyLog($"Post-collection memory usage {GC.GetTotalMemory(true):N0}", LogLevel.Info);
     }
+#endif
 
     [EventPriority(EventPriority.Low - 1000)]
     private void LateGameLaunched(object? sender, GameLaunchedEventArgs e)

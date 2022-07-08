@@ -3,7 +3,7 @@
 /// <summary>
 /// The configuration class for this mod.
 /// </summary>
-public class ModConfig
+internal sealed class ModConfig
 {
     private float consumeChanceNormal = 1f;
     private float consumeChancePreserving = 0.5f;

@@ -9,6 +9,9 @@
 * Figure out DGA fruit trees.
 <!-- bat eyes for custom locations? -->
 
+#### Version 1.1.0
+* Update to use AtraCore.
+
 #### Version 1.0.10
 
 * Updates for SMAPI 3.14.0.

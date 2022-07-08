@@ -26,7 +26,7 @@ public enum SeasonalBehavior
 /// <summary>
 /// Configuration class for this mod.
 /// </summary>
-public class ModConfig
+internal sealed class ModConfig
 {
     private int maxDailySpawns = 6;
 

@@ -16,7 +16,7 @@ namespace MuseumRewardsIn;
 
 /// <inheritdoc />
 [HarmonyPatch(typeof(Utility))]
-internal class ModEntry : Mod
+internal sealed class ModEntry : Mod
 {
     private const string BUILDING = "Buildings";
     private const string SHOPNAME = "atravita.MuseumShop";

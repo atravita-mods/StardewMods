@@ -4,24 +4,15 @@ using System.Reflection;
 namespace FrameRateLogger;
 
 /// <inheritdoc />
-internal class ModEntry : Mod
+internal sealed class ModEntry : Mod
 {
-#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
+    private Func<FrameRateCounter, int>? framerateGetter { get; set; } = null!;
 
-    /// <summary>
-    /// Gets the logger for this mod.
-    /// </summary>
-    private static IMonitor ModMonitor { get; set; }
-
-    private Func<FrameRateCounter, int>? framerateGetter { get; set; }
-
-    private FrameRateCounter? frameRateCounter { get; set; }
-#pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
+    private FrameRateCounter? frameRateCounter { get; set; } = null!;
 
     /// <inheritdoc />
     public override void Entry(IModHelper helper)
     {
-        ModMonitor = this.Monitor;
         this.frameRateCounter = new(GameRunner.instance);
         helper.Reflection.GetMethod(this.frameRateCounter, "LoadContent").Invoke();
         FieldInfo? field = helper.Reflection.GetField<int>(this.frameRateCounter, "frameRate").FieldInfo;
@@ -45,7 +36,7 @@ internal class ModEntry : Mod
     {
         if (this.frameRateCounter is not null && this.framerateGetter?.Invoke(this.frameRateCounter) is int value)
         {
-            this.Monitor.Log($"Current framerate on {Game1.ticks} is {value}", value < 30 ? LogLevel.Alert : LogLevel.Info);
+            this.Monitor.Log($"Current framerate on {Game1.ticks} is {value}", value < 30 ? LogLevel.Alert : LogLevel.Trace);
         }
     }
 

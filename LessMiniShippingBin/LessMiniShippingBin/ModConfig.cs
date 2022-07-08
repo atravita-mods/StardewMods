@@ -3,7 +3,7 @@
 /// <summary>
 /// Configuration class for this mod.
 /// </summary>
-public class ModConfig
+internal sealed class ModConfig
 {
     private int minishippingcapacity = 36;
     private int juminocapcity = 9;

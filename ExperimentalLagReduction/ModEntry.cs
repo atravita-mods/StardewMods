@@ -1,5 +1,4 @@
-﻿using AtraCore.Framework.ReflectionManager;
-using AtraShared.ConstantsAndEnums;
+﻿using AtraShared.ConstantsAndEnums;
 using AtraShared.Utils.Extensions;
 using HarmonyLib;
 using StardewModdingAPI.Events;
@@ -7,13 +6,12 @@ using StardewModdingAPI.Events;
 namespace ExperimentalLagReduction;
 
 /// <inheritdoc />
-internal class ModEntry : Mod
+internal sealed class ModEntry : Mod
 {
     /// <summary>
     /// Gets the logger for this mod.
     /// </summary>
     internal static IMonitor ModMonitor { get; private set; } = null!;
-
 
     /// <inheritdoc />
     public override void Entry(IModHelper helper)

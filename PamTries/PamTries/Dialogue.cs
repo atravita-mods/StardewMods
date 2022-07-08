@@ -4,11 +4,11 @@ using StardewValley.Locations;
 
 namespace PamTries;
 
-class Dialogue
+internal static class DialogueManager
 {
     public static void GrandKidsDialogue(object? sender, DayStartedEventArgs e)
     {
-        if (Game1.getCharacterFromName("Pam") is not NPC Pam)
+        if (Game1.getCharacterFromName("Pam") is not NPC pam)
         {
             return;
         }
@@ -23,10 +23,10 @@ class Dialogue
         return MovieTheater.GetMovieForDate(Game1.Date).ID;
     }
 
-    public static string ChildCount()
+    internal static string ChildCount()
         => $"{Game1.player.getChildrenCount()}";
 
-    public static string? ListChildren()
+    internal static string? ListChildren()
     {
         if (!Context.IsWorldReady)
         {
@@ -55,7 +55,7 @@ class Dialogue
         }// deal with the possibility other countries have different grammer later.
     }
 
-    public static NPC? GetChildbyGender(string gender)
+    internal static NPC? GetChildbyGender(string gender)
     {
         if (!Context.IsWorldReady)
         {
@@ -82,5 +82,4 @@ class Dialogue
         }
         return null;
     }
-
 }

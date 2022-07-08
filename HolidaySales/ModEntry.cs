@@ -12,7 +12,7 @@ using AtraUtils = AtraShared.Utils.Utils;
 namespace HolidaySales;
 
 /// <inheritdoc />
-internal class ModEntry : Mod
+internal sealed class ModEntry : Mod
 {
     /// <summary>
     /// Gets the logger for this mod.

@@ -15,7 +15,7 @@ namespace GingerIslandMainlandAdjustments;
 
 /// <inheritdoc />
 [UsedImplicitly]
-public class ModEntry : Mod
+internal sealed class ModEntry : Mod
 {
     private bool haveFixedSchedulesToday = false;
 

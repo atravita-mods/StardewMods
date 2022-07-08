@@ -3,6 +3,7 @@ using AtraCore.Utilities;
 using AtraShared.ConstantsAndEnums;
 using AtraShared.Integrations;
 using AtraShared.MigrationManager;
+using AtraShared.Schedules;
 using AtraShared.Utils.Extensions;
 using HarmonyLib;
 using StardewModdingAPI.Enums;
@@ -22,7 +23,7 @@ namespace StopRugRemoval;
 /// <summary>
 /// Entry class to the mod.
 /// </summary>
-public class ModEntry : Mod
+internal sealed class ModEntry : Mod
 {
     [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1306:Field names should begin with lower-case letter", Justification = "Reviewed.")]
     private static GMCMHelper? GMCM = null;
@@ -35,37 +36,40 @@ public class ModEntry : Mod
     internal static Func<Multiplayer> Multiplayer => MultiplayerHelpers.GetMultiplayer;
 
     // the following three properties are set in the entry method, which is approximately as close as I can get to the constructor anyways.
-#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
     /// <summary>
     /// Gets the logger for this file.
     /// </summary>
-    internal static IMonitor ModMonitor { get; private set; }
+    internal static IMonitor ModMonitor { get; private set; } = null!;
 
     /// <summary>
     /// Gets instance that holds the configuration for this mod.
     /// </summary>
-    internal static ModConfig Config { get; private set; }
+    internal static ModConfig Config { get; private set; } = null!;
 
     /// <summary>
     /// Gets the game content helper for this mod.
     /// </summary>
-    internal static IGameContentHelper GameContentHelper { get; private set; }
+    internal static IGameContentHelper GameContentHelper { get; private set; } = null!;
 
     /// <summary>
     /// Gets the multiplayer helper for this mod.
     /// </summary>
-    internal static IMultiplayerHelper MultiplayerHelper { get; private set; }
+    internal static IMultiplayerHelper MultiplayerHelper { get; private set; } = null!;
 
     /// <summary>
     /// Gets the input helper for this mod.
     /// </summary>
-    internal static IInputHelper InputHelper { get; private set; }
+    internal static IInputHelper InputHelper { get; private set; } = null!;
 
     /// <summary>
     /// Gets the unique id for this mod.
     /// </summary>
-    internal static string UNIQUEID { get; private set; }
-#pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
+    internal static string UNIQUEID { get; private set; } = null!;
+
+    /// <summary>
+    /// Gets the instance of the schedule utility functions.
+    /// </summary>
+    internal static ScheduleUtilityFunctions UtilitySchedulingFunctions { get; private set; } = null!;
 
     /// <inheritdoc/>
     public override void Entry(IModHelper helper)
@@ -77,6 +81,7 @@ public class ModEntry : Mod
         InputHelper = this.Helper.Input;
         UNIQUEID = this.ModManifest.UniqueID;
         Config = AtraUtils.GetConfigOrDefault<ModConfig>(helper, this.Monitor);
+        UtilitySchedulingFunctions = new(this.Monitor, this.Helper.Translation);
 
         helper.Events.GameLoop.GameLaunched += this.OnGameLaunch;
         helper.Events.GameLoop.SaveLoaded += this.SaveLoaded;
@@ -204,7 +209,7 @@ public class ModEntry : Mod
             this.SetUpBasicConfig();
         }
 
-        if (this.Helper.ModRegistry.IsLoaded("violetlizabet.CP.NoAlcohol"))
+        if (!this.Helper.ModRegistry.IsLoaded("violetlizabet.CP.NoAlcohol"))
         {
             this.Helper.Events.Content.AssetRequested += this.OnSaloonEventRequested;
         }

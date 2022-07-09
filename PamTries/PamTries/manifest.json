@@ -1,7 +1,7 @@
 {
   "Name": "Pam Tries",
   "Author": "atravita",
-  "Version": "1.0.0",
+  "Version": "1.0.0-Debug",
   "Description": "Pam tries to get clean - small code changes",
   "UniqueID": "atravita.PamTries",
   "EntryDll": "PamTries.dll",

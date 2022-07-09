@@ -1,7 +1,7 @@
 {
   "Name": "Pick Your Enchantment",
   "Author": "atravita",
-  "Version": "1.0.5",
+  "Version": "1.0.5-Debug",
   "Description": "Allows you to pick which enchantment you get.",
   "UniqueID": "atravita.ForgeMenuChoice",
   "EntryDll": "ForgeMenuChoice.dll",

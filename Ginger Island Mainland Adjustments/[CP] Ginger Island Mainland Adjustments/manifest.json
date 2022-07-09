@@ -9,9 +9,9 @@
        "UniqueID": "Pathoschild.ContentPatcher"
     },
     "Dependencies": [
-	{
-		"UniqueID": "atravita.GingerIslandMainlandAdjustments",
-		"IsRequired": true
-	}
+    {
+        "UniqueID": "atravita.GingerIslandMainlandAdjustments",
+        "IsRequired": true
+    }
     ]
 }

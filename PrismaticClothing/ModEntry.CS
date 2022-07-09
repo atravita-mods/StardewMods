@@ -7,7 +7,10 @@ namespace PrismaticClothing;
 /// <inheritdoc/>
 internal sealed class ModEntry : Mod
 {
-    internal static IMonitor ModMonitor = null!;
+    /// <summary>
+    /// Gets the logger for this mod.
+    /// </summary>
+    internal static IMonitor ModMonitor { get; private set; } = null!;
 
     /// <inheritdoc/>
     public override void Entry(IModHelper helper)
@@ -32,5 +35,4 @@ internal sealed class ModEntry : Mod
 
         harmony.Snitch(this.Monitor, harmony.Id, transpilersOnly: true);
     }
-
 }

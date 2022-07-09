@@ -144,7 +144,6 @@ public class DialogueLog : AbstractDataModel
         return false;
     }
 
-
     /// <inheritdoc/>
     [SuppressMessage("StyleCop.CSharp.OrderingRules", "SA1202:Elements should be ordered by access", Justification = "Reviewed.")]
     public override string ToString()

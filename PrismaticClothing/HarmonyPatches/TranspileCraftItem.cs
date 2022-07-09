@@ -21,7 +21,6 @@ internal static class TranspileCraftItem
     {
         try
         {
-
             ILHelper helper = new(original, instructions, ModEntry.ModMonitor, gen);
             helper.FindNext(new CodeInstructionWrapper[]
             { // find right_item.HasContextTag("color_prismatic");

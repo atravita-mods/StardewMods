@@ -1,7 +1,7 @@
 {
   "Name": "Trash Does Not Consume Bait",
   "Author": "atravita",
-  "Version": "0.1.3",
+  "Version": "0.1.3-Debug",
   "Description": "Prevents trash from consuming bait.",
   "UniqueID": "atravita.TrashDoesNotConsumeBait",
   "EntryDll": "TrashDoesNotConsumeBait.dll",

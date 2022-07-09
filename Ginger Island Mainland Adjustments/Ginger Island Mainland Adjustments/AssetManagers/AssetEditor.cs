@@ -13,6 +13,7 @@ internal static class AssetEditor
     /// Pam's mail key.
     /// </summary>
     internal const string PAMMAILKEY = "atravita_GingerIslandMainlandAdjustments_PamMail";
+    internal const int PAMEVENT = 99219999;
 
     // The following dialogue is edited from the code side so each NPC has at least the Resort dialogue.
     // A CP pack will override as these are set to edit early.
@@ -135,7 +136,7 @@ internal static class AssetEditor
     private static void EditSeedShopEvent(IAssetData e)
     {
         IAssetDataForDictionary<string, string>? editor = e.AsDictionary<string, string>();
-        editor.Data["99219999/e 503180/f Pam 2500/v Pam/w rainy/t 1700 2600"] = string.Join(
+        editor.Data[$"{PAMEVENT}/e 503180/f Pam 2500/v Pam/w rainy/t 1700 2600"] = string.Join(
             separator: string.Empty,
             "sadpiano/-1000 -1000/farmer 35 21 0 Pam 37 18 0/ignoreCollisions farmer/",
             "ignoreCollisions Pam/viewport 37 21 true/move farmer 0 -3 1/faceDirection Pam 3/",

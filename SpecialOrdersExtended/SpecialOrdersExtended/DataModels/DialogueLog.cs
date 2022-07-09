@@ -8,7 +8,7 @@ namespace SpecialOrdersExtended.DataModels;
 /// <summary>
 /// Storage structure for previously seen dialogues.
 /// </summary>
-internal class DialogueLog : AbstractDataModel
+public class DialogueLog : AbstractDataModel
 {
     private const string IDENTIFIER = "_dialogue";
 
@@ -37,7 +37,7 @@ internal class DialogueLog : AbstractDataModel
     /// <param name="multiplayerID">Multiplayer ID of the player who requested it.</param>
     /// <returns>The dialogueLog in question.</returns>
     /// <exception cref="SaveNotLoadedError">Save not loaded.</exception>
-    public static DialogueLog Load(long multiplayerID)
+    internal static DialogueLog Load(long multiplayerID)
     {
         if (!Context.IsWorldReady || Constants.SaveFolderName is null)
         {
@@ -56,7 +56,7 @@ internal class DialogueLog : AbstractDataModel
     /// <returns>A dialogueLog object.</returns>
     /// <exception cref="NotImplementedException">Not implemented, do not call.</exception>
     /// <remarks>NOT IMPLEMENTED YET.</remarks>
-    public static DialogueLog LoadTempIfAvailable(long multiplayerID)
+    internal static DialogueLog LoadTempIfAvailable(long multiplayerID)
     {
         if (!Context.IsWorldReady || Constants.SaveFolderName is null)
         {
@@ -79,12 +79,12 @@ internal class DialogueLog : AbstractDataModel
     /// <summary>
     /// Saves a temporary DialogueLog file.
     /// </summary>
-    public void SaveTemp() => base.SaveTemp(IDENTIFIER + this.MultiplayerID.ToString("X8"));
+    internal void SaveTemp() => base.SaveTemp(IDENTIFIER + this.MultiplayerID.ToString("X8"));
 
     /// <summary>
     /// Saves the DialogueLog.
     /// </summary>
-    public void Save() => base.Save(IDENTIFIER + this.MultiplayerID.ToString("X8"));
+    internal void Save() => base.Save(IDENTIFIER + this.MultiplayerID.ToString("X8"));
 
     /// <summary>
     /// Whether or not the dialogueLog contains the key.
@@ -92,7 +92,7 @@ internal class DialogueLog : AbstractDataModel
     /// <param name="dialoguekey">Exact dialogue key.</param>
     /// <param name="characterName">Which character to check.</param>
     /// <returns>True if found, false otheerwise.</returns>
-    public bool Contains(string dialoguekey, string characterName)
+    internal bool Contains(string dialoguekey, string characterName)
     {
         if (this.SeenDialogues.TryGetValue(dialoguekey, out List<string>? characterList))
         {
@@ -107,7 +107,7 @@ internal class DialogueLog : AbstractDataModel
     /// <param name="dialoguekey">Dialogue key in question.</param>
     /// <param name="characterName">NPC name.</param>
     /// <returns>True if successfully added, false otherwise.</returns>
-    public bool TryAdd(string dialoguekey, string characterName)
+    internal bool TryAdd(string dialoguekey, string characterName)
     {
         if (!this.SeenDialogues.TryGetValue(dialoguekey, out List<string>? characterList))
         {
@@ -135,7 +135,7 @@ internal class DialogueLog : AbstractDataModel
     /// <param name="dialoguekey">Dialogue key, exact.</param>
     /// <param name="characterName">Name of character.</param>
     /// <returns>True if successfully removed, false otherwise.</returns>
-    public bool TryRemove(string dialoguekey, string characterName)
+    internal bool TryRemove(string dialoguekey, string characterName)
     {
         if (this.SeenDialogues.TryGetValue(dialoguekey, out List<string>? characterList))
         {
@@ -144,7 +144,9 @@ internal class DialogueLog : AbstractDataModel
         return false;
     }
 
+
     /// <inheritdoc/>
+    [SuppressMessage("StyleCop.CSharp.OrderingRules", "SA1202:Elements should be ordered by access", Justification = "Reviewed.")]
     public override string ToString()
     {
         StringBuilder stringBuilder = new();

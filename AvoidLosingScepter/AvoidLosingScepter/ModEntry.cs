@@ -118,7 +118,7 @@ internal sealed class ModEntry : Mod
 
             int endindex = helper.Pointer;
 
-            List<CodeInstruction>? copylist = new();
+            List<CodeInstruction>? copylist = new(endindex - startindex);
             foreach (CodeInstruction? code in helper.Codes.GetRange(startindex, endindex - startindex - 3))
             {
                 copylist.Add(code.Clone());

@@ -481,31 +481,33 @@ ContinueSearchBackwards:
         {
             instruction.labels.AddRange(this.CurrentInstruction.labels);
         }
-        else
+
+        // removed a branch, so untrack those labels.
+        if (this.CurrentInstruction.Branches(out Label? currlabel))
         {
-            if (this.CurrentInstruction.Branches(out Label? currlabel))
+            this.importantLabels[currlabel!.Value]--;
+        }
+        else if (this.CurrentInstruction.opcode == OpCodes.Switch)
+        {
+            foreach (var switchLabel in (Label[])this.CurrentInstruction.operand)
             {
-                this.importantLabels[currlabel!.Value]--;
-            }
-            else if (this.CurrentInstruction.opcode == OpCodes.Switch)
-            {
-                foreach (var switchLabel in (Label[])this.CurrentInstruction.operand)
-                {
-                    this.importantLabels[switchLabel]--;
-                }
-            }
-            this.importantLabels.RemoveZeros();
-            if (this.CurrentInstruction.labels.Intersect(this.importantLabels.Keys).Any())
-            {
-                StringBuilder sb = new();
-                sb.Append("Attempted to remove an important label!\n\nThis code's labels: ")
-                    .AppendJoin(", ", this.CurrentInstruction.labels.Select(l => l.ToString()))
-                    .AppendLine().Append("Important labels: ")
-                    .AppendJoin(", ", this.importantLabels.Select(l => l.ToString()));
-                this.Monitor.Log(sb.ToString(), LogLevel.Error);
-                return ThrowHelper.ThrowInvalidOperationException<ILHelper>();
+                this.importantLabels[switchLabel]--;
             }
         }
+        this.importantLabels.RemoveZeros();
+
+        if (!keepLabels && this.CurrentInstruction.labels.Intersect(this.importantLabels.Keys).Any())
+        {
+            StringBuilder sb = new();
+            sb.Append("Attempted to remove an important label!\n\nThis code's labels: ")
+                .AppendJoin(", ", this.CurrentInstruction.labels.Select(l => l.ToString()))
+                .AppendLine().Append("Important labels: ")
+                .AppendJoin(", ", this.importantLabels.Select(l => l.ToString()));
+            this.Monitor.Log(sb.ToString(), LogLevel.Error);
+            return ThrowHelper.ThrowInvalidOperationException<ILHelper>();
+        }
+
+        // track new labels.
         if (instruction.Branches(out Label? label))
         {
             this.importantLabels[label!.Value]++;

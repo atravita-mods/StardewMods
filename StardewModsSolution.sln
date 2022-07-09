@@ -65,13 +65,19 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QualityRings", "QualityRing
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HolidaySales", "HolidaySales\HolidaySales.csproj", "{8F84A6B4-A93B-48F4-A785-49998D40983D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExperimentalLagReduction", "ExperimentalLagReduction\ExperimentalLagReduction.csproj", "{EBE7DA5A-E418-4A44-987D-393E2C4244CA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ExperimentalLagReduction", "ExperimentalLagReduction\ExperimentalLagReduction.csproj", "{EBE7DA5A-E418-4A44-987D-393E2C4244CA}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WhyAreMacs", "WhyAreMacs\WhyAreMacs.csproj", "{475A9E44-3A6B-4E3E-927D-7626AFD10A7C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PrismaticClothing", "PrismaticClothing\PrismaticClothing.csproj", "{A7F5E995-F627-4987-8F20-FAB1E4866691}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PrismaticClothing", "PrismaticClothing\PrismaticClothing.csproj", "{A7F5E995-F627-4987-8F20-FAB1E4866691}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PrismaticSlime", "PrismaticSlime\PrismaticSlime.csproj", "{7127755B-9473-4FF9-B736-8DD46DE1E0BF}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{70028B32-6F2B-41CB-907A-EDFA7416DE65}"
+	ProjectSection(SolutionItems) = preProject
+		csproj_common = csproj_common
+		LICENSE = LICENSE
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

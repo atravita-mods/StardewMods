@@ -24,13 +24,10 @@ internal class ModEntry : Mod
     private PamMood mood = PamMood.neutral;
     private MigrationManager? migrator;
 
-    // set in Entry, which is as close as I can get to the constructor
-#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
     /// <summary>
-    /// The logger for this mod.
+    /// Gets the logger for this mod.
     /// </summary>
-    internal static IMonitor ModMonitor { get; private set; }
-#pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
+    internal static IMonitor ModMonitor { get; private set; } = null!;
 
     /// <inheritdoc />
     public override void Entry(IModHelper helper)
@@ -208,6 +205,11 @@ internal class ModEntry : Mod
     {
         // reset Pam's sprite
         NPC? pam = Game1.getCharacterFromName("Pam");
+        if (pam is null)
+        {
+            this.Monitor.Log("Pam could not be found?!?");
+            return;
+        }
         pam.Sprite.SpriteHeight = 32;
         pam.Sprite.SpriteWidth = 16;
         pam.Sprite.ignoreSourceRectUpdates = false;

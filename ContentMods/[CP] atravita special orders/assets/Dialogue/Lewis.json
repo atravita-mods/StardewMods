@@ -12,8 +12,8 @@
             "atravita.warEffort2_Completed": "{{i18n:atravita.war_effort_2_completed.000}}#$b#{{i18n:atravita.war_effort_2_completed.001}}",
             "atravita.warEffort3_IsAvailable": "{{i18n:atravita.war_effort_3_isavailable}}",
             "atravita.ValleyVintage_IsAvailable": "{{i18n:atravita.valley_vintage_isavailable}}",
-			"atravita.ValleyVintage_InProgress": "{{i18n:atravita.valley_vintage_inprogress}}",
-			"atravita.ValleyVintage_InProgress4": "{{i18n:atravita.valley_vintage_inprogress4}}",
+            "atravita.ValleyVintage_InProgress": "{{i18n:atravita.valley_vintage_inprogress}}",
+            "atravita.ValleyVintage_InProgress4": "{{i18n:atravita.valley_vintage_inprogress4}}",
             "atravita.ValleyVintage_Completed": "{{i18n:atravita.valley_vintage_completed}}",
 
             "atravita.SalmonberrySeason_IsAvailable": "{{i18n:atravita.salmonberry_season_isavailable}}$h",

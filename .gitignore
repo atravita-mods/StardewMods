@@ -3,12 +3,12 @@
 ##
 ## Get latest from https://github.com/github/gitignore/blob/master/VisualStudio.gitignore
 
-<<<<<<< HEAD
-=======
 # Zip files
 *.zip
 
->>>>>>> AtraShared/main
+# Config files
+*.config
+
 # User-specific files
 *.rsuser
 *.suo

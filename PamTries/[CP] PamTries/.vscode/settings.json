@@ -1,6 +1,12 @@
 {
     "spellchecker.ignoreWordsList": [
+        "atravita",
+        "EditData",
+        "GiftReaction",
+        "HasSeenEvent",
+        "inputSeparator",
+        "LogName",
+        "PamTries",
         "sadpiano",
-        "EditData"
     ]
 }

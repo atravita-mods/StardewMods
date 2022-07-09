@@ -1,5 +1,5 @@
 {
-	"$schema": "https://smapi.io/schemas/manifest.json",
+    "$schema": "https://smapi.io/schemas/manifest.json",
    "Name": "[CP] Pam Tries",
    "Author": "atravita",
    "Version": "1.0.1",
@@ -9,41 +9,41 @@
    "UpdateKeys": [ "Nexus:9921" ],
    "ContentPackFor": {
       "UniqueID": "Pathoschild.ContentPatcher",
-	},
+    },
     "Dependencies": [
-	{
-		"UniqueID": "atravita.PamTries",
-		"IsRequired": false
-	},
-	{
-		"UniqueID": "atravita.SpecialOrdersExtended",
-		"IsRequired": false,
+    {
+        "UniqueID": "atravita.PamTries",
+        "IsRequired": false
+    },
+    {
+        "UniqueID": "atravita.SpecialOrdersExtended",
+        "IsRequired": false,
         "MinimumVersion": "1.0.4",
-	},
-	{
-		"UniqueID": "gizzymo.canonfriendlyexpansion",
-		"IsRequired": false
-	},
-	{
-		"UniqueID": "iss.immersivespouses",
-		"IsRequired": false,
-	},
-	{
-		"UniqueID": "PurrplingCat.CustomGiftDialogue",
-		"IsRequired": false
-	},
-	{
-		"UniqueID": "TheMightyAmondee.CustomTokens",
-		"IsRequired": false,
-	},
+    },
     {
-		"UniqueID": "atravita.GingerIslandMainlandAdjustments",
-		"IsRequired": false,
-	},
+        "UniqueID": "gizzymo.canonfriendlyexpansion",
+        "IsRequired": false
+    },
     {
-		"UniqueID": "atravita.CP.GingerIslandMainlandAdjustments",
-		"IsRequired": false
-	},
+        "UniqueID": "iss.immersivespouses",
+        "IsRequired": false,
+    },
+    {
+        "UniqueID": "PurrplingCat.CustomGiftDialogue",
+        "IsRequired": false
+    },
+    {
+        "UniqueID": "TheMightyAmondee.CustomTokens",
+        "IsRequired": false,
+    },
+    {
+        "UniqueID": "atravita.GingerIslandMainlandAdjustments",
+        "IsRequired": false,
+    },
+    {
+        "UniqueID": "atravita.CP.GingerIslandMainlandAdjustments",
+        "IsRequired": false
+    },
     {
         "UniqueID": "Rafseazz.RSVCP",
         "IsRequired": false,

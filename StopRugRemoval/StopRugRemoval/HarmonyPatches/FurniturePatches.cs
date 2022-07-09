@@ -72,14 +72,15 @@ internal class FurniturePatches
                 return true;
             }
             Rectangle bounds = __instance.boundingBox.Value;
-            (int tileX, int tileY) = tile.ToPoint();
+            int tileX = (int)tile.X;
+            int tileY = (int)tile.Y;
             for (int x = 0; x < bounds.Width / 64; x++)
             {
                 for (int y = 0; y < bounds.Height / 64; y++)
                 {
                     Vector2 currentTile = new(tileX + x, tileY + y);
                     if ((l.terrainFeatures.TryGetValue(currentTile, out TerrainFeature possibletree) && possibletree is Tree)
-                        || l.isTerrainFeatureAt((int)currentTile.X, (int)currentTile.Y))
+                        || l.isTerrainFeatureAt(tileX + x, tileY + y))
                     {
                         __result = false;
                         return false;

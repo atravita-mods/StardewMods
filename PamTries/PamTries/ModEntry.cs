@@ -236,7 +236,7 @@ internal class ModEntry : Mod
         // Setup tomorrow:
         this.SetPamMood((int)Game1.stats.DaysPlayed + 1);
 
-        if (Game1.getAllFarmers().Any((Farmer farmer) => farmer.mailForTomorrow.Contains("atravita_PamTries_PennyThanks")))
+        if (Game1.getAllFarmers().Any(static (Farmer farmer) => farmer.mailForTomorrow.Contains("atravita_PamTries_PennyThanks")))
         {
             Game1.addMailForTomorrow("atravita_PamTries_BusNotice");
         }

@@ -176,8 +176,7 @@ internal sealed class ModEntry : Mod
                 static (asset) =>
                 {
                     IAssetDataForMap? map = asset.AsMap();
-                    (int locX, int locY) = (config.BoxLocation * 64).ToPoint();
-                    XTile? tile = map.Data.GetLayer(BUILDING).PickTile(new Location(locX, locY), Game1.viewport.Size);
+                    XTile? tile = map.Data.GetLayer(BUILDING).PickTile(new Location((int)config.BoxLocation.X * 64, (int)config.BoxLocation.Y * 64), Game1.viewport.Size);
                     if (tile is null)
                     {
                         modMonitor.Log($"Tile could not be edited for shop, please let atra know!", LogLevel.Warn);

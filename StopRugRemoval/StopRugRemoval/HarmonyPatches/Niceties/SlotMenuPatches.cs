@@ -152,12 +152,10 @@ internal static class SlotMenuPatches
     private static void PostfixConstructor()
     {
         Vector2 position = Utility.getTopLeftPositionForCenteringOnScreen(Game1.viewport, 104, HEIGHT, -16, 160);
-        (int x, int y) = position.ToPoint();
-        Bet1000.Value = new ClickableComponent(new Rectangle(x, y, 104, HEIGHT), I18n.Bet1k());
+        Bet1000.Value = new ClickableComponent(new Rectangle((int)position.X, (int)position.Y, 104, HEIGHT), I18n.Bet1k());
 
         position = Utility.getTopLeftPositionForCenteringOnScreen(Game1.viewport, 124, HEIGHT, -16, 224);
-        (x, y) = position.ToPoint();
-        Bet10000.Value = new ClickableComponent(new Rectangle(x, y, 124, HEIGHT), I18n.Bet10k());
+        Bet10000.Value = new ClickableComponent(new Rectangle((int)position.X, (int)position.Y, 124, HEIGHT), I18n.Bet10k());
     }
 
     // Move the DONE button down to make room for the bet 1k and bet 10k buttons.

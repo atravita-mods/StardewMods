@@ -71,7 +71,7 @@ internal sealed class ModEntry : Mod
         }
         helper.Register(
             static () => Config = new(),
-            () => Task.Run(() => this.Helper.WriteConfig(Config)))
+            () => this.Helper.AsyncWriteConfig(this.Monitor, Config))
             .AddParagraph(I18n.ModDescription);
         foreach (PropertyInfo property in typeof(ModConfig).GetProperties())
         {

@@ -245,7 +245,7 @@ internal sealed class ModEntry : Mod
 
         // Have to wait until here to populate locations
         Config.PrePopulateLocations();
-        Task write = Task.Run(() => this.Helper.WriteConfig(Config));
+        this.Helper.AsyncWriteConfig(this.Monitor, Config);
 
         this.migrator = new(this.ModManifest, this.Helper, this.Monitor);
         if (!this.migrator.CheckVersionInfo())
@@ -270,8 +270,6 @@ internal sealed class ModEntry : Mod
                     setValue: (value) => Config.SafeLocationMap[loc.NameOrUniqueName] = value);
             }
         }
-
-        write.Wait();
 
         if (Context.IsMainPlayer)
         {
@@ -335,7 +333,7 @@ internal sealed class ModEntry : Mod
                     Config = new ModConfig();
                     Config.PrePopulateLocations();
                 },
-                save: () => this.Helper.WriteConfig(Config))
+                save: () => this.Helper.AsyncWriteConfig(this.Monitor, Config))
             .AddParagraph(I18n.Mod_Description);
 
         foreach (PropertyInfo property in typeof(ModConfig).GetProperties())

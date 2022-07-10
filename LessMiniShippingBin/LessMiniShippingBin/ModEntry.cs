@@ -1,4 +1,5 @@
 ﻿using AtraShared.Integrations;
+using AtraShared.Utils.Extensions;
 using HarmonyLib;
 using StardewModdingAPI.Events;
 using AtraUtils = AtraShared.Utils.Utils;
@@ -55,7 +56,7 @@ internal sealed class ModEntry : Mod
 
         helper.Register(
                 reset: static () => Config = new ModConfig(),
-                save: () => this.Helper.WriteConfig(Config))
+                save: () => this.Helper.AsyncWriteConfig(this.Monitor, Config))
             .AddParagraph(I18n.Mod_Description)
             .AddNumberOption(
                 getValue: static () => Config.MiniShippingCapacity,
@@ -66,8 +67,8 @@ internal sealed class ModEntry : Mod
                 max: 48,
                 interval: 9)
             .AddNumberOption(
-                getValue: static () => Config.JuminoCapcaity,
-                setValue: static value => Config.JuminoCapcaity = value,
+                getValue: static () => Config.JuminoCapacity,
+                setValue: static value => Config.JuminoCapacity = value,
                 name: I18n.Config_Junimo_Title,
                 tooltip: I18n.Config_Junimo_Description,
                 min: 9,

@@ -19,6 +19,9 @@ internal sealed class ModConfig
 
     private int minDartCount = 10;
 
+    /// <summary>
+    /// Gets or sets a value indicating the minimum dart requirement.
+    /// </summary>
     public int MinDartCount
     {
         get => this.minDartCount;

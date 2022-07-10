@@ -20,7 +20,7 @@ internal sealed class ModConfig
     /// <summary>
     /// Gets or sets the capacity of the jumino chest.
     /// </summary>
-    public int JuminoCapcaity
+    public int JuminoCapacity
     {
         get => this.juminocapcity;
         set => this.juminocapcity = Math.Clamp(value, 9, 48);

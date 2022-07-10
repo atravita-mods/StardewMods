@@ -2,7 +2,7 @@
 =============
 
 #### Version 0.2.0
-* Move to using AtraCore.
+* Move to using AtraCore, which should have improved loading times significantly.
 
 #### Version 0.1.7
 * Some efficiency improvements

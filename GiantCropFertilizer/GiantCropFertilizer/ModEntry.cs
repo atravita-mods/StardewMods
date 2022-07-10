@@ -150,7 +150,7 @@ internal sealed class ModEntry : Mod
             {
                 gmcmHelper.Register(
                     reset: static () => Config = new(),
-                    save: () => this.Helper.WriteConfig(Config))
+                    save: () => this.Helper.AsyncWriteConfig(this.Monitor, Config))
                 .AddParagraph(I18n.ModDescription)
                 .AddNumberOption(
                     name: I18n.GiantCropChance_Title,

@@ -30,30 +30,26 @@ internal sealed class ModEntry : Mod
     /// <remarks>If null, was not able to be loaded.</remarks>
     internal static ISpaceCoreAPI? SpaceCoreAPI => spaceCoreAPI;
 
-    // The following fields are set in the Entry method, which is about as close to the constructor as I can get
-#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
-
     /// <summary>
     /// Gets the logger for this mod.
     /// </summary>
-    internal static IMonitor ModMonitor { get; private set; }
+    internal static IMonitor ModMonitor { get; private set; } = null!;
 
     /// <summary>
     /// Gets SMAPI's data helper for this mod.
     /// </summary>
-    internal static IDataHelper DataHelper { get; private set; }
+    internal static IDataHelper DataHelper { get; private set; } = null!;
 
     /// <summary>
     /// Gets the config class for this mod.
     /// </summary>
-    internal static ModConfig Config { get; private set; }
-#pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
+    internal static ModConfig Config { get; private set; } = null!;
 
     [SuppressMessage("StyleCop.CSharp.OrderingRules", "SA1201:Elements should appear in the correct order", Justification = "Field kept near accessor.")]
     private static readonly Lazy<Func<string, bool>> CheckTagLazy = new(
-    typeof(SpecialOrder)
-        .GetCachedMethod("CheckTag", ReflectionCache.FlagTypes.StaticFlags)
-        .CreateDelegate<Func<string, bool>>);
+        typeof(SpecialOrder)
+            .GetCachedMethod("CheckTag", ReflectionCache.FlagTypes.StaticFlags)
+            .CreateDelegate<Func<string, bool>>);
 
     private static Func<string, bool> CheckTagDelegate => CheckTagLazy.Value;
 
@@ -157,7 +153,7 @@ internal sealed class ModEntry : Mod
             {
                 gmcmHelper.Register(
                     reset: static () => Config = new(),
-                    save: () => Task.Run(() => this.Helper.WriteConfig(Config)))
+                    save: () => this.Helper.AsyncWriteConfig(this.Monitor, Config))
                 .AddBoolOption(
                     name: I18n.SurpressUnnecessaryBoardUpdates_Name,
                     getValue: () => Config.SurpressUnnecessaryBoardUpdates,

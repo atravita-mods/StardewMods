@@ -14,29 +14,26 @@ using AtraUtils = AtraShared.Utils.Utils;
 namespace HighlightEmptyMachines;
 
 /// <inheritdoc />
-internal class ModEntry : Mod
+internal sealed class ModEntry : Mod
 {
     private MigrationManager? migrator;
 
     private GMCMHelper? gmcmHelper = null;
 
-#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
-
     /// <summary>
     /// Gets the logger for this mod.
     /// </summary>
-    internal static IMonitor ModMonitor { get; private set; }
+    internal static IMonitor ModMonitor { get; private set; } = null!;
 
     /// <summary>
     /// Gets the config instance for this mod.
     /// </summary>
-    internal static ModConfig Config { get; private set; }
+    internal static ModConfig Config { get; private set; } = null!;
 
     /// <summary>
     /// Gets the translation helper for this mod.
     /// </summary>
-    internal static ITranslationHelper TranslationHelper { get; private set; }
-#pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
+    internal static ITranslationHelper TranslationHelper { get; private set; } = null!;
 
     /// <inheritdoc />
     public override void Entry(IModHelper helper)
@@ -182,9 +179,20 @@ internal class ModEntry : Mod
     [EventPriority(EventPriority.Low)]
     private void OnSaveLoaded(object? sender, SaveLoadedEventArgs e)
     {
+        if (Context.IsSplitScreen && Context.ScreenId != 0)
+        {
+            return;
+        }
+
         this.migrator = new(this.ModManifest, this.Helper, this.Monitor);
-        this.migrator.ReadVersionInfo();
-        this.Helper.Events.GameLoop.Saved += this.WriteMigrationData;
+        if (!this.migrator.CheckVersionInfo())
+        {
+            this.Helper.Events.GameLoop.Saved += this.WriteMigrationData;
+        }
+        else
+        {
+            this.migrator = null;
+        }
 
         if (this.Helper.ModRegistry.IsLoaded("Digus.ProducerFrameworkMod"))
         {
@@ -212,7 +220,7 @@ internal class ModEntry : Mod
             }
 
             this.Monitor.Log("PFM compat set up!", LogLevel.Trace);
-            Task.Run(() =>  this.Helper.WriteConfig(Config));
+            Task.Run(() => this.Helper.WriteConfig(Config));
         }
         else
         {

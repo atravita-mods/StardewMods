@@ -53,6 +53,7 @@ class PTUtilities
                 if (farmer.activeDialogueEvents.TryGetValue(conversationTopic, out conversationdays))
                 {
                     Game1.player.activeDialogueEvents[conversationTopic] = conversationdays;
+                    break;
                 }
             }
         }
@@ -65,6 +66,7 @@ class PTUtilities
             SyncConversationTopics(conversationTopic);
         }
     }
+
     public static void LocalEventSyncs(IMonitor modMonitor)
     { // Sets Pam's home event as seen for everyone if any farmer has seen it.
       // but only if the mail flag isn't set.

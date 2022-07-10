@@ -1,7 +1,9 @@
 ﻿#if DEBUG
 using System.Reflection;
 using System.Reflection.Emit;
-using AtraBase.Toolkit.Reflection;
+using System.Runtime.CompilerServices;
+using AtraBase.Toolkit;
+using AtraCore.Framework.ReflectionManager;
 using AtraShared.Utils.Extensions;
 using AtraShared.Utils.HarmonyHelper;
 using HarmonyLib;
@@ -10,17 +12,21 @@ using StardewValley.Locations;
 
 namespace PamTries.HarmonyPatches;
 
+/// <summary>
+/// Patches for bus stops.
+/// </summary>
 [HarmonyPatch(typeof(BusStop))]
 internal static class BusStopPatch
 {
-    public static bool ShouldAllowBus(GameLocation loc)
+    [MethodImpl(TKConstants.Hot)]
+    private static bool ShouldAllowBus(GameLocation loc)
     {
         Vector2 bustile = new(11f, 10f);
         foreach(NPC npc in loc.getCharacters())
         {
             if (npc.isVillager() && npc.getTileLocation().Equals(bustile))
             {
-                ModEntry.ModMonitor.DebugOnlyLog($"Checking {npc.Name}", LogLevel.Warn);
+                ModEntry.ModMonitor.DebugOnlyLog($"Subbing in {npc.Name} as the bus driver.", LogLevel.Info);
                 return true;
             }
         }
@@ -31,7 +37,7 @@ internal static class BusStopPatch
     private static IEnumerable<CodeInstruction>? Transpiler(IEnumerable<CodeInstruction> instructions, ILGenerator gen, MethodBase original)
     {
         /*******************************
-         * Want to: remove the check for Pam from 
+         * Want to: remove the check for Pam from
          * if (Game1.player.Money >= (Game1.shippingTax ? 50 : 500) && base.characters.Contains(characterFromName) && characterFromName.getTileLocation().Equals(new Vector2(11f, 10f)))
          * AND replace it with our own check.
          *
@@ -77,12 +83,12 @@ internal static class BusStopPatch
                     new (OpCodes.Ldc_R4, 11),
                     new (OpCodes.Ldc_R4, 10),
                     new (OpCodes.Newobj),
-                    new (OpCodes.Call, typeof(Vector2).InstanceMethodNamed(nameof(Vector2.Equals), new Type[] { typeof(Vector2) })),
+                    new (OpCodes.Call, typeof(Vector2).GetCachedMethod(nameof(Vector2.Equals), ReflectionCache.FlagTypes.InstanceFlags, new Type[] { typeof(Vector2) })),
                 })
                 .Insert(new CodeInstruction[]
                 {
                     new (OpCodes.Ldarg_0),
-                    new (OpCodes.Call, typeof(BusStopPatch).StaticMethodNamed(nameof(BusStopPatch.ShouldAllowBus))),
+                    new (OpCodes.Call, typeof(BusStopPatch).GetCachedMethod(nameof(BusStopPatch.ShouldAllowBus), ReflectionCache.FlagTypes.StaticFlags)),
                 });
             return helper.Render();
         }

@@ -19,7 +19,7 @@ internal static class SpecialOrderPatches
     [HarmonyPrefix]
     [HarmonyPriority(Priority.Last)]
     [HarmonyPatch(nameof(SpecialOrder.UpdateAvailableSpecialOrders))]
-    private static bool PrefixUpdate() => SpecialOrder.IsSpecialOrdersBoardUnlocked() && ModEntry.Config.SurpressUnnecessaryBoardUpdates;
+    private static bool PrefixUpdate() => ModEntry.Config.SurpressUnnecessaryBoardUpdates && SpecialOrder.IsSpecialOrdersBoardUnlocked();
 
     [HarmonyPrefix]
     [HarmonyPriority(Priority.HigherThanNormal)]

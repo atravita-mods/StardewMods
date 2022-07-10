@@ -22,7 +22,15 @@ internal static class ScheduleErrorFixer
         {
             return;
         }
+
         ModEntry.ModMonitor.Log($"{__instance.Name} seems to have a null current location, attempting to fix. Please inform their author! The current day is {SDate.Now()}, their attempted schedule string was {rawData}", LogLevel.Info);
+
+        bool foundSchedule = ModEntry.UtilitySchedulingFunctions.TryFindGOTOschedule(__instance, SDate.Now(), rawData, out string? scheduleString);
+        if (foundSchedule)
+        {
+            ModEntry.ModMonitor.Log($"\tThat schedule redirected to {scheduleString}.", LogLevel.Info);
+        }
+
         if (__instance.Name is "Leo" && Game1.MasterPlayer.hasOrWillReceiveMail("leoMoved") && Game1.getLocationFromName("LeoTreeHouse") is GameLocation leohouse)
         {
             __instance.currentLocation = leohouse;
@@ -54,9 +62,9 @@ internal static class ScheduleErrorFixer
         }
 
         // Still no go, let's try parsing from the first schedule entry.
-        if (__instance.currentLocation is null)
+        if (__instance.currentLocation is null && foundSchedule)
         {
-            SpanSplit splits = rawData.SpanSplit(expectedCount: 3);
+            SpanSplit splits = scheduleString.SpanSplit(expectedCount: 3);
             if (splits.TryGetAtIndex(1, out SpanSplitEntry locName) && Game1.getLocationFromName(locName.ToString()) is GameLocation loc)
             {
                 __instance.currentLocation = loc;

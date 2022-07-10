@@ -12,7 +12,7 @@ public class Splitter
         + " Nam bibendum hendrerit urna, sed vehicula diam varius et.Integer gravida venenatis libero sit amet maximus.Etiam tempor, lectus eget mattis interdum, arcu lacus accumsan nibh, vitae sagittis neque magna non tortor. Morbi id leo gravida dolor bibendum pretium eget vitae sapien. Nulla facilisi. Nulla at lorem id nisl maximus pulvinar.Donec venenatis sem ut risus scelerisque pellentesque.Pellentesque metus sapien, venenatis scelerisque justo sit amet, hendrerit congue nisl.Ut sed turpis magna."
         + " Ut vehicula nibh quis malesuada efficitur. Nunc volutpat nibh sed mi laoreet semper.Nullam nec erat risus. Morbi ac metus sed velit imperdiet dignissim a eget nisi. Donec in interdum enim, maximus condimentum neque.Mauris sollicitudin, velit in pellentesque fringilla, libero augue lacinia ex, id congue eros lorem ac tellus. Cras convallis sagittis risus vitae pulvinar. Morbi scelerisque fringilla diam, eget laoreet ligula.Suspendisse sed lectus aliquam, efficitur tortor eu, placerat elit. Nam vehicula nunc nec ex facilisis feugiat.Phasellus aliquam, magna eu eleifend lobortis, nunc massa scelerisque libero, eget convallis lectus risus congue purus. Vestibulum sem nunc, mattis vel velit eu, molestie pharetra ex.Cras egestas scelerisque porttitor. Aenean et est et tortor porta fermentum.Cras lobortis tortor purus, aliquam hendrerit felis luctus pulvinar.Quisque eu urna eget velit consequat varius non nec sapien.";
 
-    [Benchmark]
+    //[Benchmark]
     public void Split()
     {
         foreach (var s in lori.Split())
@@ -20,7 +20,7 @@ public class Splitter
         }
     }
 
-    [Benchmark]
+    //[Benchmark]
     public void StreamSplit()
     {
         foreach (var s in new StreamSplit(lori.AsSpan()))

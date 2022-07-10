@@ -1,6 +1,7 @@
 ﻿namespace AtraShared.Integrations.Interfaces.Fluent;
 
 #pragma warning disable SA1615 // Element return value should be documented - copied from API.
+#pragma warning disable SA1201 // Elements should appear in the correct order
 
 /// <summary>A type allowing access to Project Fluent translations.</summary>
 /// <typeparam name="Key">The type of values this instance allows retrieving translations for.</typeparam>
@@ -26,4 +27,5 @@ public interface IFluent<Key>
     string this[Key key]
         => this.Get(key, null);
 }
+#pragma warning restore SA1201 // Elements should appear in the correct order
 #pragma warning restore SA1615 // Element return value should be documented

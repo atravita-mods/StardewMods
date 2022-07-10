@@ -1,9 +1,9 @@
-﻿using AtraBase.Toolkit.Reflection;
+﻿using AtraCore.Framework.ReflectionManager;
+using AtraCore.Utilities;
 using AtraShared.ConstantsAndEnums;
 using AtraShared.Integrations;
 using AtraShared.Integrations.Interfaces;
 using AtraShared.MigrationManager;
-using AtraShared.Utils;
 using AtraShared.Utils.Extensions;
 using HarmonyLib;
 using SpecialOrdersExtended.Managers;
@@ -14,7 +14,7 @@ using AtraUtils = AtraShared.Utils.Utils;
 namespace SpecialOrdersExtended;
 
 /// <inheritdoc />
-internal class ModEntry : Mod
+internal sealed class ModEntry : Mod
 {
     private MigrationManager? migrator;
 
@@ -29,10 +29,6 @@ internal class ModEntry : Mod
     /// </summary>
     /// <remarks>If null, was not able to be loaded.</remarks>
     internal static ISpaceCoreAPI? SpaceCoreAPI => spaceCoreAPI;
-
-    private static readonly Lazy<Func<string, bool>> CheckTagLazy = new(typeof(SpecialOrder).StaticMethodNamed("CheckTag").CreateDelegate<Func<string, bool>>);
-
-    private static Func<string, bool> CheckTagDelegate => CheckTagLazy.Value;
 
     // The following fields are set in the Entry method, which is about as close to the constructor as I can get
 #pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
@@ -52,6 +48,14 @@ internal class ModEntry : Mod
     /// </summary>
     internal static ModConfig Config { get; private set; }
 #pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
+
+    [SuppressMessage("StyleCop.CSharp.OrderingRules", "SA1201:Elements should appear in the correct order", Justification = "Field kept near accessor.")]
+    private static readonly Lazy<Func<string, bool>> CheckTagLazy = new(
+    typeof(SpecialOrder)
+        .GetCachedMethod("CheckTag", ReflectionCache.FlagTypes.StaticFlags)
+        .CreateDelegate<Func<string, bool>>);
+
+    private static Func<string, bool> CheckTagDelegate => CheckTagLazy.Value;
 
     /// <inheritdoc/>
     public override void Entry(IModHelper helper)
@@ -88,7 +92,6 @@ internal class ModEntry : Mod
         helper.Events.GameLoop.SaveLoaded += this.SaveLoaded;
         helper.Events.GameLoop.Saving += this.Saving;
         helper.Events.GameLoop.DayEnding += this.OnDayEnd;
-        helper.Events.GameLoop.TimeChanged += this.OnTimeChanged;
         helper.Events.GameLoop.OneSecondUpdateTicking += this.OneSecondUpdateTicking;
         helper.Events.Content.AssetRequested += this.OnAssetRequested;
     }
@@ -119,15 +122,6 @@ internal class ModEntry : Mod
     }
 
     /// <summary>
-    /// Raised every 10 in game minutes.
-    /// </summary>
-    /// <param name="sender">Unknown, used by SMAPI.</param>
-    /// <param name="e">TimeChanged params.</param>
-    /// <remarks>Currently handles: pushing delayed dialogue back onto the stack.</remarks>
-    private void OnTimeChanged(object? sender, TimeChangedEventArgs e)
-        => DialogueManager.PushPossibleDelayedDialogues();
-
-    /// <summary>
     /// Raised every second.
     /// </summary>
     /// <param name="sender">Unknown, used by SMAPI.</param>
@@ -156,6 +150,21 @@ internal class ModEntry : Mod
             api.RegisterToken(this.ModManifest, "CurrentRules", new Tokens.CurrentSpecialOrderRule());
             api.RegisterToken(this.ModManifest, "RecentCompleted", new Tokens.RecentCompletedSO());
         }
+
+        {
+            GMCMHelper gmcmHelper = new(this.Monitor, this.Helper.Translation, this.Helper.ModRegistry, this.ModManifest);
+            if (gmcmHelper.TryGetAPI())
+            {
+                gmcmHelper.Register(
+                    reset: static () => Config = new(),
+                    save: () => Task.Run(() => this.Helper.WriteConfig(Config)))
+                .AddBoolOption(
+                    name: I18n.SurpressUnnecessaryBoardUpdates_Name,
+                    getValue: () => Config.SurpressUnnecessaryBoardUpdates,
+                    setValue: (value) => Config.SurpressUnnecessaryBoardUpdates = value,
+                    tooltip: I18n.SurpressUnnecessaryBoardUpdates_Description);
+            }
+        }
     }
 
     /// <summary>
@@ -169,7 +178,6 @@ internal class ModEntry : Mod
         this.Monitor.DebugOnlyLog("Event Saving raised");
 
         DialogueManager.Save(); // Save dialogue
-        DialogueManager.ClearDelayedDialogue();
 
         if (Context.IsSplitScreen && Context.ScreenId != 0)
         {// Some properties only make sense for a single player to handle in splitscreen.
@@ -200,9 +208,15 @@ internal class ModEntry : Mod
             return;
         }
         this.migrator = new(this.ModManifest, this.Helper, this.Monitor);
-        this.migrator.ReadVersionInfo();
 
-        this.Helper.Events.GameLoop.Saved += this.WriteMigrationData;
+        if (!this.migrator.CheckVersionInfo())
+        {
+            this.Helper.Events.GameLoop.Saved += this.WriteMigrationData;
+        }
+        else
+        {
+            this.migrator = null;
+        }
         RecentSOManager.Load();
     }
 
@@ -261,7 +275,7 @@ internal class ModEntry : Mod
         {
             ModMonitor.Log(I18n.LoadSaveFirst(), LogLevel.Warn);
         }
-        Dictionary<string, SpecialOrderData> order_data = Game1.content.Load<Dictionary<string, SpecialOrderData>>("Data\\SpecialOrders");
+        Dictionary<string, SpecialOrderData> order_data = Game1.content.Load<Dictionary<string, SpecialOrderData>>(@"Data\SpecialOrders");
         List<string> keys = AtraUtils.ContextSort(order_data.Keys);
         ModMonitor.Log(I18n.NumberFound(count: keys.Count), LogLevel.Debug);
 
@@ -271,7 +285,7 @@ internal class ModEntry : Mod
         foreach (string key in keys)
         {
             SpecialOrderData order = order_data[key];
-            if (this.IsAvailableOrder(key, order))
+            if (IsAvailableOrder(key, order))
             {
                 ModMonitor.DebugOnlyLog($"\t{key} is valid");
                 validkeys.Add(key);
@@ -285,7 +299,7 @@ internal class ModEntry : Mod
         ModMonitor.Log($"{I18n.UnseenKeys(count: unseenkeys.Count)}: {string.Join(", ", unseenkeys)}", LogLevel.Debug);
     }
 
-    private bool IsAvailableOrder(string key, SpecialOrderData order)
+    private static bool IsAvailableOrder(string key, SpecialOrderData order)
     {
         ModMonitor.Log($"{I18n.Analyzing()} {key}", LogLevel.Debug);
         try

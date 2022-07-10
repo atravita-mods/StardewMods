@@ -15,13 +15,7 @@ internal class TagManager
     /// Gets a seeded random that changes once per in-game week.
     /// </summary>
     internal static Random Random
-    {
-        get
-        {
-            random ??= new Random(((int)Game1.uniqueIDForThisGame * 26) + (int)(Game1.stats.DaysPlayed / 7 * 36));
-            return random;
-        }
-    }
+         => random ??= new Random(((int)Game1.uniqueIDForThisGame * 26) + (int)(Game1.stats.DaysPlayed / 7 * 36));
 
     /// <summary>
     /// Delete's the random so it can be reset later.

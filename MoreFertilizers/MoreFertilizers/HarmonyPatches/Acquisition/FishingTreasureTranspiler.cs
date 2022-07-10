@@ -1,6 +1,5 @@
 ﻿using System.Reflection;
 using System.Reflection.Emit;
-using AtraBase.Toolkit.Reflection;
 using AtraCore.Framework.ReflectionManager;
 using AtraShared.Utils.Extensions;
 using AtraShared.Utils.HarmonyHelper;
@@ -22,7 +21,7 @@ internal static class FishingTreasureTranspiler
             int fertilizerToDrop = Game1.player.fishingLevel.Value.GetRandomFertilizerFromLevel();
             if (fertilizerToDrop != -1)
             {
-                return new SObject(fertilizerToDrop, Game1.random.Next(1, 4));
+                return new SObject(fertilizerToDrop, Game1.random.Next(1, 4 + (int)(Game1.player.DailyLuck * 20)));
             }
         }
         return null;
@@ -41,7 +40,7 @@ internal static class FishingTreasureTranspiler
             })
             .FindNext(new CodeInstructionWrapper[]
             { // find the constructor for List<Item>, which is used to hold the treasure.
-                new(OpCodes.Newobj, typeof(List<Item>).Constructor(Type.EmptyTypes)),
+                new(OpCodes.Newobj, typeof(List<Item>).GetCachedConstructor(ReflectionCache.FlagTypes.InstanceFlags)),
                 new(SpecialCodeInstructionCases.StLoc),
             })
             .Advance(1);
@@ -56,10 +55,10 @@ internal static class FishingTreasureTranspiler
             .Insert(new CodeInstruction[]
             { // insert if(GetPossibleRandomFertilizer() is SObject obj) treasureList.Add(obj);
                 ldloc,
-                new(OpCodes.Call, typeof(FishingTreasureTranspiler).StaticMethodNamed(nameof(GetPossibleRandomFertilizer))),
+                new(OpCodes.Call, typeof(FishingTreasureTranspiler).GetCachedMethod(nameof(GetPossibleRandomFertilizer), ReflectionCache.FlagTypes.StaticFlags)),
                 new(OpCodes.Dup),
                 new(OpCodes.Brfalse_S, noObject),
-                new(OpCodes.Call, typeof(List<Item>).InstanceMethodNamed("Add")),
+                new(OpCodes.Call, typeof(List<Item>).GetCachedMethod("Add", ReflectionCache.FlagTypes.InstanceFlags)),
                 new(OpCodes.Br_S, finish),
                 new CodeInstruction(OpCodes.Pop).WithLabels(noObject),
                 new(OpCodes.Pop),

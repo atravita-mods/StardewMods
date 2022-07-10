@@ -1,6 +1,5 @@
 ﻿using System.Reflection;
 using System.Reflection.Emit;
-using AtraBase.Toolkit.Reflection;
 using AtraCore.Framework.ReflectionManager;
 using AtraShared.ConstantsAndEnums;
 using AtraShared.Utils.Extensions;
@@ -11,7 +10,7 @@ using StardewValley.Tools;
 namespace AvoidLosingScepter;
 
 /// <inheritdoc />
-internal class ModEntry : Mod
+internal sealed class ModEntry : Mod
 {
 #pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
 
@@ -45,6 +44,36 @@ internal class ModEntry : Mod
             harmony.Patch(
                 original: typeof(Event).GetCachedMethod(nameof(Event.command_hospitaldeath), ReflectionCache.FlagTypes.InstanceFlags),
                 transpiler: transpiler);
+            if (this.Helper.ModRegistry.IsLoaded("spacechase0.MoonMisadventures"))
+            {
+                Type? mmMineDeath = AccessTools.TypeByName("MoonMisadventures.Patches.EventNoMineDeathPersistLossPatch");
+                MethodInfo? mmMineDeathImpl = AccessTools.Method(mmMineDeath, "Impl");
+
+                if (mmMineDeathImpl is not null)
+                {
+                    harmony.Patch(
+                        original: mmMineDeathImpl,
+                        transpiler: transpiler);
+                }
+                else
+                {
+                    this.Monitor.Log("Attempt to patch MoonMisadventures for compat failed, this mod will not work.", LogLevel.Error);
+                }
+
+                Type? mmHospitalDeath = AccessTools.TypeByName("MoonMisadventures.Patches.EventNoHospitalDeathPersistLossPatch");
+                MethodInfo? mmHospitalDeathImpl = AccessTools.Method(mmHospitalDeath, "Impl");
+
+                if (mmHospitalDeathImpl is not null)
+                {
+                    harmony.Patch(
+                        original: mmHospitalDeathImpl,
+                        transpiler: transpiler);
+                }
+                else
+                {
+                    this.Monitor.Log("Attempt to patch MoonMisadventures for compat failed, this mod will not work.", LogLevel.Error);
+                }
+            }
         }
         catch (Exception ex)
         {
@@ -72,14 +101,14 @@ internal class ModEntry : Mod
                 new(OpCodes.Isinst, typeof(MeleeWeapon)),
                 new(OpCodes.Callvirt),
                 new(OpCodes.Ldc_I4_S, 47),
-                new(OpCodes.Beq),
+                new(SpecialCodeInstructionCases.Wildcard, (inst) => inst.opcode == OpCodes.Beq || inst.opcode == OpCodes.Beq_S ),
             });
 
             int startindex = helper.Pointer;
 
             helper.FindNext(new CodeInstructionWrapper[]
             {
-                new(OpCodes.Beq),
+                new(SpecialCodeInstructionCases.Wildcard, (inst) => inst.opcode == OpCodes.Beq || inst.opcode == OpCodes.Beq_S ),
             })
             .StoreBranchDest()
             .Push()
@@ -89,7 +118,7 @@ internal class ModEntry : Mod
 
             int endindex = helper.Pointer;
 
-            List<CodeInstruction>? copylist = new();
+            List<CodeInstruction>? copylist = new(endindex - startindex);
             foreach (CodeInstruction? code in helper.Codes.GetRange(startindex, endindex - startindex - 3))
             {
                 copylist.Add(code.Clone());

@@ -1,5 +1,8 @@
 ﻿Changelog
 =============
+#### Version 0.2.0
+* Move to using AtraCore.
+
 #### Version 0.1.5
 * Fix migration code. Again.
 

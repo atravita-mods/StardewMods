@@ -131,6 +131,10 @@ public static class ReflectionCache
         return ReflectionThrowHelper.ThrowMethodNotFoundException<FieldInfo>(type.FullName + "::" + fieldName);
     }
 
+    /// <summary>
+    /// Clears the reflection cache.
+    /// </summary>
     internal static void Clear() => Cache.Clear();
+
     internal static void Swap() => Cache.Swap();
 }

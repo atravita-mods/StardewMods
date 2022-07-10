@@ -1,4 +1,6 @@
-﻿using Microsoft.Xna.Framework;
+﻿using AtraBase.Toolkit.Reflection;
+using HarmonyLib;
+using Microsoft.Xna.Framework;
 using StardewValley.Objects;
 using StardewValley.Tools;
 
@@ -10,6 +12,11 @@ namespace AtraShared.ConstantsAndEnums;
 [Flags]
 public enum ItemTypeEnum : uint
 {
+    /// <summary>
+    /// An item type that I don't know about.
+    /// </summary>
+    Unknown = 0,
+
     /// <summary>
     /// A big craftable - <see cref="Game1.bigCraftablesInformation"/>
     /// Use the Vector2 constructor.
@@ -64,17 +71,22 @@ public enum ItemTypeEnum : uint
     /// <summary>
     /// Any tool. <see cref="StardewValley.Tool"/>, excluding MeleeWeapons.
     /// </summary>
-    Tool = 0b1 << 9,
+    Tool = 0b1 << 10,
 
     /// <summary>
-    /// Any wallpaper or flooring item. <see cref="StardewValley.Objects.Wallpaper"/>
+    /// Any wallpaper <see cref="StardewValley.Objects.Wallpaper"/>
     /// </summary>
-    WallpaperAndFlooring = 0b1 << 8,
+    Wallpaper = 0b1 << 8,
+
+    /// <summary>
+    /// Any flooring item <see cref="StardewValley.Objects.Wallpaper"/>
+    /// </summary>
+    Flooring = 0b1 << 9,
 
     /// <summary>
     /// Any member of the class <see cref="StardewValley.Tools.MeleeWeapon"/>
     /// </summary>
-    Weapon = 0b1 << 10,
+    Weapon = 0b1 << 11,
 
     /// <summary>
     /// Any item that should actually be the recipe form.
@@ -88,15 +100,27 @@ public enum ItemTypeEnum : uint
 /// </summary>
 public static class ItemExtensions
 {
-#warning - TODO: generate all the isinst methods for DGA objects.
+    /// <summary>
+    /// Gets whether or not something is a DGA item.
+    /// </summary>
+    private static Lazy<Func<object, bool>?> isDGAItem = new(() =>
+    {
+        Type? type = AccessTools.TypeByName("DynamicGameAssets.Game.IDGAItem, DynamicGameAssets");
+        return type?.GetTypeIs();
+    });
+
+    /// <summary>
+    /// Gets whether or not something is a DGA item.
+    /// (note - if null, DGA was not installed or could not be found.)
+    /// </summary>
+    public static Func<object, bool>? IsDGAItem => isDGAItem.Value;
 
     /// <summary>
     /// Tries to get the ItemTypeEnum for a specific item.
-    /// Returns null if not possible.
     /// </summary>
     /// <param name="item">Item to check.</param>
     /// <returns>The ItemTypeEnum.</returns>
-    public static ItemTypeEnum? GetItemType(this Item item)
+    public static ItemTypeEnum GetItemType(this Item item)
     {
         ItemTypeEnum ret;
         switch (item)
@@ -122,8 +146,8 @@ public static class ItemExtensions
             case Tool:
                 ret = ItemTypeEnum.Tool;
                 break;
-            case Wallpaper:
-                ret = ItemTypeEnum.WallpaperAndFlooring;
+            case Wallpaper wallpaper:
+                ret = wallpaper.isFloor.Value ? ItemTypeEnum.Flooring : ItemTypeEnum.Wallpaper;
                 break;
             case Furniture:
                 ret = ItemTypeEnum.Furniture;
@@ -138,8 +162,14 @@ public static class ItemExtensions
                 break;
             }
             default:
-                return null;
+                return ItemTypeEnum.Unknown;
         }
+
+        if (IsDGAItem?.Invoke(item) == true)
+        {
+            ret |= ItemTypeEnum.DGAItem;
+        }
+
         return ret;
     }
 }

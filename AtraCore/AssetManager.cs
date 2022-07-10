@@ -1,7 +1,6 @@
 ﻿using AtraBase.Collections;
 using AtraCore.Models;
 using StardewModdingAPI.Events;
-using StardewModdingAPI.Utilities;
 
 namespace AtraCore;
 
@@ -10,13 +9,11 @@ namespace AtraCore;
 /// </summary>
 internal static class AssetManager
 {
-    private static readonly string PrismaticMaskData = PathUtilities.NormalizeAssetName("Mods/atravita/DrawPrismaticData");
-
-    internal static List<DrawPrismaticModel>? GetPrismaticModels()
+    internal static Dictionary<string, DrawPrismaticModel>? GetPrismaticModels()
     {
         try
         {
-            return Game1.content.Load<List<DrawPrismaticModel>>(PrismaticMaskData);
+            return Game1.content.Load<Dictionary<string, DrawPrismaticModel>>(AtraCoreConstants.PrismaticMaskData);
         }
         catch
         {
@@ -27,9 +24,9 @@ internal static class AssetManager
 
     internal static void Apply(AssetRequestedEventArgs e)
     {
-        if (e.NameWithoutLocale.IsEquivalentTo(PrismaticMaskData))
+        if (e.NameWithoutLocale.IsEquivalentTo(AtraCoreConstants.PrismaticMaskData))
         {
-            e.LoadFrom(EmptyContainers.GetEmptyList<DrawPrismaticModel>, AssetLoadPriority.Low);
+            e.LoadFrom(EmptyContainers.GetEmptyDictionary<string, DrawPrismaticModel>, AssetLoadPriority.Low);
         }
     }
 

@@ -1,5 +1,6 @@
 ﻿using StardewModdingAPI.Events;
 using StardewModdingAPI.Utilities;
+using StardewValley.Locations;
 
 namespace GingerIslandMainlandAdjustments.AssetManagers;
 
@@ -12,6 +13,7 @@ internal static class AssetEditor
     /// Pam's mail key.
     /// </summary>
     internal const string PAMMAILKEY = "atravita_GingerIslandMainlandAdjustments_PamMail";
+    internal const int PAMEVENT = 99219999;
 
     // The following dialogue is edited from the code side so each NPC has at least the Resort dialogue.
     // A CP pack will override as these are set to edit early.
@@ -38,27 +40,7 @@ internal static class AssetEditor
     /// <param name="e">Asset event arguments.</param>
     internal static void Edit(AssetRequestedEventArgs e)
     {
-        if (e.NameWithoutLocale.IsEquivalentTo(GeorgeDialogueLocation))
-        {
-            e.Edit(EditGeorgeDialogue, AssetEditPriority.Early);
-        }
-        else if (e.NameWithoutLocale.IsEquivalentTo(EvelynDialogueLocation))
-        {
-            e.Edit(EditEvelynDialogue, AssetEditPriority.Early);
-        }
-        else if (e.NameWithoutLocale.IsEquivalentTo(SandyDialogueLocation))
-        {
-            e.Edit(EditSandyDialogue, AssetEditPriority.Early);
-        }
-        else if (e.NameWithoutLocale.IsEquivalentTo(WillyDialogueLocation))
-        {
-            e.Edit(EditWillyDialogue, AssetEditPriority.Early);
-        }
-        else if (e.NameWithoutLocale.IsEquivalentTo(WizardDialogueLocation))
-        {
-            e.Edit(EditWizardDialogue, AssetEditPriority.Early);
-        }
-        else if (e.NameWithoutLocale.IsEquivalentTo(PhoneStringLocation))
+        if (e.NameWithoutLocale.IsEquivalentTo(PhoneStringLocation))
         {
             e.Edit(EditPhone, AssetEditPriority.Early);
         }
@@ -73,6 +55,30 @@ internal static class AssetEditor
         else if (e.NameWithoutLocale.IsEquivalentTo(DataEventsTrailerBig))
         {
             e.Edit(EditTrailerBig, AssetEditPriority.Late);
+        }
+        else if (e.NameWithoutLocale.IsDirectlyUnderPath("Characters/Dialogue")
+            && Game1.getLocationFromName("IslandSouth") is IslandSouth island && island.resortRestored.Value)
+        {
+            if (e.NameWithoutLocale.IsEquivalentTo(GeorgeDialogueLocation))
+            {
+                e.Edit(EditGeorgeDialogue, AssetEditPriority.Early);
+            }
+            else if (e.NameWithoutLocale.IsEquivalentTo(EvelynDialogueLocation))
+            {
+                e.Edit(EditEvelynDialogue, AssetEditPriority.Early);
+            }
+            else if (e.NameWithoutLocale.IsEquivalentTo(SandyDialogueLocation))
+            {
+                e.Edit(EditSandyDialogue, AssetEditPriority.Early);
+            }
+            else if (e.NameWithoutLocale.IsEquivalentTo(WillyDialogueLocation))
+            {
+                e.Edit(EditWillyDialogue, AssetEditPriority.Early);
+            }
+            else if (e.NameWithoutLocale.IsEquivalentTo(WizardDialogueLocation))
+            {
+                e.Edit(EditWizardDialogue, AssetEditPriority.Early);
+            }
         }
     }
 
@@ -130,7 +136,7 @@ internal static class AssetEditor
     private static void EditSeedShopEvent(IAssetData e)
     {
         IAssetDataForDictionary<string, string>? editor = e.AsDictionary<string, string>();
-        editor.Data["99219999/e 503180/f Pam 2500/v Pam/w rainy/t 1700 2600"] = string.Join(
+        editor.Data[$"{PAMEVENT}/e 503180/f Pam 2500/v Pam/w rainy/t 1700 2600"] = string.Join(
             separator: string.Empty,
             "sadpiano/-1000 -1000/farmer 35 21 0 Pam 37 18 0/ignoreCollisions farmer/",
             "ignoreCollisions Pam/viewport 37 21 true/move farmer 0 -3 1/faceDirection Pam 3/",

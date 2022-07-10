@@ -1,9 +1,9 @@
 ﻿using System.Reflection;
+using AtraCore.Utilities;
 using AtraShared.ConstantsAndEnums;
 using AtraShared.Integrations;
 using AtraShared.Integrations.Interfaces;
 using AtraShared.MigrationManager;
-using AtraShared.Utils;
 using AtraShared.Utils.Extensions;
 using HarmonyLib;
 using Microsoft.Xna.Framework;
@@ -23,7 +23,7 @@ using AtraUtils = AtraShared.Utils.Utils;
 namespace MoreFertilizers;
 
 /// <inheritdoc />
-internal class ModEntry : Mod
+internal sealed class ModEntry : Mod
 {
     private const string SavedIDKey = "MFSavedObjectID";
 
@@ -369,38 +369,39 @@ internal class ModEntry : Mod
     /// <remarks>Handled by <see cref="SpecialFertilizerApplication" /> and typically stored in <see cref="ModDataDictionary"/>.</remarks>
     internal static List<int> SpecialFertilizerIDs { get; } = new List<int>();
 
-#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
+    /**************
+     * Generally useful things that need to be attached to something static.
+     **************/
 
     /// <summary>
     /// Gets the logger for this mod.
     /// </summary>
-    internal static IMonitor ModMonitor { get; private set; }
+    internal static IMonitor ModMonitor { get; private set; } = null!;
 
     /// <summary>
     /// Gets the multiplayer helper for this mod.
     /// </summary>
-    internal static IMultiplayerHelper MultiplayerHelper { get; private set; }
+    internal static IMultiplayerHelper MultiplayerHelper { get; private set; } = null!;
 
     /// <summary>
     /// Gets the mod content helper for this mod.
     /// </summary>
-    internal static IModContentHelper ModContentHelper { get; private set; }
+    internal static IModContentHelper ModContentHelper { get; private set; } = null!;
 
     /// <summary>
     /// Gets the location of this mod.
     /// </summary>
-    internal static string DIRPATH { get; private set; }
+    internal static string DIRPATH { get; private set; } = null!;
 
     /// <summary>
     /// Gets this mod's uniqueID.
     /// </summary>
-    internal static string UNIQUEID { get; private set; }
+    internal static string UNIQUEID { get; private set; } = null!;
 
     /// <summary>
     /// Gets the config instance for this mod.
     /// </summary>
-    internal static ModConfig Config { get; private set; }
-#pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
+    internal static ModConfig Config { get; private set; } = null!;
 
     /// <inheritdoc />
     public override void Entry(IModHelper helper)
@@ -1012,21 +1013,32 @@ internal class ModEntry : Mod
         JojaSample.Reset();
         MiraculousFertilizerHandler.Initialize();
 
+        if (Context.IsSplitScreen && Context.ScreenId != 0)
+        {
+            return;
+        }
+
+        MultiplayerHelpers.AssertMultiplayerVersions(this.Helper.Multiplayer, this.ModManifest, this.Monitor, this.Helper.Translation);
+
         IntegrationHelper pfmHelper = new(this.Monitor, this.Helper.Translation, this.Helper.ModRegistry, LogLevel.Trace);
         if (pfmHelper.TryGetAPI("Digus.ProducerFrameworkMod", "1.7.4", out IProducerFrameworkModAPI? pfmAPI))
         {
             pfmAPI.AddContentPack(Path.Combine(this.Helper.DirectoryPath, "assets", "pfm-assets"));
         }
 
-        MultiplayerHelpers.AssertMultiplayerVersions(this.Helper.Multiplayer, this.ModManifest, this.Monitor, this.Helper.Translation);
-
         this.migrator = new(this.ModManifest, this.Helper, this.Monitor);
-        this.migrator.ReadVersionInfo();
-        this.Helper.Events.GameLoop.Saved += this.WriteMigrationData;
+
+        if (!this.migrator.CheckVersionInfo())
+        {
+            this.Helper.Events.GameLoop.Saved += this.WriteMigrationData;
+        }
+        else
+        {
+            this.migrator = null;
+        }
 
         this.FixIDs();
-        this.Helper.GameContent.InvalidateCache("Data/ObjectInformation");
-        this.Helper.GameContent.InvalidateCache($"Data/ObjectInformation.{this.Helper.Translation.Locale}");
+        this.Helper.GameContent.InvalidateCacheAndLocalized("Data/ObjectInformation");
 
         if (Context.IsMainPlayer)
         {

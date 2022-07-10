@@ -112,8 +112,8 @@
             "Pam_y5": "One year ends and another begins...Hope Penny is enjoyin' this..."
         },
         "When": {
-			"HasValue:{{ChildNames | valueAt=1}}": true,
+            "HasValue:{{ChildNames | valueAt=1}}": true,
             "HasMod":"Rafseazz.RSVCP"
-		}
+        }
     }
 ]}

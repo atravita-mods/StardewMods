@@ -12,9 +12,11 @@ namespace MoreFertilizers.HarmonyPatches.Acquisition;
 [HarmonyPatch(typeof(GameLocation))]
 internal static class GameLocationPatches
 {
+#pragma warning disable SA1310 // Field names should not contain underscore. Reviewed.
     private const int MIN_MONSTER_HEALTH = 40;
     private const double DEFAULT_DROP_CHANCE = 0.25;
     private static readonly PerScreen<double> DropChance = new(() => DEFAULT_DROP_CHANCE);
+#pragma warning restore SA1310 // Field names should not contain underscore
 
     /// <summary>
     /// Resets the dropchance, once per day.
@@ -42,11 +44,11 @@ internal static class GameLocationPatches
                     __instance.debris.Add(
                         monster.ModifyMonsterLoot(
                             new Debris(
-                                new SObject(
-                                    fertilizerToDrop,
-                                    Game1.random.Next(1, Math.Clamp(monster.MaxHealth / MIN_MONSTER_HEALTH, 1, 4))),
-                                new Vector2(x, y),
-                                who.Position)));
+                                item: new SObject(
+                                    parentSheetIndex: fertilizerToDrop,
+                                    initialStack: Game1.random.Next(1, Math.Clamp(monster.MaxHealth / MIN_MONSTER_HEALTH, 1, 4))),
+                                debrisOrigin: new Vector2(x, y),
+                                targetLocation: who.Position)));
                 }
             }
             while(passes-- > 0 && who.isWearingRing(Ring.burglarsRing));

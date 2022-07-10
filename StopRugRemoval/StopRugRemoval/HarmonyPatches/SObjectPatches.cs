@@ -39,7 +39,9 @@ internal static class SObjectPatches
             {
                 return true;
             }
-            (int posX, int posY) = ((tile * 64f) + new Vector2(32f, 32f)).ToPoint();
+
+            int posX = ((int)tile.X * 64) + 32;
+            int posY = ((int)tile.Y * 64) + 32;
             foreach (Furniture f in location.furniture)
             {
                 if (f.furniture_type.Value == Furniture.rug && f.getBoundingBox(f.TileLocation).Contains(posX, posY))

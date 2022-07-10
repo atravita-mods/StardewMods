@@ -1,57 +1,55 @@
 ﻿using System.Linq.Expressions;
 using System.Reflection;
 
+using StardewModdingAPI.Events;
+
 namespace FrameRateLogger;
 
 /// <inheritdoc />
-internal class ModEntry : Mod
+internal sealed class ModEntry : Mod
 {
-#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
+    private Func<FrameRateCounter, int>? FramerateGetter { get; set; } = null!;
 
-    /// <summary>
-    /// Gets the logger for this mod.
-    /// </summary>
-    internal static IMonitor ModMonitor { get; private set; }
-
-    Func<FrameRateCounter, int>? framerateGetter { get; set; }
-
-    FrameRateCounter? frameRateCounter { get; set; }
-#pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
+    private FrameRateCounter? FrameRateCounter { get; set; } = null!;
 
     /// <inheritdoc />
     public override void Entry(IModHelper helper)
     {
-        ModMonitor = this.Monitor;
-        this.frameRateCounter = new(GameRunner.instance);
-        helper.Reflection.GetMethod(this.frameRateCounter, "LoadContent").Invoke();
-        FieldInfo? field = helper.Reflection.GetField<int>(this.frameRateCounter, "frameRate").FieldInfo;
+        this.FrameRateCounter = new(GameRunner.instance);
+        helper.Reflection.GetMethod(this.FrameRateCounter, "LoadContent").Invoke();
+        FieldInfo? field = helper.Reflection.GetField<int>(this.FrameRateCounter, "frameRate").FieldInfo;
 
         ParameterExpression? objparam = Expression.Parameter(typeof(FrameRateCounter), "obj");
         MemberExpression? fieldgetter = Expression.Field(objparam, field);
-        this.framerateGetter = Expression.Lambda<Func<FrameRateCounter, int>>(fieldgetter, objparam).Compile();
+        this.FramerateGetter = Expression.Lambda<Func<FrameRateCounter, int>>(fieldgetter, objparam).Compile();
 
         helper.Events.Display.RenderedHud += this.OnRenderedHud;
         helper.Events.GameLoop.SaveLoaded += this.OnSaveLoaded;
         helper.Events.GameLoop.ReturnedToTitle += this.ReturnedToTitle;
+
+        helper.Events.Player.Warped += this.OnWarped;
     }
 
-    private void ReturnedToTitle(object? sender, StardewModdingAPI.Events.ReturnedToTitleEventArgs e)
+    private void OnWarped(object? sender, WarpedEventArgs e)
+        => this.Monitor.Log($"Current memory usage {GC.GetTotalMemory(false):N0}", LogLevel.Info);
+
+    private void ReturnedToTitle(object? sender, ReturnedToTitleEventArgs e)
         => this.Helper.Events.GameLoop.OneSecondUpdateTicked -= this.OnUpdateTicked;
 
-    private void OnSaveLoaded(object? sender, StardewModdingAPI.Events.SaveLoadedEventArgs e)
+    private void OnSaveLoaded(object? sender, SaveLoadedEventArgs e)
         => this.Helper.Events.GameLoop.OneSecondUpdateTicked += this.OnUpdateTicked;
 
-    private void OnUpdateTicked(object? sender, StardewModdingAPI.Events.OneSecondUpdateTickedEventArgs e)
+    private void OnUpdateTicked(object? sender, OneSecondUpdateTickedEventArgs e)
     {
-        if (this.frameRateCounter is not null && this.framerateGetter?.Invoke(this.frameRateCounter) is int value)
+        if (this.FrameRateCounter is not null && this.FramerateGetter?.Invoke(this.FrameRateCounter) is int value)
         {
-            this.Monitor.Log($"Current framerate on {Game1.ticks} is {value}", value < 30 ? LogLevel.Alert : LogLevel.Info);
+            this.Monitor.Log($"Current framerate on {Game1.ticks} is {value}", value < 30 ? LogLevel.Alert : LogLevel.Trace);
         }
     }
 
-    private void OnRenderedHud(object? sender, StardewModdingAPI.Events.RenderedHudEventArgs e)
+    private void OnRenderedHud(object? sender, RenderedHudEventArgs e)
     {
-        this.frameRateCounter?.Update(Game1.currentGameTime);
-        this.frameRateCounter?.Draw(Game1.currentGameTime);
+        this.FrameRateCounter?.Update(Game1.currentGameTime);
+        this.FrameRateCounter?.Draw(Game1.currentGameTime);
     }
 }

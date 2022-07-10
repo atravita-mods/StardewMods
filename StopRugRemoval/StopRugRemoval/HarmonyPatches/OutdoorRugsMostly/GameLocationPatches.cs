@@ -46,7 +46,9 @@ internal class GameLocationPatches
             {
                 return true;
             }
-            (int posX, int posY) = ((tileLocation * 64f) + new Vector2(32f, 32f)).ToPoint();
+
+            int posX = ((int)tileLocation.X * 64) + 32;
+            int posY = ((int)tileLocation.Y * 64) + 32;
             foreach (Furniture f in __instance.furniture)
             {
                 if (f.furniture_type.Value == Furniture.rug && f.getBoundingBox(f.TileLocation).Contains(posX, posY))

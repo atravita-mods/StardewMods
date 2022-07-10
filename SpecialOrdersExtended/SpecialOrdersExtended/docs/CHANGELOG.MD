@@ -18,8 +18,9 @@ Changelog
 6. Implement a temporary saving mechanism for Save Anywhere (look into their API?)
 <!-- Handle WoL professions? -->
 
-#### Version 1.0.8
+#### Version 1.1.0
 
+* Moves to using AtraCore.
 * Adds the `atravita_addSpecialOrder` event command.
 * Internal optimizations.
 * Clear the relevant dialogue log when a player *fails* a quest.

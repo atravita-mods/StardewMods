@@ -1,46 +1,46 @@
 {"Changes":[
-	{
-		"Action": "Include",
-		"FromFile": "assets/Late/RushOrder.json, assets/Late/FlowerPower.json, assets/Late/PierreApology.json",
-		"When": {
-			"AllowedSkills|contains=Farming": "true"
-		}
-	},
-	{
-		"Action": "Include",
-		"FromFile": "assets/Late/SweetTaste.json",
-		"When": {
-			"AllowedSkills|contains=Farming": "true",
-			"AllowedSkills|contains=ArtisanGoods": "true"
-		}
-	},
-	{
-		"Action": "Include",
-		"FromFile": "assets/Late/ValleyVintage.json",
-		"When": {
-			"AllowedSkills|contains=ArtisanGoods": "true"
-		},
-	},
-	{
-		"Action": "Include",
-		"FromFile": "assets/Late/SlimeEggs.json",
-		"When": {
-			"AllowedSkills|contains=Combat": "true"
-		}
-	},
-	{
-		"Action": "Include",
-		"FromFile": "assets/Late/TruffleTruffle.json",
-		"When": {
-			"AllowedSkills|contains=Ranching": "true",
-			"AllowedSkills|contains=ArtisanGoods": "true"
-		},
-	},
-	{
-		"Action": "Include",
-		"FromFile": "assets/Late/BlackberrySeason.json",
-		"When": {
-			"AllowedSkills|contains=Foraging": "true"
-		}
-	}
+    {
+        "Action": "Include",
+        "FromFile": "assets/Late/RushOrder.json, assets/Late/FlowerPower.json, assets/Late/PierreApology.json",
+        "When": {
+            "AllowedSkills|contains=Farming": "true"
+        }
+    },
+    {
+        "Action": "Include",
+        "FromFile": "assets/Late/SweetTaste.json",
+        "When": {
+            "AllowedSkills|contains=Farming": "true",
+            "AllowedSkills|contains=ArtisanGoods": "true"
+        }
+    },
+    {
+        "Action": "Include",
+        "FromFile": "assets/Late/ValleyVintage.json",
+        "When": {
+            "AllowedSkills|contains=ArtisanGoods": "true"
+        },
+    },
+    {
+        "Action": "Include",
+        "FromFile": "assets/Late/SlimeEggs.json",
+        "When": {
+            "AllowedSkills|contains=Combat": "true"
+        }
+    },
+    {
+        "Action": "Include",
+        "FromFile": "assets/Late/TruffleTruffle.json",
+        "When": {
+            "AllowedSkills|contains=Ranching": "true",
+            "AllowedSkills|contains=ArtisanGoods": "true"
+        },
+    },
+    {
+        "Action": "Include",
+        "FromFile": "assets/Late/BlackberrySeason.json",
+        "When": {
+            "AllowedSkills|contains=Foraging": "true"
+        }
+    }
 ]}

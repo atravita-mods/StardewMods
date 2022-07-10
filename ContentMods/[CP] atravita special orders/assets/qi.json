@@ -1,16 +1,16 @@
 {"Changes":[
-	{
-		"Action": "Include",
-		"FromFile": "assets/Qi/TheQuickestWay.json",
-		"When": {
-			"AllowedSkills": "Cooking"
-		}
-	},
-	{
-		"Action": "Include",
-		"FromFile": "assets/Qi/MonsterEradication.json",
-		"When": {
-			"AllowedSkills": "Combat"
-		}
-	},
+    {
+        "Action": "Include",
+        "FromFile": "assets/Qi/TheQuickestWay.json",
+        "When": {
+            "AllowedSkills": "Cooking"
+        }
+    },
+    {
+        "Action": "Include",
+        "FromFile": "assets/Qi/MonsterEradication.json",
+        "When": {
+            "AllowedSkills": "Combat"
+        }
+    },
 ]}

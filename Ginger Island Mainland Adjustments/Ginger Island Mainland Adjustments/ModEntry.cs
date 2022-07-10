@@ -1,5 +1,5 @@
-﻿using AtraShared.MigrationManager;
-using AtraShared.Utils;
+﻿using AtraCore.Utilities;
+using AtraShared.MigrationManager;
 using AtraShared.Utils.Extensions;
 using GingerIslandMainlandAdjustments.AssetManagers;
 using GingerIslandMainlandAdjustments.CustomConsoleCommands;
@@ -15,7 +15,7 @@ namespace GingerIslandMainlandAdjustments;
 
 /// <inheritdoc />
 [UsedImplicitly]
-public class ModEntry : Mod
+internal sealed class ModEntry : Mod
 {
     private bool haveFixedSchedulesToday = false;
 
@@ -61,11 +61,17 @@ public class ModEntry : Mod
         }
         GenerateGMCM.BuildNPCDictionary();
 
-        this.migrator = new(this.ModManifest, this.Helper, this.Monitor);
-        this.migrator.ReadVersionInfo();
         Globals.LoadDataFromSave();
 
-        this.Helper.Events.GameLoop.Saved += this.WriteMigrationData;
+        this.migrator = new(this.ModManifest, this.Helper, this.Monitor);
+        if (!this.migrator.CheckVersionInfo())
+        {
+            this.Helper.Events.GameLoop.Saved += this.WriteMigrationData;
+        }
+        else
+        {
+            this.migrator = null;
+        }
     }
 
     /// <summary>

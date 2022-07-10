@@ -3,7 +3,7 @@
 /// <summary>
 /// Config class for this mod.
 /// </summary>
-internal class ModConfig
+internal sealed class ModConfig
 {
     /// <summary>
     /// Gets or sets a value indicating whether to be verbose or not.

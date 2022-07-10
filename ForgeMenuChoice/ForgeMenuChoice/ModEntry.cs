@@ -13,7 +13,7 @@ using AtraUtils = AtraShared.Utils.Utils;
 namespace ForgeMenuChoice;
 
 /// <inheritdoc/>
-internal class ModEntry : Mod
+internal sealed class ModEntry : Mod
 {
 #pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
     /// <summary>
@@ -61,7 +61,7 @@ internal class ModEntry : Mod
 
     private void OnLocaleChanged(object? sender, LocaleChangedEventArgs e)
     {
-        GameContentHelper.InvalidateCache(AssetLoader.ENCHANTMENT_NAMES_LOCATION);
+        this.Helper.GameContent.InvalidateCacheAndLocalized(AssetLoader.ENCHANTMENT_NAMES_LOCATION);
 
         // This is the games cache of enchantment names. I null it here to clear it.
         this.Helper.Reflection.GetField<List<BaseEnchantment>?>(typeof(BaseEnchantment), "_enchantments").SetValue(null);

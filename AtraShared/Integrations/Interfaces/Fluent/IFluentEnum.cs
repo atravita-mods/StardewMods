@@ -1,5 +1,6 @@
 ﻿namespace AtraShared.Integrations.Interfaces.Fluent;
 
+#pragma warning disable SA1314 // Type parameter names should begin with T. Reviewed.
 /// <summary>A specialized type allowing access to Project Fluent translations for <typeparamref name="EnumType"/> values.</summary>
 /// <typeparam name="EnumType">The type of values this instance allows retrieving translations for.</typeparam>
 public interface IEnumFluent<EnumType> : IFluent<EnumType>
@@ -12,3 +13,4 @@ public interface IEnumFluent<EnumType> : IFluent<EnumType>
     /// <summary>Returns localized names for all possible <typeparamref name="EnumType"/> values.</summary>
     IEnumerable<string> GetAllLocalizedNames();
 }
+#pragma warning restore SA1314 // Type parameter names should begin with T

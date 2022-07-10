@@ -15,7 +15,12 @@ internal static class ChestPatcher
     {
         if (__instance.giftbox.Value && ModEntry.LuckyFertilizerID != -1)
         {
-            Game1.createMultipleObjectDebris(ModEntry.LuckyFertilizerID, (int)__instance.TileLocation.X, (int)__instance.TileLocation.Y, 5, location);
+            Game1.createMultipleObjectDebris(
+                index: ModEntry.LuckyFertilizerID,
+                xTile: (int)__instance.TileLocation.X,
+                yTile: (int)__instance.TileLocation.Y,
+                number: 5,
+                location: location);
         }
     }
 }

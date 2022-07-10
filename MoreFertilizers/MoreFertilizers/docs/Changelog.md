@@ -1,8 +1,7 @@
 ﻿Changelog
 =============
 
-
-#### Version 0.2.0 TODO items
+#### Version 0.3.0 TODO items
 * Bush fertilizers
     - Handle adding to shops and other aquisition methods.
 * Beverage fertilizer
@@ -11,7 +10,7 @@
 * Acquisition: maybee have fertilizer appear in big slimes outside the mines?
 * Items and all the implementation for the prismatic and everlasting fertilizers (don't forget that JA and Winter Star also transpile in this space)
 
-#### Version 0.2.0
+#### Version 0.3.0
 * Added new fertilizers:
     - Secret Joja Fertilizer: decreases growth time, has a chance of decreasing regrowth time, but forces the crop to be base quality.
     - Wisdom Fertilizer: increases farming XP by 10%.
@@ -20,6 +19,9 @@
 
 * Adjusted previous fertilizers:
     - Waterlogged now increases the growth speed of paddy crops a little.
+
+#### Version 0.2.0
+* Move to using AtraCore.
 
 #### Version 0.1.7
 * Some efficiency improvements

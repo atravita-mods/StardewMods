@@ -3,7 +3,7 @@
 /// <summary>
 /// The config class for this mod.
 /// </summary>
-public class ModConfig
+internal sealed class ModConfig
 {
     private double giantCropChance = 1.1d;
 
@@ -16,5 +16,8 @@ public class ModConfig
         set => this.giantCropChance = Math.Clamp(value, 0, 1.1d);
     }
 
+    /// <summary>
+    /// Gets or sets a value indicating whether giant crops should be allowed off-farm.
+    /// </summary>
     public bool AllowGiantCropsOffFarm { get; set; } = false;
 }

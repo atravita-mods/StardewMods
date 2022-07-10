@@ -15,7 +15,7 @@ internal static class PreventJukeboxCrash
     [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Harmony Convention")]
     private static bool Prefix(string name, ref bool __result)
     {
-        if (Context.IsWorldReady && !name.Equals("random", StringComparison.OrdinalIgnoreCase)
+        if (Context.IsWorldReady && ModEntry.Config.FilterJukeboxSongs && !name.Equals("random", StringComparison.OrdinalIgnoreCase)
             && !name.Equals("turn_off", StringComparison.OrdinalIgnoreCase) && !name.Equals("title_day", StringComparison.OrdinalIgnoreCase))
         {
             if (Game1.soundBank is SoundBankWrapper soundBank)
@@ -25,7 +25,7 @@ internal static class PreventJukeboxCrash
                     SoundBank? soundBankImpl = SoundBankWrapperHandler.GetActualSoundBank(soundBank);
                     if (!SoundBankWrapperHandler.HasCue(soundBankImpl, name))
                     {
-                        ModEntry.ModMonitor.Log($"Overwriting IsValidJukeboxSong for invalid cue {name}");
+                        ModEntry.ModMonitor.Log($"Overwriting IsValidJukeboxSong for invalid cue {name}", LogLevel.Debug);
                         __result = false;
                         return false;
                     }

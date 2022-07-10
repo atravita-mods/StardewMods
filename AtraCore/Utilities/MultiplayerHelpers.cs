@@ -1,6 +1,7 @@
 ﻿using AtraBase.Toolkit.Reflection;
+using AtraCore.Framework.QueuePlayerAlert;
 
-namespace AtraShared.Utils;
+namespace AtraCore.Utilities;
 
 /// <summary>
 /// Functions to help with handling multiplayer.
@@ -32,6 +33,7 @@ public static class MultiplayerHelpers
                     translation.Get("host-not-installed")
                         .Default("The host does not seem to have this mod installed. Some features may not be available."),
                     LogLevel.Warn);
+                PlayerAlertHandler.AddMessage(new HUDMessage($"Mismatched mods {manifest.UniqueID} may cause issues", HUDMessage.error_type));
             }
             else if (!hostMod.Version.Equals(manifest.Version))
             {
@@ -40,6 +42,7 @@ public static class MultiplayerHelpers
                         .Default("The host seems to have a different version of this mod ({{version}}). Some features may not work.")
                         .Tokens(new { version = manifest.Version }),
                     LogLevel.Warn);
+                PlayerAlertHandler.AddMessage(new HUDMessage($"Mismatched mod version {manifest.UniqueID} may cause issues", HUDMessage.error_type));
             }
         }
     }

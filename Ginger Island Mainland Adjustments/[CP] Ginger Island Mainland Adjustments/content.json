@@ -1,6 +1,6 @@
 {
-	"Format": "1.25.0",
-	"Changes":[
+    "Format": "1.25.0",
+    "Changes":[
     {
         "Action": "Include",
         "FromFile": "schedules.json"
@@ -47,5 +47,5 @@
             "pam_beach_fish": "8/8 8 9 9 10 10 11 11/8"
         }
     }
-	]
+    ]
 }

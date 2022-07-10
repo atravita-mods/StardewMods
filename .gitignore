@@ -6,6 +6,9 @@
 # Zip files
 *.zip
 
+# Config files
+*.config.json
+
 # User-specific files
 *.rsuser
 *.suo

@@ -14,7 +14,7 @@ using AtraUtils = AtraShared.Utils.Utils;
 namespace FarmCaveSpawn;
 
 /// <inheritdoc />
-public class ModEntry : Mod
+internal sealed class ModEntry : Mod
 {
     /// <summary>
     /// Sublocation-parsing regex.
@@ -95,7 +95,6 @@ public class ModEntry : Mod
     private void Cleanup()
     {
         this.TreeFruit.Clear();
-        this.TreeFruit.TrimExcess();
         this.random = null;
     }
 
@@ -194,15 +193,9 @@ public class ModEntry : Mod
     /// <param name="e">Arguments.</param>
     private void SpawnFruit(object? sender, DayStartedEventArgs e)
     {
-        if (!this.ShouldSpawnFruit())
-        {
-            this.SpawnedFruitToday = false;
-            return;
-        }
+        this.SpawnedFruitToday = this.ShouldSpawnFruit();
 
-        this.SpawnedFruitToday = true;
-
-        if (!Context.IsMainPlayer)
+        if (!this.SpawnedFruitToday || !Context.IsMainPlayer)
         {
             return;
         }
@@ -375,7 +368,7 @@ END:
     /// <returns>List of data, split by commas.</returns>
     private List<string> GetData(string datalocation)
     {
-        this.Helper.GameContent.InvalidateCache(datalocation);
+        this.Helper.GameContent.InvalidateCacheAndLocalized(datalocation);
         IDictionary<string, string> rawlist = this.Helper.GameContent.Load<Dictionary<string, string>>(datalocation);
         List<string> datalist = new();
 
@@ -404,13 +397,13 @@ END:
         List<int> treeFruits = new();
 
         Dictionary<int, string> fruittrees = this.Helper.GameContent.Load<Dictionary<int, string>>("Data/fruitTrees");
-        string currentseason = Game1.currentSeason.Trim().ToLowerInvariant();
+        var currentseason = Game1.currentSeason.AsSpan().Trim();
         foreach (string tree in fruittrees.Values)
         {
             SpanSplit treedata = tree.SpanSplit('/', StringSplitOptions.TrimEntries, expectedCount: 3);
 
             if ((this.config.SeasonalOnly == SeasonalBehavior.SeasonalOnly || (this.config.SeasonalOnly == SeasonalBehavior.SeasonalExceptWinter && !Game1.IsWinter))
-                && !treedata[1].Contains(currentseason)
+                && !treedata[1].Contains(currentseason, StringComparison.OrdinalIgnoreCase)
                 && (!Game1.IsSummer || !treedata[1].Contains("island")))
             {
                 continue;
@@ -505,9 +498,14 @@ END:
             return;
         }
         this.migrator = new(this.ModManifest, this.Helper, this.Monitor);
-        this.migrator.ReadVersionInfo();
-
-        this.Helper.Events.GameLoop.Saved += this.WriteMigrationData;
+        if (!this.migrator.CheckVersionInfo())
+        {
+            this.Helper.Events.GameLoop.Saved += this.WriteMigrationData;
+        }
+        else
+        {
+            this.migrator = null;
+        }
     }
 
     /// <summary>

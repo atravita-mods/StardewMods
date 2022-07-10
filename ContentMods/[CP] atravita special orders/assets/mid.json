@@ -1,53 +1,53 @@
 {"Changes":[
-	{
-		"Action": "Include",
-		"FromFile": "assets/Mid/WarEffort2.json, assets/Mid/WarEffort3.json",
-		"When": {
-			"AllowedSkills|contains=Mining": "true",
-			"AllowedSkills|contains=Combat": "true"
-		}
-	},
-	{
-		"Action": "Include",
-		"FromFile": "assets/Mid/SmallPondWoodskip.json",
-		"When": {
-			"AllowedSkills|contains=Fishing": "true",
-		}
-	},
-	{
-		"Action": "Include",
-		"FromFile": "assets/Mid/Essence.json",
-		"When": {
-			"AllowedSkills|contains=Combat": "true"
-		}
-	},
-	{
-		"Action": "Include",
-		"FromFile": "assets/Mid/CaviarTastes.json",
-		"When": {
-			"AllowedSkills|contains=ArtisanGoods": "true"
-		}
-	},
-	{
-		"Action": "Include",
-		"FromFile": "assets/Mid/InAJam.json",
-		"When": {
-			"AllowedSkills|contains=ArtisanGoods": "true",
-			"AllowedSkills|contains=Gifting": "true"
-		}
-	},
-	{
-		"Action": "Include",
-		"FromFile": "assets/Mid/MysticStones.json, assets/Mid/DemetriusMagmaCap.json, assets/Mid/MarnieTreat.json",
-		"When": {
-			"AllowedSkills|contains=Mining": "true"
-		}
-	},
-	{
-		"Action": "Include",
-		"FromFile": "assets/Mid/MarnieTreat2.json",
-		"When": {
-			"AllowedSkills|contains=Farming": "true"
-		}
-	}
+    {
+        "Action": "Include",
+        "FromFile": "assets/Mid/WarEffort2.json, assets/Mid/WarEffort3.json",
+        "When": {
+            "AllowedSkills|contains=Mining": "true",
+            "AllowedSkills|contains=Combat": "true"
+        }
+    },
+    {
+        "Action": "Include",
+        "FromFile": "assets/Mid/SmallPondWoodskip.json",
+        "When": {
+            "AllowedSkills|contains=Fishing": "true",
+        }
+    },
+    {
+        "Action": "Include",
+        "FromFile": "assets/Mid/Essence.json",
+        "When": {
+            "AllowedSkills|contains=Combat": "true"
+        }
+    },
+    {
+        "Action": "Include",
+        "FromFile": "assets/Mid/CaviarTastes.json",
+        "When": {
+            "AllowedSkills|contains=ArtisanGoods": "true"
+        }
+    },
+    {
+        "Action": "Include",
+        "FromFile": "assets/Mid/InAJam.json",
+        "When": {
+            "AllowedSkills|contains=ArtisanGoods": "true",
+            "AllowedSkills|contains=Gifting": "true"
+        }
+    },
+    {
+        "Action": "Include",
+        "FromFile": "assets/Mid/MysticStones.json, assets/Mid/DemetriusMagmaCap.json, assets/Mid/MarnieTreat.json",
+        "When": {
+            "AllowedSkills|contains=Mining": "true"
+        }
+    },
+    {
+        "Action": "Include",
+        "FromFile": "assets/Mid/MarnieTreat2.json",
+        "When": {
+            "AllowedSkills|contains=Farming": "true"
+        }
+    }
 ]}

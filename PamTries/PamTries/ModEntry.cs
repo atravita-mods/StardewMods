@@ -1,5 +1,4 @@
-﻿using AtraBase.Toolkit.Reflection;
-using AtraShared.Integrations;
+﻿using AtraShared.Integrations;
 using AtraShared.Integrations.Interfaces;
 using AtraShared.MigrationManager;
 using AtraShared.Utils.Extensions;
@@ -18,29 +17,29 @@ public enum PamMood
 }
 
 /// <inheritdoc />
-public class ModEntry : Mod
+internal class ModEntry : Mod
 {
     private static readonly string[] SyncedConversationTopics = new string[2] { "PamTriesRehab", "PamTriesRehabHoneymoon" };
     private Random? random;
     private PamMood mood = PamMood.neutral;
     private MigrationManager? migrator;
 
-    // set in Entry, which is as close as I can get to the constructor
-#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
-    internal static IMonitor ModMonitor { get; private set; }
-#pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
+    /// <summary>
+    /// Gets the logger for this mod.
+    /// </summary>
+    internal static IMonitor ModMonitor { get; private set; } = null!;
 
     /// <inheritdoc />
     public override void Entry(IModHelper helper)
     {
         I18n.Init(helper.Translation);
-        
+
         ModMonitor = this.Monitor;
 
         helper.Events.GameLoop.GameLaunched += this.OnGameLaunch;
         helper.Events.GameLoop.DayStarted += this.DayStarted;
         helper.Events.GameLoop.SaveLoaded += this.SaveLoaded;
-        helper.Events.GameLoop.DayStarted += Dialogue.GrandKidsDialogue;
+        helper.Events.GameLoop.DayStarted += DialogueManager.GrandKidsDialogue;
         helper.Events.GameLoop.DayEnding += this.DayEnd;
 
         this.ApplyPatches(new Harmony(this.ModManifest.UniqueID));
@@ -70,16 +69,22 @@ public class ModEntry : Mod
         this.SetPamMood((int)Game1.stats.DaysPlayed);
         PTUtilities.SyncConversationTopics(SyncedConversationTopics);
         PTUtilities.LocalEventSyncs(ModMonitor);
-        PTUtilities.PopulateLexicon(this.Helper.GameContent);
 
         if (Context.IsSplitScreen && Context.ScreenId != 0)
         {
             return;
         }
-        this.migrator = new(this.ModManifest, this.Helper, this.Monitor);
-        this.migrator.ReadVersionInfo();
 
-        this.Helper.Events.GameLoop.Saved += this.WriteMigrationData;
+        PTUtilities.PopulateLexicon(this.Helper.GameContent);
+        this.migrator = new(this.ModManifest, this.Helper, this.Monitor);
+        if (!this.migrator.CheckVersionInfo())
+        {
+            this.Helper.Events.GameLoop.Saved += this.WriteMigrationData;
+        }
+        else
+        {
+            this.migrator = null;
+        }
     }
 
     /// <summary>
@@ -110,7 +115,7 @@ public class ModEntry : Mod
             // save is loaded
             if (Context.IsWorldReady)
             {
-                return new[] { Dialogue.CurrentMovie() };
+                return new[] { DialogueManager.CurrentMovie() };
             }
             return null;
         });
@@ -119,7 +124,7 @@ public class ModEntry : Mod
             // save is loaded
             if (Context.IsWorldReady)
             {
-                return new[] { Dialogue.ChildCount() };
+                return new[] { DialogueManager.ChildCount() };
             }
             return null;
         });
@@ -127,7 +132,7 @@ public class ModEntry : Mod
         {
             if (Context.IsWorldReady)
             {
-                return new[] { Dialogue.ListChildren() };
+                return new[] { DialogueManager.ListChildren() };
             }
             return null;
         });
@@ -200,6 +205,11 @@ public class ModEntry : Mod
     {
         // reset Pam's sprite
         NPC? pam = Game1.getCharacterFromName("Pam");
+        if (pam is null)
+        {
+            this.Monitor.Log("Pam could not be found?!?");
+            return;
+        }
         pam.Sprite.SpriteHeight = 32;
         pam.Sprite.SpriteWidth = 16;
         pam.Sprite.ignoreSourceRectUpdates = false;
@@ -228,7 +238,7 @@ public class ModEntry : Mod
         // Setup tomorrow:
         this.SetPamMood((int)Game1.stats.DaysPlayed + 1);
 
-        if (Game1.getAllFarmers().Any((Farmer farmer) => farmer.mailForTomorrow.Contains("atravita_PamTries_PennyThanks")))
+        if (Game1.getAllFarmers().Any(static (Farmer farmer) => farmer.mailForTomorrow.Contains("atravita_PamTries_PennyThanks")))
         {
             Game1.addMailForTomorrow("atravita_PamTries_BusNotice");
         }

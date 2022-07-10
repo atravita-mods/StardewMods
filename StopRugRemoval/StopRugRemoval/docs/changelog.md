@@ -10,6 +10,8 @@
 * Move to using AtraCore.
 * Spanish translation, thanks to [Mistyspring](https://github.com/misty-spring)!
 * Prevent broken sound cues from breaking the jukebox.
+* Slingshot ammo now stacks instead of swapping.
+* Schedule fixer now tries to resolve `GOTO spring` and other statements to use the actual schedule.
 
 #### Version 1.0.11
 * Fix issues with the night market warp home.

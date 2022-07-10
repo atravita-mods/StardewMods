@@ -183,6 +183,11 @@ internal static class GIScheduler
         stopwatch.Stop();
         Globals.ModMonitor.Log($"Schedule generation took {stopwatch.ElapsedMilliseconds} ms.", LogLevel.Info);
 
+        if (Context.IsSplitScreen && Context.ScreenId != 0)
+        {
+            return;
+        }
+
         Globals.ModMonitor.Log($"Current memory usage {GC.GetTotalMemory(false):N0}", LogLevel.Alert);
         GCSettings.LargeObjectHeapCompactionMode = GCLargeObjectHeapCompactionMode.CompactOnce;
         GC.Collect();
@@ -381,7 +386,7 @@ internal static class GIScheduler
         if (musician is not null && !musician.Name.Equals("Gus", StringComparison.OrdinalIgnoreCase))
         {
             musician.currentScheduleDelay = 0f;
-            Globals.ModMonitor.DebugLog($"Found musician {musician.Name}", LogLevel.Debug);
+            Globals.ModMonitor.DebugOnlyLog($"Found musician {musician.Name}", LogLevel.Debug);
             return musician;
         }
         return null;

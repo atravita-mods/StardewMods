@@ -6,7 +6,7 @@ namespace AtraShared.Schedules.DataModels;
 /// <summary>
 /// A single schedule point.
 /// </summary>
-public class SchedulePoint
+public sealed class SchedulePoint
 {
     private readonly NPC npc;
     private readonly string map;
@@ -88,12 +88,15 @@ public class SchedulePoint
     [Pure]
     public override string ToString()
     {
-        List<string> schedulestring = new();
-        schedulestring.Add($"{(this.isarrivaltime ? "a" : string.Empty)}{this.time}");
-        schedulestring.Add(this.map);
-        schedulestring.Add(this.point.X.ToString());
-        schedulestring.Add(this.point.Y.ToString());
-        schedulestring.Add(this.direction.ToString());
+        List<string> schedulestring = new()
+        {
+            $"{(this.isarrivaltime ? "a" : string.Empty)}{this.time}",
+            this.map,
+            this.point.X.ToString(),
+            this.point.Y.ToString(),
+            this.direction.ToString(),
+        };
+
         if (this.animation is not null)
         {
             schedulestring.Add(this.animation);

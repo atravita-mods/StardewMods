@@ -1,4 +1,5 @@
 ﻿using AtraShared.Utils.Extensions;
+using GingerIslandMainlandAdjustments.AssetManagers;
 using HarmonyLib;
 using StardewModdingAPI.Events;
 using StardewModdingAPI.Utilities;
@@ -24,7 +25,8 @@ public static class MultiplayerSharedState
     /// <param name="e">arguments.</param>
     internal static void ReSendMultiplayerMessage(PeerConnectedEventArgs e)
     {
-        if (Context.IsMainPlayer && Context.IsWorldReady && Game1.getCharacterFromName("Pam") is NPC pam
+        if (Context.IsMainPlayer && Context.IsWorldReady
+            && Game1.getCharacterFromName("Pam") is NPC pam
             && pam.TryGetScheduleEntry(pam.dayScheduleName.Value, out string? rawstring)
             && Globals.UtilitySchedulingFunctions.TryFindGOTOschedule(pam, SDate.Now(), rawstring, out string redirectedstring))
         {
@@ -54,7 +56,8 @@ public static class MultiplayerSharedState
     {
         try
         {
-            if (Context.IsMainPlayer && __instance is not null && __instance.Name.Equals("Pam", StringComparison.OrdinalIgnoreCase)
+            if (Context.IsMainPlayer && __instance?.Name.Equals("Pam", StringComparison.OrdinalIgnoreCase) == true
+                && Game1.player.eventsSeen.Contains(AssetEditor.PAMEVENT)
                 && __instance.TryGetScheduleEntry(__instance.dayScheduleName.Value, out string? rawstring)
                 && Globals.UtilitySchedulingFunctions.TryFindGOTOschedule(__instance, SDate.Now(), rawstring, out string redirectedstring))
             {

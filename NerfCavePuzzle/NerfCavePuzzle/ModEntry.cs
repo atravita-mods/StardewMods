@@ -1,7 +1,7 @@
 ﻿using System.Reflection;
+using AtraCore.Utilities;
 using AtraShared.Integrations;
 using AtraShared.MigrationManager;
-using AtraShared.Utils;
 using AtraShared.Utils.Extensions;
 using HarmonyLib;
 using NerfCavePuzzle.HarmonyPatches;
@@ -12,36 +12,34 @@ using AtraUtils = AtraShared.Utils.Utils;
 namespace NerfCavePuzzle;
 
 /// <inheritdoc />
-internal class ModEntry : Mod
+internal sealed class ModEntry : Mod
 {
     private MigrationManager? migrator = null;
 
-#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
     /// <summary>
     /// Gets the logger for this file.
     /// </summary>
-    internal static IMonitor ModMonitor { get; private set; }
+    internal static IMonitor ModMonitor { get; private set; } = null!;
 
     /// <summary>
     /// Gets the data helper for this mod.
     /// </summary>
-    internal static IDataHelper DataHelper { get; private set; }
+    internal static IDataHelper DataHelper { get; private set; } = null!;
 
     /// <summary>
     /// Gets the multiplayer helper for this mod.
     /// </summary>
-    internal static IMultiplayerHelper MultiplayerHelper { get; private set; }
+    internal static IMultiplayerHelper MultiplayerHelper { get; private set; } = null!;
 
     /// <summary>
     /// Gets the uniqueID of this mod.
     /// </summary>
-    internal static string UniqueID { get; private set; }
+    internal static string UniqueID { get; private set; } = null!;
 
     /// <summary>
     /// Gets the configuration class for this mod.
     /// </summary>
-    internal static ModConfig Config { get; private set; }
-#pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
+    internal static ModConfig Config { get; private set; } = null!;
 
     /// <inheritdoc />
     public override void Entry(IModHelper helper)
@@ -94,11 +92,22 @@ internal class ModEntry : Mod
 
     private void OnSaveLoaded(object? sender, SaveLoadedEventArgs e)
     {
+        if (Context.IsSplitScreen && Context.ScreenId != 0)
+        {
+            return;
+        }
+
         MultiplayerHelpers.AssertMultiplayerVersions(this.Helper.Multiplayer, this.ModManifest, this.Monitor, this.Helper.Translation);
         this.migrator = new(this.ModManifest, this.Helper, this.Monitor);
-        this.migrator.ReadVersionInfo();
 
-        this.Helper.Events.GameLoop.Saved += this.WriteMigrationData;
+        if (!this.migrator.CheckVersionInfo())
+        {
+            this.Helper.Events.GameLoop.Saved += this.WriteMigrationData;
+        }
+        else
+        {
+            this.migrator = null;
+        }
     }
 
     /// <summary>

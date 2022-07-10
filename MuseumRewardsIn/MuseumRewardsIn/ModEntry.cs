@@ -1,4 +1,5 @@
 ﻿using System.Text.RegularExpressions;
+using AtraShared.Integrations;
 using AtraShared.ItemManagement;
 using AtraShared.Utils.Extensions;
 using HarmonyLib;
@@ -15,7 +16,7 @@ namespace MuseumRewardsIn;
 
 /// <inheritdoc />
 [HarmonyPatch(typeof(Utility))]
-internal class ModEntry : Mod
+internal sealed class ModEntry : Mod
 {
     private const string BUILDING = "Buildings";
     private const string SHOPNAME = "atravita.MuseumShop";
@@ -40,7 +41,7 @@ internal class ModEntry : Mod
     {
         modMonitor = this.Monitor;
         helper.Events.GameLoop.GameLaunched += this.OnGameLaunched;
-        helper.Events.Input.ButtonPressed += this.Input_ButtonPressed;
+        helper.Events.Input.ButtonPressed += this.OnButtonPressed;
         helper.Events.Player.Warped += this.OnWarped;
         helper.Events.Content.AssetRequested += this.OnAssetRequested;
 
@@ -64,6 +65,19 @@ internal class ModEntry : Mod
             config.BoxLocation = shopLoc;
             Task.Run(() => this.Helper.WriteConfig(config));
         }
+
+        GMCMHelper gmcm = new(this.Monitor, this.Helper.Translation, this.Helper.ModRegistry, this.ModManifest);
+        if (gmcm.TryGetAPI())
+        {
+            gmcm.Register(
+                reset: static () => config = new(),
+                save: () => Task.Run(() => this.Helper.WriteConfig(config)))
+            .AddTextOption(
+                name: I18n.BoxLocation_Name,
+                getValue: static () => config.BoxLocation.X + ", " + config.BoxLocation.Y,
+                setValue: static (str) => config.BoxLocation = str.TryParseVector2(out Vector2 vec) ? vec : shopLoc,
+                tooltip: I18n.BoxLocation_Description);
+        }
     }
 
     /// <summary>
@@ -72,6 +86,7 @@ internal class ModEntry : Mod
     /// <param name="__result">shop inventory to add to.</param>
     [HarmonyPatch(nameof(Utility.getAllFurnituresForFree))]
     [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Harmony convention.")]
+    [SuppressMessage("StyleCop.CSharp.OrderingRules", "SA1204:Static elements should appear before instance elements", Justification = "Reviewed.")]
     private static void Postfix(Dictionary<ISalable, int[]> __result)
     {
         foreach (string mailflag in Game1.player.mailReceived)
@@ -100,7 +115,7 @@ internal class ModEntry : Mod
     /// </summary>
     /// <param name="sender">SMAPI.</param>
     /// <param name="e">event args.</param>
-    private void Input_ButtonPressed(object? sender, ButtonPressedEventArgs e)
+    private void OnButtonPressed(object? sender, ButtonPressedEventArgs e)
     {
         if (!e.Button.IsActionButton() && !e.Button.IsUseToolButton())
         {
@@ -122,6 +137,8 @@ internal class ModEntry : Mod
             return;
         }
 
+        this.Helper.Input.SurpressClickInput();
+
         Dictionary<ISalable, int[]> sellables = new();
 
         foreach (string mailflag in Game1.player.mailReceived)
@@ -132,6 +149,10 @@ internal class ModEntry : Mod
                 if (ItemUtils.GetItemFromIdentifier(match.Groups["type"].Value, id) is Item item
                     && !(item is SObject obj && (obj.Category == SObject.SeedsCategory || obj.IsRecipe)))
                 {
+                    if (item.Name.StartsWith("Dwarvish Translation Guide"))
+                    {
+                        continue;
+                    }
                     int[] selldata = new int[] { Math.Max(item.salePrice() * 2, 2000), int.MaxValue };
                     sellables.Add(item, selldata);
                 }
@@ -155,14 +176,13 @@ internal class ModEntry : Mod
                 static (asset) =>
                 {
                     IAssetDataForMap? map = asset.AsMap();
-                    (int locX, int locY) = (config.BoxLocation * 64).ToPoint();
-                    XTile? tile = map.Data.GetLayer(BUILDING).PickTile(new Location(locX, locY), Game1.viewport.Size);
+                    XTile? tile = map.Data.GetLayer(BUILDING).PickTile(new Location((int)config.BoxLocation.X * 64, (int)config.BoxLocation.Y * 64), Game1.viewport.Size);
                     if (tile is null)
                     {
                         modMonitor.Log($"Tile could not be edited for shop, please let atra know!", LogLevel.Warn);
                         return;
                     }
-                    tile.Properties.Add("Action", new PropertyValue(SHOPNAME));
+                    tile.Properties["Action"] = new PropertyValue(SHOPNAME);
                 },
                 AssetEditPriority.Default + 10);
         }
@@ -175,12 +195,14 @@ internal class ModEntry : Mod
             Vector2 tile = config.BoxLocation; // default location of shop.
             foreach (Vector2 v in AtraUtils.YieldAllTiles(e.NewLocation))
             { // find the shop tile - a mod may have moved it.
-                if (e.NewLocation.doesTileHaveProperty((int)v.X, (int)v.Y, "Action", BUILDING)?.Contains(SHOPNAME) == true)
+                if (e.NewLocation.doesTileHaveProperty((int)v.X, (int)v.Y, "Action", BUILDING)?.Equals(SHOPNAME, StringComparison.OrdinalIgnoreCase) == true)
                 {
                     tile = v;
                     break;
                 }
             }
+
+            this.Monitor.DebugOnlyLog($"Adding boxen to {tile}", LogLevel.Info);
 
             // add box
             e.NewLocation.temporarySprites.Add(new TemporaryAnimatedSprite
@@ -191,9 +213,9 @@ internal class ModEntry : Mod
                 sourceRectStartingPos = new Vector2(129f, 210f),
                 interval = 50000f,
                 totalNumberOfLoops = 9999,
-                position = (new Vector2(tile.X, tile.Y - 1) * Game1.tileSize) + (new Vector2(3f, 0f) * 4f),
-                scale = 4f,
-                layerDepth = (((tile.Y - 0.5f) * Game1.tileSize) / 10000f) + 0.01f, // a little offset so it doesn't show up on the floor.
+                position = (new Vector2(tile.X, tile.Y - 1) * Game1.tileSize) + (new Vector2(3f, 0f) * Game1.pixelZoom),
+                scale = Game1.pixelZoom,
+                layerDepth = Math.Clamp((((tile.Y - 0.5f) * Game1.tileSize) / 10000f) + 0.15f, 0f, 1.0f), // a little offset so it doesn't show up on the floor.
                 id = 777f,
             });
         }

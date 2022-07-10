@@ -6,6 +6,9 @@ using HarmonyLib;
 
 namespace PamTries.HarmonyPatches;
 
+/// <summary>
+/// Patches on events to hide Pam while she's at rehab.
+/// </summary>
 [HarmonyPatch(typeof(Event))]
 internal static class EventPatches
 {

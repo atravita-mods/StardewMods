@@ -72,7 +72,8 @@ public class MigrationManager
             this.Monitor.Log($"Writing version info {this.Manifest.Version} into global data for {Constants.SaveFolderName} for {this.Manifest.UniqueID}", LogLevel.Trace);
             migrationData.VersionMap[Constants.SaveFolderName!] = this.Manifest.Version.ToString();
             this.DataHelper.WriteGlobalData(FILENAME, migrationData);
-        });
+        })
+        .ContinueWith((t) => this.Monitor.Log(t.Status == TaskStatus.RanToCompletion ? "Migration data saved successfully!" : $"Migration data failed to save {t.Status}"));
     }
 
     /// <summary>

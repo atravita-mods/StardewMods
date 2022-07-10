@@ -1,0 +1,27 @@
+{
+    "spellchecker.ignoreWordsList": [
+        "AcceptedContextTags",
+        "atravita",
+        "EditData",
+        "FromFile",
+        "GiftReaction",
+        "HasSeenEvent",
+        "ItemToRemoveOnEnd",
+        "i18n",
+        "inputSeparator",
+        "LogName",
+        "MailReceived",
+        "MailToRemoveOnEnd",
+        "NoLetter",
+        "OrderType",
+        "PamTries",
+        "RandomizedElements",
+        "RandomizedElements",
+        "RequiredCount",
+        "RequiredTags",
+        "sadpiano",
+        "SpecialOrders",
+        "SpecialRule",
+        "TargetName",
+    ]
+}

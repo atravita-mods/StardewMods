@@ -1,41 +1,33 @@
-﻿using AtraShared.ConstantsAndEnums;
+﻿using System.Reflection;
+using AtraShared.ConstantsAndEnums;
+using AtraShared.Integrations;
 using AtraShared.Utils.Extensions;
 using HarmonyLib;
+using StardewModdingAPI.Events;
+using AtraUtils = AtraShared.Utils.Utils;
 
 namespace EasierDartPuzzle;
 
 /// <inheritdoc/>
 internal class ModEntry : Mod
 {
-#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
     /// <summary>
     /// Gets the logger for this file.
     /// </summary>
-    internal static IMonitor ModMonitor { get; private set; }
+    internal static IMonitor ModMonitor { get; private set; } = null!;
 
-    /// <summary>
-    /// Gets the game content helper for this mod.
-    /// </summary>
-    internal static IGameContentHelper GameContentHelper { get; private set; }
-
-    /// <summary>
-    /// Gets the translation helper for this mod.
-    /// </summary>
-    internal static ITranslationHelper TranslationHelper { get; private set; }
-#pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
+    internal static ModConfig Config { get; private set; } = null!;
 
     /// <inheritdoc/>
     public override void Entry(IModHelper helper)
     {
         ModMonitor = this.Monitor;
-
-        GameContentHelper = helper.GameContent;
-        TranslationHelper = helper.Translation;
-
         I18n.Init(helper.Translation);
-        //Config = AtraUtils.GetConfigOrDefault<ModConfig>(helper, this.Monitor);
+        Config = AtraUtils.GetConfigOrDefault<ModConfig>(helper, this.Monitor);
 
         this.ApplyPatches(new Harmony(this.ModManifest.UniqueID));
+
+        helper.Events.GameLoop.GameLaunched += this.OnGameLaunch;
     }
 
     private void ApplyPatches(Harmony harmony)
@@ -49,5 +41,42 @@ internal class ModEntry : Mod
             ModMonitor.Log(string.Format(ErrorMessageConsts.HARMONYCRASH, ex), LogLevel.Error);
         }
         harmony.Snitch(this.Monitor, harmony.Id, transpilersOnly: true);
+    }
+
+    private static ModConfig GetConfig() => Config;
+
+    private void OnGameLaunch(object? sender, GameLaunchedEventArgs e)
+    {
+        GMCMHelper helper = new(this.Monitor, this.Helper.Translation, this.Helper.ModRegistry, this.ModManifest);
+        if (helper.TryGetAPI())
+        {
+            helper.Register(
+                reset: static () => Config = new(),
+                save: () => Task.Run(() => this.Helper.WriteConfig(Config)).ContinueWith((t) => this.Monitor.Log(t.Status == TaskStatus.RanToCompletion ? "Config saved!" : $"Config failed to save {t.Status}")));
+
+            foreach (PropertyInfo prop in typeof(ModConfig).GetProperties())
+            {
+                if (prop.PropertyType == typeof(int))
+                {
+                    helper.AddIntOption(
+                        property: prop,
+                        getConfig: GetConfig,
+                        min: prop.Name.EndsWith("Count") ? 8 : 600,
+                        max: prop.Name.EndsWith("Count") ? 30 : 2000);
+                }
+                else if (prop.PropertyType == typeof(bool))
+                {
+                    helper.AddBoolOption(prop, GetConfig);
+                }
+                else if (prop.PropertyType == typeof(float))
+                {
+                    helper.AddFloatOption(
+                        property: prop,
+                        getConfig: GetConfig,
+                        min: 0.05f,
+                        max: 20f);
+                }
+            }
+        }
     }
 }

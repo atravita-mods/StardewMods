@@ -1,5 +1,4 @@
 ﻿/***************************
- 
  * The following file was copied from: https://github.com/ShinyFurretz/StardewMods/blob/master/LineSprinklers/ILineSprinklersApi.cs.
  *
  * The original license is as follows:

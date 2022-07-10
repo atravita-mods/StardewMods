@@ -1,7 +1,7 @@
 {
   "Name": "Holiday Sales",
   "Author": "atravita",
-  "Version": "0.1.0-Debug",
+  "Version": "0.1.0",
   "Description": "Makes merchants stay open on festival days.",
   "UniqueID": "atravita.HolidaySales",
   "EntryDll": "HolidaySales.dll",

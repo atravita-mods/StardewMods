@@ -43,7 +43,7 @@ internal static class RedirectToLazyLoad
                     return true;
                 });
 
-            helper.Print();
+            // helper.Print();
             return helper.Render();
         }
         catch (Exception ex)

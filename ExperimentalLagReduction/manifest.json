@@ -1,7 +1,7 @@
 {
   "Name": "Experimental Lag Reduction",
   "Author": "atravita",
-  "Version": "0.1.0-Debug",
+  "Version": "0.1.0",
   "Description": "I hope this works.",
   "UniqueID": "atravita.ExperimentalLagReduction",
   "EntryDll": "ExperimentalLagReduction.dll",

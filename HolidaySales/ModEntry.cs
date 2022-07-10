@@ -1,10 +1,6 @@
-﻿using AtraBase.Caching;
-using AtraBase.Toolkit.Reflection;
-using AtraShared.ConstantsAndEnums;
+﻿using AtraShared.ConstantsAndEnums;
 using AtraShared.Integrations;
-using AtraShared.Utils.Extensions;
 using HarmonyLib;
-using HolidaySales.HarmonyPatches;
 using StardewModdingAPI.Events;
 
 using AtraUtils = AtraShared.Utils.Utils;
@@ -68,8 +64,9 @@ internal sealed class ModEntry : Mod
         }
         catch (Exception ex)
         {
-            ModMonitor.Log(string.Format(ErrorMessageConsts.HARMONYCRASH, ex), LogLevel.Error);
+            this.Monitor.Log(string.Format(ErrorMessageConsts.HARMONYCRASH, ex), LogLevel.Error);
         }
-        harmony.Snitch(this.Monitor, harmony.Id, transpilersOnly: true);
+
+        // no snitch - every transpiler here is a ForEachMatch anyways.
     }
 }

@@ -72,7 +72,16 @@ internal static class DataToItemMap
                 {
                     ModEntry.ModMonitor.DebugOnlyLog("Building map to resolve normal objects.", LogLevel.Info);
 
-                    Dictionary<string, int> mapping = new();
+                    Dictionary<string, int> mapping = new(Game1.objectInformation.Count)
+                    {
+                        // Special cases
+                        ["Egg"] = 176,
+                        ["Brown Egg"] = 180,
+                        ["Large Egg"] = 174,
+                        ["Large Brown Egg"] = 182,
+                    };
+
+                    // Processing from the data.
                     foreach ((int id, string data) in Game1.objectInformation)
                     {
                         // category asdf should never end up in the player inventory.
@@ -92,7 +101,9 @@ internal static class DataToItemMap
                             || name.Equals("Twig", StringComparison.OrdinalIgnoreCase)
                             || name.Equals("Rotten Plant", StringComparison.OrdinalIgnoreCase)
                             || name.Equals("???", StringComparison.OrdinalIgnoreCase)
-                            || name.Equals("DGA Dummy Object", StringComparison.OrdinalIgnoreCase))
+                            || name.Equals("DGA Dummy Object", StringComparison.OrdinalIgnoreCase)
+                            || name.Equals("Egg", StringComparison.OrdinalIgnoreCase)
+                            || name.Equals("Large Egg", StringComparison.OrdinalIgnoreCase))
                         {
                             continue;
                         }
@@ -110,7 +121,7 @@ internal static class DataToItemMap
                 {
                     ModEntry.ModMonitor.DebugOnlyLog("Building map to resolve rings.", LogLevel.Info);
 
-                    Dictionary<string, int> mapping = new();
+                    Dictionary<string, int> mapping = new(10);
                     foreach ((int id, string data) in Game1.objectInformation)
                     {
                         var cat = data.GetNthChunk('/', 3);
@@ -139,7 +150,7 @@ internal static class DataToItemMap
             {
                 ModEntry.ModMonitor.DebugOnlyLog("Building map to resolve Boots", LogLevel.Info);
 
-                Dictionary<string, int> mapping = new();
+                Dictionary<string, int> mapping = new(20);
                 foreach ((int id, string data) in Game1.content.Load<Dictionary<int, string>>(enumToAssetMap[ItemTypeEnum.Boots].BaseName))
                 {
                     string name = data.GetNthChunk('/', SObject.objectInfoNameIndex).ToString();
@@ -157,7 +168,7 @@ internal static class DataToItemMap
             {
                 ModEntry.ModMonitor.DebugOnlyLog("Building map to resolve BigCraftables", LogLevel.Info);
 
-                Dictionary<string, int> mapping = new();
+                Dictionary<string, int> mapping = new(Game1.bigCraftablesInformation.Count);
                 foreach ((int id, string data) in Game1.bigCraftablesInformation)
                 {
                     string name = data.GetNthChunk('/', SObject.objectInfoNameIndex).ToString();
@@ -175,7 +186,7 @@ internal static class DataToItemMap
             {
                 ModEntry.ModMonitor.DebugOnlyLog("Building map to resolve Clothing", LogLevel.Info);
 
-                Dictionary<string, int> mapping = new();
+                Dictionary<string, int> mapping = new(Game1.clothingInformation.Count);
                 foreach ((int id, string data) in Game1.clothingInformation)
                 {
                     string name = data.GetNthChunk('/', SObject.objectInfoNameIndex).ToString();
@@ -193,7 +204,7 @@ internal static class DataToItemMap
             {
                 ModEntry.ModMonitor.DebugOnlyLog("Building map to resolve Furniture", LogLevel.Info);
 
-                Dictionary<string, int> mapping = new();
+                Dictionary<string, int> mapping = new(20);
                 foreach ((int id, string data) in Game1.content.Load<Dictionary<int, string>>(enumToAssetMap[ItemTypeEnum.Furniture].BaseName))
                 {
                     string name = data.GetNthChunk('/', SObject.objectInfoNameIndex).ToString();
@@ -211,7 +222,7 @@ internal static class DataToItemMap
             {
                 ModEntry.ModMonitor.DebugOnlyLog("Building map to resolve Hats", LogLevel.Info);
 
-                Dictionary<string, int> mapping = new();
+                Dictionary<string, int> mapping = new(30);
                 foreach ((int id, string data) in Game1.content.Load<Dictionary<int, string>>(enumToAssetMap[ItemTypeEnum.Hat].BaseName))
                 {
                     string name = data.GetNthChunk('/', SObject.objectInfoNameIndex).ToString();

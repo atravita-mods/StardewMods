@@ -35,7 +35,6 @@ internal static class AssetEditor
     {
         if (betIconLazy.IsValueCreated && (assets is null || assets.Contains(BET_ICONS_ASSET)))
         {
-            betIconLazy.Value.Dispose();
             betIconLazy = new(() => Game1.content.Load<Texture2D>(BET_ICONS));
         }
     }

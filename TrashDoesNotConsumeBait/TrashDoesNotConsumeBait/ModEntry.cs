@@ -68,7 +68,6 @@ internal sealed class ModEntry : Mod
             });
         foreach (PropertyInfo property in typeof(ModConfig).GetProperties())
         {
-
             if (property.PropertyType == typeof(bool))
             {
                 helper.AddBoolOption(

@@ -24,8 +24,6 @@ public sealed class GMCMHelper : IntegrationHelper
     private readonly List<string> pages = new();
 
     private IGenericModConfigMenuApi? modMenuApi;
-
-    [SuppressMessage("CodeQuality", "IDE0052:Remove unread private members", Justification = "Currently only used for colors...")]
     private IGMCMOptionsAPI? gmcmOptionsApi;
 
     /// <summary>

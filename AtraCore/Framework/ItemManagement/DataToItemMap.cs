@@ -3,6 +3,10 @@ using AtraShared.ConstantsAndEnums;
 using AtraShared.Utils.Extensions;
 
 namespace AtraCore.Framework.ItemManagement;
+
+/// <summary>
+/// Handles looking up the id of an item by its name and type.
+/// </summary>
 internal static class DataToItemMap
 {
     private static readonly SortedList<ItemTypeEnum, IAssetName> enumToAssetMap = new(7);
@@ -14,6 +18,7 @@ internal static class DataToItemMap
     /// </summary>
     /// <param name="type">type of the item.</param>
     /// <param name="name">name of the item.</param>
+    /// <param name="resolveRecipesSeperately">Whether or not to ignore the recipe bit.</param>
     /// <returns>Integer ID, or -1 if not found.</returns>
     public static int GetID(ItemTypeEnum type, string name, bool resolveRecipesSeperately = false)
     {
@@ -66,7 +71,7 @@ internal static class DataToItemMap
 
         if (ShouldReset(enumToAssetMap[ItemTypeEnum.SObject]))
         {
-            if (!nameToIDMap.TryGetValue(ItemTypeEnum.SObject, out var sobj) || sobj.IsValueCreated)
+            if (!nameToIDMap.TryGetValue(ItemTypeEnum.SObject, out Lazy<Dictionary<string, int>>? sobj) || sobj.IsValueCreated)
             {
                 nameToIDMap[ItemTypeEnum.SObject] = new(() =>
                 {
@@ -204,7 +209,7 @@ internal static class DataToItemMap
             {
                 ModEntry.ModMonitor.DebugOnlyLog("Building map to resolve Furniture", LogLevel.Info);
 
-                Dictionary<string, int> mapping = new(20);
+                Dictionary<string, int> mapping = new(300);
                 foreach ((int id, string data) in Game1.content.Load<Dictionary<int, string>>(enumToAssetMap[ItemTypeEnum.Furniture].BaseName))
                 {
                     string name = data.GetNthChunk('/', SObject.objectInfoNameIndex).ToString();
@@ -222,7 +227,7 @@ internal static class DataToItemMap
             {
                 ModEntry.ModMonitor.DebugOnlyLog("Building map to resolve Hats", LogLevel.Info);
 
-                Dictionary<string, int> mapping = new(30);
+                Dictionary<string, int> mapping = new(100);
                 foreach ((int id, string data) in Game1.content.Load<Dictionary<int, string>>(enumToAssetMap[ItemTypeEnum.Hat].BaseName))
                 {
                     string name = data.GetNthChunk('/', SObject.objectInfoNameIndex).ToString();

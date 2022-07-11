@@ -56,7 +56,6 @@ public static class AssetLoader
     {
         if (uiElementLazy.IsValueCreated && (assets is null || assets.Contains(UI_ASSET_NAME)))
         {
-            uiElementLazy.Value.Dispose();
             uiElementLazy = new(() => ModEntry.GameContentHelper.Load<Texture2D>(UI_ASSET_PATH));
         }
         if (tooltipDataLazy.IsValueCreated && (assets is null || assets.Contains(TOOLTIP_DATA_NAME)))

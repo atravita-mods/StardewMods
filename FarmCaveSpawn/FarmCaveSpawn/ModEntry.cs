@@ -114,7 +114,7 @@ internal sealed class ModEntry : Mod
 
         helper.Register(
                 reset: () => this.config = new ModConfig(),
-                save: () => this.Helper.WriteConfig(this.config))
+                save: () => this.Helper.AsyncWriteConfig(this.Monitor, this.config))
             .AddParagraph(I18n.Mod_Description);
 
         foreach (PropertyInfo property in typeof(ModConfig).GetProperties())

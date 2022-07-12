@@ -80,8 +80,9 @@ public sealed class CanPlaceHandler : IMoreFertilizersAPI
         if (loc.terrainFeatures.TryGetValue(tile, out TerrainFeature? terrain))
         {
             if (terrain is FruitTree fruitTree
-                && (obj.ParentSheetIndex == ModEntry.FruitTreeFertilizerID || obj.ParentSheetIndex == ModEntry.DeluxeFruitTreeFertilizerID
-                || obj.ParentSheetIndex == ModEntry.MiraculousBeveragesID))
+                && (obj.ParentSheetIndex == ModEntry.MiraculousBeveragesID
+                    || (fruitTree.growthStage.Value != FruitTree.treeStage
+                        && (obj.ParentSheetIndex == ModEntry.FruitTreeFertilizerID || obj.ParentSheetIndex == ModEntry.DeluxeFruitTreeFertilizerID))))
             {
                 return !fruitTree.modData.ContainsKey(FruitTreeFertilizer) && !fruitTree.modData.ContainsKey(MiraculousBeverages);
             }

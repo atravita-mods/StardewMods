@@ -50,6 +50,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Utils\Extensions\NetFieldDictionaryExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Utils\Extensions\NPCExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Utils\Extensions\ScheduleExtensions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Utils\Extensions\SMAPIHelperExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Utils\Extensions\SObjectExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Utils\Extensions\TranslationHelperExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Utils\Extensions\Vector2Extensions.cs" />

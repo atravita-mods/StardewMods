@@ -3,6 +3,10 @@ using AtraShared.ConstantsAndEnums;
 using AtraShared.Utils.Extensions;
 
 namespace AtraCore.Framework.ItemManagement;
+
+/// <summary>
+/// Handles looking up the id of an item by its name and type.
+/// </summary>
 internal static class DataToItemMap
 {
     private static readonly SortedList<ItemTypeEnum, IAssetName> enumToAssetMap = new(7);
@@ -14,6 +18,7 @@ internal static class DataToItemMap
     /// </summary>
     /// <param name="type">type of the item.</param>
     /// <param name="name">name of the item.</param>
+    /// <param name="resolveRecipesSeperately">Whether or not to ignore the recipe bit.</param>
     /// <returns>Integer ID, or -1 if not found.</returns>
     public static int GetID(ItemTypeEnum type, string name, bool resolveRecipesSeperately = false)
     {
@@ -21,14 +26,12 @@ internal static class DataToItemMap
         {
             type &= ~ItemTypeEnum.Recipe;
         }
-        if (!nameToIDMap.TryGetValue(type, out Lazy<Dictionary<string, int>>? asset))
+        if (type == ItemTypeEnum.ColoredSObject)
         {
-            if (!type.HasFlag(ItemTypeEnum.SObject) || !nameToIDMap.TryGetValue(ItemTypeEnum.SObject, out asset))
-            {
-                return -1;
-            }
+            type = ItemTypeEnum.SObject;
         }
-        if (asset.Value.TryGetValue(name, out int id))
+        if (nameToIDMap.TryGetValue(type, out Lazy<Dictionary<string, int>>? asset)
+            && asset.Value.TryGetValue(name, out int id))
         {
             return id;
         }
@@ -66,13 +69,22 @@ internal static class DataToItemMap
 
         if (ShouldReset(enumToAssetMap[ItemTypeEnum.SObject]))
         {
-            if (!nameToIDMap.TryGetValue(ItemTypeEnum.SObject, out var sobj) || sobj.IsValueCreated)
+            if (!nameToIDMap.TryGetValue(ItemTypeEnum.SObject, out Lazy<Dictionary<string, int>>? sobj) || sobj.IsValueCreated)
             {
                 nameToIDMap[ItemTypeEnum.SObject] = new(() =>
                 {
                     ModEntry.ModMonitor.DebugOnlyLog("Building map to resolve normal objects.", LogLevel.Info);
 
-                    Dictionary<string, int> mapping = new();
+                    Dictionary<string, int> mapping = new(Game1.objectInformation.Count)
+                    {
+                        // Special cases
+                        ["Egg"] = 176,
+                        ["Brown Egg"] = 180,
+                        ["Large Egg"] = 174,
+                        ["Large Brown Egg"] = 182,
+                    };
+
+                    // Processing from the data.
                     foreach ((int id, string data) in Game1.objectInformation)
                     {
                         // category asdf should never end up in the player inventory.
@@ -92,7 +104,9 @@ internal static class DataToItemMap
                             || name.Equals("Twig", StringComparison.OrdinalIgnoreCase)
                             || name.Equals("Rotten Plant", StringComparison.OrdinalIgnoreCase)
                             || name.Equals("???", StringComparison.OrdinalIgnoreCase)
-                            || name.Equals("DGA Dummy Object", StringComparison.OrdinalIgnoreCase))
+                            || name.Equals("DGA Dummy Object", StringComparison.OrdinalIgnoreCase)
+                            || name.Equals("Egg", StringComparison.OrdinalIgnoreCase)
+                            || name.Equals("Large Egg", StringComparison.OrdinalIgnoreCase))
                         {
                             continue;
                         }
@@ -110,7 +124,7 @@ internal static class DataToItemMap
                 {
                     ModEntry.ModMonitor.DebugOnlyLog("Building map to resolve rings.", LogLevel.Info);
 
-                    Dictionary<string, int> mapping = new();
+                    Dictionary<string, int> mapping = new(10);
                     foreach ((int id, string data) in Game1.objectInformation)
                     {
                         var cat = data.GetNthChunk('/', 3);
@@ -133,13 +147,14 @@ internal static class DataToItemMap
             }
         }
 
-        if (ShouldReset(enumToAssetMap[ItemTypeEnum.Boots]) && (!nameToIDMap.TryGetValue(ItemTypeEnum.Boots, out var boots) || boots.IsValueCreated))
+        if (ShouldReset(enumToAssetMap[ItemTypeEnum.Boots])
+            && (!nameToIDMap.TryGetValue(ItemTypeEnum.Boots, out Lazy<Dictionary<string, int>>? boots) || boots.IsValueCreated))
         {
             nameToIDMap[ItemTypeEnum.Boots] = new(() =>
             {
                 ModEntry.ModMonitor.DebugOnlyLog("Building map to resolve Boots", LogLevel.Info);
 
-                Dictionary<string, int> mapping = new();
+                Dictionary<string, int> mapping = new(20);
                 foreach ((int id, string data) in Game1.content.Load<Dictionary<int, string>>(enumToAssetMap[ItemTypeEnum.Boots].BaseName))
                 {
                     string name = data.GetNthChunk('/', SObject.objectInfoNameIndex).ToString();
@@ -151,13 +166,14 @@ internal static class DataToItemMap
                 return mapping;
             });
         }
-        if (ShouldReset(enumToAssetMap[ItemTypeEnum.BigCraftable]) && (!nameToIDMap.TryGetValue(ItemTypeEnum.BigCraftable, out var bc) || bc.IsValueCreated))
+        if (ShouldReset(enumToAssetMap[ItemTypeEnum.BigCraftable])
+            && (!nameToIDMap.TryGetValue(ItemTypeEnum.BigCraftable, out Lazy<Dictionary<string, int>>? bc) || bc.IsValueCreated))
         {
             nameToIDMap[ItemTypeEnum.BigCraftable] = new(() =>
             {
                 ModEntry.ModMonitor.DebugOnlyLog("Building map to resolve BigCraftables", LogLevel.Info);
 
-                Dictionary<string, int> mapping = new();
+                Dictionary<string, int> mapping = new(Game1.bigCraftablesInformation.Count);
                 foreach ((int id, string data) in Game1.bigCraftablesInformation)
                 {
                     string name = data.GetNthChunk('/', SObject.objectInfoNameIndex).ToString();
@@ -169,13 +185,14 @@ internal static class DataToItemMap
                 return mapping;
             });
         }
-        if (ShouldReset(enumToAssetMap[ItemTypeEnum.Clothing]) && (!nameToIDMap.TryGetValue(ItemTypeEnum.Clothing, out var clothing) || clothing.IsValueCreated))
+        if (ShouldReset(enumToAssetMap[ItemTypeEnum.Clothing])
+            && (!nameToIDMap.TryGetValue(ItemTypeEnum.Clothing, out Lazy<Dictionary<string, int>>? clothing) || clothing.IsValueCreated))
         {
             nameToIDMap[ItemTypeEnum.Clothing] = new(() =>
             {
                 ModEntry.ModMonitor.DebugOnlyLog("Building map to resolve Clothing", LogLevel.Info);
 
-                Dictionary<string, int> mapping = new();
+                Dictionary<string, int> mapping = new(Game1.clothingInformation.Count);
                 foreach ((int id, string data) in Game1.clothingInformation)
                 {
                     string name = data.GetNthChunk('/', SObject.objectInfoNameIndex).ToString();
@@ -187,13 +204,14 @@ internal static class DataToItemMap
                 return mapping;
             });
         }
-        if (ShouldReset(enumToAssetMap[ItemTypeEnum.Furniture]) && (!nameToIDMap.TryGetValue(ItemTypeEnum.Furniture, out var furniture) || furniture.IsValueCreated))
+        if (ShouldReset(enumToAssetMap[ItemTypeEnum.Furniture])
+            && (!nameToIDMap.TryGetValue(ItemTypeEnum.Furniture, out Lazy<Dictionary<string, int>>? furniture) || furniture.IsValueCreated))
         {
             nameToIDMap[ItemTypeEnum.Furniture] = new(() =>
             {
                 ModEntry.ModMonitor.DebugOnlyLog("Building map to resolve Furniture", LogLevel.Info);
 
-                Dictionary<string, int> mapping = new();
+                Dictionary<string, int> mapping = new(300);
                 foreach ((int id, string data) in Game1.content.Load<Dictionary<int, string>>(enumToAssetMap[ItemTypeEnum.Furniture].BaseName))
                 {
                     string name = data.GetNthChunk('/', SObject.objectInfoNameIndex).ToString();
@@ -205,13 +223,14 @@ internal static class DataToItemMap
                 return mapping;
             });
         }
-        if (ShouldReset(enumToAssetMap[ItemTypeEnum.Hat]) && (!nameToIDMap.TryGetValue(ItemTypeEnum.Hat, out var hats) || hats.IsValueCreated))
+        if (ShouldReset(enumToAssetMap[ItemTypeEnum.Hat])
+            && (!nameToIDMap.TryGetValue(ItemTypeEnum.Hat, out Lazy<Dictionary<string, int>>? hats) || hats.IsValueCreated))
         {
             nameToIDMap[ItemTypeEnum.Hat] = new(() =>
             {
                 ModEntry.ModMonitor.DebugOnlyLog("Building map to resolve Hats", LogLevel.Info);
 
-                Dictionary<string, int> mapping = new();
+                Dictionary<string, int> mapping = new(100);
                 foreach ((int id, string data) in Game1.content.Load<Dictionary<int, string>>(enumToAssetMap[ItemTypeEnum.Hat].BaseName))
                 {
                     string name = data.GetNthChunk('/', SObject.objectInfoNameIndex).ToString();

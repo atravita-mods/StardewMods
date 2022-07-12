@@ -71,7 +71,7 @@ internal sealed class ModEntry : Mod
         {
             gmcm.Register(
                 reset: static () => config = new(),
-                save: () => Task.Run(() => this.Helper.WriteConfig(config)))
+                save: () => this.Helper.AsyncWriteConfig(this.Monitor, config))
             .AddTextOption(
                 name: I18n.BoxLocation_Name,
                 getValue: static () => config.BoxLocation.X + ", " + config.BoxLocation.Y,

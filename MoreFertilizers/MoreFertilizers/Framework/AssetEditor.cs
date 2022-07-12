@@ -24,6 +24,23 @@ internal static class AssetEditor
     private static readonly string LEWIS_DIALOGUE = PathUtilities.NormalizeAssetName("Characters/Dialogue/Lewis");
 #pragma warning restore SA1310 // Field names should not contain underscore
 
+    private static readonly Lazy<Dictionary<string, SpecialOrderData>> SpecialOrders = new(() =>
+    {
+        Dictionary<string, SpecialOrderData> ret = new();
+        int i = 0;
+        foreach (string? filename in Directory.GetFiles(PathUtilities.NormalizePath(ModEntry.DIRPATH + "/assets/special-orders/"), "*.json"))
+        {
+            Dictionary<string, SpecialOrderData> orders = ModEntry.ModContentHelper.Load<Dictionary<string, SpecialOrderData>>(Path.GetRelativePath(ModEntry.DIRPATH, filename));
+            foreach ((string key, SpecialOrderData order) in orders)
+            {
+                ret[key] = order;
+                i++;
+            }
+        }
+        ModEntry.ModMonitor.Log($"Found {i} Special Orders");
+        return ret;
+    });
+
     /// <summary>
     /// Handles asset editing.
     /// </summary>
@@ -84,17 +101,10 @@ internal static class AssetEditor
     private static void EditSpecialOrdersImpl(IAssetData asset)
     {
         IAssetDataForDictionary<string, SpecialOrderData>? editor = asset.AsDictionary<string, SpecialOrderData>();
-        int i = 0;
-        foreach (string? filename in Directory.GetFiles(PathUtilities.NormalizePath(ModEntry.DIRPATH + "/assets/special-orders/"), "*.json"))
+        foreach ((string key, SpecialOrderData order) in SpecialOrders.Value)
         {
-            Dictionary<string, SpecialOrderData> orders = ModEntry.ModContentHelper.Load<Dictionary<string, SpecialOrderData>>(Path.GetRelativePath(ModEntry.DIRPATH, filename));
-            foreach ((string key, SpecialOrderData order) in orders)
-            {
-                editor.Data[key] = order;
-                i++;
-            }
+            editor.Data[key] = order;
         }
-        ModEntry.ModMonitor.Log($"Added {i} Special Orders");
     }
 
     private static void EditSpecialOrdersStringsImpl(IAssetData asset)

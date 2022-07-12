@@ -52,7 +52,7 @@ internal class ModEntry : Mod
         {
             helper.Register(
                 reset: static () => Config = new(),
-                save: () => Task.Run(() => this.Helper.WriteConfig(Config)).ContinueWith((t) => this.Monitor.Log(t.Status == TaskStatus.RanToCompletion ? "Config saved!" : $"Config failed to save {t.Status}")));
+                save: () => this.Helper.AsyncWriteConfig(this.Monitor, Config));
 
             foreach (PropertyInfo prop in typeof(ModConfig).GetProperties())
             {

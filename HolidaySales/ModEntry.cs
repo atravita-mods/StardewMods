@@ -1,5 +1,6 @@
 ﻿using AtraShared.ConstantsAndEnums;
 using AtraShared.Integrations;
+using AtraShared.Utils.Extensions;
 using HarmonyLib;
 using StardewModdingAPI.Events;
 
@@ -42,7 +43,7 @@ internal sealed class ModEntry : Mod
         {
             helper.Register(
                 reset: static () => Config = new(),
-                save: () => Task.Run(() => this.Helper.WriteConfig(Config)))
+                save: () => this.Helper.AsyncWriteConfig(this.Monitor, Config))
             .AddEnumOption(
                 name: I18n.StoreFestivalBehavior_Title,
                 getValue: static () => Config.StoreFestivalBehavior,

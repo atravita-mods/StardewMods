@@ -127,7 +127,7 @@ internal sealed class ModEntry : Mod
                     },
                     save: () =>
                     {
-                        Task.Run(() => this.Helper.WriteConfig(Config));
+                        this.Helper.AsyncWriteConfig(this.Monitor, Config);
                         PFMMachineHandler.RefreshValidityList(Game1.currentLocation);
                     });
             }
@@ -135,7 +135,7 @@ internal sealed class ModEntry : Mod
             {
                 this.gmcmHelper.Register(
                 reset: static () => Config = new(),
-                save: () => Task.Run(() => this.Helper.WriteConfig(Config)));
+                save: () => this.Helper.AsyncWriteConfig(this.Monitor, Config));
             }
             this.gmcmHelper.AddParagraph(I18n.ModDescription)
             .AddColorPicker(
@@ -220,7 +220,7 @@ internal sealed class ModEntry : Mod
             }
 
             this.Monitor.Log("PFM compat set up!", LogLevel.Trace);
-            Task.Run(() => this.Helper.WriteConfig(Config));
+            this.Helper.AsyncWriteConfig(this.Monitor, Config);
         }
         else
         {

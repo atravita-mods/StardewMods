@@ -663,7 +663,7 @@ internal sealed class ModEntry : Mod
 
                 helper.Register(
                     reset: static () => Config = new(),
-                    save: () => this.Helper.WriteConfig(Config))
+                    save: () => this.Helper.AsyncWriteConfig(this.Monitor, Config))
                     .AddParagraph(I18n.Mod_Description);
                 foreach (PropertyInfo property in typeof(ModConfig).GetProperties())
                 {

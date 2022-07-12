@@ -1,5 +1,6 @@
 ﻿using System.Reflection;
 using AtraShared.Integrations;
+using AtraShared.Utils.Extensions;
 using GingerIslandMainlandAdjustments.Configuration;
 
 namespace GingerIslandMainlandAdjustments.Integrations;
@@ -35,7 +36,7 @@ internal static class GenerateGMCM
         helper.Unregister();
         helper.Register(
                 reset: static () => Globals.Config = new ModConfig(),
-                save: static () => Globals.Helper.WriteConfig(Globals.Config))
+                save: static () => Globals.Helper.AsyncWriteConfig(Globals.ModMonitor, Globals.Config))
             .AddParagraph(I18n.ModDescription)
             .AddBoolOption(
                 name: I18n.Config_EnforceGITiming_Title,

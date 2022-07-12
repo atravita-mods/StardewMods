@@ -86,7 +86,7 @@ internal sealed class ModEntry : Mod
         }
         helper.Register(
             reset: static () => Config = new ModConfig(),
-            save: () => this.Helper.WriteConfig(Config))
+            save: () => this.Helper.AsyncWriteConfig(this.Monitor, Config))
         .AddParagraph(I18n.ModDescription)
         .AddEnumOption(
             name: I18n.TooltipBehavior_Title,

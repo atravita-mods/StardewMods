@@ -60,19 +60,14 @@ internal sealed class ModEntry : Mod
             return;
         }
         helper.Register(
-            reset: static () =>
-            {
-                Config = new();
-                AssetEditor.Invalidate();
-            },
+            reset: static () => Config = new(),
             save: () =>
             {
-                Task.Run(() => this.Helper.WriteConfig(Config));
+                this.Helper.AsyncWriteConfig(this.Monitor, Config);
                 AssetEditor.Invalidate();
             });
         foreach (PropertyInfo property in typeof(ModConfig).GetProperties())
         {
-
             if (property.PropertyType == typeof(bool))
             {
                 helper.AddBoolOption(

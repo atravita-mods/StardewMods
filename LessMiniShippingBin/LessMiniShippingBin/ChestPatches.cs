@@ -27,7 +27,7 @@ internal class ChestPatches
                     __result = ModEntry.Config.MiniShippingCapacity;
                     break;
                 case Chest.SpecialChestTypes.JunimoChest:
-                    __result = ModEntry.Config.JuminoCapcaity;
+                    __result = ModEntry.Config.JuminoCapacity;
                     break;
                 default:
                     // do nothing.

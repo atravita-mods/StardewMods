@@ -26,14 +26,12 @@ internal static class DataToItemMap
         {
             type &= ~ItemTypeEnum.Recipe;
         }
-        if (!nameToIDMap.TryGetValue(type, out Lazy<Dictionary<string, int>>? asset))
+        if (type == ItemTypeEnum.ColoredSObject)
         {
-            if (!type.HasFlag(ItemTypeEnum.SObject) || !nameToIDMap.TryGetValue(ItemTypeEnum.SObject, out asset))
-            {
-                return -1;
-            }
+            type = ItemTypeEnum.SObject;
         }
-        if (asset.Value.TryGetValue(name, out int id))
+        if (nameToIDMap.TryGetValue(type, out Lazy<Dictionary<string, int>>? asset)
+            && asset.Value.TryGetValue(name, out int id))
         {
             return id;
         }
@@ -149,7 +147,8 @@ internal static class DataToItemMap
             }
         }
 
-        if (ShouldReset(enumToAssetMap[ItemTypeEnum.Boots]) && (!nameToIDMap.TryGetValue(ItemTypeEnum.Boots, out var boots) || boots.IsValueCreated))
+        if (ShouldReset(enumToAssetMap[ItemTypeEnum.Boots])
+            && (!nameToIDMap.TryGetValue(ItemTypeEnum.Boots, out Lazy<Dictionary<string, int>>? boots) || boots.IsValueCreated))
         {
             nameToIDMap[ItemTypeEnum.Boots] = new(() =>
             {
@@ -167,7 +166,8 @@ internal static class DataToItemMap
                 return mapping;
             });
         }
-        if (ShouldReset(enumToAssetMap[ItemTypeEnum.BigCraftable]) && (!nameToIDMap.TryGetValue(ItemTypeEnum.BigCraftable, out var bc) || bc.IsValueCreated))
+        if (ShouldReset(enumToAssetMap[ItemTypeEnum.BigCraftable])
+            && (!nameToIDMap.TryGetValue(ItemTypeEnum.BigCraftable, out Lazy<Dictionary<string, int>>? bc) || bc.IsValueCreated))
         {
             nameToIDMap[ItemTypeEnum.BigCraftable] = new(() =>
             {
@@ -185,7 +185,8 @@ internal static class DataToItemMap
                 return mapping;
             });
         }
-        if (ShouldReset(enumToAssetMap[ItemTypeEnum.Clothing]) && (!nameToIDMap.TryGetValue(ItemTypeEnum.Clothing, out var clothing) || clothing.IsValueCreated))
+        if (ShouldReset(enumToAssetMap[ItemTypeEnum.Clothing])
+            && (!nameToIDMap.TryGetValue(ItemTypeEnum.Clothing, out Lazy<Dictionary<string, int>>? clothing) || clothing.IsValueCreated))
         {
             nameToIDMap[ItemTypeEnum.Clothing] = new(() =>
             {
@@ -203,7 +204,8 @@ internal static class DataToItemMap
                 return mapping;
             });
         }
-        if (ShouldReset(enumToAssetMap[ItemTypeEnum.Furniture]) && (!nameToIDMap.TryGetValue(ItemTypeEnum.Furniture, out var furniture) || furniture.IsValueCreated))
+        if (ShouldReset(enumToAssetMap[ItemTypeEnum.Furniture])
+            && (!nameToIDMap.TryGetValue(ItemTypeEnum.Furniture, out Lazy<Dictionary<string, int>>? furniture) || furniture.IsValueCreated))
         {
             nameToIDMap[ItemTypeEnum.Furniture] = new(() =>
             {
@@ -221,7 +223,8 @@ internal static class DataToItemMap
                 return mapping;
             });
         }
-        if (ShouldReset(enumToAssetMap[ItemTypeEnum.Hat]) && (!nameToIDMap.TryGetValue(ItemTypeEnum.Hat, out var hats) || hats.IsValueCreated))
+        if (ShouldReset(enumToAssetMap[ItemTypeEnum.Hat])
+            && (!nameToIDMap.TryGetValue(ItemTypeEnum.Hat, out Lazy<Dictionary<string, int>>? hats) || hats.IsValueCreated))
         {
             nameToIDMap[ItemTypeEnum.Hat] = new(() =>
             {

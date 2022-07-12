@@ -51,7 +51,7 @@ public sealed class CanPlaceHandler : IMoreFertilizersAPI
             return false;
         }
 
-        if (loc.terrainFeatures.TryGetValue(tile, out TerrainFeature? terrain) && terrain is FruitTree tree
+        if (loc.terrainFeatures.TryGetValue(tile, out TerrainFeature? terrain) && terrain is FruitTree tree && tree.growthStage.Value != FruitTree.treeStage
             && (obj.ParentSheetIndex == ModEntry.FruitTreeFertilizerID || obj.ParentSheetIndex == ModEntry.DeluxeFruitTreeFertilizerID))
         {
             return !tree.modData.ContainsKey(FruitTreeFertilizer);

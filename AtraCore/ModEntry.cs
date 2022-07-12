@@ -47,8 +47,8 @@ internal sealed class ModEntry : Mod
 
 #if DEBUG
         helper.Events.GameLoop.DayStarted += this.OnDayStart;
-#endif
         helper.Events.GameLoop.SaveLoaded += this.LateSaveLoaded;
+#endif
     }
 
     private void OnGameLaunched(object? sender, GameLaunchedEventArgs e)

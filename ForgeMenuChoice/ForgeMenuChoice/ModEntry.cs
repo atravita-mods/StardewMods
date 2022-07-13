@@ -88,16 +88,7 @@ internal sealed class ModEntry : Mod
             reset: static () => Config = new ModConfig(),
             save: () => this.Helper.AsyncWriteConfig(this.Monitor, Config))
         .AddParagraph(I18n.ModDescription)
-        .AddEnumOption(
-            name: I18n.TooltipBehavior_Title,
-            getValue: static () => Config.TooltipBehavior,
-            setValue: static (value) => Config.TooltipBehavior = value,
-            tooltip: I18n.TooltipBehavior_Description)
-        .AddBoolOption(
-            name: I18n.EnableTooltipAutogeneration_Title,
-            getValue: static () => Config.EnableTooltipAutogeneration,
-            setValue: static (value) => Config.EnableTooltipAutogeneration = value,
-            tooltip: I18n.EnableTooltipAutogeneration_Description);
+        .GenerateDefaultGMCM(static () => Config);
     }
 
     private void ApplyPatches(Harmony harmony)

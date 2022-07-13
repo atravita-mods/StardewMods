@@ -154,11 +154,7 @@ internal sealed class ModEntry : Mod
                 gmcmHelper.Register(
                     reset: static () => Config = new(),
                     save: () => this.Helper.AsyncWriteConfig(this.Monitor, Config))
-                .AddBoolOption(
-                    name: I18n.SurpressUnnecessaryBoardUpdates_Name,
-                    getValue: () => Config.SurpressUnnecessaryBoardUpdates,
-                    setValue: (value) => Config.SurpressUnnecessaryBoardUpdates = value,
-                    tooltip: I18n.SurpressUnnecessaryBoardUpdates_Description);
+                .GenerateDefaultGMCM(static () => Config);
             }
         }
     }

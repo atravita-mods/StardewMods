@@ -1,4 +1,6 @@
-﻿namespace TrashDoesNotConsumeBait;
+﻿using AtraShared.Integrations.GMCMAttributes;
+
+namespace TrashDoesNotConsumeBait;
 
 /// <summary>
 /// The configuration class for this mod.
@@ -26,6 +28,8 @@ internal sealed class ModConfig
     /// <summary>
     /// Gets or sets chance of consuming bait/tackle normally.
     /// </summary>
+    [GMCMRange(0, 1)]
+    [GMCMInterval(0.01)]
     public float ConsumeChanceNormal
     {
         get => this.consumeChanceNormal;
@@ -35,6 +39,8 @@ internal sealed class ModConfig
     /// <summary>
     /// Gets or sets chance of consuming bait/tackle with the Preserving enchantment.
     /// </summary>
+    [GMCMRange(0, 1)]
+    [GMCMInterval(0.01)]
     public float ConsumeChancePreserving
     {
         get => this.consumeChancePreserving;

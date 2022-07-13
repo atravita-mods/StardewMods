@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using AtraShared.Integrations.GMCMAttributes;
+using Microsoft.Xna.Framework;
 
 namespace MoreFertilizers.Framework;
 
@@ -15,5 +16,6 @@ public sealed class ModConfig
     /// <summary>
     /// Gets or sets a value for what color to make the water overlay for fish food.
     /// </summary>
+    [GMCMDefaultColor(147, 112, 219, 155)]
     public Color WaterOverlayColor { get; set; } = new(147, 112, 219, 155);
 }

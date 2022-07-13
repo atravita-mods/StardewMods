@@ -64,18 +64,7 @@ internal sealed class ModEntry : Mod
         helper.Register(
                 reset: static () => Config = new ModConfig(),
                 save: () => this.Helper.AsyncWriteConfig(this.Monitor, Config))
-            .AddParagraph(I18n.Mod_Description);
-
-        foreach (PropertyInfo property in typeof(ModConfig).GetProperties())
-        {
-            if (property.PropertyType.Equals(typeof(bool)))
-            {
-                helper.AddBoolOption(property, static () => Config);
-            }
-            else
-            {
-                this.Monitor.DebugOnlyLog($"{property.Name} unaccounted for.", LogLevel.Warn);
-            }
-        }
+            .AddParagraph(I18n.Mod_Description)
+            .GenerateDefaultGMCM(static () => Config);
     }
 }

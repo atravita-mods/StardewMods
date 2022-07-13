@@ -65,28 +65,13 @@ internal sealed class ModEntry : Mod
     private void OnGameLaunched(object? sender, GameLaunchedEventArgs e)
     {
         GMCMHelper helper = new(this.Monitor, this.Helper.Translation, this.Helper.ModRegistry, this.ModManifest);
-        if (!helper.TryGetAPI())
+        if (helper.TryGetAPI())
         {
-            return;
-        }
-        helper.Register(
-            static () => Config = new(),
-            () => this.Helper.AsyncWriteConfig(this.Monitor, Config))
-            .AddParagraph(I18n.ModDescription);
-        foreach (PropertyInfo property in typeof(ModConfig).GetProperties())
-        {
-            if (property.PropertyType == typeof(bool))
-            {
-                helper.AddBoolOption(property, static () => Config);
-            }
-            else if (property.PropertyType == typeof(float))
-            {
-                helper.AddFloatOption(property, static () => Config, min: 0.1f, max: 10f, interval: 0.1f);
-            }
-            else if (property.PropertyType == typeof(int))
-            {
-                helper.AddIntOption(property, static () => Config, min: 5, max: 7);
-            }
+            helper.Register(
+                static () => Config = new(),
+                () => this.Helper.AsyncWriteConfig(this.Monitor, Config))
+            .AddParagraph(I18n.ModDescription)
+            .GenerateDefaultGMCM(static () => Config);
         }
     }
 

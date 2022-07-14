@@ -1,6 +1,9 @@
-﻿namespace EasierDartPuzzle;
+﻿using AtraShared.Integrations.GMCMAttributes;
+
+namespace EasierDartPuzzle;
 
 #pragma warning disable SA1201 // Elements should appear in the correct order. Backing fields kept near accessors.
+
 /// <summary>
 /// The config class for this mod.
 /// </summary>
@@ -11,10 +14,12 @@ internal sealed class ModConfig
     /// <summary>
     /// Gets or sets when the pirates should show up in multiplayer.
     /// </summary>
+    [GMCMInterval(10)]
+    [GMCMRange(600, 2000)]
     public int MPPirateArrivalTime
     {
         get => this.mpPirateArrivalTime;
-        set => this.mpPirateArrivalTime = Math.Clamp(value, 600, 2000);
+        set => this.mpPirateArrivalTime = (Math.Clamp(value, 600, 2000) / 10) * 10;
     }
 
     private int minDartCount = 10;
@@ -22,6 +27,7 @@ internal sealed class ModConfig
     /// <summary>
     /// Gets or sets a value indicating the minimum dart requirement.
     /// </summary>
+    [GMCMRange(8, 30)]
     public int MinDartCount
     {
         get => this.minDartCount;
@@ -30,16 +36,28 @@ internal sealed class ModConfig
 
     private int maxDartCount = 20;
 
+    /// <summary>
+    /// Gets or sets a value indicating the max dart requirement.
+    /// </summary>
+    [GMCMRange(8, 30)]
     public int MaxDartCount
     {
         get => this.maxDartCount;
-        set => this.minDartCount = Math.Clamp(value, 8, 30);
+        set => this.maxDartCount = Math.Clamp(value, 8, 30);
     }
 
+    /// <summary>
+    /// Gets or sets a value indicating whether the dart location should just be drawn to the screen.
+    /// </summary>
     public bool ShowDartMarker { get; set; } = false;
 
     private float jitterMultiplier = 1f;
 
+    /// <summary>
+    /// Gets or sets a value indicating how much the dart should jitter.
+    /// </summary>
+    [GMCMInterval(0.01)]
+    [GMCMRange(0.05, 20)]
     public float JitterMultiplier
     {
         get => this.jitterMultiplier;

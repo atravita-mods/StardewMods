@@ -42,6 +42,10 @@ internal static class FruitTreeDrawTranspiler
     [MethodImpl(TKConstants.Hot)]
     private static Color ReplaceColorIfNeeded(Color prevcolor, FruitTree tree)
     {
+        if (!ModEntry.Config.RecolorFruitTrees)
+        {
+            return prevcolor;
+        }
         try
         {
             if (tree.modData?.GetInt(CanPlaceHandler.FruitTreeFertilizer) is int result)

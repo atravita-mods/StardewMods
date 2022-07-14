@@ -16,7 +16,6 @@ namespace SpecialOrdersExtended;
 /// <inheritdoc />
 internal sealed class ModEntry : Mod
 {
-    private MigrationManager? migrator;
 
     /// <summary>
     /// Spacecore API handle.
@@ -52,6 +51,9 @@ internal sealed class ModEntry : Mod
             .CreateDelegate<Func<string, bool>>);
 
     private static Func<string, bool> CheckTagDelegate => CheckTagLazy.Value;
+
+    [SuppressMessage("StyleCop.CSharp.OrderingRules", "SA1201:Elements should appear in the correct order", Justification = "Reviewed.")]
+    private MigrationManager? migrator;
 
     /// <inheritdoc/>
     public override void Entry(IModHelper helper)
@@ -242,15 +244,16 @@ internal sealed class ModEntry : Mod
         foreach (string tag in args)
         {
             string base_tag;
+            var span = tag.AsSpan().Trim();
             bool match = true;
-            if (tag.StartsWith('!'))
+            if (span.StartsWith("!"))
             {
                 match = false;
-                base_tag = tag.Trim()[1..];
+                base_tag = span[1..].ToString();
             }
             else
             {
-                base_tag = tag.Trim();
+                base_tag = span.ToString();
             }
             ModMonitor.Log($"{tag}: {(match == CheckTagDelegate(base_tag) ? I18n.True() : I18n.False())}", LogLevel.Debug);
         }
@@ -291,6 +294,7 @@ internal sealed class ModEntry : Mod
         ModMonitor.Log($"{I18n.UnseenKeys(count: unseenkeys.Count)}: {string.Join(", ", unseenkeys)}", LogLevel.Debug);
     }
 
+    [SuppressMessage("StyleCop.CSharp.OrderingRules", "SA1204:Static elements should appear before instance elements", Justification = "Reviewed")]
     private static bool IsAvailableOrder(string key, SpecialOrderData order)
     {
         ModMonitor.Log($"{I18n.Analyzing()} {key}", LogLevel.Debug);

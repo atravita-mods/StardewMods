@@ -47,6 +47,7 @@ internal sealed class ModConfig
     /// <summary>
     /// Probability of any tile spawning an object, capped by max daily spawns.
     /// </summary>
+    [GMCMInterval(0.1)]
     [GMCMRange(0, 100)]
     public float SpawnChance
     {
@@ -59,6 +60,7 @@ internal sealed class ModConfig
     /// <summary>
     /// Probability of any particular spawn being a tree fruit item.
     /// </summary>
+    [GMCMInterval(0.1)]
     [GMCMRange(0, 100)]
     public float TreeFruitChance
     {

@@ -72,7 +72,6 @@ internal sealed class ModEntry : Mod
         helper.Events.GameLoop.ReturnedToTitle += this.OnReturnedToTitle;
     }
 
-
     private void OnAssetRequested(object? sender, AssetRequestedEventArgs e)
         => AssetEditor.HandleAssetRequested(e);
 
@@ -181,14 +180,11 @@ internal sealed class ModEntry : Mod
 
     private void OnSaveLoaded(object? sender, SaveLoadedEventArgs e)
     {
-        MultiplayerHelpers.AssertMultiplayerVersions(this.Helper.Multiplayer, this.ModManifest, this.Monitor, this.Helper.Translation);
-
         if (Context.IsSplitScreen && Context.ScreenId != 0)
         {
             return;
         }
-
-        this.FixIds();
+        MultiplayerHelpers.AssertMultiplayerVersions(this.Helper.Multiplayer, this.ModManifest, this.Monitor, this.Helper.Translation);
         this.migrator = new(this.ModManifest, this.Helper, this.Monitor);
         if (!this.migrator.CheckVersionInfo())
         {
@@ -198,6 +194,8 @@ internal sealed class ModEntry : Mod
         {
             this.migrator = null;
         }
+
+        this.FixIds();
     }
 
     /// <summary>

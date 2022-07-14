@@ -13,6 +13,7 @@ internal sealed class ModConfig
     /// Gets or sets the probability of a fertilized square producing a giant crop.
     /// </summary>
     [GMCMRange(0, 1.1)]
+    [GMCMInterval(0.01)]
     public double GiantCropChance
     {
         get => this.giantCropChance;

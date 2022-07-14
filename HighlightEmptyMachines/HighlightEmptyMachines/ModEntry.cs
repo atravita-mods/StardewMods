@@ -1,12 +1,10 @@
 ﻿using AtraShared.ConstantsAndEnums;
 using AtraShared.Integrations;
-using AtraShared.Integrations.Interfaces;
 using AtraShared.MigrationManager;
 using AtraShared.Niceties;
 using AtraShared.Utils.Extensions;
 using HarmonyLib;
 using HighlightEmptyMachines.Framework;
-using Microsoft.Xna.Framework;
 using StardewModdingAPI.Events;
 
 using AtraUtils = AtraShared.Utils.Utils;
@@ -93,7 +91,7 @@ internal sealed class ModEntry : Mod
     /// <summary>
     /// Resets the GMCM when the player has returned to the title.
     /// </summary>
-    /// <param name="sender">SMAPI</param>
+    /// <param name="sender">SMAPI.</param>
     /// <param name="e">event args.</param>
     private void OnReturnedToTitle(object? sender, ReturnedToTitleEventArgs e)
     {

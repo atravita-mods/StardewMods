@@ -15,7 +15,6 @@ namespace MoreFertilizers.HarmonyPatches.FishFood;
 [HarmonyPatch(typeof(FishingRod))]
 internal static class FishTimePatch
 {
-
     private static float AdjustTimeToBite(float prevTime)
     {
         if (Game1.currentLocation?.modData?.GetBool(CanPlaceHandler.FishFood) == true)

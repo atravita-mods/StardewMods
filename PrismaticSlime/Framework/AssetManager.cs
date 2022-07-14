@@ -6,11 +6,19 @@ using StardewModdingAPI.Events;
 using StardewModdingAPI.Utilities;
 
 namespace PrismaticSlime.Framework;
+
+/// <summary>
+/// Handles asset editing for this mod.
+/// </summary>
 internal static class AssetManager
 {
     private static readonly string OBJECTDATA = PathUtilities.NormalizeAssetName("Data/ObjectInformation");
     private static readonly string RINGMASK = PathUtilities.NormalizeAssetName("Mods/atravita_Prismatic_Ring/Texture");
 
+    /// <summary>
+    /// Applies the requested asset edits and loads.
+    /// </summary>
+    /// <param name="e">Event arguments.</param>
     internal static void Apply(AssetRequestedEventArgs e)
     {
         if (e.NameWithoutLocale.IsEquivalentTo(OBJECTDATA))

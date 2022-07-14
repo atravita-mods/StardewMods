@@ -41,7 +41,7 @@ public sealed class ModConfig
     /// <summary>
     /// Gets or sets the color to color invalid machines.
     /// </summary>
-    [GMCMDefaultColor(128, 128, 128, 255)]
+    [GMCMDefaultColor(128, 128, 128, 200)]
     public Color InvalidColor { get; set; } = Color.Gray;
 
     /// <summary>

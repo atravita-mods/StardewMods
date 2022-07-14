@@ -8,6 +8,7 @@ using AtraShared.Utils.Extensions;
 using Microsoft.Xna.Framework;
 using StardewModdingAPI.Utilities;
 
+#pragma warning disable SA1124 // Do not use regions
 namespace AtraShared.Integrations;
 
 // TODO
@@ -18,6 +19,8 @@ namespace AtraShared.Integrations;
 /// </summary>
 public sealed class GMCMHelper : IntegrationHelper
 {
+#region constants
+
     private const string MINVERSION = "1.8.0";
     private const string APIID = "spacechase0.GenericModConfigMenu";
 
@@ -25,10 +28,15 @@ public sealed class GMCMHelper : IntegrationHelper
     private const string GMCM_OPTIONS_ID = "jltaylor-us.GMCMOptions";
     private const string GMCM_OPTIONS_MINVERSION = "1.1.0";
 #pragma warning restore SA1310 // Field names should not contain underscore
+#endregion
 
+#region cache
+
+    [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Stylecop doesn't understand records.")]
     private readonly record struct cachekey(Type Config, Type TEnum);
 
     private static readonly ConcurrentDictionary<cachekey, MethodInfo> enumCache = new();
+#endregion
 
     private readonly IManifest manifest;
     private readonly List<string> pages = new();
@@ -85,6 +93,8 @@ public sealed class GMCMHelper : IntegrationHelper
         return this;
     }
 
+#region text
+
     /// <summary>
     /// Adds a section title at this location.
     /// </summary>
@@ -135,6 +145,9 @@ public sealed class GMCMHelper : IntegrationHelper
         this.AddParagraph(() => this.Translation.Get(translationKey, tokens));
         return this;
     }
+#endregion
+
+#region bools
 
     /// <summary>
     /// Adds a boolean option at a specific location.
@@ -192,6 +205,9 @@ public sealed class GMCMHelper : IntegrationHelper
         }
         return this;
     }
+    #endregion
+
+#region textboxes
 
     /// <summary>
     /// Adds a text option at the given location.
@@ -261,6 +277,9 @@ public sealed class GMCMHelper : IntegrationHelper
         }
         return this;
     }
+    #endregion
+
+#region enums
 
     /// <summary>
     /// Adds a enum option at the given location.
@@ -382,6 +401,9 @@ public sealed class GMCMHelper : IntegrationHelper
 
         return this;
     }
+#endregion
+
+#region floats
 
     /// <summary>
     /// Adds a float option at this point in the form.
@@ -455,8 +477,8 @@ public sealed class GMCMHelper : IntegrationHelper
                 {
                     if (attribute is GMCMRangeAttribute range)
                     {
-                        min ??= (float)range.min;
-                        max ??= (float)range.max;
+                        min ??= (float)range.Min;
+                        max ??= (float)range.Max;
                     }
                     else if (attribute is GMCMIntervalAttribute intervalAttr)
                     {
@@ -480,6 +502,9 @@ public sealed class GMCMHelper : IntegrationHelper
         }
         return this;
     }
+#endregion
+
+#region ints
 
     /// <summary>
     /// Adds an int option at this point in the form.
@@ -553,8 +578,8 @@ public sealed class GMCMHelper : IntegrationHelper
                 {
                     if (attribute is GMCMRangeAttribute range)
                     {
-                        min ??= (int)range.min;
-                        max ??= (int)range.max;
+                        min ??= (int)range.Min;
+                        max ??= (int)range.Max;
                     }
                     else if (attribute is GMCMIntervalAttribute intervalAttr)
                     {
@@ -578,6 +603,9 @@ public sealed class GMCMHelper : IntegrationHelper
         }
         return this;
     }
+#endregion
+
+#region keybinds
 
     /// <summary>
     /// Adds a KeyBindList at this position in the form.
@@ -635,6 +663,9 @@ public sealed class GMCMHelper : IntegrationHelper
         }
         return this;
     }
+#endregion
+
+#region colors
 
     /// <summary>
     /// Adds a color picking option at this point in the form.
@@ -729,6 +760,9 @@ public sealed class GMCMHelper : IntegrationHelper
         }
         return this;
     }
+#endregion
+
+#region pages
 
     /// <summary>
     /// Adds a new page and a link for it at the current location in the form.
@@ -788,6 +822,7 @@ public sealed class GMCMHelper : IntegrationHelper
         this.modMenuApi!.AddPage(this.manifest, this.pages[index]);
         return this;
     }
+#endregion
 
     /// <summary>
     /// Sets whether the following options should be title screen only.
@@ -811,6 +846,7 @@ public sealed class GMCMHelper : IntegrationHelper
         return this;
     }
 
+#region default
     /// <summary>
     /// Generates a basic GMCM config.
     /// </summary>
@@ -899,4 +935,6 @@ public sealed class GMCMHelper : IntegrationHelper
             this.Monitor.DebugOnlyLog($"{property.Name} is unaccounted for in config {typeof(TModConfig).FullName}", LogLevel.Warn);
         }
     }
+#endregion
 }
+#pragma warning restore SA1124 // Do not use regions

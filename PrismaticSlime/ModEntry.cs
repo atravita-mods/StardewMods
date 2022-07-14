@@ -9,7 +9,7 @@ using StardewModdingAPI.Events;
 namespace PrismaticSlime;
 
 /// <inheritdoc/>
-internal class ModEntry : Mod
+internal sealed class ModEntry : Mod
 {
     private static IJsonAssetsAPI? jsonAssets;
 

@@ -1,15 +1,18 @@
 ﻿namespace PamTries;
 
-class PTUtilities
+/// <summary>
+/// Utility methods for this mod.
+/// </summary>
+internal static class PTUtilities
 {
-    public static IDictionary<string, string>? Lexicon { get; set; }
+    internal static IDictionary<string, string>? Lexicon { get; set; }
 
-    public static void PopulateLexicon(IGameContentHelper contentHelper)
+    internal static void PopulateLexicon(IGameContentHelper contentHelper)
     {
         Lexicon = contentHelper.Load<Dictionary<string, string>>("Strings/Lexicon");
     }
 
-    public static string GetLexicon(string key, string? defaultresponse = null)
+    internal static string GetLexicon(string key, string? defaultresponse = null)
     {
         string? value = null;
         if (Lexicon is not null)
@@ -34,7 +37,7 @@ class PTUtilities
     /// Checks to see if any player has a specific conversation topic. If so, gives everyone the conversation topic.
     /// </summary>
     /// <param name="conversationTopic">conversation topic to sync.</param>
-    public static void SyncConversationTopics(string conversationTopic)
+    internal static void SyncConversationTopics(string conversationTopic)
     {
         if (!Game1.IsMultiplayer) { return; }
         // Rewrite this. If host has it, everyone has host's amount of days. Else, find player with it.
@@ -59,7 +62,7 @@ class PTUtilities
         }
     }
 
-    public static void SyncConversationTopics(IEnumerable<string> conversationTopics)
+    internal static void SyncConversationTopics(IEnumerable<string> conversationTopics)
     {
         foreach (string conversationTopic in conversationTopics)
         {
@@ -67,7 +70,7 @@ class PTUtilities
         }
     }
 
-    public static void LocalEventSyncs(IMonitor modMonitor)
+    internal static void LocalEventSyncs(IMonitor modMonitor)
     { // Sets Pam's home event as seen for everyone if any farmer has seen it.
       // but only if the mail flag isn't set.
         if (!Game1.IsMultiplayer)

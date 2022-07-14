@@ -3,6 +3,7 @@ using System.Reflection.Emit;
 using System.Runtime.CompilerServices;
 using AtraBase.Toolkit;
 using AtraBase.Toolkit.Reflection;
+using AtraCore.Framework.ReflectionManager;
 using AtraShared.Utils.HarmonyHelper;
 using HarmonyLib;
 using StardewValley.TerrainFeatures;
@@ -84,7 +85,7 @@ internal static class GetFertilizerSourceRectTranspiler
                 ldloc,
                 new(OpCodes.Brtrue_S, branchpast), // The  previous code has already returned a value, I don't need to.
                 new(OpCodes.Ldarg_1),
-                new(OpCodes.Call, typeof(GetFertilizerSourceRectTranspiler).StaticMethodNamed(nameof(GetIndexForFertilizer))),
+                new(OpCodes.Call, typeof(GetFertilizerSourceRectTranspiler).GetCachedMethod(nameof(GetIndexForFertilizer), ReflectionCache.FlagTypes.StaticFlags)),
                 stloc,
             }, withLabels: labels);
             return helper.Render();

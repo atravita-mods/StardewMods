@@ -30,7 +30,7 @@ internal static class FruitTreeDrawTranspiler
             Type dgaFruitTree = AccessTools.TypeByName("DynamicGameAssets.Game.CustomFruitTree")
                 ?? ReflectionThrowHelper.ThrowMethodNotFoundException<Type>("DGA Fruit Trees");
             harmony.Patch(
-                original: dgaFruitTree.InstanceMethodNamed("draw"),
+                original: dgaFruitTree.GetCachedMethod("draw", ReflectionCache.FlagTypes.InstanceFlags),
                 transpiler: new HarmonyMethod(typeof(FruitTreeDrawTranspiler), nameof(Transpiler)));
         }
         catch (Exception ex)
@@ -47,9 +47,10 @@ internal static class FruitTreeDrawTranspiler
     {
         try
         {
-            Type atFruitTree = AccessTools.TypeByName("AlternativeTextures.Framework.Patches.StandardObjects.FruitTreePatch") ?? throw new("AT Fruit tree");
+            Type atFruitTree = AccessTools.TypeByName("AlternativeTextures.Framework.Patches.StandardObjects.FruitTreePatch")
+                ?? ReflectionThrowHelper.ThrowMethodNotFoundException<Type>("AT Fruit tree");
             harmony.Patch(
-                original: atFruitTree.StaticMethodNamed("DrawPrefix"),
+                original: atFruitTree.GetCachedMethod("DrawPrefix", ReflectionCache.FlagTypes.StaticFlags),
                 transpiler: new HarmonyMethod(typeof(FruitTreeDrawTranspiler), nameof(Transpiler)));
         }
         catch (Exception ex)

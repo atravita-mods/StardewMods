@@ -1,6 +1,7 @@
 ﻿using System.Reflection;
 using System.Reflection.Emit;
 using AtraBase.Toolkit.Reflection;
+using AtraCore.Framework.ReflectionManager;
 using AtraShared.Utils.Extensions;
 using AtraShared.Utils.HarmonyHelper;
 using HarmonyLib;
@@ -43,10 +44,9 @@ internal static class BushShakeTranspiler
             .Copy(2, out IEnumerable<CodeInstruction>? copy)
             .GetLabels(out IList<Label> labels);
 
-            List<CodeInstruction> codes = new();
-            codes.Add(new(OpCodes.Ldarg_0));
+            List<CodeInstruction> codes = new() { new(OpCodes.Ldarg_0) };
             codes.AddRange(copy);
-            codes.Add(new(OpCodes.Call, typeof(BushShakeTranspiler).StaticMethodNamed(nameof(GenerateBeverage))));
+            codes.Add(new(OpCodes.Call, typeof(BushShakeTranspiler).GetCachedMethod(nameof(GenerateBeverage), ReflectionCache.FlagTypes.StaticFlags)));
 
             helper.Insert(codes.ToArray(), labels);
 

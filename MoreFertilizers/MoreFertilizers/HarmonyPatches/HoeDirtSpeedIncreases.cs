@@ -1,6 +1,6 @@
 ﻿using System.Reflection;
 using System.Reflection.Emit;
-using AtraBase.Toolkit.Reflection;
+using AtraCore.Framework.ReflectionManager;
 using AtraShared.Utils.HarmonyHelper;
 using HarmonyLib;
 using StardewValley.TerrainFeatures;
@@ -44,7 +44,7 @@ internal static class HoeDirtSpeedIncreases
             helper.FindNext(new CodeInstructionWrapper[]
             { // find the guard clause and exclude our fertilizers.
                 new(OpCodes.Ldarg_0),
-                new(OpCodes.Ldfld, typeof(HoeDirt).InstanceFieldNamed(nameof(HoeDirt.fertilizer))),
+                new(OpCodes.Ldfld, typeof(HoeDirt).GetCachedField(nameof(HoeDirt.fertilizer), ReflectionCache.FlagTypes.InstanceFlags)),
                 new(OpCodes.Call), // op_implicit
                 new(OpCodes.Ldc_I4, 465),
                 new(OpCodes.Beq_S),
@@ -59,13 +59,13 @@ internal static class HoeDirtSpeedIncreases
             .GetLabels(out IList<Label>? labelsToMove, clear: true);
 
             CodeInstruction[] copyarray = copy.ToArray();
-            copyarray[3] = new(OpCodes.Call, typeof(HoeDirtSpeedIncreases).StaticMethodNamed(nameof(ShouldSpeedUpForThisFertilizer)));
+            copyarray[3] = new(OpCodes.Call, typeof(HoeDirtSpeedIncreases).GetCachedMethod(nameof(ShouldSpeedUpForThisFertilizer), ReflectionCache.FlagTypes.StaticFlags));
             copyarray[4] = new(OpCodes.Brtrue_S, considerFertLabel);
 
             helper.Insert(copyarray, withLabels: labelsToMove)
             .FindNext(new CodeInstructionWrapper[]
             {
-                new(OpCodes.Callvirt, typeof(Crop).InstanceMethodNamed(nameof(Crop.ResetPhaseDays))),
+                new(OpCodes.Callvirt, typeof(Crop).GetCachedMethod(nameof(Crop.ResetPhaseDays), ReflectionCache.FlagTypes.InstanceFlags)),
             })
             .FindNext(new CodeInstructionWrapper[]
             {
@@ -80,7 +80,7 @@ internal static class HoeDirtSpeedIncreases
             helper.FindNext(new CodeInstructionWrapper[]
             {
                 new(OpCodes.Ldarg_0),
-                new(OpCodes.Ldfld, typeof(HoeDirt).InstanceFieldNamed(nameof(HoeDirt.fertilizer))),
+                new(OpCodes.Ldfld, typeof(HoeDirt).GetCachedField(nameof(HoeDirt.fertilizer), ReflectionCache.FlagTypes.InstanceFlags)),
                 new(OpCodes.Call), // op implicit,
                 new(OpCodes.Ldc_I4, 465),
             })
@@ -89,7 +89,7 @@ internal static class HoeDirtSpeedIncreases
             {
                 ldloc,
                 new(OpCodes.Ldarg_0),
-                new(OpCodes.Call, typeof(HoeDirtSpeedIncreases).StaticMethodNamed(nameof(AdjustIncreaseForFertilizer))),
+                new(OpCodes.Call, typeof(HoeDirtSpeedIncreases).GetCachedMethod(nameof(AdjustIncreaseForFertilizer), ReflectionCache.FlagTypes.StaticFlags)),
                 stloc,
             }, withLabels: secondLabelsToMove);
 

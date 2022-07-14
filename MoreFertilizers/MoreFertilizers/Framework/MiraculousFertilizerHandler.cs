@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using AtraShared.Niceties;
+using Microsoft.Xna.Framework;
 
 namespace MoreFertilizers.Framework;
 
@@ -15,7 +16,7 @@ internal static class MiraculousFertilizerHandler
     /// </summary>
     internal static void Initialize()
     {
-        keg = new SObject(Vector2.Zero, 12);
+        keg = new SObject(Vector2.Zero, (int)VanillaMachinesEnum.Keg);
     }
 
     /// <summary>

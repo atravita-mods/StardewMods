@@ -1,6 +1,8 @@
 ﻿using System.Reflection;
 using System.Reflection.Emit;
-using AtraBase.Toolkit.Reflection;
+using System.Runtime.CompilerServices;
+using AtraBase.Toolkit;
+using AtraCore.Framework.ReflectionManager;
 using AtraShared.Utils.Extensions;
 using AtraShared.Utils.HarmonyHelper;
 using HarmonyLib;
@@ -17,6 +19,7 @@ namespace MoreFertilizers.HarmonyPatches.BushFertilizers;
 [HarmonyPatch(typeof(Bush))]
 internal static class BushDrawTranspiler
 {
+    [MethodImpl(TKConstants.Hot)]
     private static Color AdjustColorForBush(Color prevColor, Bush bush)
     {
         if (!ModEntry.Config.RecolorBushes)
@@ -70,17 +73,17 @@ internal static class BushDrawTranspiler
             helper.FindNext(new CodeInstructionWrapper[]
             { // Find the reference to the bush's texture, not shadow textures.
                 new(OpCodes.Ldarg_1),
-                new(OpCodes.Ldsfld, typeof(Bush).StaticFieldNamed(nameof(Bush.texture))),
+                new(OpCodes.Ldsfld, typeof(Bush).GetCachedField(nameof(Bush.texture), ReflectionCache.FlagTypes.StaticFlags)),
             })
             .FindNext(new CodeInstructionWrapper[]
             { // Find where the color is loaded.
-                new(OpCodes.Call, typeof(Color).StaticPropertyNamed(nameof(Color.White)).GetGetMethod()),
+                new(OpCodes.Call, typeof(Color).GetCachedProperty(nameof(Color.White), ReflectionCache.FlagTypes.StaticFlags).GetGetMethod()),
             })
             .Advance(1)
             .Insert(new CodeInstruction[]
             {
                 new(OpCodes.Ldarg_0),
-                new(OpCodes.Call, typeof(BushDrawTranspiler).StaticMethodNamed(nameof(AdjustColorForBush))),
+                new(OpCodes.Call, typeof(BushDrawTranspiler).GetCachedMethod(nameof(AdjustColorForBush), ReflectionCache.FlagTypes.StaticFlags)),
             });
 
             // helper.Print();
@@ -88,7 +91,7 @@ internal static class BushDrawTranspiler
         }
         catch (Exception ex)
         {
-            ModEntry.ModMonitor.Log($"Mod crashed while transpiling Hoedirt.Draw:\n\n{ex}", LogLevel.Error);
+            ModEntry.ModMonitor.Log($"Mod crashed while transpiling Bush.Draw:\n\n{ex}", LogLevel.Error);
         }
         return null;
     }

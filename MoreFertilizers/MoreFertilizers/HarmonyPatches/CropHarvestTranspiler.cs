@@ -252,37 +252,37 @@ internal static class CropHarvestTranspiler
                 secondSObjectLdLoc,
                 new(OpCodes.Ldc_I4_0),
                 new(OpCodes.Ldarg_3),
-                new(OpCodes.Call, typeof(CropHarvestTranspiler).StaticMethodNamed(nameof(GetQualityForJojaFert))),
-                new(OpCodes.Callvirt, typeof(SObject).InstancePropertyNamed(nameof(SObject.Quality)).GetSetMethod()),
+                new(OpCodes.Call, typeof(CropHarvestTranspiler).GetCachedMethod(nameof(GetQualityForJojaFert), ReflectionCache.FlagTypes.StaticFlags)),
+                new(OpCodes.Callvirt, typeof(SObject).GetCachedProperty(nameof(SObject.Quality), ReflectionCache.FlagTypes.InstanceFlags).GetSetMethod()),
             })
             .FindNext(new CodeInstructionWrapper[]
             { // Find the block where the player is given XP
-                new(OpCodes.Call, typeof(Game1).StaticPropertyNamed(nameof(Game1.player)).GetGetMethod()),
+                new(OpCodes.Call, typeof(Game1).GetCachedProperty(nameof(Game1.player), ReflectionCache.FlagTypes.StaticFlags).GetGetMethod()),
                 new(OpCodes.Ldc_I4_0),
                 new(SpecialCodeInstructionCases.LdLoc),
             })
             .FindNext(new CodeInstructionWrapper[]
             {
                 new(OpCodes.Conv_I4),
-                new(OpCodes.Callvirt, typeof(Farmer).InstanceMethodNamed(nameof(Farmer.gainExperience))),
+                new(OpCodes.Callvirt, typeof(Farmer).GetCachedMethod(nameof(Farmer.gainExperience), ReflectionCache.FlagTypes.InstanceFlags)),
             })
             .Advance(1)
             .Insert(new CodeInstruction[]
             { // insert a call to a function that changes the experience gained.
                 new(OpCodes.Ldarg_3),
-                new(OpCodes.Call, typeof(CropHarvestTranspiler).StaticMethodNamed(nameof(AdjustExperience))),
+                new(OpCodes.Call, typeof(CropHarvestTranspiler).GetCachedMethod(nameof(AdjustExperience), ReflectionCache.FlagTypes.StaticFlags)),
             })
             .FindNext(new CodeInstructionWrapper[]
             {
-                new(OpCodes.Ldfld, typeof(Crop).InstanceFieldNamed(nameof(Crop.regrowAfterHarvest))),
+                new(OpCodes.Ldfld, typeof(Crop).GetCachedField(nameof(Crop.regrowAfterHarvest), ReflectionCache.FlagTypes.InstanceFlags)),
                 new(OpCodes.Call),
-                new(OpCodes.Callvirt, typeof(NetFieldBase<int, NetInt>).InstancePropertyNamed("Value").GetSetMethod()),
+                new(OpCodes.Callvirt, typeof(NetFieldBase<int, NetInt>).GetCachedProperty("Value", ReflectionCache.FlagTypes.InstanceFlags).GetSetMethod()),
             })
             .Advance(2)
             .Insert(new CodeInstruction[]
             {
                 new(OpCodes.Ldarg_3),
-                new(OpCodes.Call, typeof(CropHarvestTranspiler).StaticMethodNamed(nameof(AdjustRegrow))),
+                new(OpCodes.Call, typeof(CropHarvestTranspiler).GetCachedMethod(nameof(AdjustRegrow), ReflectionCache.FlagTypes.StaticFlags)),
             });
 
             // helper.Print();
@@ -388,41 +388,42 @@ internal static class CropHarvestTranspiler
             .Insert(new CodeInstruction[]
             {
                 new(OpCodes.Ldarg_3),
-                new(OpCodes.Call, typeof(CropHarvestTranspiler).StaticMethodNamed(nameof(MakeItemOrganic))),
+                new(OpCodes.Call, typeof(CropHarvestTranspiler).GetCachedMethod(nameof(MakeItemOrganic), ReflectionCache.FlagTypes.StaticFlags)),
             })
             .FindNext(new CodeInstructionWrapper[]
             { // Find the block where the player is given XP
-                new(OpCodes.Call, typeof(Game1).StaticPropertyNamed(nameof(Game1.player)).GetGetMethod()),
+                new(OpCodes.Call, typeof(Game1).GetCachedProperty(nameof(Game1.player), ReflectionCache.FlagTypes.StaticFlags).GetGetMethod()),
                 new(OpCodes.Ldc_I4_0),
                 new(SpecialCodeInstructionCases.LdLoc),
             })
             .FindNext(new CodeInstructionWrapper[]
             {
                 new(OpCodes.Conv_I4),
-                new(OpCodes.Callvirt, typeof(Farmer).InstanceMethodNamed(nameof(Farmer.gainExperience))),
+                new(OpCodes.Callvirt, typeof(Farmer).GetCachedMethod(nameof(Farmer.gainExperience), ReflectionCache.FlagTypes.InstanceFlags)),
             })
             .Advance(1)
             .Insert(new CodeInstruction[]
             { // insert a call to a function that changes the experience gained.
                 new(OpCodes.Ldarg_3),
-                new(OpCodes.Call, typeof(CropHarvestTranspiler).StaticMethodNamed(nameof(AdjustExperience))),
+                new(OpCodes.Call, typeof(CropHarvestTranspiler).GetCachedMethod(nameof(AdjustExperience), ReflectionCache.FlagTypes.StaticFlags)),
             });
 
-            Type phasedata = cropPackData.GetNestedType("PhaseData") ?? throw new MethodNotFoundException("DGA phase data");
+            Type phasedata = cropPackData.GetNestedType("PhaseData")
+                ?? ReflectionThrowHelper.ThrowMethodNotFoundException<Type>("DGA phase data");
 
             helper.FindNext(new CodeInstructionWrapper[]
             {
                 new(OpCodes.Ldarg_0),
-                new(OpCodes.Ldfld, typeof(Crop).InstanceFieldNamed(nameof(Crop.currentPhase))),
+                new(OpCodes.Ldfld, typeof(Crop).GetCachedField(nameof(Crop.currentPhase), ReflectionCache.FlagTypes.InstanceFlags)),
                 new(SpecialCodeInstructionCases.LdLoc),
-                new(OpCodes.Callvirt, phasedata.InstancePropertyNamed("HarvestedNewPhase").GetGetMethod()),
-                new(OpCodes.Callvirt, typeof(NetFieldBase<int, NetInt>).InstancePropertyNamed("Value").GetSetMethod()),
+                new(OpCodes.Callvirt, phasedata.GetCachedProperty("HarvestedNewPhase", ReflectionCache.FlagTypes.InstanceFlags).GetGetMethod()),
+                new(OpCodes.Callvirt, typeof(NetFieldBase<int, NetInt>).GetCachedProperty("Value", ReflectionCache.FlagTypes.InstanceFlags).GetSetMethod()),
             })
             .Advance(4)
             .Insert(new CodeInstruction[]
             {
                 new(OpCodes.Ldarg_3),
-                new(OpCodes.Call, typeof(CropHarvestTranspiler).StaticMethodNamed(nameof(AdjustRegrow))),
+                new(OpCodes.Call, typeof(CropHarvestTranspiler).GetCachedMethod(nameof(AdjustRegrow), ReflectionCache.FlagTypes.StaticFlags)),
             });
 
             // helper.Print();
@@ -430,7 +431,7 @@ internal static class CropHarvestTranspiler
         }
         catch (Exception ex)
         {
-            ModEntry.ModMonitor.Log($"Mod crashed while transpiling Crop.harvest:\n\n{ex}", LogLevel.Error);
+            ModEntry.ModMonitor.Log($"Mod crashed while transpiling DGA's Crop.harvest:\n\n{ex}", LogLevel.Error);
             original?.Snitch(ModEntry.ModMonitor);
         }
         return null;

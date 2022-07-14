@@ -22,9 +22,9 @@ internal static class MuseumRewards
         if (__instance.museumPieces.Values.Contains(74) && ModEntry.PrismaticFertilizerID != -1)
         { // prismatic shard = 74
             __instance.AddRewardIfUncollected(
-                who,
-                __result,
-                new SObject(ModEntry.PrismaticFertilizerID, 5));
+                farmer: who,
+                rewards: __result,
+                reward_item: new SObject(ModEntry.PrismaticFertilizerID, 5));
         }
     }
 }

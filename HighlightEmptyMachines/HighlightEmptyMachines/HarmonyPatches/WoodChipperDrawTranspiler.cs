@@ -2,7 +2,6 @@
 using System.Reflection.Emit;
 using System.Runtime.CompilerServices;
 using AtraBase.Toolkit;
-using AtraBase.Toolkit.Reflection;
 using AtraCore.Framework.ReflectionManager;
 using AtraShared.Niceties;
 using AtraShared.Utils.Extensions;
@@ -34,7 +33,7 @@ internal static class WoodChipperDrawTranspiler
             ILHelper helper = new(original, instructions, ModEntry.ModMonitor, gen);
             helper.FindNext(new CodeInstructionWrapper[]
             {
-                new(OpCodes.Call, typeof(Game1).GetCachedMethod(nameof(Game1.GlobalToLocal), ReflectionCache.FlagTypes.StaticFlags, new[]{ typeof(xTile.Dimensions.Rectangle), typeof(Vector2) })),
+                new(OpCodes.Call, typeof(Game1).GetCachedMethod(nameof(Game1.GlobalToLocal), ReflectionCache.FlagTypes.StaticFlags, new[] { typeof(xTile.Dimensions.Rectangle), typeof(Vector2) })),
             })
             .FindNext(new CodeInstructionWrapper[]
             {

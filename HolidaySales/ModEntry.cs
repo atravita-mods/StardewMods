@@ -44,11 +44,7 @@ internal sealed class ModEntry : Mod
             helper.Register(
                 reset: static () => Config = new(),
                 save: () => this.Helper.AsyncWriteConfig(this.Monitor, Config))
-            .AddEnumOption(
-                name: I18n.StoreFestivalBehavior_Title,
-                getValue: static () => Config.StoreFestivalBehavior,
-                setValue: static (value) => Config.StoreFestivalBehavior = value,
-                tooltip: I18n.StoreFestivalBehavior_Description);
+            .GenerateDefaultGMCM(static () => Config);
         }
     }
 

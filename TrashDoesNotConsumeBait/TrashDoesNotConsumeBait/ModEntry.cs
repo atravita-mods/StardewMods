@@ -72,7 +72,7 @@ internal sealed class ModEntry : Mod
             {
                 helper.AddBoolOption(
                     property: property,
-                    getConfig: () => Config);
+                    getConfig: static () => Config);
             }
         }
         helper.AddPageHere("CheatyStuff", I18n.CheatyStuffTitle);
@@ -82,10 +82,7 @@ internal sealed class ModEntry : Mod
             {
                 helper.AddFloatOption(
                     property: property,
-                    getConfig: () => Config,
-                    min: 0f,
-                    max: 1f,
-                    interval: 0.01f);
+                    getConfig: static () => Config);
             }
         }
     }

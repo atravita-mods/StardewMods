@@ -1,4 +1,6 @@
-﻿namespace GiantCropFertilizer;
+﻿using AtraShared.Integrations.GMCMAttributes;
+
+namespace GiantCropFertilizer;
 
 /// <summary>
 /// The config class for this mod.
@@ -10,6 +12,8 @@ internal sealed class ModConfig
     /// <summary>
     /// Gets or sets the probability of a fertilized square producing a giant crop.
     /// </summary>
+    [GMCMRange(0, 1.1)]
+    [GMCMInterval(0.01)]
     public double GiantCropChance
     {
         get => this.giantCropChance;

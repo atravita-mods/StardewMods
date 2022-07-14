@@ -1,13 +1,24 @@
 ﻿{
+
+  "mod-description": "Lets you adjust the difficulty of the dart minigame.",
+
   "IllFormatedConfig": "Config file seems ill-formated, using default. Please use Generic Mod Config Menu to configure.",
 
   "api-not-found": "{{APIID}} not found, integration disabled.",
   "api-too-old": "Please update {{apiName}}({{APIID}}) to at least version {{minversion}}. Current version {{currentversion}}. Integration disabled.",
 
-  "MPPirateArrivalTime.name": "Pirate Arrival Time in MP",
+  "MPPirateArrivalTime.title": "Pirate Arrival Time in MP",
   "MPPirateArrivalTime.description": "Set this to allow the pirates to arrive earlier in multiplayer.",
 
-  "MinDartCount.name": "Min Dart Count",
+  "MinDartCount.title": "Min Dart Count",
+  "MinDartCount.description": "The number of darts for the hardest round of the game.",
 
-  "MaxDartCount.name": "Max Dart Count",
+  "MaxDartCount.title": "Max Dart Count",
+  "MaxDartCount.description": "The number of darts for the easiest round of the game.",
+
+  "ShowDartMarker.title": "Show Dart Marker",
+  "ShowDartMarker.description": "Whether or not a more precise dart marker should be shown.",
+
+  "JitterMultiplier.title": "Jitter Multiplier",
+  "JitterMultiplier.description": "How fast the figure 8 jitter pattern should move in.",
 }

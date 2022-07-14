@@ -107,49 +107,13 @@ internal sealed class ModEntry : Mod
     private void SetUpConfig(object? sender, GameLaunchedEventArgs e)
     {
         GMCMHelper helper = new(this.Monitor, this.Helper.Translation, this.Helper.ModRegistry, this.ModManifest);
-        if (!helper.TryGetAPI())
+        if (helper.TryGetAPI())
         {
-            return;
-        }
-
-        helper.Register(
+            helper.Register(
                 reset: () => this.config = new ModConfig(),
                 save: () => this.Helper.AsyncWriteConfig(this.Monitor, this.config))
-            .AddParagraph(I18n.Mod_Description);
-
-        foreach (PropertyInfo property in typeof(ModConfig).GetProperties())
-        {
-            if (property.PropertyType.Equals(typeof(bool)))
-            {
-                helper.AddBoolOption(property, () => this.config);
-            }
-            else if (property.PropertyType.Equals(typeof(int)))
-            {
-                helper.AddIntOption(
-                    property: property,
-                    getConfig: () => this.config,
-                    min: 0,
-                    max: property.Name == "MaxDailySpawns" ? 100 : 1000);
-            }
-            else if (property.PropertyType.Equals(typeof(float)))
-            {
-                helper.AddFloatOption(
-                    property: property,
-                    getConfig: () => this.config,
-                    min: 0f,
-                    max: 100f,
-                    formatValue: FormatPercentValue);
-            }
-            else if (property.PropertyType.Equals(typeof(SeasonalBehavior)))
-            {
-                helper.AddEnumOption<ModConfig, SeasonalBehavior>(
-                    property: property,
-                    getConfig: () => this.config);
-            }
-            else
-            {
-                this.Monitor.DebugOnlyLog($"{property.Name} unaccounted for.", LogLevel.Warn);
-            }
+            .AddParagraph(I18n.Mod_Description)
+            .GenerateDefaultGMCM(() => this.config);
         }
     }
 

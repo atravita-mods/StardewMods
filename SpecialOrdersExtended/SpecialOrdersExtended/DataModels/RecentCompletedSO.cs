@@ -133,11 +133,8 @@ public class RecentCompletedSO : AbstractDataModel
     /// <param name="days">Number of days to look at.</param>
     /// <returns>IEnumerable of keys within the given timeframe.</returns>
     internal IEnumerable<string> GetKeys(uint days)
-    {
-        return this.RecentOrdersCompleted.Keys
+        => this.RecentOrdersCompleted.Keys
             .Where(a => this.RecentOrdersCompleted[a] + days >= Game1.stats.DaysPlayed);
-    }
-
 
     /// <inheritdoc/>
     [SuppressMessage("StyleCop.CSharp.OrderingRules", "SA1202:Elements should be ordered by access", Justification = "Reviewed.")]

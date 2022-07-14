@@ -12,13 +12,11 @@ namespace StopRugRemoval.HarmonyPatches.Niceties;
 internal static class StoreDelay
 {
     private const int TICKS_TO_DELAY = 20;
-    private static PerScreen<int> OpenedTick = new(() => 0);
+    private static readonly PerScreen<int> OpenedTick = new(() => 0);
 
     [HarmonyPatch(nameof(ShopMenu.setUpStoreForContext))]
     private static void Postfix()
-    {
-        OpenedTick.Value = Game1.ticks;
-    }
+        => OpenedTick.Value = Game1.ticks;
 
     [HarmonyPrefix]
     [HarmonyPriority(Priority.High)]

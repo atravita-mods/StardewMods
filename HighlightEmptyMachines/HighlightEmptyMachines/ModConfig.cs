@@ -1,4 +1,5 @@
-﻿using AtraShared.Niceties;
+﻿using AtraShared.Integrations.GMCMAttributes;
+using AtraShared.Niceties;
 using Microsoft.Xna.Framework;
 
 namespace HighlightEmptyMachines;
@@ -34,20 +35,24 @@ public sealed class ModConfig
     /// <summary>
     /// Gets or sets the color to color empty machines.
     /// </summary>
+    [GMCMDefaultColor(255, 0, 0, 255)]
     public Color EmptyColor { get; set; } = Color.Red;
 
     /// <summary>
     /// Gets or sets the color to color invalid machines.
     /// </summary>
+    [GMCMDefaultColor(128, 128, 128, 200)]
     public Color InvalidColor { get; set; } = Color.Gray;
 
     /// <summary>
     /// Gets or sets a mapping that sets whether coloration of vanilla machines should be enabled.
     /// </summary>
+    [GMCMDefaultIgnore]
     public Dictionary<VanillaMachinesEnum, bool> VanillaMachines { get; set; }
 
     /// <summary>
     /// Gets or sets a mapping that sets whether coloration of PFM machines should be enabed.
     /// </summary>
+    [GMCMDefaultIgnore]
     public Dictionary<string, bool> ProducerFrameworkModMachines { get; set; } = new();
 }

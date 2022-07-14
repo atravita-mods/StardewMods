@@ -1,12 +1,10 @@
 ﻿using AtraShared.ConstantsAndEnums;
 using AtraShared.Integrations;
-using AtraShared.Integrations.Interfaces;
 using AtraShared.MigrationManager;
 using AtraShared.Niceties;
 using AtraShared.Utils.Extensions;
 using HarmonyLib;
 using HighlightEmptyMachines.Framework;
-using Microsoft.Xna.Framework;
 using StardewModdingAPI.Events;
 
 using AtraUtils = AtraShared.Utils.Utils;
@@ -93,7 +91,7 @@ internal sealed class ModEntry : Mod
     /// <summary>
     /// Resets the GMCM when the player has returned to the title.
     /// </summary>
-    /// <param name="sender">SMAPI</param>
+    /// <param name="sender">SMAPI.</param>
     /// <param name="e">event args.</param>
     private void OnReturnedToTitle(object? sender, ReturnedToTitleEventArgs e)
     {
@@ -138,22 +136,7 @@ internal sealed class ModEntry : Mod
                 save: () => this.Helper.AsyncWriteConfig(this.Monitor, Config));
             }
             this.gmcmHelper.AddParagraph(I18n.ModDescription)
-            .AddColorPicker(
-                name: I18n.EmptyColor_Title,
-                getValue: static () => Config.EmptyColor,
-                setValue: static (val) => Config.EmptyColor = val,
-                tooltip: I18n.EmptyColor_Description,
-                showAlpha: true,
-                colorPickerStyle: (uint)IGMCMOptionsAPI.ColorPickerStyle.Default,
-                defaultColor: Color.Red)
-            .AddColorPicker(
-                name: I18n.InvalidColor_Title,
-                getValue: static () => Config.InvalidColor,
-                setValue: static (val) => Config.InvalidColor = val,
-                tooltip: I18n.InvalidColor_Description,
-                showAlpha: true,
-                colorPickerStyle: (uint)IGMCMOptionsAPI.ColorPickerStyle.Default,
-                defaultColor: Color.Gray)
+            .GenerateDefaultGMCM(static () => Config)
             .AddPageHere(
                 pageId: "individual-machines",
                 linkText: I18n.IndividualMachines_Title,

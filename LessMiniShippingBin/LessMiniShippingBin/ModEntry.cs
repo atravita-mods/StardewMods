@@ -58,21 +58,6 @@ internal sealed class ModEntry : Mod
                 reset: static () => Config = new ModConfig(),
                 save: () => this.Helper.AsyncWriteConfig(this.Monitor, Config))
             .AddParagraph(I18n.Mod_Description)
-            .AddNumberOption(
-                getValue: static () => Config.MiniShippingCapacity,
-                setValue: static value => Config.MiniShippingCapacity = value,
-                name: I18n.Config_Capacity_Title,
-                tooltip: I18n.Config_Capacity_Description,
-                min: 9,
-                max: 48,
-                interval: 9)
-            .AddNumberOption(
-                getValue: static () => Config.JuminoCapacity,
-                setValue: static value => Config.JuminoCapacity = value,
-                name: I18n.Config_Junimo_Title,
-                tooltip: I18n.Config_Junimo_Description,
-                min: 9,
-                max: 48,
-                interval: 9);
+            .GenerateDefaultGMCM(static () => Config);
     }
 }

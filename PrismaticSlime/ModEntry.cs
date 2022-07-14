@@ -9,7 +9,7 @@ using StardewModdingAPI.Events;
 namespace PrismaticSlime;
 
 /// <inheritdoc/>
-internal class ModEntry : Mod
+internal sealed class ModEntry : Mod
 {
     private static IJsonAssetsAPI? jsonAssets;
 
@@ -19,6 +19,13 @@ internal class ModEntry : Mod
     internal static IMonitor ModMonitor { get; private set; } = null!;
 
 #pragma warning disable SA1201 // Elements should appear in the correct order - keeping fields near their accessors.
+    private static IWearMoreRingsAPI? wearMoreRingsAPI;
+
+    /// <summary>
+    /// Gets the WearMoreRings API, if available.
+    /// </summary>
+    internal static IWearMoreRingsAPI? WearMoreRingsAPI => wearMoreRingsAPI;
+
     private static int prismaticSlimeEgg = -1;
 
     /// <summary>
@@ -76,6 +83,11 @@ internal class ModEntry : Mod
                 return;
             }
             jsonAssets.LoadAssets(Path.Combine(this.Helper.DirectoryPath, "assets", "json-assets"), this.Helper.Translation);
+        }
+
+        {
+            IntegrationHelper helper = new(this.Monitor, this.Helper.Translation, this.Helper.ModRegistry);
+            _ = helper.TryGetAPI("bcmpinc.WearMoreRings", "5.1.0", out wearMoreRingsAPI);
         }
     }
 

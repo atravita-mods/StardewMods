@@ -1,4 +1,6 @@
-﻿namespace SpecialOrdersExtended;
+﻿using AtraShared.Integrations.GMCMAttributes;
+
+namespace SpecialOrdersExtended;
 
 /// <summary>
 /// Config class for this mod.
@@ -9,6 +11,7 @@ internal sealed class ModConfig
     /// Gets or sets a value indicating whether to be verbose or not.
     /// </summary>
     /// <remarks>Use this setting for anything that would be useful for other mod authors.</remarks>
+    [GMCMDefaultIgnore]
     internal bool Verbose { get; set; } = false;
 
     /// <summary>

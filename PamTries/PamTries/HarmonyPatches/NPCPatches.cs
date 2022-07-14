@@ -40,7 +40,6 @@ internal static class NPCPatches
         }
     }
 
-
     /// <summary>
     /// Reset Pam's fishing sprite when done fishing.
     /// </summary>

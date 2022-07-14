@@ -1,4 +1,6 @@
-﻿namespace NerfCavePuzzle;
+﻿using AtraShared.Integrations.GMCMAttributes;
+
+namespace NerfCavePuzzle;
 
 /// <summary>
 /// The config class for this mod.
@@ -12,6 +14,7 @@ internal class ModConfig
     /// <summary>
     /// Gets or sets the speed modifer.
     /// </summary>
+    [GMCMRange(0.1, 10)]
     public float SpeedModifer
     {
         get => this.speedModifier;
@@ -21,6 +24,7 @@ internal class ModConfig
     /// <summary>
     /// Gets or sets the scaling factor for the flash speed.
     /// </summary>
+    [GMCMRange(0.1, 10)]
     public float FlashScale
     {
         get => this.flashScale;
@@ -30,6 +34,7 @@ internal class ModConfig
     /// <summary>
     /// Gets or sets a value that caps the maximum amount of notes.
     /// </summary>
+    [GMCMRange(4, 7)]
     public int MaxNotes
     {
         get => this.maxNotes;

@@ -16,6 +16,9 @@ internal class ModEntry : Mod
     /// </summary>
     internal static IMonitor ModMonitor { get; private set; } = null!;
 
+    /// <summary>
+    /// Gets the config instance for this mod.
+    /// </summary>
     internal static ModConfig Config { get; private set; } = null!;
 
     /// <inheritdoc/>
@@ -43,8 +46,6 @@ internal class ModEntry : Mod
         harmony.Snitch(this.Monitor, harmony.Id, transpilersOnly: true);
     }
 
-    private static ModConfig GetConfig() => Config;
-
     private void OnGameLaunch(object? sender, GameLaunchedEventArgs e)
     {
         GMCMHelper helper = new(this.Monitor, this.Helper.Translation, this.Helper.ModRegistry, this.ModManifest);
@@ -52,31 +53,9 @@ internal class ModEntry : Mod
         {
             helper.Register(
                 reset: static () => Config = new(),
-                save: () => this.Helper.AsyncWriteConfig(this.Monitor, Config));
-
-            foreach (PropertyInfo prop in typeof(ModConfig).GetProperties())
-            {
-                if (prop.PropertyType == typeof(int))
-                {
-                    helper.AddIntOption(
-                        property: prop,
-                        getConfig: GetConfig,
-                        min: prop.Name.EndsWith("Count") ? 8 : 600,
-                        max: prop.Name.EndsWith("Count") ? 30 : 2000);
-                }
-                else if (prop.PropertyType == typeof(bool))
-                {
-                    helper.AddBoolOption(prop, GetConfig);
-                }
-                else if (prop.PropertyType == typeof(float))
-                {
-                    helper.AddFloatOption(
-                        property: prop,
-                        getConfig: GetConfig,
-                        min: 0.05f,
-                        max: 20f);
-                }
-            }
+                save: () => this.Helper.AsyncWriteConfig(this.Monitor, Config))
+            .AddParagraph(I18n.ModDescription)
+            .GenerateDefaultGMCM(static () => Config);
         }
     }
 }

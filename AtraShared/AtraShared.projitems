@@ -13,11 +13,17 @@
     <Compile Include="$(MSBuildThisFileDirectory)ConstantsAndEnums\Seasons.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)CustomExceptions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ConstantsAndEnums\ErrorMessageConsts.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Integrations\GMCMAttributes\GMCMDefaultColorAttribute.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Integrations\GMCMAttributes\GMCMDefaultIgnoreAttribute.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Integrations\GMCMAttributes\GMCMIntervalAttribute.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Integrations\GMCMAttributes\GMCMRangeAttribute.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Integrations\GMCMAttributes\GMCMSectionAttribute.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Integrations\Interfaces\Fluent\IFluent.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Integrations\Interfaces\Fluent\IFluentAPI.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Integrations\Interfaces\Fluent\IFluentEnum.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Integrations\Interfaces\Fluent\IGameLocale.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Integrations\Interfaces\IDynamicGameAssetsAPI.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Integrations\Interfaces\IWearMoreRingsAPI.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Niceties\Records.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Niceties\SoundBankWrapperHandler.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Niceties\VanillaMachinesEnum.cs" />

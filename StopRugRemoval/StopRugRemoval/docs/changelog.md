@@ -9,7 +9,7 @@
 #### Version 1.1.0
 * Move to using AtraCore.
 * Spanish translation, thanks to [Mistyspring](https://github.com/misty-spring)!
-* Prevent broken sound cues from breaking the jukebox.
+* Prevent broken sound cues from breaking the game.
 * Slingshot ammo now stacks instead of swapping.
 * Schedule fixer now tries to resolve `GOTO spring` and other statements to use the actual schedule.
 

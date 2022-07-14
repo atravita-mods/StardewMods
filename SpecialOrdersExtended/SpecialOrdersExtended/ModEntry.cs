@@ -390,5 +390,4 @@ internal sealed class ModEntry : Mod
             }
         }
     }
-
 }

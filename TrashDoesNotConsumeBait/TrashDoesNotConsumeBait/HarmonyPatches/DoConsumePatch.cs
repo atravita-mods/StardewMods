@@ -1,5 +1,7 @@
 ﻿using System.Reflection;
 using System.Reflection.Emit;
+using System.Runtime.CompilerServices;
+using AtraBase.Toolkit;
 using AtraBase.Toolkit.Reflection;
 using AtraCore.Framework.ReflectionManager;
 using AtraShared.Utils.HarmonyHelper;
@@ -16,9 +18,11 @@ namespace TrashDoesNotConsumeBait.HarmonyPatches;
 [HarmonyPatch(typeof(FishingRod))]
 internal static class DoConsumePatch
 {
+    [MethodImpl(TKConstants.Hot)]
     private static float GetNormalChance() => ModEntry.Config.ConsumeChanceNormal;
 
-    private static float GetPresveringChance() => ModEntry.Config.ConsumeChancePreserving;
+    [MethodImpl(TKConstants.Hot)]
+    private static float GetPreservingChance() => ModEntry.Config.ConsumeChancePreserving;
 
     /// <summary>
     /// Gets the replacement bait stack, or returns null for not found.
@@ -26,6 +30,7 @@ internal static class DoConsumePatch
     /// </summary>
     /// <param name="original">Original bait.</param>
     /// <returns>Replacement bait, or null if not found.</returns>
+    [MethodImpl(TKConstants.Hot)]
     private static SObject? GetReplacementBait(SObject original)
     {
         try
@@ -73,6 +78,7 @@ internal static class DoConsumePatch
     /// </summary>
     /// <param name="original">Original tackle.</param>
     /// <returns>Replacement tackle, or null if not found.</returns>
+    [MethodImpl(TKConstants.Hot)]
     private static SObject? GetReplacementTackle(SObject original)
     {
         try
@@ -120,7 +126,7 @@ internal static class DoConsumePatch
      * if (base.attachments[0] != null && Game1.random.NextDouble() < (double)consumeChance)
      * to
      * if (!this.lastCatchWasJunk && base.attachments[0] != null && Game1.random.NextDouble() < (double)consumeChance)
-     * 
+     *
      * Also inserts calls to replace tackles/bait.
      * ***************************************************/
 #pragma warning disable SA1116 // Split parameters should start on line after declaration
@@ -146,95 +152,97 @@ internal static class DoConsumePatch
                     new(OpCodes.Callvirt, typeof(Farmer).GetCachedProperty(nameof(Farmer.IsLocalPlayer), ReflectionCache.FlagTypes.InstanceFlags).GetGetMethod()),
                     new(OpCodes.Brfalse),
                 })
-                .FindNext(new CodeInstructionWrapper[]
+            .FindNext(new CodeInstructionWrapper[]
                 {
                     new(OpCodes.Ldc_R4, 1f),
                     new(stloc),
                 })
-                .ReplaceInstruction(new(OpCodes.Call, typeof(DoConsumePatch).GetCachedMethod(nameof(DoConsumePatch.GetNormalChance), ReflectionCache.FlagTypes.StaticFlags)), keepLabels: true)
-                .FindNext(new CodeInstructionWrapper[]
+            .ReplaceInstruction(new(OpCodes.Call, typeof(DoConsumePatch).GetCachedMethod(nameof(DoConsumePatch.GetNormalChance), ReflectionCache.FlagTypes.StaticFlags)), keepLabels: true)
+            .FindNext(new CodeInstructionWrapper[]
                 {
                     new(OpCodes.Ldc_R4, 0.5f),
                     new(stloc),
                 })
-                .ReplaceInstruction(new(OpCodes.Call, typeof(DoConsumePatch).StaticMethodNamed(nameof(DoConsumePatch.GetPresveringChance))), keepLabels: true)
-                .FindNext(new CodeInstructionWrapper[]
+            .ReplaceInstruction(new(OpCodes.Call, typeof(DoConsumePatch).GetCachedMethod(nameof(DoConsumePatch.GetPreservingChance), ReflectionCache.FlagTypes.StaticFlags)), keepLabels: true)
+            .FindNext(new CodeInstructionWrapper[]
                 {
                     new(OpCodes.Ldarg_0),
-                    new(OpCodes.Ldfld, typeof(Tool).InstanceFieldNamed(nameof(Tool.attachments))),
+                    new(OpCodes.Ldfld, typeof(Tool).GetCachedField(nameof(Tool.attachments), ReflectionCache.FlagTypes.InstanceFlags)),
                     new(OpCodes.Ldc_I4_0),
                     new(OpCodes.Callvirt),
                     new(OpCodes.Brfalse_S),
                 })
-                .Push()
-                .Advance(4)
-                .StoreBranchDest()
-                .AdvanceToStoredLabel()
-                .DefineAndAttachLabel(out Label label)
-                .Pop()
-                .GetLabels(out IList<Label> labelsToMove, clear: true)
-                .Insert(new CodeInstruction[]
+            .Push()
+            .Advance(4)
+            .StoreBranchDest()
+            .AdvanceToStoredLabel()
+            .DefineAndAttachLabel(out Label label)
+            .Pop()
+            .GetLabels(out IList<Label> labelsToMove, clear: true)
+            .Insert(new CodeInstruction[]
                 {
                     new(OpCodes.Ldarg_0),
-                    new(OpCodes.Ldfld, typeof(FishingRod).InstanceFieldNamed("lastCatchWasJunk")),
+                    new(OpCodes.Ldfld, typeof(FishingRod).GetCachedField("lastCatchWasJunk", ReflectionCache.FlagTypes.InstanceFlags)),
                     new(OpCodes.Brtrue_S, label),
                 }, withLabels: labelsToMove)
-                .FindNext(new CodeInstructionWrapper[]
+            .FindNext(new CodeInstructionWrapper[]
                 {
                     new(OpCodes.Ldarg_0),
-                    new(OpCodes.Ldfld, typeof(Tool).InstanceFieldNamed(nameof(Tool.attachments))),
+                    new(OpCodes.Ldfld, typeof(Tool).GetCachedField(nameof(Tool.attachments), ReflectionCache.FlagTypes.InstanceFlags)),
                     new(OpCodes.Ldc_I4_0),
                     new(OpCodes.Ldnull),
-                    new(OpCodes.Callvirt, typeof(NetArray<SObject, NetRef<SObject>>).InstancePropertyNamed("Item").GetSetMethod()),
+                    new(OpCodes.Callvirt, typeof(NetArray<SObject, NetRef<SObject>>).GetCachedProperty("Item", ReflectionCache.FlagTypes.InstanceFlags).GetSetMethod()),
                 })
-                .Advance(3)
-                .GetLabels(out IList<Label> labelsToMove2, clear: true)
-                .ReplaceInstruction(OpCodes.Call, typeof(DoConsumePatch).StaticMethodNamed(nameof(DoConsumePatch.GetReplacementBait)))
-                .Insert(new CodeInstruction[]
+            .Advance(3)
+            .GetLabels(out IList<Label> labelsToMove2, clear: true)
+            .ReplaceInstruction(OpCodes.Call, typeof(DoConsumePatch).GetCachedMethod(nameof(DoConsumePatch.GetReplacementBait), ReflectionCache.FlagTypes.StaticFlags))
+            .Insert(new CodeInstruction[]
                 {
                     new(OpCodes.Ldarg_0),
-                    new(OpCodes.Ldfld, typeof(Tool).InstanceFieldNamed(nameof(Tool.attachments))),
+                    new(OpCodes.Ldfld, typeof(Tool).GetCachedField(nameof(Tool.attachments), ReflectionCache.FlagTypes.InstanceFlags)),
                     new(OpCodes.Ldc_I4_0),
-                    new(OpCodes.Call, typeof(NetArray<SObject, NetRef<SObject>>).InstancePropertyNamed("Item").GetGetMethod()),
+                    new(OpCodes.Call, typeof(NetArray<SObject, NetRef<SObject>>).GetCachedProperty("Item", ReflectionCache.FlagTypes.InstanceFlags).GetGetMethod()),
                 }, withLabels: labelsToMove2)
-                .FindNext(new CodeInstructionWrapper[]
+            .FindNext(new CodeInstructionWrapper[]
                 {
                     new (OpCodes.Ldsfld),
                     new (OpCodes.Ldstr, "Strings\\StringsFromCSFiles:FishingRod.cs.14085"),
                     new (OpCodes.Callvirt),
-                    new (OpCodes.Call, typeof(Game1).StaticMethodNamed(nameof(Game1.showGlobalMessage))),
+                    new (OpCodes.Call, typeof(Game1).GetCachedMethod(nameof(Game1.showGlobalMessage), ReflectionCache.FlagTypes.StaticFlags)),
                 })
-                .Remove(4)
-                .FindNext(new CodeInstructionWrapper[]
+            .Remove(4)
+            .FindNext(new CodeInstructionWrapper[]
                 {
-                    new(OpCodes.Ldsfld, typeof(FishingRod).StaticFieldNamed(nameof(FishingRod.maxTackleUses))),
+                    new(OpCodes.Ldsfld, typeof(FishingRod).GetCachedField(nameof(FishingRod.maxTackleUses), ReflectionCache.FlagTypes.StaticFlags)),
                 })
-                .FindNext(new CodeInstructionWrapper[]
+            .FindNext(new CodeInstructionWrapper[]
                 {
                     new(OpCodes.Ldarg_0),
-                    new(OpCodes.Ldfld, typeof(Tool).InstanceFieldNamed(nameof(Tool.attachments))),
+                    new(OpCodes.Ldfld, typeof(Tool).GetCachedField(nameof(Tool.attachments), ReflectionCache.FlagTypes.InstanceFlags)),
                     new(OpCodes.Ldc_I4_1),
                     new(OpCodes.Ldnull),
-                    new(OpCodes.Callvirt, typeof(NetArray<SObject, NetRef<SObject>>).InstancePropertyNamed("Item").GetSetMethod()),
+                    new(OpCodes.Callvirt, typeof(NetArray<SObject, NetRef<SObject>>).GetCachedProperty("Item", ReflectionCache.FlagTypes.InstanceFlags).GetSetMethod()),
                 })
-                .Advance(3)
-                .GetLabels(out IList<Label> labelsToMove3, clear: true)
-                .ReplaceInstruction(OpCodes.Call, typeof(DoConsumePatch).StaticMethodNamed(nameof(DoConsumePatch.GetReplacementTackle)))
-                .Insert(new CodeInstruction[]
+            .Advance(3)
+            .GetLabels(out IList<Label> labelsToMove3, clear: true)
+            .ReplaceInstruction(OpCodes.Call, typeof(DoConsumePatch).GetCachedMethod(nameof(DoConsumePatch.GetReplacementTackle), ReflectionCache.FlagTypes.StaticFlags))
+            .Insert(new CodeInstruction[]
                 {
                     new(OpCodes.Ldarg_0),
-                    new(OpCodes.Ldfld, typeof(Tool).InstanceFieldNamed(nameof(Tool.attachments))),
+                    new(OpCodes.Ldfld, typeof(Tool).GetCachedField(nameof(Tool.attachments), ReflectionCache.FlagTypes.InstanceFlags)),
                     new(OpCodes.Ldc_I4_1),
-                    new(OpCodes.Call, typeof(NetArray<SObject, NetRef<SObject>>).InstancePropertyNamed("Item").GetGetMethod()),
+                    new(OpCodes.Call, typeof(NetArray<SObject, NetRef<SObject>>).GetCachedProperty("Item", ReflectionCache.FlagTypes.InstanceFlags).GetGetMethod()),
                 }, withLabels: labelsToMove3)
-                .FindNext(new CodeInstructionWrapper[]
+            .FindNext(new CodeInstructionWrapper[]
                 {
                     new (OpCodes.Ldsfld),
                     new (OpCodes.Ldstr, "Strings\\StringsFromCSFiles:FishingRod.cs.14086"),
                     new (OpCodes.Callvirt),
-                    new (OpCodes.Call, typeof(Game1).StaticMethodNamed(nameof(Game1.showGlobalMessage))),
+                    new (OpCodes.Call, typeof(Game1).GetCachedMethod(nameof(Game1.showGlobalMessage), ReflectionCache.FlagTypes.StaticFlags)),
                 })
-                .Remove(4);
+            .Remove(4);
+
+            // helper.Print();
             return helper.Render();
         }
         catch (Exception ex)

@@ -9,10 +9,13 @@ using StardewValley.Locations;
 
 namespace HolidaySales.HarmonyPatches;
 
+/// <summary>
+/// Holds patches that move the check for whether a festival is happening to check only for festivals happening
+/// "in town", so to say.
+/// </summary>
 [HarmonyPatch]
 internal static class PatchTownMethods
 {
-
     /// <summary>
     /// Gets the methods to patch.
     /// </summary>

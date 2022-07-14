@@ -16,6 +16,9 @@ internal class ModEntry : Mod
     /// </summary>
     internal static IMonitor ModMonitor { get; private set; } = null!;
 
+    /// <summary>
+    /// Gets the config instance for this mod.
+    /// </summary>
     internal static ModConfig Config { get; private set; } = null!;
 
     /// <inheritdoc/>
@@ -51,6 +54,7 @@ internal class ModEntry : Mod
             helper.Register(
                 reset: static () => Config = new(),
                 save: () => this.Helper.AsyncWriteConfig(this.Monitor, Config))
+            .AddParagraph(I18n.ModDescription)
             .GenerateDefaultGMCM(static () => Config);
         }
     }

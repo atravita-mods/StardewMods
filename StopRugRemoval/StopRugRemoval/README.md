@@ -53,3 +53,4 @@ Translations would be very welcome! DM me or submit a pull request.
     - Vigor for the Portuguese translation! 
     - [Angel4Killer](https://github.com/angel4killer) for the Russian translation!
     - [Mistyspring](https://github.com/misty-spring) for the Spanish translation!
+* [Changelog](docs/changelog.md)

@@ -1,7 +1,7 @@
 Pick Your Enchantment/ForgeMenuChoice
 ===========================
 
-![Header image](ForgeMenuChoice/docs/tools.gif)
+![Header image](docs/tools.gif)
 
 This mod lets you pick your enchantment at the forge. No longer do you have to save scum to get the enchantment you wanted! Just place your tool or weapon in the left slot, and a prismatic shard in the right, and use the little arrows to select your new enchantment! 
 
@@ -33,8 +33,8 @@ Simply delete the mod from your Mods directory.
 
 ## Additionally:
 
-* Thanks to [martin66789](https://forums.nexusmods.com/index.php?/user/27323031-martin66789/) for the Hungarian translations!
+* Thanks to [martin66789](https://forums.nexusmods.com/index.php?/user/27323031-martin66789/) for the Hungarian translation, love1997 for the Chinese translation, and c4ttzinhaa(https://github.com/atravita-mods/StardewMods/commits?author=c4ttzinhaa) for the Portuguese translation!
 
 ## See also
 
-[Changelog](ForgeMenuChoice/docs/Changelog.md)
+[Changelog](docs/Changelog.md)

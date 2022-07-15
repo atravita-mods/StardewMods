@@ -1,7 +1,7 @@
 Less Mini Shipping Bin
 ======================
 
-![Example of enlarged Mini-Shipping Bin](LessMiniShippingBin/docs/box.gif)
+![Example of enlarged Mini-Shipping Bin](docs/box.gif)
 
 Lets you set the capacity of the mini shipping bin higher.
 
@@ -17,4 +17,4 @@ Lets you set the capacity of the mini shipping bin higher.
 
 ### See also
 
-[Changelog](./LessMiniShippingBin/docs/changelog.md)
+[Changelog](docs/changelog.md)

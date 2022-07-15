@@ -1,7 +1,7 @@
 Highlight Empty Machines
 ===========================
 
-![Header image](HighlightEmptyMachines/docs/machines.jpg)
+![Header image](docs/machines.jpg)
 
 Inspired by [Highlighted Jars](https://www.nexusmods.com/stardewvalley/mods/6833), this mods colors empty machines so they're easier to spot. Works for every vanilla machine and also [Producer Framework Mod](https://www.nexusmods.com/stardewvalley/mods/4970) machines. Additionally, dims "invalid" machines (machines in locations they don't currently work - ie casks in locations that are not valid for them, or PFM machines with location/weather/season restrictions.).
 

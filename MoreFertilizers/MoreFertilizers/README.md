@@ -1,7 +1,7 @@
 More Fertilizers
 ===========================
 
-![Header image](MoreFertilizers/docs/fertilizers.jpg)
+![Header image](docs/fertilizers.jpg)
 
 This mod adds eleven new fertilizers, including some with quite unique effects. See the table for details.
 
@@ -9,6 +9,7 @@ This mod adds eleven new fertilizers, including some with quite unique effects. 
 
 1. Install the latest version of [SMAPI](https://smapi.io).
 2. Download and unzip [Spacecore](https://www.nexusmods.com/stardewvalley/mods/1348) and [Json Assets](https://www.nexusmods.com/stardewvalley/mods/1720), and unzip both into `Stardew Valley/Mods`.
+2. Download and install [AtraCore](https://www.nexusmods.com/stardewvalley/mods/12932).
 2. Download this mod and unzip it into `Stardew Valley/Mods`.
 3. Run the game using SMAPI.
 
@@ -85,4 +86,4 @@ Many thanks to [Violetlizabet](https://www.nexusmods.com/stardewvalley/users/120
 
 ## See also
 
-[Changelog](MoreFertilizers/docs/Changelog.md)
+[Changelog](docs/Changelog.md)

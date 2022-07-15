@@ -42,4 +42,4 @@ Farm Cave Framework is handled seperately - this mod will check to see if that m
 
 The console command `av.fcs.list_fruits` will tell you which tree fruits are available for spawning.
 
-[Changelog](FarmCaveSpawn/docs/CHANGELOG.MD)
+[Changelog](docs/CHANGELOG.MD)

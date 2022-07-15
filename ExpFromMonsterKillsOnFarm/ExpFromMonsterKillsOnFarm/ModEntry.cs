@@ -1,5 +1,4 @@
-﻿using System.Reflection;
-using AtraShared.Integrations;
+﻿using AtraShared.Integrations;
 using AtraShared.Utils.Extensions;
 using HarmonyLib;
 using StardewModdingAPI.Events;
@@ -44,7 +43,7 @@ internal sealed class ModEntry : Mod
     {
         // handle patches from annotations.
         harmony.PatchAll();
-        harmony.Snitch(this.Monitor, this.ModManifest.UniqueID);
+        harmony.Snitch(this.Monitor, this.ModManifest.UniqueID, transpilersOnly: true);
     }
 
     /// <summary>
@@ -55,16 +54,14 @@ internal sealed class ModEntry : Mod
     /// <remarks>To add a new setting, add the details to the i18n file. Currently handles: bool.</remarks>
     private void SetUpConfig(object? sender, GameLaunchedEventArgs e)
     {
-
         GMCMHelper helper = new(this.Monitor, this.Helper.Translation, this.Helper.ModRegistry, this.ModManifest);
-        if (!helper.TryGetAPI())
+        if (helper.TryGetAPI())
         {
-            return;
-        }
-        helper.Register(
+            helper.Register(
                 reset: static () => Config = new ModConfig(),
                 save: () => this.Helper.AsyncWriteConfig(this.Monitor, Config))
             .AddParagraph(I18n.Mod_Description)
             .GenerateDefaultGMCM(static () => Config);
+        }
     }
 }

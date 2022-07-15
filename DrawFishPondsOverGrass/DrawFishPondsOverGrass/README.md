@@ -1,7 +1,7 @@
 Draw Fish Ponds Over Grass
 =================================
 
-![Header image](DrawFishPondsOverGrass/docs/header.png)
+![Header image](docs/header.png)
 
 This mod causes the fish pond to be drawn over any grass placed under it.
 
@@ -20,4 +20,4 @@ This mod causes the fish pond to be drawn over any grass placed under it.
 
 ## See also
 
-[Changelog](DrawFishPondsOverGrass/docs/Changelog.MD)
+[Changelog](docs/Changelog.MD)

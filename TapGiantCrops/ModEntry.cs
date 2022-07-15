@@ -19,5 +19,6 @@ internal class ModEntry : Mod
     }
 
     private void OnDayEnding(object? sender, DayEndingEventArgs e) => throw new NotImplementedException();
+
     private void OnButtonPressed(object? sender, ButtonPressedEventArgs e) => throw new NotImplementedException();
 }

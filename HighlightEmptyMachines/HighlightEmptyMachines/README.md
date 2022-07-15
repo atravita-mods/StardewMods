@@ -8,6 +8,7 @@ Inspired by [Highlighted Jars](https://www.nexusmods.com/stardewvalley/mods/6833
 ## Install
 
 1. Install the latest version of [SMAPI](https://smapi.io).
+2. Download and install [AtraCore](https://www.nexusmods.com/stardewvalley/mods/12932).
 2. Download this mod and unzip it into `Stardew Valley/Mods`.
 3. Run the game using SMAPI.
 
@@ -32,4 +33,4 @@ The mod machines in the screenshot are from the excellent [Artisanal Soda Makers
 
 ## See also
 
-[Changelog](HighlightEmptyMachines/docs/Changelog.md)
+[Changelog](docs/Changelog.md)

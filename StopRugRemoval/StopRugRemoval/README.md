@@ -5,6 +5,7 @@ A collection of little tweaks: don't pick up rugs if there's something on them! 
 #### Installation
 
 1. Install the latest version of [SMAPI](https://smapi.io).
+2. Download and install [AtraCore](https://www.nexusmods.com/stardewvalley/mods/12932).
 2. Download this mod and unzip it into `Stardew Valley/Mods`.
 3. Run the game using SMAPI.
 
@@ -51,3 +52,4 @@ Translations would be very welcome! DM me or submit a pull request.
 * Much thanks to
     - Vigor for the Portuguese translation! 
     - [Angel4Killer](https://github.com/angel4killer) for the Russian translation!
+    - [Mistyspring](https://github.com/misty-spring) for the Spanish translation!

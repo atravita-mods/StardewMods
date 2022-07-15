@@ -6,6 +6,7 @@
     <EnableHarmony>true</EnableHarmony>
     <ImplicitUsings>enable</ImplicitUsings>
     <Version>0.2.0</Version>
+    <UpdateKeys>Nexus:11856</UpdateKeys>
   </PropertyGroup>
 
   <ItemGroup>

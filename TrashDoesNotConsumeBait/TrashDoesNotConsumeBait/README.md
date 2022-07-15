@@ -6,6 +6,7 @@ This mod prevents trash from consuming bait. Additionally, it adds automatic rep
 ## Install
 
 1. Install the latest version of [SMAPI](https://smapi.io).
+2. Download and install [AtraCore](https://www.nexusmods.com/stardewvalley/mods/12932).
 2. Download this mod and unzip it into `Stardew Valley/Mods`.
 3. Run the game using SMAPI.
 
@@ -28,4 +29,4 @@ Technical note: this mod transpiles `FishingRod.doDoneFishing`, so it's not like
 
 ## See also
 
-[Changelog](TrashDoesNotConsumeBait/docs/Changelog.md)
+[Changelog](docs/Changelog.md)

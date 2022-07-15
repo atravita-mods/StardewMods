@@ -9,6 +9,7 @@
 
   <PropertyGroup>
     <Author>atravita</Author>
+    <MinimumApiVersion>3.15</MinimumApiVersion>
   </PropertyGroup>
 
   <PropertyGroup>

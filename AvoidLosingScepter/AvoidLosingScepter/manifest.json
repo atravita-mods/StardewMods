@@ -6,8 +6,7 @@
   "UniqueID": "atravita.AvoidLosingScepter",
   "EntryDll": "AvoidLosingScepter.dll",
   "UpdateKeys": [
-    "Nexus:11856",
-    "GitHub:atravita-mods/AvoidLosingSpecter"
+    "Nexus:11856"
   ],
   "Dependencies": [
     {

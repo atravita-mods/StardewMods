@@ -5,5 +5,8 @@
   "Description": "A core library mod some of my other mods depend on.",
   "UniqueID": "atravita.AtraCore",
   "EntryDll": "AtraCore.dll",
-  "MinimumApiVersion": "3.15"
+  "MinimumApiVersion": "3.15",
+  "UpdateKeys": [
+    "Nexus:12932"
+  ]
 }

@@ -1,6 +1,9 @@
-Holiday Sales
+Identifiable Combined Rings
 ===========================
 
+This mod is a work in progress and is not released.
+
+<!--
 ## Install
 
 1. Install the latest version of [SMAPI](https://smapi.io).
@@ -25,5 +28,6 @@ Run SMAPI at least once with this mod installed to generate the `config.json`, o
 * Should be compatible with most other mods.
 
 ## See also
+-->
 
 [Changelog](docs/changelog.md)

@@ -65,7 +65,7 @@ internal static class AssetManager
         DrawPrismaticModel? egg = new()
         {
             ItemType = ItemTypeEnum.SObject,
-            Identifier = "atravita.PrismaticSlimeEgg",
+            Identifier = "atravita.PrismaticSlime Egg",
         };
 
         if (!editor.Data.TryAdd(ring.Identifier, ring))

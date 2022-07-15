@@ -7,7 +7,7 @@ using HarmonyLib;
 using Microsoft.Xna.Framework;
 using StardewValley.Monsters;
 
-namespace PrismaticSlime.HarmonyPatches.Egg;
+namespace PrismaticSlime.HarmonyPatches.EggPatches;
 
 /// <summary>
 /// Makes a prismatic slime egg hatch into a prismatic slime.

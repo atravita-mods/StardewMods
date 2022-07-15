@@ -10,7 +10,7 @@ using HarmonyLib;
 using StardewValley.Locations;
 using StardewValley.Monsters;
 
-namespace PrismaticSlime.HarmonyPatches.Ring;
+namespace PrismaticSlime.HarmonyPatches.RingPatches;
 
 /// <summary>
 /// Adjusts the chances of the prismatic slime spawning in the MineShaft.

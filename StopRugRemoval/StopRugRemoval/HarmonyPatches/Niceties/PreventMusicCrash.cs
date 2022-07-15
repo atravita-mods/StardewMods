@@ -56,7 +56,7 @@ internal static class PreventMusicCrash
             ILHelper helper = new(original, instructions, ModEntry.ModMonitor, gen);
             helper.FindNext(new CodeInstructionWrapper[]
             {
-                new(OpCodes.Ldsfld, typeof(Game1).GetCachedField(Game1.requestedMusicTrack, ReflectionCache.FlagTypes.StaticFlags)),
+                new(OpCodes.Ldsfld, typeof(Game1).GetCachedField(nameof(Game1.requestedMusicTrack), ReflectionCache.FlagTypes.StaticFlags)),
                 new(SpecialCodeInstructionCases.StLoc),
             })
             .Advance(1);
@@ -67,14 +67,14 @@ internal static class PreventMusicCrash
             {
                 new(ldloc),
                 new(OpCodes.Ldstr, "none"),
-                new(OpCodes.Callvirt, typeof(string).GetCachedMethod(nameof(string.Equals), ReflectionCache.FlagTypes.InstanceFlags)),
+                new(OpCodes.Callvirt, typeof(string).GetCachedMethod(nameof(string.Equals), ReflectionCache.FlagTypes.InstanceFlags, new[] { typeof(string) } )),
                 new(OpCodes.Brfalse_S),
             })
             .Advance(1)
             .Remove(1)
             .ReplaceInstruction(OpCodes.Call, typeof(PreventMusicCrash).GetCachedMethod(nameof(ReplaceMusicCueIfNecessary), ReflectionCache.FlagTypes.StaticFlags));
 
-            helper.Print();
+            // helper.Print();
             return helper.Render();
         }
         catch (Exception ex)

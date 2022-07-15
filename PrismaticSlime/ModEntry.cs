@@ -37,7 +37,7 @@ internal sealed class ModEntry : Mod
         {
             if (prismaticSlimeEgg == -1)
             {
-                prismaticSlimeEgg = jsonAssets?.GetObjectId("atravita.PrismaticSlimeEgg") ?? -1;
+                prismaticSlimeEgg = jsonAssets?.GetObjectId("atravita.PrismaticSlime Egg") ?? -1;
             }
             return prismaticSlimeEgg;
         }

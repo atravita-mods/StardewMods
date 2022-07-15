@@ -37,7 +37,7 @@ internal static class FixStoreDialogue
             .ReplaceInstruction(OpCodes.Callvirt, typeof(SObject).GetCachedProperty(nameof(SObject.Quality), ReflectionCache.FlagTypes.InstanceFlags).GetGetMethod(), keepLabels: true)
             .Advance(1)
             .Remove(1)
-            .Advance(2);
+            .Advance(1);
 
             Label? label = (Label)helper.CurrentInstruction.operand;
 
@@ -66,7 +66,8 @@ internal static class FixStoreDialogue
                 new(OpCodes.Call, typeof(FixStoreDialogue).GetCachedMethod(nameof(IsObjectVaguelyEdible), ReflectionCache.FlagTypes.StaticFlags)),
                 new(OpCodes.Brfalse, ret),
             }, withLabels: labelsToMove);
-            helper.Print();
+
+            // helper.Print();
             return helper.Render();
         }
         catch (Exception ex)

@@ -58,7 +58,7 @@ internal static class AdjustSlimeChances
                 new(OpCodes.Call, typeof(AdjustSlimeChances).GetCachedMethod(nameof(AdjustChanceForPrismaticRing), ReflectionCache.FlagTypes.StaticFlags)),
             });
 
-            helper.Print();
+            // helper.Print();
             return helper.Render();
         }
         catch (Exception ex)

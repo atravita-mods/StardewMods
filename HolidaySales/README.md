@@ -1,7 +1,5 @@
-Highlight Empty Machines
+Holiday Sales
 ===========================
-
-![Header image](HighlightEmptyMachines/docs/machines.jpg)
 
 ## Install
 
@@ -28,4 +26,4 @@ Run SMAPI at least once with this mod installed to generate the `config.json`, o
 
 ## See also
 
-[Changelog](HolidaySales/docs/changelog.md)
+[Changelog](docs/changelog.md)

@@ -6,7 +6,10 @@ Modded farm caves don't really play well with how the fruit cave spawns its frui
 Any fruit tree's products can be spawned. Mod trees, as long as they're registered with `Data/fruitTrees`, will be used as well. (Tested with RSV and PPJA More Trees). Fruit not associated with a tree will not be produced.
 
 #### Installation
-Unzip into your mods folder. To uninstall, simply delete from mods folder.
+1. Install the latest version of [SMAPI](https://smapi.io).
+2. Download and install [AtraCore](https://www.nexusmods.com/stardewvalley/mods/12932).
+2. Download this mod and unzip it into `Stardew Valley/Mods`.
+3. Run the game using SMAPI.
 
 #### Multiplayer
 Host should install mod. Mod does not do anything for farmhands.
@@ -39,36 +42,4 @@ Farm Cave Framework is handled seperately - this mod will check to see if that m
 
 The console command `av.fcs.list_fruits` will tell you which tree fruits are available for spawning.
 
-#### Denylist
-
-Don't want this mod to spawn *your* fruit? If you use Content Patcher to add an entry to `Mods/atravita_FarmCaveSpawn_denylist` that looks like
-
-```
-{
-    "Action": "EditData",
-    "Target": "Mods/atravita_FarmCaveSpawn_denylist",
-    "Entries": {
-        "your.uniqueID": "Comma,Seperated,List,Of,Fruit,Names"
-    }
-}
-```
-
-this mod won't spawn your fruit.
-
-#### AdditionalLocations
-
-Want this mod to spawn fruit in a mod-added location? Just use Content patcher to add an entry to `Mods/atravita_FarmCaveSpawn_additionalLocations` that looks like
-
-```
-{
-    "Action": "EditData",
-    "Target": "Mods/atravita_FarmCaveSpawn_additionalLocations",
-    "Entries": {
-        "your.uniqueID": "Comma,Seperated,List,Of,Location,Names"
-    }
-}
-```
-
-to add your location as a location fruit will spawn. (To limit the spawn location, add `:[(x1;y1);(x2;y2)]` after the location name - ie `Custom_NewLocation:[(3;4);(57;54)]`). Note - semicolons, not commas. 
-
-**Changelog**: https://github.com/atravita-mods/FarmCaveSpawn/blob/master/FarmCaveSpawn/docs/CHANGELOG.MD
+[Changelog](FarmCaveSpawn/docs/CHANGELOG.MD)

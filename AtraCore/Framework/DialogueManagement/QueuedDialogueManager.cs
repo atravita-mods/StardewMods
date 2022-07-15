@@ -1,6 +1,10 @@
 ﻿using StardewModdingAPI.Utilities;
 
 namespace AtraCore.Framework.DialogueManagement;
+
+/// <summary>
+/// Handles queuing dialogue for later.
+/// </summary>
 public class QueuedDialogueManager
 {
     /// <summary>

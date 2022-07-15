@@ -1,4 +1,6 @@
-﻿using AtraCore.Framework.ItemManagement;
+﻿using System.Runtime.CompilerServices;
+using AtraBase.Toolkit;
+using AtraCore.Framework.ItemManagement;
 using AtraCore.Models;
 using AtraShared.ConstantsAndEnums;
 using HarmonyLib;
@@ -82,6 +84,7 @@ internal static class DrawPrismatic
     /// <param name="color">Color to make things.</param>
     [UsedImplicitly]
     [HarmonyPrefix]
+    [MethodImpl(TKConstants.Hot)]
     [HarmonyPatch(typeof(SObject), nameof(SObject.drawInMenu))]
     [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Harmony Convention.")]
     private static void PrefixSObjectDrawInMenu(SObject __instance, ref Color color)
@@ -103,6 +106,7 @@ internal static class DrawPrismatic
 
     [UsedImplicitly]
     [HarmonyPostfix]
+    [MethodImpl(TKConstants.Hot)]
     [HarmonyPatch(typeof(SObject), nameof(SObject.drawInMenu))]
     [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Harmony Convention.")]
     private static void PostfixSObjectDrawInMenu(
@@ -143,6 +147,7 @@ internal static class DrawPrismatic
 
     [UsedImplicitly]
     [HarmonyPrefix]
+    [MethodImpl(TKConstants.Hot)]
     [HarmonyPatch(typeof(Ring), nameof(Ring.drawInMenu))]
     [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Harmony Convention.")]
     private static void PrefixRingDrawInMenu(Ring __instance, ref Color color)
@@ -164,6 +169,7 @@ internal static class DrawPrismatic
 
     [UsedImplicitly]
     [HarmonyPostfix]
+    [MethodImpl(TKConstants.Hot)]
     [HarmonyPatch(typeof(Ring), nameof(Ring.drawInMenu))]
     [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Harmony Convention.")]
     private static void PostfixRingDrawInMenu(
@@ -173,6 +179,69 @@ internal static class DrawPrismatic
         float scaleSize,
         float transparency,
         float layerDepth)
+    {
+        try
+        {
+            if (__instance.GetItemType() is ItemTypeEnum type && PrismaticMasks.TryGetValue(type, out var masks)
+                && masks.TryGetValue(__instance.ParentSheetIndex, out var texture))
+            {
+                spriteBatch.Draw(
+                    texture: texture.Value,
+                    position: location + (new Vector2(32f, 32f) * scaleSize),
+                    sourceRectangle: new Rectangle(0, 0, 16, 16),
+                    color: Utility.GetPrismaticColor() * transparency,
+                    rotation: 0f,
+                    origin: new Vector2(8f, 8f) * scaleSize,
+                    scale: scaleSize * 4f,
+                    effects: SpriteEffects.None,
+                    layerDepth: layerDepth);
+            }
+        }
+        catch (Exception ex)
+        {
+            ModEntry.ModMonitor.Log($"Failed in drawing prismatic mask\n\n{ex}", LogLevel.Error);
+        }
+        return;
+    }
+
+#endregion
+
+#region BOOTS
+
+    [UsedImplicitly]
+    [HarmonyPrefix]
+    [MethodImpl(TKConstants.Hot)]
+    [HarmonyPatch(typeof(Boots), nameof(Boots.drawInMenu))]
+    [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Harmony Convention.")]
+    private static void PrefixBootsDrawInMenu(Boots __instance, ref Color color)
+    {
+        try
+        {
+            if (__instance.GetItemType() is ItemTypeEnum type && PrismaticFull.TryGetValue(type, out HashSet<int>? set)
+                && set.Contains(__instance.ParentSheetIndex))
+            {
+                color = Utility.GetPrismaticColor();
+            }
+        }
+        catch (Exception ex)
+        {
+            ModEntry.ModMonitor.Log($"Failed in drawing prismatic boots\n\n{ex}", LogLevel.Error);
+        }
+        return;
+    }
+
+    [UsedImplicitly]
+    [HarmonyPostfix]
+    [MethodImpl(TKConstants.Hot)]
+    [HarmonyPatch(typeof(Boots), nameof(Boots.drawInMenu))]
+    [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Harmony Convention.")]
+    private static void PostfixBootsDrawInMenu(
+    Ring __instance,
+    SpriteBatch spriteBatch,
+    Vector2 location,
+    float scaleSize,
+    float transparency,
+    float layerDepth)
     {
         try
         {

@@ -456,9 +456,6 @@ internal sealed class ModEntry : Mod
         harmony.Snitch(this.Monitor, harmony.Id, transpilersOnly: true);
     }
 
-    [SuppressMessage("StyleCop.CSharp.OrderingRules", "SA1204:Static elements should appear before instance elements", Justification = "Reviewed.")]
-    private static ModConfig GetConfig() => Config;
-
     private void OnGameLaunched(object? sender, GameLaunchedEventArgs e)
     {
         {

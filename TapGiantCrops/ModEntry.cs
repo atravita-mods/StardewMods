@@ -18,7 +18,11 @@ internal class ModEntry : Mod
         helper.Events.GameLoop.DayEnding += this.OnDayEnding;
     }
 
-    private void OnDayEnding(object? sender, DayEndingEventArgs e) => throw new NotImplementedException();
+    private void OnDayEnding(object? sender, DayEndingEventArgs e)
+    {
+    }
 
-    private void OnButtonPressed(object? sender, ButtonPressedEventArgs e) => throw new NotImplementedException();
+    private void OnButtonPressed(object? sender, ButtonPressedEventArgs e)
+    {
+    }
 }

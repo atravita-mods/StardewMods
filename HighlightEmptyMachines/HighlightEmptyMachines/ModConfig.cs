@@ -1,5 +1,5 @@
-﻿using AtraShared.Integrations.GMCMAttributes;
-using AtraShared.Niceties;
+﻿using AtraShared.ConstantsAndEnums;
+using AtraShared.Integrations.GMCMAttributes;
 using Microsoft.Xna.Framework;
 
 namespace HighlightEmptyMachines;

@@ -482,7 +482,7 @@ public sealed class GMCMHelper : IntegrationHelper
                     }
                     else if (attribute is GMCMIntervalAttribute intervalAttr)
                     {
-                        interval ??= (float)intervalAttr.interval;
+                        interval ??= (float)intervalAttr.Interval;
                     }
                 }
             }
@@ -583,7 +583,7 @@ public sealed class GMCMHelper : IntegrationHelper
                     }
                     else if (attribute is GMCMIntervalAttribute intervalAttr)
                     {
-                        interval ??= (int)intervalAttr.interval;
+                        interval ??= (int)intervalAttr.Interval;
                     }
                 }
             }

@@ -24,9 +24,10 @@
     <Compile Include="$(MSBuildThisFileDirectory)Integrations\Interfaces\Fluent\IGameLocale.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Integrations\Interfaces\IDynamicGameAssetsAPI.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Integrations\Interfaces\IWearMoreRingsAPI.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Menuing\MenuingExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Niceties\Records.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Niceties\SoundBankWrapperHandler.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Niceties\VanillaMachinesEnum.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ConstantsAndEnums\VanillaMachinesEnum.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Utils\DateHelper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Integrations\GMCMHelper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Integrations\Interfaces\IBetterSprinklersAPI.cs" />
@@ -71,5 +72,8 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="$(MSBuildThisFileDirectory)Integrations\Interfaces\Fluent\README.TXT" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="$(MSBuildThisFileDirectory)README.MD" />
   </ItemGroup>
 </Project>

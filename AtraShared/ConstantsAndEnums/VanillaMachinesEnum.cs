@@ -1,6 +1,6 @@
 ﻿using AtraBase.Toolkit.Extensions;
 
-namespace AtraShared.Niceties;
+namespace AtraShared.ConstantsAndEnums;
 
 /// <summary>
 /// Enum for all the vanilla machines that require input.

@@ -10,7 +10,10 @@ public sealed class GMCMIntervalAttribute : Attribute
     /// Initializes a new instance of the <see cref="GMCMIntervalAttribute"/> class.
     /// </summary>
     /// <param name="interval">The interval requested.</param>
-    public GMCMIntervalAttribute(double interval) => this.interval = interval;
+    public GMCMIntervalAttribute(double interval) => this.Interval = interval;
 
-    internal double interval { get; init; }
+    /// <summary>
+    /// The interval to use for a GMCM menu.
+    /// </summary>
+    internal double Interval { get; init; }
 }

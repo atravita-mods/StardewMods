@@ -61,7 +61,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LessMiniShippingBin", "Less
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MuseumRewardsIn", "MuseumRewardsIn\MuseumRewardsIn\MuseumRewardsIn.csproj", "{34E7D5AA-F3C2-43CC-8AFC-E74FA02E6637}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QualityRings", "QualityRings\QualityRings.csproj", "{ED8AD8FC-061F-4F58-82D4-7FE255AFD1CE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "QualityRings", "QualityRings\QualityRings.csproj", "{ED8AD8FC-061F-4F58-82D4-7FE255AFD1CE}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HolidaySales", "HolidaySales\HolidaySales.csproj", "{8F84A6B4-A93B-48F4-A785-49998D40983D}"
 EndProject
@@ -71,13 +71,15 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WhyAreMacs", "WhyAreMacs\Wh
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PrismaticClothing", "PrismaticClothing\PrismaticClothing.csproj", "{A7F5E995-F627-4987-8F20-FAB1E4866691}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PrismaticSlime", "PrismaticSlime\PrismaticSlime.csproj", "{7127755B-9473-4FF9-B736-8DD46DE1E0BF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PrismaticSlime", "PrismaticSlime\PrismaticSlime.csproj", "{7127755B-9473-4FF9-B736-8DD46DE1E0BF}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{70028B32-6F2B-41CB-907A-EDFA7416DE65}"
 	ProjectSection(SolutionItems) = preProject
 		csproj_common = csproj_common
 		LICENSE = LICENSE
 	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TapGiantCrops", "TapGiantCrops\TapGiantCrops.csproj", "{87CB4C6C-FD1B-490F-8ABC-F25DF6107D71}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -209,6 +211,10 @@ Global
 		{7127755B-9473-4FF9-B736-8DD46DE1E0BF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7127755B-9473-4FF9-B736-8DD46DE1E0BF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7127755B-9473-4FF9-B736-8DD46DE1E0BF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{87CB4C6C-FD1B-490F-8ABC-F25DF6107D71}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{87CB4C6C-FD1B-490F-8ABC-F25DF6107D71}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{87CB4C6C-FD1B-490F-8ABC-F25DF6107D71}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{87CB4C6C-FD1B-490F-8ABC-F25DF6107D71}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -221,6 +227,5 @@ Global
 		AtraBase\AtraBase\AtraBase.projitems*{3b016280-a267-4c67-affe-999c2b25e527}*SharedItemsImports = 5
 		AtraShared\AtraShared.projitems*{3b016280-a267-4c67-affe-999c2b25e527}*SharedItemsImports = 5
 		AtraShared\AtraShared.projitems*{7119b285-0356-4ce5-adca-cc008e9315da}*SharedItemsImports = 13
-		AtraBase\AtraBase\AtraBase.projitems*{db57d7be-53c6-4744-a446-499203da907a}*SharedItemsImports = 5
 	EndGlobalSection
 EndGlobal

@@ -1,7 +1,7 @@
 Nerf Cave Puzzle
 =================================
 
-![Crystals gif](NerfCavePuzzle/docs/crystals2.gif)
+![Crystals gif](docs/crystals2.gif)
 
 This mod makes that one cave puzzle easier.
 
@@ -10,6 +10,7 @@ By default, it simply requires the player interact with the statue again before 
 ## Install
 
 1. Install the latest version of [SMAPI](https://smapi.io).
+2. Download and install [AtraCore](https://www.nexusmods.com/stardewvalley/mods/12932).
 2. Download this mod and unzip it into `Stardew Valley/Mods`.
 3. Run the game using SMAPI.
 

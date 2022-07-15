@@ -1,13 +1,14 @@
 Museum Shop
 =================================
 
-![museumShop](MuseumRewardsIn/docs/museumShop.jpg)
+![museumShop](docs/museumShop.jpg)
 
 This mod just adds collected rewards to a shop in the museum. By default, it's one tile to the right of Gunther, although it can be moved simply by relocating the tile property `Action: atravita.MuseumShop`. It also adds furniture rewards to the furniture catalogue.
 
 ## Install
 
 1. Install the latest version of [SMAPI](https://smapi.io).
+2. Download and install [AtraCore](https://www.nexusmods.com/stardewvalley/mods/12932).
 2. Download this mod and unzip it into `Stardew Valley/Mods`.
 3. Run the game using SMAPI.
 
@@ -21,4 +22,4 @@ Note: this mod looks at the `museumCollectedReward` mail flags to generate the l
 
 ## See also
 
-* [Changelog](MuseumRewardsIn/docs/Changelog.md)
+* [Changelog](docs/Changelog.md)

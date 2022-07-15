@@ -30,4 +30,4 @@ Technical note: this mod heavily relies on transpilers and may not be compatible
 
 ## See also
 
-* [Changelog](NerfCavePuzzle/docs/Changelog.md)
+* [Changelog](docs/Changelog.md)

@@ -1,6 +1,7 @@
 ﻿using System.Text.RegularExpressions;
 using AtraShared.Integrations;
 using AtraShared.ItemManagement;
+using AtraShared.Menuing;
 using AtraShared.Utils.Extensions;
 using HarmonyLib;
 using Microsoft.Xna.Framework;
@@ -63,7 +64,7 @@ internal sealed class ModEntry : Mod
         if (config.BoxLocation == new Vector2(-1, -1))
         {
             config.BoxLocation = shopLoc;
-            Task.Run(() => this.Helper.WriteConfig(config));
+            this.Helper.AsyncWriteConfig(this.Monitor, config);
         }
 
         GMCMHelper gmcm = new(this.Monitor, this.Helper.Translation, this.Helper.ModRegistry, this.ModManifest);
@@ -122,9 +123,7 @@ internal sealed class ModEntry : Mod
             return;
         }
 
-        if (!Context.IsWorldReady || !Context.CanPlayerMove || Game1.player.isRidingHorse()
-            || Game1.currentLocation is null || Game1.eventUp || Game1.isFestival() || Game1.IsFading()
-            || Game1.activeClickableMenu is not null)
+        if (!MenuingExtensions.CanRaiseMenu())
         {
             return;
         }

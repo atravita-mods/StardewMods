@@ -6,6 +6,7 @@ using AtraCore.Framework.QueuePlayerAlert;
 using AtraCore.HarmonyPatches;
 using AtraCore.Utilities;
 using AtraShared.ConstantsAndEnums;
+using AtraShared.Integrations.Interfaces.Automate;
 using AtraShared.MigrationManager;
 using AtraShared.Utils.Extensions;
 using HarmonyLib;
@@ -58,6 +59,8 @@ internal sealed class ModEntry : Mod
         this.Helper.Events.Content.AssetsInvalidated += this.OnAssetInvalidation;
 
         this.ApplyPatches(new Harmony(this.ModManifest.UniqueID));
+
+        //_ = this.Helper.ModRegistry.GetApi<IAutomateAPI>("PathosChild.Automate");
     }
 
     private void OnSaveLoaded(object? sender, SaveLoadedEventArgs e)

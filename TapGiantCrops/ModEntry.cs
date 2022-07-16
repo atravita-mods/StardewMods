@@ -12,10 +12,10 @@ internal class ModEntry : Mod
     /// <inheritdoc />
     public override void Entry(IModHelper helper)
     {
-        this.keg = new(Vector2.Zero, (int)VanillaMachinesEnum.Keg);
-
         helper.Events.Input.ButtonPressed += this.OnButtonPressed;
         helper.Events.GameLoop.DayEnding += this.OnDayEnding;
+
+        helper.Events.GameLoop.SaveLoaded += this.OnSaveLoaded;
     }
 
     private void OnDayEnding(object? sender, DayEndingEventArgs e)
@@ -24,5 +24,10 @@ internal class ModEntry : Mod
 
     private void OnButtonPressed(object? sender, ButtonPressedEventArgs e)
     {
+    }
+
+    private void OnSaveLoaded(object? sender, SaveLoadedEventArgs e)
+    {
+        this.keg = new(Vector2.Zero, (int)VanillaMachinesEnum.Keg);
     }
 }

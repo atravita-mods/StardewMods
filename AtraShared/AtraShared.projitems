@@ -18,6 +18,17 @@
     <Compile Include="$(MSBuildThisFileDirectory)Integrations\GMCMAttributes\GMCMIntervalAttribute.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Integrations\GMCMAttributes\GMCMRangeAttribute.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Integrations\GMCMAttributes\GMCMSectionAttribute.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Integrations\Interfaces\Automate\IAutomatable.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Integrations\Interfaces\Automate\IAutomateAPI.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Integrations\Interfaces\Automate\IAutomationFactory.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Integrations\Interfaces\Automate\IConsumable.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Integrations\Interfaces\Automate\IContainer.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Integrations\Interfaces\Automate\IMachine.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Integrations\Interfaces\Automate\IRecipe.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Integrations\Interfaces\Automate\IStorage.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Integrations\Interfaces\Automate\ItemType.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Integrations\Interfaces\Automate\ITrackedStack.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Integrations\Interfaces\Automate\MachineState.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Integrations\Interfaces\Fluent\IFluent.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Integrations\Interfaces\Fluent\IFluentAPI.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Integrations\Interfaces\Fluent\IFluentEnum.cs" />
@@ -71,6 +82,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Utils\Utils.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="$(MSBuildThisFileDirectory)Integrations\Interfaces\Automate\README.TXT" />
     <Content Include="$(MSBuildThisFileDirectory)Integrations\Interfaces\Fluent\README.TXT" />
   </ItemGroup>
   <ItemGroup>

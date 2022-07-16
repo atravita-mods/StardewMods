@@ -140,6 +140,10 @@ internal static class GIScheduler
         {
             IslandSouthPatches.ClearCache();
             GIScheduler.ClearCache();
+#if DEBUG
+            stopwatch.Stop();
+            Globals.ModMonitor.Log($"GI Scheduler did not need to run, took {stopwatch.ElapsedMilliseconds} ms anyways", LogLevel.Info);
+#endif
             return;
         }
 

@@ -5,21 +5,12 @@ using AtraShared.MigrationManager;
 using AtraShared.Utils.Extensions;
 using HarmonyLib;
 using Microsoft.Xna.Framework;
+#if DEBUG
+using PamTries.HarmonyPatches;
+#endif
 using StardewModdingAPI.Events;
 
 namespace PamTries;
-
-#pragma warning disable SA1300 // Element should begin with upper-case letter
-/// <summary>
-/// Enum for Pam's mood.
-/// </summary>
-internal enum PamMood
-{
-    bad,
-    neutral,
-    good,
-}
-#pragma warning restore SA1300 // Element should begin with upper-case letter
 
 /// <inheritdoc />
 internal class ModEntry : Mod

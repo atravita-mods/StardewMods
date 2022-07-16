@@ -5,7 +5,7 @@
     <TargetFramework>net5.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Version>0.1.0</Version>
-    <UpdateKeys></UpdateKeys>
+    <UpdateKeys>-1</UpdateKeys>
   </PropertyGroup>
 
   <ItemGroup>

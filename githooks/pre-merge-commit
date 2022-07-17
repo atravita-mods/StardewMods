@@ -7,7 +7,8 @@ import re
 
 endtags = re.compile(r"</h\d>")
 endlists = re.compile(r"</[ou]l>")
-urls = re.compile(r'<a href=\"(.*?)\">(.*?)</a>')
+urls = re.compile(r'<a href=\"(http.*?)\">(.*?)</a>')
+relativeurls = re.compile(r'<a href=\"(.*?)\">(.*?)</a>')
 
 substitutions = {
     "<h1>": "[size=6]",
@@ -31,7 +32,7 @@ p = Path('.')
 for x in p.glob('**/README.md'):
     if x.parent.name.endswith('docs'):
         continue
-    print(x)
+    print("Processing: " + str(x))
     with open(x, "r") as input_file:
         html = markdown.markdown(input_file.read())
         for k,v in substitutions.items():
@@ -39,6 +40,9 @@ for x in p.glob('**/README.md'):
         html = endtags.sub("[/size]", html)
         html = endlists.sub("[/list]", html)
         html = urls.sub(r"[url=\1]\2[/url]", html)
+        
+        relativeurl = "/".join(x.parent.parts)
+        html = relativeurls.sub(r"[url=https://github.com/atravita-mods/StardewMods/blob/main/" + relativeurl + r"/\1]\2[/url]", html)
         
         #create output file. 
         with open(x.with_suffix(".bbcode"), "w") as output_file:

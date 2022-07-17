@@ -1,30 +1,29 @@
 #!/usr/bin/env python3.11
 
 import markdown
-import tomllib
-from pathlib import Path;
+from pathlib import Path
 import re
 
-endtags = re.compile(r"</h\d>")
-endlists = re.compile(r"</[ou]l>")
-urls = re.compile(r'<a href=\"(http.*?)\">(.*?)</a>')
-relativeurls = re.compile(r'<a href=\"(.*?)\">(.*?)</a>')
+end_tags = re.compile(r'</h\d>')
+end_lists = re.compile(r'</[ou]l>')
+urls = re.compile(r'<a href="(http.*?)">(.*?)</a>')
+relative_urls = re.compile(r'<a href="(.*?)">(.*?)</a>')
 
 substitutions = {
-    "<h1>": "[size=6]",
-    "<h2>": "[size=5]",
-    "<h3>": "[size=4]",
-    "<h4>": "[size=4]",
-    "<ol>": "[list=1]",
-    "<ul>": "[list]",
-    "<li>": "[*]",
-    "</li>" : "",
-    "<p>": "",
-    "</p>": "\n",
-    "<code>": "[font=Courier New]",
-    "</code>": "[/font]",
-    "<strong>": "[b]",
-    "</strong>": "[/b]",
+    '<h1>': '[size=6]',
+    '<h2>': '[size=5]',
+    '<h3>': '[size=4]',
+    '<h4>': '[size=4]',
+    '<ol>': '[list=1]',
+    '<ul>': '[list]',
+    '<li>': '[*]',
+    '</li>': '',
+    '<p>': '',
+    '</p>': '\n',
+    '<code>': '[font=Courier New]',
+    '</code>': '[/font]',
+    '<strong>': "[b]",
+    '</strong>': '[/b]',
 }
 
 p = Path('.')
@@ -32,18 +31,21 @@ p = Path('.')
 for x in p.glob('**/README.md'):
     if x.parent.name.endswith('docs'):
         continue
-    print("Processing: " + str(x))
-    with open(x, "r") as input_file:
+    print('Processing: ' + str(x))
+    with open(x, 'r') as input_file:
         html = markdown.markdown(input_file.read())
-        for k,v in substitutions.items():
-            html = html.replace(k,v)
-        html = endtags.sub("[/size]", html)
-        html = endlists.sub("[/list]", html)
-        html = urls.sub(r"[url=\1]\2[/url]", html)
+        for k, v in substitutions.items():
+            html = html.replace(k, v)
+        html = end_tags.sub('[/size]', html)
+        html = end_lists.sub('[/list]', html)
+        html = urls.sub(r'[url=\1]\2[/url]', html)
         
-        relativeurl = "/".join(x.parent.parts)
-        html = relativeurls.sub(r"[url=https://github.com/atravita-mods/StardewMods/blob/main/" + relativeurl + r"/\1]\2[/url]", html)
+        relative_url_parts = '/'.join(x.parent.parts)
+        html = relative_urls.sub(
+            r'[url=https://github.com/atravita-mods/StardewMods/blob/main/' + relative_url_parts + r'/\1]\2[/url]',
+            html,
+        )
         
-        #create output file. 
-        with open(x.with_suffix(".bbcode"), "w") as output_file:
+        # create output file.
+        with open(x.with_suffix('.bbcode'), 'w') as output_file:
             output_file.write(html)

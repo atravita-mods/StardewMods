@@ -118,12 +118,7 @@ internal sealed class ModEntry : Mod
     /// <param name="e">event args.</param>
     private void OnButtonPressed(object? sender, ButtonPressedEventArgs e)
     {
-        if (!e.Button.IsActionButton() && !e.Button.IsUseToolButton())
-        {
-            return;
-        }
-
-        if (!MenuingExtensions.CanRaiseMenu())
+        if (!MenuingExtensions.CanRaiseMenu() || (!e.Button.IsActionButton() && !e.Button.IsUseToolButton()))
         {
             return;
         }

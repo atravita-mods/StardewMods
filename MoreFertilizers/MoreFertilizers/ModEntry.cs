@@ -1,12 +1,14 @@
-﻿using System.Reflection;
+﻿#if DEBUG
+using System.Diagnostics;
+#endif
 using AtraCore.Utilities;
 using AtraShared.ConstantsAndEnums;
 using AtraShared.Integrations;
 using AtraShared.Integrations.Interfaces;
+using AtraShared.Menuing;
 using AtraShared.MigrationManager;
 using AtraShared.Utils.Extensions;
 using HarmonyLib;
-using Microsoft.Xna.Framework;
 using MoreFertilizers.DataModels;
 using MoreFertilizers.Framework;
 using MoreFertilizers.HarmonyPatches;
@@ -300,12 +302,17 @@ internal sealed class ModEntry : Mod
         => AssetEditor.EditSpecialOrderDialogue(e);
 
     private void OnButtonPressed(object? sender, ButtonPressedEventArgs e)
-        => SpecialFertilizerApplication.ApplyFertilizer(e, this.Helper.Input);
+    {
+        if (MenuingExtensions.CanRaiseMenu())
+        {
+            SpecialFertilizerApplication.ApplyFertilizer(e, this.Helper.Input);
+        }
+    }
 
 #if DEBUG
     private void DebugOutput(object? sender, ButtonPressedEventArgs e)
     {
-        if (Context.IsWorldReady && e.Button.IsUseToolButton())
+        if (MenuingExtensions.CanRaiseMenu() && e.Button.IsUseToolButton())
         {
             if (Game1.currentLocation.terrainFeatures.TryGetValue(e.Cursor.Tile, out TerrainFeature? terrainFeature))
             {
@@ -389,6 +396,11 @@ internal sealed class ModEntry : Mod
     /// <param name="harmony">This mod's harmony instance.</param>
     private void ApplyPatches(Harmony harmony)
     {
+#if DEBUG
+        Stopwatch sw = new();
+        sw.Start();
+#endif
+
         try
         {
             harmony.PatchAll();
@@ -451,9 +463,13 @@ internal sealed class ModEntry : Mod
         }
         catch (Exception ex)
         {
-            ModMonitor.Log(string.Format(ErrorMessageConsts.HARMONYCRASH, ex), LogLevel.Error);
+            this.Monitor.Log(string.Format(ErrorMessageConsts.HARMONYCRASH, ex), LogLevel.Error);
         }
         harmony.Snitch(this.Monitor, harmony.Id, transpilersOnly: true);
+#if DEBUG
+        sw.Stop();
+        this.Monitor.Log($"took {sw.ElapsedMilliseconds} ms to apply harmony patches", LogLevel.Info);
+#endif
     }
 
     private void OnGameLaunched(object? sender, GameLaunchedEventArgs e)

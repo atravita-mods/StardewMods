@@ -12,5 +12,4 @@ internal sealed class ModConfig
     /// the box for the museum shop.
     /// </summary>
     public Vector2 BoxLocation { get; set; } = new(-1, -1);
-
 }

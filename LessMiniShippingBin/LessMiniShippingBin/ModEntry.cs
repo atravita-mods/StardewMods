@@ -44,7 +44,7 @@ internal sealed class ModEntry : Mod
     /// <summary>
     /// Generates the GMCM for this mod.
     /// </summary>
-    /// <param name="sender">SMAPI</param>
+    /// <param name="sender">SMAPI.</param>
     /// <param name="e">Arguments for event.</param>
     private void SetUpConfig(object? sender, GameLaunchedEventArgs e)
     {

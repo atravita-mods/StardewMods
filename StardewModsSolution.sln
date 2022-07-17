@@ -75,11 +75,12 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PrismaticSlime", "Prismatic
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{70028B32-6F2B-41CB-907A-EDFA7416DE65}"
 	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
 		csproj_common = csproj_common
 		LICENSE = LICENSE
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TapGiantCrops", "TapGiantCrops\TapGiantCrops.csproj", "{87CB4C6C-FD1B-490F-8ABC-F25DF6107D71}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TapGiantCrops", "TapGiantCrops\TapGiantCrops.csproj", "{87CB4C6C-FD1B-490F-8ABC-F25DF6107D71}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

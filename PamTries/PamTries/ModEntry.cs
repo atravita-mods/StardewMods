@@ -193,7 +193,7 @@ internal class ModEntry : Mod
     }
 
     /// <summary>
-    /// Undoes the changes to Pam's sprite at the end of the day, in case player sleeps while Pam fishes. Also, implements rehab invisibility
+    /// Undoes the changes to Pam's sprite at the end of the day, in case player sleeps while Pam fishes. Also, implements rehab invisibility.
     /// </summary>
     /// <param name="sender">SMAPI.</param>
     /// <param name="args">Day end argmuments.</param>

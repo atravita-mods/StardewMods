@@ -224,6 +224,7 @@ internal static class GIScheduler
     /// </summary>
     /// <param name="random">Random to use to select.</param>
     /// <param name="capacity">Maximum number of people to allow on the island.</param>
+    /// <param name="explorers">Hashset of explorers.</param>
     /// <returns>Visitor List.</returns>
     /// <remarks>For a deterministic island list, use a Random seeded with the uniqueID + number of days played.</remarks>
     private static List<NPC> GenerateVistorList(Random random, int capacity, HashSet<NPC> explorers)
@@ -233,8 +234,8 @@ internal static class GIScheduler
         CurrentAdventureGroup = null;
         CurrentAdventurers = null;
 
-        List<NPC> visitors = new();
-        HashSet<NPC> valid_visitors = new();
+        List<NPC> visitors = new(capacity);
+        HashSet<NPC> valid_visitors = new(30); // this is probably an undercount, but better than 4.
 
         // For some reason, Utility.GetAllCharacters searches the farm too.
         foreach (GameLocation loc in Game1.locations)
@@ -264,7 +265,7 @@ internal static class GIScheduler
 
         if (random.NextDouble() < Globals.Config.GroupChance)
         {
-            List<string> groupkeys = new();
+            List<string> groupkeys = new(IslandGroups.Count);
             foreach (string key in IslandGroups.Keys)
             {
                 // Filter out groups where one member can't make it or are too big
@@ -401,6 +402,7 @@ internal static class GIScheduler
     /// </summary>
     /// /// <param name="random">Seeded random.</param>
     /// <param name="visitors">List of visitors.</param>
+    /// <param name="animationDescriptions">the animations description dictionary.</param>
     /// <returns>A list of filled <see cref="GingerIslandTimeSlot"/>s.</returns>
     private static List<GingerIslandTimeSlot> AssignIslandSchedules(Random random, List<NPC> visitors, Dictionary<string, string> animationDescriptions)
     {

@@ -2,6 +2,9 @@
 
 namespace AtraShared.Integrations.Interfaces.Automate;
 
+/// <summary>
+/// The API for Automate.
+/// </summary>
 public interface IAutomateAPI
 {
     /// <summary>Add an automation factory.</summary>

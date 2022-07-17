@@ -13,7 +13,7 @@ public sealed class GMCMIntervalAttribute : Attribute
     public GMCMIntervalAttribute(double interval) => this.Interval = interval;
 
     /// <summary>
-    /// The interval to use for a GMCM menu.
+    /// Gets the interval to use for a GMCM menu.
     /// </summary>
     internal double Interval { get; init; }
 }

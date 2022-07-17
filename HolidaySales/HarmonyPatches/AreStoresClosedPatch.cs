@@ -7,6 +7,9 @@ using HarmonyLib;
 
 namespace HolidaySales.HarmonyPatches;
 
+/// <summary>
+/// Patch to adjust whether stores should be closed for festivals.
+/// </summary>
 [HarmonyPatch(typeof(GameLocation))]
 internal static class AreStoresClosedPatch
 {

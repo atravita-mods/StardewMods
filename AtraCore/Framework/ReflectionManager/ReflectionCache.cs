@@ -48,9 +48,23 @@ public static class ReflectionCache
 
     private static readonly SimpleConcurrentCache<ReflectionCacheMember, MemberInfo> Cache = new();
 
+    /// <summary>
+    /// Gets a constructorinfo, from the cache if possible.
+    /// Looks for (and gets) the constructor with zero params.
+    /// </summary>
+    /// <param name="type">Type to search in.</param>
+    /// <param name="flags">Flags to use.</param>
+    /// <returns>ConstructorInfo, if it can be found.</returns>
     public static ConstructorInfo GetCachedConstructor(this Type type, FlagTypes flags)
         => type.GetCachedConstructor(flags, Type.EmptyTypes);
 
+    /// <summary>
+    /// Gets a constructorinfo, from the cache if possible.
+    /// </summary>
+    /// <param name="type">Type to search in.</param>
+    /// <param name="flags">Flags to use.</param>
+    /// <param name="paramsList">Paramater list.</param>
+    /// <returns>ConstructorInfo, if it can be found.</returns>
     public static ConstructorInfo GetCachedConstructor(this Type type, FlagTypes flags, Type[] paramsList)
     {
         ReflectionCacheMember cachekey = new(type, "ctor", flags, MemberTypes.Constructor, paramsList);
@@ -136,5 +150,8 @@ public static class ReflectionCache
     /// </summary>
     internal static void Clear() => Cache.Clear();
 
+    /// <summary>
+    /// Swaps the hot cache to stale, clears the stale cache.
+    /// </summary>
     internal static void Swap() => Cache.Swap();
 }

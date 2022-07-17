@@ -9,10 +9,29 @@ namespace AtraShared.ConstantsAndEnums;
 [SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1602:Enumeration items should be documented", Justification = "Should be obvious enough.")]
 public enum VanillaMachinesEnum
 {
+    /// <summary>
+    /// Beehouse.
+    /// </summary>
     BeeHouse = 10,
+
+    /// <summary>
+    /// Keg.
+    /// </summary>
     Keg = 12,
+
+    /// <summary>
+    /// Furnance.
+    /// </summary>
     Furnace = 13,
+
+    /// <summary>
+    /// Preserves Jar.
+    /// </summary>
     PreservesJar = 15,
+
+    /// <summary>
+    /// Cheese Press.
+    /// </summary>
     CheesePress = 16,
     Loom = 17,
     OilMaker = 19,
@@ -47,7 +66,7 @@ public static class VanillaMachinesEnumExtensions
     {
         if (machine < 0 && Game1.objectInformation.TryGetValue(-(int)machine, out string? val))
         {
-            var translatedName = val.GetNthChunk('/', SObject.objectInfoDisplayNameIndex);
+            ReadOnlySpan<char> translatedName = val.GetNthChunk('/', SObject.objectInfoDisplayNameIndex);
             if (translatedName.Length > 0)
             {
                 return translatedName.ToString();

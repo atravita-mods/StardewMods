@@ -9,6 +9,10 @@ namespace AtraCore;
 /// </summary>
 internal static class AssetManager
 {
+    /// <summary>
+    /// Gets the prismatic models data asset.
+    /// </summary>
+    /// <returns>The prismatic models data asset.</returns>
     internal static Dictionary<string, DrawPrismaticModel>? GetPrismaticModels()
     {
         try
@@ -29,5 +33,4 @@ internal static class AssetManager
             e.LoadFrom(EmptyContainers.GetEmptyDictionary<string, DrawPrismaticModel>, AssetLoadPriority.Low);
         }
     }
-
 }

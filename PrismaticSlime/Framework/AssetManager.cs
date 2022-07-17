@@ -21,7 +21,7 @@ internal static class AssetManager
     /// <param name="e">Event arguments.</param>
     internal static void Apply(AssetRequestedEventArgs e)
     {
-        if (e.NameWithoutLocale.IsEquivalentTo(OBJECTDATA))
+        if (ModEntry.PrismaticSlimeEgg != -1 && e.NameWithoutLocale.IsEquivalentTo(OBJECTDATA))
         {
             e.Edit(EditObjects);
         }
@@ -37,17 +37,14 @@ internal static class AssetManager
 
     private static void EditObjects(IAssetData asset)
     {
-        if (ModEntry.PrismaticSlimeEgg != -1)
+        IAssetDataForDictionary<int, string>? editor = asset.AsDictionary<int, string>();
+        if (editor.Data.TryGetValue(ModEntry.PrismaticSlimeEgg, out string? val))
         {
-            IAssetDataForDictionary<int, string>? editor = asset.AsDictionary<int, string>();
-            if (editor.Data.TryGetValue(ModEntry.PrismaticSlimeEgg, out string? val))
-            {
-                editor.Data[ModEntry.PrismaticSlimeEgg] = val.Replace("Basic -20", "Basic");
-            }
-            else
-            {
-                ModEntry.ModMonitor.Log($"Could not find {ModEntry.PrismaticSlimeEgg} in ObjectInformation to edit! This mod may not function properly.", LogLevel.Error);
-            }
+            editor.Data[ModEntry.PrismaticSlimeEgg] = val.Replace("Basic -20", "Basic");
+        }
+        else
+        {
+            ModEntry.ModMonitor.Log($"Could not find {ModEntry.PrismaticSlimeEgg} in ObjectInformation to edit! This mod may not function properly.", LogLevel.Error);
         }
     }
 

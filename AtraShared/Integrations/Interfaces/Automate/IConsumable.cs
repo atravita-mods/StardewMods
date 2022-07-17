@@ -1,4 +1,5 @@
 ﻿namespace AtraShared.Integrations.Interfaces.Automate;
+#pragma warning disable SA1623 // Property summary documentation should match accessors - copied from Automate to use the API.
 
 /// <summary>An ingredient stack (or stacks) which can be consumed by a machine.</summary>
 public interface IConsumable
@@ -22,3 +23,5 @@ public interface IConsumable
     /// <summary>Remove the needed number of this item from the stack and return a new stack matching the count.</summary>
     Item? Take();
 }
+
+#pragma warning restore SA1623 // Property summary documentation should match accessors

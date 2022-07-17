@@ -3,13 +3,15 @@ using AtraShared.Menuing;
 using HarmonyLib;
 using Microsoft.Xna.Framework;
 using StardewModdingAPI.Events;
+using TapGiantCrops.Framework;
 
 namespace TapGiantCrops;
 
 /// <inheritdoc />
-internal class ModEntry : Mod, ITapGiantCropsAPI
+internal sealed class ModEntry : Mod
 {
     private SObject keg = null!;
+    private TapGiantCrop api = new();
 
     /// <inheritdoc />
     public override void Entry(IModHelper helper)
@@ -21,15 +23,8 @@ internal class ModEntry : Mod, ITapGiantCropsAPI
     }
 
     /// <inheritdoc />
-    public override object? GetApi() => this;
+    public override object? GetApi() => this.api;
 
-    /// <inheritdoc />
-    public bool CanPlaceTapper(GameLocation loc, Vector2 tile) => throw new NotImplementedException();
-
-    /// <inheritdoc />
-    public bool TryPlaceTapper(GameLocation loc, Vector2 tile) => throw new NotImplementedException();
-
-    /// <inheritdoc />
     private void OnDayEnding(object? sender, DayEndingEventArgs e)
     {
     }

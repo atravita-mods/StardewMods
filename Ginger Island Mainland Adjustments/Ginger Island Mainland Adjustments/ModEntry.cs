@@ -188,7 +188,7 @@ internal sealed class ModEntry : Mod
 
     private void OnButtonPressed(object? sender, ButtonPressedEventArgs e)
     {
-        if (MenuingExtensions.CanRaiseMenu())
+        if (MenuingExtensions.IsNormalGameplay())
         {
             ShopHandler.HandleWillyShop(e);
             ShopHandler.HandleSandyShop(e);

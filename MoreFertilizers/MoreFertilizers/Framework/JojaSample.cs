@@ -27,7 +27,7 @@ internal static class JojaSample
     internal static void JojaSampleEvent(WarpedEventArgs e)
     {
         if (e.NewLocation is JojaMart && e.IsLocalPlayer
-            && MenuingExtensions.CanRaiseMenu() && !HaveRecievedSampleToday.Value
+            && MenuingExtensions.IsNormalGameplay() && !HaveRecievedSampleToday.Value
             && !Game1.eventUp && Game1.CurrentEvent is null && Game1.random.NextDouble() <= 0.15)
         {
             string[] jojaEventstring = new[]

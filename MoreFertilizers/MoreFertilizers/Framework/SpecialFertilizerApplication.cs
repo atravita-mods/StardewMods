@@ -27,7 +27,7 @@ internal static class SpecialFertilizerApplication
     /// <param name="helper">SMAPI's input helper.</param>
     internal static void ApplyFertilizer(ButtonPressedEventArgs e, IInputHelper helper)
     {
-        if (!MenuingExtensions.CanRaiseMenu() || !(e.Button.IsUseToolButton() || e.Button.IsActionButton())
+        if (!MenuingExtensions.IsNormalGameplay() || !(e.Button.IsUseToolButton() || e.Button.IsActionButton())
             || Game1.player.ActiveObject is not SObject obj || obj.bigCraftable.Value)
         {
             return;

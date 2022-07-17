@@ -3,6 +3,9 @@
 ##
 ## Get latest from https://github.com/github/gitignore/blob/master/VisualStudio.gitignore
 
+#bbcode files for nexus are auto generated, remove them
+*.bbcode
+
 #Ignore secrets
 *sekrit/*
 *sekrit/

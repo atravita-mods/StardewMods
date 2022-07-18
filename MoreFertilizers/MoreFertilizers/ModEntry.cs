@@ -312,7 +312,7 @@ internal sealed class ModEntry : Mod
 #if DEBUG
     private void DebugOutput(object? sender, ButtonPressedEventArgs e)
     {
-        if (MenuingExtensions.CanRaiseMenu() && e.Button.IsUseToolButton())
+        if (MenuingExtensions.IsNormalGameplay() && e.Button.IsUseToolButton())
         {
             if (Game1.currentLocation.terrainFeatures.TryGetValue(e.Cursor.Tile, out TerrainFeature? terrainFeature))
             {

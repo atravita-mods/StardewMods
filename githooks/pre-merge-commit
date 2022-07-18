@@ -49,3 +49,4 @@ for x in p.glob('**/README.md'):
         # create output file.
         with open(x.with_suffix('.bbcode'), 'w') as output_file:
             output_file.write(html)
+            

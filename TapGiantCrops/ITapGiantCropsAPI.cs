@@ -13,7 +13,7 @@ public interface ITapGiantCropsAPI
     /// <param name="loc">Game location.</param>
     /// <param name="tile">Tile.</param>
     /// <returns>True if placeable, false otherwise.</returns>
-    public bool CanPlaceTapper(GameLocation loc, Vector2 tile);
+    public bool CanPlaceTapper(GameLocation loc, Vector2 tile, SObject obj);
 
     /// <summary>
     /// Called to place a tapper a the specific tile.
@@ -21,5 +21,5 @@ public interface ITapGiantCropsAPI
     /// <param name="loc">GameLocation.</param>
     /// <param name="tile">Tile.</param>
     /// <returns>True if successfully placed, false otherwise.</returns>
-    public bool TryPlaceTapper(GameLocation loc, Vector2 tile);
+    public bool TryPlaceTapper(GameLocation loc, Vector2 tile, SObject obj);
 }

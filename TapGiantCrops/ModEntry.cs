@@ -1,44 +1,133 @@
 ﻿using AtraShared.ConstantsAndEnums;
+using AtraShared.Integrations;
+using AtraShared.Integrations.Interfaces.Automate;
 using AtraShared.Menuing;
+using AtraShared.Utils.Extensions;
 using HarmonyLib;
 using Microsoft.Xna.Framework;
 using StardewModdingAPI.Events;
+using StardewValley.TerrainFeatures;
 using TapGiantCrops.Framework;
+using TapGiantCrops.Integrations.Automate;
 
 namespace TapGiantCrops;
 
 /// <inheritdoc />
+[HarmonyPatch(typeof(Utility))]
 internal sealed class ModEntry : Mod
 {
-    private SObject keg = null!;
-    private TapGiantCrop api = new();
+    private static readonly TapGiantCrop Api = new();
+
+    /// <summary>
+    /// Gets the logger for this mod.
+    /// </summary>
+    internal static IMonitor ModMonitor { get; private set; } = null!;
 
     /// <inheritdoc />
     public override void Entry(IModHelper helper)
     {
+        ModMonitor = this.Monitor;
+
         helper.Events.Input.ButtonPressed += this.OnButtonPressed;
         helper.Events.GameLoop.DayEnding += this.OnDayEnding;
 
         helper.Events.GameLoop.SaveLoaded += this.OnSaveLoaded;
+
+        helper.Events.GameLoop.GameLaunched += this.OnGameLaunched;
+
+        this.ApplyPatches(new Harmony(this.ModManifest.UniqueID));
     }
 
-    /// <inheritdoc />
-    public override object? GetApi() => this.api;
-
-    private void OnDayEnding(object? sender, DayEndingEventArgs e)
+    private void OnGameLaunched(object? sender, GameLaunchedEventArgs e)
     {
-    }
-
-    private void OnButtonPressed(object? sender, ButtonPressedEventArgs e)
-    {
-        if (!MenuingExtensions.IsNormalGameplay())
+        IntegrationHelper helper = new(this.Monitor, this.Helper.Translation, this.Helper.ModRegistry);
+        if (helper.TryGetAPI("Pathoschild.Automate", "1.27.3", out IAutomateAPI? api))
         {
-            return;
+            api.AddFactory(new TappedGiantCropFactory());
         }
     }
 
-    private void OnSaveLoaded(object? sender, SaveLoadedEventArgs e)
+    private void OnDayEnding(object? sender, DayEndingEventArgs e)
     {
-        this.keg = new(Vector2.Zero, (int)VanillaMachinesEnum.Keg);
+        Utility.ForAllLocations((location) =>
+        {
+            foreach (var feature in location.resourceClumps)
+            {
+                if (feature is GiantCrop crop)
+                {
+                    Vector2 offset = crop.tile.Value;
+                    offset.X += crop.width.Value / 2;
+                    offset.Y += crop.height.Value - 1;
+                    if (location.objects.TryGetValue(offset, out var tapper) && tapper.Name.Contains("Tapper")
+                        && tapper.heldObject is not null && tapper.heldObject.Value is null)
+                    {
+                        var output = Api.GetTapperProduct(crop.which.Value, tapper);
+                        if (output is not null)
+                        {
+                            tapper.heldObject.Value = output.Value.obj;
+                            int days = output.Value.days;
+                            tapper.MinutesUntilReady = Utility.CalculateMinutesUntilMorning(Game1.timeOfDay, Math.Max(1, days));
+                            this.Monitor.DebugOnlyLog($"Assigning product to tapper at {location.NameOrUniqueName} {offset}", LogLevel.Info);
+                        }
+                    }
+                }
+            }
+        });
+    }
+
+    /// <summary>
+    /// Applies the patches for this mod.
+    /// </summary>
+    /// <param name="harmony">This mod's harmony instance.</param>
+    private void ApplyPatches(Harmony harmony)
+    {
+        try
+        {
+            harmony.PatchAll();
+        }
+        catch (Exception ex)
+        {
+            ModMonitor.Log(string.Format(ErrorMessageConsts.HARMONYCRASH, ex), LogLevel.Error);
+        }
+        harmony.Snitch(this.Monitor, this.ModManifest.UniqueID, transpilersOnly: true);
+    }
+
+    /// <inheritdoc />
+    public override object? GetApi() => Api;
+
+    private void OnButtonPressed(object? sender, ButtonPressedEventArgs e)
+    {
+        if (!MenuingExtensions.IsNormalGameplay() || !(e.Button.IsUseToolButton() || e.Button.IsActionButton()))
+        {
+            return;
+        }
+        if (Game1.player.ActiveObject is SObject obj && Api.TryPlaceTapper(Game1.currentLocation, e.Cursor.GrabTile, obj))
+        {
+            Game1.player.reduceActiveItemByOne();
+        }
+    }
+
+    private void OnSaveLoaded(object? sender, SaveLoadedEventArgs e) => Api.Init();
+
+    [HarmonyPriority(Priority.VeryHigh)]
+    [HarmonyPatch(nameof(Utility.playerCanPlaceItemHere))]
+    [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Harmony Convention")]
+    [SuppressMessage("StyleCop.CSharp.OrderingRules", "SA1204:Static elements should appear before instance elements", Justification = "Reviewed.")]
+    private static bool Prefix(GameLocation location, Item item, int x, int y, Farmer f, ref bool __result)
+    {
+        try
+        {
+            Vector2 tile = new(MathF.Floor(x / 64f), MathF.Floor(y / 64f));
+            if (Utility.withinRadiusOfPlayer(x, y, 2, f) && item is SObject obj && Api.CanPlaceTapper(location, tile, obj))
+            {
+                __result = true;
+                return false;
+            }
+        }
+        catch (Exception ex)
+        {
+            ModEntry.ModMonitor.Log($"Attempt to prefix Utility.playerCanPlaceItemHere has failed:\n\n{ex}", LogLevel.Error);
+        }
+        return true;
     }
 }

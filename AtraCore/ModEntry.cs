@@ -50,7 +50,7 @@ internal sealed class ModEntry : Mod
         helper.Events.GameLoop.TimeChanged += this.OnTimeChanged;
 
 #if DEBUG
-        helper.Events.GameLoop.DayStarted += this.OnDayStart;
+        // helper.Events.GameLoop.DayStarted += this.OnDayStart;
         helper.Events.GameLoop.SaveLoaded += this.LateSaveLoaded;
 #endif
     }
@@ -62,8 +62,6 @@ internal sealed class ModEntry : Mod
         this.Helper.Events.Content.AssetsInvalidated += this.OnAssetInvalidation;
 
         this.ApplyPatches(new Harmony(this.ModManifest.UniqueID));
-
-        _ = this.Helper.ModRegistry.GetApi<IAutomateAPI>("PathosChild.Automate");
     }
 
     private void OnSaveLoaded(object? sender, SaveLoadedEventArgs e)

@@ -37,7 +37,7 @@ internal static class PreventJukeboxCrash
             }
             else
             {
-                ModEntry.ModMonitor.LogOnce($"Stardew's implementation of soundbank seems to have changed since I wrote this. Please report this as an error to the mod page.", LogLevel.Error);
+                ModEntry.ModMonitor.Log($"Stardew's implementation of soundbank seems to have changed since I wrote this: {Game1.soundBank.GetType()}", LogLevel.Debug);
             }
         }
         return true;

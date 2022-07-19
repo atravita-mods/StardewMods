@@ -1,4 +1,5 @@
 ﻿using AtraShared.ConstantsAndEnums;
+using Microsoft.Toolkit.Diagnostics;
 using Microsoft.Xna.Framework;
 using StardewValley.TerrainFeatures;
 
@@ -14,13 +15,15 @@ public class TapGiantCrop : ITapGiantCropsAPI
     /// <inheritdoc />
     public bool CanPlaceTapper(GameLocation loc, Vector2 tile, SObject obj)
     {
+        Guard.IsNotNull(loc, nameof(loc));
+        Guard.IsNotNull(obj, nameof(obj));
         if (loc.objects.ContainsKey(tile))
         {
             return false;
         }
-        if (obj.Name.Contains("Tapper", StringComparison.OrdinalIgnoreCase) == true)
+        if (obj.Name.Contains("Tapper", StringComparison.OrdinalIgnoreCase))
         {
-            return this.GetGiantCropAt(loc, tile) is not null;
+            return GetGiantCropAt(loc, tile) is not null;
         }
         return false;
     }
@@ -28,13 +31,15 @@ public class TapGiantCrop : ITapGiantCropsAPI
     /// <inheritdoc />
     public bool TryPlaceTapper(GameLocation loc, Vector2 tile, SObject obj)
     {
+        Guard.IsNotNull(loc, nameof(loc));
+        Guard.IsNotNull(obj, nameof(obj));
         if (this.CanPlaceTapper(loc, tile, obj))
         {
             SObject tapper = (SObject)obj.getOne();
-            GiantCrop? giant = this.GetGiantCropAt(loc, tile);
+            GiantCrop? giant = GetGiantCropAt(loc, tile);
             if (giant is not null)
             {
-                var output = this.GetTapperProduct(giant.which.Value, tapper);
+                (SObject obj, int days)? output = this.GetTapperProduct(giant, tapper);
                 if (output is not null)
                 {
                     tapper.heldObject.Value = output.Value.obj;
@@ -50,17 +55,17 @@ public class TapGiantCrop : ITapGiantCropsAPI
     /// <summary>
     /// Given a particular giant crop index, gets the relevant tapper output.
     /// </summary>
-    /// <param name="giantCropIndex">Index of the giant crop.</param>
+    /// <param name="giantCrop">The giant crop.</param>
     /// <param name="tapper">The tapper in question.</param>
     /// <returns>tuple of the item and how long it should take.</returns>
-    public (SObject obj, int days)? GetTapperProduct(int giantCropIndex, SObject tapper)
+    public (SObject obj, int days)? GetTapperProduct(GiantCrop giantCrop, SObject tapper)
     {
-        int cropindex = giantCropIndex switch
+        int cropindex = giantCrop.which.Value switch
         {
             0 => 190,
             1 => 254,
             2 => 276,
-            _ => giantCropIndex,
+            _ => giantCrop.which.Value,
         };
 
         SObject crop = new(cropindex, 999);
@@ -70,7 +75,7 @@ public class TapGiantCrop : ITapGiantCropsAPI
         this.keg.heldObject.Value = null;
         if (heldobj?.getOne() is SObject returnobj)
         {
-            int days = returnobj.Price / 250;
+            int days = returnobj.Price / (25 * giantCrop.width.Value * giantCrop.height.Value);
             if (tapper.ParentSheetIndex == 264)
             {
                 days /= 2;
@@ -80,10 +85,13 @@ public class TapGiantCrop : ITapGiantCropsAPI
         return null;
     }
 
+    /// <summary>
+    /// Initializes the API (gets the keg instance used to find the output).
+    /// </summary>
     internal void Init()
         => this.keg = new(Vector2.Zero, (int)VanillaMachinesEnum.Keg);
 
-    private GiantCrop? GetGiantCropAt(GameLocation loc, Vector2 tile)
+    private static GiantCrop? GetGiantCropAt(GameLocation loc, Vector2 tile)
     {
         foreach(ResourceClump? clump in loc.resourceClumps)
         {

@@ -33,7 +33,18 @@ internal sealed class ModEntry : Mod
 
         helper.Events.GameLoop.SaveLoaded += this.OnSaveLoaded;
 
-        helper.Events.GameLoop.GameLaunched += this.OnGameLaunched;
+#if !DEBUG
+        if (!Constants.ApiVersion.IsOlderThan("3.16.0"))
+#endif
+        {
+            helper.Events.GameLoop.GameLaunched += this.OnGameLaunched;
+        }
+#if !DEBUG
+        else
+        {
+            this.Monitor.Log($"Automate support not complete for now :(");
+        }
+#endif
 
         this.ApplyPatches(new Harmony(this.ModManifest.UniqueID));
     }
@@ -61,7 +72,7 @@ internal sealed class ModEntry : Mod
                     if (location.objects.TryGetValue(offset, out var tapper) && tapper.Name.Contains("Tapper")
                         && tapper.heldObject is not null && tapper.heldObject.Value is null)
                     {
-                        var output = Api.GetTapperProduct(crop.which.Value, tapper);
+                        var output = Api.GetTapperProduct(crop, tapper);
                         if (output is not null)
                         {
                             tapper.heldObject.Value = output.Value.obj;

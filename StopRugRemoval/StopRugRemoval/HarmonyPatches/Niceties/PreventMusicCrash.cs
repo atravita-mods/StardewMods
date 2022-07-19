@@ -24,6 +24,10 @@ internal static class PreventMusicCrash
         {
             return true;
         }
+        if (Game1.soundBank is null || !Context.IsWorldReady)
+        {
+            return false;
+        }
         if (Game1.soundBank is SoundBankWrapper soundBank)
         {
             try
@@ -43,7 +47,7 @@ internal static class PreventMusicCrash
         }
         else
         {
-            ModEntry.ModMonitor.LogOnce($"Stardew's implementation of soundbank seems to have changed since I wrote this. Please report this as an error to the mod page.", LogLevel.Error);
+            ModEntry.ModMonitor.LogOnce($"Stardew's implementation of soundbank seems to have changed since I wrote this. {Game1.soundBank.GetType()}", LogLevel.Debug);
         }
         return false;
     }

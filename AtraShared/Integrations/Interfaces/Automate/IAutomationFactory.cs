@@ -8,7 +8,6 @@ namespace AtraShared.Integrations.Interfaces.Automate;
 /// <summary>Constructs machines, containers, or connectors which can be added to a machine group.</summary>
 public interface IAutomationFactory
 {
-
     /// <summary>Get a machine, container, or connector instance for a given object.</summary>
     /// <param name="obj">The in-game object.</param>
     /// <param name="location">The location to check.</param>

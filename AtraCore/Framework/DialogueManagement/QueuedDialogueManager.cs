@@ -1,4 +1,5 @@
-﻿using StardewModdingAPI.Utilities;
+﻿using Microsoft.Toolkit.Diagnostics;
+using StardewModdingAPI.Utilities;
 
 namespace AtraCore.Framework.DialogueManagement;
 
@@ -18,6 +19,8 @@ public class QueuedDialogueManager
     /// <param name="npc">NPC to push dialogue of.</param>
     public static void PushCurrentDialogueToQueue(NPC npc)
     {
+        Guard.IsNotNull(npc, nameof(npc));
+
         while (npc.CurrentDialogue.TryPop(out Dialogue? result))
         {
             DelayedDialogues.Value.Enqueue(new DelayedDialogue(

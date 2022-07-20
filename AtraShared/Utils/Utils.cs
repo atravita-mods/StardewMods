@@ -14,8 +14,7 @@ public static class Utils
     /// <summary>
     /// A Lazy that contains a single pixel, useful for drawing geometric shapes.
     /// </summary>
-    /// <remarks>Taken from https://github.com/Pathoschild/StardewMods/blob/develop/Common/CommonHelper.cs .
-    /// Thanks so much!</remarks>
+    /// <remarks>Taken from https://github.com/Pathoschild/StardewMods/blob/develop/Common/CommonHelper.cs . Much thanks.</remarks>
     private static readonly Lazy<Texture2D> LazyPixel = new(() =>
     {
         Texture2D pixel = new(Game1.graphics.GraphicsDevice, 1, 1);

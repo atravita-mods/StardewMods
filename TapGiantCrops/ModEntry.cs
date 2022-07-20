@@ -49,6 +49,9 @@ internal sealed class ModEntry : Mod
         this.ApplyPatches(new Harmony(this.ModManifest.UniqueID));
     }
 
+    /// <inheritdoc />
+    public override object? GetApi() => Api;
+
     private void OnGameLaunched(object? sender, GameLaunchedEventArgs e)
     {
         IntegrationHelper helper = new(this.Monitor, this.Helper.Translation, this.Helper.ModRegistry);
@@ -103,9 +106,6 @@ internal sealed class ModEntry : Mod
         harmony.Snitch(this.Monitor, this.ModManifest.UniqueID, transpilersOnly: true);
     }
 
-    /// <inheritdoc />
-    public override object? GetApi() => Api;
-
     private void OnButtonPressed(object? sender, ButtonPressedEventArgs e)
     {
         if (!MenuingExtensions.IsNormalGameplay() || !(e.Button.IsUseToolButton() || e.Button.IsActionButton()))
@@ -120,7 +120,7 @@ internal sealed class ModEntry : Mod
 
     private void OnSaveLoaded(object? sender, SaveLoadedEventArgs e) => Api.Init();
 
-    [HarmonyPriority(Priority.VeryHigh)]
+    [HarmonyPriority(Priority.High)]
     [HarmonyPatch(nameof(Utility.playerCanPlaceItemHere))]
     [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Harmony Convention")]
     [SuppressMessage("StyleCop.CSharp.OrderingRules", "SA1204:Static elements should appear before instance elements", Justification = "Reviewed.")]

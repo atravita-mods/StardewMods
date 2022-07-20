@@ -1,14 +1,19 @@
-﻿using System.Runtime.CompilerServices;
+﻿using System.Reflection;
+using System.Reflection.Emit;
+using System.Runtime.CompilerServices;
 using AtraBase.Toolkit;
+using AtraBase.Toolkit.Extensions;
 using AtraCore.Framework.ItemManagement;
 using AtraCore.Models;
 using AtraShared.ConstantsAndEnums;
+using AtraShared.Utils.Extensions;
+using AtraShared.Utils.HarmonyHelper;
 using HarmonyLib;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using StardewValley.Objects;
 
-namespace AtraCore.HarmonyPatches;
+namespace AtraCore.HarmonyPatches.DrawPrismaticPatches;
 
 #pragma warning disable SA1124 // Do not use regions. Reviewed.
 /// <summary>
@@ -20,7 +25,17 @@ internal static class DrawPrismatic
     private static readonly SortedList<ItemTypeEnum, Dictionary<int, Lazy<Texture2D>>> PrismaticMasks = new();
     private static readonly SortedList<ItemTypeEnum, HashSet<int>> PrismaticFull = new();
 
+    [MethodImpl(TKConstants.Hot)]
+    private static bool ShouldDrawAsFullColored(this Item item)
+        => item.GetItemType() is ItemTypeEnum type && PrismaticFull.TryGetValue(type, out HashSet<int>? set)
+            && set.Contains(item.ParentSheetIndex);
+
+    [MethodImpl(TKConstants.Hot)]
+    private static Color ReplaceDrawColorForItem(Color prevcolor, Item item)
+        => item.ShouldDrawAsFullColored() ? Utility.GetPrismaticColor() : prevcolor;
+
 #region LOADDATA
+
     /// <summary>
     /// Load the prismatic data.
     /// Called on SaveLoaded.
@@ -91,8 +106,7 @@ internal static class DrawPrismatic
     {
         try
         {
-            if (__instance.GetItemType() is ItemTypeEnum type && PrismaticFull.TryGetValue(type, out var set)
-                && set.Contains(__instance.ParentSheetIndex))
+            if (__instance.ShouldDrawAsFullColored())
             {
                 color = Utility.GetPrismaticColor();
             }
@@ -102,6 +116,26 @@ internal static class DrawPrismatic
             ModEntry.ModMonitor.Log($"Failed in drawing prismatic item\n\n{ex}", LogLevel.Error);
         }
         return;
+    }
+
+    [UsedImplicitly]
+    [HarmonyTranspiler]
+    [HarmonyPatch(typeof(SObject), nameof(SObject.drawInMenu))]
+    private static IEnumerable<CodeInstruction>? TranspileSObjectDrawInMenu(IEnumerable<CodeInstruction> instructions, ILGenerator gen, MethodBase original)
+    {
+        try
+        {
+            ILHelper helper = new(original, instructions, ModEntry.ModMonitor, gen);
+            helper.AdjustUtilityTextColor();
+
+            return helper.Render();
+        }
+        catch (Exception ex)
+        {
+            ModEntry.ModMonitor.Log($"Mod crashed while transpiling {original.GetFullName()}\n\n{ex}", LogLevel.Error);
+            original?.Snitch(ModEntry.ModMonitor);
+        }
+        return null;
     }
 
     [UsedImplicitly]
@@ -154,8 +188,7 @@ internal static class DrawPrismatic
     {
         try
         {
-            if (__instance.GetItemType() is ItemTypeEnum type && PrismaticFull.TryGetValue(type, out HashSet<int>? set)
-                && set.Contains(__instance.ParentSheetIndex))
+            if (__instance.ShouldDrawAsFullColored())
             {
                 color = Utility.GetPrismaticColor();
             }
@@ -217,8 +250,7 @@ internal static class DrawPrismatic
     {
         try
         {
-            if (__instance.GetItemType() is ItemTypeEnum type && PrismaticFull.TryGetValue(type, out HashSet<int>? set)
-                && set.Contains(__instance.ParentSheetIndex))
+            if (__instance.ShouldDrawAsFullColored())
             {
                 color = Utility.GetPrismaticColor();
             }

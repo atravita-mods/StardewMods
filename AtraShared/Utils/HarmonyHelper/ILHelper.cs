@@ -129,6 +129,8 @@ public sealed class ILHelper
         return this;
     }
 
+    internal void AdjustUtilityTextColor() => throw new NotImplementedException();
+
     /// <summary>
     /// Pops the a pointer from the pointerstack.
     /// </summary>

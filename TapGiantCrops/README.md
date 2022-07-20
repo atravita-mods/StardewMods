@@ -4,6 +4,8 @@ Tap Giant Crops.
 
 Allows you to tap giant crops.
 
+The tapper should produce the keg output for whatever crop the giant crop corresponds to.
+
 ## Install
 
 1. Install the latest version of [SMAPI](https://smapi.io).
@@ -15,7 +17,8 @@ Allows you to tap giant crops.
 
 * Works with Stardew Valley 1.5.6 on Linux/macOS/Windows.
 * Works in single player, multiplayer, and split-screen mode.
-* Should be compatible with most other mods. 
+* Should be compatible with most other mods, including giant crops from [More Giant Crops](https://www.nexusmods.com/stardewvalley/mods/5263) and [Json Assets](https://www.nexusmods.com/stardewvalley/mods/1720). [DynamicGameAssets](https://www.nexusmods.com/stardewvalley/mods/9365?tab=description) giant crops are not yet supported.
+* Doesn't work with Automate yet. Working on that!
 
 ## See also
 

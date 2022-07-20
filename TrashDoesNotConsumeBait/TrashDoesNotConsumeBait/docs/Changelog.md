@@ -1,6 +1,10 @@
 ﻿Changelog
 ===============
 
+### Version 0.2.0
+
+Update to use AtraCore (and related internal improvements).
+
 ### Version 0.1.3
 
 Updates for SMAPI 3.14.0. Mod can also now optionally prevent crab pot trash from eating bait.

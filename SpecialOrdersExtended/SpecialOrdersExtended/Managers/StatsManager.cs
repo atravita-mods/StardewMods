@@ -86,7 +86,6 @@ internal static class StatsManager
         ModEntry.ModMonitor.Log(sb.ToString(), LogLevel.Info);
     }
 
-
     /// <summary>
     /// Populate the propertyInfos cache.
     /// </summary>

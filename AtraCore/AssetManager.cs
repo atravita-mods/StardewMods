@@ -26,6 +26,10 @@ internal static class AssetManager
         return null;
     }
 
+    /// <summary>
+    /// Applies the edits and loads for this mod.
+    /// </summary>
+    /// <param name="e">Event args.</param>
     internal static void Apply(AssetRequestedEventArgs e)
     {
         if (e.NameWithoutLocale.IsEquivalentTo(AtraCoreConstants.PrismaticMaskData))

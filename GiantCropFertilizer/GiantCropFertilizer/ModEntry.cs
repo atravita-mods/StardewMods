@@ -67,7 +67,6 @@ internal sealed class ModEntry : Mod
 
         helper.Events.GameLoop.GameLaunched += this.OnGameLaunched;
         helper.Events.GameLoop.SaveLoaded += this.OnSaveLoaded;
-        helper.Events.GameLoop.Saved += this.OnSaved;
 
         helper.Events.GameLoop.ReturnedToTitle += this.OnReturnedToTitle;
     }
@@ -79,9 +78,20 @@ internal sealed class ModEntry : Mod
     {
         if (Context.IsMainPlayer)
         {
-            this.Helper.Data.WriteGlobalData(
+            Task.Run(() => this.Helper.Data.WriteGlobalData(
                   SAVESTRING,
-                  this.storedID ?? new GiantCropFertilizerIDStorage(GiantCropFertilizerID));
+                  this.storedID ?? new GiantCropFertilizerIDStorage(GiantCropFertilizerID)))
+                .ContinueWith(t =>
+                {
+                    if (t.IsCompletedSuccessfully)
+                    {
+                        this.Helper.Events.GameLoop.Saved -= this.OnSaved;
+                    }
+                    else
+                    {
+                        this.Monitor.Log($"Failed to save ids: {t.Status} - {t.Exception}", LogLevel.Error);
+                    }
+                });
         }
     }
 
@@ -247,6 +257,9 @@ internal sealed class ModEntry : Mod
             ModMonitor.Log("No need to fix IDs, nothing has changed.");
             return;
         }
+
+        this.Helper.Events.GameLoop.Saved -= this.OnSaved;
+        this.Helper.Events.GameLoop.Saved += this.OnSaved;
 
         Utility.ForAllLocations((GameLocation loc) =>
         {

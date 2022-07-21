@@ -67,6 +67,7 @@ Additionally, fertilizers may be found by breaking barrels in the mines, while p
 * [Dynamic Game Assets](https://www.nexusmods.com/stardewvalley/mods/9365) - fertilizers from this mod may or may not affect DGA crops. Still trying to figure out why. (DGA fruit trees are supported.)
 * [Lookup Anything](https://www.nexusmods.com/stardewvalley/mods/541) will only show these fertilizers as a possible output of the Bone Mill if PFM is installed. The bone mill will produce these fertilizers anyways. Otherwise fine.
 * [Fish Wells](https://www.nexusmods.com/stardewvalley/mods/7651) do not work with Domesticated Fish Food, as they do not preserve mod data. The remaining fertilizers should work, and that mod has settings that let you adjust the fish spawn time.
+* [Deluxe Grabber Redux](https://github.com/ferdaber/sdv-mods/tree/master/DeluxeGrabberRedux), as they've re-implemented most of the relevant code. Effects from these fertilizers won't show up anything gathered by a deluxe grabber until I get around to implementing support here. That might take...a while, not going to lie.
 * No mod will include the Fruit Tree Fertilizers while calculating the age of fruit trees. You'll just see the days required decrement by two occasionally.
 
 **Reporting an incompatibility**

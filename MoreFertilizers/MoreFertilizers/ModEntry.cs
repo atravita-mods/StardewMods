@@ -366,28 +366,27 @@ internal sealed class ModEntry : Mod
     /// <param name="e">Event arguments.</param>
     private void OnSaving(object? sender, SavingEventArgs e)
     {
-        if (!Context.IsMainPlayer)
+        if (Context.IsMainPlayer)
         {
-            return;
+            // TODO: This should be doable with expression trees in a less dumb way.
+            if (storedIDs is null)
+            {
+                storedIDs = new();
+                storedIDs.FruitTreeFertilizerID = FruitTreeFertilizerID;
+                storedIDs.DeluxeFruitTreeFertilizerID = DeluxeFruitTreeFertilizerID;
+                storedIDs.FishFoodID = FishFoodID;
+                storedIDs.DeluxeFishFoodID = DeluxeFishFoodID;
+                storedIDs.DomesticatedFishFoodID = DomesticatedFishFoodID;
+                storedIDs.PaddyFertilizerID = PaddyCropFertilizerID;
+                storedIDs.LuckyFertilizerID = LuckyFertilizerID;
+                storedIDs.BountifulFertilizerID = BountifulFertilizerID;
+                storedIDs.JojaFertilizerID = JojaFertilizerID;
+                storedIDs.DeluxeJojaFertilizerID = DeluxeJojaFertilizerID;
+                storedIDs.OrganicFertilizerID = OrganicFertilizerID;
+            }
+            this.Helper.Data.WriteSaveData(SavedIDKey, storedIDs);
         }
-
-        // TODO: This should be doable with expression trees in a less dumb way.
-        if (storedIDs is null)
-        {
-            storedIDs = new();
-            storedIDs.FruitTreeFertilizerID = FruitTreeFertilizerID;
-            storedIDs.DeluxeFruitTreeFertilizerID = DeluxeFruitTreeFertilizerID;
-            storedIDs.FishFoodID = FishFoodID;
-            storedIDs.DeluxeFishFoodID = DeluxeFishFoodID;
-            storedIDs.DomesticatedFishFoodID = DomesticatedFishFoodID;
-            storedIDs.PaddyFertilizerID = PaddyCropFertilizerID;
-            storedIDs.LuckyFertilizerID = LuckyFertilizerID;
-            storedIDs.BountifulFertilizerID = BountifulFertilizerID;
-            storedIDs.JojaFertilizerID = JojaFertilizerID;
-            storedIDs.DeluxeJojaFertilizerID = DeluxeJojaFertilizerID;
-            storedIDs.OrganicFertilizerID = OrganicFertilizerID;
-        }
-        this.Helper.Data.WriteSaveData(SavedIDKey, storedIDs);
+        this.Helper.Events.GameLoop.Saving -= this.OnSaving;
     }
 
     /// <summary>
@@ -487,7 +486,6 @@ internal sealed class ModEntry : Mod
 
         // Only register for events if JA pack loading was successful.
         this.Helper.Events.GameLoop.SaveLoaded += this.OnSaveLoaded;
-        this.Helper.Events.GameLoop.Saving += this.OnSaving;
         this.Helper.Events.GameLoop.ReturnedToTitle += this.OnReturnedToTitle;
 
         this.Helper.Events.Multiplayer.ModMessageReceived += this.Multiplayer_ModMessageReceived;
@@ -716,6 +714,9 @@ internal sealed class ModEntry : Mod
             ModMonitor.Log("No need to fix IDs, nothing has changed.");
             return;
         }
+
+        this.Helper.Events.GameLoop.Saving -= this.OnSaving;
+        this.Helper.Events.GameLoop.Saving += this.OnSaving;
 
         Utility.ForAllLocations((GameLocation loc) =>
         {

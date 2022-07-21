@@ -4,9 +4,10 @@ using AtraShared.Utils.HarmonyHelper;
 using Microsoft.Xna.Framework;
 
 namespace AtraCore.HarmonyPatches.DrawPrismaticPatches;
+
 internal static class DrawPrismaticExtensions
 {
-    internal static void AdjustUtilityTextColor(ILHelper helper)
+    internal static void AdjustUtilityTextColor(this ILHelper helper)
     {
         helper.ForEachMatch(
             new CodeInstructionWrapper[]

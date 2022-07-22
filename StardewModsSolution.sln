@@ -89,7 +89,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TapGiantCrops", "TapGiantCr
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TapGiantCropsAutomateBridge", "TapGiantCropsAutomateBridge\TapGiantCropsAutomateBridge.csproj", "{C0414845-029D-4179-A4DE-BF002AACC8B3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SleepInWedding.cs", "SleepInWedding.cs\SleepInWedding.cs.csproj", "{4555D4DC-3CF6-418C-B500-4D06C40A43D1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SleepInWedding", "SleepInWedding\SleepInWedding.csproj", "{804B0BC3-6A50-485A-B648-52AC96077F0E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -229,10 +229,10 @@ Global
 		{C0414845-029D-4179-A4DE-BF002AACC8B3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C0414845-029D-4179-A4DE-BF002AACC8B3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C0414845-029D-4179-A4DE-BF002AACC8B3}.Release|Any CPU.Build.0 = Release|Any CPU
-		{4555D4DC-3CF6-418C-B500-4D06C40A43D1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{4555D4DC-3CF6-418C-B500-4D06C40A43D1}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{4555D4DC-3CF6-418C-B500-4D06C40A43D1}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{4555D4DC-3CF6-418C-B500-4D06C40A43D1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{804B0BC3-6A50-485A-B648-52AC96077F0E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{804B0BC3-6A50-485A-B648-52AC96077F0E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{804B0BC3-6A50-485A-B648-52AC96077F0E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{804B0BC3-6A50-485A-B648-52AC96077F0E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

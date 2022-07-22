@@ -14,7 +14,6 @@ namespace GingerIslandMainlandAdjustments.Niceties;
 /// <summary>
 /// Class that handles patches against GameLocation...to handle the phone.
 /// </summary>
-[HarmonyPatch(typeof(GameLocation))]
 internal static class PhoneHandler
 {
     /// <summary>
@@ -25,7 +24,7 @@ internal static class PhoneHandler
     {
         if (Globals.ModRegistry.IsLoaded("Becks723.PhoneTravelingCart"))
         {
-            var type = AccessTools.TypeByName("PhoneTravelingCart.Framework.Game1Patcher");
+            var type = AccessTools.TypeByName("PhoneTravelingCart.Framework.Patchers.Game1Patcher");
             var method = AccessTools.Method(type, "Game1_ShowTelephoneMenu_Prefix");
             if (method is null)
             {
@@ -58,6 +57,8 @@ internal static class PhoneHandler
         }
     }
 
+    [HarmonyPriority(Priority.Low)]
+    [HarmonyPatch(typeof(Game1), nameof(Game1.ShowTelephoneMenu))]
     [SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1116:Split parameters should start on line after declaration", Justification = "Reviewed.")]
     private static IEnumerable<CodeInstruction>? Transpiler(IEnumerable<CodeInstruction> instructions, ILGenerator gen, MethodBase original)
     {
@@ -81,7 +82,7 @@ internal static class PhoneHandler
                 new(OpCodes.Call, typeof(PhoneHandler).GetCachedMethod(nameof(AdjustQuestionDialogue), ReflectionCache.FlagTypes.StaticFlags)),
             }, withLabels: labelsToMove);
 
-            helper.Print();
+            // helper.Print();
             return helper.Render();
         }
         catch (Exception ex)
@@ -99,7 +100,7 @@ internal static class PhoneHandler
     /// <param name="questionAndAnswer">questionAndAnswer.</param>
     /// <param name="__result">Result.</param>
     [HarmonyPostfix]
-    [HarmonyPatch(nameof(GameLocation.answerDialogueAction), new Type[] { typeof(string), typeof(string[]) })]
+    [HarmonyPatch(typeof(GameLocation), nameof(GameLocation.answerDialogueAction), new Type[] { typeof(string), typeof(string[]) })]
     [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Harmony convention")]
     private static void PostfixAnswerDialogueAction(GameLocation __instance, string questionAndAnswer, ref bool __result)
     {

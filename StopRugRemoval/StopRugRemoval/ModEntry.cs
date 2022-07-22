@@ -15,6 +15,7 @@ using StopRugRemoval.Configuration;
 using StopRugRemoval.HarmonyPatches;
 using StopRugRemoval.HarmonyPatches.Confirmations;
 using StopRugRemoval.HarmonyPatches.Niceties;
+using StopRugRemoval.HarmonyPatches.Niceties.PhoneTiming;
 using StopRugRemoval.HarmonyPatches.Volcano;
 using AtraUtils = AtraShared.Utils.Utils;
 
@@ -190,6 +191,11 @@ internal sealed class ModEntry : Mod
             {
                 ConfirmWarp.ApplyWandPatches(harmony);
             }
+            if (this.Helper.ModRegistry.IsLoaded("Becks723.PhoneTravelingCart"))
+            {
+                this.Monitor.Log("Phone Traveling Cart found, patching for compat", LogLevel.Info);
+                ScaleDialing.ApplyPatches(harmony);
+            }
         }
         catch (Exception ex)
         {
@@ -345,6 +351,10 @@ internal sealed class ModEntry : Mod
             else if (property.PropertyType == typeof(KeybindList))
             {
                 GMCM.AddKeybindList(property, GetConfig);
+            }
+            else if (property.PropertyType == typeof(float))
+            {
+                GMCM.AddFloatOption(property, GetConfig);
             }
         }
 

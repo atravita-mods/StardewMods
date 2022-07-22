@@ -64,8 +64,8 @@ public sealed class CanPlaceHandler : IMoreFertilizersAPI
             return !tree.modData.ContainsKey(FruitTreeFertilizer);
         }
 
-        if (loc.canFishHere() && loc.doesTileHaveProperty((int)tile.X, (int)tile.Y, "Water", "Back") is not null
-            && (obj.ParentSheetIndex == ModEntry.FishFoodID || obj.ParentSheetIndex == ModEntry.DeluxeFishFoodID))
+        if ((obj.ParentSheetIndex == ModEntry.FishFoodID || obj.ParentSheetIndex == ModEntry.DeluxeFishFoodID)
+            && loc.canFishHere() && loc.doesTileHaveProperty((int)tile.X, (int)tile.Y, "Water", "Back") is not null)
         {
             return !loc.modData.ContainsKey(FishFood);
         }

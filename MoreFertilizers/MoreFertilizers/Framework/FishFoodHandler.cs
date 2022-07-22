@@ -103,7 +103,7 @@ internal static class FishFoodHandler
 
         Task broadcast = Task.Run(() => BroadcastHandler(multiplayer));
 
-        Task write = Task.Run(() => helper.WriteSaveData(FISHFOODSAVESTRING, newHandler));
+        helper.WriteSaveData(FISHFOODSAVESTRING, newHandler);
 
         Utility.ForAllLocations((GameLocation loc) =>
         {
@@ -114,7 +114,7 @@ internal static class FishFoodHandler
             }
         });
 
-        Task.WaitAll(broadcast, write);
+        broadcast.Wait();
     }
 
     /// <summary>

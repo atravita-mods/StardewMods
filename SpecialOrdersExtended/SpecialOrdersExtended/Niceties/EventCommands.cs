@@ -10,34 +10,59 @@ namespace SpecialOrdersExtended.Niceties;
 [HarmonyPatch(typeof(Event))]
 internal static class EventCommands
 {
-    private static void AddSpecialOrder(Event @event, GameLocation location, GameTime time, string[] split)
+    /// <summary>
+    /// The name for the event command to add a special order.
+    /// </summary>
+    internal const string ADD_SPECIAL_ORDER = "atravita_addSpecialOrder";
+
+    /// <summary>
+    /// Adds aa special order in an event coommand.
+    /// </summary>
+    /// <param name="event">The event instance.</param>
+    /// <param name="location">GameLocation.</param>
+    /// <param name="time">time.</param>
+    /// <param name="split">evvent command, split.</param>
+    /// <remarks>This call pattern is required to register events with spacecore.</remarks>
+    internal static void AddSpecialOrder(Event @event, GameLocation location, GameTime time, string[] split)
     {
-        try
+        if (split.Length == 2)
         {
-            SpecialOrder order = SpecialOrder.GetSpecialOrder(split[1], Game1.random.Next());
-            Game1.player.team.specialOrders.Add(order);
-            MultiplayerHelpers.GetMultiplayer().globalChatInfoMessage("AcceptedSpecialOrder", Game1.player.Name, order.GetName());
+            try
+            {
+                SpecialOrder order = SpecialOrder.GetSpecialOrder(split[1], Game1.random.Next());
+                Game1.player.team.specialOrders.Add(order);
+                MultiplayerHelpers.GetMultiplayer().globalChatInfoMessage("AcceptedSpecialOrder", Game1.player.Name, order.GetName());
+            }
+            catch (Exception ex)
+            {
+                ModEntry.ModMonitor.Log($"Mod failed while attempting to adding a special order:\n\n{ex}", LogLevel.Error);
+            }
         }
-        catch (Exception ex)
+        else
         {
-            ModEntry.ModMonitor.Log($"Mod failed while attempting to adding a special order:\n\n{ex}", LogLevel.Error);
+            ModEntry.ModMonitor.Log($"Command {ADD_SPECIAL_ORDER} expects a single second argument, the internal name of the event", LogLevel.Warn);
         }
 
         @event.CurrentCommand++;
         @event.checkForNextCommand(location, time);
     }
 
-    [HarmonyPrefix]
-    [HarmonyPriority(Priority.VeryHigh)] // Need a high priority to slide in before spacecore, which has an unconditional prefix false.
-    [HarmonyPatch(nameof(Event.tryEventCommand))]
+    /// <summary>
+    /// Prefixes the TryGetCommand function to add in our event command.
+    /// </summary>
+    /// <param name="__instance">event.</param>
+    /// <param name="location">location the event is at.</param>
+    /// <param name="time">game time.</param>
+    /// <param name="split">the event command, split.</param>
+    /// <returns>True to continue to original function, false otherwise.</returns>
     [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Harmony convention.")]
-    private static bool PrefixTryGetCommand(Event __instance, GameLocation location, GameTime time, string[] split)
+    internal static bool PrefixTryGetCommand(Event __instance, GameLocation location, GameTime time, string[] split)
     {
-        if (split.Length < 2)
+        if (split.Length != 2)
         {
             return true;
         }
-        else if (split[0].Equals("atravita_addSpecialOrder", StringComparison.OrdinalIgnoreCase))
+        else if (split[0].Equals(ADD_SPECIAL_ORDER, StringComparison.Ordinal))
         {
             AddSpecialOrder(__instance, location, time, split);
             return false;

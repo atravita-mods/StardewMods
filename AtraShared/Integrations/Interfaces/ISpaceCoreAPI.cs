@@ -27,6 +27,8 @@ SOFTWARE.
  *
  * *******************************************/
 
+using System.Reflection;
+
 namespace AtraShared.Integrations.Interfaces;
 
 /// <summary>
@@ -58,4 +60,23 @@ public interface ISpaceCoreAPI
     /// <exception cref="NullReferenceException">Search for skill failed, likely skill not found.</exception>
     /// <returns>integer profession ID.</returns>
     int GetProfessionId(string skill, string profession);
+
+    /// <summary>
+    /// Adds an event command.
+    /// </summary>
+    /// <param name="command">The string command name.</param>
+    /// <param name="info">The MethodInfo to run. Must take (Event, GameLocation, GameTime, string[]).</param>
+    void AddEventCommand(string command, MethodInfo info);
+}
+
+/// <summary>
+/// More complete spacecore API.
+/// </summary>
+public interface ICompleteSpaceCoreAPI : ISpaceCoreAPI
+{
+    /// Must have [XmlType("Mods_SOMETHINGHERE")] attribute (required to start with "Mods_")
+    void RegisterSerializerType(Type type);
+
+    void RegisterCustomProperty(Type declaringType, string name, Type propType, MethodInfo getter, MethodInfo setter);
+
 }

@@ -9,6 +9,7 @@
 
   <PropertyGroup>
     <Version>0.1.0</Version>
+    <UpdateKeys>-1</UpdateKeys>
   </PropertyGroup>
 
   <ItemGroup>
@@ -19,6 +20,12 @@
   <ItemGroup>
     <ProjectReference Include="..\AtraCore\AtraCore.csproj" private="false" />
     <ProjectReference Include="..\Pintail\Pintail\Pintail.csproj" private="false" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="SpaceCore">
+      <HintPath>$(GamePath)\Mods\SpaceCore\SpaceCore.dll</HintPath>
+    </Reference>
   </ItemGroup>
 
   <ItemGroup>

@@ -5,13 +5,17 @@
   "Description": "Give rings quality.",
   "UniqueID": "atravita.QualityRings",
   "EntryDll": "QualityRings.dll",
-  "UpdateKeys": [
-    "Nexus:9921"
-  ],
   "MinimumApiVersion": "3.15",
   "Dependencies": [
     {
       "UniqueID": "atravita.AtraCore"
+    },
+    {
+      "UniqueID": "spacechase0.SpaceCore",
+      "MinimumVersion": "1.5.10"
     }
+  ],
+  "UpdateKeys": [
+    "-1"
   ]
 }

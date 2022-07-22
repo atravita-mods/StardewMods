@@ -1,4 +1,6 @@
-﻿using AtraCore.Framework.ReflectionManager;
+﻿using System.Reflection;
+using AtraBase.Toolkit.Reflection;
+using AtraCore.Framework.ReflectionManager;
 using AtraCore.Utilities;
 using AtraShared.ConstantsAndEnums;
 using AtraShared.Integrations;
@@ -7,6 +9,7 @@ using AtraShared.MigrationManager;
 using AtraShared.Utils.Extensions;
 using HarmonyLib;
 using SpecialOrdersExtended.Managers;
+using SpecialOrdersExtended.Niceties;
 using StardewModdingAPI.Events;
 using StardewValley.GameData;
 using AtraUtils = AtraShared.Utils.Utils;
@@ -64,8 +67,6 @@ internal sealed class ModEntry : Mod
         DataHelper = helper.Data;
 
         Config = AtraUtils.GetConfigOrDefault<ModConfig>(helper, this.Monitor);
-
-        this.ApplyPatches(new Harmony(this.ModManifest.UniqueID));
 
         // Register console commands.
         helper.ConsoleCommands.Add(
@@ -136,9 +137,23 @@ internal sealed class ModEntry : Mod
     /// <remarks>Used to bind APIs and register CP tokens.</remarks>
     private void OnGameLaunched(object? sender, GameLaunchedEventArgs e)
     {
+        Harmony? harmony = new(this.ModManifest.UniqueID);
+        this.ApplyPatches(harmony);
+
         // Bind Spacecore API
         IntegrationHelper helper = new(this.Monitor, this.Helper.Translation, this.Helper.ModRegistry, LogLevel.Debug);
-        helper.TryGetAPI("spacechase0.SpaceCore", "1.5.10", out spaceCoreAPI);
+        if (helper.TryGetAPI("spacechase0.SpaceCore", "1.5.10", out spaceCoreAPI))
+        {
+            MethodInfo eventcommand = typeof(EventCommands).StaticMethodNamed(nameof(EventCommands.AddSpecialOrder));
+            spaceCoreAPI.AddEventCommand(EventCommands.ADD_SPECIAL_ORDER, eventcommand);
+        }
+        else
+        {
+            this.Monitor.Log("SpaceCore not detected, handling event commands myself", LogLevel.Info);
+            harmony.Patch(
+                original: typeof(Event).GetCachedMethod(nameof(Event.tryEventCommand), ReflectionCache.FlagTypes.InstanceFlags),
+                prefix: new HarmonyMethod(typeof(EventCommands), nameof(EventCommands.PrefixTryGetCommand)));
+        }
 
         if (helper.TryGetAPI("Pathoschild.ContentPatcher", "1.20.0", out IContentPatcherAPI? api))
         {

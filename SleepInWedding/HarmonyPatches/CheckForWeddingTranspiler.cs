@@ -3,49 +3,21 @@ using System.Reflection.Emit;
 using System.Runtime.CompilerServices;
 using AtraBase.Toolkit;
 using AtraCore.Framework.ReflectionManager;
-using AtraShared.Integrations;
-using AtraShared.Integrations.GMCMAttributes;
-using AtraShared.Utils.Extensions;
 using AtraShared.Utils.Extensions;
 using AtraShared.Utils.HarmonyHelper;
 using HarmonyLib;
-using StardewModdingAPI.Events;
 using StardewValley.Locations;
 
-namespace SleepInWedding.cs;
+namespace SleepInWedding.HarmonyPatches;
 
 /// <summary>
-/// The config class for this mod.
+/// Adds an additional check for the should-a-wedding-happen? check.
 /// </summary>
-internal sealed class ModConfig
+internal static class CheckForWeddingTranspiler
 {
-    /// <summary>
-    /// Gets or sets when the wedding should begin.
-    /// </summary>
-    [GMCMInterval(10)]
-    [GMCMRange(600, 2600)]
-    public int WeddingTime { get; set; } = 800;
-}
-
-/// <inheritdoc />
-[HarmonyPatch(typeof(GameLocation))]
-internal sealed class ModEntry : Mod
-{
-    internal static ModConfig Config { get; private set; } = null!;
-
-    internal static IMonitor ModMonitor { get; private set; } = null!;
-
-    public override void Entry(IModHelper helper)
-    {
-        I18n.Init(helper.Translation);
-        ModMonitor = this.Monitor;
-
-        helper.Events.GameLoop.GameLaunched += this.OnGameLaunched;
-        helper.Events.GameLoop.SaveLoaded += this.OnSaveLoad;
-    }
 
     [MethodImpl(TKConstants.Hot)]
-    private static int GetWeddingTime() => Config.WeddingTime;
+    private static int GetWeddingTime() => ModEntry.Config.WeddingTime;
 
     [HarmonyPatch(nameof(GameLocation.checkForEvents))]
     [SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1116:Split parameters should start on line after declaration", Justification = "Reviewed.")]
@@ -53,7 +25,7 @@ internal sealed class ModEntry : Mod
     {
         try
         {
-            ILHelper helper = new(original, instructions, ModMonitor, gen);
+            ILHelper helper = new(original, instructions, ModEntry.ModMonitor, gen);
             helper.FindNext(new CodeInstructionWrapper[]
             {
                 new(OpCodes.Ldsfld, typeof(Game1).GetCachedField(nameof(Game1.weddingsToday), ReflectionCache.FlagTypes.StaticFlags)),
@@ -89,25 +61,4 @@ internal sealed class ModEntry : Mod
         }
         return null;
     }
-
-    private void OnGameLaunched(object? sender, GameLaunchedEventArgs e)
-    {
-        GMCMHelper helper = new(this.Monitor, this.Helper.Translation, this.Helper.ModRegistry, this.ModManifest);
-        if (helper.TryGetAPI())
-        {
-            helper.Register(
-                reset: static () => Config = new(),
-                save: () => this.Helper.AsyncWriteConfig(this.Monitor, Config))
-            .GenerateDefaultGMCM(static () => Config);
-        }
-    }
-
-    /// <summary>
-    /// calls queueWeddingsForToday just after save is loaded.
-    /// Game doesn't seem to call it.
-    /// </summary>
-    /// <param name="sender">SMAPI.</param>
-    /// <param name="e">Event args.</param>
-    private void OnSaveLoad(object? sender, SaveLoadedEventArgs e)
-        => Game1.queueWeddingsForToday();
 }

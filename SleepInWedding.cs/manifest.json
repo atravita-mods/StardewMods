@@ -1,0 +1,15 @@
+{
+  "Name": "Sleep In Wedding",
+  "Author": "atravita",
+  "Version": "0.1.0",
+  "Description": "Makes the wedding not happen at 6AM.",
+  "UniqueID": "atravita.SleepInWedding",
+  "EntryDll": "SleepInWedding.dll",
+  "UpdateKeys": [],
+  "MinimumApiVersion": "3.15",
+  "Dependencies": [
+    {
+      "UniqueID": "atravita.AtraCore"
+    }
+  ]
+}

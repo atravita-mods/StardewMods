@@ -1,4 +1,10 @@
-﻿using GingerIslandMainlandAdjustments.AssetManagers;
+﻿using System.Reflection;
+using System.Reflection.Emit;
+using AtraCore.Framework.ReflectionManager;
+using AtraShared.ConstantsAndEnums;
+using AtraShared.Utils.Extensions;
+using AtraShared.Utils.HarmonyHelper;
+using GingerIslandMainlandAdjustments.AssetManagers;
 using GingerIslandMainlandAdjustments.MultiplayerHandler;
 using HarmonyLib;
 using Microsoft.Xna.Framework.Graphics;
@@ -12,23 +18,78 @@ namespace GingerIslandMainlandAdjustments.Niceties;
 internal static class PhoneHandler
 {
     /// <summary>
-    /// Prefix that lets me inject Pam into the phone menu.
+    /// Applies patches against Phone Traveling Cart.
     /// </summary>
-    /// <param name="answerChoices">Responses.</param>
-    /// <param name="dialogKey">Question key, used to keep track of which question set.</param>
-    [HarmonyPrefix]
-    [HarmonyPatch(nameof(GameLocation.createQuestionDialogue), new Type[] { typeof(string), typeof(Response[]), typeof(string) })]
-    private static void PrefixQuestionDialogue(ref Response[] answerChoices, string dialogKey)
+    /// <param name="harmony">Harmony instance.</param>
+    internal static void ApplyPatches(Harmony harmony)
     {
-        if (dialogKey.Equals("telephone", StringComparison.OrdinalIgnoreCase)
-            && Game1.player.mailReceived.Contains(AssetEditor.PAMMAILKEY)
-            && Game1.getCharacterFromName("Pam") is NPC pam // omit if Pam inexplicably vanished.
-            && answerChoices.Any((Response r) => r.responseKey.Equals("Carpenter", StringComparison.OrdinalIgnoreCase)))
+        if (Globals.ModRegistry.IsLoaded("Becks723.PhoneTravelingCart"))
         {
-            List<Response> responseList = new() { new Response("PamBus", pam.displayName) };
-            responseList.AddRange(answerChoices);
-            answerChoices = responseList.ToArray();
+            var type = AccessTools.TypeByName("PhoneTravelingCart.Framework.Game1Patcher");
+            var method = AccessTools.Method(type, "Game1_ShowTelephoneMenu_Prefix");
+            if (method is null)
+            {
+                Globals.ModMonitor.Log($"Patching Phone Traveling Cart for compat seems to have failed, this mod's telephone calls may not work", LogLevel.Error);
+                return;
+            }
+            try
+            {
+                harmony.Patch(
+                    original: method,
+                    transpiler: new HarmonyMethod(typeof(PhoneHandler), nameof(Transpiler)));
+            }
+            catch (Exception ex)
+            {
+                Globals.ModMonitor.Log(string.Format(ErrorMessageConsts.HARMONYCRASH, ex), LogLevel.Error);
+            }
         }
+    }
+
+    /// <summary>
+    /// Injects Pam into the phone menu if necessary.
+    /// </summary>
+    private static void AdjustQuestionDialogue(List<Response> answerChoices)
+    {
+        // omit if Pam inexplicably vanished.
+        if (Game1.player.mailReceived.Contains(AssetEditor.PAMMAILKEY)
+            && Game1.getCharacterFromName("Pam") is NPC pam)
+        {
+            answerChoices.Add(new Response("PamBus", pam.displayName));
+        }
+    }
+
+    [SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1116:Split parameters should start on line after declaration", Justification = "Reviewed.")]
+    private static IEnumerable<CodeInstruction>? Transpiler(IEnumerable<CodeInstruction> instructions, ILGenerator gen, MethodBase original)
+    {
+        try
+        {
+            ILHelper helper = new(original, instructions, Globals.ModMonitor, gen);
+            helper.FindNext(new CodeInstructionWrapper[]
+            {
+                new(OpCodes.Newobj, typeof(List<Response>).GetCachedConstructor(ReflectionCache.FlagTypes.InstanceFlags)),
+                new(SpecialCodeInstructionCases.StLoc),
+            })
+            .Advance(1);
+
+            CodeInstruction? ldloc = helper.CurrentInstruction.ToLdLoc();
+
+            helper.Advance(1)
+            .GetLabels(out var labelsToMove)
+            .Insert(new CodeInstruction[]
+            {
+                ldloc,
+                new(OpCodes.Call, typeof(PhoneHandler).GetCachedMethod(nameof(AdjustQuestionDialogue), ReflectionCache.FlagTypes.StaticFlags)),
+            }, withLabels: labelsToMove);
+
+            helper.Print();
+            return helper.Render();
+        }
+        catch (Exception ex)
+        {
+            Globals.ModMonitor.Log($"Mod crashed while transpiling Hoedirt.Draw:\n\n{ex}", LogLevel.Error);
+            original?.Snitch(Globals.ModMonitor);
+        }
+        return null;
     }
 
     /// <summary>

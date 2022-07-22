@@ -9,6 +9,7 @@
 
   <PropertyGroup>
     <Version>0.2.0</Version>
+    <UpdateKeys>Nexus:11837</UpdateKeys>
   </PropertyGroup>
 
   <PropertyGroup>

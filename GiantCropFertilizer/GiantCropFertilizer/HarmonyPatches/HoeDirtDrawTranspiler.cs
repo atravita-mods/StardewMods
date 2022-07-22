@@ -25,7 +25,7 @@ internal static class HoeDirtDrawTranspiler
     internal static void ApplyPatches(Harmony harmony)
     {
         harmony.Patch(
-            original: typeof(HoeDirt).InstanceMethodNamed(nameof(HoeDirt.DrawOptimized)),
+            original: typeof(HoeDirt).GetCachedMethod(nameof(HoeDirt.DrawOptimized), ReflectionCache.FlagTypes.InstanceFlags),
             transpiler: new HarmonyMethod(typeof(HoeDirtDrawTranspiler).StaticMethodNamed(nameof(HoeDirtDrawTranspiler.Transpiler))));
     }
 

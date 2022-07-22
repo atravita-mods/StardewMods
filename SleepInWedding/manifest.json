@@ -1,7 +1,7 @@
 {
   "Name": "Sleep In Wedding",
   "Author": "atravita",
-  "Version": "0.1.0-Debug",
+  "Version": "0.1.0",
   "Description": "Makes the wedding not happen at 6AM.",
   "UniqueID": "atravita.SleepInWedding",
   "EntryDll": "SleepInWedding.dll",

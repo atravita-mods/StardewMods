@@ -9,7 +9,7 @@ internal sealed class ModEntry : Mod
 {
     private static IApi? spacecoreAPI;
 
-    internal static IApi? SpaceCoreAPI { get; }
+    internal static IApi? SpaceCoreAPI => spacecoreAPI;
 
     /// <inheritdoc />
     public override void Entry(IModHelper helper)

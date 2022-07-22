@@ -1,9 +1,10 @@
 ﻿using AtraShared.Integrations.Interfaces.Automate;
 using AtraShared.Utils.Extensions;
 using Microsoft.Xna.Framework;
+using StardewValley;
 using StardewValley.TerrainFeatures;
 
-namespace TapGiantCrops.Integrations.Automate;
+namespace TapGiantCropsAutomateBridge.Framework;
 
 /// <summary>
 /// Tracks a tapped giant crop.
@@ -36,7 +37,7 @@ public class TappedGiantCrop : IMachine
 
     public ITrackedStack? GetOutput()
     {
-        ModEntry.ModMonitor.DebugOnlyLog($"Automated requested output of giant crop at {this.Location} - {this.crop.tile}");
+        AutomateBridge.ModMonitor.DebugOnlyLog($"Automated requested output of giant crop at {this.Location} - {this.crop.tile}");
         return new TrackedStack(
             this.tapper.heldObject.Value,
             onEmpty: () =>
@@ -48,7 +49,7 @@ public class TappedGiantCrop : IMachine
 
     public MachineState GetState()
     {
-        ModEntry.ModMonitor.DebugOnlyLog($"Automate requested state of giant crop at {this.Location} - {this.crop.tile} - {this.tapper.heldObject.Value?.ParentSheetIndex ?? -1}");
+        Entry.ModMonitor.DebugOnlyLog($"Automate requested state of giant crop at {this.Location} - {this.crop.tile} - {this.tapper.heldObject.Value?.ParentSheetIndex ?? -1}");
         if (this.tapper.heldObject.Value is null)
         {
             return MachineState.Empty;

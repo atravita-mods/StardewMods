@@ -5,7 +5,8 @@ using StardewValley.Buildings;
 using StardewValley.Locations;
 using StardewValley.TerrainFeatures;
 
-namespace TapGiantCrops.Integrations.Automate;
+namespace TapGiantCropsAutomateBridge.Framework;
+
 
 /// <summary>
 /// The automation factory for tapped giant crops.

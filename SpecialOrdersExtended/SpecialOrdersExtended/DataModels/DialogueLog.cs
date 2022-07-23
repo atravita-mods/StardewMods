@@ -56,11 +56,11 @@ public class DialogueLog : AbstractDataModel
     /// <returns>A dialogueLog object.</returns>
     /// <exception cref="NotImplementedException">Not implemented, do not call.</exception>
     /// <remarks>NOT IMPLEMENTED YET.</remarks>
-    internal static DialogueLog LoadTempIfAvailable(long multiplayerID)
+    internal static DialogueLog? LoadTempIfAvailable(long multiplayerID)
     {
         if (!Context.IsWorldReady || Constants.SaveFolderName is null)
         {
-            throw new SaveNotLoadedError();
+            ASThrowHelper.ThrowSaveNotLoaded();
         }
         DialogueLog? log = ModEntry.DataHelper.ReadGlobalData<DialogueLog>($"{Game1.uniqueIDForThisGame}{IDENTIFIER}{multiplayerID:X8}_temp_{SDate.Now().DaysSinceStart}");
         if (log is not null)
@@ -70,10 +70,7 @@ public class DialogueLog : AbstractDataModel
             log.MultiplayerID = multiplayerID;
             return log;
         }
-        log = ModEntry.DataHelper.ReadGlobalData<DialogueLog>($"{Game1.uniqueIDForThisGame}{IDENTIFIER}{multiplayerID:X8}")
-            ?? new DialogueLog(Game1.uniqueIDForThisGame.ToString(), multiplayerID);
-        log.MultiplayerID = multiplayerID;
-        return log;
+        return null;
     }
 
     /// <summary>

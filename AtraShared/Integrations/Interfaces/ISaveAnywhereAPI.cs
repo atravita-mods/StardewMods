@@ -1,0 +1,18 @@
+﻿namespace AtraShared.Integrations.Interfaces;
+
+/// <summary>
+/// The API for Save Anywhere.
+/// </summary>
+/// <remarks>So. I actually grabbed this out of Solid Foundations and have no clue what any of this means.</remarks>
+public interface ISaveAnywhereApi
+{
+    event EventHandler BeforeSave;
+
+    event EventHandler AfterSave;
+
+    event EventHandler AfterLoad;
+
+    void addBeforeSaveEvent(string ID, Action BeforeSave);
+
+    void addAfterLoadEvent(string ID, Action AfterLoad);
+}

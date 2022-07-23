@@ -215,6 +215,24 @@ public static class GameLocationUtils
         }
     }
 
+    /// <summary>
+    /// Gets all the buildings.
+    /// </summary>
+    /// <returns>IEnumerable of all buildings.</returns>
+    public static IEnumerable<Building> GetBuildings()
+    {
+        foreach (GameLocation? loc in Game1.locations)
+        {
+            if (loc is BuildableGameLocation buildable)
+            {
+                foreach (Building? building in GetBuildings(buildable))
+                {
+                    yield return building;
+                }
+            }
+        }
+    }
+
     private static IEnumerable<GameLocation> YieldInteriorLocations(BuildableGameLocation loc)
     {
         foreach (Building building in loc.buildings)
@@ -230,6 +248,21 @@ public static class GameLocationUtils
                     }
                 }
             }
+        }
+    }
+
+    private static IEnumerable<Building> GetBuildings(BuildableGameLocation loc)
+    {
+        foreach (Building building in loc.buildings)
+        {
+            if (building.indoors?.Value is BuildableGameLocation buildable)
+            {
+                foreach (Building interiorBuilding in GetBuildings(buildable))
+                {
+                    yield return interiorBuilding;
+                }
+            }
+            yield return building;
         }
     }
 }

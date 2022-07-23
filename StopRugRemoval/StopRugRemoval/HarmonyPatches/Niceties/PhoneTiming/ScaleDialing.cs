@@ -8,9 +8,16 @@ using HarmonyLib;
 
 namespace StopRugRemoval.HarmonyPatches.Niceties.PhoneTiming;
 
+/// <summary>
+/// scales down the dialing sounds.
+/// </summary>
 [HarmonyPatch(typeof(GameLocation))]
 internal static class ScaleDialing
 {
+    /// <summary>
+    /// Applies patches against PhoneTravelingCart.
+    /// </summary>
+    /// <param name="harmony">Harmony instance.</param>
     internal static void ApplyPatches(Harmony harmony)
     {
         Type cart = AccessTools.TypeByName("PhoneTravelingCart.Framework.Patchers.GameLocationPatcher");
@@ -19,6 +26,10 @@ internal static class ScaleDialing
         if (method is not null)
         {
             harmony.Patch(method, transpiler: new HarmonyMethod(typeof(ScaleDialing), nameof(Transpiler)));
+        }
+        else
+        {
+            ModEntry.ModMonitor.Log("PhoneTravelingCart's playShopPhoneNumberSounds not found, integration may not work", LogLevel.Info);
         }
     }
 

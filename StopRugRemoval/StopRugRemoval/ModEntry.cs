@@ -98,8 +98,6 @@ internal sealed class ModEntry : Mod
         helper.Events.Multiplayer.PeerConnected += this.OnPlayerConnected;
 
         helper.Events.Specialized.LoadStageChanged += this.OnLoadStageChanged;
-
-        this.ApplyPatches(new Harmony(this.ModManifest.UniqueID));
     }
 
     /// <summary>
@@ -160,24 +158,6 @@ internal sealed class ModEntry : Mod
      * *************/
 
     /// <summary>
-    /// Applies and logs this mod's harmony patches.
-    /// </summary>
-    /// <param name="harmony">My harmony instance.</param>
-    private void ApplyPatches(Harmony harmony)
-    {
-        try
-        {
-            // handle patches from annotations.
-            harmony.PatchAll();
-        }
-        catch (Exception ex)
-        {
-            ModMonitor.Log(string.Format(ErrorMessageConsts.HARMONYCRASH, ex), LogLevel.Error);
-        }
-        harmony.Snitch(this.Monitor, harmony.Id, transpilersOnly: true);
-    }
-
-    /// <summary>
     /// Applies the patches that must be applied after all mods are initialized.
     /// IE - patches on other mods.
     /// </summary>
@@ -186,6 +166,7 @@ internal sealed class ModEntry : Mod
     {
         try
         {
+            harmony.PatchAll();
             FruitTreesAvoidHoe.ApplyPatches(harmony, this.Helper.ModRegistry);
             if (!this.Helper.ModRegistry.IsLoaded("DecidedlyHuman.BetterReturnScepter"))
             {
@@ -207,7 +188,7 @@ internal sealed class ModEntry : Mod
     private void OnGameLaunch(object? sender, GameLaunchedEventArgs e)
     {
         PlantGrassUnder.GetSmartBuildingBuildMode(this.Helper.ModRegistry);
-        this.ApplyLatePatches(new Harmony(this.ModManifest.UniqueID + "+latepatches"));
+        this.ApplyLatePatches(new Harmony(this.ModManifest.UniqueID));
 
         GMCM = new(this.Monitor, this.Helper.Translation, this.Helper.ModRegistry, this.ModManifest);
         if (GMCM.TryGetAPI())

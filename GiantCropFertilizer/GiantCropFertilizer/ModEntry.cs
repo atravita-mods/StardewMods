@@ -3,7 +3,9 @@ using AtraShared.ConstantsAndEnums;
 using AtraShared.Integrations;
 using AtraShared.Integrations.Interfaces;
 using AtraShared.MigrationManager;
+using AtraShared.Utils;
 using AtraShared.Utils.Extensions;
+using AtraShared.Utils.Shims;
 using GiantCropFertilizer.DataModels;
 using GiantCropFertilizer.HarmonyPatches;
 using HarmonyLib;
@@ -20,6 +22,10 @@ internal sealed class ModEntry : Mod
     private const string SAVESTRING = "SavedObjectID";
 
     private static IJsonAssetsAPI? jsonAssets;
+
+    private int oldID = -1;
+    private int newID = -1;
+    private ISolidFoundationsAPI? solidFoundationsAPI;
 
     private MigrationManager? migrator;
 
@@ -261,25 +267,44 @@ internal sealed class ModEntry : Mod
         this.Helper.Events.GameLoop.Saved -= this.OnSaved;
         this.Helper.Events.GameLoop.Saved += this.OnSaved;
 
-        Utility.ForAllLocations((GameLocation loc) =>
+        IntegrationHelper helper = new(this.Monitor, this.Helper.Translation, this.Helper.ModRegistry, LogLevel.Trace);
+        if (helper.TryGetAPI("PeacefulEnd.SolidFoundations", "1.12.1", out this.solidFoundationsAPI))
         {
-            foreach (TerrainFeature terrainfeature in loc.terrainFeatures.Values)
-            {
-                if (terrainfeature is HoeDirt dirt && dirt.fertilizer.Value == storedID)
-                {
-                    dirt.fertilizer.Value = newID;
-                }
-            }
-            foreach (SObject obj in loc.Objects.Values)
-            {
-                if (obj is IndoorPot pot && pot.hoeDirt?.Value?.fertilizer?.Value == storedID)
-                {
-                    pot.hoeDirt.Value.fertilizer.Value = newID;
-                }
-            }
-        });
+            this.oldID = storedID;
+            this.newID = newID;
+            this.solidFoundationsAPI.AfterBuildingRestoration += this.AfterSFBuildingRestore;
+        }
+
+        Utility.ForAllLocations((GameLocation loc) => loc.FixIDsInLocation(storedID, newID));
 
         this.storedID.ID = newID;
         ModMonitor.Log($"Fixed IDs! {storedID} => {newID}");
+    }
+
+    private void AfterSFBuildingRestore(object? sender, EventArgs e)
+    {
+        // unhook event
+        this.solidFoundationsAPI!.AfterBuildingRestoration -= this.AfterSFBuildingRestore;
+        if (SolidFoundationShims.IsSFBuilding is null)
+        {
+            this.Monitor.Log("Could not get a handle on SF's building class, deshuffling code will fail!", LogLevel.Error);
+        }
+        else if (this.oldID == -1 || this.newID == -1)
+        {
+            this.Monitor.Log("IdMap was not set correctly, deshuffling code will fail.", LogLevel.Error);
+        }
+        else
+        {
+            foreach (var building in GameLocationUtils.GetBuildings())
+            {
+                if (SolidFoundationShims.IsSFBuilding?.Invoke(building) == true)
+                {
+                    building.indoors.Value?.FixIDsInLocation(this.oldID, this.newID);
+                }
+            }
+        }
+        this.oldID = -1;
+        this.newID = -1;
+        this.solidFoundationsAPI = null;
     }
 }

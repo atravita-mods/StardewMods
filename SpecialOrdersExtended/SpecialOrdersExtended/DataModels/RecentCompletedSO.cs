@@ -49,7 +49,7 @@ public class RecentCompletedSO : AbstractDataModel
     /// </summary>
     /// <returns>The Recent Completed SO log.</returns>
     /// <exception cref="SaveNotLoadedError">Save not loaded when expected.</exception>
-    internal static RecentCompletedSO LoadTempIfAvailable()
+    internal static RecentCompletedSO? LoadTempIfAvailable()
     {
         if (!Context.IsWorldReady || Constants.SaveFolderName is null)
         {
@@ -62,8 +62,7 @@ public class RecentCompletedSO : AbstractDataModel
             ModEntry.DataHelper.WriteGlobalData<RecentCompletedSO>($"{Game1.uniqueIDForThisGame}{IDENTIFIER}_temp_{SDate.Now().DaysSinceStart}", null);
             return log;
         }
-        return ModEntry.DataHelper.ReadGlobalData<RecentCompletedSO>(Game1.uniqueIDForThisGame + IDENTIFIER)
-            ?? new RecentCompletedSO(Game1.uniqueIDForThisGame.ToString());
+        return null;
     }
 
     /// <summary>

@@ -21,7 +21,14 @@ internal class RecentSOManager
     /// <summary>
     /// Load the temp version of the recently completed SO log if available.
     /// </summary>
-    internal static void LoadTemp() => recentCompletedSO = RecentCompletedSO.LoadTempIfAvailable();
+    internal static void LoadTemp()
+    {
+        if (RecentCompletedSO.LoadTempIfAvailable() is RecentCompletedSO log)
+        {
+            ModEntry.ModMonitor.Log("Temp log loaded");
+            recentCompletedSO = log;
+        }
+    }
 
     /// <summary>
     /// Saves the recently completed SO log.

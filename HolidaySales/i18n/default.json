@@ -8,7 +8,7 @@
   "StoreFestivalBehavior.title": "Store Fertival Behavior",
   "StoreFestivalBehavior.description": "Should stores be closed for festivals?",
 
-  "FestivalShopBehavior.Open": "Open",
-  "FestivalShopBehavior.Closed": "Closed",
-  "FestivalShopBheavior.MapDependent": "Map Dependent",
+  "config.FestivalsShopBehavior.Open": "Open",
+  "config.FestivalsShopBehavior.Closed": "Closed",
+  "config.FestivalsShopBehavior.MapDependent": "Map Dependent",
 }

@@ -255,6 +255,7 @@ public static class GameLocationUtils
     {
         foreach (Building building in loc.buildings)
         {
+            yield return building;
             if (building.indoors?.Value is BuildableGameLocation buildable)
             {
                 foreach (Building interiorBuilding in GetBuildings(buildable))
@@ -262,7 +263,6 @@ public static class GameLocationUtils
                     yield return interiorBuilding;
                 }
             }
-            yield return building;
         }
     }
 }

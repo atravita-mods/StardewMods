@@ -43,6 +43,8 @@ internal sealed class ModEntry : Mod
         helper.Events.Multiplayer.ModMessageReceived += this.ModMessageReceived;
 
         helper.Events.Content.AssetRequested += this.OnAssetRequested;
+
+        AssetLoader.Init(helper.GameContent);
     }
 
     private void OnAssetRequested(object? sender, AssetRequestedEventArgs e)

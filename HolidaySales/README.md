@@ -1,5 +1,12 @@
 Holiday Sales
 ===========================
+![Header image](docs/shops.gif)
+
+It never really made sense to me that Pelican Town would close down when, say, Ridgeside, had a festival. By default, this mod keeps stores "in town" open when mod maps have festivals. (It also works the other way around - doors stay open on mod maps when the town has a festival.)
+
+Or keep them open during all festivals, be mean like that, I guess.
+
+Note: you still can't access the actual map of the festival before the festival time - this will prevent you from walking to Pierre's if there's a festival in Town, for example.
 
 ## Install
 
@@ -13,6 +20,10 @@ Simply delete from your Mods directory.
 
 ## Configuration
 Run SMAPI at least once with this mod installed to generate the `config.json`, or use [Generic Mod Config Menu](https://www.nexusmods.com/stardewvalley/mods/5098) to configure.
+
+* `Closed` - default vanilla behavior - stores closed on the day of a festival.
+* `Map Dependent` - stores closed if they're in the same region as a place with a festival, but stay open otherwise. Pelican Town is considered a region, otherwise any maps that start with `Custom_<ModName>_` are assumed to share a region.
+* `Open` - stores are open during festival days.
 
 ## Technical note:
 

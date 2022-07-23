@@ -6,14 +6,13 @@
   "UniqueID": "atravita.MoreFertilizers",
   "EntryDll": "MoreFertilizers.dll",
   "UpdateKeys": [
-    "Nexus:11837",
-    "GitHub:atravita-mods/MoreFertilizers"
+    "Nexus:11837"
   ],
   "MinimumApiVersion": "3.15",
   "Dependencies": [
     {
       "UniqueID": "spacechase0.JsonAssets",
-      "MinimumVersion": "1.10.7"
+      "MinimumVersion": "1.10.6"
     },
     {
       "UniqueID": "spacechase0.SpaceCore"

@@ -12,6 +12,7 @@ namespace TapGiantCrops.HarmonyPatches;
 internal static class GiantCropPatcher
 {
     [HarmonyPatch(nameof(GiantCrop.performToolAction))]
+    [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Harmony convention.")]
     private static bool Prefix(GiantCrop __instance, Tool t)
     {
         if (t.isHeavyHitter() && t is not MeleeWeapon)
@@ -22,7 +23,7 @@ internal static class GiantCropPatcher
                 {
                     for (int y = (int)__instance.tile.Y; y < (int)__instance.tile.Y + __instance.width.Value; y++)
                     {
-                        Vector2 tile = new Vector2(x, y);
+                        Vector2 tile = new(x, y);
                         if (Game1.currentLocation.objects.TryGetValue(tile, out StardewValley.Object? obj)
                             && obj.Name.Contains("Tapper", StringComparison.OrdinalIgnoreCase))
                         {

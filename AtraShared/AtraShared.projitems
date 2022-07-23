@@ -80,6 +80,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Utils\HarmonyHelper\ILHelper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Utils\HarmonyHelper\ILHelperExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Utils\Extensions\InputUtils.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Utils\Shims\DynamicGameAssetsShims.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Utils\Shims\SolidFoundationShims.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Utils\StringUtils.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Utils\Utils.cs" />

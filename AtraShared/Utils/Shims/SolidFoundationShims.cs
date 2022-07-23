@@ -6,6 +6,7 @@ namespace AtraShared.Utils.Shims;
 /// <summary>
 /// Shims for Solid Foundations.
 /// </summary>
+[SuppressMessage("StyleCop.CSharp.OrderingRules", "SA1201:Elements should appear in the correct order", Justification = "Preference.")]
 public static class SolidFoundationShims
 {
     /// <summary>
@@ -13,7 +14,7 @@ public static class SolidFoundationShims
     /// </summary>
     public static Func<object, bool>? IsSFBuilding => isSFBuilding.Value;
 
-    private static Lazy<Func<object, bool>?> isSFBuilding = new(() =>
+    private static readonly Lazy<Func<object, bool>?> isSFBuilding = new(() =>
     {
         Type sFBuilding = AccessTools.TypeByName("SolidFoundations.Framework.Models.ContentPack.GenericBuilding");
         return sFBuilding?.GetTypeIs();

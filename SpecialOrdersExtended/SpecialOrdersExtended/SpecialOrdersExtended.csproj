@@ -7,7 +7,11 @@
   </PropertyGroup>
 
   <PropertyGroup>
+    <Name>Special Orders Tags Extended</Name>
+    <Description>Extends the number of tags available for special orders</Description>
+    <UpdateKeys>Nexus:9855, ModDrop:1086743</UpdateKeys>
     <Version>1.1.0</Version>
+    <BaseManifest>..\..\cp_dependencies.json</BaseManifest>
   </PropertyGroup>
   
   <ItemGroup>

@@ -8,7 +8,11 @@
   </PropertyGroup>
 
   <PropertyGroup>
+    <Name>Tap Giant Crops</Name>
+    <Description>Allows you to tap the giant crops.</Description>
     <Version>0.1.0</Version>
+    <UpdateKeys>Nexus:13052</UpdateKeys>
+    <BaseManifest>..\base_dependencies.json</BaseManifest>
   </PropertyGroup>
   
   <ItemGroup>

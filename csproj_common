@@ -10,6 +10,8 @@
   <PropertyGroup>
     <Author>atravita</Author>
     <MinimumApiVersion>3.15</MinimumApiVersion>
+    <UniqueId>$(Author).$(AssemblyName)</UniqueId>
+    <EntryDll>$(AssemblyName).dll</EntryDll>
   </PropertyGroup>
 
   <PropertyGroup>

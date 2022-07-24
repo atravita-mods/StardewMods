@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <Import Project="..\csproj_common" />
 
   <PropertyGroup>
@@ -8,8 +8,11 @@
   </PropertyGroup>
 
   <PropertyGroup>
+    <Name>Quality Rings</Name>
     <Version>0.1.0</Version>
+    <Description>Gives rings quality.</Description>
     <UpdateKeys>-1</UpdateKeys>
+    <BaseManifest>..\spacecore_dependencies.json</BaseManifest>
   </PropertyGroup>
 
   <ItemGroup>

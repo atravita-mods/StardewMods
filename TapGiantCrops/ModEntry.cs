@@ -32,6 +32,7 @@ internal sealed class ModEntry : Mod
 
         helper.Events.GameLoop.SaveLoaded += this.OnSaveLoaded;
 
+        /*
 #if !DEBUG
         if (!Constants.ApiVersion.IsOlderThan("3.16.0"))
 #endif
@@ -44,6 +45,7 @@ internal sealed class ModEntry : Mod
             this.Monitor.Log($"Automate support not complete for now :(");
         }
 #endif
+        */
 
         this.ApplyPatches(new Harmony(this.ModManifest.UniqueID));
     }

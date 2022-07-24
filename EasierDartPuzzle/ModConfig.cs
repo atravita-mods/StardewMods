@@ -27,11 +27,11 @@ internal sealed class ModConfig
     /// <summary>
     /// Gets or sets a value indicating the minimum dart requirement.
     /// </summary>
-    [GMCMRange(8, 30)]
+    [GMCMRange(6, 30)]
     public int MinDartCount
     {
         get => this.minDartCount;
-        set => this.minDartCount = Math.Clamp(value, 8, 30);
+        set => this.minDartCount = Math.Clamp(value, 6, 30);
     }
 
     private int maxDartCount = 20;
@@ -39,11 +39,11 @@ internal sealed class ModConfig
     /// <summary>
     /// Gets or sets a value indicating the max dart requirement.
     /// </summary>
-    [GMCMRange(8, 30)]
+    [GMCMRange(6, 30)]
     public int MaxDartCount
     {
         get => this.maxDartCount;
-        set => this.maxDartCount = Math.Clamp(value, 8, 30);
+        set => this.maxDartCount = Math.Clamp(value, 6, 30);
     }
 
     /// <summary>

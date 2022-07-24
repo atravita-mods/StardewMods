@@ -12,7 +12,11 @@
   </PropertyGroup>
   
   <PropertyGroup>
+    <Name>Farm Cave Spawns More Tree Fruit</Name>
+    <Description>Spawn more tree fruit in the fruit cave</Description>
+    <UpdateKeys> Nexus:10186, ModDrop:1068205 </UpdateKeys>
     <Version>1.1.0</Version>
+    <BaseManifest>..\..\base_dependencies.json</BaseManifest>
   </PropertyGroup>
 
   <ItemGroup>

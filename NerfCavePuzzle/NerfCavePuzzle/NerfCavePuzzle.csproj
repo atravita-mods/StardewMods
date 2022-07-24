@@ -6,8 +6,11 @@
     <TargetFramework>net5.0</TargetFramework>
     <EnableHarmony>True</EnableHarmony>
     <ImplicitUsings>enable</ImplicitUsings>
+    <Name>Easier Cave Puzzle</Name>
+    <Description>Makes the cave puzzle a little easier.</Description>
     <Version>0.2.0</Version>
     <UpdateKeys>Nexus:11500</UpdateKeys>
+    <BaseManifest>..\..\base_dependencies.json</BaseManifest>
   </PropertyGroup>
 
   <PropertyGroup>

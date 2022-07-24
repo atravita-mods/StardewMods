@@ -11,6 +11,7 @@ This mod prevents trash from consuming bait. Additionally, it adds automatic rep
 3. Run the game using SMAPI.
 
 ## Configuration
+Run SMAPI at least once with this mod installed to generate the `config.json`, or use [Generic Mod Config Menu](https://www.nexusmods.com/stardewvalley/mods/5098) to configure.
 
 1. `AutomaticRefill`: Toggles the automatic refill feature.
 2. `SameTackleOnly`: Replacement tackles have to be the same type as the one used up.

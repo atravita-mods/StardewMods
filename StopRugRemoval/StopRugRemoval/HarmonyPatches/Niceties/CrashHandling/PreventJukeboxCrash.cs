@@ -3,7 +3,7 @@ using HarmonyLib;
 using Microsoft.Xna.Framework.Audio;
 using StardewValley.Menus;
 
-namespace StopRugRemoval.HarmonyPatches.Niceties;
+namespace StopRugRemoval.HarmonyPatches.Niceties.CrashHandling;
 
 /// <summary>
 /// Prevents a deleted cue from breaking the jukebox.

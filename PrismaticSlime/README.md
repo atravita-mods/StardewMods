@@ -2,6 +2,7 @@ Prismatic Slime
 =================================
 
 ![Header image](docs/prismatic.gif)
+
 todo: write some blurb or something.
 
 ## Install

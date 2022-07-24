@@ -9,7 +9,7 @@ using AtraShared.Utils.HarmonyHelper;
 using HarmonyLib;
 using Microsoft.Xna.Framework.Audio;
 
-namespace StopRugRemoval.HarmonyPatches.Niceties;
+namespace StopRugRemoval.HarmonyPatches.Niceties.CrashHandling;
 
 /// <summary>
 /// Adds in a check to see if the music cue exists before trying to play it.

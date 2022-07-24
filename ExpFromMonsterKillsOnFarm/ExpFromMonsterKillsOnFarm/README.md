@@ -15,6 +15,7 @@ In vanilla, when you kill a monster on the farm, you get no XP from it; nor does
 3. Run the game using SMAPI.
 
 ### Config options
+Run SMAPI at least once with this mod installed to generate the `config.json`, or use [Generic Mod Config Menu](https://www.nexusmods.com/stardewvalley/mods/5098) to configure.
 
 * `GainExp` restores XP gain from monster kills on farm.
 * `QuestCompletion` counts monster kills on farm towards billboard quest completion.

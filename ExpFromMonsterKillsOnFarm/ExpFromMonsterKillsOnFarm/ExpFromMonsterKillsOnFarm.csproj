@@ -8,7 +8,11 @@
   </PropertyGroup>
 
   <PropertyGroup>
+    <Name>EXP From Monster Kills On Farm</Name>
+    <Description>Grants XP for monster kills on the farm.</Description>
+    <UpdateKeys>Nexus:10924, ModDrop:1099838</UpdateKeys>
     <Version>0.3.0</Version>
+    <BaseManifest>..\..\base_dependencies.json</BaseManifest>
   </PropertyGroup>
 
   <PropertyGroup>

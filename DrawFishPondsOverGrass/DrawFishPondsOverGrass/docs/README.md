@@ -1,7 +1,7 @@
 ﻿Contributions README
 ====================================
 
-Most users should download the mod from the [Nexus page](https://www.nexusmods.com/stardewvalley/mods/13050). That said, if you'd like to contribute:
+Most users should download the mod from the [Nexus page](https://www.nexusmods.com/stardewvalley/mods/11352). That said, if you'd like to contribute:
 
 ### Translations:
 

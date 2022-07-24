@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <Import Project="..\csproj_common" />
 
   <PropertyGroup>
@@ -8,7 +8,11 @@
   </PropertyGroup>
 
   <PropertyGroup>
+    <Name>Prismatic Clothing</Name>
+    <Description>The prismatic shard makes clothing prismatic.</Description>
     <Version>0.1.0</Version>
+    <UpdateKeys>Nexus:13051</UpdateKeys>
+    <BaseManifest>..\base_dependencies.json</BaseManifest>
   </PropertyGroup>
 
   <ItemGroup>

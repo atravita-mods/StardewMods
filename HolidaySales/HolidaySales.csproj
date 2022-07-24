@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <Import Project="..\csproj_common" />
 
   <PropertyGroup>
@@ -8,7 +8,11 @@
   </PropertyGroup>
 
   <PropertyGroup>
+    <Name>Holiday Sales</Name>
+    <Description>Makes merchants stay open on festival days, if the festival's out of town. (Configurable!)</Description>
     <Version>0.1.0</Version>
+    <UpdateKeys>Nexus:13050</UpdateKeys>
+    <BaseManifest>..\base_dependencies.json</BaseManifest>
   </PropertyGroup>
 
   <ItemGroup>

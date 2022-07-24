@@ -8,8 +8,11 @@
   </PropertyGroup>
 
   <PropertyGroup>
+    <Name>More Fertilizers</Name>
+    <Description>Adds more fertilizers to the game.</Description>
     <Version>0.2.0</Version>
     <UpdateKeys>Nexus:11837</UpdateKeys>
+    <BaseManifest>..\..\ja_dependencies.json</BaseManifest>
   </PropertyGroup>
 
   <PropertyGroup>

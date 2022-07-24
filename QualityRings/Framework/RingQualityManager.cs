@@ -1,31 +1,36 @@
 ﻿using System.Runtime.CompilerServices;
-using Netcode;
+using AtraShared.Utils.Extensions;
 using StardewValley.Objects;
 
 namespace QualityRings.Framework;
 
 /// <summary>
-/// Helps manage the quality of rings.
+/// Caches the quality of rings so I'm not bloody parsing them from modData all the time.
 /// </summary>
 internal static class RingQualityManager
 {
-    private static readonly ConditionalWeakTable<Ring, NetInt> QualityMap = new();
+    private const string RingQuality = "atravita.RingQuality";
 
-    // Fake properties - register with spacecore.
+    private record Holder(int quality);
+
+    private static readonly ConditionalWeakTable<Ring, Holder> QualityMap = new();
 
     /// <summary>
     /// Gets the quality for a ring.
     /// </summary>
     /// <param name="ring">Ring in question.</param>
     /// <returns>quality of the ring.</returns>
-    internal static NetInt get_Quality(Ring ring)
-        => QualityMap.TryGetValue(ring, out NetInt? val) ? val : new NetInt(0);
+    internal static int GetQuality(Ring ring)
+        => QualityMap.TryGetValue(ring, out Holder? val) ? val.quality : ring.modData?.GetInt(RingQuality) ?? 0;
 
     /// <summary>
     /// Sets the quality for a ring.
     /// </summary>
     /// <param name="ring">Ring in question.</param>
     /// <param name="quality">quality of the ring.</param>
-    internal static void set_Quality(Ring ring, NetInt quality)
-        => QualityMap.AddOrUpdate(ring, quality);
+    internal static void SetQuality(Ring ring, int quality)
+    {
+        ring.modData?.SetInt(RingQuality, quality);
+        QualityMap.AddOrUpdate(ring, new Holder(quality));
+    }
 }

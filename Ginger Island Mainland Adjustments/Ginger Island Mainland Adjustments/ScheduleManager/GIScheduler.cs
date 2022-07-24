@@ -1,5 +1,4 @@
-﻿using System.Collections.Concurrent;
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using System.Runtime;
 using AtraShared.Schedules.DataModels;
 using AtraShared.Utils.Extensions;
@@ -154,22 +153,20 @@ internal static class GIScheduler
         GIScheduler.Musician = SetMusician(random, visitors, animationDescriptions);
 
         List<GingerIslandTimeSlot> activities = AssignIslandSchedules(random, visitors, animationDescriptions);
-        ConcurrentDictionary<NPC, string> schedules = RenderIslandSchedules(random, visitors, activities);
+        Dictionary<NPC, string> schedules = RenderIslandSchedules(random, visitors, activities);
 
-        Parallel.ForEach(
-            schedules,
-            (kvp) =>
+        foreach ((NPC npc, string schedule) in schedules)
+        {
+            if (ScheduleUtilities.ParseMasterScheduleAdjustedForChild2NPC(npc, schedule))
             {
-                if (ScheduleUtilities.ParseMasterScheduleAdjustedForChild2NPC(kvp.Key, kvp.Value))
-                {
-                    Globals.ModMonitor.Log($"Calculated island schedule for {kvp.Key.Name}");
-                    kvp.Key.islandScheduleName.Value = "island";
-                }
-                else
-                {
-                    kvp.Key.islandScheduleName.Value = string.Empty;
-                }
-            });
+                Globals.ModMonitor.DebugLog($"Calculated island schedule for {npc.Name}");
+                npc.islandScheduleName.Value = "island";
+            }
+            else
+            {
+                npc.islandScheduleName.Value = string.Empty;
+            }
+        }
 
         foreach (NPC visitor in schedules.Keys)
         {
@@ -424,13 +421,11 @@ internal static class GIScheduler
     /// <param name="visitors">List of visitors.</param>
     /// <param name="activities">List of activities.</param>
     /// <returns>Dictionary of NPC->raw schedule strings.</returns>
-    private static ConcurrentDictionary<NPC, string> RenderIslandSchedules(Random random, List<NPC> visitors, List<GingerIslandTimeSlot> activities)
+    private static Dictionary<NPC, string> RenderIslandSchedules(Random random, List<NPC> visitors, List<GingerIslandTimeSlot> activities)
     {
-        ConcurrentDictionary<NPC, string> completedSchedules = new();
+        Dictionary<NPC, string> completedSchedules = new();
 
-        Parallel.ForEach(
-            visitors,
-            (visitor) =>
+        foreach (NPC visitor in visitors)
         {
             bool should_dress = IslandSouth.HasIslandAttire(visitor);
             List<SchedulePoint> scheduleList = new();
@@ -484,9 +479,10 @@ internal static class GIScheduler
                         // Child2NPC NPCs don't understand "bed", must send them to the bus stop spouse dropoff.
                         ?? (Globals.IsChildToNPC?.Invoke(visitor) == true ? "1800 BusStop -1 23 3" : "1800 bed"));
             }
-            completedSchedules[visitor] = string.Join("/", schedPointString);
+            completedSchedules[visitor] = string.Join('/', schedPointString);
             Globals.ModMonitor.DebugOnlyLog($"For {visitor.Name}, created island schedule {completedSchedules[visitor]}");
-        });
+        }
+
         return completedSchedules;
     }
 }

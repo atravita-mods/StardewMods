@@ -63,5 +63,15 @@ internal sealed class ModConfig
         get => this.jitterMultiplier;
         set => this.jitterMultiplier = Math.Clamp(value, 0.05f, 20f);
     }
+
+    private float dartPrecision = 1f;
+
+    [GMCMRange(0.5, 5)]
+    [GMCMInterval(0.01)]
+    public float DartPrecision
+    {
+        get => this.dartPrecision;
+        set => this.dartPrecision = Math.Clamp(value, 0.5f, 5f);
+    }
 }
 #pragma warning restore SA1201 // Elements should appear in the correct order

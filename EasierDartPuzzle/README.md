@@ -1,6 +1,8 @@
 Easier Dart Puzzle
 =================================
 
+![Header image](docs/darts.gif)
+
 This mod allows you to adjust the difficulty of the darts game.
 
 ## Install

@@ -31,7 +31,12 @@ internal class ModEntry : Mod
         this.ApplyPatches(new Harmony(this.ModManifest.UniqueID));
 
         helper.Events.GameLoop.GameLaunched += this.OnGameLaunch;
+
+        helper.Events.Content.AssetRequested += this.OnAssetRequested;
     }
+
+    private void OnAssetRequested(object? sender, AssetRequestedEventArgs e)
+        => AssetManager.Apply(e);
 
     private void ApplyPatches(Harmony harmony)
     {

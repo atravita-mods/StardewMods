@@ -19,7 +19,6 @@ namespace SpecialOrdersExtended;
 /// <inheritdoc />
 internal sealed class ModEntry : Mod
 {
-
     /// <summary>
     /// Spacecore API handle.
     /// </summary>

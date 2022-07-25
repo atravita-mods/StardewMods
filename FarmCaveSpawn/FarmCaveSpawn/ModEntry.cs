@@ -486,11 +486,4 @@ END:
         }
         this.Helper.Events.GameLoop.Saved -= this.WriteMigrationData;
     }
-
-    /// <summary>
-    /// Formats a float as a percent value.
-    /// </summary>
-    /// <param name="val">Value to format.</param>
-    /// <returns>Formatted string.</returns>
-    private static string FormatPercentValue(float val) => $"{val:f0}%";
 }

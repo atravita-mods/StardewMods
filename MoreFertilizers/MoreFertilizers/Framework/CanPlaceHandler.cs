@@ -1,6 +1,7 @@
 ﻿using AtraCore.Utilities;
 using AtraShared.Utils;
 using AtraShared.Utils.Extensions;
+using Microsoft.Toolkit.Diagnostics;
 using Microsoft.Xna.Framework;
 using StardewValley.Buildings;
 using StardewValley.Locations;
@@ -72,7 +73,13 @@ public sealed class CanPlaceHandler : IMoreFertilizersAPI
     /// <inheritdoc />
     public bool CanPlaceFertilizer(SObject obj, GameLocation loc, Vector2 tile)
     {
-        if (obj.ParentSheetIndex == -1 || obj.bigCraftable.Value || Utility.isPlacementForbiddenHere(loc) || !Context.IsPlayerFree)
+        if (Utility.isPlacementForbiddenHere(loc) || !Context.IsPlayerFree)
+        {
+            return false;
+        }
+
+        Guard.IsNotNull(obj, nameof(obj));
+        if (obj.ParentSheetIndex == -1 || obj.bigCraftable.Value)
         {
             return false;
         }
@@ -117,8 +124,8 @@ public sealed class CanPlaceHandler : IMoreFertilizersAPI
             }
         }
 
-        if (loc.canFishHere() && loc.doesTileHaveProperty((int)tile.X, (int)tile.Y, "Water", "Back") is not null
-            && (obj.ParentSheetIndex == ModEntry.FishFoodID || obj.ParentSheetIndex == ModEntry.DeluxeFishFoodID))
+        if ((obj.ParentSheetIndex == ModEntry.FishFoodID || obj.ParentSheetIndex == ModEntry.DeluxeFishFoodID)
+            && loc.canFishHere() && loc.doesTileHaveProperty((int)tile.X, (int)tile.Y, "Water", "Back") is not null)
         {
             return !loc.modData.ContainsKey(FishFood);
         }
@@ -139,6 +146,7 @@ public sealed class CanPlaceHandler : IMoreFertilizersAPI
     /// <inheritdoc />
     public bool TryPlaceFertilizer(SObject obj, GameLocation loc, Vector2 tile)
     {
+        Guard.IsNotNull(obj, nameof(obj));
         if (!this.CanPlaceFertilizer(obj, loc, tile))
         {
             return false;
@@ -242,8 +250,9 @@ public sealed class CanPlaceHandler : IMoreFertilizersAPI
     }
 
     /// <inheritdoc />
-    public void AnimateFertilizer(StardewValley.Object obj, GameLocation loc, Vector2 tile)
+    public void AnimateFertilizer(SObject obj, GameLocation loc, Vector2 tile)
     {
+        Guard.IsNotNull(obj, nameof(obj));
         if (obj.ParentSheetIndex == ModEntry.FishFoodID || obj.ParentSheetIndex == ModEntry.DeluxeFishFoodID || obj.ParentSheetIndex == ModEntry.DomesticatedFishFoodID)
         {
             Vector2 placementtile = (tile * 64f) + new Vector2(32f, 32f);

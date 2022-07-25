@@ -1,4 +1,5 @@
 ﻿using AtraCore.Utilities;
+using AtraShared.Menuing;
 using AtraShared.Utils;
 using AtraShared.Utils.Extensions;
 using HarmonyLib;
@@ -26,7 +27,7 @@ internal static class SpecialFertilizerApplication
     /// <param name="helper">SMAPI's input helper.</param>
     internal static void ApplyFertilizer(ButtonPressedEventArgs e, IInputHelper helper)
     {
-        if (!Context.IsWorldReady || !(e.Button.IsUseToolButton() || e.Button.IsActionButton())
+        if (!MenuingExtensions.IsNormalGameplay() || !(e.Button.IsUseToolButton() || e.Button.IsActionButton())
             || Game1.player.ActiveObject is not SObject obj || obj.bigCraftable.Value)
         {
             return;

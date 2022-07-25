@@ -27,6 +27,8 @@ SOFTWARE.
  *
  * *******************************************/
 
+using System.Reflection;
+
 namespace AtraShared.Integrations.Interfaces;
 
 /// <summary>
@@ -58,4 +60,34 @@ public interface ISpaceCoreAPI
     /// <exception cref="NullReferenceException">Search for skill failed, likely skill not found.</exception>
     /// <returns>integer profession ID.</returns>
     int GetProfessionId(string skill, string profession);
+
+    /// <summary>
+    /// Adds an event command.
+    /// </summary>
+    /// <param name="command">The string command name.</param>
+    /// <param name="info">The MethodInfo to run. Must take (Event, GameLocation, GameTime, string[]).</param>
+    void AddEventCommand(string command, MethodInfo info);
+}
+
+/// <summary>
+/// More complete spacecore API.
+/// </summary>
+public interface ICompleteSpaceCoreAPI : ISpaceCoreAPI
+{
+    /// <summary>
+    /// Registers a type for spacecore to serialize.
+    /// </summary>
+    /// <param name="type">Type to serialize.</param>
+    /// <remarks>Must have [XmlType("Mods_SOMETHINGHERE")] attribute (required to start with "Mods_").</remarks>
+    void RegisterSerializerType(Type type);
+
+    /// <summary>
+    /// Registers a fake custom property with SpaceCore.
+    /// </summary>
+    /// <param name="declaringType">The type to attach the property too.</param>
+    /// <param name="name">name of the parameter.</param>
+    /// <param name="propType">type of the fake property.</param>
+    /// <param name="getter">methodinfo for the getter.</param>
+    /// <param name="setter">methodinfo for the setter.</param>
+    void RegisterCustomProperty(Type declaringType, string name, Type propType, MethodInfo getter, MethodInfo setter);
 }

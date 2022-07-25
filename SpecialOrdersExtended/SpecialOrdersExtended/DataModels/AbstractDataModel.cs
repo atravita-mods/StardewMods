@@ -27,7 +27,7 @@ public abstract class AbstractDataModel
     internal virtual void Save(string identifier)
     {
         Task.Run(() => ModEntry.DataHelper.WriteGlobalData(this.Savefile + identifier, this))
-            .ContinueWith((t) => ModEntry.ModMonitor.Log(t.Status == TaskStatus.RanToCompletion ? $"Saved {identifier}" : $"{identifier} failed to save with {t.Status}"));
+            .ContinueWith((t) => ModEntry.ModMonitor.Log(t.Status == TaskStatus.RanToCompletion ? $"Saved {identifier}" : $"{identifier} failed to save with {t.Status} - {t.Exception}"));
     }
 
     /// <summary>

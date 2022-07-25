@@ -1,6 +1,8 @@
-﻿using StardewModdingAPI.Events;
+﻿using AtraShared.Menuing;
+using StardewModdingAPI.Events;
 using StardewModdingAPI.Utilities;
 using StardewValley.Locations;
+using xTile.Dimensions;
 
 namespace MoreFertilizers.Framework;
 
@@ -25,29 +27,30 @@ internal static class JojaSample
     /// <param name="e">OnWarp events.</param>
     internal static void JojaSampleEvent(WarpedEventArgs e)
     {
-        if (e.NewLocation is not JojaMart || !e.IsLocalPlayer || HaveRecievedSampleToday.Value
-            || Game1.eventUp || Game1.CurrentEvent is not null || Game1.random.NextDouble() > 0.2)
+        if (e.NewLocation is JojaMart && e.IsLocalPlayer
+            && MenuingExtensions.IsNormalGameplay() && !HaveRecievedSampleToday.Value
+            && !Game1.eventUp && Game1.CurrentEvent is null && Game1.random.NextDouble() <= 0.15)
         {
-            return;
-        }
-
-        string[] jojaEventstring = new[]
-        {
+            string[] jojaEventstring = new[]
+            {
             "continue/-100 -100/farmer 13 28 0 Morris 13 22 2/ignoreCollisions farmer/",
             "ignoreCollisions Morris/skippable/viewport 13 25/move Morris 0 2 2/pause 400/",
             $"speak Morris \"{I18n.GetByKey($"joja.event.{Game1.random.Next(3)}")}\"/pause 400/end",
-        };
+            };
 
-        Event jojaEvent = new(string.Join(string.Empty, jojaEventstring));
-        jojaEvent.onEventFinished = () =>
-        {
-            DelayedAction.functionAfterDelay(
-                () =>
+            Event jojaEvent = new(string.Join(string.Empty, jojaEventstring))
+            {
+                onEventFinished = () =>
                 {
-                    e.Player.addItemByMenuIfNecessaryElseHoldUp(new SObject(ModEntry.JojaFertilizerID, Game1.random.Next(2, 6)));
-                }, 100);
-        };
-        HaveRecievedSampleToday.Value = true;
-        e.NewLocation.startEvent(jojaEvent);
+                    DelayedAction.functionAfterDelay(
+                        () =>
+                        {
+                            e.Player.addItemByMenuIfNecessaryElseHoldUp(new SObject(ModEntry.JojaFertilizerID, Game1.random.Next(2, 6)));
+                        }, 100);
+                },
+            };
+            HaveRecievedSampleToday.Value = true;
+            e.NewLocation.startEvent(jojaEvent);
+        }
     }
 }

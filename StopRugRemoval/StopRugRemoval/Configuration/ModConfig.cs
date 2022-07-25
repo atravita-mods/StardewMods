@@ -1,4 +1,5 @@
-﻿using StardewModdingAPI.Utilities;
+﻿using AtraShared.Integrations.GMCMAttributes;
+using StardewModdingAPI.Utilities;
 using StardewValley.Locations;
 
 namespace StopRugRemoval.Configuration;
@@ -6,6 +7,7 @@ namespace StopRugRemoval.Configuration;
 /// <summary>
 /// Configuration class for this mod.
 /// </summary>
+[SuppressMessage("StyleCop.CSharp.OrderingRules", "SA1201:Elements should appear in the correct order", Justification = "Keeping fields near accessors.")]
 internal sealed class ModConfig
 {
     /// <summary>
@@ -54,6 +56,19 @@ internal sealed class ModConfig
     /// Gets or sets a value indicating whether golden coconuts should be allowed to appear off the island, if you've cracked at least one before.
     /// </summary>
     public bool GoldenCoconutsOffIsland { get; set; } = false;
+
+    private float phoneSpeedUpFactor = 1.0f;
+
+    /// <summary>
+    /// Gets or sets a value indicating how much to speed up the phone calls by.
+    /// </summary>
+    [GMCMInterval(0.1)]
+    [GMCMRange(1.0, 5.0)]
+    public float PhoneSpeedUpFactor
+    {
+        get => this.phoneSpeedUpFactor;
+        set => this.phoneSpeedUpFactor = Math.Clamp(value, 1.0f, 5.0f);
+    }
 
     /// <summary>
     /// Gets or sets keybind to use to remove an item from a table.

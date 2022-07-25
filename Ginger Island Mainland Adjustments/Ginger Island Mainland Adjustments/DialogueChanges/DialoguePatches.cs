@@ -138,15 +138,11 @@ internal static class DialoguePatches
             }
             if (TalkedToToday.Contains(__instance.Name) && __instance.TryApplyMarriageDialogueIfExisting("GIReturn_Talked_" + __instance.Name, clearOnMovement: true))
             {
-#if DEBUG
-                Globals.ModMonitor.Log($"Setting GIReturn_Talked_{__instance.Name}.", LogLevel.Debug);
-#endif
+                Globals.ModMonitor.DebugOnlyLog($"Setting GIReturn_Talked_{__instance.Name}.", LogLevel.Debug);
             }
             else if (__instance.TryApplyMarriageDialogueIfExisting("GIReturn_" + __instance.Name, clearOnMovement: true))
             {
-#if DEBUG
-            Globals.ModMonitor.Log($"Setting GIReturn_{__instance.Name}.", LogLevel.Debug);
-#endif
+            Globals.ModMonitor.DebugOnlyLog($"Setting GIReturn_{__instance.Name}.", LogLevel.Debug);
             }
             else
             {

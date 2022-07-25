@@ -1,5 +1,5 @@
 ﻿{
-  "mod.description": "",
+  "mod.description": "A centralized location for some of atra's helper code.",
   // For GMCM
   "IllFormatedConfig": "Config file seems ill-formated, using default. Please use Generic Mod Config Menu to configure.",
 

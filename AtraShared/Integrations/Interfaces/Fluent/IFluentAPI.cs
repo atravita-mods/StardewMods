@@ -34,7 +34,7 @@ public interface IFluentApi
 
     #region Localizations
 
-    /// <summary>Get an <see cref="IFluent{}"/> instance that allows retrieving Project Fluent translations for a specific locale.</summary>
+    /// <summary>Get an <see cref="IFluent"/> instance that allows retrieving Project Fluent translations for a specific locale.</summary>
     /// <param name="locale">A locale for which to retrieve the translations.</param>
     /// <param name="mod">The mod for which to retrieve the translations.</param>
     /// <param name="file">An optional file name to retrieve the translations from.</param>

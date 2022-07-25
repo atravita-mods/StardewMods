@@ -29,7 +29,7 @@ public static class SoundBankWrapperHandler
         FieldInfo? field = typeof(SoundBank).GetCachedField("_cues", ReflectionCache.FlagTypes.InstanceFlags);
 
         // Get the _cues private field from the soundbank.
-        var param = Expression.Parameter(typeof(SoundBank), "soundbank");
+        var param = Expression.ParameterOf<SoundBank>("soundbank");
         var fieldgetter = Expression.Field(param, field);
 
         // Call the .Keys property.
@@ -48,8 +48,8 @@ public static class SoundBankWrapperHandler
         FieldInfo? field = typeof(SoundBank).GetCachedField("_cues", ReflectionCache.FlagTypes.InstanceFlags);
 
         // Get the _cues private field from the soundbank.
-        var param = Expression.Parameter(typeof(SoundBank), "soundbank");
-        var name = Expression.Parameter(typeof(string), "name");
+        var param = Expression.ParameterOf<SoundBank>("soundbank");
+        var name = Expression.ParameterOf<string>("name");
         var fieldgetter = Expression.Field(param, field);
 
         // call the ContainsKey

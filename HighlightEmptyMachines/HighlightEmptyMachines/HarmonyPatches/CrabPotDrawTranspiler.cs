@@ -2,9 +2,8 @@
 using System.Reflection.Emit;
 using System.Runtime.CompilerServices;
 using AtraBase.Toolkit;
-using AtraBase.Toolkit.Reflection;
 using AtraCore.Framework.ReflectionManager;
-using AtraShared.Niceties;
+using AtraShared.ConstantsAndEnums;
 using AtraShared.Utils.Extensions;
 using AtraShared.Utils.HarmonyHelper;
 using HarmonyLib;

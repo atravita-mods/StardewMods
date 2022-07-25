@@ -1,16 +1,13 @@
 ﻿using System.Reflection;
 using System.Reflection.Emit;
-using System.Runtime.CompilerServices;
-using AtraBase.Toolkit;
 using AtraCore.Framework.ReflectionManager;
-using AtraShared.Niceties;
 using AtraShared.Utils.Extensions;
 using AtraShared.Utils.HarmonyHelper;
 using HarmonyLib;
 using StardewValley.Locations;
 using StardewValley.Monsters;
 
-namespace PrismaticSlime.HarmonyPatches.Ring;
+namespace PrismaticSlime.HarmonyPatches.RingPatches;
 
 /// <summary>
 /// Adjusts the chances of the prismatic slime spawning in the MineShaft.
@@ -58,7 +55,7 @@ internal static class AdjustSlimeChances
                 new(OpCodes.Call, typeof(AdjustSlimeChances).GetCachedMethod(nameof(AdjustChanceForPrismaticRing), ReflectionCache.FlagTypes.StaticFlags)),
             });
 
-            helper.Print();
+            // helper.Print();
             return helper.Render();
         }
         catch (Exception ex)

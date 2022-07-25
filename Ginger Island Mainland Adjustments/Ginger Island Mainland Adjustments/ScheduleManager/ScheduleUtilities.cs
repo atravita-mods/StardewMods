@@ -219,7 +219,7 @@ internal static class ScheduleUtilities
             if (schedule is not null)
             {
                 npc.Schedule = schedule;
-                ScheduleUtilities.Schedules[npc.Name] = npc.Schedule;
+                Schedules[npc.Name] = npc.Schedule;
                 return true;
             }
             else

@@ -18,6 +18,9 @@ internal static class AdjustDartsJitter
     private static float GetDartsJitterAdjustment()
         => ModEntry.Config.JitterMultiplier;
 
+    private static float GetDartsPrecision()
+        => ModEntry.Config.DartPrecision;
+
     [HarmonyPatch(nameof(Darts.tick))]
     private static IEnumerable<CodeInstruction>? Transpiler(IEnumerable<CodeInstruction> instructions, ILGenerator gen, MethodBase original)
     {
@@ -41,7 +44,17 @@ internal static class AdjustDartsJitter
                     });
                     return true;
                 },
-                maxCount: 2);
+                maxCount: 2)
+            .FindNext(new CodeInstructionWrapper[]
+            {
+                new(OpCodes.Call, typeof(Darts).GetCachedMethod(nameof(Darts.GetRadiusFromCharge), ReflectionCache.FlagTypes.InstanceFlags)),
+            })
+            .Advance(1)
+            .Insert(new CodeInstruction[]
+            {
+                new(OpCodes.Call, typeof(AdjustDartsJitter).GetCachedMethod(nameof(GetDartsPrecision), ReflectionCache.FlagTypes.StaticFlags)),
+                new(OpCodes.Div),
+            });
 
             // helper.Print();
             return helper.Render();

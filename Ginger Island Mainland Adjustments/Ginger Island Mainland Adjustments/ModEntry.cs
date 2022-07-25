@@ -1,4 +1,5 @@
 ﻿using AtraCore.Utilities;
+using AtraShared.Menuing;
 using AtraShared.MigrationManager;
 using AtraShared.Utils.Extensions;
 using GingerIslandMainlandAdjustments.AssetManagers;
@@ -43,7 +44,7 @@ internal sealed class ModEntry : Mod
 
         helper.Events.Content.AssetRequested += this.OnAssetRequested;
 
-        this.ApplyPatches(new Harmony(this.ModManifest.UniqueID));
+        AssetLoader.Init(helper.GameContent);
     }
 
     private void OnAssetRequested(object? sender, AssetRequestedEventArgs e)
@@ -148,6 +149,7 @@ internal sealed class ModEntry : Mod
         {
             // handle patches from annotations.
             harmony.PatchAll();
+            PhoneHandler.ApplyPatches(harmony);
             if (Globals.Config.DebugMode)
             {
                 ScheduleDebugPatches.ApplyPatches(harmony);
@@ -168,6 +170,9 @@ internal sealed class ModEntry : Mod
     /// <param name="e">Possible parameters.</param>
     private void OnGameLaunched(object? sender, GameLaunchedEventArgs e)
     {
+        // Applies harmony patches.
+        this.ApplyPatches(new Harmony(this.ModManifest.UniqueID));
+
         // Generate the GMCM for this mod.
         GenerateGMCM.Initialize(this.ModManifest, this.Helper.Translation);
         GenerateGMCM.Build();
@@ -187,19 +192,19 @@ internal sealed class ModEntry : Mod
 
     private void OnButtonPressed(object? sender, ButtonPressedEventArgs e)
     {
-        // Thanks, RSV, for reminding me that there are other conditions for which I should probably not be handling shops....
-        // From: https://github.com/Rafseazz/Ridgeside-Village-Mod/blob/816a66d0c9e667d3af662babc170deed4070c9ff/Ridgeside%20SMAPI%20Component%202.0/RidgesideVillage/TileActionHandler.cs#L37
-        if (!Context.IsWorldReady || !Context.CanPlayerMove || Game1.player.isRidingHorse()
-            || Game1.currentLocation is null || Game1.eventUp || Game1.isFestival() || Game1.IsFading())
+        if (MenuingExtensions.IsNormalGameplay())
         {
-            return;
+            ShopHandler.HandleWillyShop(e);
+            ShopHandler.HandleSandyShop(e);
         }
-        ShopHandler.HandleWillyShop(e);
-        ShopHandler.HandleSandyShop(e);
     }
 
     private void OnTimeChanged(object? sender, TimeChangedEventArgs e)
     {
+        if (!Context.IsMainPlayer)
+        {
+            return;
+        }
         MidDayScheduleEditor.AttemptAdjustGISchedule(e);
         if (!this.haveFixedSchedulesToday && e.NewTime > 615)
         {

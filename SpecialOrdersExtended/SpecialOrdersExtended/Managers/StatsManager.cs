@@ -89,13 +89,14 @@ internal static class StatsManager
     /// <summary>
     /// Populate the propertyInfos cache.
     /// </summary>
+    [SuppressMessage("StyleCop.CSharp.SpacingRules", "SA1009:Closing parenthesis should be spaced correctly", Justification = "Stylecop doesn't understand nullable :(")]
     private static void GrabProperties()
     {
         propertyGetters = typeof(Stats).GetProperties()
             .Where((PropertyInfo p) => p.CanRead && p.PropertyType.Equals(typeof(uint)) && !DENYLIST.Contains(p.Name))
             .ToDictionary(
-                (PropertyInfo p) => p.Name,
-                p => p.GetGetMethod()!.CreateDelegate<Func<Stats, uint>>(),
-                StringComparer.OrdinalIgnoreCase);
+                keySelector: (PropertyInfo p) => p.Name,
+                elementSelector: (PropertyInfo p) => p.GetGetMethod()!.CreateDelegate<Func<Stats, uint>>(),
+                comparer: StringComparer.OrdinalIgnoreCase);
     }
 }

@@ -1,4 +1,6 @@
-﻿using AtraCore.Framework.ReflectionManager;
+﻿using System.Reflection;
+using AtraBase.Toolkit.Reflection;
+using AtraCore.Framework.ReflectionManager;
 using AtraCore.Utilities;
 using AtraShared.ConstantsAndEnums;
 using AtraShared.Integrations;
@@ -7,6 +9,7 @@ using AtraShared.MigrationManager;
 using AtraShared.Utils.Extensions;
 using HarmonyLib;
 using SpecialOrdersExtended.Managers;
+using SpecialOrdersExtended.Niceties;
 using StardewModdingAPI.Events;
 using StardewValley.GameData;
 using AtraUtils = AtraShared.Utils.Utils;
@@ -16,7 +19,6 @@ namespace SpecialOrdersExtended;
 /// <inheritdoc />
 internal sealed class ModEntry : Mod
 {
-
     /// <summary>
     /// Spacecore API handle.
     /// </summary>
@@ -38,6 +40,11 @@ internal sealed class ModEntry : Mod
     /// Gets SMAPI's data helper for this mod.
     /// </summary>
     internal static IDataHelper DataHelper { get; private set; } = null!;
+
+    /// <summary>
+    /// Gets SMAPI's Multiplayer helper for this mod.
+    /// </summary>
+    internal static IMultiplayerHelper MultiplayerHelper { get; private set; } = null!;
 
     /// <summary>
     /// Gets the config class for this mod.
@@ -62,10 +69,9 @@ internal sealed class ModEntry : Mod
         I18n.Init(helper.Translation);
         ModMonitor = this.Monitor;
         DataHelper = helper.Data;
+        MultiplayerHelper = helper.Multiplayer;
 
         Config = AtraUtils.GetConfigOrDefault<ModConfig>(helper, this.Monitor);
-
-        this.ApplyPatches(new Harmony(this.ModManifest.UniqueID));
 
         // Register console commands.
         helper.ConsoleCommands.Add(
@@ -136,9 +142,23 @@ internal sealed class ModEntry : Mod
     /// <remarks>Used to bind APIs and register CP tokens.</remarks>
     private void OnGameLaunched(object? sender, GameLaunchedEventArgs e)
     {
+        Harmony? harmony = new(this.ModManifest.UniqueID);
+        this.ApplyPatches(harmony);
+
         // Bind Spacecore API
         IntegrationHelper helper = new(this.Monitor, this.Helper.Translation, this.Helper.ModRegistry, LogLevel.Debug);
-        helper.TryGetAPI("spacechase0.SpaceCore", "1.5.10", out spaceCoreAPI);
+        if (helper.TryGetAPI("spacechase0.SpaceCore", "1.5.10", out spaceCoreAPI))
+        {
+            MethodInfo eventcommand = typeof(EventCommands).StaticMethodNamed(nameof(EventCommands.AddSpecialOrder));
+            spaceCoreAPI.AddEventCommand(EventCommands.ADD_SPECIAL_ORDER, eventcommand);
+        }
+        else
+        {
+            this.Monitor.Log("SpaceCore not detected, handling event commands myself", LogLevel.Info);
+            harmony.Patch(
+                original: typeof(Event).GetCachedMethod(nameof(Event.tryEventCommand), ReflectionCache.FlagTypes.InstanceFlags),
+                prefix: new HarmonyMethod(typeof(EventCommands), nameof(EventCommands.PrefixTryGetCommand)));
+        }
 
         if (helper.TryGetAPI("Pathoschild.ContentPatcher", "1.20.0", out IContentPatcherAPI? api))
         {
@@ -147,6 +167,12 @@ internal sealed class ModEntry : Mod
             api.RegisterToken(this.ModManifest, "Completed", new Tokens.CompletedSpecialOrders());
             api.RegisterToken(this.ModManifest, "CurrentRules", new Tokens.CurrentSpecialOrderRule());
             api.RegisterToken(this.ModManifest, "RecentCompleted", new Tokens.RecentCompletedSO());
+        }
+
+        if (helper.TryGetAPI("Omegasis.SaveAnywhere", "2.13.0", out ISaveAnywhereApi? saveAnywhereApi))
+        {
+            saveAnywhereApi.BeforeSave += this.BeforeSaveAnywhere;
+            saveAnywhereApi.AfterLoad += this.AfterSaveAnywhere;
         }
 
         {
@@ -159,6 +185,18 @@ internal sealed class ModEntry : Mod
                 .GenerateDefaultGMCM(static () => Config);
             }
         }
+    }
+
+    private void AfterSaveAnywhere(object? sender, EventArgs e)
+    {
+        DialogueManager.LoadTemp();
+        RecentSOManager.LoadTemp();
+    }
+
+    private void BeforeSaveAnywhere(object? sender, EventArgs e)
+    {
+        DialogueManager.SaveTemp();
+        RecentSOManager.SaveTemp();
     }
 
     /// <summary>

@@ -44,20 +44,18 @@ internal sealed class ModEntry : Mod
     /// <summary>
     /// Generates the GMCM for this mod.
     /// </summary>
-    /// <param name="sender">SMAPI</param>
+    /// <param name="sender">SMAPI.</param>
     /// <param name="e">Arguments for event.</param>
     private void SetUpConfig(object? sender, GameLaunchedEventArgs e)
     {
         GMCMHelper helper = new(this.Monitor, this.Helper.Translation, this.Helper.ModRegistry, this.ModManifest);
-        if (!helper.TryGetAPI())
+        if (helper.TryGetAPI())
         {
-            return;
-        }
-
-        helper.Register(
+            helper.Register(
                 reset: static () => Config = new ModConfig(),
                 save: () => this.Helper.AsyncWriteConfig(this.Monitor, Config))
             .AddParagraph(I18n.Mod_Description)
             .GenerateDefaultGMCM(static () => Config);
+        }
     }
 }

@@ -7,11 +7,21 @@ internal static class PTUtilities
 {
     internal static IDictionary<string, string>? Lexicon { get; set; }
 
+    /// <summary>
+    /// Loads the Leixcon file.
+    /// </summary>
+    /// <param name="contentHelper">the game content helper.</param>
     internal static void PopulateLexicon(IGameContentHelper contentHelper)
     {
         Lexicon = contentHelper.Load<Dictionary<string, string>>("Strings/Lexicon");
     }
 
+    /// <summary>
+    /// Gets a translated string from the lexicon.
+    /// </summary>
+    /// <param name="key">Key to search for.</param>
+    /// <param name="defaultresponse">Default response if nothing is found.</param>
+    /// <returns>string, if possible.</returns>
     internal static string GetLexicon(string key, string? defaultresponse = null)
     {
         string? value = null;
@@ -39,7 +49,10 @@ internal static class PTUtilities
     /// <param name="conversationTopic">conversation topic to sync.</param>
     internal static void SyncConversationTopics(string conversationTopic)
     {
-        if (!Game1.IsMultiplayer) { return; }
+        if (!Context.IsMultiplayer)
+        {
+            return;
+        }
         // Rewrite this. If host has it, everyone has host's amount of days. Else, find player with it.
         if (Game1.player.activeDialogueEvents.ContainsKey(conversationTopic))
         {
@@ -62,6 +75,10 @@ internal static class PTUtilities
         }
     }
 
+    /// <summary>
+    /// Syncs conversation topics between players.
+    /// </summary>
+    /// <param name="conversationTopics">IEnumerable of conversation topics to sync.</param>
     internal static void SyncConversationTopics(IEnumerable<string> conversationTopics)
     {
         foreach (string conversationTopic in conversationTopics)
@@ -70,10 +87,13 @@ internal static class PTUtilities
         }
     }
 
+    /// <summary>
+    /// Syncs the events seen for all players.
+    /// </summary>
+    /// <param name="modMonitor">Monitor, to use for logging.</param>
     internal static void LocalEventSyncs(IMonitor modMonitor)
-    { // Sets Pam's home event as seen for everyone if any farmer has seen it.
-      // but only if the mail flag isn't set.
-        if (!Game1.IsMultiplayer)
+    {
+        if (!Context.IsMultiplayer)
         {
             return;
         }

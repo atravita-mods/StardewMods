@@ -6,25 +6,47 @@ using AtraShared.Utils.Extensions;
 using AtraShared.Utils.HarmonyHelper;
 using HarmonyLib;
 using StardewValley.Locations;
+using StardewValley.Minigames;
 
 namespace EasierDartPuzzle.HarmonyPatches;
 
 /// <summary>
 /// Transpiler that adjusts the number of darts you get.
 /// </summary>
-[HarmonyPatch(typeof(IslandSouthEastCave))]
+[HarmonyPatch]
 internal static class AdjustDartNumberTranspiler
 {
-    private static int GetMinimumDartNumber()
+    /// <summary>
+    /// Gets the methods to patch.
+    /// </summary>
+    /// <returns>methods to patch.</returns>
+    internal static IEnumerable<MethodBase> TargetMethods()
+    {
+        yield return typeof(IslandSouthEastCave).GetCachedMethod(nameof(IslandSouthEastCave.answerDialogueAction), ReflectionCache.FlagTypes.InstanceFlags);
+        yield return typeof(Darts).GetCachedMethod(nameof(Darts.QuitGame), ReflectionCache.FlagTypes.InstanceFlags);
+    }
+
+    /// <summary>
+    /// Gets the minimum dart number.
+    /// </summary>
+    /// <returns>Minimum dart number.</returns>
+    internal static int GetMinimumDartNumber()
         => Math.Min(ModEntry.Config.MinDartCount, ModEntry.Config.MaxDartCount);
 
-    private static int GetMaximumDartNumber()
+    /// <summary>
+    /// Gets the max dart number.
+    /// </summary>
+    /// <returns>Max dart number.</returns>
+    internal static int GetMaximumDartNumber()
         => Math.Max(ModEntry.Config.MinDartCount, ModEntry.Config.MaxDartCount);
 
-    private static int GetMidddleDartNumber()
+    /// <summary>
+    /// Gets the middle dart number.
+    /// </summary>
+    /// <returns>Middle dart number.</returns>
+    internal static int GetMidddleDartNumber()
         => (ModEntry.Config.MinDartCount + ModEntry.Config.MaxDartCount) / 2;
 
-    [HarmonyPatch(nameof(IslandSouthEastCave.answerDialogueAction))]
     private static IEnumerable<CodeInstruction>? Transpiler(IEnumerable<CodeInstruction> instructions, ILGenerator gen, MethodBase original)
     {
         try
@@ -39,24 +61,24 @@ internal static class AdjustDartNumberTranspiler
             {
                 new(OpCodes.Ldc_I4_S, 20),
             })
-            .ReplaceInstruction(OpCodes.Call, typeof(AdjustDartNumberTranspiler).StaticMethodNamed(nameof(GetMaximumDartNumber)), keepLabels: true)
+            .ReplaceInstruction(OpCodes.Call, typeof(AdjustDartNumberTranspiler).GetCachedMethod(nameof(GetMaximumDartNumber), ReflectionCache.FlagTypes.StaticFlags), keepLabels: true)
             .FindNext(new CodeInstructionWrapper[]
             {
                 new(OpCodes.Ldc_I4_S, 15),
             })
-            .ReplaceInstruction(OpCodes.Call, typeof(AdjustDartNumberTranspiler).StaticMethodNamed(nameof(GetMidddleDartNumber)), keepLabels: true)
+            .ReplaceInstruction(OpCodes.Call, typeof(AdjustDartNumberTranspiler).GetCachedMethod(nameof(GetMidddleDartNumber), ReflectionCache.FlagTypes.StaticFlags), keepLabels: true)
             .FindNext(new CodeInstructionWrapper[]
              {
                  new(OpCodes.Ldc_I4_S, 10),
              })
-            .ReplaceInstruction(OpCodes.Call, typeof(AdjustDartNumberTranspiler).StaticMethodNamed(nameof(GetMinimumDartNumber)), keepLabels: true);
+            .ReplaceInstruction(OpCodes.Call, typeof(AdjustDartNumberTranspiler).GetCachedMethod(nameof(GetMinimumDartNumber), ReflectionCache.FlagTypes.StaticFlags), keepLabels: true);
 
             // helper.Print();
             return helper.Render();
         }
         catch (Exception ex)
         {
-            ModEntry.ModMonitor.Log($"Ran into error transpiling dart count!\n\n{ex}", LogLevel.Error);
+            ModEntry.ModMonitor.Log($"Ran into error transpiling {original.Name}\n\n{ex}", LogLevel.Error);
             original?.Snitch(ModEntry.ModMonitor);
         }
         return null;

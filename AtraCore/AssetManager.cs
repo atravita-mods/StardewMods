@@ -9,6 +9,10 @@ namespace AtraCore;
 /// </summary>
 internal static class AssetManager
 {
+    /// <summary>
+    /// Gets the prismatic models data asset.
+    /// </summary>
+    /// <returns>The prismatic models data asset.</returns>
     internal static Dictionary<string, DrawPrismaticModel>? GetPrismaticModels()
     {
         try
@@ -22,6 +26,10 @@ internal static class AssetManager
         return null;
     }
 
+    /// <summary>
+    /// Applies the edits and loads for this mod.
+    /// </summary>
+    /// <param name="e">Event args.</param>
     internal static void Apply(AssetRequestedEventArgs e)
     {
         if (e.NameWithoutLocale.IsEquivalentTo(AtraCoreConstants.PrismaticMaskData))
@@ -29,5 +37,4 @@ internal static class AssetManager
             e.LoadFrom(EmptyContainers.GetEmptyDictionary<string, DrawPrismaticModel>, AssetLoadPriority.Low);
         }
     }
-
 }

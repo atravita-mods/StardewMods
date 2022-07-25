@@ -1,9 +1,12 @@
-﻿using AtraBase.Toolkit;
+﻿#if DEBUG
+using System.Diagnostics;
+#endif
+using AtraBase.Toolkit;
 using AtraCore.Config;
 using AtraCore.Framework.DialogueManagement;
 using AtraCore.Framework.ItemManagement;
 using AtraCore.Framework.QueuePlayerAlert;
-using AtraCore.HarmonyPatches;
+using AtraCore.HarmonyPatches.DrawPrismaticPatches;
 using AtraCore.Utilities;
 using AtraShared.ConstantsAndEnums;
 using AtraShared.MigrationManager;
@@ -46,7 +49,7 @@ internal sealed class ModEntry : Mod
         helper.Events.GameLoop.TimeChanged += this.OnTimeChanged;
 
 #if DEBUG
-        helper.Events.GameLoop.DayStarted += this.OnDayStart;
+        // helper.Events.GameLoop.DayStarted += this.OnDayStart;
         helper.Events.GameLoop.SaveLoaded += this.LateSaveLoaded;
 #endif
     }
@@ -116,15 +119,23 @@ internal sealed class ModEntry : Mod
 
     private void ApplyPatches(Harmony harmony)
     {
+#if DEBUG
+        Stopwatch sw = new();
+        sw.Start();
+#endif
         try
         {
             harmony.PatchAll();
         }
         catch (Exception ex)
         {
-            ModMonitor.Log(string.Format(ErrorMessageConsts.HARMONYCRASH, ex), LogLevel.Error);
+            this.Monitor.Log(string.Format(ErrorMessageConsts.HARMONYCRASH, ex), LogLevel.Error);
         }
         harmony.Snitch(this.Monitor, uniqueID: harmony.Id, transpilersOnly: true);
+#if DEBUG
+        sw.Stop();
+        this.Monitor.Log($"Took {sw.ElapsedMilliseconds} ms to apply harmony patches.", LogLevel.Info);
+#endif
     }
 
     /***********
@@ -167,6 +178,10 @@ internal sealed class ModEntry : Mod
     [EventPriority(EventPriority.Low - 1000)]
     private void LateSaveLoaded(object? sender, SaveLoadedEventArgs e)
     {
+        if (Context.IsSplitScreen && Context.ScreenId != 0)
+        {
+            return;
+        }
         this.Monitor.DebugOnlyLog($"Current memory usage {GC.GetTotalMemory(false):N0}", LogLevel.Info);
         GCHelperFunctions.RequestFullGC();
         this.Monitor.DebugOnlyLog($"Post-collection memory usage {GC.GetTotalMemory(true):N0}", LogLevel.Info);

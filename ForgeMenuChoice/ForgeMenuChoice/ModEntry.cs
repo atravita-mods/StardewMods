@@ -80,15 +80,14 @@ internal sealed class ModEntry : Mod
         this.ApplyPatches(new Harmony(this.ModManifest.UniqueID));
 
         GMCMHelper helper = new(this.Monitor, this.Helper.Translation, this.Helper.ModRegistry, this.ModManifest);
-        if (!helper.TryGetAPI())
+        if (helper.TryGetAPI())
         {
-            return;
+            helper.Register(
+                reset: static () => Config = new ModConfig(),
+                save: () => this.Helper.AsyncWriteConfig(this.Monitor, Config))
+            .AddParagraph(I18n.ModDescription)
+            .GenerateDefaultGMCM(static () => Config);
         }
-        helper.Register(
-            reset: static () => Config = new ModConfig(),
-            save: () => this.Helper.AsyncWriteConfig(this.Monitor, Config))
-        .AddParagraph(I18n.ModDescription)
-        .GenerateDefaultGMCM(static () => Config);
     }
 
     private void ApplyPatches(Harmony harmony)

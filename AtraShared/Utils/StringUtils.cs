@@ -254,11 +254,12 @@ public sealed class StringUtils
     /// <param name="word">Word to truncate.</param>
     /// <param name="whichFont">Which font to use.</param>
     /// <param name="width">Width to wrap to.</param>
+    /// <param name="current_width">The width of the truncated word.</param>
     /// <param name="trunchars">Characters to use to truncate with.</param>
     /// <returns>Truncated string + width.</returns>
     private StringBuilder TruncateWord(ReadOnlySpan<char> word, SpriteFont whichFont, float width, out float current_width, string trunchars = "...")
     {
-        StringBuilder sb = new();
+        StringBuilder sb = new(word.Length);
         current_width = -whichFont.Spacing + whichFont.MeasureString(trunchars).X;
         float charwidth = 0;
         float proposedcharwidth = 0;

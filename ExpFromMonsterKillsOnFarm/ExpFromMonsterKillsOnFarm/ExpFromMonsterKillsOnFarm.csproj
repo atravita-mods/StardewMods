@@ -8,7 +8,11 @@
   </PropertyGroup>
 
   <PropertyGroup>
+    <Name>EXP From Monster Kills On Farm</Name>
+    <Description>Grants XP for monster kills on the farm.</Description>
+    <UpdateKeys>Nexus:10924, ModDrop:1099838</UpdateKeys>
     <Version>0.3.0</Version>
+    <BaseManifest>..\..\base_dependencies.json</BaseManifest>
   </PropertyGroup>
 
   <PropertyGroup>
@@ -22,8 +26,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\AtraCore\AtraCore.csproj" Private="true" />
-    <ProjectReference Include="..\..\Pintail\Pintail\Pintail.csproj" Private="true" />
+    <ProjectReference Include="..\..\AtraCore\AtraCore.csproj" Private="False" />
+    <ProjectReference Include="..\..\Pintail\Pintail\Pintail.csproj" Private="False" />
   </ItemGroup>
 
   <ItemGroup>

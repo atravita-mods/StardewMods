@@ -1,6 +1,7 @@
 ﻿using AtraBase.Toolkit.Extensions;
 using AtraShared.ConstantsAndEnums;
 using AtraShared.Utils.Extensions;
+using Microsoft.Toolkit.Diagnostics;
 
 namespace AtraCore.Framework.ItemManagement;
 
@@ -22,6 +23,8 @@ internal static class DataToItemMap
     /// <returns>Integer ID, or -1 if not found.</returns>
     public static int GetID(ItemTypeEnum type, string name, bool resolveRecipesSeperately = false)
     {
+        Guard.IsNotNullOrWhiteSpace(name, nameof(name));
+
         if (!resolveRecipesSeperately)
         {
             type &= ~ItemTypeEnum.Recipe;
@@ -173,10 +176,49 @@ internal static class DataToItemMap
             {
                 ModEntry.ModMonitor.DebugOnlyLog("Building map to resolve BigCraftables", LogLevel.Info);
 
-                Dictionary<string, int> mapping = new(Game1.bigCraftablesInformation.Count);
+                Dictionary<string, int> mapping = new(Game1.bigCraftablesInformation.Count)
+                {
+                    // special cases
+                    ["House Plant"] = 0,
+                    ["Tub o' Flowers"] = Game1.currentSeason.Equals("winter") || Game1.currentSeason.Equals("fall") ? 109 : 108,
+                    ["Rarecrow 1"] = 110,
+                    ["Rarecrow 2"] = 113,
+                    ["Rarecrow 3"] = 126,
+                    ["Rarecrow 4"] = 136,
+                    ["Rarecrow 5"] = 137,
+                    ["Rarecrow 6"] = 138,
+                    ["Rarecrow 7"] = 139,
+                    ["Rarecrow 8"] = 140,
+                    ["Seasonal Plant"] = 184,
+                    ["Seasonal Plant 1"] = 188,
+                    ["Seasonal Plant 2"] = 192,
+                    ["Seasonal Plant 3"] = 196,
+                    ["Seasonal Plant 4"] = 200,
+                    ["Seasonal Plant 5"] = 204,
+                };
+
+                // House plants :P
+                for (int i = 1; i <= 7; i++)
+                {
+                    mapping["House Plant " + i.ToString()] = i;
+                }
                 foreach ((int id, string data) in Game1.bigCraftablesInformation)
                 {
-                    string name = data.GetNthChunk('/', SObject.objectInfoNameIndex).ToString();
+                    var nameSpan = data.GetNthChunk('/', SObject.objectInfoNameIndex);
+                    if (nameSpan.Equals("House Plant", StringComparison.OrdinalIgnoreCase)
+                        || nameSpan.Equals("Wood Chair", StringComparison.OrdinalIgnoreCase)
+                        || nameSpan.Equals("Door", StringComparison.OrdinalIgnoreCase)
+                        || nameSpan.Equals("Locked Door", StringComparison.OrdinalIgnoreCase)
+                        || nameSpan.Equals("Tub o' Flowers", StringComparison.OrdinalIgnoreCase)
+                        || nameSpan.Equals("Seasonal Plant", StringComparison.OrdinalIgnoreCase)
+                        || nameSpan.Equals("Rarecrow", StringComparison.OrdinalIgnoreCase)
+                        || nameSpan.Equals("Crate", StringComparison.OrdinalIgnoreCase)
+                        || nameSpan.Equals("Barrel", StringComparison.OrdinalIgnoreCase))
+                    {
+                        continue;
+                    }
+
+                    string name = nameSpan.ToString();
                     if (!mapping.TryAdd(name, id))
                     {
                         ModEntry.ModMonitor.Log($"{name} with {id} seems to be a duplicate BigCraftable and may not be resolved correctly.", LogLevel.Warn);
@@ -192,10 +234,21 @@ internal static class DataToItemMap
             {
                 ModEntry.ModMonitor.DebugOnlyLog("Building map to resolve Clothing", LogLevel.Info);
 
-                Dictionary<string, int> mapping = new(Game1.clothingInformation.Count);
+                Dictionary<string, int> mapping = new(Game1.clothingInformation.Count)
+                {
+                    ["Prismatic Shirt"] = 1999,
+                    ["Dark Prismatic Shirt"] = 1998,
+                };
+
                 foreach ((int id, string data) in Game1.clothingInformation)
                 {
-                    string name = data.GetNthChunk('/', SObject.objectInfoNameIndex).ToString();
+                    var nameSpan = data.GetNthChunk('/', SObject.objectInfoNameIndex);
+                    if (nameSpan.Equals("Prismatic Shirt", StringComparison.OrdinalIgnoreCase))
+                    {
+                        continue;
+                    }
+
+                    string name = nameSpan.ToString();
                     if (!mapping.TryAdd(name, id))
                     {
                         ModEntry.ModMonitor.Log($"{name} with {id} seems to be a duplicate ClothingItem and may not be resolved correctly.", LogLevel.Warn);
@@ -231,9 +284,12 @@ internal static class DataToItemMap
                 ModEntry.ModMonitor.DebugOnlyLog("Building map to resolve Hats", LogLevel.Info);
 
                 Dictionary<string, int> mapping = new(100);
+
                 foreach ((int id, string data) in Game1.content.Load<Dictionary<int, string>>(enumToAssetMap[ItemTypeEnum.Hat].BaseName))
                 {
-                    string name = data.GetNthChunk('/', SObject.objectInfoNameIndex).ToString();
+                    var nameSpan = data.GetNthChunk('/', SObject.objectInfoNameIndex);
+
+                    string name = nameSpan.ToString();
                     if (!mapping.TryAdd(name, id))
                     {
                         ModEntry.ModMonitor.Log($"{name} with {id} seems to be a duplicate Hat and may not be resolved correctly.", LogLevel.Warn);

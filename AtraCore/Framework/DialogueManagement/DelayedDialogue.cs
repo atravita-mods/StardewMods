@@ -1,4 +1,6 @@
-﻿namespace AtraCore.Framework.DialogueManagement;
+﻿using Microsoft.Toolkit.Diagnostics;
+
+namespace AtraCore.Framework.DialogueManagement;
 
 /// <summary>
 /// A dialogue to delay.
@@ -17,6 +19,9 @@ public readonly struct DelayedDialogue
     /// <param name="npc">Speaking NPC.</param>
     public DelayedDialogue(int time, Dialogue dialogue, NPC npc)
     {
+        Guard.IsNotNull(dialogue, nameof(dialogue));
+        Guard.IsNotNull(npc, nameof(npc));
+
         this.time = time;
         this.dialogue = dialogue;
         this.npc = npc;

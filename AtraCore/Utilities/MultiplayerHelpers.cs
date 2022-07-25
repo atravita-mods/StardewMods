@@ -1,5 +1,6 @@
 ﻿using AtraBase.Toolkit.Reflection;
 using AtraCore.Framework.QueuePlayerAlert;
+using Microsoft.Toolkit.Diagnostics;
 
 namespace AtraCore.Utilities;
 
@@ -25,6 +26,11 @@ public static class MultiplayerHelpers
     /// <param name="translation">Translation helper.</param>
     public static void AssertMultiplayerVersions(IMultiplayerHelper multi, IManifest manifest, IMonitor monitor, ITranslationHelper translation)
     {
+        Guard.IsNotNull(multi, nameof(multi));
+        Guard.IsNotNull(manifest, nameof(manifest));
+        Guard.IsNotNull(monitor, nameof(monitor));
+        Guard.IsNotNull(translation, nameof(translation));
+
         if (Context.IsMultiplayer && !Context.IsMainPlayer && !Context.IsSplitScreen)
         {
             if (multi.GetConnectedPlayer(Game1.MasterPlayer.UniqueMultiplayerID)?.GetMod(manifest.UniqueID) is not IMultiplayerPeerMod hostMod)

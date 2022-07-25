@@ -37,7 +37,7 @@ internal sealed class ModEntry : Mod
         {
             if (prismaticSlimeEgg == -1)
             {
-                prismaticSlimeEgg = jsonAssets?.GetObjectId("atravita.PrismaticSlimeEgg") ?? -1;
+                prismaticSlimeEgg = jsonAssets?.GetObjectId("atravita.PrismaticSlime Egg") ?? -1;
             }
             return prismaticSlimeEgg;
         }
@@ -86,7 +86,7 @@ internal sealed class ModEntry : Mod
         }
 
         {
-            IntegrationHelper helper = new(this.Monitor, this.Helper.Translation, this.Helper.ModRegistry);
+            IntegrationHelper helper = new(this.Monitor, this.Helper.Translation, this.Helper.ModRegistry, LogLevel.Trace);
             _ = helper.TryGetAPI("bcmpinc.WearMoreRings", "5.1.0", out wearMoreRingsAPI);
         }
     }

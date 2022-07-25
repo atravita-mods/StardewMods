@@ -1,20 +1,16 @@
-﻿using AtraShared.Integrations;
+﻿using AtraCore.Utilities;
+using AtraShared.Integrations;
 using AtraShared.Integrations.Interfaces;
 using AtraShared.MigrationManager;
 using AtraShared.Utils.Extensions;
 using HarmonyLib;
 using Microsoft.Xna.Framework;
+#if DEBUG
 using PamTries.HarmonyPatches;
+#endif
 using StardewModdingAPI.Events;
 
 namespace PamTries;
-
-public enum PamMood
-{
-    bad,
-    neutral,
-    good,
-}
 
 /// <inheritdoc />
 internal class ModEntry : Mod
@@ -75,6 +71,8 @@ internal class ModEntry : Mod
             return;
         }
 
+        MultiplayerHelpers.AssertMultiplayerVersions(this.Helper.Multiplayer, this.ModManifest, this.Monitor, this.Helper.Translation);
+
         PTUtilities.PopulateLexicon(this.Helper.GameContent);
         this.migrator = new(this.ModManifest, this.Helper, this.Monitor);
         if (!this.migrator.CheckVersionInfo())
@@ -105,45 +103,43 @@ internal class ModEntry : Mod
     private void OnGameLaunch(object? sender, GameLaunchedEventArgs e)
     {
         IntegrationHelper helper = new(this.Monitor, this.Helper.Translation, this.Helper.ModRegistry);
-        if (!helper.TryGetAPI("Pathoschild.ContentPatcher", "1.20.0", out IContentPatcherAPI? api))
+        if (helper.TryGetAPI("Pathoschild.ContentPatcher", "1.20.0", out IContentPatcherAPI? api))
         {
-            return;
+            api.RegisterToken(this.ModManifest, "CurrentMovie", () =>
+            {
+            // save is loaded
+                if (Context.IsWorldReady)
+                {
+                    return new[] { DialogueManager.CurrentMovie() };
+                }
+                return null;
+            });
+            api.RegisterToken(this.ModManifest, "ChildrenCount", () =>
+            {
+            // save is loaded
+                if (Context.IsWorldReady)
+                {
+                    return new[] { DialogueManager.ChildCount() };
+                }
+                return null;
+            });
+            api.RegisterToken(this.ModManifest, "ListChildren", () =>
+            {
+                if (Context.IsWorldReady)
+                {
+                    return new[] { DialogueManager.ListChildren() };
+                }
+                return null;
+            });
+            api.RegisterToken(this.ModManifest, "PamMood", () =>
+            {
+                if (Context.IsWorldReady)
+                {
+                    return new[] { this.GetPamMood() };
+                }
+                return null;
+            });
         }
-
-        api.RegisterToken(this.ModManifest, "CurrentMovie", () =>
-        {
-            // save is loaded
-            if (Context.IsWorldReady)
-            {
-                return new[] { DialogueManager.CurrentMovie() };
-            }
-            return null;
-        });
-        api.RegisterToken(this.ModManifest, "ChildrenCount", () =>
-        {
-            // save is loaded
-            if (Context.IsWorldReady)
-            {
-                return new[] { DialogueManager.ChildCount() };
-            }
-            return null;
-        });
-        api.RegisterToken(this.ModManifest, "ListChildren", () =>
-        {
-            if (Context.IsWorldReady)
-            {
-                return new[] { DialogueManager.ListChildren() };
-            }
-            return null;
-        });
-        api.RegisterToken(this.ModManifest, "PamMood", () =>
-        {
-            if (Context.IsWorldReady)
-            {
-                return new[] { this.GetPamMood() };
-            }
-            return null;
-        });
     }
 
     private string GetPamMood()
@@ -197,7 +193,7 @@ internal class ModEntry : Mod
     }
 
     /// <summary>
-    /// Undoes the changes to Pam's sprite at the end of the day, in case player sleeps while Pam fishes. Also, implements rehab invisibility
+    /// Undoes the changes to Pam's sprite at the end of the day, in case player sleeps while Pam fishes. Also, implements rehab invisibility.
     /// </summary>
     /// <param name="sender">SMAPI.</param>
     /// <param name="args">Day end argmuments.</param>

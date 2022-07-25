@@ -1,4 +1,5 @@
-﻿using StardewModdingAPI.Utilities;
+﻿using Microsoft.Toolkit.Diagnostics;
+using StardewModdingAPI.Utilities;
 
 namespace AtraCore.Framework.QueuePlayerAlert;
 
@@ -11,6 +12,8 @@ public static class PlayerAlertHandler
 
     public static void AddMessage(HUDMessage message)
     {
+        Guard.IsNotNull(message, nameof(message));
+
         QueuedMessages.Value.Enqueue(message);
     }
 

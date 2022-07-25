@@ -95,12 +95,12 @@ internal static class AutomateTranspiler
             .Insert(copy.ToArray(), withLabels: labels)
             .Insert(new CodeInstruction[]
             {
-                new(OpCodes.Ldfld, typeof(SObject).InstanceFieldNamed(nameof(SObject.heldObject))),
+                new(OpCodes.Ldfld, typeof(SObject).GetCachedField(nameof(SObject.heldObject), ReflectionCache.FlagTypes.InstanceFlags)),
                 new(OpCodes.Dup),
                 new(OpCodes.Callvirt, typeof(NetFieldBase<SObject, NetRef<SObject>>).GetCachedProperty("Value", ReflectionCache.FlagTypes.InstanceFlags).GetGetMethod()),
                 new(OpCodes.Ldarg_3),
                 new(OpCodes.Ldind_Ref),
-                new(OpCodes.Call, typeof(AutomateTranspiler).StaticMethodNamed(nameof(MakeOrganic))),
+                new(OpCodes.Call, typeof(AutomateTranspiler).GetCachedMethod(nameof(MakeOrganic), ReflectionCache.FlagTypes.StaticFlags)),
                 new(OpCodes.Callvirt, typeof(NetFieldBase<SObject, NetRef<SObject>>).GetCachedProperty("Value", ReflectionCache.FlagTypes.InstanceFlags).GetSetMethod()),
             });
 

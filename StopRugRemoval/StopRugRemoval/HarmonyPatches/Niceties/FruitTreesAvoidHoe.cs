@@ -1,6 +1,5 @@
 ﻿using System.Reflection;
 using System.Reflection.Emit;
-using AtraBase.Toolkit.Reflection;
 using AtraCore.Framework.ReflectionManager;
 using AtraShared.Utils.Extensions;
 using AtraShared.Utils.HarmonyHelper;
@@ -33,7 +32,7 @@ internal static class FruitTreesAvoidHoe
             {
                 ModEntry.ModMonitor.Log("Transpiling DGA to remove damage to fruit trees from hoes", LogLevel.Info);
                 harmony.Patch(
-                    original: dgaTree.InstanceMethodNamed("performToolAction"),
+                    original: dgaTree.GetCachedMethod("performToolAction", ReflectionCache.FlagTypes.InstanceFlags),
                     transpiler: new HarmonyMethod(typeof(FruitTreesAvoidHoe), nameof(FruitTreesAvoidHoe.Transpiler)));
             }
             else

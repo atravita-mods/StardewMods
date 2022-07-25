@@ -33,6 +33,7 @@ internal static class SObjectPatches
     }
 
     [HarmonyPostfix]
+    [HarmonyPriority(Priority.VeryLow)]
     [HarmonyPatch(nameof(SObject.performObjectDropInAction))]
     [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Harmony Convention")]
     private static void PostfixDropInAction(SObject __instance, Item dropInItem, bool probe)

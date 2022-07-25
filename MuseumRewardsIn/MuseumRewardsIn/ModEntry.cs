@@ -1,6 +1,7 @@
 ﻿using System.Text.RegularExpressions;
 using AtraShared.Integrations;
 using AtraShared.ItemManagement;
+using AtraShared.Menuing;
 using AtraShared.Utils.Extensions;
 using HarmonyLib;
 using Microsoft.Xna.Framework;
@@ -63,7 +64,7 @@ internal sealed class ModEntry : Mod
         if (config.BoxLocation == new Vector2(-1, -1))
         {
             config.BoxLocation = shopLoc;
-            Task.Run(() => this.Helper.WriteConfig(config));
+            this.Helper.AsyncWriteConfig(this.Monitor, config);
         }
 
         GMCMHelper gmcm = new(this.Monitor, this.Helper.Translation, this.Helper.ModRegistry, this.ModManifest);
@@ -117,14 +118,7 @@ internal sealed class ModEntry : Mod
     /// <param name="e">event args.</param>
     private void OnButtonPressed(object? sender, ButtonPressedEventArgs e)
     {
-        if (!e.Button.IsActionButton() && !e.Button.IsUseToolButton())
-        {
-            return;
-        }
-
-        if (!Context.IsWorldReady || !Context.CanPlayerMove || Game1.player.isRidingHorse()
-            || Game1.currentLocation is null || Game1.eventUp || Game1.isFestival() || Game1.IsFading()
-            || Game1.activeClickableMenu is not null)
+        if (!MenuingExtensions.IsNormalGameplay() || (!e.Button.IsActionButton() && !e.Button.IsUseToolButton()))
         {
             return;
         }
@@ -132,7 +126,7 @@ internal sealed class ModEntry : Mod
         this.Monitor.DebugOnlyLog(Game1.currentLocation?.doesTileHaveProperty((int)e.Cursor.GrabTile.X, (int)e.Cursor.GrabTile.Y, "Action", BUILDING) ?? string.Empty);
 
         if (Game1.currentLocation is not LibraryMuseum museum
-            || museum.doesTileHavePropertyNoNull((int)e.Cursor.GrabTile.X, (int)e.Cursor.GrabTile.Y, "Action", BUILDING) != SHOPNAME)
+            || museum.doesTileHaveProperty((int)e.Cursor.GrabTile.X, (int)e.Cursor.GrabTile.Y, "Action", BUILDING) != SHOPNAME)
         {
             return;
         }

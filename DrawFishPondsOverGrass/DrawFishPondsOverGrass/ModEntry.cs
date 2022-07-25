@@ -1,5 +1,4 @@
-﻿using AtraShared.Utils.Extensions;
-using HarmonyLib;
+﻿using HarmonyLib;
 
 namespace DrawFishPondsOverGrass;
 
@@ -35,6 +34,8 @@ internal sealed class ModEntry : Mod
         {
             ModMonitor.Log($"Mod crashed while applying harmony patches\n\n{ex}", LogLevel.Error);
         }
-        harmony.Snitch(this.Monitor, this.ModManifest.UniqueID, transpilersOnly: true);
+
+        // no snitch necessary, this mod entirely uses ForEachMatch patches.
+        // harmony.Snitch(this.Monitor, this.ModManifest.UniqueID, transpilersOnly: true);
     }
 }

@@ -68,10 +68,10 @@ internal sealed class ModEntry : Mod
                     Vector2 offset = crop.tile.Value;
                     offset.X += crop.width.Value / 2;
                     offset.Y += crop.height.Value - 1;
-                    if (location.objects.TryGetValue(offset, out var tapper) && tapper.Name.Contains("Tapper")
+                    if (location.objects.TryGetValue(offset, out SObject? tapper) && tapper.Name.Contains("Tapper", StringComparison.Ordinal)
                         && tapper.heldObject is not null && tapper.heldObject.Value is null)
                     {
-                        var output = Api.GetTapperProduct(crop, tapper);
+                        (SObject obj, int days)? output = Api.GetTapperProduct(crop, tapper);
                         if (output is not null)
                         {
                             tapper.heldObject.Value = output.Value.obj;
@@ -124,11 +124,14 @@ internal sealed class ModEntry : Mod
     {
         try
         {
-            Vector2 tile = new(MathF.Floor(x / 64f), MathF.Floor(y / 64f));
-            if (Utility.withinRadiusOfPlayer(x, y, 2, f) && item is SObject obj && Api.CanPlaceTapper(location, tile, obj))
+            if (Utility.withinRadiusOfPlayer(x, y, 2, f) && item is SObject obj)
             {
-                __result = true;
-                return false;
+                Vector2 tile = new(MathF.Floor(x / 64f), MathF.Floor(y / 64f));
+                if (Api.CanPlaceTapper(location, tile, obj))
+                {
+                    __result = true;
+                    return false;
+                }
             }
         }
         catch (Exception ex)

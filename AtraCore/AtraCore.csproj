@@ -10,7 +10,7 @@
   </PropertyGroup>
 
   <PropertyGroup>
-    <Version>0.1.0</Version>
+    <Version>0.1.1</Version>
     <Name>AtraCore</Name>
     <Description>A core library mod some of my other mods depend on.</Description>
     <UpdateKeys>Nexus:12932</UpdateKeys>

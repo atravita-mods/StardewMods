@@ -15,6 +15,7 @@ using StopRugRemoval.Configuration;
 using StopRugRemoval.HarmonyPatches;
 using StopRugRemoval.HarmonyPatches.Confirmations;
 using StopRugRemoval.HarmonyPatches.Niceties;
+using StopRugRemoval.HarmonyPatches.Niceties.PhoneTiming;
 using StopRugRemoval.HarmonyPatches.Volcano;
 using AtraUtils = AtraShared.Utils.Utils;
 
@@ -97,8 +98,6 @@ internal sealed class ModEntry : Mod
         helper.Events.Multiplayer.PeerConnected += this.OnPlayerConnected;
 
         helper.Events.Specialized.LoadStageChanged += this.OnLoadStageChanged;
-
-        this.ApplyPatches(new Harmony(this.ModManifest.UniqueID));
     }
 
     /// <summary>
@@ -159,24 +158,6 @@ internal sealed class ModEntry : Mod
      * *************/
 
     /// <summary>
-    /// Applies and logs this mod's harmony patches.
-    /// </summary>
-    /// <param name="harmony">My harmony instance.</param>
-    private void ApplyPatches(Harmony harmony)
-    {
-        try
-        {
-            // handle patches from annotations.
-            harmony.PatchAll();
-        }
-        catch (Exception ex)
-        {
-            ModMonitor.Log(string.Format(ErrorMessageConsts.HARMONYCRASH, ex), LogLevel.Error);
-        }
-        harmony.Snitch(this.Monitor, harmony.Id, transpilersOnly: true);
-    }
-
-    /// <summary>
     /// Applies the patches that must be applied after all mods are initialized.
     /// IE - patches on other mods.
     /// </summary>
@@ -185,10 +166,16 @@ internal sealed class ModEntry : Mod
     {
         try
         {
+            harmony.PatchAll();
             FruitTreesAvoidHoe.ApplyPatches(harmony, this.Helper.ModRegistry);
             if (!this.Helper.ModRegistry.IsLoaded("DecidedlyHuman.BetterReturnScepter"))
             {
                 ConfirmWarp.ApplyWandPatches(harmony);
+            }
+            if (this.Helper.ModRegistry.IsLoaded("Becks723.PhoneTravelingCart"))
+            {
+                this.Monitor.Log("Phone Traveling Cart found, patching for compat", LogLevel.Info);
+                ScaleDialing.ApplyPatches(harmony);
             }
         }
         catch (Exception ex)
@@ -201,7 +188,7 @@ internal sealed class ModEntry : Mod
     private void OnGameLaunch(object? sender, GameLaunchedEventArgs e)
     {
         PlantGrassUnder.GetSmartBuildingBuildMode(this.Helper.ModRegistry);
-        this.ApplyLatePatches(new Harmony(this.ModManifest.UniqueID + "+latepatches"));
+        this.ApplyLatePatches(new Harmony(this.ModManifest.UniqueID));
 
         GMCM = new(this.Monitor, this.Helper.Translation, this.Helper.ModRegistry, this.ModManifest);
         if (GMCM.TryGetAPI())
@@ -345,6 +332,10 @@ internal sealed class ModEntry : Mod
             else if (property.PropertyType == typeof(KeybindList))
             {
                 GMCM.AddKeybindList(property, GetConfig);
+            }
+            else if (property.PropertyType == typeof(float))
+            {
+                GMCM.AddFloatOption(property, GetConfig);
             }
         }
 

@@ -21,4 +21,7 @@
 
   "JitterMultiplier.title": "Jitter Multiplier",
   "JitterMultiplier.description": "How fast the figure 8 jitter pattern should move in.",
+
+  "DartPrecision.title": "Dart Precision",
+  "DartPrecision.description":  "Affects how much randomness affects the darts after throwing."
 }

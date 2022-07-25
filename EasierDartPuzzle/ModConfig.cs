@@ -27,11 +27,11 @@ internal sealed class ModConfig
     /// <summary>
     /// Gets or sets a value indicating the minimum dart requirement.
     /// </summary>
-    [GMCMRange(8, 30)]
+    [GMCMRange(6, 30)]
     public int MinDartCount
     {
         get => this.minDartCount;
-        set => this.minDartCount = Math.Clamp(value, 8, 30);
+        set => this.minDartCount = Math.Clamp(value, 6, 30);
     }
 
     private int maxDartCount = 20;
@@ -39,11 +39,11 @@ internal sealed class ModConfig
     /// <summary>
     /// Gets or sets a value indicating the max dart requirement.
     /// </summary>
-    [GMCMRange(8, 30)]
+    [GMCMRange(6, 30)]
     public int MaxDartCount
     {
         get => this.maxDartCount;
-        set => this.maxDartCount = Math.Clamp(value, 8, 30);
+        set => this.maxDartCount = Math.Clamp(value, 6, 30);
     }
 
     /// <summary>
@@ -62,6 +62,16 @@ internal sealed class ModConfig
     {
         get => this.jitterMultiplier;
         set => this.jitterMultiplier = Math.Clamp(value, 0.05f, 20f);
+    }
+
+    private float dartPrecision = 1f;
+
+    [GMCMRange(0.5, 5)]
+    [GMCMInterval(0.01)]
+    public float DartPrecision
+    {
+        get => this.dartPrecision;
+        set => this.dartPrecision = Math.Clamp(value, 0.5f, 5f);
     }
 }
 #pragma warning restore SA1201 // Elements should appear in the correct order

@@ -2,6 +2,7 @@
 =============
 #### Version 0.2.0
 * Move to using AtraCore.
+* Add integration with SolidFoundations.
 
 #### Version 0.1.5
 * Fix migration code. Again.

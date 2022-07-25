@@ -15,7 +15,6 @@ Changelog
 ##### In consideration
 
 1. Somehow limit the kill objective to just monsters on a certain (few?) maps. (Perhaps a custom objective, perhaps a Special Rule).
-6. Implement a temporary saving mechanism for Save Anywhere (look into their API?)
 <!-- Handle WoL professions? -->
 
 #### Version 1.1.0
@@ -25,6 +24,7 @@ Changelog
 * Internal optimizations.
 * Clear the relevant dialogue log when a player *fails* a quest.
 * Add a method for content packs to more easily add untimed orders.
+* Update to handle SaveAnywhere.
 
 #### Version 1.0.7
 

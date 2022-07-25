@@ -9,25 +9,33 @@ using HarmonyLib;
 
 namespace HolidaySales.HarmonyPatches;
 
+/// <summary>
+/// Patch to handle the phone.
+/// </summary>
 [HarmonyPatch(typeof(GameLocation))]
 internal static class RedirectPhoneCall
 {
+    /// <summary>
+    /// Gets the methods to patch.
+    /// </summary>
+    /// <returns>methods to patch.</returns>
+    /// <exception cref="MethodNotFoundException">Method wasn't found.</exception>
     internal static IEnumerable<MethodBase> TargetMethods()
     {
         foreach (MethodInfo? method in typeof(GameLocation).GetMethods(BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public))
         {
-            if (method.Name.Contains("<answerDialogueAction>") && method.GetParameters().Length == 0)
+            if (method.Name.Contains("<answerDialogueAction>", StringComparison.Ordinal) && method.GetParameters().Length == 0)
             {
                 yield return method;
             }
         }
 
         Type? inner = typeof(GameLocation).GetNestedType("<>c", BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public)
-            ?? throw new MethodNotFoundException("phone");
+            ?? ReflectionThrowHelper.ThrowMethodNotFoundException<Type>("phone inner class");
 
         foreach (MethodInfo? method in inner.GetMethods(BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public))
         {
-            if (method.Name.Contains("<answerDialogueAction>") && method.GetParameters().Length == 0)
+            if (method.Name.Contains("<answerDialogueAction>", StringComparison.Ordinal) && method.GetParameters().Length == 0)
             {
                 yield return method;
             }

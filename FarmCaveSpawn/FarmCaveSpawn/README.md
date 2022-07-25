@@ -5,26 +5,28 @@ Modded farm caves don't really play well with how the fruit cave spawns its frui
 
 Any fruit tree's products can be spawned. Mod trees, as long as they're registered with `Data/fruitTrees`, will be used as well. (Tested with RSV and PPJA More Trees). Fruit not associated with a tree will not be produced.
 
-#### Installation
+## Installation
 1. Install the latest version of [SMAPI](https://smapi.io).
 2. Download and install [AtraCore](https://www.nexusmods.com/stardewvalley/mods/12932).
 2. Download this mod and unzip it into `Stardew Valley/Mods`.
 3. Run the game using SMAPI.
 
-#### Multiplayer
+## Multiplayer
 Host should install mod. Mod does not do anything for farmhands.
 
-#### SVE compat
+## SVE compat
 
 Will also spawn in the MinecartCave and the DeepCave, if `UseModCaves` is enabled (after 1.0.8). It goes room by room, so if you don't see spawns in MinecartCave and Deepcave try setting the spawn chance lower and the max daily spawns higher.
 
-#### Known compatability issues:
+## Known compatability issues:
 
 I check for `Game1.MasterPlayer.caveChoice` to see what farm cave you've picked. If you're using a mod that causes that flag to never be set (such as [Farm Cave Framework](https://www.nexusmods.com/stardewvalley/mods/10506)), this mod will never think the cave is a fruit bat cave. To get around it, you can set either `Ignore Farm Cave Type` to `true` or `Allow Early Farm Cave` to `true`.
 
 Farm Cave Framework is handled seperately - this mod will check to see if that mod's field for cave type contains the word "bat" or "fruit" and assume that it is a fruit cave. It should be compatible now.
 
-#### Configuration:
+## Configuration:
+
+Run SMAPI at least once with this mod installed to generate the `config.json`, or use [Generic Mod Config Menu](https://www.nexusmods.com/stardewvalley/mods/5098) to configure.
 
 1. `MaxDailySpawns`: the maximum number of fruit that will spawn.
 2. `SpawnChance`: the percent chance any empty square will spawn a fruit, capped by MaxDailySpawns. (Range: 0-100, where 100 means every unoccupied square will have a fruit)
@@ -41,5 +43,7 @@ Farm Cave Framework is handled seperately - this mod will check to see if that m
 11. `PriceCap`: Caps the value of the fruit that can be spawned.
 
 The console command `av.fcs.list_fruits` will tell you which tree fruits are available for spawning.
+
+## See also:
 
 [Changelog](docs/CHANGELOG.MD)

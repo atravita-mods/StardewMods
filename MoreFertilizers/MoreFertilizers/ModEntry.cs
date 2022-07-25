@@ -7,7 +7,9 @@ using AtraShared.Integrations;
 using AtraShared.Integrations.Interfaces;
 using AtraShared.Menuing;
 using AtraShared.MigrationManager;
+using AtraShared.Utils;
 using AtraShared.Utils.Extensions;
+using AtraShared.Utils.Shims;
 using HarmonyLib;
 using MoreFertilizers.DataModels;
 using MoreFertilizers.Framework;
@@ -34,6 +36,9 @@ internal sealed class ModEntry : Mod
     private static MoreFertilizerIDs? storedIDs;
 
     private MigrationManager? migrator;
+
+    private Dictionary<int, int>? idmap;
+    private ISolidFoundationsAPI? solidFoundationsAPI;
 
 #pragma warning disable SA1204 // Static elements should appear before instance elements. Keep backing fields near properties.
 #pragma warning disable SA1201 // Elements should appear in the correct order
@@ -709,7 +714,7 @@ internal sealed class ModEntry : Mod
             storedIDs.DomesticatedFishFoodID = DomesticatedFishFoodID;
         }
 
-        if (idMapping.Count <= 0 )
+        if (idMapping.Count <= 0)
         {
             ModMonitor.Log("No need to fix IDs, nothing has changed.");
             return;
@@ -718,31 +723,43 @@ internal sealed class ModEntry : Mod
         this.Helper.Events.GameLoop.Saving -= this.OnSaving;
         this.Helper.Events.GameLoop.Saving += this.OnSaving;
 
-        Utility.ForAllLocations((GameLocation loc) =>
+        // Grab the SF API to deshuffle in there too.
+        IntegrationHelper helper = new(this.Monitor, this.Helper.Translation, this.Helper.ModRegistry, LogLevel.Trace);
+        if (helper.TryGetAPI("PeacefulEnd.SolidFoundations", "1.12.1", out this.solidFoundationsAPI))
         {
-            foreach (TerrainFeature terrain in loc.terrainFeatures.Values)
-            {
-                if (terrain is HoeDirt dirt && dirt.fertilizer.Value != 0)
-                {
-                    if (idMapping.TryGetValue(dirt.fertilizer.Value, out int newval))
-                    {
-                        dirt.fertilizer.Value = newval;
-                    }
-                }
-            }
-            foreach (SObject obj in loc.Objects.Values)
-            {
-                if (obj is IndoorPot pot && pot.hoeDirt?.Value?.fertilizer?.Value is int value && value != 0)
-                {
-                    if (idMapping.TryGetValue(value, out int newvalue))
-                    {
-                        pot.hoeDirt.Value.fertilizer.Value = newvalue;
-                    }
-                }
-            }
-        });
+            this.idmap = idMapping;
+            this.solidFoundationsAPI.AfterBuildingRestoration += this.AfterSFBuildingRestore;
+        }
+
+        Utility.ForAllLocations((GameLocation loc) => loc.FixHoeDirtInLocation(idMapping));
 
         ModMonitor.Log($"Fixed IDs! {string.Join(", ", idMapping.Select((kvp) => $"{kvp.Key}=>{kvp.Value}"))}");
+    }
+
+    private void AfterSFBuildingRestore(object? sender, EventArgs e)
+    {
+        // unhook event
+        this.solidFoundationsAPI!.AfterBuildingRestoration -= this.AfterSFBuildingRestore;
+        if (SolidFoundationShims.IsSFBuilding is null)
+        {
+            this.Monitor.Log("Could not get a handle on SF's building class, deshuffling code will fail!", LogLevel.Error);
+        }
+        else if (this.idmap is null)
+        {
+            this.Monitor.Log("IdMap was not set correctly, deshuffling code will fail.", LogLevel.Error);
+        }
+        else
+        {
+            foreach (var building in GameLocationUtils.GetBuildings())
+            {
+                if (SolidFoundationShims.IsSFBuilding?.Invoke(building) == true)
+                {
+                    building.indoors.Value?.FixHoeDirtInLocation(this.idmap);
+                }
+            }
+        }
+        this.idmap = null;
+        this.solidFoundationsAPI = null;
     }
 
     /***********

@@ -12,6 +12,11 @@ This mod just adds collected rewards to a shop in the museum. By default, it's o
 2. Download this mod and unzip it into `Stardew Valley/Mods`.
 3. Run the game using SMAPI.
 
+## Configuration
+Run SMAPI at least once with this mod installed to generate the `config.json`, or use [Generic Mod Config Menu](https://www.nexusmods.com/stardewvalley/mods/5098) to configure.
+
+The single configuration option `BoxLocation` lets you set the location the box will spawn.
+
 ## Compatibility
 
 * Works with Stardew Valley 1.5.6 on Linux/macOS/Windows.

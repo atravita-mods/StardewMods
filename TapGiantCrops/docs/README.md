@@ -1,7 +1,11 @@
 ﻿Contributions README
 ====================================
 
-Most users should download the mod from the [Nexus page]<!--(https://www.nexusmods.com/stardewvalley/mods/11620)-->. That said, if you'd like to contribute:
+Most users should download the mod from the [Nexus page](https://www.nexusmods.com/stardewvalley/mods/13052). That said, if you'd like to contribute:
+
+### Extending this mod.
+
+Because this mod handles the placement of tappers internally, there's an [API](../ITapGiantCropsAPI.cs).
 
 ### Translations:
 

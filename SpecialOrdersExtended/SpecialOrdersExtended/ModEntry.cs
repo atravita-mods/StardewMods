@@ -19,7 +19,6 @@ namespace SpecialOrdersExtended;
 /// <inheritdoc />
 internal sealed class ModEntry : Mod
 {
-
     /// <summary>
     /// Spacecore API handle.
     /// </summary>
@@ -41,6 +40,11 @@ internal sealed class ModEntry : Mod
     /// Gets SMAPI's data helper for this mod.
     /// </summary>
     internal static IDataHelper DataHelper { get; private set; } = null!;
+
+    /// <summary>
+    /// Gets SMAPI's Multiplayer helper for this mod.
+    /// </summary>
+    internal static IMultiplayerHelper MultiplayerHelper { get; private set; } = null!;
 
     /// <summary>
     /// Gets the config class for this mod.
@@ -65,6 +69,7 @@ internal sealed class ModEntry : Mod
         I18n.Init(helper.Translation);
         ModMonitor = this.Monitor;
         DataHelper = helper.Data;
+        MultiplayerHelper = helper.Multiplayer;
 
         Config = AtraUtils.GetConfigOrDefault<ModConfig>(helper, this.Monitor);
 
@@ -164,6 +169,12 @@ internal sealed class ModEntry : Mod
             api.RegisterToken(this.ModManifest, "RecentCompleted", new Tokens.RecentCompletedSO());
         }
 
+        if (helper.TryGetAPI("Omegasis.SaveAnywhere", "2.13.0", out ISaveAnywhereApi? saveAnywhereApi))
+        {
+            saveAnywhereApi.BeforeSave += this.BeforeSaveAnywhere;
+            saveAnywhereApi.AfterLoad += this.AfterSaveAnywhere;
+        }
+
         {
             GMCMHelper gmcmHelper = new(this.Monitor, this.Helper.Translation, this.Helper.ModRegistry, this.ModManifest);
             if (gmcmHelper.TryGetAPI())
@@ -174,6 +185,18 @@ internal sealed class ModEntry : Mod
                 .GenerateDefaultGMCM(static () => Config);
             }
         }
+    }
+
+    private void AfterSaveAnywhere(object? sender, EventArgs e)
+    {
+        DialogueManager.LoadTemp();
+        RecentSOManager.LoadTemp();
+    }
+
+    private void BeforeSaveAnywhere(object? sender, EventArgs e)
+    {
+        DialogueManager.SaveTemp();
+        RecentSOManager.SaveTemp();
     }
 
     /// <summary>

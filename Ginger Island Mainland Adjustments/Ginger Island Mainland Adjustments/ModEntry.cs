@@ -44,7 +44,7 @@ internal sealed class ModEntry : Mod
 
         helper.Events.Content.AssetRequested += this.OnAssetRequested;
 
-        this.ApplyPatches(new Harmony(this.ModManifest.UniqueID));
+        AssetLoader.Init(helper.GameContent);
     }
 
     private void OnAssetRequested(object? sender, AssetRequestedEventArgs e)
@@ -149,6 +149,7 @@ internal sealed class ModEntry : Mod
         {
             // handle patches from annotations.
             harmony.PatchAll();
+            PhoneHandler.ApplyPatches(harmony);
             if (Globals.Config.DebugMode)
             {
                 ScheduleDebugPatches.ApplyPatches(harmony);
@@ -169,6 +170,9 @@ internal sealed class ModEntry : Mod
     /// <param name="e">Possible parameters.</param>
     private void OnGameLaunched(object? sender, GameLaunchedEventArgs e)
     {
+        // Applies harmony patches.
+        this.ApplyPatches(new Harmony(this.ModManifest.UniqueID));
+
         // Generate the GMCM for this mod.
         GenerateGMCM.Initialize(this.ModManifest, this.Helper.Translation);
         GenerateGMCM.Build();

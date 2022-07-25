@@ -47,21 +47,24 @@ internal static class AssetEditor
     /// <param name="e">Asset requested event arguments.</param>
     internal static void Edit(AssetRequestedEventArgs e)
     {
-        if (e.NameWithoutLocale.IsEquivalentTo(OBJECTDATA))
+        if ((ModEntry.PlantableFertilizerIDs.Count > 0 || ModEntry.SpecialFertilizerIDs.Count > 0) && e.NameWithoutLocale.IsEquivalentTo(OBJECTDATA))
         {
             e.Edit(EditSObjectsImpl, AssetEditPriority.Late);
         }
-        else if (e.NameWithoutLocale.IsEquivalentTo(SPECIAL_ORDERS_LOCATION))
+        else if (Utility.doesAnyFarmerHaveOrWillReceiveMail("seenBoatJourney"))
         {
-            e.Edit(EditSpecialOrdersImpl, AssetEditPriority.Early);
-        }
-        else if (e.NameWithoutLocale.IsEquivalentTo(SPECIAL_ORDERS_STRINGS))
-        {
-            e.Edit(EditSpecialOrdersStringsImpl, AssetEditPriority.Early);
-        }
-        else if (e.NameWithoutLocale.IsEquivalentTo(MAIL))
-        {
-            e.Edit(EditMailImpl, AssetEditPriority.Early);
+            if (e.NameWithoutLocale.IsEquivalentTo(SPECIAL_ORDERS_LOCATION))
+            {
+                e.Edit(EditSpecialOrdersImpl, AssetEditPriority.Early);
+            }
+            else if (e.NameWithoutLocale.IsEquivalentTo(SPECIAL_ORDERS_STRINGS))
+            {
+                e.Edit(EditSpecialOrdersStringsImpl, AssetEditPriority.Early);
+            }
+            else if (e.NameWithoutLocale.IsEquivalentTo(MAIL))
+            {
+                e.Edit(EditMailImpl, AssetEditPriority.Early);
+            }
         }
     }
 
@@ -72,7 +75,7 @@ internal static class AssetEditor
     /// <param name="e">event args.</param>
     internal static void EditSpecialOrderDialogue(AssetRequestedEventArgs e)
     {
-        if (e.NameWithoutLocale.IsEquivalentTo(LEWIS_DIALOGUE))
+        if (e.NameWithoutLocale.IsEquivalentTo(LEWIS_DIALOGUE) && Utility.doesAnyFarmerHaveOrWillReceiveMail("seenBoatJourney"))
         {
             e.Edit(EditLewisDialogueImpl, AssetEditPriority.Early);
         }

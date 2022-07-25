@@ -12,6 +12,7 @@
 * Prevent broken sound cues from breaking the game.
 * Slingshot ammo now stacks instead of swapping.
 * Schedule fixer now tries to resolve `GOTO spring` and other statements to use the actual schedule.
+* Allows speeding up of phone calls.
 
 #### Version 1.0.11
 * Fix issues with the night market warp home.

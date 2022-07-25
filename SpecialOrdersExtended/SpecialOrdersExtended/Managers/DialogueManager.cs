@@ -38,10 +38,34 @@ internal class DialogueManager
     /// Else loads from the usual file.
     /// </summary>
     /// <param name="multiplayerID">The player's unique ID.</param>
-    internal static void LoadTemp(long multiplayerID)
+    internal static void LoadTemp()
     {
-        ModEntry.ModMonitor.DebugLog($"Loading temp dialogue log for {multiplayerID:X8}");
-        InternalDialogueLog.Value = DialogueLog.LoadTempIfAvailable(multiplayerID);
+        if (Context.IsMainPlayer && Context.IsSplitScreen)
+        { // also will need to lad for farmhands.
+            foreach (IMultiplayerPeer? multi in ModEntry.MultiplayerHelper.GetConnectedPlayers())
+            {
+                long multiplayerID = multi.PlayerID;
+                int? screenid = multi.ScreenID;
+                if (screenid is not null && DialogueLog.LoadTempIfAvailable(multiplayerID) is DialogueLog log)
+                {
+                    ModEntry.ModMonitor.Log($"Loading temp dialogue log for {multiplayerID:X8}");
+                    InternalDialogueLog.SetValueForScreen(screenid.Value, log);
+                }
+            }
+        }
+        else
+        {
+            long multiplayerID = Game1.player.UniqueMultiplayerID;
+            if (DialogueLog.LoadTempIfAvailable(multiplayerID) is DialogueLog log)
+            {
+                ModEntry.ModMonitor.Log($"Loading temp dialogue log for {multiplayerID:X8}");
+                InternalDialogueLog.Value = log;
+            }
+            else
+            {
+                ModEntry.ModMonitor.Log($"No temp dialogue log found for {multiplayerID:X8}");
+            }
+        }
     }
 
     /// <summary>
@@ -63,11 +87,10 @@ internal class DialogueManager
     /// <exception cref="SaveNotLoadedError">Save not loaded.</exception>
     internal static void SaveTemp()
     {
-        if (PerscreenedDialogueLog is null)
+        foreach ((int _, DialogueLog log) in InternalDialogueLog.GetActiveValues())
         {
-            throw new SaveNotLoadedError();
+            log.SaveTemp();
         }
-        PerscreenedDialogueLog.SaveTemp();
     }
 
     /// <summary>

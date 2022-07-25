@@ -39,6 +39,7 @@ Note: you will need to run the mod at least once to generate the `config.json` f
 6. `AllowWilly` allows Willy access to the Resort.
 7. `AllowSandy` allows Sandy access to the Resort. (Psst! If you want her to have beach sprites, check out [violetlizabet](https://www.nexusmods.com/stardewvalley/users/120958053?tab=user+files)'s mod [here](https://www.nexusmods.com/stardewvalley/mods/10960)!)
 8. `AllowGeorgeAndEvelyn` allows George and Evelyn access to the resort.
+9. `AllowWizard` allows the Wizard access to the resort.
 
 **Additionally:**
 

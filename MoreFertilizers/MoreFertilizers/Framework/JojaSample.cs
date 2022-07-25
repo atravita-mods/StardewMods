@@ -2,6 +2,7 @@
 using StardewModdingAPI.Events;
 using StardewModdingAPI.Utilities;
 using StardewValley.Locations;
+using xTile.Dimensions;
 
 namespace MoreFertilizers.Framework;
 

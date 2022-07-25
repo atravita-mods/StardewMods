@@ -5,7 +5,6 @@
 
 #### Todo
 
-1. Make groups more meaningful. (for one, make `Resort_` dialogue reference the groups....)
 2. Nonreplacing dialogue for the Resort keys? (flatten the ones that already exist, but add a way to add more that's less likely to clobber).
 3. Handle roommates, like actually.
 4. See if NPCs can go *into* Professor Snail's Tent?
@@ -23,7 +22,6 @@
 <!-- Document animations -->
 <!-- Consider not allowing spouses to go to Ginger Island if they have a defined marriage_Season_day key?-->
 <!-- Document new tokens -->
-<!-- Dialogue lines for the Wizard -->
 
 ##### Known Issues
 
@@ -31,10 +29,12 @@
 2. If you pause time, NPCs will tend to get stuck at schedule points. Unfortunately for Ginger Island, this usually ends with NPCs trapped in the changing room. If you go to Ginger Island and see no one there, try unpausing time. Or just leave them trapped in the changing room....(or I guess, disable changing)
 3. The debugging console commands basically only work for the host in multiplayer.
 
-### Version 1.1.5-beta
+### Version 1.1.5
 
 * Update to SMAPI 3.15.0
 * Add `_groupname` suffix to GI `Resort` keys (ie `Resort_groupname`). <!-- test this? -->
+* Updates to use AtraCore and associated efficiency improvements.
+* Some bugfixes.
 
 ### Version 1.1.4
 

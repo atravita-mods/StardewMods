@@ -34,6 +34,11 @@ internal static class DrawPrismatic
     private static Color ReplaceDrawColorForItem(Color prevcolor, Item item)
         => item.ShouldDrawAsFullColored() ? Utility.GetPrismaticColor() : prevcolor;
 
+    [MethodImpl(TKConstants.Hot)]
+    private static Texture2D? GetColorMask(this Item item)
+        => item.GetItemType() is ItemTypeEnum type && PrismaticMasks.TryGetValue(type, out Dictionary<int, Lazy<Texture2D>>? masks)
+            && masks.TryGetValue(item.ParentSheetIndex, out Lazy<Texture2D>? mask) ? mask.Value : null;
+
 #region LOADDATA
 
     /// <summary>
@@ -153,11 +158,10 @@ internal static class DrawPrismatic
     {
         try
         {
-            if (__instance.GetItemType() is ItemTypeEnum type && PrismaticMasks.TryGetValue(type, out var masks)
-                && masks.TryGetValue(__instance.ParentSheetIndex, out var texture))
+            if (__instance.GetColorMask() is Texture2D texture)
             {
                 spriteBatch.Draw(
-                    texture: texture.Value,
+                    texture: texture,
                     position: location + (new Vector2(32f, 32f) * scaleSize),
                     sourceRectangle: new Rectangle(0, 0, 16, 16),
                     color: Utility.GetPrismaticColor() * transparency,
@@ -215,11 +219,10 @@ internal static class DrawPrismatic
     {
         try
         {
-            if (__instance.GetItemType() is ItemTypeEnum type && PrismaticMasks.TryGetValue(type, out var masks)
-                && masks.TryGetValue(__instance.ParentSheetIndex, out var texture))
+            if (__instance.GetColorMask() is Texture2D texture)
             {
                 spriteBatch.Draw(
-                    texture: texture.Value,
+                    texture: texture,
                     position: location + (new Vector2(32f, 32f) * scaleSize),
                     sourceRectangle: new Rectangle(0, 0, 16, 16),
                     color: Utility.GetPrismaticColor() * transparency,
@@ -277,11 +280,10 @@ internal static class DrawPrismatic
     {
         try
         {
-            if (__instance.GetItemType() is ItemTypeEnum type && PrismaticMasks.TryGetValue(type, out var masks)
-                && masks.TryGetValue(__instance.ParentSheetIndex, out var texture))
+            if (__instance.GetColorMask() is Texture2D texture)
             {
                 spriteBatch.Draw(
-                    texture: texture.Value,
+                    texture: texture,
                     position: location + (new Vector2(32f, 32f) * scaleSize),
                     sourceRectangle: new Rectangle(0, 0, 16, 16),
                     color: Utility.GetPrismaticColor() * transparency,

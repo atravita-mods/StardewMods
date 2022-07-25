@@ -44,13 +44,14 @@ Additionally, fertilizers may be found by breaking barrels in the mines, while p
 
 #### Known compatability:
 
-* [Walk of Life](https://www.nexusmods.com/stardewvalley/mods/8111). 
-* [Json Assets](https://www.nexusmods.com/stardewvalley/mods/1720) and any crops/fruit trees added through JA.
-* [Multi Yield Crops](https://www.nexusmods.com/stardewvalley/mods/6069) - fully supported.
 * [Automate](https://www.nexusmods.com/stardewvalley/mods/1063) and [PFMAutomate](https://www.nexusmods.com/stardewvalley/mods/5038).
-* [Teh's Fishing Overhaul](https://www.nexusmods.com/stardewvalley/mods/866).
+* [Crop Variation](https://www.nexusmods.com/stardewvalley/mods/11467) - although that mod will change the quality of crops as well, which will influence the quality of the joja-crops.
+* [Json Assets](https://www.nexusmods.com/stardewvalley/mods/1720) and any crops/fruit trees added through JA.
 * [More Rings](https://www.nexusmods.com/stardewvalley/mods/2054?tab=description). The Quality+ ring will increase the quality of joja-crops.
+* [Multi Yield Crops](https://www.nexusmods.com/stardewvalley/mods/6069) - fully supported.
 * [Smart Building](https://www.nexusmods.com/stardewvalley/mods/11158?tab=description) supports these fertilizers. Thank you so much, DecidedlyHuman!
+* [Teh's Fishing Overhaul](https://www.nexusmods.com/stardewvalley/mods/866).
+* [Walk of Life](https://www.nexusmods.com/stardewvalley/mods/8111). 
 * The large framework mods (CP/BFAV/PFM/FTM/MFM, etc.) work with this mod.
 * Any of my other mods - I try not to cause **myself** compat issues.
 * Honestly most other mods should work fine, not many actually use transpilers.
@@ -83,7 +84,7 @@ A `harmony_summary` would be greatly appreciated! If you go to the console and t
 
 ## Acknowledgements
 
-Many thanks to [Violetlizabet](https://www.nexusmods.com/stardewvalley/users/120958053) for helping me with the fertilizer sprites, Schneitizel for the French translation, and [CopperSun](https://www.nexusmods.com/stardewvalley/users/114762643) for helping me with the text!
+Many thanks to [Violetlizabet](https://www.nexusmods.com/stardewvalley/users/120958053) for helping me with the fertilizer sprites, Schneitizel for the French translation, Puffeeydii for the Chinese translation, and [CopperSun](https://www.nexusmods.com/stardewvalley/users/114762643) for helping me with the text!
 
 ## See also
 

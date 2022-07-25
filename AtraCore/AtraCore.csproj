@@ -11,7 +11,7 @@
 
   <PropertyGroup>
     <Version>0.1.0</Version>
-    <UniqueId>atravita.AtraCore</UniqueId>
+    <Name>AtraCore</Name>
     <Description>A core library mod some of my other mods depend on.</Description>
     <UpdateKeys>Nexus:12932</UpdateKeys>
   </PropertyGroup>
@@ -55,10 +55,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Pintail\Pintail\Pintail.csproj" private="true" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="assets\" />
   </ItemGroup>
 
   <ProjectExtensions><VisualStudio><UserProperties manifest_1json__JsonSchema="https://smapi.io/schemas/manifest.json" /></VisualStudio></ProjectExtensions>

@@ -27,11 +27,20 @@ internal class ModEntry : Mod
         ModMonitor = this.Monitor;
         I18n.Init(helper.Translation);
         Config = AtraUtils.GetConfigOrDefault<ModConfig>(helper, this.Monitor);
+        if (Config.MinDartCount > Config.MaxDartCount)
+        {
+            (Config.MinDartCount, Config.MaxDartCount) = (Config.MaxDartCount, Config.MinDartCount);
+        }
 
         this.ApplyPatches(new Harmony(this.ModManifest.UniqueID));
 
         helper.Events.GameLoop.GameLaunched += this.OnGameLaunch;
+
+        helper.Events.Content.AssetRequested += this.OnAssetRequested;
     }
+
+    private void OnAssetRequested(object? sender, AssetRequestedEventArgs e)
+        => AssetManager.Apply(e);
 
     private void ApplyPatches(Harmony harmony)
     {
@@ -53,7 +62,14 @@ internal class ModEntry : Mod
         {
             helper.Register(
                 reset: static () => Config = new(),
-                save: () => this.Helper.AsyncWriteConfig(this.Monitor, Config))
+                save: () =>
+                {
+                    if (Config.MinDartCount > Config.MaxDartCount)
+                    {
+                        (Config.MinDartCount, Config.MaxDartCount) = (Config.MaxDartCount, Config.MinDartCount);
+                    }
+                    this.Helper.AsyncWriteConfig(this.Monitor, Config);
+                })
             .AddParagraph(I18n.ModDescription)
             .GenerateDefaultGMCM(static () => Config);
         }

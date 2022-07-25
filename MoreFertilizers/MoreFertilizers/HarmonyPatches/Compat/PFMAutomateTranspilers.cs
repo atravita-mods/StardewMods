@@ -37,7 +37,7 @@ internal static class PFMAutomateTranspilers
         }
         catch (Exception ex)
         {
-            ModEntry.ModMonitor.Log($"Mod failed while transpiling automate. Integration may not work.\n\n{ex}", LogLevel.Error);
+            ModEntry.ModMonitor.Log($"Mod failed while transpiling PFMautomate. Integration may not work.\n\n{ex}", LogLevel.Error);
         }
     }
 
@@ -148,15 +148,15 @@ internal static class PFMAutomateTranspilers
             helper.FindNext(new CodeInstructionWrapper[]
             {
                 new(OpCodes.Ldarg_1),
-                new(OpCodes.Ldfld, typeof(SObject).InstanceFieldNamed(nameof(SObject.heldObject))),
+                new(OpCodes.Ldfld, typeof(SObject).GetCachedField(nameof(SObject.heldObject), ReflectionCache.FlagTypes.InstanceFlags)),
                 new(SpecialCodeInstructionCases.LdLoc),
-                new(OpCodes.Callvirt, typeof(NetFieldBase<SObject, NetRef<SObject>>).InstancePropertyNamed("Value").GetSetMethod()),
+                new(OpCodes.Callvirt, typeof(NetFieldBase<SObject, NetRef<SObject>>).GetCachedProperty("Value", ReflectionCache.FlagTypes.InstanceFlags).GetSetMethod()),
             })
             .Advance(3)
             .Insert(new CodeInstruction[]
             {
                 new(OpCodes.Ldarg_S, 6), // Input SObject
-                new(OpCodes.Call, typeof(AutomateTranspiler).StaticMethodNamed(nameof(AutomateTranspiler.MakeOrganic))),
+                new(OpCodes.Call, typeof(AutomateTranspiler).GetCachedMethod(nameof(AutomateTranspiler.MakeOrganic), ReflectionCache.FlagTypes.StaticFlags)),
             });
 
             // helper.Print();

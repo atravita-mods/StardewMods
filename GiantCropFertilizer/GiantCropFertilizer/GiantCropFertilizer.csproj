@@ -8,7 +8,11 @@
   </PropertyGroup>
 
   <PropertyGroup>
+    <Name>Giant Crop Fertilizer</Name>
+    <Description>Adds a fertilizer that forces giant crops.</Description>
+    <UpdateKeys>Nexus:11620</UpdateKeys>
     <Version>0.2.0</Version>
+    <BaseManifest>..\..\ja_dependencies.json</BaseManifest>
   </PropertyGroup>
 
   <ItemGroup>

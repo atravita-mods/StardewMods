@@ -79,14 +79,23 @@ internal static class AssetLoader
     /// <summary>
     /// Full list of fake assets.
     /// </summary>
-    private static readonly string[] MyAssets = new string[]
+    private static HashSet<string> myAssets = null!;
+
+    /// <summary>
+    /// Initialized the myAssets hashset.
+    /// </summary>
+    /// <param name="helper">game content helper.</param>
+    internal static void Init(IGameContentHelper helper)
     {
-        BartenderLocation,
-        ExplorerLocation,
-        MusicianLocation,
-        GroupsLocations,
-        ExclusionLocations,
-    };
+        myAssets = new(StringComparer.OrdinalIgnoreCase)
+        {
+            helper.ParseAssetName(BartenderLocation).BaseName,
+            helper.ParseAssetName(ExplorerLocation).BaseName,
+            helper.ParseAssetName(MusicianLocation).BaseName,
+            helper.ParseAssetName(GroupsLocations).BaseName,
+            helper.ParseAssetName(ExclusionLocations).BaseName,
+        };
+    }
 
     /// <summary>
     /// Get the special characters for specific scheduling positions.
@@ -212,7 +221,7 @@ internal static class AssetLoader
         {
             e.LoadFrom(GetDefaultGroups, AssetLoadPriority.Low);
         }
-        else if (MyAssets.Any((string assetpath) => e.NameWithoutLocale.IsEquivalentTo(assetpath)))
+        else if (myAssets.Contains(e.NameWithoutLocale.BaseName))
         {
             e.LoadFrom(EmptyContainers.GetEmptyDictionary<string, string>, AssetLoadPriority.Low);
         }

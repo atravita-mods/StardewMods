@@ -1,4 +1,5 @@
 ﻿using AtraShared.ConstantsAndEnums;
+using AtraShared.Utils.Shims;
 using Microsoft.Toolkit.Diagnostics;
 using Microsoft.Xna.Framework;
 using StardewValley.TerrainFeatures;
@@ -60,6 +61,10 @@ public class TapGiantCrop : ITapGiantCropsAPI
     /// <returns>tuple of the item and how long it should take.</returns>
     public (SObject obj, int days)? GetTapperProduct(GiantCrop giantCrop, SObject tapper)
     {
+        if (DynamicGameAssetsShims.IsDGAGiantCrop?.Invoke(giantCrop) == true)
+        {
+            return null;
+        }
         int cropindex = giantCrop.which.Value switch
         {
             0 => 190,
@@ -95,7 +100,7 @@ public class TapGiantCrop : ITapGiantCropsAPI
     {
         foreach(ResourceClump? clump in loc.resourceClumps)
         {
-            if (clump is GiantCrop crop)
+            if (clump is GiantCrop crop && !(DynamicGameAssetsShims.IsDGAGiantCrop?.Invoke(crop) == true))
             {
                 Vector2 offset = tile;
                 offset.Y -= crop.height.Value - 1;

@@ -3,7 +3,8 @@
 namespace QualityRings.Framework;
 internal class CraftingSkill : Skills.Skill
 {
-    public CraftingSkill() : base("atravita.CraftingSkill")
+    public CraftingSkill()
+        : base("atravita.CraftingSkill")
     {
     }
 

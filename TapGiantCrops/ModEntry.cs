@@ -8,7 +8,6 @@ using Microsoft.Xna.Framework;
 using StardewModdingAPI.Events;
 using StardewValley.TerrainFeatures;
 using TapGiantCrops.Framework;
-using TapGiantCrops.Integrations.Automate;
 
 namespace TapGiantCrops;
 
@@ -33,6 +32,7 @@ internal sealed class ModEntry : Mod
 
         helper.Events.GameLoop.SaveLoaded += this.OnSaveLoaded;
 
+        /*
 #if !DEBUG
         if (!Constants.ApiVersion.IsOlderThan("3.16.0"))
 #endif
@@ -45,6 +45,7 @@ internal sealed class ModEntry : Mod
             this.Monitor.Log($"Automate support not complete for now :(");
         }
 #endif
+        */
 
         this.ApplyPatches(new Harmony(this.ModManifest.UniqueID));
     }
@@ -54,11 +55,6 @@ internal sealed class ModEntry : Mod
 
     private void OnGameLaunched(object? sender, GameLaunchedEventArgs e)
     {
-        IntegrationHelper helper = new(this.Monitor, this.Helper.Translation, this.Helper.ModRegistry);
-        if (helper.TryGetAPI("Pathoschild.Automate", "1.27.3", out IAutomateAPI? api))
-        {
-            api.AddFactory(new TappedGiantCropFactory());
-        }
     }
 
     private void OnDayEnding(object? sender, DayEndingEventArgs e)

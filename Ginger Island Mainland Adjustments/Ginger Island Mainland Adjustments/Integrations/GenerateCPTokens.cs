@@ -20,13 +20,13 @@ internal class GenerateCPTokens
         {
             return;
         }
-
+#warning - is this the token I want, or do I want is the island truly open for business?
         api.RegisterToken(manifest, "IslandOpen", () =>
         {
             if ((Context.IsWorldReady || SaveGame.loaded is not null)
                 && Game1.getLocationFromName("IslandSouth") is IslandSouth island)
             {
-                return new[] { island.resortOpenToday.Value.ToString() };
+                return new[] { (island.resortOpenToday.Value && island.resortRestored.Value).ToString() };
             }
 
             return null;

@@ -18,9 +18,9 @@ internal static class Globals
     internal static IReflectionHelper ReflectionHelper { get; private set; }
 
     /// <summary>
-    /// Gets SMAPI's Content helper.
+    /// Gets SMAPI's game content helper.
     /// </summary>
-    internal static IContentHelper ContentHelper { get; private set; }
+    internal static IGameContentHelper GameContentHelper { get; private set; }
 
     /// <summary>
     /// Gets SMAPI's mod registry helper.
@@ -42,7 +42,7 @@ internal static class Globals
     {
         ModMonitor = monitor;
         ReflectionHelper = helper.Reflection;
-        ContentHelper = helper.Content;
+        GameContentHelper = helper.GameContent;
         ModRegistry = helper.ModRegistry;
         Helper = helper;
     }

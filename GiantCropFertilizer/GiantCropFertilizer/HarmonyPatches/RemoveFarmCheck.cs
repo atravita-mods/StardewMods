@@ -1,6 +1,8 @@
 ﻿using System.Reflection;
 using System.Reflection.Emit;
 using AtraBase.Toolkit.Reflection;
+using AtraCore.Framework.ReflectionManager;
+using AtraShared.Utils.Extensions;
 using AtraShared.Utils.HarmonyHelper;
 using HarmonyLib;
 
@@ -19,8 +21,8 @@ internal static class RemoveFarmCheck
     {
         // use a lower priority to slot after other mods that might want to transpile this ethod as well.
         harmony.Patch(
-            original: typeof(Crop).InstanceMethodNamed(nameof(Crop.newDay)),
-            transpiler: new HarmonyMethod(typeof(RemoveFarmCheck).StaticMethodNamed(nameof(Transpiler)), Priority.LowerThanNormal));
+            original: typeof(Crop).GetCachedMethod(nameof(Crop.newDay), ReflectionCache.FlagTypes.InstanceFlags),
+            transpiler: new HarmonyMethod(typeof(RemoveFarmCheck).GetCachedMethod(nameof(Transpiler), ReflectionCache.FlagTypes.StaticFlags), Priority.LowerThanNormal));
     }
 
     private static bool IsFarmOrSetOtherwise(GameLocation? location)
@@ -34,7 +36,7 @@ internal static class RemoveFarmCheck
             helper.FindNext(new CodeInstructionWrapper[]
             {
                 new(OpCodes.Ldarg_0),
-                new(OpCodes.Ldfld, typeof(Crop).InstanceFieldNamed(nameof(Crop.indexOfHarvest))),
+                new(OpCodes.Ldfld, typeof(Crop).GetCachedField(nameof(Crop.indexOfHarvest), ReflectionCache.FlagTypes.InstanceFlags)),
                 new(OpCodes.Call),
                 new(OpCodes.Ldc_I4, 276),
                 new(OpCodes.Beq_S),
@@ -46,9 +48,9 @@ internal static class RemoveFarmCheck
                 new(OpCodes.Brfalse),
             })
             .Advance(1)
-            .ReplaceInstruction(OpCodes.Call, typeof(RemoveFarmCheck).StaticMethodNamed(nameof(IsFarmOrSetOtherwise)))
+            .ReplaceInstruction(OpCodes.Call, typeof(RemoveFarmCheck).GetCachedMethod(nameof(IsFarmOrSetOtherwise), ReflectionCache.FlagTypes.StaticFlags))
             .FindNext(new CodeInstructionWrapper[]
-            { // Remove the cast to Farm.
+            { // Remove the cast to Farm. Both have to be removed to avoid nre.
                 new(OpCodes.Isinst, typeof(Farm)),
             })
             .Remove(1);
@@ -58,6 +60,7 @@ internal static class RemoveFarmCheck
         catch (Exception ex)
         {
             ModEntry.ModMonitor.Log($"Mod crashed while transpiling Hoedirt.Draw:\n\n{ex}", LogLevel.Error);
+            original?.Snitch(ModEntry.ModMonitor);
         }
         return null;
     }

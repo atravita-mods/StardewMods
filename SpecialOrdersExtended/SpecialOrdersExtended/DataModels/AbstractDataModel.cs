@@ -1,12 +1,11 @@
-﻿using AtraShared.Utils.Extensions;
-using StardewModdingAPI.Utilities;
+﻿using StardewModdingAPI.Utilities;
 
 namespace SpecialOrdersExtended.DataModels;
 
 /// <summary>
 /// Base data model class.
 /// </summary>
-internal abstract class AbstractDataModel
+public abstract class AbstractDataModel
 {
     /// <summary>
     /// Initializes a new instance of the <see cref="AbstractDataModel"/> class.
@@ -25,10 +24,10 @@ internal abstract class AbstractDataModel
     /// Handles saving.
     /// </summary>
     /// <param name="identifier">An identifier token to add to the filename.</param>
-    public virtual void Save(string identifier)
+    internal virtual void Save(string identifier)
     {
-        ModEntry.ModMonitor.DebugLog($"Saving {identifier}");
-        ModEntry.DataHelper.WriteGlobalData(this.Savefile + identifier, this);
+        Task.Run(() => ModEntry.DataHelper.WriteGlobalData(this.Savefile + identifier, this))
+            .ContinueWith((t) => ModEntry.ModMonitor.Log(t.Status == TaskStatus.RanToCompletion ? $"Saved {identifier}" : $"{identifier} failed to save with {t.Status} - {t.Exception}"));
     }
 
     /// <summary>
@@ -36,5 +35,5 @@ internal abstract class AbstractDataModel
     /// </summary>
     /// <param name="identifier">An identifier token to add to the filename.</param>
     /// <remarks>NOT IMPLEMENTED YET.</remarks>
-    public virtual void SaveTemp(string identifier) => this.Save($"{identifier}_temp_{SDate.Now().DaysSinceStart}");
+    internal virtual void SaveTemp(string identifier) => this.Save($"{identifier}_temp_{SDate.Now().DaysSinceStart}");
 }

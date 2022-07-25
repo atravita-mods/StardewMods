@@ -40,11 +40,10 @@ internal static class NPCPatches
         }
     }
 
-
     /// <summary>
     /// Reset Pam's fishing sprite when done fishing.
     /// </summary>
-    /// <param name="__instance">NPC</param>
+    /// <param name="__instance">NPC.</param>
     /// <param name="__0">animation_description.</param>
     [UsedImplicitly]
     [HarmonyPostfix]

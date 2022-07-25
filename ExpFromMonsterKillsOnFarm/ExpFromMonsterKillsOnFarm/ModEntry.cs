@@ -1,13 +1,14 @@
-﻿using System.Reflection;
-using AtraShared.Integrations;
+﻿using AtraShared.Integrations;
 using AtraShared.Utils.Extensions;
 using HarmonyLib;
 using StardewModdingAPI.Events;
 
+using AtraUtils = AtraShared.Utils.Utils;
+
 namespace ExpFromMonsterKillsOnFarm;
 
 /// <inheritdoc />
-public class ModEntry : Mod
+internal sealed class ModEntry : Mod
 {
 #pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
     // ModMonitor is set in Entry, which is as close I can reasonaby get to the constructor.
@@ -28,15 +29,8 @@ public class ModEntry : Mod
     {
         ModMonitor = this.Monitor;
         I18n.Init(helper.Translation);
-        try
-        {
-            Config = this.Helper.ReadConfig<ModConfig>();
-        }
-        catch
-        {
-            ModMonitor.Log(I18n.IllFormatedConfig(), LogLevel.Warn);
-            Config = new();
-        }
+
+        Config = AtraUtils.GetConfigOrDefault<ModConfig>(helper, this.Monitor);
         this.ApplyPatches(new Harmony(this.ModManifest.UniqueID));
         helper.Events.GameLoop.GameLaunched += this.SetUpConfig;
     }
@@ -49,7 +43,7 @@ public class ModEntry : Mod
     {
         // handle patches from annotations.
         harmony.PatchAll();
-        harmony.Snitch(this.Monitor, this.ModManifest.UniqueID);
+        harmony.Snitch(this.Monitor, this.ModManifest.UniqueID, transpilersOnly: true);
     }
 
     /// <summary>
@@ -60,27 +54,14 @@ public class ModEntry : Mod
     /// <remarks>To add a new setting, add the details to the i18n file. Currently handles: bool.</remarks>
     private void SetUpConfig(object? sender, GameLaunchedEventArgs e)
     {
-
         GMCMHelper helper = new(this.Monitor, this.Helper.Translation, this.Helper.ModRegistry, this.ModManifest);
-        if (!helper.TryGetAPI())
+        if (helper.TryGetAPI())
         {
-            return;
-        }
-        helper.Register(
-                reset: () => Config = new ModConfig(),
-                save: () => this.Helper.WriteConfig(Config))
-            .AddParagraph(I18n.Mod_Description);
-
-        foreach (PropertyInfo property in typeof(ModConfig).GetProperties())
-        {
-            if (property.PropertyType.Equals(typeof(bool)))
-            {
-                helper.AddBoolOption(property, () => Config);
-            }
-            else
-            {
-                this.Monitor.DebugOnlyLog($"{property.Name} unaccounted for.", LogLevel.Warn);
-            }
+            helper.Register(
+                reset: static () => Config = new ModConfig(),
+                save: () => this.Helper.AsyncWriteConfig(this.Monitor, Config))
+            .AddParagraph(I18n.Mod_Description)
+            .GenerateDefaultGMCM(static () => Config);
         }
     }
 }

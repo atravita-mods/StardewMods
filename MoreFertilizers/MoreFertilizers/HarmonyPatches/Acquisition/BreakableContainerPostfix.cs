@@ -39,10 +39,10 @@ internal static class BreakableContainerPostfix
             _ => ModEntry.LuckyFertilizerID,
         };
         Game1.createMultipleObjectDebris(
-            objectID,
-            (int)__instance.TileLocation.X,
-            (int)__instance.TileLocation.Y,
-            Game1.random.Next(1, Math.Clamp(Game1.player.MiningLevel / 2, 2, 10)),
-            location);
+            index: objectID,
+            xTile: (int)__instance.TileLocation.X,
+            yTile: (int)__instance.TileLocation.Y,
+            number: Game1.random.Next(1, Math.Clamp(Game1.player.MiningLevel / 2, 2, 10)),
+            location: location);
     }
 }

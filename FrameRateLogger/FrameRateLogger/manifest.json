@@ -1,10 +1,12 @@
-﻿{
+{
   "Name": "Frame Rate Logger",
   "Author": "atravita",
   "Version": "0.1.0",
   "Description": "mumble gripe annoyed",
   "UniqueID": "atravita.FrameRateLogger",
   "EntryDll": "FrameRateLogger.dll",
-  //"UpdateKeys": [ "Nexus:11856", "GitHub:atravita-mods/AvoidLosingSpecter" ],
-  "MinimumApiVersion": "3.14"
+  "MinimumApiVersion": "3.15",
+  "UpdateKeys": [
+    "-1"
+  ]
 }

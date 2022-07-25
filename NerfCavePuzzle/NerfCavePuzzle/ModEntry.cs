@@ -1,45 +1,45 @@
 ﻿using System.Reflection;
+using AtraCore.Utilities;
 using AtraShared.Integrations;
 using AtraShared.MigrationManager;
-using AtraShared.Utils;
 using AtraShared.Utils.Extensions;
 using HarmonyLib;
 using NerfCavePuzzle.HarmonyPatches;
 using StardewModdingAPI.Events;
 
+using AtraUtils = AtraShared.Utils.Utils;
+
 namespace NerfCavePuzzle;
 
 /// <inheritdoc />
-internal class ModEntry : Mod
+internal sealed class ModEntry : Mod
 {
     private MigrationManager? migrator = null;
 
-#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
     /// <summary>
     /// Gets the logger for this file.
     /// </summary>
-    internal static IMonitor ModMonitor { get; private set; }
+    internal static IMonitor ModMonitor { get; private set; } = null!;
 
     /// <summary>
     /// Gets the data helper for this mod.
     /// </summary>
-    internal static IDataHelper DataHelper { get; private set; }
+    internal static IDataHelper DataHelper { get; private set; } = null!;
 
     /// <summary>
     /// Gets the multiplayer helper for this mod.
     /// </summary>
-    internal static IMultiplayerHelper MultiplayerHelper { get; private set; }
+    internal static IMultiplayerHelper MultiplayerHelper { get; private set; } = null!;
 
     /// <summary>
     /// Gets the uniqueID of this mod.
     /// </summary>
-    internal static string UniqueID { get; private set; }
+    internal static string UniqueID { get; private set; } = null!;
 
     /// <summary>
     /// Gets the configuration class for this mod.
     /// </summary>
-    internal static ModConfig Config { get; private set; }
-#pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
+    internal static ModConfig Config { get; private set; } = null!;
 
     /// <inheritdoc />
     public override void Entry(IModHelper helper)
@@ -55,15 +55,7 @@ internal class ModEntry : Mod
 
         helper.Events.Multiplayer.ModMessageReceived += this.MultiMessageRecieved;
 
-        try
-        {
-            Config = this.Helper.ReadConfig<ModConfig>();
-        }
-        catch
-        {
-            this.Monitor.Log(I18n.IllFormatedConfig(), LogLevel.Warn);
-            Config = new();
-        }
+        Config = AtraUtils.GetConfigOrDefault<ModConfig>(helper, this.Monitor);
         this.ApplyPatches(new Harmony(UniqueID));
     }
 
@@ -73,36 +65,34 @@ internal class ModEntry : Mod
     private void OnGameLaunched(object? sender, GameLaunchedEventArgs e)
     {
         GMCMHelper helper = new(this.Monitor, this.Helper.Translation, this.Helper.ModRegistry, this.ModManifest);
-        if (!helper.TryGetAPI())
+        if (helper.TryGetAPI())
         {
-            return;
-        }
-        helper.Register(() => Config = new(), () => this.Helper.WriteConfig(Config))
-            .AddParagraph(I18n.ModDescription);
-        foreach (PropertyInfo property in typeof(ModConfig).GetProperties())
-        {
-            if (property.PropertyType == typeof(bool))
-            {
-                helper.AddBoolOption(property, () => Config);
-            }
-            else if (property.PropertyType == typeof(float))
-            {
-                helper.AddFloatOption(property, () => Config, min: 0.1f, max: 10f, interval: 0.1f);
-            }
-            else if (property.PropertyType == typeof(int))
-            {
-                helper.AddIntOption(property, () => Config, min: 5, max: 7);
-            }
+            helper.Register(
+                static () => Config = new(),
+                () => this.Helper.AsyncWriteConfig(this.Monitor, Config))
+            .AddParagraph(I18n.ModDescription)
+            .GenerateDefaultGMCM(static () => Config);
         }
     }
 
     private void OnSaveLoaded(object? sender, SaveLoadedEventArgs e)
     {
+        if (Context.IsSplitScreen && Context.ScreenId != 0)
+        {
+            return;
+        }
+
         MultiplayerHelpers.AssertMultiplayerVersions(this.Helper.Multiplayer, this.ModManifest, this.Monitor, this.Helper.Translation);
         this.migrator = new(this.ModManifest, this.Helper, this.Monitor);
-        this.migrator.ReadVersionInfo();
 
-        this.Helper.Events.GameLoop.Saved += this.WriteMigrationData;
+        if (!this.migrator.CheckVersionInfo())
+        {
+            this.Helper.Events.GameLoop.Saved += this.WriteMigrationData;
+        }
+        else
+        {
+            this.migrator = null;
+        }
     }
 
     /// <summary>

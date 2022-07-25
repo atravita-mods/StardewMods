@@ -1,11 +1,10 @@
 ﻿using AtraShared.ConstantsAndEnums;
 using AtraShared.Integrations;
-using AtraShared.Integrations.Interfaces;
 using AtraShared.MigrationManager;
+using AtraShared.Niceties;
 using AtraShared.Utils.Extensions;
 using HarmonyLib;
 using HighlightEmptyMachines.Framework;
-using Microsoft.Xna.Framework;
 using StardewModdingAPI.Events;
 
 using AtraUtils = AtraShared.Utils.Utils;
@@ -13,29 +12,26 @@ using AtraUtils = AtraShared.Utils.Utils;
 namespace HighlightEmptyMachines;
 
 /// <inheritdoc />
-internal class ModEntry : Mod
+internal sealed class ModEntry : Mod
 {
     private MigrationManager? migrator;
 
     private GMCMHelper? gmcmHelper = null;
 
-#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
-
     /// <summary>
     /// Gets the logger for this mod.
     /// </summary>
-    internal static IMonitor ModMonitor { get; private set; }
+    internal static IMonitor ModMonitor { get; private set; } = null!;
 
     /// <summary>
     /// Gets the config instance for this mod.
     /// </summary>
-    internal static ModConfig Config { get; private set; }
+    internal static ModConfig Config { get; private set; } = null!;
 
     /// <summary>
     /// Gets the translation helper for this mod.
     /// </summary>
-    internal static ITranslationHelper TranslationHelper { get; private set; }
-#pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
+    internal static ITranslationHelper TranslationHelper { get; private set; } = null!;
 
     /// <inheritdoc />
     public override void Entry(IModHelper helper)
@@ -48,6 +44,7 @@ internal class ModEntry : Mod
 
         helper.Events.GameLoop.GameLaunched += this.OnGameLaunched;
         helper.Events.GameLoop.SaveLoaded += this.OnSaveLoaded;
+        helper.Events.GameLoop.ReturnedToTitle += this.OnReturnedToTitle;
     }
 
     /// <summary>
@@ -91,6 +88,20 @@ internal class ModEntry : Mod
         }
     }
 
+    /// <summary>
+    /// Resets the GMCM when the player has returned to the title.
+    /// </summary>
+    /// <param name="sender">SMAPI.</param>
+    /// <param name="e">event args.</param>
+    private void OnReturnedToTitle(object? sender, ReturnedToTitleEventArgs e)
+    {
+        if (this.gmcmHelper?.HasGottenAPI == true)
+        {
+            this.gmcmHelper.Unregister();
+            this.SetUpBasicConfig();
+        }
+    }
+
     private void OnDayStarted(object? sender, DayStartedEventArgs e)
         => PFMMachineHandler.RefreshValidityList(Game1.currentLocation);
 
@@ -114,7 +125,7 @@ internal class ModEntry : Mod
                     },
                     save: () =>
                     {
-                        this.Helper.WriteConfig(Config);
+                        this.Helper.AsyncWriteConfig(this.Monitor, Config);
                         PFMMachineHandler.RefreshValidityList(Game1.currentLocation);
                     });
             }
@@ -122,25 +133,10 @@ internal class ModEntry : Mod
             {
                 this.gmcmHelper.Register(
                 reset: static () => Config = new(),
-                save: () => this.Helper.WriteConfig(Config));
+                save: () => this.Helper.AsyncWriteConfig(this.Monitor, Config));
             }
             this.gmcmHelper.AddParagraph(I18n.ModDescription)
-            .AddColorPicker(
-                name: I18n.EmptyColor_Title,
-                getValue: static () => Config.EmptyColor,
-                setValue: static (val) => Config.EmptyColor = val,
-                tooltip: I18n.EmptyColor_Description,
-                showAlpha: true,
-                colorPickerStyle: (uint)IGMCMOptionsAPI.ColorPickerStyle.Default,
-                defaultColor: Color.Red)
-            .AddColorPicker(
-                name: I18n.InvalidColor_Title,
-                getValue: static () => Config.InvalidColor,
-                setValue: static (val) => Config.InvalidColor = val,
-                tooltip: I18n.InvalidColor_Description,
-                showAlpha: true,
-                colorPickerStyle: (uint)IGMCMOptionsAPI.ColorPickerStyle.Default,
-                defaultColor: Color.Gray)
+            .GenerateDefaultGMCM(static () => Config)
             .AddPageHere(
                 pageId: "individual-machines",
                 linkText: I18n.IndividualMachines_Title,
@@ -166,9 +162,20 @@ internal class ModEntry : Mod
     [EventPriority(EventPriority.Low)]
     private void OnSaveLoaded(object? sender, SaveLoadedEventArgs e)
     {
+        if (Context.IsSplitScreen && Context.ScreenId != 0)
+        {
+            return;
+        }
+
         this.migrator = new(this.ModManifest, this.Helper, this.Monitor);
-        this.migrator.ReadVersionInfo();
-        this.Helper.Events.GameLoop.Saved += this.WriteMigrationData;
+        if (!this.migrator.CheckVersionInfo())
+        {
+            this.Helper.Events.GameLoop.Saved += this.WriteMigrationData;
+        }
+        else
+        {
+            this.migrator = null;
+        }
 
         if (this.Helper.ModRegistry.IsLoaded("Digus.ProducerFrameworkMod"))
         {
@@ -182,9 +189,6 @@ internal class ModEntry : Mod
 
             if (this.gmcmHelper?.HasGottenAPI == true)
             {
-                this.gmcmHelper.Unregister();
-                this.SetUpBasicConfig();
-
                 this.gmcmHelper.AddSectionTitle(I18n.PFM_Section)
                     .AddParagraph(I18n.PFM_Description);
 
@@ -199,7 +203,7 @@ internal class ModEntry : Mod
             }
 
             this.Monitor.Log("PFM compat set up!", LogLevel.Trace);
-            this.Helper.WriteConfig(Config);
+            this.Helper.AsyncWriteConfig(this.Monitor, Config);
         }
         else
         {

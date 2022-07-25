@@ -1,12 +1,16 @@
-﻿using System.Reflection;
+﻿#if DEBUG
+using System.Diagnostics;
+#endif
+using AtraCore.Utilities;
 using AtraShared.ConstantsAndEnums;
 using AtraShared.Integrations;
 using AtraShared.Integrations.Interfaces;
+using AtraShared.Menuing;
 using AtraShared.MigrationManager;
 using AtraShared.Utils;
 using AtraShared.Utils.Extensions;
+using AtraShared.Utils.Shims;
 using HarmonyLib;
-using Microsoft.Xna.Framework;
 using MoreFertilizers.DataModels;
 using MoreFertilizers.Framework;
 using MoreFertilizers.HarmonyPatches;
@@ -23,7 +27,7 @@ using AtraUtils = AtraShared.Utils.Utils;
 namespace MoreFertilizers;
 
 /// <inheritdoc />
-internal class ModEntry : Mod
+internal sealed class ModEntry : Mod
 {
     private const string SavedIDKey = "MFSavedObjectID";
 
@@ -32,6 +36,9 @@ internal class ModEntry : Mod
     private static MoreFertilizerIDs? storedIDs;
 
     private MigrationManager? migrator;
+
+    private Dictionary<int, int>? idmap;
+    private ISolidFoundationsAPI? solidFoundationsAPI;
 
 #pragma warning disable SA1204 // Static elements should appear before instance elements. Keep backing fields near properties.
 #pragma warning disable SA1201 // Elements should appear in the correct order
@@ -236,38 +243,39 @@ internal class ModEntry : Mod
     /// <remarks>Handled by <see cref="SpecialFertilizerApplication" /> and typically stored in <see cref="ModDataDictionary"/>.</remarks>
     internal static List<int> SpecialFertilizerIDs { get; } = new List<int>();
 
-#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
+    /**************
+     * Generally useful things that need to be attached to something static.
+     **************/
 
     /// <summary>
     /// Gets the logger for this mod.
     /// </summary>
-    internal static IMonitor ModMonitor { get; private set; }
+    internal static IMonitor ModMonitor { get; private set; } = null!;
 
     /// <summary>
     /// Gets the multiplayer helper for this mod.
     /// </summary>
-    internal static IMultiplayerHelper MultiplayerHelper { get; private set; }
+    internal static IMultiplayerHelper MultiplayerHelper { get; private set; } = null!;
 
     /// <summary>
     /// Gets the mod content helper for this mod.
     /// </summary>
-    internal static IModContentHelper ModContentHelper { get; private set; }
+    internal static IModContentHelper ModContentHelper { get; private set; } = null!;
 
     /// <summary>
     /// Gets the location of this mod.
     /// </summary>
-    internal static string DIRPATH { get; private set; }
+    internal static string DIRPATH { get; private set; } = null!;
 
     /// <summary>
     /// Gets this mod's uniqueID.
     /// </summary>
-    internal static string UNIQUEID { get; private set; }
+    internal static string UNIQUEID { get; private set; } = null!;
 
     /// <summary>
     /// Gets the config instance for this mod.
     /// </summary>
-    internal static ModConfig Config { get; private set; }
-#pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
+    internal static ModConfig Config { get; private set; } = null!;
 
     /// <inheritdoc />
     public override void Entry(IModHelper helper)
@@ -299,12 +307,17 @@ internal class ModEntry : Mod
         => AssetEditor.EditSpecialOrderDialogue(e);
 
     private void OnButtonPressed(object? sender, ButtonPressedEventArgs e)
-        => SpecialFertilizerApplication.ApplyFertilizer(e, this.Helper.Input);
+    {
+        if (MenuingExtensions.IsNormalGameplay())
+        {
+            SpecialFertilizerApplication.ApplyFertilizer(e, this.Helper.Input);
+        }
+    }
 
 #if DEBUG
     private void DebugOutput(object? sender, ButtonPressedEventArgs e)
     {
-        if (Context.IsWorldReady && e.Button.IsUseToolButton())
+        if (MenuingExtensions.IsNormalGameplay() && e.Button.IsUseToolButton())
         {
             if (Game1.currentLocation.terrainFeatures.TryGetValue(e.Cursor.Tile, out TerrainFeature? terrainFeature))
             {
@@ -358,28 +371,27 @@ internal class ModEntry : Mod
     /// <param name="e">Event arguments.</param>
     private void OnSaving(object? sender, SavingEventArgs e)
     {
-        if (!Context.IsMainPlayer)
+        if (Context.IsMainPlayer)
         {
-            return;
+            // TODO: This should be doable with expression trees in a less dumb way.
+            if (storedIDs is null)
+            {
+                storedIDs = new();
+                storedIDs.FruitTreeFertilizerID = FruitTreeFertilizerID;
+                storedIDs.DeluxeFruitTreeFertilizerID = DeluxeFruitTreeFertilizerID;
+                storedIDs.FishFoodID = FishFoodID;
+                storedIDs.DeluxeFishFoodID = DeluxeFishFoodID;
+                storedIDs.DomesticatedFishFoodID = DomesticatedFishFoodID;
+                storedIDs.PaddyFertilizerID = PaddyCropFertilizerID;
+                storedIDs.LuckyFertilizerID = LuckyFertilizerID;
+                storedIDs.BountifulFertilizerID = BountifulFertilizerID;
+                storedIDs.JojaFertilizerID = JojaFertilizerID;
+                storedIDs.DeluxeJojaFertilizerID = DeluxeJojaFertilizerID;
+                storedIDs.OrganicFertilizerID = OrganicFertilizerID;
+            }
+            this.Helper.Data.WriteSaveData(SavedIDKey, storedIDs);
         }
-
-        // TODO: This should be doable with expression trees in a less dumb way.
-        if (storedIDs is null)
-        {
-            storedIDs = new();
-            storedIDs.FruitTreeFertilizerID = FruitTreeFertilizerID;
-            storedIDs.DeluxeFruitTreeFertilizerID = DeluxeFruitTreeFertilizerID;
-            storedIDs.FishFoodID = FishFoodID;
-            storedIDs.DeluxeFishFoodID = DeluxeFishFoodID;
-            storedIDs.DomesticatedFishFoodID = DomesticatedFishFoodID;
-            storedIDs.PaddyFertilizerID = PaddyCropFertilizerID;
-            storedIDs.LuckyFertilizerID = LuckyFertilizerID;
-            storedIDs.BountifulFertilizerID = BountifulFertilizerID;
-            storedIDs.JojaFertilizerID = JojaFertilizerID;
-            storedIDs.DeluxeJojaFertilizerID = DeluxeJojaFertilizerID;
-            storedIDs.OrganicFertilizerID = OrganicFertilizerID;
-        }
-        this.Helper.Data.WriteSaveData(SavedIDKey, storedIDs);
+        this.Helper.Events.GameLoop.Saving -= this.OnSaving;
     }
 
     /// <summary>
@@ -388,6 +400,11 @@ internal class ModEntry : Mod
     /// <param name="harmony">This mod's harmony instance.</param>
     private void ApplyPatches(Harmony harmony)
     {
+#if DEBUG
+        Stopwatch sw = new();
+        sw.Start();
+#endif
+
         try
         {
             harmony.PatchAll();
@@ -450,13 +467,14 @@ internal class ModEntry : Mod
         }
         catch (Exception ex)
         {
-            ModMonitor.Log(string.Format(ErrorMessageConsts.HARMONYCRASH, ex), LogLevel.Error);
+            this.Monitor.Log(string.Format(ErrorMessageConsts.HARMONYCRASH, ex), LogLevel.Error);
         }
         harmony.Snitch(this.Monitor, harmony.Id, transpilersOnly: true);
+#if DEBUG
+        sw.Stop();
+        this.Monitor.Log($"took {sw.ElapsedMilliseconds} ms to apply harmony patches", LogLevel.Info);
+#endif
     }
-
-    [SuppressMessage("StyleCop.CSharp.OrderingRules", "SA1204:Static elements should appear before instance elements", Justification = "Reviewed.")]
-    private static ModConfig GetConfig() => Config;
 
     private void OnGameLaunched(object? sender, GameLaunchedEventArgs e)
     {
@@ -473,7 +491,6 @@ internal class ModEntry : Mod
 
         // Only register for events if JA pack loading was successful.
         this.Helper.Events.GameLoop.SaveLoaded += this.OnSaveLoaded;
-        this.Helper.Events.GameLoop.Saving += this.OnSaving;
         this.Helper.Events.GameLoop.ReturnedToTitle += this.OnReturnedToTitle;
 
         this.Helper.Events.Multiplayer.ModMessageReceived += this.Multiplayer_ModMessageReceived;
@@ -493,7 +510,6 @@ internal class ModEntry : Mod
         }
 
         // Handle optional integrations.
-        Task task = Task.Run(() =>
         {
             GMCMHelper helper = new(this.Monitor, this.Helper.Translation, this.Helper.ModRegistry, this.ModManifest);
             if (helper.TryGetAPI())
@@ -502,24 +518,13 @@ internal class ModEntry : Mod
 
                 helper.Register(
                     reset: static () => Config = new(),
-                    save: () => this.Helper.WriteConfig(Config))
-                    .AddParagraph(I18n.Mod_Description);
-                foreach (PropertyInfo property in typeof(ModConfig).GetProperties())
-                {
-                    if (property.PropertyType == typeof(bool))
-                    {
-                        helper.AddBoolOption(property, GetConfig);
-                    }
-                    else if (property.PropertyType == typeof(Color))
-                    {
-                        helper.AddColorPicker(property, GetConfig, defaultColor: new(147, 112, 219, 155));
-                    }
-                }
+                    save: () => this.Helper.AsyncWriteConfig(this.Monitor, Config))
+                    .AddParagraph(I18n.Mod_Description)
+                    .GenerateDefaultGMCM(static () => Config);
             }
-        });
+        }
 
         this.ApplyPatches(new Harmony(this.ModManifest.UniqueID));
-        task.Wait();
         {
             IntegrationHelper helper = new(this.Monitor, this.Helper.Translation, this.Helper.ModRegistry, LogLevel.Trace);
             if (helper.TryGetAPI("TehPers.FishingOverhaul", "3.2.7", out ISimplifiedFishingApi? fishingAPI))
@@ -709,37 +714,52 @@ internal class ModEntry : Mod
             storedIDs.DomesticatedFishFoodID = DomesticatedFishFoodID;
         }
 
-        if (idMapping.Count <= 0 )
+        if (idMapping.Count <= 0)
         {
             ModMonitor.Log("No need to fix IDs, nothing has changed.");
             return;
         }
 
-        Utility.ForAllLocations((GameLocation loc) =>
+        this.Helper.Events.GameLoop.Saving -= this.OnSaving;
+        this.Helper.Events.GameLoop.Saving += this.OnSaving;
+
+        // Grab the SF API to deshuffle in there too.
+        IntegrationHelper helper = new(this.Monitor, this.Helper.Translation, this.Helper.ModRegistry, LogLevel.Trace);
+        if (helper.TryGetAPI("PeacefulEnd.SolidFoundations", "1.12.1", out this.solidFoundationsAPI))
         {
-            foreach (TerrainFeature terrain in loc.terrainFeatures.Values)
-            {
-                if (terrain is HoeDirt dirt && dirt.fertilizer.Value != 0)
-                {
-                    if (idMapping.TryGetValue(dirt.fertilizer.Value, out int newval))
-                    {
-                        dirt.fertilizer.Value = newval;
-                    }
-                }
-            }
-            foreach (SObject obj in loc.Objects.Values)
-            {
-                if (obj is IndoorPot pot && pot.hoeDirt?.Value?.fertilizer?.Value is int value && value != 0)
-                {
-                    if (idMapping.TryGetValue(value, out int newvalue))
-                    {
-                        pot.hoeDirt.Value.fertilizer.Value = newvalue;
-                    }
-                }
-            }
-        });
+            this.idmap = idMapping;
+            this.solidFoundationsAPI.AfterBuildingRestoration += this.AfterSFBuildingRestore;
+        }
+
+        Utility.ForAllLocations((GameLocation loc) => loc.FixHoeDirtInLocation(idMapping));
 
         ModMonitor.Log($"Fixed IDs! {string.Join(", ", idMapping.Select((kvp) => $"{kvp.Key}=>{kvp.Value}"))}");
+    }
+
+    private void AfterSFBuildingRestore(object? sender, EventArgs e)
+    {
+        // unhook event
+        this.solidFoundationsAPI!.AfterBuildingRestoration -= this.AfterSFBuildingRestore;
+        if (SolidFoundationShims.IsSFBuilding is null)
+        {
+            this.Monitor.Log("Could not get a handle on SF's building class, deshuffling code will fail!", LogLevel.Error);
+        }
+        else if (this.idmap is null)
+        {
+            this.Monitor.Log("IdMap was not set correctly, deshuffling code will fail.", LogLevel.Error);
+        }
+        else
+        {
+            foreach (var building in GameLocationUtils.GetBuildings())
+            {
+                if (SolidFoundationShims.IsSFBuilding?.Invoke(building) == true)
+                {
+                    building.indoors.Value?.FixHoeDirtInLocation(this.idmap);
+                }
+            }
+        }
+        this.idmap = null;
+        this.solidFoundationsAPI = null;
     }
 
     /***********
@@ -750,21 +770,32 @@ internal class ModEntry : Mod
     {
         JojaSample.Reset();
 
+        if (Context.IsSplitScreen && Context.ScreenId != 0)
+        {
+            return;
+        }
+
+        MultiplayerHelpers.AssertMultiplayerVersions(this.Helper.Multiplayer, this.ModManifest, this.Monitor, this.Helper.Translation);
+
         IntegrationHelper pfmHelper = new(this.Monitor, this.Helper.Translation, this.Helper.ModRegistry, LogLevel.Trace);
         if (pfmHelper.TryGetAPI("Digus.ProducerFrameworkMod", "1.7.4", out IProducerFrameworkModAPI? pfmAPI))
         {
             pfmAPI.AddContentPack(Path.Combine(this.Helper.DirectoryPath, "assets", "pfm-assets"));
         }
 
-        MultiplayerHelpers.AssertMultiplayerVersions(this.Helper.Multiplayer, this.ModManifest, this.Monitor, this.Helper.Translation);
-
         this.migrator = new(this.ModManifest, this.Helper, this.Monitor);
-        this.migrator.ReadVersionInfo();
-        this.Helper.Events.GameLoop.Saved += this.WriteMigrationData;
+
+        if (!this.migrator.CheckVersionInfo())
+        {
+            this.Helper.Events.GameLoop.Saved += this.WriteMigrationData;
+        }
+        else
+        {
+            this.migrator = null;
+        }
 
         this.FixIDs();
-        this.Helper.GameContent.InvalidateCache("Data/ObjectInformation");
-        this.Helper.GameContent.InvalidateCache($"Data/ObjectInformation.{this.Helper.Translation.Locale}");
+        this.Helper.GameContent.InvalidateCacheAndLocalized("Data/ObjectInformation");
 
         if (Context.IsMainPlayer)
         {

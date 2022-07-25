@@ -8,7 +8,11 @@
   </PropertyGroup>
 
   <PropertyGroup>
-    <Version>0.1.7</Version>
+    <Name>More Fertilizers</Name>
+    <Description>Adds more fertilizers to the game.</Description>
+    <Version>0.2.0</Version>
+    <UpdateKeys>Nexus:11837</UpdateKeys>
+    <BaseManifest>..\..\ja_dependencies.json</BaseManifest>
   </PropertyGroup>
 
   <PropertyGroup>
@@ -22,6 +26,7 @@
   
   <ItemGroup>
     <PackageReference Include="JetBrains.Annotations" Version="2022.1.0" />
+    <PackageReference Include="Microsoft.Win32.Registry" Version="5.0.0" />
   </ItemGroup>
 
   <ItemGroup>

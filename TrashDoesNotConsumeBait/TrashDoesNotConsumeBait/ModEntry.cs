@@ -10,26 +10,24 @@ using AtraUtils = AtraShared.Utils.Utils;
 namespace TrashDoesNotConsumeBait;
 
 /// <inheritdoc/>
-internal class ModEntry : Mod
+internal sealed class ModEntry : Mod
 {
     private MigrationManager? migrator;
 
-#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
     /// <summary>
     /// Gets the logger for this mod.
     /// </summary>
-    internal static IMonitor ModMonitor { get; private set; }
+    internal static IMonitor ModMonitor { get; private set; } = null!;
 
     /// <summary>
     /// Gets or sets the config instance for this mod.
     /// </summary>
-    internal static ModConfig Config { get; set; }
+    internal static ModConfig Config { get; set; } = null!;
 
     /// <summary>
     /// Gets the game content helper for this mod.
     /// </summary>
-    internal static IGameContentHelper GameContentHelper { get; private set; }
-#pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
+    internal static IGameContentHelper GameContentHelper { get; private set; } = null!;
 
     /// <inheritdoc/>
     public override void Entry(IModHelper helper)
@@ -62,24 +60,19 @@ internal class ModEntry : Mod
             return;
         }
         helper.Register(
-            reset: () =>
-            {
-                Config = new();
-                AssetEditor.Invalidate();
-            },
+            reset: static () => Config = new(),
             save: () =>
             {
-                this.Helper.WriteConfig(Config);
+                this.Helper.AsyncWriteConfig(this.Monitor, Config);
                 AssetEditor.Invalidate();
             });
         foreach (PropertyInfo property in typeof(ModConfig).GetProperties())
         {
-
             if (property.PropertyType == typeof(bool))
             {
                 helper.AddBoolOption(
                     property: property,
-                    getConfig: () => Config);
+                    getConfig: static () => Config);
             }
         }
         helper.AddPageHere("CheatyStuff", I18n.CheatyStuffTitle);
@@ -89,10 +82,7 @@ internal class ModEntry : Mod
             {
                 helper.AddFloatOption(
                     property: property,
-                    getConfig: () => Config,
-                    min: 0f,
-                    max: 1f,
-                    interval: 0.01f);
+                    getConfig: static () => Config);
             }
         }
     }
@@ -121,10 +111,21 @@ internal class ModEntry : Mod
     /// <param name="e">Save loaded event arguments.</param>
     private void OnSaveLoaded(object? sender, SaveLoadedEventArgs e)
     {
-        this.migrator = new(this.ModManifest, this.Helper, this.Monitor);
-        this.migrator.ReadVersionInfo();
+        if (Context.IsSplitScreen && Context.ScreenId != 0)
+        {
+            return;
+        }
 
-        this.Helper.Events.GameLoop.Saved += this.WriteMigrationData;
+        this.migrator = new(this.ModManifest, this.Helper, this.Monitor);
+
+        if (!this.migrator.CheckVersionInfo())
+        {
+            this.Helper.Events.GameLoop.Saved += this.WriteMigrationData;
+        }
+        else
+        {
+            this.migrator = null;
+        }
     }
 
     /// <summary>
@@ -141,5 +142,4 @@ internal class ModEntry : Mod
         }
         this.Helper.Events.GameLoop.Saved -= this.WriteMigrationData;
     }
-
 }

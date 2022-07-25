@@ -1,6 +1,6 @@
 ﻿using System.Reflection;
 using System.Reflection.Emit;
-using AtraBase.Toolkit.Reflection;
+using AtraCore.Framework.ReflectionManager;
 using AtraShared.Menuing;
 using AtraShared.Utils.Extensions;
 using AtraShared.Utils.HarmonyHelper;
@@ -13,6 +13,8 @@ using StardewValley.Locations;
 using StardewValley.Tools;
 using StopRugRemoval.Configuration;
 using xTile.Dimensions;
+
+using AtraUtils = AtraShared.Utils.Utils;
 
 namespace StopRugRemoval.HarmonyPatches.Confirmations;
 
@@ -71,7 +73,7 @@ internal static class ConfirmWarp
     internal static void ApplyWandPatches(Harmony harmony)
     {
         harmony.Patch(
-            original: typeof(Wand).InstanceMethodNamed(nameof(Wand.DoFunction)),
+            original: typeof(Wand).GetCachedMethod(nameof(Wand.DoFunction), ReflectionCache.FlagTypes.InstanceFlags),
             prefix: new HarmonyMethod(typeof(ConfirmWarp), nameof(PrefixWand)));
     }
 
@@ -99,22 +101,22 @@ internal static class ConfirmWarp
             { // new SObject(688,1)
                 new(OpCodes.Ldc_I4, 688),
             })
-            .GetLabels(out var labels)
+            .GetLabels(out IList<Label>? labels)
             .Insert(new CodeInstruction[]
             {
                 new(OpCodes.Ldc_I4_1),
-                new(OpCodes.Call, typeof(ConfirmWarp).StaticMethodNamed(nameof(SetHaveConfirmed))),
+                new(OpCodes.Call, typeof(ConfirmWarp).GetCachedMethod(nameof(SetHaveConfirmed), ReflectionCache.FlagTypes.StaticFlags)),
             }, withLabels: labels)
             .FindNext(new CodeInstructionWrapper[]
             {
                 new(OpCodes.Ldc_I4_1),
                 new(OpCodes.Ret),
             })
-            .GetLabels(out var secondLabels)
+            .GetLabels(out IList<Label>? secondLabels)
             .Insert(new CodeInstruction[]
             {
                 new(OpCodes.Ldc_I4_0),
-                new(OpCodes.Call, typeof(ConfirmWarp).StaticMethodNamed(nameof(SetHaveConfirmed))),
+                new(OpCodes.Call, typeof(ConfirmWarp).GetCachedMethod(nameof(SetHaveConfirmed), ReflectionCache.FlagTypes.StaticFlags)),
             }, withLabels: secondLabels);
 
             // helper.Print();
@@ -123,7 +125,7 @@ internal static class ConfirmWarp
         catch (Exception ex)
         {
             ModEntry.ModMonitor.Log($"Ran into error transpiling around the night market warp home service.\n\n{ex}", LogLevel.Error);
-            original.Snitch(ModEntry.ModMonitor);
+            original?.Snitch(ModEntry.ModMonitor);
         }
         return null;
     }
@@ -138,6 +140,20 @@ internal static class ConfirmWarp
         {
             return true;
         }
+
+        // Special case! Stop the rain totem from going through if there's a festival tomorrow.
+        // rain totem is 681
+        if (__instance.ParentSheetIndex == 681 && !__instance.bigCraftable.Value)
+        {
+            (string season, int day) = AtraUtils.GetTomorrow(Game1.currentSeason, Game1.dayOfMonth);
+            if (Utility.isFestivalDay(day, season))
+            {
+                __result = false;
+                Game1.showRedMessage(I18n.RainTotem_Message());
+                return false;
+            }
+        }
+
         if (!Enum.IsDefined((WarpLocation)__instance.ParentSheetIndex) || __instance.bigCraftable.Value)
         { // Not an attempt to warp.
             return true;
@@ -196,7 +212,8 @@ internal static class ConfirmWarp
         {
             return true;
         }
-        if (!__instance.occupiesTile(tileLocation) || !__instance.buildingType.Value.EndsWith("Obelisk", StringComparison.OrdinalIgnoreCase) || !who.IsLocalPlayer)
+        if (!__instance.occupiesTile(tileLocation) || !__instance.buildingType.Value.EndsWith("Obelisk", StringComparison.OrdinalIgnoreCase)
+            || !who.IsLocalPlayer || __instance.daysOfConstructionLeft.Value > 0)
         {
             return true;
         }

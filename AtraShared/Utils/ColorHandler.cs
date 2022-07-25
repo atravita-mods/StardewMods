@@ -1,8 +1,8 @@
 ﻿using System.Drawing;
 using System.Globalization;
-using System.Text.RegularExpressions;
-using AtraBase.Toolkit.Extensions;
+using System.Reflection;
 using AtraBase.Toolkit.StringHandler;
+using SkiaSharp;
 using XNAColor = Microsoft.Xna.Framework.Color;
 
 namespace AtraShared.Utils;
@@ -13,6 +13,35 @@ namespace AtraShared.Utils;
 public static class ColorHandler
 {
     /// <summary>
+    /// Reflect for all the colors defined by Skia, XNA, and Microsoft.
+    /// </summary>
+    /// <remarks>There's probably a lot of repeats, but hey, this runs once.</remarks>
+    private static readonly Lazy<Dictionary<string, XNAColor>> colors = new(() =>
+    {
+        Dictionary<string, XNAColor>? colors = new();
+
+        foreach (PropertyInfo? color in typeof(SKColors).GetProperties(BindingFlags.Static | BindingFlags.Public)
+                      .Where((prop) => prop.PropertyType == typeof(SKColor)))
+        {
+            colors[color.Name] = ((SKColor)color.GetValue(null)!).ToXNAColor();
+        }
+
+        foreach (PropertyInfo? color in typeof(Color).GetProperties(BindingFlags.Static | BindingFlags.Public)
+                      .Where((prop) => prop.PropertyType == typeof(Color)))
+        {
+            colors[color.Name] = ((Color)color.GetValue(null)!).ToXNAColor();
+        }
+
+        foreach (PropertyInfo? color in typeof(XNAColor).GetProperties(BindingFlags.Static | BindingFlags.Public)
+                      .Where((prop) => prop.PropertyType == typeof(XNAColor)))
+        {
+            colors[color.Name] = (XNAColor)color.GetValue(null)!;
+        }
+
+        return colors;
+    });
+
+    /// <summary>
     /// Tries to parse a user string to an XNAcolor.
     /// </summary>
     /// <param name="colorname">user string.</param>
@@ -20,13 +49,15 @@ public static class ColorHandler
     /// <returns>True if successful, false otherwise.</returns>
     public static bool TryParseColor(string colorname, out XNAColor color)
     {
-        // Enum.TryParse doesn't accept a ReadOnlySpan<char> until NET 6.
+        if (string.IsNullOrWhiteSpace(colorname))
+        {
+            goto ColorParseFail;
+        }
+
         colorname = colorname.Trim();
 
-        // Try to see if it's a valid KnownColor enum?
-        if (Enum.TryParse(colorname, ignoreCase: true, out KnownColor result))
+        if (colors.Value.TryGetValue(colorname, out color))
         {
-            color = Color.FromKnownColor(result).ToXNAColor();
             return true;
         }
 
@@ -71,7 +102,7 @@ public static class ColorHandler
         }
 
         // Try to split and process it that way?
-        SpanSplit splits = colorname.SpanSplit(new[] { '/', ',', ';' }, StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
+        SpanSplit splits = colorname.SpanSplit(new[] { '/', ',', ';' }, StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries, 4);
         if (!splits.TryGetAtIndex(2, out _))
         {
             goto ColorParseFail;
@@ -121,6 +152,14 @@ ColorParseFail:
     /// <returns>XNA color.</returns>
     public static XNAColor ToXNAColor(this Color color)
         => new(color.R, color.G, color.B, color.A);
+
+    /// <summary>
+    /// Converts a skia color to an XNA color.
+    /// </summary>
+    /// <param name="color">Skia color.</param>
+    /// <returns>XNA color.</returns>
+    public static XNAColor ToXNAColor(this SKColor color)
+        => new(color.Red, color.Green, color.Blue, color.Alpha);
 
     /// <summary>
     /// Converts an XNA color to a hex string.

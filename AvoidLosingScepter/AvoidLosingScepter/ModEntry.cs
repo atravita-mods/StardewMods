@@ -1,6 +1,6 @@
 ﻿using System.Reflection;
 using System.Reflection.Emit;
-using AtraBase.Toolkit.Reflection;
+using AtraCore.Framework.ReflectionManager;
 using AtraShared.ConstantsAndEnums;
 using AtraShared.Utils.Extensions;
 using AtraShared.Utils.HarmonyHelper;
@@ -10,7 +10,7 @@ using StardewValley.Tools;
 namespace AvoidLosingScepter;
 
 /// <inheritdoc />
-internal class ModEntry : Mod
+internal sealed class ModEntry : Mod
 {
 #pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
 
@@ -39,11 +39,41 @@ internal class ModEntry : Mod
         {
             HarmonyMethod transpiler = new(typeof(ModEntry), nameof(Transpiler));
             harmony.Patch(
-                original: typeof(Event).InstanceMethodNamed(nameof(Event.command_minedeath)),
+                original: typeof(Event).GetCachedMethod(nameof(Event.command_minedeath), ReflectionCache.FlagTypes.InstanceFlags),
                 transpiler: transpiler);
             harmony.Patch(
-                original: typeof(Event).InstanceMethodNamed(nameof(Event.command_hospitaldeath)),
+                original: typeof(Event).GetCachedMethod(nameof(Event.command_hospitaldeath), ReflectionCache.FlagTypes.InstanceFlags),
                 transpiler: transpiler);
+            if (this.Helper.ModRegistry.IsLoaded("spacechase0.MoonMisadventures"))
+            {
+                Type? mmMineDeath = AccessTools.TypeByName("MoonMisadventures.Patches.EventNoMineDeathPersistLossPatch");
+                MethodInfo? mmMineDeathImpl = AccessTools.Method(mmMineDeath, "Impl");
+
+                if (mmMineDeathImpl is not null)
+                {
+                    harmony.Patch(
+                        original: mmMineDeathImpl,
+                        transpiler: transpiler);
+                }
+                else
+                {
+                    this.Monitor.Log("Attempt to patch MoonMisadventures for compat failed, this mod will not work.", LogLevel.Error);
+                }
+
+                Type? mmHospitalDeath = AccessTools.TypeByName("MoonMisadventures.Patches.EventNoHospitalDeathPersistLossPatch");
+                MethodInfo? mmHospitalDeathImpl = AccessTools.Method(mmHospitalDeath, "Impl");
+
+                if (mmHospitalDeathImpl is not null)
+                {
+                    harmony.Patch(
+                        original: mmHospitalDeathImpl,
+                        transpiler: transpiler);
+                }
+                else
+                {
+                    this.Monitor.Log("Attempt to patch MoonMisadventures for compat failed, this mod will not work.", LogLevel.Error);
+                }
+            }
         }
         catch (Exception ex)
         {
@@ -52,6 +82,7 @@ internal class ModEntry : Mod
         harmony.Snitch(this.Monitor, harmony.Id, transpilersOnly: true);
     }
 
+    [SuppressMessage("StyleCop.CSharp.OrderingRules", "SA1204:Static elements should appear before instance elements", Justification = "Reviewed.")]
     private static bool ProhibitLosingThisItem(Item item)
         => item is Wand || (item is SObject obj && obj.ParentSheetIndex == 911 && !obj.bigCraftable.Value)
         || item.HasContextTag("atravita_no_loss_on_death") || (item is MeleeWeapon weapon && weapon.isScythe());
@@ -63,21 +94,21 @@ internal class ModEntry : Mod
             ILHelper helper = new(original, instructions, ModMonitor, gen);
             helper.FindNext(new CodeInstructionWrapper[]
             {
-                new(OpCodes.Call, typeof(Game1).StaticPropertyNamed(nameof(Game1.player)).GetGetMethod()),
+                new(OpCodes.Call, typeof(Game1).GetCachedProperty(nameof(Game1.player), ReflectionCache.FlagTypes.StaticFlags).GetGetMethod()),
                 new(OpCodes.Callvirt),
                 new(SpecialCodeInstructionCases.LdLoc),
-                new(OpCodes.Callvirt, typeof(IList<Item>).InstancePropertyNamed("Item").GetGetMethod()),
+                new(OpCodes.Callvirt, typeof(IList<Item>).GetCachedProperty("Item", ReflectionCache.FlagTypes.InstanceFlags).GetGetMethod()),
                 new(OpCodes.Isinst, typeof(MeleeWeapon)),
                 new(OpCodes.Callvirt),
                 new(OpCodes.Ldc_I4_S, 47),
-                new(OpCodes.Beq),
+                new(SpecialCodeInstructionCases.Wildcard, (inst) => inst.opcode == OpCodes.Beq || inst.opcode == OpCodes.Beq_S ),
             });
 
             int startindex = helper.Pointer;
 
             helper.FindNext(new CodeInstructionWrapper[]
             {
-                new(OpCodes.Beq),
+                new(SpecialCodeInstructionCases.Wildcard, (inst) => inst.opcode == OpCodes.Beq || inst.opcode == OpCodes.Beq_S ),
             })
             .StoreBranchDest()
             .Push()
@@ -87,12 +118,12 @@ internal class ModEntry : Mod
 
             int endindex = helper.Pointer;
 
-            List<CodeInstruction>? copylist = new();
+            List<CodeInstruction>? copylist = new(endindex - startindex);
             foreach (CodeInstruction? code in helper.Codes.GetRange(startindex, endindex - startindex - 3))
             {
                 copylist.Add(code.Clone());
             }
-            copylist.Add(new(OpCodes.Call, typeof(ModEntry).StaticMethodNamed(nameof(ProhibitLosingThisItem))));
+            copylist.Add(new(OpCodes.Call, typeof(ModEntry).GetCachedMethod(nameof(ProhibitLosingThisItem), ReflectionCache.FlagTypes.StaticFlags)));
             copylist.Add(new(OpCodes.Brtrue_S, label));
             CodeInstruction[]? copy = copylist.ToArray();
 
@@ -104,6 +135,7 @@ internal class ModEntry : Mod
         catch (Exception ex)
         {
             ModMonitor.Log($"Mod crashed while transpiling mine death methods:\n\n{ex}", LogLevel.Error);
+            original?.Snitch(ModEntry.ModMonitor);
         }
         return null;
     }

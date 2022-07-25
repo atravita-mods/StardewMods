@@ -1,4 +1,6 @@
-﻿namespace FarmCaveSpawn;
+﻿using AtraShared.Integrations.GMCMAttributes;
+
+namespace FarmCaveSpawn;
 
 /// <summary>
 /// How the mod should handle out-of-season fruit.
@@ -26,13 +28,14 @@ public enum SeasonalBehavior
 /// <summary>
 /// Configuration class for this mod.
 /// </summary>
-public class ModConfig
+internal sealed class ModConfig
 {
     private int maxDailySpawns = 6;
 
     /// <summary>
     /// Maximum number of spawns per day.
     /// </summary>
+    [GMCMRange(0, 100)]
     public int MaxDailySpawns
     {
         get => this.maxDailySpawns;
@@ -44,6 +47,8 @@ public class ModConfig
     /// <summary>
     /// Probability of any tile spawning an object, capped by max daily spawns.
     /// </summary>
+    [GMCMInterval(0.1)]
+    [GMCMRange(0, 100)]
     public float SpawnChance
     {
         get => this.spawnChance;
@@ -55,6 +60,8 @@ public class ModConfig
     /// <summary>
     /// Probability of any particular spawn being a tree fruit item.
     /// </summary>
+    [GMCMInterval(0.1)]
+    [GMCMRange(0, 100)]
     public float TreeFruitChance
     {
         get => this.treeFruitChance;
@@ -112,6 +119,7 @@ public class ModConfig
     /// <summary>
     /// Caps the price of fruit you can get.
     /// </summary>
+    [GMCMRange(0, 1000)]
     public int PriceCap { get; set; } = 200;
 }
 #pragma warning restore SA1623 // Property summary documentation should match accessors

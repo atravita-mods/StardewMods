@@ -3,7 +3,7 @@
 
 Most users should download the mod from the [Nexus page](https://www.nexusmods.com/stardewvalley/mods/11856). That said, if you'd like to contribute:
 
-### Extending a mod.
+### Extending the mod.
 
 Have an item you don't want to lose on death? Simply add the context tag `atravita_no_loss_on_death` to it!
 
@@ -13,9 +13,7 @@ This mod uses SMAPI's i18n feature for translations. I'd love to get translation
 
 ### Compiling from source:
 
-1. Fork [AtraBase](https://github.com/atravita-mods/AtraBase). (This repository contains my general C# utilties).
-2. Fork [AtraShared](https://github.com/atravita-mods/AtraShared). (This repository contains my Stardew-specific C# utilities).
-3. Fork [this repository](https://github.com/atravita-mods/AvoidLosingScepter).
+3. Fork [this repository](https://github.com/atravita-mods/StardewMods).
 4. Make sure you have [dotnet-5.0-sdk](https://dotnet.microsoft.com/en-us/download/dotnet/5.0) installed.
 5. If your copy of the game is not in the standard STEAM or Gog install locations, you may need to edit the csproj to point at it. [Instructions here](https://github.com/Pathoschild/SMAPI/blob/develop/docs/technical/mod-package.md#available-properties).
 

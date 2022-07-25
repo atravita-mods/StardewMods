@@ -1,10 +1,14 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <Import Project="..\csproj_common" />
   <PropertyGroup>
+    <Name>Identifiable Combined Rings</Name>
+    <Description>Makes it easier to identify the rings within a combined ring.</Description>
+    <BaseManifest>..\base_dependencies.json</BaseManifest>
     <Version>0.1.0</Version>
     <TargetFramework>net5.0</TargetFramework>
     <EnableHarmony>true</EnableHarmony>
     <ImplicitUsings>enable</ImplicitUsings>
+    <UpdateKeys>-1</UpdateKeys>
   </PropertyGroup>
 
   <ItemGroup>
@@ -25,10 +29,6 @@
     <Using Alias="NotNullAttribute" Include="System.Diagnostics.CodeAnalysis.NotNullAttribute" />
     <Using Alias="Object" Include="System.Object" />
     <Using Alias="SObject" Include="StardewValley.Object" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="DataModels\" />
   </ItemGroup>
 
 </Project>

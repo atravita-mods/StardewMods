@@ -53,7 +53,7 @@ internal static class StatsManager
     {
         try
         {
-            if (PropertyGetters.TryGetValue(key.ToLowerInvariant(), out Func<Stats, uint>? property))
+            if (PropertyGetters.TryGetValue(key, out Func<Stats, uint>? property))
             {
                 return property(stats);
             }
@@ -89,14 +89,14 @@ internal static class StatsManager
     /// <summary>
     /// Populate the propertyInfos cache.
     /// </summary>
+    [SuppressMessage("StyleCop.CSharp.SpacingRules", "SA1009:Closing parenthesis should be spaced correctly", Justification = "Stylecop doesn't understand nullable :(")]
     private static void GrabProperties()
     {
-#pragma warning disable CS8604 // Possible null reference argument.  - Not actually possible, the Where should filter out any that don't have a Get.
         propertyGetters = typeof(Stats).GetProperties()
             .Where((PropertyInfo p) => p.CanRead && p.PropertyType.Equals(typeof(uint)) && !DENYLIST.Contains(p.Name))
             .ToDictionary(
-                (PropertyInfo p) => p.Name.ToLowerInvariant(),
-                p => (Func<Stats, uint>)Delegate.CreateDelegate(typeof(Func<Stats, uint>), p.GetGetMethod()));
-#pragma warning restore CS8604 // Possible null reference argument.
+                keySelector: (PropertyInfo p) => p.Name,
+                elementSelector: (PropertyInfo p) => p.GetGetMethod()!.CreateDelegate<Func<Stats, uint>>(),
+                comparer: StringComparer.OrdinalIgnoreCase);
     }
 }

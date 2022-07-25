@@ -82,12 +82,14 @@ internal static class PFMMachineHandler
     /// </summary>
     internal static void ProcessPFMRecipes()
     {
-        if (MachineRecipes is null || MachineRecipes.Count == 0)
+        List<Dictionary<string, object>>? recipes = MachineRecipes;
+
+        if (recipes is null || recipes.Count == 0)
         {
             ModEntry.ModMonitor.Log($"PFM recipes not found?");
             return;
         }
-        foreach (Dictionary<string, object>? item in MachineRecipes)
+        foreach (Dictionary<string, object>? item in recipes)
         {
             if (!item.TryGetValue("MachineID", out object? id) || id is not int)
             {

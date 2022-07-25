@@ -14,7 +14,7 @@ using AtraUtils = AtraShared.Utils.Utils;
 namespace FarmCaveSpawn;
 
 /// <inheritdoc />
-public class ModEntry : Mod
+internal sealed class ModEntry : Mod
 {
     /// <summary>
     /// Sublocation-parsing regex.
@@ -59,7 +59,7 @@ public class ModEntry : Mod
         => this.random ?? new Random(((int)Game1.uniqueIDForThisGame * 2) + ((int)Game1.stats.DaysPlayed * 7));
 
     /// <summary>
-    /// Gets a value indicating whether or not I've spawned fruit today.
+    /// Gets or sets a value indicating whether or not I've spawned fruit today.
     /// </summary>
     private bool SpawnedFruitToday { get; set; }
 
@@ -95,7 +95,6 @@ public class ModEntry : Mod
     private void Cleanup()
     {
         this.TreeFruit.Clear();
-        this.TreeFruit.TrimExcess();
         this.random = null;
     }
 
@@ -108,49 +107,13 @@ public class ModEntry : Mod
     private void SetUpConfig(object? sender, GameLaunchedEventArgs e)
     {
         GMCMHelper helper = new(this.Monitor, this.Helper.Translation, this.Helper.ModRegistry, this.ModManifest);
-        if (!helper.TryGetAPI())
+        if (helper.TryGetAPI())
         {
-            return;
-        }
-
-        helper.Register(
+            helper.Register(
                 reset: () => this.config = new ModConfig(),
-                save: () => this.Helper.WriteConfig(this.config))
-            .AddParagraph(I18n.Mod_Description);
-
-        foreach (PropertyInfo property in typeof(ModConfig).GetProperties())
-        {
-            if (property.PropertyType.Equals(typeof(bool)))
-            {
-                helper.AddBoolOption(property, () => this.config);
-            }
-            else if (property.PropertyType.Equals(typeof(int)))
-            {
-                helper.AddIntOption(
-                    property: property,
-                    getConfig: () => this.config,
-                    min: 0,
-                    max: property.Name == "MaxDailySpawns" ? 100 : 1000);
-            }
-            else if (property.PropertyType.Equals(typeof(float)))
-            {
-                helper.AddFloatOption(
-                    property: property,
-                    getConfig: () => this.config,
-                    min: 0f,
-                    max: 100f,
-                    formatValue: FormatPercentValue);
-            }
-            else if (property.PropertyType.Equals(typeof(SeasonalBehavior)))
-            {
-                helper.AddEnumOption<ModConfig, SeasonalBehavior>(
-                    property: property,
-                    getConfig: () => this.config);
-            }
-            else
-            {
-                this.Monitor.DebugOnlyLog($"{property.Name} unaccounted for.", LogLevel.Warn);
-            }
+                save: () => this.Helper.AsyncWriteConfig(this.Monitor, this.config))
+            .AddParagraph(I18n.Mod_Description)
+            .GenerateDefaultGMCM(() => this.config);
         }
     }
 
@@ -194,15 +157,9 @@ public class ModEntry : Mod
     /// <param name="e">Arguments.</param>
     private void SpawnFruit(object? sender, DayStartedEventArgs e)
     {
-        if (!this.ShouldSpawnFruit())
-        {
-            this.SpawnedFruitToday = false;
-            return;
-        }
+        this.SpawnedFruitToday = this.ShouldSpawnFruit();
 
-        this.SpawnedFruitToday = true;
-
-        if (!Context.IsMainPlayer)
+        if (!this.SpawnedFruitToday || !Context.IsMainPlayer)
         {
             return;
         }
@@ -326,8 +283,8 @@ END:
     /// <remarks>The start and end coordinates are clamped to the size of the map, so there shouldn't be a way to give this function invalid values.</remarks>
     private IEnumerable<Vector2> IterateTiles(GameLocation location, int xstart = 1, int xend = int.MaxValue, int ystart = 1, int yend = int.MaxValue)
     {
-        List<Vector2> points = Enumerable.Range(Math.Max(xstart, 1), Math.Clamp(xend, xstart, location.Map.Layers[0].LayerWidth - 2))
-            .SelectMany(x => Enumerable.Range(Math.Max(ystart, 1), Math.Clamp(yend, ystart, location.Map.Layers[0].LayerHeight - 2)), (x, y) => new Vector2(x, y)).ToList();
+        Vector2[] points = Enumerable.Range(Math.Max(xstart, 1), Math.Clamp(xend, xstart, location.Map.Layers[0].LayerWidth - 2))
+            .SelectMany(x => Enumerable.Range(Math.Max(ystart, 1), Math.Clamp(yend, ystart, location.Map.Layers[0].LayerHeight - 2)), (x, y) => new Vector2(x, y)).ToArray();
         Utility.Shuffle(this.Random, points);
         foreach (Vector2 v in points)
         {
@@ -354,10 +311,13 @@ END:
         List<string> fruitNames = new();
         foreach (int objectID in this.GetTreeFruits())
         {
-            if (Game1.objectInformation.TryGetValue(objectID, out string? val)
-                && val.SpanSplit('/').TryGetAtIndex(SObject.objectInfoDisplayNameIndex, out SpanSplitEntry name))
+            if (Game1.objectInformation.TryGetValue(objectID, out string? val))
             {
-                fruitNames.Add(name);
+                ReadOnlySpan<char> name = val.GetNthChunk('/', SObject.objectInfoDisplayNameIndex);
+                if (name.Length > 0)
+                {
+                    fruitNames.Add(name.ToString());
+                }
             }
         }
         StringBuilder sb = new("Possible fruits: ");
@@ -372,7 +332,7 @@ END:
     /// <returns>List of data, split by commas.</returns>
     private List<string> GetData(string datalocation)
     {
-        this.Helper.GameContent.InvalidateCache(datalocation);
+        this.Helper.GameContent.InvalidateCacheAndLocalized(datalocation);
         IDictionary<string, string> rawlist = this.Helper.GameContent.Load<Dictionary<string, string>>(datalocation);
         List<string> datalist = new();
 
@@ -401,13 +361,13 @@ END:
         List<int> treeFruits = new();
 
         Dictionary<int, string> fruittrees = this.Helper.GameContent.Load<Dictionary<int, string>>("Data/fruitTrees");
-        string currentseason = Game1.currentSeason.Trim().ToLowerInvariant();
+        var currentseason = Game1.currentSeason.AsSpan().Trim();
         foreach (string tree in fruittrees.Values)
         {
-            SpanSplit treedata = tree.SpanSplit('/', StringSplitOptions.TrimEntries);
+            SpanSplit treedata = tree.SpanSplit('/', StringSplitOptions.TrimEntries, expectedCount: 3);
 
             if ((this.config.SeasonalOnly == SeasonalBehavior.SeasonalOnly || (this.config.SeasonalOnly == SeasonalBehavior.SeasonalExceptWinter && !Game1.IsWinter))
-                && !treedata[1].Contains(currentseason)
+                && !treedata[1].Contains(currentseason, StringComparison.OrdinalIgnoreCase)
                 && (!Game1.IsSummer || !treedata[1].Contains("island")))
             {
                 continue;
@@ -417,7 +377,7 @@ END:
             {
                 try
                 {
-                    SpanSplit fruit = Game1.objectInformation[objectIndex].SpanSplit('/');
+                    SpanSplit fruit = Game1.objectInformation[objectIndex].SpanSplit('/', expectedCount: 5);
                     string fruitname = fruit[SObject.objectInfoNameIndex].ToString();
                     if ((this.config.AllowAnyTreeProduct || (fruit[SObject.objectInfoTypeIndex].SpanSplit().TryGetAtIndex(1, out SpanSplitEntry cat) && int.TryParse(cat, out int category) && category == SObject.FruitsCategory))
                         && (!this.config.EdiblesOnly || int.Parse(fruit[SObject.objectInfoEdibilityIndex]) >= 0)
@@ -502,9 +462,14 @@ END:
             return;
         }
         this.migrator = new(this.ModManifest, this.Helper, this.Monitor);
-        this.migrator.ReadVersionInfo();
-
-        this.Helper.Events.GameLoop.Saved += this.WriteMigrationData;
+        if (!this.migrator.CheckVersionInfo())
+        {
+            this.Helper.Events.GameLoop.Saved += this.WriteMigrationData;
+        }
+        else
+        {
+            this.migrator = null;
+        }
     }
 
     /// <summary>
@@ -521,11 +486,4 @@ END:
         }
         this.Helper.Events.GameLoop.Saved -= this.WriteMigrationData;
     }
-
-    /// <summary>
-    /// Formats a float as a percent value.
-    /// </summary>
-    /// <param name="val">Value to format.</param>
-    /// <returns>Formatted string.</returns>
-    private static string FormatPercentValue(float val) => $"{val:f0}%";
 }

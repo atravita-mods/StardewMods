@@ -1,8 +1,12 @@
-﻿namespace SpecialOrdersExtended.Managers;
+﻿using HarmonyLib;
+using StardewValley.Locations;
+
+namespace SpecialOrdersExtended.Managers;
 
 /// <summary>
 /// Static class to hold tag-management functions.
 /// </summary>
+[HarmonyPatch(typeof(SpecialOrder))]
 internal class TagManager
 {
     private static Random? random;
@@ -11,13 +15,7 @@ internal class TagManager
     /// Gets a seeded random that changes once per in-game week.
     /// </summary>
     internal static Random Random
-    {
-        get
-        {
-            random ??= new Random(((int)Game1.uniqueIDForThisGame * 26) + (int)(Game1.stats.DaysPlayed / 7 * 36));
-            return random;
-        }
-    }
+         => random ??= new Random(((int)Game1.uniqueIDForThisGame * 26) + (int)(Game1.stats.DaysPlayed / 7 * 36));
 
     /// <summary>
     /// Delete's the random so it can be reset later.
@@ -30,6 +28,9 @@ internal class TagManager
     /// <param name="__result">the result for the original function.</param>
     /// <param name="__0">string - tag to check.</param>
     /// <returns>true to continue to the vanilla function, false otherwise.</returns>
+    [HarmonyPrefix]
+    [HarmonyPatch("CheckTag")]
+    [HarmonyPriority(Priority.High)]
     [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Naming convention for Harmony")]
     public static bool PrefixCheckTag(ref bool __result, string __0)
     {
@@ -38,7 +39,7 @@ internal class TagManager
 #endif
         try
         {
-            string[] vals = __0.Split('_');
+            string[] vals = __0.Split('_', StringSplitOptions.TrimEntries | StringSplitOptions.RemoveEmptyEntries);
             switch(vals[0].ToLowerInvariant())
             {
                 case "year":
@@ -304,6 +305,28 @@ internal class TagManager
                     else
                     {
                         __result = int.TryParse(vals[1], out int required) && Game1.player.team.completedSpecialOrders.Count() >= required;
+                    }
+                    return false;
+                case "slots":
+                    // slots_X, slots_under_X
+                    if (vals[1].Equals("under", StringComparison.OrdinalIgnoreCase))
+                    {
+                        __result = int.TryParse(vals[2], out int required) && Club.timesPlayedSlots < required;
+                    }
+                    else
+                    {
+                        __result = int.TryParse(vals[1], out int required) && Club.timesPlayedSlots >= required;
+                    }
+                    return false;
+                case "blackjack":
+                    // blackjack_X, blackjac_under_X
+                    if (vals[1].Equals("under", StringComparison.OrdinalIgnoreCase))
+                    {
+                        __result = int.TryParse(vals[2], out int required) && Club.timesPlayedCalicoJack < required;
+                    }
+                    else
+                    {
+                        __result = int.TryParse(vals[1], out int required) && Club.timesPlayedCalicoJack >= required;
                     }
                     return false;
                 case "random":

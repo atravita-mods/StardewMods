@@ -54,10 +54,6 @@ public interface IJsonAssetsAPI
 
     /// <summary>Load a folder as a Json Assets content pack.</summary>
     /// <param name="path">The absolute path to the content pack folder.</param>
-    void LoadAssets(string path);
-
-    /// <summary>Load a folder as a Json Assets content pack.</summary>
-    /// <param name="path">The absolute path to the content pack folder.</param>
     /// <param name="translations">The translations to use for <c>TranslationKey</c> fields, or <c>null</c> to load the content pack's <c>i18n</c> folder if present.</param>
     void LoadAssets(string path, ITranslationHelper translations);
 
@@ -96,9 +92,9 @@ public interface IJsonAssetsAPI
     /// <summary>
     /// Tries to get the custom sprite for a JA-registered item.
     /// </summary>
-    /// <param name="entity"></param>
-    /// <param name="texture"></param>
-    /// <param name="sourceRect"></param>
+    /// <param name="entity">Entity to get the sprite of.</param>
+    /// <param name="texture">out param, texture.</param>
+    /// <param name="sourceRect">out param, source rectangle.</param>
     /// <returns>True if successful, false otherwise.</returns>
     bool TryGetCustomSprite(object entity, out Texture2D texture, out Rectangle sourceRect);
 }

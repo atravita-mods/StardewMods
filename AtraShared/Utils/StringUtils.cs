@@ -1,7 +1,7 @@
-﻿using System.Linq.Expressions;
-using System.Text;
+﻿using System.Text;
 using AtraBase.Toolkit.Reflection;
 using AtraBase.Toolkit.StringHandler;
+using FastExpressionCompiler.LightExpression;
 using Microsoft.Xna.Framework.Graphics;
 
 namespace AtraShared.Utils;
@@ -18,7 +18,7 @@ namespace AtraShared.Utils;
 /// <summary>
 /// Handles methods for dealing with strings.
 /// </summary>
-public class StringUtils
+public sealed class StringUtils
 {
     private static readonly Lazy<Func<SpriteFont, char, int>> GetGlyphLazy = new(() =>
     {
@@ -28,18 +28,18 @@ public class StringUtils
             spriteinstance,
             typeof(SpriteFont).InstanceMethodNamed("GetGlyphIndexOrDefault"),
             charinstance);
-        return Expression.Lambda<Func<SpriteFont, char, int>>(call, spriteinstance, charinstance).Compile();
+        return Expression.Lambda<Func<SpriteFont, char, int>>(call, spriteinstance, charinstance).CompileFast();
     });
-
-    private static Func<SpriteFont, char, int> GetGlyph => GetGlyphLazy.Value;
-
-    private IMonitor? Monitor { get; set; }
 
     /// <summary>
     /// Initializes a new instance of the <see cref="StringUtils"/> class.
     /// </summary>
     /// <param name="monitor">The Monitor instance to use to log for these utils.</param>
     public StringUtils(IMonitor? monitor) => this.Monitor = monitor;
+
+    private static Func<SpriteFont, char, int> GetGlyph => GetGlyphLazy.Value;
+
+    private IMonitor? Monitor { get; set; }
 
     /// <summary>
     /// Parses and wraps text, defaulting to Game1.dialogueFont and Game1.dialogueWidth.
@@ -98,7 +98,7 @@ public class StringUtils
         float current_width = -whichFont.Spacing;
         StringBuilder replacement_word = new();
         bool use_replacement_word = false;
-        foreach ((ReadOnlySpan<char> word, ReadOnlySpan<char> splitchar) in text.SpanSplit())
+        foreach ((ReadOnlySpan<char> word, ReadOnlySpan<char> splitchar) in text.StreamSplit())
         {
             if (LocalizedContentManager.CurrentLanguageCode is LocalizedContentManager.LanguageCode.fr && word.StartsWith("\n-"))
             { // This is from vanilla code, I dunno why French is special.
@@ -139,7 +139,7 @@ public class StringUtils
             {
                 continue;
             }
-            else if (splitchar == "\n")
+            else if (splitchar == "\n" || splitchar == "\r\n")
             {
                 if (--maxlines <= 0)
                 {
@@ -163,56 +163,55 @@ public class StringUtils
     /// <param name="width">Maximum width.</param>
     /// <param name="height">Maximum height.</param>
     /// <returns>Wrapped text.</returns>
-    public unsafe string WrapTextByChar(string text, SpriteFont whichFont, float width, float? height = null)
+    public string WrapTextByChar(string text, SpriteFont whichFont, float width, float? height = null)
     {
         int maxlines = height is null ? 1000 : (int)height / whichFont.LineSpacing;
         StringBuilder sb = new();
         float current_width = -whichFont.Spacing;
         float charwidth = 0;
         float proposedcharwidth = 0;
-        fixed (SpriteFont.Glyph* pointerToGlyphs = whichFont.Glyphs)
+
+        foreach (char ch in text)
         {
-            foreach (char ch in text)
+            switch (ch)
             {
-                switch (ch)
-                {
-                    case '\r':
-                        continue;
-                    case '\n':
-                        if (--maxlines <= 0)
+                case '\r':
+                    continue;
+                case '\n':
+                    if (--maxlines <= 0)
+                    {
+                        return sb.ToString();
+                    }
+                    current_width = -whichFont.Spacing;
+                    sb.AppendLine();
+                    break;
+                default:
+                    int glyph = GetGlyph(whichFont, ch);
+                    if (glyph > -1 && glyph < whichFont.Glyphs.Length)
+                    {
+                        ref SpriteFont.Glyph whichGlyph = ref whichFont.Glyphs[glyph];
+                        charwidth = whichGlyph.LeftSideBearing + whichGlyph.Width + whichGlyph.RightSideBearing;
+                        proposedcharwidth = whichGlyph.RightSideBearing < 0
+                            ? whichGlyph.LeftSideBearing + whichGlyph.Width
+                            : charwidth;
+
+                        if (current_width + proposedcharwidth + whichFont.Spacing > width)
                         {
-                            return sb.ToString();
-                        }
-                        current_width = -whichFont.Spacing;
-                        sb.AppendLine();
-                        break;
-                    default:
-                        int glyph = GetGlyph(whichFont, ch);
-                        if (glyph > -1 && glyph < whichFont.Glyphs.Length)
-                        {
-                            SpriteFont.Glyph* pWhichGlyph = pointerToGlyphs + glyph;
-                            charwidth = pWhichGlyph->LeftSideBearing + pWhichGlyph->Width + pWhichGlyph->RightSideBearing;
-                            proposedcharwidth = pWhichGlyph->RightSideBearing < 0
-                                ? pWhichGlyph->LeftSideBearing + pWhichGlyph->Width
-                                : charwidth;
-                            if (current_width + proposedcharwidth + whichFont.Spacing > width)
+                            if (--maxlines <= 0)
                             {
-                                if (--maxlines <= 0)
-                                {
-                                    return sb.ToString();
-                                }
-                                sb.AppendLine();
-                                current_width = charwidth;
+                                return sb.ToString();
                             }
-                            sb.Append(ch);
-                            current_width += charwidth + whichFont.Spacing;
+                            sb.AppendLine();
+                            current_width = charwidth;
                         }
-                        else
-                        {
-                            this.Monitor?.Log($"Glyph {ch} not accounted for!", LogLevel.Error);
-                        }
-                        break;
-                }
+                        sb.Append(ch);
+                        current_width += charwidth + whichFont.Spacing;
+                    }
+                    else
+                    {
+                        this.Monitor?.Log($"Glyph {ch} not accounted for!", LogLevel.Error);
+                    }
+                    break;
             }
         }
         return sb.ToString();
@@ -224,29 +223,28 @@ public class StringUtils
     /// <param name="whichFont">Which font to use.</param>
     /// <param name="word">Word.</param>
     /// <returns>Float width.</returns>
-    public unsafe float MeasureWord(SpriteFont whichFont, ReadOnlySpan<char> word)
+    public float MeasureWord(SpriteFont whichFont, ReadOnlySpan<char> word)
     {
         if (word.Length == 0)
         {
             return 0;
         }
         float width = -whichFont.Spacing;
-        fixed (SpriteFont.Glyph* pointerToGlyphs = whichFont.Glyphs)
+
+        foreach (char ch in word)
         {
-            foreach (char ch in word)
+            int glyph = GetGlyph(whichFont, ch);
+            if (glyph > -1 && glyph < whichFont.Glyphs.Length)
             {
-                int glyph = GetGlyph(whichFont, ch);
-                if (glyph > -1 && glyph < whichFont.Glyphs.Length)
-                {
-                    SpriteFont.Glyph* pWhichGlyph = pointerToGlyphs + glyph;
-                    width += pWhichGlyph->LeftSideBearing + pWhichGlyph->Width + pWhichGlyph->RightSideBearing + whichFont.Spacing;
-                }
-                else
-                {
-                    this.Monitor?.Log($"Glyph {ch} not accounted for!", LogLevel.Error);
-                }
+                ref SpriteFont.Glyph whichGlyph = ref whichFont.Glyphs[glyph];
+                width += whichGlyph.LeftSideBearing + whichGlyph.Width + whichGlyph.RightSideBearing + whichFont.Spacing;
+            }
+            else
+            {
+                this.Monitor?.Log($"Glyph {ch} not accounted for!", LogLevel.Error);
             }
         }
+
         return width;
     }
 
@@ -256,39 +254,38 @@ public class StringUtils
     /// <param name="word">Word to truncate.</param>
     /// <param name="whichFont">Which font to use.</param>
     /// <param name="width">Width to wrap to.</param>
+    /// <param name="current_width">The width of the truncated word.</param>
     /// <param name="trunchars">Characters to use to truncate with.</param>
     /// <returns>Truncated string + width.</returns>
-    private unsafe StringBuilder TruncateWord(ReadOnlySpan<char> word, SpriteFont whichFont, float width, out float current_width, string trunchars = "...")
+    private StringBuilder TruncateWord(ReadOnlySpan<char> word, SpriteFont whichFont, float width, out float current_width, string trunchars = "...")
     {
-        StringBuilder sb = new();
+        StringBuilder sb = new(word.Length);
         current_width = -whichFont.Spacing + whichFont.MeasureString(trunchars).X;
         float charwidth = 0;
         float proposedcharwidth = 0;
-        fixed (SpriteFont.Glyph* pointerToGlyphs = whichFont.Glyphs)
+
+        foreach (char ch in word)
         {
-            foreach (char ch in word)
+            int glyph = GetGlyph(whichFont, ch);
+            if (glyph > -1 && glyph < whichFont.Glyphs.Length)
             {
-                int glyph = GetGlyph(whichFont, ch);
-                if (glyph > -1 && glyph < whichFont.Glyphs.Length)
+                ref SpriteFont.Glyph whichGlyph = ref whichFont.Glyphs[glyph];
+                charwidth = whichGlyph.LeftSideBearing + whichGlyph.Width + whichGlyph.RightSideBearing;
+                proposedcharwidth = whichGlyph.RightSideBearing < 0
+                    ? whichGlyph.LeftSideBearing + whichGlyph.Width
+                    : charwidth;
+                if (current_width + proposedcharwidth + whichFont.Spacing > width)
                 {
-                    SpriteFont.Glyph* pWhichGlyph = pointerToGlyphs + glyph;
-                    charwidth = pWhichGlyph->LeftSideBearing + pWhichGlyph->Width + pWhichGlyph->RightSideBearing;
-                    proposedcharwidth = pWhichGlyph->RightSideBearing < 0
-                        ? pWhichGlyph->LeftSideBearing + pWhichGlyph->Width
-                        : charwidth;
-                    if (current_width + proposedcharwidth + whichFont.Spacing > width)
-                    {
-                        sb.Append(trunchars);
-                        current_width += charwidth + whichFont.Spacing;
-                        return sb;
-                    }
-                    sb.Append(ch);
+                    sb.Append(trunchars);
                     current_width += charwidth + whichFont.Spacing;
+                    return sb;
                 }
-                else
-                {
-                    this.Monitor?.Log($"Glyph {ch} not accounted for!", LogLevel.Error);
-                }
+                sb.Append(ch);
+                current_width += charwidth + whichFont.Spacing;
+            }
+            else
+            {
+                this.Monitor?.Log($"Glyph {ch} not accounted for!", LogLevel.Error);
             }
         }
         return sb;

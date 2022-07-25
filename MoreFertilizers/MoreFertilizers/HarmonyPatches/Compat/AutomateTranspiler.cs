@@ -3,6 +3,7 @@ using System.Reflection.Emit;
 using System.Runtime.CompilerServices;
 using AtraBase.Toolkit;
 using AtraBase.Toolkit.Reflection;
+using AtraCore.Framework.ReflectionManager;
 using AtraShared.Utils.Extensions;
 using AtraShared.Utils.HarmonyHelper;
 using HarmonyLib;
@@ -27,11 +28,11 @@ internal static class AutomateTranspiler
         {
             // Patch the generic automate machine.
             Type machine = AccessTools.TypeByName("Pathoschild.Stardew.Automate.Framework.GenericObjectMachine`1")?.MakeGenericType(typeof(SObject))
-                ?? throw new MethodNotFoundException("Automate machine");
+                ?? ReflectionThrowHelper.ThrowMethodNotFoundException<Type>("Automate machine");
             Type storage = AccessTools.TypeByName("Pathoschild.Stardew.Automate.IStorage")
-                ?? throw new MethodNotFoundException("Automate IStorage");
+                ?? ReflectionThrowHelper.ThrowMethodNotFoundException<Type>("Automate IStorage");
             Type recipe = AccessTools.TypeByName("Pathoschild.Stardew.Automate.IRecipe")
-                ?? throw new MethodNotFoundException("Automate IRecipe");
+                ?? ReflectionThrowHelper.ThrowMethodNotFoundException<Type>("Automate IRecipe");
             harmony.Patch(
                 original: machine.InstanceMethodNamed("GenericPullRecipe", new[] { storage, recipe.MakeArrayType(), typeof(Item).MakeByRefType() }),
                 transpiler: new HarmonyMethod(typeof(AutomateTranspiler), nameof(Transpiler)));
@@ -94,13 +95,13 @@ internal static class AutomateTranspiler
             .Insert(copy.ToArray(), withLabels: labels)
             .Insert(new CodeInstruction[]
             {
-                new(OpCodes.Ldfld, typeof(SObject).InstanceFieldNamed(nameof(SObject.heldObject))),
+                new(OpCodes.Ldfld, typeof(SObject).GetCachedField(nameof(SObject.heldObject), ReflectionCache.FlagTypes.InstanceFlags)),
                 new(OpCodes.Dup),
-                new(OpCodes.Callvirt, typeof(NetFieldBase<SObject, NetRef<SObject>>).InstancePropertyNamed("Value").GetGetMethod()),
+                new(OpCodes.Callvirt, typeof(NetFieldBase<SObject, NetRef<SObject>>).GetCachedProperty("Value", ReflectionCache.FlagTypes.InstanceFlags).GetGetMethod()),
                 new(OpCodes.Ldarg_3),
                 new(OpCodes.Ldind_Ref),
-                new(OpCodes.Call, typeof(AutomateTranspiler).StaticMethodNamed(nameof(MakeOrganic))),
-                new(OpCodes.Callvirt, typeof(NetFieldBase<SObject, NetRef<SObject>>).InstancePropertyNamed("Value").GetSetMethod()),
+                new(OpCodes.Call, typeof(AutomateTranspiler).GetCachedMethod(nameof(MakeOrganic), ReflectionCache.FlagTypes.StaticFlags)),
+                new(OpCodes.Callvirt, typeof(NetFieldBase<SObject, NetRef<SObject>>).GetCachedProperty("Value", ReflectionCache.FlagTypes.InstanceFlags).GetSetMethod()),
             });
 
             // helper.Print();

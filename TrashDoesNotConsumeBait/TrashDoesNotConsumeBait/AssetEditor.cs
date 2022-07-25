@@ -1,4 +1,5 @@
-﻿using StardewModdingAPI.Events;
+﻿using AtraShared.Utils.Extensions;
+using StardewModdingAPI.Events;
 using StardewModdingAPI.Utilities;
 
 namespace TrashDoesNotConsumeBait;
@@ -34,8 +35,8 @@ public static class AssetEditor
     /// </summary>
     internal static void Invalidate()
     {
-        ModEntry.GameContentHelper.InvalidateCache(SECRET_NOTE_LOCATION);
-        ModEntry.GameContentHelper.InvalidateCache(FORGE_MENU_CHOICE);
+        ModEntry.GameContentHelper.InvalidateCacheAndLocalized(SECRET_NOTE_LOCATION);
+        ModEntry.GameContentHelper.InvalidateCacheAndLocalized(FORGE_MENU_CHOICE);
     }
 
     private static void EditForgeMenu(IAssetData editor)

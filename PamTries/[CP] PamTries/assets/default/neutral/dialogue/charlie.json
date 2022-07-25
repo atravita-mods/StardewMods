@@ -1,9 +1,9 @@
 {"Changes":[
     {
-		"Action": "EditData",
-		"Target": "Characters/Dialogue/Pam",
-		"LogName" :"Neutral dialogue, set charlie",
-		"Entries": {
+        "Action": "EditData",
+        "Target": "Characters/Dialogue/Pam",
+        "LogName" :"Neutral dialogue, set charlie",
+        "Entries": {
             "Mon8": "Wonder how hard it'd be to start a garden. You and Caroline seem pretty good at it...",
             "Tue8": "Some chick I knew in high school randomly called me yesterday.#$e#Was hopin' she'd be apologizin' for being a jerk to everyone. Nah. She just wanted to sell lotion.#$e#Ain't gonna get into those MLM schemes, no sirree.$u",
             "Thu8": "Gettin' old is just feeling tired and achy all the time.$s#$e#My days of partyin' all night are definitely over.",
@@ -13,7 +13,7 @@
             "fallBusStop_Tue": "#$c .5#Just drivin' this bus, day in, day out.#So, what's new with you? Ain't never anything new with me, I just drive this bus.#",
             "winterTown_Tue": "Gah. Nothing I own fits.#$e#Maybe going to aerobics wouldn't be that bad of an idea...#$e#Don't wanna let anyone see me like this, though.",
             "Trailer_Big_Wed": "Blergh. I'm tired. Leave me alone.",
-			"spring_Tue10": "Blregh. Campaign season sucks. Politician ads all over the place, blaming each other for everything wrong with this country.$u#$e#I just wanna watch something fun after work.$s",
+            "spring_Tue10": "Blregh. Campaign season sucks. Politician ads all over the place, blaming each other for everything wrong with this country.$u#$e#I just wanna watch something fun after work.$s",
             "spring_Wed10": "#$c .5#Why vote? All those pols are the same anyways.#Let me tell you, kiddo, them politicians only listen to the rich.#",
             "spring_Thu8": "$d joja#The fresh food at Joja really isn't that cheap compared to Pierre's, but the frozen food is so much cheaper...|Pierre doesn't carry as many different types of chips as Joja did.$s#",
             "spring_Fri10": "#$c .5#Haven't been paying attention to the election, honestly. All them pols are the same, anyways.#I keep on gettin' robocalled by those politicans. Wish the government would do something about all these spam calls...#",
@@ -31,8 +31,8 @@
             "winter_Wed10": "I miss eggnog.#$e#Pa would make it for me and Ma. Only drink I was allowed when I was a kid.#$e#Maybe there was a good reason for that....",
             "winter_Fri10": "Ma worked as a waitress all her life. It's not an easy job. Too many jerks.",
             "winter_Sat10": "#$c 0.5#This cold's no good for my poor bones.#@, I wonder if I should get a dog?#"
-		},
-	},
+        },
+    },
     {
         "LogName":"Neutral dialogue, set charlie, post-rehab",
         "Target": "Characters/Dialogue/Pam",

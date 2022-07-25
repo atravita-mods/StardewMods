@@ -20,6 +20,8 @@ internal static class ConsoleCommands
     /// </summary>
     private const string PrePendCommand = "av.gima";
 
+    private static readonly string Antisocial = PathUtilities.NormalizeAssetName("Data/AntiSocialNPCs");
+
     /// <summary>
     /// Register the console commands for this mod.
     /// </summary>
@@ -29,7 +31,7 @@ internal static class ConsoleCommands
         commandHelper.Add(
             name: PrePendCommand,
             documentation: I18n.BaseCommand_Documentation(),
-            callback: (string command, string[] args) => Globals.ModMonitor.Log(
+            callback: static (string command, string[] args) => Globals.ModMonitor.Log(
                 I18n.BaseCommand()
                 + $"\n\t{PrePendCommand}.get_schedule"
                 + $"\n\t{PrePendCommand}.get_islanders"
@@ -117,8 +119,7 @@ internal static class ConsoleCommands
                 return;
             }
         }
-        Game1.netWorldState.Value.IslandVisitors.TryGetValue(npc.Name, out bool atIsland);
-        if (atIsland)
+        if (Game1.netWorldState.Value.IslandVisitors.TryGetValue(npc.Name, out bool atIsland) && atIsland)
         {
             Globals.ModMonitor.Log('\t' + I18n.DisplaySchedule_ToIsland(npc.Name), level);
             if (IslandSchedules.TryGetValue(npc.Name, out string? schedulestring))
@@ -151,6 +152,19 @@ internal static class ConsoleCommands
         if (npc.Schedule is null)
         {
             Globals.ModMonitor.Log($"Something very odd has happened to the schedule of {npc.Name} - it appears to have been nulled since generation", LogLevel.Error);
+            if (!npc.CanSocialize)
+            {
+                Dictionary<string, string>? antisocial;
+                try
+                {
+                    antisocial = Game1.content.Load<Dictionary<string, string>>(Antisocial);
+                }
+                catch (Exception)
+                {
+                    antisocial = new();
+                }
+                Globals.ModMonitor.Log($"\t{npc.Name} appears to be antisocial: they {(antisocial.ContainsKey(npc.Name) ? "are" : "aren't")} registered with AntisocialNPCs.", LogLevel.Info);
+            }
             return;
         }
         List<int> keys = new(npc.Schedule.Keys);
@@ -173,7 +187,7 @@ internal static class ConsoleCommands
             sb.Append("\t\t").Append(I18n.DisplaySchedule_Animation()).AppendLine(schedulePathDescription.endOfRouteBehavior);
             sb.Append("\t\t").Append(I18n.DisplaySchedule_Message()).AppendLine(schedulePathDescription.endOfRouteMessage);
         }
-
+        sb.AppendLine();
         Globals.ModMonitor.Log(sb.ToString(), level);
     }
 
@@ -192,6 +206,15 @@ internal static class ConsoleCommands
     /// <param name="args">List of islanders.</param>
     private static void ConsoleSchedule(string command, string[] args)
     {
+        if (!Context.IsWorldReady)
+        {
+            Globals.ModMonitor.Log("This command can only be run while in a save!", LogLevel.Error);
+            return;
+        }
+        if (!Context.IsMainPlayer)
+        {
+            Globals.ModMonitor.Log("This command may return inaccurate results for farmhands!", LogLevel.Warn);
+        }
         foreach (string name in args)
         {
             if (Utility.fuzzyCharacterSearch(name, must_be_villager: true) is NPC npc)

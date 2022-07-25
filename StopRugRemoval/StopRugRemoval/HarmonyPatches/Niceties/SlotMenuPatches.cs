@@ -1,6 +1,7 @@
 ﻿using System.Reflection;
 using System.Reflection.Emit;
 using AtraBase.Toolkit.Reflection;
+using AtraCore.Framework.ReflectionManager;
 using AtraShared.Menuing;
 using AtraShared.Utils.Extensions;
 using AtraShared.Utils.HarmonyHelper;
@@ -58,7 +59,7 @@ internal static class TokenPurchasePatch
                     {
                         break;
                     }
-                    int copy = i;
+                    int copy = i; // prevent accidental capture. There's no explicit notation for that in C#
                     responses.Add(new Response(i.ToString(), i.ToString()));
                     actions.Add(() => AttemptBuyTokens(copy));
                 }
@@ -86,15 +87,26 @@ internal static class SlotMenuPatches
 {
     private const int HEIGHT = 52;
 
-    private static readonly Lazy<Func<Slots, bool>> SpinningGetterLazy = new(() => typeof(Slots).InstanceFieldNamed("spinning").GetInstanceFieldGetter<Slots, bool>());
-    private static readonly Lazy<Action<Slots, bool>> SpinningSetterLazy = new(() => typeof(Slots).InstanceFieldNamed("spinning").GetInstanceFieldSetter<Slots, bool>());
+    private static readonly Lazy<Func<Slots, bool>> SpinningGetterLazy = new(
+        () => typeof(Slots).GetCachedField("spinning", ReflectionCache.FlagTypes.InstanceFlags).GetInstanceFieldGetter<Slots, bool>());
 
-    private static readonly Lazy<Func<Slots, List<float>>> SlotResultsGetterLazy = new(() => typeof(Slots).InstanceFieldNamed("slotResults").GetInstanceFieldGetter<Slots, List<float>>());
+    private static readonly Lazy<Action<Slots, bool>> SpinningSetterLazy = new(
+        () => typeof(Slots).GetCachedField("spinning", ReflectionCache.FlagTypes.InstanceFlags).GetInstanceFieldSetter<Slots, bool>());
 
-    private static readonly Lazy<Action<Slots, int>> CurrentBetSetterLazy = new(() => typeof(Slots).InstanceFieldNamed("currentBet").GetInstanceFieldSetter<Slots, int>());
-    private static readonly Lazy<Action<Slots, int>> SlotsFinishedSetterLazy = new(() => typeof(Slots).InstanceFieldNamed("slotsFinished").GetInstanceFieldSetter<Slots, int>());
-    private static readonly Lazy<Action<Slots, int>> SpinsCountSetterLazy = new(() => typeof(Slots).InstanceFieldNamed("spinsCount").GetInstanceFieldSetter<Slots, int>());
-    private static readonly Lazy<Action<Slots, bool>> ShowResultSetterLazy = new(() => typeof(Slots).InstanceFieldNamed("showResult").GetInstanceFieldSetter<Slots, bool>());
+    private static readonly Lazy<Func<Slots, List<float>>> SlotResultsGetterLazy = new(
+        () => typeof(Slots).GetCachedField("slotResults", ReflectionCache.FlagTypes.InstanceFlags).GetInstanceFieldGetter<Slots, List<float>>());
+
+    private static readonly Lazy<Action<Slots, int>> CurrentBetSetterLazy = new(
+        () => typeof(Slots).GetCachedField("currentBet", ReflectionCache.FlagTypes.InstanceFlags).GetInstanceFieldSetter<Slots, int>());
+
+    private static readonly Lazy<Action<Slots, int>> SlotsFinishedSetterLazy = new(
+        () => typeof(Slots).GetCachedField("slotsFinished", ReflectionCache.FlagTypes.InstanceFlags).GetInstanceFieldSetter<Slots, int>());
+
+    private static readonly Lazy<Action<Slots, int>> SpinsCountSetterLazy = new(
+        () => typeof(Slots).GetCachedField("spinsCount", ReflectionCache.FlagTypes.InstanceFlags).GetInstanceFieldSetter<Slots, int>());
+
+    private static readonly Lazy<Action<Slots, bool>> ShowResultSetterLazy = new(
+        () => typeof(Slots).GetCachedField("showResult", ReflectionCache.FlagTypes.InstanceFlags).GetInstanceFieldSetter<Slots, bool>());
 
     private static readonly PerScreen<ClickableComponent?> Bet1000 = new();
 
@@ -140,12 +152,10 @@ internal static class SlotMenuPatches
     private static void PostfixConstructor()
     {
         Vector2 position = Utility.getTopLeftPositionForCenteringOnScreen(Game1.viewport, 104, HEIGHT, -16, 160);
-        (int x, int y) = position.ToPoint();
-        Bet1000.Value = new ClickableComponent(new Rectangle(x, y, 104, HEIGHT), I18n.Bet1k());
+        Bet1000.Value = new ClickableComponent(new Rectangle((int)position.X, (int)position.Y, 104, HEIGHT), I18n.Bet1k());
 
         position = Utility.getTopLeftPositionForCenteringOnScreen(Game1.viewport, 124, HEIGHT, -16, 224);
-        (x, y) = position.ToPoint();
-        Bet10000.Value = new ClickableComponent(new Rectangle(x, y, 124, HEIGHT), I18n.Bet10k());
+        Bet10000.Value = new ClickableComponent(new Rectangle((int)position.X, (int)position.Y, 124, HEIGHT), I18n.Bet10k());
     }
 
     // Move the DONE button down to make room for the bet 1k and bet 10k buttons.
@@ -160,7 +170,7 @@ internal static class SlotMenuPatches
             helper.FindNext(new CodeInstructionWrapper[]
             {
                 new(OpCodes.Ldc_I4, 160),
-                new(OpCodes.Call, typeof(Utility).StaticMethodNamed(nameof(Utility.getTopLeftPositionForCenteringOnScreen), new[] { typeof(xTile.Dimensions.Rectangle), typeof(int), typeof(int), typeof(int), typeof(int) })),
+                new(OpCodes.Call, typeof(Utility).GetCachedMethod(nameof(Utility.getTopLeftPositionForCenteringOnScreen), ReflectionCache.FlagTypes.StaticFlags, new[] { typeof(xTile.Dimensions.Rectangle), typeof(int), typeof(int), typeof(int), typeof(int) })),
             })
             .ReplaceOperand(288);
 
@@ -170,7 +180,7 @@ internal static class SlotMenuPatches
         catch (Exception ex)
         {
             ModEntry.ModMonitor.Log($"Ran into error transpiling Slots.ctor!\n\n{ex}", LogLevel.Error);
-            original.Snitch(ModEntry.ModMonitor);
+            original?.Snitch(ModEntry.ModMonitor);
         }
         return null;
     }
@@ -186,7 +196,7 @@ internal static class SlotMenuPatches
             helper.FindNext(new CodeInstructionWrapper[]
             {
                 new(OpCodes.Ldarg_0),
-                new(OpCodes.Ldfld, typeof(Slots).InstanceFieldNamed("showResult")),
+                new(OpCodes.Ldfld, typeof(Slots).GetCachedField("showResult", ReflectionCache.FlagTypes.InstanceFlags)),
                 new(OpCodes.Brfalse_S),
             })
             .Advance(2)
@@ -206,7 +216,7 @@ internal static class SlotMenuPatches
         catch (Exception ex)
         {
             ModEntry.ModMonitor.Log($"Ran into error transpiling Slots.draw!\n\n{ex}", LogLevel.Error);
-            original.Snitch(ModEntry.ModMonitor);
+            original?.Snitch(ModEntry.ModMonitor);
         }
         return null;
     }

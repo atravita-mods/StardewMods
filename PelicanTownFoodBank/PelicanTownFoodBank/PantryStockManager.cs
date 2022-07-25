@@ -80,8 +80,9 @@ internal static class PantryStockManager
         Utility.Shuffle(seededRandom, cookingIngredients);
         Utility.Shuffle(seededRandom, cookedItems);
 
-        List<int> sellables = new();
-        sellables.AddRange(neededIngredients.Take(5).Concat(cookingIngredients.Take(5)).Concat(cookedItems.Take(3)));
+        List<int> sellables = new(neededIngredients.Take(5));
+        sellables.AddRange(cookingIngredients.Take(5));
+        sellables.AddRange(cookedItems.Take(3));
         Utility.Shuffle(seededRandom, sellables);
         return sellables;
     }

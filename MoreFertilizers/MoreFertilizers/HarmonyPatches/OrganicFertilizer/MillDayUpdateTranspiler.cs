@@ -3,6 +3,7 @@ using System.Reflection.Emit;
 using System.Runtime.CompilerServices;
 using AtraBase.Toolkit;
 using AtraBase.Toolkit.Reflection;
+using AtraCore.Framework.ReflectionManager;
 using AtraShared.Utils.Extensions;
 using AtraShared.Utils.HarmonyHelper;
 using HarmonyLib;
@@ -62,10 +63,10 @@ internal static class MillDayUpdateTranspiler
             helper.DeclareLocal(typeof(Item), out LocalBuilder? inputlocal)
             .FindNext(new CodeInstructionWrapper[]
             { // Find the call to get_Item.
-                new(OpCodes.Callvirt, typeof(NetFieldBase<Chest, NetRef<Chest>>).InstancePropertyNamed("Value").GetGetMethod()),
+                new(OpCodes.Callvirt, typeof(NetFieldBase<Chest, NetRef<Chest>>).GetCachedProperty("Value", ReflectionCache.FlagTypes.InstanceFlags).GetGetMethod()),
                 new(OpCodes.Ldfld, typeof(Chest).InstanceFieldNamed(nameof(Chest.items))),
                 new(SpecialCodeInstructionCases.LdLoc),
-                new(OpCodes.Callvirt, typeof(NetList<Item, NetRef<Item>>).InstancePropertyNamed("Item").GetGetMethod()),
+                new(OpCodes.Callvirt, typeof(NetList<Item, NetRef<Item>>).GetCachedProperty("Item", ReflectionCache.FlagTypes.InstanceFlags).GetGetMethod()),
             })
             .Advance(4)
             .Insert(new CodeInstruction[]
@@ -75,7 +76,7 @@ internal static class MillDayUpdateTranspiler
             })
             .FindNext(new CodeInstructionWrapper[]
             { // find and store the output's local.
-                new(OpCodes.Newobj, typeof(SObject).Constructor(new[] { typeof(int), typeof(int), typeof(bool), typeof(int), typeof(int) })),
+                new(OpCodes.Newobj, typeof(SObject).GetCachedConstructor(ReflectionCache.FlagTypes.InstanceFlags, new[] { typeof(int), typeof(int), typeof(bool), typeof(int), typeof(int) })),
                 new(SpecialCodeInstructionCases.StLoc),
                 new(SpecialCodeInstructionCases.Wildcard, (inst) => inst.Branches(out _)),
             }).Advance(1);
@@ -91,7 +92,7 @@ internal static class MillDayUpdateTranspiler
             { // Skip past the null check to the next block.
                 new(SpecialCodeInstructionCases.LdLoc),
                 new(OpCodes.Ldarg_0),
-                new(OpCodes.Ldfld, typeof(Mill).InstanceFieldNamed(nameof(Mill.output))),
+                new(OpCodes.Ldfld, typeof(Mill).GetCachedField(nameof(Mill.output), ReflectionCache.FlagTypes.InstanceFlags)),
             })
             .GetLabels(out IList<Label>? labelsToMove, clear: true)
             .Insert(new CodeInstruction[]

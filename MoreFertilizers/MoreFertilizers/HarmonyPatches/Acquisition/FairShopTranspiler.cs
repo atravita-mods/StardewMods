@@ -1,6 +1,7 @@
 ﻿using System.Reflection;
 using System.Reflection.Emit;
-using AtraBase.Toolkit.Reflection;
+using AtraCore.Framework.ReflectionManager;
+using AtraShared.Utils.Extensions;
 using AtraShared.Utils.HarmonyHelper;
 using HarmonyLib;
 
@@ -56,12 +57,12 @@ internal static class FairShopTranspiler
             helper.FindNext(new CodeInstructionWrapper[]
             {
                 new(OpCodes.Ldarg_0),
-                new(OpCodes.Ldfld, typeof(Event).InstanceFieldNamed("festivalShops")),
+                new(OpCodes.Ldfld, typeof(Event).GetCachedField("festivalShops", ReflectionCache.FlagTypes.InstanceFlags)),
                 new(OpCodes.Ldstr, "starTokenShop"),
             })
             .FindNext(new CodeInstructionWrapper[]
             {
-                new(OpCodes.Newobj, typeof(Dictionary<ISalable, int[]>).Constructor(Array.Empty<Type>())),
+                new(OpCodes.Newobj, typeof(Dictionary<ISalable, int[]>).GetCachedConstructor(ReflectionCache.FlagTypes.InstanceFlags)),
                 new(SpecialCodeInstructionCases.StLoc),
             })
             .Advance(1);
@@ -72,14 +73,14 @@ internal static class FairShopTranspiler
             helper.FindNext(new CodeInstructionWrapper[]
             {
                 new(OpCodes.Ldarg_0),
-                new(OpCodes.Ldfld, typeof(Event).InstanceFieldNamed("festivalShops")),
+                new(OpCodes.Ldfld, typeof(Event).GetCachedField("festivalShops", ReflectionCache.FlagTypes.InstanceFlags)),
                 new(OpCodes.Ldstr, "starTokenShop"),
             })
             .GetLabels(out IList<Label>? labelsToMove, clear: true)
             .Insert(new CodeInstruction[]
             {
                 ldloc,
-                new(OpCodes.Call, typeof(FairShopTranspiler).StaticMethodNamed(nameof(FairShopTranspiler.AppendToShopStock))),
+                new(OpCodes.Call, typeof(FairShopTranspiler).GetCachedMethod(nameof(AppendToShopStock), ReflectionCache.FlagTypes.StaticFlags)),
                 stloc,
             }, withLabels: labelsToMove);
 
@@ -88,6 +89,7 @@ internal static class FairShopTranspiler
         catch (Exception ex)
         {
             ModEntry.ModMonitor.Log($"Mod crashed while transpiling Event.checkaction:\n\n{ex}", LogLevel.Error);
+            original?.Snitch(ModEntry.ModMonitor);
         }
         return null;
     }

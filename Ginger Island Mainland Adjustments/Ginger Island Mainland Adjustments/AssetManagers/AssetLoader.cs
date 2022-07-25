@@ -1,6 +1,7 @@
-﻿using AtraBase.Toolkit;
-using AtraShared;
+using AtraBase.Collections;
+using AtraBase.Toolkit;
 using AtraShared.Utils.Extensions;
+using StardewModdingAPI.Events;
 using StardewModdingAPI.Utilities;
 using StardewValley.Locations;
 
@@ -9,7 +10,7 @@ namespace GingerIslandMainlandAdjustments.AssetManagers;
 /// <summary>
 /// Enum that represents the special roles on Ginger Island.
 /// </summary>
-public enum SpecialCharacterType
+internal enum SpecialCharacterType
 {
     /// <summary>
     /// Musician.
@@ -27,7 +28,7 @@ public enum SpecialCharacterType
 /// <summary>
 /// Enum that represents groups of people who might want to explore GI together.
 /// </summary>
-public enum SpecialGroupType
+internal enum SpecialGroupType
 {
     /// <summary>
     /// Groups of people who might go to Ginger Island together.
@@ -43,7 +44,7 @@ public enum SpecialGroupType
 /// <summary>
 /// Class to manage asset loading.
 /// </summary>
-public sealed class AssetLoader : IAssetLoader
+internal static class AssetLoader
 {
     /// <summary>
     /// Primary asset path for this mod. All assets should start with this.
@@ -78,56 +79,22 @@ public sealed class AssetLoader : IAssetLoader
     /// <summary>
     /// Full list of fake assets.
     /// </summary>
-    private static readonly string[] MyAssets = new string[]
-    {
-        BartenderLocation,
-        ExplorerLocation,
-        MusicianLocation,
-        GroupsLocations,
-        ExclusionLocations,
-    };
-
-    private AssetLoader()
-    {
-    }
+    private static HashSet<string> myAssets = null!;
 
     /// <summary>
-    /// Gets the instance of the AssetLoader.
+    /// Initialized the myAssets hashset.
     /// </summary>
-    public static AssetLoader Instance { get; } = new();
-
-    /// <inheritdoc />
-    [UsedImplicitly]
-    public bool CanLoad<T>(IAssetInfo asset)
-        => MyAssets.Any((string assetpath) => asset.AssetNameEquals(assetpath));
-
-    /// <inheritdoc />
-    [UsedImplicitly]
-    public T Load<T>(IAssetInfo asset)
+    /// <param name="helper">game content helper.</param>
+    internal static void Init(IGameContentHelper helper)
     {
-        // default vanilla groupings
-        if (asset.AssetNameEquals(GroupsLocations))
+        myAssets = new(StringComparer.OrdinalIgnoreCase)
         {
-            Dictionary<string, string> defaultgroups = Globals.ContentHelper.Load<Dictionary<string, string>>("assets/defaultGroupings.json", ContentSource.ModFolder);
-            if (Game1.year > 2 && defaultgroups.TryGetValue("JodiFamily", out string? val))
-            {
-                Globals.ModMonitor.DebugOnlyLog($"Kent is home, adding Kent");
-                defaultgroups["JodiFamily"] = val + ", Kent";
-            }
-            if (defaultgroups.TryGetValue("barfolk", out string? value) && Game1.getAllFarmers().Any((Farmer farmer) => farmer.eventsSeen.Contains(99210002)))
-            {
-                defaultgroups["barfolk"] = value + ", Pam"; // A little Pam Tries tie-in?
-            }
-            return (T)(object)defaultgroups;
-        }
-        // Load an empty document for everything else
-        else if (MyAssets.Any((string assetpath) => asset.AssetNameEquals(assetpath)))
-        {
-            return (T)(object)new Dictionary<string, string>
-            {
-            };
-        }
-        throw new InvalidOperationException($"Should not have tried to load '{asset.AssetName}'");
+            helper.ParseAssetName(BartenderLocation).BaseName,
+            helper.ParseAssetName(ExplorerLocation).BaseName,
+            helper.ParseAssetName(MusicianLocation).BaseName,
+            helper.ParseAssetName(GroupsLocations).BaseName,
+            helper.ParseAssetName(ExclusionLocations).BaseName,
+        };
     }
 
     /// <summary>
@@ -136,23 +103,22 @@ public sealed class AssetLoader : IAssetLoader
     /// <param name="specialCharacterType">Which type of special position am I looking for.</param>
     /// <returns>HashSet of possible special characters.</returns>
     /// <exception cref="UnexpectedEnumValueException{SpecialCharacterType}">Recieved an unexpected enum value.</exception>
-    [SuppressMessage("StyleCop.CSharp.OrderingRules", "SA1204:Static elements should appear before instance elements", Justification = "Reviewed")]
-    public static HashSet<NPC> GetSpecialCharacter(SpecialCharacterType specialCharacterType)
+    internal static HashSet<NPC> GetSpecialCharacter(SpecialCharacterType specialCharacterType)
     {
         HashSet<NPC> specialCharacters = new();
         string assetLocation = specialCharacterType switch
         {
             SpecialCharacterType.Musician => MusicianLocation,
             SpecialCharacterType.Bartender => BartenderLocation,
-            _ => throw new UnexpectedEnumValueException<SpecialCharacterType>(specialCharacterType)
+            _ => TKThrowHelper.ThrowUnexpectedEnumValueException<SpecialCharacterType, string>(specialCharacterType)
         };
-        foreach (string? specialChar in Globals.ContentHelper.Load<Dictionary<string, string>>(assetLocation, ContentSource.GameContent).Keys)
+        foreach (string? specialChar in Globals.GameContentHelper.Load<Dictionary<string, string>>(assetLocation).Keys)
         {
             if (specialChar is null)
             {
                 continue;
             }
-            if (Game1.getCharacterFromName(specialChar) is NPC npc)
+            if (Game1.getCharacterFromName(specialChar, mustBeVillager: true) is NPC npc)
             {
                 specialCharacters.Add(npc);
             }
@@ -170,16 +136,16 @@ public sealed class AssetLoader : IAssetLoader
     /// <param name="specialGroupType">Which type of special group am I looking for.</param>
     /// <returns>Dictionary of specialGroupName=>Special Group.</returns>
     /// <exception cref="UnexpectedEnumValueException{SpecialGroupType}">Received an unexpected enum value.</exception>
-    public static Dictionary<string, HashSet<NPC>> GetCharacterGroup(SpecialGroupType specialGroupType)
+    internal static Dictionary<string, HashSet<NPC>> GetCharacterGroup(SpecialGroupType specialGroupType)
     {
         Dictionary<string, HashSet<NPC>> characterGroups = new();
         string assetLocation = specialGroupType switch
         {
             SpecialGroupType.Explorers => ExplorerLocation,
             SpecialGroupType.Groups => GroupsLocations,
-            _ => throw new UnexpectedEnumValueException<SpecialGroupType>(specialGroupType)
+            _ => TKThrowHelper.ThrowUnexpectedEnumValueException<SpecialGroupType, string>(specialGroupType)
         };
-        Dictionary<string, string> data = Globals.ContentHelper.Load<Dictionary<string, string>>(assetLocation, ContentSource.GameContent);
+        Dictionary<string, string> data = Globals.GameContentHelper.Load<Dictionary<string, string>>(assetLocation);
         foreach (string? groupname in data.Keys)
         {
             if (groupname is null)
@@ -227,10 +193,10 @@ public sealed class AssetLoader : IAssetLoader
     /// </summary>
     /// <returns>Exclusions dictionary.</returns>
     /// <remarks>Will invalidate the cache every time, so cache it if you need it stored.</remarks>
-    public static Dictionary<NPC, string[]> GetExclusions()
+    internal static Dictionary<NPC, string[]> GetExclusions()
     {
         Dictionary<NPC, string[]> exclusions = new();
-        Dictionary<string, string> data = Globals.ContentHelper.Load<Dictionary<string, string>>(ExclusionLocations, ContentSource.GameContent);
+        Dictionary<string, string> data = Globals.GameContentHelper.Load<Dictionary<string, string>>(ExclusionLocations);
         foreach (string npcname in data.Keys)
         {
             if (Game1.getCharacterFromName(npcname) is NPC npc)
@@ -243,5 +209,36 @@ public sealed class AssetLoader : IAssetLoader
             }
         }
         return exclusions;
+    }
+
+    /// <summary>
+    /// Loads default files for this mod.
+    /// </summary>
+    /// <param name="e">AssetRequestedEventArguments.</param>
+    internal static void Load(AssetRequestedEventArgs e)
+    {
+        if (e.NameWithoutLocale.IsEquivalentTo(GroupsLocations))
+        {
+            e.LoadFrom(GetDefaultGroups, AssetLoadPriority.Low);
+        }
+        else if (myAssets.Contains(e.NameWithoutLocale.BaseName))
+        {
+            e.LoadFrom(EmptyContainers.GetEmptyDictionary<string, string>, AssetLoadPriority.Low);
+        }
+    }
+
+    private static Dictionary<string, string> GetDefaultGroups()
+    {
+        Dictionary<string, string> defaultgroups = Globals.ModContentHelper.Load<Dictionary<string, string>>("assets/defaultGroupings.json");
+        if (Game1.year > 2 && defaultgroups.TryGetValue("JodiFamily", out string? val))
+        {
+            Globals.ModMonitor.DebugOnlyLog($"Kent is home, adding Kent");
+            defaultgroups["JodiFamily"] = val + ", Kent";
+        }
+        if (defaultgroups.TryGetValue("barfolk", out string? value) && Game1.getAllFarmers().Any((Farmer farmer) => farmer.eventsSeen.Contains(99210002)))
+        {
+            defaultgroups["barfolk"] = value + ", Pam"; // A little Pam Tries tie-in?
+        }
+        return defaultgroups;
     }
 }

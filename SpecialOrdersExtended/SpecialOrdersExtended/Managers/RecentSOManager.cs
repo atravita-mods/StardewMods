@@ -16,18 +16,25 @@ internal class RecentSOManager
     /// <summary>
     /// Load the recently completed SO log.
     /// </summary>
-    public static void Load() => recentCompletedSO = RecentCompletedSO.Load();
+    internal static void Load() => recentCompletedSO = RecentCompletedSO.Load();
 
     /// <summary>
     /// Load the temp version of the recently completed SO log if available.
     /// </summary>
-    public static void LoadTemp() => recentCompletedSO = RecentCompletedSO.LoadTempIfAvailable();
+    internal static void LoadTemp()
+    {
+        if (RecentCompletedSO.LoadTempIfAvailable() is RecentCompletedSO log)
+        {
+            ModEntry.ModMonitor.Log("Temp log loaded");
+            recentCompletedSO = log;
+        }
+    }
 
     /// <summary>
     /// Saves the recently completed SO log.
     /// </summary>
     /// <exception cref="SaveNotLoadedError">Save not loaded.</exception>
-    public static void Save()
+    internal static void Save()
     {
         if (recentCompletedSO is null)
         {
@@ -40,7 +47,7 @@ internal class RecentSOManager
     /// Saves the recently completed SO log to a temp file.
     /// </summary>
     /// <exception cref="SaveNotLoadedError">Save not loaded.</exception>
-    public static void SaveTemp()
+    internal static void SaveTemp()
     {
         if (recentCompletedSO is null)
         {
@@ -54,7 +61,7 @@ internal class RecentSOManager
     /// </summary>
     /// <param name="days">current number of days played.</param>
     /// <returns>IEnumerable of keys within the given timeframe. May return null.</returns>
-    public static IEnumerable<string>? GetKeys(uint days) => recentCompletedSO?.GetKeys(days);
+    internal static IEnumerable<string>? GetKeys(uint days) => recentCompletedSO?.GetKeys(days);
 
     /// <summary>
     /// Run at the end of a day, in order to remove older completed orders.
@@ -62,7 +69,7 @@ internal class RecentSOManager
     /// <param name="daysplayed">current number of days played.</param>
     /// <exception cref="SaveNotLoadedError">Raised whenver the field is null and should not be. (Save not loaded).</exception>
     /// <remarks>Should remove orders more than seven days old.</remarks>
-    public static void DayUpdate(uint daysplayed)
+    internal static void DayUpdate(uint daysplayed)
     {
         if(recentCompletedSO is null)
         {
@@ -78,7 +85,7 @@ internal class RecentSOManager
     /// Grabs both the current orders marked as complete and looks for orders dismissed.
     /// </summary>
     /// <returns>true if an order got added to RecentCompletedSO, false otherwise.</returns>
-    public static bool GrabNewRecentlyCompletedOrders()
+    internal static bool GrabNewRecentlyCompletedOrders()
     {
         Dictionary<string, SpecialOrder>? currentOrders = Game1.player?.team?.specialOrders?.ToDictionaryIgnoreDuplicates(a => a.questKey.Value, a => a)
             ?? SaveGame.loaded?.specialOrders?.ToDictionaryIgnoreDuplicates(a => a.questKey.Value, a => a);
@@ -110,11 +117,11 @@ internal class RecentSOManager
         HashSet<string>? completedOrderKeys = null;
         if (Context.IsWorldReady)
         {
-            completedOrderKeys = Game1.player!.team.completedSpecialOrders.Keys.OrderBy(a => a).ToHashSet();
+            completedOrderKeys = Game1.player!.team.completedSpecialOrders.Keys.ToHashSet();
         }
         else
         {
-            completedOrderKeys = SaveGame.loaded?.completedSpecialOrders?.OrderBy(a => a)?.ToHashSet();
+            completedOrderKeys = SaveGame.loaded?.completedSpecialOrders?.ToHashSet();
         }
         if (completedOrderKeys is null)
         { // This should not happen, but just in case?
@@ -147,13 +154,18 @@ internal class RecentSOManager
     /// <param name="questkey">Quest key (exact).</param>
     /// <returns>True if successfully added, false otherwise.</returns>
     /// <exception cref="SaveNotLoadedError">Save is not loaded.</exception>
-    public static bool TryAdd(string questkey)
+    internal static bool TryAdd(string questkey)
     {
         if (!Context.IsWorldReady)
         {
             throw new SaveNotLoadedError();
         }
-        return recentCompletedSO!.TryAdd(questkey, Game1.stats.DaysPlayed);
+        if (recentCompletedSO!.TryAdd(questkey, Game1.stats.DaysPlayed))
+        {
+            ModEntry.ModMonitor.DebugOnlyLog($"Added {questkey} to the recently completed SOs", LogLevel.Info);
+            return true;
+        }
+        return false;
     }
 
     /// <summary>
@@ -162,7 +174,7 @@ internal class RecentSOManager
     /// <param name="questkey">Quest key to search for.</param>
     /// <returns>True if removed successfully, false otherwise.</returns>
     /// <exception cref="SaveNotLoadedError">If called when teh save is not loaded.</exception>
-    public static bool TryRemove(string questkey)
+    internal static bool TryRemove(string questkey)
     {
         if (!Context.IsWorldReady)
         {
@@ -179,7 +191,7 @@ internal class RecentSOManager
     /// <returns>True if questkey found and was completed in X days, false otherwise.</returns>
     /// <exception cref="SaveNotLoadedError">Save not loaded.</exception>
     /// <remarks>The data model will delete any entries older than 7 days, so beyond that it just won't know.</remarks>
-    public static bool IsWithinXDays(string questkey, uint days)
+    internal static bool IsWithinXDays(string questkey, uint days)
     {
         if (!Context.IsWorldReady)
         {

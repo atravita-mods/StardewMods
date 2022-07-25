@@ -2,7 +2,9 @@
 using System.Reflection.Emit;
 using System.Runtime.CompilerServices;
 using AtraBase.Toolkit;
-using AtraBase.Toolkit.Reflection;
+using AtraCore.Framework.ReflectionManager;
+using AtraShared.ConstantsAndEnums;
+using AtraShared.Utils.Extensions;
 using AtraShared.Utils.HarmonyHelper;
 using HarmonyLib;
 using HighlightEmptyMachines.Framework;
@@ -56,12 +58,12 @@ internal class SObjectDrawTranspiler
             helper.FindNext(new CodeInstructionWrapper[]
             {
                 new (OpCodes.Ldarg_0),
-                new (OpCodes.Ldfld, typeof(SObject).InstanceFieldNamed(nameof(SObject.bigCraftable))),
+                new (OpCodes.Ldfld, typeof(SObject).GetCachedField(nameof(SObject.bigCraftable), ReflectionCache.FlagTypes.InstanceFlags)),
             })
             .FindNext(new CodeInstructionWrapper[]
             {
                 new (OpCodes.Ldarg_0),
-                new (OpCodes.Ldfld, typeof(Item).InstanceFieldNamed(nameof(Item.parentSheetIndex))),
+                new (OpCodes.Ldfld, typeof(Item).GetCachedField(nameof(Item.parentSheetIndex), ReflectionCache.FlagTypes.InstanceFlags)),
                 new (OpCodes.Call),
                 new (OpCodes.Ldc_I4, 272),
                 new (OpCodes.Bne_Un),
@@ -71,10 +73,10 @@ internal class SObjectDrawTranspiler
             .AdvanceToStoredLabel()
             .FindNext(new CodeInstructionWrapper[]
             {
-                new (OpCodes.Call, typeof(Color).StaticPropertyNamed(nameof(Color.White)).GetGetMethod()),
+                new (OpCodes.Call, typeof(Color).GetCachedProperty(nameof(Color.White), ReflectionCache.FlagTypes.StaticFlags).GetGetMethod()),
             })
             .GetLabels(out IList<Label> colorLabels, clear: true)
-            .ReplaceInstruction(OpCodes.Call, typeof(SObjectDrawTranspiler).StaticMethodNamed(nameof(SObjectDrawTranspiler.BigCraftableNeedsInputLayerColor)))
+            .ReplaceInstruction(OpCodes.Call, typeof(SObjectDrawTranspiler).GetCachedMethod(nameof(BigCraftableNeedsInputLayerColor), ReflectionCache.FlagTypes.StaticFlags))
             .Insert(new CodeInstruction[]
             {
                 new(OpCodes.Ldarg_0),
@@ -84,6 +86,7 @@ internal class SObjectDrawTranspiler
         catch (Exception ex)
         {
             ModEntry.ModMonitor.Log($"Mod crashed while transpiling SObject.draw\n\n{ex}", LogLevel.Error);
+            original?.Snitch(ModEntry.ModMonitor);
         }
         return null;
     }

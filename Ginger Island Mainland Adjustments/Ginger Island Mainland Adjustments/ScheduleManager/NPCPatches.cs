@@ -44,7 +44,7 @@ internal static class NPCPatches
     {
         try
         {
-            if (__instance.currentLocation is IslandLocation && __0.Equals(__instance.Name.ToLowerInvariant() + "_beach_fish", StringComparison.OrdinalIgnoreCase))
+            if (__instance.currentLocation is IslandLocation && __0.Equals(__instance.Name + "_beach_fish", StringComparison.OrdinalIgnoreCase))
             {
                 __instance.extendSourceRect(0, 32);
                 __instance.Sprite.tempSpriteHeight = 64;
@@ -76,7 +76,7 @@ internal static class NPCPatches
     {
         try
         {
-            if (__0.Equals(__instance.Name.ToLowerInvariant() + "_beach_fish"))
+            if (__0.Equals(__instance.Name + "_beach_fish", StringComparison.OrdinalIgnoreCase))
             {
                 __instance.reloadSprite();
                 __instance.Sprite.SpriteWidth = 16;

@@ -1,17 +1,26 @@
-﻿using System.Reflection;
+﻿using System.Collections.Concurrent;
+using System.Reflection;
+using AtraBase.Collections;
+using AtraShared.Integrations.GMCMAttributes;
 using AtraShared.Integrations.Interfaces;
 using AtraShared.Utils;
 using AtraShared.Utils.Extensions;
 using Microsoft.Xna.Framework;
 using StardewModdingAPI.Utilities;
 
+#pragma warning disable SA1124 // Do not use regions
 namespace AtraShared.Integrations;
+
+// TODO
+// * Support doubles as well - they can be cast back and forth to floats.
 
 /// <summary>
 /// Helper class that generates the GMCM for a project.
 /// </summary>
 public sealed class GMCMHelper : IntegrationHelper
 {
+#region constants
+
     private const string MINVERSION = "1.8.0";
     private const string APIID = "spacechase0.GenericModConfigMenu";
 
@@ -19,13 +28,20 @@ public sealed class GMCMHelper : IntegrationHelper
     private const string GMCM_OPTIONS_ID = "jltaylor-us.GMCMOptions";
     private const string GMCM_OPTIONS_MINVERSION = "1.1.0";
 #pragma warning restore SA1310 // Field names should not contain underscore
+#endregion
+
+#region cache
+
+    [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Stylecop doesn't understand records.")]
+    private readonly record struct cachekey(Type Config, Type TEnum);
+
+    private static readonly ConcurrentDictionary<cachekey, MethodInfo> enumCache = new();
+#endregion
 
     private readonly IManifest manifest;
     private readonly List<string> pages = new();
 
     private IGenericModConfigMenuApi? modMenuApi;
-
-    [SuppressMessage("CodeQuality", "IDE0052:Remove unread private members", Justification = "Currently only used for colors...")]
     private IGMCMOptionsAPI? gmcmOptionsApi;
 
     /// <summary>
@@ -77,6 +93,8 @@ public sealed class GMCMHelper : IntegrationHelper
         return this;
     }
 
+#region text
+
     /// <summary>
     /// Adds a section title at this location.
     /// </summary>
@@ -127,6 +145,9 @@ public sealed class GMCMHelper : IntegrationHelper
         this.AddParagraph(() => this.Translation.Get(translationKey, tokens));
         return this;
     }
+#endregion
+
+#region bools
 
     /// <summary>
     /// Adds a boolean option at a specific location.
@@ -184,6 +205,9 @@ public sealed class GMCMHelper : IntegrationHelper
         }
         return this;
     }
+    #endregion
+
+#region textboxes
 
     /// <summary>
     /// Adds a text option at the given location.
@@ -253,6 +277,9 @@ public sealed class GMCMHelper : IntegrationHelper
         }
         return this;
     }
+    #endregion
+
+#region enums
 
     /// <summary>
     /// Adds a enum option at the given location.
@@ -349,6 +376,36 @@ public sealed class GMCMHelper : IntegrationHelper
     }
 
     /// <summary>
+    /// Adds a enum option at this point in the form.
+    /// </summary>
+    /// <typeparam name="TModConfig">Type of the config.</typeparam>
+    /// <param name="property">Property to process.</param>
+    /// <param name="getConfig">Gets the config.</param>
+    /// <param name="fieldID">FieldID if wanted.</param>
+    /// <returns>this.</returns>
+    public GMCMHelper AddEnumOption<TModConfig>(
+        PropertyInfo property,
+        Func<TModConfig> getConfig,
+        string? fieldID = null)
+    {
+        Type tEnum = property.PropertyType;
+        cachekey key = new(typeof(TModConfig), tEnum);
+        if (!enumCache.TryGetValue(key, out MethodInfo? realized))
+        {
+            realized = this.GetType().GetMethods().Where((method) => method.Name == nameof(this.AddEnumOption) && method.GetGenericArguments().Length == 2)
+                .First()
+                .MakeGenericMethod(typeof(TModConfig), tEnum);
+            enumCache[key] = realized;
+        }
+        realized.Invoke(this, new object?[] { property, getConfig, fieldID });
+
+        return this;
+    }
+#endregion
+
+#region floats
+
+    /// <summary>
     /// Adds a float option at this point in the form.
     /// </summary>
     /// <param name="name">Function to get the name of the option.</param>
@@ -413,6 +470,23 @@ public sealed class GMCMHelper : IntegrationHelper
         }
         else
         {
+            if (min is null || max is null || interval is null)
+            {
+                Attribute[]? attributes = Attribute.GetCustomAttributes(property);
+                foreach (var attribute in attributes)
+                {
+                    if (attribute is GMCMRangeAttribute range)
+                    {
+                        min ??= (float)range.Min;
+                        max ??= (float)range.Max;
+                    }
+                    else if (attribute is GMCMIntervalAttribute intervalAttr)
+                    {
+                        interval ??= (float)intervalAttr.Interval;
+                    }
+                }
+            }
+
             Func<TModConfig, float> getterDelegate = getter.CreateDelegate<Func<TModConfig, float>>();
             Action<TModConfig, float>? setterDelegate = setter.CreateDelegate<Action<TModConfig, float>>();
             this.AddNumberOption(
@@ -428,6 +502,9 @@ public sealed class GMCMHelper : IntegrationHelper
         }
         return this;
     }
+#endregion
+
+#region ints
 
     /// <summary>
     /// Adds an int option at this point in the form.
@@ -494,6 +571,23 @@ public sealed class GMCMHelper : IntegrationHelper
         }
         else
         {
+            if (min is null || max is null || interval is null)
+            {
+                Attribute[]? attributes = Attribute.GetCustomAttributes(property);
+                foreach (var attribute in attributes)
+                {
+                    if (attribute is GMCMRangeAttribute range)
+                    {
+                        min ??= (int)range.Min;
+                        max ??= (int)range.Max;
+                    }
+                    else if (attribute is GMCMIntervalAttribute intervalAttr)
+                    {
+                        interval ??= (int)intervalAttr.Interval;
+                    }
+                }
+            }
+
             Func<TModConfig, int> getterDelegate = getter.CreateDelegate<Func<TModConfig, int>>();
             Action<TModConfig, int> setterDelegate = setter.CreateDelegate<Action<TModConfig, int>>();
             this.AddNumberOption(
@@ -509,6 +603,9 @@ public sealed class GMCMHelper : IntegrationHelper
         }
         return this;
     }
+#endregion
+
+#region keybinds
 
     /// <summary>
     /// Adds a KeyBindList at this position in the form.
@@ -566,6 +663,9 @@ public sealed class GMCMHelper : IntegrationHelper
         }
         return this;
     }
+#endregion
+
+#region colors
 
     /// <summary>
     /// Adds a color picking option at this point in the form.
@@ -638,6 +738,14 @@ public sealed class GMCMHelper : IntegrationHelper
         }
         else
         {
+            if (defaultColor is null)
+            {
+                if (Attribute.GetCustomAttribute(property, typeof(GMCMDefaultColorAttribute)) is GMCMDefaultColorAttribute attr)
+                {
+                    defaultColor = new(attr.R, attr.G, attr.B, attr.A);
+                }
+            }
+
             Func<TModConfig, Color> getterDelegate = getter.CreateDelegate<Func<TModConfig, Color>>();
             Action<TModConfig, Color> setterDelegate = setter.CreateDelegate<Action<TModConfig, Color>>();
             this.AddColorPicker(
@@ -652,6 +760,9 @@ public sealed class GMCMHelper : IntegrationHelper
         }
         return this;
     }
+#endregion
+
+#region pages
 
     /// <summary>
     /// Adds a new page and a link for it at the current location in the form.
@@ -711,6 +822,7 @@ public sealed class GMCMHelper : IntegrationHelper
         this.modMenuApi!.AddPage(this.manifest, this.pages[index]);
         return this;
     }
+#endregion
 
     /// <summary>
     /// Sets whether the following options should be title screen only.
@@ -733,4 +845,96 @@ public sealed class GMCMHelper : IntegrationHelper
         this.modMenuApi!.Unregister(this.manifest);
         return this;
     }
+
+#region default
+    /// <summary>
+    /// Generates a basic GMCM config.
+    /// </summary>
+    /// <typeparam name="TModConfig">The type of the config.</typeparam>
+    /// <param name="getConfig">A getter that gets the current config.</param>
+    /// <returns>this.</returns>
+    public GMCMHelper GenerateDefaultGMCM<TModConfig>(Func<TModConfig> getConfig)
+    {
+        List<PropertyInfo> uncategorized = new();
+        DefaultDict<(int order, string name), List<PropertyInfo>> categories = new();
+
+        // look through, assign to categories.
+        foreach (var property in typeof(TModConfig).GetProperties())
+        {
+            if (Attribute.GetCustomAttribute(property, typeof(GMCMDefaultIgnoreAttribute)) is not null)
+            {
+                continue;
+            }
+            else if (Attribute.GetCustomAttribute(property, typeof(GMCMSectionAttribute)) is GMCMSectionAttribute attr)
+            {
+                categories[(attr.Order, attr.Name)].Add(property);
+            }
+            else
+            {
+                uncategorized.Add(property);
+            }
+        }
+
+        foreach (var prop in uncategorized)
+        {
+            this.ProcessProperty(getConfig, prop);
+        }
+
+        if (categories.Count > 0)
+        {
+            List<(int order, string name)>? keys = categories.Keys.OrderBy((a) => a.order).ToList();
+            foreach ((int order, string name) k in keys)
+            {
+                this.AddSectionTitle(() => this.Translation.Get(k.name + ".title"));
+                string? descriptionkey = k.name + ".description";
+                if (this.Translation.HasTranslation(descriptionkey))
+                {
+                    this.AddParagraph(descriptionkey);
+                }
+                foreach (PropertyInfo? property in categories[k])
+                {
+                    this.ProcessProperty(getConfig, property);
+                }
+            }
+        }
+        return this;
+    }
+
+    private void ProcessProperty<TModConfig>(Func<TModConfig> getConfig, PropertyInfo property)
+    {
+        if (property.PropertyType == typeof(bool))
+        {
+            this.AddBoolOption(property, getConfig);
+        }
+        else if (property.PropertyType == typeof(string))
+        {
+            this.AddTextOption(property, getConfig);
+        }
+        else if (property.PropertyType.IsAssignableTo(typeof(Enum)))
+        {
+            this.AddEnumOption(property, getConfig);
+        }
+        else if (property.PropertyType == typeof(float))
+        {
+            this.AddFloatOption(property, getConfig);
+        }
+        else if (property.PropertyType == typeof(int))
+        {
+            this.AddIntOption(property, getConfig);
+        }
+        else if (property.PropertyType == typeof(KeybindList))
+        {
+            this.AddKeybindList(property, getConfig);
+        }
+        else if (property.PropertyType == typeof(Color))
+        {
+            this.AddColorPicker(property, getConfig);
+        }
+        else
+        {
+            this.Monitor.DebugOnlyLog($"{property.Name} is unaccounted for in config {typeof(TModConfig).FullName}", LogLevel.Warn);
+        }
+    }
+#endregion
 }
+#pragma warning restore SA1124 // Do not use regions

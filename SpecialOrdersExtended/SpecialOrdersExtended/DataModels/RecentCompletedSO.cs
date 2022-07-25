@@ -8,7 +8,7 @@ namespace SpecialOrdersExtended.DataModels;
 /// <summary>
 /// Internal data model that keeps track of recently completed Special Orders.
 /// </summary>
-internal class RecentCompletedSO : AbstractDataModel
+public class RecentCompletedSO : AbstractDataModel
 {
     /// <summary>
     /// constant identifier in filename.
@@ -34,14 +34,14 @@ internal class RecentCompletedSO : AbstractDataModel
     /// </summary>
     /// <returns>RecentCompletedSO data model.</returns>
     /// <exception cref="SaveNotLoadedError">Save is not loaded.</exception>
-    public static RecentCompletedSO Load()
+    internal static RecentCompletedSO Load()
     {
-        if (!Context.IsWorldReady)
+        if (!Context.IsWorldReady || Constants.SaveFolderName is null)
         {
-            throw new SaveNotLoadedError();
+            ASThrowHelper.ThrowSaveNotLoaded();
         }
-        return ModEntry.DataHelper.ReadGlobalData<RecentCompletedSO>(Constants.SaveFolderName + IDENTIFIER)
-            ?? new RecentCompletedSO(Constants.SaveFolderName!);
+        return ModEntry.DataHelper.ReadGlobalData<RecentCompletedSO>($"{Game1.uniqueIDForThisGame}{IDENTIFIER}")
+            ?? new RecentCompletedSO(Game1.uniqueIDForThisGame.ToString());
     }
 
     /// <summary>
@@ -49,34 +49,31 @@ internal class RecentCompletedSO : AbstractDataModel
     /// </summary>
     /// <returns>The Recent Completed SO log.</returns>
     /// <exception cref="SaveNotLoadedError">Save not loaded when expected.</exception>
-    public static RecentCompletedSO LoadTempIfAvailable()
+    internal static RecentCompletedSO? LoadTempIfAvailable()
     {
-        if (!Context.IsWorldReady)
+        if (!Context.IsWorldReady || Constants.SaveFolderName is null)
         {
-            throw new SaveNotLoadedError();
+            ASThrowHelper.ThrowSaveNotLoaded();
         }
-        RecentCompletedSO? log = ModEntry.DataHelper.ReadGlobalData<RecentCompletedSO>($"{Constants.SaveFolderName}{IDENTIFIER}_temp_{SDate.Now().DaysSinceStart}");
+        RecentCompletedSO? log = ModEntry.DataHelper.ReadGlobalData<RecentCompletedSO>($"{Game1.uniqueIDForThisGame}{IDENTIFIER}_temp_{SDate.Now().DaysSinceStart}");
         if (log is not null)
         {
             // Delete the temporary file.
-#pragma warning disable CS8625 // Cannot convert null literal to non-nullable reference type. This is a valid call, SMAPI just doesn't use nullable.
-            ModEntry.DataHelper.WriteGlobalData<RecentCompletedSO>($"{Constants.SaveFolderName}{IDENTIFIER}_temp_{SDate.Now().DaysSinceStart}", null);
-#pragma warning restore CS8625 // Cannot convert null literal to non-nullable reference type.
+            ModEntry.DataHelper.WriteGlobalData<RecentCompletedSO>($"{Game1.uniqueIDForThisGame}{IDENTIFIER}_temp_{SDate.Now().DaysSinceStart}", null);
             return log;
         }
-        return ModEntry.DataHelper.ReadGlobalData<RecentCompletedSO>(Constants.SaveFolderName + IDENTIFIER)
-            ?? new RecentCompletedSO(Constants.SaveFolderName!);
+        return null;
     }
 
     /// <summary>
     /// Save a temporary file.
     /// </summary>
-    public void SaveTemp() => base.SaveTemp(IDENTIFIER);
+    internal void SaveTemp() => base.SaveTemp(IDENTIFIER);
 
     /// <summary>
     /// Saves recently completed SO data model.
     /// </summary>
-    public void Save() => base.Save(IDENTIFIER);
+    internal void Save() => base.Save(IDENTIFIER);
 
     /// <summary>
     /// Removes any quest that was completed more than seven days ago.
@@ -84,7 +81,7 @@ internal class RecentCompletedSO : AbstractDataModel
     /// <param name="daysPlayed">Total number of days played.</param>
     /// <returns>A list of removed keys.</returns>
     [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1300:Element should begin with upper-case letter", Justification = "Follows convention used in game.")]
-    public List<string> dayUpdate(uint daysPlayed)
+    internal List<string> dayUpdate(uint daysPlayed)
     {
         List<string> keysRemoved = new();
         foreach (string key in this.RecentOrdersCompleted.Keys)
@@ -104,14 +101,14 @@ internal class RecentCompletedSO : AbstractDataModel
     /// <param name="orderKey">Quest key.</param>
     /// <param name="daysPlayed">Total number of days played when quest was completed.</param>
     /// <returns>true if the quest key was successfully added, false otherwise.</returns>
-    public bool TryAdd(string orderKey, uint daysPlayed) => this.RecentOrdersCompleted.TryAdd(orderKey, daysPlayed);
+    internal bool TryAdd(string orderKey, uint daysPlayed) => this.RecentOrdersCompleted.TryAdd(orderKey, daysPlayed);
 
     /// <summary>
     /// Try to remove an order key from the recent order completed dictionary.
     /// </summary>
     /// <param name="orderKey">order to remove.</param>
     /// <returns>True if successfully removed, false otherwise.</returns>
-    public bool TryRemove(string orderKey) => this.RecentOrdersCompleted.Remove(orderKey);
+    internal bool TryRemove(string orderKey) => this.RecentOrdersCompleted.Remove(orderKey);
 
     /// <summary>
     /// Whether or not an order was completed in the last X days.
@@ -120,7 +117,7 @@ internal class RecentCompletedSO : AbstractDataModel
     /// <param name="days">Days to check.</param>
     /// <returns>True if order found and completed in the last X days, false otherwise.</returns>
     /// <remarks>Orders are removed from the list after seven days.</remarks>
-    public bool IsWithinXDays(string orderKey, uint days)
+    internal bool IsWithinXDays(string orderKey, uint days)
     {
         if (this.RecentOrdersCompleted.TryGetValue(orderKey, out uint dayCompleted))
         {
@@ -134,13 +131,12 @@ internal class RecentCompletedSO : AbstractDataModel
     /// </summary>
     /// <param name="days">Number of days to look at.</param>
     /// <returns>IEnumerable of keys within the given timeframe.</returns>
-    public IEnumerable<string> GetKeys(uint days)
-    {
-        return this.RecentOrdersCompleted.Keys
+    internal IEnumerable<string> GetKeys(uint days)
+        => this.RecentOrdersCompleted.Keys
             .Where(a => this.RecentOrdersCompleted[a] + days >= Game1.stats.DaysPlayed);
-    }
 
     /// <inheritdoc/>
+    [SuppressMessage("StyleCop.CSharp.OrderingRules", "SA1202:Elements should be ordered by access", Justification = "Reviewed.")]
     public override string ToString()
     {
         StringBuilder stringBuilder = new();

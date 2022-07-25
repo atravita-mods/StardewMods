@@ -1,6 +1,7 @@
 ﻿using System.Reflection;
 using System.Reflection.Emit;
 using AtraBase.Toolkit.Reflection;
+using AtraCore.Framework.ReflectionManager;
 using AtraShared.Utils.Extensions;
 using AtraShared.Utils.HarmonyHelper;
 using HarmonyLib;
@@ -24,9 +25,10 @@ internal static class FruitTreeDayUpdateTranspiler
     {
         try
         {
-            Type dgaFruitTree = AccessTools.TypeByName("DynamicGameAssets.Game.CustomFruitTree") ?? throw new("DGA Fruit trees not found!");
+            Type dgaFruitTree = AccessTools.TypeByName("DynamicGameAssets.Game.CustomFruitTree")
+                ?? ReflectionThrowHelper.ThrowMethodNotFoundException<Type>("DGA Fruit Trees");
             harmony.Patch(
-                original: dgaFruitTree.InstanceMethodNamed("dayUpdate"),
+                original: dgaFruitTree.GetCachedMethod("dayUpdate", ReflectionCache.FlagTypes.InstanceFlags),
                 transpiler: new HarmonyMethod(typeof(FruitTreeDayUpdateTranspiler), nameof(Transpiler)));
         }
         catch (Exception ex)
@@ -62,15 +64,15 @@ internal static class FruitTreeDayUpdateTranspiler
             {
                 new (SpecialCodeInstructionCases.LdArg),
                 new (SpecialCodeInstructionCases.LdArg),
-                new (OpCodes.Call, typeof(FruitTree).StaticMethodNamed(nameof(FruitTree.IsGrowthBlocked))),
+                new (OpCodes.Call, typeof(FruitTree).GetCachedMethod(nameof(FruitTree.IsGrowthBlocked), ReflectionCache.FlagTypes.StaticFlags)),
                 new (SpecialCodeInstructionCases.StLoc),
             })
             .FindNext(new CodeInstructionWrapper[]
             {
                 new (OpCodes.Ldarg_0),
-                new (OpCodes.Ldfld, typeof(FruitTree).InstanceFieldNamed(nameof(FruitTree.daysUntilMature))),
+                new (OpCodes.Ldfld, typeof(FruitTree).GetCachedField(nameof(FruitTree.daysUntilMature), ReflectionCache.FlagTypes.InstanceFlags)),
                 new (OpCodes.Dup),
-                new (OpCodes.Callvirt, typeof(NetFieldBase<int, NetInt>).InstancePropertyNamed("Value").GetGetMethod()),
+                new (OpCodes.Callvirt, typeof(NetFieldBase<int, NetInt>).GetCachedProperty("Value", ReflectionCache.FlagTypes.InstanceFlags).GetGetMethod()),
                 new (SpecialCodeInstructionCases.StLoc),
                 new (SpecialCodeInstructionCases.LdLoc),
                 new (OpCodes.Ldc_I4_1),
@@ -83,7 +85,7 @@ internal static class FruitTreeDayUpdateTranspiler
             .Insert(new CodeInstruction[]
             {
                 new (OpCodes.Ldarg_0),
-                new (OpCodes.Call, typeof(FruitTreeDayUpdateTranspiler).StaticMethodNamed(nameof(FruitTreeDayUpdateTranspiler.CalculateExtraGrowth))),
+                new (OpCodes.Call, typeof(FruitTreeDayUpdateTranspiler).GetCachedMethod(nameof(CalculateExtraGrowth), ReflectionCache.FlagTypes.StaticFlags)),
                 new (OpCodes.Add),
             });
             return helper.Render();

@@ -1,4 +1,5 @@
-﻿using StardewValley.TerrainFeatures;
+﻿using StardewValley.Objects;
+using StardewValley.TerrainFeatures;
 
 namespace MoreFertilizers;
 
@@ -51,5 +52,35 @@ internal static class MFUtilities
             return span.Contains("Joja", StringComparison.OrdinalIgnoreCase);
         }
         return false;
+    }
+
+    /// <summary>
+    /// Fixes IDs for all hoedirt in a specific location.
+    /// Given the idMapping.
+    /// </summary>
+    /// <param name="loc">Location to fix.</param>
+    /// <param name="idMapping">IDMapping to use.</param>
+    internal static void FixHoeDirtInLocation(this GameLocation loc, Dictionary<int, int> idMapping)
+    {
+        foreach (TerrainFeature terrain in loc.terrainFeatures.Values)
+        {
+            if (terrain is HoeDirt dirt && dirt.fertilizer.Value != 0)
+            {
+                if (idMapping.TryGetValue(dirt.fertilizer.Value, out int newval))
+                {
+                    dirt.fertilizer.Value = newval;
+                }
+            }
+        }
+        foreach (SObject obj in loc.Objects.Values)
+        {
+            if (obj is IndoorPot pot && pot.hoeDirt?.Value?.fertilizer?.Value is int value && value != 0)
+            {
+                if (idMapping.TryGetValue(value, out int newvalue))
+                {
+                    pot.hoeDirt.Value.fertilizer.Value = newvalue;
+                }
+            }
+        }
     }
 }

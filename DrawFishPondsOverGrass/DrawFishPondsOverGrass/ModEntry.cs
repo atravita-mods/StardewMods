@@ -1,10 +1,9 @@
-﻿using AtraShared.Utils.Extensions;
-using HarmonyLib;
+﻿using HarmonyLib;
 
 namespace DrawFishPondsOverGrass;
 
 /// <inheritdoc/>
-internal class ModEntry : Mod
+internal sealed class ModEntry : Mod
 {
     // the following property are set in the entry method, which is approximately as close as I can get to the constructor anyways.
 #pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
@@ -35,6 +34,8 @@ internal class ModEntry : Mod
         {
             ModMonitor.Log($"Mod crashed while applying harmony patches\n\n{ex}", LogLevel.Error);
         }
-        harmony.Snitch(this.Monitor, this.ModManifest.UniqueID);
+
+        // no snitch necessary, this mod entirely uses ForEachMatch patches.
+        // harmony.Snitch(this.Monitor, this.ModManifest.UniqueID, transpilersOnly: true);
     }
 }

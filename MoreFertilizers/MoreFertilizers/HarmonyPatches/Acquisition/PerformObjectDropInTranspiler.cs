@@ -1,6 +1,7 @@
 ﻿using System.Reflection;
 using System.Reflection.Emit;
 using AtraBase.Toolkit.Reflection;
+using AtraCore.Framework.ReflectionManager;
 using AtraShared.Utils.HarmonyHelper;
 using HarmonyLib;
 
@@ -18,7 +19,7 @@ internal static class PerformObjectDropInTranspiler
     internal static void ApplyPatches(Harmony harmony)
     {
         harmony.Patch(
-            original: typeof(SObject).InstanceMethodNamed(nameof(SObject.performObjectDropInAction)),
+            original: typeof(SObject).GetCachedMethod(nameof(SObject.performObjectDropInAction), ReflectionCache.FlagTypes.InstanceFlags),
             transpiler: new HarmonyMethod(typeof(PerformObjectDropInTranspiler), nameof(Transpiler)));
     }
 
@@ -29,10 +30,10 @@ internal static class PerformObjectDropInTranspiler
     internal static void ApplyAutomateTranspiler(Harmony harmony)
     {
         Type bonemill = AccessTools.TypeByName("Pathoschild.Stardew.Automate.Framework.Machines.Objects.BoneMillMachine")
-            ?? throw new MethodNotFoundException("Automate bonemill");
+            ?? ReflectionThrowHelper.ThrowMethodNotFoundException<Type>("Automate bonemill");
 
         harmony.Patch(
-            original: bonemill.StaticMethodNamed("GetRecipeOutput"),
+            original: bonemill.GetCachedMethod("GetRecipeOutput", ReflectionCache.FlagTypes.StaticFlags),
             transpiler: new HarmonyMethod(typeof(PerformObjectDropInTranspiler), nameof(AutomateTranspiler)));
     }
 
@@ -55,12 +56,12 @@ internal static class PerformObjectDropInTranspiler
             ILHelper helper = new(original, instructions, ModEntry.ModMonitor, gen);
             helper.FindNext(new CodeInstructionWrapper[]
             { // Find the bone mill section.
-                new(OpCodes.Call, typeof(SObject).InstancePropertyNamed(nameof(SObject.name)).GetGetMethod()),
+                new(OpCodes.Call, typeof(SObject).GetCachedProperty(nameof(SObject.name), ReflectionCache.FlagTypes.InstanceFlags).GetGetMethod()),
                 new(OpCodes.Ldstr, "Bone Mill"),
             })
             .FindNext(new CodeInstructionWrapper[]
             { // find switch(Game1.random.Next(4)) and add four new cases.
-                new(OpCodes.Ldsfld, typeof(Game1).StaticFieldNamed(nameof(Game1.random))),
+                new(OpCodes.Ldsfld, typeof(Game1).GetCachedField(nameof(Game1.random), ReflectionCache.FlagTypes.StaticFlags)),
                 new(OpCodes.Ldc_I4_4),
                 new(OpCodes.Callvirt, typeof(Random).InstanceMethodNamed(nameof(Random.Next), new[] { typeof(int) } )),
                 new(SpecialCodeInstructionCases.StLoc),

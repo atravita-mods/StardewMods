@@ -6,6 +6,9 @@ using HarmonyLib;
 
 namespace PamTries.HarmonyPatches;
 
+/// <summary>
+/// Patches on events to hide Pam while she's at rehab.
+/// </summary>
 [HarmonyPatch(typeof(Event))]
 internal static class EventPatches
 {
@@ -13,6 +16,7 @@ internal static class EventPatches
 
     [HarmonyPostfix]
     [HarmonyPatch(nameof(Event.tryToLoadFestival))]
+    [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Harmony Convention.")]
     private static void PostfixSetup(Event __instance)
     {
         if (ShouldHidePam())

@@ -10,7 +10,6 @@ namespace TrashDoesNotConsumeBait.HarmonyPatches;
 [HarmonyPatch(typeof(Toolbar))]
 internal static class ToolbarPatches
 {
-
     /***********
      * ATTENTION: Before you try refactoring this, look at how farmer.ActiveObject works.
      * Cuz it's real weird.

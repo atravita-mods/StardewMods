@@ -5,7 +5,6 @@
 
 #### Todo
 
-1. Make groups more meaningful. (for one, make `Resort_` dialogue reference the groups....)
 2. Nonreplacing dialogue for the Resort keys? (flatten the ones that already exist, but add a way to add more that's less likely to clobber).
 3. Handle roommates, like actually.
 4. See if NPCs can go *into* Professor Snail's Tent?
@@ -15,7 +14,6 @@
 <!-- Finish the locations console command: https://docs.microsoft.com/en-us/windows/console/console-virtual-terminal-sequences to add bold -->
 <!-- Write a function to get the villager's schedule for today, that takes into account that if a location replacement is needed, the villager's daySchedule.Value will be X_Replacement -->
 <!-- More schedule debugging tools: get arbitrary schedule from X day? -->
-<!-- Telephone: Lock behind a 10 heart event or something.-->
 <!-- Figure out why Emily dances *in* the changing room? -->
 <!-- AntiSocial lines for George/Evelyn/Willy-->
 <!-- Get spouses into Island Farmhouse -->
@@ -30,6 +28,13 @@
 1. NPCs may vanish if they go to `IslandSouthEast`. They reappear the next day. Therefore, that's been tempoarily removed until I figure out why they disappear from `IslandSouthEast`. `IslandNorth` is fine.
 2. If you pause time, NPCs will tend to get stuck at schedule points. Unfortunately for Ginger Island, this usually ends with NPCs trapped in the changing room. If you go to Ginger Island and see no one there, try unpausing time. Or just leave them trapped in the changing room....(or I guess, disable changing)
 3. The debugging console commands basically only work for the host in multiplayer.
+
+### Version 1.1.5
+
+* Update to SMAPI 3.15.0
+* Add `_groupname` suffix to GI `Resort` keys (ie `Resort_groupname`). <!-- test this? -->
+* Updates to use AtraCore and associated efficiency improvements.
+* Some bugfixes.
 
 ### Version 1.1.4
 

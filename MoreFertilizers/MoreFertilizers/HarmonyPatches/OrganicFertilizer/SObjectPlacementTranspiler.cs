@@ -1,6 +1,7 @@
 ﻿using System.Reflection;
 using System.Reflection.Emit;
 using AtraBase.Toolkit.Reflection;
+using AtraCore.Framework.ReflectionManager;
 using AtraShared.Utils.Extensions;
 using AtraShared.Utils.HarmonyHelper;
 using HarmonyLib;
@@ -35,7 +36,7 @@ internal static class SObjectPlacementTranspiler
 
             helper.FindNext(new CodeInstructionWrapper[]
             { // Find the location where Hoedirt.plant is called.
-                new(OpCodes.Callvirt, typeof(HoeDirt).InstanceMethodNamed(nameof(HoeDirt.plant))),
+                new(OpCodes.Callvirt, typeof(HoeDirt).GetCachedMethod(nameof(HoeDirt.plant), ReflectionCache.FlagTypes.InstanceFlags)),
                 new(OpCodes.Brfalse),
             })
             .Advance(2)
@@ -48,11 +49,13 @@ internal static class SObjectPlacementTranspiler
             .CopyIncluding(new CodeInstructionWrapper[]
             { // Get the block that gets the reference to the hoedirt. It's kinda long....
                 new(OpCodes.Castclass, typeof(HoeDirt)),
-            }, out IEnumerable<CodeInstruction>? copy);
+            }, out IEnumerable<CodeInstruction> copy);
 
-            List<CodeInstruction> codes = new(copy);
-            codes.Add(new(OpCodes.Ldarg_0));
-            codes.Add(new(OpCodes.Call, typeof(SObjectPlacementTranspiler).StaticMethodNamed(nameof(AdjustPlantedObject))));
+            List<CodeInstruction> codes = new(copy)
+            {
+                new(OpCodes.Ldarg_0),
+                new(OpCodes.Call, typeof(SObjectPlacementTranspiler).StaticMethodNamed(nameof(AdjustPlantedObject))),
+            };
 
             helper.Pop()
             .Insert(codes.ToArray());

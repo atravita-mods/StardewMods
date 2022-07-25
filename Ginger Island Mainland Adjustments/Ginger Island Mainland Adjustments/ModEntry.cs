@@ -1,5 +1,6 @@
-﻿using AtraShared.MigrationManager;
-using AtraShared.Utils;
+﻿using AtraCore.Utilities;
+using AtraShared.Menuing;
+using AtraShared.MigrationManager;
 using AtraShared.Utils.Extensions;
 using GingerIslandMainlandAdjustments.AssetManagers;
 using GingerIslandMainlandAdjustments.CustomConsoleCommands;
@@ -15,10 +16,9 @@ namespace GingerIslandMainlandAdjustments;
 
 /// <inheritdoc />
 [UsedImplicitly]
-public class ModEntry : Mod
+internal sealed class ModEntry : Mod
 {
     private bool haveFixedSchedulesToday = false;
-    private int countdown = 5; // used to register my late asset editor.
 
     private MigrationManager? migrator;
 
@@ -42,11 +42,15 @@ public class ModEntry : Mod
         helper.Events.Multiplayer.PeerConnected += this.PeerConnected;
         helper.Events.Multiplayer.ModMessageReceived += this.ModMessageReceived;
 
-        // Add my asset loader and editor.
-        helper.Content.AssetLoaders.Add(AssetLoader.Instance);
-        helper.Content.AssetEditors.Add(AssetEditor.Instance);
+        helper.Events.Content.AssetRequested += this.OnAssetRequested;
 
-        this.ApplyPatches(new Harmony(this.ModManifest.UniqueID));
+        AssetLoader.Init(helper.GameContent);
+    }
+
+    private void OnAssetRequested(object? sender, AssetRequestedEventArgs e)
+    {
+        AssetLoader.Load(e);
+        AssetEditor.Edit(e);
     }
 
     private void OnSaveLoaded(object? sender, SaveLoadedEventArgs e)
@@ -56,11 +60,19 @@ public class ModEntry : Mod
         {
             return;
         }
-        this.migrator = new(this.ModManifest, this.Helper, this.Monitor);
-        this.migrator.ReadVersionInfo();
+        GenerateGMCM.BuildNPCDictionary();
+
         Globals.LoadDataFromSave();
 
-        this.Helper.Events.GameLoop.Saved += this.WriteMigrationData;
+        this.migrator = new(this.ModManifest, this.Helper, this.Monitor);
+        if (!this.migrator.CheckVersionInfo())
+        {
+            this.Helper.Events.GameLoop.Saved += this.WriteMigrationData;
+        }
+        else
+        {
+            this.migrator = null;
+        }
     }
 
     /// <summary>
@@ -105,7 +117,10 @@ public class ModEntry : Mod
     /// <param name="sender">Unknown, never used.</param>
     /// <param name="e">Possible parameters.</param>
     private void ReturnedToTitle(object? sender, ReturnedToTitleEventArgs e)
-        => this.ClearCaches();
+    {
+        this.ClearCaches();
+        GenerateGMCM.Build();
+    }
 
     /// <summary>
     /// Clear cache at day end.
@@ -134,6 +149,7 @@ public class ModEntry : Mod
         {
             // handle patches from annotations.
             harmony.PatchAll();
+            PhoneHandler.ApplyPatches(harmony);
             if (Globals.Config.DebugMode)
             {
                 ScheduleDebugPatches.ApplyPatches(harmony);
@@ -154,11 +170,12 @@ public class ModEntry : Mod
     /// <param name="e">Possible parameters.</param>
     private void OnGameLaunched(object? sender, GameLaunchedEventArgs e)
     {
-        // Start countdown for the late asset editor
-        this.Helper.Events.GameLoop.UpdateTicked += this.FiveTicksPostGameLaunched;
+        // Applies harmony patches.
+        this.ApplyPatches(new Harmony(this.ModManifest.UniqueID));
 
         // Generate the GMCM for this mod.
-        GenerateGMCM.Build(this.ModManifest, this.Helper.Translation);
+        GenerateGMCM.Initialize(this.ModManifest, this.Helper.Translation);
+        GenerateGMCM.Build();
 
         // Add CP tokens for this mod.
         GenerateCPTokens.AddTokens(this.ModManifest);
@@ -170,42 +187,26 @@ public class ModEntry : Mod
         }
     }
 
-    /// <summary>
-    /// Adds in the late asset editor, five ticks after GameLaunched.
-    /// </summary>
-    /// <param name="sender">Smapi thing, unknown.</param>
-    /// <param name="e">UpdateTickedEventArgs.</param>
-    private void FiveTicksPostGameLaunched(object? sender, UpdateTickedEventArgs e)
-    {
-        if (--this.countdown <= 0)
-        {
-            this.Helper.Content.AssetEditors.Add(LateAssetEditor.Instance);
-            this.Helper.Events.GameLoop.UpdateTicked -= this.FiveTicksPostGameLaunched;
-        }
-    }
-
     private void OnPlayerWarped(object? sender, WarpedEventArgs e)
-    {
-        ShopHandler.AddBoxToShop(e);
-    }
+        => ShopHandler.AddBoxToShop(e);
 
     private void OnButtonPressed(object? sender, ButtonPressedEventArgs e)
     {
-        // Thanks, RSV, for reminding me that there are other conditions for which I should probably not be handling shops....
-        // From: https://github.com/Rafseazz/Ridgeside-Village-Mod/blob/816a66d0c9e667d3af662babc170deed4070c9ff/Ridgeside%20SMAPI%20Component%202.0/RidgesideVillage/TileActionHandler.cs#L37
-        if (!Context.IsWorldReady || !Context.CanPlayerMove || Game1.player.isRidingHorse()
-            || Game1.currentLocation is null || Game1.eventUp || Game1.isFestival() || Game1.IsFading())
+        if (MenuingExtensions.IsNormalGameplay())
         {
-            return;
+            ShopHandler.HandleWillyShop(e);
+            ShopHandler.HandleSandyShop(e);
         }
-        ShopHandler.HandleWillyShop(e);
-        ShopHandler.HandleSandyShop(e);
     }
 
     private void OnTimeChanged(object? sender, TimeChangedEventArgs e)
     {
+        if (!Context.IsMainPlayer)
+        {
+            return;
+        }
         MidDayScheduleEditor.AttemptAdjustGISchedule(e);
-        if (e.NewTime > 615 && !this.haveFixedSchedulesToday)
+        if (!this.haveFixedSchedulesToday && e.NewTime > 615)
         {
             // No longer need the exclusions cache.
             IslandSouthPatches.ClearCache();

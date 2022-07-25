@@ -1,14 +1,14 @@
 {"Changes": [
-	{
-		"LogName": "Schedules - fixed (bad).",
-		"Action": "EditData",
-		"Target": "Characters/schedules/Pam",
-		"Entries": {
+    {
+        "LogName": "Schedules - fixed (bad).",
+        "Action": "EditData",
+        "Target": "Characters/schedules/Pam",
+        "Entries": {
             "GIRemainder": "1800 Saloon 7 18 1/2300 Trailer 25 17 2 pam_sleep",
-			"spring_25": "800 Trailer 15 4 2 pam_sit_down/1130 Hospital 4 17 2 pam_sit_down \"Strings\\schedules\\Pam:atravita.PamTries.spring_25.000\"/1330 Hospital 4 6 1 \"Strings\\schedules\\Pam:atravita.PamTries.spring_25.001\"/1600 Saloon 7 18 1 \"Strings\\schedules\\Pam:atravita.PamTries.spring_25.bad\"/2000 Trailer 10 9 2 pam_drink/2200 Trailer 25 17 2 pam_sleep",
-			"fall_15": "630 Trailer 15 4 2 pam_sit_down/830 BusStop 11 10 2/1700 Saloon 7 18 1/2000 Trailer 10 9 2 pam_drink/2400 Trailer 25 17 2 pam_sleep" //consistent schedule on Sandy's bday
-		}
-	},
+            "spring_25": "800 Trailer 15 4 2 pam_sit_down/1130 Hospital 4 17 2 pam_sit_down \"Strings\\schedules\\Pam:atravita.PamTries.spring_25.000\"/1330 Hospital 4 6 1 \"Strings\\schedules\\Pam:atravita.PamTries.spring_25.001\"/1600 Saloon 7 18 1 \"Strings\\schedules\\Pam:atravita.PamTries.spring_25.bad\"/2000 Trailer 10 9 2 pam_drink/2200 Trailer 25 17 2 pam_sleep",
+            "fall_15": "630 Trailer 15 4 2 pam_sit_down/830 BusStop 11 10 2/1700 Saloon 7 18 1/2000 Trailer 10 9 2 pam_drink/2400 Trailer 25 17 2 pam_sleep" //consistent schedule on Sandy's bday
+        }
+    },
     {
         "LogName": "Default bad schedule after rehab",
         "Action": "EditData",
@@ -26,20 +26,20 @@
         "Entries": {
             "6": "630 Trailer 15 4 2 pam_sit_down/830 BusStop 11 10 2/a1600 Hospital 19 5 0 \"Strings\\schedules\\Pam:atravita.PamTries.therapy\"/1800 Trailer 25 17 2 pam_sleep",
             "16": "630 Trailer 15 4 2 pam_sit_down/830 BusStop 11 10 2/a1430 Hospital 9 15 3 \"Strings\\schedules\\Pam:medications\"/a1600 Hospital 19 5 0 \"Strings\\schedules\\Pam:atravita.PamTries.therapy\"/1800 Trailer 25 17 2 pam_sleep"
-		}
-	},
-	{
-		"LogName": "Schedule alpha",
-		"Action": "EditData",
-		"Target": "Characters/schedules/Pam",
-		"When": {
-			"PamScheduleToken": "alpha",
-			"BusReliability": "false"
-			},
-		"Entries": {//Joja then saloon
-			"bus": "800 Trailer 15 4 2 pam_sit_down/1200 JojaMart 6 19 1/1700 Saloon 7 18 1/2400 Trailer 25 17 2 pam_sleep"
-		}
-	},
+        }
+    },
+    {
+        "LogName": "Schedule alpha",
+        "Action": "EditData",
+        "Target": "Characters/schedules/Pam",
+        "When": {
+            "PamScheduleToken": "alpha",
+            "BusReliability": "false"
+            },
+        "Entries": {//Joja then saloon
+            "bus": "800 Trailer 15 4 2 pam_sit_down/1200 JojaMart 6 19 1/1700 Saloon 7 18 1/2400 Trailer 25 17 2 pam_sleep"
+        }
+    },
     {
         "LogName": "Schedule bravo",
         "Action": "EditData",

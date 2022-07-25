@@ -8,6 +8,14 @@
   </PropertyGroup>
 
   <PropertyGroup>
+    <Version>0.3.0</Version>
+    <Name>Less Mini Shipping Bin</Name>
+    <Description>Lets you make the mini shipping bin bigger.</Description>
+    <UpdateKeys>Nexus:10959</UpdateKeys>
+    <BaseManifest>..\..\base_dependencies.json</BaseManifest>
+  </PropertyGroup>
+
+  <PropertyGroup>
     <TranslationClassBuilder_AddGetByKey>true</TranslationClassBuilder_AddGetByKey>
   </PropertyGroup>
 

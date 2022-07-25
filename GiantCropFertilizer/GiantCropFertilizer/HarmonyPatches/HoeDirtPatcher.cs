@@ -1,4 +1,5 @@
 ﻿using AtraBase.Toolkit.Reflection;
+using AtraCore.Framework.ReflectionManager;
 using AtraShared.Utils.Extensions;
 using HarmonyLib;
 using StardewValley.TerrainFeatures;
@@ -12,7 +13,6 @@ namespace GiantCropFertilizer.HarmonyPatches;
 [HarmonyPatch]
 internal static class HoeDirtPatcher
 {
-
     /// <summary>
     /// Applies the hoedirt compat patches for multifertilizer.
     /// </summary>
@@ -21,19 +21,19 @@ internal static class HoeDirtPatcher
     internal static void ApplyPatches(Harmony harmony)
     {
         HarmonyMethod? prefix = new(
-            typeof(HoeDirtPatcher).StaticMethodNamed(nameof(HoeDirtPatcher.PrefixMulti)),
+            typeof(HoeDirtPatcher).GetCachedMethod(nameof(PrefixMulti), ReflectionCache.FlagTypes.StaticFlags),
             priority: Priority.VeryHigh);
         HarmonyMethod? postfix = new(
-            typeof(HoeDirtPatcher).StaticMethodNamed(nameof(HoeDirtPatcher.PostfixMulti)),
+            typeof(HoeDirtPatcher).GetCachedMethod(nameof(HoeDirtPatcher.PostfixMulti), ReflectionCache.FlagTypes.StaticFlags),
             priority: Priority.VeryLow);
 
         harmony.Patch(
-            typeof(HoeDirt).InstanceMethodNamed("applySpeedIncreases"),
+            typeof(HoeDirt).GetCachedMethod("applySpeedIncreases", ReflectionCache.FlagTypes.InstanceFlags),
             prefix: prefix,
             postfix: postfix);
 
         harmony.Patch(
-            typeof(HoeDirt).InstanceMethodNamed(nameof(HoeDirt.dayUpdate)),
+            typeof(HoeDirt).GetCachedMethod(nameof(HoeDirt.dayUpdate), ReflectionCache.FlagTypes.InstanceFlags),
             prefix: prefix,
             postfix: postfix);
     }

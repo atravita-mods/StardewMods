@@ -1,6 +1,11 @@
 ﻿Changelog
 =============
 
+#### Version 0.2.0
+* Move to using AtraCore, which should have improved loading times significantly.
+* Added Chinese translation (thanks to Puffeeydii!)
+* Add integration with SolidFoundations.
+
 #### Version 0.1.7
 * Some efficiency improvements
 * Drop IDs when returning to title, because JA does also.

@@ -6,13 +6,13 @@
    "UniqueID": "atravita.SpecialOrders",
    "MinimumApiVersion": "3.12.0",
    "ContentPackFor": {
-	  "UniqueID": "Pathoschild.ContentPatcher",
-	},
-	"UpdateKeys": ["Nexus:9828"],
-	"Dependencies": [
-	{
-		"UniqueID": "atravita.SpecialOrdersExtended",
-		"IsRequired": false,
-	}
-	],
+      "UniqueID": "Pathoschild.ContentPatcher",
+    },
+    "UpdateKeys": ["Nexus:9828"],
+    "Dependencies": [
+    {
+        "UniqueID": "atravita.SpecialOrdersExtended",
+        "IsRequired": false,
+    }
+    ],
 }

@@ -1,15 +1,28 @@
 ﻿namespace PamTries;
 
-class PTUtilities
+/// <summary>
+/// Utility methods for this mod.
+/// </summary>
+internal static class PTUtilities
 {
-    public static IDictionary<string, string>? Lexicon { get; set; }
+    internal static IDictionary<string, string>? Lexicon { get; set; }
 
-    public static void PopulateLexicon(IGameContentHelper contentHelper)
+    /// <summary>
+    /// Loads the Leixcon file.
+    /// </summary>
+    /// <param name="contentHelper">the game content helper.</param>
+    internal static void PopulateLexicon(IGameContentHelper contentHelper)
     {
         Lexicon = contentHelper.Load<Dictionary<string, string>>("Strings/Lexicon");
     }
 
-    public static string GetLexicon(string key, string? defaultresponse = null)
+    /// <summary>
+    /// Gets a translated string from the lexicon.
+    /// </summary>
+    /// <param name="key">Key to search for.</param>
+    /// <param name="defaultresponse">Default response if nothing is found.</param>
+    /// <returns>string, if possible.</returns>
+    internal static string GetLexicon(string key, string? defaultresponse = null)
     {
         string? value = null;
         if (Lexicon is not null)
@@ -34,9 +47,12 @@ class PTUtilities
     /// Checks to see if any player has a specific conversation topic. If so, gives everyone the conversation topic.
     /// </summary>
     /// <param name="conversationTopic">conversation topic to sync.</param>
-    public static void SyncConversationTopics(string conversationTopic)
+    internal static void SyncConversationTopics(string conversationTopic)
     {
-        if (!Game1.IsMultiplayer) { return; }
+        if (!Context.IsMultiplayer)
+        {
+            return;
+        }
         // Rewrite this. If host has it, everyone has host's amount of days. Else, find player with it.
         if (Game1.player.activeDialogueEvents.ContainsKey(conversationTopic))
         {
@@ -53,22 +69,31 @@ class PTUtilities
                 if (farmer.activeDialogueEvents.TryGetValue(conversationTopic, out conversationdays))
                 {
                     Game1.player.activeDialogueEvents[conversationTopic] = conversationdays;
+                    break;
                 }
             }
         }
     }
 
-    public static void SyncConversationTopics(IEnumerable<string> conversationTopics)
+    /// <summary>
+    /// Syncs conversation topics between players.
+    /// </summary>
+    /// <param name="conversationTopics">IEnumerable of conversation topics to sync.</param>
+    internal static void SyncConversationTopics(IEnumerable<string> conversationTopics)
     {
         foreach (string conversationTopic in conversationTopics)
         {
             SyncConversationTopics(conversationTopic);
         }
     }
-    public static void LocalEventSyncs(IMonitor modMonitor)
-    { // Sets Pam's home event as seen for everyone if any farmer has seen it.
-      // but only if the mail flag isn't set.
-        if (!Game1.IsMultiplayer)
+
+    /// <summary>
+    /// Syncs the events seen for all players.
+    /// </summary>
+    /// <param name="modMonitor">Monitor, to use for logging.</param>
+    internal static void LocalEventSyncs(IMonitor modMonitor)
+    {
+        if (!Context.IsMultiplayer)
         {
             return;
         }

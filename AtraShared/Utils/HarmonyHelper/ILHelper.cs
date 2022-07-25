@@ -6,7 +6,6 @@
 // Label stuff?
 // MAKE SURE THE LABEL COUNTS ARE RIGHT. Inserting codes should add to the Important Labels! Check **any time** labels are removed.
 // Insert should probably just have a pattern that moves over the labels....
-// BIG TODO: Branch logic doesn't handle jump tables at all!!! Do that.
 using System.Diagnostics;
 using System.Reflection;
 using System.Reflection.Emit;
@@ -14,13 +13,14 @@ using System.Text;
 using AtraBase.Collections;
 using AtraShared.Utils.Extensions;
 using HarmonyLib;
+using Microsoft.Toolkit.Diagnostics;
 
 namespace AtraShared.Utils.HarmonyHelper;
 
 /// <summary>
 /// Helper class for transpilers.
 /// </summary>
-public class ILHelper
+public sealed class ILHelper
 {
     // All locals.
     private readonly SortedList<int, LocalVariableInfo> locals = new();
@@ -38,6 +38,7 @@ public class ILHelper
     /// <param name="generator">ILGenerator.</param>
     public ILHelper(MethodBase original, IEnumerable<CodeInstruction> codes, IMonitor monitor, ILGenerator generator)
     {
+        // scan methodbody and get the original variables.
         if (original.GetMethodBody() is MethodBody body)
         {
             foreach (LocalVariableInfo loc in body.LocalVariables)
@@ -49,11 +50,14 @@ public class ILHelper
         {
             throw new InvalidOperationException($"Attempted to transpile a method without a body: {original.FullDescription()}");
         }
+
         this.Original = original;
         this.Codes = codes.ToList();
         this.Generator = generator;
         this.Monitor = monitor;
 
+        // update the variables with the ones mods have added
+        // and also take count of the labels.
         foreach (CodeInstruction code in this.Codes)
         {
             if (code.operand is LocalBuilder builder)
@@ -113,7 +117,7 @@ public class ILHelper
     /// <summary>
     /// Gets the logger for this instance.
     /// </summary>
-    protected IMonitor Monitor { get; init; }
+    private IMonitor Monitor { get; init; }
 
     /// <summary>
     /// Pushes the pointer onto the pointerstack.
@@ -143,10 +147,7 @@ public class ILHelper
     /// <exception cref="IndexOutOfRangeException">Tried to move to an invalid location.</exception>
     public ILHelper JumpTo(int index)
     {
-        if (index < 0 || index >= this.Codes.Count)
-        {
-            throw new IndexOutOfRangeException("New location for pointer is out of bounds.");
-        }
+        Guard.IsBetweenOrEqualTo(index, 0, this.Codes.Count - 1, nameof(index));
         this.Pointer = index;
         return this;
     }
@@ -194,10 +195,7 @@ public class ILHelper
     public ILHelper Advance(int steps)
     {
         this.Pointer += steps;
-        if (this.Pointer < 0 || this.Pointer >= this.Codes.Count)
-        {
-            throw new IndexOutOfRangeException("New location for pointer is out of bounds.");
-        }
+        Guard.IsBetweenOrEqualTo(this.Pointer, 0, this.Codes.Count - 1, nameof(this.Pointer));
         return this;
     }
 
@@ -215,7 +213,7 @@ public class ILHelper
         int endindex = intendedendindex ?? this.Codes.Count;
         if (startindex >= (endindex - instructions.Length) || startindex < 0 || endindex > this.Codes.Count)
         {
-            throw new ArgumentException($"Either startindex {startindex} or endindex {endindex} are invalid. ");
+            return ThrowHelper.ThrowArgumentException<ILHelper>($"Either startindex {startindex} or endindex {endindex} are invalid. ");
         }
 
         for (int i = startindex; i < endindex - instructions.Length + 1; i++)
@@ -233,7 +231,7 @@ ContinueSearchForward:
             ;
         }
         this.Monitor.Log($"The desired pattern wasn't found:\n\n" + string.Join('\n', instructions.Select(i => i.ToString())), LogLevel.Error);
-        throw new IndexOutOfRangeException();
+        return ThrowHelper.ThrowInvalidOperationException<ILHelper>();
     }
 
     /// <summary>
@@ -260,7 +258,7 @@ ContinueSearchForward:
         int endindex = intendedendindex ?? this.Codes.Count;
         if (startindex >= endindex - instructions.Length || startindex < 0 || endindex > this.Codes.Count)
         {
-            throw new ArgumentException($"Either startindex {startindex} or endindex {endindex} are invalid. ");
+            return ThrowHelper.ThrowArgumentException<ILHelper>($"Either startindex {startindex} or endindex {endindex} are invalid. ");
         }
         for (int i = endindex - instructions.Length - 1; i >= startindex; i--)
         {
@@ -277,7 +275,7 @@ ContinueSearchBackwards:
             ;
         }
         this.Monitor.Log($"The desired pattern wasn't found:\n\n" + string.Join('\n', instructions.Select(i => i.ToString())), LogLevel.Error);
-        throw new IndexOutOfRangeException();
+        return ThrowHelper.ThrowInvalidOperationException<ILHelper>();
     }
 
     /// <summary>
@@ -347,7 +345,7 @@ ContinueSearchBackwards:
                     .AppendLine().Append("Important labels: ")
                     .AppendJoin(", ", this.importantLabels.Select(l => l.ToString()));
                 this.Monitor.Log(sb.ToString(), LogLevel.Error);
-                throw new InvalidOperationException();
+                return ThrowHelper.ThrowInvalidOperationException<ILHelper>();
             }
         }
         this.Codes.RemoveRange(this.Pointer, count);
@@ -483,38 +481,40 @@ ContinueSearchBackwards:
         {
             instruction.labels.AddRange(this.CurrentInstruction.labels);
         }
-        else
+
+        // removed a branch, so untrack those labels.
+        if (this.CurrentInstruction.Branches(out Label? currlabel))
         {
-            if (this.CurrentInstruction.Branches(out Label? currlabel))
+            this.importantLabels[currlabel!.Value]--;
+        }
+        else if (this.CurrentInstruction.opcode == OpCodes.Switch)
+        {
+            foreach (var switchLabel in (Label[])this.CurrentInstruction.operand)
             {
-                this.importantLabels[currlabel!.Value]--;
-            }
-            else if (this.CurrentInstruction.opcode == OpCodes.Switch)
-            {
-                foreach (var switchLabel in (Label[])this.CurrentInstruction.operand)
-                {
-                    this.importantLabels[switchLabel]--;
-                }
-            }
-            this.importantLabels.RemoveZeros();
-            if (this.CurrentInstruction.labels.Intersect(this.importantLabels.Keys).Any())
-            {
-                StringBuilder sb = new();
-                sb.Append("Attempted to remove an important label!\n\nThis code's labels: ")
-                    .AppendJoin(", ", this.CurrentInstruction.labels.Select(l => l.ToString()))
-                    .AppendLine().Append("Important labels: ")
-                    .AppendJoin(", ", this.importantLabels.Select(l => l.ToString()));
-                this.Monitor.Log(sb.ToString(), LogLevel.Error);
-                throw new InvalidOperationException();
+                this.importantLabels[switchLabel]--;
             }
         }
+        this.importantLabels.RemoveZeros();
+
+        if (!keepLabels && this.CurrentInstruction.labels.Intersect(this.importantLabels.Keys).Any())
+        {
+            StringBuilder sb = new();
+            sb.Append("Attempted to remove an important label!\n\nThis code's labels: ")
+                .AppendJoin(", ", this.CurrentInstruction.labels.Select(l => l.ToString()))
+                .AppendLine().Append("Important labels: ")
+                .AppendJoin(", ", this.importantLabels.Select(l => l.ToString()));
+            this.Monitor.Log(sb.ToString(), LogLevel.Error);
+            return ThrowHelper.ThrowInvalidOperationException<ILHelper>();
+        }
+
+        // track new labels.
         if (instruction.Branches(out Label? label))
         {
             this.importantLabels[label!.Value]++;
         }
         else if (this.CurrentInstruction.opcode == OpCodes.Switch)
         {
-            foreach (var switchLabel in (Label[])this.CurrentInstruction.operand)
+            foreach (Label switchLabel in (Label[])this.CurrentInstruction.operand)
             {
                 this.importantLabels[switchLabel]++;
             }
@@ -547,7 +547,7 @@ ContinueSearchBackwards:
         }
         else if (this.CurrentInstruction.opcode == OpCodes.Switch)
         {
-            foreach (var switchLabel in (Label[])this.CurrentInstruction.operand)
+            foreach (Label switchLabel in (Label[])this.CurrentInstruction.operand)
             {
                 this.importantLabels[switchLabel]--;
             }
@@ -579,7 +579,7 @@ ContinueSearchBackwards:
     {
         if (!this.CurrentInstruction.Branches(out label))
         {
-            throw new InvalidOperationException($"Attempted to grab label from something that's not a branch.");
+            return ThrowHelper.ThrowInvalidOperationException<ILHelper>($"Attempted to grab label from something that's not a branch.");
         }
         return this;
     }
@@ -645,7 +645,7 @@ ContinueSearchBackwards:
         int endindex = intendedendindex ?? this.Codes.Count;
         if (startindex >= endindex || startindex < 0 || endindex > this.Codes.Count)
         {
-            throw new ArgumentException($"Either startindex {startindex} or endindex {endindex} are invalid.");
+            return ThrowHelper.ThrowArgumentException<ILHelper>($"Either startindex {startindex} or endindex {endindex} are invalid.");
         }
         for (int i = startindex; i < endindex; i++)
         {
@@ -655,7 +655,7 @@ ContinueSearchBackwards:
                 return this;
             }
         }
-        throw new IndexOutOfRangeException($"label {label} could not be found between {startindex} and {endindex}");
+        return ThrowHelper.ThrowInvalidOperationException<ILHelper>($"label {label} could not be found between {startindex} and {endindex}");
     }
 
     /// <summary>
@@ -677,7 +677,7 @@ ContinueSearchBackwards:
     {
         if (this.label is null)
         {
-            throw new InvalidOperationException("Attempted to advance to label, but there is not one stored!");
+            return ThrowHelper.ThrowInvalidOperationException<ILHelper>("Attempted to advance to label, but there is not one stored!");
         }
         return this.AdvanceToLabel(this.label.Value);
     }
@@ -696,7 +696,7 @@ ContinueSearchBackwards:
         int endindex = intendedendindex ?? this.Codes.Count;
         if (startindex >= endindex || startindex < 0 || endindex > this.Codes.Count)
         {
-            throw new ArgumentException($"Either startindex {startindex} or endindex {endindex} are invalid.");
+            return ThrowHelper.ThrowArgumentException<ILHelper>($"Either startindex {startindex} or endindex {endindex} are invalid.");
         }
         for (int i = endindex - 1; i >= startindex; i--)
         {
@@ -706,7 +706,7 @@ ContinueSearchBackwards:
                 return this;
             }
         }
-        throw new IndexOutOfRangeException($"label {label} could not be found between {startindex} and {endindex}");
+        return ThrowHelper.ThrowInvalidOperationException<ILHelper>($"label {label} could not be found between {startindex} and {endindex}");
     }
 
     /// <summary>
@@ -728,7 +728,7 @@ ContinueSearchBackwards:
     {
         if (this.label is null)
         {
-            throw new InvalidOperationException("Attempted to advance to label, but there is not one stored!");
+            return ThrowHelper.ThrowInvalidOperationException<ILHelper>("Attempted to advance to label, but there is not one stored!");
         }
         return this.RetreatToLabel(this.label.Value);
     }
@@ -777,7 +777,7 @@ ContinueSearchBackwards:
         int endindex = intendedendindex ?? this.Codes.Count;
         if (startindex >= endindex - instructions.Length || startindex < 0 || endindex > this.Codes.Count)
         {
-            throw new ArgumentException($"Either startindex {startindex} or endindex {endindex} are invalid. ");
+            return ThrowHelper.ThrowArgumentException<ILHelper>($"Either startindex {startindex} or endindex {endindex} are invalid. ");
         }
         this.Push();
         for (int i = startindex; i < endindex; i++)
@@ -830,10 +830,6 @@ ContinueSearch:
     /// <returns>The proper local instruction.</returns>
     public static CodeInstruction GetLdLoc(int localindex)
     {
-        if (localindex > byte.MaxValue)
-        {
-            throw new ArgumentOutOfRangeException($"Recieved localindex too large - {localindex}");
-        }
         return localindex switch
         {
             0 => new(OpCodes.Ldloc_0),
@@ -851,10 +847,6 @@ ContinueSearch:
     /// <returns>The proper local instruction.</returns>
     public static CodeInstruction GetStLoc(int localindex)
     {
-        if (localindex > byte.MaxValue)
-        {
-            throw new ArgumentOutOfRangeException($"Recieved localindex too large - {localindex}");
-        }
         return localindex switch
         {
             0 => new(OpCodes.Stloc_0),

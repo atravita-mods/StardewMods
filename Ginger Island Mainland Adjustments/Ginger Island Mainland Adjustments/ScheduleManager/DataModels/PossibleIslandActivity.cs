@@ -56,6 +56,7 @@ internal readonly struct PossibleIslandActivity
     /// <param name="lastAssignment">The previous assignment dictionary.</param>
     /// <param name="animation_descriptions">Dictionary of animations.</param>
     /// <param name="overrideChanceMap">Used to set the chances higher on a second pass. Null to leave unused.</param>
+    /// <param name="groupName">The group name, used when the NPC is a member of a group.</param>
     /// <returns>SchedulePoint if one is assigned, null otherwise.</returns>
     public SchedulePoint? TryAssign(
         Random random,
@@ -64,7 +65,8 @@ internal readonly struct PossibleIslandActivity
         HashSet<Point> usedPoints,
         Dictionary<NPC, string>? lastAssignment = null,
         Dictionary<string, string>? animation_descriptions = null,
-        Func<NPC, double>? overrideChanceMap = null)
+        Func<NPC, double>? overrideChanceMap = null,
+        string? groupName = null)
     {
         string? schedule_animation = null;
         if (this.animation is not null)
@@ -72,12 +74,12 @@ internal readonly struct PossibleIslandActivity
             schedule_animation = this.animation.StartsWith("square_") ? this.animation : $"{character.Name.ToLowerInvariant()}_{this.animation}";
         }
         // avoid repeating assignments.
-        if (lastAssignment?.TryGetValue(character, out string? lastanimation) == true && this.IsAnimationUnique() && schedule_animation == lastanimation)
+        if (this.IsAnimationUnique() && lastAssignment?.TryGetValue(character, out string? lastanimation) == true && schedule_animation == lastanimation)
         {
             return null;
         }
         // Run a random chance to not pick this spot.
-        double chance = overrideChanceMap is not null ? overrideChanceMap(character) : this.chanceMap(character);
+        double chance = overrideChanceMap?.Invoke(character) ?? this.chanceMap(character);
         if (random.NextDouble() > chance)
         {
             return null;
@@ -95,6 +97,7 @@ internal readonly struct PossibleIslandActivity
             schedule_animation = null; // remove animation if I don't have it.
         }
 
+        string? varKey = groupName is null ? null : this.dialogueKey + "_" + groupName;
         Utility.Shuffle(random, this.possiblepoints);
         foreach (Point pt in this.possiblepoints)
         {
@@ -111,6 +114,7 @@ internal readonly struct PossibleIslandActivity
                 isarrivaltime: false,
                 direction: this.direction,
                 animation: schedule_animation,
+                varKey: varKey,
                 basekey: this.dialogueKey);
         }
         return null;
@@ -121,8 +125,6 @@ internal readonly struct PossibleIslandActivity
     /// </summary>
     /// <returns>true if animation is unique, false otherwise.</returns>
     private bool IsAnimationUnique()
-    {
-        return !string.IsNullOrEmpty(this.animation)
+        => !string.IsNullOrEmpty(this.animation)
             && !this.animation.StartsWith("square_");
-    }
 }

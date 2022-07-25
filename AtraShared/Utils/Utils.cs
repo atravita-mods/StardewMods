@@ -1,4 +1,7 @@
-﻿using Microsoft.Xna.Framework;
+﻿using System.Runtime.CompilerServices;
+using Microsoft.Toolkit.Diagnostics;
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using StardewModdingAPI.Utilities;
 
 namespace AtraShared.Utils;
@@ -9,12 +12,29 @@ namespace AtraShared.Utils;
 public static class Utils
 {
     /// <summary>
+    /// A Lazy that contains a single pixel, useful for drawing geometric shapes.
+    /// </summary>
+    /// <remarks>Taken from https://github.com/Pathoschild/StardewMods/blob/develop/Common/CommonHelper.cs . Much thanks.</remarks>
+    private static readonly Lazy<Texture2D> LazyPixel = new(() =>
+    {
+        Texture2D pixel = new(Game1.graphics.GraphicsDevice, 1, 1);
+        pixel.SetData(new[] { Color.White });
+        return pixel;
+    });
+
+    /// <summary>
+    /// Gets a Pixel that can be used for drawing arbitrary geometric shapes.
+    /// </summary>
+    public static Texture2D Pixel => LazyPixel.Value;
+
+    /// <summary>
     /// Gets the configuration instance, or returns a default one.
     /// </summary>
     /// <typeparam name="T">Type of config.</typeparam>
     /// <param name="helper">Smapi's helper.</param>
     /// <param name="monitor">Logger.</param>
     /// <returns>Config.</returns>
+    [MethodImpl(MethodImplOptions.NoInlining)]
     public static T GetConfigOrDefault<T>(IModHelper helper, IMonitor monitor)
         where T : class, new()
     {
@@ -101,6 +121,32 @@ public static class Utils
             {
                 yield return npc;
             }
+        }
+    }
+
+#warning - fix in Stardew 1.6
+    /// <summary>
+    /// Gets the next day, given the specific season and day.
+    /// </summary>
+    /// <param name="season">Season as string.</param>
+    /// <param name="day">Day as int.</param>
+    /// <returns>ValueTuple containing the next day.</returns>
+    public static (string season, int day) GetTomorrow(string season, int day)
+    {
+        if (day == 28)
+        {
+            return season switch
+            {
+                "spring" => ("summer", 1),
+                "summer" => ("fall", 1),
+                "fall" => ("winter", 1),
+                "winter" => ("spring", 1),
+                _ => ThrowHelper.ThrowArgumentException<ValueTuple<string, int>>($"Unexpected season {season}!"),
+            };
+        }
+        else
+        {
+            return (season, day + 1);
         }
     }
 }

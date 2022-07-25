@@ -6,8 +6,13 @@
 <!-- Figure out how to replace the reference to coffee in the night market dialogue?-->
 <!-- Make it so notifications do not go away until dismissed? -->
 
-#### Version 1.0.12
+#### Version 1.1.0
+* Move to using AtraCore.
 * Spanish translation, thanks to [Mistyspring](https://github.com/misty-spring)!
+* Prevent broken sound cues from breaking the game.
+* Slingshot ammo now stacks instead of swapping.
+* Schedule fixer now tries to resolve `GOTO spring` and other statements to use the actual schedule.
+* Allows speeding up of phone calls.
 
 #### Version 1.0.11
 * Fix issues with the night market warp home.

@@ -1,4 +1,5 @@
 ﻿using AtraBase.Toolkit.Reflection;
+using AtraCore.Framework.ReflectionManager;
 using AtraShared.Utils.Extensions;
 using HarmonyLib;
 using MoreFertilizers.Framework;
@@ -19,9 +20,10 @@ internal static class SObjectPatches
     {
         try
         {
-            Type dgaObject = AccessTools.TypeByName("DynamicGameAssets.Game.CustomObject") ?? throw new("DGA SObject");
+            Type dgaObject = AccessTools.TypeByName("DynamicGameAssets.Game.CustomObject")
+                ?? ReflectionThrowHelper.ThrowMethodNotFoundException<Type>("DGA SObject");
             harmony.Patch(
-                original: dgaObject.InstanceMethodNamed("loadDisplayName"),
+                original: dgaObject.GetCachedMethod("loadDisplayName", ReflectionCache.FlagTypes.InstanceFlags),
                 postfix: new HarmonyMethod(typeof(SObjectPatches), nameof(PostfixLoadDisplayName)));
         }
         catch (Exception ex)
@@ -31,6 +33,7 @@ internal static class SObjectPatches
     }
 
     [HarmonyPostfix]
+    [HarmonyPriority(Priority.VeryLow)]
     [HarmonyPatch(nameof(SObject.performObjectDropInAction))]
     [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Harmony Convention")]
     private static void PostfixDropInAction(SObject __instance, Item dropInItem, bool probe)

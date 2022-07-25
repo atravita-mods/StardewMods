@@ -8,7 +8,11 @@
   </PropertyGroup>
 
   <PropertyGroup>
-    <Version>0.1.5</Version>
+    <Name>Giant Crop Fertilizer</Name>
+    <Description>Adds a fertilizer that forces giant crops.</Description>
+    <UpdateKeys>Nexus:11620</UpdateKeys>
+    <Version>0.2.0</Version>
+    <BaseManifest>..\..\ja_dependencies.json</BaseManifest>
   </PropertyGroup>
 
   <ItemGroup>
@@ -17,8 +21,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\AtraCore\AtraCore.csproj" private = "false"/>
-    <ProjectReference Include="..\..\Pintail\Pintail\Pintail.csproj" private = "false" />
+    <ProjectReference Include="..\..\AtraCore\AtraCore.csproj" private="false" />
+    <ProjectReference Include="..\..\Pintail\Pintail\Pintail.csproj" private="false" />
   </ItemGroup>
 
   <ItemGroup>

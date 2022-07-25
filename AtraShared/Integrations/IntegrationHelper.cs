@@ -1,4 +1,8 @@
-﻿namespace AtraShared.Integrations;
+﻿#if DEBUG
+using System.Diagnostics;
+#endif
+
+namespace AtraShared.Integrations;
 
 /// <summary>
 /// Base class for integration management.
@@ -72,7 +76,15 @@ public class IntegrationHelper
             api = default;
             return false;
         }
+#if DEBUG
+        Stopwatch sw = new();
+        sw.Start();
+#endif
         api = this.ModRegistry.GetApi<T>(apiid);
+#if DEBUG
+        sw.Stop();
+        this.Monitor.Log($"Mapping {apiid} took {sw.ElapsedMilliseconds} milliseconds", LogLevel.Info);
+#endif
         return api is not null;
     }
 }

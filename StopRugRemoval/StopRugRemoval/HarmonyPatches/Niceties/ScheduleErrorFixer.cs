@@ -1,4 +1,5 @@
-﻿using AtraBase.Toolkit.StringHandler;
+﻿using AtraBase.Toolkit.Extensions;
+using AtraBase.Toolkit.StringHandler;
 using HarmonyLib;
 using Microsoft.Xna.Framework;
 using StardewModdingAPI.Utilities;
@@ -21,33 +22,49 @@ internal static class ScheduleErrorFixer
         {
             return;
         }
+
         ModEntry.ModMonitor.Log($"{__instance.Name} seems to have a null current location, attempting to fix. Please inform their author! The current day is {SDate.Now()}, their attempted schedule string was {rawData}", LogLevel.Info);
-        if (__instance.DefaultMap is not null && Game1.getLocationFromName(__instance.DefaultMap) is GameLocation location)
+
+        bool foundSchedule = ModEntry.UtilitySchedulingFunctions.TryFindGOTOschedule(__instance, SDate.Now(), rawData, out string? scheduleString);
+        if (foundSchedule)
+        {
+            ModEntry.ModMonitor.Log($"\tThat schedule redirected to {scheduleString}.", LogLevel.Info);
+        }
+
+        if (__instance.Name is "Leo" && Game1.MasterPlayer.hasOrWillReceiveMail("leoMoved") && Game1.getLocationFromName("LeoTreeHouse") is GameLocation leohouse)
+        {
+            __instance.currentLocation = leohouse;
+            __instance.DefaultPosition = new Vector2(5f, 4f) * 64f;
+        }
+        else if (__instance.DefaultMap is not null && Game1.getLocationFromName(__instance.DefaultMap) is GameLocation location)
         { // Attempt to first just assign their position from their default map.
             __instance.currentLocation = location;
         }
-        else if (Game1.content.Load<Dictionary<string, string>>(@"Data\NPCDispositions").TryGetValue(__instance.Name, out string? dispo)
-            && dispo.SpanSplit('/').TryGetAtIndex(10, out SpanSplitEntry pos))
+        else if (Game1.content.Load<Dictionary<string, string>>(@"Data\NPCDispositions").TryGetValue(__instance.Name, out string? dispo))
         { // Okay, if that didn't work, try getting from NPCDispositions.
-            SpanSplit locParts = pos.SpanSplit();
-            string defaultMap = locParts[0].ToString();
-            if (Game1.getLocationFromName(defaultMap) is GameLocation loc)
+            ReadOnlySpan<char> pos = dispo.GetNthChunk('/', 10);
+            if (pos.Length != 0)
             {
-                __instance.DefaultMap = defaultMap;
-                __instance.currentLocation = loc;
-            }
-            if (locParts.TryGetAtIndex(1, out SpanSplitEntry strX) && int.TryParse(strX, out int x)
-                && locParts.TryGetAtIndex(2, out SpanSplitEntry strY) && int.TryParse(strY, out int y))
-            {
-                __instance.DefaultPosition = new Vector2(x * 64, y * 64);
-                return;
+                SpanSplit locParts = pos.SpanSplit(expectedCount: 3);
+                string defaultMap = locParts[0].ToString();
+                if (Game1.getLocationFromName(defaultMap) is GameLocation loc)
+                {
+                    __instance.DefaultMap = defaultMap;
+                    __instance.currentLocation = loc;
+                }
+                if (locParts.TryGetAtIndex(1, out SpanSplitEntry strX) && int.TryParse(strX, out int x)
+                    && locParts.TryGetAtIndex(2, out SpanSplitEntry strY) && int.TryParse(strY, out int y))
+                {
+                    __instance.DefaultPosition = new Vector2(x * 64, y * 64);
+                    return;
+                }
             }
         }
 
         // Still no go, let's try parsing from the first schedule entry.
-        if (__instance.currentLocation is null)
+        if (__instance.currentLocation is null && foundSchedule)
         {
-            SpanSplit splits = rawData.SpanSplit();
+            SpanSplit splits = scheduleString.SpanSplit(expectedCount: 3);
             if (splits.TryGetAtIndex(1, out SpanSplitEntry locName) && Game1.getLocationFromName(locName.ToString()) is GameLocation loc)
             {
                 __instance.currentLocation = loc;

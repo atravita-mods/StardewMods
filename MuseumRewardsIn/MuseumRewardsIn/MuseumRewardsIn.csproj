@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <Import Project="..\..\csproj_common" />
   
   <PropertyGroup>
@@ -8,7 +8,11 @@
   </PropertyGroup>
 
   <PropertyGroup>
-    <Version>0.1.0</Version>
+    <Name>Museum Store</Name>
+    <Description>Adds museum rewards to a store.</Description>
+    <UpdateKeys>Nexus:12598</UpdateKeys>
+    <Version>0.2.0</Version>
+    <BaseManifest>..\..\base_dependencies.json</BaseManifest>
   </PropertyGroup>
 
   <PropertyGroup>

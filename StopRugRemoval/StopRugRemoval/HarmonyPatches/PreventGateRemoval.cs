@@ -1,6 +1,7 @@
 ﻿using System.Reflection;
 using System.Reflection.Emit;
 using AtraBase.Toolkit.Reflection;
+using AtraCore.Framework.ReflectionManager;
 using AtraShared.Utils.HarmonyHelper;
 using HarmonyLib;
 using Microsoft.Xna.Framework;
@@ -10,6 +11,7 @@ using xTile.Dimensions;
 namespace StopRugRemoval.HarmonyPatches;
 
 #warning - remove in 1.6
+
 /// <summary>
 /// Patches to prevent gate removal.
 /// </summary>
@@ -92,7 +94,7 @@ internal static class PreventGateRemoval
                     {
                         new(OpCodes.Ldloca_S),
                         new(SpecialCodeInstructionCases.LdArg),
-                        new(OpCodes.Callvirt, typeof(Character).InstanceMethodNamed(nameof(Character.getTileLocation))),
+                        new(OpCodes.Callvirt, typeof(Character).GetCachedMethod(nameof(Character.getTileLocation), ReflectionCache.FlagTypes.InstanceFlags)),
                         new(OpCodes.Call),
                     })
                 .Push()
@@ -112,7 +114,7 @@ internal static class PreventGateRemoval
                     {
                         new(OpCodes.Ldarg_0),
                         new(OpCodes.Ldarg_1),
-                        new(OpCodes.Call, typeof(PreventGateRemoval).StaticMethodNamed(nameof(PreventGateRemoval.AreFurnitureKeysHeld))),
+                        new(OpCodes.Call, typeof(PreventGateRemoval).StaticMethodNamed(nameof(AreFurnitureKeysHeld))),
                         new(OpCodes.Brfalse, newLabel),
                     },
                     withLabels: labels);

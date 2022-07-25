@@ -1,4 +1,5 @@
 ﻿using AtraBase.Toolkit.Reflection;
+using AtraCore.Framework.ReflectionManager;
 using AtraShared.ConstantsAndEnums;
 using AtraShared.Integrations;
 using AtraShared.Utils;
@@ -12,7 +13,7 @@ using AtraUtils = AtraShared.Utils.Utils;
 namespace ForgeMenuChoice;
 
 /// <inheritdoc/>
-internal class ModEntry : Mod
+internal sealed class ModEntry : Mod
 {
 #pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
     /// <summary>
@@ -60,7 +61,7 @@ internal class ModEntry : Mod
 
     private void OnLocaleChanged(object? sender, LocaleChangedEventArgs e)
     {
-        GameContentHelper.InvalidateCache(AssetLoader.ENCHANTMENT_NAMES_LOCATION);
+        this.Helper.GameContent.InvalidateCacheAndLocalized(AssetLoader.ENCHANTMENT_NAMES_LOCATION);
 
         // This is the games cache of enchantment names. I null it here to clear it.
         this.Helper.Reflection.GetField<List<BaseEnchantment>?>(typeof(BaseEnchantment), "_enchantments").SetValue(null);
@@ -79,24 +80,14 @@ internal class ModEntry : Mod
         this.ApplyPatches(new Harmony(this.ModManifest.UniqueID));
 
         GMCMHelper helper = new(this.Monitor, this.Helper.Translation, this.Helper.ModRegistry, this.ModManifest);
-        if (!helper.TryGetAPI())
+        if (helper.TryGetAPI())
         {
-            return;
+            helper.Register(
+                reset: static () => Config = new ModConfig(),
+                save: () => this.Helper.AsyncWriteConfig(this.Monitor, Config))
+            .AddParagraph(I18n.ModDescription)
+            .GenerateDefaultGMCM(static () => Config);
         }
-        helper.Register(
-            reset: () => Config = new ModConfig(),
-            save: () => this.Helper.WriteConfig(Config))
-        .AddParagraph(I18n.ModDescription)
-        .AddEnumOption(
-            name: I18n.TooltipBehavior_Title,
-            getValue: () => Config.TooltipBehavior,
-            setValue: (value) => Config.TooltipBehavior = value,
-            tooltip: I18n.TooltipBehavior_Description)
-        .AddBoolOption(
-            name: I18n.EnableTooltipAutogeneration_Title,
-            getValue: () => Config.EnableTooltipAutogeneration,
-            setValue: (value) => Config.EnableTooltipAutogeneration = value,
-            tooltip: I18n.EnableTooltipAutogeneration_Description);
     }
 
     private void ApplyPatches(Harmony harmony)
@@ -115,25 +106,25 @@ internal class ModEntry : Mod
                 {
                     this.Monitor.Log($"Got spacecore's forge for compat patching.", LogLevel.Debug);
                     harmony.Patch(
-                        original: spaceforge.InstanceMethodNamed("cleanupBeforeExit"),
+                        original: spaceforge.GetCachedMethod("cleanupBeforeExit", ReflectionCache.FlagTypes.InstanceFlags),
                         prefix: new HarmonyMethod(typeof(ForgeMenuPatches), nameof(ForgeMenuPatches.PrefixBeforeExit)));
                     harmony.Patch(
-                        original: spaceforge.InstanceMethodNamed("IsValidCraft"),
+                        original: spaceforge.GetCachedMethod("IsValidCraft", ReflectionCache.FlagTypes.InstanceFlags),
                         prefix: new HarmonyMethod(typeof(ForgeMenuPatches), nameof(ForgeMenuPatches.PrefixIsValidCraft)));
                     harmony.Patch(
-                        original: spaceforge.InstanceMethodNamed("draw", new Type[] { typeof(SpriteBatch) }),
+                        original: spaceforge.GetCachedMethod("draw", ReflectionCache.FlagTypes.InstanceFlags, new Type[] { typeof(SpriteBatch) }),
                         postfix: new HarmonyMethod(typeof(ForgeMenuPatches), nameof(ForgeMenuPatches.PostfixDraw)));
                     harmony.Patch(
-                        original: spaceforge.InstanceMethodNamed("receiveLeftClick"),
+                        original: spaceforge.GetCachedMethod("receiveLeftClick", ReflectionCache.FlagTypes.InstanceFlags),
                         postfix: new HarmonyMethod(typeof(ForgeMenuPatches), nameof(ForgeMenuPatches.PostFixLeftClick)));
                     harmony.Patch(
-                        original: spaceforge.InstanceMethodNamed("receiveRightClick"),
+                        original: spaceforge.GetCachedMethod("receiveRightClick", ReflectionCache.FlagTypes.InstanceFlags),
                         postfix: new HarmonyMethod(typeof(ForgeMenuPatches), nameof(ForgeMenuPatches.PostfixRightClick)));
                     harmony.Patch(
-                        original: spaceforge.InstanceMethodNamed("gameWindowSizeChanged"),
+                        original: spaceforge.GetCachedMethod("gameWindowSizeChanged", ReflectionCache.FlagTypes.InstanceFlags),
                         postfix: new HarmonyMethod(typeof(ForgeMenuPatches), nameof(ForgeMenuPatches.PostfixGameWindowSizeChanged)));
                     harmony.Patch(
-                        original: spaceforge.InstanceMethodNamed("performHoverAction"),
+                        original: spaceforge.GetCachedMethod("performHoverAction", ReflectionCache.FlagTypes.InstanceFlags),
                         postfix: new HarmonyMethod(typeof(ForgeMenuPatches), nameof(ForgeMenuPatches.PostfixPerformHoverAction)));
                 }
                 else

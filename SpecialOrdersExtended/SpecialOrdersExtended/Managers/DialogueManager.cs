@@ -1,4 +1,5 @@
 ﻿using AtraBase.Toolkit;
+using AtraCore.Framework.DialogueManagement;
 using AtraShared;
 using AtraShared.Utils.Extensions;
 using SpecialOrdersExtended.DataModels;
@@ -7,53 +8,10 @@ using StardewModdingAPI.Utilities;
 namespace SpecialOrdersExtended.Managers;
 
 /// <summary>
-/// A dialogue to delay.
-/// </summary>
-internal struct DelayedDialogue
-{
-    private readonly int time;
-    private readonly Dialogue dialogue;
-    private readonly NPC npc;
-
-    /// <summary>
-    /// Initializes a new instance of the <see cref="DelayedDialogue"/> struct.
-    /// </summary>
-    /// <param name="time">Time to delay to.</param>
-    /// <param name="dialogue">Dialogue to delay.</param>
-    /// <param name="npc">Speaking NPC.</param>
-    public DelayedDialogue(int time, Dialogue dialogue, NPC npc)
-    {
-        this.time = time;
-        this.dialogue = dialogue;
-        this.npc = npc;
-    }
-
-    /// <summary>
-    /// Pushes the delayed dialogue onto the NPC's stack if it's past time to do so..
-    /// </summary>
-    /// <param name="currenttime">The current in-game time.</param>
-    /// <returns>True if pushed, false otherwise.</returns>
-    public bool PushIfPastTime(int currenttime)
-    {
-        if (currenttime > this.time)
-        {
-            this.npc.CurrentDialogue.Push(this.dialogue);
-            return true;
-        }
-        return false;
-    }
-}
-
-/// <summary>
 /// Static. Handles logic, patches, and console commands related to the special order dialogues.
 /// </summary>
 internal class DialogueManager
 {
-    /// <summary>
-    /// A queue of delayed dialogues.
-    /// </summary>
-    private static readonly PerScreen<Queue<DelayedDialogue>> DelayedDialogues = new(createNewState: () => new Queue<DelayedDialogue>());
-
     /// <summary>
     /// Backing field for PerScreened Dialogue Logs.
     /// </summary>
@@ -69,7 +27,7 @@ internal class DialogueManager
     /// Load the PerScreened Dialogue log.
     /// </summary>
     /// <param name="multiplayerID">The player's unique ID.</param>
-    public static void Load(long multiplayerID)
+    internal static void Load(long multiplayerID)
     {
         ModEntry.ModMonitor.DebugLog($"Loading dialogue log for {multiplayerID:X8}");
         InternalDialogueLog.Value = DialogueLog.Load(multiplayerID);
@@ -80,17 +38,41 @@ internal class DialogueManager
     /// Else loads from the usual file.
     /// </summary>
     /// <param name="multiplayerID">The player's unique ID.</param>
-    public static void LoadTemp(long multiplayerID)
+    internal static void LoadTemp()
     {
-        ModEntry.ModMonitor.DebugLog($"Loading temp dialogue log for {multiplayerID:X8}");
-        InternalDialogueLog.Value = DialogueLog.LoadTempIfAvailable(multiplayerID);
+        if (Context.IsMainPlayer && Context.IsSplitScreen)
+        { // also will need to lad for farmhands.
+            foreach (IMultiplayerPeer? multi in ModEntry.MultiplayerHelper.GetConnectedPlayers())
+            {
+                long multiplayerID = multi.PlayerID;
+                int? screenid = multi.ScreenID;
+                if (screenid is not null && DialogueLog.LoadTempIfAvailable(multiplayerID) is DialogueLog log)
+                {
+                    ModEntry.ModMonitor.Log($"Loading temp dialogue log for {multiplayerID:X8}");
+                    InternalDialogueLog.SetValueForScreen(screenid.Value, log);
+                }
+            }
+        }
+        else
+        {
+            long multiplayerID = Game1.player.UniqueMultiplayerID;
+            if (DialogueLog.LoadTempIfAvailable(multiplayerID) is DialogueLog log)
+            {
+                ModEntry.ModMonitor.Log($"Loading temp dialogue log for {multiplayerID:X8}");
+                InternalDialogueLog.Value = log;
+            }
+            else
+            {
+                ModEntry.ModMonitor.Log($"No temp dialogue log found for {multiplayerID:X8}");
+            }
+        }
     }
 
     /// <summary>
     /// Save a dialoguelog for a specific player.
     /// </summary>
     /// <exception cref="SaveNotLoadedError">Save is not loaded.</exception>
-    public static void Save()
+    internal static void Save()
     {
         if (PerscreenedDialogueLog is null)
         {
@@ -103,13 +85,12 @@ internal class DialogueManager
     /// Save temporary Dialogue Log file.
     /// </summary>
     /// <exception cref="SaveNotLoadedError">Save not loaded.</exception>
-    public static void SaveTemp()
+    internal static void SaveTemp()
     {
-        if (PerscreenedDialogueLog is null)
+        foreach ((int _, DialogueLog log) in InternalDialogueLog.GetActiveValues())
         {
-            throw new SaveNotLoadedError();
+            log.SaveTemp();
         }
-        PerscreenedDialogueLog.SaveTemp();
     }
 
     /// <summary>
@@ -117,7 +98,7 @@ internal class DialogueManager
     /// </summary>
     /// <param name="command">Name of console command.</param>
     /// <param name="args">Arguments for the console coomand.</param>
-    public static void ConsoleSpecialOrderDialogue(string command, string[] args)
+    internal static void ConsoleSpecialOrderDialogue(string command, string[] args)
     {
         if (!Context.IsWorldReady)
         {
@@ -191,7 +172,7 @@ internal class DialogueManager
     /// <param name="characterName">Name of character.</param>
     /// <returns>True if key has been said, false otherwise.</returns>
     /// <exception cref="SaveNotLoadedError">Save is not loaded.</exception>
-    public static bool HasSeenDialogue(string key, string characterName)
+    internal static bool HasSeenDialogue(string key, string characterName)
     {
         if (!Context.IsWorldReady)
         {
@@ -207,7 +188,7 @@ internal class DialogueManager
     /// <param name="characterName">Character.</param>
     /// <returns>True if added succesfully, false otherwise.</returns>
     /// <exception cref="SaveNotLoadedError">Save is not loaded.</exception>
-    public static bool TryAddSeenDialogue(string key, string characterName)
+    internal static bool TryAddSeenDialogue(string key, string characterName)
     {
         if (!Context.IsWorldReady)
         {
@@ -223,7 +204,7 @@ internal class DialogueManager
     /// <param name="characterName">Name of the NPC to check.</param>
     /// <returns>True if successful, false otherwise.</returns>
     /// <exception cref="SaveNotLoadedError">Save is not loaded.</exception>
-    public static bool TryRemoveSeenDialogue(string key, string characterName)
+    internal static bool TryRemoveSeenDialogue(string key, string characterName)
     {
         if (!Context.IsWorldReady)
         {
@@ -236,7 +217,7 @@ internal class DialogueManager
     /// Clear any memory of RepeatOrder keys when needed.
     /// </summary>
     /// <param name="removedKeys">List of keys to remove.</param>
-    public static void ClearRepeated(List<string> removedKeys)
+    internal static void ClearRepeated(List<string> removedKeys)
     {
         if (PerscreenedDialogueLog is null)
         {
@@ -250,10 +231,30 @@ internal class DialogueManager
                 {
                     if(dialogueKey.Contains(key))
                     {
-                        ModEntry.ModMonitor.DebugLog($"Removing key {key}");
+                        ModEntry.ModMonitor.DebugOnlyLog($"Removing key {dialogueKey}");
                         PerscreenedDialogueLog.SeenDialogues.Remove(dialogueKey);
                     }
                 }
+            }
+        }
+    }
+
+    /// <summary>
+    /// Clears dialogue related to a special order if failed.
+    /// </summary>
+    /// <param name="specialOrderKey">The key for the order failed.</param>
+    internal static void ClearOnFail(string specialOrderKey)
+    {
+        if (PerscreenedDialogueLog is null)
+        {
+            return;
+        }
+        foreach (string dialogueKey in PerscreenedDialogueLog.SeenDialogues.Keys)
+        {
+            if (dialogueKey.Contains(specialOrderKey))
+            {
+                ModEntry.ModMonitor.DebugOnlyLog($"Removing key {dialogueKey}");
+                PerscreenedDialogueLog.SeenDialogues.Remove(dialogueKey);
             }
         }
     }
@@ -267,7 +268,7 @@ internal class DialogueManager
     /// <param name="__1">NoPreface in vanilla code - to preface with season or not.</param>
     /// <exception cref="UnexpectedEnumValueException{SpecialOrder.QuestState}">Recieved unexpected enum value.</exception>
     [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Convention used by Harmony")]
-    public static void PostfixCheckDialogue(ref bool __result, ref NPC __instance, int __0, bool __1)
+    internal static void PostfixCheckDialogue(ref bool __result, ref NPC __instance, int __0, bool __1)
     {
         try
         {
@@ -342,31 +343,6 @@ internal class DialogueManager
     }
 
     /// <summary>
-    /// Clears the Delayed Dialogue queue. Call at end of day.
-    /// </summary>
-    public static void ClearDelayedDialogue() => DelayedDialogues.Value.Clear();
-
-    /// <summary>
-    /// Push any available dialogues to the NPC's dialogue stacks.
-    /// </summary>
-    public static void PushPossibleDelayedDialogues()
-    {
-        while (DelayedDialogues.Value.TryPeek(out DelayedDialogue result))
-        {
-            if (result.PushIfPastTime(Game1.timeOfDay))
-            {
-                // Successfully pushed, remove from queue.
-                _ = DelayedDialogues.Value.Dequeue();
-            }
-            else
-            {
-                // Everyone else should be behind me in time, so skip to next timeslot.
-                return;
-            }
-        }
-    }
-
-    /// <summary>
     /// Checks to see if a dialoguekey has been said already, and if not said, pushes the dialogue
     /// onto the dialogue stack.
     /// </summary>
@@ -380,14 +356,7 @@ internal class DialogueManager
             return false;
         }
 
-        // Empty NPC's current dialogue stack and keep it in a queue for now.
-        while (npc.CurrentDialogue.TryPop(out Dialogue? result))
-        {
-            DelayedDialogues.Value.Enqueue(new DelayedDialogue(
-                time: Game1.timeOfDay + 100, // delay by one hour.
-                npc: npc,
-                dialogue: result));
-        }
+        QueuedDialogueManager.PushCurrentDialogueToQueue(npc);
 
         // Push my dialogue onto their stack.
         npc.CurrentDialogue.Push(new Dialogue(npc.Dialogue[dialogueKey], npc) { removeOnNextMove = true });

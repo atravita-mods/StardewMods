@@ -65,25 +65,13 @@ internal static class GIScheduler
     /// Gets island groups. Will automatically load if null.
     /// </summary>
     private static Dictionary<string, HashSet<NPC>> IslandGroups
-    {
-        get
-        {
-            islandGroups ??= AssetLoader.GetCharacterGroup(SpecialGroupType.Groups);
-            return islandGroups;
-        }
-    }
+        => islandGroups ??= AssetLoader.GetCharacterGroup(SpecialGroupType.Groups);
 
     /// <summary>
     /// Gets explorer groups. Will automatically load if null.
     /// </summary>
     private static Dictionary<string, HashSet<NPC>> ExplorerGroups
-    {
-        get
-        {
-            explorerGroups ??= AssetLoader.GetCharacterGroup(SpecialGroupType.Explorers);
-            return explorerGroups;
-        }
-    }
+        => explorerGroups ??= AssetLoader.GetCharacterGroup(SpecialGroupType.Explorers);
 
     /// <summary>
     /// Clears the cached values for this class.

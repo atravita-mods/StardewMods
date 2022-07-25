@@ -29,6 +29,9 @@
 2. If you pause time, NPCs will tend to get stuck at schedule points. Unfortunately for Ginger Island, this usually ends with NPCs trapped in the changing room. If you go to Ginger Island and see no one there, try unpausing time. Or just leave them trapped in the changing room....(or I guess, disable changing)
 3. The debugging console commands basically only work for the host in multiplayer.
 
+### Version 1.1.6
+* Bugfixes.
+
 ### Version 1.1.5
 
 * Update to SMAPI 3.15.0

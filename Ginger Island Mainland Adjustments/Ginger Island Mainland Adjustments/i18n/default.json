@@ -151,7 +151,7 @@
 
   "config.VillagerExclusionOverride.Yes": "Yes",
   "config.VillagerExclusionOverride.No": "No",
-  "config.VillagerExclusionOverride.IfMarried": "IfMarried",
+  "config.VillagerExclusionOverride.IfMarried": "If Married",
 
   //MidDayScheduleEditor messages
   "middayScheduleEditor.npc-found-for-adjustment": "NPC {{name}} with Island Schedule, will set up for schedule alternation",

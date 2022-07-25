@@ -233,7 +233,7 @@ internal static class ScheduleUtilities
 
             try
             {
-                npc.parseMasterSchedule(rawData);
+                schedule = npc.parseMasterSchedule(rawData);
             }
             catch (Exception ex)
             {

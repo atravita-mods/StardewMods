@@ -72,7 +72,7 @@ internal static class FixBirthdayGifts
                 new CodeInstruction(OpCodes.Pop),
             });
 
-            helper.Print();
+            // helper.Print();
             return helper.Render();
         }
         catch (Exception ex)

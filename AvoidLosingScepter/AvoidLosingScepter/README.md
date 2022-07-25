@@ -21,6 +21,8 @@ Simply remove this mod from your Mods folder.
 * Works in single player, multiplayer, and split-screen mode. Should be fine if installed for one player only in multiplayer.
 * Should be compatible with most other mods. (Special handling for [Moon Misadventures](https://www.nexusmods.com/stardewvalley/mods/10612), which has its own way of preventing you from losing certain things on death.)
 
+For other mod authors: if you would like this mod to forbid the loss of an item, just attach the context tag `atravita_no_loss_on_death` on that item.
+
 ## See also
 
 [Changelog](docs/Changelog.md)

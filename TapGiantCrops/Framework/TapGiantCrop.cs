@@ -1,4 +1,5 @@
-﻿using AtraShared.ConstantsAndEnums;
+﻿using AtraBase.Toolkit.Extensions;
+using AtraShared.ConstantsAndEnums;
 using AtraShared.Utils.Shims;
 using Microsoft.Toolkit.Diagnostics;
 using Microsoft.Xna.Framework;
@@ -105,7 +106,7 @@ public class TapGiantCrop : ITapGiantCropsAPI
                 Vector2 offset = tile;
                 offset.Y -= crop.height.Value - 1;
                 offset.X -= crop.width.Value / 2;
-                if (crop.tile.Value == offset)
+                if (crop.tile.Value.X.WithinMargin(offset.X) && crop.tile.Value.Y.WithinMargin(offset.Y))
                 {
                     return crop;
                 }

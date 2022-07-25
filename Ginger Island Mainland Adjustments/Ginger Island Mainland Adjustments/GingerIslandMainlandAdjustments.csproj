@@ -10,7 +10,7 @@
     <EnableHarmony>true</EnableHarmony>
     <ImplicitUsings>enable</ImplicitUsings>
     <Version>1.1.5</Version>
-    <BaseManifest>..\..\base_dependencies.json</BaseManifest>
+    <BaseManifest>..\..\cp_dependencies.json</BaseManifest>
     <UpdateKeys> Nexus:10004@CodePack, ModDrop:1098263@CodePack</UpdateKeys>
   </PropertyGroup>
 

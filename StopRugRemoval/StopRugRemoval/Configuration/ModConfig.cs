@@ -57,7 +57,7 @@ internal sealed class ModConfig
     /// </summary>
     public bool GoldenCoconutsOffIsland { get; set; } = false;
 
-    private float phoneSpeedUpFactor = 2.0f;
+    private float phoneSpeedUpFactor = 1.0f;
 
     /// <summary>
     /// Gets or sets a value indicating how much to speed up the phone calls by.

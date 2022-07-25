@@ -9,7 +9,7 @@
     <Description>Prevents the Return Scepter from being lost on death.</Description>
     <Version>0.2.0</Version>
     <UpdateKeys>Nexus:11856</UpdateKeys>
-    <BaseManifest>..\base_dependencies.json</BaseManifest>
+    <BaseManifest>..\..\base_dependencies.json</BaseManifest>
   </PropertyGroup>
 
   <ItemGroup>

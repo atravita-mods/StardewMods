@@ -74,9 +74,20 @@ public interface ISpaceCoreAPI
 /// </summary>
 public interface ICompleteSpaceCoreAPI : ISpaceCoreAPI
 {
-    /// Must have [XmlType("Mods_SOMETHINGHERE")] attribute (required to start with "Mods_")
+    /// <summary>
+    /// Registers a type for spacecore to serialize.
+    /// </summary>
+    /// <param name="type">Type to serialize.</param>
+    /// <remarks>Must have [XmlType("Mods_SOMETHINGHERE")] attribute (required to start with "Mods_").</remarks>
     void RegisterSerializerType(Type type);
 
+    /// <summary>
+    /// Registers a fake custom property with SpaceCore.
+    /// </summary>
+    /// <param name="declaringType">The type to attach the property too.</param>
+    /// <param name="name">name of the parameter.</param>
+    /// <param name="propType">type of the fake property.</param>
+    /// <param name="getter">methodinfo for the getter.</param>
+    /// <param name="setter">methodinfo for the setter.</param>
     void RegisterCustomProperty(Type declaringType, string name, Type propType, MethodInfo getter, MethodInfo setter);
-
 }

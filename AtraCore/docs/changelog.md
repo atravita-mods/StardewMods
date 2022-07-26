@@ -1,6 +1,8 @@
 ﻿Changelog
 ============
 
-#### Version 0.1.0
+#### Version 0.1.1
+* Bump version number of dependencies.
 
-Initial upload.
+#### Version 0.1.0
+* Initial upload.

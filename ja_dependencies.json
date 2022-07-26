@@ -8,7 +8,8 @@
       "UniqueID": "spacechase0.SpaceCore"
     },
     {
-      "UniqueID": "atravita.AtraCore"
+      "UniqueID": "atravita.AtraCore",
+      "MinimumVersion": "0.1.1"
     }
   ]
 }

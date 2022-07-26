@@ -484,6 +484,10 @@ public sealed class GMCMHelper : IntegrationHelper
                     {
                         interval ??= (float)intervalAttr.Interval;
                     }
+                    else if (attribute is GMCMFormatAttribute formatAttribute)
+                    {
+                        formatValue ??= (float val) => string.Format(formatAttribute.FormatString, val);
+                    }
                 }
             }
 
@@ -584,6 +588,10 @@ public sealed class GMCMHelper : IntegrationHelper
                     else if (attribute is GMCMIntervalAttribute intervalAttr)
                     {
                         interval ??= (int)intervalAttr.Interval;
+                    }
+                    else if (attribute is GMCMFormatAttribute formatAttribute)
+                    {
+                        formatValue ??= (int val) => string.Format(formatAttribute.FormatString, val);
                     }
                 }
             }

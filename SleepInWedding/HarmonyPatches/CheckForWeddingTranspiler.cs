@@ -15,9 +15,30 @@ namespace SleepInWedding.HarmonyPatches;
 /// </summary>
 internal static class CheckForWeddingTranspiler
 {
-
-    [MethodImpl(TKConstants.Hot)]
     private static int GetWeddingTime() => ModEntry.Config.WeddingTime;
+
+    private static Event? PrepareSpouseIfNecessary(Event? @event)
+    {
+        if (@event is null)
+        {
+            return null;
+        }
+        else if (Game1.player.spouse is not null && Game1.player.isEngaged() && Game1.weddingsToday.Contains(Game1.player.UniqueMultiplayerID))
+        {
+            Friendship friendship = Game1.player.friendshipData[Game1.player.spouse];
+            if (friendship.CountdownToWedding <= 1)
+            {
+                @event.onEventFinished = (Action)Delegate.Combine(@event.onEventFinished, () =>
+                {
+                    ModEntry.ModMonitor.LogIfVerbose(() => $"Preparing spouse {Game1.player.spouse}!");
+                    friendship.Status = FriendshipStatus.Married;
+                    friendship.WeddingDate = new WorldDate(Game1.Date);
+                    Game1.prepareSpouseForWedding(Game1.player);
+                });
+            }
+        }
+        return @event;
+    }
 
     [HarmonyPatch(nameof(GameLocation.checkForEvents))]
     [SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1116:Split parameters should start on line after declaration", Justification = "Reviewed.")]
@@ -49,9 +70,20 @@ internal static class CheckForWeddingTranspiler
                 new(OpCodes.Ldsfld, typeof(Game1).GetCachedProperty(nameof(Game1.currentLocation), ReflectionCache.FlagTypes.StaticFlags).GetGetMethod()),
                 new(OpCodes.Isinst, typeof(Town)),
                 new(OpCodes.Brfalse, bypassWedding),
-            }, withLabels: labelsToMove);
+            }, withLabels: labelsToMove)
+            .FindNext(new CodeInstructionWrapper[]
+            {
+                new(OpCodes.Ldarg_0),
+                new(OpCodes.Call, typeof(Game1).GetCachedMethod(nameof(Game1.getAvailableWeddingEvent), ReflectionCache.FlagTypes.StaticFlags)),
+                new(OpCodes.Stfld),
+            })
+            .Advance(2)
+            .Insert(new CodeInstruction[]
+            {
+                new(OpCodes.Call, typeof(CheckForWeddingTranspiler).GetCachedMethod(nameof(PrepareSpouseIfNecessary), ReflectionCache.FlagTypes.StaticFlags)),
+            });
 
-            helper.Print();
+            // helper.Print();
             return helper.Render();
         }
         catch (Exception ex)

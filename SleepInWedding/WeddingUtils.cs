@@ -10,7 +10,7 @@ internal static class WeddingUtils
     /// </summary>
     /// <param name="farmer">farmer.</param>
     /// <returns>True if they're scheduled for a wedding today, false otherwise.</returns>
-    internal static bool HasWeddingToday(Farmer farmer)
+    internal static bool HasWeddingToday(this Farmer farmer)
         => HasWeddingToday(farmer.UniqueMultiplayerID);
 
     /// <summary>

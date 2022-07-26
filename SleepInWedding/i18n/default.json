@@ -1,4 +1,5 @@
 ﻿{
   "WeddingTime.title": "Wedding Time",
-  "WeddingTime.description": "Fill this in later."
+  "WeddingTime.description": "Lets you get married slightly later than 6AM.",
+  "WeddingMessage": "You're getting married today at {{WeddingTime}}!"
 }

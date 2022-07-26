@@ -12,6 +12,8 @@ namespace SleepInWedding;
 [HarmonyPatch(typeof(GameLocation))]
 internal sealed class ModEntry : Mod
 {
+    private bool checkForWedding = true;
+
     /// <summary>
     /// Gets the config for this mod.
     /// </summary>
@@ -32,8 +34,29 @@ internal sealed class ModEntry : Mod
 
         helper.Events.GameLoop.GameLaunched += this.OnGameLaunched;
         helper.Events.GameLoop.SaveLoaded += this.OnSaveLoad;
+        helper.Events.GameLoop.TimeChanged += this.OnTimeChanged;
+        helper.Events.GameLoop.DayEnding += this.OnDayEnd;
 
         this.ApplyPatches(new Harmony(this.ModManifest.UniqueID));
+    }
+
+    private void OnDayEnd(object? sender, DayEndingEventArgs e)
+        => this.checkForWedding = true;
+
+    private void OnTimeChanged(object? sender, TimeChangedEventArgs e)
+    {
+        if (e.NewTime == 610 && Game1.weddingsToday.Count > 0)
+        {
+            if (Game1.player.HasWeddingToday())
+            {
+                Game1.addHUDMessage(new HUDMessage(I18n.WeddingMessage(Config.WeddingTime)));
+            }
+        }
+        else if (!this.checkForWedding && Game1.weddingsToday.Count > 0 && Game1.timeOfDay > Config.WeddingTime)
+        {
+            Game1.player.currentLocation.checkForEvents();
+            this.checkForWedding = false;
+        }
     }
 
     private void OnGameLaunched(object? sender, GameLaunchedEventArgs e)

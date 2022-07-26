@@ -263,10 +263,7 @@ END:
     private void PlaceFruit(GameLocation location, Vector2 tile)
     {
         int fruitToPlace = Utility.GetRandom(this.TreeFruit.Count > 0 && this.Random.NextDouble() < (this.config.TreeFruitChance / 100f) ? this.TreeFruit : this.BASE_FRUIT, this.Random);
-        location.setObject(tile, new SObject(fruitToPlace, 1)
-        {
-            IsSpawnedObject = true,
-        });
+        location.Objects[tile] = new SObject(fruitToPlace, 1) { IsSpawnedObject = true };
         this.Monitor.DebugOnlyLog($"Spawning item {fruitToPlace} at {location.Name}:{tile.X},{tile.Y}", LogLevel.Debug);
     }
 

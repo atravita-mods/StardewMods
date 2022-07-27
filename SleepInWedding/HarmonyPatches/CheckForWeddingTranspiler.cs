@@ -11,6 +11,7 @@ namespace SleepInWedding.HarmonyPatches;
 /// <summary>
 /// Adds an additional check for the should-a-wedding-happen? check.
 /// </summary>
+[HarmonyPatch(typeof(GameLocation))]
 internal static class CheckForWeddingTranspiler
 {
     private static int GetWeddingTime() => ModEntry.Config.WeddingTime;
@@ -48,7 +49,7 @@ internal static class CheckForWeddingTranspiler
             helper.FindNext(new CodeInstructionWrapper[]
             {
                 new(OpCodes.Ldsfld, typeof(Game1).GetCachedField(nameof(Game1.weddingsToday), ReflectionCache.FlagTypes.StaticFlags)),
-                new(OpCodes.Callvirt, typeof(List<int>).GetCachedProperty(nameof(List<int>.Count), ReflectionCache.FlagTypes.InstanceFlags).GetGetMethod()),
+                new(OpCodes.Callvirt, typeof(List<long>).GetCachedProperty(nameof(List<long>.Count), ReflectionCache.FlagTypes.InstanceFlags).GetGetMethod()),
                 new(OpCodes.Ldc_I4_0),
                 new(SpecialCodeInstructionCases.Wildcard, (instr) => instr.opcode == OpCodes.Ble || instr.opcode == OpCodes.Ble_S),
             })
@@ -62,10 +63,10 @@ internal static class CheckForWeddingTranspiler
             .Pop()
             .Insert(new CodeInstruction[]
             { // if (Config.WeddingTime > Game1.timeOfDay) && (Game1.currentLocation is not Town), skip wedding for now.
-                new(OpCodes.Call, typeof(ModEntry).GetCachedMethod(nameof(GetWeddingTime), ReflectionCache.FlagTypes.StaticFlags)),
+                new(OpCodes.Call, typeof(CheckForWeddingTranspiler).GetCachedMethod(nameof(GetWeddingTime), ReflectionCache.FlagTypes.StaticFlags)),
                 new(OpCodes.Ldsfld, typeof(Game1).GetCachedField(nameof(Game1.timeOfDay), ReflectionCache.FlagTypes.StaticFlags)),
                 new(OpCodes.Ble, skip),
-                new(OpCodes.Ldsfld, typeof(Game1).GetCachedProperty(nameof(Game1.currentLocation), ReflectionCache.FlagTypes.StaticFlags).GetGetMethod()),
+                new(OpCodes.Call, typeof(Game1).GetCachedProperty(nameof(Game1.currentLocation), ReflectionCache.FlagTypes.StaticFlags).GetGetMethod()),
                 new(OpCodes.Isinst, typeof(Town)),
                 new(OpCodes.Brfalse, bypassWedding),
             }, withLabels: labelsToMove)

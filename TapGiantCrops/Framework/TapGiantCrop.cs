@@ -62,19 +62,12 @@ public class TapGiantCrop : ITapGiantCropsAPI
     /// <returns>tuple of the item and how long it should take.</returns>
     public (SObject obj, int days)? GetTapperProduct(GiantCrop giantCrop, SObject tapper)
     {
-        if (DynamicGameAssetsShims.IsDGAGiantCrop?.Invoke(giantCrop) == true)
+        if (DynamicGameAssetsShims.IsDGAGiantCrop?.Invoke(giantCrop) == true || giantCrop.parentSheetIndex?.Value is null)
         {
             return null;
         }
-        int cropindex = giantCrop.which.Value switch
-        {
-            0 => 190,
-            1 => 254,
-            2 => 276,
-            _ => giantCrop.which.Value,
-        };
 
-        SObject crop = new(cropindex, 999);
+        SObject crop = new(giantCrop.parentSheetIndex.Value, 999);
         this.keg.heldObject.Value = null;
         this.keg.performObjectDropInAction(crop, false, Game1.player);
         SObject? heldobj = this.keg.heldObject.Value;

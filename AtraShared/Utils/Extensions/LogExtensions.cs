@@ -16,6 +16,7 @@ public static class LogExtensions
     /// <param name="monitor">SMAPI's logger.</param>
     /// <param name="message">Message to log.</param>
     /// <param name="level">Level to log at.</param>
+    [DebuggerHidden]
     public static void DebugLog(this IMonitor monitor, string message, LogLevel level = LogLevel.Debug) =>
 #if DEBUG
         monitor.Log(message, level);
@@ -29,6 +30,7 @@ public static class LogExtensions
     /// <param name="monitor">SMAPI's logger.</param>
     /// <param name="message">Message to log.</param>
     /// <param name="level">Level to log at.</param>
+    [DebuggerHidden]
     [Conditional("DEBUG")]
     public static void DebugOnlyLog(this IMonitor monitor, string message, LogLevel level = LogLevel.Debug)
         => monitor.Log(message, level);

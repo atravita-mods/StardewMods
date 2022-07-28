@@ -243,6 +243,9 @@ internal sealed class ModEntry : Mod
 
     private void FixIds()
     {
+        // reset the ID, ask for it again from JA?
+        giantCropFertilizerID = -1;
+
         int newID = GiantCropFertilizerID;
         if (newID == -1 || !Context.IsMainPlayer)
         {

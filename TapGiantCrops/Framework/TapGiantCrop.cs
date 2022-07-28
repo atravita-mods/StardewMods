@@ -59,6 +59,7 @@ public class TapGiantCrop : ITapGiantCropsAPI
     /// <param name="giantCrop">The giant crop.</param>
     /// <param name="tapper">The tapper in question.</param>
     /// <returns>tuple of the item and how long it should take.</returns>
+    [Pure]
     public (SObject obj, int days)? GetTapperProduct(GiantCrop giantCrop, SObject tapper)
     {
         if (DynamicGameAssetsShims.IsDGAGiantCrop?.Invoke(giantCrop) == true || giantCrop.parentSheetIndex?.Value is null)

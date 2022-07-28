@@ -149,7 +149,6 @@ internal sealed class ModEntry : Mod
         {
             // handle patches from annotations.
             harmony.PatchAll();
-            PhoneHandler.ApplyPatches(harmony);
             if (Globals.Config.DebugMode)
             {
                 ScheduleDebugPatches.ApplyPatches(harmony);

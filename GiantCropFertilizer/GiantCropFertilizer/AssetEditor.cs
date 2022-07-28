@@ -28,6 +28,7 @@ internal static class AssetEditor
         if (editor.Data.TryGetValue(ModEntry.GiantCropFertilizerID, out string? val))
         {
             editor.Data[ModEntry.GiantCropFertilizerID] = val.Replace("Basic -20", "Basic -19");
+            ModEntry.ModMonitor.Log($"Successfully edited {ModEntry.GiantCropFertilizerID}");
         }
         else
         {

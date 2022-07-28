@@ -1,7 +1,7 @@
 {
   "Name": "Frame Rate Logger",
   "Author": "atravita",
-  "Version": "0.1.0",
+  "Version": "0.1.0-Debug",
   "Description": "mumble gripe annoyed",
   "UniqueID": "atravita.FrameRateLogger",
   "EntryDll": "FrameRateLogger.dll",

@@ -14,36 +14,9 @@ namespace GingerIslandMainlandAdjustments.Niceties;
 /// <summary>
 /// Class that handles patches against GameLocation...to handle the phone.
 /// </summary>
+[HarmonyPatch]
 internal static class PhoneHandler
 {
-    /// <summary>
-    /// Applies patches against Phone Traveling Cart.
-    /// </summary>
-    /// <param name="harmony">Harmony instance.</param>
-    internal static void ApplyPatches(Harmony harmony)
-    {
-        if (Globals.ModRegistry.IsLoaded("Becks723.PhoneTravelingCart"))
-        {
-            var type = AccessTools.TypeByName("PhoneTravelingCart.Framework.Patchers.Game1Patcher");
-            var method = AccessTools.Method(type, "Game1_ShowTelephoneMenu_Prefix");
-            if (method is null)
-            {
-                Globals.ModMonitor.Log($"Patching Phone Traveling Cart for compat seems to have failed, this mod's telephone calls may not work", LogLevel.Error);
-                return;
-            }
-            try
-            {
-                harmony.Patch(
-                    original: method,
-                    transpiler: new HarmonyMethod(typeof(PhoneHandler), nameof(Transpiler)));
-            }
-            catch (Exception ex)
-            {
-                Globals.ModMonitor.Log(string.Format(ErrorMessageConsts.HARMONYCRASH, ex), LogLevel.Error);
-            }
-        }
-    }
-
     /// <summary>
     /// Injects Pam into the phone menu if necessary.
     /// </summary>

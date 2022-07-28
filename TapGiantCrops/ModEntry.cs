@@ -68,7 +68,7 @@ internal sealed class ModEntry : Mod
                     Vector2 offset = crop.tile.Value;
                     offset.X += crop.width.Value / 2;
                     offset.Y += crop.height.Value - 1;
-                    if (location.objects.TryGetValue(offset, out var tapper) && tapper.Name.Contains("Tapper")
+                    if (location.objects.TryGetValue(offset, out SObject? tapper) && tapper.Name.Contains("Tapper")
                         && tapper.heldObject is not null && tapper.heldObject.Value is null)
                     {
                         var output = Api.GetTapperProduct(crop, tapper);

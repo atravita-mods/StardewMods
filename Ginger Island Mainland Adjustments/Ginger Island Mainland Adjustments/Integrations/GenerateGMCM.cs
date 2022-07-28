@@ -126,6 +126,8 @@ internal static class GenerateGMCM
                 () => Globals.Config.ScheduleStrictness.TryGetValue(k, out ScheduleStrictness val) ? val : ScheduleStrictness.Default,
                 (value) => Globals.Config.ScheduleStrictness[k] = value);
         }
+
+        Globals.Helper.AsyncWriteConfig(Globals.ModMonitor, Globals.Config);
     }
 
     private static string TwoPlaceFixedPoint(float f) => $"{f:f2}";

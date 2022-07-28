@@ -390,6 +390,7 @@ internal sealed class ModEntry : Mod
                 storedIDs.OrganicFertilizerID = OrganicFertilizerID;
             }
             this.Helper.Data.WriteSaveData(SavedIDKey, storedIDs);
+            this.Monitor.Log("Writing IDs into save data");
         }
         this.Helper.Events.GameLoop.Saving -= this.OnSaving;
     }

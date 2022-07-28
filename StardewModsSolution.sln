@@ -91,6 +91,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TapGiantCropsAutomateBridge
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SleepInWedding", "SleepInWedding\SleepInWedding.csproj", "{804B0BC3-6A50-485A-B648-52AC96077F0E}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ReviveDeadCrops", "ReviveDeadCrops\ReviveDeadCrops.csproj", "{D475C23C-8C0F-495A-8035-A73126B90783}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -233,6 +235,10 @@ Global
 		{804B0BC3-6A50-485A-B648-52AC96077F0E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{804B0BC3-6A50-485A-B648-52AC96077F0E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{804B0BC3-6A50-485A-B648-52AC96077F0E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D475C23C-8C0F-495A-8035-A73126B90783}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D475C23C-8C0F-495A-8035-A73126B90783}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D475C23C-8C0F-495A-8035-A73126B90783}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D475C23C-8C0F-495A-8035-A73126B90783}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

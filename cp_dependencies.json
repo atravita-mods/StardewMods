@@ -1,10 +1,11 @@
 {
   "Dependencies": [
     {
-      "UniqueID": "Pathoschild.ContentPatcher",
+      "UniqueID": "Pathoschild.ContentPatcher"
     },
     {
-      "UniqueID": "atravita.AtraCore"
+      "UniqueID": "atravita.AtraCore",
+      "MinimumVersion": "0.1.2"
     }
   ]
 }

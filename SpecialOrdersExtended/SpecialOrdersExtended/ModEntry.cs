@@ -210,6 +210,12 @@ internal sealed class ModEntry : Mod
     {
         this.Monitor.DebugOnlyLog("Event Saving raised");
 
+        if (!SpecialOrder.IsSpecialOrdersBoardUnlocked())
+        {
+            this.Monitor.Log($"Board is not open, skipping saving");
+            return;
+        }
+
         DialogueManager.Save(); // Save dialogue
 
         if (Context.IsSplitScreen && Context.ScreenId != 0)

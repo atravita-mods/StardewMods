@@ -2,16 +2,25 @@
 using AtraShared.Menuing;
 using AtraShared.Utils.Extensions;
 using HarmonyLib;
+using Microsoft.Xna.Framework;
 using ReviveDeadCrops.Framework;
 using StardewModdingAPI.Events;
+using StardewValley.Objects;
+using StardewValley.TerrainFeatures;
 
 namespace ReviveDeadCrops;
 
 /// <inheritdoc />
 internal sealed class ModEntry : Mod
 {
+    /// <summary>
+    /// Gets the logging instance for this mod.
+    /// </summary>
     internal static IMonitor ModMonitor { get; private set; } = null!;
 
+    /// <summary>
+    /// Gets the API for this mod.
+    /// </summary>
     internal static ReviveDeadCropsApi Api { get; private set; } = new();
 
     /// <inheritdoc />
@@ -19,7 +28,38 @@ internal sealed class ModEntry : Mod
     {
         ModMonitor = this.Monitor;
         helper.Events.Input.ButtonPressed += this.OnButtonPressed;
+        helper.Events.GameLoop.DayEnding += this.OnDayEnd;
         this.ApplyPatches(new Harmony(this.ModManifest.UniqueID));
+    }
+
+    // we need to make sure to slot in before Solid Foundations removes its buildings.
+    [EventPriority(EventPriority.High + 20)]
+    private void OnDayEnd(object? sender, DayEndingEventArgs e)
+    {
+        Utility.ForAllLocations(
+            (location) =>
+            {
+                foreach ((Vector2 _, TerrainFeature terrain) in location.terrainFeatures.Pairs)
+                {
+                    if (terrain is HoeDirt dirt && dirt.modData?.GetBool(ReviveDeadCropsApi.REVIVED_PLANT_MARKER) == true)
+                    {
+                        this.Monitor.DebugOnlyLog($"Found dirt with marker at {dirt.currentTileLocation} with crop {dirt.crop?.indexOfHarvest ?? -1}");
+                        dirt.modData.SetBool(ReviveDeadCropsApi.REVIVED_PLANT_MARKER, false);
+                        dirt.crop?.Kill();
+                    }
+                }
+
+                foreach ((Vector2 _, SObject obj) in location.Objects.Pairs)
+                {
+                    if (obj is IndoorPot pot && pot.hoeDirt.Value is HoeDirt dirt
+                        && dirt.modData?.GetBool(ReviveDeadCropsApi.REVIVED_PLANT_MARKER) == true)
+                    {
+                        this.Monitor.DebugOnlyLog($"Found dirt with marker at {dirt.currentTileLocation} with crop {dirt.crop?.indexOfHarvest ?? -1}");
+                        dirt.modData.SetBool(ReviveDeadCropsApi.REVIVED_PLANT_MARKER, false);
+                        dirt.crop?.Kill();
+                    }
+                }
+            });
     }
 
     /// <inheritdoc />
@@ -52,7 +92,6 @@ internal sealed class ModEntry : Mod
         if (Game1.player.ActiveObject is SObject obj && Api.TryApplyDust(Game1.currentLocation, e.Cursor.GrabTile, obj))
         {
             this.Helper.Input.Suppress(e.Button);
-            Api.AnimateRevival(Game1.currentLocation, e.Cursor.GrabTile);
             Game1.player.reduceActiveItemByOne();
         }
     }

@@ -25,7 +25,7 @@ internal static class AssetEditor
     private static void EditAsset(IAssetData asset)
     {
         IAssetDataForDictionary<int, string>? editor = asset.AsDictionary<int, string>();
-        if (editor.Data.TryGetValue(ModEntry.GiantCropFertilizerID, out string? val))
+        if (ModEntry.GiantCropFertilizerID != -1 && editor.Data.TryGetValue(ModEntry.GiantCropFertilizerID, out string? val))
         {
             editor.Data[ModEntry.GiantCropFertilizerID] = val.Replace("Basic -20", "Basic -19");
             ModEntry.ModMonitor.Log($"Successfully edited {ModEntry.GiantCropFertilizerID}");

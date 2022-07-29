@@ -68,13 +68,9 @@ internal sealed class ModEntry : Mod
         I18n.Init(helper.Translation);
         ModMonitor = this.Monitor;
 
-        helper.Events.Content.AssetRequested += this.OnAssetRequested;
         Config = AtraUtils.GetConfigOrDefault<ModConfig>(helper, this.Monitor);
 
         helper.Events.GameLoop.GameLaunched += this.OnGameLaunched;
-        helper.Events.GameLoop.SaveLoaded += this.OnSaveLoaded;
-
-        helper.Events.GameLoop.ReturnedToTitle += this.OnReturnedToTitle;
     }
 
     private void OnAssetRequested(object? sender, AssetRequestedEventArgs e)
@@ -159,6 +155,11 @@ internal sealed class ModEntry : Mod
             }
         }
 
+        // Wait to hook events until after we know JA can handle our items.
+        this.Helper.Events.Content.AssetRequested += this.OnAssetRequested;
+        this.Helper.Events.GameLoop.SaveLoaded += this.OnSaveLoaded;
+        this.Helper.Events.GameLoop.ReturnedToTitle += this.OnReturnedToTitle;
+
         { // GMCM integration
             GMCMHelper gmcmHelper = new(this.Monitor, this.Helper.Translation, this.Helper.ModRegistry, this.ModManifest);
             if (gmcmHelper.TryGetAPI())
@@ -234,7 +235,7 @@ internal sealed class ModEntry : Mod
      * *******/
 
     // Not quite sure why, but JA drops all IDs when returning to title. We're doing that too.
-    [EventPriority(EventPriority.High)]
+    [EventPriority(EventPriority.High + 100)]
     private void OnReturnedToTitle(object? sender, ReturnedToTitleEventArgs e)
         => giantCropFertilizerID = -1;
 

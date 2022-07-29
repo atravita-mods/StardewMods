@@ -1,5 +1,6 @@
 ﻿using AtraBase.Toolkit.Extensions;
 using AtraCore.Utilities;
+using AtraShared.Utils.Extensions;
 using Microsoft.Xna.Framework;
 using StardewValley.TerrainFeatures;
 
@@ -8,6 +9,11 @@ namespace ReviveDeadCrops.Framework;
 /// <inheritdoc />
 public class ReviveDeadCropsApi : IReviveDeadCropsApi
 {
+    /// <summary>
+    /// The moddata key to mark plants that got revived.
+    /// </summary>
+    internal const string REVIVED_PLANT_MARKER = "atravita.RevivedPlant";
+
     private const int FAIRY_DUST = 872;
 
     /// <inheritdoc />
@@ -17,27 +23,32 @@ public class ReviveDeadCropsApi : IReviveDeadCropsApi
         {
             return false;
         }
-        if (loc.terrainFeatures.TryGetValue(tile, out var terrain) && terrain is HoeDirt dirt)
+        if (loc.GetHoeDirtAtTile(tile) is HoeDirt dirt)
         {
             return dirt.crop?.dead?.Value == true;
         }
         return false;
     }
 
+    /// <inheritdoc />
     public bool TryApplyDust(GameLocation loc, Vector2 tile, SObject obj)
     {
         if (this.CanApplyDust(loc, tile, obj))
         {
-            if (loc.terrainFeatures.TryGetValue(tile, out var terrain)
-                && terrain is HoeDirt dirt && dirt.crop is Crop crop)
+            if (loc.GetHoeDirtAtTile(tile) is HoeDirt dirt && dirt.crop is Crop crop)
             {
-                this.RevivePlant(crop);
+                dirt.modData?.SetBool(REVIVED_PLANT_MARKER, true);
+                this.AnimateRevival(loc, tile);
+                DelayedAction.functionAfterDelay(
+                    () => this.RevivePlant(crop),
+                    120);
                 return true;
             }
         }
         return false;
     }
 
+    /// <inheritdoc />
     public void RevivePlant(Crop crop)
     {
         // it's alive!
@@ -65,25 +76,29 @@ public class ReviveDeadCropsApi : IReviveDeadCropsApi
         crop.growCompletely();
     }
 
+    /// <inheritdoc />
     public void AnimateRevival(GameLocation loc, Vector2 tile)
     {
         // borrowing a Prarie King TAS for this.
-        TemporaryAnimatedSprite? tas = new TemporaryAnimatedSprite(
+        TemporaryAnimatedSprite? tas = new(
             textureName: Game1.mouseCursorsName,
-            sourceRect: new Rectangle(464, 1808, 16, 16),
+            sourceRect: new Rectangle(464, 1792, 16, 16),
             animationInterval: 120f,
             animationLength: 5,
             numberOfLoops: 0,
-            position: (tile * 64f) + new Vector2(32f, 32f),
+            position: tile * 64f,
             flicker: false,
-            flipped: false,
-            layerDepth: (tile.Y / 10000f) + 0.01f,
-            alphaFade: 0f,
-            color: Color.White * 0.8f,
-            scale: 3f,
-            scaleChange: 0f,
+            flipped: Game1.random.NextDouble() < 0.5,
+            layerDepth: 1f,
+            alphaFade: 0.01f,
+            color: Color.White,
+            scale: Game1.pixelZoom,
+            scaleChange: 0.01f,
             rotation: 0f,
-            rotationChange: 0f);
+            rotationChange: 0f)
+        {
+            light = true,
+        };
         MultiplayerHelpers.GetMultiplayer().broadcastSprites(loc, tas);
     }
 }

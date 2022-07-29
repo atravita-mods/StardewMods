@@ -85,10 +85,24 @@ internal sealed class ModEntry : Mod
             jsonAssets.LoadAssets(Path.Combine(this.Helper.DirectoryPath, "assets", "json-assets"), this.Helper.Translation);
         }
 
+        this.Helper.Events.GameLoop.ReturnedToTitle += this.OnReturnedToTitle;
+
         {
             IntegrationHelper helper = new(this.Monitor, this.Helper.Translation, this.Helper.ModRegistry, LogLevel.Trace);
             _ = helper.TryGetAPI("bcmpinc.WearMoreRings", "5.1.0", out wearMoreRingsAPI);
         }
+    }
+
+    /// <summary>
+    /// Resets the IDs when returning to the title.
+    /// </summary>
+    /// <param name="sender">SMAPI.</param>
+    /// <param name="e">Event args.</param>
+    [EventPriority(EventPriority.High)]
+    private void OnReturnedToTitle(object? sender, ReturnedToTitleEventArgs e)
+    {
+        prismaticSlimeRing = -1;
+        prismaticSlimeEgg = -1;
     }
 
     private void OnAssetRequested(object? sender, AssetRequestedEventArgs e)

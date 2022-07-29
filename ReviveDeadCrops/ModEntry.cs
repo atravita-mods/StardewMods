@@ -32,6 +32,9 @@ internal sealed class ModEntry : Mod
         this.ApplyPatches(new Harmony(this.ModManifest.UniqueID));
     }
 
+    /// <inheritdoc />
+    public override object? GetApi() => Api;
+
     // we need to make sure to slot in before Solid Foundations removes its buildings.
     [EventPriority(EventPriority.High + 20)]
     private void OnDayEnd(object? sender, DayEndingEventArgs e)
@@ -41,7 +44,8 @@ internal sealed class ModEntry : Mod
             {
                 foreach ((Vector2 _, TerrainFeature terrain) in location.terrainFeatures.Pairs)
                 {
-                    if (terrain is HoeDirt dirt && dirt.modData?.GetBool(ReviveDeadCropsApi.REVIVED_PLANT_MARKER) == true)
+                    if (terrain is HoeDirt dirt && dirt.modData?.GetBool(ReviveDeadCropsApi.REVIVED_PLANT_MARKER) == true
+                        && dirt.crop is not null)
                     {
                         this.Monitor.DebugOnlyLog($"Found dirt with marker at {dirt.currentTileLocation} with crop {dirt.crop?.indexOfHarvest ?? -1}");
                         dirt.modData.SetBool(ReviveDeadCropsApi.REVIVED_PLANT_MARKER, false);
@@ -52,7 +56,8 @@ internal sealed class ModEntry : Mod
                 foreach ((Vector2 _, SObject obj) in location.Objects.Pairs)
                 {
                     if (obj is IndoorPot pot && pot.hoeDirt.Value is HoeDirt dirt
-                        && dirt.modData?.GetBool(ReviveDeadCropsApi.REVIVED_PLANT_MARKER) == true)
+                        && dirt.modData?.GetBool(ReviveDeadCropsApi.REVIVED_PLANT_MARKER) == true
+                        && dirt.crop is not null)
                     {
                         this.Monitor.DebugOnlyLog($"Found dirt with marker at {dirt.currentTileLocation} with crop {dirt.crop?.indexOfHarvest ?? -1}");
                         dirt.modData.SetBool(ReviveDeadCropsApi.REVIVED_PLANT_MARKER, false);
@@ -61,9 +66,6 @@ internal sealed class ModEntry : Mod
                 }
             });
     }
-
-    /// <inheritdoc />
-    public override object? GetApi() => Api;
 
     /// <summary>
     /// Applies the patches for this mod.

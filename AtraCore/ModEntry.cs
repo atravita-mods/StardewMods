@@ -4,6 +4,7 @@ using System.Diagnostics;
 using AtraBase.Toolkit;
 using AtraCore.Config;
 using AtraCore.Framework.DialogueManagement;
+using AtraCore.Framework.Internal;
 using AtraCore.Framework.ItemManagement;
 using AtraCore.Framework.QueuePlayerAlert;
 using AtraCore.HarmonyPatches.DrawPrismaticPatches;
@@ -13,7 +14,6 @@ using AtraShared.MigrationManager;
 using AtraShared.Utils.Extensions;
 using HarmonyLib;
 using StardewModdingAPI.Events;
-
 using AtraUtils = AtraShared.Utils.Utils;
 
 namespace AtraCore;
@@ -38,6 +38,9 @@ internal sealed class ModEntry : Mod
     {
         I18n.Init(helper.Translation);
         ModMonitor = this.Monitor;
+
+        // replace AtraBase's logger with SMAPI's logging service.
+        AtraBase.Internal.Logger.Instance = new Logger(this.Monitor);
 
         Config = AtraUtils.GetConfigOrDefault<ModConfig>(helper, this.Monitor);
 

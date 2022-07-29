@@ -35,7 +35,9 @@ public static class ASThrowHelper
     /// <summary>
     /// Throws a new SaveNotLoadedError.
     /// </summary>
+    /// <typeparam name="T">Type to return.</typeparam>
     /// <exception cref="SaveNotLoadedError">always.</exception>
+    /// <returns>nothing, doesn't return.</returns>
     [DoesNotReturn]
     [MethodImpl(MethodImplOptions.NoInlining)]
     public static T ThrowSaveNotLoaded<T>()

@@ -51,10 +51,15 @@ internal sealed class ModEntry : Mod
             {
                 if (Game1.player.HasWeddingToday())
                 {
-                    Game1.addHUDMessage(new HUDMessage(I18n.WeddingMessage(Config.WeddingTime)));
+                    int hour = Math.DivRem(Config.WeddingTime, 100, out int minutes);
+                    Game1.addHUDMessage(new HUDMessage(I18n.WeddingMessage(hour, minutes), HUDMessage.achievement_type));
                 }
             }
-            else if (!this.checkForWedding && Game1.timeOfDay > Config.WeddingTime)
+            else if (Game1.timeOfDay == Config.WeddingTime - 10)
+            {
+                Game1.addHUDMessage(new HUDMessage(I18n.WeddingReminder(), HUDMessage.achievement_type));
+            }
+            else if (this.checkForWedding && Game1.timeOfDay >= Config.WeddingTime)
             {
                 Game1.player.currentLocation.checkForEvents();
                 this.checkForWedding = false;

@@ -1,7 +1,8 @@
 {
   "Dependencies": [
     {
-      "UniqueID": "Pathoschild.ContentPatcher"
+      "UniqueID": "Pathoschild.ContentPatcher",
+      "IsRequired": false
     },
     {
       "UniqueID": "atravita.AtraCore",

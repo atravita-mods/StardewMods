@@ -37,7 +37,11 @@ public class ReviveDeadCropsApi : IReviveDeadCropsApi
         {
             if (loc.GetHoeDirtAtTile(tile) is HoeDirt dirt && dirt.crop is Crop crop)
             {
-                dirt.modData?.SetBool(REVIVED_PLANT_MARKER, true);
+                if (!loc.SeedsIgnoreSeasonsHere())
+                {
+                    dirt.modData?.SetBool(REVIVED_PLANT_MARKER, true);
+                }
+
                 this.AnimateRevival(loc, tile);
                 DelayedAction.functionAfterDelay(
                     () => this.RevivePlant(crop),

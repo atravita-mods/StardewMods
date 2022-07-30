@@ -103,4 +103,15 @@ public static class ModDataExtensions
             modData[key] = val.ToString(format, CultureInfo.InvariantCulture);
         }
     }
+
+    public static TEnum GetEnum<TEnum>(this ModDataDictionary modData, string key, TEnum defaultValue)
+        where TEnum : struct, Enum
+        => modData.TryGetValue(key, out string val)
+            && Enum.TryParse<TEnum>(val, out TEnum ret)
+                ? ret
+                : defaultValue;
+
+    public static void SetEnum<TEnum>(this ModDataDictionary modData, string key, TEnum value)
+        where TEnum : struct, Enum
+        => modData[key] = value.ToString("D");
 }

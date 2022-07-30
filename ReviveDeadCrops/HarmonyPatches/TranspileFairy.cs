@@ -1,18 +1,14 @@
 ﻿using System.Reflection;
 using System.Reflection.Emit;
-using System.Runtime.CompilerServices;
-using AtraBase.Toolkit;
-using AtraBase.Toolkit.Reflection;
 using AtraCore.Framework.ReflectionManager;
 using AtraShared.Utils.Extensions;
 using AtraShared.Utils.HarmonyHelper;
 using HarmonyLib;
 using Microsoft.Xna.Framework;
 using StardewValley.Events;
-using StardewValley.Locations;
 using StardewValley.TerrainFeatures;
 
-namespace ReviveDeadCrops;
+namespace ReviveDeadCrops.HarmonyPatches;
 
 /// <summary>
 /// Transpiles the fairy event so she revives crops. Was always kinda weird when she

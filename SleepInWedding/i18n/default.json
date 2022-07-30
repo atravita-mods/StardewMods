@@ -2,6 +2,7 @@
   "WeddingTime.title": "Wedding Time",
   "WeddingTime.description": "Lets you get married slightly later than 6AM.",
   "WeddingMessage": "You're getting married today at {{weddingHour}}:{{weddingMinutes}}!",
+  "WeddingMessageOther": "Someone's getting married today at {{weddingHour}}:{{weddingMinutes}}",
   "WeddingReminder": "Your wedding is in ten minutes! Get ready!",
   "WeddingGreeting": "Honey, we're getting married today! Are you excited?"
 }

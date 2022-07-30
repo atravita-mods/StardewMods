@@ -8,8 +8,8 @@
   </PropertyGroup>
 
   <PropertyGroup>
-    <Name>Revive Dead Crops</Name>
-    <Description>Lets you revive dead crops.</Description>
+    <Name>Single Parenthood</Name>
+    <Description>Lets you have children even if you aren't married.</Description>
     <Version>0.1.0</Version>
     <UpdateKeys>-1</UpdateKeys>
     <BaseManifest>..\base_dependencies.json</BaseManifest>

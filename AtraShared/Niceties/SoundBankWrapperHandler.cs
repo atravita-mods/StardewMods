@@ -6,6 +6,8 @@ using Microsoft.Xna.Framework.Audio;
 
 namespace AtraShared.Niceties;
 
+#warning - review and remove in 1.6
+
 #pragma warning disable SA1201 // Elements should appear in the correct order. Fields kept near their accessors.
 
 /// <summary>

@@ -35,6 +35,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Integrations\Interfaces\Fluent\IFluentEnum.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Integrations\Interfaces\Fluent\IGameLocale.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Integrations\Interfaces\IDynamicGameAssetsAPI.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Integrations\Interfaces\IPregnancyRoleApi.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Integrations\Interfaces\ISaveAnywhereAPI.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Integrations\Interfaces\ISolidFoundationsAPI.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Integrations\Interfaces\IWearMoreRingsAPI.cs" />

@@ -12,6 +12,8 @@ namespace SleepInWedding;
 [HarmonyPatch(typeof(GameLocation))]
 internal sealed class ModEntry : Mod
 {
+    private const string RestoredWeddings = "RestoredWeddings";
+
     /// <summary>
     /// Gets the config for this mod.
     /// </summary>
@@ -56,8 +58,6 @@ internal sealed class ModEntry : Mod
         }
     }
 
-    private void OnMessageRecieved(object? sender, ModMessageReceivedEventArgs e) => throw new NotImplementedException();
-
     private void OnTimeChanged(object? sender, TimeChangedEventArgs e)
     {
         if (Game1.weddingsToday.Count > 0)
@@ -85,18 +85,6 @@ internal sealed class ModEntry : Mod
         }
     }
 
-    private void OnGameLaunched(object? sender, GameLaunchedEventArgs e)
-    {
-        GMCMHelper helper = new(this.Monitor, this.Helper.Translation, this.Helper.ModRegistry, this.ModManifest);
-        if (helper.TryGetAPI())
-        {
-            helper.Register(
-                reset: static () => Config = new(),
-                save: () => this.Helper.AsyncWriteConfig(this.Monitor, Config))
-            .GenerateDefaultGMCM(static () => Config);
-        }
-    }
-
     /// <summary>
     /// calls queueWeddingsForToday just after save is loaded.
     /// Game doesn't seem to call it.
@@ -107,17 +95,76 @@ internal sealed class ModEntry : Mod
     {
         if (Context.IsMainPlayer)
         {
-            ModMonitor.DebugOnlyLog($"Before attempting queuing new weddings {string.Join(", ", Game1.weddingsToday)}");
-            ModMonitor.DebugOnlyLog($"{Game1.player.spouse ?? "null"}");
-            ModMonitor.DebugOnlyLog($"{Game1.player.isEngaged()}");
-            ModMonitor.DebugOnlyLog($"{Game1.player.isMarried()}");
-            ModMonitor.DebugOnlyLog($"{Game1.player.friendshipData[Game1.player.spouse].CountdownToWedding}");
-            ModMonitor.DebugOnlyLog($"{Game1.Date.TotalDays} {Game1.player.friendshipData[Game1.player.spouse].WeddingDate.TotalDays}");
-            if (Context.IsMainPlayer)
+            if (Game1.canHaveWeddingOnDay(Game1.dayOfMonth, Game1.currentSeason))
             {
-                Game1.queueWeddingsForToday();
+                return;
             }
+
+            ModMonitor.DebugOnlyLog($"Before attempting queuing new weddings {string.Join(", ", Game1.weddingsToday)}");
+
+            HashSet<long> added = new();
+            List<long> online = new();
+            foreach (var farmer in Game1.getOnlineFarmers())
+            {
+                // we'll need a list of farmers to broadcast to....
+                if (farmer.UniqueMultiplayerID != Game1.player.UniqueMultiplayerID)
+                {
+                    online.Add(farmer.UniqueMultiplayerID);
+                }
+
+                if (farmer.spouse is not null && farmer.friendshipData.TryGetValue(farmer.spouse, out var friendship)
+                    && friendship.CountdownToWedding == 1)
+                {
+                    if (added.Add(farmer.UniqueMultiplayerID))
+                    {
+                        Game1.weddingsToday.Add(farmer.UniqueMultiplayerID);
+                    }
+                }
+                else if (!added.Contains(farmer.UniqueMultiplayerID))
+                {
+                    long? other = farmer.team.GetSpouse(farmer.UniqueMultiplayerID);
+                    if (other is not null)
+                    {
+                        FarmerPair team = FarmerPair.MakePair(other.Value, farmer.UniqueMultiplayerID);
+                        if (farmer.team.friendshipData.TryGetValue(team, out var farmerteam)
+                            && farmerteam.CountdownToWedding == 1)
+                        {
+                            if (added.Add(farmer.UniqueMultiplayerID))
+                            {
+                                Game1.weddingsToday.Add(farmer.UniqueMultiplayerID);
+                            }
+                            if (added.Add(other.Value))
+                            {
+                                Game1.weddingsToday.Add(other.Value);
+                            }
+                        }
+                    }
+                }
+            }
+
             ModMonitor.DebugOnlyLog($"Current weddings {string.Join(", ", Game1.weddingsToday)}");
+            this.Helper.Multiplayer.SendMessage(
+                message: Game1.weddingsToday,
+                messageType: RestoredWeddings,
+                modIDs: new[] { this.ModManifest.UniqueID },
+                playerIDs: online.ToArray());
+        }
+    }
+
+    private void OnMessageRecieved(object? sender, ModMessageReceivedEventArgs e)
+    {
+        if (e.FromModID != this.ModManifest.UniqueID)
+        {
+            return;
+        }
+        if (e.Type == RestoredWeddings)
+        {
+            List<long>? weddings = e.ReadAs<List<long>>();
+            if (weddings is not null)
+            {
+                Game1.weddingsToday.Clear();
+                Game1.weddingsToday.AddRange(weddings);
+            }
         }
     }
 
@@ -136,5 +183,17 @@ internal sealed class ModEntry : Mod
             ModMonitor.Log(string.Format(ErrorMessageConsts.HARMONYCRASH, ex), LogLevel.Error);
         }
         harmony.Snitch(this.Monitor, this.ModManifest.UniqueID, transpilersOnly: true);
+    }
+
+    private void OnGameLaunched(object? sender, GameLaunchedEventArgs e)
+    {
+        GMCMHelper helper = new(this.Monitor, this.Helper.Translation, this.Helper.ModRegistry, this.ModManifest);
+        if (helper.TryGetAPI())
+        {
+            helper.Register(
+                reset: static () => Config = new(),
+                save: () => this.Helper.AsyncWriteConfig(this.Monitor, Config))
+            .GenerateDefaultGMCM(static () => Config);
+        }
     }
 }

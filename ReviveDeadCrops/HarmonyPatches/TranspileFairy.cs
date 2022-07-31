@@ -58,7 +58,7 @@ internal static class TranspileFairy
                 new(OpCodes.Call, typeof(TranspileFairy).GetCachedMethod(nameof(AnimateReviveCrop), ReflectionCache.FlagTypes.StaticFlags)),
             }, withLabels: labels);
 
-            helper.Print();
+            // helper.Print();
             return helper.Render();
         }
         catch (Exception ex)
@@ -88,7 +88,7 @@ internal static class TranspileFairy
                 new(OpCodes.Call, typeof(TranspileFairy).GetCachedMethod(nameof(ActuallyReviveCrop), ReflectionCache.FlagTypes.StaticFlags)),
             });
 
-            helper.Print();
+            // helper.Print();
             return helper.Render();
         }
         catch (Exception ex)

@@ -14,7 +14,7 @@ internal static class FarmhousePatch
     [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Harmony convention.")]
     private static bool Prefix(FarmHouse __instance, ref bool __result)
     {
-        if (__instance.owner.modData?.GetInt(ModEntry.countdown) is >= 0 )
+        if (__instance.owner.modData?.GetInt(ModEntry.countUp) is >= 0 )
         {
             __result = false;
             return true;

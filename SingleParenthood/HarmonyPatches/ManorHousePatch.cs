@@ -1,7 +1,6 @@
 ﻿using AtraShared.Menuing;
 using HarmonyLib;
 using StardewValley.Locations;
-using xTile.Dimensions;
 
 namespace SingleParenthood.HarmonyPatches;
 
@@ -15,31 +14,37 @@ internal static class ManorHousePatch
     {
         List<Response> responses = new()
         {
-            new("Have kid", "Have kid"),
-            new("Nah", "Nah"),
+            new("HaveChild", "Have kid"),
+            new("NoChild", "Nah"),
         };
 
         List<Action?> actions = new()
         {
             () =>
             {
+                Game1.player.modData[ModEntry.countUp] = "0";
             },
         };
     }
 
     [HarmonyPatch(nameof(ManorHouse.performAction))]
+    [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Harmony Convention")]
     private static bool Prefix(ManorHouse __instance, string action)
     {
-        if (action is "DivorceBook")
+        if (action is "DivorceBook"
+            && Utility.getHomeOfFarmer(Game1.player) is FarmHouse house
+            && house.upgradeLevel >= 2
+            && Game1.player.modData.ContainsKey(ModEntry.countUp)
+            && Game1.player.getChildrenCount() < ModEntry.Config.MaxKids
+            && Game1.player.AllKidsOutOfCrib())
         {
+            if (Game1.player.divorceTonight.Value)
+            {
+                return true;
+            }
             try
             {
-
-                if (Game1.player.divorceTonight.Value)
-                {
-                    return true;
-                }
-                else if (Game1.player.isMarried())
+                if (Game1.player.isMarried())
                 {
                     List<Response> responses = new()
                     {
@@ -50,10 +55,7 @@ internal static class ManorHousePatch
 
                     List<Action?> actions = new()
                     {
-                        () =>
-                        {
-                        
-                        },
+                        ChildMenu,
                         () =>
                         {
                             string s = Game1.player.hasCurrentOrPendingRoommate()

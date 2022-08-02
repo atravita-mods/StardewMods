@@ -135,6 +135,12 @@ internal sealed class ModEntry : Mod
                 this.Monitor.Log("Found Dynamic Game Assets, applying compat patches", LogLevel.Info);
                 CropTranspiler.ApplyDGAPatches(harmony);
             }
+
+            if (new Version(1, 6) > new Version(Game1.version))
+            {
+                this.Monitor.Log("Applying patch to restore giant crops to save locations", LogLevel.Debug);
+                FixSaveThing.ApplyPatches(harmony);
+            }
         }
         catch (Exception ex)
         {

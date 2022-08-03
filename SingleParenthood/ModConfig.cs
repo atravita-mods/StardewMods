@@ -1,4 +1,9 @@
 ﻿namespace SingleParenthood;
+
+/// <summary>
+/// The config class for this mod.
+/// </summary>
+[SuppressMessage("StyleCop.CSharp.OrderingRules", "SA1201:Elements should appear in the correct order", Justification = "Fields kept near accessors.")]
 internal sealed class ModConfig
 {
     private int gestation = 14;
@@ -14,9 +19,12 @@ internal sealed class ModConfig
 
     private int maxKids = 2;
 
+    /// <summary>
+    /// Gets or sets a value indicating the maximum number of kids to allow.
+    /// </summary>
     public int MaxKids
     {
         get => this.maxKids;
-        set => this.maxKids = Math.Clamp(value, 0, this.maxKids);
+        set => this.maxKids = Math.Clamp(value, 0, 10);
     }
 }

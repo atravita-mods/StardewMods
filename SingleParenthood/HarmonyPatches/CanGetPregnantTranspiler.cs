@@ -4,10 +4,7 @@ using AtraCore.Framework.ReflectionManager;
 using AtraShared.Utils.Extensions;
 using AtraShared.Utils.HarmonyHelper;
 using HarmonyLib;
-using Microsoft.Xna.Framework;
 using StardewValley.Characters;
-using StardewValley.Events;
-using StardewValley.TerrainFeatures;
 
 namespace SingleParenthood.HarmonyPatches;
 

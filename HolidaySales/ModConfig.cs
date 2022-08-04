@@ -5,6 +5,9 @@
 /// </summary>
 internal sealed class ModConfig
 {
+    /// <summary>
+    /// Gets or sets a value indicating how shops should behave during festivals.
+    /// </summary>
     public FestivalsShopBehavior StoreFestivalBehavior { get; set; } = FestivalsShopBehavior.MapDependent;
 }
 

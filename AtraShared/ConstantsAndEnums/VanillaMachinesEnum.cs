@@ -1,4 +1,5 @@
 ﻿using AtraBase.Toolkit.Extensions;
+using NetEscapades.EnumGenerators;
 
 namespace AtraShared.ConstantsAndEnums;
 
@@ -6,6 +7,7 @@ namespace AtraShared.ConstantsAndEnums;
 /// Enum for all the vanilla machines that require input.
 /// </summary>
 /// <remarks>Positive numbers refer to Big Craftables, negative ordinary SObjects.</remarks>
+[EnumExtensions]
 [SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1602:Enumeration items should be documented", Justification = "Should be obvious enough.")]
 public enum VanillaMachinesEnum
 {
@@ -33,6 +35,10 @@ public enum VanillaMachinesEnum
     /// Cheese Press.
     /// </summary>
     CheesePress = 16,
+
+    /// <summary>
+    /// Loom.
+    /// </summary>
     Loom = 17,
     OilMaker = 19,
     RecyclingMachine = 20,
@@ -55,7 +61,7 @@ public enum VanillaMachinesEnum
 /// <summary>
 /// Holds extension methods against this enum.
 /// </summary>
-public static class VanillaMachinesEnumExtensions
+public static partial class VanillaMachinesEnumExtensions
 {
     /// <summary>
     /// Tries to find the correct translation string for this machine.
@@ -80,6 +86,6 @@ public static class VanillaMachinesEnumExtensions
                 return value[(index + 1)..];
             }
         }
-        return string.Empty;
+        return machine.ToStringFast();
     }
 }

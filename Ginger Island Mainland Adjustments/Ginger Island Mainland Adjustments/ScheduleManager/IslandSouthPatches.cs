@@ -26,13 +26,7 @@ internal static class IslandSouthPatches
     /// </summary>
     /// <remarks>Cached, will reload automatically if not currently cached.</remarks>
     internal static Dictionary<NPC, string[]> Exclusions
-    {
-        get
-        {
-            exclusions ??= AssetLoader.GetExclusions();
-            return exclusions;
-        }
-    }
+        => exclusions ??= AssetLoader.GetExclusions();
 
     /// <summary>
     /// Clears/resets the Exclusions cache.
@@ -114,6 +108,27 @@ internal static class IslandSouthPatches
                     return;
                 }
             }
+
+            // if an NPC has a schedule for the specific day, don't allow them to go to the resort.
+            if (npc.HasSpecificSchedule())
+            {
+                switch (Globals.Config.ScheduleStrictness.TryGetValue(npc.Name, out var strictness) ? strictness : ScheduleStrictness.Default)
+                {
+                    case ScheduleStrictness.Strict:
+                        __result = false;
+                        return;
+                    case ScheduleStrictness.Default:
+                    {
+                        if (!Exclusions.TryGetValue(npc, out var exclusions) || !exclusions.Any((a) => a.Equals("AllowOnSpecialDays", StringComparison.OrdinalIgnoreCase)))
+                        {
+                            __result = false;
+                            return;
+                        }
+                        break;
+                    }
+                }
+            }
+
             if (!Exclusions.ContainsKey(npc))
             { // I don't have an entry for you.
                 return;

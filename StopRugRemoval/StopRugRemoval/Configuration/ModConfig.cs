@@ -71,6 +71,11 @@ internal sealed class ModConfig
     }
 
     /// <summary>
+    /// Gets or sets a value indicating whether or not the bet1k/bet10k buttons should appear.
+    /// </summary>
+    public bool BetIcons { get; set; } = true;
+
+    /// <summary>
     /// Gets or sets keybind to use to remove an item from a table.
     /// </summary>
     public KeybindList FurniturePlacementKey { get; set; } = KeybindList.Parse("LeftShift + Z");

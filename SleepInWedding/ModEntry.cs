@@ -70,19 +70,19 @@ internal sealed class ModEntry : Mod
                     Game1.addHUDMessage(new HUDMessage(I18n.WeddingMessage(hour, minutes), HUDMessage.achievement_type));
                 }
                 else
-                {
+            {
                     Game1.addHUDMessage(new HUDMessage(I18n.WeddingMessageOther(hour, minutes), HUDMessage.achievement_type));
-                }
             }
+        }
             else if (Game1.timeOfDay == Config.WeddingTime - 10)
             {
                 Game1.addHUDMessage(new HUDMessage(I18n.WeddingReminder(), HUDMessage.achievement_type));
-            }
+    }
             else if (Game1.timeOfDay == Config.WeddingTime)
-            {
+    {
                 Game1.player.currentLocation.checkForEvents();
-            }
         }
+    }
     }
 
     /// <summary>
@@ -100,7 +100,7 @@ internal sealed class ModEntry : Mod
                 return;
             }
 
-            ModMonitor.DebugOnlyLog($"Before attempting queuing new weddings {string.Join(", ", Game1.weddingsToday)}");
+        ModMonitor.DebugOnlyLog($"Before attempting queuing new weddings {string.Join(", ", Game1.weddingsToday)}");
 
             HashSet<long> added = new();
             List<long> online = new();
@@ -134,15 +134,15 @@ internal sealed class ModEntry : Mod
                                 Game1.weddingsToday.Add(farmer.UniqueMultiplayerID);
                             }
                             if (added.Add(other.Value))
-                            {
+        {
                                 Game1.weddingsToday.Add(other.Value);
                             }
                         }
                     }
                 }
-            }
+        }
 
-            ModMonitor.DebugOnlyLog($"Current weddings {string.Join(", ", Game1.weddingsToday)}");
+        ModMonitor.DebugOnlyLog($"Current weddings {string.Join(", ", Game1.weddingsToday)}");
             this.Helper.Multiplayer.SendMessage(
                 message: Game1.weddingsToday,
                 messageType: RestoredWeddings,

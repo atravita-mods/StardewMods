@@ -60,6 +60,7 @@ internal sealed class ModEntry : Mod
         {
             return;
         }
+
         GenerateGMCM.BuildNPCDictionary();
 
         Globals.LoadDataFromSave();

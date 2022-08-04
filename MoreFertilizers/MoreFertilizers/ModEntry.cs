@@ -19,7 +19,6 @@ using MoreFertilizers.HarmonyPatches.Compat;
 using MoreFertilizers.HarmonyPatches.FishFood;
 using MoreFertilizers.HarmonyPatches.FruitTreePatches;
 using StardewModdingAPI.Events;
-using StardewValley.Objects;
 using StardewValley.TerrainFeatures;
 
 using AtraUtils = AtraShared.Utils.Utils;
@@ -348,17 +347,17 @@ internal sealed class ModEntry : Mod
         // JA will reassign us IDs when it returns to title.
         // (I'm not quite sure why?)
         // But we need to drop our IDs too.
-        fruitTreeFertilizerID = -1;
-        deluxeFruitTreeFertilizerID = -1;
-        fishfoodID = -1;
-        deluxeFishFoodID = -1;
-        domesticatedFishFoodID = -1;
-        paddyCropFertilizerID = -1;
-        luckyFertilizerID = -1;
         bountifulFertilizerID = -1;
-        jojaFertilizerID = -1;
+        deluxeFishFoodID = -1;
+        deluxeFruitTreeFertilizerID = -1;
         deluxeJojaFertilizerID = -1;
+        domesticatedFishFoodID = -1;
+        fishfoodID = -1;
+        fruitTreeFertilizerID = -1;
+        jojaFertilizerID = -1;
+        luckyFertilizerID = -1;
         organicFertilizerID = -1;
+        paddyCropFertilizerID = -1;
 
         PlantableFertilizerIDs.Clear();
         SpecialFertilizerIDs.Clear();
@@ -377,17 +376,17 @@ internal sealed class ModEntry : Mod
             if (storedIDs is null)
             {
                 storedIDs = new();
-                storedIDs.FruitTreeFertilizerID = FruitTreeFertilizerID;
-                storedIDs.DeluxeFruitTreeFertilizerID = DeluxeFruitTreeFertilizerID;
-                storedIDs.FishFoodID = FishFoodID;
-                storedIDs.DeluxeFishFoodID = DeluxeFishFoodID;
-                storedIDs.DomesticatedFishFoodID = DomesticatedFishFoodID;
-                storedIDs.PaddyFertilizerID = PaddyCropFertilizerID;
-                storedIDs.LuckyFertilizerID = LuckyFertilizerID;
                 storedIDs.BountifulFertilizerID = BountifulFertilizerID;
-                storedIDs.JojaFertilizerID = JojaFertilizerID;
+                storedIDs.DeluxeFishFoodID = DeluxeFishFoodID;
+                storedIDs.DeluxeFruitTreeFertilizerID = DeluxeFruitTreeFertilizerID;
                 storedIDs.DeluxeJojaFertilizerID = DeluxeJojaFertilizerID;
+                storedIDs.DomesticatedFishFoodID = DomesticatedFishFoodID;
+                storedIDs.FishFoodID = FishFoodID;
+                storedIDs.FruitTreeFertilizerID = FruitTreeFertilizerID;
+                storedIDs.JojaFertilizerID = JojaFertilizerID;
+                storedIDs.LuckyFertilizerID = LuckyFertilizerID;
                 storedIDs.OrganicFertilizerID = OrganicFertilizerID;
+                storedIDs.PaddyFertilizerID = PaddyCropFertilizerID;
             }
             this.Helper.Data.WriteSaveData(SavedIDKey, storedIDs);
             this.Monitor.Log("Writing IDs into save data");
@@ -464,6 +463,13 @@ internal sealed class ModEntry : Mod
             {
                 this.Monitor.Log("Found Miller Time, applying compat patches", LogLevel.Info);
                 MillerTimeDayUpdateTranspiler.ApplyPatches(harmony);
+            }
+
+            if (this.Helper.ModRegistry.IsLoaded("stokastic.PrismaticTools") ||
+                this.Helper.ModRegistry.IsLoaded("kakashigr.RadioactiveTools"))
+            {
+                this.Monitor.Log("Found either prismatic tools or radioactive tools. Applying compat patches", LogLevel.Info);
+                AddCrowsForExtendedToolsTranspiler.ApplyPatches(harmony);
             }
         }
         catch (Exception ex)

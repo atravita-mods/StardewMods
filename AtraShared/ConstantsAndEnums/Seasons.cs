@@ -1,11 +1,12 @@
-﻿namespace AtraShared.ConstantsAndEnums;
+﻿using NetEscapades.EnumGenerators;
 
-#pragma warning disable SA1602 // Enumeration items should be documented. Should be obvious enough
+namespace AtraShared.ConstantsAndEnums;
 
 /// <summary>
 /// Seasons as flags, typically used for season constraints.
 /// </summary>
 [Flags]
+[EnumExtensions]
 public enum StardewSeasons : uint
 {
     /// <summary>
@@ -42,7 +43,7 @@ public enum StardewSeasons : uint
 /// <summary>
 /// Extensions for the seasons enum.
 /// </summary>
-public static class SeasonExtensions
+public static partial class SeasonExtensions
 {
     /// <summary>
     /// Parses a list of strings into the season enum.
@@ -83,6 +84,7 @@ public static class SeasonExtensions
 /// Weathers as flags....
 /// </summary>
 [Flags]
+[EnumExtensions]
 public enum StardewWeather : uint
 {
     /// <summary>
@@ -120,12 +122,11 @@ public enum StardewWeather : uint
     /// </summary>
     All = Sunny | Rainy | Stormy | Snowy | Windy,
 }
-#pragma warning restore SA1602 // Enumeration items should be documented
 
 /// <summary>
 /// Extensions for the weather enum.
 /// </summary>
-public static class WeatherExtensions
+public static partial class WeatherExtensions
 {
     /// <summary>
     /// Gets a list of strings and parses them to the weatherenum.

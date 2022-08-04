@@ -34,6 +34,9 @@
   "PhoneSpeedUpFactor.title": "Phone Speed Up Factor",
   "PhoneSpeedUpFactor.description": "How much to speed up the phone call by.",
 
+  "BetIcons.title": "Bet1k/10k Icons",
+  "BetIcons.description": "Whether or not to show the bet1k/bet10k icons.",
+
   // Handle the confirmation GMCM stuff....
 
   "BombLocationDetailed": "Bomb and warp confirmation per location",

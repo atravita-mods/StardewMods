@@ -1,6 +1,9 @@
 ﻿Changelog
 =============
 
+#### Version 0.2.1
+* Added German translation (thanks to CrisTortion!)
+
 #### Version 0.2.0
 * Move to using AtraCore, which should have improved loading times significantly.
 * Added Chinese translation (thanks to Puffeeydii!)

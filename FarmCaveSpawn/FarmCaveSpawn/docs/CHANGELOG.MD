@@ -9,6 +9,9 @@
 * Figure out DGA fruit trees.
 <!-- bat eyes for custom locations? -->
 
+#### Version 1.1.1
+* Bugfixes. Oops.
+
 #### Version 1.1.0
 * Update to use AtraCore.
 

@@ -15,6 +15,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)ConstantsAndEnums\ErrorMessageConsts.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Integrations\GMCMAttributes\GMCMDefaultColorAttribute.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Integrations\GMCMAttributes\GMCMDefaultIgnoreAttribute.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Integrations\GMCMAttributes\GMCMFormatAttribute.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Integrations\GMCMAttributes\GMCMIntervalAttribute.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Integrations\GMCMAttributes\GMCMRangeAttribute.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Integrations\GMCMAttributes\GMCMSectionAttribute.cs" />
@@ -80,6 +81,8 @@
     <Compile Include="$(MSBuildThisFileDirectory)Utils\HarmonyHelper\AdditionalCodeInstructionExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Utils\HarmonyHelper\Attributes\RequireModAttribute.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Utils\HarmonyHelper\CodeInstructionWrapper.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Utils\HarmonyHelper\HarmonyAttributes\NonFatalPatchAttribute.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Utils\HarmonyHelper\HarmonyAttributes\RequireModAttribute.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Utils\HarmonyHelper\ILHelper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Utils\HarmonyHelper\ILHelperExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Utils\Extensions\InputUtils.cs" />

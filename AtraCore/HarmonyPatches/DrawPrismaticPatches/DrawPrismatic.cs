@@ -25,21 +25,7 @@ internal static class DrawPrismatic
     private static readonly SortedList<ItemTypeEnum, Dictionary<int, Lazy<Texture2D>>> PrismaticMasks = new();
     private static readonly SortedList<ItemTypeEnum, HashSet<int>> PrismaticFull = new();
 
-    [MethodImpl(TKConstants.Hot)]
-    private static bool ShouldDrawAsFullColored(this Item item)
-        => item.GetItemType() is ItemTypeEnum type && PrismaticFull.TryGetValue(type, out HashSet<int>? set)
-            && set.Contains(item.ParentSheetIndex);
-
-    [MethodImpl(TKConstants.Hot)]
-    private static Color ReplaceDrawColorForItem(Color prevcolor, Item item)
-        => item.ShouldDrawAsFullColored() ? Utility.GetPrismaticColor() : prevcolor;
-
-    [MethodImpl(TKConstants.Hot)]
-    private static Texture2D? GetColorMask(this Item item)
-        => item.GetItemType() is ItemTypeEnum type && PrismaticMasks.TryGetValue(type, out Dictionary<int, Lazy<Texture2D>>? masks)
-            && masks.TryGetValue(item.ParentSheetIndex, out Lazy<Texture2D>? mask) ? mask.Value : null;
-
-#region LOADDATA
+    #region LOADDATA
 
     /// <summary>
     /// Load the prismatic data.
@@ -93,9 +79,25 @@ internal static class DrawPrismatic
             }
         }
     }
-#endregion
+    #endregion
 
-#region SOBJECT
+    #region Helpers
+    [MethodImpl(TKConstants.Hot)]
+    private static bool ShouldDrawAsFullColored(this Item item)
+    => item.GetItemType() is ItemTypeEnum type && PrismaticFull.TryGetValue(type, out HashSet<int>? set)
+        && set.Contains(item.ParentSheetIndex);
+
+    [MethodImpl(TKConstants.Hot)]
+    private static Color ReplaceDrawColorForItem(Color prevcolor, Item item)
+        => item.ShouldDrawAsFullColored() ? Utility.GetPrismaticColor() : prevcolor;
+
+    [MethodImpl(TKConstants.Hot)]
+    private static Texture2D? GetColorMask(this Item item)
+        => item.GetItemType() is ItemTypeEnum type && PrismaticMasks.TryGetValue(type, out Dictionary<int, Lazy<Texture2D>>? masks)
+            && masks.TryGetValue(item.ParentSheetIndex, out Lazy<Texture2D>? mask) ? mask.Value : null;
+    #endregion
+
+    #region SOBJECT
 
     /// <summary>
     /// Prefixes SObject's drawInMenu function in order to draw things prismatically.
@@ -179,9 +181,9 @@ internal static class DrawPrismatic
         return;
     }
 
-#endregion
+    #endregion
 
-#region RING
+    #region RING
 
     [UsedImplicitly]
     [HarmonyPrefix]
@@ -240,9 +242,9 @@ internal static class DrawPrismatic
         return;
     }
 
-#endregion
+    #endregion
 
-#region BOOTS
+    #region BOOTS
 
     [UsedImplicitly]
     [HarmonyPrefix]
@@ -301,6 +303,6 @@ internal static class DrawPrismatic
         return;
     }
 
-#endregion
+    #endregion
 #pragma warning restore SA1124 // Do not use regions
 }

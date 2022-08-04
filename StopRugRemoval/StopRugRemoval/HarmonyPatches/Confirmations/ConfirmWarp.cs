@@ -7,6 +7,7 @@ using AtraShared.Utils.HarmonyHelper;
 using HarmonyLib;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
+using NetEscapades.EnumGenerators;
 using StardewModdingAPI.Utilities;
 using StardewValley.Buildings;
 using StardewValley.Locations;
@@ -32,6 +33,7 @@ internal static class ConfirmWarp
     /// <summary>
     /// The location to warp to. IDs are the ParentSheetIndex of the totem.
     /// </summary>
+    [EnumExtensions]
     internal enum WarpLocation
     {
         /// <summary>
@@ -154,7 +156,7 @@ internal static class ConfirmWarp
             }
         }
 
-        if (!Enum.IsDefined((WarpLocation)__instance.ParentSheetIndex) || __instance.bigCraftable.Value)
+        if (!WarpLocationExtensions.IsDefined((WarpLocation)__instance.ParentSheetIndex) || __instance.bigCraftable.Value)
         { // Not an attempt to warp.
             return true;
         }

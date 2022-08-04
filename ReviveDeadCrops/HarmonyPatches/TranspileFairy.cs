@@ -29,6 +29,7 @@ internal static class TranspileFairy
     private static void ActuallyReviveCrop(Crop crop)
         => ModEntry.Api.RevivePlant(crop);
 
+    [HarmonyTranspiler]
     [HarmonyPatch(nameof(FairyEvent.tickUpdate))]
     [SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1116:Split parameters should start on line after declaration", Justification = "Reviewed.")]
     private static IEnumerable<CodeInstruction>? UpdateTranspiler(IEnumerable<CodeInstruction> instructions, ILGenerator gen, MethodBase original)
@@ -69,6 +70,7 @@ internal static class TranspileFairy
         return null;
     }
 
+    [HarmonyTranspiler]
     [HarmonyPatch(nameof(FairyEvent.makeChangesToLocation))]
     private static IEnumerable<CodeInstruction>? MakeChangesTranspiler(IEnumerable<CodeInstruction> instructions, ILGenerator gen, MethodBase original)
     {

@@ -1,6 +1,7 @@
 ﻿using HarmonyLib;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using StardewModdingAPI.Events;
 using StardewModdingAPI.Utilities;
 using StardewValley.Menus;
 
@@ -15,6 +16,7 @@ internal static class ForgeMenuPatches
 {
     private static readonly PerScreen<List<BaseEnchantment>> PossibleEnchantmentPerscreen = new(() => new());
     private static readonly PerScreen<ForgeSelectionMenu?> MenuPerscreen = new();
+    private static readonly PerScreen<int> LastButtonPressTicks = new(() => 0);
 
     /// <summary>
     /// Gets the current selected enchantment from the menu, if the menu exists.
@@ -28,6 +30,27 @@ internal static class ForgeMenuPatches
     {
         get => MenuPerscreen.Value;
         set => MenuPerscreen.Value = value;
+    }
+
+    /// <summary>
+    /// Handles adjusting the menu in response to button presses.
+    /// </summary>
+    /// <param name="e">Buttons.</param>
+    internal static void ApplyButtonPresses(ButtonsChangedEventArgs e)
+    {
+        if (Menu is null || LastButtonPressTicks.Value + 15 < Game1.ticks)
+        {
+            return;
+        }
+        LastButtonPressTicks.Value = Game1.ticks;
+        if (ModEntry.Config.LeftArrow.IsDown())
+        {
+            Menu.RetreatPosition(playSound: true);
+        }
+        else if (ModEntry.Config.RightArrow.IsDown())
+        {
+            Menu.AdvancePosition(playSound: true);
+        }
     }
 
     /// <summary>

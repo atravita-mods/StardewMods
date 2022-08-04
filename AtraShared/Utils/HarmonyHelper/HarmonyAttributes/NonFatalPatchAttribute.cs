@@ -3,7 +3,7 @@
 /// <summary>
 /// Indicates that the patch should be ignored if the target can not be found.
 /// </summary>
-[AttributeUsage(AttributeTargets.Class)]
+[AttributeUsage(AttributeTargets.Class | AttributeTargets.Method)]
 public class NonFatalPatchAttribute : Attribute
 {
     /// <summary>
@@ -21,7 +21,7 @@ public class NonFatalPatchAttribute : Attribute
         => this.Message = message;
 
     /// <summary>
-    /// The custom message to add, if there is one.
+    /// Gets the custom message to add, if there is one.
     /// </summary>
     internal string? Message { get; init; }
 }

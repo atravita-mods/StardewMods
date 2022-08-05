@@ -1,4 +1,6 @@
-﻿namespace ForgeMenuChoice;
+﻿using StardewModdingAPI.Utilities;
+
+namespace ForgeMenuChoice;
 
 /// <summary>
 /// Defines enums on how to show the tooltips.
@@ -36,5 +38,9 @@ internal sealed class ModConfig
     /// Whether to enable automatic generation of tooltips from Journal Scrap 9.
     /// </summary>
     public bool EnableTooltipAutogeneration { get; set; } = true;
+
+    public KeybindList LeftArrow { get; set; } = KeybindList.Parse("LeftShoulder, Left");
+
+    public KeybindList RightArrow { get; set; } = KeybindList.Parse("RightShoulder, Right");
 }
 #pragma warning restore SA1623 // Property summary documentation should match accessors

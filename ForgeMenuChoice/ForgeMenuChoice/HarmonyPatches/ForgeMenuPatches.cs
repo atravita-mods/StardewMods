@@ -46,10 +46,12 @@ internal static class ForgeMenuPatches
         if (ModEntry.Config.LeftArrow.IsDown())
         {
             Menu.RetreatPosition(playSound: true);
+            ModEntry.InputHelper.SuppressActiveKeybinds(ModEntry.Config.LeftArrow);
         }
         else if (ModEntry.Config.RightArrow.IsDown())
         {
             Menu.AdvancePosition(playSound: true);
+            ModEntry.InputHelper.SuppressActiveKeybinds(ModEntry.Config.RightArrow);
         }
     }
 

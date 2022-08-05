@@ -25,9 +25,9 @@ public class RequireModAttribute : Attribute
         this.MaxVersion = maxVersion;
     }
 
-    internal string UniqueID { get; private set; }
+    internal string UniqueID { get; init; }
 
-    internal string? MinVersion { get; private set; }
+    internal string? MinVersion { get; init; }
 
-    internal string? MaxVersion { get; private set; }
+    internal string? MaxVersion { get; init; }
 }

@@ -11,6 +11,8 @@ namespace PrismaticSlime;
 /// <inheritdoc/>
 internal sealed class ModEntry : Mod
 {
+    internal const string SlimePoppedStat = "atravita.SlimeBallsPopped";
+
     private static IJsonAssetsAPI? jsonAssets;
 
     /// <summary>

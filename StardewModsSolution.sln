@@ -93,7 +93,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SleepInWedding", "SleepInWe
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ReviveDeadCrops", "ReviveDeadCrops\ReviveDeadCrops.csproj", "{D475C23C-8C0F-495A-8035-A73126B90783}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SingleParenthood", "SingleParenthood\SingleParenthood.csproj", "{54F0A691-5B61-4966-9AD5-B6D509E5E201}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SingleParenthood", "SingleParenthood\SingleParenthood.csproj", "{54F0A691-5B61-4966-9AD5-B6D509E5E201}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

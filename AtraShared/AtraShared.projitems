@@ -79,8 +79,8 @@
     <Compile Include="$(MSBuildThisFileDirectory)Utils\Extensions\Vector2Extensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Utils\GameLocationUtils.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Utils\HarmonyHelper\AdditionalCodeInstructionExtensions.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Utils\HarmonyHelper\Attributes\RequireModAttribute.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Utils\HarmonyHelper\CodeInstructionWrapper.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Utils\HarmonyHelper\HarmonyAttributes\GameVersionAttribute.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Utils\HarmonyHelper\HarmonyAttributes\NonFatalPatchAttribute.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Utils\HarmonyHelper\HarmonyAttributes\RequireModAttribute.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Utils\HarmonyHelper\ILHelper.cs" />

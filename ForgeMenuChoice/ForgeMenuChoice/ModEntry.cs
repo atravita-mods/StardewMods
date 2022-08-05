@@ -8,6 +8,7 @@ using ForgeMenuChoice.HarmonyPatches;
 using HarmonyLib;
 using Microsoft.Xna.Framework.Graphics;
 using StardewModdingAPI.Events;
+using StardewModdingAPI.Utilities;
 using AtraUtils = AtraShared.Utils.Utils;
 
 namespace ForgeMenuChoice;
@@ -36,6 +37,8 @@ internal sealed class ModEntry : Mod
     /// </summary>
     internal static ModConfig Config { get; private set; }
 
+    internal static IInputHelper InputHelper { get; private set; }
+
     internal static StringUtils StringUtils { get; private set; }
 #pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
 
@@ -47,6 +50,7 @@ internal sealed class ModEntry : Mod
         StringUtils = new(this.Monitor);
         GameContentHelper = helper.GameContent;
         TranslationHelper = helper.Translation;
+        InputHelper = helper.Input;
 
         I18n.Init(helper.Translation);
         Config = AtraUtils.GetConfigOrDefault<ModConfig>(helper, this.Monitor);
@@ -57,7 +61,12 @@ internal sealed class ModEntry : Mod
         helper.Events.Content.AssetRequested += this.OnAssetRequested;
         helper.Events.Content.LocaleChanged += this.OnLocaleChanged;
         helper.Events.Content.AssetsInvalidated += this.OnAssetInvalidated;
+
+        helper.Events.Input.ButtonsChanged += this.OnButtonsChanged;
     }
+
+    private void OnButtonsChanged(object? sender, ButtonsChangedEventArgs e)
+        => ForgeMenuPatches.ApplyButtonPresses(e);
 
     private void OnLocaleChanged(object? sender, LocaleChangedEventArgs e)
     {

@@ -3,12 +3,14 @@ using System.Reflection.Emit;
 using AtraBase.Toolkit;
 using HarmonyLib;
 using Microsoft.Toolkit.Diagnostics;
+using NetEscapades.EnumGenerators;
 
 namespace AtraShared.Utils.HarmonyHelper;
 
 /// <summary>
 /// Special cases for code instructions to match against.
 /// </summary>
+[EnumExtensions]
 public enum SpecialCodeInstructionCases
 {
     /// <summary>
@@ -199,19 +201,23 @@ public sealed class CodeInstructionWrapper
     {
         if (this.specialInstructionCase is null)
         {
-            if (this.codeInstruction is null)
-            {
-                return "null CodeInstructionWrapper (this should never happen)";
-            }
-            else
-            {
-                return this.codeInstruction.ToString();
-            }
+            return this.codeInstruction is null
+                ? "null CodeInstructionWrapper (this should never happen)"
+                : this.codeInstruction.ToString();
         }
-        else
+
+        return this.specialInstructionCase.Value switch
         {
-            return this.specialInstructionCase.Value.ToString();
-        }
+            SpecialCodeInstructionCases.Wildcard
+                => this.predicate is null ? this.specialInstructionCase.Value.ToStringFast() : this.specialInstructionCase.Value.ToStringFast() + " with predicate",
+            SpecialCodeInstructionCases.LdArg or SpecialCodeInstructionCases.LdArgA or SpecialCodeInstructionCases.StArg
+                => this.argumentPos is null ? this.specialInstructionCase.Value.ToStringFast() : $"{this.specialInstructionCase.Value.ToStringFast()} {this.argumentPos}",
+            SpecialCodeInstructionCases.LdLoc or SpecialCodeInstructionCases.StLoc
+                => this.local is null
+                    ? (this.localType is null ? this.specialInstructionCase.Value.ToStringFast() : $"{this.specialInstructionCase.Value.ToStringFast()} {this.localType}")
+                    : $"{this.specialInstructionCase.Value.ToStringFast()} {this.local}",
+            _ => this.specialInstructionCase.Value.ToStringFast(),
+        };
     }
 
     private static bool IsMatchingLocal(LocalVariableInfo loc, object other)

@@ -48,7 +48,7 @@ public sealed class ILHelper
         }
         else
         {
-            throw new InvalidOperationException($"Attempted to transpile a method without a body: {original.FullDescription()}");
+            ThrowHelper.ThrowInvalidOperationException($"Attempted to transpile a method without a body: {original.FullDescription()}");
         }
 
         this.Original = original;
@@ -144,7 +144,7 @@ public sealed class ILHelper
     /// </summary>
     /// <param name="index">Index to move to.</param>
     /// <returns>this.</returns>
-    /// <exception cref="IndexOutOfRangeException">Tried to move to an invalid location.</exception>
+    /// <exception cref="ArgumentOutOfRangeException">Tried to move to an invalid location.</exception>
     public ILHelper JumpTo(int index)
     {
         Guard.IsBetweenOrEqualTo(index, 0, this.Codes.Count - 1, nameof(index));

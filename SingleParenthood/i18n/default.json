@@ -1,4 +1,13 @@
 ﻿{
-  //
-  "HaveChild": "",
+  
+  "Services": "Pelican Town Services",
+
+  "Adoption": "Adoption Services",
+
+  "Evict": "Eviction Services",
+  "Divorce": "Divorce Services",
+  "Leave": "Leave",
+
+  "Adopt": "Adopt a child",
+  "No": "No",
 }

@@ -1,5 +1,6 @@
 ﻿using AtraShared.ConstantsAndEnums;
 using AtraShared.Integrations;
+using AtraShared.Integrations.Interfaces;
 using AtraShared.Utils.Extensions;
 using HarmonyLib;
 using StardewModdingAPI.Events;
@@ -10,9 +11,13 @@ namespace SingleParenthood;
 /// <inheritdoc />
 internal sealed class ModEntry : Mod
 {
-    internal const string countUp = "atravita.SingleParenthood.CountUp";
-    internal const string type = "atravita.SingleParenthood.Type";
-    internal const string relationship = "atravita.SingleParenthood.Relationship";
+    internal const string CountUp = "atravita.SingleParenthood.CountUp";
+    internal const string Type = "atravita.SingleParenthood.Type";
+    internal const string Relationship = "atravita.SingleParenthood.Relationship";
+
+    private static IPregnancyRoleApi? pregancyRoleApi;
+
+    internal static IPregnancyRoleApi? PregnancyRoleApi => pregancyRoleApi;
 
     internal static IMonitor ModMonitor { get; private set; } = null!;
 
@@ -46,6 +51,9 @@ internal sealed class ModEntry : Mod
     private void OnGameLaunch(object? sender, GameLaunchedEventArgs e)
     {
         this.ApplyPatches(new Harmony(this.ModManifest.UniqueID));
+
+        IntegrationHelper integrationHelper = new(this.Monitor, this.Helper.Translation, this.Helper.ModRegistry, LogLevel.Debug);
+        _ = integrationHelper.TryGetAPI("kdau.PregnancyRole", "2.0.0", out pregancyRoleApi);
 
         GMCMHelper helper = new(this.Monitor, this.Helper.Translation, this.Helper.ModRegistry, this.ModManifest);
         if (helper.TryGetAPI())

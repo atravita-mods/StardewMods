@@ -6,6 +6,7 @@ using AtraShared.MigrationManager;
 using AtraShared.Utils.Extensions;
 using HarmonyLib;
 using Microsoft.Xna.Framework;
+using PamTries.Framework;
 #if DEBUG
 using PamTries.HarmonyPatches;
 #endif
@@ -38,6 +39,8 @@ internal class ModEntry : Mod
         helper.Events.GameLoop.SaveLoaded += this.SaveLoaded;
         helper.Events.GameLoop.DayStarted += DialogueManager.GrandKidsDialogue;
         helper.Events.GameLoop.DayEnding += this.DayEnd;
+
+        helper.Events.Content.AssetReady += this.OnAssetReady;
 
         this.ApplyPatches(new Harmony(this.ModManifest.UniqueID));
     }
@@ -144,7 +147,7 @@ internal class ModEntry : Mod
     }
 
     private string GetPamMood()
-        => this.mood.ToString();
+        => this.mood.ToStringFast();
 
     private void SetPamMood(int daysPlayed)
     {
@@ -266,4 +269,7 @@ internal class ModEntry : Mod
             }
         }
     }
+
+    private void OnAssetReady(object? sender, AssetReadyEventArgs e)
+        => AlternativeBusDriverManager.MonitorSchedule(e);
 }

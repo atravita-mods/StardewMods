@@ -1,5 +1,7 @@
 ﻿using AtraShared.Menuing;
+using AtraShared.Utils.Extensions;
 using HarmonyLib;
+using SingleParenthood.Framework;
 using StardewValley.Locations;
 
 namespace SingleParenthood.HarmonyPatches;
@@ -14,15 +16,30 @@ internal static class ManorHousePatch
     {
         List<Response> responses = new()
         {
-            new("HaveChild", "Have kid"),
-            new("NoChild", "Nah"),
+            new("atravita.HaveChild", "Have kid"),
+            new("atravita.NoChild", "Nah"),
         };
 
         List<Action?> actions = new()
         {
             () =>
             {
-                Game1.player.modData[ModEntry.countUp] = "0";
+                Game1.player.modData[ModEntry.CountUp] = "0";
+
+                if (Game1.player.hasCurrentOrPendingRoommate())
+                {
+                    Game1.player.modData.SetEnum(ModEntry.Relationship, RelationshipType.Roommates);
+                }
+                else if (Game1.player.isMarried())
+                {
+                    Game1.player.modData.SetEnum(ModEntry.Relationship, RelationshipType.Married);
+                }
+                else
+                {
+                    Game1.player.modData.SetEnum(ModEntry.Relationship, RelationshipType.Single);
+                }
+
+                Game1.player.modData.SetEnum(ModEntry.Type, ParenthoodType.Adoption);
             },
         };
     }
@@ -34,7 +51,7 @@ internal static class ManorHousePatch
         if (action is "DivorceBook"
             && Utility.getHomeOfFarmer(Game1.player) is FarmHouse house
             && house.upgradeLevel >= 2
-            && Game1.player.modData.ContainsKey(ModEntry.countUp)
+            && Game1.player.modData.ContainsKey(ModEntry.CountUp)
             && Game1.player.getChildrenCount() < ModEntry.Config.MaxKids
             && Game1.player.AllKidsOutOfCrib())
         {
@@ -48,9 +65,9 @@ internal static class ManorHousePatch
                 {
                     List<Response> responses = new()
                     {
-                        new("atravita.child", "child"),
-                        new("atravita.divorce", "Get Divorced"),
-                        new("atravita.close", "Close Menu"),
+                        new("atravita.child", I18n.Adoption()),
+                        new("atravita.divorce", I18n.Divorce()),
+                        new("atravita.close", I18n.Leave()),
                     };
 
                     List<Action?> actions = new()
@@ -65,7 +82,7 @@ internal static class ManorHousePatch
                         },
                     };
 
-                    Game1.activeClickableMenu = new DialogueAndAction("atravita.marriedChildMenu", responses, actions);
+                    Game1.activeClickableMenu = new DialogueAndAction(I18n.Services(), responses, actions);
                 }
                 else
                 {

@@ -73,6 +73,7 @@ internal sealed class ModEntry : Mod
         helper.Events.GameLoop.GameLaunched += this.OnGameLaunched;
     }
 
+    [EventPriority(EventPriority.Low)]
     private void OnAssetRequested(object? sender, AssetRequestedEventArgs e)
         => AssetEditor.HandleAssetRequested(e);
 

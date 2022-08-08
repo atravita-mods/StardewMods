@@ -1,13 +1,24 @@
 {
     "spellchecker.ignoreWordsList": [
+        "AnimalShop",
+        "anyPlayer",
         "atravita",
+        "BusReliability",
+        "BusStop",
+        "CommunityCenter",
+        "DayOfWeek",
         "EditData",
+        "FromFile",
         "GiftReaction",
         "HasSeenEvent",
         "inputSeparator",
         "LogName",
-        "PamTries",
-        "sadpiano",
         "PamApology",
+        "PamFishingLocation",
+        "PamTries",
+        "podunk",
+        "Ridgeside",
+        "sadpiano",
+        "SeedShop",
     ]
 }

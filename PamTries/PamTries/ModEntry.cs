@@ -1,6 +1,5 @@
 ﻿using AtraCore.Utilities;
 using AtraShared.Integrations;
-using AtraShared.Integrations.Interfaces;
 using AtraShared.Integrations.Interfaces.ContentPatcher;
 using AtraShared.MigrationManager;
 using AtraShared.Utils.Extensions;
@@ -39,11 +38,13 @@ internal class ModEntry : Mod
         helper.Events.GameLoop.SaveLoaded += this.SaveLoaded;
         helper.Events.GameLoop.DayStarted += DialogueManager.GrandKidsDialogue;
         helper.Events.GameLoop.DayEnding += this.DayEnd;
-
-        helper.Events.Content.AssetReady += this.OnAssetReady;
+        helper.Events.GameLoop.ReturnedToTitle += this.OnReturnedToTitle;
 
         this.ApplyPatches(new Harmony(this.ModManifest.UniqueID));
     }
+
+    private void OnReturnedToTitle(object? sender, ReturnedToTitleEventArgs e)
+        => this.Helper.Events.Content.AssetReady -= this.OnAssetReady;
 
     private void ApplyPatches(Harmony harmony)
     {
@@ -64,6 +65,7 @@ internal class ModEntry : Mod
     private void DayStarted(object? sender, DayStartedEventArgs e)
         => PTUtilities.PopulateLexicon(this.Helper.GameContent);
 
+    [EventPriority(EventPriority.High)]
     private void SaveLoaded(object? sender, SaveLoadedEventArgs e)
     {
         this.SetPamMood((int)Game1.stats.DaysPlayed);
@@ -76,8 +78,8 @@ internal class ModEntry : Mod
         }
 
         MultiplayerHelpers.AssertMultiplayerVersions(this.Helper.Multiplayer, this.ModManifest, this.Monitor, this.Helper.Translation);
-
         PTUtilities.PopulateLexicon(this.Helper.GameContent);
+
         this.migrator = new(this.ModManifest, this.Helper, this.Monitor);
         if (!this.migrator.CheckVersionInfo())
         {
@@ -86,6 +88,11 @@ internal class ModEntry : Mod
         else
         {
             this.migrator = null;
+        }
+
+        if (Context.IsMainPlayer)
+        {
+            this.Helper.Events.Content.AssetReady += this.OnAssetReady;
         }
     }
 

@@ -24,7 +24,7 @@ internal static class PostfixBigSlimeConstructor
         try
         {
             if (ModEntry.PrismaticSlimeRing != -1
-                && Game1.random.NextDouble() < 0.01 + (Game1.player.team.AverageDailyLuck() / 10.0) + (Game1.player.LuckLevel / 200.0))
+                && Game1.random.NextDouble() < 0.01 + Game1.player.team.AverageDailyLuck() / 10.0 + Game1.player.LuckLevel / 200.0)
             {
                 __instance.heldObject.Value = new SObject(ModEntry.PrismaticSlimeRing, 1);
             }

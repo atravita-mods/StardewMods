@@ -58,6 +58,23 @@
             "HasFile:{{FromFile}}": true
         }
     },
+    {//load default base dialogue
+        "Action": "Include",
+        "LogName": "Dialogue Changes - subfiles",
+        "FromFile": "assets/default/base/dialogue/{{PamRandomToken}}.json",
+        "When": {
+            "HasFile:{{FromFile}}": true,
+            "HasFile:assets/{{language}}/base/dialogue/{{PamRandomToken}}.json": false
+        }
+    },
+    {//load language-specific base dialogue
+        "Action": "Include",
+        "LogName": "Dialogue Changes - subfiles",
+        "FromFile": "assets/{{language}}/base/dialogue/{{PamRandomToken}}.json",
+        "When": {
+            "HasFile:{{FromFile}}": true
+        }
+    },
     {
         "Action": "Include",
         "LogName": "Relationship Dialogue Changes",

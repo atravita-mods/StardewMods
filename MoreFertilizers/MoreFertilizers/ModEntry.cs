@@ -298,10 +298,12 @@ internal sealed class ModEntry : Mod
     [UsedImplicitly]
     public override object GetApi() => new CanPlaceHandler();
 
+    [EventPriority(EventPriority.Low)]
     private void OnAssetRequested(object? sender, AssetRequestedEventArgs e)
         => AssetEditor.Edit(e);
 
     // Only hook if SpecialOrdersExtended is installed.
+    [EventPriority(EventPriority.Low)]
     private void OnSpecialOrderDialogueRequested(object? sender, AssetRequestedEventArgs e)
         => AssetEditor.EditSpecialOrderDialogue(e);
 

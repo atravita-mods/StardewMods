@@ -42,7 +42,7 @@ public readonly struct DelayedDialogue : IComparable<DelayedDialogue>, IEquatabl
     /// <returns>True if pushed, false otherwise.</returns>
     public bool PushIfPastTime(int currenttime)
     {
-        if (currenttime > this.time)
+        if (currenttime >= this.time)
         {
             this.npc.CurrentDialogue.Push(this.dialogue);
             return true;

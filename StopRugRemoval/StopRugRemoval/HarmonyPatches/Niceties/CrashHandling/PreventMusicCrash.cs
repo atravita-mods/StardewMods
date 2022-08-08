@@ -24,7 +24,7 @@ internal static class PreventMusicCrash
         {
             return true;
         }
-        if (Game1.soundBank is null || !Context.IsWorldReady)
+        if (Game1.soundBank is null || !Context.IsWorldReady || Game1.soundBank is DummySoundBank)
         {
             return false;
         }
@@ -65,7 +65,7 @@ internal static class PreventMusicCrash
             })
             .Advance(1);
 
-            var ldloc = helper.CurrentInstruction.ToLdLoc();
+            CodeInstruction? ldloc = helper.CurrentInstruction.ToLdLoc();
 
             helper.FindNext(new CodeInstructionWrapper[]
             {

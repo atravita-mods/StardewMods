@@ -100,7 +100,7 @@ internal sealed class ModEntry : Mod
                 return;
             }
 
-        ModMonitor.DebugOnlyLog($"Before attempting queuing new weddings {string.Join(", ", Game1.weddingsToday)}");
+            ModMonitor.DebugOnlyLog($"Before attempting queuing new weddings {string.Join(", ", Game1.weddingsToday)}");
 
             HashSet<long> added = new();
             List<long> online = new();
@@ -142,7 +142,7 @@ internal sealed class ModEntry : Mod
                 }
         }
 
-        ModMonitor.DebugOnlyLog($"Current weddings {string.Join(", ", Game1.weddingsToday)}");
+            ModMonitor.DebugOnlyLog($"Current weddings {string.Join(", ", Game1.weddingsToday)}");
             this.Helper.Multiplayer.SendMessage(
                 message: Game1.weddingsToday,
                 messageType: RestoredWeddings,

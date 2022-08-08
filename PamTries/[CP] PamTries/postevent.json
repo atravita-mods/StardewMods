@@ -88,11 +88,11 @@
     {
         "Action": "Include",
         "LogName": "Base mail changes",
-        "FromFile": "{{FirstValidFile: assets/{{language}}/quests_mail.json, assets/default/mail.json}}"
+        "FromFile": "{{FirstValidFile: assets/{{language}}/mail.json, assets/default/mail.json}}"
     },
     {
         "Action": "Include",
-        "LogName": "Event changes",
+        "LogName": "Event and quest changes",
         "FromFile": "assets/events.json"
     },
     {
@@ -114,6 +114,12 @@
         "ToArea": {"X":424, "Y": 755, "Width":35, "Height":23},
         "PatchMode": "Replace",
         "When": {"HasSeenEvent": "99210001", "HouseChanges": "true"} //Pam to rehab
+    },
+    {
+        "Action": "Include",
+        "LogName": "Movie reactions",
+        "FromFile": "assets/moviereactions.json",
+        "When": {"HasSeenEvent": "99210001", "MapChanges": "true"} //Pam to rehab
     },
     { // Prevent Pam from going on vacation on her therapy days.
       // For GIMA's exclusion system
@@ -138,6 +144,17 @@
             "HasMod": "Esca.CustomNPCExclusions",
             "Day": "6,16",
             "HasSeenEvent": "99210002"
+        }
+     },
+     {
+        "Action": "EditData",
+        "Target": "Data/CustomNPCExclusions",
+        "Entries": {
+            "Pam": "WinterStar"
+        },
+        "When":{
+            "HasMod": "Esca.CustomNPCExclusions",
+            "HasConversationTopic": "PamTriesRehab"
         }
      }
 ]}

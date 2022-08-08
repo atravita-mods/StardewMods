@@ -85,6 +85,8 @@ internal static class DataToItemMap
                         ["Brown Egg"] = 180,
                         ["Large Egg"] = 174,
                         ["Large Brown Egg"] = 182,
+                        ["Strange Doll"] = 126,
+                        ["Strange Doll 2"] = 127
                     };
 
                     // Processing from the data.
@@ -109,7 +111,8 @@ internal static class DataToItemMap
                             || name.Equals("???", StringComparison.OrdinalIgnoreCase)
                             || name.Equals("DGA Dummy Object", StringComparison.OrdinalIgnoreCase)
                             || name.Equals("Egg", StringComparison.OrdinalIgnoreCase)
-                            || name.Equals("Large Egg", StringComparison.OrdinalIgnoreCase))
+                            || name.Equals("Large Egg", StringComparison.OrdinalIgnoreCase)
+                            || name.Equals("Strange Doll", StringComparison.OrdinalIgnoreCase))
                         {
                             continue;
                         }

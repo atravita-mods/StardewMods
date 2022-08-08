@@ -1,4 +1,5 @@
-﻿using AtraShared.ConstantsAndEnums;
+﻿using System.Diagnostics;
+using AtraShared.ConstantsAndEnums;
 using AtraShared.Integrations;
 using AtraShared.MigrationManager;
 using AtraShared.Niceties;
@@ -179,6 +180,11 @@ internal sealed class ModEntry : Mod
 
         if (this.Helper.ModRegistry.IsLoaded("Digus.ProducerFrameworkMod"))
         {
+#if DEBUG
+            Stopwatch sw = new();
+            sw.Start();
+#endif
+
             PFMMachineHandler.ProcessPFMRecipes();
 
             foreach (int machineID in PFMMachineHandler.PFMMachines)
@@ -204,6 +210,10 @@ internal sealed class ModEntry : Mod
 
             this.Monitor.Log("PFM compat set up!", LogLevel.Trace);
             this.Helper.AsyncWriteConfig(this.Monitor, Config);
+#if DEBUG
+            sw.Stop();
+            this.Monitor.Log($"PFM compat took {sw.ElapsedMilliseconds} ms.");
+#endif
         }
         else
         {

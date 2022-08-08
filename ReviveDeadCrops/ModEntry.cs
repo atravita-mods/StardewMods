@@ -86,7 +86,8 @@ internal sealed class ModEntry : Mod
 
     private void OnButtonPressed(object? sender, ButtonPressedEventArgs e)
     {
-        if (!MenuingExtensions.IsNormalGameplay() || !(e.Button.IsUseToolButton() || e.Button.IsActionButton()))
+        if (!(e.Button.IsUseToolButton() || e.Button.IsActionButton())
+            || !MenuingExtensions.IsNormalGameplay())
         {
             return;
         }

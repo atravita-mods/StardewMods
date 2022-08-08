@@ -31,5 +31,10 @@ public interface IReviveDeadCropsApi
     /// <param name="crop">The crop to revive.</param>
     public void RevivePlant(Crop crop);
 
+    /// <summary>
+    /// Adds a little animation for the revival.
+    /// </summary>
+    /// <param name="loc">The game location.</param>
+    /// <param name="tile">Animation to play.</param>
     public void AnimateRevival(GameLocation loc, Vector2 tile);
 }

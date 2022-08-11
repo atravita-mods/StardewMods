@@ -2,7 +2,7 @@
 using AtraShared.Integrations.Interfaces;
 using AtraShared.Niceties;
 using AtraShared.Utils.Extensions;
-using Microsoft.Toolkit.Diagnostics;
+using CommunityToolkit.Diagnostics;
 using Microsoft.Xna.Framework;
 using StardewValley.Objects;
 using StardewValley.TerrainFeatures;

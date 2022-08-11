@@ -1,6 +1,6 @@
 ﻿using AtraBase.Toolkit.Reflection;
 using AtraCore.Framework.QueuePlayerAlert;
-using Microsoft.Toolkit.Diagnostics;
+using CommunityToolkit.Diagnostics;
 
 namespace AtraCore.Utilities;
 

@@ -1,7 +1,7 @@
 ﻿using AtraCore.Utilities;
 using AtraShared.Utils;
 using AtraShared.Utils.Extensions;
-using Microsoft.Toolkit.Diagnostics;
+using CommunityToolkit.Diagnostics;
 using Microsoft.Xna.Framework;
 using StardewValley.Buildings;
 using StardewValley.Locations;

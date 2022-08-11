@@ -1,5 +1,5 @@
 ﻿using AtraBase.Collections;
-using Microsoft.Toolkit.Diagnostics;
+using CommunityToolkit.Diagnostics;
 using StardewModdingAPI.Utilities;
 
 namespace AtraCore.Framework.DialogueManagement;

@@ -1,4 +1,4 @@
-﻿using Microsoft.Toolkit.Diagnostics;
+﻿using CommunityToolkit.Diagnostics;
 
 namespace AtraCore.Framework.DialogueManagement;
 

@@ -6,7 +6,7 @@ using AtraBase.Toolkit.Reflection;
 using AtraCore.Framework.ReflectionManager;
 using AtraShared.Utils.HarmonyHelper;
 using HarmonyLib;
-using Microsoft.Toolkit.Diagnostics;
+using CommunityToolkit.Diagnostics;
 using Netcode;
 using StardewValley.Tools;
 

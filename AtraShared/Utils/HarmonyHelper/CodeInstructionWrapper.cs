@@ -2,7 +2,7 @@
 using System.Reflection.Emit;
 using AtraBase.Toolkit;
 using HarmonyLib;
-using Microsoft.Toolkit.Diagnostics;
+using CommunityToolkit.Diagnostics;
 using NetEscapades.EnumGenerators;
 
 namespace AtraShared.Utils.HarmonyHelper;

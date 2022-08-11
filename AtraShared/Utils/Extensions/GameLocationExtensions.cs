@@ -1,5 +1,5 @@
 ﻿using AtraBase.Toolkit.Extensions;
-using Microsoft.Toolkit.Diagnostics;
+using CommunityToolkit.Diagnostics;
 using Microsoft.Xna.Framework;
 using StardewValley.Locations;
 using StardewValley.Monsters;

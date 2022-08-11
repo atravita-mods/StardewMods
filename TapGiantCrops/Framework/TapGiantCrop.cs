@@ -1,7 +1,7 @@
 ﻿using AtraBase.Toolkit.Extensions;
 using AtraShared.ConstantsAndEnums;
 using AtraShared.Utils.Shims;
-using Microsoft.Toolkit.Diagnostics;
+using CommunityToolkit.Diagnostics;
 using Microsoft.Xna.Framework;
 using StardewValley.TerrainFeatures;
 

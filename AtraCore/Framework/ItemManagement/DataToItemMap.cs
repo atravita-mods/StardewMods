@@ -1,7 +1,7 @@
 ﻿using AtraBase.Toolkit.Extensions;
 using AtraShared.ConstantsAndEnums;
 using AtraShared.Utils.Extensions;
-using Microsoft.Toolkit.Diagnostics;
+using CommunityToolkit.Diagnostics;
 
 namespace AtraCore.Framework.ItemManagement;
 

@@ -13,7 +13,7 @@ using System.Text;
 using AtraBase.Collections;
 using AtraShared.Utils.Extensions;
 using HarmonyLib;
-using Microsoft.Toolkit.Diagnostics;
+using CommunityToolkit.Diagnostics;
 
 namespace AtraShared.Utils.HarmonyHelper;
 

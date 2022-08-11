@@ -14,7 +14,7 @@ using StardewModdingAPI.Events;
 namespace PamTries;
 
 /// <inheritdoc />
-internal class ModEntry : Mod
+internal sealed class ModEntry : Mod
 {
     private static readonly string[] SyncedConversationTopics = new string[2] { "PamTriesRehab", "PamTriesRehabHoneymoon" };
     private Random? random;
@@ -40,11 +40,10 @@ internal class ModEntry : Mod
         helper.Events.GameLoop.DayEnding += this.DayEnd;
         helper.Events.GameLoop.ReturnedToTitle += this.OnReturnedToTitle;
 
+        helper.Events.Content.AssetRequested += this.OnAssetRequested;
+
         this.ApplyPatches(new Harmony(this.ModManifest.UniqueID));
     }
-
-    private void OnReturnedToTitle(object? sender, ReturnedToTitleEventArgs e)
-        => this.Helper.Events.Content.AssetReady -= this.OnAssetReady;
 
     private void ApplyPatches(Harmony harmony)
     {
@@ -96,6 +95,12 @@ internal class ModEntry : Mod
         }
     }
 
+    private void OnAssetRequested(object? sender, AssetRequestedEventArgs e)
+        => AssetManager.Apply(e);
+
+    private void OnReturnedToTitle(object? sender, ReturnedToTitleEventArgs e)
+        => this.Helper.Events.Content.AssetReady -= this.OnAssetReady;
+
     /// <summary>
     /// Writes migration data then detaches the migrator.
     /// </summary>
@@ -146,15 +151,12 @@ internal class ModEntry : Mod
             {
                 if (Context.IsWorldReady)
                 {
-                    return new[] { this.GetPamMood() };
+                    return new[] { this.mood.ToStringFast() };
                 }
                 return null;
             });
         }
     }
-
-    private string GetPamMood()
-        => this.mood.ToStringFast();
 
     private void SetPamMood(int daysPlayed)
     {

@@ -10,8 +10,7 @@ using GiantCropFertilizer.DataModels;
 using GiantCropFertilizer.HarmonyPatches;
 using HarmonyLib;
 using StardewModdingAPI.Events;
-using StardewValley.Objects;
-using StardewValley.TerrainFeatures;
+using StardewValley.Buildings;
 using AtraUtils = AtraShared.Utils.Utils;
 
 namespace GiantCropFertilizer;
@@ -245,7 +244,16 @@ internal sealed class ModEntry : Mod
         => giantCropFertilizerID = -1;
 
     private void JAIdsFixed(object? sender, EventArgs e)
-        => this.FixIds();
+    {
+        try
+        {
+            this.FixIds();
+        }
+        catch (Exception ex)
+        {
+            this.Monitor.Log($"Failed in trying to fix ids:\n\n{ex}", LogLevel.Error);
+        }
+    }
 
     private void FixIds()
     {
@@ -255,7 +263,8 @@ internal sealed class ModEntry : Mod
             return;
         }
 
-        if (this.Helper.Data.ReadGlobalData<GiantCropFertilizerIDStorage>(SAVESTRING) is not GiantCropFertilizerIDStorage storedIDCls)
+        if (this.Helper.Data.ReadGlobalData<GiantCropFertilizerIDStorage>(SAVESTRING) is not GiantCropFertilizerIDStorage storedIDCls
+            || storedIDCls.ID == -1)
         {
             ModMonitor.Log("No need to fix IDs, not installed before.");
             return;
@@ -291,23 +300,30 @@ internal sealed class ModEntry : Mod
     {
         // unhook event
         this.solidFoundationsAPI!.AfterBuildingRestoration -= this.AfterSFBuildingRestore;
-        if (SolidFoundationShims.IsSFBuilding is null)
+        try
         {
-            this.Monitor.Log("Could not get a handle on SF's building class, deshuffling code will fail!", LogLevel.Error);
-        }
-        else if (this.oldID == -1 || this.newID == -1)
-        {
-            this.Monitor.Log("IdMap was not set correctly, deshuffling code will fail.", LogLevel.Error);
-        }
-        else
-        {
-            foreach (var building in GameLocationUtils.GetBuildings())
+            if (SolidFoundationShims.IsSFBuilding is null)
             {
-                if (SolidFoundationShims.IsSFBuilding?.Invoke(building) == true)
+                this.Monitor.Log("Could not get a handle on SF's building class, deshuffling code will fail!", LogLevel.Error);
+            }
+            else if (this.oldID == -1 || this.newID == -1)
+            {
+                this.Monitor.Log("IdMap was not set correctly, deshuffling code will fail.", LogLevel.Error);
+            }
+            else
+            {
+                foreach (Building? building in GameLocationUtils.GetBuildings())
                 {
-                    building.indoors.Value?.FixIDsInLocation(this.oldID, this.newID);
+                    if (SolidFoundationShims.IsSFBuilding?.Invoke(building) == true)
+                    {
+                        building.indoors.Value?.FixIDsInLocation(this.oldID, this.newID);
+                    }
                 }
             }
+        }
+        catch (Exception ex)
+        {
+            this.Monitor.Log($"Failed in deshuffling IDs in SF buildings:\n\n{ex}", LogLevel.Error);
         }
         this.oldID = -1;
         this.newID = -1;

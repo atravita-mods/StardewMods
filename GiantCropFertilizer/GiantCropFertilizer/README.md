@@ -3,7 +3,7 @@ Giant Crop Fertilizer
 
 ![Header image](docs/fertilizer.jpg)
 
-This mod adds a fertilizer that greatly boosts the chance of getting a giant crop. Simply apply to the middle of a 9x9 square of giant-crop eligible crops, wait for them to become full grown...
+This mod adds a fertilizer that greatly boosts the chance of getting a giant crop. Simply apply to the middle of a 3x3 square of giant-crop eligible crops, wait for them to become full grown...
 
 (Note: must be applied before the crops grow entirely.)
 

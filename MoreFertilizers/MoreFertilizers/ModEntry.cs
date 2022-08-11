@@ -565,7 +565,17 @@ internal sealed class ModEntry : Mod
      * REGION JA
      * *********/
 
-    private void JsonAssets_IdsFixed(object? sender, EventArgs e) => this.FixIDs();
+    private void JsonAssets_IdsFixed(object? sender, EventArgs e)
+    {
+        try
+        {
+            this.FixIDs();
+        }
+        catch (Exception ex)
+        {
+            this.Monitor.Log($"Failed when trying to fix ids!\n\n{ex}", LogLevel.Error);
+        }
+    }
 
     private void FixIDs()
     {
@@ -751,23 +761,30 @@ internal sealed class ModEntry : Mod
     {
         // unhook event
         this.solidFoundationsAPI!.AfterBuildingRestoration -= this.AfterSFBuildingRestore;
-        if (SolidFoundationShims.IsSFBuilding is null)
+        try
         {
-            this.Monitor.Log("Could not get a handle on SF's building class, deshuffling code will fail!", LogLevel.Error);
-        }
-        else if (this.idmap is null)
-        {
-            this.Monitor.Log("IdMap was not set correctly, deshuffling code will fail.", LogLevel.Error);
-        }
-        else
-        {
-            foreach (var building in GameLocationUtils.GetBuildings())
+            if (SolidFoundationShims.IsSFBuilding is null)
             {
-                if (SolidFoundationShims.IsSFBuilding?.Invoke(building) == true)
+                this.Monitor.Log("Could not get a handle on SF's building class, deshuffling code will fail!", LogLevel.Error);
+            }
+            else if (this.idmap is null)
+            {
+                this.Monitor.Log("IdMap was not set correctly, deshuffling code will fail.", LogLevel.Error);
+            }
+            else
+            {
+                foreach (var building in GameLocationUtils.GetBuildings())
                 {
-                    building.indoors.Value?.FixHoeDirtInLocation(this.idmap);
+                    if (SolidFoundationShims.IsSFBuilding?.Invoke(building) == true)
+                    {
+                        building.indoors.Value?.FixHoeDirtInLocation(this.idmap);
+                    }
                 }
             }
+        }
+        catch (Exception ex)
+        {
+            this.Monitor.Log($"Failed while attempting to deshuffle in SF buildings:\n\n{ex}", LogLevel.Error);
         }
         this.idmap = null;
         this.solidFoundationsAPI = null;

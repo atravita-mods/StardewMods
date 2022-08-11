@@ -95,6 +95,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ReviveDeadCrops", "ReviveDe
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SingleParenthood", "SingleParenthood\SingleParenthood.csproj", "{54F0A691-5B61-4966-9AD5-B6D509E5E201}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AtraBaseTests", "AtraBase\AtraBaseTests\AtraBaseTests.csproj", "{E30DA1B2-AFDF-4CD4-A52E-6635A3C87898}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU

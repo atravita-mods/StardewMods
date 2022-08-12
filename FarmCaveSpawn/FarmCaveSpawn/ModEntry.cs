@@ -1,10 +1,11 @@
-﻿using System.Reflection;
+﻿using System.Buffers;
 using System.Text;
 using System.Text.RegularExpressions;
 using AtraBase.Toolkit.Extensions;
 using AtraBase.Toolkit.StringHandler;
 using AtraShared.Integrations;
 using AtraShared.MigrationManager;
+using AtraShared.Utils;
 using AtraShared.Utils.Extensions;
 using Microsoft.Xna.Framework;
 using StardewModdingAPI.Events;
@@ -169,14 +170,24 @@ internal sealed class ModEntry : Mod
         if (Game1.getLocationFromName("FarmCave") is FarmCave farmcave)
         {
             this.Monitor.DebugOnlyLog($"Spawning in the farmcave");
-            foreach (Vector2 v in this.IterateTiles(farmcave))
+
+            (Vector2[] tiles, int num) = farmcave.GetTiles();
+            tiles.Shuffle(this.Random, num);
+
+            for (int i = 0; i < num; i++)
             {
-                this.PlaceFruit(farmcave, v);
-                if (++count >= this.config.MaxDailySpawns)
+                ref Vector2 tile = ref tiles[i];
+                if (this.CanSpawnFruitHere(farmcave, tile))
                 {
-                    break;
+                    this.PlaceFruit(farmcave, tile);
+                    if (++count >= this.config.MaxDailySpawns)
+                    {
+                        break;
+                    }
                 }
             }
+
+            ArrayPool<Vector2>.Shared.Return(tiles);
             farmcave.UpdateReadyFlag();
             if (count >= this.config.MaxDailySpawns)
             {
@@ -221,12 +232,21 @@ internal sealed class ModEntry : Mod
                 if (Game1.getLocationFromName(parseloc) is GameLocation gameLocation)
                 {
                     this.Monitor.DebugOnlyLog($"Found {gameLocation}");
-                    foreach (Vector2 v in this.IterateTiles(gameLocation, xstart: locLimits["x1"], xend: locLimits["x2"], ystart: locLimits["y1"], yend: locLimits["y2"]))
+
+                    (Vector2[] tiles, int num) = gameLocation.GetTiles(xstart: locLimits["x1"], xend: locLimits["x2"], ystart: locLimits["y1"], yend: locLimits["y2"]);
+                    tiles.Shuffle(this.Random, num);
+
+                    for (int i = 0; i < num; i++)
                     {
-                        this.PlaceFruit(gameLocation, v);
-                        if (++count >= this.config.MaxDailySpawns)
+                        ref Vector2 tile = ref tiles[i];
+                        if (this.CanSpawnFruitHere(gameLocation, tile))
                         {
-                            goto END;
+                            this.PlaceFruit(gameLocation, tile);
+                            if (++count >= this.config.MaxDailySpawns)
+                            {
+                                ArrayPool<Vector2>.Shared.Return(tiles);
+                                goto END;
+                            }
                         }
                     }
                 }
@@ -239,12 +259,20 @@ internal sealed class ModEntry : Mod
 
         if (this.config.UseMineCave && Game1.getLocationFromName("Mine") is Mine mine)
         {
-            foreach (Vector2 v in this.IterateTiles(mine, xstart: 11))
+            (Vector2[] tiles, int num) = mine.GetTiles(xstart: 11);
+            tiles.Shuffle(this.Random, num);
+
+            for (int i = 0; i < num; i++)
             {
-                this.PlaceFruit(mine, v);
-                if (++count >= this.config.MaxDailySpawns)
+                ref Vector2 tile = ref tiles[i];
+                if (this.CanSpawnFruitHere(mine, tile))
                 {
-                    goto END;
+                    this.PlaceFruit(mine, tile);
+                    if (++count >= this.config.MaxDailySpawns)
+                    {
+                        ArrayPool<Vector2>.Shared.Return(tiles);
+                        goto END;
+                    }
                 }
             }
         }
@@ -290,6 +318,9 @@ END:
             }
         }
     }
+
+    private bool CanSpawnFruitHere(GameLocation location, Vector2 tile)
+        => this.Random.NextDouble() < this.config.SpawnChance / 100f && location.isTileLocationTotallyClearAndPlaceableIgnoreFloors(tile);
 
     /// <summary>
     /// Console command to list valid fruits for spawning.
@@ -357,7 +388,7 @@ END:
         List<int> treeFruits = new();
 
         Dictionary<int, string> fruittrees = this.Helper.GameContent.Load<Dictionary<int, string>>("Data/fruitTrees");
-        var currentseason = Game1.currentSeason.AsSpan().Trim();
+        ReadOnlySpan<char> currentseason = Game1.currentSeason.AsSpan().Trim();
         foreach (string tree in fruittrees.Values)
         {
             SpanSplit treedata = tree.SpanSplit('/', StringSplitOptions.TrimEntries, expectedCount: 3);

@@ -142,7 +142,7 @@ internal static class DialoguePatches
             }
             else if (__instance.TryApplyMarriageDialogueIfExisting("GIReturn_" + __instance.Name, clearOnMovement: true))
             {
-            Globals.ModMonitor.DebugOnlyLog($"Setting GIReturn_{__instance.Name}.", LogLevel.Debug);
+                Globals.ModMonitor.DebugOnlyLog($"Setting GIReturn_{__instance.Name}.", LogLevel.Debug);
             }
             else
             {

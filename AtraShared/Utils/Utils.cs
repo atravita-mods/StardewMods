@@ -101,6 +101,17 @@ public static class Utils
     }
 
     /// <summary>
+    /// Sorts strings (in place), taking into account the CultureInfo of the currently selected language.
+    /// </summary>
+    /// <param name="list">List of strings.</param>
+    /// <returns>A sorted list of strings.</returns>
+    public static List<string> ContextSort(List<string> list)
+    {
+        list.Sort(GetCurrentLanguageComparer(ignoreCase: true));
+        return list;
+    }
+
+    /// <summary>
     /// Returns a StringComparer for the current language the player is using.
     /// </summary>
     /// <param name="ignoreCase">Whether or not to ignore case.</param>

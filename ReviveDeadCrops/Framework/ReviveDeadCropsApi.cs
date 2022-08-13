@@ -27,6 +27,11 @@ public class ReviveDeadCropsApi : IReviveDeadCropsApi
         {
             return dirt.crop?.dead?.Value == true;
         }
+        if (loc.terrainFeatures.TryGetValue(tile, out TerrainFeature? terrain)
+            && terrain is FruitTree tree)
+        {
+            return tree.stump.Value || tree.struckByLightningCountdown.Value > 0;
+        }
         return false;
     }
 
@@ -45,6 +50,16 @@ public class ReviveDeadCropsApi : IReviveDeadCropsApi
                 this.AnimateRevival(loc, tile);
                 DelayedAction.functionAfterDelay(
                     () => this.RevivePlant(crop),
+                    120);
+                return true;
+            }
+
+            if (loc.terrainFeatures.TryGetValue(tile, out TerrainFeature? terrain)
+                && terrain is FruitTree tree)
+            {
+                this.AnimateRevival(loc, tile);
+                DelayedAction.functionAfterDelay(
+                    () => this.ReviveFruitTree(tree),
                     120);
                 return true;
             }
@@ -78,6 +93,22 @@ public class ReviveDeadCropsApi : IReviveDeadCropsApi
 
         // grow it completely.
         crop.growCompletely();
+    }
+
+    /// <inheritdoc />
+    public void ReviveFruitTree(FruitTree tree)
+    {
+        if (tree.struckByLightningCountdown.Value > 0)
+        {
+            tree.performUseAction(tree.currentTileLocation, Game1.currentLocation ?? tree.currentLocation);
+            tree.struckByLightningCountdown.Value = 0;
+        }
+        else if (tree.stump.Value)
+        {
+            tree.stump.Value = false;
+            tree.shakeLeft.Value = true;
+        }
+        tree.health.Value = 10f;
     }
 
     /// <inheritdoc />

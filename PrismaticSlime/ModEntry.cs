@@ -1,4 +1,5 @@
-﻿using AtraShared.ConstantsAndEnums;
+﻿using AtraCore.Framework.IntegrationManagers;
+using AtraShared.ConstantsAndEnums;
 using AtraShared.Integrations;
 using AtraShared.Integrations.Interfaces;
 using AtraShared.Utils.Extensions;
@@ -11,6 +12,9 @@ namespace PrismaticSlime;
 /// <inheritdoc/>
 internal sealed class ModEntry : Mod
 {
+    /// <summary>
+    /// String key used to index the number of slime balls popped.
+    /// </summary>
     internal const string SlimePoppedStat = "atravita.SlimeBallsPopped";
 
     private static IJsonAssetsAPI? jsonAssets;
@@ -21,12 +25,7 @@ internal sealed class ModEntry : Mod
     internal static IMonitor ModMonitor { get; private set; } = null!;
 
 #pragma warning disable SA1201 // Elements should appear in the correct order - keeping fields near their accessors.
-    private static IWearMoreRingsAPI? wearMoreRingsAPI;
-
-    /// <summary>
-    /// Gets the WearMoreRings API, if available.
-    /// </summary>
-    internal static IWearMoreRingsAPI? WearMoreRingsAPI => wearMoreRingsAPI;
+    internal static RingManager ringManager { get; private set; } = null!;
 
     private static int prismaticSlimeEgg = -1;
 
@@ -87,12 +86,9 @@ internal sealed class ModEntry : Mod
             jsonAssets.LoadAssets(Path.Combine(this.Helper.DirectoryPath, "assets", "json-assets"), this.Helper.Translation);
         }
 
-        this.Helper.Events.GameLoop.ReturnedToTitle += this.OnReturnedToTitle;
+        ringManager = new(this.Monitor, this.Helper.Translation, this.Helper.ModRegistry);
 
-        {
-            IntegrationHelper helper = new(this.Monitor, this.Helper.Translation, this.Helper.ModRegistry, LogLevel.Trace);
-            _ = helper.TryGetAPI("bcmpinc.WearMoreRings", "5.1.0", out wearMoreRingsAPI);
-        }
+        this.Helper.Events.GameLoop.ReturnedToTitle += this.OnReturnedToTitle;
     }
 
     /// <summary>

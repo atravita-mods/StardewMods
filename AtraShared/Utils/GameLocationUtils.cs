@@ -239,7 +239,7 @@ public static class GameLocationUtils
         }
 
         Vector2[]? buffer = ArrayPool<Vector2>.Shared.Rent(count);
-        int yLength = yend - ystart;
+        int yLength = yend - ystart + 1;
         for (int x = xstart; x <= xend; x++)
         {
             for (int y = ystart; y <= yend; y++)

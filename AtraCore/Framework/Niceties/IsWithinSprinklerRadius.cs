@@ -16,7 +16,7 @@ namespace AtraCore.Framework.Niceties;
 /// Optimized for checking over an entire map's worth of tiles.
 /// Will need to drop the cache if the player has a chance to place a sprinkler.
 /// </summary>
-public class IsWithinSprinklerRadiusHelper
+public sealed class IsWithinSprinklerRadiusHelper
 {
     // APIs - check in order.
     private static IFlexibleSprinklersApi? flexibleSprinklersApi;
@@ -27,7 +27,7 @@ public class IsWithinSprinklerRadiusHelper
     private readonly HashSet<string> processedMaps = new();
 
     // helpers
-    private IMonitor? monitor;
+    private IMonitor monitor;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="IsWithinSprinklerRadiusHelper"/> class.
@@ -56,7 +56,7 @@ public class IsWithinSprinklerRadiusHelper
     {
         this.wateredTiles.Clear();
         this.processedMaps.Clear();
-        this.monitor?.DebugOnlyLog("Clearing sprinkler-handled tiles", LogLevel.Info);
+        this.monitor.DebugOnlyLog("Clearing sprinkler-handled tiles", LogLevel.Info);
     }
 
     /// <summary>

@@ -172,23 +172,28 @@ internal sealed class ModEntry : Mod
             this.Monitor.DebugOnlyLog($"Spawning in the farmcave");
 
             (Vector2[] tiles, int num) = farmcave.GetTiles();
-            tiles.Shuffle(this.Random, num);
 
-            for (int i = 0; i < num; i++)
+            if (num > 0)
             {
-                ref Vector2 tile = ref tiles[i];
-                if (this.CanSpawnFruitHere(farmcave, tile))
+                tiles.Shuffle(this.Random, num);
+
+                for (int i = 0; i < num; i++)
                 {
-                    this.PlaceFruit(farmcave, tile);
-                    if (++count >= this.config.MaxDailySpawns)
+                    ref Vector2 tile = ref tiles[i];
+                    if (this.CanSpawnFruitHere(farmcave, tile))
                     {
-                        break;
+                        this.PlaceFruit(farmcave, tile);
+                        if (++count >= this.config.MaxDailySpawns)
+                        {
+                            break;
+                        }
                     }
                 }
+
+                ArrayPool<Vector2>.Shared.Return(tiles);
+                farmcave.UpdateReadyFlag();
             }
 
-            ArrayPool<Vector2>.Shared.Return(tiles);
-            farmcave.UpdateReadyFlag();
             if (count >= this.config.MaxDailySpawns)
             {
                 goto END;
@@ -234,6 +239,11 @@ internal sealed class ModEntry : Mod
                     this.Monitor.DebugOnlyLog($"Found {gameLocation}");
 
                     (Vector2[] tiles, int num) = gameLocation.GetTiles(xstart: locLimits["x1"], xend: locLimits["x2"], ystart: locLimits["y1"], yend: locLimits["y2"]);
+                    if (num == 0)
+                    {
+                        continue;
+                    }
+
                     tiles.Shuffle(this.Random, num);
 
                     for (int i = 0; i < num; i++)
@@ -249,6 +259,8 @@ internal sealed class ModEntry : Mod
                             }
                         }
                     }
+
+                    ArrayPool<Vector2>.Shared.Return(tiles);
                 }
                 else
                 {
@@ -260,20 +272,25 @@ internal sealed class ModEntry : Mod
         if (this.config.UseMineCave && Game1.getLocationFromName("Mine") is Mine mine)
         {
             (Vector2[] tiles, int num) = mine.GetTiles(xstart: 11);
-            tiles.Shuffle(this.Random, num);
-
-            for (int i = 0; i < num; i++)
+            if (num > 0)
             {
-                ref Vector2 tile = ref tiles[i];
-                if (this.CanSpawnFruitHere(mine, tile))
+                tiles.Shuffle(this.Random, num);
+
+                for (int i = 0; i < num; i++)
                 {
-                    this.PlaceFruit(mine, tile);
-                    if (++count >= this.config.MaxDailySpawns)
+                    ref Vector2 tile = ref tiles[i];
+                    if (this.CanSpawnFruitHere(mine, tile))
                     {
-                        ArrayPool<Vector2>.Shared.Return(tiles);
-                        goto END;
+                        this.PlaceFruit(mine, tile);
+                        if (++count >= this.config.MaxDailySpawns)
+                        {
+                            ArrayPool<Vector2>.Shared.Return(tiles);
+                            goto END;
+                        }
                     }
                 }
+
+                ArrayPool<Vector2>.Shared.Return(tiles);
             }
         }
 

@@ -147,7 +147,9 @@ internal sealed class ModEntry : Mod
                 if (ItemUtils.GetItemFromIdentifier(match.Groups["type"].Value, id) is Item item
                     && !(item is SObject obj && (obj.Category == SObject.SeedsCategory || obj.IsRecipe)))
                 {
-                    if (item.Name.StartsWith("Dwarvish Translation Guide"))
+                    if (item.Name.StartsWith("Dwarvish Translation Guide")
+                        || item.Name.Equals("Stardrop", StringComparison.OrdinalIgnoreCase)
+                        || item.Name.Equals("Crystalarium", StringComparison.OrdinalIgnoreCase))
                     {
                         continue;
                     }

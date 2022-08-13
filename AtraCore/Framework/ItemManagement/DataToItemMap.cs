@@ -86,7 +86,7 @@ internal static class DataToItemMap
                         ["Large Egg"] = 174,
                         ["Large Brown Egg"] = 182,
                         ["Strange Doll"] = 126,
-                        ["Strange Doll 2"] = 127
+                        ["Strange Doll 2"] = 127,
                     };
 
                     // Processing from the data.

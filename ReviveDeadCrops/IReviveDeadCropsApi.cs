@@ -1,4 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
+using StardewValley.TerrainFeatures;
 
 namespace ReviveDeadCrops;
 
@@ -30,6 +31,12 @@ public interface IReviveDeadCropsApi
     /// </summary>
     /// <param name="crop">The crop to revive.</param>
     public void RevivePlant(Crop crop);
+
+    /// <summary>
+    /// Revives a fruit tree (restores it from the stump if that happened, also de-coals it.)
+    /// </summary>
+    /// <param name="tree">The fruit tree to revive.</param>
+    public void ReviveFruitTree(FruitTree tree);
 
     /// <summary>
     /// Adds a little animation for the revival.

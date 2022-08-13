@@ -1,5 +1,4 @@
-﻿using AtraBase.Toolkit.Reflection;
-using AtraCore.Framework.ReflectionManager;
+﻿using AtraCore.Framework.ReflectionManager;
 using AtraShared.ConstantsAndEnums;
 using AtraShared.Integrations;
 using AtraShared.Utils;
@@ -8,7 +7,6 @@ using ForgeMenuChoice.HarmonyPatches;
 using HarmonyLib;
 using Microsoft.Xna.Framework.Graphics;
 using StardewModdingAPI.Events;
-using StardewModdingAPI.Utilities;
 using AtraUtils = AtraShared.Utils.Utils;
 
 namespace ForgeMenuChoice;

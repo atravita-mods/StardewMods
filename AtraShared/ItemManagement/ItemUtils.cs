@@ -18,6 +18,7 @@ public static class ItemUtils
     /// <param name="id">int id.</param>
     /// <returns>Item if possible.</returns>
     /// <remarks>Carries the no-inlining attribute so other mods can patch this.</remarks>
+    [Pure]
     [MethodImpl(MethodImplOptions.NoInlining)]
     public static Item? GetItemFromIdentifier(string type, int id)
     => type switch

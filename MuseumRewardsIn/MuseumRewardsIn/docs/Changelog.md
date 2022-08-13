@@ -3,6 +3,7 @@
 
 #### Version 0.2.1
 * Make the GMCM changes apply without a restart.
+* Exclude crystalarium and stardrop.
 
 #### Version 0.2.0
 

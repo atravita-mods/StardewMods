@@ -1,5 +1,6 @@
 ﻿#if DEBUG
 using System.Diagnostics;
+using AtraCore.Framework.IntegrationManagers;
 #endif
 using AtraCore.Utilities;
 using AtraShared.ConstantsAndEnums;
@@ -276,6 +277,8 @@ internal sealed class ModEntry : Mod
     /// </summary>
     internal static ModConfig Config { get; private set; } = null!;
 
+    internal static RingManager ringManager { get; private set; } = null!;
+
     /// <inheritdoc />
     public override void Entry(IModHelper helper)
     {
@@ -487,6 +490,8 @@ internal sealed class ModEntry : Mod
 
     private void OnGameLaunched(object? sender, GameLaunchedEventArgs e)
     {
+        ringManager = new(this.Monitor, this.Helper.Translation, this.Helper.ModRegistry);
+
         {
             IntegrationHelper helper = new(this.Monitor, this.Helper.Translation, this.Helper.ModRegistry, LogLevel.Warn);
             if (!helper.TryGetAPI("spacechase0.JsonAssets", "1.10.3", out jsonAssets))

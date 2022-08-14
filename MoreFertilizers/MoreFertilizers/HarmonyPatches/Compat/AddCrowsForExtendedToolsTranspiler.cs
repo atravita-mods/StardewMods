@@ -15,7 +15,16 @@ internal static class AddCrowsForExtendedToolsTranspiler
 {
     internal static void ApplyPatches(Harmony harmony)
     {
-
+        try
+        {
+            harmony.Patch(
+                original: typeof(Farm).GetCachedMethod(nameof(Farm.addCrows), ReflectionCache.FlagTypes.InstanceFlags),
+                transpiler: new HarmonyMethod(typeof(AddCrowsForExtendedToolsTranspiler), nameof(Transpiler)));
+        }
+        catch (Exception ex)
+        {
+            ModEntry.ModMonitor.Log($"Failed in attempting to transpile Farm.AddCrows\n\n{ex}", LogLevel.Error);
+        }
     }
 
     private static IEnumerable<CodeInstruction>? Transpiler(IEnumerable<CodeInstruction> instructions, ILGenerator gen, MethodBase original)
@@ -35,7 +44,7 @@ internal static class AddCrowsForExtendedToolsTranspiler
             .Remove(5)
             .AttachLabel(labels.ToArray());
 
-            helper.Print();
+            // helper.Print();
             return helper.Render();
         }
         catch (Exception ex)

@@ -51,7 +51,7 @@ internal static class GameLocationPatches
                                 targetLocation: who.Position)));
                 }
             }
-            while(passes-- > 0 && who.isWearingRing(Ring.burglarsRing));
+            while(passes-- > 0 && ModEntry.ringManager.IsFarmerWearingRing(who, Ring.burglarsRing));
         }
         catch (Exception ex)
         {

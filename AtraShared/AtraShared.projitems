@@ -41,6 +41,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Integrations\Interfaces\ISolidFoundationsAPI.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Integrations\Interfaces\IWearMoreRingsAPI.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Menuing\MenuingExtensions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\RawDataImpl.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Niceties\Records.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Niceties\SoundBankWrapperHandler.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ConstantsAndEnums\VanillaMachinesEnum.cs" />

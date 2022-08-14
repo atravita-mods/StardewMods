@@ -37,14 +37,22 @@ internal sealed class ModEntry : Mod
     /// <remarks>WARNING: NOT SET IN ENTRY.</remarks>
     private static ModConfig config = null!;
 
+    /// <summary>
+    /// Gets the game content helper.
+    /// </summary>
+    internal static IGameContentHelper GameContentHelper { get; private set; } = null!;
+
     /// <inheritdoc />
     public override void Entry(IModHelper helper)
     {
         modMonitor = this.Monitor;
+        GameContentHelper = this.Helper.GameContent;
         helper.Events.GameLoop.GameLaunched += this.OnGameLaunched;
         helper.Events.Input.ButtonPressed += this.OnButtonPressed;
         helper.Events.Player.Warped += this.OnWarped;
         helper.Events.Content.AssetRequested += this.OnAssetRequested;
+
+        helper.Events.Content.AssetsInvalidated += this.OnAssetInvalidated;
 
         I18n.Init(helper.Translation);
 
@@ -137,7 +145,9 @@ internal sealed class ModEntry : Mod
 
         this.Helper.Input.SurpressClickInput();
 
-        Dictionary<ISalable, int[]> sellables = new();
+        Dictionary<ISalable, int[]> sellables = new(20);
+
+        Dictionary<string, string> mail = this.Helper.GameContent.Load<Dictionary<string, string>>("Data/mail");
 
         foreach (string mailflag in Game1.player.mailReceived)
         {
@@ -153,6 +163,14 @@ internal sealed class ModEntry : Mod
                     {
                         continue;
                     }
+                    int[] selldata = new int[] { Math.Max(item.salePrice() * 2, 2000), int.MaxValue };
+                    sellables.Add(item, selldata);
+                }
+            }
+            else if (AssetManager.MailFlags.Contains(mailflag) && mail.TryGetValue(mailflag, out var mailstring))
+            {
+                foreach (SObject? item in mailstring.ParseItemsFromMail())
+                {
                     int[] selldata = new int[] { Math.Max(item.salePrice() * 2, 2000), int.MaxValue };
                     sellables.Add(item, selldata);
                 }
@@ -188,8 +206,15 @@ internal sealed class ModEntry : Mod
         }
     }
 
+    private void OnAssetInvalidated(object? sender, AssetsInvalidatedEventArgs e)
+        => AssetManager.Invalidate(e.NamesWithoutLocale);
+
     private void OnWarped(object? sender, WarpedEventArgs e)
     {
+        if (!e.IsLocalPlayer)
+        {
+            return;
+        }
         if (e.NewLocation is LibraryMuseum)
         {
             Vector2 tile = config.BoxLocation; // default location of shop.
@@ -218,6 +243,10 @@ internal sealed class ModEntry : Mod
                 layerDepth = Math.Clamp((((tile.Y - 0.5f) * Game1.tileSize) / 10000f) + 0.15f, 0f, 1.0f), // a little offset so it doesn't show up on the floor.
                 id = 777f,
             });
+        }
+        else
+        {
+            AssetManager.Invalidate();
         }
     }
 }

@@ -1,6 +1,4 @@
 ﻿using AtraShared.ConstantsAndEnums;
-using AtraShared.Integrations;
-using AtraShared.Integrations.Interfaces.Automate;
 using AtraShared.Menuing;
 using AtraShared.Utils.Extensions;
 using HarmonyLib;
@@ -32,30 +30,11 @@ internal sealed class ModEntry : Mod
 
         helper.Events.GameLoop.SaveLoaded += this.OnSaveLoaded;
 
-        /*
-#if !DEBUG
-        if (!Constants.ApiVersion.IsOlderThan("3.16.0"))
-#endif
-        {
-            helper.Events.GameLoop.GameLaunched += this.OnGameLaunched;
-        }
-#if !DEBUG
-        else
-        {
-            this.Monitor.Log($"Automate support not complete for now :(");
-        }
-#endif
-        */
-
         this.ApplyPatches(new Harmony(this.ModManifest.UniqueID));
     }
 
     /// <inheritdoc />
     public override object? GetApi() => Api;
-
-    private void OnGameLaunched(object? sender, GameLaunchedEventArgs e)
-    {
-    }
 
     private void OnDayEnding(object? sender, DayEndingEventArgs e)
     {
@@ -68,7 +47,7 @@ internal sealed class ModEntry : Mod
                     Vector2 offset = crop.tile.Value;
                     offset.X += crop.width.Value / 2;
                     offset.Y += crop.height.Value - 1;
-                    if (location.objects.TryGetValue(offset, out SObject? tapper) && tapper.Name.Contains("Tapper")
+                    if (location.objects.TryGetValue(offset, out SObject? tapper) && tapper.Name.Contains("Tapper", StringComparison.Ordinal)
                         && tapper.heldObject is not null && tapper.heldObject.Value is null)
                     {
                         (SObject obj, int days)? output = Api.GetTapperProduct(crop, tapper);

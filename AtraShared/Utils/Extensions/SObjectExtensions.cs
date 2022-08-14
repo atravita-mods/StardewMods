@@ -41,7 +41,7 @@ public static class SObjectExtensions
         if (Game1.bigCraftablesInformation.TryGetValue(bigCraftableIndex, out string? value))
         {
             int index = value.LastIndexOf('/');
-            if (index >= 0)
+            if (index >= 0 && index < value.Length - 1)
             {
                 return value[(index + 1)..];
             }

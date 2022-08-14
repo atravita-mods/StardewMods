@@ -6,6 +6,12 @@
         "When": {"ScheduleChanges": "true"}
     },
     {
+        "Action":"Include",
+        "LogName": "Base schedule changes",
+        "FromFile": "assets/schedules/base.json",
+        "When": {"ScheduleChanges": "true"}
+    },
+    {
         "Action": "Include",
         "LogName": "Gift changes",
         "FromFile": "assets/gifts.json",
@@ -84,6 +90,11 @@
         "Action": "Include",
         "LogName": "Base string changes",
         "FromFile": "{{FirstValidFile: assets/{{language}}/strings.json, assets/default/strings.json}}"
+    },
+    {
+        "Action": "Include",
+        "LogName": "Movie dialogue",
+        "FromFile": "assets/strings.json"
     },
     {
         "Action": "Include",

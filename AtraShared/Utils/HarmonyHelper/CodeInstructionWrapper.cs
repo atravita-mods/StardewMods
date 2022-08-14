@@ -1,8 +1,8 @@
 ﻿using System.Reflection;
 using System.Reflection.Emit;
 using AtraBase.Toolkit;
-using HarmonyLib;
 using CommunityToolkit.Diagnostics;
+using HarmonyLib;
 using NetEscapades.EnumGenerators;
 
 namespace AtraShared.Utils.HarmonyHelper;

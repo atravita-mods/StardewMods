@@ -49,6 +49,9 @@
     "No": "No",
     "and": "and",
 
+    // movie dialogue
+    "pam-movie-default": "Nothing like ending a long week with a movie and some nachos.$h",
+    "penny-movie-default": "I'm so glad I've managed to convince Mom to join me at the movies!$h",
 
     // Special order translations:
     "atravita.PamApology.Name": "For My Baby Girl",
@@ -100,6 +103,8 @@
     "002-pam-01": "Ah! Home sweet home!",
     "002-pam-02": "Although I don't miss goin' to work every day...",
     "002-penny-03": "Mom's back from rehab! Have you heard?",
+
+    //Catch Pam fishing in the forest.
 
     //Pam apologies to Gus
 

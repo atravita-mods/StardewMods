@@ -277,7 +277,10 @@ internal sealed class ModEntry : Mod
     /// </summary>
     internal static ModConfig Config { get; private set; } = null!;
 
-    internal static RingManager ringManager { get; private set; } = null!;
+    /// <summary>
+    /// Gets a handler that handles managing rings (and integration with Wear More Rings.
+    /// </summary>
+    internal static RingManager RingManager { get; private set; } = null!;
 
     /// <inheritdoc />
     public override void Entry(IModHelper helper)
@@ -490,8 +493,6 @@ internal sealed class ModEntry : Mod
 
     private void OnGameLaunched(object? sender, GameLaunchedEventArgs e)
     {
-        ringManager = new(this.Monitor, this.Helper.Translation, this.Helper.ModRegistry);
-
         {
             IntegrationHelper helper = new(this.Monitor, this.Helper.Translation, this.Helper.ModRegistry, LogLevel.Warn);
             if (!helper.TryGetAPI("spacechase0.JsonAssets", "1.10.3", out jsonAssets))
@@ -502,6 +503,8 @@ internal sealed class ModEntry : Mod
             jsonAssets.LoadAssets(Path.Combine(this.Helper.DirectoryPath, "assets", "json-assets"), this.Helper.Translation);
             jsonAssets.IdsFixed += this.JsonAssets_IdsFixed;
         }
+
+        RingManager = new(this.Monitor, this.Helper.Translation, this.Helper.ModRegistry);
 
         // Only register for events if JA pack loading was successful.
         this.Helper.Events.GameLoop.SaveLoaded += this.OnSaveLoaded;
@@ -544,13 +547,7 @@ internal sealed class ModEntry : Mod
             if (helper.TryGetAPI("TehPers.FishingOverhaul", "3.2.7", out ISimplifiedFishingApi? fishingAPI))
             {
                 fishingAPI.ModifyChanceForFish(static (Farmer who, double chance) =>
-                {
-                    if (who.currentLocation is not null)
-                    {
-                        return GetFishTranspiler.AlterFishChance(chance, who.currentLocation);
-                    }
-                    return chance;
-                });
+                    who.currentLocation is null ? chance : GetFishTranspiler.AlterFishChance(chance, who.currentLocation));
             }
         }
     }

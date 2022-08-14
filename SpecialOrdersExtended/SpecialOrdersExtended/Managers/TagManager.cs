@@ -1,4 +1,5 @@
-﻿using HarmonyLib;
+﻿using AtraShared.Utils.Extensions;
+using HarmonyLib;
 using StardewValley.Locations;
 
 namespace SpecialOrdersExtended.Managers;
@@ -7,7 +8,7 @@ namespace SpecialOrdersExtended.Managers;
 /// Static class to hold tag-management functions.
 /// </summary>
 [HarmonyPatch(typeof(SpecialOrder))]
-internal class TagManager
+internal static class TagManager
 {
     private static Random? random;
 
@@ -20,7 +21,7 @@ internal class TagManager
     /// <summary>
     /// Delete's the random so it can be reset later.
     /// </summary>
-    public static void ResetRandom() => random = null;
+    internal static void ResetRandom() => random = null;
 
     /// <summary>
     /// Prefixes CheckTag to handle special mod tags.
@@ -32,11 +33,9 @@ internal class TagManager
     [HarmonyPatch("CheckTag")]
     [HarmonyPriority(Priority.High)]
     [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Naming convention for Harmony")]
-    public static bool PrefixCheckTag(ref bool __result, string __0)
+    internal static bool PrefixCheckTag(ref bool __result, string __0)
     {
-#if DEBUG
-        ModEntry.ModMonitor.Log($"Checking tag {__0}", LogLevel.Trace);
-#endif
+        ModEntry.ModMonitor.DebugOnlyLog($"Checking tag {__0}", LogLevel.Trace);
         try
         {
             string[] vals = __0.Split('_', StringSplitOptions.TrimEntries | StringSplitOptions.RemoveEmptyEntries);
@@ -400,11 +399,7 @@ internal class TagManager
                     professionNumber = ModEntry.SpaceCoreAPI.GetProfessionId(skill, profession);
                 }
             }
-            catch (InvalidOperationException)
-            {
-                ModEntry.ModMonitor.Log(I18n.SkillNotFound(profession, skill), LogLevel.Debug);
-            }
-            catch (NullReferenceException)
+            catch (Exception ex) when (ex is InvalidOperationException or NullReferenceException)
             {
                 ModEntry.ModMonitor.Log(I18n.SkillNotFound(profession, skill), LogLevel.Debug);
             }

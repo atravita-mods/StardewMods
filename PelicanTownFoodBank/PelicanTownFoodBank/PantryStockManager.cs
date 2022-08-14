@@ -89,7 +89,7 @@ internal static class PantryStockManager
 
     private static List<int> GetNeededIngredients()
     {
-        List<int> neededIngredients = new();
+        List<int> neededIngredients = new(24);
         Dictionary<string, string> recipes = Game1.content.Load<Dictionary<string, string>>("Data/CookingRecipes");
         foreach ((string learned_recipe, int number_made) in Game1.player.cookingRecipes.Pairs)
         {
@@ -114,8 +114,8 @@ internal static class PantryStockManager
 
     private static (List<int> cookingIngredients, List<int> cookedItems) GetOtherSellables()
     {
-        List<int> cookingIngredients = new();
-        List<int> cookedItems = new();
+        List<int> cookingIngredients = new(24);
+        List<int> cookedItems = new(24);
         foreach ((int index, string data) in Game1.objectInformation)
         {
             SpanSplit splits = data.SpanSplit('/');

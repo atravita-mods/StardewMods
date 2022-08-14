@@ -60,6 +60,7 @@ internal class RawDataRented : IRawTextureData, IDisposable
         if (!this.disposed)
         {
             ArrayPool<Color>.Shared.Return(this.data);
+            this.data = null!;
             this.disposed = true;
         }
     }

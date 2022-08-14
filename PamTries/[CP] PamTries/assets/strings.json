@@ -1,0 +1,23 @@
+{"Changes":[
+    {
+        "Action": "EditData",
+        "Target": "Strings/schedules/Pam",
+        "Entries":{
+            "atravita.PamTries.movies": "{{i18n:pam-movie-{{atravita.PamTries/CurrentMovie}}|default=pam-movie-default}}"
+        },
+        "When": {
+            "HasMod": "atravita.PamTries"
+        }
+    },
+    {
+        "Action": "EditData",
+        "Target": "Strings/schedules/Penny",
+        "LogName": "Penny -- movie strings",
+        "Entries": {
+            "atravita.PamTries.movies": "{{i18n:penny-movie-{{atravita.PamTries/CurrentMovie}}|default=penny-movie-default}}"
+        },
+        "When": {
+            "HasMod": "atravita.PamTries"
+        }
+    }
+]}

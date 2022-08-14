@@ -15,13 +15,19 @@ public sealed class RingManager
     // helpers
     private IMonitor monitor;
 
+    /// <summary>
+    /// Initializes a new instance of the <see cref="RingManager"/> class.
+    /// </summary>
+    /// <param name="monitor">Monitor to use.</param>
+    /// <param name="translation">Translation helper to use.</param>
+    /// <param name="registry">Mod registry.</param>
     public RingManager(IMonitor monitor, ITranslationHelper translation, IModRegistry registry)
     {
         this.monitor = monitor;
 
         if (wearMoreRings is null)
         {
-            IntegrationHelper helper = new(monitor, translation, registry);
+            IntegrationHelper helper = new(monitor, translation, registry, LogLevel.Debug);
             _ = helper.TryGetAPI("bcmpinc.WearMoreRings", "5.1.0", out wearMoreRings);
         }
     }

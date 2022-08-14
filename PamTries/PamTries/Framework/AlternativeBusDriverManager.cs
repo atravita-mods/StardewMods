@@ -16,7 +16,7 @@ internal static class AlternativeBusDriverManager
                 string name = e.Name.BaseName.GetNthChunk('/', 2).ToString();
                 busdrivers.Add(name);
 
-                ModEntry.ModMonitor.DebugOnlyLog($"Adding {name} to possible bus drivers.", LogLevel.Debug);
+                ModEntry.ModMonitor.Log($"Adding {name} to possible bus drivers.", LogLevel.Debug);
             }
         }
     }

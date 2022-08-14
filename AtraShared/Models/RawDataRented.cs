@@ -14,10 +14,12 @@ internal class RawDataRented : IRawTextureData, IDisposable
     private bool disposed = false;
     private Color[] data;
 
-    public int Width { get; init; }
-
-    public int Height { get; init; }
-
+    /// <summary>
+    /// Initializes a new instance of the <see cref="RawDataRented"/> class.
+    /// </summary>
+    /// <param name="data">Data. (expectes a rented array).</param>
+    /// <param name="width">Width.</param>
+    /// <param name="height">Height.</param>
     public RawDataRented(Color[] data, int width, int height)
     {
         this.data = data;
@@ -25,6 +27,15 @@ internal class RawDataRented : IRawTextureData, IDisposable
         this.Height = height;
     }
 
+    /// <summary>
+    /// Finalizes an instance of the <see cref="RawDataRented"/> class.
+    /// </summary>
+    ~RawDataRented()
+    {
+        this.Dispose(disposing: false);
+    }
+
+    /// <inheritdoc />
     public Color[] Data
     {
         get
@@ -38,6 +49,12 @@ internal class RawDataRented : IRawTextureData, IDisposable
         }
     }
 
+    /// <inheritdoc />
+    public int Width { get; init; }
+
+    /// <inheritdoc />
+    public int Height { get; init; }
+
     protected virtual void Dispose(bool disposing)
     {
         if (!this.disposed)
@@ -45,11 +62,6 @@ internal class RawDataRented : IRawTextureData, IDisposable
             ArrayPool<Color>.Shared.Return(this.data);
             this.disposed = true;
         }
-    }
-
-    ~RawDataRented()
-    {
-         this.Dispose(disposing: false);
     }
 
     public void Dispose()

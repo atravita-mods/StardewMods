@@ -83,7 +83,7 @@ internal static class FarmAddCrowTranspiler
                 new(OpCodes.Brtrue_S, secondLabel),
             });
 
-            helper.Print();
+            // helper.Print();
             return helper.Render();
         }
         catch (Exception ex)

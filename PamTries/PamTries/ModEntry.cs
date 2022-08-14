@@ -38,7 +38,8 @@ internal sealed class ModEntry : Mod
         helper.Events.GameLoop.SaveLoaded += this.SaveLoaded;
         helper.Events.GameLoop.DayStarted += DialogueManager.GrandKidsDialogue;
         helper.Events.GameLoop.DayEnding += this.DayEnd;
-        helper.Events.GameLoop.ReturnedToTitle += this.OnReturnedToTitle;
+
+        helper.Events.Content.AssetReady += this.OnAssetReady;
 
         helper.Events.Content.AssetRequested += this.OnAssetRequested;
 
@@ -88,18 +89,10 @@ internal sealed class ModEntry : Mod
         {
             this.migrator = null;
         }
-
-        if (Context.IsMainPlayer)
-        {
-            this.Helper.Events.Content.AssetReady += this.OnAssetReady;
-        }
     }
 
     private void OnAssetRequested(object? sender, AssetRequestedEventArgs e)
         => AssetManager.Apply(e);
-
-    private void OnReturnedToTitle(object? sender, ReturnedToTitleEventArgs e)
-        => this.Helper.Events.Content.AssetReady -= this.OnAssetReady;
 
     /// <summary>
     /// Writes migration data then detaches the migrator.
@@ -280,5 +273,7 @@ internal sealed class ModEntry : Mod
     }
 
     private void OnAssetReady(object? sender, AssetReadyEventArgs e)
-        => AlternativeBusDriverManager.MonitorSchedule(e);
+    {
+        AlternativeBusDriverManager.MonitorSchedule(e);
+    }
 }

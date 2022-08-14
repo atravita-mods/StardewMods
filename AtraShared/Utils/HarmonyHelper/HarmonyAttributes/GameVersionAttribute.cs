@@ -6,9 +6,18 @@
 [AttributeUsage(AttributeTargets.Class | AttributeTargets.Method)]
 public class GameVersionAttribute : Attribute
 {
+    /// <summary>
+    /// Initializes a new instance of the <see cref="GameVersionAttribute"/> class.
+    /// </summary>
+    /// <param name="minVersion">Minimum version this patch should apply to.</param>
     public GameVersionAttribute(string? minVersion)
         => this.MinVersion = minVersion;
 
+    /// <summary>
+    /// Initializes a new instance of the <see cref="GameVersionAttribute"/> class.
+    /// </summary>
+    /// <param name="minVersion">Minimum version this patch should apply to.</param>
+    /// <param name="maxVersion">Maximum version this patch should apply to.</param>
     public GameVersionAttribute(string? minVersion, string? maxVersion)
     {
         this.MinVersion = minVersion;

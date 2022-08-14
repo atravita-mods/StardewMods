@@ -135,7 +135,7 @@ internal sealed class ModEntry : Mod
             return;
         }
 
-        this.Monitor.DebugOnlyLog(Game1.currentLocation?.doesTileHaveProperty((int)e.Cursor.GrabTile.X, (int)e.Cursor.GrabTile.Y, "Action", BUILDING) ?? string.Empty);
+        // this.Monitor.DebugOnlyLog(Game1.currentLocation?.doesTileHaveProperty((int)e.Cursor.GrabTile.X, (int)e.Cursor.GrabTile.Y, "Action", BUILDING) ?? string.Empty);
 
         if (Game1.currentLocation is not LibraryMuseum museum
             || museum.doesTileHaveProperty((int)e.Cursor.GrabTile.X, (int)e.Cursor.GrabTile.Y, "Action", BUILDING) != SHOPNAME)
@@ -164,7 +164,7 @@ internal sealed class ModEntry : Mod
                         continue;
                     }
                     int[] selldata = new int[] { Math.Max(item.salePrice() * 2, 2000), int.MaxValue };
-                    sellables.Add(item, selldata);
+                    sellables.TryAdd(item, selldata);
                 }
             }
             else if (AssetManager.MailFlags.Contains(mailflag) && mail.TryGetValue(mailflag, out var mailstring))
@@ -172,7 +172,7 @@ internal sealed class ModEntry : Mod
                 foreach (SObject? item in mailstring.ParseItemsFromMail())
                 {
                     int[] selldata = new int[] { Math.Max(item.salePrice() * 2, 2000), int.MaxValue };
-                    sellables.Add(item, selldata);
+                    sellables.TryAdd(item, selldata);
                 }
             }
         }
@@ -203,6 +203,10 @@ internal sealed class ModEntry : Mod
                     tile.Properties["Action"] = new PropertyValue(SHOPNAME);
                 },
                 AssetEditPriority.Default + 10);
+        }
+        else
+        {
+            AssetManager.Apply(e);
         }
     }
 

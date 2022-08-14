@@ -70,19 +70,19 @@ internal sealed class ModEntry : Mod
                     Game1.addHUDMessage(new HUDMessage(I18n.WeddingMessage(hour, minutes), HUDMessage.achievement_type));
                 }
                 else
-            {
+                {
                     Game1.addHUDMessage(new HUDMessage(I18n.WeddingMessageOther(hour, minutes), HUDMessage.achievement_type));
+                }
             }
-        }
             else if (Game1.timeOfDay == Config.WeddingTime - 10)
             {
                 Game1.addHUDMessage(new HUDMessage(I18n.WeddingReminder(), HUDMessage.achievement_type));
-    }
+            }
             else if (Game1.timeOfDay == Config.WeddingTime)
-    {
+            {
                 Game1.player.currentLocation.checkForEvents();
+            }
         }
-    }
     }
 
     /// <summary>
@@ -134,13 +134,13 @@ internal sealed class ModEntry : Mod
                                 Game1.weddingsToday.Add(farmer.UniqueMultiplayerID);
                             }
                             if (added.Add(other.Value))
-        {
+                            {
                                 Game1.weddingsToday.Add(other.Value);
                             }
                         }
                     }
                 }
-        }
+            }
 
             ModMonitor.DebugOnlyLog($"Current weddings {string.Join(", ", Game1.weddingsToday)}");
             this.Helper.Multiplayer.SendMessage(

@@ -55,10 +55,10 @@ public interface IFullContentPatcherApi : IContentPatcherAPI
     /// <remarks>Due to the Content Patcher lifecycle, the conditions API becomes available roughly two ticks after the <see cref="IGameLoopEvents.GameLaunched"/> event.</remarks>
     bool IsConditionsApiReady { get; }
 
-
     /*********
     ** Methods
     *********/
+
     /// <summary>Get a set of managed conditions which are matched against Content Patcher's internal context.</summary>
     /// <param name="manifest">The manifest of the mod parsing the conditions (see <see cref="Mod.ModManifest"/> in your enter class).</param>
     /// <param name="rawConditions">The conditions to parse, in the same format as <c>When</c> blocks in Content Patcher content packs.</param>
@@ -68,5 +68,4 @@ public interface IFullContentPatcherApi : IContentPatcherAPI
     /// <para>NOTE: this is meant to prevent mods from breaking if a player doesn't have a required mod installed. You shouldn't simply list all installed mods, and parsing conditions will still fail if a mod isn't installed regardless of the listed mod IDs.</para>
     /// </param>
     IManagedConditions ParseConditions(IManifest manifest, IDictionary<string, string?>? rawConditions, ISemanticVersion formatVersion, string[]? assumeModIds = null);
-
 }

@@ -1,7 +1,7 @@
 ﻿#if DEBUG
 using System.Diagnostics;
-using AtraCore.Framework.IntegrationManagers;
 #endif
+using AtraCore.Framework.IntegrationManagers;
 using AtraCore.Utilities;
 using AtraShared.ConstantsAndEnums;
 using AtraShared.Integrations;

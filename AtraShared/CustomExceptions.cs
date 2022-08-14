@@ -1,4 +1,5 @@
-﻿using System.Runtime.CompilerServices;
+﻿using System.Diagnostics;
+using System.Runtime.CompilerServices;
 
 namespace AtraShared;
 
@@ -26,6 +27,7 @@ public static class ASThrowHelper
     /// </summary>
     /// <exception cref="SaveNotLoadedError">always.</exception>
     [DoesNotReturn]
+    [DebuggerHidden]
     [MethodImpl(MethodImplOptions.NoInlining)]
     public static void ThrowSaveNotLoaded()
     {
@@ -39,6 +41,7 @@ public static class ASThrowHelper
     /// <exception cref="SaveNotLoadedError">always.</exception>
     /// <returns>nothing, doesn't return.</returns>
     [DoesNotReturn]
+    [DebuggerHidden]
     [MethodImpl(MethodImplOptions.NoInlining)]
     public static T ThrowSaveNotLoaded<T>()
     {

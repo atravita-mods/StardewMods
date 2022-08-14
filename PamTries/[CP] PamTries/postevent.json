@@ -87,6 +87,11 @@
     },
     {
         "Action": "Include",
+        "LogName": "Movie dialogue",
+        "FromFile": "assets/strings.json"
+    },
+    {
+        "Action": "Include",
         "LogName": "Base mail changes",
         "FromFile": "{{FirstValidFile: assets/{{language}}/mail.json, assets/default/mail.json}}"
     },

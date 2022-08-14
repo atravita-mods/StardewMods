@@ -49,6 +49,9 @@
     "No": "No",
     "and": "and",
 
+    // movie dialogue
+    "pam-movie-default": "Nothing like ending a long week with a movie and some nachos.$h",
+    "penny-movie-default": "I'm so glad I've managed to convince Mom to join me at the movies!$h",
 
     // Special order translations:
     "atravita.PamApology.Name": "For My Baby Girl",

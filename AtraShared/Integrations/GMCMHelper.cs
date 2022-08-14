@@ -5,6 +5,7 @@ using AtraShared.Integrations.GMCMAttributes;
 using AtraShared.Integrations.Interfaces;
 using AtraShared.Utils;
 using AtraShared.Utils.Extensions;
+using CommunityToolkit.Diagnostics;
 using Microsoft.Xna.Framework;
 using StardewModdingAPI.Utilities;
 
@@ -355,7 +356,8 @@ public sealed class GMCMHelper : IntegrationHelper
     {
         if (!property.PropertyType.Equals(typeof(TEnum)))
         {
-            throw new ArgumentException($"Property {property.Name} is type {property.PropertyType.Name}, not {typeof(TEnum).Name}");
+            ThrowHelper.ThrowArgumentException($"Property {property.Name} is type {property.PropertyType.Name}, not {typeof(TEnum).Name}");
+            return this;
         }
         if (property.GetGetMethod() is not MethodInfo getter || property.GetSetMethod() is not MethodInfo setter)
         {
@@ -471,7 +473,7 @@ public sealed class GMCMHelper : IntegrationHelper
         }
         else
         {
-            if (min is null || max is null || interval is null)
+            if (min is null || max is null || interval is null || formatValue is null)
             {
                 Attribute[]? attributes = Attribute.GetCustomAttributes(property);
                 foreach (var attribute in attributes)

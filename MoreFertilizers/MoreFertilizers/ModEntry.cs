@@ -277,7 +277,10 @@ internal sealed class ModEntry : Mod
     /// </summary>
     internal static ModConfig Config { get; private set; } = null!;
 
-    internal static RingManager ringManager { get; private set; } = null!;
+    /// <summary>
+    /// Gets a handler that handles managing rings (and integration with Wear More Rings.
+    /// </summary>
+    internal static RingManager RingManager { get; private set; } = null!;
 
     /// <inheritdoc />
     public override void Entry(IModHelper helper)
@@ -490,7 +493,7 @@ internal sealed class ModEntry : Mod
 
     private void OnGameLaunched(object? sender, GameLaunchedEventArgs e)
     {
-        ringManager = new(this.Monitor, this.Helper.Translation, this.Helper.ModRegistry);
+        RingManager = new(this.Monitor, this.Helper.Translation, this.Helper.ModRegistry);
 
         {
             IntegrationHelper helper = new(this.Monitor, this.Helper.Translation, this.Helper.ModRegistry, LogLevel.Warn);

@@ -1,7 +1,7 @@
 {
   "Name": "PanningFramework",
   "Author": "atravita",
-  "Version": "1.0.0",
+  "Version": "1.0.0-Debug",
   "Description": "A framework to allow adding things to panning.",
   "UniqueID": "atravita.PanningFramework",
   "EntryDll": "PanningFramework.dll",

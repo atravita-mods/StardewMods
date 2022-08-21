@@ -20,14 +20,14 @@ internal static class AlternativeBusDriverManager
             {
                 if (busdrivers.Add(name))
                 {
-                    ModEntry.ModMonitor.Log($"Adding {name} to possible bus drivers.", LogLevel.Debug);
+                    ModEntry.ModMonitor.DebugOnlyLog($"Adding {name} to possible bus drivers.", LogLevel.Debug);
                 }
             }
             else
             {
                 if (busdrivers.Remove(name))
                 {
-                    ModEntry.ModMonitor.Log($"Remvoing {name} from possible bus drivers.", LogLevel.Debug);
+                    ModEntry.ModMonitor.DebugOnlyLog($"Removing {name} from possible bus drivers.", LogLevel.Debug);
                 }
             }
         }

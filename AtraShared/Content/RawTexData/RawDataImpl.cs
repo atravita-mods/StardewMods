@@ -2,7 +2,7 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace AtraShared.Models;
+namespace AtraShared.Content.RawTextData;
 
 #warning - consider doing a from-file thing?
 

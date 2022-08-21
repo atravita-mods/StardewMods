@@ -98,8 +98,6 @@ internal class FurniturePatches
     }
 #endif
 
-#warning - remember DGA?
-
     /// <summary>
     /// Prefix to prevent objects from accidentally being removed from tables.
     /// </summary>

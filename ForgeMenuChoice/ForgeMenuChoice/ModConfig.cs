@@ -39,8 +39,14 @@ internal sealed class ModConfig
     /// </summary>
     public bool EnableTooltipAutogeneration { get; set; } = true;
 
+    /// <summary>
+    /// Gets a button that refers to clicking leftward.
+    /// </summary>
     public KeybindList LeftArrow { get; set; } = KeybindList.Parse("LeftShoulder, Left");
 
+    /// <summary>
+    /// Gets a button that refers to clicking rightwards.
+    /// </summary>
     public KeybindList RightArrow { get; set; } = KeybindList.Parse("RightShoulder, Right");
 }
 #pragma warning restore SA1623 // Property summary documentation should match accessors

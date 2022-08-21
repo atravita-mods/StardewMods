@@ -34,8 +34,8 @@ public static class GameLocationExtensions
     /// <returns>True if there's a festival at this location and it's before the start time, false otherwise.</returns>
     public static bool IsBeforeFestivalAtLocation(this GameLocation location, IMonitor monitor, bool alertPlayer = false)
     {
-        Guard.IsNotNull(monitor, nameof(monitor));
-        Guard.IsNotNull(location, nameof(location));
+        Guard.IsNotNull(monitor);
+        Guard.IsNotNull(location);
 
         try
         {
@@ -87,7 +87,7 @@ public static class GameLocationExtensions
     /// <returns>Hoedirt if found.</returns>
     public static HoeDirt? GetHoeDirtAtTile(this GameLocation location, Vector2 tile)
     {
-        Guard.IsNotNull(location, nameof(location));
+        Guard.IsNotNull(location);
 
         if (location.terrainFeatures.TryGetValue(tile, out TerrainFeature? terrain)
             && terrain is HoeDirt dirt)

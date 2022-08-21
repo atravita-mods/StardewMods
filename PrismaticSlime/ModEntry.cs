@@ -25,7 +25,7 @@ internal sealed class ModEntry : Mod
     internal static IMonitor ModMonitor { get; private set; } = null!;
 
 #pragma warning disable SA1201 // Elements should appear in the correct order - keeping fields near their accessors.
-    internal static RingManager ringManager { get; private set; } = null!;
+    internal static RingManager RingManager { get; private set; } = null!;
 
     private static int prismaticSlimeEgg = -1;
 
@@ -86,7 +86,7 @@ internal sealed class ModEntry : Mod
             jsonAssets.LoadAssets(Path.Combine(this.Helper.DirectoryPath, "assets", "json-assets"), this.Helper.Translation);
         }
 
-        ringManager = new(this.Monitor, this.Helper.Translation, this.Helper.ModRegistry);
+        RingManager = new(this.Monitor, this.Helper.Translation, this.Helper.ModRegistry);
 
         this.Helper.Events.GameLoop.ReturnedToTitle += this.OnReturnedToTitle;
     }

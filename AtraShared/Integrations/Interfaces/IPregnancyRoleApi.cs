@@ -13,7 +13,7 @@ the Software, and to permit persons to whom the Software is furnished to do so,
 subject to the following conditions:
  *
  * The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software. 
+copies or substantial portions of the Software.
 
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
@@ -25,8 +25,11 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *
  * *******************************************/
 
+using NetEscapades.EnumGenerators;
+
 namespace AtraShared.Integrations.Interfaces;
 
+[EnumExtensions]
 public enum Role
 {
     /// <summary>
@@ -51,6 +54,11 @@ public enum Role
 /// <remarks>Copied from https://gitlab.com/kdau/pregnancyrole/-/blob/main/src/Api.cs .</remarks>
 public interface IPregnancyRoleApi
 {
+    /// <summary>
+    /// Get the pregnancy role of the farmer.
+    /// </summary>
+    /// <param name="farmer"></param>
+    /// <returns></returns>
     Role GetPregnancyRole(Farmer farmer);
 
     Role GetPregnancyRole(NPC npc);
@@ -58,14 +66,14 @@ public interface IPregnancyRoleApi
     /// <summary>
     /// Whether the given farmer would require adoption to have a baby with their current spouse, including another farmer.
     /// </summary>
-    /// <param name="farmer"></param>
+    /// <param name="farmer">Farmer.</param>
     /// <returns></returns>
     bool WouldNeedAdoption(Farmer farmer);
 
     /// <summary>
     /// Whether the given NPC would require adoption to have a baby with their current farmer spouse.
     /// </summary>
-    /// <param name="npc"></param>
+    /// <param name="npc">NPC.</param>
     /// <returns></returns>
     bool WouldNeedAdoption(NPC npc);
 }

@@ -23,7 +23,7 @@
             "Resort_Bar": "Really wish I could have a little something right about now. Guess I'll have to settle for seltzer.#$b#Argh. No one likes seltzer.",
             "Resort_Wander": "Wonder what else I can do on this island?$h",
             "Resort_Bar_2": "Maybe just one drink? I'm on vacation...",
-            "Resort_Umbrella": "I think I'm startin' to burn?",
+            "Resort_Umbrella": "#$c .5#I think I'm startin' to burn?#It's a lot hotter than I'd expected...$s#",
             "Saloon_Entry": null,
             "Saloon_Mon": null,
             "Saloon_Tue": null,

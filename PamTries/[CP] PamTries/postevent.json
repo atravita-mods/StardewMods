@@ -153,6 +153,7 @@
         },
         "When": {
             "HasMod": "Esca.CustomNPCExclusions",
+            "HasMod|Contains=atravita.GingerIslandMainlandAdjustments": "false",
             "Day": "6,16",
             "HasSeenEvent": "99210002"
         }

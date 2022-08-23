@@ -160,7 +160,7 @@ internal sealed class ModEntry : Mod
     /// <param name="sender">SMAPI.</param>
     /// <param name="e">Event args.</param>
     /// <remarks>EventPriority.Low to slot after pfm.</remarks>
-    [EventPriority(EventPriority.Low)]
+    [EventPriority(EventPriority.Low - 2000)]
     private void OnSaveLoaded(object? sender, SaveLoadedEventArgs e)
     {
         if (Context.IsSplitScreen && Context.ScreenId != 0)

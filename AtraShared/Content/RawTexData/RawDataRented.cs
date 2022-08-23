@@ -54,10 +54,21 @@ public class RawDataRented : IRawTextureData, IDisposable
     }
 
     /// <inheritdoc />
-    public int Width { get; init; }
+    public int Width { get; private set; }
 
     /// <inheritdoc />
-    public int Height { get; init; }
+    public int Height { get; private set; }
+
+    /// <summary>
+    /// Adjusts a RawTextureRented's height to make it shorter.
+    /// </summary>
+    /// <param name="newHeight">The new height.</param>
+    /// <remarks>This is useful primarily to prevent SMAPI from doing a bunch of extra copying.</remarks>
+    public void Shrink(int newHeight)
+    {
+        Guard.IsLessThanOrEqualTo(newHeight, this.Height);
+        this.Height = newHeight;
+    }
 
     /// <inheritdoc/>
     public void Dispose()

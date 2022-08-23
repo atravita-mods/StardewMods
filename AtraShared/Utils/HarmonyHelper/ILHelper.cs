@@ -147,7 +147,7 @@ public sealed class ILHelper
     /// <exception cref="ArgumentOutOfRangeException">Tried to move to an invalid location.</exception>
     public ILHelper JumpTo(int index)
     {
-        Guard.IsBetweenOrEqualTo(index, 0, this.Codes.Count - 1, nameof(index));
+        Guard.IsBetweenOrEqualTo(index, 0, this.Codes.Count - 1);
         this.Pointer = index;
         return this;
     }
@@ -195,7 +195,7 @@ public sealed class ILHelper
     public ILHelper Advance(int steps)
     {
         this.Pointer += steps;
-        Guard.IsBetweenOrEqualTo(this.Pointer, 0, this.Codes.Count - 1, nameof(this.Pointer));
+        Guard.IsBetweenOrEqualTo(this.Pointer, 0, this.Codes.Count - 1);
         return this;
     }
 

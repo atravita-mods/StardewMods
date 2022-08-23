@@ -1,5 +1,6 @@
 ﻿using AtraBase.Toolkit.Reflection;
 using AtraCore.Framework.QueuePlayerAlert;
+using AtraCore.Framework.ReflectionManager;
 using CommunityToolkit.Diagnostics;
 
 namespace AtraCore.Utilities;
@@ -9,7 +10,9 @@ namespace AtraCore.Utilities;
 /// </summary>
 public static class MultiplayerHelpers
 {
-    private static readonly Lazy<Func<Multiplayer>> MultiplayerLazy = new(() => typeof(Game1).StaticFieldNamed("multiplayer").GetStaticFieldGetter<Multiplayer>());
+    private static readonly Lazy<Func<Multiplayer>> MultiplayerLazy = new(
+        () => typeof(Game1).GetCachedField("multiplayer", ReflectionCache.FlagTypes.StaticFlags)
+                                      .GetStaticFieldGetter<Multiplayer>());
 
     /// <summary>
     /// Gets a function that returns the current multiplayer instance.
@@ -26,10 +29,10 @@ public static class MultiplayerHelpers
     /// <param name="translation">Translation helper.</param>
     public static void AssertMultiplayerVersions(IMultiplayerHelper multi, IManifest manifest, IMonitor monitor, ITranslationHelper translation)
     {
-        Guard.IsNotNull(multi, nameof(multi));
-        Guard.IsNotNull(manifest, nameof(manifest));
-        Guard.IsNotNull(monitor, nameof(monitor));
-        Guard.IsNotNull(translation, nameof(translation));
+        Guard.IsNotNull(multi);
+        Guard.IsNotNull(manifest);
+        Guard.IsNotNull(monitor);
+        Guard.IsNotNull(translation);
 
         if (Context.IsMultiplayer && !Context.IsMainPlayer && !Context.IsSplitScreen)
         {

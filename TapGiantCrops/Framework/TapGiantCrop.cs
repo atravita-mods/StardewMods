@@ -17,8 +17,8 @@ public class TapGiantCrop : ITapGiantCropsAPI
     /// <inheritdoc />
     public bool CanPlaceTapper(GameLocation loc, Vector2 tile, SObject obj)
     {
-        Guard.IsNotNull(loc, nameof(loc));
-        Guard.IsNotNull(obj, nameof(obj));
+        Guard.IsNotNull(loc);
+        Guard.IsNotNull(obj);
         if (loc.objects.ContainsKey(tile))
         {
             return false;
@@ -33,8 +33,8 @@ public class TapGiantCrop : ITapGiantCropsAPI
     /// <inheritdoc />
     public bool TryPlaceTapper(GameLocation loc, Vector2 tile, SObject obj)
     {
-        Guard.IsNotNull(loc, nameof(loc));
-        Guard.IsNotNull(obj, nameof(obj));
+        Guard.IsNotNull(loc);
+        Guard.IsNotNull(obj);
         if (this.CanPlaceTapper(loc, tile, obj))
         {
             SObject tapper = (SObject)obj.getOne();

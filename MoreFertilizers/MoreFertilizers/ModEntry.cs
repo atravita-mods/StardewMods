@@ -235,13 +235,13 @@ internal sealed class ModEntry : Mod
     /// Gets a list of fertilizer IDs for fertilizers that are meant to be planted into HoeDirt.
     /// </summary>
     /// <remarks>Will be stored in the <see cref="HoeDirt.fertilizer.Value"/> field.</remarks>
-    internal static List<int> PlantableFertilizerIDs { get; } = new List<int>();
+    internal static HashSet<int> PlantableFertilizerIDs { get; } = new ();
 
     /// <summary>
     /// Gets a list of fertilizer IDs for fertilizers that are placed in other means (not into HoeDirt).
     /// </summary>
     /// <remarks>Handled by <see cref="SpecialFertilizerApplication" /> and typically stored in <see cref="ModDataDictionary"/>.</remarks>
-    internal static List<int> SpecialFertilizerIDs { get; } = new List<int>();
+    internal static HashSet<int> SpecialFertilizerIDs { get; } = new();
 
     /**************
      * Generally useful things that need to be attached to something static.
@@ -278,7 +278,7 @@ internal sealed class ModEntry : Mod
     internal static ModConfig Config { get; private set; } = null!;
 
     /// <summary>
-    /// Gets a handler that handles managing rings (and integration with Wear More Rings.
+    /// Gets a handler that handles managing rings (and integration with Wear More Rings).
     /// </summary>
     internal static RingManager RingManager { get; private set; } = null!;
 

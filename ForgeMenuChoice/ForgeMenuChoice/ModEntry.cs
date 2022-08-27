@@ -1,4 +1,5 @@
-﻿using AtraCore.Framework.ReflectionManager;
+﻿using AtraBase.Toolkit.Reflection;
+using AtraCore.Framework.ReflectionManager;
 using AtraShared.ConstantsAndEnums;
 using AtraShared.Integrations;
 using AtraShared.Utils;
@@ -39,6 +40,8 @@ internal sealed class ModEntry : Mod
 
     internal static StringUtils StringUtils { get; private set; }
 #pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
+
+    internal static Func<object, bool>? IsSpaceForge { get; private set; } = null;
 
     /// <inheritdoc/>
     public override void Entry(IModHelper helper)
@@ -133,6 +136,8 @@ internal sealed class ModEntry : Mod
                     harmony.Patch(
                         original: spaceforge.GetCachedMethod("performHoverAction", ReflectionCache.FlagTypes.InstanceFlags),
                         postfix: new HarmonyMethod(typeof(ForgeMenuPatches), nameof(ForgeMenuPatches.PostfixPerformHoverAction)));
+
+                    IsSpaceForge = spaceforge.GetTypeIs();
                 }
                 else
                 {

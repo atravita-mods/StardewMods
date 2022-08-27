@@ -9,6 +9,7 @@
 #### Version 1.1.1
 * Some menus now accept arrow keys.
 * Internal improvements (mostly wrt enums).
+* Jukebox now checks your current location, not the mainland, for the is-it-raining check.
 
 #### Version 1.1.0
 * Move to using AtraCore.

@@ -42,12 +42,18 @@ internal static class SObjectPatches
         {
             try
             {
-                if (__instance.heldObject?.Value is not null && dropInItem.modData?.GetBool(CanPlaceHandler.Organic) == true)
+                if (__instance.heldObject?.Value is not null && dropInItem.modData?.GetBool(CanPlaceHandler.Organic) == true
+                    && !__instance.heldObject.Value.modData?.GetBool(CanPlaceHandler.Organic) != true)
                 {
                     __instance.heldObject.Value.modData?.SetBool(CanPlaceHandler.Organic, true);
                     if (!__instance.heldObject.Value.Name.Contains(" (Organic)"))
                     {
                         __instance.heldObject.Value.Name += " (Organic)";
+
+                        if (__instance.ParentSheetIndex is 346 or 303 or 614 or 395 or 459)
+                        {
+                            __instance.Price = (int)(1.1 * __instance.Price);
+                        }
                     }
                     __instance.heldObject.Value.MarkContextTagsDirty();
                 }

@@ -8,6 +8,8 @@ using Microsoft.Xna.Framework;
 
 namespace MoreFertilizers.HarmonyPatches.Compat;
 
+#warning - remove in Stardew 1.6
+
 /// <summary>
 /// Applies a transpiler to make Prismatic and Radioactive's sprinklers work as anti-crow devices.
 /// </summary>

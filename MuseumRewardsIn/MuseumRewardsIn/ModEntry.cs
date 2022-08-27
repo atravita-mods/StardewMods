@@ -135,8 +135,6 @@ internal sealed class ModEntry : Mod
             return;
         }
 
-        // this.Monitor.DebugOnlyLog(Game1.currentLocation?.doesTileHaveProperty((int)e.Cursor.GrabTile.X, (int)e.Cursor.GrabTile.Y, "Action", BUILDING) ?? string.Empty);
-
         if (Game1.currentLocation is not LibraryMuseum museum
             || museum.doesTileHaveProperty((int)e.Cursor.GrabTile.X, (int)e.Cursor.GrabTile.Y, "Action", BUILDING) != SHOPNAME)
         {

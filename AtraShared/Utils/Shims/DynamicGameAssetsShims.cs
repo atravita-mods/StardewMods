@@ -7,7 +7,7 @@ namespace AtraShared.Utils.Shims;
 /// Shims for DGA.
 /// </summary>
 [SuppressMessage("StyleCop.CSharp.OrderingRules", "SA1201:Elements should appear in the correct order", Justification = "Preference.")]
-public class DynamicGameAssetsShims
+public static class DynamicGameAssetsShims
 {
     /// <summary>
     /// Gets whether or not something is a DGA giant crop.

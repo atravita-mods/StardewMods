@@ -34,8 +34,8 @@ internal static class SpecialFertilizerApplication
         }
 
         Vector2 placementtile;
-        if (PlaceHandler.CanPlaceFertilizer(obj, Game1.currentLocation, e.Cursor.Tile)
-            && Utility.withinRadiusOfPlayer(((int)e.Cursor.Tile.X * 64) + 32, ((int)e.Cursor.Tile.Y * 64) + 32, PLACEMENTRADIUS, Game1.player))
+        if (Utility.withinRadiusOfPlayer(((int)e.Cursor.Tile.X * 64) + 32, ((int)e.Cursor.Tile.Y * 64) + 32, PLACEMENTRADIUS, Game1.player)
+            && PlaceHandler.CanPlaceFertilizer(obj, Game1.currentLocation, e.Cursor.Tile))
         {
             placementtile = e.Cursor.Tile;
         }

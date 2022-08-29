@@ -196,7 +196,7 @@ internal class RecentSOManager
     {
         if (!Context.IsWorldReady)
         {
-            throw new SaveNotLoadedError();
+            ASThrowHelper.ThrowSaveNotLoaded();
         }
         return recentCompletedSO!.IsWithinXDays(questkey, days);
     }

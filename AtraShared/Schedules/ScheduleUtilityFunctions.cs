@@ -220,7 +220,7 @@ public class ScheduleUtilityFunctions
         Dictionary<int, SchedulePathDescription> remainderSchedule = new();
         QualLoc? warpPoint = null;
 
-        foreach (string schedulepoint in schedule.Split('/'))
+        foreach (string schedulepoint in schedule.Split('/', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries))
         {
             try
             {

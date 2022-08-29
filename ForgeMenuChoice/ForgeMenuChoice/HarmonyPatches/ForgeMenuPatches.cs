@@ -43,12 +43,12 @@ internal static class ForgeMenuPatches
             return;
         }
         LastButtonPressTicks.Value = Game1.ticks;
-        if (ModEntry.Config.LeftArrow.IsDown())
+        if (ModEntry.Config.LeftArrow.JustPressed())
         {
             Menu.RetreatPosition(playSound: true);
             ModEntry.InputHelper.SuppressActiveKeybinds(ModEntry.Config.LeftArrow);
         }
-        else if (ModEntry.Config.RightArrow.IsDown())
+        else if (ModEntry.Config.RightArrow.JustPressed())
         {
             Menu.AdvancePosition(playSound: true);
             ModEntry.InputHelper.SuppressActiveKeybinds(ModEntry.Config.RightArrow);

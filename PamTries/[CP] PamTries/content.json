@@ -1,6 +1,6 @@
 {
     "$schema": "https://smapi.io/schemas/content-patcher.json",
-    "Format": "1.25.0",
+    "Format": "1.27.0",
     "ConfigSchema": { //Would you like Pam to change her schedule? Also small changes to Penny's Sunday
         "ScheduleChanges": {
             "AllowValues": "true,false",

@@ -23,7 +23,7 @@ internal sealed class ModEntry : Mod
     private const string SHOPNAME = "atravita.MuseumShop";
 
     private static readonly Regex MuseumObject = new(
-        pattern: "museumCollectedReward(?<type>[a-zA-Z]+)_(?<id>[0-9]+)_",
+        pattern: "^museumCollectedReward(?<type>[a-zA-Z]+)_(?<id>[0-9]+)_",
         options: RegexOptions.Compiled,
         matchTimeout: TimeSpan.FromMilliseconds(250));
 
@@ -130,7 +130,8 @@ internal sealed class ModEntry : Mod
     /// <param name="e">event args.</param>
     private void OnButtonPressed(object? sender, ButtonPressedEventArgs e)
     {
-        if (!MenuingExtensions.IsNormalGameplay() || (!e.Button.IsActionButton() && !e.Button.IsUseToolButton()))
+        if ((!e.Button.IsActionButton() && !e.Button.IsUseToolButton())
+            || !MenuingExtensions.IsNormalGameplay())
         {
             return;
         }

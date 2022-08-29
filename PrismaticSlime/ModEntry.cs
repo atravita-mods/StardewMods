@@ -68,7 +68,6 @@ internal sealed class ModEntry : Mod
         ModMonitor = this.Monitor;
         I18n.Init(helper.Translation);
 
-        helper.Events.Content.AssetRequested += this.OnAssetRequested;
         helper.Events.GameLoop.GameLaunched += this.OnGameLaunched;
 
         this.ApplyPatches(new Harmony(this.ModManifest.UniqueID));
@@ -88,6 +87,7 @@ internal sealed class ModEntry : Mod
 
         RingManager = new(this.Monitor, this.Helper.Translation, this.Helper.ModRegistry);
 
+        this.Helper.Events.Content.AssetRequested += this.OnAssetRequested;
         this.Helper.Events.GameLoop.ReturnedToTitle += this.OnReturnedToTitle;
     }
 
@@ -103,6 +103,7 @@ internal sealed class ModEntry : Mod
         prismaticSlimeEgg = -1;
     }
 
+    [EventPriority(EventPriority.Low)]
     private void OnAssetRequested(object? sender, AssetRequestedEventArgs e)
         => AssetManager.Apply(e);
 

@@ -62,10 +62,10 @@
         }
     },
     {
-        "LogName": "Base dialogue - player married to Penny",
+        "LogName": "Base dialogue - any player married to Penny",
         "Action": "EditData",
         "Target": "Characters/Dialogue/Pam",
-        "When": {"Relationship:Penny": "Married"},
+        "When": {"Spouse:AnyPlayer": "Penny"},
         "Entries": {
             "Trailer_Entry": "Ah, home sweet home!/Ah, home at last!"
         }

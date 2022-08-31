@@ -36,7 +36,9 @@
             "Target": "Characters/Dialogue/Pam",
             "When": {"HasSeenEvent": "99210002" },
             "Entries": {
-                "fallResort_Left": "I guess that vacation was kinda okay? A little break was nice.#$b#$c .5#I dunno. I wish I could have done somethin' more interestin'...$s#Should've brought my fishin' rod. Some of those fish looked interestin'."
+                "fallResort_Left": "I guess that vacation was kinda okay? A little break was nice.#$b#$c .5#I dunno. I wish I could have done somethin' more interestin'...$s#Should've brought my fishin' rod. Some of those fish looked interestin'.",
+                "Resort_Wander_3": "My therapist says this sun is good for me.#$b#Think I'm getting a sunburn though.",
+                "Resort_Bar_4": "@, if you could go anywhere in the world, where would you go?"
             }
         },
         {

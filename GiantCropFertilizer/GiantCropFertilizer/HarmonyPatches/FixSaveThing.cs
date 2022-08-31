@@ -5,8 +5,16 @@ using StardewValley.Locations;
 using StardewValley.TerrainFeatures;
 
 namespace GiantCropFertilizer.HarmonyPatches;
+
+/// <summary>
+/// Fixes the issue where giant crops are not properly handled in the save on maps that are not Farm or IslandWest.
+/// </summary>
 internal static class FixSaveThing
 {
+    /// <summary>
+    /// Applies this patch (for versions of the game before 1.6).
+    /// </summary>
+    /// <param name="harmony">My harmony instance.</param>
     internal static void ApplyPatches(Harmony harmony)
     {
         harmony.Patch(
@@ -14,10 +22,12 @@ internal static class FixSaveThing
             postfix: new HarmonyMethod(typeof(FixSaveThing), nameof(Postfix)));
     }
 
+    [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Harmony convention.")]
     private static void Postfix(GameLocation __instance, GameLocation l)
     {
         // game handles these two.
-        if (__instance is IslandWest || __instance.Name.Equals("Farm"))
+        if (__instance is IslandWest || __instance.Name.Equals("Farm", StringComparison.OrdinalIgnoreCase)
+            || __instance.resourceClumps.Count >= l.resourceClumps.Count)
         {
             return;
         }
@@ -32,12 +42,16 @@ internal static class FixSaveThing
         }
 
         // restore previous giant crops.
+        int count = 0;
         foreach (var clump in l.resourceClumps)
         {
             if (clump is GiantCrop crop && prev.Add(crop.tile.Value))
             {
+                count++;
                 __instance.resourceClumps.Add(crop);
             }
         }
+
+        ModEntry.ModMonitor.Log($"Restored {count} giant crops at {__instance.NameOrUniqueName}");
     }
 }

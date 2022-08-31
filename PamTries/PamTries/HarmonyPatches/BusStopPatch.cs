@@ -1,5 +1,4 @@
-﻿#if DEBUG
-using System.Reflection;
+﻿using System.Reflection;
 using System.Reflection.Emit;
 using System.Runtime.CompilerServices;
 using AtraBase.Toolkit;
@@ -99,5 +98,3 @@ internal static class BusStopPatch
         }
     }
 }
-
-#endif

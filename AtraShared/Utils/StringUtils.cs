@@ -1,4 +1,5 @@
 ﻿using System.Text;
+using AtraBase.Toolkit;
 using AtraBase.Toolkit.Reflection;
 using AtraBase.Toolkit.StringHandler;
 using FastExpressionCompiler.LightExpression;
@@ -66,10 +67,13 @@ public sealed class StringUtils
         {
             return string.Empty;
         }
-        if (text.IndexOf(Dialogue.genderDialogueSplitCharacter) is int genderseperator && genderseperator > 0)
+
+        int genderseperator = text.IndexOf(Dialogue.genderDialogueSplitCharacter);
+        if (genderseperator > 0)
         {
             text = Game1.player.IsMale ? text[..genderseperator] : text[(genderseperator + 1)..];
         }
+
         switch (LocalizedContentManager.CurrentLanguageCode)
         {
             case LocalizedContentManager.LanguageCode.ja:
@@ -93,40 +97,44 @@ public sealed class StringUtils
     public string WrapTextByWords(string text, SpriteFont whichFont, float width, float? height = null)
     {
         int maxlines = height is null ? 1000 : (int)height / whichFont.LineSpacing;
-        StringBuilder sb = new();
+        StringBuilder sb = StringBuilderCache.Acquire(text.Length);
         float spacewidth = this.MeasureWord(whichFont, " ") + whichFont.Spacing;
         float current_width = -whichFont.Spacing;
-        StringBuilder replacement_word = new();
+
+        StringBuilder? replacement_word = null;
         bool use_replacement_word = false;
+
         foreach ((ReadOnlySpan<char> word, ReadOnlySpan<char> splitchar) in text.StreamSplit())
         {
             if (LocalizedContentManager.CurrentLanguageCode is LocalizedContentManager.LanguageCode.fr && word.StartsWith("\n-"))
             { // This is from vanilla code, I dunno why French is special.
                 if (--maxlines <= 0)
                 {
-                    return sb.ToString();
+                    return StringBuilderCache.GetStringAndRelease(sb);
                 }
                 current_width = -whichFont.Spacing;
                 sb.AppendLine();
                 continue;
             }
+
             float wordwidth = this.MeasureWord(whichFont, word) + spacewidth;
             if (wordwidth > width)
             { // if the word itself is **longer** than the width, we must truncate. It'll get its own line.
                 replacement_word = this.TruncateWord(word, whichFont, width, out wordwidth);
                 use_replacement_word = true;
             }
+
             current_width += whichFont.Spacing + wordwidth;
             if (current_width > width)
             {
                 if (--maxlines <= 0)
                 {
-                    return sb.ToString();
+                    return StringBuilderCache.GetStringAndRelease(sb);
                 }
                 sb.AppendLine();
                 current_width = wordwidth;
             }
-            if (use_replacement_word)
+            if (use_replacement_word && replacement_word is not null)
             {
                 sb.Append(replacement_word);
             }
@@ -134,6 +142,8 @@ public sealed class StringUtils
             {
                 sb.Append(word);
             }
+
+
             use_replacement_word = false;
             if (splitchar == "\r")
             {
@@ -143,7 +153,7 @@ public sealed class StringUtils
             {
                 if (--maxlines <= 0)
                 {
-                    return sb.ToString();
+                    return StringBuilderCache.GetStringAndRelease(sb);
                 }
                 sb.AppendLine();
             }
@@ -152,7 +162,8 @@ public sealed class StringUtils
                 sb.Append(splitchar);
             }
         }
-        return sb.ToString();
+
+        return StringBuilderCache.GetStringAndRelease(sb);
     }
 
     /// <summary>

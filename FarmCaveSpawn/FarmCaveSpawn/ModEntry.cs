@@ -1,6 +1,7 @@
 ﻿using System.Buffers;
 using System.Text;
 using System.Text.RegularExpressions;
+using AtraBase.Toolkit;
 using AtraBase.Toolkit.Extensions;
 using AtraBase.Toolkit.StringHandler;
 using AtraShared.Integrations;
@@ -364,9 +365,10 @@ END:
                 }
             }
         }
-        StringBuilder sb = new("Possible fruits: ");
+        StringBuilder sb = StringBuilderCache.Acquire(fruitNames.Count * 6);
+        sb.Append("Possible fruits: ");
         sb.AppendJoin(", ", AtraUtils.ContextSort(fruitNames));
-        this.Monitor.Log(sb.ToString(), LogLevel.Info);
+        this.Monitor.Log(StringBuilderCache.GetStringAndRelease(sb), LogLevel.Info);
     }
 
     /// <summary>

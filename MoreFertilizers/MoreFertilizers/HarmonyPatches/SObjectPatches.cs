@@ -36,9 +36,9 @@ internal static class SObjectPatches
     [HarmonyPriority(Priority.VeryLow)]
     [HarmonyPatch(nameof(SObject.performObjectDropInAction))]
     [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Harmony Convention")]
-    private static void PostfixDropInAction(SObject __instance, Item dropInItem, bool probe)
+    private static void PostfixDropInAction(SObject __instance, Item dropInItem, bool probe, bool __result)
     {
-        if (!probe)
+        if (!probe && __result)
         {
             try
             {
@@ -72,7 +72,8 @@ internal static class SObjectPatches
     {
         try
         {
-            if (i is SObject obj && !obj.bigCraftable.Value && obj.ParentSheetIndex != -1 && ModEntry.SpecialFertilizerIDs.Contains(obj.ParentSheetIndex))
+            if (__result && i is SObject obj && !obj.bigCraftable.Value
+                && obj.ParentSheetIndex != -1 && ModEntry.SpecialFertilizerIDs.Contains(obj.ParentSheetIndex))
             {
                 __result = false;
                 return false;

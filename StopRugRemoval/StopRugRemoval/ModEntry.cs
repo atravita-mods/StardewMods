@@ -168,7 +168,7 @@ internal sealed class ModEntry : Mod
     /// IE - patches on other mods.
     /// </summary>
     /// <param name="harmony">A harmony instance.</param>
-    private void ApplyLatePatches(Harmony harmony)
+    private void ApplyPatches(Harmony harmony)
     {
         try
         {
@@ -194,7 +194,7 @@ internal sealed class ModEntry : Mod
     private void OnGameLaunch(object? sender, GameLaunchedEventArgs e)
     {
         PlantGrassUnder.GetSmartBuildingBuildMode(this.Helper.ModRegistry);
-        this.ApplyLatePatches(new Harmony(this.ModManifest.UniqueID));
+        this.ApplyPatches(new Harmony(this.ModManifest.UniqueID));
 
         GMCM = new(this.Monitor, this.Helper.Translation, this.Helper.ModRegistry, this.ModManifest);
         if (GMCM.TryGetAPI())

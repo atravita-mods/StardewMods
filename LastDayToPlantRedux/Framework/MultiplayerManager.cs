@@ -18,6 +18,12 @@ internal static class MultiplayerManager
         ShouldCheckPrestiged = registry.IsLoaded("DaLion.ImmersiveProfessions");
     }
 
+    internal static void Reset()
+    {
+        agriculturalistFarmer = null;
+        prestigedAgriculturalistFarmer = null;
+    }
+
     internal static void UpdateOnDayStart(DayStartedEventArgs e)
     {
         agriculturalistFarmer = null;

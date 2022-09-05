@@ -1,25 +1,128 @@
-﻿using AtraShared.ConstantsAndEnums;
+﻿using AtraBase.Collections;
+using AtraBase.Toolkit.Extensions;
+using AtraBase.Toolkit.StringHandler;
+using AtraShared.ConstantsAndEnums;
 using StardewValley.TerrainFeatures;
 
 namespace LastDayToPlantRedux.Framework;
+
+/// <summary>
+/// Handles a cache of crop and fertilizer data.
+/// </summary>
 internal static class CropAndFertilizerManager
 {
-    private static List<HoeDirt> dirts = new();
+    private static bool CropsNeedRefreshing = true;
+    private static bool FertilizersNeedRefreshing = true;
 
-    private static List<CropEntry> crops = new();
+    // a mapping of fertilizers to a hoedirt that has them.
+    private static Dictionary<int, HoeDirt> dirts = new();
 
-    private static List<int> fertilizers = new();
+    // a cache of crop data.
+    private static Dictionary<int, CropEntry> crops = new();
 
-    private record CropEntry(int Id, StardewSeasons seasons, string growthData);
+    // a mapping of fertilizers to their localized names.
+    private static Dictionary<int, string> fertilizers = new();
 
-    internal static void LoadData(IGameContentHelper helper)
+    private record CropEntry(StardewSeasons Seasons, string GrowthData);
+
+
+#region loading
+
+    internal static void RequestInvalidateCrops()
     {
+        CropsNeedRefreshing = true;
+    }
+
+    internal static void RequestInvalidateFertilizers()
+    {
+        FertilizersNeedRefreshing = true;
+    }
+
+    /// <summary>
+    /// Parses crop data into a more optimized format.
+    /// </summary>
+    /// <returns>If any values have changed..</returns>
+    internal static bool LoadCropData()
+    {
+        if (!CropsNeedRefreshing)
+        {
+            return false;
+        }
+
+        CropsNeedRefreshing = false;
+
+        Dictionary<int, CropEntry> ret = new();
+
+        Dictionary<int, string> cropData = Game1.content.Load<Dictionary<int, string>>("Data\\Crops");
+        foreach (var (index, vals) in cropData)
+        {
+            var seasons = vals.GetNthChunk('/', 1).Trim();
+
+            StardewSeasons seasonEnum = StardewSeasons.None;
+            foreach (var season in seasons.StreamSplit(null, StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries))
+            {
+                if (StardewSeasonsExtensions.TryParse(season, ignoreCase: true, out StardewSeasons s))
+                {
+                    seasonEnum |= s;
+                }
+                else
+                {
+                    ModEntry.ModMonitor.Log($"Crop {index} - {vals} seems to have unparseable season data, skipping", LogLevel.Warn);
+                    goto breakcontinue;
+                }
+            }
+
+            var growthData = vals.GetNthChunk('/', 0).Trim().ToString();
+            ret[index] = new CropEntry(seasonEnum, growthData);
+breakcontinue:
+            ;
+        }
+
+        bool changed = !ret.IsEquivalentTo(crops);
+        crops = ret;
+        return changed;
+    }
+
+    /// <summary>
+    /// Loads a list of fertilizers.
+    /// </summary>
+    /// <returns>If anythign changed.</returns>
+    internal static bool LoadFertilizerData()
+    {
+        if (!FertilizersNeedRefreshing)
+        {
+            return false;
+        }
+        FertilizersNeedRefreshing = false;
+
+        Dictionary<int, string> ret = new();
+
         var data = Game1.objectInformation;
 
         foreach (var (index, vals) in data)
         {
+            var catName = vals.GetNthChunk('/', SObject.objectInfoTypeIndex);
+            var spaceIndx = catName.GetLastIndexOfWhiteSpace();
+            if (spaceIndx < 0)
+            {
+                continue;
+            }
 
+            int category;
+            if (!int.TryParse(catName.Slice(spaceIndx), out category) ||
+                (category is not SObject.fertilizerCategory))
+            {
+                continue;
+            }
+
+            var name = vals.GetNthChunk('/', SObject.objectInfoDisplayNameIndex).Trim().ToString();
+
+            ret[index] = name;
         }
 
+        bool changed = ret.IsEquivalentTo(fertilizers);
+        fertilizers = ret;
+        return changed;
     }
+#endregion
 }

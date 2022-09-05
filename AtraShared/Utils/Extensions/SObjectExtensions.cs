@@ -1,4 +1,6 @@
-﻿namespace AtraShared.Utils.Extensions;
+﻿using CommunityToolkit.Diagnostics;
+
+namespace AtraShared.Utils.Extensions;
 
 /// <summary>
 /// Extensions for SObject.
@@ -38,7 +40,7 @@ public static class SObjectExtensions
     /// <returns>Name of the bigcraftable.</returns>
     public static string GetBigCraftableTranslatedName(this int bigCraftableIndex)
     {
-        if (Game1.bigCraftablesInformation.TryGetValue(bigCraftableIndex, out string? value))
+        if (Game1.bigCraftablesInformation?.TryGetValue(bigCraftableIndex, out string? value) == true)
         {
             int index = value.LastIndexOf('/');
             if (index >= 0 && index < value.Length - 1)
@@ -47,5 +49,34 @@ public static class SObjectExtensions
             }
         }
         return "ERROR - big craftable not found!";
+    }
+
+    /// <summary>
+    /// Consumes a recipe by teaching the player the recipe.
+    /// </summary>
+    /// <param name="obj">The object instance.</param>
+    /// <returns>True if the recipe was taught, false otherwise.</returns>
+    public static bool ConsumeRecipeImpl(this SObject obj)
+    {
+        Guard.IsNotNull(obj);
+        Guard.IsNotNull(Game1.player);
+
+        if (obj.IsRecipe)
+        {
+            string recipeName = obj.Name;
+
+            // vanilla removes the word "Recipe" from the end
+            // because ???
+            int idx = recipeName.IndexOf("Recipe");
+            if (idx > 0)
+            {
+                recipeName = recipeName[..(idx - 1)];
+            }
+
+            return obj.Category == -7
+                ? Game1.player.cookingRecipes.TryAdd(recipeName, 0)
+                : Game1.player.craftingRecipes.TryAdd(recipeName, 0);
+        }
+        return false;
     }
 }

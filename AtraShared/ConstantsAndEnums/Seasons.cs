@@ -50,17 +50,34 @@ public static partial class SeasonExtensions
     /// </summary>
     /// <param name="seasonList">List of strings of seasons...</param>
     /// <returns>Stardew Seasons.</returns>
-    public static StardewSeasons ParseSeasonList(this List<string> seasonList)
+    public static StardewSeasons ParseSeasonList(this IEnumerable<string> seasonList)
     {
         StardewSeasons season = StardewSeasons.None;
         foreach (string? seasonstring in seasonList)
         {
-            if (Enum.TryParse(seasonstring, ignoreCase: true, out StardewSeasons s))
+            if (StardewSeasonsExtensions.TryParse(seasonstring.Trim(), ignoreCase: true, out StardewSeasons s))
             {
                 season |= s;
             }
         }
         return season;
+    }
+
+    public static bool TryParseSeasonList(this IEnumerable<string> seasonList, out StardewSeasons seasons)
+    {
+        seasons = StardewSeasons.None;
+        foreach (string? seasonstring in seasonList)
+        {
+            if (StardewSeasonsExtensions.TryParse(seasonstring.Trim(), ignoreCase: true, out StardewSeasons s))
+            {
+                seasons |= s;
+            }
+            else
+            {
+                return false;
+            }
+        }
+        return true;
     }
 
     /// <summary>
@@ -78,6 +95,23 @@ public static partial class SeasonExtensions
             3 => StardewSeasons.Winter,
             _ => StardewSeasons.None,
         };
+
+    /// <summary>
+    /// Shifts all values in a StardewSeason enum over by one month.
+    /// </summary>
+    /// <param name="seasons">Initial seasons.</param>
+    /// <returns>Seasons shifted by one.</returns>
+    public static StardewSeasons GetNextSeason(StardewSeasons seasons)
+    {
+        var shifted = (uint)seasons << 1;
+
+        if ((shifted & 0b10000) > 0)
+        {
+            shifted |= 0b1;
+            shifted &= 0b1111;
+        }
+        return (StardewSeasons)shifted;
+    }
 }
 
 /// <summary>

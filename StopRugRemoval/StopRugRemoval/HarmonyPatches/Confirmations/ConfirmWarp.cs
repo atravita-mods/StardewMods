@@ -156,7 +156,7 @@ internal static class ConfirmWarp
             }
         }
 
-        if (!WarpLocationExtensions.IsDefined((WarpLocation)__instance.ParentSheetIndex) || __instance.bigCraftable.Value)
+        if (__instance.bigCraftable.Value || !WarpLocationExtensions.IsDefined((WarpLocation)__instance.ParentSheetIndex))
         { // Not an attempt to warp.
             return true;
         }

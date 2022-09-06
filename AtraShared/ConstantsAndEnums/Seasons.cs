@@ -7,7 +7,7 @@ namespace AtraShared.ConstantsAndEnums;
 /// </summary>
 [Flags]
 [EnumExtensions]
-public enum StardewSeasons : uint
+public enum StardewSeasons : byte
 {
     /// <summary>
     /// No season constraints.
@@ -103,7 +103,7 @@ public static partial class SeasonExtensions
     /// <returns>Seasons shifted by one.</returns>
     public static StardewSeasons GetNextSeason(StardewSeasons seasons)
     {
-        var shifted = (uint)seasons << 1;
+        var shifted = (byte)seasons << 1;
 
         if ((shifted & 0b10000) > 0)
         {
@@ -119,7 +119,7 @@ public static partial class SeasonExtensions
 /// </summary>
 [Flags]
 [EnumExtensions]
-public enum StardewWeather : uint
+public enum StardewWeather : byte
 {
     /// <summary>
     /// No weather contraints.
@@ -167,12 +167,12 @@ public static partial class WeatherExtensions
     /// </summary>
     /// <param name="weatherList">List of strings of weathers....</param>
     /// <returns>Enum.</returns>
-    public static StardewWeather ParseWeatherList(this List<string> weatherList)
+    public static StardewWeather ParseWeatherList(this IEnumerable<string> weatherList)
     {
         StardewWeather weather = StardewWeather.None;
         foreach (string? weatherstring in weatherList)
         {
-            if (Enum.TryParse(weatherstring, ignoreCase: true, out StardewWeather w))
+            if (StardewWeatherExtensions.TryParse(weatherstring.Trim(), ignoreCase: true, out StardewWeather w))
             {
                 weather |= w;
             }

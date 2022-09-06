@@ -1,6 +1,6 @@
 ﻿using AtraShared.Integrations;
-using AtraShared.Integrations.Interfaces;
 using AtraShared.Utils.Extensions;
+using AtraShared.Utils.Shims;
 using LastDayToPlantRedux.Framework;
 using StardewModdingAPI.Events;
 
@@ -17,20 +17,13 @@ internal sealed class ModEntry : Mod
 
     internal static ModConfig Config { get; private set; } = null!;
 
-    // APIs
-    private static IJsonAssetsAPI? jsonAssets;
-
-    internal static IJsonAssetsAPI? JsonAssets => jsonAssets;
-
-    private static IEPUConditionsChecker? epu;
-
-    internal static IEPUConditionsChecker? EPU => epu;
-
     /// <inheritdoc />
     public override void Entry(IModHelper helper)
     {
         // bind helpers.
         ModMonitor = this.Monitor;
+        GameContentHelper = this.Helper.GameContent;
+
         Config = AtraUtils.GetConfigOrDefault<ModConfig>(helper, this.Monitor);
         helper.Events.GameLoop.GameLaunched += this.OnGameLaunched;
 
@@ -85,12 +78,8 @@ internal sealed class ModEntry : Mod
     {
         MultiplayerManager.SetShouldCheckPrestiged(this.Helper.ModRegistry);
 
-        IntegrationHelper integrationHelper = new(this.Monitor, this.Helper.Translation, this.Helper.ModRegistry, LogLevel.Trace);
-        if (integrationHelper.TryGetAPI("spacechase0.JsonAssets", "1.10.6", out jsonAssets)
-            && !integrationHelper.TryGetAPI("Cherry.ExpandedPreconditionsUtility", "1.0.1", out epu))
-        {
-            this.Monitor.Log("JA found but EPU not. EPU conditions will automatically fail.");
-        }
+        // Ask for AtraCore's JAShims to be initialized.
+        JsonAssetsShims.Initialize(this.Monitor, this.Helper.Translation, this.Helper.ModRegistry);
 
         GMCMHelper helper = new(this.Monitor, this.Helper.Translation, this.Helper.ModRegistry, this.ModManifest);
         if (helper.TryGetAPI())

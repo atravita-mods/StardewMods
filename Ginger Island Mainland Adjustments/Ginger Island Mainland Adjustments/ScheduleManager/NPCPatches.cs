@@ -1,4 +1,5 @@
-﻿using HarmonyLib;
+﻿using AtraShared.Utils.Extensions;
+using HarmonyLib;
 using Microsoft.Xna.Framework;
 using StardewValley.Locations;
 
@@ -13,7 +14,7 @@ internal static class NPCPatches
     /// <summary>
     /// Keep a list of fishers to reset their sprites at day end.
     /// </summary>
-    private static readonly List<NPC> Fishers = new();
+    private static readonly List<WeakReference<NPC>> Fishers = new();
 
     /// <summary>
     /// resets the sprites of all people who went fishing.
@@ -21,14 +22,25 @@ internal static class NPCPatches
     /// <remarks>Call at DayEnding.</remarks>
     internal static void ResetAllFishers()
     {
-        foreach (NPC npc in Fishers)
+        int count = 0;
+        int skipped = 0;
+        foreach (var npcRef in Fishers)
         {
-            npc.Sprite.SpriteHeight = 32;
-            npc.Sprite.SpriteWidth = 16;
-            npc.Sprite.ignoreSourceRectUpdates = false;
-            npc.Sprite.UpdateSourceRect();
-            npc.drawOffset.Value = Vector2.Zero;
+            if (npcRef.TryGetTarget(out NPC? npc))
+            {
+                npc.Sprite.SpriteHeight = 32;
+                npc.Sprite.SpriteWidth = 16;
+                npc.Sprite.ignoreSourceRectUpdates = false;
+                npc.Sprite.UpdateSourceRect();
+                npc.drawOffset.Value = Vector2.Zero;
+                count++;
+            }
+            else
+            {
+                skipped++;
+            }
         }
+        Globals.ModMonitor.DebugOnlyLog($"Reset sprite for {count} NPCs - {skipped} skipped", count + skipped > 0,  LogLevel.Trace);
         Fishers.Clear();
     }
 
@@ -54,7 +66,7 @@ internal static class NPCPatches
                 {
                     __instance.currentLocation.playSoundAt("slosh", __instance.getTileLocation());
                 }
-                Fishers.Add(__instance);
+                Fishers.Add(new WeakReference<NPC>(__instance));
             }
         }
         catch (Exception ex)

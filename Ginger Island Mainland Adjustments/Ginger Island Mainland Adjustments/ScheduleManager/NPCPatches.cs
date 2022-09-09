@@ -13,6 +13,7 @@ internal static class NPCPatches
 {
     /// <summary>
     /// Keep a list of fishers to reset their sprites at day end.
+    /// Using a weakref because I don't care if the NPC vanishes.
     /// </summary>
     private static readonly List<WeakReference<NPC>> Fishers = new();
 
@@ -22,6 +23,11 @@ internal static class NPCPatches
     /// <remarks>Call at DayEnding.</remarks>
     internal static void ResetAllFishers()
     {
+        if (Fishers.Count == 0)
+        {
+            return;
+        }
+
         int count = 0;
         int skipped = 0;
         foreach (var npcRef in Fishers)
@@ -40,7 +46,11 @@ internal static class NPCPatches
                 skipped++;
             }
         }
-        Globals.ModMonitor.DebugOnlyLog($"Reset sprite for {count} NPCs - {skipped} skipped", count + skipped > 0,  LogLevel.Trace);
+
+        if (count + skipped > 0)
+        {
+            Globals.ModMonitor.Log($"Reset sprite for {count} NPCs - {skipped} skipped", LogLevel.Trace);
+        }
         Fishers.Clear();
     }
 

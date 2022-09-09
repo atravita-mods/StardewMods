@@ -11,6 +11,7 @@
   <ItemGroup>
     <Compile Include="$(MSBuildThisFileDirectory)ConstantsAndEnums\ItemTypeEnum.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ConstantsAndEnums\Seasons.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ConstantsAndEnums\Weathers.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Content\RawTexData\IRawTextureDataExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)CustomExceptions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ConstantsAndEnums\ErrorMessageConsts.cs" />

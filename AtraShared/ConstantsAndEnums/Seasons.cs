@@ -1,4 +1,5 @@
-﻿using NetEscapades.EnumGenerators;
+﻿using CommunityToolkit.Diagnostics;
+using NetEscapades.EnumGenerators;
 
 namespace AtraShared.ConstantsAndEnums;
 
@@ -52,6 +53,8 @@ public static partial class SeasonExtensions
     /// <returns>Stardew Seasons.</returns>
     public static StardewSeasons ParseSeasonList(this IEnumerable<string> seasonList)
     {
+        Guard.IsNotNull(seasonList);
+
         StardewSeasons season = StardewSeasons.None;
         foreach (string? seasonstring in seasonList)
         {
@@ -65,6 +68,8 @@ public static partial class SeasonExtensions
 
     public static bool TryParseSeasonList(this IEnumerable<string> seasonList, out StardewSeasons seasons)
     {
+        Guard.IsNotNull(seasonList);
+
         seasons = StardewSeasons.None;
         foreach (string? seasonstring in seasonList)
         {
@@ -105,78 +110,22 @@ public static partial class SeasonExtensions
     {
         var shifted = (byte)seasons << 1;
 
-        if ((shifted & 0b10000) > 0)
+        if (seasons.HasFlag(StardewSeasons.Winter))
         {
             shifted |= 0b1;
-            shifted &= 0b1111;
         }
+        shifted &= 0b1111;
         return (StardewSeasons)shifted;
     }
-}
 
-/// <summary>
-/// Weathers as flags....
-/// </summary>
-[Flags]
-[EnumExtensions]
-public enum StardewWeather : byte
-{
-    /// <summary>
-    /// No weather contraints.
-    /// </summary>
-    None = 0,
-
-    /// <summary>
-    /// Sunny weather.
-    /// </summary>
-    Sunny = 0b1,
-
-    /// <summary>
-    /// Rain
-    /// </summary>
-    Rainy = 0b10,
-
-    /// <summary>
-    /// Storming.
-    /// </summary>
-    Stormy = 0b100,
-
-    /// <summary>
-    /// Snowing (winter only).
-    /// </summary>
-    Snowy = 0b1000,
-
-    /// <summary>
-    /// Windy weather, usually leaves blowing around the screen.
-    /// </summary>
-    Windy = 0b10000,
-
-    /// <summary>
-    /// All weathers.
-    /// </summary>
-    All = Sunny | Rainy | Stormy | Snowy | Windy,
-}
-
-/// <summary>
-/// Extensions for the weather enum.
-/// </summary>
-public static partial class WeatherExtensions
-{
-    /// <summary>
-    /// Gets a list of strings and parses them to the weatherenum.
-    /// </summary>
-    /// <param name="weatherList">List of strings of weathers....</param>
-    /// <returns>Enum.</returns>
-    public static StardewWeather ParseWeatherList(this IEnumerable<string> weatherList)
+    public static StardewSeasons GetPreviousSeason(StardewSeasons seasons)
     {
-        StardewWeather weather = StardewWeather.None;
-        foreach (string? weatherstring in weatherList)
+        var shifted = (byte)seasons >> 1;
+        if (seasons.HasFlag(StardewSeasons.Spring))
         {
-            if (StardewWeatherExtensions.TryParse(weatherstring.Trim(), ignoreCase: true, out StardewWeather w))
-            {
-                weather |= w;
-            }
+            shifted |= 0b1000;
         }
-        return weather;
+        shifted &= 0b1111;
+        return (StardewSeasons)shifted;
     }
 }

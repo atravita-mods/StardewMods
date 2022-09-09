@@ -38,6 +38,12 @@ public sealed class ModConfig
     public bool EnforceGITiming { get; set; } = false;
 
     /// <summary>
+    /// Gets or sets a value indicating whether resort dialogue is required for NPCS
+    /// to attend the resort.
+    /// </summary>
+    public bool RequireResortDialogue { get; set; } = true;
+
+    /// <summary>
     /// Gets or sets a value indicating whether or not Islanders should wear their beach outfits.
     /// </summary>
     public WearIslandClothing WearIslandClothing { get; set; } = WearIslandClothing.Default;

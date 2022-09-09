@@ -109,6 +109,13 @@ internal static class IslandSouthPatches
                 }
             }
 
+            if (Globals.Config.RequireResortDialogue && !npc.Dialogue.ContainsKey("Resort"))
+            {
+                Globals.ModMonitor.Log($"{npc.Name} appears to lack resort dialogue, removing from pool.", LogLevel.Info);
+                __result = false;
+                return;
+            }
+
             // if an NPC has a schedule for the specific day, don't allow them to go to the resort.
             if (npc.HasSpecificSchedule())
             {

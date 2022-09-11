@@ -1,8 +1,6 @@
-﻿using System.Diagnostics;
-using AtraShared.ConstantsAndEnums;
+﻿using AtraShared.ConstantsAndEnums;
 using AtraShared.Integrations;
 using AtraShared.MigrationManager;
-using AtraShared.Niceties;
 using AtraShared.Utils.Extensions;
 using HarmonyLib;
 using HighlightEmptyMachines.Framework;

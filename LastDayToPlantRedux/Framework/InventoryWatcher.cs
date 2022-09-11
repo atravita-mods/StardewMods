@@ -7,7 +7,15 @@ namespace LastDayToPlantRedux.Framework;
 /// </summary>
 public sealed class InventoryManagerModel
 {
+    /// <summary>
+    /// A hashet of seeds the player has seen before.
+    /// </summary>
     public HashSet<string> Seeds { get; set; } = new();
+
+    /// <summary>
+    /// A hashset of fertilizers the player has seen before.
+    /// </summary>
+    public HashSet<string> Fertilizers { get; set; } = new();
 }
 
 /// <summary>
@@ -56,13 +64,18 @@ internal static class InventoryWatcher
     {
         foreach (var item in e.Added)
         {
-            if (item is SObject obj && !obj.bigCraftable.Value && obj.Category == SObject.SeedsCategory)
+            if (item is SObject obj && !obj.bigCraftable.Value
+                && (obj.Category == SObject.SeedsCategory || obj.Category == SObject.fertilizerCategory))
             {
                 if (!IsModelLoaded)
                 {
                     LoadModel(helper);
                 }
-                if (model.Seeds.Add(obj.Name))
+                if (obj.Category == SObject.SeedsCategory && model.Seeds.Add(obj.Name))
+                {
+                    HasChanges = true;
+                }
+                else if (obj.Category == SObject.fertilizerCategory && model.Fertilizers.Add(obj.Name))
                 {
                     HasChanges = true;
                 }

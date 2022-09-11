@@ -1,6 +1,5 @@
 ﻿using System.Reflection.Emit;
 using AtraBase.Toolkit;
-using AtraBase.Toolkit.Extensions;
 using AtraCore.Framework.ReflectionManager;
 using AtraShared.Utils.HarmonyHelper;
 using HarmonyLib;

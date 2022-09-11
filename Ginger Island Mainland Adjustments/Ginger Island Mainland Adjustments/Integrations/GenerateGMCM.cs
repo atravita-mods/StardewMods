@@ -101,7 +101,7 @@ internal static class GenerateGMCM
 
         foreach (PropertyInfo property in typeof(ModConfig).GetProperties())
         {
-            if (property.Name.StartsWith("Allow"))
+            if (property.Name.StartsWith("Allow", StringComparison.OrdinalIgnoreCase))
             {
                 if (property.PropertyType == typeof(bool))
                 {

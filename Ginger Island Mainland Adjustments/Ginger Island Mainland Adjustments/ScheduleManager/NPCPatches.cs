@@ -1,5 +1,4 @@
-﻿using AtraShared.Utils.Extensions;
-using HarmonyLib;
+﻿using HarmonyLib;
 using Microsoft.Xna.Framework;
 using StardewValley.Locations;
 
@@ -30,7 +29,7 @@ internal static class NPCPatches
 
         int count = 0;
         int skipped = 0;
-        foreach (var npcRef in Fishers)
+        foreach (WeakReference<NPC>? npcRef in Fishers)
         {
             if (npcRef.TryGetTarget(out NPC? npc))
             {
@@ -47,10 +46,7 @@ internal static class NPCPatches
             }
         }
 
-        if (count + skipped > 0)
-        {
-            Globals.ModMonitor.Log($"Reset sprite for {count} NPCs - {skipped} skipped", LogLevel.Trace);
-        }
+        Globals.ModMonitor.Log($"Reset sprite for {count} NPCs - {skipped} skipped", LogLevel.Trace);
         Fishers.Clear();
     }
 

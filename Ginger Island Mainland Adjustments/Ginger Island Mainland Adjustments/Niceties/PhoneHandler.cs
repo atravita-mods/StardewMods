@@ -1,7 +1,6 @@
 ﻿using System.Reflection;
 using System.Reflection.Emit;
 using AtraCore.Framework.ReflectionManager;
-using AtraShared.ConstantsAndEnums;
 using AtraShared.Utils.Extensions;
 using AtraShared.Utils.HarmonyHelper;
 using GingerIslandMainlandAdjustments.AssetManagers;

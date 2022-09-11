@@ -1,9 +1,12 @@
-﻿using System.Text;
+﻿using System.Globalization;
+using System.Text;
 using AtraBase.Toolkit;
 using AtraBase.Toolkit.Reflection;
 using AtraBase.Toolkit.StringHandler;
 using FastExpressionCompiler.LightExpression;
 using Microsoft.Xna.Framework.Graphics;
+
+using AtraUtils = AtraShared.Utils.Utils;
 
 namespace AtraShared.Utils;
 

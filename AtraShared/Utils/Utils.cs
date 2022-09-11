@@ -1,4 +1,5 @@
-﻿using System.Runtime.CompilerServices;
+﻿using System.Globalization;
+using System.Runtime.CompilerServices;
 using CommunityToolkit.Diagnostics;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -117,7 +118,24 @@ public static class Utils
     /// <param name="ignoreCase">Whether or not to ignore case.</param>
     /// <returns>A string comparer.</returns>
     public static StringComparer GetCurrentLanguageComparer(bool ignoreCase = false)
-        => StringComparer.Create(Game1.content.CurrentCulture, ignoreCase);
+        => StringComparer.Create(GetCurrentCulture(), ignoreCase);
+
+    /// <summary>
+    /// Tries to get a CultureInfo corresponding to the player's current culture. Falls back to the thread
+    /// culture.
+    /// </summary>
+    /// <returns>CultureInfo.</returns>
+    public static CultureInfo GetCurrentCulture()
+    {
+        try
+        {
+            return new CultureInfo(Game1.content.LanguageCodeString(Game1.content.GetCurrentLanguage()));
+        }
+        catch (CultureNotFoundException)
+        {
+            return CultureInfo.CurrentCulture;
+        }
+    }
 
     /// <summary>
     /// Gets all birthday NPCs.

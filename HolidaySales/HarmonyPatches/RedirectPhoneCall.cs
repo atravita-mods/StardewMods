@@ -24,7 +24,8 @@ internal static class RedirectPhoneCall
     {
         foreach (MethodInfo? method in typeof(GameLocation).GetMethods(BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public))
         {
-            if (method.Name.Contains("<answerDialogueAction>", StringComparison.Ordinal) && method.GetParameters().Length == 0)
+            if (method.Name.Contains("<answerDialogueAction>", StringComparison.Ordinal) && method.GetParameters().Length == 0
+                && ShouldTranspileThisMethod(method))
             {
                 yield return method;
             }
@@ -35,7 +36,8 @@ internal static class RedirectPhoneCall
 
         foreach (MethodInfo? method in inner.GetMethods(BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public))
         {
-            if (method.Name.Contains("<answerDialogueAction>", StringComparison.Ordinal) && method.GetParameters().Length == 0)
+            if (method.Name.Contains("<answerDialogueAction>", StringComparison.Ordinal) && method.GetParameters().Length == 0
+                && ShouldTranspileThisMethod(method))
             {
                 yield return method;
             }
@@ -43,6 +45,10 @@ internal static class RedirectPhoneCall
 
         yield break;
     }
+
+    private static bool ShouldTranspileThisMethod(MethodInfo method)
+        => PatchProcessor.GetOriginalInstructions(method)
+        .Any((instr) => instr.Calls(typeof(GameLocation).GetCachedMethod(nameof(GameLocation.AreStoresClosedForFestival), ReflectionCache.FlagTypes.StaticFlags)));
 
     private static IEnumerable<CodeInstruction>? Transpiler(IEnumerable<CodeInstruction> instructions, ILGenerator gen, MethodBase original)
     {

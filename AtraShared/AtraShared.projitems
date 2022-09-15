@@ -95,6 +95,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Utils\Shims\DynamicGameAssetsShims.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Utils\Shims\JAInternalTypesShims\CropDataShims.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Utils\Shims\JsonAssetsShims.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Utils\Shims\SAATShims.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Utils\Shims\SolidFoundationShims.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Utils\StringUtils.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Utils\Utils.cs" />

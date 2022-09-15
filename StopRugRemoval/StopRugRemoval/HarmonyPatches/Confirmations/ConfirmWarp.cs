@@ -138,7 +138,8 @@ internal static class ConfirmWarp
     [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Harmony convention.")]
     private static bool PrefixTotemWarp(SObject __instance, GameLocation location, ref bool __result)
     {
-        if (Game1.eventUp || Game1.isFestival() || Game1.fadeToBlack || Game1.player.swimming.Value || Game1.player.onBridge.Value || !ModEntry.Config.Enabled)
+        if (Game1.eventUp || Game1.isFestival() || Game1.fadeToBlack || Game1.player.swimming.Value || Game1.player.onBridge.Value || !ModEntry.Config.Enabled
+            || Game1.activeClickableMenu is not null)
         {
             return true;
         }
@@ -198,7 +199,7 @@ internal static class ConfirmWarp
             };
 
             __result = false;
-            Game1.activeClickableMenu = new DialogueAndAction(I18n.ConfirmWarps(), responses, actions);
+            Game1.activeClickableMenu = new DialogueAndAction(I18n.ConfirmWarps(), responses, actions, ModEntry.InputHelper);
             return false;
         }
         return true;
@@ -210,7 +211,8 @@ internal static class ConfirmWarp
     [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Harmony Convention")]
     private static bool PrefixBuildingAction(Building __instance, Vector2 tileLocation, Farmer who, ref bool __result)
     {
-        if (Game1.eventUp || Game1.isFestival() || Game1.fadeToBlack || Game1.player.swimming.Value || Game1.player.onBridge.Value || !ModEntry.Config.Enabled)
+        if (Game1.eventUp || Game1.isFestival() || Game1.fadeToBlack || Game1.player.swimming.Value || Game1.player.onBridge.Value || !ModEntry.Config.Enabled
+            || Game1.activeClickableMenu is not null)
         {
             return true;
         }
@@ -261,7 +263,7 @@ internal static class ConfirmWarp
             };
 
             __result = false;
-            Game1.activeClickableMenu = new DialogueAndAction(I18n.ConfirmWarps(), responses, actions);
+            Game1.activeClickableMenu = new DialogueAndAction(I18n.ConfirmWarps(), responses, actions, ModEntry.InputHelper);
             return false;
         }
         return true;
@@ -274,7 +276,8 @@ internal static class ConfirmWarp
         {
             return true;
         }
-        if (Game1.eventUp || Game1.isFestival() || Game1.fadeToBlack || Game1.player.swimming.Value || Game1.player.onBridge.Value || !ModEntry.Config.Enabled)
+        if (Game1.eventUp || Game1.isFestival() || Game1.fadeToBlack || Game1.player.swimming.Value || Game1.player.onBridge.Value || !ModEntry.Config.Enabled
+            || Game1.activeClickableMenu is not null)
         {
             return true;
         }
@@ -298,7 +301,7 @@ internal static class ConfirmWarp
                     HaveConfirmed.Value = false;
                 },
             };
-            Game1.activeClickableMenu = new DialogueAndAction(I18n.ConfirmWarps(), responses, actions);
+            Game1.activeClickableMenu = new DialogueAndAction(I18n.ConfirmWarps(), responses, actions, ModEntry.InputHelper);
             return false;
         }
         return true;
@@ -309,7 +312,8 @@ internal static class ConfirmWarp
     [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Harmony Convention")]
     private static bool PrefixIslandWest(IslandWest __instance, string action, Farmer who, Location tileLocation)
     {
-        if (Game1.eventUp || Game1.isFestival() || Game1.fadeToBlack || Game1.player.swimming.Value || Game1.player.onBridge.Value || !ModEntry.Config.Enabled)
+        if (Game1.eventUp || Game1.isFestival() || Game1.fadeToBlack || Game1.player.swimming.Value || Game1.player.onBridge.Value || !ModEntry.Config.Enabled
+            || Game1.activeClickableMenu is not null)
         {
             return true;
         }
@@ -332,7 +336,7 @@ internal static class ConfirmWarp
                     HaveConfirmed.Value = false;
                 },
             };
-            Game1.activeClickableMenu = new DialogueAndAction(I18n.ConfirmWarps(), responses, actions);
+            Game1.activeClickableMenu = new DialogueAndAction(I18n.ConfirmWarps(), responses, actions, ModEntry.InputHelper);
             return false;
         }
         return true;

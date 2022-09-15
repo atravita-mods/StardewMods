@@ -147,7 +147,7 @@ internal static class SObjectPatches
 
                 __result = false;
 
-                Game1.activeClickableMenu = new DialogueAndAction(I18n.ConfirmBombs(), responses, actions);
+                Game1.activeClickableMenu = new DialogueAndAction(I18n.ConfirmBombs(), responses, actions, ModEntry.InputHelper);
                 return false;
             }
         }

@@ -82,7 +82,7 @@ internal static class ManorHousePatch
                         },
                     };
 
-                    Game1.activeClickableMenu = new DialogueAndAction(I18n.Services(), responses, actions);
+                    Game1.activeClickableMenu = new DialogueAndAction(I18n.Services(), responses, actions, ModEntry.InputHelper);
                 }
                 else
                 {

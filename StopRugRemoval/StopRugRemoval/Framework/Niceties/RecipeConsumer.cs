@@ -16,6 +16,10 @@ internal static class RecipeConsumer
         if (!__result && __instance.IsRecipe)
         {
             __result = __instance.ConsumeRecipeImpl();
+            if (__result)
+            {
+                Game1.playSound("newRecipe");
+            }
         }
     }
 }

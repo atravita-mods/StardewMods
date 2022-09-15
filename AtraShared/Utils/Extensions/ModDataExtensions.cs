@@ -1,6 +1,8 @@
 ﻿using System.Globalization;
 using AtraBase.Toolkit.Extensions;
 
+using Microsoft.Xna.Framework;
+
 namespace AtraShared.Utils.Extensions;
 
 /// <summary>
@@ -104,14 +106,62 @@ public static class ModDataExtensions
         }
     }
 
+    /// <summary>
+    /// Gets an enum value from modData.
+    /// </summary>
+    /// <typeparam name="TEnum">The type of the enum.</typeparam>
+    /// <param name="modData">ModData.</param>
+    /// <param name="key">Key.</param>
+    /// <param name="defaultValue">Default Value.</param>
+    /// <returns>Value if found, default value if not.</returns>
     public static TEnum GetEnum<TEnum>(this ModDataDictionary modData, string key, TEnum defaultValue)
         where TEnum : struct, Enum
         => modData.TryGetValue(key, out string val)
-            && Enum.TryParse<TEnum>(val, out TEnum ret)
+            && Enum.TryParse(val, out TEnum ret)
                 ? ret
                 : defaultValue;
 
+    /// <summary>
+    /// Sets an enum value into ModData.
+    /// </summary>
+    /// <typeparam name="TEnum"></typeparam>
+    /// <param name="modData"></param>
+    /// <param name="key"></param>
+    /// <param name="value"></param>
     public static void SetEnum<TEnum>(this ModDataDictionary modData, string key, TEnum value)
         where TEnum : struct, Enum
         => modData[key] = value.ToString("D");
+
+    public static void RemoveEnum(this ModDataDictionary modData, string key)
+        => modData.Remove(key);
+
+    // colors are stored as the hex representation of their packed value.
+    // While I could do just two chars, it'll make it harder to debug
+    // and some mods will print out the values of the moddata
+    // making arbitrary unicode characters probably unwise.
+
+    /// <summary>
+    /// Gets a color value out of ModData.
+    /// </summary>
+    /// <param name="modData">ModData.</param>
+    /// <param name="key">Key.</param>
+    /// <param name="defaultVal">default value.</param>
+    /// <returns>Int value, or null of not found/not parseable.</returns>
+    [return: NotNullIfNotNull("defaultVal")]
+    public static Color? GetColor(this ModDataDictionary modData, string key, Color? defaultVal = null)
+        => modData.TryGetValue(key, out var color) && uint.TryParse(color, NumberStyles.HexNumber, CultureInfo.InvariantCulture, out var result)
+        ? new Color(result)
+        : defaultVal;
+
+    public static void SetColor(this ModDataDictionary modData, string key, Color color, Color? defaultVal = null)
+    {
+        if (defaultVal is not null & color == defaultVal)
+        {
+            modData.Remove(key);
+        }
+        else
+        {
+            modData[key] = color.PackedValue.ToString("X");
+        }
+    }
 }

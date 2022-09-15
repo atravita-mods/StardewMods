@@ -21,6 +21,8 @@ internal sealed class ModEntry : Mod
 
     internal static IMonitor ModMonitor { get; private set; } = null!;
 
+    internal static IInputHelper InputHelper { get; private set; } = null!;
+
     internal static ModConfig Config { get; private set; } = null!;
 
     /// <inheritdoc />
@@ -28,6 +30,7 @@ internal sealed class ModEntry : Mod
     {
         I18n.Init(helper.Translation);
         ModMonitor = this.Monitor;
+        InputHelper = this.Helper.Input;
         Config = AtraUtils.GetConfigOrDefault<ModConfig>(helper, this.Monitor);
 
         helper.Events.GameLoop.GameLaunched += this.OnGameLaunch;

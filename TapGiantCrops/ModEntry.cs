@@ -20,18 +20,30 @@ internal sealed class ModEntry : Mod
     /// </summary>
     internal static IMonitor ModMonitor { get; private set; } = null!;
 
+    internal static IGameContentHelper GameContentHelper { get; private set; } = null!;
+
     /// <inheritdoc />
     public override void Entry(IModHelper helper)
     {
         ModMonitor = this.Monitor;
+        GameContentHelper = helper.GameContent;
 
         helper.Events.Input.ButtonPressed += this.OnButtonPressed;
         helper.Events.GameLoop.DayEnding += this.OnDayEnding;
 
         helper.Events.GameLoop.SaveLoaded += this.OnSaveLoaded;
 
+        helper.Events.Content.AssetRequested += this.OnAssetRequested;
+        helper.Events.Content.AssetsInvalidated += this.OnAssetInvalidated;
+
         this.ApplyPatches(new Harmony(this.ModManifest.UniqueID));
     }
+
+    private void OnAssetInvalidated(object? sender, AssetsInvalidatedEventArgs e)
+        => AssetManager.Reset(e.NamesWithoutLocale);
+
+    private void OnAssetRequested(object? sender, AssetRequestedEventArgs e)
+        => AssetManager.Load(e);
 
     /// <inheritdoc />
     public override object? GetApi() => Api;

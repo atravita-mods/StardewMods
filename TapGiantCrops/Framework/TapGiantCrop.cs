@@ -1,5 +1,6 @@
 ﻿using AtraBase.Toolkit.Extensions;
 using AtraShared.ConstantsAndEnums;
+using AtraShared.Utils.Extensions;
 using AtraShared.Utils.Shims;
 using CommunityToolkit.Diagnostics;
 using Microsoft.Xna.Framework;
@@ -68,12 +69,41 @@ public class TapGiantCrop : ITapGiantCropsAPI
             return null;
         }
 
-        SObject crop = new(giantCrop.parentSheetIndex.Value, 999);
-        this.keg.heldObject.Value = null;
-        this.keg.performObjectDropInAction(crop, false, Game1.player);
-        SObject? heldobj = this.keg.heldObject.Value;
-        this.keg.heldObject.Value = null;
-        if (heldobj?.getOne() is SObject returnobj)
+        int giantCropIndx = giantCrop.parentSheetIndex.Value;
+
+        SObject? returnobj = AssetManager.GetOverrideItem(giantCropIndx);
+
+        if (returnobj is null)
+        {
+            // find a keg output.
+            SObject crop = new(giantCropIndx, 999);
+            this.keg.heldObject.Value = null;
+            this.keg.performObjectDropInAction(crop, false, Game1.player);
+            SObject? heldobj = this.keg.heldObject.Value;
+            this.keg.heldObject.Value = null;
+            if (heldobj?.getOne() is SObject obj)
+            {
+                returnobj = obj;
+            }
+        }
+
+        // special case: giant flowers make honey
+        // this makes no sense.
+        if (returnobj is null && giantCropIndx.GetCategoryFromIndex() == SObject.flowersCategory)
+        {
+            string flowerdata = Game1.objectInformation[giantCropIndx];
+            returnobj = new SObject(340, 1); // honey index.
+            string honeyName = $"{flowerdata.GetNthChunk('/', 0).ToString()} Honey";
+
+            returnobj.Name = honeyName;
+            if (int.TryParse(flowerdata.GetNthChunk('/', SObject.objectInfoPriceIndex), out int price))
+            {
+                returnobj.Price += 2 * price;
+            }
+            returnobj.preservedParentSheetIndex.Value = giantCropIndx;
+        }
+
+        if (returnobj is not null)
         {
             int days = returnobj.Price / (25 * giantCrop.width.Value * giantCrop.height.Value);
             if (tapper.ParentSheetIndex == 264)
@@ -82,7 +112,9 @@ public class TapGiantCrop : ITapGiantCropsAPI
             }
             return (returnobj, Math.Max(1, days));
         }
-        return null;
+
+        // fallback - return sap.
+        return (new SObject(92, 20), 2);
     }
 
     /// <summary>

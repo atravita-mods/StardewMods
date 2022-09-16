@@ -1,10 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
+﻿using System.Reflection;
 using System.Reflection.Emit;
-using System.Text;
-using System.Threading.Tasks;
 
 using AtraCore.Framework.ReflectionManager;
 
@@ -19,10 +14,8 @@ namespace SpecialOrdersExtended.Niceties;
 internal static class PartialDelieverObjectives
 {
     [HarmonyPatch(nameof(DeliverObjective.ShouldShowProgress))]
-    private static void Postfix(DeliverObjective __instance, ref bool __result)
-    {
-        __result = true;
-    }
+    private static void Postfix(ref bool __result)
+        => __result = true;
 
     [HarmonyPatch(nameof(DeliverObjective.OnItemDelivered))]
     private static IEnumerable<CodeInstruction>? Transpiler(IEnumerable<CodeInstruction> instructions, ILGenerator gen, MethodBase original)
@@ -32,12 +25,12 @@ internal static class PartialDelieverObjectives
             ILHelper helper = new(original, instructions, ModEntry.ModMonitor, gen);
 
             helper.FindNext(new CodeInstructionWrapper[]
-            { // this.GetMaxCount() - this.GetCount();
+            { // this.GetMaxCount() - this.GetCount(); Copy these codes for later.
                 new(OpCodes.Ldarg_0),
-                new (OpCodes.Call, typeof(OrderObjective).GetCachedMethod(nameof(OrderObjective.GetMaxCount), ReflectionCache.FlagTypes.InstanceFlags)),
+                new(OpCodes.Call, typeof(OrderObjective).GetCachedMethod(nameof(OrderObjective.GetMaxCount), ReflectionCache.FlagTypes.InstanceFlags)),
                 new(OpCodes.Ldarg_0),
-                new (OpCodes.Call, typeof(OrderObjective).GetCachedMethod(nameof(OrderObjective.GetCount), ReflectionCache.FlagTypes.InstanceFlags)),
-                new (OpCodes.Sub),
+                new(OpCodes.Call, typeof(OrderObjective).GetCachedMethod(nameof(OrderObjective.GetCount), ReflectionCache.FlagTypes.InstanceFlags)),
+                new(OpCodes.Sub),
             })
             .Copy(5, out var copy)
             .FindNext(new CodeInstructionWrapper[]
@@ -47,21 +40,21 @@ internal static class PartialDelieverObjectives
             .FindNext(new CodeInstructionWrapper[]
             { // if (required_count > stack) return 0;
                 new(SpecialCodeInstructionCases.LdLoc),
-                new (SpecialCodeInstructionCases.LdLoc),
-                new (OpCodes.Bge_S),
-                new (OpCodes.Ldc_I4_0),
-                new (OpCodes.Ret),
+                new(SpecialCodeInstructionCases.LdLoc),
+                new(OpCodes.Bge_S),
+                new(OpCodes.Ldc_I4_0),
+                new(OpCodes.Ret),
             })
             .GetLabels(out var labels, clear: true)
             .Remove(5)
             .AttachLabels(labels)
             .FindNext(new CodeInstructionWrapper[]
-            { // if (!string.IsNullOrEmpty(this.message.Value)
-                new (OpCodes.Ldarg_0),
-                new (OpCodes.Ldfld, typeof(DeliverObjective).GetCachedField(nameof(DeliverObjective.message), ReflectionCache.FlagTypes.InstanceFlags)),
-                new (OpCodes.Callvirt),
-                new (OpCodes.Call, typeof(string).GetCachedMethod(nameof(string.IsNullOrEmpty), ReflectionCache.FlagTypes.InstanceFlags)),
-                new (OpCodes.Brtrue_S),
+            { // if (!string.IsNullOrEmpty(this.message.Value) . We need to prevent the "completed!" message if it isn't.
+                new(OpCodes.Ldarg_0),
+                new(OpCodes.Ldfld, typeof(DeliverObjective).GetCachedField(nameof(DeliverObjective.message), ReflectionCache.FlagTypes.InstanceFlags)),
+                new(OpCodes.Callvirt),
+                new(OpCodes.Call, typeof(string).GetCachedMethod(nameof(string.IsNullOrEmpty), ReflectionCache.FlagTypes.InstanceFlags)),
+                new(OpCodes.Brtrue_S),
             })
             .Push()
             .Advance(4)
@@ -70,8 +63,8 @@ internal static class PartialDelieverObjectives
             .DefineAndAttachLabel(out var jumppoint)
             .Pop()
             .GetLabels(out var secondLabels, clear: true)
-            .Insert(copy.ToArray(), withLabels: secondLabels)
-            .Insert(new CodeInstruction[] {new(OpCodes.Brtrue, jumppoint)});
+            .Insert(copy.ToArray(), withLabels: secondLabels) // can use the copy here, the counts have been udated by this point.
+            .Insert(new CodeInstruction[] { new(OpCodes.Brtrue, jumppoint) });
 
             helper.Print();
             return helper.Render();

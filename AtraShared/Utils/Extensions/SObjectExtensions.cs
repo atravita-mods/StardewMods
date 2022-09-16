@@ -1,4 +1,6 @@
-﻿using CommunityToolkit.Diagnostics;
+﻿using AtraBase.Toolkit.Extensions;
+
+using CommunityToolkit.Diagnostics;
 
 namespace AtraShared.Utils.Extensions;
 
@@ -14,6 +16,31 @@ public static class SObjectExtensions
     /// <returns>true if it's a trash item, false otherwise.</returns>
     public static bool IsTrashItem(this SObject obj)
         => obj is not null && !obj.bigCraftable.Value && (obj.ParentSheetIndex >= 168 && obj.ParentSheetIndex < 173);
+
+    /// <summary>
+    /// Gets the category number corresponding to an SObject's index.
+    /// </summary>
+    /// <param name="sObjectInd">Index of the item to check.</param>
+    /// <returns>The category index if found, or 0 otherwise.</returns>
+    public static int GetCategoryFromIndex(this int sObjectInd)
+    {
+        if (!Game1.objectInformation.TryGetValue(sObjectInd, out string? data))
+        {
+            return 0;
+        }
+
+        ReadOnlySpan<char> cat = data.GetNthChunk('/', SObject.objectInfoTypeIndex);
+
+        int index = cat.IndexOf(' ');
+        if (index < 0)
+        {
+            return 0;
+        }
+
+        return int.TryParse(cat[(index + 1)..], out int categoryIndex) && categoryIndex < 0
+            ? categoryIndex
+            : 0;
+    }
 
     /// <summary>
     /// Gets the public name of a bigcraftable.

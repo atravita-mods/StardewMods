@@ -2,8 +2,10 @@
 ===============
 TOOD:
 Automate compat
-Make giant flowers produce the relevant honey?
-Add a data asset for other giant crops.
+
+### Version 0.1.2
+* Adds a data asset - mods can provide override items.
+* Giant flowers now produce the relevant honey. I know this makes no sense.
 
 ### Version 0.1.1
 * Fixes integration with More Giant Crops and JA Giant Crops.

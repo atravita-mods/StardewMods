@@ -8,7 +8,7 @@ namespace AtraCore.Framework.ItemManagement;
 /// <summary>
 /// Handles looking up the id of an item by its name and type.
 /// </summary>
-internal static class DataToItemMap
+public static class DataToItemMap
 {
     private static readonly SortedList<ItemTypeEnum, IAssetName> enumToAssetMap = new(7);
 

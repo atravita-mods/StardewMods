@@ -620,6 +620,17 @@ ContinueSearchBackwards:
     }
 
     /// <summary>
+    /// Attaches the labels to the current instruction.
+    /// </summary>
+    /// <param name="labels">Labels to attach.</param>
+    /// <returns>this.</returns>
+    public ILHelper AttachLabels(IEnumerable<Label> labels)
+    {
+        this.CurrentInstruction.labels.AddRange(labels);
+        return this;
+    }
+
+    /// <summary>
     /// Defines a new label and attaches it to the current instruction.
     /// </summary>
     /// <param name="label">The label produced.</param>

@@ -6,9 +6,15 @@
 public interface ICustomQuestObjective
 {
     /// <summary>
-    /// The other this belongs to.
+    /// The order this belongs to.
     /// </summary>
     public string Order { get; set; }
+
+    /// <summary>
+    /// The position of the order in the list.
+    /// This is used to disambiguate multiple of the same order.
+    /// </summary>
+    public int Position { get; set; }
 }
 
 /// <summary>
@@ -20,4 +26,10 @@ public interface ICustomQuestReward
     /// The order this belongs to.
     /// </summary>
     public string Order { get; set; }
+
+    /// <summary>
+    /// The position of the order in the list.
+    /// This is used to disambiguate multiple of the same order.
+    /// </summary>
+    public int Position { get; set; }
 }

@@ -4,6 +4,8 @@ using StardewModdingAPI.Events;
 
 namespace PamTries.Framework;
 
+public sealed record ScheduleData(int TimesPamDrivenThisWeek);
+
 /// <summary>
 /// Manages alternative bus drivers.
 /// </summary>

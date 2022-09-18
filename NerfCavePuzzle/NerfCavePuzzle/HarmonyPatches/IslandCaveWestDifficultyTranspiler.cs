@@ -2,9 +2,14 @@
 using System.Reflection.Emit;
 using AtraBase.Toolkit.Reflection;
 using AtraCore.Framework.ReflectionManager;
+
+using AtraShared.Menuing;
 using AtraShared.Utils.Extensions;
 using AtraShared.Utils.HarmonyHelper;
 using HarmonyLib;
+
+using Microsoft.Xna.Framework.Input;
+
 using Netcode;
 using StardewModdingAPI.Events;
 using StardewValley.Locations;
@@ -254,6 +259,26 @@ internal static class IslandCaveWestDifficultyTranspiler
                 else if (__instance.netPhase.Value == IslandWestCave1.PHASE_INTRO)
                 {
                     __instance.timesFailed.Value = Math.Max(GetFailureCount(), __instance.timesFailed.Value);
+                }
+                else if (__instance.netPhase.Value == IslandWestCave1.PHASE_WAIT_FOR_PLAYER_INPUT && Game1.activeClickableMenu is null)
+                {
+                    List<Response> responses = new()
+                    {
+                        new Response("Yes", "Yes").SetHotKey(Keys.Y),
+                        new Response("No", "No").SetHotKey(Keys.Escape),
+                    };
+
+                    List<Action?> actions = new()
+                    {
+                        () =>
+                        {
+                            __instance.currentCrystalSequenceIndex.Value = 0;
+                            __instance.currentPlaybackCrystalSequenceIndex = 0;
+                            __instance.netPhase.Value = IslandWestCave1.PHASE_PLAY_SEQUENCE;
+                        },
+                    };
+
+                    Game1.activeClickableMenu = new DialogueAndAction("Would you like to hear the sequence again?", responses, actions, ModEntry.InputHelper);
                 }
             }
         }

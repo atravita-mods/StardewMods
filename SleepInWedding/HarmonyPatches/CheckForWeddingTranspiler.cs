@@ -29,7 +29,7 @@ internal static class CheckForWeddingTranspiler
             {
                 @event.onEventFinished = (Action)Delegate.Combine(@event.onEventFinished, () =>
                 {
-                    ModEntry.ModMonitor.LogIfVerbose(() => $"Preparing spouse {Game1.player.spouse}!");
+                    ModEntry.ModMonitor.Log($"Preparing spouse {Game1.player.spouse}!");
                     friendship.Status = FriendshipStatus.Married;
                     friendship.WeddingDate = new WorldDate(Game1.Date);
                     Game1.prepareSpouseForWedding(Game1.player);

@@ -10,6 +10,9 @@ using Netcode;
 
 namespace StopRugRemoval.HarmonyPatches.Niceties.CrashHandling;
 
+/// <summary>
+/// Holds patches that fixes the birthday gift crash.
+/// </summary>
 [HarmonyPatch]
 internal static class FixBirthdayGifts
 {

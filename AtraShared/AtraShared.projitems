@@ -73,6 +73,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Utils\Extensions\GameContentHelperExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Utils\Extensions\GameLocationExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Utils\Extensions\HarmonyExtensions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Utils\Extensions\ItemExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Utils\Extensions\LogExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Utils\Extensions\ModDataExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Utils\Extensions\NetFieldDictionaryExtensions.cs" />

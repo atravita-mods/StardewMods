@@ -17,6 +17,11 @@ public static class SObjectExtensions
     public static bool IsTrashItem(this SObject obj)
         => obj is not null && !obj.bigCraftable.Value && (obj.ParentSheetIndex >= 168 && obj.ParentSheetIndex < 173);
 
+    public static bool IsAlcoholItem(this SObject obj)
+    {
+        return obj.HasContextTag("alcohol_item") || obj.Name.Contains("Beer") || obj.Name.Contains("Wine") || obj.Name.Contains("Mead") || obj.Name.Contains("Pale Ale");
+    }
+
     /// <summary>
     /// Gets the category number corresponding to an SObject's index.
     /// </summary>

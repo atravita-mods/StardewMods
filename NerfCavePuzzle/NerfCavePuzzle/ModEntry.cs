@@ -39,6 +39,7 @@ internal sealed class ModEntry : Mod
     /// Gets the configuration class for this mod.
     /// </summary>
     internal static ModConfig Config { get; private set; } = null!;
+    internal static IInputHelper InputHelper { get; private set; } = null!;
 
     /// <inheritdoc />
     public override void Entry(IModHelper helper)
@@ -47,6 +48,7 @@ internal sealed class ModEntry : Mod
         ModMonitor = this.Monitor;
         DataHelper = helper.Data;
         MultiplayerHelper = helper.Multiplayer;
+        InputHelper = helper.Input;
         UniqueID = this.ModManifest.UniqueID;
 
         helper.Events.GameLoop.GameLaunched += this.OnGameLaunched;

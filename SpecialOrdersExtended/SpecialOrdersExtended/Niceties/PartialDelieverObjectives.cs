@@ -53,7 +53,7 @@ internal static class PartialDelieverObjectives
                 new(OpCodes.Ldarg_0),
                 new(OpCodes.Ldfld, typeof(DeliverObjective).GetCachedField(nameof(DeliverObjective.message), ReflectionCache.FlagTypes.InstanceFlags)),
                 new(OpCodes.Callvirt),
-                new(OpCodes.Call, typeof(string).GetCachedMethod(nameof(string.IsNullOrEmpty), ReflectionCache.FlagTypes.InstanceFlags)),
+                new(OpCodes.Call, typeof(string).GetCachedMethod(nameof(string.IsNullOrEmpty), ReflectionCache.FlagTypes.StaticFlags)),
                 new(OpCodes.Brtrue_S),
             })
             .Push()
@@ -66,7 +66,7 @@ internal static class PartialDelieverObjectives
             .Insert(copy.ToArray(), withLabels: secondLabels) // can use the copy here, the counts have been udated by this point.
             .Insert(new CodeInstruction[] { new(OpCodes.Brtrue, jumppoint) });
 
-            helper.Print();
+            // helper.Print();
             return helper.Render();
         }
         catch (Exception ex)

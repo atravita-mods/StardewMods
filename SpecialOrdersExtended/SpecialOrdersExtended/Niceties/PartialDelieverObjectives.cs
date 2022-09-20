@@ -17,6 +17,9 @@ internal static class PartialDelieverObjectives
     private static void Postfix(ref bool __result)
         => __result = true;
 
+    private static void PlayChime()
+        => Game1.currentLocation.playSound("discoverMineral");
+
     [HarmonyPatch(nameof(DeliverObjective.OnItemDelivered))]
     private static IEnumerable<CodeInstruction>? Transpiler(IEnumerable<CodeInstruction> instructions, ILGenerator gen, MethodBase original)
     {
@@ -49,7 +52,7 @@ internal static class PartialDelieverObjectives
             .Remove(5)
             .AttachLabels(labels)
             .FindNext(new CodeInstructionWrapper[]
-            { // if (!string.IsNullOrEmpty(this.message.Value) . We need to prevent the "completed!" message if it isn't.
+            { // if (!string.IsNullOrEmpty(this.message.Value) . We need to prevent the "completed!" message if it isn't complete yet.
                 new(OpCodes.Ldarg_0),
                 new(OpCodes.Ldfld, typeof(DeliverObjective).GetCachedField(nameof(DeliverObjective.message), ReflectionCache.FlagTypes.InstanceFlags)),
                 new(OpCodes.Callvirt),
@@ -63,10 +66,16 @@ internal static class PartialDelieverObjectives
             .DefineAndAttachLabel(out var jumppoint)
             .Pop()
             .GetLabels(out var secondLabels, clear: true)
-            .Insert(copy.ToArray(), withLabels: secondLabels) // can use the copy here, the counts have been udated by this point.
-            .Insert(new CodeInstruction[] { new(OpCodes.Brtrue, jumppoint) });
+            .DefineAndAttachLabel(out var complete)
+            .Insert(copy.ToArray(), withLabels: secondLabels) // can use the copy here, the counts have been updated by this point.
+            .Insert(new CodeInstruction[]
+            {
+                new(OpCodes.Brfalse, complete),
+                new(OpCodes.Call, typeof(PartialDelieverObjectives).GetCachedMethod(nameof(PlayChime), ReflectionCache.FlagTypes.StaticFlags)),
+                new(OpCodes.Br, jumppoint),
+            });
 
-            // helper.Print();
+            helper.Print();
             return helper.Render();
         }
         catch (Exception ex)

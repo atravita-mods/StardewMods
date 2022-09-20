@@ -66,7 +66,7 @@ public static class IRawTextureDataExtensions
 
                     ref Color targetColor = ref rawData[targetPixel];
 
-                    if (targetColor.A < 5 || sourceColor.A > 200)
+                    if (targetColor.A < 5 || sourceColor.A > 250)
                     {
                         rawData[targetPixel] = sourceColor;
                         continue;

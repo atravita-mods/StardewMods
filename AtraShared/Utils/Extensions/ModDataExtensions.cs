@@ -22,7 +22,7 @@ public static class ModDataExtensions
     /// <returns>Boolean value, or null if not found/not parseable.</returns>
     [return: NotNullIfNotNull("defaultVal")]
     public static bool? GetBool(this ModDataDictionary modData, string key, bool? defaultVal = null)
-        => modData.TryGetValue(key, out string val) ? !(val == "0") : defaultVal;
+        => modData.TryGetValue(key, out string val) ? val != "0" : defaultVal;
 
     /// <summary>
     /// Sets a boolean value into modData.
@@ -116,10 +116,9 @@ public static class ModDataExtensions
     /// <returns>Value if found, default value if not.</returns>
     public static TEnum GetEnum<TEnum>(this ModDataDictionary modData, string key, TEnum defaultValue)
         where TEnum : struct, Enum
-        => modData.TryGetValue(key, out string val)
-            && Enum.TryParse(val, out TEnum ret)
-                ? ret
-                : defaultValue;
+        => modData.TryGetValue(key, out string val) && Enum.TryParse(val, out TEnum ret)
+            ? ret
+            : defaultValue;
 
     /// <summary>
     /// Sets an enum value into ModData.
@@ -150,8 +149,8 @@ public static class ModDataExtensions
     [return: NotNullIfNotNull("defaultVal")]
     public static Color? GetColor(this ModDataDictionary modData, string key, Color? defaultVal = null)
         => modData.TryGetValue(key, out var color) && uint.TryParse(color, NumberStyles.HexNumber, CultureInfo.InvariantCulture, out var result)
-        ? new Color(result)
-        : defaultVal;
+            ? new Color(result)
+            : defaultVal;
 
     public static void SetColor(this ModDataDictionary modData, string key, Color color, Color? defaultVal = null)
     {
@@ -161,7 +160,7 @@ public static class ModDataExtensions
         }
         else
         {
-            modData[key] = color.PackedValue.ToString("X");
+            modData[key] = color.PackedValue.ToString("X", CultureInfo.InvariantCulture);
         }
     }
 }

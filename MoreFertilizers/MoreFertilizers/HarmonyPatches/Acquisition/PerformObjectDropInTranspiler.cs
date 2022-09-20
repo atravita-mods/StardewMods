@@ -63,7 +63,7 @@ internal static class PerformObjectDropInTranspiler
             { // find switch(Game1.random.Next(4)) and add four new cases.
                 new(OpCodes.Ldsfld, typeof(Game1).GetCachedField(nameof(Game1.random), ReflectionCache.FlagTypes.StaticFlags)),
                 new(OpCodes.Ldc_I4_4),
-                new(OpCodes.Callvirt, typeof(Random).InstanceMethodNamed(nameof(Random.Next), new[] { typeof(int) } )),
+                new(OpCodes.Callvirt, typeof(Random).GetCachedMethod(nameof(Random.Next), ReflectionCache.FlagTypes.InstanceFlags, new[] { typeof(int) } )),
                 new(SpecialCodeInstructionCases.StLoc),
             }).Advance(1)
             .ReplaceInstruction(OpCodes.Ldc_I4, 8)
@@ -93,22 +93,22 @@ internal static class PerformObjectDropInTranspiler
             helper.Insert(new CodeInstruction[]
             {
                 new(OpCodes.Br_S, exitPoint),
-                new(OpCodes.Call, typeof(PerformObjectDropInTranspiler).StaticMethodNamed(nameof(GetOrganicFertilizer))),
+                new(OpCodes.Call, typeof(PerformObjectDropInTranspiler).GetCachedMethod(nameof(GetOrganicFertilizer), ReflectionCache.FlagTypes.StaticFlags)),
                 storeindex,
                 new(OpCodes.Ldc_I4_3),
                 storecount,
                 new(OpCodes.Br_S, exitPoint),
-                new(OpCodes.Call, typeof(PerformObjectDropInTranspiler).StaticMethodNamed(nameof(GetDeluxeFruitTreeFertilizer))),
+                new(OpCodes.Call, typeof(PerformObjectDropInTranspiler).GetCachedMethod(nameof(GetDeluxeFruitTreeFertilizer), ReflectionCache.FlagTypes.StaticFlags)),
                 storeindex,
                 new(OpCodes.Ldc_I4_3),
                 storecount,
                 new(OpCodes.Br_S, exitPoint),
-                new(OpCodes.Call, typeof(PerformObjectDropInTranspiler).StaticMethodNamed(nameof(GetFruitTreeFertilizer))),
+                new(OpCodes.Call, typeof(PerformObjectDropInTranspiler).GetCachedMethod(nameof(GetFruitTreeFertilizer), ReflectionCache.FlagTypes.StaticFlags)),
                 storeindex,
                 new(OpCodes.Ldc_I4, 10),
                 storecount,
                 new(OpCodes.Br_S, exitPoint),
-                new(OpCodes.Call, typeof(PerformObjectDropInTranspiler).StaticMethodNamed(nameof(GetBountifulFertilizer))),
+                new(OpCodes.Call, typeof(PerformObjectDropInTranspiler).GetCachedMethod(nameof(GetBountifulFertilizer), ReflectionCache.FlagTypes.StaticFlags)),
                 storeindex,
                 new(OpCodes.Ldc_I4_5),
                 storecount,
@@ -145,9 +145,9 @@ internal static class PerformObjectDropInTranspiler
 
             helper.FindNext(new CodeInstructionWrapper[]
             { // find switch(Game1.random.Next(4)) and add four new cases.
-                new(OpCodes.Ldsfld, typeof(Game1).StaticFieldNamed(nameof(Game1.random))),
+                new(OpCodes.Ldsfld, typeof(Game1).GetCachedField(nameof(Game1.random), ReflectionCache.FlagTypes.StaticFlags)),
                 new(OpCodes.Ldc_I4_4),
-                new(OpCodes.Callvirt, typeof(Random).InstanceMethodNamed(nameof(Random.Next), new[] { typeof(int) } )),
+                new(OpCodes.Callvirt, typeof(Random).GetCachedMethod(nameof(Random.Next), ReflectionCache.FlagTypes.InstanceFlags, new[] { typeof(int) } )),
                 new(SpecialCodeInstructionCases.StLoc),
             }).Advance(1)
             .ReplaceInstruction(OpCodes.Ldc_I4, 8)
@@ -177,22 +177,22 @@ internal static class PerformObjectDropInTranspiler
             helper.Insert(new CodeInstruction[]
             {
                 new(OpCodes.Br_S, exitPoint),
-                new(OpCodes.Call, typeof(PerformObjectDropInTranspiler).StaticMethodNamed(nameof(GetOrganicFertilizer))),
+                new(OpCodes.Call, typeof(PerformObjectDropInTranspiler).GetCachedMethod(nameof(GetOrganicFertilizer), ReflectionCache.FlagTypes.StaticFlags)),
                 storeindex,
                 new(OpCodes.Ldc_I4_3),
                 storecount,
                 new(OpCodes.Br_S, exitPoint),
-                new(OpCodes.Call, typeof(PerformObjectDropInTranspiler).StaticMethodNamed(nameof(GetDeluxeFruitTreeFertilizer))),
+                new(OpCodes.Call, typeof(PerformObjectDropInTranspiler).GetCachedMethod(nameof(GetDeluxeFruitTreeFertilizer), ReflectionCache.FlagTypes.StaticFlags)),
                 storeindex,
                 new(OpCodes.Ldc_I4_3),
                 storecount,
                 new(OpCodes.Br_S, exitPoint),
-                new(OpCodes.Call, typeof(PerformObjectDropInTranspiler).StaticMethodNamed(nameof(GetFruitTreeFertilizer))),
+                new(OpCodes.Call, typeof(PerformObjectDropInTranspiler).GetCachedMethod(nameof(GetFruitTreeFertilizer), ReflectionCache.FlagTypes.StaticFlags)),
                 storeindex,
                 new(OpCodes.Ldc_I4, 10),
                 storecount,
                 new(OpCodes.Br_S, exitPoint),
-                new(OpCodes.Call, typeof(PerformObjectDropInTranspiler).StaticMethodNamed(nameof(GetBountifulFertilizer))),
+                new(OpCodes.Call, typeof(PerformObjectDropInTranspiler).GetCachedMethod(nameof(GetBountifulFertilizer), ReflectionCache.FlagTypes.StaticFlags)),
                 storeindex,
                 new(OpCodes.Ldc_I4_5),
                 storecount,

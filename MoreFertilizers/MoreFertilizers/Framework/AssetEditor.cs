@@ -98,7 +98,7 @@ internal static class AssetEditor
                 ModEntry.ModMonitor.Log($"Could not find {item} in ObjectInformation to edit! This mod may not function properly.", LogLevel.Error);
             }
         }
-        ModEntry.ModMonitor.Log($"Edited {idsToEdit.Count} fertilizers");
+        ModEntry.ModMonitor.LogOnce($"Edited {idsToEdit.Count} fertilizers");
     }
 
     private static void EditSpecialOrdersImpl(IAssetData asset)

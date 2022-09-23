@@ -441,7 +441,6 @@ internal sealed class ModEntry : Mod
     private void OnAssetRequested(object? sender, AssetRequestedEventArgs e)
         => AssetEditor.Edit(e);
 
-    [EventPriority(EventPriority.High)]
     // Only hook if SpecialOrdersExtended is installed.
     [EventPriority(EventPriority.Low)]
     private void OnSpecialOrderDialogueRequested(object? sender, AssetRequestedEventArgs e)
@@ -490,28 +489,27 @@ internal sealed class ModEntry : Mod
         // JA will reassign us IDs when it returns to title.
         // (I'm not quite sure why?)
         // But we need to drop our IDs too.
-
-        prismaticFertilizerID = -1;
-        everlastingFertilizerID = -1;
-        wisdomFertilizerID = -1;
-        fruitTreeFertilizerID = -1;
-        deluxeFruitTreeFertilizerID = -1;
-        fishfoodID = -1;
+        bountifulBushID = -1;
+        bountifulFertilizerID = -1;
         deluxeFishFoodID = -1;
         deluxeFruitTreeFertilizerID = -1;
+        deluxeFruitTreeFertilizerID = -1;
+        deluxeJojaFertilizerID = -1;
         deluxeJojaFertilizerID = -1;
         domesticatedFishFoodID = -1;
-        paddyCropFertilizerID = -1;
-        luckyFertilizerID = -1;
-        bountifulFertilizerID = -1;
-        bountifulBushID = -1;
-        rapidBushFertilizerID = -1;
-        treeTapperFertilizerID = -1;
+        everlastingFertilizerID = -1;
+        fishfoodID = -1;
+        fruitTreeFertilizerID = -1;
         jojaFertilizerID = -1;
-        deluxeJojaFertilizerID = -1;
-        secretJojaFertilizerID = -1;
-        organicFertilizerID = -1;
+        luckyFertilizerID = -1;
         miraculousBeverages = -1;
+        organicFertilizerID = -1;
+        paddyCropFertilizerID = -1;
+        prismaticFertilizerID = -1;
+        rapidBushFertilizerID = -1;
+        secretJojaFertilizerID = -1;
+        treeTapperFertilizerID = -1;
+        wisdomFertilizerID = -1;
 
         PlantableFertilizerIDs.Clear();
         SpecialFertilizerIDs.Clear();
@@ -524,38 +522,40 @@ internal sealed class ModEntry : Mod
     /// <param name="e">Event arguments.</param>
     private void OnSaving(object? sender, SavingEventArgs e)
     {
-        if (Context.IsMainPlayer)
+        this.Helper.Events.GameLoop.Saving -= this.OnSaving;
+        if (!Context.IsMainPlayer)
         {
+            return;
+        }
+
         // TODO: This should be doable with expression trees in a less dumb way.
         if (storedIDs is null)
         {
             storedIDs = new()
             {
-                PrismaticFertilizerID = PrismaticFertilizerID,
-                EverlastingFertilizerID = EverlastingFertilizerID,
-                WisdomFertilizerID = WisdomFertilizerID,
-                FruitTreeFertilizerID = FruitTreeFertilizerID,
-                DeluxeFruitTreeFertilizerID = DeluxeFruitTreeFertilizerID,
-                FishFoodID = FishFoodID,
-                DeluxeFishFoodID = DeluxeFishFoodID,
-                DomesticatedFishFoodID = DomesticatedFishFoodID,
-                PaddyFertilizerID = PaddyCropFertilizerID,
-                LuckyFertilizerID = LuckyFertilizerID,
-                BountifulFertilizerID = BountifulFertilizerID,
                 BountifulBushID = BountifulBushID,
-                RapidBushFertilizerID = RapidBushFertilizerID,
-                TreeTapperFertilizerID = TreeTapperFertilizerID,
-                JojaFertilizerID = JojaFertilizerID,
+                BountifulFertilizerID = BountifulFertilizerID,
+                DeluxeFishFoodID = DeluxeFishFoodID,
+                DeluxeFruitTreeFertilizerID = DeluxeFruitTreeFertilizerID,
                 DeluxeJojaFertilizerID = DeluxeJojaFertilizerID,
-                SecretJojaFertilizerID = SecretJojaFertilizerID,
-                OrganicFertilizerID = OrganicFertilizerID,
+                DomesticatedFishFoodID = DomesticatedFishFoodID,
+                EverlastingFertilizerID = EverlastingFertilizerID,
+                FishFoodID = FishFoodID,
+                FruitTreeFertilizerID = FruitTreeFertilizerID,
+                JojaFertilizerID = JojaFertilizerID,
+                LuckyFertilizerID = LuckyFertilizerID,
                 MiraculousBeveragesID = MiraculousBeveragesID,
+                OrganicFertilizerID = OrganicFertilizerID,
+                PaddyFertilizerID = PaddyCropFertilizerID,
+                PrismaticFertilizerID = PrismaticFertilizerID,
+                RapidBushFertilizerID = RapidBushFertilizerID,
+                SecretJojaFertilizerID = SecretJojaFertilizerID,
+                TreeTapperFertilizerID = TreeTapperFertilizerID,
+                WisdomFertilizerID = WisdomFertilizerID,
             };
         }
         this.Helper.Data.WriteSaveData(SavedIDKey, storedIDs);
         this.Monitor.Log("Writing IDs into save data");
-        this.Helper.Events.GameLoop.Saving -= this.OnSaving;
-	}
     }
 
     /// <summary>
@@ -635,11 +635,11 @@ internal sealed class ModEntry : Mod
                 this.Monitor.Log("Found Miller Time, applying compat patches", LogLevel.Info);
                 MillerTimeDayUpdateTranspiler.ApplyPatches(harmony);
             }
-            
-            ExtendedToolsMods.ApplyPatches(harmony);
+
             if (this.Helper.ModRegistry.IsLoaded("stokastic.PrismaticTools") ||
                 this.Helper.ModRegistry.IsLoaded("kakashigr.RadioactiveTools"))
             {
+                ExtendedToolsMods.ApplyPatches(harmony);
                 this.Monitor.Log("Found either prismatic tools or radioactive tools. Applying compat patches", LogLevel.Info);
                 AddCrowsForExtendedToolsTranspiler.ApplyPatches(harmony);
             }
@@ -1002,7 +1002,7 @@ internal sealed class ModEntry : Mod
         }
 
         if (idMapping.Count <= 0)
-        {i
+        {
             ModMonitor.Log("No need to fix IDs, nothing has changed.");
             return;
         }

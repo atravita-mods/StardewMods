@@ -13,21 +13,6 @@ public class MoreFertilizerIDs
     }
 
     /// <summary>
-    /// Gets or sets the ID number to store for the prismatic fertilizer.
-    /// </summary>
-    public int PrismaticFertilizerID { get; set; } = -1;
-
-    /// <summary>
-    /// Gets or sets the ID number to store for the everlasting fertilizer.
-    /// </summary>
-    public int EverlastingFertilizerID { get; set; } = -1;
-
-    /// <summary>
-    /// Gets or sets the ID number to store for the wisdom fertilizer.
-    /// </summary>
-    public int WisdomFertilizerID { get; set; } = -1;
-
-    /// <summary>
     /// Gets or sets the ID number to store for fruit tree fertilizer.
     /// </summary>
     public int FruitTreeFertilizerID { get; set; } = -1;
@@ -68,21 +53,6 @@ public class MoreFertilizerIDs
     public int BountifulFertilizerID { get; set; } = -1;
 
     /// <summary>
-    /// Gets or sets the ID number to store for the tree tapper fertilizer...
-    /// </summary>
-    public int TreeTapperFertilizerID { get; set; } = -1;
-
-    /// <summary>
-    /// Gets or sets the ID number to store for the bountiful bush fertilizer.
-    /// </summary>
-    public int BountifulBushID { get; set; } = -1;
-
-    /// <summary>
-    /// Gets or sets the ID number to store for the rapid bush fertilizer.
-    /// </summary>
-    public int RapidBushFertilizerID { get; set; } = -1;
-
-    /// <summary>
     /// Gets or sets the ID number to store for joja fertilizer.
     /// </summary>
     public int JojaFertilizerID { get; set; } = -1;
@@ -93,17 +63,15 @@ public class MoreFertilizerIDs
     public int DeluxeJojaFertilizerID { get; set; } = -1;
 
     /// <summary>
-    /// Gets or sets the ID number to store for the secret joja fertilizer.
-    /// </summary>
-    public int SecretJojaFertilizerID { get; set; } = -1;
-
-    /// <summary>
     /// Gets or sets the ID number for the organic fertilizer.
     /// </summary>
     public int OrganicFertilizerID { get; set; } = -1;
-
-    /// <summary>
-    /// Gets or sets the ID number for the miraculous beverages ID.
-    /// </summary>
-    public int MiraculousBeveragesID { get; set; } = -1;
+    public int PrismaticFertilizerID { get; internal set; }
+    public int EverlastingFertilizerID { get; internal set; }
+    public int BountifulBushID { get; internal set; }
+    public int RapidBushFertilizerID { get; internal set; }
+    public int MiraculousBeveragesID { get; internal set; }
+    public int SecretJojaFertilizerID { get; internal set; }
+    public int WisdomFertilizerID { get; internal set; }
+    public int TreeTapperFertilizerID { get; internal set; }
 }

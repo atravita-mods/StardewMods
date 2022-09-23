@@ -2,6 +2,7 @@
 using System.Runtime;
 
 using AtraShared.Schedules.DataModels;
+using AtraShared.Utils;
 using AtraShared.Utils.Extensions;
 using GingerIslandMainlandAdjustments.AssetManagers;
 using GingerIslandMainlandAdjustments.CustomConsoleCommands;
@@ -224,16 +225,15 @@ internal static class GIScheduler
         HashSet<NPC> valid_visitors = new(32); // this is probably an undercount, but better than 4.
 
         // For some reason, Utility.GetAllCharacters searches the farm too.
-        foreach (GameLocation loc in Game1.locations)
+
+        foreach (NPC npc in NPCHelpers.GetNPCs())
         {
-            foreach (NPC npc in loc.characters)
+            if (npc is not null && IslandSouth.CanVisitIslandToday(npc) && !explorers.Contains(npc))
             {
-                if (IslandSouth.CanVisitIslandToday(npc) && !explorers.Contains(npc))
-                {
-                    valid_visitors.Add(npc);
-                }
+                valid_visitors.Add(npc);
             }
         }
+        
 
         if (Globals.SaveDataModel is not null)
         {

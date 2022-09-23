@@ -93,6 +93,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Utils\HarmonyHelper\ILHelper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Utils\HarmonyHelper\ILHelperExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Utils\Extensions\InputUtils.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Utils\NPCHelpers.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Utils\Shims\DynamicGameAssetsShims.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Utils\Shims\JAInternalTypesShims\CropDataShims.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Utils\Shims\JsonAssetsShims.cs" />

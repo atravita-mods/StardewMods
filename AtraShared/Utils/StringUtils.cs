@@ -71,10 +71,15 @@ public sealed class StringUtils
             return string.Empty;
         }
 
+        ReadOnlySpan<char> textSpan;
         int genderseperator = text.IndexOf(Dialogue.genderDialogueSplitCharacter);
         if (genderseperator > 0)
         {
-            text = Game1.player.IsMale ? text[..genderseperator] : text[(genderseperator + 1)..];
+            textSpan = Game1.player.IsMale ? text.AsSpan(0, genderseperator) : text.AsSpan(genderseperator + 1);
+        }
+        else
+        {
+            textSpan = text.AsSpan();
         }
 
         switch (LocalizedContentManager.CurrentLanguageCode)
@@ -83,9 +88,9 @@ public sealed class StringUtils
             case LocalizedContentManager.LanguageCode.zh:
             case LocalizedContentManager.LanguageCode.th:
             case LocalizedContentManager.LanguageCode.mod when Game1.dialogueFont.Glyphs.Length > 4000:
-                return this.WrapTextByChar(text, whichFont, width, height);
+                return this.WrapTextByChar(textSpan, whichFont, width, height);
             default:
-                return this.WrapTextByWords(text, whichFont, width, height);
+                return this.WrapTextByWords(textSpan, whichFont, width, height);
         }
     }
 
@@ -97,7 +102,7 @@ public sealed class StringUtils
     /// <param name="width">Maximum width.</param>
     /// <param name="height">Maximum height.</param>
     /// <returns>Wrapped text.</returns>
-    public string WrapTextByWords(string text, SpriteFont whichFont, float width, float? height = null)
+    public string WrapTextByWords(ReadOnlySpan<char> text, SpriteFont whichFont, float width, float? height = null)
     {
         int maxlines = height is null ? 1000 : (int)height / whichFont.LineSpacing;
         StringBuilder sb = StringBuilderCache.Acquire(text.Length);
@@ -177,10 +182,10 @@ public sealed class StringUtils
     /// <param name="width">Maximum width.</param>
     /// <param name="height">Maximum height.</param>
     /// <returns>Wrapped text.</returns>
-    public string WrapTextByChar(string text, SpriteFont whichFont, float width, float? height = null)
+    public string WrapTextByChar(ReadOnlySpan<char> text, SpriteFont whichFont, float width, float? height = null)
     {
         int maxlines = height is null ? 1000 : (int)height / whichFont.LineSpacing;
-        StringBuilder sb = new();
+        StringBuilder sb = StringBuilderCache.Acquire(text.Length);
         float current_width = -whichFont.Spacing;
         float charwidth = 0;
         float proposedcharwidth = 0;
@@ -194,7 +199,7 @@ public sealed class StringUtils
                 case '\n':
                     if (--maxlines <= 0)
                     {
-                        return sb.ToString();
+                        return StringBuilderCache.GetStringAndRelease(sb);
                     }
                     current_width = -whichFont.Spacing;
                     sb.AppendLine();
@@ -213,7 +218,7 @@ public sealed class StringUtils
                         {
                             if (--maxlines <= 0)
                             {
-                                return sb.ToString();
+                                return StringBuilderCache.GetStringAndRelease(sb);
                             }
                             sb.AppendLine();
                             current_width = charwidth;
@@ -228,7 +233,7 @@ public sealed class StringUtils
                     break;
             }
         }
-        return sb.ToString();
+        return StringBuilderCache.GetStringAndRelease(sb);
     }
 
     /// <summary>

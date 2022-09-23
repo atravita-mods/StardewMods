@@ -1,6 +1,8 @@
 ﻿using AtraCore.Framework.ReflectionManager;
 using AtraShared.Integrations;
 using AtraShared.Integrations.Interfaces;
+using AtraShared.Utils.Shims.JAInternalTypesShims;
+
 using CommunityToolkit.Diagnostics;
 using FastExpressionCompiler.LightExpression;
 using HarmonyLib;
@@ -63,10 +65,13 @@ public static class JsonAssetsShims
 
         foreach (var crop in cropdata)
         {
+            var name = CropDataShims.GetSeedName!(crop);
         }
 
         return ret;
     }
+
+    #region methods
 
     private static Lazy<Func<bool>?> isJAInitialized = new(() =>
     {
@@ -83,4 +88,6 @@ public static class JsonAssetsShims
     });
 
     public static Func<bool>? IsJaInitialized => isJAInitialized.Value;
+
+    #endregion
 }

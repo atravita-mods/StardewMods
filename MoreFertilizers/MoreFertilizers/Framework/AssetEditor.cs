@@ -14,10 +14,6 @@ internal static class AssetEditor
     /// </summary>
     internal const string ORGANICVEGGIEMAIL = "atravita_OrganicCrops_Reward";
 #pragma warning disable SA1310 // Field names should not contain underscore. Reviewed.
-    private static readonly string JUNK_CATEGORY = $"Basic {SObject.junkCategory}";
-    private static readonly string FERTILIZER_CATEGORY = $"Basic {SObject.fertilizerCategory}";
-    private static readonly string OBJECTDATA = PathUtilities.NormalizeAssetName("Data/ObjectInformation");
-
     private static readonly string SPECIAL_ORDERS_LOCATION = PathUtilities.NormalizeAssetName("Data/SpecialOrders");
     private static readonly string SPECIAL_ORDERS_STRINGS = PathUtilities.NormalizeAssetName("Strings/SpecialOrderStrings");
     private static readonly string MAIL = PathUtilities.NormalizeAssetName("Data/mail");
@@ -47,11 +43,7 @@ internal static class AssetEditor
     /// <param name="e">Asset requested event arguments.</param>
     internal static void Edit(AssetRequestedEventArgs e)
     {
-        if ((ModEntry.PlantableFertilizerIDs.Count > 0 || ModEntry.SpecialFertilizerIDs.Count > 0) && e.NameWithoutLocale.IsEquivalentTo(OBJECTDATA))
-        {
-            e.Edit(EditSObjectsImpl, AssetEditPriority.Late);
-        }
-        else if (Utility.doesAnyFarmerHaveOrWillReceiveMail("seenBoatJourney"))
+        if (Utility.doesAnyFarmerHaveOrWillReceiveMail("seenBoatJourney"))
         {
             if (e.NameWithoutLocale.IsEquivalentTo(SPECIAL_ORDERS_LOCATION))
             {
@@ -79,26 +71,6 @@ internal static class AssetEditor
         {
             e.Edit(EditLewisDialogueImpl, AssetEditPriority.Early);
         }
-    }
-
-    private static void EditSObjectsImpl(IAssetData asset)
-    {
-        List<int> idsToEdit = new(ModEntry.PlantableFertilizerIDs);
-        idsToEdit.AddRange(ModEntry.SpecialFertilizerIDs);
-
-        IAssetDataForDictionary<int, string>? editor = asset.AsDictionary<int, string>();
-        foreach (int item in idsToEdit)
-        {
-            if (editor.Data.TryGetValue(item, out string? val))
-            {
-                editor.Data[item] = val.Replace(JUNK_CATEGORY, FERTILIZER_CATEGORY);
-            }
-            else
-            {
-                ModEntry.ModMonitor.Log($"Could not find {item} in ObjectInformation to edit! This mod may not function properly.", LogLevel.Error);
-            }
-        }
-        ModEntry.ModMonitor.LogOnce($"Edited {idsToEdit.Count} fertilizers");
     }
 
     private static void EditSpecialOrdersImpl(IAssetData asset)

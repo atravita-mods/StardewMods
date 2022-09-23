@@ -31,7 +31,12 @@ internal static class AssetManager
         }
         else if (e.NameWithoutLocale.IsEquivalentTo(DataMail))
         {
-            // apply edits?
+            e.Edit(
+            static (asset) =>
+            {
+                var data = asset.AsDictionary<string, string>().Data;
+                data[MailFlag] = "";
+            }, AssetEditPriority.Late);
         }
     }
 

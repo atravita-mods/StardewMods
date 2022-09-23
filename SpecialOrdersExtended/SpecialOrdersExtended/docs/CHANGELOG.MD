@@ -17,6 +17,9 @@ Changelog
 1. Somehow limit the kill objective to just monsters on a certain (few?) maps. (Perhaps a custom objective, perhaps a Special Rule).
 <!-- Handle WoL professions? -->
 
+#### Version 1.1.1
+* Deliver orders can now be completed partially.
+
 #### Version 1.1.0
 
 * Moves to using AtraCore.

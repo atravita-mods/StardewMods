@@ -144,9 +144,9 @@ public static class Utils
     /// <returns>IEnumerable of birthday npcs.</returns>
     public static IEnumerable<NPC> GetBirthdayNPCs(SDate day)
     {
-        foreach (NPC npc in Utility.getAllCharacters())
+        foreach (NPC npc in NPCHelpers.GetNPCs())
         {
-            if (npc.isBirthday(day.Season, day.Day))
+            if (npc is not null && npc.isBirthday(day.Season, day.Day))
             {
                 yield return npc;
             }

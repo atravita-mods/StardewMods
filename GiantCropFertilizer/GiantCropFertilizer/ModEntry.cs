@@ -72,10 +72,6 @@ internal sealed class ModEntry : Mod
         helper.Events.GameLoop.GameLaunched += this.OnGameLaunched;
     }
 
-    [EventPriority(EventPriority.Low)]
-    private void OnAssetRequested(object? sender, AssetRequestedEventArgs e)
-        => AssetEditor.HandleAssetRequested(e);
-
     private void OnSaved(object? sender, SavedEventArgs e)
     {
         if (Context.IsMainPlayer)
@@ -162,7 +158,6 @@ internal sealed class ModEntry : Mod
         }
 
         // Wait to hook events until after we know JA can handle our items.
-        this.Helper.Events.Content.AssetRequested += this.OnAssetRequested;
         this.Helper.Events.GameLoop.SaveLoaded += this.OnSaveLoaded;
         this.Helper.Events.GameLoop.ReturnedToTitle += this.OnReturnedToTitle;
 

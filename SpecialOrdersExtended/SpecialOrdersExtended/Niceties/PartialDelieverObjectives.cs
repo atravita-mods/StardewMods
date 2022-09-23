@@ -75,7 +75,7 @@ internal static class PartialDelieverObjectives
                 new(OpCodes.Br, jumppoint),
             });
 
-            helper.Print();
+            // helper.Print();
             return helper.Render();
         }
         catch (Exception ex)

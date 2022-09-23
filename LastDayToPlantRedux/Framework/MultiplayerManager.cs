@@ -11,11 +11,11 @@ internal static class MultiplayerManager
     /// <summary>
     /// Whether or het the code should check for a prestiged agriculturalist, for Walk of Life.
     /// </summary>
-    private static bool ShouldCheckPrestiged = false;
+    private static bool shouldCheckPrestiged = false;
 
     internal static void SetShouldCheckPrestiged(IModRegistry registry)
     {
-        ShouldCheckPrestiged = registry.IsLoaded("DaLion.ImmersiveProfessions");
+        shouldCheckPrestiged = registry.IsLoaded("DaLion.ImmersiveProfessions");
     }
 
     internal static void Reset()
@@ -54,7 +54,7 @@ internal static class MultiplayerManager
             agriculturalistFarmer = null;
         }
 
-        if (ShouldCheckPrestiged && e.Peer.PlayerID == prestigedAgriculturalistFarmer?.UniqueMultiplayerID)
+        if (shouldCheckPrestiged && e.Peer.PlayerID == prestigedAgriculturalistFarmer?.UniqueMultiplayerID)
         {
             prestigedAgriculturalistFarmer = null;
         }
@@ -71,7 +71,7 @@ internal static class MultiplayerManager
 
     private static bool AssignProfessionFarmersIfNeeded(Farmer farmer)
     {
-        if (ShouldCheckPrestiged && prestigedAgriculturalistFarmer is null && farmer.professions.Contains(Farmer.agriculturist + 100))
+        if (shouldCheckPrestiged && prestigedAgriculturalistFarmer is null && farmer.professions.Contains(Farmer.agriculturist + 100))
         {
             ModEntry.ModMonitor.Log($"Assigning {farmer.Name} as prestiged agricultralist farmer.");
             prestigedAgriculturalistFarmer = farmer;

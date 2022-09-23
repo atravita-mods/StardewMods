@@ -23,8 +23,8 @@ internal static class AssetManager
 {
     private static readonly string ASSETPATH = PathUtilities.NormalizeAssetName("Mods/atravita.TapGiantCrops/TappedObjectOverride");
 
-    private static Lazy<Dictionary<int, ObjectDefinition>> overrides = new(() => Game1.content.Load<Dictionary<int, ObjectDefinition>>(ASSETPATH));
     private static readonly Dictionary<int, SObject> overridesCache = new();
+    private static Lazy<Dictionary<int, ObjectDefinition>> overrides = new(() => Game1.content.Load<Dictionary<int, ObjectDefinition>>(ASSETPATH));
 
     private static IAssetName? assetName = null;
 

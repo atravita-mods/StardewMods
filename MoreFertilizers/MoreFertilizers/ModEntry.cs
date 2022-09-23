@@ -824,7 +824,6 @@ internal sealed class ModEntry : Mod
         }
 
         this.FixIDs();
-        this.Helper.GameContent.InvalidateCacheAndLocalized("Data/ObjectInformation");
 
         if (Context.IsMainPlayer)
         {

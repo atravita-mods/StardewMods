@@ -1,4 +1,6 @@
-﻿namespace GingerIslandMainlandAdjustments.Configuration;
+﻿using AtraShared.Utils;
+
+namespace GingerIslandMainlandAdjustments.Configuration;
 
 #pragma warning disable SA1201 // Elements should appear in the correct order. Fields appear close to their properties for this class.
 /// <summary>
@@ -176,9 +178,9 @@ public sealed class ModConfig
     /// </summary>
     internal void PopulateScheduleStrictness()
     {
-        foreach (NPC? character in Utility.getAllCharacters())
+        foreach (NPC? character in NPCHelpers.GetNPCs())
         {
-            if (character.CanSocialize)
+            if (character?.CanSocialize == true)
             {
                 this.ScheduleStrictness.TryAdd(character.Name, Configuration.ScheduleStrictness.Default);
             }

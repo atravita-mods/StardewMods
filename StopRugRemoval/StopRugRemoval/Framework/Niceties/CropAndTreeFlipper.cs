@@ -19,7 +19,7 @@ internal static class CropAndTreeFlipper
                 crop.flip.Value = !crop.flip.Value;
                 helper.Suppress(e.Button);
             }
-            else if (Game1.currentLocation.terrainFeatures.TryGetValue(e.Cursor.Tile, out var feature)
+            else if (Game1.currentLocation.terrainFeatures.TryGetValue(e.Cursor.Tile, out TerrainFeature? feature)
                 && feature is FruitTree tree)
             {
                 ModEntry.ModMonitor.DebugLog($"Flipping fruit tree at {e.Cursor.Tile}");

@@ -1,5 +1,7 @@
 using AtraBase.Collections;
 using AtraBase.Toolkit;
+
+using AtraShared.Utils;
 using AtraShared.Utils.Extensions;
 using StardewModdingAPI.Events;
 using StardewModdingAPI.Utilities;
@@ -172,7 +174,7 @@ internal static class AssetLoader
         if (specialGroupType == SpecialGroupType.Groups)
         {
             HashSet<NPC> allSpouses = new();
-            foreach (NPC npc in Utility.getAllCharacters())
+            foreach (NPC npc in NPCHelpers.GetNPCs())
             {
                 if (npc?.isMarried() == true && IslandSouth.CanVisitIslandToday(npc))
                 {

@@ -106,11 +106,7 @@ internal sealed class ModEntry : Mod
         {
             harmony.PatchAll();
 
-            if (this.Helper.ModRegistry.Get("Goldenrevolver.EnchantableScythes") is not IModInfo sycthes)
-            {
-                this.Monitor.Log("Enchantable Scythes is not installed, compat patches unnecessary", LogLevel.Trace);
-            }
-            else
+            if (this.Helper.ModRegistry.Get("Goldenrevolver.EnchantableScythes") is IModInfo sycthes)
             {
                 this.Monitor.Log("Applying compat patches for Enchantable Scythes.", LogLevel.Debug);
                 GetEnchantmentPatch.ApplyPatch(harmony);

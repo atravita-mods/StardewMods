@@ -345,15 +345,15 @@ ServiceFabricBackup/
 *.bim.layout
 *.bim_*.settings
 *.rptproj.rsuser
-*- [Bb]ackup.rdl
-*- [Bb]ackup ([0-9]).rdl
+	*- [Bb]ackup.rdl
+	*- [Bb]ackup ([0-9]).rdl
 *- [Bb]ackup ([0-9][0-9]).rdl
 
 # Microsoft Fakes
 FakesAssemblies/
 
 # GhostDoc plugin setting file
-*.GhostDoc.xml
+	*.GhostDoc.xml
 
 # Node.js Tools for Visual Studio
 .ntvs_analysis.dat

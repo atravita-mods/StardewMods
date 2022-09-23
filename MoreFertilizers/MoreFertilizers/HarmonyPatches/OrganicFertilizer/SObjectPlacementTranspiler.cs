@@ -54,7 +54,7 @@ internal static class SObjectPlacementTranspiler
             List<CodeInstruction> codes = new(copy)
             {
                 new(OpCodes.Ldarg_0),
-                new(OpCodes.Call, typeof(SObjectPlacementTranspiler).StaticMethodNamed(nameof(AdjustPlantedObject))),
+                new(OpCodes.Call, typeof(SObjectPlacementTranspiler).GetCachedMethod(nameof(AdjustPlantedObject), ReflectionCache.FlagTypes.StaticFlags)),
             };
 
             helper.Pop()

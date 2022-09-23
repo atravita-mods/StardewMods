@@ -17,10 +17,7 @@ namespace MoreFertilizers.HarmonyPatches.WaterLogged;
 internal static class PaddyWaterCheckTranspiler
 {
     private static bool HasPaddyFertilizer(HoeDirt dirt)
-    {
-        ModEntry.ModMonitor.DebugOnlyLog($"Checking {dirt.fertilizer.Value} against ID {ModEntry.PaddyCropFertilizerID}");
-        return ModEntry.PaddyCropFertilizerID != -1 && dirt.fertilizer.Value == ModEntry.PaddyCropFertilizerID;
-    }
+        => ModEntry.PaddyCropFertilizerID != -1 && dirt.fertilizer.Value == ModEntry.PaddyCropFertilizerID;
 
     [HarmonyPatch(nameof(HoeDirt.paddyWaterCheck))]
 #pragma warning disable SA1116 // Split parameters should start on line after declaration. Reviewed.

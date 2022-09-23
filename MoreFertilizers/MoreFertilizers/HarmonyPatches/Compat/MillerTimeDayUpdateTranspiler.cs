@@ -68,7 +68,7 @@ internal static class MillerTimeDayUpdateTranspiler
             CodeInstruction? ldoutput = helper.CurrentInstruction.ToLdLoc();
 
             helper.Advance(1)
-            .GetLabels(out IList<Label> labelsToMove)
+            .GetLabels(out IList<Label> labelsToMove, clear: true)
             .Insert(new CodeInstruction[]
             { // Place our function call here.
                 new(OpCodes.Ldloc, inputlocal),

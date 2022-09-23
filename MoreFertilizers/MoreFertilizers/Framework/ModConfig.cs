@@ -20,6 +20,11 @@ internal sealed class ModConfig
     public Color WaterOverlayColor { get; set; } = new(147, 112, 219, 155);
 
     /// <summary>
+    /// Gets or sets a value indicating whether or not bushes should change color to indicate whether or not they've been fertilized.
+    /// </summary>
+    public bool RecolorBushes { get; set; } = true;
+
+    /// <summary>
     /// Gets or sets a value indicating whether trees should be recolored when they're fertilized.
     /// </summary>
     public bool RecolorFruitTrees { get; set; } = true;

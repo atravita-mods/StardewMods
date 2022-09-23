@@ -9,6 +9,7 @@ using AtraShared.Utils.HarmonyHelper;
 using HarmonyLib;
 using Microsoft.Xna.Framework;
 using MoreFertilizers.Framework;
+using Netcode;
 using StardewValley.Objects;
 using StardewValley.TerrainFeatures;
 
@@ -54,6 +55,10 @@ internal static class CropHarvestTranspiler
             {
                 return Game1.random.NextDouble() < 0.2 ? 2 : 1;
             }
+            else if (dirt.fertilizer.Value == ModEntry.SecretJojaFertilizerID)
+            {
+                return (Game1.random.NextDouble() < 0.5 && dirt.HasJojaCrop()) ? 1 : 0;
+            }
         }
         return prevQual;
     }
@@ -74,10 +79,17 @@ internal static class CropHarvestTranspiler
                 obj.Name += " (Organic)";
                 obj.MarkContextTagsDirty();
             }
-            else if (dirt.fertilizer.Value == ModEntry.DeluxeJojaFertilizerID || dirt.fertilizer.Value == ModEntry.JojaFertilizerID)
+            else if (dirt.fertilizer.Value == ModEntry.DeluxeJojaFertilizerID
+                || dirt.fertilizer.Value == ModEntry.JojaFertilizerID
+                || dirt.fertilizer.Value == ModEntry.SecretJojaFertilizerID)
             {
                 obj.modData?.SetBool(CanPlaceHandler.Joja, true);
                 obj.MarkContextTagsDirty();
+            }
+            else if (dirt.fertilizer.Value == ModEntry.MiraculousBeveragesID
+                && MiraculousFertilizerHandler.GetBeverage(obj.ParentSheetIndex) is SObject beverage)
+            {
+                Game1.createItemDebris(beverage, dirt.currentTileLocation * 64f, -1);
             }
         }
         return obj;
@@ -91,6 +103,25 @@ internal static class CropHarvestTranspiler
         {
             ModEntry.ModMonitor.DebugOnlyLog("IncrementedOnceForBountiful", LogLevel.Info);
             return prevValue * 2;
+        }
+        return prevValue;
+    }
+
+    private static int AdjustExperience(int prevValue, HoeDirt? dirt)
+    {
+        if (ModEntry.WisdomFertilizerID != -1 && dirt?.fertilizer?.Value == ModEntry.WisdomFertilizerID)
+        {
+            return (int)(1.5 * prevValue);
+        }
+        return prevValue;
+    }
+
+    private static int AdjustRegrow(int prevValue, HoeDirt? dirt)
+    {
+        if (ModEntry.SecretJojaFertilizerID != -1 && dirt?.fertilizer?.Value == ModEntry.SecretJojaFertilizerID
+            && (Game1.random.NextDouble() < 0.5 || dirt.HasJojaCrop()))
+        {
+            return Math.Max(1, (int)(0.9 * prevValue));
         }
         return prevValue;
     }
@@ -223,6 +254,35 @@ internal static class CropHarvestTranspiler
                 new(OpCodes.Ldarg_3),
                 new(OpCodes.Call, typeof(CropHarvestTranspiler).GetCachedMethod(nameof(GetQualityForJojaFert), ReflectionCache.FlagTypes.StaticFlags)),
                 new(OpCodes.Callvirt, typeof(SObject).GetCachedProperty(nameof(SObject.Quality), ReflectionCache.FlagTypes.InstanceFlags).GetSetMethod()),
+            })
+            .FindNext(new CodeInstructionWrapper[]
+            { // Find the block where the player is given XP
+                new(OpCodes.Call, typeof(Game1).GetCachedProperty(nameof(Game1.player), ReflectionCache.FlagTypes.StaticFlags).GetGetMethod()),
+                new(OpCodes.Ldc_I4_0),
+                new(SpecialCodeInstructionCases.LdLoc),
+            })
+            .FindNext(new CodeInstructionWrapper[]
+            {
+                new(OpCodes.Conv_I4),
+                new(OpCodes.Callvirt, typeof(Farmer).GetCachedMethod(nameof(Farmer.gainExperience), ReflectionCache.FlagTypes.InstanceFlags)),
+            })
+            .Advance(1)
+            .Insert(new CodeInstruction[]
+            { // insert a call to a function that changes the experience gained.
+                new(OpCodes.Ldarg_3),
+                new(OpCodes.Call, typeof(CropHarvestTranspiler).GetCachedMethod(nameof(AdjustExperience), ReflectionCache.FlagTypes.StaticFlags)),
+            })
+            .FindNext(new CodeInstructionWrapper[]
+            {
+                new(OpCodes.Ldfld, typeof(Crop).GetCachedField(nameof(Crop.regrowAfterHarvest), ReflectionCache.FlagTypes.InstanceFlags)),
+                new(OpCodes.Call),
+                new(OpCodes.Callvirt, typeof(NetFieldBase<int, NetInt>).GetCachedProperty("Value", ReflectionCache.FlagTypes.InstanceFlags).GetSetMethod()),
+            })
+            .Advance(2)
+            .Insert(new CodeInstruction[]
+            {
+                new(OpCodes.Ldarg_3),
+                new(OpCodes.Call, typeof(CropHarvestTranspiler).GetCachedMethod(nameof(AdjustRegrow), ReflectionCache.FlagTypes.StaticFlags)),
             });
 
             // helper.Print();
@@ -329,6 +389,41 @@ internal static class CropHarvestTranspiler
             {
                 new(OpCodes.Ldarg_3),
                 new(OpCodes.Call, typeof(CropHarvestTranspiler).GetCachedMethod(nameof(MakeItemOrganic), ReflectionCache.FlagTypes.StaticFlags)),
+            })
+            .FindNext(new CodeInstructionWrapper[]
+            { // Find the block where the player is given XP
+                new(OpCodes.Call, typeof(Game1).GetCachedProperty(nameof(Game1.player), ReflectionCache.FlagTypes.StaticFlags).GetGetMethod()),
+                new(OpCodes.Ldc_I4_0),
+                new(SpecialCodeInstructionCases.LdLoc),
+            })
+            .FindNext(new CodeInstructionWrapper[]
+            {
+                new(OpCodes.Conv_I4),
+                new(OpCodes.Callvirt, typeof(Farmer).GetCachedMethod(nameof(Farmer.gainExperience), ReflectionCache.FlagTypes.InstanceFlags)),
+            })
+            .Advance(1)
+            .Insert(new CodeInstruction[]
+            { // insert a call to a function that changes the experience gained.
+                new(OpCodes.Ldarg_3),
+                new(OpCodes.Call, typeof(CropHarvestTranspiler).GetCachedMethod(nameof(AdjustExperience), ReflectionCache.FlagTypes.StaticFlags)),
+            });
+
+            Type phasedata = cropPackData.GetNestedType("PhaseData")
+                ?? ReflectionThrowHelper.ThrowMethodNotFoundException<Type>("DGA phase data");
+
+            helper.FindNext(new CodeInstructionWrapper[]
+            {
+                new(OpCodes.Ldarg_0),
+                new(OpCodes.Ldfld, typeof(Crop).GetCachedField(nameof(Crop.currentPhase), ReflectionCache.FlagTypes.InstanceFlags)),
+                new(SpecialCodeInstructionCases.LdLoc),
+                new(OpCodes.Callvirt, phasedata.GetCachedProperty("HarvestedNewPhase", ReflectionCache.FlagTypes.InstanceFlags).GetGetMethod()),
+                new(OpCodes.Callvirt, typeof(NetFieldBase<int, NetInt>).GetCachedProperty("Value", ReflectionCache.FlagTypes.InstanceFlags).GetSetMethod()),
+            })
+            .Advance(4)
+            .Insert(new CodeInstruction[]
+            {
+                new(OpCodes.Ldarg_3),
+                new(OpCodes.Call, typeof(CropHarvestTranspiler).GetCachedMethod(nameof(AdjustRegrow), ReflectionCache.FlagTypes.StaticFlags)),
             });
 
             // helper.Print();
@@ -336,7 +431,7 @@ internal static class CropHarvestTranspiler
         }
         catch (Exception ex)
         {
-            ModEntry.ModMonitor.Log($"Mod crashed while transpiling Crop.harvest:\n\n{ex}", LogLevel.Error);
+            ModEntry.ModMonitor.Log($"Mod crashed while transpiling DGA's Crop.harvest:\n\n{ex}", LogLevel.Error);
             original?.Snitch(ModEntry.ModMonitor);
         }
         return null;

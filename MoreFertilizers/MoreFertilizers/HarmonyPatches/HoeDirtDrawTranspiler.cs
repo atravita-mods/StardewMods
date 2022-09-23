@@ -47,6 +47,10 @@ internal static class HoeDirtDrawTranspiler
         {
             return Color.Navy;
         }
+        if (ModEntry.SecretJojaFertilizerID == fertilizer)
+        {
+            return Color.PaleVioletRed;
+        }
         if (ModEntry.BountifulFertilizerID == fertilizer)
         {
             return Color.Aquamarine;
@@ -54,6 +58,14 @@ internal static class HoeDirtDrawTranspiler
         if (ModEntry.OrganicFertilizerID == fertilizer)
         {
             return Color.PaleGoldenrod;
+        }
+        if (ModEntry.WisdomFertilizerID == fertilizer)
+        {
+            return Color.LightSalmon;
+        }
+        if (ModEntry.MiraculousBeveragesID == fertilizer)
+        {
+            return Color.LightCoral;
         }
         return prevColor;
     }
@@ -67,7 +79,7 @@ internal static class HoeDirtDrawTranspiler
     {
         harmony.Patch(
             original: typeof(HoeDirt).GetCachedMethod(nameof(HoeDirt.DrawOptimized), ReflectionCache.FlagTypes.InstanceFlags),
-            transpiler: new HarmonyMethod(typeof(HoeDirtDrawTranspiler).StaticMethodNamed(nameof(Transpiler))));
+            transpiler: new HarmonyMethod(typeof(HoeDirtDrawTranspiler).GetCachedMethod(nameof(Transpiler), ReflectionCache.FlagTypes.StaticFlags)));
     }
 
     private static IEnumerable<CodeInstruction>? Transpiler(IEnumerable<CodeInstruction> instructions, ILGenerator gen, MethodBase original)
@@ -101,7 +113,7 @@ internal static class HoeDirtDrawTranspiler
             .Insert(new CodeInstruction[]
             {
                 local,
-                new(OpCodes.Call, typeof(HoeDirtDrawTranspiler).StaticMethodNamed(nameof(HoeDirtDrawTranspiler.GetColor))),
+                new(OpCodes.Call, typeof(HoeDirtDrawTranspiler).GetCachedMethod(nameof(HoeDirtDrawTranspiler.GetColor), ReflectionCache.FlagTypes.StaticFlags)),
             });
             return helper.Render();
         }

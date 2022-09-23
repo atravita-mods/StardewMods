@@ -1,5 +1,7 @@
 ﻿using System.Reflection;
 using System.Reflection.Emit;
+using System.Runtime.CompilerServices;
+using AtraBase.Toolkit;
 using AtraBase.Toolkit.Reflection;
 using AtraCore.Framework.ReflectionManager;
 using AtraShared.Utils.HarmonyHelper;
@@ -37,15 +39,19 @@ internal static class PerformObjectDropInTranspiler
             transpiler: new HarmonyMethod(typeof(PerformObjectDropInTranspiler), nameof(AutomateTranspiler)));
     }
 
+    [MethodImpl(TKConstants.Hot)]
     private static int GetOrganicFertilizer()
         => ModEntry.OrganicFertilizerID != -1 ? ModEntry.OrganicFertilizerID : 466;
 
+    [MethodImpl(TKConstants.Hot)]
     private static int GetFruitTreeFertilizer()
         => ModEntry.FruitTreeFertilizerID != -1 ? ModEntry.FruitTreeFertilizerID : 369;
 
+    [MethodImpl(TKConstants.Hot)]
     private static int GetBountifulFertilizer()
         => ModEntry.BountifulFertilizerID != -1 ? ModEntry.BountifulFertilizerID : 465;
 
+    [MethodImpl(TKConstants.Hot)]
     private static int GetDeluxeFruitTreeFertilizer()
         => ModEntry.DeluxeFruitTreeFertilizerID != -1 ? ModEntry.DeluxeFruitTreeFertilizerID : 805;
 

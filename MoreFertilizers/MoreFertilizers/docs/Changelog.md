@@ -1,12 +1,32 @@
 ﻿Changelog
 =============
 
-#### Version 0.2.1
+#### Version 0.3.0 TODO items
+* Bush fertilizers
+    - Handle adding to shops and other aquisition methods.
+* Beverage fertilizer
+    - Crops
+    - Fruit trees
+* Acquisition: maybee have fertilizer appear in big slimes outside the mines?
+* Items and all the implementation for the prismatic and everlasting fertilizers (don't forget that JA and Winter Star also transpile in this space)
+* Seedy fertilizer: drops the seed? 
+* Some fertilizer for trees?
+* Something for mushroom boxen? 
+
+#### Version 0.3.0
+* Added new fertilizers:
+    - Secret Joja Fertilizer: decreases growth time, has a chance of decreasing regrowth time, but forces the crop to be base quality.
+    - Wisdom Fertilizer: increases farming XP by 10%.
+    - Rapid Bush Fertilizer: makes tea tree bushes grow 20% faster.
+    - Bountiful Bush Fertilizer: increases the production periods of tea and berry bushes.
+* Adjusted previous fertilizers:
+    - Waterlogged now increases the growth speed of paddy crops a little.
 * Added German translation (thanks to CrisTortion!)
 * Fixes the lucky fertilizer.
 * Fixes integration with Prismatic/Radioactive tools.
 * Fixes organic fertilizer with beer, pale ale, green tea, mead, and coffee.
 * Internal improvements.
+
 
 #### Version 0.2.0
 * Move to using AtraCore, which should have improved loading times significantly.

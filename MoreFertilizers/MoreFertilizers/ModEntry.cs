@@ -42,6 +42,54 @@ internal sealed class ModEntry : Mod
 
 #pragma warning disable SA1204 // Static elements should appear before instance elements. Keep backing fields near properties.
 #pragma warning disable SA1201 // Elements should appear in the correct order
+    private static int prismaticFertilizerID = -1;
+
+    internal static int PrismaticFertilizerID
+    {
+        get
+        {
+            if (prismaticFertilizerID == -1)
+            {
+                prismaticFertilizerID = jsonAssets?.GetObjectId("Prismatic Fertilizer - More Fertilizers") ?? -1;
+            }
+            return prismaticFertilizerID;
+        }
+    }
+
+    private static int everlastingFertilizerID = -1;
+
+    /// <summary>
+    /// Gets the integer ID of the Everlasting Fertilizer. Returns -1 if not found/not loaded yet.
+    /// </summary>
+    internal static int EverlastingFertilizerID
+    {
+        get
+        {
+            if (everlastingFertilizerID == -1)
+            {
+                everlastingFertilizerID = jsonAssets?.GetObjectId("Everlasting Fertilizer - More Fertilizers") ?? -1;
+            }
+            return everlastingFertilizerID;
+        }
+    }
+
+    private static int wisdomFertilizerID = -1;
+
+    /// <summary>
+    /// Gets the integer ID of the Wisdom Fertilizer. Returns -1 if not found/not loaded yet.
+    /// </summary>
+    internal static int WisdomFertilizerID
+    {
+        get
+        {
+            if (wisdomFertilizerID == -1)
+            {
+                wisdomFertilizerID = jsonAssets?.GetObjectId("Wisdom Fertilizer - More Fertilizers") ?? -1;
+            }
+            return wisdomFertilizerID;
+        }
+    }
+
     private static int fruitTreeFertilizerID = -1;
 
     /// <summary>
@@ -178,6 +226,57 @@ internal sealed class ModEntry : Mod
         }
     }
 
+    private static int bountifulBushID = -1;
+
+    /// <summary>
+    /// Gets the integer ID of the bountiful bush fertilizer. -1 if not found/not loaded yet.
+    /// </summary>
+    internal static int BountifulBushID
+    {
+        get
+        {
+            if (bountifulBushID == -1)
+            {
+                bountifulBushID = jsonAssets?.GetObjectId("Bountiful Bush Fertilizer") ?? -1;
+            }
+            return bountifulBushID;
+        }
+    }
+
+    private static int rapidBushFertilizerID = -1;
+
+    /// <summary>
+    /// Gets the integer ID of the rapid bush fertilizer. -1 if not found/not loaded yet.
+    /// </summary>
+    internal static int RapidBushFertilizerID
+    {
+        get
+        {
+            if (rapidBushFertilizerID == -1)
+            {
+                rapidBushFertilizerID = jsonAssets?.GetObjectId("Rapid Bush Fertilizer") ?? -1;
+            }
+            return rapidBushFertilizerID;
+        }
+    }
+
+    private static int treeTapperFertilizerID = -1;
+
+    /// <summary>
+    /// Gets the integer ID of the tree tapper fertilizer.
+    /// </summary>
+    internal static int TreeTapperFertilizerID
+    {
+        get
+        {
+            if (treeTapperFertilizerID != -1)
+            {
+                treeTapperFertilizerID = jsonAssets?.GetObjectId("Tree Tapper's Fertilizer - More Fertilizers") ?? -1;
+            }
+            return treeTapperFertilizerID;
+        }
+    }
+
     private static int jojaFertilizerID = -1;
 
     /// <summary>
@@ -212,6 +311,23 @@ internal sealed class ModEntry : Mod
         }
     }
 
+    private static int secretJojaFertilizerID = -1;
+
+    /// <summary>
+    /// Gets the integer ID of the Secret Joja's fertilizer. -1 if not found/not loaded yet.
+    /// </summary>
+    internal static int SecretJojaFertilizerID
+    {
+        get
+        {
+            if (secretJojaFertilizerID == -1)
+            {
+                secretJojaFertilizerID = jsonAssets?.GetObjectId("Secret Joja Fertilizer - More Fertilizers") ?? -1;
+            }
+            return secretJojaFertilizerID;
+        }
+    }
+
     private static int organicFertilizerID = -1;
 
     /// <summary>
@@ -226,6 +342,23 @@ internal sealed class ModEntry : Mod
                 organicFertilizerID = jsonAssets?.GetObjectId("Organic Fertilizer - More Fertilizers") ?? -1;
             }
             return organicFertilizerID;
+        }
+    }
+
+    private static int miraculousBeverages = -1;
+
+    /// <summary>
+    /// Gets the integer ID of the miraculous beverages fertilizer. -1 if not found/not loaded...
+    /// </summary>
+    internal static int MiraculousBeveragesID
+    {
+        get
+        {
+            if (miraculousBeverages == -1)
+            {
+                miraculousBeverages = jsonAssets?.GetObjectId("Miraculous Beverages - More Fertilizers") ?? -1;
+            }
+            return miraculousBeverages;
         }
     }
 #pragma warning restore SA1201 // Elements should appear in the correct order
@@ -308,6 +441,7 @@ internal sealed class ModEntry : Mod
     private void OnAssetRequested(object? sender, AssetRequestedEventArgs e)
         => AssetEditor.Edit(e);
 
+    [EventPriority(EventPriority.High)]
     // Only hook if SpecialOrdersExtended is installed.
     [EventPriority(EventPriority.Low)]
     private void OnSpecialOrderDialogueRequested(object? sender, AssetRequestedEventArgs e)
@@ -356,17 +490,28 @@ internal sealed class ModEntry : Mod
         // JA will reassign us IDs when it returns to title.
         // (I'm not quite sure why?)
         // But we need to drop our IDs too.
-        bountifulFertilizerID = -1;
+
+        prismaticFertilizerID = -1;
+        everlastingFertilizerID = -1;
+        wisdomFertilizerID = -1;
+        fruitTreeFertilizerID = -1;
+        deluxeFruitTreeFertilizerID = -1;
+        fishfoodID = -1;
         deluxeFishFoodID = -1;
         deluxeFruitTreeFertilizerID = -1;
         deluxeJojaFertilizerID = -1;
         domesticatedFishFoodID = -1;
-        fishfoodID = -1;
-        fruitTreeFertilizerID = -1;
-        jojaFertilizerID = -1;
-        luckyFertilizerID = -1;
-        organicFertilizerID = -1;
         paddyCropFertilizerID = -1;
+        luckyFertilizerID = -1;
+        bountifulFertilizerID = -1;
+        bountifulBushID = -1;
+        rapidBushFertilizerID = -1;
+        treeTapperFertilizerID = -1;
+        jojaFertilizerID = -1;
+        deluxeJojaFertilizerID = -1;
+        secretJojaFertilizerID = -1;
+        organicFertilizerID = -1;
+        miraculousBeverages = -1;
 
         PlantableFertilizerIDs.Clear();
         SpecialFertilizerIDs.Clear();
@@ -381,26 +526,36 @@ internal sealed class ModEntry : Mod
     {
         if (Context.IsMainPlayer)
         {
-            // TODO: This should be doable with expression trees in a less dumb way.
-            if (storedIDs is null)
+        // TODO: This should be doable with expression trees in a less dumb way.
+        if (storedIDs is null)
+        {
+            storedIDs = new()
             {
-                storedIDs = new();
-                storedIDs.BountifulFertilizerID = BountifulFertilizerID;
-                storedIDs.DeluxeFishFoodID = DeluxeFishFoodID;
-                storedIDs.DeluxeFruitTreeFertilizerID = DeluxeFruitTreeFertilizerID;
-                storedIDs.DeluxeJojaFertilizerID = DeluxeJojaFertilizerID;
-                storedIDs.DomesticatedFishFoodID = DomesticatedFishFoodID;
-                storedIDs.FishFoodID = FishFoodID;
-                storedIDs.FruitTreeFertilizerID = FruitTreeFertilizerID;
-                storedIDs.JojaFertilizerID = JojaFertilizerID;
-                storedIDs.LuckyFertilizerID = LuckyFertilizerID;
-                storedIDs.OrganicFertilizerID = OrganicFertilizerID;
-                storedIDs.PaddyFertilizerID = PaddyCropFertilizerID;
-            }
-            this.Helper.Data.WriteSaveData(SavedIDKey, storedIDs);
-            this.Monitor.Log("Writing IDs into save data");
+                PrismaticFertilizerID = PrismaticFertilizerID,
+                EverlastingFertilizerID = EverlastingFertilizerID,
+                WisdomFertilizerID = WisdomFertilizerID,
+                FruitTreeFertilizerID = FruitTreeFertilizerID,
+                DeluxeFruitTreeFertilizerID = DeluxeFruitTreeFertilizerID,
+                FishFoodID = FishFoodID,
+                DeluxeFishFoodID = DeluxeFishFoodID,
+                DomesticatedFishFoodID = DomesticatedFishFoodID,
+                PaddyFertilizerID = PaddyCropFertilizerID,
+                LuckyFertilizerID = LuckyFertilizerID,
+                BountifulFertilizerID = BountifulFertilizerID,
+                BountifulBushID = BountifulBushID,
+                RapidBushFertilizerID = RapidBushFertilizerID,
+                TreeTapperFertilizerID = TreeTapperFertilizerID,
+                JojaFertilizerID = JojaFertilizerID,
+                DeluxeJojaFertilizerID = DeluxeJojaFertilizerID,
+                SecretJojaFertilizerID = SecretJojaFertilizerID,
+                OrganicFertilizerID = OrganicFertilizerID,
+                MiraculousBeveragesID = MiraculousBeveragesID,
+            };
         }
+        this.Helper.Data.WriteSaveData(SavedIDKey, storedIDs);
+        this.Monitor.Log("Writing IDs into save data");
         this.Helper.Events.GameLoop.Saving -= this.OnSaving;
+	}
     }
 
     /// <summary>
@@ -452,6 +607,13 @@ internal sealed class ModEntry : Mod
                 SObjectPatches.ApplyDGAPatch(harmony);
             }
 
+            if (this.Helper.ModRegistry.Get("PeacefulEnd.AlternativeTextures") is IModInfo at
+                && at.Manifest.Version.IsNewerThan("6.0.0"))
+            {
+                this.Monitor.Log("Found Alternative Textures, applying compat patches", LogLevel.Info);
+                FruitTreeDrawTranspiler.ApplyATPatch(harmony);
+            }
+
             if (this.Helper.ModRegistry.Get("Cherry.MultiYieldCrops") is IModInfo multiYield
                 && multiYield.Manifest.Version.IsNewerThan("1.0.1"))
             {
@@ -473,7 +635,8 @@ internal sealed class ModEntry : Mod
                 this.Monitor.Log("Found Miller Time, applying compat patches", LogLevel.Info);
                 MillerTimeDayUpdateTranspiler.ApplyPatches(harmony);
             }
-
+            
+            ExtendedToolsMods.ApplyPatches(harmony);
             if (this.Helper.ModRegistry.IsLoaded("stokastic.PrismaticTools") ||
                 this.Helper.ModRegistry.IsLoaded("kakashigr.RadioactiveTools"))
             {
@@ -608,7 +771,37 @@ internal sealed class ModEntry : Mod
             SpecialFertilizerIDs.Add(DomesticatedFishFoodID);
         }
 
+        if (BountifulBushID != -1)
+        {
+            SpecialFertilizerIDs.Add(BountifulBushID);
+        }
+
+        if (RapidBushFertilizerID != -1)
+        {
+            SpecialFertilizerIDs.Add(RapidBushFertilizerID);
+        }
+
+        if (TreeTapperFertilizerID != -1)
+        {
+            SpecialFertilizerIDs.Add(TreeTapperFertilizerID);
+        }
+
         // Plantable ones begin here.
+        if (PrismaticFertilizerID != -1)
+        {
+            PlantableFertilizerIDs.Add(PrismaticFertilizerID);
+        }
+
+        if (EverlastingFertilizerID != -1)
+        {
+            PlantableFertilizerIDs.Add(EverlastingFertilizerID);
+        }
+
+        if (WisdomFertilizerID != -1)
+        {
+            PlantableFertilizerIDs.Add(WisdomFertilizerID);
+        }
+
         if (PaddyCropFertilizerID != -1)
         {
             PlantableFertilizerIDs.Add(PaddyCropFertilizerID);
@@ -634,9 +827,19 @@ internal sealed class ModEntry : Mod
             PlantableFertilizerIDs.Add(DeluxeJojaFertilizerID);
         }
 
+        if (SecretJojaFertilizerID != -1)
+        {
+            PlantableFertilizerIDs.Add(SecretJojaFertilizerID);
+        }
+
         if (OrganicFertilizerID != -1)
         {
             PlantableFertilizerIDs.Add(OrganicFertilizerID);
+        }
+
+        if (MiraculousBeveragesID != -1)
+        {
+            PlantableFertilizerIDs.Add(MiraculousBeveragesID);
         }
 
         if (SpecialFertilizerIDs.Count <= 0 && PlantableFertilizerIDs.Count <= 0)
@@ -662,6 +865,42 @@ internal sealed class ModEntry : Mod
         Dictionary<int, int> idMapping = new();
 
         // Have to update the planted ones.
+        if (PrismaticFertilizerID != -1
+            && storedIDs.PrismaticFertilizerID != -1
+            && PrismaticFertilizerID != storedIDs.PrismaticFertilizerID)
+        {
+            // special case! Update the museum reward tracking too...
+            string oldkey = $"museumCollectedRewardO_{storedIDs.PrismaticFertilizerID}_1";
+            string newkey = $"museumCollectedRewardO_{PrismaticFertilizerID}_1";
+
+            foreach (Farmer player in Game1.getAllFarmers())
+            {
+                if (player.mailReceived.Remove(oldkey))
+                {
+                    player.mailReceived.Add(newkey);
+                }
+            }
+
+            idMapping.Add(storedIDs.PrismaticFertilizerID, PrismaticFertilizerID);
+            storedIDs.PrismaticFertilizerID = PrismaticFertilizerID;
+        }
+
+        if (EverlastingFertilizerID != -1
+            && storedIDs.EverlastingFertilizerID != -1
+            && EverlastingFertilizerID != storedIDs.EverlastingFertilizerID)
+        {
+            idMapping.Add(storedIDs.EverlastingFertilizerID, EverlastingFertilizerID);
+            storedIDs.EverlastingFertilizerID = EverlastingFertilizerID;
+        }
+
+        if (WisdomFertilizerID != -1
+            && storedIDs.WisdomFertilizerID != -1
+            && storedIDs.WisdomFertilizerID != WisdomFertilizerID)
+        {
+            idMapping.Add(storedIDs.WisdomFertilizerID, WisdomFertilizerID);
+            storedIDs.WisdomFertilizerID = WisdomFertilizerID;
+        }
+
         if (LuckyFertilizerID != -1
             && storedIDs.LuckyFertilizerID != -1
             && storedIDs.LuckyFertilizerID != LuckyFertilizerID)
@@ -702,12 +941,28 @@ internal sealed class ModEntry : Mod
             storedIDs.DeluxeJojaFertilizerID = DeluxeJojaFertilizerID;
         }
 
+        if (SecretJojaFertilizerID != -1
+            && storedIDs.SecretJojaFertilizerID != -1
+            && storedIDs.SecretJojaFertilizerID != SecretJojaFertilizerID)
+        {
+            idMapping.Add(storedIDs.SecretJojaFertilizerID, SecretJojaFertilizerID);
+            storedIDs.SecretJojaFertilizerID = SecretJojaFertilizerID;
+        }
+
         if (OrganicFertilizerID != -1
             && storedIDs.OrganicFertilizerID != -1
             && storedIDs.OrganicFertilizerID != OrganicFertilizerID)
         {
             idMapping.Add(storedIDs.OrganicFertilizerID, OrganicFertilizerID);
             storedIDs.OrganicFertilizerID = OrganicFertilizerID;
+        }
+
+        if (MiraculousBeveragesID != -1
+            && storedIDs.MiraculousBeveragesID != -1
+            && storedIDs.MiraculousBeveragesID != MiraculousBeveragesID)
+        {
+            idMapping.Add(storedIDs.MiraculousBeveragesID, MiraculousBeveragesID);
+            storedIDs.MiraculousBeveragesID = MiraculousBeveragesID;
         }
 
         // Update stored IDs for the special ones.
@@ -736,8 +991,18 @@ internal sealed class ModEntry : Mod
             storedIDs.DomesticatedFishFoodID = DomesticatedFishFoodID;
         }
 
-        if (idMapping.Count <= 0)
+        if (RapidBushFertilizerID != -1)
         {
+            storedIDs.RapidBushFertilizerID = RapidBushFertilizerID;
+        }
+
+        if (BountifulBushID != -1)
+        {
+            storedIDs.BountifulBushID = BountifulBushID;
+        }
+
+        if (idMapping.Count <= 0)
+        {i
             ModMonitor.Log("No need to fix IDs, nothing has changed.");
             return;
         }
@@ -798,6 +1063,7 @@ internal sealed class ModEntry : Mod
     private void OnSaveLoaded(object? sender, SaveLoadedEventArgs e)
     {
         JojaSample.Reset();
+        MiraculousFertilizerHandler.Initialize();
 
         if (Context.IsSplitScreen && Context.ScreenId != 0)
         {
@@ -849,7 +1115,7 @@ internal sealed class ModEntry : Mod
     /*******************
      * REGION MINESHAFT AND MULTIPLAYER
      ********************/
-
+    [EventPriority(EventPriority.Low)]
     private void OnPlayerWarp(object? sender, WarpedEventArgs e)
     {
         JojaSample.JojaSampleEvent(e);

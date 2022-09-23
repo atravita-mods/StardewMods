@@ -45,7 +45,7 @@ internal static class PaddyWaterUpdateTranspiler
                 new(OpCodes.Ldarg_2),
                 new(OpCodes.Ldarg_3),
                 new(OpCodes.Ldarg_S, 6),
-                new(OpCodes.Call, typeof(PaddyWaterUpdateTranspiler).StaticMethodNamed(nameof(UpdateNeighbors))),
+                new(OpCodes.Call, typeof(PaddyWaterUpdateTranspiler).GetCachedMethod(nameof(UpdateNeighbors), ReflectionCache.FlagTypes.StaticFlags)),
             });
             return helper.Render();
         }

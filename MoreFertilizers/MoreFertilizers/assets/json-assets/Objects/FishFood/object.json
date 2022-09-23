@@ -2,7 +2,7 @@
   "Name": "Fish Food Fertilizer",
   "Price": "50",
   "Category": -19,
-  "Edibility": -300,
+  "Edibility": 5,
   "TranslationKey": "fish-food",
   "PurchasePrice": 500,
   "PurchaseFrom": "Willy",

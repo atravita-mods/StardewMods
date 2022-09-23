@@ -109,7 +109,7 @@ internal static class FruitTreeDrawTranspiler
         }
         catch (Exception ex)
         {
-            ModEntry.ModMonitor.Log($"Mod crashed while transpiling FruitTree.Draw:\n\n{ex}", LogLevel.Error);
+            ModEntry.ModMonitor.Log($"Mod crashed while transpiling {original.FullDescription()}:\n\n{ex}", LogLevel.Error);
             original?.Snitch(ModEntry.ModMonitor);
         }
         return null;

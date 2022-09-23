@@ -11,8 +11,8 @@ namespace LastDayToPlantRedux.Framework;
 /// </summary>
 internal static class CropAndFertilizerManager
 {
-    private static bool CropsNeedRefreshing = true;
-    private static bool FertilizersNeedRefreshing = true;
+    private static bool cropsNeedRefreshing = true;
+    private static bool fertilizersNeedRefreshing = true;
 
     // a mapping of fertilizers to a hoedirt that has them.
     private static Dictionary<int, HoeDirt> dirts = new();
@@ -30,12 +30,12 @@ internal static class CropAndFertilizerManager
 
     internal static void RequestInvalidateCrops()
     {
-        CropsNeedRefreshing = true;
+        cropsNeedRefreshing = true;
     }
 
     internal static void RequestInvalidateFertilizers()
     {
-        FertilizersNeedRefreshing = true;
+        fertilizersNeedRefreshing = true;
     }
 
     /// <summary>
@@ -44,12 +44,12 @@ internal static class CropAndFertilizerManager
     /// <returns>If any values have changed..</returns>
     internal static bool LoadCropData()
     {
-        if (!CropsNeedRefreshing)
+        if (!cropsNeedRefreshing)
         {
             return false;
         }
 
-        CropsNeedRefreshing = false;
+        cropsNeedRefreshing = false;
 
         Dictionary<int, CropEntry> ret = new();
 
@@ -89,11 +89,11 @@ breakcontinue:
     /// <returns>If anythign changed.</returns>
     internal static bool LoadFertilizerData()
     {
-        if (!FertilizersNeedRefreshing)
+        if (!fertilizersNeedRefreshing)
         {
             return false;
         }
-        FertilizersNeedRefreshing = false;
+        fertilizersNeedRefreshing = false;
 
         Dictionary<int, string> ret = new();
 

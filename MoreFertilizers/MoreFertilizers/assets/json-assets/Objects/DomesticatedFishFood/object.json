@@ -2,7 +2,7 @@
   "Name": "Domesticated Fish Food Fertilizer",
   "Price": "100",
   "Category": -19,
-  "Edibility": -300,
+  "Edibility": 10,
   "TranslationKey": "domesticated-fish-food",
   "PurchasePrice": 200,
   "PurchaseFrom": "Willy",

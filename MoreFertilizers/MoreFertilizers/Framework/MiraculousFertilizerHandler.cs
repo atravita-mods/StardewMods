@@ -1,4 +1,5 @@
-﻿using AtraShared.Niceties;
+﻿using AtraShared.ConstantsAndEnums;
+
 using Microsoft.Xna.Framework;
 
 namespace MoreFertilizers.Framework;

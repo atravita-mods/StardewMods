@@ -57,6 +57,11 @@ internal sealed class ModConfig
     /// </summary>
     public bool GoldenCoconutsOffIsland { get; set; } = false;
 
+    /// <summary>
+    /// Gets or sets a value indicating whether changes to alerts should happen.
+    /// </summary>
+    public bool AlertChanges { get; set; } = true;
+
     private float phoneSpeedUpFactor = 1.0f;
 
     /// <summary>

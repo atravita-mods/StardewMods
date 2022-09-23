@@ -1,6 +1,7 @@
 ﻿#if DEBUG
 using System.Diagnostics;
 #endif
+using AtraCore.Framework.IntegrationManagers;
 using AtraCore.Utilities;
 using AtraShared.ConstantsAndEnums;
 using AtraShared.Integrations;
@@ -19,7 +20,6 @@ using MoreFertilizers.HarmonyPatches.Compat;
 using MoreFertilizers.HarmonyPatches.FishFood;
 using MoreFertilizers.HarmonyPatches.FruitTreePatches;
 using StardewModdingAPI.Events;
-using StardewValley.Objects;
 using StardewValley.TerrainFeatures;
 
 using AtraUtils = AtraShared.Utils.Utils;
@@ -368,13 +368,13 @@ internal sealed class ModEntry : Mod
     /// Gets a list of fertilizer IDs for fertilizers that are meant to be planted into HoeDirt.
     /// </summary>
     /// <remarks>Will be stored in the <see cref="HoeDirt.fertilizer.Value"/> field.</remarks>
-    internal static List<int> PlantableFertilizerIDs { get; } = new List<int>();
+    internal static HashSet<int> PlantableFertilizerIDs { get; } = new ();
 
     /// <summary>
     /// Gets a list of fertilizer IDs for fertilizers that are placed in other means (not into HoeDirt).
     /// </summary>
     /// <remarks>Handled by <see cref="SpecialFertilizerApplication" /> and typically stored in <see cref="ModDataDictionary"/>.</remarks>
-    internal static List<int> SpecialFertilizerIDs { get; } = new List<int>();
+    internal static HashSet<int> SpecialFertilizerIDs { get; } = new();
 
     /**************
      * Generally useful things that need to be attached to something static.
@@ -410,6 +410,11 @@ internal sealed class ModEntry : Mod
     /// </summary>
     internal static ModConfig Config { get; private set; } = null!;
 
+    /// <summary>
+    /// Gets a handler that handles managing rings (and integration with Wear More Rings).
+    /// </summary>
+    internal static RingManager RingManager { get; private set; } = null!;
+
     /// <inheritdoc />
     public override void Entry(IModHelper helper)
     {
@@ -432,17 +437,20 @@ internal sealed class ModEntry : Mod
     [UsedImplicitly]
     public override object GetApi() => new CanPlaceHandler();
 
+    [EventPriority(EventPriority.Low)]
     private void OnAssetRequested(object? sender, AssetRequestedEventArgs e)
         => AssetEditor.Edit(e);
 
     [EventPriority(EventPriority.High)]
     // Only hook if SpecialOrdersExtended is installed.
+    [EventPriority(EventPriority.Low)]
     private void OnSpecialOrderDialogueRequested(object? sender, AssetRequestedEventArgs e)
         => AssetEditor.EditSpecialOrderDialogue(e);
 
     private void OnButtonPressed(object? sender, ButtonPressedEventArgs e)
     {
-        if (MenuingExtensions.IsNormalGameplay())
+        if ((e.Button.IsUseToolButton() || e.Button.IsActionButton())
+            && MenuingExtensions.IsNormalGameplay())
         {
             SpecialFertilizerApplication.ApplyFertilizer(e, this.Helper.Input);
         }
@@ -482,6 +490,7 @@ internal sealed class ModEntry : Mod
         // JA will reassign us IDs when it returns to title.
         // (I'm not quite sure why?)
         // But we need to drop our IDs too.
+
         prismaticFertilizerID = -1;
         everlastingFertilizerID = -1;
         wisdomFertilizerID = -1;
@@ -489,6 +498,8 @@ internal sealed class ModEntry : Mod
         deluxeFruitTreeFertilizerID = -1;
         fishfoodID = -1;
         deluxeFishFoodID = -1;
+        deluxeFruitTreeFertilizerID = -1;
+        deluxeJojaFertilizerID = -1;
         domesticatedFishFoodID = -1;
         paddyCropFertilizerID = -1;
         luckyFertilizerID = -1;
@@ -542,6 +553,7 @@ internal sealed class ModEntry : Mod
             };
         }
         this.Helper.Data.WriteSaveData(SavedIDKey, storedIDs);
+        this.Monitor.Log("Writing IDs into save data");
         this.Helper.Events.GameLoop.Saving -= this.OnSaving;
 	}
     }
@@ -623,8 +635,14 @@ internal sealed class ModEntry : Mod
                 this.Monitor.Log("Found Miller Time, applying compat patches", LogLevel.Info);
                 MillerTimeDayUpdateTranspiler.ApplyPatches(harmony);
             }
-
+            
             ExtendedToolsMods.ApplyPatches(harmony);
+            if (this.Helper.ModRegistry.IsLoaded("stokastic.PrismaticTools") ||
+                this.Helper.ModRegistry.IsLoaded("kakashigr.RadioactiveTools"))
+            {
+                this.Monitor.Log("Found either prismatic tools or radioactive tools. Applying compat patches", LogLevel.Info);
+                AddCrowsForExtendedToolsTranspiler.ApplyPatches(harmony);
+            }
         }
         catch (Exception ex)
         {
@@ -649,6 +667,8 @@ internal sealed class ModEntry : Mod
             jsonAssets.LoadAssets(Path.Combine(this.Helper.DirectoryPath, "assets", "json-assets"), this.Helper.Translation);
             jsonAssets.IdsFixed += this.JsonAssets_IdsFixed;
         }
+
+        RingManager = new(this.Monitor, this.Helper.Translation, this.Helper.ModRegistry);
 
         // Only register for events if JA pack loading was successful.
         this.Helper.Events.GameLoop.SaveLoaded += this.OnSaveLoaded;
@@ -691,13 +711,7 @@ internal sealed class ModEntry : Mod
             if (helper.TryGetAPI("TehPers.FishingOverhaul", "3.2.7", out ISimplifiedFishingApi? fishingAPI))
             {
                 fishingAPI.ModifyChanceForFish(static (Farmer who, double chance) =>
-                {
-                    if (who.currentLocation is not null)
-                    {
-                        return GetFishTranspiler.AlterFishChance(chance, who.currentLocation);
-                    }
-                    return chance;
-                });
+                    who.currentLocation is null ? chance : GetFishTranspiler.AlterFishChance(chance, who.currentLocation));
             }
         }
     }
@@ -715,7 +729,17 @@ internal sealed class ModEntry : Mod
      * REGION JA
      * *********/
 
-    private void JsonAssets_IdsFixed(object? sender, EventArgs e) => this.FixIDs();
+    private void JsonAssets_IdsFixed(object? sender, EventArgs e)
+    {
+        try
+        {
+            this.FixIDs();
+        }
+        catch (Exception ex)
+        {
+            this.Monitor.Log($"Failed when trying to fix ids!\n\n{ex}", LogLevel.Error);
+        }
+    }
 
     private void FixIDs()
     {
@@ -1003,23 +1027,30 @@ internal sealed class ModEntry : Mod
     {
         // unhook event
         this.solidFoundationsAPI!.AfterBuildingRestoration -= this.AfterSFBuildingRestore;
-        if (SolidFoundationShims.IsSFBuilding is null)
+        try
         {
-            this.Monitor.Log("Could not get a handle on SF's building class, deshuffling code will fail!", LogLevel.Error);
-        }
-        else if (this.idmap is null)
-        {
-            this.Monitor.Log("IdMap was not set correctly, deshuffling code will fail.", LogLevel.Error);
-        }
-        else
-        {
-            foreach (var building in GameLocationUtils.GetBuildings())
+            if (SolidFoundationShims.IsSFBuilding is null)
             {
-                if (SolidFoundationShims.IsSFBuilding?.Invoke(building) == true)
+                this.Monitor.Log("Could not get a handle on SF's building class, deshuffling code will fail!", LogLevel.Error);
+            }
+            else if (this.idmap is null)
+            {
+                this.Monitor.Log("IdMap was not set correctly, deshuffling code will fail.", LogLevel.Error);
+            }
+            else
+            {
+                foreach (var building in GameLocationUtils.GetBuildings())
                 {
-                    building.indoors.Value?.FixHoeDirtInLocation(this.idmap);
+                    if (SolidFoundationShims.IsSFBuilding?.Invoke(building) == true)
+                    {
+                        building.indoors.Value?.FixHoeDirtInLocation(this.idmap);
+                    }
                 }
             }
+        }
+        catch (Exception ex)
+        {
+            this.Monitor.Log($"Failed while attempting to deshuffle in SF buildings:\n\n{ex}", LogLevel.Error);
         }
         this.idmap = null;
         this.solidFoundationsAPI = null;
@@ -1059,7 +1090,6 @@ internal sealed class ModEntry : Mod
         }
 
         this.FixIDs();
-        this.Helper.GameContent.InvalidateCacheAndLocalized("Data/ObjectInformation");
 
         if (Context.IsMainPlayer)
         {

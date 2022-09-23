@@ -16,6 +16,7 @@ public static class LogExtensions
     /// <param name="monitor">SMAPI's logger.</param>
     /// <param name="message">Message to log.</param>
     /// <param name="level">Level to log at.</param>
+    [DebuggerHidden]
     public static void DebugLog(this IMonitor monitor, string message, LogLevel level = LogLevel.Debug) =>
 #if DEBUG
         monitor.Log(message, level);
@@ -29,9 +30,29 @@ public static class LogExtensions
     /// <param name="monitor">SMAPI's logger.</param>
     /// <param name="message">Message to log.</param>
     /// <param name="level">Level to log at.</param>
+    [DebuggerHidden]
     [Conditional("DEBUG")]
     public static void DebugOnlyLog(this IMonitor monitor, string message, LogLevel level = LogLevel.Debug)
         => monitor.Log(message, level);
+
+    /// <summary>
+    /// Logs to level (DEBUG by default) if compiled with the DEBUG flag only.
+    /// </summary>
+    /// <param name="monitor">SMAPI's logger.</param>
+    /// <param name="message">Message to log.</param>
+    /// <param name="pred">Whether to log or not.</param>
+    /// <param name="level">Level to log at.</param>
+    /// <remarks>This exists because the entire function call is remvoed when compiled not debug
+    /// including the predicate code.</remarks>
+    [DebuggerHidden]
+    [Conditional("DEBUG")]
+    public static void DebugOnlyLog(this IMonitor monitor, string message, bool pred, LogLevel level = LogLevel.Debug)
+    {
+        if (pred)
+        {
+            monitor.Log(message, level);
+        }
+    }
 
     /// <summary>
     /// Logs to level (TRACE by default) only if shouldLog is true.

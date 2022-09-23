@@ -1,6 +1,5 @@
 ﻿using System.Reflection.Emit;
 using AtraBase.Toolkit;
-using AtraBase.Toolkit.Extensions;
 using AtraCore.Framework.ReflectionManager;
 using AtraShared.Utils.HarmonyHelper;
 using HarmonyLib;
@@ -88,20 +87,35 @@ internal static class HSUtils
         };
     }
 
+    /// <summary>
+    /// Whether or not it should be considered a festival date for that particular map.
+    /// </summary>
+    /// <param name="day">day.</param>
+    /// <param name="season">season.</param>
+    /// <param name="mapname">the map name.</param>
+    /// <returns>true if it should be considered a festival day.</returns>
     internal static bool IsFestivalDayForMap(int day, string season, string mapname)
     {
         string? s = season + day;
         if (Game1.temporaryContent.Load<Dictionary<string, string>>(@"Data\Festivals\FestivalDates").ContainsKey(s))
         {
-            int index = mapname.NthOccuranceOf('_', 2);
-            string mapRegion;
+            int index = mapname.IndexOf('_');
+            string? mapRegion;
             if (index == -1)
             {
                 mapRegion = "Town";
             }
             else
             {
-                mapRegion = mapname[..index];
+                index = mapname.IndexOf('_', index + 1);
+                if (index == -1)
+                {
+                    mapRegion = "CustomMapRegion";
+                }
+                else
+                {
+                    mapRegion = mapname[..index];
+                }
             }
 
             try
@@ -117,6 +131,10 @@ internal static class HSUtils
                     else if (!conditions.StartsWith("Custom", StringComparison.Ordinal) && mapRegion == "Town")
                     {
                         return true;
+                    }
+                    else if (conditions.StartsWith("Custom", StringComparison.Ordinal) && mapRegion == "CustomMapRegion")
+                    {
+                        return conditions.IndexOf('_') == conditions.LastIndexOf('_');
                     }
                     return false;
                 }

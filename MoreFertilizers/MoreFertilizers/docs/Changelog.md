@@ -19,9 +19,14 @@
     - Wisdom Fertilizer: increases farming XP by 10%.
     - Rapid Bush Fertilizer: makes tea tree bushes grow 20% faster.
     - Bountiful Bush Fertilizer: increases the production periods of tea and berry bushes.
-
 * Adjusted previous fertilizers:
     - Waterlogged now increases the growth speed of paddy crops a little.
+* Added German translation (thanks to CrisTortion!)
+* Fixes the lucky fertilizer.
+* Fixes integration with Prismatic/Radioactive tools.
+* Fixes organic fertilizer with beer, pale ale, green tea, mead, and coffee.
+* Internal improvements.
+
 
 #### Version 0.2.0
 * Move to using AtraCore, which should have improved loading times significantly.

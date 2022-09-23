@@ -9,6 +9,9 @@
 * Controllers probably won't be able to lock onto the arrows properly, owing to the....nontraditional menu setup here. It's likely not something I can fix, either.
 * I apply the chosen enchantment when forging, not before. So if you're using a predictor, it'll just show what the game would have picked. (This goes for Many Enchantment's debug logging as well.)
 
+#### Version 1.1.1
+* Fixes Enchanted Scythes support.
+
 #### Version 1.1.0
 * Update to using AtraCore (and associated internal improvements).
 

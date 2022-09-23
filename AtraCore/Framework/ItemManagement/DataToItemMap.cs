@@ -1,14 +1,14 @@
 ﻿using AtraBase.Toolkit.Extensions;
 using AtraShared.ConstantsAndEnums;
 using AtraShared.Utils.Extensions;
-using Microsoft.Toolkit.Diagnostics;
+using CommunityToolkit.Diagnostics;
 
 namespace AtraCore.Framework.ItemManagement;
 
 /// <summary>
 /// Handles looking up the id of an item by its name and type.
 /// </summary>
-internal static class DataToItemMap
+public static class DataToItemMap
 {
     private static readonly SortedList<ItemTypeEnum, IAssetName> enumToAssetMap = new(7);
 
@@ -85,6 +85,8 @@ internal static class DataToItemMap
                         ["Brown Egg"] = 180,
                         ["Large Egg"] = 174,
                         ["Large Brown Egg"] = 182,
+                        ["Strange Doll"] = 126,
+                        ["Strange Doll 2"] = 127,
                     };
 
                     // Processing from the data.
@@ -109,7 +111,8 @@ internal static class DataToItemMap
                             || name.Equals("???", StringComparison.OrdinalIgnoreCase)
                             || name.Equals("DGA Dummy Object", StringComparison.OrdinalIgnoreCase)
                             || name.Equals("Egg", StringComparison.OrdinalIgnoreCase)
-                            || name.Equals("Large Egg", StringComparison.OrdinalIgnoreCase))
+                            || name.Equals("Large Egg", StringComparison.OrdinalIgnoreCase)
+                            || name.Equals("Strange Doll", StringComparison.OrdinalIgnoreCase))
                         {
                             continue;
                         }

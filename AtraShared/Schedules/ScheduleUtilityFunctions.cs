@@ -1,8 +1,8 @@
-﻿using System.Reflection;
-using System.Text.RegularExpressions;
+﻿using System.Text.RegularExpressions;
 using AtraBase.Toolkit.Extensions;
 using AtraBase.Toolkit.Reflection;
 using AtraBase.Toolkit.StringHandler;
+using AtraCore.Framework.ReflectionManager;
 using AtraShared.Utils.Extensions;
 using Microsoft.Xna.Framework;
 using StardewModdingAPI.Utilities;
@@ -65,7 +65,9 @@ public class ScheduleUtilityFunctions
     /// <summary>
     /// Stardew's NPC::pathfindToNextScheduleLocation method.
     /// </summary>
-    public static readonly MethodInfo PathFindMethod = typeof(NPC).InstanceMethodNamed("pathfindToNextScheduleLocation");
+    private static readonly PathFinderDelegate PathFindMethod = typeof(NPC)
+        .GetCachedMethod("pathfindToNextScheduleLocation", ReflectionCache.FlagTypes.InstanceFlags)
+        .CreateDelegate<PathFinderDelegate>();
 
     private readonly IMonitor monitor;
     private readonly ITranslationHelper translation;
@@ -84,6 +86,7 @@ public class ScheduleUtilityFunctions
     }
 
     private delegate SchedulePathDescription PathFinderDelegate(
+        NPC npc,
         string startMap,
         int startX,
         int startY,
@@ -214,10 +217,9 @@ public class ScheduleUtilityFunctions
         int lasttime = prevtime;
 
         Dictionary<int, SchedulePathDescription> remainderSchedule = new();
-        PathFinderDelegate pathfinderDelegate = PathFindMethod.CreateDelegate<PathFinderDelegate>(npc);
         QualLoc? warpPoint = null;
 
-        foreach (string schedulepoint in schedule.Split('/'))
+        foreach (string schedulepoint in schedule.Split('/', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries))
         {
             try
             {
@@ -260,7 +262,8 @@ public class ScheduleUtilityFunctions
                     Dictionary<string, string> animationData = Game1.content.Load<Dictionary<string, string>>("Data\\animationDescriptions");
                     string? sleepanimation = npc.Name.ToLowerInvariant() + "_sleep";
                     sleepanimation = animationData.ContainsKey(sleepanimation) ? sleepanimation : null;
-                    SchedulePathDescription path2bed = pathfinderDelegate(
+                    SchedulePathDescription path2bed = PathFindMethod(
+                        npc,
                         previousMap,
                         lastx,
                         lasty,
@@ -384,7 +387,8 @@ public class ScheduleUtilityFunctions
                 matchDict.TryGetValue("animation", out string? animation);
                 matchDict.TryGetValue("message", out string? message);
 
-                SchedulePathDescription newpath = pathfinderDelegate(
+                SchedulePathDescription newpath = PathFindMethod(
+                    npc,
                     previousMap,
                     lastx,
                     lasty,

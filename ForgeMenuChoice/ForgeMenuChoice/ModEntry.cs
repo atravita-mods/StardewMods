@@ -36,8 +36,12 @@ internal sealed class ModEntry : Mod
     /// </summary>
     internal static ModConfig Config { get; private set; }
 
+    internal static IInputHelper InputHelper { get; private set; }
+
     internal static StringUtils StringUtils { get; private set; }
 #pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
+
+    internal static Func<object, bool>? IsSpaceForge { get; private set; } = null;
 
     /// <inheritdoc/>
     public override void Entry(IModHelper helper)
@@ -47,6 +51,7 @@ internal sealed class ModEntry : Mod
         StringUtils = new(this.Monitor);
         GameContentHelper = helper.GameContent;
         TranslationHelper = helper.Translation;
+        InputHelper = helper.Input;
 
         I18n.Init(helper.Translation);
         Config = AtraUtils.GetConfigOrDefault<ModConfig>(helper, this.Monitor);
@@ -57,7 +62,12 @@ internal sealed class ModEntry : Mod
         helper.Events.Content.AssetRequested += this.OnAssetRequested;
         helper.Events.Content.LocaleChanged += this.OnLocaleChanged;
         helper.Events.Content.AssetsInvalidated += this.OnAssetInvalidated;
+
+        helper.Events.Input.ButtonsChanged += this.OnButtonsChanged;
     }
+
+    private void OnButtonsChanged(object? sender, ButtonsChangedEventArgs e)
+        => ForgeMenuPatches.ApplyButtonPresses(e);
 
     private void OnLocaleChanged(object? sender, LocaleChangedEventArgs e)
     {
@@ -96,9 +106,15 @@ internal sealed class ModEntry : Mod
         {
             harmony.PatchAll();
 
+            if (this.Helper.ModRegistry.Get("Goldenrevolver.EnchantableScythes") is IModInfo sycthes)
+            {
+                this.Monitor.Log("Applying compat patches for Enchantable Scythes.", LogLevel.Debug);
+                GetEnchantmentPatch.ApplyPatch(harmony);
+            }
+
             if (this.Helper.ModRegistry.Get("spacechase0.SpaceCore") is not IModInfo spacecore)
             {
-                this.Monitor.Log($"Spacecore not installed, compat patches unnecessary.", LogLevel.Debug);
+                this.Monitor.Log($"Spacecore not installed, compat patches unnecessary.", LogLevel.Trace);
             }
             else
             {
@@ -126,6 +142,8 @@ internal sealed class ModEntry : Mod
                     harmony.Patch(
                         original: spaceforge.GetCachedMethod("performHoverAction", ReflectionCache.FlagTypes.InstanceFlags),
                         postfix: new HarmonyMethod(typeof(ForgeMenuPatches), nameof(ForgeMenuPatches.PostfixPerformHoverAction)));
+
+                    IsSpaceForge = spaceforge.GetTypeIs();
                 }
                 else
                 {

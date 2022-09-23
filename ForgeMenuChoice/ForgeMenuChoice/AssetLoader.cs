@@ -1,5 +1,4 @@
 ﻿using AtraBase.Toolkit.StringHandler;
-using AtraShared.Utils;
 using AtraShared.Utils.Extensions;
 using Microsoft.Xna.Framework.Graphics;
 using StardewModdingAPI.Events;

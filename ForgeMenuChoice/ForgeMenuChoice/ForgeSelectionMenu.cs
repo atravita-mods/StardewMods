@@ -103,21 +103,11 @@ internal sealed class ForgeSelectionMenu : IClickableMenu
             base.receiveLeftClick(x, y, playSound);
             if (this.backButton.containsPoint(x, y))
             {
-                this.Index--;
-                this.backButton.scale = this.backButton.baseScale - 1;
-                if (playSound)
-                {
-                    Game1.playSound("shwip");
-                }
+                this.RetreatPosition(playSound);
             }
             else if (this.forwardButton.containsPoint(x, y))
             {
-                this.Index++;
-                this.forwardButton.scale = this.forwardButton.baseScale - 1;
-                if (playSound)
-                {
-                    Game1.playSound("shwip");
-                }
+                this.AdvancePosition(playSound);
             }
         }
         catch (Exception ex)
@@ -217,6 +207,34 @@ internal sealed class ForgeSelectionMenu : IClickableMenu
         catch (Exception ex)
         {
             ModEntry.ModMonitor.Log($"Ran into difficulties trying to draw smol menu!\n{ex}", LogLevel.Error);
+        }
+    }
+
+    /// <summary>
+    /// Retreat a position on the menu.
+    /// </summary>
+    /// <param name="playSound">Whether or not to play a sound.</param>
+    internal void RetreatPosition(bool playSound)
+    {
+        this.Index--;
+        this.backButton.scale = this.backButton.baseScale - 1;
+        if (playSound)
+        {
+            Game1.playSound("shwip");
+        }
+    }
+
+    /// <summary>
+    /// Advance a position on the menu.
+    /// </summary>
+    /// <param name="playSound">Whether or not to play a sound.</param>
+    internal void AdvancePosition(bool playSound)
+    {
+        this.Index++;
+        this.forwardButton.scale = this.forwardButton.baseScale - 1;
+        if (playSound)
+        {
+            Game1.playSound("shwip");
         }
     }
 

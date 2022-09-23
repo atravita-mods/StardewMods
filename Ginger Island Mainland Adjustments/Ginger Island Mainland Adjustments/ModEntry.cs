@@ -150,7 +150,6 @@ internal sealed class ModEntry : Mod
         {
             // handle patches from annotations.
             harmony.PatchAll();
-            PhoneHandler.ApplyPatches(harmony);
             if (Globals.Config.DebugMode)
             {
                 ScheduleDebugPatches.ApplyPatches(harmony);
@@ -193,7 +192,7 @@ internal sealed class ModEntry : Mod
 
     private void OnButtonPressed(object? sender, ButtonPressedEventArgs e)
     {
-        if (MenuingExtensions.IsNormalGameplay())
+        if (e.Button.IsActionButton() && MenuingExtensions.IsNormalGameplay())
         {
             ShopHandler.HandleWillyShop(e);
             ShopHandler.HandleSandyShop(e);

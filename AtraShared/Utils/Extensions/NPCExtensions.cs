@@ -1,4 +1,8 @@
-﻿namespace AtraShared.Utils.Extensions;
+﻿using CommunityToolkit.Diagnostics;
+
+using Microsoft.Xna.Framework;
+
+namespace AtraShared.Utils.Extensions;
 
 /// <summary>
 /// Small extensions to Stardew's NPC class.
@@ -14,8 +18,13 @@ public static class NPCExtensions
         this NPC npc,
         string dialogueKey)
     {
-        npc.CurrentDialogue.Clear();
-        npc.CurrentDialogue.Push(new Dialogue(npc.Dialogue[dialogueKey], npc) { removeOnNextMove = true });
+        Guard.IsNotNull(npc);
+
+        if (!string.IsNullOrWhiteSpace(dialogueKey) && npc.Dialogue.TryGetValue(dialogueKey, out var dialogue))
+        {
+            npc.CurrentDialogue.Clear();
+            npc.CurrentDialogue.Push(new Dialogue(dialogue, npc) { removeOnNextMove = true });
+        }
     }
 
     /// <summary>
@@ -33,7 +42,7 @@ public static class NPCExtensions
         bool clearOnMovement = false)
     {
         string dialogue = npc.tryToGetMarriageSpecificDialogueElseReturnDefault(dialogueKey);
-        if (string.IsNullOrEmpty(dialogue))
+        if (string.IsNullOrWhiteSpace(dialogue))
         {
             return false;
         }
@@ -101,5 +110,18 @@ public static class NPCExtensions
             return false;
         }
         return scheduleData.TryGetValue(scheduleKey, out rawData);
+    }
+
+    public static Vector2 GetFacingTile(this Character npc)
+    {
+        Vector2 tile = npc.Position / Game1.tileSize;
+        return npc.facingDirection.Get() switch
+        {
+            Game1.up => new(tile.X, tile.Y - 1),
+            Game1.down => new(tile.X, tile.Y + 1),
+            Game1.left => new(tile.X - 1, tile.Y),
+            Game1.right => new(tile.X + 1, tile.Y),
+            _ => tile,
+        };
     }
 }

@@ -66,7 +66,7 @@ internal static class TokenPurchasePatch
 
                 responses.Add(new Response("No", Game1.content.LoadString(@"Strings\Lexicon:QuestionDialogue_No")).SetHotKey(Keys.Escape));
 
-                Game1.activeClickableMenu = new DialogueAndAction(I18n.BuyCasino(), responses, actions);
+                Game1.activeClickableMenu = new DialogueAndAction(I18n.BuyCasino(), responses, actions, ModEntry.InputHelper);
                 __result = true;
                 return false;
             }

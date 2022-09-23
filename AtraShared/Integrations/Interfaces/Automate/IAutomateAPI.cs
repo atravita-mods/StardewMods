@@ -1,6 +1,4 @@
-﻿using Microsoft.Xna.Framework;
-
-namespace AtraShared.Integrations.Interfaces.Automate;
+﻿namespace AtraShared.Integrations.Interfaces.Automate;
 
 /// <summary>
 /// The API for Automate.

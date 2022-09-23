@@ -1,5 +1,5 @@
 {
-    "Format": "1.23.0",
+    "Format": "1.27.0",
     "ConfigSchema": {
         "AllowedSkills": {
             "AllowValues": "Farming, Fishing, Foraging, Combat, Mining, Cooking, ArtisanGoods, Ranching, Gifting",

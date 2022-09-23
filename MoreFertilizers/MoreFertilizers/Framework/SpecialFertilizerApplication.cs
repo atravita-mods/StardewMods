@@ -1,5 +1,4 @@
 ﻿using AtraCore.Utilities;
-using AtraShared.Menuing;
 using AtraShared.Utils;
 using AtraShared.Utils.Extensions;
 using HarmonyLib;
@@ -27,15 +26,14 @@ internal static class SpecialFertilizerApplication
     /// <param name="helper">SMAPI's input helper.</param>
     internal static void ApplyFertilizer(ButtonPressedEventArgs e, IInputHelper helper)
     {
-        if (!MenuingExtensions.IsNormalGameplay() || !(e.Button.IsUseToolButton() || e.Button.IsActionButton())
-            || Game1.player.ActiveObject is not SObject obj || obj.bigCraftable.Value)
+        if (Game1.player.ActiveObject is not SObject obj || obj.bigCraftable.Value)
         {
             return;
         }
 
         Vector2 placementtile;
-        if (PlaceHandler.CanPlaceFertilizer(obj, Game1.currentLocation, e.Cursor.Tile)
-            && Utility.withinRadiusOfPlayer(((int)e.Cursor.Tile.X * 64) + 32, ((int)e.Cursor.Tile.Y * 64) + 32, PLACEMENTRADIUS, Game1.player))
+        if (Utility.withinRadiusOfPlayer(((int)e.Cursor.Tile.X * 64) + 32, ((int)e.Cursor.Tile.Y * 64) + 32, PLACEMENTRADIUS, Game1.player)
+            && PlaceHandler.CanPlaceFertilizer(obj, Game1.currentLocation, e.Cursor.Tile))
         {
             placementtile = e.Cursor.Tile;
         }

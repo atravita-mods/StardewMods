@@ -1,11 +1,8 @@
 ﻿using System.Reflection;
 using System.Reflection.Emit;
-using System.Runtime.CompilerServices;
-using AtraBase.Toolkit;
 using AtraBase.Toolkit.Extensions;
 using AtraBase.Toolkit.StringHandler;
 using AtraCore.Framework.ReflectionManager;
-using AtraShared.Niceties;
 using AtraShared.Utils.Extensions;
 using AtraShared.Utils.HarmonyHelper;
 using HarmonyLib;
@@ -13,9 +10,13 @@ using Netcode;
 
 namespace StopRugRemoval.HarmonyPatches.Niceties.CrashHandling;
 
+/// <summary>
+/// Holds patches that fixes the birthday gift crash.
+/// </summary>
 [HarmonyPatch]
 internal static class FixBirthdayGifts
 {
+    [HarmonyFinalizer]
     [HarmonyPatch(typeof(NPC), nameof(NPC.getFavoriteItem))]
     [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Harmony convention.")]
     private static Exception? FinalizeGiftSelection(Exception __exception, ref SObject? __result, NPC __instance)

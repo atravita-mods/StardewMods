@@ -6,6 +6,12 @@
 <!-- Figure out how to replace the reference to coffee in the night market dialogue?-->
 <!-- Make it so notifications do not go away until dismissed? -->
 
+#### Version 1.1.1
+* Some menus now accept arrow keys.
+* Internal improvements (mostly wrt enums).
+* Jukebox now checks your current location, not the mainland, for the is-it-raining check.
+* Adds a way to flip fruit trees and crops. Yes I am this petty.
+
 #### Version 1.1.0
 * Move to using AtraCore.
 * Spanish translation, thanks to [Mistyspring](https://github.com/misty-spring)!

@@ -1,10 +1,11 @@
 ﻿using AtraCore.Utilities;
 using AtraShared.Integrations;
-using AtraShared.Integrations.Interfaces;
+using AtraShared.Integrations.Interfaces.ContentPatcher;
 using AtraShared.MigrationManager;
 using AtraShared.Utils.Extensions;
 using HarmonyLib;
 using Microsoft.Xna.Framework;
+using PamTries.Framework;
 #if DEBUG
 using PamTries.HarmonyPatches;
 #endif
@@ -13,7 +14,7 @@ using StardewModdingAPI.Events;
 namespace PamTries;
 
 /// <inheritdoc />
-internal class ModEntry : Mod
+internal sealed class ModEntry : Mod
 {
     private static readonly string[] SyncedConversationTopics = new string[2] { "PamTriesRehab", "PamTriesRehabHoneymoon" };
     private Random? random;
@@ -38,6 +39,10 @@ internal class ModEntry : Mod
         helper.Events.GameLoop.DayStarted += DialogueManager.GrandKidsDialogue;
         helper.Events.GameLoop.DayEnding += this.DayEnd;
 
+        helper.Events.Content.AssetReady += this.OnAssetReady;
+
+        helper.Events.Content.AssetRequested += this.OnAssetRequested;
+
         this.ApplyPatches(new Harmony(this.ModManifest.UniqueID));
     }
 
@@ -60,6 +65,7 @@ internal class ModEntry : Mod
     private void DayStarted(object? sender, DayStartedEventArgs e)
         => PTUtilities.PopulateLexicon(this.Helper.GameContent);
 
+    [EventPriority(EventPriority.High)]
     private void SaveLoaded(object? sender, SaveLoadedEventArgs e)
     {
         this.SetPamMood((int)Game1.stats.DaysPlayed);
@@ -72,8 +78,8 @@ internal class ModEntry : Mod
         }
 
         MultiplayerHelpers.AssertMultiplayerVersions(this.Helper.Multiplayer, this.ModManifest, this.Monitor, this.Helper.Translation);
-
         PTUtilities.PopulateLexicon(this.Helper.GameContent);
+
         this.migrator = new(this.ModManifest, this.Helper, this.Monitor);
         if (!this.migrator.CheckVersionInfo())
         {
@@ -84,6 +90,9 @@ internal class ModEntry : Mod
             this.migrator = null;
         }
     }
+
+    private void OnAssetRequested(object? sender, AssetRequestedEventArgs e)
+        => AssetManager.Apply(e);
 
     /// <summary>
     /// Writes migration data then detaches the migrator.
@@ -135,15 +144,12 @@ internal class ModEntry : Mod
             {
                 if (Context.IsWorldReady)
                 {
-                    return new[] { this.GetPamMood() };
+                    return new[] { this.mood.ToStringFast() };
                 }
                 return null;
             });
         }
     }
-
-    private string GetPamMood()
-        => this.mood.ToString();
 
     private void SetPamMood(int daysPlayed)
     {
@@ -264,5 +270,10 @@ internal class ModEntry : Mod
                 }
             }
         }
+    }
+
+    private void OnAssetReady(object? sender, AssetReadyEventArgs e)
+    {
+        AlternativeBusDriverManager.MonitorSchedule(e);
     }
 }

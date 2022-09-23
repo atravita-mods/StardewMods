@@ -1,6 +1,8 @@
 ﻿using System.Diagnostics;
 using System.Runtime;
+
 using AtraShared.Schedules.DataModels;
+using AtraShared.Utils;
 using AtraShared.Utils.Extensions;
 using GingerIslandMainlandAdjustments.AssetManagers;
 using GingerIslandMainlandAdjustments.CustomConsoleCommands;
@@ -220,19 +222,18 @@ internal static class GIScheduler
         CurrentAdventurers = null;
 
         List<NPC> visitors = new(capacity);
-        HashSet<NPC> valid_visitors = new(30); // this is probably an undercount, but better than 4.
+        HashSet<NPC> valid_visitors = new(32); // this is probably an undercount, but better than 4.
 
         // For some reason, Utility.GetAllCharacters searches the farm too.
-        foreach (GameLocation loc in Game1.locations)
+
+        foreach (NPC npc in NPCHelpers.GetNPCs())
         {
-            foreach (NPC npc in loc.characters)
+            if (npc is not null && IslandSouth.CanVisitIslandToday(npc) && !explorers.Contains(npc))
             {
-                if (IslandSouth.CanVisitIslandToday(npc) && !explorers.Contains(npc))
-                {
-                    valid_visitors.Add(npc);
-                }
+                valid_visitors.Add(npc);
             }
         }
+        
 
         if (Globals.SaveDataModel is not null)
         {
@@ -254,20 +255,32 @@ internal static class GIScheduler
             foreach (string key in IslandGroups.Keys)
             {
                 // Filter out groups where one member can't make it or are too big
-                if (IslandGroups[key].Count <= capacity - visitors.Count && IslandGroups[key].All((NPC npc) => valid_visitors.Contains(npc)))
+                // Except for spouses, we'll just randomly pick until we hit the capacity later.
+                if ((IslandGroups[key].Count <= capacity - visitors.Count || key == "allSpouses")
+                    && IslandGroups[key].All((NPC npc) => valid_visitors.Contains(npc)))
                 {
                     groupkeys.Add(key);
                 }
             }
+
             if (groupkeys.Count > 0)
             {
                 CurrentGroup = Utility.GetRandom(groupkeys, random);
                 Globals.ModMonitor.DebugOnlyLog($"Group {CurrentGroup} headed to Island.", LogLevel.Debug);
-                visitors.AddRange(IslandGroups[CurrentGroup]);
-                CurrentVisitingGroup = IslandGroups[CurrentGroup];
+
+                HashSet<NPC>? group = IslandGroups[CurrentGroup];
+                if (CurrentGroup == "allSpouses" && group.Count > capacity)
+                {
+                    group = group.OrderBy((_) => Game1.random.Next()).Take(capacity).ToHashSet();
+                }
+
+                visitors.AddRange(group);
+                CurrentVisitingGroup = group;
                 valid_visitors.ExceptWith(visitors);
             }
         }
+
+        // Add Gus (even if we go over capacity, he has a specific standing spot).
         if (Game1.getCharacterFromName("Gus") is NPC gus && !visitors.Contains(gus) && valid_visitors.Contains(gus)
             && Globals.Config.GusDayAsShortString().Equals(Game1.shortDayNameFromDayOfSeason(Game1.dayOfMonth), StringComparison.OrdinalIgnoreCase)
             && Globals.Config.GusChance > random.NextDouble())

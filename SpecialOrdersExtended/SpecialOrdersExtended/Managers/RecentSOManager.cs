@@ -38,7 +38,7 @@ internal class RecentSOManager
     {
         if (recentCompletedSO is null)
         {
-            throw new SaveNotLoadedError();
+            ASThrowHelper.ThrowSaveNotLoaded();
         }
         recentCompletedSO.Save();
     }
@@ -51,7 +51,7 @@ internal class RecentSOManager
     {
         if (recentCompletedSO is null)
         {
-            throw new SaveNotLoadedError();
+            ASThrowHelper.ThrowSaveNotLoaded();
         }
         recentCompletedSO.SaveTemp();
     }
@@ -73,11 +73,12 @@ internal class RecentSOManager
     {
         if(recentCompletedSO is null)
         {
-            throw new SaveNotLoadedError();
+            ASThrowHelper.ThrowSaveNotLoaded();
+            return;
         }
         List<string> keysRemoved = recentCompletedSO.dayUpdate(daysplayed);
         DialogueManager.ClearRepeated(keysRemoved);
-        ModEntry.ModMonitor.DebugLog($"Keys removed from Recent Completed SOs: {string.Join(", ", keysRemoved)}");
+        ModEntry.ModMonitor.LogIfVerbose(() => $"Keys removed from Recent Completed SOs: {string.Join(", ", keysRemoved)}");
     }
 
     /// <summary>
@@ -195,7 +196,7 @@ internal class RecentSOManager
     {
         if (!Context.IsWorldReady)
         {
-            throw new SaveNotLoadedError();
+            ASThrowHelper.ThrowSaveNotLoaded();
         }
         return recentCompletedSO!.IsWithinXDays(questkey, days);
     }

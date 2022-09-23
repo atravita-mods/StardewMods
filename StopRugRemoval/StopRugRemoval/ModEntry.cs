@@ -12,6 +12,7 @@ using StardewModdingAPI.Utilities;
 using StardewValley.Locations;
 using StardewValley.Objects;
 using StopRugRemoval.Configuration;
+using StopRugRemoval.Framework.Niceties;
 using StopRugRemoval.HarmonyPatches;
 using StopRugRemoval.HarmonyPatches.Confirmations;
 using StopRugRemoval.HarmonyPatches.Niceties;
@@ -90,6 +91,8 @@ internal sealed class ModEntry : Mod
         helper.Events.Player.Warped += this.Player_Warped;
         helper.Events.GameLoop.ReturnedToTitle += this.ReturnedToTitle;
 
+        helper.Events.Input.ButtonPressed += this.OnButtonPressed;
+
         helper.Events.Content.AssetRequested += this.OnAssetRequested;
         helper.Events.Content.AssetsInvalidated += this.OnAssetInvalidated;
         helper.Events.Content.LocaleChanged += this.OnLocaleChange;
@@ -99,6 +102,9 @@ internal sealed class ModEntry : Mod
 
         helper.Events.Specialized.LoadStageChanged += this.OnLoadStageChanged;
     }
+
+    private void OnButtonPressed(object? sender, ButtonPressedEventArgs e)
+        => CropAndTreeFlipper.OnButtonPressed(e, this.Helper.Input);
 
     /// <summary>
     /// Unfucks the inventory size.
@@ -162,7 +168,7 @@ internal sealed class ModEntry : Mod
     /// IE - patches on other mods.
     /// </summary>
     /// <param name="harmony">A harmony instance.</param>
-    private void ApplyLatePatches(Harmony harmony)
+    private void ApplyPatches(Harmony harmony)
     {
         try
         {
@@ -188,7 +194,7 @@ internal sealed class ModEntry : Mod
     private void OnGameLaunch(object? sender, GameLaunchedEventArgs e)
     {
         PlantGrassUnder.GetSmartBuildingBuildMode(this.Helper.ModRegistry);
-        this.ApplyLatePatches(new Harmony(this.ModManifest.UniqueID));
+        this.ApplyPatches(new Harmony(this.ModManifest.UniqueID));
 
         GMCM = new(this.Monitor, this.Helper.Translation, this.Helper.ModRegistry, this.ModManifest);
         if (GMCM.TryGetAPI())

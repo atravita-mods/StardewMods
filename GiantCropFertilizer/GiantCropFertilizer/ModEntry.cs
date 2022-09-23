@@ -10,8 +10,7 @@ using GiantCropFertilizer.DataModels;
 using GiantCropFertilizer.HarmonyPatches;
 using HarmonyLib;
 using StardewModdingAPI.Events;
-using StardewValley.Objects;
-using StardewValley.TerrainFeatures;
+using StardewValley.Buildings;
 using AtraUtils = AtraShared.Utils.Utils;
 
 namespace GiantCropFertilizer;
@@ -68,17 +67,10 @@ internal sealed class ModEntry : Mod
         I18n.Init(helper.Translation);
         ModMonitor = this.Monitor;
 
-        helper.Events.Content.AssetRequested += this.OnAssetRequested;
         Config = AtraUtils.GetConfigOrDefault<ModConfig>(helper, this.Monitor);
 
         helper.Events.GameLoop.GameLaunched += this.OnGameLaunched;
-        helper.Events.GameLoop.SaveLoaded += this.OnSaveLoaded;
-
-        helper.Events.GameLoop.ReturnedToTitle += this.OnReturnedToTitle;
     }
-
-    private void OnAssetRequested(object? sender, AssetRequestedEventArgs e)
-        => AssetEditor.HandleAssetRequested(e);
 
     private void OnSaved(object? sender, SavedEventArgs e)
     {
@@ -135,6 +127,12 @@ internal sealed class ModEntry : Mod
                 this.Monitor.Log("Found Dynamic Game Assets, applying compat patches", LogLevel.Info);
                 CropTranspiler.ApplyDGAPatches(harmony);
             }
+
+            if (new Version(1, 6) > new Version(Game1.version))
+            {
+                this.Monitor.Log("Applying patch to restore giant crops to save locations", LogLevel.Debug);
+                FixSaveThing.ApplyPatches(harmony);
+            }
         }
         catch (Exception ex)
         {
@@ -158,6 +156,10 @@ internal sealed class ModEntry : Mod
                 return;
             }
         }
+
+        // Wait to hook events until after we know JA can handle our items.
+        this.Helper.Events.GameLoop.SaveLoaded += this.OnSaveLoaded;
+        this.Helper.Events.GameLoop.ReturnedToTitle += this.OnReturnedToTitle;
 
         { // GMCM integration
             GMCMHelper gmcmHelper = new(this.Monitor, this.Helper.Translation, this.Helper.ModRegistry, this.ModManifest);
@@ -234,22 +236,35 @@ internal sealed class ModEntry : Mod
      * *******/
 
     // Not quite sure why, but JA drops all IDs when returning to title. We're doing that too.
-    [EventPriority(EventPriority.High)]
+    [EventPriority(EventPriority.High + 100)]
     private void OnReturnedToTitle(object? sender, ReturnedToTitleEventArgs e)
         => giantCropFertilizerID = -1;
 
     private void JAIdsFixed(object? sender, EventArgs e)
-        => this.FixIds();
+    {
+        try
+        {
+            this.FixIds();
+        }
+        catch (Exception ex)
+        {
+            this.Monitor.Log($"Failed in trying to fix ids:\n\n{ex}", LogLevel.Error);
+        }
+    }
 
     private void FixIds()
     {
+        // reset the ID, ask for it again from JA?
+        giantCropFertilizerID = -1;
+
         int newID = GiantCropFertilizerID;
         if (newID == -1 || !Context.IsMainPlayer)
         {
             return;
         }
 
-        if (this.Helper.Data.ReadGlobalData<GiantCropFertilizerIDStorage>(SAVESTRING) is not GiantCropFertilizerIDStorage storedIDCls)
+        if (this.Helper.Data.ReadGlobalData<GiantCropFertilizerIDStorage>(SAVESTRING) is not GiantCropFertilizerIDStorage storedIDCls
+            || storedIDCls.ID == -1)
         {
             ModMonitor.Log("No need to fix IDs, not installed before.");
             return;
@@ -285,23 +300,30 @@ internal sealed class ModEntry : Mod
     {
         // unhook event
         this.solidFoundationsAPI!.AfterBuildingRestoration -= this.AfterSFBuildingRestore;
-        if (SolidFoundationShims.IsSFBuilding is null)
+        try
         {
-            this.Monitor.Log("Could not get a handle on SF's building class, deshuffling code will fail!", LogLevel.Error);
-        }
-        else if (this.oldID == -1 || this.newID == -1)
-        {
-            this.Monitor.Log("IdMap was not set correctly, deshuffling code will fail.", LogLevel.Error);
-        }
-        else
-        {
-            foreach (var building in GameLocationUtils.GetBuildings())
+            if (SolidFoundationShims.IsSFBuilding is null)
             {
-                if (SolidFoundationShims.IsSFBuilding?.Invoke(building) == true)
+                this.Monitor.Log("Could not get a handle on SF's building class, deshuffling code will fail!", LogLevel.Error);
+            }
+            else if (this.oldID == -1 || this.newID == -1)
+            {
+                this.Monitor.Log("IdMap was not set correctly, deshuffling code will fail.", LogLevel.Error);
+            }
+            else
+            {
+                foreach (Building? building in GameLocationUtils.GetBuildings())
                 {
-                    building.indoors.Value?.FixIDsInLocation(this.oldID, this.newID);
+                    if (SolidFoundationShims.IsSFBuilding?.Invoke(building) == true)
+                    {
+                        building.indoors.Value?.FixIDsInLocation(this.oldID, this.newID);
+                    }
                 }
             }
+        }
+        catch (Exception ex)
+        {
+            this.Monitor.Log($"Failed in deshuffling IDs in SF buildings:\n\n{ex}", LogLevel.Error);
         }
         this.oldID = -1;
         this.newID = -1;

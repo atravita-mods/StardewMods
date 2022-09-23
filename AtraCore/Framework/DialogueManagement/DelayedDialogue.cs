@@ -1,11 +1,11 @@
-﻿using Microsoft.Toolkit.Diagnostics;
+﻿using CommunityToolkit.Diagnostics;
 
 namespace AtraCore.Framework.DialogueManagement;
 
 /// <summary>
 /// A dialogue to delay.
 /// </summary>
-public readonly struct DelayedDialogue
+public readonly struct DelayedDialogue : IComparable<DelayedDialogue>, IEquatable<DelayedDialogue>
 {
     private readonly int time;
     private readonly Dialogue dialogue;
@@ -27,6 +27,14 @@ public readonly struct DelayedDialogue
         this.npc = npc;
     }
 
+    /// <inheritdoc />
+    public int CompareTo(DelayedDialogue other)
+        => this.time - other.time;
+
+    /// <inheritdoc />
+    public bool Equals(DelayedDialogue other)
+        => this.time == other.time && this.npc.Name == other.npc.Name && this.dialogue.dialogues.SequenceEqual(other.dialogue.dialogues);
+
     /// <summary>
     /// Pushes the delayed dialogue onto the NPC's stack if it's past time to do so..
     /// </summary>
@@ -34,7 +42,7 @@ public readonly struct DelayedDialogue
     /// <returns>True if pushed, false otherwise.</returns>
     public bool PushIfPastTime(int currenttime)
     {
-        if (currenttime > this.time)
+        if (currenttime >= this.time)
         {
             this.npc.CurrentDialogue.Push(this.dialogue);
             return true;

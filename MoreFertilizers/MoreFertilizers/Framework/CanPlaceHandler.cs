@@ -1,7 +1,7 @@
 ﻿using AtraCore.Utilities;
 using AtraShared.Utils;
 using AtraShared.Utils.Extensions;
-using Microsoft.Toolkit.Diagnostics;
+using CommunityToolkit.Diagnostics;
 using Microsoft.Xna.Framework;
 using StardewValley.Buildings;
 using StardewValley.Locations;
@@ -78,7 +78,7 @@ public sealed class CanPlaceHandler : IMoreFertilizersAPI
             return false;
         }
 
-        Guard.IsNotNull(obj, nameof(obj));
+        Guard.IsNotNull(obj);
         if (obj.ParentSheetIndex == -1 || obj.bigCraftable.Value)
         {
             return false;
@@ -146,7 +146,7 @@ public sealed class CanPlaceHandler : IMoreFertilizersAPI
     /// <inheritdoc />
     public bool TryPlaceFertilizer(SObject obj, GameLocation loc, Vector2 tile)
     {
-        Guard.IsNotNull(obj, nameof(obj));
+        Guard.IsNotNull(obj);
         if (!this.CanPlaceFertilizer(obj, loc, tile))
         {
             return false;
@@ -252,7 +252,7 @@ public sealed class CanPlaceHandler : IMoreFertilizersAPI
     /// <inheritdoc />
     public void AnimateFertilizer(SObject obj, GameLocation loc, Vector2 tile)
     {
-        Guard.IsNotNull(obj, nameof(obj));
+        Guard.IsNotNull(obj);
         if (obj.ParentSheetIndex == ModEntry.FishFoodID || obj.ParentSheetIndex == ModEntry.DeluxeFishFoodID || obj.ParentSheetIndex == ModEntry.DomesticatedFishFoodID)
         {
             Vector2 placementtile = (tile * 64f) + new Vector2(32f, 32f);

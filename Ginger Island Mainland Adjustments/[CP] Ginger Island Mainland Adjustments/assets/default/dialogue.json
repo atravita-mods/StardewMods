@@ -49,7 +49,7 @@
             "Action": "EditData",
             "Target": "Characters/Dialogue/Demetrius",
             "Entries": {
-                "Resort_IslandNorth": "@, I wish I had some more time to study the unique folliage of this island today....",
+                "Resort_IslandNorth": "@, I wish I had some more time to study the unique foliage of this island today....",
                 "Resort_Adventure": "I'm looking forward to analyzing the ecology of the island today!",
                 "Resort_Volcano": "@, did you know that this volcano only appeared here about ten thousand years back?",
                 "Resort_Volcano_2": "Volcanos can also form on other planets! The biggest one in the solar system is Olympus Mons on Mars.",
@@ -68,7 +68,7 @@
                 "Resort_IslandNorth": "@, have you looked at these coconut trees? Something's a little different about them...",
                 "Resort_Adventure": "@, I'm looking forward to spending a day out here!",
                 "Resort_Volcano": "I wonder if Dad will let me explore in there...Probably not.",
-                "Resort_Tent": "This is making me want to become an archeologist!",
+                "Resort_Tent": "This is making me want to become an archaeologist!",
                 "Resort_AdventureReturn": "Ah, that was a nice day! I'm ready to head home now, though."
             }
         },

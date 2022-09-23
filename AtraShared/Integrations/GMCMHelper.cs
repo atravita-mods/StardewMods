@@ -5,6 +5,7 @@ using AtraShared.Integrations.GMCMAttributes;
 using AtraShared.Integrations.Interfaces;
 using AtraShared.Utils;
 using AtraShared.Utils.Extensions;
+using CommunityToolkit.Diagnostics;
 using Microsoft.Xna.Framework;
 using StardewModdingAPI.Utilities;
 
@@ -33,9 +34,9 @@ public sealed class GMCMHelper : IntegrationHelper
 #region cache
 
     [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Stylecop doesn't understand records.")]
-    private readonly record struct cachekey(Type Config, Type TEnum);
+    private readonly record struct CacheKey(Type Config, Type TEnum);
 
-    private static readonly ConcurrentDictionary<cachekey, MethodInfo> enumCache = new();
+    private static readonly ConcurrentDictionary<CacheKey, MethodInfo> enumCache = new();
 #endregion
 
     private readonly IManifest manifest;
@@ -355,7 +356,8 @@ public sealed class GMCMHelper : IntegrationHelper
     {
         if (!property.PropertyType.Equals(typeof(TEnum)))
         {
-            throw new ArgumentException($"Property {property.Name} is type {property.PropertyType.Name}, not {typeof(TEnum).Name}");
+            ThrowHelper.ThrowArgumentException($"Property {property.Name} is type {property.PropertyType.Name}, not {typeof(TEnum).Name}");
+            return this;
         }
         if (property.GetGetMethod() is not MethodInfo getter || property.GetSetMethod() is not MethodInfo setter)
         {
@@ -389,10 +391,11 @@ public sealed class GMCMHelper : IntegrationHelper
         string? fieldID = null)
     {
         Type tEnum = property.PropertyType;
-        cachekey key = new(typeof(TModConfig), tEnum);
+        CacheKey key = new(typeof(TModConfig), tEnum);
         if (!enumCache.TryGetValue(key, out MethodInfo? realized))
         {
-            realized = this.GetType().GetMethods().Where((method) => method.Name == nameof(this.AddEnumOption) && method.GetGenericArguments().Length == 2)
+            realized = this.GetType().GetMethods()
+                .Where((method) => method.Name == nameof(this.AddEnumOption) && method.GetGenericArguments().Length == 2)
                 .First()
                 .MakeGenericMethod(typeof(TModConfig), tEnum);
             enumCache[key] = realized;
@@ -470,7 +473,7 @@ public sealed class GMCMHelper : IntegrationHelper
         }
         else
         {
-            if (min is null || max is null || interval is null)
+            if (min is null || max is null || interval is null || formatValue is null)
             {
                 Attribute[]? attributes = Attribute.GetCustomAttributes(property);
                 foreach (var attribute in attributes)
@@ -855,6 +858,7 @@ public sealed class GMCMHelper : IntegrationHelper
     }
 
 #region default
+
     /// <summary>
     /// Generates a basic GMCM config.
     /// </summary>

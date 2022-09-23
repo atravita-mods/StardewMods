@@ -35,4 +35,8 @@
     <Using Alias="SObject" Include="StardewValley.Object" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="HarmonyPatches\SlimeBallPatches\" />
+  </ItemGroup>
+
 </Project>

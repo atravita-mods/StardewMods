@@ -1,6 +1,9 @@
 ﻿Changelog
 ============
 
+#### Version 0.1.2
+* Internal optimizations
+
 #### Version 0.1.1
 * Bump version number of dependencies.
 

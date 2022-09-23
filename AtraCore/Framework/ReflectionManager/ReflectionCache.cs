@@ -1,7 +1,7 @@
 ﻿using System.Reflection;
 using AtraBase.Caching;
 using AtraBase.Toolkit.Reflection;
-using Microsoft.Toolkit.Diagnostics;
+using CommunityToolkit.Diagnostics;
 
 namespace AtraCore.Framework.ReflectionManager;
 

@@ -5,6 +5,7 @@ using AtraCore.Utilities;
 using AtraShared.ConstantsAndEnums;
 using AtraShared.Integrations;
 using AtraShared.Integrations.Interfaces;
+using AtraShared.Integrations.Interfaces.ContentPatcher;
 using AtraShared.MigrationManager;
 using AtraShared.Utils.Extensions;
 using HarmonyLib;
@@ -208,6 +209,12 @@ internal sealed class ModEntry : Mod
     private void Saving(object? sender, SavingEventArgs e)
     {
         this.Monitor.DebugOnlyLog("Event Saving raised");
+
+        if (!SpecialOrder.IsSpecialOrdersBoardUnlocked())
+        {
+            this.Monitor.Log($"Board is not open, skipping saving");
+            return;
+        }
 
         DialogueManager.Save(); // Save dialogue
 

@@ -1,6 +1,4 @@
 ﻿using AtraShared.ConstantsAndEnums;
-using AtraShared.Integrations;
-using AtraShared.Integrations.Interfaces.Automate;
 using AtraShared.Menuing;
 using AtraShared.Utils.Extensions;
 using HarmonyLib;
@@ -22,40 +20,33 @@ internal sealed class ModEntry : Mod
     /// </summary>
     internal static IMonitor ModMonitor { get; private set; } = null!;
 
+    internal static IGameContentHelper GameContentHelper { get; private set; } = null!;
+
     /// <inheritdoc />
     public override void Entry(IModHelper helper)
     {
         ModMonitor = this.Monitor;
+        GameContentHelper = helper.GameContent;
 
         helper.Events.Input.ButtonPressed += this.OnButtonPressed;
         helper.Events.GameLoop.DayEnding += this.OnDayEnding;
 
         helper.Events.GameLoop.SaveLoaded += this.OnSaveLoaded;
 
-        /*
-#if !DEBUG
-        if (!Constants.ApiVersion.IsOlderThan("3.16.0"))
-#endif
-        {
-            helper.Events.GameLoop.GameLaunched += this.OnGameLaunched;
-        }
-#if !DEBUG
-        else
-        {
-            this.Monitor.Log($"Automate support not complete for now :(");
-        }
-#endif
-        */
+        helper.Events.Content.AssetRequested += this.OnAssetRequested;
+        helper.Events.Content.AssetsInvalidated += this.OnAssetInvalidated;
 
         this.ApplyPatches(new Harmony(this.ModManifest.UniqueID));
     }
 
+    private void OnAssetInvalidated(object? sender, AssetsInvalidatedEventArgs e)
+        => AssetManager.Reset(e.NamesWithoutLocale);
+
+    private void OnAssetRequested(object? sender, AssetRequestedEventArgs e)
+        => AssetManager.Load(e);
+
     /// <inheritdoc />
     public override object? GetApi() => Api;
-
-    private void OnGameLaunched(object? sender, GameLaunchedEventArgs e)
-    {
-    }
 
     private void OnDayEnding(object? sender, DayEndingEventArgs e)
     {
@@ -104,7 +95,8 @@ internal sealed class ModEntry : Mod
 
     private void OnButtonPressed(object? sender, ButtonPressedEventArgs e)
     {
-        if (!MenuingExtensions.IsNormalGameplay() || !(e.Button.IsUseToolButton() || e.Button.IsActionButton()))
+        if (!(e.Button.IsUseToolButton() || e.Button.IsActionButton())
+            || !MenuingExtensions.IsNormalGameplay())
         {
             return;
         }

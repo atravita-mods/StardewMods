@@ -1,6 +1,4 @@
 ﻿using AtraBase.Toolkit;
-using AtraShared;
-using AtraShared.Utils.Extensions;
 using GingerIslandMainlandAdjustments.AssetManagers;
 using GingerIslandMainlandAdjustments.Configuration;
 using HarmonyLib;
@@ -107,6 +105,13 @@ internal static class IslandSouthPatches
                     // already false in code, ignore me for everyone else
                     return;
                 }
+            }
+
+            if (Globals.Config.RequireResortDialogue && !npc.Dialogue.ContainsKey("Resort"))
+            {
+                Globals.ModMonitor.Log($"{npc.Name} appears to lack resort dialogue, removing from pool.", LogLevel.Info);
+                __result = false;
+                return;
             }
 
             // if an NPC has a schedule for the specific day, don't allow them to go to the resort.

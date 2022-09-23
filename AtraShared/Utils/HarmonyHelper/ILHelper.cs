@@ -12,8 +12,8 @@ using System.Reflection.Emit;
 using System.Text;
 using AtraBase.Collections;
 using AtraShared.Utils.Extensions;
+using CommunityToolkit.Diagnostics;
 using HarmonyLib;
-using Microsoft.Toolkit.Diagnostics;
 
 namespace AtraShared.Utils.HarmonyHelper;
 
@@ -48,7 +48,7 @@ public sealed class ILHelper
         }
         else
         {
-            throw new InvalidOperationException($"Attempted to transpile a method without a body: {original.FullDescription()}");
+            ThrowHelper.ThrowInvalidOperationException($"Attempted to transpile a method without a body: {original.FullDescription()}");
         }
 
         this.Original = original;
@@ -144,10 +144,10 @@ public sealed class ILHelper
     /// </summary>
     /// <param name="index">Index to move to.</param>
     /// <returns>this.</returns>
-    /// <exception cref="IndexOutOfRangeException">Tried to move to an invalid location.</exception>
+    /// <exception cref="ArgumentOutOfRangeException">Tried to move to an invalid location.</exception>
     public ILHelper JumpTo(int index)
     {
-        Guard.IsBetweenOrEqualTo(index, 0, this.Codes.Count - 1, nameof(index));
+        Guard.IsBetweenOrEqualTo(index, 0, this.Codes.Count - 1);
         this.Pointer = index;
         return this;
     }
@@ -195,7 +195,7 @@ public sealed class ILHelper
     public ILHelper Advance(int steps)
     {
         this.Pointer += steps;
-        Guard.IsBetweenOrEqualTo(this.Pointer, 0, this.Codes.Count - 1, nameof(this.Pointer));
+        Guard.IsBetweenOrEqualTo(this.Pointer, 0, this.Codes.Count - 1);
         return this;
     }
 
@@ -614,6 +614,17 @@ ContinueSearchBackwards:
     /// <param name="labels">Labels to attach.</param>
     /// <returns>this.</returns>
     public ILHelper AttachLabel(params Label[] labels)
+    {
+        this.CurrentInstruction.labels.AddRange(labels);
+        return this;
+    }
+
+    /// <summary>
+    /// Attaches the labels to the current instruction.
+    /// </summary>
+    /// <param name="labels">Labels to attach.</param>
+    /// <returns>this.</returns>
+    public ILHelper AttachLabels(IEnumerable<Label> labels)
     {
         this.CurrentInstruction.labels.AddRange(labels);
         return this;

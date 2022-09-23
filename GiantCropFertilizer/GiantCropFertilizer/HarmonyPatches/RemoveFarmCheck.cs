@@ -1,6 +1,5 @@
 ﻿using System.Reflection;
 using System.Reflection.Emit;
-using AtraBase.Toolkit.Reflection;
 using AtraCore.Framework.ReflectionManager;
 using AtraShared.Utils.Extensions;
 using AtraShared.Utils.HarmonyHelper;
@@ -19,7 +18,7 @@ internal static class RemoveFarmCheck
     /// <param name="harmony">Harmony instance.</param>
     internal static void ApplyPatches(Harmony harmony)
     {
-        // use a lower priority to slot after other mods that might want to transpile this ethod as well.
+        // use a lower priority to slot after other mods that might want to transpile this method as well.
         harmony.Patch(
             original: typeof(Crop).GetCachedMethod(nameof(Crop.newDay), ReflectionCache.FlagTypes.InstanceFlags),
             transpiler: new HarmonyMethod(typeof(RemoveFarmCheck).GetCachedMethod(nameof(Transpiler), ReflectionCache.FlagTypes.StaticFlags), Priority.LowerThanNormal));

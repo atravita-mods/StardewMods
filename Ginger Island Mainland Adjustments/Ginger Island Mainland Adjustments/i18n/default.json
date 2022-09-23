@@ -110,6 +110,8 @@
   "mod-description": "Alters Ginger Island schedules so villagers don't proceed direct to bed. Alternatively, handles GI schedules.",
   "config.enforceGITiming.title": "Enforce GI schedule timing",
   "config.enforceGITiming.description": "If schedule points are too closely spaced, skip over them (with warning).",
+  "config.require_resort_dialogue.title": "Require Resort Dialogue",
+  "config.require_resort_dialogue.description":  "Prevents NPCs from visiting the resort if they do not have the base resort dialogue key 'Resort'.",
   "config.wear_island_clothing.title": "Wear Island Outfits",
   "config.wear_island_clothing.description": "Select whether or not island outfits should be worn",
   "config.scheduler.title": "Use Mod's Scheduler",

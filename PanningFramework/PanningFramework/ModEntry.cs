@@ -2,8 +2,6 @@
 using AtraShared.Utils.Extensions;
 using HarmonyLib;
 
-using AtraUtils = AtraShared.Utils.Utils;
-
 namespace PanningFramework;
 
 /// <inheritdoc />

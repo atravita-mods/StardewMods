@@ -1,4 +1,9 @@
-﻿using StardewModdingAPI.Events;
+﻿using AtraCore;
+using AtraCore.Models;
+
+using AtraShared.ConstantsAndEnums;
+
+using StardewModdingAPI.Events;
 using StardewModdingAPI.Utilities;
 using StardewValley.GameData;
 
@@ -43,7 +48,11 @@ internal static class AssetEditor
     /// <param name="e">Asset requested event arguments.</param>
     internal static void Edit(AssetRequestedEventArgs e)
     {
-        if (Utility.doesAnyFarmerHaveOrWillReceiveMail("seenBoatJourney"))
+        if (e.NameWithoutLocale.IsEquivalentTo(AtraCoreConstants.PrismaticMaskData))
+        {
+            e.Edit(EditPrismaticMasks);
+        }
+        else if (Utility.doesAnyFarmerHaveOrWillReceiveMail("seenBoatJourney"))
         {
             if (e.NameWithoutLocale.IsEquivalentTo(SPECIAL_ORDERS_LOCATION))
             {
@@ -57,6 +66,22 @@ internal static class AssetEditor
             {
                 e.Edit(EditMailImpl, AssetEditPriority.Early);
             }
+        }
+    }
+
+    private static void EditPrismaticMasks(IAssetData asset)
+    {
+        IAssetDataForDictionary<string, DrawPrismaticModel>? editor = asset.AsDictionary<string, DrawPrismaticModel>();
+
+        DrawPrismaticModel? prismatic = new()
+        {
+            ItemType = ItemTypeEnum.SObject,
+            Identifier = "Prismatic Fertilizer - More Fertilizers",
+        };
+
+        if (!editor.Data.TryAdd(prismatic.Identifier, prismatic))
+        {
+            ModEntry.ModMonitor.Log("Could not add prismatic fertilizer to DrawPrismatic", LogLevel.Warn);
         }
     }
 

@@ -42,11 +42,22 @@ internal static class PostfixBigSlimeConstructor
     [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Harmony convention.")]
     private static void GetExtraDropItemsPostfix(List<Item> __result)
     {
+        if (ModEntry.PrismaticSlimeRing == -1)
+        {
+            return;
+        }
+
         for (int i = 0; i < __result.Count; i++)
         {
-            if (__result[i].ParentSheetIndex == ModEntry.PrismaticSlimeRing && ModEntry.PrismaticSlimeRing != -1)
+            if (__result[i].ParentSheetIndex == ModEntry.PrismaticSlimeRing)
             {
+                var oldring = __result[i];
                 __result[i] = new Ring(ModEntry.PrismaticSlimeRing);
+
+                foreach ((string k, string v) in oldring.modData.Pairs)
+                {
+                    __result[i].modData[k] = v;
+                }
             }
         }
     }

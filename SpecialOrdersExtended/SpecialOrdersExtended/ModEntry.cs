@@ -345,8 +345,20 @@ internal sealed class ModEntry : Mod
         ModMonitor.Log($"{I18n.Analyzing()} {key}", LogLevel.Debug);
         try
         {
-            SpecialOrder.GetSpecialOrder(key, Game1.random.Next());
-            ModMonitor.Log($"\t{key} {I18n.Parsable()}", LogLevel.Debug);
+            SpecialOrder? specialOrder = SpecialOrder.GetSpecialOrder(key, Game1.random.Next());
+            if (specialOrder is not null)
+            {
+                ModMonitor.Log($"\t{key} {I18n.Parsable()}", LogLevel.Debug);
+                if (specialOrder.orderType.Value.Length != 0 && specialOrder.orderType.Value != "Qi")
+                {
+                    ModMonitor.Log($"\t\tNon-vanilla special order type {specialOrder.orderType.Value}", LogLevel.Debug);
+                }
+            }
+            else
+            {
+                ModMonitor.Log($"\t{key} {I18n.Unparsable()}", LogLevel.Error);
+                return false;
+            }
         }
         catch (Exception ex)
         {

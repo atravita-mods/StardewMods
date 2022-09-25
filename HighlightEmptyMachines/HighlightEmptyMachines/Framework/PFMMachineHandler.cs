@@ -8,39 +8,18 @@ using StardewModdingAPI.Utilities;
 namespace HighlightEmptyMachines.Framework;
 
 /// <summary>
-/// Enum to hold the possible PFM Machine statuses.
-/// </summary>
-internal enum PFMMachineStatus
-{
-    /// <summary>
-    /// This machine is enabled in settings and can recieve input.
-    /// </summary>
-    Enabled,
-
-    /// <summary>
-    /// This machine is invalid for some reason.
-    /// </summary>
-    Invalid,
-
-    /// <summary>
-    /// This machine is disabled in settings.
-    /// </summary>
-    Disabled,
-}
-
-/// <summary>
 /// Static class that handles PFM machines.
 /// </summary>
 internal static class PFMMachineHandler
 {
-    private static readonly PerScreen<Dictionary<int, PFMMachineStatus>> ValidMachinesPerScreen = new(() => new Dictionary<int, PFMMachineStatus>());
+    private static readonly PerScreen<Dictionary<int, MachineStatus>> ValidMachinesPerScreen = new(() => new Dictionary<int, MachineStatus>());
     private static readonly DefaultDict<int, HashSet<PFMMachineData>> Recipes = new(() => new HashSet<PFMMachineData>());
     private static IProducerFrameworkModAPI? pfmAPI = null;
 
     /// <summary>
     /// Gets a lookup table between machines and their current status.
     /// </summary>
-    internal static Dictionary<int, PFMMachineStatus> ValidMachines => ValidMachinesPerScreen.Value;
+    internal static Dictionary<int, MachineStatus> ValidMachines => ValidMachinesPerScreen.Value;
 
     /// <summary>
     /// Gets a list of PFM machines (for use in GMCM).
@@ -155,18 +134,18 @@ internal static class PFMMachineHandler
                         && recipe.AllowedWeathers.HasFlag(weather)
                         && (recipe.ValidLocations is null || recipe.ValidLocations.Contains(location.Name)))
                     {
-                        ValidMachines[machine] = PFMMachineStatus.Enabled;
+                        ValidMachines[machine] = MachineStatus.Enabled;
                         ModEntry.ModMonitor.DebugOnlyLog($"{machine.GetBigCraftableName()} is enabled");
                         goto Continue;
                     }
                 }
                 ModEntry.ModMonitor.DebugOnlyLog($"{machine.GetBigCraftableName()} is invalid");
-                ValidMachines[machine] = PFMMachineStatus.Invalid;
+                ValidMachines[machine] = MachineStatus.Invalid;
             }
             else
             {
                 ModEntry.ModMonitor.DebugOnlyLog($"{machine.GetBigCraftableName()} is disabled in config.");
-                ValidMachines[machine] = PFMMachineStatus.Disabled;
+                ValidMachines[machine] = MachineStatus.Disabled;
             }
 Continue:
             ;

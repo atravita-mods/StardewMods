@@ -33,14 +33,18 @@ internal class SObjectDrawTranspiler
             {
                 return ModEntry.Config.InvalidColor;
             }
+            else if (obj.ParentSheetIndex == 10 && BetterBeehousesIntegration.Status == MachineStatus.Invalid)
+            {
+                return ModEntry.Config.InvalidColor;
+            }
             return ModEntry.Config.EmptyColor;
         }
-        else if (PFMMachineHandler.ValidMachines.TryGetValue(obj.ParentSheetIndex, out PFMMachineStatus status))
+        else if (PFMMachineHandler.ValidMachines.TryGetValue(obj.ParentSheetIndex, out MachineStatus status))
         {
             return status switch
             {
-                PFMMachineStatus.Invalid => ModEntry.Config.InvalidColor,
-                PFMMachineStatus.Enabled => ModEntry.Config.EmptyColor,
+                MachineStatus.Invalid => ModEntry.Config.InvalidColor,
+                MachineStatus.Enabled => ModEntry.Config.EmptyColor,
                 _ => Color.White,
             };
         }

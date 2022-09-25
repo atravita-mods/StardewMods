@@ -37,6 +37,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Integrations\Interfaces\Fluent\IFluentAPI.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Integrations\Interfaces\Fluent\IFluentEnum.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Integrations\Interfaces\Fluent\IGameLocale.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Integrations\Interfaces\IBetterBeehousesAPI.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Integrations\Interfaces\IDynamicGameAssetsAPI.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Integrations\Interfaces\IEPUConditions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Integrations\Interfaces\IPregnancyRoleApi.cs" />

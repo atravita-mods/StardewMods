@@ -2,6 +2,7 @@
 using AtraCore.Utilities;
 using AtraShared.ConstantsAndEnums;
 using AtraShared.Integrations;
+using AtraShared.Menuing;
 using AtraShared.MigrationManager;
 using AtraShared.Schedules;
 using AtraShared.Utils.Extensions;
@@ -103,8 +104,15 @@ internal sealed class ModEntry : Mod
         helper.Events.Specialized.LoadStageChanged += this.OnLoadStageChanged;
     }
 
+    [EventPriority(EventPriority.High)]
     private void OnButtonPressed(object? sender, ButtonPressedEventArgs e)
-        => CropAndTreeFlipper.OnButtonPressed(e, this.Helper.Input);
+    {
+        if (MenuingExtensions.IsNormalGameplay())
+        {
+            _ = RecipeConsumer.ConsumeRecipeIfNeeded(e, this.Helper.Input)
+                || CropAndTreeFlipper.OnButtonPressed(e, this.Helper.Input);
+        }
+    }
 
     /// <summary>
     /// Unfucks the inventory size.

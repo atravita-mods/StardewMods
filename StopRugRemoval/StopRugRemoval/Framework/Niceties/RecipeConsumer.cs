@@ -1,25 +1,25 @@
 ﻿using AtraShared.Utils.Extensions;
 using HarmonyLib;
 
+using StardewModdingAPI.Events;
+
 namespace StopRugRemoval.Framework.Niceties;
 
 /// <summary>
 /// Lets you consume a recipe object to teach yourself the recipe.
 /// </summary>
-[HarmonyPatch(typeof(SObject))]
 internal static class RecipeConsumer
 {
-    [HarmonyPatch( nameof(SObject.performUseAction))]
-    [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Harmony convention.")]
-    private static void Postfix(SObject __instance, ref bool __result)
+    internal static bool ConsumeRecipeIfNeeded(ButtonPressedEventArgs e, IInputHelper helper)
     {
-        if (!__result && __instance.IsRecipe)
+        if (e.Button.IsActionButton() && Game1.player.ActiveObject?.IsRecipe == true
+            && Game1.player.ActiveObject.ConsumeRecipeImpl())
         {
-            __result = __instance.ConsumeRecipeImpl();
-            if (__result)
-            {
-                Game1.playSound("newRecipe");
-            }
+            Game1.playSound("newRecipe");
+            Game1.player.ActiveObject = null;
+            helper.Suppress(e.Button);
+            return true;
         }
+        return false;
     }
 }

@@ -46,6 +46,10 @@ internal sealed class ModEntry : Mod
         helper.Events.GameLoop.GameLaunched += this.OnGameLaunched;
         helper.Events.GameLoop.SaveLoaded += this.OnSaveLoaded;
         helper.Events.GameLoop.ReturnedToTitle += this.OnReturnedToTitle;
+
+        // beehouses
+        helper.Events.GameLoop.DayStarted += this.OnDayStarted;
+        helper.Events.Player.Warped += this.OnPlayerWarp;
     }
 
     /// <summary>
@@ -71,6 +75,7 @@ internal sealed class ModEntry : Mod
         this.ApplyPatches(new Harmony(this.ModManifest.UniqueID));
 
         PFMMachineHandler.TryGetAPI(this.Helper.ModRegistry);
+        BetterBeehousesIntegration.TryGetAPI(this.Helper.ModRegistry);
         this.gmcmHelper = new(this.Monitor, this.Helper.Translation, this.Helper.ModRegistry, this.ModManifest);
         if (this.gmcmHelper.TryGetAPI())
         {
@@ -79,8 +84,8 @@ internal sealed class ModEntry : Mod
         }
         if (this.Helper.ModRegistry.IsLoaded("Digus.ProducerFrameworkMod"))
         {
-            this.Helper.Events.Player.Warped += this.OnPlayerWarp;
-            this.Helper.Events.GameLoop.DayStarted += this.OnDayStarted;
+            this.Helper.Events.Player.Warped += this.PFMOnPlayerWarp;
+            this.Helper.Events.GameLoop.DayStarted += this.PFMOnDayStarted;
 
             this.Helper.ConsoleCommands.Add(
                 name: "av.hem.list_pfm_machines",
@@ -103,11 +108,17 @@ internal sealed class ModEntry : Mod
         }
     }
 
-    private void OnDayStarted(object? sender, DayStartedEventArgs e)
+    private void PFMOnDayStarted(object? sender, DayStartedEventArgs e)
         => PFMMachineHandler.RefreshValidityList(Game1.currentLocation);
 
-    private void OnPlayerWarp(object? sender, WarpedEventArgs e)
+    private void PFMOnPlayerWarp(object? sender, WarpedEventArgs e)
         => PFMMachineHandler.RefreshValidityList(e.NewLocation);
+
+    private void OnDayStarted(object? sender, DayStartedEventArgs e)
+        => BetterBeehousesIntegration.UpdateStatus(Game1.currentLocation);
+
+    private void OnPlayerWarp(object? sender, WarpedEventArgs e)
+        => BetterBeehousesIntegration.UpdateStatus(e.NewLocation);
 
     /// <summary>
     /// Sets up the basic GMCM (does not include PFM machines).
@@ -123,18 +134,28 @@ internal sealed class ModEntry : Mod
                     {
                         Config = new();
                         PFMMachineHandler.RefreshValidityList(Game1.currentLocation);
+                        BetterBeehousesIntegration.UpdateStatus(Game1.currentLocation);
                     },
                     save: () =>
                     {
                         this.Helper.AsyncWriteConfig(this.Monitor, Config);
                         PFMMachineHandler.RefreshValidityList(Game1.currentLocation);
+                        BetterBeehousesIntegration.UpdateStatus(Game1.currentLocation);
                     });
             }
             else
             {
                 this.gmcmHelper.Register(
-                reset: static () => Config = new(),
-                save: () => this.Helper.AsyncWriteConfig(this.Monitor, Config));
+                reset: static () =>
+                {
+                    Config = new();
+                    BetterBeehousesIntegration.UpdateStatus(Game1.currentLocation);
+                },
+                save: () =>
+                {
+                    this.Helper.AsyncWriteConfig(this.Monitor, Config);
+                    BetterBeehousesIntegration.UpdateStatus(Game1.currentLocation);
+                });
             }
             this.gmcmHelper.AddParagraph(I18n.ModDescription)
             .GenerateDefaultGMCM(static () => Config)

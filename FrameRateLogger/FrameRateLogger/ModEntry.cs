@@ -41,7 +41,7 @@ internal sealed class ModEntry : Mod
 
     private void OnUpdateTicked(object? sender, OneSecondUpdateTickedEventArgs e)
     {
-        if (this.FrameRateCounter is not null && this.FramerateGetter?.Invoke(this.FrameRateCounter) is int value)
+        if (Game1.game1.IsActive && this.FrameRateCounter is not null && this.FramerateGetter?.Invoke(this.FrameRateCounter) is int value)
         {
             this.Monitor.Log($"Current framerate on {Game1.ticks} is {value}", value < 30 ? LogLevel.Alert : LogLevel.Trace);
         }

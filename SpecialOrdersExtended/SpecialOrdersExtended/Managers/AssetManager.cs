@@ -19,7 +19,7 @@ internal static class AssetManager
     {
         if (e.NameWithoutLocale.IsEquivalentTo(AssetLocation))
         {
-            e.LoadFrom(EmptyContainers.GetEmptyDictionary<string, int>, AssetLoadPriority.Low);
+            e.LoadFrom(EmptyContainers.GetEmptyDictionary<string, string>, AssetLoadPriority.Low);
         }
     }
 
@@ -27,6 +27,6 @@ internal static class AssetManager
     /// Gets the duration override dictionary.
     /// </summary>
     /// <returns>The duration override dictionary.</returns>
-    internal static Dictionary<string, int> GetDurationOverride()
-        => Game1.content.Load<Dictionary<string, int>>(AssetLocation);
+    internal static Dictionary<string, string> GetDurationOverride()
+        => Game1.content.Load<Dictionary<string, string>>(AssetLocation);
 }

@@ -73,6 +73,8 @@ internal sealed class ModEntry : Mod
             return;
         }
 
+        Game1.player.mailReceived.OnElementChanged += this.MailReceived_OnElementChanged;
+
         MultiplayerHelpers.AssertMultiplayerVersions(this.Helper.Multiplayer, this.ModManifest, this.Monitor, this.Helper.Translation);
         DrawPrismatic.LoadPrismaticData();
 
@@ -85,6 +87,11 @@ internal sealed class ModEntry : Mod
         {
             this.migrator = null;
         }
+    }
+
+    private void MailReceived_OnElementChanged(Netcode.NetList<string, Netcode.NetString> list, int index, string oldValue, string newValue)
+    {
+        this.Monitor.Log($"{index}, {oldValue}, {newValue}", LogLevel.Alert);
     }
 
     /********

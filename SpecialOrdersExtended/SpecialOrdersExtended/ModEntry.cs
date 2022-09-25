@@ -431,7 +431,7 @@ internal sealed class ModEntry : Mod
     {
         if (Context.IsMainPlayer && Game1.player.team.specialOrders.Count > 0)
         {
-            HashSet<string> overrides = AssetManager.GetDurationOverride().Where(kvp => kvp.Value == -1).Select(kvp => kvp.Key).ToHashSet();
+            HashSet<string> overrides = AssetManager.GetDurationOverride().Where(kvp => kvp.Value == "-1").Select(kvp => kvp.Key).ToHashSet();
             if (overrides.Count == 0)
             {
                 return;

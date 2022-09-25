@@ -361,6 +361,20 @@ internal sealed class ModEntry : Mod
             return miraculousBeverages;
         }
     }
+
+    private static int seedyFertilizerID = -1;
+
+    internal static int SeedyFertilizerID
+    {
+        get
+        {
+            if (seedyFertilizerID == -1)
+            {
+                seedyFertilizerID = jsonAssets?.GetObjectId("Seedy Fertilizer - More Fertilizers") ?? -1;
+            }
+            return seedyFertilizerID;
+        }
+    }
 #pragma warning restore SA1201 // Elements should appear in the correct order
 #pragma warning restore SA1204 // Static elements should appear before instance elements
 
@@ -508,6 +522,7 @@ internal sealed class ModEntry : Mod
         prismaticFertilizerID = -1;
         rapidBushFertilizerID = -1;
         secretJojaFertilizerID = -1;
+        seedyFertilizerID = -1;
         treeTapperFertilizerID = -1;
         wisdomFertilizerID = -1;
 
@@ -550,6 +565,7 @@ internal sealed class ModEntry : Mod
                 PrismaticFertilizerID = PrismaticFertilizerID,
                 RapidBushFertilizerID = RapidBushFertilizerID,
                 SecretJojaFertilizerID = SecretJojaFertilizerID,
+                SeedyFertilizerID = SeedyFertilizerID,
                 TreeTapperFertilizerID = TreeTapperFertilizerID,
                 WisdomFertilizerID = WisdomFertilizerID,
             };
@@ -842,6 +858,11 @@ internal sealed class ModEntry : Mod
             PlantableFertilizerIDs.Add(MiraculousBeveragesID);
         }
 
+        if (SeedyFertilizerID != -1)
+        {
+            PlantableFertilizerIDs.Add(SeedyFertilizerID);
+        }
+
         if (SpecialFertilizerIDs.Count <= 0 && PlantableFertilizerIDs.Count <= 0)
         { // I have found no valid fertilizers. Just return.
             return;
@@ -963,6 +984,14 @@ internal sealed class ModEntry : Mod
         {
             idMapping.Add(storedIDs.MiraculousBeveragesID, MiraculousBeveragesID);
             storedIDs.MiraculousBeveragesID = MiraculousBeveragesID;
+        }
+
+        if (SeedyFertilizerID != -1
+            && storedIDs.SeedyFertilizerID != -1
+            && storedIDs.SeedyFertilizerID != SeedyFertilizerID)
+        {
+            idMapping.Add(storedIDs.SeedyFertilizerID, SeedyFertilizerID);
+            storedIDs.SeedyFertilizerID = SeedyFertilizerID;
         }
 
         // Update stored IDs for the special ones.

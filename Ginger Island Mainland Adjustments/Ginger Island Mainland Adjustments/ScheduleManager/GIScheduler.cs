@@ -225,7 +225,6 @@ internal static class GIScheduler
         HashSet<NPC> valid_visitors = new(32); // this is probably an undercount, but better than 4.
 
         // For some reason, Utility.GetAllCharacters searches the farm too.
-
         foreach (NPC npc in NPCHelpers.GetNPCs())
         {
             if (npc is not null && IslandSouth.CanVisitIslandToday(npc) && !explorers.Contains(npc))
@@ -233,7 +232,6 @@ internal static class GIScheduler
                 valid_visitors.Add(npc);
             }
         }
-        
 
         if (Globals.SaveDataModel is not null)
         {

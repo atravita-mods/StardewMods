@@ -2,17 +2,30 @@
 
 namespace LastDayToPlantRedux.Framework;
 
+/// <summary>
+/// Manages multiplayer stuff for this mod.
+/// </summary>
 internal static class MultiplayerManager
 {
-    internal static Farmer? agriculturalistFarmer { get; private set; } = null;
-
-    internal static Farmer? prestigedAgriculturalistFarmer { get; private set; } = null;
-
     /// <summary>
     /// Whether or het the code should check for a prestiged agriculturalist, for Walk of Life.
     /// </summary>
     private static bool shouldCheckPrestiged = false;
 
+    /// <summary>
+    /// Gets the farmer used as the agriculturalist farmer.
+    /// </summary>
+    internal static Farmer? AgriculturalistFarmer { get; private set; } = null;
+
+    /// <summary>
+    /// Gets the farmer used as the prestiged agriculturalist farmer.
+    /// </summary>
+    internal static Farmer? PrestigedAgriculturalistFarmer { get; private set; } = null;
+
+    /// <summary>
+    /// Checks to see if WoL is installed.
+    /// </summary>
+    /// <param name="registry">ModRegistry.</param>
     internal static void SetShouldCheckPrestiged(IModRegistry registry)
     {
         shouldCheckPrestiged = registry.IsLoaded("DaLion.ImmersiveProfessions");
@@ -20,14 +33,14 @@ internal static class MultiplayerManager
 
     internal static void Reset()
     {
-        agriculturalistFarmer = null;
-        prestigedAgriculturalistFarmer = null;
+        AgriculturalistFarmer = null;
+        PrestigedAgriculturalistFarmer = null;
     }
 
     internal static void UpdateOnDayStart(DayStartedEventArgs e)
     {
-        agriculturalistFarmer = null;
-        prestigedAgriculturalistFarmer = null;
+        AgriculturalistFarmer = null;
+        PrestigedAgriculturalistFarmer = null;
         if (!Context.IsMultiplayer)
         {
             _ = AssignProfessionFarmersIfNeeded(Game1.player);
@@ -49,20 +62,20 @@ internal static class MultiplayerManager
 
     internal static void OnPlayerDisconnected(PeerDisconnectedEventArgs e)
     {
-        if (e.Peer.PlayerID == agriculturalistFarmer?.UniqueMultiplayerID)
+        if (e.Peer.PlayerID == AgriculturalistFarmer?.UniqueMultiplayerID)
         {
-            agriculturalistFarmer = null;
+            AgriculturalistFarmer = null;
         }
 
-        if (shouldCheckPrestiged && e.Peer.PlayerID == prestigedAgriculturalistFarmer?.UniqueMultiplayerID)
+        if (shouldCheckPrestiged && e.Peer.PlayerID == PrestigedAgriculturalistFarmer?.UniqueMultiplayerID)
         {
-            prestigedAgriculturalistFarmer = null;
+            PrestigedAgriculturalistFarmer = null;
         }
 
         var farmers = Game1.getAllFarmers().GetEnumerator();
 
 
-        while ((agriculturalistFarmer is null || prestigedAgriculturalistFarmer is null) &&
+        while ((AgriculturalistFarmer is null || PrestigedAgriculturalistFarmer is null) &&
             farmers.MoveNext())
         {
             _ = AssignProfessionFarmersIfNeeded(farmers.Current);
@@ -71,17 +84,17 @@ internal static class MultiplayerManager
 
     private static bool AssignProfessionFarmersIfNeeded(Farmer farmer)
     {
-        if (shouldCheckPrestiged && prestigedAgriculturalistFarmer is null && farmer.professions.Contains(Farmer.agriculturist + 100))
+        if (shouldCheckPrestiged && PrestigedAgriculturalistFarmer is null && farmer.professions.Contains(Farmer.agriculturist + 100))
         {
             ModEntry.ModMonitor.Log($"Assigning {farmer.Name} as prestiged agricultralist farmer.");
-            prestigedAgriculturalistFarmer = farmer;
+            PrestigedAgriculturalistFarmer = farmer;
             return true;
         }
-        else if (agriculturalistFarmer is null && farmer.professions.Contains(Farmer.agriculturist)
+        else if (AgriculturalistFarmer is null && farmer.professions.Contains(Farmer.agriculturist)
             && !farmer.professions.Contains(Farmer.agriculturist + 100))
         {
             ModEntry.ModMonitor.Log($"Assigning {farmer.Name} as argicultralist farmer.");
-            agriculturalistFarmer = farmer;
+            AgriculturalistFarmer = farmer;
             return true;
         }
 

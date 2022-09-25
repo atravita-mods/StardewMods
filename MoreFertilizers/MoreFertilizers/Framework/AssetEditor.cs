@@ -42,6 +42,22 @@ internal static class AssetEditor
         return ret;
     });
 
+    private static int lastTick = -1;
+    private static bool seenBoat = false;
+
+    private static bool HasSeenBoat
+    {
+        get
+        {
+            if ((Game1.ticks & ~0b11) != lastTick)
+            {
+                lastTick = Game1.ticks & ~0b11;
+                seenBoat = Utility.doesAnyFarmerHaveOrWillReceiveMail("seenBoatJourney");
+            }
+            return seenBoat;
+        }
+    }
+
     /// <summary>
     /// Handles asset editing.
     /// </summary>
@@ -52,7 +68,7 @@ internal static class AssetEditor
         {
             e.Edit(EditPrismaticMasks);
         }
-        else if (Utility.doesAnyFarmerHaveOrWillReceiveMail("seenBoatJourney"))
+        else if (HasSeenBoat)
         {
             if (e.NameWithoutLocale.IsEquivalentTo(SPECIAL_ORDERS_LOCATION))
             {

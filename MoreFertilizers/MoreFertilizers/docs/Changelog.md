@@ -12,6 +12,7 @@
 * Seedy fertilizer: drops the seed? 
 * Some fertilizer for trees?
 * Something for mushroom boxen? 
+* Fix the giftbox so you only get the starting Lucky fertilizer once.
 
 #### Version 0.3.0
 * Added new fertilizers:

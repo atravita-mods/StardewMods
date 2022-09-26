@@ -9,6 +9,7 @@ using AtraBase.Toolkit.Extensions;
 using AtraShared.ConstantsAndEnums;
 using AtraShared.Integrations;
 using AtraShared.Integrations.Interfaces;
+using AtraShared.Utils.Extensions;
 
 namespace HighlightEmptyMachines.Framework;
 internal static class BetterBeehousesIntegration
@@ -26,6 +27,10 @@ internal static class BetterBeehousesIntegration
         => new IntegrationHelper(ModEntry.ModMonitor, ModEntry.TranslationHelper, modRegistry)
             .TryGetAPI("tlitookilakin.BetterBeehouses", "1.2.6", out api);
 
+    /// <summary>
+    /// Updates the status of beehives for the current location.
+    /// </summary>
+    /// <param name="location">The game location to update to.</param>
     internal static void UpdateStatus(GameLocation location)
     {
         if (location is null)
@@ -47,5 +52,7 @@ internal static class BetterBeehousesIntegration
         {
             Status = api.GetEnabledHere(location) ? MachineStatus.Enabled : MachineStatus.Invalid;
         }
+
+        ModEntry.ModMonitor.DebugOnlyLog($"Current status of beehives is {Status}", LogLevel.Info);
     }
 }

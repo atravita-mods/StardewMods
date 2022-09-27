@@ -16,10 +16,11 @@
 
 #### Version 0.3.0
 * Added new fertilizers:
+    - Bountiful Bush Fertilizer: increases the production periods of tea and berry bushes.
+    - Fertilizer of Miraculous Beverages: makes beverages appear.
+    - Rapid Bush Fertilizer: makes tea tree bushes grow 20% faster.
     - Secret Joja Fertilizer: decreases growth time, has a chance of decreasing regrowth time, but forces the crop to be base quality.
     - Wisdom Fertilizer: increases farming XP by 10%.
-    - Rapid Bush Fertilizer: makes tea tree bushes grow 20% faster.
-    - Bountiful Bush Fertilizer: increases the production periods of tea and berry bushes.
 * Adjusted previous fertilizers:
     - Waterlogged now increases the growth speed of paddy crops a little.
 * Added German translation (thanks to CrisTortion!)

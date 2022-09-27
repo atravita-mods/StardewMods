@@ -16,6 +16,8 @@ public class ReviveDeadCropsApi : IReviveDeadCropsApi
 
     private const int FAIRY_DUST = 872;
 
+    internal bool Changed { get; set; } = false;
+
     /// <inheritdoc />
     public bool CanApplyDust(GameLocation loc, Vector2 tile, SObject obj)
     {
@@ -51,6 +53,7 @@ public class ReviveDeadCropsApi : IReviveDeadCropsApi
                 DelayedAction.functionAfterDelay(
                     () => this.RevivePlant(crop),
                     120);
+                this.Changed = true;
                 return true;
             }
 

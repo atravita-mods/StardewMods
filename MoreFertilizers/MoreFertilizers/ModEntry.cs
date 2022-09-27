@@ -364,6 +364,9 @@ internal sealed class ModEntry : Mod
 
     private static int seedyFertilizerID = -1;
 
+    /// <summary>
+    /// Gets the integer ID of the seedy fertilizer. -1 if not found/not loaded.
+    /// </summary>
     internal static int SeedyFertilizerID
     {
         get
@@ -1092,13 +1095,13 @@ internal sealed class ModEntry : Mod
     private void OnSaveLoaded(object? sender, SaveLoadedEventArgs e)
     {
         JojaSample.Reset();
-        MiraculousFertilizerHandler.Initialize();
 
         if (Context.IsSplitScreen && Context.ScreenId != 0)
         {
             return;
         }
 
+        MiraculousFertilizerHandler.Initialize();
         MultiplayerHelpers.AssertMultiplayerVersions(this.Helper.Multiplayer, this.ModManifest, this.Monitor, this.Helper.Translation);
 
         IntegrationHelper pfmHelper = new(this.Monitor, this.Helper.Translation, this.Helper.ModRegistry, LogLevel.Trace);

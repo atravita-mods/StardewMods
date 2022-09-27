@@ -39,10 +39,16 @@ internal sealed class ModEntry : Mod
     [EventPriority(EventPriority.High + 20)]
     private void OnDayEnd(object? sender, DayEndingEventArgs e)
     {
+        if (!Api.Changed)
+        {
+            return;
+        }
+        Api.Changed = false;
+
         Utility.ForAllLocations(
             (location) =>
             {
-                foreach ((Vector2 _, TerrainFeature terrain) in location.terrainFeatures.Pairs)
+                foreach (TerrainFeature terrain in location.terrainFeatures.Values)
                 {
                     if (terrain is HoeDirt dirt && dirt.modData?.GetBool(ReviveDeadCropsApi.REVIVED_PLANT_MARKER) == true
                         && dirt.crop is not null)
@@ -53,7 +59,7 @@ internal sealed class ModEntry : Mod
                     }
                 }
 
-                foreach ((Vector2 _, SObject obj) in location.Objects.Pairs)
+                foreach (SObject obj in location.Objects.Values)
                 {
                     if (obj is IndoorPot pot && pot.hoeDirt.Value is HoeDirt dirt
                         && dirt.modData?.GetBool(ReviveDeadCropsApi.REVIVED_PLANT_MARKER) == true

@@ -10,9 +10,13 @@ public static class PlayerAlertHandler
 {
     private static readonly PerScreen<Queue<HUDMessage>> QueuedMessages = new(() => new());
 
+    /// <summary>
+    /// Queues up a HUD message.
+    /// </summary>
+    /// <param name="message">Message to queue.</param>
     public static void AddMessage(HUDMessage message)
     {
-        Guard.IsNotNull(message, nameof(message));
+        Guard.IsNotNull(message);
 
         QueuedMessages.Value.Enqueue(message);
     }
@@ -23,7 +27,7 @@ public static class PlayerAlertHandler
     internal static void DisplayFromQueue()
     {
         int i = 0;
-        while (QueuedMessages.Value.TryDequeue(out HUDMessage? message) && ++i < 3)
+        while (++i < 3 && QueuedMessages.Value.TryDequeue(out HUDMessage? message))
         {
             Game1.addHUDMessage(message);
         }

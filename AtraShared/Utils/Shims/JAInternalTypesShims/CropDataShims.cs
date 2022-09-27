@@ -21,7 +21,7 @@ internal static class CropDataShims
             var isInst = Expression.TypeIs(obj, cropData);
             var ret = Expression.ParameterOf<string>("ret");
 
-            var returnnull = Expression.Assign(ret, Expression.ConstantNull(typeof(string)));
+            var returnnull = Expression.Assign(ret, Expression.ConstantNull<string>());
 
             MethodInfo nameGetter = cropData.InstancePropertyNamed("SeedName").GetGetMethod()
                 ?? ReflectionThrowHelper.ThrowMethodNotFoundException<MethodInfo>("SeedName");
@@ -39,6 +39,7 @@ internal static class CropDataShims
 
     public static Func<object, string?>? GetSeedName => getSeedName.Value;
 
+#warning - incomplete
     private static Lazy<Func<object, string[]?>?> getSeedRestrictions = new(
         () =>
         {
@@ -48,6 +49,12 @@ internal static class CropDataShims
             {
                 return null;
             }
+
+            var obj = Expression.ParameterOf<object>("obj");
+            var isInst = Expression.TypeIs(obj, cropData);
+            var ret = Expression.ParameterOf<string[]>("ret");
+
+            var returnnull = Expression.Assign(ret, Expression.ConstantNull<string[]>());
 
             return null;
         });

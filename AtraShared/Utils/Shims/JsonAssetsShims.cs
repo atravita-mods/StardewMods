@@ -1,4 +1,6 @@
-﻿using AtraCore.Framework.ReflectionManager;
+﻿using AtraBase.Toolkit.Extensions;
+
+using AtraCore.Framework.ReflectionManager;
 using AtraShared.Integrations;
 using AtraShared.Integrations.Interfaces;
 using AtraShared.Utils.Shims.JAInternalTypesShims;
@@ -9,6 +11,9 @@ using HarmonyLib;
 
 namespace AtraShared.Utils.Shims;
 
+/// <summary>
+/// Holds shims against JA.
+/// </summary>
 public static class JsonAssetsShims
 {
     private static bool initialized = false;
@@ -42,6 +47,10 @@ public static class JsonAssetsShims
             monitor.Log("JA found but EPU not. EPU conditions will automatically fail.", LogLevel.Info);
         }
     }
+
+    // A condition requires EPU if it starts with ! or is longer than two letters.
+    public static bool ConditionRequiresEPU(ReadOnlySpan<char> condition)
+        => condition[0] == '!' || condition.GetIndexOfWhiteSpace() > 3;
 
     private static Lazy<Dictionary<string, string>?> JACropCache = new(SetUpJAIntegration);
 

@@ -31,6 +31,10 @@ internal static class CraneGameTranspiler
             {
                 items.Add(new SObject(ModEntry.DeluxeJojaFertilizerID, 5));
             }
+            if (ModEntry.FruitTreeFertilizerID != -1)
+            {
+                items.Add(new SObject(ModEntry.FruitTreeFertilizerID, 5));
+            }
         }
         else
         {
@@ -61,7 +65,6 @@ internal static class CraneGameTranspiler
         }
     }
 
-#pragma warning disable SA1116 // Split parameters should start on line after declaration
     [HarmonyPatch(MethodType.Constructor)]
     private static IEnumerable<CodeInstruction>? Transpiler(IEnumerable<CodeInstruction> instructions, ILGenerator gen, MethodBase original)
     {
@@ -112,5 +115,4 @@ internal static class CraneGameTranspiler
         }
         return null;
     }
-#pragma warning restore SA1116 // Split parameters should start on line after declaration
 }

@@ -1,6 +1,9 @@
 ﻿using AtraBase.Toolkit.Extensions;
+
 using AtraShared.ConstantsAndEnums;
 using AtraShared.Utils.Extensions;
+using AtraShared.Wrappers;
+
 using CommunityToolkit.Diagnostics;
 
 namespace AtraCore.Framework.ItemManagement;
@@ -78,7 +81,7 @@ public static class DataToItemMap
                 {
                     ModEntry.ModMonitor.DebugOnlyLog("Building map to resolve normal objects.", LogLevel.Info);
 
-                    Dictionary<string, int> mapping = new(Game1.objectInformation.Count)
+                    Dictionary<string, int> mapping = new(Game1Wrappers.ObjectInfo.Count)
                     {
                         // Special cases
                         ["Egg"] = 176,
@@ -90,7 +93,7 @@ public static class DataToItemMap
                     };
 
                     // Processing from the data.
-                    foreach ((int id, string data) in Game1.objectInformation)
+                    foreach ((int id, string data) in Game1Wrappers.ObjectInfo)
                     {
                         // category asdf should never end up in the player inventory.
                         var cat = data.GetNthChunk('/', SObject.objectInfoTypeIndex);
@@ -131,7 +134,7 @@ public static class DataToItemMap
                     ModEntry.ModMonitor.DebugOnlyLog("Building map to resolve rings.", LogLevel.Info);
 
                     Dictionary<string, int> mapping = new(10);
-                    foreach ((int id, string data) in Game1.objectInformation)
+                    foreach ((int id, string data) in Game1Wrappers.ObjectInfo)
                     {
                         var cat = data.GetNthChunk('/', 3);
 

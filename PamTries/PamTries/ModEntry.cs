@@ -1,14 +1,21 @@
 ﻿using AtraCore.Utilities;
+
 using AtraShared.Integrations;
 using AtraShared.Integrations.Interfaces.ContentPatcher;
 using AtraShared.MigrationManager;
+using AtraShared.Schedules;
 using AtraShared.Utils.Extensions;
+
 using HarmonyLib;
+
 using Microsoft.Xna.Framework;
+
 using PamTries.Framework;
+
 #if DEBUG
 using PamTries.HarmonyPatches;
 #endif
+
 using StardewModdingAPI.Events;
 
 namespace PamTries;
@@ -26,10 +33,13 @@ internal sealed class ModEntry : Mod
     /// </summary>
     internal static IMonitor ModMonitor { get; private set; } = null!;
 
+    internal static ScheduleUtilityFunctions ScheduleUtilityFunctions { get; private set; } = null!;
+
     /// <inheritdoc />
     public override void Entry(IModHelper helper)
     {
         I18n.Init(helper.Translation);
+        ScheduleUtilityFunctions = new(this.Monitor, this.Helper.Translation);
 
         ModMonitor = this.Monitor;
 
@@ -42,8 +52,6 @@ internal sealed class ModEntry : Mod
         helper.Events.Content.AssetReady += this.OnAssetReady;
 
         helper.Events.Content.AssetRequested += this.OnAssetRequested;
-
-        this.ApplyPatches(new Harmony(this.ModManifest.UniqueID));
     }
 
     private void ApplyPatches(Harmony harmony)
@@ -111,6 +119,8 @@ internal sealed class ModEntry : Mod
 
     private void OnGameLaunch(object? sender, GameLaunchedEventArgs e)
     {
+        this.ApplyPatches(new Harmony(this.ModManifest.UniqueID));
+
         IntegrationHelper helper = new(this.Monitor, this.Helper.Translation, this.Helper.ModRegistry);
         if (helper.TryGetAPI("Pathoschild.ContentPatcher", "1.20.0", out IContentPatcherAPI? api))
         {
@@ -205,37 +215,7 @@ internal sealed class ModEntry : Mod
     /// <param name="args">Day end argmuments.</param>
     private void DayEnd(object? sender, DayEndingEventArgs args)
     {
-        // reset Pam's sprite
-        NPC? pam = Game1.getCharacterFromName("Pam");
-        if (pam is null)
-        {
-            this.Monitor.Log("Pam could not be found?!?");
-            return;
-        }
-        pam.Sprite.SpriteHeight = 32;
-        pam.Sprite.SpriteWidth = 16;
-        pam.Sprite.ignoreSourceRectUpdates = false;
-        pam.Sprite.UpdateSourceRect();
-        pam.drawOffset.Value = Vector2.Zero;
-        pam.IsInvisible = false;
-
         PTUtilities.SyncConversationTopics(SyncedConversationTopics);
-
-        if (Game1.player.activeDialogueEvents.TryGetValue("PamTriesRehab", out int days) && days > 1)
-        {
-            ModMonitor.Log("Pam set to invisible for rehab", LogLevel.Debug);
-            pam.daysUntilNotInvisible = 2;
-        }
-        // bad marriage penalty. Consider implementing divorce.
-        if (Context.IsMainPlayer)
-        {
-            if (Game1.getCharacterFromName("Penny").getSpouse() is Farmer pennySpouse && pennySpouse.friendshipData["Penny"].Points <= 2000)
-            {
-                pennySpouse.changeFriendship(-50, pam);
-                ModMonitor.Log("Bad marriage penalty, 50 friendship lost with Pam", LogLevel.Trace);
-            }
-        }
-
         PTUtilities.LocalEventSyncs(ModMonitor);
         // Setup tomorrow:
         this.SetPamMood((int)Game1.stats.DaysPlayed + 1);
@@ -243,6 +223,38 @@ internal sealed class ModEntry : Mod
         if (Game1.getAllFarmers().Any(static (Farmer farmer) => farmer.mailForTomorrow.Contains("atravita_PamTries_PennyThanks")))
         {
             Game1.addMailForTomorrow("atravita_PamTries_BusNotice");
+        }
+
+        // reset Pam's sprite
+        NPC? pam = Game1.getCharacterFromName("Pam");
+        if (pam is null)
+        {
+            this.Monitor.Log("Pam could not be found?!?");
+        }
+        else
+        {
+            pam.Sprite.SpriteHeight = 32;
+            pam.Sprite.SpriteWidth = 16;
+            pam.Sprite.ignoreSourceRectUpdates = false;
+            pam.Sprite.UpdateSourceRect();
+            pam.drawOffset.Value = Vector2.Zero;
+            pam.IsInvisible = false;
+
+            if (Game1.player.activeDialogueEvents.TryGetValue("PamTriesRehab", out int days) && days > 1)
+            {
+                ModMonitor.Log("Pam set to invisible for rehab", LogLevel.Debug);
+                pam.daysUntilNotInvisible = 2;
+            }
+
+            // bad marriage penalty. Consider implementing divorce.
+            if (Context.IsMainPlayer)
+            {
+                if (Game1.getCharacterFromName("Penny").getSpouse() is Farmer pennySpouse && pennySpouse.friendshipData["Penny"].Points <= 2000)
+                {
+                    pennySpouse.changeFriendship(-50, pam);
+                    ModMonitor.Log("Bad marriage penalty, 50 friendship lost with Pam", LogLevel.Trace);
+                }
+            }
         }
 
         // Ensure the master player is synced.

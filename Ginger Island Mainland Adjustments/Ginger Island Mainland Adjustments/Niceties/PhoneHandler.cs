@@ -59,7 +59,7 @@ internal static class PhoneHandler
         }
         catch (Exception ex)
         {
-            Globals.ModMonitor.Log($"Mod crashed while transpiling Hoedirt.Draw:\n\n{ex}", LogLevel.Error);
+            Globals.ModMonitor.Log($"Mod crashed while transpiling {original.FullDescription()}:\n\n{ex}", LogLevel.Error);
             original?.Snitch(Globals.ModMonitor);
         }
         return null;

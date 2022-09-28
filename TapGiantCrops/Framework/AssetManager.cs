@@ -23,7 +23,7 @@ internal static class AssetManager
 {
     private static readonly string ASSETPATH = PathUtilities.NormalizeAssetName("Mods/atravita.TapGiantCrops/TappedObjectOverride");
 
-    private static readonly Dictionary<int, SObject> overridesCache = new();
+    private static readonly Dictionary<int, SObject> OverridesCache = new();
     private static Lazy<Dictionary<int, ObjectDefinition>> overrides = new(() => Game1.content.Load<Dictionary<int, ObjectDefinition>>(ASSETPATH));
 
     private static IAssetName? assetName = null;
@@ -33,12 +33,12 @@ internal static class AssetManager
 
     internal static SObject? GetOverrideItem(int input)
     {
-        if (overridesCache.TryGetValue(input, out var obj))
+        if (OverridesCache.TryGetValue(input, out SObject? obj))
         {
             return obj.getOne() as SObject;
         }
 
-        if (overrides.Value.TryGetValue(input, out var objectDefinition))
+        if (overrides.Value.TryGetValue(input, out ObjectDefinition? objectDefinition))
         {
             if (!int.TryParse(objectDefinition.Object, out int id))
             {
@@ -66,7 +66,7 @@ internal static class AssetManager
                 }
             }
 
-            overridesCache[input] = ret;
+            OverridesCache[input] = ret;
             return ret.getOne() as SObject;
         }
 
@@ -97,7 +97,7 @@ internal static class AssetManager
             {
                 overrides = new(() => Game1.content.Load<Dictionary<int, ObjectDefinition>>(ASSETPATH));
             }
-            overridesCache.Clear();
+            OverridesCache.Clear();
         }
     }
 }

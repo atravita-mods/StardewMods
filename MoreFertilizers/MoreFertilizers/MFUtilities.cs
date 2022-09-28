@@ -1,4 +1,6 @@
-﻿using StardewValley.Objects;
+﻿using AtraShared.Wrappers;
+
+using StardewValley.Objects;
 using StardewValley.TerrainFeatures;
 
 namespace MoreFertilizers;
@@ -44,7 +46,7 @@ internal static class MFUtilities
     /// <returns>True if crop is a joja crop.</returns>
     internal static bool IsJojaCrop(this Crop crop)
     {
-        string data = Game1.objectInformation[crop.indexOfHarvest.Value];
+        string data = Game1Wrappers.ObjectInfo[crop.indexOfHarvest.Value];
         int index = data.IndexOf('/');
         if (index >= 0)
         {

@@ -102,6 +102,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Utils\Shims\SolidFoundationShims.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Utils\StringUtils.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Utils\Utils.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Wrappers\Game1Wrappers.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="$(MSBuildThisFileDirectory)Integrations\Interfaces\Automate\README.TXT" />

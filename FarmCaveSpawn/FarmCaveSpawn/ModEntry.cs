@@ -13,6 +13,7 @@ using AtraShared.Integrations;
 using AtraShared.MigrationManager;
 using AtraShared.Utils;
 using AtraShared.Utils.Extensions;
+using AtraShared.Wrappers;
 
 using Microsoft.Xna.Framework;
 
@@ -51,6 +52,10 @@ internal sealed class ModEntry : Mod
     /// </summary>
     private List<int> TreeFruit = new();
 
+    private StardewSeasons season = StardewSeasons.None;
+
+    private bool ShouldResetFruitList = true;
+
     private MigrationManager? migrator;
 
     // The config is set by the Entry method, so it should never realistically be null
@@ -73,10 +78,6 @@ internal sealed class ModEntry : Mod
     /// Gets or sets a value indicating whether or not I've spawned fruit today.
     /// </summary>
     private bool SpawnedFruitToday { get; set; }
-
-    private StardewSeasons season = StardewSeasons.None;
-
-    private bool ShouldResetFruitList = true;
 
     /// <inheritdoc />
     public override void Entry(IModHelper helper)
@@ -317,7 +318,9 @@ END:
     /// <param name="tile">Tile to place fruit on.</param>
     private void PlaceFruit(GameLocation location, Vector2 tile)
     {
-        int fruitToPlace = Utility.GetRandom(this.TreeFruit.Count > 0 && this.Random.NextDouble() < (this.config.TreeFruitChance / 100f) ? this.TreeFruit : this.BASE_FRUIT, this.Random);
+        int fruitToPlace = Utility.GetRandom(
+            this.TreeFruit.Count > 0 && this.Random.NextDouble() < (this.config.TreeFruitChance / 100f) ? this.TreeFruit : this.BASE_FRUIT,
+            this.Random);
         location.Objects[tile] = new SObject(fruitToPlace, 1) { IsSpawnedObject = true };
         this.Monitor.DebugOnlyLog($"Spawning item {fruitToPlace} at {location.Name}:{tile.X},{tile.Y}", LogLevel.Debug);
     }
@@ -342,7 +345,7 @@ END:
         List<string> fruitNames = new();
         foreach (int objectID in this.GetTreeFruits())
         {
-            if (Game1.objectInformation.TryGetValue(objectID, out string? val))
+            if (Game1Wrappers.ObjectInfo.TryGetValue(objectID, out string? val))
             {
                 ReadOnlySpan<char> name = val.GetNthChunk('/', SObject.objectInfoDisplayNameIndex);
                 if (name.Length > 0)
@@ -411,7 +414,7 @@ END:
             {
                 try
                 {
-                    SpanSplit fruit = Game1.objectInformation[objectIndex].SpanSplit('/', expectedCount: 5);
+                    SpanSplit fruit = Game1Wrappers.ObjectInfo[objectIndex].SpanSplit('/', expectedCount: 5);
                     string fruitname = fruit[SObject.objectInfoNameIndex].ToString();
                     if ((this.config.AllowAnyTreeProduct || (fruit[SObject.objectInfoTypeIndex].SpanSplit().TryGetAtIndex(1, out SpanSplitEntry cat) && int.TryParse(cat, out int category) && category == SObject.FruitsCategory))
                         && (!this.config.EdiblesOnly || int.Parse(fruit[SObject.objectInfoEdibilityIndex]) >= 0)

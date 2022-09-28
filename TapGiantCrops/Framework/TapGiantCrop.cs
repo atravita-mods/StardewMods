@@ -2,6 +2,8 @@
 using AtraShared.ConstantsAndEnums;
 using AtraShared.Utils.Extensions;
 using AtraShared.Utils.Shims;
+using AtraShared.Wrappers;
+
 using CommunityToolkit.Diagnostics;
 using Microsoft.Xna.Framework;
 using StardewValley.TerrainFeatures;
@@ -91,7 +93,7 @@ public class TapGiantCrop : ITapGiantCropsAPI
         // this makes no sense.
         if (returnobj is null && giantCropIndx.GetCategoryFromIndex() == SObject.flowersCategory)
         {
-            string flowerdata = Game1.objectInformation[giantCropIndx];
+            string flowerdata = Game1Wrappers.ObjectInfo[giantCropIndx];
             returnobj = new SObject(340, 1); // honey index.
             string honeyName = $"{flowerdata.GetNthChunk('/', 0).ToString()} Honey";
 

@@ -1,5 +1,7 @@
 ﻿using AtraBase.Toolkit.Extensions;
 
+using AtraShared.Wrappers;
+
 using CommunityToolkit.Diagnostics;
 
 namespace AtraShared.Utils.Extensions;
@@ -29,7 +31,7 @@ public static class SObjectExtensions
     /// <returns>The category index if found, or 0 otherwise.</returns>
     public static int GetCategoryFromIndex(this int sObjectInd)
     {
-        if (!Game1.objectInformation.TryGetValue(sObjectInd, out string? data))
+        if (!Game1Wrappers.ObjectInfo.TryGetValue(sObjectInd, out string? data))
         {
             return 0;
         }

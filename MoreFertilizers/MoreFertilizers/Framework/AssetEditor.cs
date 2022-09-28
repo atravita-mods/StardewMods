@@ -31,11 +31,18 @@ internal static class AssetEditor
         int i = 0;
         foreach (string? filename in Directory.GetFiles(PathUtilities.NormalizePath(ModEntry.DIRPATH + "/assets/special-orders/"), "*.json"))
         {
-            Dictionary<string, SpecialOrderData> orders = ModEntry.ModContentHelper.Load<Dictionary<string, SpecialOrderData>>(Path.GetRelativePath(ModEntry.DIRPATH, filename));
-            foreach ((string key, SpecialOrderData order) in orders)
+            try
             {
-                ret[key] = order;
-                i++;
+                Dictionary<string, SpecialOrderData> orders = ModEntry.ModContentHelper.Load<Dictionary<string, SpecialOrderData>>(Path.GetRelativePath(ModEntry.DIRPATH, filename));
+                foreach ((string key, SpecialOrderData order) in orders)
+                {
+                    ret[key] = order;
+                    i++;
+                }
+            }
+            catch (Exception ex)
+            {
+                ModEntry.ModMonitor.Log($"{filename} may not be valid:\n\n{ex}", LogLevel.Error);
             }
         }
         ModEntry.ModMonitor.Log($"Found {i} Special Orders");
@@ -85,6 +92,19 @@ internal static class AssetEditor
         }
     }
 
+    /// <summary>
+    /// Handles editing special order dialogue. This is seperate so it's only
+    /// registed if necessary.
+    /// </summary>
+    /// <param name="e">event args.</param>
+    internal static void EditSpecialOrderDialogue(AssetRequestedEventArgs e)
+    {
+        if (e.NameWithoutLocale.IsEquivalentTo(LEWIS_DIALOGUE) && Utility.doesAnyFarmerHaveOrWillReceiveMail("seenBoatJourney"))
+        {
+            e.Edit(EditLewisDialogueImpl, AssetEditPriority.Early);
+        }
+    }
+
     private static void EditPrismaticMasks(IAssetData asset)
     {
         IAssetDataForDictionary<string, DrawPrismaticModel>? editor = asset.AsDictionary<string, DrawPrismaticModel>();
@@ -98,19 +118,6 @@ internal static class AssetEditor
         if (!editor.Data.TryAdd(prismatic.Identifier, prismatic))
         {
             ModEntry.ModMonitor.Log("Could not add prismatic fertilizer to DrawPrismatic", LogLevel.Warn);
-        }
-    }
-
-    /// <summary>
-    /// Handles editing special order dialogue. This is seperate so it's only
-    /// registed if necessary.
-    /// </summary>
-    /// <param name="e">event args.</param>
-    internal static void EditSpecialOrderDialogue(AssetRequestedEventArgs e)
-    {
-        if (e.NameWithoutLocale.IsEquivalentTo(LEWIS_DIALOGUE) && Utility.doesAnyFarmerHaveOrWillReceiveMail("seenBoatJourney"))
-        {
-            e.Edit(EditLewisDialogueImpl, AssetEditPriority.Early);
         }
     }
 

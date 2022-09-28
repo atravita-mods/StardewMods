@@ -2,6 +2,8 @@
 using AtraBase.Toolkit.Extensions;
 using AtraBase.Toolkit.StringHandler;
 using AtraShared.ConstantsAndEnums;
+using AtraShared.Wrappers;
+
 using StardewValley.TerrainFeatures;
 
 namespace LastDayToPlantRedux.Framework;
@@ -86,7 +88,7 @@ breakcontinue:
     /// <summary>
     /// Loads a list of fertilizers.
     /// </summary>
-    /// <returns>If anythign changed.</returns>
+    /// <returns>If anything changed.</returns>
     internal static bool LoadFertilizerData()
     {
         if (!fertilizersNeedRefreshing)
@@ -97,7 +99,7 @@ breakcontinue:
 
         Dictionary<int, string> ret = new();
 
-        var data = Game1.objectInformation;
+        var data = Game1Wrappers.ObjectInfo;
 
         foreach (var (index, vals) in data)
         {

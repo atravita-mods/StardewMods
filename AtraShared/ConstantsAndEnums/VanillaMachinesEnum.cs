@@ -1,4 +1,7 @@
 ﻿using AtraBase.Toolkit.Extensions;
+
+using AtraShared.Wrappers;
+
 using NetEscapades.EnumGenerators;
 
 namespace AtraShared.ConstantsAndEnums;
@@ -70,7 +73,7 @@ public static partial class VanillaMachinesEnumExtensions
     /// <returns>A string, hopefully the translation.</returns>
     public static string GetBestTranslatedString(this VanillaMachinesEnum machine)
     {
-        if (machine < 0 && Game1.objectInformation.TryGetValue(-(int)machine, out string? val))
+        if (machine < 0 && Game1Wrappers.ObjectInfo.TryGetValue(-(int)machine, out string? val))
         {
             ReadOnlySpan<char> translatedName = val.GetNthChunk('/', SObject.objectInfoDisplayNameIndex);
             if (translatedName.Length > 0)

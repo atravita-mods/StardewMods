@@ -3,16 +3,6 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.2.32516.85
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "AtraShared", "AtraShared\AtraShared.shproj", "{7119B285-0356-4CE5-ADCA-CC008E9315DA}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AvoidLosingScepter", "AvoidLosingScepter\AvoidLosingScepter\AvoidLosingScepter.csproj", "{69BE3680-071F-4F86-84E4-1A3AECC45BD1}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Benchmarking", "Benchmarking\Benchmarking\Benchmarking.csproj", "{DB57D7BE-53C6-4744-A446-499203DA907A}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DrawFishPondsOverGrass", "DrawFishPondsOverGrass\DrawFishPondsOverGrass\DrawFishPondsOverGrass.csproj", "{BB60D15D-8E77-4261-8460-13515DCA9864}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FrameRateLogger", "FrameRateLogger\FrameRateLogger\FrameRateLogger.csproj", "{00FFB33B-10E5-4C95-B3EB-CF40A492575F}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GiantCropFertilizer", "GiantCropFertilizer\GiantCropFertilizer\GiantCropFertilizer.csproj", "{DA6A3126-3C93-47B9-A1EB-CE0DAEA9B599}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GingerIslandMainlandAdjustments", "Ginger Island Mainland Adjustments\Ginger Island Mainland Adjustments\GingerIslandMainlandAdjustments.csproj", "{C24C74AD-C049-4319-BA34-9FBB111FC3D9}"
@@ -97,28 +87,14 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SingleParenthood", "SingleP
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LastDayToPlantRedux", "LastDayToPlantRedux\LastDayToPlantRedux.csproj", "{05801588-35B3-41D4-A1C2-1CACE1EA68CD}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RelationshipsMatter", "RelationshipsMatter\RelationshipsMatter.csproj", "{5EBCA94A-ADAF-437B-94CD-79F1AF766022}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{69BE3680-071F-4F86-84E4-1A3AECC45BD1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{69BE3680-071F-4F86-84E4-1A3AECC45BD1}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{69BE3680-071F-4F86-84E4-1A3AECC45BD1}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{69BE3680-071F-4F86-84E4-1A3AECC45BD1}.Release|Any CPU.Build.0 = Release|Any CPU
-		{DB57D7BE-53C6-4744-A446-499203DA907A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{DB57D7BE-53C6-4744-A446-499203DA907A}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{DB57D7BE-53C6-4744-A446-499203DA907A}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{DB57D7BE-53C6-4744-A446-499203DA907A}.Release|Any CPU.Build.0 = Release|Any CPU
-		{BB60D15D-8E77-4261-8460-13515DCA9864}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{BB60D15D-8E77-4261-8460-13515DCA9864}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{BB60D15D-8E77-4261-8460-13515DCA9864}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{BB60D15D-8E77-4261-8460-13515DCA9864}.Release|Any CPU.Build.0 = Release|Any CPU
-		{00FFB33B-10E5-4C95-B3EB-CF40A492575F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{00FFB33B-10E5-4C95-B3EB-CF40A492575F}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{00FFB33B-10E5-4C95-B3EB-CF40A492575F}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{00FFB33B-10E5-4C95-B3EB-CF40A492575F}.Release|Any CPU.Build.0 = Release|Any CPU
 		{DA6A3126-3C93-47B9-A1EB-CE0DAEA9B599}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{DA6A3126-3C93-47B9-A1EB-CE0DAEA9B599}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DA6A3126-3C93-47B9-A1EB-CE0DAEA9B599}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -251,6 +227,10 @@ Global
 		{05801588-35B3-41D4-A1C2-1CACE1EA68CD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{05801588-35B3-41D4-A1C2-1CACE1EA68CD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{05801588-35B3-41D4-A1C2-1CACE1EA68CD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5EBCA94A-ADAF-437B-94CD-79F1AF766022}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5EBCA94A-ADAF-437B-94CD-79F1AF766022}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5EBCA94A-ADAF-437B-94CD-79F1AF766022}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5EBCA94A-ADAF-437B-94CD-79F1AF766022}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -262,7 +242,5 @@ Global
 		AtraBase\AtraBase\AtraBase.projitems*{2db924cc-3230-4c0a-8e9b-967cdeda2e23}*SharedItemsImports = 13
 		AtraBase\AtraBase\AtraBase.projitems*{3b016280-a267-4c67-affe-999c2b25e527}*SharedItemsImports = 5
 		AtraShared\AtraShared.projitems*{3b016280-a267-4c67-affe-999c2b25e527}*SharedItemsImports = 5
-		AtraShared\AtraShared.projitems*{7119b285-0356-4ce5-adca-cc008e9315da}*SharedItemsImports = 13
-		AtraBase\AtraBase\AtraBase.projitems*{db57d7be-53c6-4744-a446-499203da907a}*SharedItemsImports = 5
 	EndGlobalSection
 EndGlobal

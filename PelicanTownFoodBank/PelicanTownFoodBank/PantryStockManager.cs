@@ -1,4 +1,7 @@
 ﻿using AtraBase.Toolkit.StringHandler;
+
+using AtraShared.Wrappers;
+
 using Microsoft.Xna.Framework;
 using PelicanTownFoodBank.Models;
 using StardewModdingAPI.Utilities;
@@ -116,7 +119,7 @@ internal static class PantryStockManager
     {
         List<int> cookingIngredients = new(24);
         List<int> cookedItems = new(24);
-        foreach ((int index, string data) in Game1.objectInformation)
+        foreach ((int index, string data) in Game1Wrappers.ObjectInfo)
         {
             SpanSplit splits = data.SpanSplit('/');
             SpanSplit typesandcategory = splits[3].SpanSplit();

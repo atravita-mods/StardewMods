@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-using AtraBase.Toolkit.Extensions;
+﻿using AtraBase.Toolkit.Extensions;
 
 using AtraShared.ConstantsAndEnums;
 using AtraShared.Integrations;
@@ -12,11 +6,15 @@ using AtraShared.Integrations.Interfaces;
 using AtraShared.Utils.Extensions;
 
 namespace HighlightEmptyMachines.Framework;
+
+#warning - perscreen this.
+/// <summary>
+/// Handles the beehives.
+/// </summary>
 internal static class BetterBeehousesIntegration
 {
-    internal static MachineStatus Status { get; private set; } = MachineStatus.Disabled;
-
     private static IBetterBeehousesAPI? api;
+    internal static MachineStatus Status { get; private set; } = MachineStatus.Disabled;
 
     /// <summary>
     /// Tries to grab the PFM api.

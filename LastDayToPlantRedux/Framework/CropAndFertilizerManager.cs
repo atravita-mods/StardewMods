@@ -25,8 +25,8 @@ internal static class CropAndFertilizerManager
     // a mapping of fertilizers to their localized names.
     private static Dictionary<int, string> fertilizers = new();
 
+    [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "StyleCop doesn't understand records.")]
     private record CropEntry(StardewSeasons Seasons, string GrowthData);
-
 
 #region loading
 

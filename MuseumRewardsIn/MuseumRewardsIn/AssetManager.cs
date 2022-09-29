@@ -3,6 +3,9 @@ using StardewModdingAPI.Utilities;
 
 namespace MuseumRewardsIn;
 
+/// <summary>
+/// Manages assets for this mod.
+/// </summary>
 [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1310:Field names should not contain underscore", Justification = "Preference.")]
 internal static class AssetManager
 {
@@ -15,6 +18,9 @@ internal static class AssetManager
     private static IAssetName Letters =>
         letters ??= ModEntry.GameContentHelper.ParseAssetName(LETTERS_TO_CHECK);
 
+    /// <summary>
+    /// Gets a hashset of mailflags to process for gifts.
+    /// </summary>
     internal static HashSet<string> MailFlags => mailflags.Value;
 
     internal static void Invalidate(IReadOnlySet<IAssetName>? names = null)

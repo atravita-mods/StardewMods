@@ -11,10 +11,19 @@ namespace LastDayToPlantRedux;
 /// <inheritdoc />
 internal sealed class ModEntry : Mod
 {
+    /// <summary>
+    /// Gets the logger for this mod.
+    /// </summary>
     internal static IMonitor ModMonitor { get; private set; } = null!;
 
+    /// <summary>
+    /// Gets the game content helper for this mod.
+    /// </summary>
     internal static IGameContentHelper GameContentHelper { get; private set; } = null!;
 
+    /// <summary>
+    /// Gets the config instance for this mod.
+    /// </summary>
     internal static ModConfig Config { get; private set; } = null!;
 
     /// <inheritdoc />

@@ -22,7 +22,7 @@ internal sealed class ModEntry : Mod
     /// <summary>
     /// Gets or sets the config instance for this mod.
     /// </summary>
-    internal static ModConfig Config { get; set; } = null!;
+    internal static ModConfig Config { get; private set; } = null!;
 
     /// <summary>
     /// Gets the game content helper for this mod.

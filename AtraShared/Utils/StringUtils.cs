@@ -142,6 +142,7 @@ public sealed class StringUtils
                 sb.AppendLine();
                 current_width = wordwidth;
             }
+
             if (use_replacement_word && replacement_word is not null)
             {
                 sb.Append(replacement_word);
@@ -150,7 +151,6 @@ public sealed class StringUtils
             {
                 sb.Append(word);
             }
-
 
             use_replacement_word = false;
             if (splitchar == "\r")

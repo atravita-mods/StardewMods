@@ -45,7 +45,7 @@ internal static class CropHarvestTranspiler
     [MethodImpl(TKConstants.Hot)]
     private static int GetQualityForJojaFert(int prevQual, HoeDirt? dirt)
     {
-        if(dirt is not null && dirt.fertilizer.Value != -1)
+        if(dirt is not null && dirt.fertilizer.Value != -1) // the -1 is the JA not-found number
         {
             if (dirt.fertilizer.Value == ModEntry.JojaFertilizerID)
             {

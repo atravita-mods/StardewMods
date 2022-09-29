@@ -35,6 +35,7 @@ internal static class CraneGameTranspiler
             {
                 items.Add(new SObject(ModEntry.FruitTreeFertilizerID, 5));
             }
+            items.Add(new SObject(71, 1)); // Lewis's shorts.
         }
         else
         {

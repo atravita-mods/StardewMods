@@ -1,4 +1,5 @@
 ﻿using AtraCore.Utilities;
+
 using AtraShared.ConstantsAndEnums;
 using AtraShared.Integrations;
 using AtraShared.Integrations.Interfaces;
@@ -6,11 +7,16 @@ using AtraShared.MigrationManager;
 using AtraShared.Utils;
 using AtraShared.Utils.Extensions;
 using AtraShared.Utils.Shims;
+
 using GiantCropFertilizer.DataModels;
 using GiantCropFertilizer.HarmonyPatches;
+
 using HarmonyLib;
+
 using StardewModdingAPI.Events;
+
 using StardewValley.Buildings;
+
 using AtraUtils = AtraShared.Utils.Utils;
 
 namespace GiantCropFertilizer;

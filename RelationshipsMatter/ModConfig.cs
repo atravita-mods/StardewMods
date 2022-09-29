@@ -7,7 +7,7 @@ namespace RelationshipsMatter;
 /// </summary>
 internal sealed class ModConfig
 {
-    private float friendshipGainFactor;
+    private float friendshipGainFactor = 0.5f;
 
     [GMCMRange(0.01, 20)]
     public float FriendshipGainFactor
@@ -16,7 +16,7 @@ internal sealed class ModConfig
         set => this.friendshipGainFactor = Math.Clamp(value, 0.01f, 20f);
     }
 
-    private float friendshipLossFactor;
+    private float friendshipLossFactor = 1.0f;
 
     [GMCMRange(0.01, 20)]
     public float FriendshipLossFactor

@@ -3,6 +3,10 @@ using StardewModdingAPI.Events;
 using StardewModdingAPI.Utilities;
 
 namespace LastDayToPlantRedux.Framework;
+
+/// <summary>
+/// Manages assets for this mod.
+/// </summary>
 internal static class AssetManager
 {
     private static readonly string MailFlag = "atravita_LastDayLetter";
@@ -10,13 +14,17 @@ internal static class AssetManager
 
     // crop data.
     private static readonly string CropData = PathUtilities.NormalizeAssetName("Data/Crops");
+
     private static IAssetName? cropName = null;
+
     private static IAssetName CropName =>
         cropName ??= ModEntry.GameContentHelper.ParseAssetName(CropData);
 
     // data objectinfo
     private static readonly string DataObjectInfo = PathUtilities.NormalizeAssetName("Data/ObjectInformation");
+
     private static IAssetName? objectInfoName = null;
+
     private static IAssetName ObjectInfoName =>
         objectInfoName ??= ModEntry.GameContentHelper.ParseAssetName(DataObjectInfo);
 

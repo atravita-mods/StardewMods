@@ -8,22 +8,22 @@ namespace LastDayToPlantRedux.Framework;
 public sealed class InventoryManagerModel
 {
     /// <summary>
-    /// A hashet of seeds the player has seen before.
+    /// Gets or sets a hashet of seeds the player has seen before.
     /// </summary>
     public HashSet<string> Seeds { get; set; } = new();
 
     /// <summary>
-    /// A hashset of fertilizers the player has seen before.
+    /// Gets or sets a hashset of fertilizers the player has seen before.
     /// </summary>
     public HashSet<string> Fertilizers { get; set; } = new();
 }
 
 /// <summary>
-/// Watches the player inventory to see if seeds enter it.
+/// Watches the player inventory to see if seeds or fertilizer enter it.
 /// </summary>
 internal static class InventoryWatcher
 {
-    private const string savestring = "InventoryModel";
+    private const string SaveString = "InventoryModel";
 
     private static InventoryManagerModel? model = null;
 
@@ -37,14 +37,14 @@ internal static class InventoryWatcher
     [MemberNotNull(nameof(model))]
     internal static void LoadModel(IDataHelper helper)
     {
-        model = helper.ReadGlobalData<InventoryManagerModel>($"{savestring}_{Constants.SaveFolderName!.GetHashCode()}") ?? new();
+        model = helper.ReadGlobalData<InventoryManagerModel>($"{SaveString}_{Constants.SaveFolderName!.GetHashCode()}") ?? new();
     }
 
     internal static void SaveModel(IDataHelper helper)
     {
         if (model is not null)
         {
-            Task.Run(() => helper.WriteGlobalData($"{savestring}_{Constants.SaveFolderName!.GetHashCode()}", model))
+            Task.Run(() => helper.WriteGlobalData($"{SaveString}_{Constants.SaveFolderName!.GetHashCode()}", model))
                 .ContinueWith(t =>
                 {
                     switch (t.Status)

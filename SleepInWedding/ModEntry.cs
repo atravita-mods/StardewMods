@@ -185,6 +185,11 @@ internal sealed class ModEntry : Mod
         harmony.Snitch(this.Monitor, this.ModManifest.UniqueID, transpilersOnly: true);
     }
 
+    /// <summary>
+    /// Sets up the GMCM for this mod.
+    /// </summary>
+    /// <param name="sender">SMAPI.</param>
+    /// <param name="e">event args.</param>
     private void OnGameLaunched(object? sender, GameLaunchedEventArgs e)
     {
         GMCMHelper helper = new(this.Monitor, this.Helper.Translation, this.Helper.ModRegistry, this.ModManifest);

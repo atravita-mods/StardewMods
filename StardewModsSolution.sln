@@ -89,6 +89,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LastDayToPlantRedux", "Last
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RelationshipsMatter", "RelationshipsMatter\RelationshipsMatter.csproj", "{5EBCA94A-ADAF-437B-94CD-79F1AF766022}"
 EndProject
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "AtraShared", "AtraShared\AtraShared.shproj", "{7119B285-0356-4CE5-ADCA-CC008E9315DA}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -242,5 +244,6 @@ Global
 		AtraBase\AtraBase\AtraBase.projitems*{2db924cc-3230-4c0a-8e9b-967cdeda2e23}*SharedItemsImports = 13
 		AtraBase\AtraBase\AtraBase.projitems*{3b016280-a267-4c67-affe-999c2b25e527}*SharedItemsImports = 5
 		AtraShared\AtraShared.projitems*{3b016280-a267-4c67-affe-999c2b25e527}*SharedItemsImports = 5
+		AtraShared\AtraShared.projitems*{7119b285-0356-4ce5-adca-cc008e9315da}*SharedItemsImports = 13
 	EndGlobalSection
 EndGlobal

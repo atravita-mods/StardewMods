@@ -17,6 +17,11 @@ public static class MultiplayerSharedState
     private static bool hasPlayerSeenEvent;
     private static int lastCheckedTicks;
 
+    /// <summary>
+    /// Gets Pam's current schedule string.
+    /// </summary>
+    internal static string? PamsSchedule { get; private set; }
+
     private static bool HasSeenEvent
     {
         get
@@ -29,11 +34,6 @@ public static class MultiplayerSharedState
             return hasPlayerSeenEvent;
         }
     }
-
-    /// <summary>
-    /// Gets or sets pam's current schedule string.
-    /// </summary>
-    internal static string? PamsSchedule { get; set; }
 
     /// <summary>
     /// Updates entry for Pam's schedule whenever a person joins in multiplayer.

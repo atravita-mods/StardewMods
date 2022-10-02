@@ -1,4 +1,5 @@
-﻿using StardewModdingAPI.Events;
+﻿using AtraBase.Toolkit;
+using StardewModdingAPI.Events;
 
 namespace LastDayToPlantRedux.Framework;
 
@@ -25,26 +26,58 @@ internal static class InventoryWatcher
 {
     private const string SaveString = "InventoryModel";
 
+    // this isn't perscreen'ed intentionally
+    // Probably shouldn't make asset changes different between two players
+    // in splitscreen. So in splitscreen it watches both players.
     private static InventoryManagerModel? model = null;
 
-    internal static bool HasChanges { get; set; } = false;
+    /// <summary>
+    /// Gets a value indicating whether whether the InventoryWatcher has changes to consider.
+    /// </summary>
+    internal static bool HasChanges { get; private set; } = false;
 
+    /// <summary>
+    /// Gets a value indicating whether whether or not the save model is loaded.
+    /// </summary>
     [MemberNotNullWhen(returnValue: true, nameof(model))]
     internal static bool IsModelLoaded => model is not null;
 
+    /// <summary>
+    /// Clears the model.
+    /// </summary>
     internal static void ClearModel() => model = null;
 
+    /// <summary>
+    /// Request a reset to HasChanges.
+    /// </summary>
+    internal static void Reset()
+        => HasChanges = false;
+
+    /*******************************************************************
+     * SMAPI complains if there's unicode characters in a save path
+     * despite the fact that users can do things like have unicode in their save name.
+     * Using a stable hash code instead.
+     ******************************************************************/
+
+    /// <summary>
+    /// Loads the data model.
+    /// </summary>
+    /// <param name="helper">SMAPI's data helper.</param>
     [MemberNotNull(nameof(model))]
     internal static void LoadModel(IDataHelper helper)
     {
-        model = helper.ReadGlobalData<InventoryManagerModel>($"{SaveString}_{Constants.SaveFolderName!.GetHashCode()}") ?? new();
+        model = helper.ReadGlobalData<InventoryManagerModel>($"{SaveString}_{Constants.SaveFolderName!.GetStableHashCode()}") ?? new();
     }
 
+    /// <summary>
+    /// Saves the data model.
+    /// </summary>
+    /// <param name="helper">SMAPI's data helper.</param>
     internal static void SaveModel(IDataHelper helper)
     {
         if (model is not null)
         {
-            Task.Run(() => helper.WriteGlobalData($"{SaveString}_{Constants.SaveFolderName!.GetHashCode()}", model))
+            Task.Run(() => helper.WriteGlobalData($"{SaveString}_{Constants.SaveFolderName!.GetStableHashCode()}", model))
                 .ContinueWith(t =>
                 {
                     switch (t.Status)
@@ -60,9 +93,14 @@ internal static class InventoryWatcher
         }
     }
 
+    /// <summary>
+    /// Watches the inventory.
+    /// </summary>
+    /// <param name="e">Event args.</param>
+    /// <param name="helper">SMAPI's data helper.</param>
     internal static void Watch(InventoryChangedEventArgs e, IDataHelper helper)
     {
-        foreach (var item in e.Added)
+        foreach (Item? item in e.Added)
         {
             if (item is SObject obj && !obj.bigCraftable.Value
                 && (obj.Category == SObject.SeedsCategory || obj.Category == SObject.fertilizerCategory))

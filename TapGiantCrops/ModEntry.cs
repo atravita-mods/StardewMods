@@ -20,6 +20,9 @@ internal sealed class ModEntry : Mod
     /// </summary>
     internal static IMonitor ModMonitor { get; private set; } = null!;
 
+    /// <summary>
+    /// Gets the GameContentHelper for this mod.
+    /// </summary>
     internal static IGameContentHelper GameContentHelper { get; private set; } = null!;
 
     /// <inheritdoc />
@@ -39,20 +42,20 @@ internal sealed class ModEntry : Mod
         this.ApplyPatches(new Harmony(this.ModManifest.UniqueID));
     }
 
+    /// <inheritdoc />
+    public override object? GetApi() => Api;
+
     private void OnAssetInvalidated(object? sender, AssetsInvalidatedEventArgs e)
         => AssetManager.Reset(e.NamesWithoutLocale);
 
     private void OnAssetRequested(object? sender, AssetRequestedEventArgs e)
         => AssetManager.Load(e);
 
-    /// <inheritdoc />
-    public override object? GetApi() => Api;
-
     private void OnDayEnding(object? sender, DayEndingEventArgs e)
     {
         Utility.ForAllLocations((location) =>
         {
-            foreach (var feature in location.resourceClumps)
+            foreach (ResourceClump? feature in location.resourceClumps)
             {
                 if (feature is GiantCrop crop)
                 {
@@ -128,7 +131,7 @@ internal sealed class ModEntry : Mod
         }
         catch (Exception ex)
         {
-            ModEntry.ModMonitor.Log($"Attempt to prefix Utility.playerCanPlaceItemHere has failed:\n\n{ex}", LogLevel.Error);
+            ModMonitor.Log($"Attempt to prefix Utility.playerCanPlaceItemHere has failed:\n\n{ex}", LogLevel.Error);
         }
         return true;
     }

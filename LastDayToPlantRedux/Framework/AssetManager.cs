@@ -7,6 +7,7 @@ namespace LastDayToPlantRedux.Framework;
 /// <summary>
 /// Manages assets for this mod.
 /// </summary>
+[SuppressMessage("StyleCop.CSharp.OrderingRules", "SA1201:Elements should appear in the correct order", Justification = "Fields kept near accessors.")]
 internal static class AssetManager
 {
     private static readonly string MailFlag = "atravita_LastDayLetter";

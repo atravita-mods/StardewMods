@@ -17,12 +17,24 @@ internal sealed class ModEntry : Mod
 
     private static IPregnancyRoleApi? pregancyRoleApi;
 
+    /// <summary>
+    /// Gets the pregnancy role API.
+    /// </summary>
     internal static IPregnancyRoleApi? PregnancyRoleApi => pregancyRoleApi;
 
+    /// <summary>
+    /// Gets the logger for this mod.
+    /// </summary>
     internal static IMonitor ModMonitor { get; private set; } = null!;
 
+    /// <summary>
+    /// Gets the input helper for this mod.
+    /// </summary>
     internal static IInputHelper InputHelper { get; private set; } = null!;
 
+    /// <summary>
+    /// Gets the config instance for this mod.
+    /// </summary>
     internal static ModConfig Config { get; private set; } = null!;
 
     /// <inheritdoc />

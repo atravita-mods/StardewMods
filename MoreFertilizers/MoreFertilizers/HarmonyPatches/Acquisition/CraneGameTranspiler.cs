@@ -66,7 +66,7 @@ internal static class CraneGameTranspiler
         }
     }
 
-    [HarmonyPatch(MethodType.Constructor)]
+    [HarmonyPatch(MethodType.Constructor, new[] { typeof(CraneGame) })]
     private static IEnumerable<CodeInstruction>? Transpiler(IEnumerable<CodeInstruction> instructions, ILGenerator gen, MethodBase original)
     {
         try

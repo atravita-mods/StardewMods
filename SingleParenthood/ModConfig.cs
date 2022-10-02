@@ -1,4 +1,6 @@
-﻿namespace SingleParenthood;
+﻿using AtraShared.Integrations.GMCMAttributes;
+
+namespace SingleParenthood;
 
 /// <summary>
 /// The config class for this mod.
@@ -11,6 +13,7 @@ internal sealed class ModConfig
     /// <summary>
     /// Gets or sets how long an adoption/birth takes.
     /// </summary>
+    [GMCMRange(1, 28)]
     public int Gestation
     {
         get => this.gestation;
@@ -22,6 +25,7 @@ internal sealed class ModConfig
     /// <summary>
     /// Gets or sets a value indicating the maximum number of kids to allow.
     /// </summary>
+    [GMCMRange(0, 10)]
     public int MaxKids
     {
         get => this.maxKids;

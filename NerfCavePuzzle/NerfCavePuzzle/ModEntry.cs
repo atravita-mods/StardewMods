@@ -39,6 +39,10 @@ internal sealed class ModEntry : Mod
     /// Gets the configuration class for this mod.
     /// </summary>
     internal static ModConfig Config { get; private set; } = null!;
+
+    /// <summary>
+    /// Gets the input helper for this mod.
+    /// </summary>
     internal static IInputHelper InputHelper { get; private set; } = null!;
 
     /// <inheritdoc />

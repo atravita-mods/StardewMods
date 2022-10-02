@@ -262,11 +262,7 @@ internal static class IslandCaveWestDifficultyTranspiler
                 }
                 else if (__instance.netPhase.Value == IslandWestCave1.PHASE_WAIT_FOR_PLAYER_INPUT && Game1.activeClickableMenu is null)
                 {
-                    List<Response> responses = new()
-                    {
-                        new Response("Yes", "Yes").SetHotKey(Keys.Y),
-                        new Response("No", "No").SetHotKey(Keys.Escape),
-                    };
+                    List<Response> responses = new(__instance.createYesNoResponses());
 
                     List<Action?> actions = new()
                     {
@@ -278,7 +274,7 @@ internal static class IslandCaveWestDifficultyTranspiler
                         },
                     };
 
-                    Game1.activeClickableMenu = new DialogueAndAction("Would you like to hear the sequence again?", responses, actions, ModEntry.InputHelper);
+                    Game1.activeClickableMenu = new DialogueAndAction(I18n.AskAgain(), responses, actions, ModEntry.InputHelper);
                 }
             }
         }

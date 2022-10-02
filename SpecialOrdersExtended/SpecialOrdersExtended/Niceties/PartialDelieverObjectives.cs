@@ -10,10 +10,14 @@ using HarmonyLib;
 
 namespace SpecialOrdersExtended.Niceties;
 
+/// <summary>
+/// Holds patches against DeliverObjective to allow partial deliveries.
+/// </summary>
 [HarmonyPatch(typeof(DeliverObjective))]
 internal static class PartialDelieverObjectives
 {
     [HarmonyPatch(nameof(DeliverObjective.ShouldShowProgress))]
+    [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Harmony Convention.")]
     private static void Postfix(ref bool __result)
         => __result = true;
 
@@ -35,10 +39,10 @@ internal static class PartialDelieverObjectives
                 new(OpCodes.Call, typeof(OrderObjective).GetCachedMethod(nameof(OrderObjective.GetCount), ReflectionCache.FlagTypes.InstanceFlags)),
                 new(OpCodes.Sub),
             })
-            .Copy(5, out var copy)
+            .Copy(5, out IEnumerable<CodeInstruction>? copy)
             .FindNext(new CodeInstructionWrapper[]
             { // Math.Min(item.Stack, this.GetMaxCount() - this.GetCount()
-                new(OpCodes.Call, typeof(Math).GetCachedMethod(nameof(Math.Min), ReflectionCache.FlagTypes.StaticFlags, new[] { typeof(int), typeof(int) } )),
+                new(OpCodes.Call, typeof(Math).GetCachedMethod(nameof(Math.Min), ReflectionCache.FlagTypes.StaticFlags, new[] { typeof(int), typeof(int) })),
             })
             .FindNext(new CodeInstructionWrapper[]
             { // if (required_count > stack) return 0;
@@ -48,7 +52,7 @@ internal static class PartialDelieverObjectives
                 new(OpCodes.Ldc_I4_0),
                 new(OpCodes.Ret),
             })
-            .GetLabels(out var labels, clear: true)
+            .GetLabels(out IList<Label>? labels, clear: true)
             .Remove(5)
             .AttachLabels(labels)
             .FindNext(new CodeInstructionWrapper[]
@@ -63,10 +67,10 @@ internal static class PartialDelieverObjectives
             .Advance(4)
             .StoreBranchDest()
             .AdvanceToStoredLabel()
-            .DefineAndAttachLabel(out var jumppoint)
+            .DefineAndAttachLabel(out Label jumppoint)
             .Pop()
             .GetLabels(out var secondLabels, clear: true)
-            .DefineAndAttachLabel(out var complete)
+            .DefineAndAttachLabel(out Label complete)
             .Insert(copy.ToArray(), withLabels: secondLabels) // can use the copy here, the counts have been updated by this point.
             .Insert(new CodeInstruction[]
             {

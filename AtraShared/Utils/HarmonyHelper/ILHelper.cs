@@ -10,9 +10,11 @@ using System.Diagnostics;
 using System.Reflection;
 using System.Reflection.Emit;
 using System.Text;
+
 using AtraBase.Collections;
-using AtraShared.Utils.Extensions;
+
 using CommunityToolkit.Diagnostics;
+
 using HarmonyLib;
 
 namespace AtraShared.Utils.HarmonyHelper;
@@ -882,50 +884,26 @@ ContinueSearch:
         }
         else if (wrapper.LocalType is not null)
         {
-            int locCount;
             if (instruction.opcode == OpCodes.Ldloc_0 || instruction.opcode == OpCodes.Stloc_0)
             {
-                locCount = 0;
-                if (this.locals.Count <= 0)
-                {
-                    return false;
-                }
+                return this.locals.TryGetValue(0, out LocalVariableInfo? loc) && loc.LocalType == wrapper.LocalType;
             }
             else if (instruction.opcode == OpCodes.Ldloc_1 || instruction.opcode == OpCodes.Stloc_1)
             {
-                locCount = 1;
-                if (this.locals.Count <= 1)
-                {
-                    return false;
-                }
+                return this.locals.TryGetValue(1, out LocalVariableInfo? loc) && loc.LocalType == wrapper.LocalType;
             }
             else if (instruction.opcode == OpCodes.Ldloc_2 || instruction.opcode == OpCodes.Stloc_2)
             {
-                locCount = 2;
-                if (this.locals.Count <= 2)
-                {
-                    return false;
-                }
+                return this.locals.TryGetValue(2, out LocalVariableInfo? loc) && loc.LocalType == wrapper.LocalType;
             }
             else if (instruction.opcode == OpCodes.Ldloc_3 || instruction.opcode == OpCodes.Stloc_3)
             {
-                locCount = 3;
-                if (this.locals.Count <= 3)
-                {
-                    return false;
-                }
+                return this.locals.TryGetValue(3, out LocalVariableInfo? loc) && loc.LocalType == wrapper.LocalType;
             }
             else
             { // wrapper Matches would have matched it if it matched.
                 return false;
             }
-
-            return wrapper.SpecialCase switch
-            {
-                SpecialCodeInstructionCases.LdLoc => instruction.IsLdloc() && this.locals[locCount].LocalType == wrapper.LocalType,
-                SpecialCodeInstructionCases.StLoc => instruction.IsStloc() && this.locals[locCount].LocalType == wrapper.LocalType,
-                _ => false,
-            };
         }
         return false;
     }

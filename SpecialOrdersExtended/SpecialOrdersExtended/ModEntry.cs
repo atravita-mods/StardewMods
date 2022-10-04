@@ -2,17 +2,23 @@
 using AtraBase.Toolkit.Reflection;
 using AtraCore.Framework.ReflectionManager;
 using AtraCore.Utilities;
+
 using AtraShared.ConstantsAndEnums;
 using AtraShared.Integrations;
 using AtraShared.Integrations.Interfaces;
 using AtraShared.Integrations.Interfaces.ContentPatcher;
 using AtraShared.MigrationManager;
 using AtraShared.Utils.Extensions;
+
 using HarmonyLib;
+
+using SpecialOrdersExtended.HarmonyPatches;
 using SpecialOrdersExtended.Managers;
 using SpecialOrdersExtended.Niceties;
 using StardewModdingAPI.Events;
+
 using StardewValley.GameData;
+
 using AtraUtils = AtraShared.Utils.Utils;
 
 namespace SpecialOrdersExtended;
@@ -20,6 +26,9 @@ namespace SpecialOrdersExtended;
 /// <inheritdoc />
 internal sealed class ModEntry : Mod
 {
+    private static readonly string[] modsThatHandleTheBoard = new string[] { "Rafseazz.RidgesideVillage", "PurrplingCat.QuestFramework", "Esca.EMP" };
+    private bool hasModsThatHandleBoard = false;
+
     /// <summary>
     /// Spacecore API handle.
     /// </summary>
@@ -123,6 +132,16 @@ internal sealed class ModEntry : Mod
             ModMonitor.Log($"Failed to patch NPC::checkForNewCurrentDialogue for Special Orders Dialogue. Dialogue will be disabled\n\n{ex}", LogLevel.Error);
         }
 
+        if (modsThatHandleTheBoard.All( uniqueID => !this.Helper.ModRegistry.IsLoaded(uniqueID)))
+        {
+            this.Monitor.Log("Apply patch to suppress board updates.");
+            SpecialOrderPatches.ApplyUpdatePatch(harmony);
+        }
+        else
+        {
+            this.hasModsThatHandleBoard = true;
+        }
+
         harmony.Snitch(this.Monitor, harmony.Id, transpilersOnly: true);
     }
 
@@ -147,7 +166,7 @@ internal sealed class ModEntry : Mod
         this.ApplyPatches(harmony);
 
         // Bind Spacecore API
-        IntegrationHelper helper = new(this.Monitor, this.Helper.Translation, this.Helper.ModRegistry, LogLevel.Debug);
+        IntegrationHelper helper = new(this.Monitor, this.Helper.Translation, this.Helper.ModRegistry, LogLevel.Trace);
         if (helper.TryGetAPI("spacechase0.SpaceCore", "1.5.10", out spaceCoreAPI))
         {
             MethodInfo eventcommand = typeof(EventCommands).StaticMethodNamed(nameof(EventCommands.AddSpecialOrder));
@@ -210,7 +229,7 @@ internal sealed class ModEntry : Mod
     {
         this.Monitor.DebugOnlyLog("Event Saving raised");
 
-        if (!SpecialOrder.IsSpecialOrdersBoardUnlocked())
+        if (!this.hasModsThatHandleBoard && !SpecialOrder.IsSpecialOrdersBoardUnlocked())
         {
             this.Monitor.Log($"Board is not open, skipping saving");
             return;

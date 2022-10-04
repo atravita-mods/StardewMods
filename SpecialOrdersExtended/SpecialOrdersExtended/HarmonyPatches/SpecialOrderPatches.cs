@@ -1,4 +1,6 @@
-﻿using HarmonyLib;
+﻿using AtraCore.Framework.ReflectionManager;
+
+using HarmonyLib;
 using SpecialOrdersExtended.Managers;
 
 namespace SpecialOrdersExtended.HarmonyPatches;
@@ -9,6 +11,29 @@ namespace SpecialOrdersExtended.HarmonyPatches;
 [HarmonyPatch(typeof(SpecialOrder))]
 internal static class SpecialOrderPatches
 {
+    /// <summary>
+    /// Applies the patch that surpresses borad updates.
+    /// </summary>
+    /// <param name="harmony">Harmony instance.</param>
+    internal static void ApplyUpdatePatch(Harmony harmony)
+    {
+        try
+        {
+            HarmonyMethod? prefix = new(typeof(SpecialOrderPatches), nameof(PrefixUpdate))
+            {
+                priority = Priority.Last,
+            };
+
+            harmony.Patch(
+                original: typeof(SpecialOrder).GetCachedMethod(nameof(SpecialOrder.UpdateAvailableSpecialOrders), ReflectionCache.FlagTypes.StaticFlags),
+                prefix: prefix);
+        }
+        catch (Exception ex)
+        {
+            ModEntry.ModMonitor.Log($"Failed in apply board update patch:\n\n{ex}", LogLevel.Error);
+        }
+    }
+
     [HarmonyPostfix]
     [HarmonyPatch(nameof(SpecialOrder.OnFail))]
     [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Harmony Convention.")]
@@ -16,9 +41,6 @@ internal static class SpecialOrderPatches
 
     // Surpress the middle-of-night Special Order updates until
     // the board is open. There's no point.
-    [HarmonyPrefix]
-    [HarmonyPriority(Priority.Last)]
-    [HarmonyPatch(nameof(SpecialOrder.UpdateAvailableSpecialOrders))]
     private static bool PrefixUpdate() => ModEntry.Config.SurpressUnnecessaryBoardUpdates && SpecialOrder.IsSpecialOrdersBoardUnlocked();
 
     [HarmonyPrefix]

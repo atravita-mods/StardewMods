@@ -33,7 +33,7 @@ internal class SObjectDrawTranspiler
             {
                 return ModEntry.Config.InvalidColor;
             }
-            else if (obj.ParentSheetIndex == (int)VanillaMachinesEnum.BeeHouse && BetterBeehousesIntegration.Status == MachineStatus.Invalid)
+            else if (obj.ParentSheetIndex == (int)VanillaMachinesEnum.BeeHouse && BetterBeehousesIntegration.Status.Value == MachineStatus.Invalid)
             {
                 return ModEntry.Config.InvalidColor;
             }

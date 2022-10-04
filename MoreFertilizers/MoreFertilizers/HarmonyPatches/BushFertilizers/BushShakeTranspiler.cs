@@ -54,7 +54,7 @@ internal static class BushShakeTranspiler
 
             helper.Insert(codes.ToArray(), labels);
 
-            helper.Print();
+            // helper.Print();
             return helper.Render();
         }
         catch (Exception ex)

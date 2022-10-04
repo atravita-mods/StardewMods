@@ -5,16 +5,21 @@ using AtraShared.Integrations;
 using AtraShared.Integrations.Interfaces;
 using AtraShared.Utils.Extensions;
 
+using StardewModdingAPI.Utilities;
+
 namespace HighlightEmptyMachines.Framework;
 
-#warning - perscreen this.
 /// <summary>
 /// Handles the beehives.
 /// </summary>
 internal static class BetterBeehousesIntegration
 {
     private static IBetterBeehousesAPI? api;
-    internal static MachineStatus Status { get; private set; } = MachineStatus.Disabled;
+
+    /// <summary>
+    /// Gets the current beehouse status.
+    /// </summary>
+    internal static PerScreen<MachineStatus> Status { get; } = new(() => MachineStatus.Disabled);
 
     /// <summary>
     /// Tries to grab the PFM api.
@@ -29,7 +34,7 @@ internal static class BetterBeehousesIntegration
     /// Updates the status of beehives for the current location.
     /// </summary>
     /// <param name="location">The game location to update to.</param>
-    internal static void UpdateStatus(GameLocation location)
+    internal static void UpdateStatus(GameLocation? location)
     {
         if (location is null)
         {
@@ -38,17 +43,17 @@ internal static class BetterBeehousesIntegration
 
         if (!ModEntry.Config.VanillaMachines.SetDefault(VanillaMachinesEnum.BeeHouse, true))
         {
-            Status = MachineStatus.Disabled;
+            Status.Value = MachineStatus.Disabled;
             return;
         }
 
         if (api is null)
         {
-            Status = (location.IsOutdoors && Game1.GetSeasonForLocation(location) != "winter") ? MachineStatus.Enabled : MachineStatus.Invalid;
+            Status.Value = (location.IsOutdoors && Game1.GetSeasonForLocation(location) != "winter") ? MachineStatus.Enabled : MachineStatus.Invalid;
         }
         else
         {
-            Status = api.GetEnabledHere(location) ? MachineStatus.Enabled : MachineStatus.Invalid;
+            Status.Value = api.GetEnabledHere(location, Game1.currentSeason == "winter") ? MachineStatus.Enabled : MachineStatus.Invalid;
         }
 
         ModEntry.ModMonitor.DebugOnlyLog($"Current status of beehives is {Status}", LogLevel.Info);

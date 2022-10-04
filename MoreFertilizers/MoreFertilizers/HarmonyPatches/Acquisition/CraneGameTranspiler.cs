@@ -106,7 +106,7 @@ internal static class CraneGameTranspiler
                 new(OpCodes.Call, typeof(CraneGameTranspiler).GetCachedMethod(nameof(AddFertilizerToRewardsListThree), ReflectionCache.FlagTypes.StaticFlags)),
             });
 
-            helper.Print();
+            // helper.Print();
             return helper.Render();
         }
         catch (Exception ex)

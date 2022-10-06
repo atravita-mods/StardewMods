@@ -1,6 +1,8 @@
 ﻿using AtraBase.Toolkit.Extensions;
+
 using AtraShared;
 using AtraShared.Utils.Extensions;
+
 using SpecialOrdersExtended.DataModels;
 
 namespace SpecialOrdersExtended.Managers;
@@ -159,7 +161,8 @@ internal class RecentSOManager
     {
         if (!Context.IsWorldReady)
         {
-            throw new SaveNotLoadedError();
+            ASThrowHelper.ThrowSaveNotLoaded();
+            return false;
         }
         if (recentCompletedSO!.TryAdd(questkey, Game1.stats.DaysPlayed))
         {
@@ -179,7 +182,8 @@ internal class RecentSOManager
     {
         if (!Context.IsWorldReady)
         {
-            throw new SaveNotLoadedError();
+            ASThrowHelper.ThrowSaveNotLoaded();
+            return false;
         }
         return recentCompletedSO!.TryRemove(questkey);
     }

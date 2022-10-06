@@ -21,7 +21,7 @@ internal sealed class ModEntry : Mod
     /// <summary>
     /// Gets the API for this mod.
     /// </summary>
-    internal static ReviveDeadCropsApi Api { get; private set; } = new();
+    internal static ReviveDeadCropsApi Api { get; } = ReviveDeadCropsApi.Instance;
 
     /// <inheritdoc />
     public override void Entry(IModHelper helper)

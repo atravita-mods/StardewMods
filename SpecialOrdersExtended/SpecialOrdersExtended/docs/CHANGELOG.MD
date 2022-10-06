@@ -3,7 +3,6 @@ Changelog
 
 1. Add condition to just randomly reduce the chance of a quest appearing. (May need integrate with that one mod that changes the day special orders appear?)
 2. Add condition for total number of quests completed, per board.
-3. Fix issue where unicode in the save name will cause issues while saving.
 <!-- Better documentation for the dialogue tags? -->
 
 
@@ -19,6 +18,8 @@ Changelog
 
 #### Version 1.1.1
 * Deliver orders can now be completed partially.
+* Fix duration override.
+* Fix issue where unicode in the save name prevents saving of custom data.
 
 #### Version 1.1.0
 

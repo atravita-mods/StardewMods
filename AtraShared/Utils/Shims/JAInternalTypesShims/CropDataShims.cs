@@ -5,14 +5,15 @@ using HarmonyLib;
 
 namespace AtraShared.Utils.Shims.JAInternalTypesShims;
 
+[SuppressMessage("StyleCop.CSharp.OrderingRules", "SA1201:Elements should appear in the correct order", Justification = "Accessors kept near fields.")]
 internal static class CropDataShims
 {
-    private static Lazy<Func<object, string?>?> getSeedName = new(
+    private static readonly Lazy<Func<object, string?>?> getSeedName = new(
         () =>
         {
             Type cropData = AccessTools.TypeByName("JsonAssets.Data.CropData");
 
-            if (cropData == null)
+            if (cropData is null)
             {
                 return null;
             }
@@ -37,10 +38,13 @@ internal static class CropDataShims
             return Expression.Lambda<Func<object, string?>>(block, obj).CompileFast();
         });
 
+    /// <summary>
+    /// Gets the seed name from a JA ObjectData.
+    /// </summary>
     public static Func<object, string?>? GetSeedName => getSeedName.Value;
 
 #warning - incomplete
-    private static Lazy<Func<object, string[]?>?> getSeedRestrictions = new(
+    private static  readonly Lazy<Func<object, string[]?>?> getSeedRestrictions = new(
         () =>
         {
             Type cropData = AccessTools.TypeByName("JsonAssets.Data.CropData");
@@ -58,4 +62,6 @@ internal static class CropDataShims
 
             return null;
         });
+
+    public static Func<object, string[]?>? GetSeedRestrictions => getSeedRestrictions.Value;
 }

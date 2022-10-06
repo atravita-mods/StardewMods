@@ -1,6 +1,11 @@
 ﻿using AtraBase.Toolkit.Extensions;
+using AtraBase.Toolkit.Reflection;
+
+using AtraCore.Framework.ReflectionManager;
 using AtraCore.Utilities;
+
 using AtraShared.Utils.Extensions;
+
 using Microsoft.Xna.Framework;
 using StardewValley.TerrainFeatures;
 
@@ -16,6 +21,19 @@ public class ReviveDeadCropsApi : IReviveDeadCropsApi
 
     private const int FAIRY_DUST = 872;
 
+    private static readonly Lazy<Action<FruitTree, float>> ShakeTimerSetter = new(
+    () => typeof(FruitTree)
+        .GetCachedField("shakeTimer", ReflectionCache.FlagTypes.InstanceFlags)
+        .GetInstanceFieldSetter<FruitTree, float>());
+
+    /// <summary>
+    /// Gets the API instance for this mod.
+    /// </summary>
+    internal static ReviveDeadCropsApi Instance { get; } = new();
+
+    /// <summary>
+    /// Gets or sets a value indicating whether or not any crops have been revived.
+    /// </summary>
     internal bool Changed { get; set; } = false;
 
     /// <inheritdoc />
@@ -106,11 +124,12 @@ public class ReviveDeadCropsApi : IReviveDeadCropsApi
             tree.performUseAction(tree.currentTileLocation, Game1.currentLocation ?? tree.currentLocation);
             tree.struckByLightningCountdown.Value = 0;
         }
-        else if (tree.stump.Value)
+        if (tree.stump.Value)
         {
             tree.stump.Value = false;
-            tree.shakeLeft.Value = true;
         }
+        ShakeTimerSetter.Value(tree, 100f);
+        tree.shakeLeft.Value = true;
         tree.health.Value = 10f;
     }
 

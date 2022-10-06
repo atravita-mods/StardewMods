@@ -1,6 +1,7 @@
 ﻿using AtraCore.Framework.ReflectionManager;
 
 using HarmonyLib;
+
 using SpecialOrdersExtended.Managers;
 
 namespace SpecialOrdersExtended.HarmonyPatches;

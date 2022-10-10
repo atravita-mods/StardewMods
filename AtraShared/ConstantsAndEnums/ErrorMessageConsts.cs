@@ -10,5 +10,8 @@ public static class ErrorMessageConsts
     /// </summary>
     public const string HARMONYCRASH = "Mod crashed while applying harmony patches:\n\n{0}";
 
+    /// <summary>
+    /// The message string used to surpress Stylecop ordering warnings for records.
+    /// </summary>
     public const string STYLECOP_RECORDS = "Records break stylecop :(.";
 }

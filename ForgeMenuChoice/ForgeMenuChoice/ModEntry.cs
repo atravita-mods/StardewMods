@@ -36,11 +36,20 @@ internal sealed class ModEntry : Mod
     /// </summary>
     internal static ModConfig Config { get; private set; }
 
+    /// <summary>
+    /// Gets the input helper for this mod.
+    /// </summary>
     internal static IInputHelper InputHelper { get; private set; }
 
+    /// <summary>
+    /// Gets the string utilities for this mod.
+    /// </summary>
     internal static StringUtils StringUtils { get; private set; }
 #pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
 
+    /// <summary>
+    /// Gets a delegate that checks to see if the forge instance is Casey's NewForgeMenu or not.
+    /// </summary>
     internal static Func<object, bool>? IsSpaceForge { get; private set; } = null;
 
     /// <inheritdoc/>

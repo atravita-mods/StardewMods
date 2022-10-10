@@ -56,6 +56,6 @@ internal static class BetterBeehousesIntegration
             Status.Value = api.GetEnabledHere(location, Game1.GetSeasonForLocation(location) == "winter") ? MachineStatus.Enabled : MachineStatus.Invalid;
         }
 
-        ModEntry.ModMonitor.DebugOnlyLog($"Current status of beehives is {Status.Value}", LogLevel.Info);
+        ModEntry.ModMonitor.DebugOnlyLog($"Current status of beehives is {Status.Value}", LogLevel.Debug);
     }
 }

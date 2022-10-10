@@ -11,6 +11,7 @@
 
 #### Version 1.1.1
 * Fixes Enchanted Scythes support.
+* Adds keybinds - should work for controllers too.
 
 #### Version 1.1.0
 * Update to using AtraCore (and associated internal improvements).

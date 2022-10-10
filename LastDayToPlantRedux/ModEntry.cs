@@ -59,11 +59,6 @@ internal sealed class ModEntry : Mod
 
     private void OnSaveLoaded(object? sender, SaveLoadedEventArgs e)
     {
-        if (Config.CropsToDisplay == CropOptions.All)
-        {
-            return;
-        }
-
         if (Config.CropsToDisplay == CropOptions.Purchaseable)
         {
             // set up JA integration

@@ -1,7 +1,9 @@
 ﻿#if DEBUG
 using System.Diagnostics;
 #endif
+
 using AtraBase.Toolkit;
+
 using AtraCore.Config;
 using AtraCore.Framework.DialogueManagement;
 using AtraCore.Framework.Internal;
@@ -9,11 +11,15 @@ using AtraCore.Framework.ItemManagement;
 using AtraCore.Framework.QueuePlayerAlert;
 using AtraCore.HarmonyPatches.DrawPrismaticPatches;
 using AtraCore.Utilities;
+
 using AtraShared.ConstantsAndEnums;
 using AtraShared.MigrationManager;
 using AtraShared.Utils.Extensions;
+
 using HarmonyLib;
+
 using StardewModdingAPI.Events;
+
 using AtraUtils = AtraShared.Utils.Utils;
 
 namespace AtraCore;
@@ -52,7 +58,7 @@ internal sealed class ModEntry : Mod
         helper.Events.GameLoop.TimeChanged += this.OnTimeChanged;
 
 #if DEBUG
-        // helper.Events.GameLoop.DayStarted += this.OnDayStart;
+        helper.Events.GameLoop.DayStarted += this.OnDayStart;
         helper.Events.GameLoop.SaveLoaded += this.LateSaveLoaded;
 #endif
     }
@@ -74,6 +80,7 @@ internal sealed class ModEntry : Mod
         }
 
         Game1.player.mailReceived.OnElementChanged += this.MailReceived_OnElementChanged;
+        Game1.player.team.specialOrders.OnElementChanged += this.SpecialOrdersChanged;
 
         MultiplayerHelpers.AssertMultiplayerVersions(this.Helper.Multiplayer, this.ModManifest, this.Monitor, this.Helper.Translation);
         DrawPrismatic.LoadPrismaticData();
@@ -87,6 +94,11 @@ internal sealed class ModEntry : Mod
         {
             this.migrator = null;
         }
+    }
+
+    private void SpecialOrdersChanged(Netcode.NetList<SpecialOrder, Netcode.NetRef<SpecialOrder>> list, int index, SpecialOrder oldValue, SpecialOrder newValue)
+    {
+        this.Monitor.Log($"Special order {index}, {oldValue.questKey}, {newValue.questKey}", LogLevel.Alert);
     }
 
     private void MailReceived_OnElementChanged(Netcode.NetList<string, Netcode.NetString> list, int index, string oldValue, string newValue)

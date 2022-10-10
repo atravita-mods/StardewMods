@@ -1,6 +1,8 @@
 ﻿{
   "WeddingTime.title": "Wedding Time",
   "WeddingTime.description": "Lets you get married slightly later than 6AM.",
+  "TryRecoverWedding.title": "Try to recover wedding.",
+  "TryRecoverWedding.description": "By default, the wedding is skipped if you load into a save. This tries to restore that event.",
   "WeddingMessage": "You're getting married today at {{weddingHour}}:{{weddingMinutes}}!",
   "WeddingMessageOther": "Someone's getting married today at {{weddingHour}}:{{weddingMinutes}}",
   "WeddingReminder": "Your wedding is in ten minutes! Get ready!",

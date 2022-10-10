@@ -209,14 +209,28 @@ internal sealed class ModEntry : Mod
 
     private void AfterSaveAnywhere(object? sender, EventArgs e)
     {
-        DialogueManager.LoadTemp();
-        RecentSOManager.LoadTemp();
+        try
+        {
+            DialogueManager.LoadTemp();
+            RecentSOManager.LoadTemp();
+        }
+        catch (Exception ex)
+        {
+            this.Monitor.Log($"Failed in loading temporary files:\n\n{ex}", LogLevel.Error);
+        }
     }
 
     private void BeforeSaveAnywhere(object? sender, EventArgs e)
     {
-        DialogueManager.SaveTemp();
-        RecentSOManager.SaveTemp();
+        try
+        {
+            DialogueManager.SaveTemp();
+            RecentSOManager.SaveTemp();
+        }
+        catch (Exception ex)
+        {
+            this.Monitor.Log($"Failed in saving temporary files:\n\n{ex}", LogLevel.Error);
+        }
     }
 
     /// <summary>

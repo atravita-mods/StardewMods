@@ -106,6 +106,8 @@ internal static class PFMMachineHandler
                 item.TryGetValue("RequiredLocation", out object? locs) && locs is List<string> locationList && locationList.Count > 0 ? locationList : null);
             Recipes[(int)id].Add(recipe);
         }
+
+        ModEntry.ModMonitor.DebugOnlyLog($"{recipes.Count} recipes indexed.");
     }
 
     /// <summary>

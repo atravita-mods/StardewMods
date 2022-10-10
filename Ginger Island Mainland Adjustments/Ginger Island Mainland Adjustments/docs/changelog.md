@@ -32,6 +32,7 @@
 ### Version 1.1.7
 * Remove no longer necessary compat code.
 * Add the `ScheduleStrictness` property, which I promise to document sometime....
+* adds an option to prevent villagers with no Resort dialogue from going to the Resort.
 
 ### Version 1.1.6
 * Various bugfixes

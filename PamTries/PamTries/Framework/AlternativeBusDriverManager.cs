@@ -28,7 +28,7 @@ internal static class AlternativeBusDriverManager
     {
         if (e.Name.IsDirectlyUnderPath("Characters/schedules"))
         {
-            string name = e.Name.BaseName.GetNthChunk('/', 2).ToString();
+            ReadOnlySpan<char> name = e.Name.BaseName.GetNthChunk('/', 2);
             if ((Game1.year < 2 && name.Equals("Kent", StringComparison.OrdinalIgnoreCase))
                 || name.Equals("Pam", StringComparison.OrdinalIgnoreCase))
             {
@@ -36,16 +36,16 @@ internal static class AlternativeBusDriverManager
             }
             if (Game1.content.Load<Dictionary<string, string>>(e.Name.ToString()).ContainsKey("bus"))
             {
-                if (busdrivers.Add(name))
+                if (busdrivers.Add(name.ToString()))
                 {
-                    ModEntry.ModMonitor.DebugOnlyLog($"Adding {name} to possible bus drivers.", LogLevel.Debug);
+                    ModEntry.ModMonitor.DebugOnlyLog($"Adding {name.ToString()} to possible bus drivers.", LogLevel.Debug);
                 }
             }
             else
             {
-                if (busdrivers.Remove(name))
+                if (busdrivers.Remove(name.ToString()))
                 {
-                    ModEntry.ModMonitor.DebugOnlyLog($"Removing {name} from possible bus drivers.", LogLevel.Debug);
+                    ModEntry.ModMonitor.DebugOnlyLog($"Removing {name.ToString()} from possible bus drivers.", LogLevel.Debug);
                 }
             }
         }

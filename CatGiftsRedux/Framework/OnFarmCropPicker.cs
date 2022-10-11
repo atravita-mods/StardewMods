@@ -4,8 +4,17 @@ using StardewValley.Objects;
 using StardewValley.TerrainFeatures;
 
 namespace CatGiftsRedux.Framework;
+
+/// <summary>
+/// Picks a random on-farm crop.
+/// </summary>
 internal static class OnFarmCropPicker
 {
+    /// <summary>
+    /// Picks a random on-farm (living) crop.
+    /// </summary>
+    /// <param name="random">Random to use.</param>
+    /// <returns>The product of a random crop.</returns>
     internal static SObject? Pick(Random random)
     {
         ModEntry.ModMonitor.DebugOnlyLog("Picked Random Farm Crop");

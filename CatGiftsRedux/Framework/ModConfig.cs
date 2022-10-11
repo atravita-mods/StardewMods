@@ -32,9 +32,23 @@ public sealed class ModConfig
     /// Gets or sets a list of things the user wants to drop.
     /// </summary>
     [GMCMDefaultIgnore]
-    public List<WeightedItem> UserDefinedItemList { get; set; } = new();
+    public List<WeightedItem> UserDefinedItemList { get; set; } = new()
+    {
+        new (
+            new (ItemTypeEnum.SObject, "Trash"),
+            100),
+        new (
+            new (ItemTypeEnum.SObject, "Stick"),
+            100),
+    };
 
-    private float minChance = 0f;
+    /// <summary>
+    /// Gets or sets how much to weigh the user defined list.
+    /// </summary>
+    [GMCMRange(0, 1000)]
+    public int UserDefinedListWeight { get; set; } = 100;
+
+    private float minChance = 0.1f;
 
     /// <summary>
     /// Gets or sets chance the pet will bring you something at minimum hearts.
@@ -47,7 +61,7 @@ public sealed class ModConfig
         set => this.minChance = Math.Clamp(value, 0f, 1.0f);
     }
 
-    private float maxChance = 0f;
+    private float maxChance = 0.7f;
 
     /// <summary>
     /// Gets or sets the chance the pet will bring you something at max hearts.
@@ -76,37 +90,58 @@ public sealed class ModConfig
     /// Gets or sets a list of place names pets can bring you forage from.
     /// </summary>
     [GMCMDefaultIgnore]
-    public List<string> ForageFromMaps { get; set; } = new() { "Forest", "Beach" };
+    public List<string> ForageFromMaps { get; set; } = new() { "Forest", "Beach", "Mountain" };
 
     /// <summary>
-    /// Gets or sets a value indicating whether whether or not the pet should be able to get items from animal products.
+    /// Gets or sets a value indicating how much to weigh the forage from maps picker.
     /// </summary>
-    public bool AnimalProductsEnabled { get; set; } = true;
+    [GMCMRange(0, 1000)]
+    public int ForageFromMapsWeight { get; set; } = 100;
 
     /// <summary>
-    /// Gets or sets a value indicating whether whether or not the pet should be able to get products of an in-season crop.
+    /// Gets or sets a value indicating the weight of the animal products picker.
     /// </summary>
-    public bool SeasonalCropsEnabled { get; set; } = true;
+    [GMCMRange(0, 1000)]
+    public int AnimalProductsWeight { get; set; } = 100;
 
     /// <summary>
-    /// Gets or sets a value indicating whether whether or not the pet should be able to get the products of a crop growing on the farm.
+    /// Gets or sets a value indicating the weight of the seasonal crops picker.
     /// </summary>
-    public bool OnFarmCropEnabled { get; set; } = true;
+    [GMCMRange(0, 1000)]
+    public int SeasonalCropsWeight { get; set; } = 100;
 
     /// <summary>
-    /// Gets or sets a value indicating whether whether or not the pet can bring you some seasonal tree fruit.
+    /// Gets or sets a value indicating the weight of the on farm crops picker.
     /// </summary>
-    public bool SeasonalFruit { get; set; } = true;
+    [GMCMRange(0, 1000)]
+    public int OnFarmCropWeight { get; set; } = 50;
 
     /// <summary>
-    /// Gets or sets a value indicating whether whether or not the pet can bring you a ring.
+    /// Gets or sets a value indicating the weight of the seasonal fruit picker.
     /// </summary>
-    public bool RingsEnabled { get; set; } = true;
+    [GMCMRange(0, 1000)]
+    public int SeasonalFruitWeight { get; set; } = 50;
 
     /// <summary>
-    /// Gets or sets a value indicating whether whether or not the pet can pick from the full items list.
+    /// Gets or sets a value indicating the chances the pet will bring you a ring.
     /// </summary>
-    public bool AllItemsEnabled { get; set; } = true;
+    [GMCMRange(0, 1000)]
+    public int RingsWeight { get; set; } = 10;
+
+    /// <summary>
+    /// Gets or sets a value indicating the weight of the Daily Saloon dish.
+    /// </summary>
+    [GMCMRange(0, 1000)]
+    public int DailyDishWeight { get; set; } = 10;
+
+    [GMCMRange(0, 1000)]
+    public int HatWeight { get; set; } = 10;
+
+    /// <summary>
+    /// Gets or sets a value indicating whether or not the pet can pick from the full items list.
+    /// </summary>
+    [GMCMRange(0, 1000)]
+    public int AllItemsWeight { get; set; } = 100;
 
     private int maxPriceForAllItems = 500;
 

@@ -5,6 +5,7 @@ TODO: optionally highlight **buildings** that have empty machines within them?
 
 ### Version 0.2.1
 * Fix beehouses, integration with Better Beehouses.
+* Remove some items.
 
 ### Version 0.2.0
 

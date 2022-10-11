@@ -22,7 +22,7 @@ internal static class SeasonalFruitPicker
             return null;
         }
 
-        var fruit = fruittrees[random.Next(fruittrees.Count)];
+        KeyValuePair<int, string> fruit = fruittrees[random.Next(fruittrees.Count)];
 
         if (int.TryParse(fruit.Value.GetNthChunk('/', 2), out int id))
         {

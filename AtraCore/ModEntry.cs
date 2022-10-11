@@ -80,7 +80,7 @@ internal sealed class ModEntry : Mod
         }
 
         Game1.player.mailReceived.OnElementChanged += this.MailReceived_OnElementChanged;
-        Game1.player.team.specialOrders.OnElementChanged += this.SpecialOrdersChanged;
+        Game1.player.team.completedSpecialOrders.OnValueAdded += this.OnValueAdded;
 
         MultiplayerHelpers.AssertMultiplayerVersions(this.Helper.Multiplayer, this.ModManifest, this.Monitor, this.Helper.Translation);
         DrawPrismatic.LoadPrismaticData();
@@ -96,10 +96,7 @@ internal sealed class ModEntry : Mod
         }
     }
 
-    private void SpecialOrdersChanged(Netcode.NetList<SpecialOrder, Netcode.NetRef<SpecialOrder>> list, int index, SpecialOrder oldValue, SpecialOrder newValue)
-    {
-        this.Monitor.Log($"Special order {index}, {oldValue.questKey}, {newValue.questKey}", LogLevel.Alert);
-    }
+    private void OnValueAdded(string key, bool value) => this.Monitor.Log(key, LogLevel.Alert);
 
     private void MailReceived_OnElementChanged(Netcode.NetList<string, Netcode.NetString> list, int index, string oldValue, string newValue)
     {

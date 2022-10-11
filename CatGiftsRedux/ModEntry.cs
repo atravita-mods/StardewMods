@@ -1,11 +1,12 @@
-﻿using AtraBase.Models.WeightedRandom;
+﻿using AtraBase.Collections;
+using AtraBase.Models.WeightedRandom;
 using AtraBase.Toolkit.Extensions;
 
 using AtraCore.Framework.ItemManagement;
-using AtraCore.Framework.QueuePlayerAlert;
 
 using AtraShared.ConstantsAndEnums;
 using AtraShared.Integrations;
+using AtraShared.Integrations.Interfaces;
 using AtraShared.ItemManagement;
 using AtraShared.Utils.Extensions;
 
@@ -16,7 +17,6 @@ using Microsoft.Xna.Framework;
 using StardewModdingAPI.Events;
 
 using StardewValley.Characters;
-using StardewValley.Objects;
 
 using AtraUtils = AtraShared.Utils.Utils;
 
@@ -27,18 +27,22 @@ internal sealed class ModEntry : Mod
 {
     private const string SAVEKEY = "GiftsThisWeek";
 
-    private readonly HashSet<int> bannedItems = new();
+    // User defined items.
+    private readonly DefaultDict<ItemTypeEnum, HashSet<int>> bannedItems = new();
     private readonly WeightedManager<ItemRecord> playerItemsManager = new();
-
     private readonly WeightedManager<int> allItemsWeighted = new();
 
     /// <summary>
     /// The various methods of getting an item.
     /// </summary>
-    private readonly List<Func<Random, SObject?>> itemPickers = new();
+    private readonly WeightedManager<Func<Random, Item?>> itemPickers = new();
 
     private ModConfig config = null!;
+    private IDynamicGameAssetsApi? dgaAPI;
 
+    /// <summary>
+    /// Gets the logging instance for this class.
+    /// </summary>
     internal static IMonitor ModMonitor { get; private set; } = null!;
 
     /// <inheritdoc />
@@ -48,7 +52,7 @@ internal sealed class ModEntry : Mod
         this.config = AtraUtils.GetConfigOrDefault<ModConfig>(helper, this.Monitor);
         ModMonitor = this.Monitor;
 
-        helper.Events.GameLoop.GameLaunched += this.SetUpConfig;
+        helper.Events.GameLoop.GameLaunched += this.OnGameLaunch;
         helper.Events.GameLoop.SaveLoaded += this.OnSaveLoaded;
 
         helper.Events.GameLoop.DayStarted += this.OnDayLaunched;
@@ -56,25 +60,25 @@ internal sealed class ModEntry : Mod
 
     private void OnDayLaunched(object? sender, DayStartedEventArgs e)
     {
-        if (this.Helper.Data.ReadSaveData<string>(SAVEKEY) is string value && int.TryParse(value, out var giftsThisWeek))
-        {
-            if (Game1.dayOfMonth % 7 == 0)
-            {
-                giftsThisWeek = 0;
-            }
-            else if (giftsThisWeek >= this.config.WeeklyLimit)
-            {
-                return;
-            }
-        }
-        else
+        if (this.Helper.Data.ReadSaveData<string>(SAVEKEY) is not string value || !int.TryParse(value, out int giftsThisWeek))
         {
             giftsThisWeek = 0;
+        }
+
+        if (Game1.dayOfMonth % 7 == 0)
+        {
+            giftsThisWeek = 0;
+        }
+        else if (giftsThisWeek >= this.config.WeeklyLimit)
+        {
+            this.Monitor.DebugOnlyLog("Enough gifts this week");
+            return;
         }
 
         Pet? pet = Game1.player.getPet();
         if (pet is null)
         {
+            this.Monitor.DebugOnlyLog("No pet found");
             return;
         }
 
@@ -82,6 +86,7 @@ internal sealed class ModEntry : Mod
         double chance = ((pet.friendshipTowardFarmer.Value / 1000.0) * (this.config.MaxChance - this.config.MinChance)) + this.config.MinChance;
         if (random.NextDouble() > chance)
         {
+            this.Monitor.DebugOnlyLog("Failed friendship probability check");
             return;
         }
 
@@ -91,47 +96,18 @@ internal sealed class ModEntry : Mod
 
         if (pet is Cat)
         {
-            var point = farm.GetMainFarmHouseEntry();
+            Point point = farm.GetMainFarmHouseEntry();
             tile = new(point.X, point.Y + 2);
         }
         else
         {
-            tile = this.GetRandomTile(farm);
+            tile = farm.GetRandomTileImpl();
         }
 
         if (tile is null)
         {
+            this.Monitor.DebugOnlyLog("Failed to find a free tile.");
             return;
-        }
-
-        if (this.playerItemsManager.Count > 0 && random.NextDouble() < 0.25)
-        {
-            var entry = this.playerItemsManager.GetValue(random);
-            if (!int.TryParse(entry.Identifier, out var id))
-            {
-                id = DataToItemMap.GetID(entry.Type, entry.Identifier);
-            }
-
-            if (id != -1)
-            {
-                var item = ItemUtils.GetItemFromIdentifier(entry.Type, id);
-                if (item is not null)
-                {
-                    this.PlaceItem(farm, tile.Value, item, pet);
-                    goto SUCCESS;
-                }
-            }
-        }
-
-        // tiny chance of a ring.
-        if (this.config.RingsEnabled && random.NextDouble() < 0.02)
-        {
-            Ring? ring = RingPicker.Pick(random);
-            if (ring is not null)
-            {
-                this.PlaceItem(farm, tile.Value, ring, pet);
-                goto SUCCESS;
-            }
         }
 
         if (this.itemPickers.Count > 0)
@@ -139,73 +115,60 @@ internal sealed class ModEntry : Mod
             int attempts = 10;
             do
             {
-                var picker = Utility.GetRandom(this.itemPickers, random);
+                Func<Random, Item?> picker = this.itemPickers.GetValue(random);
                 Item? picked = picker(random);
 
                 if (picked is not null)
                 {
-                    if ((picked is SObject && this.bannedItems.Contains(picked.ParentSheetIndex))
+                    if ((this.bannedItems.TryGetValue(picked.GetItemType(), out HashSet<int>? bannedItems) && bannedItems.Contains(picked.ParentSheetIndex))
                         || picked.salePrice() > this.config.MaxPriceForAllItems)
                     {
                         continue;
                     }
-                    this.PlaceItem(farm, tile.Value, picked, pet);
+                    farm.PlaceItem(tile.Value, picked, pet);
                     goto SUCCESS;
                 }
             }
             while (attempts-- > 0);
         }
+
+        this.Monitor.DebugOnlyLog("Did not find a valid item.");
         return;
 SUCCESS:
         this.Helper.Data.WriteSaveData(SAVEKEY, (++giftsThisWeek).ToString());
     }
 
-    /// <summary>
-    /// Gets a random empty tile on a map.
-    /// </summary>
-    /// <param name="location">The game location to get a random tile from.</param>
-    /// <param name="tries">How many times to try.</param>
-    /// <returns>Empty tile, or null to indicate failure.</returns>
-    private Vector2? GetRandomTile(GameLocation location, int tries = 10)
+    private Item? GetUserItem(Random random)
     {
-        do
+        var entry = this.playerItemsManager.GetValue(random);
+
+        if (entry.Type.HasFlag(ItemTypeEnum.DGAItem))
         {
-            var tile = location.getRandomTile();
-            if (location.isWaterTile((int)tile.X, (int)tile.Y))
+            if (this.dgaAPI is null)
             {
-                continue;
+                this.Monitor.LogOnce("DGA item requested but DGA was not installed, ignored.", LogLevel.Warn);
             }
 
-            var options = Utility.recursiveFindOpenTiles(location, tile, 1);
-            if (options.Count > 0)
-            {
-                return options[0];
-            }
+            return this.dgaAPI?.SpawnDGAItem(entry.Identifier) as Item;
+        }
 
-        } while (tries-- > 0);
+        if (!int.TryParse(entry.Identifier, out int id))
+        {
+            id = DataToItemMap.GetID(entry.Type, entry.Identifier);
+        }
 
+        if (id > 0)
+        {
+            return ItemUtils.GetItemFromIdentifier(entry.Type, id);
+        }
         return null;
     }
 
-    private void PlaceItem(GameLocation location, Vector2 tile, Item item, Pet pet)
-    {
-        this.Monitor.DebugOnlyLog($"Placing {item.Name} at {location.NameOrUniqueName} - {tile}");
-
-        PlayerAlertHandler.AddMessage(new ($"{pet.Name} has brought you a {item.DisplayName}", 1, true, Color.PaleGreen, item));
-
-        if (item is SObject obj && !location.Objects.ContainsKey(tile))
-        {
-            location.Objects[tile] = obj;
-        }
-        else
-        {
-            var debris = new Debris(item, tile * 64f);
-            location.debris.Add(debris);
-        }
-    }
-
     private SObject? RandomSeasonalForage(Random random)
-        => new SObject(Utility.getRandomBasicSeasonalForageItem(Game1.currentSeason), 1);
+        => new(Utility.getRandomBasicSeasonalForageItem(Game1.currentSeason, random.Next()), 1);
+
+    private SObject? RandomSeasonalItem(Random random)
+        => new(Utility.getRandomPureSeasonalItem(Game1.currentSeason, random.Next()), 1);
 
     private SObject? GetFromForage(Random random)
     {
@@ -238,7 +201,7 @@ SUCCESS:
     {
         this.Monitor.DebugOnlyLog("Selected all items");
 
-        if (!this.config.AllItemsEnabled || this.allItemsWeighted.Count == 0)
+        if (this.config.AllItemsWeight <= 0 || this.allItemsWeighted.Count == 0)
         {
             return null;
         }
@@ -259,8 +222,11 @@ SUCCESS:
     /// </summary>
     /// <param name="sender">SMAPI.</param>
     /// <param name="e">event args.</param>
-    private void SetUpConfig(object? sender, GameLaunchedEventArgs e)
+    private void OnGameLaunch(object? sender, GameLaunchedEventArgs e)
     {
+        IntegrationHelper integration = new(this.Monitor, this.Helper.Translation, this.Helper.ModRegistry, LogLevel.Trace);
+        integration.TryGetAPI("spacechase0.DynamicGameAssets", "1.4.3", out this.dgaAPI);
+
         GMCMHelper helper = new(this.Monitor, this.Helper.Translation, this.Helper.ModRegistry, this.ModManifest);
         if (helper.TryGetAPI())
         {
@@ -290,11 +256,6 @@ SUCCESS:
         this.bannedItems.Clear();
         foreach (var item in this.config.Denylist)
         {
-            if (item.Type != AtraShared.ConstantsAndEnums.ItemTypeEnum.SObject)
-            {
-                continue;
-            }
-
             if (!int.TryParse(item.Identifier, out var id))
             {
                 id = DataToItemMap.GetID(item.Type, item.Identifier);
@@ -302,7 +263,7 @@ SUCCESS:
 
             if (id != -1)
             {
-                this.bannedItems.Add(id);
+                this.bannedItems[item.Type].Add(id);
             }
         }
 
@@ -313,49 +274,70 @@ SUCCESS:
             this.playerItemsManager.AddRange(this.config.UserDefinedItemList.Select((item) => new WeightedItem<ItemRecord>(item.Weight, item.Item)));
         }
 
+        // add pickers to the picking list.
         this.itemPickers.Clear();
 
-        this.itemPickers.Add(this.RandomSeasonalForage);
+        this.itemPickers.Add(100, this.RandomSeasonalForage);
+        this.itemPickers.Add(100, this.RandomSeasonalItem);
 
-        // add pickers to the picking list.
-        if (this.config.ForageFromMaps.Count > 0)
+        if (this.playerItemsManager.Count > 0 && this.config.UserDefinedListWeight > 0)
         {
-            this.itemPickers.Add(this.GetFromForage);
+            this.itemPickers.Add(this.config.UserDefinedListWeight, this.GetUserItem);
         }
 
-        if (this.config.AnimalProductsEnabled)
+        if (this.config.ForageFromMaps.Count > 0 && this.config.ForageFromMapsWeight > 0)
         {
-            this.itemPickers.Add(AnimalProductChooser.Pick);
+            this.itemPickers.Add(this.config.ForageFromMapsWeight, this.GetFromForage);
         }
 
-        if (this.config.SeasonalCropsEnabled)
+        if (this.config.AnimalProductsWeight > 0)
         {
-            this.itemPickers.Add(SeasonalCropChooser.Pick);
+            this.itemPickers.Add(this.config.AnimalProductsWeight, AnimalProductChooser.Pick);
         }
 
-        if (this.config.OnFarmCropEnabled)
+        if (this.config.SeasonalCropsWeight > 0)
         {
-            this.itemPickers.Add(OnFarmCropPicker.Pick);
+            this.itemPickers.Add(this.config.SeasonalCropsWeight, SeasonalCropChooser.Pick);
         }
 
-        if (this.config.SeasonalFruit)
+        if (this.config.OnFarmCropWeight > 0)
         {
-            this.itemPickers.Add(SeasonalFruitPicker.Pick);
+            this.itemPickers.Add(this.config.OnFarmCropWeight, OnFarmCropPicker.Pick);
+        }
+
+        if (this.config.SeasonalFruitWeight > 0)
+        {
+            this.itemPickers.Add(this.config.SeasonalFruitWeight, SeasonalFruitPicker.Pick);
+        }
+
+        if (this.config.RingsWeight > 0)
+        {
+            this.itemPickers.Add(this.config.RingsWeight, RingPicker.Pick);
+        }
+
+        if (this.config.DailyDishWeight > 0)
+        {
+            this.itemPickers.Add(this.config.DailyDishWeight, DailyDishPicker.Pick);
+        }
+
+        if (this.config.HatWeight > 0)
+        {
+            this.itemPickers.Add(this.config.HatWeight, HatPicker.Pick);
         }
 
         this.allItemsWeighted.Clear();
-        if (this.config.AllItemsEnabled)
+        if (this.config.AllItemsWeight > 0)
         {
-            foreach (var key in DataToItemMap.GetAll(ItemTypeEnum.SObject))
+            foreach (int key in DataToItemMap.GetAll(ItemTypeEnum.SObject))
             {
                 if (Game1.objectInformation.TryGetValue(key, out string? data)
                     && int.TryParse(data.GetNthChunk('/', SObject.objectInfoPriceIndex), out int price)
                     && price < this.config.MaxPriceForAllItems)
                 {
-                    this.allItemsWeighted.Add(new(price, key));
+                    this.allItemsWeighted.Add(new(this.config.MaxPriceForAllItems - price, key));
                 }
             }
-            this.itemPickers.Add(this.AllItemsPicker);
+            this.itemPickers.Add(this.config.AllItemsWeight, this.AllItemsPicker);
         }
 
         this.Monitor.Log($"{this.itemPickers.Count} pickers found.");

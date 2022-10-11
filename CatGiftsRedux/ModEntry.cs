@@ -26,16 +26,19 @@ namespace CatGiftsRedux;
 internal sealed class ModEntry : Mod
 {
     private const string SAVEKEY = "GiftsThisWeek";
-
-    // User defined items.
-    private readonly DefaultDict<ItemTypeEnum, HashSet<int>> bannedItems = new();
-    private readonly WeightedManager<ItemRecord> playerItemsManager = new();
-    private readonly WeightedManager<int> allItemsWeighted = new();
+    private static int maxPrice;
 
     /// <summary>
     /// The various methods of getting an item.
     /// </summary>
     private readonly WeightedManager<Func<Random, Item?>> itemPickers = new();
+
+    // User defined items.
+    private readonly DefaultDict<ItemTypeEnum, HashSet<int>> bannedItems = new();
+    private readonly WeightedManager<ItemRecord> playerItemsManager = new();
+    private Lazy<WeightedManager<int>> allItemsWeighted = new(GenerateAllItems);
+
+    private IAssetName dataObjectInfo = null!;
 
     private ModConfig config = null!;
     private IDynamicGameAssetsApi? dgaAPI;
@@ -51,11 +54,22 @@ internal sealed class ModEntry : Mod
         I18n.Init(helper.Translation);
         this.config = AtraUtils.GetConfigOrDefault<ModConfig>(helper, this.Monitor);
         ModMonitor = this.Monitor;
+        this.dataObjectInfo = helper.GameContent.ParseAssetName("Data/ObjectInformation");
 
         helper.Events.GameLoop.GameLaunched += this.OnGameLaunch;
         helper.Events.GameLoop.SaveLoaded += this.OnSaveLoaded;
 
         helper.Events.GameLoop.DayStarted += this.OnDayLaunched;
+        helper.Events.Content.AssetsInvalidated += this.OnAssetInvalidated;
+    }
+
+    private void OnAssetInvalidated(object? sender, AssetsInvalidatedEventArgs e)
+    {
+        if (this.allItemsWeighted.IsValueCreated && e.NamesWithoutLocale.Contains(this.dataObjectInfo))
+        {
+            maxPrice = this.config.MaxPriceForAllItems;
+            this.allItemsWeighted = new(GenerateAllItems);
+        }
     }
 
     private void OnDayLaunched(object? sender, DayStartedEventArgs e)
@@ -201,12 +215,12 @@ SUCCESS:
     {
         this.Monitor.DebugOnlyLog("Selected all items");
 
-        if (this.config.AllItemsWeight <= 0 || this.allItemsWeighted.Count == 0)
+        if (this.config.AllItemsWeight <= 0 || this.allItemsWeighted.Value.Count == 0)
         {
             return null;
         }
 
-        int id = this.allItemsWeighted.GetValue(random);
+        int id = this.allItemsWeighted.Value.GetValue(random);
         if (Game1.objectInformation.ContainsKey(id))
         {
             return new SObject(id, 1);
@@ -250,7 +264,10 @@ SUCCESS:
         {
             // sanity check the chances.
             (this.config.MinChance, this.config.MaxChance) = (this.config.MaxChance, this.config.MinChance);
+            this.Helper.AsyncWriteConfig(this.Monitor, this.config);
         }
+
+        maxPrice = this.config.MaxPriceForAllItems;
 
         // Handle banned items.
         this.bannedItems.Clear();
@@ -325,21 +342,34 @@ SUCCESS:
             this.itemPickers.Add(this.config.HatWeight, HatPicker.Pick);
         }
 
-        this.allItemsWeighted.Clear();
         if (this.config.AllItemsWeight > 0)
         {
-            foreach (int key in DataToItemMap.GetAll(ItemTypeEnum.SObject))
+            if (this.allItemsWeighted.IsValueCreated)
             {
-                if (Game1.objectInformation.TryGetValue(key, out string? data)
-                    && int.TryParse(data.GetNthChunk('/', SObject.objectInfoPriceIndex), out int price)
-                    && price < this.config.MaxPriceForAllItems)
-                {
-                    this.allItemsWeighted.Add(new(this.config.MaxPriceForAllItems - price, key));
-                }
+                this.allItemsWeighted = new(GenerateAllItems);
             }
             this.itemPickers.Add(this.config.AllItemsWeight, this.AllItemsPicker);
         }
 
         this.Monitor.Log($"{this.itemPickers.Count} pickers found.");
+    }
+
+    [SuppressMessage("StyleCop.CSharp.OrderingRules", "SA1204:Static elements should appear before instance elements", Justification = "Reviewed.")]
+    private static WeightedManager<int> GenerateAllItems()
+    {
+        WeightedManager<int> ret = new();
+        float difficulty = Game1.player?.difficultyModifier ?? 1.0f;
+
+        foreach (int key in DataToItemMap.GetAll(ItemTypeEnum.SObject))
+        {
+            if (Game1.objectInformation.TryGetValue(key, out string? data)
+                && int.TryParse(data.GetNthChunk('/', SObject.objectInfoPriceIndex), out int price)
+                && price * difficulty < maxPrice)
+            {
+                ret.Add(new(maxPrice - price, key));
+            }
+        }
+
+        return ret;
     }
 }

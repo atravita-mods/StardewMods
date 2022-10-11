@@ -1,6 +1,8 @@
 ﻿using AtraShared.Menuing;
+
 using StardewModdingAPI.Events;
 using StardewModdingAPI.Utilities;
+
 using StardewValley.Locations;
 
 namespace MoreFertilizers.Framework;

@@ -148,10 +148,10 @@ public sealed class ModConfig
     /// <summary>
     /// Gets or sets the most valuable item the pet can bring you.
     /// </summary>
-    [GMCMRange(0, 1000)]
+    [GMCMRange(100, 1000)]
     public int MaxPriceForAllItems
     {
         get => this.maxPriceForAllItems;
-        set => this.maxPriceForAllItems = Math.Clamp(value, 0, 1000);
+        set => this.maxPriceForAllItems = Math.Clamp(value, 100, 1000);
     }
 }

@@ -50,10 +50,10 @@ internal static class Utils
     /// <param name="pet">Pet to credit.</param>
     internal static void PlaceItem(this GameLocation location, Vector2 tile, Item item, Pet pet)
     {
-        ModEntry.ModMonitor.DebugOnlyLog($"Placing {item.Name} at {location.NameOrUniqueName} - {tile}");
+        ModEntry.ModMonitor.DebugOnlyLog($"Placing {item.DisplayName} at {location.NameOrUniqueName} - {tile}");
 
         PlayerAlertHandler.AddMessage(
-            message: new($"{pet.Name} has brought you a {item.DisplayName}", 1, true, Color.PaleGreen, item),
+            message: new($"{pet.Name} has brought you a {item.DisplayName}", 2, true, Color.PaleGreen),
             soundCue: pet is Cat ? "Cowboy_Footstep" : "dog_pant");
 
         if (item is SObject obj && !location.Objects.ContainsKey(tile))

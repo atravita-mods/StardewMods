@@ -72,6 +72,7 @@ internal sealed class ModEntry : Mod
         }
     }
 
+    [EventPriority(EventPriority.High)]
     private void OnDayLaunched(object? sender, DayStartedEventArgs e)
     {
         if (this.Helper.Data.ReadSaveData<string>(SAVEKEY) is not string value || !int.TryParse(value, out int giftsThisWeek))
@@ -201,14 +202,14 @@ SUCCESS:
             return null;
         }
 
-        foreach (SObject? value in loc.Objects.Values)
+        var forage = loc.Objects.Values.Where((obj) => !obj.bigCraftable.Value && obj.isForage(loc)).ToList();
+
+        if (forage.Count == 0)
         {
-            if (value.isForage(loc))
-            {
-                return value.getOne() as SObject;
-            }
+            return null;
         }
-        return null;
+
+        return forage[random.Next(forage.Count)].getOne() as SObject;
     }
 
     private SObject? AllItemsPicker(Random random)

@@ -145,7 +145,8 @@ internal static class IslandSouthPatches
                     || Game1.currentSeason.Equals(condition, StringComparison.OrdinalIgnoreCase)
                     || Game1.shortDayNameFromDayOfSeason(Game1.dayOfMonth).Equals(condition, StringComparison.OrdinalIgnoreCase)
                     || $"{Game1.currentSeason}_{Game1.shortDayNameFromDayOfSeason(Game1.dayOfMonth)}".Equals(condition, StringComparison.OrdinalIgnoreCase)
-                    || $"{Game1.currentSeason}_{Game1.dayOfMonth}".Equals(condition, StringComparison.OrdinalIgnoreCase))
+                    || $"{Game1.currentSeason}_{Game1.dayOfMonth}".Equals(condition, StringComparison.OrdinalIgnoreCase)
+                    || (!Globals.Config.UseThisScheduler && "neveralone".Equals(condition, StringComparison.OrdinalIgnoreCase)))
                 {
                     __result = false;
                     return;

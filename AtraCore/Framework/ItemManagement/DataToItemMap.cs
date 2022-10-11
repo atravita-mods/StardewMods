@@ -45,6 +45,15 @@ public static class DataToItemMap
     }
 
     /// <summary>
+    /// Gets all indexes associated with an asset type.
+    /// </summary>
+    /// <param name="type">Asset type.</param>
+    /// <returns>ienumerable of ints.</returns>
+    /// <remarks>Use this to filter out weird duplicates and stuff.</remarks>
+    public static IEnumerable<int> GetAll(ItemTypeEnum type)
+        => nameToIDMap.TryGetValue(type, out var asset) ? asset.Value.Values : Enumerable.Empty<int>();
+
+    /// <summary>
     /// Sets up various maps.
     /// </summary>
     /// <param name="helper">GameContentHelper.</param>

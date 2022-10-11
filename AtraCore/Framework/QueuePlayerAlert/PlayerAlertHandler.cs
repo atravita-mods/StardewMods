@@ -8,17 +8,19 @@ namespace AtraCore.Framework.QueuePlayerAlert;
 /// </summary>
 public static class PlayerAlertHandler
 {
-    private static readonly PerScreen<Queue<HUDMessage>> QueuedMessages = new(() => new());
+    private static readonly PerScreen<Queue<(HUDMessage message, string? soundCue)>> QueuedMessages = new(() => new());
+
+    public static void AddMessage(HUDMessage message) => AddMessage(message, null);
 
     /// <summary>
     /// Queues up a HUD message.
     /// </summary>
     /// <param name="message">Message to queue.</param>
-    public static void AddMessage(HUDMessage message)
+    public static void AddMessage(HUDMessage message, string? soundCue)
     {
         Guard.IsNotNull(message);
 
-        QueuedMessages.Value.Enqueue(message);
+        QueuedMessages.Value.Enqueue((message, soundCue));
     }
 
     /// <summary>
@@ -27,9 +29,13 @@ public static class PlayerAlertHandler
     internal static void DisplayFromQueue()
     {
         int i = 0;
-        while (++i < 3 && QueuedMessages.Value.TryDequeue(out HUDMessage? message))
+        while (++i < 3 && QueuedMessages.Value.TryDequeue(out var tuple))
         {
-            Game1.addHUDMessage(message);
+            Game1.addHUDMessage(tuple.message);
+            if (tuple.soundCue is not null)
+            {
+                Game1.playSound(tuple.soundCue);
+            }
         }
     }
 }

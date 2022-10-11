@@ -1,4 +1,7 @@
 ﻿using System.Runtime.CompilerServices;
+
+using AtraShared.ConstantsAndEnums;
+
 using Microsoft.Xna.Framework;
 using StardewValley.Objects;
 using StardewValley.Tools;
@@ -35,4 +38,28 @@ public static class ItemUtils
         "C" or "c" => new Clothing(id),
         _ => null,
     };
+
+    /// <summary>
+    /// Get an item using the enum as a category.
+    /// Returns null if it's not something that can be handled.
+    /// </summary>
+    /// <param name="type">Identifier string (like "O" or "B").</param>
+    /// <param name="id">int id.</param>
+    /// <returns>Item if possible.</returns>
+    /// <remarks>Carries the no-inlining attribute so other mods can patch this.</remarks>
+    [Pure]
+    [MethodImpl(MethodImplOptions.NoInlining)]
+    public static Item? GetItemFromIdentifier(ItemTypeEnum type, int id)
+        => type switch
+        {
+            ItemTypeEnum.Furniture => Furniture.GetFurnitureInstance(id),
+            ItemTypeEnum.SObject => new SObject(id, 1),
+            ItemTypeEnum.BigCraftable => new SObject(Vector2.Zero, id),
+            ItemTypeEnum.Ring => new Ring(id),
+            ItemTypeEnum.Boots => new Boots(id),
+            ItemTypeEnum.Weapon => new MeleeWeapon(id),
+            ItemTypeEnum.Hat => new Hat(id),
+            ItemTypeEnum.Clothing => new Clothing(id),
+            _ => null,
+        };
 }

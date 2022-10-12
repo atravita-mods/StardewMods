@@ -53,11 +53,12 @@ internal static class Utils
         ModEntry.ModMonitor.DebugOnlyLog($"Placing {item.DisplayName} at {location.NameOrUniqueName} - {tile}");
 
         PlayerAlertHandler.AddMessage(
-            message: new($"{pet.Name} has brought you a {item.DisplayName}", 2, true, Color.PaleGreen),
+            message: new($"{pet.Name} has brought you a {item.DisplayName}", Color.PaleGreen, 500, true),
             soundCue: pet is Cat ? "Cowboy_Footstep" : "dog_pant");
 
         if (item is SObject obj && !location.Objects.ContainsKey(tile))
         {
+            obj.IsSpawnedObject = true;
             location.Objects[tile] = obj;
         }
         else

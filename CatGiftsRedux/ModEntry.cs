@@ -365,7 +365,8 @@ SUCCESS:
         {
             if (Game1.objectInformation.TryGetValue(key, out string? data)
                 && int.TryParse(data.GetNthChunk('/', SObject.objectInfoPriceIndex), out int price)
-                && price * difficulty < maxPrice)
+                && price * difficulty < maxPrice
+                && !data.GetNthChunk('/', SObject.objectInfoNameIndex).Contains("Qi", StringComparison.OrdinalIgnoreCase))
             {
                 ret.Add(new(maxPrice - price, key));
             }

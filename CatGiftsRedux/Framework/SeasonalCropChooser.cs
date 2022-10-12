@@ -29,6 +29,11 @@ internal class SeasonalCropChooser
 
         var entry = content[random.Next(content.Count)];
 
+        if (entry.Value.GetNthChunk('/', SObject.objectInfoNameIndex).Contains("Qi", StringComparison.OrdinalIgnoreCase))
+        {
+            return null;
+        }
+
         if (int.TryParse(entry.Value.GetNthChunk('/', 3), out var id) && id > 0)
         {
             var colored = entry.Value.GetNthChunk('/', 8);

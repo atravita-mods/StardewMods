@@ -79,7 +79,6 @@ internal sealed class ModEntry : Mod
             return;
         }
 
-        Game1.player.mailReceived.OnElementChanged += this.MailReceived_OnElementChanged;
         Game1.player.team.completedSpecialOrders.OnValueAdded += this.OnValueAdded;
 
         MultiplayerHelpers.AssertMultiplayerVersions(this.Helper.Multiplayer, this.ModManifest, this.Monitor, this.Helper.Translation);
@@ -98,16 +97,11 @@ internal sealed class ModEntry : Mod
 
     private void OnValueAdded(string key, bool value) => this.Monitor.Log(key, LogLevel.Alert);
 
-    private void MailReceived_OnElementChanged(Netcode.NetList<string, Netcode.NetString> list, int index, string oldValue, string newValue)
-    {
-        this.Monitor.Log($"{index}, {oldValue}, {newValue}", LogLevel.Alert);
-    }
-
     /********
      * Dialogue region
      * *******/
 
-    /// <summary>
+    /// <summary>s
     /// Raised every 10 in game minutes.
     /// </summary>
     /// <param name="sender">Unknown, used by SMAPI.</param>

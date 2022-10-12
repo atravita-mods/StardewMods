@@ -44,7 +44,7 @@ internal static class CropDataShims
     public static Func<object, string?>? GetSeedName => getSeedName.Value;
 
 #warning - incomplete
-    private static  readonly Lazy<Func<object, string[]?>?> getSeedRestrictions = new(
+    private static  readonly Lazy<Func<object, IList<string>?>?> getSeedRestrictions = new(
         () =>
         {
             Type cropData = AccessTools.TypeByName("JsonAssets.Data.CropData");
@@ -58,10 +58,21 @@ internal static class CropDataShims
             var isInst = Expression.TypeIs(obj, cropData);
             var ret = Expression.ParameterOf<string[]>("ret");
 
-            var returnnull = Expression.Assign(ret, Expression.ConstantNull<string[]>());
+            var returnnull = Expression.Assign(ret, Expression.ConstantNull<IList<string>?>());
 
-            return null;
+            MethodInfo restrictionGetter = cropData.InstancePropertyNamed("SeedPurchaseRequirements").GetGetMethod()
+                ?? ReflectionThrowHelper.ThrowMethodNotFoundException<MethodInfo>("SeedPurchaseRequirements");
+
+            var casted = Expression.TypeAs(obj, cropData);
+            var assign = Expression.Assign(ret, Expression.Call(casted, restrictionGetter));
+
+            var ifStatement = Expression.IfThenElse(isInst, assign, returnnull);
+            List<ParameterExpression> param = new();
+            param.Add(ret);
+
+            var block = Expression.Block(typeof(IList<string>), param, ifStatement, ret);
+            return Expression.Lambda<Func<object, IList<string>?>>(block, obj).CompileFast();
         });
 
-    public static Func<object, string[]?>? GetSeedRestrictions => getSeedRestrictions.Value;
+    public static Func<object, IList<string>?>? GetSeedRestrictions => getSeedRestrictions.Value;
 }

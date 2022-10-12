@@ -61,7 +61,7 @@ public sealed class ModConfig
         set => this.minChance = Math.Clamp(value, 0f, 1.0f);
     }
 
-    private float maxChance = 0.7f;
+    private float maxChance = 0.6f;
 
     /// <summary>
     /// Gets or sets the chance the pet will bring you something at max hearts.

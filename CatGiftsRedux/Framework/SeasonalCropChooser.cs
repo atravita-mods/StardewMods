@@ -12,7 +12,7 @@ namespace CatGiftsRedux.Framework;
 /// <summary>
 /// Picks a random seasonal crop item.
 /// </summary>
-internal class SeasonalCropChooser
+internal static class SeasonalCropChooser
 {
     internal static SObject? Pick(Random random)
     {
@@ -44,9 +44,9 @@ internal class SeasonalCropChooser
 
                 byte[] colorarray = new byte[3];
                 int index = 0;
-                foreach (var c in stream)
+                foreach (SpanSplitEntry c in stream)
                 {
-                    if (byte.TryParse(c, out var colorbit))
+                    if (byte.TryParse(c, out byte colorbit))
                     {
                         colorarray[index++] = colorbit;
                         if (index >= 3)
@@ -56,13 +56,12 @@ internal class SeasonalCropChooser
                     }
                     else
                     {
-                        goto NoColor;
+                        // can't parse the color, just return a noncolored object and hope for the best.
+                        return new SObject(id, 1);
                     }
                 }
                 return new ColoredObject(id, 1, new Color(colorarray[0], colorarray[1], colorarray[2]));
             }
-
-NoColor:
             return new SObject(id, 1);
         }
         return null;

@@ -141,16 +141,14 @@ internal sealed class ModEntry : Mod
                         continue;
                     }
                     farm.PlaceItem(tile.Value, picked, pet);
-                    goto SUCCESS;
+                    this.Helper.Data.WriteSaveData(SAVEKEY, (++giftsThisWeek).ToString());
+                    return;
                 }
             }
             while (attempts-- > 0);
         }
 
         this.Monitor.DebugOnlyLog("Did not find a valid item.");
-        return;
-SUCCESS:
-        this.Helper.Data.WriteSaveData(SAVEKEY, (++giftsThisWeek).ToString());
     }
 
     private Item? GetUserItem(Random random)

@@ -13,14 +13,14 @@ internal static class AnimalProductChooser
     {
         ModEntry.ModMonitor.DebugOnlyLog("Picked Animal Products");
 
-        var content = Game1.content.Load<Dictionary<string, string>>("Data\\FarmAnimals");
+        Dictionary<string, string>? content = Game1.content.Load<Dictionary<string, string>>("Data\\FarmAnimals");
         if (content.Count == 0)
         {
             return null;
         }
-        var randomAnimal = content.ElementAt(random.Next(content.Count));
+        KeyValuePair<string, string> randomAnimal = content.ElementAt(random.Next(content.Count));
 
-        if (int.TryParse(randomAnimal.Value.GetNthChunk('/', 2), out var id) && id > 0)
+        if (int.TryParse(randomAnimal.Value.GetNthChunk('/', 2), out int id) && id > 0)
         {
             return new SObject(id, 1);
         }

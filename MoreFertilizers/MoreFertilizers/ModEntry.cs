@@ -909,91 +909,102 @@ internal sealed class ModEntry : Mod
             storedIDs.PrismaticFertilizerID = PrismaticFertilizerID;
         }
 
-        if (EverlastingFertilizerID != -1
-            && storedIDs.EverlastingFertilizerID != -1
-            && EverlastingFertilizerID != storedIDs.EverlastingFertilizerID)
+        if (EverlastingFertilizerID != -1)
         {
-            idMapping.Add(storedIDs.EverlastingFertilizerID, EverlastingFertilizerID);
+            if (storedIDs.EverlastingFertilizerID != -1 && EverlastingFertilizerID != storedIDs.EverlastingFertilizerID)
+            {
+                idMapping.Add(storedIDs.EverlastingFertilizerID, EverlastingFertilizerID);
+            }
             storedIDs.EverlastingFertilizerID = EverlastingFertilizerID;
         }
 
-        if (WisdomFertilizerID != -1
-            && storedIDs.WisdomFertilizerID != -1
-            && storedIDs.WisdomFertilizerID != WisdomFertilizerID)
+        if (WisdomFertilizerID != -1)
         {
-            idMapping.Add(storedIDs.WisdomFertilizerID, WisdomFertilizerID);
+            if (storedIDs.WisdomFertilizerID != -1 && storedIDs.WisdomFertilizerID != WisdomFertilizerID)
+            {
+                idMapping.Add(storedIDs.WisdomFertilizerID, WisdomFertilizerID);
+            }
             storedIDs.WisdomFertilizerID = WisdomFertilizerID;
         }
 
-        if (LuckyFertilizerID != -1
-            && storedIDs.LuckyFertilizerID != -1
-            && storedIDs.LuckyFertilizerID != LuckyFertilizerID)
+        if (LuckyFertilizerID != -1)
         {
-            idMapping.Add(storedIDs.LuckyFertilizerID, LuckyFertilizerID);
+            if (storedIDs.LuckyFertilizerID != -1 && storedIDs.LuckyFertilizerID != LuckyFertilizerID)
+            {
+                idMapping.Add(storedIDs.LuckyFertilizerID, LuckyFertilizerID);
+            }
             storedIDs.LuckyFertilizerID = LuckyFertilizerID;
         }
 
-        if (PaddyCropFertilizerID != -1
-            && storedIDs.PaddyFertilizerID != -1
-            && storedIDs.PaddyFertilizerID != PaddyCropFertilizerID)
+        if (PaddyCropFertilizerID != -1)
         {
-            idMapping.Add(storedIDs.PaddyFertilizerID, PaddyCropFertilizerID);
+            if (storedIDs.PaddyFertilizerID != -1 && storedIDs.PaddyFertilizerID != PaddyCropFertilizerID)
+            {
+                idMapping.Add(storedIDs.PaddyFertilizerID, PaddyCropFertilizerID);
+            }
             storedIDs.PaddyFertilizerID = PaddyCropFertilizerID;
         }
 
-        if (BountifulFertilizerID != -1
-            && storedIDs.BountifulFertilizerID != -1
-            && storedIDs.BountifulFertilizerID != BountifulFertilizerID)
+        if (BountifulFertilizerID != -1)
         {
-            idMapping.Add(storedIDs.BountifulFertilizerID, BountifulFertilizerID);
+            if (storedIDs.BountifulFertilizerID != -1 && storedIDs.BountifulFertilizerID != BountifulFertilizerID)
+            {
+                idMapping.Add(storedIDs.BountifulFertilizerID, BountifulFertilizerID);
+            }
             storedIDs.BountifulFertilizerID = BountifulFertilizerID;
         }
 
-        if (JojaFertilizerID != -1
-            && storedIDs.JojaFertilizerID != -1
-            && storedIDs.JojaFertilizerID != JojaFertilizerID)
+        if (JojaFertilizerID != -1)
         {
-            idMapping.Add(storedIDs.JojaFertilizerID, JojaFertilizerID);
+            if (storedIDs.JojaFertilizerID != -1 && storedIDs.JojaFertilizerID != JojaFertilizerID)
+            {
+                idMapping.Add(storedIDs.JojaFertilizerID, JojaFertilizerID);
+            }
             storedIDs.JojaFertilizerID = JojaFertilizerID;
         }
 
-        if (DeluxeJojaFertilizerID != -1
-            && storedIDs.DeluxeJojaFertilizerID != -1
-            && storedIDs.DeluxeJojaFertilizerID != DeluxeJojaFertilizerID)
+        if (DeluxeJojaFertilizerID != -1)
         {
-            idMapping.Add(storedIDs.DeluxeJojaFertilizerID, DeluxeJojaFertilizerID);
+            if (storedIDs.DeluxeJojaFertilizerID != -1 && storedIDs.DeluxeJojaFertilizerID != DeluxeJojaFertilizerID)
+            {
+                idMapping.Add(storedIDs.DeluxeJojaFertilizerID, DeluxeJojaFertilizerID);
+            }
             storedIDs.DeluxeJojaFertilizerID = DeluxeJojaFertilizerID;
         }
 
-        if (SecretJojaFertilizerID != -1
-            && storedIDs.SecretJojaFertilizerID != -1
-            && storedIDs.SecretJojaFertilizerID != SecretJojaFertilizerID)
+        if (SecretJojaFertilizerID != -1)
         {
-            idMapping.Add(storedIDs.SecretJojaFertilizerID, SecretJojaFertilizerID);
+            if (storedIDs.SecretJojaFertilizerID != -1 && storedIDs.SecretJojaFertilizerID != SecretJojaFertilizerID)
+            {
+                idMapping.Add(storedIDs.SecretJojaFertilizerID, SecretJojaFertilizerID);
+            }
             storedIDs.SecretJojaFertilizerID = SecretJojaFertilizerID;
         }
 
-        if (OrganicFertilizerID != -1
-            && storedIDs.OrganicFertilizerID != -1
-            && storedIDs.OrganicFertilizerID != OrganicFertilizerID)
+        if (OrganicFertilizerID != -1)
         {
-            idMapping.Add(storedIDs.OrganicFertilizerID, OrganicFertilizerID);
+            if (storedIDs.OrganicFertilizerID != -1 && storedIDs.OrganicFertilizerID != OrganicFertilizerID)
+            {
+                idMapping.Add(storedIDs.OrganicFertilizerID, OrganicFertilizerID);
+            }
             storedIDs.OrganicFertilizerID = OrganicFertilizerID;
         }
 
-        if (MiraculousBeveragesID != -1
-            && storedIDs.MiraculousBeveragesID != -1
-            && storedIDs.MiraculousBeveragesID != MiraculousBeveragesID)
+        if (MiraculousBeveragesID != -1)
         {
-            idMapping.Add(storedIDs.MiraculousBeveragesID, MiraculousBeveragesID);
+            if (storedIDs.MiraculousBeveragesID != -1 && storedIDs.MiraculousBeveragesID != MiraculousBeveragesID)
+            {
+                idMapping.Add(storedIDs.MiraculousBeveragesID, MiraculousBeveragesID);
+            }
             storedIDs.MiraculousBeveragesID = MiraculousBeveragesID;
         }
 
-        if (SeedyFertilizerID != -1
-            && storedIDs.SeedyFertilizerID != -1
-            && storedIDs.SeedyFertilizerID != SeedyFertilizerID)
+        if (SeedyFertilizerID != -1)
         {
-            idMapping.Add(storedIDs.SeedyFertilizerID, SeedyFertilizerID);
+            if (storedIDs.SeedyFertilizerID != -1 && storedIDs.SeedyFertilizerID != SeedyFertilizerID)
+            {
+                idMapping.Add(storedIDs.SeedyFertilizerID, SeedyFertilizerID);
+            }
             storedIDs.SeedyFertilizerID = SeedyFertilizerID;
         }
 

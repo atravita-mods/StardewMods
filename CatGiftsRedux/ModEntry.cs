@@ -153,7 +153,7 @@ internal sealed class ModEntry : Mod
 
     private Item? GetUserItem(Random random)
     {
-        var entry = this.playerItemsManager.GetValue(random);
+        ItemRecord? entry = this.playerItemsManager.GetValue(random);
 
         if (entry.Type.HasFlag(ItemTypeEnum.DGAItem))
         {
@@ -194,13 +194,13 @@ internal sealed class ModEntry : Mod
 
         string? map = Utility.GetRandom(this.config.ForageFromMaps);
 
-        var loc = Game1.getLocationFromName(map);
+        GameLocation? loc = Game1.getLocationFromName(map);
         if (loc is null)
         {
             return null;
         }
 
-        var forage = loc.Objects.Values.Where((obj) => !obj.bigCraftable.Value && obj.isForage(loc)).ToList();
+        List<SObject>? forage = loc.Objects.Values.Where((obj) => !obj.bigCraftable.Value && obj.isForage(loc)).ToList();
 
         if (forage.Count == 0)
         {
@@ -270,9 +270,9 @@ internal sealed class ModEntry : Mod
 
         // Handle banned items.
         this.bannedItems.Clear();
-        foreach (var item in this.config.Denylist)
+        foreach (ItemRecord? item in this.config.Denylist)
         {
-            if (!int.TryParse(item.Identifier, out var id))
+            if (!int.TryParse(item.Identifier, out int id))
             {
                 id = DataToItemMap.GetID(item.Type, item.Identifier);
             }

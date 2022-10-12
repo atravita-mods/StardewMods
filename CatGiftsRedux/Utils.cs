@@ -24,13 +24,13 @@ internal static class Utils
     {
         do
         {
-            var tile = location.getRandomTile();
+            Vector2 tile = location.getRandomTile();
             if (location.isWaterTile((int)tile.X, (int)tile.Y))
             {
                 continue;
             }
 
-            var options = Utility.recursiveFindOpenTiles(location, tile, 1);
+            List<Vector2>? options = Utility.recursiveFindOpenTiles(location, tile, 1);
             if (options.Count > 0)
             {
                 return options[0];
@@ -63,7 +63,7 @@ internal static class Utils
         }
         else
         {
-            var debris = new Debris(item, tile * 64f);
+            Debris? debris = new Debris(item, tile * 64f);
             location.debris.Add(debris);
         }
     }

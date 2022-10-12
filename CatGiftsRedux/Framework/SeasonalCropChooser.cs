@@ -18,7 +18,7 @@ internal static class SeasonalCropChooser
     {
         ModEntry.ModMonitor.DebugOnlyLog("Picked Seasonal Crops");
 
-        var content = Game1.content.Load<Dictionary<int, string>>("Data/Crops")
+        List<KeyValuePair<int, string>>? content = Game1.content.Load<Dictionary<int, string>>("Data/Crops")
                                    .Where((kvp) => kvp.Value.GetNthChunk('/', 1).Contains(Game1.currentSeason, StringComparison.OrdinalIgnoreCase))
                                    .ToList();
 
@@ -27,19 +27,19 @@ internal static class SeasonalCropChooser
             return null;
         }
 
-        var entry = content[random.Next(content.Count)];
+        KeyValuePair<int, string> entry = content[random.Next(content.Count)];
 
         if (entry.Value.GetNthChunk('/', SObject.objectInfoNameIndex).Contains("Qi", StringComparison.OrdinalIgnoreCase))
         {
             return null;
         }
 
-        if (int.TryParse(entry.Value.GetNthChunk('/', 3), out var id) && id > 0)
+        if (int.TryParse(entry.Value.GetNthChunk('/', 3), out int id) && id > 0)
         {
-            var colored = entry.Value.GetNthChunk('/', 8);
+            ReadOnlySpan<char> colored = entry.Value.GetNthChunk('/', 8);
             if (colored.StartsWith("true", StringComparison.Ordinal))
             {
-                var stream = colored.StreamSplit();
+                StreamSplit stream = colored.StreamSplit();
                 _ = stream.MoveNext(); // the original "true"
 
                 byte[] colorarray = new byte[3];

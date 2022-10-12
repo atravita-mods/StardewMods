@@ -16,7 +16,7 @@ internal static class HatPicker
     {
         ModEntry.ModMonitor.DebugOnlyLog("Picked hats");
 
-        var stock = Utility.getHatStock().Keys.ToList();
+        List<ISalable>? stock = Utility.getHatStock().Keys.ToList();
         return stock[random.Next(stock.Count)] as SObject;
     }
 }

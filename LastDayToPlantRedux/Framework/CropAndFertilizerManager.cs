@@ -55,10 +55,10 @@ internal static class CropAndFertilizerManager
 
         Dictionary<int, CropEntry> ret = new();
 
-        Dictionary<int, string> cropData = Game1.content.Load<Dictionary<int, string>>("Data\\Crops");
-        foreach (var (index, vals) in cropData)
+        Dictionary<int, string> cropData = Game1.content.Load<Dictionary<int, string>>(AssetManager.CropName.BaseName);
+        foreach ((int index, string vals) in cropData)
         {
-            var seasons = vals.GetNthChunk('/', 1).Trim();
+            ReadOnlySpan<char> seasons = vals.GetNthChunk('/', 1).Trim();
 
             StardewSeasons seasonEnum = StardewSeasons.None;
             foreach (var season in seasons.StreamSplit(null, StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries))
@@ -74,7 +74,7 @@ internal static class CropAndFertilizerManager
                 }
             }
 
-            var growthData = vals.GetNthChunk('/', 0).Trim().ToString();
+            string? growthData = vals.GetNthChunk('/', 0).Trim().ToString();
             ret[index] = new CropEntry(seasonEnum, growthData);
 breakcontinue:
             ;
@@ -99,9 +99,7 @@ breakcontinue:
 
         Dictionary<int, string> ret = new();
 
-        var data = Game1Wrappers.ObjectInfo;
-
-        foreach (var (index, vals) in data)
+        foreach (var (index, vals) in Game1Wrappers.ObjectInfo)
         {
             var catName = vals.GetNthChunk('/', SObject.objectInfoTypeIndex);
             var spaceIndx = catName.GetLastIndexOfWhiteSpace();

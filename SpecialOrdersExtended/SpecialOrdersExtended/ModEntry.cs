@@ -77,6 +77,7 @@ internal sealed class ModEntry : Mod
     {
         // Bind useful SMAPI features.
         I18n.Init(helper.Translation);
+        AssetManager.Initialize(helper.GameContent);
         ModMonitor = this.Monitor;
         DataHelper = helper.Data;
         MultiplayerHelper = helper.Multiplayer;

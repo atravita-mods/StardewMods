@@ -435,11 +435,12 @@ internal sealed class ModEntry : Mod
     /// <inheritdoc />
     public override void Entry(IModHelper helper)
     {
-        I18n.Init(this.Helper.Translation);
-        MultiplayerHelper = this.Helper.Multiplayer;
-        ModContentHelper = this.Helper.ModContent;
+        I18n.Init(helper.Translation);
+        AssetEditor.Initialize(helper.GameContent);
+        MultiplayerHelper = helper.Multiplayer;
+        ModContentHelper = helper.ModContent;
         ModMonitor = this.Monitor;
-        DIRPATH = this.Helper.DirectoryPath;
+        DIRPATH = helper.DirectoryPath;
         UNIQUEID = this.ModManifest.UniqueID;
         Config = AtraUtils.GetConfigOrDefault<ModConfig>(helper, this.Monitor);
 

@@ -5,6 +5,9 @@ using HarmonyLib;
 
 namespace AtraShared.Utils.Shims.JAInternalTypesShims;
 
+/// <summary>
+/// Shims against JA's crop data class.
+/// </summary>
 [SuppressMessage("StyleCop.CSharp.OrderingRules", "SA1201:Elements should appear in the correct order", Justification = "Accessors kept near fields.")]
 internal static class CropDataShims
 {

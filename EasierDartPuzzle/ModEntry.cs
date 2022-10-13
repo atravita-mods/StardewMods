@@ -25,10 +25,12 @@ internal class ModEntry : Mod
     {
         ModMonitor = this.Monitor;
         I18n.Init(helper.Translation);
+        AssetManager.Initialize(helper.GameContent);
         Config = AtraUtils.GetConfigOrDefault<ModConfig>(helper, this.Monitor);
         if (Config.MinDartCount > Config.MaxDartCount)
         {
             (Config.MinDartCount, Config.MaxDartCount) = (Config.MaxDartCount, Config.MinDartCount);
+            helper.AsyncWriteConfig(this.Monitor, Config);
         }
 
         this.ApplyPatches(new Harmony(this.ModManifest.UniqueID));

@@ -12,6 +12,7 @@ namespace MoreFertilizers.Framework;
 /// <summary>
 /// Handles asset editing for this mod.
 /// </summary>
+[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1306:Field names should begin with lower-case letter", Justification = "Effective constants are all caps.")]
 internal static class AssetEditor
 {
     /// <summary>
@@ -19,10 +20,10 @@ internal static class AssetEditor
     /// </summary>
     internal const string ORGANICVEGGIEMAIL = "atravita_OrganicCrops_Reward";
 #pragma warning disable SA1310 // Field names should not contain underscore. Reviewed.
-    private static readonly string SPECIAL_ORDERS_LOCATION = PathUtilities.NormalizeAssetName("Data/SpecialOrders");
-    private static readonly string SPECIAL_ORDERS_STRINGS = PathUtilities.NormalizeAssetName("Strings/SpecialOrderStrings");
-    private static readonly string MAIL = PathUtilities.NormalizeAssetName("Data/mail");
-    private static readonly string LEWIS_DIALOGUE = PathUtilities.NormalizeAssetName("Characters/Dialogue/Lewis");
+    private static IAssetName SPECIAL_ORDERS_LOCATION = null!;
+    private static IAssetName SPECIAL_ORDERS_STRINGS = null!;
+    private static IAssetName MAIL = null!;
+    private static IAssetName LEWIS_DIALOGUE = null!;
 #pragma warning restore SA1310 // Field names should not contain underscore
 
     private static readonly Lazy<Dictionary<string, SpecialOrderData>> SpecialOrders = new(() =>
@@ -49,6 +50,7 @@ internal static class AssetEditor
         return ret;
     });
 
+    #region minicache
     private static int lastTick = -1;
     private static bool seenBoat = false;
 
@@ -63,6 +65,19 @@ internal static class AssetEditor
             }
             return seenBoat;
         }
+    }
+    #endregion
+
+    /// <summary>
+    /// Initializes the AssetEditor.
+    /// </summary>
+    /// <param name="parser">Game content helper.</param>
+    internal static void Initialize(IGameContentHelper parser)
+    {
+        SPECIAL_ORDERS_LOCATION = parser.ParseAssetName("Data/SpecialOrders");
+        SPECIAL_ORDERS_STRINGS = parser.ParseAssetName("Strings/SpecialOrderStrings");
+        MAIL = parser.ParseAssetName("Data/mail");
+        LEWIS_DIALOGUE = parser.ParseAssetName("Characters/Dialogue/Lewis");
     }
 
     /// <summary>
@@ -99,7 +114,7 @@ internal static class AssetEditor
     /// <param name="e">event args.</param>
     internal static void EditSpecialOrderDialogue(AssetRequestedEventArgs e)
     {
-        if (e.NameWithoutLocale.IsEquivalentTo(LEWIS_DIALOGUE) && Utility.doesAnyFarmerHaveOrWillReceiveMail("seenBoatJourney"))
+        if (HasSeenBoat && e.NameWithoutLocale.IsEquivalentTo(LEWIS_DIALOGUE))
         {
             e.Edit(EditLewisDialogueImpl, AssetEditPriority.Early);
         }

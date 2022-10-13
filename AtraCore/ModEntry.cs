@@ -44,6 +44,7 @@ internal sealed class ModEntry : Mod
     {
         I18n.Init(helper.Translation);
         ModMonitor = this.Monitor;
+        AssetManager.Initialize(helper.GameContent);
 
         // replace AtraBase's logger with SMAPI's logging service.
         AtraBase.Internal.Logger.Instance = new Logger(this.Monitor);

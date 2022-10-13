@@ -40,6 +40,7 @@ internal sealed class ModEntry : Mod
     {
         I18n.Init(helper.Translation);
         ScheduleUtilityFunctions = new(this.Monitor, this.Helper.Translation);
+        AssetManager.Initialize(helper.GameContent);
 
         ModMonitor = this.Monitor;
 

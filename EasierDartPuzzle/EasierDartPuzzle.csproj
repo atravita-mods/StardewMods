@@ -11,7 +11,7 @@
   <PropertyGroup>
     <Name>Easier Dart Puzzle</Name>
     <Description>Makes the dart puzzle easier.</Description>
-    <Version>0.1.0</Version>
+    <Version>0.1.1</Version>
     <UpdateKeys>Nexus:13049</UpdateKeys>
     <BaseManifest>..\base_dependencies.json</BaseManifest>
   </PropertyGroup>

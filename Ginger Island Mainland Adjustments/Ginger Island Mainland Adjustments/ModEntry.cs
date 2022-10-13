@@ -27,6 +27,7 @@ internal sealed class ModEntry : Mod
     {
         I18n.Init(helper.Translation);
         Globals.Initialize(helper, this.Monitor, this.ModManifest);
+        AssetEditor.Initialize(helper.GameContent);
 
         ConsoleCommands.Register(this.Helper.ConsoleCommands);
 

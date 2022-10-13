@@ -83,6 +83,7 @@ internal sealed class ModEntry : Mod
     public override void Entry(IModHelper helper)
     {
         I18n.Init(helper.Translation);
+        AssetManager.Initialize(helper.GameContent);
 
         this.config = AtraUtils.GetConfigOrDefault<ModConfig>(helper, this.Monitor);
 
@@ -255,7 +256,7 @@ internal sealed class ModEntry : Mod
 
                 if (Game1.getLocationFromName(parseloc) is GameLocation gameLocation)
                 {
-                    this.Monitor.DebugOnlyLog($"Found {gameLocation}");
+                    this.Monitor.DebugOnlyLog($"Found {gameLocation.NameOrUniqueName}");
 
                     (Vector2[] tiles, int num) = gameLocation.GetTiles(xstart: locLimits["x1"], xend: locLimits["x2"], ystart: locLimits["y1"], yend: locLimits["y2"]);
                     if (num == 0)
@@ -365,9 +366,8 @@ END:
     /// </summary>
     /// <param name="datalocation">asset name.</param>
     /// <returns>List of data, split by commas.</returns>
-    private List<string> GetData(string datalocation)
+    private List<string> GetData(IAssetName datalocation)
     {
-        this.Helper.GameContent.InvalidateCacheAndLocalized(datalocation);
         IDictionary<string, string> rawlist = this.Helper.GameContent.Load<Dictionary<string, string>>(datalocation);
         List<string> datalist = new();
 

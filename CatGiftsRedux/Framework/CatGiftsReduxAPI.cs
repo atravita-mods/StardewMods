@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace CatGiftsRedux.Framework;
+﻿namespace CatGiftsRedux.Framework;
 public class CatGiftsReduxAPI : ICatGiftReduxAPI
 {
     private ModEntry us;

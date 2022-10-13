@@ -9,23 +9,24 @@ namespace StopRugRemoval;
 /// </summary>
 internal static class AssetEditor
 {
-#pragma warning disable SA1310 // Field names should not contain underscore. Reviewed.
-    private static readonly string SALOON_EVENTS = PathUtilities.NormalizeAssetName("Data/Events/Saloon");
-    private static readonly string BET_ICONS = PathUtilities.NormalizeAssetName("Mods/atravita_StopRugRemoval_BetIcons");
-#pragma warning restore SA1310 // Field names should not contain underscore
-
-    private static Lazy<Texture2D> betIconLazy = new(() => Game1.content.Load<Texture2D>(BET_ICONS));
+    private static IAssetName saloonEvents = null!;
+    private static IAssetName betIconsPath = null!;
+    private static Lazy<Texture2D> betIconLazy = new(() => Game1.content.Load<Texture2D>(betIconsPath.BaseName));
 
     /// <summary>
     /// Gets the bet button textures.
     /// </summary>
     internal static Texture2D BetIcon => betIconLazy.Value;
 
-#pragma warning disable SA1201 // Elements should appear in the correct order. Keeping field near property.
-    private static IAssetName? betIconsAsset;
-
-    private static IAssetName BET_ICONS_ASSET => betIconsAsset ??= ModEntry.GameContentHelper.ParseAssetName(BET_ICONS);
-#pragma warning restore SA1201 // Elements should appear in the correct order
+    /// <summary>
+    /// Initializes assets for this mod.
+    /// </summary>
+    /// <param name="parser">GameContentHelper.</param>
+    internal static void Initialize(IGameContentHelper parser)
+    {
+        saloonEvents = parser.ParseAssetName("Data/Events/Saloon");
+        betIconsPath = parser.ParseAssetName("Mods/atravita_StopRugRemoval_BetIcons");
+    }
 
     /// <summary>
     /// Refreshes lazies.
@@ -33,9 +34,9 @@ internal static class AssetEditor
     /// <param name="assets">IReadOnlySet of assets to refresh.</param>
     internal static void Refresh(IReadOnlySet<IAssetName>? assets = null)
     {
-        if (betIconLazy.IsValueCreated && (assets is null || assets.Contains(BET_ICONS_ASSET)))
+        if (betIconLazy.IsValueCreated && (assets is null || assets.Contains(betIconsPath)))
         {
-            betIconLazy = new(() => Game1.content.Load<Texture2D>(BET_ICONS));
+            betIconLazy = new(() => Game1.content.Load<Texture2D>(betIconsPath.BaseName));
         }
     }
 
@@ -50,7 +51,7 @@ internal static class AssetEditor
         {
             return;
         }
-        if (e.NameWithoutLocale.IsEquivalentTo(BET_ICONS))
+        if (e.NameWithoutLocale.IsEquivalentTo(betIconsPath))
         { // The BET1k/10k icons have to be localized, so they're in the i18n folder.
             string filename = "BetIcons.png";
 
@@ -81,7 +82,7 @@ internal static class AssetEditor
     /// <param name="e">Event args.</param>
     internal static void EditSaloonEvent(AssetRequestedEventArgs e)
     {
-        if (e.NameWithoutLocale.IsEquivalentTo(SALOON_EVENTS) && ModEntry.Config.Enabled)
+        if (ModEntry.Config.Enabled && e.NameWithoutLocale.IsEquivalentTo(saloonEvents))
         {
             e.Edit(EditSaloonImpl, AssetEditPriority.Late);
         }

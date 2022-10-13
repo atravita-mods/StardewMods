@@ -17,11 +17,6 @@ internal sealed class ModEntry : Mod
     internal static IMonitor ModMonitor { get; private set; } = null!;
 
     /// <summary>
-    /// Gets the game content helper for this mod.
-    /// </summary>
-    internal static IGameContentHelper GameContentHelper { get; private set; } = null!;
-
-    /// <summary>
     /// Gets the config instance for this mod.
     /// </summary>
     internal static ModConfig Config { get; private set; } = null!;
@@ -31,7 +26,7 @@ internal sealed class ModEntry : Mod
     {
         // bind helpers.
         ModMonitor = this.Monitor;
-        GameContentHelper = this.Helper.GameContent;
+        AssetManager.Initialize(helper.GameContent);
 
         Config = AtraUtils.GetConfigOrDefault<ModConfig>(helper, this.Monitor);
         helper.Events.GameLoop.GameLaunched += this.OnGameLaunched;

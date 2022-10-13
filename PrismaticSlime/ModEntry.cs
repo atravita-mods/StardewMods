@@ -24,9 +24,12 @@ internal sealed class ModEntry : Mod
     /// </summary>
     internal static IMonitor ModMonitor { get; private set; } = null!;
 
-#pragma warning disable SA1201 // Elements should appear in the correct order - keeping fields near their accessors.
+    /// <summary>
+    /// Gets wrapper that handles ring management.
+    /// </summary>
     internal static RingManager RingManager { get; private set; } = null!;
 
+#pragma warning disable SA1201 // Elements should appear in the correct order - keeping fields near their accessors.
     private static int prismaticSlimeEgg = -1;
 
     /// <summary>
@@ -66,6 +69,7 @@ internal sealed class ModEntry : Mod
     public override void Entry(IModHelper helper)
     {
         ModMonitor = this.Monitor;
+        AssetManager.Initialize(helper.GameContent);
         I18n.Init(helper.Translation);
 
         helper.Events.GameLoop.GameLaunched += this.OnGameLaunched;

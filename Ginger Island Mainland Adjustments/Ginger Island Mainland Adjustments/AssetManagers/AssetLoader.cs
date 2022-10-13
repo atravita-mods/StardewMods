@@ -82,6 +82,7 @@ internal static class AssetLoader
     /// Full list of fake assets.
     /// </summary>
     private static HashSet<string> myAssets = null!;
+    private static IAssetName groups = null!;
 
     /// <summary>
     /// Initialized the myAssets hashset.
@@ -89,12 +90,14 @@ internal static class AssetLoader
     /// <param name="helper">game content helper.</param>
     internal static void Init(IGameContentHelper helper)
     {
+        groups = helper.ParseAssetName(GroupsLocations);
+
         myAssets = new(StringComparer.OrdinalIgnoreCase)
         {
             helper.ParseAssetName(BartenderLocation).BaseName,
             helper.ParseAssetName(ExplorerLocation).BaseName,
             helper.ParseAssetName(MusicianLocation).BaseName,
-            helper.ParseAssetName(GroupsLocations).BaseName,
+            groups.BaseName,
             helper.ParseAssetName(ExclusionLocations).BaseName,
         };
     }
@@ -219,7 +222,7 @@ internal static class AssetLoader
     /// <param name="e">AssetRequestedEventArguments.</param>
     internal static void Load(AssetRequestedEventArgs e)
     {
-        if (e.NameWithoutLocale.IsEquivalentTo(GroupsLocations))
+        if (e.NameWithoutLocale.IsEquivalentTo(groups))
         {
             e.LoadFrom(GetDefaultGroups, AssetLoadPriority.Low);
         }

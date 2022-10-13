@@ -18,7 +18,7 @@ public sealed class RingManager
     /// <summary>
     /// Initializes a new instance of the <see cref="RingManager"/> class.
     /// </summary>
-    /// <param name="monitor">Monitor to use.</param>
+    /// <param name="monitor">modMonitor to use.</param>
     /// <param name="translation">Translation helper to use.</param>
     /// <param name="registry">Mod registry.</param>
     public RingManager(IMonitor monitor, ITranslationHelper translation, IModRegistry registry)

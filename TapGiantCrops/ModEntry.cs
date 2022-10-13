@@ -20,16 +20,11 @@ internal sealed class ModEntry : Mod
     /// </summary>
     internal static IMonitor ModMonitor { get; private set; } = null!;
 
-    /// <summary>
-    /// Gets the GameContentHelper for this mod.
-    /// </summary>
-    internal static IGameContentHelper GameContentHelper { get; private set; } = null!;
-
     /// <inheritdoc />
     public override void Entry(IModHelper helper)
     {
         ModMonitor = this.Monitor;
-        GameContentHelper = helper.GameContent;
+        AssetManager.Initialize(helper.GameContent);
 
         helper.Events.Input.ButtonPressed += this.OnButtonPressed;
         helper.Events.GameLoop.DayEnding += this.OnDayEnding;

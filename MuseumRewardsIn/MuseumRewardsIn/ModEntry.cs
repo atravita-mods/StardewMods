@@ -37,16 +37,15 @@ internal sealed class ModEntry : Mod
     /// <remarks>WARNING: NOT SET IN ENTRY.</remarks>
     private static ModConfig config = null!;
 
-    /// <summary>
-    /// Gets the game content helper.
-    /// </summary>
-    internal static IGameContentHelper GameContentHelper { get; private set; } = null!;
+    private static IAssetName libraryHouse = null!;
 
     /// <inheritdoc />
     public override void Entry(IModHelper helper)
     {
         modMonitor = this.Monitor;
-        GameContentHelper = this.Helper.GameContent;
+        AssetManager.Initialize(helper.GameContent);
+        libraryHouse = helper.GameContent.ParseAssetName("Maps/ArchaeologyHouse");
+
         helper.Events.GameLoop.GameLaunched += this.OnGameLaunched;
         helper.Events.Input.ButtonPressed += this.OnButtonPressed;
         helper.Events.Player.Warped += this.OnWarped;
@@ -82,7 +81,7 @@ internal sealed class ModEntry : Mod
                 reset: static () => config = new(),
                 save: () =>
                 {
-                    this.Helper.GameContent.InvalidateCacheAndLocalized("Maps/ArchaeologyHouse");
+                    this.Helper.GameContent.InvalidateCacheAndLocalized(libraryHouse.BaseName);
                     this.Helper.AsyncWriteConfig(this.Monitor, config);
                 })
             .AddTextOption(
@@ -187,7 +186,7 @@ internal sealed class ModEntry : Mod
 
     private void OnAssetRequested(object? sender, AssetRequestedEventArgs e)
     {
-        if (e.NameWithoutLocale.IsEquivalentTo("Maps/ArchaeologyHouse"))
+        if (e.NameWithoutLocale.IsEquivalentTo(libraryHouse))
         {
             e.Edit(
                 static (asset) =>

@@ -1,6 +1,8 @@
 ﻿using AtraBase.Toolkit.Extensions;
+using AtraBase.Toolkit.StringHandler;
 
 using AtraCore.Framework.ReflectionManager;
+
 using AtraShared.Integrations;
 using AtraShared.Integrations.Interfaces;
 using AtraShared.Utils.Shims.JAInternalTypesShims;
@@ -18,6 +20,8 @@ namespace AtraShared.Utils.Shims;
 public static class JsonAssetsShims
 {
     private static bool initialized = false;
+
+    private static IMonitor modMonitor = null!;
 
     #region APIs
     private static IJsonAssetsAPI? jsonAssets;
@@ -38,7 +42,7 @@ public static class JsonAssetsShims
     /// <summary>
     /// Initializes the shims.
     /// </summary>
-    /// <param name="monitor">Monitor instance.</param>
+    /// <param name="monitor">modMonitor instance.</param>
     /// <param name="translation">A translation instance.</param>
     /// <param name="registry">Registry instance.</param>
     public static void Initialize(IMonitor monitor, ITranslationHelper translation, IModRegistry registry)
@@ -48,11 +52,11 @@ public static class JsonAssetsShims
             return;
         }
 
-        initialized = true;
-
         Guard.IsNotNull(monitor);
         Guard.IsNotNull(translation);
         Guard.IsNotNull(registry);
+
+        modMonitor = monitor;
 
         IntegrationHelper integrationHelper = new(monitor, translation, registry, LogLevel.Trace);
         if (integrationHelper.TryGetAPI("spacechase0.JsonAssets", "1.10.6", out jsonAssets)
@@ -60,6 +64,8 @@ public static class JsonAssetsShims
         {
             monitor.Log("ja found but EPU not. EPU conditions will automatically fail.", LogLevel.Info);
         }
+
+        initialized = true;
     }
 
     /// <summary>
@@ -70,7 +76,12 @@ public static class JsonAssetsShims
     public static bool ConditionRequiresEPU(ReadOnlySpan<char> condition)
         => condition[0] == '!' || condition.GetIndexOfWhiteSpace() > 3;
 
-    private static Lazy<Dictionary<string, string>?> JACropCache = new(SetUpJAIntegration);
+    private static Lazy<Dictionary<string, string>?> jaCropCache = new(SetUpJAIntegration);
+
+    /// <summary>
+    /// Gets a name->preconditions map of JA crops, or null if JA was not installed/reflection failed.
+    /// </summary>
+    public static Dictionary<string, string>? JACropCache => jaCropCache.Value;
 
     private static Dictionary<string, string>? SetUpJAIntegration()
     {
@@ -100,9 +111,20 @@ public static class JsonAssetsShims
                 continue;
             }
 
-            foreach (var requirement in requirements)
+            // sanity check requirements.
+            if (epu is null)
             {
+                foreach (var requirement in requirements)
+                {
+                    if (requirement is null)
+                    {
+                        continue;
+                    }
+                    foreach (var split in requirement.StreamSplit())
+                    {
 
+                    }
+                }
             }
         }
 

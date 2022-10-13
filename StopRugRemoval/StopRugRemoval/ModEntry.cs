@@ -50,11 +50,6 @@ internal sealed class ModEntry : Mod
     internal static ModConfig Config { get; private set; } = null!;
 
     /// <summary>
-    /// Gets the game content helper for this mod.
-    /// </summary>
-    internal static IGameContentHelper GameContentHelper { get; private set; } = null!;
-
-    /// <summary>
     /// Gets the multiplayer helper for this mod.
     /// </summary>
     internal static IMultiplayerHelper MultiplayerHelper { get; private set; } = null!;
@@ -78,8 +73,8 @@ internal sealed class ModEntry : Mod
     public override void Entry(IModHelper helper)
     {
         I18n.Init(helper.Translation);
+        AssetEditor.Initialize(helper.GameContent);
         ModMonitor = this.Monitor;
-        GameContentHelper = this.Helper.GameContent;
         MultiplayerHelper = this.Helper.Multiplayer;
         InputHelper = this.Helper.Input;
         UNIQUEID = this.ModManifest.UniqueID;

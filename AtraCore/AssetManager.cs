@@ -9,6 +9,15 @@ namespace AtraCore;
 /// </summary>
 internal static class AssetManager
 {
+    private static IAssetName prismatic = null!;
+
+    /// <summary>
+    /// Initializes the asset manager.
+    /// </summary>
+    /// <param name="parser">GameContentHelper.</param>
+    internal static void Initialize(IGameContentHelper parser)
+        => prismatic = parser.ParseAssetName(AtraCoreConstants.PrismaticMaskData);
+
     /// <summary>
     /// Gets the prismatic models data asset.
     /// </summary>
@@ -32,7 +41,7 @@ internal static class AssetManager
     /// <param name="e">Event args.</param>
     internal static void Apply(AssetRequestedEventArgs e)
     {
-        if (e.NameWithoutLocale.IsEquivalentTo(AtraCoreConstants.PrismaticMaskData))
+        if (e.NameWithoutLocale.IsEquivalentTo(prismatic))
         {
             e.LoadFrom(EmptyContainers.GetEmptyDictionary<string, DrawPrismaticModel>, AssetLoadPriority.Low);
         }

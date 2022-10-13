@@ -1,6 +1,6 @@
 ﻿using AtraBase.Collections;
+
 using StardewModdingAPI.Events;
-using StardewModdingAPI.Utilities;
 
 namespace SpecialOrdersExtended.Managers;
 
@@ -9,7 +9,14 @@ namespace SpecialOrdersExtended.Managers;
 /// </summary>
 internal static class AssetManager
 {
-    private static readonly string AssetLocation = PathUtilities.NormalizeAssetName("Mods/atravita_SpecialOrdersExtended_DurationOverride");
+    private static IAssetName assetLocation = null!;
+
+    /// <summary>
+    /// Initializes assets for this mod.
+    /// </summary>
+    /// <param name="parser">Game Content Helper.</param>
+    internal static void Initialize(IGameContentHelper parser)
+        => assetLocation = parser.ParseAssetName("Mods/atravita_SpecialOrdersExtended_DurationOverride");
 
     /// <summary>
     /// Called when assets are loaded.
@@ -17,7 +24,7 @@ internal static class AssetManager
     /// <param name="e">event args.</param>
     internal static void OnLoadAsset(AssetRequestedEventArgs e)
     {
-        if (e.NameWithoutLocale.IsEquivalentTo(AssetLocation))
+        if (e.NameWithoutLocale.IsEquivalentTo(assetLocation))
         {
             e.LoadFrom(EmptyContainers.GetEmptyDictionary<string, string>, AssetLoadPriority.Low);
         }
@@ -28,5 +35,5 @@ internal static class AssetManager
     /// </summary>
     /// <returns>The duration override dictionary.</returns>
     internal static Dictionary<string, string> GetDurationOverride()
-        => Game1.content.Load<Dictionary<string, string>>(AssetLocation);
+        => Game1.content.Load<Dictionary<string, string>>(assetLocation.BaseName);
 }

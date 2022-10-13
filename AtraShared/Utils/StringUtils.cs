@@ -1,12 +1,12 @@
-﻿using System.Globalization;
-using System.Text;
+﻿using System.Text;
+
 using AtraBase.Toolkit;
 using AtraBase.Toolkit.Reflection;
 using AtraBase.Toolkit.StringHandler;
-using FastExpressionCompiler.LightExpression;
-using Microsoft.Xna.Framework.Graphics;
 
-using AtraUtils = AtraShared.Utils.Utils;
+using FastExpressionCompiler.LightExpression;
+
+using Microsoft.Xna.Framework.Graphics;
 
 namespace AtraShared.Utils;
 
@@ -38,7 +38,7 @@ public sealed class StringUtils
     /// <summary>
     /// Initializes a new instance of the <see cref="StringUtils"/> class.
     /// </summary>
-    /// <param name="monitor">The Monitor instance to use to log for these utils.</param>
+    /// <param name="monitor">The modMonitor instance to use to log for these utils.</param>
     public StringUtils(IMonitor? monitor) => this.Monitor = monitor;
 
     private static Func<SpriteFont, char, int> GetGlyph => GetGlyphLazy.Value;

@@ -1,13 +1,20 @@
 ﻿using AtraBase.Toolkit.Reflection;
+
 using AtraCore.Framework.ReflectionManager;
+
 using AtraShared.ConstantsAndEnums;
 using AtraShared.Integrations;
 using AtraShared.Utils;
 using AtraShared.Utils.Extensions;
+
 using ForgeMenuChoice.HarmonyPatches;
+
 using HarmonyLib;
+
 using Microsoft.Xna.Framework.Graphics;
+
 using StardewModdingAPI.Events;
+
 using AtraUtils = AtraShared.Utils.Utils;
 
 namespace ForgeMenuChoice;
@@ -63,6 +70,7 @@ internal sealed class ModEntry : Mod
         InputHelper = helper.Input;
 
         I18n.Init(helper.Translation);
+        AssetLoader.Initialize(helper.GameContent);
         Config = AtraUtils.GetConfigOrDefault<ModConfig>(helper, this.Monitor);
 
         helper.Events.GameLoop.GameLaunched += this.OnGameLaunched;

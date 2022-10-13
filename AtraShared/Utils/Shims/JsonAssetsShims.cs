@@ -93,6 +93,17 @@ public static class JsonAssetsShims
         foreach (var crop in cropdata)
         {
             var name = CropDataShims.GetSeedName!(crop);
+            var requirements = CropDataShims.GetSeedRestrictions!(crop);
+            if (requirements is null)
+            {
+                ret[name!] = string.Empty; // no conditions
+                continue;
+            }
+
+            foreach (var requirement in requirements)
+            {
+
+            }
         }
 
         return ret;

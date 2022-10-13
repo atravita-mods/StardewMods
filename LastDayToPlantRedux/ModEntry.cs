@@ -61,7 +61,7 @@ internal sealed class ModEntry : Mod
     {
         if (Config.CropsToDisplay == CropOptions.Purchaseable)
         {
-            // set up JA integration
+            this.SetUpJAIntegration();
         }
 
         InventoryWatcher.LoadModel(this.Helper.Data);
@@ -90,7 +90,14 @@ internal sealed class ModEntry : Mod
         {
             helper.Register(
                 reset: static () => Config = new(),
-                save: () => this.Helper.AsyncWriteConfig(this.Monitor, Config),
+                save: () =>
+                {
+                    if (Context.IsWorldReady && Config.CropsToDisplay == CropOptions.Purchaseable)
+                    {
+                        this.SetUpJAIntegration();
+                    }
+                    this.Helper.AsyncWriteConfig(this.Monitor, Config);
+                },
                 titleScreenOnly: true)
             .GenerateDefaultGMCM(static () => Config);
         }
@@ -107,4 +114,14 @@ internal sealed class ModEntry : Mod
 
     private void OnSaving(object? sender, SavingEventArgs e)
         => InventoryWatcher.SaveModel(this.Helper.Data);
+
+    private void SetUpJAIntegration()
+    {
+        if (!this.Helper.ModRegistry.IsLoaded("spacechase0.JsonAssets"))
+        {
+            this.Monitor.Log("JA not loaded, integration unnecessary");
+        }
+
+
+    }
 }

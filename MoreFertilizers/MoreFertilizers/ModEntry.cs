@@ -889,24 +889,26 @@ internal sealed class ModEntry : Mod
         Dictionary<int, int> idMapping = new();
 
         // Have to update the planted ones.
-        if (PrismaticFertilizerID != -1
-            && storedIDs.PrismaticFertilizerID != -1
-            && PrismaticFertilizerID != storedIDs.PrismaticFertilizerID)
+        if (PrismaticFertilizerID != -1)
         {
-            // special case! Update the museum reward tracking too...
-            string oldkey = $"museumCollectedRewardO_{storedIDs.PrismaticFertilizerID}_1";
-            string newkey = $"museumCollectedRewardO_{PrismaticFertilizerID}_1";
-
-            foreach (Farmer player in Game1.getAllFarmers())
+            if (storedIDs.PrismaticFertilizerID != -1
+            && PrismaticFertilizerID != storedIDs.PrismaticFertilizerID)
             {
-                if (player.mailReceived.Remove(oldkey))
-                {
-                    player.mailReceived.Add(newkey);
-                }
-            }
+                // special case! Update the museum reward tracking too...
+                string oldkey = $"museumCollectedRewardO_{storedIDs.PrismaticFertilizerID}_1";
+                string newkey = $"museumCollectedRewardO_{PrismaticFertilizerID}_1";
 
-            idMapping.Add(storedIDs.PrismaticFertilizerID, PrismaticFertilizerID);
-            storedIDs.PrismaticFertilizerID = PrismaticFertilizerID;
+                foreach (Farmer player in Game1.getAllFarmers())
+                {
+                    if (player.mailReceived.Remove(oldkey))
+                    {
+                        player.mailReceived.Add(newkey);
+                    }
+                }
+
+                idMapping.Add(storedIDs.PrismaticFertilizerID, PrismaticFertilizerID);
+                storedIDs.PrismaticFertilizerID = PrismaticFertilizerID;
+            }
         }
 
         if (EverlastingFertilizerID != -1)

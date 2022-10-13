@@ -63,6 +63,22 @@ internal sealed class ModEntry : Mod
         helper.Events.Content.AssetsInvalidated += this.OnAssetInvalidated;
     }
 
+    /// <inheritdoc />
+    public override object? GetApi(IModInfo mod) => new CatGiftsReduxAPI(this, mod);
+
+    /// <summary>
+    /// Adds a possible picker.
+    /// </summary>
+    /// <param name="weight">The weight the picker should have.</param>
+    /// <param name="picker">The picker.</param>
+    internal void AddPicker(double weight, Func<Random, Item?> picker)
+    {
+        if (weight > 0)
+        {
+            this.AddPicker(weight, picker);
+        }
+    }
+
     private void OnAssetInvalidated(object? sender, AssetsInvalidatedEventArgs e)
     {
         if (this.allItemsWeighted.IsValueCreated && e.NamesWithoutLocale.Contains(this.dataObjectInfo))
@@ -75,6 +91,11 @@ internal sealed class ModEntry : Mod
     [EventPriority(EventPriority.High)]
     private void OnDayLaunched(object? sender, DayStartedEventArgs e)
     {
+        if (!Context.IsMainPlayer)
+        {
+            return;
+        }
+
         if (this.Helper.Data.ReadSaveData<string>(SAVEKEY) is not string value || !int.TryParse(value, out int giftsThisWeek))
         {
             giftsThisWeek = 0;
@@ -131,7 +152,17 @@ internal sealed class ModEntry : Mod
             do
             {
                 Func<Random, Item?> picker = this.itemPickers.GetValue(random);
-                Item? picked = picker(random);
+                Item? picked = null;
+                try
+                {
+                    picked = picker(random);
+                }
+                catch (Exception ex)
+                {
+                    this.Monitor.Log($"Picker failed to select an item. See log for details.", LogLevel.Error);
+                    this.Monitor.Log(ex.ToString());
+                    continue;
+                }
 
                 if (picked is not null)
                 {
@@ -176,6 +207,8 @@ internal sealed class ModEntry : Mod
         }
         return null;
     }
+
+    #region pickers
 
     private SObject? RandomSeasonalForage(Random random)
         => new(Utility.getRandomBasicSeasonalForageItem(Game1.currentSeason, random.Next()), 1);
@@ -227,6 +260,8 @@ internal sealed class ModEntry : Mod
 
         return null;
     }
+
+    #endregion
 
     private void OnSaveLoaded(object? sender, SaveLoadedEventArgs e) => this.LoadDataFromConfig();
 
@@ -293,53 +328,26 @@ internal sealed class ModEntry : Mod
         // add pickers to the picking list.
         this.itemPickers.Clear();
 
-        this.itemPickers.Add(100, this.RandomSeasonalForage);
-        this.itemPickers.Add(100, this.RandomSeasonalItem);
+        this.AddPicker(100, this.RandomSeasonalForage);
+        this.AddPicker(100, this.RandomSeasonalItem);
 
-        if (this.playerItemsManager.Count > 0 && this.config.UserDefinedListWeight > 0)
+        if (this.playerItemsManager.Count > 0)
         {
-            this.itemPickers.Add(this.config.UserDefinedListWeight, this.GetUserItem);
+            this.AddPicker(this.config.UserDefinedListWeight, this.GetUserItem);
         }
 
-        if (this.config.ForageFromMaps.Count > 0 && this.config.ForageFromMapsWeight > 0)
+        if (this.config.ForageFromMaps.Count > 0)
         {
-            this.itemPickers.Add(this.config.ForageFromMapsWeight, this.GetFromForage);
+            this.AddPicker(this.config.ForageFromMapsWeight, this.GetFromForage);
         }
 
-        if (this.config.AnimalProductsWeight > 0)
-        {
-            this.itemPickers.Add(this.config.AnimalProductsWeight, AnimalProductChooser.Pick);
-        }
-
-        if (this.config.SeasonalCropsWeight > 0)
-        {
-            this.itemPickers.Add(this.config.SeasonalCropsWeight, SeasonalCropChooser.Pick);
-        }
-
-        if (this.config.OnFarmCropWeight > 0)
-        {
-            this.itemPickers.Add(this.config.OnFarmCropWeight, OnFarmCropPicker.Pick);
-        }
-
-        if (this.config.SeasonalFruitWeight > 0)
-        {
-            this.itemPickers.Add(this.config.SeasonalFruitWeight, SeasonalFruitPicker.Pick);
-        }
-
-        if (this.config.RingsWeight > 0)
-        {
-            this.itemPickers.Add(this.config.RingsWeight, RingPicker.Pick);
-        }
-
-        if (this.config.DailyDishWeight > 0)
-        {
-            this.itemPickers.Add(this.config.DailyDishWeight, DailyDishPicker.Pick);
-        }
-
-        if (this.config.HatWeight > 0)
-        {
-            this.itemPickers.Add(this.config.HatWeight, HatPicker.Pick);
-        }
+        this.AddPicker(this.config.AnimalProductsWeight, AnimalProductChooser.Pick);
+        this.AddPicker(this.config.SeasonalCropsWeight, SeasonalCropChooser.Pick);
+        this.AddPicker(this.config.OnFarmCropWeight, OnFarmCropPicker.Pick);
+        this.AddPicker(this.config.SeasonalFruitWeight, SeasonalFruitPicker.Pick);
+        this.AddPicker(this.config.RingsWeight, RingPicker.Pick);
+        this.AddPicker(this.config.DailyDishWeight, DailyDishPicker.Pick);
+        this.AddPicker(this.config.HatWeight, HatPicker.Pick);
 
         if (this.config.AllItemsWeight > 0)
         {
@@ -347,7 +355,7 @@ internal sealed class ModEntry : Mod
             {
                 this.allItemsWeighted = new(GenerateAllItems);
             }
-            this.itemPickers.Add(this.config.AllItemsWeight, this.AllItemsPicker);
+            this.AddPicker(this.config.AllItemsWeight, this.AllItemsPicker);
         }
 
         this.Monitor.Log($"{this.itemPickers.Count} pickers found.");

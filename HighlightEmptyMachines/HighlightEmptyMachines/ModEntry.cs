@@ -1,4 +1,5 @@
-﻿
+﻿using System.Diagnostics;
+
 using AtraShared.ConstantsAndEnums;
 using AtraShared.Integrations;
 using AtraShared.MigrationManager;

@@ -75,7 +75,7 @@ internal sealed class ModEntry : Mod
     {
         if (weight > 0)
         {
-            this.AddPicker(weight, picker);
+            this.itemPickers.Add(weight, picker);
         }
     }
 

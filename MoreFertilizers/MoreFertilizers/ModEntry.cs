@@ -44,6 +44,9 @@ internal sealed class ModEntry : Mod
 #pragma warning disable SA1201 // Elements should appear in the correct order
     private static int prismaticFertilizerID = -1;
 
+    /// <summary>
+    /// Gets the integer id of the Prismatic Fertilizer, or -1 if not found/not loaded yet.
+    /// </summary>
     internal static int PrismaticFertilizerID
     {
         get

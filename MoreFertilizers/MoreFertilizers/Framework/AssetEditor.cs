@@ -19,13 +19,10 @@ internal static class AssetEditor
     /// The mail key for the organic veggies reward.
     /// </summary>
     internal const string ORGANICVEGGIEMAIL = "atravita_OrganicCrops_Reward";
-#pragma warning disable SA1310 // Field names should not contain underscore. Reviewed.
-    private static IAssetName SPECIAL_ORDERS_LOCATION = null!;
-    private static IAssetName SPECIAL_ORDERS_STRINGS = null!;
-    private static IAssetName MAIL = null!;
-    private static IAssetName LEWIS_DIALOGUE = null!;
-#pragma warning restore SA1310 // Field names should not contain underscore
 
+    /// <summary>
+    /// Our special orders.
+    /// </summary>
     private static readonly Lazy<Dictionary<string, SpecialOrderData>> SpecialOrders = new(() =>
     {
         Dictionary<string, SpecialOrderData> ret = new();
@@ -49,6 +46,13 @@ internal static class AssetEditor
         ModEntry.ModMonitor.Log($"Found {i} Special Orders");
         return ret;
     });
+
+#pragma warning disable SA1310 // Field names should not contain underscore. Reviewed.
+    private static IAssetName SPECIAL_ORDERS_LOCATION = null!;
+    private static IAssetName SPECIAL_ORDERS_STRINGS = null!;
+    private static IAssetName MAIL = null!;
+    private static IAssetName LEWIS_DIALOGUE = null!;
+#pragma warning restore SA1310 // Field names should not contain underscore
 
     #region minicache
     private static int lastTick = -1;

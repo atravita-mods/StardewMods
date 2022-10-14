@@ -18,7 +18,6 @@ internal static class GCFUtils
     {
         foreach (TerrainFeature terrainfeature in loc.terrainFeatures.Values)
         {
-
             if (terrainfeature is HoeDirt dirt && dirt.fertilizer.Value == storedID)
             {
                 dirt.fertilizer.Value = newID;

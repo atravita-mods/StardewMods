@@ -9,6 +9,7 @@ using AtraShared.Integrations;
 using AtraShared.Integrations.Interfaces;
 using AtraShared.ItemManagement;
 using AtraShared.Utils.Extensions;
+using AtraShared.Wrappers;
 
 using CatGiftsRedux.Framework;
 
@@ -17,6 +18,7 @@ using Microsoft.Xna.Framework;
 using StardewModdingAPI.Events;
 
 using StardewValley.Characters;
+using StardewValley.Objects;
 
 using AtraUtils = AtraShared.Utils.Utils;
 
@@ -243,7 +245,7 @@ internal sealed class ModEntry : Mod
         return forage[random.Next(forage.Count)].getOne() as SObject;
     }
 
-    private SObject? AllItemsPicker(Random random)
+    private Item? AllItemsPicker(Random random)
     {
         this.Monitor.DebugOnlyLog("Selected all items");
 
@@ -251,13 +253,24 @@ internal sealed class ModEntry : Mod
         {
             return null;
         }
-
-        int id = this.allItemsWeighted.Value.GetValue(random);
-        if (Game1.objectInformation.ContainsKey(id))
+        int tries = 3;
+        do
         {
-            return new SObject(id, 1);
-        }
+            int id = this.allItemsWeighted.Value.GetValue(random);
 
+            // confirm the item exists.
+            if (!Game1Wrappers.ObjectInfo.TryGetValue(id, out string? objectData)
+                || objectData.GetNthChunk('1', SObject.objectInfoNameIndex).Contains("Qi", StringComparison.OrdinalIgnoreCase))
+            {
+                continue;
+            }
+
+            if (DataToItemMap.IsActuallyRing(id))
+            {
+                return new Ring(id);
+            }
+        }
+        while (tries-- > 0);
         return null;
     }
 

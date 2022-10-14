@@ -1,7 +1,10 @@
 ﻿using AtraBase.Toolkit.Extensions;
 using AtraBase.Toolkit.StringHandler;
 
+using AtraCore.Framework.ItemManagement;
+
 using AtraShared.Utils.Extensions;
+using AtraShared.Wrappers;
 
 using Microsoft.Xna.Framework;
 
@@ -14,7 +17,7 @@ namespace CatGiftsRedux.Framework;
 /// </summary>
 internal static class SeasonalCropChooser
 {
-    internal static SObject? Pick(Random random)
+    internal static Item? Pick(Random random)
     {
         ModEntry.ModMonitor.DebugOnlyLog("Picked Seasonal Crops");
 
@@ -27,43 +30,61 @@ internal static class SeasonalCropChooser
             return null;
         }
 
-        KeyValuePair<int, string> entry = content[random.Next(content.Count)];
-
-        if (entry.Value.GetNthChunk('/', SObject.objectInfoNameIndex).Contains("Qi", StringComparison.OrdinalIgnoreCase))
+        int tries = 3;
+        do
         {
-            return null;
-        }
+            KeyValuePair<int, string> entry = content[random.Next(content.Count)];
 
-        if (int.TryParse(entry.Value.GetNthChunk('/', 3), out int id) && id > 0)
-        {
-            ReadOnlySpan<char> colored = entry.Value.GetNthChunk('/', 8);
-            if (colored.StartsWith("true", StringComparison.Ordinal))
+            if (entry.Value.GetNthChunk('/', SObject.objectInfoNameIndex).Contains("Qi", StringComparison.OrdinalIgnoreCase))
             {
-                StreamSplit stream = colored.StreamSplit();
-                _ = stream.MoveNext(); // the original "true"
+                return null;
+            }
 
-                byte[] colorarray = new byte[3];
-                int index = 0;
-                foreach (SpanSplitEntry c in stream)
+            if (int.TryParse(entry.Value.GetNthChunk('/', 3), out int id) && id > 0)
+            {
+                // confirm the item exists.
+                if (!Game1Wrappers.ObjectInfo.TryGetValue(id, out string? objectData)
+                    || objectData.GetNthChunk('1', SObject.objectInfoNameIndex).Contains("Qi", StringComparison.OrdinalIgnoreCase))
                 {
-                    if (byte.TryParse(c, out byte colorbit))
+                    continue;
+                }
+
+                if (DataToItemMap.IsActuallyRing(id))
+                {
+                    return new Ring(id);
+                }
+
+                ReadOnlySpan<char> colored = entry.Value.GetNthChunk('/', 8);
+                if (colored.StartsWith("true", StringComparison.Ordinal))
+                {
+                    StreamSplit stream = colored.StreamSplit();
+                    _ = stream.MoveNext(); // the original "true"
+
+                    byte[] colorarray = new byte[3];
+                    int index = 0;
+                    foreach (SpanSplitEntry c in stream)
                     {
-                        colorarray[index++] = colorbit;
-                        if (index >= 3)
+                        if (byte.TryParse(c, out byte colorbit))
                         {
-                            break;
+                            colorarray[index++] = colorbit;
+                            if (index >= 3)
+                            {
+                                break;
+                            }
+                        }
+                        else
+                        {
+                            // can't parse the color, just return a noncolored object and hope for the best.
+                            return new SObject(id, 1);
                         }
                     }
-                    else
-                    {
-                        // can't parse the color, just return a noncolored object and hope for the best.
-                        return new SObject(id, 1);
-                    }
+                    return new ColoredObject(id, 1, new Color(colorarray[0], colorarray[1], colorarray[2]));
                 }
-                return new ColoredObject(id, 1, new Color(colorarray[0], colorarray[1], colorarray[2]));
+                return new SObject(id, 1);
             }
-            return new SObject(id, 1);
         }
+        while (tries-- > 0);
+
         return null;
     }
 }

@@ -1,6 +1,11 @@
 ﻿using AtraBase.Toolkit.Extensions;
 
+using AtraCore.Framework.ItemManagement;
+
 using AtraShared.Utils.Extensions;
+using AtraShared.Wrappers;
+
+using StardewValley.Objects;
 
 namespace CatGiftsRedux.Framework;
 
@@ -9,7 +14,7 @@ namespace CatGiftsRedux.Framework;
 /// </summary>
 internal static class SeasonalFruitPicker
 {
-    internal static SObject? Pick(Random random)
+    internal static Item? Pick(Random random)
     {
         ModEntry.ModMonitor.DebugOnlyLog("Picked Seasonal Fruit");
 
@@ -22,12 +27,29 @@ internal static class SeasonalFruitPicker
             return null;
         }
 
-        KeyValuePair<int, string> fruit = fruittrees[random.Next(fruittrees.Count)];
-
-        if (int.TryParse(fruit.Value.GetNthChunk('/', 2), out int id))
+        int tries = 3;
+        do
         {
-            return new SObject(id, 1);
+            KeyValuePair<int, string> fruit = fruittrees[random.Next(fruittrees.Count)];
+
+            if (int.TryParse(fruit.Value.GetNthChunk('/', 2), out int id))
+            {
+                // confirm the item exists.
+                if (!Game1Wrappers.ObjectInfo.TryGetValue(id, out string? objectData)
+                    || objectData.GetNthChunk('1', SObject.objectInfoNameIndex).Contains("Qi", StringComparison.OrdinalIgnoreCase))
+                {
+                    continue;
+                }
+
+                if (DataToItemMap.IsActuallyRing(id))
+                {
+                    return new Ring(id);
+                }
+
+                return new SObject(id, 1);
+            }
         }
+        while (tries-- > 3);
         return null;
     }
 }

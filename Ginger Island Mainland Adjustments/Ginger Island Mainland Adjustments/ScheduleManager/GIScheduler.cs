@@ -1,4 +1,8 @@
-﻿
+﻿#if DEBUG
+using System.Diagnostics;
+using System.Runtime;
+#endif
+
 using AtraShared.Schedules.DataModels;
 using AtraShared.Utils;
 using AtraShared.Utils.Extensions;

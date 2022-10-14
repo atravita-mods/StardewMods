@@ -1,4 +1,9 @@
-﻿using AtraShared.Utils.Extensions;
+﻿using AtraBase.Toolkit.Extensions;
+
+using AtraCore.Framework.ItemManagement;
+
+using AtraShared.Utils.Extensions;
+using AtraShared.Wrappers;
 
 using StardewValley.Objects;
 using StardewValley.TerrainFeatures;
@@ -15,7 +20,7 @@ internal static class OnFarmCropPicker
     /// </summary>
     /// <param name="random">Random to use.</param>
     /// <returns>The product of a random crop.</returns>
-    internal static SObject? Pick(Random random)
+    internal static Item? Pick(Random random)
     {
         ModEntry.ModMonitor.DebugOnlyLog("Picked Random Farm Crop");
 
@@ -28,9 +33,29 @@ internal static class OnFarmCropPicker
             return null;
         }
 
-        Crop? crop = ((HoeDirt)Utility.GetRandom(hoedirt, random)).crop;
-        return crop.programColored.Value
-            ? new ColoredObject(crop.indexOfHarvest.Value, 1, crop.tintColor.Value)
-            : new SObject(crop.indexOfHarvest.Value, 1);
+        int tries = 3;
+        do
+        {
+
+            Crop? crop = ((HoeDirt)Utility.GetRandom(hoedirt, random)).crop;
+
+            // confirm the item exists.
+            if (!Game1Wrappers.ObjectInfo.TryGetValue(crop.indexOfHarvest.Value, out string? objectData)
+                || objectData.GetNthChunk('1', SObject.objectInfoNameIndex).Contains("Qi", StringComparison.OrdinalIgnoreCase))
+            {
+                continue;
+            }
+
+            if (DataToItemMap.IsActuallyRing(crop.indexOfHarvest.Value))
+            {
+                return new Ring(crop.indexOfHarvest.Value);
+            }
+
+            return crop.programColored.Value
+                ? new ColoredObject(crop.indexOfHarvest.Value, 1, crop.tintColor.Value)
+                : new SObject(crop.indexOfHarvest.Value, 1);
+        }
+        while (tries-- > 0);
+        return null;
     }
 }

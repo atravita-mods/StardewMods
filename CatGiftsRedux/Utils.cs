@@ -1,10 +1,12 @@
-﻿using AtraCore.Framework.QueuePlayerAlert;
+﻿using AtraCore.Framework.ItemManagement;
+using AtraCore.Framework.QueuePlayerAlert;
 
 using AtraShared.Utils.Extensions;
 
 using Microsoft.Xna.Framework;
 
 using StardewValley.Characters;
+using StardewValley.Objects;
 
 namespace CatGiftsRedux;
 
@@ -55,6 +57,12 @@ internal static class Utils
         PlayerAlertHandler.AddMessage(
             message: new($"{pet.Name} has brought you a {item.DisplayName}", Color.PaleGreen, 500, true),
             soundCue: pet is Cat ? "Cowboy_Footstep" : "dog_pant");
+
+        if (DataToItemMap.IsActuallyRing(item.ParentSheetIndex) && item.GetType() == typeof(SObject))
+        {
+            ModEntry.ModMonitor.Log($"Fixing {item.Name} to be an actual ring.");
+            item = new Ring(item.ParentSheetIndex);
+        }
 
         if (item is SObject obj && !location.Objects.ContainsKey(tile))
         {

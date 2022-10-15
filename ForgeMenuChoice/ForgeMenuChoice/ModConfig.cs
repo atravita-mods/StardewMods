@@ -24,6 +24,7 @@ public enum TooltipBehavior
 }
 
 #pragma warning disable SA1623 // Property summary documentation should match accessors. Reviewed.
+
 /// <summary>
 /// Configuration class for this mod.
 /// </summary>

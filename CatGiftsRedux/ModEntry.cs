@@ -54,6 +54,7 @@ internal sealed class ModEntry : Mod
     public override void Entry(IModHelper helper)
     {
         I18n.Init(helper.Translation);
+        AssetManager.Initialize(helper.GameContent);
         this.config = AtraUtils.GetConfigOrDefault<ModConfig>(helper, this.Monitor);
         ModMonitor = this.Monitor;
         this.dataObjectInfo = helper.GameContent.ParseAssetName("Data/ObjectInformation");
@@ -62,6 +63,7 @@ internal sealed class ModEntry : Mod
         helper.Events.GameLoop.SaveLoaded += this.OnSaveLoaded;
 
         helper.Events.GameLoop.DayStarted += this.OnDayLaunched;
+        helper.Events.Content.AssetRequested += this.OnAssetRequested;
         helper.Events.Content.AssetsInvalidated += this.OnAssetInvalidated;
     }
 
@@ -80,6 +82,8 @@ internal sealed class ModEntry : Mod
             this.itemPickers.Add(weight, picker);
         }
     }
+
+    private void OnAssetRequested(object? sender, AssetRequestedEventArgs e) => AssetManager.Apply(e);
 
     private void OnAssetInvalidated(object? sender, AssetsInvalidatedEventArgs e)
     {
@@ -269,6 +273,8 @@ internal sealed class ModEntry : Mod
             {
                 return new Ring(id);
             }
+
+            return new SObject(id, 1);
         }
         while (tries-- > 0);
         return null;
@@ -361,6 +367,7 @@ internal sealed class ModEntry : Mod
         this.AddPicker(this.config.RingsWeight, RingPicker.Pick);
         this.AddPicker(this.config.DailyDishWeight, DailyDishPicker.Pick);
         this.AddPicker(this.config.HatWeight, HatPicker.Pick);
+        this.AddPicker(this.config.ModDefinedWeight, AssetManager.Pick);
 
         if (this.config.AllItemsWeight > 0)
         {

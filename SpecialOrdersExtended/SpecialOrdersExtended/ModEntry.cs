@@ -26,7 +26,7 @@ namespace SpecialOrdersExtended;
 /// <inheritdoc />
 internal sealed class ModEntry : Mod
 {
-    private static readonly string[] modsThatHandleTheBoard = new string[] { "Rafseazz.RidgesideVillage", "PurrplingCat.QuestFramework", "Esca.EMP" };
+    private static readonly string[] ModsThatHandleTheBoard = new string[] { "Rafseazz.RidgesideVillage", "PurrplingCat.QuestFramework", "Esca.EMP" };
     private bool hasModsThatHandleBoard = false;
 
     /// <summary>
@@ -133,7 +133,7 @@ internal sealed class ModEntry : Mod
             ModMonitor.Log($"Failed to patch NPC::checkForNewCurrentDialogue for Special Orders Dialogue. Dialogue will be disabled\n\n{ex}", LogLevel.Error);
         }
 
-        if (modsThatHandleTheBoard.All( uniqueID => !this.Helper.ModRegistry.IsLoaded(uniqueID)))
+        if (ModsThatHandleTheBoard.All( uniqueID => !this.Helper.ModRegistry.IsLoaded(uniqueID)))
         {
             this.Monitor.Log("Apply patch to suppress board updates.");
             SpecialOrderPatches.ApplyUpdatePatch(harmony);

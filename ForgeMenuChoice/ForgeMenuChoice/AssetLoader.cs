@@ -13,7 +13,7 @@ namespace ForgeMenuChoice;
 public static class AssetLoader
 {
     private const string ASSETPREFIX = "Mods/atravita_ForgeMenuChoice_";
-    private static readonly string uiTexturePath = PathUtilities.NormalizePath("assets/Forge-Buttons.png");
+    private static readonly string UiTexturePath = PathUtilities.NormalizePath("assets/Forge-Buttons.png");
     private static IAssetName uiAssetPath = null!;
     private static IAssetName tooltipDataPath = null!;
     private static Lazy<Texture2D> uiElementLazy = new(() => ModEntry.GameContentHelper.Load<Texture2D>(uiAssetPath));
@@ -68,7 +68,7 @@ public static class AssetLoader
     {
         if (e.NameWithoutLocale.Equals(uiAssetPath))
         {
-            e.LoadFromModFile<Texture2D>(uiTexturePath, AssetLoadPriority.Low);
+            e.LoadFromModFile<Texture2D>(UiTexturePath, AssetLoadPriority.Low);
         }
         else if (e.NameWithoutLocale.Equals(tooltipDataPath))
         {

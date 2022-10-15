@@ -3,12 +3,11 @@ using AtraShared.Integrations.GMCMAttributes;
 
 namespace CatGiftsRedux.Framework;
 
-
 [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "This is a record.")]
 public record ItemRecord(ItemTypeEnum Type, string Identifier);
 
 [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Stylecop doesn't understand records.")]
-public record WeightedItem(ItemRecord Item, double Weight);
+public record WeightedItemData(ItemRecord Item, double Weight);
 
 /// <summary>
 /// The config class for this mod.
@@ -32,13 +31,13 @@ public sealed class ModConfig
     /// Gets or sets a list of things the user wants to drop.
     /// </summary>
     [GMCMDefaultIgnore]
-    public List<WeightedItem> UserDefinedItemList { get; set; } = new()
+    public List<WeightedItemData> UserDefinedItemList { get; set; } = new()
     {
         new (
             new (ItemTypeEnum.SObject, "Trash"),
             100),
         new (
-            new (ItemTypeEnum.SObject, "Stick"),
+            new (ItemTypeEnum.SObject, "Driftwood"),
             100),
     };
 
@@ -134,8 +133,17 @@ public sealed class ModConfig
     [GMCMRange(0, 1000)]
     public int DailyDishWeight { get; set; } = 10;
 
+    /// <summary>
+    /// Gets or sets a value indicating the weight of picking a hat.
+    /// </summary>
     [GMCMRange(0, 1000)]
     public int HatWeight { get; set; } = 10;
+
+    /// <summary>
+    /// Gets or sets a value indicating the weight of picking a mod-defined item.
+    /// </summary>
+    [GMCMRange(0, 1000)]
+    public int ModDefinedWeight { get; set; } = 100;
 
     /// <summary>
     /// Gets or sets a value indicating whether or not the pet can pick from the full items list.

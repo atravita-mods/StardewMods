@@ -55,10 +55,12 @@ internal static class Utils
         ModEntry.ModMonitor.DebugOnlyLog($"Placing {item.DisplayName} at {location.NameOrUniqueName} - {tile}");
 
         PlayerAlertHandler.AddMessage(
-            message: new($"{pet.Name} has brought you a {item.DisplayName}", Color.PaleGreen, 500, true),
+            message: new($"{pet.Name} has brought you a {item.DisplayName}", Color.PaleGreen, 2000, true),
             soundCue: pet is Cat ? "Cowboy_Footstep" : "dog_pant");
 
-        if (DataToItemMap.IsActuallyRing(item.ParentSheetIndex) && item.GetType() == typeof(SObject))
+        if (item is SObject @object && !@object.bigCraftable.Value
+            && DataToItemMap.IsActuallyRing(item.ParentSheetIndex)
+            && item.GetType() == typeof(SObject))
         {
             ModEntry.ModMonitor.Log($"Fixing {item.Name} to be an actual ring.");
             item = new Ring(item.ParentSheetIndex);
@@ -71,7 +73,7 @@ internal static class Utils
         }
         else
         {
-            Debris? debris = new Debris(item, tile * 64f);
+            Debris? debris = new(item, tile * 64f);
             location.debris.Add(debris);
         }
     }

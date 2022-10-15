@@ -37,7 +37,15 @@ internal sealed class ModEntry : Mod
         => this.Helper.Events.GameLoop.OneSecondUpdateTicked -= this.OnUpdateTicked;
 
     private void OnSaveLoaded(object? sender, SaveLoadedEventArgs e)
-        => this.Helper.Events.GameLoop.OneSecondUpdateTicked += this.OnUpdateTicked;
+    {
+        Game1.player.mailReceived.OnElementChanged += this.MailReceived_OnElementChanged;
+        this.Helper.Events.GameLoop.OneSecondUpdateTicked += this.OnUpdateTicked;
+    }
+
+    private void MailReceived_OnElementChanged(Netcode.NetList<string, Netcode.NetString> list, int index, string oldValue, string newValue)
+    {
+        this.Monitor.Log($"Mail flags changed: index {index} old {oldValue} new {newValue}.", LogLevel.Alert);
+    }
 
     private void OnUpdateTicked(object? sender, OneSecondUpdateTickedEventArgs e)
     {

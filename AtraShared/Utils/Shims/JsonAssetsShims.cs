@@ -1,4 +1,8 @@
-﻿using AtraBase.Toolkit.Extensions;
+﻿using System.Text;
+
+using AtraBase.Toolkit;
+using AtraBase.Toolkit.Extensions;
+using AtraBase.Toolkit.Reflection;
 using AtraBase.Toolkit.StringHandler;
 
 using AtraCore.Framework.ReflectionManager;
@@ -91,8 +95,8 @@ public static class JsonAssetsShims
             return null;
         }
 
-        var inst = ja.GetCachedField("instance", ReflectionCache.FlagTypes.StaticFlags).GetValue(null);
-        var cropdata = ja.GetCachedField("Crops", ReflectionCache.FlagTypes.InstanceFlags).GetValue(inst) as IList<object>;
+        var inst = ja.StaticFieldNamed("instance").GetValue(null);
+        var cropdata = ja.InstanceFieldNamed("Crops").GetValue(inst) as IList<object>;
 
         if (cropdata is null)
         {
@@ -111,21 +115,22 @@ public static class JsonAssetsShims
                 continue;
             }
 
-            // sanity check requirements.
-            if (epu is null)
-            {
-                foreach (var requirement in requirements)
-                {
-                    if (requirement is null)
-                    {
-                        continue;
-                    }
-                    foreach (var split in requirement.StreamSplit())
-                    {
+            StringBuilder sb = StringBuilderCache.Acquire(64);
 
-                    }
+            foreach (var requirement in requirements)
+            {
+                if (requirement is not null)
+                {
+                    sb.Append(requirement).Append('/');
                 }
             }
+
+            if (sb.Length > 0)
+            {
+                ret[name!] = sb.ToString(0, sb.Length - 1);
+            }
+
+            StringBuilderCache.Release(sb);
         }
 
         return ret;

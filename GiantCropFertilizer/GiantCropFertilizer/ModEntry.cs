@@ -167,7 +167,8 @@ internal sealed class ModEntry : Mod
         this.Helper.Events.GameLoop.SaveLoaded += this.OnSaveLoaded;
         this.Helper.Events.GameLoop.ReturnedToTitle += this.OnReturnedToTitle;
 
-        { // GMCM integration
+        // GMCM integration
+        {
             GMCMHelper gmcmHelper = new(this.Monitor, this.Helper.Translation, this.Helper.ModRegistry, this.ModManifest);
             if (gmcmHelper.TryGetAPI())
             {

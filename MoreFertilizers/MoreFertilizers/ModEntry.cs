@@ -885,6 +885,10 @@ internal sealed class ModEntry : Mod
             if (this.Helper.Data.ReadSaveData<MoreFertilizerIDs>(SavedIDKey) is not MoreFertilizerIDs storedIDCls)
             {
                 ModMonitor.Log("No need to fix IDs, not installed before.");
+
+                this.Helper.Events.GameLoop.Saving -= this.OnSaving;
+                this.Helper.Events.GameLoop.Saving += this.OnSaving;
+
                 return;
             }
             storedIDs = storedIDCls;

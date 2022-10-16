@@ -109,7 +109,7 @@ internal static class InventoryWatcher
                 {
                     LoadModel(helper);
                 }
-                if (obj.Category == SObject.SeedsCategory && model.Seeds.Add(obj.Name))
+                if (obj.Category == SObject.SeedsCategory && !obj.isSapling() && model.Seeds.Add(obj.Name))
                 {
                     HasChanges = true;
                 }

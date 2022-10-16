@@ -273,11 +273,20 @@ internal sealed class ModEntry : Mod
         if (this.Helper.Data.ReadGlobalData<GiantCropFertilizerIDStorage>(SAVESTRING) is not GiantCropFertilizerIDStorage storedIDCls
             || storedIDCls.ID == -1)
         {
+            this.storedID = new GiantCropFertilizerIDStorage(GiantCropFertilizerID);
+
+            this.Helper.Events.GameLoop.Saved -= this.OnSaved;
+            this.Helper.Events.GameLoop.Saved += this.OnSaved;
+
             ModMonitor.Log("No need to fix IDs, not installed before.");
             return;
         }
 
-        this.storedID ??= storedIDCls;
+        if (this.storedID is null || this.storedID.ID == -1)
+        {
+            this.storedID = storedIDCls;
+        }
+
         int storedID = this.storedID.ID;
 
         if (storedID == newID)

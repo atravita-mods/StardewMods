@@ -1,4 +1,5 @@
 ﻿using AtraShared.Integrations;
+using AtraShared.MigrationManager;
 using AtraShared.Utils.Extensions;
 using AtraShared.Utils.Shims;
 using LastDayToPlantRedux.Framework;
@@ -11,6 +12,7 @@ namespace LastDayToPlantRedux;
 /// <inheritdoc />
 internal sealed class ModEntry : Mod
 {
+
     /// <summary>
     /// Gets the logger for this mod.
     /// </summary>
@@ -20,6 +22,8 @@ internal sealed class ModEntry : Mod
     /// Gets the config instance for this mod.
     /// </summary>
     internal static ModConfig Config { get; private set; } = null!;
+
+    private MigrationManager? migrator;
 
     /// <inheritdoc />
     public override void Entry(IModHelper helper)
@@ -66,6 +70,17 @@ internal sealed class ModEntry : Mod
 
         this.Helper.Events.GameLoop.Saving -= this.OnSaving;
         this.Helper.Events.GameLoop.Saving += this.OnSaving;
+
+        this.migrator = new(this.ModManifest, this.Helper, this.Monitor);
+
+        if (!this.migrator.CheckVersionInfo())
+        {
+            this.Helper.Events.GameLoop.Saved += this.WriteMigrationData;
+        }
+        else
+        {
+            this.migrator = null;
+        }
     }
 
     private void OnDayStart(object? sender, DayStartedEventArgs e)
@@ -118,5 +133,20 @@ internal sealed class ModEntry : Mod
         }
 
 
+    }
+
+    /// <summary>
+    /// Writes migration data then detaches the migrator.
+    /// </summary>
+    /// <param name="sender">Smapi thing.</param>
+    /// <param name="e">Arguments for just-before-saving.</param>
+    private void WriteMigrationData(object? sender, SavedEventArgs e)
+    {
+        if (this.migrator is not null)
+        {
+            this.migrator.SaveVersionInfo();
+            this.migrator = null;
+        }
+        this.Helper.Events.GameLoop.Saved -= this.WriteMigrationData;
     }
 }

@@ -45,6 +45,7 @@ public sealed class ModConfig
     /// Gets or sets how much to weigh the user defined list.
     /// </summary>
     [GMCMRange(0, 1000)]
+    [GMCMSection("PickerWeights", 0)]
     public int UserDefinedListWeight { get; set; } = 100;
 
     private float minChance = 0.1f;
@@ -95,60 +96,70 @@ public sealed class ModConfig
     /// Gets or sets a value indicating how much to weigh the forage from maps picker.
     /// </summary>
     [GMCMRange(0, 1000)]
+    [GMCMSection("PickerWeights", 0)]
     public int ForageFromMapsWeight { get; set; } = 100;
 
     /// <summary>
     /// Gets or sets a value indicating the weight of the animal products picker.
     /// </summary>
     [GMCMRange(0, 1000)]
+    [GMCMSection("PickerWeights", 0)]
     public int AnimalProductsWeight { get; set; } = 100;
 
     /// <summary>
     /// Gets or sets a value indicating the weight of the seasonal crops picker.
     /// </summary>
     [GMCMRange(0, 1000)]
+    [GMCMSection("PickerWeights", 0)]
     public int SeasonalCropsWeight { get; set; } = 100;
 
     /// <summary>
     /// Gets or sets a value indicating the weight of the on farm crops picker.
     /// </summary>
     [GMCMRange(0, 1000)]
+    [GMCMSection("PickerWeights", 0)]
     public int OnFarmCropWeight { get; set; } = 50;
 
     /// <summary>
     /// Gets or sets a value indicating the weight of the seasonal fruit picker.
     /// </summary>
     [GMCMRange(0, 1000)]
+    [GMCMSection("PickerWeights", 0)]
     public int SeasonalFruitWeight { get; set; } = 50;
 
     /// <summary>
     /// Gets or sets a value indicating the chances the pet will bring you a ring.
     /// </summary>
     [GMCMRange(0, 1000)]
+    [GMCMSection("PickerWeights", 0)]
     public int RingsWeight { get; set; } = 10;
 
     /// <summary>
     /// Gets or sets a value indicating the weight of the Daily Saloon dish.
     /// </summary>
     [GMCMRange(0, 1000)]
+    [GMCMSection("PickerWeights", 0)]
     public int DailyDishWeight { get; set; } = 10;
 
     /// <summary>
     /// Gets or sets a value indicating the weight of picking a hat.
     /// </summary>
     [GMCMRange(0, 1000)]
+    [GMCMSection("PickerWeights", 0)]
     public int HatWeight { get; set; } = 10;
 
     /// <summary>
     /// Gets or sets a value indicating the weight of picking a mod-defined item.
     /// </summary>
     [GMCMRange(0, 1000)]
+    [GMCMSection("PickerWeights", 0)]
     public int ModDefinedWeight { get; set; } = 100;
 
     /// <summary>
     /// Gets or sets a value indicating whether or not the pet can pick from the full items list.
     /// </summary>
     [GMCMRange(0, 1000)]
+    [GMCMSection("PickerWeights", 0)]
     public int AllItemsWeight { get; set; } = 100;
 
     private int maxPriceForAllItems = 500;

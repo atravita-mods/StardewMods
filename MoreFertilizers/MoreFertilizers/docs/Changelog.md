@@ -28,7 +28,7 @@
 * Fixes integration with Prismatic/Radioactive tools.
 * Fixes organic fertilizer with beer, pale ale, green tea, mead, and coffee.
 * Internal improvements.
-
+* Deshuffle code fixes.
 
 #### Version 0.2.0
 * Move to using AtraCore, which should have improved loading times significantly.

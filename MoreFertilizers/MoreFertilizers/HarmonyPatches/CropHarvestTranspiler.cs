@@ -6,10 +6,14 @@ using AtraBase.Toolkit.Reflection;
 using AtraCore.Framework.ReflectionManager;
 using AtraShared.Utils.Extensions;
 using AtraShared.Utils.HarmonyHelper;
+using AtraShared.Wrappers;
+
 using HarmonyLib;
 using Microsoft.Xna.Framework;
 using MoreFertilizers.Framework;
 using Netcode;
+
+using StardewValley.Characters;
 using StardewValley.Objects;
 using StardewValley.TerrainFeatures;
 
@@ -65,11 +69,11 @@ internal static class CropHarvestTranspiler
     }
 
     [MethodImpl(TKConstants.Hot)]
-    private static Item? MakeItemOrganic(Item? item, HoeDirt? dirt)
-        => item is SObject obj ? MakeObjectOrganic(obj, dirt) : item;
+    private static Item? HandleOrganicAndBeverageForItems(Item? item, HoeDirt? dirt, JunimoHarvester? junimo)
+        => item is SObject obj ? HandleOrganicAndBeverageForObjects(obj, dirt, junimo) : item;
 
     [MethodImpl(TKConstants.Hot)]
-    private static SObject MakeObjectOrganic(SObject obj, HoeDirt? dirt)
+    private static SObject HandleOrganicAndBeverageForObjects(SObject obj, HoeDirt? dirt, JunimoHarvester? junimo)
     {
         if (dirt is not null && dirt.fertilizer.Value != -1)
         {
@@ -87,10 +91,17 @@ internal static class CropHarvestTranspiler
                 obj.modData?.SetBool(CanPlaceHandler.Joja, true);
                 obj.MarkContextTagsDirty();
             }
-            else if (dirt.fertilizer.Value == ModEntry.MiraculousBeveragesID
+            else if (dirt.fertilizer.Value == ModEntry.MiraculousBeveragesID && Game1.random.Next(2) == 0
                 && MiraculousFertilizerHandler.GetBeverage(obj.ParentSheetIndex) is SObject beverage)
             {
-                Game1.createItemDebris(beverage, dirt.currentTileLocation * 64f, -1);
+                if (junimo is not null)
+                {
+                    junimo.tryToAddItemToHut(beverage);
+                }
+                else
+                {
+                    Game1.createItemDebris(beverage, dirt.currentTileLocation * 64f, -1);
+                }
             }
         }
         return obj;
@@ -108,6 +119,7 @@ internal static class CropHarvestTranspiler
         return prevValue;
     }
 
+    [MethodImpl(TKConstants.Hot)]
     private static int AdjustExperience(int prevValue, HoeDirt? dirt)
     {
         if (ModEntry.WisdomFertilizerID != -1 && dirt?.fertilizer?.Value == ModEntry.WisdomFertilizerID)
@@ -117,6 +129,7 @@ internal static class CropHarvestTranspiler
         return prevValue;
     }
 
+    [MethodImpl(TKConstants.Hot)]
     private static int AdjustRegrow(int prevValue, HoeDirt? dirt)
     {
         if (ModEntry.SecretJojaFertilizerID != -1 && dirt?.fertilizer?.Value == ModEntry.SecretJojaFertilizerID
@@ -125,6 +138,34 @@ internal static class CropHarvestTranspiler
             return Math.Max(1, (int)(0.9 * prevValue));
         }
         return prevValue;
+    }
+
+    [MethodImpl(TKConstants.Hot)]
+    private static void DropSeedsForSeedyFertilizer(int x, int y, HoeDirt? dirt, JunimoHarvester? jumino)
+    {
+        if (dirt?.crop is null)
+        {
+            return;
+        }
+
+        if (ModEntry.SeedyFertilizerID != -1 && dirt.fertilizer?.Value == ModEntry.SeedyFertilizerID)
+        {
+            dirt.crop.InferSeedIndex();
+            int seedIndex = dirt.crop.rowInSpriteSheet.Value != Crop.rowOfWildSeeds ? dirt.crop.netSeedIndex.Value : dirt.crop.whichForageCrop.Value;
+
+            if (Game1Wrappers.ObjectInfo.ContainsKey(seedIndex))
+            {
+                SObject seeds = new(seedIndex, Game1.random.Next(3));
+                if (jumino is null)
+                {
+                    Game1.createItemDebris(seeds, new Vector2((x * Game1.tileSize) + 32, (y * Game1.tileSize) + 32), -1, dirt.currentLocation);
+                }
+                else
+                {
+                    jumino.tryToAddItemToHut(seeds);
+                }
+            }
+        }
     }
 
 #pragma warning disable SA1116 // Split parameters should start on line after declaration
@@ -223,8 +264,25 @@ internal static class CropHarvestTranspiler
             .Insert(new CodeInstruction[]
             { // Insert function to make the object organic if needed.
                 new(OpCodes.Ldarg_3),
-                new (OpCodes.Call, typeof(CropHarvestTranspiler).GetCachedMethod(nameof(MakeObjectOrganic), ReflectionCache.FlagTypes.StaticFlags)),
+                new(OpCodes.Ldarg, 4),
+                new (OpCodes.Call, typeof(CropHarvestTranspiler).GetCachedMethod(nameof(HandleOrganicAndBeverageForObjects), ReflectionCache.FlagTypes.StaticFlags)),
             }, withLabels: firstSObjectCreationLabels)
+            .FindNext(new CodeInstructionWrapper[]
+            { // find the sunflower seeds block (421)
+                new (OpCodes.Ldarg_0),
+                new (OpCodes.Ldfld, typeof(Crop).GetCachedField(nameof(Crop.indexOfHarvest), ReflectionCache.FlagTypes.InstanceFlags)),
+                new (OpCodes.Call), // this is a op_Implicit
+                new (OpCodes.Ldc_I4, 421),
+            })
+            .GetLabels(out var seedyLabels)
+            .Insert(new CodeInstruction[]
+            { // and just insert the seed fertilizer just before it.
+                new(OpCodes.Ldarg_1),
+                new(OpCodes.Ldarg_2),
+                new(OpCodes.Ldarg_3),
+                new(OpCodes.Ldarg, 4),
+                new(OpCodes.Call, typeof(CropHarvestTranspiler).GetCachedMethod(nameof(DropSeedsForSeedyFertilizer), ReflectionCache.FlagTypes.StaticFlags)),
+            }, withLabels: seedyLabels)
             .FindNext(new CodeInstructionWrapper[]
             {// if (this.programColored), the second instance.
                 new(OpCodes.Ldarg_0),
@@ -245,7 +303,8 @@ internal static class CropHarvestTranspiler
             .Insert(new CodeInstruction[]
             { // Insert function to make the object organic if needed.
                 new(OpCodes.Ldarg_3),
-                new(OpCodes.Call, typeof(CropHarvestTranspiler).GetCachedMethod(nameof(MakeObjectOrganic), ReflectionCache.FlagTypes.StaticFlags)),
+                new(OpCodes.Ldarg, 4),
+                new(OpCodes.Call, typeof(CropHarvestTranspiler).GetCachedMethod(nameof(HandleOrganicAndBeverageForObjects), ReflectionCache.FlagTypes.StaticFlags)),
             }, withLabels: secondSObjectCreationLabels)
             .Advance(1)
             .Insert(new CodeInstruction[]
@@ -274,7 +333,7 @@ internal static class CropHarvestTranspiler
                 new(OpCodes.Call, typeof(CropHarvestTranspiler).GetCachedMethod(nameof(AdjustExperience), ReflectionCache.FlagTypes.StaticFlags)),
             })
             .FindNext(new CodeInstructionWrapper[]
-            {
+            { // find this.dayOfCurrentPhase.Value = this.regrowAfterHarvest
                 new(OpCodes.Ldfld, typeof(Crop).GetCachedField(nameof(Crop.regrowAfterHarvest), ReflectionCache.FlagTypes.InstanceFlags)),
                 new(OpCodes.Call),
                 new(OpCodes.Callvirt, typeof(NetFieldBase<int, NetInt>).GetCachedProperty("Value", ReflectionCache.FlagTypes.InstanceFlags).GetSetMethod()),
@@ -297,6 +356,7 @@ internal static class CropHarvestTranspiler
         return null;
     }
 
+#warning - todo: transpile DGA for the seedy fertilizer.
     private static IEnumerable<CodeInstruction>? TranspileDGA(IEnumerable<CodeInstruction> instructions, ILGenerator gen, MethodBase original)
     {
         try
@@ -389,7 +449,8 @@ internal static class CropHarvestTranspiler
             .Insert(new CodeInstruction[]
             {
                 new(OpCodes.Ldarg_3),
-                new(OpCodes.Call, typeof(CropHarvestTranspiler).GetCachedMethod(nameof(MakeItemOrganic), ReflectionCache.FlagTypes.StaticFlags)),
+                new(OpCodes.Ldarg, 4),
+                new(OpCodes.Call, typeof(CropHarvestTranspiler).GetCachedMethod(nameof(HandleOrganicAndBeverageForItems), ReflectionCache.FlagTypes.StaticFlags)),
             })
             .FindNext(new CodeInstructionWrapper[]
             { // Find the block where the player is given XP

@@ -21,19 +21,33 @@ internal static class MiraculousFertilizerHandler
     }
 
     /// <summary>
-    /// Gets the relevant index for the crop fertilizer.
+    /// Gets the relevant beverage for the beverage fertilizer.
     /// </summary>
     /// <param name="objindex">The index of the crop.</param>
     /// <returns>The beverage, if any.</returns>
     internal static SObject? GetBeverage(int objindex)
+        => GetBeverage(new SObject(objindex, 999));
+
+    /// <summary>
+    /// Gets the relevant beverage for the beverage fertilizer.
+    /// </summary>
+    /// <param name="item">The crop.</param>
+    /// <returns>The beverage, if any.</returns>
+    internal static SObject? GetBeverage(Item item)
     {
         if (keg is null)
         {
             return null;
         }
-        SObject crop = new(objindex, 999);
+
+        if (item.Stack != item.maximumStackSize())
+        {
+            item = item.getOne();
+            item.Stack = item.maximumStackSize();
+        }
+
         keg.heldObject.Value = null;
-        keg.performObjectDropInAction(crop, false, Game1.player);
+        keg.performObjectDropInAction(item, false, Game1.player);
         SObject? heldobj = keg.heldObject.Value;
         if (heldobj?.getOne() is SObject returnobj && Game1.random.NextDouble() < (15.0 + Game1.player.LuckLevel) / heldobj.Price)
         {

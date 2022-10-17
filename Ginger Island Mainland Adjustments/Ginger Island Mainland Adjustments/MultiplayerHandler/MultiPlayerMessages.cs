@@ -67,7 +67,7 @@ public static class MultiplayerSharedState
                 && Globals.UtilitySchedulingFunctions.TryFindGOTOschedule(__instance, SDate.Now(), rawstring, out string redirectedstring))
             {
                 PamsSchedule = redirectedstring;
-                Globals.ModMonitor.Log($"Grabbing Pam's rawSchedule for phone: {redirectedstring}");
+                Globals.ModMonitor.DebugOnlyLog($"Grabbing Pam's rawSchedule for phone: {redirectedstring}");
                 Globals.Helper.Multiplayer.SendMessage(redirectedstring, SCHEDULEMESSAGE, modIDs: new[] { Globals.Manifest.UniqueID });
             }
         }

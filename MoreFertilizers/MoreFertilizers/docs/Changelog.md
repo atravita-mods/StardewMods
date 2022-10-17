@@ -5,14 +5,11 @@
 * Bush fertilizers
     - Handle adding to shops and other aquisition methods.
 * Beverage fertilizer
-    - Crops
-    - Fruit trees
-* Acquisition: maybee have fertilizer appear in big slimes outside the mines?
+    - Fruit trees (DGA)
+* Acquisition: maybe have fertilizer appear in big slimes outside the mines?
 * Items and all the implementation for the prismatic and everlasting fertilizers (don't forget that JA and Winter Star also transpile in this space)
-* Seedy fertilizer: drops the seed? 
 * Some fertilizer for trees?
 * Something for mushroom boxen? 
-* Fix the giftbox so you only get the starting Lucky fertilizer once.
 
 #### Version 0.3.0
 * Added new fertilizers:
@@ -21,6 +18,7 @@
     - Rapid Bush Fertilizer: makes tea tree bushes grow 20% faster.
     - Secret Joja Fertilizer: decreases growth time, has a chance of decreasing regrowth time, but forces the crop to be base quality.
     - Wisdom Fertilizer: increases farming XP by 10%.
+    - Seedy Fertilizer: drops the seed! (doesn't work for DGA crops yet).
 * Adjusted previous fertilizers:
     - Waterlogged now increases the growth speed of paddy crops a little.
 * Added German translation (thanks to CrisTortion!)

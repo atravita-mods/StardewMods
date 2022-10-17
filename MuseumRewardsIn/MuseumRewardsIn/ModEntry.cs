@@ -88,7 +88,12 @@ internal sealed class ModEntry : Mod
                 name: I18n.BoxLocation_Name,
                 getValue: static () => config.BoxLocation.X + ", " + config.BoxLocation.Y,
                 setValue: static (str) => config.BoxLocation = str.TryParseVector2(out Vector2 vec) ? vec : shopLoc,
-                tooltip: I18n.BoxLocation_Description);
+                tooltip: I18n.BoxLocation_Description)
+            .AddBoolOption(
+                name: I18n.AllowBuyBacks_Name,
+                getValue: static () => config.AllowBuyBacks,
+                setValue: static (value) => config.AllowBuyBacks = value,
+                tooltip: I18n.AllowBuyBacks_Description);
         }
     }
 
@@ -176,6 +181,13 @@ internal sealed class ModEntry : Mod
         }
 
         var shop = new ShopMenu(sellables, who: "Gunther");
+        if (config.AllowBuyBacks)
+        {
+            shop.categoriesToSellHere.Add(SObject.mineralsCategory);
+            shop.categoriesToSellHere.Add(SObject.GemCategory);
+            // hack in buybacks for Arch, which may not have a number?
+        }
+
         if (Game1.getCharacterFromName("Gunther") is NPC gunter)
         {
             shop.portraitPerson = gunter;

@@ -1,6 +1,7 @@
 ﻿using AtraCore;
 using AtraCore.Models;
 
+using AtraShared.Caching;
 using AtraShared.ConstantsAndEnums;
 
 using StardewModdingAPI.Events;
@@ -54,23 +55,7 @@ internal static class AssetEditor
     private static IAssetName LEWIS_DIALOGUE = null!;
 #pragma warning restore SA1310 // Field names should not contain underscore
 
-    #region minicache
-    private static int lastTick = -1;
-    private static bool seenBoat = false;
-
-    private static bool HasSeenBoat
-    {
-        get
-        {
-            if ((Game1.ticks & ~0b11) != lastTick)
-            {
-                lastTick = Game1.ticks & ~0b11;
-                seenBoat = Utility.doesAnyFarmerHaveOrWillReceiveMail("seenBoatJourney");
-            }
-            return seenBoat;
-        }
-    }
-    #endregion
+    private static TickCache<bool> HasSeenBoat = new(static () => Utility.doesAnyFarmerHaveOrWillReceiveMail("seenBoatJourney"));
 
     /// <summary>
     /// Initializes the AssetEditor.
@@ -94,7 +79,7 @@ internal static class AssetEditor
         {
             e.Edit(EditPrismaticMasks);
         }
-        else if (HasSeenBoat)
+        else if (HasSeenBoat.GetValue())
         {
             if (e.NameWithoutLocale.IsEquivalentTo(SPECIAL_ORDERS_LOCATION))
             {
@@ -118,7 +103,7 @@ internal static class AssetEditor
     /// <param name="e">event args.</param>
     internal static void EditSpecialOrderDialogue(AssetRequestedEventArgs e)
     {
-        if (HasSeenBoat && e.NameWithoutLocale.IsEquivalentTo(LEWIS_DIALOGUE))
+        if (HasSeenBoat.GetValue() && e.NameWithoutLocale.IsEquivalentTo(LEWIS_DIALOGUE))
         {
             e.Edit(EditLewisDialogueImpl, AssetEditPriority.Early);
         }

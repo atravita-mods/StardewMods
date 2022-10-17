@@ -1,6 +1,6 @@
 ﻿using Microsoft.Xna.Framework.Graphics;
+
 using StardewModdingAPI.Events;
-using StardewModdingAPI.Utilities;
 
 namespace StopRugRemoval;
 

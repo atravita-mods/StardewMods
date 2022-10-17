@@ -1,4 +1,5 @@
-﻿using AtraShared.Utils.Extensions;
+﻿using AtraShared.Caching;
+using AtraShared.Utils.Extensions;
 using GingerIslandMainlandAdjustments.AssetManagers;
 using HarmonyLib;
 using StardewModdingAPI.Events;
@@ -22,18 +23,7 @@ public static class MultiplayerSharedState
     /// </summary>
     internal static string? PamsSchedule { get; private set; }
 
-    private static bool HasSeenEvent
-    {
-        get
-        {
-            if ((Game1.ticks & ~0b11) != lastCheckedTicks)
-            {
-                lastCheckedTicks = Game1.ticks & ~0b11;
-                hasPlayerSeenEvent = Game1.player.eventsSeen.Contains(AssetEditor.PAMEVENT);
-            }
-            return hasPlayerSeenEvent;
-        }
-    }
+    private static TickCache<bool> HasSeenEvent = new(static () => Game1.player.eventsSeen.Contains(AssetEditor.PAMEVENT));
 
     /// <summary>
     /// Updates entry for Pam's schedule whenever a person joins in multiplayer.
@@ -72,7 +62,7 @@ public static class MultiplayerSharedState
     {
         try
         {
-            if (Context.IsMainPlayer && HasSeenEvent && __instance?.Name.Equals("Pam", StringComparison.OrdinalIgnoreCase) == true
+            if (Context.IsMainPlayer && HasSeenEvent.GetValue() && __instance?.Name.Equals("Pam", StringComparison.OrdinalIgnoreCase) == true
                 && __instance.TryGetScheduleEntry(__instance.dayScheduleName.Value, out string? rawstring)
                 && Globals.UtilitySchedulingFunctions.TryFindGOTOschedule(__instance, SDate.Now(), rawstring, out string redirectedstring))
             {

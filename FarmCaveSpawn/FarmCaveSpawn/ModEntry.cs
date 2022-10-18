@@ -410,7 +410,8 @@ END:
                 continue;
             }
 
-            if (treedata.TryGetAtIndex(2, out SpanSplitEntry val) && int.TryParse(val, out int objectIndex))
+            // 73 is the golden walnut. Let's not let players have that, or 858's Qi gems.
+            if (treedata.TryGetAtIndex(2, out SpanSplitEntry val) && int.TryParse(val, out int objectIndex) && objectIndex != 73 && objectIndex != 858)
             {
                 try
                 {

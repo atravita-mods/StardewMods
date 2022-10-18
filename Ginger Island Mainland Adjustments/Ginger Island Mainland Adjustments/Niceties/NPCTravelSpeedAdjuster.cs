@@ -7,6 +7,7 @@ namespace GingerIslandMainlandAdjustments.Niceties;
 /// <summary>
 /// Speeds up NPCs if they have a long way to travel to and from the resort.
 /// </summary>
+/// <remarks>using about six hours as the cutoff for now.</remarks>
 [HarmonyPatch(typeof(NPC))]
 internal static class NPCTravelSpeedAdjuster
 {
@@ -16,7 +17,7 @@ internal static class NPCTravelSpeedAdjuster
     {
         if (__instance?.controller is PathFindController controller
             && Game1.IsVisitingIslandToday(__instance.Name)
-            && controller.pathToEndPoint.Count * 32 / 42 > 180)
+            && controller.pathToEndPoint.Count * 32 / 42 > 340)
         {
             Globals.ModMonitor.DebugOnlyLog($"Found npc {__instance.Name} with long travel path, speeding them up.");
             __instance.Speed = 4;

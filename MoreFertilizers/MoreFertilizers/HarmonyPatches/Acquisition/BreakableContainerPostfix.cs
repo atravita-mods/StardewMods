@@ -15,7 +15,7 @@ internal static class BreakableContainerPostfix
     [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Harmony Convention")]
     private static void Postfix(GameLocation location, BreakableContainer __instance, NetInt ___containerType)
     {
-        if (Game1.random.NextDouble() > 0.01 + (Game1.player.DailyLuck / 20))
+        if (Game1.random.NextDouble() > 0.01 + (Game1.player.DailyLuck / 20) + (Math.Min(3, Game1.player.LuckLevel) / 100))
         {
             return;
         }
@@ -26,13 +26,13 @@ internal static class BreakableContainerPostfix
                 : (Game1.random.Next(2) == 0 ? ModEntry.LuckyFertilizerID : ModEntry.PaddyCropFertilizerID),
             BreakableContainer.frostBarrel => location is MineShaft shaft && shaft.GetAdditionalDifficulty() > 0
                 ? (Game1.random.Next(3) == 0 ? ModEntry.RapidBushFertilizerID : ModEntry.DeluxeFruitTreeFertilizerID)
-                : (Game1.random.Next(3) == 0 ? ModEntry.BountifulBushID : ModEntry.OrganicFertilizerID),
+                : (Game1.random.Next(2) == 0 ? ModEntry.SeedyFertilizerID : ModEntry.WisdomFertilizerID),
             BreakableContainer.darkBarrel => location is MineShaft shaft && shaft.GetAdditionalDifficulty() > 0
                 ? (Utility.hasFinishedJojaRoute() && Game1.random.NextDouble() < 0.1 ? ModEntry.SecretJojaFertilizerID : ModEntry.DeluxeJojaFertilizerID)
                 : ModEntry.JojaFertilizerID,
             BreakableContainer.desertBarrel => (location is MineShaft shaft && shaft.GetAdditionalDifficulty() > 0)
                 ? (Game1.random.Next(2) == 0 ? ModEntry.BountifulFertilizerID : ModEntry.FruitTreeFertilizerID)
-                : (Game1.random.Next(2) == 0 ? ModEntry.SeedyFertilizerID : ModEntry.WisdomFertilizerID),
+                : (Game1.random.Next(3) == 0 ? ModEntry.BountifulBushID : ModEntry.OrganicFertilizerID),
             BreakableContainer.volcanoBarrel =>
                 Game1.random.Next(4) switch
                 {

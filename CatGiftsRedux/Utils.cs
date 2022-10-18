@@ -1,7 +1,11 @@
-﻿using AtraCore.Framework.ItemManagement;
+﻿using AtraBase.Toolkit.Extensions;
+
+using AtraCore.Framework.ItemManagement;
 using AtraCore.Framework.QueuePlayerAlert;
 
+using AtraShared.Caching;
 using AtraShared.Utils.Extensions;
+using AtraShared.Wrappers;
 
 using Microsoft.Xna.Framework;
 
@@ -15,6 +19,25 @@ namespace CatGiftsRedux;
 /// </summary>
 internal static class Utils
 {
+    private static readonly TickCache<bool> isQiQuestActive = new(() => Game1.player.team.SpecialOrderActive("QI_BEANS"));
+    private static readonly TickCache<bool> isPerfectFarm = new(() => Game1.MasterPlayer.mailReceived.Contains("Farm_Enternal"));
+
+    /// <summary>
+    /// Check if Qi's bean quest is active. Only checks once per four ticks.
+    /// </summary>
+    internal static bool IsQiQuestActive => isQiQuestActive.GetValue();
+
+    /// <summary>
+    /// Check if the object should not be given by a random picker. Basically, no golden walnuts (73), qi gems (858), Qi beans or fruit unless the special order is active.
+    /// 289 = ostrich egg, 928 is a golden egg.
+    /// Or something that doesn't exist in objinfo.
+    /// </summary>
+    /// <param name="id">int id of the item to check.</param>
+    /// <returns>true to forbid it.</returns>
+    internal static bool ForbiddenFromRandomPicking(int id)
+        => !Game1Wrappers.ObjectInfo.TryGetValue(id, out string? objectData) || id == 73 || id == 858
+        || (id is 289 or 928 && !isPerfectFarm.GetValue())
+        || (!isQiQuestActive.GetValue() && objectData.GetNthChunk('/', SObject.objectInfoNameIndex).Contains("Qi", StringComparison.OrdinalIgnoreCase));
 
     /// <summary>
     /// Gets a random empty tile on a map.

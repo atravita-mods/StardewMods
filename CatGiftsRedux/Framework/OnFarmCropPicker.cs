@@ -26,7 +26,7 @@ internal static class OnFarmCropPicker
 
         Farm? farm = Game1.getFarm();
 
-        List<TerrainFeature>? hoedirt = farm.terrainFeatures.Values.Where((feat) => feat is HoeDirt dirt && dirt.crop is not null && !dirt.crop.dead.Value).ToList();
+        List<HoeDirt>? hoedirt = farm.terrainFeatures.Values.OfType<HoeDirt>().Where((dirt) => dirt.crop is not null && !dirt.crop.dead.Value).ToList();
 
         if (hoedirt.Count == 0)
         {
@@ -37,11 +37,9 @@ internal static class OnFarmCropPicker
         do
         {
 
-            Crop? crop = ((HoeDirt)Utility.GetRandom(hoedirt, random)).crop;
+            Crop? crop = Utility.GetRandom(hoedirt, random).crop;
 
-            // confirm the item exists.
-            if (!Game1Wrappers.ObjectInfo.TryGetValue(crop.indexOfHarvest.Value, out string? objectData)
-                || objectData.GetNthChunk('1', SObject.objectInfoNameIndex).Contains("Qi", StringComparison.OrdinalIgnoreCase))
+            if (Utils.ForbiddenFromRandomPicking(crop.indexOfHarvest.Value))
             {
                 continue;
             }

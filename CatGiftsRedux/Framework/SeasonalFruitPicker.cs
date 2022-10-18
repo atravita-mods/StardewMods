@@ -34,9 +34,7 @@ internal static class SeasonalFruitPicker
 
             if (int.TryParse(fruit.Value.GetNthChunk('/', 2), out int id))
             {
-                // confirm the item exists.
-                if (!Game1Wrappers.ObjectInfo.TryGetValue(id, out string? objectData)
-                    || objectData.GetNthChunk('1', SObject.objectInfoNameIndex).Contains("Qi", StringComparison.OrdinalIgnoreCase))
+                if (Utils.ForbiddenFromRandomPicking(id))
                 {
                     continue;
                 }

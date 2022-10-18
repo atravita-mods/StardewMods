@@ -30,9 +30,7 @@ internal static class AnimalProductChooser
             KeyValuePair<string, string> randomAnimal = content.ElementAt(random.Next(content.Count));
             if (int.TryParse(randomAnimal.Value.GetNthChunk('/', 2), out int id) && id > 0)
             {
-                // confirm the item exists.
-                if (!Game1Wrappers.ObjectInfo.TryGetValue(id, out string? objectData)
-                    || objectData.GetNthChunk('1', SObject.objectInfoNameIndex).Contains("Qi", StringComparison.OrdinalIgnoreCase))
+                if (Utils.ForbiddenFromRandomPicking(id))
                 {
                     continue;
                 }

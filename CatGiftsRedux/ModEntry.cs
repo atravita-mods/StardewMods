@@ -262,9 +262,8 @@ internal sealed class ModEntry : Mod
         {
             int id = this.allItemsWeighted.Value.GetValue(random);
 
-            // confirm the item exists.
-            if (!Game1Wrappers.ObjectInfo.TryGetValue(id, out string? objectData)
-                || objectData.GetNthChunk('1', SObject.objectInfoNameIndex).Contains("Qi", StringComparison.OrdinalIgnoreCase))
+            // confirm the item exists, ban Qi items or golden walnuts
+            if (Utils.ForbiddenFromRandomPicking(id))
             {
                 continue;
             }

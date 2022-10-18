@@ -124,6 +124,7 @@ public static class DataToItemMap
                             || name.Equals("SupplyCrate", StringComparison.OrdinalIgnoreCase)
                             || name.Equals("Twig", StringComparison.OrdinalIgnoreCase)
                             || name.Equals("Rotten Plant", StringComparison.OrdinalIgnoreCase)
+                            || name.Equals("Warp Totem: Qi's Arena", StringComparison.OrdinalIgnoreCase)
                             || name.Equals("???", StringComparison.OrdinalIgnoreCase)
                             || name.Equals("DGA Dummy Object", StringComparison.OrdinalIgnoreCase)
                             || name.Equals("Egg", StringComparison.OrdinalIgnoreCase)

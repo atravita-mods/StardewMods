@@ -35,7 +35,7 @@ internal static class SeasonalCropChooser
         {
             KeyValuePair<int, string> entry = content[random.Next(content.Count)];
 
-            if (entry.Value.GetNthChunk('/', SObject.objectInfoNameIndex).Contains("Qi", StringComparison.OrdinalIgnoreCase))
+            if (!Utils.IsQiQuestActive && entry.Value.GetNthChunk('/', SObject.objectInfoNameIndex).Contains("Qi", StringComparison.OrdinalIgnoreCase))
             {
                 return null;
             }
@@ -43,8 +43,7 @@ internal static class SeasonalCropChooser
             if (int.TryParse(entry.Value.GetNthChunk('/', 3), out int id) && id > 0)
             {
                 // confirm the item exists.
-                if (!Game1Wrappers.ObjectInfo.TryGetValue(id, out string? objectData)
-                    || objectData.GetNthChunk('1', SObject.objectInfoNameIndex).Contains("Qi", StringComparison.OrdinalIgnoreCase))
+                if (Utils.ForbiddenFromRandomPicking(id))
                 {
                     continue;
                 }

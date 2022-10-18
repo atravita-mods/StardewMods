@@ -72,7 +72,7 @@ internal sealed class ModEntry : Mod
     /// Gets the seeded random for this mod.
     /// </summary>
     private Random Random
-        => this.random ??= new Random(((int)Game1.uniqueIDForThisGame * 2) + ((int)Game1.stats.DaysPlayed * 7));
+        => this.random ??= RandomUtils.GetSeededRandom(7, "atravita.FarmCaveSpawn.CaveRandom");
 
     /// <summary>
     /// Gets or sets a value indicating whether or not I've spawned fruit today.

@@ -8,7 +8,7 @@ using AtraShared.Wrappers;
 using StardewValley.Objects;
 using StardewValley.TerrainFeatures;
 
-namespace CatGiftsRedux.Framework;
+namespace CatGiftsRedux.Framework.Pickers;
 
 /// <summary>
 /// Picks a random on-farm crop.

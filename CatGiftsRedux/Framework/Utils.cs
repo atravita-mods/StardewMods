@@ -12,7 +12,7 @@ using Microsoft.Xna.Framework;
 using StardewValley.Characters;
 using StardewValley.Objects;
 
-namespace CatGiftsRedux;
+namespace CatGiftsRedux.Framework;
 
 /// <summary>
 /// A utility class for this mod.
@@ -23,7 +23,7 @@ internal static class Utils
     private static readonly TickCache<bool> isPerfectFarm = new(() => Game1.MasterPlayer.mailReceived.Contains("Farm_Enternal"));
 
     /// <summary>
-    /// Check if Qi's bean quest is active. Only checks once per four ticks.
+    /// Gets a value indicating whether Qi's bean quest is active. Only checks once per four ticks.
     /// </summary>
     internal static bool IsQiQuestActive => isQiQuestActive.GetValue();
 
@@ -36,8 +36,8 @@ internal static class Utils
     /// <returns>true to forbid it.</returns>
     internal static bool ForbiddenFromRandomPicking(int id)
         => !Game1Wrappers.ObjectInfo.TryGetValue(id, out string? objectData) || id == 73 || id == 858
-        || (id is 289 or 928 && !isPerfectFarm.GetValue())
-        || (!isQiQuestActive.GetValue() && objectData.GetNthChunk('/', SObject.objectInfoNameIndex).Contains("Qi", StringComparison.OrdinalIgnoreCase));
+        || id is 289 or 928 && !isPerfectFarm.GetValue()
+        || !isQiQuestActive.GetValue() && objectData.GetNthChunk('/', SObject.objectInfoNameIndex).Contains("Qi", StringComparison.OrdinalIgnoreCase);
 
     /// <summary>
     /// Gets a random empty tile on a map.

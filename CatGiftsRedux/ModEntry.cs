@@ -8,10 +8,11 @@ using AtraShared.ConstantsAndEnums;
 using AtraShared.Integrations;
 using AtraShared.Integrations.Interfaces;
 using AtraShared.ItemManagement;
+using AtraShared.Utils;
 using AtraShared.Utils.Extensions;
-using AtraShared.Wrappers;
 
 using CatGiftsRedux.Framework;
+using CatGiftsRedux.Framework.Pickers;
 
 using Microsoft.Xna.Framework;
 
@@ -124,7 +125,7 @@ internal sealed class ModEntry : Mod
             return;
         }
 
-        Random random = new((int)Game1.uniqueIDForThisGame - (47 * (int)Game1.stats.daysPlayed));
+        Random random = RandomUtils.GetSeededRandom(-47, "atravita.CatGiftsRedux");
         double chance = ((pet.friendshipTowardFarmer.Value / 1000.0) * (this.config.MaxChance - this.config.MinChance)) + this.config.MinChance;
         if (random.NextDouble() > chance)
         {
@@ -136,15 +137,15 @@ internal sealed class ModEntry : Mod
 
         Vector2? tile;
 
-        if (pet is Cat)
-        {
-            Point point = farm.GetMainFarmHouseEntry();
-            tile = new(point.X, point.Y + 2);
-        }
-        else
-        {
+        //if (pet is Cat)
+        //{
+        //    Point point = farm.GetMainFarmHouseEntry();
+        //    tile = new(point.X, point.Y + 1);
+        //}
+        //else
+        //{
             tile = farm.GetRandomTileImpl();
-        }
+        //}
 
         if (tile is null)
         {

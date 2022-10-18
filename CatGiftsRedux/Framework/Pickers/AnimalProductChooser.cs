@@ -3,17 +3,21 @@
 using AtraCore.Framework.ItemManagement;
 
 using AtraShared.Utils.Extensions;
-using AtraShared.Wrappers;
 
 using StardewValley.Objects;
 
-namespace CatGiftsRedux.Framework;
+namespace CatGiftsRedux.Framework.Pickers;
 
 /// <summary>
 /// Tries to pick a random animal product.
 /// </summary>
 internal static class AnimalProductChooser
 {
+    /// <summary>
+    /// Pick a random animal product.
+    /// </summary>
+    /// <param name="random">The seeded random.</param>
+    /// <returns>An item.</returns>
     internal static Item? Pick(Random random)
     {
         ModEntry.ModMonitor.DebugOnlyLog("Picked Animal Products");

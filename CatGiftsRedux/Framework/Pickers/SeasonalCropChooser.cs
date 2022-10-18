@@ -10,7 +10,7 @@ using Microsoft.Xna.Framework;
 
 using StardewValley.Objects;
 
-namespace CatGiftsRedux.Framework;
+namespace CatGiftsRedux.Framework.Pickers;
 
 /// <summary>
 /// Picks a random seasonal crop item.

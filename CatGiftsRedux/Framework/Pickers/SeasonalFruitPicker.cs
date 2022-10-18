@@ -7,7 +7,7 @@ using AtraShared.Wrappers;
 
 using StardewValley.Objects;
 
-namespace CatGiftsRedux.Framework;
+namespace CatGiftsRedux.Framework.Pickers;
 
 /// <summary>
 /// Picks an appropriate seasonal fruit.

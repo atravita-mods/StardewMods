@@ -4,7 +4,7 @@ using AtraShared.ConstantsAndEnums;
 
 using StardewValley.Objects;
 
-namespace CatGiftsRedux.Framework;
+namespace CatGiftsRedux.Framework.Pickers;
 
 /// <summary>
 /// Picks a ring.

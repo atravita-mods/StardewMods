@@ -120,7 +120,7 @@ internal static class GIScheduler
         Stopwatch stopwatch = new();
         stopwatch.Start();
 #endif
-        Random random = new((int)(Game1.uniqueIDForThisGame * 1.21f) + (int)(Game1.stats.DaysPlayed * 2.5f));
+        Random random = RandomUtils.GetSeededRandom(3, "atravita.GingerIslandMainlandAdjustments");
 
         (HashSet<NPC> explorers, string explorerGroupName) = GenerateExplorerGroup(random);
         if (explorers.Count > 0)

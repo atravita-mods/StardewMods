@@ -1,6 +1,6 @@
 ﻿using AtraShared.Utils.Extensions;
 
-namespace CatGiftsRedux.Framework;
+namespace CatGiftsRedux.Framework.Pickers;
 
 /// <summary>
 /// Picks a random unlocked hat.

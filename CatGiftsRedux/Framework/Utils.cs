@@ -89,9 +89,14 @@ internal static class Utils
             item = new Ring(item.ParentSheetIndex);
         }
 
-        if (item is SObject obj && !location.Objects.ContainsKey(tile))
+        if (item.GetType() == typeof(SObject) && !location.Objects.ContainsKey(tile))
         {
-            obj.IsSpawnedObject = true;
+            SObject obj = (item as SObject)!;
+            if (!obj.bigCraftable.Value)
+            {
+                obj.IsSpawnedObject = true;
+            }
+
             location.Objects[tile] = obj;
         }
         else

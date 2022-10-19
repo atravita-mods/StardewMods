@@ -35,7 +35,7 @@
 
   // Item names and descriptions.
   "bountiful-bush-fertilizer.description": "Your bushes will produce like they've never done before!",
-  "bountiful-bush-fertilizer.title": "Bountiful Bush Fertilizer.",
+  "bountiful-bush-fertilizer.name": "Bountiful Bush Fertilizer.",
 
   "bountiful-fertilizer.description": "Use may double the number of crops received at harvest.",
   "bountiful-fertilizer.name": "Bountiful Fertilizer",
@@ -68,7 +68,7 @@
   "joja-fertilizer-deluxe.name": "Joja's Deluxe Fertilizer",
 
   "miraculous-beverages.description": "Makes....beverages appear? What? How does this even work?",
-  "miraculous-beverages.title": "Fertilizer of Miraculous Beverages",
+  "miraculous-beverages.name": "Fertilizer of Miraculous Beverages",
 
   "organic-fertilizer.description": "You're not quite sure what it does, but organic crops always sell for higher prices...",
   "organic-fertilizer.name": "Organic Fertilizer",
@@ -77,7 +77,7 @@
   "prismatic-fertilizer.name": "Prismatic Fertilizer",
 
   "rapid-bush-fertilizer.description": "Makes your bushes grow faster!",
-  "rapid-bush-fertilizer.title": "Murph's Quik-Grow-Bush Fertilizer",
+  "rapid-bush-fertilizer.name": "Murph's Quik-Grow-Bush Fertilizer",
 
   "secret-joja-fertilizer.description": "Joja's scientists have been keeping this one under wraps for some reason.",
   "secret-joja-fertilizer.name": "Joja's Secret Fertilizer",

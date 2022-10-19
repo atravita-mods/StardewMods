@@ -17,13 +17,13 @@ internal static class KrobusShopStockPostfix
         {
             __result.TryAdd(new SObject(ModEntry.PaddyCropFertilizerID, 1), new[] { 40, int.MaxValue });
         }
-        if (ModEntry.WisdomFertilizerID != -1)
+        if (ModEntry.WisdomFertilizerID != -1 && Game1.currentSeason is "spring" or "fall")
         {
             __result.TryAdd(new SObject(ModEntry.WisdomFertilizerID, 1), new[] { 80, int.MaxValue });
         }
-        if (ModEntry.MiraculousBeveragesID != -1)
+        if (ModEntry.MiraculousBeveragesID != -1 && Game1.year > 2 && Utility.getCookedRecipesPercent() > 0.5f)
         {
-            __result.TryAdd(new SObject(ModEntry.MiraculousBeveragesID, 1), new[] { 150, int.MaxValue });
+            __result.TryAdd(new SObject(ModEntry.MiraculousBeveragesID, 1), new[] { 250, int.MaxValue });
         }
     }
 }

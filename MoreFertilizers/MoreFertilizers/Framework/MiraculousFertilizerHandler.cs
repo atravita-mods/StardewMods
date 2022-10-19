@@ -49,7 +49,7 @@ internal static class MiraculousFertilizerHandler
         keg.heldObject.Value = null;
         keg.performObjectDropInAction(item, false, Game1.player);
         SObject? heldobj = keg.heldObject.Value;
-        if (heldobj?.getOne() is SObject returnobj && Game1.random.NextDouble() < (15.0 + Game1.player.LuckLevel) / heldobj.Price)
+        if (heldobj?.getOne() is SObject returnobj && Game1.random.NextDouble() < (15.0 + Game1.player.LuckLevel) / Math.Max(heldobj.Price, 150))
         {
             return returnobj;
         }

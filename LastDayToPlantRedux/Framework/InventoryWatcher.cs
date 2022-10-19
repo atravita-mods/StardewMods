@@ -102,14 +102,14 @@ internal static class InventoryWatcher
     {
         foreach (Item? item in e.Added)
         {
-            if (item is SObject obj && !obj.bigCraftable.Value
+            if (item is SObject obj && !obj.bigCraftable.Value && !obj.isSapling()
                 && (obj.Category == SObject.SeedsCategory || obj.Category == SObject.fertilizerCategory))
             {
                 if (!IsModelLoaded)
                 {
                     LoadModel(helper);
                 }
-                if (obj.Category == SObject.SeedsCategory && !obj.isSapling() && model.Seeds.Add(obj.Name))
+                if (obj.Category == SObject.SeedsCategory && model.Seeds.Add(obj.Name))
                 {
                     HasChanges = true;
                 }

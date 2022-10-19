@@ -8,8 +8,8 @@
     - Fruit trees (DGA)
 * Acquisition: maybe have fertilizer appear in big slimes outside the mines?
 * Items and all the implementation for the prismatic and everlasting fertilizers (don't forget that JA and Winter Star also transpile in this space)
-* Some fertilizer for trees?
-* Something for mushroom boxen? 
+* Some fertilizer for trees? Tree tapper fertilizer?
+* Something for mushroom boxen? (1.6 - reduce to one day?)
 
 #### Version 0.3.0
 * Added new fertilizers:

@@ -1,10 +1,11 @@
-{"Changes": [
+{
+  "Changes": [
     { // Mail is always loaded, because otherwise bad things might happen
       // if a player completes a quest and then changes the settings.
-    "LogName": "Reward mail",
-    "Action": "EditData",
-    "Target": "Data/Mail",
-    "Entries": {
+      "LogName": "Reward mail",
+      "Action": "EditData",
+      "Target": "Data/Mail",
+      "Entries": {
         "atravita_AlcoholOrder_Reward": "@! ^{{i18n:atravita.alcohol_order.mail.text}}^^    -{{i18n:Gus}}%item object 599 5 %%[#]{{i18n:atravita.alcohol_order.mail.title}}",
         "atravita_CatfishChallenge_Reward": "@! ^{{i18n:atravita.catfish_challenge.mail.text}}^^    -{{i18n:Willy}}%item object 166 1 %%[#]{{i18n:atravita.catfish_challenge.mail.title}}",
         "atravita_DemetriusApology_Reward": "@!^{{i18n:atravita.demetrius_apology.mail.text}}^^    -{{i18n:Demetrius}}^^{{i18n:atravita.demetrius_apology.mail.postscript}}%item bigobject 94%%[#]{{i18n:travita.demetrius_apology.mail.title}}",
@@ -23,7 +24,8 @@
         "atravita_MarnieTreat2_Reward": "@! ^{{i18n:atravita.marnie_treat_2.mail.text}}^^   -{{i18n:Marnie}}^^{{i18n:atravita.marnie_treat_2.mail.postscript}}%item bigobject 272 %%[#]{{i18n:atravita.marnie_treat_2.mail.title}}",
         "atravita_ValleyVintage_Reward": "@! ^{{i18n:atravita.valley_vintage.mail.text}}^^   -{{i18n:Lewis}}^^{{i18n:atravita.valley_vintage.mail.postscript}}%item bigobject 248 %%[#]{{i18n:atravita.valley_vintage.mail.title}}",
         "atravita_MysticStones_Reward": "@! ^{{i18n:atravita.mystic_stones.mail.text}}^^   -{{i18n:Wizard}}%item object 261 5 689 5 690 5 %%[#]{{i18n:atravita.mystic_stones.mail.title}}",
-        "atravita_ValleyFlowers_reward": "@,^{{i18n:atravita.valley_flowers.mail.text}}^^     -{{i18n:Sandy}}^{{i18n:atravita.valley_flowers.mail.postscript}}%item object {{SeasonalSeeds}} 20 %%[#]{{i18n:atravita.valley_flowers.mail.title}}", "atravita_InAJam_Reward": "@!^{{i18n:atravita.in_a_jam.mail.text}}^^    --{{i18n:Gus}}%item bigobject 19 %%[#]{{i18n:atravita.in_a_jam.mail.title}}",
+        "atravita_ValleyFlowers_reward": "@,^{{i18n:atravita.valley_flowers.mail.text}}^^     -{{i18n:Sandy}}^{{i18n:atravita.valley_flowers.mail.postscript}}%item object {{SeasonalSeeds}} 20 %%[#]{{i18n:atravita.valley_flowers.mail.title}}",
+        "atravita_InAJam_Reward": "@!^{{i18n:atravita.in_a_jam.mail.text}}^^    --{{i18n:Gus}}%item bigobject 19 %%[#]{{i18n:atravita.in_a_jam.mail.title}}",
         "atravita_Essence_Reward": "@! ^{{i18n:atravita.essence.mail.text}}^^   -{{i18n:Wizard}}%item object 226 5 253 5 %%[#]{{i18n:atravita.essence.mail.title}}",
         "atravita_FlowerPower_Reward": "@! ^{{i18n:atravita.flower_power.mail.text}}^^   -{{i18n:Lewis}}%item bigobject 248 %%[#]{{i18n:atravita.flower_power.mail.title}}",
         "atravita_TruffleTruffle_Reward": "@!^{{i18n:atravita.truffle.mail.text}}^^    --{{i18n:Lewis}}%item bigobject 19 %%[#]",
@@ -32,19 +34,19 @@
         "atravita_RushOrder_Reward": "@, ^{{i18n:atravita.rush_order.mail.text}}^^   -{{i18n:Lewis}}%item bigobject 248 %%[#]{{i18n:atravita.rush_order.mail.title}}",
         "atravita_SlimeEggs_Reward": "@,^{{i18n:atravita.slime_eggs.mail.text}}^^   -{{i18n:Marlon}}%item object 857 3 %%[#]{{i18n:atravita.slime_egs.mail.title}}",
         "atravita_deckTheHalls_Invite": "@! ^{{i18n:atravita.deck_the_halls_invite.mail.text}}^^   -Caroline.%item object 236 5 %%[#]{{i18n:atravita.deck_the_halls_invite.mail.title}}",
-		"atravita_deckTheHalls_After": "@! ^{{i18n:atravita.deck_the_halls_after.mail.text}}^^     -Caroline%item object 239 5%%[#]{{i18n:atravita.deck_the_halls_invite.mail.title}}"
-        }
+        "atravita_deckTheHalls_After": "@! ^{{i18n:atravita.deck_the_halls_after.mail.text}}^^     -Caroline%item object 239 5%%[#]{{i18n:atravita.deck_the_halls_invite.mail.title}}"
+      }
     },
     {
-		"LogName": "DeckTheHalls -- too late for this year!",
-		"Action": "EditData",
-		"Target": "Data/Mail",
-		"Entries": {
-			"atravita_deckTheHalls_Invite": "@! ^{{i18n:atravita.deck_the_halls_invite.toolate.text}}^^   -{{i18n:Caroline}}.%item object 236 5 %%[#]{{i18n:atravita.deck_the_halls_invite.mail.title}}"
-		},
-		"When":
-		{
-			"Day": "24,25,26,27,28"
-		}
-	}
-]}
+      "LogName": "DeckTheHalls -- too late for this year!",
+      "Action": "EditData",
+      "Target": "Data/Mail",
+      "Entries": {
+        "atravita_deckTheHalls_Invite": "@! ^{{i18n:atravita.deck_the_halls_invite.toolate.text}}^^   -{{i18n:Caroline}}.%item object 236 5 %%[#]{{i18n:atravita.deck_the_halls_invite.mail.title}}"
+      },
+      "When": {
+        "Day": "24,25,26,27,28"
+      }
+    }
+  ]
+}

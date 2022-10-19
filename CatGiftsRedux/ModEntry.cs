@@ -22,6 +22,7 @@ using StardewValley.Characters;
 using StardewValley.Objects;
 
 using AtraUtils = AtraShared.Utils.Utils;
+using Utils = CatGiftsRedux.Framework.Utils;
 
 namespace CatGiftsRedux;
 
@@ -51,6 +52,11 @@ internal sealed class ModEntry : Mod
     /// </summary>
     internal static IMonitor ModMonitor { get; private set; } = null!;
 
+    /// <summary>
+    /// Gets the string utilities for this mod.
+    /// </summary>
+    internal static StringUtils StringUtils { get; private set; } = null!;
+
     /// <inheritdoc />
     public override void Entry(IModHelper helper)
     {
@@ -58,6 +64,7 @@ internal sealed class ModEntry : Mod
         AssetManager.Initialize(helper.GameContent);
         this.config = AtraUtils.GetConfigOrDefault<ModConfig>(helper, this.Monitor);
         ModMonitor = this.Monitor;
+        StringUtils = new(this.Monitor);
         this.dataObjectInfo = helper.GameContent.ParseAssetName("Data/ObjectInformation");
 
         helper.Events.GameLoop.GameLaunched += this.OnGameLaunch;

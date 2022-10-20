@@ -26,6 +26,8 @@ internal sealed class PetHudMessage : HUDMessage
         this.spawnedItem = spawnedItem;
     }
 
+    /// <inheritdoc />
+    /// <remarks>Draws in the hudmessage.</remarks>
     public override void draw(SpriteBatch b, int i)
     {
         Rectangle tsarea = Game1.graphics.GraphicsDevice.Viewport.GetTitleSafeArea();
@@ -77,14 +79,25 @@ internal sealed class PetHudMessage : HUDMessage
             1f);
         itemBoxPosition.X += 16f;
         itemBoxPosition.Y += 16f;
+
+        // draw item.
+        this.spawnedItem.drawInMenu(
+            b,
+            itemBoxPosition,
+            1f,
+            this.transparency,
+            1f,
+            StackDrawType.Hide);
+
+        // draw pet head.
         b.Draw(
             Game1.mouseCursors,
             itemBoxPosition + (new Vector2(8f, 8f) * 4f),
-            new Rectangle(160 + ((!Game1.player.catPerson) ? 48 : 0) + Game1.player.whichPetBreed * 16, 208, 16, 16),
+            new Rectangle(160 + (Game1.player.catPerson ? 0 : 48) + (Game1.player.whichPetBreed * 16), 208, 16, 16),
             Color.White * this.transparency,
             0f,
-            new Vector2(8f, 8f),
-            4f + Math.Max(0f, (this.timeLeft - 3000f) / 900f),
+            Vector2.Zero,
+            1f,
             SpriteEffects.None,
             1f);
 

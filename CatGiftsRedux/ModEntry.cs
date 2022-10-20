@@ -110,12 +110,7 @@ internal sealed class ModEntry : Mod
             return;
         }
 
-        if (this.Helper.Data.ReadSaveData<string>(SAVEKEY) is not string value || !int.TryParse(value, out int giftsThisWeek))
-        {
-            giftsThisWeek = 0;
-        }
-
-        if (Game1.dayOfMonth % 7 == 0)
+        if (Game1.dayOfMonth % 7 == 0 || this.Helper.Data.ReadSaveData<string>(SAVEKEY) is not string value || !int.TryParse(value, out int giftsThisWeek))
         {
             giftsThisWeek = 0;
         }
@@ -142,27 +137,27 @@ internal sealed class ModEntry : Mod
 
         Farm? farm = Game1.getFarm();
 
-        Vector2? tile;
+        Vector2? tile = null;
 
-        //if (pet is Cat)
-        //{
-        //    Point point = farm.GetMainFarmHouseEntry();
-        //    tile = new(point.X, point.Y + 1);
-        //}
-        //else
-        //{
+        if (pet is Dog)
+        {
             tile = farm.GetRandomTileImpl();
-        //}
+            if (tile is null)
+            {
+                this.Monitor.Log("Failed to find a free tile.");
+            }
+        }
 
+        // cat or fallback behavior.
         if (tile is null)
         {
-            this.Monitor.DebugOnlyLog("Failed to find a free tile.");
-            return;
+            Point point = farm.GetMainFarmHouseEntry();
+            tile = new(point.X, point.Y + 1);
         }
 
         if (this.itemPickers.Count > 0)
         {
-            int attempts = 10;
+            int attempts = 5;
             do
             {
                 Func<Random, Item?> picker = this.itemPickers.GetValue(random);
@@ -193,7 +188,7 @@ internal sealed class ModEntry : Mod
             while (attempts-- > 0);
         }
 
-        this.Monitor.DebugOnlyLog("Did not find a valid item.");
+        this.Monitor.Log("Did not find a valid item.");
     }
 
     private Item? GetUserItem(Random random)

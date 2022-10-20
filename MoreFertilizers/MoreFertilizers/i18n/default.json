@@ -76,18 +76,21 @@
   "prismatic-fertilizer.description": "The label simply says: 'Ohhhh! Pretty colors!'.",
   "prismatic-fertilizer.name": "Prismatic Fertilizer",
 
+  "radioactive-fertilizer.description": "Are you sure this is a good idea?",
+  "radioactive-fertilizer.name": "Radioactive Fertilizer",
+
   "rapid-bush-fertilizer.description": "Makes your bushes grow faster!",
   "rapid-bush-fertilizer.name": "Murph's Quik-Grow-Bush Fertilizer",
 
   "secret-joja-fertilizer.description": "Joja's scientists have been keeping this one under wraps for some reason.",
   "secret-joja-fertilizer.name": "Joja's Secret Fertilizer",
 
-  "seedy-fertilizer.description": "\"Take that, M!\" the label reads.", 
+  "seedy-fertilizer.description": "\"Take that, M!\" the label reads.",
   "seedy-fertilizer.name": "Seedy Fertilizer",
 
   "waterlogged-fertilizer.description": "Retains water so well, anywhere can be a paddy! (for paddy crops only)",
   "waterlogged-fertilizer.name": "Waterlogged Fertilizer",
 
   "wisdom-fertilizer.description": "Promises to make you wiser. Are you sure this isn't a scam?",
-  "wisdom-fertilizer.name": "Wisdom Fertilizer",
+  "wisdom-fertilizer.name": "Wisdom Fertilizer"
 }

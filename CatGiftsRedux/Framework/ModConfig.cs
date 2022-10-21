@@ -86,6 +86,8 @@ public sealed class ModConfig
         set => this.weeklyLimit = Math.Clamp(value, 0, 7);
     }
 
+    public bool GiftsInRain { get; set; } = false;
+
     /// <summary>
     /// Gets or sets a list of place names pets can bring you forage from.
     /// </summary>

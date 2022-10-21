@@ -137,6 +137,11 @@ internal sealed class ModEntry : Mod
 
         Farm? farm = Game1.getFarm();
 
+        if (Game1.IsRainingHere(farm) && !this.config.GiftsInRain)
+        {
+            return;
+        }
+
         Vector2? tile = null;
 
         if (pet is Dog)

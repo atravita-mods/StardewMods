@@ -24,13 +24,25 @@ namespace MoreFertilizers.HarmonyPatches;
 internal static class HoeDirtDrawTranspiler
 {
     /// <summary>
+    /// Applies patches to draw this fertilizer slightly different.
+    /// </summary>
+    /// <param name="harmony">Harmony instance.</param>
+    /// <remarks>Should avoid this one firing if Multifertilizers is installed.</remarks>
+    internal static void ApplyPatches(Harmony harmony)
+    {
+        harmony.Patch(
+            original: typeof(HoeDirt).GetCachedMethod(nameof(HoeDirt.DrawOptimized), ReflectionCache.FlagTypes.InstanceFlags),
+            transpiler: new HarmonyMethod(typeof(HoeDirtDrawTranspiler).GetCachedMethod(nameof(Transpiler), ReflectionCache.FlagTypes.StaticFlags)));
+    }
+
+    /// <summary>
     /// Gets the correct color for the fertilizer.
     /// </summary>
     /// <param name="prevColor">The previous color.</param>
     /// <param name="fertilizer">Fertilizer ID.</param>
     /// <returns>A color.</returns>
     [MethodImpl(TKConstants.Hot)]
-    public static Color GetColor(Color prevColor, int fertilizer)
+    private static Color GetColor(Color prevColor, int fertilizer)
     {
         if (fertilizer == -1)
         {
@@ -72,19 +84,11 @@ internal static class HoeDirtDrawTranspiler
         {
             return Color.LightCoral;
         }
+        if (ModEntry.RadioactiveFertilizerID == fertilizer)
+        {
+            return Color.LimeGreen;
+        }
         return prevColor;
-    }
-
-    /// <summary>
-    /// Applies patches to draw this fertilizer slightly different.
-    /// </summary>
-    /// <param name="harmony">Harmony instance.</param>
-    /// <remarks>Should avoid this one firing if Multifertilizers is installed.</remarks>
-    internal static void ApplyPatches(Harmony harmony)
-    {
-        harmony.Patch(
-            original: typeof(HoeDirt).GetCachedMethod(nameof(HoeDirt.DrawOptimized), ReflectionCache.FlagTypes.InstanceFlags),
-            transpiler: new HarmonyMethod(typeof(HoeDirtDrawTranspiler).GetCachedMethod(nameof(Transpiler), ReflectionCache.FlagTypes.StaticFlags)));
     }
 
     private static IEnumerable<CodeInstruction>? Transpiler(IEnumerable<CodeInstruction> instructions, ILGenerator gen, MethodBase original)

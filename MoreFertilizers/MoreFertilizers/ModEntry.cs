@@ -381,6 +381,23 @@ internal sealed class ModEntry : Mod
             return seedyFertilizerID;
         }
     }
+
+    private static int radioactiveFertilizerID = -1;
+
+    /// <summary>
+    /// Gets the integer ID of the radioactive fertilizer, or -1 if not found/not loaded.
+    /// </summary>
+    internal static int RadioactiveFertilizerID
+    {
+        get
+        {
+            if (radioactiveFertilizerID == -1)
+            {
+                radioactiveFertilizerID = jsonAssets?.GetObjectId("Radioactive Fertilizer - More Fertilizers") ?? -1;
+            }
+            return radioactiveFertilizerID;
+        }
+    }
 #pragma warning restore SA1201 // Elements should appear in the correct order
 #pragma warning restore SA1204 // Static elements should appear before instance elements
 
@@ -532,6 +549,7 @@ internal sealed class ModEntry : Mod
         seedyFertilizerID = -1;
         treeTapperFertilizerID = -1;
         wisdomFertilizerID = -1;
+        radioactiveFertilizerID = -1;
 
         PlantableFertilizerIDs.Clear();
         SpecialFertilizerIDs.Clear();
@@ -575,6 +593,7 @@ internal sealed class ModEntry : Mod
                 SeedyFertilizerID = SeedyFertilizerID,
                 TreeTapperFertilizerID = TreeTapperFertilizerID,
                 WisdomFertilizerID = WisdomFertilizerID,
+                RadioactiveFertilizerID = RadioactiveFertilizerID,
             };
         }
         this.Helper.Data.WriteSaveData(SavedIDKey, storedIDs);
@@ -870,6 +889,11 @@ internal sealed class ModEntry : Mod
             PlantableFertilizerIDs.Add(SeedyFertilizerID);
         }
 
+        if (RadioactiveFertilizerID != -1)
+        {
+            PlantableFertilizerIDs.Add(RadioactiveFertilizerID);
+        }
+
         if (SpecialFertilizerIDs.Count <= 0 && PlantableFertilizerIDs.Count <= 0)
         { // I have found no valid fertilizers. Just return.
             return;
@@ -1018,6 +1042,15 @@ internal sealed class ModEntry : Mod
             storedIDs.SeedyFertilizerID = SeedyFertilizerID;
         }
 
+        if (RadioactiveFertilizerID != -1)
+        {
+            if (storedIDs.RadioactiveFertilizerID != -1 && storedIDs.RadioactiveFertilizerID != RadioactiveFertilizerID)
+            {
+                idMapping.Add(storedIDs.RadioactiveFertilizerID, RadioactiveFertilizerID);
+            }
+            storedIDs.RadioactiveFertilizerID = RadioactiveFertilizerID;
+        }
+
         // Update stored IDs for the special ones.
         if (FruitTreeFertilizerID != -1)
         {
@@ -1052,6 +1085,11 @@ internal sealed class ModEntry : Mod
         if (BountifulBushID != -1)
         {
             storedIDs.BountifulBushID = BountifulBushID;
+        }
+
+        if (TreeTapperFertilizerID != -1)
+        {
+            storedIDs.TreeTapperFertilizerID = TreeTapperFertilizerID;
         }
 
         if (idMapping.Count <= 0)

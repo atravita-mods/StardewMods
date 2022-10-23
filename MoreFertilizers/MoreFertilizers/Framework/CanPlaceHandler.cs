@@ -1,4 +1,5 @@
-﻿using AtraCore.Utilities;
+﻿using AtraCore.Framework.ReflectionManager;
+using AtraCore.Utilities;
 using AtraShared.Utils;
 using AtraShared.Utils.Extensions;
 using CommunityToolkit.Diagnostics;
@@ -15,6 +16,19 @@ namespace MoreFertilizers.Framework;
 /// </summary>
 public sealed class CanPlaceHandler : IMoreFertilizersAPI
 {
+    /// <summary>
+    /// Stardew's Bush::shake.
+    /// </summary>
+    private static readonly BushShakeDel BushShakeMethod = typeof(Bush)
+        .GetCachedMethod("shake", ReflectionCache.FlagTypes.InstanceFlags)
+        .CreateDelegate<BushShakeDel>();
+
+    private delegate void BushShakeDel(
+        Bush bush,
+        Vector2 tileLocation,
+        bool doEvenIfStillShaking);
+
+    #region ModdataStrings
     /// <summary>
     /// ModData string for the organic fertilizer.
     /// </summary>
@@ -69,6 +83,7 @@ public sealed class CanPlaceHandler : IMoreFertilizersAPI
     /// ModData string marking miraculous beverages.
     /// </summary>
     public const string MiraculousBeverages = "atravita.MoreFertilizer.MiraculousBeverages";
+    #endregion
 
     /// <inheritdoc />
     public bool CanPlaceFertilizer(SObject obj, GameLocation loc, Vector2 tile)
@@ -168,10 +183,12 @@ public sealed class CanPlaceHandler : IMoreFertilizersAPI
                 if (obj.ParentSheetIndex == ModEntry.FruitTreeFertilizerID || obj.ParentSheetIndex == ModEntry.DeluxeFruitTreeFertilizerID)
                 {
                     fruitTree.modData?.SetInt(FruitTreeFertilizer, obj.ParentSheetIndex == ModEntry.DeluxeFruitTreeFertilizerID ? 2 : 1);
+                    fruitTree.shake(fruitTree.currentTileLocation, true, fruitTree.currentLocation);
                     return true;
                 }
                 if (obj.ParentSheetIndex == ModEntry.MiraculousBeveragesID)
                 {
+                    fruitTree.shake(fruitTree.currentTileLocation, true, fruitTree.currentLocation);
                     fruitTree.modData?.SetBool(MiraculousBeverages, true);
                     return true;
                 }
@@ -180,16 +197,19 @@ public sealed class CanPlaceHandler : IMoreFertilizersAPI
             {
                 if (obj.ParentSheetIndex == ModEntry.RapidBushFertilizerID && bush.size.Value == Bush.greenTeaBush)
                 {
+                    BushShakeMethod(bush, bush.currentTileLocation, true);
                     bush.modData?.SetBool(RapidBush, true);
                     return true;
                 }
                 else if (obj.ParentSheetIndex == ModEntry.BountifulBushID)
                 {
+                    BushShakeMethod(bush, bush.currentTileLocation, true);
                     bush.modData?.SetBool(BountifulBush, true);
                     return true;
                 }
                 else if (obj.ParentSheetIndex == ModEntry.MiraculousBeveragesID && bush.size.Value == Bush.greenTeaBush)
                 {
+                    BushShakeMethod(bush, bush.currentTileLocation, true);
                     bush.modData?.SetBool(MiraculousBeverages, true);
                     return true;
                 }
@@ -206,16 +226,19 @@ public sealed class CanPlaceHandler : IMoreFertilizersAPI
         {
             if (obj.ParentSheetIndex == ModEntry.BountifulBushID)
             {
+                BushShakeMethod(pottedBush, pottedBush.currentTileLocation, true);
                 pottedBush.modData?.SetBool(BountifulBush, true);
                 return true;
             }
             if (obj.ParentSheetIndex == ModEntry.RapidBushFertilizerID)
             {
+                BushShakeMethod(pottedBush, pottedBush.currentTileLocation, true);
                 pottedBush.modData?.SetBool(RapidBush, true);
                 return true;
             }
             if (obj.ParentSheetIndex == ModEntry.MiraculousBeveragesID)
             {
+                BushShakeMethod(pottedBush, pottedBush.currentTileLocation, true);
                 pottedBush.modData?.SetBool(MiraculousBeverages, true);
                 return true;
             }
@@ -228,6 +251,7 @@ public sealed class CanPlaceHandler : IMoreFertilizersAPI
             {
                 if (largeterrainfeature is Bush bigBush && bigBush.size.Value == Bush.mediumBush && bigBush.getBoundingBox().Intersects(pos))
                 {
+                    BushShakeMethod(bigBush, bigBush.currentTileLocation, true);
                     bigBush.modData?.SetBool(BountifulBush, true);
                     return true;
                 }
@@ -268,7 +292,7 @@ public sealed class CanPlaceHandler : IMoreFertilizersAPI
                 }
             }
 
-            Game1.playSound("throwDownITem");
+            Game1.playSound("throwDownITem"); //sic
 
             float deltaY = -140f;
             float gravity = 0.0025f;

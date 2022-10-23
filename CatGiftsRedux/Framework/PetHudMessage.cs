@@ -53,7 +53,7 @@ internal sealed class PetHudMessage : HUDMessage
             color: Color.White * this.transparency,
             rotation: 0f,
             origin: Vector2.Zero,
-            scale: 4f,
+            scale: Game1.pixelZoom,
             effects: SpriteEffects.None,
             layerDepth: 1f);
 
@@ -77,7 +77,7 @@ internal sealed class PetHudMessage : HUDMessage
             color: Color.White * this.transparency,
             rotation: 0f,
             origin: Vector2.Zero,
-            scale: 4f,
+            scale: Game1.pixelZoom,
             effects: SpriteEffects.None,
             layerDepth: 1f);
         itemBoxPosition.X += 16f;
@@ -100,12 +100,12 @@ internal sealed class PetHudMessage : HUDMessage
             color: Color.White * this.transparency,
             rotation: 0f,
             origin: Vector2.Zero,
-            scale: 4f,
+            scale: Game1.pixelZoom,
             effects: SpriteEffects.None,
             layerDepth: 1f);
 
         itemBoxPosition.X += 83f;
-        itemBoxPosition.Y -= 18f;
+        itemBoxPosition.Y += 18f;
         Utility.drawTextWithShadow(
             b,
             text: this.message,

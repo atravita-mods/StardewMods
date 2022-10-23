@@ -23,7 +23,7 @@ internal static class IslandNorthPatches
             }
             if (ModEntry.SecretJojaFertilizerID != -1 && Game1.player.DailyLuck > 0.05)
             { // 909 - radioactive ore
-                __result.TryAdd(new SObject(ModEntry.SecretJojaFertilizerID, 1), new[] { 0, int.MaxValue, 909, Utility.hasFinishedJojaRoute() ? 1 : 5 });
+                __result.TryAdd(new SObject(ModEntry.SecretJojaFertilizerID, 1), new[] { 0, int.MaxValue, 909, Utility.hasFinishedJojaRoute() ? 2 : 4 });
             }
             if (ModEntry.MiraculousBeveragesID != -1)
             { // 253 - triple shot espresso

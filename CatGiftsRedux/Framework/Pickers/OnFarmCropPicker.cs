@@ -36,7 +36,6 @@ internal static class OnFarmCropPicker
         int tries = 3;
         do
         {
-
             Crop? crop = Utility.GetRandom(hoedirt, random).crop;
 
             if (Utils.ForbiddenFromRandomPicking(crop.indexOfHarvest.Value))

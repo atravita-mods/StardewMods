@@ -15,15 +15,12 @@ public static class MultiplayerSharedState
 {
     private const string SCHEDULEMESSAGE = "GIMAScheduleUpdateMessage";
 
-    private static bool hasPlayerSeenEvent;
-    private static int lastCheckedTicks;
+    private static TickCache<bool> hasSeenEvent = new(static () => Game1.player.eventsSeen.Contains(AssetEditor.PAMEVENT));
 
     /// <summary>
     /// Gets Pam's current schedule string.
     /// </summary>
     internal static string? PamsSchedule { get; private set; }
-
-    private static TickCache<bool> HasSeenEvent = new(static () => Game1.player.eventsSeen.Contains(AssetEditor.PAMEVENT));
 
     /// <summary>
     /// Updates entry for Pam's schedule whenever a person joins in multiplayer.
@@ -62,7 +59,7 @@ public static class MultiplayerSharedState
     {
         try
         {
-            if (Context.IsMainPlayer && HasSeenEvent.GetValue() && __instance?.Name.Equals("Pam", StringComparison.OrdinalIgnoreCase) == true
+            if (Context.IsMainPlayer && hasSeenEvent.GetValue() && __instance?.Name.Equals("Pam", StringComparison.OrdinalIgnoreCase) == true
                 && __instance.TryGetScheduleEntry(__instance.dayScheduleName.Value, out string? rawstring)
                 && Globals.UtilitySchedulingFunctions.TryFindGOTOschedule(__instance, SDate.Now(), rawstring, out string redirectedstring))
             {

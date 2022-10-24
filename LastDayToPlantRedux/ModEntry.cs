@@ -85,7 +85,7 @@ internal sealed class ModEntry : Mod
 
     private void OnDayStart(object? sender, DayStartedEventArgs e)
     {
-         MultiplayerManager.UpdateOnDayStart(e);
+         MultiplayerManager.UpdateOnDayStart();
     }
 
     private void OnGameLaunched(object? sender, GameLaunchedEventArgs e)

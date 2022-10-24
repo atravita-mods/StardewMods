@@ -22,7 +22,7 @@ namespace NerfCavePuzzle.HarmonyPatches;
 /// <summary>
 /// Data model needed to save to save data.
 /// </summary>
-public class DataModel
+public sealed class DataModel
 {
     /// <summary>
     /// Initializes a new instance of the <see cref="DataModel"/> class.
@@ -263,7 +263,7 @@ internal static class IslandCaveWestDifficultyTranspiler
                 {
                     __instance.timesFailed.Value = Math.Max(GetFailureCount(), __instance.timesFailed.Value);
                 }
-                else if (__instance.netPhase.Value == IslandWestCave1.PHASE_WAIT_FOR_PLAYER_INPUT && Game1.activeClickableMenu is null)
+                else if (ModEntry.Config.AllowReAsks && __instance.netPhase.Value == IslandWestCave1.PHASE_WAIT_FOR_PLAYER_INPUT && Game1.activeClickableMenu is null)
                 {
                     List<Response> responses = new(__instance.createYesNoResponses());
 

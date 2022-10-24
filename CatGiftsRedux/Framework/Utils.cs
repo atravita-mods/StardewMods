@@ -78,7 +78,7 @@ internal static class Utils
         ModEntry.ModMonitor.DebugOnlyLog($"Placing {item.DisplayName} at {location.NameOrUniqueName} - {tile}");
 
         PlayerAlertHandler.AddMessage(
-            message: new PetHudMessage($"{pet.Name} has brought you a {item.DisplayName}", Color.PaleGreen, 2000, true, item, pet is Cat),
+            message: new PetHudMessage(I18n.PetMessage(pet.Name, item.DisplayName), Color.PaleGreen, 2000, true, item, pet is Cat),
             soundCue: pet is Cat ? "Cowboy_Footstep" : "dog_pant");
 
         if (item is SObject @object && !@object.bigCraftable.Value

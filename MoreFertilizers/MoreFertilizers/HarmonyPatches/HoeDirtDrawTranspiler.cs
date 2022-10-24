@@ -42,7 +42,7 @@ internal static class HoeDirtDrawTranspiler
     /// <param name="fertilizer">Fertilizer ID.</param>
     /// <returns>A color.</returns>
     [MethodImpl(TKConstants.Hot)]
-    private static Color GetColor(Color prevColor, int fertilizer)
+    internal static Color GetColor(Color prevColor, int fertilizer)
     {
         if (fertilizer == -1)
         {

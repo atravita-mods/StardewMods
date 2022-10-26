@@ -13,7 +13,7 @@ internal class HoeDirtDrawPatch
     [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Harmony convention.")]
     private static void Postfix(HoeDirt __instance)
     {
-        if (__instance.fertilizer.Value != -1 && __instance.fertilizer.Value == ModEntry.MiraculousBeveragesID && Game1.random.Next(1024) == 0)
+        if (__instance.fertilizer.Value != -1 && __instance.fertilizer.Value == ModEntry.MiraculousBeveragesID && Game1.random.Next(512) == 0)
         {
             __instance.currentLocation.TemporarySprites.Add(new TemporaryAnimatedSprite(
                 Game1.mouseCursorsName,

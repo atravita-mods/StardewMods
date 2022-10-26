@@ -18,7 +18,7 @@ internal static class FruitTreeUpdatePatches
     [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Harmony convention.")]
     private static void Postfix(FruitTree __instance)
     {
-        if (__instance.modData.ContainsKey(CanPlaceHandler.MiraculousBeverages) && Game1.random.Next(1024) == 0)
+        if (__instance.modData.ContainsKey(CanPlaceHandler.MiraculousBeverages) && Game1.random.Next(512) == 0)
         {
             __instance.currentLocation.TemporarySprites.Add(new TemporaryAnimatedSprite(
                 Game1.mouseCursorsName,

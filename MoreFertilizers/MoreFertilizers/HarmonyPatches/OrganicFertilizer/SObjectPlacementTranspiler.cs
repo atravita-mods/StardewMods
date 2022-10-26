@@ -24,7 +24,8 @@ internal static class SObjectPlacementTranspiler
     {
         if (dirt?.fertilizer?.Value == HoeDirt.noFertilizer
             && ModEntry.OrganicFertilizerID != -1
-            && obj.modData?.GetBool(CanPlaceHandler.Organic) == true)
+            && obj.modData?.GetBool(CanPlaceHandler.Organic) == true
+            && Game1.random.Next(2) == 0)
         {
             dirt.fertilizer.Value = ModEntry.OrganicFertilizerID;
         }

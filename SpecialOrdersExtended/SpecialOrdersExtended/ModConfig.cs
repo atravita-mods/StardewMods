@@ -19,4 +19,10 @@ internal sealed class ModConfig
     /// the board is opened.
     /// </summary>
     public bool SurpressUnnecessaryBoardUpdates { get; set; } = true;
+
+    /// <summary>
+    /// Gets or sets a value indicating whether or not Qi orders should avoid repeating until
+    /// you've seen all of them.
+    /// </summary>
+    public bool AvoidRepeatingQiOrders { get; set; } = true;
 }

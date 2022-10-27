@@ -15,17 +15,32 @@ internal static class AssetManager
     // denylist and allowlist
     private static IAssetName accessLists = null!;
 
-    internal static IAssetName CropName { get; private set; } = null!;
-    internal static IAssetName ObjectInfoName { get; private set; } = null!;
+    /// <summary>
+    /// The data asset for objects.
+    /// </summary>
+    private static IAssetName objectInfoName = null!;
 
+    /// <summary>
+    /// Gets the data asset for Data/crops.
+    /// </summary>
+    internal static IAssetName CropName { get; private set; } = null!;
+
+    /// <summary>
+    /// Initializes the asset manager.
+    /// </summary>
+    /// <param name="parser">the game content parser.</param>
     internal static void Initialize(IGameContentHelper parser)
     {
         dataMail = parser.ParseAssetName("Data/mail");
         CropName = parser.ParseAssetName("Data/Crops");
-        ObjectInfoName = parser.ParseAssetName("Data/ObjectInformation");
+        objectInfoName = parser.ParseAssetName("Data/ObjectInformation");
         accessLists = parser.ParseAssetName("Mods/atravita.LastDayToPlantRedux/AccessControl");
     }
 
+    /// <summary>
+    /// Applies asset edits for this mod.
+    /// </summary>
+    /// <param name="e">event args.</param>
     internal static void Apply(AssetRequestedEventArgs e)
     {
         if (e.NameWithoutLocale.IsEquivalentTo(accessLists))
@@ -53,7 +68,7 @@ internal static class AssetManager
         {
             CropAndFertilizerManager.RequestInvalidateCrops();
         }
-        if (e.NamesWithoutLocale.Contains(ObjectInfoName))
+        if (e.NamesWithoutLocale.Contains(objectInfoName))
         {
             CropAndFertilizerManager.RequestInvalidateFertilizers();
         }

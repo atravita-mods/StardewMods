@@ -115,15 +115,6 @@ internal sealed class ModEntry : Mod
     {
         try
         {
-            harmony.PatchAll();
-        }
-        catch (Exception ex)
-        {
-            this.Monitor.Log(string.Format(ErrorMessageConsts.HARMONYCRASH, ex), LogLevel.Error);
-        }
-
-        try
-        {
             harmony.Patch(
                 original: AccessTools.Method(typeof(NPC), nameof(NPC.checkForNewCurrentDialogue)),
                 postfix: new HarmonyMethod(typeof(DialogueManager), nameof(DialogueManager.PostfixCheckDialogue)));
@@ -141,6 +132,15 @@ internal sealed class ModEntry : Mod
         else
         {
             this.hasModsThatHandleBoard = true;
+        }
+
+        try
+        {
+            harmony.PatchAll();
+        }
+        catch (Exception ex)
+        {
+            this.Monitor.Log(string.Format(ErrorMessageConsts.HARMONYCRASH, ex), LogLevel.Error);
         }
 
         harmony.Snitch(this.Monitor, harmony.Id, transpilersOnly: true);

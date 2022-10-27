@@ -46,7 +46,62 @@ public static class ReflectionCache
     /// <param name="MemberType"></param>
     /// <param name="Params"></param>
     [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "This is a record lol.")]
-    private readonly record struct ReflectionCacheMember(Type Type, string Name, FlagTypes FlagTypes, MemberTypes MemberType, Type[]? Params);
+    private readonly record struct ReflectionCacheMember(Type Type, string Name, FlagTypes FlagTypes, MemberTypes MemberType, Type[]? Params)
+    {
+        public override int GetHashCode()
+        {
+            const int factor = -0x5AAA_AAD7;
+
+            var ret = ((EqualityComparer<Type>.Default.GetHashCode(this.Type) * factor) + EqualityComparer<string>.Default.GetHashCode(this.Name)) * factor;
+            ret += EqualityComparer<FlagTypes>.Default.GetHashCode(this.FlagTypes);
+            ret *= factor;
+            ret += EqualityComparer<MemberTypes>.Default.GetHashCode(this.MemberType);
+            ret *= factor;
+
+            if (this.Params is not null)
+            {
+                foreach (var param in this.Params)
+                {
+                    ret += EqualityComparer<Type>.Default.GetHashCode(param);
+                    ret *= factor;
+                }
+            }
+
+            return ret;
+        }
+
+        public bool Equals(ReflectionCacheMember other)
+        {
+            if (EqualityComparer<Type>.Default.Equals(this.Type, other.Type) && EqualityComparer<string>.Default.Equals(this.Name, other.Name) && EqualityComparer<FlagTypes>.Default.Equals(this.FlagTypes, other.FlagTypes) && EqualityComparer<MemberTypes>.Default.Equals(this.MemberType, other.MemberType))
+            {
+                if (this.Params is null)
+                {
+                    return other.Params is null;
+                }
+
+                if (other.Params is null)
+                {
+                    return false;
+                }
+
+                if (this.Params.Length != other.Params.Length)
+                {
+                    return false;
+                }
+
+                for (int i = 0; i < this.Params.Length; i++)
+                {
+                    if (this.Params[i] != other.Params[i])
+                    {
+                        return false;
+                    }
+                }
+
+                return true;
+            }
+            return false;
+        }
+    }
 
     private static readonly SimpleConcurrentCache<ReflectionCacheMember, MemberInfo> Cache = new(2, 50);
 
@@ -199,4 +254,30 @@ public static class ReflectionCache
     /// Swaps the hot cache to stale, clears the stale cache.
     /// </summary>
     internal static void Swap() => Cache.Swap();
+
+    #region niceties
+    public static MethodInfo GetCachedMethod<T>(this Type type, string fieldName, FlagTypes flags)
+        => type.GetCachedMethod(fieldName, flags, new[] { typeof(T) });
+
+    public static MethodInfo GetCachedMethod<T1, T2>(this Type type, string fieldName, FlagTypes flags)
+        => type.GetCachedMethod(fieldName, flags, new[] { typeof(T1), typeof(T2) });
+
+    public static MethodInfo GetCachedMethod<T1, T2, T3>(this Type type, string fieldName, FlagTypes flags)
+        => type.GetCachedMethod(fieldName, flags, new[] { typeof(T1), typeof(T2), typeof(T3) });
+
+    public static MethodInfo GetCachedMethod<T1, T2, T3, T4>(this Type type, string fieldName, FlagTypes flags)
+        => type.GetCachedMethod(fieldName, flags, new[] { typeof(T1), typeof(T2), typeof(T3), typeof(T4) });
+
+    public static ConstructorInfo GetCachedConstructor<T>(this Type type, FlagTypes flags)
+        => type.GetCachedConstructor(flags, new[] { typeof(T) } );
+
+    public static ConstructorInfo GetCachedConstructor<T1, T2>(this Type type, FlagTypes flags)
+        => type.GetCachedConstructor(flags, new[] { typeof(T1), typeof(T2) });
+
+    public static ConstructorInfo GetCachedConstructor<T1, T2, T3>(this Type type, FlagTypes flags)
+        => type.GetCachedConstructor(flags, new[] { typeof(T1), typeof(T2), typeof(T3) });
+
+    public static ConstructorInfo GetCachedConstructor<T1, T2, T3, T4>(this Type type, FlagTypes flags)
+        => type.GetCachedConstructor(flags, new[] { typeof(T1), typeof(T2), typeof(T3), typeof(T4) });
+    #endregion
 }

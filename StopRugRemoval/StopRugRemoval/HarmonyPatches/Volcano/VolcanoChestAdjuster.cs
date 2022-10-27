@@ -149,7 +149,7 @@ internal static class VolcanoChestAdjuster
             { // Find the first call to Random.Next and the local it stores to.
                 new(SpecialCodeInstructionCases.LdArg),
                 new(SpecialCodeInstructionCases.LdLoc),
-                new(OpCodes.Callvirt, typeof(Random).GetCachedMethod(nameof(Random.Next), ReflectionCache.FlagTypes.InstanceFlags, new[] { typeof(int) } )),
+                new(OpCodes.Callvirt, typeof(Random).GetCachedMethod<int>(nameof(Random.Next), ReflectionCache.FlagTypes.InstanceFlags)),
                 new(SpecialCodeInstructionCases.StLoc),
             });
 
@@ -200,7 +200,7 @@ internal static class VolcanoChestAdjuster
             { // Find the call to Random.Next and the local it stores to for rare chests.
                 new(SpecialCodeInstructionCases.LdArg),
                 new(SpecialCodeInstructionCases.LdLoc),
-                new(OpCodes.Callvirt, typeof(Random).GetCachedMethod(nameof(Random.Next), ReflectionCache.FlagTypes.InstanceFlags, new[] { typeof(int) } )),
+                new(OpCodes.Callvirt, typeof(Random).GetCachedMethod<int>(nameof(Random.Next), ReflectionCache.FlagTypes.InstanceFlags)),
                 new(SpecialCodeInstructionCases.StLoc),
             });
 

@@ -1,6 +1,8 @@
 using AtraBase.Collections;
 using AtraBase.Toolkit;
 
+using AtraCore.Framework.Caches;
+
 using AtraShared.Utils;
 using AtraShared.Utils.Extensions;
 using StardewModdingAPI.Events;
@@ -123,7 +125,7 @@ internal static class AssetLoader
             {
                 continue;
             }
-            if (Game1.getCharacterFromName(specialChar, mustBeVillager: true) is NPC npc)
+            if (NPCCache.GetByVillagerName(specialChar) is NPC npc)
             {
                 specialCharacters.Add(npc);
             }
@@ -160,7 +162,7 @@ internal static class AssetLoader
             HashSet<NPC> group = new();
             foreach (string charname in data[groupname].Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries))
             {
-                if (Game1.getCharacterFromName(charname) is NPC npc)
+                if (NPCCache.GetByVillagerName(charname) is NPC npc)
                 {
                     group.Add(npc);
                 }
@@ -204,7 +206,7 @@ internal static class AssetLoader
         Dictionary<string, string> data = Globals.GameContentHelper.Load<Dictionary<string, string>>(ExclusionLocations);
         foreach (string npcname in data.Keys)
         {
-            if (Game1.getCharacterFromName(npcname) is NPC npc)
+            if (NPCCache.GetByVillagerName(npcname) is NPC npc)
             {
                 exclusions[npc] = data[npcname].Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
             }

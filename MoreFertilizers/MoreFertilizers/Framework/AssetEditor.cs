@@ -1,4 +1,5 @@
 ﻿using AtraCore;
+using AtraCore.Framework.Caches;
 using AtraCore.Models;
 
 using AtraShared.Caching;
@@ -146,7 +147,7 @@ internal static class AssetEditor
     private static void EditMailImpl(IAssetData asset)
     {
         IAssetDataForDictionary<string, string>? editor = asset.AsDictionary<string, string>();
-        editor.Data[ORGANICVEGGIEMAIL] = $"@,^{I18n.Specialorder_Organic_Mail_Text()}^^   --{Game1.getCharacterFromName("Lewis")?.displayName ?? I18n.Lewis()}%item bigobject 272 %%[#]{I18n.Specialorder_Organic_Mail_Text()}";
+        editor.Data[ORGANICVEGGIEMAIL] = $"@,^{I18n.Specialorder_Organic_Mail_Text()}^^   --{NPCCache.GetByVillagerName("Lewis")?.displayName ?? I18n.Lewis()}%item bigobject 272 %%[#]{I18n.Specialorder_Organic_Mail_Text()}";
     }
 
     private static void EditLewisDialogueImpl(IAssetData asset)

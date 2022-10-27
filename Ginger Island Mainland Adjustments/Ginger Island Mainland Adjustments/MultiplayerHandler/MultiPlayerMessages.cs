@@ -1,4 +1,6 @@
-﻿using AtraShared.Caching;
+﻿using AtraCore.Framework.Caches;
+
+using AtraShared.Caching;
 using AtraShared.Utils.Extensions;
 using GingerIslandMainlandAdjustments.AssetManagers;
 using HarmonyLib;
@@ -29,7 +31,7 @@ public static class MultiplayerSharedState
     internal static void ReSendMultiplayerMessage(PeerConnectedEventArgs e)
     {
         if (Context.IsMainPlayer && Context.IsWorldReady
-            && Game1.getCharacterFromName("Pam") is NPC pam
+            && NPCCache.GetByVillagerName("Pam") is NPC pam
             && pam.TryGetScheduleEntry(pam.dayScheduleName.Value, out string? rawstring)
             && Globals.UtilitySchedulingFunctions.TryFindGOTOschedule(pam, SDate.Now(), rawstring, out string redirectedstring))
         {

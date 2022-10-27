@@ -1,4 +1,7 @@
 ﻿using System.Text.RegularExpressions;
+
+using AtraCore.Framework.Caches;
+
 using AtraShared.Integrations;
 using AtraShared.ItemManagement;
 using AtraShared.Menuing;
@@ -188,7 +191,7 @@ internal sealed class ModEntry : Mod
             // hack in buybacks for Arch, which may not have a number?
         }
 
-        if (Game1.getCharacterFromName("Gunther") is NPC gunter)
+        if (NPCCache.GetByVillagerName("Gunther") is NPC gunter)
         {
             shop.portraitPerson = gunter;
         }

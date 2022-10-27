@@ -8,11 +8,14 @@ namespace AtraShared.Caching;
 /// Wrapper class: caches a value for approximately four ticks.
 /// </summary>
 /// <typeparam name="T">Type of the value.</typeparam>
+/// <remarks>Constraining to just value types since reference types should run through a WeakReference.</remarks>
 public struct TickCache<T>
+    where T : struct
 {
+    private readonly Func<T> get;
+
     private int lastTick = -1;
-    private T? result = default;
-    private Func<T> get;
+    private T result = default;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="TickCache{T}"/> struct.
@@ -28,7 +31,7 @@ public struct TickCache<T>
     /// </summary>
     /// <returns>Value.</returns>
     [MethodImpl(TKConstants.Hot)]
-    public T? GetValue()
+    public T GetValue()
     {
         if ((Game1.ticks & ~0b11) != this.lastTick)
         {

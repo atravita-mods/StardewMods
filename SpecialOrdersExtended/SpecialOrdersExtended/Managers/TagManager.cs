@@ -1,4 +1,6 @@
-﻿using AtraShared.Utils.Extensions;
+﻿using AtraCore.Framework.Caches;
+
+using AtraShared.Utils.Extensions;
 using HarmonyLib;
 using StardewValley.Locations;
 
@@ -141,7 +143,7 @@ internal static class TagManager
                     return false;
                 case "married":
                     // married_NPCname, married_NPCname_not
-                    __result = Game1.getCharacterFromName(vals[1])?.getSpouse() is not null;
+                    __result = NPCCache.GetByVillagerName(vals[1])?.getSpouse() is not null;
                     if (vals.Length >= 3 && vals[2].Equals("not", StringComparison.OrdinalIgnoreCase))
                     {
                         __result = !__result;

@@ -1,4 +1,6 @@
-﻿using StardewModdingAPI.Events;
+﻿using AtraCore.Framework.Caches;
+
+using StardewModdingAPI.Events;
 using StardewModdingAPI.Utilities;
 using StardewValley.Locations;
 
@@ -158,7 +160,7 @@ internal static class AssetEditor
     private static void EditMail(IAssetData e)
     {
         IAssetDataForDictionary<string, string>? editor = e.AsDictionary<string, string>();
-        editor.Data[PAMMAILKEY] = $"{I18n.Pam_Mail_Text()}^^   --{Game1.getCharacterFromName("Pam", mustBeVillager: true)?.displayName ?? I18n.Pam()}[#]{I18n.Pam_Mail_Title()}";
+        editor.Data[PAMMAILKEY] = $"{I18n.Pam_Mail_Text()}^^   --{NPCCache.GetByVillagerName("Pam")?.displayName ?? I18n.Pam()}[#]{I18n.Pam_Mail_Title()}";
     }
 
     private static void EditSeedShopEvent(IAssetData e)

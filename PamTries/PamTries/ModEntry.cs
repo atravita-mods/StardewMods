@@ -1,4 +1,5 @@
-﻿using AtraCore.Utilities;
+﻿using AtraCore.Framework.Caches;
+using AtraCore.Utilities;
 
 using AtraShared.Integrations;
 using AtraShared.Integrations.Interfaces.ContentPatcher;
@@ -171,7 +172,7 @@ internal sealed class ModEntry : Mod
             moodchances[0] = 0;
             moodchances[1] = 0;
         }
-        else if (Game1.getCharacterFromName("Penny")?.getSpouse() is Farmer spouse
+        else if (NPCCache.GetByVillagerName("Penny")?.getSpouse() is Farmer spouse
                  && spouse.friendshipData["Penny"].IsMarried()
                  && spouse.friendshipData["Penny"].Points <= 2000)
         {// marriage penalty
@@ -227,7 +228,7 @@ internal sealed class ModEntry : Mod
         }
 
         // reset Pam's sprite
-        NPC? pam = Game1.getCharacterFromName("Pam");
+        NPC? pam = NPCCache.GetByVillagerName("Pam");
         if (pam is null)
         {
             this.Monitor.Log("Pam could not be found?!?");
@@ -250,7 +251,7 @@ internal sealed class ModEntry : Mod
             // bad marriage penalty. Consider implementing divorce.
             if (Context.IsMainPlayer)
             {
-                if (Game1.getCharacterFromName("Penny").getSpouse() is Farmer pennySpouse && pennySpouse.friendshipData["Penny"].Points <= 2000)
+                if (NPCCache.GetByVillagerName("Penny")?.getSpouse() is Farmer pennySpouse && pennySpouse.friendshipData["Penny"].Points <= 2000)
                 {
                     pennySpouse.changeFriendship(-50, pam);
                     ModMonitor.Log("Bad marriage penalty, 50 friendship lost with Pam", LogLevel.Trace);

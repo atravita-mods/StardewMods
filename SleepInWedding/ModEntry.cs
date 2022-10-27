@@ -1,4 +1,6 @@
-﻿using AtraShared.ConstantsAndEnums;
+﻿using AtraCore.Framework.Caches;
+
+using AtraShared.ConstantsAndEnums;
 using AtraShared.Integrations;
 using AtraShared.Utils.Extensions;
 using HarmonyLib;
@@ -44,7 +46,7 @@ internal sealed class ModEntry : Mod
 
     private void OnDayStart(object? sender, DayStartedEventArgs e)
     {
-        if (Game1.player.HasWeddingToday() && Game1.getCharacterFromName(Game1.player.spouse) is NPC spouse)
+        if (Game1.player.HasWeddingToday() && NPCCache.GetByVillagerName(Game1.player.spouse) is NPC spouse)
         {
             if (spouse.Dialogue.ContainsKey("DayOfWedding"))
             {

@@ -16,19 +16,8 @@ namespace MoreFertilizers.Framework;
 /// </summary>
 public sealed class CanPlaceHandler : IMoreFertilizersAPI
 {
-    /// <summary>
-    /// Stardew's Bush::shake.
-    /// </summary>
-    private static readonly BushShakeDel BushShakeMethod = typeof(Bush)
-        .GetCachedMethod("shake", ReflectionCache.FlagTypes.InstanceFlags)
-        .CreateDelegate<BushShakeDel>();
-
-    private delegate void BushShakeDel(
-        Bush bush,
-        Vector2 tileLocation,
-        bool doEvenIfStillShaking);
-
     #region ModdataStrings
+
     /// <summary>
     /// ModData string for the organic fertilizer.
     /// </summary>
@@ -84,6 +73,18 @@ public sealed class CanPlaceHandler : IMoreFertilizersAPI
     /// </summary>
     public const string MiraculousBeverages = "atravita.MoreFertilizer.MiraculousBeverages";
     #endregion
+
+    /// <summary>
+    /// Stardew's Bush::shake.
+    /// </summary>
+    private static readonly BushShakeDel BushShakeMethod = typeof(Bush)
+        .GetCachedMethod("shake", ReflectionCache.FlagTypes.InstanceFlags)
+        .CreateDelegate<BushShakeDel>();
+
+    private delegate void BushShakeDel(
+        Bush bush,
+        Vector2 tileLocation,
+        bool doEvenIfStillShaking);
 
     /// <inheritdoc />
     public bool CanPlaceFertilizer(SObject obj, GameLocation loc, Vector2 tile)

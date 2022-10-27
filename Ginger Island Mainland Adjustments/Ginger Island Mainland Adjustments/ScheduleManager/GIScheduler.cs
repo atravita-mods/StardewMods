@@ -3,6 +3,8 @@ using System.Diagnostics;
 using System.Runtime;
 #endif
 
+using AtraCore.Framework.Caches;
+
 using AtraShared.Schedules.DataModels;
 using AtraShared.Utils;
 using AtraShared.Utils.Extensions;
@@ -227,7 +229,7 @@ internal static class GIScheduler
         CurrentAdventurers = null;
 
         List<NPC> visitors = new(capacity);
-        HashSet<NPC> valid_visitors = new(32); // this is probably an undercount, but better than 4.
+        HashSet<NPC> valid_visitors = new(64); // this is probably an undercount, but better than 4.
 
         // For some reason, Utility.GetAllCharacters searches the farm too.
         foreach (NPC npc in NPCHelpers.GetNPCs())
@@ -242,7 +244,13 @@ internal static class GIScheduler
         {
             foreach (string npcname in Globals.SaveDataModel.NPCsForTomorrow)
             {
-                NPC npc = Game1.getCharacterFromName(npcname, mustBeVillager: true);
+                NPC? npc = NPCCache.GetByVillagerName(npcname);
+                if (npc is null)
+                {
+                    Globals.ModMonitor.Log($"{npcname} could not be located.", LogLevel.Warn);
+                    continue;
+                }
+
                 visitors.Add(npc);
                 if (!valid_visitors.Contains(npc))
                 {
@@ -284,7 +292,7 @@ internal static class GIScheduler
         }
 
         // Add Gus (even if we go over capacity, he has a specific standing spot).
-        if (Game1.getCharacterFromName("Gus") is NPC gus && !visitors.Contains(gus) && valid_visitors.Contains(gus)
+        if (NPCCache.GetByVillagerName("Gus") is NPC gus && !visitors.Contains(gus) && valid_visitors.Contains(gus)
             && Globals.Config.GusDayAsShortString().Equals(Game1.shortDayNameFromDayOfSeason(Game1.dayOfMonth), StringComparison.OrdinalIgnoreCase)
             && Globals.Config.GusChance > random.NextDouble())
         {
@@ -314,7 +322,7 @@ internal static class GIScheduler
             // If George in visitors, add Evelyn.
             if (visitors.Any((NPC npc) => npc.Name.Equals("George", StringComparison.OrdinalIgnoreCase))
                 && visitors.All((NPC npc) => !npc.Name.Equals("Evelyn", StringComparison.OrdinalIgnoreCase))
-                && Game1.getCharacterFromName("Evelyn") is NPC evelyn)
+                && NPCCache.GetByVillagerName("Evelyn") is NPC evelyn)
             {
                 // counting backwards to avoid kicking out a group member.
                 for (int i = visitors.Count - 1; i >= 0; i--)

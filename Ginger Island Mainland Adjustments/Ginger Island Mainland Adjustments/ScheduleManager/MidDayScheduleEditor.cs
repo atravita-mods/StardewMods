@@ -1,4 +1,7 @@
 ﻿using AtraBase.Toolkit.Extensions;
+
+using AtraCore.Framework.Caches;
+
 using AtraShared.Utils.Extensions;
 using Microsoft.Xna.Framework;
 using StardewModdingAPI.Events;
@@ -59,7 +62,7 @@ internal static class MidDayScheduleEditor
             }
             Globals.ModMonitor.Log(I18n.MiddayScheduleEditor_NpcFoundForAdjustment(name), LogLevel.Trace);
             ScheduleAltered[name] = true;
-            if (Game1.getCharacterFromName(name) is NPC npc)
+            if (NPCCache.GetByVillagerName(name) is NPC npc)
             {
                 AdjustSpecificSchedule(npc);
                 break; // Do the next person at the next ten minute tick.

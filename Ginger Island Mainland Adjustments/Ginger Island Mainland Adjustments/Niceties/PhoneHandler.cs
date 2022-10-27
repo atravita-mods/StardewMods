@@ -1,5 +1,7 @@
 ﻿using System.Reflection;
 using System.Reflection.Emit;
+
+using AtraCore.Framework.Caches;
 using AtraCore.Framework.ReflectionManager;
 using AtraShared.Utils.Extensions;
 using AtraShared.Utils.HarmonyHelper;
@@ -23,7 +25,7 @@ internal static class PhoneHandler
     {
         // omit if Pam inexplicably vanished.
         if (Game1.player.mailReceived.Contains(AssetEditor.PAMMAILKEY)
-            && Game1.getCharacterFromName("Pam") is NPC pam)
+            && NPCCache.GetByVillagerName("Pam") is NPC pam)
         {
             answerChoices.Add(new Response("PamBus", pam.displayName));
         }
@@ -86,7 +88,7 @@ internal static class PhoneHandler
                 try
                 {
                     Game1.playSound(GameLocation.PHONE_PICKUP_SOUND);
-                    if (Game1.getCharacterFromName("Pam") is not NPC pam)
+                    if (NPCCache.GetByVillagerName("Pam") is not NPC pam)
                     {
                         Globals.ModMonitor.Log($"Pam cannot be found, ending phone call.", LogLevel.Warn);
                         return;

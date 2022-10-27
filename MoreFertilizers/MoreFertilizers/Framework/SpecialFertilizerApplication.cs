@@ -26,22 +26,18 @@ internal static class SpecialFertilizerApplication
     /// <param name="helper">SMAPI's input helper.</param>
     internal static void ApplyFertilizer(ButtonPressedEventArgs e, IInputHelper helper)
     {
-        if (Game1.player.ActiveObject is not SObject obj || obj.bigCraftable.Value)
+        if (Game1.player.ActiveObject?.bigCraftable?.Value != false || Game1.player.ActiveObject.GetType() != typeof(SObject))
         {
             return;
         }
 
-        Vector2 placementtile;
-        if (Utility.withinRadiusOfPlayer(((int)e.Cursor.Tile.X * 64) + 32, ((int)e.Cursor.Tile.Y * 64) + 32, PLACEMENTRADIUS, Game1.player)
-            && PlaceHandler.CanPlaceFertilizer(obj, Game1.currentLocation, e.Cursor.Tile))
-        {
-            placementtile = e.Cursor.Tile;
-        }
-        else if (PlaceHandler.CanPlaceFertilizer(obj, Game1.currentLocation, e.Cursor.GrabTile))
-        {
-            placementtile = e.Cursor.GrabTile;
-        }
-        else
+        SObject obj = Game1.player.ActiveObject;
+
+        Vector2 placementtile = Utility.withinRadiusOfPlayer(((int)e.Cursor.Tile.X * 64) + 32, ((int)e.Cursor.Tile.Y * 64) + 32, PLACEMENTRADIUS, Game1.player)
+                                    ? e.Cursor.Tile
+                                    : e.Cursor.GrabTile;
+
+        if (!PlaceHandler.CanPlaceFertilizer(obj, Game1.currentLocation, placementtile, true))
         {
             return;
         }

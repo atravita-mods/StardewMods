@@ -12,6 +12,7 @@ namespace LastDayToPlantRedux;
 /// <inheritdoc />
 internal sealed class ModEntry : Mod
 {
+    private MigrationManager? migrator;
 
     /// <summary>
     /// Gets the logger for this mod.
@@ -22,8 +23,6 @@ internal sealed class ModEntry : Mod
     /// Gets the config instance for this mod.
     /// </summary>
     internal static ModConfig Config { get; private set; } = null!;
-
-    private MigrationManager? migrator;
 
     /// <inheritdoc />
     public override void Entry(IModHelper helper)
@@ -39,8 +38,8 @@ internal sealed class ModEntry : Mod
         helper.Events.GameLoop.DayStarted += this.OnDayStart;
         helper.Events.GameLoop.ReturnedToTitle += this.OnReturnedToTile;
 
-        helper.Events.Multiplayer.PeerConnected += (_, e) => MultiplayerManager.OnPlayerConnected(e);
-        helper.Events.Multiplayer.PeerDisconnected += (_, e) => MultiplayerManager.OnPlayerDisconnected(e);
+        helper.Events.Multiplayer.PeerConnected += static (_, e) => MultiplayerManager.OnPlayerConnected(e);
+        helper.Events.Multiplayer.PeerDisconnected += static (_, e) => MultiplayerManager.OnPlayerDisconnected(e);
 
         helper.Events.Content.AssetRequested += this.OnAssetRequested;
         helper.Events.Content.AssetsInvalidated += this.OnAssetsInvalidated;

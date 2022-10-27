@@ -11,6 +11,7 @@
 * Some fertilizer for trees? Tree tapper fertilizer?
 * Something for mushroom boxen? (1.6 - reduce to one day?)
 * Make good draw code for all of the fertilizers. (don't forget domesticated fish - maybe some more jumping...)
+* Add "already fertilized" alerts: `"TreeFertilizer2"` is probably the best StringsFromCSFiles.
 
 #### Version 0.3.0
 * Added new fertilizers:

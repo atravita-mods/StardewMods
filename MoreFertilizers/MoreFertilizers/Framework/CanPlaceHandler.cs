@@ -87,6 +87,10 @@ public sealed class CanPlaceHandler : IMoreFertilizersAPI
 
     /// <inheritdoc />
     public bool CanPlaceFertilizer(SObject obj, GameLocation loc, Vector2 tile)
+        => this.CanPlaceFertilizer(obj, loc, tile, false);
+
+    /// <inheritdoc />
+    public bool CanPlaceFertilizer(SObject obj, GameLocation loc, Vector2 tile, bool alert)
     {
         if (Utility.isPlacementForbiddenHere(loc) || !Context.IsPlayerFree)
         {
@@ -106,25 +110,45 @@ public sealed class CanPlaceHandler : IMoreFertilizersAPI
                     || (fruitTree.growthStage.Value != FruitTree.treeStage
                         && (obj.ParentSheetIndex == ModEntry.FruitTreeFertilizerID || obj.ParentSheetIndex == ModEntry.DeluxeFruitTreeFertilizerID))))
             {
-                return !fruitTree.modData.ContainsKey(FruitTreeFertilizer) && !fruitTree.modData.ContainsKey(MiraculousBeverages);
+                bool ret = !fruitTree.modData.ContainsKey(FruitTreeFertilizer) && !fruitTree.modData.ContainsKey(MiraculousBeverages);
+                if (alert && !ret)
+                {
+                    this.AlertPlayer();
+                }
+                return ret;
             }
             else if (terrain is Bush bush && (bush.size.Value == Bush.greenTeaBush || bush.size.Value == Bush.mediumBush) && !bush.townBush.Value
                 && ((obj.ParentSheetIndex == ModEntry.RapidBushFertilizerID && bush.size.Value == Bush.greenTeaBush) || obj.ParentSheetIndex == ModEntry.BountifulBushID
                     || (obj.ParentSheetIndex == ModEntry.MiraculousBeveragesID && bush.size.Value == Bush.greenTeaBush)))
             {
-                return !bush.modData.ContainsKey(BountifulBush) && !bush.modData.ContainsKey(RapidBush) && !bush.modData.ContainsKey(MiraculousBeverages);
+                bool ret = !bush.modData.ContainsKey(BountifulBush) && !bush.modData.ContainsKey(RapidBush) && !bush.modData.ContainsKey(MiraculousBeverages);
+                if (alert && !ret)
+                {
+                    this.AlertPlayer();
+                }
+                return ret;
             }
             else if (terrain is Tree tree
                 && (obj.ParentSheetIndex == ModEntry.TreeTapperFertilizerID))
             {
-                return !tree.modData.ContainsKey(TreeFertilizer) && !tree.modData.ContainsKey(TreeTapperFertilizer);
+                bool ret = !tree.modData.ContainsKey(TreeFertilizer) && !tree.modData.ContainsKey(TreeTapperFertilizer);
+                if (alert && !ret)
+                {
+                    this.AlertPlayer();
+                }
+                return ret;
             }
         }
 
         if (loc.Objects.TryGetValue(tile, out SObject @object) && @object is IndoorPot pot && pot.bush?.Value is Bush pottedBush && pottedBush.size?.Value == Bush.greenTeaBush
             && (obj.ParentSheetIndex == ModEntry.RapidBushFertilizerID || obj.ParentSheetIndex == ModEntry.BountifulBushID || obj.ParentSheetIndex == ModEntry.MiraculousBeveragesID ))
         {
-            return !pottedBush.modData.ContainsKey(BountifulBush) && !pottedBush.modData.ContainsKey(RapidBush) && !pottedBush.modData.ContainsKey(MiraculousBeverages);
+            bool ret = !pottedBush.modData.ContainsKey(BountifulBush) && !pottedBush.modData.ContainsKey(RapidBush) && !pottedBush.modData.ContainsKey(MiraculousBeverages);
+            if (alert && !ret)
+            {
+                this.AlertPlayer();
+            }
+            return ret;
         }
 
         if (obj.ParentSheetIndex == ModEntry.BountifulBushID)
@@ -134,7 +158,12 @@ public sealed class CanPlaceHandler : IMoreFertilizersAPI
             {
                 if (largeterrainfeature is Bush bigBush && !bigBush.townBush.Value && bigBush.getBoundingBox().Intersects(pos))
                 {
-                    return !bigBush.modData.ContainsKey(BountifulBush) && !bigBush.modData.ContainsKey(RapidBush) && !bigBush.modData.ContainsKey(MiraculousBeverages);
+                    bool ret = !bigBush.modData.ContainsKey(BountifulBush) && !bigBush.modData.ContainsKey(RapidBush) && !bigBush.modData.ContainsKey(MiraculousBeverages);
+                    if (alert && !ret)
+                    {
+                        this.AlertPlayer();
+                    }
+                    return ret;
                 }
             }
         }
@@ -142,7 +171,12 @@ public sealed class CanPlaceHandler : IMoreFertilizersAPI
         if ((obj.ParentSheetIndex == ModEntry.FishFoodID || obj.ParentSheetIndex == ModEntry.DeluxeFishFoodID)
             && loc.canFishHere() && loc.doesTileHaveProperty((int)tile.X, (int)tile.Y, "Water", "Back") is not null)
         {
-            return !loc.modData.ContainsKey(FishFood);
+            bool ret = !loc.modData.ContainsKey(FishFood);
+            if (alert && !ret)
+            {
+                this.AlertPlayer();
+            }
+            return ret;
         }
 
         if(loc is BuildableGameLocation buildableLoc && obj.ParentSheetIndex == ModEntry.DomesticatedFishFoodID)
@@ -151,7 +185,12 @@ public sealed class CanPlaceHandler : IMoreFertilizersAPI
             {
                 if (b is FishPond && b.occupiesTile(tile))
                 {
-                    return !b.modData.ContainsKey(DomesticatedFishFood);
+                    bool ret = !b.modData.ContainsKey(DomesticatedFishFood);
+                    if (alert && !ret)
+                    {
+                        this.AlertPlayer();
+                    }
+                    return ret;
                 }
             }
         }
@@ -162,7 +201,7 @@ public sealed class CanPlaceHandler : IMoreFertilizersAPI
     public bool TryPlaceFertilizer(SObject obj, GameLocation loc, Vector2 tile)
     {
         Guard.IsNotNull(obj);
-        if (!this.CanPlaceFertilizer(obj, loc, tile))
+        if (!this.CanPlaceFertilizer(obj, loc, tile, true))
         {
             return false;
         }
@@ -319,4 +358,7 @@ public sealed class CanPlaceHandler : IMoreFertilizersAPI
         }
         return false;
     }
+
+    private void AlertPlayer()
+        => Game1.showRedMessageUsingLoadString("Strings\\StringsFromCSFiles:TreeFertilizer2");
 }

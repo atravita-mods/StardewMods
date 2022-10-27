@@ -19,7 +19,7 @@ internal class HoeDirtDrawPatch
                 Game1.mouseCursorsName,
                 new Rectangle(372, 1956, 10, 10),
                 new Vector2(
-                    (__instance.currentTileLocation.X * 64f) + Game1.random.Next(-64, 96),
+                    (__instance.currentTileLocation.X * 64f) + Game1.random.Next(32),
                     (__instance.currentTileLocation.Y * 64f) + Game1.random.Next(-128, 0)),
                 flipped: false,
                 0.002f,

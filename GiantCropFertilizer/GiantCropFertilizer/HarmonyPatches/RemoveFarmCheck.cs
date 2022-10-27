@@ -25,7 +25,7 @@ internal static class RemoveFarmCheck
     }
 
     private static bool IsFarmOrSetOtherwise(GameLocation? location)
-        => location is Farm || ModEntry.Config.AllowGiantCropsOffFarm;
+        => location is Farm || ModEntry.Config.AllowGiantCropsOffFarm || location?.Map?.Properties?.ContainsKey("AllowGiantCrops") == true;
 
     private static IEnumerable<CodeInstruction>? Transpiler(IEnumerable<CodeInstruction> instructions, ILGenerator gen, MethodBase original)
     {

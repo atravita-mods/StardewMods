@@ -57,11 +57,6 @@ internal sealed class ModEntry : Mod
 
     private void OnSaveLoaded(object? sender, SaveLoadedEventArgs e)
     {
-        if (Config.CropsToDisplay == CropOptions.Purchaseable)
-        {
-            this.SetUpJAIntegration();
-        }
-
         InventoryWatcher.LoadModel(this.Helper.Data);
 
         this.Helper.Events.Player.InventoryChanged -= this.OnInventoryChange;
@@ -99,14 +94,7 @@ internal sealed class ModEntry : Mod
         {
             helper.Register(
                 reset: static () => Config = new(),
-                save: () =>
-                {
-                    if (Context.IsWorldReady && Config.CropsToDisplay == CropOptions.Purchaseable)
-                    {
-                        this.SetUpJAIntegration();
-                    }
-                    this.Helper.AsyncWriteConfig(this.Monitor, Config);
-                },
+                save: () => this.Helper.AsyncWriteConfig(this.Monitor, Config),
                 titleScreenOnly: true)
             .GenerateDefaultGMCM(static () => Config);
         }
@@ -130,8 +118,6 @@ internal sealed class ModEntry : Mod
         {
             this.Monitor.Log("JA not loaded, integration unnecessary");
         }
-
-
     }
 
     /// <summary>

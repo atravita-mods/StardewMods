@@ -1,5 +1,6 @@
 ﻿using System.Reflection;
 using AtraBase.Caching;
+using AtraBase.Collections;
 using AtraBase.Toolkit.Reflection;
 using CommunityToolkit.Diagnostics;
 
@@ -50,54 +51,34 @@ public static class ReflectionCache
     {
         public override int GetHashCode()
         {
-            const int factor = -0x5AAA_AAD7;
-
-            var ret = ((EqualityComparer<Type>.Default.GetHashCode(this.Type) * factor) + EqualityComparer<string>.Default.GetHashCode(this.Name)) * factor;
-            ret += EqualityComparer<FlagTypes>.Default.GetHashCode(this.FlagTypes);
-            ret *= factor;
-            ret += EqualityComparer<MemberTypes>.Default.GetHashCode(this.MemberType);
-            ret *= factor;
-
-            if (this.Params is not null)
+            unchecked
             {
-                foreach (var param in this.Params)
-                {
-                    ret += EqualityComparer<Type>.Default.GetHashCode(param);
-                    ret *= factor;
-                }
-            }
+                const int factor = -0x5AAA_AAD7;
 
-            return ret;
+                int ret = ((EqualityComparer<Type>.Default.GetHashCode(this.Type) * factor) + EqualityComparer<string>.Default.GetHashCode(this.Name)) * factor;
+                ret += EqualityComparer<FlagTypes>.Default.GetHashCode(this.FlagTypes);
+                ret *= factor;
+                ret += EqualityComparer<MemberTypes>.Default.GetHashCode(this.MemberType);
+                ret *= factor;
+
+                if (this.Params is not null)
+                {
+                    foreach (var param in this.Params)
+                    {
+                        ret += EqualityComparer<Type>.Default.GetHashCode(param);
+                        ret *= factor;
+                    }
+                }
+
+                return ret;
+            }
         }
 
         public bool Equals(ReflectionCacheMember other)
         {
             if (EqualityComparer<Type>.Default.Equals(this.Type, other.Type) && EqualityComparer<string>.Default.Equals(this.Name, other.Name) && EqualityComparer<FlagTypes>.Default.Equals(this.FlagTypes, other.FlagTypes) && EqualityComparer<MemberTypes>.Default.Equals(this.MemberType, other.MemberType))
             {
-                if (this.Params is null)
-                {
-                    return other.Params is null;
-                }
-
-                if (other.Params is null)
-                {
-                    return false;
-                }
-
-                if (this.Params.Length != other.Params.Length)
-                {
-                    return false;
-                }
-
-                for (int i = 0; i < this.Params.Length; i++)
-                {
-                    if (this.Params[i] != other.Params[i])
-                    {
-                        return false;
-                    }
-                }
-
-                return true;
+                return this.Params.ArraySequenceEquals(other.Params);
             }
             return false;
         }
@@ -245,17 +226,11 @@ public static class ReflectionCache
         return ReflectionThrowHelper.ThrowMethodNotFoundException<FieldInfo>(type.FullName + "::" + fieldName);
     }
 
-    /// <summary>
-    /// Clears the reflection cache.
-    /// </summary>
-    internal static void Clear() => Cache.Clear();
-
-    /// <summary>
-    /// Swaps the hot cache to stale, clears the stale cache.
-    /// </summary>
-    internal static void Swap() => Cache.Swap();
-
     #region niceties
+
+    /// <inheritdoc cref="GetCachedMethod(Type, string, FlagTypes, Type[])"/>
+    /// <remarks>For a method with a signature that takes one param.</remarks>
+    /// <typeparam name="T">type signature.</typeparam>
     public static MethodInfo GetCachedMethod<T>(this Type type, string fieldName, FlagTypes flags)
         => type.GetCachedMethod(fieldName, flags, new[] { typeof(T) });
 
@@ -280,4 +255,14 @@ public static class ReflectionCache
     public static ConstructorInfo GetCachedConstructor<T1, T2, T3, T4>(this Type type, FlagTypes flags)
         => type.GetCachedConstructor(flags, new[] { typeof(T1), typeof(T2), typeof(T3), typeof(T4) });
     #endregion
+
+    /// <summary>
+    /// Clears the reflection cache.
+    /// </summary>
+    internal static void Clear() => Cache.Clear();
+
+    /// <summary>
+    /// Swaps the hot cache to stale, clears the stale cache.
+    /// </summary>
+    internal static void Swap() => Cache.Swap();
 }

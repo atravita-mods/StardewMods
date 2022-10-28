@@ -71,7 +71,7 @@ internal sealed class ModEntry : Mod
         helper.Events.GameLoop.SaveLoaded += this.OnSaveLoaded;
 
         helper.Events.GameLoop.DayStarted += this.OnDayLaunched;
-        helper.Events.Content.AssetRequested += this.OnAssetRequested;
+        helper.Events.Content.AssetRequested += static (_, e) => AssetManager.Apply(e);
         helper.Events.Content.AssetsInvalidated += this.OnAssetInvalidated;
     }
 
@@ -90,8 +90,6 @@ internal sealed class ModEntry : Mod
             this.itemPickers.Add(weight, picker);
         }
     }
-
-    private void OnAssetRequested(object? sender, AssetRequestedEventArgs e) => AssetManager.Apply(e);
 
     private void OnAssetInvalidated(object? sender, AssetsInvalidatedEventArgs e)
     {
@@ -196,6 +194,8 @@ internal sealed class ModEntry : Mod
         this.Monitor.Log("Did not find a valid item.");
     }
 
+    #region pickers
+
     private Item? GetUserItem(Random random)
     {
         ItemRecord? entry = this.playerItemsManager.GetValue(random);
@@ -221,8 +221,6 @@ internal sealed class ModEntry : Mod
         }
         return null;
     }
-
-    #region pickers
 
     private SObject? RandomSeasonalForage(Random random)
         => new(Utility.getRandomBasicSeasonalForageItem(Game1.currentSeason, random.Next()), 1);

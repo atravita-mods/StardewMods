@@ -146,20 +146,13 @@ internal sealed class ModEntry : Mod
         harmony.Snitch(this.Monitor, harmony.Id, transpilersOnly: true);
     }
 
-    /// <summary>
-    /// Raised every second.
-    /// </summary>
-    /// <param name="sender">Unknown, used by SMAPI.</param>
-    /// <param name="e">OneSecondUpdate params.</param>
+
+    /// <inheritdoc cref="IGameLoopEvents.OneSecondUpdateTicking"/>
     /// <remarks>Currently handles: grabbing new recently completed special orders.</remarks>
     private void OneSecondUpdateTicking(object? sender, OneSecondUpdateTickingEventArgs e)
         => RecentSOManager.GrabNewRecentlyCompletedOrders();
 
-    /// <summary>
-    /// Raised on game launch.
-    /// </summary>
-    /// <param name="sender">Unknown, used by SMAPI.</param>
-    /// <param name="e">Game Launched arguments.</param>
+    /// <inheritdoc cref="IGameLoopEvents.GameLaunched"/>
     /// <remarks>Used to bind APIs and register CP tokens.</remarks>
     private void OnGameLaunched(object? sender, GameLaunchedEventArgs e)
     {
@@ -234,11 +227,7 @@ internal sealed class ModEntry : Mod
         }
     }
 
-    /// <summary>
-    /// Raised right before the game is saved.
-    /// </summary>
-    /// <param name="sender">Unknown, used by SMAPI.</param>
-    /// <param name="e">Event arguments.</param>
+    /// <inheritdoc cref="IGameLoopEvents.Saving"/>
     /// <remarks>Used to handle day-end events.</remarks>
     private void Saving(object? sender, SavingEventArgs e)
     {
@@ -264,11 +253,7 @@ internal sealed class ModEntry : Mod
         RecentSOManager.Save();
     }
 
-    /// <summary>
-    /// Raised when save is loaded.
-    /// </summary>
-    /// <param name="sender">Unknown, used by SMAPI.</param>
-    /// <param name="e">Parameters.</param>
+    /// <inheritdoc cref="IGameLoopEvents.SaveLoaded"/>
     /// <remarks>Used to load in this mod's data models.</remarks>
     private void SaveLoaded(object? sender, SaveLoadedEventArgs e)
     {
@@ -454,13 +439,13 @@ internal sealed class ModEntry : Mod
         return true;
     }
 
-    /********
-     * REGION UNTIMED ORDERS.
-     ********/
+    #region untimed
 
+    /// <inheritdoc cref="IContentEvents.AssetRequested"/>
     private void OnAssetRequested(object? sender, AssetRequestedEventArgs e)
         => AssetManager.OnLoadAsset(e);
 
+    /// <inheritdoc cref="IGameLoopEvents.DayEnding"/>
     private void OnDayEnd(object? sender, DayEndingEventArgs e)
     {
         if (Context.IsMainPlayer && Game1.player.team.specialOrders.Count > 0)
@@ -481,4 +466,5 @@ internal sealed class ModEntry : Mod
             }
         }
     }
+    #endregion
 }

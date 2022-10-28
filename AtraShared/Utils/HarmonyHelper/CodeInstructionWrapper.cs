@@ -154,6 +154,15 @@ public sealed class CodeInstructionWrapper
         }
     }
 
+    // op_implicits
+    public static implicit operator CodeInstructionWrapper(CodeInstruction instr) => new(instr);
+
+    public static implicit operator CodeInstructionWrapper(OpCode code) => new(code);
+
+    public static implicit operator CodeInstructionWrapper((OpCode code, object? operand) instr) => new(instr.code, instr.operand);
+
+    public static implicit operator CodeInstructionWrapper(SpecialCodeInstructionCases specialcase) => new(specialcase);
+
     // the following two are just for ILHelper, so it can match certain early locals.
 
     /// <summary>

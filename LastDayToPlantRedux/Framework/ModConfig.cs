@@ -4,9 +4,34 @@ namespace LastDayToPlantRedux.Framework;
 
 internal sealed class ModConfig
 {
-    public CropOptions CropsToDisplay { get; set; } = CropOptions.Purchaseable;
+    private CropOptions cropsToDisplay = CropOptions.Purchaseable;
+    private FertilizerOptions fertilizersToDisplay = FertilizerOptions.Seen;
 
-    public FertilizerOptions FertilizersToDisplay { get; set; } = FertilizerOptions.Seen;
+    public CropOptions CropsToDisplay
+    {
+        get => this.cropsToDisplay;
+        set
+        {
+            if (value != this.cropsToDisplay)
+            {
+                CropAndFertilizerManager.RequestInvalidateCrops();
+            }
+            this.cropsToDisplay = value;
+        }
+    }
+
+    public FertilizerOptions FertilizersToDisplay
+    {
+        get => this.fertilizersToDisplay;
+        set
+        {
+            if (value != this.fertilizersToDisplay)
+            {
+                CropAndFertilizerManager.RequestInvalidateFertilizers();
+            }
+            this.fertilizersToDisplay = value;
+        }
+    }
 
     /// <summary>
     /// Gets or sets a list of crops (by name) that should always be included.

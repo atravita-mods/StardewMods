@@ -99,7 +99,7 @@ internal static class AssetManager
     {
         if (e.NameWithoutLocale.IsEquivalentTo(assetName))
         {
-            e.LoadFrom(EmptyContainers.GetEmptyDictionary<int, string>, AssetLoadPriority.Exclusive);
+            e.LoadFrom(EmptyContainers.GetEmptyDictionary<int, ObjectDefinition>, AssetLoadPriority.Exclusive);
         }
     }
 

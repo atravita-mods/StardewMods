@@ -95,11 +95,11 @@ internal sealed class ModEntry : Mod
             helper.FindNext(new CodeInstructionWrapper[]
             {
                 new(OpCodes.Call, typeof(Game1).GetCachedProperty(nameof(Game1.player), ReflectionCache.FlagTypes.StaticFlags).GetGetMethod()),
-                new(OpCodes.Callvirt),
-                new(SpecialCodeInstructionCases.LdLoc),
+                OpCodes.Callvirt,
+                SpecialCodeInstructionCases.LdLoc,
                 new(OpCodes.Callvirt, typeof(IList<Item>).GetCachedProperty("Item", ReflectionCache.FlagTypes.InstanceFlags).GetGetMethod()),
                 new(OpCodes.Isinst, typeof(MeleeWeapon)),
-                new(OpCodes.Callvirt),
+                OpCodes.Callvirt,
                 new(OpCodes.Ldc_I4_S, 47),
                 new(SpecialCodeInstructionCases.Wildcard, (inst) => inst.opcode == OpCodes.Beq || inst.opcode == OpCodes.Beq_S ),
             });

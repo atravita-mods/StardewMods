@@ -23,18 +23,56 @@ namespace MoreFertilizers.HarmonyPatches.EverlastingFertilizer;
 [HarmonyPatch(typeof(HoeDirt))]
 internal static class RemoveSeasonCheck
 {
+    private const string WinterStar = "spacechase0.TheftOfTheWinterStar";
+
     private static int TempusGlobeID => ModEntry.JsonAssetsAPI?.GetBigCraftableId("Tempus Globe") ?? -1;
 
+    /// <summary>
+    /// Whether or not this hoedirt has the everlasting fertilizer in it.
+    /// </summary>
+    /// <param name="dirt">Hoedirt.</param>
+    /// <returns>True if the fertilizer is the everlasting fertilizer.</returns>
     [MethodImpl(TKConstants.Hot)]
-    private static bool IsInEverlasting(HoeDirt dirt, Crop crop)
-        => ModEntry.EverlastingFertilizerID != -1 && dirt.fertilizer?.Value == ModEntry.EverlastingFertilizerID;
+    internal static bool IsInEverlasting(HoeDirt dirt)
+    => ModEntry.EverlastingFertilizerID != -1 && dirt.fertilizer?.Value == ModEntry.EverlastingFertilizerID;
+
+    /// <summary>
+    /// Applies patches when Theft of the Winter Star is not installed.
+    /// </summary>
+    /// <param name="harmony">My harmony instance.</param>
+    internal static void ApplyPatches(Harmony harmony)
+    {
+        harmony.Patch(
+            original: typeof(HoeDirt).GetCachedMethod(nameof(HoeDirt.plant), ReflectionCache.FlagTypes.InstanceFlags),
+            transpiler: new(typeof(RemoveSeasonCheck).GetCachedMethod(nameof(TranspilerSansWinterStar), ReflectionCache.FlagTypes.StaticFlags)));
+    }
+
+    /// <summary>
+    /// Applies patches when Theft of the Winter Star is installed.
+    /// </summary>
+    /// <param name="harmony">My harmony instance.</param>
+    internal static void ApplyPatchesForWinterStar(Harmony harmony)
+    {
+        try
+        {
+            harmony.Patch(
+                original: typeof(HoeDirt).GetCachedMethod(nameof(HoeDirt.plant), ReflectionCache.FlagTypes.InstanceFlags),
+                transpiler: new(typeof(RemoveSeasonCheck).GetCachedMethod(nameof(TranspilerWithWinterStar), ReflectionCache.FlagTypes.StaticFlags)));
+
+        }
+        catch (Exception ex)
+        {
+            ModEntry.ModMonitor.Log($"Mod failed while patching theft of the winter star. Integration may not work.\n\n{ex}", LogLevel.Error);
+        }
+    }
 
     // checks to see if the tile is covered by our fertilizer or is covered by a tempus globe.
     [MethodImpl(TKConstants.Hot)]
     private static bool IsInEverlastingWithTempusGlobe(Crop crop, HoeDirt dirt, int tileX, int tileY, GameLocation location)
     {
-        if (IsInEverlasting(dirt, crop))
+        if (IsInEverlasting(dirt))
         {
+            crop.seasonsToGrowIn.Set(new[] { "spring", "summer", "fall", "winter" });
             return true;
         }
 
@@ -60,9 +98,48 @@ internal static class RemoveSeasonCheck
         return false;
     }
 
-    [HarmonyPatch(nameof(HoeDirt.plant))]
+    // simpler version, if theft of the winter star isn't installed.
     [SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1116:Split parameters should start on line after declaration", Justification = "Reviewed.")]
-    private static IEnumerable<CodeInstruction>? Transpiler(IEnumerable<CodeInstruction> instructions, ILGenerator gen, MethodBase original)
+    private static IEnumerable<CodeInstruction>? TranspilerSansWinterStar(IEnumerable<CodeInstruction> instructions, ILGenerator gen, MethodBase original)
+    {
+        try
+        {
+            ILHelper helper = new(original, instructions, ModEntry.ModMonitor, gen);
+            helper.FindLast(new CodeInstructionWrapper[]
+            {
+                SpecialCodeInstructionCases.LdArg,
+                (OpCodes.Callvirt, typeof(Character).GetCachedProperty(nameof(Character.currentLocation), ReflectionCache.FlagTypes.InstanceFlags).GetGetMethod()),
+                (OpCodes.Callvirt, typeof(GameLocation).GetCachedProperty(nameof(GameLocation.IsGreenhouse), ReflectionCache.FlagTypes.InstanceFlags).GetGetMethod()),
+                OpCodes.Brtrue_S,
+            })
+            .Push()
+            .Advance(3)
+            .StoreBranchDest()
+            .AdvanceToStoredLabel()
+            .DefineAndAttachLabel(out var jumppoint)
+            .Pop()
+            .GetLabels(out var labels)
+            .Insert(new CodeInstruction[]
+            {
+                new(OpCodes.Ldarg_0),
+                new(OpCodes.Call, typeof(RemoveSeasonCheck).GetCachedMethod(nameof(IsInEverlasting), ReflectionCache.FlagTypes.StaticFlags)),
+                new(OpCodes.Brtrue_S, jumppoint),
+            }, withLabels: labels);
+
+            helper.Print();
+            return helper.Render();
+        }
+        catch (Exception ex)
+        {
+            ModEntry.ModMonitor.Log($"Mod crashed while transpiling Hoedirt.Draw:\n\n{ex}", LogLevel.Error);
+            original.Snitch(ModEntry.ModMonitor);
+        }
+        return null;
+    }
+
+#warning - todo: the version where Theft of the Winter Star is installed. (Also remove casey's prefix).
+    [SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1116:Split parameters should start on line after declaration", Justification = "Reviewed.")]
+    private static IEnumerable<CodeInstruction>? TranspilerWithWinterStar(IEnumerable<CodeInstruction> instructions, ILGenerator gen, MethodBase original)
     {
         try
         {
@@ -80,7 +157,7 @@ internal static class RemoveSeasonCheck
 
             var crop = helper.CurrentInstruction.ToLdLoc();
 
-            helper.FindLast(new CodeInstructionWrapper[]
+            helper.FindLast(instructions: new CodeInstructionWrapper[]
             {
                 SpecialCodeInstructionCases.LdArg,
                 (OpCodes.Callvirt, typeof(Character).GetCachedProperty(nameof(Character.currentLocation), ReflectionCache.FlagTypes.InstanceFlags).GetGetMethod()),
@@ -93,18 +170,17 @@ internal static class RemoveSeasonCheck
             .AdvanceToStoredLabel()
             .DefineAndAttachLabel(out var jumppoint)
             .Pop()
-            .GetLabels(out var labels);
-
-            // if Theft Of the Winter Star is not installed.
-            helper.Insert(new CodeInstruction[]
+            .GetLabels(out var labels)
+            .Insert(new CodeInstruction[]
             {
-                new(OpCodes.Ldarg_0),
                 crop,
-                new(OpCodes.Call, typeof(RemoveSeasonCheck).GetCachedMethod(nameof(IsInEverlasting), ReflectionCache.FlagTypes.StaticFlags)),
+                new(OpCodes.Ldarg_0),
+                new(OpCodes.Ldarg_2),
+                new(OpCodes.Ldarg_3),
+                new (OpCodes.Ldarga_S, 6),
+                new(OpCodes.Call, typeof(RemoveSeasonCheck).GetCachedMethod(nameof(IsInEverlastingWithTempusGlobe), ReflectionCache.FlagTypes.StaticFlags)),
                 new(OpCodes.Brtrue_S, jumppoint),
             }, withLabels: labels);
-
-# warning - todo: the version where Theft of the Winter Star is installed. (Also remove casey's prefix).
 
             helper.Print();
             return helper.Render();
@@ -116,5 +192,4 @@ internal static class RemoveSeasonCheck
         }
         return null;
     }
-#pragma warning restore SA1116 // Split parameters should start on line after declaration
 }

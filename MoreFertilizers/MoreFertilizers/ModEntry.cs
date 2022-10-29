@@ -17,6 +17,7 @@ using MoreFertilizers.Framework;
 using MoreFertilizers.HarmonyPatches;
 using MoreFertilizers.HarmonyPatches.Acquisition;
 using MoreFertilizers.HarmonyPatches.Compat;
+using MoreFertilizers.HarmonyPatches.EverlastingFertilizer;
 using MoreFertilizers.HarmonyPatches.FishFood;
 using MoreFertilizers.HarmonyPatches.FruitTreePatches;
 using StardewModdingAPI.Events;
@@ -436,8 +437,6 @@ internal sealed class ModEntry : Mod
     /// </summary>
     internal static IModContentHelper ModContentHelper { get; private set; } = null!;
 
-    internal static IModRegistry Registry { get; private set; } = null!;
-
     /// <summary>
     /// Gets the location of this mod.
     /// </summary>
@@ -466,7 +465,6 @@ internal sealed class ModEntry : Mod
 
         MultiplayerHelper = helper.Multiplayer;
         ModContentHelper = helper.ModContent;
-        Registry = helper.ModRegistry;
         ModMonitor = this.Monitor;
         DIRPATH = helper.DirectoryPath;
         UNIQUEID = this.ModManifest.UniqueID;
@@ -693,6 +691,17 @@ internal sealed class ModEntry : Mod
                 this.Monitor.Log("Found either prismatic tools or radioactive tools. Applying compat patches", LogLevel.Info);
                 ExtendedToolsMods.ApplyPatches(harmony);
                 AddCrowsForExtendedToolsTranspiler.ApplyPatches(harmony);
+            }
+
+            if (this.Helper.ModRegistry.Get("spacechase0.TheftOfTheWinterStar") is IModInfo winterStar
+                && winterStar.Manifest.Version.IsNewerThan("1.2.3"))
+            {
+                this.Monitor.Log("Found Theft of the Winter Star, applying compat patches", LogLevel.Info);
+                RemoveSeasonCheck.ApplyPatchesForWinterStar(harmony);
+            }
+            else
+            {
+                RemoveSeasonCheck.ApplyPatches(harmony);
             }
         }
         catch (Exception ex)

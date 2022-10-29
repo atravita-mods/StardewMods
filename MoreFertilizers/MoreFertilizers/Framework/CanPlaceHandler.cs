@@ -211,8 +211,9 @@ public sealed class CanPlaceHandler : IMoreFertilizersAPI
             loc.modData?.SetInt(FishFood, obj.ParentSheetIndex == ModEntry.DeluxeFishFoodID ? 3 : 1);
             if (loc.IsUnsavedLocation())
             {
-                FishFoodHandler.UnsavedLocHandler.FishFoodLocationMap[Game1.currentLocation.NameOrUniqueName] = obj.ParentSheetIndex == ModEntry.DeluxeFishFoodID ? 3 : 1;
-                FishFoodHandler.BroadcastHandler(ModEntry.MultiplayerHelper);
+                int days = obj.ParentSheetIndex == ModEntry.DeluxeFishFoodID ? 3 : 1;
+                FishFoodHandler.UnsavedLocHandler.FishFoodLocationMap[Game1.currentLocation.NameOrUniqueName] = days;
+                FishFoodHandler.BroadcastSingle(ModEntry.MultiplayerHelper, Game1.currentLocation.NameOrUniqueName, days);
             }
             return true;
         }

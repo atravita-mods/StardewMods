@@ -36,7 +36,7 @@ internal static class QiQuestTranspiler
                 new(OpCodes.Or),
             });
 
-            //helper.Print();
+            // helper.Print();
             return helper.Render();
         }
         catch (Exception ex)

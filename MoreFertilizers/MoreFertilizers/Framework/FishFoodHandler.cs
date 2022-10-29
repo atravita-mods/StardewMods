@@ -5,12 +5,18 @@ using StardewValley.Locations;
 
 namespace MoreFertilizers.Framework;
 
+public record LocationRecord(string locationName, int days);
+
 /// <summary>
 /// Handles fish food for multiplayer.
 /// </summary>
 internal static class FishFoodHandler
 {
     private const string FISHFOODSAVESTRING = "atravita.MoreFertilizers.FishFood";
+
+    private const string PACKAGENAME = "DATAPACKAGE";
+
+    private const string LOCATIONBROADCAST = "LOCATIONPACKAGE";
 
     /// <summary>
     /// Gets or sets an instance of the location map.
@@ -43,9 +49,21 @@ internal static class FishFoodHandler
         {
             multiplayer.SendMessage(
                     UnsavedLocHandler,
-                    "DATAPACKAGE",
+                    PACKAGENAME,
                     new[] { ModEntry.UNIQUEID },
                     playerIDs ?? multiplayer.GetConnectedPlayers().Select((player) => player.PlayerID).ToArray());
+        }
+    }
+
+    internal static void BroadcastSingle(IMultiplayerHelper multiplayer, string locName, int days, long[]? playerIDs = null)
+    {
+        if (Context.IsMultiplayer)
+        {
+            multiplayer.SendMessage(
+                new LocationRecord(locName, days),
+                LOCATIONBROADCAST,
+                new[] { ModEntry.UNIQUEID },
+                playerIDs ?? multiplayer.GetConnectedPlayers().Select((player) => player.PlayerID).ToArray());
         }
     }
 
@@ -55,9 +73,14 @@ internal static class FishFoodHandler
     /// <param name="e">Mod message recieved event args.</param>
     internal static void RecieveHandler(ModMessageReceivedEventArgs e)
     {
-        if (e.Type is "DATAPACKAGE")
+        if (e.Type is PACKAGENAME)
         {
             UnsavedLocHandler = e.ReadAs<UnsavedLocationsHandler>();
+        }
+        else if (e.Type is LOCATIONBROADCAST)
+        {
+            LocationRecord? data = e.ReadAs<LocationRecord>();
+            UnsavedLocHandler.FishFoodLocationMap[data.locationName] = data.days;
         }
     }
 
@@ -74,7 +97,7 @@ internal static class FishFoodHandler
     /// <summary>
     /// Re-adds location data for places that get wiped, like the MineShaft and VolcanoDungeon.
     /// </summary>
-    /// <param name="e">OnWapred event args.</param>
+    /// <param name="e">OnWarped event args.</param>
     internal static void HandleWarp(WarpedEventArgs e)
     {
         if (e.IsLocalPlayer && e.NewLocation.IsUnsavedLocation()

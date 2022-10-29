@@ -15,7 +15,7 @@ using StardewValley.TerrainFeatures;
 namespace MoreFertilizers.HarmonyPatches.OrganicFertilizer;
 
 /// <summary>
-/// Handles organic seeds for SObject.placementAction.
+/// Handles organic seeds and also the everlasting fertilizers.
 /// </summary>
 [HarmonyPatch(typeof(SObject))]
 internal static class SObjectPlacementTranspiler
@@ -70,7 +70,7 @@ internal static class SObjectPlacementTranspiler
         }
         catch (Exception ex)
         {
-            ModEntry.ModMonitor.Log($"Mod crashed while transpiling SObject.placementAction:\n\n{ex}", LogLevel.Error);
+            ModEntry.ModMonitor.Log($"Mod crashed while transpiling {original.FullDescription()}:\n\n{ex}", LogLevel.Error);
         }
         return null;
     }

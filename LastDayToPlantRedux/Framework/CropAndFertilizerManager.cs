@@ -61,7 +61,7 @@ internal static class CropAndFertilizerManager
             ReadOnlySpan<char> seasons = vals.GetNthChunk('/', 1).Trim();
 
             StardewSeasons seasonEnum = StardewSeasons.None;
-            foreach (var season in seasons.StreamSplit(null, StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries))
+            foreach (SpanSplitEntry season in seasons.StreamSplit(null, StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries))
             {
                 if (StardewSeasonsExtensions.TryParse(season, ignoreCase: true, out StardewSeasons s))
                 {
@@ -99,23 +99,22 @@ breakcontinue:
 
         Dictionary<int, string> ret = new();
 
-        foreach (var (index, vals) in Game1Wrappers.ObjectInfo)
+        foreach ((int index, string vals) in Game1Wrappers.ObjectInfo)
         {
-            var catName = vals.GetNthChunk('/', SObject.objectInfoTypeIndex);
-            var spaceIndx = catName.GetLastIndexOfWhiteSpace();
+            ReadOnlySpan<char> catName = vals.GetNthChunk('/', SObject.objectInfoTypeIndex);
+            int spaceIndx = catName.GetLastIndexOfWhiteSpace();
             if (spaceIndx < 0)
             {
                 continue;
             }
 
-            int category;
-            if (!int.TryParse(catName.Slice(spaceIndx), out category) ||
+            if (!int.TryParse(catName[spaceIndx..], out int category) ||
                 (category is not SObject.fertilizerCategory))
             {
                 continue;
             }
 
-            var name = vals.GetNthChunk('/', SObject.objectInfoDisplayNameIndex).Trim().ToString();
+            string? name = vals.GetNthChunk('/', SObject.objectInfoDisplayNameIndex).Trim().ToString();
 
             ret[index] = name;
         }

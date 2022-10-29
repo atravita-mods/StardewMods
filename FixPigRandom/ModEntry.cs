@@ -50,10 +50,10 @@ internal sealed class ModEntry : Mod
     {
         try
         {
-            ILHelper helper = new(original, instructions, ModEntry.modMonitor, gen);
+            ILHelper helper = new(original, instructions, modMonitor, gen);
 
             helper.FindNext(new CodeInstructionWrapper[]
-            {
+            { // find the creation of the random and replace it with our own.
                 OpCodes.Ldarg_0,
                 (OpCodes.Ldfld, typeof(FarmAnimal).GetCachedField(nameof(FarmAnimal.myID), ReflectionCache.FlagTypes.InstanceFlags)),
                 OpCodes.Call, // this is an op_Impl
@@ -75,7 +75,7 @@ internal sealed class ModEntry : Mod
         catch (Exception ex)
         {
             modMonitor.Log($"Ran into error transpiling {original.FullDescription()}\n\n{ex}", LogLevel.Error);
-            original.Snitch(ModEntry.modMonitor);
+            original.Snitch(modMonitor);
         }
         return null;
     }

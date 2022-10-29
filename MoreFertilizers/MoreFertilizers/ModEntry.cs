@@ -27,12 +27,12 @@ using AtraUtils = AtraShared.Utils.Utils;
 namespace MoreFertilizers;
 
 /// <inheritdoc />
+[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1124:Do not use regions", Justification = "Reviewed.")]
 internal sealed class ModEntry : Mod
 {
     private const string SavedIDKey = "MFSavedObjectID";
 
     private static IJsonAssetsAPI? jsonAssets;
-
     private static MoreFertilizerIDs? storedIDs;
 
     private MigrationManager? migrator;
@@ -40,8 +40,11 @@ internal sealed class ModEntry : Mod
     private Dictionary<int, int>? idmap;
     private ISolidFoundationsAPI? solidFoundationsAPI;
 
-#pragma warning disable SA1204 // Static elements should appear before instance elements. Keep backing fields near properties.
+    #region IDs
+
 #pragma warning disable SA1201 // Elements should appear in the correct order
+    internal static IJsonAssetsAPI? JsonAssetsAPI => jsonAssets;
+
     private static int prismaticFertilizerID = -1;
 
     /// <summary>
@@ -399,7 +402,8 @@ internal sealed class ModEntry : Mod
         }
     }
 #pragma warning restore SA1201 // Elements should appear in the correct order
-#pragma warning restore SA1204 // Static elements should appear before instance elements
+
+    #endregion
 
     /// <summary>
     /// Gets a list of fertilizer IDs for fertilizers that are meant to be planted into HoeDirt.
@@ -432,6 +436,8 @@ internal sealed class ModEntry : Mod
     /// </summary>
     internal static IModContentHelper ModContentHelper { get; private set; } = null!;
 
+    internal static IModRegistry Registry { get; private set; } = null!;
+
     /// <summary>
     /// Gets the location of this mod.
     /// </summary>
@@ -457,8 +463,10 @@ internal sealed class ModEntry : Mod
     {
         I18n.Init(helper.Translation);
         AssetEditor.Initialize(helper.GameContent);
+
         MultiplayerHelper = helper.Multiplayer;
         ModContentHelper = helper.ModContent;
+        Registry = helper.ModRegistry;
         ModMonitor = this.Monitor;
         DIRPATH = helper.DirectoryPath;
         UNIQUEID = this.ModManifest.UniqueID;
@@ -475,6 +483,7 @@ internal sealed class ModEntry : Mod
     [UsedImplicitly]
     public override object GetApi() => new CanPlaceHandler();
 
+    /// <inheritdoc cref="IContentEvents.AssetRequested"/>
     [EventPriority(EventPriority.Low)]
     private void OnAssetRequested(object? sender, AssetRequestedEventArgs e)
         => AssetEditor.Edit(e);
@@ -681,8 +690,8 @@ internal sealed class ModEntry : Mod
             if (this.Helper.ModRegistry.IsLoaded("stokastic.PrismaticTools") ||
                 this.Helper.ModRegistry.IsLoaded("kakashigr.RadioactiveTools"))
             {
-                ExtendedToolsMods.ApplyPatches(harmony);
                 this.Monitor.Log("Found either prismatic tools or radioactive tools. Applying compat patches", LogLevel.Info);
+                ExtendedToolsMods.ApplyPatches(harmony);
                 AddCrowsForExtendedToolsTranspiler.ApplyPatches(harmony);
             }
         }
@@ -1213,6 +1222,7 @@ internal sealed class ModEntry : Mod
         FishFoodHandler.HandleWarp(e);
     }
 
+    /// <inheritdoc cref="IMultiplayerEvents.PeerConnected"/>
     private void Multiplayer_PeerConnected(object? sender, PeerConnectedEventArgs e)
     {
         if (e.Peer.ScreenID == 0 && Context.IsWorldReady && Context.IsMainPlayer)
@@ -1221,6 +1231,7 @@ internal sealed class ModEntry : Mod
         }
     }
 
+    /// <inheritdoc cref="IMultiplayerEvents.ModMessageReceived"/>
     private void Multiplayer_ModMessageReceived(object? sender, ModMessageReceivedEventArgs e)
     {
         if (e.FromModID != this.ModManifest.UniqueID)

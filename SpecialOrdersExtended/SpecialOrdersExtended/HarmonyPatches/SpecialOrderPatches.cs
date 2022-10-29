@@ -42,7 +42,8 @@ internal static class SpecialOrderPatches
 
     // Surpress the middle-of-night Special Order updates until
     // the board is open. There's no point.
-    private static bool PrefixUpdate() => ModEntry.Config.SurpressUnnecessaryBoardUpdates && SpecialOrder.IsSpecialOrdersBoardUnlocked();
+    private static bool PrefixUpdate() => Game1.player.team.availableSpecialOrders.Count != 0
+        || (ModEntry.Config.SurpressUnnecessaryBoardUpdates && SpecialOrder.IsSpecialOrdersBoardUnlocked());
 
     [HarmonyPrefix]
     [HarmonyPriority(Priority.HigherThanNormal)]

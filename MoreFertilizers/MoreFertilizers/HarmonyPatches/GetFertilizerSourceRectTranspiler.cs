@@ -6,6 +6,7 @@ using AtraBase.Toolkit;
 
 using AtraCore.Framework.ReflectionManager;
 
+using AtraShared.Utils.Extensions;
 using AtraShared.Utils.HarmonyHelper;
 
 using HarmonyLib;
@@ -101,6 +102,7 @@ internal static class GetFertilizerSourceRectTranspiler
         catch (Exception ex)
         {
             ModEntry.ModMonitor.Log($"Mod crashed while transpiling Hoedirt.Draw:\n\n{ex}", LogLevel.Error);
+            original.Snitch(ModEntry.ModMonitor);
         }
         return null;
     }

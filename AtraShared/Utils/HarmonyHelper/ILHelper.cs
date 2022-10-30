@@ -168,6 +168,7 @@ public sealed class ILHelper
     /// Prints out the current codes to console.
     /// Only works in DEBUG.
     /// </summary>
+    [DebuggerHidden]
     [Conditional("DEBUG")]
     public void Print()
     {
@@ -194,7 +195,8 @@ public sealed class ILHelper
     /// </summary>
     /// <param name="steps">Number of steps.</param>
     /// <returns>this.</returns>
-    /// <exception cref="IndexOutOfRangeException">Pointer tried to move to an invalid location.</exception>
+    /// <exception cref="ArgumentOutOfRangeException">Pointer tried to move to an invalid location.</exception>
+    [MethodImpl(MethodImplOptions.AggressiveOptimization)]
     public ILHelper Advance(int steps)
     {
         this.Pointer += steps;
@@ -210,7 +212,8 @@ public sealed class ILHelper
     /// <param name="intendedendindex">Index to end search (exclusive). Null for "end of instruction list".</param>
     /// <returns>this.</returns>
     /// <exception cref="ArgumentException">Startindex or Endindex are invalid.</exception>
-    /// <exception cref="IndexOutOfRangeException">No match found.</exception>
+    /// <exception cref="InvalidOperationException">No match found.</exception>
+    [MethodImpl(MethodImplOptions.AggressiveOptimization)]
     public ILHelper FindFirst(CodeInstructionWrapper[] instructions, int startindex = 0, int? intendedendindex = null)
     {
         int endindex = intendedendindex ?? this.Codes.Count;
@@ -243,7 +246,7 @@ ContinueSearchForward:
     /// <param name="instructions">Instructions to search for.</param>
     /// <returns>this.</returns>
     /// <exception cref="ArgumentException">Fewer codes remain than the length of the instructions to search for.</exception>
-    /// <exception cref="IndexOutOfRangeException">No match found.</exception>
+    /// <exception cref="InvalidOperationException">No match found.</exception>
     public ILHelper FindNext(CodeInstructionWrapper[] instructions)
         => this.FindFirst(instructions, this.Pointer + 1, this.Codes.Count);
 
@@ -255,7 +258,8 @@ ContinueSearchForward:
     /// <param name="intendedendindex">Index to end search (exclusive). Leave null to mean "last code".</param>
     /// <returns>this.</returns>
     /// <exception cref="ArgumentException">Startindex or Endindex are invalid.</exception>
-    /// <exception cref="IndexOutOfRangeException">No match found.</exception>
+    /// <exception cref="InvalidOperationException">No match found.</exception>
+    [MethodImpl(MethodImplOptions.AggressiveOptimization)]
     public ILHelper FindLast(CodeInstructionWrapper[] instructions, int startindex = 0, int? intendedendindex = null)
     {
         int endindex = intendedendindex ?? this.Codes.Count;
@@ -287,7 +291,7 @@ ContinueSearchBackwards:
     /// <param name="instructions">Instructions to search for.</param>
     /// <returns>this.</returns>
     /// <exception cref="ArgumentException">Fewer codes remain than the length of the instructions to search for.</exception>
-    /// <exception cref="IndexOutOfRangeException">No match found.</exception>
+    /// <exception cref="InvalidOperationException">No match found.</exception>
     public ILHelper FindPrev(CodeInstructionWrapper[] instructions)
         => this.FindLast(instructions, 0, this.Pointer);
 
@@ -562,7 +566,7 @@ ContinueSearchBackwards:
         }
         else if (operand is Label[] newlabels)
         {
-            foreach (var newSwitchLabel in newlabels)
+            foreach (Label newSwitchLabel in newlabels)
             {
                 this.importantLabels[newSwitchLabel]++;
             }
@@ -653,7 +657,7 @@ ContinueSearchBackwards:
     /// <param name="intendedendindex">Index to end search (exclusive). Leave null to mean "last code".</param>
     /// <returns>this.</returns>
     /// <exception cref="ArgumentException">Startindex or Endindex are invalid.</exception>
-    /// <exception cref="IndexOutOfRangeException">No match found.</exception>
+    /// <exception cref="InvalidOperationException">No match found.</exception>
     public ILHelper FindFirstLabel(Label label, int startindex = 0, int? intendedendindex = null)
     {
         int endindex = intendedendindex ?? this.Codes.Count;

@@ -25,4 +25,9 @@ internal sealed class ModConfig
     /// you've seen all of them.
     /// </summary>
     public bool AvoidRepeatingQiOrders { get; set; } = true;
+
+    /// <summary>
+    /// Gets or sets a value indicating whether or not the tag cache should be used.
+    /// </summary>
+    public bool UseTagCache { get; set; } = true;
 }

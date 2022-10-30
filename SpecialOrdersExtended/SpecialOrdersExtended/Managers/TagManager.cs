@@ -1,4 +1,6 @@
-﻿using AtraCore.Framework.Caches;
+﻿using AtraBase.Toolkit.Extensions;
+
+using AtraCore.Framework.Caches;
 
 using AtraShared.Utils.Extensions;
 using HarmonyLib;
@@ -12,18 +14,46 @@ namespace SpecialOrdersExtended.Managers;
 [HarmonyPatch(typeof(SpecialOrder))]
 internal static class TagManager
 {
+    #region random
+
     private static Random? random;
 
     /// <summary>
     /// Gets a seeded random that changes once per in-game week.
     /// </summary>
     internal static Random Random
-         => random ??= new Random(((int)Game1.uniqueIDForThisGame * 26) + (int)(Game1.stats.DaysPlayed / 7 * 36));
+    {
+        get
+        {
+            if (random is null)
+            {
+                random = new Random(((int)Game1.uniqueIDForThisGame * 26) + (int)(Game1.stats.DaysPlayed / 7 * 36));
+                random.PreWarm();
+            }
+            return random;
+}
+    }
 
     /// <summary>
     /// Delete's the random so it can be reset later.
     /// </summary>
     internal static void ResetRandom() => random = null;
+
+    #endregion
+
+    #region cache
+
+    private static int lastTick = -1;
+
+    private readonly static Dictionary<string, bool> cache = new();
+
+    internal static void ClearCache()
+    {
+        lastTick = -1;
+        cache.Clear();
+    }
+
+    #endregion
 
     /// <summary>
     /// Prefixes CheckTag to handle special mod tags.
@@ -35,8 +65,25 @@ internal static class TagManager
     [HarmonyPatch("CheckTag")]
     [HarmonyPriority(Priority.High)]
     [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Naming convention for Harmony")]
-    internal static bool PrefixCheckTag(ref bool __result, string __0)
+    private static bool PrefixCheckTag(ref bool __result, string __0)
     {
+        {
+            if (ModEntry.Config.UseTagCache && cache.TryGetValue(__0, out bool result))
+            {
+                if (Game1.ticks != lastTick)
+                {
+                    cache.Clear();
+                    lastTick = Game1.ticks;
+                }
+                else
+                {
+                    ModEntry.ModMonitor.DebugOnlyLog($"Hit cache: {__0}, {result}", LogLevel.Info);
+                    __result = result;
+                    return false;
+                }
+            }
+        }
+
         ModEntry.ModMonitor.DebugOnlyLog($"Checking tag {__0}", LogLevel.Trace);
         try
         {
@@ -343,6 +390,24 @@ internal static class TagManager
             ModEntry.ModMonitor.Log($"Failed while checking tag {__0}\n{ex}", LogLevel.Error);
         }
         return true; // continue to base code.
+    }
+
+    [HarmonyPostfix]
+    [HarmonyPriority(Priority.Last - 200)]
+    [HarmonyPatch("CheckTag")]
+    [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Naming convention for Harmony")]
+    private static void WatchTag(bool __result, string __0)
+    {
+        if (ModEntry.Config.UseTagCache)
+        {
+            if (Game1.ticks != lastTick)
+            {
+                cache.Clear();
+                lastTick = Game1.ticks;
+            }
+
+            cache[__0] = __result;
+        }
     }
 
     /// <summary>

@@ -233,6 +233,9 @@ internal sealed class ModEntry : Mod
     {
         this.Monitor.DebugOnlyLog("Event Saving raised");
 
+        TagManager.ResetRandom();
+        TagManager.ClearCache();
+
         if (!this.hasModsThatHandleBoard && !SpecialOrder.IsSpecialOrdersBoardUnlocked())
         {
             this.Monitor.Log($"Board is not open, skipping saving");
@@ -246,7 +249,6 @@ internal sealed class ModEntry : Mod
             return;
         }
 
-        TagManager.ResetRandom();
         StatsManager.ClearProperties(); // clear property cache, repopulate at next use
         RecentSOManager.GrabNewRecentlyCompletedOrders();
         RecentSOManager.DayUpdate(Game1.stats.daysPlayed);

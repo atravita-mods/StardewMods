@@ -55,7 +55,7 @@ internal static class CropInPotTranspiler
                 new (OpCodes.Call, typeof(CropInGroundTranspiler).GetCachedMethod(nameof(GetPrismaticColor), ReflectionCache.FlagTypes.StaticFlags)),
             });
 
-            helper.Print();
+            // helper.Print();
             return helper.Render();
         }
         catch (Exception ex)

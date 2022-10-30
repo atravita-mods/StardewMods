@@ -37,7 +37,7 @@ internal static class AdjustSlimeChances
 
             helper.FindNext(new CodeInstructionWrapper[]
             { // (monster as GreenSlime).makePrismatic(),
-                new(SpecialCodeInstructionCases.LdLoc),
+                SpecialCodeInstructionCases.LdLoc,
                 new(OpCodes.Isinst, typeof(GreenSlime)),
                 new(OpCodes.Callvirt, typeof(GreenSlime).GetCachedMethod(nameof(GreenSlime.makePrismatic), ReflectionCache.FlagTypes.InstanceFlags)),
             })

@@ -21,6 +21,9 @@ Changelog
 * Fix duration override.
 * Fix issue where unicode in the save name prevents saving of custom data.
 
+* Qi orders now have a setting where you can choose to avoid duplicates until every quest has been completed.
+* Tag checking now has a little cache.
+
 #### Version 1.1.0
 
 * Moves to using AtraCore.

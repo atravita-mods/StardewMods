@@ -116,9 +116,9 @@ internal static class RemoveSeasonCheck
             .Advance(3)
             .StoreBranchDest()
             .AdvanceToStoredLabel()
-            .DefineAndAttachLabel(out var jumppoint)
+            .DefineAndAttachLabel(out Label jumppoint)
             .Pop()
-            .GetLabels(out var labels)
+            .GetLabels(out IList<Label>? labels)
             .Insert(new CodeInstruction[]
             {
                 new(OpCodes.Ldarg_0),
@@ -126,7 +126,7 @@ internal static class RemoveSeasonCheck
                 new(OpCodes.Brtrue_S, jumppoint),
             }, withLabels: labels);
 
-            helper.Print();
+            // helper.Print();
             return helper.Render();
         }
         catch (Exception ex)

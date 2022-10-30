@@ -22,7 +22,7 @@ public sealed class GMCMHelper : IntegrationHelper
 {
 #region constants
 
-    private const string MINVERSION = "1.8.0";
+    private const string MINVERSION = "1.9.0";
     private const string APIID = "spacechase0.GenericModConfigMenu";
 
 #pragma warning disable SA1310 // Field names should not contain underscore. Reviewed

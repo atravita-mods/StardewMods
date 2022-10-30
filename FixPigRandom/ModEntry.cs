@@ -6,6 +6,7 @@ using AtraBase.Toolkit;
 
 using AtraCore.Framework.ReflectionManager;
 
+using AtraShared.ConstantsAndEnums;
 using AtraShared.Utils;
 using AtraShared.Utils.Extensions;
 using AtraShared.Utils.HarmonyHelper;
@@ -27,11 +28,22 @@ internal sealed class ModEntry : Mod
         modMonitor = this.Monitor;
         helper.Events.GameLoop.DayEnding += static (_, _) => Cache.Clear();
 
-        Harmony harmony = new(this.ModManifest.UniqueID);
+        this.ApplyPatches(new(this.ModManifest.UniqueID));
+    }
 
-        harmony.Patch(
-            original: typeof(FarmAnimal).GetCachedMethod("findTruffle", ReflectionCache.FlagTypes.InstanceFlags),
-            transpiler: new(typeof(ModEntry).GetCachedMethod(nameof(Transpiler), ReflectionCache.FlagTypes.StaticFlags)));
+    private void ApplyPatches(Harmony harmony)
+    {
+        try
+        {
+            harmony.Patch(
+                original: typeof(FarmAnimal).GetCachedMethod("findTruffle", ReflectionCache.FlagTypes.InstanceFlags),
+                transpiler: new(typeof(ModEntry).GetCachedMethod(nameof(Transpiler), ReflectionCache.FlagTypes.StaticFlags)));
+        }
+        catch (Exception ex)
+        {
+            modMonitor.Log(string.Format(ErrorMessageConsts.HARMONYCRASH, ex), LogLevel.Error);
+        }
+        harmony.Snitch(this.Monitor, harmony.Id, transpilersOnly: true);
     }
 
     [MethodImpl(TKConstants.Hot)]

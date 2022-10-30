@@ -80,11 +80,11 @@ internal static class CraneGameTranspiler
             .FindPrev(new CodeInstructionWrapper[]
             {
                 new(OpCodes.Newobj, typeof(List<Item>).GetCachedConstructor(ReflectionCache.FlagTypes.InstanceFlags)),
-                new(SpecialCodeInstructionCases.StLoc),
+                SpecialCodeInstructionCases.StLoc,
             })
             .Advance(1);
 
-            var ldloc = helper.CurrentInstruction.ToLdLoc();
+            CodeInstruction? ldloc = helper.CurrentInstruction.ToLdLoc();
             helper.Advance(1)
             .Insert(new CodeInstruction[]
             {
@@ -94,11 +94,11 @@ internal static class CraneGameTranspiler
             .FindNext(new CodeInstructionWrapper[]
             {
                 new(OpCodes.Newobj, typeof(List<Item>).GetCachedConstructor(ReflectionCache.FlagTypes.InstanceFlags)),
-                new(SpecialCodeInstructionCases.StLoc),
+                SpecialCodeInstructionCases.StLoc,
             })
             .Advance(1);
 
-            var ldloc2 = helper.CurrentInstruction.ToLdLoc();
+            CodeInstruction? ldloc2 = helper.CurrentInstruction.ToLdLoc();
             helper.Advance(1)
             .Insert(new CodeInstruction[]
             {
@@ -112,7 +112,7 @@ internal static class CraneGameTranspiler
         catch (Exception ex)
         {
             ModEntry.ModMonitor.Log($"Mod crashed while transpiling {original.FullDescription()}:\n\n{ex}", LogLevel.Error);
-            original?.Snitch(ModEntry.ModMonitor);
+            original.Snitch(ModEntry.ModMonitor);
         }
         return null;
     }

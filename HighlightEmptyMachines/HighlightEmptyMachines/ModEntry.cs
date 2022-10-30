@@ -205,15 +205,14 @@ internal sealed class ModEntry : Mod
         if (this.Helper.ModRegistry.IsLoaded("Digus.ProducerFrameworkMod"))
         {
 #if DEBUG
-            Stopwatch sw = new();
-            sw.Start();
+            Stopwatch sw = Stopwatch.StartNew();
 #endif
 
             PFMMachineHandler.ProcessPFMRecipes();
 
-            foreach (int machineID in PFMMachineHandler.PFMMachines)
+            // Prepopulate the machine list.
+            foreach (int machineID in PFMMachineHandler.ConditionalPFMMachines.Concat(PFMMachineHandler.UnconditionalPFMMachines))
             {
-                // Prepopulate the machine list.
                 _ = Config.ProducerFrameworkModMachines.TryAdd(machineID.GetBigCraftableName(), true);
             }
 
@@ -222,9 +221,8 @@ internal sealed class ModEntry : Mod
                 this.gmcmHelper.AddSectionTitle(I18n.PFM_Section)
                     .AddParagraph(I18n.PFM_Description);
 
-                foreach (int machineID in PFMMachineHandler.PFMMachines)
+                foreach (int machineID in PFMMachineHandler.ConditionalPFMMachines.Concat(PFMMachineHandler.UnconditionalPFMMachines))
                 {
-                    // Add an option for it.
                     this.gmcmHelper.AddBoolOption(
                         name: () => machineID.GetBigCraftableTranslatedName(),
                         getValue: () => !Config.ProducerFrameworkModMachines.TryGetValue(machineID.GetBigCraftableName(), out bool val) || val,

@@ -25,9 +25,14 @@ internal static class PFMMachineHandler
     internal static Dictionary<int, MachineStatus> ValidMachines => ValidMachinesPerScreen.Value;
 
     /// <summary>
-    /// Gets a list of PFM machines.
+    /// Gets a list of conditional PFM machines.
     /// </summary>
-    internal static IEnumerable<int> PFMMachines => Recipes.Keys;
+    internal static IEnumerable<int> ConditionalPFMMachines => Recipes.Keys;
+
+    /// <summary>
+    /// Gets a list of unconditional PFM machines.
+    /// </summary>
+    internal static IEnumerable<int> UnconditionalPFMMachines => HasUnconditionalRecipe;
 
     private static List<Dictionary<string, object>>? MachineRecipes => pfmAPI?.GetRecipes();
 
@@ -110,8 +115,9 @@ internal static class PFMMachineHandler
             {
                 ModEntry.ModMonitor.DebugOnlyLog($"{intID} is unconditional.");
                 HasUnconditionalRecipe.Add(intID);
+                Recipes.Remove(intID);
 
-                // we intentionally index one recipe.
+                continue;
             }
 
             PFMMachineData recipe = new(
@@ -122,7 +128,7 @@ internal static class PFMMachineHandler
             Recipes[intID].Add(recipe);
         }
 
-        ModEntry.ModMonitor.DebugOnlyLog($"{recipes.Count} recipes indexed.");
+        ModEntry.ModMonitor.DebugOnlyLog($"{recipes.Count} recipes indexed - {Recipes.Count} conditional machinse and - {HasUnconditionalRecipe.Count} unconditional machines.");
     }
 
     /// <summary>
@@ -141,17 +147,26 @@ internal static class PFMMachineHandler
         StardewSeasons season = SeasonExtensions.GetSeasonFromGame(location);
         StardewWeather weather = GetPFMWeather();
         bool isOutDoors = location.IsOutdoors;
-        foreach (int machine in PFMMachines)
+
+        // unconditional machines
+        foreach (int machine in HasUnconditionalRecipe)
         {
             if (ModEntry.Config.ProducerFrameworkModMachines.TryGetValue(machine.GetBigCraftableName(), out bool setting) && setting)
             {
-                if (HasUnconditionalRecipe.Contains(machine))
-                {
-                    ValidMachines[machine] = MachineStatus.Enabled;
-                    ModEntry.ModMonitor.DebugOnlyLog($"{machine.GetBigCraftableName()} is enabled unconditionally.");
-                    continue;
-                }
+                ModEntry.ModMonitor.DebugOnlyLog($"{machine.GetBigCraftableName()} is enabled unconditionally.");
+            }
+            else
+            {
+                ModEntry.ModMonitor.DebugOnlyLog($"{machine.GetBigCraftableName()} is disabled in config.");
+                ValidMachines[machine] = MachineStatus.Disabled;
+            }
+        }
 
+        // conditional machines.
+        foreach (int machine in ConditionalPFMMachines)
+        {
+            if (ModEntry.Config.ProducerFrameworkModMachines.TryGetValue(machine.GetBigCraftableName(), out bool setting) && setting)
+            {
                 foreach (PFMMachineData recipe in Recipes[machine])
                 {
                     if ((isOutDoors || !recipe.OutdoorsOnly)

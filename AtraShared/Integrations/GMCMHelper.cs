@@ -1,5 +1,7 @@
 ﻿using System.Collections.Concurrent;
 using System.Reflection;
+using System.Runtime.CompilerServices;
+
 using AtraBase.Collections;
 using AtraShared.Integrations.GMCMAttributes;
 using AtraShared.Integrations.Interfaces;
@@ -476,7 +478,7 @@ public sealed class GMCMHelper : IntegrationHelper
             if (min is null || max is null || interval is null || formatValue is null)
             {
                 Attribute[]? attributes = Attribute.GetCustomAttributes(property);
-                foreach (var attribute in attributes)
+                foreach (Attribute? attribute in attributes)
                 {
                     if (attribute is GMCMRangeAttribute range)
                     {
@@ -857,7 +859,7 @@ public sealed class GMCMHelper : IntegrationHelper
         return this;
     }
 
-#region default
+    #region default
 
     /// <summary>
     /// Generates a basic GMCM config.
@@ -865,6 +867,7 @@ public sealed class GMCMHelper : IntegrationHelper
     /// <typeparam name="TModConfig">The type of the config.</typeparam>
     /// <param name="getConfig">A getter that gets the current config.</param>
     /// <returns>this.</returns>
+    [MethodImpl(MethodImplOptions.AggressiveOptimization)]
     public GMCMHelper GenerateDefaultGMCM<TModConfig>(Func<TModConfig> getConfig)
     {
         List<PropertyInfo> uncategorized = new();

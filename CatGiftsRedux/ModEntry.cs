@@ -118,6 +118,13 @@ internal sealed class ModEntry : Mod
             return;
         }
 
+        Farm? farm = Game1.getFarm();
+
+        if (Game1.IsRainingHere(farm) && !this.config.GiftsInRain)
+        {
+            return;
+        }
+
         Pet? pet = Game1.player.getPet();
         if (pet is null)
         {
@@ -130,13 +137,6 @@ internal sealed class ModEntry : Mod
         if (random.NextDouble() > chance)
         {
             this.Monitor.DebugOnlyLog("Failed friendship probability check");
-            return;
-        }
-
-        Farm? farm = Game1.getFarm();
-
-        if (Game1.IsRainingHere(farm) && !this.config.GiftsInRain)
-        {
             return;
         }
 

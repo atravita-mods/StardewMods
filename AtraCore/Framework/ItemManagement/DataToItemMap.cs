@@ -129,7 +129,8 @@ public static class DataToItemMap
                             || name.Equals("DGA Dummy Object", StringComparison.OrdinalIgnoreCase)
                             || name.Equals("Egg", StringComparison.OrdinalIgnoreCase)
                             || name.Equals("Large Egg", StringComparison.OrdinalIgnoreCase)
-                            || name.Equals("Strange Doll", StringComparison.OrdinalIgnoreCase))
+                            || name.Equals("Strange Doll", StringComparison.OrdinalIgnoreCase)
+                            || name.Equals("Lost Book", StringComparison.OrdinalIgnoreCase))
                         {
                             continue;
                         }

@@ -113,7 +113,7 @@ internal static class PFMMachineHandler
 
             if (!outdoorsOnly && weather == StardewWeather.All && seasons == StardewSeasons.All)
             {
-                ModEntry.ModMonitor.DebugOnlyLog($"{intID} is unconditional.");
+                ModEntry.ModMonitor.DebugOnlyLog($"{intID} is unconditional.", LogLevel.Trace);
                 HasUnconditionalRecipe.Add(intID);
                 Recipes.Remove(intID);
 
@@ -121,14 +121,14 @@ internal static class PFMMachineHandler
             }
 
             PFMMachineData recipe = new(
-                outdoorsOnly,
-                seasons,
-                weather,
-                item.TryGetValue("RequiredLocation", out object? locs) && locs is List<string> locationList && locationList.Count > 0 ? locationList : null);
+                OutdoorsOnly: outdoorsOnly,
+                ValidLocations: item.TryGetValue("RequiredLocation", out object? locs) && locs is List<string> locationList && locationList.Count > 0 ? locationList : null,
+                AllowedSeasons: seasons,
+                AllowedWeathers: weather);
             Recipes[intID].Add(recipe);
         }
 
-        ModEntry.ModMonitor.DebugOnlyLog($"{recipes.Count} recipes indexed - {Recipes.Count} conditional machinse and - {HasUnconditionalRecipe.Count} unconditional machines.");
+        ModEntry.ModMonitor.DebugOnlyLog($"{recipes.Count} recipes indexed - {Recipes.Count} conditional machines and - {HasUnconditionalRecipe.Count} unconditional machines.");
     }
 
     /// <summary>
@@ -218,47 +218,12 @@ Continue:
     }
 
     /// <summary>
-    /// Data from a PFM machine, processed.
+    /// Initializes a new instance of the <see cref="PFMMachineData"/> struct.
     /// </summary>
-    internal readonly struct PFMMachineData
-    {
-        /// <summary>
-        /// If the recipe can only be run for an outside machine.
-        /// </summary>
-        internal readonly bool OutdoorsOnly;
-
-        /// <summary>
-        /// If there's season limitations on the recipe.
-        /// </summary>
-        internal readonly StardewSeasons AllowedSeasons;
-
-        /// <summary>
-        /// If there's weather limitations on the recipe.
-        /// </summary>
-        internal readonly StardewWeather AllowedWeathers;
-
-        /// <summary>
-        /// If there's location limiations on the recipe.
-        /// </summary>
-        internal readonly List<string>? ValidLocations;
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="PFMMachineData"/> struct.
-        /// </summary>
-        /// <param name="outdoorsOnly">Whether the machine recipe is outdoors only.</param>
-        /// <param name="allowedSeasons">Whether there's season limitations.</param>
-        /// <param name="allowedWeathers">Whether there's weather limitations.</param>
-        /// <param name="validLocations">Whether there's location limitations.</param>
-        public PFMMachineData(bool outdoorsOnly, StardewSeasons allowedSeasons, StardewWeather allowedWeathers, List<string>? validLocations)
-        {
-            this.OutdoorsOnly = outdoorsOnly;
-            this.AllowedSeasons = allowedSeasons;
-            this.AllowedWeathers = allowedWeathers;
-            this.ValidLocations = validLocations;
-        }
-
-        /// <inheritdoc />
-        public override string ToString()
-            => $"Outdoors {this.OutdoorsOnly}, AllowedSeasons {this.AllowedSeasons}, AllowedWeathers {this.AllowedSeasons}, ValidLocations {(this.ValidLocations is null ? "null" : string.Join(", ", this.ValidLocations))}";
-    }
+    /// <param name="outdoorsOnly">Whether the machine recipe is outdoors only.</param>
+    /// <param name="allowedSeasons">Whether there's season limitations.</param>
+    /// <param name="allowedWeathers">Whether there's weather limitations.</param>
+    /// <param name="validLocations">Whether there's location limitations.</param>
+    [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Stylecop doesn't understand records.")]
+    internal readonly record struct PFMMachineData(bool OutdoorsOnly, List<string>? ValidLocations, StardewSeasons AllowedSeasons, StardewWeather AllowedWeathers);
 }

@@ -61,23 +61,23 @@ internal class SObjectDrawTranspiler
             ILHelper helper = new(original, instructions, ModEntry.ModMonitor, gen);
             helper.FindNext(new CodeInstructionWrapper[]
             {
-                new (OpCodes.Ldarg_0),
-                new (OpCodes.Ldfld, typeof(SObject).GetCachedField(nameof(SObject.bigCraftable), ReflectionCache.FlagTypes.InstanceFlags)),
+                OpCodes.Ldarg_0,
+                (OpCodes.Ldfld, typeof(SObject).GetCachedField(nameof(SObject.bigCraftable), ReflectionCache.FlagTypes.InstanceFlags)),
             })
             .FindNext(new CodeInstructionWrapper[]
             {
-                new (OpCodes.Ldarg_0),
-                new (OpCodes.Ldfld, typeof(Item).GetCachedField(nameof(Item.parentSheetIndex), ReflectionCache.FlagTypes.InstanceFlags)),
-                new (OpCodes.Call),
-                new (OpCodes.Ldc_I4, 272),
-                new (OpCodes.Bne_Un),
+                OpCodes.Ldarg_0,
+                (OpCodes.Ldfld, typeof(Item).GetCachedField(nameof(Item.parentSheetIndex), ReflectionCache.FlagTypes.InstanceFlags)),
+                OpCodes.Call,
+                (OpCodes.Ldc_I4, 272),
+                OpCodes.Bne_Un,
             })
             .Advance(4)
             .StoreBranchDest()
             .AdvanceToStoredLabel()
             .FindNext(new CodeInstructionWrapper[]
             {
-                new (OpCodes.Call, typeof(Color).GetCachedProperty(nameof(Color.White), ReflectionCache.FlagTypes.StaticFlags).GetGetMethod()),
+                (OpCodes.Call, typeof(Color).GetCachedProperty(nameof(Color.White), ReflectionCache.FlagTypes.StaticFlags).GetGetMethod()),
             })
             .GetLabels(out IList<Label> colorLabels, clear: true)
             .ReplaceInstruction(OpCodes.Call, typeof(SObjectDrawTranspiler).GetCachedMethod(nameof(BigCraftableNeedsInputLayerColor), ReflectionCache.FlagTypes.StaticFlags))
@@ -89,7 +89,7 @@ internal class SObjectDrawTranspiler
         }
         catch (Exception ex)
         {
-            ModEntry.ModMonitor.Log($"Mod crashed while transpiling SObject.draw\n\n{ex}", LogLevel.Error);
+            ModEntry.ModMonitor.Log($"Mod crashed while transpiling {original.FullDescription()}\n\n{ex}", LogLevel.Error);
             original?.Snitch(ModEntry.ModMonitor);
         }
         return null;

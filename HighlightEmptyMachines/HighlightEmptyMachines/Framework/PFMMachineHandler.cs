@@ -1,4 +1,6 @@
-﻿using AtraBase.Collections;
+﻿using System.Runtime.CompilerServices;
+
+using AtraBase.Collections;
 using AtraShared.ConstantsAndEnums;
 using AtraShared.Integrations;
 using AtraShared.Integrations.Interfaces;
@@ -14,6 +16,7 @@ internal static class PFMMachineHandler
 {
     private static readonly PerScreen<Dictionary<int, MachineStatus>> ValidMachinesPerScreen = new(() => new Dictionary<int, MachineStatus>());
     private static readonly DefaultDict<int, HashSet<PFMMachineData>> Recipes = new(() => new HashSet<PFMMachineData>());
+    private static readonly HashSet<int> HasUnconditionalRecipe = new();
     private static IProducerFrameworkModAPI? pfmAPI = null;
 
     /// <summary>
@@ -22,7 +25,7 @@ internal static class PFMMachineHandler
     internal static Dictionary<int, MachineStatus> ValidMachines => ValidMachinesPerScreen.Value;
 
     /// <summary>
-    /// Gets a list of PFM machines (for use in GMCM).
+    /// Gets a list of PFM machines.
     /// </summary>
     internal static IEnumerable<int> PFMMachines => Recipes.Keys;
 
@@ -65,12 +68,16 @@ internal static class PFMMachineHandler
 
         if (recipes is null || recipes.Count == 0)
         {
-            ModEntry.ModMonitor.Log($"PFM recipes not found?");
+            ModEntry.ModMonitor.Log($"PFM recipes not found?", LogLevel.Warn);
             return;
         }
+
+        Recipes.Clear();
+        HasUnconditionalRecipe.Clear();
+
         foreach (Dictionary<string, object>? item in recipes)
         {
-            if (!item.TryGetValue("MachineID", out object? id) || id is not int)
+            if (!item.TryGetValue("MachineID", out object? id) || id is not int intID || HasUnconditionalRecipe.Contains(intID))
             {
                 continue;
             }
@@ -99,12 +106,20 @@ internal static class PFMMachineHandler
                 weather = StardewWeather.All;
             }
 
+            if (!outdoorsOnly && weather == StardewWeather.All && seasons == StardewSeasons.All)
+            {
+                ModEntry.ModMonitor.DebugOnlyLog($"{intID} is unconditional.");
+                HasUnconditionalRecipe.Add(intID);
+
+                // we intentionally index one recipe.
+            }
+
             PFMMachineData recipe = new(
                 outdoorsOnly,
                 seasons,
                 weather,
                 item.TryGetValue("RequiredLocation", out object? locs) && locs is List<string> locationList && locationList.Count > 0 ? locationList : null);
-            Recipes[(int)id].Add(recipe);
+            Recipes[intID].Add(recipe);
         }
 
         ModEntry.ModMonitor.DebugOnlyLog($"{recipes.Count} recipes indexed.");
@@ -114,6 +129,7 @@ internal static class PFMMachineHandler
     /// Refreshes the validity list.
     /// </summary>
     /// <param name="location">The location to analyze.</param>
+    [MethodImpl(MethodImplOptions.AggressiveOptimization)]
     internal static void RefreshValidityList(GameLocation? location)
     {
         if (location is null || pfmAPI is null)
@@ -129,6 +145,13 @@ internal static class PFMMachineHandler
         {
             if (ModEntry.Config.ProducerFrameworkModMachines.TryGetValue(machine.GetBigCraftableName(), out bool setting) && setting)
             {
+                if (HasUnconditionalRecipe.Contains(machine))
+                {
+                    ValidMachines[machine] = MachineStatus.Enabled;
+                    ModEntry.ModMonitor.DebugOnlyLog($"{machine.GetBigCraftableName()} is enabled unconditionally.");
+                    continue;
+                }
+
                 foreach (PFMMachineData recipe in Recipes[machine])
                 {
                     if ((isOutDoors || !recipe.OutdoorsOnly)
@@ -137,7 +160,7 @@ internal static class PFMMachineHandler
                         && (recipe.ValidLocations is null || recipe.ValidLocations.Contains(location.Name)))
                     {
                         ValidMachines[machine] = MachineStatus.Enabled;
-                        ModEntry.ModMonitor.DebugOnlyLog($"{machine.GetBigCraftableName()} is enabled");
+                        ModEntry.ModMonitor.DebugOnlyLog($"{machine.GetBigCraftableName()} is enabled.");
                         goto Continue;
                     }
                 }

@@ -63,7 +63,7 @@ internal static class TagManager
     /// <returns>true to continue to the vanilla function, false otherwise.</returns>
     [HarmonyPrefix]
     [HarmonyPatch("CheckTag")]
-    [HarmonyPriority(Priority.High)]
+    [HarmonyPriority(Priority.VeryHigh)]
     [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Naming convention for Harmony")]
     private static bool PrefixCheckTag(ref bool __result, string __0)
     {
@@ -77,7 +77,7 @@ internal static class TagManager
                 }
                 else
                 {
-                    ModEntry.ModMonitor.DebugOnlyLog($"Hit cache: {__0}, {result}", LogLevel.Info);
+                    ModEntry.ModMonitor.DebugOnlyLog($"Hit cache: {__0}, {result}", LogLevel.Debug);
                     __result = result;
                     return false;
                 }
@@ -250,7 +250,7 @@ internal static class TagManager
                             return false;
                         }
                     }
-                    __result = vals[1] switch
+                    __result = vals[1].ToLowerInvariant() switch
                     {
                         "mining" => Game1.getAllFarmers().Any((Farmer farmer) => farmer.miningLevel.Value >= levelwanted),
                         "farming" => Game1.getAllFarmers().Any((Farmer farmer) => farmer.farmingLevel.Value >= levelwanted),

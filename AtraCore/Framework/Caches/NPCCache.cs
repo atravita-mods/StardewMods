@@ -1,4 +1,6 @@
-﻿namespace AtraCore.Framework.Caches;
+﻿using CommunityToolkit.Diagnostics;
+
+namespace AtraCore.Framework.Caches;
 
 /// <summary>
 /// A smol cache for NPCs.
@@ -15,6 +17,8 @@ public static class NPCCache
     /// <returns>NPC if found, null otherwise.</returns>
     public static NPC? GetByVillagerName(string name)
     {
+        Guard.IsNotNullOrWhiteSpace(name);
+
         if (cache.TryGetValue(name, out WeakReference<NPC>? val))
         {
             if (val.TryGetTarget(out NPC? target))

@@ -78,7 +78,7 @@ internal sealed class ModEntry : Mod
         this.ApplyPatches(new Harmony(this.ModManifest.UniqueID));
 
         PFMMachineHandler.TryGetAPI(this.Helper.ModRegistry);
-        BetterBeehousesIntegration.TryGetAPI(this.Helper.ModRegistry);
+        BeehouseHandler.TryGetAPI(this.Helper.ModRegistry);
         this.gmcmHelper = new(this.Monitor, this.Helper.Translation, this.Helper.ModRegistry, this.ModManifest);
         if (this.gmcmHelper.TryGetAPI())
         {
@@ -118,10 +118,10 @@ internal sealed class ModEntry : Mod
         => PFMMachineHandler.RefreshValidityList(e.NewLocation);
 
     private void OnDayStarted(object? sender, DayStartedEventArgs e)
-        => BetterBeehousesIntegration.UpdateStatus(Game1.currentLocation);
+        => BeehouseHandler.UpdateStatus(Game1.currentLocation);
 
     private void OnPlayerWarp(object? sender, WarpedEventArgs e)
-        => BetterBeehousesIntegration.UpdateStatus(e.NewLocation);
+        => BeehouseHandler.UpdateStatus(e.NewLocation);
 
     /// <summary>
     /// Sets up the basic GMCM (does not include PFM machines).
@@ -137,13 +137,13 @@ internal sealed class ModEntry : Mod
                     {
                         Config = new();
                         PFMMachineHandler.RefreshValidityList(Game1.currentLocation);
-                        BetterBeehousesIntegration.UpdateStatus(Game1.currentLocation);
+                        BeehouseHandler.UpdateStatus(Game1.currentLocation);
                     },
                     save: () =>
                     {
                         this.Helper.AsyncWriteConfig(this.Monitor, Config);
                         PFMMachineHandler.RefreshValidityList(Game1.currentLocation);
-                        BetterBeehousesIntegration.UpdateStatus(Game1.currentLocation);
+                        BeehouseHandler.UpdateStatus(Game1.currentLocation);
                     });
             }
             else
@@ -152,12 +152,12 @@ internal sealed class ModEntry : Mod
                 reset: static () =>
                 {
                     Config = new();
-                    BetterBeehousesIntegration.UpdateStatus(Game1.currentLocation);
+                    BeehouseHandler.UpdateStatus(Game1.currentLocation);
                 },
                 save: () =>
                 {
                     this.Helper.AsyncWriteConfig(this.Monitor, Config);
-                    BetterBeehousesIntegration.UpdateStatus(Game1.currentLocation);
+                    BeehouseHandler.UpdateStatus(Game1.currentLocation);
                 });
             }
             this.gmcmHelper.AddParagraph(I18n.ModDescription)

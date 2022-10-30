@@ -95,12 +95,7 @@ internal sealed class ModEntry : Mod
         AssetLoader.Refresh();
     }
 
-    /// <summary>
-    /// Things to run after all mods are initialized.
-    /// And the game is launched.
-    /// </summary>
-    /// <param name="sender">SMAPI.</param>
-    /// <param name="e">Event arguments.</param>
+    /// <inheritdoc cref="IGameLoopEvents.GameLaunched"/>
     /// <remarks>We must wait until GameLaunched to patch in order to patch Spacecore.</remarks>
     private void OnGameLaunched(object? sender, GameLaunchedEventArgs e)
     {

@@ -99,7 +99,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DrawFishPondsOverGrass", "D
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FrameRateLogger", "FrameRateLogger\FrameRateLogger\FrameRateLogger.csproj", "{5C5A0F5C-FDF1-4819-9D38-E641C10909BA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FixPigRandom", "FixPigRandom\FixPigRandom.csproj", "{04FE418D-694E-4314-8B70-1FEB67586C22}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FixPigRandom", "FixPigRandom\FixPigRandom.csproj", "{04FE418D-694E-4314-8B70-1FEB67586C22}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

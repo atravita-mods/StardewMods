@@ -9,6 +9,7 @@
 using System.Diagnostics;
 using System.Reflection;
 using System.Reflection.Emit;
+using System.Runtime.CompilerServices;
 using System.Text;
 
 using AtraBase.Collections;
@@ -876,6 +877,7 @@ ContinueSearch:
     /// <param name="wrapper">The CodeInstructionWrapper.</param>
     /// <param name="instruction">The instruction to match against.</param>
     /// <returns>True if matches, false otherwise.</returns>
+    [MethodImpl(MethodImplOptions.AggressiveOptimization)]
     private bool IsMatch(CodeInstructionWrapper wrapper, CodeInstruction instruction)
     {
         if (wrapper.Matches(instruction))

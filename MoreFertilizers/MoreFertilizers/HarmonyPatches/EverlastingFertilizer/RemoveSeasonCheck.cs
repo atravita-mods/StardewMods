@@ -177,7 +177,7 @@ internal static class RemoveSeasonCheck
                 new(OpCodes.Ldarg_0),
                 new(OpCodes.Ldarg_2),
                 new(OpCodes.Ldarg_3),
-                new (OpCodes.Ldarga_S, 6),
+                new(OpCodes.Ldarga_S, 6),
                 new(OpCodes.Call, typeof(RemoveSeasonCheck).GetCachedMethod(nameof(IsInEverlastingWithTempusGlobe), ReflectionCache.FlagTypes.StaticFlags)),
                 new(OpCodes.Brtrue_S, jumppoint),
             }, withLabels: labels);

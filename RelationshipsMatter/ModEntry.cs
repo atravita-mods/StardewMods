@@ -28,10 +28,10 @@ internal sealed class ModEntry : Mod
     {
         ModMonitor = this.Monitor;
         I18n.Init(helper.Translation);
+        RMUtils.Init(helper.GameContent);
         Config = AtraUtils.GetConfigOrDefault<ModConfig>(helper, this.Monitor);
 
         helper.Events.GameLoop.GameLaunched += this.SetUpConfig;
-
         this.ApplyPatches(new(this.ModManifest.UniqueID));
     }
 

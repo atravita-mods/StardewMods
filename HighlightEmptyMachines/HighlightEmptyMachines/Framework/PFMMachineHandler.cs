@@ -154,6 +154,7 @@ internal static class PFMMachineHandler
             if (ModEntry.Config.ProducerFrameworkModMachines.TryGetValue(machine.GetBigCraftableName(), out bool setting) && setting)
             {
                 ModEntry.ModMonitor.DebugOnlyLog($"{machine.GetBigCraftableName()} is enabled unconditionally.");
+                ValidMachines[machine] = MachineStatus.Enabled;
             }
             else
             {

@@ -3,6 +3,7 @@ using System.Diagnostics;
 #endif
 using AtraCore.Framework.IntegrationManagers;
 using AtraCore.Utilities;
+
 using AtraShared.ConstantsAndEnums;
 using AtraShared.Integrations;
 using AtraShared.Integrations.Interfaces;
@@ -11,7 +12,9 @@ using AtraShared.MigrationManager;
 using AtraShared.Utils;
 using AtraShared.Utils.Extensions;
 using AtraShared.Utils.Shims;
+
 using HarmonyLib;
+
 using MoreFertilizers.DataModels;
 using MoreFertilizers.Framework;
 using MoreFertilizers.HarmonyPatches;
@@ -20,7 +23,9 @@ using MoreFertilizers.HarmonyPatches.Compat;
 using MoreFertilizers.HarmonyPatches.EverlastingFertilizer;
 using MoreFertilizers.HarmonyPatches.FishFood;
 using MoreFertilizers.HarmonyPatches.FruitTreePatches;
+
 using StardewModdingAPI.Events;
+
 using StardewValley.TerrainFeatures;
 
 using AtraUtils = AtraShared.Utils.Utils;
@@ -518,6 +523,15 @@ internal sealed class ModEntry : Mod
                 else if (terrainFeature is Tree tree)
                 {
                     this.Monitor.Log($"{e.Cursor.Tile} {(tree?.modData?.GetBool(CanPlaceHandler.TreeFertilizer) == true ? "had" : "did not have" )} tree fertilizer.", LogLevel.Info);
+                }
+                else if (terrainFeature is Bush bush)
+                {
+                    string fertilizer = bush?.modData is null ? string.Empty
+                        : bush.modData.GetBool(CanPlaceHandler.MiraculousBeverages) == true ? "beverages"
+                        : bush.modData.GetBool(CanPlaceHandler.RapidBush) == true ? "rapid"
+                        : bush.modData.GetBool(CanPlaceHandler.BountifulBush) == true ? "bountiful"
+                        : string.Empty;
+                    this.Monitor.Log($"{e.Cursor.Tile} has {fertilizer} fertilizer.", LogLevel.Info);
                 }
             }
             if (Game1.currentLocation?.modData?.GetInt(CanPlaceHandler.FishFood) is > 0)

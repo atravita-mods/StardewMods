@@ -38,6 +38,9 @@ internal static class CropAndFertilizerManager
         cropsNeedRefreshing = true;
     }
 
+    /// <summary>
+    /// Requests a refresh to the fertilizer data.
+    /// </summary>
     internal static void RequestInvalidateFertilizers()
     {
         fertilizersNeedRefreshing = true;

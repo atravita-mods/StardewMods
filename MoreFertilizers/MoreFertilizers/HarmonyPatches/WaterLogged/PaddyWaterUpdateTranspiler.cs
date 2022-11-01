@@ -42,8 +42,8 @@ internal static class PaddyWaterUpdateTranspiler
             ILHelper helper = new(original, instructions, ModEntry.ModMonitor, gen);
             helper.FindNext(new CodeInstructionWrapper[]
             { // the first use of "applySpeedIncreases" is in the fertilizer section.
-                new(OpCodes.Ldarg_0),
-                new(OpCodes.Ldarg_S),
+                OpCodes.Ldarg_0,
+                OpCodes.Ldarg_S,
                 new(OpCodes.Call, typeof(HoeDirt).GetCachedMethod("applySpeedIncreases", ReflectionCache.FlagTypes.InstanceFlags)),
             })
             .Advance(3)

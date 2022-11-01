@@ -5,7 +5,7 @@
 * Bush fertilizers
     - Handle adding to shops and other aquisition methods.
 * Beverage fertilizer
-    - Fruit trees (DGA)
+    - Fruit trees (DGA, Automate?)
 * Acquisition: maybe have fertilizer appear in big slimes outside the mines?
 * Items and all the implementation for the prismatic, radioactive, and everlasting fertilizers (don't forget that JA and Winter Star also transpile in this space)
 * Some fertilizer for trees? Tree tapper fertilizer?

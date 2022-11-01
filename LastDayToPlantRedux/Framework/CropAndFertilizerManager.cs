@@ -30,6 +30,9 @@ internal static class CropAndFertilizerManager
 
 #region loading
 
+    /// <summary>
+    /// Requests a refresh to the crops cache.
+    /// </summary>
     internal static void RequestInvalidateCrops()
     {
         cropsNeedRefreshing = true;

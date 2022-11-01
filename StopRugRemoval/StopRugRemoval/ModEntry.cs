@@ -154,6 +154,7 @@ internal sealed class ModEntry : Mod
     private void OnLocaleChange(object? sender, LocaleChangedEventArgs e)
         => AssetEditor.Refresh();
 
+    /// <inheritdoc cref="IContentEvents.AssetsInvalidated"/>
     private void OnAssetInvalidated(object? sender, AssetsInvalidatedEventArgs e)
         => AssetEditor.Refresh(e.NamesWithoutLocale);
 

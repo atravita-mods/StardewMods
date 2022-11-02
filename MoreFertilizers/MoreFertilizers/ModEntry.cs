@@ -739,7 +739,6 @@ internal sealed class ModEntry : Mod
                 return;
             }
             jsonAssets.LoadAssets(Path.Combine(this.Helper.DirectoryPath, "assets", "json-assets"), this.Helper.Translation);
-            jsonAssets.IdsFixed += this.JsonAssets_IdsFixed;
         }
 
         RingManager = new(this.Monitor, this.Helper.Translation, this.Helper.ModRegistry);
@@ -802,18 +801,6 @@ internal sealed class ModEntry : Mod
     /************
      * REGION JA
      * *********/
-
-    private void JsonAssets_IdsFixed(object? sender, EventArgs e)
-    {
-        try
-        {
-            this.FixIDs();
-        }
-        catch (Exception ex)
-        {
-            this.Monitor.Log($"Failed when trying to fix ids!\n\n{ex}", LogLevel.Error);
-        }
-    }
 
     private void FixIDs()
     {

@@ -1,7 +1,7 @@
 ﻿{
   "mod.description": "Prevents rugs from being removed if there's something on the rug. Also some other things.",
   "Enabled.title": "Enabled",
-  "Enabled.description": "Whether to enable or diable this mod.",
+  "Enabled.description": "Whether to enable or disable this mod.",
   "PreventRugRemoval.title": "Prevent Rug Removal",
   "PreventRugRemoval.description": "Whether rugs should be prevented from being removed when things are on them.",
   "CanPlaceRugsOutside.title": "Can Place Rug Outside",

@@ -192,4 +192,44 @@ internal static class RemoveSeasonCheck
         }
         return null;
     }
+
+    [HarmonyTranspiler]
+    [HarmonyPatch(nameof(HoeDirt.canPlantThisSeedHere))]
+    [SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1116:Split parameters should start on line after declaration", Justification = "Reviewed.")]
+    private static IEnumerable<CodeInstruction>? TranspileCanPlant(IEnumerable<CodeInstruction> instructions, ILGenerator gen, MethodBase original)
+    {
+        try
+        {
+            ILHelper helper = new(original, instructions, ModEntry.ModMonitor, gen);
+
+            helper.FindNext(new CodeInstructionWrapper[]
+            {
+                (OpCodes.Call, typeof(Game1).GetCachedProperty(nameof(Game1.currentLocation), ReflectionCache.FlagTypes.StaticFlags).GetGetMethod()),
+                (OpCodes.Callvirt, typeof(GameLocation).GetCachedProperty(nameof(GameLocation.IsGreenhouse), ReflectionCache.FlagTypes.InstanceFlags).GetGetMethod()),
+                OpCodes.Brtrue_S,
+            })
+            .Push()
+            .Advance(2)
+            .StoreBranchDest()
+            .AdvanceToStoredLabel()
+            .DefineAndAttachLabel(out Label jumppoint)
+            .Pop()
+            .GetLabels(out IList<Label>? labels)
+            .Insert(new CodeInstruction[]
+            {
+                new(OpCodes.Ldarg_0),
+                new(OpCodes.Call, typeof(RemoveSeasonCheck).GetCachedMethod(nameof(IsInEverlasting), ReflectionCache.FlagTypes.StaticFlags)),
+                new(OpCodes.Brtrue_S, jumppoint),
+            }, withLabels: labels);
+
+            helper.Print();
+            return helper.Render();
+        }
+        catch (Exception ex)
+        {
+            ModEntry.ModMonitor.Log($"Mod crashed while transpiling {original.FullDescription()}:\n\n{ex}", LogLevel.Error);
+            original.Snitch(ModEntry.ModMonitor);
+        }
+        return null;
+    }
 }

@@ -77,7 +77,7 @@ internal static class TagManager
                 }
                 else
                 {
-                    ModEntry.ModMonitor.DebugOnlyLog($"Hit cache: {__0}, {result}", LogLevel.Debug);
+                    ModEntry.ModMonitor.DebugOnlyLog($"Hit cache: {__0}, {result}", LogLevel.Trace);
                     __result = result;
                     return false;
                 }

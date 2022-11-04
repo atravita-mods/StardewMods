@@ -48,6 +48,6 @@ internal static class FruitTreeShakePatches
                 Game1.createItemDebris(output, tileLocation * 64f, -1);
             }
         }
-        while (__state-- > 0);
+        while (--__state > 0);
     }
 }

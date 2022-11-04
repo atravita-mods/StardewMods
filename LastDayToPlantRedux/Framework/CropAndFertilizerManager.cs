@@ -44,7 +44,23 @@ internal static class CropAndFertilizerManager
     [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "StyleCop doesn't understand records.")]
     private record CropCondition(Profession Profession, int Fertilizer);
 
-#region loading
+    #region processing
+
+    internal static void Process()
+    {
+        if (MultiplayerManager.PrestigedAgriculturalistFarmer is not null)
+        {
+
+        }
+    }
+
+    private static void ProcessForProfession(Profession profession)
+    {
+
+    }
+    #endregion
+
+    #region loading
 
     /// <summary>
     /// Requests a refresh to the crops cache.
@@ -66,7 +82,7 @@ internal static class CropAndFertilizerManager
     /// Parses crop data into a more optimized format.
     /// </summary>
     /// <returns>If any values have changed..</returns>
-    internal static bool LoadCropData()
+    private static bool LoadCropData()
     {
         if (!cropsNeedRefreshing)
         {
@@ -111,7 +127,7 @@ breakcontinue:
     /// Loads a list of fertilizers.
     /// </summary>
     /// <returns>If anything changed.</returns>
-    internal static bool LoadFertilizerData()
+    private static bool LoadFertilizerData()
     {
         if (!fertilizersNeedRefreshing)
         {
@@ -163,8 +179,5 @@ breakcontinue:
             dirts[fert] = dirt;
         }
     }
-    #endregion
-
-    #region processing
     #endregion
 }

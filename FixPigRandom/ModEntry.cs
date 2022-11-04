@@ -81,6 +81,22 @@ internal sealed class ModEntry : Mod
                 new(OpCodes.Call, typeof(ModEntry).GetCachedMethod(nameof(GetRandom), ReflectionCache.FlagTypes.StaticFlags)),
             });
 
+#if DEBUG
+            helper.FindNext(new CodeInstructionWrapper[]
+            {
+                OpCodes.Ldc_I4_M1,
+                (OpCodes.Callvirt, typeof(Netcode.NetFieldBase<int, Netcode.NetInt>).GetCachedProperty("Value", ReflectionCache.FlagTypes.InstanceFlags).GetSetMethod()),
+            })
+            .Advance(2)
+            .Insert(new CodeInstruction[]
+            {
+                new(OpCodes.Ldsfld, typeof(ModEntry).GetCachedField(nameof(modMonitor), ReflectionCache.FlagTypes.StaticFlags)),
+                new(OpCodes.Ldstr, "Truffles Over"),
+                new(OpCodes.Ldc_I4_1),
+                new(OpCodes.Callvirt, typeof(IMonitor).GetCachedMethod(nameof(IMonitor.Log), ReflectionCache.FlagTypes.InstanceFlags)),
+            });
+#endif
+
             // helper.Print();
             return helper.Render();
         }

@@ -25,7 +25,7 @@ internal static class CropTranspiler
         Type dgaCrop = AccessTools.TypeByName("DynamicGameAssets.Game.CustomCrop, DynamicGameAssets")
             ?? ReflectionThrowHelper.ThrowMethodNotFoundException<Type>("DGA CustomCrop");
         harmony.Patch(
-            original: dgaCrop.InstanceMethodNamed("NewDay"),
+            original: dgaCrop.GetCachedMethod("NewDay", ReflectionCache.FlagTypes.InstanceFlags),
             transpiler: new HarmonyMethod(typeof(CropTranspiler).StaticMethodNamed(nameof(TranspileDGA))));
     }
 

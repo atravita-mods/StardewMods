@@ -101,6 +101,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FrameRateLogger", "FrameRat
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FixPigRandom", "FixPigRandom\FixPigRandom.csproj", "{04FE418D-694E-4314-8B70-1FEB67586C22}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MoreItemsOnFishPonds", "MoreItemsOnFishPonds\MoreItemsOnFishPonds.csproj", "{89FEAEA3-321A-4A36-8054-54D7C0744982}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AlwaysScrollMapRedux", "AlwaysScrollMapRedux\AlwaysScrollMapRedux.csproj", "{6BE69C46-7F69-4593-A787-732E18D1DB14}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -263,6 +267,14 @@ Global
 		{04FE418D-694E-4314-8B70-1FEB67586C22}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{04FE418D-694E-4314-8B70-1FEB67586C22}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{04FE418D-694E-4314-8B70-1FEB67586C22}.Release|Any CPU.Build.0 = Release|Any CPU
+		{89FEAEA3-321A-4A36-8054-54D7C0744982}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{89FEAEA3-321A-4A36-8054-54D7C0744982}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{89FEAEA3-321A-4A36-8054-54D7C0744982}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{89FEAEA3-321A-4A36-8054-54D7C0744982}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6BE69C46-7F69-4593-A787-732E18D1DB14}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6BE69C46-7F69-4593-A787-732E18D1DB14}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6BE69C46-7F69-4593-A787-732E18D1DB14}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6BE69C46-7F69-4593-A787-732E18D1DB14}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

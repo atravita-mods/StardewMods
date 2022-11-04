@@ -668,6 +668,7 @@ internal sealed class ModEntry : Mod
                 FruitTreeDrawTranspiler.ApplyDGAPatch(harmony);
                 CropHarvestTranspiler.ApplyDGAPatch(harmony);
                 SObjectPatches.ApplyDGAPatch(harmony);
+                CropNewDayTranspiler.ApplyDGAPatches(harmony);
             }
 
             if (this.Helper.ModRegistry.Get("PeacefulEnd.AlternativeTextures") is IModInfo at

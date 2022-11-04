@@ -4,6 +4,8 @@ using AtraBase.Toolkit.StringHandler;
 using AtraShared.ConstantsAndEnums;
 using AtraShared.Wrappers;
 
+using NetEscapades.EnumGenerators;
+
 using StardewValley.TerrainFeatures;
 
 namespace LastDayToPlantRedux.Framework;
@@ -13,8 +15,16 @@ namespace LastDayToPlantRedux.Framework;
 /// </summary>
 internal static class CropAndFertilizerManager
 {
+    private enum Profession
+    {
+        None,
+        Agriculturalist,
+        Prestiged,
+    }
+
     private static bool cropsNeedRefreshing = true;
     private static bool fertilizersNeedRefreshing = true;
+    private static StardewSeasons lastLoadedSeason = StardewSeasons.None;
 
     // a mapping of fertilizers to a hoedirt that has them.
     private static Dictionary<int, HoeDirt> dirts = new();
@@ -25,8 +35,14 @@ internal static class CropAndFertilizerManager
     // a mapping of fertilizers to their localized names.
     private static Dictionary<int, string> fertilizers = new();
 
+    // Map conditions to the number of days it takes to grow a crop.
+    private static Dictionary<CropCondition, Dictionary<int, int>> daysPerCondition = new();
+
     [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "StyleCop doesn't understand records.")]
     private record CropEntry(StardewSeasons Seasons, string GrowthData);
+
+    [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "StyleCop doesn't understand records.")]
+    private record CropCondition(Profession Profession, int Fertilizer);
 
 #region loading
 
@@ -127,7 +143,28 @@ breakcontinue:
 
         bool changed = ret.IsEquivalentTo(fertilizers);
         fertilizers = ret;
+        if (changed)
+        {
+            PopulateFertilizerList();
+        }
         return changed;
     }
-#endregion
+
+    private static void PopulateFertilizerList()
+    {
+        dirts.Clear();
+
+        dirts[0] = new();
+
+        foreach (int fert in fertilizers.Keys)
+        {
+            HoeDirt dirt = new();
+            dirt.fertilizer.Value = fert;
+            dirts[fert] = dirt;
+        }
+    }
+    #endregion
+
+    #region processing
+    #endregion
 }

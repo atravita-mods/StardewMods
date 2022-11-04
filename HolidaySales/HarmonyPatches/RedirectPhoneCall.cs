@@ -59,7 +59,7 @@ internal static class RedirectPhoneCall
             helper.ForEachMatch(
                 new CodeInstructionWrapper[]
                 {
-                    new(OpCodes.Call, typeof(GameLocation).GetCachedMethod(nameof(GameLocation.AreStoresClosedForFestival), ReflectionCache.FlagTypes.StaticFlags)),
+                    (OpCodes.Call, typeof(GameLocation).GetCachedMethod(nameof(GameLocation.AreStoresClosedForFestival), ReflectionCache.FlagTypes.StaticFlags)),
                 },
                 (helper) =>
                 {
@@ -72,7 +72,7 @@ internal static class RedirectPhoneCall
         catch (Exception ex)
         {
             ModEntry.ModMonitor.Log($"Mod crashed while transpiling {original.GetFullName()}\n\n{ex}", LogLevel.Error);
-            original?.Snitch(ModEntry.ModMonitor);
+            original.Snitch(ModEntry.ModMonitor);
         }
         return null;
     }

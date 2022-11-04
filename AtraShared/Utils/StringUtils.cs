@@ -153,11 +153,7 @@ public sealed class StringUtils
             }
 
             use_replacement_word = false;
-            if (splitchar == "\r")
-            {
-                continue;
-            }
-            else if (splitchar == "\n" || splitchar == "\r\n")
+            if (splitchar == "\n" || splitchar == "\r\n" || splitchar == "\r")
             {
                 if (--maxlines <= 0)
                 {
@@ -221,7 +217,7 @@ public sealed class StringUtils
                                 return StringBuilderCache.GetStringAndRelease(sb);
                             }
                             sb.AppendLine();
-                            current_width = charwidth;
+                            current_width = -whichFont.Spacing;
                         }
                         sb.Append(ch);
                         current_width += charwidth + whichFont.Spacing;

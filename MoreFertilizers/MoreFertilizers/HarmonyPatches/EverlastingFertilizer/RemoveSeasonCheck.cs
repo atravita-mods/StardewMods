@@ -222,7 +222,7 @@ internal static class RemoveSeasonCheck
                 new(OpCodes.Brtrue_S, jumppoint),
             }, withLabels: labels);
 
-            helper.Print();
+            // helper.Print();
             return helper.Render();
         }
         catch (Exception ex)

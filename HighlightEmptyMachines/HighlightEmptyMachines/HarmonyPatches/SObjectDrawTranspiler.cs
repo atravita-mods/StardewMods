@@ -27,7 +27,16 @@ internal class SObjectDrawTranspiler
         {
             return Color.White;
         }
-        if (ModEntry.Config.VanillaMachines.TryGetValue((VanillaMachinesEnum)obj.ParentSheetIndex, out bool val) && val)
+        if (PFMMachineHandler.ValidMachines.TryGetValue(obj.ParentSheetIndex, out MachineStatus status))
+        {
+            return status switch
+            {
+                MachineStatus.Invalid => ModEntry.Config.InvalidColor,
+                MachineStatus.Enabled => ModEntry.Config.EmptyColor,
+                _ => Color.White,
+            };
+        }
+        else if (ModEntry.Config.VanillaMachines.TryGetValue((VanillaMachinesEnum)obj.ParentSheetIndex, out bool val) && val)
         {
             if (obj is Cask cask && Game1.currentLocation is GameLocation loc && !cask.IsValidCaskLocation(loc))
             {
@@ -38,15 +47,6 @@ internal class SObjectDrawTranspiler
                 return ModEntry.Config.InvalidColor;
             }
             return ModEntry.Config.EmptyColor;
-        }
-        else if (PFMMachineHandler.ValidMachines.TryGetValue(obj.ParentSheetIndex, out MachineStatus status))
-        {
-            return status switch
-            {
-                MachineStatus.Invalid => ModEntry.Config.InvalidColor,
-                MachineStatus.Enabled => ModEntry.Config.EmptyColor,
-                _ => Color.White,
-            };
         }
         return Color.White;
     }
@@ -90,7 +90,7 @@ internal class SObjectDrawTranspiler
         catch (Exception ex)
         {
             ModEntry.ModMonitor.Log($"Mod crashed while transpiling {original.FullDescription()}\n\n{ex}", LogLevel.Error);
-            original?.Snitch(ModEntry.ModMonitor);
+            original.Snitch(ModEntry.ModMonitor);
         }
         return null;
     }

@@ -433,12 +433,12 @@ internal sealed class ModEntry : Mod
     internal static IMonitor ModMonitor { get; private set; } = null!;
 
     /// <summary>
-    /// Gets the multiplayer helper for this mod.
+    /// Gets the multiplayer gmcmHelper for this mod.
     /// </summary>
     internal static IMultiplayerHelper MultiplayerHelper { get; private set; } = null!;
 
     /// <summary>
-    /// Gets the mod content helper for this mod.
+    /// Gets the mod content gmcmHelper for this mod.
     /// </summary>
     internal static IModContentHelper ModContentHelper { get; private set; } = null!;
 
@@ -486,15 +486,23 @@ internal sealed class ModEntry : Mod
     [UsedImplicitly]
     public override object GetApi() => new CanPlaceHandler();
 
+    #region assets
+
     /// <inheritdoc cref="IContentEvents.AssetRequested"/>
     [EventPriority(EventPriority.Low)]
     private void OnAssetRequested(object? sender, AssetRequestedEventArgs e)
         => AssetEditor.Edit(e);
 
+    /// <inheritdoc cref="IContentEvents.AssetsInvalidated"/>
+    private void OnAssetInvalidated(object? _, AssetsInvalidatedEventArgs e)
+        => RadioactiveFertilizerHandler.Reset(e.NamesWithoutLocale);
+
     // Only hook if SpecialOrdersExtended is installed.
     [EventPriority(EventPriority.Low)]
     private void OnSpecialOrderDialogueRequested(object? sender, AssetRequestedEventArgs e)
         => AssetEditor.EditSpecialOrderDialogue(e);
+
+    #endregion
 
     private void OnButtonPressed(object? sender, ButtonPressedEventArgs e)
     {
@@ -732,19 +740,17 @@ internal sealed class ModEntry : Mod
 
     private void OnGameLaunched(object? sender, GameLaunchedEventArgs e)
     {
-        {
-            IntegrationHelper helper = new(this.Monitor, this.Helper.Translation, this.Helper.ModRegistry, LogLevel.Warn);
-            if (!helper.TryGetAPI("spacechase0.JsonAssets", "1.10.3", out jsonAssets))
-            {
-                this.Monitor.Log("Packs could not be loaded! This mod will probably not function.", LogLevel.Error);
-                return;
-            }
-            jsonAssets.LoadAssets(Path.Combine(this.Helper.DirectoryPath, "assets", "json-assets"), this.Helper.Translation);
-        }
 
-        RingManager = new(this.Monitor, this.Helper.Translation, this.Helper.ModRegistry);
+        IntegrationHelper jaHelper = new(this.Monitor, this.Helper.Translation, this.Helper.ModRegistry, LogLevel.Warn);
+        if (!jaHelper.TryGetAPI("spacechase0.JsonAssets", "1.10.3", out jsonAssets))
+        {
+            this.Monitor.Log("Packs could not be loaded! This mod will probably not function.", LogLevel.Error);
+            return;
+        }
+        jsonAssets.LoadAssets(Path.Combine(this.Helper.DirectoryPath, "assets", "json-assets"), this.Helper.Translation);
 
         // Only register for events if JA pack loading was successful.
+        RingManager = new(this.Monitor, this.Helper.Translation, this.Helper.ModRegistry);
         this.Helper.Events.GameLoop.SaveLoaded += this.OnSaveLoaded;
         this.Helper.Events.GameLoop.ReturnedToTitle += this.OnReturnedToTitle;
 
@@ -758,35 +764,33 @@ internal sealed class ModEntry : Mod
         this.Helper.Events.Input.ButtonPressed += this.OnButtonPressed;
 
         this.Helper.Events.Content.AssetRequested += this.OnAssetRequested;
+        this.Helper.Events.Content.AssetsInvalidated += this.OnAssetInvalidated;
 
         if (this.Helper.ModRegistry.IsLoaded("atravita.SpecialOrdersExtended"))
         {
             this.Helper.Events.Content.AssetRequested += this.OnSpecialOrderDialogueRequested;
         }
 
-        // Handle optional integrations.
-        {
-            GMCMHelper helper = new(this.Monitor, this.Helper.Translation, this.Helper.ModRegistry, this.ModManifest);
-            if (helper.TryGetAPI())
-            {
-                helper.TryGetOptionsAPI();
-
-                helper.Register(
-                    reset: static () => Config = new(),
-                    save: () => this.Helper.AsyncWriteConfig(this.Monitor, Config))
-                    .AddParagraph(I18n.Mod_Description)
-                    .GenerateDefaultGMCM(static () => Config);
-            }
-        }
-
+        // Apply harmony patches.
         this.ApplyPatches(new Harmony(this.ModManifest.UniqueID));
+
+        // Handle optional integrations.
+        GMCMHelper gmcmHelper = new(this.Monitor, this.Helper.Translation, this.Helper.ModRegistry, this.ModManifest);
+        if (gmcmHelper.TryGetAPI())
         {
-            IntegrationHelper helper = new(this.Monitor, this.Helper.Translation, this.Helper.ModRegistry, LogLevel.Trace);
-            if (helper.TryGetAPI("TehPers.FishingOverhaul", "3.2.7", out ISimplifiedFishingApi? fishingAPI))
-            {
-                fishingAPI.ModifyChanceForFish(static (Farmer who, double chance) =>
-                    who.currentLocation is null ? chance : GetFishTranspiler.AlterFishChance(chance, who.currentLocation));
-            }
+            gmcmHelper.TryGetOptionsAPI();
+
+            gmcmHelper.Register(
+                reset: static () => Config = new(),
+                save: () => this.Helper.AsyncWriteConfig(this.Monitor, Config))
+                .AddParagraph(I18n.Mod_Description)
+                .GenerateDefaultGMCM(static () => Config);
+        }
+        IntegrationHelper helper = new(this.Monitor, this.Helper.Translation, this.Helper.ModRegistry, LogLevel.Trace);
+        if (helper.TryGetAPI("TehPers.FishingOverhaul", "3.2.7", out ISimplifiedFishingApi? fishingAPI))
+        {
+            fishingAPI.ModifyChanceForFish(static (Farmer who, double chance) =>
+                who.currentLocation is null ? chance : GetFishTranspiler.AlterFishChance(chance, who.currentLocation));
         }
     }
 
@@ -799,10 +803,7 @@ internal sealed class ModEntry : Mod
         FishFoodHandler.DecrementAndSave(this.Helper.Data, this.Helper.Multiplayer);
     }
 
-    /************
-     * REGION JA
-     * *********/
-
+    #region JsonAssets
     private void FixIDs()
     {
         PlantableFertilizerIDs.Clear();
@@ -1167,9 +1168,9 @@ internal sealed class ModEntry : Mod
         this.solidFoundationsAPI = null;
     }
 
-    /***********
-     * REGION MIGRATION
-     * **********/
+    #endregion
+
+    #region migration
     [EventPriority(EventPriority.Low)]
     private void OnSaveLoaded(object? sender, SaveLoadedEventArgs e)
     {
@@ -1223,14 +1224,19 @@ internal sealed class ModEntry : Mod
         this.Helper.Events.GameLoop.Saved -= this.WriteMigrationData;
     }
 
-    /*******************
-     * REGION MINESHAFT AND MULTIPLAYER
-     ********************/
+    #endregion
+
+    #region multiplayer
+
+    /// <inheritdoc cref="IPlayerEvents.Warped"/>
     [EventPriority(EventPriority.Low)]
     private void OnPlayerWarp(object? sender, WarpedEventArgs e)
     {
-        JojaSample.JojaSampleEvent(e);
-        FishFoodHandler.HandleWarp(e);
+        if (e.IsLocalPlayer)
+        {
+            JojaSample.JojaSampleEvent(e);
+            FishFoodHandler.HandleWarp(e);
+        }
     }
 
     /// <inheritdoc cref="IMultiplayerEvents.PeerConnected"/>
@@ -1255,4 +1261,5 @@ internal sealed class ModEntry : Mod
             FishFoodHandler.RecieveHandler(e);
         }
     }
+    #endregion
 }

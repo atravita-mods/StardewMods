@@ -116,7 +116,7 @@ internal sealed class ModEntry : Mod
         try
         {
             harmony.Patch(
-                original: AccessTools.Method(typeof(NPC), nameof(NPC.checkForNewCurrentDialogue)),
+                original: typeof(NPC).GetCachedMethod(nameof(NPC.checkForNewCurrentDialogue), ReflectionCache.FlagTypes.InstanceFlags),
                 postfix: new HarmonyMethod(typeof(DialogueManager), nameof(DialogueManager.PostfixCheckDialogue)));
         }
         catch (Exception ex)
@@ -145,7 +145,6 @@ internal sealed class ModEntry : Mod
 
         harmony.Snitch(this.Monitor, harmony.Id, transpilersOnly: true);
     }
-
 
     /// <inheritdoc cref="IGameLoopEvents.OneSecondUpdateTicking"/>
     /// <remarks>Currently handles: grabbing new recently completed special orders.</remarks>
@@ -181,6 +180,8 @@ internal sealed class ModEntry : Mod
             api.RegisterToken(this.ModManifest, "Completed", new Tokens.CompletedSpecialOrders());
             api.RegisterToken(this.ModManifest, "CurrentRules", new Tokens.CurrentSpecialOrderRule());
             api.RegisterToken(this.ModManifest, "RecentCompleted", new Tokens.RecentCompletedSO());
+
+            api.RegisterToken(this.ModManifest, "ProfitMargin", () => new[] { Math.Round(Game1.MasterPlayer.difficultyModifier, 2).ToString() });
         }
 
         if (helper.TryGetAPI("Omegasis.SaveAnywhere", "2.13.0", out ISaveAnywhereApi? saveAnywhereApi))
@@ -295,6 +296,8 @@ internal sealed class ModEntry : Mod
         this.Helper.Events.GameLoop.Saved -= this.WriteMigrationData;
     }
 
+    #region consoleCommands
+
     /// <summary>
     /// Console commands to check the value of a tag.
     /// </summary>
@@ -310,7 +313,7 @@ internal sealed class ModEntry : Mod
         foreach (string tag in args)
         {
             string base_tag;
-            var span = tag.AsSpan().Trim();
+            ReadOnlySpan<char> span = tag.AsSpan().Trim();
             bool match = true;
             if (span.StartsWith("!"))
             {
@@ -440,6 +443,8 @@ internal sealed class ModEntry : Mod
         }
         return true;
     }
+
+    #endregion
 
     #region untimed
 

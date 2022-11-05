@@ -20,14 +20,14 @@ internal static class LDUtils
             id = DataToItemMap.GetID(ItemTypeEnum.SObject, identifier);
         }
 
-        if (id < -1 || !Game1Wrappers.ObjectInfo.TryGetValue(id, out var data))
+        if (id < -1 || !Game1Wrappers.ObjectInfo.TryGetValue(id, out string? data))
         {
             ModEntry.ModMonitor.Log($"{identifier} could not be resolved, skipping");
             return null;
         }
 
-        var cat = data.GetNthChunk('/', SObject.objectInfoTypeIndex);
-        var index = cat.GetIndexOfWhiteSpace();
+        ReadOnlySpan<char> cat = data.GetNthChunk('/', SObject.objectInfoTypeIndex);
+        int index = cat.GetIndexOfWhiteSpace();
         if (index < 0 || !int.TryParse(cat[(index + 1)..], out int type))
         {
             ModEntry.ModMonitor.Log($"{identifier} with {id} does not appear to be a seed or fertilizer, skipping.");

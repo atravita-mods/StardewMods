@@ -1,4 +1,6 @@
 ﻿using AtraBase.Toolkit;
+using AtraBase.Toolkit.Extensions;
+
 using StardewModdingAPI.Events;
 
 namespace LastDayToPlantRedux.Framework;
@@ -31,6 +33,9 @@ internal static class InventoryWatcher
     // in splitscreen. So in splitscreen it watches both players.
     private static InventoryManagerModel? model = null;
 
+    /// <summary>
+    /// Gets the inventory watching model.
+    /// </summary>
     internal static InventoryManagerModel? Model => model;
 
     /// <summary>
@@ -40,11 +45,14 @@ internal static class InventoryWatcher
     internal static bool IsModelLoaded => model is not null;
 
     /// <summary>
+    /// Gets a value indicating whether or not new seeds are available.
+    /// </summary>
+    internal static bool HasSeedChanges { get; private set; } = true;
+
+    /// <summary>
     /// Clears the model.
     /// </summary>
     internal static void ClearModel() => model = null;
-
-    internal static bool HasSeedChanges { get; private set; } = true;
 
     internal static void Reset() => HasSeedChanges = false;
 
@@ -104,12 +112,24 @@ internal static class InventoryWatcher
                 {
                     LoadModel(helper);
                 }
+
+                // find the name out of Game1.objectinfo if possible.
+                string name;
+                if (Game1.objectInformation?.TryGetValue(obj.ParentSheetIndex, out string? data) == true)
+                {
+                    name = data.GetNthChunk('/', SObject.objectInfoNameIndex).ToString();
+                }
+                else
+                {
+                    name = obj.Name;
+                }
+
                 if (obj.Category == SObject.SeedsCategory && !SObject.isWildTreeSeed(obj.ParentSheetIndex)
-                    && !obj.Name.Equals("Mixed Seeds", StringComparison.OrdinalIgnoreCase) && model.Seeds.Add(obj.Name))
+                    && !name.Equals("Mixed Seeds", StringComparison.OrdinalIgnoreCase) && model.Seeds.Add(name))
                 {
                     HasSeedChanges = true;
                 }
-                else if (obj.Category == SObject.fertilizerCategory && model.Fertilizers.Add(obj.Name))
+                else if (obj.Category == SObject.fertilizerCategory && model.Fertilizers.Add(name))
                 {
                     CropAndFertilizerManager.RequestInvalidateFertilizers();
                 }

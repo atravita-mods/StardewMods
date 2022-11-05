@@ -22,13 +22,6 @@ namespace LastDayToPlantRedux.Framework;
 /// </summary>
 internal static class CropAndFertilizerManager
 {
-    private enum Profession
-    {
-        None,
-        Agriculturalist,
-        Prestiged,
-    }
-
     private static readonly TickCache<bool> HasStocklist = new(() => Game1.player.hasOrWillReceiveMail("PierreStocklist"));
 
     private static bool cropsNeedRefreshing = true;
@@ -54,6 +47,16 @@ internal static class CropAndFertilizerManager
     // Map conditions to the number of days it takes to grow a crop.
     private static Dictionary<CropCondition, Dictionary<int, int>> daysPerCondition = new();
 
+    /// <summary>
+    /// A enum corresponding to the profession to check.
+    /// </summary>
+    private enum Profession
+    {
+        None,
+        Agriculturalist,
+        Prestiged,
+    }
+
     [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "StyleCop doesn't understand records.")]
     private record CropEntry(StardewSeasons Seasons, string GrowthData);
 
@@ -70,12 +73,18 @@ internal static class CropAndFertilizerManager
 
         int daysRemaining = 28 - Game1.dayOfMonth;
 
+        if (daysRemaining < 0)
+        {
+            ModEntry.ModMonitor.Log($"Day of Month {Game1.dayOfMonth} seems odd, do you have a mod adjusting that?", LogLevel.Warn);
+            return (string.Empty, false);
+        }
+
         StringBuilder? sb = StringBuilderCache.Acquire();
         sb.Append(I18n.Intro())
            .Append("^^");
         bool hasCrops = false;
 
-        foreach (var (condition, cropvalues) in daysPerCondition)
+        foreach ((CropCondition condition, Dictionary<int, int> cropvalues) in daysPerCondition)
         {
             if (cropvalues.Count == 0)
             {
@@ -89,12 +98,12 @@ internal static class CropAndFertilizerManager
                     continue;
                 }
 
-                if (!Game1Wrappers.ObjectInfo.TryGetValue(index, out var data))
+                if (!Game1Wrappers.ObjectInfo.TryGetValue(index, out string? data))
                 {
                     continue;
                 }
 
-                ReadOnlySpan<char> name = data.GetNthChunk('/', SObject.objectInfoNameIndex);
+                ReadOnlySpan<char> name = data.GetNthChunk('/', SObject.objectInfoDisplayNameIndex);
 
                 if (name.Length == 0)
                 {
@@ -140,7 +149,7 @@ internal static class CropAndFertilizerManager
     {
         if (!StardewSeasonsExtensions.TryParse(Game1.currentSeason, ignoreCase: true, out StardewSeasons currentSeason))
         {
-            ModEntry.ModMonitor.Log($"Could not parse season {Game1.currentSeason}, what?");
+            ModEntry.ModMonitor.Log($"Could not parse season {Game1.currentSeason}?", LogLevel.Error);
             return;
         }
 
@@ -237,6 +246,8 @@ internal static class CropAndFertilizerManager
             }
             else if (!InventoryWatcher.HasSeedChanges)
             {
+                // if we've processed this fertilizer before and
+                // don't have new seed changes, we can skip this round.
                 continue;
             }
 
@@ -250,7 +261,8 @@ internal static class CropAndFertilizerManager
                     dirt.nearWaterForPaddy.Value = c.isPaddyCrop() ? 1 : 0;
                     int? days = dirt.CalculateTimings(farmer);
 
-                    // only save when there's a difference.
+                    // only save when there's a difference from unfertilized.
+                    // most fertilizers don't change the time to grow.
                     if (days is not null && unfertilized[crop] != days)
                     {
                         dict[crop] = days.Value;
@@ -280,7 +292,7 @@ internal static class CropAndFertilizerManager
             return false;
         }
 
-        if (!Game1Wrappers.ObjectInfo.TryGetValue(crop, out var data))
+        if (!Game1Wrappers.ObjectInfo.TryGetValue(crop, out string? data))
         {
             return false;
         }
@@ -291,12 +303,15 @@ internal static class CropAndFertilizerManager
                 return true;
             case CropOptions.Purchaseable:
             {
-#warning - y2 crops.
-                if (crop < 3000 || HasStocklist.GetValue())
+                if (crop < 3000)
                 {
-                    return true;
+                    if (HasStocklist.GetValue() || Game1.year > 1)
+                    {
+                        return true;
+                    }
+                    return !(crop is 476 or 485 or 489); // the year2 seeds.
                 }
-                var name = data.GetNthChunk('/', 0).ToString();
+                string? name = data.GetNthChunk('/', 0).ToString();
                 if (JsonAssetsShims.IsAvailableSeed(name))
                 {
                     return true;
@@ -306,7 +321,7 @@ internal static class CropAndFertilizerManager
             }
             case CropOptions.Seen:
             {
-                var name = data.GetNthChunk('/', 0).ToString();
+                string? name = data.GetNthChunk('/', 0).ToString();
                 return InventoryWatcher.Model?.Seeds?.Contains(name) != false;
             }
             default:
@@ -415,7 +430,7 @@ breakcontinue:
                 continue;
             }
 
-            var name = vals.GetNthChunk('/', SObject.objectInfoNameIndex).Trim().ToString();
+            string? name = vals.GetNthChunk('/', SObject.objectInfoNameIndex).Trim().ToString();
             if (!IsAllowedFertilizer(index, name))
             {
                 continue;

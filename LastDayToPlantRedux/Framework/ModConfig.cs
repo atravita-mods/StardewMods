@@ -2,13 +2,26 @@
 
 namespace LastDayToPlantRedux.Framework;
 
+/// <summary>
+/// The config class for this mod.
+/// </summary>
 internal sealed class ModConfig
 {
+    private readonly HashSet<int> allowedSeeds = new();
+    private readonly HashSet<int> allowedFertilizers = new();
+
+    private bool seedsNeedReset = true;
+    private bool fertilizersNeedReset = true;
+    private List<string> allowSeedsList = new();
+    private List<string> allowFertilizersList = new();
+
     private CropOptions cropsToDisplay = CropOptions.Purchaseable;
     private FertilizerOptions fertilizersToDisplay = FertilizerOptions.Seen;
 
-    public bool DisplayInMailbox { get; set; } = false;
-    public bool DisplayOnFirstWarp { get; set; } = true;
+    /// <summary>
+    /// Gets or sets a value indicating how to display the info.
+    /// </summary>
+    public DisplayOptions DisplayOption { get; set; } = DisplayOptions.OnFirstWarp;
 
     public CropOptions CropsToDisplay
     {
@@ -35,13 +48,6 @@ internal sealed class ModConfig
             this.fertilizersToDisplay = value;
         }
     }
-
-    private bool seedsNeedReset = true;
-    private bool fertilizersNeedReset = true;
-    private List<string> allowSeedsList = new();
-    private List<string> allowFertilizersList = new();
-    private readonly HashSet<int> allowedSeeds = new();
-    private readonly HashSet<int> allowedFertilizers = new();
 
     /// <summary>
     /// Gets or sets a list of crops (by name) that should always be included.
@@ -146,4 +152,11 @@ public enum FertilizerOptions
 {
     All,
     Seen,
+}
+
+public enum DisplayOptions
+{
+    None,
+    InMailbox,
+    OnFirstWarp,
 }

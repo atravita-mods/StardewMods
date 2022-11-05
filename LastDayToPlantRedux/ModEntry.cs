@@ -27,7 +27,6 @@ internal sealed class ModEntry : Mod
     /// </summary>
     internal static ModConfig Config { get; private set; } = null!;
 
-
     /// <inheritdoc />
     public override void Entry(IModHelper helper)
     {
@@ -65,12 +64,12 @@ internal sealed class ModEntry : Mod
     }
 
     /// <inheritdoc cref="IGameLoopEvents.SaveLoaded"/>
+    [EventPriority(EventPriority.Low)]
     private void OnSaveLoaded(object? sender, SaveLoadedEventArgs e)
     {
-        if (!Game1.player.hasOrWillReceiveMail(AssetManager.MailFlag))
-        {
-            Game1.player.mailReceived.Add(AssetManager.MailFlag);
-        }
+        // move the mail to the end so it's easier to find.
+        Game1.player.mailReceived.Remove(AssetManager.MailFlag);
+        Game1.player.mailReceived.Add(AssetManager.MailFlag);
 
         InventoryWatcher.LoadModel(this.Helper.Data);
 
@@ -87,6 +86,7 @@ internal sealed class ModEntry : Mod
     }
 
     /// <inheritdoc cref="IGameLoopEvents.GameLaunched"/>
+    [EventPriority(EventPriority.Low)]
     private void OnGameLaunched(object? sender, GameLaunchedEventArgs e)
     {
         MultiplayerManager.SetShouldCheckPrestiged(this.Helper.ModRegistry);
@@ -106,23 +106,29 @@ internal sealed class ModEntry : Mod
     }
 
     /// <inheritdoc cref="IGameLoopEvents.DayStarted"/>
+    [EventPriority(EventPriority.Low)]
     private void OnDayStart(object? sender, DayStartedEventArgs e)
     {
-        this.hasSeeds = AssetManager.UpdateOnDayStart();
-        if (this.hasSeeds && Config.DisplayInMailbox)
+        if (Context.ScreenId == 0)
         {
-            Game1.mailbox.Add(AssetManager.MailFlag);
+            this.hasSeeds = AssetManager.UpdateOnDayStart();
+            if (this.hasSeeds && Config.DisplayOption == DisplayOptions.InMailbox)
+            {
+                Game1.mailbox.Add(AssetManager.MailFlag);
+            }
         }
     }
 
+    /// <inheritdoc cref="IPlayerEvents.Warped"/>
+    [EventPriority(EventPriority.Low)]
     private void OnPlayerWarped(object? sender, WarpedEventArgs e)
     {
-        if (this.hasSeeds && e.IsLocalPlayer && Game1.activeClickableMenu is null && Config.DisplayOnFirstWarp)
+        if (this.hasSeeds && e.IsLocalPlayer && Game1.activeClickableMenu is null && Config.DisplayOption == DisplayOptions.OnFirstWarp)
         {
             this.hasSeeds = false;
-            var maildata = Game1.content.Load<Dictionary<string, string>>("Data/mail");
+            Dictionary<string, string>? maildata = Game1.content.Load<Dictionary<string, string>>(AssetManager.DataMail.BaseName);
 
-            if (maildata.TryGetValue(AssetManager.MailFlag, out var mail))
+            if (maildata.TryGetValue(AssetManager.MailFlag, out string? mail))
             {
                 Game1.activeClickableMenu = new LetterViewerMenu(mail, AssetManager.MailFlag);
             }

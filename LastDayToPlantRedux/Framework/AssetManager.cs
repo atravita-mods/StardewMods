@@ -14,7 +14,9 @@ internal static class AssetManager
     /// </summary>
     internal static readonly string MailFlag = "atravita_LastDayLetter";
 
-    // accessors
+    /// <summary>
+    /// Gets fertilizers that should always be allowed.
+    /// </summary>
     internal static HashSet<int> AllowedFertilizers
     {
         get
@@ -24,6 +26,9 @@ internal static class AssetManager
         }
     }
 
+    /// <summary>
+    /// Gets fertilizers that should always be hidden.
+    /// </summary>
     internal static HashSet<int> DeniedFertilizers
     {
         get
@@ -33,6 +38,9 @@ internal static class AssetManager
         }
     }
 
+    /// <summary>
+    /// Gets seeds that should always be allowed.
+    /// </summary>
     internal static HashSet<int> AllowedSeeds
     {
         get
@@ -42,6 +50,9 @@ internal static class AssetManager
         }
     }
 
+    /// <summary>
+    /// Gets seeds that should always be hidden.
+    /// </summary>
     internal static HashSet<int> DeniedSeeds
     {
         get
@@ -51,22 +62,32 @@ internal static class AssetManager
         }
     }
 
-    private static IAssetName dataMail = null!;
-
     // denylist and allowlist
     private static readonly HashSet<int> allowedFertilizers = new();
     private static readonly HashSet<int> deniedFertilizers = new();
     private static readonly HashSet<int> allowedSeeds = new();
     private static readonly HashSet<int> deniedSeeds = new();
-    private static IAssetName accessLists = null!;
     private static bool accessProcessed = false;
 
+    /// <summary>
+    /// The current mail for the player.
+    /// </summary>
     private static string Message = string.Empty;
+
+    /// <summary>
+    /// The location of our access identifier->access dictionary.
+    /// </summary>
+    private static IAssetName accessLists = null!;
 
     /// <summary>
     /// The data asset for objects.
     /// </summary>
     private static IAssetName objectInfoName = null!;
+
+    /// <summary>
+    /// Gets the data asset for mail.
+    /// </summary>
+    internal static IAssetName DataMail { get; private set; } = null!;
 
     /// <summary>
     /// Gets the data asset for Data/crops.
@@ -79,15 +100,19 @@ internal static class AssetManager
     /// <param name="parser">the game content parser.</param>
     internal static void Initialize(IGameContentHelper parser)
     {
-        dataMail = parser.ParseAssetName("Data/mail");
+        DataMail = parser.ParseAssetName("Data/mail");
         CropName = parser.ParseAssetName("Data/Crops");
         objectInfoName = parser.ParseAssetName("Data/ObjectInformation");
         accessLists = parser.ParseAssetName("Mods/atravita.LastDayToPlantRedux/AccessControl");
     }
 
+    /// <summary>
+    /// Updates mail on the start of a new day.
+    /// </summary>
+    /// <returns>True if there's crops with their last day today.</returns>
     internal static bool UpdateOnDayStart()
     {
-        var ret = CropAndFertilizerManager.GenerateMessageString();
+        (string message, bool showplayer) ret = CropAndFertilizerManager.GenerateMessageString();
         Message = ret.message;
         return ret.showplayer;
     }
@@ -102,12 +127,12 @@ internal static class AssetManager
         {
             e.LoadFrom(EmptyContainers.GetEmptyDictionary<string, string>, AssetLoadPriority.Exclusive);
         }
-        else if (e.NameWithoutLocale.IsEquivalentTo(dataMail) && !string.IsNullOrWhiteSpace(Message))
+        else if (e.NameWithoutLocale.IsEquivalentTo(DataMail) && !string.IsNullOrWhiteSpace(Message))
         {
             e.Edit(
             static (asset) =>
             {
-                var data = asset.AsDictionary<string, string>().Data;
+                IDictionary<string, string>? data = asset.AsDictionary<string, string>().Data;
                 data[MailFlag] = Message;
             }, AssetEditPriority.Late);
         }

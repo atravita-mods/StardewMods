@@ -10,6 +10,7 @@ using AtraCore.Framework.ReflectionManager;
 
 using AtraShared.Integrations;
 using AtraShared.Integrations.Interfaces;
+using AtraShared.Utils.Extensions;
 using AtraShared.Utils.Shims.JAInternalTypesShims;
 
 using CommunityToolkit.Diagnostics;
@@ -200,6 +201,7 @@ public static class JsonAssetsShims
             if (sb.Length > 0)
             {
                 ret[name!] = sb.ToString(0, sb.Length - 1);
+                modMonitor.DebugOnlyLog($"{name!} - {ret[name!]}");
             }
 
             StringBuilderCache.Release(sb);

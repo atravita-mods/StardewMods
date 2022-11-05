@@ -53,6 +53,7 @@ internal static class CropTranspiler
         }
     }
 
+    [HarmonyPriority(Priority.HigherThanNormal)]
     [HarmonyPatch(nameof(Crop.newDay))]
     private static IEnumerable<CodeInstruction>? Transpiler(IEnumerable<CodeInstruction> instructions, ILGenerator gen, MethodBase original)
     {

@@ -86,19 +86,19 @@ internal static class MultiplayerManager
     internal static void OnPlayerDisconnected(PeerDisconnectedEventArgs e)
     {
         if (NormalFarmer is not null
-            && (!NormalFarmer.TryGetTarget(out var normal) || normal.UniqueMultiplayerID == e.Peer.PlayerID))
+            && (!NormalFarmer.TryGetTarget(out Farmer? normal) || normal.UniqueMultiplayerID == e.Peer.PlayerID))
         {
             NormalFarmer = null;
         }
 
         if (AgriculturalistFarmer is not null
-            && (!AgriculturalistFarmer.TryGetTarget(out var farmer) || farmer.UniqueMultiplayerID == e.Peer.PlayerID))
+            && (!AgriculturalistFarmer.TryGetTarget(out Farmer? farmer) || farmer.UniqueMultiplayerID == e.Peer.PlayerID))
         {
             AgriculturalistFarmer = null;
         }
 
         if (shouldCheckPrestiged && PrestigedAgriculturalistFarmer is not null
-            && (!PrestigedAgriculturalistFarmer.TryGetTarget(out var prestigeFarmer) || prestigeFarmer.UniqueMultiplayerID == e.Peer.PlayerID))
+            && (!PrestigedAgriculturalistFarmer.TryGetTarget(out Farmer? prestigeFarmer) || prestigeFarmer.UniqueMultiplayerID == e.Peer.PlayerID))
         {
             PrestigedAgriculturalistFarmer = null;
         }

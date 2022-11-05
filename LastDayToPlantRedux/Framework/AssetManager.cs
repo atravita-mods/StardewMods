@@ -9,6 +9,11 @@ namespace LastDayToPlantRedux.Framework;
 /// </summary>
 internal static class AssetManager
 {
+    /// <summary>
+    /// The mailflag used for this mod.
+    /// </summary>
+    internal static readonly string MailFlag = "atravita_LastDayLetter";
+
     // accessors
     internal static HashSet<int> AllowedFertilizers
     {
@@ -46,7 +51,6 @@ internal static class AssetManager
         }
     }
 
-    private static readonly string MailFlag = "atravita_LastDayLetter";
     private static IAssetName dataMail = null!;
 
     // denylist and allowlist
@@ -81,9 +85,11 @@ internal static class AssetManager
         accessLists = parser.ParseAssetName("Mods/atravita.LastDayToPlantRedux/AccessControl");
     }
 
-    internal static void UpdateOnDayStart()
+    internal static bool UpdateOnDayStart()
     {
-        Message = CropAndFertilizerManager.GenerateMessageString();
+        var ret = CropAndFertilizerManager.GenerateMessageString();
+        Message = ret.message;
+        return ret.showplayer;
     }
 
     /// <summary>

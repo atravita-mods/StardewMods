@@ -5,6 +5,8 @@ using AtraShared.Utils.Shims;
 using LastDayToPlantRedux.Framework;
 using StardewModdingAPI.Events;
 
+using StardewValley.Menus;
+
 using AtraUtils = AtraShared.Utils.Utils;
 
 namespace LastDayToPlantRedux;
@@ -13,6 +15,7 @@ namespace LastDayToPlantRedux;
 internal sealed class ModEntry : Mod
 {
     private MigrationManager? migrator;
+    private bool hasSeeds = false;
 
     /// <summary>
     /// Gets the logger for this mod.
@@ -24,19 +27,22 @@ internal sealed class ModEntry : Mod
     /// </summary>
     internal static ModConfig Config { get; private set; } = null!;
 
+
     /// <inheritdoc />
     public override void Entry(IModHelper helper)
     {
         // bind helpers.
         ModMonitor = this.Monitor;
+        I18n.Init(helper.Translation);
         AssetManager.Initialize(helper.GameContent);
 
         Config = AtraUtils.GetConfigOrDefault<ModConfig>(helper, this.Monitor);
         helper.Events.GameLoop.GameLaunched += this.OnGameLaunched;
 
         helper.Events.GameLoop.SaveLoaded += this.OnSaveLoaded;
-        helper.Events.GameLoop.DayStarted += static (_, _) => AssetManager.UpdateOnDayStart();
+        helper.Events.GameLoop.DayStarted += this.OnDayStart;
         helper.Events.GameLoop.ReturnedToTitle += this.OnReturnedToTile;
+        helper.Events.Player.Warped += this.OnPlayerWarped;
 
         helper.Events.Player.InventoryChanged += (_, e) => InventoryWatcher.Watch(e, helper.Data);
         helper.Events.GameLoop.Saving += (_, _) => InventoryWatcher.SaveModel(helper.Data);
@@ -61,6 +67,11 @@ internal sealed class ModEntry : Mod
     /// <inheritdoc cref="IGameLoopEvents.SaveLoaded"/>
     private void OnSaveLoaded(object? sender, SaveLoadedEventArgs e)
     {
+        if (!Game1.player.hasOrWillReceiveMail(AssetManager.MailFlag))
+        {
+            Game1.player.mailReceived.Add(AssetManager.MailFlag);
+        }
+
         InventoryWatcher.LoadModel(this.Helper.Data);
 
         this.migrator = new(this.ModManifest, this.Helper, this.Monitor);
@@ -91,6 +102,30 @@ internal sealed class ModEntry : Mod
                 save: () => this.Helper.AsyncWriteConfig(this.Monitor, Config),
                 titleScreenOnly: true)
             .GenerateDefaultGMCM(static () => Config);
+        }
+    }
+
+    /// <inheritdoc cref="IGameLoopEvents.DayStarted"/>
+    private void OnDayStart(object? sender, DayStartedEventArgs e)
+    {
+        this.hasSeeds = AssetManager.UpdateOnDayStart();
+        if (this.hasSeeds && Config.DisplayInMailbox)
+        {
+            Game1.mailbox.Add(AssetManager.MailFlag);
+        }
+    }
+
+    private void OnPlayerWarped(object? sender, WarpedEventArgs e)
+    {
+        if (this.hasSeeds && e.IsLocalPlayer && Game1.activeClickableMenu is null && Config.DisplayOnFirstWarp)
+        {
+            this.hasSeeds = false;
+            var maildata = Game1.content.Load<Dictionary<string, string>>("Data/mail");
+
+            if (maildata.TryGetValue(AssetManager.MailFlag, out var mail))
+            {
+                Game1.activeClickableMenu = new LetterViewerMenu(mail, AssetManager.MailFlag);
+            }
         }
     }
 

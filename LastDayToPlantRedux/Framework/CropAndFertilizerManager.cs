@@ -36,13 +36,19 @@ internal static class CropAndFertilizerManager
     private static StardewSeasons lastLoadedSeason = StardewSeasons.None;
     private static bool hadStocklistLastCheck = false;
 
-    // a mapping of fertilizers to a hoedirt that has them.
+    /// <summary>
+    /// a mapping of fertilizers to a hoedirt that has them.
+    /// </summary>
     private static Dictionary<int, DummyHoeDirt> dirts = new();
 
-    // a cache of crop data.
+    /// <summary>
+    /// a cache of crop data.
+    /// </summary>
     private static Dictionary<int, CropEntry> crops = new();
 
-    // a mapping of fertilizers to their localized names.
+    /// <summary>
+    /// a mapping of fertilizers to their localized names.
+    /// </summary>
     private static Dictionary<int, string> fertilizers = new();
 
     // Map conditions to the number of days it takes to grow a crop.
@@ -56,34 +62,77 @@ internal static class CropAndFertilizerManager
 
     #region processing
 
-    internal static string GenerateMessageString()
+    internal static (string message, bool showplayer) GenerateMessageString()
     {
         ModEntry.ModMonitor.Log($"Processing for {Game1.dayOfMonth}");
         MultiplayerManager.UpdateOnDayStart();
         Process();
 
-        int days = 28 - Game1.dayOfMonth;
+        int daysRemaining = 28 - Game1.dayOfMonth;
 
         StringBuilder? sb = StringBuilderCache.Acquire();
+        sb.Append(I18n.Intro())
+           .Append("^^");
         bool hasCrops = false;
 
         foreach (var (condition, cropvalues) in daysPerCondition)
         {
             if (cropvalues.Count == 0)
+            {
                 continue;
+            }
 
+            foreach ((int index, int days) in cropvalues)
+            {
+                if (days != daysRemaining)
+                {
+                    continue;
+                }
 
+                if (!Game1Wrappers.ObjectInfo.TryGetValue(index, out var data))
+                {
+                    continue;
+                }
+
+                ReadOnlySpan<char> name = data.GetNthChunk('/', SObject.objectInfoNameIndex);
+
+                if (name.Length == 0)
+                {
+                    continue;
+                }
+                hasCrops = true;
+
+                sb.Append(I18n.CropInfo(name.ToString(), days));
+                if (condition.Fertilizer != 0)
+                {
+                    sb.Append(I18n.CropInfo_Fertilizer(fertilizers[condition.Fertilizer]));
+                }
+                switch (condition.Profession)
+                {
+                    case Profession.Agriculturalist:
+                        sb.Append(I18n.CropInfo_Agriculturalist());
+                        break;
+                    case Profession.Prestiged:
+                        sb.Append(I18n.CropInfo_Prestiged());
+                        break;
+                    default:
+                        break;
+                }
+                sb.Append('^');
+            }
         }
 
         if (!hasCrops)
         {
             sb.Clear();
             StringBuilderCache.Release(sb);
-            return I18n.None();
+            return (I18n.None(), false);
         }
         else
         {
-            return StringBuilderCache.GetStringAndRelease(sb);
+            sb.Append("[#]")
+                .Append(I18n.CropInfo_Title());
+            return (StringBuilderCache.GetStringAndRelease(sb), true);
         }
     }
 
@@ -119,6 +168,7 @@ internal static class CropAndFertilizerManager
 
             if (!Context.IsMultiplayer)
             {
+                InventoryWatcher.Reset();
                 return;
             }
         }
@@ -129,6 +179,7 @@ internal static class CropAndFertilizerManager
 
             if (!Context.IsMultiplayer)
             {
+                InventoryWatcher.Reset();
                 return;
             }
         }
@@ -136,6 +187,7 @@ internal static class CropAndFertilizerManager
         if (MultiplayerManager.NormalFarmer?.TryGetTarget(out Farmer? normal) == true)
         {
             ProcessForProfession(Profession.None, currentCrops, normal);
+            InventoryWatcher.Reset();
             return;
         }
 
@@ -163,8 +215,8 @@ internal static class CropAndFertilizerManager
             {
                 Crop c = new(crop, 0, 0);
                 DummyHoeDirt? dirt = dirts[0];
-                dirt.nearWaterForPaddy.Value = c.isPaddyCrop() ? 1 : 0;
                 dirt.crop = c;
+                dirt.nearWaterForPaddy.Value = c.isPaddyCrop() ? 1 : 0;
                 int? days = dirt.CalculateTimings(farmer);
                 if (days is not null)
                 {
@@ -174,11 +226,11 @@ internal static class CropAndFertilizerManager
             }
         }
 
-        foreach (var fertilizer in fertilizers.Keys)
+        foreach (int fertilizer in fertilizers.Keys)
         {
             CropCondition condition = new(profession, fertilizer);
 
-            if (!daysPerCondition.TryGetValue(condition, out var dict))
+            if (!daysPerCondition.TryGetValue(condition, out Dictionary<int, int>? dict))
             {
                 dict = new();
                 daysPerCondition[condition] = dict;
@@ -188,15 +240,14 @@ internal static class CropAndFertilizerManager
                 continue;
             }
 
-#warning - finish this?
             foreach (int crop in currentCrops)
             {
                 if (!dict.ContainsKey(crop))
                 {
                     Crop c = new(crop, 0, 0);
                     DummyHoeDirt? dirt = dirts[fertilizer];
-                    dirt.nearWaterForPaddy.Value = c.isPaddyCrop() ? 1 : 0;
                     dirt.crop = c;
+                    dirt.nearWaterForPaddy.Value = c.isPaddyCrop() ? 1 : 0;
                     int? days = dirt.CalculateTimings(farmer);
 
                     // only save when there's a difference.
@@ -240,6 +291,7 @@ internal static class CropAndFertilizerManager
                 return true;
             case CropOptions.Purchaseable:
             {
+#warning - y2 crops.
                 if (crop < 3000 || HasStocklist.GetValue())
                 {
                     return true;

@@ -184,7 +184,7 @@ internal sealed class ModEntry : Mod
     {
         try
         {
-            harmony.PatchAll();
+            harmony.PatchAll(typeof(ModEntry).Assembly);
             FruitTreesAvoidHoe.ApplyPatches(harmony, this.Helper.ModRegistry);
             if (!this.Helper.ModRegistry.IsLoaded("DecidedlyHuman.BetterReturnScepter"))
             {

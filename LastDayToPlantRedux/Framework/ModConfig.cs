@@ -7,6 +7,9 @@ internal sealed class ModConfig
     private CropOptions cropsToDisplay = CropOptions.Purchaseable;
     private FertilizerOptions fertilizersToDisplay = FertilizerOptions.Seen;
 
+    public bool DisplayInMailbox { get; set; } = false;
+    public bool DisplayOnFirstWarp { get; set; } = true;
+
     public CropOptions CropsToDisplay
     {
         get => this.cropsToDisplay;

@@ -1,4 +1,9 @@
 ﻿{
   "none": "There are no crops that have their last day to plant today.",
-  "intro":  "Here are the crops with a last day to plant today:",
+  "intro": "Here are the crops with a last day to plant today:",
+  "crop_info": "{{crop}} will require {{days}} days",
+  "crop_info.fertilizer": " assuming {{fertilizer}}",
+  "crop_info.agriculturalist": " (Agriculturalist)",
+  "crop_info.prestiged": " (Prestiged Agriculturalist)",
+  "crop_info.title": "Last Day To Plant",
 }

@@ -1,4 +1,6 @@
-﻿using Microsoft.Xna.Framework;
+﻿using System.Runtime.CompilerServices;
+
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
 namespace CatGiftsRedux.Framework;
@@ -31,6 +33,7 @@ internal sealed class PetHudMessage : HUDMessage
 
     /// <inheritdoc />
     /// <remarks>Draws in the hudmessage. Copied and edited from game code.</remarks>
+    [MethodImpl(MethodImplOptions.AggressiveOptimization)]
     public override void draw(SpriteBatch b, int i)
     {
         Rectangle tsarea = Game1.graphics.GraphicsDevice.Viewport.GetTitleSafeArea();

@@ -38,32 +38,28 @@ internal sealed class ModEntry : Mod
         helper.Events.GameLoop.DayStarted += this.OnDayStart;
         helper.Events.GameLoop.ReturnedToTitle += this.OnReturnedToTile;
 
+        helper.Events.Player.InventoryChanged += (_, e) => InventoryWatcher.Watch(e, helper.Data);
+        helper.Events.GameLoop.Saving += (_, _) => InventoryWatcher.SaveModel(helper.Data);
+
         helper.Events.Multiplayer.PeerConnected += static (_, e) => MultiplayerManager.OnPlayerConnected(e);
         helper.Events.Multiplayer.PeerDisconnected += static (_, e) => MultiplayerManager.OnPlayerDisconnected(e);
 
-        helper.Events.Content.AssetRequested += this.OnAssetRequested;
-        helper.Events.Content.AssetsInvalidated += this.OnAssetsInvalidated;
+        helper.Events.Content.AssetRequested += static (_, e) => AssetManager.Apply(e);
+        helper.Events.Content.AssetsInvalidated += static (_, e) => AssetManager.InvalidateCache(e);
     }
 
+    /// <inheritdoc cref="IGameLoopEvents.ReturnedToTitle"/>
     [EventPriority(EventPriority.High + 10)]
     private void OnReturnedToTile(object? sender, ReturnedToTitleEventArgs e)
     {
         InventoryWatcher.ClearModel();
         MultiplayerManager.Reset();
-
-        this.Helper.Events.Player.InventoryChanged -= this.OnInventoryChange;
-        this.Helper.Events.GameLoop.Saving -= this.OnSaving;
     }
 
+    /// <inheritdoc cref="IGameLoopEvents.SaveLoaded"/>
     private void OnSaveLoaded(object? sender, SaveLoadedEventArgs e)
     {
         InventoryWatcher.LoadModel(this.Helper.Data);
-
-        this.Helper.Events.Player.InventoryChanged -= this.OnInventoryChange;
-        this.Helper.Events.Player.InventoryChanged += this.OnInventoryChange;
-
-        this.Helper.Events.GameLoop.Saving -= this.OnSaving;
-        this.Helper.Events.GameLoop.Saving += this.OnSaving;
 
         this.migrator = new(this.ModManifest, this.Helper, this.Monitor);
 
@@ -77,11 +73,14 @@ internal sealed class ModEntry : Mod
         }
     }
 
+    /// <inheritdoc cref="IGameLoopEvents.DayStarted"/>
     private void OnDayStart(object? sender, DayStartedEventArgs e)
     {
          MultiplayerManager.UpdateOnDayStart();
+         CropAndFertilizerManager.Process();
     }
 
+    /// <inheritdoc cref="IGameLoopEvents.GameLaunched"/>
     private void OnGameLaunched(object? sender, GameLaunchedEventArgs e)
     {
         MultiplayerManager.SetShouldCheckPrestiged(this.Helper.ModRegistry);
@@ -99,18 +98,6 @@ internal sealed class ModEntry : Mod
             .GenerateDefaultGMCM(static () => Config);
         }
     }
-
-    private void OnAssetRequested(object? sender, AssetRequestedEventArgs e)
-        => AssetManager.Apply(e);
-
-    private void OnAssetsInvalidated(object? sender, AssetsInvalidatedEventArgs e)
-        => AssetManager.InvalidateCache(e);
-
-    private void OnInventoryChange(object? sender, InventoryChangedEventArgs e)
-        => InventoryWatcher.Watch(e, this.Helper.Data);
-
-    private void OnSaving(object? sender, SavingEventArgs e)
-        => InventoryWatcher.SaveModel(this.Helper.Data);
 
     private void SetUpJAIntegration()
     {

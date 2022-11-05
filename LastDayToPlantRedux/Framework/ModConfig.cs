@@ -37,10 +37,10 @@ internal sealed class ModConfig
     /// Gets or sets a list of crops (by name) that should always be included.
     /// </summary>
     [GMCMDefaultIgnore]
-    public List<string> AllowSeedsList { get; set; } = new();
+    public HashSet<string> AllowSeedsList { get; set; } = new();
 
     [GMCMDefaultIgnore]
-    public List<string> AllFertilizersList { get; set; } = new();
+    public HashSet<string> AllFertilizersList { get; set; } = new();
 }
 
 public enum CropOptions

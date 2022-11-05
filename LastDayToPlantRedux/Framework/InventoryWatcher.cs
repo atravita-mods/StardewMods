@@ -32,11 +32,6 @@ internal static class InventoryWatcher
     private static InventoryManagerModel? model = null;
 
     /// <summary>
-    /// Gets a value indicating whether whether the InventoryWatcher has changes to consider.
-    /// </summary>
-    internal static bool HasChanges { get; private set; } = false;
-
-    /// <summary>
     /// Gets a value indicating whether whether or not the save model is loaded.
     /// </summary>
     [MemberNotNullWhen(returnValue: true, nameof(model))]
@@ -46,12 +41,6 @@ internal static class InventoryWatcher
     /// Clears the model.
     /// </summary>
     internal static void ClearModel() => model = null;
-
-    /// <summary>
-    /// Request a reset to HasChanges.
-    /// </summary>
-    internal static void Reset()
-        => HasChanges = false;
 
     /*******************************************************************
      * SMAPI complains if there's unicode characters in a save path
@@ -111,11 +100,11 @@ internal static class InventoryWatcher
                 }
                 if (obj.Category == SObject.SeedsCategory && model.Seeds.Add(obj.Name))
                 {
-                    HasChanges = true;
+                    CropAndFertilizerManager.RequestInvalidateCrops();
                 }
                 else if (obj.Category == SObject.fertilizerCategory && model.Fertilizers.Add(obj.Name))
                 {
-                    HasChanges = true;
+                    CropAndFertilizerManager.RequestInvalidateFertilizers();
                 }
             }
         }

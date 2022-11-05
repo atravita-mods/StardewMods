@@ -1,21 +1,15 @@
-﻿using StardewValley.Characters;
-using StardewValley.Monsters;
+﻿namespace AtraShared.Utils;
 
-namespace AtraShared.Utils;
-
+/// <summary>
+/// Helper methods for NPCs.
+/// </summary>
 public static class NPCHelpers
 {
+    /// <summary>
+    /// Gets all NPCs (that are villagers).
+    /// </summary>
+    /// <returns>IEnumerable of villagers.</returns>
+    /// <remarks>Unlike <see cref="Utility.getAllCharacters"/>, skips nulls, avoids non-villagers, and doesn't search the farm (where npcs aren't supposed to be anyways).</remarks>
     public static IEnumerable<NPC> GetNPCs()
-    {
-        foreach (var loc in Game1.locations)
-        {
-            foreach (var npc in loc.characters)
-            {
-                if (npc is not null && npc is not Horse or Junimo or Pet or Child or Monster)
-                {
-                    yield return npc;
-                }
-            }
-        }
-    }
+        => Game1.locations.SelectMany(loc => loc.characters.Where(npc => npc is not null && npc.isVillager()));
 }

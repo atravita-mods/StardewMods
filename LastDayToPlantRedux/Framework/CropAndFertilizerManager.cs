@@ -2,6 +2,7 @@
 using AtraBase.Toolkit.Extensions;
 using AtraBase.Toolkit.StringHandler;
 using AtraShared.ConstantsAndEnums;
+using AtraShared.Utils.Extensions;
 using AtraShared.Wrappers;
 
 using NetEscapades.EnumGenerators;
@@ -27,7 +28,7 @@ internal static class CropAndFertilizerManager
     private static StardewSeasons lastLoadedSeason = StardewSeasons.None;
 
     // a mapping of fertilizers to a hoedirt that has them.
-    private static Dictionary<int, HoeDirt> dirts = new();
+    private static Dictionary<int, DummyHoeDirt> dirts = new();
 
     // a cache of crop data.
     private static Dictionary<int, CropEntry> crops = new();
@@ -48,15 +49,116 @@ internal static class CropAndFertilizerManager
 
     internal static void Process()
     {
-        if (MultiplayerManager.PrestigedAgriculturalistFarmer is not null)
+        if (!StardewSeasonsExtensions.TryParse(Game1.currentSeason, ignoreCase: true, out StardewSeasons currentSeason))
         {
-
+            ModEntry.ModMonitor.Log($"Could not parse season {Game1.currentSeason}, what?");
+            return;
         }
+
+        // if there is a season change, or if our backing data has changed, dump the cache.
+        bool fertilizerChanged = LoadFertilizerData();
+        if (currentSeason != lastLoadedSeason | LoadCropData() | fertilizerChanged)
+        {
+            daysPerCondition.Clear();
+        }
+
+        StardewSeasons nextSeason = currentSeason.GetNextSeason();
+        ModEntry.ModMonitor.DebugOnlyLog($"Checking for {currentSeason} - next is {nextSeason}", LogLevel.Info);
+
+        // load relevant crops.
+        List<int>? currentCrops = crops.Where(c => c.Value.Seasons.HasFlag(currentSeason) && !c.Value.Seasons.HasFlag(nextSeason))
+                                .Select(c => c.Key)
+                                .ToList();
+        ModEntry.ModMonitor.DebugOnlyLog($"Found {currentCrops.Count} relevant crops");
+
+        if (MultiplayerManager.PrestigedAgriculturalistFarmer?.TryGetTarget(out Farmer? prestiged) == true)
+        {
+            ProcessForProfession(Profession.Prestiged, currentCrops, prestiged);
+
+            if (!Context.IsMultiplayer)
+            {
+                return;
+            }
+        }
+
+        if (MultiplayerManager.AgriculturalistFarmer?.TryGetTarget(out Farmer? agriculturalist) == true)
+        {
+            ProcessForProfession(Profession.Agriculturalist, currentCrops, agriculturalist);
+
+            if (!Context.IsMultiplayer)
+            {
+                return;
+            }
+        }
+
+        if (MultiplayerManager.NormalFarmer?.TryGetTarget(out Farmer? normal) == true)
+        {
+            ProcessForProfession(Profession.None, currentCrops, normal);
+            return;
+        }
+
+        ModEntry.ModMonitor.Log($"No available farmers for data analysis, how did this happen?");
     }
 
-    private static void ProcessForProfession(Profession profession)
+    private static void ProcessForProfession(Profession profession, List<int> currentCrops, Farmer? farmer = null)
     {
+        if (farmer is null)
+        {
+            ModEntry.ModMonitor.Log($"Could not find farmer for {profession}, continuing.");
+            return;
+        }
 
+        if (!daysPerCondition.TryGetValue(new CropCondition(profession, 0), out Dictionary<int, int>? unfertilized))
+        {
+            unfertilized = new();
+            daysPerCondition[new CropCondition(profession, 0)] = unfertilized;
+        }
+
+        foreach (int crop in currentCrops)
+        {
+            if (!unfertilized.ContainsKey(crop))
+            {
+                Crop c = new(crop, 0, 0);
+                DummyHoeDirt? dirt = dirts[0];
+                dirt.nearWaterForPaddy.Value = c.isPaddyCrop() ? 1 : 0;
+                dirt.crop = c;
+                int? days = dirt.CalculateTimings(farmer);
+                if (days is not null)
+                {
+                    unfertilized[crop] = days.Value;
+                    ModEntry.ModMonitor.DebugOnlyLog($"{crop} takes {days.Value} days");
+                }
+            }
+        }
+
+        foreach (var fertilizer in fertilizers.Keys)
+        {
+            CropCondition condition = new(profession, fertilizer);
+
+            if (!daysPerCondition.TryGetValue(condition, out var dict))
+            {
+                dict = new();
+                daysPerCondition[condition] = dict;
+            }
+        }
+
+    }
+
+    private static bool FilterToUserConfig(int crop)
+    {
+        //todo - filter by AssetManager?
+
+        switch (ModEntry.Config.CropsToDisplay)
+        {
+            case CropOptions.All:
+                return true;
+            case CropOptions.Purchaseable:
+                return true; //todo limit by JA
+            case CropOptions.Seen:
+                return true; //todo
+            default:
+                return true;
+        }
     }
     #endregion
 
@@ -137,6 +239,8 @@ breakcontinue:
 
         Dictionary<int, string> ret = new();
 
+        DummyHoeDirt dirt = new(0);
+
         foreach ((int index, string vals) in Game1Wrappers.ObjectInfo)
         {
             ReadOnlySpan<char> catName = vals.GetNthChunk('/', SObject.objectInfoTypeIndex);
@@ -152,12 +256,22 @@ breakcontinue:
                 continue;
             }
 
-            string? name = vals.GetNthChunk('/', SObject.objectInfoDisplayNameIndex).Trim().ToString();
+            dirt.fertilizer.Value = HoeDirt.noFertilizer;
+            if (!dirt.plant(index, 0, 0, Game1.player, true, Game1.getFarm()))
+            {
+                continue;
+            }
 
-            ret[index] = name;
+            var name = vals.GetNthChunk('/', SObject.objectInfoDisplayNameIndex).Trim();
+            if (name.Equals("Tree Fertilizer", StringComparison.Ordinal))
+            {
+                continue;
+            }
+
+            ret[index] = name.ToString();
         }
 
-        bool changed = ret.IsEquivalentTo(fertilizers);
+        bool changed = !ret.IsEquivalentTo(fertilizers);
         fertilizers = ret;
         if (changed)
         {
@@ -170,14 +284,14 @@ breakcontinue:
     {
         dirts.Clear();
 
-        dirts[0] = new();
+        dirts[0] = new(0);
 
         foreach (int fert in fertilizers.Keys)
         {
-            HoeDirt dirt = new();
-            dirt.fertilizer.Value = fert;
-            dirts[fert] = dirt;
+            dirts[fert] = new(fert);
         }
+
+        ModEntry.ModMonitor.DebugOnlyLog($"Set up {dirts.Count} hoedirts");
     }
     #endregion
 }

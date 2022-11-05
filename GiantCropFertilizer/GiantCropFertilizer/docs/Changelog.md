@@ -30,7 +30,7 @@
 Makes the chance of getting a giant crop configurable. Adds code to handle JA shuffling.
 
 #### Version 0.1.1
-Reduces excess logging. Adjusts compat patches for MoreFertilizer.
+Reduces excess logging. Adjusts compat patches for MultiFertilizer.
 
 #### Version 0.1.0
 

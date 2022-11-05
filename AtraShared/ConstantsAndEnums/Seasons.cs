@@ -106,7 +106,7 @@ public static partial class SeasonExtensions
     /// </summary>
     /// <param name="seasons">Initial seasons.</param>
     /// <returns>Seasons shifted by one.</returns>
-    public static StardewSeasons GetNextSeason(StardewSeasons seasons)
+    public static StardewSeasons GetNextSeason(this StardewSeasons seasons)
     {
         var shifted = (byte)seasons << 1;
 
@@ -118,7 +118,7 @@ public static partial class SeasonExtensions
         return (StardewSeasons)shifted;
     }
 
-    public static StardewSeasons GetPreviousSeason(StardewSeasons seasons)
+    public static StardewSeasons GetPreviousSeason(this StardewSeasons seasons)
     {
         var shifted = (byte)seasons >> 1;
         if (seasons.HasFlag(StardewSeasons.Spring))

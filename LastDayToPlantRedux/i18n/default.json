@@ -1,3 +1,4 @@
 ﻿{
-  "hi": "hi",
+  "none": "There are no crops that have their last day to plant today.",
+  "intro":  "Here are the crops with a last day to plant today:",
 }

@@ -1,4 +1,5 @@
-﻿using System.Text;
+﻿using System.Reflection;
+using System.Text;
 
 using AtraBase.Toolkit;
 using AtraBase.Toolkit.Extensions;
@@ -24,7 +25,6 @@ namespace AtraShared.Utils.Shims;
 public static class JsonAssetsShims
 {
     private const int eventID = int.MinValue + 4993;
-
     private static bool initialized = false;
 
     private static IMonitor modMonitor = null!;
@@ -83,6 +83,7 @@ public static class JsonAssetsShims
     public static bool ConditionRequiresEPU(ReadOnlySpan<char> condition)
         => condition[0] == '!' || condition.GetIndexOfWhiteSpace() > 3;
 
+    // doesn't handle the stocklist.
     public static bool IsAvailableSeed(string name)
     {
         Guard.IsNotNullOrWhiteSpace(name);
@@ -123,26 +124,53 @@ public static class JsonAssetsShims
             return null;
         }
 
-        var inst = ja.StaticFieldNamed("instance").GetValue(null);
-        var cropdata = ja.InstanceFieldNamed("Crops").GetValue(inst) as IList<object>;
+        object? inst = ja.StaticFieldNamed("instance").GetValue(null);
+        object? cropdata = ja.InstanceFieldNamed("Crops").GetValue(inst)!;
 
         if (cropdata is null)
         {
             return null;
         }
 
+        try
+        {
+            MethodInfo processor = typeof(JsonAssetsShims).StaticMethodNamed(nameof(ProcessJAItems)).MakeGenericMethod(new Type[] { AccessTools.TypeByName("JsonAssets.Data.CropData") });
+            return (Dictionary<string, string>?)processor.Invoke(null, new object[] { cropdata });
+        }
+        catch (Exception ex)
+        {
+            modMonitor.Log($"Something appears to have gone wrong with JA integration:", LogLevel.Error);
+            modMonitor.Log(ex.ToString());
+            return null;
+        }
+    }
+
+    private static Dictionary<string, string>? ProcessJAItems<TType>(IList<TType> cropData)
+    {
         Dictionary<string, string> ret = new();
 
-        foreach (var crop in cropdata)
+        foreach (var crop in cropData)
         {
+            if (crop is null)
+            {
+                continue;
+            }
+
             var name = CropDataShims.GetSeedName!(crop);
             if (name is null)
             {
                 continue;
             }
 
+            var price = CropDataShims.GetSeedPurchase!(crop);
+            if (price <= 0)
+            {
+                // not purchaseable, as far as I can tell.
+                continue;
+            }
+
             var requirements = CropDataShims.GetSeedRestrictions!(crop);
-            if (requirements is null)
+            if (requirements is null || requirements.Count == 0)
             {
                 ret[name!] = string.Empty; // no conditions
                 continue;
@@ -154,15 +182,18 @@ public static class JsonAssetsShims
             {
                 if (requirement is not null)
                 {
-                    if (ConditionRequiresEPU(requirement) && EPU is null)
+                    foreach (var req in requirement.StreamSplit('/'))
                     {
-                        modMonitor.Log($"{requirement} requires EPU, which is not isntalled", LogLevel.Warn);
-                        sb.Clear();
-                        StringBuilderCache.Release(sb);
-                        goto breakcontinue;
-                    }
+                        if (ConditionRequiresEPU(req) && EPU is null)
+                        {
+                            modMonitor.Log($"{req} requires EPU, which is not installed", LogLevel.Warn);
+                            sb.Clear();
+                            StringBuilderCache.Release(sb);
+                            goto breakcontinue;
+                        }
 
-                    sb.Append(requirement).Append('/');
+                        sb.Append(req.Word).Append('/');
+                    }
                 }
             }
 

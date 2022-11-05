@@ -1,7 +1,11 @@
-﻿using AtraBase.Collections;
+﻿using System.Text;
+
+using AtraBase.Collections;
+using AtraBase.Toolkit;
 using AtraBase.Toolkit.Extensions;
 using AtraBase.Toolkit.StringHandler;
 
+using AtraShared.Caching;
 using AtraShared.ConstantsAndEnums;
 using AtraShared.Utils.Extensions;
 using AtraShared.Utils.Shims;
@@ -25,9 +29,12 @@ internal static class CropAndFertilizerManager
         Prestiged,
     }
 
+    private static readonly TickCache<bool> HasStocklist = new(() => Game1.player.hasOrWillReceiveMail("PierreStocklist"));
+
     private static bool cropsNeedRefreshing = true;
     private static bool fertilizersNeedRefreshing = true;
     private static StardewSeasons lastLoadedSeason = StardewSeasons.None;
+    private static bool hadStocklistLastCheck = false;
 
     // a mapping of fertilizers to a hoedirt that has them.
     private static Dictionary<int, DummyHoeDirt> dirts = new();
@@ -49,7 +56,38 @@ internal static class CropAndFertilizerManager
 
     #region processing
 
-    internal static void Process()
+    internal static string GenerateMessageString()
+    {
+        ModEntry.ModMonitor.Log($"Processing for {Game1.dayOfMonth}");
+        MultiplayerManager.UpdateOnDayStart();
+        Process();
+
+        int days = 28 - Game1.dayOfMonth;
+
+        StringBuilder? sb = StringBuilderCache.Acquire();
+        bool hasCrops = false;
+
+        foreach (var (condition, cropvalues) in daysPerCondition)
+        {
+            if (cropvalues.Count == 0)
+                continue;
+
+
+        }
+
+        if (!hasCrops)
+        {
+            sb.Clear();
+            StringBuilderCache.Release(sb);
+            return I18n.None();
+        }
+        else
+        {
+            return StringBuilderCache.GetStringAndRelease(sb);
+        }
+    }
+
+    private static void Process()
     {
         if (!StardewSeasonsExtensions.TryParse(Game1.currentSeason, ignoreCase: true, out StardewSeasons currentSeason))
         {
@@ -58,10 +96,13 @@ internal static class CropAndFertilizerManager
         }
 
         // if there is a season change, or if our backing data has changed, dump the cache.
-        if (currentSeason != lastLoadedSeason | LoadCropData() | LoadFertilizerData())
+        if (LoadCropData() | LoadFertilizerData() || currentSeason != lastLoadedSeason || hadStocklistLastCheck != HasStocklist.GetValue())
         {
             daysPerCondition.Clear();
         }
+
+        hadStocklistLastCheck = HasStocklist.GetValue();
+        lastLoadedSeason = currentSeason;
 
         StardewSeasons nextSeason = currentSeason.GetNextSeason();
         ModEntry.ModMonitor.DebugOnlyLog($"Checking for {currentSeason} - next is {nextSeason}", LogLevel.Info);
@@ -115,6 +156,7 @@ internal static class CropAndFertilizerManager
             daysPerCondition[new CropCondition(profession, 0)] = unfertilized;
         }
 
+        // set up unfertilized.
         foreach (int crop in currentCrops)
         {
             if (!unfertilized.ContainsKey(crop))
@@ -151,11 +193,21 @@ internal static class CropAndFertilizerManager
             {
                 if (!dict.ContainsKey(crop))
                 {
+                    Crop c = new(crop, 0, 0);
+                    DummyHoeDirt? dirt = dirts[fertilizer];
+                    dirt.nearWaterForPaddy.Value = c.isPaddyCrop() ? 1 : 0;
+                    dirt.crop = c;
+                    int? days = dirt.CalculateTimings(farmer);
 
+                    // only save when there's a difference.
+                    if (days is not null && unfertilized[crop] != days)
+                    {
+                        dict[crop] = days.Value;
+                        ModEntry.ModMonitor.DebugOnlyLog($"{crop} takes {days.Value} days for fertilizer {fertilizer}.");
+                    }
                 }
             }
         }
-
     }
 
     private static bool FilterCropsToUserConfig(int crop)
@@ -188,6 +240,10 @@ internal static class CropAndFertilizerManager
                 return true;
             case CropOptions.Purchaseable:
             {
+                if (crop < 3000 || HasStocklist.GetValue())
+                {
+                    return true;
+                }
                 var name = data.GetNthChunk('/', 0).ToString();
                 if (JsonAssetsShims.IsAvailableSeed(name))
                 {
@@ -295,7 +351,7 @@ breakcontinue:
                 continue;
             }
 
-            if (!int.TryParse(catName[spaceIndx..], out int category) ||
+            if (!int.TryParse(catName[(spaceIndx + 1)..], out int category) ||
                 (category is not SObject.fertilizerCategory))
             {
                 continue;
@@ -307,7 +363,7 @@ breakcontinue:
                 continue;
             }
 
-            var name = vals.GetNthChunk('/', SObject.objectInfoDisplayNameIndex).Trim().ToString();
+            var name = vals.GetNthChunk('/', SObject.objectInfoNameIndex).Trim().ToString();
             if (!IsAllowedFertilizer(index, name))
             {
                 continue;
@@ -355,7 +411,7 @@ breakcontinue:
         {
             return true;
         }
-        return InventoryWatcher.Model?.Seeds?.Contains(name) != false;
+        return InventoryWatcher.Model?.Fertilizers?.Contains(name) != false;
     }
     #endregion
 }

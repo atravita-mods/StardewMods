@@ -35,7 +35,7 @@ internal sealed class ModEntry : Mod
         helper.Events.GameLoop.GameLaunched += this.OnGameLaunched;
 
         helper.Events.GameLoop.SaveLoaded += this.OnSaveLoaded;
-        helper.Events.GameLoop.DayStarted += this.OnDayStart;
+        helper.Events.GameLoop.DayStarted += static (_, _) => AssetManager.UpdateOnDayStart();
         helper.Events.GameLoop.ReturnedToTitle += this.OnReturnedToTile;
 
         helper.Events.Player.InventoryChanged += (_, e) => InventoryWatcher.Watch(e, helper.Data);
@@ -52,6 +52,8 @@ internal sealed class ModEntry : Mod
     [EventPriority(EventPriority.High + 10)]
     private void OnReturnedToTile(object? sender, ReturnedToTitleEventArgs e)
     {
+        CropAndFertilizerManager.RequestInvalidateCrops();
+        CropAndFertilizerManager.RequestInvalidateFertilizers();
         InventoryWatcher.ClearModel();
         MultiplayerManager.Reset();
     }
@@ -73,13 +75,6 @@ internal sealed class ModEntry : Mod
         }
     }
 
-    /// <inheritdoc cref="IGameLoopEvents.DayStarted"/>
-    private void OnDayStart(object? sender, DayStartedEventArgs e)
-    {
-         MultiplayerManager.UpdateOnDayStart();
-         CropAndFertilizerManager.Process();
-    }
-
     /// <inheritdoc cref="IGameLoopEvents.GameLaunched"/>
     private void OnGameLaunched(object? sender, GameLaunchedEventArgs e)
     {
@@ -96,14 +91,6 @@ internal sealed class ModEntry : Mod
                 save: () => this.Helper.AsyncWriteConfig(this.Monitor, Config),
                 titleScreenOnly: true)
             .GenerateDefaultGMCM(static () => Config);
-        }
-    }
-
-    private void SetUpJAIntegration()
-    {
-        if (!this.Helper.ModRegistry.IsLoaded("spacechase0.JsonAssets"))
-        {
-            this.Monitor.Log("JA not loaded, integration unnecessary");
         }
     }
 

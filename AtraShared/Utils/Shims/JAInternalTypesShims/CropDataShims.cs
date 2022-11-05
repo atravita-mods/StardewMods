@@ -34,9 +34,8 @@ internal static class CropDataShims
             var assign = Expression.Assign(ret, Expression.Call(casted, nameGetter));
 
             var ifStatement = Expression.IfThenElse(isInst, assign, returnnull);
-            List<ParameterExpression> param = new() { ret };
 
-            var block = Expression.Block(typeof(string), param, ifStatement, ret);
+            var block = Expression.Block(typeof(string), new List<ParameterExpression>() { ret }, ifStatement, ret);
             return Expression.Lambda<Func<object, string?>>(block, obj).CompileFast();
         });
 
@@ -68,12 +67,45 @@ internal static class CropDataShims
             var assign = Expression.Assign(ret, Expression.Call(casted, restrictionGetter));
 
             var ifStatement = Expression.IfThenElse(isInst, assign, returnnull);
-            List<ParameterExpression> param = new();
-            param.Add(ret);
 
-            var block = Expression.Block(typeof(IList<string>), param, ifStatement, ret);
+            var block = Expression.Block(typeof(IList<string>), new List<ParameterExpression>() { ret }, ifStatement, ret);
             return Expression.Lambda<Func<object, IList<string>?>>(block, obj).CompileFast();
         });
 
+    /// <summary>
+    /// Gets the seed purchase requirements.
+    /// </summary>
     public static Func<object, IList<string>?>? GetSeedRestrictions => getSeedRestrictions.Value;
+
+    private static Lazy<Func<object, int>?> getSeedPurchase = new(() =>
+    {
+        Type cropData = AccessTools.TypeByName("JsonAssets.Data.CropData");
+
+        if (cropData == null)
+        {
+            return null;
+        }
+
+        var obj = Expression.ParameterOf<object>("obj");
+        var isInst = Expression.TypeIs(obj, cropData);
+        var ret = Expression.ParameterOf<int>("ret");
+
+        var returnnull = Expression.Assign(ret, Expression.ConstantInt(0));
+
+        MethodInfo restrictionGetter = cropData.InstancePropertyNamed("SeedPurchasePrice").GetGetMethod()
+            ?? ReflectionThrowHelper.ThrowMethodNotFoundException<MethodInfo>("SeedPurchasePrice");
+
+        var casted = Expression.TypeAs(obj, cropData);
+        var assign = Expression.Assign(ret, Expression.Call(casted, restrictionGetter));
+
+        var ifStatement = Expression.IfThenElse(isInst, assign, returnnull);
+
+        var block = Expression.Block(typeof(int), new List<ParameterExpression>() { ret }, ifStatement, ret);
+        return Expression.Lambda<Func<object, int>>(block, obj).CompileFast();
+    });
+
+    /// <summary>
+    /// Gets a value indicating how much the seed purchase price for this crop is.
+    /// </summary>
+    public static Func<object, int>? GetSeedPurchase => getSeedPurchase.Value;
 }

@@ -40,6 +40,11 @@ internal class DummyHoeDirt : HoeDirt
     internal int? CalculateTimings(Farmer who)
     {
         this.applySpeedIncreases(who);
-        return this.crop?.phaseDays?.Sum();
+        int ret = 0;
+        for(int i = 0; i < this.crop.phaseDays.Count - 1; i++)
+        {
+            ret += this.crop.phaseDays[i];
+        }
+        return ret;
     }
 }

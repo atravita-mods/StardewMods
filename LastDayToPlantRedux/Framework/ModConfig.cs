@@ -96,6 +96,7 @@ internal sealed class ModConfig
 
                 this.allowedSeeds.Add(id);
             }
+            this.seedsNeedReset = false;
         }
 
         return this.allowedSeeds;
@@ -124,6 +125,7 @@ internal sealed class ModConfig
 
                 this.allowedFertilizers.Add(id);
             }
+            this.fertilizersNeedReset = false;
         }
 
         return this.allowedFertilizers;

@@ -1,10 +1,4 @@
 ﻿using AtraBase.Collections;
-using AtraBase.Toolkit.Extensions;
-
-using AtraCore.Framework.ItemManagement;
-
-using AtraShared.ConstantsAndEnums;
-using AtraShared.Wrappers;
 
 using StardewModdingAPI.Events;
 
@@ -63,6 +57,8 @@ internal static class AssetManager
     private static IAssetName accessLists = null!;
     private static bool accessProcessed = false;
 
+    private static string Message = string.Empty;
+
     /// <summary>
     /// The data asset for objects.
     /// </summary>
@@ -85,6 +81,11 @@ internal static class AssetManager
         accessLists = parser.ParseAssetName("Mods/atravita.LastDayToPlantRedux/AccessControl");
     }
 
+    internal static void UpdateOnDayStart()
+    {
+        Message = CropAndFertilizerManager.GenerateMessageString();
+    }
+
     /// <summary>
     /// Applies asset edits for this mod.
     /// </summary>
@@ -95,13 +96,13 @@ internal static class AssetManager
         {
             e.LoadFrom(EmptyContainers.GetEmptyDictionary<string, string>, AssetLoadPriority.Exclusive);
         }
-        else if (e.NameWithoutLocale.IsEquivalentTo(dataMail))
+        else if (e.NameWithoutLocale.IsEquivalentTo(dataMail) && !string.IsNullOrWhiteSpace(Message))
         {
             e.Edit(
             static (asset) =>
             {
                 var data = asset.AsDictionary<string, string>().Data;
-                data[MailFlag] = "";
+                data[MailFlag] = Message;
             }, AssetEditPriority.Late);
         }
     }

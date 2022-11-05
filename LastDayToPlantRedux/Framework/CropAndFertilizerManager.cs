@@ -1,15 +1,17 @@
 ﻿using AtraBase.Collections;
 using AtraBase.Toolkit.Extensions;
 using AtraBase.Toolkit.StringHandler;
+
 using AtraShared.ConstantsAndEnums;
 using AtraShared.Utils.Extensions;
+using AtraShared.Utils.Shims;
 using AtraShared.Wrappers;
-
-using NetEscapades.EnumGenerators;
 
 using StardewValley.TerrainFeatures;
 
 namespace LastDayToPlantRedux.Framework;
+
+// fertilizers are filtered while loading, while seeds (which I expect more change for) are filtered while calculating.
 
 /// <summary>
 /// Handles a cache of crop and fertilizer data.
@@ -56,8 +58,7 @@ internal static class CropAndFertilizerManager
         }
 
         // if there is a season change, or if our backing data has changed, dump the cache.
-        bool fertilizerChanged = LoadFertilizerData();
-        if (currentSeason != lastLoadedSeason | LoadCropData() | fertilizerChanged)
+        if (currentSeason != lastLoadedSeason | LoadCropData() | LoadFertilizerData())
         {
             daysPerCondition.Clear();
         }
@@ -66,7 +67,7 @@ internal static class CropAndFertilizerManager
         ModEntry.ModMonitor.DebugOnlyLog($"Checking for {currentSeason} - next is {nextSeason}", LogLevel.Info);
 
         // load relevant crops.
-        List<int>? currentCrops = crops.Where(c => c.Value.Seasons.HasFlag(currentSeason) && !c.Value.Seasons.HasFlag(nextSeason))
+        List<int>? currentCrops = crops.Where(c => c.Value.Seasons.HasFlag(currentSeason) && !c.Value.Seasons.HasFlag(nextSeason) && FilterCropsToUserConfig(c.Key))
                                 .Select(c => c.Key)
                                 .ToList();
         ModEntry.ModMonitor.DebugOnlyLog($"Found {currentCrops.Count} relevant crops");
@@ -140,22 +141,66 @@ internal static class CropAndFertilizerManager
                 dict = new();
                 daysPerCondition[condition] = dict;
             }
+            else if (!InventoryWatcher.HasSeedChanges)
+            {
+                continue;
+            }
+
+#warning - finish this?
+            foreach (int crop in currentCrops)
+            {
+                if (!dict.ContainsKey(crop))
+                {
+
+                }
+            }
         }
 
     }
 
-    private static bool FilterToUserConfig(int crop)
+    private static bool FilterCropsToUserConfig(int crop)
     {
-        //todo - filter by AssetManager?
+        // mixed seeds.
+        if (crop == 770)
+        {
+            return false;
+        }
+
+        if (ModEntry.Config.GetAllowedSeeds().Contains(crop)
+            || AssetManager.AllowedSeeds.Contains(crop))
+        {
+            return true;
+        }
+
+        if (AssetManager.DeniedSeeds.Contains(crop) || SObject.isWildTreeSeed(crop))
+        {
+            return false;
+        }
+
+        if (!Game1Wrappers.ObjectInfo.TryGetValue(crop, out var data))
+        {
+            return false;
+        }
 
         switch (ModEntry.Config.CropsToDisplay)
         {
             case CropOptions.All:
                 return true;
             case CropOptions.Purchaseable:
-                return true; //todo limit by JA
+            {
+                var name = data.GetNthChunk('/', 0).ToString();
+                if (JsonAssetsShims.IsAvailableSeed(name))
+                {
+                    return true;
+                }
+
+                goto case CropOptions.Seen;
+            }
             case CropOptions.Seen:
-                return true; //todo
+            {
+                var name = data.GetNthChunk('/', 0).ToString();
+                return InventoryWatcher.Model?.Seeds?.Contains(name) != false;
+            }
             default:
                 return true;
         }
@@ -262,13 +307,13 @@ breakcontinue:
                 continue;
             }
 
-            var name = vals.GetNthChunk('/', SObject.objectInfoDisplayNameIndex).Trim();
-            if (name.Equals("Tree Fertilizer", StringComparison.Ordinal))
+            var name = vals.GetNthChunk('/', SObject.objectInfoDisplayNameIndex).Trim().ToString();
+            if (!IsAllowedFertilizer(index, name))
             {
                 continue;
             }
 
-            ret[index] = name.ToString();
+            ret[index] = name;
         }
 
         bool changed = !ret.IsEquivalentTo(fertilizers);
@@ -292,6 +337,25 @@ breakcontinue:
         }
 
         ModEntry.ModMonitor.DebugOnlyLog($"Set up {dirts.Count} hoedirts");
+    }
+
+    private static bool IsAllowedFertilizer(int id, string name)
+    {
+        if (ModEntry.Config.GetAllowedFertilizers().Contains(id)
+            || AssetManager.AllowedFertilizers.Contains(id))
+        {
+            return true;
+        }
+        if (name.Equals("Tree Fertilizer", StringComparison.OrdinalIgnoreCase)
+            || AssetManager.DeniedFertilizers.Contains(id))
+        {
+            return false;
+        }
+        if (ModEntry.Config.FertilizersToDisplay == FertilizerOptions.All)
+        {
+            return true;
+        }
+        return InventoryWatcher.Model?.Seeds?.Contains(name) != false;
     }
     #endregion
 }

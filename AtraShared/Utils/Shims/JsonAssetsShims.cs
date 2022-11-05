@@ -23,6 +23,8 @@ namespace AtraShared.Utils.Shims;
 [SuppressMessage("StyleCop.CSharp.OrderingRules", "SA1201:Elements should appear in the correct order", Justification = "Fields kept near accessors.")]
 public static class JsonAssetsShims
 {
+    private const int eventID = int.MinValue + 4993;
+
     private static bool initialized = false;
 
     private static IMonitor modMonitor = null!;
@@ -68,6 +70,7 @@ public static class JsonAssetsShims
         {
             monitor.Log("ja found but EPU not. EPU conditions will automatically fail.", LogLevel.Info);
         }
+        epu?.Initialize(false, registry.ModID);
 
         initialized = true;
     }
@@ -79,6 +82,31 @@ public static class JsonAssetsShims
     /// <returns>True if EPU is required.</returns>
     public static bool ConditionRequiresEPU(ReadOnlySpan<char> condition)
         => condition[0] == '!' || condition.GetIndexOfWhiteSpace() > 3;
+
+    public static bool IsAvailableSeed(string name)
+    {
+        Guard.IsNotNullOrWhiteSpace(name);
+        if(JACropCache?.TryGetValue(name, out string? conditions) != true)
+        {
+            return false;
+        }
+        if(string.IsNullOrWhiteSpace(conditions))
+        {
+            return true;
+        }
+        if(epu is not null)
+        {
+            return epu.CheckConditions(conditions);
+        }
+        Farm farm = Game1.getFarm();
+        bool replace = Game1.player.eventsSeen.Remove(eventID);
+        bool ret = farm.checkEventPrecondition($"{eventID}/{conditions}") > 0;
+        if (replace)
+        {
+            Game1.player.eventsSeen.Add(eventID);
+        }
+        return ret;
+    }
 
     private static Lazy<Dictionary<string, string>?> jaCropCache = new(SetUpJAIntegration);
 
@@ -108,6 +136,11 @@ public static class JsonAssetsShims
         foreach (var crop in cropdata)
         {
             var name = CropDataShims.GetSeedName!(crop);
+            if (name is null)
+            {
+                continue;
+            }
+
             var requirements = CropDataShims.GetSeedRestrictions!(crop);
             if (requirements is null)
             {
@@ -121,6 +154,14 @@ public static class JsonAssetsShims
             {
                 if (requirement is not null)
                 {
+                    if (ConditionRequiresEPU(requirement) && EPU is null)
+                    {
+                        modMonitor.Log($"{requirement} requires EPU, which is not isntalled", LogLevel.Warn);
+                        sb.Clear();
+                        StringBuilderCache.Release(sb);
+                        goto breakcontinue;
+                    }
+
                     sb.Append(requirement).Append('/');
                 }
             }
@@ -131,6 +172,8 @@ public static class JsonAssetsShims
             }
 
             StringBuilderCache.Release(sb);
+breakcontinue:
+            ;
         }
 
         return ret;

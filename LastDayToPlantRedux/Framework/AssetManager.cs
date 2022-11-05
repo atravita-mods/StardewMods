@@ -15,16 +15,53 @@ namespace LastDayToPlantRedux.Framework;
 /// </summary>
 internal static class AssetManager
 {
+    // accessors
+    internal static HashSet<int> AllowedFertilizers
+    {
+        get
+        {
+            ProcessAccessLists();
+            return allowedFertilizers;
+        }
+    }
+
+    internal static HashSet<int> DeniedFertilizers
+    {
+        get
+        {
+            ProcessAccessLists();
+            return deniedFertilizers;
+        }
+    }
+
+    internal static HashSet<int> AllowedSeeds
+    {
+        get
+        {
+            ProcessAccessLists();
+            return allowedSeeds;
+        }
+    }
+
+    internal static HashSet<int> DeniedSeeds
+    {
+        get
+        {
+            ProcessAccessLists();
+            return deniedSeeds;
+        }
+    }
+
     private static readonly string MailFlag = "atravita_LastDayLetter";
     private static IAssetName dataMail = null!;
 
     // denylist and allowlist
+    private static readonly HashSet<int> allowedFertilizers = new();
+    private static readonly HashSet<int> deniedFertilizers = new();
+    private static readonly HashSet<int> allowedSeeds = new();
+    private static readonly HashSet<int> deniedSeeds = new();
     private static IAssetName accessLists = null!;
     private static bool accessProcessed = false;
-    private static readonly HashSet<int> AllowedFertilizers = new();
-    private static readonly HashSet<int> DeniedFertilizers = new();
-    private static readonly HashSet<int> AllowedSeeds = new();
-    private static readonly HashSet<int> DeniedSeeds = new();
 
     /// <summary>
     /// The data asset for objects.
@@ -100,31 +137,20 @@ internal static class AssetManager
 
         AssetManager.accessProcessed = true;
 
-        AllowedFertilizers.Clear();
-        DeniedFertilizers.Clear();
-        AllowedSeeds.Clear();
-        DeniedSeeds.Clear();
+        allowedFertilizers.Clear();
+        deniedFertilizers.Clear();
+        allowedSeeds.Clear();
+        deniedSeeds.Clear();
 
-        foreach (var (item, access) in Game1.content.Load<Dictionary<string, string>>(AssetManager.accessLists.BaseName))
+        foreach ((string item, string access) in Game1.content.Load<Dictionary<string, string>>(AssetManager.accessLists.BaseName))
         {
-            if (!int.TryParse(item, out int id))
+            (int id, int type)? tup = LDUtils.ResolveIDAndType(item);
+            if (tup is null)
             {
-                id = DataToItemMap.GetID(ItemTypeEnum.SObject, item);
-            }
-
-            if (id < -1 || !Game1Wrappers.ObjectInfo.TryGetValue(id, out var data))
-            {
-                ModEntry.ModMonitor.Log($"{item} could not be resolved, skipping");
                 continue;
             }
-
-            var cat = data.GetNthChunk('/', SObject.objectInfoTypeIndex);
-            var index = cat.GetIndexOfWhiteSpace();
-            if (index < 0 || !int.TryParse(cat[(index + 1)..], out int type))
-            {
-                ModEntry.ModMonitor.Log($"{item} with {id} does not appear to be a seed or fertilizer, skipping.");
-                continue;
-            }
+            int id = tup.Value.id;
+            int type = tup.Value.type;
 
             bool isAllow = access.AsSpan().Trim().Equals("Allow", StringComparison.OrdinalIgnoreCase);
             bool isDeny = access.AsSpan().Trim().Equals("Deny", StringComparison.OrdinalIgnoreCase);
@@ -145,21 +171,21 @@ internal static class AssetManager
                 case SObject.SeedsCategory:
                     if (isAllow)
                     {
-                        AllowedSeeds.Add(id);
+                        allowedSeeds.Add(id);
                     }
                     else if (isDeny)
                     {
-                        DeniedSeeds.Add(id);
+                        deniedSeeds.Add(id);
                     }
                     break;
                 case SObject.fertilizerCategory:
                     if (isAllow)
                     {
-                        AllowedFertilizers.Add(id);
+                        allowedFertilizers.Add(id);
                     }
                     else if (isDeny)
                     {
-                        DeniedFertilizers.Add(id);
+                        deniedFertilizers.Add(id);
                     }
                     break;
                 default:

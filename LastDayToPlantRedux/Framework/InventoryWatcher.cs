@@ -31,6 +31,8 @@ internal static class InventoryWatcher
     // in splitscreen. So in splitscreen it watches both players.
     private static InventoryManagerModel? model = null;
 
+    internal static InventoryManagerModel? Model => model;
+
     /// <summary>
     /// Gets a value indicating whether whether or not the save model is loaded.
     /// </summary>
@@ -41,6 +43,10 @@ internal static class InventoryWatcher
     /// Clears the model.
     /// </summary>
     internal static void ClearModel() => model = null;
+
+    internal static bool HasSeedChanges { get; private set; } = true;
+
+    internal static void Reset() => HasSeedChanges = false;
 
     /*******************************************************************
      * SMAPI complains if there's unicode characters in a save path
@@ -98,9 +104,10 @@ internal static class InventoryWatcher
                 {
                     LoadModel(helper);
                 }
-                if (obj.Category == SObject.SeedsCategory && model.Seeds.Add(obj.Name))
+                if (obj.Category == SObject.SeedsCategory && !SObject.isWildTreeSeed(obj.ParentSheetIndex)
+                    && !obj.Name.Equals("Mixed Seeds", StringComparison.OrdinalIgnoreCase) && model.Seeds.Add(obj.Name))
                 {
-                    CropAndFertilizerManager.RequestInvalidateCrops();
+                    HasSeedChanges = true;
                 }
                 else if (obj.Category == SObject.fertilizerCategory && model.Fertilizers.Add(obj.Name))
                 {

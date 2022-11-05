@@ -33,14 +33,101 @@ internal sealed class ModConfig
         }
     }
 
+    private bool seedsNeedReset = true;
+    private bool fertilizersNeedReset = true;
+    private List<string> allowSeedsList = new();
+    private List<string> allowFertilizersList = new();
+    private readonly HashSet<int> allowedSeeds = new();
+    private readonly HashSet<int> allowedFertilizers = new();
+
     /// <summary>
     /// Gets or sets a list of crops (by name) that should always be included.
     /// </summary>
     [GMCMDefaultIgnore]
-    public HashSet<string> AllowSeedsList { get; set; } = new();
+    public List<string> AllowSeedsList
+    {
+        get
+        {
+            return this.allowSeedsList;
+        }
+
+        set
+        {
+            this.seedsNeedReset = true;
+            this.allowSeedsList = value;
+        }
+    }
 
     [GMCMDefaultIgnore]
-    public HashSet<string> AllFertilizersList { get; set; } = new();
+    public List<string> AllowFertilizersList
+    {
+        get
+        {
+            return this.allowFertilizersList;
+        }
+
+        set
+        {
+            this.fertilizersNeedReset = true;
+            this.allowFertilizersList = value;
+        }
+    }
+
+    internal HashSet<int> GetAllowedSeeds()
+    {
+        if (this.seedsNeedReset)
+        {
+            this.allowedSeeds.Clear();
+
+            foreach (string? item in this.AllowSeedsList)
+            {
+                (int id, int type)? tup = LDUtils.ResolveIDAndType(item);
+                if (tup is null)
+                {
+                    continue;
+                }
+                int id = tup.Value.id;
+                int type = tup.Value.type;
+
+                if (type != SObject.SeedsCategory)
+                {
+                    continue;
+                }
+
+                this.allowedSeeds.Add(id);
+            }
+        }
+
+        return this.allowedSeeds;
+    }
+
+    internal HashSet<int> GetAllowedFertilizers()
+    {
+        if (this.fertilizersNeedReset)
+        {
+            this.allowedFertilizers.Clear();
+
+            foreach (string? item in this.AllowFertilizersList)
+            {
+                (int id, int type)? tup = LDUtils.ResolveIDAndType(item);
+                if (tup is null)
+                {
+                    continue;
+                }
+                int id = tup.Value.id;
+                int type = tup.Value.type;
+
+                if (type != SObject.fertilizerCategory)
+                {
+                    continue;
+                }
+
+                this.allowedFertilizers.Add(id);
+            }
+        }
+
+        return this.allowedFertilizers;
+    }
 }
 
 public enum CropOptions

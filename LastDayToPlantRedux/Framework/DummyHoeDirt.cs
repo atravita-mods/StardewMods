@@ -23,10 +23,20 @@ internal class DummyHoeDirt : HoeDirt
         this.fertilizer.Value = fertilizer;
     }
 
+    /// <summary>
+    /// nop'ed.
+    /// </summary>
+    /// <param name="environment">location.</param>
+    /// <param name="tileLocation">tile.</param>
     public override void dayUpdate(GameLocation environment, Vector2 tileLocation)
     {
     }
 
+    /// <summary>
+    /// nop'ed.
+    /// </summary>
+    /// <param name="onLoad">irrelevant.</param>
+    /// <returns>always false.</returns>
     public override bool seasonUpdate(bool onLoad)
     {
         return false;

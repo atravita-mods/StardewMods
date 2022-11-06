@@ -102,7 +102,7 @@ public static class JsonAssetsShims
         }
         Farm farm = Game1.getFarm();
         bool replace = Game1.player.eventsSeen.Remove(eventID);
-        bool ret = farm.checkEventPrecondition($"{eventID}/{conditions}") > 0;
+        bool ret = farm.checkEventPrecondition($"{eventID}/{conditions}") != -1;
         if (replace)
         {
             Game1.player.eventsSeen.Add(eventID);

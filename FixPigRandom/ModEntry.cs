@@ -18,7 +18,7 @@ namespace FixPigRandom;
 /// <inheritdoc />
 internal sealed class ModEntry : Mod
 {
-    private static readonly ConditionalWeakTable<FarmAnimal, Random> Cache = new();
+    private static readonly Dictionary<long, Random> Cache = new();
 
     private static IMonitor modMonitor = null!;
 
@@ -49,10 +49,10 @@ internal sealed class ModEntry : Mod
     [MethodImpl(TKConstants.Hot)]
     private static Random GetRandom(FarmAnimal pig)
     {
-        if (!Cache.TryGetValue(pig, out Random? random))
+        if (!Cache.TryGetValue(pig.myID.Value, out Random? random))
         {
             random = RandomUtils.GetSeededRandom(2, (int)(pig.myID.Value >> 1));
-            Cache.AddOrUpdate(pig, random);
+            Cache[pig.myID.Value] = random;
         }
 
         return random;

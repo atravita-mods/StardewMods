@@ -51,6 +51,7 @@ internal sealed class ModEntry : Mod
     {
         if (!Cache.TryGetValue(pig.myID.Value, out Random? random))
         {
+            modMonitor.DebugOnlyLog($"Cache hit: {pig.myID.Value}");
             random = RandomUtils.GetSeededRandom(2, (int)(pig.myID.Value >> 1));
             Cache[pig.myID.Value] = random;
         }

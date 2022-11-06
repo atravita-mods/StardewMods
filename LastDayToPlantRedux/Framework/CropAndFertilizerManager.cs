@@ -28,6 +28,7 @@ internal static class CropAndFertilizerManager
     private static bool fertilizersNeedRefreshing = true;
     private static StardewSeasons lastLoadedSeason = StardewSeasons.None;
     private static bool hadStocklistLastCheck = false;
+    private static bool requiresReset = true;
 
     /// <summary>
     /// a mapping of fertilizers to a hoedirt that has them.
@@ -64,6 +65,8 @@ internal static class CropAndFertilizerManager
     private record CropCondition(Profession Profession, int Fertilizer);
 
     #region processing
+
+    internal static void RequestReset() => requiresReset = true;
 
     internal static (string message, bool showplayer) GenerateMessageString()
     {
@@ -154,11 +157,14 @@ internal static class CropAndFertilizerManager
         }
 
         // if there is a season change, or if our backing data has changed, dump the cache.
-        if (LoadCropData() | LoadFertilizerData() || currentSeason != lastLoadedSeason || hadStocklistLastCheck != HasStocklist.GetValue())
+        // first pipe is single intentionally, don't want shortcutting there.
+        if (LoadCropData() | LoadFertilizerData()
+            || requiresReset || currentSeason != lastLoadedSeason || hadStocklistLastCheck != HasStocklist.GetValue())
         {
             daysPerCondition.Clear();
         }
 
+        requiresReset = false;
         hadStocklistLastCheck = HasStocklist.GetValue();
         lastLoadedSeason = currentSeason;
 

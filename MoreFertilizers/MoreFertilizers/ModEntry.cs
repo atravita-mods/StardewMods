@@ -960,8 +960,8 @@ internal sealed class ModEntry : Mod
                 }
 
                 idMapping.Add(storedIDs.PrismaticFertilizerID, PrismaticFertilizerID);
-                storedIDs.PrismaticFertilizerID = PrismaticFertilizerID;
             }
+            storedIDs.PrismaticFertilizerID = PrismaticFertilizerID;
         }
 
         if (EverlastingFertilizerID != -1)

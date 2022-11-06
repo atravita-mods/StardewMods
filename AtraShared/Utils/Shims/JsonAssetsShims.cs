@@ -150,27 +150,27 @@ public static class JsonAssetsShims
     {
         Dictionary<string, string> ret = new();
 
-        foreach (var crop in cropData)
+        foreach (TType? crop in cropData)
         {
             if (crop is null)
             {
                 continue;
             }
 
-            var name = CropDataShims.GetSeedName!(crop);
+            string? name = CropDataShims.GetSeedName!(crop);
             if (name is null)
             {
                 continue;
             }
 
-            var price = CropDataShims.GetSeedPurchase!(crop);
+            int price = CropDataShims.GetSeedPurchase!(crop);
             if (price <= 0)
             {
                 // not purchaseable, as far as I can tell.
                 continue;
             }
 
-            var requirements = CropDataShims.GetSeedRestrictions!(crop);
+            IList<string>? requirements = CropDataShims.GetSeedRestrictions!(crop);
             if (requirements is null || requirements.Count == 0)
             {
                 ret[name!] = string.Empty; // no conditions
@@ -179,11 +179,11 @@ public static class JsonAssetsShims
 
             StringBuilder sb = StringBuilderCache.Acquire(64);
 
-            foreach (var requirement in requirements)
+            foreach (string? requirement in requirements)
             {
                 if (requirement is not null)
                 {
-                    foreach (var req in requirement.StreamSplit('/'))
+                    foreach (SpanSplitEntry req in requirement.StreamSplit('/'))
                     {
                         if (ConditionRequiresEPU(req) && EPU is null)
                         {

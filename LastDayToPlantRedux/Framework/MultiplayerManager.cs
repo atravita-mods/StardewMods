@@ -8,7 +8,7 @@ namespace LastDayToPlantRedux.Framework;
 internal static class MultiplayerManager
 {
     /// <summary>
-    /// Whether or het the code should check for a prestiged agriculturalist, for Walk of Life.
+    /// Whether or the the code should check for a prestiged agriculturalist, for Walk of Life.
     /// </summary>
     private static bool shouldCheckPrestiged = false;
 
@@ -61,8 +61,9 @@ internal static class MultiplayerManager
         {
             IEnumerator<Farmer>? farmers = Game1.getOnlineFarmers().GetEnumerator();
 
-            while ((NormalFarmer is null || AgriculturalistFarmer is null || PrestigedAgriculturalistFarmer is null) &&
-                farmers.MoveNext())
+            while ((NormalFarmer is null || AgriculturalistFarmer is null
+            || (shouldCheckPrestiged && PrestigedAgriculturalistFarmer is null))
+            && farmers.MoveNext())
             {
                 _ = AssignProfessionFarmersIfNeeded(farmers.Current);
             }
@@ -105,8 +106,9 @@ internal static class MultiplayerManager
 
         IEnumerator<Farmer>? farmers = Game1.getOnlineFarmers().GetEnumerator();
 
-        while ((NormalFarmer is null || AgriculturalistFarmer is null || PrestigedAgriculturalistFarmer is null) &&
-            farmers.MoveNext())
+        while ((NormalFarmer is null || AgriculturalistFarmer is null
+            || (shouldCheckPrestiged && PrestigedAgriculturalistFarmer is null))
+            && farmers.MoveNext())
         {
             _ = AssignProfessionFarmersIfNeeded(farmers.Current);
         }

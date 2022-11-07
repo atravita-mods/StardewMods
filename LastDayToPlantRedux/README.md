@@ -1,4 +1,4 @@
-Holiday Sales
+Last Day To Plant Redux
 ===========================
 ![Header image](docs/letter.png)
 
@@ -8,10 +8,12 @@ Inspired by [LastDayToPlant](https://www.nexusmods.com/stardewvalley/mods/7917?t
 
 ## Install
 
-1. Install the latest version of [SMAPI](https://smapi.io).
+This mod is not currently released, but should be soon.
+
+<!-- 1. Install the latest version of [SMAPI](https://smapi.io).
 2. Download and install [AtraCore](https://www.nexusmods.com/stardewvalley/mods/12932).
 2. Download this mod and unzip it into `Stardew Valley/Mods`.
-3. Run the game using SMAPI.
+3. Run the game using SMAPI. -->
 
 ## Uninstall
 Simply delete from your Mods directory.
@@ -19,14 +21,14 @@ Simply delete from your Mods directory.
 ## Configuration
 Run SMAPI at least once with this mod installed to generate the `config.json`, or use [Generic Mod Config Menu](https://www.nexusmods.com/stardewvalley/mods/5098) to configure.
 
-*  `DisplayOption`: The way you'd like the information presented to you. `OnFirstWarp` displays it the first time you warp, assuming you have no menus open and no events are happening. `InMailbox` puts it in your mailbox. (The letter is present in the mail collections tab, should you ever need to refer back to it.)
-*  `CropsToDisplay`: Which crops should this mod display to you? `All` displays all for the season, `Purchaseable` displays crops you can purchase and crops you've "seen", and `Seen` only displays crops you've seen.
+*  `DisplayOption`: The way you'd like the information presented to you. `OnFirstWarp` displays it the first time you warp, assuming you have no menus open and no events are happening. `InMailbox` puts it in your mailbox. `None` does neither. (The letter is also always present in the mail collections tab, should you ever need to refer back to it. It should always be relatively near the end.)
+*  `CropsToDisplay`: Which crops should this mod display to you? `All` displays all for the season, `Purchaseable` displays crops you can purchase AND crops you've "seen", and `Seen` only displays crops you've seen.
 *  "FertilizersToDisplay": Which fertilizers should this mod display to you? `All` for all relevant fertilizers, `Seen` for only fertilizers you've seen before. (`Purchaseable` isn't an option here, since More Fertilizers handles most of its shop logic on its own.)
 *  `AllowSeedsList`: A list of seeds to always display. Would look something like `["Beet Seeds", "Cake Plant Seeds", "Ancient Ferns Seed"]`. Use the `internal` name, not the display name. (The ID will also work.)
 *  `AllowFertilizersList`: A list of fertilizers to always display. Follows the same format as seeds, and also uses the internal name. (Note that most fertilizers for More Fertilizers have long internal names that don't match the display names).
 
 ## For other mod authors
-* If you'd like your seeds/fertilizers to show up or if you'd like to ban them from good, you can edit the data asset `Mods/atravita.LastDayToPlantRedux/AccessControl`, which is a string->string dictionary where the key is an identifier (internal seed name name or ID), and the value is either `allow` or `deny` (ignores case). For example:
+* If you'd like your seeds/fertilizers to show up or if you'd like to ban them for good, you can edit the data asset `Mods/atravita.LastDayToPlantRedux/AccessControl`, which is a string->string dictionary where the key is an identifier (internal seed name name or ID), and the value is either `allow` or `deny` (ignores case). For example:
 
 
 ```js

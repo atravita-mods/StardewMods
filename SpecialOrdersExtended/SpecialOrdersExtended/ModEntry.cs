@@ -78,6 +78,7 @@ internal sealed class ModEntry : Mod
         // Bind useful SMAPI features.
         I18n.Init(helper.Translation);
         AssetManager.Initialize(helper.GameContent);
+        CustomEmoji.Init(helper.GameContent);
         ModMonitor = this.Monitor;
         DataHelper = helper.Data;
         MultiplayerHelper = helper.Multiplayer;
@@ -108,7 +109,10 @@ internal sealed class ModEntry : Mod
         helper.Events.GameLoop.Saving += this.Saving;
         helper.Events.GameLoop.DayEnding += this.OnDayEnd;
         helper.Events.GameLoop.OneSecondUpdateTicking += this.OneSecondUpdateTicking;
+
         helper.Events.Content.AssetRequested += this.OnAssetRequested;
+        helper.Events.Content.AssetReady += static (_, e) => CustomEmoji.Ready(e);
+        helper.Events.Content.AssetsInvalidated += static (_, e) => CustomEmoji.Reset(e.NamesWithoutLocale);
     }
 
     private void ApplyPatches(Harmony harmony)

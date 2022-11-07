@@ -53,7 +53,7 @@ internal static class SpecialOrderPatches
     {
         try
         {
-            Dictionary<string, int> overrides = AssetManager.GetDurationOverride().ToDictionary(kvp => kvp.Key, kvp => int.TryParse(kvp.Value, out var value) ? value : 0);
+            Dictionary<string, int> overrides = AssetManager.GetDurationOverride().ToDictionary(kvp => kvp.Key, kvp => int.TryParse(kvp.Value, out int value) ? value : 0);
             if (overrides.TryGetValue(__instance.questKey.Value, out int duration))
             {
                 WorldDate? date = new(Game1.year, Game1.currentSeason, Game1.dayOfMonth);

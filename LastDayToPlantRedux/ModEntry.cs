@@ -134,11 +134,16 @@ internal sealed class ModEntry : Mod
     [EventPriority(EventPriority.Low)]
     private void OnDayStart(object? sender, DayStartedEventArgs e)
     {
-        if (Context.ScreenId == 0)
+        if (Context.ScreenId != 0)
         {
-            bool hasSeeds = AssetManager.UpdateOnDayStart();
+            return;
+        }
 
-            this.hasSeeds.Value = hasSeeds;
+        bool hasSeeds = AssetManager.UpdateOnDayStart();
+        this.hasSeeds.Value = hasSeeds;
+
+        if (Context.IsSplitScreen)
+        {
             foreach (int? screen in this.Helper.Multiplayer.GetConnectedPlayers().Where(player => player.IsSplitScreen).Select(player => player.ScreenID))
             {
                 if (screen is not null)

@@ -26,7 +26,7 @@ internal static class CropInGroundTranspiler
     [MethodImpl(TKConstants.Hot)]
     private static Color GetPrismaticColor(Color prevcolor, Vector2 tileLocation)
     {
-        if (prevcolor != Color.White && Game1.currentLocation?.terrainFeatures?.TryGetValue(tileLocation, out var terrain) == true && terrain is HoeDirt dirt
+        if (prevcolor != Color.White && Game1.currentLocation?.terrainFeatures?.TryGetValue(tileLocation, out TerrainFeature? terrain) == true && terrain is HoeDirt dirt
             && dirt.fertilizer.Value == ModEntry.PrismaticFertilizerID)
         {
             return Utility.GetPrismaticColor((int)(tileLocation.X + tileLocation.Y), 1);

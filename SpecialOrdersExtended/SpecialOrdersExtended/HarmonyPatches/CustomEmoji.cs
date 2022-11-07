@@ -82,6 +82,10 @@ internal static class CustomEmoji
         if (asset.TryGetValue(requesterName, out EmojiData? data))
         {
             IAssetName texLoc = parser.ParseAssetName(data.AssetName);
+            if (Failed.Contains(texLoc))
+            {
+                return null;
+            }
             try
             {
                 Texture2D? tex = Game1.content.Load<Texture2D>(texLoc.BaseName);

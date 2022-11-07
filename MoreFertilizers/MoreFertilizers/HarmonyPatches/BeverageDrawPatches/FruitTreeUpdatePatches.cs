@@ -25,7 +25,7 @@ internal static class FruitTreeUpdatePatches
                 new Rectangle(372, 1956, 10, 10),
                 new Vector2(
                     (__instance.currentTileLocation.X * 64f) + Game1.random.Next(-64, 96),
-                    (__instance.currentTileLocation.Y * 64f) + Game1.random.Next(-256, -64)),
+                    (__instance.currentTileLocation.Y * 64f) + Game1.random.Next(-256, -128)),
                 flipped: false,
                 0.002f,
                 Color.LimeGreen)

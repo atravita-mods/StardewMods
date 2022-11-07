@@ -121,7 +121,7 @@ internal sealed class ModEntry : Mod
             });
 #endif
 
-            helper.Print();
+            // helper.Print();
             return helper.Render();
         }
         catch (Exception ex)
@@ -156,7 +156,7 @@ internal sealed class ModEntry : Mod
                 new(OpCodes.Call, typeof(ModEntry).GetCachedMethod<long>(nameof(GetRandom), ReflectionCache.FlagTypes.StaticFlags)),
             });
 
-            helper.Print();
+            // helper.Print();
             return helper.Render();
         }
         catch (Exception ex)

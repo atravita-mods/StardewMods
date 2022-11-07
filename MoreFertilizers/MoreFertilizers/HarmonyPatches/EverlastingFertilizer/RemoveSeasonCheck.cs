@@ -87,7 +87,7 @@ internal static class RemoveSeasonCheck
         {
             for (int y = tileY - 2; y <= tileY + 2; y++)
             {
-                if (location.Objects.TryGetValue(new Vector2(x, y), out var obj)
+                if (location.Objects.TryGetValue(new Vector2(x, y), out StardewValley.Object? obj)
                     && obj.bigCraftable.Value && obj.ParentSheetIndex == TempusGlobeID)
                 {
                     return true;
@@ -155,7 +155,7 @@ internal static class RemoveSeasonCheck
             })
             .Advance(4);
 
-            var crop = helper.CurrentInstruction.ToLdLoc();
+            CodeInstruction? crop = helper.CurrentInstruction.ToLdLoc();
 
             helper.FindLast(instructions: new CodeInstructionWrapper[]
             {
@@ -168,9 +168,9 @@ internal static class RemoveSeasonCheck
             .Advance(3)
             .StoreBranchDest()
             .AdvanceToStoredLabel()
-            .DefineAndAttachLabel(out var jumppoint)
+            .DefineAndAttachLabel(out Label jumppoint)
             .Pop()
-            .GetLabels(out var labels)
+            .GetLabels(out IList<Label>? labels)
             .Insert(new CodeInstruction[]
             {
                 crop,

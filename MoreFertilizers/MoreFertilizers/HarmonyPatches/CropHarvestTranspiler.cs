@@ -298,7 +298,7 @@ internal static class CropHarvestTranspiler
                 new (OpCodes.Call), // this is a op_Implicit
                 new (OpCodes.Ldc_I4, 421),
             })
-            .GetLabels(out var seedyLabels)
+            .GetLabels(out IList<Label>? seedyLabels)
             .Insert(new CodeInstruction[]
             { // and just insert the seed fertilizer just before it.
                 new(OpCodes.Ldarg_1),

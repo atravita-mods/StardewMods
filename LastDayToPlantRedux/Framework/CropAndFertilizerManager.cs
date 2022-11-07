@@ -309,13 +309,14 @@ SUCCESS:
                 return true;
             case CropOptions.Purchaseable:
             {
+                if (HasStocklist.GetValue())
+                {
+                    goto case CropOptions.All;
+                }
+
                 if (crop < 3000)
                 {
-                    if (HasStocklist.GetValue() || Game1.year > 1)
-                    {
-                        return true;
-                    }
-                    return !(crop is 476 or 485 or 489); // the year2 seeds.
+                    return Game1.year > 1 || !(crop is 476 or 485 or 489); // the year2 seeds.
                 }
                 string? name = data.GetNthChunk('/', 0).ToString();
                 if (JsonAssetsShims.IsAvailableSeed(name))

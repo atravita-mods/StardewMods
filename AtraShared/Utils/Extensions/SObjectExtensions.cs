@@ -109,7 +109,7 @@ public static class SObjectExtensions
             int idx = recipeName.LastIndexOf("Recipe");
             if (idx > 0)
             {
-                recipeName = recipeName[..(idx - 1)];
+                recipeName = recipeName[.. (idx - 1)];
             }
 
             return obj.Category == SObject.CookingCategory

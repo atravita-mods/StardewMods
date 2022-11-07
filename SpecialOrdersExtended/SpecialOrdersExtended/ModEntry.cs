@@ -128,7 +128,7 @@ internal sealed class ModEntry : Mod
             ModMonitor.Log($"Failed to patch NPC::checkForNewCurrentDialogue for Special Orders Dialogue. Dialogue will be disabled\n\n{ex}", LogLevel.Error);
         }
 
-        if (ModsThatHandleTheBoard.All( uniqueID => !this.Helper.ModRegistry.IsLoaded(uniqueID)))
+        if (ModsThatHandleTheBoard.All(uniqueID => !this.Helper.ModRegistry.IsLoaded(uniqueID)))
         {
             this.Monitor.Log("Apply patch to suppress board updates.");
             SpecialOrderPatches.ApplyUpdatePatch(harmony);
@@ -185,7 +185,10 @@ internal sealed class ModEntry : Mod
             api.RegisterToken(this.ModManifest, "CurrentRules", new Tokens.CurrentSpecialOrderRule());
             api.RegisterToken(this.ModManifest, "RecentCompleted", new Tokens.RecentCompletedSO());
 
-            api.RegisterToken(this.ModManifest, "ProfitMargin", () => new[] { Math.Round(Game1.MasterPlayer.difficultyModifier, 2).ToString() });
+            api.RegisterToken(
+                mod: this.ModManifest,
+                name: "ProfitMargin",
+                getValue: static () => new[] { Math.Round(Game1.MasterPlayer.difficultyModifier, 2).ToString() });
         }
 
         if (helper.TryGetAPI("Omegasis.SaveAnywhere", "2.13.0", out ISaveAnywhereApi? saveAnywhereApi))
@@ -205,6 +208,8 @@ internal sealed class ModEntry : Mod
             }
         }
     }
+
+    #region save anywhere
 
     private void AfterSaveAnywhere(object? sender, EventArgs e)
     {
@@ -231,6 +236,8 @@ internal sealed class ModEntry : Mod
             this.Monitor.Log($"Failed in saving temporary files:\n\n{ex}", LogLevel.Error);
         }
     }
+
+    #endregion
 
     /// <inheritdoc cref="IGameLoopEvents.Saving"/>
     /// <remarks>Used to handle day-end events.</remarks>
@@ -300,7 +307,7 @@ internal sealed class ModEntry : Mod
         this.Helper.Events.GameLoop.Saved -= this.WriteMigrationData;
     }
 
-    #region consoleCommands
+    #region console commands
 
     /// <summary>
     /// Console commands to check the value of a tag.

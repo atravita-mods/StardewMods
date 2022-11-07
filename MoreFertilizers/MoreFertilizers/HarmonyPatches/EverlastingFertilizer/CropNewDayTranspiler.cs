@@ -1,8 +1,6 @@
 ﻿using System.Reflection;
 using System.Reflection.Emit;
-using System.Runtime.CompilerServices;
 
-using AtraBase.Toolkit;
 using AtraBase.Toolkit.Reflection;
 
 using AtraCore.Framework.ReflectionManager;
@@ -11,10 +9,6 @@ using AtraShared.Utils.Extensions;
 using AtraShared.Utils.HarmonyHelper;
 
 using HarmonyLib;
-
-using Microsoft.Xna.Framework;
-
-using StardewValley.TerrainFeatures;
 
 namespace MoreFertilizers.HarmonyPatches.EverlastingFertilizer;
 
@@ -43,6 +37,7 @@ internal static class CropNewDayTranspiler
     }
 
     [HarmonyPatch(nameof(Crop.newDay))]
+    [SuppressMessage("SMAPI.CommonErrors", "AvoidNetField:Avoid Netcode types when possible", Justification = "Used for matching only.")]
     [SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1116:Split parameters should start on line after declaration", Justification = "Reviewed.")]
     private static IEnumerable<CodeInstruction>? Transpiler(IEnumerable<CodeInstruction> instructions, ILGenerator gen, MethodBase original)
     {
@@ -60,9 +55,9 @@ internal static class CropNewDayTranspiler
             .Advance(3)
             .StoreBranchDest()
             .AdvanceToStoredLabel()
-            .DefineAndAttachLabel(out var jumppoint)
+            .DefineAndAttachLabel(out Label jumppoint)
             .Pop()
-            .GetLabels(out var labels)
+            .GetLabels(out IList<Label>? labels)
             .Insert(new CodeInstruction[]
             {
                 new(OpCodes.Ldarg_2), // fertilizer

@@ -5,13 +5,14 @@
 1. Catch input to place rug under things.
 <!-- Figure out how to replace the reference to coffee in the night market dialogue?-->
 <!-- Make it so notifications do not go away until dismissed? -->
+<!-- Make farm pan faster for animal menu and do some sort of keybind mess to snap to building-->
 
 #### Version 1.1.1
 * Some menus now accept arrow keys.
 * Internal improvements (mostly wrt enums).
 * Jukebox now checks your current location, not the mainland, for the is-it-raining check.
 * Adds a way to flip fruit trees and crops. Yes I am this petty.
-* Korean translation, thanks to [placeholder].
+* Korean translation, thanks to [park4934](https://blog.naver.com/park971202/222878509680).
 
 #### Version 1.1.0
 * Move to using AtraCore.

@@ -1151,7 +1151,7 @@ internal sealed class ModEntry : Mod
             }
             else
             {
-                foreach (var building in GameLocationUtils.GetBuildings())
+                foreach (StardewValley.Buildings.Building? building in GameLocationUtils.GetBuildings())
                 {
                     if (SolidFoundationShims.IsSFBuilding?.Invoke(building) == true)
                     {

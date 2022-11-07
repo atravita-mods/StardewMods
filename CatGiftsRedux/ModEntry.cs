@@ -111,6 +111,7 @@ internal sealed class ModEntry : Mod
         if (Game1.dayOfMonth % 7 == 0 || this.Helper.Data.ReadSaveData<string>(SAVEKEY) is not string value || !int.TryParse(value, out int giftsThisWeek))
         {
             giftsThisWeek = 0;
+            this.Helper.Data.WriteSaveData(SAVEKEY, "0");
         }
         else if (giftsThisWeek >= this.config.WeeklyLimit)
         {

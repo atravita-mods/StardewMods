@@ -16,6 +16,7 @@ using HarmonyLib;
 namespace FixPigRandom;
 
 /// <inheritdoc />
+[SuppressMessage("StyleCop.CSharp.OrderingRules", "SA1204:Static elements should appear before instance elements", Justification = "Reviewed.")]
 internal sealed class ModEntry : Mod
 {
     private static readonly Dictionary<long, Random> Cache = new();

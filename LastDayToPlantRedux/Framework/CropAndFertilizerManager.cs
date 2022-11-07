@@ -24,16 +24,13 @@ internal static class CropAndFertilizerManager
 {
     private static readonly TickCache<bool> HasStocklist = new(() => Game1.player.hasOrWillReceiveMail("PierreStocklist"));
 
-    private static bool cropsNeedRefreshing = true;
-    private static bool fertilizersNeedRefreshing = true;
-    private static StardewSeasons lastLoadedSeason = StardewSeasons.None;
-    private static bool hadStocklistLastCheck = false;
-    private static bool requiresReset = true;
+    // Map conditions to the number of days it takes to grow a crop.
+    private static readonly Dictionary<CropCondition, Dictionary<int, int>> DaysPerCondition = new();
 
     /// <summary>
     /// a mapping of fertilizers to a hoedirt that has them.
     /// </summary>
-    private static Dictionary<int, DummyHoeDirt> dirts = new();
+    private static readonly Dictionary<int, DummyHoeDirt> Dirts = new();
 
     /// <summary>
     /// a cache of crop data.
@@ -45,8 +42,11 @@ internal static class CropAndFertilizerManager
     /// </summary>
     private static Dictionary<int, string> fertilizers = new();
 
-    // Map conditions to the number of days it takes to grow a crop.
-    private static Dictionary<CropCondition, Dictionary<int, int>> daysPerCondition = new();
+    private static bool cropsNeedRefreshing = true;
+    private static bool fertilizersNeedRefreshing = true;
+    private static StardewSeasons lastLoadedSeason = StardewSeasons.None;
+    private static bool hadStocklistLastCheck = false;
+    private static bool requiresReset = true;
 
     /// <summary>
     /// A enum corresponding to the profession to check.
@@ -70,7 +70,7 @@ internal static class CropAndFertilizerManager
 
     internal static (string message, bool showplayer) GenerateMessageString()
     {
-        ModEntry.ModMonitor.Log($"Processing for {Game1.dayOfMonth}");
+        ModEntry.ModMonitor.Log($"Processing for day {Game1.dayOfMonth}");
         MultiplayerManager.UpdateOnDayStart();
         Process();
 
@@ -87,7 +87,7 @@ internal static class CropAndFertilizerManager
            .Append("^^");
         bool hasCrops = false;
 
-        foreach ((CropCondition condition, Dictionary<int, int> cropvalues) in daysPerCondition)
+        foreach ((CropCondition condition, Dictionary<int, int> cropvalues) in DaysPerCondition)
         {
             if (cropvalues.Count == 0)
             {
@@ -161,12 +161,8 @@ internal static class CropAndFertilizerManager
         if (LoadCropData() | LoadFertilizerData()
             || requiresReset || currentSeason != lastLoadedSeason || hadStocklistLastCheck != HasStocklist.GetValue())
         {
-            daysPerCondition.Clear();
+            DaysPerCondition.Clear();
         }
-
-        requiresReset = false;
-        hadStocklistLastCheck = HasStocklist.GetValue();
-        lastLoadedSeason = currentSeason;
 
         StardewSeasons nextSeason = currentSeason.GetNextSeason();
         ModEntry.ModMonitor.DebugOnlyLog($"Checking for {currentSeason} - next is {nextSeason}", LogLevel.Info);
@@ -183,8 +179,7 @@ internal static class CropAndFertilizerManager
 
             if (!Context.IsMultiplayer)
             {
-                InventoryWatcher.Reset();
-                return;
+                goto SUCCESS;
             }
         }
 
@@ -194,19 +189,24 @@ internal static class CropAndFertilizerManager
 
             if (!Context.IsMultiplayer)
             {
-                InventoryWatcher.Reset();
-                return;
+                goto SUCCESS;
             }
         }
 
         if (MultiplayerManager.NormalFarmer?.TryGetTarget(out Farmer? normal) == true)
         {
             ProcessForProfession(Profession.None, currentCrops, normal);
-            InventoryWatcher.Reset();
-            return;
+            goto SUCCESS;
         }
 
-        ModEntry.ModMonitor.Log($"No available farmers for data analysis, how did this happen?");
+        ModEntry.ModMonitor.Log($"No available farmers for data analysis, how did this happen?", LogLevel.Warn);
+        return;
+
+SUCCESS:
+        requiresReset = false;
+        hadStocklistLastCheck = HasStocklist.GetValue();
+        lastLoadedSeason = currentSeason;
+        InventoryWatcher.Reset();
     }
 
     private static void ProcessForProfession(Profession profession, List<int> currentCrops, Farmer? farmer = null)
@@ -217,10 +217,10 @@ internal static class CropAndFertilizerManager
             return;
         }
 
-        if (!daysPerCondition.TryGetValue(new CropCondition(profession, 0), out Dictionary<int, int>? unfertilized))
+        if (!DaysPerCondition.TryGetValue(new CropCondition(profession, 0), out Dictionary<int, int>? unfertilized))
         {
             unfertilized = new();
-            daysPerCondition[new CropCondition(profession, 0)] = unfertilized;
+            DaysPerCondition[new CropCondition(profession, 0)] = unfertilized;
         }
 
         // set up unfertilized.
@@ -229,7 +229,7 @@ internal static class CropAndFertilizerManager
             if (!unfertilized.ContainsKey(crop))
             {
                 Crop c = new(crop, 0, 0);
-                DummyHoeDirt? dirt = dirts[0];
+                DummyHoeDirt? dirt = Dirts[0];
                 dirt.crop = c;
                 dirt.nearWaterForPaddy.Value = c.isPaddyCrop() ? 1 : 0;
                 int? days = dirt.CalculateTimings(farmer);
@@ -245,10 +245,10 @@ internal static class CropAndFertilizerManager
         {
             CropCondition condition = new(profession, fertilizer);
 
-            if (!daysPerCondition.TryGetValue(condition, out Dictionary<int, int>? dict))
+            if (!DaysPerCondition.TryGetValue(condition, out Dictionary<int, int>? dict))
             {
                 dict = new();
-                daysPerCondition[condition] = dict;
+                DaysPerCondition[condition] = dict;
             }
             else if (!InventoryWatcher.HasSeedChanges)
             {
@@ -262,7 +262,7 @@ internal static class CropAndFertilizerManager
                 if (!dict.ContainsKey(crop))
                 {
                     Crop c = new(crop, 0, 0);
-                    DummyHoeDirt? dirt = dirts[fertilizer];
+                    DummyHoeDirt? dirt = Dirts[fertilizer];
                     dirt.crop = c;
                     dirt.nearWaterForPaddy.Value = c.isPaddyCrop() ? 1 : 0;
                     int? days = dirt.CalculateTimings(farmer);
@@ -456,16 +456,16 @@ breakcontinue:
 
     private static void PopulateFertilizerList()
     {
-        dirts.Clear();
+        Dirts.Clear();
 
-        dirts[0] = new(0);
+        Dirts[0] = new(0);
 
         foreach (int fert in fertilizers.Keys)
         {
-            dirts[fert] = new(fert);
+            Dirts[fert] = new(fert);
         }
 
-        ModEntry.ModMonitor.DebugOnlyLog($"Set up {dirts.Count} hoedirts");
+        ModEntry.ModMonitor.DebugOnlyLog($"Set up {Dirts.Count} hoedirts");
     }
 
     private static bool IsAllowedFertilizer(int id, string name)

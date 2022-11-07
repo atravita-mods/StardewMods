@@ -173,8 +173,9 @@ internal sealed class ModEntry : Mod
             moodchances[1] = 0;
         }
         else if (NPCCache.GetByVillagerName("Penny")?.getSpouse() is Farmer spouse
-                 && spouse.friendshipData["Penny"].IsMarried()
-                 && spouse.friendshipData["Penny"].Points <= 2000)
+            && spouse.friendshipData.TryGetValue("Penny", out Friendship? friendship)
+            && friendship.IsMarried()
+            && friendship.Points <= 2000)
         {// marriage penalty
             moodchances[0] = 0.4;
             moodchances[1] = 0.8;

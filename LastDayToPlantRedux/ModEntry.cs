@@ -7,6 +7,7 @@ using LastDayToPlantRedux.Framework;
 using Netcode;
 
 using StardewModdingAPI.Events;
+using StardewModdingAPI.Utilities;
 
 using StardewValley.Menus;
 
@@ -18,8 +19,8 @@ namespace LastDayToPlantRedux;
 internal sealed class ModEntry : Mod
 {
     private MigrationManager? migrator;
-    private bool hasSeeds = false;
-    private WeakReference<Farmer>? player = null;
+    private readonly PerScreen<bool> hasSeeds = new(() => false);
+    private List<WeakReference<Farmer>> players = new();
 
     /// <summary>
     /// Gets the logger for this mod.
@@ -44,6 +45,7 @@ internal sealed class ModEntry : Mod
 
         helper.Events.GameLoop.SaveLoaded += this.OnSaveLoaded;
         helper.Events.GameLoop.DayStarted += this.OnDayStart;
+        helper.Events.GameLoop.DayStarted += this.UpdateMailboxen;
         helper.Events.GameLoop.ReturnedToTitle += this.OnReturnedToTile;
         helper.Events.Player.Warped += this.OnPlayerWarped;
 
@@ -57,6 +59,8 @@ internal sealed class ModEntry : Mod
         helper.Events.Content.AssetsInvalidated += static (_, e) => AssetManager.InvalidateCache(e);
     }
 
+
+
     /// <inheritdoc cref="IGameLoopEvents.ReturnedToTitle"/>
     [EventPriority(EventPriority.High + 10)]
     private void OnReturnedToTile(object? sender, ReturnedToTitleEventArgs e)
@@ -66,10 +70,13 @@ internal sealed class ModEntry : Mod
         InventoryWatcher.ClearModel();
         MultiplayerManager.Reset();
 
-        if (this.player?.TryGetTarget(out Farmer? farmer) == true)
+        foreach (var player in this.players)
         {
-            farmer.professions.OnElementChanged -= this.Professions_OnElementChanged;
-            farmer.professions.OnArrayReplaced -= this.Professions_OnArrayReplaced;
+            if (player.TryGetTarget(out Farmer? farmer))
+            {
+                farmer.professions.OnElementChanged -= this.Professions_OnElementChanged;
+                farmer.professions.OnArrayReplaced -= this.Professions_OnArrayReplaced;
+            }
         }
     }
 
@@ -102,21 +109,24 @@ internal sealed class ModEntry : Mod
         Game1.player.mailReceived.Add(AssetManager.MailFlag);
 
         // track the player so I can remove events later.
-        this.player = new(Game1.player);
+        this.players.Add(new(Game1.player));
         Game1.player.professions.OnArrayReplaced += this.Professions_OnArrayReplaced;
         Game1.player.professions.OnElementChanged += this.Professions_OnElementChanged;
 
-        InventoryWatcher.LoadModel(this.Helper.Data);
-
-        this.migrator = new(this.ModManifest, this.Helper, this.Monitor);
-
-        if (!this.migrator.CheckVersionInfo())
+        if (Context.ScreenId == 0)
         {
-            this.Helper.Events.GameLoop.Saved += this.WriteMigrationData;
-        }
-        else
-        {
-            this.migrator = null;
+            InventoryWatcher.LoadModel(this.Helper.Data);
+
+            this.migrator = new(this.ModManifest, this.Helper, this.Monitor);
+
+            if (!this.migrator.CheckVersionInfo())
+            {
+                this.Helper.Events.GameLoop.Saved += this.WriteMigrationData;
+            }
+            else
+            {
+                this.migrator = null;
+            }
         }
     }
 
@@ -126,12 +136,25 @@ internal sealed class ModEntry : Mod
     {
         if (Context.ScreenId == 0)
         {
-            this.hasSeeds = AssetManager.UpdateOnDayStart();
-            if (this.hasSeeds && Config.DisplayOption == DisplayOptions.InMailbox)
+            bool hasSeeds = AssetManager.UpdateOnDayStart();
+
+            foreach (KeyValuePair<int, bool> screen in this.hasSeeds.GetActiveValues().ToArray())
             {
-                Game1.mailbox.Remove(AssetManager.MailFlag);
-                Game1.mailbox.Add(AssetManager.MailFlag);
+                this.hasSeeds.SetValueForScreen(screen.Key, hasSeeds);
             }
+        }
+    }
+
+    /// <inheritdoc cref="IGameLoopEvents.DayStarted"/>
+    /// <remarks>Runs after <see cref="OnDayStart(object?, DayStartedEventArgs)"/>, used to populate the mailboxes in splitscreen.
+    /// Event priorities make sure that one runs first.</remarks>
+    [EventPriority(EventPriority.Low - 1000)]
+    private void UpdateMailboxen(object? sender, DayStartedEventArgs e)
+    {
+        Game1.mailbox.Remove(AssetManager.MailFlag);
+        if (Config.DisplayOption == DisplayOptions.InMailbox && this.hasSeeds.Value)
+        {
+            Game1.mailbox.Add(AssetManager.MailFlag);
         }
     }
 
@@ -139,9 +162,9 @@ internal sealed class ModEntry : Mod
     [EventPriority(EventPriority.Low)]
     private void OnPlayerWarped(object? sender, WarpedEventArgs e)
     {
-        if (this.hasSeeds && e.IsLocalPlayer && Game1.activeClickableMenu is null && Config.DisplayOption == DisplayOptions.OnFirstWarp)
+        if (this.hasSeeds.Value && e.IsLocalPlayer && Context.IsPlayerFree && Config.DisplayOption == DisplayOptions.OnFirstWarp)
         {
-            this.hasSeeds = false;
+            this.hasSeeds.Value = false;
             Dictionary<string, string>? maildata = Game1.content.Load<Dictionary<string, string>>(AssetManager.DataMail.BaseName);
 
             if (maildata.TryGetValue(AssetManager.MailFlag, out string? mail))

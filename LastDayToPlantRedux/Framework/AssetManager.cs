@@ -7,8 +7,16 @@ namespace LastDayToPlantRedux.Framework;
 /// <summary>
 /// Manages assets for this mod.
 /// </summary>
+[SuppressMessage("StyleCop.CSharp.OrderingRules", "SA1201:Elements should appear in the correct order", Justification = "Reviewed.")]
 internal static class AssetManager
 {
+    #region denylist and allowlist
+    private static readonly HashSet<int> AllowedFertilizersValue = new();
+    private static readonly HashSet<int> DeniedFertilizersValue = new();
+    private static readonly HashSet<int> AllowedSeedsValue = new();
+    private static readonly HashSet<int> DeniedSeedsValue = new();
+    private static bool accessProcessed = false;
+
     /// <summary>
     /// The mailflag used for this mod.
     /// </summary>
@@ -22,7 +30,7 @@ internal static class AssetManager
         get
         {
             ProcessAccessLists();
-            return allowedFertilizers;
+            return AllowedFertilizersValue;
         }
     }
 
@@ -34,7 +42,7 @@ internal static class AssetManager
         get
         {
             ProcessAccessLists();
-            return deniedFertilizers;
+            return DeniedFertilizersValue;
         }
     }
 
@@ -46,7 +54,7 @@ internal static class AssetManager
         get
         {
             ProcessAccessLists();
-            return allowedSeeds;
+            return AllowedSeedsValue;
         }
     }
 
@@ -58,16 +66,11 @@ internal static class AssetManager
         get
         {
             ProcessAccessLists();
-            return deniedSeeds;
+            return DeniedSeedsValue;
         }
     }
 
-    // denylist and allowlist
-    private static readonly HashSet<int> allowedFertilizers = new();
-    private static readonly HashSet<int> deniedFertilizers = new();
-    private static readonly HashSet<int> allowedSeeds = new();
-    private static readonly HashSet<int> deniedSeeds = new();
-    private static bool accessProcessed = false;
+    #endregion
 
     /// <summary>
     /// The current mail for the player.
@@ -112,9 +115,9 @@ internal static class AssetManager
     /// <returns>True if there's crops with their last day today.</returns>
     internal static bool UpdateOnDayStart()
     {
-        (string message, bool showplayer) ret = CropAndFertilizerManager.GenerateMessageString();
-        Message = ret.message;
-        return ret.showplayer;
+        (string message, bool showplayer) = CropAndFertilizerManager.GenerateMessageString();
+        Message = message;
+        return showplayer;
     }
 
     /// <summary>
@@ -169,10 +172,10 @@ internal static class AssetManager
 
         AssetManager.accessProcessed = true;
 
-        allowedFertilizers.Clear();
-        deniedFertilizers.Clear();
-        allowedSeeds.Clear();
-        deniedSeeds.Clear();
+        AllowedFertilizersValue.Clear();
+        DeniedFertilizersValue.Clear();
+        AllowedSeedsValue.Clear();
+        DeniedSeedsValue.Clear();
 
         foreach ((string item, string access) in Game1.content.Load<Dictionary<string, string>>(AssetManager.accessLists.BaseName))
         {
@@ -203,21 +206,21 @@ internal static class AssetManager
                 case SObject.SeedsCategory:
                     if (isAllow)
                     {
-                        allowedSeeds.Add(id);
+                        AllowedSeedsValue.Add(id);
                     }
                     else if (isDeny)
                     {
-                        deniedSeeds.Add(id);
+                        DeniedSeedsValue.Add(id);
                     }
                     break;
                 case SObject.fertilizerCategory:
                     if (isAllow)
                     {
-                        allowedFertilizers.Add(id);
+                        AllowedFertilizersValue.Add(id);
                     }
                     else if (isDeny)
                     {
-                        deniedFertilizers.Add(id);
+                        DeniedFertilizersValue.Add(id);
                     }
                     break;
                 default:

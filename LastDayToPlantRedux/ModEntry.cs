@@ -46,7 +46,7 @@ internal sealed class ModEntry : Mod
         helper.Events.GameLoop.SaveLoaded += this.OnSaveLoaded;
         helper.Events.GameLoop.DayStarted += this.OnDayStart;
         helper.Events.GameLoop.DayStarted += this.UpdateMailboxen;
-        helper.Events.GameLoop.ReturnedToTitle += this.OnReturnedToTile;
+        helper.Events.GameLoop.ReturnedToTitle += this.OnReturnedToTitle;
         helper.Events.Player.Warped += this.OnPlayerWarped;
 
         helper.Events.Player.InventoryChanged += (_, e) => InventoryWatcher.Watch(e, helper.Data);
@@ -63,7 +63,7 @@ internal sealed class ModEntry : Mod
 
     /// <inheritdoc cref="IGameLoopEvents.ReturnedToTitle"/>
     [EventPriority(EventPriority.High + 10)]
-    private void OnReturnedToTile(object? sender, ReturnedToTitleEventArgs e)
+    private void OnReturnedToTitle(object? sender, ReturnedToTitleEventArgs e)
     {
         CropAndFertilizerManager.RequestInvalidateCrops();
         CropAndFertilizerManager.RequestInvalidateFertilizers();
@@ -138,9 +138,13 @@ internal sealed class ModEntry : Mod
         {
             bool hasSeeds = AssetManager.UpdateOnDayStart();
 
-            foreach (KeyValuePair<int, bool> screen in this.hasSeeds.GetActiveValues().ToArray())
+            this.hasSeeds.Value = hasSeeds;
+            foreach (int? screen in this.Helper.Multiplayer.GetConnectedPlayers().Where(player => player.IsSplitScreen).Select(player => player.ScreenID))
             {
-                this.hasSeeds.SetValueForScreen(screen.Key, hasSeeds);
+                if (screen is not null)
+                {
+                    this.hasSeeds.SetValueForScreen(screen.Value, hasSeeds);
+                }
             }
         }
     }

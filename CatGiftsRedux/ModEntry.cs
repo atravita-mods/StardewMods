@@ -91,6 +91,7 @@ internal sealed class ModEntry : Mod
         }
     }
 
+    /// <inheritdoc cref="IContentEvents.AssetsInvalidated"/>
     private void OnAssetInvalidated(object? sender, AssetsInvalidatedEventArgs e)
     {
         if (this.allItemsWeighted.IsValueCreated && e.NamesWithoutLocale.Contains(this.dataObjectInfo))
@@ -100,6 +101,7 @@ internal sealed class ModEntry : Mod
         }
     }
 
+    /// <inheritdoc cref="IGameLoopEvents.DayStarted"/>
     [EventPriority(EventPriority.High)]
     private void OnDayLaunched(object? sender, DayStartedEventArgs e)
     {
@@ -288,13 +290,10 @@ internal sealed class ModEntry : Mod
 
     #endregion
 
+    /// <inheritdoc cref="IGameLoopEvents.SaveLoaded"/>
     private void OnSaveLoaded(object? sender, SaveLoadedEventArgs e) => this.LoadDataFromConfig();
 
-    /// <summary>
-    /// Sets up the GMCM for this mod.
-    /// </summary>
-    /// <param name="sender">SMAPI.</param>
-    /// <param name="e">event args.</param>
+    /// <inheritdoc cref="IGameLoopEvents.GameLaunched"/>
     private void OnGameLaunch(object? sender, GameLaunchedEventArgs e)
     {
         IntegrationHelper integration = new(this.Monitor, this.Helper.Translation, this.Helper.ModRegistry, LogLevel.Trace);

@@ -3,6 +3,7 @@ using System.Reflection.Emit;
 using System.Runtime.CompilerServices;
 
 using AtraBase.Toolkit;
+using AtraBase.Toolkit.Reflection;
 
 using AtraCore.Framework.ReflectionManager;
 
@@ -28,8 +29,7 @@ internal sealed class ModEntry : Mod
     {
         modMonitor = this.Monitor;
         helper.Events.GameLoop.DayEnding += static (_, _) => Cache.Clear();
-
-        this.ApplyPatches(new(this.ModManifest.UniqueID));
+        helper.Events.GameLoop.GameLaunched += (_, _) => this.ApplyPatches(new(this.ModManifest.UniqueID));
     }
 
     private void ApplyPatches(Harmony harmony)
@@ -39,6 +39,24 @@ internal sealed class ModEntry : Mod
             harmony.Patch(
                 original: typeof(FarmAnimal).GetCachedMethod("findTruffle", ReflectionCache.FlagTypes.InstanceFlags),
                 transpiler: new(typeof(ModEntry).GetCachedMethod(nameof(Transpiler), ReflectionCache.FlagTypes.StaticFlags)));
+
+            if (this.Helper.ModRegistry.Get("Paritee.BetterFarmAnimalVariety") is IModInfo bfav
+                && bfav.Manifest.Version.IsNewerThan("3.2.3"))
+            {
+                this.Monitor.Log("Patching bfav for compat", LogLevel.Info);
+
+                Type? patch = AccessTools.TypeByName("BetterFarmAnimalVariety.Framework.Patches.FarmAnimal.FindTruffle");
+                if (patch is not null)
+                {
+                    harmony.Patch(
+                        original: patch.StaticMethodNamed("ShouldStopFindingProduce"),
+                        transpiler: new(typeof(ModEntry).GetCachedMethod(nameof(BFAVTranspiler), ReflectionCache.FlagTypes.StaticFlags)));
+                }
+                else
+                {
+                    this.Monitor.Log("BFAV could not be patched for compat, this mod will probably not work.", LogLevel.Warn);
+                }
+            }
         }
         catch (Exception ex)
         {
@@ -49,12 +67,16 @@ internal sealed class ModEntry : Mod
 
     [MethodImpl(TKConstants.Hot)]
     private static Random GetRandom(FarmAnimal pig)
+        => GetRandom(pig.myID.Value);
+
+    [MethodImpl(TKConstants.Hot)]
+    private static Random GetRandom(long id)
     {
-        if (!Cache.TryGetValue(pig.myID.Value, out Random? random))
+        if (!Cache.TryGetValue(id, out Random? random))
         {
-            modMonitor.DebugOnlyLog($"Cache hit: {pig.myID.Value}");
-            random = RandomUtils.GetSeededRandom(2, (int)(pig.myID.Value >> 1));
-            Cache[pig.myID.Value] = random;
+            modMonitor.DebugOnlyLog($"Cache miss: {id}");
+            random = RandomUtils.GetSeededRandom(2, (int)(id >> 1));
+            Cache[id] = random;
         }
 
         return random;
@@ -80,7 +102,7 @@ internal sealed class ModEntry : Mod
             })
             .Insert(new CodeInstruction[]
             {
-                new(OpCodes.Call, typeof(ModEntry).GetCachedMethod(nameof(GetRandom), ReflectionCache.FlagTypes.StaticFlags)),
+                new(OpCodes.Call, typeof(ModEntry).GetCachedMethod<FarmAnimal>(nameof(GetRandom), ReflectionCache.FlagTypes.StaticFlags)),
             });
 
 #if DEBUG
@@ -99,7 +121,42 @@ internal sealed class ModEntry : Mod
             });
 #endif
 
-            // helper.Print();
+            helper.Print();
+            return helper.Render();
+        }
+        catch (Exception ex)
+        {
+            modMonitor.Log($"Ran into error transpiling {original.FullDescription()}\n\n{ex}", LogLevel.Error);
+            original.Snitch(modMonitor);
+        }
+        return null;
+    }
+
+    private static IEnumerable<CodeInstruction>? BFAVTranspiler(IEnumerable<CodeInstruction> instructions, ILGenerator gen, MethodBase original)
+    {
+        try
+        {
+            ILHelper helper = new(original, instructions, modMonitor, gen);
+            Type farmAnimal = AccessTools.TypeByName("BetterFarmAnimalVariety.Framework.Decorators.FarmAnimal")
+                                ?? ReflectionThrowHelper.ThrowMethodNotFoundException<Type>("BFAV farm animal");
+
+            helper.FindNext(new CodeInstructionWrapper[]
+            { // find the creation of the random and replace it with our own.
+                OpCodes.Ldarg_0,
+                OpCodes.Ldind_Ref,
+                (OpCodes.Callvirt, farmAnimal.GetCachedMethod("GetUniqueId", ReflectionCache.FlagTypes.InstanceFlags)),
+            })
+            .Advance(3)
+            .RemoveUntil(new CodeInstructionWrapper[]
+            {
+                (OpCodes.Callvirt, typeof(Random).GetCachedMethod(nameof(Random.NextDouble), ReflectionCache.FlagTypes.InstanceFlags, Type.EmptyTypes)),
+            })
+            .Insert(new CodeInstruction[]
+            {
+                new(OpCodes.Call, typeof(ModEntry).GetCachedMethod<long>(nameof(GetRandom), ReflectionCache.FlagTypes.StaticFlags)),
+            });
+
+            helper.Print();
             return helper.Render();
         }
         catch (Exception ex)

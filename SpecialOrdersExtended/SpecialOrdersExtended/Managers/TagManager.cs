@@ -37,20 +37,25 @@ internal static class TagManager
     /// <summary>
     /// Delete's the random so it can be reset later.
     /// </summary>
-    internal static void ResetRandom() => random = null;
+    internal static void ResetRandom()
+    {
+        if (Game1.stats.DaysPlayed % 7 == 0)
+        {
+            random = null;
+        }
+    }
 
     #endregion
 
     #region cache
 
+    private readonly static Dictionary<string, bool> Cache = new();
     private static int lastTick = -1;
-
-    private readonly static Dictionary<string, bool> cache = new();
 
     internal static void ClearCache()
     {
         lastTick = -1;
-        cache.Clear();
+        Cache.Clear();
     }
 
     #endregion
@@ -68,11 +73,11 @@ internal static class TagManager
     private static bool PrefixCheckTag(ref bool __result, string __0)
     {
         {
-            if (ModEntry.Config.UseTagCache && cache.TryGetValue(__0, out bool result))
+            if (ModEntry.Config.UseTagCache && Cache.TryGetValue(__0, out bool result))
             {
                 if (Game1.ticks != lastTick)
                 {
-                    cache.Clear();
+                    Cache.Clear();
                     lastTick = Game1.ticks;
                 }
                 else
@@ -402,11 +407,11 @@ internal static class TagManager
         {
             if (Game1.ticks != lastTick)
             {
-                cache.Clear();
+                Cache.Clear();
                 lastTick = Game1.ticks;
             }
 
-            cache[__0] = __result;
+            Cache[__0] = __result;
         }
     }
 

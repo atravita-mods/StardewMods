@@ -1,4 +1,8 @@
-﻿using HarmonyLib;
+﻿using System.Runtime.CompilerServices;
+
+using AtraBase.Toolkit;
+
+using HarmonyLib;
 
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -48,7 +52,9 @@ internal static class CustomEmoji
     }
 
     [UsedImplicitly]
+    [MethodImpl(TKConstants.Hot)]
     [HarmonyPatch("GetPortraitForRequester")]
+    [HarmonyPriority(Priority.LowerThanNormal)]
     [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Named for harmony.")]
     private static void Postfix(ref KeyValuePair<Texture2D, Rectangle>? __result, string requester_name)
     {
@@ -63,6 +69,7 @@ internal static class CustomEmoji
         }
     }
 
+    [MethodImpl(TKConstants.Hot)]
     private static KeyValuePair<Texture2D, Rectangle>? GetEntry(string requesterName)
     {
         if (Cache.TryGetValue(requesterName, out KeyValuePair<Texture2D, Rectangle> entry))

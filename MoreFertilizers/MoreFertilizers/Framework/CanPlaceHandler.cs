@@ -72,6 +72,11 @@ public sealed class CanPlaceHandler : IMoreFertilizersAPI
     /// ModData string marking miraculous beverages.
     /// </summary>
     public const string MiraculousBeverages = "atravita.MoreFertilizer.MiraculousBeverages";
+
+    /// <summary>
+    /// Marks the prismatic fertilizer.
+    /// </summary>
+    public const string PrismaticFertilizer = "atravita.MoreFertilizer.Prismatic";
     #endregion
 
     /// <summary>
@@ -106,7 +111,16 @@ public sealed class CanPlaceHandler : IMoreFertilizersAPI
 
         if (loc.terrainFeatures.TryGetValue(tile, out TerrainFeature? terrain))
         {
-            if (terrain is FruitTree fruitTree
+            if (terrain is HoeDirt dirt && dirt.crop is Crop crop && crop.programColored.Value && obj.ParentSheetIndex == ModEntry.PrismaticFertilizerID)
+            {
+                bool ret = dirt.modData.ContainsKey(PrismaticFertilizer);
+                if (alert && !ret)
+                {
+                    AlertPlayer();
+                }
+                return ret;
+            }
+            else if (terrain is FruitTree fruitTree
                 && (obj.ParentSheetIndex == ModEntry.MiraculousBeveragesID
                     || (fruitTree.growthStage.Value != FruitTree.treeStage
                         && (obj.ParentSheetIndex == ModEntry.FruitTreeFertilizerID || obj.ParentSheetIndex == ModEntry.DeluxeFruitTreeFertilizerID))))
@@ -141,15 +155,27 @@ public sealed class CanPlaceHandler : IMoreFertilizersAPI
             }
         }
 
-        if (loc.Objects.TryGetValue(tile, out SObject @object) && @object is IndoorPot pot && pot.bush?.Value is Bush pottedBush && pottedBush.size?.Value == Bush.greenTeaBush
-            && (obj.ParentSheetIndex == ModEntry.RapidBushFertilizerID || obj.ParentSheetIndex == ModEntry.BountifulBushID || obj.ParentSheetIndex == ModEntry.MiraculousBeveragesID ))
+        if (loc.Objects.TryGetValue(tile, out SObject @object) && @object is IndoorPot pot)
         {
-            bool ret = !pottedBush.modData.ContainsKey(BountifulBush) && !pottedBush.modData.ContainsKey(RapidBush) && !pottedBush.modData.ContainsKey(MiraculousBeverages);
-            if (alert && !ret)
+            if (pot.bush?.Value is Bush pottedBush && pottedBush.size?.Value == Bush.greenTeaBush
+                    && (obj.ParentSheetIndex == ModEntry.RapidBushFertilizerID || obj.ParentSheetIndex == ModEntry.BountifulBushID || obj.ParentSheetIndex == ModEntry.MiraculousBeveragesID))
             {
-                AlertPlayer();
+                bool ret = !pottedBush.modData.ContainsKey(BountifulBush) && !pottedBush.modData.ContainsKey(RapidBush) && !pottedBush.modData.ContainsKey(MiraculousBeverages);
+                if (alert && !ret)
+                {
+                    AlertPlayer();
+                }
+                return ret;
             }
-            return ret;
+            else if (pot.hoeDirt.Value is HoeDirt dirt && dirt.crop is Crop crop && crop.programColored.Value && obj.ParentSheetIndex == ModEntry.PrismaticFertilizerID)
+            {
+                bool ret = dirt.modData.ContainsKey(PrismaticFertilizer);
+                if (alert && !ret)
+                {
+                    AlertPlayer();
+                }
+                return ret;
+            }
         }
 
         if (obj.ParentSheetIndex == ModEntry.BountifulBushID)
@@ -169,6 +195,7 @@ public sealed class CanPlaceHandler : IMoreFertilizersAPI
             }
         }
 
+        // fish food.
         if ((obj.ParentSheetIndex == ModEntry.FishFoodID || obj.ParentSheetIndex == ModEntry.DeluxeFishFoodID)
             && loc.canFishHere() && loc.doesTileHaveProperty((int)tile.X, (int)tile.Y, "Water", "Back") is not null)
         {
@@ -244,12 +271,27 @@ public sealed class CanPlaceHandler : IMoreFertilizersAPI
                 tree.modData?.SetBool(TreeTapperFertilizer, true);
                 return true;
             }
+
+            if (terrain is HoeDirt dirt
+                && obj.ParentSheetIndex == ModEntry.PrismaticFertilizerID)
+            {
+                dirt.modData?.SetBool(PrismaticFertilizer, true);
+                return true;
+            }
         }
 
-        if (loc.Objects.TryGetValue(tile, out SObject @object) && @object is IndoorPot pot
-            && pot.bush?.Value is Bush pottedBush && pottedBush.size?.Value == Bush.greenTeaBush)
+        if (loc.Objects.TryGetValue(tile, out SObject @object) && @object is IndoorPot pot)
         {
-            return ApplyTeaBushFertilizer(obj, pottedBush);
+            if (pot.hoeDirt.Value is HoeDirt dirt
+                && obj.ParentSheetIndex == ModEntry.PrismaticFertilizerID)
+            {
+                dirt.modData?.SetBool(PrismaticFertilizer, true);
+                return true;
+            }
+            if (pot.bush?.Value is Bush pottedBush && pottedBush.size?.Value == Bush.greenTeaBush)
+            {
+                return ApplyTeaBushFertilizer(obj, pottedBush);
+            }
         }
 
         if (obj.ParentSheetIndex == ModEntry.BountifulBushID)

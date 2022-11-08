@@ -13,6 +13,8 @@ using HarmonyLib;
 
 using Microsoft.Xna.Framework;
 
+using MoreFertilizers.Framework;
+
 using StardewValley.TerrainFeatures;
 
 namespace MoreFertilizers.HarmonyPatches.PrismaticFertilizer;
@@ -27,7 +29,7 @@ internal static class CropInGroundTranspiler
     private static Color GetPrismaticColor(Color prevcolor, Vector2 tileLocation)
     {
         if (prevcolor != Color.White && Game1.currentLocation?.terrainFeatures?.TryGetValue(tileLocation, out TerrainFeature? terrain) == true && terrain is HoeDirt dirt
-            && dirt.fertilizer.Value == ModEntry.PrismaticFertilizerID)
+            && dirt.modData?.GetBool(CanPlaceHandler.PrismaticFertilizer) == true)
         {
             return Utility.GetPrismaticColor((int)(tileLocation.X + tileLocation.Y), 1);
         }

@@ -48,21 +48,34 @@ internal static class CropAndFertilizerManager
     private static bool hadStocklistLastCheck = false;
     private static bool requiresReset = true;
 
-    /// <summary>
-    /// A enum corresponding to the profession to check.
-    /// </summary>
-    private enum Profession
-    {
-        None,
-        Agriculturalist,
-        Prestiged,
-    }
-
     [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "StyleCop doesn't understand records.")]
     private record CropEntry(StardewSeasons Seasons, string GrowthData);
 
     [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "StyleCop doesn't understand records.")]
     private record CropCondition(Profession Profession, int Fertilizer);
+
+    #region API
+
+    internal static int? GetDays(Profession profession, int fertilizer, int crop)
+    {
+        // check with specific fertilizer.
+        CropCondition? key = new(profession, fertilizer);
+        if (DaysPerCondition.TryGetValue(key, out Dictionary<int, int>? daysDict)
+            && daysDict.TryGetValue(crop, out var days))
+        {
+            return days;
+        }
+
+        // check with no fertilizer.
+        key = new(profession, 0);
+        if (DaysPerCondition.TryGetValue(key, out daysDict)
+            && daysDict.TryGetValue(crop, out days))
+        {
+            return days;
+        }
+        return null;
+    }
+    #endregion
 
     #region processing
 

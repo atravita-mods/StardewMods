@@ -6,8 +6,12 @@
   "GmcmVersionMessage": "Please update Generic Mod Config Menu (https://www.nexusmods.com/stardewvalley/mods/5098) to at least version {{version}} (Current version: {{currentversion}}). GMCM integration disabled.",
   "cp-not-installed": "Content Patcher not installed, tokens will not be available.",
 
-  "SurpressUnnecessaryBoardUpdates.name": "Surpress Unnecessary Board Updates",
+  "SurpressUnnecessaryBoardUpdates.tile": "Surpress Unnecessary Board Updates",
   "SurpressUnnecessaryBoardUpdates.description": "Prevents the game from trying to reload the special order data before the board is even open.",
+  "UseTagCache.title ": "Use Tag Cache",
+  "UseTagCache.description": "Caches the results of tags to avoid repeated checks.",
+  "AvoidRepeatingQiOrders.title": "Avoid Repeating Qi Orders",
+  "AvoidRepeatingQiOrders.description": "If enabled, Qi orders will not repeat until you've completed all of them.",
 
   //Documentation for console commands
   "special_order_pool.description": "Lists the current special orders. If order is not available, explains why.",
@@ -56,5 +60,5 @@
   "stat-not-found": "{{key}} not found in `stats.cs`. Is it provided by a mod that's not currently loaded?'",
   "stat-cache-fail": "Failure to use {{key}}, please take this log to {{atra}}.",
 
-  "skill-not-found": "${{profession}} for {{skill}} not found; perhaps it's from a mod not installed?"
+  "skill-not-found": "{{profession}} for {{skill}} not found; perhaps it's from a mod not installed?"
 }

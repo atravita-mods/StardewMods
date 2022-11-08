@@ -20,7 +20,6 @@ internal sealed class ModEntry : Mod
 {
     private MigrationManager? migrator;
     private readonly PerScreen<bool> hasSeeds = new(() => false);
-    private List<WeakReference<Farmer>> players = new();
 
     /// <summary>
     /// Gets the logger for this mod.
@@ -59,7 +58,8 @@ internal sealed class ModEntry : Mod
         helper.Events.Content.AssetsInvalidated += static (_, e) => AssetManager.InvalidateCache(e);
     }
 
-
+    /// <inheritdoc />
+    public override object? GetApi() => new LastDayToPlantAPI();
 
     /// <inheritdoc cref="IGameLoopEvents.ReturnedToTitle"/>
     [EventPriority(EventPriority.High + 10)]
@@ -69,15 +69,6 @@ internal sealed class ModEntry : Mod
         CropAndFertilizerManager.RequestInvalidateFertilizers();
         InventoryWatcher.ClearModel();
         MultiplayerManager.Reset();
-
-        foreach (var player in this.players)
-        {
-            if (player.TryGetTarget(out Farmer? farmer))
-            {
-                farmer.professions.OnElementChanged -= this.Professions_OnElementChanged;
-                farmer.professions.OnArrayReplaced -= this.Professions_OnArrayReplaced;
-            }
-        }
     }
 
     /// <inheritdoc cref="IGameLoopEvents.GameLaunched"/>
@@ -108,10 +99,9 @@ internal sealed class ModEntry : Mod
         Game1.player.mailReceived.Remove(AssetManager.MailFlag);
         Game1.player.mailReceived.Add(AssetManager.MailFlag);
 
-        // track the player so I can remove events later.
-        this.players.Add(new(Game1.player));
-        Game1.player.professions.OnArrayReplaced += this.Professions_OnArrayReplaced;
-        Game1.player.professions.OnElementChanged += this.Professions_OnElementChanged;
+        FarmerWatcher? watcher = new();
+        Game1.player.professions.OnArrayReplaced += watcher.Professions_OnArrayReplaced;
+        Game1.player.professions.OnElementChanged += watcher.Professions_OnElementChanged;
 
         if (Context.ScreenId == 0)
         {
@@ -198,22 +188,5 @@ internal sealed class ModEntry : Mod
         this.Helper.Events.GameLoop.Saved -= this.WriteMigrationData;
     }
 
-    private void Professions_OnArrayReplaced(NetList<int, NetInt> list, IList<int> before, IList<int> after)
-    {
-        if (!Context.IsMultiplayer
-                && (before.Contains(Farmer.agriculturist) != after.Contains(Farmer.agriculturist)
-                || before.Contains(Farmer.agriculturist + 100) != after.Contains(Farmer.agriculturist + 100)))
-        {
-            CropAndFertilizerManager.RequestReset();
-        }
-    }
 
-    private void Professions_OnElementChanged(NetList<int, NetInt> list, int index, int oldValue, int newValue)
-    {
-        if (!Context.IsMultiplayer
-            && (oldValue == Farmer.agriculturist || newValue == Farmer.agriculturist || oldValue == Farmer.agriculturist + 100 || newValue == Farmer.agriculturist + 11))
-        {
-            CropAndFertilizerManager.RequestReset();
-        }
-    }
 }

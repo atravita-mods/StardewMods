@@ -26,6 +26,7 @@ using MoreFertilizers.HarmonyPatches.FruitTreePatches;
 
 using StardewModdingAPI.Events;
 
+using StardewValley.Buildings;
 using StardewValley.TerrainFeatures;
 
 using AtraUtils = AtraShared.Utils.Utils;
@@ -849,12 +850,12 @@ internal sealed class ModEntry : Mod
             SpecialFertilizerIDs.Add(TreeTapperFertilizerID);
         }
 
-        // Plantable ones begin here.
         if (PrismaticFertilizerID != -1)
         {
-            PlantableFertilizerIDs.Add(PrismaticFertilizerID);
+            SpecialFertilizerIDs.Add(PrismaticFertilizerID);
         }
 
+        // Plantable ones begin here.
         if (EverlastingFertilizerID != -1)
         {
             PlantableFertilizerIDs.Add(EverlastingFertilizerID);
@@ -941,13 +942,12 @@ internal sealed class ModEntry : Mod
 
         Dictionary<int, int> idMapping = new();
 
-        // Have to update the planted ones.
+        // special case! Update the museum reward tracking too...
         if (PrismaticFertilizerID != -1)
         {
             if (storedIDs.PrismaticFertilizerID != -1
             && PrismaticFertilizerID != storedIDs.PrismaticFertilizerID)
             {
-                // special case! Update the museum reward tracking too...
                 string oldkey = $"museumCollectedRewardO_{storedIDs.PrismaticFertilizerID}_1";
                 string newkey = $"museumCollectedRewardO_{PrismaticFertilizerID}_1";
 
@@ -958,12 +958,11 @@ internal sealed class ModEntry : Mod
                         player.mailReceived.Add(newkey);
                     }
                 }
-
-                idMapping.Add(storedIDs.PrismaticFertilizerID, PrismaticFertilizerID);
             }
             storedIDs.PrismaticFertilizerID = PrismaticFertilizerID;
         }
 
+        // Have to update the planted ones.
         if (EverlastingFertilizerID != -1)
         {
             if (storedIDs.EverlastingFertilizerID != -1 && EverlastingFertilizerID != storedIDs.EverlastingFertilizerID)
@@ -1151,7 +1150,7 @@ internal sealed class ModEntry : Mod
             }
             else
             {
-                foreach (StardewValley.Buildings.Building? building in GameLocationUtils.GetBuildings())
+                foreach (Building? building in GameLocationUtils.GetBuildings())
                 {
                     if (SolidFoundationShims.IsSFBuilding?.Invoke(building) == true)
                     {

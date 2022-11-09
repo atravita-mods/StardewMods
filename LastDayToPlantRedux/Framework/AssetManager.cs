@@ -75,7 +75,7 @@ internal static class AssetManager
     /// <summary>
     /// The current mail for the player.
     /// </summary>
-    private static string Message = string.Empty;
+    private static string message = string.Empty;
 
     /// <summary>
     /// The location of our access identifier->access dictionary.
@@ -116,7 +116,7 @@ internal static class AssetManager
     internal static bool UpdateOnDayStart()
     {
         (string message, bool showplayer) = CropAndFertilizerManager.GenerateMessageString();
-        Message = message;
+        AssetManager.message = message;
         return showplayer;
     }
 
@@ -130,13 +130,13 @@ internal static class AssetManager
         {
             e.LoadFrom(EmptyContainers.GetEmptyDictionary<string, string>, AssetLoadPriority.Exclusive);
         }
-        else if (e.NameWithoutLocale.IsEquivalentTo(DataMail) && !string.IsNullOrWhiteSpace(Message))
+        else if (e.NameWithoutLocale.IsEquivalentTo(DataMail) && !string.IsNullOrWhiteSpace(message))
         {
             e.Edit(
             static (asset) =>
             {
                 IDictionary<string, string>? data = asset.AsDictionary<string, string>().Data;
-                data[MailFlag] = Message;
+                data[MailFlag] = message;
             }, AssetEditPriority.Late);
         }
     }
@@ -187,17 +187,13 @@ internal static class AssetManager
             int id = tup.Value.id;
             int type = tup.Value.type;
 
-            bool isAllow = access.AsSpan().Trim().Equals("Allow", StringComparison.OrdinalIgnoreCase);
-            bool isDeny = access.AsSpan().Trim().Equals("Deny", StringComparison.OrdinalIgnoreCase);
+            ReadOnlySpan<char> trimmed = access.AsSpan().Trim();
+            bool isAllow = trimmed.Equals("Allow", StringComparison.OrdinalIgnoreCase);
+            bool isDeny = !isAllow && trimmed.Equals("Deny", StringComparison.OrdinalIgnoreCase);
 
             if (!isAllow && !isDeny)
             {
                 ModEntry.ModMonitor.Log($"Invalid access term {access}, skipping");
-                continue;
-            }
-            else if (isAllow && isDeny)
-            {
-                ModEntry.ModMonitor.Log($"Duplicate access term {access}, skipping");
                 continue;
             }
 

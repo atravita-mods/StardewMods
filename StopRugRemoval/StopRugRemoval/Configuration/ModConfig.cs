@@ -75,6 +75,18 @@ internal sealed class ModConfig
         set => this.phoneSpeedUpFactor = Math.Clamp(value, 1.0f, 5.0f);
     }
 
+    private int craneGameDifficulty = 3;
+
+    /// <summary>
+    /// Gets or sets a value indicating how hard to make the crane game.
+    /// </summary>
+    [GMCMRange(1, 7)]
+    public int CraneGameDifficulty
+    {
+        get => this.craneGameDifficulty;
+        set => this.craneGameDifficulty = Math.Clamp(value, 1, 7);
+    }
+
     /// <summary>
     /// Gets or sets a value indicating whether or not the bet1k/bet10k buttons should appear.
     /// </summary>

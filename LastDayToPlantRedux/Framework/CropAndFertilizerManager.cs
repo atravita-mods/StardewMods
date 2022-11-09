@@ -1,4 +1,5 @@
-﻿using System.Text;
+﻿using System.Collections.ObjectModel;
+using System.Text;
 
 using AtraBase.Collections;
 using AtraBase.Toolkit;
@@ -72,6 +73,16 @@ internal static class CropAndFertilizerManager
             && daysDict.TryGetValue(crop, out days))
         {
             return days;
+        }
+        return null;
+    }
+
+    internal static IReadOnlyDictionary<int, int>? GetAll(Profession profession, int fertilizer)
+    {
+        CropCondition? key = new(profession, fertilizer);
+        if (DaysPerCondition.TryGetValue(key, out var daysDict))
+        {
+            return new ReadOnlyDictionary<int, int>(daysDict);
         }
         return null;
     }

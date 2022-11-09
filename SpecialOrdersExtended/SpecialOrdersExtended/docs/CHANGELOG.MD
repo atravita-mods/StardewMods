@@ -4,6 +4,7 @@ Changelog
 1. Add condition to just randomly reduce the chance of a quest appearing. (May need integrate with that one mod that changes the day special orders appear?)
 2. Add condition for total number of quests completed, per board.
 <!-- Better documentation for the dialogue tags? -->
+<!-- fix the tracker-->
 
 
 #### Stardew 1.6 todo

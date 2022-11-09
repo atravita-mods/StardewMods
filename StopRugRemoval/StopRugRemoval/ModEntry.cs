@@ -355,6 +355,10 @@ internal sealed class ModEntry : Mod
             {
                 GMCM.AddFloatOption(property, GetConfig);
             }
+            else if (property.PropertyType == typeof(int))
+            {
+                GMCM.AddIntOption(property, GetConfig);
+            }
         }
 
         GMCM!.AddSectionTitle(I18n.ConfirmWarps_Title)

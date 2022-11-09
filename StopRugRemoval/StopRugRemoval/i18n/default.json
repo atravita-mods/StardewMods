@@ -19,7 +19,7 @@
   "GoldenCoconutsOffIsland.title": "Golden Coconuts Off Island",
   "GoldenCoconutsOffIsland.description": "Golden coconuts can drop from palm trees off the island too! It's quite rare though.",
   "AlertChanges.title": "Alert Changes",
-  "AlertChanges.description":  "Adds some minor changes to alerts",
+  "AlertChanges.description": "Adds some minor changes to alerts",
 
   "FurniturePlacementKey.title": "Furniture Placement Key",
   "FurniturePlacementKey.description": "The keybind used to allow objects to be removed from tables.",
@@ -78,6 +78,9 @@
   "ReturnScepterInSafeAreas.description": "Whether return scepter confirmation should be enabled in safe areas.",
   "ReturnScepterInDangerousAreas.title": "Return Scepter\nIn Dangerous Areas",
   "ReturnScepterInDangerousAreas.description": "Whether return scepter confirmation should be enabled in dangerous areas.",
+
+  "CraneGameDifficulty.title": "Crane Game Difficulty",
+  "CraneGameDifficulty.description": "The difficulty for the crane game. Set **higher** for an easier crane game.",
 
   // Messages to the player.
   "rug-removal-message": "Remove all items on rug before removing rug!",

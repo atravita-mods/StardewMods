@@ -108,7 +108,7 @@ internal sealed class ModEntry : Mod
         helper.Events.GameLoop.SaveLoaded += this.SaveLoaded;
         helper.Events.GameLoop.Saving += this.Saving;
         helper.Events.GameLoop.DayEnding += this.OnDayEnd;
-        helper.Events.GameLoop.OneSecondUpdateTicking += this.OneSecondUpdateTicking;
+        helper.Events.GameLoop.TimeChanged += static (_, _) => RecentSOManager.GrabNewRecentlyCompletedOrders();
 
         helper.Events.Content.AssetRequested += this.OnAssetRequested;
         helper.Events.Content.AssetReady += static (_, e) => CustomEmoji.Ready(e);
@@ -149,11 +149,6 @@ internal sealed class ModEntry : Mod
 
         harmony.Snitch(this.Monitor, harmony.Id, transpilersOnly: true);
     }
-
-    /// <inheritdoc cref="IGameLoopEvents.OneSecondUpdateTicking"/>
-    /// <remarks>Currently handles: grabbing new recently completed special orders.</remarks>
-    private void OneSecondUpdateTicking(object? sender, OneSecondUpdateTickingEventArgs e)
-        => RecentSOManager.GrabNewRecentlyCompletedOrders();
 
     /// <inheritdoc cref="IGameLoopEvents.GameLaunched"/>
     /// <remarks>Used to bind APIs and register CP tokens.</remarks>

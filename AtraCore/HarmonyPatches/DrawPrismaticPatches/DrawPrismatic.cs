@@ -15,7 +15,8 @@ using StardewValley.Objects;
 
 namespace AtraCore.HarmonyPatches.DrawPrismaticPatches;
 
-#pragma warning disable SA1124 // Do not use regions. Reviewed.
+#warning - finish this.
+
 /// <summary>
 /// Draws things with a prismatic tint or overlay.
 /// </summary>
@@ -304,5 +305,4 @@ internal static class DrawPrismatic
     }
 
     #endregion
-#pragma warning restore SA1124 // Do not use regions
 }

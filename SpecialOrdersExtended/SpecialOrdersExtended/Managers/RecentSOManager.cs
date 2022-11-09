@@ -90,6 +90,11 @@ internal class RecentSOManager
     /// <returns>true if an order got added to RecentCompletedSO, false otherwise.</returns>
     internal static bool GrabNewRecentlyCompletedOrders()
     {
+        if (!Context.IsWorldReady)
+        {
+            return false;
+        }
+
         Dictionary<string, SpecialOrder>? currentOrders = Game1.player?.team?.specialOrders?.ToDictionaryIgnoreDuplicates(a => a.questKey.Value, a => a)
             ?? SaveGame.loaded?.specialOrders?.ToDictionaryIgnoreDuplicates(a => a.questKey.Value, a => a);
         if (currentOrders is null)

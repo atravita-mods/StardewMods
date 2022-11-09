@@ -874,7 +874,7 @@ public sealed class GMCMHelper : IntegrationHelper
         DefaultDict<(int order, string name), List<PropertyInfo>> categories = new();
 
         // look through, assign to categories.
-        foreach (var property in typeof(TModConfig).GetProperties())
+        foreach (PropertyInfo? property in typeof(TModConfig).GetProperties())
         {
             if (Attribute.GetCustomAttribute(property, typeof(GMCMDefaultIgnoreAttribute)) is not null)
             {

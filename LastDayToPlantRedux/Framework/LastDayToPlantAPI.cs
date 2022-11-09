@@ -12,4 +12,12 @@ public class LastDayToPlantAPI : ILastDayToPlantAPI
     /// <inheritdoc />
     public IReadOnlyDictionary<int, int>? GetAll(Profession profession, int fertilizer)
         => CropAndFertilizerManager.GetAll(profession, fertilizer);
+
+    /// <inheritdoc />
+    public KeyValuePair<KeyValuePair<Profession, int>, int>[]? GetConditionsPerCrop(int crop)
+        => CropAndFertilizerManager.GetConditionsPerCrop(crop);
+
+    /// <inheritdoc />
+    public int[]? GetTrackedCrops()
+        => CropAndFertilizerManager.GetTrackedCrops();
 }

@@ -1,10 +1,14 @@
 ﻿using AtraShared.ConstantsAndEnums;
 using AtraShared.Menuing;
 using AtraShared.Utils.Extensions;
+
 using HarmonyLib;
+
 using Microsoft.Xna.Framework;
+
 using StardewModdingAPI.Events;
 using StardewValley.TerrainFeatures;
+
 using TapGiantCrops.Framework;
 
 namespace TapGiantCrops;
@@ -31,8 +35,8 @@ internal sealed class ModEntry : Mod
 
         helper.Events.GameLoop.SaveLoaded += this.OnSaveLoaded;
 
-        helper.Events.Content.AssetRequested += this.OnAssetRequested;
-        helper.Events.Content.AssetsInvalidated += this.OnAssetInvalidated;
+        helper.Events.Content.AssetRequested += static (_, e) => AssetManager.Load(e);
+        helper.Events.Content.AssetsInvalidated += static (_, e) => AssetManager.Reset(e.NamesWithoutLocale);
 
         this.ApplyPatches(new Harmony(this.ModManifest.UniqueID));
     }
@@ -40,12 +44,7 @@ internal sealed class ModEntry : Mod
     /// <inheritdoc />
     public override object? GetApi() => Api;
 
-    private void OnAssetInvalidated(object? sender, AssetsInvalidatedEventArgs e)
-        => AssetManager.Reset(e.NamesWithoutLocale);
-
-    private void OnAssetRequested(object? sender, AssetRequestedEventArgs e)
-        => AssetManager.Load(e);
-
+    /// <inheritdoc cref="IGameLoopEvents.DayEnding"/>
     private void OnDayEnding(object? sender, DayEndingEventArgs e)
     {
         Utility.ForAllLocations((location) =>
@@ -91,6 +90,7 @@ internal sealed class ModEntry : Mod
         harmony.Snitch(this.Monitor, this.ModManifest.UniqueID, transpilersOnly: true);
     }
 
+    /// <inheritdoc cref="IInputEvents.ButtonPressed"/>
     private void OnButtonPressed(object? sender, ButtonPressedEventArgs e)
     {
         if (!(e.Button.IsUseToolButton() || e.Button.IsActionButton())
@@ -104,6 +104,7 @@ internal sealed class ModEntry : Mod
         }
     }
 
+    /// <inheritdoc cref="IGameLoopEvents.SaveLoaded"/>
     private void OnSaveLoaded(object? sender, SaveLoadedEventArgs e) => Api.Init();
 
     [HarmonyPriority(Priority.High)]

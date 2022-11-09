@@ -43,6 +43,9 @@ internal static class CropAndFertilizerManager
     /// </summary>
     private static Dictionary<int, string> fertilizers = new();
 
+    // the inverse of DaysPerCondition;
+    private static Lazy<Dictionary<int, List<KeyValuePair<CropCondition, int>>>?> lastGrowthPerCrop = new(GenerateReverseMap);
+
     private static bool cropsNeedRefreshing = true;
     private static bool fertilizersNeedRefreshing = true;
     private static StardewSeasons lastLoadedSeason = StardewSeasons.None;
@@ -57,6 +60,7 @@ internal static class CropAndFertilizerManager
 
     #region API
 
+    /// <inheritdoc cref="ILastDayToPlantAPI.GetDays(Profession, int, int)"/>
     internal static int? GetDays(Profession profession, int fertilizer, int crop)
     {
         // check with specific fertilizer.
@@ -77,6 +81,7 @@ internal static class CropAndFertilizerManager
         return null;
     }
 
+    /// <inheritdoc cref="ILastDayToPlantAPI.GetAll(Profession, int)"/>
     internal static IReadOnlyDictionary<int, int>? GetAll(Profession profession, int fertilizer)
     {
         CropCondition? key = new(profession, fertilizer);
@@ -86,12 +91,34 @@ internal static class CropAndFertilizerManager
         }
         return null;
     }
+
+    /// <inheritdoc cref="ILastDayToPlantAPI.GetConditionsPerCrop(int)"/>
+    internal static KeyValuePair<KeyValuePair<Profession, int>, int>[]? GetConditionsPerCrop(int crop)
+    {
+        if (lastGrowthPerCrop.Value?.TryGetValue(crop, out var val) == true)
+        {
+            return val.Select((kvp) => new KeyValuePair<KeyValuePair<Profession, int>, int>(new KeyValuePair<Profession, int>(kvp.Key.Profession, kvp.Key.Fertilizer), kvp.Value))
+                      .OrderBy((kvp) => kvp.Value)
+                      .ToArray();
+        }
+        return null;
+    }
+
+    /// <inheritdoc cref="ILastDayToPlantAPI.GetTrackedCrops"/>
+    internal static int[]? GetTrackedCrops() => lastGrowthPerCrop.Value?.Keys?.ToArray();
     #endregion
 
     #region processing
 
+    /// <summary>
+    /// Requests a cache clear.
+    /// </summary>
     internal static void RequestReset() => requiresReset = true;
 
+    /// <summary>
+    /// Generates the message string to show to the player.
+    /// </summary>
+    /// <returns>String message, and a bool that indicates if there are crops with a last day to plant today.</returns>
     internal static (string message, bool showplayer) GenerateMessageString()
     {
         ModEntry.ModMonitor.Log($"Processing for day {Game1.dayOfMonth}");
@@ -231,6 +258,32 @@ SUCCESS:
         hadStocklistLastCheck = HasStocklist.GetValue();
         lastLoadedSeason = currentSeason;
         InventoryWatcher.Reset();
+        lastGrowthPerCrop = new(GenerateReverseMap);
+    }
+
+    private static Dictionary<int, List<KeyValuePair<CropCondition, int>>>? GenerateReverseMap()
+    {
+        if (DaysPerCondition.Count == 0)
+        {
+            return null;
+        }
+
+        var result = new Dictionary<int, List<KeyValuePair<CropCondition, int>>>();
+
+        foreach ((CropCondition condition, Dictionary<int, int> dictionary) in DaysPerCondition)
+        {
+            foreach (var (crop, days) in dictionary)
+            {
+                if (!result.TryGetValue(crop, out var pairs))
+                {
+                    result[crop] = pairs = new();
+                }
+
+                pairs.Add(new(condition, days));
+            }
+        }
+
+        return result;
     }
 
     private static void ProcessForProfession(Profession profession, List<int> currentCrops, Farmer? farmer = null)

@@ -155,7 +155,6 @@ internal sealed class ModEntry : Mod
             if (helper.TryGetAPI("spacechase0.JsonAssets", "1.10.3", out jsonAssets))
             {
                 jsonAssets.LoadAssets(Path.Combine(this.Helper.DirectoryPath, "assets", "json-assets"), this.Helper.Translation);
-                jsonAssets.IdsFixed += this.JAIdsFixed;
             }
             else
             {
@@ -247,18 +246,6 @@ internal sealed class ModEntry : Mod
     [EventPriority(EventPriority.High + 100)]
     private void OnReturnedToTitle(object? sender, ReturnedToTitleEventArgs e)
         => giantCropFertilizerID = -1;
-
-    private void JAIdsFixed(object? sender, EventArgs e)
-    {
-        try
-        {
-            this.FixIds();
-        }
-        catch (Exception ex)
-        {
-            this.Monitor.Log($"Failed in trying to fix ids:\n\n{ex}", LogLevel.Error);
-        }
-    }
 
     private void FixIds()
     {

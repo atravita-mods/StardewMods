@@ -3,10 +3,6 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.2.32516.85
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PamTries", "PamTries\PamTries\PamTries.csproj", "{00E8A3D1-3515-410E-B0C0-C3F86852ABCF}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NerfCavePuzzle", "NerfCavePuzzle\NerfCavePuzzle\NerfCavePuzzle.csproj", "{0AFF2101-B521-4BCF-9B11-C0E84C694F94}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PanningFramework", "PanningFramework\PanningFramework\PanningFramework.csproj", "{ADEAC784-5C0D-4C5C-8AF3-583C5922DF9C}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PelicanTownFoodBank", "PelicanTownFoodBank\PelicanTownFoodBank\PelicanTownFoodBank.csproj", "{5815ABD0-0749-46B2-8A19-1D6DCEAA0864}"
@@ -105,20 +101,16 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GiantCropFertilizer", "Gian
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GingerIslandMainlandAdjustments", "Ginger Island Mainland Adjustments\Ginger Island Mainland Adjustments\GingerIslandMainlandAdjustments.csproj", "{8BD4D58A-19B1-4FF8-AB28-57C85FE6EC04}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PamTries", "PamTries\PamTries\PamTries.csproj", "{23824CB7-4888-42F9-9E30-11993B7D9AE8}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NerfCavePuzzle", "NerfCavePuzzle\NerfCavePuzzle\NerfCavePuzzle.csproj", "{2583DDEF-6C58-4312-8B9E-419301D3D975}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{00E8A3D1-3515-410E-B0C0-C3F86852ABCF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{00E8A3D1-3515-410E-B0C0-C3F86852ABCF}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{00E8A3D1-3515-410E-B0C0-C3F86852ABCF}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{00E8A3D1-3515-410E-B0C0-C3F86852ABCF}.Release|Any CPU.Build.0 = Release|Any CPU
-		{0AFF2101-B521-4BCF-9B11-C0E84C694F94}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{0AFF2101-B521-4BCF-9B11-C0E84C694F94}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{0AFF2101-B521-4BCF-9B11-C0E84C694F94}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{0AFF2101-B521-4BCF-9B11-C0E84C694F94}.Release|Any CPU.Build.0 = Release|Any CPU
 		{ADEAC784-5C0D-4C5C-8AF3-583C5922DF9C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{ADEAC784-5C0D-4C5C-8AF3-583C5922DF9C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{ADEAC784-5C0D-4C5C-8AF3-583C5922DF9C}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -275,6 +267,14 @@ Global
 		{8BD4D58A-19B1-4FF8-AB28-57C85FE6EC04}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8BD4D58A-19B1-4FF8-AB28-57C85FE6EC04}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8BD4D58A-19B1-4FF8-AB28-57C85FE6EC04}.Release|Any CPU.Build.0 = Release|Any CPU
+		{23824CB7-4888-42F9-9E30-11993B7D9AE8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{23824CB7-4888-42F9-9E30-11993B7D9AE8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{23824CB7-4888-42F9-9E30-11993B7D9AE8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{23824CB7-4888-42F9-9E30-11993B7D9AE8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2583DDEF-6C58-4312-8B9E-419301D3D975}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2583DDEF-6C58-4312-8B9E-419301D3D975}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2583DDEF-6C58-4312-8B9E-419301D3D975}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2583DDEF-6C58-4312-8B9E-419301D3D975}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

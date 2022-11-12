@@ -78,6 +78,13 @@ internal static class MultiplayerManager
     {
         Farmer farmer = Game1.getFarmer(e.Peer.PlayerID);
         _ = AssignProfessionFarmersIfNeeded(farmer);
+
+        if (!e.Peer.IsSplitScreen)
+        {
+            FarmerWatcher watcher = new();
+            farmer.professions.OnArrayReplaced += watcher.Professions_OnArrayReplaced;
+            farmer.professions.OnElementChanged += watcher.Professions_OnElementChanged;
+        }
     }
 
     /// <summary>

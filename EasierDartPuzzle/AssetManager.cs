@@ -17,6 +17,7 @@ internal static class AssetManager
     internal static void Initialize(IGameContentHelper parser)
         => stringsFromMaps = parser.ParseAssetName(@"Strings\StringsFromMaps");
 
+    /// <inheritdoc cref="IContentEvents.AssetRequested"/>
     internal static void Apply(AssetRequestedEventArgs e)
     {
         if (e.NameWithoutLocale.IsEquivalentTo(stringsFromMaps))

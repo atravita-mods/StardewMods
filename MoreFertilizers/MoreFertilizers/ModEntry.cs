@@ -434,7 +434,7 @@ internal sealed class ModEntry : Mod
     internal static IMonitor ModMonitor { get; private set; } = null!;
 
     /// <summary>
-    /// Gets the multiplayer gmcmHelper for this mod.
+    /// Gets the multi-player gmcmHelper for this mod.
     /// </summary>
     internal static IMultiplayerHelper MultiplayerHelper { get; private set; } = null!;
 
@@ -855,7 +855,7 @@ internal sealed class ModEntry : Mod
             SpecialFertilizerIDs.Add(PrismaticFertilizerID);
         }
 
-        // Plantable ones begin here.
+        // Plant-able ones begin here.
         if (EverlastingFertilizerID != -1)
         {
             PlantableFertilizerIDs.Add(EverlastingFertilizerID);

@@ -10,7 +10,7 @@ namespace FarmCaveSpawn;
 internal static class AssetManager
 {
     /// <summary>
-    /// Gets fake asset location for the denylist.
+    /// Gets fake asset location for the deny list.
     /// </summary>
     internal static IAssetName DENYLIST_LOCATION { get; private set; } = null!;
 
@@ -29,10 +29,7 @@ internal static class AssetManager
         ADDITIONAL_LOCATIONS_LOCATION = parser.ParseAssetName("Mods/atravita_FarmCaveSpawn_additionalLocations");
     }
 
-    /// <summary>
-    /// Loads assets for this mod.
-    /// </summary>
-    /// <param name="e">Event args.</param>
+    /// <inheritdoc cref="IContentEvents.AssetRequested"/>
     internal static void Load(AssetRequestedEventArgs e)
     {
         if (e.Name.IsEquivalentTo(DENYLIST_LOCATION))

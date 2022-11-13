@@ -37,11 +37,8 @@ internal class ModEntry : Mod
 
         helper.Events.GameLoop.GameLaunched += this.OnGameLaunch;
 
-        helper.Events.Content.AssetRequested += this.OnAssetRequested;
+        helper.Events.Content.AssetRequested += static (_, e) => AssetManager.Apply(e);
     }
-
-    private void OnAssetRequested(object? sender, AssetRequestedEventArgs e)
-        => AssetManager.Apply(e);
 
     private void ApplyPatches(Harmony harmony)
     {
@@ -56,6 +53,7 @@ internal class ModEntry : Mod
         harmony.Snitch(this.Monitor, harmony.Id, transpilersOnly: true);
     }
 
+    /// <inheritdoc cref="IGameLoopEvents.GameLaunched"/>
     private void OnGameLaunch(object? sender, GameLaunchedEventArgs e)
     {
         GMCMHelper helper = new(this.Monitor, this.Helper.Translation, this.Helper.ModRegistry, this.ModManifest);

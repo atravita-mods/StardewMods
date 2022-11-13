@@ -6,7 +6,7 @@ using CommunityToolkit.Diagnostics;
 namespace AtraCore.Utilities;
 
 /// <summary>
-/// Functions to help with handling multiplayer.
+/// Functions to help with handling multi-player.
 /// </summary>
 public static class MultiplayerHelpers
 {
@@ -15,7 +15,7 @@ public static class MultiplayerHelpers
                                       .GetStaticFieldGetter<Multiplayer>());
 
     /// <summary>
-    /// Gets a function that returns the current multiplayer instance.
+    /// Gets a function that returns the current multi-player instance.
     /// </summary>
     public static Func<Multiplayer> GetMultiplayer => MultiplayerLazy.Value;
 
@@ -23,7 +23,7 @@ public static class MultiplayerHelpers
     /// Checks if the versions installed of the mod are the same for farmhands.
     /// Prints errors to console if wrong.
     /// </summary>
-    /// <param name="multi">Multiplayer helper.</param>
+    /// <param name="multi">Multi-player helper.</param>
     /// <param name="manifest">Manifest of mod.</param>
     /// <param name="monitor">Logger.</param>
     /// <param name="translation">Translation helper.</param>

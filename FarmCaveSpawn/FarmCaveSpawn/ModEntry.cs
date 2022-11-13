@@ -182,7 +182,7 @@ internal sealed class ModEntry : Mod
 
         int count = 0;
 
-        var currentSeason = StardewSeasonsExtensions.TryParse(Game1.currentSeason, ignoreCase: true, out var val) ? val : StardewSeasons.All;
+        StardewSeasons currentSeason = StardewSeasonsExtensions.TryParse(Game1.currentSeason, ignoreCase: true, out StardewSeasons val) ? val : StardewSeasons.All;
         if (this.ShouldResetFruitList || this.season != currentSeason)
         {
             this.TreeFruit = this.GetTreeFruits();
@@ -192,7 +192,7 @@ internal sealed class ModEntry : Mod
 
         if (Game1.getLocationFromName("FarmCave") is FarmCave farmcave)
         {
-            this.Monitor.DebugOnlyLog($"Spawning in the farmcave");
+            this.Monitor.DebugOnlyLog($"Spawning in the farm cave");
 
             (Vector2[] tiles, int num) = farmcave.GetTiles();
 
@@ -382,7 +382,7 @@ END:
     }
 
     /// <summary>
-    /// Generate list of tree fruits valid for spawning, based on user config/denylist/data in Data/fruitTrees.
+    /// Generate list of tree fruits valid for spawning, based on user config/deny list/data in Data/fruitTrees.
     /// </summary>
     /// <returns>A list of tree fruit.</returns>
     private List<int> GetTreeFruits()

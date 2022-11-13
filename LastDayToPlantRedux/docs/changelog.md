@@ -1,7 +1,7 @@
 ﻿Changelog
 ===========
 
-<!--todo: draw something on the shop menus?
+<!--TODO: draw something on the shop menus?
 Will need to invert data structure for this.
 
 Maybe a filter?

@@ -12,16 +12,20 @@ public static class AssetEditor
     private static IAssetName forgeMenuChoice = null!;
     private static IAssetName secretNoteLocation = null!;
 
+    /// <summary>
+    /// Initializes the asset editor.
+    /// </summary>
+    /// <param name="parser">game content helper.</param>
     internal static void Initialize(IGameContentHelper parser)
     {
         forgeMenuChoice = parser.ParseAssetName("Mods/atravita_ForgeMenuChoice_Tooltip_Data");
         secretNoteLocation = parser.ParseAssetName("Data/SecretNotes");
     }
 
-    /// <summary>
-    /// Edits the secret note and ForgeMenuChoice's tooltips to match.
-    /// </summary>
-    /// <param name="e">Event params.</param>
+    /// <inheritdoc cref="IContentEvents.AssetRequested"/>
+    /// <remarks>
+    /// Edits the secret note and ForgeMenuChoice's tool-tips to match.
+    /// </remarks>
     internal static void EditAssets(AssetRequestedEventArgs e)
     {
         if (e.NameWithoutLocale.IsEquivalentTo(forgeMenuChoice))

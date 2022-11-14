@@ -17,7 +17,9 @@
   <PropertyGroup>
     <IgnoreModFilePatterns>\.xcf$</IgnoreModFilePatterns>
     <EnableModZip Condition="$(Configuration) != 'Release'">False</EnableModZip>
+    <ModZipPath>$(SolutionDir)\_releases</ModZipPath>
   </PropertyGroup>
+
 
   <!--common packages everyone uses-->
   <ItemGroup>

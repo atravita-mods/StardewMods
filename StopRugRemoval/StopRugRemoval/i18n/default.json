@@ -22,7 +22,7 @@
   "AlertChanges.description": "Adds some minor changes to alerts",
 
   "FurniturePlacementKey.title": "Furniture Placement Key",
-  "FurniturePlacementKey.description": "The keybind used to allow objects to be removed from tables.",
+  "FurniturePlacementKey.description": "The key-bind used to allow objects to be removed from tables.",
 
   "HideCrabPots.title": "Hide Crab Pots",
   "HideCrabPots.description": "Hides crab pots during events.",
@@ -49,7 +49,7 @@
   "config.IsSafeLocationEnum.Dynamic": "Dynamic",
 
   "config.ConfirmationEnum.Off": "Off",
-  "config.ConfirmationEnum.NotInMultiplayer": "Not In Multiplayer",
+  "config.ConfirmationEnum.NotInMultiplayer": "Not In Multi-player",
   "config.ConfirmationEnum.On": "On",
   "config.ConfirmationEnum.InMultiplayerOnly": "In MultiplayerOnly",
 
@@ -74,7 +74,7 @@
 
   "BetterReturnScepter": "Since you have Better Return Scepter installed, the return scepter settings for this mod have been disabled.",
 
-  "ReturnScepterInSafeAreas.title": "Return Scepter\nin Safe Areas",
+  "ReturnScepterInSafeAreas.title": "Return Scepter\nIn Safe Areas",
   "ReturnScepterInSafeAreas.description": "Whether return scepter confirmation should be enabled in safe areas.",
   "ReturnScepterInDangerousAreas.title": "Return Scepter\nIn Dangerous Areas",
   "ReturnScepterInDangerousAreas.description": "Whether return scepter confirmation should be enabled in dangerous areas.",

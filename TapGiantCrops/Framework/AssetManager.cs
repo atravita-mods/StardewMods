@@ -45,7 +45,7 @@ internal static class AssetManager
     }
 
     /// <summary>
-    /// Gets the relevant override item given a certain input parentsheetindex.
+    /// Gets the relevant override item given a certain input parent sheet index.
     /// </summary>
     /// <param name="input">ParentSheetIndex.</param>
     /// <returns>The tapper's product if an override is found.</returns>
@@ -91,10 +91,7 @@ internal static class AssetManager
         return null;
     }
 
-    /// <summary>
-    /// Loads assets for this mod.
-    /// </summary>
-    /// <param name="e">AssetRequestedEventArgs.</param>
+    /// <inheritdoc cref="IContentEvents.AssetRequested"/>
     internal static void Load(AssetRequestedEventArgs e)
     {
         if (e.NameWithoutLocale.IsEquivalentTo(assetName))

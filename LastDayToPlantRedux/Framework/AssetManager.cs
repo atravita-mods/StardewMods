@@ -18,7 +18,7 @@ internal static class AssetManager
     private static bool accessProcessed = false;
 
     /// <summary>
-    /// The mailflag used for this mod.
+    /// The mail flag used for this mod.
     /// </summary>
     internal static readonly string MailFlag = "atravita_LastDayLetter";
 
@@ -120,10 +120,7 @@ internal static class AssetManager
         return showplayer;
     }
 
-    /// <summary>
-    /// Applies asset edits for this mod.
-    /// </summary>
-    /// <param name="e">event args.</param>
+    /// <inheritdoc cref="IContentEvents.AssetRequested"/>
     internal static void Apply(AssetRequestedEventArgs e)
     {
         if (e.NameWithoutLocale.IsEquivalentTo(accessLists))
@@ -141,10 +138,7 @@ internal static class AssetManager
         }
     }
 
-    /// <summary>
-    /// Listens for cache invalidations and empties the relevant caches if needed.
-    /// </summary>
-    /// <param name="e">Event args.</param>
+    /// <inheritdoc cref="IContentEvents.AssetsInvalidated"/>
     internal static void InvalidateCache(AssetsInvalidatedEventArgs e)
     {
         if (e.NamesWithoutLocale.Contains(CropName))

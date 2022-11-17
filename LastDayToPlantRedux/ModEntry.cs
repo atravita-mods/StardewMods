@@ -187,6 +187,4 @@ internal sealed class ModEntry : Mod
         }
         this.Helper.Events.GameLoop.Saved -= this.WriteMigrationData;
     }
-
-
 }

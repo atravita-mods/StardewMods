@@ -136,7 +136,7 @@ public class ReviveDeadCropsApi : IReviveDeadCropsApi
     /// <inheritdoc />
     public void AnimateRevival(GameLocation loc, Vector2 tile)
     {
-        // borrowing a Prarie King TAS for this.
+        // borrowing a Prairie King TAS for this.
         TemporaryAnimatedSprite? tas = new(
             textureName: Game1.mouseCursorsName,
             sourceRect: new Rectangle(464, 1792, 16, 16),

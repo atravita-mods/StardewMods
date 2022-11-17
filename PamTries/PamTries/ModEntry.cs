@@ -73,7 +73,9 @@ internal sealed class ModEntry : Mod
     }
 
     private void DayStarted(object? sender, DayStartedEventArgs e)
-        => PTUtilities.PopulateLexicon(this.Helper.GameContent);
+    {
+        PTUtilities.PopulateLexicon(this.Helper.GameContent);
+    }
 
     [EventPriority(EventPriority.High)]
     private void SaveLoaded(object? sender, SaveLoadedEventArgs e)
@@ -98,6 +100,16 @@ internal sealed class ModEntry : Mod
         else
         {
             this.migrator = null;
+        }
+
+        if (Context.IsMainPlayer)
+        {
+            if (Game1.getLocationFromName("Trailer_Big") is GameLocation bigtrailer && bigtrailer.Objects.TryGetValue(new Vector2(26, 9), out var sign)
+                && sign.bigCraftable.Value && sign.ParentSheetIndex == 34)
+            {
+                this.Monitor.Log($"Preventing player from stealing Pam's Yoba shrine.");
+                sign.Fragility = SObject.fragility_Indestructable;
+            }
         }
     }
 

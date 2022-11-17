@@ -6,13 +6,19 @@ using AtraShared.Integrations;
 using AtraShared.ItemManagement;
 using AtraShared.Menuing;
 using AtraShared.Utils.Extensions;
+
 using HarmonyLib;
+
 using Microsoft.Xna.Framework;
+
 using StardewModdingAPI.Events;
 using StardewValley.Locations;
+
 using StardewValley.Menus;
+
 using xTile.Dimensions;
 using xTile.ObjectModel;
+
 using AtraUtils = AtraShared.Utils.Utils;
 using XTile = xTile.Tiles.Tile;
 
@@ -117,7 +123,7 @@ internal sealed class ModEntry : Mod
             {
                 if (ItemUtils.GetItemFromIdentifier(match.Groups["type"].Value, id) is Item item)
                 {
-                    if (__result.TryAdd(item, new int[] { 0, int.MaxValue }))
+                    if (__result.TryAdd(item, new int[] { 0, ShopMenu.infiniteStock }))
                     {
                         modMonitor.DebugOnlyLog($"Adding {item.Name} to catalogue!", LogLevel.Info);
                     }
@@ -130,11 +136,7 @@ internal sealed class ModEntry : Mod
         }
     }
 
-    /// <summary>
-    /// Handles opening the shop menu in the museum.
-    /// </summary>
-    /// <param name="sender">SMAPI.</param>
-    /// <param name="e">event args.</param>
+    /// <inheritdoc cref="IInputEvents.ButtonPressed"/>
     private void OnButtonPressed(object? sender, ButtonPressedEventArgs e)
     {
         if ((!e.Button.IsActionButton() && !e.Button.IsUseToolButton())
@@ -169,15 +171,15 @@ internal sealed class ModEntry : Mod
                     {
                         continue;
                     }
-                    int[] selldata = new int[] { Math.Max(item.salePrice() * 2, 2000), int.MaxValue };
+                    int[] selldata = new int[] { Math.Max(item.salePrice() * 2, 2000), ShopMenu.infiniteStock };
                     sellables.TryAdd(item, selldata);
                 }
             }
-            else if (AssetManager.MailFlags.Contains(mailflag) && mail.TryGetValue(mailflag, out var mailstring))
+            else if (AssetManager.MailFlags.Contains(mailflag) && mail.TryGetValue(mailflag, out string? mailstring))
             {
                 foreach (SObject? item in mailstring.ParseItemsFromMail())
                 {
-                    int[] selldata = new int[] { Math.Max(item.salePrice() * 2, 2000), int.MaxValue };
+                    int[] selldata = new int[] { Math.Max(item.salePrice() * 2, 2000), ShopMenu.infiniteStock };
                     sellables.TryAdd(item, selldata);
                 }
             }
@@ -244,7 +246,7 @@ internal sealed class ModEntry : Mod
                 }
             }
 
-            this.Monitor.DebugOnlyLog($"Adding boxen to {tile}", LogLevel.Info);
+            this.Monitor.DebugOnlyLog($"Adding box to {tile}", LogLevel.Info);
 
             // add box
             e.NewLocation.temporarySprites.Add(new TemporaryAnimatedSprite

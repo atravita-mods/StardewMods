@@ -101,7 +101,7 @@ internal static class DrawPrismatic
     #region SOBJECT
 
     /// <summary>
-    /// Prefixes SObject's drawInMenu function in order to draw things prismatically.
+    /// Prefixes SObject's drawInMenu function in order to draw things prismatic-ally.
     /// </summary>
     /// <param name="__instance">SObject instance.</param>
     /// <param name="color">Color to make things.</param>

@@ -60,7 +60,7 @@ internal static class AdjustSlimeChances
         catch (Exception ex)
         {
             ModEntry.ModMonitor.Log($"Ran into error transpiling {original.FullDescription()}.\n\n{ex}", LogLevel.Error);
-            original?.Snitch(ModEntry.ModMonitor);
+            original.Snitch(ModEntry.ModMonitor);
         }
         return null;
     }

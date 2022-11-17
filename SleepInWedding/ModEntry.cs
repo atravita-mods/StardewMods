@@ -106,7 +106,7 @@ internal sealed class ModEntry : Mod
 
             HashSet<long> added = new();
             List<long> online = new();
-            foreach (var farmer in Game1.getOnlineFarmers())
+            foreach (Farmer? farmer in Game1.getOnlineFarmers())
             {
                 // we'll need a list of farmers to broadcast to....
                 if (farmer.UniqueMultiplayerID != Game1.player.UniqueMultiplayerID)
@@ -114,7 +114,7 @@ internal sealed class ModEntry : Mod
                     online.Add(farmer.UniqueMultiplayerID);
                 }
 
-                if (farmer.spouse is not null && farmer.friendshipData.TryGetValue(farmer.spouse, out var friendship)
+                if (farmer.spouse is not null && farmer.friendshipData.TryGetValue(farmer.spouse, out Friendship? friendship)
                     && friendship.CountdownToWedding == 1)
                 {
                     if (added.Add(farmer.UniqueMultiplayerID))
@@ -128,7 +128,7 @@ internal sealed class ModEntry : Mod
                     if (other is not null)
                     {
                         FarmerPair team = FarmerPair.MakePair(other.Value, farmer.UniqueMultiplayerID);
-                        if (farmer.team.friendshipData.TryGetValue(team, out var farmerteam)
+                        if (farmer.team.friendshipData.TryGetValue(team, out Friendship? farmerteam)
                             && farmerteam.CountdownToWedding == 1)
                         {
                             if (added.Add(farmer.UniqueMultiplayerID))

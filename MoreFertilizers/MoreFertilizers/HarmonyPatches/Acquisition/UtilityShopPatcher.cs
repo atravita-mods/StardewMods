@@ -1,5 +1,7 @@
 ﻿using HarmonyLib;
 
+using StardewValley.Menus;
+
 namespace MoreFertilizers.HarmonyPatches.Acquisition;
 
 /// <summary>
@@ -40,7 +42,7 @@ internal static class UtilityShopPatcher
         {
             if (ModEntry.LuckyFertilizerID != -1 && Game1.player.team.AverageDailyLuck() > 0.05)
             {
-                __result.Add(new SObject(ModEntry.LuckyFertilizerID, 1), new[] { 300, int.MaxValue });
+                __result.Add(new SObject(ModEntry.LuckyFertilizerID, 1), new[] { 300, ShopMenu.infiniteStock });
             }
         }
         catch (Exception ex)
@@ -59,7 +61,7 @@ internal static class UtilityShopPatcher
             if (ModEntry.SecretJojaFertilizerID != -1 && Utility.doesMasterPlayerHaveMailReceivedButNotMailForTomorrow("ccMovieTheaterJoja")
                 && Game1.player.stats.IndividualMoneyEarned > 1_000_000 && Game1.random.NextDouble() < 0.15)
             {
-                __result.Add(new SObject(ModEntry.SecretJojaFertilizerID, 1), new[] { 150, 20 });
+                __result.Add(new SObject(ModEntry.SecretJojaFertilizerID, 1), new[] { 500, 2 });
             }
         }
         catch (Exception ex)

@@ -1,7 +1,7 @@
 {"Changes":[
     {
         "Action": "EditData",
-        "Target": "Data/MovieReactions",
+        "Target": "Data/MoviesReactions",
         "TargetField": ["Pam", "Reactions"],
         "Entries":
         {
@@ -33,7 +33,7 @@
     },
     {
         "Action":"EditData",
-        "Target": "Data/MovieReactions",
+        "Target": "Data/MoviesReactions",
         "TargetField": ["Pam", "Reactions"],
         "MoveEntries": [
             { "ID": "reaction_999", "ToPosition": "Top" }

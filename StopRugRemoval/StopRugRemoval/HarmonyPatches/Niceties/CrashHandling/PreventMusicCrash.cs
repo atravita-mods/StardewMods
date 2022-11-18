@@ -35,8 +35,8 @@ internal static class PreventMusicCrash
                 SoundBank? soundBankImpl = SoundBankWrapperHandler.GetActualSoundBank(soundBank);
                 if (!SoundBankWrapperHandler.HasCue(soundBankImpl, cue))
                 {
-                    ModEntry.ModMonitor.Log($"Surpressing unknown cue {cue}", LogLevel.Info);
-                    Game1.showRedMessage($"Music cue {cue} surpressed");
+                    ModEntry.ModMonitor.Log($"Suppressing unknown cue {cue}", LogLevel.Info);
+                    Game1.showRedMessage($"Music cue {cue} suppressed");
                     return true;
                 }
             }

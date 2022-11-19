@@ -505,6 +505,7 @@ internal sealed class ModEntry : Mod
 
     #endregion
 
+    /// <inheritdoc cref="IInputEvents.ButtonPressed"/>
     private void OnButtonPressed(object? sender, ButtonPressedEventArgs e)
     {
         if ((e.Button.IsUseToolButton() || e.Button.IsActionButton())
@@ -515,6 +516,7 @@ internal sealed class ModEntry : Mod
     }
 
 #if DEBUG
+    /// <inheritdoc cref="IInputEvents.ButtonPressed"/>
     private void DebugOutput(object? sender, ButtonPressedEventArgs e)
     {
         if (MenuingExtensions.IsNormalGameplay() && e.Button.IsUseToolButton())
@@ -1208,11 +1210,10 @@ internal sealed class ModEntry : Mod
         }
     }
 
-    /// <summary>
+    /// <inheritdoc cref="IGameLoopEvents.Saved"/>
+    /// <remarks>
     /// Writes migration data then detaches the migrator.
-    /// </summary>
-    /// <param name="sender">Smapi thing.</param>
-    /// <param name="e">Arguments for just-before-saving.</param>
+    /// </remarks>
     private void WriteMigrationData(object? sender, SavedEventArgs e)
     {
         if (this.migrator is not null)

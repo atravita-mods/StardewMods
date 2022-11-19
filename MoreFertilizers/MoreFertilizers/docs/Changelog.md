@@ -3,7 +3,7 @@
 
 #### Version 0.3.0 TODO items
 * Bush fertilizers
-    - Handle adding to shops and other aquisition methods.
+    - Handle adding to shops and other acquisition methods.
 * Beverage fertilizer
     - Fruit trees (DGA, Automate?)
 * Acquisition: maybe have fertilizer appear in big slimes outside the mines?
@@ -12,6 +12,7 @@
 * Something for mushroom boxen? (1.6 - reduce to one day?)
 * Make good draw code for all of the fertilizers. (don't forget domesticated fish - maybe some more jumping...)
 * PR Pathos to make CJB pass in the correct fertilizer (b/c Everlasting)
+* Read from JA's files to get the old IDs if I don't have them.
 
 #### Version 0.3.0
 * Added new fertilizers:

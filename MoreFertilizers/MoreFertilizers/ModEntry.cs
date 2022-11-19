@@ -13,6 +13,8 @@ using AtraShared.Utils;
 using AtraShared.Utils.Extensions;
 using AtraShared.Utils.Shims;
 
+using CommunityToolkit.Diagnostics;
+
 using HarmonyLib;
 
 using MoreFertilizers.DataModels;
@@ -23,6 +25,8 @@ using MoreFertilizers.HarmonyPatches.Compat;
 using MoreFertilizers.HarmonyPatches.EverlastingFertilizer;
 using MoreFertilizers.HarmonyPatches.FishFood;
 using MoreFertilizers.HarmonyPatches.FruitTreePatches;
+
+using Newtonsoft.Json;
 
 using StardewModdingAPI.Events;
 
@@ -743,7 +747,6 @@ internal sealed class ModEntry : Mod
 
     private void OnGameLaunched(object? sender, GameLaunchedEventArgs e)
     {
-
         IntegrationHelper jaHelper = new(this.Monitor, this.Helper.Translation, this.Helper.ModRegistry, LogLevel.Warn);
         if (!jaHelper.TryGetAPI("spacechase0.JsonAssets", "1.10.3", out jsonAssets))
         {
@@ -797,9 +800,11 @@ internal sealed class ModEntry : Mod
         }
     }
 
+    /// <inheritdoc cref="IGameLoopEvents.DayStarted"/>
     private void OnDayStart(object? sender, DayStartedEventArgs e)
         => GameLocationPatches.Reinitialize();
 
+    /// <inheritdoc cref="IGameLoopEvents.DayEnding"/>
     private void OnDayEnd(object? sender, DayEndingEventArgs e)
     {
         JojaSample.Reset();
@@ -1196,6 +1201,14 @@ internal sealed class ModEntry : Mod
         if (!this.migrator.CheckVersionInfo())
         {
             this.Helper.Events.GameLoop.Saved += this.WriteMigrationData;
+            try
+            {
+                this.migrator.RunMigration(new SemanticVersion("0.3.0"), this.GetIdsFromJAIfNeeded);
+            }
+            catch (Exception ex)
+            {
+                this.Monitor.Log($"Failed while attempting to run migrations.\n\n{ex}");
+            }
         }
         else
         {
@@ -1208,6 +1221,118 @@ internal sealed class ModEntry : Mod
         {
             FishFoodHandler.LoadHandler(this.Helper.Data, this.Helper.Multiplayer);
         }
+    }
+
+    private bool GetIdsFromJAIfNeeded(IModHelper helper, IMonitor monitor)
+    {
+        this.Monitor.Log($"Running migration for 0.3.0.");
+        Guard.IsNotNull(Constants.CurrentSavePath);
+
+        if (this.Helper.Data.ReadSaveData<MoreFertilizerIDs>(SavedIDKey) is not MoreFertilizerIDs storedIDCls)
+        {
+            monitor.Log("Ids not found.");
+            storedIDCls = new();
+        }
+
+        string path = Path.Combine(Constants.CurrentSavePath, "JsonAssets", "ids-objects.json");
+        if (!File.Exists(path))
+        {
+            monitor.Log($"Can't find JA id file");
+            return true;
+        }
+
+        Dictionary<string, int>? idsFromJA;
+        try
+        {
+            idsFromJA = JsonConvert.DeserializeObject<Dictionary<string, int>>(File.ReadAllText(path));
+        }
+        catch (Exception ex)
+        {
+            monitor.Log($"Tried to deserialize JA's data, couldn't.\n\n{ex}", LogLevel.Warn);
+            return false;
+        }
+
+        if (idsFromJA is null)
+        {
+            monitor.Log($"Tried to deserialize JA's data, couldn't - got null instead.");
+            return true;
+        }
+
+        if (storedIDCls.PrismaticFertilizerID == -1 && idsFromJA.TryGetValue("Prismatic Fertilizer - More Fertilizers", out int oldprismatic))
+        {
+            monitor.Log($"Grabbing old prismatic ID from JA");
+            storedIDCls.PrismaticFertilizerID = oldprismatic;
+        }
+
+        if (storedIDCls.EverlastingFertilizerID == -1 && idsFromJA.TryGetValue("Everlasting Fertilizer - More Fertilizers", out int oldeverlasting))
+        {
+            monitor.Log($"Grabbing old everlasting from JA");
+            storedIDCls.EverlastingFertilizerID = oldeverlasting;
+        }
+
+        if (storedIDCls.WisdomFertilizerID == -1 && idsFromJA.TryGetValue("Wisdom Fertilizer - More Fertilizers", out int oldwisdom))
+        {
+            monitor.Log($"Grabbing old wisdom ID from JA");
+            storedIDCls.WisdomFertilizerID = oldwisdom;
+        }
+
+        if (storedIDCls.PaddyFertilizerID == -1 && idsFromJA.TryGetValue("Waterlogged Fertilizer", out int oldpaddy))
+        {
+            monitor.Log($"Grabbing old waterlogged ID from JA");
+            storedIDCls.PaddyFertilizerID = oldpaddy;
+        }
+
+        if (storedIDCls.LuckyFertilizerID == -1 && idsFromJA.TryGetValue("Maebys Good-Luck Fertilizer", out int oldlucky))
+        {
+            monitor.Log($"Grabbing old lucky ID from JA");
+            storedIDCls.LuckyFertilizerID = oldlucky;
+        }
+
+        if (storedIDCls.BountifulFertilizerID == -1 && idsFromJA.TryGetValue("Bountiful Fertilizer", out int oldbountiful))
+        {
+            monitor.Log($"Grabbing old bountiful ID from JA");
+            storedIDCls.BountifulFertilizerID = oldbountiful;
+        }
+
+        if (storedIDCls.JojaFertilizerID == -1 && idsFromJA.TryGetValue("Joja Fertilizer - More Fertilizers", out int oldjoja))
+        {
+            monitor.Log($"Grabbing old joja ID from JA");
+            storedIDCls.JojaFertilizerID = oldjoja;
+        }
+
+        if (storedIDCls.DeluxeJojaFertilizerID == -1 && idsFromJA.TryGetValue("Deluxe Joja Fertilizer - More Fertilizers", out int olddeluxe))
+        {
+            monitor.Log($"Grabbing old deluxe joja ID from JA");
+            storedIDCls.DeluxeJojaFertilizerID = olddeluxe;
+        }
+
+        if (storedIDCls.SecretJojaFertilizerID == -1 && idsFromJA.TryGetValue("Secret Joja Fertilizer - More Fertilizers", out int oldsecret))
+        {
+            monitor.Log($"Grabbing old secret joja ID from JA");
+            storedIDCls.SecretJojaFertilizerID = oldsecret;
+        }
+
+        if (storedIDCls.OrganicFertilizerID == -1 && idsFromJA.TryGetValue("Organic Fertilizer - More Fertilizers", out int oldorganic))
+        {
+            monitor.Log($"Grabbing old organic ID from JA");
+            storedIDCls.OrganicFertilizerID = oldorganic;
+        }
+
+        if (storedIDCls.MiraculousBeveragesID == -1 && idsFromJA.TryGetValue("Miraculous Beverages - More Fertilizers", out int oldbeverage))
+        {
+            monitor.Log($"Grabbing old beverage ID from JA");
+            storedIDCls.MiraculousBeveragesID = oldbeverage;
+        }
+
+        if (storedIDCls.SeedyFertilizerID == -1 && idsFromJA.TryGetValue("Seedy Fertilizer - More Fertilizers", out int oldseedy))
+        {
+            monitor.Log($"Grabbing old seedy ID from JA");
+            storedIDCls.SeedyFertilizerID = oldseedy;
+        }
+
+        storedIDs = storedIDCls;
+
+        return true;
     }
 
     /// <inheritdoc cref="IGameLoopEvents.Saved"/>

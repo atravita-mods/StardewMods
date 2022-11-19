@@ -42,5 +42,9 @@ internal static class AssetManager
         {
             e.LoadFrom(EmptyContainers.GetEmptyDictionary<string, DrawPrismaticModel>, AssetLoadPriority.Low);
         }
+        else if (e.NameWithoutLocale.IsEquivalentTo("Data/Events/AdventureGuild") || e.NameWithoutLocale.IsEquivalentTo("Data/Events/Blacksmith"))
+        {
+            e.LoadFrom(EmptyContainers.GetEmptyDictionary<string, string>, AssetLoadPriority.Low);
+        }
     }
 }

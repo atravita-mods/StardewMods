@@ -525,7 +525,7 @@ breakcontinue:
 
         bool changed = !ret.IsEquivalentTo(fertilizers);
         fertilizers = ret;
-        if (changed)
+        if (changed || Dirts.Count == 0)
         {
             PopulateFertilizerList();
         }

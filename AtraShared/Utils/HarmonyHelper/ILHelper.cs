@@ -257,7 +257,7 @@ ContinueSearchForward:
     /// <param name="startindex">Index to start searching at (inclusive).</param>
     /// <param name="intendedendindex">Index to end search (exclusive). Leave null to mean "last code".</param>
     /// <returns>this.</returns>
-    /// <exception cref="ArgumentException">Startindex or Endindex are invalid.</exception>
+    /// <exception cref="ArgumentException">StartIndex or EndIndex are invalid.</exception>
     /// <exception cref="InvalidOperationException">No match found.</exception>
     [MethodImpl(MethodImplOptions.AggressiveOptimization)]
     public ILHelper FindLast(CodeInstructionWrapper[] instructions, int startindex = 0, int? intendedendindex = null)
@@ -265,7 +265,7 @@ ContinueSearchForward:
         int endindex = intendedendindex ?? this.Codes.Count;
         if (startindex >= endindex - instructions.Length || startindex < 0 || endindex > this.Codes.Count)
         {
-            return ThrowHelper.ThrowArgumentException<ILHelper>($"Either startindex {startindex} or endindex {endindex} are invalid. ");
+            return ThrowHelper.ThrowArgumentException<ILHelper>($"Either {nameof(startindex)} {startindex} or {nameof(endindex)} {endindex} are invalid. ");
         }
         for (int i = endindex - instructions.Length - 1; i >= startindex; i--)
         {
@@ -489,7 +489,7 @@ ContinueSearchBackwards:
             instruction.labels.AddRange(this.CurrentInstruction.labels);
         }
 
-        // removed a branch, so untrack those labels.
+        // removed a branch, so un-track those labels.
         if (this.CurrentInstruction.Branches(out Label? currlabel))
         {
             this.importantLabels[currlabel!.Value]--;
@@ -656,14 +656,14 @@ ContinueSearchBackwards:
     /// <param name="startindex">Index to start searching at (inclusive).</param>
     /// <param name="intendedendindex">Index to end search (exclusive). Leave null to mean "last code".</param>
     /// <returns>this.</returns>
-    /// <exception cref="ArgumentException">Startindex or Endindex are invalid.</exception>
+    /// <exception cref="ArgumentException">StartIndex or EndIndex are invalid.</exception>
     /// <exception cref="InvalidOperationException">No match found.</exception>
     public ILHelper FindFirstLabel(Label label, int startindex = 0, int? intendedendindex = null)
     {
         int endindex = intendedendindex ?? this.Codes.Count;
         if (startindex >= endindex || startindex < 0 || endindex > this.Codes.Count)
         {
-            return ThrowHelper.ThrowArgumentException<ILHelper>($"Either startindex {startindex} or endindex {endindex} are invalid.");
+            return ThrowHelper.ThrowArgumentException<ILHelper>($"Either {nameof(startindex)} {startindex} or {nameof(endindex)} {endindex} are invalid.");
         }
         for (int i = startindex; i < endindex; i++)
         {
@@ -707,14 +707,14 @@ ContinueSearchBackwards:
     /// <param name="startindex">Index to start searching at (inclusive).</param>
     /// <param name="intendedendindex">Index to end search (exclusive). Leave null to mean "last code".</param>
     /// <returns>this.</returns>
-    /// <exception cref="ArgumentException">Startindex or Endindex are invalid.</exception>
+    /// <exception cref="ArgumentException">StartIndex or EndIndex are invalid.</exception>
     /// <exception cref="IndexOutOfRangeException">No match found.</exception>
     public ILHelper FindLastLabel(Label label, int startindex = 0, int? intendedendindex = null)
     {
         int endindex = intendedendindex ?? this.Codes.Count;
         if (startindex >= endindex || startindex < 0 || endindex > this.Codes.Count)
         {
-            return ThrowHelper.ThrowArgumentException<ILHelper>($"Either startindex {startindex} or endindex {endindex} are invalid.");
+            return ThrowHelper.ThrowArgumentException<ILHelper>($"Either {nameof(startindex)} {startindex} or {nameof(endindex)} {endindex} are invalid.");
         }
         for (int i = endindex - 1; i >= startindex; i--)
         {
@@ -756,7 +756,7 @@ ContinueSearchBackwards:
     /// </summary>
     /// <param name="type">The type.</param>
     /// <param name="local">Out param - the local.</param>
-    /// <param name="pinned">Whether to pinn the local or not.</param>
+    /// <param name="pinned">Whether to pin the local or not.</param>
     /// <returns>this.</returns>
     public ILHelper DeclareLocal(Type type, out LocalBuilder local, bool pinned = false)
     {
@@ -767,12 +767,12 @@ ContinueSearchBackwards:
 
     // transformer should return true to continue and false to stop?
     // and throw errors if it runs into issues.
-    // todo: consider checking the state of the stack. Transformers should match pops and pushes...
+    // TODO: consider checking the state of the stack. Transformers should match pops and pushes...
 
     /// <summary>
     /// For each match found, run the transformer given.
     /// Transformer should take the helper as the sole argument and either return true (to continue matching) or false (to end).
-    /// Be careful with the pointerstack and make sure to restore it.
+    /// Be careful with the pointer-stack and make sure to restore it.
     /// </summary>
     /// <param name="instructions">Instruction set to match against.</param>
     /// <param name="transformer">
@@ -795,7 +795,7 @@ ContinueSearchBackwards:
         int endindex = intendedendindex ?? this.Codes.Count;
         if (startindex >= endindex - instructions.Length || startindex < 0 || endindex > this.Codes.Count)
         {
-            return ThrowHelper.ThrowArgumentException<ILHelper>($"Either startindex {startindex} or endindex {endindex} are invalid. ");
+            return ThrowHelper.ThrowArgumentException<ILHelper>($"Either {nameof(startindex)} {startindex} or {nameof(endindex)} {endindex} are invalid.");
         }
         this.Push();
         for (int i = startindex; i < endindex; i++)
@@ -815,13 +815,13 @@ ContinueSearchBackwards:
 ContinueSearch:
             ;
         }
-        this.Monitor.Log($"ForEachMatch found {count} occurances for {string.Join(", ", instructions.Select(i => i.ToString()))} for {this.Original.FullDescription()}.", LogLevel.Trace);
+        this.Monitor.Log($"ForEachMatch found {count} occurrences for {string.Join(", ", instructions.Select(i => i.ToString()))} for {this.Original.FullDescription()}.", LogLevel.Trace);
         this.Pop();
         return this;
     }
 
     /// <summary>
-    /// Gets the index of the local of a specifc type.
+    /// Gets the index of the local of a specific type.
     /// </summary>
     /// <param name="type">Type to search for.</param>
     /// <param name="which">If there's multiple locals of a single type, which one.</param>

@@ -2,9 +2,8 @@
 using AtraShared.MigrationManager;
 using AtraShared.Utils.Extensions;
 using AtraShared.Utils.Shims;
-using LastDayToPlantRedux.Framework;
 
-using Netcode;
+using LastDayToPlantRedux.Framework;
 
 using StardewModdingAPI.Events;
 using StardewModdingAPI.Utilities;

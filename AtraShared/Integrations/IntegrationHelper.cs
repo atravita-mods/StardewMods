@@ -1,5 +1,7 @@
 ﻿#if DEBUG
 using System.Diagnostics;
+
+using CommunityToolkit.Diagnostics;
 #endif
 
 namespace AtraShared.Integrations;
@@ -49,15 +51,17 @@ public class IntegrationHelper
     /// </summary>
     /// <typeparam name="T">Interface to map to.</typeparam>
     /// <param name="apiid">UniqueID of the other mod.</param>
-    /// <param name="minversion">Minimum semantic version.</param>
+    /// <param name="minversion">Minimum semantic version, or null for no minimum.</param>
     /// <param name="api">An instance of the api.</param>
     /// <returns>True if successful, false otherwise.</returns>
     public bool TryGetAPI<T>(
-        [NotNull] string apiid,
-        [NotNull] string minversion,
+        string apiid,
+        string? minversion,
         [NotNullWhen(returnValue: true )] out T? api)
         where T : class
     {
+        Guard.IsNotNull(apiid);
+
         if (this.ModRegistry.Get(apiid) is not IModInfo modInfo)
         {
             this.Monitor.Log(
@@ -67,7 +71,7 @@ public class IntegrationHelper
             api = default;
             return false;
         }
-        if (modInfo.Manifest.Version.IsOlderThan(minversion))
+        if (minversion is not null && modInfo.Manifest.Version.IsOlderThan(minversion))
         {
             this.Monitor.Log(
                 this.Translation.Get("api-too-old")
@@ -77,8 +81,7 @@ public class IntegrationHelper
             return false;
         }
 #if DEBUG
-        Stopwatch sw = new();
-        sw.Start();
+        Stopwatch sw = Stopwatch.StartNew();
 #endif
         api = this.ModRegistry.GetApi<T>(apiid);
 #if DEBUG

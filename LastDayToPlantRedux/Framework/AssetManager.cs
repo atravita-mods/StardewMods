@@ -20,7 +20,7 @@ internal static class AssetManager
     /// <summary>
     /// The mail flag used for this mod.
     /// </summary>
-    internal static readonly string MailFlag = "atravita_LastDayLetter";
+    internal const string MailFlag = "atravita_LastDayLetter";
 
     /// <summary>
     /// Gets fertilizers that should always be allowed.

@@ -50,6 +50,8 @@ internal static class SpecialFertilizerApplication
             };
         }
 
+        ModEntry.ModMonitor.DebugOnlyLog($"Checking tile {placementtile}");
+
         if (!PlaceHandler.CanPlaceFertilizer(obj, Game1.currentLocation, placementtile, true))
         {
             return;

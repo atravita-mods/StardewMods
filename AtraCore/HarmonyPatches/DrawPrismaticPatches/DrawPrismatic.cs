@@ -247,7 +247,7 @@ internal static class DrawPrismatic
                 .Insert(new CodeInstruction[] { new(OpCodes.Ldarg_0) });
             }
 
-            helper.Print();
+            // helper.Print();
             return helper.Render();
         }
         catch (Exception ex)
@@ -292,7 +292,7 @@ internal static class DrawPrismatic
             })
             .Advance(2);
 
-            var destination = helper.CurrentInstruction.Clone();
+            CodeInstruction? destination = helper.CurrentInstruction.Clone();
 
             helper.FindNext(new CodeInstructionWrapper[]
             {
@@ -310,7 +310,7 @@ internal static class DrawPrismatic
                 (OpCodes.Callvirt, typeof(SpriteBatch).GetCachedMethod(nameof(SpriteBatch.Draw), ReflectionCache.FlagTypes.InstanceFlags, new[] { typeof(Texture2D), typeof(Rectangle), typeof(Rectangle?), typeof(Color), typeof(float), typeof(Vector2), typeof(SpriteEffects), typeof(float) } )),
             });
 
-            var layerDepth = helper.CurrentInstruction.Clone();
+            CodeInstruction? layerDepth = helper.CurrentInstruction.Clone();
 
             helper.Advance(2)
             .Insert(new CodeInstruction[]
@@ -371,7 +371,7 @@ internal static class DrawPrismatic
                 (OpCodes.Callvirt, typeof(NetFieldBase<SObject, NetRef<SObject>>).GetCachedProperty("Value", ReflectionCache.FlagTypes.InstanceFlags).GetGetMethod()),
                 OpCodes.Brfalse,
             })
-            .Copy(3, out var codes)
+            .Copy(3, out IEnumerable<CodeInstruction>? codes)
             .FindNext(new CodeInstructionWrapper[]
             {
                 (OpCodes.Call, typeof(Color).GetCachedProperty(nameof(Color.White), ReflectionCache.FlagTypes.StaticFlags).GetGetMethod()),

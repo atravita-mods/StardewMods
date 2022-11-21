@@ -336,7 +336,7 @@ CONTINUELOOP:
                 dialogueKey: "Resort_Fish",
                 animation_required: true,
                 animation: "beach_fish"),
-            // under umberella
+            // under umbrella
             new PossibleIslandActivity(
                 new List<Point> { new Point(26, 26), new Point(28, 29), new Point(10, 27) },
                 chanceMap: (NPC npc) => npc.Name.Equals("Abigail", StringComparison.OrdinalIgnoreCase) ? 0.5 : 0.3,

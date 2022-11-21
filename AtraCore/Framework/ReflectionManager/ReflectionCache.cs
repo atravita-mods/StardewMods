@@ -63,8 +63,9 @@ public static class ReflectionCache
 
                 if (this.Params is not null)
                 {
-                    foreach (var param in this.Params)
+                    for (int i = 0; i < this.Params.Length; i++)
                     {
+                        Type? param = this.Params[i];
                         ret += EqualityComparer<Type>.Default.GetHashCode(param);
                         ret *= factor;
                     }
@@ -175,7 +176,7 @@ public static class ReflectionCache
     }
 
     /// <summary>
-    /// Gets a propertyinfo, from the cache if possible.
+    /// Gets a PropertyInfo, from the cache if possible.
     /// </summary>
     /// <param name="type">Type to search in.</param>
     /// <param name="propertyName">Property to search for.</param>

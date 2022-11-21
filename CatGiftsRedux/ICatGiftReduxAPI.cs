@@ -1,5 +1,7 @@
 ﻿namespace CatGiftsRedux;
 
+#nullable enable
+
 /// <summary>
 /// The API for this mod.
 /// </summary>

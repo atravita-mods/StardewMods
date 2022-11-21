@@ -1,8 +1,8 @@
 ﻿#if DEBUG
 using System.Diagnostics;
+#endif
 
 using CommunityToolkit.Diagnostics;
-#endif
 
 namespace AtraShared.Integrations;
 
@@ -16,10 +16,14 @@ public class IntegrationHelper
     /// </summary>
     /// <param name="monitor">Logger instance.</param>
     /// <param name="translation">Translation helper.</param>
-    /// <param name="modRegistry">Mod registery.</param>
+    /// <param name="modRegistry">Mod registry.</param>
     /// <param name="loglevel">Level to log issues to.</param>
     public IntegrationHelper(IMonitor monitor, ITranslationHelper translation, IModRegistry modRegistry, LogLevel loglevel = LogLevel.Info)
     {
+        Guard.IsNotNull(monitor);
+        Guard.IsNotNull(translation);
+        Guard.IsNotNull(modRegistry);
+
         this.Monitor = monitor;
         this.Translation = translation;
         this.ModRegistry = modRegistry;
@@ -37,7 +41,7 @@ public class IntegrationHelper
     protected ITranslationHelper Translation { get; init; }
 
     /// <summary>
-    /// Gets the modregistry instance.
+    /// Gets the mod registry instance.
     /// </summary>
     protected IModRegistry ModRegistry { get; init; }
 
@@ -57,7 +61,7 @@ public class IntegrationHelper
     public bool TryGetAPI<T>(
         string apiid,
         string? minversion,
-        [NotNullWhen(returnValue: true )] out T? api)
+        [NotNullWhen(returnValue: true)] out T? api)
         where T : class
     {
         Guard.IsNotNull(apiid);
@@ -83,7 +87,15 @@ public class IntegrationHelper
 #if DEBUG
         Stopwatch sw = Stopwatch.StartNew();
 #endif
-        api = this.ModRegistry.GetApi<T>(apiid);
+        try
+        {
+            api = this.ModRegistry.GetApi<T>(apiid);
+        }
+        catch (Exception ex)
+        {
+            this.Monitor.Log($"Failed while attempting to map {apiid}\n\n{ex}", LogLevel.Error);
+            api = null;
+        }
 #if DEBUG
         sw.Stop();
         this.Monitor.Log($"Mapping {apiid} took {sw.ElapsedMilliseconds} milliseconds", LogLevel.Info);

@@ -29,7 +29,7 @@ public static class PlayerAlertHandler
     internal static void DisplayFromQueue()
     {
         int i = 0;
-        while (++i < 3 && QueuedMessages.Value.TryDequeue(out var tuple))
+        while (++i < 3 && QueuedMessages.Value.TryDequeue(out (HUDMessage message, string? soundCue) tuple))
         {
             Game1.addHUDMessage(tuple.message);
             if (tuple.soundCue is not null)

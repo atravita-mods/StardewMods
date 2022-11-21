@@ -335,7 +335,7 @@ ContinueSearchBackwards:
             }
             else if (this.Codes[i].opcode == OpCodes.Switch)
             {
-                foreach (var switchLabel in (Label[])this.Codes[i].operand)
+                foreach (Label switchLabel in (Label[])this.Codes[i].operand)
                 {
                     this.importantLabels[switchLabel]--;
                 }
@@ -496,7 +496,7 @@ ContinueSearchBackwards:
         }
         else if (this.CurrentInstruction.opcode == OpCodes.Switch)
         {
-            foreach (var switchLabel in (Label[])this.CurrentInstruction.operand)
+            foreach (Label switchLabel in (Label[])this.CurrentInstruction.operand)
             {
                 this.importantLabels[switchLabel]--;
             }

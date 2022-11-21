@@ -20,7 +20,7 @@ public static class NPCExtensions
     {
         Guard.IsNotNull(npc);
 
-        if (!string.IsNullOrWhiteSpace(dialogueKey) && npc.Dialogue.TryGetValue(dialogueKey, out var dialogue))
+        if (!string.IsNullOrWhiteSpace(dialogueKey) && npc.Dialogue.TryGetValue(dialogueKey, out string? dialogue))
         {
             npc.CurrentDialogue.Clear();
             npc.CurrentDialogue.Push(new Dialogue(dialogue, npc) { removeOnNextMove = true });

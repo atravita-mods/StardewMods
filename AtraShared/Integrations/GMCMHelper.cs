@@ -583,7 +583,7 @@ public sealed class GMCMHelper : IntegrationHelper
             if (min is null || max is null || interval is null)
             {
                 Attribute[]? attributes = Attribute.GetCustomAttributes(property);
-                foreach (var attribute in attributes)
+                foreach (Attribute? attribute in attributes)
                 {
                     if (attribute is GMCMRangeAttribute range)
                     {
@@ -890,7 +890,7 @@ public sealed class GMCMHelper : IntegrationHelper
             }
         }
 
-        foreach (var prop in uncategorized)
+        foreach (PropertyInfo? prop in uncategorized)
         {
             this.ProcessProperty(getConfig, prop);
         }

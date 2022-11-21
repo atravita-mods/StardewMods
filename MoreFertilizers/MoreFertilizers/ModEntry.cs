@@ -757,6 +757,8 @@ internal sealed class ModEntry : Mod
 
         // Only register for events if JA pack loading was successful.
         RingManager = new(this.Monitor, this.Helper.Translation, this.Helper.ModRegistry);
+        RadioactiveFertilizerHandler.Initialize(this.Helper.GameContent, this.Helper.ModRegistry, this.Helper.Translation);
+
         this.Helper.Events.GameLoop.SaveLoaded += this.OnSaveLoaded;
         this.Helper.Events.GameLoop.ReturnedToTitle += this.OnReturnedToTitle;
 

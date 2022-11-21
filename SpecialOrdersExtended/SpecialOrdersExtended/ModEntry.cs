@@ -61,7 +61,7 @@ internal sealed class ModEntry : Mod
     /// </summary>
     internal static ModConfig Config { get; private set; } = null!;
 
-    [SuppressMessage("StyleCop.CSharp.OrderingRules", "SA1201:Elements should appear in the correct order", Justification = "Field kept near accessor.")]
+    [SuppressMessage("StyleCop.CSharp.OrderingRules", "SA1201:Elements should appear in the correct order", Justification = "Field kept near accessors.")]
     private static readonly Lazy<Func<string, bool>> CheckTagLazy = new(
         typeof(SpecialOrder)
             .GetCachedMethod("CheckTag", ReflectionCache.FlagTypes.StaticFlags)
@@ -108,9 +108,12 @@ internal sealed class ModEntry : Mod
         helper.Events.GameLoop.SaveLoaded += this.SaveLoaded;
         helper.Events.GameLoop.Saving += this.Saving;
         helper.Events.GameLoop.DayEnding += this.OnDayEnd;
+
         helper.Events.GameLoop.TimeChanged += static (_, _) => RecentSOManager.GrabNewRecentlyCompletedOrders();
 
-        helper.Events.Content.AssetRequested += this.OnAssetRequested;
+        helper.Events.Content.AssetRequested += static (_, e) => AssetManager.OnLoadAsset(e);
+        helper.Events.Content.AssetsInvalidated += static (_, e) => AssetManager.Reset(e.NamesWithoutLocale);
+
         helper.Events.Content.AssetReady += static (_, e) => CustomEmoji.Ready(e);
         helper.Events.Content.AssetsInvalidated += static (_, e) => CustomEmoji.Reset(e.NamesWithoutLocale);
     }
@@ -157,7 +160,7 @@ internal sealed class ModEntry : Mod
         Harmony? harmony = new(this.ModManifest.UniqueID);
         this.ApplyPatches(harmony);
 
-        // Bind Spacecore API
+        // Bind SpaceCore API
         IntegrationHelper helper = new(this.Monitor, this.Helper.Translation, this.Helper.ModRegistry, LogLevel.Trace);
         if (helper.TryGetAPI("spacechase0.SpaceCore", "1.5.10", out spaceCoreAPI))
         {
@@ -249,7 +252,7 @@ internal sealed class ModEntry : Mod
             return;
         }
 
-        DialogueManager.Save(); // Save dialogue
+        DialogueManager.Save();
 
         if (Context.IsSplitScreen && Context.ScreenId != 0)
         {// Some properties only make sense for a single player to handle in splitscreen.
@@ -287,11 +290,10 @@ internal sealed class ModEntry : Mod
         RecentSOManager.Load();
     }
 
-    /// <summary>
+    /// <inheritdoc cref="IGameLoopEvents.Saved"/>
+    /// <remarks>
     /// Writes migration data then detaches the migrator.
-    /// </summary>
-    /// <param name="sender">Smapi thing.</param>
-    /// <param name="e">Arguments for just-before-saving.</param>
+    /// </remarks>
     private void WriteMigrationData(object? sender, SavedEventArgs e)
     {
         if (this.migrator is not null)
@@ -454,10 +456,6 @@ internal sealed class ModEntry : Mod
 
     #region untimed
 
-    /// <inheritdoc cref="IContentEvents.AssetRequested"/>
-    private void OnAssetRequested(object? sender, AssetRequestedEventArgs e)
-        => AssetManager.OnLoadAsset(e);
-
     /// <inheritdoc cref="IGameLoopEvents.DayEnding"/>
     private void OnDayEnd(object? sender, DayEndingEventArgs e)
     {
@@ -465,7 +463,7 @@ internal sealed class ModEntry : Mod
 
         if (Context.IsMainPlayer && Game1.player.team.specialOrders.Count > 0)
         {
-            HashSet<string> overrides = AssetManager.GetDurationOverride().Where(kvp => kvp.Value == "-1").Select(kvp => kvp.Key).ToHashSet();
+            HashSet<string> overrides = AssetManager.Untimed.Value;
             if (overrides.Count == 0)
             {
                 return;

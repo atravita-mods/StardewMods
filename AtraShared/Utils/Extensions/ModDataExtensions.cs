@@ -148,7 +148,7 @@ public static class ModDataExtensions
     /// <returns>Int value, or null of not found/not parseable.</returns>
     [return: NotNullIfNotNull("defaultVal")]
     public static Color? GetColor(this ModDataDictionary modData, string key, Color? defaultVal = null)
-        => modData.TryGetValue(key, out var color) && uint.TryParse(color, NumberStyles.HexNumber, CultureInfo.InvariantCulture, out var result)
+        => modData.TryGetValue(key, out string? color) && uint.TryParse(color, NumberStyles.HexNumber, CultureInfo.InvariantCulture, out uint result)
             ? new Color(result)
             : defaultVal;
 

@@ -13,7 +13,7 @@ namespace SpecialOrdersExtended.HarmonyPatches;
 internal static class SpecialOrderPatches
 {
     /// <summary>
-    /// Applies the patch that surpresses borad updates.
+    /// Applies the patch that suppresses board updates.
     /// </summary>
     /// <param name="harmony">Harmony instance.</param>
     internal static void ApplyUpdatePatch(Harmony harmony)
@@ -40,7 +40,7 @@ internal static class SpecialOrderPatches
     [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Harmony Convention.")]
     private static void PostfixOnFail(SpecialOrder __instance) => DialogueManager.ClearOnFail(__instance.questKey.Value);
 
-    // Surpress the middle-of-night Special Order updates until
+    // Suppress the middle-of-night Special Order updates until
     // the board is open. There's no point.
     private static bool PrefixUpdate() => Game1.player.team.availableSpecialOrders.Count != 0
         || (ModEntry.Config.SurpressUnnecessaryBoardUpdates && SpecialOrder.IsSpecialOrdersBoardUnlocked());
@@ -66,5 +66,17 @@ internal static class SpecialOrderPatches
             ModEntry.ModMonitor.Log($"Mod failed while trying to override special order duration!\n\n{ex}");
         }
         return true;
+    }
+
+    [HarmonyPostfix]
+    [HarmonyPriority(Priority.HigherThanNormal)]
+    [HarmonyPatch(nameof(SpecialOrder.IsTimedQuest))]
+    [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Harmony convention.")]
+    private static void HandleUntimed(SpecialOrder __instance, ref bool __result)
+    {
+        if (__result && AssetManager.Untimed.Value.Contains(__instance.questKey.Value))
+        {
+            __result = false;
+        }
     }
 }

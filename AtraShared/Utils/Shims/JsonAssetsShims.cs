@@ -119,7 +119,7 @@ public static class JsonAssetsShims
 
     private static Dictionary<string, string>? SetUpJAIntegration()
     {
-        var ja = AccessTools.TypeByName("JsonAssets.Mod");
+        Type? ja = AccessTools.TypeByName("JsonAssets.Mod");
         if (ja is null)
         {
             return null;
@@ -216,14 +216,14 @@ breakcontinue:
 
     private static readonly Lazy<Func<bool>?> isJAInitialized = new(() =>
     {
-        var ja = AccessTools.TypeByName("JsonAssets.Mod");
+        Type? ja = AccessTools.TypeByName("JsonAssets.Mod");
         if (ja is null)
         {
             return null;
         }
 
-        var inst = Expression.Field(null, ja.GetCachedField("instance", ReflectionCache.FlagTypes.StaticFlags));
-        var isInit = Expression.Field(inst, ja.GetCachedField("DidInit", ReflectionCache.FlagTypes.InstanceFlags));
+        MemberExpression? inst = Expression.Field(null, ja.GetCachedField("instance", ReflectionCache.FlagTypes.StaticFlags));
+        MemberExpression? isInit = Expression.Field(inst, ja.GetCachedField("DidInit", ReflectionCache.FlagTypes.InstanceFlags));
 
         return Expression.Lambda<Func<bool>>(isInit).CompileFast();
     });

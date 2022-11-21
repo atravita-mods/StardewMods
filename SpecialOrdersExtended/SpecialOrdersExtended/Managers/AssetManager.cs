@@ -6,6 +6,7 @@ using StardewModdingAPI.Events;
 
 namespace SpecialOrdersExtended.Managers;
 
+[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "This is are record.")]
 public record EmojiData(string AssetName, Point Location);
 
 /// <summary>
@@ -17,6 +18,8 @@ internal static class AssetManager
 
     internal static IAssetName EmojiOverride { get; private set; } = null!;
 
+    internal static Lazy<HashSet<string>> Untimed = new(GetUntimed);
+
     /// <summary>
     /// Initializes assets for this mod.
     /// </summary>
@@ -27,10 +30,7 @@ internal static class AssetManager
         EmojiOverride = parser.ParseAssetName("Mods/atravita_SpecialOrdersExtended_EmojiOverride");
     }
 
-    /// <summary>
-    /// Called when assets are loaded.
-    /// </summary>
-    /// <param name="e">event args.</param>
+    /// <inheritdoc cref="IContentEvents.AssetRequested"/>
     internal static void OnLoadAsset(AssetRequestedEventArgs e)
     {
         if (e.NameWithoutLocale.IsEquivalentTo(durationOverride))
@@ -43,10 +43,27 @@ internal static class AssetManager
         }
     }
 
+    /// <inheritdoc cref="IContentEvents.AssetsInvalidated"/>
+    internal static void Reset(IReadOnlySet<IAssetName>? assets = null)
+    {
+        if (Untimed.IsValueCreated && (assets is null || assets.Contains(durationOverride)))
+        {
+            Untimed = new(GetUntimed);
+        }
+    }
+
     /// <summary>
     /// Gets the duration override dictionary.
     /// </summary>
     /// <returns>The duration override dictionary.</returns>
     internal static Dictionary<string, string> GetDurationOverride()
         => Game1.content.Load<Dictionary<string, string>>(durationOverride.BaseName);
+
+    /// <summary>
+    /// Gets the untiled special order quest keys I manage.
+    /// </summary>
+    /// <returns>Hashset of quest keys.</returns>
+    private static HashSet<string> GetUntimed()
+        => GetDurationOverride().Where(kvp => kvp.Value.AsSpan().Trim().Equals("-1", StringComparison.Ordinal))
+                                .Select(kvp => kvp.Key).ToHashSet();
 }

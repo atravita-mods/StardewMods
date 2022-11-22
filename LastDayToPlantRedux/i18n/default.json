@@ -25,7 +25,7 @@
   "CropsToDisplay.description": "Which crops should be included?",
 
   "config.CropOptions.All": "All",
-  "config.CropOptions.Purchaseable": "Purchaseable",
+  "config.CropOptions.Purchaseable": "Purchase-able",
   "config.CropOptions.Seen": "Seen",
 
   "FertilizerOptions.title": "Fertilizer Options",

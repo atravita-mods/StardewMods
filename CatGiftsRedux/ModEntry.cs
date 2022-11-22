@@ -154,7 +154,7 @@ internal sealed class ModEntry : Mod
             }
         }
 
-        // cat or fallback behavior.
+        // cat or fall back behavior.
         if (tile is null)
         {
             Point point = farm.GetMainFarmHouseEntry();
@@ -166,7 +166,12 @@ internal sealed class ModEntry : Mod
             int attempts = 5;
             do
             {
-                Func<Random, Item?> picker = this.itemPickers.GetValue(random);
+                Func<Random, Item?>? picker = this.itemPickers.GetValue(random);
+                if (picker is null)
+                {
+                    continue;
+                }
+
                 Item? picked = null;
                 try
                 {
@@ -202,6 +207,11 @@ internal sealed class ModEntry : Mod
     private Item? GetUserItem(Random random)
     {
         ItemRecord? entry = this.playerItemsManager.GetValue(random);
+
+        if (entry is null)
+        {
+            return null;
+        }
 
         if (entry.Type.HasFlag(ItemTypeEnum.DGAItem))
         {

@@ -1,4 +1,5 @@
-﻿using AtraShared.Wrappers;
+﻿using AtraShared.Caching;
+using AtraShared.Wrappers;
 
 using StardewValley.Objects;
 using StardewValley.TerrainFeatures;
@@ -10,6 +11,13 @@ namespace MoreFertilizers;
 /// </summary>
 internal static class MFUtilities
 {
+    private static readonly TickCache<bool> isQiQuestActive = new(() => Game1.player.team.SpecialOrderRuleActive("QI_BEANS"));
+
+    /// <summary>
+    /// Gets a value indicating whether or not the qi bean quest is active.
+    /// </summary>
+    internal static bool IsQiQuestActive => isQiQuestActive.GetValue();
+
     /// <summary>
     /// Gets a random fertilizer taking into account the player's level.
     /// </summary>
@@ -36,10 +44,10 @@ internal static class MFUtilities
             };
 
     /// <summary>
-    /// Whether hoedirt contains a crop should be considered a Joja crop for the Joja and Organic fertilizers.
+    /// Whether HoeDirt contains a crop should be considered a Joja crop for the Joja and Organic fertilizers.
     /// </summary>
-    /// <param name="dirt">Hoedirt.</param>
-    /// <returns>True if the hoedirt has a joja crop.</returns>
+    /// <param name="dirt">HoeDirt.</param>
+    /// <returns>True if the HoeDirt has a joja crop.</returns>
     internal static bool HasJojaCrop(this HoeDirt dirt)
         => dirt.crop is not null && dirt.crop.IsJojaCrop();
 
@@ -61,7 +69,7 @@ internal static class MFUtilities
     }
 
     /// <summary>
-    /// Fixes IDs for all hoedirt in a specific location.
+    /// Fixes IDs for all HoeDirt in a specific location.
     /// Given the idMapping.
     /// </summary>
     /// <param name="loc">Location to fix.</param>

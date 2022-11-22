@@ -104,7 +104,7 @@ public sealed class CanPlaceHandler : IMoreFertilizersAPI
         }
 
         Guard.IsNotNull(obj);
-        if (obj.ParentSheetIndex == -1 || obj.bigCraftable.Value || obj.GetType() != typeof(SObject))
+        if (obj.ParentSheetIndex == -1 || obj.bigCraftable.Value || obj.GetType() != typeof(SObject) || obj.Category != SObject.fertilizerCategory)
         {
             return false;
         }

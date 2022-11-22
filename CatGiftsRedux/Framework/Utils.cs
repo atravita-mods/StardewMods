@@ -19,7 +19,7 @@ namespace CatGiftsRedux.Framework;
 /// </summary>
 internal static class Utils
 {
-    private static readonly TickCache<bool> isQiQuestActive = new(() => Game1.player.team.SpecialOrderActive("QI_BEANS"));
+    private static readonly TickCache<bool> isQiQuestActive = new(() => Game1.player.team.SpecialOrderRuleActive("QI_BEANS"));
     private static readonly TickCache<bool> isPerfectFarm = new(() => Game1.MasterPlayer.mailReceived.Contains("Farm_Enternal"));
 
     /// <summary>
@@ -30,7 +30,7 @@ internal static class Utils
     /// <summary>
     /// Check if the object should not be given by a random picker. Basically, no golden walnuts (73), qi gems (858), Qi beans or fruit unless the special order is active.
     /// 289 = ostrich egg, 928 is a golden egg.
-    /// Or something that doesn't exist in objinfo.
+    /// Or something that doesn't exist in Data/ObjectInformation.
     /// </summary>
     /// <param name="id">int id of the item to check.</param>
     /// <returns>true to forbid it.</returns>

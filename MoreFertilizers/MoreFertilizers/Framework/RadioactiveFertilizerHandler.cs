@@ -1,23 +1,40 @@
 ﻿using AtraBase.Models.WeightedRandom;
+using AtraBase.Toolkit.Extensions;
+using AtraBase.Toolkit.StringHandler;
 
-using AtraShared.ConstantsAndEnums;
 using AtraShared.Integrations;
 using AtraShared.Integrations.Interfaces;
 using AtraShared.Utils;
+using AtraShared.Utils.Extensions;
+using AtraShared.Wrappers;
+
+using StardewModdingAPI.Events;
 
 using StardewValley.Objects;
 using StardewValley.TerrainFeatures;
 
 namespace MoreFertilizers.Framework;
+
+/// <summary>
+/// Handles the radioactive fertilizer.
+/// </summary>
 internal static class RadioactiveFertilizerHandler
 {
+    private static readonly WeightedManager<int>?[] CropManagers = new WeightedManager<int>?[4];
+
     private static IAssetName crops = null!;
     private static IAssetName objects = null!;
 
     private static ILastDayToPlantAPI? api;
 
-    private static readonly WeightedManager<(int, StardewSeasons)>?[] cropManager = new WeightedManager<(int, StardewSeasons)>?[4];
+    private static Random? random;
 
+    /// <summary>
+    /// Initializes APIs and assets for the radioactive fertilizer.
+    /// </summary>
+    /// <param name="parser">GameContent helper.</param>
+    /// <param name="registry">Mod registry.</param>
+    /// <param name="translation">Translation helper.</param>
     internal static void Initialize(IGameContentHelper parser, IModRegistry registry, ITranslationHelper translation)
     {
         crops = parser.ParseAssetName("Data/Crops");
@@ -27,52 +44,167 @@ internal static class RadioactiveFertilizerHandler
         _ = helper.TryGetAPI("atravita.LastDayToPlantRedux", null, out api);
     }
 
+    /// <inheritdoc cref="IContentEvents.AssetsInvalidated"/>
     internal static void Reset(IReadOnlySet<IAssetName>? assets = null)
     {
         if (assets is null || assets.Contains(crops) || assets.Contains(objects))
         {
-            for (int i = 0; i < cropManager.Length; i++)
+            for (int i = 0; i < CropManagers.Length; i++)
             {
-                cropManager[i] = null;
+                CropManagers[i] = null;
             }
         }
     }
 
+    /// <summary>
+    /// called at day end, handles the radioactive fertilizer.
+    /// </summary>
     internal static void OnDayEnd()
     {
-        List<HoeDirt> dirts = new();
+        if (Game1.dayOfMonth >= 28)
+        {
+            return;
+        }
+
+        // find a farmer to do the planting with.
+        Farmer bestfarmer = Game1.player;
+        Profession bestProfession = bestfarmer.GetProfession();
+        if (Context.IsMultiplayer)
+        {
+            foreach (Farmer? farmer in Game1.getOnlineFarmers())
+            {
+                if (bestProfession == Profession.Prestiged)
+                {
+                    break;
+                }
+
+                Profession profession = farmer.GetProfession();
+                if (profession > bestProfession)
+                {
+                    bestfarmer = farmer;
+                    bestProfession = profession;
+                }
+            }
+        }
+
+        ModEntry.ModMonitor.DebugOnlyLog($"Using farmer {bestfarmer.Name} with profession {bestProfession}");
+
+        Dictionary<int, string>? cropData = Game1.content.Load<Dictionary<int, string>>(crops.BaseName);
 
         Utility.ForAllLocations((location) =>
         {
-            foreach (var terrain in location.terrainFeatures.Values)
+            string seasonstring = location.GetSeasonForLocation();
+            int season = Utility.getSeasonNumber(seasonstring);
+
+            if (season < 0 || season > 3)
+            {
+                return;
+            }
+
+            foreach (TerrainFeature? terrain in location.terrainFeatures.Values)
             {
                 if (terrain is HoeDirt dirt && dirt.fertilizer.Value == ModEntry.RadioactiveFertilizerID)
                 {
-                    dirts.Add(dirt);
+                    ProcessRadioactiveFertilizer(dirt, bestfarmer, bestProfession, location, season, cropData, seasonstring);
                 }
             }
 
-            foreach (var obj in location.Objects.Values)
+            foreach (StardewValley.Object? obj in location.Objects.Values)
             {
                 if (obj is IndoorPot pot && pot.hoeDirt.Value is HoeDirt dirt && dirt.fertilizer.Value == ModEntry.RadioactiveFertilizerID)
                 {
-                    dirts.Add(dirt);
+                    ProcessRadioactiveFertilizer(dirt, bestfarmer, bestProfession, location, season, cropData, seasonstring);
                 }
             }
         });
 
-        if (dirts.Count == 0)
-        {
-            ModEntry.ModMonitor.Log($"No radioactive dirt found.");
-        }
-
-        Random random = RandomUtils.GetSeededRandom(9, (int)Game1.uniqueIDForThisGame);
+        random = null;
     }
 
-    private static WeightedManager<int> GeneratedWeightedList()
+    private static void ProcessRadioactiveFertilizer(HoeDirt dirt, Farmer farmer, Profession profession, GameLocation location, int season, Dictionary<int, string> cropData, string seasonstring)
     {
-        var cropData = Game1.content.Load<Dictionary<int, string>>(crops.BaseName);
+        random ??= RandomUtils.GetSeededRandom(9, (int)Game1.uniqueIDForThisGame);
 
-        foreach (var)
+        if (random.Next(2) == 0)
+        {
+            return;
+        }
+
+        if (CropManagers[season] is null)
+        {
+            CropManagers[season] = GeneratedWeightedList(seasonstring, cropData);
+        }
+
+        WeightedManager<int>? manager = CropManagers[season];
+
+        if (manager?.Count is null or 0)
+        {
+            return;
+        }
+
+        int crop = manager.GetValue(random);
+        if (cropData.TryGetValue(crop, out string? data) && HasSufficientTimeToGrow(profession, crop, data))
+        {
+            ModEntry.ModMonitor.Log($"Replacing plant at {dirt.currentTileLocation} with {crop}.");
+            dirt.destroyCrop(dirt.currentTileLocation, false, location);
+            dirt.plant(crop, (int)dirt.currentTileLocation.X, (int)dirt.currentTileLocation.Y, farmer, false, location);
+            dirt.fertilizer.Value = HoeDirt.noFertilizer;
+        }
+    }
+
+    private static Profession GetProfession(this Farmer farmer)
+    {
+        if (farmer.professions.Contains(Farmer.agriculturist + 100))
+        {
+            return Profession.Prestiged;
+        }
+        else if (farmer.professions.Contains(Farmer.agriculturist))
+        {
+            return Profession.Agriculturalist;
+        }
+        return Profession.None;
+    }
+
+    private static WeightedManager<int> GeneratedWeightedList(string season, Dictionary<int, string> cropData)
+    {
+        WeightedManager<int>? manager = new();
+
+        foreach ((int id, string data) in cropData)
+        {
+            if (data.GetNthChunk('/', 1).Contains(season, StringComparison.OrdinalIgnoreCase)
+                && int.TryParse(data.GetNthChunk('/', 3), out int obj)
+                && Game1Wrappers.ObjectInfo.TryGetValue(obj, out string? objData)
+                && !objData.GetNthChunk('/', SObject.objectInfoNameIndex).Contains("Qi", StringComparison.OrdinalIgnoreCase)
+                && int.TryParse(objData.GetNthChunk('/', SObject.objectInfoPriceIndex), out int price))
+            {
+                double weight = Math.Max(1500.0 / price, 1.0f);
+                manager.Add(weight, id);
+            }
+        }
+
+        return manager;
+    }
+
+    private static bool HasSufficientTimeToGrow(Profession profession, int cropId, string cropData)
+    {
+        if (api is null)
+        {
+            int daysLeft = 28 - Game1.dayOfMonth;
+            foreach (var days in cropData.GetNthChunk('/', 0).StreamSplit(null, StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries))
+            {
+                if (!int.TryParse(days, out var num) || num > daysLeft)
+                {
+                    return false;
+                }
+                daysLeft -= num;
+            }
+
+            return true;
+        }
+        else if (api.GetDays(profession, 0, cropId) > 28 - Game1.dayOfMonth)
+        {
+            return false;
+        }
+        return true;
     }
 }

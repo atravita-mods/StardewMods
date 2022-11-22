@@ -107,7 +107,7 @@ internal static class NPCPatches
         }
         catch (Exception ex)
         {
-            Globals.ModMonitor.Log($"Ran into errors in postfix for startRouteBehavior\n\n{ex}", LogLevel.Error);
+            Globals.ModMonitor.Log($"Ran into errors in postfix for endRouteBehavior\n\n{ex}", LogLevel.Error);
         }
     }
 }

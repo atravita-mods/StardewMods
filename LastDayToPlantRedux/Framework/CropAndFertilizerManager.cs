@@ -29,7 +29,7 @@ internal static class CropAndFertilizerManager
     private static readonly Dictionary<CropCondition, Dictionary<int, int>> DaysPerCondition = new();
 
     /// <summary>
-    /// a mapping of fertilizers to a hoedirt that has them.
+    /// a mapping of fertilizers to a HoeDirt that has them.
     /// </summary>
     private static readonly Dictionary<int, DummyHoeDirt> Dirts = new();
 

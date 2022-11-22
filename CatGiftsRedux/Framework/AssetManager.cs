@@ -55,6 +55,11 @@ internal static class AssetManager
 
         ItemRecord? entry = manager.GetValueUncached(random);
 
+        if (entry is null)
+        {
+            return null;
+        }
+
         if (!int.TryParse(entry.Identifier, out int id))
         {
             id = DataToItemMap.GetID(entry.Type, entry.Identifier);

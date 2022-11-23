@@ -27,9 +27,9 @@ internal static class FixBirthdayGifts
             if (Game1.NPCGiftTastes.TryGetValue(__instance.Name, out string? likes))
             {
                 ReadOnlySpan<char> loves = likes.GetNthChunk('/', NPC.gift_taste_love + 1);
-                foreach (var seg in loves.StreamSplit(options: StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries))
+                foreach (SpanSplitEntry seg in loves.StreamSplit(options: StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries))
                 {
-                    if (int.TryParse(seg, out var val) && val > 0)
+                    if (int.TryParse(seg, out int val) && val > 0)
                     {
                         __result = new SObject(val, 1);
                         return null;
@@ -50,7 +50,7 @@ internal static class FixBirthdayGifts
         {
             ILHelper helper = new(original, instructions, ModEntry.ModMonitor, gen);
 
-            var label = helper.Generator.DefineLabel();
+            Label label = helper.Generator.DefineLabel();
             helper.FindNext(new CodeInstructionWrapper[]
             {
                 new(OpCodes.Callvirt, typeof(NPC).GetCachedMethod(nameof(NPC.getFavoriteItem), ReflectionCache.FlagTypes.InstanceFlags)),

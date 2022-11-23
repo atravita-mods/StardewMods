@@ -138,7 +138,7 @@ internal static class SpecialFertilizerApplication
 
         try
         {
-            Vector2 tile = new(MathF.Floor(x / 64f), MathF.Floor(y / 64f));
+            Vector2 tile = new(x / 64, y / 64);
             if (item is SObject obj && PlaceHandler.CanPlaceFertilizer(obj, location, tile) &&
                 Utility.withinRadiusOfPlayer(x, y, PLACEMENTRADIUS, f))
             {

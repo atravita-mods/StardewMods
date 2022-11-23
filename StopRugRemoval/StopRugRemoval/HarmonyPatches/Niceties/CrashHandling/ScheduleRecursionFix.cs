@@ -3,6 +3,7 @@ using System.Reflection.Emit;
 using System.Runtime.CompilerServices;
 
 using AtraBase.Toolkit;
+using AtraBase.Toolkit.Reflection;
 
 using AtraCore.Framework.ReflectionManager;
 
@@ -14,17 +15,27 @@ using HarmonyLib;
 
 namespace StopRugRemoval.HarmonyPatches.Niceties.CrashHandling;
 
-#warning - finish this?
+#warning - crosscheck in 1.6.
 
 [HarmonyPatch(typeof(NPC))]
 internal static class ScheduleRecursionFix
 {
-    private static void AlertPlayer(NPC npc)
+    private static Lazy<Func<NPC, string>> LastLoadedScheduleGetter = new(
+        () => typeof(NPC).GetCachedField("_lastLoadedScheduleKey", ReflectionCache.FlagTypes.InstanceFlags)
+                         .GetInstanceFieldGetter<NPC, string>());
+
+    private static bool CheckForRecursion(string schedule,  NPC npc)
     {
-        ModEntry.ModMonitor.Log($"Schedule disabled for {npc.Name} - recursion found.", LogLevel.Error);
+        if (LastLoadedScheduleGetter.Value(npc) == schedule)
+        {
+            ModEntry.ModMonitor.Log($"Schedule disabled for {npc.Name} - infinite recursion found.", LogLevel.Error);
+            return true;
+        }
+        return false;
     }
 
     [HarmonyPatch(nameof(NPC.parseMasterSchedule))]
+    [SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1116:Split parameters should start on line after declaration", Justification = "Reviewed.")]
     private static IEnumerable<CodeInstruction>? Transpiler(IEnumerable<CodeInstruction> instructions, ILGenerator gen, MethodBase original)
     {
         try
@@ -33,14 +44,30 @@ internal static class ScheduleRecursionFix
             helper.FindNext(new CodeInstructionWrapper[]
             { // if (this.changeScheduleForLocationAccessibility)
                 (OpCodes.Call, typeof(NPC).GetCachedMethod("changeScheduleForLocationAccessibility", ReflectionCache.FlagTypes.InstanceFlags)),
-            })
-            .FindNext(new CodeInstructionWrapper[]
+            });
+
+            foreach (string? schedulestring in new[] { "default", "spring" })
             {
-                (OpCodes.Ldstr, "default"),
-                (OpCodes.Call, typeof(NPC).GetCachedMethod(nameof(NPC.getMasterScheduleEntry), ReflectionCache.FlagTypes.InstanceFlags)),
-                (OpCodes.Call, typeof(NPC).GetCachedMethod(nameof(NPC.parseMasterSchedule), ReflectionCache.FlagTypes.InstanceFlags)),
-            })
-            .Advance(1);
+                helper.FindNext(new CodeInstructionWrapper[]
+                { // return this.parseMasterSchedule(this.GetMasterScheduleEntry("default" OR "spring");
+                    OpCodes.Ldarg_0,
+                    OpCodes.Ldarg_0,
+                    (OpCodes.Ldstr, schedulestring),
+                    (OpCodes.Call, typeof(NPC).GetCachedMethod(nameof(NPC.getMasterScheduleEntry), ReflectionCache.FlagTypes.InstanceFlags)),
+                    (OpCodes.Call, typeof(NPC).GetCachedMethod(nameof(NPC.parseMasterSchedule), ReflectionCache.FlagTypes.InstanceFlags)),
+                })
+                .GetLabels(out IList<Label>? defaultLabels)
+                .DefineAndAttachLabel(out Label defaultJump)
+                .Insert(new CodeInstruction[]
+                {
+                    new(OpCodes.Ldstr, schedulestring),
+                    new(OpCodes.Ldarg_0),
+                    new(OpCodes.Call, typeof(ScheduleRecursionFix).GetCachedMethod(nameof(CheckForRecursion), ReflectionCache.FlagTypes.StaticFlags)),
+                    new(OpCodes.Brfalse, defaultJump),
+                    new(OpCodes.Ldnull),
+                    new(OpCodes.Ret),
+                }, withLabels: defaultLabels);
+            }
 
             helper.Print();
             return helper.Render();

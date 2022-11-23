@@ -5,5 +5,5 @@
 /// </summary>
 internal sealed class ModConfig
 {
-    public static bool AffectDailyQuests { get; set; } = true;
+    public bool AffectDailyQuests { get; set; } = true;
 }

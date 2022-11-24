@@ -22,7 +22,7 @@
   <ItemGroup>
     <ProjectReference Include="..\AtraCore\AtraCore.csproj" private="false" />
     <ProjectReference Include="..\Pintail\Pintail\Pintail.csproj" private="false" />
-        <Reference Include="Newtonsoft.Json" HintPath="$(GamePath)\smapi-internal\Newtonsoft.Json.dll" private="false"/>    
+        <Reference Include="Newtonsoft.Json" HintPath="$(GamePath)\smapi-internal\Newtonsoft.Json.dll" private="false" />    
   </ItemGroup>
 
   <ItemGroup>

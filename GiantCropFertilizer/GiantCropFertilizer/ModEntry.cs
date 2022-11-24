@@ -223,11 +223,10 @@ internal sealed class ModEntry : Mod
         this.FixIds();
     }
 
-    /// <summary>
+    /// <inheritdoc cref="IGameLoopEvents.Saved"/>
+    /// <remarks>
     /// Writes migration data then detaches the migrator.
-    /// </summary>
-    /// <param name="sender">Smapi thing.</param>
-    /// <param name="e">Arguments for just-before-saving.</param>
+    /// </remarks>
     private void WriteMigrationData(object? sender, SavedEventArgs e)
     {
         if (this.migrator is not null)
@@ -238,9 +237,7 @@ internal sealed class ModEntry : Mod
         this.Helper.Events.GameLoop.Saved -= this.WriteMigrationData;
     }
 
-    /*********
-     * REGION JSON ASSETS
-     * *******/
+    #region jsonAssets
 
     // Not quite sure why, but JA drops all IDs when returning to title. We're doing that too.
     [EventPriority(EventPriority.High + 100)]
@@ -333,4 +330,6 @@ internal sealed class ModEntry : Mod
         this.newID = -1;
         this.solidFoundationsAPI = null;
     }
+
+    #endregion
 }

@@ -69,7 +69,7 @@ internal static class ScheduleRecursionFix
                 }, withLabels: defaultLabels);
             }
 
-            helper.Print();
+            // helper.Print();
             return helper.Render();
         }
         catch (Exception ex)

@@ -1,4 +1,6 @@
-﻿using System.Diagnostics;
+﻿#if DEBUG
+using System.Diagnostics;
+#endif
 
 using AtraShared.ConstantsAndEnums;
 using AtraShared.Integrations;
@@ -50,9 +52,32 @@ internal sealed class ModEntry : Mod
         helper.Events.GameLoop.SaveLoaded += this.OnSaveLoaded;
         helper.Events.GameLoop.ReturnedToTitle += this.OnReturnedToTitle;
 
-        // beehouses
-        helper.Events.GameLoop.DayStarted += this.OnDayStarted;
-        helper.Events.Player.Warped += this.OnPlayerWarp;
+        helper.Events.GameLoop.DayStarted += static (_, _) => BeehouseHandler.UpdateStatus(Game1.currentLocation);
+        helper.Events.Player.Warped += static (_, e) => BeehouseHandler.UpdateStatus(e.NewLocation);
+    }
+
+    private void OnGameLaunched(object? sender, GameLaunchedEventArgs e)
+    {
+        this.ApplyPatches(new Harmony(this.ModManifest.UniqueID));
+
+        PFMMachineHandler.TryGetAPI(this.Helper.ModRegistry);
+        BeehouseHandler.TryGetAPI(this.Helper.ModRegistry);
+        this.gmcmHelper = new(this.Monitor, this.Helper.Translation, this.Helper.ModRegistry, this.ModManifest);
+        if (this.gmcmHelper.TryGetAPI())
+        {
+            this.gmcmHelper.TryGetOptionsAPI();
+            this.SetUpBasicConfig();
+        }
+        if (this.Helper.ModRegistry.IsLoaded("Digus.ProducerFrameworkMod"))
+        {
+            this.Helper.Events.Player.Warped += static (_, e) => PFMMachineHandler.RefreshValidityList(e.NewLocation);
+            this.Helper.Events.GameLoop.DayStarted += static (_, _) => PFMMachineHandler.RefreshValidityList(Game1.currentLocation);
+
+            this.Helper.ConsoleCommands.Add(
+                name: "av.hem.list_pfm_machines",
+                documentation: "Prints info about PFM machines...",
+                callback: PFMMachineHandler.PrintPFMRecipes);
+        }
     }
 
     /// <summary>
@@ -73,35 +98,10 @@ internal sealed class ModEntry : Mod
         harmony.Snitch(this.Monitor, harmony.Id, transpilersOnly: true);
     }
 
-    private void OnGameLaunched(object? sender, GameLaunchedEventArgs e)
-    {
-        this.ApplyPatches(new Harmony(this.ModManifest.UniqueID));
-
-        PFMMachineHandler.TryGetAPI(this.Helper.ModRegistry);
-        BeehouseHandler.TryGetAPI(this.Helper.ModRegistry);
-        this.gmcmHelper = new(this.Monitor, this.Helper.Translation, this.Helper.ModRegistry, this.ModManifest);
-        if (this.gmcmHelper.TryGetAPI())
-        {
-            this.gmcmHelper.TryGetOptionsAPI();
-            this.SetUpBasicConfig();
-        }
-        if (this.Helper.ModRegistry.IsLoaded("Digus.ProducerFrameworkMod"))
-        {
-            this.Helper.Events.Player.Warped += this.PFMOnPlayerWarp;
-            this.Helper.Events.GameLoop.DayStarted += this.PFMOnDayStarted;
-
-            this.Helper.ConsoleCommands.Add(
-                name: "av.hem.list_pfm_machines",
-                documentation: "Prints info about PFM machines...",
-                callback: PFMMachineHandler.PrintPFMRecipes);
-        }
-    }
-
-    /// <summary>
+    /// <inheritdoc cref="IGameLoopEvents.ReturnedToTitle"/>
+    /// <remarks>
     /// Resets the GMCM when the player has returned to the title.
-    /// </summary>
-    /// <param name="sender">SMAPI.</param>
-    /// <param name="e">event args.</param>
+    /// </remarks>
     private void OnReturnedToTitle(object? sender, ReturnedToTitleEventArgs e)
     {
         if (this.gmcmHelper?.HasGottenAPI == true)
@@ -110,18 +110,6 @@ internal sealed class ModEntry : Mod
             this.SetUpBasicConfig();
         }
     }
-
-    private void PFMOnDayStarted(object? sender, DayStartedEventArgs e)
-        => PFMMachineHandler.RefreshValidityList(Game1.currentLocation);
-
-    private void PFMOnPlayerWarp(object? sender, WarpedEventArgs e)
-        => PFMMachineHandler.RefreshValidityList(e.NewLocation);
-
-    private void OnDayStarted(object? sender, DayStartedEventArgs e)
-        => BeehouseHandler.UpdateStatus(Game1.currentLocation);
-
-    private void OnPlayerWarp(object? sender, WarpedEventArgs e)
-        => BeehouseHandler.UpdateStatus(e.NewLocation);
 
     /// <summary>
     /// Sets up the basic GMCM (does not include PFM machines).
@@ -178,11 +166,7 @@ internal sealed class ModEntry : Mod
         }
     }
 
-    /// <summary>
-    /// OnSaveLoaded event handler.
-    /// </summary>
-    /// <param name="sender">SMAPI.</param>
-    /// <param name="e">Event args.</param>
+    /// <inheritdoc cref="IGameLoopEvents.SaveLoaded"/>
     /// <remarks>EventPriority.Low to slot after pfm.</remarks>
     [EventPriority(EventPriority.Low - 2000)]
     private void OnSaveLoaded(object? sender, SaveLoadedEventArgs e)
@@ -210,7 +194,7 @@ internal sealed class ModEntry : Mod
 
             PFMMachineHandler.ProcessPFMRecipes();
 
-            // Prepopulate the machine list.
+            // Pre-populate the machine list.
             foreach (int machineID in PFMMachineHandler.ConditionalPFMMachines.Concat(PFMMachineHandler.UnconditionalPFMMachines))
             {
                 _ = Config.ProducerFrameworkModMachines.TryAdd(machineID.GetBigCraftableName(), true);
@@ -243,11 +227,10 @@ internal sealed class ModEntry : Mod
         }
     }
 
-    /// <summary>
+    /// <inheritdoc cref="IGameLoopEvents.Saved"/>
+    /// <remarks>
     /// Writes migration data then detaches the migrator.
-    /// </summary>
-    /// <param name="sender">Smapi thing.</param>
-    /// <param name="e">Arguments for just-before-saving.</param>
+    /// </remarks>
     private void WriteMigrationData(object? sender, SavedEventArgs e)
     {
         if (this.migrator is not null)

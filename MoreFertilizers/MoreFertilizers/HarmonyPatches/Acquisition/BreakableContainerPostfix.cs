@@ -29,7 +29,7 @@ internal static class BreakableContainerPostfix
                 : (Game1.random.Next(2) == 0 ? ModEntry.SeedyFertilizerID : ModEntry.WisdomFertilizerID),
             BreakableContainer.darkBarrel => location is MineShaft shaft && shaft.GetAdditionalDifficulty() > 0
                 ? (Utility.hasFinishedJojaRoute() && Game1.random.NextDouble() < 0.1 ? ModEntry.SecretJojaFertilizerID : ModEntry.DeluxeJojaFertilizerID)
-                : ModEntry.JojaFertilizerID,
+                : (Game1.random.Next(2) == 0 ? ModEntry.JojaFertilizerID : ModEntry.RadioactiveFertilizerID),
             BreakableContainer.desertBarrel => (location is MineShaft shaft && shaft.GetAdditionalDifficulty() > 0)
                 ? (Game1.random.Next(2) == 0 ? ModEntry.BountifulFertilizerID : ModEntry.FruitTreeFertilizerID)
                 : (Game1.random.Next(3) == 0 ? ModEntry.BountifulBushID : ModEntry.OrganicFertilizerID),

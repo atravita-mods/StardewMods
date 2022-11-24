@@ -26,5 +26,9 @@ internal static class KrobusShopStockPostfix
         {
             __result.TryAdd(new SObject(ModEntry.MiraculousBeveragesID, 1), new[] { 250, ShopMenu.infiniteStock });
         }
+        if (ModEntry.RadioactiveFertilizerID != -1 && Game1.year > 2 && Game1.player.hasMagicInk)
+        {
+            __result.TryAdd(new SObject(ModEntry.RadioactiveFertilizerID, 1), new[] { 250, ShopMenu.infiniteStock });
+        }
     }
 }

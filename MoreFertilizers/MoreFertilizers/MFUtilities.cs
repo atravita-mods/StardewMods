@@ -24,7 +24,7 @@ internal static class MFUtilities
     /// <param name="level">Int skill level.</param>
     /// <returns>Fertilizer ID (-1 if not found).</returns>
     internal static int GetRandomFertilizerFromLevel(this int level)
-        => Game1.random.Next(Math.Clamp(level + 4, 0, 14)) switch
+        => Game1.random.Next(Math.Clamp((int)(level * 1.5) + 1, 0, 16)) switch
             {
                 0 => ModEntry.LuckyFertilizerID,
                 1 => ModEntry.JojaFertilizerID,
@@ -33,13 +33,15 @@ internal static class MFUtilities
                 4 => ModEntry.FruitTreeFertilizerID,
                 5 => ModEntry.SeedyFertilizerID,
                 6 => ModEntry.FishFoodID,
-                7 => ModEntry.DeluxeFishFoodID,
-                8 => ModEntry.DomesticatedFishFoodID,
-                9 => ModEntry.DeluxeJojaFertilizerID,
-                10 => ModEntry.DeluxeFruitTreeFertilizerID,
-                11 => ModEntry.EverlastingFertilizerID,
-                12 => ModEntry.MiraculousBeveragesID,
-                13 => ModEntry.BountifulBushID,
+                7 => ModEntry.RadioactiveFertilizerID,
+                8 => ModEntry.DeluxeFishFoodID,
+                9 => ModEntry.DomesticatedFishFoodID,
+                10 => ModEntry.DeluxeJojaFertilizerID,
+                11 => ModEntry.DeluxeFruitTreeFertilizerID,
+                12 => ModEntry.TreeTapperFertilizerID,
+                13 => ModEntry.EverlastingFertilizerID,
+                14 => ModEntry.MiraculousBeveragesID,
+                15 => ModEntry.BountifulBushID,
                 _ => ModEntry.BountifulFertilizerID,
             };
 

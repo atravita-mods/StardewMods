@@ -1,6 +1,10 @@
 ﻿#if DEBUG
 using System.Diagnostics;
 #endif
+using System.Runtime.CompilerServices;
+
+using AtraBase.Toolkit;
+
 using AtraCore.Framework.IntegrationManagers;
 using AtraCore.Utilities;
 
@@ -54,6 +58,9 @@ internal sealed class ModEntry : Mod
     #region IDs
 
 #pragma warning disable SA1201 // Elements should appear in the correct order
+    /// <summary>
+    /// Gets a reference to the JA API.
+    /// </summary>
     internal static IJsonAssetsAPI? JsonAssetsAPI => jsonAssets;
 
     private static int prismaticFertilizerID = -1;
@@ -212,7 +219,7 @@ internal sealed class ModEntry : Mod
     private static int luckyFertilizerID = -1;
 
     /// <summary>
-    /// Gets the interger ID of the lucky fertiizer. -1 if not found/not loaded yet.
+    /// Gets the integer ID of the lucky fertilizer. -1 if not found/not loaded yet.
     /// </summary>
     internal static int LuckyFertilizerID
     {
@@ -348,7 +355,7 @@ internal sealed class ModEntry : Mod
     private static int organicFertilizerID = -1;
 
     /// <summary>
-    /// Gets the integer ID of the organic fertilzer. -1 if not found/not loaded yet.
+    /// Gets the integer ID of the organic fertilizer. -1 if not found/not loaded yet.
     /// </summary>
     internal static int OrganicFertilizerID
     {
@@ -1225,6 +1232,7 @@ internal sealed class ModEntry : Mod
         }
     }
 
+    [MethodImpl(TKConstants.Cold)]
     private bool GetIdsFromJAIfNeeded(IModHelper helper, IMonitor monitor)
     {
         this.Monitor.Log($"Running migration for 0.3.0.");
@@ -1353,8 +1361,6 @@ internal sealed class ModEntry : Mod
 
     #endregion
 
-    #region multiplayer
-
     /// <inheritdoc cref="IPlayerEvents.Warped"/>
     [EventPriority(EventPriority.Low)]
     private void OnPlayerWarp(object? sender, WarpedEventArgs e)
@@ -1365,6 +1371,8 @@ internal sealed class ModEntry : Mod
             FishFoodHandler.HandleWarp(e);
         }
     }
+
+    #region multiplayer
 
     /// <inheritdoc cref="IMultiplayerEvents.PeerConnected"/>
     private void Multiplayer_PeerConnected(object? sender, PeerConnectedEventArgs e)

@@ -3,9 +3,5 @@
   "Price": 100,
   "Category": -19,
   "Edibility": -300,
-  "TranslationKey": "miraculous-beverages",
-  "PurchasePrice": 250,
-  "PurchaseFrom": "Krobus",
-  "CanPurchase": true,
-  "PurchaseRequirements": [ "y 2", "n qiCave", "f Krobus 1500" ]
+  "TranslationKey": "miraculous-beverages"
 }

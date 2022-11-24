@@ -11,13 +11,6 @@ namespace MoreFertilizers;
 /// </summary>
 internal static class MFUtilities
 {
-    private static readonly TickCache<bool> isQiQuestActive = new(() => Game1.player.team.SpecialOrderRuleActive("QI_BEANS"));
-
-    /// <summary>
-    /// Gets a value indicating whether or not the qi bean quest is active.
-    /// </summary>
-    internal static bool IsQiQuestActive => isQiQuestActive.GetValue();
-
     /// <summary>
     /// Gets a random fertilizer taking into account the player's level.
     /// </summary>
@@ -51,7 +44,7 @@ internal static class MFUtilities
     /// <param name="dirt">HoeDirt.</param>
     /// <returns>True if the HoeDirt has a joja crop.</returns>
     internal static bool HasJojaCrop(this HoeDirt dirt)
-        => dirt.crop is not null && dirt.crop.IsJojaCrop();
+        => dirt?.crop?.IsJojaCrop() == true;
 
     /// <summary>
     /// Whether the crop should be considered a Joja crop for the Joja and Organic fertilizers.
@@ -60,11 +53,16 @@ internal static class MFUtilities
     /// <returns>True if crop is a joja crop.</returns>
     internal static bool IsJojaCrop(this Crop crop)
     {
+        if (crop?.indexOfHarvest?.Value is null)
+        {
+            return false;
+        }
+
         string data = Game1Wrappers.ObjectInfo[crop.indexOfHarvest.Value];
         int index = data.IndexOf('/');
         if (index >= 0)
         {
-            ReadOnlySpan<char> span = data.AsSpan(0, index);
+            ReadOnlySpan<char> span = data.AsSpan(0, index).Trim();
             return span.Contains("Joja", StringComparison.OrdinalIgnoreCase);
         }
         return false;

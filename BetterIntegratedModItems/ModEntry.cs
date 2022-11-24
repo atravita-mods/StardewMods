@@ -77,7 +77,7 @@ internal sealed class ModEntry : Mod
         harmony.Snitch(this.Monitor, harmony.Id, transpilersOnly: true);
     }
 
-    /// <inheritdoc cref="IGameLoopEvents.SaveLoaded/>
+    /// <inheritdoc cref="IGameLoopEvents.SaveLoaded"/>
     private void OnSaveLoaded(object? sender, SaveLoadedEventArgs e)
     {
         if (Context.IsSplitScreen && Context.ScreenId != 0)

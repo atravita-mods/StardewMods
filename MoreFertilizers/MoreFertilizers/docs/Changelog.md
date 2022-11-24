@@ -7,7 +7,7 @@
 * Beverage fertilizer
     - Fruit trees (DGA, Automate?)
 * Acquisition: maybe have fertilizer appear in big slimes outside the mines?
-* Items and all the implementation for the prismatic, radioactive, and everlasting fertilizers (don't forget that JA and Winter Star also transpile in this space)
+* Crosscheck Everlasting fertilizer (especially with Theft of the Winter Star).
 * Some fertilizer for trees? Tree tapper fertilizer?
 * Something for mushroom boxen? (1.6 - reduce to one day?)
 * Make good draw code for all of the fertilizers. (don't forget domesticated fish - maybe some more jumping...)
@@ -22,8 +22,12 @@
     - Secret Joja Fertilizer: decreases growth time, has a chance of decreasing regrowth time, but forces the crop to be base quality.
     - Wisdom Fertilizer: increases farming XP by 10%.
     - Seedy Fertilizer: drops the seed! (doesn't work for DGA crops yet).
+    - Prismatic Fertilizer: Makes flowers cycle through the prismatic colors.
+    - Radioactive Fertilizer: Causes crops to mutate overnight.
+    - Everlasting Fertilizer: Crops in this fertilizer ignore seasons.
 * Adjusted previous fertilizers:
     - Waterlogged now increases the growth speed of paddy crops a little.
+    - Deluxe Fruit Tree's color scheme now no longer resembles a vanilla fertilizer that much.
 * Added German translation (thanks to CrisTortion!)
 * Fixes the lucky fertilizer.
 * Fixes integration with Prismatic/Radioactive tools.

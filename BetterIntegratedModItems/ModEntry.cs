@@ -6,6 +6,7 @@ using AtraShared.MigrationManager;
 using AtraShared.Utils.Extensions;
 
 using BetterIntegratedModItems.Framework;
+using BetterIntegratedModItems.Framework.DataModels;
 
 using HarmonyLib;
 
@@ -18,6 +19,10 @@ namespace BetterIntegratedModItems;
 /// <inheritdoc />
 internal sealed class ModEntry : Mod
 {
+    private const string LOCATIONWATCHER = "location.data";
+    private const string DATAPACKAGE = "DATAPACKAGE";
+    private const string LOCATIONNAME = "LOCATIONNAME";
+
     private MigrationManager? migrator;
 
     /// <summary>
@@ -29,6 +34,12 @@ internal sealed class ModEntry : Mod
     /// Gets the config instance for this mod.
     /// </summary>
     internal static ModConfig Config { get; private set; } = null!;
+
+    /// <summary>
+    /// Gets the location watcher for this mod.
+    /// This tracks every location any player has seen.
+    /// </summary>
+    internal static LocationWatcher? LocationWatcher { get; private set; }
 
     /// <inheritdoc />
     public override void Entry(IModHelper helper)
@@ -42,6 +53,12 @@ internal sealed class ModEntry : Mod
 
         helper.Events.GameLoop.GameLaunched += this.OnGameLaunched;
         helper.Events.GameLoop.SaveLoaded += this.OnSaveLoaded;
+        helper.Events.GameLoop.Saved += this.OnSaved;
+
+        helper.Events.Player.Warped += this.OnWarped;
+
+        helper.Events.Multiplayer.PeerConnected += this.OnPeerConnected;
+        helper.Events.Multiplayer.ModMessageReceived += this.OnModMessageRecieved;
     }
 
     /// <inheritdoc cref="IGameLoopEvents.GameLaunched"/>
@@ -94,6 +111,32 @@ internal sealed class ModEntry : Mod
         {
             this.migrator = null;
         }
+
+        // Load data for the LocationWatcher.
+        LocationWatcher = this.Helper.Data.ReadSaveData<LocationWatcher>(LOCATIONWATCHER) ?? new();
+        this.Helper.Multiplayer.SendMessage(
+            message: LocationWatcher,
+            messageType: DATAPACKAGE,
+            modIDs: new[] { this.ModManifest.UniqueID },
+            playerIDs: this.Helper.Multiplayer.GetConnectedPlayers().Where(p => !p.IsSplitScreen).Select(p => p.PlayerID).ToArray());
+    }
+
+    /// <inheritdoc cref="IPlayerEvents.Warped"/>
+    private void OnWarped(object? sender, WarpedEventArgs e)
+    {
+        if (e.IsLocalPlayer && LocationWatcher!.SeenLocations.Add(e.NewLocation.Name))
+        {
+            this.Helper.Multiplayer.SendMessage(e.NewLocation.Name, LOCATIONNAME, new[] { this.ModManifest.UniqueID });
+        }
+    }
+
+    /// <inheritdoc cref="IGameLoopEvents.Saved"/>
+    private void OnSaved(object? sender, SavedEventArgs e)
+    {
+        if (Context.IsMultiplayer)
+        {
+            this.Helper.Data.WriteSaveData(LOCATIONWATCHER, LocationWatcher);
+        }
     }
 
     /// <inheritdoc cref="IGameLoopEvents.Saved"/>
@@ -109,4 +152,48 @@ internal sealed class ModEntry : Mod
         }
         this.Helper.Events.GameLoop.Saved -= this.WriteMigrationData;
     }
+
+    #region multiplayer
+    private void OnPeerConnected(object? sender, PeerConnectedEventArgs e)
+    {
+        if (Context.IsMainPlayer && LocationWatcher is not null)
+        {
+            this.Helper.Multiplayer.SendMessage(
+                message: LocationWatcher,
+                messageType: DATAPACKAGE,
+                modIDs: new[] { this.ModManifest.UniqueID },
+                playerIDs: new[] { e.Peer.PlayerID });
+        }
+    }
+
+    private void OnModMessageRecieved(object? sender, ModMessageReceivedEventArgs e)
+    {
+        if (e.FromModID != this.ModManifest.UniqueID || Context.ScreenId != 0)
+        {
+            return;
+        }
+
+        switch (e.Type)
+        {
+            case DATAPACKAGE:
+            {
+                LocationWatcher = e.ReadAs<LocationWatcher>();
+                break;
+            }
+            case LOCATIONNAME:
+            {
+                string name = e.ReadAs<string>();
+                if (Game1.getLocationFromName(name) is not null)
+                {
+                    LocationWatcher?.SeenLocations?.Add(name);
+                }
+                else
+                {
+                    this.Monitor.Log($"{name} is not a valid location.", LogLevel.Warn);
+                }
+                break;
+            }
+        }
+    }
+    #endregion
 }

@@ -18,12 +18,15 @@ Changelog
 <!-- Handle WoL professions? -->
 
 #### Version 1.1.1
+<!-- TODO: Fix watcher code, add ability to pick the other quest -->
+
 * Deliver orders can now be completed partially.
 * Fix duration override.
 * Fix issue where unicode in the save name prevents saving of custom data.
 
 * Qi orders now have a setting where you can choose to avoid duplicates until every quest has been completed.
 * Tag checking now has a little cache.
+* Add emoji system.
 
 #### Version 1.1.0
 
@@ -32,7 +35,7 @@ Changelog
 * Internal optimizations.
 * Clear the relevant dialogue log when a player *fails* a quest.
 * Add a method for content packs to more easily add untimed orders.
-* Update to handle SaveAnywhere.
+* Update to handle `SaveAnywhere`.
 
 #### Version 1.0.7
 

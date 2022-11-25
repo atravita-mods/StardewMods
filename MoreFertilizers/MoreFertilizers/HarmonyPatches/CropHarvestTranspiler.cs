@@ -12,8 +12,11 @@ using AtraShared.Utils.HarmonyHelper;
 using AtraShared.Wrappers;
 
 using HarmonyLib;
+
 using Microsoft.Xna.Framework;
+
 using MoreFertilizers.Framework;
+
 using Netcode;
 
 using StardewValley.Characters;
@@ -30,6 +33,13 @@ namespace MoreFertilizers.HarmonyPatches;
 internal static class CropHarvestTranspiler
 {
     private const string DGAModDataKey = "atravita.MoreFertilizers/DGASeedID";
+
+    private static bool HasQualityMod = false;
+
+    internal static void Initialize(IModRegistry registry)
+    {
+        HasQualityMod = registry.IsLoaded("spacechase0.AQualityMod");
+    }
 
     /// <summary>
     /// Applies a matching patch to DGA's crop.Harvest.
@@ -68,7 +78,9 @@ internal static class CropHarvestTranspiler
             }
             else if (dirt.fertilizer.Value == ModEntry.SecretJojaFertilizerID)
             {
-                return (Game1.random.Next(2) == 0 && dirt.HasJojaCrop()) ? 1 : 0;
+                return HasQualityMod
+                    ? ((Game1.random.Next(4) != 0 || dirt.HasJojaCrop()) ? -2 : 1)
+                    : ((Game1.random.Next(2) == 0 && !dirt.HasJojaCrop()) ? 1 : 0);
             }
         }
         return prevQual;
@@ -161,7 +173,7 @@ internal static class CropHarvestTranspiler
         if (ModEntry.SecretJojaFertilizerID != -1 && dirt?.fertilizer?.Value == ModEntry.SecretJojaFertilizerID
             && (Game1.random.Next(3) == 0 || dirt.HasJojaCrop()))
         {
-            return Math.Max(1, (int)(0.9 * prevValue));
+            return Math.Max(1, (int)((HasQualityMod ? 0.8 : 0.9) * prevValue));
         }
         return prevValue;
     }

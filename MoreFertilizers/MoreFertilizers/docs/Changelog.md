@@ -6,7 +6,7 @@
     - Handle adding to shops and other acquisition methods.
 * Beverage fertilizer
     - Fruit trees (DGA, Automate?)
-* Acquisition: maybe have fertilizer appear in big slimes outside the mines?
+* Tree Tapper's: Automate integration, maybe a droplet falling off the tapper???
 * Crosscheck Everlasting fertilizer (especially with Theft of the Winter Star).
 * Some fertilizer for trees? Tree tapper fertilizer?
 * Something for mushroom boxen? (1.6 - reduce to one day?)
@@ -25,6 +25,7 @@
     - Prismatic Fertilizer: Makes flowers cycle through the prismatic colors.
     - Radioactive Fertilizer: Causes crops to mutate overnight.
     - Everlasting Fertilizer: Crops in this fertilizer ignore seasons.
+    - Tree Tapper's Fertilizer: Tapped trees have a chance of producing an additional product.
 * Adjusted previous fertilizers:
     - Waterlogged now increases the growth speed of paddy crops a little.
     - Deluxe Fruit Tree's color scheme now no longer resembles a vanilla fertilizer that much.

@@ -789,6 +789,8 @@ internal sealed class ModEntry : Mod
             fishingAPI.ModifyChanceForFish(static (Farmer who, double chance) =>
                 who.currentLocation is null ? chance : GetFishTranspiler.AlterFishChance(chance, who.currentLocation));
         }
+
+        CropHarvestTranspiler.Initialize(this.Helper.ModRegistry);
     }
 
     /// <inheritdoc cref="IGameLoopEvents.DayStarted"/>

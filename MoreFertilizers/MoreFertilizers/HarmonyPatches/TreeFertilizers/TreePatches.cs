@@ -30,10 +30,11 @@ internal static class TreePatches
     [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "HarmonyConvention")]
     private static void PostfixUpdate(Tree __instance, SObject tapper_instance)
     {
-        if (__instance.modData?.GetBool(CanPlaceHandler.TreeTapperFertilizer) == true)
+        if (__instance.modData?.GetBool(CanPlaceHandler.TreeTapperFertilizer) == true
+            && tapper_instance.heldObject?.Value is not null && Game1.random.Next(8) == 0)
         {
-            ModEntry.ModMonitor.DebugOnlyLog($"Reducing tapper time of tree at {__instance.currentTileLocation}.");
-            tapper_instance.MinutesUntilReady = Math.Max((int)(tapper_instance.MinutesUntilReady * 0.75), 0);
+            ModEntry.ModMonitor.DebugOnlyLog($"Boosting tapper yield of tree at {__instance.currentTileLocation}.");
+            tapper_instance.heldObject.Value.Stack++;
         }
     }
 

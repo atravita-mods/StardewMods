@@ -45,7 +45,7 @@ internal static class GIScheduler
     public static string? CurrentGroup { get; private set; }
 
     /// <summary>
-    /// Gets the current visting group.
+    /// Gets the current visiting group.
     /// </summary>
     /// <remarks>Used primarily for setting group-based dialogue...</remarks>
     public static HashSet<NPC>? CurrentVisitingGroup { get; private set; }

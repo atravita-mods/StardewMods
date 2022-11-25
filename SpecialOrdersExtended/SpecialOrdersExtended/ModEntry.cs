@@ -30,13 +30,13 @@ internal sealed class ModEntry : Mod
     private bool hasModsThatHandleBoard = false;
 
     /// <summary>
-    /// Spacecore API handle.
+    /// SpaceCore API handle.
     /// </summary>
     /// <remarks>If null, means API not loaded.</remarks>
     private static ISpaceCoreAPI? spaceCoreAPI;
 
     /// <summary>
-    /// Gets the Spacecore API instance.
+    /// Gets the SpaceCore API instance.
     /// </summary>
     /// <remarks>If null, was not able to be loaded.</remarks>
     internal static ISpaceCoreAPI? SpaceCoreAPI => spaceCoreAPI;
@@ -55,6 +55,8 @@ internal sealed class ModEntry : Mod
     /// Gets SMAPI's Multiplayer helper for this mod.
     /// </summary>
     internal static IMultiplayerHelper MultiplayerHelper { get; private set; } = null!;
+
+    private PlayerTeamWatcher? watcher;
 
     /// <summary>
     /// Gets the config class for this mod.
@@ -108,8 +110,10 @@ internal sealed class ModEntry : Mod
         helper.Events.GameLoop.SaveLoaded += this.SaveLoaded;
         helper.Events.GameLoop.Saving += this.Saving;
         helper.Events.GameLoop.DayEnding += this.OnDayEnd;
+        helper.Events.GameLoop.ReturnedToTitle += this.OnReturnedToTitle;
 
         helper.Events.GameLoop.TimeChanged += static (_, _) => RecentSOManager.GrabNewRecentlyCompletedOrders();
+        helper.Events.GameLoop.OneSecondUpdateTicked += this.OneSecondUpdateTicked;
 
         helper.Events.Content.AssetRequested += static (_, e) => AssetManager.OnLoadAsset(e);
         helper.Events.Content.AssetsInvalidated += static (_, e) => AssetManager.Reset(e.NamesWithoutLocale);
@@ -239,31 +243,6 @@ internal sealed class ModEntry : Mod
 
     /// <inheritdoc cref="IGameLoopEvents.Saving"/>
     /// <remarks>Used to handle day-end events.</remarks>
-    private void Saving(object? sender, SavingEventArgs e)
-    {
-        this.Monitor.DebugOnlyLog("Event Saving raised");
-
-        TagManager.ResetRandom();
-        TagManager.ClearCache();
-
-        if (!this.hasModsThatHandleBoard && !SpecialOrder.IsSpecialOrdersBoardUnlocked())
-        {
-            this.Monitor.Log($"Board is not open, skipping saving");
-            return;
-        }
-
-        DialogueManager.Save();
-
-        if (Context.IsSplitScreen && Context.ScreenId != 0)
-        {// Some properties only make sense for a single player to handle in splitscreen.
-            return;
-        }
-
-        StatsManager.ClearProperties(); // clear property cache, repopulate at next use
-        RecentSOManager.GrabNewRecentlyCompletedOrders();
-        RecentSOManager.DayUpdate(Game1.stats.daysPlayed);
-        RecentSOManager.Save();
-    }
 
     /// <inheritdoc cref="IGameLoopEvents.SaveLoaded"/>
     /// <remarks>Used to load in this mod's data models.</remarks>
@@ -288,6 +267,62 @@ internal sealed class ModEntry : Mod
             this.migrator = null;
         }
         RecentSOManager.Load();
+        this.watcher = new();
+    }
+
+    private void Saving(object? sender, SavingEventArgs e)
+    {
+        this.Monitor.DebugOnlyLog("Event Saving raised");
+
+        TagManager.ResetRandom();
+        TagManager.ClearCache();
+
+        if (!this.hasModsThatHandleBoard && !SpecialOrder.IsSpecialOrdersBoardUnlocked())
+        {
+            this.Monitor.Log($"Board is not open, skipping saving");
+            return;
+        }
+
+        DialogueManager.Save();
+
+        if (Context.IsSplitScreen && Context.ScreenId != 0)
+        {// Some properties only make sense for a single player to handle in splitscreen.
+            return;
+        }
+
+        if (this.watcher is not null)
+        {
+            foreach (string? key in this.watcher.Check())
+            {
+                RecentSOManager.TryAdd(key);
+            }
+        }
+
+        StatsManager.ClearProperties(); // clear property cache, repopulate at next use
+        RecentSOManager.GrabNewRecentlyCompletedOrders();
+        RecentSOManager.DayUpdate(Game1.stats.daysPlayed);
+        RecentSOManager.Save();
+    }
+
+    /// <inheritdoc cref="IGameLoopEvents.ReturnedToTitle"/>
+    private void OnReturnedToTitle(object? sender, ReturnedToTitleEventArgs e)
+    {
+        this.watcher?.Dispose();
+        this.watcher = null;
+    }
+
+    /// <inheritdoc cref="IGameLoopEvents.OneSecondUpdateTicked"/>
+    private void OneSecondUpdateTicked(object? sender, OneSecondUpdateTickedEventArgs e)
+    {
+        if (this.watcher is null)
+        {
+            return;
+        }
+
+        foreach (string? key in this.watcher.Check())
+        {
+            RecentSOManager.TryAdd(key);
+        }
     }
 
     /// <inheritdoc cref="IGameLoopEvents.Saved"/>

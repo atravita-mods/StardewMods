@@ -53,6 +53,7 @@ internal sealed class ModEntry : Mod
 
         helper.Events.GameLoop.GameLaunched += this.OnGameLaunched;
         helper.Events.GameLoop.SaveLoaded += this.OnSaveLoaded;
+        helper.Events.GameLoop.Saving += this.OnSaving;
         helper.Events.GameLoop.Saved += this.OnSaved;
 
         helper.Events.Player.Warped += this.OnWarped;
@@ -136,6 +137,17 @@ internal sealed class ModEntry : Mod
         if (Context.IsMultiplayer)
         {
             this.Helper.Data.WriteSaveData(LOCATIONWATCHER, LocationWatcher);
+        }
+    }
+
+    /// <inheritdoc cref="IGameLoopEvents.Saving"/>
+    /// <remarks>Apparently he must be removed before saving?</remarks>
+    private void OnSaving(object? sender, SavingEventArgs e)
+    {
+        GameLocation forest = Game1.getLocationFromName("Forest");
+        if (forest is not null)
+        {
+            forest.characters.Remove(forest.getCharacterFromName("TrashBear"));
         }
     }
 

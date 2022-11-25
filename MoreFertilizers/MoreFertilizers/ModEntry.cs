@@ -498,24 +498,6 @@ internal sealed class ModEntry : Mod
     [UsedImplicitly]
     public override object GetApi() => new CanPlaceHandler();
 
-    #region assets
-
-    /// <inheritdoc cref="IContentEvents.AssetRequested"/>
-    [EventPriority(EventPriority.Low)]
-    private void OnAssetRequested(object? sender, AssetRequestedEventArgs e)
-        => AssetEditor.Edit(e);
-
-    /// <inheritdoc cref="IContentEvents.AssetsInvalidated"/>
-    private void OnAssetInvalidated(object? _, AssetsInvalidatedEventArgs e)
-        => RadioactiveFertilizerHandler.Reset(e.NamesWithoutLocale);
-
-    // Only hook if SpecialOrdersExtended is installed.
-    [EventPriority(EventPriority.Low)]
-    private void OnSpecialOrderDialogueRequested(object? sender, AssetRequestedEventArgs e)
-        => AssetEditor.EditSpecialOrderDialogue(e);
-
-    #endregion
-
     /// <inheritdoc cref="IInputEvents.ButtonPressed"/>
     private void OnButtonPressed(object? sender, ButtonPressedEventArgs e)
     {
@@ -762,10 +744,10 @@ internal sealed class ModEntry : Mod
         }
         jsonAssets.LoadAssets(Path.Combine(this.Helper.DirectoryPath, "assets", "json-assets"), this.Helper.Translation);
 
-        // Only register for events if JA pack loading was successful.
         RingManager = new(this.Monitor, this.Helper.Translation, this.Helper.ModRegistry);
         RadioactiveFertilizerHandler.Initialize(this.Helper.GameContent, this.Helper.ModRegistry, this.Helper.Translation);
 
+        // Only register for events if JA pack loading was successful.
         this.Helper.Events.GameLoop.SaveLoaded += this.OnSaveLoaded;
         this.Helper.Events.GameLoop.ReturnedToTitle += this.OnReturnedToTitle;
 
@@ -778,12 +760,12 @@ internal sealed class ModEntry : Mod
         this.Helper.Events.GameLoop.DayEnding += this.OnDayEnd;
         this.Helper.Events.Input.ButtonPressed += this.OnButtonPressed;
 
-        this.Helper.Events.Content.AssetRequested += this.OnAssetRequested;
-        this.Helper.Events.Content.AssetsInvalidated += this.OnAssetInvalidated;
+        this.Helper.Events.Content.AssetRequested += static (_, e) => AssetEditor.Edit(e);
+        this.Helper.Events.Content.AssetsInvalidated += static (_, e) => RadioactiveFertilizerHandler.Reset(e.NamesWithoutLocale);
 
         if (this.Helper.ModRegistry.IsLoaded("atravita.SpecialOrdersExtended"))
         {
-            this.Helper.Events.Content.AssetRequested += this.OnSpecialOrderDialogueRequested;
+            this.Helper.Events.Content.AssetRequested += static (_, e) => AssetEditor.EditSpecialOrderDialogue(e);
         }
 
         // Apply harmony patches.
@@ -821,7 +803,7 @@ internal sealed class ModEntry : Mod
     }
 
     #region JsonAssets
-    private void FixIDs()
+    private void GrabIds()
     {
         PlantableFertilizerIDs.Clear();
         SpecialFertilizerIDs.Clear();
@@ -933,28 +915,29 @@ internal sealed class ModEntry : Mod
         }
 
         if (SpecialFertilizerIDs.Count <= 0 && PlantableFertilizerIDs.Count <= 0)
-        { // I have found no valid fertilizers. Just return.
+        {
+            this.Monitor.Log("No valid IDs found?");
+        }
+    }
+
+    private void FixIDs()
+    {
+        if (SpecialFertilizerIDs.Count <= 0 && PlantableFertilizerIDs.Count <= 0)
+        {
+            this.Monitor.Log("No valid IDs found while attempting to deshuffle?");
             return;
         }
 
-        if (!Context.IsMainPlayer)
+        if (this.Helper.Data.ReadSaveData<MoreFertilizerIDs>(SavedIDKey) is not MoreFertilizerIDs storedIDCls)
         {
+            ModMonitor.Log("No need to fix IDs, not installed before.");
+
+            this.Helper.Events.GameLoop.Saving -= this.OnSaving;
+            this.Helper.Events.GameLoop.Saving += this.OnSaving;
+
             return;
         }
-
-        if (storedIDs is null)
-        {
-            if (this.Helper.Data.ReadSaveData<MoreFertilizerIDs>(SavedIDKey) is not MoreFertilizerIDs storedIDCls)
-            {
-                ModMonitor.Log("No need to fix IDs, not installed before.");
-
-                this.Helper.Events.GameLoop.Saving -= this.OnSaving;
-                this.Helper.Events.GameLoop.Saving += this.OnSaving;
-
-                return;
-            }
-            storedIDs = storedIDCls;
-        }
+        storedIDs = storedIDCls;
 
         Dictionary<int, int> idMapping = new();
 
@@ -1139,9 +1122,10 @@ internal sealed class ModEntry : Mod
 
         // Grab the SF API to deshuffle in there too.
         IntegrationHelper helper = new(this.Monitor, this.Helper.Translation, this.Helper.ModRegistry, LogLevel.Trace);
-        if (helper.TryGetAPI("PeacefulEnd.SolidFoundations", "1.12.1", out this.solidFoundationsAPI))
+        if (this.solidFoundationsAPI is not null || helper.TryGetAPI("PeacefulEnd.SolidFoundations", "1.12.1", out this.solidFoundationsAPI))
         {
             this.idmap = idMapping;
+            this.solidFoundationsAPI.AfterBuildingRestoration -= this.AfterSFBuildingRestore;
             this.solidFoundationsAPI.AfterBuildingRestoration += this.AfterSFBuildingRestore;
         }
 
@@ -1186,6 +1170,8 @@ internal sealed class ModEntry : Mod
     #endregion
 
     #region migration
+
+    /// <inheritdoc cref="IGameLoopEvents.SaveLoaded"/>
     [EventPriority(EventPriority.Low)]
     private void OnSaveLoaded(object? sender, SaveLoadedEventArgs e)
     {
@@ -1224,7 +1210,11 @@ internal sealed class ModEntry : Mod
             this.migrator = null;
         }
 
-        this.FixIDs();
+        this.GrabIds();
+        if (Context.IsMainPlayer)
+        {
+            this.FixIDs();
+        }
 
         if (Context.IsMainPlayer)
         {
@@ -1235,6 +1225,11 @@ internal sealed class ModEntry : Mod
     [MethodImpl(TKConstants.Cold)]
     private bool GetIdsFromJAIfNeeded(IModHelper helper, IMonitor monitor)
     {
+        if (!Context.IsMainPlayer)
+        {
+            return true;
+        }
+
         this.Monitor.Log($"Running migration for 0.3.0.");
         Guard.IsNotNull(Constants.CurrentSavePath);
 
@@ -1340,8 +1335,7 @@ internal sealed class ModEntry : Mod
             storedIDCls.SeedyFertilizerID = oldseedy;
         }
 
-        storedIDs = storedIDCls;
-
+        this.Helper.Data.WriteSaveData(SavedIDKey, storedIDCls);
         return true;
     }
 

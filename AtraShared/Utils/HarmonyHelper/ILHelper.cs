@@ -211,7 +211,7 @@ public sealed class ILHelper
     /// <param name="startindex">Index to start searching at (inclusive).</param>
     /// <param name="intendedendindex">Index to end search (exclusive). Null for "end of instruction list".</param>
     /// <returns>this.</returns>
-    /// <exception cref="ArgumentException">Startindex or Endindex are invalid.</exception>
+    /// <exception cref="ArgumentException">StartIndex or EndIndex are invalid.</exception>
     /// <exception cref="InvalidOperationException">No match found.</exception>
     [MethodImpl(MethodImplOptions.AggressiveOptimization)]
     public ILHelper FindFirst(CodeInstructionWrapper[] instructions, int startindex = 0, int? intendedendindex = null)
@@ -219,7 +219,7 @@ public sealed class ILHelper
         int endindex = intendedendindex ?? this.Codes.Count;
         if (startindex >= (endindex - instructions.Length) || startindex < 0 || endindex > this.Codes.Count)
         {
-            return ThrowHelper.ThrowArgumentException<ILHelper>($"Either startindex {startindex} or endindex {endindex} are invalid. ");
+            return ThrowHelper.ThrowArgumentException<ILHelper>($"Either startindex {startindex} or endindex {endindex} are invalid.");
         }
 
         for (int i = startindex; i < endindex - instructions.Length + 1; i++)
@@ -237,6 +237,25 @@ ContinueSearchForward:
             ;
         }
         this.Monitor.Log($"The desired pattern wasn't found:\n\n" + string.Join('\n', instructions.Select(i => i.ToString())), LogLevel.Error);
+        return ThrowHelper.ThrowInvalidOperationException<ILHelper>();
+    }
+
+    public ILHelper FindFirst(CodeInstructionWrapper instruction, int startindex = 0, int? intendedendindex = null)
+    {
+        int endindex = intendedendindex ?? this.Codes.Count;
+        if (startindex >= (endindex - 1) || startindex < 0 || endindex > this.Codes.Count)
+        {
+            return ThrowHelper.ThrowArgumentException<ILHelper>($"Either startindex {startindex} or endindex {endindex} are invalid.");
+        }
+        for (int i = startindex; i < endindex; i++)
+        {
+            if (this.IsMatch(instruction, this.Codes[i]))
+            {
+                this.Pointer = i;
+                return this;
+            }
+        }
+        this.Monitor.Log($"The desired pattern wasn't found: {instruction}", LogLevel.Error);
         return ThrowHelper.ThrowInvalidOperationException<ILHelper>();
     }
 

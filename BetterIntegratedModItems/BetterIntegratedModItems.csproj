@@ -35,4 +35,8 @@
     <Using Alias="SObject" Include="StardewValley.Object" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="DataModels\" />
+  </ItemGroup>
+
 </Project>

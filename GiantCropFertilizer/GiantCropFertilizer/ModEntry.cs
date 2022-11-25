@@ -219,8 +219,11 @@ internal sealed class ModEntry : Mod
         {
             this.migrator = null;
         }
-
-        this.FixIds();
+        this.GrabIds();
+        if (Context.IsMainPlayer)
+        {
+            this.FixIds();
+        }
     }
 
     /// <inheritdoc cref="IGameLoopEvents.Saved"/>
@@ -244,15 +247,23 @@ internal sealed class ModEntry : Mod
     private void OnReturnedToTitle(object? sender, ReturnedToTitleEventArgs e)
         => giantCropFertilizerID = -1;
 
-    private void FixIds()
+    private void GrabIds()
     {
         // reset the ID, ask for it again from JA?
         giantCropFertilizerID = -1;
 
-        int newID = GiantCropFertilizerID;
-        if (newID == -1 || !Context.IsMainPlayer)
+        if (GiantCropFertilizerID == -1)
         {
-            return;
+            this.Monitor.Log($"Could not get ID from JA.");
+        }
+    }
+
+    private void FixIds()
+    {
+        int newID = GiantCropFertilizerID;
+        if (newID == -1)
+        {
+            this.Monitor.Log($"Could not get ID from JA.");
         }
 
         if (this.Helper.Data.ReadGlobalData<GiantCropFertilizerIDStorage>(SAVESTRING) is not GiantCropFertilizerIDStorage storedIDCls
@@ -267,11 +278,7 @@ internal sealed class ModEntry : Mod
             return;
         }
 
-        if (this.storedID is null || this.storedID.ID == -1)
-        {
-            this.storedID = storedIDCls;
-        }
-
+        this.storedID = storedIDCls;
         int storedID = this.storedID.ID;
 
         if (storedID == newID)
@@ -284,10 +291,11 @@ internal sealed class ModEntry : Mod
         this.Helper.Events.GameLoop.Saved += this.OnSaved;
 
         IntegrationHelper helper = new(this.Monitor, this.Helper.Translation, this.Helper.ModRegistry, LogLevel.Trace);
-        if (helper.TryGetAPI("PeacefulEnd.SolidFoundations", "1.12.1", out this.solidFoundationsAPI))
+        if (this.solidFoundationsAPI is not null || helper.TryGetAPI("PeacefulEnd.SolidFoundations", "1.12.1", out this.solidFoundationsAPI))
         {
             this.oldID = storedID;
             this.newID = newID;
+            this.solidFoundationsAPI.AfterBuildingRestoration -= this.AfterSFBuildingRestore;
             this.solidFoundationsAPI.AfterBuildingRestoration += this.AfterSFBuildingRestore;
         }
 

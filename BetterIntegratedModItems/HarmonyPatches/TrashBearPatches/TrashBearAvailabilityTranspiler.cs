@@ -63,7 +63,7 @@ internal static class TrashBearAvailabilityTranspiler
             .Advance(3)
             .DefineAndAttachLabel(out Label skip)
             .Pop()
-            .GetLabels(out var labelsToMoveTwo)
+            .GetLabels(out IList<Label>? labelsToMoveTwo)
             .Insert(new CodeInstruction[]
             {
                 new(OpCodes.Call, typeof(ModEntry).GetCachedProperty(nameof(ModEntry.Config), ReflectionCache.FlagTypes.StaticFlags).GetGetMethod(true)),

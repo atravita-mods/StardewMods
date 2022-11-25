@@ -17,8 +17,8 @@ internal class NotWithModAttribute : Attribute
     /// Initializes a new instance of the <see cref="NotWithModAttribute"/> class.
     /// </summary>
     /// <param name="uniqueID">Unique ID of the mod.</param>
-    /// <param name="minVersion">Minimum version for this attribute to apply to.</param>
-    /// <param name="maxVersion">Max version for this attribute to apply to.</param>
+    /// <param name="minVersion">Minimum version for this attribute to apply to, inclusive.</param>
+    /// <param name="maxVersion">Max version for this attribute to apply to, inclusive.</param>
     public NotWithModAttribute(string uniqueID, string? minVersion = null, string? maxVersion = null)
         : this(uniqueID)
     {
@@ -26,6 +26,9 @@ internal class NotWithModAttribute : Attribute
         this.MaxVersion = maxVersion;
     }
 
+    /// <summary>
+    /// Gets the unique ID of the mod avoid patching with.
+    /// </summary>
     internal string UniqueID { get; init; }
 
     internal string? MinVersion { get; init; }

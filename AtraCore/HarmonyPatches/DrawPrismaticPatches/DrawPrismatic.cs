@@ -101,14 +101,16 @@ internal static class DrawPrismatic
         => item.GetItemType() is ItemTypeEnum type && PrismaticMasks.TryGetValue(type, out Dictionary<int, Lazy<Texture2D>>? masks)
             && masks.TryGetValue(item.ParentSheetIndex, out Lazy<Texture2D>? mask) ? mask.Value : null;
 
+    [MethodImpl(TKConstants.Hot)]
     private static void DrawColorMask(Item item, SpriteBatch b, Rectangle position, float drawDepth)
     {
         if (item.GetColorMask() is Texture2D texture)
         {
-            b.Draw(texture, position, null, Color.White, 0f, Vector2.Zero, SpriteEffects.None, drawDepth);
+            b.Draw(texture, position, null, Utility.GetPrismaticColor(), 0f, Vector2.Zero, SpriteEffects.None, drawDepth);
         }
     }
 
+    [MethodImpl(TKConstants.Hot)]
     private static void DrawSObjectAndAlsoColorMask(
         SpriteBatch b,
         Texture2D texture,
@@ -125,7 +127,7 @@ internal static class DrawPrismatic
         b.Draw(texture, position, sourceRectangle, color, rotation, origin, scale, effects, layerDepth);
         if (obj.GetColorMask() is Texture2D tex)
         {
-            b.Draw(tex, position, null, Color.White, rotation, origin, scale, effects, layerDepth);
+            b.Draw(tex, position, null, Utility.GetPrismaticColor(), rotation, origin, scale, effects, layerDepth);
         }
     }
     #endregion
@@ -494,12 +496,12 @@ internal static class DrawPrismatic
     [HarmonyPatch(typeof(Boots), nameof(Boots.drawInMenu))]
     [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Harmony Convention.")]
     private static void PostfixBootsDrawInMenu(
-    Ring __instance,
-    SpriteBatch spriteBatch,
-    Vector2 location,
-    float scaleSize,
-    float transparency,
-    float layerDepth)
+        Ring __instance,
+        SpriteBatch spriteBatch,
+        Vector2 location,
+        float scaleSize,
+        float transparency,
+        float layerDepth)
     {
         try
         {

@@ -6,7 +6,7 @@ using AtraShared.Utils.HarmonyHelper;
 
 using HarmonyLib;
 
-namespace StopRugRemoval.HarmonyPatches.Niceties.CrashHandling;
+namespace StopRugRemoval.HarmonyPatches.Niceties;
 [HarmonyPatch(typeof(Utility))]
 internal static class LeoFixer
 {
@@ -22,7 +22,7 @@ internal static class LeoFixer
             })
             .ReplaceOperand("leoMoved");
 
-            helper.Print();
+            // helper.Print();
             return helper.Render();
         }
         catch (Exception ex)

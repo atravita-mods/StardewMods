@@ -143,7 +143,7 @@ public sealed class CanPlaceHandler : IMoreFertilizersAPI
                 }
                 return ret;
             }
-            else if (terrain is Tree tree && tree.growthStage.Value == Tree.treeStage
+            else if (terrain is Tree tree && tree.growthStage.Value >= Tree.treeStage
                 && obj.ParentSheetIndex == ModEntry.TreeTapperFertilizerID)
             {
                 bool ret = !tree.modData.ContainsKey(TreeFertilizer) && !tree.modData.ContainsKey(TreeTapperFertilizer);

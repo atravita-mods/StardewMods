@@ -12,6 +12,8 @@ using HarmonyLib;
 
 using StardewModdingAPI.Events;
 
+using StardewValley.Characters;
+
 using AtraUtils = AtraShared.Utils.Utils;
 
 namespace BetterIntegratedModItems;
@@ -145,9 +147,9 @@ internal sealed class ModEntry : Mod
     private void OnSaving(object? sender, SavingEventArgs e)
     {
         GameLocation forest = Game1.getLocationFromName("Forest");
-        if (forest is not null)
+        if (forest is not null && forest.getCharacterFromName("TrashBear") is TrashBear bear)
         {
-            forest.characters.Remove(forest.getCharacterFromName("TrashBear"));
+            forest.characters.Remove(bear);
         }
     }
 

@@ -293,7 +293,7 @@ internal sealed class ModEntry : Mod
     {
         get
         {
-            if (treeTapperFertilizerID != -1)
+            if (treeTapperFertilizerID == -1)
             {
                 treeTapperFertilizerID = jsonAssets?.GetObjectId("Tree Tapper's Fertilizer - More Fertilizers") ?? -1;
             }
@@ -526,7 +526,7 @@ internal sealed class ModEntry : Mod
                 }
                 else if (terrainFeature is Tree tree)
                 {
-                    this.Monitor.Log($"{e.Cursor.Tile} {(tree?.modData?.GetBool(CanPlaceHandler.TreeFertilizer) == true ? "had" : "did not have" )} tree fertilizer.", LogLevel.Info);
+                    this.Monitor.Log($"{e.Cursor.Tile} {(tree?.modData?.GetBool(CanPlaceHandler.TreeFertilizer) == true ? "had" : "did not have" )} tree fertilizer and is growth stage {tree?.growthStage?.Value ?? -1}", LogLevel.Info);
                 }
                 else if (terrainFeature is Bush bush)
                 {

@@ -65,7 +65,7 @@ internal sealed class ModEntry : Mod
         I18n.Init(helper.Translation);
 
         Harmony harmony = new(this.ModManifest.UniqueID);
-        harmony.PatchAll();
+        harmony.PatchAll(typeof(ModEntry).Assembly);
     }
 
     private void OnGameLaunched(object? sender, GameLaunchedEventArgs e)

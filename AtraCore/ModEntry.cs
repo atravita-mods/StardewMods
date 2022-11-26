@@ -98,15 +98,7 @@ internal sealed class ModEntry : Mod
 
     private void OnValueAdded(string key, bool value) => this.Monitor.Log(key, LogLevel.Alert);
 
-    /********
-     * Dialogue region
-     * *******/
-
-    /// <summary>s
-    /// Raised every 10 in game minutes.
-    /// </summary>
-    /// <param name="sender">Unknown, used by SMAPI.</param>
-    /// <param name="e">TimeChanged params.</param>
+    /// <inheritdoc cref="IGameLoopEvents.TimeChanged"/>
     /// <remarks>Currently handles: pushing delayed dialogue back onto the stack, and player alerts.</remarks>
     private void OnTimeChanged(object? sender, TimeChangedEventArgs e)
     {
@@ -117,9 +109,7 @@ internal sealed class ModEntry : Mod
     private void OnDayEnd(object? sender, DayEndingEventArgs e)
         => QueuedDialogueManager.ClearDelayedDialogue();
 
-    /**************
-     * Assets
-     * ************/
+    #region assets
 
     private void OnAssetInvalidation(object? sender, AssetsInvalidatedEventArgs e)
         => DataToItemMap.Reset(e.NamesWithoutLocale);
@@ -127,9 +117,7 @@ internal sealed class ModEntry : Mod
     private void OnAssetRequested(object? sender, AssetRequestedEventArgs e)
         => AssetManager.Apply(e);
 
-    /*************
-    * Harmony
-    * *************/
+    #endregion
 
     private void ApplyPatches(Harmony harmony)
     {
@@ -139,7 +127,7 @@ internal sealed class ModEntry : Mod
 #endif
         try
         {
-            harmony.PatchAll();
+            harmony.PatchAll(typeof(ModEntry).Assembly);
         }
         catch (Exception ex)
         {
@@ -152,15 +140,11 @@ internal sealed class ModEntry : Mod
 #endif
     }
 
-    /***********
-     * Migrations
-     * ********/
 
-    /// <summary>
+    /// <inheritdoc cref="IGameLoopEvents.Saved"/>
+    /// <remarks>
     /// Writes migration data then detaches the migrator.
-    /// </summary>
-    /// <param name="sender">Smapi thing.</param>
-    /// <param name="e">Arguments for just-before-saving.</param>
+    /// </remarks>
     private void WriteMigrationData(object? sender, SavedEventArgs e)
     {
         if (this.migrator is not null)
@@ -171,9 +155,6 @@ internal sealed class ModEntry : Mod
         this.Helper.Events.GameLoop.Saved -= this.WriteMigrationData;
     }
 
-    /*************
-     * Misc
-     ***********/
 #if DEBUG
     [EventPriority(EventPriority.Low - 1000)]
     private void OnDayStart(object? sender, DayStartedEventArgs e)

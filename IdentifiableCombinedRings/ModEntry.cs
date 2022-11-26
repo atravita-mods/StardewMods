@@ -20,6 +20,6 @@ public class ModEntry : Mod
     private void ApplyPatches(Harmony harmony)
     {
         // handle patches from annotations.
-        harmony.PatchAll();
+        harmony.PatchAll(typeof(ModEntry).Assembly);
     }
 }

@@ -108,7 +108,7 @@ internal sealed class ModEntry : Mod
     {
         try
         {
-            harmony.PatchAll();
+            harmony.PatchAll(typeof(ModEntry).Assembly);
 
             if (this.Helper.ModRegistry.Get("spacechase0.MultiFertilizer") is IModInfo info
                 && info.Manifest.Version.IsOlderThan("1.0.6"))

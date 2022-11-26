@@ -79,6 +79,8 @@ public sealed class CanPlaceHandler : IMoreFertilizersAPI
     public const string PrismaticFertilizer = "atravita.MoreFertilizer.Prismatic";
     #endregion
 
+    #region reflection
+
     /// <summary>
     /// Stardew's Bush::shake.
     /// </summary>
@@ -90,6 +92,7 @@ public sealed class CanPlaceHandler : IMoreFertilizersAPI
         Bush bush,
         Vector2 tileLocation,
         bool doEvenIfStillShaking);
+    #endregion
 
     /// <inheritdoc />
     public bool CanPlaceFertilizer(SObject obj, GameLocation loc, Vector2 tile)
@@ -342,7 +345,7 @@ public sealed class CanPlaceHandler : IMoreFertilizersAPI
                 }
             }
 
-            Game1.playSound("throwDownITem"); //sic
+            Game1.playSound("throwDownITem"); // sic
 
             float deltaY = -140f;
             float gravity = 0.0025f;

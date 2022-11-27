@@ -1,4 +1,9 @@
-﻿using HarmonyLib;
+﻿using AtraShared.Caching;
+
+using HarmonyLib;
+
+using StardewModdingAPI.Utilities;
+
 using StardewValley.Locations;
 using StardewValley.Menus;
 
@@ -10,6 +15,9 @@ namespace MoreFertilizers.HarmonyPatches.Acquisition;
 [HarmonyPatch(typeof(Sewer))]
 internal static class KrobusShopStockPostfix
 {
+    private static PerScreen<TickCache<bool>> HasGottenPrismaticFertilizer = new(
+        static () => new(static () => Game1.player.mailReceived.Contains($"museumCollectedRewardO_{ModEntry.PrismaticFertilizerID}_1")));
+
     [HarmonyPatch(nameof(Sewer.getShadowShopStock))]
     [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Harmony convention.")]
     private static void Postfix(ref Dictionary<ISalable, int[]> __result)
@@ -20,7 +28,7 @@ internal static class KrobusShopStockPostfix
         }
         if (ModEntry.WisdomFertilizerID != -1 && Game1.currentSeason is "spring" or "fall")
         {
-            __result.TryAdd(new SObject(ModEntry.WisdomFertilizerID, 1), new[] { 80, ShopMenu.infiniteStock });
+            __result.TryAdd(new SObject(ModEntry.WisdomFertilizerID, 1), new[] { 100, ShopMenu.infiniteStock });
         }
         if (ModEntry.MiraculousBeveragesID != -1 && Game1.year > 2 && Utility.getCookedRecipesPercent() > 0.5f)
         {
@@ -29,6 +37,10 @@ internal static class KrobusShopStockPostfix
         if (ModEntry.RadioactiveFertilizerID != -1 && Game1.year > 2 && Game1.player.hasMagicInk)
         {
             __result.TryAdd(new SObject(ModEntry.RadioactiveFertilizerID, 1), new[] { 250, ShopMenu.infiniteStock });
+        }
+        if (ModEntry.PrismaticFertilizerID != -1 && HasGottenPrismaticFertilizer.Value.GetValue())
+        {
+            __result.TryAdd(new SObject(ModEntry.PrismaticFertilizerID, 1), new[] { 100, ShopMenu.infiniteStock });
         }
     }
 }

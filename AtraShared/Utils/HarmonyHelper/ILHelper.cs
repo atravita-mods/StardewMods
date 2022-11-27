@@ -1,8 +1,4 @@
-﻿/* **********************************
- * Don't forget to include COLLECTIONS!
- * **********************************/
-
-// TODO: AssertIs?
+﻿// TODO: AssertIs?
 // Label stuff?
 // MAKE SURE THE LABEL COUNTS ARE RIGHT. Inserting codes should add to the Important Labels! Check **any time** labels are removed.
 // Insert should probably just have a pattern that moves over the labels....
@@ -123,6 +119,44 @@ public sealed class ILHelper
     /// Gets the logger for this instance.
     /// </summary>
     private IMonitor Monitor { get; init; }
+
+    #endregion
+
+    #region static methods
+
+    /// <summary>
+    /// Gets the instruction for loading a local at the index.
+    /// </summary>
+    /// <param name="localindex">Index of the local to get.</param>
+    /// <returns>The proper local instruction.</returns>
+    public static CodeInstruction GetLdLoc(int localindex)
+    {
+        return localindex switch
+        {
+            0 => new(OpCodes.Ldloc_0),
+            1 => new(OpCodes.Ldloc_1),
+            2 => new(OpCodes.Ldloc_2),
+            3 => new(OpCodes.Ldloc_3),
+            _ => new(OpCodes.Ldloc, localindex)
+        };
+    }
+
+    /// <summary>
+    /// Gets the instruction for storing to a local at the index.
+    /// </summary>
+    /// <param name="localindex">Index of the local to get.</param>
+    /// <returns>The proper local instruction.</returns>
+    public static CodeInstruction GetStLoc(int localindex)
+    {
+        return localindex switch
+        {
+            0 => new(OpCodes.Stloc_0),
+            1 => new(OpCodes.Stloc_1),
+            2 => new(OpCodes.Stloc_2),
+            3 => new(OpCodes.Stloc_3),
+            _ => new(OpCodes.Stloc, localindex)
+        };
+    }
 
     #endregion
 
@@ -334,6 +368,8 @@ ContinueSearchBackwards:
         => this.FindLast(instructions, 0, this.Pointer);
 
     #endregion
+
+    #region manipulation
 
     /// <summary>
     /// Inserts the following code instructions at this location.
@@ -616,6 +652,10 @@ ContinueSearchBackwards:
         return this;
     }
 
+    #endregion
+
+    #region labels
+
     /// <summary>
     /// Grab branch destination.
     /// </summary>
@@ -791,6 +831,10 @@ ContinueSearchBackwards:
         return this.RetreatToLabel(this.label.Value);
     }
 
+    #endregion
+
+    #region locals
+
     /// <summary>
     /// Declares a local and adds it to the list to be tracked.
     /// </summary>
@@ -804,6 +848,27 @@ ContinueSearchBackwards:
         this.locals.Add(local.LocalIndex, local);
         return this;
     }
+
+    /// <summary>
+    /// Gets the index of the local of a specific type.
+    /// </summary>
+    /// <param name="type">Type to search for.</param>
+    /// <param name="which">If there's multiple locals of a single type, which one.</param>
+    /// <returns>Index of the local, -1 if not found.</returns>
+    public int GetIndexOfLocal(Type type, int which = 1)
+    {
+        int counter = 0;
+        foreach ((int key, LocalVariableInfo local) in this.locals)
+        {
+            if (local.LocalType == type && ++counter == which)
+            {
+                return local.LocalIndex;
+            }
+        }
+        return -1;
+    }
+
+    #endregion
 
     // transformer should return true to continue and false to stop?
     // and throw errors if it runs into issues.
@@ -858,61 +923,6 @@ ContinueSearch:
         this.Monitor.Log($"ForEachMatch found {count} occurrences for {string.Join(", ", instructions.Select(i => i.ToString()))} for {this.Original.FullDescription()}.", LogLevel.Trace);
         this.Pop();
         return this;
-    }
-
-    /// <summary>
-    /// Gets the index of the local of a specific type.
-    /// </summary>
-    /// <param name="type">Type to search for.</param>
-    /// <param name="which">If there's multiple locals of a single type, which one.</param>
-    /// <returns>Index of the local, -1 if not found.</returns>
-    public int GetIndexOfLocal(Type type, int which = 1)
-    {
-        int counter = 0;
-        foreach ((int key, LocalVariableInfo local) in this.locals)
-        {
-            if (local.LocalType == type && ++counter == which)
-            {
-                return local.LocalIndex;
-            }
-        }
-        return -1;
-    }
-
-    // 90% sure this is in Harmony already.....
-
-    /// <summary>
-    /// Gets the instruction for loading a local at the index.
-    /// </summary>
-    /// <param name="localindex">Index of the local to get.</param>
-    /// <returns>The proper local instruction.</returns>
-    public static CodeInstruction GetLdLoc(int localindex)
-    {
-        return localindex switch
-        {
-            0 => new(OpCodes.Ldloc_0),
-            1 => new(OpCodes.Ldloc_1),
-            2 => new(OpCodes.Ldloc_2),
-            3 => new(OpCodes.Ldloc_3),
-            _ => new(OpCodes.Ldloc, localindex)
-        };
-    }
-
-    /// <summary>
-    /// Gets the instruction for storing to a local at the index.
-    /// </summary>
-    /// <param name="localindex">Index of the local to get.</param>
-    /// <returns>The proper local instruction.</returns>
-    public static CodeInstruction GetStLoc(int localindex)
-    {
-        return localindex switch
-        {
-            0 => new(OpCodes.Stloc_0),
-            1 => new(OpCodes.Stloc_1),
-            2 => new(OpCodes.Stloc_2),
-            3 => new(OpCodes.Stloc_3),
-            _ => new(OpCodes.Stloc, localindex)
-        };
     }
 
     /// <summary>

@@ -23,7 +23,7 @@ namespace LastDayToPlantRedux.Framework;
 /// </summary>
 internal static class CropAndFertilizerManager
 {
-    private static readonly TickCache<bool> HasStocklist = new(() => Game1.player.hasOrWillReceiveMail("PierreStocklist"));
+    private static readonly TickCache<bool> HasStocklist = new(() => Game1.MasterPlayer.hasOrWillReceiveMail("PierreStocklist"));
 
     // Map conditions to the number of days it takes to grow a crop.
     private static readonly Dictionary<CropCondition, Dictionary<int, int>> DaysPerCondition = new();

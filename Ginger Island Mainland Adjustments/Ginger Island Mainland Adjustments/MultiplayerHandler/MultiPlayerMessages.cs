@@ -17,7 +17,8 @@ public static class MultiplayerSharedState
 {
     private const string SCHEDULEMESSAGE = "GIMAScheduleUpdateMessage";
 
-    private static TickCache<bool> hasSeenEvent = new(static () => Game1.player.eventsSeen.Contains(AssetEditor.PAMEVENT));
+    private static PerScreen<TickCache<bool>> hasSeenEvent = new(
+        static () => new (static () => Game1.player.eventsSeen.Contains(AssetEditor.PAMEVENT)));
 
     /// <summary>
     /// Gets Pam's current schedule string.
@@ -50,7 +51,7 @@ public static class MultiplayerSharedState
         if (e.FromModID == Globals.Manifest.UniqueID && e.Type == SCHEDULEMESSAGE)
         {
             PamsSchedule = e.ReadAs<string>();
-            Globals.ModMonitor.Log($"Recieved Pam's schedule {PamsSchedule}");
+            Globals.ModMonitor.Log($"Received Pam's schedule {PamsSchedule}");
         }
     }
 
@@ -61,7 +62,7 @@ public static class MultiplayerSharedState
     {
         try
         {
-            if (Context.IsMainPlayer && hasSeenEvent.GetValue() && __instance?.Name.Equals("Pam", StringComparison.OrdinalIgnoreCase) == true
+            if (Context.IsMainPlayer && hasSeenEvent.Value.GetValue() && __instance?.Name.Equals("Pam", StringComparison.OrdinalIgnoreCase) == true
                 && __instance.TryGetScheduleEntry(__instance.dayScheduleName.Value, out string? rawstring)
                 && Globals.UtilitySchedulingFunctions.TryFindGOTOschedule(__instance, SDate.Now(), rawstring, out string redirectedstring))
             {

@@ -28,7 +28,7 @@ internal static class TravelingMerchantPatcher
         {
             __result.Add(new SObject(ModEntry.BountifulBushID, 1), new[] { 200, random.Next(1, 3) });
         }
-        else if (ModEntry.WisdomFertilizerID != -1)
+        else if (ModEntry.WisdomFertilizerID != -1 && Game1.currentSeason is "summer" or "winter")
         {
             __result.Add(new SObject(ModEntry.WisdomFertilizerID, 1), new[] { 100, random.Next(1, 3) });
         }

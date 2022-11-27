@@ -1,10 +1,13 @@
-﻿using AtraCore.Utilities;
+﻿using AtraBase.Toolkit;
+
+using AtraCore.Utilities;
 
 using AtraShared.ConstantsAndEnums;
 using AtraShared.Integrations;
 using AtraShared.MigrationManager;
 using AtraShared.Utils.Extensions;
 
+using BetterIntegratedModItems.DataModels;
 using BetterIntegratedModItems.Framework;
 using BetterIntegratedModItems.Framework.DataModels;
 
@@ -26,6 +29,11 @@ internal sealed class ModEntry : Mod
     private const string LOCATIONNAME = "LOCATIONNAME";
 
     private MigrationManager? migrator;
+
+    /// <summary>
+    /// Raised when a new location is encountered.
+    /// </summary>
+    internal event EventHandler<LocationSeenEventArgs>? OnLocationSeen;
 
     /// <summary>
     /// Gets the logger for this mod.
@@ -58,7 +66,7 @@ internal sealed class ModEntry : Mod
         helper.Events.GameLoop.Saving += this.OnSaving;
         helper.Events.GameLoop.Saved += this.OnSaved;
 
-        helper.Events.Player.Warped += this.OnWarped;
+        helper.Events.Player.Warped += this.OnNewLocationSeen;
 
         helper.Events.Multiplayer.PeerConnected += this.OnPeerConnected;
         helper.Events.Multiplayer.ModMessageReceived += this.OnModMessageRecieved;
@@ -125,11 +133,12 @@ internal sealed class ModEntry : Mod
     }
 
     /// <inheritdoc cref="IPlayerEvents.Warped"/>
-    private void OnWarped(object? sender, WarpedEventArgs e)
+    private void OnNewLocationSeen(object? sender, WarpedEventArgs e)
     {
         if (e.IsLocalPlayer && LocationWatcher!.SeenLocations.Add(e.NewLocation.Name))
         {
             this.Helper.Multiplayer.SendMessage(e.NewLocation.Name, LOCATIONNAME, new[] { this.ModManifest.UniqueID });
+            this.OnLocationSeen?.GetInvocationList()?.RaiseSafe(null, new LocationSeenEventArgs(e.NewLocation.Name));
         }
     }
 

@@ -136,7 +136,7 @@ internal sealed class ModEntry : Mod
     /// <inheritdoc cref="IGameLoopEvents.Saved"/>
     private void OnSaved(object? sender, SavedEventArgs e)
     {
-        if (Context.IsMultiplayer)
+        if (Context.IsMainPlayer)
         {
             this.Helper.Data.WriteSaveData(LOCATIONWATCHER, LocationWatcher);
         }

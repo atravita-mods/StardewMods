@@ -184,17 +184,15 @@ internal sealed class ModEntry : Mod
                     continue;
                 }
 
-                if (picked is not null)
+                if (picked is null
+                    || picked.salePrice() > this.config.MaxPriceForAllItems
+                    || (this.bannedItems.TryGetValue(picked.GetItemType(), out HashSet<int>? bannedItems) && bannedItems.Contains(picked.ParentSheetIndex)))
                 {
-                    if ((this.bannedItems.TryGetValue(picked.GetItemType(), out HashSet<int>? bannedItems) && bannedItems.Contains(picked.ParentSheetIndex))
-                        || picked.salePrice() > this.config.MaxPriceForAllItems)
-                    {
-                        continue;
-                    }
-                    farm.PlaceItem(tile.Value, picked, pet);
-                    this.Helper.Data.WriteSaveData(SAVEKEY, (++giftsThisWeek).ToString());
-                    return;
+                    continue;
                 }
+                farm.PlaceItem(tile.Value, picked, pet);
+                this.Helper.Data.WriteSaveData(SAVEKEY, (++giftsThisWeek).ToString());
+                return;
             }
             while (attempts-- > 0);
         }

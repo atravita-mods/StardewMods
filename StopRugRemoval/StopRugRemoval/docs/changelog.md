@@ -9,10 +9,12 @@
 
 #### Version 1.1.1
 * Some menus now accept arrow keys.
-* Internal improvements (mostly wrt enums).
+* Internal improvements (mostly with regard to enums).
 * Jukebox now checks your current location, not the mainland, for the is-it-raining check.
 * Adds a way to flip fruit trees and crops. Yes I am this petty.
-* Korean translation, thanks to [park4934](https://blog.naver.com/park971202/222878509680).
+* Leo no longer attends the Winter Star festival before he's moved to the mainland.
+* Schedule fixer will now detect infinite recursion and prevent those crashes as well.
+* Korean translation, thanks to [park4934](https://blog.naver.com/park971202/222878509680)!.
 
 #### Version 1.1.0
 * Move to using AtraCore.

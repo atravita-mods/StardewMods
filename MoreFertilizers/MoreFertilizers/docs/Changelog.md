@@ -7,12 +7,9 @@
 * Beverage fertilizer
     - Fruit trees (DGA, Automate?)
 * Tree Tapper's: Automate integration, maybe a droplet falling off the tapper???
-* Crosscheck Everlasting fertilizer (especially with Theft of the Winter Star).
-* Some fertilizer for trees? Tree tapper fertilizer?
 * Something for mushroom boxen? (1.6 - reduce to one day?)
 * Make good draw code for all of the fertilizers. (don't forget domesticated fish - maybe some more jumping...)
 * PR Pathos to make CJB pass in the correct fertilizer (b/c Everlasting)
-* Read from JA's files to get the old IDs if I don't have them.
 
 #### Version 0.3.0
 * Added new fertilizers:

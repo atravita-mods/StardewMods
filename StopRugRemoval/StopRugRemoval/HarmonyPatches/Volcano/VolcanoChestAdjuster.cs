@@ -53,7 +53,7 @@ internal static class VolcanoChestAdjuster
     }
 
     /// <summary>
-    /// Handles recieving the data from another player.
+    /// Handles receiving the data from another player.
     /// </summary>
     /// <param name="e">Event args.</param>
     internal static void RecieveData(ModMessageReceivedEventArgs e)
@@ -106,7 +106,7 @@ internal static class VolcanoChestAdjuster
         else
         {
             data.CommonChest = prevValue;
-            ModEntry.ModMonitor.DebugOnlyLog($"Stashed comment chest value {prevValue}", LogLevel.Info);
+            ModEntry.ModMonitor.DebugOnlyLog($"Stashed common chest value {prevValue}", LogLevel.Info);
             BroadcastData(ModEntry.MultiplayerHelper);
             return true;
         }

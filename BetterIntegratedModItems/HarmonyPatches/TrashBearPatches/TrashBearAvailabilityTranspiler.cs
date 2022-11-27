@@ -42,11 +42,9 @@ internal static class TrashBearAvailabilityTranspiler
                 OpCodes.Ldc_I4_2,
                 OpCodes.Ble_S,
             })
-            .Advance(2);
-
-            Label jumppoint = (Label)helper.CurrentInstruction.operand;
-
-            helper.Advance(-2)
+            .Advance(2)
+            .GrabBranchDest(out Label? jumppoint)
+            .Advance(-2)
             .GetLabels(out IList<Label>? labelsToMove)
             .Remove(3)
             .Insert(new CodeInstruction[]

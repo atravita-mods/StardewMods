@@ -20,7 +20,6 @@ internal static class GiantCropPatcher
             return true;
         }
 
-
         try
         {
             for (int x = (int)__instance.tile.X; x < (int)__instance.tile.X + __instance.width.Value; x++)

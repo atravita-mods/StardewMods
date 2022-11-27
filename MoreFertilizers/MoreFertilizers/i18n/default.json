@@ -8,7 +8,9 @@
   "RecolorBushes.title": "Recolor Bushes",
   "RecolorBushes.description": "If enabled, bushes will change color when they're fertilized.",
   "RecolorFruitTrees.title": "Recolor Fruit Trees",
-  "RecolorFruitTrees.description": "Whether or not fruit trees should be tinted to show that they've been fertilized",
+  "RecolorFruitTrees.description": "Whether or not fruit trees should be tinted to show that they've been fertilized.",
+  "RecolorTrees.title": "Recolor Trees",
+  "RecolorTrees.description": "Whether or not non-fruit trees should be tinted to show that they've been fertilized.",
 
   // For GMCM
   "IllFormatedConfig": "Config file seems ill-formated, using default. Please use Generic Mod Config Menu to configure.",

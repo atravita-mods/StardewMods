@@ -15,30 +15,33 @@ internal static class GiantCropPatcher
     [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Harmony convention.")]
     private static bool Prefix(GiantCrop __instance, Tool t)
     {
-        if (t.isHeavyHitter() && t is not MeleeWeapon)
+        if (!t.isHeavyHitter() || t is MeleeWeapon)
         {
-            try
+            return true;
+        }
+
+
+        try
+        {
+            for (int x = (int)__instance.tile.X; x < (int)__instance.tile.X + __instance.width.Value; x++)
             {
-                for (int x = (int)__instance.tile.X; x < (int)__instance.tile.X + __instance.width.Value; x++)
+                for (int y = (int)__instance.tile.Y; y < (int)__instance.tile.Y + __instance.width.Value; y++)
                 {
-                    for (int y = (int)__instance.tile.Y; y < (int)__instance.tile.Y + __instance.width.Value; y++)
+                    Vector2 tile = new(x, y);
+                    if (Game1.currentLocation.objects.TryGetValue(tile, out SObject? obj)
+                        && obj.Name.Contains("Tapper", StringComparison.OrdinalIgnoreCase))
                     {
-                        Vector2 tile = new(x, y);
-                        if (Game1.currentLocation.objects.TryGetValue(tile, out StardewValley.Object? obj)
-                            && obj.Name.Contains("Tapper", StringComparison.OrdinalIgnoreCase))
-                        {
-                            obj.performRemoveAction(obj.TileLocation, Game1.currentLocation);
-                            Game1.createItemDebris(obj, tile * 64f, -1);
-                            Game1.currentLocation.objects.Remove(tile);
-                            return false;
-                        }
+                        obj.performRemoveAction(obj.TileLocation, Game1.currentLocation);
+                        Game1.createItemDebris(obj, tile * 64f, -1);
+                        Game1.currentLocation.objects.Remove(tile);
+                        return false;
                     }
                 }
             }
-            catch (Exception ex)
-            {
-                ModEntry.ModMonitor.Log($"Failed while popping the tapper off {ex}", LogLevel.Error);
-            }
+        }
+        catch (Exception ex)
+        {
+            ModEntry.ModMonitor.Log($"Failed while popping the tapper off {ex}", LogLevel.Error);
         }
         return true;
     }

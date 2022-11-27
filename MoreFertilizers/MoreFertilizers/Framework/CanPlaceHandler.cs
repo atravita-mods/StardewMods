@@ -92,6 +92,19 @@ public sealed class CanPlaceHandler : IMoreFertilizersAPI
         Bush bush,
         Vector2 tileLocation,
         bool doEvenIfStillShaking);
+
+    /// <summary>
+    /// Stardew's Tree::shake.
+    /// </summary>
+    private static readonly TreeShakeDel TreeShakeMethod = typeof(Tree)
+        .GetCachedMethod("shake", ReflectionCache.FlagTypes.InstanceFlags)
+        .CreateDelegate<TreeShakeDel>();
+
+    private delegate void TreeShakeDel(
+        Tree tree,
+        Vector2 tileLocation,
+        bool doEvenIfStillShaking,
+        GameLocation location);
     #endregion
 
     /// <inheritdoc />
@@ -146,7 +159,7 @@ public sealed class CanPlaceHandler : IMoreFertilizersAPI
                 }
                 return ret;
             }
-            else if (terrain is Tree tree && tree.growthStage.Value >= Tree.treeStage
+            else if (terrain is Tree tree && tree.growthStage.Value >= Tree.treeStage && tree.treeType.Value is not Tree.palmTree or Tree.palmTree2
                 && obj.ParentSheetIndex == ModEntry.TreeTapperFertilizerID)
             {
                 bool ret = !tree.modData.ContainsKey(TreeFertilizer) && !tree.modData.ContainsKey(TreeTapperFertilizer);
@@ -271,6 +284,7 @@ public sealed class CanPlaceHandler : IMoreFertilizersAPI
             if (terrain is Tree tree
                 && (obj.ParentSheetIndex == ModEntry.TreeTapperFertilizerID))
             {
+                TreeShakeMethod(tree, tile, true, loc);
                 tree.modData?.SetBool(TreeTapperFertilizer, true);
                 return true;
             }

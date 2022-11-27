@@ -78,11 +78,6 @@
     <Compile Include="$(MSBuildThisFileDirectory)Utils\GameLocationUtils.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Utils\HarmonyHelper\AdditionalCodeInstructionExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Utils\HarmonyHelper\CodeInstructionWrapper.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Utils\HarmonyHelper\HarmonyAttributes\GameVersionAttribute.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Utils\HarmonyHelper\HarmonyAttributes\HarmonyCategoryAttribute.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Utils\HarmonyHelper\HarmonyAttributes\NonFatalPatchAttribute.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Utils\HarmonyHelper\HarmonyAttributes\NotWithModAttribute.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Utils\HarmonyHelper\HarmonyAttributes\RequireModAttribute.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Utils\HarmonyHelper\ILHelper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Utils\HarmonyHelper\ILHelperExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Utils\Extensions\InputUtils.cs" />

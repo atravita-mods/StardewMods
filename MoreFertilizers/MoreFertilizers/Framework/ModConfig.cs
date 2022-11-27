@@ -25,7 +25,12 @@ internal sealed class ModConfig
     public bool RecolorBushes { get; set; } = true;
 
     /// <summary>
-    /// Gets or sets a value indicating whether trees should be recolored when they're fertilized.
+    /// Gets or sets a value indicating whether fruit trees should be recolored when they're fertilized.
     /// </summary>
     public bool RecolorFruitTrees { get; set; } = true;
+
+    /// <summary>
+    /// Gets or sets a value indicating whether trees should be recolored when they're fertilized.
+    /// </summary>
+    public bool RecolorTrees { get; set; } = false;
 }

@@ -1,4 +1,4 @@
-﻿namespace AtraShared.Utils.HarmonyHelper.HarmonyAttributes;
+﻿namespace AtraCore.Framework.Harmonizer.HarmonyAttributes;
 
 /// <summary>
 /// Indicates that the patch should be ignored if the target can not be found.

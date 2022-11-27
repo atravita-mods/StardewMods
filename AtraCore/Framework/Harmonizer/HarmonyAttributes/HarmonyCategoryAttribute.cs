@@ -1,4 +1,4 @@
-﻿namespace AtraShared.Utils.HarmonyHelper.HarmonyAttributes;
+﻿namespace AtraCore.Framework.Harmonizer.HarmonyAttributes;
 
 /// <summary>
 /// Indicates the following patch should be categorized separately.

@@ -73,7 +73,7 @@ internal static class TrashBearAvailabilityTranspiler
             }, withLabels: labelsToMoveTwo)
             ;
 
-            helper.Print();
+            // helper.Print();
             return helper.Render();
         }
         catch (Exception ex)
@@ -131,7 +131,7 @@ internal static class TrashBearAvailabilityTranspiler
             }, withLabels: labelsToMoveTwo)
             ;
 
-            helper.Print();
+            // helper.Print();
             return helper.Render();
         }
         catch (Exception ex)
@@ -160,7 +160,8 @@ internal static class TrashBearAvailabilityTranspiler
             .Remove(3);
 
             helper.CurrentInstruction.labels.AddRange(removedLabels);
-            helper.Print();
+
+            // helper.Print();
             return helper.Render();
         }
         catch (Exception ex)

@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace SpecialOrdersExtended.Managers;
-internal class PlayerTeamWatcher: IDisposable
+internal sealed class PlayerTeamWatcher: IDisposable
 {
     private bool isDisposed;
     private HashSet<string> added = new();
@@ -38,7 +38,7 @@ internal class PlayerTeamWatcher: IDisposable
     }
 
     /// <inheritdoc cref="IDisposable.Dispose" />
-    protected virtual void Dispose(bool disposing)
+    private void Dispose(bool disposing)
     {
         if (!this.isDisposed)
         {

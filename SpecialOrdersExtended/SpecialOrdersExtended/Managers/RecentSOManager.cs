@@ -156,7 +156,7 @@ internal class RecentSOManager
     }
 
     /// <summary>
-    /// Tries to add a questkey to the RecentCompletedSO data model
+    /// Tries to add a QuestKey to the RecentCompletedSO data model
     /// If it's already there, does nothing.
     /// </summary>
     /// <param name="questkey">Quest key (exact).</param>

@@ -64,7 +64,6 @@ internal sealed class ModEntry : Mod
         helper.Events.GameLoop.GameLaunched += this.OnGameLaunched;
         helper.Events.GameLoop.SaveLoaded += this.OnSaveLoaded;
         helper.Events.GameLoop.Saving += this.OnSaving;
-        helper.Events.GameLoop.Saved += this.OnSaved;
 
         helper.Events.Player.Warped += this.OnNewLocationSeen;
 
@@ -138,27 +137,23 @@ internal sealed class ModEntry : Mod
         if (e.IsLocalPlayer && LocationWatcher!.SeenLocations.Add(e.NewLocation.Name))
         {
             this.Helper.Multiplayer.SendMessage(e.NewLocation.Name, LOCATIONNAME, new[] { this.ModManifest.UniqueID });
-            this.OnLocationSeen?.GetInvocationList()?.RaiseSafe(null, new LocationSeenEventArgs(e.NewLocation.Name));
-        }
-    }
-
-    /// <inheritdoc cref="IGameLoopEvents.Saved"/>
-    private void OnSaved(object? sender, SavedEventArgs e)
-    {
-        if (Context.IsMainPlayer)
-        {
-            this.Helper.Data.WriteSaveData(LOCATIONWATCHER, LocationWatcher);
+            this.OnLocationSeen?.RaiseSafe(null, new LocationSeenEventArgs(e.NewLocation.Name));
         }
     }
 
     /// <inheritdoc cref="IGameLoopEvents.Saving"/>
-    /// <remarks>Apparently he must be removed before saving?</remarks>
+    /// <remarks>Apparently TrashBear must be removed before saving?</remarks>
     private void OnSaving(object? sender, SavingEventArgs e)
     {
         GameLocation forest = Game1.getLocationFromName("Forest");
         if (forest is not null && forest.getCharacterFromName("TrashBear") is TrashBear bear)
         {
             forest.characters.Remove(bear);
+        }
+
+        if (Context.IsMainPlayer)
+        {
+            this.Helper.Data.WriteSaveData(LOCATIONWATCHER, LocationWatcher);
         }
     }
 

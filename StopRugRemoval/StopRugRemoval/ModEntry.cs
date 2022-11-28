@@ -146,9 +146,7 @@ internal sealed class ModEntry : Mod
         }
     }
 
-    /*************
-     * REGION ASSET MANAGEMENT
-     * **********/
+    #region asset edits
 
     /// <inheritdoc cref="IContentEvents.LocaleChanged"/>
     private void OnLocaleChange(object? sender, LocaleChangedEventArgs e)
@@ -170,15 +168,14 @@ internal sealed class ModEntry : Mod
     private void OnSaloonEventRequested(object? sender, AssetRequestedEventArgs e)
         => AssetEditor.EditSaloonEvent(e);
 
+    #endregion
+
+    /// <inheritdoc cref="IPlayerEvents.Warped"/>
     private void Player_Warped(object? sender, WarpedEventArgs e)
     {
         SObjectPatches.HaveConfirmedBomb.Value = false;
         ConfirmWarp.HaveConfirmed.Value = false;
     }
-
-    /***************
-     * REGION HARMONY
-     * *************/
 
     private void ApplyPatches(Harmony harmony)
     {

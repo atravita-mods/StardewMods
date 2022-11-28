@@ -3,7 +3,7 @@
 /// <summary>
 /// The API instance for this mod.
 /// </summary>
-public class LastDayToPlantAPI : ILastDayToPlantAPI
+public sealed class LastDayToPlantAPI : ILastDayToPlantAPI
 {
     /// <inheritdoc />
     public int? GetDays(Profession profession, int fertilizer, int crop)

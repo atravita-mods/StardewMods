@@ -84,7 +84,12 @@ public static class JsonAssetsShims
     public static bool ConditionRequiresEPU(ReadOnlySpan<char> condition)
         => condition[0] == '!' || condition.GetIndexOfWhiteSpace() > 3;
 
-    // doesn't handle the stocklist.
+    /// <summary>
+    /// Gets whether or not a JA seed can be sold, looking at the condition string.
+    /// Uses EPU if installed.
+    /// </summary>
+    /// <param name="name">Name of the seed.</param>
+    /// <returns>True if is currently available, false otherwise.</returns>
     public static bool IsAvailableSeed(string name)
     {
         Guard.IsNotNullOrWhiteSpace(name);

@@ -203,7 +203,10 @@ internal sealed class ModEntry : Mod
                 string name = e.ReadAs<string>();
                 if (Game1.getLocationFromName(name) is not null)
                 {
-                    LocationWatcher?.SeenLocations?.Add(name);
+                    if (LocationWatcher?.SeenLocations?.Add(name) == true)
+                    {
+                        this.OnLocationSeen.RaiseSafe(null, new(name));
+                    }
                 }
                 else
                 {

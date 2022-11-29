@@ -41,15 +41,15 @@ internal static class PhoneHandler
             ILHelper helper = new(original, instructions, Globals.ModMonitor, gen);
             helper.FindNext(new CodeInstructionWrapper[]
             {
-                new(OpCodes.Newobj, typeof(List<Response>).GetCachedConstructor(ReflectionCache.FlagTypes.InstanceFlags)),
-                new(SpecialCodeInstructionCases.StLoc),
+                (OpCodes.Newobj, typeof(List<Response>).GetCachedConstructor(ReflectionCache.FlagTypes.InstanceFlags)),
+                SpecialCodeInstructionCases.StLoc,
             })
             .Advance(1);
 
             CodeInstruction? ldloc = helper.CurrentInstruction.ToLdLoc();
 
             helper.Advance(1)
-            .GetLabels(out var labelsToMove)
+            .GetLabels(out IList<Label>? labelsToMove)
             .Insert(new CodeInstruction[]
             {
                 ldloc,
@@ -62,7 +62,7 @@ internal static class PhoneHandler
         catch (Exception ex)
         {
             Globals.ModMonitor.Log($"Mod crashed while transpiling {original.FullDescription()}:\n\n{ex}", LogLevel.Error);
-            original?.Snitch(Globals.ModMonitor);
+            original.Snitch(Globals.ModMonitor);
         }
         return null;
     }
@@ -93,12 +93,12 @@ internal static class PhoneHandler
                         Globals.ModMonitor.Log($"Pam cannot be found, ending phone call.", LogLevel.Warn);
                         return;
                     }
-                    if (Game1.timeOfDay > 2200)
+                    else if (Game1.timeOfDay > 2200)
                     {
                         Game1.drawDialogue(pam, Game1.content.LoadString("Strings\\Characters:Pam_Bus_Late"));
                         return;
                     }
-                    if (Game1.timeOfDay < 900)
+                    else if (Game1.timeOfDay < 900)
                     {
                         if (Game1.IsVisitingIslandToday(pam.Name))
                         {

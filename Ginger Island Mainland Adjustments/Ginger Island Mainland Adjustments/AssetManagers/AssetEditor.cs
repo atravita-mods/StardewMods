@@ -1,5 +1,7 @@
 ﻿using AtraCore.Framework.Caches;
 
+using AtraShared.Caching;
+
 using StardewModdingAPI.Events;
 using StardewModdingAPI.Utilities;
 using StardewValley.Locations;
@@ -42,6 +44,12 @@ internal static class AssetEditor
     // This currently isn't used for anything.
     private static IAssetName dataEventsTrailerBig = null!;
 
+    private static PerScreen<TickCache<bool>> HasSeenNineHeart = new(
+        static () => new(() => Game1.player.eventsSeen.Contains(503180)));
+
+    private static PerScreen<TickCache<bool>> HasSeenPamEvent = new(
+        static () => new(() => Game1.player.eventsSeen.Contains(PAMEVENT)));
+
     /// <summary>
     /// Initializes the AssetEditor.
     /// </summary>
@@ -74,7 +82,7 @@ internal static class AssetEditor
         {
             e.Edit(EditPhone, AssetEditPriority.Early);
         }
-        else if (e.NameWithoutLocale.IsEquivalentTo(dataEventsSeedshop))
+        else if (HasSeenNineHeart.Value.GetValue() && e.NameWithoutLocale.IsEquivalentTo(dataEventsSeedshop))
         {
             e.Edit(EditSeedShopEvent, AssetEditPriority.Late);
         }
@@ -82,7 +90,7 @@ internal static class AssetEditor
         {
             e.Edit(EditMail, AssetEditPriority.Late);
         }
-        else if (e.NameWithoutLocale.IsEquivalentTo(dataEventsTrailerBig))
+        else if (!HasSeenNineHeart.Value.GetValue() && e.NameWithoutLocale.IsEquivalentTo(dataEventsTrailerBig))
         {
             e.Edit(EditTrailerBig, AssetEditPriority.Late);
         }

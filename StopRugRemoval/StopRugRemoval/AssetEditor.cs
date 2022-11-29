@@ -1,6 +1,9 @@
-﻿using Microsoft.Xna.Framework.Graphics;
+﻿using AtraShared.Caching;
+
+using Microsoft.Xna.Framework.Graphics;
 
 using StardewModdingAPI.Events;
+using StardewModdingAPI.Utilities;
 
 namespace StopRugRemoval;
 
@@ -11,7 +14,10 @@ internal static class AssetEditor
 {
     private static IAssetName saloonEvents = null!;
     private static IAssetName betIconsPath = null!;
-    private static Lazy<Texture2D> betIconLazy = new(() => Game1.content.Load<Texture2D>(betIconsPath.BaseName));
+    private static Lazy<Texture2D> betIconLazy = new(static () => Game1.content.Load<Texture2D>(betIconsPath.BaseName));
+
+    private static PerScreen<TickCache<bool>> hasSeenSaloonEvent = new(
+        () => new (static () => Game1.player.eventsSeen.Contains(40)));
 
     /// <summary>
     /// Gets the bet button textures.
@@ -36,7 +42,7 @@ internal static class AssetEditor
     {
         if (betIconLazy.IsValueCreated && (assets is null || assets.Contains(betIconsPath)))
         {
-            betIconLazy = new(() => Game1.content.Load<Texture2D>(betIconsPath.BaseName));
+            betIconLazy = new(static () => Game1.content.Load<Texture2D>(betIconsPath.BaseName));
         }
     }
 
@@ -76,18 +82,19 @@ internal static class AssetEditor
         }
     }
 
-    /// <summary>
+    /// <inheritdoc cref="IContentEvents.AssetRequested"/>
+    /// <remarks>
     /// Handles editing the saloon event to give the player a choice about alcohol.
-    /// </summary>
-    /// <param name="e">Event args.</param>
+    /// </remarks>
     internal static void EditSaloonEvent(AssetRequestedEventArgs e)
     {
-        if (ModEntry.Config.Enabled && e.NameWithoutLocale.IsEquivalentTo(saloonEvents))
+        if (ModEntry.Config.Enabled && !hasSeenSaloonEvent.Value.GetValue() && e.NameWithoutLocale.IsEquivalentTo(saloonEvents))
         {
             e.Edit(EditSaloonImpl, AssetEditPriority.Late);
         }
     }
 
+    /// <inheritdoc cref="AssetRequestedEventArgs.Edit(Action{IAssetData}, AssetEditPriority, string?)"/>
     private static void EditSaloonImpl(IAssetData asset)
     {
         IAssetDataForDictionary<string, string>? editor = asset.AsDictionary<string, string>();

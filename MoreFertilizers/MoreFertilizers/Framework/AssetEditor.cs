@@ -4,6 +4,7 @@ using AtraCore.Models;
 
 using AtraShared.Caching;
 using AtraShared.ConstantsAndEnums;
+using AtraShared.Utils;
 
 using StardewModdingAPI.Events;
 using StardewModdingAPI.Utilities;
@@ -56,7 +57,7 @@ internal static class AssetEditor
     private static IAssetName LEWIS_DIALOGUE = null!;
 #pragma warning restore SA1310 // Field names should not contain underscore
 
-    private static TickCache<bool> HasSeenBoat = new(static () => Utility.doesAnyFarmerHaveOrWillReceiveMail("seenBoatJourney"));
+    private static TickCache<bool> HasSeenBoat = new(static () => FarmerHelpers.HasAnyFarmerRecievedFlag("seenBoatJourney"));
 
     /// <summary>
     /// Initializes the AssetEditor.

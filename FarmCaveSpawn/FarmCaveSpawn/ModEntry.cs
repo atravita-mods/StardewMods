@@ -8,6 +8,8 @@ using AtraBase.Toolkit;
 using AtraBase.Toolkit.Extensions;
 using AtraBase.Toolkit.StringHandler;
 
+using AtraCore.Framework.ItemManagement;
+
 using AtraShared.ConstantsAndEnums;
 using AtraShared.Integrations;
 using AtraShared.MigrationManager;
@@ -322,8 +324,12 @@ END:
         int fruitToPlace = Utility.GetRandom(
             this.TreeFruit.Count > 0 && this.Random.NextDouble() < (this.config.TreeFruitChance / 100f) ? this.TreeFruit : this.BASE_FRUIT,
             this.Random);
-        location.Objects[tile] = new SObject(fruitToPlace, 1) { IsSpawnedObject = true };
-        this.Monitor.DebugOnlyLog($"Spawning item {fruitToPlace} at {location.Name}:{tile.X},{tile.Y}", LogLevel.Debug);
+
+        if (!DataToItemMap.IsActuallyRing(fruitToPlace))
+        {
+            location.Objects[tile] = new SObject(fruitToPlace, 1) { IsSpawnedObject = true };
+            this.Monitor.DebugOnlyLog($"Spawning item {fruitToPlace} at {location.Name}:{tile.X},{tile.Y}", LogLevel.Debug);
+        }
     }
 
     [MethodImpl(TKConstants.Hot)]

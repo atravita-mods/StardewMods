@@ -17,7 +17,7 @@ internal static class AssetEditor
     private static Lazy<Texture2D> betIconLazy = new(static () => Game1.content.Load<Texture2D>(betIconsPath.BaseName));
 
     private static PerScreen<TickCache<bool>> hasSeenSaloonEvent = new(
-        () => new (static () => Game1.player.eventsSeen.Contains(40)));
+        () => new (static () => Game1.player?.eventsSeen?.Contains(40) == true));
 
     /// <summary>
     /// Gets the bet button textures.

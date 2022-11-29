@@ -1,4 +1,5 @@
 ﻿using AtraShared.Caching;
+using AtraShared.Utils;
 
 using HarmonyLib;
 
@@ -15,8 +16,7 @@ namespace MoreFertilizers.HarmonyPatches.Acquisition;
 [HarmonyPatch(typeof(Sewer))]
 internal static class KrobusShopStockPostfix
 {
-    private static PerScreen<TickCache<bool>> HasGottenPrismaticFertilizer = new(
-        static () => new(static () => Game1.player.mailReceived.Contains($"museumCollectedRewardO_{ModEntry.PrismaticFertilizerID}_1")));
+    private static readonly TickCache<bool> HasGottenPrismaticFertilizer = new(static () => FarmerHelpers.HasAnyFarmerRecievedFlag($"museumCollectedRewardO_{ModEntry.PrismaticFertilizerID}_1"));
 
     [HarmonyPatch(nameof(Sewer.getShadowShopStock))]
     [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Harmony convention.")]
@@ -38,7 +38,7 @@ internal static class KrobusShopStockPostfix
         {
             __result.TryAdd(new SObject(ModEntry.RadioactiveFertilizerID, 1), new[] { 250, ShopMenu.infiniteStock });
         }
-        if (ModEntry.PrismaticFertilizerID != -1 && HasGottenPrismaticFertilizer.Value.GetValue())
+        if (ModEntry.PrismaticFertilizerID != -1 && HasGottenPrismaticFertilizer.GetValue())
         {
             __result.TryAdd(new SObject(ModEntry.PrismaticFertilizerID, 1), new[] { 100, ShopMenu.infiniteStock });
         }

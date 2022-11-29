@@ -23,6 +23,12 @@ internal static class AssetEditor
     /// </summary>
     internal const int PAMEVENT = 99219999;
 
+    private static readonly PerScreen<TickCache<bool>> HasSeenNineHeart = new(
+    static () => new(() => Game1.player?.eventsSeen?.Contains(503180) == true));
+
+    private static readonly PerScreen<TickCache<bool>> HasSeenPamEvent = new(
+        static () => new(() => Game1.player?.eventsSeen?.Contains(PAMEVENT) == true));
+
     private static readonly string Dialogue = PathUtilities.NormalizeAssetName("Characters/Dialogue");
 
     // The following dialogue is edited from the code side so each NPC has at least the Resort dialogue.
@@ -43,12 +49,6 @@ internal static class AssetEditor
     // We edit Pam's nine heart event to set flags to remember which path the player chose.
     // This currently isn't used for anything.
     private static IAssetName dataEventsTrailerBig = null!;
-
-    private static PerScreen<TickCache<bool>> HasSeenNineHeart = new(
-        static () => new(() => Game1.player.eventsSeen.Contains(503180)));
-
-    private static PerScreen<TickCache<bool>> HasSeenPamEvent = new(
-        static () => new(() => Game1.player.eventsSeen.Contains(PAMEVENT)));
 
     /// <summary>
     /// Initializes the AssetEditor.
@@ -82,7 +82,7 @@ internal static class AssetEditor
         {
             e.Edit(EditPhone, AssetEditPriority.Early);
         }
-        else if (HasSeenNineHeart.Value.GetValue() && e.NameWithoutLocale.IsEquivalentTo(dataEventsSeedshop))
+        else if (HasSeenNineHeart.Value.GetValue() && !HasSeenPamEvent.Value.GetValue() && e.NameWithoutLocale.IsEquivalentTo(dataEventsSeedshop))
         {
             e.Edit(EditSeedShopEvent, AssetEditPriority.Late);
         }

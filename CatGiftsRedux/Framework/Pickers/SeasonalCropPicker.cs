@@ -14,7 +14,7 @@ namespace CatGiftsRedux.Framework.Pickers;
 /// <summary>
 /// Picks a random seasonal crop item.
 /// </summary>
-internal static class SeasonalCropChooser
+internal static class SeasonalCropPicker
 {
     internal static Item? Pick(Random random)
     {

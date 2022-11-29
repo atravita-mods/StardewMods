@@ -11,7 +11,7 @@ namespace CatGiftsRedux.Framework.Pickers;
 /// <summary>
 /// Tries to pick a random animal product.
 /// </summary>
-internal static class AnimalProductChooser
+internal static class AnimalProductPicker
 {
     /// <summary>
     /// Pick a random animal product.

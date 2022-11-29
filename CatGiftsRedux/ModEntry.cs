@@ -373,8 +373,8 @@ internal sealed class ModEntry : Mod
             this.AddPicker(this.config.ForageFromMapsWeight, this.GetFromForage);
         }
 
-        this.AddPicker(this.config.AnimalProductsWeight, AnimalProductChooser.Pick);
-        this.AddPicker(this.config.SeasonalCropsWeight, SeasonalCropChooser.Pick);
+        this.AddPicker(this.config.AnimalProductsWeight, AnimalProductPicker.Pick);
+        this.AddPicker(this.config.SeasonalCropsWeight, SeasonalCropPicker.Pick);
         this.AddPicker(this.config.OnFarmCropWeight, OnFarmCropPicker.Pick);
         this.AddPicker(this.config.SeasonalFruitWeight, SeasonalFruitPicker.Pick);
         this.AddPicker(this.config.RingsWeight, RingPicker.Pick);

@@ -36,6 +36,9 @@
   "PhoneSpeedUpFactor.title": "Phone Speed Up Factor",
   "PhoneSpeedUpFactor.description": "How much to speed up the phone call by.",
 
+  "EditElliottEvent.title": "Edit Elliott Event",
+  "EditElliottEvent.description": "Whether or not to edit Elliott's event to add a choice for juice instead of alcohol.",
+
   "BetIcons.title": "Bet1k/10k Icons",
   "BetIcons.description": "Whether or not to show the bet1k/bet10k icons.",
 

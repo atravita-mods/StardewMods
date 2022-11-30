@@ -88,7 +88,7 @@ internal static class AssetEditor
     /// </remarks>
     internal static void EditSaloonEvent(AssetRequestedEventArgs e)
     {
-        if (ModEntry.Config.Enabled && !hasSeenSaloonEvent.Value.GetValue() && e.NameWithoutLocale.IsEquivalentTo(saloonEvents))
+        if (ModEntry.Config.Enabled && ModEntry.Config.EditElliottEvent && !hasSeenSaloonEvent.Value.GetValue() && e.NameWithoutLocale.IsEquivalentTo(saloonEvents))
         {
             e.Edit(EditSaloonImpl, AssetEditPriority.Late);
         }

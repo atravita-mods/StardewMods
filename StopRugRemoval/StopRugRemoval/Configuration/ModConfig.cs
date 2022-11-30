@@ -21,19 +21,19 @@ internal sealed class ModConfig
     public bool PreventRugRemoval { get; set; } = true;
 
     /// <summary>
-    /// Gets or sets a value indicating whether whether or not I should be able to place rugs outside.
+    /// Gets or sets a value indicating whether or not I should be able to place rugs outside.
     /// </summary>
     public bool CanPlaceRugsOutside { get; set; } = false;
 
 #if DEBUG
     /// <summary>
-    /// Gets or sets a value indicating whether whether or not I should be able to place rugs under things.
+    /// Gets or sets a value indicating whether or not I should be able to place rugs under things.
     /// </summary>
     public bool CanPlaceRugsUnder { get; set; } = true;
 #endif
 
     /// <summary>
-    /// Gets or sets a value indicating whether whether or not to prevent the removal of items from a table.
+    /// Gets or sets a value indicating whether or not to prevent the removal of items from a table.
     /// </summary>
     public bool PreventRemovalFromTable { get; set; } = true;
 
@@ -148,6 +148,11 @@ internal sealed class ModConfig
     /// </summary>
     public Dictionary<string, IsSafeLocationEnum> SafeLocationMap { get; set; } = new();
 
+    /// <summary>
+    /// Gets or sets a value indicating whether or not to edit elliott's event.
+    /// </summary>
+    public bool EditElliottEvent { get; set; } = true;
+ 
     /// <summary>
     /// Pre-populates locations.
     /// </summary>

@@ -23,6 +23,8 @@ public sealed class Harmonizer
 
     private readonly Dictionary<string, Harmony> cache = new();
 
+    private readonly Dictionary<HarmonyPatchType, (int, int)> count = new();
+
     public Harmonizer(IMonitor logger, IModRegistry registry, string uniqueID)
         : this(logger, registry, uniqueID, null) { }
 

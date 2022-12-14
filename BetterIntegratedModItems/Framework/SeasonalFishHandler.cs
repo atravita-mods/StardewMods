@@ -22,6 +22,8 @@ internal static class SeasonalFishHandler
             ModEntry.ModMonitor.Log($"Failed to parse {Game1.currentSeason} as a season, skipping.", LogLevel.Warn);
             return false;
         }
+
+        return true;
     }
 
     private static void Mod_OnLocationSeen(object? sender, LocationSeenEventArgs e) => Manager = null;

@@ -1,4 +1,6 @@
-﻿using AtraCore;
+﻿using AtraBase.Collections;
+
+using AtraCore;
 using AtraCore.Framework.Caches;
 using AtraCore.Models;
 
@@ -55,6 +57,8 @@ internal static class AssetEditor
     private static IAssetName SPECIAL_ORDERS_STRINGS = null!;
     private static IAssetName MAIL = null!;
     private static IAssetName LEWIS_DIALOGUE = null!;
+
+    private static IAssetName RADIOACTIVE_DENYLIST = null!;
 #pragma warning restore SA1310 // Field names should not contain underscore
 
     private static readonly TickCache<bool> HasSeenBoat = new(static () => FarmerHelpers.HasAnyFarmerRecievedFlag("seenBoatJourney"));
@@ -69,6 +73,7 @@ internal static class AssetEditor
         SPECIAL_ORDERS_STRINGS = parser.ParseAssetName("Strings/SpecialOrderStrings");
         MAIL = parser.ParseAssetName("Data/mail");
         LEWIS_DIALOGUE = parser.ParseAssetName("Characters/Dialogue/Lewis");
+        RADIOACTIVE_DENYLIST = parser.ParseAssetName("Mods/atravita/MoreFertilizers/RadioactiveDenylist");
     }
 
     /// <summary>
@@ -80,6 +85,10 @@ internal static class AssetEditor
         if (e.NameWithoutLocale.IsEquivalentTo(AtraCoreConstants.PrismaticMaskData))
         {
             e.Edit(EditPrismaticMasks);
+        }
+        else if (e.NameWithoutLocale.IsEquivalentTo(RADIOACTIVE_DENYLIST))
+        {
+            e.LoadFrom(EmptyContainers.GetEmptyDictionary<string, string>, AssetLoadPriority.Exclusive);
         }
         else if (HasSeenBoat.GetValue())
         {
@@ -97,6 +106,8 @@ internal static class AssetEditor
             }
         }
     }
+
+    internal static Dictionary<string, string> GetRadioactiveExclusions() => Game1.content.Load<Dictionary<string, string>>(RADIOACTIVE_DENYLIST.BaseName);
 
     /// <summary>
     /// Handles editing special order dialogue. This is seperate so it's only

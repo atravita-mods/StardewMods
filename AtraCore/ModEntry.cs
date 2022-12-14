@@ -5,6 +5,7 @@ using System.Diagnostics;
 using AtraBase.Toolkit;
 
 using AtraCore.Config;
+using AtraCore.Framework.Caches;
 using AtraCore.Framework.DialogueManagement;
 using AtraCore.Framework.Internal;
 using AtraCore.Framework.ItemManagement;
@@ -57,6 +58,7 @@ internal sealed class ModEntry : Mod
         helper.Events.GameLoop.SaveLoaded += this.OnSaveLoaded;
         helper.Events.GameLoop.DayEnding += this.OnDayEnd;
         helper.Events.GameLoop.TimeChanged += this.OnTimeChanged;
+        helper.Events.GameLoop.ReturnedToTitle += this.OnReturnedToTitle;
 
 #if DEBUG
         helper.Events.GameLoop.DayStarted += this.OnDayStart;
@@ -73,14 +75,13 @@ internal sealed class ModEntry : Mod
         this.ApplyPatches(new Harmony(this.ModManifest.UniqueID));
     }
 
+    /// <inheritdoc cref="IGameLoopEvents.SaveLoaded"/>
     private void OnSaveLoaded(object? sender, SaveLoadedEventArgs e)
     {
         if (Context.IsSplitScreen && Context.ScreenId != 0)
         {
             return;
         }
-
-        Game1.player.team.completedSpecialOrders.OnValueAdded += this.OnValueAdded;
 
         MultiplayerHelpers.AssertMultiplayerVersions(this.Helper.Multiplayer, this.ModManifest, this.Monitor, this.Helper.Translation);
         DrawPrismatic.LoadPrismaticData();
@@ -96,8 +97,6 @@ internal sealed class ModEntry : Mod
         }
     }
 
-    private void OnValueAdded(string key, bool value) => this.Monitor.Log(key, LogLevel.Alert);
-
     /// <inheritdoc cref="IGameLoopEvents.TimeChanged"/>
     /// <remarks>Currently handles: pushing delayed dialogue back onto the stack, and player alerts.</remarks>
     private void OnTimeChanged(object? sender, TimeChangedEventArgs e)
@@ -106,8 +105,15 @@ internal sealed class ModEntry : Mod
         PlayerAlertHandler.DisplayFromQueue();
     }
 
+    /// <inheritdoc cref="IGameLoopEvents.DayEnding"/>
     private void OnDayEnd(object? sender, DayEndingEventArgs e)
         => QueuedDialogueManager.ClearDelayedDialogue();
+
+    /// <inheritdoc cref="IGameLoopEvents.ReturnedToTitle"/>
+    private void OnReturnedToTitle(object? sender, ReturnedToTitleEventArgs e)
+    {
+        NPCCache.Reset();
+    }
 
     #region assets
 

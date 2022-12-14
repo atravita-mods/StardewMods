@@ -27,7 +27,8 @@ public static class MultiplayerHelpers
     /// <param name="manifest">Manifest of mod.</param>
     /// <param name="monitor">Logger.</param>
     /// <param name="translation">Translation helper.</param>
-    public static void AssertMultiplayerVersions(IMultiplayerHelper multi, IManifest manifest, IMonitor monitor, ITranslationHelper translation)
+    /// <returns>Whether mod version matches or not.</returns>
+    public static bool AssertMultiplayerVersions(IMultiplayerHelper multi, IManifest manifest, IMonitor monitor, ITranslationHelper translation)
     {
         Guard.IsNotNull(multi);
         Guard.IsNotNull(manifest);
@@ -43,6 +44,7 @@ public static class MultiplayerHelpers
                         .Default("The host does not seem to have this mod installed. Some features may not be available."),
                     LogLevel.Warn);
                 PlayerAlertHandler.AddMessage(new HUDMessage($"Mismatched mods {manifest.UniqueID} may cause issues", HUDMessage.error_type));
+                return false;
             }
             else if (!hostMod.Version.Equals(manifest.Version))
             {
@@ -52,7 +54,40 @@ public static class MultiplayerHelpers
                         .Tokens(new { version = manifest.Version }),
                     LogLevel.Warn);
                 PlayerAlertHandler.AddMessage(new HUDMessage($"Mismatched mod version {manifest.UniqueID} may cause issues", HUDMessage.error_type));
+                return false;
             }
         }
+
+        return true;
+    }
+
+    public static bool CheckMultiplayerPeer(IMultiplayerPeer peer, IManifest manifest, IMonitor monitor, ITranslationHelper translation)
+    {
+        Guard.IsNotNull(peer);
+        Guard.IsNotNull(manifest);
+        Guard.IsNotNull(monitor);
+        Guard.IsNotNull(translation);
+
+        if (peer.GetMod(manifest.UniqueID) is not IMultiplayerPeerMod otherMod)
+        {
+            monitor.Log(
+                translation.Get("peer-not-installed")
+                    .Default("{{peer}} does not seem to have this mod installed. This will probably cause issues.")
+                    .Tokens(new { peer = peer.PlayerID } ),
+                LogLevel.Warn);
+            PlayerAlertHandler.AddMessage(new HUDMessage($"Mismatched mods {manifest.UniqueID} may cause issues", HUDMessage.error_type));
+            return false;
+        }
+        else if (!otherMod.Version.Equals(manifest.Version))
+        {
+            monitor.Log(
+                translation.Get("peer-version-different")
+                        .Default("Peer {{peer}} seems to have a different version of this mod ({{version}}). This will probably cause issues.")
+                        .Tokens(new { peer = peer.PlayerID, version = manifest.Version }),
+                LogLevel.Warn);
+            PlayerAlertHandler.AddMessage(new HUDMessage($"Mismatched mod version {manifest.UniqueID} may cause issues", HUDMessage.error_type));
+            return false;
+        }
+        return true;
     }
 }

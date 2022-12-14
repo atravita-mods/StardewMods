@@ -63,6 +63,7 @@ internal static class RadioactiveFertilizerHandler
     {
         if (Game1.dayOfMonth >= 28)
         {
+            ModEntry.ModMonitor.Log("Too close to end of month, skipping radioactive fertilizer");
             return;
         }
 
@@ -98,6 +99,7 @@ internal static class RadioactiveFertilizerHandler
 
             if (season < 0 || season > 3)
             {
+                ModEntry.ModMonitor.Log("Season unrecognized, skipping");
                 return;
             }
 
@@ -169,15 +171,30 @@ internal static class RadioactiveFertilizerHandler
     {
         WeightedManager<int>? manager = new();
 
+        Dictionary<string, string>? denylist = AssetEditor.GetRadioactiveExclusions();
+
         foreach ((int id, string data) in cropData)
         {
             if (data.GetNthChunk('/', 1).Contains(season, StringComparison.OrdinalIgnoreCase)
                 && int.TryParse(data.GetNthChunk('/', 3), out int obj)
                 && Game1Wrappers.ObjectInfo.TryGetValue(obj, out string? objData)
-                && !objData.GetNthChunk('/', SObject.objectInfoNameIndex).Contains("Qi", StringComparison.OrdinalIgnoreCase)
                 && int.TryParse(objData.GetNthChunk('/', SObject.objectInfoPriceIndex), out int price))
             {
-                double weight = Math.Max(1500.0 / price, 1.0f);
+                ReadOnlySpan<char> name = objData.GetNthChunk('/', SObject.objectInfoNameIndex);
+                if (name.Contains("Qi", StringComparison.OrdinalIgnoreCase))
+                {
+                    continue;
+                }
+                if (denylist.Count != 0)
+                {
+                    string str_name = name.ToString();
+                    if (denylist.ContainsKey(str_name))
+                    {
+                        continue;
+                    }
+                }
+
+                double weight = Math.Max(2500.0 / price, 1.0f);
                 manager.Add(weight, id);
             }
         }

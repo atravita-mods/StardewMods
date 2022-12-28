@@ -1,0 +1,11 @@
+{"Changes":[
+    {
+        "Action": "Include",
+        "LogName": "Harvey - mid hearts",
+        "FromFile": "assets/default/bravo/Harvey/mid.json",
+        "When": {
+            "EnableFor": "Harvey",
+            "Query: {{Hearts:Harvey}} >= 6": true,
+        }
+    }
+]}

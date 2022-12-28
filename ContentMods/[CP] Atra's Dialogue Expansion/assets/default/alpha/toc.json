@@ -1,0 +1,11 @@
+{"Changes":[
+    {
+        "Action": "Include",
+        "LogName": "Sebastian - mid hearts",
+        "FromFile": "assets/default/alpha/Sebastian/mid.json",
+        "When": {
+            "EnableFor": "Sebastian",
+            "Query: {{Hearts:Sebastian}} >= 6": true,
+        }
+    }
+]}

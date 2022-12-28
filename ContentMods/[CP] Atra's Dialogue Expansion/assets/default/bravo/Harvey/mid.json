@@ -1,0 +1,13 @@
+{"Changes":[
+    {
+        "LogName": "Harvey mid-hearts",
+        "Action": "EditData",
+        "Target": "Characters/Dialogue/Harvey",
+        "Entries": {
+            "6_2": "My practice is barely scraping by. Not sure how I can see more patients in a town as small as this, though.$s",
+        },
+        "When": {
+            "YearModulus": "2"
+        }
+    }
+]}

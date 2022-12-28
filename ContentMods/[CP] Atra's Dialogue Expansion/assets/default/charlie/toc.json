@@ -1,0 +1,11 @@
+{"Changes":[
+    {
+        "Action": "Include",
+        "LogName": "Demetrius - mid hearts",
+        "FromFile": "assets/default/charlie/Demetrius/mid.json",
+        "When": {
+            "EnableFor": "Demetrius",
+            "Query: {{Hearts:Demetrius}} >= 6": true,
+        }
+    }
+]}

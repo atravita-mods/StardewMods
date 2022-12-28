@@ -1,0 +1,25 @@
+{"Changes":[
+    {
+        "LogName": "Demetrius mid-hearts",
+        "Action": "EditData",
+        "Target": "Characters/Dialogue/Demetrius",
+        "Entries": {
+            "6_2": "I hope my collaborator can get his edits in soon....$s",
+            "16_2": "It's always reviewer two, isn't it? Always.$a"
+        },
+        "When": {
+            "YearModulus": "2"
+        }
+    },
+    {
+        "LogName": "Demetrius mid-hearts",
+        "Action": "EditData",
+        "Target": "Characters/Dialogue/Demetrius",
+        "Entries": {
+            "6_2": "Did you see that paper by the %name group out of %place University? Amazing, isn't it?$h",
+        },
+        "When": {
+            "YearModulus": "3"
+        }
+    }
+]}

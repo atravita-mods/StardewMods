@@ -1,0 +1,25 @@
+{"Changes":[
+    {
+        "LogName": "Sebastian mid-hearts",
+        "Action": "EditData",
+        "Target": "Characters/Dialogue/Sebastian",
+        "Entries": {
+            "6_2": "Why is it every time I have to work with a Java team, they've done something weird with their architecture?$a",
+            "SebastianRoom_9_4": "Jane, I needed this reviewed last week! Could you please help me convince everyone to help keep things moving?",
+        },
+        "When": {
+            "YearModulus": "2"
+        }
+    },
+    {
+        "LogName": "Sebastian mid-hearts",
+        "Action": "EditData",
+        "Target": "Characters/Dialogue/Sebastian",
+        "Entries": {
+            "winter_15_2": "@, I got a five percent raise this year! Biggest one they've ever given me!$h" 
+        },
+        "When": {
+            "YearModulus": "3"
+        }
+    }
+]}

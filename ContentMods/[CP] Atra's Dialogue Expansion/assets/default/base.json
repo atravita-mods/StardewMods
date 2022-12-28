@@ -1,0 +1,24 @@
+{"Changes": [
+    {
+        "LogName": "Lewis base dialogue",
+        "Action": "EditData",
+        "Target": "Characters/Dialogue/Lewis",
+        "Entries": {
+            "{{TaxDay}}": "We've all gotta do our duty, @, and that duty includes paying our taxes.",
+        },
+        "When" : {
+            "EnableFor|contains=Lewis": true,
+        }
+    },
+    {
+        "LogName": "Pam base dialogue",
+        "Action": "EditData",
+        "Target": "Characters/Dialogue/Pam",
+        "Entries": {
+            "{{TaxDay}}": "Why I've gotta pay taxes to fund this stupid war, I'll never know."
+        },
+        "When" : {
+            "EnableFor|contains=Pam": true,
+        }
+    }
+]}

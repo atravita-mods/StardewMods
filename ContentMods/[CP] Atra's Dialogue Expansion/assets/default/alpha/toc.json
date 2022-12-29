@@ -1,6 +1,24 @@
 {"Changes":[
     {
         "Action": "Include",
+        "LogName": "Alex - mid hearts",
+        "FromFile": "assets/default/alpha/Alex/mid.json",
+        "When": {
+            "EnableFor": "Alex",
+            "Query: {{Hearts:Alex}} >= 6": true,
+        }
+    },
+    {
+        "Action": "Include",
+        "LogName": "Elliott - mid hearts",
+        "FromFile": "assets/default/alpha/Elliott/mid.json",
+        "When": {
+            "EnableFor": "Elliott",
+            "Query: {{Hearts:Elliott}} >= 6": true,
+        }
+    },
+    {
+        "Action": "Include",
         "LogName": "Sebastian - mid hearts",
         "FromFile": "assets/default/alpha/Sebastian/mid.json",
         "When": {

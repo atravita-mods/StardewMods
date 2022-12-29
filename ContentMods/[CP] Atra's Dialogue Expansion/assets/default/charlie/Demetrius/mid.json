@@ -4,8 +4,22 @@
         "Action": "EditData",
         "Target": "Characters/Dialogue/Demetrius",
         "Entries": {
+            "fallScienceHouse_22_20": "I'd love to talk, @, but I have a grant submission coming up that I need to work on.",
+        },
+        "When": {
+            "YearModulus": "1"
+        }
+    },
+    {
+        "LogName": "Demetrius mid-hearts",
+        "Action": "EditData",
+        "Target": "Characters/Dialogue/Demetrius",
+        "Entries": {
             "6_2": "I hope my collaborator can get his edits in soon....$s",
-            "16_2": "It's always reviewer two, isn't it? Always.$a"
+            "16_2": "It's always reviewer two, isn't it? Always.$a",
+            "springScienceHouse_22_20": "I'm so sorry, @, I've got so much work I need to get done before Monday.",
+            "summerScienceHouse_22_20": "Just need to gather a little more data for a proposal.",
+            "fallMountain_45_8": "Some of these trees are more than a hundred years old. I hope you weren't planning on cutting them down."
         },
         "When": {
             "YearModulus": "2"
@@ -17,6 +31,8 @@
         "Target": "Characters/Dialogue/Demetrius",
         "Entries": {
             "6_2": "Did you see that paper by the %name group out of %place University? Amazing, isn't it?$h",
+            "fallScienceHouse_22_20": "Got a conference coming up, @, hoping I can get myself a talk.",
+            "winterScienceHouse_22_20": "My collaborator claims his equipment is broken again.#$b#We're far closer to the submission deadline for this paper than I'd like..."
         },
         "When": {
             "YearModulus": "3"

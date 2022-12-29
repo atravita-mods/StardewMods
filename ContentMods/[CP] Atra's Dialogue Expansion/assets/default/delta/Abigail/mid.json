@@ -1,0 +1,14 @@
+{"Changes":[
+    {
+        "LogName": "Abigail mid-hearts",
+        "Action": "EditData",
+        "Target": "Characters/Dialogue/Abigail",
+        "Entries": {
+            "6_2": "I've got so much homework I need to do.$s",
+            "8_2": "Linear algebra is kicking my ass.#$b#Say, @, you any good at math?",
+        },
+        "When": {
+            "YearModulus": "2"
+        }
+    }
+]}

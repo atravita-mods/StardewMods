@@ -1,2 +1,20 @@
 {"Changes":[
+    {
+        "Action": "Include",
+        "LogName": "Abigail - mid hearts",
+        "FromFile": "assets/default/delta/Abigail/mid.json",
+        "When": {
+            "EnableFor": "Abigail",
+            "Query: {{Hearts:Abigail}} >= 6": true,
+        }
+    },
+    {
+        "Action": "Include",
+        "LogName": "Caroline - mid hearts",
+        "FromFile": "assets/default/delta/Caroline/mid.json",
+        "When": {
+            "EnableFor": "Caroline",
+            "Query: {{Hearts:Caroline}} >= 6": true,
+        }
+    }
 ]}

@@ -1,6 +1,33 @@
 {"Changes":[
     {
         "Action": "Include",
+        "LogName": "Clint - mid hearts",
+        "FromFile": "assets/default/bravo/Clint/mid.json",
+        "When": {
+            "EnableFor": "Clint",
+            "Query: {{Hearts:Clint}} >= 6": true,
+        }
+    },
+    {
+        "Action": "Include",
+        "LogName": "Emily - mid hearts",
+        "FromFile": "assets/default/bravo/Emily/mid.json",
+        "When": {
+            "EnableFor": "Emily",
+            "Query: {{Hearts:Emily}} >= 6": true,
+        }
+    },
+    {
+        "Action": "Include",
+        "LogName": "Haley - mid hearts",
+        "FromFile": "assets/default/bravo/Haley/mid.json",
+        "When": {
+            "EnableFor": "Haley",
+            "Query: {{Hearts:Haley}} >= 6": true,
+        }
+    },
+    {
+        "Action": "Include",
         "LogName": "Harvey - mid hearts",
         "FromFile": "assets/default/bravo/Harvey/mid.json",
         "When": {

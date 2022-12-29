@@ -3,7 +3,7 @@
     "Format": "1.28.0",
     "ConfigSchema": {
         "EnableFor": {
-            "AllowValues": "Lewis, Pam, Sebastian, Harvey",
+            "AllowValues": "Lewis, Pam, Sebastian, Harvey, Abigail",
             "AllowMultiple": true
         }
     },
@@ -26,6 +26,20 @@
         {
             "Name": "YearModulus",
             "Value": "{{Query: {{Year}} % 5}}"
+        },
+        {
+            "Name": "YearRemainder",
+            "Value": "",
+            "When": {
+                "Year": "1"
+            }
+        },
+        {
+            "Name": "YearRemainder",
+            "Value": "_2",
+            "When": {
+                "Year|contains=1": false
+            }
         }
     ],
     "Changes": [

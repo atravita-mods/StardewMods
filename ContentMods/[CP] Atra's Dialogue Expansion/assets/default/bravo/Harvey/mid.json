@@ -10,5 +10,14 @@
         "When": {
             "YearModulus": "2"
         }
-    }
+    },
+    {
+        "LogName": "Rain -- during winter.",
+        "Action": "EditData",
+        "Target": "Characters/Dialogue/rainy",
+        "When": {"Season": "winter"},
+        "Entries":{
+            "Harvey": "#$c .9#A cup of coffee would be quite nice right now.#Here. Have a cup of coffee. It's important to stay warm on a day like this.[395]",
+        }
+    },
 ]}

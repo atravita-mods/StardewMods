@@ -1,4 +1,15 @@
+// Primary major is accounting/business, would rather study history.
+
 {"Changes":[
+    {
+        "LogName": "Abigail mid-hearts",
+        "Action": "EditData",
+        "Target": "Characters/Dialogue/Abigail",
+        "Entries": {
+            "movieTheater": "Oh, a movie theater! @, would you like to go sometime?$h",
+            "7_2": "I hate group projects.$s"
+        },
+    },
     {
         "LogName": "Abigail mid-hearts",
         "Action": "EditData",
@@ -10,5 +21,23 @@
         "When": {
             "YearModulus": "2"
         }
-    }
+    },
+    {
+        "LogName": "Rain -- after secret woods",
+        "Action": "EditData",
+        "Target": "Characters/Dialogue/rainy",
+        "When": {"HasFlag": "beenToWoods"},
+        "Entries": {
+            "Abigail": "I love the woods in the rain.#$b#So peaceful, away from the rest of the town.#$e#I don't think anyone else goes out there."
+        }
+    },
+    {
+        "LogName": "Rain -- during winter.",
+        "Action": "EditData",
+        "Target": "Characters/Dialogue/rainy",
+        "When": {"Season": "winter"},
+        "Entries":{
+            "Abigail": "#$c .5#Sleet is no fun to be out in.#I wonder if it's warmer in the caves right now?"
+        }
+    },
 ]}

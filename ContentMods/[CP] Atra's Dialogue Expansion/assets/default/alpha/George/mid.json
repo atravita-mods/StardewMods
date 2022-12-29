@@ -5,7 +5,7 @@
         "Target": "Characters/Dialogue/rainy",
         "When": {"Season": "winter"},
         "Entries":{
-            "Maru": "Strange that it's raining in winter.",
+            "George": "{{Random: It's awful cold, isn't it? What a rotten day. ++ Why do I even bother getting out of bed when the day looks like this? ++ My hip aches.|inputSeparator=++}}"
         }
     },
 ]}

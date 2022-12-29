@@ -35,5 +35,14 @@
         "When": {
             "YearModulus": "4"
         }
-    }
+    },
+    {
+        "LogName": "Rain -- during winter.",
+        "Action": "EditData",
+        "Target": "Characters/Dialogue/rainy",
+        "When": {"Season": "winter"},
+        "Entries":{
+            "Sebastian": "Ocean gazing? In this weather?",
+        }
+    },
 ]}

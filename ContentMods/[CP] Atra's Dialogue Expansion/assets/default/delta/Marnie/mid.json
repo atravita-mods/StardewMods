@@ -5,7 +5,7 @@
         "Target": "Characters/Dialogue/rainy",
         "When": {"Season": "winter"},
         "Entries":{
-            "Maru": "Strange that it's raining in winter.",
+            "Marnie": "#$c .5#Let's get you inside and warmed up.#Days like this make me grateful for indoor heating.#$e#You did get your animals heaters, yes?",
         }
     },
 ]}

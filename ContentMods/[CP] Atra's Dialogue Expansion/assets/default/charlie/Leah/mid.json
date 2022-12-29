@@ -1,0 +1,11 @@
+{"Changes":[
+    {
+        "LogName": "Leah - mid hearts",
+        "Action": "EditData",
+        "Target": "Characters/Dialogue/Leah",
+        "Entries": {
+            "1{{YearRemainder}}": "Start of a new month, @! What are you planning on getting done?",
+        },
+        "When": {"YearModulus": 1}
+    }
+]}

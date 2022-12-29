@@ -3,8 +3,10 @@
     "Format": "1.28.0",
     "ConfigSchema": {
         "EnableFor": {
-            "AllowValues": "Lewis, Pam, Sebastian, Harvey, Abigail",
-            "AllowMultiple": true
+            "AllowValues": "Abigail, Alex, Caroline, Clint, Demetrius, Elliott, Emily, Gus, Haley, Harvey, Leah, Lewis, Maru, Pam, Robin, Sebastian",
+            "AllowMultiple": true,
+            "Default": "Abigail, Alex, Caroline, Clint, Demetrius, Elliott, Emily, Gus, Haley, Harvey, Leah, Lewis, Maru, Pam, Robin, Sebastian",
+            "AllowBlank": true
         }
     },
     "DynamicTokens": [

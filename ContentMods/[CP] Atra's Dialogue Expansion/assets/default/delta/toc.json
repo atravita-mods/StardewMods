@@ -16,5 +16,14 @@
             "EnableFor": "Caroline",
             "Query: {{Hearts:Caroline}} >= 6": true,
         }
+    },
+    {
+        "Action": "Include",
+        "LogName": "Pierre - mid hearts",
+        "FromFile": "assets/default/delta/Pierre/mid.json",
+        "When": {
+            "EnableFor": "Pierre",
+            "Query: {{Hearts:Pierre}} >= 6": true,
+        }
     }
 ]}

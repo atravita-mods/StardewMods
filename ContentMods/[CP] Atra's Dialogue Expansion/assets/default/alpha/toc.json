@@ -19,6 +19,15 @@
     },
     {
         "Action": "Include",
+        "LogName": "Gus - mid hearts",
+        "FromFile": "assets/default/alpha/Gus/mid.json",
+        "When": {
+            "EnableFor": "Gus",
+            "Query: {{Hearts:Gus}} >= 6": true,
+        }
+    },
+    {
+        "Action": "Include",
         "LogName": "Sebastian - mid hearts",
         "FromFile": "assets/default/alpha/Sebastian/mid.json",
         "When": {

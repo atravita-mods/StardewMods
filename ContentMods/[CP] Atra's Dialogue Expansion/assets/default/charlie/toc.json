@@ -43,5 +43,14 @@
             "EnableFor": "Robin",
             "Query: {{Hearts:Robin}} >= 6": true,
         }
+    },
+    {
+        "Action": "Include",
+        "LogName": "Sam - mid hearts",
+        "FromFile": "assets/default/charlie/Sam/mid.json",
+        "When": {
+            "EnableFor": "Sam",
+            "Query: {{Hearts:Sam}} >= 6": true,
+        }
     }
 ]}

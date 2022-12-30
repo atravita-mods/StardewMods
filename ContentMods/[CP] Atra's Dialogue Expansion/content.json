@@ -3,9 +3,9 @@
     "Format": "1.28.0",
     "ConfigSchema": {
         "EnableFor": {
-            "AllowValues": "Abigail, Alex, Caroline, Clint, Demetrius, Elliott, Emily, Gus, Haley, Harvey, Leah, Lewis, Maru, Pam, Robin, Sebastian",
+            "AllowValues": "Abigail, Alex, Caroline, Clint, Demetrius, Elliott, Emily, George, Gus, Haley, Harvey, Jodi, Leah, Lewis, Marnie, Maru, Pam, Pierre, Robin, Sandy, Sebastian",
             "AllowMultiple": true,
-            "Default": "Abigail, Alex, Caroline, Clint, Demetrius, Elliott, Emily, Gus, Haley, Harvey, Leah, Lewis, Maru, Pam, Robin, Sebastian",
+            "Default": "Abigail, Alex, Caroline, Clint, Demetrius, Elliott, Emily, George, Gus, Haley, Harvey, Jodi, Leah, Lewis, Marnie, Maru, Pam, Pierre, Robin, Sandy, Sebastian",
             "AllowBlank": true
         }
     },

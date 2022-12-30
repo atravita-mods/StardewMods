@@ -34,5 +34,14 @@
             "EnableFor": "Harvey",
             "Query: {{Hearts:Harvey}} >= 6": true,
         }
+    },
+    {
+        "Action": "Include",
+        "LogName": "Jodi - mid hearts",
+        "FromFile": "assets/default/bravo/Jodi/mid.json",
+        "When": {
+            "EnableFor": "Jodi",
+            "Query: {{Hearts:Jodi}} >= 6": true,
+        }
     }
 ]}

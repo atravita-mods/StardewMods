@@ -17,6 +17,9 @@
         "Entries": {
             "6_2": "I've got so much homework I need to do.$s",
             "8_2": "Linear algebra is kicking my ass.#$b#Say, @, you any good at math?",
+            "10_2": "Sam and I are thinking about going down to %place to catch a concert. You in?$h",
+            "12_2": "Ugh, I hate doing the dishes.$s",
+            "14_2": "Hiya, @, I don't have time to chat today, I've got a midterm to study for."
         },
         "When": {
             "YearModulus": "2"

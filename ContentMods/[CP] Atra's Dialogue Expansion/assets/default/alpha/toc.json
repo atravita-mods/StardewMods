@@ -19,6 +19,15 @@
     },
     {
         "Action": "Include",
+        "LogName": "Evelyn - mid hearts",
+        "FromFile": "assets/default/alpha/Evelyn/mid.json",
+        "When": {
+            "EnableFor": "Evelyn",
+            "Query: {{Hearts:Evelyn}} >= 6": true,
+        }
+    },
+    {
+        "Action": "Include",
         "LogName": "George - mid hearts",
         "FromFile": "assets/default/alpha/George/mid.json",
         "When": {

@@ -11,6 +11,7 @@ namespace MoreFertilizers.HarmonyPatches.Acquisition;
 internal static class VolcanoDungeonChest
 {
     [HarmonyPostfix]
+    [HarmonyPriority(Priority.VeryLow)]
     [HarmonyPatch(nameof(VolcanoDungeon.PopulateChest))]
     private static void PostfixPopulateChest(NetObjectList<Item> items, Random chest_random, int chest_type)
     {
@@ -37,7 +38,7 @@ internal static class VolcanoDungeonChest
             }
         }
 
-        if (ModEntry.SecretJojaFertilizerID != -1 && chest_random.NextDouble() < 0.001)
+        if (ModEntry.SecretJojaFertilizerID != -1 && chest_random.Next(1024) == 0)
         {
             items.Add(new SObject(ModEntry.SecretJojaFertilizerID, 1));
         }

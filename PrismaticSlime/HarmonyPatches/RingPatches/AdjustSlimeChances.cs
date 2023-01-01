@@ -21,7 +21,7 @@ internal static class AdjustSlimeChances
         {
             return chance;
         }
-        else if (ModEntry.RingManager.IsFarmerWearingRing(player, ModEntry.PrismaticSlimeRing))
+        else if (player.isWearingRing(ModEntry.PrismaticSlimeRing))
         {
             return Math.Clamp(chance * 5, 0, 1);
         }

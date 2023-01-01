@@ -61,8 +61,11 @@ internal sealed class ModEntry : Mod
         helper.Events.GameLoop.ReturnedToTitle += this.OnReturnedToTitle;
 
 #if DEBUG
-        helper.Events.GameLoop.DayStarted += this.OnDayStart;
-        helper.Events.GameLoop.SaveLoaded += this.LateSaveLoaded;
+        if (!helper.ModRegistry.IsLoaded("DigitalCarbide.SpriteMaster"))
+        {
+            helper.Events.GameLoop.DayStarted += this.OnDayStart;
+            helper.Events.GameLoop.SaveLoaded += this.LateSaveLoaded;
+        }
 #endif
     }
 

@@ -5,7 +5,6 @@ using System.Runtime.CompilerServices;
 
 using AtraBase.Toolkit;
 
-using AtraCore.Framework.IntegrationManagers;
 using AtraCore.Utilities;
 
 using AtraShared.ConstantsAndEnums;
@@ -469,11 +468,6 @@ internal sealed class ModEntry : Mod
     /// </summary>
     internal static ModConfig Config { get; private set; } = null!;
 
-    /// <summary>
-    /// Gets a handler that handles managing rings (and integration with Wear More Rings).
-    /// </summary>
-    internal static RingManager RingManager { get; private set; } = null!;
-
     /// <inheritdoc />
     public override void Entry(IModHelper helper)
     {
@@ -744,7 +738,6 @@ internal sealed class ModEntry : Mod
         }
         jsonAssets.LoadAssets(Path.Combine(this.Helper.DirectoryPath, "assets", "json-assets"), this.Helper.Translation);
 
-        RingManager = new(this.Monitor, this.Helper.Translation, this.Helper.ModRegistry);
         RadioactiveFertilizerHandler.Initialize(this.Helper.GameContent, this.Helper.ModRegistry, this.Helper.Translation);
 
         // Only register for events if JA pack loading was successful.

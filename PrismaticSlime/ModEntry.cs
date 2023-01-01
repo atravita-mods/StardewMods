@@ -1,5 +1,4 @@
-﻿using AtraCore.Framework.IntegrationManagers;
-using AtraShared.ConstantsAndEnums;
+﻿using AtraShared.ConstantsAndEnums;
 using AtraShared.Integrations;
 using AtraShared.Integrations.Interfaces;
 using AtraShared.Utils.Extensions;
@@ -23,11 +22,6 @@ internal sealed class ModEntry : Mod
     /// Gets the logger for this mod.
     /// </summary>
     internal static IMonitor ModMonitor { get; private set; } = null!;
-
-    /// <summary>
-    /// Gets wrapper that handles ring management.
-    /// </summary>
-    internal static RingManager RingManager { get; private set; } = null!;
 
 #pragma warning disable SA1201 // Elements should appear in the correct order - keeping fields near their accessors.
     private static int prismaticSlimeEgg = -1;
@@ -88,8 +82,6 @@ internal sealed class ModEntry : Mod
             }
             jsonAssets.LoadAssets(Path.Combine(this.Helper.DirectoryPath, "assets", "json-assets"), this.Helper.Translation);
         }
-
-        RingManager = new(this.Monitor, this.Helper.Translation, this.Helper.ModRegistry);
 
         this.Helper.Events.Content.AssetRequested += this.OnAssetRequested;
         this.Helper.Events.GameLoop.ReturnedToTitle += this.OnReturnedToTitle;

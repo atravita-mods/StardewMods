@@ -128,7 +128,7 @@ internal static class RadioactiveFertilizerHandler
     {
         random ??= RandomUtils.GetSeededRandom(9, (int)Game1.uniqueIDForThisGame);
 
-        if (random.Next(2) == 0)
+        if (random.Next(4) == 0)
         {
             return;
         }
@@ -138,7 +138,7 @@ internal static class RadioactiveFertilizerHandler
             return;
         }
 
-        if (!StardewSeasonsExtensions.TryParse(seasonstring, true, out var seasonEnum))
+        if (!StardewSeasonsExtensions.TryParse(seasonstring, true, out StardewSeasons seasonEnum))
         {
             ModEntry.ModMonitor.Log($"Invalid season found for radioactive fertilizer {seasonstring}", LogLevel.Error);
             return;
@@ -185,36 +185,34 @@ internal static class RadioactiveFertilizerHandler
     {
         WeightedManager<int>? manager = new();
 
-        Dictionary<string, string>? denylist = AssetEditor.GetRadioactiveExclusions();
+        HashSet<int> denylist = AssetEditor.GetRadioactiveExclusions();
 
         foreach ((int id, string data) in cropData)
         {
-            if (id == 885)
+            if (id == 885 || denylist.Contains(id))
             {
-                // fiber seeds.
+                // 885 - fiber seeds.
+                continue;
+            }
+
+            if (ModEntry.Config.BanRaisedSeeds && bool.TryParse(data.GetNthChunk('/', 7), out bool raised) && raised)
+            {
                 continue;
             }
 
             if (data.GetNthChunk('/', 1).Contains(season, StringComparison.OrdinalIgnoreCase)
                 && int.TryParse(data.GetNthChunk('/', 3), out int obj)
                 && Game1Wrappers.ObjectInfo.TryGetValue(obj, out string? objData)
-                && int.TryParse(objData.GetNthChunk('/', SObject.objectInfoPriceIndex), out int price))
+                && int.TryParse(objData.GetNthChunk('/', SObject.objectInfoPriceIndex), out int price)
+                && price > 0)
             {
                 ReadOnlySpan<char> name = objData.GetNthChunk('/', SObject.objectInfoNameIndex);
                 if (name.Contains("Qi", StringComparison.OrdinalIgnoreCase))
                 {
                     continue;
                 }
-                if (denylist.Count != 0)
-                {
-                    string str_name = name.ToString();
-                    if (denylist.ContainsKey(str_name))
-                    {
-                        continue;
-                    }
-                }
 
-                double weight = Math.Max(2500.0 / price, 1.0f);
+                double weight = Math.Clamp(2500.0 / price, 1.0f, 1000f);
                 manager.Add(weight, id);
             }
         }

@@ -28,7 +28,7 @@ internal static class LDUtils
 
         ReadOnlySpan<char> cat = data.GetNthChunk('/', SObject.objectInfoTypeIndex);
         int index = cat.GetIndexOfWhiteSpace();
-        if (index < 0 || !int.TryParse(cat[(index + 1)..], out int type))
+        if (index < 0 || !int.TryParse(cat[(index + 1)..], out int type) || type is not SObject.fertilizerCategory or SObject.SeedsCategory)
         {
             ModEntry.ModMonitor.Log($"{identifier} with {id} does not appear to be a seed or fertilizer, skipping.");
             return null;

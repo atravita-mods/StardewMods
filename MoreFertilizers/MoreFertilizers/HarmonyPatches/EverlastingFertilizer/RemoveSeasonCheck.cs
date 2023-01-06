@@ -87,7 +87,7 @@ internal static class RemoveSeasonCheck
         {
             for (int y = tileY - 2; y <= tileY + 2; y++)
             {
-                if (location.Objects.TryGetValue(new Vector2(x, y), out StardewValley.Object? obj)
+                if (location.Objects.TryGetValue(new Vector2(x, y), out SObject? obj)
                     && obj.bigCraftable.Value && obj.ParentSheetIndex == TempusGlobeID)
                 {
                     return true;

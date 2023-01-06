@@ -7,6 +7,7 @@ using AtraCore.Models;
 using AtraShared.Caching;
 using AtraShared.ConstantsAndEnums;
 using AtraShared.Utils;
+using AtraShared.Utils.Extensions;
 
 using StardewModdingAPI.Events;
 using StardewModdingAPI.Utilities;
@@ -63,6 +64,16 @@ internal static class AssetEditor
 
     private static readonly TickCache<bool> HasSeenBoat = new(static () => FarmerHelpers.HasAnyFarmerRecievedFlag("seenBoatJourney"));
 
+    private static HashSet<int>? denylist = null;
+
+    internal static void Reset(IReadOnlySet<IAssetName>? assets = null)
+    {
+        if (assets is null || assets.Contains(RADIOACTIVE_DENYLIST))
+        {
+            denylist = null;
+        }
+    }
+
     /// <summary>
     /// Initializes the AssetEditor.
     /// </summary>
@@ -107,7 +118,28 @@ internal static class AssetEditor
         }
     }
 
-    internal static Dictionary<string, string> GetRadioactiveExclusions() => Game1.content.Load<Dictionary<string, string>>(RADIOACTIVE_DENYLIST.BaseName);
+    internal static HashSet<int> GetRadioactiveExclusions()
+    {
+        if (denylist is not null)
+        {
+            return denylist;
+        }
+
+        ModEntry.ModMonitor.DebugOnlyLog("Resolving radioactive fertilizer denylist", LogLevel.Info);
+
+        HashSet<int> ret = new();
+        foreach (var item in Game1.content.Load<Dictionary<string, string>>(RADIOACTIVE_DENYLIST.BaseName).Keys)
+        {
+            int? id = MFUtilities.ResolveID(item);
+            if (id is not null)
+            {
+                ret.Add(id.Value);
+            }
+        }
+
+        denylist = ret;
+        return denylist;
+    }
 
     /// <summary>
     /// Handles editing special order dialogue. This is seperate so it's only

@@ -4,7 +4,7 @@
 #### Version 0.3.0 TODO items
 * Beverage fertilizer
     - Fruit trees (DGA, Automate?)
-* Tree Tapper's: Automate integration, maybe a droplet falling off the tapper???
+* Tree Tapper's: Automate integration.
 * Something for mushroom boxen? (1.6 - reduce to one day?)
 * Make good draw code for all of the fertilizers. (don't forget domesticated fish - maybe some more jumping...)
 * PR Pathos to make CJB pass in the correct fertilizer (b/c Everlasting)

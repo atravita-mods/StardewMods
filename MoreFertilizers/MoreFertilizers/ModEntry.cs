@@ -754,7 +754,7 @@ internal sealed class ModEntry : Mod
         this.Helper.Events.Input.ButtonPressed += this.OnButtonPressed;
 
         this.Helper.Events.Content.AssetRequested += static (_, e) => AssetEditor.Edit(e);
-        this.Helper.Events.Content.AssetsInvalidated += static (_, e) => RadioactiveFertilizerHandler.Reset(e.NamesWithoutLocale);
+        this.Helper.Events.Content.AssetsInvalidated += this.OnAssetInvalidated;
 
         if (this.Helper.ModRegistry.IsLoaded("atravita.SpecialOrdersExtended"))
         {
@@ -784,6 +784,13 @@ internal sealed class ModEntry : Mod
         }
 
         CropHarvestTranspiler.Initialize(this.Helper.ModRegistry);
+    }
+
+    /// <inheritdoc cref="IContentEvents.AssetsInvalidated"/>
+    private void OnAssetInvalidated(object? sender, AssetsInvalidatedEventArgs e)
+    {
+        RadioactiveFertilizerHandler.Reset(e.NamesWithoutLocale);
+        AssetEditor.Reset(e.NamesWithoutLocale);
     }
 
     /// <inheritdoc cref="IGameLoopEvents.DayStarted"/>

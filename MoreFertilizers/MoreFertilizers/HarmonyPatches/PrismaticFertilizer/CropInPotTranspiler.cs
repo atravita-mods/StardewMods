@@ -29,7 +29,7 @@ internal static class CropInPotTranspiler
     [MethodImpl(TKConstants.Hot)]
     private static Color GetPrismaticColor(Color prevcolor, Vector2 tileLocation)
     {
-        if (Game1.currentLocation?.Objects?.TryGetValue(tileLocation, out SObject? obj) == true && obj is IndoorPot pot
+        if (prevcolor != Color.White && Game1.currentLocation?.Objects?.TryGetValue(tileLocation, out SObject? obj) == true && obj is IndoorPot pot
             && pot.hoeDirt.Value is HoeDirt dirt && dirt.modData?.GetBool(CanPlaceHandler.PrismaticFertilizer) == true)
         {
             return Utility.GetPrismaticColor((int)(tileLocation.X + tileLocation.Y), 1);
@@ -37,7 +37,6 @@ internal static class CropInPotTranspiler
         return prevcolor;
     }
 
-    [HarmonyDebug]
     [HarmonyPatch(nameof(Crop.drawWithOffset))]
     private static IEnumerable<CodeInstruction>? Transpiler(IEnumerable<CodeInstruction> instructions, ILGenerator gen, MethodBase original)
     {
@@ -58,7 +57,7 @@ internal static class CropInPotTranspiler
                 new (OpCodes.Call, typeof(CropInPotTranspiler).GetCachedMethod(nameof(GetPrismaticColor), ReflectionCache.FlagTypes.StaticFlags)),
             });
 
-            helper.Print();
+            // helper.Print();
             return helper.Render();
         }
         catch (Exception ex)

@@ -29,7 +29,7 @@ internal static class CropInPotTranspiler
     [MethodImpl(TKConstants.Hot)]
     private static Color GetPrismaticColor(Color prevcolor, Vector2 tileLocation)
     {
-        if (Game1.currentLocation?.Objects?.TryGetValue(tileLocation, out StardewValley.Object? obj) == true && obj is IndoorPot pot
+        if (Game1.currentLocation?.Objects?.TryGetValue(tileLocation, out SObject? obj) == true && obj is IndoorPot pot
             && pot.hoeDirt.Value is HoeDirt dirt && dirt.modData?.GetBool(CanPlaceHandler.PrismaticFertilizer) == true)
         {
             return Utility.GetPrismaticColor((int)(tileLocation.X + tileLocation.Y), 1);

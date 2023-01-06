@@ -2,6 +2,7 @@
 using AtraBase.Toolkit.Extensions;
 using AtraBase.Toolkit.StringHandler;
 
+using AtraShared.ConstantsAndEnums;
 using AtraShared.Integrations;
 using AtraShared.Integrations.Interfaces;
 using AtraShared.Utils;
@@ -132,6 +133,12 @@ internal static class RadioactiveFertilizerHandler
             return;
         }
 
+        if (!StardewSeasonsExtensions.TryParse(seasonstring, true, out var seasonEnum))
+        {
+            ModEntry.ModMonitor.Log($"Invalid season found for radioactive fertilizer {seasonstring}", LogLevel.Error);
+            return;
+        }
+
         if (CropManagers[season] is null)
         {
             CropManagers[season] = GeneratedWeightedList(seasonstring, cropData);
@@ -145,7 +152,9 @@ internal static class RadioactiveFertilizerHandler
         }
 
         int crop = manager.GetValue(random);
-        if (cropData.TryGetValue(crop, out string? data) && HasSufficientTimeToGrow(profession, crop, data))
+
+        if (cropData.TryGetValue(crop, out string? data)
+            && (location.SeedsIgnoreSeasonsHere() || HasSufficientTimeToGrow(profession, crop, data, seasonEnum)))
         {
             ModEntry.ModMonitor.Log($"Replacing plant at {dirt.currentTileLocation} with {crop}.");
             dirt.destroyCrop(dirt.currentTileLocation, false, location);
@@ -202,14 +211,14 @@ internal static class RadioactiveFertilizerHandler
         return manager;
     }
 
-    private static bool HasSufficientTimeToGrow(Profession profession, int cropId, string cropData)
+    private static bool HasSufficientTimeToGrow(Profession profession, int cropId, string cropData, StardewSeasons season)
     {
         if (api is null)
         {
             int daysLeft = 28 - Game1.dayOfMonth;
-            foreach (var days in cropData.GetNthChunk('/', 0).StreamSplit(null, StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries))
+            foreach (SpanSplitEntry days in cropData.GetNthChunk('/', 0).StreamSplit(null, StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries))
             {
-                if (!int.TryParse(days, out var num) || num > daysLeft)
+                if (!int.TryParse(days, out int num) || num > daysLeft)
                 {
                     return false;
                 }
@@ -218,7 +227,7 @@ internal static class RadioactiveFertilizerHandler
 
             return true;
         }
-        else if (api.GetDays(profession, 0, cropId) > 28 - Game1.dayOfMonth)
+        else if (api.GetDays(profession, 0, cropId, season) > 28 - Game1.dayOfMonth)
         {
             return false;
         }

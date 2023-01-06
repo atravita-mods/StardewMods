@@ -129,7 +129,7 @@ public sealed class CanPlaceHandler : IMoreFertilizersAPI
         {
             if (terrain is HoeDirt dirt && dirt.crop is Crop crop && crop.programColored.Value && obj.ParentSheetIndex == ModEntry.PrismaticFertilizerID)
             {
-                bool ret = dirt.modData.ContainsKey(PrismaticFertilizer);
+                bool ret = !dirt.modData.ContainsKey(PrismaticFertilizer);
                 if (alert && !ret)
                 {
                     AlertPlayer();
@@ -185,7 +185,7 @@ public sealed class CanPlaceHandler : IMoreFertilizersAPI
             }
             else if (pot.hoeDirt.Value is HoeDirt dirt && dirt.crop is Crop crop && crop.programColored.Value && obj.ParentSheetIndex == ModEntry.PrismaticFertilizerID)
             {
-                bool ret = dirt.modData.ContainsKey(PrismaticFertilizer);
+                bool ret = !dirt.modData.ContainsKey(PrismaticFertilizer);
                 if (alert && !ret)
                 {
                     AlertPlayer();

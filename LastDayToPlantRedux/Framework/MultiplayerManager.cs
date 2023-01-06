@@ -33,7 +33,7 @@ internal static class MultiplayerManager
     /// <param name="registry">ModRegistry.</param>
     internal static void SetShouldCheckPrestiged(IModRegistry registry)
     {
-        shouldCheckPrestiged = registry.IsLoaded("DaLion.ImmersiveProfessions");
+        shouldCheckPrestiged = registry.IsLoaded("DaLion.ImmersiveProfessions") || registry.IsLoaded("DaLion.Overhaul");
     }
 
     /// <summary>

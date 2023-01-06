@@ -35,7 +35,6 @@
     <Compile Include="$(MSBuildThisFileDirectory)Integrations\Interfaces\IPregnancyRoleApi.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Integrations\Interfaces\ISaveAnywhereAPI.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Integrations\Interfaces\ISolidFoundationsAPI.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Integrations\Interfaces\IWearMoreRingsAPI.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Menuing\MenuingExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Content\RawTexData\RawDataImpl.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Content\RawTexData\RawDataRented.cs" />

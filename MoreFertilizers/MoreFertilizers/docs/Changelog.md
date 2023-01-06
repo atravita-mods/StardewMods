@@ -2,8 +2,6 @@
 =============
 
 #### Version 0.3.0 TODO items
-* Bush fertilizers
-    - Handle adding to shops and other acquisition methods.
 * Beverage fertilizer
     - Fruit trees (DGA, Automate?)
 * Tree Tapper's: Automate integration, maybe a droplet falling off the tapper???

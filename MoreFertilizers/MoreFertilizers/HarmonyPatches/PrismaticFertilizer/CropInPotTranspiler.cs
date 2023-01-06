@@ -37,6 +37,7 @@ internal static class CropInPotTranspiler
         return prevcolor;
     }
 
+    [HarmonyDebug]
     [HarmonyPatch(nameof(Crop.drawWithOffset))]
     private static IEnumerable<CodeInstruction>? Transpiler(IEnumerable<CodeInstruction> instructions, ILGenerator gen, MethodBase original)
     {
@@ -53,11 +54,11 @@ internal static class CropInPotTranspiler
             .Advance(3)
             .Insert(new CodeInstruction[]
             {
-                new(OpCodes.Ldarg_2),
-                new (OpCodes.Call, typeof(CropInGroundTranspiler).GetCachedMethod(nameof(GetPrismaticColor), ReflectionCache.FlagTypes.StaticFlags)),
+                new(OpCodes.Ldarg_2), // tile location
+                new (OpCodes.Call, typeof(CropInPotTranspiler).GetCachedMethod(nameof(GetPrismaticColor), ReflectionCache.FlagTypes.StaticFlags)),
             });
 
-            // helper.Print();
+            helper.Print();
             return helper.Render();
         }
         catch (Exception ex)

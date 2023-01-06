@@ -795,6 +795,7 @@ internal sealed class ModEntry : Mod
     {
         JojaSample.Reset();
         FishFoodHandler.DecrementAndSave(this.Helper.Data, this.Helper.Multiplayer);
+        RadioactiveFertilizerHandler.OnDayEnd();
     }
 
     #region JsonAssets

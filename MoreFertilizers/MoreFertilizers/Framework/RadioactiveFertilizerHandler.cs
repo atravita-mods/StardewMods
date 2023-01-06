@@ -112,7 +112,7 @@ internal static class RadioactiveFertilizerHandler
                 }
             }
 
-            foreach (StardewValley.Object? obj in location.Objects.Values)
+            foreach (SObject? obj in location.Objects.Values)
             {
                 if (obj is IndoorPot pot && pot.hoeDirt.Value is HoeDirt dirt && dirt.fertilizer.Value == ModEntry.RadioactiveFertilizerID)
                 {
@@ -129,6 +129,11 @@ internal static class RadioactiveFertilizerHandler
         random ??= RandomUtils.GetSeededRandom(9, (int)Game1.uniqueIDForThisGame);
 
         if (random.Next(2) == 0)
+        {
+            return;
+        }
+
+        if (dirt.crop is null || dirt.crop.dead.Value || dirt.crop.IsActuallyFullyGrown())
         {
             return;
         }
@@ -184,6 +189,12 @@ internal static class RadioactiveFertilizerHandler
 
         foreach ((int id, string data) in cropData)
         {
+            if (id == 885)
+            {
+                // fiber seeds.
+                continue;
+            }
+
             if (data.GetNthChunk('/', 1).Contains(season, StringComparison.OrdinalIgnoreCase)
                 && int.TryParse(data.GetNthChunk('/', 3), out int obj)
                 && Game1Wrappers.ObjectInfo.TryGetValue(obj, out string? objData)

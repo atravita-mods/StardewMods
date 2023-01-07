@@ -50,7 +50,7 @@ Additionally, fertilizers may be found by breaking barrels in the mines, while p
 Run SMAPI at least once with this mod installed to generate the `config.json`, or use [Generic Mod Config Menu](https://www.nexusmods.com/stardewvalley/mods/5098) to configure.
 
 * `MillProducesOrganic`: whether or not the mill's products should be organic.
-* 'WaterOverlayColor`: the color of the overlay tint on bodies of water for the fish foods.
+* `WaterOverlayColor`: the color of the overlay tint on bodies of water for the fish foods.
 * `RecolorBushes`: whether or not fertilized bushes should be recolored.
 * `RecolorFruitTrees`: whether or not fertilized fruit trees should be recolored.
 * `RecolorTrees`: whether or not fertilized trees should be recolored.
@@ -104,7 +104,7 @@ A `harmony_summary` would be greatly appreciated! If you go to the console and t
 * Fish ponds also slightly change color if Fish Food is applied on the farm, despite the fact that fish food does not affect fish ponds. There's realistically nothing I can do about this without tanking performance. I'd recommend [Pond Painter](https://www.nexusmods.com/stardewvalley/mods/4703).
 * There's no visual indicator for the Domesticated Fish Food. I tried a bunch of things and didn't like any of them.
 
-## Acknowledgements
+## Acknowledgments
 
 Many thanks to [Violetlizabet](https://www.nexusmods.com/stardewvalley/users/120958053) for helping me with the fertilizer sprites, Schneitizel for the French translation, Puffeeydii for the Chinese translation, CrisTortion for the German translation, and [CopperSun](https://www.nexusmods.com/stardewvalley/users/114762643) for helping me with the text!
 

@@ -57,10 +57,13 @@ internal sealed class ModConfig
     /// </summary>
     public bool GoldenCoconutsOffIsland { get; set; } = false;
 
+#if DEBUG
     /// <summary>
     /// Gets or sets a value indicating whether changes to alerts should happen.
     /// </summary>
     public bool AlertChanges { get; set; } = true;
+
+#endif
 
     private float phoneSpeedUpFactor = 1.0f;
 
@@ -129,17 +132,17 @@ internal sealed class ModConfig
     public ConfirmationEnum WarpsInSafeAreas { get; set; } = ConfirmationEnum.On;
 
     /// <summary>
-    /// Gets or sets a value indiciating whether or not to confirm warps in dangerous areas.
+    /// Gets or sets a value indicating whether or not to confirm warps in dangerous areas.
     /// </summary>
     public ConfirmationEnum WarpsInDangerousAreas { get; set; } = ConfirmationEnum.NotInMultiplayer;
 
     /// <summary>
-    /// Gets or sets a value indiciating whether or not to confirm the return scepter in safe areas.
+    /// Gets or sets a value indicating whether or not to confirm the return scepter in safe areas.
     /// </summary>
     public ConfirmationEnum ReturnScepterInSafeAreas { get; set; } = ConfirmationEnum.On;
 
     /// <summary>
-    /// Gets or sets a value indiciating whether or not to confirm the return scepter in dangerous areas.
+    /// Gets or sets a value indicating whether or not to confirm the return scepter in dangerous areas.
     /// </summary>
     public ConfirmationEnum ReturnScepterInDangerousAreas { get; set; } = ConfirmationEnum.NotInMultiplayer;
 
@@ -149,7 +152,7 @@ internal sealed class ModConfig
     public Dictionary<string, IsSafeLocationEnum> SafeLocationMap { get; set; } = new();
 
     /// <summary>
-    /// Gets or sets a value indicating whether or not to edit elliott's event.
+    /// Gets or sets a value indicating whether or not to edit Elliott's event.
     /// </summary>
     public bool EditElliottEvent { get; set; } = true;
  

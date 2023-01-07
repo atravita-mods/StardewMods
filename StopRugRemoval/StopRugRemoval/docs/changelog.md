@@ -14,6 +14,8 @@
 * Adds a way to flip fruit trees and crops. Yes I am this petty.
 * Leo no longer attends the Winter Star festival before he's moved to the mainland.
 * Schedule fixer will now detect infinite recursion and prevent those crashes as well.
+* Difficulty setting for the crane game.
+* Hopefully escaped children will cause fewer crashes?
 * Korean translation, thanks to [park4934](https://blog.naver.com/park971202/222878509680)!.
 
 #### Version 1.1.0

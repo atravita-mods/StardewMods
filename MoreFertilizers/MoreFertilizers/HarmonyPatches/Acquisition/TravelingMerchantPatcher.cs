@@ -1,6 +1,10 @@
 ﻿using AtraBase.Toolkit.Extensions;
 
+using AtraShared.Caching;
+
 using HarmonyLib;
+
+using MoreFertilizers.Framework;
 
 namespace MoreFertilizers.HarmonyPatches.Acquisition;
 
@@ -12,6 +16,8 @@ namespace MoreFertilizers.HarmonyPatches.Acquisition;
 [HarmonyPatch(typeof(Utility))]
 internal static class TravelingMerchantPatcher
 {
+    private static TickCache<bool> HasPlayerUnlockedBountiful = new(() => Game1.MasterPlayer.mailReceived.Contains(AssetEditor.BOUNTIFUL_BUSH_UNLOCK));
+
     [UsedImplicitly]
     [HarmonyPatch("generateLocalTravelingMerchantStock")]
     [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Harmony Convention")]
@@ -24,7 +30,7 @@ internal static class TravelingMerchantPatcher
             __result.Add(new SObject(ModEntry.SecretJojaFertilizerID, 1), new[] { (int)(2500 * Game1.player.difficultyModifier), 1 });
         }
 
-        if (ModEntry.BountifulBushID != -1 && Game1.currentSeason is "spring" or "fall")
+        if (ModEntry.BountifulBushID != -1 && Game1.currentSeason is "spring" or "fall" && HasPlayerUnlockedBountiful.GetValue())
         {
             __result.Add(new SObject(ModEntry.BountifulBushID, 1), new[] { 200, random.Next(1, 3) });
         }

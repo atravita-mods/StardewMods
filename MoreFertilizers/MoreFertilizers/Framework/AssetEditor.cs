@@ -26,6 +26,10 @@ internal static class AssetEditor
     /// </summary>
     internal const string ORGANICVEGGIEMAIL = "atravita_OrganicCrops_Reward";
 
+    internal const string BOUNTIFUL_BUSH_UNLOCK = "atravita_Bountiful_Bush";
+
+    internal const string GEORGE_EVENT = "atravita_George_Letter";
+
     /// <summary>
     /// Our special orders.
     /// </summary>
@@ -191,7 +195,10 @@ internal static class AssetEditor
     private static void EditMailImpl(IAssetData asset)
     {
         IAssetDataForDictionary<string, string>? editor = asset.AsDictionary<string, string>();
-        editor.Data[ORGANICVEGGIEMAIL] = $"@,^{I18n.Specialorder_Organic_Mail_Text()}^^   --{NPCCache.GetByVillagerName("Lewis")?.displayName ?? I18n.Lewis()}%item bigobject 272 %%[#]{I18n.Specialorder_Organic_Mail_Text()}";
+        editor.Data[ORGANICVEGGIEMAIL] = $"@,^{I18n.Specialorder_Organic_Mail_Text()}^^   --{NPCCache.GetByVillagerName("Lewis")?.displayName ?? I18n.Lewis()}%item bigobject 272 %% [#]{I18n.Specialorder_Organic_Mail_Text()}";
+        editor.Data[GEORGE_EVENT] = $"{I18n.George_Mail()}%item object {ModEntry.SeedyFertilizerID} 5 %% [#]{I18n.George_Mail_Title()}";
+        editor.Data[BOUNTIFUL_BUSH_UNLOCK] = $"{I18n.Bountiful_Bush_Mail()}%item object {ModEntry.BountifulBushID} 3 %% [#]{I18n.Bountiful_Bush_Mail_Title()}";
+
     }
 
     private static void EditLewisDialogueImpl(IAssetData asset)

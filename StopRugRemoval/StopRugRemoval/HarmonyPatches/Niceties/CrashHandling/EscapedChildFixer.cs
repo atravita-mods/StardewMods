@@ -20,9 +20,21 @@ internal static class EscapedChildFixer
             if (__instance.currentLocation is not FarmHouse)
             {
                 ModEntry.ModMonitor.Log($"Child {__instance.Name} seems to have escaped the farmhouse, sending them back.", LogLevel.Trace);
-                if (Game1.getLocationFromName("FarmHouse") is not FarmHouse house)
+
+                Farmer parent = Game1.MasterPlayer;
+
+                foreach (Farmer farmer in Game1.getAllFarmers())
                 {
-                    ModEntry.ModMonitor.Log($"Failed to find farmhouse?", LogLevel.Error);
+                    if (farmer.UniqueMultiplayerID == __instance.idOfParent.Value)
+                    {
+                        parent = farmer;
+                        break;
+                    }
+                }
+
+                if ((Utility.getHomeOfFarmer(parent) ?? Game1.getLocationFromName("FarmHouse")) is not FarmHouse house)
+                {
+                    ModEntry.ModMonitor.Log($"Failed to find farmhouse", LogLevel.Error);
                     return false;
                 }
 

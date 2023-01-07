@@ -8,6 +8,8 @@ namespace MoreFertilizers.Framework;
 /// </summary>
 internal sealed class ModConfig
 {
+    private bool banRaisedSeeds = false;
+
     /// <summary>
     /// Gets or sets a value indicating whether or not the mill should produce organic goods.
     /// </summary>
@@ -35,7 +37,18 @@ internal sealed class ModConfig
     public bool RecolorTrees { get; set; } = false;
 
     /// <summary>
-    /// Whether or not raised seeds should be banned from the radioactive fertilizer.
+    /// Gets or sets a value indicating whether or not raised seeds should be banned from the radioactive fertilizer.
     /// </summary>
-    public bool BanRaisedSeeds { get; set; } = false;
+    public bool BanRaisedSeeds
+    {
+        get => this.banRaisedSeeds;
+        set
+        {
+            if (value != this.banRaisedSeeds)
+            {
+                RadioactiveFertilizerHandler.Reset();
+            }
+            this.banRaisedSeeds = value;
+        }
+    }
 }

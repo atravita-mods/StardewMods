@@ -800,6 +800,16 @@ internal sealed class ModEntry : Mod
     /// <inheritdoc cref="IGameLoopEvents.DayEnding"/>
     private void OnDayEnd(object? sender, DayEndingEventArgs e)
     {
+        if (Game1.player.getFriendshipHeartLevelForNPC("George") >= 6 && Game1.player.mailReceived.Contains("georgeGifts"))
+        {
+            Game1.addMailForTomorrow(AssetEditor.GEORGE_EVENT);
+        }
+
+        if (Game1.getAllFarmers().Any(p => p.foragingLevel.Value >= 4))
+        {
+            Game1.addMailForTomorrow(AssetEditor.BOUNTIFUL_BUSH_UNLOCK);
+        }
+
         JojaSample.Reset();
         FishFoodHandler.DecrementAndSave(this.Helper.Data, this.Helper.Multiplayer);
         RadioactiveFertilizerHandler.OnDayEnd();

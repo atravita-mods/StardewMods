@@ -1,4 +1,6 @@
-﻿using AtraBase.Toolkit.Extensions;
+﻿using System.Runtime.CompilerServices;
+
+using AtraBase.Toolkit.Extensions;
 
 using AtraShared.ConstantsAndEnums;
 using AtraShared.Integrations;
@@ -12,7 +14,7 @@ namespace HighlightEmptyMachines.Framework;
 /// <summary>
 /// Handles the beehives.
 /// </summary>
-internal static class BetterBeehousesIntegration
+internal static class BeehouseHandler
 {
     private static IBetterBeehousesAPI? api;
 
@@ -34,6 +36,7 @@ internal static class BetterBeehousesIntegration
     /// Updates the status of beehives for the current location.
     /// </summary>
     /// <param name="location">The game location to update to.</param>
+    [MethodImpl(MethodImplOptions.AggressiveOptimization)]
     internal static void UpdateStatus(GameLocation? location)
     {
         if (location is null)
@@ -56,6 +59,6 @@ internal static class BetterBeehousesIntegration
             Status.Value = api.GetEnabledHere(location, Game1.GetSeasonForLocation(location) == "winter") ? MachineStatus.Enabled : MachineStatus.Invalid;
         }
 
-        ModEntry.ModMonitor.DebugOnlyLog($"Current status of beehives is {Status.Value}", LogLevel.Debug);
+        ModEntry.ModMonitor.DebugOnlyLog($"Current status of beehives is {Status.Value}");
     }
 }

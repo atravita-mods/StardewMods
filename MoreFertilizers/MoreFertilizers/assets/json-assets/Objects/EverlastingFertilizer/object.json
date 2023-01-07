@@ -4,8 +4,4 @@
   "Category": -19,
   "Edibility": -300,
   "TranslationKey": "everlasting-fertilizer",
-  "PurchasePrice": 500,
-  "PurchaseFrom": "Pierre",
-  "CanPurchase": true,
-  "PurchaseRequirements": [ "y 2", "e 2120303", "d Mon Tue Thu Fri Sat" ]
 }

@@ -103,9 +103,17 @@ public class MoreFertilizerIDs
     public int WisdomFertilizerID { get; set; } = -1;
 
     /// <summary>
-    /// Get or sets the ID number for the tree tapper fertilizer.
+    /// Gets or sets the ID number for the tree tapper fertilizer.
     /// </summary>
     public int TreeTapperFertilizerID { get; set; } = -1;
 
+    /// <summary>
+    /// Gets or sets the saved ID number for the seedy fertilizer.
+    /// </summary>
     public int SeedyFertilizerID { get; set; } = -1;
+
+    /// <summary>
+    /// Gets or sets the saved ID number for the radioactive fertilizer.
+    /// </summary>
+    public int RadioactiveFertilizerID { get; set; } = -1;
 }

@@ -1,6 +1,8 @@
 using AtraBase.Collections;
 using AtraBase.Toolkit;
 
+using AtraCore.Framework.Caches;
+
 using AtraShared.Utils;
 using AtraShared.Utils.Extensions;
 using StardewModdingAPI.Events;
@@ -82,6 +84,7 @@ internal static class AssetLoader
     /// Full list of fake assets.
     /// </summary>
     private static HashSet<string> myAssets = null!;
+    private static IAssetName groups = null!;
 
     /// <summary>
     /// Initialized the myAssets hashset.
@@ -89,12 +92,14 @@ internal static class AssetLoader
     /// <param name="helper">game content helper.</param>
     internal static void Init(IGameContentHelper helper)
     {
+        groups = helper.ParseAssetName(GroupsLocations);
+
         myAssets = new(StringComparer.OrdinalIgnoreCase)
         {
             helper.ParseAssetName(BartenderLocation).BaseName,
             helper.ParseAssetName(ExplorerLocation).BaseName,
             helper.ParseAssetName(MusicianLocation).BaseName,
-            helper.ParseAssetName(GroupsLocations).BaseName,
+            groups.BaseName,
             helper.ParseAssetName(ExclusionLocations).BaseName,
         };
     }
@@ -120,7 +125,7 @@ internal static class AssetLoader
             {
                 continue;
             }
-            if (Game1.getCharacterFromName(specialChar, mustBeVillager: true) is NPC npc)
+            if (NPCCache.GetByVillagerName(specialChar) is NPC npc)
             {
                 specialCharacters.Add(npc);
             }
@@ -157,7 +162,7 @@ internal static class AssetLoader
             HashSet<NPC> group = new();
             foreach (string charname in data[groupname].Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries))
             {
-                if (Game1.getCharacterFromName(charname) is NPC npc)
+                if (NPCCache.GetByVillagerName(charname) is NPC npc)
                 {
                     group.Add(npc);
                 }
@@ -201,7 +206,7 @@ internal static class AssetLoader
         Dictionary<string, string> data = Globals.GameContentHelper.Load<Dictionary<string, string>>(ExclusionLocations);
         foreach (string npcname in data.Keys)
         {
-            if (Game1.getCharacterFromName(npcname) is NPC npc)
+            if (NPCCache.GetByVillagerName(npcname) is NPC npc)
             {
                 exclusions[npc] = data[npcname].Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
             }
@@ -219,7 +224,7 @@ internal static class AssetLoader
     /// <param name="e">AssetRequestedEventArguments.</param>
     internal static void Load(AssetRequestedEventArgs e)
     {
-        if (e.NameWithoutLocale.IsEquivalentTo(GroupsLocations))
+        if (e.NameWithoutLocale.IsEquivalentTo(groups))
         {
             e.LoadFrom(GetDefaultGroups, AssetLoadPriority.Low);
         }

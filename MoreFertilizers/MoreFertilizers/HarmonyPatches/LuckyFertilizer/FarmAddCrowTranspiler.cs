@@ -75,7 +75,7 @@ internal static class FarmAddCrowTranspiler
             .DefineAndAttachLabel(out Label secondLabel)
             .Pop()
             .Advance(1)
-            .GetLabels(out var labelsToMove2)
+            .GetLabels(out IList<Label>? labelsToMove2)
             .Insert(codes.ToArray(), labelsToMove2)
             .Insert(new CodeInstruction[]
             {

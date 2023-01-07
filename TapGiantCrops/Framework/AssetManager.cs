@@ -5,32 +5,50 @@ using AtraCore.Framework.ItemManagement;
 using AtraShared.ConstantsAndEnums;
 
 using StardewModdingAPI.Events;
-using StardewModdingAPI.Utilities;
 
 namespace TapGiantCrops.Framework;
 
+/// <summary>
+/// A data class indicating an SObject with optional preserve values.
+/// </summary>
 public sealed class ObjectDefinition
 {
+    /// <summary>
+    /// Gets or sets identifier for the object.
+    /// </summary>
     public string Object { get; set; } = string.Empty;
 
+    /// <summary>
+    /// Gets or sets identifier for the preserve.
+    /// </summary>
     public string? Preserve { get; set; } = null;
 }
 
 /// <summary>
 /// Manages assets for this mod.
 /// </summary>
+[SuppressMessage("StyleCop.CSharp.OrderingRules", "SA1214:Readonly fields should appear before non-readonly fields", Justification = "Keeping relevant fields together.")]
 internal static class AssetManager
 {
-    private static readonly string ASSETPATH = PathUtilities.NormalizeAssetName("Mods/atravita.TapGiantCrops/TappedObjectOverride");
+    private static IAssetName assetName = null!;
 
     private static readonly Dictionary<int, SObject> OverridesCache = new();
-    private static Lazy<Dictionary<int, ObjectDefinition>> overrides = new(() => Game1.content.Load<Dictionary<int, ObjectDefinition>>(ASSETPATH));
+    private static Lazy<Dictionary<int, ObjectDefinition>> overrides = new(() => Game1.content.Load<Dictionary<int, ObjectDefinition>>(assetName.BaseName));
 
-    private static IAssetName? assetName = null;
+    /// <summary>
+    /// Initializes the asset manager.
+    /// </summary>
+    /// <param name="parser">Game content helper.</param>
+    internal static void Initialize(IGameContentHelper parser)
+    {
+        assetName = parser.ParseAssetName("Mods/atravita.TapGiantCrops/TappedObjectOverride");
+    }
 
-    private static IAssetName AssetName =>
-        assetName ??= ModEntry.GameContentHelper.ParseAssetName(ASSETPATH);
-
+    /// <summary>
+    /// Gets the relevant override item given a certain input parent sheet index.
+    /// </summary>
+    /// <param name="input">ParentSheetIndex.</param>
+    /// <returns>The tapper's product if an override is found.</returns>
     internal static SObject? GetOverrideItem(int input)
     {
         if (OverridesCache.TryGetValue(input, out SObject? obj))
@@ -73,15 +91,12 @@ internal static class AssetManager
         return null;
     }
 
-    /// <summary>
-    /// Loads assets for this mod.
-    /// </summary>
-    /// <param name="e">AssetRequestedEventArgs.</param>
+    /// <inheritdoc cref="IContentEvents.AssetRequested"/>
     internal static void Load(AssetRequestedEventArgs e)
     {
-        if (e.NameWithoutLocale.IsEquivalentTo(ASSETPATH))
+        if (e.NameWithoutLocale.IsEquivalentTo(assetName))
         {
-            e.LoadFrom(EmptyContainers.GetEmptyDictionary<int, string>, AssetLoadPriority.Exclusive);
+            e.LoadFrom(EmptyContainers.GetEmptyDictionary<int, ObjectDefinition>, AssetLoadPriority.Exclusive);
         }
     }
 
@@ -91,11 +106,11 @@ internal static class AssetManager
     /// <param name="assets">The assets to invalidate, or null to invalidate anyways.</param>
     internal static void Reset(IReadOnlySet<IAssetName>? assets = null)
     {
-        if (assets is null || assets.Contains(AssetName))
+        if (assets is null || assets.Contains(assetName))
         {
             if (overrides.IsValueCreated)
             {
-                overrides = new(() => Game1.content.Load<Dictionary<int, ObjectDefinition>>(ASSETPATH));
+                overrides = new(() => Game1.content.Load<Dictionary<int, ObjectDefinition>>(assetName.BaseName));
             }
             OverridesCache.Clear();
         }

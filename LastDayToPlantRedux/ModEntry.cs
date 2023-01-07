@@ -1,8 +1,14 @@
 ﻿using AtraShared.Integrations;
+using AtraShared.MigrationManager;
 using AtraShared.Utils.Extensions;
 using AtraShared.Utils.Shims;
+
 using LastDayToPlantRedux.Framework;
+
 using StardewModdingAPI.Events;
+using StardewModdingAPI.Utilities;
+
+using StardewValley.Menus;
 
 using AtraUtils = AtraShared.Utils.Utils;
 
@@ -11,15 +17,13 @@ namespace LastDayToPlantRedux;
 /// <inheritdoc />
 internal sealed class ModEntry : Mod
 {
+    private MigrationManager? migrator;
+    private readonly PerScreen<bool> hasSeeds = new(() => false);
+
     /// <summary>
     /// Gets the logger for this mod.
     /// </summary>
     internal static IMonitor ModMonitor { get; private set; } = null!;
-
-    /// <summary>
-    /// Gets the game content helper for this mod.
-    /// </summary>
-    internal static IGameContentHelper GameContentHelper { get; private set; } = null!;
 
     /// <summary>
     /// Gets the config instance for this mod.
@@ -31,53 +35,43 @@ internal sealed class ModEntry : Mod
     {
         // bind helpers.
         ModMonitor = this.Monitor;
-        GameContentHelper = this.Helper.GameContent;
+        I18n.Init(helper.Translation);
+        AssetManager.Initialize(helper.GameContent);
 
         Config = AtraUtils.GetConfigOrDefault<ModConfig>(helper, this.Monitor);
         helper.Events.GameLoop.GameLaunched += this.OnGameLaunched;
 
         helper.Events.GameLoop.SaveLoaded += this.OnSaveLoaded;
         helper.Events.GameLoop.DayStarted += this.OnDayStart;
-        helper.Events.GameLoop.ReturnedToTitle += this.OnReturnedToTile;
+        helper.Events.GameLoop.DayStarted += this.UpdateMailboxen;
+        helper.Events.GameLoop.ReturnedToTitle += this.OnReturnedToTitle;
+        helper.Events.Player.Warped += this.OnPlayerWarped;
 
-        helper.Events.Multiplayer.PeerConnected += (_, e) => MultiplayerManager.OnPlayerConnected(e);
-        helper.Events.Multiplayer.PeerDisconnected += (_, e) => MultiplayerManager.OnPlayerDisconnected(e);
+        helper.Events.Player.InventoryChanged += (_, e) => InventoryWatcher.Watch(e, helper.Data);
+        helper.Events.GameLoop.Saving += (_, _) => InventoryWatcher.SaveModel(helper.Data);
 
-        helper.Events.Content.AssetRequested += this.OnAssetRequested;
-        helper.Events.Content.AssetsInvalidated += this.OnAssetsInvalidated;
+        helper.Events.Multiplayer.PeerConnected += static (_, e) => MultiplayerManager.OnPlayerConnected(e);
+        helper.Events.Multiplayer.PeerDisconnected += static (_, e) => MultiplayerManager.OnPlayerDisconnected(e);
+
+        helper.Events.Content.AssetRequested += static (_, e) => AssetManager.Apply(e);
+        helper.Events.Content.AssetsInvalidated += static (_, e) => AssetManager.InvalidateCache(e);
     }
 
+    /// <inheritdoc />
+    public override object? GetApi() => new LastDayToPlantAPI();
+
+    /// <inheritdoc cref="IGameLoopEvents.ReturnedToTitle"/>
     [EventPriority(EventPriority.High + 10)]
-    private void OnReturnedToTile(object? sender, ReturnedToTitleEventArgs e)
+    private void OnReturnedToTitle(object? sender, ReturnedToTitleEventArgs e)
     {
+        CropAndFertilizerManager.RequestInvalidateCrops();
+        CropAndFertilizerManager.RequestInvalidateFertilizers();
         InventoryWatcher.ClearModel();
         MultiplayerManager.Reset();
-
-        this.Helper.Events.Player.InventoryChanged -= this.OnInventoryChange;
-        this.Helper.Events.GameLoop.Saving -= this.OnSaving;
     }
 
-    private void OnSaveLoaded(object? sender, SaveLoadedEventArgs e)
-    {
-        if (Config.CropsToDisplay == CropOptions.Purchaseable)
-        {
-            // set up JA integration
-        }
-
-        InventoryWatcher.LoadModel(this.Helper.Data);
-
-        this.Helper.Events.Player.InventoryChanged -= this.OnInventoryChange;
-        this.Helper.Events.Player.InventoryChanged += this.OnInventoryChange;
-
-        this.Helper.Events.GameLoop.Saving -= this.OnSaving;
-        this.Helper.Events.GameLoop.Saving += this.OnSaving;
-    }
-
-    private void OnDayStart(object? sender, DayStartedEventArgs e)
-    {
-         MultiplayerManager.UpdateOnDayStart(e);
-    }
-
+    /// <inheritdoc cref="IGameLoopEvents.GameLaunched"/>
+    [EventPriority(EventPriority.Low)]
     private void OnGameLaunched(object? sender, GameLaunchedEventArgs e)
     {
         MultiplayerManager.SetShouldCheckPrestiged(this.Helper.ModRegistry);
@@ -90,21 +84,107 @@ internal sealed class ModEntry : Mod
         {
             helper.Register(
                 reset: static () => Config = new(),
-                save: () => this.Helper.AsyncWriteConfig(this.Monitor, Config),
-                titleScreenOnly: true)
+                save: () => this.Helper.AsyncWriteConfig(this.Monitor, Config))
+            .AddParagraph(I18n.ModDescription)
             .GenerateDefaultGMCM(static () => Config);
         }
     }
 
-    private void OnAssetRequested(object? sender, AssetRequestedEventArgs e)
-        => AssetManager.Apply(e);
+    /// <inheritdoc cref="IGameLoopEvents.SaveLoaded"/>
+    [EventPriority(EventPriority.Low)]
+    private void OnSaveLoaded(object? sender, SaveLoadedEventArgs e)
+    {
+        // move the mail to the end so it's easier to find.
+        Game1.player.mailReceived.Remove(AssetManager.MailFlag);
+        Game1.player.mailReceived.Add(AssetManager.MailFlag);
 
-    private void OnAssetsInvalidated(object? sender, AssetsInvalidatedEventArgs e)
-        => AssetManager.InvalidateCache(e);
+        FarmerWatcher? watcher = new();
+        Game1.player.professions.OnArrayReplaced += watcher.Professions_OnArrayReplaced;
+        Game1.player.professions.OnElementChanged += watcher.Professions_OnElementChanged;
 
-    private void OnInventoryChange(object? sender, InventoryChangedEventArgs e)
-        => InventoryWatcher.Watch(e, this.Helper.Data);
+        if (Context.ScreenId == 0)
+        {
+            InventoryWatcher.LoadModel(this.Helper.Data);
 
-    private void OnSaving(object? sender, SavingEventArgs e)
-        => InventoryWatcher.SaveModel(this.Helper.Data);
+            this.migrator = new(this.ModManifest, this.Helper, this.Monitor);
+
+            if (!this.migrator.CheckVersionInfo())
+            {
+                this.Helper.Events.GameLoop.Saved += this.WriteMigrationData;
+            }
+            else
+            {
+                this.migrator = null;
+            }
+        }
+    }
+
+    /// <inheritdoc cref="IGameLoopEvents.DayStarted"/>
+    [EventPriority(EventPriority.Low)]
+    private void OnDayStart(object? sender, DayStartedEventArgs e)
+    {
+        if (Context.ScreenId != 0)
+        {
+            return;
+        }
+
+        bool hasSeeds = AssetManager.UpdateOnDayStart();
+        this.Helper.GameContent.InvalidateCacheAndLocalized("Data/mail");
+        this.hasSeeds.Value = hasSeeds;
+
+        if (Context.IsSplitScreen)
+        {
+            foreach (int? screen in this.Helper.Multiplayer.GetConnectedPlayers().Where(player => player.IsSplitScreen).Select(player => player.ScreenID))
+            {
+                if (screen is not null)
+                {
+                    this.hasSeeds.SetValueForScreen(screen.Value, hasSeeds);
+                }
+            }
+        }
+    }
+
+    /// <inheritdoc cref="IGameLoopEvents.DayStarted"/>
+    /// <remarks>Runs after <see cref="OnDayStart(object?, DayStartedEventArgs)"/>, used to populate the mailboxes in splitscreen.
+    /// Event priorities make sure that one runs first.</remarks>
+    [EventPriority(EventPriority.Low - 1000)]
+    private void UpdateMailboxen(object? sender, DayStartedEventArgs e)
+    {
+        Game1.mailbox.Remove(AssetManager.MailFlag);
+        if (Config.DisplayOption == DisplayOptions.InMailbox && this.hasSeeds.Value)
+        {
+            Game1.mailbox.Add(AssetManager.MailFlag);
+        }
+    }
+
+    /// <inheritdoc cref="IPlayerEvents.Warped"/>
+    [EventPriority(EventPriority.Low)]
+    private void OnPlayerWarped(object? sender, WarpedEventArgs e)
+    {
+        if (this.hasSeeds.Value && e.IsLocalPlayer && Context.IsPlayerFree && Config.DisplayOption == DisplayOptions.OnFirstWarp)
+        {
+            this.hasSeeds.Value = false;
+            Dictionary<string, string>? maildata = Game1.content.Load<Dictionary<string, string>>(AssetManager.DataMail.BaseName);
+
+            if (maildata.TryGetValue(AssetManager.MailFlag, out string? mail))
+            {
+                Game1.activeClickableMenu = new LetterViewerMenu(mail, AssetManager.MailFlag);
+            }
+        }
+    }
+
+    /// <summary>
+    /// Writes migration data then detaches the migrator.
+    /// </summary>
+    /// <param name="sender">Smapi thing.</param>
+    /// <param name="e">Arguments for just-before-saving.</param>
+    private void WriteMigrationData(object? sender, SavedEventArgs e)
+    {
+        if (this.migrator is not null)
+        {
+            this.migrator.SaveVersionInfo();
+            this.migrator = null;
+        }
+        this.Helper.Events.GameLoop.Saved -= this.WriteMigrationData;
+    }
 }

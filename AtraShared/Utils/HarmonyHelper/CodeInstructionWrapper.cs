@@ -166,6 +166,15 @@ public sealed class CodeInstructionWrapper
     /// </summary>
     public Type? LocalType => this.localType;
 
+    // op_implicits
+    public static implicit operator CodeInstructionWrapper(CodeInstruction instr) => new(instr);
+
+    public static implicit operator CodeInstructionWrapper(OpCode code) => new(code);
+
+    public static implicit operator CodeInstructionWrapper((OpCode code, object? operand) instr) => new(instr.code, instr.operand);
+
+    public static implicit operator CodeInstructionWrapper(SpecialCodeInstructionCases specialcase) => new(specialcase);
+
     /// <summary>
     /// Whether or not this CodeInstructionWrapper is a valid match to the code instruction.
     /// </summary>

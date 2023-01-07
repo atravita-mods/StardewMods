@@ -27,6 +27,7 @@ internal sealed class ModEntry : Mod
     {
         I18n.Init(helper.Translation);
         Globals.Initialize(helper, this.Monitor, this.ModManifest);
+        AssetEditor.Initialize(helper.GameContent);
 
         ConsoleCommands.Register(this.Helper.ConsoleCommands);
 
@@ -149,7 +150,7 @@ internal sealed class ModEntry : Mod
         try
         {
             // handle patches from annotations.
-            harmony.PatchAll();
+            harmony.PatchAll(typeof(ModEntry).Assembly);
             if (Globals.Config.DebugMode)
             {
                 ScheduleDebugPatches.ApplyPatches(harmony);

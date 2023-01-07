@@ -1,15 +1,25 @@
 ﻿using System.Reflection;
 using System.Reflection.Emit;
 using System.Runtime.CompilerServices;
+
 using AtraBase.Toolkit;
 using AtraBase.Toolkit.Reflection;
+
 using AtraCore.Framework.ReflectionManager;
+
 using AtraShared.Utils.Extensions;
 using AtraShared.Utils.HarmonyHelper;
+using AtraShared.Wrappers;
+
 using HarmonyLib;
+
 using Microsoft.Xna.Framework;
+
 using MoreFertilizers.Framework;
+
 using Netcode;
+
+using StardewValley.Characters;
 using StardewValley.Objects;
 using StardewValley.TerrainFeatures;
 
@@ -22,6 +32,15 @@ namespace MoreFertilizers.HarmonyPatches;
 [HarmonyPatch(typeof(Crop))]
 internal static class CropHarvestTranspiler
 {
+    private const string DGAModDataKey = "atravita.MoreFertilizers/DGASeedID";
+
+    private static bool HasQualityMod = false;
+
+    internal static void Initialize(IModRegistry registry)
+    {
+        HasQualityMod = registry.IsLoaded("spacechase0.AQualityMod");
+    }
+
     /// <summary>
     /// Applies a matching patch to DGA's crop.Harvest.
     /// </summary>
@@ -42,6 +61,7 @@ internal static class CropHarvestTranspiler
         }
     }
 
+    #region helpers
     [MethodImpl(TKConstants.Hot)]
     private static int GetQualityForJojaFert(int prevQual, HoeDirt? dirt)
     {
@@ -54,19 +74,32 @@ internal static class CropHarvestTranspiler
             }
             else if (dirt.fertilizer.Value == ModEntry.DeluxeJojaFertilizerID)
             {
-                return Game1.random.NextDouble() < 0.2 ? 2 : 1;
+                return Game1.random.Next(5) == 0 ? 2 : 1;
             }
             else if (dirt.fertilizer.Value == ModEntry.SecretJojaFertilizerID)
             {
-                return (Game1.random.NextDouble() < 0.5 && dirt.HasJojaCrop()) ? 1 : 0;
+                return HasQualityMod
+                    ? ((Game1.random.Next(4) != 0 || dirt.HasJojaCrop()) ? -2 : 1)
+                    : ((Game1.random.Next(2) == 0 && !dirt.HasJojaCrop()) ? 1 : 0);
             }
         }
         return prevQual;
     }
 
+    // Handles organic/beverage fertilizer for DGA.
     [MethodImpl(TKConstants.Hot)]
-    private static Item? MakeItemOrganic(Item? item, HoeDirt? dirt)
-        => item is SObject obj ? MakeObjectOrganic(obj, dirt) : item;
+    private static Item? HandleOrganicAndBeverageItem(Item? item, HoeDirt? dirt, JunimoHarvester? junimo)
+    {
+        HandleBeverageFertilizer(item, dirt, junimo);
+        return item is SObject obj ? HandleOrganicAndBeverageItem(obj, dirt, junimo) : item;
+    }
+
+    [MethodImpl(TKConstants.Hot)]
+    private static SObject HandleOrganicAndBeverage(SObject obj, HoeDirt? dirt, JunimoHarvester? junimo)
+    {
+        HandleBeverageFertilizer(obj, dirt, junimo);
+        return MakeObjectOrganic(obj, dirt);
+    }
 
     [MethodImpl(TKConstants.Hot)]
     private static SObject MakeObjectOrganic(SObject obj, HoeDirt? dirt)
@@ -87,20 +120,36 @@ internal static class CropHarvestTranspiler
                 obj.modData?.SetBool(CanPlaceHandler.Joja, true);
                 obj.MarkContextTagsDirty();
             }
-            else if (dirt.fertilizer.Value == ModEntry.MiraculousBeveragesID
-                && MiraculousFertilizerHandler.GetBeverage(obj.ParentSheetIndex) is SObject beverage)
-            {
-                Game1.createItemDebris(beverage, dirt.currentTileLocation * 64f, -1);
-            }
         }
         return obj;
+    }
+
+    // Drops the beverage if needed.
+    [MethodImpl(TKConstants.Hot)]
+    private static void HandleBeverageFertilizer(Item? item, HoeDirt? dirt, JunimoHarvester? junimo)
+    {
+        if (dirt is not null && dirt.fertilizer.Value != -1 && item is not null)
+        {
+            if (dirt.fertilizer.Value == ModEntry.MiraculousBeveragesID
+                && MiraculousFertilizerHandler.GetBeverage(item) is SObject beverage)
+            {
+                if (junimo is not null)
+                {
+                    junimo.tryToAddItemToHut(beverage);
+                }
+                else
+                {
+                    Game1.createItemDebris(beverage, dirt.currentTileLocation * 64f, -1);
+                }
+            }
+        }
     }
 
     [MethodImpl(TKConstants.Hot)]
     private static int IncrementForBountiful(int prevValue, HoeDirt? dirt)
     {
         if (ModEntry.BountifulFertilizerID != -1 && dirt?.fertilizer?.Value == ModEntry.BountifulFertilizerID
-            && Game1.random.NextDouble() < 0.1)
+            && Game1.random.Next(10) == 0)
         {
             ModEntry.ModMonitor.DebugOnlyLog("IncrementedOnceForBountiful", LogLevel.Info);
             return prevValue * 2;
@@ -108,6 +157,7 @@ internal static class CropHarvestTranspiler
         return prevValue;
     }
 
+    [MethodImpl(TKConstants.Hot)]
     private static int AdjustExperience(int prevValue, HoeDirt? dirt)
     {
         if (ModEntry.WisdomFertilizerID != -1 && dirt?.fertilizer?.Value == ModEntry.WisdomFertilizerID)
@@ -117,15 +167,42 @@ internal static class CropHarvestTranspiler
         return prevValue;
     }
 
+    [MethodImpl(TKConstants.Hot)]
     private static int AdjustRegrow(int prevValue, HoeDirt? dirt)
     {
         if (ModEntry.SecretJojaFertilizerID != -1 && dirt?.fertilizer?.Value == ModEntry.SecretJojaFertilizerID
-            && (Game1.random.NextDouble() < 0.5 || dirt.HasJojaCrop()))
+            && (Game1.random.Next(3) == 0 || dirt.HasJojaCrop()))
         {
-            return Math.Max(1, (int)(0.9 * prevValue));
+            return Math.Max(1, (int)((HasQualityMod ? 0.8 : 0.9) * prevValue));
         }
         return prevValue;
     }
+
+    [MethodImpl(TKConstants.Hot)]
+    private static void DropSeedsForSeedyFertilizer(int x, int y, HoeDirt? dirt, JunimoHarvester? jumino)
+    {
+        if (dirt?.crop is not null && Game1.random.Next(10) == 0
+            && ModEntry.SeedyFertilizerID != -1 && dirt.fertilizer?.Value == ModEntry.SeedyFertilizerID)
+        {
+            dirt.crop.InferSeedIndex();
+            int seedIndex = dirt.crop.rowInSpriteSheet.Value != Crop.rowOfWildSeeds ? dirt.crop.netSeedIndex.Value : dirt.crop.whichForageCrop.Value;
+
+            if (Game1Wrappers.ObjectInfo.ContainsKey(seedIndex))
+            {
+                SObject seeds = new(seedIndex, Game1.random.Next(3));
+                if (jumino is null)
+                {
+                    Game1.createItemDebris(seeds, new Vector2((x * Game1.tileSize) + 32, (y * Game1.tileSize) + 32), -1, dirt.currentLocation);
+                }
+                else
+                {
+                    jumino.tryToAddItemToHut(seeds);
+                }
+            }
+        }
+    }
+
+    #endregion
 
 #pragma warning disable SA1116 // Split parameters should start on line after declaration
     [HarmonyPatch(nameof(Crop.harvest))]
@@ -223,8 +300,25 @@ internal static class CropHarvestTranspiler
             .Insert(new CodeInstruction[]
             { // Insert function to make the object organic if needed.
                 new(OpCodes.Ldarg_3),
-                new (OpCodes.Call, typeof(CropHarvestTranspiler).GetCachedMethod(nameof(MakeObjectOrganic), ReflectionCache.FlagTypes.StaticFlags)),
+                new(OpCodes.Ldarg, 4),
+                new (OpCodes.Call, typeof(CropHarvestTranspiler).GetCachedMethod(nameof(HandleOrganicAndBeverage), ReflectionCache.FlagTypes.StaticFlags)),
             }, withLabels: firstSObjectCreationLabels)
+            .FindNext(new CodeInstructionWrapper[]
+            { // find the sunflower seeds block (421)
+                new (OpCodes.Ldarg_0),
+                new (OpCodes.Ldfld, typeof(Crop).GetCachedField(nameof(Crop.indexOfHarvest), ReflectionCache.FlagTypes.InstanceFlags)),
+                new (OpCodes.Call), // this is a op_Implicit
+                new (OpCodes.Ldc_I4, 421),
+            })
+            .GetLabels(out IList<Label>? seedyLabels)
+            .Insert(new CodeInstruction[]
+            { // and just insert the seed fertilizer just before it.
+                new(OpCodes.Ldarg_1),
+                new(OpCodes.Ldarg_2),
+                new(OpCodes.Ldarg_3),
+                new(OpCodes.Ldarg, 4),
+                new(OpCodes.Call, typeof(CropHarvestTranspiler).GetCachedMethod(nameof(DropSeedsForSeedyFertilizer), ReflectionCache.FlagTypes.StaticFlags)),
+            }, withLabels: seedyLabels)
             .FindNext(new CodeInstructionWrapper[]
             {// if (this.programColored), the second instance.
                 new(OpCodes.Ldarg_0),
@@ -274,7 +368,7 @@ internal static class CropHarvestTranspiler
                 new(OpCodes.Call, typeof(CropHarvestTranspiler).GetCachedMethod(nameof(AdjustExperience), ReflectionCache.FlagTypes.StaticFlags)),
             })
             .FindNext(new CodeInstructionWrapper[]
-            {
+            { // find this.dayOfCurrentPhase.Value = this.regrowAfterHarvest
                 new(OpCodes.Ldfld, typeof(Crop).GetCachedField(nameof(Crop.regrowAfterHarvest), ReflectionCache.FlagTypes.InstanceFlags)),
                 new(OpCodes.Call),
                 new(OpCodes.Callvirt, typeof(NetFieldBase<int, NetInt>).GetCachedProperty("Value", ReflectionCache.FlagTypes.InstanceFlags).GetSetMethod()),
@@ -297,6 +391,7 @@ internal static class CropHarvestTranspiler
         return null;
     }
 
+#warning - todo: transpile DGA for the seedy fertilizer.
     private static IEnumerable<CodeInstruction>? TranspileDGA(IEnumerable<CodeInstruction> instructions, ILGenerator gen, MethodBase original)
     {
         try
@@ -389,7 +484,8 @@ internal static class CropHarvestTranspiler
             .Insert(new CodeInstruction[]
             {
                 new(OpCodes.Ldarg_3),
-                new(OpCodes.Call, typeof(CropHarvestTranspiler).GetCachedMethod(nameof(MakeItemOrganic), ReflectionCache.FlagTypes.StaticFlags)),
+                new(OpCodes.Ldarg, 4),
+                new(OpCodes.Call, typeof(CropHarvestTranspiler).GetCachedMethod(nameof(HandleOrganicAndBeverageItem), ReflectionCache.FlagTypes.StaticFlags)),
             })
             .FindNext(new CodeInstructionWrapper[]
             { // Find the block where the player is given XP

@@ -1,4 +1,7 @@
 ﻿using System.Reflection;
+
+using AtraCore.Framework.Caches;
+
 using AtraShared.Integrations;
 using AtraShared.Utils.Extensions;
 using GingerIslandMainlandAdjustments.Configuration;
@@ -127,7 +130,7 @@ internal static class GenerateGMCM
         foreach ((string k, ScheduleStrictness v) in Globals.Config.ScheduleStrictness)
         {
             helper.AddEnumOption(
-                () => Game1.getCharacterFromName(k)?.displayName ?? k,
+                () => NPCCache.GetByVillagerName(k)?.displayName ?? k,
                 () => Globals.Config.ScheduleStrictness.TryGetValue(k, out ScheduleStrictness val) ? val : ScheduleStrictness.Default,
                 (value) => Globals.Config.ScheduleStrictness[k] = value);
         }

@@ -1,5 +1,7 @@
 ﻿using System.Collections.Concurrent;
 using System.Reflection;
+using System.Runtime.CompilerServices;
+
 using AtraBase.Collections;
 using AtraShared.Integrations.GMCMAttributes;
 using AtraShared.Integrations.Interfaces;
@@ -9,7 +11,6 @@ using CommunityToolkit.Diagnostics;
 using Microsoft.Xna.Framework;
 using StardewModdingAPI.Utilities;
 
-#pragma warning disable SA1124 // Do not use regions
 namespace AtraShared.Integrations;
 
 // TODO
@@ -22,7 +23,7 @@ public sealed class GMCMHelper : IntegrationHelper
 {
 #region constants
 
-    private const string MINVERSION = "1.8.0";
+    private const string MINVERSION = "1.9.0";
     private const string APIID = "spacechase0.GenericModConfigMenu";
 
 #pragma warning disable SA1310 // Field names should not contain underscore. Reviewed
@@ -55,6 +56,7 @@ public sealed class GMCMHelper : IntegrationHelper
     public GMCMHelper(IMonitor monitor, ITranslationHelper translation, IModRegistry modRegistry, IManifest manifest)
         : base(monitor, translation, modRegistry)
     {
+        Guard.IsNotNull(manifest);
         this.manifest = manifest;
     }
 
@@ -75,6 +77,7 @@ public sealed class GMCMHelper : IntegrationHelper
     /// Tries to grab a copy of GMCM Option's API.
     /// </summary>
     /// <returns>True if successful, false otherwise.</returns>
+    [MemberNotNullWhen(returnValue: true, members: nameof(gmcmOptionsApi))]
     public bool TryGetOptionsAPI() => this.TryGetAPI(GMCM_OPTIONS_ID, GMCM_OPTIONS_MINVERSION, out this.gmcmOptionsApi);
 
     /// <summary>
@@ -82,7 +85,7 @@ public sealed class GMCMHelper : IntegrationHelper
     /// </summary>
     /// <param name="reset">Reset callback.</param>
     /// <param name="save">Save callback.</param>
-    /// <param name="titleScreenOnly">Whether or not the config should only be availble from the title screen.</param>
+    /// <param name="titleScreenOnly">Whether or not the config should only be available from the title screen.</param>
     /// <returns>this.</returns>
     public GMCMHelper Register(Action reset, Action save, bool titleScreenOnly = false)
     {
@@ -100,7 +103,7 @@ public sealed class GMCMHelper : IntegrationHelper
     /// Adds a section title at this location.
     /// </summary>
     /// <param name="title">Function that gets the title.</param>
-    /// <param name="tooltip">Function, if any, for a tooltip.</param>
+    /// <param name="tooltip">Function, if any, for a tool-tip.</param>
     /// <returns>this.</returns>
     public GMCMHelper AddSectionTitle(Func<string> title, Func<string>? tooltip = null)
     {
@@ -154,9 +157,9 @@ public sealed class GMCMHelper : IntegrationHelper
     /// Adds a boolean option at a specific location.
     /// </summary>
     /// <param name="name">Function to get the name of the option.</param>
-    /// <param name="getValue">Getvalue callback.</param>
-    /// <param name="setValue">Setvalue callback.</param>
-    /// <param name="tooltip">Function to get the tooltip for the option.</param>
+    /// <param name="getValue">GetValue callback.</param>
+    /// <param name="setValue">SetValue callback.</param>
+    /// <param name="tooltip">Function to get the tool-tip for the option.</param>
     /// <param name="fieldId">FieldID.</param>
     /// <returns>this.</returns>
     public GMCMHelper AddBoolOption(
@@ -191,7 +194,7 @@ public sealed class GMCMHelper : IntegrationHelper
     {
         if (property.GetGetMethod() is not MethodInfo getter || property.GetSetMethod() is not MethodInfo setter)
         {
-            this.Monitor.DebugOnlyLog($"{property.Name} appears to be a misconfigured option!", LogLevel.Warn);
+            this.Monitor.DebugOnlyLog($"{property.Name} appears to be a mis-configured option!", LogLevel.Warn);
         }
         else
         {
@@ -289,7 +292,7 @@ public sealed class GMCMHelper : IntegrationHelper
     /// <param name="name">Function to get the name of the option.</param>
     /// <param name="getValue">GetValue callback.</param>
     /// <param name="setValue">SetValue callback.</param>
-    /// <param name="tooltip">Function to get the tooltip of the option.</param>
+    /// <param name="tooltip">Function to get the tool-tip of the option.</param>
     /// <param name="fieldId">FieldID.</param>
     /// <returns>this.</returns>
     public GMCMHelper AddEnumOption<TEnum>(
@@ -316,9 +319,9 @@ public sealed class GMCMHelper : IntegrationHelper
     /// </summary>
     /// <typeparam name="TEnum">Type of the enum.</typeparam>
     /// <param name="name">Name of the field.</param>
-    /// <param name="getValue">Getvalue callback.</param>
-    /// <param name="setValue">Setvalue callback.</param>
-    /// <param name="tooltip">Function to get the tooltip.</param>
+    /// <param name="getValue">GetValue callback.</param>
+    /// <param name="setValue">SetValue callback.</param>
+    /// <param name="tooltip">Function to get the tool-tip.</param>
     /// <param name="fieldId">FieldId.</param>
     /// <returns>this.</returns>
     public GMCMHelper AddEnumOption<TEnum>(
@@ -361,7 +364,7 @@ public sealed class GMCMHelper : IntegrationHelper
         }
         if (property.GetGetMethod() is not MethodInfo getter || property.GetSetMethod() is not MethodInfo setter)
         {
-            this.Monitor.DebugOnlyLog($"{property.Name} appears to be a misconfigured option!", LogLevel.Warn);
+            this.Monitor.DebugOnlyLog($"{property.Name} appears to be a mis-configured option!", LogLevel.Warn);
         }
         else
         {
@@ -417,7 +420,7 @@ public sealed class GMCMHelper : IntegrationHelper
     /// <param name="tooltip">Tooltip callback.</param>
     /// <param name="min">Minimum value.</param>
     /// <param name="max">Maximum value.</param>
-    /// <param name="interval">Itnerval. </param>
+    /// <param name="interval">Interval. </param>
     /// <param name="formatValue">Format function.</param>
     /// <param name="fieldId">FieldId.</param>
     /// <returns>this.</returns>
@@ -455,7 +458,7 @@ public sealed class GMCMHelper : IntegrationHelper
     /// <param name="min">Min.</param>
     /// <param name="max">Max.</param>
     /// <param name="interval">Interval.</param>
-    /// <param name="formatValue">Formmater.</param>
+    /// <param name="formatValue">Formatter.</param>
     /// <param name="fieldID">fieldId.</param>
     /// <returns>this.</returns>
     public GMCMHelper AddFloatOption<TModConfig>(
@@ -469,14 +472,14 @@ public sealed class GMCMHelper : IntegrationHelper
     {
         if (property.GetGetMethod() is not MethodInfo getter || property.GetSetMethod() is not MethodInfo setter)
         {
-            this.Monitor.DebugOnlyLog($"{property.Name} appears to be a misconfigured option!", LogLevel.Warn);
+            this.Monitor.DebugOnlyLog($"{property.Name} appears to be a mis-configured option!", LogLevel.Warn);
         }
         else
         {
             if (min is null || max is null || interval is null || formatValue is null)
             {
                 Attribute[]? attributes = Attribute.GetCustomAttributes(property);
-                foreach (var attribute in attributes)
+                foreach (Attribute? attribute in attributes)
                 {
                     if (attribute is GMCMRangeAttribute range)
                     {
@@ -581,7 +584,7 @@ public sealed class GMCMHelper : IntegrationHelper
             if (min is null || max is null || interval is null)
             {
                 Attribute[]? attributes = Attribute.GetCustomAttributes(property);
-                foreach (var attribute in attributes)
+                foreach (Attribute? attribute in attributes)
                 {
                     if (attribute is GMCMRangeAttribute range)
                     {
@@ -624,7 +627,7 @@ public sealed class GMCMHelper : IntegrationHelper
     /// <param name="name">Function to get the name.</param>
     /// <param name="getValue">GetValue callback.</param>
     /// <param name="setValue">SetValue callback.</param>
-    /// <param name="tooltip">Function to get the tooltip.</param>
+    /// <param name="tooltip">Function to get the tool-tip.</param>
     /// <param name="fieldId">FieldID.</param>
     /// <returns>this.</returns>
     public GMCMHelper AddKeybindList(
@@ -645,7 +648,7 @@ public sealed class GMCMHelper : IntegrationHelper
     }
 
     /// <summary>
-    /// Adds a keybindlist option at this point in the form.
+    /// Adds a keybind list option at this point in the form.
     /// </summary>
     /// <typeparam name="TModConfig">ModConfig's type.</typeparam>
     /// <param name="property">Property to process.</param>
@@ -659,7 +662,7 @@ public sealed class GMCMHelper : IntegrationHelper
     {
         if (property.GetGetMethod() is not MethodInfo getter || property.GetSetMethod() is not MethodInfo setter)
         {
-            this.Monitor.DebugOnlyLog($"{property.Name} appears to be a misconfigured option!", LogLevel.Warn);
+            this.Monitor.DebugOnlyLog($"{property.Name} appears to be a mis-configured option!", LogLevel.Warn);
         }
         else
         {
@@ -684,7 +687,7 @@ public sealed class GMCMHelper : IntegrationHelper
     /// <param name="name">Function to get the name.</param>
     /// <param name="getValue">GetValue callback.</param>
     /// <param name="setValue">SetValue callback.</param>
-    /// <param name="tooltip">Function to get the tooltip.</param>
+    /// <param name="tooltip">Function to get the tool-tip.</param>
     /// <param name="showAlpha">If GMCM Options is installed, show the alpha picker or not.</param>
     /// <param name="colorPickerStyle">GMCM Option's picker style.</param>
     /// <param name="fieldID">field ID.</param>
@@ -745,7 +748,7 @@ public sealed class GMCMHelper : IntegrationHelper
     {
         if (property.GetGetMethod() is not MethodInfo getter || property.GetSetMethod() is not MethodInfo setter)
         {
-            this.Monitor.DebugOnlyLog($"{property.Name} appears to be a misconfigured option!", LogLevel.Warn);
+            this.Monitor.DebugOnlyLog($"{property.Name} appears to be a mis-configured option!", LogLevel.Warn);
         }
         else
         {
@@ -780,7 +783,7 @@ public sealed class GMCMHelper : IntegrationHelper
     /// </summary>
     /// <param name="pageId">The page's ID.</param>
     /// <param name="linkText">Function to get the link text.</param>
-    /// <param name="tooltip">Function to get a tooltip, if wanted.</param>
+    /// <param name="tooltip">Function to get a tool-tip, if wanted.</param>
     /// <param name="pageTitle">Function to get the page's title.</param>
     /// <returns>this.</returns>
     public GMCMHelper AddPageHere(
@@ -857,7 +860,7 @@ public sealed class GMCMHelper : IntegrationHelper
         return this;
     }
 
-#region default
+    #region default
 
     /// <summary>
     /// Generates a basic GMCM config.
@@ -865,13 +868,14 @@ public sealed class GMCMHelper : IntegrationHelper
     /// <typeparam name="TModConfig">The type of the config.</typeparam>
     /// <param name="getConfig">A getter that gets the current config.</param>
     /// <returns>this.</returns>
+    [MethodImpl(MethodImplOptions.AggressiveOptimization)]
     public GMCMHelper GenerateDefaultGMCM<TModConfig>(Func<TModConfig> getConfig)
     {
         List<PropertyInfo> uncategorized = new();
         DefaultDict<(int order, string name), List<PropertyInfo>> categories = new();
 
         // look through, assign to categories.
-        foreach (var property in typeof(TModConfig).GetProperties())
+        foreach (PropertyInfo? property in typeof(TModConfig).GetProperties())
         {
             if (Attribute.GetCustomAttribute(property, typeof(GMCMDefaultIgnoreAttribute)) is not null)
             {
@@ -887,7 +891,7 @@ public sealed class GMCMHelper : IntegrationHelper
             }
         }
 
-        foreach (var prop in uncategorized)
+        foreach (PropertyInfo? prop in uncategorized)
         {
             this.ProcessProperty(getConfig, prop);
         }
@@ -949,4 +953,3 @@ public sealed class GMCMHelper : IntegrationHelper
     }
 #endregion
 }
-#pragma warning restore SA1124 // Do not use regions

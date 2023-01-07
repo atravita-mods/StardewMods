@@ -1,4 +1,6 @@
-﻿using HarmonyLib;
+﻿using AtraShared.Utils.Extensions;
+
+using HarmonyLib;
 using Microsoft.Xna.Framework;
 using StardewValley.Monsters;
 using StardewValley.Objects;
@@ -51,7 +53,12 @@ internal static class PostfixBigSlimeConstructor
         {
             if (__result[i].ParentSheetIndex == ModEntry.PrismaticSlimeRing)
             {
-                var oldring = __result[i];
+                if (__result[i] is not SObject oldring || oldring.bigCraftable.Value || oldring.GetType() != typeof(SObject))
+                {
+                    continue;
+                }
+
+                ModEntry.ModMonitor.DebugOnlyLog("Fixing ring to be prismatic ring");
                 __result[i] = new Ring(ModEntry.PrismaticSlimeRing);
 
                 foreach ((string k, string v) in oldring.modData.Pairs)

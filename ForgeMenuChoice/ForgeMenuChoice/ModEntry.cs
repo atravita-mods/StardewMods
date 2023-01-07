@@ -1,13 +1,20 @@
 ﻿using AtraBase.Toolkit.Reflection;
+
 using AtraCore.Framework.ReflectionManager;
+
 using AtraShared.ConstantsAndEnums;
 using AtraShared.Integrations;
 using AtraShared.Utils;
 using AtraShared.Utils.Extensions;
+
 using ForgeMenuChoice.HarmonyPatches;
+
 using HarmonyLib;
+
 using Microsoft.Xna.Framework.Graphics;
+
 using StardewModdingAPI.Events;
+
 using AtraUtils = AtraShared.Utils.Utils;
 
 namespace ForgeMenuChoice;
@@ -63,6 +70,7 @@ internal sealed class ModEntry : Mod
         InputHelper = helper.Input;
 
         I18n.Init(helper.Translation);
+        AssetLoader.Initialize(helper.GameContent);
         Config = AtraUtils.GetConfigOrDefault<ModConfig>(helper, this.Monitor);
 
         helper.Events.GameLoop.GameLaunched += this.OnGameLaunched;
@@ -87,12 +95,7 @@ internal sealed class ModEntry : Mod
         AssetLoader.Refresh();
     }
 
-    /// <summary>
-    /// Things to run after all mods are initialized.
-    /// And the game is launched.
-    /// </summary>
-    /// <param name="sender">SMAPI.</param>
-    /// <param name="e">Event arguments.</param>
+    /// <inheritdoc cref="IGameLoopEvents.GameLaunched"/>
     /// <remarks>We must wait until GameLaunched to patch in order to patch Spacecore.</remarks>
     private void OnGameLaunched(object? sender, GameLaunchedEventArgs e)
     {
@@ -113,7 +116,7 @@ internal sealed class ModEntry : Mod
     {
         try
         {
-            harmony.PatchAll();
+            harmony.PatchAll(typeof(ModEntry).Assembly);
 
             if (this.Helper.ModRegistry.Get("Goldenrevolver.EnchantableScythes") is IModInfo sycthes)
             {

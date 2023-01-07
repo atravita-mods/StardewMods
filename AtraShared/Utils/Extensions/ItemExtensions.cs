@@ -11,7 +11,7 @@ public static class ItemExtensions
         Guard.IsNotNull(item);
         Guard.IsNotNull(tagList);
 
-        foreach (var tag in tagList.StreamSplit(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries))
+        foreach (SpanSplitEntry tag in tagList.StreamSplit(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries))
         {
             if (!item.CheckOrTag(tag))
             {
@@ -24,7 +24,7 @@ public static class ItemExtensions
 
     private static bool CheckOrTag(this Item item, ReadOnlySpan<char> split)
     {
-        foreach (var tag in split.StreamSplit('/', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries))
+        foreach (SpanSplitEntry tag in split.StreamSplit('/', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries))
         {
             if (item.HasContextTag(tag))
             {

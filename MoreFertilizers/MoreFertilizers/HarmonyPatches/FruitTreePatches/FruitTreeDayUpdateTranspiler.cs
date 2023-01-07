@@ -44,6 +44,7 @@ internal static class FruitTreeDayUpdateTranspiler
             if (tree.modData?.GetInt(CanPlaceHandler.FruitTreeFertilizer) is int result
                 && Game1.random.NextDouble() <= 0.1 * result)
             {
+                ModEntry.ModMonitor.LogIfVerbose(() => $"Speeding up fruit tree at {tree.currentTileLocation}");
                 return 1;
             }
         }

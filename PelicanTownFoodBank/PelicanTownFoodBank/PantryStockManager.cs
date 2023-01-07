@@ -1,5 +1,6 @@
 ﻿using AtraBase.Toolkit.StringHandler;
 
+using AtraShared.Utils;
 using AtraShared.Wrappers;
 
 using Microsoft.Xna.Framework;
@@ -76,7 +77,7 @@ internal static class PantryStockManager
     /// <returns>The daily inventory.</returns>
     internal static List<int> SetUpInventory()
     {
-        Random seededRandom = new((int)(Game1.uniqueIDForThisGame * 2) + (int)(Game1.stats.DaysPlayed * 40));
+        Random seededRandom = RandomUtils.GetSeededRandom(6, "atravita.CCOverhaul");
         List<int> neededIngredients = GetNeededIngredients();
         (List<int> cookingIngredients, List<int> cookedItems) = GetOtherSellables();
         Utility.Shuffle(seededRandom, neededIngredients);

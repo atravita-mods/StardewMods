@@ -1,11 +1,14 @@
-﻿using AtraShared.Menuing;
-using AtraShared.Utils.Extensions;
+﻿using AtraShared.Utils.Extensions;
 
 using StardewModdingAPI.Events;
 
 using StardewValley.TerrainFeatures;
 
 namespace StopRugRemoval.Framework.Niceties;
+
+/// <summary>
+/// Handles flipping crops.
+/// </summary>
 internal static class CropAndTreeFlipper
 {
     /// <summary>

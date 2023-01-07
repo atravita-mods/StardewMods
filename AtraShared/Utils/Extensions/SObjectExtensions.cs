@@ -19,6 +19,11 @@ public static class SObjectExtensions
     public static bool IsTrashItem(this SObject obj)
         => obj is not null && !obj.bigCraftable.Value && (obj.ParentSheetIndex >= 168 && obj.ParentSheetIndex < 173);
 
+    /// <summary>
+    /// Returns true for an item that would be considered alcohol.
+    /// </summary>
+    /// <param name="obj">SObject.</param>
+    /// <returns>True if alcohol.</returns>
     public static bool IsAlcoholItem(this SObject obj)
     {
         return obj.HasContextTag("alcohol_item") || obj.Name.Contains("Beer") || obj.Name.Contains("Wine") || obj.Name.Contains("Mead") || obj.Name.Contains("Pale Ale");
@@ -101,13 +106,13 @@ public static class SObjectExtensions
 
             // vanilla removes the word "Recipe" from the end
             // because ???
-            int idx = recipeName.IndexOf("Recipe");
+            int idx = recipeName.LastIndexOf("Recipe");
             if (idx > 0)
             {
-                recipeName = recipeName[..(idx - 1)];
+                recipeName = recipeName[.. (idx - 1)];
             }
 
-            return obj.Category == -7
+            return obj.Category == SObject.CookingCategory
                 ? Game1.player.cookingRecipes.TryAdd(recipeName, 0)
                 : Game1.player.craftingRecipes.TryAdd(recipeName, 0);
         }

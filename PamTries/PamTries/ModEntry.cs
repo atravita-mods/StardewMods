@@ -1,4 +1,5 @@
-﻿using AtraCore.Utilities;
+﻿using AtraCore.Framework.Caches;
+using AtraCore.Utilities;
 
 using AtraShared.Integrations;
 using AtraShared.Integrations.Interfaces.ContentPatcher;
@@ -40,6 +41,7 @@ internal sealed class ModEntry : Mod
     {
         I18n.Init(helper.Translation);
         ScheduleUtilityFunctions = new(this.Monitor, this.Helper.Translation);
+        AssetManager.Initialize(helper.GameContent);
 
         ModMonitor = this.Monitor;
 
@@ -61,7 +63,7 @@ internal sealed class ModEntry : Mod
 #if DEBUG
             BusDriverTranspile.ApplyPatch(harmony);
 #endif
-            harmony.PatchAll();
+            harmony.PatchAll(typeof(ModEntry).Assembly);
         }
         catch (Exception ex)
         {
@@ -71,7 +73,9 @@ internal sealed class ModEntry : Mod
     }
 
     private void DayStarted(object? sender, DayStartedEventArgs e)
-        => PTUtilities.PopulateLexicon(this.Helper.GameContent);
+    {
+        PTUtilities.PopulateLexicon(this.Helper.GameContent);
+    }
 
     [EventPriority(EventPriority.High)]
     private void SaveLoaded(object? sender, SaveLoadedEventArgs e)
@@ -96,6 +100,16 @@ internal sealed class ModEntry : Mod
         else
         {
             this.migrator = null;
+        }
+
+        if (Context.IsMainPlayer)
+        {
+            if (Game1.getLocationFromName("Trailer_Big") is GameLocation bigtrailer && bigtrailer.Objects.TryGetValue(new Vector2(26, 9), out var sign)
+                && sign.bigCraftable.Value && sign.ParentSheetIndex == 34)
+            {
+                this.Monitor.Log($"Preventing player from stealing Pam's Yoba shrine.");
+                sign.Fragility = SObject.fragility_Indestructable;
+            }
         }
     }
 
@@ -170,9 +184,10 @@ internal sealed class ModEntry : Mod
             moodchances[0] = 0;
             moodchances[1] = 0;
         }
-        else if (Game1.getCharacterFromName("Penny")?.getSpouse() is Farmer spouse
-                 && spouse.friendshipData["Penny"].IsMarried()
-                 && spouse.friendshipData["Penny"].Points <= 2000)
+        else if (NPCCache.GetByVillagerName("Penny")?.getSpouse() is Farmer spouse
+            && spouse.friendshipData.TryGetValue("Penny", out Friendship? friendship)
+            && friendship.IsMarried()
+            && friendship.Points <= 2000)
         {// marriage penalty
             moodchances[0] = 0.4;
             moodchances[1] = 0.8;
@@ -208,11 +223,10 @@ internal sealed class ModEntry : Mod
         }
     }
 
-    /// <summary>
+    /// <inheritdoc cref="IGameLoopEvents.DayEnding"/>
+    /// <remarks>
     /// Undoes the changes to Pam's sprite at the end of the day, in case player sleeps while Pam fishes. Also, implements rehab invisibility.
-    /// </summary>
-    /// <param name="sender">SMAPI.</param>
-    /// <param name="args">Day end argmuments.</param>
+    /// </remarks>
     private void DayEnd(object? sender, DayEndingEventArgs args)
     {
         PTUtilities.SyncConversationTopics(SyncedConversationTopics);
@@ -226,12 +240,7 @@ internal sealed class ModEntry : Mod
         }
 
         // reset Pam's sprite
-        NPC? pam = Game1.getCharacterFromName("Pam");
-        if (pam is null)
-        {
-            this.Monitor.Log("Pam could not be found?!?");
-        }
-        else
+        if (NPCCache.GetByVillagerName("Pam") is NPC pam)
         {
             pam.Sprite.SpriteHeight = 32;
             pam.Sprite.SpriteWidth = 16;
@@ -249,12 +258,17 @@ internal sealed class ModEntry : Mod
             // bad marriage penalty. Consider implementing divorce.
             if (Context.IsMainPlayer)
             {
-                if (Game1.getCharacterFromName("Penny").getSpouse() is Farmer pennySpouse && pennySpouse.friendshipData["Penny"].Points <= 2000)
+                if (NPCCache.GetByVillagerName("Penny")?.getSpouse() is Farmer pennySpouse
+                    && (!pennySpouse.friendshipData.TryGetValue("Penny", out Friendship? friendship) || friendship.Points <= 2000))
                 {
                     pennySpouse.changeFriendship(-50, pam);
                     ModMonitor.Log("Bad marriage penalty, 50 friendship lost with Pam", LogLevel.Trace);
                 }
             }
+        }
+        else
+        {
+            this.Monitor.Log("Pam could not be found?!?");
         }
 
         // Ensure the master player is synced.

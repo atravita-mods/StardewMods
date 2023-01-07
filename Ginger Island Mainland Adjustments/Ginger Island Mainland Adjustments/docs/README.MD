@@ -11,7 +11,7 @@ Certain behaviors of the mod can be altered by using Content Patcher to patch in
 
 ```js
 {
-    "Format": "1.24.0",
+    "Format": "1.28.0",
     "Changes": [
         {
             "Action": "EditData",
@@ -30,7 +30,7 @@ The following data is what this mod will look for:
 
 ```js
 {
-    "Format": "1.24.0",
+    "Format": "1.28.0",
     "Changes": [
         {
             "Action": "EditData",

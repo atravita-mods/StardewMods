@@ -1,14 +1,22 @@
 ﻿using System.Reflection;
 using System.Reflection.Emit;
+
 using System.Runtime.CompilerServices;
+
 using AtraBase.Toolkit;
+
 using AtraCore.Framework.ReflectionManager;
+
 using AtraShared.Utils.Extensions;
 using AtraShared.Utils.HarmonyHelper;
+
 using HarmonyLib;
+
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+
 using MoreFertilizers.Framework;
+
 using StardewValley.TerrainFeatures;
 
 namespace MoreFertilizers.HarmonyPatches.BushFertilizers;
@@ -41,7 +49,7 @@ internal static class BushDrawTranspiler
                 return Color.LawnGreen;
             }
         }
-        if (bush.size.Value == Bush.mediumBush)
+        else if (bush.size.Value == Bush.mediumBush)
         {
 #warning - fix this to be less dumb in 1.6
             if (bush.modData?.GetBool(CanPlaceHandler.BountifulBush) == true)

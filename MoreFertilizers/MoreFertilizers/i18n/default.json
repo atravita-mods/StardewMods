@@ -8,7 +8,12 @@
   "RecolorBushes.title": "Recolor Bushes",
   "RecolorBushes.description": "If enabled, bushes will change color when they're fertilized.",
   "RecolorFruitTrees.title": "Recolor Fruit Trees",
-  "RecolorFruitTrees.description": "Whether or not fruit trees should be tinted to show that they've been fertilized",
+  "RecolorFruitTrees.description": "Whether or not fruit trees should be tinted to show that they've been fertilized.",
+  "RecolorTrees.title": "Recolor Trees",
+  "RecolorTrees.description": "Whether or not non-fruit trees should be tinted to show that they've been fertilized.",
+
+  "BanRaisedSeeds.title": "Ban Raised Seeds",
+  "BanRaisedSeeds.description": "Whether or not raised seeds should be banned from the radioactive fertilizer.",
 
   // For GMCM
   "IllFormatedConfig": "Config file seems ill-formated, using default. Please use Generic Mod Config Menu to configure.",
@@ -17,6 +22,12 @@
 
   // Appended to the name of organic objects.
   "organic": "(Organic)",
+
+  // mail
+  "bountiful.bush.mail": "...with this fertilizer bushes will have longer producing seasons...I hope we can make a deal....[water staining obscures the rest of the message]",
+  "bountiful.bush.mail.title": "A Scrap of Paper",
+  "george.mail": "@, you've been a better friend than this old man could have ever expected. Think I've got something that might be interesting to you.^^-George. PS - Got Robin to handle the logistics for me, so if you want more talk to her.",
+  "george.mail.title":  "A Letter From George",
 
   // Joja free sample dialogue.
   "joja.event.0": "Welcome to JojaMart, @! May I interest you in some of our patented fertilizer? Here, have some!",
@@ -35,7 +46,7 @@
 
   // Item names and descriptions.
   "bountiful-bush-fertilizer.description": "Your bushes will produce like they've never done before!",
-  "bountiful-bush-fertilizer.title": "Bountiful Bush Fertilizer.",
+  "bountiful-bush-fertilizer.name": "Bountiful Bush Fertilizer.",
 
   "bountiful-fertilizer.description": "Use may double the number of crops received at harvest.",
   "bountiful-fertilizer.name": "Bountiful Fertilizer",
@@ -43,7 +54,7 @@
   "deluxe-fish-food.description": "Quite good at attracting fish. Lasts for a few days. Toss into water",
   "deluxe-fish-food.name": "Deluxe Fish Food",
 
-  "deluxe-fruit-tree-fertilizer.description": "Guarenteed to make your fruit trees grow rapidly!",
+  "deluxe-fruit-tree-fertilizer.description": "Guaranteed to make your fruit trees grow rapidly!",
   "deluxe-fruit-tree-fertilizer.name": "Deluxe Fruit Tree Fertilizer",
 
   "domesticated-fish-food.description": "Makes your domesticated fish grow faster!",
@@ -68,7 +79,7 @@
   "joja-fertilizer-deluxe.name": "Joja's Deluxe Fertilizer",
 
   "miraculous-beverages.description": "Makes....beverages appear? What? How does this even work?",
-  "miraculous-beverages.title": "Fertilizer of Miraculous Beverages",
+  "miraculous-beverages.name": "Fertilizer of Miraculous Beverages",
 
   "organic-fertilizer.description": "You're not quite sure what it does, but organic crops always sell for higher prices...",
   "organic-fertilizer.name": "Organic Fertilizer",
@@ -76,18 +87,24 @@
   "prismatic-fertilizer.description": "The label simply says: 'Ohhhh! Pretty colors!'.",
   "prismatic-fertilizer.name": "Prismatic Fertilizer",
 
+  "radioactive-fertilizer.description": "Are you sure this is a good idea?",
+  "radioactive-fertilizer.name": "Radioactive Fertilizer",
+
   "rapid-bush-fertilizer.description": "Makes your bushes grow faster!",
-  "rapid-bush-fertilizer.title": "Murph's Quik-Grow-Bush Fertilizer",
+  "rapid-bush-fertilizer.name": "Murph's Quik-Grow-Bush Fertilizer",
 
   "secret-joja-fertilizer.description": "Joja's scientists have been keeping this one under wraps for some reason.",
   "secret-joja-fertilizer.name": "Joja's Secret Fertilizer",
 
-  "seedy-fertilizer.description": "\"Take that, M!\" the label reads.", 
+  "seedy-fertilizer.description": "\"Take that, M!\" the label reads.",
   "seedy-fertilizer.name": "Seedy Fertilizer",
+
+  "tree-tapper.description": "A tree tapper's best friend.",
+  "tree-tapper.name": "Tree Tapper's Fertilizer",
 
   "waterlogged-fertilizer.description": "Retains water so well, anywhere can be a paddy! (for paddy crops only)",
   "waterlogged-fertilizer.name": "Waterlogged Fertilizer",
 
   "wisdom-fertilizer.description": "Promises to make you wiser. Are you sure this isn't a scam?",
-  "wisdom-fertilizer.name": "Wisdom Fertilizer",
+  "wisdom-fertilizer.name": "Wisdom Fertilizer"
 }

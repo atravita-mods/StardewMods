@@ -1,17 +1,21 @@
 ﻿using System.Reflection;
 using System.Reflection.Emit;
+
+using AtraBase.Toolkit.Extensions;
 using AtraBase.Toolkit.Reflection;
+
 using AtraCore.Framework.ReflectionManager;
 
 using AtraShared.Menuing;
 using AtraShared.Utils.Extensions;
 using AtraShared.Utils.HarmonyHelper;
+
 using HarmonyLib;
 
-using Microsoft.Xna.Framework.Input;
-
 using Netcode;
+
 using StardewModdingAPI.Events;
+
 using StardewValley.Locations;
 
 namespace NerfCavePuzzle.HarmonyPatches;
@@ -19,7 +23,7 @@ namespace NerfCavePuzzle.HarmonyPatches;
 /// <summary>
 /// Data model needed to save to save data.
 /// </summary>
-public class DataModel
+public sealed class DataModel
 {
     /// <summary>
     /// Initializes a new instance of the <see cref="DataModel"/> class.
@@ -65,7 +69,7 @@ internal static class IslandCaveWestDifficultyTranspiler
         if (Context.IsMainPlayer && e.FromModID == ModEntry.UniqueID && e.Type == SAVEKEY && int.TryParse(e.ReadAs<string>(), out int times))
         {
             ModEntry.DataHelper.WriteSaveData(SAVEKEY, new DataModel(times));
-            ModEntry.ModMonitor.Log($"Recieved failure times {times}", LogLevel.Debug);
+            ModEntry.ModMonitor.Log($"Received failure times {times}", LogLevel.Debug);
         }
         else if (Context.IsMainPlayer && e.FromModID == ModEntry.UniqueID && e.Type == REQUESTCAVEFAILED && e.ReadAs<string>() == "GET")
         {
@@ -246,35 +250,43 @@ internal static class IslandCaveWestDifficultyTranspiler
         {
             if (action is not null && who.IsLocalPlayer && !__instance.completed.Value)
             {
-                string[] splits = action.Split(' ');
-                if (!splits[0].Equals("CrystalCaveActivate", StringComparison.OrdinalIgnoreCase) || !__instance.isActivated.Value)
+                if (!action.GetNthChunk(' ', 0).Equals("CrystalCaveActivate", StringComparison.OrdinalIgnoreCase) || !__instance.isActivated.Value)
                 {
                     return;
                 }
-                else if (__instance.netPhase.Value is DELAYVALUE)
-                {
-                    __instance.netPhase.Value = IslandWestCave1.PHASE_PLAY_SEQUENCE;
-                    __instance.playSound("shwip");
-                }
-                else if (__instance.netPhase.Value == IslandWestCave1.PHASE_INTRO)
-                {
-                    __instance.timesFailed.Value = Math.Max(GetFailureCount(), __instance.timesFailed.Value);
-                }
-                else if (__instance.netPhase.Value == IslandWestCave1.PHASE_WAIT_FOR_PLAYER_INPUT && Game1.activeClickableMenu is null)
-                {
-                    List<Response> responses = new(__instance.createYesNoResponses());
 
-                    List<Action?> actions = new()
+                switch (__instance.netPhase.Value)
+                {
+                    case DELAYVALUE:
                     {
-                        () =>
+                        __instance.netPhase.Value = IslandWestCave1.PHASE_PLAY_SEQUENCE;
+                        __instance.playSound("shwip"); // sic
+                        break;
+                    }
+                    case IslandWestCave1.PHASE_INTRO:
+                    {
+                        __instance.timesFailed.Value = Math.Max(GetFailureCount(), __instance.timesFailed.Value);
+                        break;
+                    }
+                    case IslandWestCave1.PHASE_WAIT_FOR_PLAYER_INPUT:
+                    {
+                        if (ModEntry.Config.AllowReAsks && Game1.activeClickableMenu is null)
                         {
-                            __instance.currentCrystalSequenceIndex.Value = 0;
-                            __instance.currentPlaybackCrystalSequenceIndex = 0;
-                            __instance.netPhase.Value = IslandWestCave1.PHASE_PLAY_SEQUENCE;
-                        },
-                    };
+                            List<Response> responses = new(__instance.createYesNoResponses());
+                            List<Action?> actions = new()
+                            {
+                                () =>
+                                {
+                                __instance.currentCrystalSequenceIndex.Value = 0;
+                                __instance.currentPlaybackCrystalSequenceIndex = 0;
+                                __instance.netPhase.Value = IslandWestCave1.PHASE_PLAY_SEQUENCE;
+                                },
+                            };
 
-                    Game1.activeClickableMenu = new DialogueAndAction(I18n.AskAgain(), responses, actions, ModEntry.InputHelper);
+                            Game1.activeClickableMenu = new DialogueAndAction(I18n.AskAgain(), responses, actions, ModEntry.InputHelper);
+                        }
+                        break;
+                    }
                 }
             }
         }

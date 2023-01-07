@@ -21,11 +21,11 @@ internal static class RemoveFarmCheck
         // use a lower priority to slot after other mods that might want to transpile this method as well.
         harmony.Patch(
             original: typeof(Crop).GetCachedMethod(nameof(Crop.newDay), ReflectionCache.FlagTypes.InstanceFlags),
-            transpiler: new HarmonyMethod(typeof(RemoveFarmCheck).GetCachedMethod(nameof(Transpiler), ReflectionCache.FlagTypes.StaticFlags), Priority.LowerThanNormal));
+            transpiler: new HarmonyMethod(typeof(RemoveFarmCheck).GetCachedMethod(nameof(Transpiler), ReflectionCache.FlagTypes.StaticFlags), Priority.HigherThanNormal));
     }
 
     private static bool IsFarmOrSetOtherwise(GameLocation? location)
-        => location is Farm || ModEntry.Config.AllowGiantCropsOffFarm;
+        => location is Farm || ModEntry.Config.AllowGiantCropsOffFarm || location?.Map?.Properties?.ContainsKey("AllowGiantCrops") == true;
 
     private static IEnumerable<CodeInstruction>? Transpiler(IEnumerable<CodeInstruction> instructions, ILGenerator gen, MethodBase original)
     {

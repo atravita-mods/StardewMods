@@ -13,7 +13,7 @@ namespace TapGiantCrops.Framework;
 /// <summary>
 /// API instance for Tap Giant Crops.
 /// </summary>
-public class TapGiantCrop : ITapGiantCropsAPI
+public sealed class TapGiantCrop : ITapGiantCropsAPI
 {
     private SObject keg = null!;
 
@@ -41,8 +41,7 @@ public class TapGiantCrop : ITapGiantCropsAPI
         if (this.CanPlaceTapper(loc, tile, obj))
         {
             SObject tapper = (SObject)obj.getOne();
-            GiantCrop? giant = GetGiantCropAt(loc, tile);
-            if (giant is not null)
+            if (GetGiantCropAt(loc, tile) is GiantCrop giant)
             {
                 (SObject obj, int days)? output = this.GetTapperProduct(giant, tapper);
                 if (output is not null)

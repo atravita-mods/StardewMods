@@ -9,24 +9,18 @@ internal class ModEntry : Mod
 {
     private MigrationManager? migrator;
 
-#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
     /// <summary>
     /// Gets the logger for this mod.
     /// </summary>
-    internal static IMonitor ModMonitor { get; private set; }
-
-    /// <summary>
-    /// Gets the game content helper for this mod.
-    /// </summary>
-    internal static IGameContentHelper GameContentHelper { get; private set; }
-#pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
+    internal static IMonitor ModMonitor { get; private set; } = null!;
 
     /// <inheritdoc />
     public override void Entry(IModHelper helper)
     {
         I18n.Init(helper.Translation);
         ModMonitor = this.Monitor;
-        GameContentHelper = helper.GameContent;
+        AssetManager.Initialize(helper.GameContent);
+
 #if DEBUG
         helper.Events.Input.ButtonPressed += this.OnButtonPressed;
 #endif

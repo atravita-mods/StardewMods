@@ -1,15 +1,24 @@
 ﻿using System.Text.RegularExpressions;
+
+using AtraCore.Framework.Caches;
+
 using AtraShared.Integrations;
 using AtraShared.ItemManagement;
 using AtraShared.Menuing;
 using AtraShared.Utils.Extensions;
+
 using HarmonyLib;
+
 using Microsoft.Xna.Framework;
+
 using StardewModdingAPI.Events;
 using StardewValley.Locations;
+
 using StardewValley.Menus;
+
 using xTile.Dimensions;
 using xTile.ObjectModel;
+
 using AtraUtils = AtraShared.Utils.Utils;
 using XTile = xTile.Tiles.Tile;
 
@@ -37,16 +46,15 @@ internal sealed class ModEntry : Mod
     /// <remarks>WARNING: NOT SET IN ENTRY.</remarks>
     private static ModConfig config = null!;
 
-    /// <summary>
-    /// Gets the game content helper.
-    /// </summary>
-    internal static IGameContentHelper GameContentHelper { get; private set; } = null!;
+    private static IAssetName libraryHouse = null!;
 
     /// <inheritdoc />
     public override void Entry(IModHelper helper)
     {
         modMonitor = this.Monitor;
-        GameContentHelper = this.Helper.GameContent;
+        AssetManager.Initialize(helper.GameContent);
+        libraryHouse = helper.GameContent.ParseAssetName("Maps/ArchaeologyHouse");
+
         helper.Events.GameLoop.GameLaunched += this.OnGameLaunched;
         helper.Events.Input.ButtonPressed += this.OnButtonPressed;
         helper.Events.Player.Warped += this.OnWarped;
@@ -57,7 +65,7 @@ internal sealed class ModEntry : Mod
         I18n.Init(helper.Translation);
 
         Harmony harmony = new(this.ModManifest.UniqueID);
-        harmony.PatchAll();
+        harmony.PatchAll(typeof(ModEntry).Assembly);
     }
 
     private void OnGameLaunched(object? sender, GameLaunchedEventArgs e)
@@ -82,14 +90,19 @@ internal sealed class ModEntry : Mod
                 reset: static () => config = new(),
                 save: () =>
                 {
-                    this.Helper.GameContent.InvalidateCacheAndLocalized("Maps/ArchaeologyHouse");
+                    this.Helper.GameContent.InvalidateCacheAndLocalized(libraryHouse.BaseName);
                     this.Helper.AsyncWriteConfig(this.Monitor, config);
                 })
             .AddTextOption(
                 name: I18n.BoxLocation_Name,
                 getValue: static () => config.BoxLocation.X + ", " + config.BoxLocation.Y,
                 setValue: static (str) => config.BoxLocation = str.TryParseVector2(out Vector2 vec) ? vec : shopLoc,
-                tooltip: I18n.BoxLocation_Description);
+                tooltip: I18n.BoxLocation_Description)
+            .AddBoolOption(
+                name: I18n.AllowBuyBacks_Name,
+                getValue: static () => config.AllowBuyBacks,
+                setValue: static (value) => config.AllowBuyBacks = value,
+                tooltip: I18n.AllowBuyBacks_Description);
         }
     }
 
@@ -110,7 +123,7 @@ internal sealed class ModEntry : Mod
             {
                 if (ItemUtils.GetItemFromIdentifier(match.Groups["type"].Value, id) is Item item)
                 {
-                    if (__result.TryAdd(item, new int[] { 0, int.MaxValue }))
+                    if (__result.TryAdd(item, new int[] { 0, ShopMenu.infiniteStock }))
                     {
                         modMonitor.DebugOnlyLog($"Adding {item.Name} to catalogue!", LogLevel.Info);
                     }
@@ -123,11 +136,7 @@ internal sealed class ModEntry : Mod
         }
     }
 
-    /// <summary>
-    /// Handles opening the shop menu in the museum.
-    /// </summary>
-    /// <param name="sender">SMAPI.</param>
-    /// <param name="e">event args.</param>
+    /// <inheritdoc cref="IInputEvents.ButtonPressed"/>
     private void OnButtonPressed(object? sender, ButtonPressedEventArgs e)
     {
         if ((!e.Button.IsActionButton() && !e.Button.IsUseToolButton())
@@ -162,22 +171,29 @@ internal sealed class ModEntry : Mod
                     {
                         continue;
                     }
-                    int[] selldata = new int[] { Math.Max(item.salePrice() * 2, 2000), int.MaxValue };
+                    int[] selldata = new int[] { Math.Max(item.salePrice() * 2, 2000), ShopMenu.infiniteStock };
                     sellables.TryAdd(item, selldata);
                 }
             }
-            else if (AssetManager.MailFlags.Contains(mailflag) && mail.TryGetValue(mailflag, out var mailstring))
+            else if (AssetManager.MailFlags.Contains(mailflag) && mail.TryGetValue(mailflag, out string? mailstring))
             {
                 foreach (SObject? item in mailstring.ParseItemsFromMail())
                 {
-                    int[] selldata = new int[] { Math.Max(item.salePrice() * 2, 2000), int.MaxValue };
+                    int[] selldata = new int[] { Math.Max(item.salePrice() * 2, 2000), ShopMenu.infiniteStock };
                     sellables.TryAdd(item, selldata);
                 }
             }
         }
 
-        var shop = new ShopMenu(sellables, who: "Gunther");
-        if (Game1.getCharacterFromName("Gunther") is NPC gunter)
+        var shop = new ShopMenu(sellables, who: "Gunther") { storeContext = SHOPNAME };
+        if (config.AllowBuyBacks)
+        {
+            shop.categoriesToSellHere.Add(SObject.mineralsCategory);
+            shop.categoriesToSellHere.Add(SObject.GemCategory);
+            // hack in buybacks for Arch, which may not have a number?
+        }
+
+        if (NPCCache.GetByVillagerName("Gunther") is NPC gunter)
         {
             shop.portraitPerson = gunter;
         }
@@ -187,7 +203,7 @@ internal sealed class ModEntry : Mod
 
     private void OnAssetRequested(object? sender, AssetRequestedEventArgs e)
     {
-        if (e.NameWithoutLocale.IsEquivalentTo("Maps/ArchaeologyHouse"))
+        if (e.NameWithoutLocale.IsEquivalentTo(libraryHouse))
         {
             e.Edit(
                 static (asset) =>
@@ -230,7 +246,7 @@ internal sealed class ModEntry : Mod
                 }
             }
 
-            this.Monitor.DebugOnlyLog($"Adding boxen to {tile}", LogLevel.Info);
+            this.Monitor.DebugOnlyLog($"Adding box to {tile}", LogLevel.Info);
 
             // add box
             e.NewLocation.temporarySprites.Add(new TemporaryAnimatedSprite

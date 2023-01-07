@@ -1,10 +1,13 @@
 ﻿using AtraShared.ConstantsAndEnums;
 using AtraShared.Menuing;
 using AtraShared.Utils.Extensions;
+
 using HarmonyLib;
-using Microsoft.Xna.Framework;
+
 using ReviveDeadCrops.Framework;
+
 using StardewModdingAPI.Events;
+
 using StardewValley.Objects;
 using StardewValley.TerrainFeatures;
 
@@ -54,7 +57,7 @@ internal sealed class ModEntry : Mod
                         && dirt.crop is not null)
                     {
                         this.Monitor.DebugOnlyLog($"Found dirt with marker at {dirt.currentTileLocation} with crop {dirt.crop?.indexOfHarvest ?? -1}");
-                        dirt.modData.SetBool(ReviveDeadCropsApi.REVIVED_PLANT_MARKER, false);
+                        dirt.modData.SetBool(ReviveDeadCropsApi.REVIVED_PLANT_MARKER, false, false);
                         dirt.crop?.Kill();
                     }
                 }
@@ -66,7 +69,7 @@ internal sealed class ModEntry : Mod
                         && dirt.crop is not null)
                     {
                         this.Monitor.DebugOnlyLog($"Found dirt with marker at {dirt.currentTileLocation} with crop {dirt.crop?.indexOfHarvest ?? -1}");
-                        dirt.modData.SetBool(ReviveDeadCropsApi.REVIVED_PLANT_MARKER, false);
+                        dirt.modData.SetBool(ReviveDeadCropsApi.REVIVED_PLANT_MARKER, false, false);
                         dirt.crop?.Kill();
                     }
                 }
@@ -81,7 +84,7 @@ internal sealed class ModEntry : Mod
     {
         try
         {
-            harmony.PatchAll();
+            harmony.PatchAll(typeof(ModEntry).Assembly);
         }
         catch (Exception ex)
         {

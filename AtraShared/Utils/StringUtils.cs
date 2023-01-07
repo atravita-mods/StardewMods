@@ -1,12 +1,14 @@
-﻿using System.Globalization;
-using System.Text;
+﻿using System.Text;
+
 using AtraBase.Toolkit;
 using AtraBase.Toolkit.Reflection;
 using AtraBase.Toolkit.StringHandler;
-using FastExpressionCompiler.LightExpression;
-using Microsoft.Xna.Framework.Graphics;
 
-using AtraUtils = AtraShared.Utils.Utils;
+using CommunityToolkit.Diagnostics;
+
+using FastExpressionCompiler.LightExpression;
+
+using Microsoft.Xna.Framework.Graphics;
 
 namespace AtraShared.Utils;
 
@@ -38,7 +40,7 @@ public sealed class StringUtils
     /// <summary>
     /// Initializes a new instance of the <see cref="StringUtils"/> class.
     /// </summary>
-    /// <param name="monitor">The Monitor instance to use to log for these utils.</param>
+    /// <param name="monitor">The modMonitor instance to use to log for these utilities.</param>
     public StringUtils(IMonitor? monitor) => this.Monitor = monitor;
 
     private static Func<SpriteFont, char, int> GetGlyph => GetGlyphLazy.Value;
@@ -70,6 +72,9 @@ public sealed class StringUtils
         {
             return string.Empty;
         }
+
+        Guard.IsNotNull(whichFont);
+        Guard.IsGreaterThan(width, 0);
 
         ReadOnlySpan<char> textSpan;
         int genderseperator = text.IndexOf(Dialogue.genderDialogueSplitCharacter);
@@ -153,11 +158,7 @@ public sealed class StringUtils
             }
 
             use_replacement_word = false;
-            if (splitchar == "\r")
-            {
-                continue;
-            }
-            else if (splitchar == "\n" || splitchar == "\r\n")
+            if (splitchar == "\n" || splitchar == "\r\n" || splitchar == "\r")
             {
                 if (--maxlines <= 0)
                 {
@@ -221,7 +222,7 @@ public sealed class StringUtils
                                 return StringBuilderCache.GetStringAndRelease(sb);
                             }
                             sb.AppendLine();
-                            current_width = charwidth;
+                            current_width = -whichFont.Spacing;
                         }
                         sb.Append(ch);
                         current_width += charwidth + whichFont.Spacing;

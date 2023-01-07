@@ -5,6 +5,7 @@ using System.Diagnostics;
 using AtraBase.Toolkit;
 
 using AtraCore.Config;
+using AtraCore.Framework.Caches;
 using AtraCore.Framework.DialogueManagement;
 using AtraCore.Framework.Internal;
 using AtraCore.Framework.ItemManagement;
@@ -44,6 +45,7 @@ internal sealed class ModEntry : Mod
     {
         I18n.Init(helper.Translation);
         ModMonitor = this.Monitor;
+        AssetManager.Initialize(helper.GameContent);
 
         // replace AtraBase's logger with SMAPI's logging service.
         AtraBase.Internal.Logger.Instance = new Logger(this.Monitor);
@@ -56,10 +58,14 @@ internal sealed class ModEntry : Mod
         helper.Events.GameLoop.SaveLoaded += this.OnSaveLoaded;
         helper.Events.GameLoop.DayEnding += this.OnDayEnd;
         helper.Events.GameLoop.TimeChanged += this.OnTimeChanged;
+        helper.Events.GameLoop.ReturnedToTitle += this.OnReturnedToTitle;
 
 #if DEBUG
-        helper.Events.GameLoop.DayStarted += this.OnDayStart;
-        helper.Events.GameLoop.SaveLoaded += this.LateSaveLoaded;
+        if (!helper.ModRegistry.IsLoaded("DigitalCarbide.SpriteMaster"))
+        {
+            helper.Events.GameLoop.DayStarted += this.OnDayStart;
+            helper.Events.GameLoop.SaveLoaded += this.LateSaveLoaded;
+        }
 #endif
     }
 
@@ -72,15 +78,13 @@ internal sealed class ModEntry : Mod
         this.ApplyPatches(new Harmony(this.ModManifest.UniqueID));
     }
 
+    /// <inheritdoc cref="IGameLoopEvents.SaveLoaded"/>
     private void OnSaveLoaded(object? sender, SaveLoadedEventArgs e)
     {
         if (Context.IsSplitScreen && Context.ScreenId != 0)
         {
             return;
         }
-
-        Game1.player.mailReceived.OnElementChanged += this.MailReceived_OnElementChanged;
-        Game1.player.team.specialOrders.OnElementChanged += this.SpecialOrdersChanged;
 
         MultiplayerHelpers.AssertMultiplayerVersions(this.Helper.Multiplayer, this.ModManifest, this.Monitor, this.Helper.Translation);
         DrawPrismatic.LoadPrismaticData();
@@ -96,25 +100,7 @@ internal sealed class ModEntry : Mod
         }
     }
 
-    private void SpecialOrdersChanged(Netcode.NetList<SpecialOrder, Netcode.NetRef<SpecialOrder>> list, int index, SpecialOrder oldValue, SpecialOrder newValue)
-    {
-        this.Monitor.Log($"Special order {index}, {oldValue.questKey}, {newValue.questKey}", LogLevel.Alert);
-    }
-
-    private void MailReceived_OnElementChanged(Netcode.NetList<string, Netcode.NetString> list, int index, string oldValue, string newValue)
-    {
-        this.Monitor.Log($"{index}, {oldValue}, {newValue}", LogLevel.Alert);
-    }
-
-    /********
-     * Dialogue region
-     * *******/
-
-    /// <summary>
-    /// Raised every 10 in game minutes.
-    /// </summary>
-    /// <param name="sender">Unknown, used by SMAPI.</param>
-    /// <param name="e">TimeChanged params.</param>
+    /// <inheritdoc cref="IGameLoopEvents.TimeChanged"/>
     /// <remarks>Currently handles: pushing delayed dialogue back onto the stack, and player alerts.</remarks>
     private void OnTimeChanged(object? sender, TimeChangedEventArgs e)
     {
@@ -122,12 +108,17 @@ internal sealed class ModEntry : Mod
         PlayerAlertHandler.DisplayFromQueue();
     }
 
+    /// <inheritdoc cref="IGameLoopEvents.DayEnding"/>
     private void OnDayEnd(object? sender, DayEndingEventArgs e)
         => QueuedDialogueManager.ClearDelayedDialogue();
 
-    /**************
-     * Assets
-     * ************/
+    /// <inheritdoc cref="IGameLoopEvents.ReturnedToTitle"/>
+    private void OnReturnedToTitle(object? sender, ReturnedToTitleEventArgs e)
+    {
+        NPCCache.Reset();
+    }
+
+    #region assets
 
     private void OnAssetInvalidation(object? sender, AssetsInvalidatedEventArgs e)
         => DataToItemMap.Reset(e.NamesWithoutLocale);
@@ -135,9 +126,7 @@ internal sealed class ModEntry : Mod
     private void OnAssetRequested(object? sender, AssetRequestedEventArgs e)
         => AssetManager.Apply(e);
 
-    /*************
-    * Harmony
-    * *************/
+    #endregion
 
     private void ApplyPatches(Harmony harmony)
     {
@@ -147,7 +136,7 @@ internal sealed class ModEntry : Mod
 #endif
         try
         {
-            harmony.PatchAll();
+            harmony.PatchAll(typeof(ModEntry).Assembly);
         }
         catch (Exception ex)
         {
@@ -160,15 +149,11 @@ internal sealed class ModEntry : Mod
 #endif
     }
 
-    /***********
-     * Migrations
-     * ********/
 
-    /// <summary>
+    /// <inheritdoc cref="IGameLoopEvents.Saved"/>
+    /// <remarks>
     /// Writes migration data then detaches the migrator.
-    /// </summary>
-    /// <param name="sender">Smapi thing.</param>
-    /// <param name="e">Arguments for just-before-saving.</param>
+    /// </remarks>
     private void WriteMigrationData(object? sender, SavedEventArgs e)
     {
         if (this.migrator is not null)
@@ -179,9 +164,6 @@ internal sealed class ModEntry : Mod
         this.Helper.Events.GameLoop.Saved -= this.WriteMigrationData;
     }
 
-    /*************
-     * Misc
-     ***********/
 #if DEBUG
     [EventPriority(EventPriority.Low - 1000)]
     private void OnDayStart(object? sender, DayStartedEventArgs e)

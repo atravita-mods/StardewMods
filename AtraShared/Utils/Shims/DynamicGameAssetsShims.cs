@@ -16,7 +16,13 @@ public static class DynamicGameAssetsShims
 
     private static Lazy<Func<object, bool>?> isDGAGiantCrop = new(() =>
     {
-        var type = AccessTools.TypeByName("DynamicGameAssets.Game.CustomGiantCrop");
-        return type?.GetTypeIs();
+        try
+        {
+            return AccessTools.TypeByName("DynamicGameAssets.Game.CustomGiantCrop")?.GetTypeIs();
+        }
+        catch (Exception)
+        {
+            return null;
+        }
     });
 }

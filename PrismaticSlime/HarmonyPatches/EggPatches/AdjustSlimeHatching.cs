@@ -33,15 +33,15 @@ internal static class AdjustSlimeHatching
             ILHelper helper = new(original, instructions, ModEntry.ModMonitor, gen);
             helper.FindNext(new CodeInstructionWrapper[]
             {
-                new(SpecialCodeInstructionCases.LdLoc),
-                new(OpCodes.Ldfld),
-                new(OpCodes.Callvirt, typeof(GameLocation).GetCachedMethod(nameof(GameLocation.canSlimeHatchHere), ReflectionCache.FlagTypes.InstanceFlags)),
-                new(OpCodes.Brfalse),
+                SpecialCodeInstructionCases.LdLoc,
+                OpCodes.Ldfld,
+                (OpCodes.Callvirt, typeof(GameLocation).GetCachedMethod(nameof(GameLocation.canSlimeHatchHere), ReflectionCache.FlagTypes.InstanceFlags)),
+                OpCodes.Brfalse,
             })
             .FindNext(new CodeInstructionWrapper[]
             {
-                new(OpCodes.Call, typeof(Vector2).GetCachedMethod("op_Multiply", ReflectionCache.FlagTypes.StaticFlags, new[] { typeof(Vector2), typeof(float) } )),
-                new(SpecialCodeInstructionCases.StLoc),
+                (OpCodes.Call, typeof(Vector2).GetCachedMethod<Vector2, float>("op_Multiply", ReflectionCache.FlagTypes.StaticFlags)),
+                SpecialCodeInstructionCases.StLoc,
             })
             .Advance(1);
 
@@ -49,19 +49,19 @@ internal static class AdjustSlimeHatching
 
             helper.FindNext(new CodeInstructionWrapper[]
             {
-                new(OpCodes.Ldarg_0),
-                new(OpCodes.Ldfld, typeof(SObject).GetCachedField(nameof(SObject.heldObject), ReflectionCache.FlagTypes.InstanceFlags)),
-                new(OpCodes.Callvirt),
+                OpCodes.Ldarg_0,
+                (OpCodes.Ldfld, typeof(SObject).GetCachedField(nameof(SObject.heldObject), ReflectionCache.FlagTypes.InstanceFlags)),
+                OpCodes.Callvirt,
             })
             .Copy(3, out IEnumerable<CodeInstruction>? heldobj);
 
             helper.FindNext(new CodeInstructionWrapper[]
             {
-                new(SpecialCodeInstructionCases.LdLoc),
-                new(OpCodes.Ldc_I4_0),
-                new(OpCodes.Newobj, typeof(GreenSlime).GetCachedConstructor(ReflectionCache.FlagTypes.InstanceFlags, new[] { typeof(Vector2), typeof(int) } )),
-                new(SpecialCodeInstructionCases.StLoc),
-                new(OpCodes.Br_S),
+                SpecialCodeInstructionCases.LdLoc,
+                OpCodes.Ldc_I4_0,
+                (OpCodes.Newobj, typeof(GreenSlime).GetCachedConstructor<Vector2, int>(ReflectionCache.FlagTypes.InstanceFlags)),
+                SpecialCodeInstructionCases.StLoc,
+                OpCodes.Br_S,
             })
             .Advance(3);
 
@@ -94,7 +94,7 @@ internal static class AdjustSlimeHatching
         catch (Exception ex)
         {
             ModEntry.ModMonitor.Log($"Ran into error transpiling {original.FullDescription()}.\n\n{ex}", LogLevel.Error);
-            original?.Snitch(ModEntry.ModMonitor);
+            original.Snitch(ModEntry.ModMonitor);
         }
         return null;
     }

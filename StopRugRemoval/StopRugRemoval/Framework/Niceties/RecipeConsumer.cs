@@ -1,5 +1,4 @@
 ﻿using AtraShared.Utils.Extensions;
-using HarmonyLib;
 
 using StardewModdingAPI.Events;
 

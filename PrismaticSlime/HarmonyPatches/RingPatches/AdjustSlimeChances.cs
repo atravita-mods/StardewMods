@@ -21,7 +21,7 @@ internal static class AdjustSlimeChances
         {
             return chance;
         }
-        else if (ModEntry.RingManager.IsFarmerWearingRing(player, ModEntry.PrismaticSlimeRing))
+        else if (player.isWearingRing(ModEntry.PrismaticSlimeRing))
         {
             return Math.Clamp(chance * 5, 0, 1);
         }
@@ -37,7 +37,7 @@ internal static class AdjustSlimeChances
 
             helper.FindNext(new CodeInstructionWrapper[]
             { // (monster as GreenSlime).makePrismatic(),
-                new(SpecialCodeInstructionCases.LdLoc),
+                SpecialCodeInstructionCases.LdLoc,
                 new(OpCodes.Isinst, typeof(GreenSlime)),
                 new(OpCodes.Callvirt, typeof(GreenSlime).GetCachedMethod(nameof(GreenSlime.makePrismatic), ReflectionCache.FlagTypes.InstanceFlags)),
             })
@@ -60,7 +60,7 @@ internal static class AdjustSlimeChances
         catch (Exception ex)
         {
             ModEntry.ModMonitor.Log($"Ran into error transpiling {original.FullDescription()}.\n\n{ex}", LogLevel.Error);
-            original?.Snitch(ModEntry.ModMonitor);
+            original.Snitch(ModEntry.ModMonitor);
         }
         return null;
     }

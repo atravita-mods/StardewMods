@@ -1,9 +1,11 @@
 ﻿using AtraCore;
 using AtraCore.Models;
+
 using AtraShared.ConstantsAndEnums;
+
 using Microsoft.Xna.Framework.Graphics;
+
 using StardewModdingAPI.Events;
-using StardewModdingAPI.Utilities;
 
 namespace PrismaticSlime.Framework;
 
@@ -12,8 +14,20 @@ namespace PrismaticSlime.Framework;
 /// </summary>
 internal static class AssetManager
 {
-    private static readonly string OBJECTDATA = PathUtilities.NormalizeAssetName("Data/ObjectInformation");
-    private static readonly string RINGMASK = PathUtilities.NormalizeAssetName("Mods/atravita_Prismatic_Ring/Texture");
+    private static IAssetName objectData = null!;
+    private static IAssetName ringMask = null!;
+    private static IAssetName maskLocation = null!;
+
+    /// <summary>
+    /// Initializes the asset manager.
+    /// </summary>
+    /// <param name="parser">Game content helper.</param>
+    internal static void Initialize(IGameContentHelper parser)
+    {
+        objectData = parser.ParseAssetName("Data/ObjectInformation");
+        ringMask = parser.ParseAssetName("Mods/atravita_Prismatic_Ring/Texture");
+        maskLocation = parser.ParseAssetName(AtraCoreConstants.PrismaticMaskData);
+    }
 
     /// <summary>
     /// Applies the requested asset edits and loads.
@@ -21,15 +35,15 @@ internal static class AssetManager
     /// <param name="e">Event arguments.</param>
     internal static void Apply(AssetRequestedEventArgs e)
     {
-        if (ModEntry.PrismaticSlimeEgg != -1 && e.NameWithoutLocale.IsEquivalentTo(OBJECTDATA))
+        if (ModEntry.PrismaticSlimeEgg != -1 && e.NameWithoutLocale.IsEquivalentTo(objectData))
         {
             e.Edit(EditObjects);
         }
-        else if (e.NameWithoutLocale.IsEquivalentTo(AtraCoreConstants.PrismaticMaskData))
+        else if (e.NameWithoutLocale.IsEquivalentTo(maskLocation))
         {
             e.Edit(EditPrismaticMasks);
         }
-        else if (e.NameWithoutLocale.IsEquivalentTo(RINGMASK))
+        else if (e.NameWithoutLocale.IsEquivalentTo(ringMask))
         {
             e.LoadFromModFile<Texture2D>("assets/json-assets/Objects/PrismaticSlimeRing/mask.png", AssetLoadPriority.Exclusive);
         }
@@ -56,7 +70,7 @@ internal static class AssetManager
         {
             ItemType = ItemTypeEnum.Ring,
             Identifier = "atravita.PrismaticSlimeRing",
-            Mask = RINGMASK,
+            Mask = ringMask.BaseName,
         };
 
         DrawPrismaticModel? egg = new()

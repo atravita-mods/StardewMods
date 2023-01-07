@@ -1,4 +1,6 @@
 ﻿using AtraBase.Toolkit;
+using AtraBase.Toolkit.Extensions;
+
 using StardewModdingAPI.Events;
 
 namespace LastDayToPlantRedux.Framework;
@@ -32,9 +34,9 @@ internal static class InventoryWatcher
     private static InventoryManagerModel? model = null;
 
     /// <summary>
-    /// Gets a value indicating whether whether the InventoryWatcher has changes to consider.
+    /// Gets the inventory watching model.
     /// </summary>
-    internal static bool HasChanges { get; private set; } = false;
+    internal static InventoryManagerModel? Model => model;
 
     /// <summary>
     /// Gets a value indicating whether whether or not the save model is loaded.
@@ -43,15 +45,16 @@ internal static class InventoryWatcher
     internal static bool IsModelLoaded => model is not null;
 
     /// <summary>
+    /// Gets a value indicating whether or not new seeds are available.
+    /// </summary>
+    internal static bool HasSeedChanges { get; private set; } = true;
+
+    /// <summary>
     /// Clears the model.
     /// </summary>
     internal static void ClearModel() => model = null;
 
-    /// <summary>
-    /// Request a reset to HasChanges.
-    /// </summary>
-    internal static void Reset()
-        => HasChanges = false;
+    internal static void Reset() => HasSeedChanges = false;
 
     /*******************************************************************
      * SMAPI complains if there's unicode characters in a save path
@@ -102,20 +105,33 @@ internal static class InventoryWatcher
     {
         foreach (Item? item in e.Added)
         {
-            if (item is SObject obj && !obj.bigCraftable.Value
+            if (item is SObject obj && !obj.bigCraftable.Value && !obj.isSapling()
                 && (obj.Category == SObject.SeedsCategory || obj.Category == SObject.fertilizerCategory))
             {
                 if (!IsModelLoaded)
                 {
                     LoadModel(helper);
                 }
-                if (obj.Category == SObject.SeedsCategory && model.Seeds.Add(obj.Name))
+
+                // find the name out of Game1.objectinfo if possible.
+                string name;
+                if (Game1.objectInformation?.TryGetValue(obj.ParentSheetIndex, out string? data) == true)
                 {
-                    HasChanges = true;
+                    name = data.GetNthChunk('/', SObject.objectInfoNameIndex).ToString();
                 }
-                else if (obj.Category == SObject.fertilizerCategory && model.Fertilizers.Add(obj.Name))
+                else
                 {
-                    HasChanges = true;
+                    name = obj.Name;
+                }
+
+                if (obj.Category == SObject.SeedsCategory && !SObject.isWildTreeSeed(obj.ParentSheetIndex)
+                    && !name.Equals("Mixed Seeds", StringComparison.OrdinalIgnoreCase) && model.Seeds.Add(name))
+                {
+                    HasSeedChanges = true;
+                }
+                else if (obj.Category == SObject.fertilizerCategory && model.Fertilizers.Add(name))
+                {
+                    CropAndFertilizerManager.RequestInvalidateFertilizers();
                 }
             }
         }

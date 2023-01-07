@@ -5,7 +5,7 @@ using StardewValley.Tools;
 namespace TrashDoesNotConsumeBait.HarmonyPatches;
 
 /// <summary>
-/// Class that holds patches against the toolbar.
+/// Class that holds patches against the tool bar.
 /// </summary>
 [HarmonyPatch(typeof(Toolbar))]
 internal static class ToolbarPatches
@@ -47,7 +47,7 @@ internal static class ToolbarPatches
                                     }
                                 }
 
-                                // settting the ActiveObject to an item adds it to inventory. If prev is null, ActiveObject is just removed from the inventory
+                                // setting the ActiveObject to an item adds it to inventory. If prev is null, ActiveObject is just removed from the inventory
                                 Game1.player.ActiveObject = prev;
                                 fishingRod.attachments[0] = activeObj;
                             }

@@ -54,7 +54,7 @@ internal static class JukeboxesEverywhere
                 {
                     new(OpCodes.Ldsfld, typeof(Game1).GetCachedField(nameof(Game1.isRaining), ReflectionCache.FlagTypes.StaticFlags)),
                 })
-                .GetLabels(out var labels)
+                .GetLabels(out IList<Label>? labels)
                 .Remove(1)
                 .Insert(new CodeInstruction[]
                 {

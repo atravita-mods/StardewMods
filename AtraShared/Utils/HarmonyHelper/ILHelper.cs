@@ -1,14 +1,11 @@
-﻿/* **********************************
- * Don't forget to include COLLECTIONS!
- * **********************************/
-
-// TODO: AssertIs?
+﻿// TODO: AssertIs?
 // Label stuff?
 // MAKE SURE THE LABEL COUNTS ARE RIGHT. Inserting codes should add to the Important Labels! Check **any time** labels are removed.
 // Insert should probably just have a pattern that moves over the labels....
 using System.Diagnostics;
 using System.Reflection;
 using System.Reflection.Emit;
+using System.Runtime.CompilerServices;
 using System.Text;
 
 using AtraBase.Collections;
@@ -34,13 +31,13 @@ public sealed class ILHelper
     /// <summary>
     /// Initializes a new instance of the <see cref="ILHelper"/> class.
     /// </summary>
-    /// <param name="original">Original method's methodbase.</param>
+    /// <param name="original">Original method's MethodBase.</param>
     /// <param name="codes">IEnumerable of codes.</param>
     /// <param name="monitor">Logger.</param>
     /// <param name="generator">ILGenerator.</param>
     public ILHelper(MethodBase original, IEnumerable<CodeInstruction> codes, IMonitor monitor, ILGenerator generator)
     {
-        // scan methodbody and get the original variables.
+        // scan method body and get the original variables.
         if (original.GetMethodBody() is MethodBody body)
         {
             foreach (LocalVariableInfo loc in body.LocalVariables)
@@ -80,8 +77,10 @@ public sealed class ILHelper
         }
     }
 
+    #region properties
+
     /// <summary>
-    /// Gets the original methodbase.
+    /// Gets the original MethodBase.
     /// </summary>
     public MethodBase Original { get; init; }
 
@@ -121,8 +120,50 @@ public sealed class ILHelper
     /// </summary>
     private IMonitor Monitor { get; init; }
 
+    #endregion
+
+    #region static methods
+
     /// <summary>
-    /// Pushes the pointer onto the pointerstack.
+    /// Gets the instruction for loading a local at the index.
+    /// </summary>
+    /// <param name="localindex">Index of the local to get.</param>
+    /// <returns>The proper local instruction.</returns>
+    public static CodeInstruction GetLdLoc(int localindex)
+    {
+        return localindex switch
+        {
+            0 => new(OpCodes.Ldloc_0),
+            1 => new(OpCodes.Ldloc_1),
+            2 => new(OpCodes.Ldloc_2),
+            3 => new(OpCodes.Ldloc_3),
+            _ => new(OpCodes.Ldloc, localindex)
+        };
+    }
+
+    /// <summary>
+    /// Gets the instruction for storing to a local at the index.
+    /// </summary>
+    /// <param name="localindex">Index of the local to get.</param>
+    /// <returns>The proper local instruction.</returns>
+    public static CodeInstruction GetStLoc(int localindex)
+    {
+        return localindex switch
+        {
+            0 => new(OpCodes.Stloc_0),
+            1 => new(OpCodes.Stloc_1),
+            2 => new(OpCodes.Stloc_2),
+            3 => new(OpCodes.Stloc_3),
+            _ => new(OpCodes.Stloc, localindex)
+        };
+    }
+
+    #endregion
+
+    #region jumps
+
+    /// <summary>
+    /// Pushes the pointer onto the pointer stack.
     /// </summary>
     /// <returns>this.</returns>
     public ILHelper Push()
@@ -132,7 +173,7 @@ public sealed class ILHelper
     }
 
     /// <summary>
-    /// Pops the a pointer from the pointerstack.
+    /// Pops the a pointer from the pointer stack.
     /// </summary>
     /// <returns>this.</returns>
     public ILHelper Pop()
@@ -154,6 +195,22 @@ public sealed class ILHelper
         return this;
     }
 
+    /// <summary>
+    /// Moves the pointer forward the number of steps.
+    /// </summary>
+    /// <param name="steps">Number of steps.</param>
+    /// <returns>this.</returns>
+    /// <exception cref="ArgumentOutOfRangeException">Pointer tried to move to an invalid location.</exception>
+    [MethodImpl(MethodImplOptions.AggressiveOptimization)]
+    public ILHelper Advance(int steps)
+    {
+        this.Pointer += steps;
+        Guard.IsBetweenOrEqualTo(this.Pointer, 0, this.Codes.Count - 1);
+        return this;
+    }
+
+    #endregion
+
     // TODO: Consider doing basic stack checking here.
 
     /// <summary>
@@ -167,6 +224,7 @@ public sealed class ILHelper
     /// Prints out the current codes to console.
     /// Only works in DEBUG.
     /// </summary>
+    [DebuggerHidden]
     [Conditional("DEBUG")]
     public void Print()
     {
@@ -188,18 +246,7 @@ public sealed class ILHelper
         this.Monitor.Log(sb.ToString(), LogLevel.Info);
     }
 
-    /// <summary>
-    /// Moves the pointer forward the number of steps.
-    /// </summary>
-    /// <param name="steps">Number of steps.</param>
-    /// <returns>this.</returns>
-    /// <exception cref="IndexOutOfRangeException">Pointer tried to move to an invalid location.</exception>
-    public ILHelper Advance(int steps)
-    {
-        this.Pointer += steps;
-        Guard.IsBetweenOrEqualTo(this.Pointer, 0, this.Codes.Count - 1);
-        return this;
-    }
+    #region search
 
     /// <summary>
     /// Finds the first occurrence of the following pattern between the indexes given.
@@ -208,14 +255,15 @@ public sealed class ILHelper
     /// <param name="startindex">Index to start searching at (inclusive).</param>
     /// <param name="intendedendindex">Index to end search (exclusive). Null for "end of instruction list".</param>
     /// <returns>this.</returns>
-    /// <exception cref="ArgumentException">Startindex or Endindex are invalid.</exception>
-    /// <exception cref="IndexOutOfRangeException">No match found.</exception>
+    /// <exception cref="ArgumentException">StartIndex or EndIndex are invalid.</exception>
+    /// <exception cref="InvalidOperationException">No match found.</exception>
+    [MethodImpl(MethodImplOptions.AggressiveOptimization)]
     public ILHelper FindFirst(CodeInstructionWrapper[] instructions, int startindex = 0, int? intendedendindex = null)
     {
         int endindex = intendedendindex ?? this.Codes.Count;
         if (startindex >= (endindex - instructions.Length) || startindex < 0 || endindex > this.Codes.Count)
         {
-            return ThrowHelper.ThrowArgumentException<ILHelper>($"Either startindex {startindex} or endindex {endindex} are invalid. ");
+            return ThrowHelper.ThrowArgumentException<ILHelper>($"Either the start index {startindex} or the end index {endindex} are invalid.");
         }
 
         for (int i = startindex; i < endindex - instructions.Length + 1; i++)
@@ -237,12 +285,40 @@ ContinueSearchForward:
     }
 
     /// <summary>
+    /// Finds the first occurrence of the following pattern between the indexes given.
+    /// </summary>
+    /// <param name="instruction">Instruction to search for.</param>
+    /// <param name="startindex">Index to start searching at (inclusive).</param>
+    /// <param name="intendedendindex">Index to end search (exclusive). Null for "end of instruction list".</param>
+    /// <returns>this.</returns>
+    /// <exception cref="ArgumentException">StartIndex or EndIndex are invalid.</exception>
+    /// <exception cref="InvalidOperationException">No match found.</exception>
+    public ILHelper FindFirst(CodeInstructionWrapper instruction, int startindex = 0, int? intendedendindex = null)
+    {
+        int endindex = intendedendindex ?? this.Codes.Count;
+        if (startindex >= (endindex - 1) || startindex < 0 || endindex > this.Codes.Count)
+        {
+            return ThrowHelper.ThrowArgumentException<ILHelper>($"Either the start index {startindex} or the end index {endindex} are invalid.");
+        }
+        for (int i = startindex; i < endindex; i++)
+        {
+            if (this.IsMatch(instruction, this.Codes[i]))
+            {
+                this.Pointer = i;
+                return this;
+            }
+        }
+        this.Monitor.Log($"The desired pattern wasn't found: {instruction}", LogLevel.Error);
+        return ThrowHelper.ThrowInvalidOperationException<ILHelper>();
+    }
+
+    /// <summary>
     /// Finds the next occurrence of the code instruction.
     /// </summary>
     /// <param name="instructions">Instructions to search for.</param>
     /// <returns>this.</returns>
     /// <exception cref="ArgumentException">Fewer codes remain than the length of the instructions to search for.</exception>
-    /// <exception cref="IndexOutOfRangeException">No match found.</exception>
+    /// <exception cref="InvalidOperationException">No match found.</exception>
     public ILHelper FindNext(CodeInstructionWrapper[] instructions)
         => this.FindFirst(instructions, this.Pointer + 1, this.Codes.Count);
 
@@ -253,14 +329,15 @@ ContinueSearchForward:
     /// <param name="startindex">Index to start searching at (inclusive).</param>
     /// <param name="intendedendindex">Index to end search (exclusive). Leave null to mean "last code".</param>
     /// <returns>this.</returns>
-    /// <exception cref="ArgumentException">Startindex or Endindex are invalid.</exception>
-    /// <exception cref="IndexOutOfRangeException">No match found.</exception>
+    /// <exception cref="ArgumentException">StartIndex or EndIndex are invalid.</exception>
+    /// <exception cref="InvalidOperationException">No match found.</exception>
+    [MethodImpl(MethodImplOptions.AggressiveOptimization)]
     public ILHelper FindLast(CodeInstructionWrapper[] instructions, int startindex = 0, int? intendedendindex = null)
     {
         int endindex = intendedendindex ?? this.Codes.Count;
         if (startindex >= endindex - instructions.Length || startindex < 0 || endindex > this.Codes.Count)
         {
-            return ThrowHelper.ThrowArgumentException<ILHelper>($"Either startindex {startindex} or endindex {endindex} are invalid. ");
+            return ThrowHelper.ThrowArgumentException<ILHelper>($"Either {nameof(startindex)} {startindex} or {nameof(endindex)} {endindex} are invalid. ");
         }
         for (int i = endindex - instructions.Length - 1; i >= startindex; i--)
         {
@@ -286,9 +363,13 @@ ContinueSearchBackwards:
     /// <param name="instructions">Instructions to search for.</param>
     /// <returns>this.</returns>
     /// <exception cref="ArgumentException">Fewer codes remain than the length of the instructions to search for.</exception>
-    /// <exception cref="IndexOutOfRangeException">No match found.</exception>
+    /// <exception cref="InvalidOperationException">No match found.</exception>
     public ILHelper FindPrev(CodeInstructionWrapper[] instructions)
         => this.FindLast(instructions, 0, this.Pointer);
+
+    #endregion
+
+    #region manipulation
 
     /// <summary>
     /// Inserts the following code instructions at this location.
@@ -330,7 +411,7 @@ ContinueSearchBackwards:
             }
             else if (this.Codes[i].opcode == OpCodes.Switch)
             {
-                foreach (var switchLabel in (Label[])this.Codes[i].operand)
+                foreach (Label switchLabel in (Label[])this.Codes[i].operand)
                 {
                     this.importantLabels[switchLabel]--;
                 }
@@ -484,14 +565,14 @@ ContinueSearchBackwards:
             instruction.labels.AddRange(this.CurrentInstruction.labels);
         }
 
-        // removed a branch, so untrack those labels.
+        // removed a branch, so un-track those labels.
         if (this.CurrentInstruction.Branches(out Label? currlabel))
         {
             this.importantLabels[currlabel!.Value]--;
         }
         else if (this.CurrentInstruction.opcode == OpCodes.Switch)
         {
-            foreach (var switchLabel in (Label[])this.CurrentInstruction.operand)
+            foreach (Label switchLabel in (Label[])this.CurrentInstruction.operand)
             {
                 this.importantLabels[switchLabel]--;
             }
@@ -561,7 +642,7 @@ ContinueSearchBackwards:
         }
         else if (operand is Label[] newlabels)
         {
-            foreach (var newSwitchLabel in newlabels)
+            foreach (Label newSwitchLabel in newlabels)
             {
                 this.importantLabels[newSwitchLabel]++;
             }
@@ -570,6 +651,10 @@ ContinueSearchBackwards:
         this.CurrentInstruction.operand = operand;
         return this;
     }
+
+    #endregion
+
+    #region labels
 
     /// <summary>
     /// Grab branch destination.
@@ -651,14 +736,14 @@ ContinueSearchBackwards:
     /// <param name="startindex">Index to start searching at (inclusive).</param>
     /// <param name="intendedendindex">Index to end search (exclusive). Leave null to mean "last code".</param>
     /// <returns>this.</returns>
-    /// <exception cref="ArgumentException">Startindex or Endindex are invalid.</exception>
-    /// <exception cref="IndexOutOfRangeException">No match found.</exception>
+    /// <exception cref="ArgumentException">StartIndex or EndIndex are invalid.</exception>
+    /// <exception cref="InvalidOperationException">No match found.</exception>
     public ILHelper FindFirstLabel(Label label, int startindex = 0, int? intendedendindex = null)
     {
         int endindex = intendedendindex ?? this.Codes.Count;
         if (startindex >= endindex || startindex < 0 || endindex > this.Codes.Count)
         {
-            return ThrowHelper.ThrowArgumentException<ILHelper>($"Either startindex {startindex} or endindex {endindex} are invalid.");
+            return ThrowHelper.ThrowArgumentException<ILHelper>($"Either {nameof(startindex)} {startindex} or {nameof(endindex)} {endindex} are invalid.");
         }
         for (int i = startindex; i < endindex; i++)
         {
@@ -702,14 +787,14 @@ ContinueSearchBackwards:
     /// <param name="startindex">Index to start searching at (inclusive).</param>
     /// <param name="intendedendindex">Index to end search (exclusive). Leave null to mean "last code".</param>
     /// <returns>this.</returns>
-    /// <exception cref="ArgumentException">Startindex or Endindex are invalid.</exception>
+    /// <exception cref="ArgumentException">StartIndex or EndIndex are invalid.</exception>
     /// <exception cref="IndexOutOfRangeException">No match found.</exception>
     public ILHelper FindLastLabel(Label label, int startindex = 0, int? intendedendindex = null)
     {
         int endindex = intendedendindex ?? this.Codes.Count;
         if (startindex >= endindex || startindex < 0 || endindex > this.Codes.Count)
         {
-            return ThrowHelper.ThrowArgumentException<ILHelper>($"Either startindex {startindex} or endindex {endindex} are invalid.");
+            return ThrowHelper.ThrowArgumentException<ILHelper>($"Either {nameof(startindex)} {startindex} or {nameof(endindex)} {endindex} are invalid.");
         }
         for (int i = endindex - 1; i >= startindex; i--)
         {
@@ -746,12 +831,16 @@ ContinueSearchBackwards:
         return this.RetreatToLabel(this.label.Value);
     }
 
+    #endregion
+
+    #region locals
+
     /// <summary>
     /// Declares a local and adds it to the list to be tracked.
     /// </summary>
     /// <param name="type">The type.</param>
     /// <param name="local">Out param - the local.</param>
-    /// <param name="pinned">Whether to pinn the local or not.</param>
+    /// <param name="pinned">Whether to pin the local or not.</param>
     /// <returns>this.</returns>
     public ILHelper DeclareLocal(Type type, out LocalBuilder local, bool pinned = false)
     {
@@ -760,14 +849,35 @@ ContinueSearchBackwards:
         return this;
     }
 
+    /// <summary>
+    /// Gets the index of the local of a specific type.
+    /// </summary>
+    /// <param name="type">Type to search for.</param>
+    /// <param name="which">If there's multiple locals of a single type, which one.</param>
+    /// <returns>Index of the local, -1 if not found.</returns>
+    public int GetIndexOfLocal(Type type, int which = 1)
+    {
+        int counter = 0;
+        foreach ((int key, LocalVariableInfo local) in this.locals)
+        {
+            if (local.LocalType == type && ++counter == which)
+            {
+                return local.LocalIndex;
+            }
+        }
+        return -1;
+    }
+
+    #endregion
+
     // transformer should return true to continue and false to stop?
     // and throw errors if it runs into issues.
-    // todo: consider checking the state of the stack. Transformers should match pops and pushes...
+    // TODO: consider checking the state of the stack. Transformers should match pops and pushes...
 
     /// <summary>
     /// For each match found, run the transformer given.
     /// Transformer should take the helper as the sole argument and either return true (to continue matching) or false (to end).
-    /// Be careful with the pointerstack and make sure to restore it.
+    /// Be careful with the pointer-stack and make sure to restore it.
     /// </summary>
     /// <param name="instructions">Instruction set to match against.</param>
     /// <param name="transformer">
@@ -790,7 +900,7 @@ ContinueSearchBackwards:
         int endindex = intendedendindex ?? this.Codes.Count;
         if (startindex >= endindex - instructions.Length || startindex < 0 || endindex > this.Codes.Count)
         {
-            return ThrowHelper.ThrowArgumentException<ILHelper>($"Either startindex {startindex} or endindex {endindex} are invalid. ");
+            return ThrowHelper.ThrowArgumentException<ILHelper>($"Either {nameof(startindex)} {startindex} or {nameof(endindex)} {endindex} are invalid.");
         }
         this.Push();
         for (int i = startindex; i < endindex; i++)
@@ -810,64 +920,9 @@ ContinueSearchBackwards:
 ContinueSearch:
             ;
         }
-        this.Monitor.Log($"ForEachMatch found {count} occurances for {string.Join(", ", instructions.Select(i => i.ToString()))} for {this.Original.FullDescription()}.", LogLevel.Trace);
+        this.Monitor.Log($"ForEachMatch found {count} occurrences for {string.Join(", ", instructions.Select(i => i.ToString()))} for {this.Original.FullDescription()}.", LogLevel.Trace);
         this.Pop();
         return this;
-    }
-
-    /// <summary>
-    /// Gets the index of the local of a specifc type.
-    /// </summary>
-    /// <param name="type">Type to search for.</param>
-    /// <param name="which">If there's multiple locals of a single type, which one.</param>
-    /// <returns>Index of the local, -1 if not found.</returns>
-    public int GetIndexOfLocal(Type type, int which = 1)
-    {
-        int counter = 0;
-        foreach ((int key, LocalVariableInfo local) in this.locals)
-        {
-            if (local.LocalType == type && ++counter == which)
-            {
-                return local.LocalIndex;
-            }
-        }
-        return -1;
-    }
-
-    // 90% sure this is in Harmony already.....
-
-    /// <summary>
-    /// Gets the instruction for loading a local at the index.
-    /// </summary>
-    /// <param name="localindex">Index of the local to get.</param>
-    /// <returns>The proper local instruction.</returns>
-    public static CodeInstruction GetLdLoc(int localindex)
-    {
-        return localindex switch
-        {
-            0 => new(OpCodes.Ldloc_0),
-            1 => new(OpCodes.Ldloc_1),
-            2 => new(OpCodes.Ldloc_2),
-            3 => new(OpCodes.Ldloc_3),
-            _ => new(OpCodes.Ldloc, localindex)
-        };
-    }
-
-    /// <summary>
-    /// Gets the instruction for storing to a local at the index.
-    /// </summary>
-    /// <param name="localindex">Index of the local to get.</param>
-    /// <returns>The proper local instruction.</returns>
-    public static CodeInstruction GetStLoc(int localindex)
-    {
-        return localindex switch
-        {
-            0 => new(OpCodes.Stloc_0),
-            1 => new(OpCodes.Stloc_1),
-            2 => new(OpCodes.Stloc_2),
-            3 => new(OpCodes.Stloc_3),
-            _ => new(OpCodes.Stloc, localindex)
-        };
     }
 
     /// <summary>
@@ -876,6 +931,7 @@ ContinueSearch:
     /// <param name="wrapper">The CodeInstructionWrapper.</param>
     /// <param name="instruction">The instruction to match against.</param>
     /// <returns>True if matches, false otherwise.</returns>
+    [MethodImpl(MethodImplOptions.AggressiveOptimization)]
     private bool IsMatch(CodeInstructionWrapper wrapper, CodeInstruction instruction)
     {
         if (wrapper.Matches(instruction))

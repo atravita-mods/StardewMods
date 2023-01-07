@@ -17,6 +17,8 @@ public static class DataToItemMap
 
     private static readonly SortedList<ItemTypeEnum, Lazy<Dictionary<string, int>>> nameToIDMap = new(8);
 
+    private static Lazy<HashSet<int>> actuallyRings = new(() => GetAll(ItemTypeEnum.Ring).ToHashSet());
+
     /// <summary>
     /// Given an ItemType and a name, gets the id.
     /// </summary>
@@ -43,6 +45,17 @@ public static class DataToItemMap
         }
         return -1;
     }
+
+    public static bool IsActuallyRing(int id) => actuallyRings.Value.Contains(id);
+
+    /// <summary>
+    /// Gets all indexes associated with an asset type.
+    /// </summary>
+    /// <param name="type">Asset type.</param>
+    /// <returns>ienumerable of ints.</returns>
+    /// <remarks>Use this to filter out weird duplicates and stuff.</remarks>
+    public static IEnumerable<int> GetAll(ItemTypeEnum type)
+        => nameToIDMap.TryGetValue(type, out Lazy<Dictionary<string, int>>? asset) ? asset.Value.Values : Enumerable.Empty<int>();
 
     /// <summary>
     /// Sets up various maps.
@@ -96,13 +109,13 @@ public static class DataToItemMap
                     foreach ((int id, string data) in Game1Wrappers.ObjectInfo)
                     {
                         // category asdf should never end up in the player inventory.
-                        var cat = data.GetNthChunk('/', SObject.objectInfoTypeIndex);
+                        ReadOnlySpan<char> cat = data.GetNthChunk('/', SObject.objectInfoTypeIndex);
                         if (cat.Equals("asdf", StringComparison.OrdinalIgnoreCase))
                         {
                             continue;
                         }
 
-                        var name = data.GetNthChunk('/', SObject.objectInfoNameIndex);
+                        ReadOnlySpan<char> name = data.GetNthChunk('/', SObject.objectInfoNameIndex);
                         if (name.Equals("Stone", StringComparison.OrdinalIgnoreCase) && id != 390)
                         {
                             continue;
@@ -111,11 +124,13 @@ public static class DataToItemMap
                             || name.Equals("SupplyCrate", StringComparison.OrdinalIgnoreCase)
                             || name.Equals("Twig", StringComparison.OrdinalIgnoreCase)
                             || name.Equals("Rotten Plant", StringComparison.OrdinalIgnoreCase)
+                            || name.Equals("Warp Totem: Qi's Arena", StringComparison.OrdinalIgnoreCase)
                             || name.Equals("???", StringComparison.OrdinalIgnoreCase)
                             || name.Equals("DGA Dummy Object", StringComparison.OrdinalIgnoreCase)
                             || name.Equals("Egg", StringComparison.OrdinalIgnoreCase)
                             || name.Equals("Large Egg", StringComparison.OrdinalIgnoreCase)
-                            || name.Equals("Strange Doll", StringComparison.OrdinalIgnoreCase))
+                            || name.Equals("Strange Doll", StringComparison.OrdinalIgnoreCase)
+                            || name.Equals("Lost Book", StringComparison.OrdinalIgnoreCase))
                         {
                             continue;
                         }
@@ -136,7 +151,7 @@ public static class DataToItemMap
                     Dictionary<string, int> mapping = new(10);
                     foreach ((int id, string data) in Game1Wrappers.ObjectInfo)
                     {
-                        var cat = data.GetNthChunk('/', 3);
+                        ReadOnlySpan<char> cat = data.GetNthChunk('/', 3);
 
                         // wedding ring (801) isn't a real ring.
                         // JA rings are registered as "Basic -96"
@@ -145,7 +160,7 @@ public static class DataToItemMap
                             continue;
                         }
 
-                        var name = data.GetNthChunk('/', SObject.objectInfoNameIndex).ToString();
+                        string? name = data.GetNthChunk('/', SObject.objectInfoNameIndex).ToString();
                         if (!mapping.TryAdd(name, id))
                         {
                             ModEntry.ModMonitor.Log($"{name} with {id} seems to be a duplicate Ring and may not be resolved correctly.", LogLevel.Warn);
@@ -153,6 +168,10 @@ public static class DataToItemMap
                     }
                     return mapping;
                 });
+            }
+            if (actuallyRings.IsValueCreated)
+            {
+                actuallyRings = new(GetAll(ItemTypeEnum.Ring).ToHashSet());
             }
         }
 
@@ -210,7 +229,7 @@ public static class DataToItemMap
                 }
                 foreach ((int id, string data) in Game1.bigCraftablesInformation)
                 {
-                    var nameSpan = data.GetNthChunk('/', SObject.objectInfoNameIndex);
+                    ReadOnlySpan<char> nameSpan = data.GetNthChunk('/', SObject.objectInfoNameIndex);
                     if (nameSpan.Equals("House Plant", StringComparison.OrdinalIgnoreCase)
                         || nameSpan.Equals("Wood Chair", StringComparison.OrdinalIgnoreCase)
                         || nameSpan.Equals("Door", StringComparison.OrdinalIgnoreCase)
@@ -248,7 +267,7 @@ public static class DataToItemMap
 
                 foreach ((int id, string data) in Game1.clothingInformation)
                 {
-                    var nameSpan = data.GetNthChunk('/', SObject.objectInfoNameIndex);
+                    ReadOnlySpan<char> nameSpan = data.GetNthChunk('/', SObject.objectInfoNameIndex);
                     if (nameSpan.Equals("Prismatic Shirt", StringComparison.OrdinalIgnoreCase))
                     {
                         continue;
@@ -293,7 +312,7 @@ public static class DataToItemMap
 
                 foreach ((int id, string data) in Game1.content.Load<Dictionary<int, string>>(enumToAssetMap[ItemTypeEnum.Hat].BaseName))
                 {
-                    var nameSpan = data.GetNthChunk('/', SObject.objectInfoNameIndex);
+                    ReadOnlySpan<char> nameSpan = data.GetNthChunk('/', SObject.objectInfoNameIndex);
 
                     string name = nameSpan.ToString();
                     if (!mapping.TryAdd(name, id))

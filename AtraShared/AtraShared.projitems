@@ -9,29 +9,21 @@
     <Import_RootNamespace>AtraShared</Import_RootNamespace>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)Caching\TickCache.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ConstantsAndEnums\ItemTypeEnum.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ConstantsAndEnums\Seasons.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ConstantsAndEnums\Weathers.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Content\RawTexData\IRawTextureDataExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)CustomExceptions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ConstantsAndEnums\ErrorMessageConsts.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Utils\Extensions\CropExtensions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Utils\FarmerHelpers.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Integrations\GMCMAttributes\GMCMDefaultColorAttribute.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Integrations\GMCMAttributes\GMCMDefaultIgnoreAttribute.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Integrations\GMCMAttributes\GMCMFormatAttribute.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Integrations\GMCMAttributes\GMCMIntervalAttribute.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Integrations\GMCMAttributes\GMCMRangeAttribute.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Integrations\GMCMAttributes\GMCMSectionAttribute.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Integrations\Interfaces\Automate\IAutomatable.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Integrations\Interfaces\Automate\IAutomateAPI.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Integrations\Interfaces\Automate\IAutomationFactory.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Integrations\Interfaces\Automate\IConsumable.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Integrations\Interfaces\Automate\IContainer.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Integrations\Interfaces\Automate\IMachine.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Integrations\Interfaces\Automate\IRecipe.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Integrations\Interfaces\Automate\IStorage.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Integrations\Interfaces\Automate\ItemType.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Integrations\Interfaces\Automate\ITrackedStack.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Integrations\Interfaces\Automate\MachineState.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Integrations\Interfaces\ContentPatcher\IManagedConditions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Integrations\Interfaces\Fluent\IFluent.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Integrations\Interfaces\Fluent\IFluentAPI.cs" />
@@ -40,10 +32,10 @@
     <Compile Include="$(MSBuildThisFileDirectory)Integrations\Interfaces\IBetterBeehousesAPI.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Integrations\Interfaces\IDynamicGameAssetsAPI.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Integrations\Interfaces\IEPUConditions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Integrations\Interfaces\ILastDayToPlantAPI.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Integrations\Interfaces\IPregnancyRoleApi.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Integrations\Interfaces\ISaveAnywhereAPI.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Integrations\Interfaces\ISolidFoundationsAPI.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Integrations\Interfaces\IWearMoreRingsAPI.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Menuing\MenuingExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Content\RawTexData\RawDataImpl.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Content\RawTexData\RawDataRented.cs" />
@@ -87,14 +79,11 @@
     <Compile Include="$(MSBuildThisFileDirectory)Utils\GameLocationUtils.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Utils\HarmonyHelper\AdditionalCodeInstructionExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Utils\HarmonyHelper\CodeInstructionWrapper.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Utils\HarmonyHelper\HarmonyAttributes\GameVersionAttribute.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Utils\HarmonyHelper\HarmonyAttributes\NonFatalPatchAttribute.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Utils\HarmonyHelper\HarmonyAttributes\NotWithModAttribute.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Utils\HarmonyHelper\HarmonyAttributes\RequireModAttribute.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Utils\HarmonyHelper\ILHelper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Utils\HarmonyHelper\ILHelperExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Utils\Extensions\InputUtils.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Utils\NPCHelpers.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Utils\RandomUtils.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Utils\Shims\DynamicGameAssetsShims.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Utils\Shims\JAInternalTypesShims\CropDataShims.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Utils\Shims\JsonAssetsShims.cs" />
@@ -105,7 +94,6 @@
     <Compile Include="$(MSBuildThisFileDirectory)Wrappers\Game1Wrappers.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="$(MSBuildThisFileDirectory)Integrations\Interfaces\Automate\README.TXT" />
     <Content Include="$(MSBuildThisFileDirectory)Integrations\Interfaces\Fluent\README.TXT" />
   </ItemGroup>
   <ItemGroup>

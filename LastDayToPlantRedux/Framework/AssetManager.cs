@@ -1,63 +1,222 @@
 ﻿using AtraBase.Collections;
+
 using StardewModdingAPI.Events;
-using StardewModdingAPI.Utilities;
 
 namespace LastDayToPlantRedux.Framework;
 
 /// <summary>
 /// Manages assets for this mod.
 /// </summary>
-[SuppressMessage("StyleCop.CSharp.OrderingRules", "SA1201:Elements should appear in the correct order", Justification = "Fields kept near accessors.")]
+[SuppressMessage("StyleCop.CSharp.OrderingRules", "SA1201:Elements should appear in the correct order", Justification = "Reviewed.")]
 internal static class AssetManager
 {
-    private static readonly string MailFlag = "atravita_LastDayLetter";
-    private static readonly string DataMail = PathUtilities.NormalizeAssetName("Data/mail");
+    #region denylist and allowlist
+    private static readonly HashSet<int> AllowedFertilizersValue = new();
+    private static readonly HashSet<int> DeniedFertilizersValue = new();
+    private static readonly HashSet<int> AllowedSeedsValue = new();
+    private static readonly HashSet<int> DeniedSeedsValue = new();
+    private static bool accessProcessed = false;
 
-    // crop data.
-    private static readonly string CropData = PathUtilities.NormalizeAssetName("Data/Crops");
+    /// <summary>
+    /// The mail flag used for this mod.
+    /// </summary>
+    internal const string MailFlag = "atravita_LastDayLetter";
 
-    private static IAssetName? cropName = null;
+    /// <summary>
+    /// Gets fertilizers that should always be allowed.
+    /// </summary>
+    internal static HashSet<int> AllowedFertilizers
+    {
+        get
+        {
+            ProcessAccessLists();
+            return AllowedFertilizersValue;
+        }
+    }
 
-    private static IAssetName CropName =>
-        cropName ??= ModEntry.GameContentHelper.ParseAssetName(CropData);
+    /// <summary>
+    /// Gets fertilizers that should always be hidden.
+    /// </summary>
+    internal static HashSet<int> DeniedFertilizers
+    {
+        get
+        {
+            ProcessAccessLists();
+            return DeniedFertilizersValue;
+        }
+    }
 
-    // data objectinfo
-    private static readonly string DataObjectInfo = PathUtilities.NormalizeAssetName("Data/ObjectInformation");
+    /// <summary>
+    /// Gets seeds that should always be allowed.
+    /// </summary>
+    internal static HashSet<int> AllowedSeeds
+    {
+        get
+        {
+            ProcessAccessLists();
+            return AllowedSeedsValue;
+        }
+    }
 
-    private static IAssetName? objectInfoName = null;
+    /// <summary>
+    /// Gets seeds that should always be hidden.
+    /// </summary>
+    internal static HashSet<int> DeniedSeeds
+    {
+        get
+        {
+            ProcessAccessLists();
+            return DeniedSeedsValue;
+        }
+    }
 
-    private static IAssetName ObjectInfoName =>
-        objectInfoName ??= ModEntry.GameContentHelper.ParseAssetName(DataObjectInfo);
+    #endregion
 
-    // denylist and allowlist
-    private static readonly string AccessLists = PathUtilities.NormalizeAssetName("Mods/atravita.LastDayToPlantRedux/AccessControl");
+    /// <summary>
+    /// The current mail for the player.
+    /// </summary>
+    private static string message = string.Empty;
 
+    /// <summary>
+    /// The location of our access identifier->access dictionary.
+    /// </summary>
+    private static IAssetName accessLists = null!;
+
+    /// <summary>
+    /// The data asset for objects.
+    /// </summary>
+    private static IAssetName objectInfoName = null!;
+
+    /// <summary>
+    /// Gets the data asset for mail.
+    /// </summary>
+    internal static IAssetName DataMail { get; private set; } = null!;
+
+    /// <summary>
+    /// Gets the data asset for Data/crops.
+    /// </summary>
+    internal static IAssetName CropName { get; private set; } = null!;
+
+    /// <summary>
+    /// Initializes the asset manager.
+    /// </summary>
+    /// <param name="parser">the game content parser.</param>
+    internal static void Initialize(IGameContentHelper parser)
+    {
+        DataMail = parser.ParseAssetName("Data/mail");
+        CropName = parser.ParseAssetName("Data/Crops");
+        objectInfoName = parser.ParseAssetName("Data/ObjectInformation");
+        accessLists = parser.ParseAssetName("Mods/atravita.LastDayToPlantRedux/AccessControl");
+    }
+
+    /// <summary>
+    /// Updates mail on the start of a new day.
+    /// </summary>
+    /// <returns>True if there's crops with their last day today.</returns>
+    internal static bool UpdateOnDayStart()
+    {
+        (string message, bool showplayer) = CropAndFertilizerManager.GenerateMessageString();
+        AssetManager.message = message;
+        return showplayer;
+    }
+
+    /// <inheritdoc cref="IContentEvents.AssetRequested"/>
     internal static void Apply(AssetRequestedEventArgs e)
     {
-        if (e.NameWithoutLocale.IsEquivalentTo(AccessLists))
+        if (e.NameWithoutLocale.IsEquivalentTo(accessLists))
         {
-            e.LoadFrom(EmptyContainers.GetEmptyDictionary<int, string>, AssetLoadPriority.Exclusive);
+            e.LoadFrom(EmptyContainers.GetEmptyDictionary<string, string>, AssetLoadPriority.Exclusive);
         }
-        else if (e.NameWithoutLocale.IsEquivalentTo(DataMail))
+        else if (e.NameWithoutLocale.IsEquivalentTo(DataMail) && !string.IsNullOrWhiteSpace(message))
         {
             e.Edit(
             static (asset) =>
             {
-                var data = asset.AsDictionary<string, string>().Data;
-                data[MailFlag] = "";
+                IDictionary<string, string>? data = asset.AsDictionary<string, string>().Data;
+                data[MailFlag] = message;
             }, AssetEditPriority.Late);
         }
     }
 
+    /// <inheritdoc cref="IContentEvents.AssetsInvalidated"/>
     internal static void InvalidateCache(AssetsInvalidatedEventArgs e)
     {
         if (e.NamesWithoutLocale.Contains(CropName))
         {
             CropAndFertilizerManager.RequestInvalidateCrops();
+            AssetManager.accessProcessed = false;
         }
-        if (e.NamesWithoutLocale.Contains(ObjectInfoName))
+        if (e.NamesWithoutLocale.Contains(objectInfoName))
         {
             CropAndFertilizerManager.RequestInvalidateFertilizers();
+            AssetManager.accessProcessed = false;
+        }
+        if (e.NamesWithoutLocale.Contains(accessLists))
+        {
+            AssetManager.accessProcessed = false;
+        }
+    }
+
+    private static void ProcessAccessLists()
+    {
+        if (AssetManager.accessProcessed)
+        {
+            return;
+        }
+
+        AssetManager.accessProcessed = true;
+
+        AllowedFertilizersValue.Clear();
+        DeniedFertilizersValue.Clear();
+        AllowedSeedsValue.Clear();
+        DeniedSeedsValue.Clear();
+
+        foreach ((string item, string access) in Game1.content.Load<Dictionary<string, string>>(AssetManager.accessLists.BaseName))
+        {
+            (int id, int type)? tup = LDUtils.ResolveIDAndType(item);
+            if (tup is null)
+            {
+                continue;
+            }
+            int id = tup.Value.id;
+            int type = tup.Value.type;
+
+            ReadOnlySpan<char> trimmed = access.AsSpan().Trim();
+            bool isAllow = trimmed.Equals("Allow", StringComparison.OrdinalIgnoreCase);
+            bool isDeny = !isAllow && trimmed.Equals("Deny", StringComparison.OrdinalIgnoreCase);
+
+            if (!isAllow && !isDeny)
+            {
+                ModEntry.ModMonitor.Log($"Invalid access term {access}, skipping");
+                continue;
+            }
+
+            switch (type)
+            {
+                case SObject.SeedsCategory:
+                    if (isAllow)
+                    {
+                        AllowedSeedsValue.Add(id);
+                    }
+                    else if (isDeny)
+                    {
+                        DeniedSeedsValue.Add(id);
+                    }
+                    break;
+                case SObject.fertilizerCategory:
+                    if (isAllow)
+                    {
+                        AllowedFertilizersValue.Add(id);
+                    }
+                    else if (isDeny)
+                    {
+                        DeniedFertilizersValue.Add(id);
+                    }
+                    break;
+                default:
+                    ModEntry.ModMonitor.Log($"{item} with {id} is type {type}, not a seed or fertilizer, skipping.");
+                    break;
+            }
         }
     }
 }

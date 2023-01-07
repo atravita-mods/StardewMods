@@ -1,4 +1,8 @@
-﻿using AtraShared.Utils.Extensions;
+﻿using AtraBase.Toolkit.Extensions;
+
+using AtraCore.Framework.Caches;
+
+using AtraShared.Utils.Extensions;
 using HarmonyLib;
 using StardewValley.Locations;
 
@@ -10,18 +14,51 @@ namespace SpecialOrdersExtended.Managers;
 [HarmonyPatch(typeof(SpecialOrder))]
 internal static class TagManager
 {
+    #region random
+
     private static Random? random;
 
     /// <summary>
     /// Gets a seeded random that changes once per in-game week.
     /// </summary>
     internal static Random Random
-         => random ??= new Random(((int)Game1.uniqueIDForThisGame * 26) + (int)(Game1.stats.DaysPlayed / 7 * 36));
+    {
+        get
+        {
+            if (random is null)
+            {
+                random = new Random(((int)Game1.uniqueIDForThisGame * 26) + (int)(Game1.stats.DaysPlayed / 7 * 36));
+                random.PreWarm();
+            }
+            return random;
+}
+    }
 
     /// <summary>
     /// Delete's the random so it can be reset later.
     /// </summary>
-    internal static void ResetRandom() => random = null;
+    internal static void ResetRandom()
+    {
+        if (Game1.stats.DaysPlayed % 7 == 0)
+        {
+            random = null;
+        }
+    }
+
+    #endregion
+
+    #region cache
+
+    private readonly static Dictionary<string, bool> Cache = new();
+    private static int lastTick = -1;
+
+    internal static void ClearCache()
+    {
+        lastTick = -1;
+        Cache.Clear();
+    }
+
+    #endregion
 
     /// <summary>
     /// Prefixes CheckTag to handle special mod tags.
@@ -31,10 +68,27 @@ internal static class TagManager
     /// <returns>true to continue to the vanilla function, false otherwise.</returns>
     [HarmonyPrefix]
     [HarmonyPatch("CheckTag")]
-    [HarmonyPriority(Priority.High)]
+    [HarmonyPriority(Priority.VeryHigh)]
     [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Naming convention for Harmony")]
-    internal static bool PrefixCheckTag(ref bool __result, string __0)
+    private static bool PrefixCheckTag(ref bool __result, string __0)
     {
+        {
+            if (ModEntry.Config.UseTagCache && Cache.TryGetValue(__0, out bool result))
+            {
+                if (Game1.ticks != lastTick)
+                {
+                    Cache.Clear();
+                    lastTick = Game1.ticks;
+                }
+                else
+                {
+                    ModEntry.ModMonitor.DebugOnlyLog($"Hit cache: {__0}, {result}", LogLevel.Trace);
+                    __result = result;
+                    return false;
+                }
+            }
+        }
+
         ModEntry.ModMonitor.DebugOnlyLog($"Checking tag {__0}", LogLevel.Trace);
         try
         {
@@ -141,7 +195,7 @@ internal static class TagManager
                     return false;
                 case "married":
                     // married_NPCname, married_NPCname_not
-                    __result = Game1.getCharacterFromName(vals[1])?.getSpouse() is not null;
+                    __result = NPCCache.GetByVillagerName(vals[1])?.getSpouse() is not null;
                     if (vals.Length >= 3 && vals[2].Equals("not", StringComparison.OrdinalIgnoreCase))
                     {
                         __result = !__result;
@@ -201,7 +255,7 @@ internal static class TagManager
                             return false;
                         }
                     }
-                    __result = vals[1] switch
+                    __result = vals[1].ToLowerInvariant() switch
                     {
                         "mining" => Game1.getAllFarmers().Any((Farmer farmer) => farmer.miningLevel.Value >= levelwanted),
                         "farming" => Game1.getAllFarmers().Any((Farmer farmer) => farmer.farmingLevel.Value >= levelwanted),
@@ -341,6 +395,24 @@ internal static class TagManager
             ModEntry.ModMonitor.Log($"Failed while checking tag {__0}\n{ex}", LogLevel.Error);
         }
         return true; // continue to base code.
+    }
+
+    [HarmonyPostfix]
+    [HarmonyPriority(Priority.Last - 200)]
+    [HarmonyPatch("CheckTag")]
+    [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Naming convention for Harmony")]
+    private static void WatchTag(bool __result, string __0)
+    {
+        if (ModEntry.Config.UseTagCache)
+        {
+            if (Game1.ticks != lastTick)
+            {
+                Cache.Clear();
+                lastTick = Game1.ticks;
+            }
+
+            Cache[__0] = __result;
+        }
     }
 
     /// <summary>

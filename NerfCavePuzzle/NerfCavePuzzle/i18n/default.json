@@ -23,5 +23,7 @@
   "MaxNotes.title": "Max Notes",
   "MaxNotes.description": "Adjusts the maximum number of notes. Note: must be set by host.",
   "PauseBetweenRounds.title": "Pause Between Rounds",
-  "PauseBetweenRounds.description": "If true, you must talk to the statue to continue to the next round. Note: must be set by host."
+  "PauseBetweenRounds.description": "If true, you must talk to the statue to continue to the next round. Note: must be set by host.",
+  "AllowReAsks.title": "Allow Re-Asks",
+  "AllowReAsks.description":  "Allows you to ask the statue for the pattern again."
 }

@@ -2,17 +2,12 @@
 =============
 
 #### Version 0.3.0 TODO items
-* Bush fertilizers
-    - Handle adding to shops and other aquisition methods.
 * Beverage fertilizer
-    - Crops
-    - Fruit trees
-* Acquisition: maybee have fertilizer appear in big slimes outside the mines?
-* Items and all the implementation for the prismatic and everlasting fertilizers (don't forget that JA and Winter Star also transpile in this space)
-* Seedy fertilizer: drops the seed? 
-* Some fertilizer for trees?
-* Something for mushroom boxen? 
-* Fix the giftbox so you only get the starting Lucky fertilizer once.
+    - Fruit trees (DGA, Automate?)
+* Tree Tapper's: Automate integration.
+* Something for mushroom boxen? (1.6 - reduce to one day?)
+* Make good draw code for all of the fertilizers. (don't forget domesticated fish - maybe some more jumping...)
+* PR Pathos to make CJB pass in the correct fertilizer (b/c Everlasting)
 
 #### Version 0.3.0
 * Added new fertilizers:
@@ -21,14 +16,20 @@
     - Rapid Bush Fertilizer: makes tea tree bushes grow 20% faster.
     - Secret Joja Fertilizer: decreases growth time, has a chance of decreasing regrowth time, but forces the crop to be base quality.
     - Wisdom Fertilizer: increases farming XP by 10%.
+    - Seedy Fertilizer: drops the seed! (doesn't work for DGA crops yet).
+    - Prismatic Fertilizer: Makes flowers cycle through the prismatic colors.
+    - Radioactive Fertilizer: Causes crops to mutate overnight.
+    - Everlasting Fertilizer: Crops in this fertilizer ignore seasons.
+    - Tree Tapper's Fertilizer: Tapped trees have a chance of producing an additional product.
 * Adjusted previous fertilizers:
     - Waterlogged now increases the growth speed of paddy crops a little.
+    - Deluxe Fruit Tree's color scheme now no longer resembles a vanilla fertilizer that much.
 * Added German translation (thanks to CrisTortion!)
 * Fixes the lucky fertilizer.
 * Fixes integration with Prismatic/Radioactive tools.
 * Fixes organic fertilizer with beer, pale ale, green tea, mead, and coffee.
 * Internal improvements.
-
+* Deshuffle code fixes.
 
 #### Version 0.2.0
 * Move to using AtraCore, which should have improved loading times significantly.

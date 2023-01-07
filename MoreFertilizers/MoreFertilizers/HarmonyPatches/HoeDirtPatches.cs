@@ -4,7 +4,7 @@ using StardewValley.TerrainFeatures;
 namespace MoreFertilizers.HarmonyPatches;
 
 /// <summary>
-/// Patches against hoedirt.
+/// Patches against HoeDirt.
 /// </summary>
 [HarmonyPatch(typeof(HoeDirt))]
 internal static class HoeDirtPatches

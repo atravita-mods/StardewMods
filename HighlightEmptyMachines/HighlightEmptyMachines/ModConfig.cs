@@ -25,7 +25,6 @@ public sealed class ModConfig
         this.VanillaMachines[VanillaMachinesEnum.Incubator] = false;
         this.VanillaMachines[VanillaMachinesEnum.SlimeIncubator] = false;
         this.VanillaMachines[VanillaMachinesEnum.OstrichIncubator] = false;
-        this.VanillaMachines[VanillaMachinesEnum.BeeHouse] = false;
 
         // Set invalid to be just a little transparent.
         Color invalid = Color.Gray;

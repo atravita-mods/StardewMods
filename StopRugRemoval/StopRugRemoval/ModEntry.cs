@@ -1,17 +1,25 @@
 ﻿using System.Reflection;
+
+using AtraBase.Toolkit.Extensions;
+
 using AtraCore.Utilities;
+
 using AtraShared.ConstantsAndEnums;
 using AtraShared.Integrations;
 using AtraShared.Menuing;
 using AtraShared.MigrationManager;
 using AtraShared.Schedules;
 using AtraShared.Utils.Extensions;
+
 using HarmonyLib;
+
 using StardewModdingAPI.Enums;
 using StardewModdingAPI.Events;
 using StardewModdingAPI.Utilities;
+
 using StardewValley.Locations;
 using StardewValley.Objects;
+
 using StopRugRemoval.Configuration;
 using StopRugRemoval.Framework.Niceties;
 using StopRugRemoval.HarmonyPatches;
@@ -19,6 +27,7 @@ using StopRugRemoval.HarmonyPatches.Confirmations;
 using StopRugRemoval.HarmonyPatches.Niceties;
 using StopRugRemoval.HarmonyPatches.Niceties.PhoneTiming;
 using StopRugRemoval.HarmonyPatches.Volcano;
+
 using AtraUtils = AtraShared.Utils.Utils;
 
 namespace StopRugRemoval;
@@ -33,12 +42,13 @@ internal sealed class ModEntry : Mod
 
     private MigrationManager? migrator;
 
+    #region accessors
+
     /// <summary>
     /// Gets a function that gets Game1.multiplayer.
     /// </summary>
     internal static Func<Multiplayer> Multiplayer => MultiplayerHelpers.GetMultiplayer;
 
-    // the following three properties are set in the entry method, which is approximately as close as I can get to the constructor anyways.
     /// <summary>
     /// Gets the logger for this file.
     /// </summary>
@@ -48,11 +58,6 @@ internal sealed class ModEntry : Mod
     /// Gets instance that holds the configuration for this mod.
     /// </summary>
     internal static ModConfig Config { get; private set; } = null!;
-
-    /// <summary>
-    /// Gets the game content helper for this mod.
-    /// </summary>
-    internal static IGameContentHelper GameContentHelper { get; private set; } = null!;
 
     /// <summary>
     /// Gets the multiplayer helper for this mod.
@@ -74,12 +79,14 @@ internal sealed class ModEntry : Mod
     /// </summary>
     internal static ScheduleUtilityFunctions UtilitySchedulingFunctions { get; private set; } = null!;
 
+    #endregion
+
     /// <inheritdoc/>
     public override void Entry(IModHelper helper)
     {
         I18n.Init(helper.Translation);
+        AssetEditor.Initialize(helper.GameContent);
         ModMonitor = this.Monitor;
-        GameContentHelper = this.Helper.GameContent;
         MultiplayerHelper = this.Helper.Multiplayer;
         InputHelper = this.Helper.Input;
         UNIQUEID = this.ModManifest.UniqueID;
@@ -104,6 +111,7 @@ internal sealed class ModEntry : Mod
         helper.Events.Specialized.LoadStageChanged += this.OnLoadStageChanged;
     }
 
+    /// <inheritdoc cref="IInputEvents.ButtonPressed"/>
     [EventPriority(EventPriority.High)]
     private void OnButtonPressed(object? sender, ButtonPressedEventArgs e)
     {
@@ -114,12 +122,8 @@ internal sealed class ModEntry : Mod
         }
     }
 
-    /// <summary>
-    /// Unfucks the inventory size.
-    /// Which I might have fucked up in a PR to JA.
-    /// </summary>
-    /// <param name="sender">SMAPI.</param>
-    /// <param name="e">event args.</param>
+    /// <inheritdoc cref="ISpecializedEvents.LoadStageChanged"/>
+    /// <remarks>Unfucks the inventory size. Which I might have fucked up in a PR to JA.</remarks>
     [EventPriority(EventPriority.Low)]
     private void OnLoadStageChanged(object? sender, LoadStageChangedEventArgs e)
     {
@@ -135,17 +139,20 @@ internal sealed class ModEntry : Mod
                         player.Items.Add(null);
                     }
                 }
+
+                this.Monitor.Log($"Checking for nulls in player quest log for {player.Name}");
+                player.questLog.ClearNulls();
             }
         }
     }
 
-    /*************
-     * REGION ASSET MANAGEMENT
-     * **********/
+    #region asset edits
 
+    /// <inheritdoc cref="IContentEvents.LocaleChanged"/>
     private void OnLocaleChange(object? sender, LocaleChangedEventArgs e)
         => AssetEditor.Refresh();
 
+    /// <inheritdoc cref="IContentEvents.AssetsInvalidated"/>
     private void OnAssetInvalidated(object? sender, AssetsInvalidatedEventArgs e)
         => AssetEditor.Refresh(e.NamesWithoutLocale);
 
@@ -161,26 +168,20 @@ internal sealed class ModEntry : Mod
     private void OnSaloonEventRequested(object? sender, AssetRequestedEventArgs e)
         => AssetEditor.EditSaloonEvent(e);
 
+    #endregion
+
+    /// <inheritdoc cref="IPlayerEvents.Warped"/>
     private void Player_Warped(object? sender, WarpedEventArgs e)
     {
         SObjectPatches.HaveConfirmedBomb.Value = false;
         ConfirmWarp.HaveConfirmed.Value = false;
     }
 
-    /***************
-     * REGION HARMONY
-     * *************/
-
-    /// <summary>
-    /// Applies the patches that must be applied after all mods are initialized.
-    /// IE - patches on other mods.
-    /// </summary>
-    /// <param name="harmony">A harmony instance.</param>
     private void ApplyPatches(Harmony harmony)
     {
         try
         {
-            harmony.PatchAll();
+            harmony.PatchAll(typeof(ModEntry).Assembly);
             FruitTreesAvoidHoe.ApplyPatches(harmony, this.Helper.ModRegistry);
             if (!this.Helper.ModRegistry.IsLoaded("DecidedlyHuman.BetterReturnScepter"))
             {
@@ -199,6 +200,7 @@ internal sealed class ModEntry : Mod
         harmony.Snitch(this.Monitor, harmony.Id, transpilersOnly: true);
     }
 
+    /// <inheritdoc cref="IGameLoopEvents.GameLaunched"/>
     private void OnGameLaunch(object? sender, GameLaunchedEventArgs e)
     {
         PlantGrassUnder.GetSmartBuildingBuildMode(this.Helper.ModRegistry);
@@ -220,20 +222,7 @@ internal sealed class ModEntry : Mod
         }
     }
 
-    private void ReturnedToTitle(object? sender, ReturnedToTitleEventArgs e)
-    {
-        if (GMCM?.HasGottenAPI == true)
-        {
-            GMCM.Unregister();
-            this.SetUpBasicConfig();
-        }
-    }
-
-    /// <summary>
-    /// Raised when save is loaded.
-    /// </summary>
-    /// <param name="sender">Unknown, used by SMAPI.</param>
-    /// <param name="e">Parameters.</param>
+    /// <inheritdoc cref="IGameLoopEvents.SaveLoaded"/>
     private void SaveLoaded(object? sender, SaveLoadedEventArgs e)
     {
         // This allows NPCs to say hi to the player. Yes, I'm that petty.
@@ -322,9 +311,21 @@ internal sealed class ModEntry : Mod
         this.Helper.Events.GameLoop.Saved -= this.WriteMigrationData;
     }
 
+    #region GMCM
+
     // Favor a single defined function that gets the config, instead of defining the lambda over and over again.
     [SuppressMessage("StyleCop.CSharp.OrderingRules", "SA1204:Static elements should appear before instance elements", Justification = "Reviewed.")]
     private static ModConfig GetConfig() => Config;
+
+    /// <inheritdoc cref="IGameLoopEvents.ReturnedToTitle"/>
+    private void ReturnedToTitle(object? sender, ReturnedToTitleEventArgs e)
+    {
+        if (GMCM?.HasGottenAPI == true)
+        {
+            GMCM.Unregister();
+            this.SetUpBasicConfig();
+        }
+    }
 
     private void SetUpBasicConfig()
     {
@@ -350,6 +351,10 @@ internal sealed class ModEntry : Mod
             else if (property.PropertyType == typeof(float))
             {
                 GMCM.AddFloatOption(property, GetConfig);
+            }
+            else if (property.PropertyType == typeof(int))
+            {
+                GMCM.AddIntOption(property, GetConfig);
             }
         }
 
@@ -400,10 +405,11 @@ internal sealed class ModEntry : Mod
                 tooltip: I18n.BombsInDangerousAreas_Description);
     }
 
-    /**************
-     * REGION MULTIPLAYER
-     * ***********/
+    #endregion
 
+    #region multiplayer
+
+    /// <inheritdoc cref="IMultiplayerEvents.ModMessageReceived"/>
     private void OnModMessageRecieved(object? sender, ModMessageReceivedEventArgs e)
     {
         if (e.FromModID != ModEntry.UNIQUEID)
@@ -425,4 +431,6 @@ internal sealed class ModEntry : Mod
             VolcanoChestAdjuster.BroadcastData(this.Helper.Multiplayer, new[] { e.Peer.PlayerID });
         }
     }
+
+    #endregion
 }

@@ -42,7 +42,7 @@ internal static class AddCrowsForExtendedToolsTranspiler
                 new(OpCodes.Call),
                 new(SpecialCodeInstructionCases.Wildcard, (instr) => instr.opcode == OpCodes.Brfalse || instr.opcode == OpCodes.Brfalse_S),
             })
-            .GetLabels(out var labels)
+            .GetLabels(out IList<Label>? labels)
             .Remove(5)
             .AttachLabel(labels.ToArray());
 

@@ -20,7 +20,7 @@ public static class NPCExtensions
     {
         Guard.IsNotNull(npc);
 
-        if (!string.IsNullOrWhiteSpace(dialogueKey) && npc.Dialogue.TryGetValue(dialogueKey, out var dialogue))
+        if (!string.IsNullOrWhiteSpace(dialogueKey) && npc.Dialogue.TryGetValue(dialogueKey, out string? dialogue))
         {
             npc.CurrentDialogue.Clear();
             npc.CurrentDialogue.Push(new Dialogue(dialogue, npc) { removeOnNextMove = true });
@@ -48,6 +48,10 @@ public static class NPCExtensions
         }
         else
         {
+            // make endearment token work. This is basically copied from game code.
+            dialogue = dialogue.Replace(MarriageDialogueReference.ENDEARMENT_TOKEN_LOWER, npc.getTermOfSpousalEndearment().ToLower(), StringComparison.Ordinal);
+            dialogue = dialogue.Replace(MarriageDialogueReference.ENDEARMENT_TOKEN, npc.getTermOfSpousalEndearment(), StringComparison.Ordinal);
+
             if (!add)
             {
                 npc.CurrentDialogue.Clear();
@@ -62,7 +66,7 @@ public static class NPCExtensions
     /// Given a base key, gets a random dialogue from a set.
     /// </summary>
     /// <param name="npc">NPC.</param>
-    /// <param name="basekey">Basekey to use.</param>
+    /// <param name="basekey">Base key to use.</param>
     /// <param name="random">Random to use, defaults to Game1.random if null.</param>
     /// <returns>null if no dialogue key found, a random dialogue key otherwise.</returns>
     public static string? GetRandomDialogue(
@@ -112,6 +116,11 @@ public static class NPCExtensions
         return scheduleData.TryGetValue(scheduleKey, out rawData);
     }
 
+    /// <summary>
+    /// Gets the tile an NPC is currently facing.
+    /// </summary>
+    /// <param name="npc">NPC in question.</param>
+    /// <returns>Tile they're facing.</returns>
     public static Vector2 GetFacingTile(this Character npc)
     {
         Vector2 tile = npc.Position / Game1.tileSize;

@@ -53,13 +53,13 @@ internal static class CheckForWeddingTranspiler
                 new(OpCodes.Ldc_I4_0),
                 new(SpecialCodeInstructionCases.Wildcard, (instr) => instr.opcode == OpCodes.Ble || instr.opcode == OpCodes.Ble_S),
             })
-            .GetLabels(out var labelsToMove, clear: true)
-            .DefineAndAttachLabel(out var skip)
+            .GetLabels(out IList<Label>? labelsToMove, clear: true)
+            .DefineAndAttachLabel(out Label skip)
             .Push()
             .Advance(3)
             .StoreBranchDest()
             .AdvanceToStoredLabel()
-            .DefineAndAttachLabel(out var bypassWedding)
+            .DefineAndAttachLabel(out Label bypassWedding)
             .Pop()
             .Insert(new CodeInstruction[]
             { // if (Config.WeddingTime > Game1.timeOfDay) && (Game1.currentLocation is not Town), skip wedding for now.
@@ -88,7 +88,7 @@ internal static class CheckForWeddingTranspiler
         catch (Exception ex)
         {
             ModEntry.ModMonitor.Log($"Ran into error transpiling {original.FullDescription()}.\n\n{ex}", LogLevel.Error);
-            original?.Snitch(ModEntry.ModMonitor);
+            original.Snitch(ModEntry.ModMonitor);
         }
         return null;
     }

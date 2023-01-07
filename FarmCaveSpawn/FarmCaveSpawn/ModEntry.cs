@@ -8,6 +8,8 @@ using AtraBase.Toolkit;
 using AtraBase.Toolkit.Extensions;
 using AtraBase.Toolkit.StringHandler;
 
+using AtraCore.Framework.ItemManagement;
+
 using AtraShared.ConstantsAndEnums;
 using AtraShared.Integrations;
 using AtraShared.MigrationManager;
@@ -72,7 +74,7 @@ internal sealed class ModEntry : Mod
     /// Gets the seeded random for this mod.
     /// </summary>
     private Random Random
-        => this.random ??= new Random(((int)Game1.uniqueIDForThisGame * 2) + ((int)Game1.stats.DaysPlayed * 7));
+        => this.random ??= RandomUtils.GetSeededRandom(7, "atravita.FarmCaveSpawn.CaveRandom");
 
     /// <summary>
     /// Gets or sets a value indicating whether or not I've spawned fruit today.
@@ -83,6 +85,7 @@ internal sealed class ModEntry : Mod
     public override void Entry(IModHelper helper)
     {
         I18n.Init(helper.Translation);
+        AssetManager.Initialize(helper.GameContent);
 
         this.config = AtraUtils.GetConfigOrDefault<ModConfig>(helper, this.Monitor);
 
@@ -181,7 +184,7 @@ internal sealed class ModEntry : Mod
 
         int count = 0;
 
-        var currentSeason = StardewSeasonsExtensions.TryParse(Game1.currentSeason, ignoreCase: true, out var val) ? val : StardewSeasons.All;
+        StardewSeasons currentSeason = StardewSeasonsExtensions.TryParse(Game1.currentSeason, ignoreCase: true, out StardewSeasons val) ? val : StardewSeasons.All;
         if (this.ShouldResetFruitList || this.season != currentSeason)
         {
             this.TreeFruit = this.GetTreeFruits();
@@ -191,7 +194,7 @@ internal sealed class ModEntry : Mod
 
         if (Game1.getLocationFromName("FarmCave") is FarmCave farmcave)
         {
-            this.Monitor.DebugOnlyLog($"Spawning in the farmcave");
+            this.Monitor.DebugOnlyLog($"Spawning in the farm cave");
 
             (Vector2[] tiles, int num) = farmcave.GetTiles();
 
@@ -255,7 +258,7 @@ internal sealed class ModEntry : Mod
 
                 if (Game1.getLocationFromName(parseloc) is GameLocation gameLocation)
                 {
-                    this.Monitor.DebugOnlyLog($"Found {gameLocation}");
+                    this.Monitor.DebugOnlyLog($"Found {gameLocation.NameOrUniqueName}");
 
                     (Vector2[] tiles, int num) = gameLocation.GetTiles(xstart: locLimits["x1"], xend: locLimits["x2"], ystart: locLimits["y1"], yend: locLimits["y2"]);
                     if (num == 0)
@@ -321,8 +324,12 @@ END:
         int fruitToPlace = Utility.GetRandom(
             this.TreeFruit.Count > 0 && this.Random.NextDouble() < (this.config.TreeFruitChance / 100f) ? this.TreeFruit : this.BASE_FRUIT,
             this.Random);
-        location.Objects[tile] = new SObject(fruitToPlace, 1) { IsSpawnedObject = true };
-        this.Monitor.DebugOnlyLog($"Spawning item {fruitToPlace} at {location.Name}:{tile.X},{tile.Y}", LogLevel.Debug);
+
+        if (!DataToItemMap.IsActuallyRing(fruitToPlace))
+        {
+            location.Objects[tile] = new SObject(fruitToPlace, 1) { IsSpawnedObject = true };
+            this.Monitor.DebugOnlyLog($"Spawning item {fruitToPlace} at {location.Name}:{tile.X},{tile.Y}", LogLevel.Debug);
+        }
     }
 
     [MethodImpl(TKConstants.Hot)]
@@ -365,9 +372,8 @@ END:
     /// </summary>
     /// <param name="datalocation">asset name.</param>
     /// <returns>List of data, split by commas.</returns>
-    private List<string> GetData(string datalocation)
+    private List<string> GetData(IAssetName datalocation)
     {
-        this.Helper.GameContent.InvalidateCacheAndLocalized(datalocation);
         IDictionary<string, string> rawlist = this.Helper.GameContent.Load<Dictionary<string, string>>(datalocation);
         List<string> datalist = new();
 
@@ -382,7 +388,7 @@ END:
     }
 
     /// <summary>
-    /// Generate list of tree fruits valid for spawning, based on user config/denylist/data in Data/fruitTrees.
+    /// Generate list of tree fruits valid for spawning, based on user config/deny list/data in Data/fruitTrees.
     /// </summary>
     /// <returns>A list of tree fruit.</returns>
     private List<int> GetTreeFruits()
@@ -410,7 +416,8 @@ END:
                 continue;
             }
 
-            if (treedata.TryGetAtIndex(2, out SpanSplitEntry val) && int.TryParse(val, out int objectIndex))
+            // 73 is the golden walnut. Let's not let players have that, or 858's Qi gems.
+            if (treedata.TryGetAtIndex(2, out SpanSplitEntry val) && int.TryParse(val, out int objectIndex) && objectIndex != 73 && objectIndex != 858)
             {
                 try
                 {

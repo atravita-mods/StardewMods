@@ -42,7 +42,7 @@ internal static class PartialDelieverObjectives
             .Copy(5, out IEnumerable<CodeInstruction>? copy)
             .FindNext(new CodeInstructionWrapper[]
             { // Math.Min(item.Stack, this.GetMaxCount() - this.GetCount()
-                new(OpCodes.Call, typeof(Math).GetCachedMethod(nameof(Math.Min), ReflectionCache.FlagTypes.StaticFlags, new[] { typeof(int), typeof(int) })),
+                new(OpCodes.Call, typeof(Math).GetCachedMethod<int, int>(nameof(Math.Min), ReflectionCache.FlagTypes.StaticFlags)),
             })
             .FindNext(new CodeInstructionWrapper[]
             { // if (required_count > stack) return 0;
@@ -69,7 +69,7 @@ internal static class PartialDelieverObjectives
             .AdvanceToStoredLabel()
             .DefineAndAttachLabel(out Label jumppoint)
             .Pop()
-            .GetLabels(out var secondLabels, clear: true)
+            .GetLabels(out IList<Label>? secondLabels, clear: true)
             .DefineAndAttachLabel(out Label complete)
             .Insert(copy.ToArray(), withLabels: secondLabels) // can use the copy here, the counts have been updated by this point.
             .Insert(new CodeInstruction[]

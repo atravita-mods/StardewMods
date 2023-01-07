@@ -1,17 +1,21 @@
 ﻿using System.Reflection;
 using System.Reflection.Emit;
-using AtraBase.Toolkit.Reflection;
+
 using AtraCore.Framework.ReflectionManager;
+
 using AtraShared.Utils.Extensions;
 using AtraShared.Utils.HarmonyHelper;
+
 using HarmonyLib;
+
 using MoreFertilizers.Framework;
+
 using StardewValley.TerrainFeatures;
 
 namespace MoreFertilizers.HarmonyPatches.OrganicFertilizer;
 
 /// <summary>
-/// Handles organic seeds for SObject.placementAction.
+/// Handles organic seeds and also the everlasting fertilizers.
 /// </summary>
 [HarmonyPatch(typeof(SObject))]
 internal static class SObjectPlacementTranspiler
@@ -20,7 +24,8 @@ internal static class SObjectPlacementTranspiler
     {
         if (dirt?.fertilizer?.Value == HoeDirt.noFertilizer
             && ModEntry.OrganicFertilizerID != -1
-            && obj.modData?.GetBool(CanPlaceHandler.Organic) == true)
+            && obj.modData?.GetBool(CanPlaceHandler.Organic) == true
+            && Game1.random.Next(2) == 0)
         {
             dirt.fertilizer.Value = ModEntry.OrganicFertilizerID;
         }
@@ -65,7 +70,7 @@ internal static class SObjectPlacementTranspiler
         }
         catch (Exception ex)
         {
-            ModEntry.ModMonitor.Log($"Mod crashed while transpiling SObject.placementAction:\n\n{ex}", LogLevel.Error);
+            ModEntry.ModMonitor.Log($"Mod crashed while transpiling {original.FullDescription()}:\n\n{ex}", LogLevel.Error);
         }
         return null;
     }

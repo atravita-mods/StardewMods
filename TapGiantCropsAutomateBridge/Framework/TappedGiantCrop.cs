@@ -1,9 +1,10 @@
 ﻿using AtraShared.Utils.Extensions;
+
 using Microsoft.Xna.Framework;
+
 using Pathoschild.Stardew.Automate;
-using StardewValley;
+
 using StardewValley.TerrainFeatures;
-using TapGiantCropsAutomateBridge;
 
 
 namespace TapGiantCropsAutomateBridge.Framework;

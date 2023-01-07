@@ -1,5 +1,4 @@
-﻿using AtraCore.Framework.IntegrationManagers;
-using AtraShared.ConstantsAndEnums;
+﻿using AtraShared.ConstantsAndEnums;
 using AtraShared.Integrations;
 using AtraShared.Integrations.Interfaces;
 using AtraShared.Utils.Extensions;
@@ -25,8 +24,6 @@ internal sealed class ModEntry : Mod
     internal static IMonitor ModMonitor { get; private set; } = null!;
 
 #pragma warning disable SA1201 // Elements should appear in the correct order - keeping fields near their accessors.
-    internal static RingManager RingManager { get; private set; } = null!;
-
     private static int prismaticSlimeEgg = -1;
 
     /// <summary>
@@ -66,6 +63,7 @@ internal sealed class ModEntry : Mod
     public override void Entry(IModHelper helper)
     {
         ModMonitor = this.Monitor;
+        AssetManager.Initialize(helper.GameContent);
         I18n.Init(helper.Translation);
 
         helper.Events.GameLoop.GameLaunched += this.OnGameLaunched;
@@ -84,8 +82,6 @@ internal sealed class ModEntry : Mod
             }
             jsonAssets.LoadAssets(Path.Combine(this.Helper.DirectoryPath, "assets", "json-assets"), this.Helper.Translation);
         }
-
-        RingManager = new(this.Monitor, this.Helper.Translation, this.Helper.ModRegistry);
 
         this.Helper.Events.Content.AssetRequested += this.OnAssetRequested;
         this.Helper.Events.GameLoop.ReturnedToTitle += this.OnReturnedToTitle;
@@ -112,7 +108,7 @@ internal sealed class ModEntry : Mod
         try
         {
             // handle patches from annotations.
-            harmony.PatchAll();
+            harmony.PatchAll(typeof(ModEntry).Assembly);
         }
         catch (Exception ex)
         {

@@ -1,8 +1,12 @@
 ﻿#if DEBUG
 using System.Diagnostics;
 #endif
-using AtraCore.Framework.IntegrationManagers;
+using System.Runtime.CompilerServices;
+
+using AtraBase.Toolkit;
+
 using AtraCore.Utilities;
+
 using AtraShared.ConstantsAndEnums;
 using AtraShared.Integrations;
 using AtraShared.Integrations.Interfaces;
@@ -11,15 +15,25 @@ using AtraShared.MigrationManager;
 using AtraShared.Utils;
 using AtraShared.Utils.Extensions;
 using AtraShared.Utils.Shims;
+
+using CommunityToolkit.Diagnostics;
+
 using HarmonyLib;
+
 using MoreFertilizers.DataModels;
 using MoreFertilizers.Framework;
 using MoreFertilizers.HarmonyPatches;
 using MoreFertilizers.HarmonyPatches.Acquisition;
 using MoreFertilizers.HarmonyPatches.Compat;
+using MoreFertilizers.HarmonyPatches.EverlastingFertilizer;
 using MoreFertilizers.HarmonyPatches.FishFood;
 using MoreFertilizers.HarmonyPatches.FruitTreePatches;
+
+using Newtonsoft.Json;
+
 using StardewModdingAPI.Events;
+
+using StardewValley.Buildings;
 using StardewValley.TerrainFeatures;
 
 using AtraUtils = AtraShared.Utils.Utils;
@@ -27,12 +41,12 @@ using AtraUtils = AtraShared.Utils.Utils;
 namespace MoreFertilizers;
 
 /// <inheritdoc />
+[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1124:Do not use regions", Justification = "Reviewed.")]
 internal sealed class ModEntry : Mod
 {
     private const string SavedIDKey = "MFSavedObjectID";
 
     private static IJsonAssetsAPI? jsonAssets;
-
     private static MoreFertilizerIDs? storedIDs;
 
     private MigrationManager? migrator;
@@ -40,10 +54,19 @@ internal sealed class ModEntry : Mod
     private Dictionary<int, int>? idmap;
     private ISolidFoundationsAPI? solidFoundationsAPI;
 
-#pragma warning disable SA1204 // Static elements should appear before instance elements. Keep backing fields near properties.
+    #region IDs
+
 #pragma warning disable SA1201 // Elements should appear in the correct order
+    /// <summary>
+    /// Gets a reference to the JA API.
+    /// </summary>
+    internal static IJsonAssetsAPI? JsonAssetsAPI => jsonAssets;
+
     private static int prismaticFertilizerID = -1;
 
+    /// <summary>
+    /// Gets the integer id of the Prismatic Fertilizer, or -1 if not found/not loaded yet.
+    /// </summary>
     internal static int PrismaticFertilizerID
     {
         get
@@ -195,7 +218,7 @@ internal sealed class ModEntry : Mod
     private static int luckyFertilizerID = -1;
 
     /// <summary>
-    /// Gets the interger ID of the lucky fertiizer. -1 if not found/not loaded yet.
+    /// Gets the integer ID of the lucky fertilizer. -1 if not found/not loaded yet.
     /// </summary>
     internal static int LuckyFertilizerID
     {
@@ -269,7 +292,7 @@ internal sealed class ModEntry : Mod
     {
         get
         {
-            if (treeTapperFertilizerID != -1)
+            if (treeTapperFertilizerID == -1)
             {
                 treeTapperFertilizerID = jsonAssets?.GetObjectId("Tree Tapper's Fertilizer - More Fertilizers") ?? -1;
             }
@@ -331,7 +354,7 @@ internal sealed class ModEntry : Mod
     private static int organicFertilizerID = -1;
 
     /// <summary>
-    /// Gets the integer ID of the organic fertilzer. -1 if not found/not loaded yet.
+    /// Gets the integer ID of the organic fertilizer. -1 if not found/not loaded yet.
     /// </summary>
     internal static int OrganicFertilizerID
     {
@@ -378,8 +401,26 @@ internal sealed class ModEntry : Mod
             return seedyFertilizerID;
         }
     }
+
+    private static int radioactiveFertilizerID = -1;
+
+    /// <summary>
+    /// Gets the integer ID of the radioactive fertilizer, or -1 if not found/not loaded.
+    /// </summary>
+    internal static int RadioactiveFertilizerID
+    {
+        get
+        {
+            if (radioactiveFertilizerID == -1)
+            {
+                radioactiveFertilizerID = jsonAssets?.GetObjectId("Radioactive Fertilizer - More Fertilizers") ?? -1;
+            }
+            return radioactiveFertilizerID;
+        }
+    }
 #pragma warning restore SA1201 // Elements should appear in the correct order
-#pragma warning restore SA1204 // Static elements should appear before instance elements
+
+    #endregion
 
     /// <summary>
     /// Gets a list of fertilizer IDs for fertilizers that are meant to be planted into HoeDirt.
@@ -403,12 +444,12 @@ internal sealed class ModEntry : Mod
     internal static IMonitor ModMonitor { get; private set; } = null!;
 
     /// <summary>
-    /// Gets the multiplayer helper for this mod.
+    /// Gets the multi-player gmcmHelper for this mod.
     /// </summary>
     internal static IMultiplayerHelper MultiplayerHelper { get; private set; } = null!;
 
     /// <summary>
-    /// Gets the mod content helper for this mod.
+    /// Gets the mod content gmcmHelper for this mod.
     /// </summary>
     internal static IModContentHelper ModContentHelper { get; private set; } = null!;
 
@@ -427,19 +468,16 @@ internal sealed class ModEntry : Mod
     /// </summary>
     internal static ModConfig Config { get; private set; } = null!;
 
-    /// <summary>
-    /// Gets a handler that handles managing rings (and integration with Wear More Rings).
-    /// </summary>
-    internal static RingManager RingManager { get; private set; } = null!;
-
     /// <inheritdoc />
     public override void Entry(IModHelper helper)
     {
-        I18n.Init(this.Helper.Translation);
-        MultiplayerHelper = this.Helper.Multiplayer;
-        ModContentHelper = this.Helper.ModContent;
+        I18n.Init(helper.Translation);
+        AssetEditor.Initialize(helper.GameContent);
+
+        MultiplayerHelper = helper.Multiplayer;
+        ModContentHelper = helper.ModContent;
         ModMonitor = this.Monitor;
-        DIRPATH = this.Helper.DirectoryPath;
+        DIRPATH = helper.DirectoryPath;
         UNIQUEID = this.ModManifest.UniqueID;
         Config = AtraUtils.GetConfigOrDefault<ModConfig>(helper, this.Monitor);
 
@@ -454,15 +492,7 @@ internal sealed class ModEntry : Mod
     [UsedImplicitly]
     public override object GetApi() => new CanPlaceHandler();
 
-    [EventPriority(EventPriority.Low)]
-    private void OnAssetRequested(object? sender, AssetRequestedEventArgs e)
-        => AssetEditor.Edit(e);
-
-    // Only hook if SpecialOrdersExtended is installed.
-    [EventPriority(EventPriority.Low)]
-    private void OnSpecialOrderDialogueRequested(object? sender, AssetRequestedEventArgs e)
-        => AssetEditor.EditSpecialOrderDialogue(e);
-
+    /// <inheritdoc cref="IInputEvents.ButtonPressed"/>
     private void OnButtonPressed(object? sender, ButtonPressedEventArgs e)
     {
         if ((e.Button.IsUseToolButton() || e.Button.IsActionButton())
@@ -473,6 +503,7 @@ internal sealed class ModEntry : Mod
     }
 
 #if DEBUG
+    /// <inheritdoc cref="IInputEvents.ButtonPressed"/>
     private void DebugOutput(object? sender, ButtonPressedEventArgs e)
     {
         if (MenuingExtensions.IsNormalGameplay() && e.Button.IsUseToolButton())
@@ -489,7 +520,16 @@ internal sealed class ModEntry : Mod
                 }
                 else if (terrainFeature is Tree tree)
                 {
-                    this.Monitor.Log($"{e.Cursor.Tile} {(tree?.modData?.GetBool(CanPlaceHandler.TreeFertilizer) == true ? "had" : "did not have" )} tree fertilizer.", LogLevel.Info);
+                    this.Monitor.Log($"{e.Cursor.Tile} {(tree?.modData?.GetBool(CanPlaceHandler.TreeFertilizer) == true ? "had" : "did not have" )} tree fertilizer and is growth stage {tree?.growthStage?.Value ?? -1}", LogLevel.Info);
+                }
+                else if (terrainFeature is Bush bush)
+                {
+                    string fertilizer = bush?.modData is null ? string.Empty
+                        : bush.modData.GetBool(CanPlaceHandler.MiraculousBeverages) == true ? "beverages"
+                        : bush.modData.GetBool(CanPlaceHandler.RapidBush) == true ? "rapid"
+                        : bush.modData.GetBool(CanPlaceHandler.BountifulBush) == true ? "bountiful"
+                        : string.Empty;
+                    this.Monitor.Log($"{e.Cursor.Tile} has {fertilizer} fertilizer.", LogLevel.Info);
                 }
             }
             if (Game1.currentLocation?.modData?.GetInt(CanPlaceHandler.FishFood) is > 0)
@@ -528,6 +568,7 @@ internal sealed class ModEntry : Mod
         seedyFertilizerID = -1;
         treeTapperFertilizerID = -1;
         wisdomFertilizerID = -1;
+        radioactiveFertilizerID = -1;
 
         PlantableFertilizerIDs.Clear();
         SpecialFertilizerIDs.Clear();
@@ -571,6 +612,7 @@ internal sealed class ModEntry : Mod
                 SeedyFertilizerID = SeedyFertilizerID,
                 TreeTapperFertilizerID = TreeTapperFertilizerID,
                 WisdomFertilizerID = WisdomFertilizerID,
+                RadioactiveFertilizerID = RadioactiveFertilizerID,
             };
         }
         this.Helper.Data.WriteSaveData(SavedIDKey, storedIDs);
@@ -590,7 +632,7 @@ internal sealed class ModEntry : Mod
 
         try
         {
-            harmony.PatchAll();
+            harmony.PatchAll(typeof(ModEntry).Assembly);
 
             if (this.Helper.ModRegistry.Get("spacechase0.MultiFertilizer") is IModInfo info
                 && info.Manifest.Version.IsOlderThan("1.0.6"))
@@ -624,6 +666,7 @@ internal sealed class ModEntry : Mod
                 FruitTreeDrawTranspiler.ApplyDGAPatch(harmony);
                 CropHarvestTranspiler.ApplyDGAPatch(harmony);
                 SObjectPatches.ApplyDGAPatch(harmony);
+                CropNewDayTranspiler.ApplyDGAPatches(harmony);
             }
 
             if (this.Helper.ModRegistry.Get("PeacefulEnd.AlternativeTextures") is IModInfo at
@@ -658,9 +701,20 @@ internal sealed class ModEntry : Mod
             if (this.Helper.ModRegistry.IsLoaded("stokastic.PrismaticTools") ||
                 this.Helper.ModRegistry.IsLoaded("kakashigr.RadioactiveTools"))
             {
-                ExtendedToolsMods.ApplyPatches(harmony);
                 this.Monitor.Log("Found either prismatic tools or radioactive tools. Applying compat patches", LogLevel.Info);
+                ExtendedToolsMods.ApplyPatches(harmony);
                 AddCrowsForExtendedToolsTranspiler.ApplyPatches(harmony);
+            }
+
+            if (this.Helper.ModRegistry.Get("spacechase0.TheftOfTheWinterStar") is IModInfo winterStar
+                && winterStar.Manifest.Version.IsNewerThan("1.2.3"))
+            {
+                this.Monitor.Log("Found Theft of the Winter Star, applying compat patches", LogLevel.Info);
+                RemoveSeasonCheck.ApplyPatchesForWinterStar(harmony);
+            }
+            else
+            {
+                RemoveSeasonCheck.ApplyPatches(harmony);
             }
         }
         catch (Exception ex)
@@ -676,18 +730,15 @@ internal sealed class ModEntry : Mod
 
     private void OnGameLaunched(object? sender, GameLaunchedEventArgs e)
     {
+        IntegrationHelper jaHelper = new(this.Monitor, this.Helper.Translation, this.Helper.ModRegistry, LogLevel.Warn);
+        if (!jaHelper.TryGetAPI("spacechase0.JsonAssets", "1.10.3", out jsonAssets))
         {
-            IntegrationHelper helper = new(this.Monitor, this.Helper.Translation, this.Helper.ModRegistry, LogLevel.Warn);
-            if (!helper.TryGetAPI("spacechase0.JsonAssets", "1.10.3", out jsonAssets))
-            {
-                this.Monitor.Log("Packs could not be loaded! This mod will probably not function.", LogLevel.Error);
-                return;
-            }
-            jsonAssets.LoadAssets(Path.Combine(this.Helper.DirectoryPath, "assets", "json-assets"), this.Helper.Translation);
-            jsonAssets.IdsFixed += this.JsonAssets_IdsFixed;
+            this.Monitor.Log("Packs could not be loaded! This mod will probably not function.", LogLevel.Error);
+            return;
         }
+        jsonAssets.LoadAssets(Path.Combine(this.Helper.DirectoryPath, "assets", "json-assets"), this.Helper.Translation);
 
-        RingManager = new(this.Monitor, this.Helper.Translation, this.Helper.ModRegistry);
+        RadioactiveFertilizerHandler.Initialize(this.Helper.GameContent, this.Helper.ModRegistry, this.Helper.Translation);
 
         // Only register for events if JA pack loading was successful.
         this.Helper.Events.GameLoop.SaveLoaded += this.OnSaveLoaded;
@@ -702,65 +753,70 @@ internal sealed class ModEntry : Mod
         this.Helper.Events.GameLoop.DayEnding += this.OnDayEnd;
         this.Helper.Events.Input.ButtonPressed += this.OnButtonPressed;
 
-        this.Helper.Events.Content.AssetRequested += this.OnAssetRequested;
+        this.Helper.Events.Content.AssetRequested += static (_, e) => AssetEditor.Edit(e);
+        this.Helper.Events.Content.AssetsInvalidated += this.OnAssetInvalidated;
 
         if (this.Helper.ModRegistry.IsLoaded("atravita.SpecialOrdersExtended"))
         {
-            this.Helper.Events.Content.AssetRequested += this.OnSpecialOrderDialogueRequested;
+            this.Helper.Events.Content.AssetRequested += static (_, e) => AssetEditor.EditSpecialOrderDialogue(e);
         }
+
+        // Apply harmony patches.
+        this.ApplyPatches(new Harmony(this.ModManifest.UniqueID));
 
         // Handle optional integrations.
+        GMCMHelper gmcmHelper = new(this.Monitor, this.Helper.Translation, this.Helper.ModRegistry, this.ModManifest);
+        if (gmcmHelper.TryGetAPI())
         {
-            GMCMHelper helper = new(this.Monitor, this.Helper.Translation, this.Helper.ModRegistry, this.ModManifest);
-            if (helper.TryGetAPI())
-            {
-                helper.TryGetOptionsAPI();
+            gmcmHelper.TryGetOptionsAPI();
 
-                helper.Register(
-                    reset: static () => Config = new(),
-                    save: () => this.Helper.AsyncWriteConfig(this.Monitor, Config))
-                    .AddParagraph(I18n.Mod_Description)
-                    .GenerateDefaultGMCM(static () => Config);
-            }
+            gmcmHelper.Register(
+                reset: static () => Config = new(),
+                save: () => this.Helper.AsyncWriteConfig(this.Monitor, Config))
+                .AddParagraph(I18n.Mod_Description)
+                .GenerateDefaultGMCM(static () => Config);
+        }
+        IntegrationHelper helper = new(this.Monitor, this.Helper.Translation, this.Helper.ModRegistry, LogLevel.Trace);
+        if (helper.TryGetAPI("TehPers.FishingOverhaul", "3.2.7", out ISimplifiedFishingApi? fishingAPI))
+        {
+            fishingAPI.ModifyChanceForFish(static (Farmer who, double chance) =>
+                who.currentLocation is null ? chance : GetFishTranspiler.AlterFishChance(chance, who.currentLocation));
         }
 
-        this.ApplyPatches(new Harmony(this.ModManifest.UniqueID));
-        {
-            IntegrationHelper helper = new(this.Monitor, this.Helper.Translation, this.Helper.ModRegistry, LogLevel.Trace);
-            if (helper.TryGetAPI("TehPers.FishingOverhaul", "3.2.7", out ISimplifiedFishingApi? fishingAPI))
-            {
-                fishingAPI.ModifyChanceForFish(static (Farmer who, double chance) =>
-                    who.currentLocation is null ? chance : GetFishTranspiler.AlterFishChance(chance, who.currentLocation));
-            }
-        }
+        CropHarvestTranspiler.Initialize(this.Helper.ModRegistry);
     }
 
+    /// <inheritdoc cref="IContentEvents.AssetsInvalidated"/>
+    private void OnAssetInvalidated(object? sender, AssetsInvalidatedEventArgs e)
+    {
+        RadioactiveFertilizerHandler.Reset(e.NamesWithoutLocale);
+        AssetEditor.Reset(e.NamesWithoutLocale);
+    }
+
+    /// <inheritdoc cref="IGameLoopEvents.DayStarted"/>
     private void OnDayStart(object? sender, DayStartedEventArgs e)
         => GameLocationPatches.Reinitialize();
 
+    /// <inheritdoc cref="IGameLoopEvents.DayEnding"/>
     private void OnDayEnd(object? sender, DayEndingEventArgs e)
     {
+        if (Game1.player.getFriendshipHeartLevelForNPC("George") >= 6 && Game1.player.mailReceived.Contains("georgeGifts"))
+        {
+            Game1.addMailForTomorrow(AssetEditor.GEORGE_EVENT);
+        }
+
+        if (Game1.getAllFarmers().Any(p => p.foragingLevel.Value >= 4))
+        {
+            Game1.addMailForTomorrow(AssetEditor.BOUNTIFUL_BUSH_UNLOCK);
+        }
+
         JojaSample.Reset();
         FishFoodHandler.DecrementAndSave(this.Helper.Data, this.Helper.Multiplayer);
+        RadioactiveFertilizerHandler.OnDayEnd();
     }
 
-    /************
-     * REGION JA
-     * *********/
-
-    private void JsonAssets_IdsFixed(object? sender, EventArgs e)
-    {
-        try
-        {
-            this.FixIDs();
-        }
-        catch (Exception ex)
-        {
-            this.Monitor.Log($"Failed when trying to fix ids!\n\n{ex}", LogLevel.Error);
-        }
-    }
-
-    private void FixIDs()
+    #region JsonAssets
+    private void GrabIds()
     {
         PlantableFertilizerIDs.Clear();
         SpecialFertilizerIDs.Clear();
@@ -805,12 +861,12 @@ internal sealed class ModEntry : Mod
             SpecialFertilizerIDs.Add(TreeTapperFertilizerID);
         }
 
-        // Plantable ones begin here.
         if (PrismaticFertilizerID != -1)
         {
-            PlantableFertilizerIDs.Add(PrismaticFertilizerID);
+            SpecialFertilizerIDs.Add(PrismaticFertilizerID);
         }
 
+        // Plant-able ones begin here.
         if (EverlastingFertilizerID != -1)
         {
             PlantableFertilizerIDs.Add(EverlastingFertilizerID);
@@ -866,135 +922,165 @@ internal sealed class ModEntry : Mod
             PlantableFertilizerIDs.Add(SeedyFertilizerID);
         }
 
+        if (RadioactiveFertilizerID != -1)
+        {
+            PlantableFertilizerIDs.Add(RadioactiveFertilizerID);
+        }
+
         if (SpecialFertilizerIDs.Count <= 0 && PlantableFertilizerIDs.Count <= 0)
-        { // I have found no valid fertilizers. Just return.
+        {
+            this.Monitor.Log("No valid IDs found?");
+        }
+    }
+
+    private void FixIDs()
+    {
+        if (SpecialFertilizerIDs.Count <= 0 && PlantableFertilizerIDs.Count <= 0)
+        {
+            this.Monitor.Log("No valid IDs found while attempting to deshuffle?");
             return;
         }
 
-        if (!Context.IsMainPlayer)
+        if (this.Helper.Data.ReadSaveData<MoreFertilizerIDs>(SavedIDKey) is not MoreFertilizerIDs storedIDCls)
         {
+            ModMonitor.Log("No need to fix IDs, not installed before.");
+
+            this.Helper.Events.GameLoop.Saving -= this.OnSaving;
+            this.Helper.Events.GameLoop.Saving += this.OnSaving;
+
             return;
         }
-
-        if (storedIDs is null)
-        {
-            if (this.Helper.Data.ReadSaveData<MoreFertilizerIDs>(SavedIDKey) is not MoreFertilizerIDs storedIDCls)
-            {
-                ModMonitor.Log("No need to fix IDs, not installed before.");
-                return;
-            }
-            storedIDs = storedIDCls;
-        }
+        storedIDs = storedIDCls;
 
         Dictionary<int, int> idMapping = new();
 
-        // Have to update the planted ones.
-        if (PrismaticFertilizerID != -1
-            && storedIDs.PrismaticFertilizerID != -1
-            && PrismaticFertilizerID != storedIDs.PrismaticFertilizerID)
+        // special case! Update the museum reward tracking too...
+        if (PrismaticFertilizerID != -1)
         {
-            // special case! Update the museum reward tracking too...
-            string oldkey = $"museumCollectedRewardO_{storedIDs.PrismaticFertilizerID}_1";
-            string newkey = $"museumCollectedRewardO_{PrismaticFertilizerID}_1";
-
-            foreach (Farmer player in Game1.getAllFarmers())
+            if (storedIDs.PrismaticFertilizerID != -1
+            && PrismaticFertilizerID != storedIDs.PrismaticFertilizerID)
             {
-                if (player.mailReceived.Remove(oldkey))
+                string oldkey = $"museumCollectedRewardO_{storedIDs.PrismaticFertilizerID}_1";
+                string newkey = $"museumCollectedRewardO_{PrismaticFertilizerID}_1";
+
+                foreach (Farmer player in Game1.getAllFarmers())
                 {
-                    player.mailReceived.Add(newkey);
+                    if (player.mailReceived.Remove(oldkey))
+                    {
+                        player.mailReceived.Add(newkey);
+                    }
                 }
             }
-
-            idMapping.Add(storedIDs.PrismaticFertilizerID, PrismaticFertilizerID);
             storedIDs.PrismaticFertilizerID = PrismaticFertilizerID;
         }
 
-        if (EverlastingFertilizerID != -1
-            && storedIDs.EverlastingFertilizerID != -1
-            && EverlastingFertilizerID != storedIDs.EverlastingFertilizerID)
+        // Have to update the planted ones.
+        if (EverlastingFertilizerID != -1)
         {
-            idMapping.Add(storedIDs.EverlastingFertilizerID, EverlastingFertilizerID);
+            if (storedIDs.EverlastingFertilizerID != -1 && EverlastingFertilizerID != storedIDs.EverlastingFertilizerID)
+            {
+                idMapping.Add(storedIDs.EverlastingFertilizerID, EverlastingFertilizerID);
+            }
             storedIDs.EverlastingFertilizerID = EverlastingFertilizerID;
         }
 
-        if (WisdomFertilizerID != -1
-            && storedIDs.WisdomFertilizerID != -1
-            && storedIDs.WisdomFertilizerID != WisdomFertilizerID)
+        if (WisdomFertilizerID != -1)
         {
-            idMapping.Add(storedIDs.WisdomFertilizerID, WisdomFertilizerID);
+            if (storedIDs.WisdomFertilizerID != -1 && storedIDs.WisdomFertilizerID != WisdomFertilizerID)
+            {
+                idMapping.Add(storedIDs.WisdomFertilizerID, WisdomFertilizerID);
+            }
             storedIDs.WisdomFertilizerID = WisdomFertilizerID;
         }
 
-        if (LuckyFertilizerID != -1
-            && storedIDs.LuckyFertilizerID != -1
-            && storedIDs.LuckyFertilizerID != LuckyFertilizerID)
+        if (LuckyFertilizerID != -1)
         {
-            idMapping.Add(storedIDs.LuckyFertilizerID, LuckyFertilizerID);
+            if (storedIDs.LuckyFertilizerID != -1 && storedIDs.LuckyFertilizerID != LuckyFertilizerID)
+            {
+                idMapping.Add(storedIDs.LuckyFertilizerID, LuckyFertilizerID);
+            }
             storedIDs.LuckyFertilizerID = LuckyFertilizerID;
         }
 
-        if (PaddyCropFertilizerID != -1
-            && storedIDs.PaddyFertilizerID != -1
-            && storedIDs.PaddyFertilizerID != PaddyCropFertilizerID)
+        if (PaddyCropFertilizerID != -1)
         {
-            idMapping.Add(storedIDs.PaddyFertilizerID, PaddyCropFertilizerID);
+            if (storedIDs.PaddyFertilizerID != -1 && storedIDs.PaddyFertilizerID != PaddyCropFertilizerID)
+            {
+                idMapping.Add(storedIDs.PaddyFertilizerID, PaddyCropFertilizerID);
+            }
             storedIDs.PaddyFertilizerID = PaddyCropFertilizerID;
         }
 
-        if (BountifulFertilizerID != -1
-            && storedIDs.BountifulFertilizerID != -1
-            && storedIDs.BountifulFertilizerID != BountifulFertilizerID)
+        if (BountifulFertilizerID != -1)
         {
-            idMapping.Add(storedIDs.BountifulFertilizerID, BountifulFertilizerID);
+            if (storedIDs.BountifulFertilizerID != -1 && storedIDs.BountifulFertilizerID != BountifulFertilizerID)
+            {
+                idMapping.Add(storedIDs.BountifulFertilizerID, BountifulFertilizerID);
+            }
             storedIDs.BountifulFertilizerID = BountifulFertilizerID;
         }
 
-        if (JojaFertilizerID != -1
-            && storedIDs.JojaFertilizerID != -1
-            && storedIDs.JojaFertilizerID != JojaFertilizerID)
+        if (JojaFertilizerID != -1)
         {
-            idMapping.Add(storedIDs.JojaFertilizerID, JojaFertilizerID);
+            if (storedIDs.JojaFertilizerID != -1 && storedIDs.JojaFertilizerID != JojaFertilizerID)
+            {
+                idMapping.Add(storedIDs.JojaFertilizerID, JojaFertilizerID);
+            }
             storedIDs.JojaFertilizerID = JojaFertilizerID;
         }
 
-        if (DeluxeJojaFertilizerID != -1
-            && storedIDs.DeluxeJojaFertilizerID != -1
-            && storedIDs.DeluxeJojaFertilizerID != DeluxeJojaFertilizerID)
+        if (DeluxeJojaFertilizerID != -1)
         {
-            idMapping.Add(storedIDs.DeluxeJojaFertilizerID, DeluxeJojaFertilizerID);
+            if (storedIDs.DeluxeJojaFertilizerID != -1 && storedIDs.DeluxeJojaFertilizerID != DeluxeJojaFertilizerID)
+            {
+                idMapping.Add(storedIDs.DeluxeJojaFertilizerID, DeluxeJojaFertilizerID);
+            }
             storedIDs.DeluxeJojaFertilizerID = DeluxeJojaFertilizerID;
         }
 
-        if (SecretJojaFertilizerID != -1
-            && storedIDs.SecretJojaFertilizerID != -1
-            && storedIDs.SecretJojaFertilizerID != SecretJojaFertilizerID)
+        if (SecretJojaFertilizerID != -1)
         {
-            idMapping.Add(storedIDs.SecretJojaFertilizerID, SecretJojaFertilizerID);
+            if (storedIDs.SecretJojaFertilizerID != -1 && storedIDs.SecretJojaFertilizerID != SecretJojaFertilizerID)
+            {
+                idMapping.Add(storedIDs.SecretJojaFertilizerID, SecretJojaFertilizerID);
+            }
             storedIDs.SecretJojaFertilizerID = SecretJojaFertilizerID;
         }
 
-        if (OrganicFertilizerID != -1
-            && storedIDs.OrganicFertilizerID != -1
-            && storedIDs.OrganicFertilizerID != OrganicFertilizerID)
+        if (OrganicFertilizerID != -1)
         {
-            idMapping.Add(storedIDs.OrganicFertilizerID, OrganicFertilizerID);
+            if (storedIDs.OrganicFertilizerID != -1 && storedIDs.OrganicFertilizerID != OrganicFertilizerID)
+            {
+                idMapping.Add(storedIDs.OrganicFertilizerID, OrganicFertilizerID);
+            }
             storedIDs.OrganicFertilizerID = OrganicFertilizerID;
         }
 
-        if (MiraculousBeveragesID != -1
-            && storedIDs.MiraculousBeveragesID != -1
-            && storedIDs.MiraculousBeveragesID != MiraculousBeveragesID)
+        if (MiraculousBeveragesID != -1)
         {
-            idMapping.Add(storedIDs.MiraculousBeveragesID, MiraculousBeveragesID);
+            if (storedIDs.MiraculousBeveragesID != -1 && storedIDs.MiraculousBeveragesID != MiraculousBeveragesID)
+            {
+                idMapping.Add(storedIDs.MiraculousBeveragesID, MiraculousBeveragesID);
+            }
             storedIDs.MiraculousBeveragesID = MiraculousBeveragesID;
         }
 
-        if (SeedyFertilizerID != -1
-            && storedIDs.SeedyFertilizerID != -1
-            && storedIDs.SeedyFertilizerID != SeedyFertilizerID)
+        if (SeedyFertilizerID != -1)
         {
-            idMapping.Add(storedIDs.SeedyFertilizerID, SeedyFertilizerID);
+            if (storedIDs.SeedyFertilizerID != -1 && storedIDs.SeedyFertilizerID != SeedyFertilizerID)
+            {
+                idMapping.Add(storedIDs.SeedyFertilizerID, SeedyFertilizerID);
+            }
             storedIDs.SeedyFertilizerID = SeedyFertilizerID;
+        }
+
+        if (RadioactiveFertilizerID != -1)
+        {
+            if (storedIDs.RadioactiveFertilizerID != -1 && storedIDs.RadioactiveFertilizerID != RadioactiveFertilizerID)
+            {
+                idMapping.Add(storedIDs.RadioactiveFertilizerID, RadioactiveFertilizerID);
+            }
+            storedIDs.RadioactiveFertilizerID = RadioactiveFertilizerID;
         }
 
         // Update stored IDs for the special ones.
@@ -1033,6 +1119,11 @@ internal sealed class ModEntry : Mod
             storedIDs.BountifulBushID = BountifulBushID;
         }
 
+        if (TreeTapperFertilizerID != -1)
+        {
+            storedIDs.TreeTapperFertilizerID = TreeTapperFertilizerID;
+        }
+
         if (idMapping.Count <= 0)
         {
             ModMonitor.Log("No need to fix IDs, nothing has changed.");
@@ -1044,9 +1135,10 @@ internal sealed class ModEntry : Mod
 
         // Grab the SF API to deshuffle in there too.
         IntegrationHelper helper = new(this.Monitor, this.Helper.Translation, this.Helper.ModRegistry, LogLevel.Trace);
-        if (helper.TryGetAPI("PeacefulEnd.SolidFoundations", "1.12.1", out this.solidFoundationsAPI))
+        if (this.solidFoundationsAPI is not null || helper.TryGetAPI("PeacefulEnd.SolidFoundations", "1.12.1", out this.solidFoundationsAPI))
         {
             this.idmap = idMapping;
+            this.solidFoundationsAPI.AfterBuildingRestoration -= this.AfterSFBuildingRestore;
             this.solidFoundationsAPI.AfterBuildingRestoration += this.AfterSFBuildingRestore;
         }
 
@@ -1071,7 +1163,7 @@ internal sealed class ModEntry : Mod
             }
             else
             {
-                foreach (var building in GameLocationUtils.GetBuildings())
+                foreach (Building? building in GameLocationUtils.GetBuildings())
                 {
                     if (SolidFoundationShims.IsSFBuilding?.Invoke(building) == true)
                     {
@@ -1088,9 +1180,11 @@ internal sealed class ModEntry : Mod
         this.solidFoundationsAPI = null;
     }
 
-    /***********
-     * REGION MIGRATION
-     * **********/
+    #endregion
+
+    #region migration
+
+    /// <inheritdoc cref="IGameLoopEvents.SaveLoaded"/>
     [EventPriority(EventPriority.Low)]
     private void OnSaveLoaded(object? sender, SaveLoadedEventArgs e)
     {
@@ -1115,13 +1209,25 @@ internal sealed class ModEntry : Mod
         if (!this.migrator.CheckVersionInfo())
         {
             this.Helper.Events.GameLoop.Saved += this.WriteMigrationData;
+            try
+            {
+                this.migrator.RunMigration(new SemanticVersion("0.3.0"), this.GetIdsFromJAIfNeeded);
+            }
+            catch (Exception ex)
+            {
+                this.Monitor.Log($"Failed while attempting to run migrations.\n\n{ex}");
+            }
         }
         else
         {
             this.migrator = null;
         }
 
-        this.FixIDs();
+        this.GrabIds();
+        if (Context.IsMainPlayer)
+        {
+            this.FixIDs();
+        }
 
         if (Context.IsMainPlayer)
         {
@@ -1129,11 +1235,127 @@ internal sealed class ModEntry : Mod
         }
     }
 
-    /// <summary>
+    [MethodImpl(TKConstants.Cold)]
+    private bool GetIdsFromJAIfNeeded(IModHelper helper, IMonitor monitor)
+    {
+        if (!Context.IsMainPlayer)
+        {
+            return true;
+        }
+
+        this.Monitor.Log($"Running migration for 0.3.0.");
+        Guard.IsNotNull(Constants.CurrentSavePath);
+
+        if (this.Helper.Data.ReadSaveData<MoreFertilizerIDs>(SavedIDKey) is not MoreFertilizerIDs storedIDCls)
+        {
+            monitor.Log("Ids not found.");
+            storedIDCls = new();
+        }
+
+        string path = Path.Combine(Constants.CurrentSavePath, "JsonAssets", "ids-objects.json");
+        if (!File.Exists(path))
+        {
+            monitor.Log($"Can't find JA id file");
+            return true;
+        }
+
+        Dictionary<string, int>? idsFromJA;
+        try
+        {
+            idsFromJA = JsonConvert.DeserializeObject<Dictionary<string, int>>(File.ReadAllText(path));
+        }
+        catch (Exception ex)
+        {
+            monitor.Log($"Tried to deserialize JA's data, couldn't.\n\n{ex}", LogLevel.Warn);
+            return false;
+        }
+
+        if (idsFromJA is null)
+        {
+            monitor.Log($"Tried to deserialize JA's data, couldn't - got null instead.");
+            return true;
+        }
+
+        if (storedIDCls.PrismaticFertilizerID == -1 && idsFromJA.TryGetValue("Prismatic Fertilizer - More Fertilizers", out int oldprismatic))
+        {
+            monitor.Log($"Grabbing old prismatic ID from JA");
+            storedIDCls.PrismaticFertilizerID = oldprismatic;
+        }
+
+        if (storedIDCls.EverlastingFertilizerID == -1 && idsFromJA.TryGetValue("Everlasting Fertilizer - More Fertilizers", out int oldeverlasting))
+        {
+            monitor.Log($"Grabbing old everlasting from JA");
+            storedIDCls.EverlastingFertilizerID = oldeverlasting;
+        }
+
+        if (storedIDCls.WisdomFertilizerID == -1 && idsFromJA.TryGetValue("Wisdom Fertilizer - More Fertilizers", out int oldwisdom))
+        {
+            monitor.Log($"Grabbing old wisdom ID from JA");
+            storedIDCls.WisdomFertilizerID = oldwisdom;
+        }
+
+        if (storedIDCls.PaddyFertilizerID == -1 && idsFromJA.TryGetValue("Waterlogged Fertilizer", out int oldpaddy))
+        {
+            monitor.Log($"Grabbing old waterlogged ID from JA");
+            storedIDCls.PaddyFertilizerID = oldpaddy;
+        }
+
+        if (storedIDCls.LuckyFertilizerID == -1 && idsFromJA.TryGetValue("Maebys Good-Luck Fertilizer", out int oldlucky))
+        {
+            monitor.Log($"Grabbing old lucky ID from JA");
+            storedIDCls.LuckyFertilizerID = oldlucky;
+        }
+
+        if (storedIDCls.BountifulFertilizerID == -1 && idsFromJA.TryGetValue("Bountiful Fertilizer", out int oldbountiful))
+        {
+            monitor.Log($"Grabbing old bountiful ID from JA");
+            storedIDCls.BountifulFertilizerID = oldbountiful;
+        }
+
+        if (storedIDCls.JojaFertilizerID == -1 && idsFromJA.TryGetValue("Joja Fertilizer - More Fertilizers", out int oldjoja))
+        {
+            monitor.Log($"Grabbing old joja ID from JA");
+            storedIDCls.JojaFertilizerID = oldjoja;
+        }
+
+        if (storedIDCls.DeluxeJojaFertilizerID == -1 && idsFromJA.TryGetValue("Deluxe Joja Fertilizer - More Fertilizers", out int olddeluxe))
+        {
+            monitor.Log($"Grabbing old deluxe joja ID from JA");
+            storedIDCls.DeluxeJojaFertilizerID = olddeluxe;
+        }
+
+        if (storedIDCls.SecretJojaFertilizerID == -1 && idsFromJA.TryGetValue("Secret Joja Fertilizer - More Fertilizers", out int oldsecret))
+        {
+            monitor.Log($"Grabbing old secret joja ID from JA");
+            storedIDCls.SecretJojaFertilizerID = oldsecret;
+        }
+
+        if (storedIDCls.OrganicFertilizerID == -1 && idsFromJA.TryGetValue("Organic Fertilizer - More Fertilizers", out int oldorganic))
+        {
+            monitor.Log($"Grabbing old organic ID from JA");
+            storedIDCls.OrganicFertilizerID = oldorganic;
+        }
+
+        if (storedIDCls.MiraculousBeveragesID == -1 && idsFromJA.TryGetValue("Miraculous Beverages - More Fertilizers", out int oldbeverage))
+        {
+            monitor.Log($"Grabbing old beverage ID from JA");
+            storedIDCls.MiraculousBeveragesID = oldbeverage;
+        }
+
+        if (storedIDCls.SeedyFertilizerID == -1 && idsFromJA.TryGetValue("Seedy Fertilizer - More Fertilizers", out int oldseedy))
+        {
+            monitor.Log($"Grabbing old seedy ID from JA");
+            storedIDCls.SeedyFertilizerID = oldseedy;
+        }
+
+        this.Helper.Data.WriteSaveData(SavedIDKey, storedIDCls);
+        return true;
+    }
+
+    /// <inheritdoc cref="IGameLoopEvents.Saved"/>
+    /// <remarks>
     /// Writes migration data then detaches the migrator.
-    /// </summary>
-    /// <param name="sender">Smapi thing.</param>
-    /// <param name="e">Arguments for just-before-saving.</param>
+    /// </remarks>
     private void WriteMigrationData(object? sender, SavedEventArgs e)
     {
         if (this.migrator is not null)
@@ -1144,16 +1366,22 @@ internal sealed class ModEntry : Mod
         this.Helper.Events.GameLoop.Saved -= this.WriteMigrationData;
     }
 
-    /*******************
-     * REGION MINESHAFT AND MULTIPLAYER
-     ********************/
+    #endregion
+
+    /// <inheritdoc cref="IPlayerEvents.Warped"/>
     [EventPriority(EventPriority.Low)]
     private void OnPlayerWarp(object? sender, WarpedEventArgs e)
     {
-        JojaSample.JojaSampleEvent(e);
-        FishFoodHandler.HandleWarp(e);
+        if (e.IsLocalPlayer)
+        {
+            JojaSample.JojaSampleEvent(e);
+            FishFoodHandler.HandleWarp(e);
+        }
     }
 
+    #region multiplayer
+
+    /// <inheritdoc cref="IMultiplayerEvents.PeerConnected"/>
     private void Multiplayer_PeerConnected(object? sender, PeerConnectedEventArgs e)
     {
         if (e.Peer.ScreenID == 0 && Context.IsWorldReady && Context.IsMainPlayer)
@@ -1162,6 +1390,7 @@ internal sealed class ModEntry : Mod
         }
     }
 
+    /// <inheritdoc cref="IMultiplayerEvents.ModMessageReceived"/>
     private void Multiplayer_ModMessageReceived(object? sender, ModMessageReceivedEventArgs e)
     {
         if (e.FromModID != this.ModManifest.UniqueID)
@@ -1174,4 +1403,5 @@ internal sealed class ModEntry : Mod
             FishFoodHandler.RecieveHandler(e);
         }
     }
+    #endregion
 }

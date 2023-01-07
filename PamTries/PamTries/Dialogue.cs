@@ -1,4 +1,6 @@
-﻿using StardewModdingAPI.Events;
+﻿using AtraCore.Framework.Caches;
+
+using StardewModdingAPI.Events;
 using StardewValley.Characters;
 using StardewValley.Locations;
 
@@ -8,7 +10,7 @@ internal static class DialogueManager
 {
     public static void GrandKidsDialogue(object? sender, DayStartedEventArgs e)
     {
-        if (Game1.getCharacterFromName("Pam") is not NPC pam)
+        if (NPCCache.GetByVillagerName("Pam") is not NPC pam)
         {
             return;
         }
@@ -20,7 +22,7 @@ internal static class DialogueManager
         {
             return null;
         }
-        return MovieTheater.GetMovieForDate(Game1.Date).ID;
+        return MovieTheater.GetMovieForDate(Game1.Date)?.ID;
     }
 
     internal static string ChildCount()

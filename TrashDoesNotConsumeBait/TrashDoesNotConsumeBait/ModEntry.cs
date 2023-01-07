@@ -35,6 +35,7 @@ internal sealed class ModEntry : Mod
         ModMonitor = this.Monitor;
         GameContentHelper = helper.GameContent;
         I18n.Init(helper.Translation);
+        AssetEditor.Initialize(helper.GameContent);
         Config = AtraUtils.GetConfigOrDefault<ModConfig>(helper, this.Monitor);
 
         helper.Events.GameLoop.GameLaunched += this.SetUpConfig;
@@ -95,7 +96,7 @@ internal sealed class ModEntry : Mod
     {
         try
         {
-            harmony.PatchAll();
+            harmony.PatchAll(typeof(ModEntry).Assembly);
         }
         catch (Exception ex)
         {

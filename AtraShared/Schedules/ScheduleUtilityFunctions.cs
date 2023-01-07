@@ -2,6 +2,8 @@
 using AtraBase.Toolkit.Extensions;
 using AtraBase.Toolkit.Reflection;
 using AtraBase.Toolkit.StringHandler;
+
+using AtraCore.Framework.Caches;
 using AtraCore.Framework.ReflectionManager;
 using AtraShared.Utils.Extensions;
 using Microsoft.Xna.Framework;
@@ -152,7 +154,18 @@ public class ScheduleUtilityFunctions
                 // NOT friendship NPCName heartLevel
                 if (command[1].Equals("friendship", StringComparison.Ordinal))
                 {
-                    int hearts = Utility.GetAllPlayerFriendshipLevel(Game1.getCharacterFromName(command[2], mustBeVillager: true)) / 250;
+                    NPC? friendNpc = NPCCache.GetByVillagerName(command[2]);
+                    if (friendNpc is null)
+                    {
+                        // can't find the friend npc.
+                        this.monitor.Log(
+                            this.translation.Get("GOTO_FRIEND_NOT_FOUND")
+                            .Default("NPC {{npc}} not found, friend requirement {{requirment}} cannot be evaluated: {{scheduleKey}}")
+                            .Tokens(new { npc = command[2], requirment = splits[0], schedulekey = rawData }), LogLevel.Warn);
+                        return false;
+                    }
+
+                    int hearts = Utility.GetAllPlayerFriendshipLevel(friendNpc) / 250;
                     if (!int.TryParse(command[3], out int heartLevel))
                     {
                         // ill formed friendship check string, warn

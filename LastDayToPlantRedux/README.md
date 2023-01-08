@@ -8,12 +8,10 @@ Inspired by [LastDayToPlant](https://www.nexusmods.com/stardewvalley/mods/7917?t
 
 ## Install
 
-This mod is not currently released, but should be soon.
-
-<!-- 1. Install the latest version of [SMAPI](https://smapi.io).
+1. Install the latest version of [SMAPI](https://smapi.io).
 2. Download and install [AtraCore](https://www.nexusmods.com/stardewvalley/mods/12932).
 2. Download this mod and unzip it into `Stardew Valley/Mods`.
-3. Run the game using SMAPI. -->
+3. Run the game using SMAPI.
 
 ## Uninstall
 Simply delete from your Mods directory.
@@ -27,34 +25,14 @@ Run SMAPI at least once with this mod installed to generate the `config.json`, o
 *  `AllowSeedsList`: A list of seeds to always display. Would look something like `["Beet Seeds", "Cake Plant Seeds", "Ancient Ferns Seed"]`. Use the `internal` name, not the display name. (The ID will also work.)
 *  `AllowFertilizersList`: A list of fertilizers to always display. Follows the same format as seeds, and also uses the internal name. (Note that most fertilizers for More Fertilizers have long internal names that don't match the display names).
 
-## For other mod authors
-* If you'd like your seeds/fertilizers to show up or if you'd like to ban them for good, you can edit the data asset `Mods/atravita.LastDayToPlantRedux/AccessControl`, which is a string->string dictionary where the key is an identifier (internal seed name name or ID), and the value is either `allow` or `deny` (ignores case). For example:
-
-
-```js
-{
-    "Format": "1.28.0",
-    "Changes": [
-        {
-            "Action": "EditData",
-            "Target": "Mods/atravita.LastDayToPlantRedux/AccessControl",
-            "Entries": {
-                "Pufferchick Seeds": "deny",
-            }
-        }
-    ]
-}
-```
-
-will prevent this mod from reporting information on `Pufferchick Seeds` UNLESS the user has explicitly added `Pufferchick Seeds` to their config file.
 
 ## Technical notes:
 
 * Each plant is only checked once per fertilizer. This shouldn't matter unless someone creates a fertilizer that only has a chance of changing the growth time, which as far as I know no one has.
 * I assume all paddy crops are grown near water.
-* The process used to calculate the number of days for each plant under each condition is fairly slow, and there's nothing I can realistically do about the fact that it's an `O(mn)` problem. I cache as much as I can, but on my computer first startup takes about 400-500 ms (for about 100 modded crops + about 20 modded fertilizers). About half this time is reflecting into JA to see when crops are purchaseable, so `Seen` and `All` are definitely significantly faster. (That said - it's cached, I usually see about 2-20ms on subsequent days.)
+* The process used to calculate the number of days for each plant under each condition is fairly slow, and there's nothing I can realistically do about the fact that it's an `O(mn)` problem. I cache as much as I can, but on my computer first startup takes about 400-500 ms (for about 100 modded crops + about 20 modded fertilizers). About half this time is reflecting into JA to see when crops are purchase-able, so `Seen` and `All` are definitely significantly faster. (That said - it's cached, I usually see about 2-20ms on subsequent days.)
 * Fertilizers are only displayed if they change the time needed (so things like the Quality Fertilizer are ignored).
-* For splitscreen - the two players are tracked together for things like `Seen` fertilizers and crops.
+* For split-screen - the two players are tracked together for things like `Seen` fertilizers and crops.
 * In multiplayer, if you change professions, you'll temporarily see timing info for both your old profession and new profession.
 * I only look at the current month for timing info, so if you have a crop that takes more than an in-game month to grow, this mod will never tell you about it. This is entirely because I structured my caches weird, but at this point I'm not rewriting the whole mod for a handful of crops most people would plant in their greenhouse anyways.
 * This mod assumes the month is 28 days. I'll implement support for mods that add longer/shorter months if sufficient people ask.

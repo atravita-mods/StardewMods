@@ -1,4 +1,5 @@
 ﻿using AtraShared.ConstantsAndEnums;
+using AtraShared.Integrations;
 using AtraShared.Integrations.Interfaces;
 using AtraShared.Menuing;
 using AtraShared.Utils.Extensions;
@@ -31,6 +32,9 @@ internal sealed class ModEntry : Mod
 
     private static int everlastingID = -1;
 
+    /// <summary>
+    /// Gets the id of the everlasting fertilizer.
+    /// </summary>
     internal static int EverlastingID
     {
         get
@@ -48,14 +52,24 @@ internal sealed class ModEntry : Mod
     public override void Entry(IModHelper helper)
     {
         ModMonitor = this.Monitor;
+
+        helper.Events.GameLoop.GameLaunched += this.OnGameLaunched;
         helper.Events.Input.ButtonPressed += this.OnButtonPressed;
         helper.Events.GameLoop.DayEnding += this.OnDayEnd;
 
-        helper.Events.GameLoop.ReturnedToTitle += this.GameLoop_ReturnedToTitle;
+        helper.Events.GameLoop.ReturnedToTitle += this.OnReturnedToTitle;
         this.ApplyPatches(new Harmony(this.ModManifest.UniqueID));
     }
 
-    private void GameLoop_ReturnedToTitle(object? sender, ReturnedToTitleEventArgs e)
+    /// <inheritdoc cref="IGameLoopEvents.GameLaunched"/>
+    private void OnGameLaunched(object? sender, GameLaunchedEventArgs e)
+    {
+        IntegrationHelper helper = new(this.Monitor, this.Helper.Translation, this.Helper.ModRegistry, LogLevel.Trace);
+        _ = helper.TryGetAPI("spacechase0.JsonAssets", "1.10.3", out jaAPI);
+    }
+
+    /// <inheritdoc cref="IGameLoopEvents.ReturnedToTitle"/>
+    private void OnReturnedToTitle(object? sender, ReturnedToTitleEventArgs e)
         => everlastingID = -1;
 
     /// <inheritdoc />

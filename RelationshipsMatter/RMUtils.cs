@@ -6,13 +6,21 @@ using AtraCore.Framework.Caches;
 namespace RelationshipsMatter;
 internal static class RMUtils
 {
-    private static Lazy<Dictionary<string, HashSet<string>>> Relations = new(GenerateRelationsMap);
+    private static Lazy<Dictionary<string, HashSet<string>>> relations = new(GenerateRelationsMap);
 
     private static IAssetName asset = null!;
 
     internal static void Init(IGameContentHelper parser)
     {
         asset = parser.ParseAssetName("Data/NPCDispositions");
+    }
+
+    internal static void Reset(IReadOnlySet<IAssetName>? assets)
+    {
+        if ((assets is null || assets.Contains(asset)) && relations.IsValueCreated)
+        {
+            relations = new(GenerateRelationsMap);
+        }
     }
 
     private static Dictionary<string, HashSet<string>> GenerateRelationsMap()

@@ -5,6 +5,7 @@
 * Fix issue with giant crops vanishing on maps that were not Farm or IslandWest.
 * Internal improvements.
 * Deshuffling fix.
+* Add Russian (thanks pavlo2906)!
 
 #### Version 0.2.0
 * Move to using AtraCore.

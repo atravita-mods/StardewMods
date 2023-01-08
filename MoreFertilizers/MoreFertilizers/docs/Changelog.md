@@ -24,6 +24,7 @@
 * Adjusted previous fertilizers:
     - Waterlogged now increases the growth speed of paddy crops a little.
     - Deluxe Fruit Tree's color scheme now no longer resembles a vanilla fertilizer that much.
+    - The two fruit tree growth fertilizers have been boosted slightly.
 * Added German translation (thanks to CrisTortion!)
 * Fixes the lucky fertilizer.
 * Fixes integration with Prismatic/Radioactive tools.

@@ -1,4 +1,6 @@
-﻿using CommunityToolkit.Diagnostics;
+﻿using System.Numerics;
+
+using CommunityToolkit.Diagnostics;
 using NetEscapades.EnumGenerators;
 
 namespace AtraShared.ConstantsAndEnums;
@@ -69,4 +71,7 @@ public static partial class WeatherExtensions
         }
         return weather;
     }
+
+    public static int CountWeathers(this StardewWeather weather)
+        => BitOperations.PopCount((uint)weather);
 }

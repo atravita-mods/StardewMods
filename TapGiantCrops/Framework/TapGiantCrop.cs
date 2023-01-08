@@ -50,6 +50,7 @@ public sealed class TapGiantCrop : ITapGiantCropsAPI
                     tapper.MinutesUntilReady = Utility.CalculateMinutesUntilMorning(Game1.timeOfDay, output.Value.days);
                 }
             }
+            loc.playSound("axe");
             loc.objects[tile] = tapper;
             return true;
         }

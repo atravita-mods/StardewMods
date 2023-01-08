@@ -75,6 +75,11 @@ internal static class CropAndFertilizerManager
     /// <inheritdoc cref="ILastDayToPlantAPI.GetDays(Profession, int, int, StardewSeasons)"/>
     internal static int? GetDays(Profession profession, int fertilizer, int crop, StardewSeasons season)
     {
+        if (season.CountSeasons() != 1)
+        {
+            return null;
+        }
+
         var seasonIndex = season.ToSeasonIndex();
         var seasonDict = DaysPerCondition[seasonIndex];
 
@@ -99,6 +104,11 @@ internal static class CropAndFertilizerManager
     /// <inheritdoc cref="ILastDayToPlantAPI.GetAll(Profession, int, StardewSeasons)"/>
     internal static IReadOnlyDictionary<int, int>? GetAll(Profession profession, int fertilizer, StardewSeasons season)
     {
+        if (season.CountSeasons() != 1)
+        {
+            return null;
+        }
+
         var seasonIndex = season.ToSeasonIndex();
         var seasonDict = DaysPerCondition[seasonIndex];
 
@@ -113,6 +123,11 @@ internal static class CropAndFertilizerManager
     /// <inheritdoc cref="ILastDayToPlantAPI.GetConditionsPerCrop(int)"/>
     internal static KeyValuePair<KeyValuePair<Profession, int>, int>[]? GetConditionsPerCrop(int crop, StardewSeasons season)
     {
+        if (season.CountSeasons() != 1)
+        {
+            return null;
+        }
+
         if (lastGrowthPerCrop[season.ToSeasonIndex()].Value?.TryGetValue(crop, out var val) == true)
         {
             return val.Select((kvp) => new KeyValuePair<KeyValuePair<Profession, int>, int>(new KeyValuePair<Profession, int>(kvp.Key.Profession, kvp.Key.Fertilizer), kvp.Value))
@@ -140,7 +155,7 @@ internal static class CropAndFertilizerManager
     internal static (string message, bool showplayer) GenerateMessageString()
     {
         ModEntry.ModMonitor.Log($"Processing for day {Game1.dayOfMonth}");
-        if (!StardewSeasonsExtensions.TryParse(Game1.currentSeason, true, out StardewSeasons season))
+        if (!StardewSeasonsExtensions.TryParse(Game1.currentSeason, true, out StardewSeasons season) || season.CountSeasons() != 1)
         {
             ModEntry.ModMonitor.Log("Invalid season?");
         }

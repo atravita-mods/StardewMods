@@ -550,8 +550,6 @@ internal sealed class ModEntry : Mod
         bountifulFertilizerID = -1;
         deluxeFishFoodID = -1;
         deluxeFruitTreeFertilizerID = -1;
-        deluxeFruitTreeFertilizerID = -1;
-        deluxeJojaFertilizerID = -1;
         deluxeJojaFertilizerID = -1;
         domesticatedFishFoodID = -1;
         everlastingFertilizerID = -1;

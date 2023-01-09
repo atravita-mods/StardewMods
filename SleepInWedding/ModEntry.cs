@@ -1,4 +1,6 @@
-﻿using AtraShared.ConstantsAndEnums;
+﻿using AtraCore.Framework.Caches;
+
+using AtraShared.ConstantsAndEnums;
 using AtraShared.Integrations;
 using AtraShared.Utils.Extensions;
 using HarmonyLib;
@@ -12,7 +14,7 @@ namespace SleepInWedding;
 [HarmonyPatch(typeof(GameLocation))]
 internal sealed class ModEntry : Mod
 {
-    private bool checkForWedding = true;
+    private const string RestoredWeddings = "RestoredWeddings";
 
     /// <summary>
     /// Gets the config for this mod.
@@ -35,13 +37,30 @@ internal sealed class ModEntry : Mod
         helper.Events.GameLoop.GameLaunched += this.OnGameLaunched;
         helper.Events.GameLoop.SaveLoaded += this.OnSaveLoad;
         helper.Events.GameLoop.TimeChanged += this.OnTimeChanged;
-        helper.Events.GameLoop.DayEnding += this.OnDayEnd;
+        helper.Events.GameLoop.DayStarted += this.OnDayStart;
+
+        helper.Events.Multiplayer.ModMessageReceived += this.OnMessageRecieved;
 
         this.ApplyPatches(new Harmony(this.ModManifest.UniqueID));
     }
 
-    private void OnDayEnd(object? sender, DayEndingEventArgs e)
-        => this.checkForWedding = true;
+    private void OnDayStart(object? sender, DayStartedEventArgs e)
+    {
+        if (Game1.player.HasWeddingToday() && NPCCache.GetByVillagerName(Game1.player.spouse) is NPC spouse)
+        {
+            spouse.currentMarriageDialogue.Clear();
+
+            if (spouse.Dialogue.ContainsKey("DayOfWedding"))
+            {
+                spouse.ClearAndPushDialogue("DayOfWedding");
+            }
+            else
+            {
+                spouse.CurrentDialogue.Clear();
+                spouse.CurrentDialogue.Push(new(I18n.WeddingGreeting(), spouse));
+            }
+        }
+    }
 
     private void OnTimeChanged(object? sender, TimeChangedEventArgs e)
     {
@@ -49,28 +68,24 @@ internal sealed class ModEntry : Mod
         {
             if (e.NewTime == 610)
             {
+                int hour = Math.DivRem(Config.WeddingTime, 100, out int minutes);
                 if (Game1.player.HasWeddingToday())
                 {
-                    Game1.addHUDMessage(new HUDMessage(I18n.WeddingMessage(Config.WeddingTime)));
+                    Game1.addHUDMessage(new HUDMessage(I18n.WeddingMessage(hour, minutes.ToString("D2")), HUDMessage.achievement_type));
+                }
+                else
+                {
+                    Game1.addHUDMessage(new HUDMessage(I18n.WeddingMessageOther(hour, minutes.ToString("D2")), HUDMessage.achievement_type));
                 }
             }
-            else if (!this.checkForWedding && Game1.timeOfDay > Config.WeddingTime)
+            else if (Game1.timeOfDay == Utility.ModifyTime(Config.WeddingTime, -30))
             {
-                Game1.player.currentLocation.checkForEvents();
-                this.checkForWedding = false;
+                Game1.addHUDMessage(new HUDMessage(I18n.WeddingReminder(), HUDMessage.achievement_type));
             }
-        }
-    }
-
-    private void OnGameLaunched(object? sender, GameLaunchedEventArgs e)
-    {
-        GMCMHelper helper = new(this.Monitor, this.Helper.Translation, this.Helper.ModRegistry, this.ModManifest);
-        if (helper.TryGetAPI())
-        {
-            helper.Register(
-                reset: static () => Config = new(),
-                save: () => this.Helper.AsyncWriteConfig(this.Monitor, Config))
-            .GenerateDefaultGMCM(static () => Config);
+            else if (Game1.timeOfDay == Config.WeddingTime)
+            {
+                Game1.warpFarmer(new LocationRequest("Town", false, Game1.getLocationFromName("Town")), 5, 10, 0);
+            }
         }
     }
 
@@ -82,17 +97,79 @@ internal sealed class ModEntry : Mod
     /// <param name="e">Event args.</param>
     private void OnSaveLoad(object? sender, SaveLoadedEventArgs e)
     {
-        ModMonitor.DebugOnlyLog($"Before attempting queuing new weddings {string.Join(", ", Game1.weddingsToday)}");
-        ModMonitor.DebugOnlyLog($"{Game1.player.spouse ?? "null"}");
-        ModMonitor.DebugOnlyLog($"{Game1.player.isEngaged()}");
-        ModMonitor.DebugOnlyLog($"{Game1.player.isMarried()}");
-        ModMonitor.DebugOnlyLog($"{Game1.player.friendshipData[Game1.player.spouse].CountdownToWedding}");
-        ModMonitor.DebugOnlyLog($"{Game1.Date.TotalDays} {Game1.player.friendshipData[Game1.player.spouse].WeddingDate.TotalDays}");
-        if (Context.IsMainPlayer)
+        if (Context.IsMainPlayer && Config.TryRecoverWedding)
         {
-            Game1.queueWeddingsForToday();
+            if (!Game1.canHaveWeddingOnDay(Game1.dayOfMonth, Game1.currentSeason))
+            {
+                return;
+            }
+
+            ModMonitor.DebugOnlyLog($"Before attempting queuing new weddings {string.Join(", ", Game1.weddingsToday)}");
+
+            HashSet<long> added = new();
+            List<long> online = new();
+            foreach (Farmer? farmer in Game1.getOnlineFarmers())
+            {
+                // we'll need a list of farmers to broadcast to....
+                if (farmer.UniqueMultiplayerID != Game1.player.UniqueMultiplayerID)
+                {
+                    online.Add(farmer.UniqueMultiplayerID);
+                }
+
+                if (farmer.spouse is not null && farmer.friendshipData.TryGetValue(farmer.spouse, out Friendship? friendship)
+                    && friendship.WeddingDate.TotalDays + 1 == Game1.Date.TotalDays)
+                {
+                    if (added.Add(farmer.UniqueMultiplayerID))
+                    {
+                        Game1.weddingsToday.Add(farmer.UniqueMultiplayerID);
+                    }
+                }
+                else if (!added.Contains(farmer.UniqueMultiplayerID))
+                {
+                    long? other = farmer.team.GetSpouse(farmer.UniqueMultiplayerID);
+                    if (other is not null)
+                    {
+                        FarmerPair team = FarmerPair.MakePair(other.Value, farmer.UniqueMultiplayerID);
+                        if (farmer.team.friendshipData.TryGetValue(team, out Friendship? farmerteam)
+                            && farmerteam.WeddingDate.TotalDays + 1 == Game1.Date.TotalDays)
+                        {
+                            if (added.Add(farmer.UniqueMultiplayerID))
+                            {
+                                Game1.weddingsToday.Add(farmer.UniqueMultiplayerID);
+                            }
+                            if (added.Add(other.Value))
+                            {
+                                Game1.weddingsToday.Add(other.Value);
+                            }
+                        }
+                    }
+                }
+            }
+
+            ModMonitor.DebugOnlyLog($"Current weddings {string.Join(", ", Game1.weddingsToday)}");
+            this.Helper.Multiplayer.SendMessage(
+                message: Game1.weddingsToday,
+                messageType: RestoredWeddings,
+                modIDs: new[] { this.ModManifest.UniqueID },
+                playerIDs: online.ToArray());
         }
-        ModMonitor.DebugOnlyLog($"Current weddings {string.Join(", ", Game1.weddingsToday)}");
+    }
+
+    private void OnMessageRecieved(object? sender, ModMessageReceivedEventArgs e)
+    {
+        if (e.FromModID != this.ModManifest.UniqueID)
+        {
+            return;
+        }
+        if (e.Type == RestoredWeddings)
+        {
+            List<long>? weddings = e.ReadAs<List<long>>();
+            if (weddings is not null)
+            {
+                Game1.weddingsToday.Clear();
+                Game1.weddingsToday.AddRange(weddings);
+            }
+        }
     }
 
     /// <summary>
@@ -103,12 +180,29 @@ internal sealed class ModEntry : Mod
     {
         try
         {
-            harmony.PatchAll();
+            harmony.PatchAll(typeof(ModEntry).Assembly);
         }
         catch (Exception ex)
         {
             ModMonitor.Log(string.Format(ErrorMessageConsts.HARMONYCRASH, ex), LogLevel.Error);
         }
         harmony.Snitch(this.Monitor, this.ModManifest.UniqueID, transpilersOnly: true);
+    }
+
+    /// <summary>
+    /// Sets up the GMCM for this mod.
+    /// </summary>
+    /// <param name="sender">SMAPI.</param>
+    /// <param name="e">event args.</param>
+    private void OnGameLaunched(object? sender, GameLaunchedEventArgs e)
+    {
+        GMCMHelper helper = new(this.Monitor, this.Helper.Translation, this.Helper.ModRegistry, this.ModManifest);
+        if (helper.TryGetAPI())
+        {
+            helper.Register(
+                reset: static () => Config = new(),
+                save: () => this.Helper.AsyncWriteConfig(this.Monitor, Config))
+            .GenerateDefaultGMCM(static () => Config);
+        }
     }
 }

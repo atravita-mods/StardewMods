@@ -1,7 +1,13 @@
 ﻿using System.Text;
+
+using AtraBase.Toolkit;
 using AtraBase.Toolkit.Reflection;
 using AtraBase.Toolkit.StringHandler;
+
+using CommunityToolkit.Diagnostics;
+
 using FastExpressionCompiler.LightExpression;
+
 using Microsoft.Xna.Framework.Graphics;
 
 namespace AtraShared.Utils;
@@ -34,7 +40,7 @@ public sealed class StringUtils
     /// <summary>
     /// Initializes a new instance of the <see cref="StringUtils"/> class.
     /// </summary>
-    /// <param name="monitor">The Monitor instance to use to log for these utils.</param>
+    /// <param name="monitor">The modMonitor instance to use to log for these utilities.</param>
     public StringUtils(IMonitor? monitor) => this.Monitor = monitor;
 
     private static Func<SpriteFont, char, int> GetGlyph => GetGlyphLazy.Value;
@@ -66,19 +72,30 @@ public sealed class StringUtils
         {
             return string.Empty;
         }
-        if (text.IndexOf(Dialogue.genderDialogueSplitCharacter) is int genderseperator && genderseperator > 0)
+
+        Guard.IsNotNull(whichFont);
+        Guard.IsGreaterThan(width, 0);
+
+        ReadOnlySpan<char> textSpan;
+        int genderseperator = text.IndexOf(Dialogue.genderDialogueSplitCharacter);
+        if (genderseperator > 0)
         {
-            text = Game1.player.IsMale ? text[..genderseperator] : text[(genderseperator + 1)..];
+            textSpan = Game1.player.IsMale ? text.AsSpan(0, genderseperator) : text.AsSpan(genderseperator + 1);
         }
+        else
+        {
+            textSpan = text.AsSpan();
+        }
+
         switch (LocalizedContentManager.CurrentLanguageCode)
         {
             case LocalizedContentManager.LanguageCode.ja:
             case LocalizedContentManager.LanguageCode.zh:
             case LocalizedContentManager.LanguageCode.th:
             case LocalizedContentManager.LanguageCode.mod when Game1.dialogueFont.Glyphs.Length > 4000:
-                return this.WrapTextByChar(text, whichFont, width, height);
+                return this.WrapTextByChar(textSpan, whichFont, width, height);
             default:
-                return this.WrapTextByWords(text, whichFont, width, height);
+                return this.WrapTextByWords(textSpan, whichFont, width, height);
         }
     }
 
@@ -90,43 +107,48 @@ public sealed class StringUtils
     /// <param name="width">Maximum width.</param>
     /// <param name="height">Maximum height.</param>
     /// <returns>Wrapped text.</returns>
-    public string WrapTextByWords(string text, SpriteFont whichFont, float width, float? height = null)
+    public string WrapTextByWords(ReadOnlySpan<char> text, SpriteFont whichFont, float width, float? height = null)
     {
         int maxlines = height is null ? 1000 : (int)height / whichFont.LineSpacing;
-        StringBuilder sb = new();
+        StringBuilder sb = StringBuilderCache.Acquire(text.Length);
         float spacewidth = this.MeasureWord(whichFont, " ") + whichFont.Spacing;
         float current_width = -whichFont.Spacing;
-        StringBuilder replacement_word = new();
+
+        StringBuilder? replacement_word = null;
         bool use_replacement_word = false;
+
         foreach ((ReadOnlySpan<char> word, ReadOnlySpan<char> splitchar) in text.StreamSplit())
         {
             if (LocalizedContentManager.CurrentLanguageCode is LocalizedContentManager.LanguageCode.fr && word.StartsWith("\n-"))
             { // This is from vanilla code, I dunno why French is special.
                 if (--maxlines <= 0)
                 {
-                    return sb.ToString();
+                    return StringBuilderCache.GetStringAndRelease(sb);
                 }
                 current_width = -whichFont.Spacing;
                 sb.AppendLine();
                 continue;
             }
+
             float wordwidth = this.MeasureWord(whichFont, word) + spacewidth;
             if (wordwidth > width)
             { // if the word itself is **longer** than the width, we must truncate. It'll get its own line.
                 replacement_word = this.TruncateWord(word, whichFont, width, out wordwidth);
                 use_replacement_word = true;
             }
+
             current_width += whichFont.Spacing + wordwidth;
             if (current_width > width)
             {
                 if (--maxlines <= 0)
                 {
-                    return sb.ToString();
+                    return StringBuilderCache.GetStringAndRelease(sb);
                 }
                 sb.AppendLine();
                 current_width = wordwidth;
             }
-            if (use_replacement_word)
+
+            if (use_replacement_word && replacement_word is not null)
             {
                 sb.Append(replacement_word);
             }
@@ -134,16 +156,13 @@ public sealed class StringUtils
             {
                 sb.Append(word);
             }
+
             use_replacement_word = false;
-            if (splitchar == "\r")
-            {
-                continue;
-            }
-            else if (splitchar == "\n" || splitchar == "\r\n")
+            if (splitchar == "\n" || splitchar == "\r\n" || splitchar == "\r")
             {
                 if (--maxlines <= 0)
                 {
-                    return sb.ToString();
+                    return StringBuilderCache.GetStringAndRelease(sb);
                 }
                 sb.AppendLine();
             }
@@ -152,7 +171,8 @@ public sealed class StringUtils
                 sb.Append(splitchar);
             }
         }
-        return sb.ToString();
+
+        return StringBuilderCache.GetStringAndRelease(sb);
     }
 
     /// <summary>
@@ -163,10 +183,10 @@ public sealed class StringUtils
     /// <param name="width">Maximum width.</param>
     /// <param name="height">Maximum height.</param>
     /// <returns>Wrapped text.</returns>
-    public string WrapTextByChar(string text, SpriteFont whichFont, float width, float? height = null)
+    public string WrapTextByChar(ReadOnlySpan<char> text, SpriteFont whichFont, float width, float? height = null)
     {
         int maxlines = height is null ? 1000 : (int)height / whichFont.LineSpacing;
-        StringBuilder sb = new();
+        StringBuilder sb = StringBuilderCache.Acquire(text.Length);
         float current_width = -whichFont.Spacing;
         float charwidth = 0;
         float proposedcharwidth = 0;
@@ -180,7 +200,7 @@ public sealed class StringUtils
                 case '\n':
                     if (--maxlines <= 0)
                     {
-                        return sb.ToString();
+                        return StringBuilderCache.GetStringAndRelease(sb);
                     }
                     current_width = -whichFont.Spacing;
                     sb.AppendLine();
@@ -199,10 +219,10 @@ public sealed class StringUtils
                         {
                             if (--maxlines <= 0)
                             {
-                                return sb.ToString();
+                                return StringBuilderCache.GetStringAndRelease(sb);
                             }
                             sb.AppendLine();
-                            current_width = charwidth;
+                            current_width = -whichFont.Spacing;
                         }
                         sb.Append(ch);
                         current_width += charwidth + whichFont.Spacing;
@@ -214,7 +234,7 @@ public sealed class StringUtils
                     break;
             }
         }
-        return sb.ToString();
+        return StringBuilderCache.GetStringAndRelease(sb);
     }
 
     /// <summary>

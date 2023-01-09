@@ -91,10 +91,10 @@ internal static class ConfirmWarp
             ILHelper helper = new(original, instructions, ModEntry.ModMonitor, gen);
             helper.FindNext(new CodeInstructionWrapper[]
             { // case "WarperQuestion_Yes"
-                new(OpCodes.Ldarg_1),
+                OpCodes.Ldarg_1,
                 new(OpCodes.Ldstr, "WarperQuestion_Yes"),
-                new(OpCodes.Call),
-                new(OpCodes.Brtrue_S),
+                OpCodes.Call,
+                OpCodes.Brtrue_S,
             })
             .Advance(3)
             .StoreBranchDest()
@@ -138,7 +138,8 @@ internal static class ConfirmWarp
     [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Harmony convention.")]
     private static bool PrefixTotemWarp(SObject __instance, GameLocation location, ref bool __result)
     {
-        if (Game1.eventUp || Game1.isFestival() || Game1.fadeToBlack || Game1.player.swimming.Value || Game1.player.onBridge.Value || !ModEntry.Config.Enabled)
+        if (Game1.eventUp || Game1.isFestival() || Game1.fadeToBlack || Game1.player.swimming.Value || Game1.player.onBridge.Value
+            || !ModEntry.Config.Enabled || Game1.activeClickableMenu is not null)
         {
             return true;
         }
@@ -156,7 +157,7 @@ internal static class ConfirmWarp
             }
         }
 
-        if (!WarpLocationExtensions.IsDefined((WarpLocation)__instance.ParentSheetIndex) || __instance.bigCraftable.Value)
+        if (__instance.bigCraftable.Value || !WarpLocationExtensions.IsDefined((WarpLocation)__instance.ParentSheetIndex))
         { // Not an attempt to warp.
             return true;
         }
@@ -198,7 +199,7 @@ internal static class ConfirmWarp
             };
 
             __result = false;
-            Game1.activeClickableMenu = new DialogueAndAction(I18n.ConfirmWarps(), responses, actions);
+            Game1.activeClickableMenu = new DialogueAndAction(I18n.ConfirmWarps(), responses, actions, ModEntry.InputHelper);
             return false;
         }
         return true;
@@ -210,7 +211,8 @@ internal static class ConfirmWarp
     [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Harmony Convention")]
     private static bool PrefixBuildingAction(Building __instance, Vector2 tileLocation, Farmer who, ref bool __result)
     {
-        if (Game1.eventUp || Game1.isFestival() || Game1.fadeToBlack || Game1.player.swimming.Value || Game1.player.onBridge.Value || !ModEntry.Config.Enabled)
+        if (Game1.eventUp || Game1.isFestival() || Game1.fadeToBlack || Game1.player.swimming.Value || Game1.player.onBridge.Value
+            || !ModEntry.Config.Enabled || Game1.activeClickableMenu is not null)
         {
             return true;
         }
@@ -228,7 +230,7 @@ internal static class ConfirmWarp
             _ => WarpLocation.None,
         };
 
-        if (location is WarpLocation.None || Game1.getLocationFromName(location.ToString()) is not GameLocation loc)
+        if (location is WarpLocation.None || Game1.getLocationFromName(location.ToStringFast()) is not GameLocation loc)
         { // Something went very wrong. I cannot find the location at all....
             return true;
         }
@@ -261,7 +263,7 @@ internal static class ConfirmWarp
             };
 
             __result = false;
-            Game1.activeClickableMenu = new DialogueAndAction(I18n.ConfirmWarps(), responses, actions);
+            Game1.activeClickableMenu = new DialogueAndAction(I18n.ConfirmWarps(), responses, actions, ModEntry.InputHelper);
             return false;
         }
         return true;
@@ -274,10 +276,12 @@ internal static class ConfirmWarp
         {
             return true;
         }
-        if (Game1.eventUp || Game1.isFestival() || Game1.fadeToBlack || Game1.player.swimming.Value || Game1.player.onBridge.Value || !ModEntry.Config.Enabled)
+        if (Game1.eventUp || Game1.isFestival() || Game1.fadeToBlack || Game1.player.swimming.Value || Game1.player.onBridge.Value || !ModEntry.Config.Enabled
+            || Game1.activeClickableMenu is not null)
         {
             return true;
         }
+
         if (!HaveConfirmed.Value
              && (IsLocationConsideredDangerous(location) ? ModEntry.Config.ReturnScepterInDangerousAreas : ModEntry.Config.ReturnScepterInSafeAreas)
                  .HasFlag(Context.IsMultiplayer ? ConfirmationEnum.InMultiplayerOnly : ConfirmationEnum.NotInMultiplayer))
@@ -298,7 +302,7 @@ internal static class ConfirmWarp
                     HaveConfirmed.Value = false;
                 },
             };
-            Game1.activeClickableMenu = new DialogueAndAction(I18n.ConfirmWarps(), responses, actions);
+            Game1.activeClickableMenu = new DialogueAndAction(I18n.ConfirmWarps(), responses, actions, ModEntry.InputHelper);
             return false;
         }
         return true;
@@ -309,7 +313,8 @@ internal static class ConfirmWarp
     [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Harmony Convention")]
     private static bool PrefixIslandWest(IslandWest __instance, string action, Farmer who, Location tileLocation)
     {
-        if (Game1.eventUp || Game1.isFestival() || Game1.fadeToBlack || Game1.player.swimming.Value || Game1.player.onBridge.Value || !ModEntry.Config.Enabled)
+        if (Game1.eventUp || Game1.isFestival() || Game1.fadeToBlack || Game1.player.swimming.Value || Game1.player.onBridge.Value
+            || !ModEntry.Config.Enabled || Game1.activeClickableMenu is not null)
         {
             return true;
         }
@@ -332,7 +337,7 @@ internal static class ConfirmWarp
                     HaveConfirmed.Value = false;
                 },
             };
-            Game1.activeClickableMenu = new DialogueAndAction(I18n.ConfirmWarps(), responses, actions);
+            Game1.activeClickableMenu = new DialogueAndAction(I18n.ConfirmWarps(), responses, actions, ModEntry.InputHelper);
             return false;
         }
         return true;

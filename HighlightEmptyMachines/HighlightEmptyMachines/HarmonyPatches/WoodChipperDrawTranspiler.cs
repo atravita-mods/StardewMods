@@ -33,7 +33,7 @@ internal static class WoodChipperDrawTranspiler
             ILHelper helper = new(original, instructions, ModEntry.ModMonitor, gen);
             helper.FindNext(new CodeInstructionWrapper[]
             {
-                new(OpCodes.Call, typeof(Game1).GetCachedMethod(nameof(Game1.GlobalToLocal), ReflectionCache.FlagTypes.StaticFlags, new[] { typeof(xTile.Dimensions.Rectangle), typeof(Vector2) })),
+                new(OpCodes.Call, typeof(Game1).GetCachedMethod<xTile.Dimensions.Rectangle, Vector2>(nameof(Game1.GlobalToLocal), ReflectionCache.FlagTypes.StaticFlags)),
             })
             .FindNext(new CodeInstructionWrapper[]
             {
@@ -49,8 +49,8 @@ internal static class WoodChipperDrawTranspiler
         }
         catch (Exception ex)
         {
-            ModEntry.ModMonitor.Log($"Mod crashed while transpiling Crabpot.draw:\n\n{ex}", LogLevel.Error);
-            original?.Snitch(ModEntry.ModMonitor);
+            ModEntry.ModMonitor.Log($"Mod crashed while transpiling {original.FullDescription()}:\n\n{ex}", LogLevel.Error);
+            original.Snitch(ModEntry.ModMonitor);
         }
         return null;
     }

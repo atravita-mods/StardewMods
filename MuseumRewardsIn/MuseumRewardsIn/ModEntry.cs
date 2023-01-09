@@ -1,15 +1,24 @@
 ﻿using System.Text.RegularExpressions;
+
+using AtraCore.Framework.Caches;
+
 using AtraShared.Integrations;
 using AtraShared.ItemManagement;
 using AtraShared.Menuing;
 using AtraShared.Utils.Extensions;
+
 using HarmonyLib;
+
 using Microsoft.Xna.Framework;
+
 using StardewModdingAPI.Events;
 using StardewValley.Locations;
+
 using StardewValley.Menus;
+
 using xTile.Dimensions;
 using xTile.ObjectModel;
+
 using AtraUtils = AtraShared.Utils.Utils;
 using XTile = xTile.Tiles.Tile;
 
@@ -23,7 +32,7 @@ internal sealed class ModEntry : Mod
     private const string SHOPNAME = "atravita.MuseumShop";
 
     private static readonly Regex MuseumObject = new(
-        pattern: "museumCollectedReward(?<type>[a-zA-Z]+)_(?<id>[0-9]+)_",
+        pattern: "^museumCollectedReward(?<type>[a-zA-Z]+)_(?<id>[0-9]+)_",
         options: RegexOptions.Compiled,
         matchTimeout: TimeSpan.FromMilliseconds(250));
 
@@ -37,19 +46,26 @@ internal sealed class ModEntry : Mod
     /// <remarks>WARNING: NOT SET IN ENTRY.</remarks>
     private static ModConfig config = null!;
 
+    private static IAssetName libraryHouse = null!;
+
     /// <inheritdoc />
     public override void Entry(IModHelper helper)
     {
         modMonitor = this.Monitor;
+        AssetManager.Initialize(helper.GameContent);
+        libraryHouse = helper.GameContent.ParseAssetName("Maps/ArchaeologyHouse");
+
         helper.Events.GameLoop.GameLaunched += this.OnGameLaunched;
         helper.Events.Input.ButtonPressed += this.OnButtonPressed;
         helper.Events.Player.Warped += this.OnWarped;
         helper.Events.Content.AssetRequested += this.OnAssetRequested;
 
+        helper.Events.Content.AssetsInvalidated += this.OnAssetInvalidated;
+
         I18n.Init(helper.Translation);
 
         Harmony harmony = new(this.ModManifest.UniqueID);
-        harmony.PatchAll();
+        harmony.PatchAll(typeof(ModEntry).Assembly);
     }
 
     private void OnGameLaunched(object? sender, GameLaunchedEventArgs e)
@@ -74,14 +90,19 @@ internal sealed class ModEntry : Mod
                 reset: static () => config = new(),
                 save: () =>
                 {
-                    this.Helper.GameContent.InvalidateCacheAndLocalized("Maps/ArchaeologyHouse");
+                    this.Helper.GameContent.InvalidateCacheAndLocalized(libraryHouse.BaseName);
                     this.Helper.AsyncWriteConfig(this.Monitor, config);
                 })
             .AddTextOption(
                 name: I18n.BoxLocation_Name,
                 getValue: static () => config.BoxLocation.X + ", " + config.BoxLocation.Y,
                 setValue: static (str) => config.BoxLocation = str.TryParseVector2(out Vector2 vec) ? vec : shopLoc,
-                tooltip: I18n.BoxLocation_Description);
+                tooltip: I18n.BoxLocation_Description)
+            .AddBoolOption(
+                name: I18n.AllowBuyBacks_Name,
+                getValue: static () => config.AllowBuyBacks,
+                setValue: static (value) => config.AllowBuyBacks = value,
+                tooltip: I18n.AllowBuyBacks_Description);
         }
     }
 
@@ -102,7 +123,7 @@ internal sealed class ModEntry : Mod
             {
                 if (ItemUtils.GetItemFromIdentifier(match.Groups["type"].Value, id) is Item item)
                 {
-                    if (__result.TryAdd(item, new int[] { 0, int.MaxValue }))
+                    if (__result.TryAdd(item, new int[] { 0, ShopMenu.infiniteStock }))
                     {
                         modMonitor.DebugOnlyLog($"Adding {item.Name} to catalogue!", LogLevel.Info);
                     }
@@ -115,19 +136,14 @@ internal sealed class ModEntry : Mod
         }
     }
 
-    /// <summary>
-    /// Handles opening the shop menu in the museum.
-    /// </summary>
-    /// <param name="sender">SMAPI.</param>
-    /// <param name="e">event args.</param>
+    /// <inheritdoc cref="IInputEvents.ButtonPressed"/>
     private void OnButtonPressed(object? sender, ButtonPressedEventArgs e)
     {
-        if (!MenuingExtensions.IsNormalGameplay() || (!e.Button.IsActionButton() && !e.Button.IsUseToolButton()))
+        if ((!e.Button.IsActionButton() && !e.Button.IsUseToolButton())
+            || !MenuingExtensions.IsNormalGameplay())
         {
             return;
         }
-
-        this.Monitor.DebugOnlyLog(Game1.currentLocation?.doesTileHaveProperty((int)e.Cursor.GrabTile.X, (int)e.Cursor.GrabTile.Y, "Action", BUILDING) ?? string.Empty);
 
         if (Game1.currentLocation is not LibraryMuseum museum
             || museum.doesTileHaveProperty((int)e.Cursor.GrabTile.X, (int)e.Cursor.GrabTile.Y, "Action", BUILDING) != SHOPNAME)
@@ -137,7 +153,9 @@ internal sealed class ModEntry : Mod
 
         this.Helper.Input.SurpressClickInput();
 
-        Dictionary<ISalable, int[]> sellables = new();
+        Dictionary<ISalable, int[]> sellables = new(20);
+
+        Dictionary<string, string> mail = this.Helper.GameContent.Load<Dictionary<string, string>>("Data/mail");
 
         foreach (string mailflag in Game1.player.mailReceived)
         {
@@ -147,18 +165,35 @@ internal sealed class ModEntry : Mod
                 if (ItemUtils.GetItemFromIdentifier(match.Groups["type"].Value, id) is Item item
                     && !(item is SObject obj && (obj.Category == SObject.SeedsCategory || obj.IsRecipe)))
                 {
-                    if (item.Name.StartsWith("Dwarvish Translation Guide"))
+                    if (item.Name.StartsWith("Dwarvish Translation Guide")
+                        || item.Name.Equals("Stardrop", StringComparison.OrdinalIgnoreCase)
+                        || item.Name.Equals("Crystalarium", StringComparison.OrdinalIgnoreCase))
                     {
                         continue;
                     }
-                    int[] selldata = new int[] { Math.Max(item.salePrice() * 2, 2000), int.MaxValue };
-                    sellables.Add(item, selldata);
+                    int[] selldata = new int[] { Math.Max(item.salePrice() * 2, 2000), ShopMenu.infiniteStock };
+                    sellables.TryAdd(item, selldata);
+                }
+            }
+            else if (AssetManager.MailFlags.Contains(mailflag) && mail.TryGetValue(mailflag, out string? mailstring))
+            {
+                foreach (SObject? item in mailstring.ParseItemsFromMail())
+                {
+                    int[] selldata = new int[] { Math.Max(item.salePrice() * 2, 2000), ShopMenu.infiniteStock };
+                    sellables.TryAdd(item, selldata);
                 }
             }
         }
 
-        var shop = new ShopMenu(sellables, who: "Gunther");
-        if (Game1.getCharacterFromName("Gunther") is NPC gunter)
+        var shop = new ShopMenu(sellables, who: "Gunther") { storeContext = SHOPNAME };
+        if (config.AllowBuyBacks)
+        {
+            shop.categoriesToSellHere.Add(SObject.mineralsCategory);
+            shop.categoriesToSellHere.Add(SObject.GemCategory);
+            // hack in buybacks for Arch, which may not have a number?
+        }
+
+        if (NPCCache.GetByVillagerName("Gunther") is NPC gunter)
         {
             shop.portraitPerson = gunter;
         }
@@ -168,7 +203,7 @@ internal sealed class ModEntry : Mod
 
     private void OnAssetRequested(object? sender, AssetRequestedEventArgs e)
     {
-        if (e.NameWithoutLocale.IsEquivalentTo("Maps/ArchaeologyHouse"))
+        if (e.NameWithoutLocale.IsEquivalentTo(libraryHouse))
         {
             e.Edit(
                 static (asset) =>
@@ -184,10 +219,21 @@ internal sealed class ModEntry : Mod
                 },
                 AssetEditPriority.Default + 10);
         }
+        else
+        {
+            AssetManager.Apply(e);
+        }
     }
+
+    private void OnAssetInvalidated(object? sender, AssetsInvalidatedEventArgs e)
+        => AssetManager.Invalidate(e.NamesWithoutLocale);
 
     private void OnWarped(object? sender, WarpedEventArgs e)
     {
+        if (!e.IsLocalPlayer)
+        {
+            return;
+        }
         if (e.NewLocation is LibraryMuseum)
         {
             Vector2 tile = config.BoxLocation; // default location of shop.
@@ -200,7 +246,7 @@ internal sealed class ModEntry : Mod
                 }
             }
 
-            this.Monitor.DebugOnlyLog($"Adding boxen to {tile}", LogLevel.Info);
+            this.Monitor.DebugOnlyLog($"Adding box to {tile}", LogLevel.Info);
 
             // add box
             e.NewLocation.temporarySprites.Add(new TemporaryAnimatedSprite
@@ -216,6 +262,10 @@ internal sealed class ModEntry : Mod
                 layerDepth = Math.Clamp((((tile.Y - 0.5f) * Game1.tileSize) / 10000f) + 0.15f, 0f, 1.0f), // a little offset so it doesn't show up on the floor.
                 id = 777f,
             });
+        }
+        else
+        {
+            AssetManager.Invalidate();
         }
     }
 }

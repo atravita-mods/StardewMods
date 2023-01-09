@@ -5,7 +5,6 @@
 /// </summary>
 internal static class ScheduleExtensionMethods
 {
-
     /// <summary>
     /// Checks if the NPC has a specific schedule for today, where a specific schedule is a
     /// [season]_[day] or a marriage_[season]_[day].

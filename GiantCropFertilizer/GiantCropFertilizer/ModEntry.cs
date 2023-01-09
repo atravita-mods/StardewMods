@@ -1,4 +1,5 @@
 ﻿using AtraCore.Utilities;
+
 using AtraShared.ConstantsAndEnums;
 using AtraShared.Integrations;
 using AtraShared.Integrations.Interfaces;
@@ -6,11 +7,16 @@ using AtraShared.MigrationManager;
 using AtraShared.Utils;
 using AtraShared.Utils.Extensions;
 using AtraShared.Utils.Shims;
+
 using GiantCropFertilizer.DataModels;
 using GiantCropFertilizer.HarmonyPatches;
+
 using HarmonyLib;
+
 using StardewModdingAPI.Events;
+
 using StardewValley.Buildings;
+
 using AtraUtils = AtraShared.Utils.Utils;
 
 namespace GiantCropFertilizer;
@@ -67,17 +73,10 @@ internal sealed class ModEntry : Mod
         I18n.Init(helper.Translation);
         ModMonitor = this.Monitor;
 
-        helper.Events.Content.AssetRequested += this.OnAssetRequested;
         Config = AtraUtils.GetConfigOrDefault<ModConfig>(helper, this.Monitor);
 
         helper.Events.GameLoop.GameLaunched += this.OnGameLaunched;
-        helper.Events.GameLoop.SaveLoaded += this.OnSaveLoaded;
-
-        helper.Events.GameLoop.ReturnedToTitle += this.OnReturnedToTitle;
     }
-
-    private void OnAssetRequested(object? sender, AssetRequestedEventArgs e)
-        => AssetEditor.HandleAssetRequested(e);
 
     private void OnSaved(object? sender, SavedEventArgs e)
     {
@@ -109,7 +108,7 @@ internal sealed class ModEntry : Mod
     {
         try
         {
-            harmony.PatchAll();
+            harmony.PatchAll(typeof(ModEntry).Assembly);
 
             if (this.Helper.ModRegistry.Get("spacechase0.MultiFertilizer") is IModInfo info
                 && info.Manifest.Version.IsOlderThan("1.0.6"))
@@ -135,7 +134,8 @@ internal sealed class ModEntry : Mod
                 CropTranspiler.ApplyDGAPatches(harmony);
             }
 
-            if (new Version(1, 6) > new Version(Game1.version))
+            if (new Version(1, 6) > new Version(Game1.version) &&
+                (this.Helper.ModRegistry.Get("spacechase0.MoreGiantCrops") is not IModInfo giant || giant.Manifest.Version.IsOlderThan("1.2.0")))
             {
                 this.Monitor.Log("Applying patch to restore giant crops to save locations", LogLevel.Debug);
                 FixSaveThing.ApplyPatches(harmony);
@@ -155,7 +155,6 @@ internal sealed class ModEntry : Mod
             if (helper.TryGetAPI("spacechase0.JsonAssets", "1.10.3", out jsonAssets))
             {
                 jsonAssets.LoadAssets(Path.Combine(this.Helper.DirectoryPath, "assets", "json-assets"), this.Helper.Translation);
-                jsonAssets.IdsFixed += this.JAIdsFixed;
             }
             else
             {
@@ -164,7 +163,12 @@ internal sealed class ModEntry : Mod
             }
         }
 
-        { // GMCM integration
+        // Wait to hook events until after we know JA can handle our items.
+        this.Helper.Events.GameLoop.SaveLoaded += this.OnSaveLoaded;
+        this.Helper.Events.GameLoop.ReturnedToTitle += this.OnReturnedToTitle;
+
+        // GMCM integration
+        {
             GMCMHelper gmcmHelper = new(this.Monitor, this.Helper.Translation, this.Helper.ModRegistry, this.ModManifest);
             if (gmcmHelper.TryGetAPI())
             {
@@ -215,15 +219,17 @@ internal sealed class ModEntry : Mod
         {
             this.migrator = null;
         }
-
-        this.FixIds();
+        this.GrabIds();
+        if (Context.IsMainPlayer)
+        {
+            this.FixIds();
+        }
     }
 
-    /// <summary>
+    /// <inheritdoc cref="IGameLoopEvents.Saved"/>
+    /// <remarks>
     /// Writes migration data then detaches the migrator.
-    /// </summary>
-    /// <param name="sender">Smapi thing.</param>
-    /// <param name="e">Arguments for just-before-saving.</param>
+    /// </remarks>
     private void WriteMigrationData(object? sender, SavedEventArgs e)
     {
         if (this.migrator is not null)
@@ -234,43 +240,45 @@ internal sealed class ModEntry : Mod
         this.Helper.Events.GameLoop.Saved -= this.WriteMigrationData;
     }
 
-    /*********
-     * REGION JSON ASSETS
-     * *******/
+    #region jsonAssets
 
     // Not quite sure why, but JA drops all IDs when returning to title. We're doing that too.
-    [EventPriority(EventPriority.High)]
+    [EventPriority(EventPriority.High + 100)]
     private void OnReturnedToTitle(object? sender, ReturnedToTitleEventArgs e)
         => giantCropFertilizerID = -1;
 
-    private void JAIdsFixed(object? sender, EventArgs e)
+    private void GrabIds()
     {
-        try
+        // reset the ID, ask for it again from JA?
+        giantCropFertilizerID = -1;
+
+        if (GiantCropFertilizerID == -1)
         {
-            this.FixIds();
-        }
-        catch (Exception ex)
-        {
-            this.Monitor.Log($"Failed in trying to fix ids:\n\n{ex}", LogLevel.Error);
+            this.Monitor.Log($"Could not get ID from JA.");
         }
     }
 
     private void FixIds()
     {
         int newID = GiantCropFertilizerID;
-        if (newID == -1 || !Context.IsMainPlayer)
+        if (newID == -1)
         {
-            return;
+            this.Monitor.Log($"Could not get ID from JA.");
         }
 
         if (this.Helper.Data.ReadGlobalData<GiantCropFertilizerIDStorage>(SAVESTRING) is not GiantCropFertilizerIDStorage storedIDCls
             || storedIDCls.ID == -1)
         {
+            this.storedID = new GiantCropFertilizerIDStorage(GiantCropFertilizerID);
+
+            this.Helper.Events.GameLoop.Saved -= this.OnSaved;
+            this.Helper.Events.GameLoop.Saved += this.OnSaved;
+
             ModMonitor.Log("No need to fix IDs, not installed before.");
             return;
         }
 
-        this.storedID ??= storedIDCls;
+        this.storedID = storedIDCls;
         int storedID = this.storedID.ID;
 
         if (storedID == newID)
@@ -283,10 +291,11 @@ internal sealed class ModEntry : Mod
         this.Helper.Events.GameLoop.Saved += this.OnSaved;
 
         IntegrationHelper helper = new(this.Monitor, this.Helper.Translation, this.Helper.ModRegistry, LogLevel.Trace);
-        if (helper.TryGetAPI("PeacefulEnd.SolidFoundations", "1.12.1", out this.solidFoundationsAPI))
+        if (this.solidFoundationsAPI is not null || helper.TryGetAPI("PeacefulEnd.SolidFoundations", "1.12.1", out this.solidFoundationsAPI))
         {
             this.oldID = storedID;
             this.newID = newID;
+            this.solidFoundationsAPI.AfterBuildingRestoration -= this.AfterSFBuildingRestore;
             this.solidFoundationsAPI.AfterBuildingRestoration += this.AfterSFBuildingRestore;
         }
 
@@ -329,4 +338,6 @@ internal sealed class ModEntry : Mod
         this.newID = -1;
         this.solidFoundationsAPI = null;
     }
+
+    #endregion
 }

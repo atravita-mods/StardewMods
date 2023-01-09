@@ -8,6 +8,8 @@ using Microsoft.Xna.Framework;
 
 namespace MoreFertilizers.HarmonyPatches.Compat;
 
+#warning - remove in Stardew 1.6
+
 /// <summary>
 /// Applies a transpiler to make Prismatic and Radioactive's sprinklers work as anti-crow devices.
 /// </summary>
@@ -15,7 +17,16 @@ internal static class AddCrowsForExtendedToolsTranspiler
 {
     internal static void ApplyPatches(Harmony harmony)
     {
-
+        try
+        {
+            harmony.Patch(
+                original: typeof(Farm).GetCachedMethod(nameof(Farm.addCrows), ReflectionCache.FlagTypes.InstanceFlags),
+                transpiler: new HarmonyMethod(typeof(AddCrowsForExtendedToolsTranspiler), nameof(Transpiler)));
+        }
+        catch (Exception ex)
+        {
+            ModEntry.ModMonitor.Log($"Failed in attempting to transpile Farm.AddCrows\n\n{ex}", LogLevel.Error);
+        }
     }
 
     private static IEnumerable<CodeInstruction>? Transpiler(IEnumerable<CodeInstruction> instructions, ILGenerator gen, MethodBase original)
@@ -31,11 +42,11 @@ internal static class AddCrowsForExtendedToolsTranspiler
                 new(OpCodes.Call),
                 new(SpecialCodeInstructionCases.Wildcard, (instr) => instr.opcode == OpCodes.Brfalse || instr.opcode == OpCodes.Brfalse_S),
             })
-            .GetLabels(out var labels)
+            .GetLabels(out IList<Label>? labels)
             .Remove(5)
             .AttachLabel(labels.ToArray());
 
-            helper.Print();
+            // helper.Print();
             return helper.Render();
         }
         catch (Exception ex)

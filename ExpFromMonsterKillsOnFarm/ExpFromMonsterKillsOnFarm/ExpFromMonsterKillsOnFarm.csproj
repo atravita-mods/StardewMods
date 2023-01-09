@@ -2,7 +2,6 @@
   <Import Project="..\..\csproj_common" />
   
   <PropertyGroup>
-    <TargetFramework>net5.0</TargetFramework>
     <EnableHarmony>true</EnableHarmony>
     <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
@@ -11,7 +10,7 @@
     <Name>EXP From Monster Kills On Farm</Name>
     <Description>Grants XP for monster kills on the farm.</Description>
     <UpdateKeys>Nexus:10924, ModDrop:1099838</UpdateKeys>
-    <Version>0.3.0</Version>
+    <Version>0.3.1</Version>
     <BaseManifest>..\..\base_dependencies.json</BaseManifest>
   </PropertyGroup>
 
@@ -20,7 +19,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="JetBrains.Annotations" Version="2022.1.0" />
+    <PackageReference Include="JetBrains.Annotations" Version="2022.3.1" />
     <PackageReference Include="Microsoft.Win32.Registry" Version="5.0.0" />
     <!-- Makes warnings go away, not sure what it does...-->
   </ItemGroup>

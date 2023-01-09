@@ -2,8 +2,6 @@
 using AtraShared.Utils.Extensions;
 using HarmonyLib;
 
-using AtraUtils = AtraShared.Utils.Utils;
-
 namespace PanningFramework;
 
 /// <inheritdoc />
@@ -35,7 +33,7 @@ internal class ModEntry : Mod
     {
         try
         {
-            harmony.PatchAll();
+            harmony.PatchAll(typeof(ModEntry).Assembly);
         }
         catch (Exception ex)
         {

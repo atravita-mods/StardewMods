@@ -1,0 +1,11 @@
+{"Changes":[
+    {
+        "LogName": "Rain -- during winter.",
+        "Action": "EditData",
+        "Target": "Characters/Dialogue/rainy",
+        "When": {"Season": "winter"},
+        "Entries":{
+            "George": "{{Random: It's awful cold, isn't it? What a rotten day. ++ Why do I even bother getting out of bed when the day looks like this? ++ My hip aches.|inputSeparator=++}}"
+        }
+    },
+]}

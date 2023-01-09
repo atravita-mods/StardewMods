@@ -1,10 +1,12 @@
 ﻿using AtraShared.Integrations.GMCMAttributes;
+using NetEscapades.EnumGenerators;
 
 namespace FarmCaveSpawn;
 
 /// <summary>
 /// How the mod should handle out-of-season fruit.
 /// </summary>
+[EnumExtensions]
 public enum SeasonalBehavior
 {
     /// <summary>

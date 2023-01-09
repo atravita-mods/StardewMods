@@ -1,5 +1,8 @@
 ﻿using System.Reflection;
+using System.Runtime.CompilerServices;
 using System.Text;
+
+using AtraBase.Toolkit;
 using AtraBase.Toolkit.Extensions;
 using HarmonyLib;
 
@@ -43,6 +46,7 @@ public static class HarmonyExtensions
     /// <param name="monitor">Logger.</param>
     /// <param name="filter">Filter. Leave null to not filter.</param>
     /// <param name="transpilersOnly">Whether or not to log transpilers only.</param>
+    [MethodImpl(MethodImplOptions.AggressiveOptimization)]
     public static void Snitch(this MethodBase method, IMonitor monitor, Func<Patch, bool>? filter = null, bool transpilersOnly = false)
     {
         filter ??= (_) => true;
@@ -62,7 +66,7 @@ public static class HarmonyExtensions
             return;
         }
 
-        StringBuilder sb = new();
+        StringBuilder sb = StringBuilderCache.Acquire();
         sb.Append("Patched method ").Append(method.FullDescription());
 
         if (!transpilersOnly)
@@ -90,7 +94,7 @@ public static class HarmonyExtensions
             }
         }
 
-        monitor.Log(sb.ToString(), LogLevel.Trace);
+        monitor.Log(StringBuilderCache.GetStringAndRelease(sb), LogLevel.Trace);
     }
 
     /// <summary>

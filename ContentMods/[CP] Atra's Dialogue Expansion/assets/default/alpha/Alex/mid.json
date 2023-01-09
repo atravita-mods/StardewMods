@@ -1,0 +1,20 @@
+{"Changes":[
+    {
+        "LogName": "Rain -- during winter.",
+        "Action": "EditData",
+        "Target": "Characters/Dialogue/rainy",
+        "When": {"Season": "winter"},
+        "Entries":{
+            "Alex": "#$c .5#Hmmph. This is not good weather for sports, but... oh well, I can always lift weights inside.#Days like this let the truly dedicated show their mettle.#$b#What? I know some words.",
+        }
+    },
+    {
+        "LogName": "Alex - mid hearts",
+        "Action": "EditData",
+        "Target": "Characters/Dialogue/Alex",
+        "When": {"YearModulus": "2"},
+        "Entries": {
+            "4_2": "@! I saw a new exercise on social media the other day. Can't wait to try it out."
+        }
+    }
+]}

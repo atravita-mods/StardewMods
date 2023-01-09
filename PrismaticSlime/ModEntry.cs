@@ -11,6 +11,11 @@ namespace PrismaticSlime;
 /// <inheritdoc/>
 internal sealed class ModEntry : Mod
 {
+    /// <summary>
+    /// String key used to index the number of slime balls popped.
+    /// </summary>
+    internal const string SlimePoppedStat = "atravita.SlimeBallsPopped";
+
     private static IJsonAssetsAPI? jsonAssets;
 
     /// <summary>
@@ -19,13 +24,6 @@ internal sealed class ModEntry : Mod
     internal static IMonitor ModMonitor { get; private set; } = null!;
 
 #pragma warning disable SA1201 // Elements should appear in the correct order - keeping fields near their accessors.
-    private static IWearMoreRingsAPI? wearMoreRingsAPI;
-
-    /// <summary>
-    /// Gets the WearMoreRings API, if available.
-    /// </summary>
-    internal static IWearMoreRingsAPI? WearMoreRingsAPI => wearMoreRingsAPI;
-
     private static int prismaticSlimeEgg = -1;
 
     /// <summary>
@@ -65,9 +63,9 @@ internal sealed class ModEntry : Mod
     public override void Entry(IModHelper helper)
     {
         ModMonitor = this.Monitor;
+        AssetManager.Initialize(helper.GameContent);
         I18n.Init(helper.Translation);
 
-        helper.Events.Content.AssetRequested += this.OnAssetRequested;
         helper.Events.GameLoop.GameLaunched += this.OnGameLaunched;
 
         this.ApplyPatches(new Harmony(this.ModManifest.UniqueID));
@@ -85,12 +83,23 @@ internal sealed class ModEntry : Mod
             jsonAssets.LoadAssets(Path.Combine(this.Helper.DirectoryPath, "assets", "json-assets"), this.Helper.Translation);
         }
 
-        {
-            IntegrationHelper helper = new(this.Monitor, this.Helper.Translation, this.Helper.ModRegistry, LogLevel.Trace);
-            _ = helper.TryGetAPI("bcmpinc.WearMoreRings", "5.1.0", out wearMoreRingsAPI);
-        }
+        this.Helper.Events.Content.AssetRequested += this.OnAssetRequested;
+        this.Helper.Events.GameLoop.ReturnedToTitle += this.OnReturnedToTitle;
     }
 
+    /// <summary>
+    /// Resets the IDs when returning to the title.
+    /// </summary>
+    /// <param name="sender">SMAPI.</param>
+    /// <param name="e">Event args.</param>
+    [EventPriority(EventPriority.High)]
+    private void OnReturnedToTitle(object? sender, ReturnedToTitleEventArgs e)
+    {
+        prismaticSlimeRing = -1;
+        prismaticSlimeEgg = -1;
+    }
+
+    [EventPriority(EventPriority.Low)]
     private void OnAssetRequested(object? sender, AssetRequestedEventArgs e)
         => AssetManager.Apply(e);
 
@@ -99,7 +108,7 @@ internal sealed class ModEntry : Mod
         try
         {
             // handle patches from annotations.
-            harmony.PatchAll();
+            harmony.PatchAll(typeof(ModEntry).Assembly);
         }
         catch (Exception ex)
         {

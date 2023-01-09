@@ -6,7 +6,6 @@
     <RootNamespace>GingerIslandMainlandAdjustments</RootNamespace>
     <Name>Ginger Island Mainland Adjustments</Name>
     <Description>Dialogue keys for NPCs headed to or away from Ginger Island, post-Ginger Island Schedules, and so on.</Description>
-    <TargetFramework>net5.0</TargetFramework>
     <EnableHarmony>true</EnableHarmony>
     <ImplicitUsings>enable</ImplicitUsings>
     <Version>1.1.7</Version>
@@ -19,7 +18,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="JetBrains.Annotations" Version="2022.1.0" />
+    <PackageReference Include="JetBrains.Annotations" Version="2022.3.1" />
     <PackageReference Include="Microsoft.Win32.Registry" Version="5.0.0" /> <!-- Makes warnings go away, not sure what it does...-->
   </ItemGroup>
 

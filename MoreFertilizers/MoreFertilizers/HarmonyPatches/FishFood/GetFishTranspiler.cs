@@ -1,6 +1,5 @@
 ﻿using System.Reflection;
 using System.Reflection.Emit;
-using AtraBase.Toolkit.Reflection;
 using AtraCore.Framework.ReflectionManager;
 using AtraShared.Utils.Extensions;
 using AtraShared.Utils.HarmonyHelper;
@@ -25,7 +24,7 @@ internal static class GetFishTranspiler
     {
         try
         {
-            if (loc.modData?.GetBool(CanPlaceHandler.FishFood) == true && prevChance < 0.3)
+            if (prevChance < 0.3 && loc.modData?.GetBool(CanPlaceHandler.FishFood) == true)
             {
                 double newChance = Math.Sqrt(Math.Clamp(prevChance, 0, 1));
                 ModEntry.ModMonitor.DebugOnlyLog($"Adjusting fish chance at {loc.NameOrUniqueName}: {prevChance} => {newChance}", LogLevel.Debug);

@@ -1,0 +1,12 @@
+{"Changes":[
+    {
+        "Action": "EditData",
+        "LogName": "Jodi mid-hearts",
+        "Entries": {
+            "2{{YearRemainder}}": "",
+        },
+        "When": {
+            "YearModulus": "1"
+        }
+    },
+]}

@@ -1,9 +1,11 @@
 ﻿using HarmonyLib;
 
+using StardewValley.Menus;
+
 namespace GiantCropFertilizer.HarmonyPatches;
 
 /// <summary>
-/// Patch to put our fertilzier into Qi's shop.
+/// Patch to put our fertilizer into Qi's shop.
 /// </summary>
 [HarmonyPatch(typeof(Utility))]
 internal static class UtilityShopPatcher
@@ -15,7 +17,7 @@ internal static class UtilityShopPatcher
         if (ModEntry.GiantCropFertilizerID != -1)
         {
             SObject obj = new(ModEntry.GiantCropFertilizerID, 1);
-            __result.Add(obj, new[] { 0, int.MaxValue, 858, 5 });
+            __result.Add(obj, new[] { 0, ShopMenu.infiniteStock, 858, 5 });
         }
     }
 }

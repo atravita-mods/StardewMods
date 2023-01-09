@@ -1,6 +1,4 @@
 ﻿using AtraBase.Toolkit;
-using AtraShared;
-using AtraShared.Utils.Extensions;
 using GingerIslandMainlandAdjustments.AssetManagers;
 using GingerIslandMainlandAdjustments.Configuration;
 using HarmonyLib;
@@ -52,7 +50,7 @@ internal static class IslandSouthPatches
             }
             catch (Exception ex)
             {
-                Globals.ModMonitor.Log($"Errors generating ginger island schedules, defaulting to vanilla code\n\n{ex}");
+                Globals.ModMonitor.Log($"Errors generating ginger island schedules, defaulting to vanilla code\n\n{ex}", LogLevel.Error);
             }
         }
         return true;
@@ -109,23 +107,29 @@ internal static class IslandSouthPatches
                 }
             }
 
+            if (Globals.Config.RequireResortDialogue && !npc.Dialogue.ContainsKey("Resort"))
+            {
+                Globals.ModMonitor.Log($"{npc.Name} appears to lack resort dialogue, removing from pool.", LogLevel.Info);
+                __result = false;
+                return;
+            }
+
             // if an NPC has a schedule for the specific day, don't allow them to go to the resort.
             if (npc.HasSpecificSchedule())
             {
-                switch (Globals.Config.ScheduleStrictness.TryGetValue(npc.Name, out var strictness) ? strictness : ScheduleStrictness.Default)
+                switch (Globals.Config.ScheduleStrictness.TryGetValue(npc.Name, out ScheduleStrictness strictness) ? strictness : ScheduleStrictness.Default)
                 {
-                    case ScheduleStrictness.Strict:
-                        __result = false;
-                        return;
                     case ScheduleStrictness.Default:
                     {
                         if (!Exclusions.TryGetValue(npc, out var exclusions) || !exclusions.Any((a) => a.Equals("AllowOnSpecialDays", StringComparison.OrdinalIgnoreCase)))
                         {
-                            __result = false;
-                            return;
+                            goto case ScheduleStrictness.Strict;
                         }
                         break;
                     }
+                    case ScheduleStrictness.Strict:
+                        __result = false;
+                        return;
                 }
             }
 
@@ -140,7 +144,8 @@ internal static class IslandSouthPatches
                     || Game1.currentSeason.Equals(condition, StringComparison.OrdinalIgnoreCase)
                     || Game1.shortDayNameFromDayOfSeason(Game1.dayOfMonth).Equals(condition, StringComparison.OrdinalIgnoreCase)
                     || $"{Game1.currentSeason}_{Game1.shortDayNameFromDayOfSeason(Game1.dayOfMonth)}".Equals(condition, StringComparison.OrdinalIgnoreCase)
-                    || $"{Game1.currentSeason}_{Game1.dayOfMonth}".Equals(condition, StringComparison.OrdinalIgnoreCase))
+                    || $"{Game1.currentSeason}_{Game1.dayOfMonth}".Equals(condition, StringComparison.OrdinalIgnoreCase)
+                    || (!Globals.Config.UseThisScheduler && "neveralone".Equals(condition, StringComparison.OrdinalIgnoreCase)))
                 {
                     __result = false;
                     return;

@@ -1,4 +1,6 @@
-﻿namespace HolidaySales;
+﻿using NetEscapades.EnumGenerators;
+
+namespace HolidaySales;
 
 /// <summary>
 /// The config class for this mod.
@@ -14,6 +16,7 @@ internal sealed class ModConfig
 /// <summary>
 /// The expected behavior of the shops during festivals.
 /// </summary>
+[EnumExtensions]
 internal enum FestivalsShopBehavior
 {
     /// <summary>

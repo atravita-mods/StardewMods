@@ -1,7 +1,7 @@
 ﻿using System.Reflection;
 using System.Reflection.Emit;
-using AtraBase.Toolkit.Reflection;
 using AtraCore.Framework.ReflectionManager;
+using AtraShared.Utils.Extensions;
 using AtraShared.Utils.HarmonyHelper;
 using HarmonyLib;
 using Microsoft.Xna.Framework;
@@ -52,6 +52,7 @@ internal static class FarmLightningTranspiler
         catch (Exception ex)
         {
             ModEntry.ModMonitor.Log($"Mod crashed while transpiling Utility.performLightningUpdate:\n\n{ex}", LogLevel.Error);
+            original?.Snitch(ModEntry.ModMonitor);
         }
         return null;
     }

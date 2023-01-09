@@ -27,6 +27,7 @@ internal sealed class ModEntry : Mod
     {
         I18n.Init(helper.Translation);
         Globals.Initialize(helper, this.Monitor, this.ModManifest);
+        AssetEditor.Initialize(helper.GameContent);
 
         ConsoleCommands.Register(this.Helper.ConsoleCommands);
 
@@ -149,8 +150,7 @@ internal sealed class ModEntry : Mod
         try
         {
             // handle patches from annotations.
-            harmony.PatchAll();
-            PhoneHandler.ApplyPatches(harmony);
+            harmony.PatchAll(typeof(ModEntry).Assembly);
             if (Globals.Config.DebugMode)
             {
                 ScheduleDebugPatches.ApplyPatches(harmony);
@@ -193,7 +193,7 @@ internal sealed class ModEntry : Mod
 
     private void OnButtonPressed(object? sender, ButtonPressedEventArgs e)
     {
-        if (MenuingExtensions.IsNormalGameplay())
+        if (e.Button.IsActionButton() && MenuingExtensions.IsNormalGameplay())
         {
             ShopHandler.HandleWillyShop(e);
             ShopHandler.HandleSandyShop(e);

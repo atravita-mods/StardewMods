@@ -1,5 +1,4 @@
-﻿using System.Reflection;
-using AtraCore.Utilities;
+﻿using AtraCore.Utilities;
 using AtraShared.Integrations;
 using AtraShared.MigrationManager;
 using AtraShared.Utils.Extensions;
@@ -41,6 +40,11 @@ internal sealed class ModEntry : Mod
     /// </summary>
     internal static ModConfig Config { get; private set; } = null!;
 
+    /// <summary>
+    /// Gets the input helper for this mod.
+    /// </summary>
+    internal static IInputHelper InputHelper { get; private set; } = null!;
+
     /// <inheritdoc />
     public override void Entry(IModHelper helper)
     {
@@ -48,6 +52,7 @@ internal sealed class ModEntry : Mod
         ModMonitor = this.Monitor;
         DataHelper = helper.Data;
         MultiplayerHelper = helper.Multiplayer;
+        InputHelper = helper.Input;
         UniqueID = this.ModManifest.UniqueID;
 
         helper.Events.GameLoop.GameLaunched += this.OnGameLaunched;
@@ -114,7 +119,7 @@ internal sealed class ModEntry : Mod
     {
         try
         {
-            harmony.PatchAll();
+            harmony.PatchAll(typeof(ModEntry).Assembly);
             CaveCrystalTranspiler.ApplyPatch(harmony);
         }
         catch (Exception ex)

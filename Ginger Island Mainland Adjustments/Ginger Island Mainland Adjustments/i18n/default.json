@@ -155,6 +155,13 @@
   "config.VillagerExclusionOverride.No": "No",
   "config.VillagerExclusionOverride.IfMarried": "If Married",
 
+  "ScheduleStrictness": "Schedule Strictness",
+  "ScheduleStrictness.description":  "Whether or not an NPC should be allowed to go to the resort if they have a specific schedule for that day",
+
+  "config.ScheduleStrictness.Default": "Default",
+  "config.ScheduleStrictness.Strict": "Strict",
+  "config.ScheduleStrictness.Loose":  "Loose",
+
   //MidDayScheduleEditor messages
   "middayScheduleEditor.npc-found-for-adjustment": "NPC {{name}} with Island Schedule, will set up for schedule alternation",
   "middayScheduleEditor.npc-not-islander": "Recieved NPC {{name}}, who is not headed to Ginger Island",

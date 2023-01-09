@@ -1,6 +1,9 @@
 ﻿Changelog
 ===========
 
+### Version 0.3.1
+* No new changes, just recompiled for a new version of atracore.
+
 ### Version 0.3.0
 * Update to use AtraCore.
 

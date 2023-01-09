@@ -127,6 +127,8 @@ internal static class GenerateGMCM
 
         Globals.Config.PopulateScheduleStrictness();
 
+        helper.AddPageHere("strictness", I18n.ScheduleStrictness, I18n.ScheduleStrictness_Description)
+              .AddParagraph(I18n.ScheduleStrictness_Description);
         foreach ((string k, ScheduleStrictness v) in Globals.Config.ScheduleStrictness)
         {
             helper.AddEnumOption(

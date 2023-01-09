@@ -40,7 +40,7 @@ Prismatic Fertilizer            | Causes flowers to cycle through the prismatic 
 Seedy Fertilizer                | 10% chance of dropping the seed from the crop at harvest. | Purchase from Robin, year 2 or later, after reaching six hearts with George and finishing his special order.
 Everlasting Fertilizer          | Prevents crops from dying due to season changes. | Purchase from Mr. Qi's gem shop (no other requirements) for 1 qi gem each.
 Radioactive Fertilizer          | Chance of swapping around which crop is growing! Weighted towards cheaper crops, however. | Purchase from Krobus, year 2 or later, after receiving magic ink.
-Bountiful Bush Fertilizer       | Increases the number of days bushes produce.     | Purchase from the Traveling Cart in spring or fall (no other requirements).
+Bountiful Bush Fertilizer       | Increases the number of days bushes produce.     | Purchase from the Traveling Cart in spring or fall after any player has reached level 4 foraging.
 Rapid Bush Fertilizer           | Increases the growth speed of tea bushes by 20%  | Purchase from Pierre on Wednesdays and Sundays, year 2 or later, after reaching 6 hearts with Caroline and seeing her tea event.
 Tree Tapper's Fertilizer        | 12.5% chance of producing a doubled tapper product | Purchase from Robin on Wednesdays and Sundays, year 2 or later, after reaching 6 hearts with Robin and finishing her Resource Rush.
 

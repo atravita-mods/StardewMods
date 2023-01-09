@@ -18,7 +18,7 @@ Simply delete from your Mods directory.
 
 * Works with Stardew Valley 1.5.6 on Linux/macOS/Windows.
 * Works in single player, multiplayer, and split-screen mode. Should be fine if installed for only one player in multiplayer.
-* Should be compatible with most other mods. Works for JA crops, but not DGA crops. Works with mods that change the growth time via CP, like [Balanced Valley](https://www.nexusmods.com/stardewvalley/mods/13970?tab=description) (except, well, not taking into account crops that take more than a month to grow.) Designed to work with my [More Fertilizers](https://www.nexusmods.com/stardewvalley/mods/11837). Takes into account Walk of Life's Prestiged Agriculturalist.
+* Should be compatible with most other mods.
 
 ## See also
 

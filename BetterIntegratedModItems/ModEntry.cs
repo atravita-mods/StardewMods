@@ -1,10 +1,13 @@
-﻿using AtraCore.Utilities;
+﻿using AtraBase.Toolkit;
+
+using AtraCore.Utilities;
 
 using AtraShared.ConstantsAndEnums;
 using AtraShared.Integrations;
 using AtraShared.MigrationManager;
 using AtraShared.Utils.Extensions;
 
+using BetterIntegratedModItems.DataModels;
 using BetterIntegratedModItems.Framework;
 using BetterIntegratedModItems.Framework.DataModels;
 
@@ -26,6 +29,11 @@ internal sealed class ModEntry : Mod
     private const string LOCATIONNAME = "LOCATIONNAME";
 
     private MigrationManager? migrator;
+
+    /// <summary>
+    /// Raised when a new location is encountered.
+    /// </summary>
+    internal event EventHandler<LocationSeenEventArgs>? OnLocationSeen;
 
     /// <summary>
     /// Gets the logger for this mod.
@@ -56,9 +64,8 @@ internal sealed class ModEntry : Mod
         helper.Events.GameLoop.GameLaunched += this.OnGameLaunched;
         helper.Events.GameLoop.SaveLoaded += this.OnSaveLoaded;
         helper.Events.GameLoop.Saving += this.OnSaving;
-        helper.Events.GameLoop.Saved += this.OnSaved;
 
-        helper.Events.Player.Warped += this.OnWarped;
+        helper.Events.Player.Warped += this.OnNewLocationSeen;
 
         helper.Events.Multiplayer.PeerConnected += this.OnPeerConnected;
         helper.Events.Multiplayer.ModMessageReceived += this.OnModMessageRecieved;
@@ -88,7 +95,7 @@ internal sealed class ModEntry : Mod
     {
         try
         {
-            harmony.PatchAll();
+            harmony.PatchAll(typeof(ModEntry).Assembly);
         }
         catch (Exception ex)
         {
@@ -125,31 +132,28 @@ internal sealed class ModEntry : Mod
     }
 
     /// <inheritdoc cref="IPlayerEvents.Warped"/>
-    private void OnWarped(object? sender, WarpedEventArgs e)
+    private void OnNewLocationSeen(object? sender, WarpedEventArgs e)
     {
         if (e.IsLocalPlayer && LocationWatcher!.SeenLocations.Add(e.NewLocation.Name))
         {
             this.Helper.Multiplayer.SendMessage(e.NewLocation.Name, LOCATIONNAME, new[] { this.ModManifest.UniqueID });
-        }
-    }
-
-    /// <inheritdoc cref="IGameLoopEvents.Saved"/>
-    private void OnSaved(object? sender, SavedEventArgs e)
-    {
-        if (Context.IsMultiplayer)
-        {
-            this.Helper.Data.WriteSaveData(LOCATIONWATCHER, LocationWatcher);
+            this.OnLocationSeen?.RaiseSafe(null, new LocationSeenEventArgs(e.NewLocation.Name));
         }
     }
 
     /// <inheritdoc cref="IGameLoopEvents.Saving"/>
-    /// <remarks>Apparently he must be removed before saving?</remarks>
+    /// <remarks>Apparently TrashBear must be removed before saving?</remarks>
     private void OnSaving(object? sender, SavingEventArgs e)
     {
         GameLocation forest = Game1.getLocationFromName("Forest");
         if (forest is not null && forest.getCharacterFromName("TrashBear") is TrashBear bear)
         {
             forest.characters.Remove(bear);
+        }
+
+        if (Context.IsMainPlayer)
+        {
+            this.Helper.Data.WriteSaveData(LOCATIONWATCHER, LocationWatcher);
         }
     }
 
@@ -199,7 +203,10 @@ internal sealed class ModEntry : Mod
                 string name = e.ReadAs<string>();
                 if (Game1.getLocationFromName(name) is not null)
                 {
-                    LocationWatcher?.SeenLocations?.Add(name);
+                    if (LocationWatcher?.SeenLocations?.Add(name) == true)
+                    {
+                        this.OnLocationSeen.RaiseSafe(null, new(name));
+                    }
                 }
                 else
                 {

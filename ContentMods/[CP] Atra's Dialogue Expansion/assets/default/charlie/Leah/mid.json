@@ -1,0 +1,28 @@
+{"Changes":[
+    {
+        "LogName": "Leah - mid hearts",
+        "Action": "EditData",
+        "Target": "Characters/Dialogue/Leah",
+        "Entries": {
+            "1{{YearRemainder}}": "Start of a new month, @! What are you planning on getting done?",
+        },
+        "When": {"YearModulus": 1}
+    },
+    {
+        "LogName": "Leah -- Extended Dialogue",
+        "Action": "EditData",
+        "Target": "Characters/Dialogue/Leah",
+        "Entries": {
+            "movieTheater": "Heard that a movie theater's coming to town!$h#$e$To be honest, movies are certainly something I've missed.",
+        }
+    },
+    {
+        "LogName": "Leah -- Married Dialogue",
+        "Action": "EditData",
+        "Target": "Characters/Dialogue/MarriageDialogueLeah",
+        "Entries": {
+            "{{TheMightyAmondee.CustomTokens/AnniversarySeason}}_{{TheMightyAmondee.CustomTokens/AnniversaryDay}}": "It's our anniversary, dear! Don't you think we should do something fun today?", 
+        },
+        "When": {"HasMod" :"TheMightyAmondee.CustomTokens"}
+    },
+]}

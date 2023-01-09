@@ -146,9 +146,7 @@ internal sealed class ModEntry : Mod
         }
     }
 
-    /*************
-     * REGION ASSET MANAGEMENT
-     * **********/
+    #region asset edits
 
     /// <inheritdoc cref="IContentEvents.LocaleChanged"/>
     private void OnLocaleChange(object? sender, LocaleChangedEventArgs e)
@@ -170,15 +168,14 @@ internal sealed class ModEntry : Mod
     private void OnSaloonEventRequested(object? sender, AssetRequestedEventArgs e)
         => AssetEditor.EditSaloonEvent(e);
 
+    #endregion
+
+    /// <inheritdoc cref="IPlayerEvents.Warped"/>
     private void Player_Warped(object? sender, WarpedEventArgs e)
     {
         SObjectPatches.HaveConfirmedBomb.Value = false;
         ConfirmWarp.HaveConfirmed.Value = false;
     }
-
-    /***************
-     * REGION HARMONY
-     * *************/
 
     private void ApplyPatches(Harmony harmony)
     {
@@ -213,6 +210,14 @@ internal sealed class ModEntry : Mod
         if (GMCM.TryGetAPI())
         {
             this.SetUpBasicConfig();
+        }
+
+        // NPC sanity checking
+        this.Helper.Events.GameLoop.DayEnding += static (_, _) => DuplicateNPCDetector.DayEnd();
+
+        if (!this.Helper.ModRegistry.IsLoaded("spacechase0.CustomNPCFixes") && new Version(1, 6) > new Version(Game1.version))
+        {
+            this.Helper.Events.GameLoop.DayStarted += static (_, _) => DuplicateNPCDetector.DayStart();
         }
 
         if (!this.Helper.ModRegistry.IsLoaded("violetlizabet.CP.NoAlcohol"))
@@ -422,11 +427,10 @@ internal sealed class ModEntry : Mod
         VolcanoChestAdjuster.RecieveData(e);
     }
 
-    /// <summary>
+    /// <inheritdoc cref="IMultiplayerEvents.PeerConnected"/>
+    /// <remarks>
     /// Sends out the volcano data manager whenever a new player connects.
-    /// </summary>
-    /// <param name="sender">SMAPI.</param>
-    /// <param name="e">Event args.</param>
+    /// </remarks>
     private void OnPlayerConnected(object? sender, PeerConnectedEventArgs e)
     {
         if(e.Peer.ScreenID == 0 && Context.IsWorldReady && Context.IsMainPlayer)

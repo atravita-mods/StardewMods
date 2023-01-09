@@ -8,6 +8,8 @@ using AtraBase.Toolkit;
 using AtraBase.Toolkit.Extensions;
 using AtraBase.Toolkit.StringHandler;
 
+using AtraCore.Framework.ItemManagement;
+
 using AtraShared.ConstantsAndEnums;
 using AtraShared.Integrations;
 using AtraShared.MigrationManager;
@@ -58,10 +60,7 @@ internal sealed class ModEntry : Mod
 
     private MigrationManager? migrator;
 
-    // The config is set by the Entry method, so it should never realistically be null
-#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
-    private ModConfig config;
-#pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
+    private ModConfig config = null!;
 
     /// <summary>
     /// Location to temporarily store the seeded random.
@@ -322,8 +321,12 @@ END:
         int fruitToPlace = Utility.GetRandom(
             this.TreeFruit.Count > 0 && this.Random.NextDouble() < (this.config.TreeFruitChance / 100f) ? this.TreeFruit : this.BASE_FRUIT,
             this.Random);
-        location.Objects[tile] = new SObject(fruitToPlace, 1) { IsSpawnedObject = true };
-        this.Monitor.DebugOnlyLog($"Spawning item {fruitToPlace} at {location.Name}:{tile.X},{tile.Y}", LogLevel.Debug);
+
+        if (!DataToItemMap.IsActuallyRing(fruitToPlace))
+        {
+            location.Objects[tile] = new SObject(fruitToPlace, 1) { IsSpawnedObject = true };
+            this.Monitor.DebugOnlyLog($"Spawning item {fruitToPlace} at {location.Name}:{tile.X},{tile.Y}", LogLevel.Debug);
+        }
     }
 
     [MethodImpl(TKConstants.Hot)]

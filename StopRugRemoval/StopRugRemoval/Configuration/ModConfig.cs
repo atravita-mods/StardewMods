@@ -21,19 +21,19 @@ internal sealed class ModConfig
     public bool PreventRugRemoval { get; set; } = true;
 
     /// <summary>
-    /// Gets or sets a value indicating whether whether or not I should be able to place rugs outside.
+    /// Gets or sets a value indicating whether or not I should be able to place rugs outside.
     /// </summary>
     public bool CanPlaceRugsOutside { get; set; } = false;
 
 #if DEBUG
     /// <summary>
-    /// Gets or sets a value indicating whether whether or not I should be able to place rugs under things.
+    /// Gets or sets a value indicating whether or not I should be able to place rugs under things.
     /// </summary>
     public bool CanPlaceRugsUnder { get; set; } = true;
 #endif
 
     /// <summary>
-    /// Gets or sets a value indicating whether whether or not to prevent the removal of items from a table.
+    /// Gets or sets a value indicating whether or not to prevent the removal of items from a table.
     /// </summary>
     public bool PreventRemovalFromTable { get; set; } = true;
 
@@ -57,10 +57,13 @@ internal sealed class ModConfig
     /// </summary>
     public bool GoldenCoconutsOffIsland { get; set; } = false;
 
+#if DEBUG
     /// <summary>
     /// Gets or sets a value indicating whether changes to alerts should happen.
     /// </summary>
     public bool AlertChanges { get; set; } = true;
+
+#endif
 
     private float phoneSpeedUpFactor = 1.0f;
 
@@ -129,17 +132,17 @@ internal sealed class ModConfig
     public ConfirmationEnum WarpsInSafeAreas { get; set; } = ConfirmationEnum.On;
 
     /// <summary>
-    /// Gets or sets a value indiciating whether or not to confirm warps in dangerous areas.
+    /// Gets or sets a value indicating whether or not to confirm warps in dangerous areas.
     /// </summary>
     public ConfirmationEnum WarpsInDangerousAreas { get; set; } = ConfirmationEnum.NotInMultiplayer;
 
     /// <summary>
-    /// Gets or sets a value indiciating whether or not to confirm the return scepter in safe areas.
+    /// Gets or sets a value indicating whether or not to confirm the return scepter in safe areas.
     /// </summary>
     public ConfirmationEnum ReturnScepterInSafeAreas { get; set; } = ConfirmationEnum.On;
 
     /// <summary>
-    /// Gets or sets a value indiciating whether or not to confirm the return scepter in dangerous areas.
+    /// Gets or sets a value indicating whether or not to confirm the return scepter in dangerous areas.
     /// </summary>
     public ConfirmationEnum ReturnScepterInDangerousAreas { get; set; } = ConfirmationEnum.NotInMultiplayer;
 
@@ -148,6 +151,17 @@ internal sealed class ModConfig
     /// </summary>
     public Dictionary<string, IsSafeLocationEnum> SafeLocationMap { get; set; } = new();
 
+    /// <summary>
+    /// Gets or sets a value indicating whether or not to edit Elliott's event.
+    /// </summary>
+    public bool EditElliottEvent { get; set; } = true;
+
+
+    /// <summary>
+    /// Gets or sets a value indicating whether or not to remove duplicate npcs if found.
+    /// </summary>
+    public bool RemoveDuplicateNPCs { get; set; } = false;
+ 
     /// <summary>
     /// Pre-populates locations.
     /// </summary>

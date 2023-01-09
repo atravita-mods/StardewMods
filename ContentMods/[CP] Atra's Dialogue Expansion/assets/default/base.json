@@ -1,0 +1,57 @@
+{"Changes": [
+    {
+        "LogName": "Demetrius - base",
+        "Action": "EditData",
+        "Target": "Characters/Dialogue/Demetrius",
+        "Entries":
+            {
+            "movieTheater": "Oh, a movie theater?$k#$e#$c 0.5#Sorry, I'm not one for movies.#I don't usually watch movies",
+        }
+    },
+    {
+        "LogName": "Lewis base dialogue",
+        "Action": "EditData",
+        "Target": "Characters/Dialogue/Lewis",
+        "Entries": {
+            "{{TaxDay}}": "We've all gotta do our duty, @, and that duty includes paying our taxes.",
+        },
+        "When" : {
+            "EnableFor|contains=Lewis": true,
+        }
+    },
+    {
+        "LogName": "Pam base dialogue",
+        "Action": "EditData",
+        "Target": "Characters/Dialogue/Pam",
+        "Entries": {
+            "{{TaxDay}}": "Why I've gotta pay taxes to fund this stupid war, I'll never know."
+        },
+        "When" : {
+            "EnableFor|contains=Pam": true,
+        }
+    },
+    {
+        "LogName": "Gus New Years At Resort",
+        "Action": "EditData",
+        "Target": "Characters/Dialogue/Gus",
+        "When":
+        {
+            "Season": "winter",
+            "Day": 28
+        },
+        "Entries":
+        {
+            "IslandSouth_14_21": "Happy New Year, @! Have one on me today.[873]#$e#May the next year be even better!",
+        }
+    },
+    {
+        "LogName": "Sandy Movies",
+        "Action": "EditData",
+        "Target": "Characters/Dialogue/Sandy",
+        "When": {"HasFlag": "ccMovieTheater"},
+        "Entries": {
+            "movieTheater": "I heard you guys have a theater now!$h#$b#I'm so excited! I love movies.",
+            "Fri10": "So...have you seen a good movie recently?$h#$b#I hear The Mysteries of %place is good.#$e#Say, I'd love to see a movie with you.#$b#It's always a treat to see you."
+        }
+    },
+]}

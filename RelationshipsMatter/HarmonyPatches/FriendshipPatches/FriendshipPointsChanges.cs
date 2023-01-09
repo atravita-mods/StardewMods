@@ -1,4 +1,6 @@
-﻿using HarmonyLib;
+﻿using AtraBase.Toolkit.Extensions;
+
+using HarmonyLib;
 
 namespace RelationshipsMatter.HarmonyPatches.FriendshipPatches;
 
@@ -14,11 +16,11 @@ internal static class FriendshipPointsChanges
     {
         if (amount > 0)
         {
-            amount = (int)(amount * ModEntry.Config.FriendshipGainFactor);
+            amount = (amount * ModEntry.Config.FriendshipGainFactor).RandomRoundProportional();
         }
         else
         {
-            amount = (int)(amount * ModEntry.Config.FriendshipLossFactor);
+            amount = (amount * ModEntry.Config.FriendshipLossFactor).RandomRoundProportional();
         }
     }
 }

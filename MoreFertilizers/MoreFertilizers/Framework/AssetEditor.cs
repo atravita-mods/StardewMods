@@ -1,9 +1,13 @@
-﻿using AtraCore;
+﻿using AtraBase.Collections;
+
+using AtraCore;
 using AtraCore.Framework.Caches;
 using AtraCore.Models;
 
 using AtraShared.Caching;
 using AtraShared.ConstantsAndEnums;
+using AtraShared.Utils;
+using AtraShared.Utils.Extensions;
 
 using StardewModdingAPI.Events;
 using StardewModdingAPI.Utilities;
@@ -21,6 +25,10 @@ internal static class AssetEditor
     /// The mail key for the organic veggies reward.
     /// </summary>
     internal const string ORGANICVEGGIEMAIL = "atravita_OrganicCrops_Reward";
+
+    internal const string BOUNTIFUL_BUSH_UNLOCK = "atravita_Bountiful_Bush";
+
+    internal const string GEORGE_EVENT = "atravita_George_Letter";
 
     /// <summary>
     /// Our special orders.
@@ -54,9 +62,21 @@ internal static class AssetEditor
     private static IAssetName SPECIAL_ORDERS_STRINGS = null!;
     private static IAssetName MAIL = null!;
     private static IAssetName LEWIS_DIALOGUE = null!;
+
+    private static IAssetName RADIOACTIVE_DENYLIST = null!;
 #pragma warning restore SA1310 // Field names should not contain underscore
 
-    private static TickCache<bool> HasSeenBoat = new(static () => Utility.doesAnyFarmerHaveOrWillReceiveMail("seenBoatJourney"));
+    private static readonly TickCache<bool> HasSeenBoat = new(static () => FarmerHelpers.HasAnyFarmerRecievedFlag("seenBoatJourney"));
+
+    private static HashSet<int>? denylist = null;
+
+    internal static void Reset(IReadOnlySet<IAssetName>? assets = null)
+    {
+        if (assets is null || assets.Contains(RADIOACTIVE_DENYLIST))
+        {
+            denylist = null;
+        }
+    }
 
     /// <summary>
     /// Initializes the AssetEditor.
@@ -68,6 +88,7 @@ internal static class AssetEditor
         SPECIAL_ORDERS_STRINGS = parser.ParseAssetName("Strings/SpecialOrderStrings");
         MAIL = parser.ParseAssetName("Data/mail");
         LEWIS_DIALOGUE = parser.ParseAssetName("Characters/Dialogue/Lewis");
+        RADIOACTIVE_DENYLIST = parser.ParseAssetName("Mods/atravita/MoreFertilizers/RadioactiveDenylist");
     }
 
     /// <summary>
@@ -79,6 +100,10 @@ internal static class AssetEditor
         if (e.NameWithoutLocale.IsEquivalentTo(AtraCoreConstants.PrismaticMaskData))
         {
             e.Edit(EditPrismaticMasks);
+        }
+        else if (e.NameWithoutLocale.IsEquivalentTo(RADIOACTIVE_DENYLIST))
+        {
+            e.LoadFrom(EmptyContainers.GetEmptyDictionary<string, string>, AssetLoadPriority.Exclusive);
         }
         else if (HasSeenBoat.GetValue())
         {
@@ -95,6 +120,29 @@ internal static class AssetEditor
                 e.Edit(EditMailImpl, AssetEditPriority.Early);
             }
         }
+    }
+
+    internal static HashSet<int> GetRadioactiveExclusions()
+    {
+        if (denylist is not null)
+        {
+            return denylist;
+        }
+
+        ModEntry.ModMonitor.DebugOnlyLog("Resolving radioactive fertilizer denylist", LogLevel.Info);
+
+        HashSet<int> ret = new();
+        foreach (var item in Game1.content.Load<Dictionary<string, string>>(RADIOACTIVE_DENYLIST.BaseName).Keys)
+        {
+            int? id = MFUtilities.ResolveID(item);
+            if (id is not null)
+            {
+                ret.Add(id.Value);
+            }
+        }
+
+        denylist = ret;
+        return denylist;
     }
 
     /// <summary>
@@ -147,7 +195,10 @@ internal static class AssetEditor
     private static void EditMailImpl(IAssetData asset)
     {
         IAssetDataForDictionary<string, string>? editor = asset.AsDictionary<string, string>();
-        editor.Data[ORGANICVEGGIEMAIL] = $"@,^{I18n.Specialorder_Organic_Mail_Text()}^^   --{NPCCache.GetByVillagerName("Lewis")?.displayName ?? I18n.Lewis()}%item bigobject 272 %%[#]{I18n.Specialorder_Organic_Mail_Text()}";
+        editor.Data[ORGANICVEGGIEMAIL] = $"@,^{I18n.Specialorder_Organic_Mail_Text()}^^   --{NPCCache.GetByVillagerName("Lewis")?.displayName ?? I18n.Lewis()}%item bigobject 272 %% [#]{I18n.Specialorder_Organic_Mail_Text()}";
+        editor.Data[GEORGE_EVENT] = $"{I18n.George_Mail()}%item object {ModEntry.SeedyFertilizerID} 5 %% [#]{I18n.George_Mail_Title()}";
+        editor.Data[BOUNTIFUL_BUSH_UNLOCK] = $"{I18n.Bountiful_Bush_Mail()}%item object {ModEntry.BountifulBushID} 3 %% [#]{I18n.Bountiful_Bush_Mail_Title()}";
+
     }
 
     private static void EditLewisDialogueImpl(IAssetData asset)

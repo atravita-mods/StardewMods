@@ -1,5 +1,7 @@
 ﻿using AtraCore.Framework.Caches;
 
+using AtraShared.Caching;
+
 using StardewModdingAPI.Events;
 using StardewModdingAPI.Utilities;
 using StardewValley.Locations;
@@ -20,6 +22,12 @@ internal static class AssetEditor
     /// The integer key of Pam's heart event.
     /// </summary>
     internal const int PAMEVENT = 99219999;
+
+    private static readonly PerScreen<TickCache<bool>> HasSeenNineHeart = new(
+    static () => new(() => Game1.player?.eventsSeen?.Contains(503180) == true));
+
+    private static readonly PerScreen<TickCache<bool>> HasSeenPamEvent = new(
+        static () => new(() => Game1.player?.eventsSeen?.Contains(PAMEVENT) == true));
 
     private static readonly string Dialogue = PathUtilities.NormalizeAssetName("Characters/Dialogue");
 
@@ -74,7 +82,7 @@ internal static class AssetEditor
         {
             e.Edit(EditPhone, AssetEditPriority.Early);
         }
-        else if (e.NameWithoutLocale.IsEquivalentTo(dataEventsSeedshop))
+        else if (HasSeenNineHeart.Value.GetValue() && !HasSeenPamEvent.Value.GetValue() && e.NameWithoutLocale.IsEquivalentTo(dataEventsSeedshop))
         {
             e.Edit(EditSeedShopEvent, AssetEditPriority.Late);
         }
@@ -82,7 +90,7 @@ internal static class AssetEditor
         {
             e.Edit(EditMail, AssetEditPriority.Late);
         }
-        else if (e.NameWithoutLocale.IsEquivalentTo(dataEventsTrailerBig))
+        else if (!HasSeenNineHeart.Value.GetValue() && e.NameWithoutLocale.IsEquivalentTo(dataEventsTrailerBig))
         {
             e.Edit(EditTrailerBig, AssetEditPriority.Late);
         }

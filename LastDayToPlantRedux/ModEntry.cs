@@ -129,6 +129,7 @@ internal sealed class ModEntry : Mod
         }
 
         bool hasSeeds = AssetManager.UpdateOnDayStart();
+        this.Helper.GameContent.InvalidateCacheAndLocalized("Data/mail");
         this.hasSeeds.Value = hasSeeds;
 
         if (Context.IsSplitScreen)

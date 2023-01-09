@@ -150,7 +150,7 @@ internal sealed class ModEntry : Mod
         try
         {
             // handle patches from annotations.
-            harmony.PatchAll();
+            harmony.PatchAll(typeof(ModEntry).Assembly);
             if (Globals.Config.DebugMode)
             {
                 ScheduleDebugPatches.ApplyPatches(harmony);

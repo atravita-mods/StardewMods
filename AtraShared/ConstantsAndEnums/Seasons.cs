@@ -1,4 +1,6 @@
-﻿using CommunityToolkit.Diagnostics;
+﻿using System.Numerics;
+
+using CommunityToolkit.Diagnostics;
 using NetEscapades.EnumGenerators;
 
 namespace AtraShared.ConstantsAndEnums;
@@ -128,4 +130,17 @@ public static partial class SeasonExtensions
         shifted &= 0b1111;
         return (StardewSeasons)shifted;
     }
+
+    public static int CountSeasons(this StardewSeasons seasons) => BitOperations.PopCount((uint)seasons);
+
+    public static int ToSeasonIndex(this StardewSeasons seasons)
+        => seasons switch
+        {
+            StardewSeasons.Spring => 0,
+            StardewSeasons.Summer => 1,
+            StardewSeasons.Fall => 2,
+            StardewSeasons.Winter => 3,
+            _ => ThrowHelper.ThrowArgumentException<int>("Expected a single season.")
+        };
+
 }

@@ -1,0 +1,11 @@
+{"Changes":[
+    {
+        "LogName": "Pierre mid-hearts",
+        "Action": "EditData",
+        "Target": "Characters/Dialogue/Pierre",
+        "Entries": {
+            "movieTheater": "@, have you heard? We've got a movie theater now! Think I'll take Caroline out on a date...",
+            "winter_7{{YearRemainder}}": "Gotta start stocking Winter Star gifts soon. It's the busiest retail season of the year...$h"
+        },
+    },
+]}

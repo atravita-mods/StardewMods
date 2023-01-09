@@ -2,17 +2,12 @@
 =============
 
 #### Version 0.3.0 TODO items
-* Bush fertilizers
-    - Handle adding to shops and other acquisition methods.
 * Beverage fertilizer
     - Fruit trees (DGA, Automate?)
-* Tree Tapper's: Automate integration, maybe a droplet falling off the tapper???
-* Crosscheck Everlasting fertilizer (especially with Theft of the Winter Star).
-* Some fertilizer for trees? Tree tapper fertilizer?
+* Tree Tapper's: Automate integration.
 * Something for mushroom boxen? (1.6 - reduce to one day?)
 * Make good draw code for all of the fertilizers. (don't forget domesticated fish - maybe some more jumping...)
 * PR Pathos to make CJB pass in the correct fertilizer (b/c Everlasting)
-* Read from JA's files to get the old IDs if I don't have them.
 
 #### Version 0.3.0
 * Added new fertilizers:
@@ -29,6 +24,7 @@
 * Adjusted previous fertilizers:
     - Waterlogged now increases the growth speed of paddy crops a little.
     - Deluxe Fruit Tree's color scheme now no longer resembles a vanilla fertilizer that much.
+    - The two fruit tree growth fertilizers have been boosted slightly.
 * Added German translation (thanks to CrisTortion!)
 * Fixes the lucky fertilizer.
 * Fixes integration with Prismatic/Radioactive tools.

@@ -48,6 +48,8 @@ internal sealed class ModEntry : Mod
     {
         if (Game1.player.HasWeddingToday() && NPCCache.GetByVillagerName(Game1.player.spouse) is NPC spouse)
         {
+            spouse.currentMarriageDialogue.Clear();
+
             if (spouse.Dialogue.ContainsKey("DayOfWedding"))
             {
                 spouse.ClearAndPushDialogue("DayOfWedding");
@@ -69,20 +71,20 @@ internal sealed class ModEntry : Mod
                 int hour = Math.DivRem(Config.WeddingTime, 100, out int minutes);
                 if (Game1.player.HasWeddingToday())
                 {
-                    Game1.addHUDMessage(new HUDMessage(I18n.WeddingMessage(hour, minutes), HUDMessage.achievement_type));
+                    Game1.addHUDMessage(new HUDMessage(I18n.WeddingMessage(hour, minutes.ToString("D2")), HUDMessage.achievement_type));
                 }
                 else
                 {
-                    Game1.addHUDMessage(new HUDMessage(I18n.WeddingMessageOther(hour, minutes), HUDMessage.achievement_type));
+                    Game1.addHUDMessage(new HUDMessage(I18n.WeddingMessageOther(hour, minutes.ToString("D2")), HUDMessage.achievement_type));
                 }
             }
-            else if (Game1.timeOfDay == Config.WeddingTime - 10)
+            else if (Game1.timeOfDay == Utility.ModifyTime(Config.WeddingTime, -30))
             {
                 Game1.addHUDMessage(new HUDMessage(I18n.WeddingReminder(), HUDMessage.achievement_type));
             }
             else if (Game1.timeOfDay == Config.WeddingTime)
             {
-                Game1.player.currentLocation.checkForEvents();
+                Game1.warpFarmer(new LocationRequest("Town", false, Game1.getLocationFromName("Town")), 5, 10, 0);
             }
         }
     }
@@ -95,9 +97,9 @@ internal sealed class ModEntry : Mod
     /// <param name="e">Event args.</param>
     private void OnSaveLoad(object? sender, SaveLoadedEventArgs e)
     {
-        if (Context.IsMainPlayer)
+        if (Context.IsMainPlayer && Config.TryRecoverWedding)
         {
-            if (Game1.canHaveWeddingOnDay(Game1.dayOfMonth, Game1.currentSeason))
+            if (!Game1.canHaveWeddingOnDay(Game1.dayOfMonth, Game1.currentSeason))
             {
                 return;
             }
@@ -115,7 +117,7 @@ internal sealed class ModEntry : Mod
                 }
 
                 if (farmer.spouse is not null && farmer.friendshipData.TryGetValue(farmer.spouse, out Friendship? friendship)
-                    && friendship.CountdownToWedding == 1)
+                    && friendship.WeddingDate.TotalDays + 1 == Game1.Date.TotalDays)
                 {
                     if (added.Add(farmer.UniqueMultiplayerID))
                     {
@@ -129,7 +131,7 @@ internal sealed class ModEntry : Mod
                     {
                         FarmerPair team = FarmerPair.MakePair(other.Value, farmer.UniqueMultiplayerID);
                         if (farmer.team.friendshipData.TryGetValue(team, out Friendship? farmerteam)
-                            && farmerteam.CountdownToWedding == 1)
+                            && farmerteam.WeddingDate.TotalDays + 1 == Game1.Date.TotalDays)
                         {
                             if (added.Add(farmer.UniqueMultiplayerID))
                             {
@@ -178,7 +180,7 @@ internal sealed class ModEntry : Mod
     {
         try
         {
-            harmony.PatchAll();
+            harmony.PatchAll(typeof(ModEntry).Assembly);
         }
         catch (Exception ex)
         {

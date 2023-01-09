@@ -23,10 +23,16 @@ namespace LastDayToPlantRedux.Framework;
 /// </summary>
 internal static class CropAndFertilizerManager
 {
-    private static readonly TickCache<bool> HasStocklist = new(() => Game1.player.hasOrWillReceiveMail("PierreStocklist"));
+    private static readonly TickCache<bool> HasStocklist = new(() => Game1.MasterPlayer.hasOrWillReceiveMail("PierreStocklist"));
 
-    // Map conditions to the number of days it takes to grow a crop.
-    private static readonly Dictionary<CropCondition, Dictionary<int, int>> DaysPerCondition = new();
+    // Map conditions to the number of days it takes to grow a crop, per season.
+    private static readonly Dictionary<CropCondition, Dictionary<int, int>>[] DaysPerCondition = new Dictionary<CropCondition, Dictionary<int, int>>[4]
+    {
+        new(),
+        new(),
+        new(),
+        new(),
+    };
 
     /// <summary>
     /// a mapping of fertilizers to a HoeDirt that has them.
@@ -44,11 +50,17 @@ internal static class CropAndFertilizerManager
     private static Dictionary<int, string> fertilizers = new();
 
     // the inverse of DaysPerCondition;
-    private static Lazy<Dictionary<int, List<KeyValuePair<CropCondition, int>>>?> lastGrowthPerCrop = new(GenerateReverseMap);
+    private static readonly Lazy<Dictionary<int, List<KeyValuePair<CropCondition, int>>>?>[] lastGrowthPerCrop
+        = new Lazy<Dictionary<int, List<KeyValuePair<CropCondition, int>>>?>[]
+        {
+            new(() => GenerateReverseMap(0)),
+            new(() => GenerateReverseMap(1)),
+            new(() => GenerateReverseMap(2)),
+            new(() => GenerateReverseMap(3)),
+        };
 
     private static bool cropsNeedRefreshing = true;
     private static bool fertilizersNeedRefreshing = true;
-    private static StardewSeasons lastLoadedSeason = StardewSeasons.None;
     private static bool hadStocklistLastCheck = false;
     private static bool requiresReset = true;
 
@@ -60,12 +72,20 @@ internal static class CropAndFertilizerManager
 
     #region API
 
-    /// <inheritdoc cref="ILastDayToPlantAPI.GetDays(Profession, int, int)"/>
-    internal static int? GetDays(Profession profession, int fertilizer, int crop)
+    /// <inheritdoc cref="ILastDayToPlantAPI.GetDays(Profession, int, int, StardewSeasons)"/>
+    internal static int? GetDays(Profession profession, int fertilizer, int crop, StardewSeasons season)
     {
+        if (season.CountSeasons() != 1)
+        {
+            return null;
+        }
+
+        var seasonIndex = season.ToSeasonIndex();
+        var seasonDict = DaysPerCondition[seasonIndex];
+
         // check with specific fertilizer.
         CropCondition? key = new(profession, fertilizer);
-        if (DaysPerCondition.TryGetValue(key, out Dictionary<int, int>? daysDict)
+        if (seasonDict.TryGetValue(key, out Dictionary<int, int>? daysDict)
             && daysDict.TryGetValue(crop, out var days))
         {
             return days;
@@ -73,7 +93,7 @@ internal static class CropAndFertilizerManager
 
         // check with no fertilizer.
         key = new(profession, 0);
-        if (DaysPerCondition.TryGetValue(key, out daysDict)
+        if (seasonDict.TryGetValue(key, out daysDict)
             && daysDict.TryGetValue(crop, out days))
         {
             return days;
@@ -81,11 +101,19 @@ internal static class CropAndFertilizerManager
         return null;
     }
 
-    /// <inheritdoc cref="ILastDayToPlantAPI.GetAll(Profession, int)"/>
-    internal static IReadOnlyDictionary<int, int>? GetAll(Profession profession, int fertilizer)
+    /// <inheritdoc cref="ILastDayToPlantAPI.GetAll(Profession, int, StardewSeasons)"/>
+    internal static IReadOnlyDictionary<int, int>? GetAll(Profession profession, int fertilizer, StardewSeasons season)
     {
+        if (season.CountSeasons() != 1)
+        {
+            return null;
+        }
+
+        var seasonIndex = season.ToSeasonIndex();
+        var seasonDict = DaysPerCondition[seasonIndex];
+
         CropCondition? key = new(profession, fertilizer);
-        if (DaysPerCondition.TryGetValue(key, out var daysDict))
+        if (seasonDict.TryGetValue(key, out var daysDict))
         {
             return new ReadOnlyDictionary<int, int>(daysDict);
         }
@@ -93,9 +121,14 @@ internal static class CropAndFertilizerManager
     }
 
     /// <inheritdoc cref="ILastDayToPlantAPI.GetConditionsPerCrop(int)"/>
-    internal static KeyValuePair<KeyValuePair<Profession, int>, int>[]? GetConditionsPerCrop(int crop)
+    internal static KeyValuePair<KeyValuePair<Profession, int>, int>[]? GetConditionsPerCrop(int crop, StardewSeasons season)
     {
-        if (lastGrowthPerCrop.Value?.TryGetValue(crop, out var val) == true)
+        if (season.CountSeasons() != 1)
+        {
+            return null;
+        }
+
+        if (lastGrowthPerCrop[season.ToSeasonIndex()].Value?.TryGetValue(crop, out var val) == true)
         {
             return val.Select((kvp) => new KeyValuePair<KeyValuePair<Profession, int>, int>(new KeyValuePair<Profession, int>(kvp.Key.Profession, kvp.Key.Fertilizer), kvp.Value))
                       .OrderBy((kvp) => kvp.Value)
@@ -105,7 +138,7 @@ internal static class CropAndFertilizerManager
     }
 
     /// <inheritdoc cref="ILastDayToPlantAPI.GetTrackedCrops"/>
-    internal static int[]? GetTrackedCrops() => lastGrowthPerCrop.Value?.Keys?.ToArray();
+    internal static int[]? GetTrackedCrops() => lastGrowthPerCrop.SelectMany(a => a.Value?.Keys ?? Enumerable.Empty<int>()).ToArray();
     #endregion
 
     #region processing
@@ -122,8 +155,13 @@ internal static class CropAndFertilizerManager
     internal static (string message, bool showplayer) GenerateMessageString()
     {
         ModEntry.ModMonitor.Log($"Processing for day {Game1.dayOfMonth}");
+        if (!StardewSeasonsExtensions.TryParse(Game1.currentSeason, true, out StardewSeasons season) || season.CountSeasons() != 1)
+        {
+            ModEntry.ModMonitor.Log("Invalid season?");
+        }
+
         MultiplayerManager.UpdateOnDayStart();
-        Process();
+        Process(season);
 
         int daysRemaining = 28 - Game1.dayOfMonth;
 
@@ -138,7 +176,7 @@ internal static class CropAndFertilizerManager
            .Append("^^");
         bool hasCrops = false;
 
-        foreach ((CropCondition condition, Dictionary<int, int> cropvalues) in DaysPerCondition)
+        foreach ((CropCondition condition, Dictionary<int, int> cropvalues) in DaysPerCondition[season.ToSeasonIndex()])
         {
             if (cropvalues.Count == 0)
             {
@@ -199,34 +237,37 @@ internal static class CropAndFertilizerManager
         }
     }
 
-    private static void Process()
+    private static void Process(StardewSeasons season)
     {
-        if (!StardewSeasonsExtensions.TryParse(Game1.currentSeason, ignoreCase: true, out StardewSeasons currentSeason))
-        {
-            ModEntry.ModMonitor.Log($"Could not parse season {Game1.currentSeason}?", LogLevel.Error);
-            return;
-        }
+        int seasonIndex = season.ToSeasonIndex();
 
         // if there is a season change, or if our backing data has changed, dump the cache.
         // first pipe is single intentionally, don't want shortcutting there.
         if (LoadCropData() | LoadFertilizerData()
-            || requiresReset || currentSeason != lastLoadedSeason || hadStocklistLastCheck != HasStocklist.GetValue())
+            || requiresReset || hadStocklistLastCheck != HasStocklist.GetValue())
         {
-            DaysPerCondition.Clear();
+            if (DaysPerCondition[seasonIndex] is null)
+            {
+                DaysPerCondition[seasonIndex] = new();
+            }
+            else
+            {
+                DaysPerCondition[seasonIndex].Clear();
+            }
         }
 
-        StardewSeasons nextSeason = currentSeason.GetNextSeason();
-        ModEntry.ModMonitor.DebugOnlyLog($"Checking for {currentSeason} - next is {nextSeason}", LogLevel.Info);
+        StardewSeasons nextSeason = season.GetNextSeason();
+        ModEntry.ModMonitor.DebugOnlyLog($"Checking for {season} - next is {nextSeason}", LogLevel.Info);
 
         // load relevant crops.
-        List<int>? currentCrops = crops.Where(c => c.Value.Seasons.HasFlag(currentSeason) && !c.Value.Seasons.HasFlag(nextSeason) && FilterCropsToUserConfig(c.Key))
+        List<int>? currentCrops = crops.Where(c => c.Value.Seasons.HasFlag(season) && !c.Value.Seasons.HasFlag(nextSeason) && FilterCropsToUserConfig(c.Key))
                                 .Select(c => c.Key)
                                 .ToList();
         ModEntry.ModMonitor.DebugOnlyLog($"Found {currentCrops.Count} relevant crops");
 
         if (MultiplayerManager.PrestigedAgriculturalistFarmer?.TryGetTarget(out Farmer? prestiged) == true)
         {
-            ProcessForProfession(Profession.Prestiged, currentCrops, prestiged);
+            ProcessForProfession(Profession.Prestiged, currentCrops, seasonIndex,  prestiged);
 
             if (!Context.IsMultiplayer)
             {
@@ -236,7 +277,7 @@ internal static class CropAndFertilizerManager
 
         if (MultiplayerManager.AgriculturalistFarmer?.TryGetTarget(out Farmer? agriculturalist) == true)
         {
-            ProcessForProfession(Profession.Agriculturalist, currentCrops, agriculturalist);
+            ProcessForProfession(Profession.Agriculturalist, currentCrops, seasonIndex, agriculturalist);
 
             if (!Context.IsMultiplayer)
             {
@@ -246,7 +287,7 @@ internal static class CropAndFertilizerManager
 
         if (MultiplayerManager.NormalFarmer?.TryGetTarget(out Farmer? normal) == true)
         {
-            ProcessForProfession(Profession.None, currentCrops, normal);
+            ProcessForProfession(Profession.None, currentCrops, seasonIndex, normal);
             goto SUCCESS;
         }
 
@@ -256,21 +297,21 @@ internal static class CropAndFertilizerManager
 SUCCESS:
         requiresReset = false;
         hadStocklistLastCheck = HasStocklist.GetValue();
-        lastLoadedSeason = currentSeason;
         InventoryWatcher.Reset();
-        lastGrowthPerCrop = new(GenerateReverseMap);
+        lastGrowthPerCrop[seasonIndex] = new(() => GenerateReverseMap(seasonIndex));
     }
 
-    private static Dictionary<int, List<KeyValuePair<CropCondition, int>>>? GenerateReverseMap()
+    private static Dictionary<int, List<KeyValuePair<CropCondition, int>>>? GenerateReverseMap(int season)
     {
-        if (DaysPerCondition.Count == 0)
+        var seasonDict = DaysPerCondition[season];
+        if (seasonDict?.Count is 0 or null)
         {
             return null;
         }
 
         var result = new Dictionary<int, List<KeyValuePair<CropCondition, int>>>();
 
-        foreach ((CropCondition condition, Dictionary<int, int> dictionary) in DaysPerCondition)
+        foreach ((CropCondition condition, Dictionary<int, int> dictionary) in seasonDict)
         {
             foreach (var (crop, days) in dictionary)
             {
@@ -286,18 +327,19 @@ SUCCESS:
         return result;
     }
 
-    private static void ProcessForProfession(Profession profession, List<int> currentCrops, Farmer? farmer = null)
+    private static void ProcessForProfession(Profession profession, List<int> currentCrops, int seasonIndex, Farmer? farmer = null)
     {
         if (farmer is null)
         {
             ModEntry.ModMonitor.Log($"Could not find farmer for {profession}, continuing.");
             return;
         }
+        var seasonDict = DaysPerCondition[seasonIndex];
 
-        if (!DaysPerCondition.TryGetValue(new CropCondition(profession, 0), out Dictionary<int, int>? unfertilized))
+        if (!seasonDict.TryGetValue(new CropCondition(profession, 0), out Dictionary<int, int>? unfertilized))
         {
             unfertilized = new();
-            DaysPerCondition[new CropCondition(profession, 0)] = unfertilized;
+            seasonDict[new CropCondition(profession, 0)] = unfertilized;
         }
 
         // set up unfertilized.
@@ -322,10 +364,10 @@ SUCCESS:
         {
             CropCondition condition = new(profession, fertilizer);
 
-            if (!DaysPerCondition.TryGetValue(condition, out Dictionary<int, int>? dict))
+            if (!seasonDict.TryGetValue(condition, out Dictionary<int, int>? dict))
             {
                 dict = new();
-                DaysPerCondition[condition] = dict;
+                seasonDict[condition] = dict;
             }
             else if (!InventoryWatcher.HasSeedChanges)
             {

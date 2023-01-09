@@ -38,4 +38,6 @@ public static class NPCCache
         }
         return npc;
     }
+
+    internal static void Reset() => cache.Clear();
 }

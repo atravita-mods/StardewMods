@@ -179,6 +179,11 @@ internal class Game1DialoguePatches
     [HarmonyPatch(nameof(Game1.updateWeatherIcon))]
     private static void AppendMarriageDialogue()
     {
+        if (!Game1.newDay && Game1.gameMode != Game1.loadingMode)
+        {
+            return;
+        }
+
         try
         {
             if (Game1.player?.getSpouse() is NPC spouse && Game1.IsVisitingIslandToday(spouse.Name))

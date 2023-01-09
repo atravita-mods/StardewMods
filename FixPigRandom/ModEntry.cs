@@ -27,6 +27,7 @@ internal sealed class ModEntry : Mod
     /// <inheritdoc />
     public override void Entry(IModHelper helper)
     {
+        I18n.Init(helper.Translation);
         modMonitor = this.Monitor;
         helper.Events.GameLoop.DayEnding += static (_, _) => Cache.Clear();
         helper.Events.GameLoop.GameLaunched += (_, _) => this.ApplyPatches(new(this.ModManifest.UniqueID));
@@ -74,7 +75,7 @@ internal sealed class ModEntry : Mod
     {
         if (!Cache.TryGetValue(id, out Random? random))
         {
-            modMonitor.DebugOnlyLog($"Cache miss: {id}");
+            modMonitor.DebugOnlyLog($"Cache miss: {id}", LogLevel.Info);
             random = RandomUtils.GetSeededRandom(2, (int)(id >> 1));
             Cache[id] = random;
         }

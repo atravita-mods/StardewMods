@@ -2,6 +2,7 @@
 using AtraBase.Toolkit.Extensions;
 using AtraBase.Toolkit.StringHandler;
 
+using AtraShared.ConstantsAndEnums;
 using AtraShared.Integrations;
 using AtraShared.Integrations.Interfaces;
 using AtraShared.Utils;
@@ -63,6 +64,7 @@ internal static class RadioactiveFertilizerHandler
     {
         if (Game1.dayOfMonth >= 28)
         {
+            ModEntry.ModMonitor.Log("Too close to end of month, skipping radioactive fertilizer");
             return;
         }
 
@@ -98,6 +100,7 @@ internal static class RadioactiveFertilizerHandler
 
             if (season < 0 || season > 3)
             {
+                ModEntry.ModMonitor.Log("Season unrecognized, skipping");
                 return;
             }
 
@@ -109,7 +112,7 @@ internal static class RadioactiveFertilizerHandler
                 }
             }
 
-            foreach (StardewValley.Object? obj in location.Objects.Values)
+            foreach (SObject? obj in location.Objects.Values)
             {
                 if (obj is IndoorPot pot && pot.hoeDirt.Value is HoeDirt dirt && dirt.fertilizer.Value == ModEntry.RadioactiveFertilizerID)
                 {
@@ -125,8 +128,19 @@ internal static class RadioactiveFertilizerHandler
     {
         random ??= RandomUtils.GetSeededRandom(9, (int)Game1.uniqueIDForThisGame);
 
-        if (random.Next(2) == 0)
+        if (random.Next(4) == 0)
         {
+            return;
+        }
+
+        if (dirt.crop is null || dirt.crop.dead.Value || dirt.crop.IsActuallyFullyGrown())
+        {
+            return;
+        }
+
+        if (!StardewSeasonsExtensions.TryParse(seasonstring, true, out StardewSeasons seasonEnum))
+        {
+            ModEntry.ModMonitor.Log($"Invalid season found for radioactive fertilizer {seasonstring}", LogLevel.Error);
             return;
         }
 
@@ -143,7 +157,9 @@ internal static class RadioactiveFertilizerHandler
         }
 
         int crop = manager.GetValue(random);
-        if (cropData.TryGetValue(crop, out string? data) && HasSufficientTimeToGrow(profession, crop, data))
+
+        if (cropData.TryGetValue(crop, out string? data)
+            && (location.SeedsIgnoreSeasonsHere() || HasSufficientTimeToGrow(profession, crop, data, seasonEnum)))
         {
             ModEntry.ModMonitor.Log($"Replacing plant at {dirt.currentTileLocation} with {crop}.");
             dirt.destroyCrop(dirt.currentTileLocation, false, location);
@@ -169,15 +185,34 @@ internal static class RadioactiveFertilizerHandler
     {
         WeightedManager<int>? manager = new();
 
+        HashSet<int> denylist = AssetEditor.GetRadioactiveExclusions();
+
         foreach ((int id, string data) in cropData)
         {
+            if (id == 885 || denylist.Contains(id))
+            {
+                // 885 - fiber seeds.
+                continue;
+            }
+
+            if (ModEntry.Config.BanRaisedSeeds && bool.TryParse(data.GetNthChunk('/', 7), out bool raised) && raised)
+            {
+                continue;
+            }
+
             if (data.GetNthChunk('/', 1).Contains(season, StringComparison.OrdinalIgnoreCase)
                 && int.TryParse(data.GetNthChunk('/', 3), out int obj)
                 && Game1Wrappers.ObjectInfo.TryGetValue(obj, out string? objData)
-                && !objData.GetNthChunk('/', SObject.objectInfoNameIndex).Contains("Qi", StringComparison.OrdinalIgnoreCase)
-                && int.TryParse(objData.GetNthChunk('/', SObject.objectInfoPriceIndex), out int price))
+                && int.TryParse(objData.GetNthChunk('/', SObject.objectInfoPriceIndex), out int price)
+                && price > 0)
             {
-                double weight = Math.Max(1500.0 / price, 1.0f);
+                ReadOnlySpan<char> name = objData.GetNthChunk('/', SObject.objectInfoNameIndex);
+                if (name.Contains("Qi", StringComparison.OrdinalIgnoreCase))
+                {
+                    continue;
+                }
+
+                double weight = Math.Clamp(2500.0 / price, 1.0f, 1000f);
                 manager.Add(weight, id);
             }
         }
@@ -185,14 +220,14 @@ internal static class RadioactiveFertilizerHandler
         return manager;
     }
 
-    private static bool HasSufficientTimeToGrow(Profession profession, int cropId, string cropData)
+    private static bool HasSufficientTimeToGrow(Profession profession, int cropId, string cropData, StardewSeasons season)
     {
         if (api is null)
         {
             int daysLeft = 28 - Game1.dayOfMonth;
-            foreach (var days in cropData.GetNthChunk('/', 0).StreamSplit(null, StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries))
+            foreach (SpanSplitEntry days in cropData.GetNthChunk('/', 0).StreamSplit(null, StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries))
             {
-                if (!int.TryParse(days, out var num) || num > daysLeft)
+                if (!int.TryParse(days, out int num) || num > daysLeft)
                 {
                     return false;
                 }
@@ -201,7 +236,7 @@ internal static class RadioactiveFertilizerHandler
 
             return true;
         }
-        else if (api.GetDays(profession, 0, cropId) > 28 - Game1.dayOfMonth)
+        else if (api.GetDays(profession, 0, cropId, season) > 28 - Game1.dayOfMonth)
         {
             return false;
         }

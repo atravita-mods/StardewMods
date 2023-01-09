@@ -34,3 +34,8 @@ Remove every instance of the giant crop fertilizer you have in your inventory an
 ## See also
 
 [Changelog](docs/Changelog.md)
+
+## Much thanks to
+
+- [Becks723](https://github.com/Becks723) for the Chinese translation!
+- pavlo2906 for the Russian translation!

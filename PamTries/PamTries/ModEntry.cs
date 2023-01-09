@@ -63,7 +63,7 @@ internal sealed class ModEntry : Mod
 #if DEBUG
             BusDriverTranspile.ApplyPatch(harmony);
 #endif
-            harmony.PatchAll();
+            harmony.PatchAll(typeof(ModEntry).Assembly);
         }
         catch (Exception ex)
         {
@@ -223,11 +223,10 @@ internal sealed class ModEntry : Mod
         }
     }
 
-    /// <summary>
+    /// <inheritdoc cref="IGameLoopEvents.DayEnding"/>
+    /// <remarks>
     /// Undoes the changes to Pam's sprite at the end of the day, in case player sleeps while Pam fishes. Also, implements rehab invisibility.
-    /// </summary>
-    /// <param name="sender">SMAPI.</param>
-    /// <param name="args">Day end argmuments.</param>
+    /// </remarks>
     private void DayEnd(object? sender, DayEndingEventArgs args)
     {
         PTUtilities.SyncConversationTopics(SyncedConversationTopics);
@@ -241,12 +240,7 @@ internal sealed class ModEntry : Mod
         }
 
         // reset Pam's sprite
-        NPC? pam = NPCCache.GetByVillagerName("Pam");
-        if (pam is null)
-        {
-            this.Monitor.Log("Pam could not be found?!?");
-        }
-        else
+        if (NPCCache.GetByVillagerName("Pam") is NPC pam)
         {
             pam.Sprite.SpriteHeight = 32;
             pam.Sprite.SpriteWidth = 16;
@@ -264,12 +258,17 @@ internal sealed class ModEntry : Mod
             // bad marriage penalty. Consider implementing divorce.
             if (Context.IsMainPlayer)
             {
-                if (NPCCache.GetByVillagerName("Penny")?.getSpouse() is Farmer pennySpouse && pennySpouse.friendshipData["Penny"].Points <= 2000)
+                if (NPCCache.GetByVillagerName("Penny")?.getSpouse() is Farmer pennySpouse
+                    && (!pennySpouse.friendshipData.TryGetValue("Penny", out Friendship? friendship) || friendship.Points <= 2000))
                 {
                     pennySpouse.changeFriendship(-50, pam);
                     ModMonitor.Log("Bad marriage penalty, 50 friendship lost with Pam", LogLevel.Trace);
                 }
             }
+        }
+        else
+        {
+            this.Monitor.Log("Pam could not be found?!?");
         }
 
         // Ensure the master player is synced.

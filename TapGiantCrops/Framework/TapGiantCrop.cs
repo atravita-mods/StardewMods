@@ -1,4 +1,8 @@
 ﻿using AtraBase.Toolkit.Extensions;
+using AtraBase.Toolkit.Reflection;
+
+using AtraCore.Framework.ReflectionManager;
+
 using AtraShared.ConstantsAndEnums;
 using AtraShared.Utils.Extensions;
 using AtraShared.Utils.Shims;
@@ -13,8 +17,21 @@ namespace TapGiantCrops.Framework;
 /// <summary>
 /// API instance for Tap Giant Crops.
 /// </summary>
-public class TapGiantCrop : ITapGiantCropsAPI
+public sealed class TapGiantCrop : ITapGiantCropsAPI
 {
+    /// <summary>
+    /// Stardew's Bush::shake.
+    /// </summary>
+    private static readonly Action<GiantCrop, float> GiantCropSetShake = typeof(GiantCrop)
+        .GetCachedField("shakeTimer", ReflectionCache.FlagTypes.InstanceFlags)
+        .GetInstanceFieldSetter<GiantCrop, float>();
+
+    private static void ShakeGiantCrop(GiantCrop crop)
+    {
+        GiantCropSetShake(crop, 100f);
+        crop.NeedsUpdate = true;
+    }
+
     private SObject keg = null!;
 
     /// <inheritdoc />
@@ -41,8 +58,7 @@ public class TapGiantCrop : ITapGiantCropsAPI
         if (this.CanPlaceTapper(loc, tile, obj))
         {
             SObject tapper = (SObject)obj.getOne();
-            GiantCrop? giant = GetGiantCropAt(loc, tile);
-            if (giant is not null)
+            if (GetGiantCropAt(loc, tile) is GiantCrop giant)
             {
                 (SObject obj, int days)? output = this.GetTapperProduct(giant, tapper);
                 if (output is not null)
@@ -50,9 +66,12 @@ public class TapGiantCrop : ITapGiantCropsAPI
                     tapper.heldObject.Value = output.Value.obj;
                     tapper.MinutesUntilReady = Utility.CalculateMinutesUntilMorning(Game1.timeOfDay, output.Value.days);
                 }
+
+                loc.playSound("axe");
+                ShakeGiantCrop(giant);
+                loc.objects[tile] = tapper;
+                return true;
             }
-            loc.objects[tile] = tapper;
-            return true;
         }
         return false;
     }

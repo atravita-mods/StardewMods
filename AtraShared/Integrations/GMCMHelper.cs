@@ -11,7 +11,6 @@ using CommunityToolkit.Diagnostics;
 using Microsoft.Xna.Framework;
 using StardewModdingAPI.Utilities;
 
-#pragma warning disable SA1124 // Do not use regions
 namespace AtraShared.Integrations;
 
 // TODO
@@ -57,6 +56,7 @@ public sealed class GMCMHelper : IntegrationHelper
     public GMCMHelper(IMonitor monitor, ITranslationHelper translation, IModRegistry modRegistry, IManifest manifest)
         : base(monitor, translation, modRegistry)
     {
+        Guard.IsNotNull(manifest);
         this.manifest = manifest;
     }
 
@@ -77,6 +77,7 @@ public sealed class GMCMHelper : IntegrationHelper
     /// Tries to grab a copy of GMCM Option's API.
     /// </summary>
     /// <returns>True if successful, false otherwise.</returns>
+    [MemberNotNullWhen(returnValue: true, members: nameof(gmcmOptionsApi))]
     public bool TryGetOptionsAPI() => this.TryGetAPI(GMCM_OPTIONS_ID, GMCM_OPTIONS_MINVERSION, out this.gmcmOptionsApi);
 
     /// <summary>
@@ -952,4 +953,3 @@ public sealed class GMCMHelper : IntegrationHelper
     }
 #endregion
 }
-#pragma warning restore SA1124 // Do not use regions

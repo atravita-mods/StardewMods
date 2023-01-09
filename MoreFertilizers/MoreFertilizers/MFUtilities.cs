@@ -1,4 +1,8 @@
-﻿using AtraShared.Caching;
+﻿using AtraBase.Toolkit.Extensions;
+using AtraCore.Framework.ItemManagement;
+
+using AtraShared.Caching;
+using AtraShared.ConstantsAndEnums;
 using AtraShared.Wrappers;
 
 using StardewValley.Objects;
@@ -96,5 +100,34 @@ internal static class MFUtilities
                 }
             }
         }
+    }
+
+    /// <summary>
+    /// Returns the id and type of an SObject, or null if not found.
+    /// </summary>
+    /// <param name="identifier">string identifier.</param>
+    /// <returns>id/type tuple, or null for not found.</returns>
+    internal static int? ResolveID(string identifier)
+    {
+        if (!int.TryParse(identifier, out int id))
+        {
+            id = DataToItemMap.GetID(ItemTypeEnum.SObject, identifier);
+        }
+
+        if (id < -1 || !Game1Wrappers.ObjectInfo.TryGetValue(id, out string? data))
+        {
+            ModEntry.ModMonitor.Log($"{identifier} could not be resolved, skipping");
+            return null;
+        }
+
+        ReadOnlySpan<char> cat = data.GetNthChunk('/', SObject.objectInfoTypeIndex);
+        int index = cat.GetIndexOfWhiteSpace();
+        if (index < 0 || !int.TryParse(cat[(index + 1)..], out int type) || type is not SObject.SeedsCategory)
+        {
+            ModEntry.ModMonitor.Log($"{identifier} with {id} does not appear to be a seed, skipping.");
+            return null;
+        }
+
+        return id;
     }
 }

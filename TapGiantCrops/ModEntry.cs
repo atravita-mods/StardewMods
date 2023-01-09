@@ -1,4 +1,5 @@
 ﻿using AtraShared.ConstantsAndEnums;
+using AtraShared.Integrations;
 using AtraShared.Menuing;
 using AtraShared.Utils.Extensions;
 
@@ -81,7 +82,7 @@ internal sealed class ModEntry : Mod
     {
         try
         {
-            harmony.PatchAll();
+            harmony.PatchAll(typeof(ModEntry).Assembly);
         }
         catch (Exception ex)
         {

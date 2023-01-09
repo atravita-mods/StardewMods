@@ -10,7 +10,7 @@
 
   <PropertyGroup>
     <Author>atravita</Author>
-    <MinimumApiVersion>3.17</MinimumApiVersion>
+    <MinimumApiVersion>3.18</MinimumApiVersion>
     <UniqueId>$(Author).$(AssemblyName)</UniqueId>
     <EntryDll>$(AssemblyName).dll</EntryDll>
   </PropertyGroup>
@@ -24,7 +24,7 @@
 
   <!--common packages everyone uses-->
   <ItemGroup>
-    <PackageReference Include="Pathoschild.Stardew.ModBuildConfig" Version="4.0.2" />
+    <PackageReference Include="Pathoschild.Stardew.ModBuildConfig" Version="4.1.0" />
     <PackageReference Include="Pathoschild.Stardew.ModTranslationClassBuilder" Version="2.0.1" />
     <PackageReference Include="Leclair.Stardew.ModManifestBuilder" Version="1.0.3" />
 

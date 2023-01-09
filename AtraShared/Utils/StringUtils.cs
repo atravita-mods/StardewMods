@@ -4,6 +4,8 @@ using AtraBase.Toolkit;
 using AtraBase.Toolkit.Reflection;
 using AtraBase.Toolkit.StringHandler;
 
+using CommunityToolkit.Diagnostics;
+
 using FastExpressionCompiler.LightExpression;
 
 using Microsoft.Xna.Framework.Graphics;
@@ -38,7 +40,7 @@ public sealed class StringUtils
     /// <summary>
     /// Initializes a new instance of the <see cref="StringUtils"/> class.
     /// </summary>
-    /// <param name="monitor">The modMonitor instance to use to log for these utils.</param>
+    /// <param name="monitor">The modMonitor instance to use to log for these utilities.</param>
     public StringUtils(IMonitor? monitor) => this.Monitor = monitor;
 
     private static Func<SpriteFont, char, int> GetGlyph => GetGlyphLazy.Value;
@@ -70,6 +72,9 @@ public sealed class StringUtils
         {
             return string.Empty;
         }
+
+        Guard.IsNotNull(whichFont);
+        Guard.IsGreaterThan(width, 0);
 
         ReadOnlySpan<char> textSpan;
         int genderseperator = text.IndexOf(Dialogue.genderDialogueSplitCharacter);

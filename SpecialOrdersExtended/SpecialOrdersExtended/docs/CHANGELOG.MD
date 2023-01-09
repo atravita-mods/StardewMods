@@ -23,6 +23,7 @@ Changelog
 * Deliver orders can now be completed partially.
 * Fix duration override.
 * Fix issue where unicode in the save name prevents saving of custom data.
+* Internal optimizations. <!--Recent SO watcher now only runs every ten in-game minutes as backup; a new system using NetEvents was implemented.-->
 
 * Qi orders now have a setting where you can choose to avoid duplicates until every quest has been completed.
 * Tag checking now has a little cache.

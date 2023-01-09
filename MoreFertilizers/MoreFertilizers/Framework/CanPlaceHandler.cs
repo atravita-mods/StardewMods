@@ -79,6 +79,8 @@ public sealed class CanPlaceHandler : IMoreFertilizersAPI
     public const string PrismaticFertilizer = "atravita.MoreFertilizer.Prismatic";
     #endregion
 
+    #region reflection
+
     /// <summary>
     /// Stardew's Bush::shake.
     /// </summary>
@@ -90,6 +92,20 @@ public sealed class CanPlaceHandler : IMoreFertilizersAPI
         Bush bush,
         Vector2 tileLocation,
         bool doEvenIfStillShaking);
+
+    /// <summary>
+    /// Stardew's Tree::shake.
+    /// </summary>
+    private static readonly TreeShakeDel TreeShakeMethod = typeof(Tree)
+        .GetCachedMethod("shake", ReflectionCache.FlagTypes.InstanceFlags)
+        .CreateDelegate<TreeShakeDel>();
+
+    private delegate void TreeShakeDel(
+        Tree tree,
+        Vector2 tileLocation,
+        bool doEvenIfStillShaking,
+        GameLocation location);
+    #endregion
 
     /// <inheritdoc />
     public bool CanPlaceFertilizer(SObject obj, GameLocation loc, Vector2 tile)
@@ -113,7 +129,7 @@ public sealed class CanPlaceHandler : IMoreFertilizersAPI
         {
             if (terrain is HoeDirt dirt && dirt.crop is Crop crop && crop.programColored.Value && obj.ParentSheetIndex == ModEntry.PrismaticFertilizerID)
             {
-                bool ret = dirt.modData.ContainsKey(PrismaticFertilizer);
+                bool ret = !dirt.modData.ContainsKey(PrismaticFertilizer);
                 if (alert && !ret)
                 {
                     AlertPlayer();
@@ -143,7 +159,7 @@ public sealed class CanPlaceHandler : IMoreFertilizersAPI
                 }
                 return ret;
             }
-            else if (terrain is Tree tree && tree.growthStage.Value >= Tree.treeStage
+            else if (terrain is Tree tree && tree.growthStage.Value >= Tree.treeStage && tree.treeType.Value is not Tree.palmTree or Tree.palmTree2
                 && obj.ParentSheetIndex == ModEntry.TreeTapperFertilizerID)
             {
                 bool ret = !tree.modData.ContainsKey(TreeFertilizer) && !tree.modData.ContainsKey(TreeTapperFertilizer);
@@ -169,7 +185,7 @@ public sealed class CanPlaceHandler : IMoreFertilizersAPI
             }
             else if (pot.hoeDirt.Value is HoeDirt dirt && dirt.crop is Crop crop && crop.programColored.Value && obj.ParentSheetIndex == ModEntry.PrismaticFertilizerID)
             {
-                bool ret = dirt.modData.ContainsKey(PrismaticFertilizer);
+                bool ret = !dirt.modData.ContainsKey(PrismaticFertilizer);
                 if (alert && !ret)
                 {
                     AlertPlayer();
@@ -268,6 +284,7 @@ public sealed class CanPlaceHandler : IMoreFertilizersAPI
             if (terrain is Tree tree
                 && (obj.ParentSheetIndex == ModEntry.TreeTapperFertilizerID))
             {
+                TreeShakeMethod(tree, tile, true, loc);
                 tree.modData?.SetBool(TreeTapperFertilizer, true);
                 return true;
             }
@@ -342,7 +359,7 @@ public sealed class CanPlaceHandler : IMoreFertilizersAPI
                 }
             }
 
-            Game1.playSound("throwDownITem"); //sic
+            Game1.playSound("throwDownITem"); // sic
 
             float deltaY = -140f;
             float gravity = 0.0025f;

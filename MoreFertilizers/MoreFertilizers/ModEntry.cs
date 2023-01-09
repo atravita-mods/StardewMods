@@ -5,7 +5,6 @@ using System.Runtime.CompilerServices;
 
 using AtraBase.Toolkit;
 
-using AtraCore.Framework.IntegrationManagers;
 using AtraCore.Utilities;
 
 using AtraShared.ConstantsAndEnums;
@@ -469,11 +468,6 @@ internal sealed class ModEntry : Mod
     /// </summary>
     internal static ModConfig Config { get; private set; } = null!;
 
-    /// <summary>
-    /// Gets a handler that handles managing rings (and integration with Wear More Rings).
-    /// </summary>
-    internal static RingManager RingManager { get; private set; } = null!;
-
     /// <inheritdoc />
     public override void Entry(IModHelper helper)
     {
@@ -556,8 +550,6 @@ internal sealed class ModEntry : Mod
         bountifulFertilizerID = -1;
         deluxeFishFoodID = -1;
         deluxeFruitTreeFertilizerID = -1;
-        deluxeFruitTreeFertilizerID = -1;
-        deluxeJojaFertilizerID = -1;
         deluxeJojaFertilizerID = -1;
         domesticatedFishFoodID = -1;
         everlastingFertilizerID = -1;
@@ -638,7 +630,7 @@ internal sealed class ModEntry : Mod
 
         try
         {
-            harmony.PatchAll();
+            harmony.PatchAll(typeof(ModEntry).Assembly);
 
             if (this.Helper.ModRegistry.Get("spacechase0.MultiFertilizer") is IModInfo info
                 && info.Manifest.Version.IsOlderThan("1.0.6"))
@@ -744,7 +736,6 @@ internal sealed class ModEntry : Mod
         }
         jsonAssets.LoadAssets(Path.Combine(this.Helper.DirectoryPath, "assets", "json-assets"), this.Helper.Translation);
 
-        RingManager = new(this.Monitor, this.Helper.Translation, this.Helper.ModRegistry);
         RadioactiveFertilizerHandler.Initialize(this.Helper.GameContent, this.Helper.ModRegistry, this.Helper.Translation);
 
         // Only register for events if JA pack loading was successful.
@@ -761,7 +752,7 @@ internal sealed class ModEntry : Mod
         this.Helper.Events.Input.ButtonPressed += this.OnButtonPressed;
 
         this.Helper.Events.Content.AssetRequested += static (_, e) => AssetEditor.Edit(e);
-        this.Helper.Events.Content.AssetsInvalidated += static (_, e) => RadioactiveFertilizerHandler.Reset(e.NamesWithoutLocale);
+        this.Helper.Events.Content.AssetsInvalidated += this.OnAssetInvalidated;
 
         if (this.Helper.ModRegistry.IsLoaded("atravita.SpecialOrdersExtended"))
         {
@@ -793,6 +784,13 @@ internal sealed class ModEntry : Mod
         CropHarvestTranspiler.Initialize(this.Helper.ModRegistry);
     }
 
+    /// <inheritdoc cref="IContentEvents.AssetsInvalidated"/>
+    private void OnAssetInvalidated(object? sender, AssetsInvalidatedEventArgs e)
+    {
+        RadioactiveFertilizerHandler.Reset(e.NamesWithoutLocale);
+        AssetEditor.Reset(e.NamesWithoutLocale);
+    }
+
     /// <inheritdoc cref="IGameLoopEvents.DayStarted"/>
     private void OnDayStart(object? sender, DayStartedEventArgs e)
         => GameLocationPatches.Reinitialize();
@@ -800,8 +798,19 @@ internal sealed class ModEntry : Mod
     /// <inheritdoc cref="IGameLoopEvents.DayEnding"/>
     private void OnDayEnd(object? sender, DayEndingEventArgs e)
     {
+        if (Game1.player.getFriendshipHeartLevelForNPC("George") >= 6 && Game1.player.mailReceived.Contains("georgeGifts"))
+        {
+            Game1.addMailForTomorrow(AssetEditor.GEORGE_EVENT);
+        }
+
+        if (Game1.getAllFarmers().Any(p => p.foragingLevel.Value >= 4))
+        {
+            Game1.addMailForTomorrow(AssetEditor.BOUNTIFUL_BUSH_UNLOCK);
+        }
+
         JojaSample.Reset();
         FishFoodHandler.DecrementAndSave(this.Helper.Data, this.Helper.Multiplayer);
+        RadioactiveFertilizerHandler.OnDayEnd();
     }
 
     #region JsonAssets

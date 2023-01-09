@@ -5,18 +5,25 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace SpecialOrdersExtended.Managers;
-internal class PlayerTeamWatcher: IDisposable
+internal sealed class PlayerTeamWatcher: IDisposable
 {
     private bool isDisposed;
     private HashSet<string> added = new();
     private HashSet<string> removed = new();
 
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="PlayerTeamWatcher"/> class.
+    /// </summary>
     internal PlayerTeamWatcher()
     {
-        Game1.player.team.specialOrders.OnElementChanged += this.SpecialOrders_OnElementChanged;
-        Game1.player.team.specialOrders.OnArrayReplaced += this.SpecialOrders_OnArrayReplaced;
+        Game1.player.team.completedSpecialOrders.OnValueAdded += this.OnValueAdded;
+        Game1.player.team.completedSpecialOrders.OnValueRemoved += this.OnValueRemoved;
     }
 
+    /// <summary>
+    /// Finalizes an instance of the <see cref="PlayerTeamWatcher"/> class.
+    /// </summary>
     ~PlayerTeamWatcher()
     {
         // Do not change this code. Put cleanup code in 'Dispose(bool disposing)' method
@@ -31,17 +38,32 @@ internal class PlayerTeamWatcher: IDisposable
     }
 
     /// <inheritdoc cref="IDisposable.Dispose" />
-    protected virtual void Dispose(bool disposing)
+    private void Dispose(bool disposing)
     {
         if (!this.isDisposed)
         {
-
-            Game1.player.team.specialOrders.OnElementChanged -= this.SpecialOrders_OnElementChanged;
-            Game1.player.team.specialOrders.OnArrayReplaced -= this.SpecialOrders_OnArrayReplaced;
+            Game1.player.team.completedSpecialOrders.OnValueAdded -= this.OnValueAdded;
+            Game1.player.team.completedSpecialOrders.OnValueRemoved -= this.OnValueRemoved;
 
             this.added = null!;
             this.removed = null!;
             this.isDisposed = true;
+        }
+    }
+
+    private void OnValueAdded(string key, bool value)
+    {
+        if (key is not null && !this.removed.Remove(key))
+        {
+            this.added.Add(key);
+        }
+    }
+
+    private void OnValueRemoved(string key, bool value)
+    {
+        if (key is not null && !this.added.Remove(key))
+        {
+            this.removed.Add(key);
         }
     }
 
@@ -64,54 +86,6 @@ internal class PlayerTeamWatcher: IDisposable
         {
             this.Reset();
             return Enumerable.Empty<string>();
-        }
-    }
-
-    private void SpecialOrders_OnArrayReplaced(Netcode.NetList<SpecialOrder, Netcode.NetRef<SpecialOrder>> list, IList<SpecialOrder> before, IList<SpecialOrder> after)
-    {
-        HashSet<string> added = after.Select((q) => q.questKey.Value).ToHashSet();
-        added.ExceptWith(before.Select(q => q.questKey.Value));
-        HashSet<string> removed = before.Select((q) => q.questKey.Value).ToHashSet();
-        removed.ExceptWith(after.Select(q => q.questKey.Value));
-
-        foreach (string? key in removed)
-        {
-            this.Remove(key);
-        }
-
-        foreach (string? key in added)
-        {
-            this.Add(key);
-        }
-    }
-
-    private void SpecialOrders_OnElementChanged(Netcode.NetList<SpecialOrder, Netcode.NetRef<SpecialOrder>> list, int index, SpecialOrder oldValue, SpecialOrder newValue)
-    {
-        this.Remove(oldValue.questKey.Value);
-        this.Add(newValue.questKey.Value);
-    }
-
-    private void Add(string key)
-    {
-        if (key is null)
-        {
-            return;
-        }
-        if (!this.removed.Remove(key))
-        {
-            this.added.Add(key);
-        }
-    }
-
-    private void Remove(string key)
-    {
-        if (key is null)
-        {
-            return;
-        }
-        if (!this.added.Remove(key))
-        {
-            this.removed.Add(key);
         }
     }
 }

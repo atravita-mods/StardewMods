@@ -12,20 +12,18 @@ namespace AvoidLosingScepter;
 /// <inheritdoc />
 internal sealed class ModEntry : Mod
 {
-#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
-
     /// <summary>
     /// Gets the logger for this mod.
     /// </summary>
-    internal static IMonitor ModMonitor { get; private set; }
-#pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
+    internal static IMonitor ModMonitor { get; private set; } = null!;
 
     /// <inheritdoc />
     public override void Entry(IModHelper helper)
     {
         I18n.Init(helper.Translation);
         ModMonitor = this.Monitor;
-        this.ApplyPatches(new Harmony(this.ModManifest.UniqueID));
+
+        helper.Events.GameLoop.GameLaunched += (_,_) => this.ApplyPatches(new Harmony(this.ModManifest.UniqueID));
     }
 
     /// <summary>
@@ -135,7 +133,7 @@ internal sealed class ModEntry : Mod
         catch (Exception ex)
         {
             ModMonitor.Log($"Mod crashed while transpiling mine death methods:\n\n{ex}", LogLevel.Error);
-            original?.Snitch(ModEntry.ModMonitor);
+            original.Snitch(ModEntry.ModMonitor);
         }
         return null;
     }

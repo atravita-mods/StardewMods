@@ -1,0 +1,11 @@
+{"Changes":[
+    {
+        "LogName": "Rain -- during winter.",
+        "Action": "EditData",
+        "Target": "Characters/Dialogue/rainy",
+        "When": {"Season": "winter"},
+        "Entries":{
+            "Maru": "Strange that it's raining in winter.",
+        }
+    },
+]}

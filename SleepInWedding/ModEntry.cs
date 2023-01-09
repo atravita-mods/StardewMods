@@ -48,6 +48,8 @@ internal sealed class ModEntry : Mod
     {
         if (Game1.player.HasWeddingToday() && NPCCache.GetByVillagerName(Game1.player.spouse) is NPC spouse)
         {
+            spouse.currentMarriageDialogue.Clear();
+
             if (spouse.Dialogue.ContainsKey("DayOfWedding"))
             {
                 spouse.ClearAndPushDialogue("DayOfWedding");
@@ -76,7 +78,7 @@ internal sealed class ModEntry : Mod
                     Game1.addHUDMessage(new HUDMessage(I18n.WeddingMessageOther(hour, minutes.ToString("D2")), HUDMessage.achievement_type));
                 }
             }
-            else if (Game1.timeOfDay == Utility.ModifyTime(e.NewTime, -30))
+            else if (Game1.timeOfDay == Utility.ModifyTime(Config.WeddingTime, -30))
             {
                 Game1.addHUDMessage(new HUDMessage(I18n.WeddingReminder(), HUDMessage.achievement_type));
             }
@@ -95,7 +97,7 @@ internal sealed class ModEntry : Mod
     /// <param name="e">Event args.</param>
     private void OnSaveLoad(object? sender, SaveLoadedEventArgs e)
     {
-        if (Context.IsMainPlayer)
+        if (Context.IsMainPlayer && Config.TryRecoverWedding)
         {
             if (!Game1.canHaveWeddingOnDay(Game1.dayOfMonth, Game1.currentSeason))
             {

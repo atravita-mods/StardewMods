@@ -10,6 +10,9 @@ internal sealed class ModConfig
 {
     private float friendshipGainFactor = 0.5f;
 
+    /// <summary>
+    /// Gets or sets a value indicating how much friendship gain will be affected.
+    /// </summary>
     [GMCMRange(0.01, 20)]
     public float FriendshipGainFactor
     {

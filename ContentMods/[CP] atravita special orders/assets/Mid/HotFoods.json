@@ -1,27 +1,11 @@
 {"Changes": [
     {
-        "LogName": "Hot Foods - Strings",
-        "Action": "EditData",
-        "Target": "Strings/SpecialOrderStrings",
-        "Entries": {
-            "atravita.HotFoods.Name": "Some Like it Hot.",
-            "atravita.HotFoods.Text": "Looking for help catering a Hot Foods! Let's get grab some fresh fish, cook up some seafood dishes, and hand them out around town!",
-            "atravita.HotFoods.collect_tuna": "Fish up a tuna.",
-            "atravita.HotFoods.collect_flounder": "Fish up a flounder.",
-            "atravita.HotFoods.collect_sunfish": "Fish up a sunfish.",
-            "atravita.HotFoods.collect_rainbow_trout": "Fish up a rainbow trout.",
-            "atravita.HotFoods.cook": "Cook 30 seafood dishes.",
-            "atravita.HotFoods.gift": "Gift 10 liked seafood dishes.",
-            "atravita.HotFoods.donate": "Place the remainder of the seafood dishes in the fridge in the saloon.",
-        },
-    },
-    {
         "LogName": "Hot Foods - Special Order",
         "Action": "EditData",
         "Target": "Data/SpecialOrders",
         "Entries": {
             "atravita.HotFoods": {
-                "Name": "[atravita.HotFoods.Name]",
+                "Name": "{{i18n: atravita.hotfoods.name}}",
                 "Requester": "Gus",
                 "Duration": "TwoWeeks",
                 "Repeatable": "{{Repeatability}}",
@@ -32,12 +16,12 @@
                 "SpecialRule": "",
                 "ItemToRemoveOnEnd": null,
                 "MailToRemoveOnEnd": null,
-                "Text": "[atravita.HotFoods.Text]",
+                "Text": "{{i18n: atravita.hotfoods.text}}",
                 "RandomizedElements": null,
                 "Objectives": [
                     {
                         "Type": "Fish",
-                        "Text": "[atravita.HotFoods.collect_tuna]",
+                        "Text": "{{i18n: atravita.hotfoods.collect_tuna}}",
                         "RequiredCount": "1",
                         "Data": {
                             "AcceptedContextTags": "item_tuna",
@@ -45,7 +29,7 @@
                     },
                     {
                         "Type": "Fish",
-                        "Text": "[atravita.HotFoods.collect_flounder]",
+                        "Text": "{{i18n: atravita.hotfoods.collect_flounder}}",
                         "RequiredCount": "1",
                         "Data": {
                             "AcceptedContextTags": "item_flounder",
@@ -53,7 +37,7 @@
                     },
                     {
                         "Type": "Fish",
-                        "Text": "[atravita.HotFoods.collect_sunfish]",
+                        "Text": "{{i18n: atravita.hotfoods.collect_sunfish}}",
                         "RequiredCount": "1",
                         "Data": {
                             "AcceptedContextTags": "item_sunfish",
@@ -61,7 +45,7 @@
                     },
                     {
                         "Type": "Fish",
-                        "Text": "[atravita.HotFoods.collect_rainbow_trout]",
+                        "Text": "{{i18n: atravita.hotfoods.collect_rainbow_trout}}",
                         "RequiredCount": "1",
                         "Data": {
                             "AcceptedContextTags": "item_rainbow_trout",
@@ -69,7 +53,7 @@
                     },
                     {
                         "Type": "Collect",
-                        "Text": "[atravita.HotFoods.cook]",
+                        "Text": "{{i18n: atravita.hotfoods.cook}}",
                         "RequiredCount": "30",
                         "Data": {
                             "AcceptedContextTags": "food_seafood",
@@ -77,7 +61,7 @@
                     },
                     {
                         "Type": "Gift",
-                        "Text": "[atravita.HotFoods.gift]",
+                        "Text": "{{i18n: atravita.hotfoods.gift}}",
                         "RequiredCount": "10",
                         "Data": {
                             "AcceptedContextTags": "food_seafood",
@@ -86,7 +70,7 @@
                     },
                     {
                         "Type": "Donate",
-                        "Text": "[atravita.HotFoods.donate]",
+                        "Text": "{{i18n: atravita.hotfoods.donate}}",
                         "RequiredCount": "20",
                         "Data": {
                             "DropBox": "GusFridge",
@@ -112,14 +96,6 @@
                 ],
             }
         }
-    },
-    {
-        "LogName": "Hot Foods - Mail",
-        "Action": "EditData",
-        "Target": "Data/Mail",
-        "Entries": {
-            "atravita_HotFoods_Reward": "@! ^Thanks for helping me throw the bash! I've attached some items that'll help you make great seafood!^^    -Gus%item object 710 15%%[#]Hot Foods thank-you note",
-        },
-    },
+    }
     ]
 }

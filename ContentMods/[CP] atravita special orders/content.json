@@ -78,7 +78,10 @@
     },
     {
         "Action": "Include",
-        "FromFile": "assets/Dialogue/Lewis.json, assets/Dialogue/Gus.json, assets/Dialogue/Caroline.json, assets/Dialogue/Willy.json"
+        "FromFile": "assets/Dialogue/Lewis.json, assets/Dialogue/Gus.json, assets/Dialogue/Caroline.json, assets/Dialogue/Willy.json",
+        "When": {
+            "HasMod": "atravita.SpecialOrdersExtended"
+        }
     },
     {
         "Action": "Include",

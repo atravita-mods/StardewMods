@@ -38,7 +38,7 @@ internal sealed class ModEntry : Mod
 
     private void OnSaveLoaded(object? sender, SaveLoadedEventArgs e)
     {
-        Game1.player.mailReceived.OnElementChanged += this.MailReceived_OnElementChanged;
+        //Game1.player.mailReceived.OnElementChanged += this.MailReceived_OnElementChanged;
         this.Helper.Events.GameLoop.OneSecondUpdateTicked += this.OnUpdateTicked;
     }
 

@@ -1,4 +1,6 @@
 ﻿using AtraShared.ConstantsAndEnums;
+using AtraShared.Integrations;
+using AtraShared.Integrations.Interfaces;
 using AtraShared.Menuing;
 using AtraShared.Utils.Extensions;
 
@@ -26,14 +28,49 @@ internal sealed class ModEntry : Mod
     /// </summary>
     internal static ReviveDeadCropsApi Api { get; } = ReviveDeadCropsApi.Instance;
 
+    private static IJsonAssetsAPI? jaAPI;
+
+    private static int everlastingID = -1;
+
+    /// <summary>
+    /// Gets the id of the everlasting fertilizer.
+    /// </summary>
+    internal static int EverlastingID
+    {
+        get
+        {
+            if (everlastingID == -1)
+            {
+                everlastingID = jaAPI?.GetObjectId("Everlasting Fertilizer - More Fertilizers") ?? -1;
+            }
+
+            return everlastingID;
+        }
+    }
+
     /// <inheritdoc />
     public override void Entry(IModHelper helper)
     {
         ModMonitor = this.Monitor;
+
+        helper.Events.GameLoop.GameLaunched += this.OnGameLaunched;
         helper.Events.Input.ButtonPressed += this.OnButtonPressed;
         helper.Events.GameLoop.DayEnding += this.OnDayEnd;
+
+        helper.Events.GameLoop.ReturnedToTitle += this.OnReturnedToTitle;
         this.ApplyPatches(new Harmony(this.ModManifest.UniqueID));
     }
+
+    /// <inheritdoc cref="IGameLoopEvents.GameLaunched"/>
+    private void OnGameLaunched(object? sender, GameLaunchedEventArgs e)
+    {
+        IntegrationHelper helper = new(this.Monitor, this.Helper.Translation, this.Helper.ModRegistry, LogLevel.Trace);
+        _ = helper.TryGetAPI("spacechase0.JsonAssets", "1.10.3", out jaAPI);
+    }
+
+    /// <inheritdoc cref="IGameLoopEvents.ReturnedToTitle"/>
+    private void OnReturnedToTitle(object? sender, ReturnedToTitleEventArgs e)
+        => everlastingID = -1;
 
     /// <inheritdoc />
     public override object? GetApi() => Api;
@@ -54,7 +91,7 @@ internal sealed class ModEntry : Mod
                 foreach (TerrainFeature terrain in location.terrainFeatures.Values)
                 {
                     if (terrain is HoeDirt dirt && dirt.modData?.GetBool(ReviveDeadCropsApi.REVIVED_PLANT_MARKER) == true
-                        && dirt.crop is not null)
+                        && dirt.crop is not null && dirt.fertilizer.Value != EverlastingID)
                     {
                         this.Monitor.DebugOnlyLog($"Found dirt with marker at {dirt.currentTileLocation} with crop {dirt.crop?.indexOfHarvest ?? -1}");
                         dirt.modData.SetBool(ReviveDeadCropsApi.REVIVED_PLANT_MARKER, false, false);
@@ -66,7 +103,7 @@ internal sealed class ModEntry : Mod
                 {
                     if (obj is IndoorPot pot && pot.hoeDirt.Value is HoeDirt dirt
                         && dirt.modData?.GetBool(ReviveDeadCropsApi.REVIVED_PLANT_MARKER) == true
-                        && dirt.crop is not null)
+                        && dirt.crop is not null && dirt.fertilizer.Value != EverlastingID)
                     {
                         this.Monitor.DebugOnlyLog($"Found dirt with marker at {dirt.currentTileLocation} with crop {dirt.crop?.indexOfHarvest ?? -1}");
                         dirt.modData.SetBool(ReviveDeadCropsApi.REVIVED_PLANT_MARKER, false, false);

@@ -11,6 +11,7 @@ namespace TapGiantCrops.HarmonyPatches;
 [HarmonyPatch(typeof(GiantCrop))]
 internal static class GiantCropPatcher
 {
+    [HarmonyPriority(Priority.High)]
     [HarmonyPatch(nameof(GiantCrop.performToolAction))]
     [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Harmony convention.")]
     private static bool Prefix(GiantCrop __instance, Tool t)

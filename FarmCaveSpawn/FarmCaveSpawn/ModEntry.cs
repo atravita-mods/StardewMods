@@ -60,10 +60,7 @@ internal sealed class ModEntry : Mod
 
     private MigrationManager? migrator;
 
-    // The config is set by the Entry method, so it should never realistically be null
-#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
-    private ModConfig config;
-#pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
+    private ModConfig config = null!;
 
     /// <summary>
     /// Location to temporarily store the seeded random.

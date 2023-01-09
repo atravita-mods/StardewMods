@@ -155,6 +155,12 @@ internal sealed class ModConfig
     /// Gets or sets a value indicating whether or not to edit Elliott's event.
     /// </summary>
     public bool EditElliottEvent { get; set; } = true;
+
+
+    /// <summary>
+    /// Gets or sets a value indicating whether or not to remove duplicate npcs if found.
+    /// </summary>
+    public bool RemoveDuplicateNPCs { get; set; } = false;
  
     /// <summary>
     /// Pre-populates locations.

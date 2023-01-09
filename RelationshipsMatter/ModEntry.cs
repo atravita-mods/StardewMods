@@ -32,6 +32,7 @@ internal sealed class ModEntry : Mod
         Config = AtraUtils.GetConfigOrDefault<ModConfig>(helper, this.Monitor);
 
         helper.Events.GameLoop.GameLaunched += this.SetUpConfig;
+        helper.Events.Content.AssetsInvalidated += (_, e) => RMUtils.Reset(e.NamesWithoutLocale);
         this.ApplyPatches(new(this.ModManifest.UniqueID));
     }
 

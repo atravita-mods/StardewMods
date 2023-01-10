@@ -58,7 +58,6 @@ internal static class RemoveSeasonCheck
             harmony.Patch(
                 original: typeof(HoeDirt).GetCachedMethod(nameof(HoeDirt.plant), ReflectionCache.FlagTypes.InstanceFlags),
                 transpiler: new(typeof(RemoveSeasonCheck).GetCachedMethod(nameof(TranspilerWithWinterStar), ReflectionCache.FlagTypes.StaticFlags)));
-
         }
         catch (Exception ex)
         {

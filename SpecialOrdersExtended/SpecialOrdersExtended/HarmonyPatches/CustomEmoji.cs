@@ -18,7 +18,7 @@ namespace SpecialOrdersExtended.HarmonyPatches;
 [HarmonyPatch(typeof(SpecialOrdersBoard))]
 internal static class CustomEmoji
 {
-    private static readonly HashSet<IAssetName> Failed = new(); // hashet of failed loads.
+    private static readonly HashSet<IAssetName> Failed = new(); // hashset of failed loads.
     private static readonly Dictionary<string, KeyValuePair<Texture2D, Rectangle>> Cache = new();
 
     private static IGameContentHelper parser = null!;
@@ -37,7 +37,7 @@ internal static class CustomEmoji
         }
         if (assets is not null && Failed.Count > 0)
         {
-            Failed.RemoveWhere((asset) => assets.Contains(asset));
+            Failed.RemoveWhere(assets.Contains);
         }
     }
 
@@ -63,10 +63,7 @@ internal static class CustomEmoji
             return;
         }
 
-        if (__result is null)
-        {
-            __result = GetEntry(requester_name);
-        }
+        __result ??= GetEntry(requester_name);
     }
 
     [MethodImpl(TKConstants.Hot)]

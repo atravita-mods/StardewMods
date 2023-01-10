@@ -1,6 +1,9 @@
 ﻿Changelog
 ============
 
+#### Version 0.1.3
+* Fix conflict with PFM.
+
 #### Version 0.1.2
 * Internal optimizations
 * `WeightedManager` now refuses items with negative weights.

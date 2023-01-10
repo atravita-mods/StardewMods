@@ -18,6 +18,7 @@ namespace MoreFertilizers.Framework;
 /// <summary>
 /// Handles asset editing for this mod.
 /// </summary>
+[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1310:Field names should not contain underscore", Justification = "Preference.")]
 [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1306:Field names should begin with lower-case letter", Justification = "Effective constants are all caps.")]
 internal static class AssetEditor
 {
@@ -26,8 +27,14 @@ internal static class AssetEditor
     /// </summary>
     internal const string ORGANICVEGGIEMAIL = "atravita_OrganicCrops_Reward";
 
+    /// <summary>
+    /// The letter key used for the bountiful bush fertilizer's unlock.
+    /// </summary>
     internal const string BOUNTIFUL_BUSH_UNLOCK = "atravita_Bountiful_Bush";
 
+    /// <summary>
+    /// A letter used to tell the player that robin now sells fertilizer after George's leek special order.
+    /// </summary>
     internal const string GEORGE_EVENT = "atravita_George_Letter";
 
     /// <summary>
@@ -56,27 +63,15 @@ internal static class AssetEditor
         ModEntry.ModMonitor.Log($"Found {i} Special Orders");
         return ret;
     });
+    private static readonly TickCache<bool> HasSeenBoat = new(static () => FarmerHelpers.HasAnyFarmerRecievedFlag("seenBoatJourney"));
 
-#pragma warning disable SA1310 // Field names should not contain underscore. Reviewed.
     private static IAssetName SPECIAL_ORDERS_LOCATION = null!;
     private static IAssetName SPECIAL_ORDERS_STRINGS = null!;
     private static IAssetName MAIL = null!;
     private static IAssetName LEWIS_DIALOGUE = null!;
-
     private static IAssetName RADIOACTIVE_DENYLIST = null!;
-#pragma warning restore SA1310 // Field names should not contain underscore
-
-    private static readonly TickCache<bool> HasSeenBoat = new(static () => FarmerHelpers.HasAnyFarmerRecievedFlag("seenBoatJourney"));
 
     private static HashSet<int>? denylist = null;
-
-    internal static void Reset(IReadOnlySet<IAssetName>? assets = null)
-    {
-        if (assets is null || assets.Contains(RADIOACTIVE_DENYLIST))
-        {
-            denylist = null;
-        }
-    }
 
     /// <summary>
     /// Initializes the AssetEditor.
@@ -122,6 +117,19 @@ internal static class AssetEditor
         }
     }
 
+    /// <inheritdoc cref="IContentEvents.AssetsInvalidated"/>
+    internal static void Reset(IReadOnlySet<IAssetName>? assets = null)
+    {
+        if (assets is null || assets.Contains(RADIOACTIVE_DENYLIST))
+        {
+            denylist = null;
+        }
+    }
+
+    /// <summary>
+    /// Gets a hashset of ids that should be excluded from the radioactive fertilizer.
+    /// </summary>
+    /// <returns>ids to exclude.</returns>
     internal static HashSet<int> GetRadioactiveExclusions()
     {
         if (denylist is not null)
@@ -146,8 +154,8 @@ internal static class AssetEditor
     }
 
     /// <summary>
-    /// Handles editing special order dialogue. This is seperate so it's only
-    /// registed if necessary.
+    /// Handles editing special order dialogue. This is separate so it's only
+    /// registered if necessary.
     /// </summary>
     /// <param name="e">event args.</param>
     internal static void EditSpecialOrderDialogue(AssetRequestedEventArgs e)
@@ -157,6 +165,8 @@ internal static class AssetEditor
             e.Edit(EditLewisDialogueImpl, AssetEditPriority.Early);
         }
     }
+
+    #region editors
 
     private static void EditPrismaticMasks(IAssetData asset)
     {
@@ -206,4 +216,6 @@ internal static class AssetEditor
         IAssetDataForDictionary<string, string>? editor = asset.AsDictionary<string, string>();
         editor.Data["atravita.OrganicCrops_InProgress"] = I18n.Specialorder_Organic_LewisInprogress();
     }
+
+    #endregion
 }

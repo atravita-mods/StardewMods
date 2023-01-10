@@ -9,7 +9,7 @@
   </PropertyGroup>
 
   <PropertyGroup>
-    <Author>atravita</Author>
+    <Authors>atravita</Authors>
     <MinimumApiVersion>3.18</MinimumApiVersion>
     <UniqueId>$(Author).$(AssemblyName)</UniqueId>
     <EntryDll>$(AssemblyName).dll</EntryDll>
@@ -26,7 +26,7 @@
   <ItemGroup>
     <PackageReference Include="Pathoschild.Stardew.ModBuildConfig" Version="4.1.0" />
     <PackageReference Include="Pathoschild.Stardew.ModTranslationClassBuilder" Version="2.0.1" />
-    <PackageReference Include="Leclair.Stardew.ModManifestBuilder" Version="1.0.3" />
+    <PackageReference Include="Leclair.Stardew.ModManifestBuilder" Version="2.0.1" />
 
     <PackageReference Include="StyleCop.Analyzers" Version="1.1.118">
         <PrivateAssets>all</PrivateAssets>

@@ -36,7 +36,7 @@ internal static class AddCrowsForExtendedToolsTranspiler
             ILHelper helper = new(original, instructions, ModEntry.ModMonitor, gen);
             helper.FindNext(new CodeInstructionWrapper[]
             {
-                new(OpCodes.Ldloca),
+                new(OpCodes.Ldloca_S),
                 new(OpCodes.Call, typeof(KeyValuePair<Vector2, SObject>).GetCachedProperty("Value", ReflectionCache.FlagTypes.InstanceFlags).GetGetMethod()),
                 new(OpCodes.Ldfld, typeof(SObject).GetCachedField(nameof(SObject.bigCraftable), ReflectionCache.FlagTypes.InstanceFlags)),
                 new(OpCodes.Call),

@@ -9,7 +9,7 @@
   </PropertyGroup>
 
   <PropertyGroup>
-    <Author>atravita</Author>
+    <Authors>atravita</Authors>
     <MinimumApiVersion>3.18</MinimumApiVersion>
     <UniqueId>$(Author).$(AssemblyName)</UniqueId>
     <EntryDll>$(AssemblyName).dll</EntryDll>

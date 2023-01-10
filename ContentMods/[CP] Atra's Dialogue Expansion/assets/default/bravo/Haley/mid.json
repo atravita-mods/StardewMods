@@ -1,2 +1,10 @@
 {"Changes":[
-    ]}
+    {
+        "LogName": "Abigail mid-hearts",
+        "Action": "EditData",
+        "Target": "Characters/Dialogue/Abigail",
+        "Entries": {
+            "6_2": "@! My mother sent me a new mascara from %place! What do you think of it?$h#$e#It's a new type of mascara, called a 'tubing mascara'. A lot less likely to smudge!"
+        },
+    }
+]}

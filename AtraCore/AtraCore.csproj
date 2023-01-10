@@ -32,7 +32,7 @@
 
   <PropertyGroup>
     <TranslationClassBuilder_AddGetByKey>true</TranslationClassBuilder_AddGetByKey>
-    <AllowUnsafeBlocks>False</AllowUnsafeBlocks>
+    <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
   </PropertyGroup>
 
   <ItemGroup>

@@ -1,6 +1,10 @@
 ﻿Changelog
 =============
 
+#### Version 0.3.1
+* Fixed integration with the two extended tools mods.
+* Updated Chinese translation (thanks to Puffeeydii!)
+
 #### Version 0.3.0 TODO items
 * Beverage fertilizer
     - Fruit trees (DGA, Automate?)

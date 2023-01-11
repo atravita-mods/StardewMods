@@ -1,6 +1,10 @@
 ﻿using System.Linq.Expressions;
 using System.Reflection;
 
+using AtraShared.Integrations.Interfaces;
+
+using FrameRateLogger.Framework;
+
 using StardewModdingAPI.Events;
 
 namespace FrameRateLogger;
@@ -8,6 +12,9 @@ namespace FrameRateLogger;
 /// <inheritdoc />
 internal sealed class ModEntry : Mod
 {
+    private bool enabled = true;
+    private ModConfig config = null!;
+
     private Func<FrameRateCounter, int>? FramerateGetter { get; set; } = null!;
 
     private FrameRateCounter? FrameRateCounter { get; set; } = null!;
@@ -23,23 +30,82 @@ internal sealed class ModEntry : Mod
         MemberExpression? fieldgetter = Expression.Field(objparam, field);
         this.FramerateGetter = Expression.Lambda<Func<FrameRateCounter, int>>(fieldgetter, objparam).Compile();
 
-        helper.Events.Display.RenderedHud += this.OnRenderedHud;
-        helper.Events.GameLoop.SaveLoaded += this.OnSaveLoaded;
-        helper.Events.GameLoop.ReturnedToTitle += this.ReturnedToTitle;
+        this.config = helper.ReadConfig<ModConfig>();
+        if (this.config.Enabled)
+        {
+            this.enabled = true;
+        }
+
+        helper.Events.GameLoop.SaveLoaded += (_, _) =>
+        {
+            this.UnHook();
+            if (this.enabled)
+            {
+                this.Hook();
+            }
+        };
+
+        helper.Events.GameLoop.ReturnedToTitle += (_, _) => this.UnHook();
 
         helper.Events.Player.Warped += this.OnWarped;
+
+        helper.Events.GameLoop.GameLaunched += this.OnGameLaunched;
+    }
+
+    private void OnGameLaunched(object? sender, GameLaunchedEventArgs e)
+    {
+        if (this.Helper.ModRegistry.GetApi<IGenericModConfigMenuApi>("spacechase0.GenericModConfigMenu") is IGenericModConfigMenuApi api)
+        {
+            api.Register(
+                mod: this.ModManifest,
+                reset: () =>
+                {
+                    this.config = new();
+                    if (!this.enabled)
+                    {
+                        this.UnHook();
+                        this.Hook();
+                    }
+                    this.enabled = true;
+                },
+                save: () =>
+                {
+                    if (this.config.Enabled != this.enabled)
+                    {
+                        this.Monitor.Log("Switching " + (this.config.Enabled ? "on" : "off"));
+                        this.enabled = this.config.Enabled;
+
+                        this.UnHook();
+                        if (this.enabled)
+                        {
+                            this.Hook();
+                        }
+                    }
+
+                    this.Helper.WriteConfig(this.config);
+                });
+            api.AddBoolOption(
+                mod: this.ModManifest,
+                getValue: () => this.config.Enabled,
+                setValue: value => this.config.Enabled = value,
+                I18n.Enabled);
+        }
     }
 
     private void OnWarped(object? sender, WarpedEventArgs e)
         => this.Monitor.Log($"Current memory usage {GC.GetTotalMemory(false):N0}", LogLevel.Info);
 
-    private void ReturnedToTitle(object? sender, ReturnedToTitleEventArgs e)
-        => this.Helper.Events.GameLoop.OneSecondUpdateTicked -= this.OnUpdateTicked;
+    private void UnHook()
+    {
+        this.Helper.Events.GameLoop.OneSecondUpdateTicked -= this.OnUpdateTicked;
+        this.Helper.Events.Display.RenderedHud -= this.OnRenderedHud;
+    }
 
-    private void OnSaveLoaded(object? sender, SaveLoadedEventArgs e)
+    private void Hook()
     {
         //Game1.player.mailReceived.OnElementChanged += this.MailReceived_OnElementChanged;
         this.Helper.Events.GameLoop.OneSecondUpdateTicked += this.OnUpdateTicked;
+        this.Helper.Events.Display.RenderedHud += this.OnRenderedHud;
     }
 
     private void MailReceived_OnElementChanged(Netcode.NetList<string, Netcode.NetString> list, int index, string oldValue, string newValue)
@@ -47,6 +113,7 @@ internal sealed class ModEntry : Mod
         this.Monitor.Log($"Mail flags changed: index {index} old {oldValue} new {newValue}.", LogLevel.Alert);
     }
 
+    /// <inheritdoc cref="IGameLoopEvents.OneSecondUpdateTicked"/>
     private void OnUpdateTicked(object? sender, OneSecondUpdateTickedEventArgs e)
     {
         if (this.FrameRateCounter is not null && this.FramerateGetter?.Invoke(this.FrameRateCounter) is int value && Game1.game1.IsActive)
@@ -55,6 +122,7 @@ internal sealed class ModEntry : Mod
         }
     }
 
+    /// <inheritdoc cref="IDisplayEvents.RenderedHud"/>
     private void OnRenderedHud(object? sender, RenderedHudEventArgs e)
     {
         this.FrameRateCounter?.Update(Game1.currentGameTime);

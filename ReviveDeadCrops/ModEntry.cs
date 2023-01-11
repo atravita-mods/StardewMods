@@ -61,6 +61,10 @@ internal sealed class ModEntry : Mod
         this.ApplyPatches(new Harmony(this.ModManifest.UniqueID));
     }
 
+    /// <inheritdoc />
+    [UsedImplicitly]
+    public override object? GetApi() => Api;
+
     /// <inheritdoc cref="IGameLoopEvents.GameLaunched"/>
     private void OnGameLaunched(object? sender, GameLaunchedEventArgs e)
     {
@@ -71,9 +75,6 @@ internal sealed class ModEntry : Mod
     /// <inheritdoc cref="IGameLoopEvents.ReturnedToTitle"/>
     private void OnReturnedToTitle(object? sender, ReturnedToTitleEventArgs e)
         => everlastingID = -1;
-
-    /// <inheritdoc />
-    public override object? GetApi() => Api;
 
     // we need to make sure to slot in before Solid Foundations removes its buildings.
     [EventPriority(EventPriority.High + 20)]

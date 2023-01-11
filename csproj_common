@@ -5,13 +5,14 @@
     <LangVersion>latest</LangVersion>
     <Nullable>enable</Nullable>
     <WarningsAsErrors>Nullable</WarningsAsErrors>
+    <CheckEolTargetFramework>false</CheckEolTargetFramework>
     <TargetFramework>net5.0</TargetFramework>
   </PropertyGroup>
 
   <PropertyGroup>
     <Authors>atravita</Authors>
     <MinimumApiVersion>3.18</MinimumApiVersion>
-    <UniqueId>$(Author).$(AssemblyName)</UniqueId>
+    <UniqueId>$(Authors).$(AssemblyName)</UniqueId>
     <EntryDll>$(AssemblyName).dll</EntryDll>
   </PropertyGroup>
 

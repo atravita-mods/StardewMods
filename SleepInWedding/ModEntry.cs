@@ -44,6 +44,7 @@ internal sealed class ModEntry : Mod
         this.ApplyPatches(new Harmony(this.ModManifest.UniqueID));
     }
 
+    /// <inheritdoc cref="IGameLoopEvents.DayStarted"/>
     private void OnDayStart(object? sender, DayStartedEventArgs e)
     {
         if (Game1.player.HasWeddingToday() && NPCCache.GetByVillagerName(Game1.player.spouse) is NPC spouse)
@@ -78,13 +79,14 @@ internal sealed class ModEntry : Mod
                     Game1.addHUDMessage(new HUDMessage(I18n.WeddingMessageOther(hour, minutes.ToString("D2")), HUDMessage.achievement_type));
                 }
             }
-            else if (Game1.timeOfDay == Utility.ModifyTime(Config.WeddingTime, -30))
-            {
-                Game1.addHUDMessage(new HUDMessage(I18n.WeddingReminder(), HUDMessage.achievement_type));
-            }
             else if (Game1.timeOfDay == Config.WeddingTime)
             {
                 Game1.warpFarmer(new LocationRequest("Town", false, Game1.getLocationFromName("Town")), 5, 10, 0);
+                // this.Helper.Events.GameLoop.TimeChanged -= this.OnTimeChanged;
+            }
+            else if (Game1.timeOfDay == Utility.ModifyTime(Config.WeddingTime, -30))
+            {
+                Game1.addHUDMessage(new HUDMessage(I18n.WeddingReminder(), HUDMessage.achievement_type));
             }
         }
     }

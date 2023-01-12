@@ -5,7 +5,7 @@
         "LogName": "Good dialogue, set charlie",
         "Entries": {
             "Saloon_Fri": "@! Join us. Can I buy you a drink?#$e#I've saved up some money that I'm not drinkin' nearly as often...",
-            "springForest": "#$c 0.5#Nothin' like the fresh air of spring.$h#All this walkin' around has been good for me!#",
+            "Forest": "#$c 0.5#Nothin' like the fresh air of spring.$h#All this walkin' around has been good for me!#",
             "fallBusStop_Mon": "Abby comes around, sometimes, to play her flute.#$e#She's decently good",
             "fallBusStop_Mon_inlaw_Abigail": "How's Abby doin'? She's enjoying the farm life?#$e#You know, I never expected that girl to settle down...especially in this little town...",
             "summerMountain": "#$c 0.5#So much cooler, up here in the mountains.$h#Ah, it's nice to escape the heat a little. Fishing's been great, too!#",

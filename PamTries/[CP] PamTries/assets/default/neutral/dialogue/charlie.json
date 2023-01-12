@@ -9,7 +9,7 @@
             "Thu8": "Gettin' old is just feeling tired and achy all the time.$s#$e#My days of partyin' all night are definitely over.",
             "Fri8": "Argh. I'm too old to be fallin' asleep on the couch.#$e#Everything hurts.$s",
             "Sat8": "My feet ache.$s",
-            "springBusStop_Tue": "#$c .5#Got nothin' to do but listen to the radio on this bus while I wait for passengers...#The news is always so depressing, @. Ain't nothin' good happening in the world right now.",
+            "BusStop_Tue": "#$c .5#Got nothin' to do but listen to the radio on this bus while I wait for passengers...#The news is always so depressing, @. Ain't nothin' good happening in the world right now.",
             "fallBusStop_Tue": "#$c .5#Just drivin' this bus, day in, day out.#So, what's new with you? Ain't never anything new with me, I just drive this bus.#",
             "winterTown_Tue": "Gah. Nothing I own fits.#$e#Maybe going to aerobics wouldn't be that bad of an idea...#$e#Don't wanna let anyone see me like this, though.",
             "Trailer_Big_Wed": "Blergh. I'm tired. Leave me alone.",

@@ -3,6 +3,7 @@ using System.Reflection.Emit;
 using System.Runtime.CompilerServices;
 
 using AtraBase.Toolkit;
+using AtraBase.Toolkit.Extensions;
 using AtraBase.Toolkit.Reflection;
 
 using AtraCore.Framework.ReflectionManager;
@@ -173,7 +174,7 @@ internal static class CropHarvestTranspiler
         if (ModEntry.SecretJojaFertilizerID != -1 && dirt?.fertilizer?.Value == ModEntry.SecretJojaFertilizerID
             && (Game1.random.Next(3) == 0 || dirt.HasJojaCrop()))
         {
-            return Math.Max(1, (int)((HasQualityMod ? 0.8 : 0.9) * prevValue));
+            return Math.Max(1, ((HasQualityMod ? 0.8 : 0.9) * prevValue).RandomRoundProportional());
         }
         return prevValue;
     }

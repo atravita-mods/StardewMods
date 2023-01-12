@@ -362,10 +362,15 @@ public class ScheduleUtilityFunctions
                 {
                     if (npc.TryGetScheduleEntry(location + "_Replacement", out string? replacement))
                     {
-                        SpanSplit replacementdata = replacement.SpanSplit();
-                        x = int.Parse(replacementdata[0]);
-                        y = int.Parse(replacementdata[1]);
-                        if (!replacementdata.TryGetAtIndex(2, out SpanSplitEntry val) || !int.TryParse(val, out direction))
+                        StreamSplit replacementdata = replacement.StreamSplit();
+
+                        if (!replacementdata.MoveNext() || !int.TryParse(replacementdata.Current, out x)
+                            || !replacementdata.MoveNext() || !int.TryParse(replacementdata.Current, out y))
+                        {
+                            this.monitor.Log($"Failed in parsing replacement {replacement}", LogLevel.Warn);
+                            continue;
+                        }
+                        if (!replacementdata.MoveNext() || !int.TryParse(replacementdata.Current, out direction))
                         {
                             direction = Game1.down;
                         }

@@ -1,17 +1,22 @@
 ﻿Changelog
 =============
 
-#### Version 0.3.1
-* Fixed integration with the two extended tools mods.
-* Updated Chinese translation (thanks to Puffeeydii!)
-
-#### Version 0.3.0 TODO items
+#### TODO items
 * Beverage fertilizer
     - Fruit trees (DGA, Automate?)
 * Tree Tapper's: Automate integration.
 * Something for mushroom boxen? (1.6 - reduce to one day?)
 * Make good draw code for all of the fertilizers. (don't forget domesticated fish - maybe some more jumping...)
 * PR Pathos to make CJB pass in the correct fertilizer (b/c Everlasting)
+
+#### Version 0.3.2
+* Balance
+    * Secret Joja Fertilizer now uses random round proportional instead of math.floor.
+
+
+#### Version 0.3.1
+* Fixed integration with the two extended tools mods.
+* Updated Chinese translation (thanks to Puffeeydii!)
 
 #### Version 0.3.0
 * Added new fertilizers:

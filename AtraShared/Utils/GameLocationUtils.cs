@@ -222,7 +222,7 @@ public static class GameLocationUtils
         int ystart = 1,
         int yend = int.MaxValue)
     {
-        Guard.IsNotNull(location, nameof(location));
+        Guard.IsNotNull(location);
 
         // sanity
         xstart = Math.Max(xstart, 1);

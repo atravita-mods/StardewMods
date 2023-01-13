@@ -90,7 +90,7 @@ Run SMAPI at least once with this mod installed to generate the `config.json`, o
 * [Fish Wells](https://www.nexusmods.com/stardewvalley/mods/7651) do not work with Domesticated Fish Food, as they do not preserve mod data. The remaining fertilizers should work, and that mod has settings that let you adjust the fish spawn time.
 * [Deluxe Grabber Redux](https://github.com/ferdaber/sdv-mods/tree/master/DeluxeGrabberRedux), as they've re-implemented most of the relevant code. Effects from these fertilizers won't show up anything gathered by a deluxe grabber until I get around to implementing support here. That might take...a while, not going to lie.
 * No mod will include the Fruit Tree Fertilizers while calculating the age of fruit trees. You'll just see the days required decrement by two occasionally.
-* Using CJB cheat's instant crop growth may not work well with the Everlasting Fertilizer.
+* Using CJB cheat's instant crop growth may not work well with the Everlasting Fertilizer. (Awaiting next release of CJB).
 * Still no organic support for Solid Foundations buildings, my apologies!
 
 **Reporting an incompatibility**

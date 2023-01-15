@@ -2,6 +2,7 @@
 
 using AtraShared.ConstantsAndEnums;
 using AtraShared.Integrations;
+using AtraShared.Integrations.Interfaces.ContentPatcher;
 using AtraShared.Utils.Extensions;
 using HarmonyLib;
 using StardewModdingAPI.Events;
@@ -205,6 +206,24 @@ internal sealed class ModEntry : Mod
                 reset: static () => Config = new(),
                 save: () => this.Helper.AsyncWriteConfig(this.Monitor, Config))
             .GenerateDefaultGMCM(static () => Config);
+        }
+
+        IntegrationHelper integrationHelper = new(this.Monitor, this.Helper.Translation, this.Helper.ModRegistry);
+        if (integrationHelper.TryGetAPI("Pathoschild.ContentPatcher", "1.19.0", out IContentPatcherAPI? api))
+        {
+            api.RegisterToken(this.ModManifest,
+                "IsCurrentlyWedding",
+                () =>
+                {
+                    if (Game1.CurrentEvent is Event evt && evt.id == Event.weddingEventId)
+                    {
+                        return new[] { "true" };
+                    }
+                    else
+                    {
+                        return new[] { "false" };
+                    }
+                });
         }
     }
 }

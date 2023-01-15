@@ -12,6 +12,8 @@
 #### Version 0.3.2
 * Balance
     * Secret Joja Fertilizer now uses random round proportional instead of math.floor.
+* Bugfixes
+    * Fix compat with Theft of the Winter Star.
 
 
 #### Version 0.3.1

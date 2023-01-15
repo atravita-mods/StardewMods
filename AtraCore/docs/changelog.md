@@ -1,6 +1,10 @@
 ﻿Changelog
 ============
 
+#### Version 0.1.4
+* Refactored `WeightedManager`.
+* Couple of extra helper functions.
+
 #### Version 0.1.3
 * Fix conflict with PFM.
 

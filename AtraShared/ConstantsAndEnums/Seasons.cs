@@ -142,5 +142,4 @@ public static partial class SeasonExtensions
             StardewSeasons.Winter => 3,
             _ => ThrowHelper.ThrowArgumentException<int>("Expected a single season.")
         };
-
 }

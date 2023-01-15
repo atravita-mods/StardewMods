@@ -173,10 +173,10 @@ internal static class RemoveSeasonCheck
             .Insert(new CodeInstruction[]
             {
                 crop,
-                new(OpCodes.Ldarg_0),
-                new(OpCodes.Ldarg_2),
-                new(OpCodes.Ldarg_3),
-                new(OpCodes.Ldarga_S, 6),
+                new(OpCodes.Ldarg_0), // this
+                new(OpCodes.Ldarg_2), // tile_X
+                new(OpCodes.Ldarg_3), // tile_Y
+                new(OpCodes.Ldarg_S, 6), //game location.
                 new(OpCodes.Call, typeof(RemoveSeasonCheck).GetCachedMethod(nameof(IsInEverlastingWithTempusGlobe), ReflectionCache.FlagTypes.StaticFlags)),
                 new(OpCodes.Brtrue_S, jumppoint),
             }, withLabels: labels);

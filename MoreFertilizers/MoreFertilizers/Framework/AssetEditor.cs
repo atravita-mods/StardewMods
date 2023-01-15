@@ -63,6 +63,7 @@ internal static class AssetEditor
         ModEntry.ModMonitor.Log($"Found {i} Special Orders");
         return ret;
     });
+
     private static readonly TickCache<bool> HasSeenBoat = new(static () => FarmerHelpers.HasAnyFarmerRecievedFlag("seenBoatJourney"));
 
     private static IAssetName SPECIAL_ORDERS_LOCATION = null!;
@@ -140,7 +141,7 @@ internal static class AssetEditor
         ModEntry.ModMonitor.DebugOnlyLog("Resolving radioactive fertilizer denylist", LogLevel.Info);
 
         HashSet<int> ret = new();
-        foreach (var item in Game1.content.Load<Dictionary<string, string>>(RADIOACTIVE_DENYLIST.BaseName).Keys)
+        foreach (string item in Game1.content.Load<Dictionary<string, string>>(RADIOACTIVE_DENYLIST.BaseName).Keys)
         {
             int? id = MFUtilities.ResolveID(item);
             if (id is not null)
@@ -208,7 +209,6 @@ internal static class AssetEditor
         editor.Data[ORGANICVEGGIEMAIL] = $"@,^{I18n.Specialorder_Organic_Mail_Text()}^^   --{NPCCache.GetByVillagerName("Lewis")?.displayName ?? I18n.Lewis()}%item bigobject 272 %% [#]{I18n.Specialorder_Organic_Mail_Text()}";
         editor.Data[GEORGE_EVENT] = $"{I18n.George_Mail()}%item object {ModEntry.SeedyFertilizerID} 5 %% [#]{I18n.George_Mail_Title()}";
         editor.Data[BOUNTIFUL_BUSH_UNLOCK] = $"{I18n.Bountiful_Bush_Mail()}%item object {ModEntry.BountifulBushID} 3 %% [#]{I18n.Bountiful_Bush_Mail_Title()}";
-
     }
 
     private static void EditLewisDialogueImpl(IAssetData asset)

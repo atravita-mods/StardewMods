@@ -11,7 +11,7 @@
     <Description>Moves the wedding so it's not at 6AM.</Description>
     <Version>0.1.0</Version>
     <UpdateKeys>Nexus:15006</UpdateKeys>
-    <BaseManifest>..\base_dependencies.json</BaseManifest>
+    <BaseManifest>..\cp_dependencies.json</BaseManifest>
   </PropertyGroup>
 
 

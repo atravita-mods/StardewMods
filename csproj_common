@@ -14,6 +14,8 @@
     <MinimumApiVersion>3.18</MinimumApiVersion>
     <UniqueId>$(Authors).$(AssemblyName)</UniqueId>
     <EntryDll>$(AssemblyName).dll</EntryDll>
+    <GamePath>C:\Program Files (x86)\Steam\steamapps\common\Stardew Valley</GamePath>
+    <GameModsPath>$(GamePath)/Mods</GameModsPath>
   </PropertyGroup>
 
   <PropertyGroup>
@@ -27,7 +29,7 @@
   <ItemGroup>
     <PackageReference Include="Pathoschild.Stardew.ModBuildConfig" Version="4.1.0" />
     <PackageReference Include="Pathoschild.Stardew.ModTranslationClassBuilder" Version="2.0.1" />
-    <PackageReference Include="Leclair.Stardew.ModManifestBuilder" Version="2.0.1" />
+    <PackageReference Include="Leclair.Stardew.ModManifestBuilder" Version="2.1.0" />
 
     <PackageReference Include="StyleCop.Analyzers" Version="1.1.118">
         <PrivateAssets>all</PrivateAssets>

@@ -26,6 +26,16 @@ internal static class ConsoleCommands
         }
 
         ReadOnlySpan<char> name = args[0].AsSpan().Trim();
+
+        if (name.Equals("all", StringComparison.OrdinalIgnoreCase))
+        {
+            foreach (BushSizes possibleBush in BushSizesExtensions.GetValues())
+            {
+                Game1.player.addItemToInventoryBool(new InventoryBush(possibleBush, count));
+            }
+            return;
+        }
+
         BushSizes bushIndex;
         if (int.TryParse(name, out int id) && BushSizesExtensions.IsDefined((BushSizes)id))
         {
@@ -37,8 +47,6 @@ internal static class ConsoleCommands
             return;
         }
 
-        InventoryBush bush = new(bushIndex, count);
-
-        Game1.player.addItemToInventoryBool(bush);
+        Game1.player.addItemToInventoryBool(new InventoryBush(bushIndex, count));
     }
 }

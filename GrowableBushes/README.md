@@ -1,6 +1,6 @@
 Growable Bushes
 ===========================
-![Header image](docs/letter.png)
+![Header image](docs/scroll.gif)
 
 Lets you plop down bushes.
 
@@ -20,7 +20,7 @@ Simply delete from your Mods directory.
 ## Compatibility
 
 * Works with Stardew Valley 1.5.6 on Linux/macOS/Windows.
-* Works in single player, multiplayer, and split-screen mode. Should be fine if installed for only one player in multiplayer.
+* Works in single player, multiplayer, and split-screen mode. Absolutely has to be installed by everyone in multiplayer.
 * Should be compatible with most other mods.
 
 ## See also

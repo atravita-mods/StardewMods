@@ -60,6 +60,8 @@ internal sealed class ModEntry : Mod
 
             this.Helper.Events.Input.ButtonPressed += this.OnButtonPressed;
             this.Helper.Events.GameLoop.SaveLoaded += this.SaveLoaded;
+            this.Helper.Events.Player.Warped += this.OnWarped;
+            this.Helper.Events.Player.InventoryChanged += this.OnInventoryChanged;
 
             this.ApplyPatches(new Harmony(this.ModManifest.UniqueID));
 
@@ -78,6 +80,44 @@ internal sealed class ModEntry : Mod
         {
             // this should never happen. I'm using a spacecore type. It should actually just die.
             this.Monitor.Log($"Could not load spacecore's API. This is a fatal error.", LogLevel.Error);
+        }
+    }
+
+    private void OnInventoryChanged(object? sender, InventoryChangedEventArgs e)
+    {
+        if (!e.IsLocalPlayer || Game1.currentLocation is not GameLocation loc)
+        {
+            return;
+        }
+
+        foreach (var item in e.Added)
+        {
+            if (item is InventoryBush bush)
+            {
+                bush.UpdateForNewLocation(loc);
+            }
+        }
+
+        foreach (var item in e.Removed)
+        {
+            if (item is InventoryBush bush)
+            {
+                bush.UpdateForNewLocation(loc);
+            }
+        }
+    }
+
+    private void OnWarped(object? sender, WarpedEventArgs e)
+    {
+        if (e.IsLocalPlayer && e.NewLocation is GameLocation loc)
+        {
+            foreach (var item in e.Player.Items)
+            {
+                if (item is InventoryBush bush)
+                {
+                    bush.UpdateForNewLocation(loc);
+                }
+            }
         }
     }
 

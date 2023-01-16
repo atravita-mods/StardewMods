@@ -36,4 +36,12 @@ internal static class BushSizesExtraExtensions
             _ when BushSizesExtensions.IsDefined(sizes) => (int)sizes,
             _ => Bush.smallBush,
         };
+
+    internal static int GetWidth(this BushSizes sizes)
+        => sizes switch
+        {
+            BushSizes.Small or BushSizes.SmallAlt => 1,
+            BushSizes.Large or BushSizes.TownLarge => 3,
+            _ => 2
+        };
 }

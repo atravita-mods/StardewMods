@@ -5,7 +5,11 @@ using AtraCore.Framework.ReflectionManager;
 using AtraShared.Utils.Extensions;
 
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Graphics.PackedVector;
 
+using StardewValley;
+using StardewValley.Objects;
 using StardewValley.TerrainFeatures;
 
 namespace GrowableBushes.Framework;
@@ -16,9 +20,6 @@ namespace GrowableBushes.Framework;
 [XmlType("Mods_atravita_InventoryBush")]
 public sealed class InventoryBush : SObject
 {
-    [XmlIgnore]
-    private int currentSeason = -1;
-
     [XmlIgnore]
     private Rectangle sourceRect = default;
 
@@ -81,9 +82,22 @@ public sealed class InventoryBush : SObject
 
     #region placement
 
-    // TODO: actually check like boundaries?
-    public override bool canBePlacedHere(GameLocation l, Vector2 tile) => true;
+    /// <inheritdoc />
+    public override bool canBePlacedHere(GameLocation l, Vector2 tile)
+    {
+        int width = ((BushSizes)this.ParentSheetIndex).GetWidth();
 
+        for (int y = (int)tile.Y; y < (int)tile.Y + width; y++)
+        {
+            if (!IsTilePlaceableForBush(l, (int)tile.X, y))
+            {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    /// <inheritdoc />
     public override bool placementAction(GameLocation location, int x, int y, Farmer? who = null)
     {
         BushSizes size = (BushSizes)this.ParentSheetIndex;
@@ -120,8 +134,149 @@ public sealed class InventoryBush : SObject
 
     #endregion
 
-    // TODO: draw, draw in menu, draw while holding overhead. SObject has too many draw methods XD
-    // placement bounds too!
+    #region draw
+
+    /// <inheritdoc />
+    public override void draw(SpriteBatch spriteBatch, int x, int y, float alpha = 1)
+    {
+        float draw_layer = Math.Max(
+            0f,
+            ((y * 64) + 40) / 10000f) + (x * 1E-05f);
+        this.draw(spriteBatch, x, y, draw_layer, alpha);
+    }
+
+    /// <inheritdoc />
+    public override void draw(SpriteBatch spriteBatch, int xNonTile, int yNonTile, float layerDepth, float alpha = 1)
+    {
+        if (this.sourceRect == default)
+        {
+            int season = GetSeason(Game1.currentLocation);
+            this.sourceRect = this.GetSourceRectForSeason(season);
+        }
+
+        if (this.sourceRect != default)
+        {
+            Vector2 position = Game1.GlobalToLocal(Game1.viewport, new Vector2(xNonTile * 64, (yNonTile * 64) - (this.sourceRect.Height * 4) + 64));
+            spriteBatch.Draw(
+                texture: Bush.texture.Value,
+                position,
+                sourceRectangle: this.sourceRect,
+                color: Color.White * alpha,
+                rotation: 0f,
+                origin: Vector2.Zero,
+                scale: Vector2.One * Game1.pixelZoom,
+                effects: SpriteEffects.None,
+                layerDepth);
+        }
+    }
+
+    /// <inheritdoc />
+    public override void drawPlacementBounds(SpriteBatch spriteBatch, GameLocation location)
+    {
+        int X = (int)Game1.GetPlacementGrabTile().X * 64;
+        int Y = (int)Game1.GetPlacementGrabTile().Y * 64;
+        Game1.isCheckingNonMousePlacement = !Game1.IsPerformingMousePlacement();
+        if (Game1.isCheckingNonMousePlacement)
+        {
+            Vector2 nearbyValidPlacementPosition = Utility.GetNearbyValidPlacementPosition(Game1.player, location, this, X, Y);
+            X = (int)nearbyValidPlacementPosition.X;
+            Y = (int)nearbyValidPlacementPosition.Y;
+        }
+
+        int width = ((BushSizes)this.ParentSheetIndex).GetWidth();
+        bool canPlaceHere = Utility.playerCanPlaceItemHere(location, this, X, Y, Game1.player) && Utility.withinRadiusOfPlayer(X, Y, 1, Game1.player);
+        for (int x_offset = 0; x_offset < width; x_offset++)
+        {
+            spriteBatch.Draw(
+                texture: Game1.mouseCursors,
+                new Vector2((((X / 64) + x_offset) * 64) - Game1.viewport.X, Y - Game1.viewport.Y),
+                new Rectangle(canPlaceHere ? 194 : 210, 388, 16, 16),
+                color: Color.White,
+                rotation: 0f,
+                origin: Vector2.Zero,
+                scale: 4f,
+                effects: SpriteEffects.None,
+                layerDepth: 0.01f);
+        }
+        this.draw(spriteBatch, X / 64, Y / 64, 0.5f);
+    }
+
+    /// <inheritdoc />
+    public override void drawAsProp(SpriteBatch b)
+    {
+        this.draw(b, (int)this.TileLocation.X, (int)this.TileLocation.Y);
+    }
+
+    public override void drawInMenu(SpriteBatch spriteBatch, Vector2 location, float scaleSize, float transparency, float layerDepth, StackDrawType drawStackNumber, Color color, bool drawShadow)
+    {
+        if (this.sourceRect == default)
+        {
+            int season = GetSeason(Game1.currentLocation);
+            this.sourceRect = this.GetSourceRectForSeason(season);
+        }
+
+        if (this.sourceRect != default)
+        {
+            spriteBatch.Draw(
+                Bush.texture.Value,
+                location + new Vector2(this.sourceRect.Width < this.sourceRect.Height && (BushSizes)this.ParentSheetIndex != BushSizes.Medium ? 32f : 16f, 32f),
+                this.sourceRect,
+                color * transparency,
+                0f,
+                new Vector2(8f, 16f),
+                this.getScaleSize() * scaleSize,
+                SpriteEffects.None,
+                layerDepth);
+            if (((drawStackNumber == StackDrawType.Draw && this.maximumStackSize() > 1 && this.Stack > 1) || drawStackNumber == StackDrawType.Draw_OneInclusive)
+                && scaleSize > 0.3f && this.Stack != int.MaxValue)
+            {
+                Utility.drawTinyDigits(
+                    toDraw: this.stack.Value,
+                    b: spriteBatch,
+                    position: location + new Vector2((float)(64 - Utility.getWidthOfTinyDigitString(this.stack, 3f * scaleSize)) + 3f * scaleSize, 64f - 18f * scaleSize + 2f),
+                    scale: 3f * scaleSize,
+                    layerDepth: 1f,
+                    c: Color.White);
+            }
+        }
+    }
+
+    private float getScaleSize() =>
+        (BushSizes)this.ParentSheetIndex switch
+        {
+            BushSizes.Large or BushSizes.TownLarge=> 1f,
+            BushSizes.Medium => 1.2f,
+            _ => 2f
+        };
+
+    /// <inheritdoc />
+    public override void drawWhenHeld(SpriteBatch spriteBatch, Vector2 objectPosition, Farmer f)
+    {
+        if (this.sourceRect == default)
+        {
+            int season = GetSeason(f.currentLocation);
+            this.sourceRect = this.GetSourceRectForSeason(season);
+        }
+        if (this.sourceRect != default)
+        {
+            int xOffset = (this.sourceRect.Width - 16) * 2;
+            objectPosition.X -= xOffset;
+            int yOffset = Math.Max(this.sourceRect.Height - 32, 0);
+            objectPosition.Y -= yOffset;
+            spriteBatch.Draw(
+                texture: Bush.texture.Value,
+                position: objectPosition,
+                sourceRectangle: this.sourceRect,
+                color: Color.White,
+                rotation: 0f,
+                origin: Vector2.Zero,
+                scale: 4f,
+                effects: SpriteEffects.None,
+                layerDepth: Math.Max(0f, (f.getStandingY() + 3) / 10000f));
+        }
+    }
+
+    #endregion
 
     #region misc
 
@@ -139,6 +294,9 @@ public sealed class InventoryBush : SObject
 
     /// <inheritdoc />
     public override Color getCategoryColor() => Color.Green;
+
+    /// <inheritdoc />
+    public override bool isPlaceable() => true;
 
     /// <inheritdoc />
     public override bool canBePlacedInWater() => false;
@@ -194,10 +352,40 @@ public sealed class InventoryBush : SObject
 
     #region helpers
 
+    internal void UpdateForNewLocation(GameLocation location)
+    {
+        int season = GetSeason(location);
+        this.sourceRect = GetSourceRectForSeason(season);
+    }
+
+    private static bool IsTilePlaceableForBush(GameLocation location, int tileX, int tileY)
+    {
+        if (location is null)
+        {
+            return false;
+        }
+
+        if (location.doesTileHaveProperty(tileX, tileY, "Water", "Back") is not null)
+        {
+            return false;
+        }
+
+        foreach (Farmer farmer in location.farmers)
+        {
+            if (farmer.GetBoundingBox().Intersects(new Rectangle(tileX * 64, tileY * 64, 64, 64)))
+            {
+                return false;
+            }
+        }
+
+        Vector2 tile = new(tileX, tileY);
+        return !location.isTileOccupied(tile);
+    }
+
     private static int GetSeason(GameLocation loc)
         => Utility.getSeasonNumber(Game1.GetSeasonForLocation(loc));
-    
-    // derived from Bush.setUpSourceREct
+
+    // derived from Bush.setUpSourceRect
     private Rectangle GetSourceRectForSeason(int season)
     {
         switch ((BushSizes)this.ParentSheetIndex)
@@ -218,10 +406,15 @@ public sealed class InventoryBush : SObject
                     2 => new Rectangle(48, 128, 48, 48),
                     _ => new Rectangle(0, 176, 48, 48),
                 };
+            case BushSizes.TownLarge:
+                return new Rectangle(48, 176, 48, 48);
+            case BushSizes.Harvested:
+                return new Rectangle(0, 320, 32, 32);
+            case BushSizes.Walnut:
+                return new Rectangle(32, 320, 32, 32);
             default:
                 return default;
         }
     }
-
     #endregion
 }

@@ -36,7 +36,7 @@ internal static class BushToolActionTranspiler
             .AdvanceToStoredLabel()
             .DefineAndAttachLabel(out Label jumpPoint)
             .Pop()
-            .GetLabels(out var labelsToMove)
+            .GetLabels(out IList<Label>? labelsToMove)
             .Insert(new CodeInstruction[]
             {
                 new(OpCodes.Ldarg_0),

@@ -245,7 +245,7 @@ public sealed class InventoryBush : SObject
         (BushSizes)this.ParentSheetIndex switch
         {
             BushSizes.Large or BushSizes.TownLarge=> 1f,
-            BushSizes.Medium => 1.2f,
+            BushSizes.Medium => 1.4f,
             _ => 2f
         };
 
@@ -279,6 +279,13 @@ public sealed class InventoryBush : SObject
     #endregion
 
     #region misc
+
+    public override Item getOne()
+    {
+        InventoryBush bush = new((BushSizes)this.ParentSheetIndex, 1);
+        bush._GetOneFrom(this);
+        return bush;
+    }
 
     /// <inheritdoc />
     public override bool canBeShipped() => false;
@@ -355,7 +362,7 @@ public sealed class InventoryBush : SObject
     internal void UpdateForNewLocation(GameLocation location)
     {
         int season = GetSeason(location);
-        this.sourceRect = GetSourceRectForSeason(season);
+        this.sourceRect = this.GetSourceRectForSeason(season);
     }
 
     private static bool IsTilePlaceableForBush(GameLocation location, int tileX, int tileY)
@@ -407,7 +414,12 @@ public sealed class InventoryBush : SObject
                     _ => new Rectangle(0, 176, 48, 48),
                 };
             case BushSizes.TownLarge:
-                return new Rectangle(48, 176, 48, 48);
+                return season switch
+                {
+                    0 or 1 => new Rectangle(48, 176, 48, 48),
+                    2 => new Rectangle(48, 128, 48, 48),
+                    _ => new Rectangle(0, 176, 48, 48),
+                };
             case BushSizes.Harvested:
                 return new Rectangle(0, 320, 32, 32);
             case BushSizes.Walnut:

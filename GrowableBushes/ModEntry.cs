@@ -10,6 +10,8 @@ using GrowableBushes.Framework;
 
 using HarmonyLib;
 
+using Microsoft.Xna.Framework;
+
 using StardewModdingAPI.Events;
 
 using StardewValley.TerrainFeatures;
@@ -48,8 +50,10 @@ internal sealed class ModEntry : Mod
 
         helper.Events.GameLoop.GameLaunched += this.OnGameLaunched;
         ConsoleCommands.RegisterCommands(helper.ConsoleCommands);
+        ShopManager.Initialize(helper.GameContent);
     }
 
+    /// <inheritdoc cref="IGameLoopEvents.GameLaunched"/>
     private void OnGameLaunched(object? sender, GameLaunchedEventArgs e)
     {
         IntegrationHelper helper = new(this.Monitor, this.Helper.Translation, this.Helper.ModRegistry, LogLevel.Error);
@@ -58,10 +62,14 @@ internal sealed class ModEntry : Mod
         {
             api.RegisterSerializerType(typeof(InventoryBush));
 
-            this.Helper.Events.Input.ButtonPressed += this.OnButtonPressed;
             this.Helper.Events.GameLoop.SaveLoaded += this.SaveLoaded;
             this.Helper.Events.Player.Warped += this.OnWarped;
             this.Helper.Events.Player.InventoryChanged += this.OnInventoryChanged;
+
+            // shop
+            this.Helper.Events.Content.AssetRequested += static (_, e) => ShopManager.OnAssetRequested(e);
+            this.Helper.Events.GameLoop.DayEnding += static (_, e) => ShopManager.OnDayEnd(e);
+            this.Helper.Events.Input.ButtonPressed += (_, e) => ShopManager.OnButtonPressed(e, this.Helper.Input);
 
             this.ApplyPatches(new Harmony(this.ModManifest.UniqueID));
 
@@ -73,7 +81,12 @@ internal sealed class ModEntry : Mod
                     reset: static () => Config = new(),
                     save: () => this.Helper.AsyncWriteConfig(this.Monitor, Config))
                 .AddParagraph(I18n.ModDescription)
-                .GenerateDefaultGMCM(static () => Config);
+                .GenerateDefaultGMCM(static () => Config)
+                .AddTextOption(
+                    name: I18n.ShopLocation,
+                    getValue: static () => Config.ShopLocation.X + ", " + Config.ShopLocation.Y,
+                    setValue: static (str) => Config.ShopLocation = str.TryParseVector2(out Vector2 vec) ? vec : new Vector2(1, 7),
+                    tooltip: I18n.ShopLocation_Description);
             }
         }
         else
@@ -83,6 +96,7 @@ internal sealed class ModEntry : Mod
         }
     }
 
+    /// <inheritdoc cref="IPlayerEvents.InventoryChanged"/>
     private void OnInventoryChanged(object? sender, InventoryChangedEventArgs e)
     {
         if (!e.IsLocalPlayer || Game1.currentLocation is not GameLocation loc)
@@ -90,7 +104,7 @@ internal sealed class ModEntry : Mod
             return;
         }
 
-        foreach (var item in e.Added)
+        foreach (Item item in e.Added)
         {
             if (item is InventoryBush bush)
             {
@@ -98,7 +112,7 @@ internal sealed class ModEntry : Mod
             }
         }
 
-        foreach (var item in e.Removed)
+        foreach (Item item in e.Removed)
         {
             if (item is InventoryBush bush)
             {
@@ -107,11 +121,12 @@ internal sealed class ModEntry : Mod
         }
     }
 
+    /// <inheritdoc cref="IPlayerEvents.Warped"/>
     private void OnWarped(object? sender, WarpedEventArgs e)
     {
         if (e.IsLocalPlayer && e.NewLocation is GameLocation loc)
         {
-            foreach (var item in e.Player.Items)
+            foreach (Item? item in e.Player.Items)
             {
                 if (item is InventoryBush bush)
                 {
@@ -137,16 +152,6 @@ internal sealed class ModEntry : Mod
             ModMonitor.Log(string.Format(ErrorMessageConsts.HARMONYCRASH, ex), LogLevel.Error);
         }
         harmony.Snitch(this.Monitor, harmony.Id, transpilersOnly: true);
-    }
-
-#warning - remove this debug method!
-    private void OnButtonPressed(object? sender, ButtonPressedEventArgs e)
-    {
-        if (Context.IsPlayerFree && e.Button == SButton.L)
-        {
-            InventoryBush bush = new(BushSizes.Small, 1);
-            Game1.player.addItemByMenuIfNecessaryElseHoldUp(bush);
-        }
     }
 
     #region migration

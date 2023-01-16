@@ -1,6 +1,10 @@
 ﻿Changelog
 ============
 
+#### Version 0.2.0
+* Fix issue where code that picked a random tile in a map would confuse height and width.
+* Updated dependencies...which broke backwards compat **again**.
+
 #### Version 0.1.4
 * Refactored `WeightedManager`.
 * Couple of extra helper functions.

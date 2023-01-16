@@ -60,7 +60,7 @@ public static partial class SeasonExtensions
         StardewSeasons season = StardewSeasons.None;
         foreach (string? seasonstring in seasonList)
         {
-            if (StardewSeasonsExtensions.TryParse(seasonstring.Trim(), ignoreCase: true, out StardewSeasons s))
+            if (StardewSeasonsExtensions.TryParse(seasonstring.AsSpan().Trim(), out StardewSeasons s, ignoreCase: true))
             {
                 season |= s;
             }
@@ -75,7 +75,7 @@ public static partial class SeasonExtensions
         seasons = StardewSeasons.None;
         foreach (string? seasonstring in seasonList)
         {
-            if (StardewSeasonsExtensions.TryParse(seasonstring.Trim(), ignoreCase: true, out StardewSeasons s))
+            if (StardewSeasonsExtensions.TryParse(seasonstring.AsSpan().Trim(), out StardewSeasons s, ignoreCase: true))
             {
                 seasons |= s;
             }

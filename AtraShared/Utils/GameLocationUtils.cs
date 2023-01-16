@@ -229,7 +229,7 @@ public static class GameLocationUtils
         ystart = Math.Max(ystart, 1);
 
         xend = Math.Clamp(xend, xstart, location.Map.Layers[0].LayerWidth - 2);
-        yend = Math.Clamp(yend, ystart, location.Map.Layers[0].LayerWidth - 2);
+        yend = Math.Clamp(yend, ystart, location.Map.Layers[0].LayerHeight - 2);
 
         int count = (xend - xstart) * (yend - ystart);
 

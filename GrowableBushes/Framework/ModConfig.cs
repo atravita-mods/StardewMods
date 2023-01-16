@@ -13,4 +13,6 @@ internal sealed class ModConfig
 
     [GMCMDefaultIgnore]
     public Vector2 ShopLocation { get; set; } = new(1, 7);
+
+    public bool ShouldNPCsTrampleBushes { get; set; } = true;
 }

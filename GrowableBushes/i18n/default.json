@@ -8,9 +8,9 @@
   "category": "Bush",
 
   "bush.small": "Small Bush",
+  "bush.small.description":  "Place to grow a small bush.",
   "bush.medium": "Medium Bush",
+  "bush.medium.description": "Place to grow a medium bush.",
   "bush.large": "Large Bush",
-
-  "bush.small.alt": "Alternative Small Bush",
-  "bush.town": "Town Bush"
+  "bush.large.description":  "Place to grow a large bush."
 }

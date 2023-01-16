@@ -11,6 +11,8 @@ using HarmonyLib;
 
 using StardewModdingAPI.Events;
 
+using AtraUtils = AtraShared.Utils.Utils;
+
 namespace GrowableBushes;
 
 // TODO:
@@ -30,14 +32,21 @@ internal sealed class ModEntry : Mod
     /// </summary>
     internal static IMonitor ModMonitor { get; private set; } = null!;
 
+    /// <summary>
+    /// Gets the config instance for this mod.
+    /// </summary>
+    internal static ModConfig Config { get; private set; } = null!;
+
     /// <inheritdoc />
     public override void Entry(IModHelper helper)
     {
         I18n.Init(helper.Translation);
 
         ModMonitor = this.Monitor;
+        Config = AtraUtils.GetConfigOrDefault<ModConfig>(helper, this.Monitor);
 
         helper.Events.GameLoop.GameLaunched += this.OnGameLaunched;
+        ConsoleCommands.RegisterCommands(helper.ConsoleCommands);
     }
 
     private void OnGameLaunched(object? sender, GameLaunchedEventArgs e)
@@ -52,6 +61,17 @@ internal sealed class ModEntry : Mod
             this.Helper.Events.GameLoop.SaveLoaded += this.SaveLoaded;
 
             this.ApplyPatches(new Harmony(this.ModManifest.UniqueID));
+
+            GMCMHelper gmcmHelper = new(this.Monitor, this.Helper.Translation, this.Helper.ModRegistry, this.ModManifest);
+
+            if (gmcmHelper.TryGetAPI())
+            {
+                gmcmHelper.Register(
+                    reset: static () => Config = new(),
+                    save: () => this.Helper.AsyncWriteConfig(this.Monitor, Config))
+                .AddParagraph(I18n.ModDescription)
+                .GenerateDefaultGMCM(static () => Config);
+            }
         }
         else
         {
@@ -83,7 +103,7 @@ internal sealed class ModEntry : Mod
     {
         if (Context.IsPlayerFree && e.Button == SButton.L)
         {
-            InventoryBush bush = new(0, 1);
+            InventoryBush bush = new(BushSizes.Medium, 1);
             Game1.player.addItemByMenuIfNecessaryElseHoldUp(bush);
         }
     }

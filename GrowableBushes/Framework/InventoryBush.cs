@@ -16,7 +16,10 @@ namespace GrowableBushes.Framework;
 [XmlType("Mods_atravita_InventoryBush")]
 public sealed class InventoryBush : SObject
 {
+    [XmlIgnore]
     private int currentSeason = -1;
+
+    [XmlIgnore]
     private Rectangle sourceRect = default;
 
     /// <summary>
@@ -30,6 +33,7 @@ public sealed class InventoryBush : SObject
     internal const string BushModData = "atravita.InventoryBush.Planted";
 
     /// <summary>
+    /// Initializes a new instance of the <see cref="InventoryBush"/> class.
     /// Constructor for the serializer.
     /// </summary>
     public InventoryBush() : base() {}
@@ -39,10 +43,14 @@ public sealed class InventoryBush : SObject
     /// </summary>
     /// <param name="whichBush">Which bush this inventory bush corresponds to.</param>
     /// <param name="initialStack">Initial stack of bushes.</param>
-    public InventoryBush(int whichBush, int initialStack)
-        : base(whichBush, initialStack, false, -1, 0)
+    public InventoryBush(BushSizes whichBush, int initialStack)
+        : base((int)whichBush, initialStack, false, -1, 0)
     {
-        this.ParentSheetIndex = Math.Clamp(whichBush, 0, BushSizesExtensions.Length - 1);
+        if (!BushSizesExtensions.IsDefined(whichBush))
+        {
+            ModEntry.ModMonitor.Log($"Bush {whichBush.ToStringFast()} doesn't seem to be a valid bush? Setting as smol bush.", LogLevel.Error);
+            this.ParentSheetIndex = 0;
+        }
 
         this.bigCraftable.Value = true;
         this.Name = BushPrefix + ((BushSizes)this.ParentSheetIndex).ToStringFast();
@@ -82,19 +90,6 @@ public sealed class InventoryBush : SObject
         Vector2 placementTile = new (x / Game1.tileSize, y / Game1.tileSize);
         Bush bush = new (placementTile, size.ToStardewBush(), location);
 
-        switch (size)
-        {
-            case BushSizes.AlternativeSmall:
-                bush.tileSheetOffset.Value = 1;
-                break;
-            case BushSizes.Town:
-                bush.townBush.Value = true;
-                break;
-            case BushSizes.Medium:
-                bush.townBush.Value = false;
-                break;
-        }
-
         bush.modData.SetBool(BushModData, true);
         location.largeTerrainFeatures.Add(bush);
         location.playSound("thudStep");
@@ -125,14 +120,44 @@ public sealed class InventoryBush : SObject
     public override Color getCategoryColor() => Color.Green;
 
     /// <inheritdoc />
+    public override bool canBePlacedInWater() => false;
+
+    /// <inheritdoc />
+    public override bool canStackWith(ISalable other)
+    {
+        if (other is not InventoryBush otherBush)
+        {
+            return false;
+        }
+        return this.ParentSheetIndex == otherBush.ParentSheetIndex;
+    }
+
+    /// <inheritdoc />
     protected override string loadDisplayName() => (BushSizes)this.ParentSheetIndex switch
     {
         BushSizes.Small => I18n.Bush_Small(),
         BushSizes.Medium => I18n.Bush_Medium(),
         BushSizes.Large => I18n.Bush_Large(),
-        BushSizes.AlternativeSmall => I18n.Bush_Small_Alt(),
-        _ => I18n.Bush_Town(),
+        _ => "Error Bush",
     };
+
+    /// <inheritdoc />
+    public override string getDescription() => (BushSizes)this.ParentSheetIndex switch
+    {
+        BushSizes.Small => I18n.Bush_Small_Description(),
+        BushSizes.Medium => I18n.Bush_Medium_Description(),
+        BushSizes.Large => I18n.Bush_Large_Description(),
+        _ => "This should have not have happened. What. You should probably just trash this."
+    };
+
+    /// <inheritdoc />
+    protected override void _PopulateContextTags(HashSet<string> tags)
+    {
+        tags.Add("category_inventory_bush");
+        tags.Add($"id_inventoryBush_{this.ParentSheetIndex}");
+        tags.Add("quality_none");
+        tags.Add("item_" + this.SanitizeContextTag(this.Name));
+    }
 
     #endregion
 
@@ -140,17 +165,19 @@ public sealed class InventoryBush : SObject
 
     private static int GetSeason(GameLocation loc)
         => Utility.getSeasonNumber(Game1.GetSeasonForLocation(loc));
-    /*
+    
     private Rectangle GetSourceRectForSeason(int season)
     {
-        switch (this.ParentSheetIndex)
+        switch ((BushSizes)this.ParentSheetIndex)
         {
-            case Bush.smallBush:
-                return 
-            case Bush.mediumBush:
+            case BushSizes.Small:
+                return new Rectangle(season * 32, 224, 16, 32);
+            case BushSizes.Medium:
+            case BushSizes.Large:
             default:
+                return default;
         }
-    }*/
+    }
 
     #endregion
 }

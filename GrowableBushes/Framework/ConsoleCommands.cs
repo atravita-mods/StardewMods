@@ -14,7 +14,7 @@ internal static class ConsoleCommands
 
     private static void AddBushToInventory(string command, string[] args)
     {
-        if (args.Length is not 1 or 2)
+        if (args.Length != 1 && args.Length != 2)
         {
             ModEntry.ModMonitor.Log("Expected one or two arguments", LogLevel.Error);
             return;
@@ -25,6 +25,20 @@ internal static class ConsoleCommands
             count = 1;
         }
 
-        //Game1.player.addItemToInventoryBool();
+        ReadOnlySpan<char> name = args[0].AsSpan().Trim();
+        BushSizes bushIndex;
+        if (int.TryParse(name, out int id) && BushSizesExtensions.IsDefined((BushSizes)id))
+        {
+            bushIndex = (BushSizes)id;
+        }
+        else if (!BushSizesExtensions.TryParse(name, out bushIndex, ignoreCase: true))
+        {
+            ModEntry.ModMonitor.Log($"{name.ToString()} is not a valid bush.", LogLevel.Error);
+            return;
+        }
+
+        InventoryBush bush = new(bushIndex, count);
+
+        Game1.player.addItemToInventoryBool(bush);
     }
 }

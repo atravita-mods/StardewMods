@@ -19,7 +19,7 @@ internal static class BushDestroyablePatches
         {
             try
             {
-                if (__instance.modData?.GetBool(InventoryBush.BushModData) == true)
+                if (ModEntry.Config.CanAxeAllBushes || __instance.modData?.GetBool(InventoryBush.BushModData) == true)
                 {
                     __result = true;
                 }

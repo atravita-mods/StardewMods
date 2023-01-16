@@ -5,12 +5,30 @@
   "api-not-found": "{{APIID}} not found, integration disabled.",
   "api-too-old": "Please update {{apiName}}({{APIID}}) to at least version {{minversion}}. Current version {{currentversion}}. Integration disabled.",
 
+  // GMCM
+  "CanAxeAllBushes.title": "Can Axe All Bushes",
+  "CanAxeAllBushes.description": "Enable to allow axing of all bushes.",
+
+  // item names and descriptions
   "category": "Bush",
 
   "bush.small": "Small Bush",
-  "bush.small.description":  "Place to grow a small bush.",
+  "bush.small.description": "Place to grow a small bush.",
   "bush.medium": "Medium Bush",
   "bush.medium.description": "Place to grow a medium bush.",
   "bush.large": "Large Bush",
-  "bush.large.description":  "Place to grow a large bush."
+  "bush.large.description": "Place to grow a large bush.",
+
+  "bush.small.alt": "Alternative Small Bush",
+  "bush.small.alt.description": "Place to grow an alternative small bush.",
+  "bush.town": "Town Bush",
+  "bush.town.description": "Place to grow a town bush.",
+  "bush.town.big": "Large Town Bush",
+  "bush.town.big.description": "Place to grow a large town bush",
+
+  "bush.walnut": "Walnut Bush",
+  "bush.walnut.description": "Place to grow a decorative walnut bush",
+
+  "bush.harvested": "Harvested Bush",
+  "bush.harvested.description": "Place to grow a decorative, already harvested walnut bush."
 }

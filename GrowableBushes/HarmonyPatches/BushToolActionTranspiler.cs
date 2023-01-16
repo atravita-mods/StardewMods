@@ -1,0 +1,57 @@
+﻿using System.Reflection;
+using System.Reflection.Emit;
+using AtraCore.Framework.ReflectionManager;
+using AtraShared.Utils.Extensions;
+using AtraShared.Utils.HarmonyHelper;
+using GrowableBushes.Framework;
+using HarmonyLib;
+using StardewValley.TerrainFeatures;
+
+namespace GrowableBushes.HarmonyPatches;
+
+[HarmonyPatch(typeof(Bush))]
+internal static class BushToolActionTranspiler
+{
+    private static bool IsPlacedBush(Bush bush)
+        => bush.modData?.ContainsKey(InventoryBush.BushModData) == true;
+
+    [HarmonyPatch(nameof(Bush.performToolAction))]
+    [SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1116:Split parameters should start on line after declaration", Justification = "Reviewed.")]
+    private static IEnumerable<CodeInstruction>? Transpiler(IEnumerable<CodeInstruction> instructions, ILGenerator gen, MethodBase original)
+    {
+        try
+        {
+            ILHelper helper = new(original, instructions, ModEntry.ModMonitor, gen);
+            helper.FindNext(new CodeInstructionWrapper[]
+            {
+                OpCodes.Ldarg_0,
+                (OpCodes.Ldfld, typeof(Bush).GetCachedField(nameof(Bush.size), ReflectionCache.FlagTypes.InstanceFlags)),
+                OpCodes.Call, //op_implicit
+                OpCodes.Ldc_I4_4,
+                OpCodes.Bne_Un_S,
+            })
+            .Push()
+            .Advance(4)
+            .StoreBranchDest()
+            .AdvanceToStoredLabel()
+            .DefineAndAttachLabel(out Label jumpPoint)
+            .Pop()
+            .GetLabels(out var labelsToMove)
+            .Insert(new CodeInstruction[]
+            {
+                new(OpCodes.Ldarg_0),
+                new(OpCodes.Call, typeof(BushToolActionTranspiler).GetCachedMethod(nameof(IsPlacedBush), ReflectionCache.FlagTypes.StaticFlags)),
+                new(OpCodes.Brtrue, jumpPoint),
+            }, withLabels: labelsToMove);
+            
+            // helper.Print();
+            return helper.Render();
+        }
+        catch (Exception ex)
+        {
+            ModEntry.ModMonitor.Log($"Mod crashed while transpiling {original.FullDescription()}:\n\n{ex}", LogLevel.Error);
+            original.Snitch(ModEntry.ModMonitor);
+        }
+        return null;
+    }
+}

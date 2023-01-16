@@ -30,7 +30,7 @@ public sealed class InventoryBush : SObject
     /// <summary>
     /// The moddata string used to mark the bushes planted with this mod.
     /// </summary>
-    internal const string BushModData = "atravita.InventoryBush.Planted";
+    internal const string BushModData = "atravita.InventoryBush.Type";
 
     /// <summary>
     /// Initializes a new instance of the <see cref="InventoryBush"/> class.
@@ -49,10 +49,11 @@ public sealed class InventoryBush : SObject
         if (!BushSizesExtensions.IsDefined(whichBush))
         {
             ModEntry.ModMonitor.Log($"Bush {whichBush.ToStringFast()} doesn't seem to be a valid bush? Setting as smol bush.", LogLevel.Error);
-            this.ParentSheetIndex = 0;
+            this.ParentSheetIndex = (int)BushSizes.Small;
         }
 
         this.bigCraftable.Value = true;
+        this.CanBeSetDown = true;
         this.Name = BushPrefix + ((BushSizes)this.ParentSheetIndex).ToStringFast();
         this.Edibility = inedible;
         this.Price = 0;
@@ -90,7 +91,27 @@ public sealed class InventoryBush : SObject
         Vector2 placementTile = new (x / Game1.tileSize, y / Game1.tileSize);
         Bush bush = new (placementTile, size.ToStardewBush(), location);
 
-        bush.modData.SetBool(BushModData, true);
+        // set metadata.
+        switch (size)
+        {
+            case BushSizes.SmallAlt:
+                bush.tileSheetOffset.Value = 1;
+                break;
+            case BushSizes.Harvested:
+                bush.tileSheetOffset.Value = 0;
+                break;
+            case BushSizes.Medium:
+            case BushSizes.Large:
+                bush.townBush.Value = false;
+                break;
+            case BushSizes.Town:
+            case BushSizes.TownLarge:
+                bush.townBush.Value = true;
+                break;
+        }
+
+        bush.setUpSourceRect();
+        bush.modData.SetEnum(BushModData, size);
         location.largeTerrainFeatures.Add(bush);
         location.playSound("thudStep");
         BushShakeMethod(bush, placementTile, true);
@@ -138,6 +159,11 @@ public sealed class InventoryBush : SObject
         BushSizes.Small => I18n.Bush_Small(),
         BushSizes.Medium => I18n.Bush_Medium(),
         BushSizes.Large => I18n.Bush_Large(),
+        BushSizes.SmallAlt => I18n.Bush_Small_Alt(),
+        BushSizes.Town => I18n.Bush_Town(),
+        BushSizes.TownLarge => I18n.Bush_Town_Big(),
+        BushSizes.Walnut => I18n.Bush_Walnut(),
+        BushSizes.Harvested => I18n.Bush_Harvested(),
         _ => "Error Bush",
     };
 
@@ -147,6 +173,11 @@ public sealed class InventoryBush : SObject
         BushSizes.Small => I18n.Bush_Small_Description(),
         BushSizes.Medium => I18n.Bush_Medium_Description(),
         BushSizes.Large => I18n.Bush_Large_Description(),
+        BushSizes.SmallAlt => I18n.Bush_Small_Alt_Description(),
+        BushSizes.Town => I18n.Bush_Town_Description(),
+        BushSizes.TownLarge => I18n.Bush_Town_Big_Description(),
+        BushSizes.Walnut => I18n.Bush_Walnut_Description(),
+        BushSizes.Harvested => I18n.Bush_Harvested_Description(),
         _ => "This should have not have happened. What. You should probably just trash this."
     };
 
@@ -166,14 +197,27 @@ public sealed class InventoryBush : SObject
     private static int GetSeason(GameLocation loc)
         => Utility.getSeasonNumber(Game1.GetSeasonForLocation(loc));
     
+    // derived from Bush.setUpSourceREct
     private Rectangle GetSourceRectForSeason(int season)
     {
         switch ((BushSizes)this.ParentSheetIndex)
         {
             case BushSizes.Small:
                 return new Rectangle(season * 32, 224, 16, 32);
+            case BushSizes.SmallAlt:
+                return new Rectangle((season * 32) + 16, 224, 16, 32);
             case BushSizes.Medium:
+                int y = Math.DivRem(season * 64, Bush.texture.Value.Bounds.Width, out int x);
+                return new Rectangle(x, y, 32, 48);
+            case BushSizes.Town:
+                return new Rectangle(season * 32, 96, 32, 32);
             case BushSizes.Large:
+                return season switch
+                {
+                    0 or 1 => new Rectangle(0, 128, 48, 48),
+                    2 => new Rectangle(48, 128, 48, 48),
+                    _ => new Rectangle(0, 176, 48, 48),
+                };
             default:
                 return default;
         }

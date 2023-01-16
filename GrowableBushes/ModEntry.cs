@@ -3,6 +3,7 @@
 using AtraShared.ConstantsAndEnums;
 using AtraShared.Integrations;
 using AtraShared.MigrationManager;
+using AtraShared.Utils;
 using AtraShared.Utils.Extensions;
 
 using GrowableBushes.Framework;
@@ -11,14 +12,14 @@ using HarmonyLib;
 
 using StardewModdingAPI.Events;
 
+using StardewValley.TerrainFeatures;
+
 using AtraUtils = AtraShared.Utils.Utils;
 
 namespace GrowableBushes;
 
 // TODO:
-// * Placement code for bushes.
 // * Override all the necessary draw methods.
-// * Make sure you can axe a bush (in case you want to move it).
 // * Bushes for sale.
 // * Smart Building compat.
 
@@ -103,12 +104,13 @@ internal sealed class ModEntry : Mod
     {
         if (Context.IsPlayerFree && e.Button == SButton.L)
         {
-            InventoryBush bush = new(BushSizes.Medium, 1);
+            InventoryBush bush = new(BushSizes.Small, 1);
             Game1.player.addItemByMenuIfNecessaryElseHoldUp(bush);
         }
     }
 
     #region migration
+
     /// <inheritdoc cref="IGameLoopEvents.SaveLoaded"/>
     /// <remarks>Used to load in this mod's data models.</remarks>
     private void SaveLoaded(object? sender, SaveLoadedEventArgs e)
@@ -128,6 +130,27 @@ internal sealed class ModEntry : Mod
         else
         {
             this.migrator = null;
+        }
+
+        if (Context.IsMainPlayer)
+        {
+            foreach (GameLocation loc in GameLocationUtils.YieldAllLocations())
+            {
+                foreach (LargeTerrainFeature? feature in loc.largeTerrainFeatures)
+                {
+                    if (feature is not Bush bush || !bush.modData.ContainsKey(InventoryBush.BushModData))
+                    {
+                        continue;
+                    }
+
+                    BushSizes size = bush.modData.GetEnum(InventoryBush.BushModData, BushSizes.Small);
+                    if (size == BushSizes.SmallAlt)
+                    {
+                        bush.tileSheetOffset.Value = 1;
+                        bush.setUpSourceRect();
+                    }
+                }
+            }
         }
     }
 

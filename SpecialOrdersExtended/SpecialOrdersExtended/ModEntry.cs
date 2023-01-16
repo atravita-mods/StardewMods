@@ -29,6 +29,8 @@ internal sealed class ModEntry : Mod
     private static readonly string[] ModsThatHandleTheBoard = new string[] { "Rafseazz.RidgesideVillage", "PurrplingCat.QuestFramework", "Esca.EMP" };
     private bool hasModsThatHandleBoard = false;
 
+    private PlayerTeamWatcher? watcher;
+
     /// <summary>
     /// SpaceCore API handle.
     /// </summary>
@@ -55,8 +57,6 @@ internal sealed class ModEntry : Mod
     /// Gets SMAPI's Multiplayer helper for this mod.
     /// </summary>
     internal static IMultiplayerHelper MultiplayerHelper { get; private set; } = null!;
-
-    private PlayerTeamWatcher? watcher;
 
     /// <summary>
     /// Gets the config class for this mod.
@@ -137,7 +137,7 @@ internal sealed class ModEntry : Mod
 
         if (ModsThatHandleTheBoard.All(uniqueID => !this.Helper.ModRegistry.IsLoaded(uniqueID)))
         {
-            this.Monitor.Log("Apply patch to suppress board updates.");
+            this.Monitor.Log("Applying patch to suppress board updates.");
             SpecialOrderPatches.ApplyUpdatePatch(harmony);
         }
         else

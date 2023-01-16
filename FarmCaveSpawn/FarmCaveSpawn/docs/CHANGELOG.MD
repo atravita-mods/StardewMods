@@ -9,6 +9,9 @@
 * Figure out DGA fruit trees.
 <!-- bat eyes for custom locations? -->
 
+#### Version 1.1.3
+* Recompiled for new AtraCore.
+
 #### Version 1.1.2
 * Internal improvements (use rented arrays when possible, other memory optimizations).
 

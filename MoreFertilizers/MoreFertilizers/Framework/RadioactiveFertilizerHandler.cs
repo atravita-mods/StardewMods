@@ -138,7 +138,7 @@ internal static class RadioactiveFertilizerHandler
             return;
         }
 
-        if (!StardewSeasonsExtensions.TryParse(seasonstring, true, out StardewSeasons seasonEnum))
+        if (!StardewSeasonsExtensions.TryParse(seasonstring, value: out StardewSeasons seasonEnum, ignoreCase: true))
         {
             ModEntry.ModMonitor.Log($"Invalid season found for radioactive fertilizer {seasonstring}", LogLevel.Error);
             return;

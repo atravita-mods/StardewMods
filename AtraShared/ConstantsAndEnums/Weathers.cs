@@ -64,7 +64,7 @@ public static partial class WeatherExtensions
         StardewWeather weather = StardewWeather.None;
         foreach (string? weatherstring in weatherList)
         {
-            if (StardewWeatherExtensions.TryParse(weatherstring.Trim(), out StardewWeather w, ignoreCase: true))
+            if (StardewWeatherExtensions.TryParse(name: weatherstring.AsSpan().Trim(), value: out StardewWeather w, ignoreCase: true))
             {
                 weather |= w;
             }

@@ -4,4 +4,13 @@
 
   "api-not-found": "{{APIID}} not found, integration disabled.",
   "api-too-old": "Please update {{apiName}}({{APIID}}) to at least version {{minversion}}. Current version {{currentversion}}. Integration disabled.",
+
+  "category": "Bush",
+
+  "bush.small": "Small Bush",
+  "bush.medium": "Medium Bush",
+  "bush.large": "Large Bush",
+
+  "bush.small.alt": "Alternative Small Bush",
+  "bush.town": "Town Bush"
 }

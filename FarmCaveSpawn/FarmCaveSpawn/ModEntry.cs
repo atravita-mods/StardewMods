@@ -181,7 +181,7 @@ internal sealed class ModEntry : Mod
 
         int count = 0;
 
-        StardewSeasons currentSeason = StardewSeasonsExtensions.TryParse(Game1.currentSeason, ignoreCase: true, out StardewSeasons val) ? val : StardewSeasons.All;
+        StardewSeasons currentSeason = StardewSeasonsExtensions.TryParse(Game1.currentSeason, value: out StardewSeasons val, ignoreCase: true) ? val : StardewSeasons.All;
         if (this.ShouldResetFruitList || this.season != currentSeason)
         {
             this.TreeFruit = this.GetTreeFruits();

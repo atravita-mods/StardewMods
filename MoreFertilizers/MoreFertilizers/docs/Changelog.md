@@ -9,6 +9,9 @@
 * Make good draw code for all of the fertilizers. (don't forget domesticated fish - maybe some more jumping...)
 * PR Pathos to make CJB pass in the correct fertilizer (b/c Everlasting) - done, waiting for Pathos to merge.
 
+#### Version 0.3.3
+* Update to latest AtraCore.
+
 #### Version 0.3.2
 * Balance
     * Secret Joja Fertilizer now uses random round proportional instead of math.floor.

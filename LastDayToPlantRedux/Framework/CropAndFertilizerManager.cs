@@ -155,7 +155,7 @@ internal static class CropAndFertilizerManager
     internal static (string message, bool showplayer) GenerateMessageString()
     {
         ModEntry.ModMonitor.Log($"Processing for day {Game1.dayOfMonth}");
-        if (!StardewSeasonsExtensions.TryParse(Game1.currentSeason, true, out StardewSeasons season) || season.CountSeasons() != 1)
+        if (!StardewSeasonsExtensions.TryParse(Game1.currentSeason, value: out StardewSeasons season, ignoreCase: true) || season.CountSeasons() != 1)
         {
             ModEntry.ModMonitor.Log("Invalid season?");
         }
@@ -497,7 +497,7 @@ SUCCESS:
             StardewSeasons seasonEnum = StardewSeasons.None;
             foreach (SpanSplitEntry season in seasons.StreamSplit(null, StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries))
             {
-                if (StardewSeasonsExtensions.TryParse(season, ignoreCase: true, out StardewSeasons s))
+                if (StardewSeasonsExtensions.TryParse(season, value: out StardewSeasons s, ignoreCase: true))
                 {
                     seasonEnum |= s;
                 }

@@ -17,7 +17,7 @@ internal static class SeasonalFishHandler
 
     private static bool Load()
     {
-        if (!StardewSeasonsExtensions.TryParse(Game1.currentSeason, ignoreCase: true, out var currentSeason))
+        if (!StardewSeasonsExtensions.TryParse(Game1.currentSeason, value: out StardewSeasons currentSeason, ignoreCase: true))
         {
             ModEntry.ModMonitor.Log($"Failed to parse {Game1.currentSeason} as a season, skipping.", LogLevel.Warn);
             return false;

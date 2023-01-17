@@ -1,10 +1,15 @@
 ﻿using System.Reflection;
 using System.Reflection.Emit;
+
 using AtraCore.Framework.ReflectionManager;
+
 using AtraShared.Utils.Extensions;
 using AtraShared.Utils.HarmonyHelper;
+
 using GrowableBushes.Framework;
+
 using HarmonyLib;
+
 using StardewValley.TerrainFeatures;
 
 namespace GrowableBushes.HarmonyPatches;
@@ -16,7 +21,8 @@ namespace GrowableBushes.HarmonyPatches;
 internal static class BushToolActionTranspiler
 {
     private static bool IsPlacedBush(Bush bush)
-        => bush.modData?.ContainsKey(InventoryBush.BushModData) == true;
+        => (ModEntry.Config.CanAxeAllBushes && bush.tileSheetOffset.Value == 0)
+            || (bush.modData?.ContainsKey(InventoryBush.BushModData) == true);
 
     [HarmonyPatch(nameof(Bush.performToolAction))]
     [SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1116:Split parameters should start on line after declaration", Justification = "Reviewed.")]

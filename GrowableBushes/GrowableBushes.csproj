@@ -25,12 +25,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Reference Include="SpaceCore" private="false">
-      <HintPath>$(GamePath)\Mods\SpaceCore\SpaceCore.dll</HintPath>
-    </Reference>
-  </ItemGroup>
-
-  <ItemGroup>
     <Using Include="StardewValley" />
     <Using Include="StardewModdingAPI" />
     <Using Include="System.Diagnostics.CodeAnalysis" />

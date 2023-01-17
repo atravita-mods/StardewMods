@@ -3,6 +3,9 @@ using AtraShared.Caching;
 using AtraShared.Menuing;
 using AtraShared.Utils;
 using AtraShared.Utils.Extensions;
+
+using HarmonyLib;
+
 using StardewModdingAPI.Events;
 using StardewValley.Menus;
 using xTile.Dimensions;
@@ -14,6 +17,7 @@ namespace GrowableBushes.Framework;
 /// <summary>
 /// Manages Caroline's bush shop.
 /// </summary>
+[HarmonyPatch(typeof(Utility))]
 internal static class ShopManager
 {
     private const string BUILDING = "Buildings";
@@ -90,6 +94,38 @@ internal static class ShopManager
 
         Dictionary<ISalable, int[]> sellables = new(20);
 
+        sellables.PopulateSellablesWithBushes();
+
+        ShopMenu shop = new(sellables, who: "Caroline") { storeContext = SHOPNAME };
+
+        if (NPCCache.GetByVillagerName("Caroline") is NPC caroline)
+        {
+            shop.portraitPerson = caroline;
+        }
+        shop.potraitPersonDialogue = I18n.Shop_Message();
+        Game1.activeClickableMenu = shop;
+    }
+
+    /// <summary>
+    /// Postfix to add bushes to the catalog.
+    /// </summary>
+    /// <param name="__result">shop inventory to add to.</param>
+    [HarmonyPatch(nameof(Utility.getAllFurnituresForFree))]
+    [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Harmony convention.")]
+    private static void Postfix(Dictionary<ISalable, int[]> __result)
+    {
+        try
+        {
+            __result.PopulateSellablesWithBushes();
+        }
+        catch (Exception ex)
+        {
+            ModEntry.ModMonitor.Log($"Failed while trying to add bushes to the catalogue\n\n{ex}", LogLevel.Error);
+        }
+    }
+
+    private static void PopulateSellablesWithBushes(this Dictionary<ISalable, int[]> sellables)
+    {
         foreach (BushSizes bushIndex in BushSizesExtensions.GetValues())
         {
             int[] sellData;
@@ -99,24 +135,15 @@ internal static class ShopManager
             }
             else if (bushIndex is BushSizes.Medium)
             {
-                sellData = new[] { 500, ShopMenu.infiniteStock };
+                sellData = new[] { 750, ShopMenu.infiniteStock };
             }
             else
             {
-                sellData = new[] { 100, ShopMenu.infiniteStock };
+                sellData = new[] { 250, ShopMenu.infiniteStock };
             }
 
             InventoryBush bush = new(bushIndex, 1);
             _ = sellables.TryAdd(bush, sellData);
         }
-
-        ShopMenu shop = new ShopMenu(sellables, who: "Caroline") { storeContext = SHOPNAME };
-
-        if (NPCCache.GetByVillagerName("Caroline") is NPC caroline)
-        {
-            shop.portraitPerson = caroline;
-        }
-        shop.potraitPersonDialogue = I18n.Shop_Message();
-        Game1.activeClickableMenu = shop;
     }
 }

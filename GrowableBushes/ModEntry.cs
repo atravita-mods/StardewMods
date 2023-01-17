@@ -2,6 +2,7 @@
 
 using AtraShared.ConstantsAndEnums;
 using AtraShared.Integrations;
+using AtraShared.Integrations.Interfaces;
 using AtraShared.MigrationManager;
 using AtraShared.Utils;
 using AtraShared.Utils.Extensions;
@@ -56,7 +57,7 @@ internal sealed class ModEntry : Mod
     {
         IntegrationHelper helper = new(this.Monitor, this.Helper.Translation, this.Helper.ModRegistry, LogLevel.Error);
 
-        if (helper.TryGetAPI("spacechase0.SpaceCore", "1.9.3", out SpaceCore.IApi? api))
+        if (helper.TryGetAPI("spacechase0.SpaceCore", "1.9.3", out ICompleteSpaceCoreAPI? api))
         {
             api.RegisterSerializerType(typeof(InventoryBush));
 
@@ -89,7 +90,6 @@ internal sealed class ModEntry : Mod
         }
         else
         {
-            // this should never happen. I'm using a spacecore type. It should actually just die.
             this.Monitor.Log($"Could not load spacecore's API. This is a fatal error.", LogLevel.Error);
         }
     }

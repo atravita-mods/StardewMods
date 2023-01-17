@@ -11,13 +11,13 @@
 
 #### Version 0.3.3
 * Update to latest AtraCore.
+* Fix everlasting fertilizer not getting a special color.
 
 #### Version 0.3.2
 * Balance
     * Secret Joja Fertilizer now uses random round proportional instead of math.floor.
 * Bugfixes
     * Fix compat with Theft of the Winter Star.
-
 
 #### Version 0.3.1
 * Fixed integration with the two extended tools mods.

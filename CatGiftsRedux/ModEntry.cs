@@ -73,6 +73,8 @@ internal sealed class ModEntry : Mod
         helper.Events.GameLoop.DayStarted += this.OnDayLaunched;
         helper.Events.Content.AssetRequested += static (_, e) => AssetManager.Apply(e);
         helper.Events.Content.AssetsInvalidated += this.OnAssetInvalidated;
+
+        this.Monitor.Log($"Starting up: {this.ModManifest.UniqueID} - {typeof(ModEntry).Assembly.FullName}");
     }
 
     /// <inheritdoc />

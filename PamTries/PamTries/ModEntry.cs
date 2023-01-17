@@ -43,6 +43,8 @@ internal sealed class ModEntry : Mod
         ScheduleUtilityFunctions = new(this.Monitor, this.Helper.Translation);
         AssetManager.Initialize(helper.GameContent);
 
+        this.Monitor.Log($"Starting up: {this.ModManifest.UniqueID} - {typeof(ModEntry).Assembly.FullName}");
+
         ModMonitor = this.Monitor;
 
         helper.Events.GameLoop.GameLaunched += this.OnGameLaunch;

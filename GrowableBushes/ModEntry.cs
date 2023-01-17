@@ -47,6 +47,8 @@ internal sealed class ModEntry : Mod
         helper.Events.GameLoop.GameLaunched += this.OnGameLaunched;
         ConsoleCommands.RegisterCommands(helper.ConsoleCommands);
         ShopManager.Initialize(helper.GameContent);
+
+        this.Monitor.Log($"Starting up: {this.ModManifest.UniqueID} - {typeof(ModEntry).Assembly.FullName}");
     }
 
     /// <inheritdoc />

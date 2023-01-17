@@ -55,6 +55,8 @@ internal sealed class ModEntry : Mod
         InputHelper = helper.Input;
         UniqueID = this.ModManifest.UniqueID;
 
+        this.Monitor.Log($"Starting up: {this.ModManifest.UniqueID} - {typeof(ModEntry).Assembly.FullName}");
+
         helper.Events.GameLoop.GameLaunched += this.OnGameLaunched;
         helper.Events.GameLoop.SaveLoaded += this.OnSaveLoaded;
 

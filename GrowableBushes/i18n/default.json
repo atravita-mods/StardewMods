@@ -12,6 +12,8 @@
   "ShopLocation.description": "The location of the bush shop in Caroline's sunroom.",
   "ShouldNPCsTrampleBushes.title": "Should NPCs Trample Bushes.",
   "ShouldNPCsTrampleBushes.description": "If enabled, will allow NPCs to remove bushes in their path.",
+  "RelaxedPlacement.title": "Relaxed Placement",
+  "RelaxedPlacement.description": "If enabled, placement rules will be relaxed.",
 
   // Shop
   "shop.message": "Hi! Anything you want?",
@@ -38,7 +40,6 @@
 
   "bush.walnut": "Walnut Bush",
   "bush.walnut.description": "Place to grow a decorative walnut bush",
-
   "bush.harvested": "Harvested Bush",
   "bush.harvested.description": "Place to grow a decorative, already harvested walnut bush."
 }

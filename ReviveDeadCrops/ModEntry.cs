@@ -58,6 +58,9 @@ internal sealed class ModEntry : Mod
         helper.Events.GameLoop.DayEnding += this.OnDayEnd;
 
         helper.Events.GameLoop.ReturnedToTitle += this.OnReturnedToTitle;
+
+        this.Monitor.Log($"Starting up: {this.ModManifest.UniqueID} - {typeof(ModEntry).Assembly.FullName}");
+
         this.ApplyPatches(new Harmony(this.ModManifest.UniqueID));
     }
 

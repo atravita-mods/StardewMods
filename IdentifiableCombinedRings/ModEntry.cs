@@ -11,6 +11,8 @@ public class ModEntry : Mod
         I18n.Init(this.Helper.Translation);
         Globals.Initialize(helper, this.Monitor);
         this.ApplyPatches(new Harmony(this.ModManifest.UniqueID));
+
+        this.Monitor.Log($"Starting up: {this.ModManifest.UniqueID} - {typeof(ModEntry).Assembly.FullName}");
     }
 
     /// <summary>

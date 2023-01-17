@@ -22,6 +22,8 @@ internal sealed class ModEntry : Mod
     /// <inheritdoc />
     public override void Entry(IModHelper helper)
     {
+        this.Monitor.Log($"Starting up: {this.ModManifest.UniqueID} - {typeof(ModEntry).Assembly.FullName}");
+
         this.FrameRateCounter = new(GameRunner.instance);
         helper.Reflection.GetMethod(this.FrameRateCounter, "LoadContent").Invoke();
         FieldInfo? field = helper.Reflection.GetField<int>(this.FrameRateCounter, "frameRate").FieldInfo;

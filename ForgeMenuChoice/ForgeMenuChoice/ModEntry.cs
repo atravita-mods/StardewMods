@@ -73,6 +73,8 @@ internal sealed class ModEntry : Mod
         AssetLoader.Initialize(helper.GameContent);
         Config = AtraUtils.GetConfigOrDefault<ModConfig>(helper, this.Monitor);
 
+        this.Monitor.Log($"Starting up: {this.ModManifest.UniqueID} - {typeof(ModEntry).Assembly.FullName}");
+
         helper.Events.GameLoop.GameLaunched += this.OnGameLaunched;
 
         helper.Events.Player.Warped += this.Player_Warped;

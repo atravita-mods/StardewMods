@@ -1,4 +1,5 @@
 ﻿using AtraCore.Framework.Caches;
+
 using AtraShared.Caching;
 using AtraShared.Menuing;
 using AtraShared.Utils;
@@ -8,8 +9,10 @@ using HarmonyLib;
 
 using StardewModdingAPI.Events;
 using StardewValley.Menus;
+
 using xTile.Dimensions;
 using xTile.ObjectModel;
+
 using XTile = xTile.Tiles.Tile;
 
 namespace GrowableBushes.Framework;
@@ -126,12 +129,21 @@ internal static class ShopManager
 
     private static void PopulateSellablesWithBushes(this Dictionary<ISalable, int[]> sellables)
     {
+        sellables ??= new();
+
         foreach (BushSizes bushIndex in BushSizesExtensions.GetValues())
         {
             int[] sellData;
-            if (bushIndex is BushSizes.Walnut or BushSizes.Harvested && !islandUnlocked.GetValue())
+            if (bushIndex is BushSizes.Walnut or BushSizes.Harvested)
             {
-                continue;
+                if (!islandUnlocked.GetValue())
+                {
+                    continue;
+                }
+                else
+                {
+                    sellData = new[] { 750, ShopMenu.infiniteStock };
+                }
             }
             else if (bushIndex is BushSizes.Medium)
             {
@@ -139,7 +151,7 @@ internal static class ShopManager
             }
             else
             {
-                sellData = new[] { 250, ShopMenu.infiniteStock };
+                sellData = new[] { 300, ShopMenu.infiniteStock };
             }
 
             InventoryBush bush = new(bushIndex, 1);

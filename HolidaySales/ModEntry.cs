@@ -32,6 +32,8 @@ internal sealed class ModEntry : Mod
         Config = AtraUtils.GetConfigOrDefault<ModConfig>(helper, this.Monitor);
 
         helper.Events.GameLoop.GameLaunched += this.OnGameLaunch;
+
+        this.Monitor.Log($"Starting up: {this.ModManifest.UniqueID} - {typeof(ModEntry).Assembly.FullName}");
     }
 
     private void OnGameLaunch(object? sender, GameLaunchedEventArgs e)

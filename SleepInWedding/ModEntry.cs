@@ -42,6 +42,8 @@ internal sealed class ModEntry : Mod
 
         helper.Events.Multiplayer.ModMessageReceived += this.OnMessageRecieved;
 
+        this.Monitor.Log($"Starting up: {this.ModManifest.UniqueID} - {typeof(ModEntry).Assembly.FullName}");
+
         this.ApplyPatches(new Harmony(this.ModManifest.UniqueID));
     }
 

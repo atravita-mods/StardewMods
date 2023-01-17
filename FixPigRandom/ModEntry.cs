@@ -31,6 +31,8 @@ internal sealed class ModEntry : Mod
         modMonitor = this.Monitor;
         helper.Events.GameLoop.DayEnding += static (_, _) => Cache.Clear();
         helper.Events.GameLoop.GameLaunched += (_, _) => this.ApplyPatches(new(this.ModManifest.UniqueID));
+
+        this.Monitor.Log($"Starting up: {this.ModManifest.UniqueID} - {typeof(ModEntry).Assembly.FullName}");
     }
 
     private void ApplyPatches(Harmony harmony)

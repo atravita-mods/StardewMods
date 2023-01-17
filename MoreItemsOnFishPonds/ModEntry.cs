@@ -24,7 +24,7 @@ internal sealed class ModEntry : Mod
     public override void Entry(IModHelper helper)
     {
         modMonitor = this.Monitor;
-
+        this.Monitor.Log($"Starting up: {this.ModManifest.UniqueID} - {typeof(ModEntry).Assembly.FullName}");
         this.ApplyPatches(new(this.ModManifest.UniqueID));
 
 #if DEBUG

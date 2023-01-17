@@ -39,6 +39,8 @@ internal sealed class ModEntry : Mod
         helper.Events.Content.AssetRequested += static (_, e) => AssetManager.Load(e);
         helper.Events.Content.AssetsInvalidated += static (_, e) => AssetManager.Reset(e.NamesWithoutLocale);
 
+        this.Monitor.Log($"Starting up: {this.ModManifest.UniqueID} - {typeof(ModEntry).Assembly.FullName}");
+
         this.ApplyPatches(new Harmony(this.ModManifest.UniqueID));
     }
 

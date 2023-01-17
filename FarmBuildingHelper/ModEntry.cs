@@ -27,6 +27,7 @@ internal sealed class ModEntry : Mod
         I18n.Init(helper.Translation);
         ModMonitor = this.Monitor;
         Config = AtraUtils.GetConfigOrDefault<ModConfig>(helper, this.Monitor);
+        this.Monitor.Log($"Starting up: {this.ModManifest.UniqueID} - {typeof(ModEntry).Assembly.FullName}");
 
         helper.Events.Display.MenuChanged += this.OnMenuChanged;
     }

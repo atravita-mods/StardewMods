@@ -69,6 +69,8 @@ internal sealed class ModEntry : Mod
 
         helper.Events.Multiplayer.PeerConnected += this.OnPeerConnected;
         helper.Events.Multiplayer.ModMessageReceived += this.OnModMessageRecieved;
+
+        this.Monitor.Log($"Starting up: {this.ModManifest.UniqueID} - {typeof(ModEntry).Assembly.FullName}");
     }
 
     /// <inheritdoc cref="IGameLoopEvents.GameLaunched"/>

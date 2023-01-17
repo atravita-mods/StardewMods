@@ -55,6 +55,8 @@ internal sealed class ModEntry : Mod
         AssetManager.Initialize(helper.GameContent);
         libraryHouse = helper.GameContent.ParseAssetName("Maps/ArchaeologyHouse");
 
+        this.Monitor.Log($"Starting up: {this.ModManifest.UniqueID} - {typeof(ModEntry).Assembly.FullName}");
+
         helper.Events.GameLoop.GameLaunched += this.OnGameLaunched;
         helper.Events.Input.ButtonPressed += this.OnButtonPressed;
         helper.Events.Player.Warped += this.OnWarped;

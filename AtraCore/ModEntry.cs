@@ -51,6 +51,7 @@ internal sealed class ModEntry : Mod
         AtraBase.Internal.Logger.Instance = new Logger(this.Monitor);
 
         Config = AtraUtils.GetConfigOrDefault<ModConfig>(helper, this.Monitor);
+        this.Monitor.Log($"Starting up: {this.ModManifest.UniqueID} - {typeof(ModEntry).Assembly.FullName}");
 
         helper.Events.Content.AssetRequested += this.OnAssetRequested;
 

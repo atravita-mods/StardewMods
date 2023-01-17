@@ -28,6 +28,7 @@ internal sealed class ModEntry : Mod
         I18n.Init(helper.Translation);
         Globals.Initialize(helper, this.Monitor, this.ModManifest);
         AssetEditor.Initialize(helper.GameContent);
+        this.Monitor.Log($"Starting up: {this.ModManifest.UniqueID} - {typeof(ModEntry).Assembly.FullName}");
 
         ConsoleCommands.Register(this.Helper.ConsoleCommands);
 

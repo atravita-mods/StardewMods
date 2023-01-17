@@ -93,6 +93,8 @@ internal sealed class ModEntry : Mod
         Config = AtraUtils.GetConfigOrDefault<ModConfig>(helper, this.Monitor);
         UtilitySchedulingFunctions = new(this.Monitor, this.Helper.Translation);
 
+        this.Monitor.Log($"Starting up: {this.ModManifest.UniqueID} - {typeof(ModEntry).Assembly.FullName}");
+
         helper.Events.GameLoop.GameLaunched += this.OnGameLaunch;
         helper.Events.GameLoop.SaveLoaded += this.SaveLoaded;
         helper.Events.GameLoop.Saving += this.BeforeSaving;

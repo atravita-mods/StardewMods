@@ -85,6 +85,8 @@ internal sealed class ModEntry : Mod
         DataHelper = helper.Data;
         MultiplayerHelper = helper.Multiplayer;
 
+        this.Monitor.Log($"Starting up: {this.ModManifest.UniqueID} - {typeof(ModEntry).Assembly.FullName}");
+
         Config = AtraUtils.GetConfigOrDefault<ModConfig>(helper, this.Monitor);
 
         // Register console commands.

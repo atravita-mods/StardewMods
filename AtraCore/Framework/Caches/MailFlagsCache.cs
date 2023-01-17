@@ -31,9 +31,9 @@ internal static class MailFlagsCache
 
     internal static void Unwatch()
     {
-        foreach(var reference in listsToFree)
+        foreach(WeakReference<NetList<string, NetString>> reference in listsToFree)
         {
-            if (reference.TryGetTarget(out var target))
+            if (reference.TryGetTarget(out NetList<string, NetString>? target))
             {
                 target.OnElementChanged -= ThisPlayerWatcher;
             }

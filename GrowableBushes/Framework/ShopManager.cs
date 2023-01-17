@@ -92,7 +92,7 @@ internal static class ShopManager
 
         input.SurpressClickInput();
 
-        Dictionary<ISalable, int[]> sellables = new(20);
+        Dictionary<ISalable, int[]> sellables = new(BushSizesExtensions.Length);
 
         sellables.PopulateSellablesWithBushes();
 

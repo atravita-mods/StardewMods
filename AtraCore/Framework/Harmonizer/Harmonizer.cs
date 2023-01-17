@@ -48,7 +48,7 @@ public sealed class Harmonizer
 #if DEBUG
         Stopwatch sw = Stopwatch.StartNew();
 #endif
-        foreach (var type in assembly.GetTypes())
+        foreach (Type type in assembly.GetTypes())
         {
             if (type.GetCustomAttribute<HarmonyPatch>() is not HarmonyPatch patch)
             {

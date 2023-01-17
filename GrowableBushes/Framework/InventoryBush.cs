@@ -9,6 +9,8 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Graphics.PackedVector;
 
 using StardewValley;
+using StardewValley.Buildings;
+using StardewValley.Locations;
 using StardewValley.Objects;
 using StardewValley.TerrainFeatures;
 
@@ -94,6 +96,18 @@ public sealed class InventoryBush : SObject
                 return false;
             }
         }
+
+        if (l is BuildableGameLocation buildable)
+        {
+            foreach (Building? building in buildable.buildings)
+            {
+                if (!building.isTilePassable(tile))
+                {
+                    return false;
+                }
+            }
+        }
+
         return true;
     }
 

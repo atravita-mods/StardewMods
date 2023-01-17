@@ -20,11 +20,6 @@ using AtraUtils = AtraShared.Utils.Utils;
 
 namespace GrowableBushes;
 
-// TODO:
-// * Override all the necessary draw methods.
-// * Bushes for sale.
-// * Smart Building compat.
-
 /// <inheritdoc />
 internal sealed class ModEntry : Mod
 {
@@ -52,6 +47,8 @@ internal sealed class ModEntry : Mod
         ConsoleCommands.RegisterCommands(helper.ConsoleCommands);
         ShopManager.Initialize(helper.GameContent);
     }
+
+    public override object? GetApi() => new GrowableBushesAPI();
 
     /// <inheritdoc cref="IGameLoopEvents.GameLaunched"/>
     private void OnGameLaunched(object? sender, GameLaunchedEventArgs e)

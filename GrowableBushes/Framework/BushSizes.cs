@@ -4,26 +4,6 @@ using StardewValley.TerrainFeatures;
 
 namespace GrowableBushes.Framework;
 
-/// <summary>
-/// Valid bush sizes.
-/// </summary>
-[EnumExtensions]
-public enum BushSizes
-{
-    // base game bush sizes
-    Small = Bush.smallBush,
-    Medium = Bush.mediumBush,
-    Large = Bush.largeBush,
-
-    Harvested = Bush.walnutBush - 1,
-    Walnut = Bush.walnutBush,
-
-    // weird sizes
-    SmallAlt = 7,
-    Town = 8,
-    TownLarge = 9,
-}
-
 internal static class BushSizesExtraExtensions
 {
     internal static int ToStardewBush(this BushSizes sizes)

@@ -15,4 +15,6 @@ internal sealed class ModConfig
     public Vector2 ShopLocation { get; set; } = new(1, 7);
 
     public bool ShouldNPCsTrampleBushes { get; set; } = true;
+
+    public bool RelaxedPlacement { get; set; } = false;
 }

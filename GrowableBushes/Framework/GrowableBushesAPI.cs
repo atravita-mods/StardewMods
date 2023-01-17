@@ -10,9 +10,6 @@ namespace GrowableBushes.Framework;
 public sealed class GrowableBushesAPI : IGrowableBushesAPI
 {
     /// <inheritdoc />
-    public bool CanPlaceBush(SObject obj, GameLocation loc, Vector2 tile) => obj is InventoryBush bush && bush.canBePlacedHere(loc, tile);
-
-    /// <inheritdoc />
     public SObject GetBush(BushSizes size) => new InventoryBush(size, 1);
 
     /// <inheritdoc />
@@ -52,6 +49,10 @@ public sealed class GrowableBushesAPI : IGrowableBushesAPI
     }
 
     /// <inheritdoc />
-    public bool TryPlaceBush(SObject obj, GameLocation loc, Vector2 tile)
-        => obj is InventoryBush bush && bush.placementAction(loc, (int)(tile.X * Game1.tileSize), (int)(tile.Y * Game1.tileSize), Game1.player);
+    public bool CanPlaceBush(SObject obj, GameLocation loc, Vector2 tile, bool relaxed)
+        => obj is InventoryBush bush && bush.CanPlace(loc, tile, relaxed);
+
+    /// <inheritdoc />
+    public bool TryPlaceBush(SObject obj, GameLocation loc, Vector2 tile, bool relaxed)
+        => obj is InventoryBush bush && bush.PlaceBush(loc, (int)(tile.X * Game1.tileSize), (int)(tile.Y * Game1.tileSize), relaxed);
 }

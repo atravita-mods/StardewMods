@@ -18,8 +18,9 @@ public interface IGrowableBushesAPI
     /// <param name="obj">StardewValley.Object to place.</param>
     /// <param name="loc">GameLocation to place at.</param>
     /// <param name="tile">Tile to place at.</param>
+    /// <param name="relaxed">Whether or to use relaxed placement rules.</param>
     /// <returns>True if the SObject is an InventoryBush and can be placed, false otherwise.</returns>
-    public bool CanPlaceBush(StardewValley.Object obj, GameLocation loc, Vector2 tile);
+    public bool CanPlaceBush(StardewValley.Object obj, GameLocation loc, Vector2 tile, bool relaxed);
 
     /// <summary>
     /// Called to place an InventoryBush at a specific location.
@@ -27,9 +28,10 @@ public interface IGrowableBushesAPI
     /// <param name="obj">StardewValley.Object to place.</param>
     /// <param name="loc">GameLocation to place at.</param>
     /// <param name="tile">Which tile to place at.</param>
+    /// <param name="relaxed">Whether or to use relaxed placement rules.</param>
     /// <returns>True if the SObject is an InventoryBush and was successfully placed, false otherwise.</returns>
     /// <remarks>Does not handle inventory management.</remarks>
-    public bool TryPlaceBush(StardewValley.Object obj, GameLocation loc, Vector2 tile);
+    public bool TryPlaceBush(StardewValley.Object obj, GameLocation loc, Vector2 tile, bool relaxed);
 
     /// <summary>
     /// Gets the InventoryBush associated with a specific size.

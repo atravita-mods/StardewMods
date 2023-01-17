@@ -1,17 +1,12 @@
 ﻿using System.Xml.Serialization;
-
 using AtraCore.Framework.ReflectionManager;
-
 using AtraShared.Utils.Extensions;
-
+using GrowableBushes;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-
 using StardewValley.Buildings;
 using StardewValley.Locations;
 using StardewValley.TerrainFeatures;
-
-using GrowableBushes;
 
 namespace GrowableBushes.Framework;
 
@@ -90,15 +85,30 @@ public sealed class InventoryBush : SObject
 
     /// <inheritdoc />
     public override bool canBePlacedHere(GameLocation l, Vector2 tile)
+        => this.CanPlace(l, tile, ModEntry.Config.RelaxedPlacement);
+
+    /// <summary>
+    /// Checks for placement restrictions.
+    /// </summary>
+    /// <param name="l">Game location.</param>
+    /// <param name="tile">Tile to check.</param>
+    /// <param name="relaxed">If we should use relaxed restrictions.</param>
+    /// <returns>Whether or not placement is allowed.</returns>
+    internal bool CanPlace(GameLocation l, Vector2 tile, bool relaxed)
     {
         int width = ((BushSizes)this.ParentSheetIndex).GetWidth();
 
         for (int y = (int)tile.Y; y < (int)tile.Y + width; y++)
         {
-            if (!IsTilePlaceableForBush(l, (int)tile.X, y))
+            if (!IsTilePlaceableForBush(l, (int)tile.X, y, relaxed))
             {
                 return false;
             }
+        }
+
+        if (relaxed)
+        {
+            return true;
         }
 
         if (l is BuildableGameLocation buildable)
@@ -117,11 +127,27 @@ public sealed class InventoryBush : SObject
 
     /// <inheritdoc />
     public override bool placementAction(GameLocation location, int x, int y, Farmer? who = null)
+        => this.PlaceBush(location, x, y, ModEntry.Config.RelaxedPlacement);
+
+    /// <summary>
+    /// Places a bush.
+    /// </summary>
+    /// <param name="location">Game location.</param>
+    /// <param name="x">non tile x.</param>
+    /// <param name="y">non tile y.</param>
+    /// <param name="relaxed">use relaxed placement or not.</param>
+    /// <returns>True if placed, false otherwise.</returns>
+    internal bool PlaceBush(GameLocation location, int x, int y, bool relaxed)
     {
         BushSizes size = (BushSizes)this.ParentSheetIndex;
 
-        Vector2 placementTile = new (x / Game1.tileSize, y / Game1.tileSize);
-        Bush bush = new (placementTile, size.ToStardewBush(), location);
+        Vector2 placementTile = new(x / Game1.tileSize, y / Game1.tileSize);
+        if (!this.CanPlace(location, placementTile, relaxed))
+        {
+            return false;
+        }
+
+        Bush bush = new(placementTile, size.ToStardewBush(), location);
 
         // set metadata.
         switch (size)
@@ -393,7 +419,7 @@ public sealed class InventoryBush : SObject
         this.sourceRect = this.GetSourceRectForSeason(season);
     }
 
-    private static bool IsTilePlaceableForBush(GameLocation location, int tileX, int tileY)
+    private static bool IsTilePlaceableForBush(GameLocation location, int tileX, int tileY, bool relaxed)
     {
         if (location is null)
         {
@@ -413,8 +439,7 @@ public sealed class InventoryBush : SObject
             }
         }
 
-        Vector2 tile = new(tileX, tileY);
-        return !location.isTileOccupied(tile);
+        return relaxed || !location.isTileOccupied(new Vector2(tileX, tileY));
     }
 
     private static int GetSeason(GameLocation loc)

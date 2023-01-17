@@ -117,6 +117,11 @@ internal sealed class ModConfig
     public bool FilterJukeboxSongs { get; set; } = true;
 
     /// <summary>
+    /// Gets or sets a value indicating whether or not napalm rings should affect safe areas.
+    /// </summary>
+    public bool NapalmInSafeAreas { get; set; } = true;
+
+    /// <summary>
     /// Gets or sets a value indicating whether or not to confirm bomb placement in safe areas.
     /// </summary>
     public ConfirmationEnum BombsInSafeAreas { get; set; } = ConfirmationEnum.On;

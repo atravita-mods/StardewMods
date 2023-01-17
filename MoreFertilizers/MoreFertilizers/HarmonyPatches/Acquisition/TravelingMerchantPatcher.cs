@@ -16,7 +16,7 @@ namespace MoreFertilizers.HarmonyPatches.Acquisition;
 [HarmonyPatch(typeof(Utility))]
 internal static class TravelingMerchantPatcher
 {
-    private static TickCache<bool> HasPlayerUnlockedBountiful = new(() => Game1.MasterPlayer.mailReceived.Contains(AssetEditor.BOUNTIFUL_BUSH_UNLOCK));
+    private static readonly TickCache<bool> HasPlayerUnlockedBountiful = new(() => Game1.MasterPlayer.mailReceived.Contains(AssetEditor.BOUNTIFUL_BUSH_UNLOCK));
 
     [UsedImplicitly]
     [HarmonyPatch("generateLocalTravelingMerchantStock")]

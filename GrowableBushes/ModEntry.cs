@@ -48,6 +48,7 @@ internal sealed class ModEntry : Mod
         ShopManager.Initialize(helper.GameContent);
     }
 
+    /// <inheritdoc />
     public override object? GetApi() => new GrowableBushesAPI();
 
     /// <inheritdoc cref="IGameLoopEvents.GameLaunched"/>
@@ -65,7 +66,7 @@ internal sealed class ModEntry : Mod
 
             // shop
             this.Helper.Events.Content.AssetRequested += static (_, e) => ShopManager.OnAssetRequested(e);
-            this.Helper.Events.GameLoop.DayEnding += static (_, e) => ShopManager.OnDayEnd(e);
+            this.Helper.Events.GameLoop.DayEnding += static (_, _) => ShopManager.OnDayEnd();
             this.Helper.Events.Input.ButtonPressed += (_, e) => ShopManager.OnButtonPressed(e, this.Helper.Input);
 
             this.ApplyPatches(new Harmony(this.ModManifest.UniqueID));

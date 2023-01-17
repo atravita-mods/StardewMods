@@ -2,7 +2,7 @@ Growable Bushes
 ===========================
 ![Header image](docs/scroll.gif)
 
-Lets you plop down bushes.
+Lets you plop down bushes. Buy them from Caroline's sunroom (the planter on the left).
 
 ## Install
 
@@ -14,14 +14,21 @@ Lets you plop down bushes.
 ## Uninstall
 Simply delete from your Mods directory.
 
+## Configuration
+Run SMAPI at least once with this mod installed to generate the `config.json`, or use [Generic Mod Config Menu](https://www.nexusmods.com/stardewvalley/mods/5098) to configure.
+* `CanAxeAllBushes`: By default you're only allowed to axe bushes that you've placed. Turn this on to axe all bushes.
+* `ShopLocation`: The tile that the bush shop is on, in Caroline's Sunroom.
+* `ShouldNPCsTrampleBushes`: If turned on, will allow NPCs to remove bushes in their path.
+
 ## Technical Notes:
-* TODO: make a note about townBush/AlternativeSmolBush being a little special.
+* Some of the bushes are simply alternative forms of other bushes in the game and probably won't be recognized by other mods. If you use Destroyable bushes and cut down an Alternative Small Bush, for example, Destroyable Bushes will regrow a Small Bush. The Town Bush and the Medium Bush are also alternative forms, as are the Large Town Bush and the Large Bush.
+* If you use bushes to block of NPC pathing, it'll definitely break things.
 
 ## Compatibility
 
 * Works with Stardew Valley 1.5.6 on Linux/macOS/Windows.
-* Works in single player, multiplayer, and split-screen mode. Absolutely has to be installed by everyone in multiplayer.
-* Should be compatible with most other mods.
+* Works in single player, multiplayer, and split-screen mode. **Absolutely** has to be installed by everyone in multiplayer.
+* Should be compatible with most other mods, including Destoryable Bushes.
 
 ## See also
 

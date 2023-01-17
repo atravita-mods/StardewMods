@@ -21,6 +21,7 @@ namespace LastDayToPlantRedux.Framework;
 /// <summary>
 /// Handles a cache of crop and fertilizer data.
 /// </summary>
+[SuppressMessage("StyleCop.CSharp.OrderingRules", "SA1214:Readonly fields should appear before non-readonly fields", Justification = "Reviewed.")]
 internal static class CropAndFertilizerManager
 {
     private static readonly TickCache<bool> HasStocklist = new(() => Game1.MasterPlayer.hasOrWillReceiveMail("PierreStocklist"));
@@ -50,7 +51,7 @@ internal static class CropAndFertilizerManager
     private static Dictionary<int, string> fertilizers = new();
 
     // the inverse of DaysPerCondition;
-    private static readonly Lazy<Dictionary<int, List<KeyValuePair<CropCondition, int>>>?>[] lastGrowthPerCrop
+    private static readonly Lazy<Dictionary<int, List<KeyValuePair<CropCondition, int>>>?>[] LastGrowthPerCrop
         = new Lazy<Dictionary<int, List<KeyValuePair<CropCondition, int>>>?>[]
         {
             new(() => GenerateReverseMap(0)),
@@ -128,7 +129,7 @@ internal static class CropAndFertilizerManager
             return null;
         }
 
-        if (lastGrowthPerCrop[season.ToSeasonIndex()].Value?.TryGetValue(crop, out var val) == true)
+        if (LastGrowthPerCrop[season.ToSeasonIndex()].Value?.TryGetValue(crop, out var val) == true)
         {
             return val.Select((kvp) => new KeyValuePair<KeyValuePair<Profession, int>, int>(new KeyValuePair<Profession, int>(kvp.Key.Profession, kvp.Key.Fertilizer), kvp.Value))
                       .OrderBy((kvp) => kvp.Value)
@@ -138,7 +139,7 @@ internal static class CropAndFertilizerManager
     }
 
     /// <inheritdoc cref="ILastDayToPlantAPI.GetTrackedCrops"/>
-    internal static int[]? GetTrackedCrops() => lastGrowthPerCrop.SelectMany(a => a.Value?.Keys ?? Enumerable.Empty<int>()).ToArray();
+    internal static int[]? GetTrackedCrops() => LastGrowthPerCrop.SelectMany(a => a.Value?.Keys ?? Enumerable.Empty<int>()).ToArray();
     #endregion
 
     #region processing
@@ -298,7 +299,7 @@ SUCCESS:
         requiresReset = false;
         hadStocklistLastCheck = HasStocklist.GetValue();
         InventoryWatcher.Reset();
-        lastGrowthPerCrop[seasonIndex] = new(() => GenerateReverseMap(seasonIndex));
+        LastGrowthPerCrop[seasonIndex] = new(() => GenerateReverseMap(seasonIndex));
     }
 
     private static Dictionary<int, List<KeyValuePair<CropCondition, int>>>? GenerateReverseMap(int season)

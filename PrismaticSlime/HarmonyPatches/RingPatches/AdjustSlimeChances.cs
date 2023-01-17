@@ -64,7 +64,7 @@ internal static class AdjustSlimeChances
                 operand: typeof(FarmerTeamExtensions).GetCachedMethod(nameof(FarmerTeamExtensions.SpecialOrderActiveOrCompleted), ReflectionCache.FlagTypes.StaticFlags),
                 keepLabels: true);
 
-            helper.Print();
+            // helper.Print();
             return helper.Render();
         }
         catch (Exception ex)

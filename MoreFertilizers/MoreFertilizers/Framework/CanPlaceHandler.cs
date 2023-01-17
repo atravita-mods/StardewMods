@@ -14,6 +14,7 @@ namespace MoreFertilizers.Framework;
 /// <summary>
 /// Class that handles placement of special fertilizers.
 /// </summary>
+[SuppressMessage("StyleCop.CSharp.OrderingRules", "SA1201:Elements should appear in the correct order", Justification = "Reviewed.")]
 public sealed class CanPlaceHandler : IMoreFertilizersAPI
 {
     #region ModdataStrings

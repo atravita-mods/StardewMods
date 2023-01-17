@@ -176,12 +176,12 @@ internal static class RemoveSeasonCheck
                 new(OpCodes.Ldarg_0), // this
                 new(OpCodes.Ldarg_2), // tile_X
                 new(OpCodes.Ldarg_3), // tile_Y
-                new(OpCodes.Ldarg_S, 6), //game location.
+                new(OpCodes.Ldarg_S, 6), // game location.
                 new(OpCodes.Call, typeof(RemoveSeasonCheck).GetCachedMethod(nameof(IsInEverlastingWithTempusGlobe), ReflectionCache.FlagTypes.StaticFlags)),
                 new(OpCodes.Brtrue_S, jumppoint),
             }, withLabels: labels);
 
-            helper.Print();
+            // helper.Print();
             return helper.Render();
         }
         catch (Exception ex)

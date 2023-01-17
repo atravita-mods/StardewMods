@@ -10,7 +10,7 @@
     <Name>Growable Bushes</Name>
     <Description>Lets you grow bushes.</Description>
     <Version>0.1.0</Version>
-    <UpdateKeys>-1</UpdateKeys>
+    <UpdateKeys>Nexus:15111</UpdateKeys>
     <BaseManifest>..\spacecore_dependencies.json</BaseManifest>
   </PropertyGroup>
 

@@ -6,12 +6,9 @@ using AtraShared.Utils.Extensions;
 
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Graphics.PackedVector;
 
-using StardewValley;
 using StardewValley.Buildings;
 using StardewValley.Locations;
-using StardewValley.Objects;
 using StardewValley.TerrainFeatures;
 
 namespace GrowableBushes.Framework;
@@ -20,6 +17,7 @@ namespace GrowableBushes.Framework;
 /// A bush in the inventory.
 /// </summary>
 [XmlType("Mods_atravita_InventoryBush")]
+[SuppressMessage("StyleCop.CSharp.OrderingRules", "SA1202:Elements should be ordered by access", Justification = "Keeping like methods together.")]
 public sealed class InventoryBush : SObject
 {
     [XmlIgnore]
@@ -39,7 +37,10 @@ public sealed class InventoryBush : SObject
     /// Initializes a new instance of the <see cref="InventoryBush"/> class.
     /// Constructor for the serializer.
     /// </summary>
-    public InventoryBush() : base() {}
+    public InventoryBush()
+        : base()
+    {
+    }
 
     /// <summary>
     /// Initializes a new instance of the <see cref="InventoryBush"/> class.
@@ -71,6 +72,7 @@ public sealed class InventoryBush : SObject
     /// <summary>
     /// Stardew's Bush::shake.
     /// </summary>
+    [SuppressMessage("StyleCop.CSharp.OrderingRules", "SA1201:Elements should appear in the correct order", Justification = "Reflection delegate.")]
     private static readonly BushShakeDel BushShakeMethod = typeof(Bush)
         .GetCachedMethod("shake", ReflectionCache.FlagTypes.InstanceFlags)
         .CreateDelegate<BushShakeDel>();
@@ -187,23 +189,27 @@ public sealed class InventoryBush : SObject
     /// <inheritdoc />
     public override void drawPlacementBounds(SpriteBatch spriteBatch, GameLocation location)
     {
-        int X = (int)Game1.GetPlacementGrabTile().X * 64;
-        int Y = (int)Game1.GetPlacementGrabTile().Y * 64;
+        int x, y;
         Game1.isCheckingNonMousePlacement = !Game1.IsPerformingMousePlacement();
         if (Game1.isCheckingNonMousePlacement)
         {
-            Vector2 nearbyValidPlacementPosition = Utility.GetNearbyValidPlacementPosition(Game1.player, location, this, X, Y);
-            X = (int)nearbyValidPlacementPosition.X;
-            Y = (int)nearbyValidPlacementPosition.Y;
+            Vector2 nearbyValidPlacementPosition = Utility.GetNearbyValidPlacementPosition(Game1.player, location, this, x, y);
+            x = (int)nearbyValidPlacementPosition.X;
+            y = (int)nearbyValidPlacementPosition.Y;
+        }
+        else
+        {
+            x = (int)Game1.GetPlacementGrabTile().X * 64;
+            y = (int)Game1.GetPlacementGrabTile().Y * 64;
         }
 
         int width = ((BushSizes)this.ParentSheetIndex).GetWidth();
-        bool canPlaceHere = Utility.playerCanPlaceItemHere(location, this, X, Y, Game1.player) && Utility.withinRadiusOfPlayer(X, Y, 1, Game1.player);
+        bool canPlaceHere = Utility.playerCanPlaceItemHere(location, this, x, y, Game1.player) && Utility.withinRadiusOfPlayer(x, y, 1, Game1.player);
         for (int x_offset = 0; x_offset < width; x_offset++)
         {
             spriteBatch.Draw(
                 texture: Game1.mouseCursors,
-                new Vector2((((X / 64) + x_offset) * 64) - Game1.viewport.X, Y - Game1.viewport.Y),
+                new Vector2((((x / 64) + x_offset) * 64) - Game1.viewport.X, y - Game1.viewport.Y),
                 new Rectangle(canPlaceHere ? 194 : 210, 388, 16, 16),
                 color: Color.White,
                 rotation: 0f,
@@ -212,7 +218,7 @@ public sealed class InventoryBush : SObject
                 effects: SpriteEffects.None,
                 layerDepth: 0.01f);
         }
-        this.draw(spriteBatch, X / 64, Y / 64, 0.5f);
+        this.draw(spriteBatch, x / 64, y / 64, 0.5f);
     }
 
     /// <inheritdoc />
@@ -221,6 +227,7 @@ public sealed class InventoryBush : SObject
         this.draw(b, (int)this.TileLocation.X, (int)this.TileLocation.Y);
     }
 
+    /// <inheritdoc />
     public override void drawInMenu(SpriteBatch spriteBatch, Vector2 location, float scaleSize, float transparency, float layerDepth, StackDrawType drawStackNumber, Color color, bool drawShadow)
     {
         if (this.sourceRect == default)
@@ -238,30 +245,22 @@ public sealed class InventoryBush : SObject
                 color * transparency,
                 0f,
                 new Vector2(8f, 16f),
-                this.getScaleSize() * scaleSize,
+                this.GetScaleSize() * scaleSize,
                 SpriteEffects.None,
                 layerDepth);
             if (((drawStackNumber == StackDrawType.Draw && this.maximumStackSize() > 1 && this.Stack > 1) || drawStackNumber == StackDrawType.Draw_OneInclusive)
                 && scaleSize > 0.3f && this.Stack != int.MaxValue)
             {
                 Utility.drawTinyDigits(
-                    toDraw: this.stack.Value,
+                    toDraw: this.Stack,
                     b: spriteBatch,
-                    position: location + new Vector2((float)(64 - Utility.getWidthOfTinyDigitString(this.stack, 3f * scaleSize)) + 3f * scaleSize, 64f - 18f * scaleSize + 2f),
+                    position: location + new Vector2(64 - Utility.getWidthOfTinyDigitString(this.Stack, 3f * scaleSize) + (3f * scaleSize), 64f - (18f * scaleSize) + 2f),
                     scale: 3f * scaleSize,
                     layerDepth: 1f,
                     c: Color.White);
             }
         }
     }
-
-    private float getScaleSize() =>
-        (BushSizes)this.ParentSheetIndex switch
-        {
-            BushSizes.Large or BushSizes.TownLarge=> 1f,
-            BushSizes.Medium => 1.4f,
-            _ => 2f
-        };
 
     /// <inheritdoc />
     public override void drawWhenHeld(SpriteBatch spriteBatch, Vector2 objectPosition, Farmer f)
@@ -290,10 +289,23 @@ public sealed class InventoryBush : SObject
         }
     }
 
+    /// <summary>
+    /// Gets the DrawInMenu scaling for a bush.
+    /// </summary>
+    /// <returns>float scaling factor.</returns>
+    private float GetScaleSize() =>
+        (BushSizes)this.ParentSheetIndex switch
+        {
+            BushSizes.Large or BushSizes.TownLarge => 1f,
+            BushSizes.Medium => 1.4f,
+            _ => 2f
+        };
+
     #endregion
 
     #region misc
 
+    /// <inheritdoc />
     public override Item getOne()
     {
         InventoryBush bush = new((BushSizes)this.ParentSheetIndex, 1);
@@ -373,6 +385,10 @@ public sealed class InventoryBush : SObject
 
     #region helpers
 
+    /// <summary>
+    /// Updates the sourceRect for a new location.
+    /// </summary>
+    /// <param name="location">The location to update for.</param>
     internal void UpdateForNewLocation(GameLocation location)
     {
         int season = GetSeason(location);

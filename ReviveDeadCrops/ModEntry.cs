@@ -18,16 +18,6 @@ namespace ReviveDeadCrops;
 /// <inheritdoc />
 internal sealed class ModEntry : Mod
 {
-    /// <summary>
-    /// Gets the logging instance for this mod.
-    /// </summary>
-    internal static IMonitor ModMonitor { get; private set; } = null!;
-
-    /// <summary>
-    /// Gets the API for this mod.
-    /// </summary>
-    internal static ReviveDeadCropsApi Api { get; } = ReviveDeadCropsApi.Instance;
-
     private static IJsonAssetsAPI? jaAPI;
 
     private static int everlastingID = -1;
@@ -47,6 +37,16 @@ internal sealed class ModEntry : Mod
             return everlastingID;
         }
     }
+
+    /// <summary>
+    /// Gets the logging instance for this mod.
+    /// </summary>
+    internal static IMonitor ModMonitor { get; private set; } = null!;
+
+    /// <summary>
+    /// Gets the API for this mod.
+    /// </summary>
+    internal static ReviveDeadCropsApi Api { get; } = ReviveDeadCropsApi.Instance;
 
     /// <inheritdoc />
     public override void Entry(IModHelper helper)

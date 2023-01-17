@@ -31,13 +31,14 @@ internal static class BushPatches
     [HarmonyPostfix]
     [HarmonyPriority(Priority.LowerThanNormal)]
     [HarmonyPatch(nameof(Bush.isDestroyable))]
+    [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Harmony convention.")]
     private static void PostfixIsDestroyable(Bush __instance, ref bool __result)
     {
         if (!__result)
         {
             try
             {
-                if (ModEntry.Config.CanAxeAllBushes || __instance.modData?.ContainsKey(InventoryBush.BushModData) == true)
+                if (ModEntry.Config.CanAxeAllBushes || __instance?.modData?.ContainsKey(InventoryBush.BushModData) == true)
                 {
                     __result = true;
                 }
@@ -52,14 +53,20 @@ internal static class BushPatches
     [HarmonyPrefix]
     [HarmonyPriority(Priority.First)]
     [HarmonyPatch("shake")]
+    [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Harmony convention.")]
     private static bool PrefixShake(Bush __instance, bool doEvenIfStillShaking)
     {
+        if (__instance is null)
+        {
+            return true;
+        }
+
         try
         {
             if (__instance.size.Value == Bush.walnutBush &&
                 __instance.modData?.GetEnum(InventoryBush.BushModData, BushSizes.Small) == BushSizes.Walnut)
             {
-                if (BushMaxShakeGetterLazy.Value(__instance) == 0 || doEvenIfStillShaking)
+                if (doEvenIfStillShaking || BushMaxShakeGetterLazy.Value(__instance) == 0)
                 {
                     BushMaxShakeSetterLazy.Value(__instance, MathF.PI / 128f);
                 }
@@ -76,11 +83,12 @@ internal static class BushPatches
 
     [HarmonyPostfix]
     [HarmonyPatch(nameof(Bush.dayUpdate))]
+    [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Harmony convention.")]
     private static void PostfixDayUpdate(Bush __instance, GameLocation environment)
     {
         try
         {
-            if (!__instance.modData.ContainsKey(InventoryBush.BushModData))
+            if (__instance?.modData?.ContainsKey(InventoryBush.BushModData) != true)
             {
                 return;
             }
@@ -114,12 +122,13 @@ internal static class BushPatches
     {
         if (__result)
         {
+            // bush slated for removal.
             return;
         }
 
         try
         {
-            if (!__instance.modData.ContainsKey(InventoryBush.BushModData))
+            if (__instance?.modData?.ContainsKey(InventoryBush.BushModData) != true)
             {
                 return;
             }

@@ -26,7 +26,6 @@ namespace MoreFertilizers.HarmonyPatches.TreeFertilizers;
 [HarmonyPatch(typeof(Tree))]
 internal static class TreeDrawTranspiler
 {
-
     [MethodImpl(TKConstants.Hot)]
     private static Color ReplaceColorIfNeeded(Color prevcolor, Tree tree)
     {

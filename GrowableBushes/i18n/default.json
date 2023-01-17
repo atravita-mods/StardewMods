@@ -10,6 +10,8 @@
   "CanAxeAllBushes.description": "Enable to allow axing of all bushes.",
   "ShopLocation": "Shop Location",
   "ShopLocation.description": "The location of the bush shop in Caroline's sunroom.",
+  "ShouldNPCsTrampleBushes.title": "Should NPCs Trample Bushes.",
+  "ShouldNPCsTrampleBushes.description": "If enabled, will allow NPCs to remove bushes in their path.",
 
   // Shop
   "shop.message": "Hi! Anything you want?",

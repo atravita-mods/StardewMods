@@ -35,11 +35,11 @@ internal static class CropHarvestTranspiler
 {
     private const string DGAModDataKey = "atravita.MoreFertilizers/DGASeedID";
 
-    private static bool HasQualityMod = false;
+    private static bool hasQualityMod = false;
 
     internal static void Initialize(IModRegistry registry)
     {
-        HasQualityMod = registry.IsLoaded("spacechase0.AQualityMod");
+        hasQualityMod = registry.IsLoaded("spacechase0.AQualityMod");
     }
 
     /// <summary>
@@ -79,7 +79,7 @@ internal static class CropHarvestTranspiler
             }
             else if (dirt.fertilizer.Value == ModEntry.SecretJojaFertilizerID)
             {
-                return HasQualityMod
+                return hasQualityMod
                     ? ((Game1.random.Next(4) != 0 || dirt.HasJojaCrop()) ? -2 : 1)
                     : ((Game1.random.Next(2) == 0 && !dirt.HasJojaCrop()) ? 1 : 0);
             }
@@ -174,7 +174,7 @@ internal static class CropHarvestTranspiler
         if (ModEntry.SecretJojaFertilizerID != -1 && dirt?.fertilizer?.Value == ModEntry.SecretJojaFertilizerID
             && (Game1.random.Next(3) == 0 || dirt.HasJojaCrop()))
         {
-            return Math.Max(1, ((HasQualityMod ? 0.8 : 0.9) * prevValue).RandomRoundProportional());
+            return Math.Max(1, ((hasQualityMod ? 0.8 : 0.9) * prevValue).RandomRoundProportional());
         }
         return prevValue;
     }

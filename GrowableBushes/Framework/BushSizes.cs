@@ -1,11 +1,17 @@
-﻿using NetEscapades.EnumGenerators;
-
-using StardewValley.TerrainFeatures;
+﻿using StardewValley.TerrainFeatures;
 
 namespace GrowableBushes.Framework;
 
+/// <summary>
+/// Extension methods for BushSizes.
+/// </summary>
 internal static class BushSizesExtraExtensions
 {
+    /// <summary>
+    /// Gets the <see cref="Bush.size"/> for the BushSizes.
+    /// </summary>
+    /// <param name="sizes">BushSize.</param>
+    /// <returns>int size.</returns>
     internal static int ToStardewBush(this BushSizes sizes)
         => sizes switch
         {
@@ -17,6 +23,11 @@ internal static class BushSizesExtraExtensions
             _ => Bush.smallBush,
         };
 
+    /// <summary>
+    /// Get the width (in tiles) of a specific BushSize.
+    /// </summary>
+    /// <param name="sizes">size.</param>
+    /// <returns>width.</returns>
     internal static int GetWidth(this BushSizes sizes)
         => sizes switch
         {

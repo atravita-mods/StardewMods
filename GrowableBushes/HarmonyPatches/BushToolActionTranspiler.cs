@@ -9,6 +9,9 @@ using StardewValley.TerrainFeatures;
 
 namespace GrowableBushes.HarmonyPatches;
 
+/// <summary>
+/// Transpiler on Bush.performToolAction to allow decorative walnut bushes to but axed.
+/// </summary>
 [HarmonyPatch(typeof(Bush))]
 internal static class BushToolActionTranspiler
 {
@@ -26,7 +29,7 @@ internal static class BushToolActionTranspiler
             {
                 OpCodes.Ldarg_0,
                 (OpCodes.Ldfld, typeof(Bush).GetCachedField(nameof(Bush.size), ReflectionCache.FlagTypes.InstanceFlags)),
-                OpCodes.Call, //op_implicit
+                OpCodes.Call, // op_implicit
                 OpCodes.Ldc_I4_4,
                 OpCodes.Bne_Un_S,
             })
@@ -43,7 +46,7 @@ internal static class BushToolActionTranspiler
                 new(OpCodes.Call, typeof(BushToolActionTranspiler).GetCachedMethod(nameof(IsPlacedBush), ReflectionCache.FlagTypes.StaticFlags)),
                 new(OpCodes.Brtrue, jumpPoint),
             }, withLabels: labelsToMove);
-            
+
             // helper.Print();
             return helper.Render();
         }

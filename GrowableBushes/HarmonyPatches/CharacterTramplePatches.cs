@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-using GrowableBushes.Framework;
+﻿using GrowableBushes.Framework;
 
 using HarmonyLib;
 
@@ -15,10 +9,15 @@ using StardewValley.Tools;
 
 namespace GrowableBushes.HarmonyPatches;
 
+/// <summary>
+/// Holds patches that lets npcs trample bushes.
+/// </summary>
 [HarmonyPatch(typeof(Character))]
 internal static class CharacterTramplePatches
 {
+    [HarmonyPriority(Priority.HigherThanNormal)]
     [HarmonyPatch(nameof(Character.MovePosition))]
+    [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Harmony convention.")]
     private static void Prefix(Character __instance, GameLocation currentLocation)
     {
         if (!ModEntry.Config.ShouldNPCsTrampleBushes || __instance is not NPC npc || !npc.isVillager()
@@ -33,7 +32,7 @@ internal static class CharacterTramplePatches
 
             for (int i = 0; i < currentLocation.largeTerrainFeatures.Count; i++)
             {
-                var feature = currentLocation.largeTerrainFeatures[i];
+                LargeTerrainFeature feature = currentLocation.largeTerrainFeatures[i];
                 if (feature is Bush bush && bush.getBoundingBox().Contains(nextPosition)
                     && bush.modData.ContainsKey(InventoryBush.BushModData))
                 {

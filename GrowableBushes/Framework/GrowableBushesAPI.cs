@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 
 namespace GrowableBushes.Framework;
 
@@ -22,9 +16,7 @@ public sealed class GrowableBushesAPI : IGrowableBushesAPI
     {
         if (obj is InventoryBush bush && BushSizesExtensions.IsDefined((BushSizes)bush.ParentSheetIndex))
         {
-
             return (BushSizes)bush.ParentSheetIndex;
-
         }
         return null;
     }

@@ -1,24 +1,19 @@
 ﻿using AtraCore.Framework.Caches;
-using System.Text.RegularExpressions;
-
 using AtraShared.Caching;
-using AtraShared.ItemManagement;
 using AtraShared.Menuing;
 using AtraShared.Utils;
-
+using AtraShared.Utils.Extensions;
 using StardewModdingAPI.Events;
-
-using StardewValley.Locations;
-
 using StardewValley.Menus;
-
 using xTile.Dimensions;
 using xTile.ObjectModel;
-
 using XTile = xTile.Tiles.Tile;
-using AtraShared.Utils.Extensions;
 
 namespace GrowableBushes.Framework;
+
+/// <summary>
+/// Manages Caroline's bush shop.
+/// </summary>
 internal static class ShopManager
 {
     private const string BUILDING = "Buildings";
@@ -27,14 +22,19 @@ internal static class ShopManager
     private static IAssetName sunHouse = null!;
     private static IAssetName mail = null!;
 
-    private static TickCache<bool> IslandUnlocked = new(() => FarmerHelpers.HasAnyFarmerRecievedFlag("seenBoatJourney"));
+    private static TickCache<bool> islandUnlocked = new(() => FarmerHelpers.HasAnyFarmerRecievedFlag("seenBoatJourney"));
 
+    /// <summary>
+    /// Initializes asset names.
+    /// </summary>
+    /// <param name="parser">asset name parser.</param>
     internal static void Initialize(IGameContentHelper parser)
     {
         sunHouse = parser.ParseAssetName("Maps/Sunroom");
         mail = parser.ParseAssetName("Data/mail");
     }
 
+    /// <inheritdoc cref="IContentEvents.AssetRequested"/>
     internal static void OnAssetRequested(AssetRequestedEventArgs e)
     {
         if (e.NameWithoutLocale.IsEquivalentTo(mail))
@@ -62,7 +62,8 @@ internal static class ShopManager
         }
     }
 
-    internal static void OnDayEnd(DayEndingEventArgs e)
+    /// <inheritdoc cref="IGameLoopEvents.DayEnding"/>
+    internal static void OnDayEnd()
     {
         if (Game1.getOnlineFarmers().Any((farmer) => farmer.eventsSeen.Contains(719926)))
         {
@@ -89,10 +90,10 @@ internal static class ShopManager
 
         Dictionary<ISalable, int[]> sellables = new(20);
 
-        foreach (var bushIndex in BushSizesExtensions.GetValues())
+        foreach (BushSizes bushIndex in BushSizesExtensions.GetValues())
         {
             int[] sellData;
-            if (bushIndex is BushSizes.Walnut or BushSizes.Harvested && !IslandUnlocked.GetValue())
+            if (bushIndex is BushSizes.Walnut or BushSizes.Harvested && !islandUnlocked.GetValue())
             {
                 continue;
             }
@@ -109,7 +110,7 @@ internal static class ShopManager
             _ = sellables.TryAdd(bush, sellData);
         }
 
-        var shop = new ShopMenu(sellables, who: "Caroline") { storeContext = SHOPNAME };
+        ShopMenu shop = new ShopMenu(sellables, who: "Caroline") { storeContext = SHOPNAME };
 
         if (NPCCache.GetByVillagerName("Caroline") is NPC caroline)
         {

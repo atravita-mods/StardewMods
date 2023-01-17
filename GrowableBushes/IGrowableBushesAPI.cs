@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 
 using NetEscapades.EnumGenerators;
 
@@ -14,11 +8,10 @@ namespace GrowableBushes;
 
 /// <summary>
 /// The API for Growable Bushes.
-/// You will also need the enum BushSizes.cs
+/// You will also need the enum BushSizes.cs.
 /// </summary>
 public interface IGrowableBushesAPI
 {
-
     /// <summary>
     /// Checks whether or not an InventoryBush can be placed.
     /// </summary>
@@ -61,15 +54,46 @@ public interface IGrowableBushesAPI
 public enum BushSizes
 {
     // base game bush sizes
+
+    /// <summary>
+    /// A small 16x32 bush.
+    /// </summary>
     Small = Bush.smallBush,
+
+    /// <summary>
+    /// The medium sized, berry bushes.
+    /// </summary>
     Medium = Bush.mediumBush,
+
+    /// <summary>
+    /// A large bush.
+    /// </summary>
     Large = Bush.largeBush,
 
+    /// <summary>
+    /// A harvested walnut bush.
+    /// </summary>
     Harvested = Bush.walnutBush - 1,
+
+    /// <summary>
+    /// A decorative walnut bush.
+    /// </summary>
     Walnut = Bush.walnutBush,
 
     // weird sizes
+
+    /// <summary>
+    /// The alternate form of the 16x32 small bush.
+    /// </summary>
     SmallAlt = 7,
+
+    /// <summary>
+    /// A medium sized bush that usually grows in town.
+    /// </summary>
     Town = 8,
+
+    /// <summary>
+    /// A large bush that usually grows in town.
+    /// </summary>
     TownLarge = 9,
 }

@@ -1,12 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿namespace GrowableBushes.Framework;
 
-namespace GrowableBushes.Framework;
+/// <summary>
+/// Manages console commands for this mod.
+/// </summary>
 internal static class ConsoleCommands
 {
+    /// <summary>
+    /// Registers these console commands with SMAPI.
+    /// </summary>
+    /// <param name="commandHelper">Command helper.</param>
     internal static void RegisterCommands(ICommandHelper commandHelper)
     {
         commandHelper.Add("av.gb.add_bush", "Adds a placeable bush to your inventory", AddBushToInventory);

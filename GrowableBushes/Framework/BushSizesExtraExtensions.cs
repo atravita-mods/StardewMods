@@ -1,4 +1,6 @@
-﻿using StardewValley.TerrainFeatures;
+﻿using AtraShared.Utils.Extensions;
+
+using StardewValley.TerrainFeatures;
 
 namespace GrowableBushes.Framework;
 
@@ -35,4 +37,26 @@ internal static class BushSizesExtraExtensions
             BushSizes.Large or BushSizes.TownLarge => 3,
             _ => 2
         };
+
+    /// <summary>
+    /// Gets the BushSize this bush corresponds to.
+    /// </summary>
+    /// <param name="bush">Bush to check.</param>
+    /// <returns>BushSize if found.</returns>
+    /// <remarks>Does not look at the metadata.</remarks>
+    internal static BushSizes ToBushSize(this Bush bush)
+    {
+        return bush.size.Value switch
+        {
+            Bush.smallBush when bush.tileSheetOffset.Value == 1 => BushSizes.SmallAlt,
+            Bush.smallBush => BushSizes.Small,
+            Bush.mediumBush when bush.townBush.Value => BushSizes.Town,
+            Bush.mediumBush => BushSizes.Medium,
+            Bush.largeBush when bush.townBush.Value => BushSizes.TownLarge,
+            Bush.largeBush => BushSizes.Large,
+            Bush.walnutBush when bush.tileSheetOffset.Value == 1 => BushSizes.Walnut,
+            Bush.walnutBush => BushSizes.Harvested,
+            _ => BushSizes.Invalid
+        };
+    }
 }

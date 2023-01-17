@@ -67,7 +67,7 @@ internal static class BushPatches
         try
         {
             if (__instance.size.Value == Bush.walnutBush &&
-                __instance.modData?.GetEnum(InventoryBush.BushModData, BushSizes.Small) == BushSizes.Walnut)
+                __instance.modData?.GetEnum(InventoryBush.BushModData, BushSizes.Invalid) == BushSizes.Walnut)
             {
                 if (doEvenIfStillShaking || BushMaxShakeGetterLazy.Value(__instance) == 0)
                 {
@@ -95,7 +95,7 @@ internal static class BushPatches
                 return;
             }
 
-            BushSizes size = __instance.modData.GetEnum(InventoryBush.BushModData, BushSizes.Small);
+            BushSizes size = __instance.modData.GetEnum(InventoryBush.BushModData, BushSizes.Invalid);
             switch (size)
             {
                 case BushSizes.SmallAlt:
@@ -135,7 +135,7 @@ internal static class BushPatches
                 return;
             }
 
-            BushSizes size = __instance.modData.GetEnum(InventoryBush.BushModData, BushSizes.Small);
+            BushSizes size = __instance.modData.GetEnum(InventoryBush.BushModData, BushSizes.Invalid);
             switch (size)
             {
                 case BushSizes.SmallAlt:

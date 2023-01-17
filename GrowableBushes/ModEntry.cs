@@ -186,7 +186,7 @@ internal sealed class ModEntry : Mod
                         continue;
                     }
 
-                    BushSizes size = bush.modData.GetEnum(InventoryBush.BushModData, BushSizes.Small);
+                    BushSizes size = bush.modData.GetEnum(InventoryBush.BushModData, BushSizes.Invalid);
                     if (size == BushSizes.SmallAlt)
                     {
                         bush.tileSheetOffset.Value = 1;

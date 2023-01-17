@@ -12,7 +12,7 @@ Lets you plop down bushes. Buy them from Caroline's sunroom (the planter on the 
 3. Run the game using SMAPI.
 
 ## Uninstall
-Simply delete from your Mods directory.
+Remove any bush items you have in your inventory, and cut down any bushes you don't want anymore, and then delete from your Mods directory.
 
 ## Configuration
 Run SMAPI at least once with this mod installed to generate the `config.json`, or use [Generic Mod Config Menu](https://www.nexusmods.com/stardewvalley/mods/5098) to configure.
@@ -23,7 +23,9 @@ Run SMAPI at least once with this mod installed to generate the `config.json`, o
 ## Technical Notes:
 * The bushes in your inventory are a custom subclass. Once placed, however, they're the exact same bushes as every other bush. If you remove this mod, those bushes will remain (and, uh, the walnut bushes you put down will become collect-able.)
 * You should be able to target the bushes, after placement, with [Alternative Textures](https://www.nexusmods.com/stardewvalley/mods/9246).
-* Some of the bushes are simply alternative forms of other bushes in the game and probably won't be recognized by other mods. If you use Destroyable bushes and cut down an Alternative Small Bush, for example, [Destroyable Bushes](https://www.nexusmods.com/stardewvalley/mods/6304) will regrow a Small Bush. The Town Bush and the Medium Bush are also alternative forms, as are the Large Town Bush and the Large Bush.
+* [Destroyable Bushes](https://www.nexusmods.com/stardewvalley/mods/6304) will try to regrow bushes you cut down (if you have that mod set to regrow).
+* You can fertilize the medium-sized bushes with the fertilizers in [More Fertilizers](../More Fertilizers/More Fertilizers).
+* Some of the bushes are simply alternative forms of other bushes in the game and probably won't be recognized by other mods. If you use Destroyable bushes and cut down an Alternative Small Bush, for example, Destroyable Bushes will regrow a Small Bush. The Town Bush and the Medium Bush are also alternative forms, as are the Large Town Bush and the Large Bush.
 * If you use bushes to block of NPC pathing, it'll definitely break things.
 
 ## Compatibility

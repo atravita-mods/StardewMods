@@ -11,6 +11,8 @@ using StardewValley.Buildings;
 using StardewValley.Locations;
 using StardewValley.TerrainFeatures;
 
+using GrowableBushes;
+
 namespace GrowableBushes.Framework;
 
 /// <summary>
@@ -52,8 +54,8 @@ public sealed class InventoryBush : SObject
     {
         if (!BushSizesExtensions.IsDefined(whichBush))
         {
-            ModEntry.ModMonitor.Log($"Bush {whichBush.ToStringFast()} doesn't seem to be a valid bush? Setting as smol bush.", LogLevel.Error);
-            this.ParentSheetIndex = (int)BushSizes.Small;
+            ModEntry.ModMonitor.Log($"Bush {whichBush.ToStringFast()} doesn't seem to be a valid bush? Setting as error bush.", LogLevel.Error);
+            this.ParentSheetIndex = (int)BushSizes.Invalid;
         }
 
         this.bigCraftable.Value = true;

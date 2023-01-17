@@ -42,8 +42,29 @@ public interface IGrowableBushesAPI
     /// Gets the size associated with this InventoryBush, or null if it's not an InventoryBush.
     /// </summary>
     /// <param name="obj">Object to check.</param>
-    /// <returns>Size if applicable, null if not.</returns>
-    public BushSizes? GetSizeOfBushIfApplicable(StardewValley.Object obj);
+    /// <returns>Size if applicable, or <see cref="BushSizes.Invalid"/> if not.</returns>
+    public BushSizes GetSizeOfBushIfApplicable(StardewValley.Object obj);
+
+    /// <summary>
+    /// Checks to see if a bush can be picked up from this location.
+    /// </summary>
+    /// <param name="loc">Game location.</param>
+    /// <param name="tile">Tile to pick up from.</param>
+    /// <param name="placedOnly">Whether or not we should be limited to just bushes we placed.</param>
+    /// <returns>A BushSizes that corresponds size of the bush, or <see cref="BushSizes.Invalid"/> otherwise.</returns>
+    /// <remarks>For safety reasons, a real (non-decorative) walnut bush still bearing a walnut will not be pick-up-able.</remarks>
+    public BushSizes CanPickUpBush(GameLocation loc, Vector2 tile, bool placedOnly = false);
+
+    /// <summary>
+    /// Picks up a bush if possible.
+    /// </summary>
+    /// <param name="loc">Game location.</param>
+    /// <param name="tile">Tile to pick up from.</param>
+    /// <param name="placedOnly">Whether or not we should be limited to just bushes we placed.</param>
+    /// <returns>InventoryBush if successfully picked up, null otherwise.</returns>
+    /// <remarks>For safety reasons, a real (non-decorative) walnut bush still bearing a walnut will not be pick-up-able.
+    /// This method also does NOT handle adding the bush to the user's inventory.</remarks>
+    public StardewValley.Object? TryPickUpBush(GameLocation loc, Vector2 tile, bool placedOnly = false);
 }
 
 /// <summary>
@@ -53,6 +74,11 @@ public interface IGrowableBushesAPI
 [EnumExtensions]
 public enum BushSizes
 {
+    /// <summary>
+    /// The marker for an invalid bush.
+    /// </summary>
+    Invalid = -1,
+
     // base game bush sizes
 
     /// <summary>

@@ -33,7 +33,11 @@ internal static class ConsoleCommands
         {
             foreach (BushSizes possibleBush in BushSizesExtensions.GetValues())
             {
-                Game1.player.addItemToInventoryBool(new InventoryBush(possibleBush, count));
+                InventoryBush item = new(possibleBush, count);
+                if (!Game1.player.addItemToInventoryBool(item))
+                {
+                    Game1.currentLocation.debris.Add(new Debris(item, Game1.player.Position));
+                }
             }
             return;
         }
@@ -45,10 +49,16 @@ internal static class ConsoleCommands
         }
         else if (!BushSizesExtensions.TryParse(name, out bushIndex, ignoreCase: true))
         {
-            ModEntry.ModMonitor.Log($"{name.ToString()} is not a valid bush.", LogLevel.Error);
+            ModEntry.ModMonitor.Log($"{name.ToString()} is not a valid bush. Valid bushes are: {string.Join(" ,", BushSizesExtensions.GetNames())}", LogLevel.Error);
             return;
         }
 
-        Game1.player.addItemToInventoryBool(new InventoryBush(bushIndex, count));
+        {
+            InventoryBush item = new(bushIndex, count);
+            if (!Game1.player.addItemToInventoryBool(item))
+            {
+                Game1.currentLocation.debris.Add(new Debris(item, Game1.player.Position));
+            }
+        }
     }
 }

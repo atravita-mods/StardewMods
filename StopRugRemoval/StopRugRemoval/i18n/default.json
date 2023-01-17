@@ -43,6 +43,8 @@
   "BetIcons.description": "Whether or not to show the bet1k/bet10k icons.",
 
   // Handle the confirmation GMCM stuff....
+  "NapalmInSafeAreas.title": "Napalm In Safe Areas",
+  "NapalmInSafeAreas.description": "If disabled, prevents napalm rings from taking effect in areas marked as Safe (by default the Farm).",
 
   "BombLocationDetailed": "Bomb and warp confirmation per location",
   "BombLocationDetailed.description": "Sets whether or not a location should be considered safe or dangerous when it comes to bomb confirmation. A dynamic location is considered dangerous if there is a single enemy on it.",

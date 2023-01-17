@@ -72,9 +72,11 @@ internal static class ShopManager
     /// <inheritdoc cref="IGameLoopEvents.DayEnding"/>
     internal static void OnDayEnd()
     {
-        if (Game1.getOnlineFarmers().Any((farmer) => farmer.eventsSeen.Contains(719926)))
+        if (Game1.player.getFriendshipLevelForNPC("Caroline") > 1500
+            && !Game1.player.mailReceived.Contains(SHOPNAME)
+            && Game1.player.mailReceived.Contains("CarolineTea"))
         {
-            Game1.addMailForTomorrow(mailName: SHOPNAME, noLetter: false, sendToEveryone: true);
+            Game1.addMailForTomorrow(mailName: SHOPNAME);
         }
     }
 

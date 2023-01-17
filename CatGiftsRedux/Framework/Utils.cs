@@ -98,6 +98,11 @@ internal static class Utils
             }
 
             location.Objects[tile] = obj;
+
+            if (pet is Dog)
+            {
+                location.makeHoeDirt(tile, ignoreChecks: false);
+            }
         }
         else
         {

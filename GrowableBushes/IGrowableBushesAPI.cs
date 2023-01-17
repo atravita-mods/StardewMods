@@ -6,6 +6,8 @@ using StardewValley.TerrainFeatures;
 
 namespace GrowableBushes;
 
+#nullable enable
+
 /// <summary>
 /// The API for Growable Bushes.
 /// You will also need the enum BushSizes.cs.

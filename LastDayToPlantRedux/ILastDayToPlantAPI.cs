@@ -45,10 +45,21 @@ public interface ILastDayToPlantAPI
 /// </summary>
 public enum Profession
 {
+    /// <summary>
+    /// No special growing profession.
+    /// </summary>
     None,
+
+    /// <summary>
+    /// Agricultralist.
+    /// </summary>
     Agriculturalist,
+
+    /// <summary>
+    /// Prestiged agricultralist from WoL/MARGO.
+    /// </summary>
     Prestiged,
 }
 
-// also need to copy StardewSeason.cs: https://github.com/atravita-mods/StardewMods/blob/main/AtraShared/ConstantsAndEnums/Seasons.cs . Note while that is a 
+// also need to copy StardewSeason.cs: https://github.com/atravita-mods/StardewMods/blob/main/AtraShared/ConstantsAndEnums/Seasons.cs . Note while that is a
 // bitflag enum, this API only expects to be called with a single season at a time and will throw an error otherwise.

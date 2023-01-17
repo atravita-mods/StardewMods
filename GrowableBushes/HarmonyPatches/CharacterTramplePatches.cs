@@ -1,4 +1,8 @@
-﻿using GrowableBushes.Framework;
+﻿using System.Runtime.CompilerServices;
+
+using AtraBase.Toolkit;
+
+using GrowableBushes.Framework;
 
 using HarmonyLib;
 
@@ -15,6 +19,7 @@ namespace GrowableBushes.HarmonyPatches;
 [HarmonyPatch(typeof(Character))]
 internal static class CharacterTramplePatches
 {
+    [MethodImpl(TKConstants.Hot)]
     [HarmonyPriority(Priority.HigherThanNormal)]
     [HarmonyPatch(nameof(Character.MovePosition))]
     [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Harmony convention.")]

@@ -16,8 +16,11 @@ namespace GrowableBushes.HarmonyPatches;
 /// Patches on bushes.
 /// </summary>
 [HarmonyPatch(typeof(Bush))]
+[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Harmony convention.")]
 internal static class BushPatches
 {
+    #region delegates
+
     private static readonly Lazy<Func<Bush, float>> BushMaxShakeGetterLazy = new(
     () => typeof(Bush)
         .GetCachedField("maxShake", ReflectionCache.FlagTypes.InstanceFlags)
@@ -28,10 +31,11 @@ internal static class BushPatches
         .GetCachedField("maxShake", ReflectionCache.FlagTypes.InstanceFlags)
         .GetInstanceFieldSetter<Bush, float>());
 
+    #endregion
+
     [HarmonyPostfix]
     [HarmonyPriority(Priority.LowerThanNormal)]
     [HarmonyPatch(nameof(Bush.isDestroyable))]
-    [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Harmony convention.")]
     private static void PostfixIsDestroyable(Bush __instance, ref bool __result)
     {
         if (!__result)
@@ -53,7 +57,6 @@ internal static class BushPatches
     [HarmonyPrefix]
     [HarmonyPriority(Priority.First)]
     [HarmonyPatch("shake")]
-    [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Harmony convention.")]
     private static bool PrefixShake(Bush __instance, bool doEvenIfStillShaking)
     {
         if (__instance is null)
@@ -83,7 +86,6 @@ internal static class BushPatches
 
     [HarmonyPostfix]
     [HarmonyPatch(nameof(Bush.dayUpdate))]
-    [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Harmony convention.")]
     private static void PostfixDayUpdate(Bush __instance, GameLocation environment)
     {
         try

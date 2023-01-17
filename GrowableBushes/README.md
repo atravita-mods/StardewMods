@@ -21,14 +21,16 @@ Run SMAPI at least once with this mod installed to generate the `config.json`, o
 * `ShouldNPCsTrampleBushes`: If turned on, will allow NPCs to remove bushes in their path.
 
 ## Technical Notes:
-* Some of the bushes are simply alternative forms of other bushes in the game and probably won't be recognized by other mods. If you use Destroyable bushes and cut down an Alternative Small Bush, for example, Destroyable Bushes will regrow a Small Bush. The Town Bush and the Medium Bush are also alternative forms, as are the Large Town Bush and the Large Bush.
+* The bushes in your inventory are a custom subclass. Once placed, however, they're the exact same bushes as every other bush. If you remove this mod, those bushes will remain (and, uh, the walnut bushes you put down will become collect-able.)
+* You should be able to target the bushes, after placement, with [Alternative Textures](https://www.nexusmods.com/stardewvalley/mods/9246).
+* Some of the bushes are simply alternative forms of other bushes in the game and probably won't be recognized by other mods. If you use Destroyable bushes and cut down an Alternative Small Bush, for example, [Destroyable Bushes](https://www.nexusmods.com/stardewvalley/mods/6304) will regrow a Small Bush. The Town Bush and the Medium Bush are also alternative forms, as are the Large Town Bush and the Large Bush.
 * If you use bushes to block of NPC pathing, it'll definitely break things.
 
 ## Compatibility
 
 * Works with Stardew Valley 1.5.6 on Linux/macOS/Windows.
 * Works in single player, multiplayer, and split-screen mode. **Absolutely** has to be installed by everyone in multiplayer.
-* Should be compatible with most other mods, including Destoryable Bushes.
+* Should be compatible with most other mods, including [Destroyable Bushes](https://www.nexusmods.com/stardewvalley/mods/6304). Will work with recolors (I really like [Simple Foliage](https://www.nexusmods.com/stardewvalley/mods/8164), as an example)! Works with Smart Building...mostly! (the red text is harmless).
 
 ## See also
 

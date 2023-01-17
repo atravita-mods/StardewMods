@@ -189,18 +189,14 @@ public sealed class InventoryBush : SObject
     /// <inheritdoc />
     public override void drawPlacementBounds(SpriteBatch spriteBatch, GameLocation location)
     {
-        int x, y;
+        int x = (int)Game1.GetPlacementGrabTile().X * 64;
+        int y = (int)Game1.GetPlacementGrabTile().Y * 64;
         Game1.isCheckingNonMousePlacement = !Game1.IsPerformingMousePlacement();
         if (Game1.isCheckingNonMousePlacement)
         {
             Vector2 nearbyValidPlacementPosition = Utility.GetNearbyValidPlacementPosition(Game1.player, location, this, x, y);
             x = (int)nearbyValidPlacementPosition.X;
             y = (int)nearbyValidPlacementPosition.Y;
-        }
-        else
-        {
-            x = (int)Game1.GetPlacementGrabTile().X * 64;
-            y = (int)Game1.GetPlacementGrabTile().Y * 64;
         }
 
         int width = ((BushSizes)this.ParentSheetIndex).GetWidth();

@@ -421,19 +421,33 @@ public sealed class InventoryBush : SObject
 
     private static bool IsTilePlaceableForBush(GameLocation location, int tileX, int tileY, bool relaxed)
     {
-        if (location is null)
+        if (location is null || location.doesTileHaveProperty(tileX, tileY, "Water", "Back") is not null)
         {
             return false;
         }
 
-        if (location.doesTileHaveProperty(tileX, tileY, "Water", "Back") is not null)
-        {
-            return false;
-        }
+        Rectangle position = new(tileX * 64, tileY * 64, 64, 64);
 
         foreach (Farmer farmer in location.farmers)
         {
-            if (farmer.GetBoundingBox().Intersects(new Rectangle(tileX * 64, tileY * 64, 64, 64)))
+            if (farmer.GetBoundingBox().Intersects(position))
+            {
+                return false;
+            }
+        }
+
+        foreach (Character character in location.characters)
+        {
+            if (character.GetBoundingBox().Intersects(position))
+            {
+                return false;
+            }
+
+        }
+
+        foreach (LargeTerrainFeature largeTerrainFeature in location.largeTerrainFeatures)
+        {
+            if (largeTerrainFeature.getBoundingBox().Intersects(position))
             {
                 return false;
             }

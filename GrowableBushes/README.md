@@ -19,12 +19,13 @@ Run SMAPI at least once with this mod installed to generate the `config.json`, o
 * `CanAxeAllBushes`: By default you're only allowed to axe bushes that you've placed. Turn this on to axe all bushes.
 * `ShopLocation`: The tile that the bush shop is on, in Caroline's Sunroom.
 * `ShouldNPCsTrampleBushes`: If turned on, will allow NPCs to remove bushes in their path.
+* `RelaxedPlacement`: If enabled, will relax the placement restrictions on bushes. Strongly recommend having [NoClip](https://www.nexusmods.com/stardewvalley/mods/3900) installed if you want to use this, it's possible to get yourself stuck in a bush by placing it on your head.
 
 ## Technical Notes:
 * The bushes in your inventory are a custom subclass. Once placed, however, they're the exact same bushes as every other bush. If you remove this mod, those bushes will remain (and, uh, the walnut bushes you put down will become collect-able.)
 * You should be able to target the bushes, after placement, with [Alternative Textures](https://www.nexusmods.com/stardewvalley/mods/9246).
 * [Destroyable Bushes](https://www.nexusmods.com/stardewvalley/mods/6304) will try to regrow bushes you cut down (if you have that mod set to regrow).
-* You can fertilize the medium-sized bushes with the fertilizers in [More Fertilizers](../More Fertilizers/More Fertilizers).
+* You can fertilize the medium-sized bushes with the fertilizers in [More Fertilizers](../MoreFertilizers/MoreFertilizers).
 * Some of the bushes are simply alternative forms of other bushes in the game and probably won't be recognized by other mods. If you use Destroyable bushes and cut down an Alternative Small Bush, for example, Destroyable Bushes will regrow a Small Bush. The Town Bush and the Medium Bush are also alternative forms, as are the Large Town Bush and the Large Bush.
 * If you use bushes to block of NPC pathing, it'll definitely break things.
 

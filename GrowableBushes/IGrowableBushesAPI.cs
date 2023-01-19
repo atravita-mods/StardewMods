@@ -43,7 +43,7 @@ public interface IGrowableBushesAPI
     public StardewValley.Object GetBush(BushSizes size);
 
     /// <summary>
-    /// Gets the size associated with this InventoryBush, or null if it's not an InventoryBush.
+    /// Gets the size associated with this InventoryBush, or <see cref="BushSizes.Invalid"/> if it's not an InventoryBush.
     /// </summary>
     /// <param name="obj">Object to check.</param>
     /// <returns>Size if applicable, or <see cref="BushSizes.Invalid"/> if not.</returns>

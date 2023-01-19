@@ -7,7 +7,7 @@
         "Target": "Characters/Dialogue/Abigail",
         "Entries": {
             "movieTheater": "Oh, a movie theater! @, would you like to go sometime?$h",
-            "7_2": "I hate group projects.$s"
+            "7_2": "I hate group projects.$s#$b#Trying to get my teammates to do their work when we're all remote is stupid hard."
         },
     },
     {
@@ -19,7 +19,8 @@
             "8_2": "Linear algebra is kicking my ass.#$b#Say, @, you any good at math?",
             "10_2": "Sam and I are thinking about going down to %place to catch a concert. You in?$h",
             "12_2": "Ugh, I hate doing the dishes.$s",
-            "14_2": "Hiya, @, I don't have time to chat today, I've got a midterm to study for."
+            "14_2": "Hiya, @, I don't have time to chat today, I've got a midterm to study for.",
+            "16_2": "Ugh. @, just between you and me, I'm really not feeling my major.",
         },
         "When": {
             "YearModulus": "2"

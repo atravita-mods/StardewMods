@@ -7,7 +7,7 @@ Lets you plop down bushes. Buy them from Caroline's sunroom (the planter on the 
 ## Install
 
 1. Install the latest version of [SMAPI](https://smapi.io).
-2. Download and install [AtraCore](https://www.nexusmods.com/stardewvalley/mods/12932) and [Spacecore](https://www.nexusmods.com/stardewvalley/mods/1348).
+2. Download and install [AtraCore](https://www.nexusmods.com/stardewvalley/mods/12932) and [SpaceCore](https://www.nexusmods.com/stardewvalley/mods/1348).
 2. Download this mod and unzip it into `Stardew Valley/Mods`.
 3. Run the game using SMAPI.
 
@@ -28,6 +28,7 @@ Run SMAPI at least once with this mod installed to generate the `config.json`, o
 * You can fertilize the medium-sized bushes with the fertilizers in [More Fertilizers](../MoreFertilizers/MoreFertilizers).
 * Some of the bushes are simply alternative forms of other bushes in the game and probably won't be recognized by other mods. If you use Destroyable bushes and cut down an Alternative Small Bush, for example, Destroyable Bushes will regrow a Small Bush. The Town Bush and the Medium Bush are also alternative forms, as are the Large Town Bush and the Large Bush.
 * If you use bushes to block of NPC pathing, it'll definitely break things.
+* **A performance note**: The game is NOT optimized for having a lot of bushes. If you place many bushes on a map where there are also a lot of NPCs/monsters trying to path, expect slowdown.
 
 ## Compatibility
 

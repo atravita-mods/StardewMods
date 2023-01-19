@@ -136,7 +136,11 @@ internal static class ShopManager
         foreach (BushSizes bushIndex in BushSizesExtensions.GetValues())
         {
             int[] sellData;
-            if (bushIndex is BushSizes.Walnut or BushSizes.Harvested)
+            if (bushIndex is BushSizes.Invalid)
+            {
+                continue;
+            }
+            else if (bushIndex is BushSizes.Walnut or BushSizes.Harvested)
             {
                 if (!islandUnlocked.GetValue())
                 {

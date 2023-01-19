@@ -17,7 +17,7 @@ internal static class AssetManager
     private static IAssetName objectData = null!;
     private static IAssetName ringMask = null!;
     private static IAssetName maskLocation = null!;
-
+    private static IAssetName toastMask = null!;
     /// <summary>
     /// Initializes the asset manager.
     /// </summary>
@@ -26,6 +26,7 @@ internal static class AssetManager
     {
         objectData = parser.ParseAssetName("Data/ObjectInformation");
         ringMask = parser.ParseAssetName("Mods/atravita_Prismatic_Ring/Texture");
+        toastMask = parser.ParseAssetName("Mods/atravita_Prismatic_Toast/Texture");
         maskLocation = parser.ParseAssetName(AtraCoreConstants.PrismaticMaskData);
     }
 
@@ -46,6 +47,10 @@ internal static class AssetManager
         else if (e.NameWithoutLocale.IsEquivalentTo(ringMask))
         {
             e.LoadFromModFile<Texture2D>("assets/json-assets/Objects/PrismaticSlimeRing/mask.png", AssetLoadPriority.Exclusive);
+        }
+        else if (e.NameWithoutLocale.IsEquivalentTo(toastMask))
+        {
+            e.LoadFromModFile<Texture2D>("assets/json-assets/Objects/PrismaticJellyToast/mask.png", AssetLoadPriority.Exclusive);
         }
     }
 
@@ -79,6 +84,13 @@ internal static class AssetManager
             Identifier = "atravita.PrismaticSlime Egg",
         };
 
+        DrawPrismaticModel? toast = new()
+        {
+            ItemType = ItemTypeEnum.SObject,
+            Identifier = "atravita.PrismaticJellyToast",
+            Mask = toastMask.BaseName,
+        };
+
         if (!editor.Data.TryAdd(ring.Identifier, ring))
         {
             ModEntry.ModMonitor.Log("Could not add prismatic slime ring to DrawPrismatic", LogLevel.Warn);
@@ -87,6 +99,11 @@ internal static class AssetManager
         if (!editor.Data.TryAdd(egg.Identifier, egg))
         {
             ModEntry.ModMonitor.Log("Could not add prismatic slime egg to DrawPrismatic", LogLevel.Warn);
+        }
+
+        if (!editor.Data.TryAdd(toast.Identifier, toast))
+        {
+            ModEntry.ModMonitor.Log("Could not add prismatic jelly toast to DrawPrismatic", LogLevel.Warn);
         }
     }
 }

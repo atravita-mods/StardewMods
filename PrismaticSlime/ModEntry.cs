@@ -57,6 +57,23 @@ internal sealed class ModEntry : Mod
             return prismaticSlimeRing;
         }
     }
+
+    private static int prismaticJellyToast = -1;
+
+    /// <summary>
+    /// Gets the integer ID of the Prismatic Slime Ring. -1 if not found/not loaded yet.
+    /// </summary>
+    internal static int PrismaticJellyToast
+    {
+        get
+        {
+            if (prismaticJellyToast == -1)
+            {
+                prismaticJellyToast = jsonAssets?.GetObjectId("atravita.PrismaticJellyToast") ?? -1;
+            }
+            return prismaticJellyToast;
+        }
+    }
 #pragma warning restore SA1201 // Elements should appear in the correct order
 
     /// <inheritdoc/>

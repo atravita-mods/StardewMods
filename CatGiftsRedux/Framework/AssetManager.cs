@@ -1,4 +1,5 @@
 ﻿using AtraBase.Collections;
+using AtraBase.Models.Result;
 using AtraBase.Models.WeightedRandom;
 
 using AtraCore.Framework.ItemManagement;
@@ -51,11 +52,9 @@ internal static class AssetManager
             return null;
         }
 
-        WeightedManager<ItemRecord> manager = new(data.Select(item => new WeightedItem<ItemRecord>(item.Weight, item.Item)));
+        WeightedManager<ItemRecord?> manager = new(data.Select(item => new WeightedItem<ItemRecord?>(item.Weight, item.Item)));
 
-        ItemRecord? entry = manager.GetValueUncached(random);
-
-        if (entry is null)
+        if (!manager.GetValueUncached(random).TryGetValue(out ItemRecord? entry) || entry is null)
         {
             return null;
         }

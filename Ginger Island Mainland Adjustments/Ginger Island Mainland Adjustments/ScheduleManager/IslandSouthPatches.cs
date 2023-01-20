@@ -62,6 +62,7 @@ internal static class IslandSouthPatches
     /// <param name="npc">the NPC to check.</param>
     /// <param name="__result">True if the NPC can go to the island, false otherwise.</param>
     [HarmonyPostfix]
+    [HarmonyPriority(Priority.Last)]
     [HarmonyPatch(nameof(IslandSouth.CanVisitIslandToday))]
     [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Convention used by Harmony")]
     private static void ExtendCanGoToIsland(NPC npc, ref bool __result)
@@ -114,6 +115,12 @@ internal static class IslandSouthPatches
                 return;
             }
 
+            if (npc.getMasterScheduleRawData()?.ContainsKey("spring") != true)
+            {
+                Globals.ModMonitor.Log($"{npc.Name} lacks a spring schedule, this will cause issues, removing from GI pool", LogLevel.Warn);
+                return;
+            }
+
             // if an NPC has a schedule for the specific day, don't allow them to go to the resort.
             if (npc.HasSpecificSchedule())
             {
@@ -121,7 +128,7 @@ internal static class IslandSouthPatches
                 {
                     case ScheduleStrictness.Default:
                     {
-                        if (!Exclusions.TryGetValue(npc, out var exclusions) || !exclusions.Any((a) => a.Equals("AllowOnSpecialDays", StringComparison.OrdinalIgnoreCase)))
+                        if (!Exclusions.TryGetValue(npc, out string[]? exclusions) || !exclusions.Any((a) => a.Equals("AllowOnSpecialDays", StringComparison.OrdinalIgnoreCase)))
                         {
                             goto case ScheduleStrictness.Strict;
                         }
@@ -133,11 +140,10 @@ internal static class IslandSouthPatches
                 }
             }
 
-            if (!Exclusions.ContainsKey(npc))
+            if (!Exclusions.TryGetValue(npc, out string[]? checkset))
             { // I don't have an entry for you.
                 return;
             }
-            string[] checkset = Exclusions[npc];
             foreach (string condition in checkset)
             {
                 if (Game1.dayOfMonth.ToString().Equals(condition, StringComparison.OrdinalIgnoreCase)

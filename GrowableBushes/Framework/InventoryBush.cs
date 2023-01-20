@@ -96,8 +96,12 @@ public sealed class InventoryBush : SObject
     /// <returns>Whether or not placement is allowed.</returns>
     internal bool CanPlace(GameLocation l, Vector2 tile, bool relaxed)
     {
-        int width = ((BushSizes)this.ParentSheetIndex).GetWidth();
+        if (l.largeTerrainFeatures is null)
+        {
+            return false;
+        }
 
+        int width = ((BushSizes)this.ParentSheetIndex).GetWidth();
         for (int y = (int)tile.Y; y < (int)tile.Y + width; y++)
         {
             if (!IsTilePlaceableForBush(l, (int)tile.X, y, relaxed))
@@ -139,8 +143,12 @@ public sealed class InventoryBush : SObject
     /// <returns>True if placed, false otherwise.</returns>
     internal bool PlaceBush(GameLocation location, int x, int y, bool relaxed)
     {
-        BushSizes size = (BushSizes)this.ParentSheetIndex;
+        if (location.largeTerrainFeatures is null || Utility.isPlacementForbiddenHere(location))
+        {
+            return false;
+        }
 
+        BushSizes size = (BushSizes)this.ParentSheetIndex;
         Vector2 placementTile = new(x / Game1.tileSize, y / Game1.tileSize);
         if (!this.CanPlace(location, placementTile, relaxed))
         {

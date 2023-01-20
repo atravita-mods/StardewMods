@@ -85,9 +85,14 @@ internal static class SObjectPatches
     /// </summary>
     /// <param name="__instance">SObject instance.</param>
     /// <param name="t">tool used.</param>
+    [HarmonyPrefix]
+    [HarmonyPatch(nameof(SObject.performToolAction))]
     [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "HarmonyConvention")]
-    private static bool PrefixPerformToolAction(SObject __instance, Tool t)
-        => t is not Hoe || !__instance.IsScarecrow();
+    private static bool PrefixPerformToolAction(SObject __instance, Tool t, ref bool __result)
+    {
+        __result = t is not Hoe || !__instance.IsScarecrow();
+        return __result;
+    }
 
     /// <summary>
     /// Prefix on placement to prevent planting of fruit trees and tea saplings on rugs, hopefully.

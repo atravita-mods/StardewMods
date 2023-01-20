@@ -126,14 +126,13 @@ internal static class RadioactiveFertilizerHandler
 
     private static void ProcessRadioactiveFertilizer(HoeDirt dirt, Farmer farmer, Profession profession, GameLocation location, int season, Dictionary<int, string> cropData, string seasonstring)
     {
-        random ??= RandomUtils.GetSeededRandom(9, (int)Game1.uniqueIDForThisGame);
-
-        if (random.Next(4) == 0)
+        if (dirt.crop is null || dirt.crop.dead.Value || dirt.crop.IsActuallyFullyGrown())
         {
             return;
         }
 
-        if (dirt.crop is null || dirt.crop.dead.Value || dirt.crop.IsActuallyFullyGrown())
+        random ??= RandomUtils.GetSeededRandom(9, "radioactive.fertilizer");
+        if (random.Next(4) == 0)
         {
             return;
         }
@@ -144,19 +143,13 @@ internal static class RadioactiveFertilizerHandler
             return;
         }
 
-        if (CropManagers[season] is null)
-        {
-            CropManagers[season] = GeneratedWeightedList(seasonstring, cropData);
-        }
+        CropManagers[season] ??= GeneratedWeightedList(seasonstring, cropData);
 
         WeightedManager<int>? manager = CropManagers[season];
-
-        if (manager?.Count is null or 0)
+        if (manager?.Count is null or 0 || !manager.GetValue(random).TryGetValue(out int crop))
         {
             return;
         }
-
-        int crop = manager.GetValue(random);
 
         if (cropData.TryGetValue(crop, out string? data)
             && (location.SeedsIgnoreSeasonsHere() || HasSufficientTimeToGrow(profession, crop, data, seasonEnum)))

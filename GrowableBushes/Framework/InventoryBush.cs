@@ -101,7 +101,13 @@ public sealed class InventoryBush : SObject
             return false;
         }
 
-        int width = ((BushSizes)this.ParentSheetIndex).GetWidth();
+        BushSizes size = (BushSizes)this.ParentSheetIndex;
+        if (size == BushSizes.Invalid)
+        {
+            return false;
+        }
+
+        int width = size.GetWidth();
         for (int y = (int)tile.Y; y < (int)tile.Y + width; y++)
         {
             if (!IsTilePlaceableForBush(l, (int)tile.X, y, relaxed))
@@ -149,6 +155,11 @@ public sealed class InventoryBush : SObject
         }
 
         BushSizes size = (BushSizes)this.ParentSheetIndex;
+        if (size == BushSizes.Invalid)
+        {
+            return false;
+        }
+
         Vector2 placementTile = new(x / Game1.tileSize, y / Game1.tileSize);
         if (!this.CanPlace(location, placementTile, relaxed))
         {

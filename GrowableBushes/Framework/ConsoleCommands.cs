@@ -33,6 +33,11 @@ internal static class ConsoleCommands
         {
             foreach (BushSizes possibleBush in BushSizesExtensions.GetValues())
             {
+                if (possibleBush == BushSizes.Invalid)
+                {
+                    continue;
+                }
+
                 InventoryBush item = new(possibleBush, count);
                 if (!Game1.player.addItemToInventoryBool(item))
                 {

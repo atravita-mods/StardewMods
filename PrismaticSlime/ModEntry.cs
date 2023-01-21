@@ -115,7 +115,6 @@ internal sealed class ModEntry : Mod
 
         this.Helper.Events.Content.AssetRequested += this.OnAssetRequested;
         this.Helper.Events.GameLoop.ReturnedToTitle += this.OnReturnedToTitle;
-        this.Helper.Events.Player.InventoryChanged += this.OnInventoryChanged;
         this.Helper.Events.GameLoop.SaveLoaded += this.OnSaveLoaded;
     }
 
@@ -171,23 +170,6 @@ internal sealed class ModEntry : Mod
         }
 
         harmony.Snitch(this.Monitor, harmony.Id, transpilersOnly: true);
-    }
-
-    /// <inheritdoc cref="IPlayerEvents.InventoryChanged"/>
-    private void OnInventoryChanged(object? sender, InventoryChangedEventArgs e)
-    {
-        if (!Game1.player.cookingRecipes.ContainsKey(AssetManager.RecipeName))
-        {
-            foreach (Item item in e.Added)
-            {
-                if (Utility.IsNormalObjectAtParentSheetIndex(item, PrismaticJelly)
-                    && Game1.player.cookingRecipes.TryAdd(AssetManager.RecipeName, 0))
-                {
-                    Game1.addHUDMessage(new HUDMessage(I18n.Recipe_Unlocked(I18n.PrismaticJellyToast_Name()), HUDMessage.newQuest_type));
-                    break;
-                }
-            }
-        }
     }
 
     #region migration

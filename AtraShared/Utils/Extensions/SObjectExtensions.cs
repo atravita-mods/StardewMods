@@ -24,7 +24,8 @@ public static class SObjectExtensions
     /// <returns>Total time the parabolic arc will take.</returns>
     public static float ParabolicThrowItem(this SObject obj, Vector2 start, Vector2 end, Multiplayer mp, GameLocation loc)
     {
-        float gravity = 0.0025f;
+        const float gravity = 0.0025f;
+
         float velocity = -0.08f;
         Vector2 delta = end - start;
         if (delta.Y < 40)

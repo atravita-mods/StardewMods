@@ -137,12 +137,12 @@ internal static class RadioactiveFertilizerHandler
             return;
         }
 
-        if (!StardewSeasonsExtensions.TryParse(seasonstring, value: out StardewSeasons seasonEnum, ignoreCase: true))
+        if (location.SeedsIgnoreSeasonsHere())
         {
-            ModEntry.ModMonitor.Log($"Invalid season found for radioactive fertilizer {seasonstring}", LogLevel.Error);
-            return;
+            season = random.Next(4);
         }
 
+        StardewSeasons seasonEnum = SeasonExtensions.GetSeasonFromIndex(season);
         CropManagers[season] ??= GeneratedWeightedList(seasonstring, cropData);
 
         WeightedManager<int>? manager = CropManagers[season];

@@ -94,7 +94,10 @@ public static partial class SeasonExtensions
     /// <returns>Season.</returns>
 #warning - need to fix in Stardew 1.6.
     public static StardewSeasons GetSeasonFromGame(GameLocation? loc)
-        => Utility.getSeasonNumber(Game1.GetSeasonForLocation(loc)) switch
+        => GetSeasonFromIndex(Utility.getSeasonNumber(Game1.GetSeasonForLocation(loc)));
+
+    public static StardewSeasons GetSeasonFromIndex(int index)
+        => index switch
         {
             0 => StardewSeasons.Spring,
             1 => StardewSeasons.Summer,

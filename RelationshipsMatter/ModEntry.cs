@@ -1,5 +1,6 @@
 ﻿using AtraShared.ConstantsAndEnums;
 using AtraShared.Integrations;
+using AtraShared.Schedules;
 using AtraShared.Utils.Extensions;
 
 using HarmonyLib;
@@ -19,9 +20,14 @@ internal sealed class ModEntry : Mod
     internal static IMonitor ModMonitor { get; private set; } = null!;
 
     /// <summary>
-    /// Gets or sets the config instance for this mod.
+    /// Gets the config instance for this mod.
     /// </summary>
-    internal static ModConfig Config { get; set; } = null!;
+    internal static ModConfig Config { get; private set; } = null!;
+
+    /// <summary>
+    /// Gets the scheduler instance for this mod.
+    /// </summary>
+    internal static ScheduleUtilityFunctions Scheduler { get; private set; } = null!;
 
     /// <inheritdoc/>
     public override void Entry(IModHelper helper)
@@ -30,6 +36,7 @@ internal sealed class ModEntry : Mod
         I18n.Init(helper.Translation);
         RMUtils.Init(helper.GameContent);
         Config = AtraUtils.GetConfigOrDefault<ModConfig>(helper, this.Monitor);
+        Scheduler = new(this.Monitor, this.Helper.Translation);
 
         this.Monitor.Log($"Starting up: {this.ModManifest.UniqueID} - {typeof(ModEntry).Assembly.FullName}");
 
@@ -51,6 +58,7 @@ internal sealed class ModEntry : Mod
             helper.Register(
                 reset: static () => Config = new(),
                 save: () => this.Helper.AsyncWriteConfig(this.Monitor, Config))
+            .AddParagraph(I18n.ModDescription)
             .GenerateDefaultGMCM(static () => Config);
         }
     }

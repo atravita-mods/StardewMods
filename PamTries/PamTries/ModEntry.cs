@@ -34,6 +34,9 @@ internal sealed class ModEntry : Mod
     /// </summary>
     internal static IMonitor ModMonitor { get; private set; } = null!;
 
+    /// <summary>
+    /// Gets the scheduling tools for this mod.
+    /// </summary>
     internal static ScheduleUtilityFunctions ScheduleUtilityFunctions { get; private set; } = null!;
 
     /// <inheritdoc />

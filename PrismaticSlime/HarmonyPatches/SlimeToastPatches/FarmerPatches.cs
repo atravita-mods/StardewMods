@@ -19,8 +19,8 @@ internal static class FarmerPatches
 
         try
         {
-            BuffEnum buffenum = BuffEnumExtensions.GetRandomBuff(Game1.random, false);
-            Buff buff = buffenum.GetBuffOf(5, 2600, "Prismatic Toast", "TODO");
+            BuffEnum buffenum = BuffEnumExtensions.GetRandomBuff();
+            Buff buff = buffenum.GetBuffOf(5, 2600, "Prismatic Toast", I18n.PrismaticJellyToast_Name());
             buff.which = ID;
             buff.sheetIndex = 0;
             buff.description = I18n.PrismaticJellyBuff_Description(buffenum.ToStringFast());

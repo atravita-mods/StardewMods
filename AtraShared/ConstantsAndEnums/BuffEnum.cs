@@ -33,7 +33,7 @@ public static partial class BuffEnumExtensions
 
     private static readonly int CraftingIndex = Array.IndexOf(_all, BuffEnum.Crafting);
 
-    public static BuffEnum GetRandomBuff(Random? random, bool includeCrafting)
+    public static BuffEnum GetRandomBuff(Random? random = null, bool includeCrafting = false)
     {
         random ??= _random;
         if (includeCrafting)

@@ -3,7 +3,9 @@ Prismatic Slime
 
 ![Header image](docs/prismatic.gif)
 
-todo: write some blurb or something.
+Makes that prismatic slime not a one-time encounter. Lets you raise them in the slime hutch. Gives the Prismatic Jelly a few more usages.
+
+This is my Pride 2022 mod. But wait, atra, you may say, it's like...2023? And I say: yes. I know. I'm very late.
 
 ## Install
 

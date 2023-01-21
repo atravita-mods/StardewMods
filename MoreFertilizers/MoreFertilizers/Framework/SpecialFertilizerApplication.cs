@@ -76,7 +76,7 @@ internal static class SpecialFertilizerApplication
             Game1.playSound("throwDownITem");
 
             Multiplayer? mp = MultiplayerHelpers.GetMultiplayer();
-            float time = ParabolicThrowItem(obj, Game1.player.Position - new Vector2(0, 128), placementpixel, mp);
+            float time = obj.ParabolicThrowItem(Game1.player.Position - new Vector2(0, 128), placementpixel, mp, Game1.currentLocation);
 
             GameLocationUtils.DrawWaterSplash(Game1.currentLocation, placementpixel, mp, (int)time);
 
@@ -96,38 +96,6 @@ internal static class SpecialFertilizerApplication
             helper.Suppress(e.Button);
             return;
         }
-    }
-
-    private static float ParabolicThrowItem(StardewValley.Object obj, Vector2 start, Vector2 end, Multiplayer mp)
-    {
-        float gravity = 0.0025f;
-        float velocity = -0.08f;
-        Vector2 delta = end - start;
-        if (delta.Y < 40)
-        {
-            // Ensure the initial velocity is sufficiently fast to make it all the way up.
-            velocity -= MathF.Sqrt(2 * MathF.Abs(delta.Y + 80) * gravity);
-        }
-        float time = (MathF.Sqrt(Math.Max((velocity * velocity) + (gravity * delta.Y * 2f), 0)) / gravity) - (velocity / gravity);
-        mp.broadcastSprites(
-            Game1.currentLocation,
-            new TemporaryAnimatedSprite(
-                textureName: Game1.objectSpriteSheetName,
-                sourceRect: Game1.getSourceRectForStandardTileSheet(Game1.objectSpriteSheet, obj.ParentSheetIndex, 16, 16),
-                position: start,
-                flipped: false,
-                alphaFade: 0f,
-                color: Color.White)
-            {
-                scale = Game1.pixelZoom,
-                layerDepth = 1f,
-                totalNumberOfLoops = 1,
-                interval = time,
-                acceleration = new Vector2(0f, gravity),
-                motion = new Vector2(delta.X / time, velocity),
-                timeBasedMotion = true,
-            });
-        return time;
     }
 
     [HarmonyPrefix]

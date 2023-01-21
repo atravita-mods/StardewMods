@@ -179,6 +179,7 @@ internal sealed class ModEntry : Mod
 
         if (Context.IsMainPlayer)
         {
+            ModEntry.ModMonitor.Log("Fixing up alternative smol bush");
             foreach (GameLocation loc in GameLocationUtils.YieldAllLocations())
             {
                 foreach (LargeTerrainFeature? feature in loc.largeTerrainFeatures)

@@ -1,7 +1,9 @@
 ﻿using AtraCore;
 using AtraCore.Models;
 
+using AtraShared.Caching;
 using AtraShared.ConstantsAndEnums;
+using AtraShared.Utils;
 
 using Microsoft.Xna.Framework.Graphics;
 
@@ -14,10 +16,16 @@ namespace PrismaticSlime.Framework;
 /// </summary>
 internal static class AssetManager
 {
+    internal const string RecipeName = "Prismatic Jelly Toast";
+
     private static IAssetName objectData = null!;
     private static IAssetName ringMask = null!;
     private static IAssetName maskLocation = null!;
     private static IAssetName toastMask = null!;
+    private static IAssetName recipes = null!;
+
+    private static TickCache<bool> anyFarmerHasRecipe = new(() => FarmerHelpers.GetFarmers().Any(f => f.cookingRecipes.ContainsKey("Prismatic Jelly Toast")));
+
     /// <summary>
     /// Initializes the asset manager.
     /// </summary>
@@ -28,6 +36,7 @@ internal static class AssetManager
         ringMask = parser.ParseAssetName("Mods/atravita_Prismatic_Ring/Texture");
         toastMask = parser.ParseAssetName("Mods/atravita_Prismatic_Toast/Texture");
         maskLocation = parser.ParseAssetName(AtraCoreConstants.PrismaticMaskData);
+        recipes = parser.ParseAssetName("Data/CookingRecipes");
     }
 
     /// <summary>
@@ -52,6 +61,16 @@ internal static class AssetManager
         {
             e.LoadFromModFile<Texture2D>("assets/json-assets/Objects/PrismaticJellyToast/mask.png", AssetLoadPriority.Exclusive);
         }
+        else if (e.NameWithoutLocale.IsEquivalentTo(recipes) && anyFarmerHasRecipe.GetValue())
+        {
+            e.Edit(EditRecipesImpl, AssetEditPriority.Late);
+        }
+    }
+
+    private static void EditRecipesImpl(IAssetData asset)
+    {
+        // prismatic jelly and bread.
+        asset.AsDictionary<string, string>().Data[RecipeName] = $"216 1 {ModEntry.PrismaticJelly} 1/unused/{ModEntry.PrismaticJellyToast}/none/{I18n.PrismaticJellyToast_Name()}";
     }
 
     private static void EditObjects(IAssetData asset)

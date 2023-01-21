@@ -1,6 +1,9 @@
-﻿using AtraShared.ConstantsAndEnums;
+﻿using AtraCore.Utilities;
+
+using AtraShared.ConstantsAndEnums;
 using AtraShared.Integrations;
 using AtraShared.Integrations.Interfaces;
+using AtraShared.MigrationManager;
 using AtraShared.Utils.Extensions;
 using HarmonyLib;
 using PrismaticSlime.Framework;
@@ -16,7 +19,15 @@ internal sealed class ModEntry : Mod
     /// </summary>
     internal const string SlimePoppedStat = "atravita.SlimeBallsPopped";
 
+    /// <summary>
+    /// Int Id of the prismatic jelly.
+    /// </summary>
+    internal const int PrismaticJelly = 876;
+
+    private const string SAVEKEY = "item_ids";
+
     private static IJsonAssetsAPI? jsonAssets;
+    private MigrationManager? migrator;
 
     /// <summary>
     /// Gets the logger for this mod.
@@ -104,6 +115,30 @@ internal sealed class ModEntry : Mod
 
         this.Helper.Events.Content.AssetRequested += this.OnAssetRequested;
         this.Helper.Events.GameLoop.ReturnedToTitle += this.OnReturnedToTitle;
+        this.Helper.Events.Player.InventoryChanged += this.OnInventoryChanged;
+        this.Helper.Events.GameLoop.SaveLoaded += this.OnSaveLoaded;
+    }
+
+    private void OnSaveLoaded(object? sender, SaveLoadedEventArgs e)
+    {
+        MultiplayerHelpers.AssertMultiplayerVersions(this.Helper.Multiplayer, this.ModManifest, this.Monitor, this.Helper.Translation);
+
+        this.migrator = new(this.ModManifest, this.Helper, this.Monitor);
+        if (!this.migrator.CheckVersionInfo())
+        {
+            this.Helper.Events.GameLoop.Saved += this.WriteMigrationData;
+        }
+        else
+        {
+            this.migrator = null;
+        }
+
+        if (Context.IsMainPlayer)
+        {
+            // hook event to save Ids so future migrations are possible.
+            this.Helper.Events.GameLoop.Saving -= this.OnSaving;
+            this.Helper.Events.GameLoop.Saving += this.OnSaving;
+        }
     }
 
     /// <summary>
@@ -116,6 +151,7 @@ internal sealed class ModEntry : Mod
     {
         prismaticSlimeRing = -1;
         prismaticSlimeEgg = -1;
+        prismaticJellyToast = -1;
     }
 
     [EventPriority(EventPriority.Low)]
@@ -136,4 +172,74 @@ internal sealed class ModEntry : Mod
 
         harmony.Snitch(this.Monitor, harmony.Id, transpilersOnly: true);
     }
+
+    /// <inheritdoc cref="IPlayerEvents.InventoryChanged"/>
+    private void OnInventoryChanged(object? sender, InventoryChangedEventArgs e)
+    {
+        if (!Game1.player.cookingRecipes.ContainsKey(AssetManager.RecipeName))
+        {
+            foreach (Item item in e.Added)
+            {
+                if (Utility.IsNormalObjectAtParentSheetIndex(item, PrismaticJelly)
+                    && Game1.player.cookingRecipes.TryAdd(AssetManager.RecipeName, 0))
+                {
+                    Game1.addHUDMessage(new HUDMessage(I18n.Recipe_Unlocked(I18n.PrismaticJellyToast_Name()), HUDMessage.newQuest_type));
+                    break;
+                }
+            }
+        }
+    }
+
+    #region migration
+
+    /// <inheritdoc cref="IGameLoopEvents.Saving"/>
+    private void OnSaving(object? sender, SavingEventArgs e)
+    {
+        this.Helper.Events.GameLoop.Saving -= this.OnSaving;
+        if (Context.IsMainPlayer)
+        {
+            DataModel data = this.Helper.Data.ReadSaveData<DataModel>(SAVEKEY) ?? new();
+            bool changed = false;
+
+            if (data.EggId != PrismaticSlimeEgg)
+            {
+                data.EggId = PrismaticSlimeEgg;
+                changed = true;
+            }
+
+            if (data.RingId != PrismaticSlimeRing)
+            {
+                data.RingId = PrismaticSlimeRing;
+                changed = true;
+            }
+
+            if (data.ToastId != PrismaticJellyToast)
+            {
+                data.ToastId = PrismaticJellyToast;
+                changed = true;
+            }
+
+            if (changed)
+            {
+                ModEntry.ModMonitor.Log("Writing ids into save");
+                this.Helper.Data.WriteSaveData("item_ids", data);
+            }
+        }
+    }
+
+    /// <inheritdoc cref="IGameLoopEvents.Saved"/>
+    /// <remarks>
+    /// Writes migration data then detaches the migrator.
+    /// </remarks>
+    private void WriteMigrationData(object? sender, SavedEventArgs e)
+    {
+        if (this.migrator is not null)
+        {
+            this.migrator.SaveVersionInfo();
+            this.migrator = null;
+        }
+
+        this.Helper.Events.GameLoop.Saved -= this.WriteMigrationData;
+    }
+    #endregion
 }

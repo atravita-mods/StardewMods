@@ -17,6 +17,8 @@
     <Compile Include="$(MSBuildThisFileDirectory)Content\RawTexData\IRawTextureDataExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)CustomExceptions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ConstantsAndEnums\ErrorMessageConsts.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Integrations\Interfaces\IGiantCropTweaksAPI.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Integrations\Interfaces\IMoreGiantCropsAPI.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Utils\Extensions\CropExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Utils\Extensions\FarmerTeamExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Utils\FarmerHelpers.cs" />

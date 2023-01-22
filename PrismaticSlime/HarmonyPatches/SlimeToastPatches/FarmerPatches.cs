@@ -7,7 +7,7 @@ namespace PrismaticSlime.HarmonyPatches.SlimeToastPatches;
 [HarmonyPatch(typeof(Farmer))]
 internal static class FarmerPatches
 {
-    private const int ID = 45674642; // TODO - use the actual id.
+    internal const int BuffId = 15157;
 
     [HarmonyPatch(nameof(Farmer.doneEating))]
     private static void Prefix(Farmer __instance)
@@ -21,7 +21,7 @@ internal static class FarmerPatches
         {
             BuffEnum buffenum = BuffEnumExtensions.GetRandomBuff();
             Buff buff = buffenum.GetBuffOf(5, 2600, "Prismatic Toast", I18n.PrismaticJellyToast_Name());
-            buff.which = ID;
+            buff.which = BuffId;
             buff.sheetIndex = 0;
             buff.description = I18n.PrismaticJellyBuff_Description(buffenum.ToStringFast());
 

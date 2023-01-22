@@ -101,14 +101,14 @@ public static class NPCExtensions
     /// <param name="scheduleKey">Schedule key to look for.</param>
     /// <param name="rawData">Raw schedule string.</param>
     /// <returns>True if successful, false otherwise.</returns>
-    /// <remarks>Does **not** set _lastLoadedScheduleKey.</remarks>
+    /// <remarks>Does **not** set _lastLoadedScheduleKey, intentionally.</remarks>
     public static bool TryGetScheduleEntry(
         this NPC npc,
         string scheduleKey,
         [NotNullWhen(returnValue: true)] out string? rawData)
     {
         rawData = null;
-        Dictionary<string, string> scheduleData = npc.getMasterScheduleRawData();
+        Dictionary<string, string>? scheduleData = npc.getMasterScheduleRawData();
         if (scheduleData is null || scheduleKey is null)
         {
             return false;

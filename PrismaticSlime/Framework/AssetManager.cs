@@ -16,14 +16,17 @@ namespace PrismaticSlime.Framework;
 /// </summary>
 internal static class AssetManager
 {
-
     private static IAssetName objectData = null!;
 
     private static IAssetName maskLocation = null!;
     private static IAssetName ringMask = null!;
     private static IAssetName toastMask = null!;
 
-    internal static IAssetName BuffTexture { get; private set; } = null!;
+    private static IAssetName buffTextureLocation = null!;
+
+    private static Lazy<Texture2D> buffTex = new(() => Game1.content.Load<Texture2D>(buffTextureLocation.BaseName));
+
+    internal static Texture2D BuffTexture => buffTex.Value;
 
     /// <summary>
     /// Initializes the asset manager.
@@ -37,7 +40,16 @@ internal static class AssetManager
         toastMask = parser.ParseAssetName("Mods/atravita_Prismatic_Toast/Texture");
         maskLocation = parser.ParseAssetName(AtraCoreConstants.PrismaticMaskData);
 
-        BuffTexture = parser.ParseAssetName("Mods/atravita_Prismatic_Buff/Texture");
+        buffTextureLocation = parser.ParseAssetName("Mods/atravita_Prismatic_Buff/Texture");
+    }
+
+    /// <inheritdoc cref="IContentEvents.AssetsInvalidated"/>
+    internal static void Reset(IReadOnlySet<IAssetName>? assets = null)
+    {
+        if (buffTex.IsValueCreated && (assets is null || assets.Contains(buffTextureLocation)))
+        {
+            buffTex = new(static () => Game1.content.Load<Texture2D>(buffTextureLocation.BaseName));
+        }
     }
 
     /// <summary>
@@ -62,7 +74,7 @@ internal static class AssetManager
         {
             e.LoadFromModFile<Texture2D>("assets/json-assets/Objects/PrismaticJellyToast/mask.png", AssetLoadPriority.Exclusive);
         }
-        else if (e.NameWithoutLocale.IsEquivalentTo(BuffTexture))
+        else if (e.NameWithoutLocale.IsEquivalentTo(buffTextureLocation))
         {
             e.LoadFromModFile<Texture2D>("assets/textures/buff.png", AssetLoadPriority.Exclusive);
         }

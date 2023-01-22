@@ -1,0 +1,19 @@
+﻿{
+  "mod-description": "Lets you put down giant crops.",
+  "IllFormatedConfig": "Config file seems ill-formated, using default. Please use Generic Mod Config Menu to configure.",
+
+  "api-not-found": "{{APIID}} not found, integration disabled.",
+  "api-too-old": "Please update {{apiName}}({{APIID}}) to at least version {{minversion}}. Current version {{currentversion}}. Integration disabled.",
+
+  // GMCM
+  "ShopLocation": "Shop Location",
+  "ShopLocation.description": "The location of the bush shop in the Witch's place.",
+  "ShouldNPCsTrampleGiantCrops.title": "Should NPCs Trample Giant Crops.",
+  "ShouldNPCsTrampleGiantCrops.description": "If enabled, will allow NPCs to remove giant crops in their path.",
+  "RelaxedPlacement.title": "Relaxed Placement",
+  "RelaxedPlacement.description": "If enabled, placement rules will be relaxed.",
+
+  // Items
+  "Shovel.Name": "Shovel",
+  "Shovel.Description": "An old, beat up shovel.",
+}

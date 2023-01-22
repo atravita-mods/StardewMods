@@ -115,9 +115,12 @@ internal static class IslandSouthPatches
                 return;
             }
 
-            if (npc.getMasterScheduleRawData()?.ContainsKey("spring") != true)
+            if (npc.getMasterScheduleRawData()?.ContainsKey("spring") != true
+                && npc.getMasterScheduleRawData()?.ContainsKey("default") != true
+                && npc.getSpouse() is not null)
             {
                 Globals.ModMonitor.Log($"{npc.Name} lacks a spring schedule, this will cause issues, removing from GI pool", LogLevel.Warn);
+                __result = false;
                 return;
             }
 

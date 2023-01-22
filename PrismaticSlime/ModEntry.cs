@@ -38,7 +38,7 @@ internal sealed class ModEntry : Mod
     private static int prismaticSlimeEgg = -1;
 
     /// <summary>
-    /// Gets the integer ID of the Prismatic Slime Egg. -1 if not found/not loaded yet.
+    /// Gets the integer BuffId of the Prismatic Slime Egg. -1 if not found/not loaded yet.
     /// </summary>
     internal static int PrismaticSlimeEgg
     {
@@ -55,7 +55,7 @@ internal sealed class ModEntry : Mod
     private static int prismaticSlimeRing = -1;
 
     /// <summary>
-    /// Gets the integer ID of the Prismatic Slime Ring. -1 if not found/not loaded yet.
+    /// Gets the integer BuffId of the Prismatic Slime Ring. -1 if not found/not loaded yet.
     /// </summary>
     internal static int PrismaticSlimeRing
     {
@@ -72,7 +72,7 @@ internal sealed class ModEntry : Mod
     private static int prismaticJellyToast = -1;
 
     /// <summary>
-    /// Gets the integer ID of the Prismatic Slime Ring. -1 if not found/not loaded yet.
+    /// Gets the integer BuffId of the Prismatic Slime Ring. -1 if not found/not loaded yet.
     /// </summary>
     internal static int PrismaticJellyToast
     {
@@ -113,7 +113,9 @@ internal sealed class ModEntry : Mod
             jsonAssets.LoadAssets(Path.Combine(this.Helper.DirectoryPath, "assets", "json-assets"), this.Helper.Translation);
         }
 
-        this.Helper.Events.Content.AssetRequested += this.OnAssetRequested;
+        this.Helper.Events.Content.AssetRequested += static (_, e) => AssetManager.Apply(e);
+        this.Helper.Events.Content.AssetsInvalidated += static (_, e) => AssetManager.Reset(e.NamesWithoutLocale);
+
         this.Helper.Events.GameLoop.ReturnedToTitle += this.OnReturnedToTitle;
         this.Helper.Events.GameLoop.SaveLoaded += this.OnSaveLoaded;
     }
@@ -152,10 +154,6 @@ internal sealed class ModEntry : Mod
         prismaticSlimeEgg = -1;
         prismaticJellyToast = -1;
     }
-
-    [EventPriority(EventPriority.Low)]
-    private void OnAssetRequested(object? sender, AssetRequestedEventArgs e)
-        => AssetManager.Apply(e);
 
     private void ApplyPatches(Harmony harmony)
     {

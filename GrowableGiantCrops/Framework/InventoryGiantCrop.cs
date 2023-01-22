@@ -1,8 +1,11 @@
 ﻿using System.Xml.Serialization;
 
+using AtraBase.Toolkit.Extensions;
 using AtraBase.Toolkit.Reflection;
 
 using AtraCore.Framework.ReflectionManager;
+
+using AtraShared.Wrappers;
 
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -32,6 +35,9 @@ public sealed class InventoryGiantCrop : SObject
     [XmlIgnore]
     private Rectangle sourceRect = default;
 
+    [XmlIgnore]
+    private string? texturePath;
+
     /// <summary>
     /// Initializes a new instance of the <see cref="InventoryGiantCrop"/> class.
     /// Used for the serializer, do not use.
@@ -60,6 +66,10 @@ public sealed class InventoryGiantCrop : SObject
     public InventoryGiantCrop(int intID)
     {
         this.ParentSheetIndex = intID;
+        if (Game1Wrappers.ObjectInfo.TryGetValue(intID, out var data))
+        {
+            this.Name = data.GetNthChunk('/').ToString();
+        }
     }
 
     #region reflection

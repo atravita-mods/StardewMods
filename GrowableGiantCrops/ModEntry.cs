@@ -34,9 +34,11 @@ internal sealed class ModEntry : Mod
     internal static ModConfig Config { get; private set; } = null!;
 
     #region APIs
-    internal static IJsonAssetsAPI? JaAPI { get; private set; };
+    internal static IJsonAssetsAPI? JaAPI { get; private set; }
 
-    internal static IMoreGiantCropsAPI? MoreGiantCropsAPI { get; private set; };
+    internal static IMoreGiantCropsAPI? MoreGiantCropsAPI { get; private set; }
+
+    internal static IGiantCropTweaks? GiantCropTweaksAPI { get; private set; }
 
     #endregion
 
@@ -49,11 +51,16 @@ internal sealed class ModEntry : Mod
         Config = AtraUtils.GetConfigOrDefault<ModConfig>(helper, this.Monitor);
 
         helper.Events.GameLoop.GameLaunched += this.OnGameLaunched;
+        ConsoleCommands.RegisterCommands(helper.ConsoleCommands);
 
-        //ConsoleCommands.RegisterCommands(helper.ConsoleCommands);
+        AssetManager.Initialize(helper.GameContent);
+
         //ShopManager.Initialize(helper.GameContent);
 
         this.Monitor.Log($"Starting up: {this.ModManifest.UniqueID} - {typeof(ModEntry).Assembly.FullName}");
+
+        // assets
+        this.Helper.Events.Content.AssetRequested += static (_, e) => AssetManager.OnAssetRequested(e);
     }
 
     // /// <inheritdoc />
@@ -70,6 +77,7 @@ internal sealed class ModEntry : Mod
             api.RegisterSerializerType(typeof(ShovelTool));
 
             this.Helper.Events.GameLoop.SaveLoaded += this.SaveLoaded;
+
             // this.Helper.Events.Player.Warped += this.OnWarped;
             // this.Helper.Events.Player.InventoryChanged += this.OnInventoryChanged;
 
@@ -94,6 +102,20 @@ internal sealed class ModEntry : Mod
                     getValue: static () => Config.ShopLocation.X + ", " + Config.ShopLocation.Y,
                     setValue: static (str) => Config.ShopLocation = str.TryParseVector2(out Vector2 vec) ? vec : new Vector2(1, 7),
                     tooltip: I18n.ShopLocation_Description);
+            }
+
+            // optional APIs
+            if (helper.TryGetAPI("spacechase0.JsonAssets", "1.10.10", out IJsonAssetsAPI? jaAPI))
+            {
+                JaAPI = jaAPI;
+            }
+            if (helper.TryGetAPI("spacechase0.MoreGiantCrops", "1.2.0", out IMoreGiantCropsAPI? mgAPI))
+            {
+                MoreGiantCropsAPI = mgAPI;
+            }
+            if (helper.TryGetAPI("leclair.giantcroptweaks", "0.1.0", out IGiantCropTweaks? gcAPI))
+            {
+                GiantCropTweaksAPI = gcAPI;
             }
         }
         else

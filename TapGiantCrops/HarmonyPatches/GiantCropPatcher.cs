@@ -3,6 +3,8 @@ using Microsoft.Xna.Framework;
 using StardewValley.TerrainFeatures;
 using StardewValley.Tools;
 
+using TapGiantCrops.Framework;
+
 namespace TapGiantCrops.HarmonyPatches;
 
 /// <summary>
@@ -31,6 +33,8 @@ internal static class GiantCropPatcher
                     if (Game1.currentLocation.objects.TryGetValue(tile, out SObject? obj)
                         && obj.Name.Contains("Tapper", StringComparison.OrdinalIgnoreCase))
                     {
+
+                        TapGiantCrop.ShakeGiantCrop(__instance);
                         obj.performRemoveAction(obj.TileLocation, Game1.currentLocation);
                         Game1.createItemDebris(obj, tile * 64f, -1);
                         Game1.currentLocation.objects.Remove(tile);

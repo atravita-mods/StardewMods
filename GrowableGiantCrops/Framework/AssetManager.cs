@@ -25,7 +25,7 @@ internal static class AssetManager
     {
         if (e.NameWithoutLocale.IsEquivalentTo(ToolTextureName))
         {
-            e.LoadFromModFile<Texture2D>("assets/textures/", AssetLoadPriority.Exclusive);
+            e.LoadFromModFile<Texture2D>("assets/textures/shovel.png", AssetLoadPriority.Exclusive);
         }
     }
 }

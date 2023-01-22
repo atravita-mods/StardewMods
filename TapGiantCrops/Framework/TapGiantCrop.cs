@@ -20,13 +20,13 @@ namespace TapGiantCrops.Framework;
 public sealed class TapGiantCrop : ITapGiantCropsAPI
 {
     /// <summary>
-    /// Stardew's Bush::shake.
+    /// A setter to shake a giant crop.
     /// </summary>
     private static readonly Action<GiantCrop, float> GiantCropSetShake = typeof(GiantCrop)
         .GetCachedField("shakeTimer", ReflectionCache.FlagTypes.InstanceFlags)
         .GetInstanceFieldSetter<GiantCrop, float>();
 
-    private static void ShakeGiantCrop(GiantCrop crop)
+    internal static void ShakeGiantCrop(GiantCrop crop)
     {
         GiantCropSetShake(crop, 100f);
         crop.NeedsUpdate = true;

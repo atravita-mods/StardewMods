@@ -1,4 +1,6 @@
-﻿using AtraShared.ConstantsAndEnums;
+﻿using AtraCore.Framework.DialogueManagement;
+
+using AtraShared.ConstantsAndEnums;
 
 using HarmonyLib;
 
@@ -11,20 +13,56 @@ internal static class NPCTryRecieveActiveItemPatches
     private static bool Prefix(NPC __instance, Farmer who)
     {
         if (Utility.IsNormalObjectAtParentSheetIndex(who.ActiveObject, ModEntry.PrismaticJelly)
-            || who.team.specialOrders.Any(order => order.questKey.Value == "Wizard2"))
+            && !who.team.specialOrders.Any(order => order.questKey.Value == "Wizard2"))
         {
             try
             {
-                // TODO
-                if (__instance.Name == "Wizard")
+                QueuedDialogueManager.PushCurrentDialogueToQueue(__instance);
+                switch (__instance.Name)
                 {
-                    // Wizard stuff
-                    BuffEnum buffEnum = BuffEnumExtensions.GetRandomBuff();
+                    case "Wizard":
+                    {
+                        BuffEnum buffEnum = BuffEnumExtensions.GetRandomBuff();
+                        Buff buff = buffEnum.GetBuffOf(1, 700, "The Wizard's Gift", "The Wizard's Gift"); // TODO: localization.
+
+                        Game1.buffsDisplay.addOtherBuff(buff);
+
+                        __instance.doEmote(Character.exclamationEmote);
+                        Dialogue item = new(I18n.PrismaticJelly_Wizard(), __instance)
+                        {
+                            onFinish = () => who.Money += 2000,
+                        };
+                        __instance.CurrentDialogue.Push(item);
+                        break;
+                    }
+                    case "Gus":
+                    {
+                        Dialogue item = new(I18n.PrismaticJelly_Gus(), __instance)
+                        {
+                            onFinish = () =>
+                            {
+                                DelayedAction.functionAfterDelay(
+                                    () => who.addItemByMenuIfNecessaryElseHoldUp(new SObject(ModEntry.PrismaticJellyToast, 1)),
+                                    200);
+                            },
+                        };
+                        __instance.CurrentDialogue.Push(item);
+                        break;
+                    }
+                    default:
+                    {
+                        __instance.doEmote(Character.happyEmote);
+                        who.changeFriendship(100, __instance);
+                        if (!__instance.Dialogue.TryGetValue("PrismaticSlimeJelly.Response", out string? response))
+                        {
+                            response = I18n.PrismaticJelly_Response(__instance.displayName);
+                        }
+                        __instance.CurrentDialogue.Push(new Dialogue(response, __instance));
+                        break;
+                    }
                 }
-                else
-                {
-                    // dialogue, friendship.
-                }
+                who.reduceActiveItemByOne();
+                Game1.drawDialogue(__instance);
                 return false;
             }
             catch (Exception ex)

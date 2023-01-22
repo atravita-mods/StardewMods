@@ -9,7 +9,7 @@
   <PropertyGroup>
     <Name>Prismatic Slimes in Slime Hutch.</Name>
     <Description>Allows you to raise prismatic slimes in the slime hutch.</Description>
-    <UpdateKeys>-1</UpdateKeys>
+    <UpdateKeys>Nexus:15157</UpdateKeys>
     <Version>0.1.0</Version>
     <BaseManifest>..\ja_dependencies.json</BaseManifest>
   </PropertyGroup>

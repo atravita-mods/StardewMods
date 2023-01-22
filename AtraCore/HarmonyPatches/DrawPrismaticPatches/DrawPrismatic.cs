@@ -314,7 +314,7 @@ internal static class DrawPrismatic
                 new(OpCodes.Call, typeof(DrawPrismatic).GetCachedMethod(nameof(DrawColorMask), ReflectionCache.FlagTypes.StaticFlags, new[] { typeof(ItemTypeEnum), typeof(int), typeof(SpriteBatch), typeof(int), typeof(int), typeof(float) } )),
             });
 
-            helper.Print();
+            // helper.Print();
             return helper.Render();
         }
         catch (Exception ex)

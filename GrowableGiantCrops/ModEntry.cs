@@ -42,8 +42,9 @@ internal sealed class ModEntry : Mod
     internal static IGiantCropTweaks? GiantCropTweaksAPI { get; private set; }
 
     internal static IGrowableBushesAPI? GrowableBushesAPI { get; private set; }
-
     #endregion
+
+    internal static int[]? ValidIDs { get; private set; }
 
     /// <inheritdoc />
     public override void Entry(IModHelper helper)

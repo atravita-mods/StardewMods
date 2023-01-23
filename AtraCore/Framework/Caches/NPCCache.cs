@@ -14,7 +14,7 @@ public static class NPCCache
     public static bool TryInsert(NPC npc)
     {
         Guard.IsNotNull(npc);
-        if (!npc.isVillager() || string.IsNullOrWhiteSpace(npc.Name))
+        if (!npc.isVillager() || string.IsNullOrWhiteSpace(npc.Name) | npc.GetType() != typeof(NPC))
         {
             return false;
         }
@@ -44,7 +44,7 @@ public static class NPCCache
         }
 
         NPC? npc = Game1.getCharacterFromName(name, mustBeVillager: true, useLocationsListOnly: false);
-        if (npc is not null)
+        if (npc is not null && npc.GetType() == typeof(NPC))
         {
             cache[name] = new(npc);
         }

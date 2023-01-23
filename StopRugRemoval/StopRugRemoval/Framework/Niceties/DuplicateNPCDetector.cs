@@ -150,7 +150,7 @@ internal static class DuplicateNPCDetector
             for (int i = loc.characters.Count - 1; i >= 0; i--)
             {
                 NPC character = loc.characters[i];
-                if (!character.isVillager())
+                if (!character.isVillager() || character.GetType() != typeof(NPC))
                 {
                     continue;
                 }

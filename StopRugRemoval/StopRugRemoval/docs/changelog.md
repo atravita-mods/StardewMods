@@ -7,6 +7,9 @@
 <!-- Make it so notifications do not go away until dismissed? -->
 <!-- Make farm pan faster for animal menu and do some sort of keybind mess to snap to building-->
 
+#### Version 1.1.2
+* By popular request, defang the napalm ring in safe areas.
+
 #### Version 1.1.1
 * Some menus now accept arrow keys.
 * Internal improvements (mostly with regard to enums).

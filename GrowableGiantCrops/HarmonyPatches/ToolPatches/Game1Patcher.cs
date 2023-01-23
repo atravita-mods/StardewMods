@@ -15,11 +15,11 @@ internal static class Game1Patcher
     /// </summary>
     /// <param name="f">Farmer.</param>
     /// <param name="currentToolIndex">the current tool index.</param>
-    /// <returns></returns>
+    /// <returns>true to continue on to the vanilla method, false to skip.</returns>
     [HarmonyPatch(nameof(Game1.drawTool), new[] { typeof(Farmer), typeof(int) })]
     private static bool Prefix(Farmer f, int currentToolIndex)
     {
-        if (f.CurrentTool is not ShovelTool shovel)
+        if (f.CurrentTool is not ShovelTool)
         {
             return true;
         }
@@ -48,10 +48,7 @@ internal static class Game1Patcher
             return false;
         }
 
-        if (f.CurrentTool is not null)
-        {
-            f.CurrentTool.draw(Game1.spriteBatch);
-        }
+        f.CurrentTool?.draw(Game1.spriteBatch);
 
         Vector2 position;
         float rotation = 0f;

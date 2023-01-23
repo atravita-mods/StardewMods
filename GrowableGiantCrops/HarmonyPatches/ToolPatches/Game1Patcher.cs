@@ -11,7 +11,7 @@ namespace GrowableGiantCrops.HarmonyPatches.ToolPatches;
 internal static class Game1Patcher
 {
     /// <summary>
-    /// Draws the shovel. Highly derived from Game1.drawTool
+    /// Draws the shovel.
     /// </summary>
     /// <param name="f">Farmer.</param>
     /// <param name="currentToolIndex">the current tool index.</param>
@@ -23,8 +23,6 @@ internal static class Game1Patcher
         {
             return true;
         }
-
-        ModEntry.ModMonitor.LogOnce(f.Sprite.CurrentFrame.ToString(), LogLevel.Alert);
 
         Rectangle sourceRectangleForTool = new(currentToolIndex * 16, 0, 16, 32);
         Vector2 fPosition = f.getLocalPosition(Game1.viewport) + f.jitter + f.armOffset;
@@ -61,41 +59,45 @@ internal static class Game1Patcher
 
         switch (f.FacingDirection)
         {
-            case 0:
+            case Game1.up:
                 switch (f.Sprite.currentAnimationIndex)
                 {
                     case 0:
-                        position = Utility.snapToInt(new Vector2(fPosition.X, fPosition.Y - 128f - 8f + (float)Math.Min(8, f.toolPower * 4)));
+                        position = Utility.snapToInt(new Vector2(fPosition.X, fPosition.Y - 64f));
                         break;
                     case 1:
                         position = Utility.snapToInt(new Vector2(fPosition.X + 4f, fPosition.Y - 128f + 40f));
                         break;
                     case 2:
-                        position = Utility.snapToInt(new Vector2(fPosition.X, fPosition.Y - 64f));
+                        position = Utility.snapToInt(new Vector2(fPosition.X, fPosition.Y - 128f + 24f));
+                        break;
+                    case 3:
+                        position = Utility.snapToInt(new Vector2(fPosition.X, fPosition.Y - 128f));
                         break;
                     default:
                         return false;
                 }
                 break;
-            case 1:
+            case Game1.right:
                 switch (f.Sprite.currentAnimationIndex)
                 {
                     case 0:
-                        position = Utility.snapToInt(new Vector2(fPosition.X - 32f - 4f - Math.Min(8, f.toolPower * 4), fPosition.Y - 128f + 24f + Math.Min(8, f.toolPower * 4)));
-                        rotation = (-MathF.PI / 12f) - (Math.Min(f.toolPower, 2) * (MathF.PI / 64f));
+                        position = Utility.snapToInt(new Vector2(fPosition.X + 72f, fPosition.Y - 28f));
+                        rotation = MathF.PI * 10f / 12f;
+                        origin = new Vector2(0f, 32f);
                         break;
                     case 1:
-                        position = Utility.snapToInt(new Vector2(fPosition.X + 32f - 24f, fPosition.Y - 124f + 64f));
-                        rotation = -MathF.PI / 12f;
+                        position = Utility.snapToInt(new Vector2(fPosition.X + 76f, fPosition.Y - 20f));
+                        rotation = MathF.PI * 11f / 12f;
                         origin = new Vector2(0f, 32f);
                         break;
                     case 2:
-                        position = Utility.snapToInt(new Vector2(fPosition.X + 32f - 4f, fPosition.Y - 132f + 64f));
-                        rotation = MathF.PI / 4f;
+                        position = Utility.snapToInt(new Vector2(fPosition.X + 74f, fPosition.Y - 40f));
+                        rotation = MathF.PI * 10f / 12f;
                         origin = new Vector2(0f, 32f);
                         break;
                     case 3:
-                        position = Utility.snapToInt(new Vector2(fPosition.X + 32f + 28f, fPosition.Y - 64f));
+                        position = Utility.snapToInt(new Vector2(fPosition.X + 32f + 28f, fPosition.Y - 86f));
                         rotation = MathF.PI * 7f / 12f;
                         origin = new Vector2(0f, 32f);
                         break;
@@ -108,51 +110,58 @@ internal static class Game1Patcher
                         return false;
                 }
                 break;
-            case 2:
+            case Game1.down:
                 switch (f.Sprite.currentAnimationIndex)
                 {
                     case 0:
-                        position = Utility.snapToInt(new Vector2(fPosition.X - 20f, fPosition.Y - 128f + 12f + Math.Min(8, f.toolPower * 4)));
+                        position = Utility.snapToInt(new Vector2(fPosition.X + 60f, fPosition.Y + 64f));
+                        rotation = MathF.PI;
                         break;
                     case 1:
-                        position = Utility.snapToInt(new Vector2(fPosition.X - 12f, fPosition.Y - 128f + 32f));
-                        rotation = -MathF.PI / 24f;
+                        position = Utility.snapToInt(new Vector2(fPosition.X + 60f, fPosition.Y + 56f));
+                        rotation = MathF.PI;
                         break;
                     case 2:
-                        position = Utility.snapToInt(new Vector2(fPosition.X, fPosition.Y - 64f));
+                        position = Utility.snapToInt(new Vector2(fPosition.X, fPosition.Y - 44f));
                         break;
                     case 3:
-                        position = Utility.snapToInt(new Vector2(fPosition.X, fPosition.Y - 20f));
+                        position = Utility.snapToInt(new Vector2(fPosition.X, fPosition.Y - 56f));
+                        // rotation = -MathF.PI / 24f;
                         break;
                     case 4:
-                        position = Utility.snapToInt(new Vector2(fPosition.X, fPosition.Y - 16f));
+                        position = Utility.snapToInt(new Vector2(fPosition.X, fPosition.Y - 60f));
                         break;
                     default:
                         return true;
                 }
                 break;
-            case 3:
+            case Game1.left:
                 switch (f.Sprite.currentAnimationIndex)
                 {
                     case 0:
-                        position = Utility.snapToInt(new Vector2(fPosition.X + 32f + 8f + Math.Min(8, f.toolPower * 4), fPosition.Y - 128f + 8f + Math.Min(8, f.toolPower * 4)));
-                        rotation = MathF.PI / 12f + Math.Min(f.toolPower, 2) * (MathF.PI / 64f);
+                        position = Utility.snapToInt(new Vector2(fPosition.X + 42f, fPosition.Y + 8f));
+                        rotation = -MathF.PI * 10f / 12f;
+                        origin = new Vector2(0f, 32f);
                         break;
                     case 1:
-                        position = Utility.snapToInt(new Vector2(fPosition.X - 16f, fPosition.Y - 128f + 16f));
-                        rotation = MathF.PI / 12f;
+                        position = Utility.snapToInt(new Vector2(fPosition.X + 54f, fPosition.Y));
+                        rotation = -MathF.PI * 11f / 12f;
+                        origin = new Vector2(0f, 32f);
                         break;
                     case 2:
-                        position = Utility.snapToInt(new Vector2(fPosition.X - 64f + 4f, fPosition.Y - 128f + 60f));
-                        rotation = -MathF.PI / 4f;
+                        position = Utility.snapToInt(new Vector2(fPosition.X + 54f, fPosition.Y));
+                        rotation = -MathF.PI * 10f / 12f;
+                        origin = new Vector2(0f, 32f);
                         break;
                     case 3:
-                        position = Utility.snapToInt(new Vector2(fPosition.X - 64f + 24f, fPosition.Y + 12f));
+                        position = Utility.snapToInt(new Vector2(fPosition.X + 34f, fPosition.Y - 21f));
                         rotation = -MathF.PI * 7f / 12f;
+                        origin = new Vector2(0f, 32f);
                         break;
                     case 4:
-                        position = Utility.snapToInt(new Vector2(fPosition.X - 64f + 24f, fPosition.Y + 24f));
+                        position = Utility.snapToInt(new Vector2(fPosition.X + 34f, fPosition.Y));
                         rotation = -MathF.PI * 7f / 12f;
+                        origin = new Vector2(0f, 32f);
                         break;
                     default:
                         return false;

@@ -22,7 +22,14 @@ namespace GrowableGiantCrops;
 /// <inheritdoc />
 internal sealed class ModEntry : Mod
 {
+    private static int[]? moreGiantCropsIds;
+    private static int[]? jaCropIds;
+
     private MigrationManager? migrator;
+
+    internal static int[] MoreGiantCropsIds => moreGiantCropsIds ?? Array.Empty<int>();
+
+    internal static int[] JACropIds => jaCropIds ?? Array.Empty<int>();
 
     /// <summary>
     /// Gets the logger for this mod.
@@ -43,8 +50,6 @@ internal sealed class ModEntry : Mod
 
     internal static IGrowableBushesAPI? GrowableBushesAPI { get; private set; }
     #endregion
-
-    internal static int[]? ValidIDs { get; private set; }
 
     /// <inheritdoc />
     public override void Entry(IModHelper helper)
@@ -201,6 +206,11 @@ internal sealed class ModEntry : Mod
     /// <remarks>Used to load in this mod's data models.</remarks>
     private void SaveLoaded(object? sender, SaveLoadedEventArgs e)
     {
+        // load giant crop indexes.
+        moreGiantCropsIds = MoreGiantCropsAPI?.RegisteredCrops();
+        jaCropIds = JaAPI?.GetGiantCropIndexes();
+
+        // sanity checks.
         MultiplayerHelpers.AssertMultiplayerVersions(this.Helper.Multiplayer, this.ModManifest, this.Monitor, this.Helper.Translation);
 
         if (Context.IsSplitScreen && Context.ScreenId != 0)
@@ -208,6 +218,7 @@ internal sealed class ModEntry : Mod
             return;
         }
 
+        // migration
         this.migrator = new(this.ModManifest, this.Helper, this.Monitor);
         if (!this.migrator.CheckVersionInfo())
         {

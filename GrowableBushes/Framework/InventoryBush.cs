@@ -37,6 +37,9 @@ public sealed class InventoryBush : SObject
     public InventoryBush()
         : base()
     {
+        this.Edibility = inedible;
+        this.Price = 0;
+        this.Category = -15500057; // random negative integer.
     }
 
     /// <summary>

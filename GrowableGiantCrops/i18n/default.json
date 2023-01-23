@@ -16,4 +16,7 @@
   // Items
   "Shovel.Name": "Shovel",
   "Shovel.Description": "An old, beat up shovel.",
+
+  // Giant crops
+  "Category": "Giant Crop",
 }

@@ -1,4 +1,6 @@
-﻿using Microsoft.Xna.Framework;
+﻿using AtraBase.Toolkit.Extensions;
+
+using Microsoft.Xna.Framework;
 
 namespace AtraShared.Utils.Extensions;
 
@@ -24,19 +26,14 @@ public static class Vector2Extensions
     /// <returns>true if successful, false otherwise.</returns>
     public static bool TryParseVector2(this ReadOnlySpan<char> span, out Vector2 vector)
     {
-        span = span.Trim();
-
-        int index = span.IndexOf(',');
-
-        if (index <= 0 || index >= span.Length - 1 // comma should not be the first or last position
-            || !float.TryParse(span[..index], out float x)
-            || !float.TryParse(span[(index + 1)..], out float y))
+        if (span.Trim().TrySplitOnce(',', out ReadOnlySpan<char> first, out ReadOnlySpan<char> second)
+            && float.TryParse(first.Trim(), out float x) && float.TryParse(second.Trim(), out float y))
         {
-            vector = default;
-            return false;
+            vector = new Vector2(x, y);
+            return true;
         }
 
-        vector = new Vector2(x, y);
-        return true;
+        vector = default;
+        return false;
     }
 }

@@ -23,11 +23,36 @@ namespace GrowableGiantCrops.Framework;
 [SuppressMessage("StyleCop.CSharp.OrderingRules", "SA1202:Elements should be ordered by access", Justification = "Keeping like methods together.")]
 public sealed class InventoryGiantCrop : SObject
 {
+    #region consts
+
+    /// <summary>
+    /// A prefix used on the name of a giant crop in the inventory.
+    /// </summary>
+    internal const string InventoryGiantCropPrefix = "atravita.GrowableGiantCrop/";
+
+    /// <summary>
+    /// Khloe's mod data key, used to identify her giant crops.
+    /// </summary>
     internal const string GiantCropTweaksModDataKey = "leclair.giantcroptweaks/Id";
-    internal const int GiantCropTweaksIndex = -1337; // Numeric ID to distinguish the giant crop tweaks giant crops.
+
+    /// <summary>
+    /// Numeric category ID used to identify Khloe's giant crops.
+    /// </summary>
+    internal const int GiantCropTweaksCategory = -13376523;
+
+    /// <summary>
+    /// Numeric category ID used to identify JA/vanilla giant crops.
+    /// </summary>
     internal const int GiantCropCategory = -15577335; // set a large random negative number
 
-    public readonly NetString stringID = new NetString(string.Empty);
+    #endregion
+
+    /// <summary>
+    /// The string id, used to distinguish GiantCropTweaks giant crops.
+    /// </summary>
+    public readonly NetString stringID = new(string.Empty);
+
+    #region drawfields
 
     [XmlIgnore]
     private Texture2D? texture;
@@ -38,6 +63,8 @@ public sealed class InventoryGiantCrop : SObject
     [XmlIgnore]
     private string? texturePath;
 
+    #endregion
+
     /// <summary>
     /// Initializes a new instance of the <see cref="InventoryGiantCrop"/> class.
     /// Used for the serializer, do not use.
@@ -47,29 +74,40 @@ public sealed class InventoryGiantCrop : SObject
     {
         this.NetFields.AddFields(this.stringID);
         this.Category = GiantCropCategory;
+        this.Price = 0;
+        this.CanBeSetDown = true;
+        this.Edibility = inedible;
     }
 
     /// <summary>
     /// Initializes a new instance of the <see cref="InventoryGiantCrop"/> class for a GiantCropTweaks giant crop.
     /// </summary>
-    /// <param name="stringID">the string id of the giantcroptweaks giant crop</param>
-    public InventoryGiantCrop(string stringID)
+    /// <param name="stringID">the string id of the giantcroptweaks giant crop.</param>
+    /// <param name="intID">int id of crop product.</param>
+    /// <param name="initialStack">initial stack size.</param>
+    public InventoryGiantCrop(string stringID, int intID, int initialStack)
+        : this(intID, initialStack)
     {
         this.stringID.Value = stringID;
-        this.ParentSheetIndex = GiantCropTweaksIndex;
+        this.Category = GiantCropTweaksCategory;
     }
 
     /// <summary>
     /// Initializes a new instance of the <see cref="InventoryGiantCrop"/> class for vanilla/JA giant crops.
     /// </summary>
     /// <param name="intID">Integer ID to use.</param>
-    public InventoryGiantCrop(int intID)
+    /// <param name="initialStack">The initial size of the stack.</param>
+    public InventoryGiantCrop(int intID, int initialStack)
+        : this()
     {
         this.ParentSheetIndex = intID;
-        if (Game1Wrappers.ObjectInfo.TryGetValue(intID, out var data))
+        if (Game1Wrappers.ObjectInfo.TryGetValue(intID, out string? data))
         {
-            this.Name = data.GetNthChunk('/').ToString();
+            this.Name = InventoryGiantCropPrefix + data.GetNthChunk('/').ToString();
         }
+
+        // populate metadata:
+        this.Stack = initialStack;
     }
 
     #region reflection
@@ -91,4 +129,49 @@ public sealed class InventoryGiantCrop : SObject
         crop.NeedsUpdate = true;
     }
     #endregion
+
+    #region misc
+
+    /// <inheritdoc />
+    public override Item getOne()
+    {
+        InventoryGiantCrop crop = new(this.stringID.Value, this.ParentSheetIndex, 1);
+        crop._GetOneFrom(this);
+        return crop;
+    }
+
+    /// <inheritdoc />
+    public override bool canBeShipped() => false;
+
+    /// <inheritdoc />
+    public override bool canBeGivenAsGift() => false;
+
+    /// <inheritdoc />
+    public override bool canBeTrashed() => true;
+
+    /// <inheritdoc />
+    public override string getCategoryName() => I18n.Category();
+
+    /// <inheritdoc />
+    public override Color getCategoryColor() => Color.ForestGreen;
+
+    /// <inheritdoc />
+    public override bool isPlaceable() => true;
+
+    /// <inheritdoc />
+    public override bool canBePlacedInWater() => false;
+
+    /// <inheritdoc />
+    public override bool canStackWith(ISalable other)
+    {
+        if (other is not InventoryGiantCrop otherBush)
+        {
+            return false;
+        }
+        return this.ParentSheetIndex == otherBush.ParentSheetIndex
+            && this.Category == otherBush.Category
+            && this.stringID.Value == otherBush.stringID.Value;
+    }
+    #endregion
+
 }

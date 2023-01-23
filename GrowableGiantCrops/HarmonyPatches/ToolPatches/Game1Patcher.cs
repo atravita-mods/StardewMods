@@ -7,6 +7,9 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace GrowableGiantCrops.HarmonyPatches.ToolPatches;
 
+/// <summary>
+/// Patches on Game1.
+/// </summary>
 [HarmonyPatch(typeof(Game1))]
 internal static class Game1Patcher
 {
@@ -52,7 +55,7 @@ internal static class Game1Patcher
 
         Vector2 position;
         float rotation = 0f;
-        Vector2 origin = new Vector2(0f, 16f);
+        Vector2 origin = new(0f, 16f);
 
         switch (f.FacingDirection)
         {
@@ -123,7 +126,6 @@ internal static class Game1Patcher
                         break;
                     case 3:
                         position = Utility.snapToInt(new Vector2(fPosition.X, fPosition.Y - 56f));
-                        // rotation = -MathF.PI / 24f;
                         break;
                     case 4:
                         position = Utility.snapToInt(new Vector2(fPosition.X, fPosition.Y - 60f));
@@ -177,7 +179,7 @@ internal static class Game1Patcher
             origin,
             scale: 4f,
             effects: SpriteEffects.None,
-            layerDepth: Math.Max(0f, tool_draw_layer_offset + f.GetBoundingBox().Bottom / 10000f));
+            layerDepth: Math.Max(0f, tool_draw_layer_offset + (f.GetBoundingBox().Bottom / 10000f)));
 
         return false;
     }

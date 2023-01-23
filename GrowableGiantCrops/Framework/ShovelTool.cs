@@ -1,7 +1,5 @@
 ﻿using System.Xml.Serialization;
 
-using AtraShared.Utils.Extensions;
-
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
@@ -13,6 +11,7 @@ namespace GrowableGiantCrops.Framework;
 /// A shovel.
 /// </summary>
 [XmlType("Mods_atravita_Shovel")]
+[SuppressMessage("StyleCop.CSharp.OrderingRules", "SA1202:Elements should be ordered by access", Justification = "Like methods are grouped together.")]
 public sealed class ShovelTool : GenericTool
 {
     public ShovelTool()

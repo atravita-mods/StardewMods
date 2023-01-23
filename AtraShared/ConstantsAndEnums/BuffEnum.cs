@@ -4,8 +4,12 @@ using NetEscapades.EnumGenerators;
 
 namespace AtraShared.ConstantsAndEnums;
 
+/// <summary>
+/// An enum that corresponds to valid buffs in stardew.
+/// </summary>
 [Flags]
 [EnumExtensions]
+[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1602:Enumeration items should be documented", Justification = "Self evident.")]
 public enum BuffEnum
 {
     Farming = 1 << Buff.farming,
@@ -26,6 +30,7 @@ public enum BuffEnum
 /// <summary>
 /// Extensions for <see cref="BuffEnum"/>.
 /// </summary>
+[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1309:Field names should not begin with underscore", Justification = "Preference.")]
 public static partial class BuffEnumExtensions
 {
     private static readonly Random _random = new Random().PreWarm();

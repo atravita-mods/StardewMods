@@ -156,6 +156,15 @@ internal sealed class ModEntry : Mod
             this.Monitor.Log(string.Format(ErrorMessageConsts.HARMONYCRASH, ex), LogLevel.Error);
         }
 
+        try
+        {
+            DebuggingPatches.Apply(harmony);
+        }
+        catch (Exception ex)
+        {
+            this.Monitor.Log($"Failed while trying to apply debugging patches.\n\n{ex}", LogLevel.Warn);
+        }
+
         harmony.Snitch(this.Monitor, harmony.Id, transpilersOnly: true);
     }
 

@@ -27,8 +27,14 @@ internal sealed class ModEntry : Mod
 
     private MigrationManager? migrator;
 
+    /// <summary>
+    /// Gets the product IDs recognized by More Giant Crops.
+    /// </summary>
     internal static int[] MoreGiantCropsIds => moreGiantCropsIds ?? Array.Empty<int>();
 
+    /// <summary>
+    /// Gets the product IDs recognized by JsonAssets.
+    /// </summary>
     internal static int[] JACropIds => jaCropIds ?? Array.Empty<int>();
 
     /// <summary>
@@ -87,9 +93,6 @@ internal sealed class ModEntry : Mod
 
             this.Helper.Events.GameLoop.SaveLoaded += this.SaveLoaded;
 
-            // this.Helper.Events.Player.Warped += this.OnWarped;
-            // this.Helper.Events.Player.InventoryChanged += this.OnInventoryChanged;
-
             // shop
             // this.Helper.Events.Content.AssetRequested += static (_, e) => ShopManager.OnAssetRequested(e);
             // this.Helper.Events.GameLoop.DayEnding += static (_, _) => ShopManager.OnDayEnd();
@@ -137,50 +140,6 @@ internal sealed class ModEntry : Mod
             this.Monitor.Log($"Could not load spacecore's API. This is a fatal error.", LogLevel.Error);
         }
     }
-
-    /*
-    /// <inheritdoc cref="IPlayerEvents.InventoryChanged"/>
-    private void OnInventoryChanged(object? sender, InventoryChangedEventArgs e)
-    {
-        if (!e.IsLocalPlayer || Game1.currentLocation is not GameLocation loc)
-        {
-            return;
-        }
-
-        foreach (Item item in e.Added)
-        {
-            if (item is InventoryBush bush)
-            {
-                bush.UpdateForNewLocation(loc);
-            }
-        }
-
-        foreach (Item item in e.Removed)
-        {
-            if (item is InventoryBush bush)
-            {
-                bush.UpdateForNewLocation(loc);
-            }
-        }
-    }
-    */
-
-    /*
-    /// <inheritdoc cref="IPlayerEvents.Warped"/>
-    private void OnWarped(object? sender, WarpedEventArgs e)
-    {
-        if (e.IsLocalPlayer && e.NewLocation is GameLocation loc)
-        {
-            foreach (Item? item in e.Player.Items)
-            {
-                if (item is InventoryBush bush)
-                {
-                    bush.UpdateForNewLocation(loc);
-                }
-            }
-        }
-    }
-    */
 
     /// <summary>
     /// Applies the patches for this mod.

@@ -15,7 +15,7 @@ internal sealed class ModConfig
     public bool Verbose { get; set; } = false;
 
     /// <summary>
-    /// Gets or sets a value indicating whether or not to surpress board updates before
+    /// Gets or sets a value indicating whether or not to suppress board updates before
     /// the board is opened.
     /// </summary>
     public bool SurpressUnnecessaryBoardUpdates { get; set; } = true;

@@ -37,7 +37,7 @@ internal static class SpecialFertilizerApplication
                                     ? e.Cursor.Tile
                                     : e.Cursor.GrabTile;
 
-        // HACK move the tile further from the player if they're controller 
+        // HACK move the tile further from the player if they're controller.
         if ((obj.ParentSheetIndex == ModEntry.FishFoodID || obj.ParentSheetIndex == ModEntry.DeluxeFishFoodID) &&
             !Game1.currentLocation.isWaterTile((int)placementtile.X, (int)placementtile.Y))
         {

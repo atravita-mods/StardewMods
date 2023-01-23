@@ -1,5 +1,7 @@
 ﻿using CommunityToolkit.Diagnostics;
 
+using StardewValley.Locations;
+
 namespace AtraCore.Framework.Caches;
 
 /// <summary>
@@ -8,6 +10,16 @@ namespace AtraCore.Framework.Caches;
 public static class NPCCache
 {
     private static readonly Dictionary<string, WeakReference<NPC>> cache = new();
+
+    public static bool TryInsert(NPC npc)
+    {
+        Guard.IsNotNull(npc);
+        if (!npc.isVillager() || string.IsNullOrWhiteSpace(npc.Name))
+        {
+            return false;
+        }
+        return cache.TryAdd(npc.Name, new WeakReference<NPC>(npc));
+    }
 
     /// <summary>
     /// Tries to find a NPC from the game.
@@ -36,6 +48,21 @@ public static class NPCCache
         {
             cache[name] = new(npc);
         }
+
+        // check the movie theater as well. These **might** be duplicates
+        // so we'll leave you guys uncached for now.
+        if (npc is null && Game1.getLocationFromName("MovieTheater") is MovieTheater theater)
+        {
+            ModEntry.ModMonitor.Log($"Searching movie theater for npc {name}");
+            foreach (var character in theater.characters)
+            {
+                if (character.isVillager() && character.Name == name)
+                {
+                    npc = character;
+                }
+            }
+        }
+
         return npc;
     }
 

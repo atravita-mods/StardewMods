@@ -1,10 +1,15 @@
 ﻿using AtraBase.Toolkit.Extensions;
 using AtraBase.Toolkit.StringHandler;
 
+using AtraCore.Framework.Caches;
+
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
 namespace StopRugRemoval.Framework.Niceties;
+
+// TODO - figure out Custom Companions compat.
+
 internal static class DuplicateNPCDetector
 {
     internal static void DayEnd()
@@ -149,6 +154,9 @@ internal static class DuplicateNPCDetector
                 {
                     continue;
                 }
+
+                // let's populate AtraCore's cache while we're at it.
+                _ = NPCCache.TryInsert(character);
 
                 if (!found.TryAdd(character.Name, character) && character.Name != "Mister Qi")
                 {

@@ -11,4 +11,13 @@ public sealed class ModConfig
     public bool ShouldNPCsTrampleGiantCrops { get; set; } = true;
 
     public bool RelaxedPlacement { get; set; } = false;
+
+    private int shovelEnergy = 7;
+
+    [GMCMRange(0, 10)]
+    public int ShovelEnergy
+    {
+        get => this.shovelEnergy;
+        set => Math.Clamp(this.shovelEnergy, 0, 10);
+    }
 }

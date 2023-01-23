@@ -10,6 +10,7 @@ using GrowableGiantCrops.Framework;
 
 using HarmonyLib;
 
+using Microsoft.CodeAnalysis;
 using Microsoft.Xna.Framework;
 
 using StardewModdingAPI.Events;
@@ -39,6 +40,8 @@ internal sealed class ModEntry : Mod
     internal static IMoreGiantCropsAPI? MoreGiantCropsAPI { get; private set; }
 
     internal static IGiantCropTweaks? GiantCropTweaksAPI { get; private set; }
+
+    internal static IGrowableBushesAPI? GrowableBushesAPI { get; private set; }
 
     #endregion
 
@@ -105,17 +108,22 @@ internal sealed class ModEntry : Mod
             }
 
             // optional APIs
-            if (helper.TryGetAPI("spacechase0.JsonAssets", "1.10.10", out IJsonAssetsAPI? jaAPI))
+            IntegrationHelper optional = new(this.Monitor, this.Helper.Translation, this.Helper.ModRegistry, LogLevel.Trace);
+            if (optional.TryGetAPI("spacechase0.JsonAssets", "1.10.10", out IJsonAssetsAPI? jaAPI))
             {
                 JaAPI = jaAPI;
             }
-            if (helper.TryGetAPI("spacechase0.MoreGiantCrops", "1.2.0", out IMoreGiantCropsAPI? mgAPI))
+            if (optional.TryGetAPI("spacechase0.MoreGiantCrops", "1.2.0", out IMoreGiantCropsAPI? mgAPI))
             {
                 MoreGiantCropsAPI = mgAPI;
             }
-            if (helper.TryGetAPI("leclair.giantcroptweaks", "0.1.0", out IGiantCropTweaks? gcAPI))
+            if (optional.TryGetAPI("leclair.giantcroptweaks", "0.1.0", out IGiantCropTweaks? gcAPI))
             {
                 GiantCropTweaksAPI = gcAPI;
+            }
+            if (optional.TryGetAPI("atravita.GrowableBushes", "0.0.1", out IGrowableBushesAPI? growable))
+            {
+                GrowableBushesAPI = growable;
             }
         }
         else

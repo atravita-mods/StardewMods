@@ -34,8 +34,6 @@ internal sealed class ModEntry : Mod
 
     private MigrationManager? migrator;
 
-    private GiantCropFertilizerIDStorage? storedID;
-
     [SuppressMessage("StyleCop.CSharp.OrderingRules", "SA1204:Static elements should appear before instance elements", Justification = "Field kept near property.")]
     private static int giantCropFertilizerID = -1;
 
@@ -83,22 +81,10 @@ internal sealed class ModEntry : Mod
     {
         if (Context.IsMainPlayer)
         {
-            this.storedID ??= new GiantCropFertilizerIDStorage(GiantCropFertilizerID);
-            this.storedID.ID = GiantCropFertilizerID;
-            Task.Run(() => this.Helper.Data.WriteGlobalData(SAVESTRING, this.storedID))
-                .ContinueWith(t =>
-                {
-                    if (t.IsCompletedSuccessfully)
-                    {
-                        this.Helper.Events.GameLoop.Saved -= this.OnSaved;
-                        this.Monitor.Log($"Saved IDs!", LogLevel.Info);
-                    }
-                    else
-                    {
-                        this.Monitor.Log($"Failed to save ids: {t.Status} - {t.Exception}", LogLevel.Error);
-                    }
-                });
+            this.Helper.Data.WriteSaveData(SAVESTRING, GiantCropFertilizerID.ToString());
+            this.Monitor.Log($"Saved IDs!", LogLevel.Info);
         }
+        this.Helper.Events.GameLoop.Saved -= this.OnSaved;
     }
 
     /// <summary>
@@ -268,20 +254,20 @@ internal sealed class ModEntry : Mod
             this.Monitor.Log($"Could not get ID from JA.");
         }
 
-        if (this.Helper.Data.ReadGlobalData<GiantCropFertilizerIDStorage>(SAVESTRING) is not GiantCropFertilizerIDStorage storedIDCls
-            || storedIDCls.ID == -1)
+        int storedID;
+        if (this.Helper.Data.ReadSaveData<string>(SAVESTRING) is not string savedIdstring || !int.TryParse(savedIdstring, out storedID))
         {
-            this.storedID = new GiantCropFertilizerIDStorage(GiantCropFertilizerID);
+            if (this.Helper.Data.ReadGlobalData<GiantCropFertilizerIDStorage>(SAVESTRING) is not GiantCropFertilizerIDStorage storedIDCls
+                || storedIDCls.ID == -1)
+            {
+                this.Helper.Events.GameLoop.Saved -= this.OnSaved;
+                this.Helper.Events.GameLoop.Saved += this.OnSaved;
 
-            this.Helper.Events.GameLoop.Saved -= this.OnSaved;
-            this.Helper.Events.GameLoop.Saved += this.OnSaved;
-
-            ModMonitor.Log("No need to fix IDs, not installed before.");
-            return;
+                ModMonitor.Log("No need to fix IDs, not installed before.");
+                return;
+            }
+            storedID = storedIDCls.ID;
         }
-
-        this.storedID = storedIDCls;
-        int storedID = this.storedID.ID;
 
         if (storedID == newID)
         {
@@ -303,7 +289,6 @@ internal sealed class ModEntry : Mod
 
         Utility.ForAllLocations((GameLocation loc) => loc.FixIDsInLocation(storedID, newID));
 
-        this.storedID.ID = newID;
         ModMonitor.Log($"Fixed IDs! {storedID} => {newID}");
     }
 

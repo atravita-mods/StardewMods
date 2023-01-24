@@ -42,8 +42,7 @@ internal static class CharacterTramplePatches
                     && bush.modData.ContainsKey(InventoryBush.BushModData))
                 {
                     bush.health = -1f;
-                    Axe axe = new();
-                    axe.UpgradeLevel = 3;
+                    Axe axe = new() { UpgradeLevel = 3 };
                     bush.performToolAction(axe, 0, bush.currentTileLocation, currentLocation);
                     currentLocation.largeTerrainFeatures.RemoveAt(i);
                 }

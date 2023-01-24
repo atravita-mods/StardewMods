@@ -368,7 +368,6 @@ internal static class DrawPrismatic
         }
         return null;
     }
-#warning - the other draw method...
 
     [UsedImplicitly]
     [HarmonyTranspiler]

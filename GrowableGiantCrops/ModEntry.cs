@@ -10,7 +10,6 @@ using GrowableGiantCrops.Framework;
 
 using HarmonyLib;
 
-using Microsoft.CodeAnalysis;
 using Microsoft.Xna.Framework;
 
 using StardewModdingAPI.Events;

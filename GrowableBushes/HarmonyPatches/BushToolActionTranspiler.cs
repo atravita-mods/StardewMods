@@ -15,7 +15,7 @@ using StardewValley.TerrainFeatures;
 namespace GrowableBushes.HarmonyPatches;
 
 /// <summary>
-/// Transpiler on Bush.performToolAction to allow decorative walnut bushes to but axed.
+/// Transpiler on Bush.performToolAction to allow decorative walnut bushes to be axed.
 /// </summary>
 [HarmonyPatch(typeof(Bush))]
 internal static class BushToolActionTranspiler

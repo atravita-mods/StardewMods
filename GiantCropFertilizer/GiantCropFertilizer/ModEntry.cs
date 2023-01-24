@@ -77,14 +77,14 @@ internal sealed class ModEntry : Mod
         helper.Events.GameLoop.GameLaunched += this.OnGameLaunched;
     }
 
-    private void OnSaved(object? sender, SavedEventArgs e)
+    private void OnSaving(object? sender, SavingEventArgs e)
     {
         if (Context.IsMainPlayer)
         {
             this.Helper.Data.WriteSaveData(SAVESTRING, GiantCropFertilizerID.ToString());
             this.Monitor.Log($"Saved IDs!", LogLevel.Info);
         }
-        this.Helper.Events.GameLoop.Saved -= this.OnSaved;
+        this.Helper.Events.GameLoop.Saving -= this.OnSaving;
     }
 
     /// <summary>
@@ -207,6 +207,7 @@ internal sealed class ModEntry : Mod
         {
             this.migrator = null;
         }
+
         this.GrabIds();
         if (Context.IsMainPlayer)
         {
@@ -214,7 +215,7 @@ internal sealed class ModEntry : Mod
         }
     }
 
-    /// <inheritdoc cref="IGameLoopEvents.Saved"/>
+    /// <inheritdoc cref="IGameLoopEvents.Save"/>
     /// <remarks>
     /// Writes migration data then detaches the migrator.
     /// </remarks>
@@ -260,8 +261,8 @@ internal sealed class ModEntry : Mod
             if (this.Helper.Data.ReadGlobalData<GiantCropFertilizerIDStorage>(SAVESTRING) is not GiantCropFertilizerIDStorage storedIDCls
                 || storedIDCls.ID == -1)
             {
-                this.Helper.Events.GameLoop.Saved -= this.OnSaved;
-                this.Helper.Events.GameLoop.Saved += this.OnSaved;
+                this.Helper.Events.GameLoop.Saving -= this.OnSaving;
+                this.Helper.Events.GameLoop.Saving += this.OnSaving;
 
                 ModMonitor.Log("No need to fix IDs, not installed before.");
                 return;
@@ -275,8 +276,8 @@ internal sealed class ModEntry : Mod
             return;
         }
 
-        this.Helper.Events.GameLoop.Saved -= this.OnSaved;
-        this.Helper.Events.GameLoop.Saved += this.OnSaved;
+        this.Helper.Events.GameLoop.Saving -= this.OnSaving;
+        this.Helper.Events.GameLoop.Saving += this.OnSaving;
 
         IntegrationHelper helper = new(this.Monitor, this.Helper.Translation, this.Helper.ModRegistry, LogLevel.Trace);
         if (this.solidFoundationsAPI is not null || helper.TryGetAPI("PeacefulEnd.SolidFoundations", "1.12.1", out this.solidFoundationsAPI))

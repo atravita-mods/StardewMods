@@ -1,4 +1,5 @@
-﻿using AtraShared.Integrations;
+﻿using AtraShared.ConstantsAndEnums;
+using AtraShared.Integrations;
 using AtraShared.Utils.Extensions;
 
 using HarmonyLib;
@@ -31,6 +32,7 @@ public class ModEntry : Mod
 
         AssetManager.Initialize(helper.GameContent);
         helper.Events.Content.AssetRequested += static (_, e) => AssetManager.OnAssetRequested(e);
+        helper.Events.GameLoop.SaveLoaded += static (_, _) => AssetManager.Load();
     }
 
     /// <summary>
@@ -39,8 +41,15 @@ public class ModEntry : Mod
     /// <param name="harmony">My harmony instance.</param>
     private void ApplyPatches(Harmony harmony)
     {
-        // handle patches from annotations.
-        harmony.PatchAll(typeof(ModEntry).Assembly);
+        try
+        {
+            harmony.PatchAll(typeof(ModEntry).Assembly);
+        }
+        catch (Exception ex)
+        {
+            Globals.ModMonitor.Log(string.Format(ErrorMessageConsts.HARMONYCRASH, ex), LogLevel.Error);
+        }
+        harmony.Snitch(this.Monitor, harmony.Id, transpilersOnly: true);
     }
 
     /// <summary>

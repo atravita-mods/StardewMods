@@ -1,5 +1,8 @@
 ﻿using HarmonyLib;
 
+using IdentifiableCombinedRings.DataModels;
+using IdentifiableCombinedRings.Framework;
+
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
@@ -13,7 +16,7 @@ namespace IdentifiableCombinedRings.HarmonyPatches;
 internal class CombinedRingPatcher
 {
     /// <summary>
-    /// Patches drawInMenu
+    /// Patches drawInMenu.
     /// </summary>
     /// <param name="__instance">Combined ring to check.</param>
     [HarmonyPrefix]
@@ -43,8 +46,28 @@ internal class CombinedRingPatcher
                 return true;
             }
 
-            combinedRings[0].drawInMenu(spriteBatch, location, scaleSize * .75f, transparency, layerDepth, drawStackNumber, color, drawShadow);
-            combinedRings[1].drawInMenu(spriteBatch, location, scaleSize * .75f, transparency, layerDepth, drawStackNumber, color, drawShadow);
+            int first = combinedRings[0].ParentSheetIndex;
+            int second = combinedRings[1].ParentSheetIndex;
+
+            RingPair pair = first > second ? new(second, first) : new(first, second);
+
+            if (AssetManager.GetOverrideTexture(pair) is Texture2D texture)
+            {
+                spriteBatch.Draw(
+                    texture,
+                    location + new Vector2(32f, 32f) * scaleSize,
+                    new Rectangle(0, 0, 16, 16),
+                    color * transparency,
+                    0f,
+                    new Vector2(8f, 8f) * scaleSize,
+                    scaleSize * 4f,
+                    SpriteEffects.None,
+                    layerDepth);
+                return false;
+            }
+
+            combinedRings[0].drawInMenu(spriteBatch, location + new Vector2(8f, 0f), scaleSize * .8f, transparency, layerDepth, drawStackNumber, color, drawShadow);
+            combinedRings[1].drawInMenu(spriteBatch, location + new Vector2(-16f, 12f), scaleSize * .8f, transparency, layerDepth, drawStackNumber, color, drawShadow);
 
             return false;
         }

@@ -6,6 +6,8 @@
         "Entries": {
             "1{{YearRemainder}}": "Start of a new month, @! What are you planning on getting done?",
             "3{{YearRemainder}}": "@, I got a new commission! I'm so excited.$h",
+            "5{{YearRemainder}}": "When I need inspiration, I take walks through the forest.#$b#I love living out here! $h",
+            "7{{YearRemainder}}": "I've got a little kitchen in my studio but honestly it's not much.#$b#There's so much fresh food to be found in the forest though! I love fresh salads.",
         },
         "When": {"YearModulus": 1}
     },

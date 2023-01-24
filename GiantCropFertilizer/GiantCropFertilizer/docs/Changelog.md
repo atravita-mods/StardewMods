@@ -1,6 +1,9 @@
 ﻿Changelog
 =============
 
+#### Version 0.2.2
+* Simplify and fix the deshuffle code.
+
 #### Version 0.2.1
 * Fix issue with giant crops vanishing on maps that were not Farm or IslandWest.
 * Internal improvements.

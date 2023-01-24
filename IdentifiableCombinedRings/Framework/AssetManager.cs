@@ -7,6 +7,8 @@ using AtraShared.ConstantsAndEnums;
 
 using IdentifiableCombinedRings.DataModels;
 
+using Microsoft.Xna.Framework.Graphics;
+
 using StardewModdingAPI.Events;
 
 namespace IdentifiableCombinedRings.Framework;
@@ -18,7 +20,7 @@ internal static class AssetManager
 {
     private static IAssetName RingLocation = null!;
 
-    private static Dictionary<RingPair, string> textureOverrides = new();
+    private static readonly Dictionary<RingPair, Lazy<Texture2D>> TextureOverrides = new();
 
     internal static void Initialize(IGameContentHelper parser)
     {
@@ -33,9 +35,11 @@ internal static class AssetManager
         }
     }
 
+    internal static Texture2D? GetOverrideTexture(RingPair pair) => TextureOverrides.TryGetValue(pair, out var tex) ? tex.Value : null;
+
     internal static void Load()
     {
-        textureOverrides.Clear();
+        TextureOverrides.Clear();
 
         Dictionary<string, RingDataModel> models = Game1.content.Load<Dictionary<string, RingDataModel>>(RingLocation.BaseName);
         foreach (RingDataModel model in models.Values)
@@ -45,6 +49,12 @@ internal static class AssetManager
                 || second.Contains(','))
             {
                 Globals.ModMonitor.Log($"'{model.RingIdentifiers ?? string.Empty}' was not a valid identifier set, skipping.", LogLevel.Error);
+                continue;
+            }
+
+            if (string.IsNullOrWhiteSpace(model.TextureLocation))
+            {
+                Globals.ModMonitor.Log($"Texture cannot be null or whitespace", LogLevel.Error);
                 continue;
             }
 
@@ -60,11 +70,11 @@ internal static class AssetManager
                 continue;
             }
 
-            // swap so firstring is always lower.
-            if (firstring > secondring)
-            {
-                (secondring, firstring) = (firstring, secondring);
-            }
+            RingPair pair = firstring > secondring
+                ? new(secondring, firstring)
+                : new(firstring, secondring);
+
+            TextureOverrides[pair] = new(() => Game1.content.Load<Texture2D>(model.TextureLocation));
         }
     }
 

@@ -7,6 +7,10 @@ using StardewValley.Menus;
 // TODO - color in the little slots somehow and make them not interactable.
 
 namespace PrismaticSlime.HarmonyPatches.JellyPatches;
+
+/// <summary>
+/// Patches against the dye pots.
+/// </summary>
 [HarmonyPatch(typeof(DyeMenu))]
 internal static class DyePotPatches
 {

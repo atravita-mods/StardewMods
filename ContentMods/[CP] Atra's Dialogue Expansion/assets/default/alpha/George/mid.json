@@ -14,7 +14,16 @@
         "Target": "Characters/Dialogue/George",
         "Entries": {
             "movieTheater": "Oh, @, we have a movie theater again!$h#$e#Think I'll take Evelyn, we used to go to the movies every Friday night.",
-            "winter_7{{YearRemainder}}": "Everyone expects me to be cherry for the Festival. Hrmph."
-        },
+            "winter_7{{YearRemainder}}": "Everyone expects me to be cheery for the Festival. Hrmph.#$b#It's cold, @, no good for my knee."
+        }
     },
+    {
+        "LogName": "George mid-hearts - Y2",
+        "Action": "EditData",
+        "Target":"Characters/Dialogue/George",
+        "Entries": {
+            "1_2": "Evelyn and I've been living in this here valley for a very long time, @. My family's been living here for as long as we can remember.$h#$b#Ain't no place like our dear Pelican Town.",
+            "3_2": "Pelican Town used to be so much bigger, back when the mines were still active.#$b#Now? I don't know how the younguns' are gonna find jobs around these parts."
+        }
+    }, // Y3, Y4 strike and strike break?
 ]}

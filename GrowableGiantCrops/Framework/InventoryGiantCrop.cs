@@ -130,6 +130,15 @@ public sealed class InventoryGiantCrop : SObject
     }
     #endregion
 
+    #region draw
+
+    private void PopulateTexture()
+    {
+
+    }
+
+    #endregion
+
     #region misc
 
     /// <inheritdoc />
@@ -172,6 +181,19 @@ public sealed class InventoryGiantCrop : SObject
             && this.Category == otherBush.Category
             && this.stringID.Value == otherBush.stringID.Value;
     }
+    #endregion
+
+    #region helpers
+
+    private static int ProductToGameIndex(int productIndex)
+        => productIndex switch
+        {
+            190 => GiantCrop.cauliflower,
+            254 => GiantCrop.melon,
+            276 => GiantCrop.pumpkin,
+            _ => productIndex,
+        };
+
     #endregion
 
 }

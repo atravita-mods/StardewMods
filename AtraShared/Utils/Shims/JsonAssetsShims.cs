@@ -25,7 +25,7 @@ namespace AtraShared.Utils.Shims;
 [SuppressMessage("StyleCop.CSharp.OrderingRules", "SA1201:Elements should appear in the correct order", Justification = "Fields kept near accessors.")]
 public static class JsonAssetsShims
 {
-    private const int eventID = int.MinValue + 4993;
+    private const int EventID = int.MinValue + 4993;
     private static bool initialized = false;
 
     private static IMonitor modMonitor = null!;
@@ -106,11 +106,11 @@ public static class JsonAssetsShims
             return epu.CheckConditions(conditions);
         }
         Farm farm = Game1.getFarm();
-        bool replace = Game1.player.eventsSeen.Remove(eventID);
-        bool ret = farm.checkEventPrecondition($"{eventID}/{conditions}") != -1;
+        bool replace = Game1.player.eventsSeen.Remove(EventID);
+        bool ret = farm.checkEventPrecondition($"{EventID}/{conditions}") != -1;
         if (replace)
         {
-            Game1.player.eventsSeen.Add(eventID);
+            Game1.player.eventsSeen.Add(EventID);
         }
         return ret;
     }

@@ -23,6 +23,10 @@ internal static class MRUtils
         }
 
         int endindex = mail.IndexOf("%%", startindex);
+        if (endindex < 0)
+        {
+            return Enumerable.Empty<SObject>();
+        }
 
         ReadOnlySpan<char> substring = mail.AsSpan(startindex, endindex - startindex).Trim();
         if (substring.Length <= 0)

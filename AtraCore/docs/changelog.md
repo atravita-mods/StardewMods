@@ -3,6 +3,7 @@
 
 #### Version 0.2.0
 * Fix issue where code that picked a random tile in a map would confuse height and width.
+* Prismatic drawing functions now account for crafting and cooking recipes.
 * Updated dependencies...which broke backwards compat **again**.
 
 #### Version 0.1.4

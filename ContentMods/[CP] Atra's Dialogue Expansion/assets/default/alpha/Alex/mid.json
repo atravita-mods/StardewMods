@@ -14,7 +14,8 @@
         "Target": "Characters/Dialogue/Alex",
         "When": {"YearModulus": "2"},
         "Entries": {
-            "4_2": "@! I saw a new exercise on social media the other day. Can't wait to try it out."
+            "4_2": "@! I saw a new exercise on social media the other day. Can't wait to try it out.",
+            "6_2": "There's nothing like a nice early morning run.$h",
         }
     }
 ]}

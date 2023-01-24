@@ -5,6 +5,7 @@
         "Target": "Characters/Dialogue/Leah",
         "Entries": {
             "1{{YearRemainder}}": "Start of a new month, @! What are you planning on getting done?",
+            "3{{YearRemainder}}": "@, I got a new commission! I'm so excited.$h",
         },
         "When": {"YearModulus": 1}
     },

@@ -83,14 +83,15 @@ internal sealed class ModEntry : Mod
     {
         if (Context.IsMainPlayer)
         {
-            Task.Run(() => this.Helper.Data.WriteGlobalData(
-                  SAVESTRING,
-                  this.storedID ?? new GiantCropFertilizerIDStorage(GiantCropFertilizerID)))
+            this.storedID ??= new GiantCropFertilizerIDStorage(GiantCropFertilizerID);
+            this.storedID.ID = GiantCropFertilizerID;
+            Task.Run(() => this.Helper.Data.WriteGlobalData(SAVESTRING, this.storedID))
                 .ContinueWith(t =>
                 {
                     if (t.IsCompletedSuccessfully)
                     {
                         this.Helper.Events.GameLoop.Saved -= this.OnSaved;
+                        this.Monitor.Log($"Saved IDs!", LogLevel.Info);
                     }
                     else
                     {

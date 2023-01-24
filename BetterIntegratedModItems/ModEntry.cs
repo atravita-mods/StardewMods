@@ -136,7 +136,7 @@ internal sealed class ModEntry : Mod
     /// <inheritdoc cref="IPlayerEvents.Warped"/>
     private void OnNewLocationSeen(object? sender, WarpedEventArgs e)
     {
-        if (e.IsLocalPlayer && LocationWatcher!.SeenLocations.Add(e.NewLocation.Name))
+        if (e.IsLocalPlayer && !e.NewLocation.IsUnsavedLocation() && LocationWatcher!.SeenLocations.Add(e.NewLocation.Name))
         {
             this.Helper.Multiplayer.SendMessage(e.NewLocation.Name, LOCATIONNAME, new[] { this.ModManifest.UniqueID });
             this.OnLocationSeen?.RaiseSafe(null, new LocationSeenEventArgs(e.NewLocation.Name));

@@ -23,7 +23,7 @@ internal sealed class ModEntry : Mod
         I18n.Init(helper.Translation);
         ModMonitor = this.Monitor;
 
-        helper.Events.GameLoop.GameLaunched += (_,_) => this.ApplyPatches(new Harmony(this.ModManifest.UniqueID));
+        helper.Events.GameLoop.GameLaunched += (_, _) => this.ApplyPatches(new Harmony(this.ModManifest.UniqueID));
         this.Monitor.Log($"Starting up: {this.ModManifest.UniqueID} - {typeof(ModEntry).Assembly.FullName}");
     }
 
@@ -126,15 +126,14 @@ internal sealed class ModEntry : Mod
             copylist.Add(new(OpCodes.Brtrue_S, label));
             CodeInstruction[]? copy = copylist.ToArray();
 
-            helper.Advance(1)
-            .Insert(copy);
+            helper.Advance(1).Insert(copy);
 
             return helper.Render();
         }
         catch (Exception ex)
         {
             ModMonitor.Log($"Mod crashed while transpiling mine death methods:\n\n{ex}", LogLevel.Error);
-            original.Snitch(ModEntry.ModMonitor);
+            original.Snitch(ModMonitor);
         }
         return null;
     }

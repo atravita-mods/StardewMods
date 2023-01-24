@@ -252,9 +252,6 @@ internal sealed class ModEntry : Mod
 
     #endregion
 
-    /// <inheritdoc cref="IGameLoopEvents.Saving"/>
-    /// <remarks>Used to handle day-end events.</remarks>
-
     /// <inheritdoc cref="IGameLoopEvents.SaveLoaded"/>
     /// <remarks>Used to load in this mod's data models.</remarks>
     private void SaveLoaded(object? sender, SaveLoadedEventArgs e)
@@ -281,6 +278,8 @@ internal sealed class ModEntry : Mod
         this.watcher = new();
     }
 
+    /// <inheritdoc cref="IGameLoopEvents.Saving"/>
+    /// <remarks>Used to handle day-end events.</remarks>
     private void Saving(object? sender, SavingEventArgs e)
     {
         this.Monitor.DebugOnlyLog("Event Saving raised");

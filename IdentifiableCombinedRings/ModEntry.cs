@@ -1,5 +1,7 @@
 ﻿using HarmonyLib;
 
+using IdentifiableCombinedRings.Framework;
+
 namespace IdentifiableCombinedRings;
 
 /// <inheritdoc />
@@ -13,6 +15,9 @@ public class ModEntry : Mod
         this.ApplyPatches(new Harmony(this.ModManifest.UniqueID));
 
         this.Monitor.Log($"Starting up: {this.ModManifest.UniqueID} - {typeof(ModEntry).Assembly.FullName}");
+
+        AssetManager.Initialize(helper.GameContent);
+        helper.Events.Content.AssetRequested += static (_, e) => AssetManager.OnAssetRequested(e);
     }
 
     /// <summary>

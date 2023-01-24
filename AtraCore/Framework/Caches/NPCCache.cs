@@ -70,6 +70,7 @@ public static class NPCCache
                 if (character.isVillager() && character.Name == name)
                 {
                     npc = character;
+                    break;
                 }
             }
         }

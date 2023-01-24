@@ -5,7 +5,7 @@
 /// This is primarily used for unpatching.
 /// </summary>
 [AttributeUsage(AttributeTargets.Class | AttributeTargets.Method)]
-public class HarmonyCategoryAttribute: Attribute
+public class HarmonyCategoryAttribute : Attribute
 {
     /// <summary>
     /// Initializes a new instance of the <see cref="HarmonyCategoryAttribute"/> class.

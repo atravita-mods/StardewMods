@@ -8,4 +8,13 @@
             "George": "{{Random: It's awful cold, isn't it? What a rotten day. ++ Why do I even bother getting out of bed when the day looks like this? ++ My hip aches.|inputSeparator=++}}"
         }
     },
+    {
+        "LogName": "George mid-hearts",
+        "Action": "EditData",
+        "Target": "Characters/Dialogue/George",
+        "Entries": {
+            "movieTheater": "Oh, @, we have a movie theater again!$h#$e#Think I'll take Evelyn, we used to go to the movies every Friday night.",
+            "winter_7{{YearRemainder}}": "Everyone expects me to be cherry for the Festival. Hrmph."
+        },
+    },
 ]}

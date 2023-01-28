@@ -51,6 +51,7 @@ internal class SObjectDrawTranspiler
         return Color.White;
     }
 
+    [MethodImpl(TKConstants.Hot)]
     private static bool ShouldDisablePulsing() => ModEntry.Config.DisablePulsing;
 
 #pragma warning disable SA1116 // Split parameters should start on line after declaration. Reviewed
@@ -72,12 +73,12 @@ internal class SObjectDrawTranspiler
                 (OpCodes.Callvirt, typeof(SObject).GetCachedMethod(nameof(SObject.getScale), ReflectionCache.FlagTypes.InstanceFlags)),
                 SpecialCodeInstructionCases.StLoc,
             })
-            .Push()
-            .GetLabels(out var pulseLabels)
+            .Push() // edit to Vector2 vector = ShouldDisablePulsing ? Vector2.Zero : this.getScale();
+            .GetLabels(out IList<Label>? pulseLabels)
             .Advance(2)
-            .DefineAndAttachLabel(out var nopulseJump)
+            .DefineAndAttachLabel(out Label nopulseJump)
             .Pop()
-            .DefineAndAttachLabel(out var pulseJump)
+            .DefineAndAttachLabel(out Label pulseJump)
             .Insert(new CodeInstruction[]
             {
                 new(OpCodes.Call, typeof(SObjectDrawTranspiler).GetCachedMethod(nameof(ShouldDisablePulsing), ReflectionCache.FlagTypes.StaticFlags)),

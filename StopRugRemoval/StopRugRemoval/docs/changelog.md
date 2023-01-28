@@ -9,6 +9,7 @@
 
 #### Version 1.1.2
 * By popular request, defang the napalm ring in safe areas.
+* New fixes: Journal scraps are now less silly, also removing a mod that adds secret notes won't lock you out of secret notes.
 
 #### Version 1.1.1
 * Some menus now accept arrow keys.

@@ -111,6 +111,10 @@ internal sealed class ModEntry : Mod
         helper.Events.Multiplayer.PeerConnected += this.OnPlayerConnected;
 
         helper.Events.Specialized.LoadStageChanged += this.OnLoadStageChanged;
+
+        // secret notes
+        FixSecretNotes.Initialize(helper.GameContent);
+        helper.Events.Content.AssetsInvalidated += (_, e) => FixSecretNotes.Reset(e.NamesWithoutLocale);
     }
 
     /// <inheritdoc cref="IInputEvents.ButtonPressed"/>

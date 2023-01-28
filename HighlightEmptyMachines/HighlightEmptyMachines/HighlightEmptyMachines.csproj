@@ -29,10 +29,6 @@
   </ItemGroup>
   
   <ItemGroup>
-    <REfere
-  </ItemGroup>
-
-  <ItemGroup>
     <Using Include="StardewValley" />
     <Using Include="StardewModdingAPI" />
     <Using Include="System.Diagnostics.CodeAnalysis" />

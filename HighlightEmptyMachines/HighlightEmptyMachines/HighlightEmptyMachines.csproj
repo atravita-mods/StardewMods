@@ -28,6 +28,9 @@
     <ProjectReference Include="..\..\Pintail\Pintail\Pintail.csproj" private="false" />
   </ItemGroup>
   
+  <ItemGroup>
+    <REfere
+  </ItemGroup>
 
   <ItemGroup>
     <Using Include="StardewValley" />

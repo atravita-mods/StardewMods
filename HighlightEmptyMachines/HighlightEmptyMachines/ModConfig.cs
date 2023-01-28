@@ -55,4 +55,6 @@ public sealed class ModConfig
     /// </summary>
     [GMCMDefaultIgnore]
     public Dictionary<string, bool> ProducerFrameworkModMachines { get; set; } = new();
+
+    public bool DisablePulsing { get; set; } = false;
 }

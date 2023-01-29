@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+using AtraBase.Models.Result;
+
 using AtraShared.Utils.Extensions;
 
 using HarmonyLib;
@@ -42,12 +44,20 @@ internal static class FixSecretNotes
     {
         try
         {
-            __result = __instance.GetLocationContext() == GameLocation.LocationContext.Island
+            __result = null;
+            Option<SObject?> option = __instance.GetLocationContext() == GameLocation.LocationContext.Island
                        ? TryGenerateJournalScrap(who)
                        : TryGenerateSecretNote(who);
 
-            // if I can't find a secret note, go to the original function just in case.
-            return __result is null;
+            if (option.IsNone)
+            {
+                return true;
+            }
+            else
+            {
+                __result = option.Unwrap_Or_Default();
+                return false;
+            }
         }
         catch (Exception ex)
         {
@@ -57,11 +67,11 @@ internal static class FixSecretNotes
         return true;
     }
 
-    private static SObject? TryGenerateSecretNote(Farmer who)
+    private static Option<SObject?> TryGenerateSecretNote(Farmer who)
     {
         if (!who.hasMagnifyingGlass || HasSeenAllSecretNotes.Value)
         {
-            return null;
+            return Option<SObject?>.None;
         }
 
         const string secreteNoteName = "Secret Note #";
@@ -84,7 +94,7 @@ internal static class FixSecretNotes
         if (unseenNotes.Count == 0)
         {
             HasSeenAllSecretNotes.Value = true;
-            return null;
+            return Option<SObject?>.None;
         }
 
         // copied from game code.
@@ -92,21 +102,21 @@ internal static class FixSecretNotes
         double chanceForNewNote = GameLocation.LAST_SECRET_NOTE_CHANCE + ((GameLocation.FIRST_SECRET_NOTE_CHANCE - GameLocation.LAST_SECRET_NOTE_CHANCE) * fractionOfNotesRemaining);
         if (Game1.random.NextDouble() >= chanceForNewNote)
         {
-            return null;
+            return new(null);
         }
 
         int noteID = unseenNotes.ElementAt(Game1.random.Next(unseenNotes.Count));
         SObject note = new(79, 1);
         note.Name += " #" + noteID;
 
-        return note;
+        return new(note);
     }
 
-    private static SObject? TryGenerateJournalScrap(Farmer who)
+    private static Option<SObject?> TryGenerateJournalScrap(Farmer who)
     {
         if (HasSeenAllJournalScraps.Value)
         {
-            return null;
+            return Option<SObject?>.None;
         }
 
         const string journalName = "Journal Scrap #";
@@ -129,7 +139,7 @@ internal static class FixSecretNotes
         if (unseenScraps.Count == 0)
         {
             HasSeenAllJournalScraps.Value = true;
-            return null;
+            return Option<SObject?>.None;
         }
 
         // copied from game code.
@@ -137,13 +147,13 @@ internal static class FixSecretNotes
         double chanceForNewNote = GameLocation.LAST_SECRET_NOTE_CHANCE + ((GameLocation.FIRST_SECRET_NOTE_CHANCE - GameLocation.LAST_SECRET_NOTE_CHANCE) * fractionOfNotesRemaining);
         if (Game1.random.NextDouble() >= chanceForNewNote)
         {
-            return null;
+            return new (null);
         }
 
         int scrapID = unseenScraps.Min();
         SObject note = new(842, 1);
         note.Name += " #" + (scrapID - GameLocation.JOURNAL_INDEX);
 
-        return note;
+        return new(note);
     }
 }

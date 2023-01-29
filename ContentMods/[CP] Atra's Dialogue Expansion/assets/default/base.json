@@ -52,11 +52,23 @@
         "Target": "Characters/Dialogue/Sandy",
         "When": {
             "HasFlag": "ccMovieTheater",
-            "EnableFor|contains=Sandy": true,
+            "EnableFor|contains=Sandy": true
         },
         "Entries": {
             "movieTheater": "I heard you guys have a theater now!$h#$b#I'm so excited! I love movies.",
-            "Fri10": "So...have you seen a good movie recently?$h#$b#I hear The Mysteries of %place is good.#$e#Say, I'd love to see a movie with you.#$b#It's always a treat to see you."
+            "Fri10": "So...have you seen a good movie recently?$h#$b#I hear The Mysteries of %place is good.#$e#$c .5#Say, I'd love to see a movie with you.#$e#It's always a treat to see you."
         }
-    }
+    },
+    {
+        "LogName": "Rain -- during winter.",
+        "Action": "EditData",
+        "Target": "Characters/Dialogue/rainy",
+        "When": {
+            "Season": "winter",
+            "EnableFor|contains=Evelyn": true
+        },
+        "Entries":{
+            "Evelyn": "Weather like this...we didn't use to get rain during winter.$s#$e#The snow'll become slush and that's difficult for George.",
+        }
+    },
 ]}

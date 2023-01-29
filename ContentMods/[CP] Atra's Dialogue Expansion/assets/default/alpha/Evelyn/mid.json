@@ -1,14 +1,5 @@
 {"Changes":[
     {
-        "LogName": "Rain -- during winter.",
-        "Action": "EditData",
-        "Target": "Characters/Dialogue/rainy",
-        "When": {"Season": "winter"},
-        "Entries":{
-            "Evelyn": "Weather like this...we didn't use to get rain during winter.",
-        }
-    },
-    {
         "LogName": "Evelyn mid-hearts",
         "Action": "EditData",
         "Target": "Characters/Dialogue/Evelyn",

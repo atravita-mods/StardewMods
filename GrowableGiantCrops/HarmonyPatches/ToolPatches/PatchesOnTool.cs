@@ -52,7 +52,7 @@ internal static class PatchesOnTool
                 new(OpCodes.Brtrue, jumpPoint),
             }, withLabels: labelsToMove);
 
-            helper.Print();
+            // helper.Print();
             return helper.Render();
         }
         catch (Exception ex)

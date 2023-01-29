@@ -56,6 +56,7 @@ internal static class Game1Patcher
         Vector2 position;
         float rotation = 0f;
         Vector2 origin = new(0f, 16f);
+        SpriteEffects effect = SpriteEffects.None;
 
         switch (f.FacingDirection)
         {
@@ -79,32 +80,29 @@ internal static class Game1Patcher
                 }
                 break;
             case Game1.right:
+                origin = new Vector2(0f, 32f);
+                effect = SpriteEffects.FlipHorizontally;
                 switch (f.Sprite.currentAnimationIndex)
                 {
                     case 0:
                         position = Utility.snapToInt(new Vector2(fPosition.X + 72f, fPosition.Y - 28f));
                         rotation = MathF.PI * 10f / 12f;
-                        origin = new Vector2(0f, 32f);
                         break;
                     case 1:
                         position = Utility.snapToInt(new Vector2(fPosition.X + 76f, fPosition.Y - 20f));
                         rotation = MathF.PI * 11f / 12f;
-                        origin = new Vector2(0f, 32f);
                         break;
                     case 2:
                         position = Utility.snapToInt(new Vector2(fPosition.X + 74f, fPosition.Y - 40f));
                         rotation = MathF.PI * 10f / 12f;
-                        origin = new Vector2(0f, 32f);
                         break;
                     case 3:
                         position = Utility.snapToInt(new Vector2(fPosition.X + 32f + 28f, fPosition.Y - 86f));
                         rotation = MathF.PI * 7f / 12f;
-                        origin = new Vector2(0f, 32f);
                         break;
                     case 4:
                         position = Utility.snapToInt(new Vector2(fPosition.X + 32f + 28f, fPosition.Y - 64f + 4f));
                         rotation = MathF.PI * 7f / 12f;
-                        origin = new Vector2(0f, 32f);
                         break;
                     default:
                         return false;
@@ -135,32 +133,28 @@ internal static class Game1Patcher
                 }
                 break;
             case Game1.left:
+                origin = new Vector2(0f, 32f);
                 switch (f.Sprite.currentAnimationIndex)
                 {
                     case 0:
                         position = Utility.snapToInt(new Vector2(fPosition.X + 42f, fPosition.Y + 8f));
                         rotation = -MathF.PI * 10f / 12f;
-                        origin = new Vector2(0f, 32f);
                         break;
                     case 1:
                         position = Utility.snapToInt(new Vector2(fPosition.X + 54f, fPosition.Y));
                         rotation = -MathF.PI * 11f / 12f;
-                        origin = new Vector2(0f, 32f);
                         break;
                     case 2:
                         position = Utility.snapToInt(new Vector2(fPosition.X + 54f, fPosition.Y));
                         rotation = -MathF.PI * 10f / 12f;
-                        origin = new Vector2(0f, 32f);
                         break;
                     case 3:
                         position = Utility.snapToInt(new Vector2(fPosition.X + 34f, fPosition.Y - 21f));
                         rotation = -MathF.PI * 7f / 12f;
-                        origin = new Vector2(0f, 32f);
                         break;
                     case 4:
                         position = Utility.snapToInt(new Vector2(fPosition.X + 34f, fPosition.Y));
                         rotation = -MathF.PI * 7f / 12f;
-                        origin = new Vector2(0f, 32f);
                         break;
                     default:
                         return false;
@@ -178,7 +172,7 @@ internal static class Game1Patcher
             rotation,
             origin,
             scale: 4f,
-            effects: SpriteEffects.None,
+            effects: effect,
             layerDepth: Math.Max(0f, tool_draw_layer_offset + (f.GetBoundingBox().Bottom / 10000f)));
 
         return false;

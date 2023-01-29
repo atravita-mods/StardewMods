@@ -101,7 +101,7 @@ public sealed class ShovelTool : GenericTool
         spriteBatch.Draw(
             texture: AssetManager.ToolTexture,
             position: location + new Vector2(32f, 32f),
-            new Rectangle(80, 16, 16, 16),
+            new Rectangle(96, 16, 16, 16),
             color: color * transparency,
             rotation: 0f,
             new Vector2(8f, 8f),

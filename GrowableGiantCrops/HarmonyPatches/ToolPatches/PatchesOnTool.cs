@@ -8,14 +8,29 @@ using StardewValley.Tools;
 
 namespace GrowableGiantCrops.HarmonyPatches.ToolPatches;
 
+/// <summary>
+/// Patches on tools.
+/// </summary>
 [HarmonyPatch(typeof(Tool))]
-internal static class ToolUpdateTranspiler
+internal static class PatchesOnTool
 {
+    [HarmonyPatch(nameof(Tool.isHeavyHitter))]
+    [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Harmony convention.")]
+    private static bool Prefix(Tool __instance, ref bool __result)
+    {
+        if (__instance is ShovelTool)
+        {
+            __result = true;
+            return false;
+        }
+        return true;
+    }
+
     [HarmonyPatch(nameof(Tool.Update))]
     [SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1116:Split parameters should start on line after declaration", Justification = "Reviewed.")]
     private static IEnumerable<CodeInstruction>? Transpiler(IEnumerable<CodeInstruction> instructions, ILGenerator gen, MethodBase original)
     {
-        return null;
+        // return null;
         try
         {
             ILHelper helper = new(original, instructions, ModEntry.ModMonitor, gen);

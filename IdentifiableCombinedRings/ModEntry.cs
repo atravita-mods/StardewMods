@@ -56,7 +56,7 @@ public class ModEntry : Mod
     /// Generates the GMCM for this mod by looking at the structure of the config class.
     /// </summary>
     /// <param name="sender">Unknown, expected by SMAPI.</param>
-    /// <param name="e">Arguments for eevnt.</param>
+    /// <param name="e">Arguments for event.</param>
     /// <remarks>To add a new setting, add the details to the i18n file. Currently handles: bool.</remarks>
     private void SetUpConfig(object? sender, GameLaunchedEventArgs e)
     {

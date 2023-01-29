@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-using AtraBase.Models.Result;
+﻿using AtraBase.Models.Result;
 
 using AtraShared.Utils.Extensions;
 
@@ -25,6 +19,8 @@ internal static class FixSecretNotes
     private static readonly PerScreen<bool> HasSeenAllSecretNotes = new(() => false);
     private static readonly PerScreen<bool> HasSeenAllJournalScraps = new(() => false);
 
+    #region asset fussing
+
     private static IAssetName noteLoc = null!;
 
     internal static void Initialize(IGameContentHelper parser)
@@ -39,9 +35,18 @@ internal static class FixSecretNotes
         }
     }
 
+    #endregion
+
+    #region override vanilla note creation
+
     [HarmonyPatch(nameof(GameLocation.tryToCreateUnseenSecretNote))]
     private static bool Prefix(GameLocation __instance, Farmer who, ref SObject? __result)
     {
+        if (!ModEntry.Config.OverrideSecretNotes)
+        {
+            return true;
+        }
+
         try
         {
             __result = null;
@@ -79,16 +84,16 @@ internal static class FixSecretNotes
 
         // Get list of seen notes and add notes in inventory.
         HashSet<int> seenNotes = who.secretNotesSeen.Where(id => id < GameLocation.JOURNAL_INDEX).ToHashSet();
-        foreach (var item in who.Items)
+        foreach (Item? item in who.Items)
         {
-            if (item.Name.StartsWith(secreteNoteName) && int.TryParse(item.Name.AsSpan(secreteNoteName.Length).Trim(), out var idx))
+            if (item.Name.StartsWith(secreteNoteName) && int.TryParse(item.Name.AsSpan(secreteNoteName.Length).Trim(), out int idx))
             {
                 seenNotes.Add(idx);
             }
         }
 
         // find a note that the farmer has not seen.
-        HashSet<int> unseenNotes = secretNoteData.Keys.Where(id => seenNotes.Contains(id)).ToHashSet();
+        HashSet<int> unseenNotes = secretNoteData.Keys.Where(id => id < GameLocation.JOURNAL_INDEX && !seenNotes.Contains(id)).ToHashSet();
 
         ModEntry.ModMonitor.DebugOnlyLog($"{unseenNotes.Count} notes unseen: {string.Join(", ", unseenNotes.Select(x => x.ToString()))}", LogLevel.Info);
         if (unseenNotes.Count == 0)
@@ -99,7 +104,7 @@ internal static class FixSecretNotes
 
         // copied from game code.
         double fractionOfNotesRemaining = (unseenNotes.Count - 1) / Math.Max(1f, unseenNotes.Count + seenNotes.Count - 1);
-        double chanceForNewNote = GameLocation.LAST_SECRET_NOTE_CHANCE + ((GameLocation.FIRST_SECRET_NOTE_CHANCE - GameLocation.LAST_SECRET_NOTE_CHANCE) * fractionOfNotesRemaining);
+        double chanceForNewNote = ModEntry.Config.MinNoteChance + ((ModEntry.Config.MaxNoteChance - ModEntry.Config.MinNoteChance) * fractionOfNotesRemaining);
         if (Game1.random.NextDouble() >= chanceForNewNote)
         {
             return new(null);
@@ -124,16 +129,16 @@ internal static class FixSecretNotes
 
         // get seen notes and add any note the farmer has in their inventory.
         HashSet<int> seenScraps = who.secretNotesSeen.Where(id => id >= GameLocation.JOURNAL_INDEX).ToHashSet();
-        foreach (var item in who.Items)
+        foreach (Item? item in who.Items)
         {
-            if (item.Name.StartsWith(journalName) && int.TryParse(item.Name.AsSpan(journalName.Length).Trim(), out var idx))
+            if (item.Name.StartsWith(journalName) && int.TryParse(item.Name.AsSpan(journalName.Length).Trim(), out int idx))
             {
                 seenScraps.Add(idx + GameLocation.JOURNAL_INDEX);
             }
         }
 
         // find a scrap that the farmer has not seen.
-        HashSet<int> unseenScraps = secretNoteData.Keys.Where(id => seenScraps.Contains(id)).ToHashSet();
+        HashSet<int> unseenScraps = secretNoteData.Keys.Where(id => id >= GameLocation.JOURNAL_INDEX && !seenScraps.Contains(id)).ToHashSet();
 
         ModEntry.ModMonitor.DebugOnlyLog($"{unseenScraps.Count} scraps unseen: {string.Join(", ", unseenScraps.Select(x => x.ToString()))}", LogLevel.Info);
         if (unseenScraps.Count == 0)
@@ -144,7 +149,7 @@ internal static class FixSecretNotes
 
         // copied from game code.
         double fractionOfNotesRemaining = (unseenScraps.Count - 1) / Math.Max(1f, unseenScraps.Count + seenScraps.Count - 1);
-        double chanceForNewNote = GameLocation.LAST_SECRET_NOTE_CHANCE + ((GameLocation.FIRST_SECRET_NOTE_CHANCE - GameLocation.LAST_SECRET_NOTE_CHANCE) * fractionOfNotesRemaining);
+        double chanceForNewNote = ModEntry.Config.MinNoteChance + ((ModEntry.Config.MaxNoteChance - ModEntry.Config.MinNoteChance) * fractionOfNotesRemaining);
         if (Game1.random.NextDouble() >= chanceForNewNote)
         {
             return new (null);
@@ -156,4 +161,6 @@ internal static class FixSecretNotes
 
         return new(note);
     }
+
+    #endregion
 }

@@ -1,10 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿namespace IdentifiableCombinedRings.Framework;
 
-namespace IdentifiableCombinedRings.Framework;
+/// <summary>
+/// The config class for this mod.
+/// </summary>
 internal sealed class ModConfig
 {
     public bool OverrideCombinedRing { get; set; } = true;

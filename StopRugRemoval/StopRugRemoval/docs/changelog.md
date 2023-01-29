@@ -6,6 +6,7 @@
 <!-- Figure out how to replace the reference to coffee in the night market dialogue?-->
 <!-- Make it so notifications do not go away until dismissed? -->
 <!-- Make farm pan faster for animal menu and do some sort of keybind mess to snap to building-->
+<!-- do I need to override reading secret notes too? -->
 
 #### Version 1.1.2
 * By popular request, defang the napalm ring in safe areas.

@@ -90,7 +90,14 @@ internal sealed class ModEntry : Mod
         MultiplayerHelper = this.Helper.Multiplayer;
         InputHelper = this.Helper.Input;
         UNIQUEID = this.ModManifest.UniqueID;
+
         Config = AtraUtils.GetConfigOrDefault<ModConfig>(helper, this.Monitor);
+        if (Config.MaxNoteChance < Config.MinNoteChance)
+        {
+            (Config.MaxNoteChance, Config.MinNoteChance) = (Config.MinNoteChance, Config.MaxNoteChance);
+            helper.AsyncWriteConfig(ModEntry.ModMonitor, Config);
+        }
+
         UtilitySchedulingFunctions = new(this.Monitor, this.Helper.Translation);
 
         this.Monitor.Log($"Starting up: {this.ModManifest.UniqueID} - {typeof(ModEntry).Assembly.FullName}");
@@ -349,28 +356,16 @@ internal sealed class ModEntry : Mod
                     Config = new ModConfig();
                     Config.PrePopulateLocations();
                 },
-                save: () => this.Helper.AsyncWriteConfig(this.Monitor, Config))
-            .AddParagraph(I18n.Mod_Description);
-
-        foreach (PropertyInfo property in typeof(ModConfig).GetProperties())
-        {
-            if (property.PropertyType == typeof(bool))
-            {
-                GMCM.AddBoolOption(property, GetConfig);
-            }
-            else if (property.PropertyType == typeof(KeybindList))
-            {
-                GMCM.AddKeybindList(property, GetConfig);
-            }
-            else if (property.PropertyType == typeof(float))
-            {
-                GMCM.AddFloatOption(property, GetConfig);
-            }
-            else if (property.PropertyType == typeof(int))
-            {
-                GMCM.AddIntOption(property, GetConfig);
-            }
-        }
+                save: () =>
+                {
+                    if (Config.MaxNoteChance < Config.MinNoteChance)
+                    {
+                        (Config.MaxNoteChance, Config.MinNoteChance) = (Config.MinNoteChance, Config.MaxNoteChance);
+                    }
+                    this.Helper.AsyncWriteConfig(this.Monitor, Config);
+                })
+            .AddParagraph(I18n.Mod_Description)
+            .GenerateDefaultGMCM(static () => Config);
 
         GMCM!.AddSectionTitle(I18n.ConfirmWarps_Title)
             .AddParagraph(I18n.ConfirmWarps_Description)

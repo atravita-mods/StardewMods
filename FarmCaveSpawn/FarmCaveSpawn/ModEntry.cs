@@ -33,11 +33,13 @@ internal sealed class ModEntry : Mod
     /// <summary>
     /// Sublocation-parsing regex.
     /// </summary>
-    private readonly Regex regex = new(
+    private static readonly Regex regex = new(
         // ":[(x1;y1);(x2;y2)]"
         pattern: @":\[\((?<x1>[0-9]+);(?<y1>[0-9]+)\);\((?<x2>[0-9]+);(?<y2>[0-9]+)\)\]$",
         options: RegexOptions.CultureInvariant | RegexOptions.Compiled,
         matchTimeout: TimeSpan.FromMilliseconds(250));
+
+    private static bool ShouldResetFruitList = true;
 
     /// <summary>
     /// The item IDs for the four basic forage fruit.
@@ -55,8 +57,6 @@ internal sealed class ModEntry : Mod
     private List<int> TreeFruit = new();
 
     private StardewSeasons season = StardewSeasons.None;
-
-    private bool ShouldResetFruitList = true;
 
     private MigrationManager? migrator;
 
@@ -94,11 +94,20 @@ internal sealed class ModEntry : Mod
 
         helper.Events.Content.AssetRequested += this.OnAssetRequested;
 
+        // inventory watching
+        InventoryWatcher.Initialize(this.ModManifest.UniqueID);
+        helper.Events.GameLoop.SaveLoaded += (_, _) => InventoryWatcher.Load(helper.Multiplayer, helper.Data);
+        helper.Events.Player.InventoryChanged += (_, e) => InventoryWatcher.Watch(e, helper.Multiplayer);
+        helper.Events.Multiplayer.PeerConnected += (_, e) => InventoryWatcher.OnPeerConnected(e, helper.Multiplayer);
+        helper.Events.Multiplayer.ModMessageReceived += static (_, e) => InventoryWatcher.OnModMessageRecieved(e);
+
         helper.ConsoleCommands.Add(
             name: "av.fcs.list_fruits",
             documentation: I18n.ListFruits_Description(),
             callback: this.ListFruits);
     }
+
+    internal static void RequestFruitListReset() => ShouldResetFruitList = true;
 
     private void OnAssetRequested(object? sender, AssetRequestedEventArgs e)
         => AssetManager.Load(e);
@@ -126,7 +135,7 @@ internal sealed class ModEntry : Mod
                 save: () =>
                 {
                     this.Helper.AsyncWriteConfig(this.Monitor, this.config);
-                    this.ShouldResetFruitList = true;
+                    ShouldResetFruitList = true;
                 })
             .AddParagraph(I18n.Mod_Description)
             .GenerateDefaultGMCM(() => this.config);
@@ -183,12 +192,12 @@ internal sealed class ModEntry : Mod
         int count = 0;
 
         StardewSeasons currentSeason = StardewSeasonsExtensions.TryParse(Game1.currentSeason, value: out StardewSeasons val, ignoreCase: true) ? val : StardewSeasons.All;
-        if (this.ShouldResetFruitList || this.season != currentSeason)
+        if (ShouldResetFruitList || this.season != currentSeason)
         {
             this.TreeFruit = this.GetTreeFruits();
         }
         this.season = currentSeason;
-        this.ShouldResetFruitList = false;
+        ShouldResetFruitList = false;
 
         if (Game1.getLocationFromName("FarmCave") is FarmCave farmcave)
         {
@@ -235,7 +244,7 @@ internal sealed class ModEntry : Mod
                 };
                 try
                 {
-                    MatchCollection matches = this.regex.Matches(location);
+                    MatchCollection matches = regex.Matches(location);
                     if (matches.Count == 1)
                     {
                         Match match = matches[0];
@@ -403,8 +412,13 @@ END:
 
         Dictionary<int, string> fruittrees = this.Helper.GameContent.Load<Dictionary<int, string>>("Data/fruitTrees");
         ReadOnlySpan<char> currentseason = Game1.currentSeason.AsSpan().Trim();
-        foreach (string tree in fruittrees.Values)
+        foreach ((int saplingIndex, string tree) in fruittrees)
         {
+            if (this.config.ProgressionMode && !InventoryWatcher.HaveSeen(saplingIndex))
+            {
+                continue;
+            }
+
             SpanSplit treedata = tree.SpanSplit('/', StringSplitOptions.TrimEntries, expectedCount: 3);
 
             if ((this.config.SeasonalOnly == SeasonalBehavior.SeasonalOnly || (this.config.SeasonalOnly == SeasonalBehavior.SeasonalExceptWinter && !Game1.IsWinter))

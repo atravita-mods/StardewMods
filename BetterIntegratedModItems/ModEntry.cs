@@ -124,13 +124,16 @@ internal sealed class ModEntry : Mod
             this.migrator = null;
         }
 
-        // Load data for the LocationWatcher.
-        LocationWatcher = this.Helper.Data.ReadSaveData<LocationWatcher>(LOCATIONWATCHER) ?? new();
-        this.Helper.Multiplayer.SendMessage(
-            message: LocationWatcher,
-            messageType: DATAPACKAGE,
-            modIDs: new[] { this.ModManifest.UniqueID },
-            playerIDs: this.Helper.Multiplayer.GetConnectedPlayers().Where(p => !p.IsSplitScreen).Select(p => p.PlayerID).ToArray());
+        if (Context.IsMainPlayer)
+        {
+            // Load data for the LocationWatcher.
+            LocationWatcher = this.Helper.Data.ReadSaveData<LocationWatcher>(LOCATIONWATCHER) ?? new();
+            this.Helper.Multiplayer.SendMessage(
+                message: LocationWatcher,
+                messageType: DATAPACKAGE,
+                modIDs: new[] { this.ModManifest.UniqueID },
+                playerIDs: this.Helper.Multiplayer.GetConnectedPlayers().Where(p => !p.IsSplitScreen).Select(p => p.PlayerID).ToArray());
+        }
     }
 
     /// <inheritdoc cref="IPlayerEvents.Warped"/>

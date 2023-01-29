@@ -90,6 +90,31 @@ internal sealed class ModConfig
         set => this.craneGameDifficulty = Math.Clamp(value, 1, 7);
     }
 
+    [GMCMSection("SecretNotesOverride", 1)]
+    public bool OverrideSecretNotes { get; set; } = true;
+
+    private float maxNoteChance = GameLocation.FIRST_SECRET_NOTE_CHANCE;
+
+    [GMCMRange(0, 1)]
+    [GMCMInterval(0.01)]
+    [GMCMSection("SecretNotesOverride", 1)]
+    public float MaxNoteChance
+    {
+        get => this.maxNoteChance;
+        set => this.maxNoteChance = Math.Clamp(value, 0f, 1f);
+    }
+
+    private float minNoteChance = GameLocation.LAST_SECRET_NOTE_CHANCE;
+
+    [GMCMRange(0, 1)]
+    [GMCMInterval(0.01)]
+    [GMCMSection("SecretNotesOverride", 1)]
+    public float MinNoteChance
+    {
+        get => this.minNoteChance;
+        set => this.minNoteChance = Math.Clamp(value, 0f, 1f);
+    }
+
     /// <summary>
     /// Gets or sets a value indicating whether or not the bet1k/bet10k buttons should appear.
     /// </summary>
@@ -124,36 +149,43 @@ internal sealed class ModConfig
     /// <summary>
     /// Gets or sets a value indicating whether or not to confirm bomb placement in safe areas.
     /// </summary>
+    [GMCMDefaultIgnore]
     public ConfirmationEnum BombsInSafeAreas { get; set; } = ConfirmationEnum.On;
 
     /// <summary>
     /// Gets or sets a value indicating whether or not to confirm bomb placement in dangerous areas.
     /// </summary>
+    [GMCMDefaultIgnore]
     public ConfirmationEnum BombsInDangerousAreas { get; set; } = ConfirmationEnum.Off;
 
     /// <summary>
     /// Gets or sets a value indicating whether or not to confirm warps in safe areas.
     /// </summary>
+    [GMCMDefaultIgnore]
     public ConfirmationEnum WarpsInSafeAreas { get; set; } = ConfirmationEnum.On;
 
     /// <summary>
     /// Gets or sets a value indicating whether or not to confirm warps in dangerous areas.
     /// </summary>
+    [GMCMDefaultIgnore]
     public ConfirmationEnum WarpsInDangerousAreas { get; set; } = ConfirmationEnum.NotInMultiplayer;
 
     /// <summary>
     /// Gets or sets a value indicating whether or not to confirm the return scepter in safe areas.
     /// </summary>
+    [GMCMDefaultIgnore]
     public ConfirmationEnum ReturnScepterInSafeAreas { get; set; } = ConfirmationEnum.On;
 
     /// <summary>
     /// Gets or sets a value indicating whether or not to confirm the return scepter in dangerous areas.
     /// </summary>
+    [GMCMDefaultIgnore]
     public ConfirmationEnum ReturnScepterInDangerousAreas { get; set; } = ConfirmationEnum.NotInMultiplayer;
 
     /// <summary>
     /// Gets or sets map to which locations are considered safe.
     /// </summary>
+    [GMCMDefaultIgnore]
     public Dictionary<string, IsSafeLocationEnum> SafeLocationMap { get; set; } = new();
 
     /// <summary>
@@ -161,12 +193,11 @@ internal sealed class ModConfig
     /// </summary>
     public bool EditElliottEvent { get; set; } = true;
 
-
     /// <summary>
     /// Gets or sets a value indicating whether or not to remove duplicate npcs if found.
     /// </summary>
     public bool RemoveDuplicateNPCs { get; set; } = false;
- 
+
     /// <summary>
     /// Pre-populates locations.
     /// </summary>

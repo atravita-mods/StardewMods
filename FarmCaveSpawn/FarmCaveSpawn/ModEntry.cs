@@ -100,6 +100,7 @@ internal sealed class ModEntry : Mod
         helper.Events.Player.InventoryChanged += (_, e) => InventoryWatcher.Watch(e, helper.Multiplayer);
         helper.Events.Multiplayer.PeerConnected += (_, e) => InventoryWatcher.OnPeerConnected(e, helper.Multiplayer);
         helper.Events.Multiplayer.ModMessageReceived += static (_, e) => InventoryWatcher.OnModMessageRecieved(e);
+        helper.Events.GameLoop.Saving += (_, _) => InventoryWatcher.Saving(helper.Data);
 
         helper.ConsoleCommands.Add(
             name: "av.fcs.list_fruits",

@@ -31,7 +31,7 @@ public sealed class InventoryBush : SObject
     /// <summary>
     /// The moddata string used to mark the bushes planted with this mod.
     /// </summary>
-    internal const string BushModData = "atravita.InventoryBush.Type";
+    internal const string BushModData = $"{BushPrefix}Type";
 
     /// <summary>
     /// Initializes a new instance of the <see cref="InventoryBush"/> class.
@@ -102,7 +102,7 @@ public sealed class InventoryBush : SObject
     /// <returns>Whether or not placement is allowed.</returns>
     internal bool CanPlace(GameLocation l, Vector2 tile, bool relaxed)
     {
-        if (l.largeTerrainFeatures is null)
+        if (l.largeTerrainFeatures is null || Utility.isPlacementForbiddenHere(l))
         {
             return false;
         }

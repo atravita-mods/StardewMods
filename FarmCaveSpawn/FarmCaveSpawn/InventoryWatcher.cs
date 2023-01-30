@@ -6,11 +6,17 @@ using StardewModdingAPI.Events;
 
 namespace FarmCaveSpawn;
 
+/// <summary>
+/// The inventory data model.
+/// </summary>
 public sealed class InventoryManagerModel
 {
     public HashSet<string> Saplings { get; set; } = new();
 }
 
+/// <summary>
+/// Manages watching the inventory for progression mode.
+/// </summary>
 internal static class InventoryWatcher
 {
     private const string SaveString = "InventoryModel";
@@ -20,8 +26,13 @@ internal static class InventoryWatcher
     private static InventoryManagerModel? model;
     private static string UniqueID = null!;
 
+    /// <summary>
+    /// Sets useful fields.
+    /// </summary>
+    /// <param name="uniqueID">Unique ID of this mod.</param>
     internal static void Initialize(string uniqueID) => UniqueID = uniqueID;
 
+    /// <inheritdoc cref="IGameLoopEvents.SaveLoaded"/>
     internal static void Load(IMultiplayerHelper multi, IDataHelper data)
     {
         if (Context.IsMainPlayer)
@@ -36,6 +47,16 @@ internal static class InventoryWatcher
         }
     }
 
+    internal static void Saving(IDataHelper data)
+    {
+        if (Context.IsMainPlayer && model is not null)
+        {
+            data.WriteSaveData(SaveString, model);
+        }
+    }
+
+    /// <inheritdoc cref="IPlayerEvents.InventoryChanged"/>
+    /// <remarks>Is used to keep track of saplings that have entered the inventory.</remarks>
     internal static void Watch(InventoryChangedEventArgs e, IMultiplayerHelper multi)
     {
         foreach (var item in e.Added)
@@ -52,6 +73,11 @@ internal static class InventoryWatcher
         }
     }
 
+    /// <summary>
+    /// Checks whether or not a specific <paramref name="parentSheetIndex"/> corresponds to a sapling seen before.
+    /// </summary>
+    /// <param name="parentSheetIndex">Parent sheet index to check.</param>
+    /// <returns>If the sapling has been viewed.</returns>
     internal static bool HaveSeen(int parentSheetIndex)
     {
         if (Game1Wrappers.ObjectInfo.TryGetValue(parentSheetIndex, out string? data))

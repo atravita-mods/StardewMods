@@ -89,6 +89,7 @@ internal sealed class ModEntry : Mod
         {
             api.RegisterSerializerType(typeof(InventoryGiantCrop));
             api.RegisterSerializerType(typeof(ShovelTool));
+            api.RegisterSerializerType(typeof(InventoryResourceClump));
 
             this.Helper.Events.GameLoop.SaveLoaded += this.SaveLoaded;
 

@@ -105,6 +105,10 @@ public sealed class InventoryGiantCrop : SObject
         {
             this.Name = InventoryGiantCropPrefix + data.GetNthChunk('/').ToString();
         }
+        else
+        {
+            this.Name = InventoryGiantCropPrefix + "NoNameFound";
+        }
 
         // populate metadata:
         this.Stack = initialStack;
@@ -144,7 +148,9 @@ public sealed class InventoryGiantCrop : SObject
     /// <inheritdoc />
     public override Item getOne()
     {
-        InventoryGiantCrop crop = new(this.stringID.Value, this.ParentSheetIndex, 1);
+        InventoryGiantCrop crop = string.IsNullOrEmpty(this.stringID.Value)
+            ? new(this.ParentSheetIndex, 1)
+            : new(this.stringID.Value, this.ParentSheetIndex, 1);
         crop._GetOneFrom(this);
         return crop;
     }
@@ -159,7 +165,7 @@ public sealed class InventoryGiantCrop : SObject
     public override bool canBeTrashed() => true;
 
     /// <inheritdoc />
-    public override string getCategoryName() => I18n.Category();
+    public override string getCategoryName() => I18n.GiantCropCategory();
 
     /// <inheritdoc />
     public override Color getCategoryColor() => Color.ForestGreen;
@@ -180,6 +186,22 @@ public sealed class InventoryGiantCrop : SObject
         return this.ParentSheetIndex == otherBush.ParentSheetIndex
             && this.Category == otherBush.Category
             && this.stringID.Value == otherBush.stringID.Value;
+    }
+
+    protected override string loadDisplayName() => I18n.GiantCrop_Name(this.GetProductDisplayName());
+
+    public override string getDescription() => I18n.GiantCrop_Description(this.GetProductDisplayName());
+
+    private string GetProductDisplayName()
+    {
+        if (Game1Wrappers.ObjectInfo.TryGetValue(this.ParentSheetIndex, out var data))
+        {
+            return data.GetNthChunk('/', objectInfoDisplayNameIndex).ToString();
+        }
+        else
+        {
+            return "UNKNOWN";
+        }
     }
     #endregion
 

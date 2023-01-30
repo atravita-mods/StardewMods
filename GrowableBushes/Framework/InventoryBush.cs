@@ -108,15 +108,15 @@ public sealed class InventoryBush : SObject
         }
 
         BushSizes size = (BushSizes)this.ParentSheetIndex;
-        if (size == BushSizes.Invalid)
+        if (size == BushSizes.Invalid || !BushSizesExtensions.IsDefined(size))
         {
             return false;
         }
 
         int width = size.GetWidth();
-        for (int y = (int)tile.Y; y < (int)tile.Y + width; y++)
+        for (int x = (int)tile.X; x < (int)tile.X + width; x++)
         {
-            if (!IsTilePlaceableForBush(l, (int)tile.X, y, relaxed))
+            if (!IsTilePlaceableForBush(l, x, (int)tile.Y, relaxed))
             {
                 return false;
             }
@@ -161,7 +161,7 @@ public sealed class InventoryBush : SObject
         }
 
         BushSizes size = (BushSizes)this.ParentSheetIndex;
-        if (size == BushSizes.Invalid)
+        if (size == BushSizes.Invalid || !BushSizesExtensions.IsDefined(size))
         {
             return false;
         }
@@ -258,7 +258,7 @@ public sealed class InventoryBush : SObject
         {
             spriteBatch.Draw(
                 texture: Game1.mouseCursors,
-                new Vector2((((x / 64) + x_offset) * 64) - Game1.viewport.X, y - Game1.viewport.Y),
+                new Vector2(x + (x_offset * 64) - Game1.viewport.X, y - Game1.viewport.Y),
                 new Rectangle(canPlaceHere ? 194 : 210, 388, 16, 16),
                 color: Color.White,
                 rotation: 0f,

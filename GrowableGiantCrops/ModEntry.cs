@@ -77,8 +77,8 @@ internal sealed class ModEntry : Mod
         this.Helper.Events.Content.AssetRequested += static (_, e) => AssetManager.OnAssetRequested(e);
     }
 
-    // /// <inheritdoc />
-    // public override object? GetApi() => new GrowableBushesAPI();
+    /// <inheritdoc />
+    public override object? GetApi() => new Api();
 
     /// <inheritdoc cref="IGameLoopEvents.GameLaunched"/>
     private void OnGameLaunched(object? sender, GameLaunchedEventArgs e)

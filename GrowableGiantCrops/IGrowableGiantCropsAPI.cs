@@ -3,6 +3,7 @@
 namespace GrowableGiantCrops;
 public interface IGrowableGiantCropsAPI
 {
+    public bool IsShovel(Tool tool);
 }
 
 [EnumExtensions]

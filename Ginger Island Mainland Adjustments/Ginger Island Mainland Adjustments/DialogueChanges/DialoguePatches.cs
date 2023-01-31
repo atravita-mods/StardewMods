@@ -190,9 +190,7 @@ internal class Game1DialoguePatches
             {
                 if (spouse.TryApplyMarriageDialogueIfExisting("GILeave_" + spouse.Name))
                 {
-#if DEBUG
-                Globals.ModMonitor.Log($"Setting GILeave_{spouse?.Name}", LogLevel.Trace);
-#endif
+                    Globals.ModMonitor.DebugOnlyLog($"Setting GILeave_{spouse?.Name}", LogLevel.Trace);
                 }
                 else if (Game1.player is not null)
                 {
@@ -206,6 +204,7 @@ internal class Game1DialoguePatches
                     {
                         spouse.CurrentDialogue.Push(new Dialogue(I18n.GILeaveDefaultUnhappy(), spouse));
                     }
+                    Globals.ModMonitor.DebugOnlyLog($"Setting default GILeave dialogue.", LogLevel.Trace);
                 }
             }
         }

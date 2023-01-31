@@ -155,7 +155,7 @@ public sealed class InventoryResourceClump : SObject
             return false;
         }
 
-        Vector2 placementTile = new(x / 64f, y / 64f);
+        Vector2 placementTile = new(x / Game1.tileSize, y / Game1.tileSize);
         if (!this.CanPlace(location, placementTile, relaxed))
         {
             return false;

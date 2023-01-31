@@ -1,11 +1,19 @@
 {"Changes":[
     {
-        "LogName": "Rain -- during winter.",
+        "LogName": "Elliott - mid hearts",
         "Action": "EditData",
-        "Target": "Characters/Dialogue/rainy",
-        "When": {"Season": "winter"},
-        "Entries":{
-            "Elliott": "A day like this is good for my productivity.#$e#It's not like I'd be going out in this weather.#$e#Maybe to the saloon. Later.",
+        "Target": "Characters/Dialogue/Elliott",
+        "Entries": {
+            "movieTheater": "Ah, @, a movie theater in our town! Perhaps that will give me some inspiration.",
         }
     },
+    {
+        "LogName": "Elliott - mid hearts - Y2",
+        "Action": "EditData",
+        "Target": "Characters/Dialogue/Elliott",
+        "When": {"YearModulus": "2"},
+        "Entries": {
+            "4_2": "I'm not quite sure how to get my characters out of this bind...",
+        }
+    }
 ]}

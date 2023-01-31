@@ -60,6 +60,8 @@ internal static class TokenPurchasePatch
                         break;
                     }
                     int copy = i; // prevent accidental capture. There's no explicit notation for that in C#
+
+                    // TODO: fix this to use the player's locale here.
                     responses.Add(new Response(i.ToString(), i.ToString()));
                     actions.Add(() => AttemptBuyTokens(copy));
                 }

@@ -15,6 +15,8 @@ internal sealed class ModConfig
     /// </summary>
     public bool Enabled { get; set; } = true;
 
+    #region rugs
+
     /// <summary>
     /// Gets or sets a value indicating whether or not rugs should not be removed from under things.
     /// </summary>
@@ -33,14 +35,16 @@ internal sealed class ModConfig
 #endif
 
     /// <summary>
-    /// Gets or sets a value indicating whether or not to prevent the removal of items from a table.
-    /// </summary>
-    public bool PreventRemovalFromTable { get; set; } = true;
-
-    /// <summary>
     /// Gets or sets a value indicating whether planting on rugs should be allowed.
     /// </summary>
     public bool PreventPlantingOnRugs { get; set; } = true;
+
+    #endregion
+
+    /// <summary>
+    /// Gets or sets a value indicating whether or not to prevent the removal of items from a table.
+    /// </summary>
+    public bool PreventRemovalFromTable { get; set; } = true;
 
     /// <summary>
     /// Gets or sets a value indicating whether grass should be placed under objects.
@@ -90,11 +94,19 @@ internal sealed class ModConfig
         set => this.craneGameDifficulty = Math.Clamp(value, 1, 7);
     }
 
+    #region secret notes
+
+    /// <summary>
+    /// Gets or sets a value indicating whether or not this mod should handle spawning secret notes.
+    /// </summary>
     [GMCMSection("SecretNotesOverride", 1)]
     public bool OverrideSecretNotes { get; set; } = true;
 
     private float maxNoteChance = GameLocation.FIRST_SECRET_NOTE_CHANCE;
 
+    /// <summary>
+    /// Gets or sets a value indicating the maximum chance of spawning a secret note.
+    /// </summary>
     [GMCMRange(0, 1)]
     [GMCMInterval(0.01)]
     [GMCMSection("SecretNotesOverride", 1)]
@@ -106,6 +118,9 @@ internal sealed class ModConfig
 
     private float minNoteChance = GameLocation.LAST_SECRET_NOTE_CHANCE;
 
+    /// <summary>
+    /// Gets or sets a value indicating the minimum chance of spawning a secret note.
+    /// </summary>
     [GMCMRange(0, 1)]
     [GMCMInterval(0.01)]
     [GMCMSection("SecretNotesOverride", 1)]
@@ -114,6 +129,8 @@ internal sealed class ModConfig
         get => this.minNoteChance;
         set => this.minNoteChance = Math.Clamp(value, 0f, 1f);
     }
+
+    #endregion
 
     /// <summary>
     /// Gets or sets a value indicating whether or not the bet1k/bet10k buttons should appear.

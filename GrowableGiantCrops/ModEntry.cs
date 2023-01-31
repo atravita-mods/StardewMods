@@ -7,6 +7,7 @@ using AtraShared.MigrationManager;
 using AtraShared.Utils.Extensions;
 
 using GrowableGiantCrops.Framework;
+using GrowableGiantCrops.HarmonyPatches.Niceties;
 
 using HarmonyLib;
 
@@ -60,6 +61,7 @@ internal sealed class ModEntry : Mod
     public override void Entry(IModHelper helper)
     {
         I18n.Init(helper.Translation);
+        this.Monitor.Log($"Starting up: {this.ModManifest.UniqueID} - {typeof(ModEntry).Assembly.FullName}");
 
         ModMonitor = this.Monitor;
         Config = AtraUtils.GetConfigOrDefault<ModConfig>(helper, this.Monitor);
@@ -68,13 +70,13 @@ internal sealed class ModEntry : Mod
         ConsoleCommands.RegisterCommands(helper.ConsoleCommands);
 
         AssetManager.Initialize(helper.GameContent);
+        AssetCache.Initialize(helper.GameContent);
 
         //ShopManager.Initialize(helper.GameContent);
 
-        this.Monitor.Log($"Starting up: {this.ModManifest.UniqueID} - {typeof(ModEntry).Assembly.FullName}");
-
         // assets
         this.Helper.Events.Content.AssetRequested += static (_, e) => AssetManager.OnAssetRequested(e);
+        this.Helper.Events.Content.AssetsInvalidated += static (_, e) => AssetManager.Reset(e.NamesWithoutLocale);
     }
 
     /// <inheritdoc />
@@ -85,59 +87,58 @@ internal sealed class ModEntry : Mod
     {
         IntegrationHelper helper = new(this.Monitor, this.Helper.Translation, this.Helper.ModRegistry, LogLevel.Error);
 
-        if (helper.TryGetAPI("spacechase0.SpaceCore", "1.9.3", out ICompleteSpaceCoreAPI? api))
-        {
-            api.RegisterSerializerType(typeof(InventoryGiantCrop));
-            api.RegisterSerializerType(typeof(ShovelTool));
-            api.RegisterSerializerType(typeof(InventoryResourceClump));
-
-            this.Helper.Events.GameLoop.SaveLoaded += this.SaveLoaded;
-
-            // shop
-            // this.Helper.Events.Content.AssetRequested += static (_, e) => ShopManager.OnAssetRequested(e);
-            // this.Helper.Events.GameLoop.DayEnding += static (_, _) => ShopManager.OnDayEnd();
-            // this.Helper.Events.Input.ButtonPressed += (_, e) => ShopManager.OnButtonPressed(e, this.Helper.Input);
-
-            this.ApplyPatches(new Harmony(this.ModManifest.UniqueID));
-
-            GMCMHelper gmcmHelper = new(this.Monitor, this.Helper.Translation, this.Helper.ModRegistry, this.ModManifest);
-
-            if (gmcmHelper.TryGetAPI())
-            {
-                gmcmHelper.Register(
-                    reset: static () => Config = new(),
-                    save: () => this.Helper.AsyncWriteConfig(this.Monitor, Config))
-                .AddParagraph(I18n.ModDescription)
-                .GenerateDefaultGMCM(static () => Config)
-                .AddTextOption(
-                    name: I18n.ShopLocation,
-                    getValue: static () => Config.ShopLocation.X + ", " + Config.ShopLocation.Y,
-                    setValue: static (str) => Config.ShopLocation = str.TryParseVector2(out Vector2 vec) ? vec : new Vector2(1, 7),
-                    tooltip: I18n.ShopLocation_Description);
-            }
-
-            // optional APIs
-            IntegrationHelper optional = new(this.Monitor, this.Helper.Translation, this.Helper.ModRegistry, LogLevel.Trace);
-            if (optional.TryGetAPI("spacechase0.JsonAssets", "1.10.10", out IJsonAssetsAPI? jaAPI))
-            {
-                JaAPI = jaAPI;
-            }
-            if (optional.TryGetAPI("spacechase0.MoreGiantCrops", "1.2.0", out IMoreGiantCropsAPI? mgAPI))
-            {
-                MoreGiantCropsAPI = mgAPI;
-            }
-            if (optional.TryGetAPI("leclair.giantcroptweaks", "0.1.0", out IGiantCropTweaks? gcAPI))
-            {
-                GiantCropTweaksAPI = gcAPI;
-            }
-            if (optional.TryGetAPI("atravita.GrowableBushes", "0.0.1", out IGrowableBushesAPI? growable))
-            {
-                GrowableBushesAPI = growable;
-            }
-        }
-        else
+        if (!helper.TryGetAPI("spacechase0.SpaceCore", "1.9.3", out ICompleteSpaceCoreAPI? api))
         {
             this.Monitor.Log($"Could not load spacecore's API. This is a fatal error.", LogLevel.Error);
+            return;
+        }
+
+        api.RegisterSerializerType(typeof(InventoryGiantCrop));
+        api.RegisterSerializerType(typeof(ShovelTool));
+        api.RegisterSerializerType(typeof(InventoryResourceClump));
+
+        this.Helper.Events.GameLoop.SaveLoaded += this.SaveLoaded;
+
+        // shop
+        // this.Helper.Events.Content.AssetRequested += static (_, e) => ShopManager.OnAssetRequested(e);
+        // this.Helper.Events.GameLoop.DayEnding += static (_, _) => ShopManager.OnDayEnd();
+        // this.Helper.Events.Input.ButtonPressed += (_, e) => ShopManager.OnButtonPressed(e, this.Helper.Input);
+
+        this.ApplyPatches(new Harmony(this.ModManifest.UniqueID));
+
+        GMCMHelper gmcmHelper = new(this.Monitor, this.Helper.Translation, this.Helper.ModRegistry, this.ModManifest);
+
+        if (gmcmHelper.TryGetAPI())
+        {
+            gmcmHelper.Register(
+                reset: static () => Config = new(),
+                save: () => this.Helper.AsyncWriteConfig(this.Monitor, Config))
+            .AddParagraph(I18n.ModDescription)
+            .GenerateDefaultGMCM(static () => Config)
+            .AddTextOption(
+                name: I18n.ShopLocation,
+                getValue: static () => Config.ShopLocation.X + ", " + Config.ShopLocation.Y,
+                setValue: static (str) => Config.ShopLocation = str.TryParseVector2(out Vector2 vec) ? vec : new Vector2(1, 7),
+                tooltip: I18n.ShopLocation_Description);
+        }
+
+        // optional APIs
+        IntegrationHelper optional = new(this.Monitor, this.Helper.Translation, this.Helper.ModRegistry, LogLevel.Trace);
+        if (optional.TryGetAPI("spacechase0.JsonAssets", "1.10.10", out IJsonAssetsAPI? jaAPI))
+        {
+            JaAPI = jaAPI;
+        }
+        if (optional.TryGetAPI("spacechase0.MoreGiantCrops", "1.2.0", out IMoreGiantCropsAPI? mgAPI))
+        {
+            MoreGiantCropsAPI = mgAPI;
+        }
+        if (optional.TryGetAPI("leclair.giantcroptweaks", "0.1.0", out IGiantCropTweaks? gcAPI))
+        {
+            GiantCropTweaksAPI = gcAPI;
+        }
+        if (optional.TryGetAPI("atravita.GrowableBushes", "0.0.1", out IGrowableBushesAPI? growable))
+        {
+            GrowableBushesAPI = growable;
         }
     }
 
@@ -145,12 +146,19 @@ internal sealed class ModEntry : Mod
     /// Applies the patches for this mod.
     /// </summary>
     /// <param name="harmony">This mod's harmony instance.</param>
-    /// <remarks>Delay until GameLaunched in order to patch other mods....</remarks>
     private void ApplyPatches(Harmony harmony)
     {
         try
         {
             harmony.PatchAll(typeof(ModEntry).Assembly);
+
+            if (new Version(1, 6) > new Version(Game1.version) &&
+                (this.Helper.ModRegistry.Get("atravita.GiantCropFertilizer") is not IModInfo fert || fert.Manifest.Version.IsOlderThan("0.2.2")) &&
+                (this.Helper.ModRegistry.Get("spacechase0.MoreGiantCrops") is not IModInfo giant || giant.Manifest.Version.IsOlderThan("1.2.0")))
+            {
+                this.Monitor.Log("Applying patch to restore giant crops to save locations", LogLevel.Debug);
+                FixSaveThing.ApplyPatches(harmony);
+            }
         }
         catch (Exception ex)
         {

@@ -12,6 +12,18 @@
         }
     },
     {
+        "LogName": "Rain -- during winter - elliott.",
+        "Action": "EditData",
+        "Target": "Characters/Dialogue/rainy",
+        "When": {
+            "Season": "winter",
+            "EnableFor|contains=Elliott": true,
+        },
+        "Entries":{
+            "Elliott": "A day like this is good for my productivity.#$e#It's not like I'd be going out in this weather.#$e#Maybe to the saloon. Later.",
+        }
+    },
+    {
         "LogName": "Lewis base dialogue",
         "Action": "EditData",
         "Target": "Characters/Dialogue/Lewis",
@@ -60,7 +72,7 @@
         }
     },
     {
-        "LogName": "Rain -- during winter.",
+        "LogName": "Rain -- during winter - evelyn.",
         "Action": "EditData",
         "Target": "Characters/Dialogue/rainy",
         "When": {

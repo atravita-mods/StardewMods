@@ -28,6 +28,15 @@
     },
     {
         "Action": "Include",
+        "LogName": "Haley - high hearts",
+        "FromFile": "assets/default/bravo/Haley/high.json",
+        "When": {
+            "EnableFor": "Haley",
+            "Query: {{Hearts:Haley}} >= 8": true,
+        }
+    },
+    {
+        "Action": "Include",
         "LogName": "Harvey - mid hearts",
         "FromFile": "assets/default/bravo/Harvey/mid.json",
         "When": {

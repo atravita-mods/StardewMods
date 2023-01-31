@@ -55,7 +55,7 @@ public sealed class InventoryGiantCrop : SObject
     #region drawfields
 
     [XmlIgnore]
-    private Texture2D? texture;
+    private AssetHolder? holder;
 
     [XmlIgnore]
     private Rectangle sourceRect = default;
@@ -136,9 +136,44 @@ public sealed class InventoryGiantCrop : SObject
 
     #region draw
 
+    /// <summary>
+    /// Calculates the correct texture and rectangle to draw.
+    /// </summary>
     private void PopulateTexture()
     {
+        try
+        {
+            if (!string.IsNullOrEmpty(this.stringID.Value))
+            {
+                // TODO: attempt to handle Giant Crop Tweaks here.
+            }
 
+            // Check More Giant Crops and Json Assets for texture data.
+            if (ModEntry.JaAPI?.TryGetGiantCropSprite(this.ParentSheetIndex, out var jaTex) == true)
+            {
+                this.holder = new(jaTex.Value);
+                this.sourceRect = new Rectangle(0, 0, 32, 32);
+            }
+            else if (ModEntry.MoreGiantCropsAPI?.GetTexture(this.ParentSheetIndex) is Texture2D mgcTex)
+            {
+                this.holder = new(mgcTex);
+                this.sourceRect = new Rectangle(0, 0, 32, 32);
+            }
+            else
+            {
+                int idx = ProductToGameIndex(this.ParentSheetIndex);
+                if (idx >= GiantCrop.cauliflower && idx <= GiantCrop.pumpkin)
+                {
+                    this.holder = AssetCache.Get("TileSheets/crops");
+                    this.sourceRect = new Rectangle(112 + (idx * 48), 512, 48, 63);
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            ModEntry.ModMonitor.Log($"Failed in attempting to acquire texture and boundaries for {this.Name} - {this.ParentSheetIndex}, see log for details.", LogLevel.Error);
+            ModEntry.ModMonitor.Log(ex.ToString());
+        }
     }
 
     #endregion

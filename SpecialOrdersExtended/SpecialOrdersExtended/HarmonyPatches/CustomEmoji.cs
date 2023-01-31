@@ -15,10 +15,13 @@ using StardewValley.Menus;
 
 namespace SpecialOrdersExtended.HarmonyPatches;
 
+/// <summary>
+/// Handles loading custom emoji.
+/// </summary>
 [HarmonyPatch(typeof(SpecialOrdersBoard))]
 internal static class CustomEmoji
 {
-    private static readonly HashSet<IAssetName> Failed = new(); // hashset of failed loads.
+    private static readonly HashSet<string> Failed = new(); // hashset of failed loads.
     private static readonly Dictionary<string, KeyValuePair<Texture2D, Rectangle>> Cache = new();
 
     private static IGameContentHelper parser = null!;
@@ -37,7 +40,10 @@ internal static class CustomEmoji
         }
         if (assets is not null && Failed.Count > 0)
         {
-            Failed.RemoveWhere(assets.Contains);
+            foreach (IAssetName a in assets)
+            {
+                Failed.Remove(a.BaseName);
+            }
         }
     }
 
@@ -47,8 +53,7 @@ internal static class CustomEmoji
     /// <param name="e">Asset event args.</param>
     internal static void Ready(AssetReadyEventArgs e)
     {
-        Failed.Remove(e.Name);
-        Failed.Remove(e.NameWithoutLocale);
+        Failed.Remove(e.NameWithoutLocale.BaseName);
     }
 
     [UsedImplicitly]
@@ -86,7 +91,7 @@ internal static class CustomEmoji
         if (asset.TryGetValue(requesterName, out EmojiData? data))
         {
             IAssetName texLoc = parser.ParseAssetName(data.AssetName);
-            if (Failed.Contains(texLoc))
+            if (Failed.Contains(texLoc.BaseName))
             {
                 return null;
             }
@@ -107,7 +112,7 @@ internal static class CustomEmoji
             }
             catch (Exception ex)
             {
-                Failed.Add(texLoc);
+                Failed.Add(texLoc.BaseName);
                 ModEntry.ModMonitor.LogOnce($"Failed to load {data.AssetName}.", LogLevel.Error);
                 ModEntry.ModMonitor.Log(ex.ToString());
             }

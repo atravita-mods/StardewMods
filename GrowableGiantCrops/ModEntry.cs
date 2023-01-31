@@ -174,8 +174,8 @@ internal sealed class ModEntry : Mod
     private void SaveLoaded(object? sender, SaveLoadedEventArgs e)
     {
         // load giant crop indexes.
-        moreGiantCropsIds = MoreGiantCropsAPI?.RegisteredCrops();
-        jaCropIds = JaAPI?.GetGiantCropIndexes();
+        moreGiantCropsIds = MoreGiantCropsAPI?.RegisteredCrops() ?? Array.Empty<int>();
+        jaCropIds = JaAPI?.GetGiantCropIndexes() ?? Array.Empty<int>();
 
         // sanity checks.
         MultiplayerHelpers.AssertMultiplayerVersions(this.Helper.Multiplayer, this.ModManifest, this.Monitor, this.Helper.Translation);

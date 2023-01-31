@@ -347,6 +347,9 @@ public sealed class InventoryBush : SObject
     }
 
     /// <inheritdoc />
+    public override int maximumStackSize() => 999;
+
+    /// <inheritdoc />
     public override bool canBeShipped() => false;
 
     /// <inheritdoc />

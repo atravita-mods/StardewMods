@@ -1,12 +1,12 @@
-{"Changes":[{
-    "LogName": "Sandy mid-hearts",
-    "Action": "EditData",
-    "Target": "Characters/Dialogue/Sandy",
-    "Entries": {
-        "6_2": "My shops not in a great location for business but I can afford the rent.",
-    },
-    "When": {
-        "YearModulus": "3"
+{"Changes":[
+    {
+        "LogName": "Sandy mid-hearts",
+        "Action": "EditData",
+        "Target": "Characters/Dialogue/Sandy",
+        "Entries": {
+            "6_2": "My shops not in a great location for business but I can afford the rent.",
+            "8_2": "About twenty years back this was a bustling truck stop. But we've haven't had that much traffic for a long time.$s"
+        },
+        "When": { "YearModulus": "3"}
     }
-    },
 ]}

@@ -3,10 +3,10 @@
         "Action": "EditData",
         "LogName": "Jodi mid-hearts",
         "Entries": {
-            "2{{YearRemainder}}": "Sometimes I feel like all I do is cook and clean.$s",
+            "2{{YearRemainder}}": "Sometimes I feel like all I do is cook and clean.$s"
         },
         "When": {
             "YearModulus": "1"
         }
-    },
+    }
 ]}

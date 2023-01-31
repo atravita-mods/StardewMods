@@ -5,10 +5,10 @@
         "Target": "Characters/Dialogue/Haley",
         "Entries": {
             "6_2": "@! My mother sent me a new mascara from %place! What do you think of it?$h#$e#It's a tubing mascara, so a lot less likely to smudge."
-        },
+        }
     },
     {
-        "LogName": "Haley - emily's parrot",
+        "LogName": "Haley - Emily's parrot",
         "Action": "EditData",
         "Target": "Characters/Dialogue/Haley",
         "When": {"HasSeenEvent": 463391},

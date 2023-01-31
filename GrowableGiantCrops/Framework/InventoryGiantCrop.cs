@@ -65,9 +65,6 @@ public sealed class InventoryGiantCrop : SObject
     private Rectangle sourceRect = default;
 
     [XmlIgnore]
-    private string? texturePath;
-
-    [XmlIgnore]
     private Point tileSize = default;
 
     #endregion
@@ -193,6 +190,15 @@ public sealed class InventoryGiantCrop : SObject
             return false;
         }
 
+        if (!string.IsNullOrEmpty(this.stringID.Value) && ModEntry.GiantCropTweaksAPI?.GiantCrops?.ContainsKey(this.stringID.Value) != true)
+        {
+            return false;
+        }
+        else if (!IsValidGiantCropIndex(this.ParentSheetIndex))
+        {
+            return false;
+        }
+
         Vector2 placementTile = new(x / Game1.tileSize, y / Game1.tileSize);
         if (!this.CanPlace(location, placementTile, relaxed))
         {
@@ -291,6 +297,78 @@ public sealed class InventoryGiantCrop : SObject
         this.draw(spriteBatch, x / 64, y / 64, 0.5f);
     }
 
+    /// <inheritdoc />
+    public override void drawAsProp(SpriteBatch b)
+    {
+        this.draw(b, (int)this.TileLocation.X, (int)this.TileLocation.Y);
+    }
+
+    /// <inheritdoc />
+    public override void drawInMenu(SpriteBatch spriteBatch, Vector2 location, float scaleSize, float transparency, float layerDepth, StackDrawType drawStackNumber, Color color, bool drawShadow)
+    {
+        if (this.sourceRect == default || this.holder is null)
+        {
+            this.PopulateTexture();
+        }
+
+        if (this.sourceRect != default && this.holder?.Get() is Texture2D tex)
+        {
+            spriteBatch.Draw(
+                tex,
+                location + new Vector2(16f, 16f),
+                this.sourceRect,
+                color * transparency,
+                0f,
+                new Vector2(8f, 16f),
+                this.GetScaleSize() * scaleSize,
+                SpriteEffects.None,
+                layerDepth);
+            if (((drawStackNumber == StackDrawType.Draw && this.maximumStackSize() > 1 && this.Stack > 1) || drawStackNumber == StackDrawType.Draw_OneInclusive)
+                && scaleSize > 0.3f && this.Stack != int.MaxValue)
+            {
+                Utility.drawTinyDigits(
+                    toDraw: this.Stack,
+                    b: spriteBatch,
+                    position: location + new Vector2(64 - Utility.getWidthOfTinyDigitString(this.Stack, 3f * scaleSize) + (3f * scaleSize), 64f - (18f * scaleSize) + 2f),
+                    scale: 3f * scaleSize,
+                    layerDepth: 1f,
+                    c: Color.White);
+            }
+        }
+    }
+
+    /// <inheritdoc />
+    public override void drawWhenHeld(SpriteBatch spriteBatch, Vector2 objectPosition, Farmer f)
+    {
+        if (this.sourceRect == default || this.holder is null)
+        {
+            this.PopulateTexture();
+        }
+        if (this.sourceRect != default && this.holder?.Get() is Texture2D tex)
+        {
+            int xOffset = (this.sourceRect.Width - 16) * 2;
+            objectPosition.X -= xOffset;
+            int yOffset = Math.Max((this.sourceRect.Height * 4) - 64, 0);
+            objectPosition.Y -= yOffset;
+            spriteBatch.Draw(
+                texture: tex,
+                position: objectPosition,
+                sourceRectangle: this.sourceRect,
+                color: Color.White,
+                rotation: 0f,
+                origin: Vector2.Zero,
+                scale: 4f,
+                effects: SpriteEffects.None,
+                layerDepth: Math.Max(0f, (f.getStandingY() + 3) / 10000f));
+        }
+    }
+
+    private float GetScaleSize()
+    {
+        this.PopulateTileSize();
+        return 3.5f / Math.Max(1, this.tileSize.X);
+    }
+
     private void PopulateTileSize()
     {
         if (this.tileSize == default)
@@ -368,6 +446,9 @@ public sealed class InventoryGiantCrop : SObject
     }
 
     /// <inheritdoc />
+    public override int maximumStackSize() => 999;
+
+    /// <inheritdoc />
     public override bool canBeShipped() => false;
 
     /// <inheritdoc />
@@ -400,8 +481,10 @@ public sealed class InventoryGiantCrop : SObject
             && this.stringID.Value == otherBush.stringID.Value;
     }
 
+    /// <inheritdoc />
     protected override string loadDisplayName() => I18n.GiantCrop_Name(this.GetProductDisplayName());
 
+    /// <inheritdoc />
     public override string getDescription() => I18n.GiantCrop_Description(this.GetProductDisplayName());
 
     private string GetProductDisplayName()
@@ -418,6 +501,23 @@ public sealed class InventoryGiantCrop : SObject
     #endregion
 
     #region helpers
+
+    internal static bool IsValidGiantCropIndex(int idx)
+    {
+        switch (idx)
+        {
+            case 190:
+            case 254:
+            case 276:
+                return true;
+        }
+
+        if (ModEntry.JACropIds.Contains(idx))
+        {
+            return true;
+        }
+        return ModEntry.MoreGiantCropsIds.Contains(idx);
+    }
 
     private static int ProductToGameIndex(int productIndex)
         => productIndex switch

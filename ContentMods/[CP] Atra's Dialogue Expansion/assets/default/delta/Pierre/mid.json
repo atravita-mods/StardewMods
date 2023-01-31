@@ -6,7 +6,7 @@
         "Entries": {
             "movieTheater": "@, have you heard? We've got a movie theater now! Think I'll take Caroline out on a date...",
             "winter_7{{YearRemainder}}": "Gotta start stocking Winter Star gifts soon. It's the busiest retail season of the year...$h"
-        },
+        }
     },
     {
         "LogName": "Pierre mid-hearts",
@@ -14,9 +14,11 @@
         "Target": "Characters/Dialogue/Pierre",
         "Entries": {
             "6_2": "My father? He really wasn't ever in my life.$s#$b#It was just me, my mother, and my sister, in a tiny apartment in Zuzu City.",
+            "17_2": "I grew up poor. I wouldn't ever want that for my family.$s#$b#Caroline thinks I work too much, but we need to keep the store running.",
+            "19_2": "We used to have a lot more farmers down in the valley. Unfortunately, our soil isn't the best.#$b#Say, could I interest you in one of my fertilizers?"
         },
         "When": {
             "YearModulus": "3"
         }
-    },
+    }
 ]}

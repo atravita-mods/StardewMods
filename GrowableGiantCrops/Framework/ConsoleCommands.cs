@@ -48,17 +48,21 @@ internal static class ConsoleCommands
             return;
         }
 
-        // TODO - validation.
-
         InventoryGiantCrop item;
         if (args.Length == 3 && ModEntry.GiantCropTweaksAPI?.TryGetTexture(args[2], out var _) == true)
         {
             ModEntry.ModMonitor.Log($"Spawning with GiantCropTweaks id {args[2]}");
             item = new(args[2], productID, count);
         }
+        else if (InventoryGiantCrop.IsValidGiantCropIndex(productID))
+        {
+
+            item = new(productID, count);
+        }
         else
         {
-            item = new(productID, count);
+            ModEntry.ModMonitor.Log($"{productID} doesn't seem to be a valid giant crop.", LogLevel.Error);
+            return;
         }
 
         if (!Game1.player.addItemToInventoryBool(item))

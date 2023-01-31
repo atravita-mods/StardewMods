@@ -1,6 +1,6 @@
 {"Changes":[
     {
-        "LogName": "Rain - alpha - seedshop",
+        "LogName": "Rain - SeedShop",
         "Action": "EditData",
         "Target": "Characters/Dialogue/Caroline",
         "When": {"Weather: valley": "Rain, Storm"},
@@ -12,7 +12,16 @@
         "Target": "Characters/Dialogue/rainy",
         "When": {"Season": "winter"},
         "Entries":{
-            "Caroline": "#$c .7#I hope the sun comes out soon. What did the weather report say today?#A good cup of tea is excellent on a day like this. Here. I've got an extra.[614]",
+            "Caroline": "#$c .7#I hope the sun comes out soon. What did the weather report say today?#A good cup of tea is excellent on a day like this. Here. I've got an extra.[614]"
         }
     },
+    {
+        "LogName": "Caroline: mid hearts",
+        "Action": "EditData",
+        "Target": "Characters/Dialogue/Caroline",
+        "Entries": {
+            "9{{YearRemainder}}": "Gosh, @, I was up way too late last night trying to balance the books.#$b#Apologies if I don't feel like chatting.",
+            "11{{YearRemainder}}": "Think I might order some new tea...Let's see, what have I not had recently?"
+        }
+    }
 ]}

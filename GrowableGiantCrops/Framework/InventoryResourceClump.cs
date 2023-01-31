@@ -304,6 +304,9 @@ public sealed class InventoryResourceClump : SObject
     }
 
     /// <inheritdoc />
+    public override int maximumStackSize() => 999;
+
+    /// <inheritdoc />
     public override bool canBeShipped() => false;
 
     /// <inheritdoc />

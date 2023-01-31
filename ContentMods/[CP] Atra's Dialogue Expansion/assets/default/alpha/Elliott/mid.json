@@ -4,7 +4,7 @@
         "Action": "EditData",
         "Target": "Characters/Dialogue/Elliott",
         "Entries": {
-            "movieTheater": "Ah, @, a movie theater in our town! Perhaps that will give me some inspiration.",
+            "movieTheater": "Ah, @, a movie theater in our town! Perhaps that will give me some inspiration."
         }
     },
     {
@@ -13,7 +13,7 @@
         "Target": "Characters/Dialogue/Elliott",
         "When": {"YearModulus": "2"},
         "Entries": {
-            "4_2": "I'm not quite sure how to get my characters out of this bind...",
+            "4_2": "I'm not quite sure how to get my characters out of this bind..."
         }
     }
 ]}

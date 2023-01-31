@@ -5,7 +5,7 @@
         "Target": "Characters/Dialogue/rainy",
         "When": {"Season": "winter"},
         "Entries":{
-            "Marnie": "#$c .5#Let's get you inside and warmed up.#Days like this make me grateful for indoor heating.#$e#You did get your animals heaters, yes?",
+            "Marnie": "#$c .5#Let's get you inside and warmed up.#Days like this make me grateful for indoor heating.#$e#You did get your animals heaters, yes?"
         }
     },
     {
@@ -14,6 +14,7 @@
         "Target": "Characters/Dialogue/Marnie",
         "Entries": {
             "movieTheater": "I can't believe a movie theater came to our town! @, you want to come see a movie with me?$h",
-        },
-    },
+            "10{{YearRemainder}}": "I've got so much work to do...$s"
+        }
+    }
 ]}

@@ -137,11 +137,12 @@ public sealed class InventoryGiantCrop : SObject
     #region placement
 
     public override bool canBePlacedHere(GameLocation l, Vector2 tile)
+        => this.CanPlace(l, tile, ModEntry.Config.RelaxedPlacement);
+
+    internal bool CanPlace(GameLocation l, Vector2 tile, bool relaxed)
     {
 
-    }
-    internal bool CanPlace()
-    {
+
         return false;
     }
 

@@ -472,7 +472,7 @@ public class ScheduleUtilityFunctions
     /// Given an schedule, returns the last schedule point without the time.
     /// </summary>
     /// <param name="rawSchedule">Raw schedule string.</param>
-    /// <returns>Last schedule point without the time, or null for failure.</returns>
+    /// <returns>Last schedule point without the time, or empty span for failure.</returns>
     private static ReadOnlySpan<char> GetLastPointWithoutTime(string rawSchedule)
     {
         ReadOnlySpan<char> lastPoint = rawSchedule.AsSpan().TrimEnd('/');
@@ -486,6 +486,6 @@ public class ScheduleUtilityFunctions
         {
             return second;
         }
-        return ReadOnlySpan<char>.Empty
+        return ReadOnlySpan<char>.Empty;
     }
 }

@@ -49,6 +49,16 @@ internal sealed class ModEntry : Mod
         AssetLoader.Init(helper.GameContent);
     }
 
+    /// <inheritdoc />
+    protected override void Dispose(bool disposing)
+    {
+        if (disposing)
+        {
+            AssetEditor.DisposeContentManager();
+        }
+        base.Dispose(disposing);
+    }
+
     private void OnAssetRequested(object? sender, AssetRequestedEventArgs e)
     {
         AssetLoader.Load(e);

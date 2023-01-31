@@ -35,14 +35,15 @@ internal sealed class ModEntry : Mod
         // Register events
         helper.Events.GameLoop.GameLaunched += this.OnGameLaunched;
         helper.Events.GameLoop.TimeChanged += this.OnTimeChanged;
+        helper.Events.GameLoop.DayStarted += MarriageDialogueHandler.OnDayStart;
         helper.Events.GameLoop.DayEnding += this.OnDayEnding;
         helper.Events.GameLoop.ReturnedToTitle += this.ReturnedToTitle;
         helper.Events.GameLoop.SaveLoaded += this.OnSaveLoaded;
         helper.Events.Input.ButtonPressed += this.OnButtonPressed;
         helper.Events.Player.Warped += this.OnPlayerWarped;
 
-        helper.Events.Multiplayer.PeerConnected += this.PeerConnected;
-        helper.Events.Multiplayer.ModMessageReceived += this.ModMessageReceived;
+        helper.Events.Multiplayer.PeerConnected += static (_, e) => MultiplayerSharedState.ReSendMultiplayerMessage(e);
+        helper.Events.Multiplayer.ModMessageReceived += static (_, e) => MultiplayerSharedState.UpdateFromMessage(e);
 
         helper.Events.Content.AssetRequested += this.OnAssetRequested;
 
@@ -231,10 +232,4 @@ internal sealed class ModEntry : Mod
             this.haveFixedSchedulesToday = true;
         }
     }
-
-    private void PeerConnected(object? sender, PeerConnectedEventArgs e)
-        => MultiplayerSharedState.ReSendMultiplayerMessage(e);
-
-    private void ModMessageReceived(object? sender, ModMessageReceivedEventArgs e)
-        => MultiplayerSharedState.UpdateFromMessage(e);
 }

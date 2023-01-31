@@ -42,9 +42,8 @@ public class AssetNameComparer : EqualityComparer<IAssetName>
 /// </summary>
 public class BaseAssetNameComparer : EqualityComparer<IAssetName>
 {
-
-    private static StringComparer comparer = StringComparer.OrdinalIgnoreCase;
-    private static BaseAssetNameComparer instance = new();
+    private static readonly StringComparer comparer = StringComparer.OrdinalIgnoreCase;
+    private static readonly BaseAssetNameComparer instance = new();
 
     /// <summary>
     /// Gets the singleton instance.

@@ -12,6 +12,8 @@
   "ShouldNPCsTrampleGiantCrops.description": "If enabled, will allow NPCs to remove giant crops in their path.",
   "RelaxedPlacement.title": "Relaxed Placement",
   "RelaxedPlacement.description": "If enabled, placement rules will be relaxed.",
+  "ShovelEnergy.title": "Shovel Energy",
+  "ShovelEnergy.description": "How much stamina should each use of the shovel take.",
 
   // Items
   "Shovel.Name": "Shovel",
@@ -39,5 +41,5 @@
   "MineRockOne.name": "Mine Rock",
   "MineRockOne.description": "A large mine rock. Can be placed.",
   "MineRockThree.name": "Frozen Mine Rock",
-  "MineRockThree.description": "A large, rather frozen, mine rock. Can be placed.",
+  "MineRockThree.description": "A large, rather frozen, mine rock. Can be placed."
 }

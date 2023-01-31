@@ -111,22 +111,6 @@ public sealed class InventoryResourceClump : SObject
             }
         }
 
-        if (relaxed)
-        {
-            return true;
-        }
-
-        if (l is BuildableGameLocation buildable)
-        {
-            foreach (Building? building in buildable.buildings)
-            {
-                if (!building.isTilePassable(tile))
-                {
-                    return false;
-                }
-            }
-        }
-
         return true;
     }
 

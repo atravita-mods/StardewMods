@@ -1,10 +1,24 @@
 ﻿using Microsoft.Xna.Framework;
 
+using StardewValley.Buildings;
+using StardewValley.Locations;
 using StardewValley.TerrainFeatures;
 
 namespace GrowableGiantCrops;
+
+/// <summary>
+/// The utility class for this mod.
+/// </summary>
 internal static class GGCUtils
 {
+    /// <summary>
+    /// Checks to see if I can stick a resource clump at a specific tile.
+    /// </summary>
+    /// <param name="location">Game location to check.</param>
+    /// <param name="tileX">x coord of tile.</param>
+    /// <param name="tileY">y coord of tile.</param>
+    /// <param name="relaxed">whether or not to use relaxed placement rules.</param>
+    /// <returns>True if placeable, false otherwise.</returns>
     internal static bool IsTilePlaceableForResourceClump(GameLocation location, int tileX, int tileY, bool relaxed)
     {
         if (location is null || location.doesTileHaveProperty(tileX, tileY, "Water", "Back") is not null)
@@ -28,7 +42,6 @@ internal static class GGCUtils
             {
                 return false;
             }
-
         }
 
         foreach (ResourceClump? clump in location.resourceClumps)
@@ -36,6 +49,28 @@ internal static class GGCUtils
             if (clump.getBoundingBox(clump.currentTileLocation).Intersects(position))
             {
                 return false;
+            }
+        }
+
+        if (location is IAnimalLocation hasAnimals)
+        {
+            foreach (FarmAnimal? animal in hasAnimals.Animals.Values)
+            {
+                if (animal.GetBoundingBox().Intersects(position))
+                {
+                    return false;
+                }
+            }
+        }
+
+        if (!relaxed && location is BuildableGameLocation buildable)
+        {
+            foreach (Building? building in buildable.buildings)
+            {
+                if (!building.isTilePassable(new Vector2(tileX, tileY)))
+                {
+                    return false;
+                }
             }
         }
 

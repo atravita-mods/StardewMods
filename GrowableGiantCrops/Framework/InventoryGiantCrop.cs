@@ -5,6 +5,7 @@ using AtraBase.Toolkit.Reflection;
 
 using AtraCore.Framework.ReflectionManager;
 
+using AtraShared.Integrations.Interfaces;
 using AtraShared.Wrappers;
 
 using Microsoft.Xna.Framework;
@@ -141,9 +142,24 @@ public sealed class InventoryGiantCrop : SObject
 
     internal bool CanPlace(GameLocation l, Vector2 tile, bool relaxed)
     {
+        if (l.resourceClumps is null || Utility.isPlacementForbiddenHere(l))
+        {
+            return false;
+        }
 
+        Point size = new(3, 3);
+        if (!string.IsNullOrEmpty(this.stringID.Value)
+            && ModEntry.GiantCropTweaksAPI?.GiantCrops?.TryGetValue(this.stringID.Value, out IGiantCropData? data) == true)
+        {
+            size = data.TileSize;
+        }
 
-        return false;
+        for (int x = (int)tile.X; x < (int)tile.X + size.X; x++)
+        {
+
+        }
+
+        return return true;
     }
 
     #endregion

@@ -14,7 +14,7 @@ public sealed class ModConfig
 
     private int shovelEnergy = 7;
 
-    [GMCMRange(0, 10)]
+    [GMCMRange(0, 25)]
     public int ShovelEnergy
     {
         get => this.shovelEnergy;

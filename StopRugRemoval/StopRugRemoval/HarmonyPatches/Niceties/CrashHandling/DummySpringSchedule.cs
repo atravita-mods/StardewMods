@@ -58,7 +58,7 @@ internal static class DummySpringSchedule
                 new CodeInstruction(OpCodes.Pop).WithLabels(isnull),
             }, withLabels: labelsToMove);
 
-            helper.Print();
+            // helper.Print();
             return helper.Render();
         }
         catch (Exception ex)

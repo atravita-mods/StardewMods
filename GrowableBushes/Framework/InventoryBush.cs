@@ -122,22 +122,6 @@ public sealed class InventoryBush : SObject
             }
         }
 
-        if (relaxed)
-        {
-            return true;
-        }
-
-        if (l is BuildableGameLocation buildable)
-        {
-            foreach (Building? building in buildable.buildings)
-            {
-                if (!building.isTilePassable(tile))
-                {
-                    return false;
-                }
-            }
-        }
-
         return true;
     }
 
@@ -475,6 +459,28 @@ public sealed class InventoryBush : SObject
             if (largeTerrainFeature.getBoundingBox().Intersects(position))
             {
                 return false;
+            }
+        }
+
+        if (location is IAnimalLocation hasAnimals)
+        {
+            foreach (var animal in hasAnimals.Animals.Values)
+            {
+                if (animal.GetBoundingBox().Intersects(position))
+                {
+                    return false;
+                }
+            }
+        }
+
+        if (!relaxed && location is BuildableGameLocation buildable)
+        {
+            foreach (Building? building in buildable.buildings)
+            {
+                if (!building.isTilePassable(new Vector2(tileX, tileY)))
+                {
+                    return false;
+                }
             }
         }
 

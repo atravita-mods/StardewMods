@@ -24,13 +24,13 @@ internal static class ConsoleCommands
 
     private static void AddGiant(string commands, string[] args)
     {
-        if (args.Length != 1 && args.Length != 2)
+        if (args.Length < 1 && args.Length > 3)
         {
             ModEntry.ModMonitor.Log("Expected one or two arguments", LogLevel.Error);
             return;
         }
 
-        if (args.Length != 2 || !int.TryParse(args[1], out int count))
+        if (args.Length < 2 || !int.TryParse(args[1], out int count))
         {
             count = 1;
         }
@@ -46,6 +46,24 @@ internal static class ConsoleCommands
         {
             ModEntry.ModMonitor.Log($"Could not resolve product '{name}'.", LogLevel.Error);
             return;
+        }
+
+        // TODO - validation.
+
+        InventoryGiantCrop item;
+        if (args.Length == 3 && ModEntry.GiantCropTweaksAPI?.TryGetTexture(args[2], out var _) == true)
+        {
+            ModEntry.ModMonitor.Log($"Spawning with GiantCropTweaks id {args[2]}");
+            item = new(args[2], productID, count);
+        }
+        else
+        {
+            item = new(productID, count);
+        }
+
+        if (!Game1.player.addItemToInventoryBool(item))
+        {
+            Game1.currentLocation.debris.Add(new Debris(item, Game1.player.Position));
         }
     }
 

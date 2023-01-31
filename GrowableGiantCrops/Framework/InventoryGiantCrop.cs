@@ -13,9 +13,12 @@ using Microsoft.Xna.Framework.Graphics;
 
 using Netcode;
 
+using StardewValley.Locations;
 using StardewValley.TerrainFeatures;
 
 namespace GrowableGiantCrops.Framework;
+
+// NOTE: remember that the lower left corner is the placement corner!
 
 /// <summary>
 /// A class that represents a giant crop in the inventory.
@@ -63,6 +66,9 @@ public sealed class InventoryGiantCrop : SObject
 
     [XmlIgnore]
     private string? texturePath;
+
+    [XmlIgnore]
+    private Point tileSize = default;
 
     #endregion
 
@@ -137,9 +143,17 @@ public sealed class InventoryGiantCrop : SObject
 
     #region placement
 
+    /// <inheritdoc />
     public override bool canBePlacedHere(GameLocation l, Vector2 tile)
         => this.CanPlace(l, tile, ModEntry.Config.RelaxedPlacement);
 
+    /// <summary>
+    /// Checks to see if a giant crop can be placed.
+    /// </summary>
+    /// <param name="l">The game location to check.</param>
+    /// <param name="tile">The tile to check.</param>
+    /// <param name="relaxed">Whether or not to use relaxed placement rules.</param>
+    /// <returns>True if place-able, false otherwise.</returns>
     internal bool CanPlace(GameLocation l, Vector2 tile, bool relaxed)
     {
         if (l.resourceClumps is null || Utility.isPlacementForbiddenHere(l))
@@ -147,24 +161,151 @@ public sealed class InventoryGiantCrop : SObject
             return false;
         }
 
-        Point size = new(3, 3);
-        if (!string.IsNullOrEmpty(this.stringID.Value)
-            && ModEntry.GiantCropTweaksAPI?.GiantCrops?.TryGetValue(this.stringID.Value, out IGiantCropData? data) == true)
+        this.PopulateTileSize();
+        if (this.tileSize == default)
         {
-            size = data.TileSize;
+            return false;
         }
 
-        for (int x = (int)tile.X; x < (int)tile.X + size.X; x++)
+        for (int x = (int)tile.X; x < (int)tile.X + this.tileSize.X; x++)
         {
-
+            for (int y = (int)tile.Y - this.tileSize.Y + 1; y <= (int)tile.Y; y++)
+            {
+                if (!GGCUtils.IsTilePlaceableForResourceClump(l, x, y, relaxed))
+                {
+                    return false;
+                }
+            }
         }
 
-        return return true;
+        return true;
+    }
+
+    /// <inheritdoc />
+    public override bool placementAction(GameLocation location, int x, int y, Farmer? who = null)
+        => this.PlaceGiantCrop(location, x, y, ModEntry.Config.RelaxedPlacement);
+
+    internal bool PlaceGiantCrop(GameLocation location, int x, int y, bool relaxed)
+    {
+        this.PopulateTileSize();
+        if (this.tileSize == default)
+        {
+            return false;
+        }
+
+        Vector2 placementTile = new(x / Game1.tileSize, y / Game1.tileSize);
+        if (!this.CanPlace(location, placementTile, relaxed))
+        {
+            return false;
+        }
+
+        placementTile.Y -= this.tileSize.Y - 1;
+
+        GiantCrop giant = new(this.ParentSheetIndex, placementTile);
+        if (!string.IsNullOrEmpty(this.stringID.Value))
+        {
+            giant.modData[GiantCropTweaksModDataKey] = this.stringID.Value;
+        }
+
+        location.resourceClumps.Add(giant);
+        location.playSound("thudStep");
+        ShakeGiantCrop(giant);
+        return true;
     }
 
     #endregion
 
     #region draw
+
+    /// <inheritdoc />
+    public override void draw(SpriteBatch spriteBatch, int x, int y, float alpha = 1)
+    {
+        float draw_layer = Math.Max(
+            0f,
+            ((y * 64) + 40) / 10000f) + (x * 1E-05f);
+        this.draw(spriteBatch, x, y, draw_layer, alpha);
+    }
+
+    /// <inheritdoc />
+    public override void draw(SpriteBatch spriteBatch, int xNonTile, int yNonTile, float layerDepth, float alpha = 1)
+    {
+        if (this.sourceRect == default || this.holder is null)
+        {
+            this.PopulateTexture();
+        }
+
+        if (this.sourceRect != default && this.holder?.Get() is Texture2D tex)
+        {
+            Vector2 position = Game1.GlobalToLocal(Game1.viewport, new Vector2(xNonTile * 64, (yNonTile * 64) - (this.sourceRect.Height * 4) + 64));
+            spriteBatch.Draw(
+                texture: tex,
+                position,
+                sourceRectangle: this.sourceRect,
+                color: Color.White * alpha,
+                rotation: 0f,
+                origin: Vector2.Zero,
+                scale: Vector2.One * Game1.pixelZoom,
+                effects: SpriteEffects.None,
+                layerDepth);
+        }
+    }
+
+    /// <inheritdoc />
+    public override void drawPlacementBounds(SpriteBatch spriteBatch, GameLocation location)
+    {
+        this.PopulateTileSize();
+        if (this.tileSize == default)
+        {
+            return;
+        }
+
+        Vector2 grabTile = Game1.GetPlacementGrabTile();
+        int x = (int)grabTile.X * 64;
+        int y = (int)grabTile.Y * 64;
+        Game1.isCheckingNonMousePlacement = !Game1.IsPerformingMousePlacement();
+        if (Game1.isCheckingNonMousePlacement)
+        {
+            Vector2 nearbyValidPlacementPosition = Utility.GetNearbyValidPlacementPosition(Game1.player, location, this, x, y);
+            x = (int)nearbyValidPlacementPosition.X;
+            y = (int)nearbyValidPlacementPosition.Y;
+        }
+
+        bool canPlaceHere = Utility.playerCanPlaceItemHere(location, this, x, y, Game1.player) && Utility.withinRadiusOfPlayer(x, y, 1, Game1.player);
+
+        for (int x_offset = 0; x_offset < this.tileSize.X; x_offset++)
+        {
+            for (int y_offset = 1 - this.tileSize.Y; y_offset <= 0; y_offset++)
+            {
+                spriteBatch.Draw(
+                    texture: Game1.mouseCursors,
+                    new Vector2(x + (x_offset * 64) - Game1.viewport.X, y + (y_offset * 64) - Game1.viewport.Y),
+                    new Rectangle(canPlaceHere ? 194 : 210, 388, 16, 16),
+                    color: Color.White,
+                    rotation: 0f,
+                    origin: Vector2.Zero,
+                    scale: 4f,
+                    effects: SpriteEffects.None,
+                    layerDepth: 0.01f);
+            }
+        }
+        this.draw(spriteBatch, x / 64, y / 64, 0.5f);
+    }
+
+    private void PopulateTileSize()
+    {
+        if (this.tileSize == default)
+        {
+            if (!string.IsNullOrEmpty(this.stringID.Value)
+                && ModEntry.GiantCropTweaksAPI?.GiantCrops?.TryGetValue(this.stringID.Value, out IGiantCropData? data) == true)
+            {
+                this.tileSize = data.TileSize;
+            }
+            else
+            {
+                this.tileSize = new(3, 3);
+            }
+        }
+    }
 
     /// <summary>
     /// Calculates the correct texture and rectangle to draw.
@@ -173,9 +314,15 @@ public sealed class InventoryGiantCrop : SObject
     {
         try
         {
-            if (!string.IsNullOrEmpty(this.stringID.Value))
+            if (!string.IsNullOrEmpty(this.stringID.Value)
+                && ModEntry.GiantCropTweaksAPI?.GiantCrops?.TryGetValue(this.stringID.Value, out IGiantCropData? data) == true
+                && AssetCache.Get(data.Texture) is AssetHolder holder)
             {
-                // TODO: attempt to handle Giant Crop Tweaks here.
+                this.holder = holder;
+                if (ModEntry.GiantCropTweaksAPI.TryGetSource(this.stringID.Value, out Rectangle? rect))
+                {
+                    this.sourceRect = rect ?? new Rectangle(data.Corner, new Point(data.TileSize.X * 16, (data.TileSize.Y * 16) + 16));
+                }
             }
 
             // Check More Giant Crops and Json Assets for texture data.

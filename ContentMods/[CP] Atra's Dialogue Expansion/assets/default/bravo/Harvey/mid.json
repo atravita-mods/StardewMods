@@ -5,6 +5,7 @@
         "Target": "Characters/Dialogue/Harvey",
         "Entries": {
             "6_2": "My practice is barely scraping by. Not sure how I can see more patients in a town as small as this, though.$s",
+            "7_2": "Sorry if I'm grumpy, I was up all night entering data into the electronic medical records.$s#$b#Say, @, would you happen to have a spare coffee?",
             "22_2": "Saw a new study from %place Biologics, their new chemotherapy agent doubled the five-year survival rate for non-alcoholic primary hepatic malignancy.",
         },
         "When": {

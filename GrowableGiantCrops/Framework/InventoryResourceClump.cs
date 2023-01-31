@@ -102,7 +102,7 @@ public sealed class InventoryResourceClump : SObject
 
         for (int x = (int)tile.X; x < (int)tile.X + 2; x++)
         {
-            for (int y = (int)tile.Y; y < (int)tile.Y + 2; y++)
+            for (int y = (int)tile.Y - 1; y < (int)tile.Y + 1; y++)
             {
                 if (!GGCUtils.IsTilePlaceableForResourceClump(l, x, y, relaxed))
                 {

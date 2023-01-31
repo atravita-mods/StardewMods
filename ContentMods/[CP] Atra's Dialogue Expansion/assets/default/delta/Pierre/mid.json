@@ -8,4 +8,15 @@
             "winter_7{{YearRemainder}}": "Gotta start stocking Winter Star gifts soon. It's the busiest retail season of the year...$h"
         },
     },
+    {
+        "LogName": "Pierre mid-hearts",
+        "Action": "EditData",
+        "Target": "Characters/Dialogue/Pierre",
+        "Entries": {
+            "6_2": "My father? He really wasn't ever in my life.$s#$b#It was just me, my mother, and my sister, in a tiny apartment in Zuzu City.",
+        },
+        "When": {
+            "YearModulus": "3"
+        }
+    },
 ]}

@@ -21,8 +21,13 @@ internal static class AssetCache
         gameContent = gameContentHelper;
     }
 
-    internal static AssetHolder? Get(string key)
+    internal static AssetHolder? Get(string? key)
     {
+        if (string.IsNullOrEmpty(key))
+        {
+            return null;
+        }
+
         IAssetName parsed = gameContent.ParseAssetName(key);
         return Get(parsed);
     }

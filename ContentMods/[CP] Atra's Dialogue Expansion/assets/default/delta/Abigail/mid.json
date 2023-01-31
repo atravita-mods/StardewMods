@@ -27,6 +27,17 @@
         }
     },
     {
+        "LogName": "Abigail mid-hearts",
+        "Action": "EditData",
+        "Target": "Characters/Dialogue/Abigail",
+        "Entries": {
+            "6_2": "Between you and I, @, I wish dad would let me change my major.#$b#I'm really not cut out for business administration.",
+        },
+        "When": {
+            "YearModulus": "3"
+        }
+    },
+    {
         "LogName": "Rain -- after secret woods",
         "Action": "EditData",
         "Target": "Characters/Dialogue/rainy",

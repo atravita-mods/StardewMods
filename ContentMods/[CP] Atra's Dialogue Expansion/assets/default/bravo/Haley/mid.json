@@ -6,5 +6,15 @@
         "Entries": {
             "6_2": "@! My mother sent me a new mascara from %place! What do you think of it?$h#$e#It's a tubing mascara, so a lot less likely to smudge."
         },
+    },
+    {
+        "LogName": "Haley - emily's parrot",
+        "Action": "EditData",
+        "Target": "Characters/Dialogue/Haley",
+        "When": {"HasSeenEvent": 463391},
+        "Entries": {
+            "8_2": "Took some really nice photo's of Emily's parrot the other day. I think it enjoys posing for me.$h",
+            "16_2": "Emily's parrot pooped on my favorite dress yesterday.$s#$b#Of course I don't blame it, it's just an animal. Doesn't mean I'm not mad about it though."
+        }
     }
 ]}

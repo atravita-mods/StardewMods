@@ -44,6 +44,14 @@ internal static class DummySpringSchedule
             .GetLabels(out var labelsToMove)
             .DefineAndAttachLabel(out var skip);
             Label isnull = helper.Generator.DefineLabel();
+
+            /* Injecting:
+             * if (arg1 == "spring" && GetDummpSpringSchedule(npc) is string ret)
+             * {
+             *     return ret;
+             * }
+             * */
+
             helper.Insert(new CodeInstruction[]
             {
                 new (OpCodes.Ldarg_1),

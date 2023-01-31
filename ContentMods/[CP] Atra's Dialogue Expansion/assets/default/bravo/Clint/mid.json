@@ -7,5 +7,15 @@
         "Entries":{
             "Saloon_Entry": "Glad to be out of the rain...",
         }
-    }  
+    },
+    {
+        "LogName": "Clint mid-hearts",
+        "Action": "EditData",
+        "Target": "Characters/Dialogue/Clint",
+        "Entries": {
+            "6_2": "Got a commission from %place for a pile of swords. That'll be nice for the ole' balance sheet.",
+            "8_2": "What would I've done if I didn't become a blacksmith? Err, @, I'm not sure actually.$s"
+        },
+        "When": {"YearModulus": 2},
+    }
 ]}

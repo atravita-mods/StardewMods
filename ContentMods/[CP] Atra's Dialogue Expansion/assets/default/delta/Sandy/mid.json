@@ -1,2 +1,12 @@
-{"Changes":[
-    ]}
+{"Changes":[{
+    "LogName": "Sandy mid-hearts",
+    "Action": "EditData",
+    "Target": "Characters/Dialogue/Sandy",
+    "Entries": {
+        "6_2": "My shops not in a great location for business but I can afford the rent.",
+    },
+    "When": {
+        "YearModulus": "3"
+    }
+    },
+]}

@@ -1,2 +1,11 @@
 {"Changes":[
-    ]}
+    {
+        "LogName": "Emily mid-hearts",
+        "Action": "EditData",
+        "Target": "Characters/Dialogue/Emily",
+        "Entries": {
+            "6_2": "@! Look at this new yarn my mother sent me! Isn't it so soft?$h",
+            "17{{YearRemainder}}": "Have I considered moving out of town? Of course I have, but Pelican Town is my home.",
+        },
+    }
+]}

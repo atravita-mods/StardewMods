@@ -134,6 +134,19 @@ public sealed class InventoryGiantCrop : SObject
     }
     #endregion
 
+    #region placement
+
+    public override bool canBePlacedHere(GameLocation l, Vector2 tile)
+    {
+
+    }
+    internal bool CanPlace()
+    {
+        return false;
+    }
+
+    #endregion
+
     #region draw
 
     /// <summary>

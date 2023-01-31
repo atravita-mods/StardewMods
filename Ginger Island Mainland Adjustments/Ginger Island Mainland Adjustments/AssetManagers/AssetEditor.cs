@@ -50,6 +50,9 @@ internal static class AssetEditor
     // This currently isn't used for anything.
     private static IAssetName dataEventsTrailerBig = null!;
 
+    // Make sure Sandy has her usual spring schedule!
+    private static IAssetName sandySchedule = null!;
+
     /// <summary>
     /// Initializes the AssetEditor.
     /// </summary>
@@ -70,6 +73,9 @@ internal static class AssetEditor
         dataEventsSeedshop = parser.ParseAssetName("Data/Events/SeedShop");
         dataMail = parser.ParseAssetName("Data/mail");
         dataEventsTrailerBig = parser.ParseAssetName("Data/Events/Trailer_Big");
+
+        // schedule
+        sandySchedule = parser.ParseAssetName("Characters/schedules/Sandy");
     }
 
     /// <summary>
@@ -93,6 +99,10 @@ internal static class AssetEditor
         else if (!HasSeenNineHeart.Value.GetValue() && e.NameWithoutLocale.IsEquivalentTo(dataEventsTrailerBig))
         {
             e.Edit(EditTrailerBig, AssetEditPriority.Late);
+        }
+        else if (e.NameWithoutLocale.IsEquivalentTo(sandySchedule))
+        {
+            e.Edit(EditSandySchedule, AssetEditPriority.Late + 100);
         }
         else if (e.NameWithoutLocale.BaseName.StartsWith(Dialogue)
             && Game1.getLocationFromName("IslandSouth") is IslandSouth island && island.resortRestored.Value)
@@ -118,6 +128,15 @@ internal static class AssetEditor
                 e.Edit(EditWizardDialogue, AssetEditPriority.Early);
             }
         }
+    }
+
+    // create a new instance of new LocalizedContentManager(...) and use that to get the original schedules?
+
+    private static void EditSandySchedule(IAssetData e)
+    {
+        // SVE removes Sandy's spring schedule for some reason, this can cause issues if she goes to the resort.
+        var editor = e.AsDictionary<string, string>();
+        editor.Data.TryAdd("spring", "630 SandyHouse 2 5 2");
     }
 
     private static void EditGeorgeDialogue(IAssetData e)

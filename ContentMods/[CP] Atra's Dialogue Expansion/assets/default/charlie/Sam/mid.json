@@ -1,2 +1,10 @@
 {"Changes":[
+    {
+        "LogName": "Sam, mid hearts",
+        "Action": "EditData",
+        "Target": "Characters/Dialogue/Sam",
+        "Entries":{
+            "1{{YearRemainder}}": "Ugh, it's laundry day again. I wish I didn't have to do the laundry.$s"
+        }
+    },
 ]}

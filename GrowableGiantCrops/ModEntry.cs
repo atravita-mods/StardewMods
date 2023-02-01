@@ -72,7 +72,7 @@ internal sealed class ModEntry : Mod
         AssetManager.Initialize(helper.GameContent);
         AssetCache.Initialize(helper.GameContent);
 
-        //ShopManager.Initialize(helper.GameContent);
+        ShopManager.Initialize(helper.GameContent);
 
         // assets
         this.Helper.Events.Content.AssetRequested += static (_, e) => AssetManager.OnAssetRequested(e);
@@ -116,10 +116,10 @@ internal sealed class ModEntry : Mod
             .AddParagraph(I18n.ModDescription)
             .GenerateDefaultGMCM(static () => Config)
             .AddTextOption(
-                name: I18n.ShopLocation,
-                getValue: static () => Config.ShopLocation.X + ", " + Config.ShopLocation.Y,
-                setValue: static (str) => Config.ShopLocation = str.TryParseVector2(out Vector2 vec) ? vec : new Vector2(1, 7),
-                tooltip: I18n.ShopLocation_Description);
+                name: I18n.GiantCropShopLocation_Title,
+                getValue: static () => Config.GiantCropShopLocation.X + ", " + Config.GiantCropShopLocation.Y,
+                setValue: static (str) => Config.GiantCropShopLocation = str.TryParseVector2(out Vector2 vec) ? vec : new Vector2(1, 7),
+                tooltip: I18n.GiantCropShopLocation_Description);
         }
 
         // optional APIs

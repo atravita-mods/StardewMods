@@ -1,0 +1,13 @@
+{"Changes":[
+    {
+        "Action": "EditData",
+        "LogName": "Kent mid-hearts",
+        "Target": "Characters/Dialogue/Kent",
+        "Entries": {
+            "2{{YearRemainder}}": "I feel like I'm stuck in place, never really getting better, never really getting worse.$s"
+        },
+        "When": {
+            "YearModulus": "1"
+        }
+    }
+]}

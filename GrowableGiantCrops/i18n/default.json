@@ -6,9 +6,13 @@
   "api-too-old": "Please update {{apiName}}({{APIID}}) to at least version {{minversion}}. Current version {{currentversion}}. Integration disabled.",
 
   // GMCM
-  "ShopLocation": "Shop Location",
-  "ShopLocation.description": "The location of the bush shop in the Witch's place.",
-  "ShouldNPCsTrampleGiantCrops.title": "Should NPCs Trample Giant Crops.",
+  "GiantCropShopLocation.title": "Giant Crop Shop Location",
+  "GiantCropShopLocation.description": "The location of the giant crop shop in the Witch's place.",
+  "ResourceShopLocation.title": "Resource Shop Location",
+  "ResourceShopLocation.description": "The location of the resource shop in Robin's.",
+  "ShouldNPCsTrampleResourcesClumps.title": "NPCs Trample Resources",
+  "ShouldNPCsTrampleResourcesClumps.description": "If enabled, will allow NPCs to remove resource clumps in their path",
+  "ShouldNPCsTrampleGiantCrops.title": "NPCs Trample Giant Crops.",
   "ShouldNPCsTrampleGiantCrops.description": "If enabled, will allow NPCs to remove giant crops in their path.",
   "RelaxedPlacement.title": "Relaxed Placement",
   "RelaxedPlacement.description": "If enabled, placement rules will be relaxed.",

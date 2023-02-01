@@ -13,7 +13,6 @@ using Microsoft.Xna.Framework.Graphics;
 
 using Netcode;
 
-using StardewValley.Locations;
 using StardewValley.TerrainFeatures;
 
 namespace GrowableGiantCrops.Framework;
@@ -182,6 +181,14 @@ public sealed class InventoryGiantCrop : SObject
     public override bool placementAction(GameLocation location, int x, int y, Farmer? who = null)
         => this.PlaceGiantCrop(location, x, y, ModEntry.Config.RelaxedPlacement);
 
+    /// <summary>
+    /// Places a giant crop at this pixel location.
+    /// </summary>
+    /// <param name="location">Location to place at.</param>
+    /// <param name="x">pixel x.</param>
+    /// <param name="y">pixel y.</param>
+    /// <param name="relaxed">whether or not to use relaxed placement rules.</param>
+    /// <returns>True if placed, false otherwise.</returns>
     internal bool PlaceGiantCrop(GameLocation location, int x, int y, bool relaxed)
     {
         this.PopulateTileSize();

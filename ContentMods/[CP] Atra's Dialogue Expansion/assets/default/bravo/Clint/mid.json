@@ -9,6 +9,16 @@
         }
     },
     {
+        "Action": "EditData",
+        "Target": "Characters/Dialogue/Clint",
+        "Entries": {
+            "Town4": "Gonna be honest, @, I never understood why you'd move to a town like this anyways...#$b#But I guess this is a good place to start a family..."
+        },
+        "When": {
+            "HavingChild": "@{{playerName}}"
+        }
+    },
+    {
         "LogName": "Clint mid-hearts",
         "Action": "EditData",
         "Target": "Characters/Dialogue/Clint",

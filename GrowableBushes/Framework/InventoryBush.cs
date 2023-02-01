@@ -203,8 +203,7 @@ public sealed class InventoryBush : SObject
     {
         if (this.sourceRect == default)
         {
-            int season = GetSeason(Game1.currentLocation);
-            this.sourceRect = this.GetSourceRectForSeason(season);
+            this.sourceRect = this.GetSourceRectForSeason(GetSeason(Game1.currentLocation));
         }
 
         if (this.sourceRect != default)
@@ -265,8 +264,7 @@ public sealed class InventoryBush : SObject
     {
         if (this.sourceRect == default)
         {
-            int season = GetSeason(Game1.currentLocation);
-            this.sourceRect = this.GetSourceRectForSeason(season);
+            this.sourceRect = this.GetSourceRectForSeason(GetSeason(Game1.currentLocation));
         }
 
         if (this.sourceRect != default)
@@ -300,8 +298,7 @@ public sealed class InventoryBush : SObject
     {
         if (this.sourceRect == default)
         {
-            int season = GetSeason(f.currentLocation);
-            this.sourceRect = this.GetSourceRectForSeason(season);
+            this.sourceRect = this.GetSourceRectForSeason(GetSeason(f.currentLocation));
         }
         if (this.sourceRect != default)
         {

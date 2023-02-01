@@ -1,4 +1,5 @@
 {"Changes": [
+    // TODO: generic spouse anniversary dialogue.
     {
         "LogName": "Demetrius - base",
         "Action": "EditData",

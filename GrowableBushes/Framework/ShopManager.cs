@@ -26,10 +26,10 @@ internal static class ShopManager
     private const string BUILDING = "Buildings";
     private const string SHOPNAME = "atravita.BushShop";
 
+    private static readonly TickCache<bool> IslandUnlocked = new(() => FarmerHelpers.HasAnyFarmerRecievedFlag("seenBoatJourney"));
+
     private static IAssetName sunHouse = null!;
     private static IAssetName mail = null!;
-
-    private static TickCache<bool> islandUnlocked = new(() => FarmerHelpers.HasAnyFarmerRecievedFlag("seenBoatJourney"));
 
     /// <summary>
     /// Initializes asset names.
@@ -131,8 +131,6 @@ internal static class ShopManager
 
     private static void PopulateSellablesWithBushes(this Dictionary<ISalable, int[]> sellables)
     {
-        sellables ??= new();
-
         foreach (BushSizes bushIndex in BushSizesExtensions.GetValues())
         {
             int[] sellData;
@@ -142,13 +140,13 @@ internal static class ShopManager
             }
             else if (bushIndex is BushSizes.Walnut or BushSizes.Harvested)
             {
-                if (!islandUnlocked.GetValue())
+                if (IslandUnlocked.GetValue())
                 {
-                    continue;
+                    sellData = new[] { 750, ShopMenu.infiniteStock };
                 }
                 else
                 {
-                    sellData = new[] { 750, ShopMenu.infiniteStock };
+                    continue;
                 }
             }
             else if (bushIndex is BushSizes.Medium)

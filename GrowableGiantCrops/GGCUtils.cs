@@ -1,4 +1,8 @@
-﻿using Microsoft.Xna.Framework;
+﻿using System.Runtime.CompilerServices;
+
+using AtraBase.Toolkit;
+
+using Microsoft.Xna.Framework;
 
 using StardewValley.Buildings;
 using StardewValley.Locations;
@@ -15,10 +19,11 @@ internal static class GGCUtils
     /// Checks to see if I can stick a resource clump at a specific tile.
     /// </summary>
     /// <param name="location">Game location to check.</param>
-    /// <param name="tileX">x coord of tile.</param>
-    /// <param name="tileY">y coord of tile.</param>
+    /// <param name="tileX">x coordinate of tile.</param>
+    /// <param name="tileY">y coordinate of tile.</param>
     /// <param name="relaxed">whether or not to use relaxed placement rules.</param>
     /// <returns>True if placeable, false otherwise.</returns>
+    [MethodImpl(TKConstants.Hot)]
     internal static bool IsTilePlaceableForResourceClump(GameLocation location, int tileX, int tileY, bool relaxed)
     {
         if (location is null || location.doesTileHaveProperty(tileX, tileY, "Water", "Back") is not null)

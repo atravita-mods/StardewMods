@@ -4,6 +4,8 @@ using AtraBase.Toolkit.Reflection;
 
 using AtraCore.Framework.ReflectionManager;
 
+using AtraShared.Utils.Extensions;
+
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
@@ -24,6 +26,8 @@ public sealed class InventoryResourceClump : SObject
     private Rectangle sourceRect = default;
 
     internal const string ResourcePrefix = "atravita.ResourceClump.";
+
+    internal const string ResourceModdata = $"{ResourcePrefix}Type";
 
     /// <summary>
     /// Numeric category ID used to identify JA/vanilla giant crops.
@@ -149,6 +153,7 @@ public sealed class InventoryResourceClump : SObject
         // edge, so just subtract here.
         placementTile.Y -= 1;
         ResourceClump clump = new(this.ParentSheetIndex, 2, 2, placementTile);
+        clump.modData.SetEnum(ResourceModdata, size);
         location.resourceClumps.Add(clump);
         location.playSound("thudStep");
         ShakeResourceClump(clump);
@@ -276,7 +281,7 @@ public sealed class InventoryResourceClump : SObject
         {
             int xOffset = (this.sourceRect.Width - 16) * 2;
             objectPosition.X -= xOffset;
-            int yOffset = Math.Max(this.sourceRect.Height * 4 - 64, 0);
+            int yOffset = Math.Max((this.sourceRect.Height * 4) - 64, 0);
             objectPosition.Y -= yOffset;
             spriteBatch.Draw(
                 texture: Game1.objectSpriteSheet,
@@ -366,6 +371,12 @@ public sealed class InventoryResourceClump : SObject
     #endregion
 
     #region helpers
+
+    internal static ResourceClumpIndexes GetMatchingClumpIndex(ResourceClump clump)
+    {
+        var idx = (ResourceClumpIndexes)clump.parentSheetIndex.Value;
+        return ResourceClumpIndexesExtensions.IsDefined(idx) ? idx : ResourceClumpIndexes.Invalid;
+    }
 
     private static Rectangle GetSourceRect(int idx)
     {

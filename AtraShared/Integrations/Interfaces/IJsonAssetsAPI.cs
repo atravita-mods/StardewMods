@@ -111,4 +111,11 @@ public interface IJsonAssetsAPI
     /// </summary>
     /// <returns></returns>
     int[] GetGiantCropIndexes();
+
+    /// <summary>
+    /// Fixes the ids in an item.
+    /// </summary>
+    /// <param name="item">Item to fix.</param>
+    /// <returns>True if the item is to be removed, false otherwise.</returns>
+    bool FixIdsInItem(Item item);
 }

@@ -438,6 +438,16 @@ public sealed class InventoryGiantCrop : SObject
         }
     }
 
+    /// <summary>
+    /// Resets the draw fields so they're calculated the next time the giant crop is drawn.
+    /// </summary>
+    internal void ResetDrawFields()
+    {
+        this.holder = null;
+        this.sourceRect = default;
+        this.tileSize = default;
+    }
+
     #endregion
 
     #region misc
@@ -508,7 +518,6 @@ public sealed class InventoryGiantCrop : SObject
     #endregion
 
     #region helpers
-
     internal static bool IsValidGiantCropIndex(int idx)
     {
         switch (idx)
@@ -534,7 +543,6 @@ public sealed class InventoryGiantCrop : SObject
             276 => GiantCrop.pumpkin,
             _ => productIndex,
         };
-
     #endregion
 
 }

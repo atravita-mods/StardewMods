@@ -7,6 +7,7 @@ using AtraShared.MigrationManager;
 using AtraShared.Utils.Extensions;
 
 using GrowableGiantCrops.Framework;
+using GrowableGiantCrops.HarmonyPatches.ItemPatches;
 using GrowableGiantCrops.HarmonyPatches.Niceties;
 
 using HarmonyLib;
@@ -116,9 +117,14 @@ internal sealed class ModEntry : Mod
             .AddParagraph(I18n.ModDescription)
             .GenerateDefaultGMCM(static () => Config)
             .AddTextOption(
+                name: I18n.ResourceShopLocation_Title,
+                getValue: static () => Config.ResourceShopLocation.X + ", " + Config.ResourceShopLocation.Y,
+                setValue: static (str) => Config.ResourceShopLocation = str.TryParseVector2(out Vector2 vec) ? vec : new Vector2(6, 19),
+                tooltip: I18n.ResourceShopLocation_Description)
+            .AddTextOption(
                 name: I18n.GiantCropShopLocation_Title,
                 getValue: static () => Config.GiantCropShopLocation.X + ", " + Config.GiantCropShopLocation.Y,
-                setValue: static (str) => Config.GiantCropShopLocation = str.TryParseVector2(out Vector2 vec) ? vec : new Vector2(1, 7),
+                setValue: static (str) => Config.GiantCropShopLocation = str.TryParseVector2(out Vector2 vec) ? vec : new Vector2(8, 14),
                 tooltip: I18n.GiantCropShopLocation_Description);
         }
 
@@ -151,6 +157,12 @@ internal sealed class ModEntry : Mod
         try
         {
             harmony.PatchAll(typeof(ModEntry).Assembly);
+
+            if (this.Helper.ModRegistry.IsLoaded("spacechase0.JsonAssets"))
+            {
+                this.Monitor.Log("Applying deshuffle patch");
+                DeshufflePatch.ApplyPatch(harmony);
+            }
 
             if (new Version(1, 6) > new Version(Game1.version) &&
                 (this.Helper.ModRegistry.Get("atravita.GiantCropFertilizer") is not IModInfo fert || fert.Manifest.Version.IsOlderThan("0.2.2")) &&

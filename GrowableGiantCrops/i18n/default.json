@@ -19,6 +19,9 @@
   "ShovelEnergy.title": "Shovel Energy",
   "ShovelEnergy.description": "How much stamina should each use of the shovel take.",
 
+  // Stores
+  "ShopMessage.Robin": "Whatcha lookin' for?",
+
   // Items
   "Shovel.Name": "Shovel",
   "Shovel.Description": "An old, beat up shovel.",

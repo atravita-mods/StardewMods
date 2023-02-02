@@ -2,6 +2,8 @@
 
 using AtraShared.ConstantsAndEnums;
 
+using Microsoft.Xna.Framework.Graphics;
+
 namespace GrowableGiantCrops.Framework;
 
 /// <summary>
@@ -24,9 +26,9 @@ internal static class ConsoleCommands
 
     private static void AddGiant(string commands, string[] args)
     {
-        if (args.Length < 1 && args.Length > 3)
+        if (args.Length < 1 || args.Length > 3)
         {
-            ModEntry.ModMonitor.Log("Expected one or two arguments", LogLevel.Error);
+            ModEntry.ModMonitor.Log("Expected at least one argument", LogLevel.Error);
             return;
         }
 
@@ -49,7 +51,7 @@ internal static class ConsoleCommands
         }
 
         InventoryGiantCrop item;
-        if (args.Length == 3 && ModEntry.GiantCropTweaksAPI?.TryGetTexture(args[2], out var _) == true)
+        if (args.Length == 3 && ModEntry.GiantCropTweaksAPI?.TryGetTexture(args[2], out Texture2D? _) == true)
         {
             ModEntry.ModMonitor.Log($"Spawning with GiantCropTweaks id {args[2]}");
             item = new(args[2], productID, count);

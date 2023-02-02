@@ -4,7 +4,17 @@
         "Action": "EditData",
         "Target": "Characters/Dialogue/Sam",
         "Entries":{
-            "1{{YearRemainder}}": "Ugh, it's laundry day again. I wish I didn't have to do the laundry.$s"
+            "1{{YearRemainder}}": "Ugh, it's laundry day again. I wish I didn't have to do the laundry.$s",
+            "7{{YearRemainder}}": "Just wanna go skateboarding today...not sure I have the time for it though."
         }
     },
+    {
+        "LogName": "Rain -- during winter.",
+        "Action": "EditData",
+        "Target": "Characters/Dialogue/rainy",
+        "When": {"Season": "winter"},
+        "Entries":{
+            "Sam": "Ugh, the weather is absolutely miserable today.$s"
+        }
+    }
 ]}

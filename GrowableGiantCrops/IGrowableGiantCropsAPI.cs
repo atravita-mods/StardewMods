@@ -4,6 +4,8 @@ namespace GrowableGiantCrops;
 public interface IGrowableGiantCropsAPI
 {
     public bool IsShovel(Tool tool);
+
+    public SObject GetResourceClump(ResourceClumpIndexes idx);
 }
 
 [EnumExtensions]

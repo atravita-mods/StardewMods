@@ -168,6 +168,7 @@ internal static class ShopManager
 
     private static WeightedManager<int> GetWeightedManager()
     {
-
+        WeightedManager<int> manager = new();
+        return manager;
     }
 }

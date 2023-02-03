@@ -25,27 +25,52 @@ public sealed class GrowableBushesAPI : IGrowableBushesAPI
     /// <inheritdoc />
     public BushSizes CanPickUpBush(GameLocation loc, Vector2 tile, bool placedOnly = false)
     {
+        if (loc.largeTerrainFeatures is null)
+        {
+            return BushSizes.Invalid;
+        }
+
         LargeTerrainFeature? feat = loc.getLargeTerrainFeatureAt((int)tile.X, (int)tile.Y);
         if (feat is Bush bush)
         {
-            BushSizes metaData = bush.modData.GetEnum(InventoryBush.BushModData, BushSizes.Invalid);
-
-            if (placedOnly)
-            {
-                return metaData;
-            }
-
-            BushSizes size = bush.ToBushSize();
-            return size == BushSizes.Walnut ? BushSizes.Invalid : size;
+            return this.CanPickUpBush(bush, placedOnly);
         }
         return BushSizes.Invalid;
+    }
+
+    public BushSizes CanPickUpBush(Bush bush, bool placedOnly = false)
+    {
+        BushSizes metaData = bush.modData.GetEnum(InventoryBush.BushModData, BushSizes.Invalid);
+
+        if (placedOnly)
+        {
+            return metaData;
+        }
+
+        BushSizes size = bush.ToBushSize();
+        return size == BushSizes.Walnut ? BushSizes.Invalid : size;
     }
 
     /// <inheritdoc />
     public SObject? TryPickUpBush(GameLocation loc, Vector2 tile, bool placedOnly = false)
     {
-        BushSizes size = this.CanPickUpBush(loc, tile, placedOnly);
-        return size == BushSizes.Invalid ? null : new InventoryBush(size, 1);
+        if (loc.largeTerrainFeatures is not null)
+        {
+            Rectangle tileRect = new((int)tile.X * 64, (int)tile.Y * 64, 64, 64);
+            for (int i = loc.largeTerrainFeatures.Count - 1; i >= 0; i--)
+            {
+                if (loc.largeTerrainFeatures[i] is Bush bush && bush.getBoundingBox().Intersects(tileRect))
+                {
+                    var size = this.CanPickUpBush(bush, placedOnly);
+                    if (size != BushSizes.Invalid)
+                    {
+                        loc.largeTerrainFeatures.RemoveAt(i);
+                        return (InventoryBush?)new InventoryBush(size, 1);
+                    }
+                }
+            }
+        }
+        return null;
     }
 
     /// <inheritdoc />

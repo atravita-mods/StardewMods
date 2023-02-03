@@ -1,8 +1,12 @@
 ﻿using System.Xml.Serialization;
 
+using AtraShared.Utils.Extensions;
+
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
+using StardewValley;
+using StardewValley.TerrainFeatures;
 using StardewValley.Tools;
 
 namespace GrowableGiantCrops.Framework;
@@ -78,13 +82,81 @@ public sealed class ShovelTool : GenericTool
         }
     }
 
+    /// <summary>
+    /// Does the actual tool function.
+    /// </summary>
+    /// <param name="location">The game location.</param>
+    /// <param name="x">pixel x.</param>
+    /// <param name="y">pixel y.</param>
+    /// <param name="power">The power level of the tool</param>
+    /// <param name="who">Last farmer to use.</param>
     public override void DoFunction(GameLocation location, int x, int y, int power, Farmer who)
     {
         base.DoFunction(location, x, y, power, who);
         who.Stamina -= ModEntry.Config.ShovelEnergy;
-        if (location.performToolAction(this, x / 64, y / 64))
+
+        Vector2 pickupTile = new Vector2(x / 64, y / 64);
+        if (ModEntry.GrowableBushesAPI?.TryPickUpBush(location, pickupTile) is SObject bush)
         {
+            ModEntry.ModMonitor.DebugOnlyLog($"Picking up bush {bush.Name}", LogLevel.Info);
+            if (!who.addItemToInventoryBool(bush))
+            {
+                location.debris.Add(new Debris(bush, who.Position));
+            }
             return;
+        }
+
+        for (int i = location.resourceClumps.Count - 1; i >= 0; i--)
+        {
+            var clump = location.resourceClumps[i];
+            if (clump is null || !clump.getBoundingBox(clump.tile.Value).Contains(x,y))
+            {
+                continue;
+            }
+            SObject? item = null;
+            switch (clump)
+            {
+                case GiantCrop giant:
+                {
+                    InventoryGiantCrop? inventoryGiantCrop = null;
+                    if (giant.modData.TryGetValue(InventoryGiantCrop.GiantCropTweaksModDataKey, out var stringID)
+                        && ModEntry.GiantCropTweaksAPI?.GiantCrops.ContainsKey(stringID) == true)
+                    {
+                        inventoryGiantCrop = new InventoryGiantCrop(stringID, giant.parentSheetIndex.Value, 1);
+                    }
+                    else if (InventoryGiantCrop.IsValidGiantCropIndex(giant.parentSheetIndex.Value))
+                    {
+                        inventoryGiantCrop = new InventoryGiantCrop(giant.parentSheetIndex.Value, 1);
+                    }
+
+                    item = inventoryGiantCrop;
+                    if (inventoryGiantCrop is not null)
+                    {
+                        AddAnimations(location, pickupTile, inventoryGiantCrop.TexturePath, inventoryGiantCrop.SourceRect, inventoryGiantCrop.TileSize);
+                    }
+                    break;
+                }
+                case ResourceClump resource:
+                    ResourceClumpIndexes idx = (ResourceClumpIndexes)resource.parentSheetIndex.Value;
+                    if (idx != ResourceClumpIndexes.Invalid && ResourceClumpIndexesExtensions.IsDefined(idx))
+                    {
+                        InventoryResourceClump inventoryResourceClump = new(idx, 1);
+                        item = inventoryResourceClump;
+                        AddAnimations(location, pickupTile, Game1.objectSpriteSheetName, inventoryResourceClump.SourceRect, new Point(2, 2));
+                    }
+                    break;
+            }
+
+            if (item is not null)
+            {
+                ModEntry.ModMonitor.DebugOnlyLog($"Picking up {item.Name}", LogLevel.Info);
+                if (!who.addItemToInventoryBool(item))
+                {
+                    location.debris.Add(new Debris(item, who.Position));
+                }
+                location.resourceClumps.RemoveAt(i);
+                break;
+            }
         }
     }
 
@@ -145,6 +217,17 @@ public sealed class ShovelTool : GenericTool
     /// <inheritdoc />
     /// <remarks>forbid attachments.</remarks>
     public override SObject attach(SObject o) => o;
+
+    #endregion
+
+    #region helpers
+    internal static void AddAnimations(GameLocation loc, Vector2 tile, string? texturePath, Rectangle sourceRect, Point tileSize)
+    {
+        if (texturePath is null)
+        {
+            return;
+        }
+    }
 
     #endregion
 }

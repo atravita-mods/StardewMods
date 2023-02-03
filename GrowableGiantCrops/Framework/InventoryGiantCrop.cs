@@ -127,6 +127,51 @@ public sealed class InventoryGiantCrop : SObject
         .GetInstanceFieldSetter<GiantCrop, float>();
 
     /// <summary>
+    /// Gets a texture path of this giant crop.
+    /// </summary>
+    [XmlIgnore]
+    internal string TexturePath
+    {
+        get
+        {
+            if (this.sourceRect == default || this.holder is null)
+            {
+                this.PopulateTexture();
+            }
+            return this.holder?.TextureName ?? (AssetManager.GiantCropPrefix + this.ParentSheetIndex);
+        }
+    }
+
+    /// <summary>
+    /// Gets the source rect to draw for this giant crop.
+    /// </summary>
+    [XmlIgnore]
+    internal Rectangle SourceRect
+    {
+        get
+        {
+            if (this.sourceRect == default || this.holder is null)
+            {
+                this.PopulateTexture();
+            }
+            return this.sourceRect;
+        }
+    }
+
+    /// <summary>
+    /// Gets the tile size of this giant crop.
+    /// </summary>
+    [XmlIgnore]
+    internal Point TileSize
+    {
+        get
+        {
+            this.PopulateTileSize();
+            return this.tileSize;
+        }
+    }
+
+    /// <summary>
     /// A method to shake a giant crop.
     /// </summary>
     /// <param name="crop">The giant crop to shake.</param>

@@ -35,6 +35,22 @@ public sealed class InventoryResourceClump : SObject
     internal const int ResourceClump = -15576655; // set a large random negative number
 
     /// <summary>
+    /// Gets the source rectangle to draw (from Maps/SpringObjects).
+    /// </summary>
+    [XmlIgnore]
+    internal Rectangle SourceRect
+    {
+        get
+        {
+            if (this.sourceRect == default)
+            {
+                this.sourceRect = GetSourceRect(this.ParentSheetIndex);
+            }
+            return this.sourceRect;
+        }
+    }
+
+    /// <summary>
     /// Initializes a new instance of the <see cref="InventoryResourceClump"/> class.
     /// This constructor is for the serializer. Do not use it.
     /// </summary>

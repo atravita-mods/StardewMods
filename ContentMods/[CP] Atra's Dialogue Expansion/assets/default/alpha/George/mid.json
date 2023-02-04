@@ -9,6 +9,16 @@
         }
     },
     {
+        "LogName": "George mid-hearts - post sports",
+        "Action": "EditData",
+        "Target": "Characters/Dialogue/George",
+        "When": {"HasFlag": "saloonSportsRoom"},
+        "Entries": {
+            "Sun6": "@, you gonna watch the game? The {{i18n:sports.team.{{Random:01, 02, 03, 04, 05, 06, 07, 08|key=sports_team}} }} are playing the {{i18n:sports.team.{{Random:02, 03, 04, 05, 06, 07, 08, 01|key=sports_team}} }}!",
+            "Mon6": "Hey, @, did you catch the game last night? Wasn't it {{Random:great, incredible, absurd, so boring}}?" 
+        }
+    },
+    {
         "LogName": "George mid-hearts",
         "Action": "EditData",
         "Target": "Characters/Dialogue/George",
@@ -21,9 +31,20 @@
         "LogName": "George mid-hearts - Y2",
         "Action": "EditData",
         "Target":"Characters/Dialogue/George",
+        "When": {"YearRemainder": 2},
         "Entries": {
             "1_2": "Evelyn and I've been living in this here valley for a very long time, @. My family's been living here for as long as we can remember.$h#$b#Ain't no place like our dear Pelican Town.",
             "3_2": "Pelican Town used to be so much bigger, back when the mines were still active.#$b#Now? I don't know how the younguns' are gonna find jobs around these parts."
         }
-    }, // Y3, Y4 strike and strike break?
+    },
+    // Y3, Y4 strike and strike break?
+    {
+        "LogName": "George mid-hearts - Y3",
+        "Action": "EditData",
+        "Target":"Characters/Dialogue/George",
+        "When": {"YearRemainder": 3},
+        "Entries": {
+            "1_2": "@, this year's cost-of-living adjustment for my pension isn't keeping up with inflation at all.#$b#Guess Evelyn and I will have to scrimp and save more than usual..."
+        }
+    }
 ]}

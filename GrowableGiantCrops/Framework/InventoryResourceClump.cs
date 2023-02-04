@@ -9,8 +9,6 @@ using AtraShared.Utils.Extensions;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-using StardewValley.Buildings;
-using StardewValley.Locations;
 using StardewValley.TerrainFeatures;
 
 namespace GrowableGiantCrops.Framework;
@@ -25,14 +23,53 @@ public sealed class InventoryResourceClump : SObject
     [XmlIgnore]
     private Rectangle sourceRect = default;
 
+    /// <summary>
+    /// A prefix to the name of inventory resource clumps.
+    /// </summary>
     internal const string ResourcePrefix = "atravita.ResourceClump.";
 
+    /// <summary>
+    /// The moddata string used to identify placed inventory resource clumps.
+    /// </summary>
     internal const string ResourceModdata = $"{ResourcePrefix}Type";
 
     /// <summary>
     /// Numeric category ID used to identify JA/vanilla giant crops.
     /// </summary>
     internal const int ResourceClump = -15576655; // set a large random negative number
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="InventoryResourceClump"/> class.
+    /// This constructor is for the serializer. Do not use it.
+    /// </summary>
+    public InventoryResourceClump()
+        : base()
+    {
+        this.Edibility = inedible;
+        this.Price = 0;
+        this.Category = ResourceClump;
+    }
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="InventoryResourceClump"/> class.
+    /// </summary>
+    /// <param name="idx">the resource clump index.</param>
+    /// <param name="initialStack">the initial stack size.</param>
+    public InventoryResourceClump(ResourceClumpIndexes idx, int initialStack)
+        : base((int)idx, initialStack, false, -1, 0)
+    {
+        if (!ResourceClumpIndexesExtensions.IsDefined(idx))
+        {
+            ModEntry.ModMonitor.Log($"Resource clump {idx.ToStringFast()} doesn't seem to be a valid resource clump. Setting to stump.", LogLevel.Error);
+            this.ParentSheetIndex = (int)ResourceClumpIndexes.Stump;
+        }
+
+        this.CanBeSetDown = true;
+        this.Name = ResourcePrefix + ((ResourceClumpIndexes)this.ParentSheetIndex).ToStringFast();
+        this.Edibility = inedible;
+        this.Price = 0;
+        this.Category = ResourceClump;
+    }
 
     /// <summary>
     /// Gets the source rectangle to draw (from Maps/SpringObjects).
@@ -48,34 +85,6 @@ public sealed class InventoryResourceClump : SObject
             }
             return this.sourceRect;
         }
-    }
-
-    /// <summary>
-    /// Initializes a new instance of the <see cref="InventoryResourceClump"/> class.
-    /// This constructor is for the serializer. Do not use it.
-    /// </summary>
-    public InventoryResourceClump()
-        : base()
-    {
-        this.Edibility = inedible;
-        this.Price = 0;
-        this.Category = ResourceClump;
-    }
-
-    public InventoryResourceClump(ResourceClumpIndexes idx, int initialStack)
-        : base((int)idx, initialStack, false, -1, 0)
-    {
-        if (!ResourceClumpIndexesExtensions.IsDefined(idx))
-        {
-            ModEntry.ModMonitor.Log($"Resource clump {idx.ToStringFast()} doesn't seem to be a valid resource clump. Setting to stump.", LogLevel.Error);
-            this.ParentSheetIndex = (int)ResourceClumpIndexes.Stump;
-        }
-
-        this.CanBeSetDown = true;
-        this.Name = ResourcePrefix + ((ResourceClumpIndexes)this.ParentSheetIndex).ToStringFast();
-        this.Edibility = inedible;
-        this.Price = 0;
-        this.Category = ResourceClump;
     }
 
     #region reflection
@@ -317,6 +326,8 @@ public sealed class InventoryResourceClump : SObject
     #endregion
 
     #region misc
+
+    /// <inheritdoc />
     public override Item getOne()
     {
         InventoryResourceClump clump = new((ResourceClumpIndexes)this.ParentSheetIndex, 1);
@@ -384,16 +395,31 @@ public sealed class InventoryResourceClump : SObject
                 _ => I18n.ResourceClumpInvalid_Description(),
             };
 
+    /// <inheritdoc />
+    protected override void _PopulateContextTags(HashSet<string> tags)
+    {
+        tags.Add("category_inventory_resource_clump");
+        tags.Add($"id_inventoryResourceClump_{this.ParentSheetIndex}");
+        tags.Add("quality_none");
+        tags.Add("item_" + this.SanitizeContextTag(this.Name));
+    }
+
     #endregion
 
     #region helpers
 
+    /// <summary>
+    /// Gets the index associated with a specific clump.
+    /// </summary>
+    /// <param name="clump">Clump to get the index for.</param>
+    /// <returns><see cref="ResourceClumpIndexes"/>, or <see cref="ResourceClumpIndexes.Invalid"/> if it could not be matched up.</returns>
     internal static ResourceClumpIndexes GetMatchingClumpIndex(ResourceClump clump)
     {
-        var idx = (ResourceClumpIndexes)clump.parentSheetIndex.Value;
+        ResourceClumpIndexes idx = (ResourceClumpIndexes)clump.parentSheetIndex.Value;
         return ResourceClumpIndexesExtensions.IsDefined(idx) ? idx : ResourceClumpIndexes.Invalid;
     }
 
+    // derived from ResourceClump.draw
     private static Rectangle GetSourceRect(int idx)
     {
         Rectangle sourceRect = Game1.getSourceRectForStandardTileSheet(Game1.objectSpriteSheet, idx, 16, 16);

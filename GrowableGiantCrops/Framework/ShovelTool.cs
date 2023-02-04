@@ -1,5 +1,7 @@
 ﻿using System.Xml.Serialization;
 
+using AtraCore.Utilities;
+
 using AtraShared.Utils.Extensions;
 
 using Microsoft.Xna.Framework;
@@ -93,9 +95,8 @@ public sealed class ShovelTool : GenericTool
     public override void DoFunction(GameLocation location, int x, int y, int power, Farmer who)
     {
         base.DoFunction(location, x, y, power, who);
-        who.Stamina -= ModEntry.Config.ShovelEnergy;
 
-        Vector2 pickupTile = new Vector2(x / 64, y / 64);
+        Vector2 pickupTile = new(x / 64, y / 64);
         if (ModEntry.GrowableBushesAPI?.TryPickUpBush(location, pickupTile) is SObject bush)
         {
             ModEntry.ModMonitor.DebugOnlyLog($"Picking up bush {bush.Name}", LogLevel.Info);
@@ -103,12 +104,13 @@ public sealed class ShovelTool : GenericTool
             {
                 location.debris.Add(new Debris(bush, who.Position));
             }
+            who.Stamina -= ModEntry.Config.ShovelEnergy;
             return;
         }
 
         for (int i = location.resourceClumps.Count - 1; i >= 0; i--)
         {
-            var clump = location.resourceClumps[i];
+            ResourceClump? clump = location.resourceClumps[i];
             if (clump is null || !clump.getBoundingBox(clump.tile.Value).Contains(x,y))
             {
                 continue;
@@ -119,7 +121,7 @@ public sealed class ShovelTool : GenericTool
                 case GiantCrop giant:
                 {
                     InventoryGiantCrop? inventoryGiantCrop = null;
-                    if (giant.modData.TryGetValue(InventoryGiantCrop.GiantCropTweaksModDataKey, out var stringID)
+                    if (giant.modData.TryGetValue(InventoryGiantCrop.GiantCropTweaksModDataKey, out string? stringID)
                         && ModEntry.GiantCropTweaksAPI?.GiantCrops.ContainsKey(stringID) == true)
                     {
                         inventoryGiantCrop = new InventoryGiantCrop(stringID, giant.parentSheetIndex.Value, 1);
@@ -132,7 +134,7 @@ public sealed class ShovelTool : GenericTool
                     item = inventoryGiantCrop;
                     if (inventoryGiantCrop is not null)
                     {
-                        AddAnimations(location, pickupTile, inventoryGiantCrop.TexturePath, inventoryGiantCrop.SourceRect, inventoryGiantCrop.TileSize);
+                        AddAnimations(location, giant.tile.Value, inventoryGiantCrop.TexturePath, inventoryGiantCrop.SourceRect, inventoryGiantCrop.TileSize);
                     }
                     break;
                 }
@@ -142,7 +144,7 @@ public sealed class ShovelTool : GenericTool
                     {
                         InventoryResourceClump inventoryResourceClump = new(idx, 1);
                         item = inventoryResourceClump;
-                        AddAnimations(location, pickupTile, Game1.objectSpriteSheetName, inventoryResourceClump.SourceRect, new Point(2, 2));
+                        AddAnimations(location, resource.tile.Value, Game1.objectSpriteSheetName, inventoryResourceClump.SourceRect, new Point(2, 2));
                     }
                     break;
             }
@@ -154,6 +156,8 @@ public sealed class ShovelTool : GenericTool
                 {
                     location.debris.Add(new Debris(item, who.Position));
                 }
+                who.Stamina -= ModEntry.Config.ShovelEnergy;
+                location.resourceClumps[i].performToolAction(this, 0, pickupTile, location);
                 location.resourceClumps.RemoveAt(i);
                 break;
             }
@@ -227,6 +231,59 @@ public sealed class ShovelTool : GenericTool
         {
             return;
         }
+
+        Multiplayer mp = MultiplayerHelpers.GetMultiplayer();
+
+        float deltaY = -90;
+        const float gravity = 0.0025f;
+
+        float velocity = -0.7f - MathF.Sqrt(2 * 60f * gravity);
+        float time = (MathF.Sqrt((velocity * velocity) - (gravity * deltaY * 2f)) / gravity) - (velocity / gravity);
+
+        Vector2 landingPos = new Vector2(tile.X + (tileSize.X / 2f) - 1, tile.Y + tileSize.Y - 1) * 64f;
+
+        TemporaryAnimatedSprite objTas = new(
+            textureName: texturePath,
+            sourceRect: sourceRect,
+            position: tile * 64f,
+            flipped: false,
+            alphaFade: 0f,
+            color: Color.White)
+        {
+            totalNumberOfLoops = 1,
+            interval = time,
+            acceleration = new Vector2(0f, gravity),
+            motion = new Vector2(0f, velocity),
+            scale = Game1.pixelZoom,
+            timeBasedMotion = true,
+            rotation = 0.1f,
+            rotationChange = 0.1f,
+            scaleChange = -0.0015f,
+            layerDepth = (landingPos.Y + 32f) / 10000f,
+        };
+
+        TemporaryAnimatedSprite? dustTas = new(
+            textureName: Game1.mouseCursorsName,
+            sourceRect: new Rectangle(464, 1792, 16, 16),
+            animationInterval: 120f,
+            animationLength: 5,
+            numberOfLoops: 0,
+            position: landingPos,
+            flicker: false,
+            flipped: Game1.random.NextDouble() < 0.5,
+            layerDepth: (landingPos.Y + 40f) / 10000f,
+            alphaFade: 0.01f,
+            color: Color.White,
+            scale: Game1.pixelZoom,
+            scaleChange: 0.02f,
+            rotation: 0f,
+            rotationChange: 0f)
+        {
+            light = true,
+            delayBeforeAnimationStart = Math.Max((int)time - 10, 0),
+        };
+
+        mp.broadcastSprites(loc, objTas, dustTas);
     }
 
     #endregion

@@ -549,6 +549,15 @@ public sealed class InventoryGiantCrop : SObject
     /// <inheritdoc />
     public override string getDescription() => I18n.GiantCrop_Description(this.GetProductDisplayName());
 
+    /// <inheritdoc />
+    protected override void _PopulateContextTags(HashSet<string> tags)
+    {
+        tags.Add("category_inventory_giant_crop");
+        tags.Add($"id_inventoryGiantCrop_{this.ParentSheetIndex}");
+        tags.Add("quality_none");
+        tags.Add("item_" + this.SanitizeContextTag(this.Name));
+    }
+
     private string GetProductDisplayName()
     {
         if (Game1Wrappers.ObjectInfo.TryGetValue(this.ParentSheetIndex, out var data))

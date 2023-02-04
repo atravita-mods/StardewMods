@@ -1,6 +1,7 @@
 ﻿using System.Xml.Serialization;
 
 using AtraCore.Framework.ReflectionManager;
+using AtraCore.Utilities;
 
 using AtraShared.Utils.Extensions;
 
@@ -76,11 +77,11 @@ public sealed class InventoryBush : SObject
     /// Stardew's Bush::shake.
     /// </summary>
     [SuppressMessage("StyleCop.CSharp.OrderingRules", "SA1201:Elements should appear in the correct order", Justification = "Reflection delegate.")]
-    private static readonly BushShakeDel BushShakeMethod = typeof(Bush)
+    internal static readonly BushShakeDel BushShakeMethod = typeof(Bush)
         .GetCachedMethod("shake", ReflectionCache.FlagTypes.InstanceFlags)
         .CreateDelegate<BushShakeDel>();
 
-    private delegate void BushShakeDel(
+    internal delegate void BushShakeDel(
         Bush bush,
         Vector2 tileLocation,
         bool doEvenIfStillShaking);
@@ -451,7 +452,6 @@ public sealed class InventoryBush : SObject
             {
                 return false;
             }
-
         }
 
         foreach (LargeTerrainFeature largeTerrainFeature in location.largeTerrainFeatures)
@@ -464,7 +464,7 @@ public sealed class InventoryBush : SObject
 
         if (location is IAnimalLocation hasAnimals)
         {
-            foreach (var animal in hasAnimals.Animals.Values)
+            foreach (FarmAnimal? animal in hasAnimals.Animals.Values)
             {
                 if (animal.GetBoundingBox().Intersects(position))
                 {
@@ -525,6 +525,28 @@ public sealed class InventoryBush : SObject
             default:
                 return default;
         }
+    }
+
+    /// <summary>
+    /// Draw some graphics for being picked up.
+    /// </summary>
+    /// <param name="location">game location picked up from.</param>
+    internal void DrawPickUpGraphics(GameLocation location, Vector2 position)
+    {
+        if (this.sourceRect == default)
+        {
+            this.sourceRect = this.GetSourceRectForSeason(GetSeason(Game1.currentLocation));
+        }
+        if (this.sourceRect == default)
+        {
+            ModEntry.ModMonitor.Log($"Could not resolve source rect for {this.Name}", LogLevel.Error);
+            return;
+        }
+
+        Multiplayer mult = MultiplayerHelpers.GetMultiplayer();
+        TemporaryAnimatedSprite bushTas = new("TileSheets/bushes", this.sourceRect, position, false, 0f, Color.White);
+
+        mult.broadcastSprites(location, bushTas);
     }
     #endregion
 }

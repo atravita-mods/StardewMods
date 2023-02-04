@@ -78,6 +78,9 @@ internal sealed class ModEntry : Mod
         // assets
         this.Helper.Events.Content.AssetRequested += static (_, e) => AssetManager.OnAssetRequested(e);
         this.Helper.Events.Content.AssetsInvalidated += static (_, e) => AssetManager.Reset(e.NamesWithoutLocale);
+
+        this.Helper.Events.Content.AssetsInvalidated += static (_, e) => AssetCache.Refresh(e.NamesWithoutLocale);
+        this.Helper.Events.Content.AssetReady += static (_, e) => AssetCache.Ready(e.NameWithoutLocale);
     }
 
     /// <inheritdoc />
@@ -101,7 +104,7 @@ internal sealed class ModEntry : Mod
         this.Helper.Events.GameLoop.SaveLoaded += this.SaveLoaded;
 
         // shop
-        // this.Helper.Events.Content.AssetRequested += static (_, e) => ShopManager.OnAssetRequested(e);
+        this.Helper.Events.Content.AssetRequested += static (_, e) => ShopManager.OnAssetRequested(e);
         // this.Helper.Events.GameLoop.DayEnding += static (_, _) => ShopManager.OnDayEnd();
         // this.Helper.Events.Input.ButtonPressed += (_, e) => ShopManager.OnButtonPressed(e, this.Helper.Input);
 

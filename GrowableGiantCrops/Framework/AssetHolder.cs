@@ -10,8 +10,6 @@ internal class AssetHolder
     private readonly IAssetName? assetName;
     private Texture2D texture;
 
-    internal string? TextureName => this.assetName?.BaseName;
-
     /// <summary>
     /// Initializes a new instance of the <see cref="AssetHolder"/> class.
     /// </summary>
@@ -31,6 +29,11 @@ internal class AssetHolder
     {
         this.texture = texture;
     }
+
+    /// <summary>
+    /// Gets the texture name associated with this instance, if any.
+    /// </summary>
+    internal string? TextureName => this.assetName?.BaseName;
 
     /// <summary>
     /// Gets the held texture if it's not disposed.

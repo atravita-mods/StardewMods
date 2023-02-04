@@ -61,9 +61,10 @@ public sealed class GrowableBushesAPI : IGrowableBushesAPI
             {
                 if (loc.largeTerrainFeatures[i] is Bush bush && bush.getBoundingBox().Intersects(tileRect))
                 {
-                    var size = this.CanPickUpBush(bush, placedOnly);
+                    BushSizes size = this.CanPickUpBush(bush, placedOnly);
                     if (size != BushSizes.Invalid)
                     {
+                        InventoryBush.BushShakeMethod(bush, bush.currentTileLocation, true);
                         loc.largeTerrainFeatures.RemoveAt(i);
                         return (InventoryBush?)new InventoryBush(size, 1);
                     }

@@ -17,5 +17,14 @@
             "4_2": "@! I saw a new exercise on social media the other day. Can't wait to try it out.",
             "6_2": "There's nothing like a nice early morning run.$h"
         }
+    },
+    {
+        "LogName": "Alex - mid hearts",
+        "Action": "EditData",
+        "Target": "Characters/Dialogue/Alex",
+        "When": {"YearModulus": "4"},
+        "Entries": {
+            "spring_Sun4": "It's an election year, @!#$b#Do I think the Governor is going to get re-elected? Of course I do, he always gets re-elected.",
+        }
     }
 ]}

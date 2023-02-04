@@ -1,4 +1,6 @@
-﻿using AtraCore.Framework.ItemManagement;
+﻿using AtraBase.Toolkit.Reflection;
+
+using AtraCore.Framework.ItemManagement;
 using AtraCore.Framework.ReflectionManager;
 
 using AtraShared.ConstantsAndEnums;
@@ -31,7 +33,7 @@ internal static class DeshufflePatch
         {
             harmony.Patch(
                 original: ja.GetCachedMethod("FixItem", ReflectionCache.FlagTypes.InstanceFlags),
-                prefix: new HarmonyMethod(typeof(DeshufflePatch).GetMethod(nameof(Prefix))));
+                prefix: new HarmonyMethod(typeof(DeshufflePatch).StaticMethodNamed(nameof(Prefix))));
         }
         catch (Exception ex)
         {

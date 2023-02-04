@@ -10,6 +10,8 @@ using HarmonyLib;
 
 namespace GrowableGiantCrops.HarmonyPatches.Niceties;
 
+// TODO : Move this to Tool.DoFunction.
+
 [HarmonyPatch(typeof(SObject))]
 internal static class SObjectPatches
 {

@@ -2,6 +2,8 @@
 
 using AtraShared.Niceties;
 
+using StardewModdingAPI.Events;
+
 using Microsoft.Xna.Framework.Graphics;
 
 namespace GrowableGiantCrops.Framework;
@@ -16,11 +18,20 @@ internal static class AssetCache
 
     private static IGameContentHelper gameContent = null!;
 
+    /// <summary>
+    /// Initialize the asset cache.
+    /// </summary>
+    /// <param name="gameContentHelper">smapi's game content helper.</param>
     internal static void Initialize(IGameContentHelper gameContentHelper)
     {
         gameContent = gameContentHelper;
     }
 
+    /// <summary>
+    /// Gets an asset associated with a string asset path.
+    /// </summary>
+    /// <param name="key">string asset path.</param>
+    /// <returns>AssetHolder, or null if could not be resolved.</returns>
     internal static AssetHolder? Get(string? key)
     {
         if (string.IsNullOrEmpty(key))
@@ -32,6 +43,11 @@ internal static class AssetCache
         return Get(parsed);
     }
 
+    /// <summary>
+    /// Gets an asset associated with an <see cref="IAssetName"/>.
+    /// </summary>
+    /// <param name="parsed">parsed asset name.</param>
+    /// <returns>AssetHolder, or null if it could not be resolved.</returns>
     internal static AssetHolder? Get(IAssetName parsed)
     {
         if (Cache.TryGetValue(parsed.BaseName, out WeakReference<AssetHolder>? weakref) && weakref.TryGetTarget(out AssetHolder? holder))
@@ -64,13 +80,17 @@ internal static class AssetCache
         return null;
     }
 
+    /// <summary>
+    /// Propagates an <see cref="IContentEvents.AssetsInvalidated" /> to the cached assets.
+    /// </summary>
+    /// <param name="assets">Assets to refresh, or null for all.</param>
     internal static void Refresh(IReadOnlySet<IAssetName>? assets)
     {
         if (assets is null)
         {
             foreach ((string? key, WeakReference<AssetHolder>? holder) in Cache)
             {
-                if (!holder.TryGetTarget(out AssetHolder? target))
+                if (!holder.TryGetTarget(out AssetHolder? _))
                 {
                     Cache.TryRemove(key, out _);
                 }
@@ -91,6 +111,10 @@ internal static class AssetCache
         }
     }
 
+    /// <summary>
+    /// Listens to when an asset is ready to refresh asset holders and clear failed loads.
+    /// </summary>
+    /// <param name="asset">the asset that is ready.</param>
     internal static void Ready(IAssetName asset)
     {
         if (Cache.TryGetValue(asset.BaseName, out WeakReference<AssetHolder>? holder))

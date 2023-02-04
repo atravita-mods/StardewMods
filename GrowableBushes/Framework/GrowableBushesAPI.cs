@@ -42,7 +42,7 @@ public sealed class GrowableBushesAPI : IGrowableBushesAPI
     {
         BushSizes metaData = bush.modData.GetEnum(InventoryBush.BushModData, BushSizes.Invalid);
 
-        if (placedOnly)
+        if (placedOnly || metaData != BushSizes.Invalid)
         {
             return metaData;
         }
@@ -64,9 +64,13 @@ public sealed class GrowableBushesAPI : IGrowableBushesAPI
                     BushSizes size = this.CanPickUpBush(bush, placedOnly);
                     if (size != BushSizes.Invalid)
                     {
-                        InventoryBush.BushShakeMethod(bush, bush.currentTileLocation, true);
+                        InventoryBush.BushShakeMethod(bush, tile, true);
                         loc.largeTerrainFeatures.RemoveAt(i);
-                        return (InventoryBush?)new InventoryBush(size, 1);
+                        InventoryBush pickedUpBush = new(size, 1)
+                        {
+                            TileLocation = bush.tilePosition.Value,
+                        };
+                        return pickedUpBush;
                     }
                 }
             }
@@ -81,4 +85,13 @@ public sealed class GrowableBushesAPI : IGrowableBushesAPI
     /// <inheritdoc />
     public bool TryPlaceBush(SObject obj, GameLocation loc, Vector2 tile, bool relaxed)
         => obj is InventoryBush bush && bush.PlaceBush(loc, (int)(tile.X * Game1.tileSize), (int)(tile.Y * Game1.tileSize), relaxed);
+
+    /// <inheritdoc />
+    public void DrawPickUpGraphics(SObject obj, GameLocation loc, Vector2 tile)
+    {
+        if (obj is InventoryBush bush)
+        {
+            bush.DrawPickUpGraphics(loc, tile);
+        }
+    }
 }

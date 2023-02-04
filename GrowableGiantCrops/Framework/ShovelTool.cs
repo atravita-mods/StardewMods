@@ -104,6 +104,7 @@ public sealed class ShovelTool : GenericTool
             {
                 location.debris.Add(new Debris(bush, who.Position));
             }
+            ModEntry.GrowableBushesAPI.DrawPickUpGraphics(bush, location, bush.TileLocation);
             who.Stamina -= ModEntry.Config.ShovelEnergy;
             return;
         }
@@ -234,7 +235,7 @@ public sealed class ShovelTool : GenericTool
 
         Multiplayer mp = MultiplayerHelpers.GetMultiplayer();
 
-        float deltaY = -90;
+        const float deltaY = -90;
         const float gravity = 0.0025f;
 
         float velocity = -0.7f - MathF.Sqrt(2 * 60f * gravity);

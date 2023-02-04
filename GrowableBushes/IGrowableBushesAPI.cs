@@ -70,7 +70,13 @@ public interface IGrowableBushesAPI
     /// This method also does NOT handle adding the bush to the user's inventory.</remarks>
     public StardewValley.Object? TryPickUpBush(GameLocation loc, Vector2 tile, bool placedOnly = false);
 
-    // TODO: TAS for picking up a bush.
+    /// <summary>
+    /// Draws in a little bush flinging animation corresponding to a specific inventoryBush.
+    /// </summary>
+    /// <param name="obj">Inventory bush to fling.</param>
+    /// <param name="loc">Game location to fling from.</param>
+    /// <param name="tile">The tile to fling from.</param>
+    public void DrawPickUpGraphics(StardewValley.Object obj, GameLocation loc, Vector2 tile);
 }
 
 /// <summary>

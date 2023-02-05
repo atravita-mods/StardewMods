@@ -1,12 +1,21 @@
-﻿namespace GrowableGiantCrops.Framework;
+﻿using GrowableGiantCrops.Framework.InventoryModels;
+
+namespace GrowableGiantCrops.Framework;
 
 /// <summary>
 /// The API for this mod.
 /// </summary>
 public sealed class Api : IGrowableGiantCropsAPI
 {
+    #region shovel
+
     /// <inheritdoc />
     public bool IsShovel(Tool tool) => tool is ShovelTool;
+
+    /// <inheritdoc />
+    public Tool GetShovel() => new ShovelTool();
+
+    #endregion
 
     #region clumps
 

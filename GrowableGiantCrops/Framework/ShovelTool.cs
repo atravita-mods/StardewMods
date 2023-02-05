@@ -4,7 +4,8 @@ using AtraCore.Utilities;
 
 using AtraShared.Utils.Extensions;
 using AtraShared.Utils.Shims;
-
+using GrowableGiantCrops.Framework.Assets;
+using GrowableGiantCrops.Framework.InventoryModels;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
@@ -13,7 +14,7 @@ using StardewValley.Locations;
 using StardewValley.TerrainFeatures;
 using StardewValley.Tools;
 
-using XLocation =  xTile.Dimensions.Location;
+using XLocation = xTile.Dimensions.Location;
 
 namespace GrowableGiantCrops.Framework;
 
@@ -24,6 +25,9 @@ namespace GrowableGiantCrops.Framework;
 [SuppressMessage("StyleCop.CSharp.OrderingRules", "SA1202:Elements should be ordered by access", Justification = "Like methods are grouped together.")]
 public sealed class ShovelTool : GenericTool
 {
+    /// <summary>
+    /// Initializes a new instance of the <see cref="ShovelTool"/> class.
+    /// </summary>
     public ShovelTool()
         : base(I18n.Shovel_Name(), I18n.Shovel_Description(), 0, 0, 0)
     {
@@ -98,13 +102,14 @@ public sealed class ShovelTool : GenericTool
     /// <param name="who">Last farmer to use.</param>
     public override void DoFunction(GameLocation location, int x, int y, int power, Farmer who)
     {
-        base.DoFunction(location, x, y, power, who);
-
         try
         {
+            base.DoFunction(location, x, y, power, who);
+            Vector2 pickupTile = new(x / Game1.tileSize, y / Game1.tileSize);
+
+            location.performToolAction(this, x / Game1.tileSize, y / Game1.tileSize);
 
             // Handle bushes.
-            Vector2 pickupTile = new(x / 64, y / 64);
             if (ModEntry.GrowableBushesAPI?.TryPickUpBush(location, pickupTile) is SObject bush)
             {
                 ModEntry.ModMonitor.DebugOnlyLog($"Picking up bush {bush.Name}", LogLevel.Info);
@@ -139,6 +144,52 @@ public sealed class ShovelTool : GenericTool
                 }
             }
 
+            // handle secret woods clumps
+            if (location is Woods woods)
+            {
+                for (int i = woods.stumps.Count - 1; i >= 0; i--)
+                {
+                    ResourceClump? clump = woods.stumps[i];
+                    if (clump is null || !clump.getBoundingBox(clump.tile.Value).Contains(x, y))
+                    {
+                        continue;
+                    }
+                    if (GetMatchingInventoryItem(woods, clump) is SObject item)
+                    {
+                        ModEntry.ModMonitor.DebugOnlyLog($"Picking up {item.Name}", LogLevel.Info);
+                        if (!who.addItemToInventoryBool(item))
+                        {
+                            woods.debris.Add(new Debris(item, who.Position));
+                        }
+                        who.Stamina -= ModEntry.Config.ShovelEnergy;
+                        woods.stumps[i].performToolAction(this, 0, pickupTile, woods);
+                        woods.stumps.RemoveAt(i);
+                        return;
+                    }
+                }
+            }
+
+            // the log blocking off the secret forest.
+            if (location is Forest forest)
+            {
+                if (forest.log is not null && forest.log.getBoundingBox(forest.log.tile.Value).Contains(x, y))
+                {
+                    if (GetMatchingInventoryItem(forest, forest.log) is SObject item)
+                    {
+                        ModEntry.ModMonitor.DebugOnlyLog($"Picking up {item.Name}", LogLevel.Info);
+                        if (!who.addItemToInventoryBool(item))
+                        {
+                            forest.debris.Add(new Debris(item, who.Position));
+                        }
+                        who.Stamina -= ModEntry.Config.ShovelEnergy;
+                        forest.log.performToolAction(this, 0, pickupTile, forest);
+                        forest.log = null;
+                        return;
+                    }
+                }
+            }
+
+            // handle FTM resource clumps.
             if (FarmTypeManagerShims.GetEmbeddedResourceClump is not null)
             {
                 for (int i = location.largeTerrainFeatures.Count - 1; i >= 0; i--)

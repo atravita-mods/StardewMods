@@ -7,6 +7,8 @@ using AtraShared.MigrationManager;
 using AtraShared.Utils.Extensions;
 
 using GrowableGiantCrops.Framework;
+using GrowableGiantCrops.Framework.Assets;
+using GrowableGiantCrops.Framework.InventoryModels;
 using GrowableGiantCrops.HarmonyPatches.Compat;
 using GrowableGiantCrops.HarmonyPatches.ItemPatches;
 using GrowableGiantCrops.HarmonyPatches.Niceties;
@@ -106,6 +108,7 @@ internal sealed class ModEntry : Mod
 
         // shop
         this.Helper.Events.Content.AssetRequested += static (_, e) => ShopManager.OnAssetRequested(e);
+        this.Helper.Events.Content.AssetsInvalidated += static (_, e) => ShopManager.OnAssetInvalidated(e.NamesWithoutLocale);
         // this.Helper.Events.GameLoop.DayEnding += static (_, _) => ShopManager.OnDayEnd();
         // this.Helper.Events.Input.ButtonPressed += (_, e) => ShopManager.OnButtonPressed(e, this.Helper.Input);
 

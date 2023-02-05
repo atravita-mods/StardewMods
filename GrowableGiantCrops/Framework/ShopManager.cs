@@ -1,6 +1,7 @@
 ﻿using System.Diagnostics;
 
 using AtraBase.Models.WeightedRandom;
+using AtraBase.Toolkit.Extensions;
 
 using AtraCore.Framework.Caches;
 
@@ -8,10 +9,14 @@ using AtraShared.Caching;
 using AtraShared.Menuing;
 using AtraShared.Utils;
 using AtraShared.Utils.Extensions;
+using AtraShared.Wrappers;
+
+using GrowableGiantCrops.Framework.InventoryModels;
 
 using StardewModdingAPI.Events;
 
 using StardewValley.Menus;
+using StardewValley.TerrainFeatures;
 
 using xTile.Dimensions;
 using xTile.ObjectModel;
@@ -51,9 +56,13 @@ internal static class ShopManager
         dataObjectInfo = parser.ParseAssetName("Data/ObjectInformation");
     }
 
-    internal static void OnAssetInvalidated(AssetsInvalidatedEventArgs e)
+    /// <inheritdoc cref="IContentEvents.AssetsInvalidated"/>
+    internal static void OnAssetInvalidated(IReadOnlySet<IAssetName>? assets)
     {
-        weighted = null;
+        if (assets is null || assets.Contains(dataObjectInfo))
+        {
+            weighted = null;
+        }
     }
 
     /// <inheritdoc cref="IContentEvents.AssetRequested"/>
@@ -115,11 +124,9 @@ internal static class ShopManager
             input.SurpressClickInput();
 
             Dictionary<ISalable, int[]> sellables = new(ResourceClumpIndexesExtensions.Length);
-
             sellables.PopulateSellablesWithResourceClumps();
 
             ShopMenu shop = new(sellables, who: "Caroline") { storeContext = RESOURCE_SHOP_NAME };
-
             if (NPCCache.GetByVillagerName("Robin") is NPC robin)
             {
                 shop.portraitPerson = robin;
@@ -169,6 +176,22 @@ internal static class ShopManager
     private static WeightedManager<int> GetWeightedManager()
     {
         WeightedManager<int> manager = new();
+
+        foreach (var idx in ModEntry.JACropIds.Concat(ModEntry.MoreGiantCropsIds).Concat(new[] { 190, 254, 276 }))
+        {
+            var price = GetPriceOfProduct(idx);
+            if (price is not null)
+            {
+                manager.Add(new(2500d / Math.Clamp(price.Value, 1, 2500), idx));
+            }
+        }
+        ModEntry.ModMonitor.DebugOnlyLog($"Got {manager.Count} giant crop entries for shop.");
         return manager;
     }
+
+    private static int? GetPriceOfProduct(int idx)
+    => Game1Wrappers.ObjectInfo.TryGetValue(idx, out var info) && 
+       int.TryParse(info.GetNthChunk('/', SObject.objectInfoPriceIndex), out var price)
+       ? price
+       : null;
 }

@@ -12,6 +12,9 @@ using StardewValley.TerrainFeatures;
 
 namespace AtraShared.Utils.Shims;
 
+/// <summary>
+/// Shims to make working with FTM stuff easier.
+/// </summary>
 public static class FarmTypeManagerShims
 {
     private static readonly Lazy<Func<LargeTerrainFeature, ResourceClump?>?> getEmbeddedResourceClump = new(
@@ -44,5 +47,8 @@ public static class FarmTypeManagerShims
             return Expression.Lambda<Func<LargeTerrainFeature, ResourceClump?>>(block, potentialClump).CompileFast();
         });
 
+    /// <summary>
+    /// Gets the resource clump wrapped by a FTM largeterrainfeature.
+    /// </summary>
     public static Func<LargeTerrainFeature, ResourceClump?>? GetEmbeddedResourceClump => getEmbeddedResourceClump.Value;
 }

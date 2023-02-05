@@ -1,7 +1,7 @@
 ﻿using AtraCore.Framework.ItemManagement;
 
 using AtraShared.ConstantsAndEnums;
-
+using GrowableGiantCrops.Framework.InventoryModels;
 using Microsoft.Xna.Framework.Graphics;
 
 namespace GrowableGiantCrops.Framework;

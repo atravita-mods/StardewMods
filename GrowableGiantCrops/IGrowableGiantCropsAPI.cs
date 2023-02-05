@@ -9,12 +9,24 @@ namespace GrowableGiantCrops;
 /// </summary>
 public interface IGrowableGiantCropsAPI
 {
+    #region Tool methods
+
     /// <summary>
     /// Gets whether or not the current tool is a shovel.
     /// </summary>
     /// <param name="tool">Tool to check.</param>
     /// <returns>Whether or not the tool is a shovel.</returns>
     public bool IsShovel(Tool tool);
+
+    /// <summary>
+    /// Gets a shovel instance.
+    /// </summary>
+    /// <returns>A shovel.</returns>
+    public Tool GetShovel();
+
+    #endregion
+
+    #region Resource Clump methods
 
     /// <summary>
     /// Gets the InventoryResourceClump associated with the specific ResourceClumpIndex.
@@ -32,6 +44,8 @@ public interface IGrowableGiantCropsAPI
     /// <param name="obj">The object to check.</param>
     /// <returns>A <see cref="ResourceClumpIndexes"/> (or <see cref="ResourceClumpIndexes.Invalid"/> if not applicable.).</returns>
     public ResourceClumpIndexes GetIndexOfClumpIfApplicable(StardewValley.Object obj);
+
+    #endregion
 }
 
 /// <summary>

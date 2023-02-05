@@ -40,7 +40,6 @@
 
   <ItemGroup>
     <Folder Include="assets\textures\" />
-    <Folder Include="docs\" />
   </ItemGroup>
 
 </Project>

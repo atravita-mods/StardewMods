@@ -4,9 +4,7 @@ using AtraCore.Framework.ItemManagement;
 using AtraCore.Framework.ReflectionManager;
 
 using AtraShared.ConstantsAndEnums;
-
-using GrowableGiantCrops.Framework;
-
+using GrowableGiantCrops.Framework.InventoryModels;
 using HarmonyLib;
 
 namespace GrowableGiantCrops.HarmonyPatches.ItemPatches;

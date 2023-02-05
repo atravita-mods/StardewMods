@@ -459,12 +459,12 @@ public sealed class InventoryGiantCrop : SObject
             if (ModEntry.JaAPI?.TryGetGiantCropSprite(this.ParentSheetIndex, out var jaTex) == true)
             {
                 this.holder = new(jaTex.Value);
-                this.sourceRect = new Rectangle(0, 0, 32, 32);
+                this.sourceRect = new Rectangle(0, 0, 48, 64);
             }
             else if (ModEntry.MoreGiantCropsAPI?.GetTexture(this.ParentSheetIndex) is Texture2D mgcTex)
             {
                 this.holder = new(mgcTex);
-                this.sourceRect = new Rectangle(0, 0, 32, 32);
+                this.sourceRect = new Rectangle(0, 0, 48, 64);
             }
             else
             {
@@ -472,7 +472,7 @@ public sealed class InventoryGiantCrop : SObject
                 if (idx >= GiantCrop.cauliflower && idx <= GiantCrop.pumpkin)
                 {
                     this.holder = AssetCache.Get("TileSheets/crops");
-                    this.sourceRect = new Rectangle(112 + (idx * 48), 512, 48, 63);
+                    this.sourceRect = new Rectangle(112 + (idx * 48), 512, 48, 64);
                 }
             }
         }

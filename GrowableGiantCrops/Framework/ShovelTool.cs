@@ -3,13 +3,17 @@
 using AtraCore.Utilities;
 
 using AtraShared.Utils.Extensions;
+using AtraShared.Utils.Shims;
 
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
 using StardewValley;
+using StardewValley.Locations;
 using StardewValley.TerrainFeatures;
 using StardewValley.Tools;
+
+using XLocation =  xTile.Dimensions.Location;
 
 namespace GrowableGiantCrops.Framework;
 
@@ -96,73 +100,152 @@ public sealed class ShovelTool : GenericTool
     {
         base.DoFunction(location, x, y, power, who);
 
-        Vector2 pickupTile = new(x / 64, y / 64);
-        if (ModEntry.GrowableBushesAPI?.TryPickUpBush(location, pickupTile) is SObject bush)
+        try
         {
-            ModEntry.ModMonitor.DebugOnlyLog($"Picking up bush {bush.Name}", LogLevel.Info);
-            if (!who.addItemToInventoryBool(bush))
-            {
-                location.debris.Add(new Debris(bush, who.Position));
-            }
-            ModEntry.GrowableBushesAPI.DrawPickUpGraphics(bush, location, bush.TileLocation);
-            who.Stamina -= ModEntry.Config.ShovelEnergy;
-            return;
-        }
 
-        for (int i = location.resourceClumps.Count - 1; i >= 0; i--)
-        {
-            ResourceClump? clump = location.resourceClumps[i];
-            if (clump is null || !clump.getBoundingBox(clump.tile.Value).Contains(x,y))
+            // Handle bushes.
+            Vector2 pickupTile = new(x / 64, y / 64);
+            if (ModEntry.GrowableBushesAPI?.TryPickUpBush(location, pickupTile) is SObject bush)
             {
-                continue;
-            }
-            SObject? item = null;
-            switch (clump)
-            {
-                case GiantCrop giant:
+                ModEntry.ModMonitor.DebugOnlyLog($"Picking up bush {bush.Name}", LogLevel.Info);
+                if (!who.addItemToInventoryBool(bush))
                 {
-                    InventoryGiantCrop? inventoryGiantCrop = null;
-                    if (giant.modData.TryGetValue(InventoryGiantCrop.GiantCropTweaksModDataKey, out string? stringID)
-                        && ModEntry.GiantCropTweaksAPI?.GiantCrops.ContainsKey(stringID) == true)
-                    {
-                        inventoryGiantCrop = new InventoryGiantCrop(stringID, giant.parentSheetIndex.Value, 1);
-                    }
-                    else if (InventoryGiantCrop.IsValidGiantCropIndex(giant.parentSheetIndex.Value))
-                    {
-                        inventoryGiantCrop = new InventoryGiantCrop(giant.parentSheetIndex.Value, 1);
-                    }
-
-                    item = inventoryGiantCrop;
-                    if (inventoryGiantCrop is not null)
-                    {
-                        AddAnimations(location, giant.tile.Value, inventoryGiantCrop.TexturePath, inventoryGiantCrop.SourceRect, inventoryGiantCrop.TileSize);
-                    }
-                    break;
+                    location.debris.Add(new Debris(bush, who.Position));
                 }
-                case ResourceClump resource:
-                    ResourceClumpIndexes idx = (ResourceClumpIndexes)resource.parentSheetIndex.Value;
-                    if (idx != ResourceClumpIndexes.Invalid && ResourceClumpIndexesExtensions.IsDefined(idx))
-                    {
-                        InventoryResourceClump inventoryResourceClump = new(idx, 1);
-                        item = inventoryResourceClump;
-                        AddAnimations(location, resource.tile.Value, Game1.objectSpriteSheetName, inventoryResourceClump.SourceRect, new Point(2, 2));
-                    }
-                    break;
-            }
-
-            if (item is not null)
-            {
-                ModEntry.ModMonitor.DebugOnlyLog($"Picking up {item.Name}", LogLevel.Info);
-                if (!who.addItemToInventoryBool(item))
-                {
-                    location.debris.Add(new Debris(item, who.Position));
-                }
+                ModEntry.GrowableBushesAPI.DrawPickUpGraphics(bush, location, bush.TileLocation);
                 who.Stamina -= ModEntry.Config.ShovelEnergy;
-                location.resourceClumps[i].performToolAction(this, 0, pickupTile, location);
-                location.resourceClumps.RemoveAt(i);
+                return;
+            }
+
+            // Handle normal game resource clumps.
+            for (int i = location.resourceClumps.Count - 1; i >= 0; i--)
+            {
+                ResourceClump? clump = location.resourceClumps[i];
+                if (clump is null || !clump.getBoundingBox(clump.tile.Value).Contains(x, y))
+                {
+                    continue;
+                }
+                if (GetMatchingInventoryItem(location, clump) is SObject item)
+                {
+                    ModEntry.ModMonitor.DebugOnlyLog($"Picking up {item.Name}", LogLevel.Info);
+                    if (!who.addItemToInventoryBool(item))
+                    {
+                        location.debris.Add(new Debris(item, who.Position));
+                    }
+                    who.Stamina -= ModEntry.Config.ShovelEnergy;
+                    location.resourceClumps[i].performToolAction(this, 0, pickupTile, location);
+                    location.resourceClumps.RemoveAt(i);
+                    return;
+                }
+            }
+
+            if (FarmTypeManagerShims.GetEmbeddedResourceClump is not null)
+            {
+                for (int i = location.largeTerrainFeatures.Count - 1; i >= 0; i--)
+                {
+                    ResourceClump? clump = FarmTypeManagerShims.GetEmbeddedResourceClump(location.largeTerrainFeatures[i]);
+                    if (clump is null || !clump.getBoundingBox(clump.tile.Value).Contains(x, y))
+                    {
+                        continue;
+                    }
+                    if (GetMatchingInventoryItem(location, clump) is SObject item)
+                    {
+                        ModEntry.ModMonitor.DebugOnlyLog($"Picking up {item.Name}", LogLevel.Info);
+                        if (!who.addItemToInventoryBool(item))
+                        {
+                            location.debris.Add(new Debris(item, who.Position));
+                        }
+                        who.Stamina -= ModEntry.Config.ShovelEnergy;
+                        location.largeTerrainFeatures[i].performToolAction(this, 0, pickupTile, location);
+                        location.largeTerrainFeatures.RemoveAt(i);
+                        return;
+                    }
+                }
+            }
+
+            if (location.terrainFeatures.TryGetValue(pickupTile, out TerrainFeature? terrain)
+                && terrain.performToolAction(this, 0, pickupTile, location))
+            {
+                who.Stamina -= Math.Min(ModEntry.Config.ShovelEnergy, 1);
+                location.terrainFeatures.Remove(pickupTile);
+                return;
+            }
+            if (location.objects.TryGetValue(pickupTile, out SObject? obj)
+                && obj.performToolAction(this, location))
+            {
+                who.Stamina -= Math.Min(ModEntry.Config.ShovelEnergy, 1);
+                location.objects.Remove(pickupTile);
+                return;
+            }
+
+            // derived from Hoe.
+            if (location.doesTileHaveProperty((int)pickupTile.X, (int)pickupTile.Y, "Diggable", "Back") is null
+                || location.isTileOccupied(pickupTile) || !location.isTilePassable(new XLocation((int)pickupTile.X, (int)pickupTile.Y), Game1.viewport))
+            {
+                return;
+            }
+
+            who.Stamina -= Math.Min(ModEntry.Config.ShovelEnergy, 1);
+            location.makeHoeDirt(pickupTile);
+            location.playSound("hoeHit");
+            Game1.removeSquareDebrisFromTile((int)pickupTile.X, (int)pickupTile.Y);
+            location.checkForBuriedItem((int)pickupTile.X, (int)pickupTile.Y, explosion: false, detectOnly: false, who);
+            MultiplayerHelpers.GetMultiplayer().broadcastSprites(location, new TemporaryAnimatedSprite(
+                rowInAnimationTexture: 12,
+                new Vector2(pickupTile.X * 64f, pickupTile.Y * 64f),
+                color: Color.White,
+                animationLength: 8,
+                flipped: Game1.random.NextDouble() < 0.5,
+                animationInterval: 50f));
+        }
+        catch (Exception ex)
+        {
+            ModEntry.ModMonitor.Log($"Unexpected error in using shovel:\n\n{ex}", LogLevel.Error);
+        }
+    }
+
+    /// <summary>
+    /// Handles getting the matching inventory item.
+    /// </summary>
+    /// <param name="location">Game location we're at.</param>
+    /// <param name="clump">The clump to check.</param>
+    /// <returns>An SObject matching the inventory item variant, or null for not applicable.</returns>
+    private static SObject? GetMatchingInventoryItem(GameLocation location, ResourceClump? clump)
+    {
+        switch (clump)
+        {
+            case GiantCrop giant:
+            {
+                InventoryGiantCrop? inventoryGiantCrop = null;
+                if (giant.modData.TryGetValue(InventoryGiantCrop.GiantCropTweaksModDataKey, out string? stringID)
+                    && ModEntry.GiantCropTweaksAPI?.GiantCrops.ContainsKey(stringID) == true)
+                {
+                    inventoryGiantCrop = new InventoryGiantCrop(stringID, giant.parentSheetIndex.Value, 1);
+                }
+                else if (InventoryGiantCrop.IsValidGiantCropIndex(giant.parentSheetIndex.Value))
+                {
+                    inventoryGiantCrop = new InventoryGiantCrop(giant.parentSheetIndex.Value, 1);
+                }
+
+                if (inventoryGiantCrop is not null)
+                {
+                    AddAnimations(location, giant.tile.Value, inventoryGiantCrop.TexturePath, inventoryGiantCrop.SourceRect, inventoryGiantCrop.TileSize);
+                    return inventoryGiantCrop;
+                }
                 break;
             }
+            case ResourceClump resource:
+                ResourceClumpIndexes idx = (ResourceClumpIndexes)resource.parentSheetIndex.Value;
+                if (idx != ResourceClumpIndexes.Invalid && ResourceClumpIndexesExtensions.IsDefined(idx))
+                {
+                    InventoryResourceClump inventoryResourceClump = new(idx, 1);
+                    AddAnimations(location, resource.tile.Value, Game1.objectSpriteSheetName, inventoryResourceClump.SourceRect, new Point(2, 2));
+                    return inventoryResourceClump;
+                }
+                break;
         }
+
+        return null;
     }
 
     /// <inheritdoc />

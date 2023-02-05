@@ -45,12 +45,13 @@ internal static class AssetManager
         ToolTextureName = parser.ParseAssetName("Mods/atravita.GrowableGiantCrops/Shovel");
 
         const int TEX_WIDTH = 48;
-        Color[] buffer = ArrayPool<Color>.Shared.Rent(TEX_WIDTH * TEX_WIDTH);
+        const int TEX_HEIGHT = 64;
+        Color[] buffer = ArrayPool<Color>.Shared.Rent(TEX_WIDTH * TEX_HEIGHT);
         try
         {
-            Array.Fill(buffer, Color.MonoGameOrange);
-            Texture2D tex = new(Game1.graphics.GraphicsDevice, TEX_WIDTH, TEX_WIDTH) { Name = GiantCropPrefix + "ErrorTex" };
-            tex.SetData(0, new Rectangle(0, 0, TEX_WIDTH, TEX_WIDTH), buffer, 0, TEX_WIDTH * TEX_WIDTH);
+            Array.Fill(buffer, Color.MonoGameOrange, 0, TEX_WIDTH * TEX_HEIGHT);
+            Texture2D tex = new(Game1.graphics.GraphicsDevice, TEX_WIDTH, TEX_HEIGHT) { Name = GiantCropPrefix + "ErrorTex" };
+            tex.SetData(0, new Rectangle(0, 0, TEX_WIDTH, TEX_HEIGHT), buffer, 0, TEX_WIDTH * TEX_HEIGHT);
             errorTex = tex;
         }
         catch (Exception ex)

@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-using GrowableGiantCrops.Framework;
+﻿using GrowableGiantCrops.Framework;
 
 using HarmonyLib;
 
@@ -21,6 +15,15 @@ internal static class SObjectPatches
         if (t is not ShovelTool)
         {
             return true;
+        }
+
+        try
+        {
+
+        }
+        catch (Exception ex)
+        {
+            ModEntry.ModMonitor.Log($"Failed while trying to lift items with the shovel\n\n{ex}", LogLevel.Error);
         }
 
         return true;

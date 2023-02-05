@@ -41,14 +41,14 @@ internal static class FixSaveThing
             prev.Add(clump.tile.Value);
         }
 
-        // restore previous giant crops.
+        // restore previous clumps.
         int count = 0;
         foreach (ResourceClump? clump in l.resourceClumps)
         {
-            if (clump is GiantCrop crop && prev.Add(crop.tile.Value))
+            if (prev.Add(clump.tile.Value))
             {
                 count++;
-                __instance.resourceClumps.Add(crop);
+                __instance.resourceClumps.Add(clump);
             }
         }
 

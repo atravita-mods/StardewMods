@@ -7,6 +7,7 @@ using AtraShared.MigrationManager;
 using AtraShared.Utils.Extensions;
 
 using GrowableGiantCrops.Framework;
+using GrowableGiantCrops.HarmonyPatches.Compat;
 using GrowableGiantCrops.HarmonyPatches.ItemPatches;
 using GrowableGiantCrops.HarmonyPatches.Niceties;
 
@@ -161,18 +162,23 @@ internal sealed class ModEntry : Mod
         {
             harmony.PatchAll(typeof(ModEntry).Assembly);
 
+            if (new Version(1, 6) > new Version(Game1.version))
+            {
+                this.Monitor.Log("Applying patch to restore giant crops and clumps to save locations", LogLevel.Debug);
+                FixSaveThing.ApplyPatches(harmony);
+            }
+
             if (this.Helper.ModRegistry.IsLoaded("spacechase0.JsonAssets"))
             {
                 this.Monitor.Log("Applying deshuffle patch");
                 DeshufflePatch.ApplyPatch(harmony);
             }
 
-            if (new Version(1, 6) > new Version(Game1.version) &&
-                (this.Helper.ModRegistry.Get("atravita.GiantCropFertilizer") is not IModInfo fert || fert.Manifest.Version.IsOlderThan("0.2.2")) &&
-                (this.Helper.ModRegistry.Get("spacechase0.MoreGiantCrops") is not IModInfo giant || giant.Manifest.Version.IsOlderThan("1.2.0")))
+            if (this.Helper.ModRegistry.Get("Esca.FarmTypeManager") is IModInfo ftm
+                && !ftm.Manifest.Version.IsOlderThan("1.16.0"))
             {
-                this.Monitor.Log("Applying patch to restore giant crops to save locations", LogLevel.Debug);
-                FixSaveThing.ApplyPatches(harmony);
+                this.Monitor.Log("Applying FTM patches");
+                FTMArtifactSpotPatch.ApplyPatch(harmony);
             }
         }
         catch (Exception ex)

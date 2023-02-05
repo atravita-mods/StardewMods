@@ -40,6 +40,7 @@ internal static class GiantCropPatcher
                             Game1.currentLocation.debris.Add(new(held, tile * 64));
                         }
                         obj.heldObject.Value = null;
+                        obj.readyForHarvest.Value = false;
 
                         InventoryGiantCrop.ShakeGiantCrop(__instance);
                         obj.performRemoveAction(obj.TileLocation, Game1.currentLocation);

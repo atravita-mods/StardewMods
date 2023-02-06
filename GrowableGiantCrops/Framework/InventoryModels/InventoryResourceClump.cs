@@ -48,6 +48,7 @@ public sealed class InventoryResourceClump : SObject
         this.Edibility = inedible;
         this.Price = 0;
         this.Category = ResourceClump;
+        this.bigCraftable.Value = true;
     }
 
     /// <summary>
@@ -69,6 +70,7 @@ public sealed class InventoryResourceClump : SObject
         this.Edibility = inedible;
         this.Price = 0;
         this.Category = ResourceClump;
+        this.bigCraftable.Value = true;
     }
 
     /// <summary>
@@ -194,7 +196,7 @@ public sealed class InventoryResourceClump : SObject
     {
         float draw_layer = Math.Max(
             0f,
-            (y * 64 + 40) / 10000f) + x * 1E-05f;
+            ((y * 64) + 40) / 10000f) + (x * 1E-05f);
         this.draw(spriteBatch, x, y, draw_layer, alpha);
     }
 
@@ -242,7 +244,7 @@ public sealed class InventoryResourceClump : SObject
             {
                 spriteBatch.Draw(
                     texture: Game1.mouseCursors,
-                    new Vector2(x + x_offset * 64 - Game1.viewport.X, y + y_offset * 64 - Game1.viewport.Y),
+                    new Vector2(x + (x_offset * 64) - Game1.viewport.X, y + (y_offset * 64) - Game1.viewport.Y),
                     new Rectangle(canPlaceHere ? 194 : 210, 388, 16, 16),
                     color: Color.White,
                     rotation: 0f,
@@ -281,7 +283,7 @@ public sealed class InventoryResourceClump : SObject
                 this.GetScaleSize() * scaleSize,
                 SpriteEffects.None,
                 layerDepth);
-            if ((drawStackNumber == StackDrawType.Draw && this.maximumStackSize() > 1 && this.Stack > 1 || drawStackNumber == StackDrawType.Draw_OneInclusive)
+            if (((drawStackNumber == StackDrawType.Draw && this.maximumStackSize() > 1 && this.Stack > 1) || drawStackNumber == StackDrawType.Draw_OneInclusive)
                 && scaleSize > 0.3f && this.Stack != int.MaxValue)
             {
                 Utility.drawTinyDigits(
@@ -306,7 +308,7 @@ public sealed class InventoryResourceClump : SObject
         {
             int xOffset = (this.sourceRect.Width - 16) * 2;
             objectPosition.X -= xOffset;
-            int yOffset = Math.Max(this.sourceRect.Height * 4 - 64, 0);
+            int yOffset = Math.Max((this.sourceRect.Height * Game1.pixelZoom) - Game1.tileSize, 0);
             objectPosition.Y -= yOffset;
             spriteBatch.Draw(
                 texture: Game1.objectSpriteSheet,

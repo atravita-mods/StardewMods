@@ -26,6 +26,7 @@ namespace GrowableGiantCrops.Framework.InventoryModels;
 /// </summary>
 [XmlType("Mods_atravita_InventoryGiantCrop")]
 [SuppressMessage("StyleCop.CSharp.OrderingRules", "SA1202:Elements should be ordered by access", Justification = "Keeping like methods together.")]
+[SuppressMessage("StyleCop.CSharp.OrderingRules", "SA1201:Elements should appear in the correct order", Justification = "Keeping like methods together.")]
 public sealed class InventoryGiantCrop : SObject
 {
     #region consts
@@ -282,7 +283,7 @@ public sealed class InventoryGiantCrop : SObject
     {
         float draw_layer = Math.Max(
             0f,
-            (y * 64 + 40) / 10000f) + x * 1E-05f;
+            ((y * Game1.tileSize) + 40) / 10000f) + (x * 1E-05f);
         this.draw(spriteBatch, x, y, draw_layer, alpha);
     }
 
@@ -296,7 +297,9 @@ public sealed class InventoryGiantCrop : SObject
 
         if (this.sourceRect != default && this.holder?.Get() is Texture2D tex)
         {
-            Vector2 position = Game1.GlobalToLocal(Game1.viewport, new Vector2(xNonTile * 64, yNonTile * 64 - this.sourceRect.Height * 4 + 64));
+            Vector2 position = Game1.GlobalToLocal(
+                Game1.viewport,
+                new Vector2(xNonTile * Game1.tileSize, (yNonTile * Game1.tileSize) - (this.sourceRect.Height * Game1.pixelZoom) + Game1.tileSize));
             spriteBatch.Draw(
                 texture: tex,
                 position,
@@ -320,8 +323,8 @@ public sealed class InventoryGiantCrop : SObject
         }
 
         Vector2 grabTile = Game1.GetPlacementGrabTile();
-        int x = (int)grabTile.X * 64;
-        int y = (int)grabTile.Y * 64;
+        int x = (int)grabTile.X * Game1.tileSize;
+        int y = (int)grabTile.Y * Game1.tileSize;
         Game1.isCheckingNonMousePlacement = !Game1.IsPerformingMousePlacement();
         if (Game1.isCheckingNonMousePlacement)
         {
@@ -338,17 +341,17 @@ public sealed class InventoryGiantCrop : SObject
             {
                 spriteBatch.Draw(
                     texture: Game1.mouseCursors,
-                    new Vector2(x + x_offset * 64 - Game1.viewport.X, y + y_offset * 64 - Game1.viewport.Y),
+                    new Vector2(x + (x_offset * 64) - Game1.viewport.X, y + (y_offset * 64) - Game1.viewport.Y),
                     new Rectangle(canPlaceHere ? 194 : 210, 388, 16, 16),
                     color: Color.White,
                     rotation: 0f,
                     origin: Vector2.Zero,
-                    scale: 4f,
+                    scale: Game1.pixelZoom,
                     effects: SpriteEffects.None,
                     layerDepth: 0.01f);
             }
         }
-        this.draw(spriteBatch, x / 64, y / 64, 0.5f);
+        this.draw(spriteBatch, x / Game1.tileSize, y / Game1.tileSize, 0.5f);
     }
 
     /// <inheritdoc />
@@ -368,22 +371,22 @@ public sealed class InventoryGiantCrop : SObject
         if (this.sourceRect != default && this.holder?.Get() is Texture2D tex)
         {
             spriteBatch.Draw(
-                tex,
-                location + new Vector2(16f, 16f),
-                this.sourceRect,
-                color * transparency,
-                0f,
+                texture: tex,
+                position: location + new Vector2(16f, 16f),
+                sourceRectangle: this.sourceRect,
+                color: color * transparency,
+                rotation: 0f,
                 new Vector2(8f, 16f),
-                this.GetScaleSize() * scaleSize,
-                SpriteEffects.None,
+                scale: this.GetScaleSize() * scaleSize,
+                effects: SpriteEffects.None,
                 layerDepth);
-            if ((drawStackNumber == StackDrawType.Draw && this.maximumStackSize() > 1 && this.Stack > 1 || drawStackNumber == StackDrawType.Draw_OneInclusive)
+            if (((drawStackNumber == StackDrawType.Draw && this.maximumStackSize() > 1 && this.Stack > 1) || drawStackNumber == StackDrawType.Draw_OneInclusive)
                 && scaleSize > 0.3f && this.Stack != int.MaxValue)
             {
                 Utility.drawTinyDigits(
                     toDraw: this.Stack,
                     b: spriteBatch,
-                    position: location + new Vector2(64 - Utility.getWidthOfTinyDigitString(this.Stack, 3f * scaleSize) + 3f * scaleSize, 64f - 18f * scaleSize + 2f),
+                    position: location + new Vector2(64 - Utility.getWidthOfTinyDigitString(this.Stack, 3f * scaleSize) + (3f * scaleSize), 64f - (18f * scaleSize) + 2f),
                     scale: 3f * scaleSize,
                     layerDepth: 1f,
                     c: Color.White);
@@ -402,7 +405,7 @@ public sealed class InventoryGiantCrop : SObject
         {
             int xOffset = (this.sourceRect.Width - 16) * 2;
             objectPosition.X -= xOffset;
-            int yOffset = Math.Max(this.sourceRect.Height * 4 - 64, 0);
+            int yOffset = Math.Max((this.sourceRect.Height * Game1.pixelZoom) - Game1.tileSize, 0);
             objectPosition.Y -= yOffset;
             spriteBatch.Draw(
                 texture: tex,
@@ -446,27 +449,28 @@ public sealed class InventoryGiantCrop : SObject
     {
         try
         {
+            const int DEFAULT_WIDTH = 48;
+            const int DEFAULT_HEIGHT = 64;
+
             if (!string.IsNullOrEmpty(this.stringID.Value)
                 && ModEntry.GiantCropTweaksAPI?.GiantCrops?.TryGetValue(this.stringID.Value, out IGiantCropData? data) == true
                 && AssetCache.Get(data.Texture) is AssetHolder holder)
             {
                 this.holder = holder;
-                if (ModEntry.GiantCropTweaksAPI.TryGetSource(this.stringID.Value, out Rectangle? rect))
-                {
-                    this.sourceRect = rect ?? new Rectangle(data.Corner, new Point(data.TileSize.X * 16, data.TileSize.Y * 16 + 16));
-                }
+                _ = ModEntry.GiantCropTweaksAPI.TryGetSource(this.stringID.Value, out Rectangle? rect);
+                this.sourceRect = rect ?? new Rectangle(data.Corner, new Point(data.TileSize.X * 16, (data.TileSize.Y * 16) + 16));
             }
 
             // Check More Giant Crops and Json Assets for texture data.
-            if (ModEntry.JaAPI?.TryGetGiantCropSprite(this.ParentSheetIndex, out var jaTex) == true)
+            else if (ModEntry.JaAPI?.TryGetGiantCropSprite(this.ParentSheetIndex, out Lazy<Texture2D>? jaTex) == true)
             {
                 this.holder = new(jaTex.Value);
-                this.sourceRect = new Rectangle(0, 0, 48, 64);
+                this.sourceRect = new Rectangle(0, 0, DEFAULT_WIDTH, DEFAULT_HEIGHT);
             }
             else if (ModEntry.MoreGiantCropsAPI?.GetTexture(this.ParentSheetIndex) is Texture2D mgcTex)
             {
                 this.holder = new(mgcTex);
-                this.sourceRect = new Rectangle(0, 0, 48, 64);
+                this.sourceRect = new Rectangle(0, 0, DEFAULT_WIDTH, DEFAULT_HEIGHT);
             }
             else
             {
@@ -474,7 +478,7 @@ public sealed class InventoryGiantCrop : SObject
                 if (idx >= GiantCrop.cauliflower && idx <= GiantCrop.pumpkin)
                 {
                     this.holder = AssetCache.Get("TileSheets/crops");
-                    this.sourceRect = new Rectangle(112 + idx * 48, 512, 48, 64);
+                    this.sourceRect = new Rectangle(112 + (idx * DEFAULT_WIDTH), 512, DEFAULT_WIDTH, DEFAULT_HEIGHT);
                 }
             }
         }
@@ -562,7 +566,7 @@ public sealed class InventoryGiantCrop : SObject
 
     private string GetProductDisplayName()
     {
-        if (Game1Wrappers.ObjectInfo.TryGetValue(this.ParentSheetIndex, out var data))
+        if (Game1Wrappers.ObjectInfo.TryGetValue(this.ParentSheetIndex, out string? data))
         {
             return data.GetNthChunk('/', objectInfoDisplayNameIndex).ToString();
         }
@@ -574,6 +578,12 @@ public sealed class InventoryGiantCrop : SObject
     #endregion
 
     #region helpers
+
+    /// <summary>
+    /// Checks if an index is a valid giant crop index.
+    /// </summary>
+    /// <param name="idx">Index to check.</param>
+    /// <returns>True if it's accounted for.</returns>
     internal static bool IsValidGiantCropIndex(int idx)
     {
         switch (idx)

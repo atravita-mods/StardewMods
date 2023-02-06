@@ -46,6 +46,11 @@ public interface IGrowableGiantCropsAPI
     public ResourceClumpIndexes GetIndexOfClumpIfApplicable(StardewValley.Object obj);
 
     #endregion
+
+    #region GiantCrop
+
+    public (int idx, string? stringId)? GetIdentifiers(StardewValley.Object obj);
+    #endregion
 }
 
 /// <summary>

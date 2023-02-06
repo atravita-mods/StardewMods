@@ -221,6 +221,7 @@ public sealed class ShovelTool : GenericTool
                 location.terrainFeatures.Remove(pickupTile);
                 return;
             }
+
             if (location.objects.TryGetValue(pickupTile, out SObject? obj)
                 && obj.performToolAction(this, location))
             {

@@ -8,12 +8,8 @@ using AtraShared.Utils.Extensions;
 using HarmonyLib;
 
 using StardewModdingAPI.Events;
+
 using StardewValley.Menus;
-
-using xTile.Dimensions;
-using xTile.ObjectModel;
-
-using XTile = xTile.Tiles.Tile;
 
 namespace GrowableBushes.Framework;
 
@@ -54,18 +50,13 @@ internal static class ShopManager
         else if (e.NameWithoutLocale.IsEquivalentTo(sunHouse))
         {
             e.Edit(
-                static (asset) =>
-                {
-                    IAssetDataForMap? map = asset.AsMap();
-                    XTile? tile = map.Data.GetLayer(BUILDING).PickTile(new Location((int)ModEntry.Config.ShopLocation.X * 64, (int)ModEntry.Config.ShopLocation.Y * 64), Game1.viewport.Size);
-                    if (tile is null)
-                    {
-                        ModEntry.ModMonitor.Log($"Tile could not be edited for shop, please let atra know!", LogLevel.Warn);
-                        return;
-                    }
-                    tile.Properties["Action"] = new PropertyValue(SHOPNAME);
-                },
-                AssetEditPriority.Default + 10);
+                apply: static (asset) => asset.AsMap().AddTileProperty(
+                    monitor: ModEntry.ModMonitor,
+                    layer: BUILDING,
+                    key: "Action",
+                    property: SHOPNAME,
+                    placementTile: ModEntry.Config.ShopLocation),
+                priority: AssetEditPriority.Default + 10);
         }
     }
 

@@ -16,12 +16,6 @@ using GrowableGiantCrops.Framework.InventoryModels;
 using StardewModdingAPI.Events;
 
 using StardewValley.Menus;
-using StardewValley.TerrainFeatures;
-
-using xTile.Dimensions;
-using xTile.ObjectModel;
-
-using XTile = xTile.Tiles.Tile;
 
 namespace GrowableGiantCrops.Framework;
 
@@ -78,34 +72,24 @@ internal static class ShopManager
         else */if (e.NameWithoutLocale.IsEquivalentTo(robinHouse))
         {
             e.Edit(
-                static (asset) =>
-                {
-                    IAssetDataForMap? map = asset.AsMap();
-                    XTile? tile = map.Data.GetLayer(BUILDING).PickTile(new Location((int)ModEntry.Config.ResourceShopLocation.X * 64, (int)ModEntry.Config.ResourceShopLocation.Y * 64), Game1.viewport.Size);
-                    if (tile is null)
-                    {
-                        ModEntry.ModMonitor.Log($"Tile could not be edited for shop, please let atra know!", LogLevel.Warn);
-                        return;
-                    }
-                    tile.Properties["Action"] = new PropertyValue(RESOURCE_SHOP_NAME);
-                },
-                AssetEditPriority.Default + 10);
+                apply: static (asset) => asset.AsMap().AddTileProperty(
+                    monitor: ModEntry.ModMonitor,
+                    layer: BUILDING,
+                    key: "Action",
+                    property: RESOURCE_SHOP_NAME,
+                    placementTile: ModEntry.Config.ResourceShopLocation),
+                priority: AssetEditPriority.Default + 10);
         }
         else if (e.NameWithoutLocale.IsEquivalentTo(witchHouse))
         {
             e.Edit(
-                static (asset) =>
-                {
-                    IAssetDataForMap? map = asset.AsMap();
-                    XTile? tile = map.Data.GetLayer(BUILDING).PickTile(new Location((int)ModEntry.Config.GiantCropShopLocation.X * 64, (int)ModEntry.Config.GiantCropShopLocation.Y * 64), Game1.viewport.Size);
-                    if (tile is null)
-                    {
-                        ModEntry.ModMonitor.Log($"Tile could not be edited for shop, please let atra know!", LogLevel.Warn);
-                        return;
-                    }
-                    tile.Properties["Action"] = new PropertyValue(GIANT_CROP_SHOP_NAME);
-                },
-                AssetEditPriority.Default + 10);
+                apply: static (asset) => asset.AsMap().AddTileProperty(
+                    monitor: ModEntry.ModMonitor,
+                    layer: BUILDING,
+                    key: "Action",
+                    property: GIANT_CROP_SHOP_NAME,
+                    placementTile: ModEntry.Config.GiantCropShopLocation),
+                priority: AssetEditPriority.Default + 10);
         }
     }
 
@@ -163,7 +147,7 @@ internal static class ShopManager
                 sellData = new[] { 7_500, ShopMenu.infiniteStock };
             }
 
-            var clumpItem = new InventoryResourceClump(clump, 1);
+            InventoryResourceClump clumpItem = new InventoryResourceClump(clump, 1);
             _ = sellables.TryAdd(clumpItem, sellData);
         }
     }
@@ -177,9 +161,9 @@ internal static class ShopManager
     {
         WeightedManager<int> manager = new();
 
-        foreach (var idx in ModEntry.JACropIds.Concat(ModEntry.MoreGiantCropsIds).Concat(new[] { 190, 254, 276 }))
+        foreach (int idx in ModEntry.JACropIds.Concat(ModEntry.MoreGiantCropsIds).Concat(new[] { 190, 254, 276 }))
         {
-            var price = GetPriceOfProduct(idx);
+            int? price = GetPriceOfProduct(idx);
             if (price is not null)
             {
                 manager.Add(new(2500d / Math.Clamp(price.Value, 1, 2500), idx));
@@ -190,8 +174,8 @@ internal static class ShopManager
     }
 
     private static int? GetPriceOfProduct(int idx)
-    => Game1Wrappers.ObjectInfo.TryGetValue(idx, out var info) && 
-       int.TryParse(info.GetNthChunk('/', SObject.objectInfoPriceIndex), out var price)
+    => Game1Wrappers.ObjectInfo.TryGetValue(idx, out string? info) &&
+       int.TryParse(info.GetNthChunk('/', SObject.objectInfoPriceIndex), out int price)
        ? price
        : null;
 }

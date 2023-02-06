@@ -37,4 +37,18 @@ public sealed class Api : IGrowableGiantCropsAPI
     public SObject GetResourceClump(ResourceClumpIndexes idx) => new InventoryResourceClump(idx, 1);
 
     #endregion
+
+    #region crops
+
+    public (int idx, string? stringId)? GetIdentifiers(StardewValley.Object obj)
+    {
+        if (obj is InventoryGiantCrop crop)
+        {
+            string? stringID = string.IsNullOrEmpty(crop.stringID.Value) ? null : crop.stringID.Value;
+            return (crop.ParentSheetIndex, stringID);
+        }
+        return null;
+    }
+
+    #endregion
 }

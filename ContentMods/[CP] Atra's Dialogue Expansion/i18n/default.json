@@ -8,4 +8,25 @@
     "sports.team.06": "Gators",
     "sports.team.07": "Hawks",
     "sports.team.08": "Panthers",
+
+    // generic video games
+    "video.game.01": "Atomic Rising",
+    "video.game.02": "Clusterbot",
+    "video.game.03": "Alphawind",
+    "video.game.04": "Dragoncell",
+    "video.game.05": "Ghosts of Faith",
+    "video.game.06": "Mortaltrail",
+    "video.game.07": "Wing Edge",
+    "video.game.08": "Phantomheart",
+    "video.game.09": "Crowns and Monsters",
+
+    // clothing brand names.
+    "clothing.brand.01": "Couture par Oiseau",
+    "clothing.brand.02": "Azure",
+    "clothing.brand.03": "Dawn Company",
+    "clothing.brand.04": "Helix",
+    "clothing.brand.05": "Spectacle",
+    "clothing.brand.06": "Mode par Essence",
+    "clothing.brand.07": "Esprit",
+    "clothing.brand.08": "Petal Rose",
 }

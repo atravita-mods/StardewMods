@@ -13,6 +13,7 @@
 * Update to latest AtraCore.
 * Fix everlasting fertilizer not getting a special color.
 * Fix Radioactive fertilizer not properly ignoring seasons in Greenhouse locations.
+* Buff Secret Joja Fertilizr back up a little.
 
 #### Version 0.3.2
 * Balance

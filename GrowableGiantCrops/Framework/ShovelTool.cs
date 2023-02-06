@@ -11,6 +11,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 using StardewValley;
 using StardewValley.Locations;
+using StardewValley.Objects;
 using StardewValley.TerrainFeatures;
 using StardewValley.Tools;
 
@@ -214,30 +215,47 @@ public sealed class ShovelTool : GenericTool
                 }
             }
 
+            int energy = Math.Min(ModEntry.Config.ShovelEnergy, 1);
             if (location.terrainFeatures.TryGetValue(pickupTile, out TerrainFeature? terrain)
                 && terrain.performToolAction(this, 0, pickupTile, location))
             {
-                who.Stamina -= Math.Min(ModEntry.Config.ShovelEnergy, 1);
+                who.Stamina -= energy;
                 location.terrainFeatures.Remove(pickupTile);
                 return;
             }
 
-            if (location.objects.TryGetValue(pickupTile, out SObject? obj)
-                && obj.performToolAction(this, location))
+            if (location.objects.TryGetValue(pickupTile, out SObject? obj))
             {
-                who.Stamina -= Math.Min(ModEntry.Config.ShovelEnergy, 1);
-                location.objects.Remove(pickupTile);
-                return;
+                // special case: shovel pushes full chests.
+                if (obj is Chest chest && !chest.isEmpty())
+                {
+                    location.playSound("hammer");
+                    chest.shakeTimer = 100;
+                    if (chest.TileLocation.X == 0f && chest.TileLocation.Y == 0f && location.getObjectAtTile((int)pickupTile.X, (int)pickupTile.Y) == chest)
+                    {
+                        chest.TileLocation = pickupTile;
+                    }
+                    chest.MoveToSafePosition(location, chest.TileLocation, 0, who.GetFacingDirection());
+                    who.Stamina -= energy;
+                    return;
+                }
+
+                if (obj.performToolAction(this, location))
+                {
+                    who.Stamina -= energy;
+                    location.objects.Remove(pickupTile);
+                    return;
+                }
             }
 
-            // derived from Hoe.
+            // derived from Hoe - this makes hoedirt.
             if (location.doesTileHaveProperty((int)pickupTile.X, (int)pickupTile.Y, "Diggable", "Back") is null
                 || location.isTileOccupied(pickupTile) || !location.isTilePassable(new XLocation((int)pickupTile.X, (int)pickupTile.Y), Game1.viewport))
             {
                 return;
             }
 
-            who.Stamina -= Math.Min(ModEntry.Config.ShovelEnergy, 1);
+            who.Stamina -= energy;
             location.makeHoeDirt(pickupTile);
             location.playSound("hoeHit");
             Game1.removeSquareDebrisFromTile((int)pickupTile.X, (int)pickupTile.Y);
@@ -361,6 +379,15 @@ public sealed class ShovelTool : GenericTool
     #endregion
 
     #region helpers
+
+    /// <summary>
+    /// Helps animate a resource clump or large crop.
+    /// </summary>
+    /// <param name="loc">GameLocation.</param>
+    /// <param name="tile">Tile to animate at.</param>
+    /// <param name="texturePath">Path to the texture.</param>
+    /// <param name="sourceRect">Sourcerect to use.</param>
+    /// <param name="tileSize">The size of the item, in tiles.</param>
     internal static void AddAnimations(GameLocation loc, Vector2 tile, string? texturePath, Rectangle sourceRect, Point tileSize)
     {
         if (texturePath is null)
@@ -394,7 +421,7 @@ public sealed class ShovelTool : GenericTool
             timeBasedMotion = true,
             rotation = 0.1f,
             rotationChange = 0.1f,
-            scaleChange = -0.0015f,
+            scaleChange = -0.0015f * (Math.Max(3, tileSize.Y) / 3),
             layerDepth = (landingPos.Y + 32f) / 10000f,
         };
 

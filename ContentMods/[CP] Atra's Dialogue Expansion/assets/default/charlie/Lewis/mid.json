@@ -14,9 +14,7 @@
             "Entries": {
                 "Town4": "@! I hear you're going to have a child soon! Have you picked out a name yet?"
             },
-            "When": {
-                "HavingChild": "@{{playerName}}"
-            }
+            "When": { "HavingChild": "@{{playerName}}"}
         }
     ]
 }

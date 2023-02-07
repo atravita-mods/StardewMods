@@ -11,7 +11,7 @@ internal sealed class ModConfig
 {
     public bool CanAxeAllBushes { get; set; } = false;
 
-    [GMCMDefaultIgnore]
+    [GMCMDefaultVector(1,7)]
     public Vector2 ShopLocation { get; set; } = new(1, 7);
 
     public bool ShouldNPCsTrampleBushes { get; set; } = true;

@@ -1,11 +1,23 @@
 {"Changes": [
-    // TODO: generic spouse anniversary dialogue.
+    {
+        "LogName": "Generic spouse dialogue.",
+        "Action": "EditData",
+        "Target": "Characters/Dialogue/MarriageDialogue{{Spouse}}",
+        "Entries": {
+            "{{TheMightyAmondee.CustomTokens/AnniversarySeason}}_{{TheMightyAmondee.CustomTokens/AnniversaryDay}}": "Oh, honey, it's our anniversary today!#$b#Soooo....you've got anything planned?"
+        },
+        "When": {
+            "HasMod" :"TheMightyAmondee.CustomTokens",
+            "HasValue: {{Spouse}}": true,
+        }
+    },
     {
         "LogName": "Demetrius - base",
         "Action": "EditData",
         "Target": "Characters/Dialogue/Demetrius",
         "Entries": {
-            "movieTheater": "Oh, a movie theater?$k#$e#$c 0.5#Sorry, I'm not one for movies.#I don't usually watch movies"
+            "movieTheater": "Oh, a movie theater?$k#$e#$c 0.5#Sorry, I'm not one for movies.#I don't usually watch movies",
+            "{{TaxDay}}": "You'd think that, since the government is the one who pays me, I wouldn't have to do all this work to pay my taxes.$s"
         },
         "When" : { "EnableFor|contains=Demetrius": true}
     },
@@ -38,6 +50,15 @@
             "{{TaxDay}}": "Why I've gotta pay taxes to fund this stupid war, I'll never know."
         },
         "When" : {"EnableFor|contains=Pam": true}
+    },
+    {
+        "LogName": "Pierre base dialogue",
+        "Action": "EditData",
+        "Target": "Characters/Dialogue/Pierre",
+        "Entries": {
+            "{{TaxDay}}": "Dunno what the state is doing with all my tax dollars.$s#$b#Such a process, every year, to file them. Takes Caroline a week!"
+        },
+        "When" : { "EnableFor|contains=Pierre": true}
     },
     {
         "LogName": "Gus New Years At Resort",

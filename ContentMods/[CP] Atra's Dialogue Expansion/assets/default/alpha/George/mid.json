@@ -5,7 +5,7 @@
         "Target": "Characters/Dialogue/rainy",
         "When": {"Season": "winter"},
         "Entries":{
-            "George": "{{Random: It's awful cold, isn't it? What a rotten day. ++ Why do I even bother getting out of bed when the day looks like this? ++ My hip aches.|inputSeparator=++}}"
+            "George": "{{Random: It's awful cold, isn't it? What a rotten day. ++ Why do I even bother getting out of bed when the day looks like this? ++ My hip aches. Weather ain't making this any better.|inputSeparator=++}}"
         }
     },
     {
@@ -34,7 +34,9 @@
         "When": {"YearRemainder": 2},
         "Entries": {
             "1_2": "Evelyn and I've been living in this here valley for a very long time, @. My family's been living here for as long as we can remember.$h#$b#Ain't no place like our dear Pelican Town.",
-            "3_2": "Pelican Town used to be so much bigger, back when the mines were still active.#$b#Now? I don't know how the younguns' are gonna find jobs around these parts."
+            "3_2": "Pelican Town used to be so much bigger, back when the mines were still active.#$b#Now? I don't know how the younguns' are gonna find jobs around these parts.",
+            "5_2": "Sometimes I worry about the kids. Some of them don't seem to be able to do anything away from their computers.",
+            "7_2": "Between you and I, @, the pension ain't nearly enough some days.$s",
         }
     },
     // Y3, Y4 strike and strike break?

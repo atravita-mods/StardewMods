@@ -28,7 +28,7 @@
         }
     },
     {
-        "LogName": "Gus Snow",
+        "LogName": "Gus Y2",
         "Action": "EditData",
         "Target": "Characters/Dialogue/Gus",
         "When": { "YearRemainder": "2"},

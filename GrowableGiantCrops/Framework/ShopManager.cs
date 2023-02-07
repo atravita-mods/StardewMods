@@ -29,6 +29,7 @@ internal static class ShopManager
     private const string GIANT_CROP_SHOP_NAME = "atravita.GiantCropShop";
 
     private static readonly TickCache<bool> HasReachedSkullCavern = new(() => FarmerHelpers.HasAnyFarmerRecievedFlag("qiChallengeComplete"));
+    private static readonly TickCache<bool> PerfectFaarm = new(() => FarmerHelpers.HasAnyFarmerRecievedFlag("Farm_Eternal"));
 
     private static WeightedManager<int>? weighted;
 
@@ -37,6 +38,8 @@ internal static class ShopManager
 
     private static IAssetName mail = null!;
     private static IAssetName dataObjectInfo = null!;
+
+    private static StringUtils stringUtils = null!;
 
     /// <summary>
     /// Initializes the asset names.
@@ -48,6 +51,8 @@ internal static class ShopManager
         witchHouse = parser.ParseAssetName("Maps/WitchHut");
         mail = parser.ParseAssetName("Data/mail");
         dataObjectInfo = parser.ParseAssetName("Data/ObjectInformation");
+
+        stringUtils = new(ModEntry.ModMonitor);
     }
 
     /// <inheritdoc cref="IContentEvents.AssetsInvalidated"/>
@@ -115,7 +120,7 @@ internal static class ShopManager
             {
                 shop.portraitPerson = robin;
             }
-            shop.potraitPersonDialogue = I18n.ShopMessage_Robin();
+            shop.potraitPersonDialogue = stringUtils.ParseAndWrapText(I18n.ShopMessage_Robin(), Game1.dialogueFont, 304);
             Game1.activeClickableMenu = shop;
         }
     }

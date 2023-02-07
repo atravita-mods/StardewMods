@@ -13,7 +13,7 @@ public sealed class ModConfig
     /// <summary>
     /// Gets or sets the tile of the giant crop shop's location.
     /// </summary>
-    [GMCMDefaultIgnore]
+    [GMCMDefaultVector(8, 14)]
     public Vector2 GiantCropShopLocation { get; set; } = new(8, 14);
 
     // TODO: check positioning with SVE.
@@ -21,7 +21,7 @@ public sealed class ModConfig
     /// <summary>
     /// Gets or sets the tile of the resource shop's location.
     /// </summary>
-    [GMCMDefaultIgnore]
+    [GMCMDefaultVector(6, 19)]
     public Vector2 ResourceShopLocation { get; set; } = new(6, 19);
 
     /// <summary>

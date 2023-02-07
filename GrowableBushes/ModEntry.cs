@@ -82,12 +82,7 @@ internal sealed class ModEntry : Mod
                     reset: static () => Config = new(),
                     save: () => this.Helper.AsyncWriteConfig(this.Monitor, Config))
                 .AddParagraph(I18n.ModDescription)
-                .GenerateDefaultGMCM(static () => Config)
-                .AddTextOption(
-                    name: I18n.ShopLocation,
-                    getValue: static () => Config.ShopLocation.X + ", " + Config.ShopLocation.Y,
-                    setValue: static (str) => Config.ShopLocation = str.TryParseVector2(out Vector2 vec) ? vec : new Vector2(1, 7),
-                    tooltip: I18n.ShopLocation_Description);
+                .GenerateDefaultGMCM(static () => Config);
             }
         }
         else

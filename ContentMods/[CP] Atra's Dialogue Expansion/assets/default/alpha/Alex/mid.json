@@ -14,6 +14,7 @@
         "Target": "Characters/Dialogue/Alex",
         "When": {"YearModulus": "2"},
         "Entries": {
+            "Sun6": "@, you planning on watching the game? The {{i18n:sports.team.{{Random:01, 02, 03, 04, 05, 06, 07, 08|key=sports_team}} }} are playing the {{i18n:sports.team.{{Random:02, 03, 04, 05, 06, 07, 08, 01|key=sports_team}} }}! I'm so excited!",
             "4_2": "@! I saw a new exercise on social media the other day. Can't wait to try it out.",
             "6_2": "There's nothing like a nice early morning run.$h"
         }

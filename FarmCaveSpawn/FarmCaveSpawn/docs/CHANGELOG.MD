@@ -12,6 +12,7 @@
 #### Version 1.1.3
 * Recompiled for new AtraCore.
 * Added a progression mode.
+* Ban tiles that aren't viewable.
 
 #### Version 1.1.2
 * Internal improvements (use rented arrays when possible, other memory optimizations).

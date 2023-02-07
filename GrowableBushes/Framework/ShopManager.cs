@@ -27,6 +27,8 @@ internal static class ShopManager
     private static IAssetName sunHouse = null!;
     private static IAssetName mail = null!;
 
+    private static StringUtils stringUtils = null!;
+
     /// <summary>
     /// Initializes asset names.
     /// </summary>
@@ -35,6 +37,8 @@ internal static class ShopManager
     {
         sunHouse = parser.ParseAssetName("Maps/Sunroom");
         mail = parser.ParseAssetName("Data/mail");
+
+        stringUtils = new(ModEntry.ModMonitor);
     }
 
     /// <inheritdoc cref="IContentEvents.AssetRequested"/>
@@ -98,7 +102,7 @@ internal static class ShopManager
         {
             shop.portraitPerson = caroline;
         }
-        shop.potraitPersonDialogue = I18n.Shop_Message();
+        shop.potraitPersonDialogue = stringUtils.ParseAndWrapText(I18n.Shop_Message(), Game1.dialogueFont, 304);
         Game1.activeClickableMenu = shop;
     }
 

@@ -3,10 +3,7 @@
         "LogName": "Demetrius Volcano",
         "Action": "EditData",
         "Target": "Characters/Dialogue/Demetrius",
-        "When":
-        {
-            "HasFlag": "Island_FirstParrot",
-        },
+        "When": { "HasFlag": "Island_FirstParrot" },
         "Entries":
         {
             "Resort": "The mushrooms around here are extraordinary!$h#$e#I have never seen any mushrooms like these!",
@@ -18,23 +15,24 @@
         "Target": "Characters/Dialogue/rainy",
         "When": {"Season": "winter"},
         "Entries":{
-            "Demetrius": "Rare to see winter storms around here.",
+            "Demetrius": "Rare to see winter storms around here."
         }
     },
     {
-        "LogName": "Demetrius mid-hearts",
+        "LogName": "Demetrius mid-hearts, year 1",
         "Action": "EditData",
         "Target": "Characters/Dialogue/Demetrius",
         "Entries": {
             "ScienceHouse_22_20": "I've got so much data I need to analyze.$s",
             "fallScienceHouse_22_20": "I'd love to talk, @, but I have a grant submission coming up that I need to work on.",
+            "fallMountain_45_8": "We're lucky to have so much old growth forest around here.#$b#It takes decades for a forest to develop properly."
         },
         "When": {
             "YearModulus": "1"
         }
     },
     {
-        "LogName": "Demetrius mid-hearts",
+        "LogName": "Demetrius mid-hearts, Y2",
         "Action": "EditData",
         "Target": "Characters/Dialogue/Demetrius",
         "Entries": {

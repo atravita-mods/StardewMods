@@ -6,6 +6,11 @@ using StardewValley.Monsters;
 using StardewValley.Objects;
 using StardewValley.TerrainFeatures;
 
+using xTile.Tiles;
+
+using XLocation = xTile.Dimensions.Location;
+using XRectangle = xTile.Dimensions.Rectangle;
+
 namespace AtraShared.Utils.Extensions;
 
 /// <summary>
@@ -100,5 +105,16 @@ public static class GameLocationExtensions
             return pot.hoeDirt.Value;
         }
         return null;
+    }
+
+    public static bool IsTileViewable(this GameLocation? loc, XLocation tileLocation, XRectangle viewport)
+    {
+        if (loc is null)
+        {
+            return false;
+        }
+
+        return (loc.map.GetLayer("Front")?.PickTile(new XLocation(tileLocation.X * 64, tileLocation.Y * 64), viewport.Size)
+            ?? loc.map.GetLayer("AlwaysFront")?.PickTile(new XLocation(tileLocation.X * 64, tileLocation.Y * 64), viewport.Size)) is null;
     }
 }

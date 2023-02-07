@@ -215,6 +215,7 @@ public sealed class ShovelTool : GenericTool
                 }
             }
 
+            // for small things we take only one energy, at most.
             int energy = Math.Min(ModEntry.Config.ShovelEnergy, 1);
             if (location.terrainFeatures.TryGetValue(pickupTile, out TerrainFeature? terrain)
                 && terrain.performToolAction(this, 0, pickupTile, location))
@@ -229,14 +230,20 @@ public sealed class ShovelTool : GenericTool
                 // special case: shovel pushes full chests.
                 if (obj is Chest chest && !chest.isEmpty())
                 {
-                    location.playSound("hammer");
-                    chest.shakeTimer = 100;
-                    if (chest.TileLocation.X == 0f && chest.TileLocation.Y == 0f && location.getObjectAtTile((int)pickupTile.X, (int)pickupTile.Y) == chest)
-                    {
-                        chest.TileLocation = pickupTile;
-                    }
-                    chest.MoveToSafePosition(location, chest.TileLocation, 0, who.GetFacingDirection());
-                    who.Stamina -= energy;
+                    chest.GetMutex().RequestLock(
+                        acquired: () =>
+                        {
+                             location.playSound("hammer");
+                             chest.shakeTimer = 100;
+                             if (chest.TileLocation.X == 0f && chest.TileLocation.Y == 0f && location.getObjectAtTile((int)pickupTile.X, (int)pickupTile.Y) == chest)
+                             {
+                                   chest.TileLocation = pickupTile;
+                             }
+                             chest.MoveToSafePosition(location, chest.TileLocation, 0, who.GetFacingDirection());
+                             who.Stamina -= energy;
+                             return;
+                        },
+                        failed: () => ModEntry.ModMonitor.Log($"Chest at {chest.TileLocation}: lock not acquired, skipping"));
                     return;
                 }
 

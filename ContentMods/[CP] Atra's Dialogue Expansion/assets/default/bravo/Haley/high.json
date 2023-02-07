@@ -1,6 +1,6 @@
 {"Changes":[
     {
-        "LogName": "Haley high-hearts",
+        "LogName": "Haley high-hearts, Y2",
         "Action": "EditData",
         "Target": "Characters/Dialogue/Haley",
         "When": {"YearRemainder": 2},

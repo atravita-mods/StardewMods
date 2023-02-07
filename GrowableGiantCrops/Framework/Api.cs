@@ -40,7 +40,8 @@ public sealed class Api : IGrowableGiantCropsAPI
 
     #region crops
 
-    public (int idx, string? stringId)? GetIdentifiers(StardewValley.Object obj)
+    /// <inheritdoc />
+    public (int idx, string? stringId)? GetIdentifiers(SObject obj)
     {
         if (obj is InventoryGiantCrop crop)
         {

@@ -5,7 +5,8 @@
         "Target": "Characters/Dialogue/Sam",
         "Entries":{
             "1{{YearRemainder}}": "Ugh, it's laundry day again. I wish I didn't have to do the laundry.$s",
-            "7{{YearRemainder}}": "Just wanna go skateboarding today...not sure I have the time for it though."
+            "7{{YearRemainder}}": "Just wanna go skateboarding today...not sure I have the time for it though.",
+            "8{{YearRemainder}}": "Sebastian showed me a video game the other day that looked super fun. {{i18n:video.game.{{Random:01, 02, 03, 04, 05, 06, 07, 08, 09}} }}, have you heard of it?",
         }
     },
     {

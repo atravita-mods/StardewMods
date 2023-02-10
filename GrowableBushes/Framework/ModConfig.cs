@@ -9,12 +9,24 @@ namespace GrowableBushes.Framework;
 /// </summary>
 internal sealed class ModConfig
 {
+    /// <summary>
+    /// Gets or sets a value indicating whether or not players should be able to axe non-placed bushes.
+    /// </summary>
     public bool CanAxeAllBushes { get; set; } = false;
 
-    [GMCMDefaultVector(1,7)]
+    /// <summary>
+    /// Gets or sets where the default shop location is.
+    /// </summary>
+    [GMCMDefaultVector(1, 7)]
     public Vector2 ShopLocation { get; set; } = new(1, 7);
 
+    /// <summary>
+    /// Gets or sets a value indicating whether or not npcs should be able to trample bushes in their way.
+    /// </summary>
     public bool ShouldNPCsTrampleBushes { get; set; } = true;
 
+    /// <summary>
+    /// Gets or sets a value indicating whether to disable some placement rules.
+    /// </summary>
     public bool RelaxedPlacement { get; set; } = false;
 }

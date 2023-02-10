@@ -7,16 +7,6 @@
 public class GMCMDefaultVectorAttribute : Attribute
 {
     /// <summary>
-    /// Gets the default X coordinate.
-    /// </summary>
-    internal float X { get; init; }
-
-    /// <summary>
-    /// Gets the default Y coordinate.
-    /// </summary>
-    internal float Y { get; init; }
-
-    /// <summary>
     /// Initializes a new instance of the <see cref="GMCMDefaultVectorAttribute"/> class.
     /// </summary>
     /// <param name="x">x coordinate.</param>
@@ -26,4 +16,14 @@ public class GMCMDefaultVectorAttribute : Attribute
         this.X = x;
         this.Y = y;
     }
+
+    /// <summary>
+    /// Gets the default X coordinate.
+    /// </summary>
+    internal float X { get; init; }
+
+    /// <summary>
+    /// Gets the default Y coordinate.
+    /// </summary>
+    internal float Y { get; init; }
 }

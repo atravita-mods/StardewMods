@@ -32,6 +32,7 @@
 ### Version 1.1.8
 * Fix assumption in scheduling code that schedules will have at least two points.
 * GIMA will now re-add the `default` or `spring` schedule if a mod tries removing that from a vanilla character. This is because the game expects one of those two schedules to exist and uses it as a default, and removing both may cause a crash.
+* Add Chinese (thanks Herienseo!)
 
 ### Version 1.1.7
 * Remove no longer necessary compat code.

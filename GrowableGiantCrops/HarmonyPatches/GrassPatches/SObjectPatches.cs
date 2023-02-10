@@ -1,12 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace GrowableGiantCrops.HarmonyPatches.GrassPatches;
+﻿namespace GrowableGiantCrops.HarmonyPatches.GrassPatches;
 
 internal static class SObjectPatches
 {
-    internal static string ModDataKey = "atravita.GrowableGiantCrop.GrassType";
+    /// <summary>
+    /// A mod data key used to demark custom grass types.
+    /// </summary>
+    internal const string ModDataKey = "atravita.GrowableGiantCrop.GrassType";
+
+    /// <summary>
+    /// The ParentSheetIndex of a grass starter.
+    /// </summary>
+    internal const int GrassStarterIndex = 297;
 }

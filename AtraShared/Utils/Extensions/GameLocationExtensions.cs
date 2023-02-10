@@ -107,6 +107,13 @@ public static class GameLocationExtensions
         return null;
     }
 
+    /// <summary>
+    /// Whether or not a tile is covered by a Front or AlwaysFront tile at this location.
+    /// </summary>
+    /// <param name="loc">GameLocation.</param>
+    /// <param name="tileLocation">Tile.</param>
+    /// <param name="viewport">Viewport.</param>
+    /// <returns>True if covered, false otherwise.</returns>
     public static bool IsTileViewable(this GameLocation? loc, XLocation tileLocation, XRectangle viewport)
     {
         if (loc is null)

@@ -56,6 +56,8 @@ public sealed class InventoryGiantCrop : SObject
     /// <summary>
     /// The string id, used to distinguish GiantCropTweaks giant crops.
     /// </summary>
+    [SuppressMessage("StyleCop.CSharp.MaintainabilityRules", "SA1401:Fields should be private", Justification = "Public for serializer.")]
+    [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1307:Accessible fields should begin with upper-case letter", Justification = "Reviewed.")]
     public readonly NetString stringID = new(string.Empty);
 
     #region drawfields

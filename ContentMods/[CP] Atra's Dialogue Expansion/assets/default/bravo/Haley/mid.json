@@ -16,5 +16,14 @@
             "8_2": "Took some really nice photo's of Emily's parrot the other day. I think it enjoys posing for me.$h",
             "16_2": "Emily's parrot pooped on my favorite dress yesterday.$s#$b#Of course I don't blame it, it's just an animal. Doesn't mean I'm not mad about it though."
         }
+    },
+    {
+        "LogName": "Haley - Y2",
+        "Action" :"EditData",
+        "Target": "Characters/Dialogue/Haley",
+        "Entries":{
+            "Forest_77_44": "Oh, wow, @, look at those birds! Aren't they beautiful?",
+        },
+        "When": {"YearModulus": "2"}
     }
 ]}

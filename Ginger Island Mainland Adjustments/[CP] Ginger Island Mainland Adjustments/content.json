@@ -7,9 +7,16 @@
     },
     {
         "Action": "Include",
-        "FromFile": "schedules.json",
+        "FromFile": "assets/sve_schedules.json",
         "When": {
             "HasMod": "FlashShifter.StardewValleyExpandedCP",
+        }
+    },
+    {
+        "Action": "Include",
+        "FromFile": "assets/immersive_sandy_schedules.json",
+        "When": {
+            "HasMod": "beyondrecovery.immersivesandy",
         }
     },
     {

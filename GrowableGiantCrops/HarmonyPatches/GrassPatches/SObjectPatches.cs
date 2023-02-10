@@ -3,7 +3,7 @@
 internal static class SObjectPatches
 {
     /// <summary>
-    /// A mod data key used to demark custom grass types.
+    /// A mod data key used to mark custom grass types.
     /// </summary>
     internal const string ModDataKey = "atravita.GrowableGiantCrop.GrassType";
 
@@ -11,6 +11,4 @@ internal static class SObjectPatches
     /// The ParentSheetIndex of a grass starter.
     /// </summary>
     internal const int GrassStarterIndex = 297;
-
-    
 }

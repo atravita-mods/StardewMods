@@ -1,5 +1,4 @@
 ﻿using AtraShared.ConstantsAndEnums;
-using AtraShared.Integrations;
 using AtraShared.Menuing;
 using AtraShared.Utils.Extensions;
 
@@ -8,6 +7,7 @@ using HarmonyLib;
 using Microsoft.Xna.Framework;
 
 using StardewModdingAPI.Events;
+
 using StardewValley.TerrainFeatures;
 
 using TapGiantCrops.Framework;
@@ -52,6 +52,11 @@ internal sealed class ModEntry : Mod
     {
         Utility.ForAllLocations((location) =>
         {
+            if (location?.resourceClumps is null)
+            {
+                return;
+            }
+
             foreach (ResourceClump? feature in location.resourceClumps)
             {
                 if (feature is GiantCrop crop)

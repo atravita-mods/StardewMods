@@ -48,7 +48,8 @@
         "When": {"YearRemainder": 3},
         "Entries": {
             "1_2": "@, this year's cost-of-living adjustment for my pension isn't keeping up with inflation at all.#$b#Guess Evelyn and I will have to scrimp and save more than usual...",
-            "3_2": "Did I take my mornin' meds? I can't remember...$s"
+            "3_2": "Did I take my mornin' meds? I can't remember...$s",
+            "17_2": "Feel like every time I go to see Dr. Harvey I've got more medications I've gotta take...$s",
         }
     }
 ]}

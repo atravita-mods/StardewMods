@@ -24,7 +24,7 @@
         "Target": "Characters/Dialogue/Clint",
         "Entries": {
             "6_2": "Got a commission from %place for a pile of swords. That'll be nice for the ole' balance sheet.",
-            "8_2": "What would I've done if I didn't become a blacksmith? Err, @, I'm not sure actually.$s"
+            "8_2": "What would I've done if I didn't become a blacksmith? Err, @, I'm not sure actually.$s#$b#Didn't really have an idea of what I wanted to become as a kid. Just followed my father's footsteps."
         },
         "When": {"YearModulus": 2}
     }

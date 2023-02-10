@@ -22,8 +22,17 @@
         "Action" :"EditData",
         "Target": "Characters/Dialogue/Haley",
         "Entries":{
-            "Forest_77_44": "Oh, wow, @, look at those birds! Aren't they beautiful?",
+            "Forest_77_44": "Oh, wow, @, look at those birds! Aren't they beautiful?"
         },
         "When": {"YearModulus": "2"}
+    },
+    {
+        "LogName": "Haley - Y3",
+        "Action" :"EditData",
+        "Target": "Characters/Dialogue/Haley",
+        "Entries":{
+            "Forest_77_44": "Just playing with some new lenses mother sent me.$h"
+        },
+        "When": {"YearModulus": "3"}
     }
 ]}

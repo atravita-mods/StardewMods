@@ -14,5 +14,14 @@
             "13_2": "I love how my skin looks today! @, this blush is doing amazing things for my complexion.",
             "15_2": "Look at this new dress my mother sent me! Isn't it flattering?$h"
         }
+    },
+    {
+        "LogName": "Haley high-hearts, Y3",
+        "Action": "EditData",
+        "Target": "Characters/Dialogue/Haley",
+        "When": {"YearRemainder": 3},
+        "Entries": {
+            "1_2": "Emily asked me to photograph some of her designs the other day.#$b#She certainly has an unique style, but it works well for her.$h",
+        }
     }
 ]}

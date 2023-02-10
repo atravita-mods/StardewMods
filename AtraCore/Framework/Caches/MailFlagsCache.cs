@@ -1,6 +1,10 @@
 ﻿using Netcode;
 
 namespace AtraCore.Framework.Caches;
+
+/// <summary>
+/// Manages watching mail flags.
+/// </summary>
 internal static class MailFlagsCache
 {
     private static List<WeakReference<NetList<string, NetString>>> listsToFree = new();

@@ -15,6 +15,8 @@ using StardewValley.Objects;
 using StardewValley.TerrainFeatures;
 using StardewValley.Tools;
 
+using static StardewValley.Menus.CharacterCustomization;
+
 using XLocation = xTile.Dimensions.Location;
 
 namespace GrowableGiantCrops.Framework;
@@ -204,6 +206,11 @@ public sealed class ShovelTool : GenericTool
             int energy = Math.Min(ModEntry.Config.ShovelEnergy, 1);
             if (location.terrainFeatures.TryGetValue(pickupTile, out TerrainFeature? terrain))
             {
+                if (terrain is Grass grass)
+                {
+
+                }
+
                 if (terrain.performToolAction(this, 0, pickupTile, location))
                 {
                     who.Stamina -= energy;
@@ -214,8 +221,6 @@ public sealed class ShovelTool : GenericTool
 
             if (location.objects.TryGetValue(pickupTile, out SObject? obj))
             {
-                // TODO: consider moving slime balls? "Slime Ball"
-
                 // special case: shovel pushes full chests.
                 if (obj is Chest chest && !chest.isEmpty())
                 {
@@ -236,6 +241,7 @@ public sealed class ShovelTool : GenericTool
                     return;
                 }
 
+                // special cases: Mushroom boxes, slime balls
                 if (obj.bigCraftable.Value && obj.GetType() == typeof(SObject))
                 {
                     if (obj.Name == "Mushroom Box")
@@ -249,6 +255,27 @@ public sealed class ShovelTool : GenericTool
                         }
                         obj.performRemoveAction(pickupTile, location);
                         GiveItemOrMakeDebris(location, who, obj);
+                        AddAnimations(
+                            loc: location,
+                            tile: pickupTile - Vector2.UnitY,
+                            texturePath: Game1.bigCraftableSpriteSheetName,
+                            sourceRect: SObject.getSourceRectForBigCraftable(128),
+                            new Point(1, 2));
+                        location.objects.Remove(pickupTile);
+                        return;
+                    }
+                    else if (obj.Name == "Slime Ball")
+                    {
+                        who.Stamina -= energy;
+                        obj.ParentSheetIndex = 56;
+                        obj.performRemoveAction(pickupTile, location);
+                        GiveItemOrMakeDebris(location, who, obj);
+                        AddAnimations(
+                            loc: location,
+                            tile: pickupTile - Vector2.UnitY,
+                            texturePath: Game1.bigCraftableSpriteSheetName,
+                            sourceRect: SObject.getSourceRectForBigCraftable(56),
+                            new Point(1, 2));
                         location.objects.Remove(pickupTile);
                         return;
                     }

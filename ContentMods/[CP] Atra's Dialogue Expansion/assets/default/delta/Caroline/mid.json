@@ -27,7 +27,7 @@
             "13{{YearRemainder}}": "Wonder if any of our supplies is carrying a new tea?",
             "15{{YearRemainder}}": "Wish I had more time to garden, but running a small business is a lot of work.",
             "19{{YearRemainder}}": "Did you see the {{i18n:clothing.brand.{{Random:01, 02, 03, 04, 05, 06, 07, 08}} }} dress Haley was wearing?#$b#I would never when I was her age!",
-            "23{{YearRemainder}}": "%Caroline is muttering to herself.#$b#I wonder if we should get Abigail some therapy or something...#$e#What? Oh, it's nothing."
+            "25{{YearRemainder}}": "%Caroline is muttering to herself.#$b#I wonder if we should get Abigail some therapy or something...#$e#What? Oh, it's nothing."
         },
         "When": {"YearModulus": "1"}
     },
@@ -43,6 +43,17 @@
             "17{{YearRemainder}}": "Ever since Pierre decided that the shop should be open seven days a week, I've felt like I've always been at work.$s#$b#Wish I could just get a little time to drink a nice cup of tea.",
             "21{{YearRemainder}}": "Used to enjoy going out to the forest to gather mushrooms. We would sometimes sell them, helped when we needed the money.",
             "23{{YearRemainder}}": "Lewis handles most of the good export out of this county, and we're now handling most of the imports.$h"
+        }
+    },
+    {
+        "LogName": "Caroline: mid hearts. Y1, CC",
+        "Action": "EditData",
+        "Target": "Characters/Dialogue/Caroline",
+        "When": {
+            "YearModulus": "2",
+        },
+        "Entries": {
+            "1_2": "@, I feel so old and out of touch these days. I have no clue what the young people want anymore."
         }
     }
 ]}

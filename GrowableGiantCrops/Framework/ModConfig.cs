@@ -50,4 +50,9 @@ public sealed class ModConfig
         get => this.shovelEnergy;
         set => this.shovelEnergy = Math.Clamp(this.shovelEnergy, 0, 25);
     }
+
+    /// <summary>
+    /// Gets or sets a value indicating whether or not placed slime balls can be squished.
+    /// </summary>
+    public bool CanSquishPlacedSlimeBalls { get; set; } = false;
 }

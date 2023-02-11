@@ -18,13 +18,15 @@
   "RelaxedPlacement.description": "If enabled, placement rules will be relaxed.",
   "ShovelEnergy.title": "Shovel Energy",
   "ShovelEnergy.description": "How much stamina should each use of the shovel take.",
+  "CanSquishPlacedSlimeBalls.title": "Squish Placed Slime Balls",
+  "CanSquishPlacedSlimeBalls.description": "If enabled, placed slime balls cannot be squished (and are thus purely decorative)",
 
   // Stores
   "ShopMessage.Robin": "Whatcha lookin' for?",
 
   //mail for shops:
   "RobinMail": "Hi @!^Recently, I've picked up some large resource clumps for sale. Check my counter if you'd like some. I've heard they're nice for decorating.^^  --Robin[#]Robin's Resource Clumps",
-  "WitchMail":  "....some magic....easier to grow....giant crops....recently got a shovel....to transplant them....[#]Giant Crop Shop mail",
+  "WitchMail": "....some magic....easier to grow....giant crops....recently got a shovel....to transplant them....[#]Giant Crop Shop mail",
 
   // Items
   "Shovel.Name": "Shovel",

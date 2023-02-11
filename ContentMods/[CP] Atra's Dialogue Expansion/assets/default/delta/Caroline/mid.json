@@ -1,4 +1,6 @@
 {"Changes":[
+    // Long suffering, does the bookkeeping.
+    // Expensive tastes, not enough money to back that up.
     {
         "LogName": "Rain - SeedShop",
         "Action": "EditData",
@@ -21,7 +23,26 @@
         "Target": "Characters/Dialogue/Caroline",
         "Entries": {
             "9{{YearRemainder}}": "Gosh, @, I was up way too late last night trying to balance the books.#$b#Apologies if I don't feel like chatting.",
-            "11{{YearRemainder}}": "Think I might order some new tea...Let's see, what have I not had recently?"
+            "11{{YearRemainder}}": "Think I might order some new tea...Let's see, what have I not had recently?",
+            "13{{YearRemainder}}": "Wonder if any of our supplies is carrying a new tea?",
+            "15{{YearRemainder}}": "Wish I had more time to garden, but running a small business is a lot of work.",
+            "19{{YearRemainder}}": "Did you see the {{i18n:clothing.brand.{{Random:01, 02, 03, 04, 05, 06, 07, 08}} }} dress Haley was wearing?#$b#I would never when I was her age!",
+            "23{{YearRemainder}}": "%Caroline is muttering to herself.#$b#I wonder if we should get Abigail some therapy or something...#$e#What? Oh, it's nothing."
+        },
+        "When": {"YearModulus": "1"}
+    },
+    {
+        "LogName": "Caroline: mid hearts. Y1, CC",
+        "Action": "EditData",
+        "Target": "Characters/Dialogue/Caroline",
+        "When": {
+            "YearModulus": "1",
+            "IsCommunityCenterComplete": true
+        },
+        "Entries": {
+            "17{{YearRemainder}}": "Ever since Pierre decided that the shop should be open seven days a week, I've felt like I've always been at work.$s#$b#Wish I could just get a little time to drink a nice cup of tea.",
+            "21{{YearRemainder}}": "Used to enjoy going out to the forest to gather mushrooms. We would sometimes sell them, helped when we needed the money.",
+            "23{{YearRemainder}}": "Lewis handles most of the good export out of this county, and we're now handling most of the imports.$h"
         }
     }
 ]}

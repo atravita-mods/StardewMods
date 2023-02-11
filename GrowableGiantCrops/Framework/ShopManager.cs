@@ -222,7 +222,7 @@ internal static class ShopManager
             foreach ((int index, int count) in stock.Value)
             {
                 int price = GetPriceOfProduct(index) ?? 0;
-                _ = sellables.TryAdd(new InventoryGiantCrop(index, 1), new int[] { Math.Max(price * 30, 5_000), count });
+                _ = sellables.TryAdd(new InventoryGiantCrop(index, count), new int[] { Math.Max(price * 30, 5_000), count });
             }
         }
     }
@@ -253,7 +253,8 @@ internal static class ShopManager
 
         Dictionary<int, int> chosen = new();
 
-        for (int i = 0; i < 5; i++)
+        int totalCount = 5 + (ModEntry.GetTotalValidIndexes() / 5);
+        for (int i = 0; i < totalCount; i++)
         {
             Option<int> picked = weighted.GetValue();
             if (picked.IsNone)
@@ -262,7 +263,7 @@ internal static class ShopManager
             }
 
             int idx = picked.Unwrap();
-            if (!chosen.TryGetValue(idx, out var prev))
+            if (!chosen.TryGetValue(idx, out int prev))
             {
                 prev = 0;
             }

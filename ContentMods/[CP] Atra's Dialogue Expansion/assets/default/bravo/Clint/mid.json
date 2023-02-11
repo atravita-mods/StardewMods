@@ -5,7 +5,8 @@
         "Target": "Characters/Dialogue/Clint",
         "When": { "Weather: valley": "Rain, Storm"},
         "Entries":{
-            "Saloon_Entry": "Glad to be out of the rain..."
+            "Saloon_Entry": "Glad to be out of the rain...",
+            "BlackSmith_Entry": "Home, sweet home!"
         }
     },
     {

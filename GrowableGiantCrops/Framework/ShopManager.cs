@@ -33,8 +33,9 @@ internal static class ShopManager
     private static readonly TickCache<bool> HasReachedSkullCavern = new(() => FarmerHelpers.HasAnyFarmerRecievedFlag("qiChallengeComplete"));
     private static readonly TickCache<bool> PerfectFaarm = new(() => FarmerHelpers.HasAnyFarmerRecievedFlag("Farm_Eternal"));
 
+    // giant crop shop state.
+    private static readonly PerScreen<Dictionary<int, int>?> Stock = new();
     private static WeightedManager<int>? weighted;
-    private static readonly PerScreen<Dictionary<int, int>?> stock = new();
 
     private static IAssetName robinHouse = null!;
     private static IAssetName witchHouse = null!;
@@ -70,14 +71,17 @@ internal static class ShopManager
     /// <inheritdoc cref="IContentEvents.AssetRequested"/>
     internal static void OnAssetRequested(AssetRequestedEventArgs e)
     {
-        /* if (e.NameWithoutLocale.IsEquivalentTo(mail))
+        if (e.NameWithoutLocale.IsEquivalentTo(mail))
         {
             e.Edit(static (asset) =>
             {
-                asset.AsDictionary<string, string>().Data[SHOPNAME] = I18n.Caroline_Mail();
+                IDictionary<string, string> data = asset.AsDictionary<string, string>().Data;
+
+                data[RESOURCE_SHOP_NAME] = I18n.RobinMail();
+                data[GIANT_CROP_SHOP_NAME] = I18n.WitchMail();
             });
         }
-        else */if (e.NameWithoutLocale.IsEquivalentTo(robinHouse))
+        else if (e.NameWithoutLocale.IsEquivalentTo(robinHouse))
         {
             e.Edit(
                 apply: static (asset) => asset.AsMap().AddTileProperty(
@@ -134,36 +138,45 @@ internal static class ShopManager
             Dictionary<ISalable, int[]> sellables = new();
             sellables.PopulateWitchShop();
 
-            ShopMenu shop = new(sellables, on_purchase: TrackStock) { storeContext = RESOURCE_SHOP_NAME };
-            Game1.activeClickableMenu = shop;
+            Game1.activeClickableMenu = new ShopMenu(sellables, on_purchase: TrackStock) { storeContext = GIANT_CROP_SHOP_NAME };
         }
     }
 
+    /// <inheritdoc cref="IGameLoopEvents.DayEnding"/>
+    /// <remarks>Used to reset the shop inventory and send mail about the shops.</remarks>
     internal static void OnDayEnd()
     {
-        stock.Value = null;
+        Stock.Value = null;
+
+        // add Robin letter for tomorrow.
+        if (Game1.player.getFriendshipLevelForNPC("Robin") > 250
+            && !Game1.player.mailReceived.Contains(RESOURCE_SHOP_NAME)
+            && Game1.player.mailReceived.Contains("robinKitchenLetter"))
+        {
+            Game1.addMailForTomorrow(mailName: RESOURCE_SHOP_NAME);
+        }
+
+        // add Witch letter for tomorrow.
+        if (Game1.player.hasMagicInk && !Game1.player.mailReceived.Contains(GIANT_CROP_SHOP_NAME))
+        {
+            Game1.addMailForTomorrow(mailName: GIANT_CROP_SHOP_NAME);
+        }
     }
 
     private static bool TrackStock(ISalable salable, Farmer farmer, int count)
     {
-        if (salable is not InventoryGiantCrop crop)
-        {
-            return false;
-        }
-
-        if (stock.Value?.TryGetValue(crop.ParentSheetIndex, out var remaining) == true)
+        if (salable is InventoryGiantCrop crop && Stock.Value?.TryGetValue(crop.ParentSheetIndex, out int remaining) == true)
         {
             remaining -= count;
             if (remaining <= 0)
             {
-                stock.Value.Remove(crop.ParentSheetIndex);
+                Stock.Value.Remove(crop.ParentSheetIndex);
             }
             else
             {
-                stock.Value[crop.ParentSheetIndex] = remaining;
+                Stock.Value[crop.ParentSheetIndex] = remaining;
             }
         }
-
         return false; // do not want to yeet the menu.
     }
 
@@ -203,6 +216,11 @@ internal static class ShopManager
     {
         Debug.Assert(sellables is not null, "Sellables cannot be null.");
 
+        if (!Game1.player.Items.Any(item => item is ShovelTool))
+        {
+            sellables.TryAdd(new ShovelTool(), new[] { 3_000, 1 });
+        }
+
         if (PerfectFaarm.GetValue())
         {
             foreach (int idx in ModEntry.YieldAllGiantCropIndexes())
@@ -213,14 +231,19 @@ internal static class ShopManager
         }
         else
         {
-            stock.Value ??= GenerateDailyStock();
-            if (stock.Value is null)
+            Stock.Value ??= GenerateDailyStock();
+            if (Stock.Value is null)
             {
                 return;
             }
 
-            foreach ((int index, int count) in stock.Value)
+            foreach ((int index, int count) in Stock.Value)
             {
+                if (count <= 0)
+                {
+                    continue;
+                }
+
                 int price = GetPriceOfProduct(index) ?? 0;
                 _ = sellables.TryAdd(new InventoryGiantCrop(index, count), new int[] { Math.Max(price * 30, 5_000), count });
             }

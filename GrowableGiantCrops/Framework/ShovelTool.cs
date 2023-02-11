@@ -272,7 +272,7 @@ public sealed class ShovelTool : GenericTool
                 new Vector2(pickupTile.X * 64f, pickupTile.Y * 64f),
                 color: Color.White,
                 animationLength: 8,
-                flipped: Game1.random.NextDouble() < 0.5,
+                flipped: Game1.random.Next(2) == 0,
                 animationInterval: 50f));
         }
         catch (Exception ex)

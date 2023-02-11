@@ -27,7 +27,8 @@
         "Target": "Characters/Dialogue/Pierre",
         "Entries": {
             "3_2": "Everything's harder when the economy goes bad like this.#$b#Government'll bail out the big guys and there's welfare payments for the poor, but people like me get squeezed.",
-            "5_2": "My suppliers want to raise their prices...#$b#I can't pass on price increases though..."
+            "5_2": "My suppliers want to raise their prices...#$b#I can't pass on price increases though...",
+            "7_2": "Before I moved to Pelican Town? I was a night manager at a gas station in Zuzu City.#$e#Dangerous work, and definitely a young man's job.#$b#I hated having to work nights. It takes more out of you than what most people expect.$s"
         },
         "When": { "YearModulus": "3"}
     }

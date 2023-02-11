@@ -22,6 +22,10 @@
   // Stores
   "ShopMessage.Robin": "Whatcha lookin' for?",
 
+  //mail for shops:
+  "RobinMail": "Hi @!^Recently, I've picked up some large resource clumps for sale. Check my counter if you'd like some. I've heard they're nice for decorating.^^  --Robin[#]Robin's Resource Clumps",
+  "WitchMail":  "....some magic....easier to grow....giant crops....recently got a shovel....to transplant them....[#]Giant Crop Shop mail",
+
   // Items
   "Shovel.Name": "Shovel",
   "Shovel.Description": "An old, beat up shovel.",

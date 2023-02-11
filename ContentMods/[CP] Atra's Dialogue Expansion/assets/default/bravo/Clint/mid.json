@@ -27,5 +27,14 @@
             "8_2": "What would I've done if I didn't become a blacksmith? Err, @, I'm not sure actually.$s#$b#Didn't really have an idea of what I wanted to become as a kid. Just followed my father's footsteps."
         },
         "When": {"YearModulus": 2}
+    },
+    {
+        "LogName": "Clint mid-hearts",
+        "Action": "EditData",
+        "Target": "Characters/Dialogue/Clint",
+        "Entries": {
+            "6_2": "%Clint is mumbling to himself.#$b#Gosh, this economy doesn't help matters...$s#$e#Oh, what? It's nothing."
+        },
+        "When": {"YearModulus": 3}
     }
 ]}

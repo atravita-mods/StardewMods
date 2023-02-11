@@ -1,0 +1,43 @@
+﻿using HarmonyLib;
+
+namespace GrowableGiantCrops.HarmonyPatches.GrassPatches;
+
+/// <summary>
+/// Adds patches against Item.
+/// </summary>
+[HarmonyPatch(typeof(Item))]
+internal static class ItemPatches
+{
+    [HarmonyPrefix]
+    [HarmonyPatch(nameof(Item.canStackWith))]
+    [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Harmony convention.")]
+    private static bool PrefixCanStackWith(Item __instance, ISalable other, ref bool __result)
+    {
+        if (other is null || __instance.ParentSheetIndex != SObjectPatches.GrassStarterIndex)
+        {
+            return true;
+        }
+
+        try
+        {
+            if (other is SObject otherItem)
+            {
+                string? myData = null;
+                string? otherData = null;
+                _ = __instance.modData?.TryGetValue(SObjectPatches.ModDataKey, out myData);
+                _ = otherItem.modData?.TryGetValue(SObjectPatches.ModDataKey, out otherData);
+                if (myData != otherData)
+                {
+                    __result = false;
+                    return false;
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            ModEntry.ModMonitor.Log($"Failed in overwriting stacking behavior:\n\n{ex}", LogLevel.Error);
+        }
+
+        return true;
+    }
+}

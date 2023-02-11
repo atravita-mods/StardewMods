@@ -22,7 +22,8 @@
         "Action" :"EditData",
         "Target": "Characters/Dialogue/Haley",
         "Entries":{
-            "Forest_77_44": "Oh, wow, @, look at those birds! Aren't they beautiful?"
+            "Forest_77_44": "Oh, wow, @, look at those birds! Aren't they beautiful?",
+            "17_2": "Mother and father used to take us traveling with them all the time.$h"
         },
         "When": {"YearModulus": "2"}
     },
@@ -31,7 +32,8 @@
         "Action" :"EditData",
         "Target": "Characters/Dialogue/Haley",
         "Entries":{
-            "Forest_77_44": "Just playing with some new lenses mother sent me.$h"
+            "Forest_77_44": "Just playing with some new lenses mother sent me.$h",
+            "18_2": "Mother loved photography. Sadly, she doesn't have time to take many photos these days.#$e#It takes a lot of patience to get a good photo."
         },
         "When": {"YearModulus": "3"}
     }

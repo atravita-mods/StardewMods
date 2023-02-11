@@ -90,6 +90,36 @@ internal sealed class ModEntry : Mod
     /// <inheritdoc />
     public override object? GetApi() => new Api();
 
+    #region helpers
+
+    /// <summary>
+    /// Get the total number of valid IDs.
+    /// </summary>
+    /// <returns>Count of valid IDs.</returns>
+    internal static int GetTotalValidIndexes() => 3 + JACropIds.Length + MoreGiantCropsIds.Length;
+
+    /// <summary>
+    /// Gets all valid giant crop indexes.
+    /// </summary>
+    /// <returns>All valid indexes for giant crops.</returns>
+    internal static IEnumerable<int> YieldAllGiantCropIndexes()
+    {
+        yield return 190;
+        yield return 254;
+        yield return 276;
+
+        foreach (int item in JACropIds)
+        {
+            yield return item;
+        }
+
+        foreach (int item in MoreGiantCropsIds)
+        {
+            yield return item;
+        }
+    }
+    #endregion
+
     /// <inheritdoc cref="IGameLoopEvents.GameLaunched"/>
     private void OnGameLaunched(object? sender, GameLaunchedEventArgs e)
     {
@@ -111,7 +141,7 @@ internal sealed class ModEntry : Mod
         this.Helper.Events.Content.AssetRequested += static (_, e) => ShopManager.OnAssetRequested(e);
         this.Helper.Events.Content.AssetsInvalidated += static (_, e) => ShopManager.OnAssetInvalidated(e.NamesWithoutLocale);
         this.Helper.Events.Input.ButtonPressed += (_, e) => ShopManager.OnButtonPressed(e, this.Helper.Input);
-        // this.Helper.Events.GameLoop.DayEnding += static (_, _) => ShopManager.OnDayEnd();
+        this.Helper.Events.GameLoop.DayEnding += static (_, _) => ShopManager.OnDayEnd();
 
         // grass
         SObjectPatches.Initialize(this.Helper.ModRegistry);

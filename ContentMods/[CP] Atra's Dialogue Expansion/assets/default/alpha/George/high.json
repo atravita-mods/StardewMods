@@ -1,0 +1,10 @@
+{"Changes":[
+    {
+        "Action": "EditData",
+        "Target": "Characters/Dialogue/George",
+        "Entries": {
+            "15_2": "It's nice that Alex is still livin' with us. I need more help than what my dear wife Evelyn can provide some days."
+        },
+        "When": {"YearModulus": "2"}
+    }
+]}

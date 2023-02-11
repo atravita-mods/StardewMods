@@ -42,6 +42,17 @@
             "When": {
                 "Year|contains=1": false
             }
+        },
+        {
+            "Name": "HasPet",
+            "Value": "{{HasSeenEvent:HostPlayer|contains=1590166, 897405}}",
+        },
+        {
+            "Name": "HasPet",
+            "Value": false,
+            "When": {
+                "HasFlag:HostPlayer": "rejectedPet"
+            }
         }
     ],
     "Changes": [

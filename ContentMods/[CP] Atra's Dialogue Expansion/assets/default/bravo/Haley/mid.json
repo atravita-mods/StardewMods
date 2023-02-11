@@ -33,7 +33,8 @@
         "Target": "Characters/Dialogue/Haley",
         "Entries":{
             "Forest_77_44": "Just playing with some new lenses mother sent me.$h",
-            "18_2": "Mother loved photography. Sadly, she doesn't have time to take many photos these days.#$e#It takes a lot of patience to get a good photo."
+            "18_2": "Mother loved photography. Sadly, she doesn't have time to take many photos these days.#$e#It takes a lot of patience to get a good photo.",
+            "19_2": "Ugh, I've gotta re-do my nails, they're chipping already. This polish wasn't cheap either...$s"
         },
         "When": {"YearModulus": "3"}
     }

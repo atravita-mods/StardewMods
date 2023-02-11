@@ -4,9 +4,9 @@
 TODO:
    - Enchantments?
    - Check map modifications. Which ones do I want to yeet?
-   - Finish up the shops (with randomized selection for giant crops).
    - Let players move mushroom boxes
    - Implement grass + weeds + other objects.
+   - Custom resource clumps and custom ore nodes?
 
 ### Version 0.1.0
 

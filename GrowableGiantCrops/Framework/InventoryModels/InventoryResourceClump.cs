@@ -421,6 +421,12 @@ public sealed class InventoryResourceClump : SObject
         return ResourceClumpIndexesExtensions.IsDefined(idx) ? idx : ResourceClumpIndexes.Invalid;
     }
 
+    internal static bool IsValidClumpIndex(int index)
+    {
+        ResourceClumpIndexes idx = (ResourceClumpIndexes)index;
+        return idx != ResourceClumpIndexes.Invalid && ResourceClumpIndexesExtensions.IsDefined(idx);
+    }
+
     // derived from ResourceClump.draw
     private static Rectangle GetSourceRect(int idx)
     {

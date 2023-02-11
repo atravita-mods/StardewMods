@@ -114,10 +114,7 @@ public sealed class ShovelTool : GenericTool
             if (ModEntry.GrowableBushesAPI?.TryPickUpBush(location, pickupTile) is SObject bush)
             {
                 ModEntry.ModMonitor.DebugOnlyLog($"Picking up bush {bush.Name}", LogLevel.Info);
-                if (!who.addItemToInventoryBool(bush))
-                {
-                    location.debris.Add(new Debris(bush, who.Position));
-                }
+                GiveItemOrMakeDebris(location, who, bush);
                 ModEntry.GrowableBushesAPI.DrawPickUpGraphics(bush, location, bush.TileLocation);
                 who.Stamina -= ModEntry.Config.ShovelEnergy;
                 return;
@@ -134,10 +131,7 @@ public sealed class ShovelTool : GenericTool
                 if (GetMatchingInventoryItem(location, clump) is SObject item)
                 {
                     ModEntry.ModMonitor.DebugOnlyLog($"Picking up {item.Name}", LogLevel.Info);
-                    if (!who.addItemToInventoryBool(item))
-                    {
-                        location.debris.Add(new Debris(item, who.Position));
-                    }
+                    GiveItemOrMakeDebris(location, who, item);
                     who.Stamina -= ModEntry.Config.ShovelEnergy;
                     location.resourceClumps[i].performToolAction(this, 0, pickupTile, location);
                     location.resourceClumps.RemoveAt(i);
@@ -158,10 +152,7 @@ public sealed class ShovelTool : GenericTool
                     if (GetMatchingInventoryItem(woods, clump) is SObject item)
                     {
                         ModEntry.ModMonitor.DebugOnlyLog($"Picking up {item.Name}", LogLevel.Info);
-                        if (!who.addItemToInventoryBool(item))
-                        {
-                            woods.debris.Add(new Debris(item, who.Position));
-                        }
+                        GiveItemOrMakeDebris(woods, who, item);
                         who.Stamina -= ModEntry.Config.ShovelEnergy;
                         woods.stumps[i].performToolAction(this, 0, pickupTile, woods);
                         woods.stumps.RemoveAt(i);
@@ -178,10 +169,7 @@ public sealed class ShovelTool : GenericTool
                     if (GetMatchingInventoryItem(forest, forest.log) is SObject item)
                     {
                         ModEntry.ModMonitor.DebugOnlyLog($"Picking up {item.Name}", LogLevel.Info);
-                        if (!who.addItemToInventoryBool(item))
-                        {
-                            forest.debris.Add(new Debris(item, who.Position));
-                        }
+                        GiveItemOrMakeDebris(forest, who, item);
                         who.Stamina -= ModEntry.Config.ShovelEnergy;
                         forest.log.performToolAction(this, 0, pickupTile, forest);
                         forest.log = null;
@@ -203,10 +191,7 @@ public sealed class ShovelTool : GenericTool
                     if (GetMatchingInventoryItem(location, clump) is SObject item)
                     {
                         ModEntry.ModMonitor.DebugOnlyLog($"Picking up {item.Name}", LogLevel.Info);
-                        if (!who.addItemToInventoryBool(item))
-                        {
-                            location.debris.Add(new Debris(item, who.Position));
-                        }
+                        GiveItemOrMakeDebris(location, who, item);
                         who.Stamina -= ModEntry.Config.ShovelEnergy;
                         location.largeTerrainFeatures[i].performToolAction(this, 0, pickupTile, location);
                         location.largeTerrainFeatures.RemoveAt(i);
@@ -217,16 +202,20 @@ public sealed class ShovelTool : GenericTool
 
             // for small things we take only one energy, at most.
             int energy = Math.Min(ModEntry.Config.ShovelEnergy, 1);
-            if (location.terrainFeatures.TryGetValue(pickupTile, out TerrainFeature? terrain)
-                && terrain.performToolAction(this, 0, pickupTile, location))
+            if (location.terrainFeatures.TryGetValue(pickupTile, out TerrainFeature? terrain))
             {
-                who.Stamina -= energy;
-                location.terrainFeatures.Remove(pickupTile);
-                return;
+                if (terrain.performToolAction(this, 0, pickupTile, location))
+                {
+                    who.Stamina -= energy;
+                    location.terrainFeatures.Remove(pickupTile);
+                    return;
+                }
             }
 
             if (location.objects.TryGetValue(pickupTile, out SObject? obj))
             {
+                // TODO: consider moving slime balls? "Slime Ball"
+
                 // special case: shovel pushes full chests.
                 if (obj is Chest chest && !chest.isEmpty())
                 {
@@ -247,6 +236,24 @@ public sealed class ShovelTool : GenericTool
                     return;
                 }
 
+                if (obj.bigCraftable.Value && obj.GetType() == typeof(SObject))
+                {
+                    if (obj.Name == "Mushroom Box")
+                    {
+                        who.Stamina -= energy;
+                        obj.ParentSheetIndex = 128;
+                        if (obj.readyForHarvest.Value)
+                        {
+                            location.debris.Add(new Debris(obj.heldObject.Value, who.Position));
+                            obj.heldObject.Value = null;
+                        }
+                        obj.performRemoveAction(pickupTile, location);
+                        GiveItemOrMakeDebris(location, who, obj);
+                        location.objects.Remove(pickupTile);
+                        return;
+                    }
+                }
+
                 if (obj.performToolAction(this, location))
                 {
                     who.Stamina -= energy;
@@ -263,7 +270,7 @@ public sealed class ShovelTool : GenericTool
             }
 
             who.Stamina -= energy;
-            location.makeHoeDirt(pickupTile);
+            location.makeHoeDirt(pickupTile, ignoreChecks: false);
             location.playSound("hoeHit");
             Game1.removeSquareDebrisFromTile((int)pickupTile.X, (int)pickupTile.Y);
             location.checkForBuriedItem((int)pickupTile.X, (int)pickupTile.Y, explosion: false, detectOnly: false, who);
@@ -454,6 +461,20 @@ public sealed class ShovelTool : GenericTool
         };
 
         mp.broadcastSprites(loc, objTas, dustTas);
+    }
+
+    /// <summary>
+    /// Tries to add an item to the player's inventory, dropping it at their feet if we can't.
+    /// </summary>
+    /// <param name="location">relevant location.</param>
+    /// <param name="who">farmer to add to.</param>
+    /// <param name="item">item to add.</param>
+    private static void GiveItemOrMakeDebris(GameLocation location, Farmer who, Item item)
+    {
+        if (!who.addItemToInventoryBool(item))
+        {
+            location.debris.Add(new Debris(item, who.Position));
+        }
     }
 
     #endregion

@@ -60,7 +60,7 @@ If you have a mod that changes the Ginger Island maps, this mod may be incompati
 
 #### Current compatibility list:
 
-* No known incompatabilities!
+* No known incompatibilities!
 
 ### Additionally...
 

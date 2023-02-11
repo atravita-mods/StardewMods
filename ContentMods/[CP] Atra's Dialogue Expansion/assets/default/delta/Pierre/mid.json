@@ -28,7 +28,8 @@
         "Entries": {
             "3_2": "Everything's harder when the economy goes bad like this.#$b#Government'll bail out the big guys and there's welfare payments for the poor, but people like me get squeezed.",
             "5_2": "My suppliers want to raise their prices...#$b#I can't pass on price increases though...",
-            "7_2": "Before I moved to Pelican Town? I was a night manager at a gas station in Zuzu City.#$e#Dangerous work, and definitely a young man's job.#$b#I hated having to work nights. It takes more out of you than what most people expect.$s"
+            "7_2": "Before I moved to Pelican Town? I was a night manager at a gas station in Zuzu City.#$e#Dangerous work, and definitely a young man's job.#$b#I hated having to work nights. It takes more out of you than what most people expect.$s",
+            "9_2": "I met Caroline when she was in college and I was working nights at a grocery store.#$b#Working for Joja let me save up enough money to buy this place..."
         },
         "When": { "YearModulus": "3"}
     }

@@ -276,7 +276,7 @@ internal static class ShopManager
 
         Dictionary<int, int> chosen = new();
 
-        int totalCount = 5 + (ModEntry.GetTotalValidIndexes() / 5);
+        int totalCount = Math.Max(5, ModEntry.GetTotalValidIndexes() / 5);
         for (int i = 0; i < totalCount; i++)
         {
             Option<int> picked = weighted.GetValue();

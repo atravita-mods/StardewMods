@@ -11,6 +11,7 @@ using StardewModdingAPI.Events;
 using StardewValley.TerrainFeatures;
 
 using TapGiantCrops.Framework;
+using TapGiantCrops.HarmonyPatches;
 
 namespace TapGiantCrops;
 
@@ -90,6 +91,13 @@ internal sealed class ModEntry : Mod
         try
         {
             harmony.PatchAll(typeof(ModEntry).Assembly);
+
+            if (new Version(1, 6) > new Version(Game1.version) &&
+                (this.Helper.ModRegistry.Get("spacechase0.MoreGiantCrops") is not IModInfo giant || giant.Manifest.Version.IsOlderThan("1.2.0")))
+            {
+                this.Monitor.Log("Applying patch to restore giant crops to save locations", LogLevel.Debug);
+                FixSaveThing.ApplyPatches(harmony);
+            }
         }
         catch (Exception ex)
         {

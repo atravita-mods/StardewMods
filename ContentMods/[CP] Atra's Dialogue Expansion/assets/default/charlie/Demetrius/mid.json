@@ -6,7 +6,7 @@
         "When": { "HasFlag": "Island_FirstParrot" },
         "Entries":
         {
-            "Resort": "The mushrooms around here are extraordinary!$h#$e#I have never seen any mushrooms like these!",
+            "Resort": "The mushrooms around here are extraordinary!$h#$e#I have never seen any mushrooms like these!"
         }
     },
     {
@@ -15,7 +15,7 @@
         "Target": "Characters/Dialogue/rainy",
         "When": {"Season": "winter"},
         "Entries":{
-            "Demetrius": "Rare to see winter storms around here."
+            "Demetrius": "Rare to see winter storms around here....Something in the weather seems different."
         }
     },
     {
@@ -27,9 +27,7 @@
             "fallScienceHouse_22_20": "I'd love to talk, @, but I have a grant submission coming up that I need to work on.",
             "fallMountain_45_8": "We're lucky to have so much old growth forest around here.#$b#It takes decades for a forest to develop properly."
         },
-        "When": {
-            "YearModulus": "1"
-        }
+        "When": { "YearModulus": "1" }
     },
     {
         "LogName": "Demetrius mid-hearts, Y2",
@@ -42,21 +40,19 @@
             "summerScienceHouse_22_20": "Just need to gather a little more data for a proposal.",
             "fallMountain_45_8": "Some of these trees are more than a hundred years old. I hope you weren't planning on cutting them down."
         },
-        "When": {
-            "YearModulus": "2"
-        }
+        "When": { "YearModulus": "2" }
     },
     {
-        "LogName": "Demetrius mid-hearts",
+        "LogName": "Demetrius mid-hearts, Y3",
         "Action": "EditData",
         "Target": "Characters/Dialogue/Demetrius",
         "Entries": {
             "6_2": "Did you see that paper by the %name group out of %place University? Amazing, isn't it?$h",
+            "16_2": "Sometimes I wonder what I could have done to be more successful in my career...$s",
+            "18_2": "Between you and I, @, writing proposals is the worst part of my job.",
             "fallScienceHouse_22_20": "Got a conference coming up, @, hoping I can get myself a talk.",
             "winterScienceHouse_22_20": "My collaborator claims his equipment is broken again.#$b#We're far closer to the submission deadline for this paper than I'd like..."
         },
-        "When": {
-            "YearModulus": "3"
-        }
+        "When": { "YearModulus": "3"}
     }
 ]}

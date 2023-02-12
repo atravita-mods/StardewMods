@@ -12,6 +12,18 @@
         }
     },
     {
+        "LogName": "Leah -- Married Dialogue",
+        "Action": "EditData",
+        "Target": "Characters/Dialogue/MarriageDialogueLeah",
+        "Entries": {
+            "{{TheMightyAmondee.CustomTokens/AnniversarySeason}}_{{TheMightyAmondee.CustomTokens/AnniversaryDay}}": "It's our anniversary, dear! Don't you think we should do something fun today?"
+        },
+        "When": {
+            "HasMod" :"TheMightyAmondee.CustomTokens",
+            "EnableFor|contains=Leah": true
+        }
+    },
+    {
         "LogName": "Demetrius - base",
         "Action": "EditData",
         "Target": "Characters/Dialogue/Demetrius",

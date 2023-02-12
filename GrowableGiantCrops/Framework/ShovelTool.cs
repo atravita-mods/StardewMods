@@ -4,18 +4,18 @@ using AtraCore.Utilities;
 
 using AtraShared.Utils.Extensions;
 using AtraShared.Utils.Shims;
+
 using GrowableGiantCrops.Framework.Assets;
 using GrowableGiantCrops.Framework.InventoryModels;
+using GrowableGiantCrops.HarmonyPatches.GrassPatches;
+
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-using StardewValley;
 using StardewValley.Locations;
 using StardewValley.Objects;
 using StardewValley.TerrainFeatures;
 using StardewValley.Tools;
-
-using static StardewValley.Menus.CharacterCustomization;
 
 using XLocation = xTile.Dimensions.Location;
 
@@ -208,7 +208,18 @@ public sealed class ShovelTool : GenericTool
             {
                 if (terrain is Grass grass)
                 {
-
+                    who.Stamina -= energy;
+                    SObject starter = new(SObjectPatches.GrassStarterIndex, 1);
+                    starter.modData?.SetInt(SObjectPatches.ModDataKey, grass.grassType.Value);
+                    GiveItemOrMakeDebris(location, who, starter);
+                    AddAnimations(
+                        loc: location,
+                        tile: pickupTile,
+                        texturePath: Game1.objectSpriteSheetName,
+                        sourceRect: GameLocation.getSourceRectForObject(SObjectPatches.GrassStarterIndex),
+                        new Point(1, 1));
+                    location.terrainFeatures.Remove(pickupTile);
+                    return;
                 }
 
                 if (terrain.performToolAction(this, 0, pickupTile, location))
@@ -221,6 +232,24 @@ public sealed class ShovelTool : GenericTool
 
             if (location.objects.TryGetValue(pickupTile, out SObject? obj))
             {
+                // TODO: special case terrain stuff.
+                if (!obj.bigCraftable.Value && obj.GetType() == typeof(SObject))
+                {
+                    if (obj.Name == "Stone" || obj.Name.Contains("Weeds") || obj.Name.Contains("Twig"))
+                    {
+                        who.Stamina -= energy;
+                        GiveItemOrMakeDebris(location, who, obj);
+                        AddAnimations(
+                            loc: location,
+                            tile: pickupTile,
+                            texturePath: Game1.objectSpriteSheetName,
+                            sourceRect: GameLocation.getSourceRectForObject(obj.ParentSheetIndex),
+                            new Point(1, 1));
+                        location.Objects.Remove(pickupTile);
+                        return;
+                    }
+                }
+
                 // special case: shovel pushes full chests.
                 if (obj is Chest chest && !chest.isEmpty())
                 {

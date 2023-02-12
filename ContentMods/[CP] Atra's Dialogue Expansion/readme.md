@@ -13,10 +13,11 @@ This mod adds a lot of new dialogue, mostly focused on the mundane parts of smal
 ## Uninstall
 Simply remove this mod from your mods folder.
 
-## Confirguation
+## Configuration 
 TODO
 
 ## Compatability
-TODO
+This mod should be compatiable with most other mods, even other dialogue mods. I've tried to use dialogue keys that aren't commonly used.
 
+## License
 The MIT license over my entire repository covers this, but this is also dual license'd [CC-4.0](https://creativecommons.org/licenses/by/4.0/). You may pick either license.

@@ -13,7 +13,8 @@
             "11_2": "To be honest, @, one of the reasons why I own so much clothing is so I can avoid doing laundry so often.",
             "13_2": "I love how my skin looks today! @, this blush is doing amazing things for my complexion.",
             "15_2": "Look at this new dress my mother sent me! Isn't it flattering?$h",
-            "17_2": "Father got me a gift card to {{i18n:clothing.brand.{{Random:01, 02, 03, 04, 05, 06, 07, 08}} }}. Emily and I are thinking of heading over, perhaps some time this week?"
+            "17_2": "Father got me a gift card to {{i18n:clothing.brand.{{Random:01, 02, 03, 04, 05, 06, 07, 08}} }}. Emily and I are thinking of heading over, perhaps some time this week?",
+            "19_2": "Look, @, I managed to cook something! Emily says mom and dad would be very proud of me.$h#$b#Want some?[194]"
         }
     },
     {

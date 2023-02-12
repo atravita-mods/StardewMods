@@ -12,7 +12,8 @@
         "Action": "EditData",
         "Target": "Characters/Dialogue/Gus",
         "Entries": {
-            "Town4": "Oh, @! Heard you're having a kid soon. You excited?"
+            "Town4": "Oh, @! Heard you're having a kid soon. You excited?",
+            "Saloon_Fri": "Oh, @! How have you been? Heard on the grapevine you're having a kiddo soon. Here, take this.[236]$h.#$b#I hear parenting takes a lot out of you..."
         },
         "When": { "HavingChild": "@{{playerName}}"}
     },
@@ -35,6 +36,15 @@
             "summerSeedShop6": "@, have you cooked anything interesting recently? Our little valley has so many nice ingredients just out for the taking, if you're willing to forage.$h",
             "fallSeedShop6": "Let's see, where did I put my grocery list?",
             "1_2": "I've always dreamed of owning a restaurant.$h"
+        }
+    },
+    {
+        "LogName": "Gus Y3",
+        "Action": "EditData",
+        "Target": "Characters/Dialogue/Gus",
+        "When": { "YearRemainder": "3"},
+        "Entries": {
+            "fall_15_2": "Hey, @, any fall dishes you're looking forward to cooking?#$e#Made some excellent stuffing the other day. Here, have some![239]"
         }
     }
 ]}

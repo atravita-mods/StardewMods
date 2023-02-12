@@ -1,5 +1,7 @@
 ﻿using NetEscapades.EnumGenerators;
 
+using StardewValley.TerrainFeatures;
+
 #nullable enable
 
 namespace GrowableGiantCrops;
@@ -74,6 +76,29 @@ public enum ResourceClumpIndexes
 
     /// <summary>
     /// Represents an invalid ResourceClumpIndex
+    /// </summary>
+    Invalid = -999,
+}
+
+/// <summary>
+/// The enum used for different grass types.
+/// Do not copy the [EnumExtensions] attribute, that is used for internal source generation.
+/// </summary>
+[EnumExtensions]
+public enum GrassIndexes
+{
+    Spring = Grass.springGrass,
+    Cave = Grass.caveGrass,
+    Forst = Grass.frostGrass,
+    Lava = Grass.lavaGrass,
+    CaveTwo = Grass.caveGrass2,
+    Cobweb = Grass.cobweb,
+
+    // usually would have just used null,
+    // but Pintail can't proxy Nullable<TEnum> right now.
+
+    /// <summary>
+    /// Represents an invalid GrassIndex
     /// </summary>
     Invalid = -999,
 }

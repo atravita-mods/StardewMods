@@ -36,14 +36,14 @@ internal static class FixSaveThing
         // Keep track of occupied tiles here.
         HashSet<Vector2> prev = new(l.resourceClumps.Count);
 
-        foreach (var clump in __instance.resourceClumps)
+        foreach (ResourceClump? clump in __instance.resourceClumps)
         {
             prev.Add(clump.tile.Value);
         }
 
         // restore previous giant crops.
         int count = 0;
-        foreach (var clump in l.resourceClumps)
+        foreach (ResourceClump? clump in l.resourceClumps)
         {
             if (clump is GiantCrop crop && prev.Add(crop.tile.Value))
             {

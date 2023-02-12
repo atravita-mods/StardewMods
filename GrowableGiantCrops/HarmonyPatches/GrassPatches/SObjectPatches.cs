@@ -1,9 +1,13 @@
 ﻿using System.Reflection;
+using System.Reflection.Emit;
 using System.Runtime.CompilerServices;
 
 using AtraBase.Toolkit;
 
 using AtraCore.Framework.ReflectionManager;
+
+using AtraShared.Utils.Extensions;
+using AtraShared.Utils.HarmonyHelper;
 
 using FastExpressionCompiler.LightExpression;
 
@@ -115,8 +119,6 @@ internal static class SObjectPatches
         ["6"] = 140,
     };
 
-    #endregion
-
     [MethodImpl(TKConstants.Hot)]
     private static bool GetDrawParts(SObject obj, [NotNullWhen(true)] out Texture2D? tex, out int offset)
     {
@@ -168,7 +170,7 @@ internal static class SObjectPatches
             origin: Vector2.Zero,
             scale: Vector2.One * Game1.pixelZoom,
             effects: SpriteEffects.None,
-            draw_layer);
+            layerDepth: draw_layer);
 
         return false;
     }
@@ -184,7 +186,7 @@ internal static class SObjectPatches
 
         spriteBatch.Draw(
             texture: tex,
-            position: objectPosition,
+            position: objectPosition - new Vector2(0, 8),
             sourceRectangle: new Rectangle(30, offset, 15, 20),
             color: Color.White,
             rotation: 0f,
@@ -228,4 +230,53 @@ internal static class SObjectPatches
         }
         return false;
     }
+
+    #endregion
+
+    #region placement patch
+
+    private static Grass GetMatchingGrass(SObject obj)
+    {
+        if (obj.ParentSheetIndex != GrassStarterIndex || obj.modData?.GetInt(ModDataKey) is not int idx)
+        {
+            return new Grass(Grass.springGrass, 4);
+        }
+
+        Grass grass = new(idx, 1);
+        grass.modData.SetBool(ModDataKey, true);
+        return grass;
+    }
+
+    [HarmonyPatch(nameof(SObject.placementAction))]
+    [SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1116:Split parameters should start on line after declaration", Justification = "Reviewed.")]
+    private static IEnumerable<CodeInstruction>? Transpiler(IEnumerable<CodeInstruction> instructions, ILGenerator gen, MethodBase original)
+    {
+        try
+        {
+            ILHelper helper = new(original, instructions, ModEntry.ModMonitor, gen);
+            helper.FindNext(new CodeInstructionWrapper[]
+            {
+                OpCodes.Ldc_I4_1,
+                OpCodes.Ldc_I4_4,
+                (OpCodes.Newobj, typeof(Grass).GetCachedConstructor<int, int>(ReflectionCache.FlagTypes.InstanceFlags)),
+            })
+            .GetLabels(out IList<Label>? labels)
+            .Remove(3)
+            .Insert(new CodeInstruction[]
+            {
+                new(OpCodes.Ldarg_0),
+                new(OpCodes.Call, typeof(SObjectPatches).GetCachedMethod(nameof(GetMatchingGrass), ReflectionCache.FlagTypes.StaticFlags)),
+            }, withLabels: labels);
+
+            // helper.Print();
+            return helper.Render();
+        }
+        catch (Exception ex)
+        {
+            ModEntry.ModMonitor.Log($"Mod crashed while transpiling {original.FullDescription()}:\n\n{ex}", LogLevel.Error);
+            original.Snitch(ModEntry.ModMonitor);
+        }
+        return null;
+    }
+    #endregion
 }

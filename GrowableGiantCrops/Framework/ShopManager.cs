@@ -13,6 +13,7 @@ using AtraShared.Utils.Extensions;
 using AtraShared.Wrappers;
 
 using GrowableGiantCrops.Framework.InventoryModels;
+using GrowableGiantCrops.HarmonyPatches.GrassPatches;
 
 using StardewModdingAPI.Events;
 using StardewModdingAPI.Utilities;
@@ -219,6 +220,16 @@ internal static class ShopManager
         if (!Game1.player.Items.Any(item => item is ShovelTool))
         {
             sellables.TryAdd(new ShovelTool(), new[] { 3_000, 1 });
+        }
+
+        // grass
+        foreach (GrassIndexes grass in GrassIndexesExtensions.GetValues())
+        {
+            if (grass == GrassIndexes.Invalid)
+            {
+                continue;
+            }
+            _ = sellables.TryAdd(new SObject(SObjectPatches.GrassStarterIndex, 1), new[] { 100, ShopMenu.infiniteStock });
         }
 
         if (PerfectFaarm.GetValue())

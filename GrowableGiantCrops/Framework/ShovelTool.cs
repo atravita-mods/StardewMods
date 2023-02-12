@@ -257,7 +257,7 @@ public sealed class ShovelTool : GenericTool
                 }
 
                 // special case: shovel pushes full chests.
-                if (obj is Chest chest && !chest.isEmpty())
+                if (obj is Chest chest && !chest.isEmpty() && chest.playerChest.Value)
                 {
                     chest.GetMutex().RequestLock(
                         acquired: () =>

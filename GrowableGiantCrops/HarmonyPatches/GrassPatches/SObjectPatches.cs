@@ -23,7 +23,12 @@ using StardewValley.TerrainFeatures;
 
 namespace GrowableGiantCrops.HarmonyPatches.GrassPatches;
 
+/// <summary>
+/// Patches on SObject for grass.
+/// </summary>
 [HarmonyPatch(typeof(SObject))]
+[SuppressMessage("StyleCop.CSharp.OrderingRules", "SA1201:Elements should appear in the correct order", Justification = "Reviewed.")]
+[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1311:Static readonly fields should begin with upper-case letter", Justification = "Reviewed.")]
 internal static class SObjectPatches
 {
     /// <summary>
@@ -38,7 +43,7 @@ internal static class SObjectPatches
 
     #region delegates
 
-    private static Lazy<Func<SObject, bool>?> isMoreGrassStarter = new(() =>
+    private static readonly Lazy<Func<SObject, bool>?> isMoreGrassStarter = new(() =>
     {
         Type? moreGrass = AccessTools.TypeByName("MoreGrassStarters.GrassStarterItem");
         if (moreGrass is null)
@@ -51,9 +56,12 @@ internal static class SObjectPatches
         return Expression.Lambda<Func<SObject, bool>>(express, obj).CompileFast();
     });
 
+    /// <summary>
+    /// Gets whether an item is a MoreGrassStarter grass starter.
+    /// </summary>
     internal static Func<SObject, bool>? IsMoreGrassStarter => isMoreGrassStarter.Value;
 
-    private static Lazy<Func<int, SObject>?> instantiateMoreGrassStarter = new(() =>
+    private static readonly Lazy<Func<int, SObject>?> instantiateMoreGrassStarter = new(() =>
     {
         Type? moreGrass = AccessTools.TypeByName("MoreGrassStarters.GrassStarterItem");
         if (moreGrass is null)

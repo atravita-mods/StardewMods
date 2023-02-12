@@ -50,9 +50,19 @@
             "6_2": "Did you see that paper by the %name group out of %place University? Amazing, isn't it?$h",
             "16_2": "Sometimes I wonder what I could have done to be more successful in my career...$s",
             "18_2": "Between you and I, @, writing proposals is the worst part of my job.",
+            "20_2": "Tree fertilizer can make trees grow much faster, but I wonder if it affects the quality of their wood.#$b#Generally fast-growing trees can't produce as dense of wood.",
             "fallScienceHouse_22_20": "Got a conference coming up, @, hoping I can get myself a talk.",
             "winterScienceHouse_22_20": "My collaborator claims his equipment is broken again.#$b#We're far closer to the submission deadline for this paper than I'd like..."
         },
         "When": { "YearModulus": "3"}
+    },
+    {
+        "LogName": "Demetrius mid-hearts, Y4",
+        "Action": "EditData",
+        "Target": "Characters/Dialogue/Demetrius",
+        "Entries": {
+            "2_2": "Before Pelican Town was a mining town, it was a forestry.#$b#But that was a long time ago, and the forest has had a bit of a chance to recover.",
+        },
+        "When": { "YearModulus": "4"}
     }
 ]}

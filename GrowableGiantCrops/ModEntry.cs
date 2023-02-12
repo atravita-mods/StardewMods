@@ -143,9 +143,6 @@ internal sealed class ModEntry : Mod
         this.Helper.Events.Input.ButtonPressed += (_, e) => ShopManager.OnButtonPressed(e, this.Helper.Input);
         this.Helper.Events.GameLoop.DayEnding += static (_, _) => ShopManager.OnDayEnd();
 
-        // grass
-        SObjectPatches.Initialize(this.Helper.ModRegistry);
-
         this.ApplyPatches(new Harmony(this.ModManifest.UniqueID));
 
         GMCMHelper gmcmHelper = new(this.Monitor, this.Helper.Translation, this.Helper.ModRegistry, this.ModManifest);
@@ -206,6 +203,11 @@ internal sealed class ModEntry : Mod
             {
                 this.Monitor.Log("Applying FTM patches");
                 FTMArtifactSpotPatch.ApplyPatch(harmony);
+            }
+            if (this.Helper.ModRegistry.IsLoaded("spacechase0.MoreGrassStarters"))
+            {
+                this.Monitor.Log("Patching More Grass Starters");
+                MoreGrassStartersCompat.ApplyPatch(harmony);
             }
         }
         catch (Exception ex)

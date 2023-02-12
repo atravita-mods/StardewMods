@@ -209,7 +209,12 @@ public sealed class ShovelTool : GenericTool
                 if (terrain is Grass grass)
                 {
                     who.Stamina -= energy;
-                    SObject starter = new(SObjectPatches.GrassStarterIndex, 1);
+                    SObject? starter = null;
+                    if (SObjectPatches.IsMoreGrassGrass?.Invoke(grass) == true)
+                    {
+                        starter = SObjectPatches.InstantiateMoreGrassStarter?.Invoke(grass.grassType.Value);
+                    }
+                    starter ??= new(SObjectPatches.GrassStarterIndex, 1);
                     starter.modData?.SetInt(SObjectPatches.ModDataKey, grass.grassType.Value);
                     GiveItemOrMakeDebris(location, who, starter);
                     AddAnimations(
@@ -232,10 +237,11 @@ public sealed class ShovelTool : GenericTool
 
             if (location.objects.TryGetValue(pickupTile, out SObject? obj))
             {
-                // TODO: special case terrain stuff.
+                // special case terrain stuff.
                 if (!obj.bigCraftable.Value && obj.GetType() == typeof(SObject))
                 {
-                    if (obj.Name == "Stone" || obj.Name.Contains("Weeds") || obj.Name.Contains("Twig"))
+                    if (obj.ParentSheetIndex >= 0 &&
+                        (obj.Name == "Stone" || obj.Name.Contains("Weeds") || obj.Name.Contains("Twig")))
                     {
                         who.Stamina -= energy;
                         GiveItemOrMakeDebris(location, who, obj);

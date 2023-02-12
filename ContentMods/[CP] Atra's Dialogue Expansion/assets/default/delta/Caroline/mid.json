@@ -27,7 +27,8 @@
             "13{{YearRemainder}}": "Wonder if any of our supplies is carrying a new tea?",
             "15{{YearRemainder}}": "Wish I had more time to garden, but running a small business is a lot of work.",
             "19{{YearRemainder}}": "Did you see the {{i18n:clothing.brand.{{Random:01, 02, 03, 04, 05, 06, 07, 08}} }} dress Haley was wearing?#$b#I would never when I was her age!",
-            "25{{YearRemainder}}": "%Caroline is muttering to herself.#$b#I wonder if we should get Abigail some therapy or something...#$e#What? Oh, it's nothing."
+            "25{{YearRemainder}}": "%Caroline is muttering to herself.#$b#I wonder if we should get Abigail some therapy or something...#$e#What? Oh, it's nothing.",
+            "28{{YearRemainder}}": "I grew up here in this valley. Only really left once, to go to college in Zuzu City.#$b#I love it here. It's my home."
         },
         "When": {"YearModulus": "1"}
     },
@@ -40,20 +41,33 @@
             "IsCommunityCenterComplete": true
         },
         "Entries": {
+            "1{{YearRemainder}}": "Hey, @, how have you been? Join me for a cup of tea?[614]",
+            "4{{YearRemainder}}": "Ugh, @, I wish I had more time to garden.$s#$e#Say, take these and plant them for me? I haven't the time to do much gardening myself lately.[770]",
             "17{{YearRemainder}}": "Ever since Pierre decided that the shop should be open seven days a week, I've felt like I've always been at work.$s#$b#Wish I could just get a little time to drink a nice cup of tea.",
             "21{{YearRemainder}}": "Used to enjoy going out to the forest to gather mushrooms. We would sometimes sell them, helped when we needed the money.",
             "23{{YearRemainder}}": "Lewis handles most of the good export out of this county, and we're now handling most of the imports.$h"
         }
     },
     {
-        "LogName": "Caroline: mid hearts. Y1, CC",
+        "LogName": "Caroline: mid hearts. Y2",
+        "Action": "EditData",
+        "Target": "Characters/Dialogue/Caroline",
+        "When": { "YearModulus": "2" },
+        "Entries": {
+            "1_2": "@, I feel so old and out of touch these days. I have no clue what the young people want anymore.",
+            "3_2": "We would have supported Abigail if she wanted to  leave home to go to college, but that wasn't what she wanted to do."
+        }
+    },
+    {
+        "LogName": "Caroline: mid hearts Y2 post SO",
         "Action": "EditData",
         "Target": "Characters/Dialogue/Caroline",
         "When": {
             "YearModulus": "2",
+            "HasFlag": "carolineSO"
         },
         "Entries": {
-            "1_2": "@, I feel so old and out of touch these days. I have no clue what the young people want anymore."
+            "5_2": "I miss being young and free-spirited.$s#$b#And here I am, trying to get Abigail to behave more like an adult.",
         }
     }
 ]}

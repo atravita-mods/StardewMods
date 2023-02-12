@@ -1,0 +1,13 @@
+{"Changes":[
+    {
+        "Action": "EditData",
+        "LogName": "Vincent mid-hearts",
+        "Target": "Characters/Dialogue/Vincent",
+        "Entries": {
+            "2{{YearRemainder}}": "My ear hurts.$s",
+        },
+        "When": {
+            "YearModulus": "1"
+        }
+    }
+]}

@@ -61,5 +61,14 @@
             "EnableFor": "Kent",
             "Query: {{Hearts:Kent}} >= 6": true
         }
+    },
+    {
+        "Action": "Include",
+        "LogName": "Vincent - mid hearts",
+        "FromFile": "assets/default/bravo/Vincent/mid.json",
+        "When": {
+            "EnableFor": "Vincent",
+            "Query: {{Hearts:Kent}} >= 6": true
+        }
     }
 ]}

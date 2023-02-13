@@ -377,7 +377,8 @@ public sealed class InventoryBush : SObject
         {
             return false;
         }
-        return this.ParentSheetIndex == otherBush.ParentSheetIndex;
+        return this.ParentSheetIndex == otherBush.ParentSheetIndex
+            && (!ModEntry.Config.PreserveModData || this.modData.ModDataMatches(otherBush.modData));
     }
 
     /// <inheritdoc />

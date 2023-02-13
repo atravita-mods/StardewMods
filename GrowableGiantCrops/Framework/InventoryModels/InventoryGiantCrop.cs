@@ -6,6 +6,7 @@ using AtraBase.Toolkit.Reflection;
 using AtraCore.Framework.ReflectionManager;
 
 using AtraShared.Integrations.Interfaces;
+using AtraShared.Utils.Extensions;
 using AtraShared.Wrappers;
 
 using GrowableGiantCrops.Framework.Assets;
@@ -40,6 +41,8 @@ public sealed class InventoryGiantCrop : SObject
     /// Khloe's mod data key, used to identify her giant crops.
     /// </summary>
     internal const string GiantCropTweaksModDataKey = "leclair.giantcroptweaks/Id";
+
+    internal const string ModDataKey = $"{InventoryGiantCropPrefix}Id";
 
     /// <summary>
     /// Numeric category ID used to identify Khloe's giant crops.
@@ -259,6 +262,12 @@ public sealed class InventoryGiantCrop : SObject
         placementTile.Y -= this.tileSize.Y - 1;
 
         GiantCrop giant = new(this.ParentSheetIndex, placementTile);
+
+        if (ModEntry.Config.PreserveModData)
+        {
+            giant.modData.CopyModDataFrom(this.modData);
+        }
+        giant.modData?.SetInt(ModDataKey, this.ParentSheetIndex);
         if (!string.IsNullOrEmpty(this.stringID.Value))
         {
             giant.modData[GiantCropTweaksModDataKey] = this.stringID.Value;
@@ -536,13 +545,14 @@ public sealed class InventoryGiantCrop : SObject
     /// <inheritdoc />
     public override bool canStackWith(ISalable other)
     {
-        if (other is not InventoryGiantCrop otherBush)
+        if (other is not InventoryGiantCrop otherCrop)
         {
             return false;
         }
-        return this.ParentSheetIndex == otherBush.ParentSheetIndex
-            && this.Category == otherBush.Category
-            && this.stringID.Value == otherBush.stringID.Value;
+        return this.ParentSheetIndex == otherCrop.ParentSheetIndex
+            && this.Category == otherCrop.Category
+            && this.stringID.Value == otherCrop.stringID.Value
+            && (!ModEntry.Config.PreserveModData || this.modData.ModDataMatches(otherCrop.modData));
     }
 
     /// <inheritdoc />

@@ -180,7 +180,11 @@ public sealed class InventoryResourceClump : SObject
         // edge, so just subtract here.
         placementTile.Y -= 1;
         ResourceClump clump = new(this.ParentSheetIndex, 2, 2, placementTile);
-        clump.modData.SetEnum(ResourceModdata, size);
+        if (ModEntry.Config.PreserveModData)
+        {
+            clump.modData.CopyModDataFrom(this.modData);
+        }
+        clump.modData?.SetEnum(ResourceModdata, size);
         location.resourceClumps.Add(clump);
         location.playSound("thudStep");
         ShakeResourceClump(clump);
@@ -364,11 +368,12 @@ public sealed class InventoryResourceClump : SObject
     /// <inheritdoc />
     public override bool canStackWith(ISalable other)
     {
-        if (other is not InventoryResourceClump otherBush)
+        if (other is not InventoryResourceClump otherClump)
         {
             return false;
         }
-        return this.ParentSheetIndex == otherBush.ParentSheetIndex;
+        return this.ParentSheetIndex == otherClump.ParentSheetIndex
+            && (!ModEntry.Config.PreserveModData || this.modData.ModDataMatches(otherClump.modData));
     }
 
     /// <inheritdoc/>

@@ -2,9 +2,8 @@
 
 using AtraBase.Toolkit.Extensions;
 
+using AtraShared.Utils.Extensions;
 using AtraShared.Wrappers;
-
-using GrowableGiantCrops.Framework.Assets;
 
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -21,7 +20,6 @@ namespace GrowableGiantCrops.Framework.InventoryModels;
 /// </summary>
 [XmlType("Mods_atravita_InventoryFruitTree")]
 [SuppressMessage("StyleCop.CSharp.OrderingRules", "SA1202:Elements should be ordered by access", Justification = "Keeping like methods together.")]
-[SuppressMessage("StyleCop.CSharp.OrderingRules", "SA1201:Elements should appear in the correct order", Justification = "Keeping like methods together.")]
 public sealed class InventoryFruitTree : SObject
 {
     #region consts
@@ -30,6 +28,8 @@ public sealed class InventoryFruitTree : SObject
     /// A prefix used on the name of a tree in the inventory.
     /// </summary>
     internal const string InventoryTreePrefix = "atravita.InventoryFruitTree/";
+
+    internal const string ModDataKey = $"{InventoryTreePrefix}Id";
 
     /// <summary>
     /// The category number for inventory trees.
@@ -159,6 +159,12 @@ public sealed class InventoryFruitTree : SObject
         };
         fruitTree.struckByLightningCountdown.Value = this.struckByLightning.Value;
         fruitTree.daysUntilMature.Value = this.daysUntilMature.Value;
+        if (ModEntry.Config.PreserveModData)
+        {
+            fruitTree.modData.CopyModDataFrom(this.modData);
+        }
+        fruitTree.modData?.SetInt(ModDataKey, this.ParentSheetIndex);
+
         fruitTree.shake(placementTile, true, location);
         location.terrainFeatures[placementTile] = fruitTree;
         location.playSound("dirtyHit");
@@ -353,7 +359,8 @@ public sealed class InventoryFruitTree : SObject
         return this.ParentSheetIndex == otherFruitTree.ParentSheetIndex
             && this.growthStage.Value == otherFruitTree.growthStage.Value
             && this.daysUntilMature.Value == otherFruitTree.daysUntilMature.Value
-            && this.struckByLightning.Value == otherFruitTree.struckByLightning.Value;
+            && this.struckByLightning.Value == otherFruitTree.struckByLightning.Value
+            && (!ModEntry.Config.PreserveModData || this.modData.ModDataMatches(otherFruitTree.modData));
     }
 
     /// <inheritdoc />

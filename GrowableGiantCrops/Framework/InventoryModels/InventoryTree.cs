@@ -2,6 +2,8 @@
 
 using AtraCore.Framework.ReflectionManager;
 
+using AtraShared.Utils.Extensions;
+
 using GrowableGiantCrops.Framework.Assets;
 
 using Microsoft.Xna.Framework;
@@ -29,6 +31,8 @@ public sealed class InventoryTree : SObject
     /// A prefix used on the name of a tree in the inventory.
     /// </summary>
     internal const string InventoryTreePrefix = "atravita.InventoryTree/";
+
+    internal const string ModDataKey = $"{InventoryTreePrefix}Type";
 
     /// <summary>
     /// The category number for inventory trees.
@@ -160,6 +164,12 @@ public sealed class InventoryTree : SObject
         }
 
         Tree tree = new(this.ParentSheetIndex, this.growthStage.Value);
+        if (ModEntry.Config.PreserveModData)
+        {
+            tree.modData.CopyModDataFrom(this.modData);
+        }
+        tree.modData?.SetEnum(ModDataKey, (TreeIndexes)this.ParentSheetIndex);
+
         location.terrainFeatures[placementTile] = tree;
         TreeShakeMethod(tree, placementTile, true, location);
         location.playSound("dirtyHit");
@@ -390,7 +400,8 @@ public sealed class InventoryTree : SObject
             return false;
         }
         return this.ParentSheetIndex == tree.ParentSheetIndex
-            && this.growthStage.Value == tree.growthStage.Value;
+            && this.growthStage.Value == tree.growthStage.Value
+            && (!ModEntry.Config.PreserveModData || this.modData.ModDataMatches(tree.modData));
     }
 
     /// <inheritdoc/>

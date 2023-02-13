@@ -70,6 +70,12 @@ public sealed class GrowableBushesAPI : IGrowableBushesAPI
                         {
                             TileLocation = bush.tilePosition.Value,
                         };
+
+                        if (ModEntry.Config.PreserveModData)
+                        {
+                            pickedUpBush.modData.CopyModDataFrom(bush.modData);
+                        }
+
                         return pickedUpBush;
                     }
                 }

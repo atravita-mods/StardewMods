@@ -17,12 +17,12 @@ public static class ModDataExtensions
     /// <summary>
     /// Gets whether two modData dictionaries contain exactly the same modData.
     /// </summary>
-    /// <param name="modData">This modData.</param>
+    /// <param name="self">This modData.</param>
     /// <param name="other">That modData.</param>
     /// <returns>True if they match, false otherwise.</returns>
-    internal static bool ModDataMatches(this ModDataDictionary? modData, ModDataDictionary? other)
+    public static bool ModDataMatches(this ModDataDictionary? self, ModDataDictionary? other)
     {
-        if (modData?.Count() is null or 0)
+        if (self?.Count() is null or 0)
         {
             return other?.Count() is null or 0;
         }
@@ -30,8 +30,26 @@ public static class ModDataExtensions
         {
             return false;
         }
-        return modData.Count() == other.Count()
-                && modData.Pairs.All((kvp) => other.TryGetValue(kvp.Key, out var val) && val == kvp.Value);
+        return self.Count() == other.Count()
+                && self.Pairs.All((kvp) => other.TryGetValue(kvp.Key, out var val) && val == kvp.Value);
+    }
+
+    /// <summary>
+    /// Copies all modData out of the other dictionary into this one.
+    /// </summary>
+    /// <param name="self">This modData.</param>
+    /// <param name="other">That modData.</param>
+    public static void CopyModDataFrom(this ModDataDictionary? self, ModDataDictionary? other)
+    {
+        if (self is null || other is null)
+        {
+            return;
+        }
+
+        foreach ((string key, string value) in other.Pairs)
+        {
+            self[key] = value;
+        }
     }
 
     // Instead of storing a real bool, just store 0 or 1

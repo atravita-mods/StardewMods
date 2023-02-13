@@ -202,7 +202,7 @@ internal static class ShopManager
             }
         }
         else if (salable.GetType() == typeof(SObject) && salable is SObject obj && !obj.bigCraftable.Value
-            && NodeStock.Value?.TryGetValue(obj.ParentSheetIndex, out var remainder) == true)
+            && NodeStock.Value?.TryGetValue(obj.ParentSheetIndex, out int remainder) == true)
         {
             remainder -= count;
             if (remainder <= 0)
@@ -244,18 +244,8 @@ internal static class ShopManager
                 sellData = new[] { 7_500, ShopMenu.infiniteStock };
             }
 
-            InventoryResourceClump clumpItem = new InventoryResourceClump(clump, 1);
+            InventoryResourceClump clumpItem = new(clump, 1);
             _ = sellables.TryAdd(clumpItem, sellData);
-        }
-    }
-
-    private static void PopulateWitchShop(this IDictionary<ISalable, int[]> sellables)
-    {
-        Debug.Assert(sellables is not null, "Sellables cannot be null.");
-
-        if (!Game1.player.Items.Any(item => item is ShovelTool))
-        {
-            sellables.TryAdd(new ShovelTool(), new[] { 3_000, 1 });
         }
 
         // grass
@@ -270,18 +260,28 @@ internal static class ShopManager
             grassStarter.modData?.SetInt(SObjectPatches.ModDataKey, (int)grass);
             _ = sellables.TryAdd(grassStarter, new[] { 100, ShopMenu.infiniteStock });
         }
+    }
+
+    private static void PopulateWitchShop(this IDictionary<ISalable, int[]> sellables)
+    {
+        Debug.Assert(sellables is not null, "Sellables cannot be null.");
+
+        if (!Game1.player.Items.Any(item => item is ShovelTool))
+        {
+            sellables.TryAdd(new ShovelTool(), new[] { 3_000, 1 });
+        }
 
         if (PerfectFaarm.GetValue())
         {
             foreach (int idx in ModEntry.YieldAllGiantCropIndexes())
             {
                 int price = GetPriceOfProduct(idx) ?? 0;
-                _ = sellables.TryAdd(new InventoryGiantCrop(idx, 1), new int[] { Math.Max(price * 30, 5_000), ShopMenu.infiniteStock});
+                _ = sellables.TryAdd(new InventoryGiantCrop(idx, 1), new int[] { Math.Max(price * 30, 5_000), ShopMenu.infiniteStock });
             }
 
             foreach (int idx in nodes)
             {
-                _ = sellables.TryAdd(new SObject(idx, 1), new[] { 100, ShopMenu.infiniteStock });
+                _ = sellables.TryAdd(new SObject(idx, 1) { MinutesUntilReady = 25 }, new[] { 500, ShopMenu.infiniteStock });
             }
         }
         else
@@ -310,7 +310,7 @@ internal static class ShopManager
                     {
                         continue;
                     }
-                    _ = sellables.TryAdd(new SObject(index, count), new[] { 100, count });
+                    _ = sellables.TryAdd(new SObject(index, count) { MinutesUntilReady = 25 }, new[] { 500, count });
                 }
             }
         }
@@ -336,13 +336,10 @@ internal static class ShopManager
     {
         Dictionary<int, int> chosen = new(6);
         ShuffledYielder<int> shuffler = new(nodes);
-        for (int i = 0; i < 6; i++)
+        int total = 6;
+        while (shuffler.MoveNext() && total-- > 0)
         {
-            if(!shuffler.MoveNext())
-            {
-                break;
-            }
-            chosen[shuffler.Current] = 5;
+            chosen[shuffler.Current] = 10;
         }
         return chosen.Count > 0 ? chosen : null;
     }

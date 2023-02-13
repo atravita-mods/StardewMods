@@ -129,9 +129,11 @@ internal sealed class ModEntry : Mod
             return;
         }
 
-        api.RegisterSerializerType(typeof(InventoryGiantCrop));
         api.RegisterSerializerType(typeof(ShovelTool));
         api.RegisterSerializerType(typeof(InventoryResourceClump));
+        api.RegisterSerializerType(typeof(InventoryGiantCrop));
+        api.RegisterSerializerType(typeof(InventoryFruitTree));
+        api.RegisterSerializerType(typeof(InventoryTree));
 
         this.Helper.Events.GameLoop.SaveLoaded += this.SaveLoaded;
 

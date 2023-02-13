@@ -132,7 +132,7 @@ internal static class SObjectPatches
     {
         tex = null;
         offset = 0;
-        if (obj.ParentSheetIndex != GrassStarterIndex || obj.modData?.TryGetValue(ModDataKey, out var idx) != true)
+        if (obj.ParentSheetIndex != GrassStarterIndex || obj.modData?.TryGetValue(ModDataKey, out string? idx) != true)
         {
             return false;
         }

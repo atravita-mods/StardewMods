@@ -14,6 +14,8 @@
   "ShouldNPCsTrampleBushes.description": "If enabled, will allow NPCs to remove bushes in their path.",
   "RelaxedPlacement.title": "Relaxed Placement",
   "RelaxedPlacement.description": "If enabled, placement rules will be relaxed.",
+  "AllowBushStacking.title": "Bush Stacking",
+  "AllowBushStacking.description": "If enabled, bushes will be able to stack.",
 
   // Shop
   "shop.message": "Hi! Anything you want?",

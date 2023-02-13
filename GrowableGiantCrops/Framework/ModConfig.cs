@@ -58,5 +58,12 @@ public sealed class ModConfig
 
     public bool ShouldAnimalsEatPlacedGrass { get; set; } = true;
 
+    // TODO
     public bool ShouldPlacedGrassSpread { get; set; } = false;
+
+    // TODO
+    public bool PreserveModData { get; set; } = true;
+
+    // TODO
+    public bool AllowLargeItemStacking { get; set; } = true;
 }

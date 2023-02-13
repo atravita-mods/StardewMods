@@ -44,7 +44,7 @@ internal static class PreventWeedSpread
             .Push()
             .StoreBranchDest()
             .AdvanceToStoredLabel()
-            .DefineAndAttachLabel(out var jumpPast)
+            .DefineAndAttachLabel(out Label jumpPast)
             .Pop()
             .FindNext(new CodeInstructionWrapper[]
             {

@@ -1,6 +1,9 @@
 ﻿using System.Runtime.CompilerServices;
 
 using AtraBase.Toolkit;
+using AtraBase.Toolkit.Extensions;
+
+using AtraShared.Wrappers;
 
 using Microsoft.Xna.Framework;
 
@@ -15,6 +18,27 @@ namespace GrowableGiantCrops;
 /// </summary>
 internal static class GGCUtils
 {
+    /// <summary>
+    /// Checks to see if this tile is valid for trees.
+    /// </summary>
+    /// <param name="location">The game location to check.</param>
+    /// <param name="relaxed">Whether or not to use relaxed placement restrictions.</param>
+    /// <param name="tileX">the X tile location.</param>
+    /// <param name="tileY">the Y tile location.</param>
+    /// <returns>True if it's placeable, false otherwise.</returns>
+    internal static bool CanPlantTreesAtLocation(GameLocation? location, bool relaxed, int tileX, int tileY)
+    {
+        if (location?.terrainFeatures is null || Utility.isPlacementForbiddenHere(location))
+        {
+            return false;
+        }
+        if (relaxed || (location.IsOutdoors && location.doesTileHavePropertyNoNull(tileX, tileY, "Type", "Back") == "Dirt"))
+        {
+            return true;
+        }
+        return location.IsGreenhouse || location.map?.Properties?.ContainsKey("ForceAllowTreePlanting") == true;
+    }
+
     /// <summary>
     /// Checks to see if I can stick a resource clump at a specific tile.
     /// </summary>
@@ -81,4 +105,14 @@ internal static class GGCUtils
 
         return relaxed || !location.isTileOccupied(new Vector2(tileX, tileY));
     }
+
+    /// <summary>
+    /// Tries to get the name of an SObject.
+    /// </summary>
+    /// <param name="idx">index of that SOBject.</param>
+    /// <returns>Name or placeholder if not found.</returns>
+    internal static string GetNameOfSObject(int idx)
+        => Game1Wrappers.ObjectInfo.TryGetValue(idx, out string? data)
+            ? data.GetNthChunk('/').ToString()
+            : "NoNameFound";
 }

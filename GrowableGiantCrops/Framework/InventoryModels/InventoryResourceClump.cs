@@ -338,7 +338,7 @@ public sealed class InventoryResourceClump : SObject
     }
 
     /// <inheritdoc />
-    public override int maximumStackSize() => 999;
+    public override int maximumStackSize() => ModEntry.Config.AllowLargeItemStacking ? 999 : 1;
 
     /// <inheritdoc />
     public override bool canBeShipped() => false;

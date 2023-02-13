@@ -55,7 +55,7 @@ internal static class MoreGrassStartersCompat
         try
         {
             Vector2 tile = new Vector2(x / Game1.tileSize, y / Game1.tileSize);
-            if (location.terrainFeatures?.TryGetValue(tile, out var terrain) == true
+            if (location.terrainFeatures?.TryGetValue(tile, out TerrainFeature? terrain) == true
                 && terrain is Grass grass)
             {
                 grass.numberOfWeeds.Value = 1;

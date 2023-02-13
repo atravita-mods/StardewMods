@@ -102,3 +102,27 @@ public enum GrassIndexes
     /// </summary>
     Invalid = -999,
 }
+
+/// <summary>
+/// The enum used for different tree types.
+/// Do not copy the [EnumExtensions] attribute, that is used for internal source generation.
+/// </summary>
+[EnumExtensions]
+public enum TreeIndexes
+{
+    Maple = Tree.bushyTree,
+    Oak = Tree.leafyTree,
+    Pine = Tree.pineTree,
+    Palm = Tree.palmTree,
+    BigPalm = Tree.palmTree2,
+    Mahagony = Tree.mahoganyTree,
+    Mushroom = Tree.mushroomTree,
+
+    // usually would have just used null,
+    // but Pintail can't proxy Nullable<TEnum> right now.
+
+    /// <summary>
+    /// Represents an invalid TreeIndex
+    /// </summary>
+    Invalid = -999,
+}

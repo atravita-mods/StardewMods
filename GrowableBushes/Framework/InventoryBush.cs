@@ -347,7 +347,7 @@ public sealed class InventoryBush : SObject
     }
 
     /// <inheritdoc />
-    public override int maximumStackSize() => 999;
+    public override int maximumStackSize() => ModEntry.Config.AllowBushStacking ? 999 : 1;
 
     /// <inheritdoc />
     public override bool canBeShipped() => false;
@@ -490,7 +490,9 @@ public sealed class InventoryBush : SObject
     }
 
     private static int GetSeason(GameLocation loc)
-        => Utility.getSeasonNumber(Game1.GetSeasonForLocation(loc));
+    {
+        return Utility.getSeasonNumber(loc is Desert? "summer" : Game1.GetSeasonForLocation(loc));
+    }
 
     // derived from Bush.setUpSourceRect
     private Rectangle GetSourceRectForSeason(int season)

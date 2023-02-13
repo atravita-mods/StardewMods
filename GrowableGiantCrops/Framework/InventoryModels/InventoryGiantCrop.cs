@@ -61,7 +61,6 @@ public sealed class InventoryGiantCrop : SObject
     public readonly NetString stringID = new(string.Empty);
 
     #region drawfields
-
     [XmlIgnore]
     private AssetHolder? holder;
 
@@ -70,7 +69,6 @@ public sealed class InventoryGiantCrop : SObject
 
     [XmlIgnore]
     private Point tileSize = default;
-
     #endregion
 
     /// <summary>
@@ -80,7 +78,7 @@ public sealed class InventoryGiantCrop : SObject
     public InventoryGiantCrop()
         : base()
     {
-        this.NetFields.AddFields(this.stringID);
+        this.NetFields.AddField(this.stringID);
         this.Category = GiantCropCategory;
         this.Price = 0;
         this.CanBeSetDown = true;
@@ -109,16 +107,7 @@ public sealed class InventoryGiantCrop : SObject
         : this()
     {
         this.ParentSheetIndex = intID;
-        if (Game1Wrappers.ObjectInfo.TryGetValue(intID, out string? data))
-        {
-            this.Name = InventoryGiantCropPrefix + data.GetNthChunk('/').ToString();
-        }
-        else
-        {
-            this.Name = InventoryGiantCropPrefix + "NoNameFound";
-        }
-
-        // populate metadata:
+        this.Name = InventoryGiantCropPrefix + GGCUtils.GetNameOfSObject(intID);
         this.Stack = initialStack;
     }
 
@@ -203,6 +192,11 @@ public sealed class InventoryGiantCrop : SObject
     internal bool CanPlace(GameLocation l, Vector2 tile, bool relaxed)
     {
         if (l.resourceClumps is null || Utility.isPlacementForbiddenHere(l))
+        {
+            return false;
+        }
+
+        if (!IsValidGiantCropIndex(this.ParentSheetIndex))
         {
             return false;
         }
@@ -516,7 +510,7 @@ public sealed class InventoryGiantCrop : SObject
     }
 
     /// <inheritdoc />
-    public override int maximumStackSize() => 999;
+    public override int maximumStackSize() => ModEntry.Config.AllowLargeItemStacking ? 999 : 1;
 
     /// <inheritdoc />
     public override bool canBeShipped() => false;

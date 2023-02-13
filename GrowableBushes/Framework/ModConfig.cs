@@ -29,4 +29,12 @@ internal sealed class ModConfig
     /// Gets or sets a value indicating whether to disable some placement rules.
     /// </summary>
     public bool RelaxedPlacement { get; set; } = false;
+
+    // TODO
+    public bool PreserveModData { get; set; } = false;
+
+    /// <summary>
+    /// Gets or sets a value indicating whether or not bushes should stack.
+    /// </summary>
+    public bool AllowBushStacking { get; set; } = true;
 }

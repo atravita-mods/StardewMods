@@ -204,37 +204,8 @@ public sealed class ShovelTool : GenericTool
 
             // for small things we take only one energy, at most.
             int energy = Math.Min(ModEntry.Config.ShovelEnergy, 1);
-            if (location.terrainFeatures.TryGetValue(pickupTile, out TerrainFeature? terrain))
-            {
-                if (terrain is Grass grass && terrain.GetType() == typeof(Grass)) // block subclasses like Cosmetic Plant.
-                {
-                    who.Stamina -= energy;
-                    SObject? starter = null;
-                    if (SObjectPatches.IsMoreGrassGrass?.Invoke(grass) == true)
-                    {
-                        starter = SObjectPatches.InstantiateMoreGrassStarter?.Invoke(grass.grassType.Value);
-                    }
-                    starter ??= new(SObjectPatches.GrassStarterIndex, 1);
-                    starter.modData?.SetInt(SObjectPatches.ModDataKey, grass.grassType.Value);
-                    GiveItemOrMakeDebris(location, who, starter);
-                    AddAnimations(
-                        loc: location,
-                        tile: pickupTile,
-                        texturePath: Game1.objectSpriteSheetName,
-                        sourceRect: GameLocation.getSourceRectForObject(SObjectPatches.GrassStarterIndex),
-                        new Point(1, 1));
-                    location.terrainFeatures.Remove(pickupTile);
-                    return;
-                }
 
-                if (terrain.performToolAction(this, 0, pickupTile, location))
-                {
-                    who.Stamina -= energy;
-                    location.terrainFeatures.Remove(pickupTile);
-                    return;
-                }
-            }
-
+            // objects go before terrain so tappers are removed before trees/fruit trees.
             if (location.objects.TryGetValue(pickupTile, out SObject? obj))
             {
                 // special case terrain stuff.
@@ -262,15 +233,15 @@ public sealed class ShovelTool : GenericTool
                     chest.GetMutex().RequestLock(
                         acquired: () =>
                         {
-                             location.playSound("hammer");
-                             chest.shakeTimer = 100;
-                             if (chest.TileLocation.X == 0f && chest.TileLocation.Y == 0f && location.getObjectAtTile((int)pickupTile.X, (int)pickupTile.Y) == chest)
-                             {
-                                   chest.TileLocation = pickupTile;
-                             }
-                             chest.MoveToSafePosition(location, chest.TileLocation, 0, who.GetFacingDirection());
-                             who.Stamina -= energy;
-                             return;
+                            location.playSound("hammer");
+                            chest.shakeTimer = 100;
+                            if (chest.TileLocation.X == 0f && chest.TileLocation.Y == 0f && location.getObjectAtTile((int)pickupTile.X, (int)pickupTile.Y) == chest)
+                            {
+                                chest.TileLocation = pickupTile;
+                            }
+                            chest.MoveToSafePosition(location, chest.TileLocation, 0, who.GetFacingDirection());
+                            who.Stamina -= energy;
+                            return;
                         },
                         failed: () => ModEntry.ModMonitor.Log($"Chest at {chest.TileLocation}: lock not acquired, skipping"));
                     return;
@@ -320,6 +291,39 @@ public sealed class ShovelTool : GenericTool
                 {
                     who.Stamina -= energy;
                     location.objects.Remove(pickupTile);
+                    return;
+                }
+            }
+
+            if (location.terrainFeatures.TryGetValue(pickupTile, out TerrainFeature? terrain))
+            {
+                // block subclasses like Cosmetic Plant, which currently cannot be safely moved.
+                if (terrain is Grass grass &&
+                    (terrain.GetType() == typeof(Grass) || SObjectPatches.IsMoreGrassGrass?.Invoke(grass) == true))
+                {
+                    who.Stamina -= energy;
+                    SObject? starter = null;
+                    if (SObjectPatches.IsMoreGrassGrass?.Invoke(grass) == true)
+                    {
+                        starter = SObjectPatches.InstantiateMoreGrassStarter?.Invoke(grass.grassType.Value);
+                    }
+                    starter ??= new(SObjectPatches.GrassStarterIndex, 1);
+                    starter.modData?.SetInt(SObjectPatches.ModDataKey, grass.grassType.Value);
+                    GiveItemOrMakeDebris(location, who, starter);
+                    AddAnimations(
+                        loc: location,
+                        tile: pickupTile,
+                        texturePath: Game1.objectSpriteSheetName,
+                        sourceRect: GameLocation.getSourceRectForObject(SObjectPatches.GrassStarterIndex),
+                        new Point(1, 1));
+                    location.terrainFeatures.Remove(pickupTile);
+                    return;
+                }
+
+                if (terrain.performToolAction(this, 0, pickupTile, location))
+                {
+                    who.Stamina -= energy;
+                    location.terrainFeatures.Remove(pickupTile);
                     return;
                 }
             }

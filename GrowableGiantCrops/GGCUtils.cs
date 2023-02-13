@@ -115,4 +115,25 @@ internal static class GGCUtils
         => Game1Wrappers.ObjectInfo.TryGetValue(idx, out string? data)
             ? data.GetNthChunk('/').ToString()
             : "NoNameFound";
+
+    internal static bool HasTreeInRadiusTwo(this GameLocation? loc, int tileX, int tileY)
+    {
+        if (loc?.terrainFeatures is null)
+        {
+            return false;
+        }
+        for (int x = tileX - 2; x <= tileX + 2; x++)
+        {
+            for (int y = tileY - 2; y <= tileY + 2; y++)
+            {
+                Vector2 tile = new(x, y);
+                if (loc.terrainFeatures.TryGetValue(tile, out var terrain)
+                    && terrain is Tree or FruitTree)
+                {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
 }

@@ -48,37 +48,67 @@ internal static class DeshufflePatch
     [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Harmony convention.")]
     private static bool Prefix(Item item, ref bool __result)
     {
-        if (item is not InventoryGiantCrop giantCrop)
+        if (item is InventoryGiantCrop giantCrop)
         {
+            try
+            {
+                string name = giantCrop.Name[InventoryGiantCrop.InventoryGiantCropPrefix.Length..];
+                int id = DataToItemMap.GetID(ItemTypeEnum.SObject, name);
+                if (id != -1)
+                {
+                    ModEntry.ModMonitor.Log($"Fixing up {giantCrop.Name} by name");
+                    giantCrop.ParentSheetIndex = id;
+                    __result = false;
+                }
+                else
+                {
+                    ModEntry.ModMonitor.Log($"Attempting to fix up {giantCrop.Name} by id");
+                    SObject dummy = new(giantCrop.ParentSheetIndex, 1);
+                    __result = ModEntry.JaAPI?.FixIdsInItem(dummy) ?? true;
+                    giantCrop.ParentSheetIndex = dummy.ParentSheetIndex;
+                }
+
+                giantCrop.ResetDrawFields();
+
+                return false;
+            }
+            catch (Exception ex)
+            {
+                ModEntry.ModMonitor.Log($"Failed to deshuffle {giantCrop.Name}:\n\n{ex}", LogLevel.Error);
+            }
+        }
+
+        if (item is InventoryFruitTree fruitTree)
+        {
+            try
+            {
+                string name = fruitTree.Name[InventoryFruitTree.InventoryTreePrefix.Length..];
+                int id = DataToItemMap.GetID(ItemTypeEnum.SObject, name);
+                if (id != -1)
+                {
+                    ModEntry.ModMonitor.Log($"Fixing up {fruitTree.Name} by name");
+                    fruitTree.ParentSheetIndex = id;
+                    __result = false;
+                }
+                else
+                {
+                    ModEntry.ModMonitor.Log($"Attempting to fix up {fruitTree.Name} by id");
+                    SObject dummy = new(fruitTree.ParentSheetIndex, 1);
+                    __result = ModEntry.JaAPI?.FixIdsInItem(dummy) ?? true;
+                    fruitTree.ParentSheetIndex = dummy.ParentSheetIndex;
+                }
+
+                fruitTree.Reset();
+
+                return false;
+            }
+            catch (Exception ex)
+            {
+                ModEntry.ModMonitor.Log($"Failed to deshuffle {fruitTree.Name}:\n\n{ex}", LogLevel.Error);
+            }
             return true;
         }
 
-        try
-        {
-            string name = giantCrop.Name[InventoryGiantCrop.InventoryGiantCropPrefix.Length..];
-            int id = DataToItemMap.GetID(ItemTypeEnum.SObject, name);
-            if (id != -1)
-            {
-                ModEntry.ModMonitor.Log($"Fixing up {giantCrop.Name} by name");
-                giantCrop.ParentSheetIndex = id;
-                __result = false;
-            }
-            else
-            {
-                ModEntry.ModMonitor.Log($"Attempting to fix up {giantCrop.Name} by id");
-                SObject dummy = new(giantCrop.ParentSheetIndex, 1);
-                __result = ModEntry.JaAPI?.FixIdsInItem(dummy) ?? true;
-                giantCrop.ParentSheetIndex = dummy.ParentSheetIndex;
-            }
-
-            giantCrop.ResetDrawFields();
-
-            return false;
-        }
-        catch (Exception ex)
-        {
-            ModEntry.ModMonitor.Log($"Failed to deshuffle {giantCrop.Name}:\n\n{ex}", LogLevel.Error);
-        }
         return true;
     }
 }

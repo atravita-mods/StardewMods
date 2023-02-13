@@ -5,6 +5,8 @@ using AtraCore.Framework.ReflectionManager;
 using GrowableGiantCrops.Framework.Assets;
 
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Graphics.PackedVector;
 
 using Netcode;
 
@@ -80,7 +82,7 @@ public sealed class InventoryTree : SObject
         }
 
         this.ParentSheetIndex = (int)idx;
-        this.growthStage.Value = growthStage;
+        this.growthStage.Value = Math.Clamp(growthStage, Tree.seedStage, Tree.treeStage);
         this.Stack = initialStack;
         this.Name = InventoryTreePrefix + idx.ToStringFast();
     }
@@ -140,11 +142,20 @@ public sealed class InventoryTree : SObject
     public override bool placementAction(GameLocation location, int x, int y, Farmer? who = null)
         => this.PlaceTree(location, x, y, ModEntry.Config.RelaxedPlacement);
 
+    /// <summary>
+    /// Places this tree at this location.
+    /// </summary>
+    /// <param name="location">Gamelocation to place at.</param>
+    /// <param name="x">nonTileX.</param>
+    /// <param name="y">nonTileY.</param>
+    /// <param name="relaxed">Whether or not to use relaxed placement rules.</param>
+    /// <returns>True for placed, false otherwise.</returns>
     internal bool PlaceTree(GameLocation location, int x, int y, bool relaxed)
     {
         Vector2 placementTile = new(x / Game1.tileSize, y / Game1.tileSize);
         if (!this.CanPlace(location, placementTile, relaxed))
         {
+            Game1.showRedMessage(Game1.content.LoadString("Strings\\StringsFromCSFiles:Object.cs.13053"));
             return false;
         }
 
@@ -154,6 +165,269 @@ public sealed class InventoryTree : SObject
         location.playSound("dirtyHit");
         DelayedAction.playSoundAfterDelay("coin", 100);
         return true;
+    }
+
+    #endregion
+
+    #region draw
+
+    /// <inheritdoc />
+    public override void draw(SpriteBatch spriteBatch, int x, int y, float alpha = 1)
+    {
+        float draw_layer = Math.Max(
+            0f,
+            ((y * Game1.tileSize) + 40) / 10000f) + (x * 1E-05f);
+        this.draw(spriteBatch, x, y, draw_layer, alpha);
+    }
+
+    /// <inheritdoc />
+    public override void draw(SpriteBatch spriteBatch, int xNonTile, int yNonTile, float layerDepth, float alpha = 1)
+    {
+        if (this.sourceRect == default || this.holder is null)
+        {
+            this.PopulateDrawFields();
+        }
+
+        if (this.sourceRect != default && this.holder?.Get() is Texture2D tex)
+        {
+            Vector2 position = Game1.GlobalToLocal(
+                Game1.viewport,
+                new Vector2((xNonTile * Game1.tileSize) - (this.sourceRect.Width == 48 ? Game1.tileSize : 0), (yNonTile * Game1.tileSize) - (this.sourceRect.Height * Game1.pixelZoom) + Game1.tileSize));
+            if (this.growthStage.Value == Tree.treeStage)
+            {
+                Vector2 stump = Game1.GlobalToLocal(
+                    Game1.viewport,
+                    new Vector2(xNonTile * Game1.tileSize, (yNonTile * Game1.tileSize) - Game1.tileSize));
+                spriteBatch.Draw(
+                    texture: tex,
+                    position: stump,
+                    sourceRectangle: new Rectangle(32, 96, 16, 32),
+                    color: Color.White * alpha,
+                    rotation: 0f,
+                    origin: Vector2.Zero,
+                    scale: Vector2.One * Game1.pixelZoom,
+                    effects: SpriteEffects.None,
+                    layerDepth);
+            }
+            spriteBatch.Draw(
+                texture: tex,
+                position,
+                sourceRectangle: this.sourceRect,
+                color: Color.White * alpha,
+                rotation: 0f,
+                origin: Vector2.Zero,
+                scale: Vector2.One * Game1.pixelZoom,
+                effects: SpriteEffects.None,
+                layerDepth + 0.01f);
+        }
+    }
+
+    /// <inheritdoc />
+    public override void drawPlacementBounds(SpriteBatch spriteBatch, GameLocation location)
+    {
+        Vector2 grabTile = Game1.GetPlacementGrabTile();
+        int x = (int)grabTile.X * Game1.tileSize;
+        int y = (int)grabTile.Y * Game1.tileSize;
+        Game1.isCheckingNonMousePlacement = !Game1.IsPerformingMousePlacement();
+        if (Game1.isCheckingNonMousePlacement)
+        {
+            Vector2 nearbyValidPlacementPosition = Utility.GetNearbyValidPlacementPosition(Game1.player, location, this, x, y);
+            x = (int)nearbyValidPlacementPosition.X;
+            y = (int)nearbyValidPlacementPosition.Y;
+        }
+
+        bool canPlaceHere = Utility.playerCanPlaceItemHere(location, this, x, y, Game1.player) && Utility.withinRadiusOfPlayer(x, y, 1, Game1.player);
+        spriteBatch.Draw(
+            texture: Game1.mouseCursors,
+            new Vector2(x - Game1.viewport.X, y - Game1.viewport.Y),
+            new Rectangle(canPlaceHere ? 194 : 210, 388, 16, 16),
+            color: Color.White,
+            rotation: 0f,
+            origin: Vector2.Zero,
+            scale: Game1.pixelZoom,
+            effects: SpriteEffects.None,
+            layerDepth: 0.01f);
+        this.draw(spriteBatch, x / Game1.tileSize, y / Game1.tileSize, 0.5f);
+    }
+
+    /// <inheritdoc />
+    public override void drawAsProp(SpriteBatch b)
+    {
+        this.draw(b, (int)this.TileLocation.X, (int)this.TileLocation.Y);
+    }
+
+    /// <inheritdoc />
+    public override void drawInMenu(SpriteBatch spriteBatch, Vector2 location, float scaleSize, float transparency, float layerDepth, StackDrawType drawStackNumber, Color color, bool drawShadow)
+    {
+        if (this.sourceRect == default || this.holder is null)
+        {
+            this.PopulateDrawFields();
+        }
+
+        if (this.sourceRect != default && this.holder?.Get() is Texture2D tex)
+        {
+            Vector2 offset = this.growthStage.Value switch
+            {
+                Tree.treeStage => new Vector2(16f, 0f),
+                Tree.bushStage or 4 => new Vector2(32f, 32f),
+                _ => new Vector2(32f, 64f),
+            };
+            spriteBatch.Draw(
+                texture: tex,
+                position: location + offset,
+                sourceRectangle: this.sourceRect,
+                color: color * transparency,
+                rotation: 0f,
+                new Vector2(8f, 16f),
+                scale: this.GetScaleSize() * scaleSize,
+                effects: SpriteEffects.None,
+                layerDepth);
+            if (((drawStackNumber == StackDrawType.Draw && this.maximumStackSize() > 1 && this.Stack > 1) || drawStackNumber == StackDrawType.Draw_OneInclusive)
+                && scaleSize > 0.3f && this.Stack != int.MaxValue)
+            {
+                Utility.drawTinyDigits(
+                    toDraw: this.Stack,
+                    b: spriteBatch,
+                    position: location + new Vector2(64 - Utility.getWidthOfTinyDigitString(this.Stack, 3f * scaleSize) + (3f * scaleSize), 64f - (18f * scaleSize) + 2f),
+                    scale: 3f * scaleSize,
+                    layerDepth: 1f,
+                    c: Color.White);
+            }
+        }
+    }
+
+    /// <inheritdoc />
+    public override void drawWhenHeld(SpriteBatch spriteBatch, Vector2 objectPosition, Farmer f)
+    {
+        if (this.sourceRect == default || this.holder is null)
+        {
+            this.PopulateDrawFields();
+        }
+        if (this.sourceRect != default && this.holder?.Get() is Texture2D tex)
+        {
+            float layerDepth = Math.Max(0f, (f.getStandingY() + 3) / 10000f);
+            objectPosition.Y -= 2 * Game1.tileSize;
+            if (this.growthStage.Value == Tree.treeStage)
+            {
+                spriteBatch.Draw(
+                    texture: tex,
+                    position: objectPosition + new Vector2(0, 128),
+                    sourceRectangle: new Rectangle(32, 96, 16, 32),
+                    color: Color.White,
+                    rotation: 0f,
+                    origin: Vector2.Zero,
+                    scale: Vector2.One * Game1.pixelZoom,
+                    effects: SpriteEffects.None,
+                    layerDepth);
+            }
+
+            int xOffset = (this.sourceRect.Width - 16) * 2;
+            objectPosition.X -= xOffset;
+            int yOffset = (this.sourceRect.Height * Game1.pixelZoom) - 4 * Game1.tileSize;
+            objectPosition.Y -= yOffset;
+            spriteBatch.Draw(
+                texture: tex,
+                position: objectPosition,
+                sourceRectangle: this.sourceRect,
+                color: Color.White,
+                rotation: 0f,
+                origin: Vector2.Zero,
+                scale: 4f,
+                effects: SpriteEffects.None,
+                layerDepth: layerDepth + 0.01f);
+        }
+    }
+
+    private float GetScaleSize()
+    {
+        if (this.sourceRect == default || this.holder is null)
+        {
+            this.PopulateDrawFields();
+        }
+        return 64 / Math.Clamp(this.sourceRect.Height, 1, 64);
+    }
+    #endregion
+
+    #region misc
+
+    /// <inheritdoc />
+    public override Item getOne()
+    {
+        InventoryTree tree = new((TreeIndexes)this.ParentSheetIndex, 1, this.growthStage.Value);
+        tree._GetOneFrom(this);
+        return tree;
+    }
+
+    /// <inheritdoc />
+    public override int maximumStackSize() => ModEntry.Config.AllowLargeItemStacking ? 999 : 1;
+
+    /// <inheritdoc />
+    public override bool canBeShipped() => false;
+
+    /// <inheritdoc />
+    public override bool canBeGivenAsGift() => false;
+
+    /// <inheritdoc />
+    public override bool canBeTrashed() => true;
+
+    /// <inheritdoc />
+    public override string getCategoryName() => I18n.TreeCategory();
+
+    /// <inheritdoc />
+    public override Color getCategoryColor() => Color.ForestGreen;
+
+    /// <inheritdoc />
+    public override bool isPlaceable() => true;
+
+    /// <inheritdoc />
+    public override bool canBePlacedInWater() => false;
+
+    /// <inheritdoc />
+    public override bool canStackWith(ISalable other)
+    {
+        if (other is not InventoryTree tree)
+        {
+            return false;
+        }
+        return this.ParentSheetIndex == tree.ParentSheetIndex
+            && this.growthStage.Value == tree.growthStage.Value;
+    }
+
+    /// <inheritdoc/>
+    protected override string loadDisplayName()
+        => (TreeIndexes)this.ParentSheetIndex switch
+        {
+            TreeIndexes.Maple => I18n.Maple_Name(),
+            TreeIndexes.Oak => I18n.Oak_Name(),
+            TreeIndexes.Pine => I18n.Pine_Name(),
+            TreeIndexes.Palm => I18n.Palm_Name(),
+            TreeIndexes.BigPalm => I18n.BigPalm_Name(),
+            TreeIndexes.Mahogany => I18n.Mahogany_Name(),
+            TreeIndexes.Mushroom => I18n.Mushroom_Name(),
+            _ => I18n.TreeInvalid_Name(),
+        };
+
+    /// <inheritdoc/>
+    public override string getDescription()
+        => (TreeIndexes)this.ParentSheetIndex switch
+        {
+            TreeIndexes.Maple => I18n.Maple_Description(),
+            TreeIndexes.Oak => I18n.Oak_Description(),
+            TreeIndexes.Pine => I18n.Pine_Description(),
+            TreeIndexes.Palm => I18n.Palm_Description(),
+            TreeIndexes.BigPalm => I18n.BigPalm_Description(),
+            TreeIndexes.Mahogany => I18n.Mahogany_Description(),
+            TreeIndexes.Mushroom => I18n.Mushroom_Description(),
+            _ => I18n.TreeInvalid_Description(),
+        };
+
+    /// <inheritdoc />
+    protected override void _PopulateContextTags(HashSet<string> tags)
+    {
+        tags.Add("category_inventory_tree");
+        tags.Add($"id_inventoryTree_{this.ParentSheetIndex}");
+        tags.Add("quality_none");
+        tags.Add("item_" + this.SanitizeContextTag(this.Name));
     }
 
     #endregion
@@ -220,7 +494,7 @@ public sealed class InventoryTree : SObject
             0 => new Rectangle(32, 128, 16, 16),
             1 => new Rectangle(0, 128, 16, 16),
             2 => new Rectangle(16, 128, 16, 16),
-            3 => new Rectangle(0, 96, 16, 32),
+            3 or 4 => new Rectangle(0, 96, 16, 32),
             _ => new Rectangle(0, 0, 48, 96),
         };
     }

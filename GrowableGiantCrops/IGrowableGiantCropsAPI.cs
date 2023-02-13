@@ -115,7 +115,7 @@ public enum TreeIndexes
     Pine = Tree.pineTree,
     Palm = Tree.palmTree,
     BigPalm = Tree.palmTree2,
-    Mahagony = Tree.mahoganyTree,
+    Mahogany = Tree.mahoganyTree,
     Mushroom = Tree.mushroomTree,
 
     // usually would have just used null,

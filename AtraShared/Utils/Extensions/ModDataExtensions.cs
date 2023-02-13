@@ -14,6 +14,26 @@ namespace AtraShared.Utils.Extensions;
 /// <remarks>Inspired by https://github.com/spacechase0/StardewValleyMods/blob/main/SpaceShared/ModDataHelper.cs. </remarks>
 public static class ModDataExtensions
 {
+    /// <summary>
+    /// Gets whether two modData dictionaries contain exactly the same modData.
+    /// </summary>
+    /// <param name="modData">This modData.</param>
+    /// <param name="other">That modData.</param>
+    /// <returns>True if they match, false otherwise.</returns>
+    internal static bool ModDataMatches(this ModDataDictionary? modData, ModDataDictionary? other)
+    {
+        if (modData?.Count() is null or 0)
+        {
+            return other?.Count() is null or 0;
+        }
+        if (other?.Count() is null or 0)
+        {
+            return false;
+        }
+        return modData.Count() == other.Count()
+                && modData.Pairs.All((kvp) => other.TryGetValue(kvp.Key, out var val) && val == kvp.Value);
+    }
+
     // Instead of storing a real bool, just store 0 or 1
 
     /// <summary>

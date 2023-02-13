@@ -77,8 +77,6 @@ internal sealed class ModEntry : Mod
         AssetManager.Initialize(helper.GameContent);
         AssetCache.Initialize(helper.GameContent);
 
-        ShopManager.Initialize(helper.GameContent);
-
         // assets
         this.Helper.Events.Content.AssetRequested += static (_, e) => AssetManager.OnAssetRequested(e);
         this.Helper.Events.Content.AssetsInvalidated += static (_, e) => AssetManager.Reset(e.NamesWithoutLocale);
@@ -138,6 +136,7 @@ internal sealed class ModEntry : Mod
         this.Helper.Events.GameLoop.SaveLoaded += this.SaveLoaded;
 
         // shop
+        ShopManager.Initialize(this.Helper.GameContent);
         this.Helper.Events.Content.AssetRequested += static (_, e) => ShopManager.OnAssetRequested(e);
         this.Helper.Events.Content.AssetsInvalidated += static (_, e) => ShopManager.OnAssetInvalidated(e.NamesWithoutLocale);
         this.Helper.Events.Input.ButtonPressed += (_, e) => ShopManager.OnButtonPressed(e, this.Helper.Input);

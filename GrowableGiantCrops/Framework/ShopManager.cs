@@ -1,5 +1,6 @@
 ﻿using System.Diagnostics;
 
+using AtraBase.Models.RentedArrayHelpers;
 using AtraBase.Models.Result;
 using AtraBase.Models.WeightedRandom;
 using AtraBase.Toolkit.Extensions;
@@ -38,6 +39,9 @@ internal static class ShopManager
     private static readonly PerScreen<Dictionary<int, int>?> Stock = new();
     private static WeightedManager<int>? weighted;
 
+    private static readonly PerScreen<Dictionary<int, int>?> NodeStock = new();
+    private static int[] nodes = null!;
+
     private static IAssetName robinHouse = null!;
     private static IAssetName witchHouse = null!;
 
@@ -58,6 +62,24 @@ internal static class ShopManager
         dataObjectInfo = parser.ParseAssetName("Data/ObjectInformation");
 
         stringUtils = new(ModEntry.ModMonitor);
+
+        HashSet<int> nodesList = new();
+        foreach ((int index, string data) in Game1.objectInformation)
+        {
+            if (index == 290)
+            {
+                continue;
+            }
+            ReadOnlySpan<char> name = data.GetNthChunk('/');
+            if (name.Equals("Stone", StringComparison.OrdinalIgnoreCase)
+                || name.Equals("Weeds", StringComparison.OrdinalIgnoreCase)
+                || name.Equals("Twig", StringComparison.OrdinalIgnoreCase))
+            {
+                nodesList.Add(index);
+            }
+        }
+
+        nodes = nodesList.ToArray();
     }
 
     /// <inheritdoc cref="IContentEvents.AssetsInvalidated"/>
@@ -148,6 +170,7 @@ internal static class ShopManager
     internal static void OnDayEnd()
     {
         Stock.Value = null;
+        NodeStock.Value = null;
 
         // add Robin letter for tomorrow.
         if (Game1.player.getFriendshipLevelForNPC("Robin") > 250
@@ -176,6 +199,19 @@ internal static class ShopManager
             else
             {
                 Stock.Value[crop.ParentSheetIndex] = remaining;
+            }
+        }
+        else if (salable.GetType() == typeof(SObject) && salable is SObject obj && !obj.bigCraftable.Value
+            && NodeStock.Value?.TryGetValue(obj.ParentSheetIndex, out var remainder) == true)
+        {
+            remainder -= count;
+            if (remainder <= 0)
+            {
+                NodeStock.Value.Remove(obj.ParentSheetIndex);
+            }
+            else
+            {
+                NodeStock.Value[obj.ParentSheetIndex] = remainder;
             }
         }
         return false; // do not want to yeet the menu.
@@ -229,7 +265,10 @@ internal static class ShopManager
             {
                 continue;
             }
-            _ = sellables.TryAdd(new SObject(SObjectPatches.GrassStarterIndex, 1), new[] { 100, ShopMenu.infiniteStock });
+
+            SObject grassStarter = new(SObjectPatches.GrassStarterIndex, 1);
+            grassStarter.modData?.SetInt(SObjectPatches.ModDataKey, (int)grass);
+            _ = sellables.TryAdd(grassStarter, new[] { 100, ShopMenu.infiniteStock });
         }
 
         if (PerfectFaarm.GetValue())
@@ -239,24 +278,40 @@ internal static class ShopManager
                 int price = GetPriceOfProduct(idx) ?? 0;
                 _ = sellables.TryAdd(new InventoryGiantCrop(idx, 1), new int[] { Math.Max(price * 30, 5_000), ShopMenu.infiniteStock});
             }
+
+            foreach (int idx in nodes)
+            {
+                _ = sellables.TryAdd(new SObject(idx, 1), new[] { 100, ShopMenu.infiniteStock });
+            }
         }
         else
         {
             Stock.Value ??= GenerateDailyStock();
-            if (Stock.Value is null)
+            if (Stock.Value is not null)
             {
-                return;
+                foreach ((int index, int count) in Stock.Value)
+                {
+                    if (count <= 0)
+                    {
+                        continue;
+                    }
+
+                    int price = GetPriceOfProduct(index) ?? 0;
+                    _ = sellables.TryAdd(new InventoryGiantCrop(index, count), new int[] { Math.Max(price * 30, 5_000), count });
+                }
             }
 
-            foreach ((int index, int count) in Stock.Value)
+            NodeStock.Value ??= GenerateNodeShop();
+            if (NodeStock.Value is not null)
             {
-                if (count <= 0)
+                foreach ((int index, int count) in NodeStock.Value)
                 {
-                    continue;
+                    if (count <= 0)
+                    {
+                        continue;
+                    }
+                    _ = sellables.TryAdd(new SObject(index, count), new[] { 100, count });
                 }
-
-                int price = GetPriceOfProduct(index) ?? 0;
-                _ = sellables.TryAdd(new InventoryGiantCrop(index, count), new int[] { Math.Max(price * 30, 5_000), count });
             }
         }
     }
@@ -275,6 +330,21 @@ internal static class ShopManager
         }
         ModEntry.ModMonitor.DebugOnlyLog($"Got {manager.Count} giant crop entries for shop.");
         return manager;
+    }
+
+    private static Dictionary<int, int>? GenerateNodeShop()
+    {
+        Dictionary<int, int> chosen = new(6);
+        ShuffledYielder<int> shuffler = new(nodes);
+        for (int i = 0; i < 6; i++)
+        {
+            if(!shuffler.MoveNext())
+            {
+                break;
+            }
+            chosen[shuffler.Current] = 5;
+        }
+        return chosen.Count > 0 ? chosen : null;
     }
 
     private static Dictionary<int, int>? GenerateDailyStock()

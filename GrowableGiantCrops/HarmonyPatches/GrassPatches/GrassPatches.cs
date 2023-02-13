@@ -15,6 +15,10 @@ namespace GrowableGiantCrops.HarmonyPatches.GrassPatches;
 internal static class GrassPatches
 {
     [HarmonyPatch(nameof(Grass.dayUpdate))]
+    private static bool Prefix(Grass __instance)
+        => __instance is null || !(SObjectPatches.IsMoreGrassGrass?.Invoke(__instance) == true);
+
+    [HarmonyPatch(nameof(Grass.dayUpdate))]
     private static IEnumerable<CodeInstruction>? Transpiler(IEnumerable<CodeInstruction> instructions, ILGenerator gen, MethodBase original)
     {
         try

@@ -206,7 +206,7 @@ public sealed class ShovelTool : GenericTool
             int energy = Math.Min(ModEntry.Config.ShovelEnergy, 1);
             if (location.terrainFeatures.TryGetValue(pickupTile, out TerrainFeature? terrain))
             {
-                if (terrain is Grass grass)
+                if (terrain is Grass grass && terrain.GetType() == typeof(Grass)) // block subclasses like Cosmetic Plant.
                 {
                     who.Stamina -= energy;
                     SObject? starter = null;

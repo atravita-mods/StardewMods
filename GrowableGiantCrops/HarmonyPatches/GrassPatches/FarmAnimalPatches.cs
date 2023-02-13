@@ -47,7 +47,7 @@ internal static class FarmAnimalPatches
                 opcode: OpCodes.Call,
                 operand: typeof(FarmAnimalPatches).GetCachedMethod(nameof(ShouldEatThisGrass), ReflectionCache.FlagTypes.StaticFlags));
 
-            helper.Print();
+            // helper.Print();
             return helper.Render();
         }
         catch (Exception ex)

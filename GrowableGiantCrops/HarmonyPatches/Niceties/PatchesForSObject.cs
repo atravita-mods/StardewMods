@@ -10,17 +10,22 @@ namespace GrowableGiantCrops.HarmonyPatches.Niceties;
 [HarmonyPatch(typeof(SObject))]
 internal static class PatchesForSObject
 {
-    #region slimeball
+    internal const string ModDataWeed = "atravita.GrowableGiantCrops.PlacedWeed";
+
     private const string ModDataKey = "atravita.GrowableGiantCrops.PlacedSlimeBall";
 
     [HarmonyPostfix]
     [HarmonyPatch(nameof(SObject.placementAction))]
     [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Harmony convention.")]
-    private static void PostfixSlimeBall(SObject __instance)
+    private static void PostfixPlacement(SObject __instance)
     {
         if (__instance?.bigCraftable?.Value == true && __instance.Name == "Slime Ball")
         {
             __instance.modData?.SetBool(ModDataKey, true);
+        }
+        else if (__instance?.bigCraftable?.Value == false && (__instance.Name == "Stone" || __instance.Name.Contains("Weeds") || __instance.Name.Contains("Twig")))
+        {
+            __instance.modData?.SetBool(ModDataWeed, true);
         }
     }
 
@@ -39,9 +44,7 @@ internal static class PatchesForSObject
         }
         return true;
     }
-    #endregion
 
-    #region misc terrain
     [HarmonyPostfix]
     [HarmonyPatch(nameof(SObject.isPlaceable))]
     [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Harmony convention.")]
@@ -70,6 +73,4 @@ internal static class PatchesForSObject
             ModEntry.ModMonitor.Log(ex.ToString());
         }
     }
-
-    #endregion
 }

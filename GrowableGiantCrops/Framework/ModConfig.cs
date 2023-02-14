@@ -66,4 +66,6 @@ public sealed class ModConfig
 
     // TODO
     public bool AllowLargeItemStacking { get; set; } = true;
+
+    // Placed only?
 }

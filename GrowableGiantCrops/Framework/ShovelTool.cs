@@ -460,14 +460,7 @@ public sealed class ShovelTool : GenericTool
 
     #region helpers
 
-    /// <summary>
-    /// Helps animate a resource clump or large crop.
-    /// </summary>
-    /// <param name="loc">GameLocation.</param>
-    /// <param name="tile">Tile to animate at.</param>
-    /// <param name="texturePath">Path to the texture.</param>
-    /// <param name="sourceRect">Sourcerect to use.</param>
-    /// <param name="tileSize">The size of the item, in tiles.</param>
+    /// <inheritdoc cref="IGrowableGiantCropsAPI.DrawAnimations(GameLocation, Vector2, string?, Rectangle, Point)"/>
     internal static void AddAnimations(GameLocation loc, Vector2 tile, string? texturePath, Rectangle sourceRect, Point tileSize)
     {
         if (texturePath is null)

@@ -38,6 +38,7 @@ public sealed class GrowableBushesAPI : IGrowableBushesAPI
         return BushSizes.Invalid;
     }
 
+    /// <inheritdoc />
     public BushSizes CanPickUpBush(Bush bush, bool placedOnly = false)
     {
         BushSizes metaData = bush.modData.GetEnum(InventoryBush.BushModData, BushSizes.Invalid);

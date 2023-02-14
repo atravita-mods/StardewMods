@@ -32,6 +32,9 @@ public sealed class InventoryTree : SObject
     /// </summary>
     internal const string InventoryTreePrefix = "atravita.InventoryTree/";
 
+    /// <summary>
+    /// A mod data string used to mark trees planted from these items.
+    /// </summary>
     internal const string ModDataKey = $"{InventoryTreePrefix}Type";
 
     /// <summary>
@@ -113,6 +116,38 @@ public sealed class InventoryTree : SObject
         GameLocation location);
     #endregion
 
+    /// <summary>
+    /// Gets the texture path of this inventory tree, if it was found.
+    /// </summary>
+    [XmlIgnore]
+    internal string? TexturePath
+    {
+        get
+        {
+            if (this.sourceRect == default || this.holder is null)
+            {
+                this.PopulateDrawFields();
+            }
+            return this.holder?.TextureName;
+        }
+    }
+
+    /// <summary>
+    /// Gets the source rect associated with this inventory tree.
+    /// </summary>
+    [XmlIgnore]
+    internal Rectangle SourceRect
+    {
+        get
+        {
+            if (this.sourceRect == default || this.holder is null)
+            {
+                this.PopulateDrawFields();
+            }
+            return this.sourceRect;
+        }
+    }
+
     #region placement
 
     /// <inheritdoc />
@@ -164,7 +199,10 @@ public sealed class InventoryTree : SObject
             return false;
         }
 
-        Tree tree = new(this.ParentSheetIndex, this.growthStage.Value);
+        Tree tree = new(this.ParentSheetIndex, this.growthStage.Value)
+        {
+            currentTileLocation = placementTile,
+        };
         if (ModEntry.Config.PreserveModData)
         {
             tree.modData.CopyModDataFrom(this.modData);

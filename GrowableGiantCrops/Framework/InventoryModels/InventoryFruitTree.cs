@@ -103,6 +103,22 @@ public sealed class InventoryFruitTree : SObject
         this.Name = InventoryTreePrefix + GGCUtils.GetNameOfSObject(saplingIndex);
     }
 
+    /// <summary>
+    /// Gets the source rect associated with this inventory fruit tree.
+    /// </summary>
+    [XmlIgnore]
+    internal Rectangle SourceRect
+    {
+        get
+        {
+            if (this.sourceRect == default)
+            {
+                this.PopulateDrawFields();
+            }
+            return this.sourceRect;
+        }
+    }
+
     #region placement
 
     /// <inheritdoc />
@@ -156,6 +172,7 @@ public sealed class InventoryFruitTree : SObject
         {
             GreenHouseTree = location.IsGreenhouse || ((this.ParentSheetIndex == 69 || this.ParentSheetIndex == 835) && location is IslandWest),
             GreenHouseTileTree = location.doesTileHavePropertyNoNull((int)placementTile.X, (int)placementTile.Y, "Type", "Back") == "Stone",
+            currentTileLocation = placementTile,
         };
         fruitTree.struckByLightningCountdown.Value = this.struckByLightning.Value;
         fruitTree.daysUntilMature.Value = this.daysUntilMature.Value;

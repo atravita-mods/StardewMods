@@ -60,6 +60,15 @@ public interface IGrowableBushesAPI
     public BushSizes CanPickUpBush(GameLocation loc, Vector2 tile, bool placedOnly = false);
 
     /// <summary>
+    /// Checks to see if this specific bush can be picked up.
+    /// </summary>
+    /// <param name="bush">The bush in question.</param>
+    /// <param name="placedOnly">If I should favor only placed bushes.</param>
+    /// <returns>A BushSizes that corresponds size of the bush, or <see cref="BushSizes.Invalid"/> otherwise.</returns>
+    /// <remarks>For safety reasons, a real (non-decorative) walnut bush still bearing a walnut will not be pick-up-able.</remarks>
+    public BushSizes CanPickUpBush(Bush bush, bool placedOnly = false);
+
+    /// <summary>
     /// Picks up a bush if possible.
     /// </summary>
     /// <param name="loc">Game location.</param>

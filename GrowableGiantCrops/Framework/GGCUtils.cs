@@ -3,7 +3,11 @@
 using AtraBase.Toolkit;
 using AtraBase.Toolkit.Extensions;
 
+using AtraShared.Utils.Extensions;
+using AtraShared.Utils.Shims;
 using AtraShared.Wrappers;
+
+using GrowableGiantCrops.Framework.InventoryModels;
 
 using Microsoft.Xna.Framework;
 
@@ -32,11 +36,146 @@ internal static class GGCUtils
         {
             return false;
         }
-        if (relaxed || location.IsOutdoors && location.doesTileHavePropertyNoNull(tileX, tileY, "Type", "Back") == "Dirt")
+        if (relaxed || (location.IsOutdoors && location.doesTileHavePropertyNoNull(tileX, tileY, "Type", "Back") == "Dirt"))
         {
             return true;
         }
         return location.IsGreenhouse || location.map?.Properties?.ContainsKey("ForceAllowTreePlanting") == true;
+    }
+
+    /// <summary>
+    /// Gets the large object <see cref="LargeTerrainFeature"/> or <see cref="ResourceClump"/> at a specific location.
+    /// </summary>
+    /// <param name="loc">Location to check.</param>
+    /// <param name="nonTileX">X coord.</param>
+    /// <param name="nonTileY">Y coord.</param>
+    /// <param name="placedOnly">Whether or not to only include what the player has placed.</param>
+    /// <returns>The feature, or null for not found.</returns>
+    internal static TerrainFeature? GetLargeObjectAtLocation(this GameLocation loc, int nonTileX, int nonTileY, bool placedOnly)
+    {
+        if (loc.resourceClumps is not null)
+        {
+            foreach (ResourceClump? clump in loc.resourceClumps)
+            {
+                if (clump is not null && clump.getBoundingBox(clump.tile.Value).Contains(nonTileX, nonTileY)
+                    && (!placedOnly || clump.modData?.ContainsKey(InventoryResourceClump.ResourceModdata) == true))
+                {
+                    return clump;
+                }
+            }
+        }
+
+        if (placedOnly)
+        {
+            return null;
+        }
+
+        // handle secret woods clumps
+        if (loc is Woods woods)
+        {
+            foreach (ResourceClump? stump in woods.stumps)
+            {
+                if (stump is not null && stump.getBoundingBox(stump.tile.Value).Contains(nonTileX, nonTileY))
+                {
+                    return stump;
+                }
+            }
+        }
+
+        // the log blocking off the secret forest.
+        if (loc is Forest forest)
+        {
+            if (forest.log is not null && forest.log.getBoundingBox(forest.log.tile.Value).Contains(nonTileX, nonTileX))
+            {
+                return forest.log;
+            }
+        }
+
+        LargeTerrainFeature? terrain = loc.getLargeTerrainFeatureAt(nonTileX / Game1.tileSize, nonTileY / Game1.tileSize);
+        if (terrain is null)
+        {
+            return null;
+        }
+
+        if (FarmTypeManagerShims.GetEmbeddedResourceClump?.Invoke(terrain) is ResourceClump embedded)
+        {
+            return embedded;
+        }
+        return terrain;
+    }
+
+    /// <summary>
+    /// Gets the large object <see cref="LargeTerrainFeature"/> or <see cref="ResourceClump"/> at a specific location, and removes it.
+    /// </summary>
+    /// <param name="loc">Location to check.</param>
+    /// <param name="nonTileX">X coord.</param>
+    /// <param name="nonTileY">Y coord.</param>
+    /// <param name="placedOnly">Whether or not to only include what the player has placed.</param>
+    /// <returns>The feature, or null for not found.</returns>
+    internal static TerrainFeature? RemoveLargeObjectAtLocation(this GameLocation loc, int nonTileX, int nonTileY, bool placedOnly)
+    {
+        if (loc.resourceClumps is not null)
+        {
+            for (int i = loc.resourceClumps.Count - 1; i >= 0; i--)
+            {
+                ResourceClump? clump = loc.resourceClumps[i];
+                if (clump is not null && clump.getBoundingBox(clump.tile.Value).Contains(nonTileX, nonTileY)
+                    && (!placedOnly || clump.modData?.ContainsKey(InventoryResourceClump.ResourceModdata) == true))
+                {
+                    loc.resourceClumps.RemoveAt(i);
+                    return clump;
+                }
+            }
+        }
+
+        if (placedOnly)
+        {
+            return null;
+        }
+
+        // handle secret woods clumps
+        if (loc is Woods woods)
+        {
+            for (int i = woods.stumps.Count - 1; i >= 0; i--)
+            {
+                ResourceClump? clump = woods.stumps[i];
+                if (clump is not null && clump.getBoundingBox(clump.tile.Value).Contains(nonTileX, nonTileY))
+                {
+                    woods.stumps.RemoveAt(i);
+                    return clump;
+                }
+            }
+        }
+
+        // the log blocking off the secret forest.
+        if (loc is Forest forest)
+        {
+            if (forest.log is not null && forest.log.getBoundingBox(forest.log.tile.Value).Contains(nonTileX, nonTileY))
+            {
+                ResourceClump log = forest.log;
+                forest.log = null;
+                return log;
+            }
+        }
+
+        if (loc.largeTerrainFeatures is not null)
+        {
+            Rectangle tileRect = new(nonTileX, nonTileY, 64, 64);
+            for (int i = loc.largeTerrainFeatures.Count - 1; i >= 0; i--)
+            {
+                if (loc.largeTerrainFeatures[i] is LargeTerrainFeature terrain && terrain.getBoundingBox().Intersects(tileRect))
+                {
+                    loc.largeTerrainFeatures.RemoveAt(i);
+                    if (FarmTypeManagerShims.GetEmbeddedResourceClump?.Invoke(terrain) is ResourceClump embedded)
+                    {
+                        return embedded;
+                    }
+                    return terrain;
+                }
+            }
+        }
+
+        return null;
     }
 
     /// <summary>

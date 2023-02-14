@@ -28,16 +28,22 @@ public sealed class Api : IGrowableGiantCropsAPI
     /// <inheritdoc/>
     public bool CanPlace(SObject obj, GameLocation loc, Vector2 tile, bool relaxed)
     => obj switch
-        {
-            InventoryResourceClump clump => this.CanPlaceClump(clump, loc, tile, relaxed),
-            _ => false,
-        };
+    {
+        InventoryResourceClump clump => this.CanPlaceClump(clump, loc, tile, relaxed),
+        InventoryGiantCrop crop => this.CanPlaceGiant(crop, loc, tile, relaxed),
+        InventoryFruitTree fruitTree => this.CanPlaceFruitTree(fruitTree, loc, tile, relaxed),
+        InventoryTree tree => this.CanPlaceTree(tree, loc, tile, relaxed),
+        _ => false,
+    };
 
     /// <inheritdoc/>
     public bool TryPlace(SObject obj, GameLocation loc, Vector2 tile, bool relaxed)
     => obj switch
         {
             InventoryResourceClump clump => this.TryPlaceClump(clump, loc, tile, relaxed),
+            InventoryGiantCrop crop => this.TryPlaceGiant(crop, loc, tile, relaxed),
+            InventoryFruitTree fruitTree => this.TryPlaceFruitTree(fruitTree, loc, tile, relaxed),
+            InventoryTree tree => this.TryPlaceTree(tree, loc, tile, relaxed),
             _ => false,
         };
 
@@ -207,6 +213,14 @@ public sealed class Api : IGrowableGiantCropsAPI
     }
 
     /// <inheritdoc />
+    public bool CanPlaceGiant(SObject obj, GameLocation loc, Vector2 tile, bool relaxed)
+        => obj is InventoryGiantCrop crop && crop.CanPlace(loc, tile, relaxed);
+
+    /// <inheritdoc />
+    public bool TryPlaceGiant(SObject obj, GameLocation loc, Vector2 tile, bool relaxed)
+        => obj is InventoryGiantCrop crop && crop.PlaceGiantCrop(loc, (int)tile.X * Game1.tileSize, (int)tile.Y * Game1.tileSize, relaxed);
+
+    /// <inheritdoc />
     public (int idx, string? stringId)? CanPickUpCrop(GiantCrop crop, bool placedOnly)
     {
         if (!placedOnly || crop.modData?.ContainsKey(InventoryGiantCrop.ModDataKey) == true)
@@ -224,12 +238,37 @@ public sealed class Api : IGrowableGiantCropsAPI
         return null;
     }
 
+    /// <inheritdoc />
     public (int idx, string? stringId)? CanPickUpCrop(GameLocation loc, Vector2 tile, bool placedOnly)
         => loc.GetLargeObjectAtLocation(((int)tile.X * Game1.tileSize) + 32, ((int)tile.Y * Game1.tileSize) + 32, placedOnly) switch
         {
-            GiantCrop crop => this.CanPickUpClump(crop, placedOnly),
+            GiantCrop crop => this.CanPickUpCrop(crop, placedOnly),
             _ => null,
         };
+
+    #endregion
+
+    #region trees
+
+    /// <inheritdoc />
+    public bool CanPlaceTree(SObject obj, GameLocation loc, Vector2 tile, bool relaxed)
+        => obj is InventoryTree tree && tree.CanPlace(loc, tile, relaxed);
+
+    /// <inheritdoc />
+    public bool TryPlaceTree(SObject obj, GameLocation loc, Vector2 tile, bool relaxed)
+        => obj is InventoryTree tree && tree.PlaceTree(loc, (int)tile.X * Game1.tileSize, (int)tile.Y * Game1.tileSize, relaxed);
+
+    #endregion
+
+    #region fruit trees
+
+    /// <inheritdoc />
+    public bool CanPlaceFruitTree(SObject obj, GameLocation loc, Vector2 tile, bool relaxed)
+        => obj is InventoryFruitTree tree && tree.CanPlace(loc, tile, relaxed);
+
+    /// <inheritdoc />
+    public bool TryPlaceFruitTree(SObject obj, GameLocation loc, Vector2 tile, bool relaxed)
+        => obj is InventoryFruitTree tree && tree.PlaceFruitTree(loc, (int)tile.X * Game1.tileSize, (int)tile.Y * Game1.tileSize, relaxed);
 
     #endregion
 }

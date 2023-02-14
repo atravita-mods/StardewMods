@@ -19,6 +19,8 @@ internal static class AssetManager
     /// </summary>
     internal const string GiantCropPrefix = "Mods/atravita/GrowableBushes/";
 
+    private static IAssetName fruitTreeData = null!;
+
     /// <summary>
     /// An error texture, used to fill in if a JA/MGC texture is not found.
     /// </summary>
@@ -43,6 +45,7 @@ internal static class AssetManager
     internal static void Initialize(IGameContentHelper parser)
     {
         ToolTextureName = parser.ParseAssetName("Mods/atravita.GrowableGiantCrops/Shovel");
+        fruitTreeData = parser.ParseAssetName(@"Data\fruitTrees");
 
         const int TEX_WIDTH = 48;
         const int TEX_HEIGHT = 64;

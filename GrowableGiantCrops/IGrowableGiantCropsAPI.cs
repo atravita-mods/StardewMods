@@ -80,7 +80,7 @@ public interface IGrowableGiantCropsAPI
     public bool CanPickUp(GameLocation loc, Vector2 tile, bool placedOnly = false);
 
     /// <summary>
-    /// Tries to pick up something from this location
+    /// Tries to pick up something from this location.
     /// </summary>
     /// <param name="loc">Game location.</param>
     /// <param name="tile">Tile to pick up from.</param>
@@ -191,6 +191,26 @@ public interface IGrowableGiantCropsAPI
     public StardewValley.Object? GetGiantCrop(string stringID, int produceIndex, int initialStack);
 
     /// <summary>
+    /// Checks whether or not a giant crop can be placed at this location.
+    /// </summary>
+    /// <param name="obj">Giant crop to place.</param>
+    /// <param name="loc">Game location.</param>
+    /// <param name="tile">Tile to place at.</param>
+    /// <param name="relaxed">Whether or not to use relaxed placement rules.</param>
+    /// <returns>True if place-able.</returns>
+    public bool CanPlaceGiant(StardewValley.Object obj, GameLocation loc, Vector2 tile, bool relaxed);
+
+    /// <summary>
+    /// Tries to place a giant crop at a specific location.
+    /// </summary>
+    /// <param name="obj">giant crop to place.</param>
+    /// <param name="loc">Game location.</param>
+    /// <param name="tile">Tile to place at.</param>
+    /// <param name="relaxed">Whether or not to use relaxed placement rules.</param>
+    /// <returns>True if successfully placed.</returns>
+    public bool TryPlaceGiant(StardewValley.Object obj, GameLocation loc, Vector2 tile, bool relaxed);
+
+    /// <summary>
     /// Gets the InventoryGiantCrop associated with this giant crop.
     /// </summary>
     /// <param name="giant">The giant crop.</param>
@@ -204,6 +224,61 @@ public interface IGrowableGiantCropsAPI
     /// <param name="placedOnly">If we should restrict to just placed crops.</param>
     /// <returns>Identifier if it can be picked up, null otherwise.</returns>
     public (int idx, string? stringId)? CanPickUpCrop(GiantCrop crop, bool placedOnly);
+
+    /// <summary>
+    /// Whether or not a giant crop at this location can be picked up.
+    /// </summary>
+    /// <param name="loc">Game location to check.</param>
+    /// <param name="tile">tile location to check.</param>
+    /// <param name="placedOnly">Whether to check placed items only or not.</param>
+    /// <returns>Identifier if there's a giant crop that can be picked up, null otherwise.</returns>
+    public (int idx, string? stringId)? CanPickUpCrop(GameLocation loc, Vector2 tile, bool placedOnly);
+
+    #endregion
+
+    #region tree
+    /// <summary>
+    /// Checks whether or not a tree can be placed at this location.
+    /// </summary>
+    /// <param name="obj">Tree to place.</param>
+    /// <param name="loc">Game location.</param>
+    /// <param name="tile">Tile to place at.</param>
+    /// <param name="relaxed">Whether or not to use relaxed placement rules.</param>
+    /// <returns>True if place-able.</returns>
+    public bool CanPlaceTree(StardewValley.Object obj, GameLocation loc, Vector2 tile, bool relaxed);
+
+    /// <summary>
+    /// Tries to place a tree at a specific location.
+    /// </summary>
+    /// <param name="obj">Tree to place.</param>
+    /// <param name="loc">Game location.</param>
+    /// <param name="tile">Tile to place at.</param>
+    /// <param name="relaxed">Whether or not to use relaxed placement rules.</param>
+    /// <returns>True if successfully placed.</returns>
+    public bool TryPlaceTree(StardewValley.Object obj, GameLocation loc, Vector2 tile, bool relaxed);
+    #endregion
+
+    #region fruit tree
+
+    /// <summary>
+    /// Checks whether or not a fruit tree can be placed at this location.
+    /// </summary>
+    /// <param name="obj">Fruit tree to place.</param>
+    /// <param name="loc">Game location.</param>
+    /// <param name="tile">Tile to place at.</param>
+    /// <param name="relaxed">Whether or not to use relaxed placement rules.</param>
+    /// <returns>True if place-able.</returns>
+    public bool CanPlaceFruitTree(StardewValley.Object obj, GameLocation loc, Vector2 tile, bool relaxed);
+
+    /// <summary>
+    /// Tries to place a fruit tree at a specific location.
+    /// </summary>
+    /// <param name="obj">Fruit tree to place.</param>
+    /// <param name="loc">Game location.</param>
+    /// <param name="tile">Tile to place at.</param>
+    /// <param name="relaxed">Whether or not to use relaxed placement rules.</param>
+    /// <returns>True if successfully placed.</returns>
+    public bool TryPlaceFruitTree(StardewValley.Object obj, GameLocation loc, Vector2 tile, bool relaxed);
     #endregion
 }
 

@@ -14,11 +14,14 @@ using StardewValley.Tools;
 
 namespace GrowableGiantCrops.HarmonyPatches.ItemPatches;
 
+/// <summary>
+/// Transpiler to allow the shovel to also affect artifact spots as if it was a hoe.
+/// </summary>
 [HarmonyPatch(typeof(SObject))]
 internal static class ArtifactSpotTranspiler
 {
     [HarmonyPatch(nameof(SObject.performToolAction))]
-    [SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1116:Split parameters should start on line after declaration", Justification = "Reviewed.")]
+    [SuppressMessage("SMAPI.CommonErrors", "AvoidNetField:Avoid Netcode types when possible", Justification = "Used for matching only.")]
     private static IEnumerable<CodeInstruction>? Transpiler(IEnumerable<CodeInstruction> instructions, ILGenerator gen, MethodBase original)
     {
         try
@@ -35,7 +38,7 @@ internal static class ArtifactSpotTranspiler
             { // t is Hoe
                 SpecialCodeInstructionCases.LdLoc,
                 OpCodes.Ldfld,
-                OpCodes.Isinst,
+                (OpCodes.Isinst, typeof(Hoe)),
                 OpCodes.Brfalse,
             })
             .Push()
@@ -43,7 +46,7 @@ internal static class ArtifactSpotTranspiler
             .DefineAndAttachLabel(out Label jumpPoint)
             .Pop()
             .GetLabels(out IList<Label>? labelsToMove)
-            .Copy(4, out var codes);
+            .Copy(4, out IEnumerable<CodeInstruction>? codes);
 
             // insert t is ShovelTool -> final is if (t is ShovelTool || t is Hoe);
             CodeInstruction[] copy = codes.ToArray();
@@ -52,7 +55,7 @@ internal static class ArtifactSpotTranspiler
 
             helper.Insert(copy);
 
-            helper.Print();
+            // helper.Print();
             return helper.Render();
         }
         catch (Exception ex)

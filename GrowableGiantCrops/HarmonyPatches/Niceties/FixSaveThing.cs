@@ -52,6 +52,6 @@ internal static class FixSaveThing
             }
         }
 
-        ModEntry.ModMonitor.Log($"Restored {count} giant crops at {__instance.NameOrUniqueName}");
+        ModEntry.ModMonitor.Log($"Restored {count} resource clumps at {__instance.NameOrUniqueName}");
     }
 }

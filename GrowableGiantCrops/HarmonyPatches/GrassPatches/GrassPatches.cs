@@ -14,6 +14,24 @@ namespace GrowableGiantCrops.HarmonyPatches.GrassPatches;
 [HarmonyPatch(typeof(Grass))]
 internal static class GrassPatches
 {
+    /// <summary>
+    /// Prevents grass from being scythed if it was placed.
+    /// </summary>
+    /// <param name="__instance">Grass instance.</param>
+    /// <param name="__result">Set to false to preserve the grass.</param>
+    /// <returns>False to skip original, true to continue to original</returns>
+    [HarmonyPatch(nameof(Grass.performToolAction))]
+    [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Harmony convention.")]
+    private static bool Prefix(Grass __instance, ref bool __result)
+    {
+        if (ModEntry.Config.ShouldPlacedGrassIgnoreScythe && __instance.modData?.ContainsKey(SObjectPatches.ModDataKey) == true)
+        {
+            __result = false;
+            return false;
+        }
+        return true;
+    }
+
     [HarmonyPatch(nameof(Grass.dayUpdate))]
     private static IEnumerable<CodeInstruction>? Transpiler(IEnumerable<CodeInstruction> instructions, ILGenerator gen, MethodBase original)
     {

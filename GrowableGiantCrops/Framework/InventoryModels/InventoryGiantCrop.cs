@@ -16,6 +16,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 using Netcode;
 
+using StardewValley;
 using StardewValley.TerrainFeatures;
 
 namespace GrowableGiantCrops.Framework.InventoryModels;
@@ -214,7 +215,8 @@ public sealed class InventoryGiantCrop : SObject
         {
             for (int y = (int)tile.Y - this.tileSize.Y + 1; y <= (int)tile.Y; y++)
             {
-                if (!GGCUtils.IsTilePlaceableForResourceClump(l, x, y, relaxed))
+                if (!GGCUtils.IsTilePlaceableForResourceClump(l, x, y, relaxed)
+                    && (!relaxed && !IsTileHoeable(l, x, y)))
                 {
                     return false;
                 }
@@ -223,6 +225,9 @@ public sealed class InventoryGiantCrop : SObject
 
         return true;
     }
+
+    private static bool IsTileHoeable(GameLocation l, int x, int y)
+        => l.doesTileHaveProperty(x, y, "Diggable", "Back") is not null;
 
     /// <inheritdoc />
     public override bool placementAction(GameLocation location, int x, int y, Farmer? who = null)

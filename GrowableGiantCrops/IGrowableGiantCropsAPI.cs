@@ -30,6 +30,11 @@ public interface IGrowableGiantCropsAPI
 
     #endregion
 
+    #region config
+    public int MaxTreeStage { get; }
+    public int MaxFruitTreeStage { get; }
+    #endregion
+
     #region Generalized Placement
 
     /// <summary>

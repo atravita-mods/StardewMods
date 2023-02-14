@@ -11,6 +11,7 @@ namespace GrowableGiantCrops.Framework;
 /// <summary>
 /// The API for this mod.
 /// </summary>
+[SuppressMessage("StyleCop.CSharp.OrderingRules", "SA1201:Elements should appear in the correct order", Justification = "Reviewed.")]
 public sealed class Api : IGrowableGiantCropsAPI
 {
     #region shovel
@@ -20,6 +21,16 @@ public sealed class Api : IGrowableGiantCropsAPI
 
     /// <inheritdoc />
     public Tool GetShovel() => new ShovelTool();
+
+    #endregion
+
+    #region config
+
+    /// <inheritdoc/>
+    public int MaxTreeStage => ModEntry.Config.MaxTreeStageInternal;
+
+    /// <inheritdoc/>
+    public int MaxFruitTreeStage => ModEntry.Config.MaxFruitTreeStageInternal;
 
     #endregion
 

@@ -10,16 +10,30 @@
   "GiantCropShopLocation.description": "The location of the giant crop shop in the Witch's place.",
   "ResourceShopLocation.title": "Resource Shop Location",
   "ResourceShopLocation.description": "The location of the resource shop in Robin's.",
+
   "ShouldNPCsTrampleResourcesClumps.title": "NPCs Trample Resources",
   "ShouldNPCsTrampleResourcesClumps.description": "If enabled, will allow NPCs to remove resource clumps in their path",
   "ShouldNPCsTrampleGiantCrops.title": "NPCs Trample Giant Crops.",
   "ShouldNPCsTrampleGiantCrops.description": "If enabled, will allow NPCs to remove giant crops in their path.",
+
   "RelaxedPlacement.title": "Relaxed Placement",
   "RelaxedPlacement.description": "If enabled, placement rules will be relaxed.",
+
   "ShovelEnergy.title": "Shovel Energy",
   "ShovelEnergy.description": "How much stamina should each use of the shovel take.",
+
   "CanSquishPlacedSlimeBalls.title": "Squish Placed Slime Balls",
   "CanSquishPlacedSlimeBalls.description": "If enabled, placed slime balls cannot be squished (and are thus purely decorative)",
+
+  "ShouldAnimalsEatPlacedGrass.title": "Animals Eat Placed Grass",
+  "ShouldAnimalsEatPlacedGrass.description": "If enabled, animals will eat grass created from starters created by this mod.",
+  "ShouldPlacedGrassSpread.title": "Placed Grass Spreads",
+  "ShouldPlacedGrassSpread.description": "If enabled, placed grass will spread normally.",
+  "ShouldPlacedGrassIgnoreScythe.title": "Placed Grass Ignores Scythe",
+  "ShouldPlacedGrassIgnoreScythe.description": "If enabled, placed grass will ignore the scythe and become purely decorative.",
+
+  "Grass.title":  "Grass-related options:",
+  "Misc.title": "Miscellaneous options:",
 
   // Stores
   "ShopMessage.Robin": "Whatcha lookin' for?",

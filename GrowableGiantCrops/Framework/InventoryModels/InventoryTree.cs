@@ -185,7 +185,7 @@ public sealed class InventoryTree : SObject
         return (GGCUtils.CanPlantTreesAtLocation(l, relaxed, x, y) || l.CanPlantTreesHere(69, x, y)) // 69 - banana tree.
             && l.terrainFeatures?.ContainsKey(tile) == false
             && GGCUtils.IsTilePlaceableForResourceClump(l, x, y, relaxed)
-            && (relaxed || this.isStump ||this.growthStage.Value < Tree.treeStage || !AdultTreesAround(l, x, y));
+            && (relaxed || this.isStump.Value || this.growthStage.Value < Tree.treeStage || !AdultTreesAround(l, x, y));
     }
 
     /// <inheritdoc />

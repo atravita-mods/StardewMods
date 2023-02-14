@@ -13,6 +13,7 @@ using GrowableGiantCrops.HarmonyPatches.GrassPatches;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
+using StardewValley;
 using StardewValley.Locations;
 using StardewValley.Objects;
 using StardewValley.TerrainFeatures;
@@ -110,7 +111,7 @@ public sealed class ShovelTool : GenericTool
             location.performToolAction(this, x / Game1.tileSize, y / Game1.tileSize);
 
             // Handle bushes.
-            if (ModEntry.GrowableBushesAPI?.TryPickUpBush(location, pickupTile) is SObject bush)
+            if (ModEntry.GrowableBushesAPI?.TryPickUpBush(location, pickupTile, ModEntry.Config.PlacedOnly) is SObject bush)
             {
                 ModEntry.ModMonitor.DebugOnlyLog($"Picking up bush {bush.Name}", LogLevel.Info);
                 GiveItemOrMakeDebris(location, who, bush);
@@ -119,113 +120,49 @@ public sealed class ShovelTool : GenericTool
                 return;
             }
 
-            // Handle normal game resource clumps.
-            for (int i = location.resourceClumps.Count - 1; i >= 0; i--)
+            if (api.TryPickUpClumpOrGiantCrop(location, pickupTile, ModEntry.Config.PlacedOnly) is SObject inventoryClump)
             {
-                ResourceClump? clump = location.resourceClumps[i];
-                if (clump is null || !clump.getBoundingBox(clump.tile.Value).Contains(x, y))
-                {
-                    continue;
-                }
-                if (GetMatchingInventoryItem(location, clump) is SObject item)
-                {
-                    ModEntry.ModMonitor.DebugOnlyLog($"Picking up {item.Name}", LogLevel.Info);
-                    GiveItemOrMakeDebris(location, who, item);
-                    who.Stamina -= ModEntry.Config.ShovelEnergy;
-                    location.resourceClumps[i].performToolAction(this, 0, pickupTile, location);
-                    location.resourceClumps.RemoveAt(i);
-                    return;
-                }
-            }
-
-            // handle secret woods clumps
-            if (location is Woods woods)
-            {
-                for (int i = woods.stumps.Count - 1; i >= 0; i--)
-                {
-                    ResourceClump? clump = woods.stumps[i];
-                    if (clump is null || !clump.getBoundingBox(clump.tile.Value).Contains(x, y))
-                    {
-                        continue;
-                    }
-                    if (GetMatchingInventoryItem(woods, clump) is SObject item)
-                    {
-                        ModEntry.ModMonitor.DebugOnlyLog($"Picking up {item.Name}", LogLevel.Info);
-                        GiveItemOrMakeDebris(woods, who, item);
-                        who.Stamina -= ModEntry.Config.ShovelEnergy;
-                        woods.stumps[i].performToolAction(this, 0, pickupTile, woods);
-                        woods.stumps.RemoveAt(i);
-                        return;
-                    }
-                }
-            }
-
-            // the log blocking off the secret forest.
-            if (location is Forest forest)
-            {
-                if (forest.log is not null && forest.log.getBoundingBox(forest.log.tile.Value).Contains(x, y))
-                {
-                    if (GetMatchingInventoryItem(forest, forest.log) is SObject item)
-                    {
-                        ModEntry.ModMonitor.DebugOnlyLog($"Picking up {item.Name}", LogLevel.Info);
-                        GiveItemOrMakeDebris(forest, who, item);
-                        who.Stamina -= ModEntry.Config.ShovelEnergy;
-                        forest.log.performToolAction(this, 0, pickupTile, forest);
-                        forest.log = null;
-                        return;
-                    }
-                }
-            }
-
-            // handle FTM resource clumps.
-            if (FarmTypeManagerShims.GetEmbeddedResourceClump is not null)
-            {
-                for (int i = location.largeTerrainFeatures.Count - 1; i >= 0; i--)
-                {
-                    ResourceClump? clump = FarmTypeManagerShims.GetEmbeddedResourceClump(location.largeTerrainFeatures[i]);
-                    if (clump is null || !clump.getBoundingBox(clump.tile.Value).Contains(x, y))
-                    {
-                        continue;
-                    }
-                    if (GetMatchingInventoryItem(location, clump) is SObject item)
-                    {
-                        ModEntry.ModMonitor.DebugOnlyLog($"Picking up {item.Name}", LogLevel.Info);
-                        GiveItemOrMakeDebris(location, who, item);
-                        who.Stamina -= ModEntry.Config.ShovelEnergy;
-                        location.largeTerrainFeatures[i].performToolAction(this, 0, pickupTile, location);
-                        location.largeTerrainFeatures.RemoveAt(i);
-                        return;
-                    }
-                }
+                ModEntry.ModMonitor.DebugOnlyLog($"Picking up {inventoryClump.Name}.", LogLevel.Info);
+                who.Stamina -= ModEntry.Config.ShovelEnergy;
+                GiveItemOrMakeDebris(location, who, inventoryClump);
+                api.DrawPickUpGraphics(inventoryClump, location, inventoryClump.TileLocation);
+                return;
             }
 
             // for small things we take only one energy, at most.
             int energy = Math.Min(ModEntry.Config.ShovelEnergy, 1);
 
             // objects go before terrain so tappers are removed before trees/fruit trees.
-            if (location.objects.TryGetValue(pickupTile, out SObject? obj))
+            if (location.objects.TryGetValue(pickupTile, out SObject? @object))
             {
                 // special case terrain stuff.
-                if (!obj.bigCraftable.Value && obj.GetType() == typeof(SObject))
+                if (!@object.bigCraftable.Value && @object.GetType() == typeof(SObject))
                 {
-                    if (obj.ParentSheetIndex >= 0 &&
-                        (obj.Name == "Stone" || obj.Name.Contains("Weeds") || obj.Name.Contains("Twig")))
+                    if (@object.ParentSheetIndex >= 0 &&
+                        (@object.Name == "Stone" || @object.Name.Contains("Weeds") || @object.Name.Contains("Twig")))
                     {
                         who.Stamina -= energy;
-                        GiveItemOrMakeDebris(location, who, obj);
+                        GiveItemOrMakeDebris(location, who, @object);
                         AddAnimations(
                             loc: location,
                             tile: pickupTile,
                             texturePath: Game1.objectSpriteSheetName,
-                            sourceRect: GameLocation.getSourceRectForObject(obj.ParentSheetIndex),
+                            sourceRect: GameLocation.getSourceRectForObject(@object.ParentSheetIndex),
                             new Point(1, 1));
                         location.Objects.Remove(pickupTile);
                         return;
                     }
                 }
 
+                // special case, ignore indoor pots with stuff in them.
+                if (@object is IndoorPot pot && (pot.hoeDirt?.Value?.crop is not null || pot.bush?.Value is not null))
+                {
+                    pot.shakeTimer = 100;
+                    return;
+                }
+
                 // special case: shovel pushes full chests.
-                if (obj is Chest chest && !chest.isEmpty() && chest.playerChest.Value)
+                if (@object is Chest chest && !chest.isEmpty() && chest.playerChest.Value)
                 {
                     chest.GetMutex().RequestLock(
                         acquired: () =>
@@ -245,19 +182,19 @@ public sealed class ShovelTool : GenericTool
                 }
 
                 // special cases: Mushroom boxes, slime balls
-                if (obj.bigCraftable.Value && obj.GetType() == typeof(SObject))
+                if (@object.bigCraftable.Value && @object.GetType() == typeof(SObject))
                 {
-                    if (obj.Name == "Mushroom Box")
+                    if (@object.Name == "Mushroom Box")
                     {
                         who.Stamina -= energy;
-                        obj.ParentSheetIndex = 128;
-                        if (obj.readyForHarvest.Value)
+                        @object.ParentSheetIndex = 128;
+                        if (@object.readyForHarvest.Value)
                         {
-                            location.debris.Add(new Debris(obj.heldObject.Value, who.Position));
-                            obj.heldObject.Value = null;
+                            location.debris.Add(new Debris(@object.heldObject.Value, who.Position));
+                            @object.heldObject.Value = null;
                         }
-                        obj.performRemoveAction(pickupTile, location);
-                        GiveItemOrMakeDebris(location, who, obj);
+                        @object.performRemoveAction(pickupTile, location);
+                        GiveItemOrMakeDebris(location, who, @object);
                         AddAnimations(
                             loc: location,
                             tile: pickupTile - Vector2.UnitY,
@@ -267,12 +204,12 @@ public sealed class ShovelTool : GenericTool
                         location.objects.Remove(pickupTile);
                         return;
                     }
-                    else if (obj.Name == "Slime Ball")
+                    else if (@object.Name == "Slime Ball")
                     {
                         who.Stamina -= energy;
-                        obj.ParentSheetIndex = 56;
-                        obj.performRemoveAction(pickupTile, location);
-                        GiveItemOrMakeDebris(location, who, obj);
+                        @object.ParentSheetIndex = 56;
+                        @object.performRemoveAction(pickupTile, location);
+                        GiveItemOrMakeDebris(location, who, @object);
                         AddAnimations(
                             loc: location,
                             tile: pickupTile - Vector2.UnitY,
@@ -284,18 +221,17 @@ public sealed class ShovelTool : GenericTool
                     }
                 }
 
-                // TODO: figure out why normal artifact spots do not respond to the shovel.
-                if (obj.performToolAction(this, location))
+                if (@object.performToolAction(this, location))
                 {
                     who.Stamina -= energy;
-                    if (FTMArtifactSpotPatch.IsBuriedItem?.Invoke(obj) != true)
+                    if (FTMArtifactSpotPatch.IsBuriedItem?.Invoke(@object) != true)
                     {
-                        GiveItemOrMakeDebris(location, who, obj);
+                        GiveItemOrMakeDebris(location, who, @object);
                         AddAnimations(
                             loc: location,
                             tile: pickupTile,
-                            texturePath: obj.bigCraftable.Value ? Game1.bigCraftableSpriteSheetName : Game1.objectSpriteSheetName,
-                            sourceRect: obj.bigCraftable.Value ? SObject.getSourceRectForBigCraftable(obj.ParentSheetIndex) : GameLocation.getSourceRectForObject(obj.ParentSheetIndex),
+                            texturePath: @object.bigCraftable.Value ? Game1.bigCraftableSpriteSheetName : Game1.objectSpriteSheetName,
+                            sourceRect: @object.bigCraftable.Value ? SObject.getSourceRectForBigCraftable(@object.ParentSheetIndex) : GameLocation.getSourceRectForObject(@object.ParentSheetIndex),
                             new Point(1, 1));
                     }
                     location.objects.Remove(pickupTile);

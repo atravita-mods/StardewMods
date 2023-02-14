@@ -1,6 +1,6 @@
 <Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
 
-  <!-- Thanks to DecidedlyHuman! Remove bin and obj automatically with a clean action.   
+  <!-- Thanks to DecidedlyHuman! Remove bin and obj automatically with a clean action.
   <Target Name="RemoveAutoGenDirs" AfterTargets="Clean">
     <RemoveDir Directories="$(ProjectDir)bin;$(ProjectDir)obj" />
   </Target> -->

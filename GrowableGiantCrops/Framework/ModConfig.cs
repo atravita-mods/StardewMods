@@ -103,7 +103,7 @@ public sealed class ModConfig
     private int maxFruitTreeStage = 4;
 
     [GMCMRange(0, 5)]
-    [GMCMSection("Trees", 4)]
+    [GMCMSection("Trees", 5)]
     public int MaxFruitTreeStage
     {
         get
@@ -117,14 +117,27 @@ public sealed class ModConfig
         }
     }
 
+    /// <summary>
+    /// Gets the maximum stage of a fruit tree that can be lifted by the shovel.
+    /// Used internally, matches game fruit tree stages.
+    /// </summary>
     internal int MaxFruitTreeStageInternal => this.maxFruitTreeStage;
 
+    /// <summary>
+    /// Gets or sets a value indicating whether or not animals should ignore placed grass.
+    /// </summary>
     [GMCMSection("Grass", 10)]
     public bool ShouldAnimalsEatPlacedGrass { get; set; } = true;
 
     // TODO
     [GMCMSection("Grass", 10)]
     public bool ShouldPlacedGrassSpread { get; set; } = false;
+
+    /// <summary>
+    /// Gets or sets a value indicating whether or not placed grass should ignore the scythe.
+    /// </summary>
+    [GMCMSection("Grass", 10)]
+    public bool ShouldPlacedGrassIgnoreScythe { get; set; } = false;
 
     /// <summary>
     /// Gets or sets a value indicating whether or not placed slime balls can be squished.

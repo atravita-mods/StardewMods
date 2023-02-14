@@ -308,7 +308,7 @@ public sealed class InventoryFruitTree : SObject
         {
             int xOffset = (this.sourceRect.Width - 16) * 2;
             objectPosition.X -= xOffset;
-            int yOffset = Math.Max((this.sourceRect.Height * Game1.pixelZoom) - 2 * Game1.tileSize, 0);
+            int yOffset = Math.Max((this.sourceRect.Height * Game1.pixelZoom) - (2 * Game1.tileSize), 0);
             objectPosition.Y -= yOffset;
             spriteBatch.Draw(
                 texture: FruitTree.texture,
@@ -410,12 +410,17 @@ public sealed class InventoryFruitTree : SObject
 
     #region helpers
 
-    internal static bool IsValidFruitTree(int index)
+    /// <summary>
+    /// Does this sapling index correspond to a valid fruit tree.
+    /// </summary>
+    /// <param name="saplingIndex">The index of the sapling.</param>
+    /// <returns>True if it corresponds to a key in Data\fruitTrees, false otherwise.</returns>
+    internal static bool IsValidFruitTree(int saplingIndex)
     {
         try
         {
             Dictionary<int, string> data = Game1.content.Load<Dictionary<int, string>>(@"Data\fruitTrees");
-            return data.ContainsKey(index);
+            return data.ContainsKey(saplingIndex);
         }
         catch (Exception ex)
         {

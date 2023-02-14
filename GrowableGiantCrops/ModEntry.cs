@@ -10,17 +10,12 @@ using GrowableGiantCrops.Framework;
 using GrowableGiantCrops.Framework.Assets;
 using GrowableGiantCrops.Framework.InventoryModels;
 using GrowableGiantCrops.HarmonyPatches.Compat;
-using GrowableGiantCrops.HarmonyPatches.GrassPatches;
 using GrowableGiantCrops.HarmonyPatches.ItemPatches;
 using GrowableGiantCrops.HarmonyPatches.Niceties;
 
 using HarmonyLib;
 
-using Microsoft.Xna.Framework;
-
 using StardewModdingAPI.Events;
-
-using StardewValley.TerrainFeatures;
 
 using AtraUtils = AtraShared.Utils.Utils;
 
@@ -165,22 +160,24 @@ internal sealed class ModEntry : Mod
         }
 
         // optional APIs
-        IntegrationHelper optional = new(this.Monitor, this.Helper.Translation, this.Helper.ModRegistry, LogLevel.Trace);
-        if (optional.TryGetAPI("spacechase0.JsonAssets", "1.10.10", out IJsonAssetsAPI? jaAPI))
         {
-            JaAPI = jaAPI;
-        }
-        if (optional.TryGetAPI("spacechase0.MoreGiantCrops", "1.2.0", out IMoreGiantCropsAPI? mgAPI))
-        {
-            MoreGiantCropsAPI = mgAPI;
-        }
-        if (optional.TryGetAPI("leclair.giantcroptweaks", "0.1.0", out IGiantCropTweaks? gcAPI))
-        {
-            GiantCropTweaksAPI = gcAPI;
-        }
-        if (optional.TryGetAPI("atravita.GrowableBushes", "0.0.1", out IGrowableBushesAPI? growable))
-        {
-            GrowableBushesAPI = growable;
+            IntegrationHelper optional = new(this.Monitor, this.Helper.Translation, this.Helper.ModRegistry, LogLevel.Trace);
+            if (optional.TryGetAPI("spacechase0.JsonAssets", "1.10.10", out IJsonAssetsAPI? jaAPI))
+            {
+                JaAPI = jaAPI;
+            }
+            if (optional.TryGetAPI("spacechase0.MoreGiantCrops", "1.2.0", out IMoreGiantCropsAPI? mgAPI))
+            {
+                MoreGiantCropsAPI = mgAPI;
+            }
+            if (optional.TryGetAPI("leclair.giantcroptweaks", "0.1.0", out IGiantCropTweaks? gcAPI))
+            {
+                GiantCropTweaksAPI = gcAPI;
+            }
+            if (optional.TryGetAPI("atravita.GrowableBushes", "0.0.1", out IGrowableBushesAPI? growable))
+            {
+                GrowableBushesAPI = growable;
+            }
         }
     }
 

@@ -19,7 +19,7 @@ namespace GrowableGiantCrops.HarmonyPatches.Niceties;
 internal static class PreventWeedSpread
 {
     private static bool ShouldSkipThisWeed(KeyValuePair<Vector2, SObject> weedCandidate)
-        => weedCandidate.Value.modData?.GetBool(PatchesForSObject.ModDataWeed) == true;
+        => weedCandidate.Value.modData?.GetBool(PatchesForSObject.ModDataMiscObject) == true;
 
     [HarmonyPatch(nameof(GameLocation.spawnWeedsAndStones))]
     private static IEnumerable<CodeInstruction>? Transpiler(IEnumerable<CodeInstruction> instructions, ILGenerator gen, MethodBase original)

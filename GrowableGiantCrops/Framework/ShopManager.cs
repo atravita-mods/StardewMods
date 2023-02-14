@@ -276,19 +276,20 @@ internal static class ShopManager
             sellables.TryAdd(new ShovelTool(), new[] { 5_000, 1 });
         }
 
+        const int GIANT_CROP_PRICE_MULITPLIER = 40;
+
         if (PerfectFaarm.GetValue())
         {
             foreach (int idx in ModEntry.YieldAllGiantCropIndexes())
             {
                 int price = GetPriceOfProduct(idx) ?? 0;
-                _ = sellables.TryAdd(new InventoryGiantCrop(idx, 1), new int[] { Math.Max(price * 30, 5_000), ShopMenu.infiniteStock });
+                _ = sellables.TryAdd(new InventoryGiantCrop(idx, 1), new int[] { Math.Max(price * GIANT_CROP_PRICE_MULITPLIER, 5_000), ShopMenu.infiniteStock });
             }
 
             foreach (int idx in nodes)
             {
-                _ = sellables.TryAdd(new SObject(idx, 1) { MinutesUntilReady = 25 }, new[] { 1_500, ShopMenu.infiniteStock });
+                _ = sellables.TryAdd(new SObject(idx, 1) { MinutesUntilReady = 25, Edibility = SObject.inedible }, new[] { 1_500, ShopMenu.infiniteStock });
             }
-
         }
         else
         {
@@ -303,7 +304,7 @@ internal static class ShopManager
                     }
 
                     int price = GetPriceOfProduct(index) ?? 0;
-                    _ = sellables.TryAdd(new InventoryGiantCrop(index, count), new int[] { Math.Max(price * 30, 5_000), count });
+                    _ = sellables.TryAdd(new InventoryGiantCrop(index, count), new int[] { Math.Max(price * GIANT_CROP_PRICE_MULITPLIER, 5_000), count });
                 }
             }
 
@@ -316,7 +317,7 @@ internal static class ShopManager
                     {
                         continue;
                     }
-                    _ = sellables.TryAdd(new SObject(index, count) { MinutesUntilReady = 25 }, new[] { 1_500, count });
+                    _ = sellables.TryAdd(new SObject(index, count) { MinutesUntilReady = 25, Edibility = SObject.inedible }, new[] { 1_500, count });
                 }
             }
         }
@@ -369,7 +370,7 @@ internal static class ShopManager
 
         Dictionary<int, int> chosen = new();
 
-        int totalCount = Math.Max(5, ModEntry.GetTotalValidIndexes() / 5);
+        int totalCount = Math.Max(7, ModEntry.GetTotalValidIndexes() / 5);
         for (int i = 0; i < totalCount; i++)
         {
             Option<int> picked = weighted.GetValue();

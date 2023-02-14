@@ -8,7 +8,6 @@ using GrowableGiantCrops.Framework.Assets;
 
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Graphics.PackedVector;
 
 using Netcode;
 
@@ -16,6 +15,8 @@ using StardewValley.Locations;
 using StardewValley.TerrainFeatures;
 
 namespace GrowableGiantCrops.Framework.InventoryModels;
+
+// TODO: stumps?
 
 /// <summary>
 /// A class that represents a normal tree in the inventory.
@@ -50,6 +51,13 @@ public sealed class InventoryTree : SObject
     [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1307:Accessible fields should begin with upper-case letter", Justification = "Reviewed.")]
     public readonly NetInt growthStage = new(Tree.seedStage);
 
+    /// <summary>
+    /// The growth stage.
+    /// </summary>
+    [SuppressMessage("StyleCop.CSharp.MaintainabilityRules", "SA1401:Fields should be private", Justification = "Public for serializer.")]
+    [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1307:Accessible fields should begin with upper-case letter", Justification = "Reviewed.")]
+    public readonly NetBool isStump = new(false);
+
     #region drawfields
     [XmlIgnore]
     private AssetHolder? holder;
@@ -65,7 +73,7 @@ public sealed class InventoryTree : SObject
     public InventoryTree()
         : base()
     {
-        this.NetFields.AddField(this.growthStage);
+        this.NetFields.AddFields(this.growthStage, this.isStump);
         this.Category = InventoryTreeCategory;
         this.Price = 0;
         this.CanBeSetDown = true;
@@ -79,7 +87,8 @@ public sealed class InventoryTree : SObject
     /// <param name="idx">The index of the tree.</param>
     /// <param name="initialStack">The initial stack.</param>
     /// <param name="growthStage">The growth stage.</param>
-    public InventoryTree(TreeIndexes idx, int initialStack, int growthStage)
+    /// <param name="isStump">Whether or not the tree is a stump.</param>
+    public InventoryTree(TreeIndexes idx, int initialStack, int growthStage, bool isStump = false)
         : this()
     {
         if (!TreeIndexesExtensions.IsDefined(idx))
@@ -90,6 +99,7 @@ public sealed class InventoryTree : SObject
 
         this.ParentSheetIndex = (int)idx;
         this.growthStage.Value = Math.Clamp(growthStage, Tree.seedStage, Tree.treeStage);
+        this.isStump.Value = isStump;
         this.Stack = initialStack;
         this.Name = InventoryTreePrefix + idx.ToStringFast();
     }
@@ -175,7 +185,7 @@ public sealed class InventoryTree : SObject
         return (GGCUtils.CanPlantTreesAtLocation(l, relaxed, x, y) || l.CanPlantTreesHere(69, x, y)) // 69 - banana tree.
             && l.terrainFeatures?.ContainsKey(tile) == false
             && GGCUtils.IsTilePlaceableForResourceClump(l, x, y, relaxed)
-            && (relaxed || this.growthStage.Value < Tree.treeStage || !AdultTreesAround(l, x, y));
+            && (relaxed || this.isStump ||this.growthStage.Value < Tree.treeStage || !AdultTreesAround(l, x, y));
     }
 
     /// <inheritdoc />
@@ -203,6 +213,7 @@ public sealed class InventoryTree : SObject
         {
             currentTileLocation = placementTile,
         };
+        tree.stump.Value = this.isStump.Value;
         if (ModEntry.Config.PreserveModData)
         {
             tree.modData.CopyModDataFrom(this.modData);
@@ -242,7 +253,7 @@ public sealed class InventoryTree : SObject
             Vector2 position = Game1.GlobalToLocal(
                 Game1.viewport,
                 new Vector2((xNonTile * Game1.tileSize) - (this.sourceRect.Width == 48 ? Game1.tileSize : 0), (yNonTile * Game1.tileSize) - (this.sourceRect.Height * Game1.pixelZoom) + Game1.tileSize));
-            if (this.growthStage.Value == Tree.treeStage)
+            if (this.growthStage.Value == Tree.treeStage && !this.isStump.Value)
             {
                 Vector2 stump = Game1.GlobalToLocal(
                     Game1.viewport,
@@ -315,12 +326,20 @@ public sealed class InventoryTree : SObject
 
         if (this.sourceRect != default && this.holder?.Get() is Texture2D tex)
         {
-            Vector2 offset = this.growthStage.Value switch
+            Vector2 offset;
+            if (this.isStump.Value)
             {
-                Tree.treeStage => new Vector2(16f, 0f),
-                Tree.bushStage or 4 => new Vector2(32f, 32f),
-                _ => new Vector2(32f, 64f),
-            };
+                offset = new Vector2(32f, 32f);
+            }
+            else
+            {
+                offset = this.growthStage.Value switch
+                {
+                    Tree.treeStage => new Vector2(16f, 0f),
+                    Tree.bushStage or 4 => new Vector2(32f, 32f),
+                    _ => new Vector2(32f, 64f),
+                };
+            }
             spriteBatch.Draw(
                 texture: tex,
                 position: location + offset,
@@ -356,7 +375,7 @@ public sealed class InventoryTree : SObject
         {
             float layerDepth = Math.Max(0f, (f.getStandingY() + 3) / 10000f);
             objectPosition.Y -= 2 * Game1.tileSize;
-            if (this.growthStage.Value == Tree.treeStage)
+            if (this.growthStage.Value == Tree.treeStage && !this.isStump.Value)
             {
                 spriteBatch.Draw(
                     texture: tex,
@@ -372,7 +391,7 @@ public sealed class InventoryTree : SObject
 
             int xOffset = (this.sourceRect.Width - 16) * 2;
             objectPosition.X -= xOffset;
-            int yOffset = (this.sourceRect.Height * Game1.pixelZoom) - 4 * Game1.tileSize;
+            int yOffset = (this.sourceRect.Height * Game1.pixelZoom) - (4 * Game1.tileSize);
             objectPosition.Y -= yOffset;
             spriteBatch.Draw(
                 texture: tex,
@@ -440,6 +459,7 @@ public sealed class InventoryTree : SObject
         }
         return this.ParentSheetIndex == tree.ParentSheetIndex
             && this.growthStage.Value == tree.growthStage.Value
+            && this.isStump.Value == tree.isStump.Value
             && (!ModEntry.Config.PreserveModData || this.modData.ModDataMatches(tree.modData));
     }
 
@@ -539,14 +559,21 @@ public sealed class InventoryTree : SObject
             return;
         }
 
-        this.sourceRect = this.growthStage.Value switch
+        if (this.isStump.Value)
         {
-            0 => new Rectangle(32, 128, 16, 16),
-            1 => new Rectangle(0, 128, 16, 16),
-            2 => new Rectangle(16, 128, 16, 16),
-            3 or 4 => new Rectangle(0, 96, 16, 32),
-            _ => new Rectangle(0, 0, 48, 96),
-        };
+            this.sourceRect = new Rectangle(32, 96, 16, 32);
+        }
+        else
+        {
+            this.sourceRect = this.growthStage.Value switch
+            {
+                0 => new Rectangle(32, 128, 16, 16),
+                1 => new Rectangle(0, 128, 16, 16),
+                2 => new Rectangle(16, 128, 16, 16),
+                3 or 4 => new Rectangle(0, 96, 16, 32),
+                _ => new Rectangle(0, 0, 48, 96),
+            };
+        }
     }
 
     private static bool AdultTreesAround(GameLocation l, int xTile, int yTile)

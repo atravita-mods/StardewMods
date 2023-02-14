@@ -40,7 +40,7 @@ internal static class EventCommands
         }
         else
         {
-            ModEntry.ModMonitor.Log($"Command {ADD_SPECIAL_ORDER} expects a single second argument, the internal name of the event", LogLevel.Warn);
+            ModEntry.ModMonitor.Log($"Command {ADD_SPECIAL_ORDER} expects a single argument, the internal name of the order", LogLevel.Warn);
         }
 
         @event.CurrentCommand++;

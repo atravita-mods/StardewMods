@@ -5,6 +5,7 @@ using AtraShared.Niceties;
 using StardewModdingAPI.Events;
 
 using Microsoft.Xna.Framework.Graphics;
+using AtraShared.Utils.Extensions;
 
 namespace GrowableGiantCrops.Framework.Assets;
 
@@ -57,11 +58,13 @@ internal static class AssetCache
 
         if (Failed.Contains(parsed))
         {
+            ModEntry.ModMonitor.DebugOnlyLog($"{parsed.Name} marked fail in AssetCache, skipping.", LogLevel.Info);
             return null;
         }
 
         try
         {
+            ModEntry.ModMonitor.DebugOnlyLog($"Trying to load {parsed.Name} in AssetCache.", LogLevel.Info);
             Texture2D texture = gameContent.Load<Texture2D>(parsed);
             if (!texture.IsDisposed)
             {

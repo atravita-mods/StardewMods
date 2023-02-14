@@ -92,11 +92,12 @@ public interface IGrowableGiantCropsAPI
     #region Resource Clump methods
 
     /// <summary>
-    /// Gets the InventoryResourceClump associated with the specific ResourceClumpIndex.
+    /// Gets the InventoryResourceClump associated with the specific ResourceClumpIndex, if valid.
     /// </summary>
     /// <param name="idx">Index to use.</param>
-    /// <returns>InventoryResourceClump.</returns>
-    public SObject GetResourceClump(ResourceClumpIndexes idx);
+    /// <param name="initialStack">The initial stack size. Defaults to one.</param>
+    /// <returns>InventoryResourceClump, null if invalid.</returns>
+    public StardewValley.Object? GetResourceClump(ResourceClumpIndexes idx, int initialStack = 1);
 
     // Pintail currently does not proxy Nullable<TEnum>
 
@@ -153,14 +154,14 @@ public interface IGrowableGiantCropsAPI
     public ResourceClumpIndexes CanPickUpClump(ResourceClump clump, bool placedOnly = false);
 
     /// <summary>
-    /// Picks up a clump if possible.
+    /// Picks up a clump or giant crop if possible.
     /// </summary>
     /// <param name="loc">Game location.</param>
     /// <param name="tile">Tile to pick up from.</param>
-    /// <param name="placedOnly">Whether or not we should be limited to just clump we placed.</param>
-    /// <returns>InventoryGiantClump if successfully picked up, null otherwise.</returns>
-    /// This method also does NOT handle adding the clump to the user's inventory.</remarks>
-    public StardewValley.Object? TryPickUpClump(GameLocation loc, Vector2 tile, bool placedOnly = false);
+    /// <param name="placedOnly">Whether or not we should be limited to just clumps or giant crops we placed.</param>
+    /// <returns>InventoryGiantClump or InventoryGiantCrop if successfully picked up, null otherwise.</returns>
+    /// This method also does NOT handle adding the item to the user's inventory.</remarks>
+    public StardewValley.Object? TryPickUpClumpOrGiantCrop(GameLocation loc, Vector2 tile, bool placedOnly = false);
 
     #endregion
 
@@ -237,6 +238,17 @@ public interface IGrowableGiantCropsAPI
     #endregion
 
     #region tree
+
+    /// <summary>
+    /// Gets the InventoryTree associated with the specific TeeIndex, if valid.
+    /// </summary>
+    /// <param name="idx">the index of the tree.</param>
+    /// <param name="initialStack">The initial stack size.</param>
+    /// <param name="growthStage">The growth stage of the tree. Vanilla trees range from 0 <see cref="Tree.seedStage"/> to 5 <see cref="Tree.treeStage"/>. Defaults to <see cref="Tree.bushStage"/></param>
+    /// <param name="isStump">Whether or not the tree is a stump. This really only makes sense for <see cref="Tree.treeStage" />trees.</param>
+    /// <returns>The InventoryTree, or null if invalid.</returns>
+    public StardewValley.Object? GetTree(TreeIndexes idx, int initialStack = 1, int growthStage = Tree.bushStage, bool isStump = false);
+
     /// <summary>
     /// Checks whether or not a tree can be placed at this location.
     /// </summary>

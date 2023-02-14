@@ -7,6 +7,7 @@ using AtraShared.Utils.Shims;
 
 using GrowableGiantCrops.Framework.Assets;
 using GrowableGiantCrops.Framework.InventoryModels;
+using GrowableGiantCrops.HarmonyPatches.Compat;
 using GrowableGiantCrops.HarmonyPatches.GrassPatches;
 
 using Microsoft.Xna.Framework;
@@ -28,6 +29,8 @@ namespace GrowableGiantCrops.Framework;
 [SuppressMessage("StyleCop.CSharp.OrderingRules", "SA1202:Elements should be ordered by access", Justification = "Like methods are grouped together.")]
 public sealed class ShovelTool : GenericTool
 {
+    private static Api api = new();
+
     /// <summary>
     /// Initializes a new instance of the <see cref="ShovelTool"/> class.
     /// </summary>
@@ -78,21 +81,15 @@ public sealed class ShovelTool : GenericTool
         who.canReleaseTool = false;
 
         // use the watering can arms.
-        switch (who.FacingDirection)
+        int frame = who.FacingDirection switch
         {
-            case 2:
-                ((FarmerSprite)who.Sprite).animateOnce(164, 125f, 3);
-                break;
-            case 1:
-                ((FarmerSprite)who.Sprite).animateOnce(172, 125f, 3);
-                break;
-            case 0:
-                ((FarmerSprite)who.Sprite).animateOnce(180, 125f, 3);
-                break;
-            case 3:
-                ((FarmerSprite)who.Sprite).animateOnce(188, 125f, 3);
-                break;
-        }
+            Game1.down => 164,
+            Game1.right => 172,
+            Game1.up => 180,
+            _ => 188,
+        };
+
+        (who.Sprite as FarmerSprite)?.animateOnce(whichAnimation: frame, animationInterval: 125f, numberOfFrames: 3);
     }
 
     /// <summary>
@@ -287,9 +284,20 @@ public sealed class ShovelTool : GenericTool
                     }
                 }
 
+                // TODO: figure out why normal artifact spots do not respond to the shovel.
                 if (obj.performToolAction(this, location))
                 {
                     who.Stamina -= energy;
+                    if (FTMArtifactSpotPatch.IsBuriedItem?.Invoke(obj) != true)
+                    {
+                        GiveItemOrMakeDebris(location, who, obj);
+                        AddAnimations(
+                            loc: location,
+                            tile: pickupTile,
+                            texturePath: obj.bigCraftable.Value ? Game1.bigCraftableSpriteSheetName : Game1.objectSpriteSheetName,
+                            sourceRect: obj.bigCraftable.Value ? SObject.getSourceRectForBigCraftable(obj.ParentSheetIndex) : GameLocation.getSourceRectForObject(obj.ParentSheetIndex),
+                            new Point(1, 1));
+                    }
                     location.objects.Remove(pickupTile);
                     return;
                 }
@@ -518,6 +526,11 @@ public sealed class ShovelTool : GenericTool
             light = true,
             delayBeforeAnimationStart = Math.Max((int)time - 10, 0),
         };
+
+        // if you somehow manage to hit a monster with the animation.....
+        DelayedAction.functionAfterDelay(
+            () => loc.damageMonster(new Rectangle((int)landingPos.X, (int)landingPos.Y, 64, 64), 1, 7, false, Game1.player),
+            (int)time);
 
         mp.broadcastSprites(loc, objTas, dustTas);
     }

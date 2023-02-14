@@ -2,6 +2,8 @@
 
 using HarmonyLib;
 
+using Microsoft.Xna.Framework;
+
 namespace GrowableGiantCrops.HarmonyPatches.Niceties;
 
 /// <summary>
@@ -10,22 +12,33 @@ namespace GrowableGiantCrops.HarmonyPatches.Niceties;
 [HarmonyPatch(typeof(SObject))]
 internal static class PatchesForSObject
 {
-    internal const string ModDataWeed = "atravita.GrowableGiantCrops.PlacedWeed";
+    internal const string ModDataMiscObject = "atravita.GrowableGiantCrops.PlacedObject";
 
     private const string ModDataKey = "atravita.GrowableGiantCrops.PlacedSlimeBall";
 
     [HarmonyPostfix]
     [HarmonyPatch(nameof(SObject.placementAction))]
     [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Harmony convention.")]
-    private static void PostfixPlacement(SObject __instance)
+    private static void PostfixPlacement(SObject __instance, int x, int y)
     {
-        if (__instance?.bigCraftable?.Value == true && __instance.Name == "Slime Ball")
+        if (__instance?.bigCraftable?.Value == true)
         {
-            __instance.modData?.SetBool(ModDataKey, true);
+            if (__instance.Name == "Slime Ball")
+            {
+                __instance.modData?.SetBool(ModDataKey, true);
+                __instance.TileLocation = new Vector2(x / Game1.tileSize, y / Game1.tileSize);
+            }
+            else if (__instance.Name == "Mushroom Box")
+            {
+                __instance.modData?.SetBool(ModDataMiscObject, true);
+                __instance.TileLocation = new Vector2(x / Game1.tileSize, y / Game1.tileSize);
+            }
         }
-        else if (__instance?.bigCraftable?.Value == false && (__instance.Name == "Stone" || __instance.Name.Contains("Weeds") || __instance.Name.Contains("Twig")))
+        else if (__instance?.bigCraftable?.Value == false
+            && (__instance.Name == "Stone" || __instance.Name.Contains("Weeds") || __instance.Name.Contains("Twig")))
         {
-            __instance.modData?.SetBool(ModDataWeed, true);
+            __instance.modData?.SetBool(ModDataMiscObject, true);
+            __instance.TileLocation = new Vector2(x / Game1.tileSize, y / Game1.tileSize);
         }
     }
 

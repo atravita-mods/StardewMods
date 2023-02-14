@@ -1,26 +1,40 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection.Emit;
-using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
+﻿using AtraBase.Toolkit.Reflection;
 
-using AtraBase.Toolkit.Reflection;
 using AtraCore.Framework.ReflectionManager;
 
-using AtraShared.Utils.HarmonyHelper;
-
+using FastExpressionCompiler.LightExpression;
 
 using GrowableGiantCrops.Framework;
-using GrowableGiantCrops.HarmonyPatches.ItemPatches;
+
 using HarmonyLib;
 
-using StardewValley.Tools;
-
 namespace GrowableGiantCrops.HarmonyPatches.Compat;
+
+/// <summary>
+/// Patches for FTM's burial spot.
+/// </summary>
 internal static class FTMArtifactSpotPatch
 {
+    #region delegates
+    private static readonly Lazy<Func<SObject, bool>?> isBuriedItem = new(() =>
+    {
+        Type? buriedItem = AccessTools.TypeByName("FarmTypeManager.ModEntry+BuriedItems");
+        if (buriedItem is null)
+        {
+            return null;
+        }
+
+        ParameterExpression? obj = Expression.ParameterOf<SObject>("obj");
+        TypeBinaryExpression? express = Expression.TypeIs(obj, buriedItem);
+        return Expression.Lambda<Func<SObject, bool>>(express, obj).CompileFast();
+    });
+
+    /// <summary>
+    /// Gets whether an item is a MoreGrassStarter grass starter.
+    /// </summary>
+    internal static Func<SObject, bool>? IsBuriedItem => isBuriedItem.Value;
+    #endregion
+
     /// <summary>
     /// Applies the patches for this class.
     /// </summary>
@@ -46,6 +60,7 @@ internal static class FTMArtifactSpotPatch
         }
     }
 
+    [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Harmony convention.")]
     private static bool Prefix(SObject __instance, Tool t, GameLocation location, ref bool __result)
     {
         if (t is not ShovelTool)

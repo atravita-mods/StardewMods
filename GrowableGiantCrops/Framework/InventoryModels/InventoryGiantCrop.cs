@@ -268,7 +268,7 @@ public sealed class InventoryGiantCrop : SObject
             giant.modData.CopyModDataFrom(this.modData);
         }
         giant.modData?.SetInt(ModDataKey, this.ParentSheetIndex);
-        if (!string.IsNullOrEmpty(this.stringID.Value))
+        if (!string.IsNullOrEmpty(this.stringID.Value) && giant.modData is not null)
         {
             giant.modData[GiantCropTweaksModDataKey] = this.stringID.Value;
         }

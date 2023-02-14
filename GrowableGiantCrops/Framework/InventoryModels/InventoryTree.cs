@@ -139,7 +139,8 @@ public sealed class InventoryTree : SObject
 
         return (GGCUtils.CanPlantTreesAtLocation(l, relaxed, x, y) || l.CanPlantTreesHere(69, x, y)) // 69 - banana tree.
             && l.terrainFeatures?.ContainsKey(tile) == false
-            && GGCUtils.IsTilePlaceableForResourceClump(l, x, y, relaxed);
+            && GGCUtils.IsTilePlaceableForResourceClump(l, x, y, relaxed)
+            && (relaxed || this.growthStage.Value < Tree.treeStage || !AdultTreesAround(l, x, y));
     }
 
     /// <inheritdoc />
@@ -508,6 +509,22 @@ public sealed class InventoryTree : SObject
             3 or 4 => new Rectangle(0, 96, 16, 32),
             _ => new Rectangle(0, 0, 48, 96),
         };
+    }
+
+    private static bool AdultTreesAround(GameLocation l, int xTile, int yTile)
+    {
+        for (int x = xTile - 1; x <= xTile + 1; x++)
+        {
+            for (int y = yTile - 1; x <= yTile + 1; y++)
+            {
+                if (l.terrainFeatures.TryGetValue(new Vector2(x, y), out var terrain)
+                    && terrain is Tree tree && tree.growthStage.Value >= Tree.treeStage)
+                {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
     #endregion
 }

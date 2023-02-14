@@ -20,6 +20,8 @@ using Microsoft.Xna.Framework;
 
 using StardewModdingAPI.Events;
 
+using StardewValley.TerrainFeatures;
+
 using AtraUtils = AtraShared.Utils.Utils;
 
 namespace GrowableGiantCrops;
@@ -143,6 +145,11 @@ internal sealed class ModEntry : Mod
         this.Helper.Events.Content.AssetsInvalidated += static (_, e) => ShopManager.OnAssetInvalidated(e.NamesWithoutLocale);
         this.Helper.Events.Input.ButtonPressed += (_, e) => ShopManager.OnButtonPressed(e, this.Helper.Input);
         this.Helper.Events.GameLoop.DayEnding += static (_, _) => ShopManager.OnDayEnd();
+        this.Helper.Events.GameLoop.ReturnedToTitle += static (_, _) => ShopManager.Reset();
+
+        // trees
+        this.Helper.Events.Player.Warped += this.OnPlayerWarped;
+        this.Helper.Events.Player.InventoryChanged += this.OnInventoryChanged;
 
         this.ApplyPatches(new Harmony(this.ModManifest.UniqueID));
 
@@ -176,6 +183,62 @@ internal sealed class ModEntry : Mod
             GrowableBushesAPI = growable;
         }
     }
+
+    #region resetting
+
+    private void OnInventoryChanged(object? sender, InventoryChangedEventArgs e)
+    {
+        if (!e.IsLocalPlayer)
+        {
+            return;
+        }
+
+        foreach (var item in e.Added)
+        {
+            if (item is InventoryFruitTree fruitTree)
+            {
+                fruitTree.Reset();
+            }
+            else if (item is InventoryTree tree)
+            {
+                tree.Reset();
+            }
+        }
+
+        foreach (var item in e.Removed)
+        {
+            if (item is InventoryFruitTree fruitTree)
+            {
+                fruitTree.Reset();
+            }
+            else if (item is InventoryTree tree)
+            {
+                tree.Reset();
+            }
+        }
+    }
+
+    private void OnPlayerWarped(object? sender, WarpedEventArgs e)
+    {
+        if (!e.IsLocalPlayer)
+        {
+            return;
+        }
+
+        foreach (var item in e.Player.Items)
+        {
+            if (item is InventoryFruitTree fruitTree)
+            {
+                fruitTree.Reset();
+            }
+            else if (item is InventoryTree tree)
+            {
+                tree.Reset();
+            }
+        }
+    }
+
+    #endregion
 
     /// <summary>
     /// Applies the patches for this mod.

@@ -1,5 +1,9 @@
 ﻿using GrowableGiantCrops.Framework.InventoryModels;
 
+using Microsoft.Xna.Framework;
+
+using StardewValley.TerrainFeatures;
+
 namespace GrowableGiantCrops.Framework;
 
 /// <summary>
@@ -14,6 +18,18 @@ public sealed class Api : IGrowableGiantCropsAPI
 
     /// <inheritdoc />
     public Tool GetShovel() => new ShovelTool();
+
+    #endregion
+
+    #region any
+
+    /// <inheritdoc/>
+    public bool CanPlace(SObject obj, GameLocation loc, Vector2 tile, bool relaxed)
+    => obj switch
+        {
+            InventoryResourceClump clump => this.CanPlaceClump(clump, loc, tile, relaxed),
+            _ => false,
+        };
 
     #endregion
 
@@ -36,6 +52,14 @@ public sealed class Api : IGrowableGiantCropsAPI
     /// <inheritdoc />
     public SObject GetResourceClump(ResourceClumpIndexes idx) => new InventoryResourceClump(idx, 1);
 
+    /// <inheritdoc />
+    public bool CanPlaceClump(SObject obj, GameLocation loc, Vector2 tile, bool relaxed)
+        => obj is InventoryResourceClump clump && clump.CanPlace(loc, tile, relaxed);
+
+    /// <inheritdoc />
+    public bool TryPlaceClump(SObject obj, GameLocation loc, Vector2 tile, bool relaxed)
+        => obj is InventoryResourceClump clump && clump.PlaceResourceClump(loc, (int)tile.X * Game1.tileSize, (int)tile.Y * Game1.tileSize, relaxed);
+
     #endregion
 
     #region crops
@@ -49,6 +73,12 @@ public sealed class Api : IGrowableGiantCropsAPI
             return (crop.ParentSheetIndex, stringID);
         }
         return null;
+    }
+
+    /// <inheritdoc />
+    public SObject GetGiantCrop(int produceIndex, int initialStack)
+    {
+        return new InventoryGiantCrop(produceIndex, initialStack);
     }
 
     #endregion

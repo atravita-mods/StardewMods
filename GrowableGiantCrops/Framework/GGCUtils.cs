@@ -11,7 +11,7 @@ using StardewValley.Buildings;
 using StardewValley.Locations;
 using StardewValley.TerrainFeatures;
 
-namespace GrowableGiantCrops;
+namespace GrowableGiantCrops.Framework;
 
 /// <summary>
 /// The utility class for this mod.
@@ -32,7 +32,7 @@ internal static class GGCUtils
         {
             return false;
         }
-        if (relaxed || (location.IsOutdoors && location.doesTileHavePropertyNoNull(tileX, tileY, "Type", "Back") == "Dirt"))
+        if (relaxed || location.IsOutdoors && location.doesTileHavePropertyNoNull(tileX, tileY, "Type", "Back") == "Dirt")
         {
             return true;
         }

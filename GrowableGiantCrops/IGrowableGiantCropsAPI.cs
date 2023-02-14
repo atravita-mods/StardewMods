@@ -1,4 +1,6 @@
-﻿using NetEscapades.EnumGenerators;
+﻿using Microsoft.Xna.Framework;
+
+using NetEscapades.EnumGenerators;
 
 using StardewValley.TerrainFeatures;
 
@@ -28,6 +30,18 @@ public interface IGrowableGiantCropsAPI
 
     #endregion
 
+    #region Generalized Placement
+    /// <summary>
+    /// Checks whether or an object managed by this mod.
+    /// </summary>
+    /// <param name="obj">Object to place.</param>
+    /// <param name="loc">Game location.</param>
+    /// <param name="tile">Tile to place at.</param>
+    /// <param name="relaxed">Whether or not to use relaxed placement rules.</param>
+    /// <returns>True if place-able.</returns>
+    public bool CanPlace(StardewValley.Object obj, GameLocation loc, Vector2 tile, bool relaxed);
+    #endregion
+
     #region Resource Clump methods
 
     /// <summary>
@@ -47,11 +61,38 @@ public interface IGrowableGiantCropsAPI
     /// <returns>A <see cref="ResourceClumpIndexes"/> (or <see cref="ResourceClumpIndexes.Invalid"/> if not applicable.).</returns>
     public ResourceClumpIndexes GetIndexOfClumpIfApplicable(StardewValley.Object obj);
 
+    /// <summary>
+    /// Checks whether or not a clump can be placed at this location.
+    /// </summary>
+    /// <param name="obj">Clump to place.</param>
+    /// <param name="loc">Game location.</param>
+    /// <param name="tile">Tile to place at.</param>
+    /// <param name="relaxed">Whether or not to use relaxed placement rules.</param>
+    /// <returns>True if place-able.</returns>
+    public bool CanPlaceClump(StardewValley.Object obj, GameLocation loc, Vector2 tile, bool relaxed);
+
+    /// <summary>
+    /// Tries to place a clump at a specific location.
+    /// </summary>
+    /// <param name="obj">Clump to place.</param>
+    /// <param name="loc">Game location.</param>
+    /// <param name="tile">Tile to place at.</param>
+    /// <param name="relaxed">Whether or not to use relaxed placement rules.</param>
+    /// <returns>True if successfully placed.</returns>
+    public bool TryPlaceClump(StardewValley.Object obj, GameLocation loc, Vector2 tile, bool relaxed);
+
     #endregion
 
     #region GiantCrop
 
+    /// <summary>
+    /// Gets the identifiers for an inventory giant crop, if relevant.
+    /// </summary>
+    /// <param name="obj">Suspected inventory giant crop.</param>
+    /// <returns>the product index and the GiantCropsTweaks string id, if relevant. Null otherwise.</returns>
     public (int idx, string? stringId)? GetIdentifiers(StardewValley.Object obj);
+
+    public StardewValley.Object GetGiantCrop(int produceIndex, int initialStack);
     #endregion
 }
 

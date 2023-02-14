@@ -165,12 +165,17 @@ internal static class ShopManager
         }
     }
 
+    internal static void Reset()
+    {
+        Stock.Value = null;
+        NodeStock.Value = null;
+    }
+
     /// <inheritdoc cref="IGameLoopEvents.DayEnding"/>
     /// <remarks>Used to reset the shop inventory and send mail about the shops.</remarks>
     internal static void OnDayEnd()
     {
-        Stock.Value = null;
-        NodeStock.Value = null;
+        Reset();
 
         // add Robin letter for tomorrow.
         if (Game1.player.getFriendshipLevelForNPC("Robin") > 250
@@ -268,7 +273,7 @@ internal static class ShopManager
 
         if (!Game1.player.Items.Any(item => item is ShovelTool))
         {
-            sellables.TryAdd(new ShovelTool(), new[] { 3_000, 1 });
+            sellables.TryAdd(new ShovelTool(), new[] { 5_000, 1 });
         }
 
         if (PerfectFaarm.GetValue())
@@ -281,8 +286,9 @@ internal static class ShopManager
 
             foreach (int idx in nodes)
             {
-                _ = sellables.TryAdd(new SObject(idx, 1) { MinutesUntilReady = 25 }, new[] { 500, ShopMenu.infiniteStock });
+                _ = sellables.TryAdd(new SObject(idx, 1) { MinutesUntilReady = 25 }, new[] { 1_500, ShopMenu.infiniteStock });
             }
+
         }
         else
         {
@@ -310,9 +316,18 @@ internal static class ShopManager
                     {
                         continue;
                     }
-                    _ = sellables.TryAdd(new SObject(index, count) { MinutesUntilReady = 25 }, new[] { 500, count });
+                    _ = sellables.TryAdd(new SObject(index, count) { MinutesUntilReady = 25 }, new[] { 1_500, count });
                 }
             }
+        }
+
+        foreach (TreeIndexes idx in TreeIndexesExtensions.GetValues())
+        {
+            if (idx == TreeIndexes.Invalid || idx == TreeIndexes.Mushroom)
+            {
+                continue;
+            }
+            _ = sellables.TryAdd(new InventoryTree(idx, 1, 3), new[] { 5_000, ShopMenu.infiniteStock });
         }
     }
 

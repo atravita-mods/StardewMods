@@ -56,7 +56,7 @@ internal static class PreventGrassSpreadTranspiler
                 new(OpCodes.Brtrue, jumpPoint),
             });
 
-            helper.Print();
+            // helper.Print();
             return helper.Render();
         }
         catch (Exception ex)

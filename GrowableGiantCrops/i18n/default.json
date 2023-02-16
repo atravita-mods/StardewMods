@@ -1,5 +1,5 @@
 ﻿{
-  "mod-description": "Lets you put down giant crops.",
+  "mod-description": "Lets you put down giant crops. And maybe a few other things.",
   "IllFormatedConfig": "Config file seems ill-formated, using default. Please use Generic Mod Config Menu to configure.",
 
   "api-not-found": "{{APIID}} not found, integration disabled.",
@@ -22,8 +22,15 @@
   "ShovelEnergy.title": "Shovel Energy",
   "ShovelEnergy.description": "How much stamina should each use of the shovel take.",
 
+  "AllowLargeItemStacking.title": "Allow Large Item Stacking",
+  "AllowLargeItemStacking.description": "If enabled, large items like inventory giant crops can stack.",
+  "PreserveModData.title": "Preserve Mod Data",
+  "PreserveModData.description": "If set, mod data will be copied out of the terrain version of items into the inventory version of items. This means they will probably stack less well, but will mean that mod data other mods use, like MARGO's tree age or MoreFertilizer's non-standard fertilizers, will stay.",
+
   "CanSquishPlacedSlimeBalls.title": "Squish Placed Slime Balls",
   "CanSquishPlacedSlimeBalls.description": "If enabled, placed slime balls cannot be squished (and are thus purely decorative)",
+  "PreservePlacedWeeds.title": "Preserve Placed Weeds",
+  "PreservePlacedWeeds.description": "If enabled, placed weeds will not die in winter.",
 
   "ShouldAnimalsEatPlacedGrass.title": "Animals Eat Placed Grass",
   "ShouldAnimalsEatPlacedGrass.description": "If enabled, animals will eat grass created from starters created by this mod.",
@@ -32,11 +39,15 @@
   "ShouldPlacedGrassIgnoreScythe.title": "Placed Grass Ignores Scythe",
   "ShouldPlacedGrassIgnoreScythe.description": "If enabled, placed grass will ignore the scythe and become purely decorative.",
 
+  "Shop.title": "Shop-related options:",
+  "Shop.description": "Use these to customize the location of the shops if needed.",
   "Grass.title": "Grass-related options:",
   "Misc.title": "Miscellaneous options:",
+  "LargeItems.title": "Large item options:",
+  "LargeItems.description": "These options pertain to the giant crop, the resource clumps, and both kinds of trees.",
 
   // Stores
-  "ShopMessage.Robin": "Whatcha lookin' for?",
+  "ShopMessage.Robin": "Whatcha lookin' for? Anything catch your eye?",
 
   //mail for shops:
   "RobinMail": "Hi @!^Recently, I've picked up some interesting grass starters for sale. Check my counter if you'd like some. I've heard they're nice for decorating.^^  --Robin[#]Robin's Grass Starters",

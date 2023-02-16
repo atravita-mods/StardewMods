@@ -61,14 +61,21 @@ public sealed class ModConfig
     [GMCMSection("LargeItems", 0)]
     public bool ShouldNPCsTrampleGiantCrops { get; set; } = true;
 
+    /// <summary>
+    /// Gets or sets a value indicating whether or not moddata should be copied.
+    /// </summary>
     [GMCMSection("LargeItems", 0)]
     public bool PreserveModData { get; set; } = true;
 
+    /// <summary>
+    /// Gets or sets a value indicating whether large inventory items, like giant crops and trees
+    /// should be allowed to stack.
+    /// </summary>
     [GMCMSection("LargeItems", 0)]
     public bool AllowLargeItemStacking { get; set; } = true;
 
     // TODO - note, internally stored as the matching game stage, displayed as wiki stage.
-    private int maxTreeStage = 4;
+    private int maxTreeStage = 3;
 
     /// <summary>
     /// Gets or sets the maximum tree stage that can be lifted by the shovel.
@@ -99,7 +106,7 @@ public sealed class ModConfig
     /// </summary>
     internal int MaxTreeStageInternal => this.maxTreeStage;
 
-    private int maxFruitTreeStage = 4;
+    private int maxFruitTreeStage = 3;
 
     [GMCMRange(0, 5)]
     [GMCMSection("Trees", 5)]
@@ -144,6 +151,9 @@ public sealed class ModConfig
     [GMCMSection("Misc", 20)]
     public bool CanSquishPlacedSlimeBalls { get; set; } = false;
 
+    /// <summary>
+    /// Gets or sets a value indicating whether or not placed weeds should die in winter.
+    /// </summary>
     [GMCMSection("Misc", 20)]
     public bool PreservePlacedWeeds { get; set; } = true;
 }

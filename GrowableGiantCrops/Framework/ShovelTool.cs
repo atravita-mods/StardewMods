@@ -120,6 +120,7 @@ public sealed class ShovelTool : GenericTool
                 return;
             }
 
+            // Handle clumps and giant crops.
             if (api.TryPickUpClumpOrGiantCrop(location, pickupTile, ModEntry.Config.PlacedOnly) is SObject inventoryClump)
             {
                 ModEntry.ModMonitor.DebugOnlyLog($"Picking up {inventoryClump.Name}.", LogLevel.Info);

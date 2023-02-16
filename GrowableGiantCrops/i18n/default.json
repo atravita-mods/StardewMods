@@ -32,14 +32,15 @@
   "ShouldPlacedGrassIgnoreScythe.title": "Placed Grass Ignores Scythe",
   "ShouldPlacedGrassIgnoreScythe.description": "If enabled, placed grass will ignore the scythe and become purely decorative.",
 
-  "Grass.title":  "Grass-related options:",
+  "Grass.title": "Grass-related options:",
   "Misc.title": "Miscellaneous options:",
 
   // Stores
   "ShopMessage.Robin": "Whatcha lookin' for?",
 
   //mail for shops:
-  "RobinMail": "Hi @!^Recently, I've picked up some large resource clumps for sale. Check my counter if you'd like some. I've heard they're nice for decorating.^^  --Robin[#]Robin's Resource Clumps",
+  "RobinMail": "Hi @!^Recently, I've picked up some interesting grass starters for sale. Check my counter if you'd like some. I've heard they're nice for decorating.^^  --Robin[#]Robin's Grass Starters",
+  "RobinMailTwo": "@!^Got some new resource clumps for sale now too!^^  --Robin[#]Robin's Grass Starters",
   "WitchMail": "....some magic....easier to grow....giant crops....recently got a shovel....to transplant them....[#]Giant Crop Shop mail",
 
   // Items

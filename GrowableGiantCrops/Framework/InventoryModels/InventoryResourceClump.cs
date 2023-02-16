@@ -200,7 +200,7 @@ public sealed class InventoryResourceClump : SObject
     {
         float draw_layer = Math.Max(
             0f,
-            ((y * 64) + 40) / 10000f) + (x * 1E-05f);
+            ((y * Game1.tileSize) + 40) / 10000f) + (x * 1E-05f);
         this.draw(spriteBatch, x, y, draw_layer, alpha);
     }
 
@@ -214,7 +214,9 @@ public sealed class InventoryResourceClump : SObject
 
         if (this.sourceRect != default)
         {
-            Vector2 position = Game1.GlobalToLocal(Game1.viewport, new Vector2(xNonTile * 64, yNonTile * 64 - this.sourceRect.Height * 4 + 64));
+            Vector2 position = Game1.GlobalToLocal(
+                viewport: Game1.viewport,
+                new Vector2(xNonTile * Game1.tileSize, (yNonTile * Game1.tileSize) - (this.sourceRect.Height * Game1.pixelZoom) + Game1.tileSize));
             spriteBatch.Draw(
                 texture: Game1.objectSpriteSheet,
                 position,
@@ -231,8 +233,8 @@ public sealed class InventoryResourceClump : SObject
     /// <inheritdoc />
     public override void drawPlacementBounds(SpriteBatch spriteBatch, GameLocation location)
     {
-        int x = (int)Game1.GetPlacementGrabTile().X * 64;
-        int y = (int)Game1.GetPlacementGrabTile().Y * 64;
+        int x = (int)Game1.GetPlacementGrabTile().X * Game1.tileSize;
+        int y = (int)Game1.GetPlacementGrabTile().Y * Game1.tileSize;
         Game1.isCheckingNonMousePlacement = !Game1.IsPerformingMousePlacement();
         if (Game1.isCheckingNonMousePlacement)
         {
@@ -241,14 +243,15 @@ public sealed class InventoryResourceClump : SObject
             y = (int)nearbyValidPlacementPosition.Y;
         }
 
-        bool canPlaceHere = Utility.playerCanPlaceItemHere(location, this, x, y, Game1.player) && Utility.withinRadiusOfPlayer(x, y, 1, Game1.player);
+        bool canPlaceHere = Utility.playerCanPlaceItemHere(location, this, x, y, Game1.player)
+                                && Utility.withinRadiusOfPlayer(x, y, 1, Game1.player);
         for (int x_offset = 0; x_offset < 2; x_offset++)
         {
             for (int y_offset = -1; y_offset < 1; y_offset++)
             {
                 spriteBatch.Draw(
                     texture: Game1.mouseCursors,
-                    new Vector2(x + (x_offset * 64) - Game1.viewport.X, y + (y_offset * 64) - Game1.viewport.Y),
+                    new Vector2(x + (x_offset * Game1.tileSize) - Game1.viewport.X, y + (y_offset * Game1.tileSize) - Game1.viewport.Y),
                     new Rectangle(canPlaceHere ? 194 : 210, 388, 16, 16),
                     color: Color.White,
                     rotation: 0f,
@@ -258,7 +261,7 @@ public sealed class InventoryResourceClump : SObject
                     layerDepth: 0.01f);
             }
         }
-        this.draw(spriteBatch, x / 64, y / 64, 0.5f);
+        this.draw(spriteBatch, x / Game1.tileSize, y / Game1.tileSize, 0.5f);
     }
 
     /// <inheritdoc />
@@ -293,7 +296,7 @@ public sealed class InventoryResourceClump : SObject
                 Utility.drawTinyDigits(
                     toDraw: this.Stack,
                     b: spriteBatch,
-                    position: location + new Vector2(64 - Utility.getWidthOfTinyDigitString(this.Stack, 3f * scaleSize) + 3f * scaleSize, 64f - 18f * scaleSize + 2f),
+                    position: location + new Vector2(Game1.tileSize - Utility.getWidthOfTinyDigitString(this.Stack, 3f * scaleSize) + (3f * scaleSize), 64f - (18f * scaleSize) + 2f),
                     scale: 3f * scaleSize,
                     layerDepth: 1f,
                     c: Color.White);
@@ -312,7 +315,7 @@ public sealed class InventoryResourceClump : SObject
         {
             int xOffset = (this.sourceRect.Width - 16) * 2;
             objectPosition.X -= xOffset;
-            int yOffset = Math.Max((this.sourceRect.Height * Game1.pixelZoom) - Game1.tileSize, 0);
+            int yOffset = Math.Max((this.sourceRect.Height * Game1.pixelZoom) - (2 * Game1.tileSize), 0);
             objectPosition.Y -= yOffset;
             spriteBatch.Draw(
                 texture: Game1.objectSpriteSheet,

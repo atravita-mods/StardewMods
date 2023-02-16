@@ -7,6 +7,7 @@ namespace GrowableGiantCrops.Framework;
 /// <summary>
 /// The configuration class for this mod.
 /// </summary>
+[SuppressMessage("StyleCop.CSharp.OrderingRules", "SA1202:Elements should be ordered by access", Justification = "Reviewed.")]
 [SuppressMessage("StyleCop.CSharp.OrderingRules", "SA1201:Elements should appear in the correct order", Justification = "Fields kept near accessors.")]
 public sealed class ModConfig
 {
@@ -60,11 +61,9 @@ public sealed class ModConfig
     [GMCMSection("LargeItems", 0)]
     public bool ShouldNPCsTrampleGiantCrops { get; set; } = true;
 
-    // TODO
     [GMCMSection("LargeItems", 0)]
     public bool PreserveModData { get; set; } = true;
 
-    // TODO
     [GMCMSection("LargeItems", 0)]
     public bool AllowLargeItemStacking { get; set; } = true;
 
@@ -144,4 +143,7 @@ public sealed class ModConfig
     /// </summary>
     [GMCMSection("Misc", 20)]
     public bool CanSquishPlacedSlimeBalls { get; set; } = false;
+
+    [GMCMSection("Misc", 20)]
+    public bool PreservePlacedWeeds { get; set; } = true;
 }

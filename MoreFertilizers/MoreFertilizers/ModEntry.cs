@@ -625,8 +625,7 @@ internal sealed class ModEntry : Mod
     private void ApplyPatches(Harmony harmony)
     {
 #if DEBUG
-        Stopwatch sw = new();
-        sw.Start();
+        Stopwatch sw = Stopwatch.StartNew();
 #endif
 
         try

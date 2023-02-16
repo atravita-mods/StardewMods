@@ -1,5 +1,7 @@
-﻿using System.Xml.Serialization;
+﻿using System.Runtime.CompilerServices;
+using System.Xml.Serialization;
 
+using AtraBase.Toolkit;
 using AtraBase.Toolkit.Extensions;
 using AtraBase.Toolkit.Reflection;
 
@@ -595,6 +597,7 @@ public sealed class InventoryGiantCrop : SObject
     /// </summary>
     /// <param name="idx">Index to check.</param>
     /// <returns>True if it's accounted for.</returns>
+    [MethodImpl(TKConstants.Hot)]
     internal static bool IsValidGiantCropIndex(int idx)
     {
         switch (idx)

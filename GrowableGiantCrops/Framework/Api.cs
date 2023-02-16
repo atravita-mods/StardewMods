@@ -296,6 +296,12 @@ public sealed class Api : IGrowableGiantCropsAPI
     #region fruit trees
 
     /// <inheritdoc />
+    public SObject? GetFruitTree(int saplingIndex, int initialStack, int growthStage, int daysUntilMature, int struckByLightning = 0)
+    => InventoryFruitTree.IsValidFruitTree(saplingIndex)
+            ? new InventoryFruitTree(saplingIndex, initialStack, growthStage, daysUntilMature, struckByLightning)
+            : null;
+
+    /// <inheritdoc />
     public bool CanPlaceFruitTree(SObject obj, GameLocation loc, Vector2 tile, bool relaxed)
         => obj is InventoryFruitTree tree && tree.CanPlace(loc, tile, relaxed);
 

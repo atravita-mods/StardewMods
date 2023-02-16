@@ -3,7 +3,6 @@
 using AtraBase.Toolkit;
 using AtraBase.Toolkit.Extensions;
 
-using AtraShared.Utils.Extensions;
 using AtraShared.Utils.Shims;
 using AtraShared.Wrappers;
 
@@ -14,6 +13,8 @@ using Microsoft.Xna.Framework;
 using StardewValley.Buildings;
 using StardewValley.Locations;
 using StardewValley.TerrainFeatures;
+
+using XLocation = xTile.Dimensions.Location;
 
 namespace GrowableGiantCrops.Framework;
 
@@ -231,18 +232,30 @@ internal static class GGCUtils
             }
         }
 
-        if (!relaxed && location is BuildableGameLocation buildable)
+        if (relaxed)
+        {
+            return true;
+        }
+
+        Vector2 tile = new(tileX, tileY);
+        if (location is BuildableGameLocation buildable)
         {
             foreach (Building? building in buildable.buildings)
             {
-                if (!building.isTilePassable(new Vector2(tileX, tileY)))
+                if (!building.isTilePassable(tile))
                 {
                     return false;
                 }
             }
         }
 
-        return relaxed || !location.isTileOccupied(new Vector2(tileX, tileY));
+        if (location.terrainFeatures?.ContainsKey(tile) == true
+            || location.Objects?.ContainsKey(tile) == true)
+        {
+            return false;
+        }
+
+        return !location.isTileOccupied(tile) && location.isTilePassable(new XLocation(tileX, tileY), Game1.viewport);
     }
 
     /// <summary>

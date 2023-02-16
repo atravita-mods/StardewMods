@@ -1,4 +1,6 @@
-﻿using AtraCore.Utilities;
+﻿using System.Diagnostics;
+
+using AtraCore.Utilities;
 
 using AtraShared.ConstantsAndEnums;
 using AtraShared.Integrations;
@@ -243,6 +245,9 @@ internal sealed class ModEntry : Mod
     /// <param name="harmony">This mod's harmony instance.</param>
     private void ApplyPatches(Harmony harmony)
     {
+#if DEBUG
+        Stopwatch sw = Stopwatch.StartNew();
+#endif
         try
         {
             harmony.PatchAll(typeof(ModEntry).Assembly);
@@ -276,6 +281,11 @@ internal sealed class ModEntry : Mod
             ModMonitor.Log(string.Format(ErrorMessageConsts.HARMONYCRASH, ex), LogLevel.Error);
         }
         harmony.Snitch(this.Monitor, harmony.Id, transpilersOnly: true);
+
+#if DEBUG
+        sw.Stop();
+        this.Monitor.Log($"took {sw.ElapsedMilliseconds} ms to apply harmony patches", LogLevel.Info);
+#endif
     }
 
     #region migration

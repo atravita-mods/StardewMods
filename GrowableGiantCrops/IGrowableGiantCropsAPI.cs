@@ -11,6 +11,7 @@ namespace GrowableGiantCrops;
 /// <summary>
 /// The api for this mod.
 /// </summary>
+[SuppressMessage("StyleCop.CSharp.OrderingRules", "SA1201:Elements should appear in the correct order", Justification = "Reviewed.")]
 public interface IGrowableGiantCropsAPI
 {
     #region Tool methods
@@ -31,8 +32,17 @@ public interface IGrowableGiantCropsAPI
     #endregion
 
     #region config
+
+    /// <summary>
+    /// Gets the maximum tree stage the shovel will pick up.
+    /// </summary>
     public int MaxTreeStage { get; }
+
+    /// <summary>
+    /// Gets the maximum fruit tree stage the shovel will pick up.
+    /// </summary>
     public int MaxFruitTreeStage { get; }
+
     #endregion
 
     #region Generalized Placement
@@ -276,6 +286,17 @@ public interface IGrowableGiantCropsAPI
     #endregion
 
     #region fruit tree
+
+    /// <summary>
+    /// Gets an Inventory Fruit Tree instance.
+    /// </summary>
+    /// <param name="saplingIndex">The index of the sapling it corresponds to.</param>
+    /// <param name="initialStack">The initial stack.</param>
+    /// <param name="growthStage">The growth stage of the fruit tree.</param>
+    /// <param name="daysUntilMature">How many days until the fruit tree is mature.</param>
+    /// <param name="struckByLightning">If the fruit tree has been struck by lightning, how many days until that goes away.</param>
+    /// <returns>Inventory fruit tree, or null for invalid.</returns>
+    public StardewValley.Object? GetFruitTree(int saplingIndex, int initialStack, int growthStage, int daysUntilMature, int struckByLightning = 0);
 
     /// <summary>
     /// Checks whether or not a fruit tree can be placed at this location.

@@ -29,6 +29,8 @@ namespace GrowableGiantCrops.HarmonyPatches.GrassPatches;
 [HarmonyPatch(typeof(SObject))]
 [SuppressMessage("StyleCop.CSharp.OrderingRules", "SA1201:Elements should appear in the correct order", Justification = "Reviewed.")]
 [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1311:Static readonly fields should begin with upper-case letter", Justification = "Reviewed.")]
+[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Named for Harmony.")]
+[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1623:Property summary documentation should match accessors", Justification = "Reviewed.")]
 internal static class SObjectPatches
 {
     /// <summary>
@@ -75,6 +77,9 @@ internal static class SObjectPatches
         return Expression.Lambda<Func<int, SObject>>(newObj, which).CompileFast();
     });
 
+    /// <summary>
+    /// Instantiates an instance of an More Grass grass starter.
+    /// </summary>
     internal static Func<int, SObject>? InstantiateMoreGrassStarter => instantiateMoreGrassStarter.Value;
 
     private static Lazy<Func<Grass, bool>?> isMoreGrassGrass = new(() =>
@@ -90,6 +95,9 @@ internal static class SObjectPatches
         return Expression.Lambda<Func<Grass, bool>>(express, obj).CompileFast();
     });
 
+    /// <summary>
+    /// Checks to see if a Grass instance is a More Grass grass.
+    /// </summary>
     internal static Func<Grass, bool>? IsMoreGrassGrass => isMoreGrassGrass.Value;
 
     private static Lazy<Func<int, Grass>?> instantiateMoreGrassGrass = new(() =>
@@ -107,6 +115,9 @@ internal static class SObjectPatches
         return Expression.Lambda<Func<int, Grass>>(newObj, which).CompileFast();
     });
 
+    /// <summary>
+    /// Instantiates an instance of a MoreGrass grass.
+    /// </summary>
     internal static Func<int, Grass>? InstantiateMoreGrassGrass => instantiateMoreGrassGrass.Value;
 
     #endregion

@@ -169,6 +169,15 @@ public interface IGrowableGiantCropsAPI
     public ResourceClumpIndexes CanPickUpClump(ResourceClump clump, bool placedOnly = false);
 
     /// <summary>
+    /// Tries to pick up a resource clump.
+    /// </summary>
+    /// <param name="loc">Game location to check.</param>
+    /// <param name="tile">Tile to check.</param>
+    /// <param name="placedOnly">Whether to limit to just placed items.</param>
+    /// <returns>InventoryResourceClump, or null for failure.</returns>
+    public StardewValley.Object? TryPickUpClump(GameLocation loc, Vector2 tile, bool placedOnly = false);
+
+    /// <summary>
     /// Picks up a clump or giant crop if possible.
     /// </summary>
     /// <param name="loc">Game location.</param>
@@ -250,6 +259,15 @@ public interface IGrowableGiantCropsAPI
     /// <returns>Identifier if there's a giant crop that can be picked up, null otherwise.</returns>
     public (int idx, string? stringId)? CanPickUpCrop(GameLocation loc, Vector2 tile, bool placedOnly);
 
+    /// <summary>
+    /// Tries to pick up a giant crop at this location.
+    /// </summary>
+    /// <param name="loc">The location to check.</param>
+    /// <param name="tile">The tile to check.</param>
+    /// <param name="placedOnly">Whether or not to only look at placed crops.</param>
+    /// <returns>InventoryGiantCrop, or null for failure.</returns>
+    public StardewValley.Object? TryPickUpGiantCrop(GameLocation loc, Vector2 tile, bool placedOnly = false);
+
     #endregion
 
     #region tree
@@ -263,6 +281,13 @@ public interface IGrowableGiantCropsAPI
     /// <param name="isStump">Whether or not the tree is a stump. This really only makes sense for <see cref="Tree.treeStage" />trees.</param>
     /// <returns>The InventoryTree, or null if invalid.</returns>
     public StardewValley.Object? GetTree(TreeIndexes idx, int initialStack = 1, int growthStage = Tree.bushStage, bool isStump = false);
+
+    /// <summary>
+    /// Gets the inventory item matching a tree.
+    /// </summary>
+    /// <param name="tree">The tree to match.</param>
+    /// <returns>InventoryTree, or null for invalid.</returns>
+    public StardewValley.Object? GetMatchingTree(Tree tree);
 
     /// <summary>
     /// Checks whether or not a tree can be placed at this location.
@@ -283,6 +308,32 @@ public interface IGrowableGiantCropsAPI
     /// <param name="relaxed">Whether or not to use relaxed placement rules.</param>
     /// <returns>True if successfully placed.</returns>
     public bool TryPlaceTree(StardewValley.Object obj, GameLocation loc, Vector2 tile, bool relaxed);
+
+    /// <summary>
+    /// If this particular tree is one that can be picked up, given the constraints.
+    /// </summary>
+    /// <param name="tree">Tree in question.</param>
+    /// <param name="placedOnly">Whether or not to only consider placed trees.</param>
+    /// <returns>TreeIndex of the tree, or Invalid if it can't be picked up.</returns>
+    public TreeIndexes CanPickUpTree(Tree tree, bool placedOnly);
+
+    /// <summary>
+    /// Whether or not it's possible to pick up a tree from this location.
+    /// </summary>
+    /// <param name="loc">GameLocation.</param>
+    /// <param name="tile">tile to pick up form.</param>
+    /// <param name="placedOnly">Whether or not to only consider placed trees.</param>
+    /// <returns>TreeIndex of the tree, or Invalid if it can't be picked up.</returns>
+    public TreeIndexes CanPickUpTree(GameLocation loc, Vector2 tile, bool placedOnly);
+
+    /// <summary>
+    /// Tries to pick up a resource tree.
+    /// </summary>
+    /// <param name="loc">Game location to check.</param>
+    /// <param name="tile">Tile to check.</param>
+    /// <param name="placedOnly">Whether to limit to just placed items.</param>
+    /// <returns>InventoryTree, or null for failure.</returns>
+    public StardewValley.Object? TryPickUpTree(GameLocation loc, Vector2 tile, bool placedOnly = false);
     #endregion
 
     #region fruit tree

@@ -9,7 +9,6 @@ using HarmonyLib;
 
 using Microsoft.Xna.Framework;
 
-using StardewValley;
 using StardewValley.TerrainFeatures;
 
 namespace GrowableGiantCrops.HarmonyPatches;
@@ -20,7 +19,7 @@ namespace GrowableGiantCrops.HarmonyPatches;
 [HarmonyPatch(typeof(Character))]
 internal static class CharacterTramplePatches
 {
-    private static Api api = new();
+    private static readonly Api Api = new();
 
     [MethodImpl(TKConstants.Hot)]
     [HarmonyPriority(Priority.HigherThanNormal)]
@@ -50,7 +49,7 @@ internal static class CharacterTramplePatches
                 {
                     case GiantCrop crop when ModEntry.Config.ShouldNPCsTrampleGiantCrops:
                         if (crop.modData.ContainsKey(InventoryGiantCrop.ModDataKey)
-                            && api.GetMatchingCrop(crop) is InventoryGiantCrop inventoryGiant)
+                            && Api.GetMatchingCrop(crop) is InventoryGiantCrop inventoryGiant)
                         {
                             currentLocation.debris.Add(new(inventoryGiant, inventoryGiant.TileLocation * Game1.tileSize));
                             currentLocation.resourceClumps.RemoveAt(i);
@@ -58,7 +57,7 @@ internal static class CharacterTramplePatches
                         break;
                     case ResourceClump resourceClump when ModEntry.Config.ShouldNPCsTrampleResourcesClumps:
                         if (resourceClump.modData.ContainsKey(InventoryResourceClump.ResourceModdata)
-                            && api.GetMatchingClump(resourceClump) is InventoryResourceClump inventoryClump)
+                            && Api.GetMatchingClump(resourceClump) is InventoryResourceClump inventoryClump)
                         {
                             currentLocation.debris.Add(new(inventoryClump, inventoryClump.TileLocation * Game1.tileSize));
                             currentLocation.resourceClumps.RemoveAt(i);
@@ -69,7 +68,7 @@ internal static class CharacterTramplePatches
         }
         catch (Exception ex)
         {
-            ModEntry.ModMonitor.Log($"Failed in trying to trample a bush:\n\n{ex}", LogLevel.Error);
+            ModEntry.ModMonitor.Log($"Failed in trying to trample a resource clump.:\n\n{ex}", LogLevel.Error);
         }
     }
 }

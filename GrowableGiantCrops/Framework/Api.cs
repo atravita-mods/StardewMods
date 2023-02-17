@@ -67,6 +67,39 @@ public sealed class Api : IGrowableGiantCropsAPI
         _ => false
     };
 
+    /// <inheritdoc />
+    public SObject? TryPickUpClumpOrGiantCrop(GameLocation loc, Vector2 tile, bool placedOnly = false)
+    {
+        switch (loc.RemoveLargeObjectAtLocation(((int)tile.X * Game1.tileSize) + 32, ((int)tile.Y * Game1.tileSize) + 32, placedOnly))
+        {
+            case GiantCrop giant:
+                if (this.GetMatchingCrop(giant) is InventoryGiantCrop inventoryGiantCrop)
+                {
+                    return inventoryGiantCrop;
+                }
+                else
+                {
+                    loc.resourceClumps.Add(giant);
+                    return null;
+                }
+            case ResourceClump resource:
+                if (this.GetMatchingClump(resource) is InventoryResourceClump inventoryResourceClump)
+                {
+                    return inventoryResourceClump;
+                }
+                else
+                {
+                    loc.resourceClumps.Add(resource);
+                    return null;
+                }
+            case LargeTerrainFeature terrain:
+                loc.largeTerrainFeatures.Add(terrain);
+                return null;
+            default:
+                return null;
+        }
+    }
+
     /// <inheritdoc/>
     public SObject? TryPickUp(GameLocation loc, Vector2 tile, bool placedOnly = false)
     {
@@ -87,6 +120,12 @@ public sealed class Api : IGrowableGiantCropsAPI
                 break;
             case InventoryResourceClump clump:
                 ShovelTool.AddAnimations(loc, tile, Game1.objectSpriteSheetName, clump.SourceRect, new Point(2, 2));
+                break;
+            case InventoryTree tree:
+                Vector2 offset = new(
+                    x: tree.SourceRect.Width / 32,
+                    y: tree.SourceRect.Height / 16);
+                ShovelTool.AddAnimations(loc, tile - offset, tree.TexturePath, tree.SourceRect, new Point(((int)offset.X * 2) + 1, (int)offset.Y + 1));
                 break;
             case SObject @object when @object.bigCraftable.Value:
                 ShovelTool.AddAnimations(loc, tile, Game1.objectSpriteSheetName, GameLocation.getSourceRectForObject(@object.ParentSheetIndex), new Point(1, 1));
@@ -154,23 +193,6 @@ public sealed class Api : IGrowableGiantCropsAPI
     }
 
     /// <inheritdoc />
-    public SObject? TryPickUpClumpOrGiantCrop(GameLocation loc, Vector2 tile, bool placedOnly = false)
-    {
-        switch (loc.RemoveLargeObjectAtLocation(((int)tile.X * Game1.tileSize) + 32, ((int)tile.Y * Game1.tileSize) + 32, placedOnly))
-        {
-            case GiantCrop giant:
-                return this.GetMatchingCrop(giant);
-            case ResourceClump resource:
-                return this.GetMatchingClump(resource);
-            case LargeTerrainFeature terrain:
-                loc.largeTerrainFeatures.Add(terrain);
-                return null;
-            default:
-                return null;
-        }
-    }
-
-    /// <inheritdoc />
     public SObject? GetMatchingClump(ResourceClump resource)
     {
         if (resource is GiantCrop crop)
@@ -181,9 +203,40 @@ public sealed class Api : IGrowableGiantCropsAPI
         ResourceClumpIndexes idx = (ResourceClumpIndexes)resource.parentSheetIndex.Value;
         if (idx != ResourceClumpIndexes.Invalid && ResourceClumpIndexesExtensions.IsDefined(idx))
         {
-            return new InventoryResourceClump(idx, 1) { TileLocation = resource.tile.Value };
+            InventoryResourceClump clump = new(idx, 1) { TileLocation = resource.tile.Value };
+            if (ModEntry.Config.PreserveModData)
+            {
+                clump.modData?.CopyModDataFrom(resource.modData);
+            }
+            return clump;
         }
         return null;
+    }
+
+    /// <inheritdoc />
+    public SObject? TryPickUpClump(GameLocation loc, Vector2 tile, bool placedOnly = false)
+    {
+        switch (loc.RemoveLargeObjectAtLocation(((int)tile.X * Game1.tileSize) + 32, ((int)tile.Y * Game1.tileSize) + 32, placedOnly))
+        {
+            case GiantCrop giant:
+                loc.resourceClumps.Add(giant);
+                return null;
+            case ResourceClump resource:
+                if (this.GetMatchingClump(resource) is InventoryResourceClump inventoryResourceClump)
+                {
+                    return inventoryResourceClump;
+                }
+                else
+                {
+                    loc.resourceClumps.Add(resource);
+                    return null;
+                }
+            case LargeTerrainFeature terrain:
+                loc.largeTerrainFeatures.Add(terrain);
+                return null;
+            default:
+                return null;
+        }
     }
 
     #endregion
@@ -229,6 +282,10 @@ public sealed class Api : IGrowableGiantCropsAPI
 
         if (inventoryGiantCrop is not null)
         {
+            if (ModEntry.Config.PreserveModData)
+            {
+                inventoryGiantCrop.modData?.CopyModDataFrom(giant.modData);
+            }
             inventoryGiantCrop.TileLocation = giant.tile.Value;
             return inventoryGiantCrop;
         }
@@ -269,6 +326,32 @@ public sealed class Api : IGrowableGiantCropsAPI
             _ => null,
         };
 
+    /// <inheritdoc />
+    public SObject? TryPickUpGiantCrop(GameLocation loc, Vector2 tile, bool placedOnly = false)
+    {
+        switch (loc.RemoveLargeObjectAtLocation(((int)tile.X * Game1.tileSize) + 32, ((int)tile.Y * Game1.tileSize) + 32, placedOnly))
+        {
+            case GiantCrop giant:
+                if (this.GetMatchingCrop(giant) is InventoryGiantCrop inventoryGiantCrop)
+                {
+                    return inventoryGiantCrop;
+                }
+                else
+                {
+                    loc.resourceClumps.Add(giant);
+                    return null;
+                }
+            case ResourceClump resource:
+                loc.resourceClumps.Add(resource);
+                return null;
+            case LargeTerrainFeature terrain:
+                loc.largeTerrainFeatures.Add(terrain);
+                return null;
+            default:
+                return null;
+        }
+    }
+
     #endregion
 
     #region trees
@@ -284,12 +367,67 @@ public sealed class Api : IGrowableGiantCropsAPI
     }
 
     /// <inheritdoc />
+    public SObject? GetMatchingTree(Tree tree)
+    {
+        SObject? inventoryTree = this.GetTree((TreeIndexes)tree.treeType.Value, 1, tree.growthStage.Value, tree.stump.Value);
+        if (inventoryTree is InventoryTree && ModEntry.Config.PreserveModData)
+        {
+            inventoryTree.modData?.CopyModDataFrom(tree.modData);
+            inventoryTree.TileLocation = tree.currentTileLocation;
+        }
+        return inventoryTree;
+    }
+
+    /// <inheritdoc />
     public bool CanPlaceTree(SObject obj, GameLocation loc, Vector2 tile, bool relaxed)
         => obj is InventoryTree tree && tree.CanPlace(loc, tile, relaxed);
 
     /// <inheritdoc />
     public bool TryPlaceTree(SObject obj, GameLocation loc, Vector2 tile, bool relaxed)
         => obj is InventoryTree tree && tree.PlaceTree(loc, (int)tile.X * Game1.tileSize, (int)tile.Y * Game1.tileSize, relaxed);
+
+    /// <inheritdoc />
+    public TreeIndexes CanPickUpTree(Tree tree, bool placedOnly)
+    {
+        if (!placedOnly || tree.modData?.ContainsKey(InventoryTree.ModDataKey) == true)
+        {
+            TreeIndexes id = (TreeIndexes)tree.treeType.Value;
+            if (TreeIndexesExtensions.IsDefined(id))
+            {
+                return id;
+            }
+        }
+        return TreeIndexes.Invalid;
+    }
+
+    /// <inheritdoc />
+    public TreeIndexes CanPickUpTree(GameLocation loc, Vector2 tile, bool placedOnly)
+    {
+        if (loc?.terrainFeatures?.TryGetValue(tile, out TerrainFeature? terrainFeature) == true
+            && terrainFeature is Tree tree)
+        {
+            return this.CanPickUpTree(tree, placedOnly);
+        }
+        return TreeIndexes.Invalid;
+    }
+
+    /// <inheritdoc />
+    public SObject? TryPickUpTree(GameLocation loc, Vector2 tile, bool placedOnly = false)
+    {
+        if (loc.terrainFeatures?.TryGetValue(tile, out TerrainFeature? terrain) == true
+            && terrain is Tree tree && this.CanPickUpTree(tree, placedOnly) != TreeIndexes.Invalid)
+        {
+            InventoryTree.TreeShakeMethod(tree, tile, true, loc);
+            SObject? inventoryTree = this.GetMatchingTree(tree);
+            if (inventoryTree is InventoryTree)
+            {
+                loc.terrainFeatures.Remove(tile);
+            }
+            return inventoryTree;
+        }
+
+        return null;
+    }
 
     #endregion
 

@@ -3,7 +3,6 @@
 using AtraCore.Utilities;
 
 using AtraShared.Utils.Extensions;
-using AtraShared.Utils.Shims;
 
 using GrowableGiantCrops.Framework.Assets;
 using GrowableGiantCrops.Framework.InventoryModels;
@@ -13,8 +12,6 @@ using GrowableGiantCrops.HarmonyPatches.GrassPatches;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-using StardewValley;
-using StardewValley.Locations;
 using StardewValley.Objects;
 using StardewValley.TerrainFeatures;
 using StardewValley.Tools;
@@ -30,7 +27,7 @@ namespace GrowableGiantCrops.Framework;
 [SuppressMessage("StyleCop.CSharp.OrderingRules", "SA1202:Elements should be ordered by access", Justification = "Like methods are grouped together.")]
 public sealed class ShovelTool : GenericTool
 {
-    private static Api api = new();
+    private static readonly Api Api = new();
 
     /// <summary>
     /// Initializes a new instance of the <see cref="ShovelTool"/> class.
@@ -56,21 +53,13 @@ public sealed class ShovelTool : GenericTool
     {
         // use the watering can arms.
         who.jitterStrength = 0.25f;
-        switch (who.FacingDirection)
+        who.FarmerSprite.setCurrentFrame(who.FacingDirection switch
         {
-            case Game1.up:
-                who.FarmerSprite.setCurrentFrame(180);
-                break;
-            case Game1.right:
-                who.FarmerSprite.setCurrentFrame(172);
-                break;
-            case Game1.down:
-                who.FarmerSprite.setCurrentFrame(164);
-                break;
-            case Game1.left:
-                who.FarmerSprite.setCurrentFrame(188);
-                break;
-        }
+            Game1.down => 164,
+            Game1.right => 172,
+            Game1.up => 180,
+            _ => 188,
+        });
         this.Update(who.FacingDirection, 0, who);
         return false;
     }
@@ -121,12 +110,12 @@ public sealed class ShovelTool : GenericTool
             }
 
             // Handle clumps and giant crops.
-            if (api.TryPickUpClumpOrGiantCrop(location, pickupTile, ModEntry.Config.PlacedOnly) is SObject inventoryClump)
+            if (Api.TryPickUpClumpOrGiantCrop(location, pickupTile, ModEntry.Config.PlacedOnly) is SObject inventoryClump)
             {
                 ModEntry.ModMonitor.DebugOnlyLog($"Picking up {inventoryClump.Name}.", LogLevel.Info);
                 who.Stamina -= ModEntry.Config.ShovelEnergy;
                 GiveItemOrMakeDebris(location, who, inventoryClump);
-                api.DrawPickUpGraphics(inventoryClump, location, inventoryClump.TileLocation);
+                Api.DrawPickUpGraphics(inventoryClump, location, inventoryClump.TileLocation);
                 return;
             }
 
@@ -262,6 +251,16 @@ public sealed class ShovelTool : GenericTool
                         sourceRect: GameLocation.getSourceRectForObject(SObjectPatches.GrassStarterIndex),
                         new Point(1, 1));
                     location.terrainFeatures.Remove(pickupTile);
+                    return;
+                }
+
+                if (terrain is Tree tree && terrain.GetType() == typeof(Tree)
+                    && Api.TryPickUpTree(location, pickupTile, ModEntry.Config.PlacedOnly) is InventoryTree inventoryTree)
+                {
+                    ModEntry.ModMonitor.DebugOnlyLog($"Picking up {inventoryTree.Name}.", LogLevel.Info);
+                    who.Stamina -= ModEntry.Config.ShovelEnergy;
+                    GiveItemOrMakeDebris(location, who, inventoryTree);
+                    Api.DrawPickUpGraphics(inventoryTree, location, inventoryTree.TileLocation);
                     return;
                 }
 
@@ -464,9 +463,11 @@ public sealed class ShovelTool : GenericTool
             delayBeforeAnimationStart = Math.Max((int)time - 10, 0),
         };
 
+        int damage = (sourceRect.Height / 16) * (sourceRect.Width / 16);
+
         // if you somehow manage to hit a monster with the animation.....
         DelayedAction.functionAfterDelay(
-            () => loc.damageMonster(new Rectangle((int)landingPos.X, (int)landingPos.Y, 64, 64), 1, 7, false, Game1.player),
+            () => loc.damageMonster(new Rectangle((int)landingPos.X, (int)landingPos.Y, 64, 64), damage, damage * 3, false, Game1.player),
             (int)time);
 
         mp.broadcastSprites(loc, objTas, dustTas);

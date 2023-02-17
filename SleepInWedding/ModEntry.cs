@@ -7,6 +7,8 @@ using AtraShared.Utils.Extensions;
 using HarmonyLib;
 using StardewModdingAPI.Events;
 
+using static StardewValley.Polygon;
+
 using AtraUtils = AtraShared.Utils.Utils;
 
 namespace SleepInWedding;
@@ -41,6 +43,7 @@ internal sealed class ModEntry : Mod
         helper.Events.GameLoop.DayStarted += this.OnDayStart;
 
         helper.Events.Multiplayer.ModMessageReceived += this.OnMessageRecieved;
+        helper.Events.Multiplayer.PeerConnected += this.OnPeerConnected;
 
         this.Monitor.Log($"Starting up: {this.ModManifest.UniqueID} - {typeof(ModEntry).Assembly.FullName}");
 
@@ -160,6 +163,23 @@ internal sealed class ModEntry : Mod
         }
     }
 
+    /// <inheritdoc cref="IMultiplayerEvents.PeerConnected"/>
+    /// <remarks>Send restored weddings if needed when a peer connects.</remarks>
+    private void OnPeerConnected(object? sender, PeerConnectedEventArgs e)
+    {
+        if (!Config.TryRecoverWedding)
+        {
+            return;
+        }
+
+        ModMonitor.DebugOnlyLog($"Current weddings {string.Join(", ", Game1.weddingsToday)}");
+        this.Helper.Multiplayer.SendMessage(
+            message: Game1.weddingsToday,
+            messageType: RestoredWeddings,
+            modIDs: new[] { this.ModManifest.UniqueID },
+            playerIDs: new[] { e.Peer.PlayerID });
+    }
+
     private void OnMessageRecieved(object? sender, ModMessageReceivedEventArgs e)
     {
         if (e.FromModID != this.ModManifest.UniqueID)
@@ -171,8 +191,14 @@ internal sealed class ModEntry : Mod
             List<long>? weddings = e.ReadAs<List<long>>();
             if (weddings is not null)
             {
-                Game1.weddingsToday.Clear();
-                Game1.weddingsToday.AddRange(weddings);
+                foreach (long wedding in weddings)
+                {
+                    if (!Game1.weddingsToday.Contains(wedding))
+                    {
+                        ModEntry.ModMonitor.Log($"Adding restored wedding {wedding}");
+                        Game1.weddingsToday.Add(wedding);
+                    }
+                }
             }
         }
     }
@@ -213,7 +239,8 @@ internal sealed class ModEntry : Mod
         IntegrationHelper integrationHelper = new(this.Monitor, this.Helper.Translation, this.Helper.ModRegistry);
         if (integrationHelper.TryGetAPI("Pathoschild.ContentPatcher", "1.19.0", out IContentPatcherAPI? api))
         {
-            api.RegisterToken(this.ModManifest,
+            api.RegisterToken(
+                this.ModManifest,
                 "IsCurrentlyWedding",
                 () =>
                 {

@@ -135,7 +135,9 @@ public sealed class ModConfig
     [GMCMSection("Grass", 10)]
     public bool ShouldAnimalsEatPlacedGrass { get; set; } = true;
 
-    // TODO
+    /// <summary>
+    /// Gets or sets a value indicating whether or not placed grass should be capable of spreading.
+    /// </summary>
     [GMCMSection("Grass", 10)]
     public bool ShouldPlacedGrassSpread { get; set; } = false;
 

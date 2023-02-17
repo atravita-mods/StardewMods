@@ -2,10 +2,14 @@
 
 using AtraBase.Toolkit.Extensions;
 
+using AtraShared.Utils.Extensions;
+
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
 using StardewModdingAPI.Events;
+
+using StardewValley.TerrainFeatures;
 
 namespace GrowableGiantCrops.Framework.Assets;
 
@@ -20,6 +24,8 @@ internal static class AssetManager
     internal const string GiantCropPrefix = "Mods/atravita/GrowableBushes/";
 
     private static IAssetName fruitTreeData = null!;
+
+    private static Lazy<Dictionary<int, int>> reverseFruitTreeMap = new(GenerateFruitTreeMap);
 
     /// <summary>
     /// An error texture, used to fill in if a JA/MGC texture is not found.
@@ -99,5 +105,47 @@ internal static class AssetManager
         {
             toolTex = new(() => Game1.content.Load<Texture2D>(ToolTextureName.BaseName));
         }
+        if ((assets is null || assets.Contains(fruitTreeData)) && reverseFruitTreeMap.IsValueCreated)
+        {
+            reverseFruitTreeMap = new(GenerateFruitTreeMap);
+        }
+    }
+
+    /// <summary>
+    /// Given a fruit tree index, looks up the sapling index.
+    /// </summary>
+    /// <param name="treeIndex"><see cref="FruitTree.treeType"/>.</param>
+    /// <returns>Sapling index, or null for not found.</returns>
+    internal static int? GetMatchingSaplingIndex(int treeIndex)
+        => reverseFruitTreeMap.Value.TryGetValue(treeIndex, out int saplingIndex) ? saplingIndex : null;
+
+    private static Dictionary<int, int> GenerateFruitTreeMap()
+    {
+        ModEntry.ModMonitor.DebugOnlyLog($"Generating reverse tree map");
+        Dictionary<int, string>? data;
+        try
+        {
+            data = Game1.content.Load<Dictionary<int, string>>(fruitTreeData.BaseName);
+        }
+        catch (Exception ex)
+        {
+            ModEntry.ModMonitor.Log($"Failed to generate reverse fruit tree lookup map:\n\n{ex}", LogLevel.Error);
+            return new Dictionary<int, int>();
+        }
+        Dictionary<int, int> map = new(data.Count);
+
+        foreach ((int saplingIndex, string s) in data)
+        {
+            if (!int.TryParse(s.GetNthChunk('/'), out int treeIndex))
+            {
+                ModEntry.ModMonitor.Log($"Malformed tree data: {saplingIndex} - {s}, skipping", LogLevel.Warn);
+            }
+            if (!map.TryAdd(treeIndex, saplingIndex))
+            {
+                ModEntry.ModMonitor.Log($"Duplicate fruit tree saplingIndex: {saplingIndex} - {s}, skipping", LogLevel.Warn);
+            }
+        }
+
+        return map;
     }
 }

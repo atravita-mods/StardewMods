@@ -1,5 +1,6 @@
 ﻿using AtraShared.Utils.Extensions;
 
+using GrowableGiantCrops.Framework.Assets;
 using GrowableGiantCrops.Framework.InventoryModels;
 
 using Microsoft.Xna.Framework;
@@ -122,11 +123,21 @@ public sealed class Api : IGrowableGiantCropsAPI
                 ShovelTool.AddAnimations(loc, tile, Game1.objectSpriteSheetName, clump.SourceRect, new Point(2, 2));
                 break;
             case InventoryTree tree:
+            {
                 Vector2 offset = new(
                     x: tree.SourceRect.Width / 32,
                     y: tree.SourceRect.Height / 16);
                 ShovelTool.AddAnimations(loc, tile - offset, tree.TexturePath, tree.SourceRect, new Point(((int)offset.X * 2) + 1, (int)offset.Y + 1));
                 break;
+            }
+            case InventoryFruitTree fruitTree:
+            {
+                Vector2 offset = new(
+                    x: fruitTree.SourceRect.Width / 32,
+                    y: fruitTree.SourceRect.Height / 16);
+                ShovelTool.AddAnimations(loc, tile - offset, "TileSheets/fruitTrees", fruitTree.SourceRect, new Point(((int)offset.X * 2) + 1, (int)offset.Y + 1));
+                break;
+            }
             case SObject @object when @object.bigCraftable.Value:
                 ShovelTool.AddAnimations(loc, tile, Game1.objectSpriteSheetName, GameLocation.getSourceRectForObject(@object.ParentSheetIndex), new Point(1, 1));
                 break;
@@ -301,7 +312,7 @@ public sealed class Api : IGrowableGiantCropsAPI
         => obj is InventoryGiantCrop crop && crop.PlaceGiantCrop(loc, (int)tile.X * Game1.tileSize, (int)tile.Y * Game1.tileSize, relaxed);
 
     /// <inheritdoc />
-    public (int idx, string? stringId)? CanPickUpCrop(GiantCrop crop, bool placedOnly)
+    public (int idx, string? stringId)? CanPickUpCrop(GiantCrop crop, bool placedOnly = false)
     {
         if (!placedOnly || crop.modData?.ContainsKey(InventoryGiantCrop.ModDataKey) == true)
         {
@@ -319,7 +330,7 @@ public sealed class Api : IGrowableGiantCropsAPI
     }
 
     /// <inheritdoc />
-    public (int idx, string? stringId)? CanPickUpCrop(GameLocation loc, Vector2 tile, bool placedOnly)
+    public (int idx, string? stringId)? CanPickUpCrop(GameLocation loc, Vector2 tile, bool placedOnly = false)
         => loc.GetLargeObjectAtLocation(((int)tile.X * Game1.tileSize) + 32, ((int)tile.Y * Game1.tileSize) + 32, placedOnly) switch
         {
             GiantCrop crop => this.CanPickUpCrop(crop, placedOnly),
@@ -373,6 +384,9 @@ public sealed class Api : IGrowableGiantCropsAPI
         if (inventoryTree is InventoryTree && ModEntry.Config.PreserveModData)
         {
             inventoryTree.modData?.CopyModDataFrom(tree.modData);
+        }
+        if (inventoryTree is not null)
+        {
             inventoryTree.TileLocation = tree.currentTileLocation;
         }
         return inventoryTree;
@@ -387,7 +401,7 @@ public sealed class Api : IGrowableGiantCropsAPI
         => obj is InventoryTree tree && tree.PlaceTree(loc, (int)tile.X * Game1.tileSize, (int)tile.Y * Game1.tileSize, relaxed);
 
     /// <inheritdoc />
-    public TreeIndexes CanPickUpTree(Tree tree, bool placedOnly)
+    public TreeIndexes CanPickUpTree(Tree tree, bool placedOnly = false)
     {
         if (!placedOnly || tree.modData?.ContainsKey(InventoryTree.ModDataKey) == true)
         {
@@ -401,7 +415,7 @@ public sealed class Api : IGrowableGiantCropsAPI
     }
 
     /// <inheritdoc />
-    public TreeIndexes CanPickUpTree(GameLocation loc, Vector2 tile, bool placedOnly)
+    public TreeIndexes CanPickUpTree(GameLocation loc, Vector2 tile, bool placedOnly = false)
     {
         if (loc?.terrainFeatures?.TryGetValue(tile, out TerrainFeature? terrainFeature) == true
             && terrainFeature is Tree tree)
@@ -440,12 +454,82 @@ public sealed class Api : IGrowableGiantCropsAPI
             : null;
 
     /// <inheritdoc />
+    public SObject? GetMatchingFruitTree(FruitTree tree)
+    {
+        int? saplingIndex = AssetManager.GetMatchingSaplingIndex(tree.treeType.Value);
+        if (saplingIndex is null)
+        {
+            return null;
+        }
+        SObject? inventoryTree = this.GetFruitTree(
+            saplingIndex: saplingIndex.Value,
+            initialStack: 1,
+            growthStage: tree.growthStage.Value,
+            daysUntilMature: tree.daysUntilMature.Value,
+            struckByLightning: tree.struckByLightningCountdown.Value);
+        if (inventoryTree is InventoryFruitTree && ModEntry.Config.PreserveModData)
+        {
+            inventoryTree.modData?.CopyModDataFrom(tree.modData);
+        }
+        if (inventoryTree is not null)
+        {
+            inventoryTree.TileLocation = tree.currentTileLocation;
+        }
+        return inventoryTree;
+    }
+
+    /// <inheritdoc />
     public bool CanPlaceFruitTree(SObject obj, GameLocation loc, Vector2 tile, bool relaxed)
         => obj is InventoryFruitTree tree && tree.CanPlace(loc, tile, relaxed);
 
     /// <inheritdoc />
     public bool TryPlaceFruitTree(SObject obj, GameLocation loc, Vector2 tile, bool relaxed)
         => obj is InventoryFruitTree tree && tree.PlaceFruitTree(loc, (int)tile.X * Game1.tileSize, (int)tile.Y * Game1.tileSize, relaxed);
+
+    // TODO
+    // int saplingIndex, int initialStack, int growthStage, int daysUntilMature, int struckByLightning = 0
+    /// <inheritdoc />
+    public (int saplingIndex, int growthStage, int daysUntilMature, int struckByLightning)? CanPickUpFruitTree(FruitTree tree, bool placedOnly = false)
+    {
+        if (!placedOnly || tree.modData?.ContainsKey(InventoryFruitTree.ModDataKey) == true)
+        {
+            int? saplingID = AssetManager.GetMatchingSaplingIndex(tree.treeType.Value);
+            if (saplingID is not null)
+            {
+                return (saplingID.Value, tree.growthStage.Value, tree.daysUntilMature.Value, tree.struckByLightningCountdown.Value);
+            }
+        }
+        return null;
+    }
+
+    /// <inheritdoc />
+    public (int saplingIndex, int growthStage, int daysUntilMature, int struckByLightning)? CanPickUpFruitTree(GameLocation loc, Vector2 tile, bool placedOnly = false)
+    {
+        if (loc?.terrainFeatures?.TryGetValue(tile, out TerrainFeature? terrainFeature) == true
+            && terrainFeature is FruitTree tree)
+        {
+            return this.CanPickUpFruitTree(tree, placedOnly);
+        }
+        return null;
+    }
+
+    /// <inheritdoc />
+    public SObject? TryPickUpFruitTree(GameLocation loc, Vector2 tile, bool placedOnly = false)
+    {
+        if (loc.terrainFeatures?.TryGetValue(tile, out TerrainFeature? terrain) == true
+            && terrain is FruitTree tree && this.CanPickUpFruitTree(tree, placedOnly) is not null)
+        {
+            tree.shake(tile, true, loc);
+            SObject? inventoryTree = this.GetMatchingFruitTree(tree);
+            if (inventoryTree is InventoryFruitTree)
+            {
+                loc.terrainFeatures.Remove(tile);
+            }
+            return inventoryTree;
+        }
+
+        return null;
+    }
 
     #endregion
 }

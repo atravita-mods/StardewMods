@@ -315,7 +315,7 @@ public interface IGrowableGiantCropsAPI
     /// <param name="tree">Tree in question.</param>
     /// <param name="placedOnly">Whether or not to only consider placed trees.</param>
     /// <returns>TreeIndex of the tree, or Invalid if it can't be picked up.</returns>
-    public TreeIndexes CanPickUpTree(Tree tree, bool placedOnly);
+    public TreeIndexes CanPickUpTree(Tree tree, bool placedOnly = false);
 
     /// <summary>
     /// Whether or not it's possible to pick up a tree from this location.
@@ -324,7 +324,7 @@ public interface IGrowableGiantCropsAPI
     /// <param name="tile">tile to pick up form.</param>
     /// <param name="placedOnly">Whether or not to only consider placed trees.</param>
     /// <returns>TreeIndex of the tree, or Invalid if it can't be picked up.</returns>
-    public TreeIndexes CanPickUpTree(GameLocation loc, Vector2 tile, bool placedOnly);
+    public TreeIndexes CanPickUpTree(GameLocation loc, Vector2 tile, bool placedOnly = false);
 
     /// <summary>
     /// Tries to pick up a resource tree.
@@ -350,6 +350,13 @@ public interface IGrowableGiantCropsAPI
     public StardewValley.Object? GetFruitTree(int saplingIndex, int initialStack, int growthStage, int daysUntilMature, int struckByLightning = 0);
 
     /// <summary>
+    /// Gets the InventoryFruitTree that matches this FruitTree.
+    /// </summary>
+    /// <param name="tree">The fruit tree.</param>
+    /// <returns>InventoryFruitTree, or null for invalid.</returns>
+    public StardewValley.Object? GetMatchingFruitTree(FruitTree tree);
+
+    /// <summary>
     /// Checks whether or not a fruit tree can be placed at this location.
     /// </summary>
     /// <param name="obj">Fruit tree to place.</param>
@@ -368,6 +375,32 @@ public interface IGrowableGiantCropsAPI
     /// <param name="relaxed">Whether or not to use relaxed placement rules.</param>
     /// <returns>True if successfully placed.</returns>
     public bool TryPlaceFruitTree(StardewValley.Object obj, GameLocation loc, Vector2 tile, bool relaxed);
+
+    /// <summary>
+    /// Checks to see if a fruit tree can be picked up.
+    /// </summary>
+    /// <param name="tree">Fruit tree to check.</param>
+    /// <param name="placedOnly">Whether to limit to placed trees only.</param>
+    /// <returns>Identifying info for a tree that can be picked up, null otherwise.</returns>
+    public (int saplingIndex, int growthStage, int daysUntilMature, int struckByLightning)? CanPickUpFruitTree(FruitTree tree, bool placedOnly = false);
+
+    /// <summary>
+    /// Checks to see if a fruit tree can be picked up from this tile.
+    /// </summary>
+    /// <param name="loc">Game location to check.</param>
+    /// <param name="tile">Tile to check.</param>
+    /// <param name="placedOnly">Whether to limit to placed trees only.</param>
+    /// <returns>Identifying info for a fruit tree that can be picked up, null otherwise.</returns>
+    public (int saplingIndex, int growthStage, int daysUntilMature, int struckByLightning)? CanPickUpFruitTree(GameLocation loc, Vector2 tile, bool placedOnly = false);
+
+    /// <summary>
+    /// Tries to pick up a fruit tree.
+    /// </summary>
+    /// <param name="loc">Game location to pick up from.</param>
+    /// <param name="tile">Tile to pick up from.</param>
+    /// <param name="placedOnly">whether to limit to placed trees only or not.</param>
+    /// <returns>InventoryFruitTree if successful, null otherwise.</returns>
+    public SObject? TryPickUpFruitTree(GameLocation loc, Vector2 tile, bool placedOnly = false);
     #endregion
 }
 

@@ -124,6 +124,26 @@ public sealed class InventoryTree : SObject
         Vector2 tileLocation,
         bool doEvenIfStillShaking,
         GameLocation location);
+
+    /// <summary>
+    /// Stardew's performSeedDestory.
+    /// </summary>
+    internal static readonly SeedDestroy SeedDestoryMethod = typeof(Tree)
+        .GetCachedMethod("performSeedDestroy", ReflectionCache.FlagTypes.InstanceFlags)
+        .CreateDelegate<SeedDestroy>();
+
+    /// <summary>
+    /// A delegate that matches the pattern of Stardew's performSeedDestroy.
+    /// </summary>
+    /// <param name="tree">The tree instance.</param>
+    /// <param name="t">The tool used.</param>
+    /// <param name="tileLocation">The tile location.</param>
+    /// <param name="location">The game location.</param>
+    internal delegate void SeedDestroy(
+        Tree tree,
+        Tool t,
+        Vector2 tileLocation,
+        GameLocation location);
     #endregion
 
     /// <summary>
@@ -580,7 +600,7 @@ public sealed class InventoryTree : SObject
     {
         for (int x = xTile - 1; x <= xTile + 1; x++)
         {
-            for (int y = yTile - 1; x <= yTile + 1; y++)
+            for (int y = yTile - 1; y <= yTile + 1; y++)
             {
                 if (l.terrainFeatures.TryGetValue(new Vector2(x, y), out var terrain)
                     && terrain is Tree tree && tree.growthStage.Value >= Tree.treeStage)

@@ -52,7 +52,7 @@ internal static class GGCUtils
     /// <param name="nonTileY">Y coord.</param>
     /// <param name="placedOnly">Whether or not to only include what the player has placed.</param>
     /// <returns>The feature, or null for not found.</returns>
-    internal static TerrainFeature? GetLargeObjectAtLocation(this GameLocation loc, int nonTileX, int nonTileY, bool placedOnly)
+    internal static TerrainFeature? GetLargeObjectAtLocation(this GameLocation loc, int nonTileX, int nonTileY, bool placedOnly = false)
     {
         if (loc.resourceClumps is not null)
         {
@@ -113,7 +113,7 @@ internal static class GGCUtils
     /// <param name="nonTileY">Y coord.</param>
     /// <param name="placedOnly">Whether or not to only include what the player has placed.</param>
     /// <returns>The feature, or null for not found.</returns>
-    internal static TerrainFeature? RemoveLargeObjectAtLocation(this GameLocation loc, int nonTileX, int nonTileY, bool placedOnly)
+    internal static TerrainFeature? RemoveLargeObjectAtLocation(this GameLocation loc, int nonTileX, int nonTileY, bool placedOnly = false)
     {
         if (loc.resourceClumps is not null)
         {
@@ -268,6 +268,13 @@ internal static class GGCUtils
             ? data.GetNthChunk('/').ToString()
             : "NoNameFound";
 
+    /// <summary>
+    /// Whether or not there's a tree of any type within radius two.
+    /// </summary>
+    /// <param name="loc">Game location to check.</param>
+    /// <param name="tileX">X tile.</param>
+    /// <param name="tileY">Y tile.</param>
+    /// <returns>True if there's a tree of any type, false otherwise.</returns>
     internal static bool HasTreeInRadiusTwo(this GameLocation? loc, int tileX, int tileY)
     {
         if (loc?.terrainFeatures is null)
@@ -279,7 +286,7 @@ internal static class GGCUtils
             for (int y = tileY - 2; y <= tileY + 2; y++)
             {
                 Vector2 tile = new(x, y);
-                if (loc.terrainFeatures.TryGetValue(tile, out var terrain)
+                if (loc.terrainFeatures.TryGetValue(tile, out TerrainFeature? terrain)
                     && terrain is Tree or FruitTree)
                 {
                     return true;

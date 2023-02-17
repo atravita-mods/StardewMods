@@ -1,22 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Reflection;
 using System.Reflection.Emit;
-using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 
 using AtraCore.Framework.ReflectionManager;
 
+using AtraShared.Utils.Extensions;
 using AtraShared.Utils.HarmonyHelper;
 
 using HarmonyLib;
 
-using StardewValley.Locations;
-using AtraShared.Utils.Extensions;
-
 namespace SleepInWedding.HarmonyPatches;
 
+/// <summary>
+/// Removes the multiplayer sync at the end of the wedding.
+/// </summary>
 [HarmonyPatch(typeof(Utility))]
 internal static class RemoveEndWeddingCheck
 {

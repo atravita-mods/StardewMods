@@ -254,14 +254,51 @@ public sealed class ShovelTool : GenericTool
                     return;
                 }
 
-                if (terrain is Tree tree && terrain.GetType() == typeof(Tree)
-                    && Api.TryPickUpTree(location, pickupTile, ModEntry.Config.PlacedOnly) is InventoryTree inventoryTree)
+                if (terrain is Tree tree && terrain.GetType() == typeof(Tree))
                 {
-                    ModEntry.ModMonitor.DebugOnlyLog($"Picking up {inventoryTree.Name}.", LogLevel.Info);
-                    who.Stamina -= ModEntry.Config.ShovelEnergy;
-                    GiveItemOrMakeDebris(location, who, inventoryTree);
-                    Api.DrawPickUpGraphics(inventoryTree, location, inventoryTree.TileLocation);
-                    return;
+                    if (tree.growthStage.Value <= ModEntry.Config.MaxTreeStageInternal)
+                    {
+                        if (tree.growthStage.Value == 0)
+                        {
+                            who.Stamina -= energy;
+                            location.playSound("woodyHit");
+                            location.playSound("axchop");
+                            InventoryTree.SeedDestoryMethod(tree, this, pickupTile, location);
+                            location.terrainFeatures.Remove(pickupTile);
+                            return;
+                        }
+                        else if (Api.TryPickUpTree(location, pickupTile, ModEntry.Config.PlacedOnly) is InventoryTree inventoryTree)
+                        {
+                            ModEntry.ModMonitor.DebugOnlyLog($"Picking up {inventoryTree.Name}.", LogLevel.Info);
+                            who.Stamina -= ModEntry.Config.ShovelEnergy;
+                            GiveItemOrMakeDebris(location, who, inventoryTree);
+                            Api.DrawPickUpGraphics(inventoryTree, location, inventoryTree.TileLocation);
+                            return;
+                        }
+                    }
+                    else
+                    {
+                        InventoryTree.TreeShakeMethod(tree, pickupTile, true, location);
+                    }
+                }
+
+                if (terrain is FruitTree fruitTree && terrain.GetType() == typeof(FruitTree))
+                {
+                    if (fruitTree.growthStage.Value <= ModEntry.Config.MaxFruitTreeStageInternal)
+                    {
+                        if (Api.TryPickUpFruitTree(location, pickupTile, ModEntry.Config.PlacedOnly) is InventoryFruitTree inventoryFruitTree)
+                        {
+                            ModEntry.ModMonitor.DebugOnlyLog($"Picking up {inventoryFruitTree.Name}.", LogLevel.Info);
+                            who.Stamina -= ModEntry.Config.ShovelEnergy;
+                            GiveItemOrMakeDebris(location, who, inventoryFruitTree);
+                            Api.DrawPickUpGraphics(inventoryFruitTree, location, inventoryFruitTree.TileLocation);
+                            return;
+                        }
+                    }
+                    else
+                    {
+                        fruitTree.shake(pickupTile, true, location);
+                    }
                 }
 
                 if (terrain.performToolAction(this, 0, pickupTile, location))
@@ -296,50 +333,6 @@ public sealed class ShovelTool : GenericTool
         {
             ModEntry.ModMonitor.Log($"Unexpected error in using shovel:\n\n{ex}", LogLevel.Error);
         }
-    }
-
-    /// <summary>
-    /// Handles getting the matching inventory item.
-    /// </summary>
-    /// <param name="location">Game location we're at.</param>
-    /// <param name="clump">The clump to check.</param>
-    /// <returns>An SObject matching the inventory item variant, or null for not applicable.</returns>
-    private static SObject? GetMatchingInventoryItem(GameLocation location, ResourceClump? clump)
-    {
-        switch (clump)
-        {
-            case GiantCrop giant:
-            {
-                InventoryGiantCrop? inventoryGiantCrop = null;
-                if (giant.modData.TryGetValue(InventoryGiantCrop.GiantCropTweaksModDataKey, out string? stringID)
-                    && ModEntry.GiantCropTweaksAPI?.GiantCrops.ContainsKey(stringID) == true)
-                {
-                    inventoryGiantCrop = new InventoryGiantCrop(stringID, giant.parentSheetIndex.Value, 1);
-                }
-                else if (InventoryGiantCrop.IsValidGiantCropIndex(giant.parentSheetIndex.Value))
-                {
-                    inventoryGiantCrop = new InventoryGiantCrop(giant.parentSheetIndex.Value, 1);
-                }
-
-                if (inventoryGiantCrop is not null)
-                {
-                    AddAnimations(location, giant.tile.Value, inventoryGiantCrop.TexturePath, inventoryGiantCrop.SourceRect, inventoryGiantCrop.TileSize);
-                    return inventoryGiantCrop;
-                }
-                break;
-            }
-            case ResourceClump resource:
-                ResourceClumpIndexes idx = (ResourceClumpIndexes)resource.parentSheetIndex.Value;
-                if (idx != ResourceClumpIndexes.Invalid && ResourceClumpIndexesExtensions.IsDefined(idx))
-                {
-                    InventoryResourceClump inventoryResourceClump = new(idx, 1);
-                    AddAnimations(location, resource.tile.Value, Game1.objectSpriteSheetName, inventoryResourceClump.SourceRect, new Point(2, 2));
-                    return inventoryResourceClump;
-                }
-                break;
-        }
-
-        return null;
     }
 
     /// <inheritdoc />
@@ -438,7 +431,7 @@ public sealed class ShovelTool : GenericTool
             timeBasedMotion = true,
             rotation = 0.1f,
             rotationChange = 0.1f,
-            scaleChange = -0.0015f * (Math.Max(3, tileSize.Y) / 3),
+            scaleChange = -0.0015f * (Math.Max(3, tileSize.X) / 3),
             layerDepth = (landingPos.Y + 32f) / 10000f,
         };
 

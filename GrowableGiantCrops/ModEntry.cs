@@ -143,8 +143,9 @@ internal sealed class ModEntry : Mod
         this.Helper.Events.Input.ButtonPressed += (_, e) => ShopManager.OnButtonPressed(e, this.Helper.Input);
         this.Helper.Events.GameLoop.DayEnding += static (_, _) => ShopManager.OnDayEnd();
         this.Helper.Events.GameLoop.ReturnedToTitle += static (_, _) => ShopManager.Reset();
+        this.Helper.Events.Player.Warped += static (_, e) => ShopManager.AddBoxToShop(e);
 
-        // trees
+        // trees - season switching in inventory.
         this.Helper.Events.Player.Warped += this.OnPlayerWarped;
         this.Helper.Events.Player.InventoryChanged += this.OnInventoryChanged;
 

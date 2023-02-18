@@ -156,7 +156,7 @@ internal static class ShopManager
     {
         try
         {
-            __result.PopulateSellablesWithBushes();
+            __result.PopulateSellablesWithBushes(free: true);
         }
         catch (Exception ex)
         {
@@ -164,7 +164,7 @@ internal static class ShopManager
         }
     }
 
-    private static void PopulateSellablesWithBushes(this Dictionary<ISalable, int[]> sellables)
+    private static void PopulateSellablesWithBushes(this Dictionary<ISalable, int[]> sellables, bool free = false)
     {
         foreach (BushSizes bushIndex in BushSizesExtensions.GetValues())
         {
@@ -177,7 +177,7 @@ internal static class ShopManager
             {
                 if (IslandUnlocked.GetValue())
                 {
-                    sellData = new[] { 750, ShopMenu.infiniteStock };
+                    sellData = new[] { free ? 0 : 1_500 * ModEntry.Config.ShopCostScale, ShopMenu.infiniteStock };
                 }
                 else
                 {
@@ -186,11 +186,11 @@ internal static class ShopManager
             }
             else if (bushIndex is BushSizes.Medium)
             {
-                sellData = new[] { 750, ShopMenu.infiniteStock };
+                sellData = new[] { free ? 0 : 1_000 * ModEntry.Config.ShopCostScale , ShopMenu.infiniteStock };
             }
             else
             {
-                sellData = new[] { 300, ShopMenu.infiniteStock };
+                sellData = new[] { free ? 0 : 500 * ModEntry.Config.ShopCostScale, ShopMenu.infiniteStock };
             }
 
             InventoryBush bush = new(bushIndex, 1);

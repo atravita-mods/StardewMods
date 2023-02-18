@@ -13,8 +13,11 @@ using AtraShared.Utils;
 using AtraShared.Utils.Extensions;
 using AtraShared.Wrappers;
 
+using GrowableGiantCrops.Framework.Assets;
 using GrowableGiantCrops.Framework.InventoryModels;
 using GrowableGiantCrops.HarmonyPatches.GrassPatches;
+
+using Microsoft.Xna.Framework;
 
 using StardewModdingAPI.Events;
 using StardewModdingAPI.Utilities;
@@ -139,6 +142,63 @@ internal static class ShopManager
                     property: GIANT_CROP_SHOP_NAME,
                     placementTile: ModEntry.Config.GiantCropShopLocation),
                 priority: AssetEditPriority.Default + 10);
+        }
+    }
+
+    /// <summary>
+    /// Adds a small bush graphic to the shop.
+    /// </summary>
+    /// <param name="e">On Warped event arguments.</param>
+    internal static void AddBoxToShop(WarpedEventArgs e)
+    {
+        if (!e.IsLocalPlayer || !ModEntry.Config.ShowBushShopGraphic)
+        {
+            return;
+        }
+
+        if (e.NewLocation.Name.Equals("ScienceHouse", StringComparison.OrdinalIgnoreCase) && Game1.player.hasOrWillReceiveMail(RESOURCE_SHOP_NAME))
+        {
+            Vector2 tile = ModEntry.Config.ResourceShopLocation;
+
+            // add box
+            e.NewLocation.temporarySprites.Add(new TemporaryAnimatedSprite(
+                textureName: AssetManager.ShopGraphics.BaseName,
+                sourceRect: new Rectangle(16, 16, 16, 32),
+                position: new Vector2(tile.X, tile.Y - 2) * Game1.tileSize,
+                flipped: false,
+                alphaFade: 0f,
+                color: Color.White)
+            {
+                animationLength = 1,
+                sourceRectStartingPos = Vector2.One * 16,
+                interval = 50000f,
+                totalNumberOfLoops = 9999,
+                scale = 4f,
+                layerDepth = (((tile.Y - 0.5f) * Game1.tileSize) / 10000f) + 0.01f, // a little offset so it doesn't show up on the floor.
+                id = 777f,
+            });
+        }
+        else if (e.NewLocation.Name.Equals("WitchHut", StringComparison.OrdinalIgnoreCase))
+        {
+            Vector2 tile = ModEntry.Config.GiantCropShopLocation;
+
+            // add box
+            e.NewLocation.temporarySprites.Add(new TemporaryAnimatedSprite(
+                textureName: AssetManager.ShopGraphics.BaseName,
+                sourceRect: new Rectangle(32, 0, 32, 48),
+                position: new Vector2(tile.X, tile.Y - 2) * Game1.tileSize,
+                flipped: false,
+                alphaFade: 0f,
+                color: Color.White)
+            {
+                animationLength = 1,
+                sourceRectStartingPos = Vector2.UnitX * 32,
+                interval = 50000f,
+                totalNumberOfLoops = 9999,
+                scale = 4f,
+                layerDepth = (((tile.Y - 0.5f) * Game1.tileSize) / 10000f) + 0.01f, // a little offset so it doesn't show up on the floor.
+                id = 777f,
+            });
         }
     }
 

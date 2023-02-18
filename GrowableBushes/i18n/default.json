@@ -20,6 +20,8 @@
   "AllowBushStacking.description": "If enabled, bushes will be able to stack.",
   "PreserveModData.title": "Preserve Mod Data",
   "PreserveModData.description": "If enabled, mod data will be preserved for bushes, but stacking may be less efficient.",
+  "ShopCostScale.title": "Shop Cost Scale",
+  "ShopCostScale.description": "Scales the cost of bushes in the shop.",
 
   // Shop
   "shop.message": "Hi! Anything you want?",

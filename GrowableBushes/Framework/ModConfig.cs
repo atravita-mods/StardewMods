@@ -44,4 +44,16 @@ internal sealed class ModConfig
     /// Gets or sets a value indicating whether or not bushes should stack.
     /// </summary>
     public bool AllowBushStacking { get; set; } = true;
+
+    private int shopCostScale = 5;
+
+    /// <summary>
+    /// Gets or sets a value indicating how to scale the shop cost.
+    /// </summary>
+    [GMCMRange(1, 10)]
+    public int ShopCostScale
+    {
+        get => this.shopCostScale;
+        set => this.shopCostScale = Math.Clamp(value, 1, 10);
+    }
 }

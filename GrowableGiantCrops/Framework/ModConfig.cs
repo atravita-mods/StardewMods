@@ -32,6 +32,12 @@ public sealed class ModConfig
     }
 
     /// <summary>
+    /// Gets or sets a value indicating whether or not shops should have graphics.
+    /// </summary>
+    [GMCMSection("Shop", -10)]
+    public bool ShowBushShopGraphic { get; set; } = true;
+
+    /// <summary>
     /// Gets or sets the tile of the giant crop shop's location.
     /// </summary>
     [GMCMDefaultVector(8, 14)]

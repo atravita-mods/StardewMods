@@ -2,7 +2,7 @@ Growable Bushes
 ===========================
 ![Header image](docs/scroll.gif)
 
-Lets you plop down bushes. Buy them from Caroline's sunroom (the planter on the left).
+Lets you plop down bushes. Buy them from Caroline's sunroom (the planter on the left), or grab them from the Furniture Catalogue.
 
 ## Install
 

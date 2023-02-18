@@ -45,12 +45,18 @@ internal static class AssetManager
     internal static IAssetName ToolTextureName { get; private set; } = null!;
 
     /// <summary>
+    /// Gets the IAssetName corresponding to the shop graphics.
+    /// </summary>
+    internal static IAssetName ShopGraphics { get; private set; } = null!;
+
+    /// <summary>
     /// Initializes the AssetManager.
     /// </summary>
     /// <param name="parser">GameContent helper.</param>
     internal static void Initialize(IGameContentHelper parser)
     {
         ToolTextureName = parser.ParseAssetName("Mods/atravita.GrowableGiantCrops/Shovel");
+        ShopGraphics = parser.ParseAssetName("Mods/atravita.GrowableGiantCrops/Shop");
         fruitTreeData = parser.ParseAssetName(@"Data\fruitTrees");
 
         const int TEX_WIDTH = 48;
@@ -79,6 +85,10 @@ internal static class AssetManager
         if (e.NameWithoutLocale.IsEquivalentTo(ToolTextureName))
         {
             e.LoadFromModFile<Texture2D>("assets/textures/shovel.png", AssetLoadPriority.Exclusive);
+        }
+        else if (e.NameWithoutLocale.IsEquivalentTo(ShopGraphics))
+        {
+            e.LoadFromModFile<Texture2D>("assets/textures/void_grass_box.png", AssetLoadPriority.Exclusive);
         }
         else if (e.NameWithoutLocale.StartsWith(GiantCropPrefix, false, false)
             && int.TryParse(e.NameWithoutLocale.BaseName.GetNthChunk('/', 3), out int idx))

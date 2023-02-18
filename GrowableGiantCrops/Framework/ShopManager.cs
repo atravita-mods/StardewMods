@@ -305,7 +305,7 @@ internal static class ShopManager
             sellables.TryAdd(new ShovelTool(), new[] { 5_000, 1 });
         }
 
-        const int GIANT_CROP_PRICE_MULITPLIER = 50;
+        const int GIANT_CROP_PRICE_MULITPLIER = 60;
         const int NODE_COST = 1_000;
 
         if (PerfectFarm.GetValue())

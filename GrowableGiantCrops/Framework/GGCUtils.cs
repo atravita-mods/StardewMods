@@ -30,14 +30,15 @@ internal static class GGCUtils
     /// <param name="relaxed">Whether or not to use relaxed placement restrictions.</param>
     /// <param name="tileX">the X tile location.</param>
     /// <param name="tileY">the Y tile location.</param>
+    /// <param name="wildTree">Whether or not the tree is a wild tree.</param>
     /// <returns>True if it's placeable, false otherwise.</returns>
-    internal static bool CanPlantTreesAtLocation(GameLocation? location, bool relaxed, int tileX, int tileY)
+    internal static bool CanPlantTreesAtLocation(GameLocation? location, bool relaxed, int tileX, int tileY, bool wildTree)
     {
         if (location?.terrainFeatures is null || Utility.isPlacementForbiddenHere(location))
         {
             return false;
         }
-        if (relaxed || (location.IsOutdoors && location.doesTileHavePropertyNoNull(tileX, tileY, "Type", "Back") == "Dirt"))
+        if (relaxed || (wildTree && location.IsOutdoors && location.doesTileHavePropertyNoNull(tileX, tileY, "Type", "Back") == "Dirt"))
         {
             return true;
         }
@@ -249,7 +250,8 @@ internal static class GGCUtils
             }
         }
 
-        if (location.terrainFeatures?.ContainsKey(tile) == true
+        if ((location.terrainFeatures?.TryGetValue(tile, out var terrain) == true
+            && (terrain is not HoeDirt dirt || dirt.crop is not null))
             || location.Objects?.ContainsKey(tile) == true)
         {
             return false;

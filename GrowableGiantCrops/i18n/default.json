@@ -18,6 +18,8 @@
 
   "RelaxedPlacement.title": "Relaxed Placement",
   "RelaxedPlacement.description": "If enabled, placement rules will be relaxed.",
+  "PlacedOnly.title": "Placed Only",
+  "PlacedOnly.description": "If enabled, the shovel will only move items that were placed down by a player.",
 
   "ShovelEnergy.title": "Shovel Energy",
   "ShovelEnergy.description": "How much stamina should each use of the shovel take.",
@@ -32,6 +34,11 @@
   "PreservePlacedWeeds.title": "Preserve Placed Weeds",
   "PreservePlacedWeeds.description": "If enabled, placed weeds will not die in winter.",
 
+  "MaxTreeStage.title": "Max Tree Stage",
+  "MaxTreeStage.description": "The biggest tree the shovel can pick up. Set to -1 to disable.",
+  "MaxFruitTreeStage.title": "Max Fruit Tree Stage",
+  "MaxFruitTreeStage.description": "The biggest fruit tree the shovel can pick up. Set to -1 to disable.",
+
   "ShouldAnimalsEatPlacedGrass.title": "Animals Eat Placed Grass",
   "ShouldAnimalsEatPlacedGrass.description": "If enabled, animals will eat grass created from starters created by this mod.",
   "ShouldPlacedGrassSpread.title": "Placed Grass Spreads",
@@ -45,6 +52,8 @@
   "Misc.title": "Miscellaneous options:",
   "LargeItems.title": "Large item options:",
   "LargeItems.description": "These options pertain to the giant crop, the resource clumps, and both kinds of trees.",
+  "Trees.title": "Tree-related options:",
+  "Trees.description": "These options pertain to fruit trees and wild trees",
 
   // Stores
   "ShopMessage.Robin": "Whatcha lookin' for? Anything catch your eye?",

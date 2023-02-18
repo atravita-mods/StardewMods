@@ -141,7 +141,7 @@ public sealed class InventoryFruitTree : SObject
 
         int x = (int)tile.X;
         int y = (int)tile.Y;
-        return (GGCUtils.CanPlantTreesAtLocation(l, relaxed, x, y) || l.CanPlantTreesHere(69, x, y)) // 69 - banana tree.
+        return (GGCUtils.CanPlantTreesAtLocation(l, relaxed, x, y, false) || l.CanPlantTreesHere(69, x, y)) // 69 - banana tree.
             && l.terrainFeatures?.ContainsKey(tile) == false
             && GGCUtils.IsTilePlaceableForResourceClump(l, x, y, relaxed)
             && (relaxed || (!FruitTree.IsGrowthBlocked(tile, l) && !l.HasTreeInRadiusTwo(x, y)));

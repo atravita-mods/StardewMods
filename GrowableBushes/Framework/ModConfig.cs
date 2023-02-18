@@ -21,6 +21,11 @@ internal sealed class ModConfig
     public Vector2 ShopLocation { get; set; } = new(1, 7);
 
     /// <summary>
+    /// Gets or sets a value indicating whether or not the bush shop should have a little graphic.
+    /// </summary>
+    public bool ShowBushShopGraphic { get; set; } = true;
+
+    /// <summary>
     /// Gets or sets a value indicating whether or not npcs should be able to trample bushes in their way.
     /// </summary>
     public bool ShouldNPCsTrampleBushes { get; set; } = true;
@@ -30,7 +35,9 @@ internal sealed class ModConfig
     /// </summary>
     public bool RelaxedPlacement { get; set; } = false;
 
-    // TODO
+    /// <summary>
+    /// Gets or sets a value indicating whether or not mod data should be preserved.
+    /// </summary>
     public bool PreserveModData { get; set; } = false;
 
     /// <summary>

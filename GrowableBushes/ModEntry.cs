@@ -47,6 +47,7 @@ internal sealed class ModEntry : Mod
         helper.Events.GameLoop.GameLaunched += this.OnGameLaunched;
         ConsoleCommands.RegisterCommands(helper.ConsoleCommands);
         ShopManager.Initialize(helper.GameContent);
+        AssetManager.Initialize(helper.GameContent);
 
         this.Monitor.Log($"Starting up: {this.ModManifest.UniqueID} - {typeof(ModEntry).Assembly.FullName}");
     }
@@ -71,6 +72,10 @@ internal sealed class ModEntry : Mod
             this.Helper.Events.Content.AssetRequested += static (_, e) => ShopManager.OnAssetRequested(e);
             this.Helper.Events.GameLoop.DayEnding += static (_, _) => ShopManager.OnDayEnd();
             this.Helper.Events.Input.ButtonPressed += (_, e) => ShopManager.OnButtonPressed(e, this.Helper.Input);
+
+            // shop TAS
+            this.Helper.Events.Content.AssetRequested += static (_, e) => AssetManager.Load(e);
+            this.Helper.Events.Player.Warped += static (_, e) => ShopManager.AddBoxToShop(e);
 
             this.ApplyPatches(new Harmony(this.ModManifest.UniqueID));
 

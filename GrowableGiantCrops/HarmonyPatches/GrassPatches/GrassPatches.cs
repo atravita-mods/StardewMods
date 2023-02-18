@@ -20,9 +20,10 @@ internal static class GrassPatches
     /// <param name="__instance">Grass instance.</param>
     /// <param name="__result">Set to false to preserve the grass.</param>
     /// <returns>False to skip original, true to continue to original</returns>
+    [HarmonyPrefix]
     [HarmonyPatch(nameof(Grass.performToolAction))]
     [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Harmony convention.")]
-    private static bool Prefix(Grass __instance, ref bool __result)
+    private static bool PrefixToolAction(Grass __instance, ref bool __result)
     {
         if (ModEntry.Config.ShouldPlacedGrassIgnoreScythe && __instance.modData?.ContainsKey(SObjectPatches.ModDataKey) == true)
         {
@@ -30,6 +31,28 @@ internal static class GrassPatches
             return false;
         }
         return true;
+    }
+
+    /// <summary>
+    /// Prevents placed grass from dying on season change.
+    /// </summary>
+    /// <param name="__instance">Grass.</param>
+    /// <param name="__result">True to remove, false otherwise.</param>
+    [HarmonyPostfix]
+    [HarmonyPatch(nameof(Grass.seasonUpdate))]
+    [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Harmony convention.")]
+    private static void PostfixSeasonUpdate(Grass __instance, ref bool __result)
+    {
+        if (!__result)
+        {
+            return;
+        }
+
+        if (__instance.modData?.ContainsKey(SObjectPatches.ModDataKey) == true)
+        {
+            __result = false;
+            __instance.loadSprite();
+        }
     }
 
     [HarmonyPatch(nameof(Grass.dayUpdate))]

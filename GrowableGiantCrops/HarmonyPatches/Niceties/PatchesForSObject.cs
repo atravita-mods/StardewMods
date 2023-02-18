@@ -12,6 +12,9 @@ namespace GrowableGiantCrops.HarmonyPatches.Niceties;
 [HarmonyPatch(typeof(SObject))]
 internal static class PatchesForSObject
 {
+    /// <summary>
+    /// Marks an SObject placed with this mod.
+    /// </summary>
     internal const string ModDataMiscObject = "atravita.GrowableGiantCrops.PlacedObject";
 
     private const string ModDataKey = "atravita.GrowableGiantCrops.PlacedSlimeBall";

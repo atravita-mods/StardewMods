@@ -101,12 +101,52 @@ public sealed class Api : IGrowableGiantCropsAPI
         }
     }
 
+    /// <inheritdoc />
+    public SObject? TryPickUpTreeOrFruitTree(GameLocation loc, Vector2 tile, bool placedOnly = false)
+    {
+        if (loc.terrainFeatures?.TryGetValue(tile, out TerrainFeature? terrain) == true)
+        {
+            switch (terrain)
+            {
+                case FruitTree fruitTree:
+                    if (this.CanPickUpFruitTree(fruitTree, placedOnly) != null)
+                    {
+                        fruitTree.shake(tile, true, loc);
+                        if (this.GetMatchingFruitTree(fruitTree) is InventoryFruitTree inventoryFruitTree)
+                        {
+                            loc.terrainFeatures.Remove(tile);
+                            return inventoryFruitTree;
+                        }
+                    }
+                    break;
+                case Tree tree:
+                    if (this.CanPickUpTree(tree, placedOnly) != TreeIndexes.Invalid)
+                    {
+                        InventoryTree.TreeShakeMethod(tree, tile, true, loc);
+                        if (this.GetMatchingTree(tree) is InventoryTree inventoryTree)
+                        {
+                            loc.terrainFeatures.Remove(tile);
+                            return inventoryTree;
+                        }
+                    }
+                    break;
+            }
+        }
+
+        return null;
+    }
+
+
     /// <inheritdoc/>
     public SObject? TryPickUp(GameLocation loc, Vector2 tile, bool placedOnly = false)
     {
         if (this.TryPickUpClumpOrGiantCrop(loc, tile, placedOnly) is SObject @object)
         {
             return @object;
+        }
+        if (this.TryPickUpTreeOrFruitTree(loc, tile, placedOnly) is SObject obj)
+        {
+            return obj;
         }
         return null;
     }

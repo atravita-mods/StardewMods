@@ -273,6 +273,15 @@ public interface IGrowableGiantCropsAPI
     #region tree
 
     /// <summary>
+    /// Tries to pick up a tree or a fruit tree.
+    /// </summary>
+    /// <param name="loc">The game location to pick up from.</param>
+    /// <param name="tile">The tile to pick up form.</param>
+    /// <param name="placedOnly">Whether or not to restrict to only placed only items.</param>
+    /// <returns>The InventoryTree or InventoryFruitTree, or null for invalid.</returns>
+    public SObject? TryPickUpTreeOrFruitTree(GameLocation loc, Vector2 tile, bool placedOnly = false);
+
+    /// <summary>
     /// Gets the InventoryTree associated with the specific TeeIndex, if valid.
     /// </summary>
     /// <param name="idx">the index of the tree.</param>

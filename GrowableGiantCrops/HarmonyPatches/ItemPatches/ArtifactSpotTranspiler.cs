@@ -53,7 +53,7 @@ internal static class ArtifactSpotTranspiler
             copy[2].operand = typeof(ShovelTool);
             copy[3] = new (OpCodes.Brtrue, jumpPoint);
 
-            helper.Insert(copy);
+            helper.Insert(copy, labelsToMove);
 
             // helper.Print();
             return helper.Render();

@@ -256,7 +256,7 @@ public sealed class ShovelTool : GenericTool
 
                 if (terrain is Tree tree && terrain.GetType() == typeof(Tree))
                 {
-                    if (tree.growthStage.Value <= ModEntry.Config.MaxTreeStageInternal)
+                    if (Math.Clamp(tree.growthStage.Value, 0, 5) <= ModEntry.Config.MaxTreeStageInternal)
                     {
                         if (tree.growthStage.Value == 0)
                         {
@@ -407,7 +407,7 @@ public sealed class ShovelTool : GenericTool
 
         Multiplayer mp = MultiplayerHelpers.GetMultiplayer();
 
-        const float deltaY = -90;
+        float deltaY = -50f - (sourceRect.Height * 2);
         const float gravity = 0.0025f;
 
         float velocity = -0.7f - MathF.Sqrt(2 * 60f * gravity);

@@ -7,9 +7,14 @@ using AtraShared.Utils.Extensions;
 
 using HarmonyLib;
 
+using Microsoft.Xna.Framework;
+
 using StardewModdingAPI.Events;
 
+using StardewValley.Locations;
 using StardewValley.Menus;
+
+using AtraUtils = AtraShared.Utils.Utils;
 
 namespace GrowableBushes.Framework;
 
@@ -72,6 +77,41 @@ internal static class ShopManager
             && Game1.player.mailReceived.Contains("CarolineTea"))
         {
             Game1.addMailForTomorrow(mailName: SHOPNAME);
+        }
+    }
+
+    /// <summary>
+    /// Adds a small bush graphic to the shop.
+    /// </summary>
+    /// <param name="e">On Warped event arguments.</param>
+    internal static void AddBoxToShop(WarpedEventArgs e)
+    {
+        if (!e.IsLocalPlayer || !ModEntry.Config.ShowBushShopGraphic)
+        {
+            return;
+        }
+
+        if (e.NewLocation.Name.Equals("SunRoom", StringComparison.OrdinalIgnoreCase))
+        {
+            Vector2 tile = ModEntry.Config.ShopLocation;
+
+            // add box
+            e.NewLocation.temporarySprites.Add(new TemporaryAnimatedSprite(
+                textureName: AssetManager.bushes.BaseName,
+                sourceRect: new Rectangle(0, 0, 16, 48),
+                position: new Vector2(tile.X, tile.Y - 1) * Game1.tileSize,
+                flipped: false,
+                alphaFade: 0f,
+                color: Color.White)
+            {
+                animationLength = 1,
+                sourceRectStartingPos = Vector2.Zero,
+                interval = 50000f,
+                totalNumberOfLoops = 9999,
+                scale = 4f,
+                layerDepth = (((tile.Y - 0.5f) * Game1.tileSize) / 10000f) + 0.01f, // a little offset so it doesn't show up on the floor.
+                id = 777f,
+            });
         }
     }
 

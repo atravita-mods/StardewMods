@@ -135,7 +135,7 @@ internal sealed class ModEntry : Mod
             {
                 for (int i = 0; i < 3; i++)
                 {
-                    critters.Add(new Butterfly(Game1.player.getTileLocation(), Game1.random.Next(2) == 0));
+                    critters.Add(new Butterfly(Game1.player.getTileLocation(), Game1.random.Next(2) == 0).setStayInbounds(true));
                 }
             }
         }
@@ -167,7 +167,7 @@ internal sealed class ModEntry : Mod
                 int count = Game1.player.GetEffectsOfRingMultiplier(ButterflyRing);
                 for (int i = 0; i < count; i++)
                 {
-                    critters.Add(new Butterfly(Game1.player.getTileLocation(), Game1.random.Next(2) == 0));
+                    critters.Add(new Butterfly(Game1.player.getTileLocation(), Game1.random.Next(2) == 0).setStayInbounds(true));
                 }
             }
         }

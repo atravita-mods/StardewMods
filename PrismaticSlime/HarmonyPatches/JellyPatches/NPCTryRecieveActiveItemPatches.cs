@@ -4,6 +4,8 @@ using AtraShared.ConstantsAndEnums;
 
 using HarmonyLib;
 
+using Microsoft.Xna.Framework;
+
 namespace PrismaticSlime.HarmonyPatches.JellyPatches;
 
 [HarmonyPatch(typeof(NPC))]
@@ -23,8 +25,8 @@ internal static class NPCTryRecieveActiveItemPatches
                     case "Wizard":
                     {
                         BuffEnum buffEnum = BuffEnumExtensions.GetRandomBuff();
-                        Buff buff = buffEnum.GetBuffOf(1, 700, "The Wizard's Gift", "The Wizard's Gift"); // TODO: localization.
-
+                        Buff buff = buffEnum.GetBuffOf(1, 700, "The Wizard's Gift", I18n.WizardGift());
+                        buff.glow = Color.PaleVioletRed;
                         Game1.buffsDisplay.addOtherBuff(buff);
 
                         __instance.doEmote(Character.exclamationEmote);
@@ -51,6 +53,24 @@ internal static class NPCTryRecieveActiveItemPatches
                     }
                     default:
                     {
+                        if (!who.friendshipData.TryGetValue(__instance.Name, out Friendship? friendship))
+                        {
+                            friendship = new(0);
+                            who.friendshipData[__instance.Name] = friendship;
+                        }
+                        else if (friendship.GiftsToday >= 1 || friendship.GiftsThisWeek >= 2 || friendship.IsDivorced())
+                        {
+                            return true;
+                        }
+
+                        // update friendship stats
+                        friendship.GiftsToday++;
+                        friendship.GiftsThisWeek++;
+                        friendship.LastGiftDate = new(Game1.Date);
+                        Game1.stats.GiftsGiven++;
+
+                        who.friendshipData[__instance.Name] = friendship;
+
                         __instance.doEmote(Character.happyEmote);
                         who.changeFriendship(100, __instance);
                         if (!__instance.Dialogue.TryGetValue("PrismaticSlimeJelly.Response", out string? response))
@@ -62,6 +82,7 @@ internal static class NPCTryRecieveActiveItemPatches
                     }
                 }
                 who.reduceActiveItemByOne();
+                who.currentLocation.localSound("give_gift");
                 Game1.drawDialogue(__instance);
                 return false;
             }

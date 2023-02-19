@@ -5,6 +5,8 @@ Critter Rings
 
 This incredibly self-indulgent mod has two rings in it. The Butterfly ring summons a butterfly every ten in-game minutes during daytime. The Firefly ring summons a firefly every ten in-game minutes during night. Additionally, the butterfly ring is a magnetic ring, and the firefly ring is a glow ring.
 
+Buy both from Marlon after you've gotten the skull key.
+
 ## Install
 
 1. Install the latest version of [SMAPI](https://smapi.io).
@@ -23,8 +25,11 @@ Options
 
 * Works with Stardew Valley 1.5.6 on Linux/macOS/Windows.
 * Works in single player, multiplayer, and split-screen mode. In multiplayer, both players should install.
-* Should be compatible with most other mods. 
+* Should be compatible with most other mods.
+
+## Much thanks to
+* [Violetlizabet](https://www.nexusmods.com/stardewvalley/users/120958053) for drawing the ring graphics for me!
 
 ## See also
 
-[Changelog](docs/Changelog.MD)
+[Changelog](docs/changelog.md)

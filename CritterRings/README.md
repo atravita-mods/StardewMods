@@ -1,7 +1,7 @@
 Critter Rings
 =================================
 
-![Header image](docs/darts.gif)
+![Header image](docs/image.png)
 
 This incredibly self-indulgent mod has two rings in it. The Butterfly ring summons a butterfly every ten in-game minutes during daytime. The Firefly ring summons a firefly every ten in-game minutes during night. Additionally, the butterfly ring is a magnetic ring, and the firefly ring is a glow ring.
 

@@ -442,9 +442,9 @@ internal static class ShopManager
 
     private static Dictionary<int, int>? GenerateNodeShop()
     {
-        Dictionary<int, int> chosen = new(6);
+        Dictionary<int, int> chosen = new(4);
         ShuffledYielder<int> shuffler = new(nodes);
-        int total = 6;
+        int total = 4;
         while (shuffler.MoveNext() && total-- > 0)
         {
             chosen[shuffler.Current] = 10;
@@ -463,7 +463,7 @@ internal static class ShopManager
 
         Dictionary<int, int> chosen = new();
 
-        int totalCount = Math.Max(7, ModEntry.GetTotalValidIndexes() / 5);
+        int totalCount = Math.Max(5, ModEntry.GetTotalValidIndexes() / 7);
         for (int i = 0; i < totalCount; i++)
         {
             Option<int> picked = weighted.GetValue();
@@ -480,6 +480,7 @@ internal static class ShopManager
             chosen[idx] = prev + 5;
         }
 
+        ModEntry.ModMonitor.DebugOnlyLog($"Got {chosen.Count} giant crop entries for shop.", LogLevel.Info);
         return chosen;
     }
 

@@ -37,8 +37,7 @@
   "PreservePlacedWeeds.description": "If enabled, placed weeds will not die in winter.",
 
   "PlacedTreesSpread.title": "Placed Trees Spread",
-  "PlacedTreesSpread.description": "If enabled, placed trees can spread.",
-
+  "PlacedTreesSpread.description": "If enabled, placed trees can spread on the farm.",
   "MaxTreeStage.title": "Max Tree Stage",
   "MaxTreeStage.description": "The biggest tree the shovel can pick up. Set to -1 to disable.",
   "MaxFruitTreeStage.title": "Max Fruit Tree Stage",

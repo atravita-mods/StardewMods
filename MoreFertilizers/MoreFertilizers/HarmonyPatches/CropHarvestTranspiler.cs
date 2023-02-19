@@ -163,7 +163,7 @@ internal static class CropHarvestTranspiler
     {
         if (ModEntry.WisdomFertilizerID != -1 && dirt?.fertilizer?.Value == ModEntry.WisdomFertilizerID)
         {
-            return (int)(1.5 * prevValue);
+            return (1.5 * prevValue).RandomRoundProportional();
         }
         return prevValue;
     }

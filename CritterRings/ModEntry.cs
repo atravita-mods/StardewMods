@@ -94,6 +94,7 @@ internal sealed class ModEntry : Mod
         this.Helper.Events.GameLoop.ReturnedToTitle += this.OnReturnedToTitle;
         this.Helper.Events.GameLoop.SaveLoaded += this.OnSaveLoaded;
         this.Helper.Events.GameLoop.TimeChanged += this.OnTimeChanged;
+        this.Helper.Events.Player.Warped += this.OnWarp;
 
         GMCMHelper gmcmHelper = new(this.Monitor, this.Helper.Translation, this.Helper.ModRegistry, this.ModManifest);
         if (gmcmHelper.TryGetAPI())
@@ -106,9 +107,44 @@ internal sealed class ModEntry : Mod
         }
     }
 
+    /// <inheritdoc cref="IPlayerEvents.Warped"/>
+    private void OnWarp(object? sender, WarpedEventArgs e)
+    {
+        if (!e.IsLocalPlayer)
+        {
+            return;
+        }
+        e.NewLocation?.instantiateCrittersList();
+        if (e.NewLocation?.critters is not List<Critter> critters)
+        {
+            return;
+        }
+        if (Game1.isDarkOut())
+        {
+            if (FireFlyRing > 0 && Game1.player.isWearingRing(FireFlyRing))
+            {
+                for (int i = 0; i < 3; i++)
+                {
+                    critters.Add(new Firefly(Game1.player.getTileLocation()));
+                }
+            }
+        }
+        else if (Config.ButterfliesSpawnInRain || !Game1.IsRainingHere(Game1.currentLocation))
+        {
+            if (ButterflyRing > 0 && Game1.player.isWearingRing(ButterflyRing))
+            {
+                for (int i = 0; i < 3; i++)
+                {
+                    critters.Add(new Butterfly(Game1.player.getTileLocation(), Game1.random.Next(2) == 0));
+                }
+            }
+        }
+    }
+
     /// <inheritdoc cref="IGameLoopEvents.TimeChanged"/>
     private void OnTimeChanged(object? sender, TimeChangedEventArgs e)
     {
+        Game1.currentLocation?.instantiateCrittersList();
         if (Game1.currentLocation?.critters is not List<Critter> critters)
         {
             return;
@@ -212,7 +248,7 @@ internal sealed class ModEntry : Mod
 
             if (changed)
             {
-                ModEntry.ModMonitor.Log("Writing ids into save");
+                ModMonitor.Log("Writing ids into save.");
                 this.Helper.Data.WriteSaveData("item_ids", data);
             }
         }

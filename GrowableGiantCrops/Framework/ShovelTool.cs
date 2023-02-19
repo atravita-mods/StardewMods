@@ -98,6 +98,7 @@ public sealed class ShovelTool : GenericTool
             Vector2 pickupTile = new(x / Game1.tileSize, y / Game1.tileSize);
 
             location.performToolAction(this, x / Game1.tileSize, y / Game1.tileSize);
+            GGCUtils.GetLargeObjectAtLocation(location, x, y, false)?.performToolAction(this, 0, pickupTile, location);
 
             // Handle bushes.
             if (ModEntry.GrowableBushesAPI?.TryPickUpBush(location, pickupTile, ModEntry.Config.PlacedOnly) is SObject bush)

@@ -35,7 +35,7 @@ public sealed class ModConfig
     /// Gets or sets a value indicating whether or not shops should have graphics.
     /// </summary>
     [GMCMSection("Shop", -10)]
-    public bool ShowBushShopGraphic { get; set; } = true;
+    public bool ShowShopGraphics { get; set; } = true;
 
     /// <summary>
     /// Gets or sets the tile of the giant crop shop's location.
@@ -80,7 +80,12 @@ public sealed class ModConfig
     [GMCMSection("LargeItems", 0)]
     public bool AllowLargeItemStacking { get; set; } = true;
 
-    // TODO - note, internally stored as the matching game stage, displayed as wiki stage.
+    /// <summary>
+    /// Gets or sets a value indicating whether placed trees should spread.
+    /// </summary>
+    [GMCMSection("Trees", 5)]
+    public bool PlacedTreesSpread { get; set; } = false;
+
     private int maxTreeStage = 3;
 
     /// <summary>

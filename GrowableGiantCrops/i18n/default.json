@@ -6,6 +6,8 @@
   "api-too-old": "Please update {{apiName}}({{APIID}}) to at least version {{minversion}}. Current version {{currentversion}}. Integration disabled.",
 
   // GMCM
+  "ShowShopGraphics.title": "Show Shop Graphics",
+  "ShowShopGraphics.description": "If enabled, will draw in the shop graphics. Disable if this clashes too badly with a recolor or something.",
   "GiantCropShopLocation.title": "Giant Crop Shop Location",
   "GiantCropShopLocation.description": "The location of the giant crop shop in the Witch's place.",
   "ResourceShopLocation.title": "Resource Shop Location",
@@ -33,6 +35,9 @@
   "CanSquishPlacedSlimeBalls.description": "If enabled, placed slime balls cannot be squished (and are thus purely decorative)",
   "PreservePlacedWeeds.title": "Preserve Placed Weeds",
   "PreservePlacedWeeds.description": "If enabled, placed weeds will not die in winter.",
+
+  "PlacedTreesSpread.title": "Placed Trees Spread",
+  "PlacedTreesSpread.description": "If enabled, placed trees can spread.",
 
   "MaxTreeStage.title": "Max Tree Stage",
   "MaxTreeStage.description": "The biggest tree the shovel can pick up. Set to -1 to disable.",

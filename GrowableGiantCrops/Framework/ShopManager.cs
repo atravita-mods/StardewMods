@@ -151,7 +151,7 @@ internal static class ShopManager
     /// <param name="e">On Warped event arguments.</param>
     internal static void AddBoxToShop(WarpedEventArgs e)
     {
-        if (!e.IsLocalPlayer || !ModEntry.Config.ShowBushShopGraphic)
+        if (!e.IsLocalPlayer || !ModEntry.Config.ShowShopGraphics)
         {
             return;
         }

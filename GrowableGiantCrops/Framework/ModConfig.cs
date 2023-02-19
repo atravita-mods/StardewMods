@@ -16,7 +16,9 @@ public sealed class ModConfig
     /// </summary>
     public bool RelaxedPlacement { get; set; } = false;
 
-    // TODO: if enabled, the shovel can only move placed items.
+    /// <summary>
+    /// Gets or sets a value indicating whether shovel can only lift large items you've placed.
+    /// </summary>
     public bool PlacedOnly { get; set; } = false;
 
     private int shovelEnergy = 7;
@@ -53,8 +55,6 @@ public sealed class ModConfig
     [GMCMSection("Shop", -10)]
     public Vector2 ResourceShopLocation { get; set; } = new(6, 19);
 
-    // TODO
-
     /// <summary>
     /// Gets or sets a value indicating whether or not NPCs should trample placed resource clumps.
     /// </summary>
@@ -63,7 +63,7 @@ public sealed class ModConfig
 
     /// <summary>
     /// Gets or sets a value indicating whether or not NPCs should be able to trample giant crops.
-    /// </summary>
+    /// </summary>or
     [GMCMSection("LargeItems", 0)]
     public bool ShouldNPCsTrampleGiantCrops { get; set; } = true;
 

@@ -19,7 +19,40 @@ A special note for SolidFoundations: **absolutely** make sure to remove every in
 ## Configuration
 Run SMAPI at least once with this mod installed to generate the `config.json`, or use [Generic Mod Config Menu](https://www.nexusmods.com/stardewvalley/mods/5098) to configure.
 
-TODO
+#### General options
+
+* `RelaxedPlacement`: Relaxes placement rules for the giant crops, resource clumps, fruit trees, and trees. This will let you place fruit trees closer together than the game would normally allow, for example.
+* `PlacedOnly`: If enabled, the shovel will only pick up large items you've placed.
+* `ShovelEnergy`: How much energy should each use of the shovel on a large item take? Defaults to 7.
+
+#### Shop options
+
+* `ShowShopGraphics`: Whether or not to show the overlay graphics that indicate where a shop is. 
+* `GiantCropShopLocation` and `ResourceShopLocation` control where the shops are in the Witch's hut and Robin's desk, respectively. Use this to move the shops around if another mod edits those maps.
+
+#### Large item options
+
+* `ShouldNPCsTrampleResourcesClumps` and `ShouldNPCsTrampleGiantCrops` will let NPCs remove giant crops and resource clumps in their way. 
+* `PreserveModData`: mod data is basically something mods can use to put small amounts of data on individual instances of something. If this is enabled, mod data will be copied from the world version of something to the inventory version. This will mean that the inventory versions will stack less nicely, but data added by other mods will persist. For an example: More Fertilizers uses mod data for non-crop fertilizers, so disabling this will remove any fruit tree fertilizer.
+* `AllowLargeItemStacking`: Controls whether or not the inventory versions of large items stack.
+* `PlacedTreesSpread`: Controls whether or not trees placed on farm can spread.
+* `MaxTreeStage` and `MaxFruitTreeStage` define the largest trees the shovel can pick up, where the stage numbers match the ones on the wiki: [fruit trees](https://stardewvalleywiki.com/Fruit_Trees), [normal trees](https://stardewvalleywiki.com/Trees#Growth_Cycle).
+
+#### Grass options
+* `ShouldAnimalsEatPlacedGrass`: If disabled, animals will skip over and avoid eating grass placed by this mod. (Animals will never eat cobwebs.)
+* `ShouldPlacedGrassSpread`: If disabled, placed grass will never spread to a neighboring tile.
+* `ShouldPlacedGrassIgnoreScythe`: If enabled, placed grass will be immune to the scythe and all weapons.
+
+#### Misc options
+* `CanSquishPlacedSlimeBalls`: If disabled, slime balls you've picked up and moved are not squish-able.
+* `PreservePlacedWeeds`: If enabled, placed weeds will not die in winter.
+
+## Items
+* **Grass starters**: After getting a single heart from Robin and getting her letter about the first house expansion, Robin will sell grass starters corresponding to every type of grass you can see in game. You can also get these grass starters by using the shovel on any clump of grass in the game (including that in the mines). For balance reasons, the grass starters will only put down a single tuff of grass, but the grass will grow normally and fill out over time. Additionally, you can choose if animals will eat placed grass or if placed grass will spread at all. Grass from these starters will not die in winter.
+   - Note that internally, those cobwebs are actually grass.
+* **Resource clumps**: These include the big rocks you can find in the mines, the large stumps and hollow logs, and the meteorite. They are purchasable from Robin after you've gotten the skull key, except for the meteorite, which is locked behind getting level 25 in the skull cavern. You can also use the shovel to lift them.
+* **Small terrain items**: These include the little nodes, twigs, weeds, etc. The little crystals in the frost levels of the mines are actually internally weeds. Placed weeds won't spread, and optionally won't die in winter. A small selection is sold at the witch hut shop every day. These are also liftable from the mines with the shovel. (Custom Ore Nodes/Custom Resource Clumps isn't currently supported, though.)
+* **Giant Crops**: A small selection of giant crops are available every day through the shop in the Witch's hut, or you can lift them with the shovel if they happen to grow for you.
 
 ## Shops
 * Robin's shop opens up after you get a single heart from her and you've gotten her letter on the first house expansion. She'll carry grass starters, and also will carry resource clumps after you've reached the bottom of the mines. These grass starters will not die in winter, and you can control if they spread or not.
@@ -38,9 +71,13 @@ TODO
 * Works with Stardew Valley 1.5.6 on Linux/macOS/Windows.
 * Works in single player, multiplayer, and split-screen mode. **Absolutely** has to be installed by everyone in multiplayer.
 * Should be compatible with most other mods. Tested with [Json Assets](https://www.nexusmods.com/stardewvalley/mods/1720)'s giant crops and [More Giant Crops](https://www.nexusmods.com/stardewvalley/mods/5263), as well as giant crops from [Giant Crop Tweaks](https://www.nexusmods.com/stardewvalley/mods/14370).
+* Works with [More Grass Starters](https://www.nexusmods.com/stardewvalley/mods/1702). Note that the starters from More Grass Starters and the starters from this mod are different and will act differently. More Grass Starters starters are found at Pierre's, mine are at the little resource shop on Robin's desk.
 * Specific compatibility notes: This mod uses SpaceCore's serializer.
     - I did not test this mod with Save Anywhere (either version), use at your own risk.
-    - It should work fine with SolidFoundations, just remember to remove all instances of the inventory version of the bushes from all SolidFoundations buildings before removing this mod. (Placed bushes should be fine to leave.)
+    - It should work fine with SolidFoundations, just remember to remove all instances of the inventory version of the giant crops, resource clumps, trees, and etc from all SolidFoundations buildings before removing this mod.
+
+## Much thanks to
+* [VoidWitchCult](https://www.nexusmods.com/stardewvalley/users/163267158) for providing me with graphics for Robin's shop! Check out [their goth bachelors/bachelorettes](https://www.nexusmods.com/stardewvalley/mods/15335)!
 
 ## See also
 

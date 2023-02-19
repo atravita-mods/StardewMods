@@ -236,28 +236,18 @@ public sealed class ShovelTool : GenericTool
                 if (terrain is Grass grass &&
                     (terrain.GetType() == typeof(Grass) || SObjectPatches.IsMoreGrassGrass?.Invoke(grass) == true))
                 {
-                    who.Stamina -= energy;
-                    SObject? starter = null;
-                    if (SObjectPatches.IsMoreGrassGrass?.Invoke(grass) == true)
-                    {
-                        starter = SObjectPatches.InstantiateMoreGrassStarter?.Invoke(grass.grassType.Value);
-                    }
-                    starter ??= new(SObjectPatches.GrassStarterIndex, 1);
-                    starter.modData?.SetInt(SObjectPatches.ModDataKey, grass.grassType.Value);
-                    GiveItemOrMakeDebris(location, who, starter);
-                    AddAnimations(
-                        loc: location,
-                        tile: pickupTile,
-                        texturePath: Game1.objectSpriteSheetName,
-                        sourceRect: GameLocation.getSourceRectForObject(SObjectPatches.GrassStarterIndex),
-                        new Point(1, 1));
-                    location.terrainFeatures.Remove(pickupTile);
+                    HandleGrass(location, who, pickupTile, energy, grass);
                     return;
                 }
 
                 if (terrain is Tree tree && terrain.GetType() == typeof(Tree))
                 {
-                    if (Math.Clamp(tree.growthStage.Value, 0, 5) <= ModEntry.Config.MaxTreeStageInternal)
+                    int effectiveStage = Math.Clamp(tree.growthStage.Value, 0, 5);
+                    if (effectiveStage == 4)
+                    {
+                        effectiveStage--;
+                    }
+                    if (effectiveStage <= ModEntry.Config.MaxTreeStageInternal)
                     {
                         if (tree.growthStage.Value == 0)
                         {
@@ -334,6 +324,26 @@ public sealed class ShovelTool : GenericTool
         {
             ModEntry.ModMonitor.Log($"Unexpected error in using shovel:\n\n{ex}", LogLevel.Error);
         }
+    }
+
+    private static void HandleGrass(GameLocation location, Farmer who, Vector2 pickupTile, int energy, Grass grass)
+    {
+        who.Stamina -= energy;
+        SObject? starter = null;
+        if (SObjectPatches.IsMoreGrassGrass?.Invoke(grass) == true)
+        {
+            starter = SObjectPatches.InstantiateMoreGrassStarter?.Invoke(grass.grassType.Value);
+        }
+        starter ??= new(SObjectPatches.GrassStarterIndex, 1);
+        starter.modData?.SetInt(SObjectPatches.ModDataKey, grass.grassType.Value);
+        GiveItemOrMakeDebris(location, who, starter);
+        AddAnimations(
+            loc: location,
+            tile: pickupTile,
+            texturePath: Game1.objectSpriteSheetName,
+            sourceRect: GameLocation.getSourceRectForObject(SObjectPatches.GrassStarterIndex),
+            new Point(1, 1));
+        location.terrainFeatures.Remove(pickupTile);
     }
 
     /// <inheritdoc />

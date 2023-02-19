@@ -18,6 +18,7 @@ namespace GrowableGiantCrops.Framework.InventoryModels;
 /// </summary>
 [XmlType("Mods_atravita_InventoryResourceClump")]
 [SuppressMessage("StyleCop.CSharp.OrderingRules", "SA1202:Elements should be ordered by access", Justification = "Keeping like methods together.")]
+[SuppressMessage("StyleCop.CSharp.OrderingRules", "SA1201:Elements should appear in the correct order", Justification = "Keeping like elements together.")]
 public sealed class InventoryResourceClump : SObject
 {
     [XmlIgnore]
@@ -429,6 +430,11 @@ public sealed class InventoryResourceClump : SObject
         return ResourceClumpIndexesExtensions.IsDefined(idx) ? idx : ResourceClumpIndexes.Invalid;
     }
 
+    /// <summary>
+    /// Checks to see if an int index is a valid index for a resource clump.
+    /// </summary>
+    /// <param name="index">the int index.</param>
+    /// <returns>True if we recognize it, false otherwise.</returns>
     internal static bool IsValidClumpIndex(int index)
     {
         ResourceClumpIndexes idx = (ResourceClumpIndexes)index;

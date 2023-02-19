@@ -53,6 +53,10 @@ Run SMAPI at least once with this mod installed to generate the `config.json`, o
 * **Resource clumps**: These include the big rocks you can find in the mines, the large stumps and hollow logs, and the meteorite. They are purchasable from Robin after you've gotten the skull key, except for the meteorite, which is locked behind getting level 25 in the skull cavern. You can also use the shovel to lift them.
 * **Small terrain items**: These include the little nodes, twigs, weeds, etc. The little crystals in the frost levels of the mines are actually internally weeds. Placed weeds won't spread, and optionally won't die in winter. A small selection is sold at the witch hut shop every day. These are also liftable from the mines with the shovel. (Custom Ore Nodes/Custom Resource Clumps isn't currently supported, though.)
 * **Giant Crops**: A small selection of giant crops are available every day through the shop in the Witch's hut, or you can lift them with the shovel if they happen to grow for you.
+* **Fruit trees**: Can be transplanted with the shovel. Note that stumps of fruit trees cannot be moved.
+* **Trees**: Can be transplanted with the shovel. Small versions will be sold in the Witch's hut, and unlike fruit trees, stumps of trees can be moved.
+
+A note on bushes: this mod doesn't deal with bushes, but if you have Growable Bushes installed, the shovel can lift bushes.
 
 ## Shops
 * Robin's shop opens up after you get a single heart from her and you've gotten her letter on the first house expansion. She'll carry grass starters, and also will carry resource clumps after you've reached the bottom of the mines. These grass starters will not die in winter, and you can control if they spread or not.

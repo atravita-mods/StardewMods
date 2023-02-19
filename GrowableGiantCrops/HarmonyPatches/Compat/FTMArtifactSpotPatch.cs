@@ -16,6 +16,7 @@ namespace GrowableGiantCrops.HarmonyPatches.Compat;
 internal static class FTMArtifactSpotPatch
 {
     #region delegates
+    [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1311:Static readonly fields should begin with upper-case letter", Justification = "Reviewed.")]
     private static readonly Lazy<Func<SObject, bool>?> isBuriedItem = new(() =>
     {
         Type? buriedItem = AccessTools.TypeByName("FarmTypeManager.ModEntry+BuriedItems");

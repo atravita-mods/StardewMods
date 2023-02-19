@@ -18,6 +18,10 @@ using Microsoft.Xna.Framework;
 using StardewValley.TerrainFeatures;
 
 namespace GrowableGiantCrops.HarmonyPatches.Compat;
+
+/// <summary>
+/// Patches MoreGrassStarters.
+/// </summary>
 internal static class MoreGrassStartersCompat
 {
     /// <summary>
@@ -45,6 +49,7 @@ internal static class MoreGrassStartersCompat
         }
     }
 
+    [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Harmony Convention.")]
     private static void Postfix(SObject __instance, GameLocation location, int x, int y, bool __result)
     {
         if (!__result || __instance?.modData?.GetBool(SObjectPatches.ModDataKey) != true)

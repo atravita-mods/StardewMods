@@ -26,7 +26,9 @@ public sealed class Harmonizer
     private readonly Dictionary<HarmonyPatchType, (int, int)> count = new();
 
     public Harmonizer(IMonitor logger, IModRegistry registry, string uniqueID)
-        : this(logger, registry, uniqueID, null) { }
+        : this(logger, registry, uniqueID, null)
+    {
+    }
 
     public Harmonizer(IMonitor logger, IModRegistry registry, string uniqueID, IEnumerable<string>? excludedCategories)
     {
@@ -41,6 +43,9 @@ public sealed class Harmonizer
         this.excludedCategories = excludedCategories?.ToImmutableArray();
     }
 
+    /// <summary>
+    /// The unique ID of this mod.
+    /// </summary>
     public string UniqueID { get; init; }
 
     public void PatchAll(Assembly assembly)

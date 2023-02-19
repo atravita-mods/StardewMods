@@ -1,11 +1,11 @@
 ﻿using System.Collections.Concurrent;
 
 using AtraShared.Niceties;
-
-using StardewModdingAPI.Events;
+using AtraShared.Utils.Extensions;
 
 using Microsoft.Xna.Framework.Graphics;
-using AtraShared.Utils.Extensions;
+
+using StardewModdingAPI.Events;
 
 namespace GrowableGiantCrops.Framework.Assets;
 

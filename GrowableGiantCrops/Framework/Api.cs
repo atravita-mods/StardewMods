@@ -136,7 +136,6 @@ public sealed class Api : IGrowableGiantCropsAPI
         return null;
     }
 
-
     /// <inheritdoc/>
     public SObject? TryPickUp(GameLocation loc, Vector2 tile, bool placedOnly = false)
     {

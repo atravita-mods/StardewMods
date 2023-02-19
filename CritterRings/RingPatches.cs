@@ -79,7 +79,7 @@ internal static class RingPatches
 
     [HarmonyPostfix]
     [HarmonyPatch(nameof(Ring.onLeaveLocation))]
-    private static void PostfixLeaveLocation(Ring __instance, Farmer who, GameLocation environment)
+    private static void PostfixLeaveLocation(Ring __instance, GameLocation environment)
     {
         if (__instance.ParentSheetIndex < 0)
         {
@@ -135,7 +135,7 @@ internal static class RingPatches
         }
         catch (Exception ex)
         {
-            ModEntry.ModMonitor.Log($"Failed when trying to dequip ring!\n\n{ex}", LogLevel.Error);
+            ModEntry.ModMonitor.Log($"Failed when trying to equip ring!\n\n{ex}", LogLevel.Error);
         }
     }
 

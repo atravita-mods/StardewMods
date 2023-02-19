@@ -33,7 +33,6 @@ internal static class CharacterTramplePatches
             return;
         }
 
-
         try
         {
             Rectangle nextPosition = npc.nextPosition(npc.FacingDirection);

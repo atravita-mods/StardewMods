@@ -12,6 +12,7 @@ namespace CritterRings;
 internal static class ShopPatcher
 {
     [HarmonyPatch(nameof(Utility.getAdventureShopStock))]
+    [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Harmony convention.")]
     private static void Postfix(Dictionary<ISalable, int[]> __result)
     {
         try

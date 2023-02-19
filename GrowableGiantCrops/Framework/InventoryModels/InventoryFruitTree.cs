@@ -29,6 +29,9 @@ public sealed class InventoryFruitTree : SObject
     /// </summary>
     internal const string InventoryTreePrefix = "atravita.InventoryFruitTree/";
 
+    /// <summary>
+    /// The mod data key used to keep track of a placed tree.
+    /// </summary>
     internal const string ModDataKey = $"{InventoryTreePrefix}Id";
 
     /// <summary>
@@ -288,7 +291,7 @@ public sealed class InventoryFruitTree : SObject
                 Utility.drawTinyDigits(
                     toDraw: this.Stack,
                     b: spriteBatch,
-                    position: location + new Vector2(64 - Utility.getWidthOfTinyDigitString(this.Stack, 3f * scaleSize) + 3f * scaleSize, 64f - 18f * scaleSize + 2f),
+                    position: location + new Vector2(64 - Utility.getWidthOfTinyDigitString(this.Stack, 3f * scaleSize) + (3f * scaleSize), 64f - (18f * scaleSize) + 2f),
                     scale: 3f * scaleSize,
                     layerDepth: 1f,
                     c: Color.White);

@@ -14,6 +14,8 @@ using StardewModdingAPI.Events;
 
 using StardewValley.BellsAndWhistles;
 
+using AtraUtils = AtraShared.Utils.Utils;
+
 namespace CritterRings;
 
 /// <inheritdoc />
@@ -23,6 +25,8 @@ internal sealed class ModEntry : Mod
     private MigrationManager? migrator;
 
     private const string SAVEKEY = "item_ids";
+
+    internal static ModConfig Config { get; private set; } = null!;
 
     /// <summary>
     /// Gets the logger for this mod.
@@ -67,6 +71,8 @@ internal sealed class ModEntry : Mod
     public override void Entry(IModHelper helper)
     {
         I18n.Init(helper.Translation);
+        ModMonitor = this.Monitor;
+        Config = AtraUtils.GetConfigOrDefault<ModConfig>(helper, this.Monitor);
         helper.Events.GameLoop.GameLaunched += this.OnGameLaunched;
         this.Monitor.Log($"Starting up: {this.ModManifest.UniqueID} - {typeof(ModEntry).Assembly.FullName}");
         this.ApplyPatches(new Harmony(this.ModManifest.UniqueID));
@@ -88,6 +94,16 @@ internal sealed class ModEntry : Mod
         this.Helper.Events.GameLoop.ReturnedToTitle += this.OnReturnedToTitle;
         this.Helper.Events.GameLoop.SaveLoaded += this.OnSaveLoaded;
         this.Helper.Events.GameLoop.TimeChanged += this.OnTimeChanged;
+
+        GMCMHelper gmcmHelper = new(this.Monitor, this.Helper.Translation, this.Helper.ModRegistry, this.ModManifest);
+        if (gmcmHelper.TryGetAPI())
+        {
+            gmcmHelper.Register(
+                reset: static () => Config = new(),
+                save: () => this.Helper.AsyncWriteConfig(this.Monitor, Config))
+            .AddParagraph(I18n.Mod_Description)
+            .GenerateDefaultGMCM(static () => Config);
+        }
     }
 
     /// <inheritdoc cref="IGameLoopEvents.TimeChanged"/>
@@ -108,7 +124,7 @@ internal sealed class ModEntry : Mod
                 }
             }
         }
-        else
+        else if (Config.ButterfliesSpawnInRain || !Game1.IsRainingHere(Game1.currentLocation))
         {
             if (ButterflyRing > 0)
             {

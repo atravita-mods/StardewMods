@@ -240,6 +240,12 @@ public sealed class InventoryTree : SObject
         }
         tree.modData?.SetEnum(ModDataKey, (TreeIndexes)this.ParentSheetIndex);
 
+        if (this.ParentSheetIndex == Tree.mushroomTree && this.growthStage.Value == Tree.treeStage
+            && location.IsOutdoors && Game1.GetSeasonForLocation(location) == "winter")
+        {
+            tree.stump.Value = true;
+        }
+
         location.terrainFeatures[placementTile] = tree;
         TreeShakeMethod(tree, placementTile, true, location);
         location.playSound("dirtyHit");

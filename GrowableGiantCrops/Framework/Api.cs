@@ -496,6 +496,10 @@ public sealed class Api : IGrowableGiantCropsAPI
     /// <inheritdoc />
     public SObject? GetMatchingFruitTree(FruitTree tree)
     {
+        if (tree.stump.Value)
+        {
+            return null;
+        }
         int? saplingIndex = AssetManager.GetMatchingSaplingIndex(tree.treeType.Value);
         if (saplingIndex is null)
         {
@@ -526,11 +530,13 @@ public sealed class Api : IGrowableGiantCropsAPI
     public bool TryPlaceFruitTree(SObject obj, GameLocation loc, Vector2 tile, bool relaxed)
         => obj is InventoryFruitTree tree && tree.PlaceFruitTree(loc, (int)tile.X * Game1.tileSize, (int)tile.Y * Game1.tileSize, relaxed);
 
-    // TODO
-    // int saplingIndex, int initialStack, int growthStage, int daysUntilMature, int struckByLightning = 0
     /// <inheritdoc />
     public (int saplingIndex, int growthStage, int daysUntilMature, int struckByLightning)? CanPickUpFruitTree(FruitTree tree, bool placedOnly = false)
     {
+        if (tree.stump.Value)
+        {
+            return null;
+        }
         if (!placedOnly || tree.modData?.ContainsKey(InventoryFruitTree.ModDataKey) == true)
         {
             int? saplingID = AssetManager.GetMatchingSaplingIndex(tree.treeType.Value);

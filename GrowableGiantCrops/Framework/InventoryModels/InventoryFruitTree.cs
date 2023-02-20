@@ -384,6 +384,9 @@ public sealed class InventoryFruitTree : SObject
     }
 
     /// <inheritdoc />
+    public override bool isForage(GameLocation location) => false;
+
+    /// <inheritdoc />
     protected override string loadDisplayName() => I18n.FruitTree_Name(this.GetSaplingDisplayName());
 
     /// <inheritdoc />

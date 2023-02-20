@@ -72,10 +72,14 @@ internal static class NPCTryRecieveActiveItemPatches
                         who.friendshipData[__instance.Name] = friendship;
 
                         __instance.doEmote(Character.happyEmote);
-                        who.changeFriendship(100, __instance);
-                        if (!__instance.Dialogue.TryGetValue("PrismaticSlimeJelly.Response", out string? response))
+                        bool isBirthday = Game1.dayOfMonth == __instance.Birthday_Day &&
+                            __instance.Birthday_Season?.Equals(Game1.currentSeason, StringComparison.OrdinalIgnoreCase) == true;
+                        who.changeFriendship(isBirthday ? 800 : 100, __instance);
+                        if (!__instance.Dialogue.TryGetValue("PrismaticSlimeJelly.Response" + (isBirthday ? ".Birthday" : string.Empty), out string? response))
                         {
-                            response = I18n.PrismaticJelly_Response(__instance.displayName);
+                            response = isBirthday
+                                ? I18n.PrismaticJelly_Response_Birthday(__instance.displayName)
+                                : I18n.PrismaticJelly_Response(__instance.displayName);
                         }
                         __instance.CurrentDialogue.Push(new Dialogue(response, __instance));
                         break;

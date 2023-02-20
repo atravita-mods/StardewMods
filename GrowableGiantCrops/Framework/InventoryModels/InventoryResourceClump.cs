@@ -367,6 +367,9 @@ public sealed class InventoryResourceClump : SObject
     public override bool isPlaceable() => true;
 
     /// <inheritdoc />
+    public override bool isForage(GameLocation location) => false;
+
+    /// <inheritdoc />
     public override bool canBePlacedInWater() => false;
 
     /// <inheritdoc />

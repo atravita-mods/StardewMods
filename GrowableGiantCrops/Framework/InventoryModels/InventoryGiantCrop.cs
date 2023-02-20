@@ -538,6 +538,9 @@ public sealed class InventoryGiantCrop : SObject
     public override bool canBeTrashed() => true;
 
     /// <inheritdoc />
+    public override bool isForage(GameLocation location) => false;
+
+    /// <inheritdoc />
     public override string getCategoryName() => I18n.GiantCropCategory();
 
     /// <inheritdoc />

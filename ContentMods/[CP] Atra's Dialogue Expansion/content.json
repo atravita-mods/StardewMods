@@ -3,9 +3,9 @@
     "Format": "1.28.0",
     "ConfigSchema": {
         "EnableFor": {
-            "AllowValues": "Abigail, Alex, Caroline, Clint, Demetrius, Elliott, Emily, Evelyn, George, Gus, Haley, Harvey, Jodi, Kent, Leah, Lewis, Marnie, Maru, Pam, Pierre, Robin, Sandy, Sebastian, Shane, Vincent, Willy",
+            "AllowValues": "Abigail, Alex, Caroline, Clint, Demetrius, Elliott, Emily, Evelyn, George, Gus, Haley, Harvey, Jodi, Kent, Leah, Lewis, Marnie, Maru, Pam, Pierre, Robin, Sam, Sandy, Sebastian, Shane, Vincent, Willy",
             "AllowMultiple": true,
-            "Default": "Abigail, Alex, Caroline, Clint, Demetrius, Elliott, Emily, Evelyn, George, Gus, Haley, Harvey, Jodi, Kent, Leah, Lewis, Marnie, Maru, Pam, Pierre, Robin, Sandy, Sebastian, Shane, Vincent, Willy",
+            "Default": "Abigail, Alex, Caroline, Clint, Demetrius, Elliott, Emily, Evelyn, George, Gus, Haley, Harvey, Jodi, Kent, Leah, Lewis, Marnie, Maru, Pam, Pierre, Robin, Sam, Sandy, Sebastian, Shane, Vincent, Willy",
             "AllowBlank": true
         }
     },
@@ -60,11 +60,13 @@
             "Action": "Include",
             "LogName": "Dialogue Changes: base",
             "FromFile": "{{FirstValidFile: assets/{{language}}/base.json, assets/default/base.json}}",
+            "When": {"Day|contains=0": false}
         },
         {
             "Action": "Include",
             "LogName": "Dialogue Changes: Randomized",
-            "FromFile": "{{FirstValidFile: assets/{{language}}/{{DialogueRandom}}/toc.json, assets/default/{{DialogueRandom}}/toc.json}}"
+            "FromFile": "{{FirstValidFile: assets/{{language}}/{{DialogueRandom}}/toc.json, assets/default/{{DialogueRandom}}/toc.json}}",
+            "When": {"Day|contains=0": false}
         }
     ],
 }

@@ -373,6 +373,9 @@ public sealed class InventoryBush : SObject
     public override bool canBePlacedInWater() => false;
 
     /// <inheritdoc />
+    public override bool isForage(GameLocation location) => false;
+
+    /// <inheritdoc />
     public override bool canStackWith(ISalable other)
     {
         if (other is not InventoryBush otherBush)

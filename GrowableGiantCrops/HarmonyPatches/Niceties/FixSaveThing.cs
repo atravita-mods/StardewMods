@@ -1,4 +1,6 @@
-﻿using AtraCore.Framework.ReflectionManager;
+﻿using AtraBase.Toolkit.Reflection;
+
+using AtraCore.Framework.ReflectionManager;
 using HarmonyLib;
 using Microsoft.Xna.Framework;
 using StardewValley.Locations;
@@ -17,9 +19,10 @@ internal static class FixSaveThing
     /// <param name="harmony">My harmony instance.</param>
     internal static void ApplyPatches(Harmony harmony)
     {
+        // use an early priority because we restore all clumps.
         harmony.Patch(
             original: typeof(GameLocation).GetCachedMethod(nameof(GameLocation.TransferDataFromSavedLocation), ReflectionCache.FlagTypes.InstanceFlags),
-            postfix: new HarmonyMethod(typeof(FixSaveThing), nameof(Postfix)));
+            postfix: new HarmonyMethod(typeof(FixSaveThing).StaticMethodNamed(nameof(Postfix)), Priority.High));
     }
 
     [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Harmony convention.")]

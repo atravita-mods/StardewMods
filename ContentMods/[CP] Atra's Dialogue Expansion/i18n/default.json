@@ -37,4 +37,38 @@
     "restaurant.04": "Fire and Ice",
     "restaurant.05": "l'Ambiance d'Hiver",
     "restaurant.06": "Citronnelle",
+
+    // generic dishes - free free to replace with
+    // whatever adults eat in your country.
+    "dishes.adult.01": "beer cheese soup",
+    "dishes.adult.02": "bison burger",
+    "dishes.adult.03": "goulash",
+    "dishes.adult.04": "fried morels",
+    "dishes.adult.05": "shrimp cocktail",
+    "dishes.adult.06": "burnt ends sandwich",
+    "dishes.adult.07": "mustard-brined pork",
+    "dishes.adult.08": "beef stroganoff",
+    "dishes.adult.09": "wild fennel stir-fry",
+
+    // dishes aimed at children
+    "dishes.child.01": "toasted ravioli",
+    "dishes.child.02": "dino nuggets",
+    "dishes.child.03": "pork tenderloin sandwich",
+    "dishes.child.04": "pizza puff",
+    "dishes.child.05": "hamburger and fries",
+    "dishes.child.06": "chicken sandwich",
+    "dishes.child.07": "chili",
+    "dishes.child.08": "cornbread",
+    "dishes.child.09": "milkshake",
+
+    // deserts
+    "dishes.dessert.01": "cherry pie",
+    "dishes.dessert.02": "frozen custard",
+    "dishes.dessert.03": "juneberry pie",
+    "dishes.dessert.04": "fudge",
+    "dishes.dessert.05": "chocolate pavlova",
+    "dishes.dessert.06": "cookies",
+    "dishes.dessert.07": "cake",
+    "dishes.dessert.08": "sugar cream pie",
+    "dishes.dessert.09": "cheesecake",
 }

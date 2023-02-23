@@ -1,8 +1,12 @@
 ﻿using AtraShared.Utils.Extensions;
 
+using GrowableGiantCrops.Framework;
+
 using HarmonyLib;
 
 using Microsoft.Xna.Framework;
+
+using StardewValley.Locations;
 
 namespace GrowableGiantCrops.HarmonyPatches.Niceties;
 
@@ -22,7 +26,7 @@ internal static class PatchesForSObject
     [HarmonyPostfix]
     [HarmonyPatch(nameof(SObject.placementAction))]
     [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Harmony convention.")]
-    private static void PostfixPlacement(SObject __instance, int x, int y)
+    private static void PostfixPlacement(SObject __instance, GameLocation location, int x, int y)
     {
         if (__instance?.bigCraftable?.Value == true)
         {
@@ -42,6 +46,14 @@ internal static class PatchesForSObject
         {
             __instance.modData?.SetBool(ModDataMiscObject, true);
             __instance.TileLocation = new Vector2(x / Game1.tileSize, y / Game1.tileSize);
+
+            if (location is MineShaft shaft && __instance.Name == "Stone")
+            {
+                int stonesLeft = ShovelTool.MineRockCountGetter.Value(shaft);
+                stonesLeft++;
+                ModEntry.ModMonitor.DebugOnlyLog($"{stonesLeft} stones left on floor {shaft.mineLevel}", LogLevel.Info);
+                ShovelTool.MineRockCountSetter.Value(shaft, stonesLeft);
+            }
         }
     }
 

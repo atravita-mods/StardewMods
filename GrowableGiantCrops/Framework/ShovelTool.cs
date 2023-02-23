@@ -1,5 +1,9 @@
-﻿using System.Xml.Serialization;
+﻿using System.Reflection;
+using System.Xml.Serialization;
 
+using AtraBase.Toolkit.Reflection;
+
+using AtraCore.Framework.ReflectionManager;
 using AtraCore.Utilities;
 
 using AtraShared.Utils.Extensions;
@@ -12,6 +16,7 @@ using GrowableGiantCrops.HarmonyPatches.GrassPatches;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
+using StardewValley.Locations;
 using StardewValley.Objects;
 using StardewValley.TerrainFeatures;
 using StardewValley.Tools;
@@ -28,6 +33,30 @@ namespace GrowableGiantCrops.Framework;
 public sealed class ShovelTool : GenericTool
 {
     private static readonly Api Api = new();
+
+    #region delegates
+
+    /// <summary>
+    /// Gets the mine rock count on a specific mineshaft level.
+    /// </summary>
+    internal static readonly Lazy<Func<MineShaft, int>> MineRockCountGetter = new(() =>
+        (typeof(MineShaft).GetCachedProperty("stonesLeftOnThisLevel", ReflectionCache.FlagTypes.InstanceFlags)
+             .GetGetMethod(nonPublic: true) ?? ReflectionThrowHelper.ThrowMethodNotFoundException<MethodInfo>("stonesLeftOnThisLevelGetter"))
+             .CreateDelegate<Func<MineShaft, int>>());
+
+    /// <summary>
+    /// Sets the mine rock count on a specific mineshaft level.
+    /// </summary>
+    internal static readonly Lazy<Action<MineShaft, int>> MineRockCountSetter = new(() =>
+        (typeof(MineShaft).GetCachedProperty("stonesLeftOnThisLevel", ReflectionCache.FlagTypes.InstanceFlags)
+             .GetSetMethod(nonPublic: true) ?? ReflectionThrowHelper.ThrowMethodNotFoundException<MethodInfo>("stonesLeftOnThisLevelSetter"))
+             .CreateDelegate<Action<MineShaft, int>>());
+
+    private static readonly Lazy<Func<MineShaft, bool>> HasLadderSpawnedGetter = new(() =>
+        typeof(MineShaft).GetCachedField("ladderHasSpawned", ReflectionCache.FlagTypes.InstanceFlags)
+        .GetInstanceFieldGetter<MineShaft, bool>());
+
+    #endregion
 
     /// <summary>
     /// Initializes a new instance of the <see cref="ShovelTool"/> class.
@@ -132,15 +161,7 @@ public sealed class ShovelTool : GenericTool
                     if (@object.ParentSheetIndex >= 0 &&
                         (@object.Name == "Stone" || @object.Name.Contains("Weeds") || @object.Name.Contains("Twig")))
                     {
-                        who.Stamina -= energy;
-                        GiveItemOrMakeDebris(location, who, @object);
-                        AddAnimations(
-                            loc: location,
-                            tile: pickupTile,
-                            texturePath: Game1.objectSpriteSheetName,
-                            sourceRect: GameLocation.getSourceRectForObject(@object.ParentSheetIndex),
-                            new Point(1, 1));
-                        location.Objects.Remove(pickupTile);
+                        HandleTerrainObject(location, who, pickupTile, energy, @object);
                         return;
                     }
                 }
@@ -249,7 +270,7 @@ public sealed class ShovelTool : GenericTool
                     }
                     if (effectiveStage <= ModEntry.Config.MaxTreeStageInternal)
                     {
-                        if (tree.growthStage.Value == 0)
+                        if (tree.growthStage.Value == 0 && tree.treeType.Value is not Tree.palmTree or Tree.palmTree2)
                         {
                             who.Stamina -= energy;
                             location.playSound("woodyHit");
@@ -324,6 +345,33 @@ public sealed class ShovelTool : GenericTool
         {
             ModEntry.ModMonitor.Log($"Unexpected error in using shovel:\n\n{ex}", LogLevel.Error);
         }
+    }
+
+    private static void HandleTerrainObject(GameLocation location, Farmer who, Vector2 pickupTile, int energy, SObject @object)
+    {
+        who.Stamina -= energy;
+        GiveItemOrMakeDebris(location, who, @object);
+        AddAnimations(
+            loc: location,
+            tile: pickupTile,
+            texturePath: Game1.objectSpriteSheetName,
+            sourceRect: GameLocation.getSourceRectForObject(@object.ParentSheetIndex),
+            new Point(1, 1));
+        location.Objects.Remove(pickupTile);
+
+        if (location is MineShaft shaft && @object.Name == "Stone")
+        {
+            int stonesLeft = MineRockCountGetter.Value(shaft);
+            stonesLeft--;
+            ModEntry.ModMonitor.DebugOnlyLog($"{stonesLeft} stones left on floor {shaft.mineLevel}", LogLevel.Info);
+            if (stonesLeft <= 0 && !HasLadderSpawnedGetter.Value(shaft))
+            {
+                ModEntry.ModMonitor.DebugOnlyLog($"Last rock on {shaft.mineLevel}, creating ladder.", LogLevel.Info);
+                shaft.createLadderDown((int)pickupTile.X, (int)pickupTile.Y);
+            }
+            MineRockCountSetter.Value(shaft, stonesLeft);
+        }
+        return;
     }
 
     private static void HandleGrass(GameLocation location, Farmer who, Vector2 pickupTile, int energy, Grass grass)

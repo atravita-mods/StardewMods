@@ -42,7 +42,7 @@ internal static class GGCUtils
         {
             return true;
         }
-        return location.IsGreenhouse || location.map?.Properties?.ContainsKey("ForceAllowTreePlanting") == true;
+        return location.IsGreenhouse || location.map?.Properties?.ContainsKey("ForceAllowTreePlanting") == true || location is Farm or IslandWest;
     }
 
     /// <summary>

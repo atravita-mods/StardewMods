@@ -69,14 +69,14 @@ internal static class AssetCache
             if (!texture.IsDisposed)
             {
                 AssetHolder newHolder = new(parsed, texture);
-                Cache[parsed.BaseName] = new(newHolder);
+                Cache[string.IsInterned(parsed.BaseName) ?? parsed.BaseName] = new(newHolder);
                 return newHolder;
             }
         }
         catch (Exception ex)
         {
             Failed.Add(parsed);
-            ModEntry.ModMonitor.LogOnce($"Failed to load {parsed}.", LogLevel.Error);
+            ModEntry.ModMonitor.Log($"Failed to load {parsed}, see log for details.", LogLevel.Error);
             ModEntry.ModMonitor.Log(ex.ToString());
         }
 

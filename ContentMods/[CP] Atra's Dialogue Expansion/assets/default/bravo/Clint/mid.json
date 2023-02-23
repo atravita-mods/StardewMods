@@ -26,7 +26,7 @@
         "Entries": {
             "6_2": "Got a commission from %place for a pile of swords. That'll be nice for the ole' balance sheet.",
             "8_2": "What would I've done if I didn't become a blacksmith? Err, @, I'm not sure actually.$s#$b#Didn't really have an idea of what I wanted to become as a kid. Just followed my father's footsteps.",
-            "10_2": "My family has been blacksmiths in this here town for as long as I can remember...."
+            "10_2": "My family has been blacksmiths in this here town for as long as I can remember....",
         },
         "When": {"YearModulus": 2}
     },
@@ -35,7 +35,8 @@
         "Action": "EditData",
         "Target": "Characters/Dialogue/Clint",
         "Entries": {
-            "6_2": "%Clint is mumbling to himself.#$b#Gosh, this economy doesn't help matters...$s#$e#Oh, what? It's nothing."
+            "6_2": "%Clint is mumbling to himself.#$b#Gosh, this economy doesn't help matters...$s#$e#Oh, what? It's nothing.",
+            "12_2": "I've really only left Pelican Town for long enough to do an apprenticeship in Grampleton. This's where I've been all my life.$s"
         },
         "When": {"YearModulus": 3}
     }

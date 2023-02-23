@@ -447,7 +447,7 @@ public sealed class InventoryTree : SObject
     /// <inheritdoc />
     public override Item getOne()
     {
-        InventoryTree tree = new((TreeIndexes)this.ParentSheetIndex, 1, this.growthStage.Value);
+        InventoryTree tree = new((TreeIndexes)this.ParentSheetIndex, 1, this.growthStage.Value, this.isStump.Value);
         tree._GetOneFrom(this);
         return tree;
     }

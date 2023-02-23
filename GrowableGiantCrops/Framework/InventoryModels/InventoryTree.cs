@@ -361,7 +361,7 @@ public sealed class InventoryTree : SObject
             {
                 offset = this.growthStage.Value switch
                 {
-                    Tree.treeStage => new Vector2(16f, 0f),
+                    Tree.treeStage => scaleSize >= 0.95f ? new Vector2(16f, 0f) : new Vector2(16f, 8f),
                     Tree.bushStage or 4 => new Vector2(32f, 32f),
                     _ => new Vector2(32f, 64f),
                 };

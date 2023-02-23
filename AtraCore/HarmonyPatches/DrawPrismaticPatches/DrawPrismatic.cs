@@ -156,6 +156,8 @@ internal static class DrawPrismatic
         float layerDepth,
         SObject obj)
     {
+        position.X = (int)position.X;
+        position.Y = (int)position.Y;
         b.Draw(texture, position, sourceRectangle, color, rotation, origin, scale, effects, layerDepth);
         if (obj.GetColorMask() is Texture2D tex)
         {

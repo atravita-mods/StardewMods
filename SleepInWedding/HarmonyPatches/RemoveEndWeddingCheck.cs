@@ -13,10 +13,15 @@ namespace SleepInWedding.HarmonyPatches;
 /// <summary>
 /// Removes the multiplayer sync at the end of the wedding.
 /// </summary>
-[HarmonyPatch(typeof(Utility))]
+[HarmonyPatch]
 internal static class RemoveEndWeddingCheck
 {
-    [HarmonyPatch(nameof(Utility.getWeddingEvent))]
+    private static IEnumerable<MethodBase> TargetMethods()
+    {
+        yield return typeof(Utility).GetCachedMethod(nameof(Utility.getWeddingEvent), ReflectionCache.FlagTypes.StaticFlags);
+        yield return typeof(Utility).GetCachedMethod(nameof(Utility.getPlayerWeddingEvent), ReflectionCache.FlagTypes.StaticFlags);
+    }
+
     [SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1116:Split parameters should start on line after declaration", Justification = "Reviewed.")]
     [SuppressMessage("SMAPI.CommonErrors", "AvoidNetField:Avoid Netcode types when possible", Justification = "Used for matching only.")]
     [SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1122:Use string.Empty for empty strings", Justification = "Intentionally using string literal.")]

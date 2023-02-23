@@ -19,7 +19,7 @@ internal static class NPCTryRecieveActiveItemPatches
         {
             try
             {
-                QueuedDialogueManager.PushCurrentDialogueToQueue(__instance);
+                // QueuedDialogueManager.PushCurrentDialogueToQueue(__instance);
                 switch (__instance.Name)
                 {
                     case "Wizard":
@@ -53,14 +53,28 @@ internal static class NPCTryRecieveActiveItemPatches
                     }
                     default:
                     {
+                        bool isBirthday = Game1.dayOfMonth == __instance.Birthday_Day &&
+                            __instance.Birthday_Season?.Equals(Game1.currentSeason, StringComparison.OrdinalIgnoreCase) == true;
                         if (!who.friendshipData.TryGetValue(__instance.Name, out Friendship? friendship))
                         {
                             friendship = new(0);
                             who.friendshipData[__instance.Name] = friendship;
                         }
-                        else if (friendship.GiftsToday >= 1 || friendship.GiftsThisWeek >= 2 || friendship.IsDivorced())
+                        else if (friendship.IsDivorced())
                         {
-                            return true;
+                            __instance.CurrentDialogue.Push(new Dialogue(Game1.content.LoadString("Strings\\Characters:Divorced_gift"), __instance));
+                            Game1.drawDialogue(__instance);
+                            return false;
+                        }
+                        else if (friendship.GiftsToday >= 1)
+                        {
+                            Game1.drawObjectDialogue(Game1.parseText(Game1.content.LoadString("Strings\\StringsFromCSFiles:NPC.cs.3981", __instance.displayName)));
+                            return false;
+                        }
+                        else if (!isBirthday && friendship.GiftsThisWeek >= 2 && __instance.getSpouse() != who)
+                        {
+                            Game1.drawObjectDialogue(Game1.parseText(Game1.content.LoadString("Strings\\StringsFromCSFiles:NPC.cs.3987", __instance.displayName, 2)));
+                            return false;
                         }
 
                         // update friendship stats
@@ -69,11 +83,7 @@ internal static class NPCTryRecieveActiveItemPatches
                         friendship.LastGiftDate = new(Game1.Date);
                         Game1.stats.GiftsGiven++;
 
-                        who.friendshipData[__instance.Name] = friendship;
-
                         __instance.doEmote(Character.happyEmote);
-                        bool isBirthday = Game1.dayOfMonth == __instance.Birthday_Day &&
-                            __instance.Birthday_Season?.Equals(Game1.currentSeason, StringComparison.OrdinalIgnoreCase) == true;
                         who.changeFriendship(isBirthday ? 800 : 100, __instance);
                         if (!__instance.Dialogue.TryGetValue("PrismaticSlimeJelly.Response" + (isBirthday ? ".Birthday" : string.Empty), out string? response))
                         {

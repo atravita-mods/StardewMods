@@ -21,7 +21,7 @@ internal static class AssetManager
     /// <summary>
     /// The const string that starts for running JA/MGC textures through the content pipeline.
     /// </summary>
-    internal const string GiantCropPrefix = "Mods/atravita/GrowableBushes/";
+    internal const string GiantCropPrefix = "Mods/atravita.GrowableGiantCrops/";
 
     private static IAssetName fruitTreeData = null!;
 
@@ -49,15 +49,32 @@ internal static class AssetManager
     /// </summary>
     internal static IAssetName ShopGraphics { get; private set; } = null!;
 
+    #region palm trees
+    internal static IAssetName WinterBigPalm { get; private set; } = null!;
+
+    internal static IAssetName WinterPalm { get; private set; } = null!;
+
+    internal static IAssetName FallBigPalm { get; private set; } = null!;
+
+    internal static IAssetName FallPalm { get; private set; } = null!;
+
+    #endregion
+
     /// <summary>
     /// Initializes the AssetManager.
     /// </summary>
     /// <param name="parser">GameContent helper.</param>
     internal static void Initialize(IGameContentHelper parser)
     {
-        ToolTextureName = parser.ParseAssetName("Mods/atravita.GrowableGiantCrops/Shovel");
-        ShopGraphics = parser.ParseAssetName("Mods/atravita.GrowableGiantCrops/Shop");
+        ToolTextureName = parser.ParseAssetName($"{GiantCropPrefix}Shovel");
+        ShopGraphics = parser.ParseAssetName($"{GiantCropPrefix}Shop");
         fruitTreeData = parser.ParseAssetName(@"Data\fruitTrees");
+
+        WinterBigPalm = parser.ParseAssetName($"{GiantCropPrefix}WinterBigPalm");
+        WinterPalm = parser.ParseAssetName($"{GiantCropPrefix}WinterPalm");
+
+        FallBigPalm = parser.ParseAssetName($"{GiantCropPrefix}FallBigPalm");
+        FallPalm = parser.ParseAssetName($"{GiantCropPrefix}FallPalm");
 
         const int TEX_WIDTH = 48;
         const int TEX_HEIGHT = 64;
@@ -82,16 +99,12 @@ internal static class AssetManager
     /// <inheritdoc cref="IContentEvents.AssetRequested" />
     internal static void OnAssetRequested(AssetRequestedEventArgs e)
     {
-        if (e.NameWithoutLocale.IsEquivalentTo(ToolTextureName))
+        if (!e.NameWithoutLocale.StartsWith(GiantCropPrefix, false, false))
         {
-            e.LoadFromModFile<Texture2D>("assets/textures/shovel.png", AssetLoadPriority.Exclusive);
+            return;
         }
-        else if (e.NameWithoutLocale.IsEquivalentTo(ShopGraphics))
-        {
-            e.LoadFromModFile<Texture2D>("assets/textures/void_grass_box.png", AssetLoadPriority.Exclusive);
-        }
-        else if (e.NameWithoutLocale.StartsWith(GiantCropPrefix, false, false)
-            && int.TryParse(e.NameWithoutLocale.BaseName.GetNthChunk('/', 3), out int idx))
+
+        if (int.TryParse(e.NameWithoutLocale.BaseName.GetNthChunk('/', 2), out int idx))
         {
             if (ModEntry.JaAPI?.TryGetGiantCropSprite(idx, out Lazy<Texture2D>? lazy) == true)
             {
@@ -105,6 +118,30 @@ internal static class AssetManager
             {
                 e.LoadFrom(() => errorTex, AssetLoadPriority.Exclusive);
             }
+        }
+        else if (e.NameWithoutLocale.IsEquivalentTo(ToolTextureName))
+        {
+            e.LoadFromModFile<Texture2D>("assets/textures/shovel.png", AssetLoadPriority.Exclusive);
+        }
+        else if (e.NameWithoutLocale.IsEquivalentTo(ShopGraphics))
+        {
+            e.LoadFromModFile<Texture2D>("assets/textures/void_grass_box.png", AssetLoadPriority.Exclusive);
+        }
+        else if (e.NameWithoutLocale.IsEquivalentTo(WinterBigPalm))
+        {
+            e.LoadFromModFile<Texture2D>("assets/textures/winter_palm2.png", AssetLoadPriority.Exclusive);
+        }
+        else if (e.NameWithoutLocale.IsEquivalentTo(WinterPalm))
+        {
+            e.LoadFromModFile<Texture2D>("assets/textures/winter_palm.png", AssetLoadPriority.Exclusive);
+        }
+        else if (e.NameWithoutLocale.IsEquivalentTo(FallBigPalm))
+        {
+            e.LoadFromModFile<Texture2D>("assets/textures/fall_palm2.png", AssetLoadPriority.Exclusive);
+        }
+        else if (e.NameWithoutLocale.IsEquivalentTo(FallPalm))
+        {
+            e.LoadFromModFile<Texture2D>("assets/textures/fall_palm.png", AssetLoadPriority.Exclusive);
         }
     }
 

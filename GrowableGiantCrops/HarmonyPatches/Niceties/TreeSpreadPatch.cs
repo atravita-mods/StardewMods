@@ -36,7 +36,9 @@ internal static class TreeSpreadPatch
                 OpCodes.Brfalse,
             })
             .Push()
-            .Advance(3)
+            .Advance(2)
+            .StoreBranchDest()
+            .AdvanceToStoredLabel()
             .DefineAndAttachLabel(out Label jumpPoint)
             .Pop()
             .GetLabels(out IList<Label>? labelsToMove)

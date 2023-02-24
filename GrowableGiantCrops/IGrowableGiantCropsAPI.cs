@@ -104,7 +104,7 @@ public interface IGrowableGiantCropsAPI
     public StardewValley.Object? TryPickUp(GameLocation loc, Vector2 tile, bool placedOnly = false);
     #endregion
 
-    #region Resource Clump methods
+    #region Resource Clumps
 
     /// <summary>
     /// Gets the InventoryResourceClump associated with the specific ResourceClumpIndex, if valid.
@@ -189,7 +189,7 @@ public interface IGrowableGiantCropsAPI
 
     #endregion
 
-    #region GiantCrop
+    #region Giant Crops
 
     /// <summary>
     /// Gets the identifiers for an inventory giant crop, if relevant.
@@ -270,7 +270,7 @@ public interface IGrowableGiantCropsAPI
 
     #endregion
 
-    #region tree
+    #region Trees
 
     /// <summary>
     /// Tries to pick up a tree or a fruit tree.
@@ -345,7 +345,7 @@ public interface IGrowableGiantCropsAPI
     public StardewValley.Object? TryPickUpTree(GameLocation loc, Vector2 tile, bool placedOnly = false);
     #endregion
 
-    #region fruit tree
+    #region Fruit Trees
 
     /// <summary>
     /// Gets an Inventory Fruit Tree instance.
@@ -410,6 +410,23 @@ public interface IGrowableGiantCropsAPI
     /// <param name="placedOnly">whether to limit to placed trees only or not.</param>
     /// <returns>InventoryFruitTree if successful, null otherwise.</returns>
     public SObject? TryPickUpFruitTree(GameLocation loc, Vector2 tile, bool placedOnly = false);
+    #endregion
+
+    #region Small Items
+
+    /// <summary>
+    /// Given a grass starter, returns the matching grass instance.
+    /// </summary>
+    /// <param name="starter">Grass starter.</param>
+    /// <returns>Grass.</returns>
+    public Grass? GetMatchingGrass(SObject starter);
+
+    /// <summary>
+    /// Gets the grass starter that matches this grass instance.
+    /// </summary>
+    /// <param name="grass">Grass instance.</param>
+    /// <returns>Grass starter.</returns>
+    public StardewValley.Object GetMatchingStarter(Grass grass);
     #endregion
 }
 

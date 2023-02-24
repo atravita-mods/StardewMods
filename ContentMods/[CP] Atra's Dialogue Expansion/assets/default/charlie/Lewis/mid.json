@@ -5,7 +5,8 @@
             "Action": "EditData",
             "Target": "Characters/Dialogue/Lewis",
             "Entries": {
-                "movieTheater": "@! A movie theater seems to have appeared in the valley!$h#$e#$c 0.3#Here's a ticket![809]#It's nice to have more entertainment options available in the valley#$e#"
+                "movieTheater": "@! A movie theater seems to have appeared in the valley!$h#$e#$c 0.3#Here's a ticket![809]#It's nice to have more entertainment options available in the valley#$e#",
+                "dumped_Guys": "I can't believe you'd be so cruel, dating all of them like that."
             }
         },
         {

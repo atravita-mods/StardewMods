@@ -1,19 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Reflection;
 using System.Reflection.Emit;
-using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
+
 using AtraCore.Framework.ReflectionManager;
+
 using AtraShared.Utils.Extensions;
 using AtraShared.Utils.HarmonyHelper;
 
 using GrowableGiantCrops.HarmonyPatches.Niceties;
 
 using HarmonyLib;
-using StardewValley.TerrainFeatures;
+
 using Microsoft.Xna.Framework;
+
+using StardewValley.TerrainFeatures;
 
 namespace GrowableGiantCrops.HarmonyPatches.GrassPatches;
 

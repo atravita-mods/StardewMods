@@ -3,6 +3,7 @@ using System.Reflection.Emit;
 using System.Runtime.CompilerServices;
 
 using AtraBase.Toolkit;
+using AtraBase.Toolkit.Reflection;
 
 using AtraCore.Framework.ReflectionManager;
 
@@ -11,6 +12,7 @@ using AtraShared.Utils.HarmonyHelper;
 
 using FastExpressionCompiler.LightExpression;
 
+using GrowableGiantCrops.Framework;
 using GrowableGiantCrops.Framework.Assets;
 
 using HarmonyLib;
@@ -33,6 +35,8 @@ namespace GrowableGiantCrops.HarmonyPatches.GrassPatches;
 [SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1623:Property summary documentation should match accessors", Justification = "Reviewed.")]
 internal static class SObjectPatches
 {
+    private static Api Api = new();
+
     /// <summary>
     /// A mod data key used to mark custom grass types.
     /// </summary>
@@ -119,6 +123,36 @@ internal static class SObjectPatches
     /// Instantiates an instance of a MoreGrass grass.
     /// </summary>
     internal static Func<int, Grass>? InstantiateMoreGrassGrass => instantiateMoreGrassGrass.Value;
+
+    private static Lazy<Func<SObject, int?>?> getMoreGrassStarterIndex = new(() =>
+    {
+        Type? moreGrass = AccessTools.TypeByName("MoreGrassStarters.GrassStarterItem");
+        if (moreGrass is null)
+        {
+            return null;
+        }
+
+        ParameterExpression? obj = Expression.ParameterOf<SObject>("obj");
+        TypeBinaryExpression? isInst = Expression.TypeIs(obj, moreGrass);
+        ParameterExpression ret = Expression.ParameterOf<int?>("ret");
+
+        ConstantExpression retnull = Expression.ConstantNull<int>();
+        MethodInfo whichGrassGetter = moreGrass.GetCachedProperty("whichGrass", ReflectionCache.FlagTypes.InstanceFlags).GetGetMethod()
+                                       ?? ReflectionThrowHelper.ThrowMethodNotFoundException<MethodInfo>("whichgrass getter");
+
+        UnaryExpression casted = Expression.TypeAs(obj, moreGrass);
+        BinaryExpression assign = Expression.Assign(ret, Expression.Call(casted, whichGrassGetter));
+
+        ConditionalExpression ifStatement = Expression.IfThenElse(isInst, assign, retnull);
+
+        BlockExpression block = Expression.Block(typeof(int?), new List<ParameterExpression>() { ret }, ifStatement, ret);
+        return Expression.Lambda<Func<SObject, int?>>(block, obj).CompileFast();
+    });
+
+    /// <summary>
+    /// Gets the internal index of a more grass starter.
+    /// </summary>
+    internal static Func<SObject, int?>? GetMoreGrassStarterIndex => getMoreGrassStarterIndex.Value;
 
     #endregion
 
@@ -254,17 +288,7 @@ internal static class SObjectPatches
 
     #region placement patch
 
-    private static Grass GetMatchingGrass(SObject obj)
-    {
-        if (obj.ParentSheetIndex != GrassStarterIndex || obj.modData?.GetInt(ModDataKey) is not int idx)
-        {
-            return new Grass(Grass.springGrass, 4);
-        }
-
-        Grass grass = new(idx, 1);
-        grass.modData.SetBool(ModDataKey, true);
-        return grass;
-    }
+    private static Grass GetMatchingGrass(SObject obj) => Api.GetMatchingGrass(obj) ?? new Grass(Grass.springGrass, 4);
 
     [HarmonyPatch(nameof(SObject.placementAction))]
     [SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1116:Split parameters should start on line after declaration", Justification = "Reviewed.")]

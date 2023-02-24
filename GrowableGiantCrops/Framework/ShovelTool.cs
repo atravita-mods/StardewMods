@@ -347,53 +347,6 @@ public sealed class ShovelTool : GenericTool
         }
     }
 
-    private static void HandleTerrainObject(GameLocation location, Farmer who, Vector2 pickupTile, int energy, SObject @object)
-    {
-        who.Stamina -= energy;
-        GiveItemOrMakeDebris(location, who, @object);
-        AddAnimations(
-            loc: location,
-            tile: pickupTile,
-            texturePath: Game1.objectSpriteSheetName,
-            sourceRect: GameLocation.getSourceRectForObject(@object.ParentSheetIndex),
-            new Point(1, 1));
-        location.Objects.Remove(pickupTile);
-
-        if (location is MineShaft shaft && @object.Name == "Stone")
-        {
-            int stonesLeft = MineRockCountGetter.Value(shaft);
-            stonesLeft--;
-            ModEntry.ModMonitor.DebugOnlyLog($"{stonesLeft} stones left on floor {shaft.mineLevel}", LogLevel.Info);
-            if (stonesLeft <= 0 && !HasLadderSpawnedGetter.Value(shaft))
-            {
-                ModEntry.ModMonitor.DebugOnlyLog($"Last rock on {shaft.mineLevel}, creating ladder.", LogLevel.Info);
-                shaft.createLadderDown((int)pickupTile.X, (int)pickupTile.Y);
-            }
-            MineRockCountSetter.Value(shaft, stonesLeft);
-        }
-        return;
-    }
-
-    private static void HandleGrass(GameLocation location, Farmer who, Vector2 pickupTile, int energy, Grass grass)
-    {
-        who.Stamina -= energy;
-        SObject? starter = null;
-        if (SObjectPatches.IsMoreGrassGrass?.Invoke(grass) == true)
-        {
-            starter = SObjectPatches.InstantiateMoreGrassStarter?.Invoke(grass.grassType.Value);
-        }
-        starter ??= new(SObjectPatches.GrassStarterIndex, 1);
-        starter.modData?.SetInt(SObjectPatches.ModDataKey, grass.grassType.Value);
-        GiveItemOrMakeDebris(location, who, starter);
-        AddAnimations(
-            loc: location,
-            tile: pickupTile,
-            texturePath: Game1.objectSpriteSheetName,
-            sourceRect: GameLocation.getSourceRectForObject(SObjectPatches.GrassStarterIndex),
-            new Point(1, 1));
-        location.terrainFeatures.Remove(pickupTile);
-    }
-
     /// <inheritdoc />
     public override bool onRelease(GameLocation location, int x, int y, Farmer who) => false;
 
@@ -537,6 +490,47 @@ public sealed class ShovelTool : GenericTool
         {
             location.debris.Add(new Debris(item, who.Position));
         }
+    }
+
+    private static void HandleTerrainObject(GameLocation location, Farmer who, Vector2 pickupTile, int energy, SObject @object)
+    {
+        who.Stamina -= energy;
+        GiveItemOrMakeDebris(location, who, @object);
+        AddAnimations(
+            loc: location,
+            tile: pickupTile,
+            texturePath: Game1.objectSpriteSheetName,
+            sourceRect: GameLocation.getSourceRectForObject(@object.ParentSheetIndex),
+            new Point(1, 1));
+        location.Objects.Remove(pickupTile);
+
+        if (location is MineShaft shaft && @object.Name == "Stone")
+        {
+            int stonesLeft = MineRockCountGetter.Value(shaft);
+            stonesLeft--;
+            ModEntry.ModMonitor.DebugOnlyLog($"{stonesLeft} stones left on floor {shaft.mineLevel}", LogLevel.Info);
+            if (stonesLeft <= 0 && !HasLadderSpawnedGetter.Value(shaft))
+            {
+                ModEntry.ModMonitor.DebugOnlyLog($"Last rock on {shaft.mineLevel}, creating ladder.", LogLevel.Info);
+                shaft.createLadderDown((int)pickupTile.X, (int)pickupTile.Y);
+            }
+            MineRockCountSetter.Value(shaft, stonesLeft);
+        }
+        return;
+    }
+
+    private static void HandleGrass(GameLocation location, Farmer who, Vector2 pickupTile, int energy, Grass grass)
+    {
+        who.Stamina -= energy;
+        SObject starter = Api.GetMatchingStarter(grass);
+        GiveItemOrMakeDebris(location, who, starter);
+        AddAnimations(
+            loc: location,
+            tile: pickupTile,
+            texturePath: Game1.objectSpriteSheetName,
+            sourceRect: GameLocation.getSourceRectForObject(SObjectPatches.GrassStarterIndex),
+            new Point(1, 1));
+        location.terrainFeatures.Remove(pickupTile);
     }
 
     #endregion

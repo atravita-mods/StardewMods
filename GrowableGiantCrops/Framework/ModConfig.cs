@@ -119,6 +119,10 @@ public sealed class ModConfig
 
     private int maxFruitTreeStage = 3;
 
+    /// <summary>
+    /// Gets or sets the maximum state of a fruit tree that can be lifted by the shovel.
+    /// Matches the stages shown on the wiki.
+    /// </summary>
     [GMCMRange(0, 5)]
     [GMCMSection("Trees", 5)]
     public int MaxFruitTreeStage
@@ -139,6 +143,10 @@ public sealed class ModConfig
     /// Used internally, matches game fruit tree stages.
     /// </summary>
     internal int MaxFruitTreeStageInternal => this.maxFruitTreeStage;
+
+    // TODO - overwrite the palm trees to use Elizabeth's pretty graphics.
+    [GMCMSection("Trees", 5)]
+    public PalmTreeBehavior PalmTreeBehavior { get; set; } = PalmTreeBehavior.Seasonal;
 
     /// <summary>
     /// Gets or sets a value indicating whether or not animals should ignore placed grass.
@@ -169,4 +177,11 @@ public sealed class ModConfig
     /// </summary>
     [GMCMSection("Misc", 20)]
     public bool PreservePlacedWeeds { get; set; } = true;
+}
+
+public enum PalmTreeBehavior
+{
+    Default,
+    Seasonal,
+    Stump
 }

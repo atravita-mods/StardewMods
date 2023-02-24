@@ -1,14 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Reflection;
+using System.Reflection.Emit;
 
 using AtraBase.Toolkit.Reflection;
 using AtraCore.Framework.ReflectionManager;
 
 using AtraShared.Utils.Extensions;
-
+using AtraShared.Utils.HarmonyHelper;
 using GrowableGiantCrops.HarmonyPatches.GrassPatches;
 
 using HarmonyLib;
@@ -30,18 +27,29 @@ internal static class MoreGrassStartersCompat
     /// <param name="harmony">My harmony instance.</param>
     internal static void ApplyPatch(Harmony harmony)
     {
-        Type? buriedItem = AccessTools.TypeByName("MoreGrassStarters.GrassStarterItem");
-        if (buriedItem is null)
-        {
-            ModEntry.ModMonitor.Log($"MoreGrassStarter's GrassStarter item could not be found?.", LogLevel.Error);
-            return;
-        }
-
         try
         {
-            harmony.Patch(
-                original: buriedItem.GetCachedMethod("placementAction", ReflectionCache.FlagTypes.InstanceFlags),
-                prefix: new HarmonyMethod(typeof(MoreGrassStartersCompat).StaticMethodNamed(nameof(Postfix))));
+            if (AccessTools.TypeByName("MoreGrassStarters.GrassStarterItem") is Type grassStarter)
+            {
+                harmony.Patch(
+                    original: grassStarter.GetCachedMethod("placementAction", ReflectionCache.FlagTypes.InstanceFlags),
+                    prefix: new HarmonyMethod(typeof(MoreGrassStartersCompat).StaticMethodNamed(nameof(Postfix))));
+            }
+            else
+            {
+                ModEntry.ModMonitor.Log($"MoreGrassStarter's GrassStarter item could not be found?.", LogLevel.Error);
+            }
+
+            if (AccessTools.TypeByName("MoreGrassStarters.Mod") is Type moreGrassStarters)
+            {
+                harmony.Patch(
+                   original: moreGrassStarters.GetCachedMethod("OnDayStarted", ReflectionCache.FlagTypes.InstanceFlags),
+                   transpiler: new HarmonyMethod(typeof(MoreGrassStartersCompat).StaticMethodNamed(nameof(Transpiler))));
+            }
+            else
+            {
+                ModEntry.ModMonitor.Log($"MoreGrassStarter's modentry class could not be found?.", LogLevel.Error);
+            }
         }
         catch (Exception ex)
         {
@@ -59,7 +67,7 @@ internal static class MoreGrassStartersCompat
 
         try
         {
-            Vector2 tile = new Vector2(x / Game1.tileSize, y / Game1.tileSize);
+            Vector2 tile = new(x / Game1.tileSize, y / Game1.tileSize);
             if (location.terrainFeatures?.TryGetValue(tile, out TerrainFeature? terrain) == true
                 && terrain is Grass grass)
             {
@@ -70,5 +78,49 @@ internal static class MoreGrassStartersCompat
         {
             ModEntry.ModMonitor.Log($"Failed while trying to override health of MGS grass:\n\n{ex}", LogLevel.Error);
         }
+    }
+
+    private static bool ShouldSkipThisGrass(Grass? grass) => grass?.modData?.ContainsKey(SObjectPatches.ModDataKey) == true;
+
+    [SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1116:Split parameters should start on line after declaration", Justification = "Reviewed.")]
+    private static IEnumerable<CodeInstruction>? Transpiler(IEnumerable<CodeInstruction> instructions, ILGenerator gen, MethodBase original)
+    {
+        try
+        {
+            ILHelper helper = new(original, instructions, ModEntry.ModMonitor, gen);
+            helper.FindNext(new CodeInstructionWrapper[]
+            { // terrainFeature is Grass grass
+                SpecialCodeInstructionCases.LdLoc,
+                (OpCodes.Isinst, typeof(Grass)),
+                SpecialCodeInstructionCases.StLoc,
+                SpecialCodeInstructionCases.LdLoc,
+                OpCodes.Brfalse_S,
+            })
+            .Advance(3);
+
+            var ldloc = helper.CurrentInstruction.Clone();
+            helper.Push()
+            .Advance(1)
+            .StoreBranchDest()
+            .AdvanceToStoredLabel()
+            .DefineAndAttachLabel(out Label jumpPoint)
+            .Pop()
+            .GetLabels(out IList<Label>? labelsToMove)
+            .Insert(new CodeInstruction[]
+            {
+                ldloc,
+                new(OpCodes.Call, typeof(MoreGrassStartersCompat).GetCachedMethod(nameof(ShouldSkipThisGrass), ReflectionCache.FlagTypes.StaticFlags)),
+                new(OpCodes.Brtrue, jumpPoint),
+            }, withLabels: labelsToMove);
+
+            // helper.Print();
+            return helper.Render();
+        }
+        catch (Exception ex)
+        {
+            ModEntry.ModMonitor.Log($"Mod crashed while transpiling {original.FullDescription()}:\n\n{ex}", LogLevel.Error);
+            original.Snitch(ModEntry.ModMonitor);
+        }
+        return null;
     }
 }

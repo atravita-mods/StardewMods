@@ -1,4 +1,6 @@
-﻿using HarmonyLib;
+﻿using AtraShared.Utils.Extensions;
+
+using HarmonyLib;
 
 namespace GrowableGiantCrops.HarmonyPatches.GrassPatches;
 
@@ -26,7 +28,8 @@ internal static class ItemPatches
                 string? otherData = null;
                 _ = __instance.modData?.TryGetValue(SObjectPatches.ModDataKey, out myData);
                 _ = otherItem.modData?.TryGetValue(SObjectPatches.ModDataKey, out otherData);
-                if (myData != otherData)
+                if (myData != otherData
+                    || (myData is not null && ModEntry.Config.PreserveModData && !__instance.modData.ModDataMatches(otherItem.modData)))
                 {
                     __result = false;
                     return false;

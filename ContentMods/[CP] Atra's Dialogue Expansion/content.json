@@ -67,6 +67,15 @@
             "LogName": "Dialogue Changes: Randomized",
             "FromFile": "{{FirstValidFile: assets/{{language}}/{{DialogueRandom}}/toc.json, assets/default/{{DialogueRandom}}/toc.json}}",
             "When": {"Day|contains=0": false}
+        },
+        {
+            "Action": "EditData",
+            "LogName": "EventRepeater",
+            "Target": "Mods/EventRepeater/MailToRepeat",
+            "When": {"DayOfWeek" : "Monday"},
+            "Entries": {
+                "atravitaDialogueLeahBeach": "null",
+            }
         }
     ],
 }

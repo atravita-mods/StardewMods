@@ -9,7 +9,9 @@
             "5{{YearRemainder}}": "When I need inspiration, I take walks through the forest.#$b#I love living out here, so much inspiration so close to us.$h",
             "7{{YearRemainder}}": "I've got a little kitchen in my studio but honestly it's not much.#$b#There's so much fresh food to be found in the forest though! I love fresh salads.",
             "9": "I moved here just before you did. Needed to get away from the big city...",
-            "9_2": "My, @, we've been living in this town for quite a while, right?" // the earliest this can show up is year 6
+            "9_2": "My, @, we've been living in this town for quite a while, right?", // the earliest this can show up is year 6
+
+            "Beach_72_18": "$1 atravitaDialogueLeahBeach#Oh, hi, @, how are you doing today? I found this mussel, isn't the iridescence beautiful?[719]#$e#Nature is so inspiring, isn't it? I love coming out here to paint."
         },
         "When": {"YearModulus": 1}
     },

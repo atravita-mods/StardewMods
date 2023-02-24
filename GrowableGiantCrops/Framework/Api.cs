@@ -2,6 +2,7 @@
 
 using GrowableGiantCrops.Framework.Assets;
 using GrowableGiantCrops.Framework.InventoryModels;
+using GrowableGiantCrops.HarmonyPatches.GrassPatches;
 
 using Microsoft.Xna.Framework;
 
@@ -574,6 +575,55 @@ public sealed class Api : IGrowableGiantCropsAPI
         }
 
         return null;
+    }
+
+    #endregion
+
+    #region grass
+
+    /// <inheritdoc />
+    public Grass? GetMatchingGrass(SObject starter)
+    {
+        if (starter.ParentSheetIndex != SObjectPatches.GrassStarterIndex)
+        {
+            return null;
+        }
+
+        if (SObjectPatches.IsMoreGrassStarter?.Invoke(starter) == true
+            && SObjectPatches.GetMoreGrassStarterIndex?.Invoke(starter) is int moreGrassIdx)
+        {
+            return SObjectPatches.InstantiateMoreGrassGrass?.Invoke(moreGrassIdx);
+        }
+
+        if (starter.modData?.GetInt(SObjectPatches.ModDataKey) is not int idx)
+        {
+            return new Grass(Grass.springGrass, 4);
+        }
+
+        Grass grass = new(idx, 1);
+        grass.modData.SetBool(SObjectPatches.ModDataKey, true);
+
+        if (ModEntry.Config.PreserveModData)
+        {
+            grass.modData?.CopyModDataFrom(starter.modData);
+        }
+        return grass;
+    }
+
+    public SObject GetMatchingStarter(Grass grass)
+    {
+        SObject? starter = null;
+        if (SObjectPatches.IsMoreGrassGrass?.Invoke(grass) == true)
+        {
+            starter = SObjectPatches.InstantiateMoreGrassStarter?.Invoke(grass.grassType.Value);
+        }
+        starter ??= new(SObjectPatches.GrassStarterIndex, 1);
+        if (ModEntry.Config.PreserveModData)
+        {
+            starter.modData?.CopyModDataFrom(grass.modData);
+        }
+        starter.modData?.SetInt(SObjectPatches.ModDataKey, grass.grassType.Value);
+        return starter;
     }
 
     #endregion

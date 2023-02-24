@@ -25,7 +25,8 @@
         "Entries": {
             "ScienceHouse_22_20": "I've got so much data I need to analyze.$s",
             "fallScienceHouse_22_20": "I'd love to talk, @, but I have a grant submission coming up that I need to work on.",
-            "fallMountain_45_8": "We're lucky to have so much old growth forest around here.#$b#It takes decades for a forest to develop properly."
+            "fallMountain_45_8": "We're lucky to have so much old growth forest around here.#$b#It takes decades for a forest to develop properly.",
+            "summer_2{{YearRemainder}}": "I better not forget our anniversary this year, Robin will really hate it if I forget again."
         },
         "When": { "YearModulus": "1" }
     },
@@ -43,10 +44,20 @@
         "When": { "YearModulus": "2" }
     },
     {
+        "LogName": "Demetrius mid-hearts, Y2, mushrooms",
+        "Action": "EditData",
+        "Target": "Characters/Dialogue/Demetrius",
+        "Entries": {
+            "7_2": "There's nothing like a nice ripe, juicy peach in the summer, right?%revealtasteRobin636#$b#Robin and I used to go down to the local farmers market and buy them by the box, back when we lived in the city.#$e#Here, I've got an extra, do you want it?[636]",
+        },
+        "When": { "YearModulus": "2", "FarmCave": "Mushrooms"}
+    },
+    {
         "LogName": "Demetrius mid-hearts, Y3",
         "Action": "EditData",
         "Target": "Characters/Dialogue/Demetrius",
         "Entries": {
+            "fall_1_2": "Now that it's fall, I think I'll try growing some pumpkins for Robin again.%revealtasteRobin276#$b#They're her favorite vegetable. Here, I have a few extra seeds, want them? [490]#$e#Tried growing them a few years ago, I'm not the best gardener. Think I overwatered them.",
             "6_2": "Did you see that paper by the %name group out of %place University? Amazing, isn't it?$h",
             "16_2": "Sometimes I wonder what I could have done to be more successful in my career...$s",
             "18_2": "Between you and I, @, writing proposals is the worst part of my job.",

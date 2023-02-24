@@ -82,6 +82,7 @@ A note on bushes: this mod doesn't deal with bushes, but if you have Growable Bu
 
 ## Much thanks to
 * [VoidWitchCult](https://www.nexusmods.com/stardewvalley/users/163267158) for providing me with graphics for Robin's shop! Check out [their goth bachelors/bachelorettes](https://www.nexusmods.com/stardewvalley/mods/15335)!
+* [Violetlizabet](https://www.nexusmods.com/stardewvalley/users/120958053) for the winter palm trees!
 
 ## See also
 

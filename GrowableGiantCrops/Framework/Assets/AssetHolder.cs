@@ -5,7 +5,7 @@ namespace GrowableGiantCrops.Framework.Assets;
 /// <summary>
 /// Holds a single texture asset.
 /// </summary>
-internal class AssetHolder
+internal sealed class AssetHolder
 {
     private readonly IAssetName? assetName;
     private Texture2D texture;

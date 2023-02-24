@@ -565,9 +565,35 @@ public sealed class InventoryTree : SObject
                 assetPath = @"TerrainFeatures\mushroom_tree";
                 break;
             case Tree.palmTree:
+                if (ModEntry.Config.PalmTreeBehavior is PalmTreeBehavior.Seasonal)
+                {
+                    if (season == "fall")
+                    {
+                        assetPath = AssetManager.FallPalm.BaseName;
+                        break;
+                    }
+                    if (season == "winter")
+                    {
+                        assetPath = AssetManager.WinterPalm.BaseName;
+                        break;
+                    }
+                }
                 assetPath = @"TerrainFeatures\tree_palm";
                 break;
             case Tree.palmTree2:
+                if (ModEntry.Config.PalmTreeBehavior is PalmTreeBehavior.Seasonal)
+                {
+                    if (season == "fall")
+                    {
+                        assetPath = AssetManager.FallBigPalm.BaseName;
+                        break;
+                    }
+                    if (season == "winter")
+                    {
+                        assetPath = AssetManager.WinterBigPalm.BaseName;
+                        break;
+                    }
+                }
                 assetPath = @"TerrainFeatures\tree_palm2";
                 break;
             case Tree.pineTree:

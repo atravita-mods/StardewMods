@@ -412,7 +412,7 @@ public sealed class Api : IGrowableGiantCropsAPI
     {
         if (TreeIndexesExtensions.IsDefined(idx))
         {
-            return isStump && growthStage < Tree.treeStage ? null : new InventoryTree(idx, initialStack, growthStage, isStump);
+            return new InventoryTree(idx, initialStack, growthStage, growthStage == Tree.treeStage && isStump);
         }
         return null;
     }
@@ -610,6 +610,7 @@ public sealed class Api : IGrowableGiantCropsAPI
         return grass;
     }
 
+    /// <inheritdoc />
     public SObject GetMatchingStarter(Grass grass)
     {
         SObject? starter = null;

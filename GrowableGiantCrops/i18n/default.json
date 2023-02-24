@@ -58,6 +58,13 @@
   "LargeItems.description": "These options pertain to the giant crop, the resource clumps, and both kinds of trees.",
   "Trees.title": "Tree-related options:",
   "Trees.description": "These options pertain to fruit trees and wild trees",
+  "PalmTreeBehavior.title": "Palm Tree Behavior",
+  "PalmTreeBehavior.description": "Adjusts the behavior of the palm trees. Seasonal - they will use seasonal textures bundled in this mod. Stump - they will behave like mushroom trees and become stumps in winter. Default - they will do neither",
+
+  "config.PalmTreeBehavior.Default": "Default",
+  "config.PalmTreeBehavior.Seasonal": "Seasonal",
+  "config.PalmTreeBehavior.Stump": "Stump",
+
 
   // Stores
   "ShopMessage.Robin": "Whatcha lookin' for? Anything catch your eye?",

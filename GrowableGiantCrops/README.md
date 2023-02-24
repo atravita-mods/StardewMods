@@ -37,6 +37,7 @@ Run SMAPI at least once with this mod installed to generate the `config.json`, o
 * `AllowLargeItemStacking`: Controls whether or not the inventory versions of large items stack.
 * `PlacedTreesSpread`: Controls whether or not trees placed on farm can spread.
 * `MaxTreeStage` and `MaxFruitTreeStage` define the largest trees the shovel can pick up, where the stage numbers match the ones on the wiki: [fruit trees](https://stardewvalleywiki.com/Fruit_Trees), [normal trees](https://stardewvalleywiki.com/Trees#Growth_Cycle).
+* `PalmTreeBehavior`: What palm trees should behave like, outside the desert. `Default` is desert-like behavior. `Stump` is mushroom-tree like behavior. And `Seasonal` makes palm trees use seasonal skins.
 
 #### Grass options
 * `ShouldAnimalsEatPlacedGrass`: If disabled, animals will skip over and avoid eating grass placed by this mod. (Animals will never eat cobwebs.)

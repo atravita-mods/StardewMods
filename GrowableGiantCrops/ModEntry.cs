@@ -193,28 +193,14 @@ internal sealed class ModEntry : Mod
             return;
         }
 
-        foreach (var item in e.Added)
+        foreach (Item item in e.Added)
         {
-            if (item is InventoryFruitTree fruitTree)
-            {
-                fruitTree.Reset();
-            }
-            else if (item is InventoryTree tree)
-            {
-                tree.Reset();
-            }
+            GGCUtils.ResetGraphics(item);
         }
 
-        foreach (var item in e.Removed)
+        foreach (Item item in e.Removed)
         {
-            if (item is InventoryFruitTree fruitTree)
-            {
-                fruitTree.Reset();
-            }
-            else if (item is InventoryTree tree)
-            {
-                tree.Reset();
-            }
+            GGCUtils.ResetGraphics(item);
         }
     }
 
@@ -225,16 +211,9 @@ internal sealed class ModEntry : Mod
             return;
         }
 
-        foreach (var item in e.Player.Items)
+        foreach (Item? item in e.Player.Items)
         {
-            if (item is InventoryFruitTree fruitTree)
-            {
-                fruitTree.Reset();
-            }
-            else if (item is InventoryTree tree)
-            {
-                tree.Reset();
-            }
+            GGCUtils.ResetGraphics(item);
         }
     }
 

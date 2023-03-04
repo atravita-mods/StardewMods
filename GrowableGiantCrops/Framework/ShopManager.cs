@@ -99,6 +99,8 @@ internal static class ShopManager
         nodes = nodesList.ToArray();
     }
 
+    #region events
+
     /// <inheritdoc cref="IContentEvents.AssetsInvalidated"/>
     internal static void OnAssetInvalidated(IReadOnlySet<IAssetName>? assets)
     {
@@ -256,18 +258,23 @@ internal static class ShopManager
         Reset();
 
         // add Robin letter for tomorrow.
-        if (!HaveSentAllRobinMail.Value
-            && Game1.player.getFriendshipLevelForNPC("Robin") > 250
-            && Game1.player.mailReceived.Contains("robinKitchenLetter"))
+        if (!HaveSentAllRobinMail.Value)
         {
-            if (Game1.player.mailReceived.Contains(RESOURCE_SHOP_NAME))
+            if (Game1.player.mailReceived.Contains(ROBIN_MAIL_TWO))
             {
-                Game1.addMailForTomorrow(mailName: RESOURCE_SHOP_NAME);
-            }
-            else if (Game1.player.hasSkullKey && !Game1.player.mailReceived.Contains(ROBIN_MAIL_TWO))
-            {
-                Game1.addMailForTomorrow(mailName: ROBIN_MAIL_TWO);
                 HaveSentAllRobinMail.Value = true;
+            }
+            else if (Game1.player.getFriendshipLevelForNPC("Robin") > 250 && Game1.player.mailReceived.Contains("robinKitchenLetter"))
+            {
+                if (!Game1.player.mailReceived.Contains(RESOURCE_SHOP_NAME))
+                {
+                    Game1.addMailForTomorrow(mailName: RESOURCE_SHOP_NAME);
+                }
+                else if (Game1.player.hasSkullKey && !Game1.player.mailReceived.Contains(ROBIN_MAIL_TWO))
+                {
+                    Game1.addMailForTomorrow(mailName: ROBIN_MAIL_TWO);
+                    HaveSentAllRobinMail.Value = true;
+                }
             }
         }
 
@@ -277,6 +284,8 @@ internal static class ShopManager
             Game1.addMailForTomorrow(mailName: GIANT_CROP_SHOP_NAME);
         }
     }
+
+    #endregion
 
     private static bool TrackStock(ISalable salable, Farmer farmer, int count)
     {
@@ -307,6 +316,8 @@ internal static class ShopManager
         }
         return false; // do not want to yeet the menu.
     }
+
+    #region stock
 
     private static void PopulateSellablesWithResourceClumps(this Dictionary<ISalable, int[]> sellables)
     {
@@ -384,7 +395,7 @@ internal static class ShopManager
         }
         else
         {
-            Stock.Value ??= GenerateDailyStock();
+            Stock.Value ??= GenerateGiantCropStock();
             if (Stock.Value is not null)
             {
                 foreach ((int index, int count) in Stock.Value)
@@ -424,6 +435,19 @@ internal static class ShopManager
         }
     }
 
+    private static Dictionary<int, int>? GenerateNodeShop()
+    {
+        Dictionary<int, int> chosen = new(4);
+        ShuffledYielder<int> shuffler = new(nodes);
+        int total = 4;
+        while (shuffler.MoveNext() && total-- > 0)
+        {
+            chosen[shuffler.Current] = 10;
+        }
+        ModEntry.ModMonitor.DebugOnlyLog($"Got {chosen.Count} node entries for shop.", LogLevel.Info);
+        return chosen.Count > 0 ? chosen : null;
+    }
+
     private static WeightedManager<int> GetWeightedManager()
     {
         WeightedManager<int> manager = new();
@@ -440,20 +464,7 @@ internal static class ShopManager
         return manager;
     }
 
-    private static Dictionary<int, int>? GenerateNodeShop()
-    {
-        Dictionary<int, int> chosen = new(4);
-        ShuffledYielder<int> shuffler = new(nodes);
-        int total = 4;
-        while (shuffler.MoveNext() && total-- > 0)
-        {
-            chosen[shuffler.Current] = 10;
-        }
-        ModEntry.ModMonitor.DebugOnlyLog($"Got {chosen.Count} node entries for shop.", LogLevel.Info);
-        return chosen.Count > 0 ? chosen : null;
-    }
-
-    private static Dictionary<int, int>? GenerateDailyStock()
+    private static Dictionary<int, int>? GenerateGiantCropStock()
     {
         weighted ??= GetWeightedManager();
         if (weighted.Count == 0)
@@ -494,4 +505,6 @@ internal static class ShopManager
         => Game1Wrappers.ObjectInfo.TryGetValue(idx, out string? info)
             ? info.GetNthChunk('/').Equals("Stone", StringComparison.OrdinalIgnoreCase) ? 2_750 : 1_000
             : null;
+
+    #endregion
 }

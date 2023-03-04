@@ -2,7 +2,7 @@ Growable Giant Crops (Shovel Mod)
 ===========================
 ![Header image](docs/showcase.gif)
 
-Lets you pick up and put down a lot of things. With a shovel. Also lets you buy certain things from either Robin or the Witch.
+Lets you pick up and put down a lot of things. With a shovel you can buy from the Witch's hut. Also lets you buy certain things from either Robin or the Witch.
 
 ## Install
 
@@ -36,7 +36,7 @@ Run SMAPI at least once with this mod installed to generate the `config.json`, o
 * `PreserveModData`: mod data is basically something mods can use to put small amounts of data on individual instances of something. If this is enabled, mod data will be copied from the world version of something to the inventory version. This will mean that the inventory versions will stack less nicely, but data added by other mods will persist. For an example: More Fertilizers uses mod data for non-crop fertilizers, so disabling this will remove any fruit tree fertilizer.
 * `AllowLargeItemStacking`: Controls whether or not the inventory versions of large items stack.
 * `PlacedTreesSpread`: Controls whether or not trees placed on farm can spread.
-* `MaxTreeStage` and `MaxFruitTreeStage` define the largest trees the shovel can pick up, where the stage numbers match the ones on the wiki: [fruit trees](https://stardewvalleywiki.com/Fruit_Trees), [normal trees](https://stardewvalleywiki.com/Trees#Growth_Cycle).
+* `MaxTreeStage` and `MaxFruitTreeStage` define the largest trees the shovel can pick up, where the stage numbers match the ones on the wiki: [fruit trees](https://stardewvalleywiki.com/Fruit_Trees), [normal trees](https://stardewvalleywiki.com/Trees#Growth_Cycle). Set to 0 to prevent.
 * `PalmTreeBehavior`: What palm trees should behave like, outside the desert. `Default` is desert-like behavior. `Stump` is mushroom-tree like behavior. And `Seasonal` makes palm trees use seasonal skins.
 
 #### Grass options
@@ -70,6 +70,18 @@ A note on bushes: this mod doesn't deal with bushes, but if you have Growable Bu
 * You should be able to target everything, after placement, with [Alternative Textures](https://www.nexusmods.com/stardewvalley/mods/9246).
 * If you use giant crops or resource clumps to block of NPC pathing, it'll definitely break things. Don't do that.
 * **A performance note**: The game is NOT optimized for having a lot of resource clumps everywhere. If you place many giant crops or resource clumps on a map where there are also a lot of NPCs/monsters trying to path, expect slowdown.
+
+## Console commands
+These were primarily used for debugging but exist if you want to spawn things directly in your inventory.
+
+* `av.ggc.add_shovel` adds the shovel to your inventory
+* `av.ggc.add_giant <identifier> [count] [GiantCropTweaksId]` as an inventory giant crop to your inventory, where the identifier is either the int ID or the name of the product, count is the stack count (optional, defaults to 1), and GiantCropTweaksId will use the GiantCropTweaks version if that is specified and it's valid. For example:
+    - `av.ggc.add_giant Melon` to add a giant melon to your inventory. Note that identifiers are case sensitive.
+* `av.ggc.add_resource <identifier> [count]` to add a resource clump to your inventory.
+* `av.ggc.add_grass <identifier> [count]` to add grass starters to your inventory.
+* `av.ggc.add_tree <identifier> [count] [stage]` to add inventory tree items to your inventory, where stage is the internal stage (ie 3 for `Tree.bushStage`)
+* `av.ggc.add_fruittree <identifier> [count] [stage]` to add inventory fruit trees to your inventory, where identifier is the sapling and stage is the internal stage.
+    - `av.ggc.add_sapling "Apple Sapling" 1 3` (note the quote marks because Apple Sapling has a space in it) to spawn a stage-3 apple sapling in your inventory.
 
 ## Compatibility
 

@@ -42,15 +42,15 @@ internal static class GGCUtils
         {
             return true;
         }
-        return location.IsGreenhouse || location.map?.Properties?.ContainsKey("ForceAllowTreePlanting") == true || location is Farm or IslandWest;
+        return location is Farm or IslandWest || location.IsGreenhouse || location.map?.Properties?.ContainsKey("ForceAllowTreePlanting") == true;
     }
 
     /// <summary>
     /// Gets the large object <see cref="LargeTerrainFeature"/> or <see cref="ResourceClump"/> at a specific location.
     /// </summary>
     /// <param name="loc">Location to check.</param>
-    /// <param name="nonTileX">X coord.</param>
-    /// <param name="nonTileY">Y coord.</param>
+    /// <param name="nonTileX">X coordinate.</param>
+    /// <param name="nonTileY">Y coordinate.</param>
     /// <param name="placedOnly">Whether or not to only include what the player has placed.</param>
     /// <returns>The feature, or null for not found.</returns>
     internal static TerrainFeature? GetLargeObjectAtLocation(this GameLocation loc, int nonTileX, int nonTileY, bool placedOnly = false)
@@ -110,8 +110,8 @@ internal static class GGCUtils
     /// Gets the large object <see cref="LargeTerrainFeature"/> or <see cref="ResourceClump"/> at a specific location, and removes it.
     /// </summary>
     /// <param name="loc">Location to check.</param>
-    /// <param name="nonTileX">X coord.</param>
-    /// <param name="nonTileY">Y coord.</param>
+    /// <param name="nonTileX">X coordinate.</param>
+    /// <param name="nonTileY">Y coordinate.</param>
     /// <param name="placedOnly">Whether or not to only include what the player has placed.</param>
     /// <returns>The feature, or null for not found.</returns>
     internal static TerrainFeature? RemoveLargeObjectAtLocation(this GameLocation loc, int nonTileX, int nonTileY, bool placedOnly = false)
@@ -277,6 +277,7 @@ internal static class GGCUtils
     /// <param name="tileX">X tile.</param>
     /// <param name="tileY">Y tile.</param>
     /// <returns>True if there's a tree of any type, false otherwise.</returns>
+    [MethodImpl(TKConstants.Hot)]
     internal static bool HasTreeInRadiusTwo(this GameLocation? loc, int tileX, int tileY)
     {
         if (loc?.terrainFeatures is null)
@@ -296,5 +297,23 @@ internal static class GGCUtils
             }
         }
         return false;
+    }
+
+    /// <summary>
+    /// If called on an Inventory item, causes it to reset its graphics.
+    /// </summary>
+    /// <param name="item">Item to reset.</param>
+    [MethodImpl(MethodImplOptions.AggressiveOptimization)]
+    internal static void ResetGraphics(Item item)
+    {
+        switch (item)
+        {
+            case InventoryFruitTree fruitTree:
+                fruitTree.Reset();
+                break;
+            case InventoryTree tree:
+                tree.Reset();
+                break;
+        }
     }
 }

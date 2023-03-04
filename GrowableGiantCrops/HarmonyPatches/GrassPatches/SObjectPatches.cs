@@ -35,8 +35,6 @@ namespace GrowableGiantCrops.HarmonyPatches.GrassPatches;
 [SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1623:Property summary documentation should match accessors", Justification = "Reviewed.")]
 internal static class SObjectPatches
 {
-    private static Api Api = new();
-
     /// <summary>
     /// A mod data key used to mark custom grass types.
     /// </summary>
@@ -46,6 +44,8 @@ internal static class SObjectPatches
     /// The ParentSheetIndex of a grass starter.
     /// </summary>
     internal const int GrassStarterIndex = 297;
+
+    private static readonly Api Api = new();
 
     #region delegates
 

@@ -203,8 +203,8 @@ public sealed class ShovelTool : GenericTool
                         if (@object.readyForHarvest.Value)
                         {
                             location.debris.Add(new Debris(@object.heldObject.Value, who.Position));
-                            @object.heldObject.Value = null;
                         }
+                        @object.heldObject.Value = null;
                         @object.performRemoveAction(pickupTile, location);
                         GiveItemOrMakeDebris(location, who, @object);
                         AddAnimations(
@@ -227,6 +227,26 @@ public sealed class ShovelTool : GenericTool
                             tile: pickupTile - Vector2.UnitY,
                             texturePath: Game1.bigCraftableSpriteSheetName,
                             sourceRect: SObject.getSourceRectForBigCraftable(56),
+                            new Point(1, 2));
+                        location.objects.Remove(pickupTile);
+                        return;
+                    }
+                    else if (@object.Name == "Slime Incubator")
+                    {
+                        who.Stamina -= energy;
+                        @object.ParentSheetIndex = 156;
+                        if (@object.MinutesUntilReady <= 0)
+                        {
+                            location.debris.Add(new Debris(@object.heldObject.Value, who.Position));
+                        }
+                        @object.heldObject.Value = null;
+                        @object.performRemoveAction(pickupTile, location);
+                        GiveItemOrMakeDebris(location, who, @object);
+                        AddAnimations(
+                            loc: location,
+                            tile: pickupTile - Vector2.UnitY,
+                            texturePath: Game1.bigCraftableSpriteSheetName,
+                            sourceRect: SObject.getSourceRectForBigCraftable(156),
                             new Point(1, 2));
                         location.objects.Remove(pickupTile);
                         return;

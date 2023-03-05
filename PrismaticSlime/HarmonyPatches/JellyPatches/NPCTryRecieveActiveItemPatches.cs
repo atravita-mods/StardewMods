@@ -1,6 +1,7 @@
 ﻿using AtraCore.Framework.DialogueManagement;
 
 using AtraShared.ConstantsAndEnums;
+using AtraShared.Utils.Extensions;
 
 using HarmonyLib;
 
@@ -49,6 +50,16 @@ internal static class NPCTryRecieveActiveItemPatches
                             },
                         };
                         __instance.CurrentDialogue.Push(item);
+                        break;
+                    }
+                    case "Emily":
+                    {
+                        if (Game1.player.modData?.GetInt(DyePotPatches.ModData) is > 0)
+                        {
+                            goto default;
+                        }
+                        __instance.CurrentDialogue.Push(new(I18n.PrismaticJelly_Emily(), __instance));
+                        Game1.player.modData?.SetInt(DyePotPatches.ModData, 10);
                         break;
                     }
                     default:

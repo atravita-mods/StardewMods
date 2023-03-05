@@ -32,15 +32,16 @@ internal static class AssetEditor
     private static readonly PerScreen<TickCache<bool>> HasSeenPamEvent = new(
         static () => new(() => Game1.player?.eventsSeen?.Contains(PAMEVENT) == true));
 
-    private static readonly string Dialogue = PathUtilities.NormalizeAssetName("Characters/Dialogue");
+    private static readonly string Dialogue = PathUtilities.NormalizeAssetName("Characters/Dialogue") + "/";
 
-    // The following dialogue is edited from the code side so each NPC has at least the Resort dialogue.
-    // A CP pack will override as these are set to edit early.
-    private static IAssetName georgeDialogueLocation = null!;
-    private static IAssetName evelynDialogueLocation = null!;
-    private static IAssetName sandyDialogueLocation = null!;
-    private static IAssetName willyDialogueLocation = null!;
-    private static IAssetName wizardDialogueLocation = null!;
+    private static Dictionary<string, Action<IAssetData>> dialoguesToEdit = new(comparer: StringComparer.OrdinalIgnoreCase)
+    {
+        ["George"] = EditGeorgeDialogue,
+        ["Evelyn"] = EditEvelynDialogue,
+        ["Sandy"] = EditSandyDialogue,
+        ["Willy"] = EditWillyDialogue,
+        ["Wizard"] = EditWizardDialogue,
+    };
 
     // We edit Pam's phone dialogue into Strings/Characters so content packs can target that.
     private static IAssetName phoneStringLocation = null!;
@@ -62,13 +63,6 @@ internal static class AssetEditor
     /// <param name="parser">GameContentHelper.</param>
     internal static void Initialize(IGameContentHelper parser)
     {
-        // dialogue
-        georgeDialogueLocation = parser.ParseAssetName("Characters/Dialogue/George");
-        evelynDialogueLocation = parser.ParseAssetName("Characters/Dialogue/Evelyn");
-        sandyDialogueLocation = parser.ParseAssetName("Characters/Dialogue/Sandy");
-        willyDialogueLocation = parser.ParseAssetName("Characters/Dialogue/Willy");
-        wizardDialogueLocation = parser.ParseAssetName("Characters/Dialogue/Wizard");
-
         // phone
         phoneStringLocation = parser.ParseAssetName("Strings/Characters");
 
@@ -94,13 +88,13 @@ internal static class AssetEditor
         {
             e.Edit(EditPhone, AssetEditPriority.Early);
         }
-        else if (HasSeenNineHeart.Value.GetValue() && !HasSeenPamEvent.Value.GetValue() && e.NameWithoutLocale.IsEquivalentTo(dataEventsSeedshop))
-        {
-            e.Edit(EditSeedShopEvent, AssetEditPriority.Late);
-        }
         else if (e.NameWithoutLocale.IsEquivalentTo(dataMail))
         {
             e.Edit(EditMail, AssetEditPriority.Late);
+        }
+        else if (HasSeenNineHeart.Value.GetValue() && !HasSeenPamEvent.Value.GetValue() && e.NameWithoutLocale.IsEquivalentTo(dataEventsSeedshop))
+        {
+            e.Edit(EditSeedShopEvent, AssetEditPriority.Late);
         }
         else if (!HasSeenNineHeart.Value.GetValue() && e.NameWithoutLocale.IsEquivalentTo(dataEventsTrailerBig))
         {
@@ -110,28 +104,13 @@ internal static class AssetEditor
         {
             e.Edit(CheckSpringSchedule, AssetEditPriority.Late + 100);
         }
-        else if (e.NameWithoutLocale.BaseName.StartsWith(Dialogue)
+        else if (e.NameWithoutLocale.StartsWith(Dialogue, false, false)
             && Game1.getLocationFromName("IslandSouth") is IslandSouth island && island.resortRestored.Value)
         {
-            if (e.NameWithoutLocale.IsEquivalentTo(georgeDialogueLocation))
+            string npcName = e.NameWithoutLocale.BaseName.GetNthChunk('/', 2).ToString();
+            if (dialoguesToEdit.TryGetValue(npcName, out Action<IAssetData>? editor))
             {
-                e.Edit(EditGeorgeDialogue, AssetEditPriority.Early);
-            }
-            else if (e.NameWithoutLocale.IsEquivalentTo(evelynDialogueLocation))
-            {
-                e.Edit(EditEvelynDialogue, AssetEditPriority.Early);
-            }
-            else if (e.NameWithoutLocale.IsEquivalentTo(sandyDialogueLocation))
-            {
-                e.Edit(EditSandyDialogue, AssetEditPriority.Early);
-            }
-            else if (e.NameWithoutLocale.IsEquivalentTo(willyDialogueLocation))
-            {
-                e.Edit(EditWillyDialogue, AssetEditPriority.Early);
-            }
-            else if (e.NameWithoutLocale.IsEquivalentTo(wizardDialogueLocation))
-            {
-                e.Edit(EditWizardDialogue, AssetEditPriority.Early);
+                e.Edit(editor, AssetEditPriority.Early);
             }
         }
     }

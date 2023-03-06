@@ -2,6 +2,8 @@
 
 using Microsoft.Xna.Framework;
 
+using NetEscapades.EnumGenerators;
+
 namespace GrowableGiantCrops.Framework;
 
 /// <summary>
@@ -144,7 +146,9 @@ public sealed class ModConfig
     /// </summary>
     internal int MaxFruitTreeStageInternal => this.maxFruitTreeStage;
 
-    // TODO - overwrite the palm trees to use Elizabeth's pretty graphics.
+    /// <summary>
+    /// Gets or sets a value indicating how palm trees should behave.
+    /// </summary>
     [GMCMSection("Trees", 5)]
     public PalmTreeBehavior PalmTreeBehavior { get; set; } = PalmTreeBehavior.Seasonal;
 
@@ -179,9 +183,30 @@ public sealed class ModConfig
     public bool PreservePlacedWeeds { get; set; } = true;
 }
 
+/// <summary>
+/// An enum indicating how palm trees should behave.
+/// </summary>
+[Flags]
+[EnumExtensions]
 public enum PalmTreeBehavior
 {
-    Default,
-    Seasonal,
-    Stump
+    /// <summary>
+    /// Follows normal game logic (no changes).
+    /// </summary>
+    Default = 0,
+
+    /// <summary>
+    /// Uses seasonal textures in fall and winter.
+    /// </summary>
+    Seasonal = 1,
+
+    /// <summary>
+    /// Turns into a stump in winter, and back again in spring.
+    /// </summary>
+    Stump = 1 << 1,
+
+    /// <summary>
+    /// Uses both behaviors.
+    /// </summary>
+    Both = Stump | Seasonal,
 }

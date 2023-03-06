@@ -61,6 +61,8 @@ internal sealed class ModEntry : Mod
         helper.Events.GameLoop.TimeChanged += this.OnTimeChanged;
         helper.Events.GameLoop.ReturnedToTitle += this.OnReturnedToTitle;
 
+        helper.Events.Player.Warped += this.Player_Warped;
+
 #if DEBUG
         if (!helper.ModRegistry.IsLoaded("DigitalCarbide.SpriteMaster"))
         {
@@ -107,6 +109,21 @@ internal sealed class ModEntry : Mod
     {
         QueuedDialogueManager.PushPossibleDelayedDialogues();
         PlayerAlertHandler.DisplayFromQueue();
+    }
+
+    /// <inheritdoc cref="IPlayerEvents.Warped"/>
+    private void Player_Warped(object? sender, WarpedEventArgs e)
+    {
+        if (!e.IsLocalPlayer || !PlayerAlertHandler.HasMessages())
+        {
+            return;
+        }
+
+        int count = 5 - Game1.hudMessages.Count;
+        if (count > 0)
+        {
+            PlayerAlertHandler.DisplayFromQueue(count);
+        }
     }
 
     /// <inheritdoc cref="IGameLoopEvents.DayEnding"/>

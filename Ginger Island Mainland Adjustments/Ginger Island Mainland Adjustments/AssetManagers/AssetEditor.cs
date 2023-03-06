@@ -32,9 +32,9 @@ internal static class AssetEditor
     private static readonly PerScreen<TickCache<bool>> HasSeenPamEvent = new(
         static () => new(() => Game1.player?.eventsSeen?.Contains(PAMEVENT) == true));
 
-    private static readonly string Dialogue = PathUtilities.NormalizeAssetName("Characters/Dialogue") + "/";
+    internal static readonly string Dialogue = PathUtilities.NormalizeAssetName("Characters/Dialogue") + "/";
 
-    private static Dictionary<string, Action<IAssetData>> dialoguesToEdit = new(comparer: StringComparer.OrdinalIgnoreCase)
+    private static readonly Dictionary<string, Action<IAssetData>> DialoguesToEdit = new(comparer: StringComparer.OrdinalIgnoreCase)
     {
         ["George"] = EditGeorgeDialogue,
         ["Evelyn"] = EditEvelynDialogue,
@@ -42,6 +42,8 @@ internal static class AssetEditor
         ["Willy"] = EditWillyDialogue,
         ["Wizard"] = EditWizardDialogue,
     };
+
+    internal static IEnumerable<string> CharacterDialogues => DialoguesToEdit.Keys;
 
     // We edit Pam's phone dialogue into Strings/Characters so content packs can target that.
     private static IAssetName phoneStringLocation = null!;
@@ -108,7 +110,7 @@ internal static class AssetEditor
             && Game1.getLocationFromName("IslandSouth") is IslandSouth island && island.resortRestored.Value)
         {
             string npcName = e.NameWithoutLocale.BaseName.GetNthChunk('/', 2).ToString();
-            if (dialoguesToEdit.TryGetValue(npcName, out Action<IAssetData>? editor))
+            if (DialoguesToEdit.TryGetValue(npcName, out Action<IAssetData>? editor))
             {
                 e.Edit(editor, AssetEditPriority.Early);
             }

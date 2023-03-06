@@ -64,7 +64,7 @@
   "config.PalmTreeBehavior.Default": "Default",
   "config.PalmTreeBehavior.Seasonal": "Seasonal",
   "config.PalmTreeBehavior.Stump": "Stump",
-
+  "config.PalmTreeBehavior.Both": "Both",
 
   // Stores
   "ShopMessage.Robin": "Whatcha lookin' for? Anything catch your eye?",

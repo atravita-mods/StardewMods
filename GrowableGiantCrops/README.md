@@ -12,7 +12,7 @@ Lets you pick up and put down a lot of things. With a shovel you can buy from th
 3. Run the game using SMAPI.
 
 ## Uninstall
-Remove any large inventory items you have in your inventory, and then delete from your Mods directory.
+Remove any large inventory items you have in your inventory or any storage, and then delete from your Mods directory.
 
 A special note for SolidFoundations: **absolutely** make sure to remove every instance of the inventory version of fruit trees, trees, giant crops, and resource clumps from Solid Foundations buildings before removing this mod.
 
@@ -49,15 +49,15 @@ Run SMAPI at least once with this mod installed to generate the `config.json`, o
 * `PreservePlacedWeeds`: If enabled, placed weeds will not die in winter.
 
 ## Items
-* **Grass starters**: After getting a single heart from Robin and getting her letter about the first house expansion, Robin will sell grass starters corresponding to every type of grass you can see in game. You can also get these grass starters by using the shovel on any clump of grass in the game (including that in the mines). For balance reasons, the grass starters will only put down a single tuff of grass, but the grass will grow normally and fill out over time. Additionally, you can choose if animals will eat placed grass or if placed grass will spread at all. Grass from these starters will not die in winter.
+* **Grass starters**: After getting a single heart from Robin and getting her letter about the first house expansion, Robin will sell grass starters corresponding to every type of grass you can see in game. You can also get these grass starters by using the shovel on any clump of grass in the game (including that in the mines). For balance reasons, the grass starters will only put down a single tuft of grass, but the grass will grow normally and fill out over time. Additionally, you can choose if animals will eat placed grass or if placed grass will spread at all. Grass from these starters will not die in winter.
    - Note that internally, those cobwebs are actually grass.
 * **Resource clumps**: These include the big rocks you can find in the mines, the large stumps and hollow logs, and the meteorite. They are purchasable from Robin after you've gotten the skull key, except for the meteorite, which is locked behind getting level 25 in the skull cavern. You can also use the shovel to lift them.
-* **Small terrain items**: These include the little nodes, twigs, weeds, etc. The little crystals in the frost levels of the mines are actually internally weeds. Placed weeds won't spread, and optionally won't die in winter. A small selection is sold at the witch hut shop every day. These are also liftable from the mines with the shovel. (Custom Ore Nodes/Custom Resource Clumps isn't currently supported, though.)
+* **Small terrain items**: These include the little nodes, twigs, weeds, etc. The little crystals in the frost levels of the mines are actually internally weeds. Placed weeds won't spread, and optionally won't die in winter. A small selection is sold at the witch hut shop every day. These are also lift-able from the mines with the shovel. (Custom Ore Nodes/Custom Resource Clumps isn't currently supported, though.)
 * **Giant Crops**: A small selection of giant crops are available every day through the shop in the Witch's hut, or you can lift them with the shovel if they happen to grow for you.
-* **Fruit trees**: Can be transplanted with the shovel. Note that stumps of fruit trees cannot be moved.
+* **Fruit trees**: Can be transplanted with the shovel. Note that stumps of fruit trees cannot be moved - you can use [this mod](https://www.nexusmods.com/stardewvalley/mods/15005) to revive them though.
 * **Trees**: Can be transplanted with the shovel. Small versions will be sold in the Witch's hut, and unlike fruit trees, stumps of trees can be moved.
 
-A note on bushes: this mod doesn't deal with bushes, but if you have Growable Bushes installed, the shovel can lift bushes.
+A note on bushes: this mod doesn't deal with bushes, but if you have [Growable Bushes](https://www.nexusmods.com/stardewvalley/mods/15111) installed, the shovel can lift bushes.
 
 ## Shops
 * Robin's shop opens up after you get a single heart from her and you've gotten her letter on the first house expansion. She'll carry grass starters, and also will carry resource clumps after you've reached the bottom of the mines. These grass starters will not die in winter, and you can control if they spread or not.
@@ -95,8 +95,8 @@ These were primarily used for debugging but exist if you want to spawn things di
 
 ## Much thanks to
 * [VoidWitchCult](https://www.nexusmods.com/stardewvalley/users/163267158) for providing me with graphics for Robin's shop! Check out [their goth bachelors/bachelorettes](https://www.nexusmods.com/stardewvalley/mods/15335)!
-* [Violetlizabet](https://www.nexusmods.com/stardewvalley/users/120958053) for the winter palm trees!
+* [Violetlizabet](https://www.nexusmods.com/stardewvalley/users/120958053) for the winter palm trees! Check out her [Fireworks Festival](https://www.nexusmods.com/stardewvalley/mods/15261)!
 
 ## See also
 
-[Changelog](docs/changelog.md)
+[Change log](docs/changelog.md)

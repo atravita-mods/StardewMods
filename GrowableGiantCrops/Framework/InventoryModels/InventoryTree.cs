@@ -16,8 +16,6 @@ using StardewValley.TerrainFeatures;
 
 namespace GrowableGiantCrops.Framework.InventoryModels;
 
-// TODO: stumps?
-
 /// <summary>
 /// A class that represents a normal tree in the inventory.
 /// </summary>
@@ -205,7 +203,7 @@ public sealed class InventoryTree : SObject
         return (GGCUtils.CanPlantTreesAtLocation(l, relaxed, x, y, true) || l.CanPlantTreesHere(309, x, y)) // 309 is one of the wild trees.
             && l.terrainFeatures?.ContainsKey(tile) == false
             && GGCUtils.IsTilePlaceableForResourceClump(l, x, y, relaxed)
-            && (relaxed || this.isStump.Value || this.growthStage.Value < Tree.treeStage || !AdultTreesAround(l, x, y));
+            && (relaxed || this.isStump.Value || this.growthStage.Value < Tree.treeStage || !HasAdultTreesAround(l, x, y));
     }
 
     /// <inheritdoc />
@@ -555,6 +553,8 @@ public sealed class InventoryTree : SObject
             return;
         }
 
+        #warning probably need to fix this in 1.6
+
         // derived from Tree.loadTexture and Tree.draw
         string season = loc is Desert or MineShaft ? "spring" : Game1.GetSeasonForLocation(loc);
 
@@ -565,7 +565,7 @@ public sealed class InventoryTree : SObject
                 assetPath = @"TerrainFeatures\mushroom_tree";
                 break;
             case Tree.palmTree:
-                if (ModEntry.Config.PalmTreeBehavior is PalmTreeBehavior.Seasonal)
+                if (ModEntry.Config.PalmTreeBehavior.HasFlagFast(PalmTreeBehavior.Seasonal))
                 {
                     if (season == "fall")
                     {
@@ -581,7 +581,7 @@ public sealed class InventoryTree : SObject
                 assetPath = @"TerrainFeatures\tree_palm";
                 break;
             case Tree.palmTree2:
-                if (ModEntry.Config.PalmTreeBehavior is PalmTreeBehavior.Seasonal)
+                if (ModEntry.Config.PalmTreeBehavior.HasFlagFast(PalmTreeBehavior.Seasonal))
                 {
                     if (season == "fall")
                     {
@@ -631,13 +631,13 @@ public sealed class InventoryTree : SObject
         }
     }
 
-    private static bool AdultTreesAround(GameLocation l, int xTile, int yTile)
+    private static bool HasAdultTreesAround(GameLocation l, int xTile, int yTile)
     {
         for (int x = xTile - 1; x <= xTile + 1; x++)
         {
             for (int y = yTile - 1; y <= yTile + 1; y++)
             {
-                if (l.terrainFeatures.TryGetValue(new Vector2(x, y), out var terrain)
+                if (l.terrainFeatures.TryGetValue(new Vector2(x, y), out TerrainFeature? terrain)
                     && terrain is Tree tree && tree.growthStage.Value >= Tree.treeStage)
                 {
                     return true;

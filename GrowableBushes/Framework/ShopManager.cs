@@ -84,7 +84,7 @@ internal static class ShopManager
     /// Adds a small bush graphic to the shop.
     /// </summary>
     /// <param name="e">On Warped event arguments.</param>
-    internal static void AddBoxToShop(WarpedEventArgs e)
+    internal static void AddSignToShop(WarpedEventArgs e)
     {
         if (!e.IsLocalPlayer || !ModEntry.Config.ShowBushShopGraphic)
         {
@@ -97,7 +97,7 @@ internal static class ShopManager
 
             // add box
             e.NewLocation.temporarySprites.Add(new TemporaryAnimatedSprite(
-                textureName: AssetManager.bushes.BaseName,
+                textureName: AssetManager.BushShopTexture.BaseName,
                 sourceRect: new Rectangle(0, 0, 16, 48),
                 position: new Vector2(tile.X, tile.Y - 1) * Game1.tileSize,
                 flipped: false,
@@ -156,6 +156,10 @@ internal static class ShopManager
     {
         try
         {
+            if (!ModEntry.Config.BushesInFurnitureCatalogue)
+            {
+                return;
+            }
             __result.PopulateSellablesWithBushes(free: true);
         }
         catch (Exception ex)

@@ -22,7 +22,7 @@ internal static class SeasonalTreeUpdates
     [HarmonyPatch("loadTexture")]
     private static bool PrefixLoadTexture(Tree __instance, ref Texture2D __result)
     {
-        if (ModEntry.Config.PalmTreeBehavior != PalmTreeBehavior.Seasonal)
+        if (!ModEntry.Config.PalmTreeBehavior.HasFlagFast(PalmTreeBehavior.Seasonal))
         {
             return true;
         }
@@ -76,7 +76,7 @@ internal static class SeasonalTreeUpdates
     [HarmonyPatch(nameof(Tree.dayUpdate))]
     private static void PrefixDayUpdate(Tree __instance, GameLocation environment)
     {
-        if (ModEntry.Config.PalmTreeBehavior != PalmTreeBehavior.Stump || __instance.health.Value <= -100f || environment is Desert or MineShaft or IslandLocation
+        if (!ModEntry.Config.PalmTreeBehavior.HasFlagFast(PalmTreeBehavior.Stump) || __instance.health.Value <= -100f || environment is Desert or MineShaft or IslandLocation
             || __instance.modData?.ContainsKey(InventoryTree.ModDataKey) != true)
         {
             return;
@@ -88,7 +88,7 @@ internal static class SeasonalTreeUpdates
             {
                 __instance.stump.Value = true;
             }
-            else if (Game1.dayOfMonth <= 1 && Game1.currentSeason.Equals("spring"))
+            else if (Game1.dayOfMonth <= 1 && Game1.IsSpring)
             {
                 __instance.stump.Value = false;
                 __instance.health.Value = 10f;

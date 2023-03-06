@@ -148,7 +148,7 @@ internal static class IslandSouthPatches
             }
             foreach (string condition in checkset)
             {
-                if (Game1.dayOfMonth.ToString().Equals(condition, StringComparison.OrdinalIgnoreCase)
+                if ((int.TryParse(condition, out int day) && day == Game1.dayOfMonth)
                     || Game1.currentSeason.Equals(condition, StringComparison.OrdinalIgnoreCase)
                     || Game1.shortDayNameFromDayOfSeason(Game1.dayOfMonth).Equals(condition, StringComparison.OrdinalIgnoreCase)
                     || $"{Game1.currentSeason}_{Game1.shortDayNameFromDayOfSeason(Game1.dayOfMonth)}".Equals(condition, StringComparison.OrdinalIgnoreCase)

@@ -3,7 +3,7 @@ Documentation
 
 [← back to readme](../../README.md)
 
-Most users should download the mod from the [Nexus page](https://www.nexusmods.com/stardewvalley/mods/15559). That said, if you'd like to contribute:
+Most users should download the mod from the [Nexus page](https://www.nexusmods.com/stardewvalley/mods/15111). That said, if you'd like to contribute:
 
 ### Translations:
 
@@ -12,9 +12,7 @@ This mod uses SMAPI's i18n feature for translations. I'd love to get translation
 ### Textures
 
 You can edit the following textures using Content Patcher.
-* Shovel: `Mods/atravita.GrowableGiantCrops/Shovel`
-* Shop graphics: `Mods/atravita.GrowableGiantCrops/Shop`
-* Palm trees: `Mods/atravita.GrowableGiantCrops/WinterPalm`, `Mods/atravita.GrowableGiantCrops/WinterBigPalm`, `Mods/atravita.GrowableGiantCrops/FallPalm`, and `Mods/atravita.GrowableGiantCrops/FallBigPalm`, 
+* Shop graphics: `Mods/atravita/GrowableBushes/BushTAS`.
 
 ### Compiling from source:
 

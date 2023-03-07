@@ -9,6 +9,7 @@ internal sealed class AssetHolder
 {
     private readonly IAssetName? assetName;
     private Texture2D texture;
+    private bool dirty = false;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="AssetHolder"/> class.
@@ -41,9 +42,11 @@ internal sealed class AssetHolder
     /// <returns>Texture (or null if not possible).</returns>
     internal Texture2D? Get()
     {
-        if (this.texture.IsDisposed && !string.IsNullOrWhiteSpace(this.assetName?.BaseName))
+        if ((this.dirty || this.texture.IsDisposed)
+            && !string.IsNullOrWhiteSpace(this.assetName?.BaseName))
         {
             this.texture = Game1.content.Load<Texture2D>(this.assetName.BaseName);
+            this.dirty = false;
         }
         return this.texture.IsDisposed ? null : this.texture;
     }
@@ -57,8 +60,14 @@ internal sealed class AssetHolder
         if (!string.IsNullOrWhiteSpace(this.assetName?.BaseName))
         {
             this.texture = Game1.content.Load<Texture2D>(this.assetName.BaseName);
+            this.dirty = false;
             return true;
         }
         return false;
     }
+
+    /// <summary>
+    /// Marks the asset as dirty to be refreshed next time its needed.
+    /// </summary>
+    internal void MarkDirty() => this.dirty = true;
 }

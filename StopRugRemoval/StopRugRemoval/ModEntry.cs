@@ -124,6 +124,16 @@ internal sealed class ModEntry : Mod
         helper.Events.Content.AssetsInvalidated += (_, e) => FixSecretNotes.Reset(e.NamesWithoutLocale);
     }
 
+    /// <inheritdoc />
+    protected override void Dispose(bool disposing)
+    {
+        if (disposing)
+        {
+            AssetEditor.Dispose();
+        }
+        base.Dispose(disposing);
+    }
+
     /// <inheritdoc cref="IInputEvents.ButtonPressed"/>
     [EventPriority(EventPriority.High)]
     private void OnButtonPressed(object? sender, ButtonPressedEventArgs e)
@@ -339,10 +349,6 @@ internal sealed class ModEntry : Mod
 
     #region GMCM
 
-    // Favor a single defined function that gets the config, instead of defining the lambda over and over again.
-    [SuppressMessage("StyleCop.CSharp.OrderingRules", "SA1204:Static elements should appear before instance elements", Justification = "Reviewed.")]
-    private static ModConfig GetConfig() => Config;
-
     /// <inheritdoc cref="IGameLoopEvents.ReturnedToTitle"/>
     private void ReturnedToTitle(object? sender, ReturnedToTitleEventArgs e)
     {
@@ -426,7 +432,7 @@ internal sealed class ModEntry : Mod
     /// <inheritdoc cref="IMultiplayerEvents.ModMessageReceived"/>
     private void OnModMessageRecieved(object? sender, ModMessageReceivedEventArgs e)
     {
-        if (e.FromModID != ModEntry.UNIQUEID)
+        if (e.FromModID != UNIQUEID)
         {
             return;
         }

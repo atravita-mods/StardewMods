@@ -1,6 +1,4 @@
-﻿using AtraCore.Framework.DialogueManagement;
-
-using AtraShared.ConstantsAndEnums;
+﻿using AtraShared.ConstantsAndEnums;
 using AtraShared.Utils.Extensions;
 
 using HarmonyLib;
@@ -9,7 +7,11 @@ using Microsoft.Xna.Framework;
 
 namespace PrismaticSlime.HarmonyPatches.JellyPatches;
 
+/// <summary>
+/// A patch to handle NPCs receiving the prismatic slime jelly.
+/// </summary>
 [HarmonyPatch(typeof(NPC))]
+[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Harmony convention.")]
 internal static class NPCTryRecieveActiveItemPatches
 {
     [HarmonyPatch(nameof(NPC.tryToReceiveActiveObject))]
@@ -20,7 +22,6 @@ internal static class NPCTryRecieveActiveItemPatches
         {
             try
             {
-                // QueuedDialogueManager.PushCurrentDialogueToQueue(__instance);
                 switch (__instance.Name)
                 {
                     case "Wizard":
@@ -62,7 +63,7 @@ internal static class NPCTryRecieveActiveItemPatches
                         Game1.player.modData?.SetInt(DyePotPatches.ModData, 10);
                         break;
                     }
-                    default:
+                    default: // treat as a gift.
                     {
                         bool isBirthday = Game1.dayOfMonth == __instance.Birthday_Day &&
                             __instance.Birthday_Season?.Equals(Game1.currentSeason, StringComparison.OrdinalIgnoreCase) == true;

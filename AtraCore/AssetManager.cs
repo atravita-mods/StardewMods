@@ -1,5 +1,12 @@
 ﻿using AtraBase.Collections;
+using AtraBase.Toolkit.Extensions;
+
 using AtraCore.Models;
+
+using AtraShared.Utils.Extensions;
+
+using Microsoft.Xna.Framework.Content;
+
 using StardewModdingAPI.Events;
 using StardewModdingAPI.Utilities;
 
@@ -14,7 +21,7 @@ internal static class AssetManager
 
     private static HashSet<string> eventLocations = new(StringComparer.OrdinalIgnoreCase);
 
-    private static string dataEvents = PathUtilities.NormalizeAssetName("Data/Events/") + "/";
+    private static string dataEvents = PathUtilities.NormalizeAssetName("Data/Events") + "/";
 
     /// <summary>
     /// Initializes the asset manager.
@@ -25,6 +32,25 @@ internal static class AssetManager
         prismatic = parser.ParseAssetName(AtraCoreConstants.PrismaticMaskData);
 
         // check and populate the event locations.
+        foreach (string? location in new[] { "AdventureGuild", "Blacksmith", "WitchHut", "WitchSwamp", "Summit" })
+        {
+            try
+            {
+                _ = parser.Load<Dictionary<string, string>>(dataEvents + location);
+            }
+            catch (ContentLoadException)
+            {
+                ModEntry.ModMonitor.DebugOnlyLog($"Adding location {location} to event file loaders.");
+                eventLocations.Add(location);
+            }
+            catch (Exception ex)
+            {
+                ModEntry.ModMonitor.Log($"Unexpected error checking {location}'s event file!", LogLevel.Error);
+                ModEntry.ModMonitor.Log(ex.ToString());
+            }
+        }
+
+        ModEntry.ModMonitor.Log($"Checked event data, adding {eventLocations.Count}");
     }
 
     /// <summary>
@@ -51,9 +77,13 @@ internal static class AssetManager
         {
             e.LoadFrom(EmptyContainers.GetEmptyDictionary<string, DrawPrismaticModel>, AssetLoadPriority.Low);
         }
-        else if (e.NameWithoutLocale.IsEquivalentTo("Data/Events/AdventureGuild") || e.NameWithoutLocale.IsEquivalentTo("Data/Events/Blacksmith"))
+        else if (e.NameWithoutLocale.StartsWith(dataEvents, false, false))
         {
-            e.LoadFrom(EmptyContainers.GetEmptyDictionary<string, string>, AssetLoadPriority.Low);
+            string loc = e.NameWithoutLocale.BaseName.GetNthChunk('/', 2).ToString();
+            if (eventLocations.Contains(loc))
+            {
+                e.LoadFrom(EmptyContainers.GetEmptyDictionary<string, string>, AssetLoadPriority.Low - 1000);
+            }
         }
     }
 }

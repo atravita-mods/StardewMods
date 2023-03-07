@@ -4,10 +4,10 @@ using AtraShared.ConstantsAndEnums;
 using AtraShared.Integrations;
 using AtraShared.Integrations.Interfaces.ContentPatcher;
 using AtraShared.Utils.Extensions;
-using HarmonyLib;
-using StardewModdingAPI.Events;
 
-using static StardewValley.Polygon;
+using HarmonyLib;
+
+using StardewModdingAPI.Events;
 
 using AtraUtils = AtraShared.Utils.Utils;
 
@@ -88,7 +88,6 @@ internal sealed class ModEntry : Mod
             else if (Game1.timeOfDay == Config.WeddingTime)
             {
                 Game1.warpFarmer(new LocationRequest("Town", false, Game1.getLocationFromName("Town")), 5, 10, 0);
-                // this.Helper.Events.GameLoop.TimeChanged -= this.OnTimeChanged;
             }
             else if (Game1.timeOfDay == Utility.ModifyTime(Config.WeddingTime, -30))
             {
@@ -240,19 +239,9 @@ internal sealed class ModEntry : Mod
         if (integrationHelper.TryGetAPI("Pathoschild.ContentPatcher", "1.19.0", out IContentPatcherAPI? api))
         {
             api.RegisterToken(
-                this.ModManifest,
-                "IsCurrentlyWedding",
-                () =>
-                {
-                    if (Game1.CurrentEvent is Event evt && evt.id == Event.weddingEventId)
-                    {
-                        return new[] { "true" };
-                    }
-                    else
-                    {
-                        return new[] { "false" };
-                    }
-                });
+                mod: this.ModManifest,
+                name: "IsCurrentlyWedding",
+                getValue: () => new[] { (Game1.CurrentEvent is Event evt && evt.id == Event.weddingEventId).ToString() });
         }
     }
 }

@@ -10,7 +10,7 @@
     <Name>Growable Giant Crops</Name>
     <Description>Lets you grow giant crops.</Description>
     <Version>0.1.0</Version>
-    <UpdateKeys>Nexus:15111</UpdateKeys>
+    <UpdateKeys>Nexus:15559</UpdateKeys>
     <BaseManifest>..\spacecore_dependencies.json</BaseManifest>
   </PropertyGroup>
 

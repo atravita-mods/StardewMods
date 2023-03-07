@@ -12,13 +12,14 @@ namespace StopRugRemoval;
 /// <summary>
 /// Handles editing assets.
 /// </summary>
+[SuppressMessage("StyleCop.CSharp.OrderingRules", "SA1214:Readonly fields should appear before non-readonly fields", Justification = "Reviewed.")]
 internal static class AssetEditor
 {
     private static IAssetName saloonEvents = null!;
     private static IAssetName betIconsPath = null!;
     private static Lazy<Texture2D> betIconLazy = new(static () => Game1.content.Load<Texture2D>(betIconsPath.BaseName));
 
-    private static readonly PerScreen<TickCache<bool>> hasSeenSaloonEvent = new(
+    private static readonly PerScreen<TickCache<bool>> HasSeenSaloonEvent = new(
         () => new (static () => Game1.player?.eventsSeen?.Contains(40) == true));
 
     #region birdiequest
@@ -50,6 +51,15 @@ internal static class AssetEditor
         BirdieQuest.Add(parser.ParseAssetName($"{dialogue}George"), 867);
         BirdieQuest.Add(parser.ParseAssetName($"{dialogue}Wizard"), 868);
         BirdieQuest.Add(parser.ParseAssetName($"{dialogue}Willy"), 869);
+    }
+
+    /// <summary>
+    /// Disposes the content manager.
+    /// </summary>
+    internal static void Dispose()
+    {
+        contentManager?.Dispose();
+        contentManager = null;
     }
 
     /// <summary>
@@ -133,7 +143,7 @@ internal static class AssetEditor
     /// </remarks>
     internal static void EditSaloonEvent(AssetRequestedEventArgs e)
     {
-        if (ModEntry.Config.Enabled && ModEntry.Config.EditElliottEvent && !hasSeenSaloonEvent.Value.GetValue() && e.NameWithoutLocale.IsEquivalentTo(saloonEvents))
+        if (ModEntry.Config.Enabled && ModEntry.Config.EditElliottEvent && !HasSeenSaloonEvent.Value.GetValue() && e.NameWithoutLocale.IsEquivalentTo(saloonEvents))
         {
             e.Edit(EditSaloonImpl, AssetEditPriority.Late);
         }

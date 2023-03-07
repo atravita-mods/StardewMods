@@ -407,7 +407,7 @@ public sealed class GMCMHelper : IntegrationHelper
 
         return this;
     }
-    #endregion
+#endregion
 
 #region vector2
 
@@ -485,7 +485,7 @@ public sealed class GMCMHelper : IntegrationHelper
 
     #endregion
 
-    #region floats
+#region floats
 
     /// <summary>
     /// Adds a float option at this point in the form.
@@ -937,7 +937,7 @@ public sealed class GMCMHelper : IntegrationHelper
         return this;
     }
 
-    #region default
+#region default
 
     /// <summary>
     /// Generates a basic GMCM config.

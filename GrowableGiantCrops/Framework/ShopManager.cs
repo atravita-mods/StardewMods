@@ -90,7 +90,8 @@ internal static class ShopManager
             ReadOnlySpan<char> name = data.GetNthChunk('/');
             if (name.Equals("Stone", StringComparison.OrdinalIgnoreCase)
                 || name.Equals("Weeds", StringComparison.OrdinalIgnoreCase)
-                || name.Equals("Twig", StringComparison.OrdinalIgnoreCase))
+                || name.Equals("Twig", StringComparison.OrdinalIgnoreCase)
+                || name.Equals("SupplyCrate", StringComparison.OrdinalIgnoreCase))
             {
                 nodesList.Add(index);
             }

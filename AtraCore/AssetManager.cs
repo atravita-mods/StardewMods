@@ -1,6 +1,7 @@
 ﻿using AtraBase.Collections;
 using AtraCore.Models;
 using StardewModdingAPI.Events;
+using StardewModdingAPI.Utilities;
 
 namespace AtraCore;
 
@@ -11,12 +12,20 @@ internal static class AssetManager
 {
     private static IAssetName prismatic = null!;
 
+    private static HashSet<string> eventLocations = new(StringComparer.OrdinalIgnoreCase);
+
+    private static string dataEvents = PathUtilities.NormalizeAssetName("Data/Events/") + "/";
+
     /// <summary>
     /// Initializes the asset manager.
     /// </summary>
     /// <param name="parser">GameContentHelper.</param>
     internal static void Initialize(IGameContentHelper parser)
-        => prismatic = parser.ParseAssetName(AtraCoreConstants.PrismaticMaskData);
+    {
+        prismatic = parser.ParseAssetName(AtraCoreConstants.PrismaticMaskData);
+
+        // check and populate the event locations.
+    }
 
     /// <summary>
     /// Gets the prismatic models data asset.

@@ -13,6 +13,8 @@
     <WarningsAsErrors>Nullable</WarningsAsErrors>
     <CheckEolTargetFramework>false</CheckEolTargetFramework>
     <TargetFramework>net5.0</TargetFramework>
+    <!-- Set checked on when compiling Debug. -->
+    <CheckForOverflowUnderflow Condition="$(Configuration) == 'Debug'">true</CheckForOverflowUnderflow>
   </PropertyGroup>
 
   <PropertyGroup>

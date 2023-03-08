@@ -1,4 +1,6 @@
-﻿using AtraShared.Schedules.DataModels;
+﻿using AtraBase.Models.RentedArrayHelpers;
+
+using AtraShared.Schedules.DataModels;
 using Microsoft.Xna.Framework;
 
 namespace GingerIslandMainlandAdjustments.ScheduleManager.DataModels;
@@ -8,7 +10,7 @@ namespace GingerIslandMainlandAdjustments.ScheduleManager.DataModels;
 /// </summary>
 internal readonly struct PossibleIslandActivity
 {
-    private readonly List<Point> possiblepoints;
+    private readonly Point[] possiblepoints;
     private readonly string map;
     private readonly int direction;
     private readonly string dialogueKey;
@@ -28,7 +30,7 @@ internal readonly struct PossibleIslandActivity
     /// <param name="animation">The animation to play. May be not required.</param>
     /// <param name="chanceMap">Function that maps specific NPCs to custom chances.</param>
     internal PossibleIslandActivity(
-        List<Point> possiblepoints,
+        Point[] possiblepoints,
         string map = "IslandSouth",
         int direction = 2,
         double basechance = 1.0,
@@ -96,9 +98,9 @@ internal readonly struct PossibleIslandActivity
             schedule_animation = null; // remove animation if I don't have it.
         }
 
-        string? varKey = groupName is null ? null : this.dialogueKey + "_" + groupName;
-        Utility.Shuffle(random, this.possiblepoints);
-        foreach (Point pt in this.possiblepoints)
+        string? varKey = groupName is null ? null : $"{this.dialogueKey}_{groupName}";
+        ShuffledYielder<Point> shuffled = new(this.possiblepoints, random: random);
+        foreach (Point pt in shuffled)
         {
             if (!usedPoints.Contains(pt))
             {

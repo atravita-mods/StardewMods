@@ -296,7 +296,6 @@ internal sealed class ModEntry : Mod
         {
             VolcanoChestAdjuster.LoadData(this.Helper.Data, this.Helper.Multiplayer);
 
-            // Make an attempt to clear all nulls from chests.
             Utility.ForAllLocations(action: static (GameLocation loc) =>
             {
                 if (loc is null)
@@ -304,6 +303,29 @@ internal sealed class ModEntry : Mod
                     return;
                 }
 
+#warning - review and remove in stardew 1.6
+                // crosscheck and fix jukeboxes.
+                string song = loc.miniJukeboxTrack.Value;
+                if (!string.IsNullOrEmpty(song))
+                {
+                    ModMonitor.DebugOnlyLog($"Checking jukebox {song}...");
+                    try
+                    {
+                        Game1.soundBank.GetCue(song);
+                    }
+                    catch (ArgumentException)
+                    {
+                        ModMonitor.Log($"Found missing soundtrack {song}, removing.", LogLevel.Warn);
+                        loc.miniJukeboxTrack.Value = string.Empty;
+                    }
+                    catch (Exception ex)
+                    {
+                        ModMonitor.Log($"Failed while trying to retrieve song {song} - {ex}.", LogLevel.Error);
+                        loc.miniJukeboxTrack.Value = string.Empty;
+                    }
+                }
+
+                // Make an attempt to clear all nulls from chests.
                 foreach (SObject obj in loc.Objects.Values)
                 {
                     if (obj is Chest chest)

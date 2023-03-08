@@ -97,6 +97,13 @@ These were primarily used for debugging but exist if you want to spawn things di
 * [VoidWitchCult](https://www.nexusmods.com/stardewvalley/users/163267158) for providing me with graphics for Robin's shop! Check out [their goth bachelors/bachelorettes](https://www.nexusmods.com/stardewvalley/mods/15335)!
 * [Violetlizabet](https://www.nexusmods.com/stardewvalley/users/120958053) for the winter palm trees! Check out her [Fireworks Festival](https://www.nexusmods.com/stardewvalley/mods/15261)!
 
+## Mods in screenshots
+* The giant crops
+    - Coffee mug and starfruit are from [6480's pack](https://www.nexusmods.com/stardewvalley/mods/5221). Giant coffee bean is the test pack for [Giant Crop Tweaks](https://www.nexusmods.com/stardewvalley/mods/14370).
+    - Sunflower and blue jazz are from [BBR's pack](https://www.nexusmods.com/stardewvalley/mods/10751).
+    - I couldn't track down the giant Qi Crop mod anymore, sorry!
+    - The rest of the flowers are probably from [Lumi's flower pack](https://www.nexusmods.com/stardewvalley/mods/7110).
+
 ## See also
 
 [Change log](docs/changelog.md)

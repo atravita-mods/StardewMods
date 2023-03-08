@@ -90,14 +90,6 @@ internal sealed class ModEntry : Mod
                 IslandSouthWatcher southWatcher = new(this.Helper.GameContent);
                 perch.upgradeCompleteEvent.onEvent += southWatcher.OnResortFixed;
             }
-            else
-            {
-                this.Monitor.Log("Invalidating dialogues on save load.");
-                foreach (string name in AssetEditor.CharacterDialogues)
-                {
-                    this.Helper.GameContent.InvalidateCacheAndLocalized(AssetEditor.Dialogue + name);
-                }
-            }
         }
 
         this.migrator = new(this.ModManifest, this.Helper, this.Monitor);

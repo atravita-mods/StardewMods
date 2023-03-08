@@ -12,6 +12,7 @@
 #### Version 1.1.2
 * By popular request, defang the napalm ring in safe areas.
 * New fixes: Journal scraps are now less silly, also removing a mod that adds secret notes won't lock you out of secret notes.
+* Jukeboxes are now sanity-checked at save load, so authors changing audio cues no longer breaks things.
 
 #### Version 1.1.1
 * Some menus now accept arrow keys.

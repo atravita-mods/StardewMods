@@ -1,27 +1,37 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-using AtraShared.Utils.Extensions;
-
-using Netcode;
+﻿using AtraShared.Utils.Extensions;
 
 namespace GingerIslandMainlandAdjustments.AssetManagers;
+
+/// <summary>
+/// Watches IslandSouth's resort parrot.
+/// </summary>
 internal sealed class IslandSouthWatcher
 {
-    private IGameContentHelper _contentHelper;
+    private readonly IGameContentHelper contentHelper;
 
-    public IslandSouthWatcher(IGameContentHelper contentHelper) => this._contentHelper = contentHelper;
+    /// <summary>
+    /// Initializes a new instance of the <see cref="IslandSouthWatcher"/> class.
+    /// </summary>
+    /// <param name="contentHelper">SMAPI's game content helper.</param>
+    public IslandSouthWatcher(IGameContentHelper contentHelper) => this.contentHelper = contentHelper;
 
+    /// <summary>
+    /// Called when the resort is fixed.
+    /// </summary>
     internal void OnResortFixed()
     {
         Globals.ModMonitor.DebugOnlyLog("Resort fixed! Invalidating.", LogLevel.Info);
 
-        foreach (var name in AssetEditor.CharacterDialogues)
+        try
         {
-            this._contentHelper.InvalidateCacheAndLocalized(AssetEditor.Dialogue + name);
+            foreach (string name in AssetEditor.CharacterDialogues)
+            {
+                this.contentHelper.InvalidateCacheAndLocalized(AssetEditor.Dialogue + name);
+            }
+        }
+        catch (Exception ex)
+        {
+            Globals.ModMonitor.Log($"Unexpected error refreshing NPC dialogue:\n\n{ex}", LogLevel.Error);
         }
     }
 }

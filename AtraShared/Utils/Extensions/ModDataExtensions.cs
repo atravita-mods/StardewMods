@@ -53,6 +53,8 @@ public static class ModDataExtensions
     }
 
     // Instead of storing a real bool, just store 0 or 1
+    private const string trueValue = "1";
+    private const string falseValue = "0";
 
     /// <summary>
     /// Gets a boolean value out of ModData.
@@ -64,7 +66,9 @@ public static class ModDataExtensions
     [MethodImpl(TKConstants.Hot)]
     [return: NotNullIfNotNull("defaultVal")]
     public static bool? GetBool(this ModDataDictionary modData, string key, bool? defaultVal = null)
-        => modData.TryGetValue(key, out string val) ? val != "0" : defaultVal;
+        => modData.TryGetValue(key, out string val)
+            ? val != falseValue
+            : defaultVal;
 
     /// <summary>
     /// Sets a boolean value into modData.
@@ -82,7 +86,7 @@ public static class ModDataExtensions
         }
         else
         {
-            modData[key] = val ? "1" : "0";
+            modData[key] = val ? trueValue : falseValue;
         }
     }
 
@@ -96,7 +100,9 @@ public static class ModDataExtensions
     [MethodImpl(TKConstants.Hot)]
     [return: NotNullIfNotNull("defaultVal")]
     public static float? GetFloat(this ModDataDictionary modData, string key, float? defaultVal = null)
-        => modData.TryGetValue(key, out string val) && float.TryParse(val, out float result) ? result : defaultVal;
+        => modData.TryGetValue(key, out string val) && float.TryParse(val, NumberStyles.Number, CultureInfo.InvariantCulture, out float result)
+            ? result
+            : defaultVal;
 
     /// <summary>
     /// Sets a float value into modData. To reduce reads/writes, rounds.
@@ -116,7 +122,8 @@ public static class ModDataExtensions
         }
         else
         {
-            modData[key] = MathF.Round(val, decimals, MidpointRounding.ToEven).ToString(format, CultureInfo.InvariantCulture);
+            modData[key] = MathF.Round(val, decimals, MidpointRounding.ToEven)
+                                .ToString(format, provider: CultureInfo.InvariantCulture);
         }
     }
 
@@ -130,7 +137,7 @@ public static class ModDataExtensions
     [MethodImpl(TKConstants.Hot)]
     [return: NotNullIfNotNull("defaultVal")]
     public static int? GetInt(this ModDataDictionary modData, string key, int? defaultVal = null)
-        => modData.TryGetValue(key, out string val) && int.TryParse(val, out int result) ? result : defaultVal;
+        => modData.TryGetValue(key, out string val) && int.TryParse(val, NumberStyles.AllowLeadingSign, CultureInfo.InvariantCulture, out int result) ? result : defaultVal;
 
     /// <summary>
     /// Sets a int value into modData.
@@ -149,7 +156,7 @@ public static class ModDataExtensions
         }
         else
         {
-            modData[key] = val.ToString(format, CultureInfo.InvariantCulture);
+            modData[key] = val.ToString(format, provider: CultureInfo.InvariantCulture);
         }
     }
 

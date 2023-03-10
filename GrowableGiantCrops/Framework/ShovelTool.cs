@@ -54,7 +54,7 @@ public sealed class ShovelTool : GenericTool
 
     private static readonly Lazy<Func<MineShaft, bool>> HasLadderSpawnedGetter = new(() =>
         typeof(MineShaft).GetCachedField("ladderHasSpawned", ReflectionCache.FlagTypes.InstanceFlags)
-        .GetInstanceFieldGetter<MineShaft, bool>());
+             .GetInstanceFieldGetter<MineShaft, bool>());
 
     #endregion
 

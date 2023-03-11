@@ -3,7 +3,7 @@
 using StardewValley.Menus;
 using StardewValley.Objects;
 
-namespace CritterRings;
+namespace CritterRings.HarmonyPatches;
 
 /// <summary>
 /// Adds the rings to Marlon's shop.

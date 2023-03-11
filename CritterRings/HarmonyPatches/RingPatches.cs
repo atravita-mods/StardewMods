@@ -8,7 +8,7 @@ using Microsoft.Xna.Framework;
 
 using StardewValley.Objects;
 
-namespace CritterRings;
+namespace CritterRings.HarmonyPatches;
 
 #warning - this will need to be refactored for 1.6
 
@@ -116,19 +116,25 @@ internal static class RingPatches
             }
             else if (__instance.ParentSheetIndex == ModEntry.FireFlyRing)
             {
-                int startingID = __instance.uniqueID.Value + (int)who.UniqueMultiplayerID;
-                while (location.sharedLights.ContainsKey(startingID))
+                int startingID;
+                int lightID;
+                unchecked
                 {
-                    startingID++;
+                    startingID = __instance.uniqueID.Value + (int)who.UniqueMultiplayerID;
+                    lightID = startingID;
+                    while (location.sharedLights.ContainsKey(lightID))
+                    {
+                        lightID++;
+                    }
                 }
-                lightIDSourceSetter.Value(__instance, startingID);
 
-                location.sharedLights[startingID] = new LightSource(
+                lightIDSourceSetter.Value(__instance, lightID);
+                location.sharedLights[lightID] = new LightSource(
                     textureIndex: 1,
                     new Vector2(who.Position.X + 21f, who.Position.Y + 64f),
                     radius: 10f,
                     new Color(0, 80, 0),
-                    identifier: __instance.uniqueID.Value + (int)who.UniqueMultiplayerID,
+                    identifier: startingID,
                     light_context: LightSource.LightContext.None,
                     playerID: who.UniqueMultiplayerID);
             }

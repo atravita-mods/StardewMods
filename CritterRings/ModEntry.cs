@@ -6,6 +6,7 @@ using AtraShared.Integrations.Interfaces;
 using AtraShared.MigrationManager;
 using AtraShared.Utils.Extensions;
 
+using CritterRings.Framework;
 using CritterRings.Models;
 
 using HarmonyLib;
@@ -19,19 +20,25 @@ using AtraUtils = AtraShared.Utils.Utils;
 namespace CritterRings;
 
 /// <inheritdoc />
+[SuppressMessage("StyleCop.CSharp.OrderingRules", "SA1201:Elements should appear in the correct order", Justification = "Reviewed.")]
 internal sealed class ModEntry : Mod
 {
+    private const string SAVEKEY = "item_ids";
+
     private static IJsonAssetsAPI? jsonAssets;
     private MigrationManager? migrator;
 
-    private const string SAVEKEY = "item_ids";
-
+    /// <summary>
+    /// Gets the config instance for this mod.
+    /// </summary>
     internal static ModConfig Config { get; private set; } = null!;
 
     /// <summary>
     /// Gets the logger for this mod.
     /// </summary>
     internal static IMonitor ModMonitor { get; private set; } = null!;
+
+    #region JA ids
 
     private static int butterflyRing = -1;
 
@@ -66,6 +73,8 @@ internal sealed class ModEntry : Mod
             return fireflyRing;
         }
     }
+
+    #endregion
 
     /// <inheritdoc />
     public override void Entry(IModHelper helper)
@@ -123,20 +132,14 @@ internal sealed class ModEntry : Mod
         {
             if (FireFlyRing > 0 && Game1.player.isWearingRing(FireFlyRing))
             {
-                for (int i = 0; i < 3; i++)
-                {
-                    critters.Add(new Firefly(Game1.player.getTileLocation()));
-                }
+                CRUtils.SpawnFirefly(critters, 3);
             }
         }
-        else if (Config.ButterfliesSpawnInRain || !Game1.IsRainingHere(Game1.currentLocation))
+        else if (Game1.currentLocation.ShouldSpawnButterflies())
         {
             if (ButterflyRing > 0 && Game1.player.isWearingRing(ButterflyRing))
             {
-                for (int i = 0; i < 3; i++)
-                {
-                    critters.Add(new Butterfly(Game1.player.getTileLocation(), Game1.random.Next(2) == 0).setStayInbounds(true));
-                }
+                CRUtils.SpawnButterfly(critters, 3);
             }
         }
     }
@@ -153,22 +156,14 @@ internal sealed class ModEntry : Mod
         {
             if (FireFlyRing > 0)
             {
-                int count = Game1.player.GetEffectsOfRingMultiplier(FireFlyRing);
-                for (int i = 0; i < count; i++)
-                {
-                    critters.Add(new Firefly(Game1.player.getTileLocation()));
-                }
+                CRUtils.SpawnFirefly(critters, Game1.player.GetEffectsOfRingMultiplier(FireFlyRing));
             }
         }
-        else if (Config.ButterfliesSpawnInRain || !Game1.IsRainingHere(Game1.currentLocation))
+        else if (Game1.currentLocation.ShouldSpawnButterflies())
         {
             if (ButterflyRing > 0)
             {
-                int count = Game1.player.GetEffectsOfRingMultiplier(ButterflyRing);
-                for (int i = 0; i < count; i++)
-                {
-                    critters.Add(new Butterfly(Game1.player.getTileLocation(), Game1.random.Next(2) == 0).setStayInbounds(true));
-                }
+                CRUtils.SpawnButterfly(critters, Game1.player.GetEffectsOfRingMultiplier(ButterflyRing));
             }
         }
     }

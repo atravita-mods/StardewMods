@@ -53,7 +53,8 @@
         "Entries": {
             "3_2": "I grew up poor, @, and I wouldn't wish that on anyone.",
             "5_2": "Maybe I should carry more boxed meals? They're certainly more convenient than cooking...",
-            "17_2": "I suspect we have a leak in the ceiling.#$b#Between you and I, @, I'm not good at dealing with things like this."
+            "17_2": "I suspect we have a leak in the ceiling.#$b#Between you and I, @, I'm not good at dealing with things like this.#$e#Guess I should get Robin to look at my roof...",
+            "19_2": "@, I just want you to know, you'll never find better seeds that the ones I sell. Never."
         },
         "When": { "YearModulus": "4"}
     }

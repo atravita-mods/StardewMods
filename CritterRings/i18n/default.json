@@ -8,9 +8,15 @@
   "api-not-found": "{{APIID}} not found, integration disabled.",
   "api-too-old": "Please update {{apiName}}({{APIID}}) to at least version {{minversion}}. Current version {{currentversion}}. Integration disabled.",
 
+  "bunny-ring.name": "Bunny Ring",
+  "bunny-ring.description": "Encourages bunnies to come near you.",
+
   "butterfly-ring.name": "Butterfly Ring",
   "butterfly-ring.description": "During the day, summons butterflies to you.",
 
-  "firefly-ring.name": "Firefly ring",
-  "firefly-ring.description": "During the night, summons fireflies to you."
+  "firefly-ring.name": "Firefly Ring",
+  "firefly-ring.description": "During the night, summons fireflies to you.",
+
+  "owl-ring.name": "Owl Ring",
+  "owl-ring.description": "Encourages owls to come near you."
 }

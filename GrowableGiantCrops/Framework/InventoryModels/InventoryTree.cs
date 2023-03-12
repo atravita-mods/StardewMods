@@ -238,7 +238,8 @@ public sealed class InventoryTree : SObject
         }
         tree.modData?.SetEnum(ModDataKey, (TreeIndexes)this.ParentSheetIndex);
 
-        if (this.ParentSheetIndex == Tree.mushroomTree && this.growthStage.Value == Tree.treeStage
+        if ((this.ParentSheetIndex == Tree.mushroomTree || (tree.IsPalmTree() && ModEntry.Config.PalmTreeBehavior.HasFlagFast(PalmTreeBehavior.Stump)))
+            && this.growthStage.Value == Tree.treeStage
             && location.IsOutdoors && Game1.GetSeasonForLocation(location) == "winter")
         {
             tree.stump.Value = true;

@@ -11,13 +11,9 @@ using CritterRings.Models;
 
 using HarmonyLib;
 
-using Microsoft.Xna.Framework;
-
 using StardewModdingAPI.Events;
-using StardewModdingAPI.Utilities;
 
 using StardewValley.BellsAndWhistles;
-using StardewValley.TerrainFeatures;
 
 using AtraUtils = AtraShared.Utils.Utils;
 
@@ -27,16 +23,15 @@ namespace CritterRings;
 [SuppressMessage("StyleCop.CSharp.OrderingRules", "SA1201:Elements should appear in the correct order", Justification = "Reviewed.")]
 internal sealed class ModEntry : Mod
 {
-    internal const int BuffID = 2731247;
+    /// <summary>
+    /// A buff corresponding to the bunny ring.
+    /// </summary>
+    internal const int BunnyBuffId = 2731247;
 
     private const string SAVEKEY = "item_ids";
 
     private static IJsonAssetsAPI? jsonAssets;
     private MigrationManager? migrator;
-
-    private PerScreen<Vector2> playerPosition = new();
-
-    private PerScreen<WeakReference<Bush>> bestBush = new();
 
     /// <summary>
     /// Gets the config instance for this mod.
@@ -170,12 +165,12 @@ internal sealed class ModEntry : Mod
     private void OnButtonPressed(object? sender, ButtonPressedEventArgs e)
     {
         if (Context.IsPlayerFree && Config.BunnyRingButton.JustPressed() && BunnyRing > 0
-            && Game1.player.isWearingRing(BunnyRing) && !Game1.player.hasBuff(BuffID))
+            && Game1.player.isWearingRing(BunnyRing) && !Game1.player.hasBuff(BunnyBuffId))
         {
             if (Game1.player.Stamina >= Config.BunnyRingStamina && !Game1.player.exhausted.Value)
             {
                 Buff buff = BuffEnum.Speed.GetBuffOf(Config.BunnyRingBoost, 20, "atravita.BunnyRing", I18n.BunnyRing_Name());
-                buff.which = BuffID;
+                buff.which = BunnyBuffId;
                 buff.description = I18n.BunnyBuff_Description(Config.BunnyRingBoost);
                 buff.sheetIndex = 1;
 

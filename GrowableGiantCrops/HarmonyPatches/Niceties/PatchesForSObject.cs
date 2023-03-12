@@ -40,6 +40,11 @@ internal static class PatchesForSObject
                 __instance.modData?.SetBool(ModDataMiscObject, true);
                 __instance.TileLocation = new Vector2(x / Game1.tileSize, y / Game1.tileSize);
             }
+            else if (__instance.ParentSheetIndex == 78)
+            {
+                __instance.modData?.SetBool(ModDataMiscObject, true);
+                __instance.Fragility = SObject.fragility_Removable;
+            }
         }
         else if (__instance?.bigCraftable?.Value == false
             && (__instance.Name == "Stone" || __instance.Name.Contains("Weeds") || __instance.Name.Contains("Twig")))

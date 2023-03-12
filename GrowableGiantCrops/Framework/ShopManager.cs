@@ -122,6 +122,7 @@ internal static class ShopManager
 
                 data[RESOURCE_SHOP_NAME] = I18n.RobinMail();
                 data[GIANT_CROP_SHOP_NAME] = I18n.WitchMail();
+                data[ROBIN_MAIL_TWO] = I18n.RobinMailTwo();
             });
         }
         else if (e.NameWithoutLocale.IsEquivalentTo(robinHouse))

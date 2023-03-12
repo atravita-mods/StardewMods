@@ -16,7 +16,7 @@ internal static class BuffPatches
     [HarmonyPatch(nameof(Buff.getClickableComponents))]
     private static void Postfix(Buff __instance, List<ClickableTextureComponent> __result)
     {
-        if (__instance.which == ModEntry.BuffID)
+        if (__instance.which == ModEntry.BunnyBuffId)
         {
             __result.Clear();
             __result.Add(new ClickableTextureComponent(

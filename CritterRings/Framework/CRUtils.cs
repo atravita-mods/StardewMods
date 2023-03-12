@@ -66,7 +66,33 @@ internal static class CRUtils
         }
     }
 
-    internal static IEnumerable<(Vector2, bool)> FindBunnySpawnTile(GameLocation loc, Vector2 playerTile, int count)
+    /// <summary>
+    /// Add bunnies to a location.
+    /// </summary>
+    /// <param name="critters">The critter list.</param>
+    /// <param name="count">The number of bunnies to spawn.</param>
+    internal static void AddBunnies(List<Critter> critters, int count)
+    {
+        int delay = 0;
+        foreach ((Vector2 position, bool flipped) in CRUtils.FindBunnySpawnTile(
+            loc: Game1.currentLocation,
+            playerTile: Game1.player.getTileLocation(),
+            count: count * 2))
+        {
+            GameLocation location = Game1.currentLocation;
+            DelayedAction.functionAfterDelay(
+            () =>
+            {
+                if (location == Game1.currentLocation)
+                {
+                    CRUtils.SpawnRabbit(critters, position, location, flipped);
+                }
+            },
+            delay += Game1.random.Next(250, 750));
+        }
+    }
+
+    private static IEnumerable<(Vector2, bool)> FindBunnySpawnTile(GameLocation loc, Vector2 playerTile, int count)
     {
         if (loc.largeTerrainFeatures?.Count is null or 0)
         {
@@ -110,12 +136,12 @@ internal static class CRUtils
         }
     }
 
-    internal static void SpawnRabbit(List<Critter>? critters, Vector2 tile, GameLocation loc, bool flipped)
+    private static void SpawnRabbit(List<Critter>? critters, Vector2 tile, GameLocation loc, bool flipped)
     {
         if (critters is not null)
         {
-            Rabbit rabbit = new Rabbit(tile, flipped);
-            CharacterTimerSetter.Value(rabbit, 1000);
+            Rabbit rabbit = new(tile, flipped);
+            CharacterTimerSetter.Value(rabbit, Game1.random.Next(750, 1500));
             critters.Add(rabbit);
 
             // little TAS to hide the pop in.

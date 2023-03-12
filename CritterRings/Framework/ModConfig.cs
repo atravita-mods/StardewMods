@@ -40,6 +40,18 @@ public sealed class ModConfig
         set => this.bunnyRingStamina = Math.Clamp(value, 0, 50);
     }
 
+    private int bunnyRingBoost = 5;
+
+    /// <summary>
+    /// Gets or sets a value indicating how big of a speed boost the bunny ring's dash should be.
+    /// </summary>
+    [GMCMRange(1, 10)]
+    public int BunnyRingBoost
+    {
+        get => this.bunnyRingBoost;
+        set => this.bunnyRingBoost = Math.Clamp(value, 1, 10);
+    }
+
     /// <summary>
     /// Gets or sets a value indicating which button should be used for the bunny ring's stamina-sprint.
     /// </summary>

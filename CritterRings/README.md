@@ -3,9 +3,7 @@ Critter Rings
 
 ![Header image](docs/image.png)
 
-This incredibly self-indulgent mod has two rings in it. The Butterfly ring summons a butterfly every ten in-game minutes during daytime. The Firefly ring summons a firefly every ten in-game minutes during night. Additionally, the butterfly ring is a magnetic ring, and the firefly ring is a glow ring.
-
-Buy both from Marlon after you've gotten the skull key.
+This incredibly self-indulgent mod has four rings in it: the Butterfly Ring, the Bunny Ring, the Owl Ring, and the Firefly Ring. Each summons the relevant critter when worn. Additionally, each has extra secondary effect.
 
 ## Install
 
@@ -14,6 +12,13 @@ Buy both from Marlon after you've gotten the skull key.
 2. Download and install [AtraCore](https://www.nexusmods.com/stardewvalley/mods/12932).
 2. Download this mod and unzip it into `Stardew Valley/Mods`.
 3. Run the game using SMAPI.
+
+## Rings
+* Bunny Ring: Allows a 14s "sprint" of +5 speed in return for 10 (configurable) stamina. Summons bunnies before dark.
+* Butterfly Ring: Acts as magnet ring, summons butterflies before dark. Buy from Marlon after receiving the skull key.
+* Firefly Ring: Acts as a glow ring, summons fireflies after dark. Buy from Marlon after receiving the skull key.
+* Owl ring: Makes enemies less likely to see you. Summons owls.
+
 
 ## Configuration
 Run SMAPI at least once with this mod installed to generate the `config.json`, or use [Generic Mod Config Menu](https://www.nexusmods.com/stardewvalley/mods/5098) to configure.

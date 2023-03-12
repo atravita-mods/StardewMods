@@ -10,7 +10,8 @@
 
   "bunny-ring.name": "Bunny Ring",
   "bunny-ring.description": "Encourages bunnies to come near you.",
-  "bunny-buff.description": "The energy of the local wildlife encourages you. +3 speed.",
+  "bunny-buff.description": "The energy of the local wildlife encourages you. +{{amount}} speed.",
+  "bunny-buff.tired": "Too tired for that!",
 
   "butterfly-ring.name": "Butterfly Ring",
   "butterfly-ring.description": "During the day, summons butterflies to you.",

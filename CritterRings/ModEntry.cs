@@ -166,19 +166,25 @@ internal sealed class ModEntry : Mod
         }
     }
 
+    /// <inheritdoc cref="IInputEvents.ButtonPressed"/>
     private void OnButtonPressed(object? sender, ButtonPressedEventArgs e)
     {
-        if (Context.IsPlayerFree && Config.BunnyRingButton.JustPressed())
+        if (Context.IsPlayerFree && Config.BunnyRingButton.JustPressed() && BunnyRing > 0
+            && Game1.player.isWearingRing(BunnyRing) && !Game1.player.hasBuff(BuffID))
         {
-            if (!Game1.player.hasBuff(BuffID) && Game1.player.Stamina > 0 && !Game1.player.exhausted.Value)
+            if (Game1.player.Stamina >= Config.BunnyRingStamina && !Game1.player.exhausted.Value)
             {
-                Buff buff = BuffEnum.Speed.GetBuffOf(3, 20, "atravita.BunnyRing", I18n.BunnyRing_Name());
+                Buff buff = BuffEnum.Speed.GetBuffOf(Config.BunnyRingBoost, 20, "atravita.BunnyRing", I18n.BunnyRing_Name());
                 buff.which = BuffID;
-                buff.description = I18n.BunnyBuff_Description();
+                buff.description = I18n.BunnyBuff_Description(Config.BunnyRingBoost);
                 buff.sheetIndex = 1;
 
                 Game1.buffsDisplay.addOtherBuff(buff);
                 Game1.player.Stamina -= Config.BunnyRingStamina;
+            }
+            else
+            {
+                Game1.showRedMessage(I18n.BunnyBuff_Tired());
             }
         }
     }
@@ -202,11 +208,15 @@ internal sealed class ModEntry : Mod
                 CRUtils.SpawnFirefly(critters, 3);
             }
         }
-        else if (Game1.currentLocation.ShouldSpawnButterflies())
+        else
         {
-            if (ButterflyRing > 0 && Game1.player.isWearingRing(ButterflyRing))
+            if (Game1.currentLocation.ShouldSpawnButterflies() && ButterflyRing > 0 && Game1.player.isWearingRing(ButterflyRing))
             {
                 CRUtils.SpawnButterfly(critters, 3);
+            }
+            if (BunnyRing > 0 && Game1.player.isWearingRing(BunnyRing))
+            {
+                CRUtils.AddBunnies(critters, 3);
             }
         }
     }
@@ -226,33 +236,18 @@ internal sealed class ModEntry : Mod
                 CRUtils.SpawnFirefly(critters, Game1.player.GetEffectsOfRingMultiplier(FireFlyRing));
             }
         }
-        else if (Game1.currentLocation.ShouldSpawnButterflies())
+        else
         {
-            if (ButterflyRing > 0)
+            if (ButterflyRing > 0 && Game1.currentLocation.ShouldSpawnButterflies())
             {
                 CRUtils.SpawnButterfly(critters, Game1.player.GetEffectsOfRingMultiplier(ButterflyRing));
             }
-        }
-        if (BunnyRing > 0)
-        {
-            int delay = 0;
-            foreach ((Vector2 position, bool flipped) in CRUtils.FindBunnySpawnTile(
-                loc: Game1.currentLocation,
-                playerTile: Game1.player.getTileLocation(),
-                count: Game1.player.GetEffectsOfRingMultiplier(BunnyRing) * 2))
+            if (BunnyRing > 0)
             {
-                GameLocation location = Game1.currentLocation;
-                DelayedAction.functionAfterDelay(
-                () =>
-                {
-                    if (location == Game1.currentLocation)
-                    {
-                        CRUtils.SpawnRabbit(critters, position, location, flipped);
-                    }
-                },
-                delay += Game1.random.Next(250, 750));
+                CRUtils.AddBunnies(critters, Game1.player.GetEffectsOfRingMultiplier(BunnyRing));
             }
         }
+
     }
 
     /// <inheritdoc cref="IGameLoopEvents.SaveLoaded"/>

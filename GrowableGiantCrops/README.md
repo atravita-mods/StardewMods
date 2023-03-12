@@ -101,7 +101,7 @@ These were primarily used for debugging but exist if you want to spawn things di
 * The giant crops
     - Coffee mug and starfruit are from [6480's pack](https://www.nexusmods.com/stardewvalley/mods/5221). Giant coffee bean is the test pack for [Giant Crop Tweaks](https://www.nexusmods.com/stardewvalley/mods/14370).
     - Sunflower and blue jazz are from [BBR's pack](https://www.nexusmods.com/stardewvalley/mods/10751).
-    - I couldn't track down the giant Qi Crop mod anymore, sorry!
+    - I couldn't track down the Giant Qi Crop anymore, sorry! Looks like that has been [hidden](https://www.nexusmods.com/stardewvalley/mods/14226).
     - The rest of the flowers are probably from [Lumi's flower pack](https://www.nexusmods.com/stardewvalley/mods/7110).
 
 ## See also

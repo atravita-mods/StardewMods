@@ -1,5 +1,7 @@
 ﻿using AtraShared.Integrations.GMCMAttributes;
 
+using StardewModdingAPI.Utilities;
+
 namespace CritterRings.Framework;
 
 /// <summary>
@@ -26,7 +28,7 @@ public sealed class ModConfig
     /// </summary>
     public bool ButterfliesSpawnInRain { get; set; } = false;
 
-    private int bunnyRingStamina = 20;
+    private int bunnyRingStamina = 10;
 
     /// <summary>
     /// Gets or sets a value indicating how expensive the bunny ring's dash should be.
@@ -37,4 +39,9 @@ public sealed class ModConfig
         get => this.bunnyRingStamina;
         set => this.bunnyRingStamina = Math.Clamp(value, 0, 50);
     }
+
+    /// <summary>
+    /// Gets or sets a value indicating which button should be used for the bunny ring's stamina-sprint.
+    /// </summary>
+    public KeybindList BunnyRingButton { get; set; } = new KeybindList(new(SButton.Space), new(SButton.DPadDown));
 }

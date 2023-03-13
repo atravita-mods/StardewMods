@@ -10,6 +10,7 @@ namespace GrowableGiantCrops.HarmonyPatches.Niceties;
 /// Patches on the dwarf's shop stock.
 /// </summary>
 [HarmonyPatch(typeof(Utility))]
+[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Named for Harmony.")]
 internal static class DwarfShopPatches
 {
     [HarmonyPriority(Priority.VeryLow)]

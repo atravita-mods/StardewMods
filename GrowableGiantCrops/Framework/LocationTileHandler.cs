@@ -19,27 +19,29 @@ internal static class LocationTileHandler
 
     private delegate bool LocationTileDelegate(
         ShovelTool shovel,
+        Farmer who,
         GameLocation location,
         Vector2 tile);
 
     /// <summary>
     /// Applies the shovel to a specific map.
     /// </summary>
+    /// <param name="who">The farmer doing the action.</param>
     /// <param name="shovel">The shovel instance.</param>
     /// <param name="location">Game location to apply to.</param>
     /// <param name="tile">Tile to apply to.</param>
     /// <returns>True if successfully applied, false otherwise.</returns>
-    internal static bool ApplyShovelToMap(ShovelTool shovel, GameLocation location, Vector2 tile)
+    internal static bool ApplyShovelToMap(ShovelTool shovel, Farmer who, GameLocation location, Vector2 tile)
     {
         if (Handlers.TryGetValue(location.NameOrUniqueName, out List<LocationTileDelegate>? handlers))
         {
             ModEntry.ModMonitor.DebugOnlyLog($"Running handler for {location.NameOrUniqueName}", LogLevel.Info);
-            return handlers.Any(handler => handler.Invoke(shovel, location, tile));
+            return handlers.Any(handler => handler.Invoke(shovel, who, location, tile));
         }
         return false;
     }
 
-    private static bool IslandNorthHandler(ShovelTool shovel, GameLocation location, Vector2 tile)
+    private static bool IslandNorthHandler(ShovelTool shovel, Farmer who, GameLocation location, Vector2 tile)
     {
         if (location is not IslandNorth islandNorth || tile.Y != 47f || (tile.X != 21f && tile.X != 22f) || islandNorth.caveOpened.Value)
         {
@@ -52,7 +54,7 @@ internal static class LocationTileHandler
         return true;
     }
 
-    private static bool RailRoadHandler(ShovelTool shovel, GameLocation location, Vector2 tile)
+    private static bool RailRoadHandler(ShovelTool shovel, Farmer who, GameLocation location, Vector2 tile)
     {
         if (location is not Railroad railroad)
         {

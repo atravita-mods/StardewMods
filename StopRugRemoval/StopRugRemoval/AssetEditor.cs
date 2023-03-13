@@ -4,12 +4,9 @@ using AtraShared.Caching;
 using AtraShared.Utils.Extensions;
 
 using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Input;
 
 using StardewModdingAPI.Events;
 using StardewModdingAPI.Utilities;
-
-using StardewValley;
 
 namespace StopRugRemoval;
 

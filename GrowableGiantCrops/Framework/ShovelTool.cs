@@ -126,7 +126,7 @@ public sealed class ShovelTool : GenericTool
             base.DoFunction(location, x, y, power, who);
             Vector2 pickupTile = new(x / Game1.tileSize, y / Game1.tileSize);
 
-            if (LocationTileHandler.ApplyShovelToMap(this, location, pickupTile))
+            if (LocationTileHandler.ApplyShovelToMap(this, who, location, pickupTile))
             {
                 return;
             }

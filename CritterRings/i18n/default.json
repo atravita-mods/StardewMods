@@ -1,13 +1,30 @@
 ﻿{
-  "mod.description": "A pair of rings. One summons butterflies, the other fireflies.",
+  "mod.description": "Rings that summon critters...and maybe do a little more.",
   // For GMCM
   "IllFormatedConfig": "Config file seems ill-formated, using default. Please use Generic Mod Config Menu to configure.",
+
+  "CritterSpawnMultiplier.title": "Critter Spawn Multiplier",
+  "CritterSpawnMultiplier.description": "Set higher to have more critters spawn",
+
+  "ButterflyRing.title": "Butterfly Ring Options",
+  "BunnyRing.title": "Bunny Ring Options",
+
   "ButterfliesSpawnInRain.title": "Butterflies Spawn In Rain",
   "ButterfliesSpawnInRain.description": "If enabled, butterflies spawn in rain. If disabled, they'll only spawn in sunny weather.",
+
+  "BunnyRingStamina.title": "Bunny Ring Stamina",
+  "BunnyRingStamina.description": "The cost in stamina for a single bunny ring boost.",
+
+  "BunnyRingBoost.title": "Bunny Ring Boost",
+  "BunnyRingBoost.description": "The amount of speed the bunny ring boost provides.",
+
+  "BunnyRingButton.title": "Bunny Ring Button",
+  "BunnyRingButton.description": "The button used to trigger the bunny ring's sprint.",
 
   "api-not-found": "{{APIID}} not found, integration disabled.",
   "api-too-old": "Please update {{apiName}}({{APIID}}) to at least version {{minversion}}. Current version {{currentversion}}. Integration disabled.",
 
+  // Rings
   "bunny-ring.name": "Bunny Ring",
   "bunny-ring.description": "Encourages bunnies to come near you.",
   "bunny-buff.description": "The energy of the local wildlife encourages you. +{{amount}} speed.",

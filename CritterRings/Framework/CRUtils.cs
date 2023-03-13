@@ -74,7 +74,7 @@ internal static class CRUtils
     internal static void AddBunnies(List<Critter> critters, int count)
     {
         int delay = 0;
-        foreach ((Vector2 position, bool flipped) in CRUtils.FindBunnySpawnTile(
+        foreach ((Vector2 position, bool flipped) in FindBunnySpawnTile(
             loc: Game1.currentLocation,
             playerTile: Game1.player.getTileLocation(),
             count: count * 2))
@@ -85,7 +85,7 @@ internal static class CRUtils
             {
                 if (location == Game1.currentLocation)
                 {
-                    CRUtils.SpawnRabbit(critters, position, location, flipped);
+                    SpawnRabbit(critters, position, location, flipped);
                 }
             },
             delay += Game1.random.Next(250, 750));
@@ -94,20 +94,27 @@ internal static class CRUtils
 
     private static IEnumerable<(Vector2, bool)> FindBunnySpawnTile(GameLocation loc, Vector2 playerTile, int count)
     {
-        if (loc.largeTerrainFeatures?.Count is null or 0)
+        if (count <= 0 || loc.largeTerrainFeatures?.Count is null or 0)
         {
             yield break;
         }
 
+        List<Bush> bushes = loc.largeTerrainFeatures.OfType<Bush>().ToList();
+        if (bushes.Count == 0)
+        {
+            yield break;
+        }
+        Utility.Shuffle(Game1.random, bushes);
+
         count *= ModEntry.Config.CritterSpawnMultiplier;
-        foreach (LargeTerrainFeature? feature in loc.largeTerrainFeatures)
+        foreach (Bush bush in bushes)
         {
             if (count <= 0)
             {
                 yield break;
             }
 
-            if (feature is Bush bush && Vector2.DistanceSquared(bush.tilePosition.Value, playerTile) <= 225)
+            if (Vector2.DistanceSquared(bush.tilePosition.Value, playerTile) <= 225)
             {
                 if (bush.size.Value == Bush.walnutBush && bush.tileSheetOffset.Value == 1)
                 {
@@ -117,6 +124,7 @@ internal static class CRUtils
 
                 bool flipped = Game1.random.Next(2) == 0;
                 Vector2 startTile = bush.tilePosition.Value;
+                startTile.X += flipped ? 1 : -1;
                 int distance = Game1.random.Next(5, 12);
 
                 for (int i = distance; i > 0; i--)

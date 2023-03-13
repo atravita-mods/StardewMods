@@ -83,7 +83,7 @@ internal static class ShopManager
         HashSet<int> nodesList = new();
         foreach ((int index, string data) in Game1.objectInformation)
         {
-            if (index == 290)
+            if (index == 390)
             {
                 continue;
             }

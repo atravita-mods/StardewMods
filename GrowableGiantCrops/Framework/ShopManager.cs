@@ -338,12 +338,16 @@ internal static class ShopManager
                 {
                     if (HasCompletedQiChallenge.GetValue())
                     {
-                        sellData = new[] { 10_000, ShopMenu.infiniteStock };
+                        sellData = new[] { 15_000, ShopMenu.infiniteStock };
                     }
                     else
                     {
                         continue;
                     }
+                }
+                else if (clump == ResourceClumpIndexes.Stump || clump == ResourceClumpIndexes.HollowLog)
+                {
+                    sellData = new[] { 10_000, ShopMenu.infiniteStock };
                 }
                 else
                 {

@@ -12,12 +12,12 @@ internal class GingerIslandTimeSlot
     /// <summary>
     /// A list of possible island activities.
     /// </summary>
-    private static readonly List<PossibleIslandActivity> PossibleActivities = GenerateIslandActivtyList();
+    private static readonly PossibleIslandActivity[] PossibleActivities = GenerateIslandActivtyList();
 
     /// <summary>
     /// Location dancers can be in relation to a musician, if one is found.
     /// </summary>
-    private static readonly List<Point> DanceDeltas = new()
+    private static readonly Point[] DanceDeltas = new[]
     {
         new Point(1, 1),
         new Point(-1, -1),
@@ -114,7 +114,7 @@ internal class GingerIslandTimeSlot
         // Get a list of possible dancers (who have _beach_dance as a possible animation).
         HashSet<NPC> dancers = (this.musician is not null)
             ? this.visitors.Where((NPC npc) => animationDescriptions.ContainsKey($"{npc.Name.ToLowerInvariant()}_beach_dance")).ToHashSet()
-            : new HashSet<NPC>();
+            : new();
 
         // assign bartenders and drinkers.
         if (this.bartender is not null)
@@ -256,7 +256,7 @@ internal class GingerIslandTimeSlot
             Globals.ModMonitor.DebugOnlyLog($"Now using fall back spot assignment for {visitor.Name} at {this.timeslot}", LogLevel.Warn);
 
             // now iterate backwards through the list, forcibly assigning people to places....
-            for (int i = PossibleActivities.Count - 1; i >= 0; i--)
+            for (int i = PossibleActivities.Length - 1; i >= 0; i--)
             {
                 SchedulePoint? schedulePoint = PossibleActivities[i].TryAssign(
                     random: this.random,
@@ -301,9 +301,9 @@ CONTINUELOOP:
     /// <returns>List of PossibleIslandActivities.</returns>
     [Pure]
     [SuppressMessage("StyleCop.CSharp.OrderingRules", "SA1204:Static elements should appear before instance elements", Justification = "Reviewed")]
-    private static List<PossibleIslandActivity> GenerateIslandActivtyList()
+    private static PossibleIslandActivity[] GenerateIslandActivtyList()
     {
-        return new List<PossibleIslandActivity>()
+        return new[]
         {
             // towel lounging
             new PossibleIslandActivity(
@@ -314,7 +314,7 @@ CONTINUELOOP:
                 animation: "beach_towel"),
             // dancing
             new PossibleIslandActivity(
-                possiblepoints: new[] { new Point(18, 26), new Point(21, 30), new Point (25, 25) },
+                possiblepoints: new[] { new Point(18, 26), new Point(21, 30), new Point(25, 25) },
                 chanceMap: static (NPC npc) => npc.Name.Equals("Emily", StringComparison.OrdinalIgnoreCase) ? 0.7 : 0.5,
                 dialogueKey: "Resort_Dance",
                 animation: "beach_dance",

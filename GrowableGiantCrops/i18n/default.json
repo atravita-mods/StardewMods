@@ -125,5 +125,8 @@
   "Mahogany.name": "Mahogany",
   "Mahogany.description": "A mahogany tree",
   "Mushroom.name": "Mushroom",
-  "Mushroom.description": "A mushroom tree"
+  "Mushroom.description": "A mushroom tree",
+
+  // Misc lines
+  "Summit.Boulder": "A mystical force keeps this rock in place. The shovel cannot budge it.",
 }

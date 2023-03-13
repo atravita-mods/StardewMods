@@ -126,7 +126,7 @@ public sealed class ShovelTool : GenericTool
             base.DoFunction(location, x, y, power, who);
             Vector2 pickupTile = new(x / Game1.tileSize, y / Game1.tileSize);
 
-            if (LocationTileHandler.ApplyShovelToMap(location, pickupTile))
+            if (LocationTileHandler.ApplyShovelToMap(this, location, pickupTile))
             {
                 return;
             }
@@ -201,10 +201,7 @@ public sealed class ShovelTool : GenericTool
                             {
                                 return;
                             }
-                            else
-                            {
-                                break;
-                            }
+                            break;
                         }
                         case "Slime Ball":
                         {
@@ -212,10 +209,7 @@ public sealed class ShovelTool : GenericTool
                             {
                                 return;
                             }
-                            else
-                            {
-                                break;
-                            }
+                            break;
                         }
                         case "Slime Incubator":
                         {
@@ -223,10 +217,7 @@ public sealed class ShovelTool : GenericTool
                             {
                                 return;
                             }
-                            else
-                            {
-                                break;
-                            }
+                            break;
                         }
                         case "Boulder":
                         {
@@ -235,10 +226,7 @@ public sealed class ShovelTool : GenericTool
                                 @object.Fragility = SObject.fragility_Removable;
                                 return;
                             }
-                            else
-                            {
-                                break;
-                            }
+                            break;
                         }
                     }
                 }
@@ -278,16 +266,13 @@ public sealed class ShovelTool : GenericTool
                     int effectiveStage = Math.Clamp(tree.growthStage.Value, 0, 5);
                     if (effectiveStage == 4)
                     {
-                        effectiveStage--;
+                        effectiveStage = 3;
                     }
                     if (effectiveStage <= ModEntry.Config.MaxTreeStageInternal && this.HandleTree(location, who, pickupTile, ModEntry.Config.ShovelEnergy, tree))
                     {
                         return;
                     }
-                    else
-                    {
-                        InventoryTree.TreeShakeMethod(tree, pickupTile, true, location);
-                    }
+                    InventoryTree.TreeShakeMethod(tree, pickupTile, true, location);
                 }
 
                 if (terrain is FruitTree fruitTree && terrain.GetType() == typeof(FruitTree))
@@ -296,10 +281,7 @@ public sealed class ShovelTool : GenericTool
                     {
                         return;
                     }
-                    else
-                    {
-                        fruitTree.shake(pickupTile, true, location);
-                    }
+                    fruitTree.shake(pickupTile, true, location);
                 }
 
                 if (terrain.performToolAction(this, 0, pickupTile, location))

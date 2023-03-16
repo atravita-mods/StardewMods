@@ -14,17 +14,18 @@ This incredibly self-indulgent mod has four rings in it: the Butterfly Ring, the
 3. Run the game using SMAPI.
 
 ## Rings
-* Bunny Ring: Allows a 14s "sprint" of +5 speed in return for 10 (configurable) stamina. Summons bunnies before dark.
+* Bunny Ring: Allows a 14s "sprint" of +5 (configurable) speed in return for 10 (configurable) stamina. Summons bunnies before dark.
 * Butterfly Ring: Acts as magnet ring, summons butterflies before dark. Buy from Marlon after receiving the skull key.
 * Firefly Ring: Acts as a glow ring, summons fireflies after dark. Buy from Marlon after receiving the skull key.
 * Owl ring: Makes enemies less likely to see you. Summons owls.
 
-
 ## Configuration
 Run SMAPI at least once with this mod installed to generate the `config.json`, or use [Generic Mod Config Menu](https://www.nexusmods.com/stardewvalley/mods/5098) to configure.
 
-Options
-`ButterfliesSpawnInRain`: if enabled, butterflies will spawn in the rain.
+Options:
+* `CritterSpawnMultiplier`: Controls how many critters will spawn per interval of time. Set it higher to get more critters.
+* `ButterfliesSpawnInRain`: if enabled, butterflies will spawn in the rain.
+
 
 ## Compatibility
 

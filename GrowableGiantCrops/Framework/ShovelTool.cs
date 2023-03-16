@@ -365,6 +365,10 @@ public sealed class ShovelTool : GenericTool
     /// <remarks>forbid attachments.</remarks>
     public override SObject attach(SObject o) => o;
 
+    /// <inheritdoc />
+    /// <remarks>Always allow the player to trash this if necessary.</remarks>
+    public override bool canBeTrashed() => true;
+
     #endregion
 
     #region helpers

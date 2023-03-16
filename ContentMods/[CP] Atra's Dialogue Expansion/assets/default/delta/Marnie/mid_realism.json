@@ -14,7 +14,8 @@
         "Target": "Characters/Dialogue/Marnie",
         "When": { "YearModulus": "2" },
         "Entries": {
-            "5_2": "My dear Bessie stepped on a nail the other day. Poor darling, I need to do a better job making sure their pen doesn't have dangerous items in it."
+            "5_2": "My dear Bessie stepped on a nail the other day. Poor darling, I need to do a better job making sure their pen doesn't have dangerous items in it.",
+            "7_2": "I try to keep my dairy organic. It's better for the cows, most of the time."
         }
     }
 ]}

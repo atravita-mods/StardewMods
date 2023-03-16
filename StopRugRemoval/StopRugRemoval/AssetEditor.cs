@@ -114,7 +114,7 @@ internal static class AssetEditor
                         ModEntry.ModMonitor.Log($"Could not restore birdie quest key for {character}.", LogLevel.Warn);
                     }
                 },
-                AssetEditPriority.Late);
+                AssetEditPriority.Late + 1000);
         }
         else if (e.NameWithoutLocale.IsEquivalentTo(weapons))
         {
@@ -127,7 +127,7 @@ internal static class AssetEditor
                     // check golden scythe and infinity gavel.
                     if (!data.ContainsKey(53) || !data.ContainsKey(63))
                     {
-                        ModEntry.ModMonitor.Log("Missing weapons detected, are you using a weapons mod made before 1.5?", LogLevel.Error);
+                        ModEntry.ModMonitor.LogOnce("Missing weapons detected, are you using a weapons mod made before 1.5?", LogLevel.Error);
                         contentManager ??= new(Game1.content.ServiceProvider, Game1.content.RootDirectory);
                         try
                         {
@@ -136,7 +136,7 @@ internal static class AssetEditor
                             {
                                 if (data.TryAdd(key, value))
                                 {
-                                    ModEntry.ModMonitor.Log($"Restoring missing weapon: {key}", LogLevel.Info);
+                                    ModEntry.ModMonitor.LogOnce($"Restoring missing weapon: {key}", LogLevel.Info);
                                 }
                             }
                         }

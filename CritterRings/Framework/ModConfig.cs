@@ -58,5 +58,5 @@ public sealed class ModConfig
     /// Gets or sets a value indicating which button should be used for the bunny ring's stamina-sprint.
     /// </summary>
     [GMCMSection("BunnyRing", 10)]
-    public KeybindList BunnyRingButton { get; set; } = new KeybindList(new(SButton.Space), new(SButton.DPadDown));
+    public KeybindList BunnyRingButton { get; set; } = new KeybindList(new(SButton.LeftShift), new(SButton.DPadDown));
 }

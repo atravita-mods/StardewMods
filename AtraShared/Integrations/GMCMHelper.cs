@@ -397,11 +397,10 @@ public sealed class GMCMHelper : IntegrationHelper
         CacheKey key = new(typeof(TModConfig), tEnum);
         if (!enumCache.TryGetValue(key, out MethodInfo? realized))
         {
-            realized = this.GetType().GetMethods()
+            enumCache[key] = realized = this.GetType().GetMethods()
                 .Where((method) => method.Name == nameof(this.AddEnumOption) && method.GetGenericArguments().Length == 2)
                 .First()
                 .MakeGenericMethod(typeof(TModConfig), tEnum);
-            enumCache[key] = realized;
         }
         realized.Invoke(this, new object?[] { property, getConfig, fieldID });
 

@@ -7,11 +7,13 @@ using AtraShared.MigrationManager;
 using AtraShared.Utils.Extensions;
 
 using CritterRings.Framework;
+using CritterRings.Framework.Managers;
 using CritterRings.Models;
 
 using HarmonyLib;
 
 using StardewModdingAPI.Events;
+using StardewModdingAPI.Utilities;
 
 using StardewValley.BellsAndWhistles;
 
@@ -42,6 +44,11 @@ internal sealed class ModEntry : Mod
     /// Gets the logger for this mod.
     /// </summary>
     internal static IMonitor ModMonitor { get; private set; } = null!;
+
+    #region managers
+
+    private PerScreen<BunnySpawnManager?> bunnyManager = new(() => null);
+    #endregion
 
     #region JA ids
 
@@ -164,9 +171,20 @@ internal sealed class ModEntry : Mod
     /// <inheritdoc cref="IInputEvents.ButtonPressed"/>
     private void OnButtonPressed(object? sender, ButtonPressedEventArgs e)
     {
-        if (Context.IsPlayerFree && Config.BunnyRingButton.JustPressed() && BunnyRing > 0
+        if (!Context.IsPlayerFree)
+        {
+            return;
+        }
+        if (e.Button == SButton.Space)
+        {
+            Game1.player.synchronizedJump(16f);
+            this.Helper.Input.Suppress(e.Button);
+        }
+
+        if (Config.BunnyRingButton.JustPressed() && BunnyRing > 0
             && Game1.player.isWearingRing(BunnyRing) && !Game1.player.hasBuff(BunnyBuffId))
         {
+            this.Helper.Input.Suppress(e.Button);
             if (Game1.player.Stamina >= Config.BunnyRingStamina && !Game1.player.exhausted.Value)
             {
                 Buff buff = BuffEnum.Speed.GetBuffOf(Config.BunnyRingBoost, 20, "atravita.BunnyRing", I18n.BunnyRing_Name());
@@ -211,7 +229,13 @@ internal sealed class ModEntry : Mod
             }
             if (BunnyRing > 0 && Game1.player.isWearingRing(BunnyRing))
             {
-                CRUtils.AddBunnies(critters, 3);
+                if (this.bunnyManager.Value?.IsValid() == false)
+                {
+                    this.bunnyManager.Value.Dispose();
+                    this.bunnyManager.Value = null;
+                }
+                this.bunnyManager.Value ??= new(this.Monitor, Game1.player, this.Helper.Events.Player);
+                CRUtils.AddBunnies(critters, 3, this.bunnyManager.Value.GetTrackedBushes());
             }
         }
     }
@@ -239,7 +263,13 @@ internal sealed class ModEntry : Mod
             }
             if (BunnyRing > 0)
             {
-                CRUtils.AddBunnies(critters, Game1.player.GetEffectsOfRingMultiplier(BunnyRing));
+                if (this.bunnyManager.Value?.IsValid() == false)
+                {
+                    this.bunnyManager.Value.Dispose();
+                    this.bunnyManager.Value = null;
+                }
+                this.bunnyManager.Value ??= new(this.Monitor, Game1.player, this.Helper.Events.Player);
+                CRUtils.AddBunnies(critters, Game1.player.GetEffectsOfRingMultiplier(BunnyRing), this.bunnyManager.Value.GetTrackedBushes());
             }
         }
 

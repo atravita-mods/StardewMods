@@ -71,39 +71,38 @@ internal static class CRUtils
     /// </summary>
     /// <param name="critters">The critter list.</param>
     /// <param name="count">The number of bunnies to spawn.</param>
-    internal static void AddBunnies(List<Critter> critters, int count)
+    internal static void AddBunnies(List<Critter> critters, int count, List<Bush>? bushes)
     {
-        int delay = 0;
-        foreach ((Vector2 position, bool flipped) in FindBunnySpawnTile(
-            loc: Game1.currentLocation,
-            playerTile: Game1.player.getTileLocation(),
-            count: count * 2))
+        if (critters is not null && count > 0)
         {
-            GameLocation location = Game1.currentLocation;
-            DelayedAction.functionAfterDelay(
-            () =>
+            int delay = 0;
+            foreach ((Vector2 position, bool flipped) in FindBunnySpawnTile(
+                loc: Game1.currentLocation,
+                bushes: bushes,
+                playerTile: Game1.player.getTileLocation(),
+                count: count * 2))
             {
-                if (location == Game1.currentLocation)
+                GameLocation location = Game1.currentLocation;
+                DelayedAction.functionAfterDelay(
+                func: () =>
                 {
-                    SpawnRabbit(critters, position, location, flipped);
-                }
-            },
-            delay += Game1.random.Next(250, 750));
+                    if (location == Game1.currentLocation)
+                    {
+                        SpawnRabbit(critters, position, location, flipped);
+                    }
+                },
+                timer: delay += Game1.random.Next(250, 750));
+            }
         }
     }
 
-    private static IEnumerable<(Vector2, bool)> FindBunnySpawnTile(GameLocation loc, Vector2 playerTile, int count)
+    private static IEnumerable<(Vector2, bool)> FindBunnySpawnTile(GameLocation loc, List<Bush>? bushes, Vector2 playerTile, int count)
     {
-        if (count <= 0 || loc.largeTerrainFeatures?.Count is null or 0)
+        if (count <= 0 || bushes?.Count is null or 0)
         {
             yield break;
         }
 
-        List<Bush> bushes = loc.largeTerrainFeatures.OfType<Bush>().ToList();
-        if (bushes.Count == 0)
-        {
-            yield break;
-        }
         Utility.Shuffle(Game1.random, bushes);
 
         count *= ModEntry.Config.CritterSpawnMultiplier;
@@ -135,11 +134,12 @@ internal static class CRUtils
                     {
                         yield return (tile, flipped);
                         count--;
-                        break;
+                        goto Continue;
                     }
                 }
                 yield return (startTile, flipped);
                 count--;
+Continue:;
             }
         }
     }

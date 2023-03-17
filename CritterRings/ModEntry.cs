@@ -47,7 +47,9 @@ internal sealed class ModEntry : Mod
 
     #region managers
 
-    private PerScreen<BunnySpawnManager?> bunnyManager = new(() => null);
+    private static readonly PerScreen<BunnySpawnManager?> BunnyManager = new(() => null);
+
+    private static readonly PerScreen<JumpManager?> JumpManager = new(() => null);
     #endregion
 
     #region JA ids
@@ -103,6 +105,23 @@ internal sealed class ModEntry : Mod
         }
     }
 
+    private static int frogRing = -1;
+
+    /// <summary>
+    /// Gets the integer Id of the Frog Ring. -1 if not found/not loaded yet.
+    /// </summary>
+    internal static int FrogRing
+    {
+        get
+        {
+            if (frogRing == -1)
+            {
+                frogRing = jsonAssets?.GetObjectId("atravita.FrogRing") ?? -1;
+            }
+            return frogRing;
+        }
+    }
+
     private static int owlRing = -1;
 
     /// <summary>
@@ -121,6 +140,8 @@ internal sealed class ModEntry : Mod
     }
 
     #endregion
+
+    #region initialization
 
     /// <inheritdoc />
     public override void Entry(IModHelper helper)
@@ -168,6 +189,23 @@ internal sealed class ModEntry : Mod
         }
     }
 
+    private void ApplyPatches(Harmony harmony)
+    {
+        try
+        {
+            // handle patches from annotations.
+            harmony.PatchAll(typeof(ModEntry).Assembly);
+        }
+        catch (Exception ex)
+        {
+            ModMonitor.Log(string.Format(ErrorMessageConsts.HARMONYCRASH, ex), LogLevel.Error);
+        }
+
+        harmony.Snitch(this.Monitor, harmony.Id, transpilersOnly: true);
+    }
+
+    #endregion
+
     /// <inheritdoc cref="IInputEvents.ButtonPressed"/>
     private void OnButtonPressed(object? sender, ButtonPressedEventArgs e)
     {
@@ -175,16 +213,27 @@ internal sealed class ModEntry : Mod
         {
             return;
         }
-        if (e.Button == SButton.Space)
+        if (Config.FrogRingButton.JustPressed() && FrogRing > 0
+            && Game1.player.isWearingRing(frogRing))
         {
-            Game1.player.synchronizedJump(16f);
-            this.Helper.Input.Suppress(e.Button);
+            if (JumpManager.Value?.IsValid() == true)
+            {
+                ModMonitor.Log($"Jump already in progress for this player, skipping.");
+            }
+            else if (Game1.player.isRidingHorse())
+            {
+                Game1.showRedMessage("The Frog Ring Is Insufficiently Powerful For That");
+            }
+            else
+            {
+                JumpManager.Value?.Dispose();
+                JumpManager.Value = new(Game1.player, this.Helper.Events.GameLoop, this.Helper.Events.Display);
+            }
         }
 
         if (Config.BunnyRingButton.JustPressed() && BunnyRing > 0
             && Game1.player.isWearingRing(BunnyRing) && !Game1.player.hasBuff(BunnyBuffId))
         {
-            this.Helper.Input.Suppress(e.Button);
             if (Game1.player.Stamina >= Config.BunnyRingStamina && !Game1.player.exhausted.Value)
             {
                 Buff buff = BuffEnum.Speed.GetBuffOf(Config.BunnyRingBoost, 20, "atravita.BunnyRing", I18n.BunnyRing_Name());
@@ -221,22 +270,19 @@ internal sealed class ModEntry : Mod
                 CRUtils.SpawnFirefly(critters, 3);
             }
         }
-        else
+        else if (Game1.currentLocation.ShouldSpawnButterflies() && ButterflyRing > 0 && Game1.player.isWearingRing(ButterflyRing))
         {
-            if (Game1.currentLocation.ShouldSpawnButterflies() && ButterflyRing > 0 && Game1.player.isWearingRing(ButterflyRing))
+            CRUtils.SpawnButterfly(critters, 3);
+        }
+        if (BunnyRing > 0 && Game1.player.isWearingRing(BunnyRing))
+        {
+            if (BunnyManager.Value?.IsValid() == false)
             {
-                CRUtils.SpawnButterfly(critters, 3);
+                BunnyManager.Value.Dispose();
+                BunnyManager.Value = null;
             }
-            if (BunnyRing > 0 && Game1.player.isWearingRing(BunnyRing))
-            {
-                if (this.bunnyManager.Value?.IsValid() == false)
-                {
-                    this.bunnyManager.Value.Dispose();
-                    this.bunnyManager.Value = null;
-                }
-                this.bunnyManager.Value ??= new(this.Monitor, Game1.player, this.Helper.Events.Player);
-                CRUtils.AddBunnies(critters, 3, this.bunnyManager.Value.GetTrackedBushes());
-            }
+            BunnyManager.Value ??= new(this.Monitor, Game1.player, this.Helper.Events.Player);
+            CRUtils.AddBunnies(critters, 3, BunnyManager.Value.GetTrackedBushes());
         }
     }
 
@@ -255,24 +301,21 @@ internal sealed class ModEntry : Mod
                 CRUtils.SpawnFirefly(critters, Game1.player.GetEffectsOfRingMultiplier(FireFlyRing));
             }
         }
-        else
+        else if (ButterflyRing > 0 && Game1.currentLocation.ShouldSpawnButterflies())
         {
-            if (ButterflyRing > 0 && Game1.currentLocation.ShouldSpawnButterflies())
-            {
-                CRUtils.SpawnButterfly(critters, Game1.player.GetEffectsOfRingMultiplier(ButterflyRing));
-            }
-            if (BunnyRing > 0)
-            {
-                if (this.bunnyManager.Value?.IsValid() == false)
-                {
-                    this.bunnyManager.Value.Dispose();
-                    this.bunnyManager.Value = null;
-                }
-                this.bunnyManager.Value ??= new(this.Monitor, Game1.player, this.Helper.Events.Player);
-                CRUtils.AddBunnies(critters, Game1.player.GetEffectsOfRingMultiplier(BunnyRing), this.bunnyManager.Value.GetTrackedBushes());
-            }
+            CRUtils.SpawnButterfly(critters, Game1.player.GetEffectsOfRingMultiplier(ButterflyRing));
         }
 
+        if (BunnyRing > 0)
+        {
+            if (BunnyManager.Value?.IsValid() == false)
+            {
+                BunnyManager.Value.Dispose();
+                BunnyManager.Value = null;
+            }
+            BunnyManager.Value ??= new(this.Monitor, Game1.player, this.Helper.Events.Player);
+            CRUtils.AddBunnies(critters, Game1.player.GetEffectsOfRingMultiplier(BunnyRing), BunnyManager.Value.GetTrackedBushes());
+        }
     }
 
     /// <inheritdoc cref="IGameLoopEvents.SaveLoaded"/>
@@ -306,25 +349,24 @@ internal sealed class ModEntry : Mod
     [EventPriority(EventPriority.High)]
     private void OnReturnedToTitle(object? sender, ReturnedToTitleEventArgs e)
     {
+        // reset JA ids. No clue why but JA does this.
         bunnyRing = -1;
         butterflyRing = -1;
         fireflyRing = -1;
+        frogRing = -1;
         owlRing = -1;
-    }
 
-    private void ApplyPatches(Harmony harmony)
-    {
-        try
+        // reset and yeet managers.
+        foreach ((_, JumpManager? value) in JumpManager.GetActiveValues())
         {
-            // handle patches from annotations.
-            harmony.PatchAll(typeof(ModEntry).Assembly);
+            value?.Dispose();
         }
-        catch (Exception ex)
+        JumpManager.ResetAllScreens();
+        foreach ((_, BunnySpawnManager? value) in BunnyManager.GetActiveValues())
         {
-            ModMonitor.Log(string.Format(ErrorMessageConsts.HARMONYCRASH, ex), LogLevel.Error);
+            value?.Dispose();
         }
-
-        harmony.Snitch(this.Monitor, harmony.Id, transpilersOnly: true);
+        BunnyManager.ResetAllScreens();
     }
 
     #region migration
@@ -353,6 +395,12 @@ internal sealed class ModEntry : Mod
             if (data.FireFlyRing != FireFlyRing)
             {
                 data.FireFlyRing = FireFlyRing;
+                changed = true;
+            }
+
+            if (data.FrogRing != FrogRing)
+            {
+                data.FrogRing = FrogRing;
                 changed = true;
             }
 

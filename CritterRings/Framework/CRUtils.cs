@@ -123,14 +123,15 @@ internal static class CRUtils
 
                 bool flipped = Game1.random.Next(2) == 0;
                 Vector2 startTile = bush.tilePosition.Value;
-                startTile.X += flipped ? 1 : -1;
+                startTile.X += flipped ? 2 : -2;
                 int distance = Game1.random.Next(5, 12);
 
                 for (int i = distance; i > 0; i--)
                 {
                     Vector2 tile = startTile;
                     startTile.X += flipped ? 1 : -1;
-                    if (!bush.getBoundingBox().Intersects(new Rectangle((int)startTile.X * 64, (int)startTile.Y * 64, 64, 64)) && !loc.isTileLocationTotallyClearAndPlaceable(startTile))
+                    if (!bush.getBoundingBox().Intersects(new Rectangle((int)startTile.X * 64, (int)startTile.Y * 64, 64, 64))
+                        && (!loc.isTileLocationTotallyClearAndPlaceable(startTile) || loc.isWaterTile((int)startTile.X, (int)startTile.Y)))
                     {
                         yield return (tile, flipped);
                         count--;
@@ -149,6 +150,8 @@ Continue:;
         if (critters is not null)
         {
             Rabbit rabbit = new(tile, flipped);
+            // make the rabbit hang around for a little longer.
+            // so it doesn't immediately exist stage left.
             CharacterTimerSetter.Value(rabbit, Game1.random.Next(750, 1500));
             critters.Add(rabbit);
 

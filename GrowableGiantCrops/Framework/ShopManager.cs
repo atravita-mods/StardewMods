@@ -240,7 +240,7 @@ internal static class ShopManager
             Dictionary<ISalable, int[]> sellables = new();
             sellables.PopulateWitchShop();
 
-            Game1.activeClickableMenu = new ShopMenu(sellables, on_purchase: TrackStock) { storeContext = GIANT_CROP_SHOP_NAME };
+            Game1.activeClickableMenu = new ShopMenu(sellables, on_purchase: PerfectFarm.GetValue() ? null : TrackStock) { storeContext = GIANT_CROP_SHOP_NAME };
         }
     }
 

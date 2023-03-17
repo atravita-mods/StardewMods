@@ -11,7 +11,7 @@ namespace CritterRings.Framework.Managers;
 /// The vast majority of players will not see a bush change at all in their game, definitely not every ten in-game minutes
 /// So this tracker exists to prevent us from repeatedly allocating.
 /// </summary>
-internal class BunnySpawnManager: IDisposable
+internal sealed class BunnySpawnManager : IDisposable
 {
     private IPlayerEvents playerEvents;
     private WeakReference<Farmer> farmerRef;
@@ -33,7 +33,28 @@ internal class BunnySpawnManager: IDisposable
         this.playerEvents.Warped += this.OnWarp;
     }
 
-    internal bool IsValid() => this.farmerRef?.TryGetTarget(out var farmer) == true && farmer is not null;
+    /// <summary>
+    /// Finalizes an instance of the <see cref="BunnySpawnManager"/> class.
+    /// </summary>
+    ~BunnySpawnManager()
+    {
+        this.Dispose(disposing: false);
+    }
+
+    /// <inheritdoc cref="IDisposable.Dispose"/>
+    public void Dispose()
+    {
+        this.Dispose(disposing: true);
+        GC.SuppressFinalize(this);
+    }
+
+    /// <summary>
+    /// Checks to see if this instance is still valid.
+    /// </summary>
+    /// <returns>True if not disposed and the farmer reference is still valid.</returns>
+    internal bool IsValid()
+        => !this.disposedValue
+        && this.farmerRef?.TryGetTarget(out Farmer? farmer) == true && farmer is not null;
 
     internal List<Bush>? GetTrackedBushes()
     {
@@ -53,7 +74,7 @@ internal class BunnySpawnManager: IDisposable
     private void OnWarp(object? sender, WarpedEventArgs e)
     {
         if (this.farmerRef?.TryGetTarget(out Farmer? farmer) != true || this.disposedValue || farmer is null
-            || !object.ReferenceEquals(farmer, e.Player))
+            || !ReferenceEquals(farmer, e.Player))
         {
             ModEntry.ModMonitor.DebugOnlyLog($"Warp event raised, not for us", LogLevel.Info);
             return;
@@ -65,11 +86,13 @@ internal class BunnySpawnManager: IDisposable
         }
     }
 
-    protected virtual void Dispose(bool disposing)
+    /// <inheritdoc cref="IDisposable.Dispose"/>
+    /// <param name="disposing">Whether or not this is called from the Dispose function or by the finalizer.</param>
+    protected void Dispose(bool disposing)
     {
         if (!this.disposedValue)
         {
-            if (this.listener?.TryGetTarget(out var watcher) == true)
+            if (this.listener?.TryGetTarget(out LargeObjectListener? watcher) == true)
             {
                 watcher?.Dispose();
             }
@@ -81,18 +104,11 @@ internal class BunnySpawnManager: IDisposable
         }
     }
 
-    public void Dispose()
-    {
-        // Do not change this code. Put cleanup code in 'Dispose(bool disposing)' method
-        this.Dispose(disposing: true);
-        GC.SuppressFinalize(this);
-    }
-
     /// <summary>
     /// A class to hook into largeterrainfeature's events.
     /// Do not maintain a strong reference to this to allow the GC to collect if needed.
     /// </summary>
-    private class LargeObjectListener : IDisposable
+    private sealed class LargeObjectListener : IDisposable
     {
         private readonly IMonitor monitor;
         private List<Bush>? watchedBushes;
@@ -142,10 +158,9 @@ internal class BunnySpawnManager: IDisposable
         public void Dispose()
         {
             this.Dispose(disposing: true);
-            GC.SuppressFinalize(this);
         }
 
-        protected virtual void Dispose(bool disposing)
+        protected void Dispose(bool disposing)
         {
             if (!this.disposedValue && this.location?.largeTerrainFeatures is { } features)
             {

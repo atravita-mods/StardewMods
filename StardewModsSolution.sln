@@ -115,7 +115,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GrowableBushes", "GrowableB
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GrowableGiantCrops", "GrowableGiantCrops\GrowableGiantCrops.csproj", "{6932AA8F-D4B7-4322-894E-00426002A8A5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CritterRings", "CritterRings\CritterRings.csproj", "{A55D6E3F-B6C1-4AEC-ADB8-B52E9AEAC9CA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CritterRings", "CritterRings\CritterRings.csproj", "{A55D6E3F-B6C1-4AEC-ADB8-B52E9AEAC9CA}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

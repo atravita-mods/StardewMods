@@ -8,6 +8,7 @@
 
   "ButterflyRing.title": "Butterfly Ring Options",
   "BunnyRing.title": "Bunny Ring Options",
+  "FrogRing.title": "Frog Ring Options",
 
   "ButterfliesSpawnInRain.title": "Butterflies Spawn In Rain",
   "ButterfliesSpawnInRain.description": "If enabled, butterflies spawn in rain. If disabled, they'll only spawn in sunny weather.",
@@ -26,16 +27,19 @@
 
   // Rings
   "bunny-ring.name": "Bunny Ring",
-  "bunny-ring.description": "Encourages bunnies to come near you.",
+  "bunny-ring.description": "Encourages bunnies to come near you. You learn from their speed.",
   "bunny-buff.description": "The energy of the local wildlife encourages you. +{{amount}} speed.",
   "bunny-buff.tired": "Too tired for that!",
 
   "butterfly-ring.name": "Butterfly Ring",
-  "butterfly-ring.description": "During the day, summons butterflies to you.",
+  "butterfly-ring.description": "During the day, summons butterflies to you. Also, increases magnetism.",
 
   "firefly-ring.name": "Firefly Ring",
-  "firefly-ring.description": "During the night, summons fireflies to you.",
+  "firefly-ring.description": "During the night, summons fireflies to you, and brings you light.",
 
   "owl-ring.name": "Owl Ring",
-  "owl-ring.description": "Encourages owls to come near you."
+  "owl-ring.description": "Encourages owls to come near you. They inspire you to be more stealthy.",
+
+  "frog-ring.name": "Frog Ring",
+  "frog-ring.description": "Attracts frogs. Makes you feel lighter."
 }

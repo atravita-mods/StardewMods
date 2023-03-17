@@ -25,7 +25,8 @@ Run SMAPI at least once with this mod installed to generate the `config.json`, o
 Options:
 * `CritterSpawnMultiplier`: Controls how many critters will spawn per interval of time. Set it higher to get more critters.
 * `ButterfliesSpawnInRain`: if enabled, butterflies will spawn in the rain.
-
+* `BunnyRingStamina`: How much stamina each sprint of the bunny ring should take.
+* `BunnyRingBoost`: Indicates how much speed the bunny ring sprint should add. Default +3.
 
 ## Compatibility
 

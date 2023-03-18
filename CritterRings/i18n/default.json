@@ -44,5 +44,6 @@
   "owl-ring.description": "Encourages owls to come near you. They inspire you to be more stealthy.",
 
   "frog-ring.name": "Frog Ring",
-  "frog-ring.description": "Attracts frogs. Makes you feel lighter."
+  "frog-ring.description": "Attracts frogs. Makes you feel lighter.",
+  "frog-ring.horse": "Frog ring can't pick up your horse!",
 }

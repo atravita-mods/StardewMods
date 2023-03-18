@@ -16,6 +16,7 @@ using StardewModdingAPI.Events;
 using StardewModdingAPI.Utilities;
 
 using StardewValley.BellsAndWhistles;
+using StardewValley.Tools;
 
 using AtraUtils = AtraShared.Utils.Utils;
 
@@ -47,9 +48,9 @@ internal sealed class ModEntry : Mod
 
     #region managers
 
-    private static readonly PerScreen<BunnySpawnManager?> BunnyManager = new(() => null);
+    private static readonly PerScreen<BunnySpawnManager?> BunnyManagers = new(() => null);
 
-    private static readonly PerScreen<JumpManager?> JumpManager = new(() => null);
+    private static readonly PerScreen<JumpManager?> JumpManagers = new(() => null);
     #endregion
 
     #region JA ids
@@ -178,6 +179,8 @@ internal sealed class ModEntry : Mod
         this.Helper.Events.Content.AssetRequested += static (_, e) => AssetManager.Apply(e);
         this.Helper.Events.Content.AssetsInvalidated += static (_, e) => AssetManager.Reset(e.NamesWithoutLocale);
 
+        JumpManager.Initialize(this.Helper.ModRegistry);
+
         GMCMHelper gmcmHelper = new(this.Monitor, this.Helper.Translation, this.Helper.ModRegistry, this.ModManifest);
         if (gmcmHelper.TryGetAPI())
         {
@@ -216,18 +219,22 @@ internal sealed class ModEntry : Mod
         if (Config.FrogRingButton.JustPressed() && FrogRing > 0
             && Game1.player.isWearingRing(frogRing) && !Game1.player.UsingTool)
         {
-            if (JumpManager.Value?.IsValid() == true)
+            if (JumpManagers.Value?.IsValid() == true)
             {
                 ModMonitor.Log($"Jump already in progress for this player, skipping.");
             }
             else if (Game1.player.isRidingHorse())
             {
-                Game1.showRedMessage("The Frog Ring Is Insufficiently Powerful For That");
+                Game1.showRedMessage(I18n.FrogRing_Horse());
+            }
+            else if (Game1.player.exhausted.Value || Game1.player.Stamina < ModEntry.Config.MaxFrogJumpDistance)
+            {
+                Game1.showRedMessage(I18n.BunnyBuff_Tired());
             }
             else
             {
-                JumpManager.Value?.Dispose();
-                JumpManager.Value = new(Game1.player, this.Helper.Events.GameLoop, this.Helper.Events.Display);
+                JumpManagers.Value?.Dispose();
+                JumpManagers.Value = new(Game1.player, this.Helper.Events.GameLoop, this.Helper.Events.Display);
             }
         }
 
@@ -277,13 +284,13 @@ internal sealed class ModEntry : Mod
         }
         if (BunnyRing > 0 && Game1.player.isWearingRing(BunnyRing))
         {
-            if (BunnyManager.Value?.IsValid() == false)
+            if (BunnyManagers.Value?.IsValid() == false)
             {
-                BunnyManager.Value.Dispose();
-                BunnyManager.Value = null;
+                BunnyManagers.Value.Dispose();
+                BunnyManagers.Value = null;
             }
-            BunnyManager.Value ??= new(this.Monitor, Game1.player, this.Helper.Events.Player);
-            CRUtils.AddBunnies(critters, 3, BunnyManager.Value.GetTrackedBushes());
+            BunnyManagers.Value ??= new(this.Monitor, Game1.player, this.Helper.Events.Player);
+            CRUtils.AddBunnies(critters, 3, BunnyManagers.Value.GetTrackedBushes());
         }
     }
 
@@ -309,13 +316,13 @@ internal sealed class ModEntry : Mod
 
         if (BunnyRing > 0)
         {
-            if (BunnyManager.Value?.IsValid() == false)
+            if (BunnyManagers.Value?.IsValid() == false)
             {
-                BunnyManager.Value.Dispose();
-                BunnyManager.Value = null;
+                BunnyManagers.Value.Dispose();
+                BunnyManagers.Value = null;
             }
-            BunnyManager.Value ??= new(this.Monitor, Game1.player, this.Helper.Events.Player);
-            CRUtils.AddBunnies(critters, Game1.player.GetEffectsOfRingMultiplier(BunnyRing), BunnyManager.Value.GetTrackedBushes());
+            BunnyManagers.Value ??= new(this.Monitor, Game1.player, this.Helper.Events.Player);
+            CRUtils.AddBunnies(critters, Game1.player.GetEffectsOfRingMultiplier(BunnyRing), BunnyManagers.Value.GetTrackedBushes());
         }
     }
 
@@ -358,16 +365,16 @@ internal sealed class ModEntry : Mod
         owlRing = -1;
 
         // reset and yeet managers.
-        foreach ((_, JumpManager? value) in JumpManager.GetActiveValues())
+        foreach ((_, JumpManager? value) in JumpManagers.GetActiveValues())
         {
             value?.Dispose();
         }
-        JumpManager.ResetAllScreens();
-        foreach ((_, BunnySpawnManager? value) in BunnyManager.GetActiveValues())
+        JumpManagers.ResetAllScreens();
+        foreach ((_, BunnySpawnManager? value) in BunnyManagers.GetActiveValues())
         {
             value?.Dispose();
         }
-        BunnyManager.ResetAllScreens();
+        BunnyManagers.ResetAllScreens();
     }
 
     #region migration

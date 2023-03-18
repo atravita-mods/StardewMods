@@ -1,10 +1,14 @@
-﻿#define TRACE
+﻿// #define TRACE
 
 using AtraBase.Toolkit.Extensions;
+using AtraBase.Toolkit.Reflection;
+
+using AtraCore.Framework.ReflectionManager;
 
 using AtraShared.Utils.Extensions;
 
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 
 using StardewModdingAPI.Events;
 
@@ -14,10 +18,13 @@ namespace CritterRings.Framework.Managers;
 /// Manages a jump for a player.
 /// </summary>
 [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1310:Field names should not contain underscore", Justification = "Preference.")]
+[SuppressMessage("StyleCop.CSharp.OrderingRules", "SA1204:Static elements should appear before instance elements", Justification = "Preference.")]
+[SuppressMessage("StyleCop.CSharp.OrderingRules", "SA1214:Readonly fields should appear before non-readonly fields", Justification = "Preference.")]
 internal sealed class JumpManager : IDisposable
 {
-    private const float GRAVITY = 0.5f;
     private const int DEFAULT_TICKS = 200;
+
+    private static bool hasSwim = false;
 
     // event handlers.
     private IGameLoopEvents gameEvents;
@@ -29,16 +36,28 @@ internal sealed class JumpManager : IDisposable
 
     private State state = State.Charging;
     private int ticks = DEFAULT_TICKS;
-    private readonly Vector2 direction = Vector2.Zero;
+    private readonly Vector2 direction;
 
     // charging fields.
     private int distance = 1;
+    private readonly Vector2 startTile;
     private Vector2 currentTile = Vector2.Zero;
     private Vector2 openTile = Vector2.Zero;
     private bool isCurrentTileBlocked = false;
 
     // jumping fields.
     private JumpFrame frame;
+    private float velocity;
+
+    #region delegates
+
+    // this exists because if currentAnimationFrames is 1 or lower,
+    // the game will unset PauseForSingleAnimation on its own.
+    // so we just manually set it to two.
+    private static Lazy<Action<FarmerSprite, int>> currentFramesSetter = new(() =>
+        typeof(FarmerSprite).GetCachedField("currentAnimationFrames", ReflectionCache.FlagTypes.InstanceFlags).GetInstanceFieldSetter<FarmerSprite, int>()
+    );
+    #endregion
 
     /// <summary>
     /// Initializes a new instance of the <see cref="JumpManager"/> class.
@@ -64,9 +83,11 @@ internal sealed class JumpManager : IDisposable
             _ => Vector2.UnitX,
         };
 
+        this.startTile = this.openTile = farmer.getTileLocation();
+        this.RecalculateTiles(farmer, Game1.currentLocation);
+
+        farmer.completelyStopAnimatingOrDoingAction();
         farmer.CanMove = false;
-        farmer.UsingTool = false;
-        ModEntry.ModMonitor.DebugOnlyLog($"Picking tool? {Game1.pickingTool}", LogLevel.Alert);
         SetCrouchAnimation(farmer);
     }
 
@@ -97,11 +118,19 @@ internal sealed class JumpManager : IDisposable
     }
 
     /// <summary>
+    /// sets some initial state.
+    /// </summary>
+    /// <param name="registry">Modregistry.</param>
+    internal static void Initialize(IModRegistry registry)
+        => hasSwim = registry.IsLoaded("aedenthorn.Swim");
+
+    /// <summary>
     /// Checks to see if this JumpManager is valid (ie, not disposed, and has an active farmer associated).
     /// </summary>
     /// <returns>True if valid.</returns>
     internal bool IsValid()
-        => !this.disposedValue && this.state != State.Inactive && this.farmerRef?.TryGetTarget(out Farmer? farmer) == true && farmer is not null;
+        => !this.disposedValue && this.state != State.Inactive
+            && this.farmerRef?.TryGetTarget(out Farmer? farmer) == true && farmer is not null;
 
     private bool IsCurrentFarmer()
         => this.farmerRef?.TryGetTarget(out Farmer? farmer) == true && ReferenceEquals(farmer, Game1.player);
@@ -111,6 +140,43 @@ internal sealed class JumpManager : IDisposable
         if (!this.IsCurrentFarmer())
         {
             return;
+        }
+
+        if (this.isCurrentTileBlocked)
+        {
+            e.SpriteBatch.Draw(
+                texture: Game1.mouseCursors,
+                new Vector2((this.currentTile.X * Game1.tileSize) - Game1.viewport.X, (this.currentTile.Y * Game1.tileSize) - Game1.viewport.Y),
+                new Rectangle(210, 388, 16, 16),
+                color: Color.White,
+                rotation: 0f,
+                origin: Vector2.Zero,
+                scale: 4f,
+                effects: SpriteEffects.None,
+                layerDepth: 0.01f);
+            e.SpriteBatch.Draw(
+                texture: Game1.mouseCursors,
+                new Vector2((this.openTile.X * Game1.tileSize) - Game1.viewport.X, (this.openTile.Y * Game1.tileSize) - Game1.viewport.Y),
+                new Rectangle(194, 388, 16, 16),
+                color: Color.White,
+                rotation: 0f,
+                origin: Vector2.Zero,
+                scale: 4f,
+                effects: SpriteEffects.None,
+                layerDepth: 0.01f);
+        }
+        else
+        {
+            e.SpriteBatch.Draw(
+                texture: Game1.mouseCursors,
+                new Vector2((this.currentTile.X * Game1.tileSize) - Game1.viewport.X, (this.currentTile.Y * Game1.tileSize) - Game1.viewport.Y),
+                new Rectangle(194, 388, 16, 16),
+                color: Color.White,
+                rotation: 0f,
+                origin: Vector2.Zero,
+                scale: 4f,
+                effects: SpriteEffects.None,
+                layerDepth: 0.01f);
         }
     }
 
@@ -132,17 +198,30 @@ internal sealed class JumpManager : IDisposable
                         {
                             ++this.distance;
                             CRUtils.PlayChargeCue(this.distance);
+                            this.RecalculateTiles(Game1.player, Game1.currentLocation);
                         }
                         this.ticks = DEFAULT_TICKS;
                         ModEntry.ModMonitor.TraceOnlyLog($"(Frog Ring) distance: {this.distance}");
                     }
+                }
+                else if (this.startTile == this.openTile)
+                {
+                    ModEntry.ModMonitor.DebugOnlyLog($"(Frog Ring) Switching Charging -> Invalid", LogLevel.Info);
+                    Game1.player.synchronizedJump(3f); // a tiny little hop
+                    this.state = State.Inactive;
+                    this.Dispose();
                 }
                 else
                 {
                     ModEntry.ModMonitor.DebugOnlyLog($"(Frog Ring) Switching Charging -> Jumping", LogLevel.Info);
                     this.state = State.Jumping;
 
-                    float initialVelocity = 6f * MathF.Sqrt(this.distance);
+                    // gravity is 0.5f, so total time is 2 * initialVelocity / 0.5 = 4 * initialVelocity;
+                    float initialVelocity = 4f * MathF.Sqrt(this.distance);
+                    float tileTravelDistance = (int)(Math.Abs(this.openTile.X - this.startTile.X) + Math.Abs(this.openTile.Y - this.startTile.Y));
+                    Game1.player.Stamina -= tileTravelDistance;
+                    float travelDistance = tileTravelDistance * Game1.tileSize;
+                    this.velocity = travelDistance / ((4 * initialVelocity) - 1);
                     Game1.player.synchronizedJump(initialVelocity);
 
                     this.previousCollisionValue = Game1.player.ignoreCollisions;
@@ -160,34 +239,60 @@ internal sealed class JumpManager : IDisposable
                 }
                 else
                 {
-                    if (this.frame != JumpFrame.Hold)
+                    Game1.player.Position += this.velocity * this.direction;
+                    // Handle switching the jump frame.
+                    switch (this.frame)
                     {
-                        switch (this.frame)
+                        case JumpFrame.Start:
                         {
-                            case JumpFrame.Start:
+                            if (Game1.player.yJumpOffset < -20)
                             {
-                                if (Game1.player.yJumpOffset < -20)
-                                {
-                                    ModEntry.ModMonitor.TraceOnlyLog("(Frog Ring) Setting Jump Frame: START -> TRANSITION");
-                                    SetTransitionAnimation(Game1.player);
-                                    this.frame = JumpFrame.Transition;
-                                }
-                                break;
+                                ModEntry.ModMonitor.TraceOnlyLog("(Frog Ring) Setting Jump Frame: START -> TRANSITION");
+                                SetTransitionAnimation(Game1.player);
+                                this.frame = JumpFrame.Transition;
                             }
-                            case JumpFrame.Transition:
+                            break;
+                        }
+                        case JumpFrame.Transition:
+                        {
+                            if (Game1.player.yJumpVelocity < 0)
                             {
-                                if (Game1.player.yJumpVelocity < 0)
-                                {
-                                    ModEntry.ModMonitor.TraceOnlyLog("(Frog Ring) Setting Jump Frame: TRANSITION -> HOLD");
-                                    HoldJumpAnimation(Game1.player);
-                                    this.frame = JumpFrame.Hold;
-                                }
-                                break;
+                                ModEntry.ModMonitor.TraceOnlyLog("(Frog Ring) Setting Jump Frame: TRANSITION -> HOLD");
+                                HoldJumpAnimation(Game1.player);
+                                this.frame = JumpFrame.Hold;
                             }
+                            break;
                         }
                     }
                 }
                 break;
+        }
+    }
+
+    private void RecalculateTiles(Farmer farmer, GameLocation location)
+    {
+        this.currentTile = this.startTile + (this.direction * this.distance);
+        Rectangle box = farmer.GetBoundingBox();
+        box.X += (int)this.direction.X * this.distance * Game1.tileSize;
+        box.Y += (int)this.direction.Y * this.distance * Game1.tileSize;
+        bool isValidTile = location.isTileOnMap(this.currentTile)
+            && !location.isWaterTile((int)this.currentTile.X, (int)this.currentTile.Y)
+            && !location.isCollidingPosition(box, Game1.viewport, true, 0, false, farmer);
+
+        if (hasSwim)
+        {
+            // let the user jump into water if they have swim mod.
+            isValidTile = isValidTile || location.isOpenWater((int)this.currentTile.X, (int)this.currentTile.Y);
+        }
+
+        if (isValidTile)
+        {
+            this.openTile = this.currentTile;
+            this.isCurrentTileBlocked = false;
+        }
+        else
+        {
+            this.isCurrentTileBlocked = true;
         }
     }
 
@@ -202,7 +307,6 @@ internal sealed class JumpManager : IDisposable
             {
                 farmer.CanMove = true;
                 farmer.ignoreCollisions = this.previousCollisionValue;
-                farmer.jitterStrength = 0f;
                 farmer.completelyStopAnimatingOrDoingAction();
             }
             this.farmerRef = null!;
@@ -236,7 +340,6 @@ internal sealed class JumpManager : IDisposable
 
     private static void SetCrouchAnimation(Farmer farmer)
     {
-        farmer.completelyStopAnimatingOrDoingAction();
         farmer.FarmerSprite.setCurrentSingleFrame(
             which: farmer.FacingDirection switch
             {
@@ -244,8 +347,11 @@ internal sealed class JumpManager : IDisposable
                 Game1.right => 58,
                 Game1.up => 62,
                 _ => 58,
-            }, flip: farmer.FacingDirection == Game1.left);
+            }, flip: farmer.FacingDirection == Game1.left,
+            interval: 2000);
         farmer.FarmerSprite.PauseForSingleAnimation = true;
+        farmer.FarmerSprite.timer = 0f;
+        currentFramesSetter.Value(farmer.FarmerSprite, 2);
     }
 
     private static void StartJumpAnimation(Farmer farmer)
@@ -259,6 +365,7 @@ internal sealed class JumpManager : IDisposable
                 _ => 59,
             }, flip: farmer.FacingDirection == Game1.left);
         farmer.FarmerSprite.PauseForSingleAnimation = true;
+        currentFramesSetter.Value(farmer.FarmerSprite, 2);
     }
 
     private static void SetTransitionAnimation(Farmer farmer)
@@ -273,6 +380,7 @@ internal sealed class JumpManager : IDisposable
             }, flip: farmer.FacingDirection == Game1.left,
             secondaryArm: true);
         farmer.FarmerSprite.PauseForSingleAnimation = true;
+        currentFramesSetter.Value(farmer.FarmerSprite, 2);
     }
 
     private static void HoldJumpAnimation(Farmer farmer)
@@ -285,9 +393,9 @@ internal sealed class JumpManager : IDisposable
             Game1.up => 70,
             _ => 52,
         },
-        //secondaryArm: true,
         flip: farmer.FacingDirection == Game1.left);
         farmer.FarmerSprite.PauseForSingleAnimation = true;
+        currentFramesSetter.Value(farmer.FarmerSprite, 2);
     }
 
     #endregion

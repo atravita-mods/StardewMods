@@ -29,6 +29,8 @@ internal static class RingPatches
                     .GetInstanceFieldSetter<Ring, int?>());
     #endregion
 
+    private const int ButterflyMagneticism = 128;
+
     [HarmonyPostfix]
     [HarmonyPatch(nameof(Ring.onUnequip))]
     private static void PostfixUnequip(Ring __instance, Farmer who, GameLocation location)
@@ -42,7 +44,7 @@ internal static class RingPatches
         {
             if (__instance.ParentSheetIndex == ModEntry.ButterflyRing)
             {
-                who.MagneticRadius -= 128;
+                who.MagneticRadius -= ButterflyMagneticism;
             }
             else if (__instance.ParentSheetIndex == ModEntry.FireFlyRing)
             {
@@ -112,7 +114,7 @@ internal static class RingPatches
         {
             if (__instance.ParentSheetIndex == ModEntry.ButterflyRing)
             {
-                who.MagneticRadius += 128;
+                who.MagneticRadius += ButterflyMagneticism;
             }
             else if (__instance.ParentSheetIndex == ModEntry.FireFlyRing)
             {
@@ -132,7 +134,7 @@ internal static class RingPatches
                 location.sharedLights[lightID] = new LightSource(
                     textureIndex: 1,
                     new Vector2(who.Position.X + 21f, who.Position.Y + 64f),
-                    radius: 10f,
+                    radius: 12f,
                     new Color(0, 80, 0),
                     identifier: startingID,
                     light_context: LightSource.LightContext.None,

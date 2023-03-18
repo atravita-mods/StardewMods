@@ -36,10 +36,7 @@ internal sealed class BunnySpawnManager : IDisposable
     /// <summary>
     /// Finalizes an instance of the <see cref="BunnySpawnManager"/> class.
     /// </summary>
-    ~BunnySpawnManager()
-    {
-        this.Dispose(disposing: false);
-    }
+    ~BunnySpawnManager() => this.Dispose(disposing: false);
 
     /// <inheritdoc cref="IDisposable.Dispose"/>
     public void Dispose()
@@ -56,6 +53,10 @@ internal sealed class BunnySpawnManager : IDisposable
         => !this.disposedValue
         && this.farmerRef?.TryGetTarget(out Farmer? farmer) == true && farmer is not null;
 
+    /// <summary>
+    /// Gets a list of bushes tracked by this instances.
+    /// </summary>
+    /// <returns>The bushes tracked by this instance.</returns>
     internal List<Bush>? GetTrackedBushes()
     {
         if (this.farmerRef?.TryGetTarget(out Farmer? farmer) != true || farmer is null)
@@ -69,6 +70,24 @@ internal sealed class BunnySpawnManager : IDisposable
             this.listener = new(watcher);
         }
         return watcher.GetBushes();
+    }
+
+    /// <inheritdoc cref="IDisposable.Dispose"/>
+    /// <param name="disposing">Whether or not this is called from the Dispose function or by the finalizer.</param>
+    private void Dispose(bool disposing)
+    {
+        if (!this.disposedValue)
+        {
+            if (this.listener?.TryGetTarget(out LargeObjectListener? watcher) == true)
+            {
+                watcher?.Dispose();
+            }
+            this.playerEvents.Warped -= this.OnWarp;
+            this.playerEvents = null!;
+            this.farmerRef = null!;
+            this.listener = null!;
+            this.disposedValue = true;
+        }
     }
 
     private void OnWarp(object? sender, WarpedEventArgs e)
@@ -86,31 +105,13 @@ internal sealed class BunnySpawnManager : IDisposable
         }
     }
 
-    /// <inheritdoc cref="IDisposable.Dispose"/>
-    /// <param name="disposing">Whether or not this is called from the Dispose function or by the finalizer.</param>
-    protected void Dispose(bool disposing)
-    {
-        if (!this.disposedValue)
-        {
-            if (this.listener?.TryGetTarget(out LargeObjectListener? watcher) == true)
-            {
-                watcher?.Dispose();
-            }
-            this.playerEvents.Warped -= this.OnWarp;
-            this.playerEvents = null!;
-            this.farmerRef = null!;
-            this.listener = null!;
-            this.disposedValue = true;
-        }
-    }
-
     /// <summary>
-    /// A class to hook into largeterrainfeature's events.
+    /// A class to hook into <see cref="GameLocation.largeTerrainFeatures" />'s events.
     /// Do not maintain a strong reference to this to allow the GC to collect if needed.
     /// </summary>
     private sealed class LargeObjectListener : IDisposable
     {
-        private readonly IMonitor monitor;
+        private IMonitor monitor;
         private List<Bush>? watchedBushes;
         private GameLocation? location;
         private bool disposedValue;
@@ -126,9 +127,22 @@ internal sealed class BunnySpawnManager : IDisposable
             }
         }
 
-        public LargeObjectListener ChangeLocation(GameLocation newLocation)
+        ~LargeObjectListener() => this.Dispose(false);
+
+        public void Dispose()
         {
-            this.monitor.DebugOnlyLog($"Changing bushwatcher {this.location?.NameOrUniqueName} -> {newLocation.NameOrUniqueName}");
+            this.Dispose(disposing: true);
+            GC.SuppressFinalize(this);
+        }
+
+        /// <summary>
+        /// Changes this watcher to watch a new location.
+        /// </summary>
+        /// <param name="newLocation">new location to watch.</param>
+        /// <returns>this.</returns>
+        internal LargeObjectListener ChangeLocation(GameLocation newLocation)
+        {
+            this.monitor.DebugOnlyLog($"(Bunny Ring) Changing bushwatcher {this.location?.NameOrUniqueName} -> {newLocation.NameOrUniqueName}");
 
             if (newLocation.largeTerrainFeatures is not null)
             {
@@ -155,19 +169,19 @@ internal sealed class BunnySpawnManager : IDisposable
             return this.watchedBushes;
         }
 
-        public void Dispose()
+        private void Dispose(bool disposing)
         {
-            this.Dispose(disposing: true);
-        }
-
-        protected void Dispose(bool disposing)
-        {
-            if (!this.disposedValue && this.location?.largeTerrainFeatures is { } features)
+            if (!this.disposedValue)
             {
-                features.OnValueAdded -= this.OnValueAdded;
-                features.OnValueRemoved -= this.OnValueRemoved;
-                this.disposedValue = true;
+                if (this.location?.largeTerrainFeatures is { } features)
+                {
+                    features.OnValueAdded -= this.OnValueAdded;
+                    features.OnValueRemoved -= this.OnValueRemoved;
+                }
+                this.location = null!;
+                this.monitor = null!;
                 this.watchedBushes = null;
+                this.disposedValue = true;
             }
         }
 
@@ -176,7 +190,7 @@ internal sealed class BunnySpawnManager : IDisposable
             if (feature is Bush bush)
             {
                 this.monitor.DebugOnlyLog($"Bush added at {bush.tilePosition}");
-                this.watchedBushes ??= new();
+                this.watchedBushes ??= this.location?.largeTerrainFeatures?.OfType<Bush>()?.ToList() ?? new();
                 this.watchedBushes.Add(bush);
             }
         }

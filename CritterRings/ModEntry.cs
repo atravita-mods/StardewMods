@@ -214,7 +214,7 @@ internal sealed class ModEntry : Mod
             return;
         }
         if (Config.FrogRingButton.JustPressed() && FrogRing > 0
-            && Game1.player.isWearingRing(frogRing))
+            && Game1.player.isWearingRing(frogRing) && !Game1.player.UsingTool)
         {
             if (JumpManager.Value?.IsValid() == true)
             {
@@ -252,6 +252,7 @@ internal sealed class ModEntry : Mod
     }
 
     /// <inheritdoc cref="IPlayerEvents.Warped"/>
+    [EventPriority(EventPriority.Low)]
     private void OnWarp(object? sender, WarpedEventArgs e)
     {
         if (!e.IsLocalPlayer)

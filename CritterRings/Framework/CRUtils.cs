@@ -23,6 +23,23 @@ internal static class CRUtils
 
     #endregion
 
+    internal static void PlayChargeCue(int charge)
+    {
+        if (Game1.soundBank is not null)
+        {
+            try
+            {
+                ICue cue = Game1.soundBank.GetCue("toolCharge");
+                cue.SetVariable("Pitch", (Game1.random.Next(12, 16) + charge ) * 100);
+                cue.Play();
+            }
+            catch (Exception ex)
+            {
+                ModEntry.ModMonitor.Log($"Failed while trying to play charge-up cue!\n\n{ex}", LogLevel.Error);
+            }
+        }
+    }
+
     /// <summary>
     /// Checks to make sure it's safe to spawn butterflies.
     /// </summary>

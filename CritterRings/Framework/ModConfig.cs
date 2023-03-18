@@ -60,9 +60,32 @@ public sealed class ModConfig
     [GMCMSection("BunnyRing", 10)]
     public KeybindList BunnyRingButton { get; set; } = new KeybindList(new(SButton.LeftShift), new(SButton.LeftStick));
 
+    private int maxFrogJumpDistance = 10;
+
+    /// <summary>
+    /// Gets or sets the maximum jump distance for the frog ring.
+    /// </summary>
+    [GMCMRange(1, 15)]
+    [GMCMSection("FrogRing", 20)]
+    public int MaxFrogJumpDistance
+    {
+        get => this.maxFrogJumpDistance;
+        set => this.maxFrogJumpDistance = Math.Clamp(value, 1, 15);
+    }
+
     /// <summary>
     /// Gets or sets a value indicating which button should be used for the frog ring's jump.
     /// </summary>
     [GMCMSection("FrogRing", 20)]
     public KeybindList FrogRingButton { get; set; } = new KeybindList(new(SButton.Space), new(SButton.RightStick));
+
+    private int jumpChargeSpeed = 10;
+
+    [GMCMRange(1, 20)]
+    [GMCMSection("FrogRing", 20)]
+    public int JumpChargeSpeed
+    {
+        get => this.jumpChargeSpeed;
+        set => this.jumpChargeSpeed = Math.Clamp(value, 1, 20);
+    }
 }

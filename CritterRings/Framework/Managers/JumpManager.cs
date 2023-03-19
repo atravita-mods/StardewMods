@@ -12,6 +12,8 @@ using Microsoft.Xna.Framework.Graphics;
 
 using StardewModdingAPI.Events;
 
+using XLocation = xTile.Dimensions.Location;
+
 namespace CritterRings.Framework.Managers;
 
 /// <summary>
@@ -288,6 +290,7 @@ internal sealed class JumpManager : IDisposable
         box.X += (int)this.direction.X * this.distance * Game1.tileSize;
         box.Y += (int)this.direction.Y * this.distance * Game1.tileSize;
         bool isValidTile = location.isTileOnMap(this.currentTile)
+            && location.isTilePassable(new XLocation((int)this.currentTile.X, (int)this.currentTile.Y), Game1.viewport)
             && !location.isWaterTile((int)this.currentTile.X, (int)this.currentTile.Y)
             && !location.isCollidingPosition(box, Game1.viewport, true, 0, false, farmer);
 

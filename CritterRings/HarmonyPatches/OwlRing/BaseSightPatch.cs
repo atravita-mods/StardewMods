@@ -16,7 +16,7 @@ namespace CritterRings.HarmonyPatches.OwlRing;
 internal static class BaseSightPatch
 {
     [MethodImpl(TKConstants.Hot)]
-    [HarmonyPatch(nameof(NPC.withinPlayerThreshold))]
+    [HarmonyPatch(nameof(NPC.withinPlayerThreshold), new[] { typeof(int) } )]
     private static void Postfix(NPC __instance, ref int threshold)
     {
         if (__instance is not Monster)
@@ -26,7 +26,7 @@ internal static class BaseSightPatch
 
         if (ModEntry.OwlRing > 0 && Game1.player.isWearingRing(ModEntry.OwlRing))
         {
-            threshold = (threshold * 2 / 3f).RandomRoundProportional();
+            threshold /= 2;
         }
     }
 }

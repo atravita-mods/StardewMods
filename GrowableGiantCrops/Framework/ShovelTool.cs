@@ -112,7 +112,7 @@ public sealed class ShovelTool : GenericTool
         FarmerSprite? sprite = who.Sprite as FarmerSprite;
         if (sprite is not null)
         {
-            sprite.animateOnce(whichAnimation: animation, animationInterval: 150f * this.AnimationSpeedModifier, numberOfFrames: 3);
+            sprite.animateOnce(whichAnimation: animation, animationInterval: 150f, numberOfFrames: 3);
 
             if (this.AnimationSpeedModifier <= 1f)
             {

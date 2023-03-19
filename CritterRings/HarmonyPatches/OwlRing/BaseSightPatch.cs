@@ -17,7 +17,7 @@ internal static class BaseSightPatch
 {
     [MethodImpl(TKConstants.Hot)]
     [HarmonyPatch(nameof(NPC.withinPlayerThreshold), new[] { typeof(int) } )]
-    private static void Postfix(NPC __instance, ref int threshold)
+    private static void Prefix(NPC __instance, ref int threshold)
     {
         if (__instance is not Monster)
         {

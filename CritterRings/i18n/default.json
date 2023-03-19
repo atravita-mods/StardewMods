@@ -13,6 +13,9 @@
   "ButterfliesSpawnInRain.title": "Butterflies Spawn In Rain",
   "ButterfliesSpawnInRain.description": "If enabled, butterflies spawn in rain. If disabled, they'll only spawn in sunny weather.",
 
+  "PlayAudioEffects.title": "Play Audio Effects",
+  "PlayAudioEffects.description": "Whether or not to play the audio effects from this mod.",
+
   "BunnyRingStamina.title": "Bunny Ring Stamina",
   "BunnyRingStamina.description": "The cost in stamina for a single bunny ring boost.",
 
@@ -24,6 +27,9 @@
 
   "FrogRingButton.title": "Frog Ring Button",
   "FrogRingButton.description": "The button used to trigger the frog ring's jump.",
+
+  "JumpChargeSpeed.title": "Jump Charge Speed",
+  "JumpChargeSpeed.description": "Adjusts how fast the frog jump charges (ie, goes one tile further.) Higher for faster.",
 
   "api-not-found": "{{APIID}} not found, integration disabled.",
   "api-too-old": "Please update {{apiName}}({{APIID}}) to at least version {{minversion}}. Current version {{currentversion}}. Integration disabled.",
@@ -45,5 +51,5 @@
 
   "frog-ring.name": "Frog Ring",
   "frog-ring.description": "Attracts frogs. Makes you feel lighter.",
-  "frog-ring.horse": "Frog ring can't pick up your horse!",
+  "frog-ring.horse": "Frog ring can't pick up your horse!"
 }

@@ -108,7 +108,7 @@ public sealed class ShovelTool : GenericTool
             _ => 188,
         };
 
-        (who.Sprite as FarmerSprite)?.animateOnce(whichAnimation: frame, animationInterval: 125f, numberOfFrames: 3);
+        (who.Sprite as FarmerSprite)?.animateOnce(whichAnimation: frame, animationInterval: 150f * this.AnimationSpeedModifier, numberOfFrames: 3);
     }
 
     /// <summary>

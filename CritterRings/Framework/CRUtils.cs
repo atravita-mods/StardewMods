@@ -1,11 +1,10 @@
-﻿using AtraCore.Utilities;
+﻿using AtraBase.Toolkit.Reflection;
 using AtraCore.Framework.ReflectionManager;
-
+using AtraCore.Utilities;
 using Microsoft.Xna.Framework;
-
 using StardewValley.BellsAndWhistles;
+using StardewValley.Locations;
 using StardewValley.TerrainFeatures;
-using AtraBase.Toolkit.Reflection;
 
 namespace CritterRings.Framework;
 
@@ -21,11 +20,20 @@ internal static class CRUtils
         .GetInstanceFieldSetter<Rabbit, int>()
     );
 
+    private static Lazy<Action<Frog, int>> FrogTimerSetter = new(() =>
+    typeof(Frog).GetCachedField("beforeFadeTimer", ReflectionCache.FlagTypes.InstanceFlags)
+    .GetInstanceFieldSetter<Frog, int>()
+);
+
     #endregion
 
+    /// <summary>
+    /// Plays the sound associated with charging up.
+    /// </summary>
+    /// <param name="charge">The charge amount.</param>
     internal static void PlayChargeCue(int charge)
     {
-        if (Game1.soundBank is not null)
+        if (ModEntry.Config.PlayAudioEffects && Game1.soundBank is not null)
         {
             try
             {
@@ -48,6 +56,43 @@ internal static class CRUtils
     internal static bool ShouldSpawnButterflies([NotNullWhen(true)] this GameLocation? loc)
         => loc is not null && !Game1.isDarkOut()
             && (ModEntry.Config.ButterfliesSpawnInRain || !loc.IsOutdoors || !Game1.IsRainingHere(loc));
+
+    /// <summary>
+    /// Checks to make sure it's safe to spawn frogs.
+    /// </summary>
+    /// <param name="loc">GameLocation to check.</param>
+    /// <returns>True if this is a good place to spawn frogs.</returns>
+    internal static bool ShouldSpawnFrogs([NotNullWhen(true)] this GameLocation? loc)
+    {
+        if (loc is null)
+        {
+            return false;
+        }
+
+        if (ModEntry.Config.FrogsSpawnOnlyInRain && !Game1.IsRainingHere(loc) && loc.IsOutdoors)
+        {
+            return false;
+        }
+
+        if (!ModEntry.Config.FrogsSpawnInHeat && loc is Desert or VolcanoDungeon or Caldera)
+        {
+            return false;
+        }
+
+        MineShaft? shaft = loc as MineShaft;
+
+        if (!ModEntry.Config.FrogsSpawnInHeat && shaft?.getMineArea() == 80)
+        {
+            return false;
+        }
+
+        if (!ModEntry.Config.FrogsSpawnInCold && ((Game1.GetSeasonForLocation(loc) == "winter" && loc is not Desert or IslandLocation) || shaft?.getMineArea() == 40))
+        {
+            return false;
+        }
+
+        return true;
+    }
 
     /// <summary>
     /// Spawns fireflies around the player.
@@ -79,6 +124,25 @@ internal static class CRUtils
             for (int i = 0; i < count; i++)
             {
                 critters.Add(new Butterfly(Game1.player.getTileLocation(), Game1.random.Next(2) == 0).setStayInbounds(true));
+            }
+        }
+    }
+
+    /// <summary>
+    /// Spawns frogs around the player.
+    /// </summary>
+    /// <param name="critters">Critters list to add to.</param>
+    /// <param name="count">Number of frogs to spawn.</param>
+    internal static void SpawnFrogs(List<Critter> critters, int count)
+    {
+        if (critters is not null && count > 0)
+        {
+            count *= ModEntry.Config.CritterSpawnMultiplier;
+            for (int i = 0; i < count; i++)
+            {
+                Frog frog = new(Game1.player.getTileLocation());
+                FrogTimerSetter.Value(frog, Game1.random.Next(2000, 5000));
+                critters.Add(frog);
             }
         }
     }

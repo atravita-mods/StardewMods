@@ -16,6 +16,7 @@ using StardewModdingAPI.Events;
 using StardewModdingAPI.Utilities;
 
 using StardewValley.BellsAndWhistles;
+using StardewValley.Locations;
 using StardewValley.Tools;
 
 using AtraUtils = AtraShared.Utils.Utils;
@@ -216,8 +217,8 @@ internal sealed class ModEntry : Mod
         {
             return;
         }
-        if (Config.FrogRingButton.JustPressed() && FrogRing > 0
-            && Game1.player.isWearingRing(frogRing) && !Game1.player.UsingTool)
+        if (Config.MaxFrogJumpDistance > 0 && Config.FrogRingButton.JustPressed() && FrogRing > 0
+            && Game1.player.isWearingRing(frogRing) && !Game1.player.UsingTool && !Game1.player.isEating)
         {
             if (JumpManagers.Value?.IsValid() == true)
             {
@@ -227,7 +228,7 @@ internal sealed class ModEntry : Mod
             {
                 Game1.showRedMessage(I18n.FrogRing_Horse());
             }
-            else if (Game1.player.exhausted.Value || Game1.player.Stamina < ModEntry.Config.MaxFrogJumpDistance)
+            else if (Game1.player.exhausted.Value || Game1.player.Stamina < Config.MaxFrogJumpDistance)
             {
                 Game1.showRedMessage(I18n.BunnyBuff_Tired());
             }
@@ -238,7 +239,7 @@ internal sealed class ModEntry : Mod
             }
         }
 
-        if (Config.BunnyRingButton.JustPressed() && BunnyRing > 0
+        if (Config.BunnyRingBoost > 0 && Config.BunnyRingButton.JustPressed() && BunnyRing > 0
             && Game1.player.isWearingRing(BunnyRing) && !Game1.player.hasBuff(BunnyBuffId))
         {
             if (Game1.player.Stamina >= Config.BunnyRingStamina && !Game1.player.exhausted.Value)
@@ -262,7 +263,7 @@ internal sealed class ModEntry : Mod
     [EventPriority(EventPriority.Low)]
     private void OnWarp(object? sender, WarpedEventArgs e)
     {
-        if (!e.IsLocalPlayer)
+        if (!e.IsLocalPlayer || Config.CritterSpawnMultiplier == 0)
         {
             return;
         }
@@ -292,11 +293,19 @@ internal sealed class ModEntry : Mod
             BunnyManagers.Value ??= new(this.Monitor, Game1.player, this.Helper.Events.Player);
             CRUtils.AddBunnies(critters, 3, BunnyManagers.Value.GetTrackedBushes());
         }
+        if (FrogRing > 0 && Game1.player.isWearingRing(FrogRing) && Game1.currentLocation.ShouldSpawnFrogs())
+        {
+            CRUtils.SpawnFrogs(critters, 3);
+        }
     }
 
     /// <inheritdoc cref="IGameLoopEvents.TimeChanged"/>
     private void OnTimeChanged(object? sender, TimeChangedEventArgs e)
     {
+        if (Config.CritterSpawnMultiplier == 0)
+        {
+            return;
+        }
         Game1.currentLocation?.instantiateCrittersList();
         if (Game1.currentLocation?.critters is not List<Critter> critters)
         {
@@ -312,6 +321,10 @@ internal sealed class ModEntry : Mod
         else if (ButterflyRing > 0 && Game1.currentLocation.ShouldSpawnButterflies())
         {
             CRUtils.SpawnButterfly(critters, Game1.player.GetEffectsOfRingMultiplier(ButterflyRing));
+        }
+        if (FrogRing > 0 && Game1.currentLocation.ShouldSpawnFrogs())
+        {
+            CRUtils.SpawnFrogs(critters, Game1.player.GetEffectsOfRingMultiplier(FrogRing));
         }
 
         if (BunnyRing > 0)

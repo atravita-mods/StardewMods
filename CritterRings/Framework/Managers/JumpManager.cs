@@ -48,6 +48,8 @@ internal sealed class JumpManager : IDisposable
     // jumping fields.
     private JumpFrame frame;
     private float velocity;
+    private bool prevInvincibility = false;
+    private int prevInvincibilityTimer = 0;
 
     #region delegates
 
@@ -74,6 +76,10 @@ internal sealed class JumpManager : IDisposable
 
         this.gameEvents.UpdateTicked += this.OnUpdateTicked;
         this.displayEvents.RenderedWorld += this.OnRenderedWorld;
+
+        this.previousCollisionValue = Game1.player.ignoreCollisions;
+        this.prevInvincibility = Game1.player.temporarilyInvincible;
+        this.prevInvincibilityTimer = Game1.player.temporaryInvincibilityTimer;
 
         this.direction = Game1.player.FacingDirection switch
         {
@@ -224,8 +230,14 @@ internal sealed class JumpManager : IDisposable
                     this.velocity = travelDistance / ((4 * initialVelocity) - 1);
                     Game1.player.synchronizedJump(initialVelocity);
 
+                    // track player state
                     this.previousCollisionValue = Game1.player.ignoreCollisions;
                     Game1.player.ignoreCollisions = true;
+
+                    this.prevInvincibility = Game1.player.temporarilyInvincible;
+                    this.prevInvincibilityTimer = Game1.player.temporaryInvincibilityTimer;
+                    Game1.player.temporarilyInvincible = true;
+                    Game1.player.temporaryInvincibilityTimer = int.MinValue;
 
                     StartJumpAnimation(Game1.player);
                 }
@@ -307,6 +319,8 @@ internal sealed class JumpManager : IDisposable
             {
                 farmer.CanMove = true;
                 farmer.ignoreCollisions = this.previousCollisionValue;
+                farmer.temporarilyInvincible = this.prevInvincibility;
+                farmer.temporaryInvincibilityTimer = this.prevInvincibilityTimer;
                 farmer.completelyStopAnimatingOrDoingAction();
             }
             this.farmerRef = null!;

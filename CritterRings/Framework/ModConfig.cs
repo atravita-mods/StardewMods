@@ -19,8 +19,13 @@ public sealed class ModConfig
     public int CritterSpawnMultiplier
     {
         get => this.critterSpawnMultiplier;
-        set => this.critterSpawnMultiplier = Math.Clamp(value, 1, 5);
+        set => this.critterSpawnMultiplier = Math.Clamp(value, 0, 5);
     }
+
+    /// <summary>
+    /// Gets or sets a value indicating whether or not audio effects should be played.
+    /// </summary>
+    public bool PlayAudioEffects { get; set; } = true;
 
     /// <summary>
     /// Gets or sets a value indicating whether or not butterflies should spawn if it's rainy out.
@@ -51,7 +56,7 @@ public sealed class ModConfig
     public int BunnyRingBoost
     {
         get => this.bunnyRingBoost;
-        set => this.bunnyRingBoost = Math.Clamp(value, 1, 10);
+        set => this.bunnyRingBoost = Math.Clamp(value, 0, 10);
     }
 
     /// <summary>
@@ -70,7 +75,7 @@ public sealed class ModConfig
     public int MaxFrogJumpDistance
     {
         get => this.maxFrogJumpDistance;
-        set => this.maxFrogJumpDistance = Math.Clamp(value, 1, 15);
+        set => this.maxFrogJumpDistance = Math.Clamp(value, 0, 15);
     }
 
     /// <summary>
@@ -81,6 +86,9 @@ public sealed class ModConfig
 
     private int jumpChargeSpeed = 10;
 
+    /// <summary>
+    /// Gets or sets a value indicating how fast the frog jump charges.
+    /// </summary>
     [GMCMRange(1, 20)]
     [GMCMSection("FrogRing", 20)]
     public int JumpChargeSpeed
@@ -88,4 +96,13 @@ public sealed class ModConfig
         get => this.jumpChargeSpeed;
         set => this.jumpChargeSpeed = Math.Clamp(value, 1, 20);
     }
+
+    [GMCMSection("FrogRing", 20)]
+    public bool FrogsSpawnInHeat { get; set; } = false;
+
+    [GMCMSection("FrogRing", 20)]
+    public bool FrogsSpawnInCold { get; set; } = false;
+
+    [GMCMSection("FrogRing", 20)]
+    public bool FrogsSpawnOnlyInRain { get; set; } = false;
 }

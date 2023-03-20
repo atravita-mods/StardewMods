@@ -8,7 +8,7 @@
   <PropertyGroup>
     <Name>Last Day to Plant Redux</Name>
     <Description>Tells you the last day to plant various crops, adjusted for fertilizer.</Description>
-    <Version>0.1.0</Version>
+    <Version>0.1.1</Version>
     <UpdateKeys>Nexus:15004</UpdateKeys>
     <BaseManifest>..\base_dependencies.json</BaseManifest>
   </PropertyGroup>

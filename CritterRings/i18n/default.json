@@ -31,6 +31,9 @@
   "JumpChargeSpeed.title": "Jump Charge Speed",
   "JumpChargeSpeed.description": "Adjusts how fast the frog jump charges (ie, goes one tile further.) Higher for faster.",
 
+  "FrogsSpawnInHeat.title": "Frogs Spawn In Heat",
+  "FrogsSpawnInHeat.description": "If enabled, frogs may spawn in locations that are probably too hot for them, like the lava levels of the mine or the desert.",
+
   "api-not-found": "{{APIID}} not found, integration disabled.",
   "api-too-old": "Please update {{apiName}}({{APIID}}) to at least version {{minversion}}. Current version {{currentversion}}. Integration disabled.",
 

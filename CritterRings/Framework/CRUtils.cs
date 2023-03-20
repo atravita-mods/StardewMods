@@ -15,14 +15,14 @@ internal static class CRUtils
 {
     #region delegates
 
-    private static Lazy<Action<Rabbit, int>> CharacterTimerSetter = new(() =>
+    private static readonly Lazy<Action<Rabbit, int>> CharacterTimerSetter = new(() =>
         typeof(Rabbit).GetCachedField("characterCheckTimer", ReflectionCache.FlagTypes.InstanceFlags)
         .GetInstanceFieldSetter<Rabbit, int>()
     );
 
-    private static Lazy<Action<Frog, int>> FrogTimerSetter = new(() =>
-    typeof(Frog).GetCachedField("beforeFadeTimer", ReflectionCache.FlagTypes.InstanceFlags)
-    .GetInstanceFieldSetter<Frog, int>()
+    private static readonly Lazy<Action<Frog, int>> FrogTimerSetter = new(() =>
+        typeof(Frog).GetCachedField("beforeFadeTimer", ReflectionCache.FlagTypes.InstanceFlags)
+        .GetInstanceFieldSetter<Frog, int>()
 );
 
     #endregion
@@ -43,7 +43,24 @@ internal static class CRUtils
             }
             catch (Exception ex)
             {
+                ModEntry.Config.PlayAudioEffects = false;
                 ModEntry.ModMonitor.Log($"Failed while trying to play charge-up cue!\n\n{ex}", LogLevel.Error);
+            }
+        }
+    }
+
+    internal static void PlayMeep()
+    {
+        if (ModEntry.Config.PlayAudioEffects && Game1.soundBank is not null)
+        {
+            try
+            {
+                Game1.playSound("dustMeep");
+            }
+            catch (Exception ex)
+            {
+                ModEntry.Config.PlayAudioEffects = false;
+                ModEntry.ModMonitor.Log($"Failed while trying to play hopping noise.\n\n{ex}", LogLevel.Error);
             }
         }
     }

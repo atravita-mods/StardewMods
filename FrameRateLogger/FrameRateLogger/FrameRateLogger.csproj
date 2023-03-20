@@ -9,7 +9,7 @@
   <PropertyGroup>
     <Name>Frame Rate Logger</Name>
     <Description>Logs the current frame rate.</Description>
-    <Version>0.1.0</Version>
+    <Version>0.1.1</Version>
     <UpdateKeys>Nexus:15002</UpdateKeys>
   </PropertyGroup>
 

@@ -59,7 +59,7 @@ internal sealed class ModEntry : Mod
         helper.Events.GameLoop.SaveLoaded += this.OnSaveLoaded;
         helper.Events.GameLoop.DayEnding += this.OnDayEnd;
         helper.Events.GameLoop.TimeChanged += this.OnTimeChanged;
-        helper.Events.GameLoop.ReturnedToTitle += this.OnReturnedToTitle;
+        helper.Events.GameLoop.ReturnedToTitle += static (_, _) => NPCCache.Reset();
 
         helper.Events.Player.Warped += this.Player_Warped;
 
@@ -129,12 +129,6 @@ internal sealed class ModEntry : Mod
     /// <inheritdoc cref="IGameLoopEvents.DayEnding"/>
     private void OnDayEnd(object? sender, DayEndingEventArgs e)
         => QueuedDialogueManager.ClearDelayedDialogue();
-
-    /// <inheritdoc cref="IGameLoopEvents.ReturnedToTitle"/>
-    private void OnReturnedToTitle(object? sender, ReturnedToTitleEventArgs e)
-    {
-        NPCCache.Reset();
-    }
 
     #region assets
 

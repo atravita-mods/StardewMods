@@ -97,6 +97,10 @@ public sealed class ModConfig
         set => this.jumpChargeSpeed = Math.Clamp(value, 1, 20);
     }
 
+    /// <summary>
+    /// Gets or sets a value indicating whether or not the frogs should spawn in a very hot location
+    /// such as the volcano or desert.
+    /// </summary>
     [GMCMSection("FrogRing", 20)]
     public bool FrogsSpawnInHeat { get; set; } = false;
 

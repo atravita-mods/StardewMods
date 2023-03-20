@@ -48,9 +48,7 @@ internal sealed class ModEntry : Mod
         };
 
         helper.Events.GameLoop.ReturnedToTitle += (_, _) => this.UnHook();
-
         helper.Events.Player.Warped += this.OnWarped;
-
         helper.Events.GameLoop.GameLaunched += this.OnGameLaunched;
     }
 
@@ -105,14 +103,8 @@ internal sealed class ModEntry : Mod
 
     private void Hook()
     {
-        //Game1.player.mailReceived.OnElementChanged += this.MailReceived_OnElementChanged;
         this.Helper.Events.GameLoop.OneSecondUpdateTicked += this.OnUpdateTicked;
         this.Helper.Events.Display.RenderedHud += this.OnRenderedHud;
-    }
-
-    private void MailReceived_OnElementChanged(Netcode.NetList<string, Netcode.NetString> list, int index, string oldValue, string newValue)
-    {
-        this.Monitor.Log($"Mail flags changed: index {index} old {oldValue} new {newValue}.", LogLevel.Alert);
     }
 
     /// <inheritdoc cref="IGameLoopEvents.OneSecondUpdateTicked"/>

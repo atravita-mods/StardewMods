@@ -217,8 +217,8 @@ internal sealed class ModEntry : Mod
         {
             return;
         }
-        if (Config.MaxFrogJumpDistance > 0 && Config.FrogRingButton.JustPressed() && FrogRing > 0
-            && Game1.player.isWearingRing(frogRing) && !Game1.player.UsingTool && !Game1.player.isEating)
+        if (Config.MaxFrogJumpDistance > 0 && Config.FrogRingButton.Keybinds.FirstOrDefault(k => k.GetState() == SButtonState.Pressed) is Keybind keybind
+            && FrogRing > 0 && Game1.player.isWearingRing(frogRing) && !Game1.player.UsingTool && !Game1.player.isEating)
         {
             if (JumpManagers.Value?.IsValid() == true)
             {
@@ -235,7 +235,7 @@ internal sealed class ModEntry : Mod
             else
             {
                 JumpManagers.Value?.Dispose();
-                JumpManagers.Value = new(Game1.player, this.Helper.Events.GameLoop, this.Helper.Events.Display);
+                JumpManagers.Value = new(Game1.player, this.Helper.Events.GameLoop, this.Helper.Events.Display, keybind);
             }
         }
 

@@ -110,22 +110,28 @@ public sealed class ShovelTool : GenericTool
         };
 
         FarmerSprite? sprite = who.Sprite as FarmerSprite;
-        if (sprite is not null)
+        if (sprite is null)
         {
-            sprite.animateOnce(whichAnimation: animation, animationInterval: 150f, numberOfFrames: 3);
+            return;
+        }
 
-            if (this.AnimationSpeedModifier <= 1f)
+        sprite.animateOnce(whichAnimation: animation, animationInterval: 150f, numberOfFrames: 3);
+
+        // for some reason, the watering can doesn't respect animationInterval.
+        // We're just going to manually edit the animation timings if needed for Swift.
+        // god this is bad.
+        if (this.AnimationSpeedModifier >= 1f)
+        {
+            return;
+        }
+
+        lock (sprite.currentAnimation)
+        {
+            Span<FarmerSprite.AnimationFrame> asSpan = CollectionsMarshal.AsSpan(sprite.currentAnimation);
+            for (int i = 0; i < asSpan.Length; i++)
             {
-                lock (sprite.currentAnimation)
-                {
-                    Span<FarmerSprite.AnimationFrame> asSpan = CollectionsMarshal.AsSpan(sprite.currentAnimation);
-                    for (int i = 0; i < asSpan.Length; i++)
-                    {
-                        ref FarmerSprite.AnimationFrame temp = ref asSpan[i];
-                        temp.milliseconds = (int)(temp.milliseconds * this.AnimationSpeedModifier);
-                    }
-                }
-
+                ref FarmerSprite.AnimationFrame temp = ref asSpan[i];
+                temp.milliseconds = (int)(temp.milliseconds * this.AnimationSpeedModifier);
             }
         }
     }

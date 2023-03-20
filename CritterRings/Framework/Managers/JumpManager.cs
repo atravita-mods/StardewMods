@@ -11,6 +11,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
 using StardewModdingAPI.Events;
+using StardewModdingAPI.Utilities;
 
 using XLocation = xTile.Dimensions.Location;
 
@@ -35,10 +36,14 @@ internal sealed class JumpManager : IDisposable
     private bool disposedValue;
     private WeakReference<Farmer> farmerRef;
     private bool previousCollisionValue = false; // keeps track of whether or not the farmer had noclip on.
+    private bool prevInvincibility; // we set invincibility because the farmer's sprite is not drawn anywhere
+    private int prevInvincibilityTimer; // near the actual position, so this way the farmer can't appear to get hit out of nowhere.
+    private bool forceTimePass;
 
     private State state = State.Charging;
     private int ticks = DEFAULT_TICKS;
     private readonly Vector2 direction;
+    private Keybind keybind;
 
     // charging fields.
     private int distance = 1;
@@ -50,15 +55,13 @@ internal sealed class JumpManager : IDisposable
     // jumping fields.
     private JumpFrame frame;
     private float velocity;
-    private bool prevInvincibility = false;
-    private int prevInvincibilityTimer = 0;
 
     #region delegates
 
     // this exists because if currentAnimationFrames is 1 or lower,
     // the game will unset PauseForSingleAnimation on its own.
     // so we just manually set it to two.
-    private static Lazy<Action<FarmerSprite, int>> currentFramesSetter = new(() =>
+    private static readonly Lazy<Action<FarmerSprite, int>> currentFramesSetter = new(() =>
         typeof(FarmerSprite).GetCachedField("currentAnimationFrames", ReflectionCache.FlagTypes.InstanceFlags).GetInstanceFieldSetter<FarmerSprite, int>()
     );
     #endregion
@@ -69,19 +72,25 @@ internal sealed class JumpManager : IDisposable
     /// <param name="farmer">The farmer we're tracking.</param>
     /// <param name="gameEvents">The game event manager.</param>
     /// <param name="displayEvents">The display event manager.</param>
-    internal JumpManager(Farmer farmer, IGameLoopEvents gameEvents, IDisplayEvents displayEvents)
+    internal JumpManager(Farmer farmer, IGameLoopEvents gameEvents, IDisplayEvents displayEvents, Keybind keybind)
     {
         ModEntry.ModMonitor.DebugOnlyLog("(FrogRing) Starting -> Charging");
         this.farmerRef = new(farmer);
         this.gameEvents = gameEvents;
         this.displayEvents = displayEvents;
+        this.keybind = keybind;
 
         this.gameEvents.UpdateTicked += this.OnUpdateTicked;
         this.displayEvents.RenderedWorld += this.OnRenderedWorld;
 
+        // save the values here too in case we get interrupted.
         this.previousCollisionValue = Game1.player.ignoreCollisions;
         this.prevInvincibility = Game1.player.temporarilyInvincible;
         this.prevInvincibilityTimer = Game1.player.temporaryInvincibilityTimer;
+
+        // forcing time to pass even while we're preparing to jump.
+        this.forceTimePass = Game1.player.forceTimePass;
+        Game1.player.forceTimePass = true;
 
         this.direction = Game1.player.FacingDirection switch
         {
@@ -197,7 +206,7 @@ internal sealed class JumpManager : IDisposable
         switch (this.state)
         {
             case State.Charging:
-                if (ModEntry.Config.FrogRingButton.IsDown())
+                if (this.keybind.GetState().IsDown())
                 {
                     this.ticks -= ModEntry.Config.JumpChargeSpeed;
                     if (this.ticks <= 0)
@@ -223,6 +232,8 @@ internal sealed class JumpManager : IDisposable
                 {
                     ModEntry.ModMonitor.DebugOnlyLog($"(Frog Ring) Switching Charging -> Jumping", LogLevel.Info);
                     this.state = State.Jumping;
+
+                    CRUtils.PlayMeep();
 
                     // gravity is 0.5f, so total time is 2 * initialVelocity / 0.5 = 4 * initialVelocity;
                     float initialVelocity = 4f * MathF.Sqrt(this.distance);
@@ -286,13 +297,17 @@ internal sealed class JumpManager : IDisposable
     private void RecalculateTiles(Farmer farmer, GameLocation location)
     {
         this.currentTile = this.startTile + (this.direction * this.distance);
-        Rectangle box = farmer.GetBoundingBox();
-        box.X += (int)this.direction.X * this.distance * Game1.tileSize;
-        box.Y += (int)this.direction.Y * this.distance * Game1.tileSize;
         bool isValidTile = location.isTileOnMap(this.currentTile)
             && location.isTilePassable(new XLocation((int)this.currentTile.X, (int)this.currentTile.Y), Game1.viewport)
-            && !location.isWaterTile((int)this.currentTile.X, (int)this.currentTile.Y)
-            && !location.isCollidingPosition(box, Game1.viewport, true, 0, false, farmer);
+            && !location.isWaterTile((int)this.currentTile.X, (int)this.currentTile.Y);
+
+        if (isValidTile)
+        {
+            Rectangle box = farmer.GetBoundingBox();
+            box.X += (int)this.direction.X * this.distance * Game1.tileSize;
+            box.Y += (int)this.direction.Y * this.distance * Game1.tileSize;
+            isValidTile &= !location.isCollidingPosition(box, Game1.viewport, true, 0, false, farmer);
+        }
 
         if (hasSwim)
         {
@@ -324,8 +339,10 @@ internal sealed class JumpManager : IDisposable
                 farmer.ignoreCollisions = this.previousCollisionValue;
                 farmer.temporarilyInvincible = this.prevInvincibility;
                 farmer.temporaryInvincibilityTimer = this.prevInvincibilityTimer;
+                farmer.forceTimePass = this.forceTimePass;
                 farmer.completelyStopAnimatingOrDoingAction();
             }
+            this.keybind = null!;
             this.farmerRef = null!;
             this.gameEvents = null!;
             this.displayEvents = null!;

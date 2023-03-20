@@ -20,7 +20,7 @@
 <!-- Get Willy to change in his bedroom? -->
 <!-- Make sure the GI schedule keys are right.... -->
 <!-- Document animations -->
-<!-- Warp NPCs into, say, Town, if they need to walk a long distance? -->
+<!-- Warp NPCs into, say, Town or Saloon, if they need to walk a long distance? -->
 <!-- Document new tokens -->
 
 ##### Known Issues

@@ -13,6 +13,7 @@ namespace CritterRings.HarmonyPatches.OwlRing;
 /// Patches so monsters have to be closer to you to see them.
 /// </summary>
 [HarmonyPatch(typeof(NPC))]
+[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Harmony convention.")]
 internal static class BaseSightPatch
 {
     [MethodImpl(TKConstants.Hot)]
@@ -27,6 +28,7 @@ internal static class BaseSightPatch
         if (ModEntry.OwlRing > 0 && Game1.player.isWearingRing(ModEntry.OwlRing))
         {
             threshold /= 2;
+            threshold += threshold / 2;
         }
     }
 }

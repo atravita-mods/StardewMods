@@ -3,14 +3,25 @@
 using StardewModdingAPI.Events;
 
 namespace CritterRings.Framework;
+
+/// <summary>
+/// Manages assets for this mod.
+/// </summary>
 internal static class AssetManager
 {
     private static IAssetName buffTextureLocation = null!;
 
     private static Lazy<Texture2D> buffTex = new(() => Game1.content.Load<Texture2D>(buffTextureLocation.BaseName));
 
+    /// <summary>
+    /// The location of the buff icon texture.
+    /// </summary>
     internal static Texture2D BuffTexture => buffTex.Value;
 
+    /// <summary>
+    /// Initializes this asset manager.
+    /// </summary>
+    /// <param name="parser">Game content helper.</param>
     internal static void Initialize(IGameContentHelper parser)
     {
         buffTextureLocation = parser.ParseAssetName("Mods/atravita/CritterRings/BuffIcon");

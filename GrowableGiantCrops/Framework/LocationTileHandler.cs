@@ -110,7 +110,7 @@ internal static class LocationTileHandler
                 pingPong = true,
                 delayBeforeAnimationStart = 2000,
             });
-            multi.broadcastSprites(railroad, new TemporaryAnimatedSprite(Game1.mouseCursorsName, new Rectangle(0, 499, 10, 11), 50f, 7, 999, new Vector2(54f, 34f) * 64f + new Vector2(7f, 11f) * 4f, flicker: false, flipped: false, 0.2177f, 0f, Color.White, 4f, 0f, 0f, 0f)
+            multi.broadcastSprites(railroad, new TemporaryAnimatedSprite(Game1.mouseCursorsName, new Rectangle(0, 499, 10, 11), 50f, 7, 999, (new Vector2(54f, 34f) * 64f) + (new Vector2(7f, 11f) * 4f), flicker: false, flipped: false, 0.2177f, 0f, Color.White, 4f, 0f, 0f, 0f)
             {
                 xPeriodic = true,
                 xPeriodicLoopTime = 8000f,
@@ -119,7 +119,7 @@ internal static class LocationTileHandler
                 acceleration = new Vector2(0f, -0.015f),
                 delayBeforeAnimationStart = 2000,
             });
-            multi.broadcastSprites(railroad, new TemporaryAnimatedSprite(Game1.mouseCursorsName, new Rectangle(0, 499, 10, 11), 35.715f, 7, 8, new Vector2(54f, 34f) * 64f + new Vector2(3f, 10f) * 4f, flicker: false, flipped: false, 0.2305f, 0f, Color.White, 4f, 0f, 0f, 0f)
+            multi.broadcastSprites(railroad, new TemporaryAnimatedSprite(Game1.mouseCursorsName, new Rectangle(0, 499, 10, 11), 35.715f, 7, 8, (new Vector2(54f, 34f) * 64f) + (new Vector2(3f, 10f) * 4f), flicker: false, flipped: false, 0.2305f, 0f, Color.White, 4f, 0f, 0f, 0f)
             {
                 id = 9999f,
             });
@@ -146,9 +146,124 @@ internal static class LocationTileHandler
 
         string? property = sewer.doesTileHaveProperty((int)tile.X, (int)tile.Y, "TouchAction", "Back");
 
-        if (property == "MagicSeal")
+        // taken from NPC.checkAction.
+        if (property == "MagicalSeal")
         {
+            who.removeQuest(28);
+            who.mailReceived.Add("krobusUnseal");
 
+            Game1.player.jitterStrength = 2f;
+            Game1.player.freezePause = 500;
+
+            Multiplayer multi = MultiplayerHelpers.GetMultiplayer();
+
+            // derived from GameLocation.performTouchAction.
+            for (int i = 0; i < 40; i++)
+            {
+                multi.broadcastSprites(sewer, new TemporaryAnimatedSprite(
+                    textureName: Game1.mouseCursorsName,
+                    new Rectangle(666, 1851, 8, 8),
+                    animationInterval: 25f,
+                    animationLength: 4,
+                    numberOfLoops: 2,
+                    position: (new Vector2(3f, 19f) * 64f) + new Vector2(-8 + ((i % 4) * 16), -(i / 4) * 64 / 4),
+                    flicker: false,
+                    flipped: false)
+                {
+                    layerDepth = 0.1152f + (i / 10000f),
+                    color = new Color(100 + (i * 4), i * 5, 120 + (i * 4)),
+                    pingPong = true,
+                    delayBeforeAnimationStart = i * 10,
+                    scale = 4f,
+                    alphaFade = 0.01f,
+                });
+                multi.broadcastSprites(sewer, new TemporaryAnimatedSprite(
+                    textureName: Game1.mouseCursorsName,
+                    new Rectangle(666, 1851, 8, 8),
+                    animationInterval: 25f,
+                    animationLength: 4,
+                    numberOfLoops: 2,
+                    position: (new Vector2(3f, 17f) * 64f) + new Vector2(-8 + ((i % 4) * 16), i / 4 * 64 / 4),
+                    flicker: false,
+                    flipped: false)
+                {
+                    layerDepth = 0.1152f + (i / 10000f),
+                    color = new Color(232 - (i * 4), 192 - (i * 6), 255 - (i * 4)),
+                    pingPong = true,
+                    delayBeforeAnimationStart = 320 + (i * 10),
+                    scale = 4f,
+                    alphaFade = 0.01f,
+                });
+                multi.broadcastSprites(sewer, new TemporaryAnimatedSprite(
+                    textureName: Game1.mouseCursorsName,
+                    new Rectangle(666, 1851, 8, 8),
+                    animationInterval: 25f,
+                    animationLength: 4,
+                    numberOfLoops: 2,
+                    position: (new Vector2(3f, 19f) * 64f) + new Vector2(-8 + ((i % 4) * 16), -(i / 4) * 64 / 4),
+                    flicker: false,
+                    flipped: false)
+                {
+                    layerDepth = 0.1152f + (i / 10000f),
+                    color = new Color(100 + (i * 4), i * 6, 120 + (i * 4)),
+                    pingPong = true,
+                    delayBeforeAnimationStart = 640 + (i * 10),
+                    scale = 4f,
+                    alphaFade = 0.01f,
+                });
+            }
+
+            // derived from NPC.checkAction
+            DelayedAction.addTemporarySpriteAfterDelay(
+                new TemporaryAnimatedSprite(
+                    textureName: "TileSheets\\Projectiles",
+                    new Rectangle(0, 0, 16, 16),
+                    animationInterval: 3000f,
+                    animationLength: 1,
+                    numberOfLoops: 0,
+                    position: new Vector2(31f, 17f) * Game1.tileSize,
+                    flicker: false,
+                    flipped: false)
+                {
+                    scale = 4f,
+                    delayBeforeAnimationStart = 1,
+                    startSound = "debuffSpell",
+                    motion = new Vector2(-9f, 1f),
+                    rotationChange = MathF.PI / 64f,
+                    light = true,
+                    lightRadius = 1f,
+                    lightcolor = new Color(150, 0, 50),
+                    layerDepth = 1f,
+                    alphaFade = 0.003f,
+                },
+                l: sewer,
+                timer: 200);
+            DelayedAction.addTemporarySpriteAfterDelay(
+                new TemporaryAnimatedSprite(
+                    textureName: "TileSheets\\Projectiles",
+                    new Rectangle(0, 0, 16, 16),
+                    animationInterval: 3000f,
+                    animationLength: 1,
+                    numberOfLoops: 0,
+                    position: new Vector2(31f, 17f) * Game1.tileSize,
+                    flicker: false,
+                    flipped: false)
+                {
+                    startSound = "debuffSpell",
+                    delayBeforeAnimationStart = 1,
+                    scale = Game1.pixelZoom,
+                    motion = new Vector2(-9f, 1f),
+                    rotationChange = MathF.PI / 64f,
+                    light = true,
+                    lightRadius = 1f,
+                    lightcolor = new Color(150, 0, 50),
+                    layerDepth = 1f,
+                    alphaFade = 0.003f,
+                },
+                l: sewer,
+                timer: 700);
+
+            return true;
         }
 
         return false;

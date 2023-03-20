@@ -175,7 +175,7 @@ internal sealed class ModEntry : Mod
         this.Helper.Events.GameLoop.SaveLoaded += this.OnSaveLoaded;
         this.Helper.Events.GameLoop.TimeChanged += this.OnTimeChanged;
         this.Helper.Events.Player.Warped += this.OnWarp;
-        this.Helper.Events.Input.ButtonPressed += this.OnButtonPressed;
+        this.Helper.Events.Input.ButtonsChanged += this.OnButtonsChanged;
 
         this.Helper.Events.Content.AssetRequested += static (_, e) => AssetManager.Apply(e);
         this.Helper.Events.Content.AssetsInvalidated += static (_, e) => AssetManager.Reset(e.NamesWithoutLocale);
@@ -210,15 +210,16 @@ internal sealed class ModEntry : Mod
 
     #endregion
 
-    /// <inheritdoc cref="IInputEvents.ButtonPressed"/>
-    private void OnButtonPressed(object? sender, ButtonPressedEventArgs e)
+    /// <inheritdoc cref="IInputEvents.ButtonsChanged"/>
+    private void OnButtonsChanged(object? sender, ButtonsChangedEventArgs e)
     {
         if (!Context.IsPlayerFree)
         {
             return;
         }
-        if (Config.MaxFrogJumpDistance > 0 && Config.FrogRingButton.Keybinds.FirstOrDefault(k => k.GetState() == SButtonState.Pressed) is Keybind keybind
-            && FrogRing > 0 && Game1.player.isWearingRing(frogRing) && !Game1.player.UsingTool && !Game1.player.isEating)
+        if (!Game1.player.UsingTool && !Game1.player.isEating
+            && Config.MaxFrogJumpDistance > 0 && Config.FrogRingButton.Keybinds.FirstOrDefault(k => k.GetState() == SButtonState.Pressed) is Keybind keybind
+            && FrogRing > 0 && Game1.player.isWearingRing(FrogRing))
         {
             if (JumpManagers.Value?.IsValid() == true)
             {
@@ -279,7 +280,7 @@ internal sealed class ModEntry : Mod
                 CRUtils.SpawnFirefly(critters, 3);
             }
         }
-        else if (Game1.currentLocation.ShouldSpawnButterflies() && ButterflyRing > 0 && Game1.player.isWearingRing(ButterflyRing))
+        else if (e.NewLocation.ShouldSpawnButterflies() && ButterflyRing > 0 && Game1.player.isWearingRing(ButterflyRing))
         {
             CRUtils.SpawnButterfly(critters, 3);
         }
@@ -293,9 +294,14 @@ internal sealed class ModEntry : Mod
             BunnyManagers.Value ??= new(this.Monitor, Game1.player, this.Helper.Events.Player);
             CRUtils.AddBunnies(critters, 3, BunnyManagers.Value.GetTrackedBushes());
         }
-        if (FrogRing > 0 && Game1.player.isWearingRing(FrogRing) && Game1.currentLocation.ShouldSpawnFrogs())
+        if (FrogRing > 0 && Game1.player.isWearingRing(FrogRing) && e.NewLocation.ShouldSpawnFrogs())
         {
-            CRUtils.SpawnFrogs(critters, 3);
+            CRUtils.SpawnFrogs(e.NewLocation, critters, 3);
+        }
+
+        if (OwlRing > 0 && Game1.player.isWearingRing(OwlRing) && e.NewLocation.ShouldSpawnOwls())
+        {
+            CRUtils.SpawnOwls(e.NewLocation, critters, 3);
         }
     }
 
@@ -324,7 +330,12 @@ internal sealed class ModEntry : Mod
         }
         if (FrogRing > 0 && Game1.currentLocation.ShouldSpawnFrogs())
         {
-            CRUtils.SpawnFrogs(critters, Game1.player.GetEffectsOfRingMultiplier(FrogRing));
+            CRUtils.SpawnFrogs(Game1.currentLocation, critters, Game1.player.GetEffectsOfRingMultiplier(FrogRing));
+        }
+
+        if (OwlRing > 0 && Game1.player.isWearingRing(OwlRing) && Game1.currentLocation.ShouldSpawnOwls())
+        {
+            CRUtils.SpawnOwls(Game1.currentLocation, critters, Game1.player.GetEffectsOfRingMultiplier(OwlRing));
         }
 
         if (BunnyRing > 0)

@@ -17,16 +17,28 @@ This incredibly self-indulgent mod has four rings in it: the Butterfly Ring, the
 * Bunny Ring: Allows a 14s "sprint" of +5 (configurable) speed in return for 10 (configurable) stamina. Summons bunnies before dark.
 * Butterfly Ring: Acts as magnet ring, summons butterflies before dark. Buy from Marlon after receiving the skull key.
 * Firefly Ring: Acts as a glow ring, summons fireflies after dark. Buy from Marlon after receiving the skull key.
-* Owl ring: Makes enemies less likely to see you. Summons owls.
+* Frog Ring: Hold down the jump button to charge up a jump! Costs stamina, though.
+* Owl Ring: Makes enemies less likely to see you. Summons owls.
 
 ## Configuration
 Run SMAPI at least once with this mod installed to generate the `config.json`, or use [Generic Mod Config Menu](https://www.nexusmods.com/stardewvalley/mods/5098) to configure.
 
-Options:
+#### General Options:
 * `CritterSpawnMultiplier`: Controls how many critters will spawn per interval of time. Set it higher to get more critters.
+* `PlayAudioEffects`: Whether or not the audio effects from this mod will be played.
+
+#### Butterfly Ring Options
 * `ButterfliesSpawnInRain`: if enabled, butterflies will spawn in the rain.
+
+#### Bunny Ring Options.
 * `BunnyRingStamina`: How much stamina each sprint of the bunny ring should take.
 * `BunnyRingBoost`: Indicates how much speed the bunny ring sprint should add. Default +3.
+* `BunnyRingButton`: Indicates which button(s) to use for the bunny ring's sprint.
+
+#### Frog Ring Options
+* `MaxFrogJumpDistance`: Maximum distance the frog ring will jump you.
+* `FrogRingButton`: The button used for the frog jump.
+* `JumpChargeSpeed`: Indicates how quickly the jump should charge up. Higher for faster.
 
 ## Compatibility
 

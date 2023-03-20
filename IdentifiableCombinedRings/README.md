@@ -19,6 +19,8 @@ Simply delete from your Mods directory.
 ## Configuration
 Run SMAPI at least once with this mod installed to generate the `config.json`, or use [Generic Mod Config Menu](https://www.nexusmods.com/stardewvalley/mods/5098) to configure.
 
+`OverrideCombinedRing` - whether or not this mod should override the graphics for a combined ring.
+
 ## Compatibility
 
 * Works with Stardew Valley 1.5.6 on Linux/macOS/Windows.

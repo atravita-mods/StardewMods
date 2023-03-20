@@ -34,11 +34,6 @@ internal static class ShopPatcher
                 __result.TryAdd(new Ring(ModEntry.ButterflyRing), new[] { RING_COST, ShopMenu.infiniteStock });
             }
 
-            if (ModEntry.OwlRing > 0)
-            {
-                __result.TryAdd(new Ring(ModEntry.OwlRing), new[] { RING_COST, ShopMenu.infiniteStock });
-            }
-
             if (!Game1.player.hasMagicInk)
             {
                 return;
@@ -54,6 +49,11 @@ internal static class ShopPatcher
             if (ModEntry.BunnyRing > 0)
             {
                 __result.TryAdd(new Ring(ModEntry.BunnyRing), new[] { LATE_RING_COST, ShopMenu.infiniteStock });
+            }
+
+            if (ModEntry.OwlRing > 0)
+            {
+                __result.TryAdd(new Ring(ModEntry.OwlRing), new[] { LATE_RING_COST, ShopMenu.infiniteStock });
             }
         }
         catch (Exception ex)

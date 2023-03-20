@@ -51,7 +51,7 @@ public sealed class ModConfig
     /// <summary>
     /// Gets or sets a value indicating how big of a speed boost the bunny ring's dash should be.
     /// </summary>
-    [GMCMRange(1, 10)]
+    [GMCMRange(0, 10)]
     [GMCMSection("BunnyRing", 10)]
     public int BunnyRingBoost
     {
@@ -70,7 +70,7 @@ public sealed class ModConfig
     /// <summary>
     /// Gets or sets the maximum jump distance for the frog ring.
     /// </summary>
-    [GMCMRange(1, 15)]
+    [GMCMRange(0, 15)]
     [GMCMSection("FrogRing", 20)]
     public int MaxFrogJumpDistance
     {
@@ -104,9 +104,21 @@ public sealed class ModConfig
     [GMCMSection("FrogRing", 20)]
     public bool FrogsSpawnInHeat { get; set; } = false;
 
+    /// <summary>
+    /// Gets or sets a value indicating whether or not frogs should spawn in a very cold location.
+    /// </summary>
     [GMCMSection("FrogRing", 20)]
     public bool FrogsSpawnInCold { get; set; } = false;
 
+    /// <summary>
+    /// Gets or sets a value indicating whether or not frogs can only spawn outdoors in rain.
+    /// </summary>
     [GMCMSection("FrogRing", 20)]
     public bool FrogsSpawnOnlyInRain { get; set; } = false;
+
+    [GMCMSection("OwlRing", 30)]
+    public bool OwlsSpawnIndoors { get; set; } = false;
+
+    [GMCMSection("OwlRing", 30)]
+    public bool OwlsSpawnDuringDay { get; set; } = true;
 }

@@ -75,6 +75,15 @@ internal static class CRUtils
             && (ModEntry.Config.ButterfliesSpawnInRain || !loc.IsOutdoors || !Game1.IsRainingHere(loc));
 
     /// <summary>
+    /// Checks to make sure it's safe to spawn owls.
+    /// </summary>
+    /// <param name="loc">Game location to check.</param>
+    /// <returns>True if okay to spawn owls.</returns>
+    internal static bool ShouldSpawnOwls([NotNullWhen(true)] this GameLocation? loc)
+        => loc is not null && (Game1.isDarkOut() || ModEntry.Config.OwlsSpawnDuringDay)
+            && (ModEntry.Config.OwlsSpawnIndoors || loc.IsOutdoors);
+
+    /// <summary>
     /// Checks to make sure it's safe to spawn frogs.
     /// </summary>
     /// <param name="loc">GameLocation to check.</param>
@@ -148,9 +157,10 @@ internal static class CRUtils
     /// <summary>
     /// Spawns frogs around the player.
     /// </summary>
+    /// <param name="loc">The game location.</param>
     /// <param name="critters">Critters list to add to.</param>
     /// <param name="count">Number of frogs to spawn.</param>
-    internal static void SpawnFrogs(List<Critter> critters, int count)
+    internal static void SpawnFrogs(GameLocation loc, List<Critter> critters, int count)
     {
         if (critters is not null && count > 0)
         {
@@ -160,6 +170,46 @@ internal static class CRUtils
                 Frog frog = new(Game1.player.getTileLocation());
                 FrogTimerSetter.Value(frog, Game1.random.Next(2000, 5000));
                 critters.Add(frog);
+            }
+        }
+    }
+
+    /// <summary>
+    /// Spawns owls.
+    /// </summary>
+    /// <param name="loc">The game location.</param>
+    /// <param name="critters">Critters list to add to.</param>
+    /// <param name="count">Number of owls to spawn.</param>
+    internal static void SpawnOwls(GameLocation loc, List<Critter> critters, int count)
+    {
+        if (critters is not null && count > 0)
+        {
+            count *= ModEntry.Config.CritterSpawnMultiplier;
+            for (int i = 0; i < count; i++)
+            {
+                Vector2 owlPos;
+
+                if (Game1.random.Next(2) == 0)
+                {
+                    Vector2 pos = Game1.player.Position;
+                    float deltaY = pos.Y + 128;
+                    owlPos = new Vector2(
+                    x: Math.Clamp(pos.X - (deltaY / 4), 0, (loc.Map.Layers[0].LayerWidth - 1) * Game1.tileSize) + Game1.random.Next(-127, 129),
+                    y: -128);
+                }
+                else
+                {
+                    owlPos = new Vector2(
+                    x: Game1.random.Next(0, (loc.Map.Layers[0].LayerWidth - 1) * Game1.tileSize),
+                    y: -128);
+                }
+                Owl owl = new(owlPos);
+                DelayedAction.functionAfterDelay(
+                    func: () =>
+                    {
+                        critters.Add(owl);
+                    },
+                    timer: (i * 100) + Game1.random.Next(-50, 50));
             }
         }
     }

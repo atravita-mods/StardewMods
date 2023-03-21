@@ -17,6 +17,8 @@ using XLocation = xTile.Dimensions.Location;
 
 namespace CritterRings.Framework.Managers;
 
+// TODO: update the viewport to follow the green square?
+
 /// <summary>
 /// Manages a jump for a player.
 /// </summary>
@@ -38,7 +40,7 @@ internal sealed class JumpManager : IDisposable
     private bool previousCollisionValue = false; // keeps track of whether or not the farmer had noclip on.
     private bool prevInvincibility; // we set invincibility because the farmer's sprite is not drawn anywhere
     private int prevInvincibilityTimer; // near the actual position, so this way the farmer can't appear to get hit out of nowhere.
-    private bool forceTimePass;
+    private readonly bool forceTimePass;
 
     private State state = State.Charging;
     private int ticks = DEFAULT_TICKS;
@@ -54,7 +56,7 @@ internal sealed class JumpManager : IDisposable
 
     // jumping fields.
     private JumpFrame frame;
-    private float velocity;
+    private float velocityX;
 
     #region delegates
 
@@ -72,6 +74,7 @@ internal sealed class JumpManager : IDisposable
     /// <param name="farmer">The farmer we're tracking.</param>
     /// <param name="gameEvents">The game event manager.</param>
     /// <param name="displayEvents">The display event manager.</param>
+    /// <param name="keybind">The keybind that triggered this jump.</param>
     internal JumpManager(Farmer farmer, IGameLoopEvents gameEvents, IDisplayEvents displayEvents, Keybind keybind)
     {
         ModEntry.ModMonitor.DebugOnlyLog("(FrogRing) Starting -> Charging");
@@ -91,6 +94,8 @@ internal sealed class JumpManager : IDisposable
         // forcing time to pass even while we're preparing to jump.
         this.forceTimePass = Game1.player.forceTimePass;
         Game1.player.forceTimePass = true;
+
+        // Game1.viewportFreeze = true;
 
         this.direction = Game1.player.FacingDirection switch
         {
@@ -159,35 +164,23 @@ internal sealed class JumpManager : IDisposable
             return;
         }
 
-        if (this.isCurrentTileBlocked)
+        e.SpriteBatch.Draw(
+            texture: Game1.mouseCursors,
+            new Vector2((this.openTile.X * Game1.tileSize) - Game1.viewport.X, (this.openTile.Y * Game1.tileSize) - Game1.viewport.Y),
+            new Rectangle(194, 388, 16, 16),
+            color: Color.White,
+            rotation: 0f,
+            origin: Vector2.Zero,
+            scale: 4f,
+            effects: SpriteEffects.None,
+            layerDepth: 0.01f);
+
+        if (this.isCurrentTileBlocked && this.state == State.Charging)
         {
             e.SpriteBatch.Draw(
                 texture: Game1.mouseCursors,
                 new Vector2((this.currentTile.X * Game1.tileSize) - Game1.viewport.X, (this.currentTile.Y * Game1.tileSize) - Game1.viewport.Y),
                 new Rectangle(210, 388, 16, 16),
-                color: Color.White,
-                rotation: 0f,
-                origin: Vector2.Zero,
-                scale: 4f,
-                effects: SpriteEffects.None,
-                layerDepth: 0.01f);
-            e.SpriteBatch.Draw(
-                texture: Game1.mouseCursors,
-                new Vector2((this.openTile.X * Game1.tileSize) - Game1.viewport.X, (this.openTile.Y * Game1.tileSize) - Game1.viewport.Y),
-                new Rectangle(194, 388, 16, 16),
-                color: Color.White,
-                rotation: 0f,
-                origin: Vector2.Zero,
-                scale: 4f,
-                effects: SpriteEffects.None,
-                layerDepth: 0.01f);
-        }
-        else
-        {
-            e.SpriteBatch.Draw(
-                texture: Game1.mouseCursors,
-                new Vector2((this.currentTile.X * Game1.tileSize) - Game1.viewport.X, (this.currentTile.Y * Game1.tileSize) - Game1.viewport.Y),
-                new Rectangle(194, 388, 16, 16),
                 color: Color.White,
                 rotation: 0f,
                 origin: Vector2.Zero,
@@ -235,13 +228,16 @@ internal sealed class JumpManager : IDisposable
 
                     CRUtils.PlayMeep();
 
-                    // gravity is 0.5f, so total time is 2 * initialVelocity / 0.5 = 4 * initialVelocity;
-                    float initialVelocity = 4f * MathF.Sqrt(this.distance);
-                    float tileTravelDistance = (int)(Math.Abs(this.openTile.X - this.startTile.X) + Math.Abs(this.openTile.Y - this.startTile.Y));
-                    Game1.player.Stamina -= tileTravelDistance;
+                    // gravity is 0.5f, so total time is 2 * initialVelocityY / 0.5 = 4 * initialVelocityY;
+                    float initialVelocityY = 4f * MathF.Sqrt(this.distance);
+                    float tileTravelDistance = this.openTile.ManhattanDistance(this.startTile);
+                    if (ModEntry.Config.JumpCostsStamina && Game1.CurrentEvent is null)
+                    {
+                        Game1.player.Stamina -= tileTravelDistance;
+                    }
                     float travelDistance = tileTravelDistance * Game1.tileSize;
-                    this.velocity = travelDistance / ((4 * initialVelocity) - 1);
-                    Game1.player.synchronizedJump(initialVelocity);
+                    this.velocityX = travelDistance / ((4 * initialVelocityY) - 1);
+                    Game1.player.synchronizedJump(initialVelocityY);
 
                     // track player state
                     this.previousCollisionValue = Game1.player.ignoreCollisions;
@@ -264,7 +260,7 @@ internal sealed class JumpManager : IDisposable
                 }
                 else
                 {
-                    Game1.player.Position += this.velocity * this.direction;
+                    Game1.player.Position += this.velocityX * this.direction;
                     // Handle switching the jump frame.
                     switch (this.frame)
                     {
@@ -319,6 +315,8 @@ internal sealed class JumpManager : IDisposable
         {
             this.openTile = this.currentTile;
             this.isCurrentTileBlocked = false;
+
+            // Game1.moveViewportTo(this.openTile * Game1.tileSize, 5f);
         }
         else
         {

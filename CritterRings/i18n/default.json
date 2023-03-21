@@ -9,6 +9,7 @@
   "ButterflyRing.title": "Butterfly Ring Options",
   "BunnyRing.title": "Bunny Ring Options",
   "FrogRing.title": "Frog Ring Options",
+  "OwlRing.title": "Owl Ring Options",
 
   "ButterfliesSpawnInRain.title": "Butterflies Spawn In Rain",
   "ButterfliesSpawnInRain.description": "If enabled, butterflies spawn in rain. If disabled, they'll only spawn in sunny weather.",
@@ -28,8 +29,14 @@
   "FrogRingButton.title": "Frog Ring Button",
   "FrogRingButton.description": "The button used to trigger the frog ring's jump.",
 
+  "MaxFrogJumpDistance.title": "Max Frog Jump Distance",
+  "MaxFrogJumpDistance.description": "The maximum distance the frog ring will try to jump.",
+
   "JumpChargeSpeed.title": "Jump Charge Speed",
   "JumpChargeSpeed.description": "Adjusts how fast the frog jump charges (ie, goes one tile further.) Higher for faster.",
+
+  "JumpCostsStamina.title": "Jump Costs Stamina",
+  "JumpCostsStamina.description": "If enabled, you'll spend one stamina point per tile traversed.",
 
   "FrogsSpawnInHeat.title": "Frogs Spawn In Heat",
   "FrogsSpawnInHeat.description": "If enabled, frogs may spawn in locations that are probably too hot for them, like the lava levels of the mine or the desert.",
@@ -39,6 +46,12 @@
 
   "FrogsSpawnOnlyInRain.title": "Frogs Spawn Only In Rain",
   "FrogsSpawnOnlyInRain.description": "If enabled, frogs will only spawn outside in rain.",
+
+  "OwlsSpawnIndoors.title": "Owls Spawn Indoors",
+  "OwlsSpawnIndoors.description": "If owls should spawn indoors.",
+
+  "OwlsSpawnDuringDay.title": "Owls Spawn During Day",
+  "OwlsSpawnDuringDay.description": "If owls should spawn during the day.",
 
   "api-not-found": "{{APIID}} not found, integration disabled.",
   "api-too-old": "Please update {{apiName}}({{APIID}}) to at least version {{minversion}}. Current version {{currentversion}}. Integration disabled.",

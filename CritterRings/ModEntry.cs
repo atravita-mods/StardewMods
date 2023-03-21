@@ -217,7 +217,7 @@ internal sealed class ModEntry : Mod
         {
             return;
         }
-        if (!Game1.player.UsingTool && !Game1.player.isEating
+        if (!Game1.player.UsingTool && !Game1.player.isEating && Game1.player.yJumpOffset == 0
             && Config.MaxFrogJumpDistance > 0 && Config.FrogRingButton.Keybinds.FirstOrDefault(k => k.GetState() == SButtonState.Pressed) is Keybind keybind
             && FrogRing > 0 && Game1.player.isWearingRing(FrogRing))
         {
@@ -229,7 +229,7 @@ internal sealed class ModEntry : Mod
             {
                 Game1.showRedMessage(I18n.FrogRing_Horse());
             }
-            else if (Game1.player.exhausted.Value || Game1.player.Stamina < Config.MaxFrogJumpDistance)
+            else if (Game1.player.exhausted.Value || (Game1.player.Stamina < Config.MaxFrogJumpDistance && Config.JumpCostsStamina))
             {
                 Game1.showRedMessage(I18n.BunnyBuff_Tired());
             }
@@ -284,7 +284,7 @@ internal sealed class ModEntry : Mod
         {
             CRUtils.SpawnButterfly(critters, 3);
         }
-        if (BunnyRing > 0 && Game1.player.isWearingRing(BunnyRing))
+        if (BunnyRing > 0 && e.NewLocation is not Caldera && Game1.player.isWearingRing(BunnyRing))
         {
             if (BunnyManagers.Value?.IsValid() == false)
             {
@@ -292,16 +292,16 @@ internal sealed class ModEntry : Mod
                 BunnyManagers.Value = null;
             }
             BunnyManagers.Value ??= new(this.Monitor, Game1.player, this.Helper.Events.Player);
-            CRUtils.AddBunnies(critters, 3, BunnyManagers.Value.GetTrackedBushes());
+            CRUtils.AddBunnies(critters, 5, BunnyManagers.Value.GetTrackedBushes());
         }
         if (FrogRing > 0 && Game1.player.isWearingRing(FrogRing) && e.NewLocation.ShouldSpawnFrogs())
         {
-            CRUtils.SpawnFrogs(e.NewLocation, critters, 3);
+            CRUtils.SpawnFrogs(e.NewLocation, critters, 5);
         }
 
         if (OwlRing > 0 && Game1.player.isWearingRing(OwlRing) && e.NewLocation.ShouldSpawnOwls())
         {
-            CRUtils.SpawnOwls(e.NewLocation, critters, 3);
+            CRUtils.SpawnOwls(e.NewLocation, critters, 1);
         }
     }
 
@@ -338,7 +338,7 @@ internal sealed class ModEntry : Mod
             CRUtils.SpawnOwls(Game1.currentLocation, critters, Game1.player.GetEffectsOfRingMultiplier(OwlRing));
         }
 
-        if (BunnyRing > 0)
+        if (BunnyRing > 0 && Game1.currentLocation is not Caldera)
         {
             if (BunnyManagers.Value?.IsValid() == false)
             {

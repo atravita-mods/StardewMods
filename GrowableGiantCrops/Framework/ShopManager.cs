@@ -463,7 +463,7 @@ internal static class ShopManager
             int? price = GetPriceOfProduct(idx);
             if (price is not null)
             {
-                manager.Add(new(2500d / Math.Clamp(price.Value, 50, 1250), idx));
+                manager.Add(new((2500d / Math.Clamp(price.Value, 50, 1250)) + 10, idx));
             }
         }
         ModEntry.ModMonitor.DebugOnlyLog($"Got {manager.Count} giant crop entries for shop.", LogLevel.Info);

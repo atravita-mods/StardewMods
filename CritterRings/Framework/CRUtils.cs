@@ -23,7 +23,7 @@ internal static class CRUtils
     private static readonly Lazy<Action<Frog, int>> FrogTimerSetter = new(() =>
         typeof(Frog).GetCachedField("beforeFadeTimer", ReflectionCache.FlagTypes.InstanceFlags)
         .GetInstanceFieldSetter<Frog, int>()
-);
+    );
 
     #endregion
 
@@ -49,6 +49,9 @@ internal static class CRUtils
         }
     }
 
+    /// <summary>
+    /// Plays a little meep.
+    /// </summary>
     internal static void PlayMeep()
     {
         if (ModEntry.Config.PlayAudioEffects && Game1.soundBank is not null)
@@ -164,12 +167,46 @@ internal static class CRUtils
     {
         if (critters is not null && count > 0)
         {
-            count *= ModEntry.Config.CritterSpawnMultiplier;
+            count *= ModEntry.Config.CritterSpawnMultiplier * 2;
             for (int i = 0; i < count; i++)
             {
-                Frog frog = new(Game1.player.getTileLocation());
+                Frog? frog = null;
+
+                // try for a frog that leaps into water.
+                if (loc.waterTiles is not null && Game1.random.Next(2) == 0)
+                {
+                    for (int j = 0; j < 3; j++)
+                    {
+                        Vector2 tile = loc.getRandomTile();
+                        int xCoord = (int)tile.X;
+                        int yCoord = (int)tile.Y;
+                        if (!loc.isWaterTile(xCoord, yCoord) || !loc.isWaterTile(xCoord, yCoord - 1)
+                            || loc.doesTileHaveProperty(xCoord, yCoord, "Passable", "Buildings") is not null)
+                        {
+                            continue;
+                        }
+
+                        bool flipped = Game1.random.Next(2) == 0;
+                        for (int x = 1; x < 11; x++)
+                        {
+                            if (!loc.isTileOnMap(xCoord + x, yCoord))
+                            {
+                                goto breakbreak;
+                            }
+
+                            if (loc.isWaterTile(xCoord + x, yCoord))
+                            {
+                                frog = new(new Vector2(tile.X + x, tile.Y), true, flipped);
+                                goto breakbreak;
+                            }
+                        }
+                    }
+                }
+breakbreak:
+                frog ??= new(Game1.player.getTileLocation());
                 FrogTimerSetter.Value(frog, Game1.random.Next(2000, 5000));
                 critters.Add(frog);
+
             }
         }
     }
@@ -189,12 +226,12 @@ internal static class CRUtils
             {
                 Vector2 owlPos;
 
-                if (Game1.random.Next(2) == 0)
+                if (Game1.random.Next(3) == 0)
                 {
                     Vector2 pos = Game1.player.Position;
                     float deltaY = pos.Y + 128;
                     owlPos = new Vector2(
-                    x: Math.Clamp(pos.X - (deltaY / 4), 0, (loc.Map.Layers[0].LayerWidth - 1) * Game1.tileSize) + Game1.random.Next(-127, 129),
+                    x: Math.Clamp(pos.X - (deltaY / 4), 0, (loc.Map.Layers[0].LayerWidth - 1) * Game1.tileSize) + Game1.random.Next(-256, 128),
                     y: -128);
                 }
                 else
@@ -209,7 +246,7 @@ internal static class CRUtils
                     {
                         critters.Add(owl);
                     },
-                    timer: (i * 100) + Game1.random.Next(-50, 50));
+                    timer: (i * 150) + Game1.random.Next(-50, 150));
             }
         }
     }
@@ -219,6 +256,7 @@ internal static class CRUtils
     /// </summary>
     /// <param name="critters">The critter list.</param>
     /// <param name="count">The number of bunnies to spawn.</param>
+    /// <param name="bushes">The bushes on the map, for the bunnies to run towards.</param>
     internal static void AddBunnies(List<Critter> critters, int count, List<Bush>? bushes)
     {
         if (critters is not null && count > 0)

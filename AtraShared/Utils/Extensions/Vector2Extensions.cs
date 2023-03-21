@@ -9,6 +9,9 @@ namespace AtraShared.Utils.Extensions;
 /// </summary>
 public static class Vector2Extensions
 {
+    public static float ManhattanDistance(this Vector2 self, Vector2 other)
+        => Math.Abs(self.X - other.X) + Math.Abs(self.Y - other.Y);
+
     /// <summary>
     /// Tries to parse a vector2 from a string.
     /// </summary>

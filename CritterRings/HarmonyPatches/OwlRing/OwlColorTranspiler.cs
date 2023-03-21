@@ -1,13 +1,19 @@
-﻿using System.Reflection.Emit;
-using System.Reflection;
+﻿using System.Reflection;
+using System.Reflection.Emit;
+
+using System.Runtime.CompilerServices;
+
+using AtraBase.Toolkit;
+
 using AtraCore.Framework.ReflectionManager;
 
+using AtraShared.Utils.Extensions;
 using AtraShared.Utils.HarmonyHelper;
 
 using HarmonyLib;
 
 using Microsoft.Xna.Framework;
-using AtraShared.Utils.Extensions;
+
 using StardewValley.BellsAndWhistles;
 
 namespace CritterRings.HarmonyPatches.OwlRing;
@@ -18,6 +24,7 @@ namespace CritterRings.HarmonyPatches.OwlRing;
 [HarmonyPatch(typeof(Owl))]
 internal static class OwlColorTranspiler
 {
+    [MethodImpl(TKConstants.Hot)]
     private static Color GetColorForTime(Color prevcolor)
     {
         if (Game1.isDarkOut())
@@ -26,13 +33,12 @@ internal static class OwlColorTranspiler
         }
         if (Game1.isStartingToGetDarkOut())
         {
-            return Color.LightBlue;
+            return Color.LightSteelBlue;
         }
         return Color.White;
     }
 
     [HarmonyPatch(nameof(Owl.drawAboveFrontLayer))]
-    [SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1116:Split parameters should start on line after declaration", Justification = "Reviewed.")]
     private static IEnumerable<CodeInstruction>? Transpiler(IEnumerable<CodeInstruction> instructions, ILGenerator gen, MethodBase original)
     {
         try
@@ -48,7 +54,7 @@ internal static class OwlColorTranspiler
                 new (OpCodes.Call, typeof(OwlColorTranspiler).GetCachedMethod(nameof(GetColorForTime), ReflectionCache.FlagTypes.StaticFlags)),
             });
 
-            helper.Print();
+            // helper.Print();
             return helper.Render();
         }
         catch (Exception ex)

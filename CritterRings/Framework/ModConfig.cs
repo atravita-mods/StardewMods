@@ -15,7 +15,7 @@ public sealed class ModConfig
     /// <summary>
     /// Gets or sets a multiplicative factor which determines the number of critters to spawn.
     /// </summary>
-    [GMCMRange(1, 5)]
+    [GMCMRange(0, 5)]
     public int CritterSpawnMultiplier
     {
         get => this.critterSpawnMultiplier;
@@ -70,12 +70,12 @@ public sealed class ModConfig
     /// <summary>
     /// Gets or sets the maximum jump distance for the frog ring.
     /// </summary>
-    [GMCMRange(0, 15)]
+    [GMCMRange(0, 20)]
     [GMCMSection("FrogRing", 20)]
     public int MaxFrogJumpDistance
     {
         get => this.maxFrogJumpDistance;
-        set => this.maxFrogJumpDistance = Math.Clamp(value, 0, 15);
+        set => this.maxFrogJumpDistance = Math.Clamp(value, 0, 20);
     }
 
     /// <summary>
@@ -98,6 +98,12 @@ public sealed class ModConfig
     }
 
     /// <summary>
+    /// Gets or sets a value indicating whether or not the jump costs stamina.
+    /// </summary>
+    [GMCMSection("FrogRing", 20)]
+    public bool JumpCostsStamina { get; set; } = true;
+
+    /// <summary>
     /// Gets or sets a value indicating whether or not the frogs should spawn in a very hot location
     /// such as the volcano or desert.
     /// </summary>
@@ -116,9 +122,15 @@ public sealed class ModConfig
     [GMCMSection("FrogRing", 20)]
     public bool FrogsSpawnOnlyInRain { get; set; } = false;
 
+    /// <summary>
+    /// Gets or sets a value indicating whether or not owls should spawn indoors.
+    /// </summary>
     [GMCMSection("OwlRing", 30)]
     public bool OwlsSpawnIndoors { get; set; } = false;
 
+    /// <summary>
+    /// Gets or sets a value indicating whether or not owls should spawn during the day.
+    /// </summary>
     [GMCMSection("OwlRing", 30)]
     public bool OwlsSpawnDuringDay { get; set; } = true;
 }

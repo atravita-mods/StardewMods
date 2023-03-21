@@ -12,6 +12,7 @@ namespace AtraShared.Utils.Extensions;
 /// Extensions to more easily interact with the ModData <see cref="ModDataDictionary" /> dictionary.
 /// </summary>
 /// <remarks>Inspired by https://github.com/spacechase0/StardewValleyMods/blob/main/SpaceShared/ModDataHelper.cs. </remarks>
+[SuppressMessage("StyleCop.CSharp.OrderingRules", "SA1201:Elements should appear in the correct order", Justification = "Reviewed.")]
 public static class ModDataExtensions
 {
     /// <summary>

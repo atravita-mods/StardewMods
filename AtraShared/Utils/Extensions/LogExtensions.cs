@@ -32,7 +32,7 @@ public static class LogExtensions
     /// <param name="message">Message to log.</param>
     /// <param name="level">Level to log at.</param>
     [DebuggerHidden]
-    [Conditional("TRACE")]
+    [Conditional("TRACELOG")]
     [MethodImpl(TKConstants.Hot)]
     public static void TraceOnlyLog(this IMonitor monitor, string message, LogLevel level = LogLevel.Debug)
         => monitor.Log(message, level);

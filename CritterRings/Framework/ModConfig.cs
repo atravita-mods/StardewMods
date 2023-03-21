@@ -104,6 +104,12 @@ public sealed class ModConfig
     public bool JumpCostsStamina { get; set; } = true;
 
     /// <summary>
+    /// Gets or sets a value indicating whether or not the viewport should follow the jump target.
+    /// </summary>
+    [GMCMSection("FrogRing", 20)]
+    public bool ViewportFollowsTarget { get; set; } = true;
+
+    /// <summary>
     /// Gets or sets a value indicating whether or not the frogs should spawn in a very hot location
     /// such as the volcano or desert.
     /// </summary>

@@ -38,6 +38,9 @@
   "JumpCostsStamina.title": "Jump Costs Stamina",
   "JumpCostsStamina.description": "If enabled, you'll spend one stamina point per tile traversed.",
 
+  "ViewportFollowsTarget.title": "Viewport Follows Target",
+  "ViewportFollowsTarget.descrption": "If enabled, the viewport will follow the target square, not the farmer.",
+
   "FrogsSpawnInHeat.title": "Frogs Spawn In Heat",
   "FrogsSpawnInHeat.description": "If enabled, frogs may spawn in locations that are probably too hot for them, like the lava levels of the mine or the desert.",
 

@@ -161,7 +161,6 @@ internal sealed class ModEntry : Mod
 #endif
     }
 
-
     /// <inheritdoc cref="IGameLoopEvents.Saved"/>
     /// <remarks>
     /// Writes migration data then detaches the migrator.

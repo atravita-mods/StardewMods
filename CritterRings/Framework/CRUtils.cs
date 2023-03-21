@@ -319,8 +319,11 @@ breakbreak:
                     if (!bush.getBoundingBox().Intersects(new Rectangle((int)startTile.X * 64, (int)startTile.Y * 64, 64, 64))
                         && (!loc.isTileLocationTotallyClearAndPlaceable(startTile) || loc.isWaterTile((int)startTile.X, (int)startTile.Y)))
                     {
-                        yield return (tile, flipped);
-                        count--;
+                        if (distance > 3)
+                        {
+                            yield return (tile, flipped);
+                            count--;
+                        }
                         goto Continue;
                     }
                 }

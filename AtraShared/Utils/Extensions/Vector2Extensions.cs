@@ -9,8 +9,23 @@ namespace AtraShared.Utils.Extensions;
 /// </summary>
 public static class Vector2Extensions
 {
+    /// <summary>
+    /// Finds the Manhattan (taxicab) distance between two vectors.
+    /// </summary>
+    /// <param name="self">First vector.</param>
+    /// <param name="other">Second vector.</param>
+    /// <returns>Manhattan distance.</returns>
     public static float ManhattanDistance(this Vector2 self, Vector2 other)
         => Math.Abs(self.X - other.X) + Math.Abs(self.Y - other.Y);
+
+    /// <summary>
+    /// Finds the midpoint between two vectors.
+    /// </summary>
+    /// <param name="self">First vector.</param>
+    /// <param name="other">Second vector.</param>
+    /// <returns>Midpoint.</returns>
+    public static Vector2 Midpoint(this Vector2 self, Vector2 other)
+        => new(self.X + ((other.X - self.X) / 2), self.Y + ((other.Y - self.Y) / 2));
 
     /// <summary>
     /// Tries to parse a vector2 from a string.

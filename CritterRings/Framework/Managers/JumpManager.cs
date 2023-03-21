@@ -1,5 +1,4 @@
-﻿// #define TRACE
-
+﻿using AtraBase.Models.Result;
 using AtraBase.Toolkit.Extensions;
 using AtraBase.Toolkit.Reflection;
 
@@ -16,8 +15,6 @@ using StardewModdingAPI.Utilities;
 using XLocation = xTile.Dimensions.Location;
 
 namespace CritterRings.Framework.Managers;
-
-// TODO: update the viewport to follow the green square?
 
 /// <summary>
 /// Manages a jump for a player.
@@ -94,8 +91,6 @@ internal sealed class JumpManager : IDisposable
         // forcing time to pass even while we're preparing to jump.
         this.forceTimePass = Game1.player.forceTimePass;
         Game1.player.forceTimePass = true;
-
-        // Game1.viewportFreeze = true;
 
         this.direction = Game1.player.FacingDirection switch
         {
@@ -196,6 +191,19 @@ internal sealed class JumpManager : IDisposable
         {
             return;
         }
+
+        // Thanks for the viewport movement code, DecidedlyHuman!
+        if (this.state != State.Inactive && ModEntry.Config.ViewportFollowsTarget)
+        {
+            Vector2 position = Game1.player.Position + new Vector2(32, 32);
+            Vector2 midpoint = Game1.player.FacingDirection switch
+            {
+                Game1.left or Game1.right => new Vector2(position.X + (((this.openTile.X * Game1.tileSize) - position.X) / 2), position.Y),
+                _ => new Vector2(position.X, position.Y + (((this.openTile.Y * Game1.tileSize) - position.Y) / 2)),
+            };
+            Game1.moveViewportTo(midpoint, ModEntry.Config.JumpChargeSpeed / 2);
+        }
+
         switch (this.state)
         {
             case State.Charging:
@@ -315,8 +323,6 @@ internal sealed class JumpManager : IDisposable
         {
             this.openTile = this.currentTile;
             this.isCurrentTileBlocked = false;
-
-            // Game1.moveViewportTo(this.openTile * Game1.tileSize, 5f);
         }
         else
         {
@@ -338,6 +344,10 @@ internal sealed class JumpManager : IDisposable
                 farmer.temporarilyInvincible = this.prevInvincibility;
                 farmer.temporaryInvincibilityTimer = this.prevInvincibilityTimer;
                 farmer.forceTimePass = this.forceTimePass;
+                if (disposing)
+                {
+                    Game1.moveViewportTo(farmer.Position, ModEntry.Config.JumpChargeSpeed);
+                }
                 farmer.completelyStopAnimatingOrDoingAction();
             }
             this.keybind = null!;

@@ -5,7 +5,6 @@ using HarmonyLib;
 using StardewValley.Menus;
 
 // TODO - color in the little slots somehow and make them not interactable.
-
 namespace PrismaticSlime.HarmonyPatches.JellyPatches;
 
 /// <summary>

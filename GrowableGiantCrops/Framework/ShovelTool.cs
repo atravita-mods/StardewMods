@@ -31,6 +31,7 @@ namespace GrowableGiantCrops.Framework;
 /// </summary>
 [XmlType("Mods_atravita_Shovel")]
 [SuppressMessage("StyleCop.CSharp.OrderingRules", "SA1202:Elements should be ordered by access", Justification = "Like methods are grouped together.")]
+[SuppressMessage("StyleCop.CSharp.OrderingRules", "SA1204:Static elements should appear before instance elements", Justification = "Helper methods are placed near bottom.")]
 public sealed class ShovelTool : GenericTool
 {
     private static readonly Api Api = new();

@@ -14,6 +14,7 @@ namespace GingerIslandMainlandAdjustments.AssetManagers;
 /// <summary>
 /// Manages asset editing for this mod.
 /// </summary>
+[SuppressMessage("StyleCop.CSharp.OrderingRules", "SA1202:Elements should be ordered by access", Justification = "Reviewed.")]
 internal static class AssetEditor
 {
     /// <summary>
@@ -32,6 +33,9 @@ internal static class AssetEditor
     private static readonly PerScreen<TickCache<bool>> HasSeenPamEvent = new(
         static () => new(() => Game1.player?.eventsSeen?.Contains(PAMEVENT) == true));
 
+    /// <summary>
+    /// The dialogue prefix.
+    /// </summary>
     internal static readonly string Dialogue = PathUtilities.NormalizeAssetName("Characters/Dialogue") + "/";
 
     private static readonly Dictionary<string, Action<IAssetData>> DialoguesToEdit = new(comparer: StringComparer.OrdinalIgnoreCase)
@@ -43,6 +47,9 @@ internal static class AssetEditor
         ["Wizard"] = EditWizardDialogue,
     };
 
+    /// <summary>
+    /// Gets the NPCs who have dialogue we should edit.
+    /// </summary>
     internal static IEnumerable<string> CharacterDialogues => DialoguesToEdit.Keys;
 
     // We edit Pam's phone dialogue into Strings/Characters so content packs can target that.
@@ -74,6 +81,9 @@ internal static class AssetEditor
         dataEventsTrailerBig = parser.ParseAssetName("Data/Events/Trailer_Big");
     }
 
+    /// <summary>
+    /// Disposes the content manager. Called when our mod instance is disposed.
+    /// </summary>
     internal static void DisposeContentManager()
     {
         contentManager?.Dispose();

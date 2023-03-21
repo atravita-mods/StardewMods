@@ -103,6 +103,7 @@ public sealed class InventoryTree : SObject
     }
 
     #region reflection
+
     /// <summary>
     /// Stardew's Tree::shake.
     /// </summary>

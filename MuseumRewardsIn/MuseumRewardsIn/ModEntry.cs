@@ -189,7 +189,8 @@ internal sealed class ModEntry : Mod
         {
             shop.categoriesToSellHere.Add(SObject.mineralsCategory);
             shop.categoriesToSellHere.Add(SObject.GemCategory);
-            // hack in buybacks for Arch, which may not have a number?
+
+            // TODO: hack in buybacks for Arch, which may not have a number?
         }
 
         if (NPCCache.GetByVillagerName("Gunther") is NPC gunter)

@@ -12,6 +12,8 @@ using Microsoft.Xna.Framework.Graphics;
 using StardewModdingAPI.Events;
 using StardewModdingAPI.Utilities;
 
+using StardewValley.Locations;
+
 using XLocation = xTile.Dimensions.Location;
 
 namespace CritterRings.Framework.Managers;
@@ -305,18 +307,18 @@ internal sealed class JumpManager : IDisposable
             && location.isTilePassable(new XLocation((int)this.currentTile.X, (int)this.currentTile.Y), Game1.viewport)
             && !location.isWaterTile((int)this.currentTile.X, (int)this.currentTile.Y);
 
+        // let the user jump into water if they have swim mod. But not lava.
+        if (hasSwim && !isValidTile && location is not VolcanoDungeon or Caldera)
+        {
+            isValidTile = location.isOpenWater((int)this.currentTile.X, (int)this.currentTile.Y);
+        }
+
         if (isValidTile)
         {
             Rectangle box = farmer.GetBoundingBox();
             box.X += (int)this.direction.X * this.distance * Game1.tileSize;
             box.Y += (int)this.direction.Y * this.distance * Game1.tileSize;
             isValidTile &= !location.isCollidingPosition(box, Game1.viewport, true, 0, false, farmer);
-        }
-
-        if (hasSwim)
-        {
-            // let the user jump into water if they have swim mod.
-            isValidTile = isValidTile || location.isOpenWater((int)this.currentTile.X, (int)this.currentTile.Y);
         }
 
         if (isValidTile)

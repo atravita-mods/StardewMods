@@ -3,7 +3,7 @@ Critter Rings
 
 ![Header image](docs/image.png)
 
-This incredibly self-indulgent mod has five rings in it: the Butterfly Ring, the Bunny Ring, the Frog Ring, the Owl Ring, and the Firefly Ring. Each summons the relevant critter when worn. Additionally, each has extra secondary effect.
+This incredibly self-indulgent mod has five rings in it: the Butterfly Ring, the Bunny Ring, the Frog Ring, the Owl Ring, and the Firefly Ring. Each summons the relevant critter when worn. Additionally, each has extra secondary effect. Frog jumps, bunny ring has a sprint, the owl ring makes it so enemies are less likely to see you, firefly is a glowstone ring, and butterfly is a magnetic ring.
 
 ## Install
 
@@ -39,6 +39,16 @@ Run SMAPI at least once with this mod installed to generate the `config.json`, o
 * `MaxFrogJumpDistance`: Maximum distance the frog ring will jump you.
 * `FrogRingButton`: The button used for the frog jump.
 * `JumpChargeSpeed`: Indicates how quickly the jump should charge up. Higher for faster.
+* `JumpCostsStamina`: Whether or not the jump should cost stamina. If enabled, it will cost one stamina point per square moved.
+* `ViewportFollowsTarget`: If enabled, the viewport will try to follow the midpoint between the target and the player character.
+
+* `FrogsSpawnInHeat`: If enabled, frogs will spawn in places probably too hot for them, like the volcano.
+* `FrogsSpawnInCold`: If enabled, frogs will spawn in places probably too cold for them, like during winter or in the ice levels of the mines.
+* `FrogsSpawnOnlyInRain`: If enabled, frogs will only spawn outdoors when it's raining.
+#### Owl Ring Options
+
+* `OwlsSpawnIndoors`: If enabled, owls will spawn indoors.
+* `OwlsSpawnDuringDay`: If enabled, owls will spawn during the day.
 
 ## Compatibility
 

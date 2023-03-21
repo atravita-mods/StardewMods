@@ -7,7 +7,7 @@ public static class FarmerHelpers
 
     public static bool HasAnyFarmerRecievedFlag(string flag)
     {
-        foreach (var farmer in GetFarmers())
+        foreach (Farmer farmer in GetFarmers())
         {
             if (farmer.hasOrWillReceiveMail(flag))
             {

@@ -23,7 +23,8 @@ internal sealed class ModEntry : Mod
         I18n.Init(helper.Translation);
         ModMonitor = this.Monitor;
 
-        helper.Events.GameLoop.GameLaunched += (_,_) => this.ApplyPatches(new Harmony(this.ModManifest.UniqueID));
+        helper.Events.GameLoop.GameLaunched += (_, _) => this.ApplyPatches(new Harmony(this.ModManifest.UniqueID));
+        this.Monitor.Log($"Starting up: {this.ModManifest.UniqueID} - {typeof(ModEntry).Assembly.FullName}");
     }
 
     /// <summary>
@@ -83,7 +84,8 @@ internal sealed class ModEntry : Mod
     [SuppressMessage("StyleCop.CSharp.OrderingRules", "SA1204:Static elements should appear before instance elements", Justification = "Reviewed.")]
     private static bool ProhibitLosingThisItem(Item item)
         => item is Wand || (item is SObject obj && obj.ParentSheetIndex == 911 && !obj.bigCraftable.Value)
-        || item.HasContextTag("atravita_no_loss_on_death") || (item is MeleeWeapon weapon && weapon.isScythe());
+        || item.HasContextTag("atravita_no_loss_on_death") || item.HasContextTag("prevent_loss_on_death")
+        || (item is MeleeWeapon weapon && weapon.isScythe());
 
     private static IEnumerable<CodeInstruction>? Transpiler(IEnumerable<CodeInstruction> instructions, ILGenerator gen, MethodBase original)
     {
@@ -125,15 +127,14 @@ internal sealed class ModEntry : Mod
             copylist.Add(new(OpCodes.Brtrue_S, label));
             CodeInstruction[]? copy = copylist.ToArray();
 
-            helper.Advance(1)
-            .Insert(copy);
+            helper.Advance(1).Insert(copy);
 
             return helper.Render();
         }
         catch (Exception ex)
         {
             ModMonitor.Log($"Mod crashed while transpiling mine death methods:\n\n{ex}", LogLevel.Error);
-            original.Snitch(ModEntry.ModMonitor);
+            original.Snitch(ModMonitor);
         }
         return null;
     }

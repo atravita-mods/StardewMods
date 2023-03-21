@@ -90,8 +90,17 @@ internal sealed class ModEntry : Mod
         MultiplayerHelper = this.Helper.Multiplayer;
         InputHelper = this.Helper.Input;
         UNIQUEID = this.ModManifest.UniqueID;
+
         Config = AtraUtils.GetConfigOrDefault<ModConfig>(helper, this.Monitor);
+        if (Config.MaxNoteChance < Config.MinNoteChance)
+        {
+            (Config.MaxNoteChance, Config.MinNoteChance) = (Config.MinNoteChance, Config.MaxNoteChance);
+            helper.AsyncWriteConfig(ModEntry.ModMonitor, Config);
+        }
+
         UtilitySchedulingFunctions = new(this.Monitor, this.Helper.Translation);
+
+        this.Monitor.Log($"Starting up: {this.ModManifest.UniqueID} - {typeof(ModEntry).Assembly.FullName}");
 
         helper.Events.GameLoop.GameLaunched += this.OnGameLaunch;
         helper.Events.GameLoop.SaveLoaded += this.SaveLoaded;
@@ -109,6 +118,20 @@ internal sealed class ModEntry : Mod
         helper.Events.Multiplayer.PeerConnected += this.OnPlayerConnected;
 
         helper.Events.Specialized.LoadStageChanged += this.OnLoadStageChanged;
+
+        // secret notes
+        FixSecretNotes.Initialize(helper.GameContent);
+        helper.Events.Content.AssetsInvalidated += (_, e) => FixSecretNotes.Reset(e.NamesWithoutLocale);
+    }
+
+    /// <inheritdoc />
+    protected override void Dispose(bool disposing)
+    {
+        if (disposing)
+        {
+            AssetEditor.Dispose();
+        }
+        base.Dispose(disposing);
     }
 
     /// <inheritdoc cref="IInputEvents.ButtonPressed"/>
@@ -273,9 +296,36 @@ internal sealed class ModEntry : Mod
         {
             VolcanoChestAdjuster.LoadData(this.Helper.Data, this.Helper.Multiplayer);
 
-            // Make an attempt to clear all nulls from chests.
-            Utility.ForAllLocations(action: (GameLocation loc) =>
+            Utility.ForAllLocations(action: static (GameLocation loc) =>
             {
+                if (loc is null)
+                {
+                    return;
+                }
+
+#warning - review and remove in stardew 1.6
+                // crosscheck and fix jukeboxes.
+                string song = loc.miniJukeboxTrack.Value;
+                if (!string.IsNullOrEmpty(song))
+                {
+                    ModMonitor.DebugOnlyLog($"Checking jukebox {song}...");
+                    try
+                    {
+                        Game1.soundBank.GetCue(song);
+                    }
+                    catch (ArgumentException)
+                    {
+                        ModMonitor.Log($"Found missing soundtrack {song}, removing.", LogLevel.Warn);
+                        loc.miniJukeboxTrack.Value = string.Empty;
+                    }
+                    catch (Exception ex)
+                    {
+                        ModMonitor.Log($"Failed while trying to retrieve song {song} - {ex}.", LogLevel.Error);
+                        loc.miniJukeboxTrack.Value = string.Empty;
+                    }
+                }
+
+                // Make an attempt to clear all nulls from chests.
                 foreach (SObject obj in loc.Objects.Values)
                 {
                     if (obj is Chest chest)
@@ -321,10 +371,6 @@ internal sealed class ModEntry : Mod
 
     #region GMCM
 
-    // Favor a single defined function that gets the config, instead of defining the lambda over and over again.
-    [SuppressMessage("StyleCop.CSharp.OrderingRules", "SA1204:Static elements should appear before instance elements", Justification = "Reviewed.")]
-    private static ModConfig GetConfig() => Config;
-
     /// <inheritdoc cref="IGameLoopEvents.ReturnedToTitle"/>
     private void ReturnedToTitle(object? sender, ReturnedToTitleEventArgs e)
     {
@@ -343,28 +389,16 @@ internal sealed class ModEntry : Mod
                     Config = new ModConfig();
                     Config.PrePopulateLocations();
                 },
-                save: () => this.Helper.AsyncWriteConfig(this.Monitor, Config))
-            .AddParagraph(I18n.Mod_Description);
-
-        foreach (PropertyInfo property in typeof(ModConfig).GetProperties())
-        {
-            if (property.PropertyType == typeof(bool))
-            {
-                GMCM.AddBoolOption(property, GetConfig);
-            }
-            else if (property.PropertyType == typeof(KeybindList))
-            {
-                GMCM.AddKeybindList(property, GetConfig);
-            }
-            else if (property.PropertyType == typeof(float))
-            {
-                GMCM.AddFloatOption(property, GetConfig);
-            }
-            else if (property.PropertyType == typeof(int))
-            {
-                GMCM.AddIntOption(property, GetConfig);
-            }
-        }
+                save: () =>
+                {
+                    if (Config.MaxNoteChance < Config.MinNoteChance)
+                    {
+                        (Config.MaxNoteChance, Config.MinNoteChance) = (Config.MinNoteChance, Config.MaxNoteChance);
+                    }
+                    this.Helper.AsyncWriteConfig(this.Monitor, Config);
+                })
+            .AddParagraph(I18n.Mod_Description)
+            .GenerateDefaultGMCM(static () => Config);
 
         GMCM!.AddSectionTitle(I18n.ConfirmWarps_Title)
             .AddParagraph(I18n.ConfirmWarps_Description)
@@ -420,7 +454,7 @@ internal sealed class ModEntry : Mod
     /// <inheritdoc cref="IMultiplayerEvents.ModMessageReceived"/>
     private void OnModMessageRecieved(object? sender, ModMessageReceivedEventArgs e)
     {
-        if (e.FromModID != ModEntry.UNIQUEID)
+        if (e.FromModID != UNIQUEID)
         {
             return;
         }

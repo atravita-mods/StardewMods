@@ -69,6 +69,8 @@ internal sealed class ModEntry : Mod
 
         helper.Events.Multiplayer.PeerConnected += this.OnPeerConnected;
         helper.Events.Multiplayer.ModMessageReceived += this.OnModMessageRecieved;
+
+        this.Monitor.Log($"Starting up: {this.ModManifest.UniqueID} - {typeof(ModEntry).Assembly.FullName}");
     }
 
     /// <inheritdoc cref="IGameLoopEvents.GameLaunched"/>
@@ -122,19 +124,22 @@ internal sealed class ModEntry : Mod
             this.migrator = null;
         }
 
-        // Load data for the LocationWatcher.
-        LocationWatcher = this.Helper.Data.ReadSaveData<LocationWatcher>(LOCATIONWATCHER) ?? new();
-        this.Helper.Multiplayer.SendMessage(
-            message: LocationWatcher,
-            messageType: DATAPACKAGE,
-            modIDs: new[] { this.ModManifest.UniqueID },
-            playerIDs: this.Helper.Multiplayer.GetConnectedPlayers().Where(p => !p.IsSplitScreen).Select(p => p.PlayerID).ToArray());
+        if (Context.IsMainPlayer)
+        {
+            // Load data for the LocationWatcher.
+            LocationWatcher = this.Helper.Data.ReadSaveData<LocationWatcher>(LOCATIONWATCHER) ?? new();
+            this.Helper.Multiplayer.SendMessage(
+                message: LocationWatcher,
+                messageType: DATAPACKAGE,
+                modIDs: new[] { this.ModManifest.UniqueID },
+                playerIDs: this.Helper.Multiplayer.GetConnectedPlayers().Where(p => !p.IsSplitScreen).Select(p => p.PlayerID).ToArray());
+        }
     }
 
     /// <inheritdoc cref="IPlayerEvents.Warped"/>
     private void OnNewLocationSeen(object? sender, WarpedEventArgs e)
     {
-        if (e.IsLocalPlayer && LocationWatcher!.SeenLocations.Add(e.NewLocation.Name))
+        if (e.IsLocalPlayer && !e.NewLocation.IsUnsavedLocation() && LocationWatcher!.SeenLocations.Add(e.NewLocation.Name))
         {
             this.Helper.Multiplayer.SendMessage(e.NewLocation.Name, LOCATIONNAME, new[] { this.ModManifest.UniqueID });
             this.OnLocationSeen?.RaiseSafe(null, new LocationSeenEventArgs(e.NewLocation.Name));

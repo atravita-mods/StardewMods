@@ -1,10 +1,16 @@
 ﻿using AtraBase.Toolkit.Extensions;
+
 using CommunityToolkit.Diagnostics;
+
 using Microsoft.Xna.Framework;
+
 using StardewValley.Locations;
 using StardewValley.Monsters;
 using StardewValley.Objects;
 using StardewValley.TerrainFeatures;
+
+using XLocation = xTile.Dimensions.Location;
+using XRectangle = xTile.Dimensions.Rectangle;
 
 namespace AtraShared.Utils.Extensions;
 
@@ -21,6 +27,7 @@ public static class GameLocationExtensions
     /// </summary>
     /// <param name="location">Location to check.</param>
     /// <returns>Whether the location should be considered dangerous.</returns>
+    [SuppressMessage("StyleCop.CSharp.SpacingRules", "SA1008:Opening parenthesis should be spaced correctly", Justification = "Preference.")]
     public static bool IsDangerousLocation(this GameLocation location)
         => !location.IsFarm && !location.IsGreenhouse && location is not (SlimeHutch or Town or IslandWest)
             && (location is MineShaft or VolcanoDungeon or BugLand || location.characters.Any((character) => character is Monster));
@@ -100,5 +107,23 @@ public static class GameLocationExtensions
             return pot.hoeDirt.Value;
         }
         return null;
+    }
+
+    /// <summary>
+    /// Whether or not a tile is covered by a Front or AlwaysFront tile at this location.
+    /// </summary>
+    /// <param name="loc">GameLocation.</param>
+    /// <param name="tileLocation">Tile.</param>
+    /// <param name="viewport">Viewport.</param>
+    /// <returns>True if covered, false otherwise.</returns>
+    public static bool IsTileViewable(this GameLocation? loc, XLocation tileLocation, XRectangle viewport)
+    {
+        if (loc is null)
+        {
+            return false;
+        }
+
+        return (loc.map.GetLayer("Front")?.PickTile(new XLocation(tileLocation.X * 64, tileLocation.Y * 64), viewport.Size)
+            ?? loc.map.GetLayer("AlwaysFront")?.PickTile(new XLocation(tileLocation.X * 64, tileLocation.Y * 64), viewport.Size)) is null;
     }
 }

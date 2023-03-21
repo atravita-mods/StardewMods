@@ -95,6 +95,11 @@ internal static class RadioactiveFertilizerHandler
 
         Utility.ForAllLocations((location) =>
         {
+            if (location is null)
+            {
+                return;
+            }
+
             string seasonstring = location.GetSeasonForLocation();
             int season = Utility.getSeasonNumber(seasonstring);
 
@@ -126,37 +131,30 @@ internal static class RadioactiveFertilizerHandler
 
     private static void ProcessRadioactiveFertilizer(HoeDirt dirt, Farmer farmer, Profession profession, GameLocation location, int season, Dictionary<int, string> cropData, string seasonstring)
     {
-        random ??= RandomUtils.GetSeededRandom(9, (int)Game1.uniqueIDForThisGame);
-
-        if (random.Next(4) == 0)
-        {
-            return;
-        }
-
         if (dirt.crop is null || dirt.crop.dead.Value || dirt.crop.IsActuallyFullyGrown())
         {
             return;
         }
 
-        if (!StardewSeasonsExtensions.TryParse(seasonstring, true, out StardewSeasons seasonEnum))
+        random ??= RandomUtils.GetSeededRandom(9, "radioactive.fertilizer");
+        if (random.Next(4) == 0)
         {
-            ModEntry.ModMonitor.Log($"Invalid season found for radioactive fertilizer {seasonstring}", LogLevel.Error);
             return;
         }
 
-        if (CropManagers[season] is null)
+        if (location.SeedsIgnoreSeasonsHere())
         {
-            CropManagers[season] = GeneratedWeightedList(seasonstring, cropData);
+            season = random.Next(4);
         }
+
+        StardewSeasons seasonEnum = SeasonExtensions.GetSeasonFromIndex(season);
+        CropManagers[season] ??= GeneratedWeightedList(seasonstring, cropData);
 
         WeightedManager<int>? manager = CropManagers[season];
-
-        if (manager?.Count is null or 0)
+        if (manager?.Count is null or 0 || !manager.GetValue(random).TryGetValue(out int crop))
         {
             return;
         }
-
-        int crop = manager.GetValue(random);
 
         if (cropData.TryGetValue(crop, out string? data)
             && (location.SeedsIgnoreSeasonsHere() || HasSufficientTimeToGrow(profession, crop, data, seasonEnum)))

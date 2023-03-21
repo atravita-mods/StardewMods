@@ -10,17 +10,17 @@ namespace LastDayToPlantRedux.Framework;
 [SuppressMessage("StyleCop.CSharp.OrderingRules", "SA1201:Elements should appear in the correct order", Justification = "Reviewed.")]
 internal static class AssetManager
 {
+    /// <summary>
+    /// The mail flag used for this mod.
+    /// </summary>
+    internal const string MailFlag = "atravita_LastDayLetter";
+
     #region denylist and allowlist
     private static readonly HashSet<int> AllowedFertilizersValue = new();
     private static readonly HashSet<int> DeniedFertilizersValue = new();
     private static readonly HashSet<int> AllowedSeedsValue = new();
     private static readonly HashSet<int> DeniedSeedsValue = new();
     private static bool accessProcessed = false;
-
-    /// <summary>
-    /// The mail flag used for this mod.
-    /// </summary>
-    internal const string MailFlag = "atravita_LastDayLetter";
 
     /// <summary>
     /// Gets fertilizers that should always be allowed.
@@ -171,6 +171,8 @@ internal static class AssetManager
         AllowedSeedsValue.Clear();
         DeniedSeedsValue.Clear();
 
+        ModEntry.ModMonitor.Log("Processing access lists");
+
         foreach ((string item, string access) in Game1.content.Load<Dictionary<string, string>>(AssetManager.accessLists.BaseName))
         {
             (int id, int type)? tup = LDUtils.ResolveIDAndType(item);
@@ -187,7 +189,7 @@ internal static class AssetManager
 
             if (!isAllow && !isDeny)
             {
-                ModEntry.ModMonitor.Log($"Invalid access term {access}, skipping");
+                ModEntry.ModMonitor.Log($"Invalid access term {access}, skipping", LogLevel.Info);
                 continue;
             }
 
@@ -214,7 +216,7 @@ internal static class AssetManager
                     }
                     break;
                 default:
-                    ModEntry.ModMonitor.Log($"{item} with {id} is type {type}, not a seed or fertilizer, skipping.");
+                    ModEntry.ModMonitor.Log($"{item} with {id} is type {type}, not a seed or fertilizer, skipping.", LogLevel.Info);
                     break;
             }
         }

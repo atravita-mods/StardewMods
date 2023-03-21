@@ -60,7 +60,7 @@ public static partial class SeasonExtensions
         StardewSeasons season = StardewSeasons.None;
         foreach (string? seasonstring in seasonList)
         {
-            if (StardewSeasonsExtensions.TryParse(seasonstring.Trim(), ignoreCase: true, out StardewSeasons s))
+            if (StardewSeasonsExtensions.TryParse(name: seasonstring.AsSpan().Trim(), value: out StardewSeasons s, ignoreCase: true))
             {
                 season |= s;
             }
@@ -75,7 +75,7 @@ public static partial class SeasonExtensions
         seasons = StardewSeasons.None;
         foreach (string? seasonstring in seasonList)
         {
-            if (StardewSeasonsExtensions.TryParse(seasonstring.Trim(), ignoreCase: true, out StardewSeasons s))
+            if (StardewSeasonsExtensions.TryParse(name: seasonstring.AsSpan().Trim(), value: out StardewSeasons s, ignoreCase: true))
             {
                 seasons |= s;
             }
@@ -94,7 +94,10 @@ public static partial class SeasonExtensions
     /// <returns>Season.</returns>
 #warning - need to fix in Stardew 1.6.
     public static StardewSeasons GetSeasonFromGame(GameLocation? loc)
-        => Utility.getSeasonNumber(Game1.GetSeasonForLocation(loc)) switch
+        => GetSeasonFromIndex(Utility.getSeasonNumber(Game1.GetSeasonForLocation(loc)));
+
+    public static StardewSeasons GetSeasonFromIndex(int index)
+        => index switch
         {
             0 => StardewSeasons.Spring,
             1 => StardewSeasons.Summer,
@@ -142,5 +145,4 @@ public static partial class SeasonExtensions
             StardewSeasons.Winter => 3,
             _ => ThrowHelper.ThrowArgumentException<int>("Expected a single season.")
         };
-
 }

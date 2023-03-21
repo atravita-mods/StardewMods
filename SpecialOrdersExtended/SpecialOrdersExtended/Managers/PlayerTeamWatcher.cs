@@ -1,16 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿namespace SpecialOrdersExtended.Managers;
 
-namespace SpecialOrdersExtended.Managers;
-internal sealed class PlayerTeamWatcher: IDisposable
+/// <summary>
+/// Watches players to see when special orders are completed.
+/// </summary>
+internal sealed class PlayerTeamWatcher : IDisposable
 {
     private bool isDisposed;
     private HashSet<string> added = new();
     private HashSet<string> removed = new();
-
 
     /// <summary>
     /// Initializes a new instance of the <see cref="PlayerTeamWatcher"/> class.
@@ -35,6 +32,35 @@ internal sealed class PlayerTeamWatcher: IDisposable
     {
         this.Dispose(disposing: true);
         GC.SuppressFinalize(this);
+    }
+
+    /// <summary>
+    /// Resets the watcher.
+    /// </summary>
+    internal void Reset()
+    {
+        this.removed.Clear();
+        this.added.Clear();
+    }
+
+    /// <summary>
+    /// Checks to see if there are any new special orders since last check.
+    /// </summary>
+    /// <returns>An IEnumerable if there was any new orders.</returns>
+    internal IEnumerable<string> Check()
+    {
+        if (this.added.Count > 0)
+        {
+            HashSet<string>? added = this.added;
+            this.added = new();
+            this.Reset();
+            return added;
+        }
+        else
+        {
+            this.Reset();
+            return Enumerable.Empty<string>();
+        }
     }
 
     /// <inheritdoc cref="IDisposable.Dispose" />
@@ -64,28 +90,6 @@ internal sealed class PlayerTeamWatcher: IDisposable
         if (key is not null && !this.added.Remove(key))
         {
             this.removed.Add(key);
-        }
-    }
-
-    internal void Reset()
-    {
-        this.removed.Clear();
-        this.added.Clear();
-    }
-
-    internal IEnumerable<string> Check()
-    {
-        if (this.added.Count > 0)
-        {
-            HashSet<string>? added = this.added;
-            this.added = new();
-            this.Reset();
-            return added;
-        }
-        else
-        {
-            this.Reset();
-            return Enumerable.Empty<string>();
         }
     }
 }

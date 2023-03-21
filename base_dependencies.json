@@ -2,7 +2,8 @@
   "Dependencies": [
     {
       "UniqueID": "atravita.AtraCore",
-      "MinimumVersion": "0.1.2"
+      "MinimumVersion": "0.1.4",
+      "IsRequired":  true
     }
   ]
 }

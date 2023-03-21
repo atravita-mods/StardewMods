@@ -176,7 +176,7 @@ internal class DialogueManager
     {
         if (!Context.IsWorldReady)
         {
-            throw new SaveNotLoadedError();
+            ASThrowHelper.ThrowSaveNotLoaded();
         }
         return PerscreenedDialogueLog!.Contains(key, characterName);
     }
@@ -192,7 +192,7 @@ internal class DialogueManager
     {
         if (!Context.IsWorldReady)
         {
-            throw new SaveNotLoadedError();
+            ASThrowHelper.ThrowSaveNotLoaded();
         }
         return PerscreenedDialogueLog!.TryAdd(key, characterName);
     }
@@ -208,7 +208,7 @@ internal class DialogueManager
     {
         if (!Context.IsWorldReady)
         {
-            throw new SaveNotLoadedError();
+            ASThrowHelper.ThrowSaveNotLoaded();
         }
         return PerscreenedDialogueLog!.TryRemove(key, characterName);
     }

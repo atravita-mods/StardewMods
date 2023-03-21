@@ -46,6 +46,11 @@ public static class DataToItemMap
         return -1;
     }
 
+    /// <summary>
+    /// If the SObject index is actually a ring.
+    /// </summary>
+    /// <param name="id">int id</param>
+    /// <returns>true for rings, false otherwise.</returns>
     public static bool IsActuallyRing(int id) => actuallyRings.Value.Contains(id);
 
     /// <summary>

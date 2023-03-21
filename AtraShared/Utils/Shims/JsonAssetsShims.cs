@@ -25,7 +25,7 @@ namespace AtraShared.Utils.Shims;
 [SuppressMessage("StyleCop.CSharp.OrderingRules", "SA1201:Elements should appear in the correct order", Justification = "Fields kept near accessors.")]
 public static class JsonAssetsShims
 {
-    private const int eventID = int.MinValue + 4993;
+    private const int EventID = int.MinValue + 4993;
     private static bool initialized = false;
 
     private static IMonitor modMonitor = null!;
@@ -106,11 +106,11 @@ public static class JsonAssetsShims
             return epu.CheckConditions(conditions);
         }
         Farm farm = Game1.getFarm();
-        bool replace = Game1.player.eventsSeen.Remove(eventID);
-        bool ret = farm.checkEventPrecondition($"{eventID}/{conditions}") != -1;
+        bool replace = Game1.player.eventsSeen.Remove(EventID);
+        bool ret = farm.checkEventPrecondition($"{EventID}/{conditions}") != -1;
         if (replace)
         {
-            Game1.player.eventsSeen.Add(eventID);
+            Game1.player.eventsSeen.Add(EventID);
         }
         return ret;
     }
@@ -133,15 +133,75 @@ public static class JsonAssetsShims
         object? inst = ja.StaticFieldNamed("instance").GetValue(null);
         object? cropdata = ja.InstanceFieldNamed("Crops").GetValue(inst)!;
 
-        if (cropdata is null)
+        if (cropdata is not IReadOnlyList<object> cropList)
         {
             return null;
         }
 
         try
         {
-            MethodInfo processor = typeof(JsonAssetsShims).StaticMethodNamed(nameof(ProcessJAItems)).MakeGenericMethod(new Type[] { AccessTools.TypeByName("JsonAssets.Data.CropData") });
-            return (Dictionary<string, string>?)processor.Invoke(null, new object[] { cropdata });
+            Dictionary<string, string> ret = new(cropList.Count);
+
+            foreach (object? crop in cropList)
+            {
+                if (crop is null)
+                {
+                    continue;
+                }
+
+                string? name = CropDataShims.GetSeedName!(crop);
+                if (name is null)
+                {
+                    continue;
+                }
+
+                int price = CropDataShims.GetSeedPurchase!(crop);
+                if (price <= 0)
+                {
+                    // not purchaseable, as far as I can tell.
+                    continue;
+                }
+
+                IList<string>? requirements = CropDataShims.GetSeedRestrictions!(crop);
+                if (requirements is null || requirements.Count == 0)
+                {
+                    ret[name!] = string.Empty; // no conditions
+                    continue;
+                }
+
+                StringBuilder sb = StringBuilderCache.Acquire(64);
+
+                foreach (string? requirement in requirements)
+                {
+                    if (requirement is not null)
+                    {
+                        foreach (SpanSplitEntry req in requirement.StreamSplit('/'))
+                        {
+                            if (ConditionRequiresEPU(req) && EPU is null)
+                            {
+                                modMonitor.Log($"{req} requires EPU, which is not installed", LogLevel.Warn);
+                                sb.Clear();
+                                StringBuilderCache.Release(sb);
+                                goto breakcontinue;
+                            }
+
+                            sb.Append(req.Word).Append('/');
+                        }
+                    }
+                }
+
+                if (sb.Length > 0)
+                {
+                    ret[name!] = sb.ToString(0, sb.Length - 1);
+                    modMonitor.DebugOnlyLog($"{name!} - {ret[name!]}");
+                }
+
+                StringBuilderCache.Release(sb);
+breakcontinue:
+                ;
+            }
+
+            return ret;
         }
         catch (Exception ex)
         {
@@ -149,72 +209,6 @@ public static class JsonAssetsShims
             modMonitor.Log(ex.ToString());
             return null;
         }
-    }
-
-    private static Dictionary<string, string>? ProcessJAItems<TType>(IList<TType> cropData)
-    {
-        Dictionary<string, string> ret = new();
-
-        foreach (TType? crop in cropData)
-        {
-            if (crop is null)
-            {
-                continue;
-            }
-
-            string? name = CropDataShims.GetSeedName!(crop);
-            if (name is null)
-            {
-                continue;
-            }
-
-            int price = CropDataShims.GetSeedPurchase!(crop);
-            if (price <= 0)
-            {
-                // not purchaseable, as far as I can tell.
-                continue;
-            }
-
-            IList<string>? requirements = CropDataShims.GetSeedRestrictions!(crop);
-            if (requirements is null || requirements.Count == 0)
-            {
-                ret[name!] = string.Empty; // no conditions
-                continue;
-            }
-
-            StringBuilder sb = StringBuilderCache.Acquire(64);
-
-            foreach (string? requirement in requirements)
-            {
-                if (requirement is not null)
-                {
-                    foreach (SpanSplitEntry req in requirement.StreamSplit('/'))
-                    {
-                        if (ConditionRequiresEPU(req) && EPU is null)
-                        {
-                            modMonitor.Log($"{req} requires EPU, which is not installed", LogLevel.Warn);
-                            sb.Clear();
-                            StringBuilderCache.Release(sb);
-                            goto breakcontinue;
-                        }
-
-                        sb.Append(req.Word).Append('/');
-                    }
-                }
-            }
-
-            if (sb.Length > 0)
-            {
-                ret[name!] = sb.ToString(0, sb.Length - 1);
-                modMonitor.DebugOnlyLog($"{name!} - {ret[name!]}");
-            }
-
-            StringBuilderCache.Release(sb);
-breakcontinue:
-            ;
-        }
-
-        return ret;
     }
 
     #region methods

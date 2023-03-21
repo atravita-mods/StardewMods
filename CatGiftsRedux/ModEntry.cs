@@ -73,6 +73,8 @@ internal sealed class ModEntry : Mod
         helper.Events.GameLoop.DayStarted += this.OnDayLaunched;
         helper.Events.Content.AssetRequested += static (_, e) => AssetManager.Apply(e);
         helper.Events.Content.AssetsInvalidated += this.OnAssetInvalidated;
+
+        this.Monitor.Log($"Starting up: {this.ModManifest.UniqueID} - {typeof(ModEntry).Assembly.FullName}");
     }
 
     /// <inheritdoc />
@@ -166,8 +168,7 @@ internal sealed class ModEntry : Mod
             int attempts = 5;
             do
             {
-                Func<Random, Item?>? picker = this.itemPickers.GetValue(random);
-                if (picker is null)
+                if (!this.itemPickers.GetValue(random).TryGetValue(out Func<Random, Item?>? picker) || picker is null)
                 {
                     continue;
                 }
@@ -204,9 +205,7 @@ internal sealed class ModEntry : Mod
 
     private Item? GetUserItem(Random random)
     {
-        ItemRecord? entry = this.playerItemsManager.GetValue(random);
-
-        if (entry is null)
+        if (!this.playerItemsManager.GetValue(random).TryGetValue(out ItemRecord? entry) || entry is null)
         {
             return null;
         }
@@ -277,7 +276,10 @@ internal sealed class ModEntry : Mod
         int tries = 3;
         do
         {
-            int id = this.allItemsWeighted.Value.GetValue(random);
+            if (!this.allItemsWeighted.Value.GetValue(random).TryGetValue(out int id))
+            {
+                continue;
+            }
 
             // confirm the item exists, ban Qi items or golden walnuts
             if (Utils.ForbiddenFromRandomPicking(id))
@@ -354,7 +356,7 @@ internal sealed class ModEntry : Mod
         this.playerItemsManager.Clear();
         if (this.config.UserDefinedItemList.Count > 0)
         {
-            this.playerItemsManager.AddRange(this.config.UserDefinedItemList.Select((item) => new WeightedItem<ItemRecord>(item.Weight, item.Item)));
+            this.playerItemsManager.AddRange(this.config.UserDefinedItemList.Select((item) => new WeightedItem<ItemRecord?>(item.Weight, item.Item)));
         }
 
         // add pickers to the picking list.

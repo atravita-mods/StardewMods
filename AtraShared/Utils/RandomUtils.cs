@@ -29,7 +29,7 @@ public static class RandomUtils
     {
         unchecked
         {
-            Random random = new((int)(Game1.uniqueIDForThisGame + (ulong)(dayFactor * Game1.stats.DaysPlayed) + (ulong)initial));
+            Random random = new((int)(Game1.uniqueIDForThisGame + (ulong)(dayFactor * Game1.stats.DaysPlayed) ^ (ulong)initial));
             random.PreWarm();
             return random;
         }

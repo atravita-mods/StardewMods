@@ -26,7 +26,6 @@ namespace MoreFertilizers.HarmonyPatches.TreeFertilizers;
 [HarmonyPatch(typeof(Tree))]
 internal static class TreeDrawTranspiler
 {
-
     [MethodImpl(TKConstants.Hot)]
     private static Color ReplaceColorIfNeeded(Color prevcolor, Tree tree)
     {
@@ -94,7 +93,7 @@ internal static class TreeDrawTranspiler
         catch (Exception ex)
         {
             ModEntry.ModMonitor.Log($"Mod crashed while transpiling {original.FullDescription()}:\n\n{ex}", LogLevel.Error);
-            original?.Snitch(ModEntry.ModMonitor);
+            original.Snitch(ModEntry.ModMonitor);
         }
         return null;
     }

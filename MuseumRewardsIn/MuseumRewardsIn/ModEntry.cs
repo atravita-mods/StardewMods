@@ -12,15 +12,12 @@ using HarmonyLib;
 using Microsoft.Xna.Framework;
 
 using StardewModdingAPI.Events;
+
 using StardewValley.Locations;
 
 using StardewValley.Menus;
 
-using xTile.Dimensions;
-using xTile.ObjectModel;
-
 using AtraUtils = AtraShared.Utils.Utils;
-using XTile = xTile.Tiles.Tile;
 
 namespace MuseumRewardsIn;
 
@@ -54,6 +51,8 @@ internal sealed class ModEntry : Mod
         modMonitor = this.Monitor;
         AssetManager.Initialize(helper.GameContent);
         libraryHouse = helper.GameContent.ParseAssetName("Maps/ArchaeologyHouse");
+
+        this.Monitor.Log($"Starting up: {this.ModManifest.UniqueID} - {typeof(ModEntry).Assembly.FullName}");
 
         helper.Events.GameLoop.GameLaunched += this.OnGameLaunched;
         helper.Events.Input.ButtonPressed += this.OnButtonPressed;
@@ -190,7 +189,8 @@ internal sealed class ModEntry : Mod
         {
             shop.categoriesToSellHere.Add(SObject.mineralsCategory);
             shop.categoriesToSellHere.Add(SObject.GemCategory);
-            // hack in buybacks for Arch, which may not have a number?
+
+            // TODO: hack in buybacks for Arch, which may not have a number?
         }
 
         if (NPCCache.GetByVillagerName("Gunther") is NPC gunter)
@@ -206,18 +206,13 @@ internal sealed class ModEntry : Mod
         if (e.NameWithoutLocale.IsEquivalentTo(libraryHouse))
         {
             e.Edit(
-                static (asset) =>
-                {
-                    IAssetDataForMap? map = asset.AsMap();
-                    XTile? tile = map.Data.GetLayer(BUILDING).PickTile(new Location((int)config.BoxLocation.X * 64, (int)config.BoxLocation.Y * 64), Game1.viewport.Size);
-                    if (tile is null)
-                    {
-                        modMonitor.Log($"Tile could not be edited for shop, please let atra know!", LogLevel.Warn);
-                        return;
-                    }
-                    tile.Properties["Action"] = new PropertyValue(SHOPNAME);
-                },
-                AssetEditPriority.Default + 10);
+                apply: (asset) => asset.AsMap().AddTileProperty(
+                    monitor: this.Monitor,
+                    layer: BUILDING,
+                    key: "Action",
+                    property: SHOPNAME,
+                    placementTile: config.BoxLocation),
+                priority: AssetEditPriority.Default + 10);
         }
         else
         {
@@ -252,14 +247,14 @@ internal sealed class ModEntry : Mod
             e.NewLocation.temporarySprites.Add(new TemporaryAnimatedSprite
             {
                 texture = Game1.mouseCursors2,
-                sourceRect = new Microsoft.Xna.Framework.Rectangle(129, 210, 13, 16),
+                sourceRect = new Rectangle(129, 210, 13, 16),
                 animationLength = 1,
                 sourceRectStartingPos = new Vector2(129f, 210f),
                 interval = 50000f,
                 totalNumberOfLoops = 9999,
                 position = (new Vector2(tile.X, tile.Y - 1) * Game1.tileSize) + (new Vector2(3f, 0f) * Game1.pixelZoom),
                 scale = Game1.pixelZoom,
-                layerDepth = Math.Clamp((((tile.Y - 0.5f) * Game1.tileSize) / 10000f) + 0.15f, 0f, 1.0f), // a little offset so it doesn't show up on the floor.
+                layerDepth = Math.Clamp((((tile.Y - 0.5f) * Game1.tileSize) / 10000f) + 0.01f, 0f, 1.0f), // a little offset so it doesn't show up on the floor.
                 id = 777f,
             });
         }

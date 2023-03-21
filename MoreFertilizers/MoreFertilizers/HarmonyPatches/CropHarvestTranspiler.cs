@@ -3,6 +3,7 @@ using System.Reflection.Emit;
 using System.Runtime.CompilerServices;
 
 using AtraBase.Toolkit;
+using AtraBase.Toolkit.Extensions;
 using AtraBase.Toolkit.Reflection;
 
 using AtraCore.Framework.ReflectionManager;
@@ -34,11 +35,11 @@ internal static class CropHarvestTranspiler
 {
     private const string DGAModDataKey = "atravita.MoreFertilizers/DGASeedID";
 
-    private static bool HasQualityMod = false;
+    private static bool hasQualityMod = false;
 
     internal static void Initialize(IModRegistry registry)
     {
-        HasQualityMod = registry.IsLoaded("spacechase0.AQualityMod");
+        hasQualityMod = registry.IsLoaded("spacechase0.AQualityMod");
     }
 
     /// <summary>
@@ -78,7 +79,7 @@ internal static class CropHarvestTranspiler
             }
             else if (dirt.fertilizer.Value == ModEntry.SecretJojaFertilizerID)
             {
-                return HasQualityMod
+                return hasQualityMod
                     ? ((Game1.random.Next(4) != 0 || dirt.HasJojaCrop()) ? -2 : 1)
                     : ((Game1.random.Next(2) == 0 && !dirt.HasJojaCrop()) ? 1 : 0);
             }
@@ -162,7 +163,7 @@ internal static class CropHarvestTranspiler
     {
         if (ModEntry.WisdomFertilizerID != -1 && dirt?.fertilizer?.Value == ModEntry.WisdomFertilizerID)
         {
-            return (int)(1.5 * prevValue);
+            return (1.5 * prevValue).RandomRoundProportional();
         }
         return prevValue;
     }
@@ -171,9 +172,9 @@ internal static class CropHarvestTranspiler
     private static int AdjustRegrow(int prevValue, HoeDirt? dirt)
     {
         if (ModEntry.SecretJojaFertilizerID != -1 && dirt?.fertilizer?.Value == ModEntry.SecretJojaFertilizerID
-            && (Game1.random.Next(3) == 0 || dirt.HasJojaCrop()))
+            && (Game1.random.Next(2) == 0 || dirt.HasJojaCrop()))
         {
-            return Math.Max(1, (int)((HasQualityMod ? 0.8 : 0.9) * prevValue));
+            return Math.Max(1, ((hasQualityMod ? 0.65 : 0.8) * prevValue).RandomRoundProportional());
         }
         return prevValue;
     }

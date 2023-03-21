@@ -18,16 +18,6 @@ namespace ReviveDeadCrops;
 /// <inheritdoc />
 internal sealed class ModEntry : Mod
 {
-    /// <summary>
-    /// Gets the logging instance for this mod.
-    /// </summary>
-    internal static IMonitor ModMonitor { get; private set; } = null!;
-
-    /// <summary>
-    /// Gets the API for this mod.
-    /// </summary>
-    internal static ReviveDeadCropsApi Api { get; } = ReviveDeadCropsApi.Instance;
-
     private static IJsonAssetsAPI? jaAPI;
 
     private static int everlastingID = -1;
@@ -48,6 +38,16 @@ internal sealed class ModEntry : Mod
         }
     }
 
+    /// <summary>
+    /// Gets the logging instance for this mod.
+    /// </summary>
+    internal static IMonitor ModMonitor { get; private set; } = null!;
+
+    /// <summary>
+    /// Gets the API for this mod.
+    /// </summary>
+    internal static ReviveDeadCropsApi Api { get; } = ReviveDeadCropsApi.Instance;
+
     /// <inheritdoc />
     public override void Entry(IModHelper helper)
     {
@@ -58,8 +58,15 @@ internal sealed class ModEntry : Mod
         helper.Events.GameLoop.DayEnding += this.OnDayEnd;
 
         helper.Events.GameLoop.ReturnedToTitle += this.OnReturnedToTitle;
+
+        this.Monitor.Log($"Starting up: {this.ModManifest.UniqueID} - {typeof(ModEntry).Assembly.FullName}");
+
         this.ApplyPatches(new Harmony(this.ModManifest.UniqueID));
     }
+
+    /// <inheritdoc />
+    [UsedImplicitly]
+    public override object? GetApi() => Api;
 
     /// <inheritdoc cref="IGameLoopEvents.GameLaunched"/>
     private void OnGameLaunched(object? sender, GameLaunchedEventArgs e)
@@ -72,9 +79,6 @@ internal sealed class ModEntry : Mod
     private void OnReturnedToTitle(object? sender, ReturnedToTitleEventArgs e)
         => everlastingID = -1;
 
-    /// <inheritdoc />
-    public override object? GetApi() => Api;
-
     // we need to make sure to slot in before Solid Foundations removes its buildings.
     [EventPriority(EventPriority.High + 20)]
     private void OnDayEnd(object? sender, DayEndingEventArgs e)
@@ -86,8 +90,13 @@ internal sealed class ModEntry : Mod
         Api.Changed = false;
 
         Utility.ForAllLocations(
-            (location) =>
+            action: (location) =>
             {
+                if (location is null)
+                {
+                    return;
+                }
+
                 foreach (TerrainFeature terrain in location.terrainFeatures.Values)
                 {
                     if (terrain is HoeDirt dirt && dirt.modData?.GetBool(ReviveDeadCropsApi.REVIVED_PLANT_MARKER) == true

@@ -29,6 +29,8 @@ internal sealed class ModEntry : Mod
     private static readonly string[] ModsThatHandleTheBoard = new string[] { "Rafseazz.RidgesideVillage", "PurrplingCat.QuestFramework", "Esca.EMP" };
     private bool hasModsThatHandleBoard = false;
 
+    private PlayerTeamWatcher? watcher;
+
     /// <summary>
     /// SpaceCore API handle.
     /// </summary>
@@ -56,8 +58,6 @@ internal sealed class ModEntry : Mod
     /// </summary>
     internal static IMultiplayerHelper MultiplayerHelper { get; private set; } = null!;
 
-    private PlayerTeamWatcher? watcher;
-
     /// <summary>
     /// Gets the config class for this mod.
     /// </summary>
@@ -84,6 +84,8 @@ internal sealed class ModEntry : Mod
         ModMonitor = this.Monitor;
         DataHelper = helper.Data;
         MultiplayerHelper = helper.Multiplayer;
+
+        this.Monitor.Log($"Starting up: {this.ModManifest.UniqueID} - {typeof(ModEntry).Assembly.FullName}");
 
         Config = AtraUtils.GetConfigOrDefault<ModConfig>(helper, this.Monitor);
 
@@ -137,7 +139,7 @@ internal sealed class ModEntry : Mod
 
         if (ModsThatHandleTheBoard.All(uniqueID => !this.Helper.ModRegistry.IsLoaded(uniqueID)))
         {
-            this.Monitor.Log("Apply patch to suppress board updates.");
+            this.Monitor.Log("Applying patch to suppress board updates.");
             SpecialOrderPatches.ApplyUpdatePatch(harmony);
         }
         else
@@ -152,6 +154,15 @@ internal sealed class ModEntry : Mod
         catch (Exception ex)
         {
             this.Monitor.Log(string.Format(ErrorMessageConsts.HARMONYCRASH, ex), LogLevel.Error);
+        }
+
+        try
+        {
+            DebuggingPatches.Apply(harmony);
+        }
+        catch (Exception ex)
+        {
+            this.Monitor.Log($"Failed while trying to apply debugging patches.\n\n{ex}", LogLevel.Warn);
         }
 
         harmony.Snitch(this.Monitor, harmony.Id, transpilersOnly: true);
@@ -241,9 +252,6 @@ internal sealed class ModEntry : Mod
 
     #endregion
 
-    /// <inheritdoc cref="IGameLoopEvents.Saving"/>
-    /// <remarks>Used to handle day-end events.</remarks>
-
     /// <inheritdoc cref="IGameLoopEvents.SaveLoaded"/>
     /// <remarks>Used to load in this mod's data models.</remarks>
     private void SaveLoaded(object? sender, SaveLoadedEventArgs e)
@@ -270,6 +278,8 @@ internal sealed class ModEntry : Mod
         this.watcher = new();
     }
 
+    /// <inheritdoc cref="IGameLoopEvents.Saving"/>
+    /// <remarks>Used to handle day-end events.</remarks>
     private void Saving(object? sender, SavingEventArgs e)
     {
         this.Monitor.DebugOnlyLog("Event Saving raised");

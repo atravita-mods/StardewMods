@@ -6,6 +6,8 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 using StardewModdingAPI.Utilities;
 using StardewValley.Objects;
+using StardewValley.Tools;
+
 using StopRugRemoval.Configuration;
 
 namespace StopRugRemoval.HarmonyPatches;
@@ -30,7 +32,7 @@ internal static class SObjectPatches
     /// <returns>True to continue to vanilla function, false otherwise.</returns>
     [HarmonyPrefix]
     [HarmonyPatch("canPlaceWildTreeSeed")]
-    [SuppressMessage("StyleCop", "SA1313", Justification = "Style prefered by Harmony")]
+    [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "HarmonyConvention")]
     private static bool PrefixWildTrees(GameLocation location, Vector2 tile, ref bool __result)
     {
         try
@@ -76,6 +78,20 @@ internal static class SObjectPatches
         {
             ModEntry.ModMonitor.Log($"Error while creating debris.{ex}", LogLevel.Error);
         }
+    }
+
+    /// <summary>
+    /// Prevent hoes from lifting up the scarecrows.
+    /// </summary>
+    /// <param name="__instance">SObject instance.</param>
+    /// <param name="t">tool used.</param>
+    [HarmonyPrefix]
+    [HarmonyPatch(nameof(SObject.performToolAction))]
+    [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "HarmonyConvention")]
+    private static bool PrefixPerformToolAction(SObject __instance, Tool t, ref bool __result)
+    {
+        __result = t is not Hoe || !__instance.IsScarecrow();
+        return __result;
     }
 
     /// <summary>

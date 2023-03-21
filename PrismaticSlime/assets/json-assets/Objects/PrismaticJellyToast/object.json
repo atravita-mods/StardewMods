@@ -1,0 +1,8 @@
+﻿{
+  "Name": "atravita.PrismaticJellyToast",
+  "Category": "Cooking",
+  "Edibility": 100,
+  "Price": 5000,
+  "TranslationKey": "prismatic-jelly-toast",
+  "CanSell": false
+}

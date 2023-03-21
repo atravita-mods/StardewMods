@@ -2,6 +2,8 @@
 
 using Microsoft.Xna.Framework;
 
+#nullable enable
+
 namespace MoreFertilizers;
 
 /// <summary>

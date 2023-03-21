@@ -45,6 +45,8 @@ internal sealed class ModEntry : Mod
         InputHelper = this.Helper.Input;
         Config = AtraUtils.GetConfigOrDefault<ModConfig>(helper, this.Monitor);
 
+        this.Monitor.Log($"Starting up: {this.ModManifest.UniqueID} - {typeof(ModEntry).Assembly.FullName}");
+
         helper.Events.GameLoop.GameLaunched += this.OnGameLaunch;
     }
 

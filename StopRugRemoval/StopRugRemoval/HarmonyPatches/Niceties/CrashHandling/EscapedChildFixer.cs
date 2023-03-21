@@ -7,6 +7,9 @@ using StardewValley.Locations;
 
 namespace StopRugRemoval.HarmonyPatches.Niceties.CrashHandling;
 
+/// <summary>
+/// Returns escaped children.
+/// </summary>
 [HarmonyPatch(typeof(Child))]
 internal static class EscapedChildFixer
 {

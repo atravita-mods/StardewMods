@@ -34,6 +34,9 @@ internal sealed class ModEntry : Mod
     /// </summary>
     internal static IMonitor ModMonitor { get; private set; } = null!;
 
+    /// <summary>
+    /// Gets the scheduling tools for this mod.
+    /// </summary>
     internal static ScheduleUtilityFunctions ScheduleUtilityFunctions { get; private set; } = null!;
 
     /// <inheritdoc />
@@ -42,6 +45,8 @@ internal sealed class ModEntry : Mod
         I18n.Init(helper.Translation);
         ScheduleUtilityFunctions = new(this.Monitor, this.Helper.Translation);
         AssetManager.Initialize(helper.GameContent);
+
+        this.Monitor.Log($"Starting up: {this.ModManifest.UniqueID} - {typeof(ModEntry).Assembly.FullName}");
 
         ModMonitor = this.Monitor;
 

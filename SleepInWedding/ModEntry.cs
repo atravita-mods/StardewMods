@@ -2,8 +2,11 @@
 
 using AtraShared.ConstantsAndEnums;
 using AtraShared.Integrations;
+using AtraShared.Integrations.Interfaces.ContentPatcher;
 using AtraShared.Utils.Extensions;
+
 using HarmonyLib;
+
 using StardewModdingAPI.Events;
 
 using AtraUtils = AtraShared.Utils.Utils;
@@ -40,10 +43,14 @@ internal sealed class ModEntry : Mod
         helper.Events.GameLoop.DayStarted += this.OnDayStart;
 
         helper.Events.Multiplayer.ModMessageReceived += this.OnMessageRecieved;
+        helper.Events.Multiplayer.PeerConnected += this.OnPeerConnected;
+
+        this.Monitor.Log($"Starting up: {this.ModManifest.UniqueID} - {typeof(ModEntry).Assembly.FullName}");
 
         this.ApplyPatches(new Harmony(this.ModManifest.UniqueID));
     }
 
+    /// <inheritdoc cref="IGameLoopEvents.DayStarted"/>
     private void OnDayStart(object? sender, DayStartedEventArgs e)
     {
         if (Game1.player.HasWeddingToday() && NPCCache.GetByVillagerName(Game1.player.spouse) is NPC spouse)
@@ -78,13 +85,13 @@ internal sealed class ModEntry : Mod
                     Game1.addHUDMessage(new HUDMessage(I18n.WeddingMessageOther(hour, minutes.ToString("D2")), HUDMessage.achievement_type));
                 }
             }
-            else if (Game1.timeOfDay == Utility.ModifyTime(Config.WeddingTime, -30))
-            {
-                Game1.addHUDMessage(new HUDMessage(I18n.WeddingReminder(), HUDMessage.achievement_type));
-            }
             else if (Game1.timeOfDay == Config.WeddingTime)
             {
                 Game1.warpFarmer(new LocationRequest("Town", false, Game1.getLocationFromName("Town")), 5, 10, 0);
+            }
+            else if (Game1.timeOfDay == Utility.ModifyTime(Config.WeddingTime, -30))
+            {
+                Game1.addHUDMessage(new HUDMessage(I18n.WeddingReminder(), HUDMessage.achievement_type));
             }
         }
     }
@@ -155,6 +162,23 @@ internal sealed class ModEntry : Mod
         }
     }
 
+    /// <inheritdoc cref="IMultiplayerEvents.PeerConnected"/>
+    /// <remarks>Send restored weddings if needed when a peer connects.</remarks>
+    private void OnPeerConnected(object? sender, PeerConnectedEventArgs e)
+    {
+        if (!Config.TryRecoverWedding)
+        {
+            return;
+        }
+
+        ModMonitor.DebugOnlyLog($"Current weddings {string.Join(", ", Game1.weddingsToday)}");
+        this.Helper.Multiplayer.SendMessage(
+            message: Game1.weddingsToday,
+            messageType: RestoredWeddings,
+            modIDs: new[] { this.ModManifest.UniqueID },
+            playerIDs: new[] { e.Peer.PlayerID });
+    }
+
     private void OnMessageRecieved(object? sender, ModMessageReceivedEventArgs e)
     {
         if (e.FromModID != this.ModManifest.UniqueID)
@@ -166,8 +190,14 @@ internal sealed class ModEntry : Mod
             List<long>? weddings = e.ReadAs<List<long>>();
             if (weddings is not null)
             {
-                Game1.weddingsToday.Clear();
-                Game1.weddingsToday.AddRange(weddings);
+                foreach (long wedding in weddings)
+                {
+                    if (!Game1.weddingsToday.Contains(wedding))
+                    {
+                        ModEntry.ModMonitor.Log($"Adding restored wedding {wedding}");
+                        Game1.weddingsToday.Add(wedding);
+                    }
+                }
             }
         }
     }
@@ -203,6 +233,15 @@ internal sealed class ModEntry : Mod
                 reset: static () => Config = new(),
                 save: () => this.Helper.AsyncWriteConfig(this.Monitor, Config))
             .GenerateDefaultGMCM(static () => Config);
+        }
+
+        IntegrationHelper integrationHelper = new(this.Monitor, this.Helper.Translation, this.Helper.ModRegistry);
+        if (integrationHelper.TryGetAPI("Pathoschild.ContentPatcher", "1.19.0", out IContentPatcherAPI? api))
+        {
+            api.RegisterToken(
+                mod: this.ModManifest,
+                name: "IsCurrentlyWedding",
+                getValue: () => new[] { (Game1.CurrentEvent is Event evt && evt.id == Event.weddingEventId).ToString() });
         }
     }
 }

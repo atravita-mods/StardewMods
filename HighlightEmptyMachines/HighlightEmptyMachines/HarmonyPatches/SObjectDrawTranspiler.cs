@@ -51,6 +51,9 @@ internal class SObjectDrawTranspiler
         return Color.White;
     }
 
+    [MethodImpl(TKConstants.Hot)]
+    private static bool ShouldDisablePulsing() => ModEntry.Config.DisablePulsing;
+
 #pragma warning disable SA1116 // Split parameters should start on line after declaration. Reviewed
     [HarmonyPatch(nameof(SObject.draw), new[] { typeof(SpriteBatch), typeof(int), typeof(int), typeof(float) })]
     [SuppressMessage("SMAPI.CommonErrors", "AvoidNetField:Avoid Netcode types when possible", Justification = "Only used for matching.")]
@@ -64,6 +67,25 @@ internal class SObjectDrawTranspiler
                 OpCodes.Ldarg_0,
                 (OpCodes.Ldfld, typeof(SObject).GetCachedField(nameof(SObject.bigCraftable), ReflectionCache.FlagTypes.InstanceFlags)),
             })
+            .FindNext(new CodeInstructionWrapper[]
+            { // Vector2 vector = this.getScale();
+                OpCodes.Ldarg_0,
+                (OpCodes.Callvirt, typeof(SObject).GetCachedMethod(nameof(SObject.getScale), ReflectionCache.FlagTypes.InstanceFlags)),
+                SpecialCodeInstructionCases.StLoc,
+            })
+            .Push() // edit to Vector2 vector = ShouldDisablePulsing ? Vector2.Zero : this.getScale();
+            .GetLabels(out IList<Label>? pulseLabels)
+            .Advance(2)
+            .DefineAndAttachLabel(out Label nopulseJump)
+            .Pop()
+            .DefineAndAttachLabel(out Label pulseJump)
+            .Insert(new CodeInstruction[]
+            {
+                new(OpCodes.Call, typeof(SObjectDrawTranspiler).GetCachedMethod(nameof(ShouldDisablePulsing), ReflectionCache.FlagTypes.StaticFlags)),
+                new(OpCodes.Brfalse, pulseJump),
+                new(OpCodes.Call, typeof(Vector2).GetCachedProperty(nameof(Vector2.Zero), ReflectionCache.FlagTypes.StaticFlags).GetGetMethod()),
+                new (OpCodes.Br_S, nopulseJump),
+            }, withLabels: pulseLabels)
             .FindNext(new CodeInstructionWrapper[]
             {
                 OpCodes.Ldarg_0,
@@ -85,6 +107,8 @@ internal class SObjectDrawTranspiler
             {
                 new(OpCodes.Ldarg_0),
             }, withLabels: colorLabels);
+
+            // helper.Print();
             return helper.Render();
         }
         catch (Exception ex)

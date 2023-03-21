@@ -397,17 +397,92 @@ public sealed class GMCMHelper : IntegrationHelper
         CacheKey key = new(typeof(TModConfig), tEnum);
         if (!enumCache.TryGetValue(key, out MethodInfo? realized))
         {
-            realized = this.GetType().GetMethods()
+            enumCache[key] = realized = this.GetType().GetMethods()
                 .Where((method) => method.Name == nameof(this.AddEnumOption) && method.GetGenericArguments().Length == 2)
                 .First()
                 .MakeGenericMethod(typeof(TModConfig), tEnum);
-            enumCache[key] = realized;
         }
         realized.Invoke(this, new object?[] { property, getConfig, fieldID });
 
         return this;
     }
 #endregion
+
+#region vector2
+
+    /// <summary>
+    /// Adds a Vector2 option at this location in the menu.
+    /// </summary>
+    /// <param name="name">Name of field.</param>
+    /// <param name="getValue">Value getter.</param>
+    /// <param name="setValue">Value setter.</param>
+    /// <param name="tooltip">tooltip.</param>
+    /// <param name="default">default value.</param>
+    /// <param name="fieldId">The id of the field, if necessary.</param>
+    /// <returns>this.</returns>
+    public GMCMHelper AddVectorOption(
+        Func<string> name,
+        Func<Vector2> getValue,
+        Action<Vector2> setValue,
+        Func<string>? tooltip = null,
+        Vector2? @default = null,
+        string? fieldId = null
+        )
+    {
+        this.AddTextOption(
+            name: name,
+            getValue: () =>
+            {
+                Vector2 vec = getValue();
+                return vec.X + ", " + vec.Y;
+            },
+            setValue: value => setValue(value.TryParseVector2(out Vector2 vec) ? vec : (@default ?? default)),
+            tooltip: tooltip,
+            fieldId: fieldId
+            );
+        return this;
+    }
+
+    /// <summary>
+    /// Adds a Vector2 option at this location in the menu.
+    /// </summary>
+    /// <typeparam name="TModConfig">Type of the config.</typeparam>
+    /// <param name="property">Property that corresponds to the config.</param>
+    /// <param name="getConfig">A getter for the config.</param>
+    /// <param name="default">Default value, or null to check the attribute.</param>
+    /// <param name="fieldID">ID for the field if needed.</param>
+    /// <returns>this.</returns>
+    public GMCMHelper AddVectorOption<TModConfig>(
+    PropertyInfo property,
+    Func<TModConfig> getConfig,
+    Vector2? @default = null,
+    string? fieldID = null)
+    {
+        if (property.GetGetMethod() is not MethodInfo getter || property.GetSetMethod() is not MethodInfo setter)
+        {
+            this.Monitor.DebugOnlyLog($"{property.Name} appears to be a mis-configured option!", LogLevel.Warn);
+        }
+        else
+        {
+            if (@default is null && Attribute.GetCustomAttribute(property, typeof(GMCMDefaultVectorAttribute)) is GMCMDefaultVectorAttribute attr)
+            {
+                @default = new(attr.X, attr.Y);
+            }
+
+            Func<TModConfig, Vector2> getterDelegate = getter.CreateDelegate<Func<TModConfig, Vector2>>();
+            Action<TModConfig, Vector2> setterDelegate = setter.CreateDelegate<Action<TModConfig, Vector2>>();
+            this.AddVectorOption(
+                name: () => this.Translation.Get($"{property.Name}.title"),
+                tooltip: () => this.Translation.Get($"{property.Name}.description"),
+                getValue: () => getterDelegate(getConfig()),
+                setValue: value => setterDelegate(getConfig(), value),
+                @default: @default,
+                fieldId: fieldID);
+        }
+        return this;
+    }
+
+    #endregion
 
 #region floats
 
@@ -512,6 +587,7 @@ public sealed class GMCMHelper : IntegrationHelper
         }
         return this;
     }
+
 #endregion
 
 #region ints
@@ -860,7 +936,7 @@ public sealed class GMCMHelper : IntegrationHelper
         return this;
     }
 
-    #region default
+#region default
 
     /// <summary>
     /// Generates a basic GMCM config.
@@ -929,6 +1005,10 @@ public sealed class GMCMHelper : IntegrationHelper
         else if (property.PropertyType.IsAssignableTo(typeof(Enum)))
         {
             this.AddEnumOption(property, getConfig);
+        }
+        else if (property.PropertyType == typeof(Vector2))
+        {
+            this.AddVectorOption(property, getConfig);
         }
         else if (property.PropertyType == typeof(float))
         {

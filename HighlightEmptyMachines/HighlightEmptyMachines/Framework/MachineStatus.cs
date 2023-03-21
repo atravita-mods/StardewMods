@@ -6,7 +6,7 @@
 internal enum MachineStatus
 {
     /// <summary>
-    /// This machine is enabled in settings and can recieve input.
+    /// This machine is enabled in settings and can receive input.
     /// </summary>
     Enabled,
 

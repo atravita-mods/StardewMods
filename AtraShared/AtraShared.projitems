@@ -10,13 +10,22 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="$(MSBuildThisFileDirectory)Caching\TickCache.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ConstantsAndEnums\BuffEnum.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ConstantsAndEnums\ItemTypeEnum.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ConstantsAndEnums\Seasons.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ConstantsAndEnums\Weathers.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Content\RawTexData\IRawTextureDataExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)CustomExceptions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ConstantsAndEnums\ErrorMessageConsts.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Integrations\GMCMAttributes\GMCMDefaultVectorAttribute.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Integrations\Interfaces\IGiantCropTweaksAPI.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Integrations\Interfaces\IGrowableBushesAPI.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Integrations\Interfaces\IMoreGiantCropsAPI.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Niceties\AssetNameComparer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Utils\Extensions\CropExtensions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Utils\Extensions\FarmerTeamExtensions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Utils\Extensions\IAssetDataForMapsExtensions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Utils\Extensions\TreeExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Utils\FarmerHelpers.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Integrations\GMCMAttributes\GMCMDefaultColorAttribute.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Integrations\GMCMAttributes\GMCMDefaultIgnoreAttribute.cs" />
@@ -85,6 +94,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Utils\NPCHelpers.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Utils\RandomUtils.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Utils\Shims\DynamicGameAssetsShims.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Utils\Shims\FarmTypeManagerShims.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Utils\Shims\JAInternalTypesShims\CropDataShims.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Utils\Shims\JsonAssetsShims.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Utils\Shims\SAATShims.cs" />

@@ -14,6 +14,7 @@ namespace MoreFertilizers.Framework;
 /// <summary>
 /// Class that handles placement of special fertilizers.
 /// </summary>
+[SuppressMessage("StyleCop.CSharp.OrderingRules", "SA1201:Elements should appear in the correct order", Justification = "Reviewed.")]
 public sealed class CanPlaceHandler : IMoreFertilizersAPI
 {
     #region ModdataStrings
@@ -361,8 +362,9 @@ public sealed class CanPlaceHandler : IMoreFertilizersAPI
 
             Game1.playSound("throwDownITem"); // sic
 
-            float deltaY = -140f;
-            float gravity = 0.0025f;
+            const float deltaY = -140f;
+            const float gravity = 0.0025f;
+
             float velocity = -0.08f - MathF.Sqrt(2 * 60f * gravity);
             float time = (MathF.Sqrt((velocity * velocity) - (gravity * deltaY * 2f)) / gravity) - (velocity / gravity);
 
@@ -391,8 +393,8 @@ public sealed class CanPlaceHandler : IMoreFertilizersAPI
             if (obj.ParentSheetIndex != ModEntry.DomesticatedFishFoodID)
             {
                 DelayedAction.functionAfterDelay(
-                    static () => Game1.currentLocation.waterColor.Value = ModEntry.Config.WaterOverlayColor,
-                    (int)time);
+                    func: static () => Game1.currentLocation.waterColor.Value = ModEntry.Config.WaterOverlayColor,
+                    timer: (int)time);
             }
         }
     }
@@ -421,5 +423,5 @@ public sealed class CanPlaceHandler : IMoreFertilizersAPI
     }
 
     private static void AlertPlayer()
-        => Game1.showRedMessageUsingLoadString("Strings\\StringsFromCSFiles:TreeFertilizer2");
+        => Game1.showRedMessageUsingLoadString(@"Strings\StringsFromCSFiles:TreeFertilizer2");
 }

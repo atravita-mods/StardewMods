@@ -1,13 +1,29 @@
 ﻿Changelog
 =============
 
-#### Version 0.3.0 TODO items
+#### TODO items
 * Beverage fertilizer
     - Fruit trees (DGA, Automate?)
 * Tree Tapper's: Automate integration.
 * Something for mushroom boxen? (1.6 - reduce to one day?)
 * Make good draw code for all of the fertilizers. (don't forget domesticated fish - maybe some more jumping...)
-* PR Pathos to make CJB pass in the correct fertilizer (b/c Everlasting)
+
+#### Version 0.3.3
+* Update to latest AtraCore.
+* Fix everlasting fertilizer not getting a special color.
+* Fix Radioactive fertilizer not properly ignoring seasons in Greenhouse locations.
+* Buff Secret Joja Fertilizer back up a little, lightly buff Wisdom Fertilizer (which also now uses random round proportional).
+* Fix compat with Immersive Scarecrows.
+
+#### Version 0.3.2
+* Balance
+    * Secret Joja Fertilizer now uses random round proportional instead of math.floor.
+* Bugfixes
+    * Fix compat with Theft of the Winter Star.
+
+#### Version 0.3.1
+* Fixed integration with the two extended tools mods.
+* Updated Chinese translation (thanks to Puffeeydii!)
 
 #### Version 0.3.0
 * Added new fertilizers:

@@ -51,6 +51,7 @@ internal sealed class ModEntry : Mod
         AtraBase.Internal.Logger.Instance = new Logger(this.Monitor);
 
         Config = AtraUtils.GetConfigOrDefault<ModConfig>(helper, this.Monitor);
+        this.Monitor.Log($"Starting up: {this.ModManifest.UniqueID} - {typeof(ModEntry).Assembly.FullName}");
 
         helper.Events.Content.AssetRequested += this.OnAssetRequested;
 
@@ -58,7 +59,9 @@ internal sealed class ModEntry : Mod
         helper.Events.GameLoop.SaveLoaded += this.OnSaveLoaded;
         helper.Events.GameLoop.DayEnding += this.OnDayEnd;
         helper.Events.GameLoop.TimeChanged += this.OnTimeChanged;
-        helper.Events.GameLoop.ReturnedToTitle += this.OnReturnedToTitle;
+        helper.Events.GameLoop.ReturnedToTitle += static (_, _) => NPCCache.Reset();
+
+        helper.Events.Player.Warped += this.Player_Warped;
 
 #if DEBUG
         if (!helper.ModRegistry.IsLoaded("DigitalCarbide.SpriteMaster"))
@@ -108,15 +111,24 @@ internal sealed class ModEntry : Mod
         PlayerAlertHandler.DisplayFromQueue();
     }
 
+    /// <inheritdoc cref="IPlayerEvents.Warped"/>
+    private void Player_Warped(object? sender, WarpedEventArgs e)
+    {
+        if (!e.IsLocalPlayer || !PlayerAlertHandler.HasMessages())
+        {
+            return;
+        }
+
+        int count = 5 - Game1.hudMessages.Count;
+        if (count > 0)
+        {
+            PlayerAlertHandler.DisplayFromQueue(count);
+        }
+    }
+
     /// <inheritdoc cref="IGameLoopEvents.DayEnding"/>
     private void OnDayEnd(object? sender, DayEndingEventArgs e)
         => QueuedDialogueManager.ClearDelayedDialogue();
-
-    /// <inheritdoc cref="IGameLoopEvents.ReturnedToTitle"/>
-    private void OnReturnedToTitle(object? sender, ReturnedToTitleEventArgs e)
-    {
-        NPCCache.Reset();
-    }
 
     #region assets
 
@@ -148,7 +160,6 @@ internal sealed class ModEntry : Mod
         this.Monitor.Log($"Took {sw.ElapsedMilliseconds} ms to apply harmony patches.", LogLevel.Info);
 #endif
     }
-
 
     /// <inheritdoc cref="IGameLoopEvents.Saved"/>
     /// <remarks>

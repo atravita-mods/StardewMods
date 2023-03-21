@@ -1,4 +1,6 @@
-﻿using Microsoft.Xna.Framework;
+﻿using AtraBase.Toolkit.Extensions;
+
+using Microsoft.Xna.Framework;
 
 namespace AtraShared.Utils.Extensions;
 
@@ -7,6 +9,24 @@ namespace AtraShared.Utils.Extensions;
 /// </summary>
 public static class Vector2Extensions
 {
+    /// <summary>
+    /// Finds the Manhattan (taxicab) distance between two vectors.
+    /// </summary>
+    /// <param name="self">First vector.</param>
+    /// <param name="other">Second vector.</param>
+    /// <returns>Manhattan distance.</returns>
+    public static float ManhattanDistance(this Vector2 self, Vector2 other)
+        => Math.Abs(self.X - other.X) + Math.Abs(self.Y - other.Y);
+
+    /// <summary>
+    /// Finds the midpoint between two vectors.
+    /// </summary>
+    /// <param name="self">First vector.</param>
+    /// <param name="other">Second vector.</param>
+    /// <returns>Midpoint.</returns>
+    public static Vector2 Midpoint(this Vector2 self, Vector2 other)
+        => new(self.X + ((other.X - self.X) / 2), self.Y + ((other.Y - self.Y) / 2));
+
     /// <summary>
     /// Tries to parse a vector2 from a string.
     /// </summary>
@@ -24,19 +44,14 @@ public static class Vector2Extensions
     /// <returns>true if successful, false otherwise.</returns>
     public static bool TryParseVector2(this ReadOnlySpan<char> span, out Vector2 vector)
     {
-        span = span.Trim();
-
-        int index = span.IndexOf(',');
-
-        if (index <= 0 || index >= span.Length - 1 // comma should not be the first or last position
-            || !float.TryParse(span[..index], out float x)
-            || !float.TryParse(span[(index + 1)..], out float y))
+        if (span.Trim().TrySplitOnce(',', out ReadOnlySpan<char> first, out ReadOnlySpan<char> second)
+            && float.TryParse(first.Trim(), out float x) && float.TryParse(second.Trim(), out float y))
         {
-            vector = default;
-            return false;
+            vector = new Vector2(x, y);
+            return true;
         }
 
-        vector = new Vector2(x, y);
-        return true;
+        vector = default;
+        return false;
     }
 }

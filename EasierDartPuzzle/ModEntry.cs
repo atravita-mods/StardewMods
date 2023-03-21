@@ -33,6 +33,8 @@ internal sealed class ModEntry : Mod
             helper.AsyncWriteConfig(this.Monitor, Config);
         }
 
+        this.Monitor.Log($"Starting up: {this.ModManifest.UniqueID} - {typeof(ModEntry).Assembly.FullName}");
+
         this.ApplyPatches(new Harmony(this.ModManifest.UniqueID));
 
         helper.Events.GameLoop.GameLaunched += this.OnGameLaunch;

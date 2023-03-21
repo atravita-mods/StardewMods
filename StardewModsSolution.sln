@@ -67,7 +67,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TapGiantCrops", "TapGiantCrops\TapGiantCrops.csproj", "{87CB4C6C-FD1B-490F-8ABC-F25DF6107D71}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TapGiantCropsAutomateBridge", "TapGiantCropsAutomateBridge\TapGiantCropsAutomateBridge.csproj", "{C0414845-029D-4179-A4DE-BF002AACC8B3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TapGiantCropsAutomateBridge", "TapGiantCropsAutomateBridge\TapGiantCropsAutomateBridge.csproj", "{C0414845-029D-4179-A4DE-BF002AACC8B3}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SleepInWedding", "SleepInWedding\SleepInWedding.csproj", "{804B0BC3-6A50-485A-B648-52AC96077F0E}"
 EndProject
@@ -109,7 +109,13 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BetterIntegratedModItems", 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Stackify", "Stackify\Stackify.csproj", "{059511A7-ECC8-4AD6-9322-1FA18AE7DE0B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FarmBuildingHelper", "FarmBuildingHelper\FarmBuildingHelper.csproj", "{4C663EAD-2C15-49AF-8434-B6541A41E49F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FarmBuildingHelper", "FarmBuildingHelper\FarmBuildingHelper.csproj", "{4C663EAD-2C15-49AF-8434-B6541A41E49F}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GrowableBushes", "GrowableBushes\GrowableBushes.csproj", "{50F93997-9C93-48BB-B745-BB59AD29BE19}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GrowableGiantCrops", "GrowableGiantCrops\GrowableGiantCrops.csproj", "{6932AA8F-D4B7-4322-894E-00426002A8A5}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CritterRings", "CritterRings\CritterRings.csproj", "{A55D6E3F-B6C1-4AEC-ADB8-B52E9AEAC9CA}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -293,6 +299,18 @@ Global
 		{4C663EAD-2C15-49AF-8434-B6541A41E49F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4C663EAD-2C15-49AF-8434-B6541A41E49F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4C663EAD-2C15-49AF-8434-B6541A41E49F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{50F93997-9C93-48BB-B745-BB59AD29BE19}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{50F93997-9C93-48BB-B745-BB59AD29BE19}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{50F93997-9C93-48BB-B745-BB59AD29BE19}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{50F93997-9C93-48BB-B745-BB59AD29BE19}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6932AA8F-D4B7-4322-894E-00426002A8A5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6932AA8F-D4B7-4322-894E-00426002A8A5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6932AA8F-D4B7-4322-894E-00426002A8A5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6932AA8F-D4B7-4322-894E-00426002A8A5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A55D6E3F-B6C1-4AEC-ADB8-B52E9AEAC9CA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A55D6E3F-B6C1-4AEC-ADB8-B52E9AEAC9CA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A55D6E3F-B6C1-4AEC-ADB8-B52E9AEAC9CA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A55D6E3F-B6C1-4AEC-ADB8-B52E9AEAC9CA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

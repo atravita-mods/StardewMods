@@ -1,0 +1,13 @@
+{ "Changes":[
+    {
+        "LogName": "Willy mid-hearts",
+        "Action": "EditData",
+        "Target": "Characters/Dialogue/Willy",
+        "Entries": {
+            "6_2": "My family's been from these parts as far as I can remember."
+        },
+        "When": {
+            "YearModulus": "2"
+        }
+    },
+]}

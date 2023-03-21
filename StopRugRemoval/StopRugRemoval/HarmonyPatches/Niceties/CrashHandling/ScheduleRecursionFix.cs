@@ -1,13 +1,10 @@
 ﻿using System.Reflection;
 using System.Reflection.Emit;
-using System.Runtime.CompilerServices;
 
-using AtraBase.Toolkit;
 using AtraBase.Toolkit.Reflection;
 
 using AtraCore.Framework.ReflectionManager;
 
-using AtraShared.Niceties;
 using AtraShared.Utils.Extensions;
 using AtraShared.Utils.HarmonyHelper;
 
@@ -17,10 +14,13 @@ namespace StopRugRemoval.HarmonyPatches.Niceties.CrashHandling;
 
 #warning - crosscheck in 1.6.
 
+/// <summary>
+/// Prevents default->default and spring->spring recursion in scheduling.
+/// </summary>
 [HarmonyPatch(typeof(NPC))]
 internal static class ScheduleRecursionFix
 {
-    private static Lazy<Func<NPC, string>> LastLoadedScheduleGetter = new(
+    private static readonly Lazy<Func<NPC, string>> LastLoadedScheduleGetter = new(
         () => typeof(NPC).GetCachedField("_lastLoadedScheduleKey", ReflectionCache.FlagTypes.InstanceFlags)
                          .GetInstanceFieldGetter<NPC, string>());
 

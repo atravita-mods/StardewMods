@@ -1,10 +1,16 @@
 ﻿using AtraBase.Toolkit.Extensions;
 using AtraBase.Toolkit.StringHandler;
 
+using AtraCore.Framework.Caches;
+
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
 namespace StopRugRemoval.Framework.Niceties;
+
+/// <summary>
+/// Detects and tries to fix up duplicate NPCs.
+/// </summary>
 internal static class DuplicateNPCDetector
 {
     internal static void DayEnd()
@@ -62,9 +68,7 @@ internal static class DuplicateNPCDetector
             }
         }
 
-        var dispos = Game1.content.Load<Dictionary<string, string>>("Data\\NPCDispositions");
-
-        foreach (var (name, dispo) in dispos)
+        foreach ((string name, string dispo) in Game1.content.Load<Dictionary<string, string>>("Data\\NPCDispositions"))
         {
             if (found.Contains(name) || (Game1.year <= 1 && name == "Kent") || (name == "Leo" && !Game1.MasterPlayer.hasOrWillReceiveMail("addedParrotBoy")))
             {
@@ -72,29 +76,31 @@ internal static class DuplicateNPCDetector
             }
             try
             {
-                StreamSplit defaultpos = dispo.GetNthChunk('/', 10).StreamSplit(' ');
+                StreamSplit defaultpos = dispo.GetNthChunk('/', 10)
+                                              .StreamSplit(null, StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
                 if (!defaultpos.MoveNext())
                 {
-                    ModEntry.ModMonitor.Log($"Badly formatted dispo for npc {name}");
+                    ModEntry.ModMonitor.Log($"Badly formatted dispo for npc {name} - {dispo}", LogLevel.Warn);
                     continue;
                 }
 
-                string mapstring = defaultpos.Current.ToString();
-
+                string mapstring;
                 if (name == "Leo" && leoMoved)
                 {
                     mapstring = "LeoTreeHouse";
                 }
+                else
+                {
+                    mapstring = defaultpos.Current.ToString();
+                }
 
-                GameLocation map = Game1.getLocationFromName(mapstring);
-                if (map is null)
+                if (Game1.getLocationFromName(mapstring) is not GameLocation map)
                 {
                     ModEntry.ModMonitor.Log($"{name} has a dispo entry for map {mapstring} which could not be found.", LogLevel.Warn);
                     continue;
                 }
 
                 int x, y;
-
                 if (name == "Leo" && leoMoved)
                 {
                     x = 5;
@@ -104,40 +110,50 @@ internal static class DuplicateNPCDetector
                 {
                     if (!defaultpos.MoveNext() || int.TryParse(defaultpos.Current, out x))
                     {
-                        ModEntry.ModMonitor.Log($"Badly formatted dispo for npc {name}");
+                        ModEntry.ModMonitor.Log($"Badly formatted dispo for npc {name}  - {dispo}", LogLevel.Warn);
                         continue;
                     }
 
                     if (!defaultpos.MoveNext() || int.TryParse(defaultpos.Current, out y))
                     {
-                        ModEntry.ModMonitor.Log($"Badly formatted dispo for npc {name}");
+                        ModEntry.ModMonitor.Log($"Badly formatted dispo for npc {name}  - {dispo}", LogLevel.Warn);
                         continue;
                     }
                 }
 
                 ModEntry.ModMonitor.Log($"Found missing NPC {name}, adding");
 
-                map.addCharacter(
-                    new NPC(
-                        sprite: new AnimatedSprite(@"Characters\" + NPC.getTextureNameForCharacter(name), 0, 16, 32),
-                        position: new Vector2(x, y) * 64f,
-                        defaultMap: mapstring,
-                        facingDir: 0,
-                        name: name,
-                        schedule: null,
-                        portrait: Game1.content.Load<Texture2D>(@"Portraits\" + NPC.getTextureNameForCharacter(name)),
-                        eventActor: false));
+                NPC npc = new(
+                    sprite: new AnimatedSprite(@"Characters\" + NPC.getTextureNameForCharacter(name), 0, 16, 32),
+                    position: new Vector2(x, y) * 64f,
+                    defaultMap: mapstring,
+                    facingDir: 0,
+                    name: name,
+                    schedule: null,
+                    portrait: Game1.content.Load<Texture2D>(@"Portraits\" + NPC.getTextureNameForCharacter(name)),
+                    eventActor: false);
+                map.addCharacter(npc);
+                try
+                {
+                    npc.Schedule = npc.getSchedule(Game1.dayOfMonth);
+                }
+                catch (Exception ex)
+                {
+                    ModEntry.ModMonitor.Log($"Failed to restore schedule for missing NPC {name}\n\n{ex}", LogLevel.Warn);
+                }
+
+                // TODO: may need to fix up their dialogue as well?
             }
             catch (Exception ex)
             {
-                ModEntry.ModMonitor.Log($"Failed to add missing npc {name}\n\n{ex}");
+                ModEntry.ModMonitor.Log($"Failed to add missing npc {name}\n\n{ex}", LogLevel.Warn);
             }
         }
 
         DetectDuplicateNPCs();
     }
 
-    private static void DetectDuplicateNPCs()
+    private static Dictionary<string, NPC> DetectDuplicateNPCs()
     {
         Dictionary<string, NPC> found = new();
         foreach (GameLocation loc in Game1.locations)
@@ -145,25 +161,31 @@ internal static class DuplicateNPCDetector
             for (int i = loc.characters.Count - 1; i >= 0; i--)
             {
                 NPC character = loc.characters[i];
-                if (!character.isVillager())
+                if (!character.isVillager() || character.GetType() != typeof(NPC))
                 {
                     continue;
                 }
 
+                // let's populate AtraCore's cache while we're at it.
+                _ = NPCCache.TryInsert(character);
+
                 if (!found.TryAdd(character.Name, character) && character.Name != "Mister Qi")
                 {
-                    ModEntry.ModMonitor.Log($"Found duplicate NPC {character.Name}");
+                    ModEntry.ModMonitor.Log($"Found duplicate NPC {character.Name}", LogLevel.Info);
                     if (object.ReferenceEquals(character, found[character.Name]))
                     {
-                        ModEntry.ModMonitor.Log("These appear to be the same instance.");
+                        ModEntry.ModMonitor.Log("    These appear to be the same instance.", LogLevel.Info);
                     }
 
                     if (ModEntry.Config.RemoveDuplicateNPCs)
                     {
                         loc.characters.RemoveAt(i);
+                        ModEntry.ModMonitor.Log("    Removing duplicate.", LogLevel.Info);
                     }
                 }
             }
         }
+
+        return found;
     }
 }

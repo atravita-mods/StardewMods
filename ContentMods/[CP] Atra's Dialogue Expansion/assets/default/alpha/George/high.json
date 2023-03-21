@@ -1,0 +1,12 @@
+{"Changes":[
+    {
+        "Action": "EditData",
+        "Target": "Characters/Dialogue/George",
+        "Entries": {
+            "15_2": "It's nice that Alex is still livin' with us. I need more help than what my dear wife Evelyn can provide some days.",
+            "19_2": "I remember when the mines were first being developed. The town was so happy. We needed the economic activity.#$b#Didn't consider how polluting they'd be.",
+            "21_2": "We didn't have these new electric devices when we were kids. Had to go out and kick a ball about for our entertainment."
+        },
+        "When": {"YearModulus": "2"}
+    }
+]}

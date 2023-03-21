@@ -4,6 +4,8 @@ using AtraShared.Wrappers;
 
 using CommunityToolkit.Diagnostics;
 
+using Microsoft.Xna.Framework;
+
 namespace AtraShared.Utils.Extensions;
 
 /// <summary>
@@ -11,6 +13,48 @@ namespace AtraShared.Utils.Extensions;
 /// </summary>
 public static class SObjectExtensions
 {
+    /// <summary>
+    /// Creates a TAS that represents a parabolic arc.
+    /// </summary>
+    /// <param name="obj">Object to throw.</param>
+    /// <param name="start">Start location.</param>
+    /// <param name="end">End location.</param>
+    /// <param name="mp">Multiplayer instance.</param>
+    /// <param name="loc">GameLocation.</param>
+    /// <returns>Total time the parabolic arc will take.</returns>
+    public static float ParabolicThrowItem(this SObject obj, Vector2 start, Vector2 end, Multiplayer mp, GameLocation loc)
+    {
+        const float gravity = 0.0025f;
+
+        float velocity = -0.08f;
+        Vector2 delta = end - start;
+        if (delta.Y < 40)
+        {
+            // Ensure the initial velocity is sufficiently fast to make it all the way up.
+            velocity -= MathF.Sqrt(2 * MathF.Abs(delta.Y + 80) * gravity);
+        }
+        float time = (MathF.Sqrt(Math.Max((velocity * velocity) + (gravity * delta.Y * 2f), 0)) / gravity) - (velocity / gravity);
+        mp.broadcastSprites(
+            loc,
+            new TemporaryAnimatedSprite(
+                textureName: Game1.objectSpriteSheetName,
+                sourceRect: Game1.getSourceRectForStandardTileSheet(Game1.objectSpriteSheet, obj.ParentSheetIndex, 16, 16),
+                position: start,
+                flipped: false,
+                alphaFade: 0f,
+                color: Color.White)
+            {
+                scale = Game1.pixelZoom,
+                layerDepth = 1f,
+                totalNumberOfLoops = 1,
+                interval = time,
+                acceleration = new Vector2(0f, gravity),
+                motion = new Vector2(delta.X / time, velocity),
+                timeBasedMotion = true,
+            });
+        return time;
+    }
+
     /// <summary>
     /// Gets whether or not an SObject is a trash item.
     /// </summary>

@@ -25,7 +25,7 @@ public enum VanillaMachinesEnum
     Keg = 12,
 
     /// <summary>
-    /// Furnance.
+    /// Furnace.
     /// </summary>
     Furnace = 13,
 
@@ -43,10 +43,30 @@ public enum VanillaMachinesEnum
     /// Loom.
     /// </summary>
     Loom = 17,
+
+    /// <summary>
+    /// Oil maker.
+    /// </summary>
     OilMaker = 19,
+
+    /// <summary>
+    /// Recycling machine.
+    /// </summary>
     RecyclingMachine = 20,
+
+    /// <summary>
+    /// Crystalarium.
+    /// </summary>
     Crystalarium = 21,
+
+    /// <summary>
+    /// Mayo machine.
+    /// </summary>
     MayonnaiseMachine = 24,
+
+    /// <summary>
+    /// Seed maker.
+    /// </summary>
     SeedMaker = 25,
     BoneMill = 90,
     Incubator = 101,

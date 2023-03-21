@@ -12,9 +12,50 @@ namespace AtraShared.Utils.Extensions;
 /// Extensions to more easily interact with the ModData <see cref="ModDataDictionary" /> dictionary.
 /// </summary>
 /// <remarks>Inspired by https://github.com/spacechase0/StardewValleyMods/blob/main/SpaceShared/ModDataHelper.cs. </remarks>
+[SuppressMessage("StyleCop.CSharp.OrderingRules", "SA1201:Elements should appear in the correct order", Justification = "Reviewed.")]
 public static class ModDataExtensions
 {
+    /// <summary>
+    /// Gets whether two modData dictionaries contain exactly the same modData.
+    /// </summary>
+    /// <param name="self">This modData.</param>
+    /// <param name="other">That modData.</param>
+    /// <returns>True if they match, false otherwise.</returns>
+    public static bool ModDataMatches(this ModDataDictionary? self, ModDataDictionary? other)
+    {
+        if (self?.Count() is null or 0)
+        {
+            return other?.Count() is null or 0;
+        }
+        if (other?.Count() is null or 0)
+        {
+            return false;
+        }
+        return self.Count() == other.Count()
+                && self.Pairs.All((kvp) => other.TryGetValue(kvp.Key, out var val) && val == kvp.Value);
+    }
+
+    /// <summary>
+    /// Copies all modData out of the other dictionary into this one.
+    /// </summary>
+    /// <param name="self">This modData.</param>
+    /// <param name="other">That modData.</param>
+    public static void CopyModDataFrom(this ModDataDictionary? self, ModDataDictionary? other)
+    {
+        if (self is null || other is null)
+        {
+            return;
+        }
+
+        foreach ((string key, string value) in other.Pairs)
+        {
+            self[key] = value;
+        }
+    }
+
     // Instead of storing a real bool, just store 0 or 1
+    private const string trueValue = "1";
+    private const string falseValue = "0";
 
     /// <summary>
     /// Gets a boolean value out of ModData.
@@ -26,7 +67,9 @@ public static class ModDataExtensions
     [MethodImpl(TKConstants.Hot)]
     [return: NotNullIfNotNull("defaultVal")]
     public static bool? GetBool(this ModDataDictionary modData, string key, bool? defaultVal = null)
-        => modData.TryGetValue(key, out string val) ? val != "0" : defaultVal;
+        => modData.TryGetValue(key, out string val)
+            ? val != falseValue
+            : defaultVal;
 
     /// <summary>
     /// Sets a boolean value into modData.
@@ -44,7 +87,7 @@ public static class ModDataExtensions
         }
         else
         {
-            modData[key] = val ? "1" : "0";
+            modData[key] = val ? trueValue : falseValue;
         }
     }
 
@@ -58,7 +101,9 @@ public static class ModDataExtensions
     [MethodImpl(TKConstants.Hot)]
     [return: NotNullIfNotNull("defaultVal")]
     public static float? GetFloat(this ModDataDictionary modData, string key, float? defaultVal = null)
-        => modData.TryGetValue(key, out string val) && float.TryParse(val, out float result) ? result : defaultVal;
+        => modData.TryGetValue(key, out string val) && float.TryParse(val, NumberStyles.Number, CultureInfo.InvariantCulture, out float result)
+            ? result
+            : defaultVal;
 
     /// <summary>
     /// Sets a float value into modData. To reduce reads/writes, rounds.
@@ -78,7 +123,8 @@ public static class ModDataExtensions
         }
         else
         {
-            modData[key] = MathF.Round(val, decimals, MidpointRounding.ToEven).ToString(format, CultureInfo.InvariantCulture);
+            modData[key] = MathF.Round(val, decimals, MidpointRounding.ToEven)
+                                .ToString(format, provider: CultureInfo.InvariantCulture);
         }
     }
 
@@ -92,7 +138,7 @@ public static class ModDataExtensions
     [MethodImpl(TKConstants.Hot)]
     [return: NotNullIfNotNull("defaultVal")]
     public static int? GetInt(this ModDataDictionary modData, string key, int? defaultVal = null)
-        => modData.TryGetValue(key, out string val) && int.TryParse(val, out int result) ? result : defaultVal;
+        => modData.TryGetValue(key, out string val) && int.TryParse(val, NumberStyles.AllowLeadingSign, CultureInfo.InvariantCulture, out int result) ? result : defaultVal;
 
     /// <summary>
     /// Sets a int value into modData.
@@ -111,7 +157,7 @@ public static class ModDataExtensions
         }
         else
         {
-            modData[key] = val.ToString(format, CultureInfo.InvariantCulture);
+            modData[key] = val.ToString(format, provider: CultureInfo.InvariantCulture);
         }
     }
 

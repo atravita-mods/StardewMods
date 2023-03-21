@@ -18,6 +18,8 @@ internal sealed class ModEntry : Mod
         ModMonitor = this.Monitor;
         I18n.Init(helper.Translation);
 
+        this.Monitor.Log($"Starting up: {this.ModManifest.UniqueID} - {typeof(ModEntry).Assembly.FullName}");
+
         this.ApplyPatches(new Harmony(this.ModManifest.UniqueID));
     }
 

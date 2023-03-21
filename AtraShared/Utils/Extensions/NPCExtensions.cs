@@ -101,14 +101,14 @@ public static class NPCExtensions
     /// <param name="scheduleKey">Schedule key to look for.</param>
     /// <param name="rawData">Raw schedule string.</param>
     /// <returns>True if successful, false otherwise.</returns>
-    /// <remarks>Does **not** set _lastLoadedScheduleKey.</remarks>
+    /// <remarks>Does **not** set _lastLoadedScheduleKey, intentionally.</remarks>
     public static bool TryGetScheduleEntry(
         this NPC npc,
         string scheduleKey,
         [NotNullWhen(returnValue: true)] out string? rawData)
     {
         rawData = null;
-        Dictionary<string, string> scheduleData = npc.getMasterScheduleRawData();
+        Dictionary<string, string>? scheduleData = npc.getMasterScheduleRawData();
         if (scheduleData is null || scheduleKey is null)
         {
             return false;
@@ -126,10 +126,10 @@ public static class NPCExtensions
         Vector2 tile = npc.Position / Game1.tileSize;
         return npc.facingDirection.Get() switch
         {
-            Game1.up => new(tile.X, tile.Y - 1),
-            Game1.down => new(tile.X, tile.Y + 1),
-            Game1.left => new(tile.X - 1, tile.Y),
-            Game1.right => new(tile.X + 1, tile.Y),
+            Game1.up => tile - Vector2.UnitY,
+            Game1.down => tile + Vector2.UnitY,
+            Game1.left => tile - Vector2.UnitX,
+            Game1.right => tile + Vector2.UnitX,
             _ => tile,
         };
     }

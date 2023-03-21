@@ -3,6 +3,8 @@ using System.Reflection.Emit;
 using System.Runtime.CompilerServices;
 using AtraBase.Toolkit;
 using AtraBase.Toolkit.Extensions;
+using AtraBase.Toolkit.Reflection;
+
 using AtraCore.Framework.ItemManagement;
 using AtraCore.Framework.ReflectionManager;
 using AtraCore.Models;
@@ -93,8 +95,17 @@ internal static class DrawPrismatic
         && set.Contains(item.ParentSheetIndex);
 
     [MethodImpl(TKConstants.Hot)]
+    private static bool ShouldDrawAsFullColored(this Ring ring)
+        => PrismaticFull.TryGetValue(ItemTypeEnum.Ring, out HashSet<int>? set)
+            && set.Contains(ring.indexInTileSheet.Value);
+
+    [MethodImpl(TKConstants.Hot)]
     private static Color ReplaceDrawColorForItem(Color prevcolor, Item item)
         => item.ShouldDrawAsFullColored() ? Utility.GetPrismaticColor() : prevcolor;
+
+    [MethodImpl(TKConstants.Hot)]
+    private static Color ReplaceDrawColorForItem(Color prevcolor, ItemTypeEnum type, int parentSheetIndex)
+        => PrismaticFull.TryGetValue(type, out HashSet<int>? set) && set.Contains(parentSheetIndex) ? Utility.GetPrismaticColor() : prevcolor;
 
     [MethodImpl(TKConstants.Hot)]
     private static Texture2D? GetColorMask(this Item item)
@@ -102,11 +113,42 @@ internal static class DrawPrismatic
             && masks.TryGetValue(item.ParentSheetIndex, out Lazy<Texture2D>? mask) ? mask.Value : null;
 
     [MethodImpl(TKConstants.Hot)]
+    private static Texture2D? GetColorMask(this Ring ring)
+    => PrismaticMasks.TryGetValue(ItemTypeEnum.Ring, out Dictionary<int, Lazy<Texture2D>>? masks)
+        && masks.TryGetValue(ring.indexInTileSheet.Value, out Lazy<Texture2D>? mask) ? mask.Value : null;
+
+    [MethodImpl(TKConstants.Hot)]
     private static void DrawColorMask(Item item, SpriteBatch b, Rectangle position, float drawDepth)
     {
         if (item.GetColorMask() is Texture2D texture)
         {
-            b.Draw(texture, position, null, Utility.GetPrismaticColor(), 0f, Vector2.Zero, SpriteEffects.None, drawDepth);
+            b.Draw(
+                texture,
+                destinationRectangle: position,
+                sourceRectangle: null,
+                color: Utility.GetPrismaticColor(),
+                rotation: 0f,
+                origin: Vector2.Zero,
+                effects: SpriteEffects.None,
+                layerDepth: drawDepth + 0.001f);
+        }
+    }
+
+    [MethodImpl(TKConstants.Hot)]
+    private static void DrawColorMask(ItemTypeEnum type, int parentSheetIndex, SpriteBatch b, int x, int y, float drawDepth)
+    {
+        if (PrismaticMasks.TryGetValue(type, out Dictionary<int, Lazy<Texture2D>>? masks) && masks.TryGetValue(parentSheetIndex, out Lazy<Texture2D>? mask))
+        {
+            b.Draw(
+                texture: mask.Value,
+                new Vector2(x, y),
+                sourceRectangle: null,
+                color: Utility.GetPrismaticColor(),
+                rotation: 0,
+                origin: Vector2.Zero,
+                scale: 4f,
+                effects: SpriteEffects.None,
+                layerDepth: drawDepth + 0.001f);
         }
     }
 
@@ -124,10 +166,12 @@ internal static class DrawPrismatic
         float layerDepth,
         SObject obj)
     {
+        position.X = (int)position.X;
+        position.Y = (int)position.Y;
         b.Draw(texture, position, sourceRectangle, color, rotation, origin, scale, effects, layerDepth);
         if (obj.GetColorMask() is Texture2D tex)
         {
-            b.Draw(tex, position, null, Utility.GetPrismaticColor(), rotation, origin, scale, effects, layerDepth);
+            b.Draw(tex, position, null, Utility.GetPrismaticColor(), rotation, origin, scale, effects, layerDepth + 0.001f);
         }
     }
     #endregion
@@ -206,7 +250,7 @@ internal static class DrawPrismatic
                     origin: new Vector2(8f, 8f) * scaleSize,
                     scale: scaleSize * 4f,
                     effects: SpriteEffects.None,
-                    layerDepth: layerDepth);
+                    layerDepth: layerDepth + 0.01f);
             }
         }
         catch (Exception ex)
@@ -214,6 +258,83 @@ internal static class DrawPrismatic
             ModEntry.ModMonitor.Log($"Failed in drawing prismatic mask\n\n{ex}", LogLevel.Error);
         }
         return;
+    }
+
+    [UsedImplicitly]
+    [HarmonyTranspiler]
+    [HarmonyPatch(typeof(CraftingRecipe), nameof(CraftingRecipe.drawMenuView))]
+    private static IEnumerable<CodeInstruction>? TranspileCraftingRecipes(IEnumerable<CodeInstruction> instructions, ILGenerator gen, MethodBase original)
+    {
+        try
+        {
+            ILHelper helper = new(original, instructions, ModEntry.ModMonitor, gen);
+
+            helper.FindNext(new CodeInstructionWrapper[]
+            {
+                (OpCodes.Call, typeof(Color).GetCachedProperty("White", ReflectionCache.FlagTypes.StaticFlags).GetGetMethod()),
+            })
+            .Advance(1)
+            .Insert(new CodeInstruction[]
+            {
+                new(OpCodes.Ldc_I4, (int)ItemTypeEnum.BigCraftable),
+                new(OpCodes.Ldarg_0),
+                new(OpCodes.Call, typeof(CraftingRecipe).GetCachedMethod(nameof(CraftingRecipe.getIndexOfMenuView), ReflectionCache.FlagTypes.InstanceFlags)),
+                new(OpCodes.Call, typeof(DrawPrismatic).GetCachedMethod<Color, ItemTypeEnum, int>(nameof(ReplaceDrawColorForItem), ReflectionCache.FlagTypes.StaticFlags)),
+            })
+            .FindNext(new CodeInstructionWrapper[]
+            {
+                (OpCodes.Call, typeof(Utility).GetCachedMethod(nameof(Utility.drawWithShadow), ReflectionCache.FlagTypes.StaticFlags)),
+            })
+            .Advance(1)
+            .Insert(new CodeInstruction[]
+            {
+                new(OpCodes.Ldc_I4, (int)ItemTypeEnum.BigCraftable),
+                new(OpCodes.Ldarg_0),
+                new(OpCodes.Call, typeof(CraftingRecipe).GetCachedMethod(nameof(CraftingRecipe.getIndexOfMenuView), ReflectionCache.FlagTypes.InstanceFlags)),
+                new(OpCodes.Ldarg_1), // spritebatch
+                new(OpCodes.Ldarg_2), // x
+                new(OpCodes.Ldarg_3), // y
+                new(OpCodes.Ldarga_S, 4),
+                new(OpCodes.Call, typeof(DrawPrismatic).GetCachedMethod(nameof(DrawColorMask), ReflectionCache.FlagTypes.StaticFlags, new[] { typeof(ItemTypeEnum), typeof(int), typeof(SpriteBatch), typeof(int), typeof(int), typeof(float) } )),
+            })
+            .FindNext(new CodeInstructionWrapper[]
+            {
+                (OpCodes.Call, typeof(Color).GetCachedProperty("White", ReflectionCache.FlagTypes.StaticFlags).GetGetMethod()),
+            })
+            .Advance(1)
+            .Insert(new CodeInstruction[]
+            {
+                new(OpCodes.Ldc_I4, (int)ItemTypeEnum.SObject),
+                new(OpCodes.Ldarg_0),
+                new(OpCodes.Call, typeof(CraftingRecipe).GetCachedMethod(nameof(CraftingRecipe.getIndexOfMenuView), ReflectionCache.FlagTypes.InstanceFlags)),
+                new(OpCodes.Call, typeof(DrawPrismatic).GetCachedMethod<Color, ItemTypeEnum, int>(nameof(ReplaceDrawColorForItem), ReflectionCache.FlagTypes.StaticFlags)),
+            })
+            .FindNext(new CodeInstructionWrapper[]
+            {
+                (OpCodes.Call, typeof(Utility).GetCachedMethod(nameof(Utility.drawWithShadow), ReflectionCache.FlagTypes.StaticFlags)),
+            })
+            .Advance(1)
+            .Insert(new CodeInstruction[]
+            {
+                new(OpCodes.Ldc_I4, (int)ItemTypeEnum.SObject),
+                new(OpCodes.Ldarg_0),
+                new(OpCodes.Call, typeof(CraftingRecipe).GetCachedMethod(nameof(CraftingRecipe.getIndexOfMenuView), ReflectionCache.FlagTypes.InstanceFlags)),
+                new(OpCodes.Ldarg_1), // spritebatch
+                new(OpCodes.Ldarg_2), // x
+                new(OpCodes.Ldarg_3), // y
+                new(OpCodes.Ldarga_S, 4),
+                new(OpCodes.Call, typeof(DrawPrismatic).GetCachedMethod(nameof(DrawColorMask), ReflectionCache.FlagTypes.StaticFlags, new[] { typeof(ItemTypeEnum), typeof(int), typeof(SpriteBatch), typeof(int), typeof(int), typeof(float) } )),
+            });
+
+            // helper.Print();
+            return helper.Render();
+        }
+        catch (Exception ex)
+        {
+            ModEntry.ModMonitor.Log($"Mod crashed while transpiling {original.GetFullName()}\n\n{ex}", LogLevel.Error);
+            original.Snitch(ModEntry.ModMonitor);
+        }
+        return null;
     }
 
     [UsedImplicitly]
@@ -237,7 +358,7 @@ internal static class DrawPrismatic
                 .Insert(new CodeInstruction[]
                 {
                     new(OpCodes.Ldarg_0),
-                    new(OpCodes.Call, typeof(DrawPrismatic).GetCachedMethod(nameof(ReplaceDrawColorForItem), ReflectionCache.FlagTypes.StaticFlags)),
+                    new(OpCodes.Call, typeof(DrawPrismatic).GetCachedMethod<Color, Item>(nameof(ReplaceDrawColorForItem), ReflectionCache.FlagTypes.StaticFlags)),
                 })
                 .FindNext(new CodeInstructionWrapper[]
                 {
@@ -259,10 +380,10 @@ internal static class DrawPrismatic
         }
         return null;
     }
-#warning - the other draw method...
 
     [UsedImplicitly]
     [HarmonyTranspiler]
+    [HarmonyBefore("Digus.ProducerFrameworkMod")]
     [SuppressMessage("SMAPI.CommonErrors", "AvoidNetField:Avoid Netcode types when possible", Justification = "Used for matching only.")]
     [HarmonyPatch(typeof(SObject), nameof(SObject.draw), new[] { typeof(SpriteBatch), typeof(int), typeof(int), typeof(float) } )]
     private static IEnumerable<CodeInstruction>? TranspileSObjectDraw(IEnumerable<CodeInstruction> instructions, ILGenerator gen, MethodBase original)
@@ -304,7 +425,7 @@ internal static class DrawPrismatic
             .Insert(new CodeInstruction[]
             {
                 new(OpCodes.Ldarg_0),
-                new(OpCodes.Call, typeof(DrawPrismatic).GetCachedMethod(nameof(ReplaceDrawColorForItem), ReflectionCache.FlagTypes.StaticFlags)),
+                new(OpCodes.Call, typeof(DrawPrismatic).GetCachedMethod<Color, Item>(nameof(ReplaceDrawColorForItem), ReflectionCache.FlagTypes.StaticFlags)),
             })
             .FindNext(new CodeInstructionWrapper[]
             {
@@ -321,7 +442,7 @@ internal static class DrawPrismatic
                 new(OpCodes.Ldarg_1),
                 destination,
                 layerDepth,
-                new(OpCodes.Call, typeof(DrawPrismatic).GetCachedMethod(nameof(DrawColorMask), ReflectionCache.FlagTypes.StaticFlags)),
+                new(OpCodes.Call, typeof(DrawPrismatic).GetCachedMethod<Item, SpriteBatch, Rectangle, float>(nameof(DrawColorMask), ReflectionCache.FlagTypes.StaticFlags)),
             });
 
             // alright! Now to deal with normal SObjects
@@ -345,7 +466,7 @@ internal static class DrawPrismatic
             .Insert(new CodeInstruction[]
             {
                 new(OpCodes.Ldarg_0),
-                new(OpCodes.Call, typeof(DrawPrismatic).GetCachedMethod(nameof(ReplaceDrawColorForItem), ReflectionCache.FlagTypes.StaticFlags)),
+                new(OpCodes.Call, typeof(DrawPrismatic).GetCachedMethod<Color, Item>(nameof(ReplaceDrawColorForItem), ReflectionCache.FlagTypes.StaticFlags)),
             })
             .FindNext(new CodeInstructionWrapper[]
             {
@@ -382,7 +503,7 @@ internal static class DrawPrismatic
             .Insert(codes.ToArray())
             .Insert(new CodeInstruction[]
             {
-                new(OpCodes.Call, typeof(DrawPrismatic).GetCachedMethod(nameof(ReplaceDrawColorForItem), ReflectionCache.FlagTypes.StaticFlags)),
+                new(OpCodes.Call, typeof(DrawPrismatic).GetCachedMethod<Color, Item>(nameof(ReplaceDrawColorForItem), ReflectionCache.FlagTypes.StaticFlags)),
             })
             .FindNext(new CodeInstructionWrapper[]
             {
@@ -455,7 +576,7 @@ internal static class DrawPrismatic
                     origin: new Vector2(8f, 8f) * scaleSize,
                     scale: scaleSize * 4f,
                     effects: SpriteEffects.None,
-                    layerDepth: layerDepth);
+                    layerDepth: layerDepth + 0.001f);
             }
         }
         catch (Exception ex)
@@ -516,7 +637,7 @@ internal static class DrawPrismatic
                     origin: new Vector2(8f, 8f) * scaleSize,
                     scale: scaleSize * 4f,
                     effects: SpriteEffects.None,
-                    layerDepth: layerDepth);
+                    layerDepth: layerDepth + 0.001f);
             }
         }
         catch (Exception ex)

@@ -1,6 +1,9 @@
-﻿using AtraCore.Framework.Caches;
+﻿using AtraBase.Toolkit.Extensions;
+
+using AtraCore.Framework.Caches;
 
 using AtraShared.Caching;
+using AtraShared.Utils.Extensions;
 
 using StardewModdingAPI.Events;
 using StardewModdingAPI.Utilities;
@@ -11,6 +14,7 @@ namespace GingerIslandMainlandAdjustments.AssetManagers;
 /// <summary>
 /// Manages asset editing for this mod.
 /// </summary>
+[SuppressMessage("StyleCop.CSharp.OrderingRules", "SA1202:Elements should be ordered by access", Justification = "Reviewed.")]
 internal static class AssetEditor
 {
     /// <summary>
@@ -29,15 +33,24 @@ internal static class AssetEditor
     private static readonly PerScreen<TickCache<bool>> HasSeenPamEvent = new(
         static () => new(() => Game1.player?.eventsSeen?.Contains(PAMEVENT) == true));
 
-    private static readonly string Dialogue = PathUtilities.NormalizeAssetName("Characters/Dialogue");
+    /// <summary>
+    /// The dialogue prefix.
+    /// </summary>
+    internal static readonly string Dialogue = PathUtilities.NormalizeAssetName("Characters/Dialogue") + "/";
 
-    // The following dialogue is edited from the code side so each NPC has at least the Resort dialogue.
-    // A CP pack will override as these are set to edit early.
-    private static IAssetName georgeDialogueLocation = null!;
-    private static IAssetName evelynDialogueLocation = null!;
-    private static IAssetName sandyDialogueLocation = null!;
-    private static IAssetName willyDialogueLocation = null!;
-    private static IAssetName wizardDialogueLocation = null!;
+    private static readonly Dictionary<string, Action<IAssetData>> DialoguesToEdit = new(comparer: StringComparer.OrdinalIgnoreCase)
+    {
+        ["George"] = EditGeorgeDialogue,
+        ["Evelyn"] = EditEvelynDialogue,
+        ["Sandy"] = EditSandyDialogue,
+        ["Willy"] = EditWillyDialogue,
+        ["Wizard"] = EditWizardDialogue,
+    };
+
+    /// <summary>
+    /// Gets the NPCs who have dialogue we should edit.
+    /// </summary>
+    internal static IEnumerable<string> CharacterDialogues => DialoguesToEdit.Keys;
 
     // We edit Pam's phone dialogue into Strings/Characters so content packs can target that.
     private static IAssetName phoneStringLocation = null!;
@@ -50,19 +63,15 @@ internal static class AssetEditor
     // This currently isn't used for anything.
     private static IAssetName dataEventsTrailerBig = null!;
 
+    // This stashes our LocalizedContentManager, should we need to restore a schedule
+    private static LocalizedContentManager? contentManager;
+
     /// <summary>
     /// Initializes the AssetEditor.
     /// </summary>
     /// <param name="parser">GameContentHelper.</param>
     internal static void Initialize(IGameContentHelper parser)
     {
-        // dialogue
-        georgeDialogueLocation = parser.ParseAssetName("Characters/Dialogue/George");
-        evelynDialogueLocation = parser.ParseAssetName("Characters/Dialogue/Evelyn");
-        sandyDialogueLocation = parser.ParseAssetName("Characters/Dialogue/Sandy");
-        willyDialogueLocation = parser.ParseAssetName("Characters/Dialogue/Willy");
-        wizardDialogueLocation = parser.ParseAssetName("Characters/Dialogue/Wizard");
-
         // phone
         phoneStringLocation = parser.ParseAssetName("Strings/Characters");
 
@@ -70,6 +79,15 @@ internal static class AssetEditor
         dataEventsSeedshop = parser.ParseAssetName("Data/Events/SeedShop");
         dataMail = parser.ParseAssetName("Data/mail");
         dataEventsTrailerBig = parser.ParseAssetName("Data/Events/Trailer_Big");
+    }
+
+    /// <summary>
+    /// Disposes the content manager. Called when our mod instance is disposed.
+    /// </summary>
+    internal static void DisposeContentManager()
+    {
+        contentManager?.Dispose();
+        contentManager = null;
     }
 
     /// <summary>
@@ -82,41 +100,65 @@ internal static class AssetEditor
         {
             e.Edit(EditPhone, AssetEditPriority.Early);
         }
-        else if (HasSeenNineHeart.Value.GetValue() && !HasSeenPamEvent.Value.GetValue() && e.NameWithoutLocale.IsEquivalentTo(dataEventsSeedshop))
-        {
-            e.Edit(EditSeedShopEvent, AssetEditPriority.Late);
-        }
         else if (e.NameWithoutLocale.IsEquivalentTo(dataMail))
         {
             e.Edit(EditMail, AssetEditPriority.Late);
+        }
+        else if (HasSeenNineHeart.Value.GetValue() && !HasSeenPamEvent.Value.GetValue() && e.NameWithoutLocale.IsEquivalentTo(dataEventsSeedshop))
+        {
+            e.Edit(EditSeedShopEvent, AssetEditPriority.Late);
         }
         else if (!HasSeenNineHeart.Value.GetValue() && e.NameWithoutLocale.IsEquivalentTo(dataEventsTrailerBig))
         {
             e.Edit(EditTrailerBig, AssetEditPriority.Late);
         }
-        else if (e.NameWithoutLocale.BaseName.StartsWith(Dialogue)
+        else if (e.NameWithoutLocale.StartsWith("Characters/schedules/", false, false))
+        {
+            e.Edit(CheckSpringSchedule, AssetEditPriority.Late + 100);
+        }
+        else if (e.NameWithoutLocale.StartsWith(Dialogue, false, false)
             && Game1.getLocationFromName("IslandSouth") is IslandSouth island && island.resortRestored.Value)
         {
-            if (e.NameWithoutLocale.IsEquivalentTo(georgeDialogueLocation))
+            string npcName = e.NameWithoutLocale.BaseName.GetNthChunk('/', 2).ToString();
+            if (DialoguesToEdit.TryGetValue(npcName, out Action<IAssetData>? editor))
             {
-                e.Edit(EditGeorgeDialogue, AssetEditPriority.Early);
+                e.Edit(editor, AssetEditPriority.Early);
             }
-            else if (e.NameWithoutLocale.IsEquivalentTo(evelynDialogueLocation))
+        }
+    }
+
+    private static void CheckSpringSchedule(IAssetData e)
+    {
+        // SVE removes Sandy's spring schedule for some reason, this can cause issues if she goes to the resort.
+        Globals.ModMonitor.DebugOnlyLog($"Checking schedule {e.NameWithoutLocale}", LogLevel.Info);
+
+        IAssetDataForDictionary<string, string> editor = e.AsDictionary<string, string>();
+        if (!editor.Data.ContainsKey("spring") && !editor.Data.ContainsKey("default"))
+        {
+            string character = e.NameWithoutLocale.BaseName.GetNthChunk('/', 2).ToString();
+            Globals.ModMonitor.Log($"Found NPC {character} without either a spring or default schedule. This may cause issues.", LogLevel.Warn);
+            contentManager ??= new(Game1.content.ServiceProvider, Game1.content.RootDirectory);
+            try
             {
-                e.Edit(EditEvelynDialogue, AssetEditPriority.Early);
+                Dictionary<string, string> original = contentManager.LoadBase<Dictionary<string, string>>(e.NameWithoutLocale.BaseName);
+                if (original.TryGetValue("spring", out string? data))
+                {
+                    Globals.ModMonitor.Log($"Original spring schedule found: {data}. Adding back", LogLevel.Info);
+                    editor.Data["spring"] = data;
+                    return;
+                }
+                else if (original.TryGetValue("default", out string? @default))
+                {
+                    Globals.ModMonitor.Log($"Original default schedule found: {@default}. Adding back", LogLevel.Info);
+                    editor.Data["default"] = @default;
+                    return;
+                }
             }
-            else if (e.NameWithoutLocale.IsEquivalentTo(sandyDialogueLocation))
+            catch (Exception ex)
             {
-                e.Edit(EditSandyDialogue, AssetEditPriority.Early);
+                Globals.ModMonitor.Log($"Could not find original schedule for {character}:\n\n{ex}");
             }
-            else if (e.NameWithoutLocale.IsEquivalentTo(willyDialogueLocation))
-            {
-                e.Edit(EditWillyDialogue, AssetEditPriority.Early);
-            }
-            else if (e.NameWithoutLocale.IsEquivalentTo(wizardDialogueLocation))
-            {
-                e.Edit(EditWizardDialogue, AssetEditPriority.Early);
-            }
+            Globals.ModMonitor.Log($"Could not restore spring schedule for {character}.", LogLevel.Warn);
         }
     }
 

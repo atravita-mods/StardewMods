@@ -17,7 +17,7 @@ internal static class PostfixGreenSlime
     {
         if (ModEntry.PrismaticSlimeEgg != -1
             && __instance.prismatic.Value
-            && Game1.random.Next(8) == 0)
+            && Game1.random.Next(2) == 0)
         {
             __result.Add(new SObject(ModEntry.PrismaticSlimeEgg, 1));
         }

@@ -17,8 +17,8 @@ namespace LastDayToPlantRedux;
 /// <inheritdoc />
 internal sealed class ModEntry : Mod
 {
-    private MigrationManager? migrator;
     private readonly PerScreen<bool> hasSeeds = new(() => false);
+    private MigrationManager? migrator;
 
     /// <summary>
     /// Gets the logger for this mod.
@@ -37,6 +37,8 @@ internal sealed class ModEntry : Mod
         ModMonitor = this.Monitor;
         I18n.Init(helper.Translation);
         AssetManager.Initialize(helper.GameContent);
+
+        this.Monitor.Log($"Starting up: {this.ModManifest.UniqueID} - {typeof(ModEntry).Assembly.FullName}");
 
         Config = AtraUtils.GetConfigOrDefault<ModConfig>(helper, this.Monitor);
         helper.Events.GameLoop.GameLaunched += this.OnGameLaunched;

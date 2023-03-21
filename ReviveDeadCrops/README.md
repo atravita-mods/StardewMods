@@ -2,7 +2,9 @@ Revive Dead Crops
 =================================
 ![Header image](docs/revive.gif)
 
-This mod lets you revive dead crops. They'll still die that day, however, so be careful!
+This mod lets you revive dead crops using fairy dust. They'll still die that day, however, so be careful!
+
+You can also revive any fruit trees you accidentally cut down.
 
 ## Install
 

@@ -21,6 +21,8 @@ internal class ModEntry : Mod
         ModMonitor = this.Monitor;
         AssetManager.Initialize(helper.GameContent);
 
+        this.Monitor.Log($"Starting up: {this.ModManifest.UniqueID} - {typeof(ModEntry).Assembly.FullName}");
+
 #if DEBUG
         helper.Events.Input.ButtonPressed += this.OnButtonPressed;
 #endif

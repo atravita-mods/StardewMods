@@ -34,8 +34,6 @@ internal sealed class ModEntry : Mod
 
     private MigrationManager? migrator;
 
-    private GiantCropFertilizerIDStorage? storedID;
-
     [SuppressMessage("StyleCop.CSharp.OrderingRules", "SA1204:Static elements should appear before instance elements", Justification = "Field kept near property.")]
     private static int giantCropFertilizerID = -1;
 
@@ -74,29 +72,19 @@ internal sealed class ModEntry : Mod
         ModMonitor = this.Monitor;
 
         Config = AtraUtils.GetConfigOrDefault<ModConfig>(helper, this.Monitor);
+        this.Monitor.Log($"Starting up: {this.ModManifest.UniqueID} - {typeof(ModEntry).Assembly.FullName}");
 
         helper.Events.GameLoop.GameLaunched += this.OnGameLaunched;
     }
 
-    private void OnSaved(object? sender, SavedEventArgs e)
+    private void OnSaving(object? sender, SavingEventArgs e)
     {
         if (Context.IsMainPlayer)
         {
-            Task.Run(() => this.Helper.Data.WriteGlobalData(
-                  SAVESTRING,
-                  this.storedID ?? new GiantCropFertilizerIDStorage(GiantCropFertilizerID)))
-                .ContinueWith(t =>
-                {
-                    if (t.IsCompletedSuccessfully)
-                    {
-                        this.Helper.Events.GameLoop.Saved -= this.OnSaved;
-                    }
-                    else
-                    {
-                        this.Monitor.Log($"Failed to save ids: {t.Status} - {t.Exception}", LogLevel.Error);
-                    }
-                });
+            this.Helper.Data.WriteSaveData(SAVESTRING, GiantCropFertilizerID.ToString());
+            this.Monitor.Log($"Saved IDs!", LogLevel.Info);
         }
+        this.Helper.Events.GameLoop.Saving -= this.OnSaving;
     }
 
     /// <summary>
@@ -135,6 +123,7 @@ internal sealed class ModEntry : Mod
             }
 
             if (new Version(1, 6) > new Version(Game1.version) &&
+                !this.Helper.ModRegistry.IsLoaded("atravita.GrowableGiantCrops") &&
                 (this.Helper.ModRegistry.Get("spacechase0.MoreGiantCrops") is not IModInfo giant || giant.Manifest.Version.IsOlderThan("1.2.0")))
             {
                 this.Monitor.Log("Applying patch to restore giant crops to save locations", LogLevel.Debug);
@@ -219,6 +208,7 @@ internal sealed class ModEntry : Mod
         {
             this.migrator = null;
         }
+
         this.GrabIds();
         if (Context.IsMainPlayer)
         {
@@ -226,7 +216,7 @@ internal sealed class ModEntry : Mod
         }
     }
 
-    /// <inheritdoc cref="IGameLoopEvents.Saved"/>
+    /// <inheritdoc cref="IGameLoopEvents.Save"/>
     /// <remarks>
     /// Writes migration data then detaches the migrator.
     /// </remarks>
@@ -266,20 +256,20 @@ internal sealed class ModEntry : Mod
             this.Monitor.Log($"Could not get ID from JA.");
         }
 
-        if (this.Helper.Data.ReadGlobalData<GiantCropFertilizerIDStorage>(SAVESTRING) is not GiantCropFertilizerIDStorage storedIDCls
-            || storedIDCls.ID == -1)
+        int storedID;
+        if (this.Helper.Data.ReadSaveData<string>(SAVESTRING) is not string savedIdstring || !int.TryParse(savedIdstring, out storedID))
         {
-            this.storedID = new GiantCropFertilizerIDStorage(GiantCropFertilizerID);
+            if (this.Helper.Data.ReadGlobalData<GiantCropFertilizerIDStorage>(SAVESTRING) is not GiantCropFertilizerIDStorage storedIDCls
+                || storedIDCls.ID == -1)
+            {
+                this.Helper.Events.GameLoop.Saving -= this.OnSaving;
+                this.Helper.Events.GameLoop.Saving += this.OnSaving;
 
-            this.Helper.Events.GameLoop.Saved -= this.OnSaved;
-            this.Helper.Events.GameLoop.Saved += this.OnSaved;
-
-            ModMonitor.Log("No need to fix IDs, not installed before.");
-            return;
+                ModMonitor.Log("No need to fix IDs, not installed before.");
+                return;
+            }
+            storedID = storedIDCls.ID;
         }
-
-        this.storedID = storedIDCls;
-        int storedID = this.storedID.ID;
 
         if (storedID == newID)
         {
@@ -287,8 +277,8 @@ internal sealed class ModEntry : Mod
             return;
         }
 
-        this.Helper.Events.GameLoop.Saved -= this.OnSaved;
-        this.Helper.Events.GameLoop.Saved += this.OnSaved;
+        this.Helper.Events.GameLoop.Saving -= this.OnSaving;
+        this.Helper.Events.GameLoop.Saving += this.OnSaving;
 
         IntegrationHelper helper = new(this.Monitor, this.Helper.Translation, this.Helper.ModRegistry, LogLevel.Trace);
         if (this.solidFoundationsAPI is not null || helper.TryGetAPI("PeacefulEnd.SolidFoundations", "1.12.1", out this.solidFoundationsAPI))
@@ -301,7 +291,6 @@ internal sealed class ModEntry : Mod
 
         Utility.ForAllLocations((GameLocation loc) => loc.FixIDsInLocation(storedID, newID));
 
-        this.storedID.ID = newID;
         ModMonitor.Log($"Fixed IDs! {storedID} => {newID}");
     }
 

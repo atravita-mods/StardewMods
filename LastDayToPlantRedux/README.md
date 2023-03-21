@@ -2,7 +2,7 @@ Last Day To Plant Redux
 ===========================
 ![Header image](docs/letter.png)
 
-Look, I just wanted a mod of this type to handle the fertilizers from [More Fertilizers](../More Fertilizers/More Fertilizers), okay?
+Look, I just wanted a mod of this type to handle the fertilizers from [More Fertilizers](../MoreFertilizers/MoreFertilizers), okay?
 
 Inspired by [LastDayToPlant](https://www.nexusmods.com/stardewvalley/mods/7917?tab=posts), this mod calculates the last day you can plant certain crops, taking into account fertilizers (including mod fertilizers!)
 

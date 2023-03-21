@@ -15,22 +15,32 @@ using StardewValley.TerrainFeatures;
 namespace TapGiantCrops.Framework;
 
 /// <summary>
-/// API instance for Tap Giant Crops.
+/// API class for Tap Giant Crops.
 /// </summary>
+
+[SuppressMessage("StyleCop.CSharp.OrderingRules", "SA1201:Elements should appear in the correct order", Justification = "Reviewed.")]
 public sealed class TapGiantCrop : ITapGiantCropsAPI
 {
+    #region delegates
+
     /// <summary>
-    /// Stardew's Bush::shake.
+    /// A setter to shake a giant crop.
     /// </summary>
     private static readonly Action<GiantCrop, float> GiantCropSetShake = typeof(GiantCrop)
         .GetCachedField("shakeTimer", ReflectionCache.FlagTypes.InstanceFlags)
         .GetInstanceFieldSetter<GiantCrop, float>();
 
-    private static void ShakeGiantCrop(GiantCrop crop)
+    /// <summary>
+    /// A method that shakes a giant crop.
+    /// </summary>
+    /// <param name="crop">Crop to shake</param>
+    internal static void ShakeGiantCrop(GiantCrop crop)
     {
         GiantCropSetShake(crop, 100f);
         crop.NeedsUpdate = true;
     }
+
+    #endregion
 
     private SObject keg = null!;
 
@@ -60,6 +70,14 @@ public sealed class TapGiantCrop : ITapGiantCropsAPI
             SObject tapper = (SObject)obj.getOne();
             if (GetGiantCropAt(loc, tile) is GiantCrop giant)
             {
+                LargeTerrainFeature? terrain = loc.getLargeTerrainFeatureAt((int)tile.X, (int)tile.Y);
+                if (terrain is not null && FarmTypeManagerShims.GetEmbeddedResourceClump?.Invoke(terrain) is GiantCrop crop)
+                {
+                    // Moving crop to the normal location.
+                    loc.largeTerrainFeatures.Remove(terrain);
+                    loc.resourceClumps.Add(crop);
+                }
+
                 (SObject obj, int days)? output = this.GetTapperProduct(giant, tapper);
                 if (output is not null)
                 {
@@ -146,9 +164,27 @@ public sealed class TapGiantCrop : ITapGiantCropsAPI
 
     private static GiantCrop? GetGiantCropAt(GameLocation loc, Vector2 tile)
     {
-        foreach(ResourceClump? clump in loc.resourceClumps)
+        if (loc.resourceClumps is not null)
         {
-            if (clump is GiantCrop crop && !(DynamicGameAssetsShims.IsDGAGiantCrop?.Invoke(crop) == true))
+            foreach (ResourceClump? clump in loc.resourceClumps)
+            {
+                if (clump is GiantCrop crop && !(DynamicGameAssetsShims.IsDGAGiantCrop?.Invoke(crop) == true))
+                {
+                    Vector2 offset = tile;
+                    offset.Y -= crop.height.Value - 1;
+                    offset.X -= crop.width.Value / 2;
+                    if (crop.tile.Value.X.WithinMargin(offset.X) && crop.tile.Value.Y.WithinMargin(offset.Y))
+                    {
+                        return crop;
+                    }
+                }
+            }
+        }
+        if (FarmTypeManagerShims.GetEmbeddedResourceClump is not null && loc.largeTerrainFeatures is not null)
+        {
+            LargeTerrainFeature terrain = loc.getLargeTerrainFeatureAt((int)tile.X, (int)tile.Y);
+            if (terrain is not null && FarmTypeManagerShims.GetEmbeddedResourceClump(terrain) is GiantCrop crop
+                && !(DynamicGameAssetsShims.IsDGAGiantCrop?.Invoke(crop) == true))
             {
                 Vector2 offset = tile;
                 offset.Y -= crop.height.Value - 1;
@@ -159,6 +195,7 @@ public sealed class TapGiantCrop : ITapGiantCropsAPI
                 }
             }
         }
+
         return null;
     }
 }

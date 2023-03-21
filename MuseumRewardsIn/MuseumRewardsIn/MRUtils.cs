@@ -3,8 +3,17 @@ using Microsoft.Xna.Framework;
 using StardewValley.Objects;
 
 namespace MuseumRewardsIn;
+
+/// <summary>
+/// The utility class for this mod.
+/// </summary>
 internal static class MRUtils
 {
+    /// <summary>
+    /// Finds the items attached to a mail string.
+    /// </summary>
+    /// <param name="mail">The mail data to process.</param>
+    /// <returns>The items attached.</returns>
     internal static IEnumerable<SObject> ParseItemsFromMail(this string mail)
     {
         int startindex = mail.IndexOf("%item");
@@ -14,6 +23,10 @@ internal static class MRUtils
         }
 
         int endindex = mail.IndexOf("%%", startindex);
+        if (endindex < 0)
+        {
+            return Enumerable.Empty<SObject>();
+        }
 
         ReadOnlySpan<char> substring = mail.AsSpan(startindex, endindex - startindex).Trim();
         if (substring.Length <= 0)

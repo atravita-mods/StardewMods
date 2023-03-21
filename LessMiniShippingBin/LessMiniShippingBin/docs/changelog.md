@@ -1,6 +1,9 @@
 ﻿Changelog
 ===============
 
+### Version 0.3.2
+* Fix up translations, how did I not notice.
+
 ### Version 0.3.1
 * No real changes, just recompiled for new atracore.
 

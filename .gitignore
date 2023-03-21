@@ -70,6 +70,7 @@ output
 
 # Zip files
 *.zip
+*.7z
 
 # Config files
 *.config\.json

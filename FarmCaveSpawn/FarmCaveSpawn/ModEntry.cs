@@ -24,6 +24,7 @@ using StardewModdingAPI.Events;
 using StardewValley.Locations;
 
 using AtraUtils = AtraShared.Utils.Utils;
+using XLocation = xTile.Dimensions.Location;
 
 namespace FarmCaveSpawn;
 
@@ -33,11 +34,13 @@ internal sealed class ModEntry : Mod
     /// <summary>
     /// Sublocation-parsing regex.
     /// </summary>
-    private readonly Regex regex = new(
+    private static readonly Regex Regex = new(
         // ":[(x1;y1);(x2;y2)]"
         pattern: @":\[\((?<x1>[0-9]+);(?<y1>[0-9]+)\);\((?<x2>[0-9]+);(?<y2>[0-9]+)\)\]$",
         options: RegexOptions.CultureInvariant | RegexOptions.Compiled,
         matchTimeout: TimeSpan.FromMilliseconds(250));
+
+    private static bool ShouldResetFruitList = true;
 
     /// <summary>
     /// The item IDs for the four basic forage fruit.
@@ -55,8 +58,6 @@ internal sealed class ModEntry : Mod
     private List<int> TreeFruit = new();
 
     private StardewSeasons season = StardewSeasons.None;
-
-    private bool ShouldResetFruitList = true;
 
     private MigrationManager? migrator;
 
@@ -85,13 +86,22 @@ internal sealed class ModEntry : Mod
         AssetManager.Initialize(helper.GameContent);
 
         this.config = AtraUtils.GetConfigOrDefault<ModConfig>(helper, this.Monitor);
+        this.Monitor.Log($"Starting up: {this.ModManifest.UniqueID} - {typeof(ModEntry).Assembly.FullName}");
 
         helper.Events.GameLoop.DayStarted += this.SpawnFruit;
         helper.Events.GameLoop.GameLaunched += this.SetUpConfig;
         helper.Events.GameLoop.OneSecondUpdateTicking += this.BellsAndWhistles;
         helper.Events.GameLoop.SaveLoaded += this.SaveLoaded;
 
-        helper.Events.Content.AssetRequested += this.OnAssetRequested;
+        helper.Events.Content.AssetRequested += static (_, e) => AssetManager.Load(e);
+
+        // inventory watching
+        InventoryWatcher.Initialize(this.ModManifest.UniqueID);
+        helper.Events.GameLoop.SaveLoaded += (_, _) => InventoryWatcher.Load(helper.Multiplayer, helper.Data);
+        helper.Events.Player.InventoryChanged += (_, e) => InventoryWatcher.Watch(e, helper.Multiplayer);
+        helper.Events.Multiplayer.PeerConnected += (_, e) => InventoryWatcher.OnPeerConnected(e, helper.Multiplayer);
+        helper.Events.Multiplayer.ModMessageReceived += static (_, e) => InventoryWatcher.OnModMessageRecieved(e);
+        helper.Events.GameLoop.Saving += (_, _) => InventoryWatcher.Saving(helper.Data);
 
         helper.ConsoleCommands.Add(
             name: "av.fcs.list_fruits",
@@ -99,8 +109,10 @@ internal sealed class ModEntry : Mod
             callback: this.ListFruits);
     }
 
-    private void OnAssetRequested(object? sender, AssetRequestedEventArgs e)
-        => AssetManager.Load(e);
+    /// <summary>
+    /// Request the fruit list be reset the next time it's used.
+    /// </summary>
+    internal static void RequestFruitListReset() => ShouldResetFruitList = true;
 
     /// <summary>
     /// Remove the list TreeFruit when no longer necessary, delete the Random as well.
@@ -125,7 +137,7 @@ internal sealed class ModEntry : Mod
                 save: () =>
                 {
                     this.Helper.AsyncWriteConfig(this.Monitor, this.config);
-                    this.ShouldResetFruitList = true;
+                    ShouldResetFruitList = true;
                 })
             .AddParagraph(I18n.Mod_Description)
             .GenerateDefaultGMCM(() => this.config);
@@ -181,13 +193,13 @@ internal sealed class ModEntry : Mod
 
         int count = 0;
 
-        StardewSeasons currentSeason = StardewSeasonsExtensions.TryParse(Game1.currentSeason, ignoreCase: true, out StardewSeasons val) ? val : StardewSeasons.All;
-        if (this.ShouldResetFruitList || this.season != currentSeason)
+        StardewSeasons currentSeason = StardewSeasonsExtensions.TryParse(Game1.currentSeason, value: out StardewSeasons val, ignoreCase: true) ? val : StardewSeasons.All;
+        if (ShouldResetFruitList || this.season != currentSeason)
         {
             this.TreeFruit = this.GetTreeFruits();
         }
         this.season = currentSeason;
-        this.ShouldResetFruitList = false;
+        ShouldResetFruitList = false;
 
         if (Game1.getLocationFromName("FarmCave") is FarmCave farmcave)
         {
@@ -234,7 +246,7 @@ internal sealed class ModEntry : Mod
                 };
                 try
                 {
-                    MatchCollection matches = this.regex.Matches(location);
+                    MatchCollection matches = Regex.Matches(location);
                     if (matches.Count == 1)
                     {
                         Match match = matches[0];
@@ -331,7 +343,9 @@ END:
 
     [MethodImpl(TKConstants.Hot)]
     private bool CanSpawnFruitHere(GameLocation location, Vector2 tile)
-        => this.Random.NextDouble() < this.config.SpawnChance / 100f && location.isTileLocationTotallyClearAndPlaceableIgnoreFloors(tile);
+        => this.Random.NextDouble() < this.config.SpawnChance / 100f
+            && location.IsTileViewable(new XLocation((int)tile.X, (int)tile.Y), Game1.viewport)
+            && location.isTileLocationTotallyClearAndPlaceableIgnoreFloors(tile);
 
     /// <summary>
     /// Console command to list valid fruits for spawning.
@@ -402,8 +416,13 @@ END:
 
         Dictionary<int, string> fruittrees = this.Helper.GameContent.Load<Dictionary<int, string>>("Data/fruitTrees");
         ReadOnlySpan<char> currentseason = Game1.currentSeason.AsSpan().Trim();
-        foreach (string tree in fruittrees.Values)
+        foreach ((int saplingIndex, string tree) in fruittrees)
         {
+            if (this.config.ProgressionMode && !InventoryWatcher.HaveSeen(saplingIndex))
+            {
+                continue;
+            }
+
             SpanSplit treedata = tree.SpanSplit('/', StringSplitOptions.TrimEntries, expectedCount: 3);
 
             if ((this.config.SeasonalOnly == SeasonalBehavior.SeasonalOnly || (this.config.SeasonalOnly == SeasonalBehavior.SeasonalExceptWinter && !Game1.IsWinter))

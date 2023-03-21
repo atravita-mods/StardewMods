@@ -57,6 +57,7 @@ internal sealed class ModEntry : Mod
     #region IDs
 
 #pragma warning disable SA1201 // Elements should appear in the correct order
+
     /// <summary>
     /// Gets a reference to the JA API.
     /// </summary>
@@ -482,6 +483,7 @@ internal sealed class ModEntry : Mod
         Config = AtraUtils.GetConfigOrDefault<ModConfig>(helper, this.Monitor);
 
         helper.Events.GameLoop.GameLaunched += this.OnGameLaunched;
+        this.Monitor.Log($"Starting up: {this.ModManifest.UniqueID} - {typeof(ModEntry).Assembly.FullName}");
 
 #if DEBUG
         helper.Events.Input.ButtonPressed += this.DebugOutput;
@@ -624,8 +626,7 @@ internal sealed class ModEntry : Mod
     private void ApplyPatches(Harmony harmony)
     {
 #if DEBUG
-        Stopwatch sw = new();
-        sw.Start();
+        Stopwatch sw = Stopwatch.StartNew();
 #endif
 
         try
@@ -696,8 +697,10 @@ internal sealed class ModEntry : Mod
                 MillerTimeDayUpdateTranspiler.ApplyPatches(harmony);
             }
 
-            if (this.Helper.ModRegistry.IsLoaded("stokastic.PrismaticTools") ||
-                this.Helper.ModRegistry.IsLoaded("kakashigr.RadioactiveTools"))
+            if ((this.Helper.ModRegistry.Get("aedenthorn.ImmersiveScarecrows") is not IModInfo immersiveCrows
+                || immersiveCrows.Manifest.Version.IsOlderThan("0.3.1")) // immersive crows has the same patch, which breaks mine. But thankfully this renders mine unnecessary.
+                && (this.Helper.ModRegistry.IsLoaded("stokastic.PrismaticTools") ||
+                this.Helper.ModRegistry.IsLoaded("kakashigr.RadioactiveTools")))
             {
                 this.Monitor.Log("Found either prismatic tools or radioactive tools. Applying compat patches", LogLevel.Info);
                 ExtendedToolsMods.ApplyPatches(harmony);

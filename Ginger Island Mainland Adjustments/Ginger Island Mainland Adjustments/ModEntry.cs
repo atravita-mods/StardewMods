@@ -12,6 +12,9 @@ using GingerIslandMainlandAdjustments.ScheduleManager;
 using HarmonyLib;
 using StardewModdingAPI.Events;
 
+using StardewValley.BellsAndWhistles;
+using StardewValley.Locations;
+
 namespace GingerIslandMainlandAdjustments;
 
 /// <inheritdoc />
@@ -28,24 +31,36 @@ internal sealed class ModEntry : Mod
         I18n.Init(helper.Translation);
         Globals.Initialize(helper, this.Monitor, this.ModManifest);
         AssetEditor.Initialize(helper.GameContent);
+        this.Monitor.Log($"Starting up: {this.ModManifest.UniqueID} - {typeof(ModEntry).Assembly.FullName}");
 
         ConsoleCommands.Register(this.Helper.ConsoleCommands);
 
         // Register events
         helper.Events.GameLoop.GameLaunched += this.OnGameLaunched;
         helper.Events.GameLoop.TimeChanged += this.OnTimeChanged;
+        helper.Events.GameLoop.DayStarted += MarriageDialogueHandler.OnDayStart;
         helper.Events.GameLoop.DayEnding += this.OnDayEnding;
         helper.Events.GameLoop.ReturnedToTitle += this.ReturnedToTitle;
         helper.Events.GameLoop.SaveLoaded += this.OnSaveLoaded;
         helper.Events.Input.ButtonPressed += this.OnButtonPressed;
         helper.Events.Player.Warped += this.OnPlayerWarped;
 
-        helper.Events.Multiplayer.PeerConnected += this.PeerConnected;
-        helper.Events.Multiplayer.ModMessageReceived += this.ModMessageReceived;
+        helper.Events.Multiplayer.PeerConnected += static (_, e) => MultiplayerSharedState.ReSendMultiplayerMessage(e);
+        helper.Events.Multiplayer.ModMessageReceived += static (_, e) => MultiplayerSharedState.UpdateFromMessage(e);
 
         helper.Events.Content.AssetRequested += this.OnAssetRequested;
 
         AssetLoader.Init(helper.GameContent);
+    }
+
+    /// <inheritdoc />
+    protected override void Dispose(bool disposing)
+    {
+        if (disposing)
+        {
+            AssetEditor.DisposeContentManager();
+        }
+        base.Dispose(disposing);
     }
 
     private void OnAssetRequested(object? sender, AssetRequestedEventArgs e)
@@ -63,8 +78,19 @@ internal sealed class ModEntry : Mod
         }
 
         GenerateGMCM.BuildNPCDictionary();
-
         Globals.LoadDataFromSave();
+
+        if (Game1.getLocationFromName("IslandSouth") is IslandSouth islandSouth)
+        {
+            this.Monitor.DebugOnlyLog("Found IslandSouth.", LogLevel.Info);
+            ParrotUpgradePerch? perch = islandSouth.parrotUpgradePerches.FirstOrDefault(perch => perch.tilePosition.X == 17 && perch.tilePosition.Y == 22);
+            if (perch is not null && perch.currentState.Value != ParrotUpgradePerch.UpgradeState.Complete)
+            {
+                this.Monitor.DebugOnlyLog("Found perch, applying watching.", LogLevel.Info);
+                IslandSouthWatcher southWatcher = new(this.Helper.GameContent);
+                perch.upgradeCompleteEvent.onEvent += southWatcher.OnResortFixed;
+            }
+        }
 
         this.migrator = new(this.ModManifest, this.Helper, this.Monitor);
         if (!this.migrator.CheckVersionInfo())
@@ -220,10 +246,4 @@ internal sealed class ModEntry : Mod
             this.haveFixedSchedulesToday = true;
         }
     }
-
-    private void PeerConnected(object? sender, PeerConnectedEventArgs e)
-        => MultiplayerSharedState.ReSendMultiplayerMessage(e);
-
-    private void ModMessageReceived(object? sender, ModMessageReceivedEventArgs e)
-        => MultiplayerSharedState.UpdateFromMessage(e);
 }

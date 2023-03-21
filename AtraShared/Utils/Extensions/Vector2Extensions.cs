@@ -19,6 +19,15 @@ public static class Vector2Extensions
         => Math.Abs(self.X - other.X) + Math.Abs(self.Y - other.Y);
 
     /// <summary>
+    /// Finds the chessboard (Chebyshev) distance between two vectors.
+    /// </summary>
+    /// <param name="self">First vector.</param>
+    /// <param name="other">Second vector.</param>
+    /// <returns>Chessboard distance.</returns>
+    public static float ChessboardDistance(this Vector2 self, Vector2 other)
+        => Math.Max(Math.Abs(self.X - other.X), Math.Abs(self.Y - other.Y));
+
+    /// <summary>
     /// Finds the midpoint between two vectors.
     /// </summary>
     /// <param name="self">First vector.</param>

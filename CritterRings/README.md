@@ -45,6 +45,8 @@ Run SMAPI at least once with this mod installed to generate the `config.json`, o
 * `FrogsSpawnInHeat`: If enabled, frogs will spawn in places probably too hot for them, like the volcano.
 * `FrogsSpawnInCold`: If enabled, frogs will spawn in places probably too cold for them, like during winter or in the ice levels of the mines.
 * `FrogsSpawnOnlyInRain`: If enabled, frogs will only spawn outdoors when it's raining.
+* `SaltwaterFrogs`: If enabled, frogs might spawn in saltwater.
+
 #### Owl Ring Options
 
 * `OwlsSpawnIndoors`: If enabled, owls will spawn indoors.

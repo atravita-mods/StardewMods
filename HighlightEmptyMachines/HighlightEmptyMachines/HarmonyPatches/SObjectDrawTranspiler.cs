@@ -59,9 +59,20 @@ internal class SObjectDrawTranspiler
     [SuppressMessage("SMAPI.CommonErrors", "AvoidNetField:Avoid Netcode types when possible", Justification = "Only used for matching.")]
     private static IEnumerable<CodeInstruction>? Transpiler(IEnumerable<CodeInstruction> instructions, ILGenerator gen, MethodBase original)
     {
+        MethodInfo? getScale = AccessTools.Method(AccessTools.TypeByName("ProducerFrameworkMod.ObjectOverrides"), "getScale");
+        if (getScale is not null)
+        {
+            ModEntry.ModMonitor.Log($"Found PFM, adjusting transpiler");
+        }
+        else
+        {
+            getScale = typeof(SObject).GetCachedMethod(nameof(SObject.getScale), ReflectionCache.FlagTypes.InstanceFlags);
+        }
+
         try
         {
             ILHelper helper = new(original, instructions, ModEntry.ModMonitor, gen);
+            helper.Print();
             helper.FindNext(new CodeInstructionWrapper[]
             {
                 OpCodes.Ldarg_0,
@@ -70,7 +81,9 @@ internal class SObjectDrawTranspiler
             .FindNext(new CodeInstructionWrapper[]
             { // Vector2 vector = this.getScale();
                 OpCodes.Ldarg_0,
-                (OpCodes.Callvirt, typeof(SObject).GetCachedMethod(nameof(SObject.getScale), ReflectionCache.FlagTypes.InstanceFlags)),
+                new (
+                    specialcase: SpecialCodeInstructionCases.Wildcard,
+                    predicate: instr => instr.Calls(getScale)),
                 SpecialCodeInstructionCases.StLoc,
             })
             .Push() // edit to Vector2 vector = ShouldDisablePulsing ? Vector2.Zero : this.getScale();
@@ -108,7 +121,7 @@ internal class SObjectDrawTranspiler
                 new(OpCodes.Ldarg_0),
             }, withLabels: colorLabels);
 
-            // helper.Print();
+            helper.Print();
             return helper.Render();
         }
         catch (Exception ex)

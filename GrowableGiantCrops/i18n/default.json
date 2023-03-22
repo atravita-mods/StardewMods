@@ -66,6 +66,8 @@
   "config.PalmTreeBehavior.Stump": "Stump",
   "config.PalmTreeBehavior.Both": "Both",
 
+  "fruit-tree.forbidden": "This fruit tree is not yours. You may not take it",
+
   // Stores
   "ShopMessage.Robin": "Whatcha lookin' for? Anything catch your eye?",
 

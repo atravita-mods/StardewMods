@@ -50,6 +50,9 @@
   "FrogsSpawnOnlyInRain.title": "Frogs Spawn Only In Rain",
   "FrogsSpawnOnlyInRain.description": "If enabled, frogs will only spawn outside in rain.",
 
+  "SaltwaterFrogs.title": "Saltwater Frogs",
+  "SaltwaterFrogs.description": "If enabled, frogs might spawn in saltwater.",
+
   "OwlsSpawnIndoors.title": "Owls Spawn Indoors",
   "OwlsSpawnIndoors.description": "If owls should spawn indoors.",
 

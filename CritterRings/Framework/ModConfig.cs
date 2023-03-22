@@ -129,6 +129,12 @@ public sealed class ModConfig
     public bool FrogsSpawnOnlyInRain { get; set; } = false;
 
     /// <summary>
+    /// Gets or sets a value indicating whether or not frogs can spawn in areas that are saltwater.
+    /// </summary>
+    [GMCMSection("FrogRing", 20)]
+    public bool SaltwaterFrogs { get; set; } = false;
+
+    /// <summary>
     /// Gets or sets a value indicating whether or not owls should spawn indoors.
     /// </summary>
     [GMCMSection("OwlRing", 30)]

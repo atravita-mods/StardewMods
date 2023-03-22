@@ -2,8 +2,10 @@
 using System.Runtime.InteropServices;
 using System.Xml.Serialization;
 
+using AtraBase.Toolkit.Extensions;
 using AtraBase.Toolkit.Reflection;
 
+using AtraCore.Framework.Caches;
 using AtraCore.Framework.ReflectionManager;
 using AtraCore.Utilities;
 
@@ -158,6 +160,28 @@ public sealed class ShovelTool : GenericTool
             }
 
             location.performToolAction(this, x / Game1.tileSize, y / Game1.tileSize);
+
+            // allow modders to block the shovel.
+            if (location.doesTileHaveProperty(x, y, "atravita.ShovelForbidden", "Back") is string message)
+            {
+                if (string.IsNullOrWhiteSpace(message))
+                {
+                    Game1.showRedMessage(I18n.FruitTree_Forbidden());
+                }
+                else if (message.TrySplitOnce(':', out ReadOnlySpan<char> first, out ReadOnlySpan<char> second))
+                {
+                    if (NPCCache.GetByVillagerName(first.Trim().ToString()) is NPC npc)
+                    {
+                        Game1.drawDialogue(npc, second.Trim().ToString());
+                    }
+                }
+                else
+                {
+                    Game1.drawObjectDialogue(message.Trim());
+                }
+                return;
+            }
+
             GGCUtils.GetLargeObjectAtLocation(location, x, y, false)?.performToolAction(this, 0, pickupTile, location);
 
             int bigItemEnergy = this.IsEfficient ? 0 : ModEntry.Config.ShovelEnergy;
@@ -305,6 +329,15 @@ public sealed class ShovelTool : GenericTool
 
                 if (terrain is FruitTree fruitTree && terrain.GetType() == typeof(FruitTree))
                 {
+                    // this is for East Scarp. We'll prevent people from stealing their trees.
+                    if (location.doesTileHaveProperty(x, y, "FruitTree", "Back") is not null
+                        || location.NameOrUniqueName == "DeepWoods")
+                    {
+                        Game1.showRedMessage(I18n.FruitTree_Forbidden());
+                        fruitTree.shake(pickupTile, true, location);
+                        return;
+                    }
+
                     if (fruitTree.growthStage.Value <= ModEntry.Config.MaxFruitTreeStageInternal && HandleFruitTree(location, who, pickupTile, bigItemEnergy))
                     {
                         return;

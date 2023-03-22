@@ -1,4 +1,7 @@
-﻿using AtraBase.Models.Result;
+﻿using System.Runtime.CompilerServices;
+
+using AtraBase.Models.Result;
+using AtraBase.Toolkit;
 using AtraBase.Toolkit.Extensions;
 using AtraBase.Toolkit.Reflection;
 
@@ -151,9 +154,11 @@ internal sealed class JumpManager : IDisposable
         => !this.disposedValue && this.state != State.Inactive
             && this.farmerRef?.TryGetTarget(out Farmer? farmer) == true && farmer is not null;
 
+    [MethodImpl(TKConstants.Hot)]
     private bool IsCurrentFarmer()
         => this.farmerRef?.TryGetTarget(out Farmer? farmer) == true && ReferenceEquals(farmer, Game1.player);
 
+    [MethodImpl(TKConstants.Hot)]
     private void OnRenderedWorld(object? sender, RenderedWorldEventArgs e)
     {
         if (!this.IsCurrentFarmer())
@@ -187,6 +192,7 @@ internal sealed class JumpManager : IDisposable
         }
     }
 
+    [MethodImpl(TKConstants.Hot)]
     private void OnUpdateTicked(object? sender, UpdateTickedEventArgs e)
     {
         if (!this.IsCurrentFarmer())
@@ -198,10 +204,11 @@ internal sealed class JumpManager : IDisposable
         if (this.state != State.Inactive && ModEntry.Config.ViewportFollowsTarget)
         {
             Vector2 position = Game1.player.Position + new Vector2(32, 32);
+            Vector2 target = this.openTile * Game1.tileSize;
             Vector2 midpoint = Game1.player.FacingDirection switch
             {
-                Game1.left or Game1.right => new Vector2(position.X + (((this.openTile.X * Game1.tileSize) - position.X) / 2), position.Y),
-                _ => new Vector2(position.X, position.Y + (((this.openTile.Y * Game1.tileSize) - position.Y) / 2)),
+                Game1.left or Game1.right => new Vector2(target.X + Math.Clamp((position.X - target.X) / 2, -320, 320), position.Y),
+                _ => new Vector2(position.X, target.Y + Math.Clamp((position.Y - target.Y) / 2, -320, 320)),
             };
             Game1.moveViewportTo(midpoint, ModEntry.Config.JumpChargeSpeed / 2);
         }

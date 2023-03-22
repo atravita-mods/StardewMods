@@ -90,11 +90,11 @@ public sealed class ModConfig
     /// Gets or sets a value indicating how fast the frog jump charges.
     /// </summary>
     [GMCMRange(1, 20)]
-    [GMCMSection("FrogRing", 20)]
+    [GMCMSection("FrogRing", 40)]
     public int JumpChargeSpeed
     {
         get => this.jumpChargeSpeed;
-        set => this.jumpChargeSpeed = Math.Clamp(value, 1, 20);
+        set => this.jumpChargeSpeed = Math.Clamp(value, 1, 40);
     }
 
     /// <summary>

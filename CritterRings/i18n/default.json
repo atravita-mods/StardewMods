@@ -79,5 +79,6 @@
 
   "frog-ring.name": "Frog Ring",
   "frog-ring.description": "Attracts frogs. Makes you feel lighter.",
-  "frog-ring.horse": "Frog ring can't pick up your horse!"
+  "frog-ring.horse": "Frog ring can't pick up your horse!",
+  "frog-ring.blocked": "The frog can't jump this way."
 }

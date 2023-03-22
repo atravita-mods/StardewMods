@@ -55,6 +55,7 @@ internal sealed class JumpManager : IDisposable
     private Vector2 currentTile = Vector2.Zero;
     private Vector2 openTile = Vector2.Zero;
     private bool isCurrentTileBlocked = false;
+    private bool blocked = false;
 
     // jumping fields.
     private JumpFrame frame;
@@ -221,7 +222,7 @@ internal sealed class JumpManager : IDisposable
                     this.ticks -= ModEntry.Config.JumpChargeSpeed;
                     if (this.ticks <= 0)
                     {
-                        if (this.distance < ModEntry.Config.MaxFrogJumpDistance)
+                        if (this.distance < ModEntry.Config.MaxFrogJumpDistance && !this.blocked)
                         {
                             ++this.distance;
                             CRUtils.PlayChargeCue(this.distance);
@@ -326,6 +327,14 @@ internal sealed class JumpManager : IDisposable
             box.X += (int)this.direction.X * this.distance * Game1.tileSize;
             box.Y += (int)this.direction.Y * this.distance * Game1.tileSize;
             isValidTile &= !location.isCollidingPosition(box, Game1.viewport, true, 0, false, farmer);
+        }
+
+        // check a tile property here, so mapmakers can block the jump.
+        if (location.doesEitherTileOrTileIndexPropertyEqual((int)this.currentTile.X, (int)this.currentTile.Y, "atravita.FrogJump", "Back", "Forbidden"))
+        {
+            this.blocked = true;
+            isValidTile = false;
+            Game1.showRedMessage(I18n.FrogRing_Blocked());
         }
 
         if (isValidTile)

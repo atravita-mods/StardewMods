@@ -62,7 +62,7 @@ internal class SObjectDrawTranspiler
         MethodInfo? getScale = AccessTools.Method(AccessTools.TypeByName("ProducerFrameworkMod.ObjectOverrides"), "getScale");
         if (getScale is not null)
         {
-            ModEntry.ModMonitor.Log($"Found PFM, adjusting transpiler");
+            ModEntry.ModMonitor.Log($"Found PFM, adjusting transpiler.");
         }
         else
         {
@@ -72,7 +72,6 @@ internal class SObjectDrawTranspiler
         try
         {
             ILHelper helper = new(original, instructions, ModEntry.ModMonitor, gen);
-            helper.Print();
             helper.FindNext(new CodeInstructionWrapper[]
             {
                 OpCodes.Ldarg_0,
@@ -121,7 +120,7 @@ internal class SObjectDrawTranspiler
                 new(OpCodes.Ldarg_0),
             }, withLabels: colorLabels);
 
-            helper.Print();
+            //helper.Print();
             return helper.Render();
         }
         catch (Exception ex)

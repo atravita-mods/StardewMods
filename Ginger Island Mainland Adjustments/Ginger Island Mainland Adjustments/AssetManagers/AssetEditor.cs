@@ -136,7 +136,7 @@ internal static class AssetEditor
         if (!editor.Data.ContainsKey("spring") && !editor.Data.ContainsKey("default"))
         {
             string character = e.NameWithoutLocale.BaseName.GetNthChunk('/', 2).ToString();
-            Globals.ModMonitor.Log($"Found NPC {character} without either a spring or default schedule. This may cause issues.", LogLevel.Warn);
+            Globals.ModMonitor.Log($"Found NPC {character} without either a spring or default schedule. This may cause issues.", LogLevel.Info);
             contentManager ??= new(Game1.content.ServiceProvider, Game1.content.RootDirectory);
             try
             {
@@ -158,7 +158,7 @@ internal static class AssetEditor
             {
                 Globals.ModMonitor.Log($"Could not find original schedule for {character}:\n\n{ex}");
             }
-            Globals.ModMonitor.Log($"Could not restore spring schedule for {character}.", LogLevel.Warn);
+            Globals.ModMonitor.Log($"Could not restore spring schedule for {character}.", LogLevel.Info);
         }
     }
 

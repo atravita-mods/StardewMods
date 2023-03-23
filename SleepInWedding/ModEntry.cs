@@ -89,7 +89,7 @@ internal sealed class ModEntry : Mod
             {
                 Game1.warpFarmer(new LocationRequest("Town", false, Game1.getLocationFromName("Town")), 5, 10, 0);
             }
-            else if (Game1.timeOfDay == Utility.ModifyTime(Config.WeddingTime, -30))
+            else if (Game1.timeOfDay == Utility.ModifyTime(Config.WeddingTime, -20))
             {
                 Game1.addHUDMessage(new HUDMessage(I18n.WeddingReminder(), HUDMessage.achievement_type));
             }

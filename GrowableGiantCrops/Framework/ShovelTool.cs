@@ -330,8 +330,10 @@ public sealed class ShovelTool : GenericTool
                 if (terrain is FruitTree fruitTree && terrain.GetType() == typeof(FruitTree))
                 {
                     // this is for East Scarp. We'll prevent people from stealing their trees.
-                    if (location.doesTileHaveProperty(x, y, "FruitTree", "Back") is not null
-                        || location.NameOrUniqueName == "DeepWoods")
+                    // also the ones at the deep woods entry.
+                    if (fruitTree.modData?.ContainsKey(InventoryFruitTree.ModDataKey) != true
+                        && (location.doesTileHaveProperty(x, y, "FruitTree", "Back") is not null
+                            || location.NameOrUniqueName == "DeepWoods"))
                     {
                         Game1.showRedMessage(I18n.FruitTree_Forbidden());
                         fruitTree.shake(pickupTile, true, location);

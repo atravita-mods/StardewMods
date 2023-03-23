@@ -46,6 +46,7 @@ Run SMAPI at least once with this mod installed to generate the `config.json`, o
 * `FrogsSpawnInCold`: If enabled, frogs will spawn in places probably too cold for them, like during winter or in the ice levels of the mines.
 * `FrogsSpawnOnlyInRain`: If enabled, frogs will only spawn outdoors when it's raining.
 * `SaltwaterFrogs`: If enabled, frogs might spawn in saltwater.
+* `IndoorFrogs`: If enabled, frogs might spawn indoors.
 
 #### Owl Ring Options
 
@@ -59,7 +60,8 @@ Run SMAPI at least once with this mod installed to generate the `config.json`, o
 * Should be compatible with most other mods.
 
 ## Much thanks to
-* [Violetlizabet](https://www.nexusmods.com/stardewvalley/users/120958053) for drawing the ring graphics for me!
+* [Violetlizabet](https://www.nexusmods.com/stardewvalley/users/120958053) for drawing the ring graphics for me! Check out her [Magic Buildings](https://www.nexusmods.com/stardewvalley/mods/10142) mod!
+* [DecidedlyHuman](https://www.nexusmods.com/stardewvalley/users/79440738), for helping me with the viewport code. Check out his [Smart Building](https://www.nexusmods.com/stardewvalley/mods/11158)!
 
 ## See also
 

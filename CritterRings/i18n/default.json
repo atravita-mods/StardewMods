@@ -53,6 +53,9 @@
   "SaltwaterFrogs.title": "Saltwater Frogs",
   "SaltwaterFrogs.description": "If enabled, frogs might spawn in saltwater.",
 
+  "IndoorFrogs.title": "Indoor Frogs",
+  "IndoorFrogs.description": "If enabled, frogs can spawn indoors.",
+
   "OwlsSpawnIndoors.title": "Owls Spawn Indoors",
   "OwlsSpawnIndoors.description": "If owls should spawn indoors.",
 

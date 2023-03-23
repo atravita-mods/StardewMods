@@ -112,7 +112,7 @@ internal sealed class ModEntry : Mod
     {
         if (this.FrameRateCounter is not null && this.FramerateGetter?.Invoke(this.FrameRateCounter) is int value && Game1.game1.IsActive)
         {
-            this.Monitor.Log($"Current framerate on {Game1.ticks} is {value}", value < 30 ? LogLevel.Alert : LogLevel.Trace);
+            this.Monitor.Log($"Current framerate on {Game1.ticks} is {value}", value < 30 ? LogLevel.Warn : LogLevel.Trace);
         }
     }
 

@@ -103,6 +103,11 @@ internal static class CRUtils
             return false;
         }
 
+        if (!ModEntry.Config.IndoorFrogs && !loc.IsOutdoors)
+        {
+            return false;
+        }
+
         if (!ModEntry.Config.FrogsSpawnInHeat && loc is Desert or VolcanoDungeon or Caldera)
         {
             return false;

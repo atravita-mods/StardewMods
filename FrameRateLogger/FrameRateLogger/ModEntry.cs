@@ -23,6 +23,7 @@ internal sealed class ModEntry : Mod
     public override void Entry(IModHelper helper)
     {
         this.Monitor.Log($"Starting up: {this.ModManifest.UniqueID} - {typeof(ModEntry).Assembly.FullName}");
+        I18n.Init(helper.Translation);
 
         this.FrameRateCounter = new(GameRunner.instance);
         helper.Reflection.GetMethod(this.FrameRateCounter, "LoadContent").Invoke();

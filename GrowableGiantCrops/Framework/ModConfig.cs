@@ -57,6 +57,20 @@ public sealed class ModConfig
     [GMCMSection("Shop", -10)]
     public Vector2 ResourceShopLocation { get; set; } = new(6, 19);
 
+    private int maxGiantCropsSold = 5;
+
+    /// <summary>
+    /// Gets or sets the maximum number of giant crops that will be sold in the giant crop store,
+    /// if perfection has not been reached.
+    /// </summary>
+    [GMCMRange(1, 25)]
+    [GMCMSection("Shop", -10)]
+    public int MaxGiantCropsSold
+    {
+        get => this.maxGiantCropsSold;
+        set => this.maxGiantCropsSold = Math.Max(value, 1);
+    }
+
     /// <summary>
     /// Gets or sets a value indicating whether or not NPCs should trample placed resource clumps.
     /// </summary>

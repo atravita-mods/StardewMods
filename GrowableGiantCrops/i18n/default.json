@@ -13,6 +13,9 @@
   "ResourceShopLocation.title": "Resource Shop Location",
   "ResourceShopLocation.description": "The location of the resource shop in Robin's.",
 
+  "MaxGiantCropsSold.title": "Max Giant Crops Sold",
+  "MaxGiantCropsSold.description": "The maximum number of giant crops that will be sold at the witch's store, before perfection has been obtained.",
+
   "ShouldNPCsTrampleResourcesClumps.title": "NPCs Trample Resources",
   "ShouldNPCsTrampleResourcesClumps.description": "If enabled, will allow NPCs to remove resource clumps in their path",
   "ShouldNPCsTrampleGiantCrops.title": "NPCs Trample Giant Crops.",
@@ -21,7 +24,7 @@
   "RelaxedPlacement.title": "Relaxed Placement",
   "RelaxedPlacement.description": "If enabled, placement rules will be relaxed.",
   "PlacedOnly.title": "Placed Only",
-  "PlacedOnly.description": "If enabled, the shovel will only move items that were placed down by a player.",
+  "PlacedOnly.description": "If enabled, the shovel will only move items that were placed down by a player. Note that this option only tracks items placed down while this mod was installed and cannot track items previously placed.",
 
   "ShovelEnergy.title": "Shovel Energy",
   "ShovelEnergy.description": "How much stamina should each use of the shovel take.",
@@ -130,5 +133,5 @@
   "Mushroom.description": "A mushroom tree",
 
   // Misc lines
-  "Summit.Boulder": "A mystical force keeps this rock in place. The shovel cannot budge it.",
+  "Summit.Boulder": "A mystical force keeps this rock in place. The shovel cannot budge it."
 }

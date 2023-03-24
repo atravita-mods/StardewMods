@@ -272,7 +272,7 @@ internal sealed class JumpManager : IDisposable
 
                     if (tileToCheck is not null)
                     {
-                        int verticalHeightNeeded = 5;
+                        int verticalHeightNeeded = 4;
                         int startX = (int)tileToCheck.Value.X * Game1.tileSize;
                         int startY = (int)(tileToCheck.Value.Y - 3) * Game1.tileSize;
                         while (startY > 0 && (Game1.currentLocation.map.GetLayer("Front")?.PickTile(new XLocation(startX, startY), Game1.viewport.Size) is not null
@@ -284,7 +284,7 @@ internal sealed class JumpManager : IDisposable
 
                         ModEntry.ModMonitor.DebugOnlyLog($"Additional vertical height: {verticalHeightNeeded}");
 
-                        initialVelocityY = Math.Max(initialVelocityY, 8 * MathF.Sqrt(verticalHeightNeeded));
+                        initialVelocityY = Math.Max(initialVelocityY, 6 * MathF.Sqrt(verticalHeightNeeded));
                     }
 
                     // a little sanity here.

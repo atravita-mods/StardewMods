@@ -3,7 +3,7 @@ Critter Rings
 
 ![Header image](docs/image.png)
 
-This incredibly self-indulgent mod has five rings in it: the Butterfly Ring, the Bunny Ring, the Frog Ring, the Owl Ring, and the Firefly Ring. Each summons the relevant critter when worn. Additionally, each has extra secondary effect. Frog jumps, bunny ring has a sprint, the owl ring makes it so enemies are less likely to see you, firefly is a glowstone ring, and butterfly is a magnetic ring.
+This incredibly self-indulgent mod has five rings in it: the Butterfly Ring, the Bunny Ring, the Frog Ring, the Owl Ring, and the Firefly Ring. Each summons the relevant critter when worn. Additionally, each has extra secondary effect. Frog jumps, bunny ring has a sprint, the owl ring makes it so enemies are less likely to see you, firefly is a glow ring, and butterfly is a magnetic ring.
 
 ## Install
 

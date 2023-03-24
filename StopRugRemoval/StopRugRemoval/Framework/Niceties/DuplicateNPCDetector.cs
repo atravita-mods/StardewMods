@@ -172,7 +172,7 @@ internal static class DuplicateNPCDetector
                 if (!found.TryAdd(character.Name, character) && character.Name != "Mister Qi")
                 {
                     ModEntry.ModMonitor.Log($"Found duplicate NPC {character.Name}", LogLevel.Info);
-                    if (object.ReferenceEquals(character, found[character.Name]))
+                    if (ReferenceEquals(character, found[character.Name]))
                     {
                         ModEntry.ModMonitor.Log("    These appear to be the same instance.", LogLevel.Info);
                     }

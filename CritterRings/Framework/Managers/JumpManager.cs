@@ -15,7 +15,9 @@ using Microsoft.Xna.Framework.Graphics;
 using StardewModdingAPI.Events;
 using StardewModdingAPI.Utilities;
 
+using StardewValley.Buildings;
 using StardewValley.Locations;
+using StardewValley.TerrainFeatures;
 
 using XLocation = xTile.Dimensions.Location;
 
@@ -56,6 +58,7 @@ internal sealed class JumpManager : IDisposable
     private Vector2 openTile = Vector2.Zero;
     private bool isCurrentTileBlocked = false;
     private bool blocked = false;
+    private bool needsBigJump = false;
 
     // jumping fields.
     private JumpFrame frame;
@@ -246,16 +249,59 @@ internal sealed class JumpManager : IDisposable
 
                     CRUtils.PlayMeep();
 
-                    // gravity is 0.5f, so total time is 2 * initialVelocityY / 0.5 = 4 * initialVelocityY;
+                    #region velocity calculations
+
                     float initialVelocityY = 4f * MathF.Sqrt(this.distance);
+
+                    // we're just gonna hope the big jump is enough to clear most buildings :(
+                    if (this.needsBigJump)
+                    {
+                        initialVelocityY = Math.Max(16f, initialVelocityY);
+                    }
+
+                    // okay, let's adjust for possible front tiles if needed
+                    Vector2? tileToCheck = null;
+                    if (this.direction == Vector2.UnitY)
+                    {
+                        tileToCheck = this.startTile;
+                    }
+                    else if (this.direction == -Vector2.UnitY)
+                    {
+                        tileToCheck = this.openTile;
+                    }
+
+                    if (tileToCheck is not null)
+                    {
+                        int verticalHeightNeeded = 5;
+                        int startX = (int)tileToCheck.Value.X * Game1.tileSize;
+                        int startY = (int)(tileToCheck.Value.Y - 3) * Game1.tileSize;
+                        while (startY > 0 && (Game1.currentLocation.map.GetLayer("Front")?.PickTile(new XLocation(startX, startY), Game1.viewport.Size) is not null
+                            || Game1.currentLocation.map.GetLayer("AlwaysFront")?.PickTile(new XLocation(startX, startY), Game1.viewport.Size) is not null))
+                        {
+                            ++verticalHeightNeeded;
+                            startY -= 64;
+                        }
+
+                        ModEntry.ModMonitor.DebugOnlyLog($"Additional vertical height: {verticalHeightNeeded}");
+
+                        initialVelocityY = Math.Max(initialVelocityY, 8 * MathF.Sqrt(verticalHeightNeeded));
+                    }
+
+                    // a little sanity here.
+                    initialVelocityY = Math.Min(initialVelocityY, 128f);
+
                     float tileTravelDistance = this.openTile.ManhattanDistance(this.startTile);
                     if (ModEntry.Config.JumpCostsStamina && Game1.CurrentEvent is null)
                     {
                         Game1.player.Stamina -= tileTravelDistance;
                     }
                     float travelDistance = tileTravelDistance * Game1.tileSize;
+
+                    // gravity is 0.5f, so total time is 2 * initialVelocityY / 0.5 = 4 * initialVelocityY;
                     this.velocityX = travelDistance / ((4 * initialVelocityY) - 1);
                     Game1.player.synchronizedJump(initialVelocityY);
+
+                    #endregion
 
                     // track player state
                     this.previousCollisionValue = Game1.player.ignoreCollisions;
@@ -337,6 +383,26 @@ internal sealed class JumpManager : IDisposable
             Game1.showRedMessage(I18n.FrogRing_Blocked());
         }
 
+        if (!this.needsBigJump)
+        {
+            if (location.terrainFeatures.TryGetValue(this.currentTile, out TerrainFeature? feat)
+                && feat is Tree or FruitTree)
+            {
+                this.needsBigJump = true;
+            }
+            if (!this.needsBigJump && location is Farm farm)
+            {
+                foreach (Building? building in farm.buildings)
+                {
+                    if (building.occupiesTile(this.currentTile))
+                    {
+                        this.needsBigJump = true;
+                        break;
+                    }
+                }
+            }
+        }
+
         if (isValidTile)
         {
             this.openTile = this.currentTile;
@@ -364,7 +430,7 @@ internal sealed class JumpManager : IDisposable
                 farmer.forceTimePass = this.forceTimePass;
                 if (disposing)
                 {
-                    Game1.moveViewportTo(farmer.Position, ModEntry.Config.JumpChargeSpeed);
+                    Game1.moveViewportTo(farmer.Position, 5f);
                 }
                 farmer.completelyStopAnimatingOrDoingAction();
             }

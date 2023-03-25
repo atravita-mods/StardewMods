@@ -5,6 +5,7 @@ TODO: optionally highlight **buildings** that have empty machines within them?
 
 ### Version 0.2.2
 * Recompiled for new AtraCore, my apologies!
+* By popular request, allow you to disable the pulsing.
 
 ### Version 0.2.1
 * Fix beehouses, integration with Better Beehouses.

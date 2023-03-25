@@ -333,7 +333,8 @@ public sealed class ShovelTool : GenericTool
                     // also the ones at the deep woods entry.
                     if (fruitTree.modData?.ContainsKey(InventoryFruitTree.ModDataKey) != true
                         && (location.doesTileHaveProperty(x, y, "FruitTree", "Back") is not null
-                            || location.NameOrUniqueName == "DeepWoods"))
+                            || location.NameOrUniqueName == "DeepWoods"
+                            || location.NameOrUniqueName == "Custom_Ridgeside_RidgesideVillage"))
                     {
                         Game1.showRedMessage(I18n.FruitTree_Forbidden());
                         fruitTree.shake(pickupTile, true, location);

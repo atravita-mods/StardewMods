@@ -1,0 +1,5 @@
+﻿{
+  "mod.description": "Lets you pan the camera around.",
+  // For GMCM
+  "IllFormatedConfig": "Config file seems ill-formated, using default. Please use Generic Mod Config Menu to configure.",
+}

@@ -69,6 +69,8 @@
   "config.PalmTreeBehavior.Stump": "Stump",
   "config.PalmTreeBehavior.Both": "Both",
 
+  // forbid picking up certain things.
+  "item.forbidden": "This is not yours. You may not take it",
   "fruit-tree.forbidden": "This fruit tree is not yours. You may not take it",
 
   // Stores

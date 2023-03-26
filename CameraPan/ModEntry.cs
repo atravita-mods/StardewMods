@@ -6,6 +6,7 @@ using StardewModdingAPI.Utilities;
 using CameraPan.Framework;
 
 using AtraUtils = AtraShared.Utils.Utils;
+using AtraShared.Integrations;
 
 namespace CameraPan;
 
@@ -29,11 +30,26 @@ internal sealed class ModEntry : Mod
     {
         Config = AtraUtils.GetConfigOrDefault<ModConfig>(helper, this.Monitor);
 
+        helper.Events.GameLoop.GameLaunched += this.SetUpConfig;
+
         helper.Events.GameLoop.UpdateTicked += this.OnTicked;
         helper.Events.Input.ButtonPressed += this.OnButtonPressed;
 
         helper.Events.Player.Warped += this.OnWarped;
         helper.Events.Display.MenuChanged += this.OnMenuChanged;
+    }
+
+    private void SetUpConfig(object? sender, GameLaunchedEventArgs e)
+    {
+        GMCMHelper gmcmHelper = new(this.Monitor, this.Helper.Translation, this.Helper.ModRegistry, this.ModManifest);
+        if (gmcmHelper.TryGetAPI())
+        {
+            gmcmHelper.Register(
+                reset: static () => Config = new(),
+                save: () => this.Helper.AsyncWriteConfig(this.Monitor, Config))
+            .AddParagraph(I18n.Mod_Description)
+            .GenerateDefaultGMCM(static () => Config);
+        }
     }
 
     private void OnMenuChanged(object? sender, MenuChangedEventArgs e)

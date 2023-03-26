@@ -44,6 +44,7 @@ internal static class PatchesForSObject
             {
                 placed.modData?.SetBool(ModDataMiscObject, true);
                 placed.TileLocation = new Vector2(x / Game1.tileSize, y / Game1.tileSize);
+                placed.Fragility = SObject.fragility_Removable;
             }
             else if (__instance.ParentSheetIndex == 78)
             {
@@ -54,13 +55,13 @@ internal static class PatchesForSObject
         else if (__instance?.bigCraftable?.Value == false)
         {
             if (SObject.isWildTreeSeed(__instance.ParentSheetIndex)
-                && location.terrainFeatures.TryGetValue(new Vector2(x / Game1.tileSize, y / Game1.tileSize), out var terrain)
+                && location.terrainFeatures.TryGetValue(new Vector2(x / Game1.tileSize, y / Game1.tileSize), out TerrainFeature? terrain)
                 && terrain is Tree tree)
             {
                 tree.modData?.SetEnum(InventoryTree.ModDataKey, (TreeIndexes)tree.treeType.Value);
             }
             if (InventoryFruitTree.IsValidFruitTree(__instance.ParentSheetIndex)
-                && location.terrainFeatures.TryGetValue(new Vector2(x / Game1.tileSize, y / Game1.tileSize), out var feature)
+                && location.terrainFeatures.TryGetValue(new Vector2(x / Game1.tileSize, y / Game1.tileSize), out TerrainFeature? feature)
                 && feature is FruitTree fruitTree)
             {
                 fruitTree.modData?.SetInt(InventoryFruitTree.ModDataKey, __instance.ParentSheetIndex);

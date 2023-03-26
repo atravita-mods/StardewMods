@@ -1,8 +1,11 @@
 ﻿namespace CameraPan.Framework;
 
+/// <summary>
+/// The config class for this mod.
+/// </summary>
+[SuppressMessage("StyleCop.CSharp.OrderingRules", "SA1201:Elements should appear in the correct order", Justification = "Fields kept near accessors.")]
 public sealed class ModConfig
 {
-
     private float speed = 8f;
 
     /// <summary>
@@ -18,12 +21,18 @@ public sealed class ModConfig
 
     private float yRange = 1000f;
 
+    /// <summary>
+    /// Gets or sets the maximum distance the focal point can be from the player, on the x axis.
+    /// </summary>
     public float XRange
     {
         get => this.xRange;
         set => this.xRange = Math.Max(value, 1f);
     }
 
+    /// <summary>
+    /// Gets or sets the maximum distance the focal point can be from the player, on the y axis.
+    /// </summary>
     public float YRange
     {
         get => this.yRange;

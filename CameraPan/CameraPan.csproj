@@ -3,6 +3,7 @@
 
   <PropertyGroup>
     <ImplicitUsings>enable</ImplicitUsings>
+    <EnableHarmony>true</EnableHarmony>
   </PropertyGroup>
 
   <PropertyGroup>

@@ -40,18 +40,24 @@ internal static class MoreGrassStartersCompat
                 ModEntry.ModMonitor.Log($"MoreGrassStarter's GrassStarter item could not be found?.", LogLevel.Error);
             }
 
-            if (registry.Get("spacechase0.MoreGrassStarters") is IModInfo modInfo
-                && modInfo.Manifest.Version.IsOlderThan("1.2.2"))
+            if (registry.Get("spacechase0.MoreGrassStarters") is IModInfo modInfo)
             {
-                if (AccessTools.TypeByName("MoreGrassStarters.Mod") is Type moreGrassStarters)
+                if (modInfo.Manifest.Version.IsOlderThan("1.2.1"))
                 {
-                    harmony.Patch(
-                       original: moreGrassStarters.GetCachedMethod("OnDayStarted", ReflectionCache.FlagTypes.InstanceFlags),
-                       transpiler: new HarmonyMethod(typeof(MoreGrassStartersCompat).StaticMethodNamed(nameof(Transpiler))));
+                    if (AccessTools.TypeByName("MoreGrassStarters.Mod") is Type moreGrassStarters)
+                    {
+                        harmony.Patch(
+                           original: moreGrassStarters.GetCachedMethod("OnDayStarted", ReflectionCache.FlagTypes.InstanceFlags),
+                           transpiler: new HarmonyMethod(typeof(MoreGrassStartersCompat).StaticMethodNamed(nameof(Transpiler))));
+                    }
+                    else
+                    {
+                        ModEntry.ModMonitor.Log($"MoreGrassStarter's modentry class could not be found?.", LogLevel.Error);
+                    }
                 }
-                else
+                else if (modInfo.Manifest.Version.IsOlderThan("1.2.2"))
                 {
-                    ModEntry.ModMonitor.Log($"MoreGrassStarter's modentry class could not be found?.", LogLevel.Error);
+                    ModEntry.ModMonitor.Log($"Detected MoreGrassStarters version 1.2.1. You may see odd issues with placed grass. Please update that mod to 1.2.2 or above!", LogLevel.Warn);
                 }
             }
         }

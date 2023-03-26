@@ -11,8 +11,6 @@ using GrowableBushes.Framework;
 
 using HarmonyLib;
 
-using Microsoft.Xna.Framework;
-
 using StardewModdingAPI.Events;
 
 using StardewValley.TerrainFeatures;

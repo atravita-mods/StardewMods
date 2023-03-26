@@ -582,6 +582,11 @@ public class ShovelTool : GenericTool
 
     protected virtual bool PushChest(GameLocation location, Farmer who, Vector2 pickupTile, int energy, Chest chest)
     {
+        // skip marketday chests
+        if (chest.modData?.ContainsKey("ceruleandeep.MarketDay/GrangeDisplay") == true)
+        {
+            return false;
+        }
         chest.GetMutex().RequestLock(
             acquired: () =>
             {

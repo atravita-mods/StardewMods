@@ -580,6 +580,15 @@ public class ShovelTool : GenericTool
         return true;
     }
 
+    /// <summary>
+    /// Pushes a chest back.
+    /// </summary>
+    /// <param name="location">Game location.</param>
+    /// <param name="who">Farmer.</param>
+    /// <param name="pickupTile">Tile affected.</param>
+    /// <param name="energy">Amount of energy to use.</param>
+    /// <param name="chest">Chest to move.</param>
+    /// <returns>True if successful, false if nothing happened.</returns>
     protected virtual bool PushChest(GameLocation location, Farmer who, Vector2 pickupTile, int energy, Chest chest)
     {
         // skip marketday chests

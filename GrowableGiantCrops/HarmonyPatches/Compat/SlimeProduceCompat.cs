@@ -17,6 +17,10 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
 namespace GrowableGiantCrops.HarmonyPatches.Compat;
+
+/// <summary>
+/// Compat for Slime Produce.
+/// </summary>
 internal static class SlimeProduceCompat
 {
     /// <summary>
@@ -24,6 +28,10 @@ internal static class SlimeProduceCompat
     /// </summary>
     internal const string SlimeBall = "atravita.PickedUpSlimeball";
 
+    /// <summary>
+    /// Applies these patches.
+    /// </summary>
+    /// <param name="harmony">My harmony instance.</param>
     internal static void ApplyPatches(Harmony harmony)
     {
         Type? slimeProduce = AccessTools.TypeByName("SlimeProduce.SlimeBall");
@@ -87,13 +95,14 @@ internal static class SlimeProduceCompat
         }
     }
 
+    /// <summary>
+    /// Replace the color for a Slime Ball if needed.
+    /// </summary>
+    /// <param name="prevColor">Previous color.</param>
+    /// <param name="item">Item to look at.</param>
+    /// <returns>New color.</returns>
     [MethodImpl(TKConstants.Hot)]
-    private static void PrefixDraw(SObject __instance, ref Color color)
-    {
-        color = ReplaceDrawColorForSlimeEgg(color, __instance);
-    }
-
-    private static Color ReplaceDrawColorForSlimeEgg(Color prevColor, SObject item)
+    internal static Color ReplaceDrawColorForSlimeEgg(Color prevColor, SObject item)
     {
         if (prevColor == Color.White && item.Name == "Slime Ball" && item.orderData?.Value is not null
             && uint.TryParse(item.orderData.Value.GetNthChunk('/'), out var packed))
@@ -101,6 +110,12 @@ internal static class SlimeProduceCompat
             return new(packed);
         }
         return prevColor;
+    }
+
+    [MethodImpl(TKConstants.Hot)]
+    private static void PrefixDraw(SObject __instance, ref Color color)
+    {
+        color = ReplaceDrawColorForSlimeEgg(color, __instance);
     }
 
     private static void Postfix(object __instance, SObject slimeBall)
@@ -172,4 +187,3 @@ internal static class SlimeProduceCompat
         return null;
     }
 }
-

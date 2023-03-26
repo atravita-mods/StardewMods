@@ -435,7 +435,7 @@ public sealed class ShovelTool : GenericTool
     #region helpers
 
     /// <inheritdoc cref="IGrowableGiantCropsAPI.DrawAnimations(GameLocation, Vector2, string?, Rectangle, Point)"/>
-    internal static void AddAnimations(GameLocation loc, Vector2 tile, string? texturePath, Rectangle sourceRect, Point tileSize)
+    internal static void AddAnimations(GameLocation loc, Vector2 tile, string? texturePath, Rectangle sourceRect, Point tileSize, Color? color = null)
     {
         if (texturePath is null)
         {
@@ -458,7 +458,7 @@ public sealed class ShovelTool : GenericTool
             position: tile * 64f,
             flipped: false,
             alphaFade: 0f,
-            color: Color.White)
+            color: color ?? Color.White)
         {
             totalNumberOfLoops = 1,
             interval = time,
@@ -613,7 +613,8 @@ public sealed class ShovelTool : GenericTool
             tile: pickupTile - Vector2.UnitY,
             texturePath: Game1.bigCraftableSpriteSheetName,
             sourceRect: SObject.getSourceRectForBigCraftable(idx),
-            new Point(1, 2));
+            new Point(1, 2),
+            color: SlimeProduceCompat.ReplaceDrawColorForSlimeEgg(Color.White, @object));
         location.objects.Remove(pickupTile);
 
         return true;

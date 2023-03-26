@@ -27,10 +27,8 @@ internal static class Game1Patcher
             return true;
         }
 
-        int width = shovel.GetTexture().Width;
-        int yindex = Math.DivRem(currentToolIndex * 16, width, out int xindex);
-
-        Rectangle sourceRectangleForTool = new(xindex, yindex, 16, 32);
+        int xindex = (currentToolIndex * 16) % shovel.GetTexture().Width;
+        Rectangle sourceRectangleForTool = new(xindex, shovel.UpgradeLevel * 32, 16, 32);
         Vector2 fPosition = f.getLocalPosition(Game1.viewport) + f.jitter + f.armOffset;
         float tool_draw_layer_offset = 0f;
         if (f.FacingDirection == 0)

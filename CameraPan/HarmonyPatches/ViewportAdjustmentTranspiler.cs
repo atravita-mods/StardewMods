@@ -24,6 +24,8 @@ internal static class ViewportAdjustmentTranspiler
     private static bool IsInEvent()
         => Game1.CurrentEvent is Event evt && (evt.farmer is not null && !evt.isFestival);
 
+
+
     private static IEnumerable<CodeInstruction>? Transpiler(IEnumerable<CodeInstruction> instructions, ILGenerator gen, MethodBase original)
     {
         try

@@ -255,6 +255,12 @@ internal sealed class ModEntry : Mod
                 this.Monitor.Log("Patching More Grass Starters");
                 MoreGrassStartersCompat.ApplyPatch(harmony, this.Helper.ModRegistry);
             }
+
+            if (this.Helper.ModRegistry.IsLoaded("exotico.SlimeProduce"))
+            {
+                this.Monitor.Log("Patching Slime Produce");
+                SlimeProduceCompat.ApplyPatches(harmony);
+            }
         }
         catch (Exception ex)
         {

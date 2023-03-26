@@ -352,7 +352,7 @@ internal static class DrawPrismatic
             {
                 helper.FindNext(new CodeInstructionWrapper[]
                 {
-                (OpCodes.Call, typeof(Color).GetCachedProperty(nameof(Color.White), ReflectionCache.FlagTypes.StaticFlags).GetGetMethod()),
+                    (OpCodes.Call, typeof(Color).GetCachedProperty(nameof(Color.White), ReflectionCache.FlagTypes.StaticFlags).GetGetMethod()),
                 })
                 .Advance(1)
                 .Insert(new CodeInstruction[]

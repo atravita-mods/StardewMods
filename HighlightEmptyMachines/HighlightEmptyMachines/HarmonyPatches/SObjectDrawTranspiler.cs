@@ -55,6 +55,7 @@ internal class SObjectDrawTranspiler
     private static bool ShouldDisablePulsing() => ModEntry.Config.DisablePulsing;
 
 #pragma warning disable SA1116 // Split parameters should start on line after declaration. Reviewed
+    [HarmonyPriority(Priority.VeryLow)]
     [HarmonyPatch(nameof(SObject.draw), new[] { typeof(SpriteBatch), typeof(int), typeof(int), typeof(float) })]
     [SuppressMessage("SMAPI.CommonErrors", "AvoidNetField:Avoid Netcode types when possible", Justification = "Only used for matching.")]
     private static IEnumerable<CodeInstruction>? Transpiler(IEnumerable<CodeInstruction> instructions, ILGenerator gen, MethodBase original)

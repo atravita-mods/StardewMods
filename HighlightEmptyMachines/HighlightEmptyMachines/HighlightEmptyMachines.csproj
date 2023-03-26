@@ -10,7 +10,7 @@
     <Name>Highlight Empty Machines</Name>
     <Description>Highlights empty machines to make them a little more obvious.</Description>
     <UpdateKeys>Nexus:11664</UpdateKeys>
-    <Version>0.2.2</Version>
+    <Version>0.2.3</Version>
     <BaseManifest>..\..\base_dependencies.json</BaseManifest>
   </PropertyGroup>
 

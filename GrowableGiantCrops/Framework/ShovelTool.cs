@@ -259,6 +259,7 @@ public sealed class ShovelTool : GenericTool
                         {
                             if (HandleBigCraftable(location, who, pickupTile, smallItemEnergy, @object, 56))
                             {
+                                @object.modData?.SetBool(SlimeProduceCompat.SlimeBall, true);
                                 return;
                             }
                             break;
@@ -594,6 +595,7 @@ public sealed class ShovelTool : GenericTool
         {
             location.debris.Add(new Debris(@object.heldObject.Value, who.Position));
         }
+        @object.Fragility = SObject.fragility_Removable;
         return HandleBigCraftable(location, who, pickupTile, energy, @object, 156);
     }
 

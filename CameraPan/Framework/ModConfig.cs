@@ -1,4 +1,6 @@
-﻿namespace CameraPan.Framework;
+﻿using StardewModdingAPI.Utilities;
+
+namespace CameraPan.Framework;
 
 /// <summary>
 /// The config class for this mod.
@@ -38,4 +40,6 @@ public sealed class ModConfig
         get => this.yRange;
         set => this.yRange = Math.Max(value, 1f);
     }
+
+    public KeybindList ResetButton { get; set; } = new(singleKey: SButton.Escape);
 }

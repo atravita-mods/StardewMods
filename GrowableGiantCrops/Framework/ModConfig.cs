@@ -36,6 +36,11 @@ public sealed class ModConfig
     }
 
     /// <summary>
+    /// Gets or sets a value indicating whether or not the shovel should do damage to monsters.
+    /// </summary>
+    public bool ShovelDoesDamage { get; set; } = true;
+
+    /// <summary>
     /// Gets or sets a value indicating whether or not shops should have graphics.
     /// </summary>
     [GMCMSection("Shop", -10)]

@@ -496,9 +496,12 @@ public sealed class ShovelTool : GenericTool
         int damage = (sourceRect.Height / 16) * (sourceRect.Width / 16);
 
         // if you somehow manage to hit a monster with the animation.....
-        DelayedAction.functionAfterDelay(
-            () => loc.damageMonster(new Rectangle((int)landingPos.X, (int)landingPos.Y, 64, 64), damage, damage * 3, false, Game1.player),
-            (int)time);
+        if (ModEntry.Config.ShovelDoesDamage)
+        {
+            DelayedAction.functionAfterDelay(
+                () => loc.damageMonster(new Rectangle((int)landingPos.X, (int)landingPos.Y, 64, 64), damage, damage * 3, false, Game1.player),
+                (int)time);
+        }
 
         mp.broadcastSprites(loc, objTas, dustTas);
     }

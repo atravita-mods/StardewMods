@@ -9,7 +9,7 @@
   <PropertyGroup>
     <Name>Growable Giant Crops</Name>
     <Description>Lets you grow giant crops.</Description>
-    <Version>0.1.2</Version>
+    <Version>0.1.3</Version>
     <UpdateKeys>Nexus:15559</UpdateKeys>
     <BaseManifest>..\spacecore_dependencies.json</BaseManifest>
   </PropertyGroup>

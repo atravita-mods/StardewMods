@@ -7,11 +7,8 @@ using AtraShared.Utils.Extensions;
 using AtraShared.Utils.HarmonyHelper;
 
 using GrowableGiantCrops.Framework;
-using GrowableGiantCrops.HarmonyPatches.GrassPatches;
 
 using HarmonyLib;
-
-using StardewValley.TerrainFeatures;
 
 namespace GrowableGiantCrops.HarmonyPatches.ToolPatches;
 

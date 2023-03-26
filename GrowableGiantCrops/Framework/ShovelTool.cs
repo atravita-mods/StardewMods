@@ -36,7 +36,10 @@ namespace GrowableGiantCrops.Framework;
 [SuppressMessage("StyleCop.CSharp.OrderingRules", "SA1204:Static elements should appear before instance elements", Justification = "Helper methods are placed near bottom.")]
 public class ShovelTool : GenericTool
 {
-    private static readonly Api Api = new();
+    /// <summary>
+    /// The API instance.
+    /// </summary>
+    protected static readonly Api Api = new();
 
     #region delegates
 
@@ -112,8 +115,7 @@ public class ShovelTool : GenericTool
             _ => 188,
         };
 
-        FarmerSprite? sprite = who.Sprite as FarmerSprite;
-        if (sprite is null)
+        if (who.Sprite is not FarmerSprite sprite)
         {
             return;
         }
@@ -383,7 +385,7 @@ public class ShovelTool : GenericTool
     public override void drawInMenu(SpriteBatch spriteBatch, Vector2 location, float scaleSize, float transparency, float layerDepth, StackDrawType drawStackNumber, Color color, bool drawShadow)
     {
         spriteBatch.Draw(
-            texture: AssetManager.ToolTexture,
+            texture: this.GetTexture(),
             position: location + new Vector2(32f, 32f),
             new Rectangle(96, 16, 16, 16),
             color: color * transparency,
@@ -399,6 +401,12 @@ public class ShovelTool : GenericTool
 
     /// <inheritdoc />
     protected override string loadDescription() => I18n.Shovel_Description();
+
+    /// <summary>
+    /// Gets the texture for the tool.
+    /// </summary>
+    /// <returns>Texture.</returns>
+    public virtual Texture2D GetTexture() => AssetManager.ToolTexture;
 
     #endregion
 
@@ -435,7 +443,7 @@ public class ShovelTool : GenericTool
     #region helpers
 
     /// <inheritdoc cref="IGrowableGiantCropsAPI.DrawAnimations(GameLocation, Vector2, string?, Rectangle, Point)"/>
-    internal static void AddAnimations(GameLocation loc, Vector2 tile, string? texturePath, Rectangle sourceRect, Point tileSize, Color? color = null)
+    protected internal static void AddAnimations(GameLocation loc, Vector2 tile, string? texturePath, Rectangle sourceRect, Point tileSize, Color? color = null)
     {
         if (texturePath is null)
         {
@@ -520,6 +528,15 @@ public class ShovelTool : GenericTool
         }
     }
 
+    /// <summary>
+    /// Handles a terrain object.
+    /// </summary>
+    /// <param name="location">GameLocation.</param>
+    /// <param name="who">Farmer.</param>
+    /// <param name="pickupTile">Tile picked up from.</param>
+    /// <param name="energy">Energy used.</param>
+    /// <param name="object">The object affected.</param>
+    /// <returns>True if handled, false otherwise.</returns>
     protected virtual bool HandleTerrainObject(GameLocation location, Farmer who, Vector2 pickupTile, int energy, SObject @object)
     {
         who.Stamina -= energy;

@@ -33,8 +33,7 @@ namespace GrowableGiantCrops.Framework;
 /// </summary>
 [XmlType("Mods_atravita_Shovel")]
 [SuppressMessage("StyleCop.CSharp.OrderingRules", "SA1202:Elements should be ordered by access", Justification = "Like methods are grouped together.")]
-[SuppressMessage("StyleCop.CSharp.OrderingRules", "SA1204:Static elements should appear before instance elements", Justification = "Helper methods are placed near bottom.")]
-public class ShovelTool : GenericTool
+public class ShovelTool : Tool
 {
     /// <summary>
     /// The API instance.
@@ -69,7 +68,7 @@ public class ShovelTool : GenericTool
     /// Initializes a new instance of the <see cref="ShovelTool"/> class.
     /// </summary>
     public ShovelTool()
-        : base(I18n.Shovel_Name(), I18n.Shovel_Description(), 0, 0, 0)
+        : base(I18n.Shovel_Name(), 0, 0, 0, false, 0)
     {
         this.Stackable = false;
     }
@@ -421,6 +420,9 @@ public class ShovelTool : GenericTool
     public override void actionWhenClaimed()
     {
     }
+
+    /// <inheritdoc />
+    public override bool actionWhenPurchased() => false;
 
     /// <inheritdoc />
     /// <remarks>forbid attachments.</remarks>

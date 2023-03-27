@@ -1,27 +1,25 @@
-﻿using System.Reflection;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Reflection.Emit;
-
+using System.Reflection;
+using System.Text;
+using System.Threading.Tasks;
 using AtraCore.Framework.ReflectionManager;
 
-using AtraShared.Utils.Extensions;
 using AtraShared.Utils.HarmonyHelper;
 
-using GrowableGiantCrops.Framework;
-
 using HarmonyLib;
+using AtraShared.Utils.Extensions;
+using StardewValley.Tools;
+using GrowableGiantCrops.Framework;
 
 namespace GrowableGiantCrops.HarmonyPatches.ToolPatches;
 
-/// <summary>
-/// Patch to prevent shovel from doing damage if that's been disabled.
-/// </summary>
-[HarmonyPatch(typeof(Tool))]
-internal static class ShouldDamageMonsterTranspiler
+[HarmonyPatch(typeof(GameLocation))]
+internal static class ShovelUpgradablePatch
 {
-    private static bool ShouldSkipDamagingMonster(Tool tool)
-        => tool is ShovelTool && !ModEntry.Config.ShovelDoesDamage;
-
-    [HarmonyPatch(nameof(Tool.DoFunction))]
+    [HarmonyPatch(nameof(GameLocation.blacksmith))]
     [SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1116:Split parameters should start on line after declaration", Justification = "Reviewed.")]
     private static IEnumerable<CodeInstruction>? Transpiler(IEnumerable<CodeInstruction> instructions, ILGenerator gen, MethodBase original)
     {
@@ -30,23 +28,23 @@ internal static class ShouldDamageMonsterTranspiler
             ILHelper helper = new(original, instructions, ModEntry.ModMonitor, gen);
             helper.FindNext(new CodeInstructionWrapper[]
             {
-                OpCodes.Ldarg_0,
-                (OpCodes.Call, typeof(Tool).GetCachedMethod(nameof(Tool.isHeavyHitter), ReflectionCache.FlagTypes.InstanceFlags)),
+                SpecialCodeInstructionCases.LdLoc,
+                (OpCodes.Isinst, typeof(GenericTool)),
                 OpCodes.Brfalse_S,
             })
             .Push()
-            .Advance(2)
-            .StoreBranchDest()
-            .AdvanceToStoredLabel()
+            .Advance(3)
             .DefineAndAttachLabel(out var jumpPoint)
-            .Pop()
-            .GetLabels(out var labelsToMove)
+            .Pop();
+
+            var ldloc = helper.CurrentInstruction.Clone();
+            helper.GetLabels(out var labelsToMove)
             .Insert(new CodeInstruction[]
             {
-                new(OpCodes.Ldarg_0),
-                new(OpCodes.Call, typeof(ShouldDamageMonsterTranspiler).GetCachedMethod(nameof(ShouldSkipDamagingMonster), ReflectionCache.FlagTypes.StaticFlags)),
+                ldloc,
+                new(OpCodes.Isinst, typeof(ShovelTool)),
                 new(OpCodes.Brtrue, jumpPoint),
-            }, withLabels: labelsToMove);
+            }, labelsToMove);
 
             // helper.Print();
             return helper.Render();

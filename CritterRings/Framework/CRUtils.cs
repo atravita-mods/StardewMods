@@ -187,7 +187,7 @@ internal static class CRUtils
                         int yCoord = (int)tile.Y;
                         if (!loc.isWaterTile(xCoord, yCoord) || !loc.isWaterTile(xCoord, yCoord - 1)
                             || loc.doesTileHaveProperty(xCoord, yCoord, "Passable", "Buildings") is not null
-                            || (loc.catchOceanCrabPotFishFromThisSpot(xCoord, yCoord) && !ModEntry.Config.SaltwaterFrogs))
+                            || ((loc is Beach || loc.catchOceanCrabPotFishFromThisSpot(xCoord, yCoord)) && !ModEntry.Config.SaltwaterFrogs))
                         {
                             continue;
                         }

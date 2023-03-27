@@ -24,6 +24,7 @@ Run SMAPI at least once with this mod installed to generate the `config.json`, o
 * `RelaxedPlacement`: Relaxes placement rules for the giant crops, resource clumps, fruit trees, and trees. This will let you place fruit trees closer together than the game would normally allow, for example.
 * `PlacedOnly`: If enabled, the shovel will only pick up large items you've placed.
 * `ShovelEnergy`: How much energy should each use of the shovel on a large item take? Defaults to 7.
+* `ShovelDoesDamage`: If enabled, the shovel will do a little damage when it comes into contact with monsters, and also the items thrown into the air by the shovel do damage.
 
 #### Shop options
 

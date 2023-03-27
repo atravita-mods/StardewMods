@@ -7,6 +7,9 @@ TODO:
    - Maybe put grass in the furniture catalogue?
    - option for the two hoe enchantments?
 
+### Version 0.1.4
+* Added option for the two hoe enchantments.
+
 ### Version 0.1.3
 * Shovel can optionally not do damage
 * Additions for extensibility

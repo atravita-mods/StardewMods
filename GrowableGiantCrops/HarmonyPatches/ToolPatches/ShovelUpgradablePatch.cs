@@ -36,11 +36,11 @@ internal static class ShovelUpgradablePatch
             .Advance(2)
             .StoreBranchDest()
             .AdvanceToStoredLabel()
-            .DefineAndAttachLabel(out var jumpPoint)
+            .DefineAndAttachLabel(out Label jumpPoint)
             .Pop();
 
-            var ldloc = helper.CurrentInstruction.Clone();
-            helper.GetLabels(out var labelsToMove)
+            CodeInstruction ldloc = helper.CurrentInstruction.Clone();
+            helper.GetLabels(out IList<Label>? labelsToMove)
             .Insert(new CodeInstruction[]
             {
                 ldloc,

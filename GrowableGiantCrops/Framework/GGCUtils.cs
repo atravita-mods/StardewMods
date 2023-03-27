@@ -250,7 +250,7 @@ internal static class GGCUtils
             }
         }
 
-        if ((location.terrainFeatures?.TryGetValue(tile, out var terrain) == true
+        if ((location.terrainFeatures?.TryGetValue(tile, out TerrainFeature? terrain) == true
             && (terrain is not HoeDirt dirt || dirt.crop is not null))
             || location.Objects?.ContainsKey(tile) == true)
         {

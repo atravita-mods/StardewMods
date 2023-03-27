@@ -41,6 +41,11 @@ public sealed class ModConfig
     public bool ShovelDoesDamage { get; set; } = true;
 
     /// <summary>
+    /// Gets or sets a value indicating whether or not the shovel should be allowed the two hoe enchantments.
+    /// </summary>
+    public bool AllowHoeEnchantments { get; set; } = false;
+
+    /// <summary>
     /// Gets or sets a value indicating whether or not shops should have graphics.
     /// </summary>
     [GMCMSection("Shop", -10)]

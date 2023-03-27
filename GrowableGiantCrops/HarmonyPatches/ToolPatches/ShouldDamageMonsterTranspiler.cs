@@ -38,9 +38,9 @@ internal static class ShouldDamageMonsterTranspiler
             .Advance(2)
             .StoreBranchDest()
             .AdvanceToStoredLabel()
-            .DefineAndAttachLabel(out var jumpPoint)
+            .DefineAndAttachLabel(out Label jumpPoint)
             .Pop()
-            .GetLabels(out var labelsToMove)
+            .GetLabels(out IList<Label>? labelsToMove)
             .Insert(new CodeInstruction[]
             {
                 new(OpCodes.Ldarg_0),

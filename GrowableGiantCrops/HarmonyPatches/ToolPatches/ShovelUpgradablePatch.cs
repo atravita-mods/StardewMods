@@ -33,7 +33,9 @@ internal static class ShovelUpgradablePatch
                 OpCodes.Brfalse_S,
             })
             .Push()
-            .Advance(3)
+            .Advance(2)
+            .StoreBranchDest()
+            .AdvanceToStoredLabel()
             .DefineAndAttachLabel(out var jumpPoint)
             .Pop();
 

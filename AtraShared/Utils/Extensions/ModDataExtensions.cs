@@ -54,8 +54,8 @@ public static class ModDataExtensions
     }
 
     // Instead of storing a real bool, just store 0 or 1
-    private const string trueValue = "1";
-    private const string falseValue = "0";
+    private const string TrueValue = "1";
+    private const string FalseValue = "0";
 
     /// <summary>
     /// Gets a boolean value out of ModData.
@@ -68,7 +68,7 @@ public static class ModDataExtensions
     [return: NotNullIfNotNull("defaultVal")]
     public static bool? GetBool(this ModDataDictionary modData, string key, bool? defaultVal = null)
         => modData.TryGetValue(key, out string val)
-            ? val != falseValue
+            ? val != FalseValue
             : defaultVal;
 
     /// <summary>
@@ -87,7 +87,7 @@ public static class ModDataExtensions
         }
         else
         {
-            modData[key] = val ? trueValue : falseValue;
+            modData[key] = val ? TrueValue : FalseValue;
         }
     }
 

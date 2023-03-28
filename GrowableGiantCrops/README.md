@@ -24,6 +24,7 @@ Run SMAPI at least once with this mod installed to generate the `config.json`, o
 * `RelaxedPlacement`: Relaxes placement rules for the giant crops, resource clumps, fruit trees, and trees. This will let you place fruit trees closer together than the game would normally allow, for example.
 * `PlacedOnly`: If enabled, the shovel will only pick up large items you've placed.
 * `ShovelEnergy`: How much energy should each use of the shovel on a large item take? Defaults to 7.
+* `ShovelDoesDamage`: If enabled, the shovel will do a little damage when it comes into contact with monsters, and also the items thrown into the air by the shovel do damage.
 
 #### Shop options
 
@@ -91,11 +92,14 @@ These were primarily used for debugging but exist if you want to spawn things di
 * Works with [More Grass Starters](https://www.nexusmods.com/stardewvalley/mods/1702). Note that the starters from More Grass Starters and the starters from this mod are different and will act differently. More Grass Starters starters are found at Pierre's, mine are at the little resource shop on Robin's desk.
 * Specific compatibility notes: This mod uses SpaceCore's serializer.
     - I did not test this mod with Save Anywhere (either version), use at your own risk.
-    - It should work fine with SolidFoundations, just remember to remove all instances of the inventory version of the giant crops, resource clumps, trees, and etc from all SolidFoundations buildings before removing this mod.
+    - It should work fine with SolidFoundations, just remember to remove **all** instances of the inventory version of the giant crops, resource clumps, trees, and etc from all SolidFoundations buildings before removing this mod. If you do not, your buildings might vanish.
 
 ## Much thanks to
 * [VoidWitchCult](https://www.nexusmods.com/stardewvalley/users/163267158) for providing me with graphics for Robin's shop! Check out [their goth bachelors/bachelorettes](https://www.nexusmods.com/stardewvalley/mods/15335)!
 * [Violetlizabet](https://www.nexusmods.com/stardewvalley/users/120958053) for the winter palm trees! Check out her [Fireworks Festival](https://www.nexusmods.com/stardewvalley/mods/15261)!
+* [Casey](https://www.nexusmods.com/stardewvalley/users/34250790) for...a lot at this point. This mod uses her serializer magic and would not be possible without it.
+
+If anyone wants to re-texture the shovel, I'd greatly appreciate it, haha.
 
 ## Mods in screenshots
 * The giant crops

@@ -90,11 +90,11 @@ public sealed class ModConfig
     /// Gets or sets a value indicating how fast the frog jump charges.
     /// </summary>
     [GMCMRange(1, 20)]
-    [GMCMSection("FrogRing", 20)]
+    [GMCMSection("FrogRing", 40)]
     public int JumpChargeSpeed
     {
         get => this.jumpChargeSpeed;
-        set => this.jumpChargeSpeed = Math.Clamp(value, 1, 20);
+        set => this.jumpChargeSpeed = Math.Clamp(value, 1, 40);
     }
 
     /// <summary>
@@ -127,6 +127,18 @@ public sealed class ModConfig
     /// </summary>
     [GMCMSection("FrogRing", 20)]
     public bool FrogsSpawnOnlyInRain { get; set; } = false;
+
+    /// <summary>
+    /// Gets or sets a value indicating whether or not frogs can spawn in areas that are saltwater.
+    /// </summary>
+    [GMCMSection("FrogRing", 20)]
+    public bool SaltwaterFrogs { get; set; } = false;
+
+    /// <summary>
+    /// Gets or sets a value indicating whether or not frogs can spawn indoors.
+    /// </summary>
+    [GMCMSection("FrogRing", 20)]
+    public bool IndoorFrogs { get; set; } = false;
 
     /// <summary>
     /// Gets or sets a value indicating whether or not owls should spawn indoors.

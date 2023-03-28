@@ -2,8 +2,10 @@
 using System.Runtime.InteropServices;
 using System.Xml.Serialization;
 
+using AtraBase.Toolkit.Extensions;
 using AtraBase.Toolkit.Reflection;
 
+using AtraCore.Framework.Caches;
 using AtraCore.Framework.ReflectionManager;
 using AtraCore.Utilities;
 
@@ -31,10 +33,12 @@ namespace GrowableGiantCrops.Framework;
 /// </summary>
 [XmlType("Mods_atravita_Shovel")]
 [SuppressMessage("StyleCop.CSharp.OrderingRules", "SA1202:Elements should be ordered by access", Justification = "Like methods are grouped together.")]
-[SuppressMessage("StyleCop.CSharp.OrderingRules", "SA1204:Static elements should appear before instance elements", Justification = "Helper methods are placed near bottom.")]
-public sealed class ShovelTool : GenericTool
+public class ShovelTool : Tool
 {
-    private static readonly Api Api = new();
+    /// <summary>
+    /// The API instance.
+    /// </summary>
+    protected static readonly Api Api = new();
 
     #region delegates
 
@@ -64,7 +68,7 @@ public sealed class ShovelTool : GenericTool
     /// Initializes a new instance of the <see cref="ShovelTool"/> class.
     /// </summary>
     public ShovelTool()
-        : base(I18n.Shovel_Name(), I18n.Shovel_Description(), 0, 0, 0)
+        : base(I18n.Shovel_Name(), 0, 0, 0, false, 0)
     {
         this.Stackable = false;
     }
@@ -110,8 +114,7 @@ public sealed class ShovelTool : GenericTool
             _ => 188,
         };
 
-        FarmerSprite? sprite = who.Sprite as FarmerSprite;
-        if (sprite is null)
+        if (who.Sprite is not FarmerSprite sprite)
         {
             return;
         }
@@ -158,6 +161,28 @@ public sealed class ShovelTool : GenericTool
             }
 
             location.performToolAction(this, x / Game1.tileSize, y / Game1.tileSize);
+
+            // allow modders to block the shovel.
+            if (location.doesTileHaveProperty(x, y, "atravita.ShovelForbidden", "Back") is string message)
+            {
+                if (string.IsNullOrWhiteSpace(message))
+                {
+                    Game1.showRedMessage(I18n.FruitTree_Forbidden());
+                }
+                else if (message.TrySplitOnce(':', out ReadOnlySpan<char> first, out ReadOnlySpan<char> second))
+                {
+                    if (NPCCache.GetByVillagerName(first.Trim().ToString()) is NPC npc)
+                    {
+                        Game1.drawDialogue(npc, second.Trim().ToString());
+                    }
+                }
+                else
+                {
+                    Game1.drawObjectDialogue(message.Trim());
+                }
+                return;
+            }
+
             GGCUtils.GetLargeObjectAtLocation(location, x, y, false)?.performToolAction(this, 0, pickupTile, location);
 
             int bigItemEnergy = this.IsEfficient ? 0 : ModEntry.Config.ShovelEnergy;
@@ -166,7 +191,7 @@ public sealed class ShovelTool : GenericTool
             if (ModEntry.GrowableBushesAPI?.TryPickUpBush(location, pickupTile, ModEntry.Config.PlacedOnly) is SObject bush)
             {
                 ModEntry.ModMonitor.DebugOnlyLog($"Picking up bush {bush.Name}", LogLevel.Info);
-                GiveItemOrMakeDebris(location, who, bush);
+                this.GiveItemOrMakeDebris(location, who, bush);
                 ModEntry.GrowableBushesAPI.DrawPickUpGraphics(bush, location, bush.TileLocation);
                 who.Stamina -= bigItemEnergy;
                 return;
@@ -177,7 +202,7 @@ public sealed class ShovelTool : GenericTool
             {
                 ModEntry.ModMonitor.DebugOnlyLog($"Picking up {inventoryClump.Name}.", LogLevel.Info);
                 who.Stamina -= bigItemEnergy;
-                GiveItemOrMakeDebris(location, who, inventoryClump);
+                this.GiveItemOrMakeDebris(location, who, inventoryClump);
                 Api.DrawPickUpGraphics(inventoryClump, location, inventoryClump.TileLocation);
                 return;
             }
@@ -195,7 +220,7 @@ public sealed class ShovelTool : GenericTool
                         (@object.Name == "Stone" || @object.Name.Contains("Weeds")
                         || @object.Name.Contains("Twig") || @object.Name == "SupplyCrate"))
                     {
-                        if (HandleTerrainObject(location, who, pickupTile, smallItemEnergy, @object))
+                        if (this.HandleTerrainObject(location, who, pickupTile, smallItemEnergy, @object))
                         {
                             return;
                         }
@@ -212,7 +237,7 @@ public sealed class ShovelTool : GenericTool
                 // special case: shovel pushes full chests.
                 if (@object is Chest chest && !chest.isEmpty() && chest.playerChest.Value)
                 {
-                    if (PushChest(location, who, pickupTile, smallItemEnergy, chest))
+                    if (this.PushChest(location, who, pickupTile, smallItemEnergy, chest))
                     {
                         return;
                     }
@@ -225,7 +250,7 @@ public sealed class ShovelTool : GenericTool
                     {
                         case "Mushroom Box":
                         {
-                            if (HandleMushroomBox(location, who, pickupTile, smallItemEnergy, @object))
+                            if (this.HandleMushroomBox(location, who, pickupTile, smallItemEnergy, @object))
                             {
                                 return;
                             }
@@ -233,15 +258,16 @@ public sealed class ShovelTool : GenericTool
                         }
                         case "Slime Ball":
                         {
-                            if (HandleBigCraftable(location, who, pickupTile, smallItemEnergy, @object, 56))
+                            if (this.HandleBigCraftable(location, who, pickupTile, smallItemEnergy, @object, 56))
                             {
+                                @object.modData?.SetBool(SlimeProduceCompat.SlimeBall, true);
                                 return;
                             }
                             break;
                         }
                         case "Slime Incubator":
                         {
-                            if (HandleSlimeIncubator(location, who, pickupTile, smallItemEnergy, @object))
+                            if (this.HandleSlimeIncubator(location, who, pickupTile, smallItemEnergy, @object))
                             {
                                 return;
                             }
@@ -249,7 +275,7 @@ public sealed class ShovelTool : GenericTool
                         }
                         case "Boulder":
                         {
-                            if (HandleBigCraftable(location, who, pickupTile, smallItemEnergy, @object, 78))
+                            if (this.HandleBigCraftable(location, who, pickupTile, smallItemEnergy, @object, 78))
                             {
                                 @object.Fragility = SObject.fragility_Removable;
                                 return;
@@ -264,7 +290,7 @@ public sealed class ShovelTool : GenericTool
                     who.Stamina -= smallItemEnergy;
                     if (FTMArtifactSpotPatch.IsBuriedItem?.Invoke(@object) != true)
                     {
-                        GiveItemOrMakeDebris(location, who, @object);
+                        this.GiveItemOrMakeDebris(location, who, @object);
                         AddAnimations(
                             loc: location,
                             tile: pickupTile,
@@ -283,7 +309,7 @@ public sealed class ShovelTool : GenericTool
                 if (terrain is Grass grass &&
                     (terrain.GetType() == typeof(Grass) || SObjectPatches.IsMoreGrassGrass?.Invoke(grass) == true))
                 {
-                    if (HandleGrass(location, who, pickupTile, smallItemEnergy, grass))
+                    if (this.HandleGrass(location, who, pickupTile, smallItemEnergy, grass))
                     {
                         return;
                     }
@@ -305,7 +331,19 @@ public sealed class ShovelTool : GenericTool
 
                 if (terrain is FruitTree fruitTree && terrain.GetType() == typeof(FruitTree))
                 {
-                    if (fruitTree.growthStage.Value <= ModEntry.Config.MaxFruitTreeStageInternal && HandleFruitTree(location, who, pickupTile, bigItemEnergy))
+                    // this is for East Scarp. We'll prevent people from stealing their trees.
+                    // also the ones at the deep woods entry.
+                    if (fruitTree.modData?.ContainsKey(InventoryFruitTree.ModDataKey) != true
+                        && (location.doesTileHaveProperty(x, y, "FruitTree", "Back") is not null
+                            || location.NameOrUniqueName == "DeepWoods"
+                            || location.NameOrUniqueName == "Custom_Ridgeside_RidgesideVillage"))
+                    {
+                        Game1.showRedMessage(I18n.FruitTree_Forbidden());
+                        fruitTree.shake(pickupTile, true, location);
+                        return;
+                    }
+
+                    if (fruitTree.growthStage.Value <= ModEntry.Config.MaxFruitTreeStageInternal && this.HandleFruitTree(location, who, pickupTile, bigItemEnergy))
                     {
                         return;
                     }
@@ -327,7 +365,7 @@ public sealed class ShovelTool : GenericTool
                 return;
             }
 
-            MakeHoeDirt(location, who, pickupTile, smallItemEnergy);
+            this.MakeHoeDirt(location, who, pickupTile, smallItemEnergy);
         }
         catch (Exception ex)
         {
@@ -346,7 +384,7 @@ public sealed class ShovelTool : GenericTool
     public override void drawInMenu(SpriteBatch spriteBatch, Vector2 location, float scaleSize, float transparency, float layerDepth, StackDrawType drawStackNumber, Color color, bool drawShadow)
     {
         spriteBatch.Draw(
-            texture: AssetManager.ToolTexture,
+            texture: this.GetTexture(),
             position: location + new Vector2(32f, 32f),
             new Rectangle(96, 16, 16, 16),
             color: color * transparency,
@@ -363,6 +401,12 @@ public sealed class ShovelTool : GenericTool
     /// <inheritdoc />
     protected override string loadDescription() => I18n.Shovel_Description();
 
+    /// <summary>
+    /// Gets the texture for the tool.
+    /// </summary>
+    /// <returns>Texture.</returns>
+    public virtual Texture2D GetTexture() => AssetManager.ToolTexture;
+
     #endregion
 
     #region misc
@@ -376,6 +420,9 @@ public sealed class ShovelTool : GenericTool
     public override void actionWhenClaimed()
     {
     }
+
+    /// <inheritdoc />
+    public override bool actionWhenPurchased() => false;
 
     /// <inheritdoc />
     /// <remarks>forbid attachments.</remarks>
@@ -398,7 +445,7 @@ public sealed class ShovelTool : GenericTool
     #region helpers
 
     /// <inheritdoc cref="IGrowableGiantCropsAPI.DrawAnimations(GameLocation, Vector2, string?, Rectangle, Point)"/>
-    internal static void AddAnimations(GameLocation loc, Vector2 tile, string? texturePath, Rectangle sourceRect, Point tileSize)
+    protected internal static void AddAnimations(GameLocation loc, Vector2 tile, string? texturePath, Rectangle sourceRect, Point tileSize, Color? color = null)
     {
         if (texturePath is null)
         {
@@ -421,7 +468,7 @@ public sealed class ShovelTool : GenericTool
             position: tile * 64f,
             flipped: false,
             alphaFade: 0f,
-            color: Color.White)
+            color: color ?? Color.White)
         {
             totalNumberOfLoops = 1,
             interval = time,
@@ -459,9 +506,12 @@ public sealed class ShovelTool : GenericTool
         int damage = (sourceRect.Height / 16) * (sourceRect.Width / 16);
 
         // if you somehow manage to hit a monster with the animation.....
-        DelayedAction.functionAfterDelay(
-            () => loc.damageMonster(new Rectangle((int)landingPos.X, (int)landingPos.Y, 64, 64), damage, damage * 3, false, Game1.player),
-            (int)time);
+        if (ModEntry.Config.ShovelDoesDamage)
+        {
+            DelayedAction.functionAfterDelay(
+                () => loc.damageMonster(new Rectangle((int)landingPos.X, (int)landingPos.Y, 64, 64), damage, damage * 3, false, Game1.player),
+                (int)time);
+        }
 
         mp.broadcastSprites(loc, objTas, dustTas);
     }
@@ -472,7 +522,7 @@ public sealed class ShovelTool : GenericTool
     /// <param name="location">relevant location.</param>
     /// <param name="who">farmer to add to.</param>
     /// <param name="item">item to add.</param>
-    private static void GiveItemOrMakeDebris(GameLocation location, Farmer who, Item item)
+    protected virtual void GiveItemOrMakeDebris(GameLocation location, Farmer who, Item item)
     {
         if (!who.addItemToInventoryBool(item))
         {
@@ -480,10 +530,19 @@ public sealed class ShovelTool : GenericTool
         }
     }
 
-    private static bool HandleTerrainObject(GameLocation location, Farmer who, Vector2 pickupTile, int energy, SObject @object)
+    /// <summary>
+    /// Handles a terrain object.
+    /// </summary>
+    /// <param name="location">GameLocation.</param>
+    /// <param name="who">Farmer.</param>
+    /// <param name="pickupTile">Tile picked up from.</param>
+    /// <param name="energy">Energy used.</param>
+    /// <param name="object">The object affected.</param>
+    /// <returns>True if handled, false otherwise.</returns>
+    protected virtual bool HandleTerrainObject(GameLocation location, Farmer who, Vector2 pickupTile, int energy, SObject @object)
     {
         who.Stamina -= energy;
-        GiveItemOrMakeDebris(location, who, @object);
+        this.GiveItemOrMakeDebris(location, who, @object);
         AddAnimations(
             loc: location,
             tile: pickupTile,
@@ -507,11 +566,11 @@ public sealed class ShovelTool : GenericTool
         return true;
     }
 
-    private static bool HandleGrass(GameLocation location, Farmer who, Vector2 pickupTile, int energy, Grass grass)
+    protected virtual bool HandleGrass(GameLocation location, Farmer who, Vector2 pickupTile, int energy, Grass grass)
     {
         who.Stamina -= energy;
         SObject starter = Api.GetMatchingStarter(grass);
-        GiveItemOrMakeDebris(location, who, starter);
+        this.GiveItemOrMakeDebris(location, who, starter);
         AddAnimations(
             loc: location,
             tile: pickupTile,
@@ -523,8 +582,22 @@ public sealed class ShovelTool : GenericTool
         return true;
     }
 
-    private static bool PushChest(GameLocation location, Farmer who, Vector2 pickupTile, int energy, Chest chest)
+    /// <summary>
+    /// Pushes a chest back.
+    /// </summary>
+    /// <param name="location">Game location.</param>
+    /// <param name="who">Farmer.</param>
+    /// <param name="pickupTile">Tile affected.</param>
+    /// <param name="energy">Amount of energy to use.</param>
+    /// <param name="chest">Chest to move.</param>
+    /// <returns>True if successful, false if nothing happened.</returns>
+    protected virtual bool PushChest(GameLocation location, Farmer who, Vector2 pickupTile, int energy, Chest chest)
     {
+        // skip marketday chests
+        if (chest.modData?.ContainsKey("ceruleandeep.MarketDay/GrangeDisplay") == true)
+        {
+            return false;
+        }
         chest.GetMutex().RequestLock(
             acquired: () =>
             {
@@ -543,45 +616,47 @@ public sealed class ShovelTool : GenericTool
         return true;
     }
 
-    private static bool HandleMushroomBox(GameLocation location, Farmer who, Vector2 pickupTile, int energy, SObject @object)
+    protected virtual bool HandleMushroomBox(GameLocation location, Farmer who, Vector2 pickupTile, int energy, SObject @object)
     {
         if (@object.readyForHarvest.Value)
         {
             location.debris.Add(new Debris(@object.heldObject.Value, who.Position));
         }
-        return HandleBigCraftable(location, who, pickupTile, energy, @object, 128);
+        return this.HandleBigCraftable(location, who, pickupTile, energy, @object, 128);
     }
 
-    private static bool HandleSlimeIncubator(GameLocation location, Farmer who, Vector2 pickupTile, int energy, SObject @object)
+    protected virtual bool HandleSlimeIncubator(GameLocation location, Farmer who, Vector2 pickupTile, int energy, SObject @object)
     {
         if (@object.MinutesUntilReady <= 0)
         {
             location.debris.Add(new Debris(@object.heldObject.Value, who.Position));
         }
-        return HandleBigCraftable(location, who, pickupTile, energy, @object, 156);
+        @object.Fragility = SObject.fragility_Removable;
+        return this.HandleBigCraftable(location, who, pickupTile, energy, @object, 156);
     }
 
 #warning - 1.6 has nice methods for this.
 
-    private static bool HandleBigCraftable(GameLocation location, Farmer who, Vector2 pickupTile, int energy, SObject @object, int idx)
+    protected virtual bool HandleBigCraftable(GameLocation location, Farmer who, Vector2 pickupTile, int energy, SObject @object, int idx)
     {
         who.Stamina -= energy;
         @object.ParentSheetIndex = idx;
         @object.heldObject.Value = null;
         @object.performRemoveAction(pickupTile, location);
-        GiveItemOrMakeDebris(location, who, @object);
+        this.GiveItemOrMakeDebris(location, who, @object);
         AddAnimations(
             loc: location,
             tile: pickupTile - Vector2.UnitY,
             texturePath: Game1.bigCraftableSpriteSheetName,
             sourceRect: SObject.getSourceRectForBigCraftable(idx),
-            new Point(1, 2));
+            new Point(1, 2),
+            color: SlimeProduceCompat.ReplaceDrawColorForSlimeEgg(Color.White, @object));
         location.objects.Remove(pickupTile);
 
         return true;
     }
 
-    private bool HandleTree(GameLocation location, Farmer who, Vector2 pickupTile, int energy, Tree tree)
+    protected virtual bool HandleTree(GameLocation location, Farmer who, Vector2 pickupTile, int energy, Tree tree)
     {
         if (tree.growthStage.Value == 0 && tree.treeType.Value is not Tree.palmTree or Tree.palmTree2)
         {
@@ -596,7 +671,7 @@ public sealed class ShovelTool : GenericTool
         {
             ModEntry.ModMonitor.DebugOnlyLog($"Picking up {inventoryTree.Name}.", LogLevel.Info);
             who.Stamina -= ModEntry.Config.ShovelEnergy;
-            GiveItemOrMakeDebris(location, who, inventoryTree);
+            this.GiveItemOrMakeDebris(location, who, inventoryTree);
             Api.DrawPickUpGraphics(inventoryTree, location, inventoryTree.TileLocation);
             return true;
         }
@@ -604,20 +679,20 @@ public sealed class ShovelTool : GenericTool
         return false;
     }
 
-    private static bool HandleFruitTree(GameLocation location, Farmer who, Vector2 pickupTile, int energy)
+    protected virtual bool HandleFruitTree(GameLocation location, Farmer who, Vector2 pickupTile, int energy)
     {
         if (Api.TryPickUpFruitTree(location, pickupTile, ModEntry.Config.PlacedOnly) is InventoryFruitTree inventoryFruitTree)
         {
             ModEntry.ModMonitor.DebugOnlyLog($"Picking up {inventoryFruitTree.Name}.", LogLevel.Info);
             who.Stamina -= energy;
-            GiveItemOrMakeDebris(location, who, inventoryFruitTree);
+            this.GiveItemOrMakeDebris(location, who, inventoryFruitTree);
             Api.DrawPickUpGraphics(inventoryFruitTree, location, inventoryFruitTree.TileLocation);
             return true;
         }
         return false;
     }
 
-    private static bool MakeHoeDirt(GameLocation location, Farmer who, Vector2 pickupTile, int energy)
+    protected virtual bool MakeHoeDirt(GameLocation location, Farmer who, Vector2 pickupTile, int energy)
     {
         who.Stamina -= energy;
         location.makeHoeDirt(pickupTile, ignoreChecks: false);

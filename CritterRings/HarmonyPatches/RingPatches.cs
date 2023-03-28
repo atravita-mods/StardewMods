@@ -19,6 +19,8 @@ namespace CritterRings.HarmonyPatches;
 [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Harmony convention.")]
 internal static class RingPatches
 {
+    private const int ButterflyMagneticism = 128;
+
     #region delegates
     private static readonly Lazy<Func<Ring, int?>> lightIDSourceGetter = new(() =>
         typeof(Ring).GetCachedField("_lightSourceID", ReflectionCache.FlagTypes.InstanceFlags)
@@ -28,8 +30,6 @@ internal static class RingPatches
         typeof(Ring).GetCachedField("_lightSourceID", ReflectionCache.FlagTypes.InstanceFlags)
                     .GetInstanceFieldSetter<Ring, int?>());
     #endregion
-
-    private const int ButterflyMagneticism = 128;
 
     [HarmonyPostfix]
     [HarmonyPatch(nameof(Ring.onUnequip))]

@@ -103,6 +103,11 @@ internal static class CRUtils
             return false;
         }
 
+        if (!ModEntry.Config.IndoorFrogs && !loc.IsOutdoors)
+        {
+            return false;
+        }
+
         if (!ModEntry.Config.FrogsSpawnInHeat && loc is Desert or VolcanoDungeon or Caldera)
         {
             return false;
@@ -181,7 +186,8 @@ internal static class CRUtils
                         int xCoord = (int)tile.X;
                         int yCoord = (int)tile.Y;
                         if (!loc.isWaterTile(xCoord, yCoord) || !loc.isWaterTile(xCoord, yCoord - 1)
-                            || loc.doesTileHaveProperty(xCoord, yCoord, "Passable", "Buildings") is not null)
+                            || loc.doesTileHaveProperty(xCoord, yCoord, "Passable", "Buildings") is not null
+                            || ((loc is Beach || loc.catchOceanCrabPotFishFromThisSpot(xCoord, yCoord)) && !ModEntry.Config.SaltwaterFrogs))
                         {
                             continue;
                         }

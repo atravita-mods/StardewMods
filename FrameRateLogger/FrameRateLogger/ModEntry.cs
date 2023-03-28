@@ -23,6 +23,7 @@ internal sealed class ModEntry : Mod
     public override void Entry(IModHelper helper)
     {
         this.Monitor.Log($"Starting up: {this.ModManifest.UniqueID} - {typeof(ModEntry).Assembly.FullName}");
+        I18n.Init(helper.Translation);
 
         this.FrameRateCounter = new(GameRunner.instance);
         helper.Reflection.GetMethod(this.FrameRateCounter, "LoadContent").Invoke();
@@ -112,7 +113,7 @@ internal sealed class ModEntry : Mod
     {
         if (this.FrameRateCounter is not null && this.FramerateGetter?.Invoke(this.FrameRateCounter) is int value && Game1.game1.IsActive)
         {
-            this.Monitor.Log($"Current framerate on {Game1.ticks} is {value}", value < 30 ? LogLevel.Alert : LogLevel.Trace);
+            this.Monitor.Log($"Current framerate on {Game1.ticks} is {value}", value < 30 ? LogLevel.Warn : LogLevel.Trace);
         }
     }
 

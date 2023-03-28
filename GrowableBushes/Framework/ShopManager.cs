@@ -190,7 +190,7 @@ internal static class ShopManager
             }
             else if (bushIndex is BushSizes.Medium)
             {
-                sellData = new[] { free ? 0 : 1_000 * ModEntry.Config.ShopCostScale , ShopMenu.infiniteStock };
+                sellData = new[] { free ? 0 : 1_000 * ModEntry.Config.ShopCostScale, ShopMenu.infiniteStock };
             }
             else
             {

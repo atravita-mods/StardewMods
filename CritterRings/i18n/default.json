@@ -50,6 +50,12 @@
   "FrogsSpawnOnlyInRain.title": "Frogs Spawn Only In Rain",
   "FrogsSpawnOnlyInRain.description": "If enabled, frogs will only spawn outside in rain.",
 
+  "SaltwaterFrogs.title": "Saltwater Frogs",
+  "SaltwaterFrogs.description": "If enabled, frogs might spawn in saltwater.",
+
+  "IndoorFrogs.title": "Indoor Frogs",
+  "IndoorFrogs.description": "If enabled, frogs can spawn indoors.",
+
   "OwlsSpawnIndoors.title": "Owls Spawn Indoors",
   "OwlsSpawnIndoors.description": "If owls should spawn indoors.",
 
@@ -76,5 +82,6 @@
 
   "frog-ring.name": "Frog Ring",
   "frog-ring.description": "Attracts frogs. Makes you feel lighter.",
-  "frog-ring.horse": "Frog ring can't pick up your horse!"
+  "frog-ring.horse": "Frog ring can't pick up your horse!",
+  "frog-ring.blocked": "The frog can't jump this way."
 }

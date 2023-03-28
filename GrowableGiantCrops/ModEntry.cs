@@ -253,7 +253,13 @@ internal sealed class ModEntry : Mod
             if (this.Helper.ModRegistry.IsLoaded("spacechase0.MoreGrassStarters"))
             {
                 this.Monitor.Log("Patching More Grass Starters");
-                MoreGrassStartersCompat.ApplyPatch(harmony);
+                MoreGrassStartersCompat.ApplyPatch(harmony, this.Helper.ModRegistry);
+            }
+
+            if (this.Helper.ModRegistry.IsLoaded("exotico.SlimeProduce"))
+            {
+                this.Monitor.Log("Patching Slime Produce");
+                SlimeProduceCompat.ApplyPatches(harmony);
             }
         }
         catch (Exception ex)

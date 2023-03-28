@@ -3,7 +3,7 @@ Critter Rings
 
 ![Header image](docs/image.png)
 
-This incredibly self-indulgent mod has five rings in it: the Butterfly Ring, the Bunny Ring, the Frog Ring, the Owl Ring, and the Firefly Ring. Each summons the relevant critter when worn. Additionally, each has extra secondary effect. Frog jumps, bunny ring has a sprint, the owl ring makes it so enemies are less likely to see you, firefly is a glowstone ring, and butterfly is a magnetic ring.
+This incredibly self-indulgent mod has five rings in it: the Butterfly Ring, the Bunny Ring, the Frog Ring, the Owl Ring, and the Firefly Ring. Each summons the relevant critter when worn. Additionally, each has extra secondary effect. Frog jumps, bunny ring has a sprint, the owl ring makes it so enemies are less likely to see you, firefly is a glow ring, and butterfly is a magnetic ring.
 
 ## Install
 
@@ -45,6 +45,9 @@ Run SMAPI at least once with this mod installed to generate the `config.json`, o
 * `FrogsSpawnInHeat`: If enabled, frogs will spawn in places probably too hot for them, like the volcano.
 * `FrogsSpawnInCold`: If enabled, frogs will spawn in places probably too cold for them, like during winter or in the ice levels of the mines.
 * `FrogsSpawnOnlyInRain`: If enabled, frogs will only spawn outdoors when it's raining.
+* `SaltwaterFrogs`: If enabled, frogs might spawn in saltwater.
+* `IndoorFrogs`: If enabled, frogs might spawn indoors.
+
 #### Owl Ring Options
 
 * `OwlsSpawnIndoors`: If enabled, owls will spawn indoors.
@@ -57,7 +60,9 @@ Run SMAPI at least once with this mod installed to generate the `config.json`, o
 * Should be compatible with most other mods.
 
 ## Much thanks to
-* [Violetlizabet](https://www.nexusmods.com/stardewvalley/users/120958053) for drawing the ring graphics for me!
+* [Violetlizabet](https://www.nexusmods.com/stardewvalley/users/120958053) for drawing the ring graphics for me! Check out her [Magic Buildings](https://www.nexusmods.com/stardewvalley/mods/10142) mod!
+* [DecidedlyHuman](https://www.nexusmods.com/stardewvalley/users/79440738), for helping me with the viewport code. Check out his [Smart Building](https://www.nexusmods.com/stardewvalley/mods/11158)!
+* pavlo2906 for the Russian translation!
 
 ## See also
 

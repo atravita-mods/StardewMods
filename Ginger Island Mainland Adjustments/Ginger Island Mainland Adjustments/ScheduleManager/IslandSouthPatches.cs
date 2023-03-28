@@ -115,6 +115,7 @@ internal static class IslandSouthPatches
                 return;
             }
 
+            /*
             if (npc.getMasterScheduleRawData()?.ContainsKey("spring") != true
                 && npc.getMasterScheduleRawData()?.ContainsKey("default") != true)
             {
@@ -122,6 +123,7 @@ internal static class IslandSouthPatches
                 __result = false;
                 return;
             }
+            */
 
             // if an NPC has a schedule for the specific day, don't allow them to go to the resort.
             if (npc.HasSpecificSchedule())

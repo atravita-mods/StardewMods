@@ -1,4 +1,7 @@
-﻿using AtraBase.Models.Result;
+﻿using System.Runtime.CompilerServices;
+
+using AtraBase.Models.Result;
+using AtraBase.Toolkit;
 using AtraBase.Toolkit.Extensions;
 using AtraBase.Toolkit.Reflection;
 
@@ -12,7 +15,9 @@ using Microsoft.Xna.Framework.Graphics;
 using StardewModdingAPI.Events;
 using StardewModdingAPI.Utilities;
 
+using StardewValley.Buildings;
 using StardewValley.Locations;
+using StardewValley.TerrainFeatures;
 
 using XLocation = xTile.Dimensions.Location;
 
@@ -52,6 +57,8 @@ internal sealed class JumpManager : IDisposable
     private Vector2 currentTile = Vector2.Zero;
     private Vector2 openTile = Vector2.Zero;
     private bool isCurrentTileBlocked = false;
+    private bool blocked = false;
+    private bool needsBigJump = false;
 
     // jumping fields.
     private JumpFrame frame;
@@ -151,9 +158,11 @@ internal sealed class JumpManager : IDisposable
         => !this.disposedValue && this.state != State.Inactive
             && this.farmerRef?.TryGetTarget(out Farmer? farmer) == true && farmer is not null;
 
+    [MethodImpl(TKConstants.Hot)]
     private bool IsCurrentFarmer()
         => this.farmerRef?.TryGetTarget(out Farmer? farmer) == true && ReferenceEquals(farmer, Game1.player);
 
+    [MethodImpl(TKConstants.Hot)]
     private void OnRenderedWorld(object? sender, RenderedWorldEventArgs e)
     {
         if (!this.IsCurrentFarmer())
@@ -187,6 +196,7 @@ internal sealed class JumpManager : IDisposable
         }
     }
 
+    [MethodImpl(TKConstants.Hot)]
     private void OnUpdateTicked(object? sender, UpdateTickedEventArgs e)
     {
         if (!this.IsCurrentFarmer())
@@ -198,10 +208,11 @@ internal sealed class JumpManager : IDisposable
         if (this.state != State.Inactive && ModEntry.Config.ViewportFollowsTarget)
         {
             Vector2 position = Game1.player.Position + new Vector2(32, 32);
+            Vector2 target = this.openTile * Game1.tileSize;
             Vector2 midpoint = Game1.player.FacingDirection switch
             {
-                Game1.left or Game1.right => new Vector2(position.X + (((this.openTile.X * Game1.tileSize) - position.X) / 2), position.Y),
-                _ => new Vector2(position.X, position.Y + (((this.openTile.Y * Game1.tileSize) - position.Y) / 2)),
+                Game1.left or Game1.right => new Vector2(target.X + Math.Clamp((position.X - target.X) / 2, -320, 320), position.Y),
+                _ => new Vector2(position.X, target.Y + Math.Clamp((position.Y - target.Y) / 2, -320, 320)),
             };
             Game1.moveViewportTo(midpoint, ModEntry.Config.JumpChargeSpeed / 2);
         }
@@ -214,7 +225,7 @@ internal sealed class JumpManager : IDisposable
                     this.ticks -= ModEntry.Config.JumpChargeSpeed;
                     if (this.ticks <= 0)
                     {
-                        if (this.distance < ModEntry.Config.MaxFrogJumpDistance)
+                        if (this.distance < ModEntry.Config.MaxFrogJumpDistance && !this.blocked)
                         {
                             ++this.distance;
                             CRUtils.PlayChargeCue(this.distance);
@@ -238,16 +249,59 @@ internal sealed class JumpManager : IDisposable
 
                     CRUtils.PlayMeep();
 
-                    // gravity is 0.5f, so total time is 2 * initialVelocityY / 0.5 = 4 * initialVelocityY;
+                    #region velocity calculations
+
                     float initialVelocityY = 4f * MathF.Sqrt(this.distance);
+
+                    // we're just gonna hope the big jump is enough to clear most buildings :(
+                    if (this.needsBigJump)
+                    {
+                        initialVelocityY = Math.Max(16f, initialVelocityY);
+                    }
+
+                    // okay, let's adjust for possible front tiles if needed
+                    Vector2? tileToCheck = null;
+                    if (this.direction == Vector2.UnitY)
+                    {
+                        tileToCheck = this.startTile;
+                    }
+                    else if (this.direction == -Vector2.UnitY)
+                    {
+                        tileToCheck = this.openTile;
+                    }
+
+                    if (tileToCheck is not null)
+                    {
+                        int verticalHeightNeeded = 4;
+                        int startX = (int)tileToCheck.Value.X * Game1.tileSize;
+                        int startY = (int)(tileToCheck.Value.Y - 3) * Game1.tileSize;
+                        while (startY > 0 && (Game1.currentLocation.map.GetLayer("Front")?.PickTile(new XLocation(startX, startY), Game1.viewport.Size) is not null
+                            || Game1.currentLocation.map.GetLayer("AlwaysFront")?.PickTile(new XLocation(startX, startY), Game1.viewport.Size) is not null))
+                        {
+                            ++verticalHeightNeeded;
+                            startY -= 64;
+                        }
+
+                        ModEntry.ModMonitor.DebugOnlyLog($"Additional vertical height: {verticalHeightNeeded}");
+
+                        initialVelocityY = Math.Max(initialVelocityY, 6 * MathF.Sqrt(verticalHeightNeeded));
+                    }
+
+                    // a little sanity here.
+                    initialVelocityY = Math.Min(initialVelocityY, 128f);
+
                     float tileTravelDistance = this.openTile.ManhattanDistance(this.startTile);
                     if (ModEntry.Config.JumpCostsStamina && Game1.CurrentEvent is null)
                     {
                         Game1.player.Stamina -= tileTravelDistance;
                     }
                     float travelDistance = tileTravelDistance * Game1.tileSize;
+
+                    // gravity is 0.5f, so total time is 2 * initialVelocityY / 0.5 = 4 * initialVelocityY;
                     this.velocityX = travelDistance / ((4 * initialVelocityY) - 1);
                     Game1.player.synchronizedJump(initialVelocityY);
+
+                    #endregion
 
                     // track player state
                     this.previousCollisionValue = Game1.player.ignoreCollisions;
@@ -321,6 +375,34 @@ internal sealed class JumpManager : IDisposable
             isValidTile &= !location.isCollidingPosition(box, Game1.viewport, true, 0, false, farmer);
         }
 
+        // check a tile property here, so mapmakers can block the jump.
+        if (location.doesEitherTileOrTileIndexPropertyEqual((int)this.currentTile.X, (int)this.currentTile.Y, "atravita.FrogJump", "Back", "Forbidden"))
+        {
+            this.blocked = true;
+            isValidTile = false;
+            Game1.showRedMessage(I18n.FrogRing_Blocked());
+        }
+
+        if (!this.needsBigJump)
+        {
+            if (location.terrainFeatures.TryGetValue(this.currentTile, out TerrainFeature? feat)
+                && feat is Tree or FruitTree)
+            {
+                this.needsBigJump = true;
+            }
+            if (!this.needsBigJump && location is Farm farm)
+            {
+                foreach (Building? building in farm.buildings)
+                {
+                    if (building.occupiesTile(this.currentTile))
+                    {
+                        this.needsBigJump = true;
+                        break;
+                    }
+                }
+            }
+        }
+
         if (isValidTile)
         {
             this.openTile = this.currentTile;
@@ -348,7 +430,7 @@ internal sealed class JumpManager : IDisposable
                 farmer.forceTimePass = this.forceTimePass;
                 if (disposing)
                 {
-                    Game1.moveViewportTo(farmer.Position, ModEntry.Config.JumpChargeSpeed);
+                    Game1.moveViewportTo(farmer.Position, 5f);
                 }
                 farmer.completelyStopAnimatingOrDoingAction();
             }

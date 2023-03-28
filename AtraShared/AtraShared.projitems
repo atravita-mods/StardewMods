@@ -89,6 +89,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Utils\HarmonyHelper\AdditionalCodeInstructionExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Utils\HarmonyHelper\CodeInstructionWrapper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Utils\HarmonyHelper\ILHelper.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Utils\HarmonyHelper\ILHelperExceptions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Utils\HarmonyHelper\ILHelperExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Utils\Extensions\InputUtils.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Utils\NPCHelpers.cs" />

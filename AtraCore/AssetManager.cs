@@ -17,11 +17,10 @@ namespace AtraCore;
 /// </summary>
 internal static class AssetManager
 {
+    private static readonly HashSet<string> eventLocations = new(StringComparer.OrdinalIgnoreCase);
+    private static readonly string dataEvents = PathUtilities.NormalizeAssetName("Data/Events") + "/";
+
     private static IAssetName prismatic = null!;
-
-    private static HashSet<string> eventLocations = new(StringComparer.OrdinalIgnoreCase);
-
-    private static string dataEvents = PathUtilities.NormalizeAssetName("Data/Events") + "/";
 
     /// <summary>
     /// Initializes the asset manager.

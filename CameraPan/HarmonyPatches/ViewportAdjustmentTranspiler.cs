@@ -1,18 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Reflection;
 using System.Reflection.Emit;
-using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
-using AtraCore.Framework.ReflectionManager;
-using AtraShared.Utils.HarmonyHelper;
-
-using HarmonyLib;
-
-using StardewValley.TerrainFeatures;
 using AtraShared.Utils.Extensions;
-using Microsoft.Xna.Framework;
+using AtraShared.Utils.HarmonyHelper;
+using HarmonyLib;
 
 namespace CameraPan.HarmonyPatches;
 

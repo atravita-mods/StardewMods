@@ -6,6 +6,8 @@ using AtraCore.Framework.Caches;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
+using StardewModdingAPI.Events;
+
 namespace StopRugRemoval.Framework.Niceties;
 
 /// <summary>
@@ -13,16 +15,16 @@ namespace StopRugRemoval.Framework.Niceties;
 /// </summary>
 internal static class DuplicateNPCDetector
 {
+    /// <inheritdoc cref="IGameLoopEvents.DayEnding"/>
     internal static void DayEnd()
     {
-        if (!Context.IsMainPlayer)
+        if (Context.IsMainPlayer)
         {
-            return;
+            DetectDuplicateNPCs();
         }
-
-        DetectDuplicateNPCs();
     }
 
+    /// <inheritdoc cref="IGameLoopEvents.DayStarted"/>
     internal static void DayStart()
     {
         if (!Context.IsMainPlayer)

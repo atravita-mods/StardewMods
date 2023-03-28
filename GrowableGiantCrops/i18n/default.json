@@ -19,6 +19,9 @@
   "ShovelDoesDamage.title": "Shovel Does Damage",
   "ShovelDoesDamage.description": "If enabled, hitting monsters with the shovel, or having items thrown upward by the shovel hit a monster will cause damage. Poor monsters.",
 
+  "AllowHoeEnchantments.title": "Allow Hoe Enchantments",
+  "AllowHoeEnchantments.description": "If enabled, the two hoe enchantments (Archaeologist and Generous) can be applied to the shovel.",
+
   "ShouldNPCsTrampleResourcesClumps.title": "NPCs Trample Resources",
   "ShouldNPCsTrampleResourcesClumps.description": "If enabled, will allow NPCs to remove resource clumps in their path",
   "ShouldNPCsTrampleGiantCrops.title": "NPCs Trample Giant Crops.",

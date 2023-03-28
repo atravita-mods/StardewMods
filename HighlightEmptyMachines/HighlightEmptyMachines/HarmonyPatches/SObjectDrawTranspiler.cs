@@ -55,20 +55,17 @@ internal class SObjectDrawTranspiler
     private static bool ShouldDisablePulsing() => ModEntry.Config.DisablePulsing;
 
 #pragma warning disable SA1116 // Split parameters should start on line after declaration. Reviewed
-    [HarmonyPriority(Priority.VeryLow)]
+    [HarmonyAfter("Digus.ProducerFrameworkMod")]
     [HarmonyPatch(nameof(SObject.draw), new[] { typeof(SpriteBatch), typeof(int), typeof(int), typeof(float) })]
     [SuppressMessage("SMAPI.CommonErrors", "AvoidNetField:Avoid Netcode types when possible", Justification = "Only used for matching.")]
     private static IEnumerable<CodeInstruction>? Transpiler(IEnumerable<CodeInstruction> instructions, ILGenerator gen, MethodBase original)
     {
-        MethodInfo? getScale = AccessTools.Method(AccessTools.TypeByName("ProducerFrameworkMod.ObjectOverrides"), "getScale");
-        if (getScale is not null)
+        MethodInfo? pfmGetScale = AccessTools.Method(AccessTools.TypeByName("ProducerFrameworkMod.ObjectOverrides"), "getScale");
+        if (pfmGetScale is not null)
         {
             ModEntry.ModMonitor.Log($"Found PFM, adjusting transpiler.");
         }
-        else
-        {
-            getScale = typeof(SObject).GetCachedMethod(nameof(SObject.getScale), ReflectionCache.FlagTypes.InstanceFlags);
-        }
+        var originalGetScale = typeof(SObject).GetCachedMethod(nameof(SObject.getScale), ReflectionCache.FlagTypes.InstanceFlags);
 
         try
         {
@@ -77,13 +74,12 @@ internal class SObjectDrawTranspiler
             {
                 OpCodes.Ldarg_0,
                 (OpCodes.Ldfld, typeof(SObject).GetCachedField(nameof(SObject.bigCraftable), ReflectionCache.FlagTypes.InstanceFlags)),
-            })
-            .FindNext(new CodeInstructionWrapper[]
+            }).FindNext(new CodeInstructionWrapper[]
             { // Vector2 vector = this.getScale();
                 OpCodes.Ldarg_0,
                 new (
                     specialcase: SpecialCodeInstructionCases.Wildcard,
-                    predicate: instr => instr.Calls(getScale)),
+                    predicate: instr => (pfmGetScale is not null && instr.Calls(pfmGetScale)) || instr.Calls(originalGetScale)),
                 SpecialCodeInstructionCases.StLoc,
             })
             .Push() // edit to Vector2 vector = ShouldDisablePulsing ? Vector2.Zero : this.getScale();

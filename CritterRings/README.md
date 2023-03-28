@@ -62,6 +62,7 @@ Run SMAPI at least once with this mod installed to generate the `config.json`, o
 ## Much thanks to
 * [Violetlizabet](https://www.nexusmods.com/stardewvalley/users/120958053) for drawing the ring graphics for me! Check out her [Magic Buildings](https://www.nexusmods.com/stardewvalley/mods/10142) mod!
 * [DecidedlyHuman](https://www.nexusmods.com/stardewvalley/users/79440738), for helping me with the viewport code. Check out his [Smart Building](https://www.nexusmods.com/stardewvalley/mods/11158)!
+* pavlo2906 for the Russian translation!
 
 ## See also
 

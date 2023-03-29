@@ -4,6 +4,9 @@ using HarmonyLib;
 
 using StardewValley.Tools;
 
+/// <summary>
+/// Patches to make sure the player doesn't move in certain times.
+/// </summary>
 [HarmonyPatch]
 internal static class JumpPatches
 {
@@ -12,12 +15,6 @@ internal static class JumpPatches
     private static bool PrefixSwordSwing(Farmer who)
     {
         return ModEntry.CurrentJumper?.IsValid(out Farmer? farmer) != true || !ReferenceEquals(who, farmer);
-    }
-
-    [HarmonyPatch(typeof(MeleeWeapon), nameof(MeleeWeapon.doSwipe))]
-    private static bool PrefixSwordSwipe(Farmer f)
-    {
-        return ModEntry.CurrentJumper?.IsValid(out Farmer? farmer) != true || !ReferenceEquals(f, farmer);
     }
 
     [HarmonyPrefix]

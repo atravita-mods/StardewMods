@@ -17,6 +17,8 @@ using GrowableGiantCrops.Framework.Assets;
 using GrowableGiantCrops.Framework.InventoryModels;
 using GrowableGiantCrops.HarmonyPatches.GrassPatches;
 
+using HarmonyLib;
+
 using Microsoft.Xna.Framework;
 
 using StardewModdingAPI.Events;
@@ -29,6 +31,7 @@ namespace GrowableGiantCrops.Framework;
 /// <summary>
 /// Manages shops for this mod.
 /// </summary>
+[HarmonyPatch(typeof(Utility))]
 [SuppressMessage("StyleCop.CSharp.OrderingRules", "SA1214:Readonly fields should appear before non-readonly fields", Justification = "Reviewed.")]
 internal static class ShopManager
 {
@@ -221,8 +224,9 @@ internal static class ShopManager
         {
             input.SurpressClickInput();
 
-            Dictionary<ISalable, int[]> sellables = new(ResourceClumpIndexesExtensions.Length);
+            Dictionary<ISalable, int[]> sellables = new(ResourceClumpIndexesExtensions.Length + GrassIndexesExtensions.Length);
             sellables.PopulateSellablesWithResourceClumps();
+            sellables.PopulateSellablesWithGrass();
 
             ShopMenu shop = new(sellables, who: "Robin") { storeContext = RESOURCE_SHOP_NAME };
             if (NPCCache.GetByVillagerName("Robin") is NPC robin)
@@ -321,10 +325,26 @@ internal static class ShopManager
 
     #region stock
 
+    /// <summary>
+    /// Postfix to add bushes to the catalog.
+    /// </summary>
+    /// <param name="__result">shop inventory to add to.</param>
+    [HarmonyPatch(nameof(Utility.getAllFurnituresForFree))]
+    [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Harmony convention.")]
+    private static void Postfix(Dictionary<ISalable, int[]> __result)
+    {
+        try
+        {
+            __result.PopulateSellablesWithGrass(cheaper: true);
+        }
+        catch (Exception ex)
+        {
+            ModEntry.ModMonitor.Log($"Failed while trying to add grass to the catalogue\n\n{ex}", LogLevel.Error);
+        }
+    }
+
     private static void PopulateSellablesWithResourceClumps(this Dictionary<ISalable, int[]> sellables)
     {
-        Debug.Assert(sellables is not null, "Sellables cannot be null.");
-
         if (Game1.player.hasSkullKey)
         {
             foreach (ResourceClumpIndexes clump in ResourceClumpIndexesExtensions.GetValues())
@@ -358,8 +378,12 @@ internal static class ShopManager
                 _ = sellables.TryAdd(clumpItem, sellData);
             }
         }
+    }
 
-        // grass
+    private static void PopulateSellablesWithGrass(this Dictionary<ISalable, int[]> sellables, bool cheaper = false)
+    {
+        Debug.Assert(sellables is not null, "Sellables cannot be null.");
+
         foreach (GrassIndexes grass in GrassIndexesExtensions.GetValues())
         {
             if (grass == GrassIndexes.Invalid)
@@ -369,7 +393,7 @@ internal static class ShopManager
 
             SObject grassStarter = new(SObjectPatches.GrassStarterIndex, 1);
             grassStarter.modData?.SetInt(SObjectPatches.ModDataKey, (int)grass);
-            _ = sellables.TryAdd(grassStarter, new[] { 500, ShopMenu.infiniteStock });
+            _ = sellables.TryAdd(grassStarter, new[] { cheaper ? 100 : 500, ShopMenu.infiniteStock });
         }
     }
 
@@ -463,7 +487,7 @@ internal static class ShopManager
             int? price = GetPriceOfProduct(idx);
             if (price is not null)
             {
-                manager.Add(new((2500d / Math.Clamp(price.Value, 50, 1250)) + 10, idx));
+                manager.Add(new((2500d / Math.Clamp(price.Value, 75, 1250)) + 10, idx));
             }
         }
         ModEntry.ModMonitor.DebugOnlyLog($"Got {manager.Count} giant crop entries for shop.", LogLevel.Info);
@@ -504,10 +528,19 @@ internal static class ShopManager
     }
 
     private static int? GetPriceOfProduct(int idx)
-    => Game1Wrappers.ObjectInfo.TryGetValue(idx, out string? info) &&
-       int.TryParse(info.GetNthChunk('/', SObject.objectInfoPriceIndex), out int price)
-       ? price
-       : null;
+    {
+        if (Game1Wrappers.ObjectInfo.TryGetValue(idx, out string? info)
+            && int.TryParse(info.GetNthChunk('/', SObject.objectInfoPriceIndex), out int price))
+        {
+            // qi fruit exception
+            if (idx == 890)
+            {
+                return 150;
+            }
+            return price;
+        }
+        return null;
+    }
 
     private static int? PriceNode(int idx)
         => Game1Wrappers.ObjectInfo.TryGetValue(idx, out string? info)

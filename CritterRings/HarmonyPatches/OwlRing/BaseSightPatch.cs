@@ -1,7 +1,6 @@
 ﻿using System.Runtime.CompilerServices;
 
 using AtraBase.Toolkit;
-using AtraBase.Toolkit.Extensions;
 
 using HarmonyLib;
 

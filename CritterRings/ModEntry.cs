@@ -17,7 +17,6 @@ using StardewModdingAPI.Utilities;
 
 using StardewValley.BellsAndWhistles;
 using StardewValley.Locations;
-using StardewValley.Tools;
 
 using AtraUtils = AtraShared.Utils.Utils;
 
@@ -54,6 +53,9 @@ internal sealed class ModEntry : Mod
 
     private static readonly PerScreen<JumpManager?> JumpManagers = new(() => null);
 
+    /// <summary>
+    /// Gets a reference to the current jumpManager, if applicable.
+    /// </summary>
     internal static JumpManager? CurrentJumper => JumpManagers.Value;
     #endregion
 
@@ -267,10 +269,20 @@ internal sealed class ModEntry : Mod
     [EventPriority(EventPriority.Low)]
     private void OnWarp(object? sender, WarpedEventArgs e)
     {
-        if (!e.IsLocalPlayer || Config.CritterSpawnMultiplier == 0)
+        if (!e.IsLocalPlayer)
         {
             return;
         }
+
+        // forcibly end the jump if the player was in one.
+        JumpManagers.Value?.Dispose();
+        JumpManagers.Value = null;
+
+        if (Config.CritterSpawnMultiplier == 0)
+        {
+            return;
+        }
+
         e.NewLocation?.instantiateCrittersList();
         if (e.NewLocation?.critters is not List<Critter> critters)
         {
@@ -280,7 +292,7 @@ internal sealed class ModEntry : Mod
         {
             if (FireFlyRing > 0 && Game1.player.isWearingRing(FireFlyRing))
             {
-                CRUtils.SpawnFirefly(critters, 3);
+                CRUtils.SpawnFirefly(critters, 5);
             }
         }
         else if (e.NewLocation.ShouldSpawnButterflies() && ButterflyRing > 0 && Game1.player.isWearingRing(ButterflyRing))

@@ -1,6 +1,5 @@
 ﻿using System.Runtime.CompilerServices;
 
-using AtraBase.Models.Result;
 using AtraBase.Toolkit;
 using AtraBase.Toolkit.Extensions;
 using AtraBase.Toolkit.Reflection;

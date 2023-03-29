@@ -7,6 +7,7 @@ namespace GrowableBushes.Framework;
 /// <summary>
 /// The config class for this mod.
 /// </summary>
+[SuppressMessage("StyleCop.CSharp.OrderingRules", "SA1201:Elements should appear in the correct order", Justification = "Accessors kept near fields.")]
 internal sealed class ModConfig
 {
     /// <summary>

@@ -27,6 +27,12 @@ internal sealed class ModEntry : Mod
     [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1310:Field names should not contain underscore", Justification = "Reviewed.")]
     internal const int CAMERA_ID = 106;
 
+    private static readonly PerScreen<int> xOffset = new(() => 0);
+    private static readonly PerScreen<int> yOffset = new(() => 0);
+
+    internal static int XOffset => xOffset.Value;
+    internal static int YOffset => yOffset.Value;
+
     /// <summary>
     /// Gets the config instance for this mod.
     /// </summary>
@@ -36,17 +42,6 @@ internal sealed class ModEntry : Mod
     /// Gets the logging instance for this mod.
     /// </summary>
     internal static IMonitor ModMonitor { get; private set; } = null!;
-
-    private static readonly PerScreen<Vector2> offset = new (() => Vector2.Zero);
-
-    /// <summary>
-    /// Gets or sets the amount of pixels to offset from the player position.
-    /// </summary>
-    internal static Vector2 Offset
-    {
-        get => offset.Value;
-        set => offset.Value = value;
-    }
 
     /// <inheritdoc />
     public override void Entry(IModHelper helper)
@@ -68,7 +63,10 @@ internal sealed class ModEntry : Mod
 
     private static void Reset()
     {
-        offset.Value = Vector2.Zero;
+
+        ModEntry.ModMonitor.Log("Reset!", LogLevel.Alert);
+        xOffset.Value = 0;
+        yOffset.Value = 0;
     }
 
     private void OnButtonsChanged(object? sender, ButtonsChangedEventArgs e)
@@ -103,7 +101,7 @@ internal sealed class ModEntry : Mod
     {
         if (e.OldMenu is not null && e.NewMenu is null)
         {
-            offset.Value = Vector2.Zero;
+            Reset();
             Game1.viewportTarget = new Vector2(-2.14748365E+09f, -2.14748365E+09f);
         }
         else if (e.OldMenu is null && e.NewMenu is not null)
@@ -116,7 +114,7 @@ internal sealed class ModEntry : Mod
     {
         if (e.IsLocalPlayer)
         {
-            offset.Value = Vector2.Zero;
+            Reset();
             Game1.viewportTarget = new Vector2(-2.14748365E+09f, -2.14748365E+09f);
         }
     }
@@ -128,34 +126,38 @@ internal sealed class ModEntry : Mod
             return;
         }
         Vector2 pos = this.Helper.Input.GetCursorPosition().ScreenPixels;
-        Vector2 adjustment = Vector2.Zero;
+        int xAdjustment = xOffset.Value;
+        int yAdjustment = yOffset.Value;
+
+        // ModEntry.ModMonitor.Log($"{xAdjustment} - {yAdjustment}", LogLevel.Warn);
+
         int width = Game1.viewport.Width / 8;
         if (pos.X < width)
         {
-            adjustment.X = -Config.Speed;
+            xAdjustment -= Config.Speed;
         }
         else if (pos.X > Game1.viewport.Width - width)
         {
-            adjustment.X = Config.Speed;
+            xAdjustment += Config.Speed;
         }
 
         int height = Game1.viewport.Height / 8;
         if (pos.Y < height)
         {
-            adjustment.Y = -Config.Speed;
+            yAdjustment -= Config.Speed;
         }
         else if (pos.Y > Game1.viewport.Height - height)
         {
-            adjustment.Y = Config.Speed;
+            yAdjustment += Config.Speed;
         }
 
-        Vector2 temp = offset.Value + adjustment;
+        xAdjustment = Math.Clamp(xAdjustment, -Config.XRangeInternal, Config.XRangeInternal);
+        yAdjustment = Math.Clamp(yAdjustment, -Config.YRangeInternal, Config.YRangeInternal);
 
-        temp.X = Math.Clamp(temp.X, -Config.XRangeInternal, Config.XRangeInternal);
-        temp.Y = Math.Clamp(temp.Y, -Config.YRangeInternal, Config.YRangeInternal);
+        xOffset.Value = xAdjustment;
+        yOffset.Value = yAdjustment;
 
-        offset.Value = temp;
-        Game1.moveViewportTo(Game1.player.Position + offset.Value, Config.Speed);
+        // Game1.moveViewportTo(new Vector2(Game1.player.Position.X + xOffset.Value, Game1.player.Position.Y + yOffset.Value), Config.Speed);
     }
 
     /// <summary>

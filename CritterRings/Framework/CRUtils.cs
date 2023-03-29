@@ -212,7 +212,6 @@ breakbreak:
                 frog ??= new(Game1.player.getTileLocation());
                 FrogTimerSetter.Value(frog, Game1.random.Next(2000, 5000));
                 critters.Add(frog);
-
             }
         }
     }
@@ -335,7 +334,7 @@ breakbreak:
                 }
                 yield return (startTile, flipped);
                 count--;
-Continue:;
+Continue: ;
             }
         }
     }

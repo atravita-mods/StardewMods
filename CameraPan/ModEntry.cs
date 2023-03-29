@@ -15,6 +15,9 @@ using AtraUtils = AtraShared.Utils.Utils;
 
 namespace CameraPan;
 
+// TODO: just re-write the viewport center code at this point.
+// TODO: draw a big arrow pointing towards the player if the player is off screen?
+
 /// <inheritdoc />
 internal sealed class ModEntry : Mod
 {
@@ -59,6 +62,8 @@ internal sealed class ModEntry : Mod
 
         helper.Events.Player.Warped += this.OnWarped;
         helper.Events.Display.MenuChanged += this.OnMenuChanged;
+
+        helper.Events.Display.WindowResized += static (_, _) => Config?.RecalculateBounds();
     }
 
     private static void Reset()
@@ -77,13 +82,18 @@ internal sealed class ModEntry : Mod
     private void OnGameLaunched(object? sender, GameLaunchedEventArgs e)
     {
         this.ApplyPatches(new Harmony(this.ModManifest.UniqueID));
+        Config.RecalculateBounds();
 
         GMCMHelper gmcmHelper = new(this.Monitor, this.Helper.Translation, this.Helper.ModRegistry, this.ModManifest);
         if (gmcmHelper.TryGetAPI())
         {
             gmcmHelper.Register(
                 reset: static () => Config = new(),
-                save: () => this.Helper.AsyncWriteConfig(this.Monitor, Config))
+                save: () =>
+                {
+                    this.Helper.AsyncWriteConfig(this.Monitor, Config);
+                    Config.RecalculateBounds();
+                })
             .AddParagraph(I18n.Mod_Description)
             .GenerateDefaultGMCM(static () => Config);
         }
@@ -95,6 +105,10 @@ internal sealed class ModEntry : Mod
         {
             offset.Value = Vector2.Zero;
             Game1.viewportTarget = new Vector2(-2.14748365E+09f, -2.14748365E+09f);
+        }
+        else if (e.OldMenu is null && e.NewMenu is not null)
+        {
+            Game1.moveViewportTo(Game1.player.Position, Config.Speed);
         }
     }
 
@@ -115,28 +129,30 @@ internal sealed class ModEntry : Mod
         }
         Vector2 pos = this.Helper.Input.GetCursorPosition().ScreenPixels;
         Vector2 adjustment = Vector2.Zero;
-        if (pos.X < (Game1.viewport.Width / 8))
+        int width = Game1.viewport.Width / 8;
+        if (pos.X < width)
         {
             adjustment.X = -Config.Speed;
         }
-        else if (pos.X > Game1.viewport.Width - (Game1.viewport.Width / 8))
+        else if (pos.X > Game1.viewport.Width - width)
         {
             adjustment.X = Config.Speed;
         }
 
-        if (pos.Y < (Game1.viewport.Height / 8))
+        int height = Game1.viewport.Height / 8;
+        if (pos.Y < height)
         {
             adjustment.Y = -Config.Speed;
         }
-        else if (pos.Y > Game1.viewport.Height - (Game1.viewport.Height / 8))
+        else if (pos.Y > Game1.viewport.Height - height)
         {
             adjustment.Y = Config.Speed;
         }
 
         Vector2 temp = offset.Value + adjustment;
 
-        temp.X = Math.Clamp(temp.X, -Config.XRange, Config.XRange);
-        temp.Y = Math.Clamp(temp.Y, -Config.YRange, Config.YRange);
+        temp.X = Math.Clamp(temp.X, -Config.XRangeInternal, Config.XRangeInternal);
+        temp.Y = Math.Clamp(temp.Y, -Config.YRangeInternal, Config.YRangeInternal);
 
         offset.Value = temp;
         Game1.moveViewportTo(Game1.player.Position + offset.Value, Config.Speed);

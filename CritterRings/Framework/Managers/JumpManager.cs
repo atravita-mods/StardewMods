@@ -160,10 +160,14 @@ internal sealed class JumpManager : IDisposable
     /// <summary>
     /// Checks to see if this JumpManager is valid (ie, not disposed, and has an active farmer associated).
     /// </summary>
+    /// <param name="farmer">The relevant farmer.</param>
     /// <returns>True if valid.</returns>
-    internal bool IsValid()
-        => !this.disposedValue && this.state != State.Inactive
-            && this.farmerRef?.TryGetTarget(out Farmer? farmer) == true && farmer is not null;
+    internal bool IsValid([NotNullWhen(true)] out Farmer? farmer)
+    {
+        farmer = null;
+        return !this.disposedValue && this.state != State.Inactive
+                    && this.farmerRef?.TryGetTarget(out farmer) == true && farmer is not null;
+    }
 
     [MethodImpl(TKConstants.Hot)]
     private bool IsCurrentFarmer()

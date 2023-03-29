@@ -24,6 +24,7 @@ using AtraUtils = AtraShared.Utils.Utils;
 namespace CritterRings;
 
 /// <inheritdoc />
+[HarmonyPatch]
 [SuppressMessage("StyleCop.CSharp.OrderingRules", "SA1201:Elements should appear in the correct order", Justification = "Reviewed.")]
 internal sealed class ModEntry : Mod
 {
@@ -52,6 +53,8 @@ internal sealed class ModEntry : Mod
     private static readonly PerScreen<BunnySpawnManager?> BunnyManagers = new(() => null);
 
     private static readonly PerScreen<JumpManager?> JumpManagers = new(() => null);
+
+    internal static JumpManager? CurrentJumper => JumpManagers.Value;
     #endregion
 
     #region JA ids
@@ -221,7 +224,7 @@ internal sealed class ModEntry : Mod
             && Config.MaxFrogJumpDistance > 0 && Config.FrogRingButton.Keybinds.FirstOrDefault(k => k.GetState() == SButtonState.Pressed) is Keybind keybind
             && FrogRing > 0 && Game1.player.isWearingRing(FrogRing))
         {
-            if (JumpManagers.Value?.IsValid() == true)
+            if (JumpManagers.Value?.IsValid(out _) == true)
             {
                 ModMonitor.Log($"Jump already in progress for this player, skipping.");
             }

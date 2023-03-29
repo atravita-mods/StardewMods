@@ -7,7 +7,7 @@ namespace AtraShared.Integrations;
 /// Copy from https://github.com/atravita-mods/StardewMods/blob/main/GrowableGiantCrops/IGrowableGiantCropsAPI.cs 
 /// if you want the full thing.
 /// </summary>
-internal interface IGrowableGiantCrops
+public interface IGrowableGiantCrops
 {
     /// <summary>
     /// Given a grass starter, returns the matching grass instance.

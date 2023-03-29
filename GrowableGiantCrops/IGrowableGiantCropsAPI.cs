@@ -435,6 +435,7 @@ public interface IGrowableGiantCropsAPI
 /// Do not copy the [EnumExtensions] attribute, that is used for internal source generation.
 /// </summary>
 [EnumExtensions]
+[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1602:Enumeration items should be documented", Justification = "Should be evident.")]
 public enum ResourceClumpIndexes
 {
     Stump = 600,
@@ -460,6 +461,7 @@ public enum ResourceClumpIndexes
 /// Do not copy the [EnumExtensions] attribute, that is used for internal source generation.
 /// </summary>
 [EnumExtensions]
+[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1602:Enumeration items should be documented", Justification = "Should be evident.")]
 public enum GrassIndexes
 {
     Spring = Grass.springGrass,
@@ -483,6 +485,7 @@ public enum GrassIndexes
 /// Do not copy the [EnumExtensions] attribute, that is used for internal source generation.
 /// </summary>
 [EnumExtensions]
+[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1602:Enumeration items should be documented", Justification = "Should be evident.")]
 public enum TreeIndexes
 {
     Maple = Tree.bushyTree,

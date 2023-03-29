@@ -226,7 +226,7 @@ internal sealed class ModEntry : Mod
     /// <inheritdoc cref="IGameLoopEvents.GameLaunched"/>
     private void OnGameLaunch(object? sender, GameLaunchedEventArgs e)
     {
-        PlantGrassUnder.GetSmartBuildingBuildMode(this.Helper.ModRegistry);
+        PlantGrassUnder.GetSmartBuildingBuildMode(this.Helper.Translation, this.Helper.ModRegistry);
         this.ApplyPatches(new Harmony(this.ModManifest.UniqueID));
 
         GMCM = new(this.Monitor, this.Helper.Translation, this.Helper.ModRegistry, this.ModManifest);

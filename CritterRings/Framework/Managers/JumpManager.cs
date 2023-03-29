@@ -58,7 +58,7 @@ internal sealed class JumpManager : IDisposable
     private Vector2 openTile = Vector2.Zero;
     private bool isCurrentTileBlocked = false;
     private bool blocked = false;
-    private bool needsBigJump = false;
+    private NeedsBigJump needsBigJump = NeedsBigJump.False;
 
     // jumping fields.
     private JumpFrame frame;
@@ -134,6 +134,13 @@ internal sealed class JumpManager : IDisposable
         Start,
         Transition,
         Hold,
+    }
+
+    private enum NeedsBigJump
+    {
+        False,
+        IfPastThisPoint,
+        True,
     }
 
     /// <inheritdoc cref="IDisposable.Dispose"/>
@@ -254,7 +261,7 @@ internal sealed class JumpManager : IDisposable
                     float initialVelocityY = 4f * MathF.Sqrt(this.distance);
 
                     // we're just gonna hope the big jump is enough to clear most buildings :(
-                    if (this.needsBigJump)
+                    if (this.needsBigJump == NeedsBigJump.True)
                     {
                         initialVelocityY = Math.Max(16f, initialVelocityY);
                     }
@@ -383,20 +390,20 @@ internal sealed class JumpManager : IDisposable
             Game1.showRedMessage(I18n.FrogRing_Blocked());
         }
 
-        if (!this.needsBigJump)
+        if (this.needsBigJump == NeedsBigJump.False)
         {
             if (location.terrainFeatures.TryGetValue(this.currentTile, out TerrainFeature? feat)
                 && feat is Tree or FruitTree)
             {
-                this.needsBigJump = true;
+                this.needsBigJump = NeedsBigJump.IfPastThisPoint;
             }
-            if (!this.needsBigJump && location is Farm farm)
+            if (this.needsBigJump == NeedsBigJump.False && location is Farm farm)
             {
                 foreach (Building? building in farm.buildings)
                 {
                     if (building.occupiesTile(this.currentTile))
                     {
-                        this.needsBigJump = true;
+                        this.needsBigJump = NeedsBigJump.IfPastThisPoint;
                         break;
                     }
                 }
@@ -407,6 +414,10 @@ internal sealed class JumpManager : IDisposable
         {
             this.openTile = this.currentTile;
             this.isCurrentTileBlocked = false;
+            if (this.needsBigJump == NeedsBigJump.IfPastThisPoint)
+            {
+                this.needsBigJump = NeedsBigJump.True;
+            }
         }
         else
         {

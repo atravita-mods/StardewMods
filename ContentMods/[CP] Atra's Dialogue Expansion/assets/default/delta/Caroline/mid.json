@@ -24,6 +24,7 @@
         "Target": "Characters/Dialogue/Caroline",
         "Entries": {
             "Resort_Entering": "Ah, a nice day of rest and relaxation!$h",
+            "Resort_Bar_2": "I could do with a Long Island Iced Tea right about now",
             "9{{YearRemainder}}": "Gosh, @, I was up way too late last night trying to balance the books.#$b#Apologies if I don't feel like chatting.",
             "11{{YearRemainder}}": "Think I might order some new tea...Let's see, what have I not had recently?",
             "13{{YearRemainder}}": "Wonder if any of our supplies is carrying a new tea?",
@@ -43,6 +44,10 @@
             "IsCommunityCenterComplete": true
         },
         "Entries": {
+            "summer_Mon6": "@, while I grew up here, I wasn't ever planning on moving back. That was Pierre's idea.#$b#I'm glad we did, though.",
+            "fall_Mon6": "Think I'll take a walk around. Maybe head out to the woods.",
+            "winter_Mon6": "There's nothing like fresh tea from a plant you've grown yourself.",
+
             "1{{YearRemainder}}": "Hey, @, how have you been? Join me for a cup of tea?[614]",
             "4{{YearRemainder}}": "Ugh, @, I wish I had more time to garden.$s#$e#Say, take these and plant them for me? I haven't the time to do much gardening myself lately.[770]",
             "17{{YearRemainder}}": "Ever since Pierre decided that the shop should be open seven days a week, I've felt like I've always been at work.$s#$b#Wish I could just get a little time to drink a nice cup of tea.",
@@ -57,9 +62,13 @@
         "Target": "Characters/Dialogue/Caroline",
         "When": { "YearModulus": "2" },
         "Entries": {
+            "summer_Sun6": "Thinking about taking a walk around, see if I can scare up some morels.#$b#Nothing like freshly foraged mushrooms. Well, if you're sure they're safe to eat.",
+
+            "spring_Mon4": "I love helping Evelyn out with the town gardens.$h",
             "1_2": "@, I feel so old and out of touch these days. I have no clue what the young people want anymore.",
             "3_2": "We would have supported Abigail if she wanted to  leave home to go to college, but that wasn't what she wanted to do.",
-            "5_2": "I can't believe how much has changed since I was young...#$e#When I was Abby's age, we'd go hitchhike all the time. Wasn't the wisest idea, in hindsight...$s"
+            "7_2": "I can't believe how much has changed since I was young...#$e#When I was Abby's age, we'd go hitchhike all the time. Wasn't the wisest idea, in hindsight...$s",
+            "9_2": "When I was young, my mother would raise horse in this valley.#$b#She taught me how to ride when I was just nine years old.",
         }
     },
     {

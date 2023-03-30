@@ -1,0 +1,14 @@
+{"Changes":[
+    {
+        "LogName": "Penny - Y2",
+        "Action": "EditData",
+        "Target": "Characters/Dialogue/Penny",
+        "When": { "YearRemainder": "2"},
+        "Entries": {
+            "Mon8": "Some days I still can't believe I'm no longer living in a trailer.$h",
+
+            "3_2": "You'd think we wouldn't have so many dishes to do, considering the fact that Mom mostly lives off of TV dinners...",
+            "7_2": "Gotta swing by the post office to pick up our mail today.#$b#What am I waiting for? Just a copy of the latest Homes and Gardens magazine.#$e#I'd love, love to decorate more, but I haven't the time. It's hard enough just keeping our home clean.",
+        }
+    }
+]}

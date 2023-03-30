@@ -60,7 +60,10 @@
         "Target": "Characters/Dialogue/Marnie",
         "Entries": {
             "{{TaxDay}}": "%Marnie looks exhausted.#$b#Sorry, @, I was up all night trying to file my taxes...#$e#Why do I always leave things like this to the last minute...",
-            "Tue": "Between you and I, I think this good country air does Shane well.$h"
+
+            // block off her vanilla line about Shane **just** moving in after Y1
+            "Tue": "Between you and I, I think this good country air does Shane well.$h",
+            "Tue_inlaw_Shane": "I'm glad Shane found you, @. I think he's been doing better, recently.$h"
         },
         "When": {
             "EnableFor|contains=Marnie": true,
@@ -121,6 +124,18 @@
         },
         "Entries":{
             "Evelyn": "Weather like this...we didn't use to get rain during winter.$s#$e#The snow'll become slush and that's difficult for George."
+        }
+    },
+    {
+        "LogName": "Rain -- after secret woods",
+        "Action": "EditData",
+        "Target": "Characters/Dialogue/rainy",
+        "When": {
+            "HasFlag": "beenToWoods",
+            "EnableFor|contains=Abigail": true
+        },
+        "Entries": {
+            "Abigail": "I love the woods in the rain.#$b#So peaceful, away from the rest of the town.#$e#I don't think anyone else goes out there."
         }
     }
 ]}

@@ -356,7 +356,7 @@ Continue: ;
                 animationInterval: 120f,
                 animationLength: 5,
                 numberOfLoops: 0,
-                position: (tile - Vector2.One) * 64f,
+                position: (tile - Vector2.One) * Game1.tileSize,
                 flicker: false,
                 flipped: Game1.random.NextDouble() < 0.5,
                 layerDepth: 1f,

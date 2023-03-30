@@ -18,14 +18,7 @@ internal static class ViewportAdjustmentPostfix
     {
         if (Game1.viewportTarget.X == -2.14748365E+09f && !IsInEvent())
         {
-            Game1.viewportCenter.X += ModEntry.XOffset;
-            Game1.viewportCenter.Y += ModEntry.YOffset;
-
-            __result = Game1.viewportCenter;
-        }
-        else
-        {
-            ModEntry.ModMonitor.Log($"Not handling viewport", LogLevel.Alert);
+            __result = Game1.viewportCenter = ModEntry.Target;
         }
     }
 }

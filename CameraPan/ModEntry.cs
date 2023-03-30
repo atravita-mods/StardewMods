@@ -1,4 +1,9 @@
-﻿using AtraShared.ConstantsAndEnums;
+﻿using System.Runtime.CompilerServices;
+
+using AtraBase.Toolkit;
+using AtraBase.Toolkit.Extensions;
+
+using AtraShared.ConstantsAndEnums;
 using AtraShared.Integrations;
 using AtraShared.Utils.Extensions;
 
@@ -15,7 +20,6 @@ using AtraUtils = AtraShared.Utils.Utils;
 
 namespace CameraPan;
 
-// TODO: just re-write the viewport center code at this point.
 // TODO: draw a big arrow pointing towards the player if the player is off screen?
 
 /// <inheritdoc />
@@ -27,11 +31,12 @@ internal sealed class ModEntry : Mod
     [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1310:Field names should not contain underscore", Justification = "Reviewed.")]
     internal const int CAMERA_ID = 106;
 
-    private static readonly PerScreen<int> xOffset = new(() => 0);
-    private static readonly PerScreen<int> yOffset = new(() => 0);
+    private static readonly PerScreen<Point> offset = new(() => Point.Zero);
+    private static readonly PerScreen<Point> target = new (() => Point.Zero);
 
-    internal static int XOffset => xOffset.Value;
-    internal static int YOffset => yOffset.Value;
+    internal static Point Target => target.Value;
+
+    internal static readonly PerScreen<bool> snapOnNextTick = new(() => false);
 
     /// <summary>
     /// Gets the config instance for this mod.
@@ -56,17 +61,14 @@ internal sealed class ModEntry : Mod
         helper.Events.Input.ButtonsChanged += this.OnButtonsChanged;
 
         helper.Events.Player.Warped += this.OnWarped;
-        helper.Events.Display.MenuChanged += this.OnMenuChanged;
 
         helper.Events.Display.WindowResized += static (_, _) => Config?.RecalculateBounds();
     }
 
     private static void Reset()
     {
-
-        ModEntry.ModMonitor.Log("Reset!", LogLevel.Alert);
-        xOffset.Value = 0;
-        yOffset.Value = 0;
+        ModMonitor.DebugOnlyLog("Reset!", LogLevel.Alert);
+        offset.Value = Point.Zero;
     }
 
     private void OnButtonsChanged(object? sender, ButtonsChangedEventArgs e)
@@ -74,6 +76,7 @@ internal sealed class ModEntry : Mod
         if (Config.ResetButton.JustPressed())
         {
             Reset();
+            snapOnNextTick.Value = true;
         }
     }
 
@@ -97,28 +100,16 @@ internal sealed class ModEntry : Mod
         }
     }
 
-    private void OnMenuChanged(object? sender, MenuChangedEventArgs e)
-    {
-        if (e.OldMenu is not null && e.NewMenu is null)
-        {
-            Reset();
-            Game1.viewportTarget = new Vector2(-2.14748365E+09f, -2.14748365E+09f);
-        }
-        else if (e.OldMenu is null && e.NewMenu is not null)
-        {
-            Game1.moveViewportTo(Game1.player.Position, Config.Speed);
-        }
-    }
-
     private void OnWarped(object? sender, WarpedEventArgs e)
     {
         if (e.IsLocalPlayer)
         {
             Reset();
-            Game1.viewportTarget = new Vector2(-2.14748365E+09f, -2.14748365E+09f);
+            snapOnNextTick.Value = true;
         }
     }
 
+    [MethodImpl(TKConstants.Hot)]
     private void OnTicked(object? sender, UpdateTickedEventArgs e)
     {
         if (!Context.IsPlayerFree)
@@ -126,10 +117,8 @@ internal sealed class ModEntry : Mod
             return;
         }
         Vector2 pos = this.Helper.Input.GetCursorPosition().ScreenPixels;
-        int xAdjustment = xOffset.Value;
-        int yAdjustment = yOffset.Value;
-
-        // ModEntry.ModMonitor.Log($"{xAdjustment} - {yAdjustment}", LogLevel.Warn);
+        int xAdjustment = offset.Value.X;
+        int yAdjustment = offset.Value.Y;
 
         int width = Game1.viewport.Width / 8;
         if (pos.X < width)
@@ -154,10 +143,39 @@ internal sealed class ModEntry : Mod
         xAdjustment = Math.Clamp(xAdjustment, -Config.XRangeInternal, Config.XRangeInternal);
         yAdjustment = Math.Clamp(yAdjustment, -Config.YRangeInternal, Config.YRangeInternal);
 
-        xOffset.Value = xAdjustment;
-        yOffset.Value = yAdjustment;
+        offset.Value = new(xAdjustment, yAdjustment);
 
-        // Game1.moveViewportTo(new Vector2(Game1.player.Position.X + xOffset.Value, Game1.player.Position.Y + yOffset.Value), Config.Speed);
+        Vector2 playerPos = Game1.player.Position;
+
+        int x = (playerPos.X + xAdjustment).ToIntFast();
+        int y = (playerPos.Y + yAdjustment).ToIntFast();
+
+        if (snapOnNextTick.Value)
+        {
+            snapOnNextTick.Value = false;
+        }
+        else
+        {
+            if (Math.Abs(Game1.viewportCenter.X - x) < 256)
+            {
+                x = Math.Clamp(x, Game1.viewportCenter.X - Config.Speed, Game1.viewportCenter.X + Config.Speed);
+            }
+            if (Math.Abs(Game1.viewportCenter.Y - y) < 256)
+            {
+                y = Math.Clamp(y, Game1.viewportCenter.Y - Config.Speed, Game1.viewportCenter.Y + Config.Speed);
+            }
+        }
+
+        // smooth it out a bit - if we're not moving very far just leave the camera in place.
+        if (Math.Abs(Game1.viewportCenter.X - x) < 5)
+        {
+            x = Game1.viewportCenter.X;
+        }
+        if (Math.Abs(Game1.viewportCenter.Y - y) < 5)
+        {
+            y = Game1.viewportCenter.Y;
+        }
+        target.Value = new(x, y);
     }
 
     /// <summary>

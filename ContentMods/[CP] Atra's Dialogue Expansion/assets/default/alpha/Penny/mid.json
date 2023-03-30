@@ -1,0 +1,12 @@
+{"Changes":[
+    {
+        "LogName": "Penny - Y2",
+        "Action": "EditData",
+        "Target": "Characters/Dialogue/Penny",
+        "When": { "YearRemainder": "2"},
+        "Entries": {
+            "Mon4": "@, you've got any interesting books you want to read?",
+            "1_2": "I'd love to decorate more, but Mum doesn't approve.",
+        }
+    }
+]}

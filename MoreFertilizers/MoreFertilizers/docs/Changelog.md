@@ -8,6 +8,9 @@
 * Something for mushroom boxen? (1.6 - reduce to one day?)
 * Make good draw code for all of the fertilizers. (don't forget domesticated fish - maybe some more jumping...)
 
+#### Version 0.3.5
+* Buff the bountiful bush fertilizer.
+
 #### Version 0.3.4
 * Fix integration with DGA.
 

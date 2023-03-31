@@ -36,7 +36,18 @@ internal sealed class ModEntry : Mod
 
     internal static Point Target => target.Value;
 
-    internal static readonly PerScreen<bool> snapOnNextTick = new(() => false);
+    private static readonly PerScreen<bool> enabled = new(() => true);
+
+    private static readonly PerScreen<bool> snapOnNextTick = new(() => false);
+
+    /// <summary>
+    /// Gets or sets a value indicating whether not the camera should snap to the target the next tick.
+    /// </summary>
+    internal static bool SnapOnNextTick
+    {
+        get => snapOnNextTick.Value;
+        set => snapOnNextTick.Value = value;
+    }
 
     /// <summary>
     /// Gets the config instance for this mod.
@@ -67,8 +78,8 @@ internal sealed class ModEntry : Mod
 
     private static void Reset()
     {
-        ModMonitor.DebugOnlyLog("Reset!", LogLevel.Alert);
         offset.Value = Point.Zero;
+        target.Value = new(Game1.player.getStandingX(), Game1.player.getStandingY());
     }
 
     private void OnButtonsChanged(object? sender, ButtonsChangedEventArgs e)
@@ -76,7 +87,7 @@ internal sealed class ModEntry : Mod
         if (Config.ResetButton.JustPressed())
         {
             Reset();
-            snapOnNextTick.Value = true;
+            SnapOnNextTick = true;
         }
     }
 
@@ -105,14 +116,14 @@ internal sealed class ModEntry : Mod
         if (e.IsLocalPlayer)
         {
             Reset();
-            snapOnNextTick.Value = true;
+            SnapOnNextTick = true;
         }
     }
 
     [MethodImpl(TKConstants.Hot)]
     private void OnTicked(object? sender, UpdateTickedEventArgs e)
     {
-        if (!Context.IsPlayerFree)
+        if (!Context.IsPlayerFree || !enabled.Value)
         {
             return;
         }
@@ -121,21 +132,21 @@ internal sealed class ModEntry : Mod
         int yAdjustment = offset.Value.Y;
 
         int width = Game1.viewport.Width / 8;
-        if (pos.X < width)
+        if (Config.LeftButton.IsDown() || pos.X < width)
         {
             xAdjustment -= Config.Speed;
         }
-        else if (pos.X > Game1.viewport.Width - width)
+        else if (Config.RightButton.IsDown() || pos.X > Game1.viewport.Width - width)
         {
             xAdjustment += Config.Speed;
         }
 
         int height = Game1.viewport.Height / 8;
-        if (pos.Y < height)
+        if (Config.UpButton.IsDown() || pos.Y < height)
         {
             yAdjustment -= Config.Speed;
         }
-        else if (pos.Y > Game1.viewport.Height - height)
+        else if (Config.DownButton.IsDown() || pos.Y > Game1.viewport.Height - height)
         {
             yAdjustment += Config.Speed;
         }
@@ -145,14 +156,12 @@ internal sealed class ModEntry : Mod
 
         offset.Value = new(xAdjustment, yAdjustment);
 
-        Vector2 playerPos = Game1.player.Position;
+        int x = Game1.player.getStandingX();
+        int y = Game1.player.getStandingY();
 
-        int x = (playerPos.X + xAdjustment).ToIntFast();
-        int y = (playerPos.Y + yAdjustment).ToIntFast();
-
-        if (snapOnNextTick.Value)
+        if (SnapOnNextTick)
         {
-            snapOnNextTick.Value = false;
+            SnapOnNextTick = false;
         }
         else
         {

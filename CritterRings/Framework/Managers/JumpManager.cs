@@ -217,7 +217,7 @@ internal sealed class JumpManager : IDisposable
         // Thanks for the viewport movement code, DecidedlyHuman!
         if (this.state != State.Inactive && ModEntry.Config.ViewportFollowsTarget)
         {
-            Vector2 position = Game1.player.Position + new Vector2(32, 32);
+            Vector2 position = new(Game1.player.getStandingX(), Game1.player.getStandingY());
             Vector2 target = this.openTile * Game1.tileSize;
             Vector2 midpoint = Game1.player.FacingDirection switch
             {

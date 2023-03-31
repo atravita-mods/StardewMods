@@ -21,7 +21,15 @@
             "Saloon_Fri": null,
             "Saloon_Sat": null,
             "Saloon_Thu": null,
+
+            // Resort lines.
+            "Resort_Chair_2": "Oh, looking for a nice spot to rest my poor feet.",
+            "Resort_Bar_2": "Mmmmm. Say, @, what looks good to you?",
+
+            // GIMA
+            "Resort_Pier": "Look, @! Look how clear the water is!$h",
             
+            // Base daily lines.
             "4{{YearRemainder}}": "Our hoof trimmer is going to be stopping by in the next few days. Do you want me to see if he has time for you?",
             "10{{YearRemainder}}": "I've got so much work to do...$s",
             "11{{YearRemainder}}": "Work on the ranch never ends...always have cows to milk, chicken coops to clean, inventory to manage...$s",

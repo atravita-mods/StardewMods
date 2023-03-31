@@ -4,5 +4,17 @@
   "IllFormatedConfig": "Config file seems ill-formated, using default. Please use Generic Mod Config Menu to configure.",
 
   "Speed.title": "Speed",
-  "Speed.description": "How fast should the camera move?"
+  "Speed.description": "How fast should the camera move?",
+
+  "XRange.title": "X Range",
+  "XRange.description": "The distance the viewport can get away from the player, on the X axis.",
+
+  "YRange.title": "Y Range",
+  "YRange.description": "The distance the viewport can get away from the player, on the Y axis.",
+
+  "KeepPlayerOnScreen.title": "Keep Player On Screen",
+  "KeepPlayerOnScreen.description": "If enabled, the camera will avoid panning too far, to keep the player character on-screen.",
+
+  "ResetButton.title": "Reset Button",
+  "ResetButton.description":  "The button to use to reset the camera over the player."
 }

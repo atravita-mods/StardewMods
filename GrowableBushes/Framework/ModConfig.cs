@@ -16,6 +16,11 @@ internal sealed class ModConfig
     public bool CanAxeAllBushes { get; set; } = false;
 
     /// <summary>
+    /// Gets or sets a value indicating whether or not bushes in greenhouses should bear fruit all the time.
+    /// </summary>
+    public bool GreenhouseBushesAlwaysBloom { get; set; } = false;
+
+    /// <summary>
     /// Gets or sets where the default shop location is.
     /// </summary>
     [GMCMDefaultVector(1, 7)]

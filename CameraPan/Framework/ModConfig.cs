@@ -41,15 +41,20 @@ public sealed class ModConfig
         set => this.yRange = Math.Max(value, 1);
     }
 
-    private bool keepPlayerOnScreen = true;
+    /// <summary>
+    /// Gets or sets a value indicating whether or not players should be kept on screen.
+    /// </summary>
+    public bool KeepPlayerOnScreen { get; set; } = true;
 
-    public bool KeepPlayerOnScreen
-    {
-        get => this.keepPlayerOnScreen;
-        set => this.keepPlayerOnScreen = value;
-    }
+    public KeybindList ResetButton { get; set; } = new(new(SButton.R), new(SButton.RightStick));
 
-    public KeybindList ResetButton { get; set; } = new(singleKey: SButton.Escape);
+    public KeybindList UpButton { get; set; } = new(new(SButton.Up), new(SButton.RightThumbstickUp));
+
+    public KeybindList DownButton { get; set; } = new(new(SButton.Down), new(SButton.RightThumbstickDown));
+
+    public KeybindList LeftButton { get; set; } = new(new(SButton.Left), new(SButton.RightThumbstickLeft));
+
+    public KeybindList RightButton { get; set; } = new(new(SButton.Right), new(SButton.RightThumbstickRight));
 
     #region internal
 
@@ -60,6 +65,9 @@ public sealed class ModConfig
 
     internal int YRangeInternal => this.yRangeActual;
 
+    /// <summary>
+    /// Recalculates the actual bounds that should be used for the viewport, taking into account the window size.
+    /// </summary>
     internal void RecalculateBounds()
     {
         if (this.KeepPlayerOnScreen)
@@ -75,4 +83,31 @@ public sealed class ModConfig
     }
 
     #endregion
+}
+
+/// <summary>
+/// Controls how the camera should behave.
+/// </summary>
+[Flags]
+public enum CameraBehavior
+{
+    /// <summary>
+    /// Use the vanilla behavior.
+    /// </summary>
+    Vanila = 0,
+
+    /// <summary>
+    /// Always keep the player in the center.
+    /// </summary>
+    Locked = 0b1,
+
+    /// <summary>
+    /// Apply the offset, if relevant.
+    /// </summary>
+    Offset = 0b10,
+
+    /// <summary>
+    /// Always keep the offset position in the center.
+    /// </summary>
+    Both = Locked | Offset,
 }

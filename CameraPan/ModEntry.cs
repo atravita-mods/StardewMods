@@ -156,8 +156,8 @@ internal sealed class ModEntry : Mod
 
         offset.Value = new(xAdjustment, yAdjustment);
 
-        int x = Game1.player.getStandingX();
-        int y = Game1.player.getStandingY();
+        int x = Game1.player.getStandingX() + xAdjustment;
+        int y = Game1.player.getStandingY() + yAdjustment;
 
         if (SnapOnNextTick)
         {

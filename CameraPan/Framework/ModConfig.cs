@@ -8,6 +8,8 @@ namespace CameraPan.Framework;
 [SuppressMessage("StyleCop.CSharp.OrderingRules", "SA1201:Elements should appear in the correct order", Justification = "Fields kept near accessors.")]
 public sealed class ModConfig
 {
+    public ToggleBehavior ToggleBehavior { get; set; } = ToggleBehavior.Toggle;
+
     private int speed = 8;
 
     /// <summary>
@@ -55,6 +57,11 @@ public sealed class ModConfig
     public KeybindList LeftButton { get; set; } = new(new(SButton.Left), new(SButton.RightThumbstickLeft));
 
     public KeybindList RightButton { get; set; } = new(new(SButton.Right), new(SButton.RightThumbstickRight));
+
+    /// <summary>
+    /// Gets or sets a value indicating which button should be used to toggle the panning.
+    /// </summary>
+    public KeybindList ToggleButton { get; set; } = new(new(SButton.O), new(SButton.RightTrigger));
 
     #region internal
 
@@ -110,4 +117,12 @@ public enum CameraBehavior
     /// Always keep the offset position in the center.
     /// </summary>
     Both = Locked | Offset,
+}
+
+public enum ToggleBehavior
+{
+    Never,
+    Toggle,
+    Camera,
+    Always,
 }

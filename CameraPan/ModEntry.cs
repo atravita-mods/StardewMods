@@ -36,7 +36,7 @@ internal sealed class ModEntry : Mod
 
     internal static Point Target => target.Value;
 
-    private static readonly PerScreen<bool> enabled = new(() => true);
+    private static readonly PerScreen<bool> enabled = new(() => !(Config?.ToggleBehavior != ToggleBehavior.Never));
 
     private static readonly PerScreen<bool> snapOnNextTick = new(() => false);
 
@@ -66,6 +66,11 @@ internal sealed class ModEntry : Mod
         ModMonitor = this.Monitor;
         Config = AtraUtils.GetConfigOrDefault<ModConfig>(helper, this.Monitor);
 
+        if (Config.ToggleBehavior == ToggleBehavior.Never)
+        {
+            enabled.Value = false;
+        }
+
         helper.Events.GameLoop.GameLaunched += this.OnGameLaunched;
 
         helper.Events.GameLoop.UpdateTicked += this.OnTicked;
@@ -89,6 +94,12 @@ internal sealed class ModEntry : Mod
             Reset();
             SnapOnNextTick = true;
         }
+
+        if (Config.ToggleBehavior == ToggleBehavior.Toggle && Config.ToggleButton.JustPressed())
+        {
+            enabled.Value = !enabled.Value;
+            this.Monitor.Log($"Switching panning to {enabled.Value}");
+        }
     }
 
     private void OnGameLaunched(object? sender, GameLaunchedEventArgs e)
@@ -105,9 +116,32 @@ internal sealed class ModEntry : Mod
                 {
                     this.Helper.AsyncWriteConfig(this.Monitor, Config);
                     Config.RecalculateBounds();
+
+                    UpdateBehaviorForConfig();
                 })
             .AddParagraph(I18n.Mod_Description)
             .GenerateDefaultGMCM(static () => Config);
+        }
+    }
+
+    private static void UpdateBehaviorForConfig()
+    {
+        switch (Config.ToggleBehavior)
+        {
+            case ToggleBehavior.Never:
+                foreach ((int screen, bool _) in enabled.GetActiveValues())
+                {
+                    enabled.SetValueForScreen(screen, false);
+                }
+                break;
+            case ToggleBehavior.Camera:
+            case ToggleBehavior.Toggle:
+            case ToggleBehavior.Always:
+                foreach ((int screen, bool _) in enabled.GetActiveValues())
+                {
+                    enabled.SetValueForScreen(screen, true);
+                }
+                break;
         }
     }
 
@@ -123,36 +157,72 @@ internal sealed class ModEntry : Mod
     [MethodImpl(TKConstants.Hot)]
     private void OnTicked(object? sender, UpdateTickedEventArgs e)
     {
-        if (!Context.IsPlayerFree || !enabled.Value)
+        if (!Context.IsPlayerFree || !Game1.game1.IsActive)
         {
             return;
         }
-        Vector2 pos = this.Helper.Input.GetCursorPosition().ScreenPixels;
+
+        if (Config.ToggleBehavior == ToggleBehavior.Camera)
+        {
+                enabled.Value = Game1.player.ActiveObject is SObject obj && obj.bigCraftable.Value && obj.ParentSheetIndex == CAMERA_ID;
+        }
+
         int xAdjustment = offset.Value.X;
         int yAdjustment = offset.Value.Y;
+        if (enabled.Value)
+        {
+            Vector2 pos = this.Helper.Input.GetCursorPosition().ScreenPixels;
+            int width = Game1.viewport.Width / 8;
+            if (Config.LeftButton.IsDown() || (pos.X < width && pos.X >= 0))
+            {
+                xAdjustment -= Config.Speed;
+            }
+            else if (Config.RightButton.IsDown() || (pos.X > Game1.viewport.Width - width && pos.X <= Game1.viewport.Width))
+            {
+                xAdjustment += Config.Speed;
+            }
 
-        int width = Game1.viewport.Width / 8;
-        if (Config.LeftButton.IsDown() || pos.X < width)
-        {
-            xAdjustment -= Config.Speed;
-        }
-        else if (Config.RightButton.IsDown() || pos.X > Game1.viewport.Width - width)
-        {
-            xAdjustment += Config.Speed;
-        }
+            int height = Game1.viewport.Height / 8;
+            if (Config.UpButton.IsDown() || (pos.Y < height && pos.Y >= 0))
+            {
+                yAdjustment -= Config.Speed;
+            }
+            else if (Config.DownButton.IsDown() || (pos.Y > Game1.viewport.Height - height && pos.Y <= Game1.viewport.Height))
+            {
+                yAdjustment += Config.Speed;
+            }
 
-        int height = Game1.viewport.Height / 8;
-        if (Config.UpButton.IsDown() || pos.Y < height)
-        {
-            yAdjustment -= Config.Speed;
+            xAdjustment = Math.Clamp(xAdjustment, -Config.XRangeInternal, Config.XRangeInternal);
+            yAdjustment = Math.Clamp(yAdjustment, -Config.YRangeInternal, Config.YRangeInternal);
         }
-        else if (Config.DownButton.IsDown() || pos.Y > Game1.viewport.Height - height)
+        else if (offset.Value != Point.Zero)
         {
-            yAdjustment += Config.Speed;
-        }
+            if (Math.Abs(xAdjustment) <= Config.Speed)
+            {
+                xAdjustment = 0;
+            }
+            else if (xAdjustment > 0)
+            {
+                xAdjustment -= Config.Speed;
+            }
+            else
+            {
+                xAdjustment += Config.Speed;
+            }
 
-        xAdjustment = Math.Clamp(xAdjustment, -Config.XRangeInternal, Config.XRangeInternal);
-        yAdjustment = Math.Clamp(yAdjustment, -Config.YRangeInternal, Config.YRangeInternal);
+            if (Math.Abs(yAdjustment) <= Config.Speed)
+            {
+                yAdjustment = 0;
+            }
+            else if (yAdjustment > 0)
+            {
+                yAdjustment -= Config.Speed;
+            }
+            else
+            {
+                yAdjustment += Config.Speed;
+            }
+        }
 
         offset.Value = new(xAdjustment, yAdjustment);
 
@@ -165,13 +235,21 @@ internal sealed class ModEntry : Mod
         }
         else
         {
-            if (Math.Abs(Game1.viewportCenter.X - x) < 256)
+            if (Math.Abs(Game1.viewportCenter.X - x) < 512)
             {
                 x = Math.Clamp(x, Game1.viewportCenter.X - Config.Speed, Game1.viewportCenter.X + Config.Speed);
             }
-            if (Math.Abs(Game1.viewportCenter.Y - y) < 256)
+            else
+            {
+                ModMonitor.DebugOnlyLog($"snapped x", LogLevel.Info);
+            }
+            if (Math.Abs(Game1.viewportCenter.Y - y) < 512)
             {
                 y = Math.Clamp(y, Game1.viewportCenter.Y - Config.Speed, Game1.viewportCenter.Y + Config.Speed);
+            }
+            else
+            {
+                ModMonitor.DebugOnlyLog($"snapped y", LogLevel.Info);
             }
         }
 

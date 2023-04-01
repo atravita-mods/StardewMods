@@ -1,4 +1,6 @@
-﻿using StardewModdingAPI.Utilities;
+﻿using NetEscapades.EnumGenerators;
+
+using StardewModdingAPI.Utilities;
 
 namespace CameraPan.Framework;
 
@@ -8,6 +10,9 @@ namespace CameraPan.Framework;
 [SuppressMessage("StyleCop.CSharp.OrderingRules", "SA1201:Elements should appear in the correct order", Justification = "Fields kept near accessors.")]
 public sealed class ModConfig
 {
+    /// <summary>
+    /// Gets or sets a value indicating how the panning should be toggled.
+    /// </summary>
     public ToggleBehavior ToggleBehavior { get; set; } = ToggleBehavior.Toggle;
 
     private int speed = 8;
@@ -18,7 +23,7 @@ public sealed class ModConfig
     public int Speed
     {
         get => this.speed;
-        set => this.speed = Math.Clamp(value, 1, 20);
+        set => this.speed = Math.Clamp(value, 1, 24);
     }
 
     private int xRange = 1000;
@@ -96,6 +101,7 @@ public sealed class ModConfig
 /// Controls how the camera should behave.
 /// </summary>
 [Flags]
+[EnumExtensions]
 public enum CameraBehavior
 {
     /// <summary>
@@ -119,9 +125,19 @@ public enum CameraBehavior
     Both = Locked | Offset,
 }
 
+/// <summary>
+/// Indicates how the camera panning should be toggled.
+/// </summary>
 public enum ToggleBehavior
 {
+    /// <summary>
+    /// Camera panning should never be allowed.
+    /// </summary>
     Never,
+
+    /// <summary>
+    /// A hotkey controls camera panning.
+    /// </summary>
     Toggle,
     Camera,
     Always,

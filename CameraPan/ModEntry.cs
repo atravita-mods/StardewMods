@@ -1,7 +1,6 @@
 ﻿using System.Runtime.CompilerServices;
 
 using AtraBase.Toolkit;
-using AtraBase.Toolkit.Extensions;
 
 using AtraShared.ConstantsAndEnums;
 using AtraShared.Integrations;
@@ -23,6 +22,7 @@ namespace CameraPan;
 // TODO: draw a big arrow pointing towards the player if the player is off screen?
 
 /// <inheritdoc />
+[SuppressMessage("StyleCop.CSharp.OrderingRules", "SA1204:Static elements should appear before instance elements", Justification = "Reviewed.")]
 internal sealed class ModEntry : Mod
 {
     /// <summary>
@@ -134,8 +134,6 @@ internal sealed class ModEntry : Mod
                     enabled.SetValueForScreen(screen, false);
                 }
                 break;
-            case ToggleBehavior.Camera:
-            case ToggleBehavior.Toggle:
             case ToggleBehavior.Always:
                 foreach ((int screen, bool _) in enabled.GetActiveValues())
                 {

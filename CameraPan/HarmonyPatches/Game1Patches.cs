@@ -1,4 +1,6 @@
-﻿using HarmonyLib;
+﻿using System.Runtime.CompilerServices;
+
+using HarmonyLib;
 
 namespace CameraPan.HarmonyPatches;
 
@@ -10,5 +12,16 @@ internal static class Game1Patches
 {
     [HarmonyPostfix]
     [HarmonyPatch(nameof(Game1.afterFadeReturnViewportToPlayer))]
-    private static void PostfixAfterFade() => ModEntry.SnapOnNextTick = true;
+    private static void PostfixAfterFade() => ResetAndSnap();
+
+    [HarmonyPrefix]
+    [HarmonyPatch(nameof(Game1.globalFadeToClear))]
+    private static void PrefixFadeToClear() => ResetAndSnap();
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    private static void ResetAndSnap()
+    {
+        ModEntry.SnapOnNextTick = true;
+        ModEntry.Reset();
+    }
 }

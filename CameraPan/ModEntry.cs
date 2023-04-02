@@ -11,9 +11,12 @@ using CameraPan.Framework;
 using HarmonyLib;
 
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 
 using StardewModdingAPI.Events;
 using StardewModdingAPI.Utilities;
+
+using static System.Net.Mime.MediaTypeNames;
 
 using AtraUtils = AtraShared.Utils.Utils;
 
@@ -85,7 +88,11 @@ internal sealed class ModEntry : Mod
         helper.Events.GameLoop.GameLaunched += this.OnGameLaunched;
     }
 
-    private static void Reset()
+    /// <summary>
+    /// Resets the target point to the feet of the player.
+    /// </summary>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    internal static void Reset()
     {
         offset.Value = Point.Zero;
         target.Value = new(Game1.player.getStandingX(), Game1.player.getStandingY());
@@ -116,6 +123,7 @@ internal sealed class ModEntry : Mod
 
         // Register for events.
         this.Helper.Events.GameLoop.UpdateTicked += this.OnTicked;
+        this.Helper.Events.Display.RenderedHud += this.DrawHud;
         this.Helper.Events.Input.ButtonsChanged += this.OnButtonsChanged;
         this.Helper.Events.Player.Warped += this.OnWarped;
         this.Helper.Events.Display.WindowResized += static (_, _) => Config?.RecalculateBounds();
@@ -138,6 +146,23 @@ internal sealed class ModEntry : Mod
                 })
             .AddParagraph(I18n.Mod_Description)
             .GenerateDefaultGMCM(static () => Config);
+        }
+    }
+
+    private void DrawHud(object? sender, RenderedHudEventArgs e)
+    {
+        if (ConsoleCommands.DrawMarker)
+        {
+            e.SpriteBatch.Draw(
+                texture: AssetManager.DartsTexture,
+                position: Game1.GlobalToLocal(Game1.viewport, Target.ToVector2()),
+                sourceRectangle: new Rectangle(0, 320, 64, 64),
+                color: Color.White * 0.7f,
+                rotation: 0f,
+                origin: new Vector2(32f, 32),
+                scale: 0.5f,
+                effects: SpriteEffects.None,
+                layerDepth: 1f);
         }
     }
 

@@ -3,6 +3,9 @@
   // For GMCM
   "IllFormatedConfig": "Config file seems ill-formated, using default. Please use Generic Mod Config Menu to configure.",
 
+  // GMCM section tiles
+  "Keybind.title": "Keybinds",
+
   // GMCM
   "ToggleBehavior.title": "Toggle Behavior",
   "ToggleBehavior.description": "Controls what toggles the camera panning. Options: Never = no panning. Always = panning always allowed. Camera = hold the camera object to pan. Toggle = uses a hotkey to toggle.",

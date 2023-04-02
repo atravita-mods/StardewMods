@@ -26,11 +26,11 @@
         "When": { "YearModulus": "3" }
     },
     {
-        "LogName": "Harvey mid-hearts y2 with pet",
+        "LogName": "Harvey mid-hearts y3 with pet",
         "Action": "EditData",
         "Target": "Characters/Dialogue/Harvey",
         "Entries": {
-            "11_2": "You know, if %pet gets sick, I could probably take care of them too!"
+            "12_2": "You know, if %pet gets sick, I could probably take care of them too!"
         },
         "When":{"YearModulus": "3", "HasPet": true}
     },

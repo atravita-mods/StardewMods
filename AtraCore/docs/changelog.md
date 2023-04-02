@@ -1,6 +1,9 @@
 ﻿Changelog
 ============
 
+#### Version 0.2.2
+* Adds direction enum.
+
 #### Version 0.2.1
 * Fixing math error in the code that picks a random tile off the map.
 

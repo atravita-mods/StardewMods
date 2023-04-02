@@ -25,13 +25,14 @@ namespace CameraPan;
 // TODO: draw a big arrow pointing towards the player if the player is off screen?
 
 /// <inheritdoc />
+[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1310:Field names should not contain underscore", Justification = "Constants.")]
 [SuppressMessage("StyleCop.CSharp.OrderingRules", "SA1204:Static elements should appear before instance elements", Justification = "Reviewed.")]
+[SuppressMessage("StyleCop.CSharp.OrderingRules", "SA1201:Elements should appear in the correct order", Justification = "Accessors kept near backing fields.")]
 internal sealed class ModEntry : Mod
 {
     /// <summary>
     /// The integer ID of the camera item.
     /// </summary>
-    [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1310:Field names should not contain underscore", Justification = "Reviewed.")]
     internal const int CAMERA_ID = 106;
 
     /// <summary>
@@ -149,23 +150,6 @@ internal sealed class ModEntry : Mod
         }
     }
 
-    private void DrawHud(object? sender, RenderedHudEventArgs e)
-    {
-        if (ConsoleCommands.DrawMarker)
-        {
-            e.SpriteBatch.Draw(
-                texture: AssetManager.DartsTexture,
-                position: Game1.GlobalToLocal(Game1.viewport, Target.ToVector2()),
-                sourceRectangle: new Rectangle(0, 320, 64, 64),
-                color: Color.White * 0.7f,
-                rotation: 0f,
-                origin: new Vector2(32f, 32),
-                scale: 0.5f,
-                effects: SpriteEffects.None,
-                layerDepth: 1f);
-        }
-    }
-
     private static void UpdateBehaviorForConfig()
     {
         switch (Config.ToggleBehavior)
@@ -192,6 +176,102 @@ internal sealed class ModEntry : Mod
             Reset();
             SnapOnNextTick = true;
         }
+    }
+
+    [MethodImpl(TKConstants.Hot)]
+    private void DrawHud(object? sender, RenderedHudEventArgs e)
+    {
+        if (ConsoleCommands.DrawMarker)
+        {
+            Vector2 target = Game1.GlobalToLocal(Game1.viewport, Target.ToVector2());
+            e.SpriteBatch.Draw(
+                texture: AssetManager.DartsTexture,
+                position: target,
+                sourceRectangle: new Rectangle(0, 320, 64, 64),
+                color: Color.White * 0.7f,
+                rotation: 0f,
+                origin: new Vector2(32f, 32f),
+                scale: 0.5f,
+                effects: SpriteEffects.None,
+                layerDepth: 1f);
+        }
+
+        if (Game1.currentLocation is not GameLocation location)
+        {
+            return;
+        }
+
+        if (Context.IsMultiplayer && Config.ShowArrowsToOtherPlayers)
+        {
+            foreach (Farmer? player in location.farmers)
+            {
+                this.DrawArrowForPlayer(e.SpriteBatch, player);
+            }
+        }
+        else if (!Config.KeepPlayerOnScreen)
+        {
+            this.DrawArrowForPlayer(e.SpriteBatch, Game1.player);
+        }
+    }
+
+    private void DrawArrowForPlayer(SpriteBatch s, Farmer farmer)
+    {
+        if (farmer is null)
+        {
+            return;
+        }
+
+        Vector2 pos = farmer.Position + new Vector2(32f, -64f);
+        if (Utility.isOnScreen(pos, 64))
+        {
+            return;
+        }
+
+        Vector2 arrowPos = Game1.GlobalToLocal(pos);
+        Direction direction = Direction.None;
+
+        if (arrowPos.X <= 0)
+        {
+            direction |= Direction.Left;
+            arrowPos.X = 8f;
+        }
+        else if (arrowPos.X >= Game1.viewport.Width)
+        {
+            direction |= Direction.Right;
+            arrowPos.X = Game1.viewport.Width - 8f;
+        }
+
+        if (arrowPos.Y <= 0)
+        {
+            direction |= Direction.Up;
+            arrowPos.Y = 8f;
+        }
+        else if (arrowPos.Y >= Game1.viewport.Height)
+        {
+            direction |= Direction.Down;
+            arrowPos.Y = Game1.viewport.Height - 8f;
+        }
+
+        s.Draw(
+            texture: AssetManager.ArrowTexture,
+            position: arrowPos,
+            sourceRectangle: null,
+            color: ReferenceEquals(farmer, Game1.player) ? Config.SelfColor : Config.FriendColor,
+            rotation: direction.GetRotationFacing(),
+            origin: new Vector2(2f, 2f),
+            scale: Game1.pixelZoom,
+            effects: SpriteEffects.None,
+            layerDepth: 1f);
+
+        var temp = direction.GetVectorFacing();
+
+        farmer.FarmerRenderer.drawMiniPortrat(
+            b: s,
+            position: arrowPos - (direction.GetVectorFacing() * 48f) - new Vector2(32f, 48f),
+            layerDepth: 1f,
+            scale: Game1.pixelZoom,
+            facingDirection: Game1.down,
+            who: farmer);
     }
 
     [MethodImpl(TKConstants.Hot)]

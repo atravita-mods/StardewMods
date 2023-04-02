@@ -1,5 +1,7 @@
 ﻿using AtraShared.Integrations.GMCMAttributes;
 
+using Microsoft.Xna.Framework;
+
 using NetEscapades.EnumGenerators;
 
 using StardewModdingAPI.Utilities;
@@ -54,36 +56,63 @@ public sealed class ModConfig
     /// <summary>
     /// Gets or sets a value indicating whether or not players should be kept on screen.
     /// </summary>
+    [GMCMSection("Boundaries", 5)]
     public bool KeepPlayerOnScreen { get; set; } = true;
+
+    /// <summary>
+    /// Gets or sets a value indicating whether or not to show arrows to other players in multiplayer.
+    /// </summary>
+    [GMCMSection("Boundaries", 5)]
+    public bool ShowArrowsToOtherPlayers { get; set; } = true;
+
+    /// <summary>
+    /// Gets or sets the color for which to draw an arrow pointing at the player, if the player is off screen.
+    /// </summary>
+    [GMCMSection("Boundaries", 5)]
+    [GMCMDefaultColor(255, 0, 0, 0)]
+    public Color SelfColor { get; set; } = Color.Red;
+
+    /// <summary>
+    /// Gets or sets the color for which to draw an arrow pointing at other players on the map.
+    /// </summary>
+    [GMCMSection("Boundaries", 5)]
+    [GMCMDefaultColor(0, 0, 255, 0)]
+    public Color FriendColor { get; set; } = Color.Blue;
 
     /// <summary>
     /// Gets or sets a value indicating which button should be used to toggle the panning.
     /// </summary>
+    [GMCMSection("Keybind", 10)]
     public KeybindList ToggleButton { get; set; } = new(new(SButton.O), new(SButton.RightTrigger));
 
     /// <summary>
     /// Gets or sets the button used to reset the camera behind the player.
     /// </summary>
+    [GMCMSection("Keybind", 10)]
     public KeybindList ResetButton { get; set; } = new(new(SButton.R), new(SButton.RightStick));
 
     /// <summary>
     /// Gets or sets the button used to set the camera upwards.
     /// </summary>
+    [GMCMSection("Keybind", 10)]
     public KeybindList UpButton { get; set; } = new(new(SButton.Up), new(SButton.RightThumbstickUp));
 
     /// <summary>
     /// Gets or sets the button used to set the camera downwards.
     /// </summary>
+    [GMCMSection("Keybind", 10)]
     public KeybindList DownButton { get; set; } = new(new(SButton.Down), new(SButton.RightThumbstickDown));
 
     /// <summary>
     /// Gets or sets the button used to set the camera leftwards.
     /// </summary>
+    [GMCMSection("Keybind", 10)]
     public KeybindList LeftButton { get; set; } = new(new(SButton.Left), new(SButton.RightThumbstickLeft));
 
     /// <summary>
     /// Gets or sets the button used to set the camera rightwards.
     /// </summary>
+    [GMCMSection("Keybind", 10)]
     public KeybindList RightButton { get; set; } = new(new(SButton.Right), new(SButton.RightThumbstickRight));
 
     #region internal

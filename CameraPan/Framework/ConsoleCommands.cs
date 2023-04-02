@@ -8,7 +8,12 @@ internal static class ConsoleCommands
     /// <summary>
     /// Gets a value indicating whether or not the debug target circle should be drawn.
     /// </summary>
-    internal static bool DrawMarker { get; private set; } = false;
+    internal static bool DrawMarker { get; private set; } =
+#if DEBUG
+    true;
+#else
+    false;
+#endif
 
     /// <summary>
     /// Registers the console commands for this mod.

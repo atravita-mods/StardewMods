@@ -18,6 +18,14 @@
         }
     },
     {
+        "LogName": "Haley - Y1",
+        "Action": "EditData",
+        "Target": "Characters/Dialogue/Haley",
+        "Entries":{
+            "4{{YearRemainder}}": "@, I think our sink is leaking. Do you know how hard it is to get a plumber around these parts?$s"
+        }
+    },
+    {
         "LogName": "Haley - Y2",
         "Action" :"EditData",
         "Target": "Characters/Dialogue/Haley",

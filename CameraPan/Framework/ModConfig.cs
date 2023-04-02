@@ -1,4 +1,6 @@
-﻿using NetEscapades.EnumGenerators;
+﻿using AtraShared.Integrations.GMCMAttributes;
+
+using NetEscapades.EnumGenerators;
 
 using StardewModdingAPI.Utilities;
 
@@ -20,6 +22,7 @@ public sealed class ModConfig
     /// <summary>
     /// Gets or sets the speed to move the camera at.
     /// </summary>
+    [GMCMRange(1, 24)]
     public int Speed
     {
         get => this.speed;
@@ -53,20 +56,35 @@ public sealed class ModConfig
     /// </summary>
     public bool KeepPlayerOnScreen { get; set; } = true;
 
-    public KeybindList ResetButton { get; set; } = new(new(SButton.R), new(SButton.RightStick));
-
-    public KeybindList UpButton { get; set; } = new(new(SButton.Up), new(SButton.RightThumbstickUp));
-
-    public KeybindList DownButton { get; set; } = new(new(SButton.Down), new(SButton.RightThumbstickDown));
-
-    public KeybindList LeftButton { get; set; } = new(new(SButton.Left), new(SButton.RightThumbstickLeft));
-
-    public KeybindList RightButton { get; set; } = new(new(SButton.Right), new(SButton.RightThumbstickRight));
-
     /// <summary>
     /// Gets or sets a value indicating which button should be used to toggle the panning.
     /// </summary>
     public KeybindList ToggleButton { get; set; } = new(new(SButton.O), new(SButton.RightTrigger));
+
+    /// <summary>
+    /// Gets or sets the button used to reset the camera behind the player.
+    /// </summary>
+    public KeybindList ResetButton { get; set; } = new(new(SButton.R), new(SButton.RightStick));
+
+    /// <summary>
+    /// Gets or sets the button used to set the camera upwards.
+    /// </summary>
+    public KeybindList UpButton { get; set; } = new(new(SButton.Up), new(SButton.RightThumbstickUp));
+
+    /// <summary>
+    /// Gets or sets the button used to set the camera downwards.
+    /// </summary>
+    public KeybindList DownButton { get; set; } = new(new(SButton.Down), new(SButton.RightThumbstickDown));
+
+    /// <summary>
+    /// Gets or sets the button used to set the camera leftwards.
+    /// </summary>
+    public KeybindList LeftButton { get; set; } = new(new(SButton.Left), new(SButton.RightThumbstickLeft));
+
+    /// <summary>
+    /// Gets or sets the button used to set the camera rightwards.
+    /// </summary>
+    public KeybindList RightButton { get; set; } = new(new(SButton.Right), new(SButton.RightThumbstickRight));
 
     #region internal
 
@@ -139,6 +157,14 @@ public enum ToggleBehavior
     /// A hotkey controls camera panning.
     /// </summary>
     Toggle,
+
+    /// <summary>
+    /// Holding the camera object allows panning.
+    /// </summary>
     Camera,
+
+    /// <summary>
+    /// Panning is always enabled.
+    /// </summary>
     Always,
 }

@@ -31,12 +31,20 @@ internal sealed class ModEntry : Mod
     [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1310:Field names should not contain underscore", Justification = "Reviewed.")]
     internal const int CAMERA_ID = 106;
 
+    /// <summary>
+    /// The integer ID used to note hud messages from this mod.
+    /// </summary>
+    internal const int HUD_ID = -9553485;
+
     private static readonly PerScreen<Point> offset = new(() => Point.Zero);
     private static readonly PerScreen<Point> target = new (() => Point.Zero);
 
+    /// <summary>
+    /// Gets a value indicating the target point of the camera.
+    /// </summary>
     internal static Point Target => target.Value;
 
-    private static readonly PerScreen<bool> enabled = new(() => !(Config?.ToggleBehavior != ToggleBehavior.Never));
+    private static readonly PerScreen<bool> enabled = new(() => Config?.ToggleBehavior != ToggleBehavior.Never);
 
     private static readonly PerScreen<bool> snapOnNextTick = new(() => false);
 
@@ -71,14 +79,10 @@ internal sealed class ModEntry : Mod
             enabled.Value = false;
         }
 
+        ConsoleCommands.Register(helper.ConsoleCommands);
+        AssetManager.Initialize(helper.GameContent);
+
         helper.Events.GameLoop.GameLaunched += this.OnGameLaunched;
-
-        helper.Events.GameLoop.UpdateTicked += this.OnTicked;
-        helper.Events.Input.ButtonsChanged += this.OnButtonsChanged;
-
-        helper.Events.Player.Warped += this.OnWarped;
-
-        helper.Events.Display.WindowResized += static (_, _) => Config?.RecalculateBounds();
     }
 
     private static void Reset()
@@ -98,7 +102,10 @@ internal sealed class ModEntry : Mod
         if (Config.ToggleBehavior == ToggleBehavior.Toggle && Config.ToggleButton.JustPressed())
         {
             enabled.Value = !enabled.Value;
-            this.Monitor.Log($"Switching panning to {enabled.Value}");
+            string message = I18n.Enabled_Message(enabled.Value ? I18n.Enabled() : I18n.Disabled());
+            this.Monitor.Log(message);
+            Game1.hudMessages.RemoveAll(message => message.number == HUD_ID);
+            Game1.addHUDMessage(new(message, HUDMessage.newQuest_type) { number = HUD_ID , noIcon = true});
         }
     }
 
@@ -106,6 +113,16 @@ internal sealed class ModEntry : Mod
     {
         this.ApplyPatches(new Harmony(this.ModManifest.UniqueID));
         Config.RecalculateBounds();
+
+        // Register for events.
+        this.Helper.Events.GameLoop.UpdateTicked += this.OnTicked;
+        this.Helper.Events.Input.ButtonsChanged += this.OnButtonsChanged;
+        this.Helper.Events.Player.Warped += this.OnWarped;
+        this.Helper.Events.Display.WindowResized += static (_, _) => Config?.RecalculateBounds();
+
+        // asset events.
+        this.Helper.Events.Content.AssetRequested += static (_, e) => AssetManager.Apply(e);
+        this.Helper.Events.Content.AssetsInvalidated += static (_, e) => AssetManager.Reset(e.NamesWithoutLocale);
 
         GMCMHelper gmcmHelper = new(this.Monitor, this.Helper.Translation, this.Helper.ModRegistry, this.ModManifest);
         if (gmcmHelper.TryGetAPI())

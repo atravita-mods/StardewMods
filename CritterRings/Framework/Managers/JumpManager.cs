@@ -261,7 +261,7 @@ internal sealed class JumpManager : IDisposable
 
                     #region velocity calculations
 
-                    float initialVelocityY = 4f * MathF.Sqrt(this.distance);
+                    float initialVelocityY = Math.Max(6f, 4f * MathF.Sqrt(this.distance));
 
                     // we're just gonna hope the big jump is enough to clear most buildings :(
                     if (this.needsBigJump == NeedsBigJump.True)
@@ -285,8 +285,7 @@ internal sealed class JumpManager : IDisposable
                         int verticalHeightNeeded = 4;
                         int startX = (int)tileToCheck.Value.X * Game1.tileSize;
                         int startY = (int)(tileToCheck.Value.Y - 3) * Game1.tileSize;
-                        while (startY > 0 && (Game1.currentLocation.map.GetLayer("Front")?.PickTile(new XLocation(startX, startY), Game1.viewport.Size) is not null
-                            || Game1.currentLocation.map.GetLayer("AlwaysFront")?.PickTile(new XLocation(startX, startY), Game1.viewport.Size) is not null))
+                        while (startY > 0 && HasFrontOrAlwaysFrontTile(startX, startY))
                         {
                             ++verticalHeightNeeded;
                             startY -= 64;
@@ -364,6 +363,10 @@ internal sealed class JumpManager : IDisposable
         }
     }
 
+    private static bool HasFrontOrAlwaysFrontTile(int x, int y)
+        => Game1.currentLocation.map.GetLayer("Front")?.PickTile(new XLocation(x * Game1.tileSize, y * Game1.tileSize), Game1.viewport.Size) is not null
+            || Game1.currentLocation.map.GetLayer("AlwaysFront")?.PickTile(new XLocation(x * Game1.tileSize, y * Game1.tileSize), Game1.viewport.Size) is not null;
+
     private void RecalculateTiles(Farmer farmer, GameLocation location)
     {
         this.currentTile = this.startTile + (this.direction * this.distance);
@@ -400,11 +403,15 @@ internal sealed class JumpManager : IDisposable
             {
                 this.needsBigJump = NeedsBigJump.IfPastThisPoint;
             }
-            if (this.needsBigJump == NeedsBigJump.False && location is Farm farm)
+            else if (HasFrontOrAlwaysFrontTile((int)this.currentTile.X, (int)this.currentTile.Y))
+            {
+                this.needsBigJump = NeedsBigJump.IfPastThisPoint;
+            }
+            else if (location is Farm farm)
             {
                 foreach (Building? building in farm.buildings)
                 {
-                    if (building.occupiesTile(this.currentTile))
+                    if (building is not ShippingBin or FishPond && building.occupiesTile(this.currentTile))
                     {
                         this.needsBigJump = NeedsBigJump.IfPastThisPoint;
                         break;

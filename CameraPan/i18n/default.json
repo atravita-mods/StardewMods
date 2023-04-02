@@ -3,6 +3,10 @@
   // For GMCM
   "IllFormatedConfig": "Config file seems ill-formated, using default. Please use Generic Mod Config Menu to configure.",
 
+  // GMCM
+  "ToggleBehavior.title": "Toggle Behavior",
+  "ToggleBehavior.description": "Controls what toggles the camera panning. Options: Never = no panning. Always = panning always allowed. Camera = hold the camera object to pan. Toggle = uses a hotkey to toggle.",
+
   "Speed.title": "Speed",
   "Speed.description": "How fast should the camera move?",
 
@@ -15,6 +19,27 @@
   "KeepPlayerOnScreen.title": "Keep Player On Screen",
   "KeepPlayerOnScreen.description": "If enabled, the camera will avoid panning too far, to keep the player character on-screen.",
 
+  "ToggleButton.title": "Toggle Button",
+  "ToggleButton.description": "The button used to toggle panning, if Toggle is enabled.",
+
   "ResetButton.title": "Reset Button",
-  "ResetButton.description":  "The button to use to reset the camera over the player."
+  "ResetButton.description": "The button to use to reset the camera over the player.",
+
+  "UpButton.title": "Up Button",
+  "UpButton.description": "The button used to pan the camera upwards, if panning is enabled.",
+
+  "DownButton.title": "Down Button",
+  "DownButton.description": "The button used to pan the camera downwards, if panning is enabled.",
+
+  "LeftButton.title": "Left Button",
+  "LeftButton.description": "The button used to pan the camera leftwards, if panning is enabled.",
+
+  "RightButton.title": "Right Button",
+  "RightButton.description": "The button used to pan the camera rightwards, if panning is enabled.",
+
+  // Messages shown to players.
+  "enabled.message": "Panning is {{status}}",
+  "enabled": "enabled",
+  "disabled": "disabled"
+
 }

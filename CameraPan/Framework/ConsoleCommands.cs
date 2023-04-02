@@ -30,5 +30,24 @@ internal static class ConsoleCommands
         {
             DrawMarker = !DrawMarker;
         }
+        else
+        {
+            switch (args[0])
+            {
+                case "enable":
+                    DrawMarker = true;
+                    break;
+                case "disable":
+                    DrawMarker = false;
+                    break;
+            }
+        }
+
+        if (!DrawMarker)
+        {
+            AssetManager.Reset();
+        }
+
+        ModEntry.ModMonitor.Log("Okay, the debug marker is " + (DrawMarker ? "enabled" : "disabled"), LogLevel.Info);
     }
 }

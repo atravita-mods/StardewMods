@@ -209,7 +209,7 @@ internal sealed class JumpManager : IDisposable
     [MethodImpl(TKConstants.Hot)]
     private void OnUpdateTicked(object? sender, UpdateTickedEventArgs e)
     {
-        if (!this.IsCurrentFarmer())
+        if (!this.IsCurrentFarmer() || !Game1.game1.IsActive)
         {
             return;
         }

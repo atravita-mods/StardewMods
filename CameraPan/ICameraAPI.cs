@@ -20,6 +20,11 @@ public interface ICameraAPI
     public CameraBehavior Behavior { get; }
 
     /// <summary>
+    /// Gets the current toggle behavior.
+    /// </summary>
+    public ToggleBehavior ToggleBehavior { get; }
+
+    /// <summary>
     /// Enables panning mode.
     /// </summary>
     public void Enable();
@@ -67,4 +72,30 @@ public enum CameraBehavior
     /// Always keep the offset position in the center.
     /// </summary>
     Both = Locked | Offset,
+}
+
+/// <summary>
+/// Indicates how the camera panning should be toggled.
+/// </summary>
+public enum ToggleBehavior
+{
+    /// <summary>
+    /// Camera panning should never be allowed.
+    /// </summary>
+    Never,
+
+    /// <summary>
+    /// A hotkey controls camera panning.
+    /// </summary>
+    Toggle,
+
+    /// <summary>
+    /// Holding the camera object allows panning.
+    /// </summary>
+    Camera,
+
+    /// <summary>
+    /// Panning is always enabled.
+    /// </summary>
+    Always,
 }

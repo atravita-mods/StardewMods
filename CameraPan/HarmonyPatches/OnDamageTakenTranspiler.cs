@@ -20,7 +20,8 @@ internal static class OnDamageTakenTranspiler
     {
         if (ReferenceEquals(player, Game1.player) && ModEntry.Config.ResetWhenDamageTaken)
         {
-            Game1.moveViewportTo(player.getStandingXY().ToVector2(), 8, 50);
+            ModEntry.ZeroOffset();
+            ModEntry.MSHoldOffset = 250;
         }
     }
 

@@ -18,6 +18,10 @@ internal static class Game1Patches
     [HarmonyPatch(nameof(Game1.globalFadeToClear))]
     private static void PrefixFadeToClear() => ResetAndSnap();
 
+    [HarmonyPostfix]
+    [HarmonyPatch("onFadeToBlackComplete")]
+    private static void PostfixFadeToBlack() => ResetAndSnap();
+
     [HarmonyPrefix]
     [HarmonyPatch(nameof(Game1.moveViewportTo))]
     private static void PrefixMoveViewport(ref Game1.afterFadeFunction? reachedTarget)

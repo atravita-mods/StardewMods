@@ -69,6 +69,14 @@ internal sealed class ModEntry : Mod
         set => snapOnNextTick.Value = value;
     }
 
+    private static readonly PerScreen<int> msHoldOffset = new(() => -1);
+
+    internal static int MSHoldOffset
+    {
+        get => msHoldOffset.Value;
+        set => msHoldOffset.Value = value;
+    }
+
     /// <summary>
     /// Gets the config instance for this mod.
     /// </summary>
@@ -227,21 +235,10 @@ internal sealed class ModEntry : Mod
                 texture: AssetManager.DartsTexture,
                 position: target,
                 sourceRectangle: new Rectangle(0, 320, 64, 64),
-                color: (Game1.viewportTarget.X != -2.14748365E+09f ? Color.Red : Color.White )* 0.7f,
+                color: (Game1.viewportTarget.X != -2.14748365E+09f ? Color.Red : Color.White) * 0.7f,
                 rotation: 0f,
                 origin: new Vector2(32f, 32f),
                 scale: 0.5f,
-                effects: SpriteEffects.None,
-                layerDepth: 1f);
-
-            e.SpriteBatch.Draw(
-                texture: AssetManager.DartsTexture,
-                position: Game1.GlobalToLocal(Game1.viewport, Game1.currentViewportTarget),
-                sourceRectangle: new Rectangle(0, 320, 64, 64),
-                color: Color.Blue,
-                rotation: 0f,
-                origin: new Vector2(32f, 32f),
-                scale: 0.25f,
                 effects: SpriteEffects.None,
                 layerDepth: 1f);
         }
@@ -345,7 +342,11 @@ internal sealed class ModEntry : Mod
         int yAdjustment = offset.Value.Y;
         if (enabled.Value)
         {
-            if (Game1.player.CanMove)
+            if (MSHoldOffset > 0)
+            {
+                MSHoldOffset -= Game1.currentGameTime.ElapsedGameTime.Milliseconds;
+            }
+            if (Game1.player.CanMove && MSHoldOffset <= 0)
             {
                 Vector2 pos = this.Helper.Input.GetCursorPosition().ScreenPixels;
                 int width = Game1.viewport.Width / 8;

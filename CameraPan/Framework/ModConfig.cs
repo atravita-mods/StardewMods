@@ -195,30 +195,4 @@ public enum PerMapCameraBehavior
     ByIndoorsOutdoors = 0b1 << 3,
 }
 
-/// <summary>
-/// Indicates how the camera panning should be toggled.
-/// </summary>
-public enum ToggleBehavior
-{
-    /// <summary>
-    /// Camera panning should never be allowed.
-    /// </summary>
-    Never,
-
-    /// <summary>
-    /// A hotkey controls camera panning.
-    /// </summary>
-    Toggle,
-
-    /// <summary>
-    /// Holding the camera object allows panning.
-    /// </summary>
-    Camera,
-
-    /// <summary>
-    /// Panning is always enabled.
-    /// </summary>
-    Always,
-}
-
 #endregion

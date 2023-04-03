@@ -21,6 +21,9 @@ public sealed class API : ICameraAPI
     public CameraBehavior Behavior => ViewportAdjustmentPatches.Behavior;
 
     /// <inheritdoc />
+    public ToggleBehavior ToggleBehavior => ModEntry.Config.ToggleBehavior;
+
+    /// <inheritdoc />
     public void Disable()
     {
         ModEntry.ModMonitor.Log($"{this.callerUniqueID} disabling panning.");

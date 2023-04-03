@@ -22,6 +22,7 @@ internal static class EventPatches
         DelayedAction.functionAfterDelay(
             () =>
             {
+                var pos = Game1.player.getStandingXY();
                 ModEntry.Reset();
                 ModEntry.SnapOnNextTick = true;
             },

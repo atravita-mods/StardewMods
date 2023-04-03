@@ -18,6 +18,20 @@ internal static class Game1Patches
     [HarmonyPatch(nameof(Game1.globalFadeToClear))]
     private static void PrefixFadeToClear() => ResetAndSnap();
 
+    [HarmonyPrefix]
+    [HarmonyPatch(nameof(Game1.moveViewportTo))]
+    private static void PrefixMoveViewport(ref Game1.afterFadeFunction? reachedTarget)
+    {
+        if (reachedTarget is null)
+        {
+            reachedTarget = ModEntry.ZeroOffset;
+        }
+        else
+        {
+            reachedTarget += ModEntry.ZeroOffset;
+        }
+    }
+
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     private static void ResetAndSnap()
     {

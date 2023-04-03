@@ -224,7 +224,7 @@ internal sealed class JumpManager : IDisposable
                 Game1.left or Game1.right => new Vector2(target.X + Math.Clamp((position.X - target.X) / 2, -320, 320), position.Y),
                 _ => new Vector2(position.X, target.Y + Math.Clamp((position.Y - target.Y) / 2, -320, 320)),
             };
-            Game1.moveViewportTo(midpoint, ModEntry.Config.JumpChargeSpeed / 2);
+            Game1.moveViewportTo(midpoint, ModEntry.Config.JumpChargeSpeed / 2, holdTimer: 50);
         }
 
         switch (this.state)
@@ -535,9 +535,9 @@ internal sealed class JumpManager : IDisposable
         farmer.FarmerSprite.setCurrentSingleFrame(
         which: farmer.FacingDirection switch
         {
-            Game1.down => 62,
+            Game1.down => 70,
             Game1.right => 52,
-            Game1.up => 70,
+            Game1.up => 62,
             _ => 52,
         },
         flip: farmer.FacingDirection == Game1.left);

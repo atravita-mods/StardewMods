@@ -16,8 +16,6 @@ using Microsoft.Xna.Framework.Graphics;
 using StardewModdingAPI.Events;
 using StardewModdingAPI.Utilities;
 
-using static System.Net.Mime.MediaTypeNames;
-
 using AtraUtils = AtraShared.Utils.Utils;
 
 namespace CameraPan;
@@ -50,7 +48,7 @@ internal sealed class ModEntry : Mod
 
     private static readonly PerScreen<bool> enabled = new(() => Config?.ToggleBehavior != ToggleBehavior.Never);
 
-    private static readonly PerScreen<bool> snapOnNextTick = new(() => false);
+    private static readonly PerScreen<bool> snapOnNextTick = new(() => true);
 
     /// <summary>
     /// Gets or sets a value indicating whether not the camera should snap to the target the next tick.
@@ -98,6 +96,8 @@ internal sealed class ModEntry : Mod
         offset.Value = Point.Zero;
         target.Value = new(Game1.player.getStandingX(), Game1.player.getStandingY());
     }
+
+    internal static void ZeroOffset() => offset.Value = Point.Zero;
 
     private void OnButtonsChanged(object? sender, ButtonsChangedEventArgs e)
     {
@@ -178,6 +178,8 @@ internal sealed class ModEntry : Mod
         }
     }
 
+    #region draw
+
     [MethodImpl(TKConstants.Hot)]
     private void DrawHud(object? sender, RenderedHudEventArgs e)
     {
@@ -205,16 +207,17 @@ internal sealed class ModEntry : Mod
         {
             foreach (Farmer? player in location.farmers)
             {
-                this.DrawArrowForPlayer(e.SpriteBatch, player);
+                DrawArrowForPlayer(e.SpriteBatch, player);
             }
         }
         else if (!Config.KeepPlayerOnScreen)
         {
-            this.DrawArrowForPlayer(e.SpriteBatch, Game1.player);
+            DrawArrowForPlayer(e.SpriteBatch, Game1.player);
         }
     }
 
-    private void DrawArrowForPlayer(SpriteBatch s, Farmer farmer)
+    [MethodImpl(TKConstants.Hot)]
+    private static void DrawArrowForPlayer(SpriteBatch s, Farmer farmer)
     {
         if (farmer is null)
         {
@@ -222,10 +225,6 @@ internal sealed class ModEntry : Mod
         }
 
         Vector2 pos = farmer.Position + new Vector2(32f, -64f);
-        if (Utility.isOnScreen(pos, 64))
-        {
-            return;
-        }
 
         Vector2 arrowPos = Game1.GlobalToLocal(pos);
         Direction direction = Direction.None;
@@ -252,6 +251,13 @@ internal sealed class ModEntry : Mod
             arrowPos.Y = Game1.viewport.Height - 8f;
         }
 
+        if (direction == Direction.None)
+        {
+            return;
+        }
+
+        arrowPos = Utility.snapToInt(arrowPos);
+
         s.Draw(
             texture: AssetManager.ArrowTexture,
             position: arrowPos,
@@ -263,8 +269,6 @@ internal sealed class ModEntry : Mod
             effects: SpriteEffects.None,
             layerDepth: 1f);
 
-        var temp = direction.GetVectorFacing();
-
         farmer.FarmerRenderer.drawMiniPortrat(
             b: s,
             position: arrowPos - (direction.GetVectorFacing() * 48f) - new Vector2(32f, 48f),
@@ -273,6 +277,8 @@ internal sealed class ModEntry : Mod
             facingDirection: Game1.down,
             who: farmer);
     }
+
+    #endregion
 
     [MethodImpl(TKConstants.Hot)]
     private void OnTicked(object? sender, UpdateTickedEventArgs e)
@@ -284,12 +290,12 @@ internal sealed class ModEntry : Mod
 
         if (Config.ToggleBehavior == ToggleBehavior.Camera)
         {
-                enabled.Value = Game1.player.ActiveObject is SObject obj && obj.bigCraftable.Value && obj.ParentSheetIndex == CAMERA_ID;
+            enabled.Value = Game1.player.ActiveObject is SObject obj && obj.bigCraftable.Value && obj.ParentSheetIndex == CAMERA_ID;
         }
 
         int xAdjustment = offset.Value.X;
         int yAdjustment = offset.Value.Y;
-        if (enabled.Value)
+        if (enabled.Value && Game1.player.CanMove)
         {
             Vector2 pos = this.Helper.Input.GetCursorPosition().ScreenPixels;
             int width = Game1.viewport.Width / 8;
@@ -355,22 +361,8 @@ internal sealed class ModEntry : Mod
         }
         else
         {
-            if (Math.Abs(Game1.viewportCenter.X - x) < 512)
-            {
-                x = Math.Clamp(x, Game1.viewportCenter.X - Config.Speed, Game1.viewportCenter.X + Config.Speed);
-            }
-            else
-            {
-                ModMonitor.DebugOnlyLog($"snapped x", LogLevel.Info);
-            }
-            if (Math.Abs(Game1.viewportCenter.Y - y) < 512)
-            {
-                y = Math.Clamp(y, Game1.viewportCenter.Y - Config.Speed, Game1.viewportCenter.Y + Config.Speed);
-            }
-            else
-            {
-                ModMonitor.DebugOnlyLog($"snapped y", LogLevel.Info);
-            }
+            x = Math.Clamp(x, Game1.viewportCenter.X - Config.Speed, Game1.viewportCenter.X + Config.Speed);
+            y = Math.Clamp(y, Game1.viewportCenter.Y - Config.Speed, Game1.viewportCenter.Y + Config.Speed);
         }
 
         // smooth it out a bit - if we're not moving very far just leave the camera in place.

@@ -154,6 +154,7 @@ public static partial class DirectionExtensions
             Direction.Up | Direction.Left => -3 * MathF.PI / 4,
             Direction.Up | Direction.Right => -MathF.PI / 4,
             Direction.Down | Direction.Left => 3 * MathF.PI / 4,
+            Direction.Down | Direction.Right => MathF.PI / 4,
             _ => ThrowHelper.ThrowArgumentOutOfRangeException<float>($"Unexpected direction! {direction.ToHexString()}"),
         };
     }

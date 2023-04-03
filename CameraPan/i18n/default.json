@@ -5,10 +5,16 @@
 
   // GMCM section tiles
   "Keybind.title": "Keybinds",
+  "Boundaries.title": "Boundaries",
 
   // GMCM
   "ToggleBehavior.title": "Toggle Behavior",
   "ToggleBehavior.description": "Controls what toggles the camera panning. Options: Never = no panning. Always = panning always allowed. Camera = hold the camera object to pan. Toggle = uses a hotkey to toggle.",
+
+  "config.ToggleBehavior.Toggle": "Toggle",
+  "config.ToggleBehavior.Always": "Always",
+  "config.ToggleBehavior.Never": "Never",
+  "config.ToggleBehavior.Camera": "Camera",
 
   "Speed.title": "Speed",
   "Speed.description": "How fast should the camera move?",
@@ -21,6 +27,15 @@
 
   "KeepPlayerOnScreen.title": "Keep Player On Screen",
   "KeepPlayerOnScreen.description": "If enabled, the camera will avoid panning too far, to keep the player character on-screen.",
+
+  "ShowArrowsToOtherPlayers.title": "Show Arrows To Other Players",
+  "ShowArrowsToOtherPlayers.description": "If enabled, arrows will point out other players on the same map",
+
+  "SelfColor.title": "Self Color",
+  "SelfColor.description": "The color of the arrow pointing out the current player",
+
+  "FriendColor.title": "Friend Color",
+  "FriendColor.description": "The color of the arrow pointing out friends.",
 
   "ToggleButton.title": "Toggle Button",
   "ToggleButton.description": "The button used to toggle panning, if Toggle is enabled.",

@@ -97,6 +97,9 @@ internal sealed class ModEntry : Mod
         target.Value = new(Game1.player.getStandingX(), Game1.player.getStandingY());
     }
 
+    /// <summary>
+    /// Sets the offset to zero.
+    /// </summary>
     internal static void ZeroOffset() => offset.Value = Point.Zero;
 
     private void OnButtonsChanged(object? sender, ButtonsChangedEventArgs e)
@@ -198,7 +201,7 @@ internal sealed class ModEntry : Mod
                 layerDepth: 1f);
         }
 
-        if (Game1.currentLocation is not GameLocation location)
+        if (Game1.currentLocation is not GameLocation location || !Context.IsPlayerFree)
         {
             return;
         }

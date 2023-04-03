@@ -19,6 +19,8 @@ public sealed class ModConfig
     /// </summary>
     public ToggleBehavior ToggleBehavior { get; set; } = ToggleBehavior.Toggle;
 
+    public bool ResetWhenDamageTaken { get; set; } = true;
+
     private int speed = 8;
 
     /// <summary>
@@ -38,6 +40,7 @@ public sealed class ModConfig
     /// <summary>
     /// Gets or sets the maximum distance the focal point can be from the player, on the x axis.
     /// </summary>
+    [GMCMSection("Boundaries", 5)]
     public int XRange
     {
         get => this.xRange;
@@ -47,6 +50,7 @@ public sealed class ModConfig
     /// <summary>
     /// Gets or sets the maximum distance the focal point can be from the player, on the y axis.
     /// </summary>
+    [GMCMSection("Boundaries", 5)]
     public int YRange
     {
         get => this.yRange;
@@ -115,6 +119,25 @@ public sealed class ModConfig
     [GMCMSection("Keybind", 10)]
     public KeybindList RightButton { get; set; } = new(new(SButton.Right), new(SButton.RightThumbstickRight));
 
+
+    /// <summary>
+    /// Gets or sets the behavior of the camera in an indoors location.
+    /// </summary>
+    [GMCMSection("Camera", 20)]
+    public CameraBehavior IndoorsCameraBehavior { get; set; } = CameraBehavior.Both;
+
+    /// <summary>
+    /// Gets or sets the behavior of the camera in an outdoors location.
+    /// </summary>
+    [GMCMSection("Camera", 20)]
+    public CameraBehavior OutdoorsCameraBehavior { get; set; } = CameraBehavior.Offset;
+
+    /// <summary>
+    /// Gets or sets the behavior of the camera per-map.
+    /// </summary>
+    [GMCMDefaultIgnore]
+    public Dictionary<string, PerMapCameraBehavior> PerMapCameraBehavior { get; set; } = new();
+
     #region internal
 
     private int xRangeActual = 1000;
@@ -142,6 +165,31 @@ public sealed class ModConfig
     }
 
     #endregion
+}
+
+#region enums
+
+/// <summary>
+/// Gets the per-map behavior for the camera.
+/// </summary>
+public enum PerMapCameraBehavior
+{
+    /// <inheritdoc cref="CameraBehavior.Vanila"/>
+    Vanilla = CameraBehavior.Vanila,
+
+    /// <inheritdoc cref="CameraBehavior.Locked"/>
+    Locked = CameraBehavior.Locked,
+
+    /// <inheritdoc cref="CameraBehavior.Offset"/>
+    Offset = CameraBehavior.Offset,
+
+    /// <inheritdoc cref="CameraBehavior.Both"/>
+    Both = CameraBehavior.Both,
+
+    /// <summary>
+    /// Uses the default for the indoors/outdoors.
+    /// </summary>
+    ByIndoorsOutdoors = 0b1 << 3,
 }
 
 /// <summary>
@@ -197,3 +245,5 @@ public enum ToggleBehavior
     /// </summary>
     Always,
 }
+
+#endregion

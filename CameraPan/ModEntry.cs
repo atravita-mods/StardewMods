@@ -7,6 +7,7 @@ using AtraShared.Integrations;
 using AtraShared.Utils.Extensions;
 
 using CameraPan.Framework;
+using CameraPan.HarmonyPatches;
 
 using HarmonyLib;
 
@@ -69,6 +70,8 @@ internal sealed class ModEntry : Mod
     /// </summary>
     internal static IMonitor ModMonitor { get; private set; } = null!;
 
+    private GMCMHelper? gmcm;
+
     /// <inheritdoc />
     public override void Entry(IModHelper helper)
     {
@@ -87,6 +90,11 @@ internal sealed class ModEntry : Mod
         helper.Events.GameLoop.GameLaunched += this.OnGameLaunched;
     }
 
+    #region reset
+
+    /* Both of these carry the AggressiveInlining attribute
+     * primarily because they're sometimes used as delegates. */
+
     /// <summary>
     /// Resets the target point to the feet of the player.
     /// </summary>
@@ -100,7 +108,10 @@ internal sealed class ModEntry : Mod
     /// <summary>
     /// Sets the offset to zero.
     /// </summary>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     internal static void ZeroOffset() => offset.Value = Point.Zero;
+
+    #endregion
 
     private void OnButtonsChanged(object? sender, ButtonsChangedEventArgs e)
     {
@@ -136,17 +147,27 @@ internal sealed class ModEntry : Mod
         this.Helper.Events.Content.AssetRequested += static (_, e) => AssetManager.Apply(e);
         this.Helper.Events.Content.AssetsInvalidated += static (_, e) => AssetManager.Reset(e.NamesWithoutLocale);
 
-        GMCMHelper gmcmHelper = new(this.Monitor, this.Helper.Translation, this.Helper.ModRegistry, this.ModManifest);
-        if (gmcmHelper.TryGetAPI())
+        this.SetUpInitialConfig();
+    }
+
+    private void SetUpInitialConfig()
+    {
+        if (this.gmcm?.HasGottenAPI == true)
         {
-            gmcmHelper.Register(
+            this.gmcm.Unregister();
+        }
+
+        this.gmcm ??= new(this.Monitor, this.Helper.Translation, this.Helper.ModRegistry, this.ModManifest);
+        if (this.gmcm.TryGetAPI())
+        {
+            this.gmcm.Register(
                 reset: static () => Config = new(),
                 save: () =>
                 {
                     this.Helper.AsyncWriteConfig(this.Monitor, Config);
                     Config.RecalculateBounds();
-
                     UpdateBehaviorForConfig();
+                    ViewportAdjustmentPatches.SetCameraBehaviorForConfig(Config, Game1.currentLocation);
                 })
             .AddParagraph(I18n.Mod_Description)
             .GenerateDefaultGMCM(static () => Config);
@@ -178,6 +199,7 @@ internal sealed class ModEntry : Mod
         {
             Reset();
             SnapOnNextTick = true;
+            ViewportAdjustmentPatches.SetCameraBehaviorForConfig(Config, e.NewLocation);
         }
     }
 

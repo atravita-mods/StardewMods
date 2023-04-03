@@ -18,7 +18,12 @@ internal static class EventPatches
     [HarmonyPatch(typeof(Event), nameof(Event.endBehaviors))]
     private static void PostfixEndBehaviors()
     {
-        ModEntry.Reset();
-        ModEntry.SnapOnNextTick = true;
+        DelayedAction.functionAfterDelay(
+            func: static () =>
+            {
+                ModEntry.Reset();
+                ModEntry.SnapOnNextTick = true;
+            },
+            timer: 50);
     }
 }

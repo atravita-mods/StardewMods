@@ -1,14 +1,24 @@
 ﻿using System.Reflection;
 using System.Reflection.Emit;
+
 using System.Runtime.CompilerServices;
+
 using AtraBase.Toolkit;
+
 using AtraCore.Framework.ReflectionManager;
+
 using AtraShared.Utils.Extensions;
 using AtraShared.Utils.HarmonyHelper;
+
 using CameraPan.Framework;
+
 using HarmonyLib;
+
 using Microsoft.Xna.Framework;
+
 using StardewModdingAPI.Utilities;
+
+using StardewValley.Locations;
 
 namespace CameraPan.HarmonyPatches;
 
@@ -20,6 +30,24 @@ namespace CameraPan.HarmonyPatches;
 internal static class ViewportAdjustmentPatches
 {
     private static readonly PerScreen<CameraBehavior> cameraBehavior = new(() => CameraBehavior.Both);
+
+    /// <summary>
+    /// Adjusts the camera behavior for this location.
+    /// </summary>
+    /// <param name="config">Config instance.</param>
+    /// <param name="location">Location to adjust for.</param>
+    internal static void SetCameraBehaviorForConfig(ModConfig config, GameLocation location)
+    {
+        var behavior = location.IsOutdoors || location is BugLand ? config.OutdoorsCameraBehavior : config.IndoorsCameraBehavior;
+        if (location.forceViewportPlayerFollow)
+        {
+            behavior |= CameraBehavior.Locked;
+        }
+
+        cameraBehavior.Value = behavior;
+
+        ModEntry.ModMonitor.Log($"Setting camera behavior {behavior.ToStringFast()} for location {location.NameOrUniqueName}");
+    }
 
     #region transpiler helpers
 

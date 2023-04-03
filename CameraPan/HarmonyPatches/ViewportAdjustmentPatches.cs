@@ -29,7 +29,15 @@ namespace CameraPan.HarmonyPatches;
 [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Named for Harmony.")]
 internal static class ViewportAdjustmentPatches
 {
+
     private static readonly PerScreen<CameraBehavior> cameraBehavior = new(() => CameraBehavior.Both);
+
+    /// <summary>
+    /// Gets the current camera behavior.
+    /// </summary>
+    internal static CameraBehavior Behavior => cameraBehavior.Value;
+
+    private static bool IsGamePanning => Game1.viewportTarget.X != -2.14748365E+09f;
 
     /// <summary>
     /// Adjusts the camera behavior for this location.
@@ -38,7 +46,7 @@ internal static class ViewportAdjustmentPatches
     /// <param name="location">Location to adjust for.</param>
     internal static void SetCameraBehaviorForConfig(ModConfig config, GameLocation location)
     {
-        var behavior = location.IsOutdoors || location is BugLand ? config.OutdoorsCameraBehavior : config.IndoorsCameraBehavior;
+        CameraBehavior behavior = location.IsOutdoors || location is BugLand ? config.OutdoorsCameraBehavior : config.IndoorsCameraBehavior;
         if (location.forceViewportPlayerFollow)
         {
             behavior |= CameraBehavior.Locked;
@@ -56,10 +64,10 @@ internal static class ViewportAdjustmentPatches
         => Game1.CurrentEvent is Event evt && (evt.farmer is not null && !evt.isFestival);
 
     [MethodImpl(TKConstants.Hot)]
-    private static bool ShouldLock() => !IsInEvent() && cameraBehavior.Value.HasFlagFast(CameraBehavior.Locked);
+    private static bool ShouldLock() => !IsGamePanning && !IsInEvent() && cameraBehavior.Value.HasFlagFast(CameraBehavior.Locked);
 
     [MethodImpl(TKConstants.Hot)]
-    private static bool ShouldOffset() => !IsInEvent() && cameraBehavior.Value.HasFlagFast(CameraBehavior.Offset);
+    private static bool ShouldOffset() => !IsGamePanning && !IsInEvent() && cameraBehavior.Value.HasFlagFast(CameraBehavior.Offset);
 
     [MethodImpl(TKConstants.Hot)]
     private static float GetXTarget(float prevVal) => ShouldOffset() ? ModEntry.Target.X : prevVal;
@@ -73,7 +81,7 @@ internal static class ViewportAdjustmentPatches
     [HarmonyPatch("getViewportCenter")]
     private static void Postfix(ref Point __result)
     {
-        if (Game1.viewportTarget.X == -2.14748365E+09f && !IsInEvent() && ShouldOffset()
+        if (!IsGamePanning && !IsInEvent() && ShouldOffset()
             && (Math.Abs(Game1.viewportCenter.X - ModEntry.Target.X) >= 4 || Math.Abs(Game1.viewportCenter.Y - ModEntry.Target.Y) >= 4))
         {
             __result = Game1.viewportCenter = ModEntry.Target;
@@ -120,7 +128,7 @@ internal static class ViewportAdjustmentPatches
             .Pop()
             .GetLabels(out IList<Label>? secondLabelsToMove)
             .Insert(new CodeInstruction[]
-            { // insert if (ShouldLock() || GAme1.currentLocation.forceViewportPlayerFollow)
+            { // insert if (ShouldLock() || Game1.currentLocation.forceViewportPlayerFollow)
                 new(OpCodes.Call, typeof(ViewportAdjustmentPatches).GetCachedMethod(nameof(ShouldLock), ReflectionCache.FlagTypes.StaticFlags)),
                 new(OpCodes.Brtrue, jumpToLock),
             }, withLabels: secondLabelsToMove)
@@ -145,7 +153,7 @@ internal static class ViewportAdjustmentPatches
                 new (OpCodes.Call, typeof(ViewportAdjustmentPatches).GetCachedMethod(nameof(GetYTarget), ReflectionCache.FlagTypes.StaticFlags)),
             });
 
-            // helper.Print();
+            helper.Print();
             return helper.Render();
         }
         catch (Exception ex)

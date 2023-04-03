@@ -19,7 +19,10 @@ public sealed class ModConfig
     /// </summary>
     public ToggleBehavior ToggleBehavior { get; set; } = ToggleBehavior.Toggle;
 
-    public bool ResetWhenDamageTaken { get; set; } = true;
+    /// <summary>
+    /// Gets or sets a value indicating whether or not to hard snap the camera back if the player takes damage.
+    /// </summary>
+    public bool ResetWhenDamageTaken { get; set; } = false;
 
     private int speed = 8;
 
@@ -190,34 +193,6 @@ public enum PerMapCameraBehavior
     /// Uses the default for the indoors/outdoors.
     /// </summary>
     ByIndoorsOutdoors = 0b1 << 3,
-}
-
-/// <summary>
-/// Controls how the camera should behave.
-/// </summary>
-[Flags]
-[EnumExtensions]
-public enum CameraBehavior
-{
-    /// <summary>
-    /// Use the vanilla behavior.
-    /// </summary>
-    Vanila = 0,
-
-    /// <summary>
-    /// Always keep the player in the center.
-    /// </summary>
-    Locked = 0b1,
-
-    /// <summary>
-    /// Apply the offset, if relevant.
-    /// </summary>
-    Offset = 0b10,
-
-    /// <summary>
-    /// Always keep the offset position in the center.
-    /// </summary>
-    Both = Locked | Offset,
 }
 
 /// <summary>

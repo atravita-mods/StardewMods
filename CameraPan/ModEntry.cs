@@ -49,6 +49,15 @@ internal sealed class ModEntry : Mod
 
     private static readonly PerScreen<bool> enabled = new(() => Config?.ToggleBehavior != ToggleBehavior.Never);
 
+    /// <summary>
+    /// Gets or sets a value indicating whether or not panning has been enabled.
+    /// </summary>
+    internal static bool IsEnabled
+    {
+        get => enabled.Value;
+        set => enabled.Value = value;
+    } 
+
     private static readonly PerScreen<bool> snapOnNextTick = new(() => true);
 
     /// <summary>
@@ -89,6 +98,9 @@ internal sealed class ModEntry : Mod
 
         helper.Events.GameLoop.GameLaunched += this.OnGameLaunched;
     }
+
+    /// <inheritdoc />
+    public override object? GetApi(IModInfo mod) => new API(mod.Manifest.UniqueID);
 
     #region reset
 
@@ -215,10 +227,21 @@ internal sealed class ModEntry : Mod
                 texture: AssetManager.DartsTexture,
                 position: target,
                 sourceRectangle: new Rectangle(0, 320, 64, 64),
-                color: Color.White * 0.7f,
+                color: (Game1.viewportTarget.X != -2.14748365E+09f ? Color.Red : Color.White )* 0.7f,
                 rotation: 0f,
                 origin: new Vector2(32f, 32f),
                 scale: 0.5f,
+                effects: SpriteEffects.None,
+                layerDepth: 1f);
+
+            e.SpriteBatch.Draw(
+                texture: AssetManager.DartsTexture,
+                position: Game1.GlobalToLocal(Game1.viewport, Game1.currentViewportTarget),
+                sourceRectangle: new Rectangle(0, 320, 64, 64),
+                color: Color.Blue,
+                rotation: 0f,
+                origin: new Vector2(32f, 32f),
+                scale: 0.25f,
                 effects: SpriteEffects.None,
                 layerDepth: 1f);
         }
@@ -320,31 +343,34 @@ internal sealed class ModEntry : Mod
 
         int xAdjustment = offset.Value.X;
         int yAdjustment = offset.Value.Y;
-        if (enabled.Value && Game1.player.CanMove)
+        if (enabled.Value)
         {
-            Vector2 pos = this.Helper.Input.GetCursorPosition().ScreenPixels;
-            int width = Game1.viewport.Width / 8;
-            if (Config.LeftButton.IsDown() || (pos.X < width && pos.X >= 0))
+            if (Game1.player.CanMove)
             {
-                xAdjustment -= Config.Speed;
-            }
-            else if (Config.RightButton.IsDown() || (pos.X > Game1.viewport.Width - width && pos.X <= Game1.viewport.Width))
-            {
-                xAdjustment += Config.Speed;
-            }
+                Vector2 pos = this.Helper.Input.GetCursorPosition().ScreenPixels;
+                int width = Game1.viewport.Width / 8;
+                if (Config.LeftButton.IsDown() || (pos.X < width && pos.X >= 0))
+                {
+                    xAdjustment -= Config.Speed;
+                }
+                else if (Config.RightButton.IsDown() || (pos.X > Game1.viewport.Width - width && pos.X <= Game1.viewport.Width))
+                {
+                    xAdjustment += Config.Speed;
+                }
 
-            int height = Game1.viewport.Height / 8;
-            if (Config.UpButton.IsDown() || (pos.Y < height && pos.Y >= 0))
-            {
-                yAdjustment -= Config.Speed;
-            }
-            else if (Config.DownButton.IsDown() || (pos.Y > Game1.viewport.Height - height && pos.Y <= Game1.viewport.Height))
-            {
-                yAdjustment += Config.Speed;
-            }
+                int height = Game1.viewport.Height / 8;
+                if (Config.UpButton.IsDown() || (pos.Y < height && pos.Y >= 0))
+                {
+                    yAdjustment -= Config.Speed;
+                }
+                else if (Config.DownButton.IsDown() || (pos.Y > Game1.viewport.Height - height && pos.Y <= Game1.viewport.Height))
+                {
+                    yAdjustment += Config.Speed;
+                }
 
-            xAdjustment = Math.Clamp(xAdjustment, -Config.XRangeInternal, Config.XRangeInternal);
-            yAdjustment = Math.Clamp(yAdjustment, -Config.YRangeInternal, Config.YRangeInternal);
+                xAdjustment = Math.Clamp(xAdjustment, -Config.XRangeInternal, Config.XRangeInternal);
+                yAdjustment = Math.Clamp(yAdjustment, -Config.YRangeInternal, Config.YRangeInternal);
+            }
         }
         else if (offset.Value != Point.Zero)
         {

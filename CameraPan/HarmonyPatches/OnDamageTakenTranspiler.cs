@@ -20,8 +20,7 @@ internal static class OnDamageTakenTranspiler
     {
         if (ReferenceEquals(player, Game1.player) && ModEntry.Config.ResetWhenDamageTaken)
         {
-            ModEntry.Reset();
-            ModEntry.SnapOnNextTick = true;
+            Game1.moveViewportTo(player.getStandingXY().ToVector2(), 8, 50);
         }
     }
 
@@ -43,7 +42,7 @@ internal static class OnDamageTakenTranspiler
                 new (OpCodes.Call, typeof(OnDamageTakenTranspiler).GetCachedMethod(nameof(OnDamageTaken), ReflectionCache.FlagTypes.StaticFlags)),
             });
 
-            helper.Print();
+            // helper.Print();
             return helper.Render();
         }
         catch (Exception ex)

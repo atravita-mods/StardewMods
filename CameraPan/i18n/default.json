@@ -25,6 +25,9 @@
   "YRange.title": "Y Range",
   "YRange.description": "The distance the viewport can get away from the player, on the Y axis.",
 
+  "UseMouseToPan.title": "Use Mouse To Pan",
+  "UseMouseToPan.description": "If enabled, moving the mouse to the edges of the screen will pan the camera.",
+
   "KeepPlayerOnScreen.title": "Keep Player On Screen",
   "KeepPlayerOnScreen.description": "If enabled, the camera will avoid panning too far, to keep the player character on-screen.",
 

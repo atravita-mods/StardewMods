@@ -20,6 +20,11 @@ public sealed class ModConfig
     public ToggleBehavior ToggleBehavior { get; set; } = ToggleBehavior.Toggle;
 
     /// <summary>
+    /// Gets or sets a value indicating whether or not mouse panning should be enabled.
+    /// </summary>
+    public bool UseMouseToPan { get; set; } = true;
+
+    /// <summary>
     /// Gets or sets a value indicating whether or not to hard snap the camera back if the player takes damage.
     /// </summary>
     public bool ResetWhenDamageTaken { get; set; } = false;

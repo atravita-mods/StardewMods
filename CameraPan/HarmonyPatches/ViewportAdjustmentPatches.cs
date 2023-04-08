@@ -46,14 +46,29 @@ internal static class ViewportAdjustmentPatches
     /// <param name="location">Location to adjust for.</param>
     internal static void SetCameraBehaviorForConfig(ModConfig config, GameLocation location)
     {
-        CameraBehavior behavior = location.IsOutdoors || location is BugLand ? config.OutdoorsCameraBehavior : config.IndoorsCameraBehavior;
+
+        CameraBehavior behavior;
+
+        if (ModEntry.Config.PerMapCameraBehavior.TryGetValue(location.Name, out var perMapCameraBehavior) && perMapCameraBehavior != PerMapCameraBehavior.ByIndoorsOutdoors)
+        {
+            behavior = (CameraBehavior)perMapCameraBehavior;
+        }
+        else
+        {
+            behavior = location.IsOutdoors || location is BugLand ? config.OutdoorsCameraBehavior : config.IndoorsCameraBehavior;
+        }
+
         if (location.forceViewportPlayerFollow)
         {
             behavior |= CameraBehavior.Locked;
         }
+        if (!string.IsNullOrWhiteSpace(location.getMapProperty("atravita.PanningForbidden")))
+        {
+            behavior &= ~CameraBehavior.Offset;
+            Game1.addHUDMessage(new("Panning has been forbidden."));
+        }
 
         cameraBehavior.Value = behavior;
-
         ModEntry.ModMonitor.Log($"Setting camera behavior {behavior.ToStringFast()} for location {location.NameOrUniqueName}");
     }
 

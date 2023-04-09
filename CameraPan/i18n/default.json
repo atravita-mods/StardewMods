@@ -5,7 +5,9 @@
 
   // GMCM section tiles
   "Keybind.title": "Keybinds",
+  "Keybind.description": "The keybinds used to control the camera.",
   "Boundaries.title": "Boundaries",
+  "Camera.title": "Camera",
 
   // GMCM
   "ToggleBehavior.title": "Toggle Behavior",
@@ -15,6 +17,9 @@
   "config.ToggleBehavior.Always": "Always",
   "config.ToggleBehavior.Never": "Never",
   "config.ToggleBehavior.Camera": "Camera",
+
+  "ResetWhenDamageTaken.title": "Reset When Damage Taken",
+  "ResetWhenDamageTaken.description": "Resets the camera after damage is taken.",
 
   "Speed.title": "Speed",
   "Speed.description": "How fast should the camera move?",
@@ -58,9 +63,33 @@
   "RightButton.title": "Right Button",
   "RightButton.description": "The button used to pan the camera rightwards, if panning is enabled.",
 
+  // camera behavior translations
+  "IndoorsCameraBehavior.title": "Indoors Camera Behavior",
+  "IndoorsCameraBehavior.description": "Controls the default behavior of the camera in indoor spaces.",
+  "OutdoorsCameraBehavior.title": "Outdoors Camera Behavior",
+  "OutdoorsCameraBehavior.description": "Controls the default behavior of the camera in outdoor spaces",
+
+  "config.CameraBehavior.Vanilla": "Vanilla",
+  "config.CameraBehavior.Offset": "Offset",
+  "config.CameraBehavior.Both": "Both",
+  "config.CameraBehavior.Locked": "Locked",
+
+  // Per-map configuration
+  "PerMapBehavior.title": "Per-Map Configuration",
+  "PerMapBehavior.description": "Allows you to fine-tune the behavior of this mod for each map.",
+
+  "config.PerMapCameraBehavior.Vanilla": "Vanilla",
+  "config.PerMapCameraBehavior.Offset": "Offset",
+  "config.PerMapCameraBehavior.Both": "Both",
+  "config.PerMapCameraBehavior.Locked": "Locked",
+  "config.PerMapCameraBehavior.ByIndoorOutdoor": "By Indoor/Outdoor",
+
+
   // Messages shown to players.
   "enabled.message": "Panning is {{status}}",
   "enabled": "enabled",
-  "disabled": "disabled"
+  "disabled": "disabled",
+
+  "forbidden": "Panning is forbidden on this map."
 
 }

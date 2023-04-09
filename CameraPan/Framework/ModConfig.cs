@@ -2,8 +2,6 @@
 
 using Microsoft.Xna.Framework;
 
-using NetEscapades.EnumGenerators;
-
 using StardewModdingAPI.Utilities;
 
 namespace CameraPan.Framework;

@@ -89,6 +89,8 @@ internal sealed class ModEntry : Mod
 
     private GMCMHelper? gmcm;
 
+    #region initialization
+
     /// <inheritdoc />
     public override void Entry(IModHelper helper)
     {
@@ -109,6 +111,129 @@ internal sealed class ModEntry : Mod
 
     /// <inheritdoc />
     public override object? GetApi(IModInfo mod) => new API(mod.Manifest.UniqueID);
+
+    private void OnGameLaunched(object? sender, GameLaunchedEventArgs e)
+    {
+        this.ApplyPatches(new Harmony(this.ModManifest.UniqueID));
+        Config.RecalculateBounds();
+
+        // Register for events.
+        this.Helper.Events.GameLoop.UpdateTicked += this.OnTicked;
+        this.Helper.Events.Display.RenderedHud += this.DrawHud;
+        this.Helper.Events.Input.ButtonsChanged += this.OnButtonsChanged;
+        this.Helper.Events.Player.Warped += this.OnWarped;
+        this.Helper.Events.Display.WindowResized += static (_, _) => Config?.RecalculateBounds();
+
+        // asset events.
+        this.Helper.Events.Content.AssetRequested += static (_, e) => AssetManager.Apply(e);
+        this.Helper.Events.Content.AssetsInvalidated += static (_, e) => AssetManager.Reset(e.NamesWithoutLocale);
+
+        // configuration
+        this.SetUpInitialConfig();
+        this.Helper.Events.GameLoop.ReturnedToTitle += (_, _) => this.SetUpInitialConfig();
+        this.Helper.Events.GameLoop.SaveLoaded += (_, _) => this.SetUpDetailedConfig();
+    }
+
+    /// <summary>
+    /// Applies the patches for this mod.
+    /// </summary>
+    /// <param name="harmony">This mod's harmony instance.</param>
+    /// <remarks>Delay until GameLaunched in order to patch other mods....</remarks>
+    private void ApplyPatches(Harmony harmony)
+    {
+        try
+        {
+            harmony.PatchAll(typeof(ModEntry).Assembly);
+        }
+        catch (Exception ex)
+        {
+            ModMonitor.Log(string.Format(ErrorMessageConsts.HARMONYCRASH, ex), LogLevel.Error);
+        }
+        harmony.Snitch(this.Monitor, harmony.Id, transpilersOnly: true);
+    }
+
+    #endregion
+
+    #region config
+
+    private void SetUpInitialConfig()
+    {
+        if (this.gmcm?.HasGottenAPI == true)
+        {
+            this.gmcm.Unregister();
+        }
+
+        this.gmcm ??= new(this.Monitor, this.Helper.Translation, this.Helper.ModRegistry, this.ModManifest);
+        if (this.gmcm.TryGetAPI())
+        {
+            this.gmcm.Register(
+                reset: static () => Config = new(),
+                save: () =>
+                {
+                    this.Helper.AsyncWriteConfig(this.Monitor, Config);
+                    Config.RecalculateBounds();
+                    UpdateBehaviorForConfig();
+                    ViewportAdjustmentPatches.SetCameraBehaviorForConfig(Config, Game1.currentLocation);
+                })
+            .AddParagraph(I18n.Mod_Description)
+            .GenerateDefaultGMCM(static () => Config);
+        }
+    }
+
+    private void SetUpDetailedConfig()
+    {
+        bool changed = false;
+        Utility.ForAllLocations(location =>
+        {
+            changed |= Config.PerMapCameraBehavior.TryAdd(location.Name, PerMapCameraBehavior.ByIndoorsOutdoors);
+        });
+
+        if (changed)
+        {
+            this.Helper.AsyncWriteConfig(this.Monitor, Config);
+        }
+
+        if (this.gmcm?.HasGottenAPI != true)
+        {
+            return;
+        }
+
+        this.gmcm.AddPageHere(
+            pageId: "PerMapBehavior",
+            linkText: I18n.PerMapBehavior_Title,
+            tooltip: I18n.PerMapBehavior_Description,
+            pageTitle: I18n.PerMapBehavior_Title)
+            .AddParagraph(I18n.PerMapBehavior_Description);
+
+        foreach ((string key, PerMapCameraBehavior value) in Config.PerMapCameraBehavior)
+        {
+            this.gmcm.AddEnumOption(
+                name: () => key,
+                getValue: () => Config.PerMapCameraBehavior.TryGetValue(key, out PerMapCameraBehavior value) ? value : PerMapCameraBehavior.ByIndoorsOutdoors,
+                setValue: value => Config.PerMapCameraBehavior[key] = value);
+        }
+    }
+
+    private static void UpdateBehaviorForConfig()
+    {
+        switch (Config.ToggleBehavior)
+        {
+            case ToggleBehavior.Never:
+                foreach ((int screen, bool _) in enabled.GetActiveValues())
+                {
+                    enabled.SetValueForScreen(screen, false);
+                }
+                break;
+            case ToggleBehavior.Always:
+                foreach ((int screen, bool _) in enabled.GetActiveValues())
+                {
+                    enabled.SetValueForScreen(screen, true);
+                }
+                break;
+        }
+    }
+
+    #endregion
 
     #region reset
 
@@ -148,70 +273,6 @@ internal sealed class ModEntry : Mod
             this.Monitor.Log(message);
             Game1.hudMessages.RemoveAll(message => message.number == HUD_ID);
             Game1.addHUDMessage(new(message, HUDMessage.newQuest_type) { number = HUD_ID, noIcon = true});
-        }
-    }
-
-    private void OnGameLaunched(object? sender, GameLaunchedEventArgs e)
-    {
-        this.ApplyPatches(new Harmony(this.ModManifest.UniqueID));
-        Config.RecalculateBounds();
-
-        // Register for events.
-        this.Helper.Events.GameLoop.UpdateTicked += this.OnTicked;
-        this.Helper.Events.Display.RenderedHud += this.DrawHud;
-        this.Helper.Events.Input.ButtonsChanged += this.OnButtonsChanged;
-        this.Helper.Events.Player.Warped += this.OnWarped;
-        this.Helper.Events.Display.WindowResized += static (_, _) => Config?.RecalculateBounds();
-
-        // asset events.
-        this.Helper.Events.Content.AssetRequested += static (_, e) => AssetManager.Apply(e);
-        this.Helper.Events.Content.AssetsInvalidated += static (_, e) => AssetManager.Reset(e.NamesWithoutLocale);
-
-        this.SetUpInitialConfig();
-
-        this.Helper.Events.GameLoop.ReturnedToTitle += (_, _) => this.SetUpInitialConfig();
-    }
-
-    private void SetUpInitialConfig()
-    {
-        if (this.gmcm?.HasGottenAPI == true)
-        {
-            this.gmcm.Unregister();
-        }
-
-        this.gmcm ??= new(this.Monitor, this.Helper.Translation, this.Helper.ModRegistry, this.ModManifest);
-        if (this.gmcm.TryGetAPI())
-        {
-            this.gmcm.Register(
-                reset: static () => Config = new(),
-                save: () =>
-                {
-                    this.Helper.AsyncWriteConfig(this.Monitor, Config);
-                    Config.RecalculateBounds();
-                    UpdateBehaviorForConfig();
-                    ViewportAdjustmentPatches.SetCameraBehaviorForConfig(Config, Game1.currentLocation);
-                })
-            .AddParagraph(I18n.Mod_Description)
-            .GenerateDefaultGMCM(static () => Config);
-        }
-    }
-
-    private static void UpdateBehaviorForConfig()
-    {
-        switch (Config.ToggleBehavior)
-        {
-            case ToggleBehavior.Never:
-                foreach ((int screen, bool _) in enabled.GetActiveValues())
-                {
-                    enabled.SetValueForScreen(screen, false);
-                }
-                break;
-            case ToggleBehavior.Always:
-                foreach ((int screen, bool _) in enabled.GetActiveValues())
-                {
-                    enabled.SetValueForScreen(screen, true);
-                }
-                break;
         }
     }
 
@@ -429,23 +490,5 @@ internal sealed class ModEntry : Mod
             y = Game1.viewportCenter.Y;
         }
         target.Value = new(x, y);
-    }
-
-    /// <summary>
-    /// Applies the patches for this mod.
-    /// </summary>
-    /// <param name="harmony">This mod's harmony instance.</param>
-    /// <remarks>Delay until GameLaunched in order to patch other mods....</remarks>
-    private void ApplyPatches(Harmony harmony)
-    {
-        try
-        {
-            harmony.PatchAll(typeof(ModEntry).Assembly);
-        }
-        catch (Exception ex)
-        {
-            ModMonitor.Log(string.Format(ErrorMessageConsts.HARMONYCRASH, ex), LogLevel.Error);
-        }
-        harmony.Snitch(this.Monitor, harmony.Id, transpilersOnly: true);
     }
 }

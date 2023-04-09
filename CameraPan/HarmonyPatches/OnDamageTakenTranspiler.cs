@@ -1,6 +1,8 @@
 ﻿using System.Reflection;
 using System.Reflection.Emit;
 
+using AtraBase.Toolkit.Extensions;
+
 using AtraCore.Framework.ReflectionManager;
 
 using AtraShared.Utils.Extensions;
@@ -21,7 +23,11 @@ internal static class OnDamageTakenTranspiler
         if (ReferenceEquals(player, Game1.player) && ModEntry.Config.ResetWhenDamageTaken)
         {
             ModEntry.ZeroOffset();
-            ModEntry.MSHoldOffset = 250;
+            ModEntry.MSHoldOffset = (Math.Max(
+                    Math.Abs(Game1.viewportCenter.X - Game1.player.Position.X),
+                    Math.Abs(Game1.viewportCenter.X - Game1.player.Position.X)).ToIntFast()
+                / ModEntry.Config.Speed)
+                + 50;
         }
     }
 

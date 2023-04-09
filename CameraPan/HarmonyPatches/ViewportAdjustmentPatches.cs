@@ -44,12 +44,16 @@ internal static class ViewportAdjustmentPatches
     /// </summary>
     /// <param name="config">Config instance.</param>
     /// <param name="location">Location to adjust for.</param>
-    internal static void SetCameraBehaviorForConfig(ModConfig config, GameLocation location)
+    internal static void SetCameraBehaviorForConfig(ModConfig config, GameLocation? location)
     {
+        if (location is null)
+        {
+            return;
+        }
 
         CameraBehavior behavior;
-
-        if (ModEntry.Config.PerMapCameraBehavior.TryGetValue(location.Name, out var perMapCameraBehavior) && perMapCameraBehavior != PerMapCameraBehavior.ByIndoorsOutdoors)
+        if (ModEntry.Config.PerMapCameraBehavior.TryGetValue(location.Name, out PerMapCameraBehavior perMapCameraBehavior)
+            && perMapCameraBehavior != PerMapCameraBehavior.ByIndoorsOutdoors)
         {
             behavior = (CameraBehavior)perMapCameraBehavior;
         }
@@ -62,10 +66,10 @@ internal static class ViewportAdjustmentPatches
         {
             behavior |= CameraBehavior.Locked;
         }
-        if (!string.IsNullOrWhiteSpace(location.getMapProperty("atravita.PanningForbidden")))
+        if (behavior.HasFlagFast(CameraBehavior.Offset) && !string.IsNullOrWhiteSpace(location.getMapProperty("atravita.PanningForbidden")))
         {
             behavior &= ~CameraBehavior.Offset;
-            Game1.addHUDMessage(new("Panning has been forbidden."));
+            Game1.addHUDMessage(new(I18n.Forbidden()));
         }
 
         cameraBehavior.Value = behavior;
@@ -168,7 +172,7 @@ internal static class ViewportAdjustmentPatches
                 new (OpCodes.Call, typeof(ViewportAdjustmentPatches).GetCachedMethod(nameof(GetYTarget), ReflectionCache.FlagTypes.StaticFlags)),
             });
 
-            helper.Print();
+            // helper.Print();
             return helper.Render();
         }
         catch (Exception ex)

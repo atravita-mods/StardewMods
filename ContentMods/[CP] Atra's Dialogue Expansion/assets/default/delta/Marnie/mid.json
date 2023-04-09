@@ -62,7 +62,10 @@
         "When": { "YearModulus": "3" },
         "Entries": {
 
-            "18_2": "Cost of feed's going up, but I ain't getting paid any more for my eggs or milk.#$b#@, I think there's collusion going on.$s#$e#Not sure what to do, it's just little old me against all the ag companies.$s"
+            "1_2": "This farm has been in my family for five generations. I'm very proud to be running it.#$e#I'm not sure who'll run it after me.",
+            "18_2": "Cost of feed's going up, but I ain't getting paid any more for my eggs or milk.#$b#@, I think there's collusion going on.$s#$e#Not sure what to do, it's just little old me against all the ag companies.$s",
+            "19_2": "I make quite a bit of cheese as well, on my farm. ",
+            "22_2": "%Marnie looks tired.#$b#*Yawn*. Oh, @, hi! Just had to get up very early this morning to herd some cows back into their pen."
         }
     }
 ]}

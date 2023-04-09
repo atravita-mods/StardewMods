@@ -33,8 +33,6 @@ internal sealed class ModEntry : Mod
         options: RegexOptions.Compiled,
         matchTimeout: TimeSpan.FromMilliseconds(250));
 
-    private static IMonitor modMonitor = null!;
-
     private static Vector2 shopLoc = new(4, 9);
 
     /// <summary>
@@ -45,10 +43,15 @@ internal sealed class ModEntry : Mod
 
     private static IAssetName libraryHouse = null!;
 
+    /// <summary>
+    /// Gets the logging instance for this mod.
+    /// </summary>
+    internal static IMonitor ModMonitor { get; private set; } = null!;
+
     /// <inheritdoc />
     public override void Entry(IModHelper helper)
     {
-        modMonitor = this.Monitor;
+        ModMonitor = this.Monitor;
         AssetManager.Initialize(helper.GameContent);
         libraryHouse = helper.GameContent.ParseAssetName("Maps/ArchaeologyHouse");
 
@@ -60,6 +63,8 @@ internal sealed class ModEntry : Mod
         helper.Events.Content.AssetRequested += this.OnAssetRequested;
 
         helper.Events.Content.AssetsInvalidated += this.OnAssetInvalidated;
+
+        helper.Events.Player.InventoryChanged += static (_, e) => LibraryMuseumPatches.OnInventoryChanged(e.Added);
 
         I18n.Init(helper.Translation);
 
@@ -124,11 +129,11 @@ internal sealed class ModEntry : Mod
                 {
                     if (__result.TryAdd(item, new int[] { 0, ShopMenu.infiniteStock }))
                     {
-                        modMonitor.DebugOnlyLog($"Adding {item.Name} to catalogue!", LogLevel.Info);
+                        ModMonitor.DebugOnlyLog($"Adding {item.Name} to catalogue!", LogLevel.Info);
                     }
                     else
                     {
-                        modMonitor.Log($"Could not add {item.Name} to catalogue, may be a duplicate!", LogLevel.Warn);
+                        ModMonitor.Log($"Could not add {item.Name} to catalogue, may be a duplicate!", LogLevel.Warn);
                     }
                 }
             }

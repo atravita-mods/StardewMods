@@ -82,7 +82,7 @@
   "config.PerMapCameraBehavior.Offset": "Offset",
   "config.PerMapCameraBehavior.Both": "Both",
   "config.PerMapCameraBehavior.Locked": "Locked",
-  "config.PerMapCameraBehavior.ByIndoorOutdoor": "By Indoor/Outdoor",
+  "config.PerMapCameraBehavior.ByIndoorsOutdoors": "By Indoor/Outdoor",
 
 
   // Messages shown to players.

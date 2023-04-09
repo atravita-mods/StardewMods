@@ -180,8 +180,8 @@ public sealed class ModConfig
 /// </summary>
 public enum PerMapCameraBehavior
 {
-    /// <inheritdoc cref="CameraBehavior.Vanila"/>
-    Vanilla = CameraBehavior.Vanila,
+    /// <inheritdoc cref="CameraBehavior.Vanilla"/>
+    Vanilla = CameraBehavior.Vanilla,
 
     /// <inheritdoc cref="CameraBehavior.Locked"/>
     Locked = CameraBehavior.Locked,

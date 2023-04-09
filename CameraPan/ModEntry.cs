@@ -260,13 +260,13 @@ internal sealed class ModEntry : Mod
 
     private void OnButtonsChanged(object? sender, ButtonsChangedEventArgs e)
     {
-        if (Config.ResetButton.JustPressed())
+        if (Config.ResetButton?.JustPressed() == true)
         {
             Reset();
             SnapOnNextTick = true;
         }
 
-        if (Config.ToggleBehavior == ToggleBehavior.Toggle && Config.ToggleButton.JustPressed())
+        if (Config.ToggleBehavior == ToggleBehavior.Toggle && Config.ToggleButton?.JustPressed() == true)
         {
             enabled.Value = !enabled.Value;
             string message = I18n.Enabled_Message(enabled.Value ? I18n.Enabled() : I18n.Disabled());
@@ -413,21 +413,21 @@ internal sealed class ModEntry : Mod
             {
                 Vector2 pos = this.Helper.Input.GetCursorPosition().ScreenPixels;
                 int width = Game1.viewport.Width / 8;
-                if (Config.LeftButton.IsDown() || (Config.UseMouseToPan && pos.X < width && pos.X >= 0))
+                if (Config.LeftButton?.IsDown() == true || (Config.UseMouseToPan && pos.X < width && pos.X >= 0))
                 {
                     xAdjustment -= Config.Speed;
                 }
-                else if (Config.RightButton.IsDown() || (Config.UseMouseToPan && pos.X > Game1.viewport.Width - width && pos.X <= Game1.viewport.Width))
+                else if (Config.RightButton?.IsDown() == true || (Config.UseMouseToPan && pos.X > Game1.viewport.Width - width && pos.X <= Game1.viewport.Width))
                 {
                     xAdjustment += Config.Speed;
                 }
 
                 int height = Game1.viewport.Height / 8;
-                if (Config.UpButton.IsDown() || (Config.UseMouseToPan && pos.Y < height && pos.Y >= 0))
+                if (Config.UpButton?.IsDown() == true || (Config.UseMouseToPan && pos.Y < height && pos.Y >= 0))
                 {
                     yAdjustment -= Config.Speed;
                 }
-                else if (Config.DownButton.IsDown() || (Config.UseMouseToPan && pos.Y > Game1.viewport.Height - height && pos.Y <= Game1.viewport.Height))
+                else if (Config.DownButton?.IsDown() == true || (Config.UseMouseToPan && pos.Y > Game1.viewport.Height - height && pos.Y <= Game1.viewport.Height))
                 {
                     yAdjustment += Config.Speed;
                 }

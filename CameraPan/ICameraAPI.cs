@@ -56,7 +56,7 @@ public enum CameraBehavior
     /// <summary>
     /// Use the vanilla behavior.
     /// </summary>
-    Vanila = 0,
+    Vanilla = 0,
 
     /// <summary>
     /// Always keep the player in the center.

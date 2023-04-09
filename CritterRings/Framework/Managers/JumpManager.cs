@@ -138,8 +138,10 @@ internal sealed class JumpManager : IDisposable
     private enum NeedsBigJump
     {
         False,
-        IfPastThisPoint,
-        True,
+        IfPastMedium,
+        Medium,
+        IfPastBig,
+        Big,
     }
 
     /// <inheritdoc cref="IDisposable.Dispose"/>
@@ -215,7 +217,7 @@ internal sealed class JumpManager : IDisposable
         }
 
         // Thanks for the viewport movement code, DecidedlyHuman!
-        if (this.state != State.Inactive && ModEntry.Config.ViewportFollowsTarget)
+        if (this.state != State.Inactive && ModEntry.Config.ViewportFollowsTarget && Game1.currentLocation?.forceViewportPlayerFollow == false)
         {
             Vector2 position = new(Game1.player.getStandingX(), Game1.player.getStandingY());
             Vector2 target = this.openTile * Game1.tileSize;
@@ -264,7 +266,11 @@ internal sealed class JumpManager : IDisposable
                     float initialVelocityY = Math.Max(6f, 4f * MathF.Sqrt(this.distance));
 
                     // we're just gonna hope the big jump is enough to clear most buildings :(
-                    if (this.needsBigJump == NeedsBigJump.True)
+                    if (this.needsBigJump == NeedsBigJump.Medium)
+                    {
+                        initialVelocityY = Math.Max(12f, initialVelocityY);
+                    }
+                    else if (this.needsBigJump == NeedsBigJump.Big)
                     {
                         initialVelocityY = Math.Max(16f, initialVelocityY);
                     }
@@ -396,16 +402,16 @@ internal sealed class JumpManager : IDisposable
             Game1.showRedMessage(I18n.FrogRing_Blocked());
         }
 
-        if (this.needsBigJump == NeedsBigJump.False)
+        if (this.needsBigJump != NeedsBigJump.IfPastBig && this.needsBigJump != NeedsBigJump.Big)
         {
             if (location.terrainFeatures.TryGetValue(this.currentTile, out TerrainFeature? feat)
                 && feat is Tree or FruitTree)
             {
-                this.needsBigJump = NeedsBigJump.IfPastThisPoint;
+                this.needsBigJump = NeedsBigJump.IfPastBig;
             }
             else if (HasFrontOrAlwaysFrontTile((int)this.currentTile.X, (int)this.currentTile.Y))
             {
-                this.needsBigJump = NeedsBigJump.IfPastThisPoint;
+                this.needsBigJump = NeedsBigJump.IfPastMedium;
             }
             else if (location is Farm farm)
             {
@@ -413,7 +419,7 @@ internal sealed class JumpManager : IDisposable
                 {
                     if (building is not ShippingBin or FishPond && building.occupiesTile(this.currentTile))
                     {
-                        this.needsBigJump = NeedsBigJump.IfPastThisPoint;
+                        this.needsBigJump = NeedsBigJump.IfPastBig;
                         break;
                     }
                 }
@@ -424,10 +430,14 @@ internal sealed class JumpManager : IDisposable
         {
             this.openTile = this.currentTile;
             this.isCurrentTileBlocked = false;
-            if (this.needsBigJump == NeedsBigJump.IfPastThisPoint)
+            if (this.needsBigJump == NeedsBigJump.IfPastBig)
             {
-                this.needsBigJump = NeedsBigJump.True;
+                this.needsBigJump = NeedsBigJump.Big;
             }
+            else if (this.needsBigJump == NeedsBigJump.IfPastBig)
+            {
+                this.needsBigJump = NeedsBigJump.Medium;
+            };
         }
         else
         {

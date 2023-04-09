@@ -11,6 +11,7 @@ This mod uses SMAPI's i18n feature for translations. I'd love to get translation
 
 ### Map Properties
 
+If you'd like to disable panning on a map, you can do so with the map property `"atravita.PanningForbidden"`. Any value there, as long as it's not whitespace, will disable map panning.
 
 ### Compiling from source:
 

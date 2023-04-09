@@ -1,4 +1,7 @@
 {"Changes":[
+// Lean into rural doctor difficulties.
+// Harvey's not making too much money, he has to deal with "insurers", he has substandard equipment, and he has student loans.
+
     {
         "LogName": "Harvey mid-hearts",
         "Action": "EditData",
@@ -24,15 +27,6 @@
             "11_2": "I came out here because I wanted a slower pace of life.#$b#In the city, the insurance companies lean on us to see so many patients in a day, it's hard to connect with anyone.#$e#Of course, I wouldn't be able to afford the move if the government didn't have programs to help me with medical school debt.#$e#Sometimes, still, I feel like the clinic is barely hanging on, financially."
         },
         "When": { "YearModulus": "3" }
-    },
-    {
-        "LogName": "Harvey mid-hearts - Y4",
-        "Action": "EditData",
-        "Target": "Characters/Dialogue/Harvey",
-        "Entries": {
-            "6_2": "%Harvey looks exhausted.#$e#Oh, hi @! I'm sorry, I was up late yesterday arguing with the insurer.#$b#I wish they'd let doctors doctor and stop trying to micromanage us.$s"
-        },
-        "When": { "YearModulus": "4" }
     },
     {
         "LogName": "Harvey mid-hearts y3 with pet",

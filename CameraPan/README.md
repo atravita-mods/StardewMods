@@ -1,6 +1,6 @@
 Camera Pan
 ===========================
-<!--![Header image](docs/pig.png)-->
+![Header image](docs/camera.gif)
 
 Allows you to freely pan the camera.
 

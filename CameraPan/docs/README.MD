@@ -3,7 +3,7 @@ Documentation
 
 [← back to readme](../../README.md)
 
-Most users should download the mod from the [Nexus page](https://www.nexusmods.com/stardewvalley/mods/15557). That said, if you'd like to contribute:
+Most users should download the mod from the [Nexus page](https://www.nexusmods.com/stardewvalley/mods/16218). That said, if you'd like to contribute:
 
 ### Translations:
 

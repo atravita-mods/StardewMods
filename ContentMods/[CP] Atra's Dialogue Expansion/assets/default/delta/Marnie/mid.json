@@ -1,4 +1,10 @@
 {"Changes":[
+
+    // Marnie primarily raises cows. She makes cheese as well.
+    // She's one of a few ranchers who raise baby cows as well, and in general sells baby animals.
+
+    // (Shane cares more about the chickens.)
+
     {
         "LogName": "Rain -- during winter.",
         "Action": "EditData",

@@ -373,8 +373,12 @@ internal sealed class JumpManager : IDisposable
         => Game1.currentLocation.map.GetLayer("Front")?.PickTile(new XLocation(x * Game1.tileSize, y * Game1.tileSize), Game1.viewport.Size) is not null
             || Game1.currentLocation.map.GetLayer("AlwaysFront")?.PickTile(new XLocation(x * Game1.tileSize, y * Game1.tileSize), Game1.viewport.Size) is not null;
 
-    private void RecalculateTiles(Farmer farmer, GameLocation location)
+    private void RecalculateTiles(Farmer farmer, GameLocation? location)
     {
+        if (location is null)
+        {
+            return;
+        }
         this.currentTile = this.startTile + (this.direction * this.distance);
         bool isValidTile = location.isTileOnMap(this.currentTile)
             && location.isTilePassable(new XLocation((int)this.currentTile.X, (int)this.currentTile.Y), Game1.viewport)

@@ -70,7 +70,8 @@
             }
         },
         {
-            "LogName": "Marnie base dialogue",
+            // This block is to remove vanilla Marnie lines that no longer make sense past Y1.
+            "LogName": "Marnie base dialogue - past Y1",
             "Action": "EditData",
             "Target": "Characters/Dialogue/Marnie",
             "Entries": {

@@ -1,0 +1,11 @@
+{"Changes":[
+    {
+        "LogName": "Harvey mid-hearts - Y4",
+        "Action": "EditData",
+        "Target": "Characters/Dialogue/Harvey",
+        "Entries": {
+            "6_2": "%Harvey looks exhausted.#$e#Oh, hi @! I'm sorry, I was up late yesterday arguing with the insurer.#$b#I wish they'd let doctors doctor and stop trying to micromanage us.$s"
+        },
+        "When": { "YearModulus": "4" }
+    }
+]}

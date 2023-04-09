@@ -260,6 +260,8 @@ public sealed class ILHelper
     [MethodImpl(MethodImplOptions.AggressiveOptimization)]
     public ILHelper FindFirst(CodeInstructionWrapper[] instructions, int startindex = 0, int? intendedendindex = null)
     {
+        Guard.IsNotEqualTo(instructions.Length, 0);
+
         int endindex = intendedendindex ?? this.Codes.Count;
         if (startindex >= (endindex - instructions.Length) || startindex < 0 || endindex > this.Codes.Count)
         {
@@ -332,6 +334,8 @@ ContinueSearchForward:
     [MethodImpl(MethodImplOptions.AggressiveOptimization)]
     public ILHelper FindLast(CodeInstructionWrapper[] instructions, int startindex = 0, int? intendedendindex = null)
     {
+        Guard.IsNotEqualTo(instructions.Length, 0);
+
         int endindex = intendedendindex ?? this.Codes.Count;
         if (startindex >= endindex - instructions.Length || startindex < 0 || endindex > this.Codes.Count)
         {

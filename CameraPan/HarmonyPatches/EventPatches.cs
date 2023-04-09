@@ -1,4 +1,6 @@
-﻿using HarmonyLib;
+﻿using System.Reflection;
+
+using HarmonyLib;
 
 namespace CameraPan.HarmonyPatches;
 
@@ -8,7 +10,22 @@ namespace CameraPan.HarmonyPatches;
 [HarmonyPatch]
 internal static class EventPatches
 {
-    [HarmonyPatch(typeof(Game1), nameof(Game1.eventFinished))]
+    private static IEnumerable<MethodBase> TargetMethods()
+    {
+        yield return AccessTools.Method(typeof(Game1), nameof(Game1.eventFinished));
+        yield return AccessTools.Method(typeof(Event), nameof(Event.endBehaviors));
+    }
+
+    [HarmonyPostfix]
     private static void PostfixEventEnd()
-        => ModEntry.SnapOnNextTick = true;
+    {
+        DelayedAction.functionAfterDelay(
+            () =>
+            {
+                var pos = Game1.player.getStandingXY();
+                ModEntry.Reset();
+                ModEntry.SnapOnNextTick = true;
+            },
+            25);
+    }
 }

@@ -1,4 +1,5 @@
 {"Changes":[
+    // Emily is the older, more responsible sibling (if a bit New Age about it.)
     {
         "LogName": "Emily mid-hearts, Y1",
         "Action": "EditData",
@@ -8,6 +9,7 @@
 
             "Mon8": "@, I think there's something very special about you.",
 
+            "4{{YearRemainder}}": "Ugh, I think our sink is leaking. Gotta go find a plumber, I guess.$s",
             "6{{YearRemainder}}": "@! Look at this new yarn my mother sent me! Isn't it so soft?$h",
             "11{{YearRemainder}}": "I love taking walks, whenever I have the time to do so.$h#$b#One of the best parts of living here.$h",
             "13{{YearRemainder}}": "I'm hoping at some point to move away and see if I can make it as a fashion designer.",
@@ -40,6 +42,7 @@
         "Entries": {
             "1_2": "I believe that if you're kind to nature, nature will be kind to you in turn.",
             "3_2": "Haley has always been the baby of the family.#$b#She's only a few years younger than I am, but our parents definitely spoiled her more.#$e#Sometimes I worry.",
+            "5_2": "I like doing flatfelled seams, even if they're a lot of work. They're so much more durable!$h",
 
             "Tue10": "I've made most of my clothing, I love to sew.$h#$b#Plus, you get better clothing if you make it yourself.",
 
@@ -48,5 +51,14 @@
             "summer_Sat6": "@, you've ever just taken a day for yourself? The lovely weather these days makes me really want to!",
         },
         "When": {"YearModulus": "2"}
+    },
+    {
+        "LogName": "Emily mid-hearts, Y3",
+        "Action": "EditData",
+        "Target": "Characters/Dialogue/Emily",
+        "Entries": {
+            "7_2": "I've been doing a lot of lace insertion work lately. It's so pretty but so tedious.",
+        },
+        "When": {"YearModulus": "3"}
     },
 ]}

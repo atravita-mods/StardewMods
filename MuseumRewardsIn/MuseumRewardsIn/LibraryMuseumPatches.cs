@@ -30,7 +30,7 @@ internal static class LibraryMuseumPatches
             {
                 item.modData.Remove(MUSEUM_MARKER);
                 item.specialItem = false;
-                ModEntry.ModMonitor.Log($"Removing special flag from {item.Name}");
+                ModEntry.ModMonitor.DebugOnlyLog($"Removing special flag from {item.Name}");
             }
         }
     }

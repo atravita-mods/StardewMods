@@ -46,6 +46,12 @@ internal sealed class ModEntry : Mod
             return;
         }
 
+        if (Game1.IsVisitingIslandToday(npc.Name))
+        {
+            ModMonitor.Log($"{npc.Name} is going to the island, have fun!");
+            return;
+        }
+
         ModMonitor.Log($"Checking {npc.Name}, is currently at {npc.currentLocation.NameOrUniqueName}", LogLevel.Info);
 
         var scheduleKey = npc.dayScheduleName.Value;
@@ -62,6 +68,20 @@ internal sealed class ModEntry : Mod
             return;
         }
 
+        var claimedMap = Game1.getLocationFromName(npc.currentLocation.NameOrUniqueName);
+        if (claimedMap is not null)
+        {
+            if (!ReferenceEquals(claimedMap, npc.currentLocation))
+            {
+                ModMonitor.Log($"What the hell? NPC claims to be on map {claimedMap.NameOrUniqueName} but is on the map {npc.currentLocation.NameOrUniqueName}, which has failed a reference equality check.", LogLevel.Warn);
+            }
+
+            if (claimedMap.characters.Contains(npc))
+            {
+                ModMonitor.Log($"{npc.Name} correctly in the characters list of {claimedMap}", LogLevel.Info);
+            }
+        }
+
         if (schedule.StartsWith("0 "))
         {
             ModMonitor.Log($"Appears to have a zero schedule: {schedule}.");
@@ -69,6 +89,7 @@ internal sealed class ModEntry : Mod
 
             if (npc.currentLocation.NameOrUniqueName != locstring)
             {
+
                 ModMonitor.Log($"Performing hard warp", LogLevel.Info);
                 var target = schedule.GetNthChunk('/').StreamSplit();
                 _ = target.MoveNext(); // time
@@ -103,10 +124,10 @@ internal sealed class ModEntry : Mod
         }
         else
         {
-            ModMonitor.Log($"Does not have 0 schedule");
+            ModMonitor.Log($"Does not have 0 schedule", LogLevel.Info);
             if (npc.currentLocation.NameOrUniqueName != npc.DefaultMap)
             {
-                ModMonitor.Log($"Seems to be on the wrong map?");
+                ModMonitor.Log($"Seems to be on the wrong map?", LogLevel.Info);
                 Game1.warpCharacter(npc, npc.DefaultMap, new Point((int)npc.DefaultPosition.X / Game1.tileSize, (int)npc.DefaultPosition.Y / Game1.tileSize));
             }
         }

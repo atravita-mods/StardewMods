@@ -37,6 +37,6 @@ internal static class NapalmInSafeAreas
     }
 
     private static bool IsLocationConsideredSafe(this GameLocation location)
-        => ModEntry.Config.SafeLocationMap.TryGetValue(location.NameOrUniqueName, out IsSafeLocationEnum val)
+        => ModEntry.Config.SafeLocationMap.TryGetValue(location.Name, out IsSafeLocationEnum val)
             & val == IsSafeLocationEnum.Safe;
 }

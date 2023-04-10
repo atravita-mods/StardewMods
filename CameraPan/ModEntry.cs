@@ -182,6 +182,8 @@ internal sealed class ModEntry : Mod
 
     private void SetUpDetailedConfig()
     {
+        ViewportAdjustmentPatches.SetCameraBehaviorForConfig(Config, Game1.currentLocation);
+
         bool changed = false;
         Utility.ForAllLocations(location =>
         {
@@ -413,21 +415,21 @@ internal sealed class ModEntry : Mod
             {
                 Vector2 pos = this.Helper.Input.GetCursorPosition().ScreenPixels;
                 int width = Game1.viewport.Width / 8;
-                if (Config.LeftButton?.IsDown() == true || (Config.UseMouseToPan && pos.X < width && pos.X >= 0))
+                if (Config.LeftButton?.IsDown() == true || (Config.UseMouseToPan && pos.X < width && pos.X >= -255))
                 {
                     xAdjustment -= Config.Speed;
                 }
-                else if (Config.RightButton?.IsDown() == true || (Config.UseMouseToPan && pos.X > Game1.viewport.Width - width && pos.X <= Game1.viewport.Width))
+                else if (Config.RightButton?.IsDown() == true || (Config.UseMouseToPan && pos.X > Game1.viewport.Width - width && pos.X <= Game1.viewport.Width + 255))
                 {
                     xAdjustment += Config.Speed;
                 }
 
                 int height = Game1.viewport.Height / 8;
-                if (Config.UpButton?.IsDown() == true || (Config.UseMouseToPan && pos.Y < height && pos.Y >= 0))
+                if (Config.UpButton?.IsDown() == true || (Config.UseMouseToPan && pos.Y < height && pos.Y >= -255))
                 {
                     yAdjustment -= Config.Speed;
                 }
-                else if (Config.DownButton?.IsDown() == true || (Config.UseMouseToPan && pos.Y > Game1.viewport.Height - height && pos.Y <= Game1.viewport.Height))
+                else if (Config.DownButton?.IsDown() == true || (Config.UseMouseToPan && pos.Y > Game1.viewport.Height - height && pos.Y <= Game1.viewport.Height + 255))
                 {
                     yAdjustment += Config.Speed;
                 }

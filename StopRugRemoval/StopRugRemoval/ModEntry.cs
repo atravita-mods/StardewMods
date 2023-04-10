@@ -1,6 +1,4 @@
-﻿using System.Reflection;
-
-using AtraBase.Toolkit.Extensions;
+﻿using AtraBase.Toolkit.Extensions;
 
 using AtraCore.Utilities;
 
@@ -15,7 +13,6 @@ using HarmonyLib;
 
 using StardewModdingAPI.Enums;
 using StardewModdingAPI.Events;
-using StardewModdingAPI.Utilities;
 
 using StardewValley.Locations;
 using StardewValley.Objects;
@@ -265,8 +262,10 @@ internal sealed class ModEntry : Mod
         }
 
         // Have to wait until here to populate locations
-        Config.PrePopulateLocations();
-        this.Helper.AsyncWriteConfig(this.Monitor, Config);
+        if (Config.PrePopulateLocations())
+        {
+            this.Helper.AsyncWriteConfig(this.Monitor, Config);
+        }
 
         this.migrator = new(this.ModManifest, this.Helper, this.Monitor);
         if (!this.migrator.CheckVersionInfo())
@@ -283,12 +282,12 @@ internal sealed class ModEntry : Mod
             GMCM.AddPageHere("Bombs", I18n.BombLocationDetailed)
                 .AddParagraph(I18n.BombLocationDetailed_Description);
 
-            foreach (GameLocation loc in Game1.locations)
+            foreach ((string name, IsSafeLocationEnum setting) in Config.SafeLocationMap)
             {
                 GMCM.AddEnumOption(
-                    name: () => loc.NameOrUniqueName,
-                    getValue: () => Config.SafeLocationMap.TryGetValue(loc.NameOrUniqueName, out IsSafeLocationEnum val) ? val : IsSafeLocationEnum.Dynamic,
-                    setValue: (value) => Config.SafeLocationMap[loc.NameOrUniqueName] = value);
+                    name: () => name,
+                    getValue: () => Config.SafeLocationMap.TryGetValue(name, out IsSafeLocationEnum val) ? val : IsSafeLocationEnum.Dynamic,
+                    setValue: (value) => Config.SafeLocationMap[name] = value);
             }
         }
 

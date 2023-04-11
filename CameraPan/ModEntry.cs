@@ -89,6 +89,8 @@ internal sealed class ModEntry : Mod
 
     private GMCMHelper? gmcm;
 
+    private Point? ClickAndDragScrollPosition = null;
+
     #region initialization
 
     /// <inheritdoc />
@@ -276,6 +278,18 @@ internal sealed class ModEntry : Mod
             Game1.hudMessages.RemoveAll(message => message.number == HUD_ID);
             Game1.addHUDMessage(new(message, HUDMessage.newQuest_type) { number = HUD_ID, noIcon = true});
         }
+
+        if (Config.ClickAndDragBehavior == ClickAndDragBehavior.AutoScroll)
+        {
+            if (Config.ClickToScroll?.JustPressed() == true)
+            {
+                this.ClickAndDragScrollPosition = this.Helper.Input.GetCursorPosition().ScreenPixels.ToPoint();
+            }
+            else if (Config.ClickToScroll?.GetState() == SButtonState.Released)
+            {
+                this.ClickAndDragScrollPosition = null;
+            }
+        }
     }
 
     private void OnWarped(object? sender, WarpedEventArgs e)
@@ -301,6 +315,21 @@ internal sealed class ModEntry : Mod
                 position: target,
                 sourceRectangle: new Rectangle(0, 320, 64, 64),
                 color: (Game1.viewportTarget.X != -2.14748365E+09f ? Color.Red : Color.White) * 0.7f,
+                rotation: 0f,
+                origin: new Vector2(32f, 32f),
+                scale: 0.5f,
+                effects: SpriteEffects.None,
+                layerDepth: 1f);
+        }
+
+        if (this.ClickAndDragScrollPosition is not null)
+        {
+            Vector2 target = Game1.GlobalToLocal(Game1.viewport, Target.ToVector2());
+            e.SpriteBatch.Draw(
+                texture: AssetManager.DartsTexture,
+                position: this.ClickAndDragScrollPosition.Value.ToVector2(),
+                sourceRectangle: new Rectangle(0, 320, 64, 64),
+                color: (Game1.viewportTarget.X != -2.14748365E+09f ? Color.Green : Color.White) * 0.7f,
                 rotation: 0f,
                 origin: new Vector2(32f, 32f),
                 scale: 0.5f,

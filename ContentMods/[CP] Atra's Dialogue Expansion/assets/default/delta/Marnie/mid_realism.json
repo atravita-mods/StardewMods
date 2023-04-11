@@ -4,6 +4,7 @@
         "Action": "EditData",
         "Target": "Characters/Dialogue/Marnie",
         "Entries": {
+            "8{{YearRemainder}}": "I've got {{Range: 5,10}} cows to artificially inseminate tomorrow morning. It'll be a long day...",
             "12{{YearRemainder}}": "Happier cows produce better milk.$h",
             "25{{YearRemainder}}": "Ugh, we seem to have a digital dermatitis outbreak among my cows.#$b#I'll need to get a vet in, might need to get antibiotics administered.",
             "26{{YearRemainder}}": "Between you and I, I wish it was easier to socialize around these parts without going to the Saloon.#$b#It's not good for Shane.$s",
@@ -22,7 +23,8 @@
         "Entries": {
             "5_2": "My dear Bessie stepped on a nail the other day. Poor darling, I need to do a better job making sure their pen doesn't have dangerous items in it.",
             "7_2": "I try to keep my dairy organic. It's better for the cows, most of the time.",
-            "18_2": "Most dairy farms don't keep bulls around. It's too dangerous, usually.#$b#Bulls can be quite unpredictable."
+            "18_2": "Most dairy farms don't keep bulls around. It's too dangerous, usually.#$b#Bulls can be quite unpredictable.",
+            "23_2": "We're not allowed to use antibiotics, lest we lose our organic certification."
         }
     }
 ]}

@@ -1,6 +1,9 @@
 ﻿Changelog
 ============
 
+#### Version 0.2.3
+* Adds a skill enum and wallet items enum. <!--TODO profession enum -->
+
 #### Version 0.2.2
 * Adds direction enum.
 

@@ -64,11 +64,14 @@
         "Entries": {
             "summer_Sun6": "Thinking about taking a walk around, see if I can scare up some morels.#$b#Nothing like freshly foraged mushrooms. Well, if you're sure they're safe to eat.",
 
-            "spring_Mon4": "I love helping Evelyn out with the town gardens.$h",
+            "Mon4": "I love helping Evelyn out with the town gardens.$h",
+            "winter_Mon4": "Gotta help Evelyn prepare the flower garden for next year, it'll be glorious!$h",
+
             "1_2": "@, I feel so old and out of touch these days. I have no clue what the young people want anymore.",
             "3_2": "We would have supported Abigail if she wanted to  leave home to go to college, but that wasn't what she wanted to do.",
             "7_2": "I can't believe how much has changed since I was young...#$e#When I was Abby's age, we'd go hitchhike all the time. Wasn't the wisest idea, in hindsight...$s",
-            "9_2": "When I was young, my mother would raise horse in this valley.#$b#She taught me how to ride when I was just nine years old.",
+            "9_2": "When I was young, my mother would raise horses in this valley.#$b#She taught me how to ride when I was just six years old.",
+            "11_2": "Economically, the town seems to be doing better now.#$b#A lot of people had to move away during the last recession.$s#$e#Land's cheap out here, but it's hard to find a job, and everything is so much more expensive.#$b#To be honest, I'm not sure what Abigail will do.",
         }
     },
     {
@@ -80,7 +83,12 @@
             "HasFlag": "carolineSO"
         },
         "Entries": {
-            "5_2": "I miss being young and free-spirited.$s#$b#And here I am, trying to get Abigail to behave more like an adult.",
+            "5_2": "I miss being young and free-spirited.$s#$b#And here I am, trying to get Abigail to behave more like an adult.$s",
+            "13_2": "Gosh, I wish I wasn't so busy all the time running the shop.#$b#Would love to go vacation more often.",
+
+            // GIMA lines.
+            "Resort_Approach": "@, I'm so excited to be going on vacation today!",
+            "Resort_Bar_2": "Mmmmmm. I wonder what's in this?$h"
         }
     }
 ]}

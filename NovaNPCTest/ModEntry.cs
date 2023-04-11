@@ -1,17 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-
 using AtraBase.Toolkit.Extensions;
 using AtraBase.Toolkit.StringHandler;
-
 using AtraCore.Framework.Caches;
-
 using AtraShared.Schedules;
 using AtraShared.Utils.Extensions;
-
 using Microsoft.Xna.Framework;
-
 using StardewModdingAPI.Events;
 using StardewModdingAPI.Utilities;
 

@@ -23,6 +23,11 @@ public sealed class ModConfig
     public bool UseMouseToPan { get; set; } = true;
 
     /// <summary>
+    /// Gets or set a value indicating how middle click scroll should behave.
+    /// </summary>
+    public ClickAndDragBehavior ClickAndDragBehavior { get; set; } = ClickAndDragBehavior.DragMap;
+
+    /// <summary>
     /// Gets or sets a value indicating whether or not to hard snap the camera back if the player takes damage.
     /// </summary>
     public bool ResetWhenDamageTaken { get; set; } = false;
@@ -100,6 +105,9 @@ public sealed class ModConfig
     /// </summary>
     [GMCMSection("Keybind", 10)]
     public KeybindList ResetButton { get; set; } = new(new(SButton.R), new(SButton.RightStick));
+
+    [GMCMSection("Keybind", 10)]
+    public KeybindList ClickToScroll { get; set; } = new(SButton.MouseMiddle);
 
     /// <summary>
     /// Gets or sets the button used to set the camera upwards.
@@ -196,6 +204,27 @@ public enum PerMapCameraBehavior
     /// Uses the default for the indoors/outdoors.
     /// </summary>
     ByIndoorsOutdoors = 0b1 << 3,
+}
+
+/// <summary>
+/// The behavior used for middle click, basically.
+/// </summary>
+public enum ClickAndDragBehavior
+{
+    /// <summary>
+    /// No middle click scroll.
+    /// </summary>
+    Off,
+
+    /// <summary>
+    /// Middle click to drag the map with you.
+    /// </summary>
+    DragMap,
+
+    /// <summary>
+    /// The firefox autoscroll thingie.
+    /// </summary>
+    AutoScroll,
 }
 
 #endregion

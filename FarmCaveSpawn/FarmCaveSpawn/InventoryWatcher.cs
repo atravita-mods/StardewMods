@@ -47,6 +47,7 @@ internal static class InventoryWatcher
         }
     }
 
+    /// <inheritdoc cref="IGameLoopEvents.Saving"/>
     internal static void Saving(IDataHelper data)
     {
         if (Context.IsMainPlayer && model is not null)
@@ -59,12 +60,12 @@ internal static class InventoryWatcher
     /// <remarks>Is used to keep track of saplings that have entered the inventory.</remarks>
     internal static void Watch(InventoryChangedEventArgs e, IMultiplayerHelper multi)
     {
-        foreach (var item in e.Added)
+        foreach (Item item in e.Added)
         {
             if (item is SObject obj && obj.isSapling() && Game1Wrappers.ObjectInfo.TryGetValue(obj.ParentSheetIndex, out string? data))
             {
                 string name = data.GetNthChunk('/').ToString();
-                if (model?.Saplings?.Add(name) == true)
+                if (!string.IsNullOrWhiteSpace(name) && model?.Saplings?.Add(name) == true)
                 {
                     multi.SendMessage(name, SINGLE, new[] { UniqueID });
                     ModEntry.RequestFruitListReset();

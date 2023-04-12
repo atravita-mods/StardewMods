@@ -297,9 +297,12 @@ internal sealed class JumpManager : IDisposable
                             startY -= 64;
                         }
 
-                        ModEntry.ModMonitor.DebugOnlyLog($"Additional vertical height: {verticalHeightNeeded}");
+                        ModEntry.ModMonitor.DebugOnlyLog($"Additional vertical height: {verticalHeightNeeded}", LogLevel.Debug);
 
-                        initialVelocityY = Math.Max(initialVelocityY, 6 * MathF.Sqrt(verticalHeightNeeded));
+                        if (verticalHeightNeeded > 4)
+                        {
+                            initialVelocityY = Math.Max(initialVelocityY, 6 * MathF.Sqrt(verticalHeightNeeded));
+                        }
                     }
 
                     // a little sanity here.

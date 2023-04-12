@@ -1,6 +1,7 @@
 ﻿using System.Runtime.CompilerServices;
 
 using AtraBase.Toolkit;
+using AtraBase.Toolkit.Extensions;
 
 using AtraShared.ConstantsAndEnums;
 using AtraShared.Integrations;
@@ -71,6 +72,9 @@ internal sealed class ModEntry : Mod
 
     private static readonly PerScreen<int> msHoldOffset = new(() => -1);
 
+    /// <summary>
+    /// Gets or sets a value in milliseconds over how long to withhold camera control from the player.
+    /// </summary>
     internal static int MSHoldOffset
     {
         get => msHoldOffset.Value;
@@ -89,7 +93,11 @@ internal sealed class ModEntry : Mod
 
     private GMCMHelper? gmcm;
 
-    private Point? ClickAndDragScrollPosition = null;
+    /// <summary>
+    /// In <see cref="ClickAndDragBehavior.DragMap"/> mode this is the last position of the mouse.
+    /// In <see cref="ClickAndDragBehavior.AutoScroll"/> mode this is the center position to pan from.
+    /// </summary>
+    private PerScreen<Point?> clickAndDragScrollPosition = new(() => null);
 
     #region initialization
 
@@ -276,18 +284,18 @@ internal sealed class ModEntry : Mod
             string message = I18n.Enabled_Message(enabled.Value ? I18n.Enabled() : I18n.Disabled());
             this.Monitor.Log(message);
             Game1.hudMessages.RemoveAll(message => message.number == HUD_ID);
-            Game1.addHUDMessage(new(message, HUDMessage.newQuest_type) { number = HUD_ID, noIcon = true});
+            Game1.addHUDMessage(new(message, HUDMessage.newQuest_type) { number = HUD_ID, noIcon = true });
         }
 
         if (Config.ClickAndDragBehavior == ClickAndDragBehavior.AutoScroll)
         {
             if (Config.ClickToScroll?.JustPressed() == true)
             {
-                this.ClickAndDragScrollPosition = this.Helper.Input.GetCursorPosition().ScreenPixels.ToPoint();
+                this.clickAndDragScrollPosition.Value = this.Helper.Input.GetCursorPosition().ScreenPixels.ToPoint();
             }
             else if (Config.ClickToScroll?.GetState() == SButtonState.Released)
             {
-                this.ClickAndDragScrollPosition = null;
+                this.clickAndDragScrollPosition.Value = null;
             }
         }
     }
@@ -320,21 +328,37 @@ internal sealed class ModEntry : Mod
                 scale: 0.5f,
                 effects: SpriteEffects.None,
                 layerDepth: 1f);
+
+            if (this.clickAndDragScrollPosition.Value is not null && Config.ClickAndDragBehavior == ClickAndDragBehavior.DragMap)
+            {
+                e.SpriteBatch.Draw(
+                    texture: AssetManager.DartsTexture,
+                    position: this.clickAndDragScrollPosition.Value.Value.ToVector2(),
+                    sourceRectangle: new Rectangle(0, 320, 64, 64),
+                    color: (Game1.viewportTarget.X != -2.14748365E+09f ? Color.DarkGreen : Color.Green) * 0.7f,
+                    rotation: 0f,
+                    origin: new Vector2(32f, 32f),
+                    scale: 0.5f,
+                    effects: SpriteEffects.None,
+                    layerDepth: 1f);
+            }
         }
 
-        if (this.ClickAndDragScrollPosition is not null)
+        if (this.clickAndDragScrollPosition.Value is not null && Config.ClickAndDragBehavior == ClickAndDragBehavior.AutoScroll)
         {
-            Vector2 target = Game1.GlobalToLocal(Game1.viewport, Target.ToVector2());
-            e.SpriteBatch.Draw(
-                texture: AssetManager.DartsTexture,
-                position: this.ClickAndDragScrollPosition.Value.ToVector2(),
-                sourceRectangle: new Rectangle(0, 320, 64, 64),
-                color: (Game1.viewportTarget.X != -2.14748365E+09f ? Color.Green : Color.White) * 0.7f,
-                rotation: 0f,
-                origin: new Vector2(32f, 32f),
-                scale: 0.5f,
-                effects: SpriteEffects.None,
-                layerDepth: 1f);
+            foreach (Direction direction in DirectionExtensions.Cardinal)
+            {
+                e.SpriteBatch.Draw(
+                    texture: AssetManager.ArrowTexture,
+                    position: this.clickAndDragScrollPosition.Value.Value.ToVector2() + (direction.GetVectorFacing() * 20f),
+                    sourceRectangle: null,
+                    color: Color.PowderBlue * 0.7f,
+                    rotation: direction.GetRotationFacing(),
+                    origin: new Vector2(2f, 2f),
+                    scale: Game1.pixelZoom,
+                    effects: SpriteEffects.None,
+                    layerDepth: 1f);
+            }
         }
 
         if (Game1.currentLocation is not GameLocation location || !Context.IsPlayerFree)
@@ -442,25 +466,50 @@ internal sealed class ModEntry : Mod
             }
             if (Game1.player.CanMove && MSHoldOffset <= 0)
             {
-                Vector2 pos = this.Helper.Input.GetCursorPosition().ScreenPixels;
-                int width = Game1.viewport.Width / 8;
-                if (Config.LeftButton?.IsDown() == true || (Config.UseMouseToPan && pos.X < width && pos.X >= -255))
+                Vector2 mousePosition = this.Helper.Input.GetCursorPosition().ScreenPixels;
+                if (Config.ClickAndDragBehavior != ClickAndDragBehavior.Off && Config.ClickToScroll?.IsDown() == true)
                 {
-                    xAdjustment -= Config.Speed;
+                    if (Config.ClickAndDragBehavior == ClickAndDragBehavior.DragMap)
+                    {
+                        if (this.clickAndDragScrollPosition.Value is Point pastPoint)
+                        {
+                            xAdjustment += pastPoint.X - mousePosition.X.ToIntFast();
+                            yAdjustment += pastPoint.Y - mousePosition.Y.ToIntFast();
+                        }
+                        this.clickAndDragScrollPosition.Value = mousePosition.ToPoint();
+                    }
+                    else if (Config.ClickAndDragBehavior == ClickAndDragBehavior.AutoScroll)
+                    {
+                        if (this.clickAndDragScrollPosition.Value is Point center)
+                        {
+                            const int twoTiles = Game1.tileSize * 2;
+                            xAdjustment += (Math.Clamp((mousePosition.X - center.X) / twoTiles, -1.5f, 1.5f) * Config.Speed).ToIntFast();
+                            yAdjustment += (Math.Clamp((mousePosition.Y - center.Y) / twoTiles, -1.5f, 1.5f) * Config.Speed).ToIntFast();
+                        }
+                    }
                 }
-                else if (Config.RightButton?.IsDown() == true || (Config.UseMouseToPan && pos.X > Game1.viewport.Width - width && pos.X <= Game1.viewport.Width + 255))
+                else
                 {
-                    xAdjustment += Config.Speed;
-                }
+                    this.clickAndDragScrollPosition.Value = null;
+                    int width = Game1.viewport.Width / 8;
+                    if (Config.LeftButton?.IsDown() == true || (Config.UseMouseToPan && mousePosition.X < width && mousePosition.X >= -255))
+                    {
+                        xAdjustment -= Config.Speed;
+                    }
+                    else if (Config.RightButton?.IsDown() == true || (Config.UseMouseToPan && mousePosition.X > Game1.viewport.Width - width && mousePosition.X <= Game1.viewport.Width + 255))
+                    {
+                        xAdjustment += Config.Speed;
+                    }
 
-                int height = Game1.viewport.Height / 8;
-                if (Config.UpButton?.IsDown() == true || (Config.UseMouseToPan && pos.Y < height && pos.Y >= -255))
-                {
-                    yAdjustment -= Config.Speed;
-                }
-                else if (Config.DownButton?.IsDown() == true || (Config.UseMouseToPan && pos.Y > Game1.viewport.Height - height && pos.Y <= Game1.viewport.Height + 255))
-                {
-                    yAdjustment += Config.Speed;
+                    int height = Game1.viewport.Height / 8;
+                    if (Config.UpButton?.IsDown() == true || (Config.UseMouseToPan && mousePosition.Y < height && mousePosition.Y >= -255))
+                    {
+                        yAdjustment -= Config.Speed;
+                    }
+                    else if (Config.DownButton?.IsDown() == true || (Config.UseMouseToPan && mousePosition.Y > Game1.viewport.Height - height && mousePosition.Y <= Game1.viewport.Height + 255))
+                    {
+                        yAdjustment += Config.Speed;
+                    }
                 }
 
                 xAdjustment = Math.Clamp(xAdjustment, -Config.XRangeInternal, Config.XRangeInternal);
@@ -511,15 +560,6 @@ internal sealed class ModEntry : Mod
             y = Math.Clamp(y, Game1.viewportCenter.Y - Config.Speed, Game1.viewportCenter.Y + Config.Speed);
         }
 
-        // smooth it out a bit - if we're not moving very far just leave the camera in place.
-        if (Math.Abs(Game1.viewportCenter.X - x) < 5)
-        {
-            x = Game1.viewportCenter.X;
-        }
-        if (Math.Abs(Game1.viewportCenter.Y - y) < 5)
-        {
-            y = Game1.viewportCenter.Y;
-        }
         target.Value = new(x, y);
     }
 }

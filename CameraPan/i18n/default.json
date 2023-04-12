@@ -33,6 +33,13 @@
   "UseMouseToPan.title": "Use Mouse To Pan",
   "UseMouseToPan.description": "If enabled, moving the mouse to the edges of the screen will pan the camera.",
 
+  "ClickAndDragBehavior.title": "Click And Drag Behavior",
+  "ClickAndDragBehavior.description": "Controls how click-and-drag works. (see also the Click To Scroll keybind). Off = disabled. Drag Map = click to drag. AutoScroll = Mozilla-style.",
+
+  "config.ClickAndDragBehavior.Off": "Off",
+  "config.ClickAndDragBehavior.DragMap": "Drag Map",
+  "config.ClickAndDragBehavior.AutoScroll":  "AutoScroll",
+
   "KeepPlayerOnScreen.title": "Keep Player On Screen",
   "KeepPlayerOnScreen.description": "If enabled, the camera will avoid panning too far, to keep the player character on-screen.",
 
@@ -50,6 +57,9 @@
 
   "ResetButton.title": "Reset Button",
   "ResetButton.description": "The button to use to reset the camera over the player.",
+
+  "ClickToScroll.title": "Click To Scroll",
+  "ClickToScroll.description":  "The button used for click-to-scroll.",
 
   "UpButton.title": "Up Button",
   "UpButton.description": "The button used to pan the camera upwards, if panning is enabled.",

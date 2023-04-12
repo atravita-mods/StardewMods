@@ -38,7 +38,10 @@
 
   "config.ClickAndDragBehavior.Off": "Off",
   "config.ClickAndDragBehavior.DragMap": "Drag Map",
-  "config.ClickAndDragBehavior.AutoScroll":  "AutoScroll",
+  "config.ClickAndDragBehavior.AutoScroll": "AutoScroll",
+
+  "ClickAndDragColor.title": "Click And Drag Color",
+  "ClickAndDragColor.description": "Sets the color of the little arrows that appear when the AutoScroll setting of Click And Drag behavior is enabled.",
 
   "KeepPlayerOnScreen.title": "Keep Player On Screen",
   "KeepPlayerOnScreen.description": "If enabled, the camera will avoid panning too far, to keep the player character on-screen.",
@@ -59,7 +62,7 @@
   "ResetButton.description": "The button to use to reset the camera over the player.",
 
   "ClickToScroll.title": "Click To Scroll",
-  "ClickToScroll.description":  "The button used for click-to-scroll.",
+  "ClickToScroll.description": "The button used for click-to-scroll.",
 
   "UpButton.title": "Up Button",
   "UpButton.description": "The button used to pan the camera upwards, if panning is enabled.",
@@ -100,6 +103,11 @@
   "enabled": "enabled",
   "disabled": "disabled",
 
-  "forbidden": "Panning is forbidden on this map."
+  "enabled-tooltip": "Panning is currently enabled",
+  "disabled-tooltip": "Panning is currently disabled",
+  "disabled-settings-tooltip": "Panning is disabled on this map in the settings",
+  "disabled-map-tooltip": "Panning is disabled by this map.",
 
+  "forbidden": "Panning is forbidden on this map.",
+  "disabled-somehow": "Panning has been disabled on this map."
 }

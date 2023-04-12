@@ -70,9 +70,16 @@ internal static class ViewportAdjustmentPatches
         {
             behavior &= ~CameraBehavior.Offset;
             Game1.addHUDMessage(new(I18n.Forbidden()));
+            ModEntry.SetCameraHoverMessage(CameraBehaviorMessage.DisabledByMap);
+        }
+        else
+        {
+            ModEntry.SetCameraHoverMessage(behavior.HasFlagFast(CameraBehavior.Offset) ? CameraBehaviorMessage.Allowed : CameraBehaviorMessage.DisabledBySettings);
         }
 
         cameraBehavior.Value = behavior;
+
+        ModEntry.Reset();
         ModEntry.ModMonitor.Log($"Setting camera behavior {behavior.ToStringFast()} for location {location.NameOrUniqueName}");
     }
 
@@ -85,8 +92,12 @@ internal static class ViewportAdjustmentPatches
     [MethodImpl(TKConstants.Hot)]
     private static bool ShouldLock() => !IsGamePanning && !IsInEvent() && cameraBehavior.Value.HasFlagFast(CameraBehavior.Locked);
 
+    /// <summary>
+    /// Whether or not the map allows panning.
+    /// </summary>
+    /// <returns>True if panning should be allowed.</returns>
     [MethodImpl(TKConstants.Hot)]
-    private static bool ShouldOffset() => !IsGamePanning && !IsInEvent() && cameraBehavior.Value.HasFlagFast(CameraBehavior.Offset);
+    internal static bool ShouldOffset() => !IsGamePanning && !IsInEvent() && cameraBehavior.Value.HasFlagFast(CameraBehavior.Offset);
 
     [MethodImpl(TKConstants.Hot)]
     private static float GetXTarget(float prevVal) => ShouldOffset() ? ModEntry.Target.X : prevVal;

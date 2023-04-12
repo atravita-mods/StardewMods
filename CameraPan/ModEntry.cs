@@ -5,6 +5,7 @@ using AtraBase.Toolkit.Extensions;
 
 using AtraShared.ConstantsAndEnums;
 using AtraShared.Integrations;
+using AtraShared.Utils;
 using AtraShared.Utils.Extensions;
 
 using CameraPan.Framework;
@@ -14,9 +15,12 @@ using HarmonyLib;
 
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
 
 using StardewModdingAPI.Events;
 using StardewModdingAPI.Utilities;
+
+using StardewValley.Menus;
 
 using AtraUtils = AtraShared.Utils.Utils;
 
@@ -86,18 +90,30 @@ internal sealed class ModEntry : Mod
     /// </summary>
     internal static ModConfig Config { get; private set; } = null!;
 
+    private static StringUtils stringUtils = null!;
+
     /// <summary>
     /// Gets the logging instance for this mod.
     /// </summary>
     internal static IMonitor ModMonitor { get; private set; } = null!;
 
-    private GMCMHelper? gmcm;
+    /// <summary>
+    /// Gets a message to draw if the camera button is hovered over.
+    /// </summary>
+    internal static string CameraHoverMessage { get; private set; } = string.Empty;
 
     /// <summary>
     /// In <see cref="ClickAndDragBehavior.DragMap"/> mode this is the last position of the mouse.
     /// In <see cref="ClickAndDragBehavior.AutoScroll"/> mode this is the center position to pan from.
     /// </summary>
-    private PerScreen<Point?> clickAndDragScrollPosition = new(() => null);
+    private readonly PerScreen<Point?> clickAndDragScrollPosition = new(() => null);
+
+    /// <summary>
+    /// Gets the location of the camera button.
+    /// </summary>
+    private static readonly PerScreen<ClickableTextureComponent?> CameraButton = new(() => null);
+
+    private GMCMHelper? gmcm;
 
     #region initialization
 
@@ -107,6 +123,7 @@ internal sealed class ModEntry : Mod
         I18n.Init(helper.Translation);
         ModMonitor = this.Monitor;
         Config = AtraUtils.GetConfigOrDefault<ModConfig>(helper, this.Monitor);
+        stringUtils = new StringUtils(this.Monitor);
 
         if (Config.ToggleBehavior == ToggleBehavior.Never)
         {
@@ -131,8 +148,13 @@ internal sealed class ModEntry : Mod
         this.Helper.Events.GameLoop.UpdateTicked += this.OnTicked;
         this.Helper.Events.Display.RenderedHud += this.DrawHud;
         this.Helper.Events.Input.ButtonsChanged += this.OnButtonsChanged;
+        this.Helper.Events.Input.ButtonPressed += this.OnClicked;
         this.Helper.Events.Player.Warped += this.OnWarped;
-        this.Helper.Events.Display.WindowResized += static (_, _) => Config?.RecalculateBounds();
+        this.Helper.Events.Display.WindowResized += static (_, _) =>
+        {
+            Config?.RecalculateBounds();
+            CreateOrModifyButton();
+        };
 
         // asset events.
         this.Helper.Events.Content.AssetRequested += static (_, e) => AssetManager.Apply(e);
@@ -141,7 +163,25 @@ internal sealed class ModEntry : Mod
         // configuration
         this.SetUpInitialConfig();
         this.Helper.Events.GameLoop.ReturnedToTitle += (_, _) => this.SetUpInitialConfig();
-        this.Helper.Events.GameLoop.SaveLoaded += (_, _) => this.SetUpDetailedConfig();
+        this.Helper.Events.GameLoop.SaveLoaded += (_, _) =>
+        {
+            this.SetUpDetailedConfig();
+            CreateOrModifyButton();
+        };
+    }
+
+    private void OnClicked(object? sender, ButtonPressedEventArgs e)
+    {
+        if (Context.IsPlayerFree && Config.ToggleBehavior == ToggleBehavior.Toggle
+            && e.Button.IsUseToolButton() && ViewportAdjustmentPatches.ShouldOffset())
+        {
+            var mousePos = e.Cursor.ScreenPixels;
+            if (CameraButton.Value?.containsPoint((int)mousePos.X, (int)mousePos.Y) == true)
+            {
+                this.ToggleCamera();
+                this.Helper.Input.Suppress(e.Button);
+            }
+        }
     }
 
     /// <summary>
@@ -160,6 +200,21 @@ internal sealed class ModEntry : Mod
             ModMonitor.Log(string.Format(ErrorMessageConsts.HARMONYCRASH, ex), LogLevel.Error);
         }
         harmony.Snitch(this.Monitor, harmony.Id, transpilersOnly: true);
+    }
+
+    private static void CreateOrModifyButton()
+    {
+        if (Game1.dayTimeMoneyBox?.position is Vector2 position)
+        {
+            Point cameraPos = new ((int)position.X - 80, (int)position.Y + 4);
+
+            CameraButton.Value ??= new(
+                new Rectangle(cameraPos, new(18 * Game1.pixelZoom, 15 * Game1.pixelZoom)),
+                Game1.mouseCursors2,
+                new Rectangle(72, 32, 18, 15),
+                Game1.pixelZoom);
+            CameraButton.Value.setPosition(cameraPos.X, cameraPos.Y);
+        }
     }
 
     #endregion
@@ -270,6 +325,38 @@ internal sealed class ModEntry : Mod
 
     #endregion
 
+    /// <summary>
+    /// Sets the message used when hovering over the camera button.
+    /// </summary>
+    /// <param name="message">The message to set.</param>
+    internal static void SetCameraHoverMessage(CameraBehaviorMessage message)
+    {
+        switch (message)
+        {
+            case CameraBehaviorMessage.Allowed:
+                CameraHoverMessage = enabled.Value ? I18n.EnabledTooltip() : I18n.DisabledTooltip();
+                break;
+            case CameraBehaviorMessage.DisabledBySettings:
+                CameraHoverMessage = I18n.DisabledSettingsTooltip();
+                break;
+            case CameraBehaviorMessage.DisabledByMap:
+                CameraHoverMessage = I18n.DisabledMapTooltip();
+                break;
+        }
+        CameraHoverMessage = stringUtils.ParseAndWrapText(CameraHoverMessage, Game1.smallFont, 400);
+    }
+
+    private void ToggleCamera()
+    {
+        enabled.Value = !enabled.Value;
+        string message = I18n.Enabled_Message(enabled.Value ? I18n.Enabled() : I18n.Disabled());
+        this.Monitor.Log(message);
+        Game1.hudMessages.RemoveAll(message => message.number == HUD_ID);
+        Game1.addHUDMessage(new(message, HUDMessage.newQuest_type) { number = HUD_ID, noIcon = true });
+
+        SetCameraHoverMessage(CameraBehaviorMessage.Allowed);
+    }
+
     private void OnButtonsChanged(object? sender, ButtonsChangedEventArgs e)
     {
         if (Config.ResetButton?.JustPressed() == true)
@@ -280,11 +367,15 @@ internal sealed class ModEntry : Mod
 
         if (Config.ToggleBehavior == ToggleBehavior.Toggle && Config.ToggleButton?.JustPressed() == true)
         {
-            enabled.Value = !enabled.Value;
-            string message = I18n.Enabled_Message(enabled.Value ? I18n.Enabled() : I18n.Disabled());
-            this.Monitor.Log(message);
-            Game1.hudMessages.RemoveAll(message => message.number == HUD_ID);
-            Game1.addHUDMessage(new(message, HUDMessage.newQuest_type) { number = HUD_ID, noIcon = true });
+            if (ViewportAdjustmentPatches.ShouldOffset())
+            {
+                this.ToggleCamera();
+            }
+            else
+            {
+                Game1.hudMessages.RemoveAll(message => message.number == HUD_ID);
+                Game1.addHUDMessage(new(I18n.DisabledSomehow(), HUDMessage.newQuest_type) { number = HUD_ID, noIcon = true });
+            }
         }
 
         if (Config.ClickAndDragBehavior == ClickAndDragBehavior.AutoScroll)
@@ -315,6 +406,7 @@ internal sealed class ModEntry : Mod
     [MethodImpl(TKConstants.Hot)]
     private void DrawHud(object? sender, RenderedHudEventArgs e)
     {
+        // Debug markers
         if (ConsoleCommands.DrawMarker)
         {
             Vector2 target = Game1.GlobalToLocal(Game1.viewport, Target.ToVector2());
@@ -344,7 +436,13 @@ internal sealed class ModEntry : Mod
             }
         }
 
-        if (this.clickAndDragScrollPosition.Value is not null && Config.ClickAndDragBehavior == ClickAndDragBehavior.AutoScroll)
+        if (Game1.game1.takingMapScreenshot)
+        {
+            return;
+        }
+
+        if (enabled.Value && ViewportAdjustmentPatches.ShouldOffset()
+            && this.clickAndDragScrollPosition.Value is not null && Config.ClickAndDragBehavior == ClickAndDragBehavior.AutoScroll)
         {
             foreach (Direction direction in DirectionExtensions.Cardinal)
             {
@@ -352,12 +450,23 @@ internal sealed class ModEntry : Mod
                     texture: AssetManager.ArrowTexture,
                     position: this.clickAndDragScrollPosition.Value.Value.ToVector2() + (direction.GetVectorFacing() * 20f),
                     sourceRectangle: null,
-                    color: Color.PowderBlue * 0.7f,
+                    color: Config.ClickAndDragColor,
                     rotation: direction.GetRotationFacing(),
                     origin: new Vector2(2f, 2f),
                     scale: Game1.pixelZoom,
                     effects: SpriteEffects.None,
                     layerDepth: 1f);
+            }
+        }
+
+        if (Game1.CurrentEvent is null)
+        {
+            CameraButton.Value?.draw(e.SpriteBatch, enabled.Value && ViewportAdjustmentPatches.ShouldOffset() ? Color.White : Color.Gray, 0.99f);
+            int mouseX = Game1.getMouseX(true);
+            int mouseY = Game1.getMouseY(true);
+            if (CameraButton.Value?.containsPoint(mouseX, mouseY) == true)
+            {
+                IClickableMenu.drawHoverText(e.SpriteBatch, CameraHoverMessage, Game1.smallFont);
             }
         }
 
@@ -446,7 +555,7 @@ internal sealed class ModEntry : Mod
     [MethodImpl(TKConstants.Hot)]
     private void OnTicked(object? sender, UpdateTickedEventArgs e)
     {
-        if (!Context.IsPlayerFree || !Game1.game1.IsActive)
+        if (!Context.IsPlayerFree || !Game1.game1.IsActive || !ViewportAdjustmentPatches.ShouldOffset())
         {
             return;
         }
@@ -467,6 +576,11 @@ internal sealed class ModEntry : Mod
             if (Game1.player.CanMove && MSHoldOffset <= 0)
             {
                 Vector2 mousePosition = this.Helper.Input.GetCursorPosition().ScreenPixels;
+                if (Config.ToggleBehavior == ToggleBehavior.Toggle)
+                {
+                    CameraButton.Value?.tryHover((int)mousePosition.X, (int)mousePosition.Y);
+                }
+
                 if (Config.ClickAndDragBehavior != ClickAndDragBehavior.Off && Config.ClickToScroll?.IsDown() == true)
                 {
                     if (Config.ClickAndDragBehavior == ClickAndDragBehavior.DragMap)

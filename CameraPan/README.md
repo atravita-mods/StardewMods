@@ -20,6 +20,8 @@ Run SMAPI at least once with this mod installed to generate the `config.json`, o
 #### General Options
 * `ToggleBehavior`: Sets how the camera should be toggled on and off. Available options: `Always` (panning always enabled), `Never` (panning never enabled), `Toggle` (a toggle key enables or disables the panning), or `Camera` (holding the camera object enables the camera. Check Robin for it!).
 * `UseMouseToPan`: If enabled, moving the mouse to the edges of the screen will cause the camera to pan, *if camera panning is enabled*.
+* `ClickAndDragBehavior`: Defines the behavior for clicking-and-dragging. Options are: `None` (do nothing), `DragMap` (will move the map under the mouse), and `AutoScroll` (which is Mozilla-style scrolling). The default button for this is the middle mouse button, but can be set with the `ClickToScroll` keybind.
+* `ClickAndDragColor`: As AutoScroll mode draws four tiny arrows on the screen, this lets you set their color.
 * `ResetWhenDamageTaken`: If enabled, the camera will pan back towards the player if the player takes damage.
 * `Speed`: Controls how fast the camera pans.
 
@@ -36,6 +38,7 @@ Set any of the keybinds to null to disable.
 
 * `ToggleButton`: The button used to toggle the camera, if `ToggleBehavior` is set to `Toggle`.
 * `ResetButton`: The button that resets the camera over the player.
+* `ClickToScroll`: The button used for the click-and-drag behavior. Defaults to middle-click.
 * `UpButton`, `DownButton`, `LeftButton`, `RightButton` pan the camera.
 
 #### Map-specific camera behavior.
@@ -43,7 +46,7 @@ These control the default map behavior. The four options are:
 
 * `Vanilla`: Completely vanilla camera. No panning, no locking. The camera will in general stay in-bounds.
 * `Offset`: Panning is enabled, but the camera is not locked.
-* `Locked`: The default vanilla camera will try to stay in-bounds on the map. This locks the camera to the player, including allowing it to leave the map boundaries.
+* `Locked`: The default vanilla camera will try to stay in-bounds on the map. This locks the camera to the player's feet, including allowing it to leave the map boundaries.
 * `Both`: This combines `Offset` and `Locked`. The camera will lock to the panned position.
 
 Maps are generally categorized as indoor and outdoors and you can set those separately, or you can set a per-map override.

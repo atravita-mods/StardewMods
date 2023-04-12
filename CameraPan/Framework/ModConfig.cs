@@ -23,9 +23,15 @@ public sealed class ModConfig
     public bool UseMouseToPan { get; set; } = true;
 
     /// <summary>
-    /// Gets or set a value indicating how middle click scroll should behave.
+    /// Gets or sets a value indicating how middle click scroll should behave.
     /// </summary>
     public ClickAndDragBehavior ClickAndDragBehavior { get; set; } = ClickAndDragBehavior.DragMap;
+
+    /// <summary>
+    /// Gets or sets the color for which to draw the Mozilla Arrows TM.
+    /// </summary>
+    [GMCMDefaultColor(127, 255, 0, 255)]
+    public Color ClickAndDragColor { get; set; } = Color.Chartreuse;
 
     /// <summary>
     /// Gets or sets a value indicating whether or not to hard snap the camera back if the player takes damage.
@@ -84,14 +90,14 @@ public sealed class ModConfig
     /// Gets or sets the color for which to draw an arrow pointing at the player, if the player is off screen.
     /// </summary>
     [GMCMSection("Boundaries", 5)]
-    [GMCMDefaultColor(255, 0, 0, 0)]
+    [GMCMDefaultColor(255, 0, 0, 255)]
     public Color SelfColor { get; set; } = Color.Red;
 
     /// <summary>
     /// Gets or sets the color for which to draw an arrow pointing at other players on the map.
     /// </summary>
     [GMCMSection("Boundaries", 5)]
-    [GMCMDefaultColor(0, 0, 255, 0)]
+    [GMCMDefaultColor(0, 0, 255, 255)]
     public Color FriendColor { get; set; } = Color.Blue;
 
     /// <summary>
@@ -106,6 +112,9 @@ public sealed class ModConfig
     [GMCMSection("Keybind", 10)]
     public KeybindList ResetButton { get; set; } = new(new(SButton.R), new(SButton.RightStick));
 
+    /// <summary>
+    /// Gets or sets the keybind used for ClickToScroll.
+    /// </summary>
     [GMCMSection("Keybind", 10)]
     public KeybindList ClickToScroll { get; set; } = new(SButton.MouseMiddle);
 

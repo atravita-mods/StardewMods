@@ -59,7 +59,8 @@
             "15_2": "I've been working so hard during aerobics!$h#$b#It's not that farm work isn't hard work, but I enjoy a spot of exercise with friends too.",
             "17_2": "My weekends are Mondays and Tuesdays, mostly. You'll find me behind my counter most other days!",
             "19_2": "With the cost of feed going up like this, I'm not sure how I'll stay in business.$s",
-            "22_2": "I mainly raise cows for milk, but I also raise baby animals for sale to other farmers.$h"
+            "22_2": "I mainly raise cows for milk, but I also raise baby animals for sale to other farmers.$h#$b#It's a lot of work, but it's worth it!",
+            "23_2": "For cows, I usually raise Braunvieh or Holsteins. But I'm open to raising other breeds!$h" // Braunvieh is the precursor to the Brown Swiss, they're kinda cute. Holstein is the stereotypical white/black cow. Also cute.
         }
     },
     {
@@ -71,7 +72,7 @@
 
             "1_2": "This farm has been in my family for five generations. I'm very proud to be running it.#$e#I'm not sure who'll run it after me.",
             "18_2": "Cost of feed's going up, but I ain't getting paid any more for my eggs or milk.#$b#@, I think there's collusion going on.$s#$e#Not sure what to do, it's just little old me against all the ag companies.$s",
-            "19_2": "I make quite a bit of cheese as well, on my farm. ",
+            "19_2": "I make quite a bit of cheese as well, on my farm.#$b#There's nothing like farm fresh cheese!",
             "22_2": "%Marnie looks tired.#$b#*Yawn*. Oh, @, hi! Just had to get up very early this morning to herd some cows back into their pen."
         }
     }

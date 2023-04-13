@@ -468,7 +468,7 @@ internal sealed class JumpManager : IDisposable
                 farmer.forceTimePass = this.forceTimePass;
                 if (disposing)
                 {
-                    Game1.moveViewportTo(farmer.Position, 5f);
+                    Game1.moveViewportTo(farmer.Position, 5f, 60, null, ModEntry.cameraAPI is null ? null : ModEntry.cameraAPI.Reset);
                 }
                 farmer.completelyStopAnimatingOrDoingAction();
             }

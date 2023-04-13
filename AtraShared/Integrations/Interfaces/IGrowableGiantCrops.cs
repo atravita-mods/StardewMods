@@ -1,6 +1,6 @@
 ﻿using StardewValley.TerrainFeatures;
 
-namespace AtraShared.Integrations;
+namespace AtraShared.Integrations.Interfaces;
 
 /// <summary>
 /// The bits of the GrowableGiantCrops API I use.

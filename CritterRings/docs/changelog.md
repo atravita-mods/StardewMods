@@ -1,6 +1,10 @@
 ﻿Changelog
 ==============
 
+## Version 0.1.4
+* More y-velocity fiddling
+* Integration with my camera panning mod.
+
 ## Version 0.1.3
 * More y-velocity adjustments (this time with buildings).
 * Slightly better layering with buildings and trees and whatnot.

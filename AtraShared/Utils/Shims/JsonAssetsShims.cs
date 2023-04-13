@@ -17,6 +17,8 @@ using CommunityToolkit.Diagnostics;
 using FastExpressionCompiler.LightExpression;
 using HarmonyLib;
 
+using StardewValley.Locations;
+
 namespace AtraShared.Utils.Shims;
 
 /// <summary>
@@ -105,9 +107,14 @@ public static class JsonAssetsShims
         {
             return epu.CheckConditions(conditions);
         }
-        Farm farm = Game1.getFarm();
+
+        // The L condition is bugged if you don't use "FarmHouse".
+        if (Game1.getLocationFromName("FarmHouse") is not FarmHouse farmhouse)
+        {
+            return false;
+        }
         bool replace = Game1.player.eventsSeen.Remove(EventID);
-        bool ret = farm.checkEventPrecondition($"{EventID}/{conditions}") != -1;
+        bool ret = farmhouse.checkEventPrecondition($"{EventID}/{conditions}") != -1;
         if (replace)
         {
             Game1.player.eventsSeen.Add(EventID);

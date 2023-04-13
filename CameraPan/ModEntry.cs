@@ -175,8 +175,7 @@ internal sealed class ModEntry : Mod
         if (Context.IsPlayerFree && Config.ToggleBehavior == ToggleBehavior.Toggle
             && e.Button.IsUseToolButton() && ViewportAdjustmentPatches.ShouldOffset())
         {
-            var mousePos = e.Cursor.ScreenPixels;
-            if (CameraButton.Value?.containsPoint((int)mousePos.X, (int)mousePos.Y) == true)
+            if (CameraButton.Value?.containsPoint(Game1.getMouseX(true), Game1.getMouseY(true)) == true)
             {
                 this.ToggleCamera();
                 this.Helper.Input.Suppress(e.Button);
@@ -202,7 +201,7 @@ internal sealed class ModEntry : Mod
         harmony.Snitch(this.Monitor, harmony.Id, transpilersOnly: true);
     }
 
-    private static void CreateOrModifyButton()
+    internal static void CreateOrModifyButton()
     {
         if (Game1.dayTimeMoneyBox?.position is Vector2 position)
         {
@@ -382,7 +381,7 @@ internal sealed class ModEntry : Mod
         {
             if (Config.ClickToScroll?.JustPressed() == true)
             {
-                this.clickAndDragScrollPosition.Value = this.Helper.Input.GetCursorPosition().ScreenPixels.ToPoint();
+                this.clickAndDragScrollPosition.Value = new Point(Game1.getMouseX(true), Game1.getMouseY(true));
             }
             else if (Config.ClickToScroll?.GetState() == SButtonState.Released)
             {
@@ -409,10 +408,10 @@ internal sealed class ModEntry : Mod
         // Debug markers
         if (ConsoleCommands.DrawMarker)
         {
-            Vector2 target = Game1.GlobalToLocal(Game1.viewport, Target.ToVector2());
+            Vector2 target = Game1.GlobalToLocal(Game1.uiViewport, Target.ToVector2());
             e.SpriteBatch.Draw(
                 texture: AssetManager.DartsTexture,
-                position: target,
+                position: target / Game1.options.zoomLevel,
                 sourceRectangle: new Rectangle(0, 320, 64, 64),
                 color: (Game1.viewportTarget.X != -2.14748365E+09f ? Color.Red : Color.White) * 0.7f,
                 rotation: 0f,
@@ -444,11 +443,12 @@ internal sealed class ModEntry : Mod
         if (enabled.Value && ViewportAdjustmentPatches.ShouldOffset()
             && this.clickAndDragScrollPosition.Value is not null && Config.ClickAndDragBehavior == ClickAndDragBehavior.AutoScroll)
         {
+            var basePos = this.clickAndDragScrollPosition.Value.Value.ToVector2();
             foreach (Direction direction in DirectionExtensions.Cardinal)
             {
                 e.SpriteBatch.Draw(
                     texture: AssetManager.ArrowTexture,
-                    position: this.clickAndDragScrollPosition.Value.Value.ToVector2() + (direction.GetVectorFacing() * 20f),
+                    position: basePos + (direction.GetVectorFacing() * 20f),
                     sourceRectangle: null,
                     color: Config.ClickAndDragColor,
                     rotation: direction.GetRotationFacing(),
@@ -575,10 +575,11 @@ internal sealed class ModEntry : Mod
             }
             if (Game1.player.CanMove && MSHoldOffset <= 0)
             {
-                Vector2 mousePosition = this.Helper.Input.GetCursorPosition().ScreenPixels;
+                int mouseX = Game1.getMouseX(true);
+                int mouseY = Game1.getMouseY(true);
                 if (Config.ToggleBehavior == ToggleBehavior.Toggle)
                 {
-                    CameraButton.Value?.tryHover((int)mousePosition.X, (int)mousePosition.Y);
+                    CameraButton.Value?.tryHover(Game1.getMouseX(true), Game1.getMouseY(true));
                 }
 
                 if (Config.ClickAndDragBehavior != ClickAndDragBehavior.Off && Config.ClickToScroll?.IsDown() == true)
@@ -587,40 +588,40 @@ internal sealed class ModEntry : Mod
                     {
                         if (this.clickAndDragScrollPosition.Value is Point pastPoint)
                         {
-                            xAdjustment += pastPoint.X - mousePosition.X.ToIntFast();
-                            yAdjustment += pastPoint.Y - mousePosition.Y.ToIntFast();
+                            xAdjustment += pastPoint.X - mouseX;
+                            yAdjustment += pastPoint.Y - mouseY;
                         }
-                        this.clickAndDragScrollPosition.Value = mousePosition.ToPoint();
+                        this.clickAndDragScrollPosition.Value = new (mouseX, mouseY);
                     }
                     else if (Config.ClickAndDragBehavior == ClickAndDragBehavior.AutoScroll)
                     {
                         if (this.clickAndDragScrollPosition.Value is Point center)
                         {
                             const int twoTiles = Game1.tileSize * 2;
-                            xAdjustment += (Math.Clamp((mousePosition.X - center.X) / twoTiles, -1.5f, 1.5f) * Config.Speed).ToIntFast();
-                            yAdjustment += (Math.Clamp((mousePosition.Y - center.Y) / twoTiles, -1.5f, 1.5f) * Config.Speed).ToIntFast();
+                            xAdjustment += (Math.Clamp((mouseX - center.X) * 1f / twoTiles, -1.5f, 1.5f) * Config.Speed).ToIntFast();
+                            yAdjustment += (Math.Clamp((mouseY - center.Y) * 1f / twoTiles, -1.5f, 1.5f) * Config.Speed).ToIntFast();
                         }
                     }
                 }
                 else
                 {
                     this.clickAndDragScrollPosition.Value = null;
-                    int width = Game1.viewport.Width / 8;
-                    if (Config.LeftButton?.IsDown() == true || (Config.UseMouseToPan && mousePosition.X < width && mousePosition.X >= -255))
+                    int width = Game1.uiViewport.Width / 8;
+                    if (Config.LeftButton?.IsDown() == true || (Config.UseMouseToPan && mouseX < width && mouseX >= -255))
                     {
                         xAdjustment -= Config.Speed;
                     }
-                    else if (Config.RightButton?.IsDown() == true || (Config.UseMouseToPan && mousePosition.X > Game1.viewport.Width - width && mousePosition.X <= Game1.viewport.Width + 255))
+                    else if (Config.RightButton?.IsDown() == true || (Config.UseMouseToPan && mouseX > Game1.uiViewport.Width - width && mouseX <= Game1.viewport.Width + 255))
                     {
                         xAdjustment += Config.Speed;
                     }
 
-                    int height = Game1.viewport.Height / 8;
-                    if (Config.UpButton?.IsDown() == true || (Config.UseMouseToPan && mousePosition.Y < height && mousePosition.Y >= -255))
+                    int height = Game1.uiViewport.Height / 8;
+                    if (Config.UpButton?.IsDown() == true || (Config.UseMouseToPan && mouseY < height && mouseY >= -255))
                     {
                         yAdjustment -= Config.Speed;
                     }
-                    else if (Config.DownButton?.IsDown() == true || (Config.UseMouseToPan && mousePosition.Y > Game1.viewport.Height - height && mousePosition.Y <= Game1.viewport.Height + 255))
+                    else if (Config.DownButton?.IsDown() == true || (Config.UseMouseToPan && mouseY > Game1.uiViewport.Height - height && mouseY <= Game1.viewport.Height + 255))
                     {
                         yAdjustment += Config.Speed;
                     }

@@ -5,7 +5,6 @@ namespace CameraPan.Framework;
 /// <inheritdoc />
 public sealed class API : ICameraAPI
 {
-
     private string callerUniqueID;
 
     /// <summary>

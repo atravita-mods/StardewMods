@@ -39,7 +39,7 @@ internal sealed class ModEntry : Mod
         {
             foreach (NPC? character in characters)
             {
-                if (character?.isVillager() != true)
+                if (character?.CanSocialize != true)
                 {
                     continue;
                 }
@@ -49,11 +49,16 @@ internal sealed class ModEntry : Mod
         }
     }
 
+    /// <summary>
+    /// Draws in an arrow pointing at an NPC.
+    /// </summary>
+    /// <param name="spriteBatch">Sprite batch to use.</param>
+    /// <param name="character">Character to draw arrow pointing at.</param>
     private static void DrawArrowForNPC(SpriteBatch spriteBatch, NPC character)
     {
         Vector2 pos = character.Position + new Vector2(32f, 64f);
 
-        Vector2 arrowPos = Game1.GlobalToLocal(pos);
+        Vector2 arrowPos = Game1.GlobalToLocal(Game1.uiViewport, pos);
         Direction direction = Direction.None;
 
         if (arrowPos.X <= 0)

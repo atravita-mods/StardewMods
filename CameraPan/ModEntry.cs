@@ -350,7 +350,8 @@ internal sealed class ModEntry : Mod
         enabled.Value = !enabled.Value;
         string message = I18n.Enabled_Message(enabled.Value ? I18n.Enabled() : I18n.Disabled());
         this.Monitor.Log(message);
-        Game1.hudMessages.RemoveAll(message => message.number == HUD_ID);
+
+        RemoveMyHudMessages();
         Game1.addHUDMessage(new(message, HUDMessage.newQuest_type) { number = HUD_ID, noIcon = true });
 
         SetCameraHoverMessage(CameraBehaviorMessage.Allowed);
@@ -358,6 +359,11 @@ internal sealed class ModEntry : Mod
 
     private void OnButtonsChanged(object? sender, ButtonsChangedEventArgs e)
     {
+        if (!Context.IsPlayerFree)
+        {
+            return;
+        }
+
         if (Config.ResetButton?.JustPressed() == true)
         {
             Reset();
@@ -372,20 +378,21 @@ internal sealed class ModEntry : Mod
             }
             else
             {
-                Game1.hudMessages.RemoveAll(message => message.number == HUD_ID);
+                RemoveMyHudMessages();
                 Game1.addHUDMessage(new(I18n.DisabledSomehow(), HUDMessage.newQuest_type) { number = HUD_ID, noIcon = true });
             }
         }
 
         if (Config.ClickAndDragBehavior == ClickAndDragBehavior.AutoScroll)
         {
-            if (Config.ClickToScroll?.JustPressed() == true)
+            switch (Config.ClickToScroll?.GetState())
             {
-                this.clickAndDragScrollPosition.Value = new Point(Game1.getMouseX(true), Game1.getMouseY(true));
-            }
-            else if (Config.ClickToScroll?.GetState() == SButtonState.Released)
-            {
-                this.clickAndDragScrollPosition.Value = null;
+                case SButtonState.Pressed:
+                    this.clickAndDragScrollPosition.Value = new Point(Game1.getMouseX(true), Game1.getMouseY(true));
+                    break;
+                case SButtonState.Released or SButtonState.None:
+                    this.clickAndDragScrollPosition.Value = null;
+                    break;
             }
         }
     }
@@ -498,7 +505,7 @@ internal sealed class ModEntry : Mod
 
         Vector2 pos = farmer.Position + new Vector2(32f, -64f);
 
-        Vector2 arrowPos = Game1.GlobalToLocal(pos);
+        Vector2 arrowPos = Game1.GlobalToLocal(Game1.uiViewport, pos);
         Direction direction = Direction.None;
 
         if (arrowPos.X <= 0)
@@ -549,6 +556,9 @@ internal sealed class ModEntry : Mod
             facingDirection: Game1.down,
             who: farmer);
     }
+
+    private static void RemoveMyHudMessages()
+        => Game1.hudMessages.RemoveAll(static message => message.number == HUD_ID);
 
     #endregion
 

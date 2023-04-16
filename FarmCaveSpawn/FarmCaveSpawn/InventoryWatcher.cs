@@ -21,7 +21,8 @@ internal static class InventoryWatcher
 {
     private const string SaveString = "InventoryModel";
     private const string DATAPACKAGE = "DATAPACKAGE";
-    private const string SINGLE = "SINGLE";
+    private const string SAPLING = "SAPLING";
+    private const string FRUIT = "FRUIT";
 
     private static InventoryManagerModel? model;
     private static string UniqueID = null!;
@@ -67,7 +68,7 @@ internal static class InventoryWatcher
                 string name = data.GetNthChunk('/').ToString();
                 if (!string.IsNullOrWhiteSpace(name) && model?.Saplings?.Add(name) == true)
                 {
-                    multi.SendMessage(name, SINGLE, new[] { UniqueID });
+                    multi.SendMessage(name, SAPLING, new[] { UniqueID });
                     ModEntry.RequestFruitListReset();
                 }
             }
@@ -115,7 +116,7 @@ internal static class InventoryWatcher
                 model = e.ReadAs<InventoryManagerModel>();
                 break;
             }
-            case SINGLE:
+            case SAPLING:
             {
                 string name = e.ReadAs<string>();
                 if (model?.Saplings?.Add(name) == true)

@@ -105,7 +105,7 @@ public class IntegrationHelper
         catch (Exception ex)
         {
             this.Monitor.Log($"Failed while attempting to map {apiid}\n\n{ex}", LogLevel.Error);
-            api = null;
+            api = default;
         }
 #if DEBUG
         sw.Stop();

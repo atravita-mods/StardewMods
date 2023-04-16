@@ -2,7 +2,7 @@
 using CommunityToolkit.Diagnostics;
 using Microsoft.Xna.Framework;
 
-namespace AtraShared.Content.RawTextData;
+namespace AtraShared.Content.RawTexData;
 
 /// <summary>
 /// An implementation of IRawTextureData that uses

@@ -1,6 +1,10 @@
 ﻿Changelog
 ==============
 
+## Version 0.1.3
+* Fix being able to keybind toggle with another menu open.
+* Fix ui scaling on the little arrows.
+
 ## Version 0.1.2
 * Fix not taking UI scaling into account.
 

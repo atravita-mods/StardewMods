@@ -1,6 +1,9 @@
 ﻿Changelog
 ============
 
+#### Version 0.2.4
+* Color parser is now case invariant and includes rebeccapurple.
+
 #### Version 0.2.3
 * Adds a skill enum and wallet items enum. <!--TODO profession enum -->
 

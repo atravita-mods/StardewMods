@@ -18,7 +18,7 @@ public static class ColorHandler
     /// <remarks>There's probably a lot of repeats, but hey, this runs once.</remarks>
     private static readonly Lazy<Dictionary<string, XNAColor>> colors = new(() =>
     {
-        Dictionary<string, XNAColor>? colors = new();
+        Dictionary<string, XNAColor>? colors = new(StringComparer.InvariantCultureIgnoreCase);
 
         foreach (PropertyInfo? color in typeof(SKColors).GetProperties(BindingFlags.Static | BindingFlags.Public)
                       .Where((prop) => prop.PropertyType == typeof(SKColor)))
@@ -37,6 +37,13 @@ public static class ColorHandler
         {
             colors[color.Name] = (XNAColor)color.GetValue(null)!;
         }
+
+        // manually add rebeccapurple
+        byte r = 0x66;
+        byte g = 0x33;
+        byte b = 0x99;
+
+        colors["rebeccapurple"] = new XNAColor(r, g, b);
 
         return colors;
     });

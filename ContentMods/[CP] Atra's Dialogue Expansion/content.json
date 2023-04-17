@@ -11,6 +11,10 @@
         "IncreasedRealism": {
             "AllowValues": "true, false",
             "Default": "false",
+        },
+        "MapStrings": {
+            "AllowValues": "true, false",
+            "Default": "true",
         }
     },
     "DynamicTokens": [
@@ -81,6 +85,12 @@
                 "atravitaDialogueLeahBeach": "null",
                 "atravitaGusNewYear": "null",
             }
+        },
+        {
+            "Action": "Include",
+            "LogName": "MapStrings",
+            "When": {"MapStrings": true},
+            "FromFile": "assets/mapstrings.json"
         }
     ],
 }

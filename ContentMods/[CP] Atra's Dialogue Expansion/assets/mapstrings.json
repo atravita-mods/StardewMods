@@ -1,0 +1,25 @@
+{"Changes":[
+    {
+        "LogName": "Emily/Haley map strings",
+        "Action": "EditData",
+        "Target": "Strings/StringsFromMaps",
+        "Entries": {
+            "HaleyHouse.17": "{{i18n:haley-parents-intro.{{Random: 01, 02, 03}}}}^{{i18n:haley-parents-totally-returning.{{YearModulus}} }} {{i18n:haley-parents-vacation.{{Season}}.{{YearModulus}} }}^{{i18n:haley-parents-advice.{{Season}}.{{YearModulus}} }}^^{{i18n:haley-parents-signoff}}"
+        },
+        "When": {
+            "EnableFor|contains=Haley": true,
+            "EnableFor|Contains=Emily": true
+        }
+    },
+    {
+        "LogName": "Harvey map strings",
+        "Action": "EditData",
+        "Target": "Strings/StringsFromMaps",
+        "Entries": {
+            "HarveyRoom.12": "{{i18n:harvey-fridge.{{Season}} }}",
+        },
+        "When": {
+            "EnableFor|Contains=Harvey": true,
+        }
+    }
+]}

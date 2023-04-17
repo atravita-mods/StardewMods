@@ -1,4 +1,8 @@
 {
+/***************
+* For randomization: A bunch of randomized nouns.
+****************/
+
     // sports teams - basically a random list of generic sport team names.
     "sports.team.01": "Seahawks",
     "sports.team.02": "Hurricanes",
@@ -72,11 +76,54 @@
     "dishes.dessert.08": "sugar cream pie",
     "dishes.dessert.09": "cheesecake",
 
+/****************
+* Map strings
+****************/
+
+    // Penny's room
+    // Books about teaching. Feel free to make some up!
+    "penny-teaching.spring.1": "'Basic Math for Second Grade'",
+    "penny-teaching.summer.1": "'A Brief History of the Ferngill Republic'",
+    "penny-teaching.fall.1": "'Toys and Cakes: Economics for Third Grade'",
+    "penny-teaching.winter.1": "'Botany for Elementary School: Worksheets'",
+
+    "penny-teaching.spring.2": "'From the Past: Ancient Ferngill History'",
+    "penny-teaching.summer.2": "'The Ones Who Need More: How to Teach Less Gifted Students.'",
+    "penny-teaching.fall.2": "'Animals And You: Basic Anatomy for Young Children'",
+    "penny-teaching.winter.2": "'A Basic Guide to Grammar'",
+
+    "penny-teaching.spring.3": "'Introducing Multiplication'",
+    "penny-teaching.summer.3": "'Teach Your Child To Program'",
+    "penny-teaching.fall.3": "'Algebra for the Precocious Elementary School Student'",
+    "penny-teaching.winter.3": "'Distracted: How To Keep The Attention of Students Despite Modern Technology.'",
+
+    "penny-teaching.spring.4": "'Teaching the Times Table: Why Memorization Still Matters'",
+    "penny-teaching.summer.4": "'A Gentle Breeze Blows: Short Stories for the Advanced Elementary School Student'",
+    "penny-teaching.winter.4": "'Simple Kitchen Science Experiments: Elementary School Edition'",
+
+    "penny-teaching.spring.5": "'The Five Paragraph Essay And You'",
+    "penny-teaching.summer.5": "'Geometry for Young Minds, Workbook Edition'",
+    "penny-teaching.fall.5": "'Attentionomics: Keeping Students' Attention in the Modern Era'",
+    "penny-teaching.winter.5": "'101 Things Every Middle Schooler Should Know'",
+
     // Harvey's room
     "harvey-fridge.spring": "There's a very sad head of lettuce",
     "harvey-fridge.summer": "It's full of frozen dinners and one sad box of tofu.",
     "harvey-fridge.fall": "There's half a casserole and some TV dinners.",
     "harvey-fridge.winter": "There's an entire fruitcake and some veggies definitely past their prime.",
+
+    "harvey-table.spring": "'Amateur Ham Radio'",
+    "harvey-table.summer": "'Tabletop Games: A Quick Guide'",
+    "harvey-table.fall": "'Fifty Steps To Getting Your Pilot's License'",
+    "harvey-table.winter": "'Building Your Own Radio'",
+
+    // Haley:
+    // Haley photography books:
+    "haley-photography.1": "'Tips And Tricks To Low Light Photography'",
+    "haley-photography.2": "'All This Green: A Guide to Taking Good Pictures of Nature'",
+    "haley-photography.3": "'Striking: How to Photograph Fashion'",
+    "haley-photography.4": "'Postprocessing-and-You: How to Make Bad Photos Look Good'",
+    "haley-photography.5": "'Long Exposure Shots: A How To Guide.'",
 
     // Letters to Haley and Emily,
     "haley-parents-intro.01": "To our dearest daughters:",

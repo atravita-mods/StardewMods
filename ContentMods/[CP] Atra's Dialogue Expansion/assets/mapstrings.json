@@ -12,14 +12,38 @@
         }
     },
     {
+        "LogName": "Haley map strings",
+        "Action": "EditData",
+        "Target": "Strings/StringsFromMaps",
+        "Entries": {
+            "HaleyHouse.13": "{{i18n: haley-photography.{{YearModulus}} }}",
+        },
+        "When": {
+            "EnableFor|contains=Haley": true,
+        }
+    },
+    {
         "LogName": "Harvey map strings",
         "Action": "EditData",
         "Target": "Strings/StringsFromMaps",
         "Entries": {
             "HarveyRoom.12": "{{i18n:harvey-fridge.{{Season}} }}",
+            "HarveyRoom.13": "{{i18n:harvey-table.{{Season}} }}"
         },
         "When": {
             "EnableFor|Contains=Harvey": true,
+            "Year|contains=1": false,
+        }
+    },
+    {
+        "LogName": "Penny map strings",
+        "Action": "EditData",
+        "Target": "Strings/StringsFromMaps",
+        "Entries": {
+            "Trailer.1": "{{i18n:penny-teaching.{{Season}}.{{YearModulus}} }}"
+        },
+        "When": {
+            "EnableFor|Contains=Penny": true,
         }
     }
 ]}

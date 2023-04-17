@@ -414,7 +414,9 @@ internal sealed class ModEntry : Mod
         // Debug markers
         if (ConsoleCommands.DrawMarker)
         {
-            Vector2 target = Utility.ModifyCoordinatesForUIScale(Game1.GlobalToLocal(Game1.viewport, Target.ToVector2()));
+            Vector2 target = Utility.ModifyCoordinatesForUIScale(Game1.GlobalToLocal(
+                Game1.viewport,
+                Target.ToVector2()));
             e.SpriteBatch.Draw(
                 texture: AssetManager.DartsTexture,
                 position: target / Game1.options.zoomLevel,

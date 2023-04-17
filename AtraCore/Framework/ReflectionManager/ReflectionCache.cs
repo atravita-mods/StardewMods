@@ -51,28 +51,22 @@ public static class ReflectionCache
     {
         public override int GetHashCode()
         {
-            unchecked
+            HashCode hash = new();
+            hash.Add(this.Type);
+            hash.Add(this.Name);
+            hash.Add(this.FlagTypes);
+            hash.Add(this.MemberType);
+
+            if (this.Params is not null)
             {
-                const int factor = -0x5AAA_AAD7;
-
-                int ret = ((EqualityComparer<Type>.Default.GetHashCode(this.Type) * factor) + EqualityComparer<string>.Default.GetHashCode(this.Name)) * factor;
-                ret += EqualityComparer<FlagTypes>.Default.GetHashCode(this.FlagTypes);
-                ret *= factor;
-                ret += EqualityComparer<MemberTypes>.Default.GetHashCode(this.MemberType);
-                ret *= factor;
-
-                if (this.Params is not null)
+                hash.Add(-0x5AAA_AAD7); // using this to make sure null and zero are separated.
+                foreach (Type param in this.Params)
                 {
-                    for (int i = 0; i < this.Params.Length; i++)
-                    {
-                        Type? param = this.Params[i];
-                        ret += EqualityComparer<Type>.Default.GetHashCode(param);
-                        ret *= factor;
-                    }
+                    hash.Add(param);
                 }
-
-                return ret;
             }
+
+            return hash.ToHashCode();
         }
 
         public bool Equals(ReflectionCacheMember other)

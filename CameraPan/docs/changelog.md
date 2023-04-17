@@ -1,6 +1,10 @@
 ﻿Changelog
 ==============
 
+## Version 0.1.4
+* More ui scaling fixes
+* The camera will now keep up better if you have a slow config speed but a farmer with a lot of speed buff.
+
 ## Version 0.1.3
 * Fix being able to keybind toggle with another menu open.
 * Fix ui scaling on the little arrows.

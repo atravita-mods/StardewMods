@@ -15,7 +15,6 @@ using HarmonyLib;
 
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Input;
 
 using StardewModdingAPI.Events;
 using StardewModdingAPI.Utilities;
@@ -415,7 +414,7 @@ internal sealed class ModEntry : Mod
         // Debug markers
         if (ConsoleCommands.DrawMarker)
         {
-            Vector2 target = Game1.GlobalToLocal(Game1.uiViewport, Target.ToVector2());
+            Vector2 target = Utility.ModifyCoordinatesForUIScale(Game1.GlobalToLocal(Game1.viewport, Target.ToVector2()));
             e.SpriteBatch.Draw(
                 texture: AssetManager.DartsTexture,
                 position: target / Game1.options.zoomLevel,
@@ -505,7 +504,7 @@ internal sealed class ModEntry : Mod
 
         Vector2 pos = farmer.Position + new Vector2(32f, -64f);
 
-        Vector2 arrowPos = Game1.GlobalToLocal(Game1.uiViewport, pos);
+        Vector2 arrowPos = Game1.GlobalToLocal(Game1.viewport, pos);
         Direction direction = Direction.None;
 
         if (arrowPos.X <= 0)
@@ -535,7 +534,7 @@ internal sealed class ModEntry : Mod
             return;
         }
 
-        arrowPos = Utility.snapToInt(arrowPos);
+        arrowPos = Utility.snapToInt( Utility.ModifyCoordinatesForUIScale(arrowPos));
 
         s.Draw(
             texture: AssetManager.ArrowTexture,
@@ -681,8 +680,10 @@ internal sealed class ModEntry : Mod
         }
         else
         {
-            x = Math.Clamp(x, Game1.viewportCenter.X - Config.Speed, Game1.viewportCenter.X + Config.Speed);
-            y = Math.Clamp(y, Game1.viewportCenter.Y - Config.Speed, Game1.viewportCenter.Y + Config.Speed);
+            int movementSpeed = (int)Game1.player.getMovementSpeed() + 1;
+            int clampSpeed = Math.Max(movementSpeed, Config.Speed) + 2;
+            x = Math.Clamp(x, Game1.viewportCenter.X - clampSpeed, Game1.viewportCenter.X + clampSpeed);
+            y = Math.Clamp(y, Game1.viewportCenter.Y - clampSpeed, Game1.viewportCenter.Y + clampSpeed);
         }
 
         target.Value = new(x, y);

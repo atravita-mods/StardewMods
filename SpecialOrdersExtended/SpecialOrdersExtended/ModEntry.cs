@@ -1,5 +1,7 @@
 ﻿using System.Reflection;
 using AtraBase.Toolkit.Reflection;
+
+using AtraCore.Framework.EventCommands;
 using AtraCore.Framework.ReflectionManager;
 using AtraCore.Utilities;
 
@@ -177,17 +179,11 @@ internal sealed class ModEntry : Mod
 
         // Bind SpaceCore API
         IntegrationHelper helper = new(this.Monitor, this.Helper.Translation, this.Helper.ModRegistry, LogLevel.Trace);
-        if (helper.TryGetAPI("spacechase0.SpaceCore", "1.5.10", out spaceCoreAPI))
+        _ = helper.TryGetAPI("spacechase0.SpaceCore", "1.5.10", out spaceCoreAPI);
+
+        if (!EventCommandManager.Add(new AddSpecialOrderCommand("atravita_addSpecialOrder", this.Monitor)))
         {
-            MethodInfo eventcommand = typeof(EventCommands).StaticMethodNamed(nameof(EventCommands.AddSpecialOrder));
-            spaceCoreAPI.AddEventCommand(EventCommands.ADD_SPECIAL_ORDER, eventcommand);
-        }
-        else
-        {
-            this.Monitor.Log("SpaceCore not detected, handling event commands myself", LogLevel.Info);
-            harmony.Patch(
-                original: typeof(Event).GetCachedMethod(nameof(Event.tryEventCommand), ReflectionCache.FlagTypes.InstanceFlags),
-                prefix: new HarmonyMethod(typeof(EventCommands), nameof(EventCommands.PrefixTryGetCommand)));
+            this.Monitor.Log($"Custom event command could not be added?", LogLevel.Warn);
         }
 
         if (helper.TryGetAPI("Pathoschild.ContentPatcher", "1.20.0", out IContentPatcherAPI? api))

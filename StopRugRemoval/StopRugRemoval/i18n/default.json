@@ -42,6 +42,14 @@
   "BetIcons.title": "Bet1k/10k Icons",
   "BetIcons.description": "Whether or not to show the bet1k/bet10k icons.",
 
+  // sign and crystallarium stuff
+  "config.SignBehavior.Vanilla": "Vanilla",
+  "config.SignBehavior.Keybind": "Keybind",
+  "config.SignBehavior.Break":  "Break",
+
+  "sign.require-break": "Break the sign to change the item!",
+  "sign.require-keybind": "Press {{keybind}} to change the item!",
+
   // secret notes gmmc
   "SecretNotesOverride.title": "Secret Note options",
   "SecretNotesOverride.descriptions": "Controls how this mod handles secret notes.",

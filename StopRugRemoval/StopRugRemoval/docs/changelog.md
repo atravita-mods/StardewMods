@@ -9,6 +9,10 @@
 <!-- do I need to override reading secret notes too? -->
 <!-- fix the stupid integration issues with CM/SAAT -->
 
+#### Version 1.1.4
+* Null current locations now will re-check the netlocation ref first. (Apparently they're less than reliable?)
+
+
 #### Version 1.1.3
 * Fix integration with GrowableGiantCrops/MoreGrassStarters.
 

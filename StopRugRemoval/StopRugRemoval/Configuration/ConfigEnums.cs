@@ -50,3 +50,18 @@ public enum IsSafeLocationEnum
     /// </summary>
     Dynamic,
 }
+
+public enum SignBehavior
+{
+    Vanilla,
+    Break,
+    Keybind
+}
+
+public enum CrystallariumBehavior
+{
+    Vanilla,
+    Break,
+    Swap,
+    Keybind
+}

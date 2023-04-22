@@ -34,34 +34,34 @@ internal static class JumpPatches
     [HarmonyPatch(typeof(Farmer), nameof(Farmer.getDrawLayer))]
     private static void PostfixGetDrawLayer(Farmer __instance, ref float __result)
     {
+        const float factor = 0.0035f;
         switch (MathF.Sign(__instance.yJumpVelocity))
         {
             // player rising.
             case 1:
 
                 // and moving forward
-                if (MathF.Sign(__instance.Position.Y - __instance.lastPosition.Y) == 1)
+                if (__instance.Position.Y - __instance.lastPosition.Y > 0)
                 {
-                    __result -= 0.0035f;
+                    __result -= factor;
                     return;
                 }
 
-                __result += 0.0035f;
+                __result += factor;
                 return;
 
             // player falling
             case -1:
 
                 // and moving backwards
-                if (MathF.Sign(__instance.Position.Y - __instance.lastPosition.Y) == -1)
+                if (__instance.Position.Y - __instance.lastPosition.Y < 0)
                 {
-                    __result -= 0.0035f;
+                    __result -= factor;
                     return;
                 }
 
-                __result += 0.0035f;
+                __result += factor;
                 return;
-                break;
         }
     }
 }

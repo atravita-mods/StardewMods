@@ -1,8 +1,16 @@
 ﻿using AtraBase.Toolkit.Extensions;
+using AtraBase.Toolkit.Reflection;
 using AtraBase.Toolkit.StringHandler;
+
+using AtraCore.Framework.ReflectionManager;
+
 using HarmonyLib;
 using Microsoft.Xna.Framework;
+
+using Netcode;
 using StardewModdingAPI.Utilities;
+
+using StardewValley.Network;
 
 namespace StopRugRemoval.HarmonyPatches.Niceties;
 
@@ -13,6 +21,24 @@ namespace StopRugRemoval.HarmonyPatches.Niceties;
 [HarmonyPatch(typeof(NPC))]
 internal static class ScheduleErrorFixer
 {
+    #region delegates
+    private static Lazy<Func<NPC, NetLocationRef>> _getLocationRef = new(() =>
+        typeof(NPC).GetCachedField("currentLocationRef", ReflectionCache.FlagTypes.InstanceFlags)
+                   .GetInstanceFieldGetter<NPC, NetLocationRef>()
+    );
+
+    private static Lazy<Action<NetLocationRef, bool>> _markDirty = new(() =>
+        typeof(NetLocationRef).GetCachedField("_dirty", ReflectionCache.FlagTypes.InstanceFlags)
+                              .GetInstanceFieldSetter<NetLocationRef, bool>()
+    );
+
+    private static Lazy<Func<NetLocationRef, NetString>> _getLocationName = new(() =>
+        typeof(NetLocationRef).GetCachedField("locationName", ReflectionCache.FlagTypes.InstanceFlags)
+                              .GetInstanceFieldGetter<NetLocationRef, NetString>()
+    );
+
+    #endregion
+
     [HarmonyPriority(Priority.First)]
     [HarmonyPatch(nameof(NPC.parseMasterSchedule))]
     [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Harmony Convention")]
@@ -23,8 +49,24 @@ internal static class ScheduleErrorFixer
             return;
         }
 
-        ModEntry.ModMonitor.Log($"{__instance.Name} seems to have a null current location, attempting to fix. Please inform their author! The current day is {SDate.Now()}, their attempted schedule string was {rawData}", LogLevel.Info);
+        ModEntry.ModMonitor.Log($"{__instance.Name} seems to have a null current location, attempting to fix.", LogLevel.Info);
+        ModEntry.ModMonitor.Log($"Multiplayer: {Context.IsMultiplayer}? Host: {Context.IsMainPlayer}? The current day is {SDate.Now()}.", LogLevel.Info);
 
+        NetLocationRef backing = _getLocationRef.Value(__instance);
+        NetString expectedName = _getLocationName.Value(backing);
+        if (!string.IsNullOrWhiteSpace(expectedName.Value))
+        {
+            ModEntry.ModMonitor.Log($"Location Ref has value {expectedName}, marking dirty.", LogLevel.Info);
+            _markDirty.Value(backing, true);
+        }
+
+        if (__instance.currentLocation is not null)
+        {
+            ModEntry.ModMonitor.Log("Successfully restored location reference!", LogLevel.Info);
+            return;
+        }
+
+        ModEntry.ModMonitor.Log($"Their attempted schedule string was {rawData}", LogLevel.Info);
         bool foundSchedule = ModEntry.UtilitySchedulingFunctions.TryFindGOTOschedule(__instance, SDate.Now(), rawData, out string? scheduleString);
         if (foundSchedule)
         {

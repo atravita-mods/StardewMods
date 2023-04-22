@@ -178,6 +178,10 @@ internal static class DuplicateNPCDetector
                     {
                         ModEntry.ModMonitor.Log("    These appear to be the same instance.", LogLevel.Info);
                     }
+                    if (character.id != found[character.Name].id)
+                    {
+                        ModEntry.ModMonitor.Log("    These appear to have different internal IDs", LogLevel.Warn);
+                    }
 
                     if (ModEntry.Config.RemoveDuplicateNPCs)
                     {

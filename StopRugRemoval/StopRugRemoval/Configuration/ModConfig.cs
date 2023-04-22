@@ -163,6 +163,10 @@ internal sealed class ModConfig
     /// </summary>
     public bool NapalmInSafeAreas { get; set; } = true;
 
+    public CrystallariumBehavior CrystallariumBehavior { get; set; } = CrystallariumBehavior.Vanilla;
+
+    public SignBehavior SignBehavior { get; set; } = SignBehavior.Vanilla;
+
     /// <summary>
     /// Gets or sets a value indicating whether or not to confirm bomb placement in safe areas.
     /// </summary>

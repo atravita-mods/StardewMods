@@ -7,6 +7,8 @@ using AtraBase.Toolkit;
 using AtraCore.Config;
 using AtraCore.Framework.Caches;
 using AtraCore.Framework.DialogueManagement;
+using AtraCore.Framework.EventCommands;
+using AtraCore.Framework.EventCommands.AllowRepeatCommand;
 using AtraCore.Framework.Internal;
 using AtraCore.Framework.ItemManagement;
 using AtraCore.Framework.QueuePlayerAlert;
@@ -59,9 +61,12 @@ internal sealed class ModEntry : Mod
         helper.Events.GameLoop.SaveLoaded += this.OnSaveLoaded;
         helper.Events.GameLoop.DayEnding += this.OnDayEnd;
         helper.Events.GameLoop.TimeChanged += this.OnTimeChanged;
-        helper.Events.GameLoop.ReturnedToTitle += static (_, _) => NPCCache.Reset();
+        helper.Events.GameLoop.ReturnedToTitle += this.OnReturnedToTitle;
 
         helper.Events.Player.Warped += this.Player_Warped;
+
+        EventCommandManager.Add(new RemoveMailCommand("atravita_" + nameof(RemoveMailCommand), this.Monitor));
+        EventCommandManager.Add(new AllowRepeatAfter("atravita_" + nameof(AllowRepeatAfter), this.Monitor));
 
 #if DEBUG
         if (!helper.ModRegistry.IsLoaded("DigitalCarbide.SpriteMaster"))
@@ -71,6 +76,7 @@ internal sealed class ModEntry : Mod
         }
 #endif
     }
+
 
     private void OnGameLaunched(object? sender, GameLaunchedEventArgs e)
     {
@@ -84,6 +90,15 @@ internal sealed class ModEntry : Mod
     /// <inheritdoc cref="IGameLoopEvents.SaveLoaded"/>
     private void OnSaveLoaded(object? sender, SaveLoadedEventArgs e)
     {
+        try
+        {
+            AllowRepeatAfterHandler.Load(this.Helper.Data);
+        }
+        catch (Exception ex)
+        {
+            this.Monitor.Log($"Failed while trying to read events to repeat file: {ex}", LogLevel.Error);
+        }
+
         if (Context.IsSplitScreen && Context.ScreenId != 0)
         {
             return;
@@ -101,6 +116,12 @@ internal sealed class ModEntry : Mod
         {
             this.migrator = null;
         }
+    }
+
+    private void OnReturnedToTitle(object? sender, ReturnedToTitleEventArgs e)
+    {
+        NPCCache.Reset();
+        AllowRepeatAfterHandler.Reset();
     }
 
     /// <inheritdoc cref="IGameLoopEvents.TimeChanged"/>
@@ -128,7 +149,12 @@ internal sealed class ModEntry : Mod
 
     /// <inheritdoc cref="IGameLoopEvents.DayEnding"/>
     private void OnDayEnd(object? sender, DayEndingEventArgs e)
-        => QueuedDialogueManager.ClearDelayedDialogue();
+    {
+        QueuedDialogueManager.ClearDelayedDialogue();
+
+        AllowRepeatAfterHandler.DayEnd();
+        AllowRepeatAfterHandler.Save(this.Helper.Data);
+    }
 
     #region assets
 

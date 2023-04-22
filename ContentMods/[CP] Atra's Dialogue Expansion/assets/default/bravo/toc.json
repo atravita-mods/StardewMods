@@ -78,7 +78,7 @@
         "FromFile": "assets/default/bravo/Vincent/mid.json",
         "When": {
             "EnableFor": "Vincent",
-            "Query: {{Hearts:Kent}} >= 6": true
+            "Query: {{Hearts:Vincent}} >= 6": true
         }
     }
 ]}

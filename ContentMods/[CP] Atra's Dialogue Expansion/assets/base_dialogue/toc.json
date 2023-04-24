@@ -3,10 +3,19 @@
         {
             "Action": "Include",
             "LogName": "Clint - base",
-            "FromFile": "assets/base_dialogue/clint/mid.json",
+            "FromFile": "assets/base_dialogue/Clint/mid.json",
             "When": {
                 "EnableFor|contains=Clint": true,
-                "Query: {{Hearts:Clint}} >=4": true
+                "Query: {{Hearts:Clint}} >= 4": true
+            }
+        },
+        {
+            "Action": "Include",
+            "LogName": "George - base",
+            "FromFile": "assets/base_dialogue/George/mid.json",
+            "When": {
+                "EnableFor|contains=George": true,
+                "Query: {{Hearts:George}} >= 6": true
             }
         }
     ]

@@ -9,20 +9,12 @@
         }
     },
     {
-        "LogName": "George mid-hearts - post sports",
-        "Action": "EditData",
-        "Target": "Characters/Dialogue/George",
-        "When": {"HasFlag": "saloonSportsRoom"},
-        "Entries": {
-            "Sun6": "@, you gonna watch the game? The {{i18n:sports.team.{{Random:01, 02, 03, 04, 05, 06, 07, 08|key=sports_team}} }} are playing the {{i18n:sports.team.{{Random:02, 03, 04, 05, 06, 07, 08, 01|key=sports_team}} }}!",
-            "Mon6": "Hey, @, did you catch the game last night? Wasn't it {{Random:great, incredible, absurd, so boring}}?" 
-        }
-    },
-    {
         "LogName": "George mid-hearts",
         "Action": "EditData",
         "Target": "Characters/Dialogue/George",
         "Entries": {
+            "Tue8": "My medications make me sleepy all the time.$s",
+
             "movieTheater": "Oh, @, we have a movie theater again!$h#$e#Think I'll take Evelyn, we used to go to the movies every Friday night.",
             "winter_7{{YearRemainder}}": "Everyone expects me to be cheery for the Festival. Hrmph.#$b#It's cold, @, no good for my knee."
         }

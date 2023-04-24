@@ -21,6 +21,10 @@
 
             "Sun8": "@, you planning on watching the game? The {{i18n:sports.team.{{Random:01, 02, 03, 04, 05, 06, 07, 08|key=sports_team}} }} are playing the {{i18n:sports.team.{{Random:02, 03, 04, 05, 06, 07, 08, 01|key=sports_team}} }}! I'm so excited!",
 
+            "winter_Mon4": "Maybe I should take up hockey?",
+            "winter_Wed8": "Probably gonna go lift weights.#$e#Working out outside is so much more fun, though.",
+            "winter_Sat10": "Hey @, what's your favorite hockey club?#$e#I've been thinking of going to a game sometime, you in?",
+
             "Fri8": "You know what, @? While I'd love to go pro some day, I'm not sure I should leave my Grandma and Grandpa alone right now.",
             "4_2": "@! I saw a new exercise on social media the other day. Can't wait to try it out.#$e#Basically, you kneel on the ground, and get someone to hold your feet still...$#b#Then you lean forward until your nose is on the floor. It's surprisingly hard!",
             "6_2": "There's nothing like a nice early morning run.$h",
@@ -28,7 +32,8 @@
             "10_2": "Nothing like some nice fresh salmon for dinner!$h#$b#My granny's a great cook, and I'm definitely learning a lot from her.",
             "11_2": "Sam and I went running this morning. Company's always nice on a long run.#$b#Hey, @, would you ever be interested?",
             "13_2": "Grandma thinks I might make a good physical trainer some day.",
-            "14_2": "It's important to adapt exercises to what you can do.#$b#Trying to do something too hard will just get you injured.#$e#In middle school I broke my ankle and had to sit out for weeks because I tried to copy a skateboard trick from Sam."
+            "14_2": "It's important to adapt exercises to what you can do.#$b#Trying to do something too hard will just get you injured.#$e#In middle school I broke my ankle and had to sit out for weeks because I tried to copy a skateboard trick from Sam.",
+            "15_2": "Haley and I are thinking of going down to %place to catch a %name Taylor concert. You in?$h"
         }
     },
     {

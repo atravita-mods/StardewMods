@@ -76,6 +76,18 @@
     "dishes.dessert.08": "sugar cream pie",
     "dishes.dessert.09": "cheesecake",
 
+    // sports dialogue
+    "great": "great",
+    "incredible": "incredible",
+    "absurd": "absurd",
+    "boring": "so boring",
+
+/***************
+* Fancier dialogue
+***************/
+    "george-sports.sun": "@, you gonna watch the game? The {{first}} are playing the {{second}}!",
+    "george-sports.mon": "Hey, @, did you catch the game last night? Wasn't it {{reaction}}?",
+
 /***************
 * Birthday related
 ****************/

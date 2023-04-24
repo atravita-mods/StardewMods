@@ -43,12 +43,27 @@
   "BetIcons.description": "Whether or not to show the bet1k/bet10k icons.",
 
   // sign and crystallarium stuff
+  "SignBehavior.title": "Sign Behavior",
+  "SignBehavior.description": "Select how you want signs to behave. Break: must break to change item on sign. Keybind: Hold keybind to change item on sign.",
+
   "config.SignBehavior.Vanilla": "Vanilla",
   "config.SignBehavior.Keybind": "Keybind",
-  "config.SignBehavior.Break":  "Break",
+  "config.SignBehavior.Break": "Break",
+
+  "CrystalariumBehavior.title": "Crystalarium Behavior",
+  "CrystalariumBehavior.description": "Select how you want crystalarium to behave. Break: must break to change replicating crystal. Keybind: hold keybind to change replicating crystal. Swap: the crystal processing will go back into your inventory.",
+
+  "config.CrystalariumBehavior.Vanilla": "Vanilla",
+  "config.CrystalariumBehavior.Break": "Break",
+  "config.CrystalariumBehavior.Swap": "Swap",
+  "config.CrystalariumBehavior.Keybind": "Keybind",
 
   "sign.require-break": "Break the sign to change the item!",
   "sign.require-keybind": "Press {{keybind}} to change the item!",
+
+  "crystalarium.require-break": "Break the crystalarium to change the item!",
+  "crystalarium.require-keybind": "Press {{keybind}} to change the item!",
+  "crystalarium.inventory-full": "Can't swap, inventory full!",
 
   // secret notes gmmc
   "SecretNotesOverride.title": "Secret Note options",

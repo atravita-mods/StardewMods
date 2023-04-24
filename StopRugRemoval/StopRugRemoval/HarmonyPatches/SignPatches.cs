@@ -8,11 +8,16 @@ namespace StopRugRemoval.HarmonyPatches;
 /// Patches on signs.
 /// </summary>
 [HarmonyPatch(typeof(Sign))]
-internal static class SighPatches
+[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Named for Harmony.")]
+internal static class SignPatches
 {
     [HarmonyPatch(nameof(Sign.checkForAction))]
-    private static bool Prefix(bool justCheckingForActivity)
+    private static bool Prefix(Sign __instance, bool justCheckingForActivity)
     {
+        if (!ModEntry.Config.Enabled || __instance.displayItem.Value is null)
+        {
+            return true;
+        }
         switch (ModEntry.Config.SignBehavior)
         {
             case Configuration.SignBehavior.Break:

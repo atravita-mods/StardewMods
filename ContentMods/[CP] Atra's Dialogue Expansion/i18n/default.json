@@ -76,6 +76,11 @@
     "dishes.dessert.08": "sugar cream pie",
     "dishes.dessert.09": "cheesecake",
 
+/***************
+* Birthday related
+****************/
+    "clint-emily-birthday": "It's Emily's birthday tomorrow. Should I get her something?",
+
 /****************
 * Map strings
 ****************/
@@ -116,6 +121,20 @@
     "harvey-table.summer": "'Tabletop Games: A Quick Guide'",
     "harvey-table.fall": "'Fifty Steps To Getting Your Pilot's License'",
     "harvey-table.winter": "'Building Your Own Radio'",
+
+    "harvey-tele.start": "It's a pretty standard TV set.",
+    "harvey-tele.spring.00": "There's a program on about planes from the great war.",
+    "harvey-tele.spring.01": "A medical drama is on.",
+    "harvey-tele.spring.02": "It's set to a cooking station.",
+    "harvey-tele.summer.00": "It's set to the history station.",
+    "harvey-tele.summer.01": "Currently playing: a drama set during the Great War.",
+    "harvey-tele.summer.02": "The current program is a tour of a plane construction facility.",
+    "harvey-tele.fall.00": "It's set to the shopping channel currently.",
+    "harvey-tele.fall.01": "The current program is trying to sell you a plane window.",
+    "harvey-tele.fall.02": "An ad about the Fern Islands is playing.",
+    "harvey-tele.winter.00": "The TV is off for once.",
+    "harvey-tele.winter.01": "Currently playing: a program about mysterious plane crashes.",
+    "harvey-tele.winter.02": "There's a program about historical war planes playing.",
 
     // Haley:
     // Haley photography books:
@@ -178,5 +197,26 @@
     "haley-parents-advice.winter.4": "Make sure to keep the bills paid.",
     "haley-parents-advice.winter.5": "Try to enjoy your youth while you still have it.",
 
-    "haley-parents-signoff": "Love, Mom & Dad"
+    "haley-parents-signoff": "Love, Mom & Dad",
+
+    // Marnie
+    "animalshop-sink.spring.00": "A sink. It's full of dirty dishes.",
+    "animalshop-sink.spring.01": "Looks like the microwave's plate is in here.",
+    "animalshop-sink.spring.02": "A bunch of bottles for feeding fresh calves.",
+    "animalshop-sink.summer.00": "A plastic takeout container. Looks like it used to contain spaghetti sauce.",
+    "animalshop-sink.summer.01": "Looks like someone was trying to cook. They've made a mess!",
+    "animalshop-sink.summer.02": "There's two dirty wine glasses in this sink.",
+    "animalshop-sink.fall.00": "There's a burned attempt at a pie in this sink.",
+    "animalshop-sink.fall.01": "Someone's left a cast iron pan in the sink.",
+    "animalshop-sink.fall.02": "There's a turkey defrosting in the sink.",
+    "animalshop-sink.winter.00": "The remnants of a nice spaghetti dinner.",
+    "animalshop-sink.winter.01": "Oh, it looks like someone was making something fancy!",
+    "animalshop-sink.winter.02": "The sink seems clogged with grease.",
+
+    // Shane
+    // video game console.
+    "shane-videogame.spring": "It's a dusty Mega Station. The game inside appears to be a {{game}}.",
+    "shane-videogame.summer": "The Mega Station has been left on. Looks like Shane was playing {{game}}.",
+    "shane-videogame.fall": "A Mega Station. Looks like Shane left a game inside. It's {{game}}.",
+    "shane-videogame.winter": "Looks like Shane's Mega Station. He's been playing {{game}}, it appears."
 }

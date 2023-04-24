@@ -11,17 +11,11 @@
     <Description>Adds museum rewards to a store.</Description>
     <UpdateKeys>-1</UpdateKeys>
     <Version>0.1.0</Version>
-    <BaseManifest>..\base_dependencies.json</BaseManifest>
   </PropertyGroup>
 
   <PropertyGroup>
     <TranslationClassBuilder_AddGetByKey>true</TranslationClassBuilder_AddGetByKey>
   </PropertyGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\AtraCore\AtraCore.csproj" Private="false" />
-    <ProjectReference Include="..\Pintail\Pintail\Pintail.csproj" Private="false" />
-  </ItemGroup>
 
   <ItemGroup>
     <Using Include="StardewValley" />

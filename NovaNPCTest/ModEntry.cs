@@ -1,12 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using AtraBase.Toolkit.Extensions;
-using AtraBase.Toolkit.StringHandler;
-using AtraCore.Framework.Caches;
-using AtraShared.Schedules;
-using AtraShared.Utils.Extensions;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
+
 using StardewModdingAPI.Events;
 using StardewModdingAPI.Utilities;
 
@@ -30,8 +23,8 @@ internal sealed class ModEntry : Mod
     [EventPriority(EventPriority.Low - 10000)]
     private void OnDayStart(object? sender, DayStartedEventArgs e)
     {
-        this.CheckSchedule(NPCCache.GetByVillagerName("Nova.Dylan"));
-        this.CheckSchedule(NPCCache.GetByVillagerName("Nova.Eli"));
+        this.CheckSchedule(Game1.getCharacterFromName("Nova.Dylan"));
+        this.CheckSchedule(Game1.getCharacterFromName("Nova.Eli"));
     }
 
     private void CheckSchedule(NPC? npc)
@@ -47,19 +40,25 @@ internal sealed class ModEntry : Mod
             return;
         }
 
-        ModMonitor.Log($"Checking {npc.Name}, is currently at {npc.currentLocation.NameOrUniqueName}", LogLevel.Info);
+        ModMonitor.Log($"Checking {npc.Name}, is currently at {npc.currentLocation.NameOrUniqueName}");
 
         var scheduleKey = npc.dayScheduleName.Value;
 
+        if (scheduleKey.EndsWith("_Replacement"))
+        {
+            ModMonitor.Log($"{npc.Name} has a replacement schedule, probably shouldn't try to fix spawn points.");
+            return;
+        }
+
         if (!npc.TryGetScheduleEntry(scheduleKey, out var entry))
         {
-            ModMonitor.Log($"With schedule key {scheduleKey} that apparently doesn't correspond to a schedule. What.", LogLevel.Info);
+            ModMonitor.Log($"With schedule key {scheduleKey} that apparently doesn't correspond to a schedule. What.");
             return;
         }
 
         if (!Scheduler.TryFindGOTOschedule(npc, SDate.Now(), entry, out var schedule))
         {
-            ModMonitor.Log($"With schedule key {scheduleKey} that apparently doesn't correspond to a schedule that could be resolved: {entry}.", LogLevel.Info);
+            ModMonitor.Log($"With schedule key {scheduleKey} that apparently doesn't correspond to a schedule that could be resolved: {entry}.");
             return;
         }
 
@@ -68,24 +67,24 @@ internal sealed class ModEntry : Mod
         {
             if (!ReferenceEquals(claimedMap, npc.currentLocation))
             {
-                ModMonitor.Log($"What the hell? NPC claims to be on map {claimedMap.NameOrUniqueName} but is on the map {npc.currentLocation.NameOrUniqueName}, which has failed a reference equality check.", LogLevel.Warn);
+                ModMonitor.Log($"What the hell? NPC claims to be on map {claimedMap.NameOrUniqueName} but is on the map {npc.currentLocation.NameOrUniqueName}, which has failed a reference equality check.");
             }
 
             if (claimedMap.characters.Contains(npc))
             {
-                ModMonitor.Log($"{npc.Name} correctly in the characters list of {claimedMap}", LogLevel.Info);
+                ModMonitor.Log($"{npc.Name} correctly in the characters list of {claimedMap}");
             }
         }
 
         if (schedule.StartsWith("0 "))
         {
             ModMonitor.Log($"Appears to have a zero schedule: {schedule}.");
-            var locstring = schedule.GetNthChunk(' ', 1).ToString();
+            string locstring = schedule.GetNthChunk(' ', 1).ToString();
 
             if (npc.currentLocation.NameOrUniqueName != locstring)
             {
 
-                ModMonitor.Log($"Performing hard warp", LogLevel.Info);
+                ModMonitor.Log($"Performing hard warp");
                 var target = schedule.GetNthChunk('/').StreamSplit();
                 _ = target.MoveNext(); // time
 
@@ -119,10 +118,10 @@ internal sealed class ModEntry : Mod
         }
         else
         {
-            ModMonitor.Log($"Does not have 0 schedule", LogLevel.Info);
+            ModMonitor.Log($"Does not have 0 schedule");
             if (npc.currentLocation.NameOrUniqueName != npc.DefaultMap)
             {
-                ModMonitor.Log($"Seems to be on the wrong map?", LogLevel.Info);
+                ModMonitor.Log($"Seems to be on the wrong map?");
                 Game1.warpCharacter(npc, npc.DefaultMap, new Point((int)npc.DefaultPosition.X / Game1.tileSize, (int)npc.DefaultPosition.Y / Game1.tileSize));
             }
         }

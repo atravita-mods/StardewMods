@@ -22,6 +22,10 @@ public static class NPCExtensions
 
         if (!string.IsNullOrWhiteSpace(dialogueKey) && npc.Dialogue.TryGetValue(dialogueKey, out string? dialogue))
         {
+            // make endearment token work. This is basically copied from game code.
+            dialogue = dialogue.Replace(MarriageDialogueReference.ENDEARMENT_TOKEN_LOWER, npc.getTermOfSpousalEndearment().ToLower(), StringComparison.Ordinal);
+            dialogue = dialogue.Replace(MarriageDialogueReference.ENDEARMENT_TOKEN, npc.getTermOfSpousalEndearment(), StringComparison.Ordinal);
+
             npc.CurrentDialogue.Clear();
             npc.CurrentDialogue.Push(new Dialogue(dialogue, npc) { removeOnNextMove = true });
         }

@@ -9,5 +9,14 @@
             "18_2": "Gus gets up at dawn to bake bread for the Saloon. Then he's up until late bartending. I wish had even half of that man's energy and dedication.",
             "22_2": "I wish I could have been a better mother for Penny.$s"
         }
+    },
+    {
+        "LogName": "Pam - Y2, before rehab",
+        "Action": "EditData",
+        "Target": "Characters/Dialogue/Pam",
+        "When": {"HasSeenEvent|contains=99210002": false},
+        "Entries": {
+            "24_2": "Hmmm....boxed red wine or boxed white wine for tonight?"
+        }
     }
 ]}

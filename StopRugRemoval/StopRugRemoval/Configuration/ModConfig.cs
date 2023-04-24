@@ -163,8 +163,14 @@ internal sealed class ModConfig
     /// </summary>
     public bool NapalmInSafeAreas { get; set; } = true;
 
-    public CrystallariumBehavior CrystallariumBehavior { get; set; } = CrystallariumBehavior.Vanilla;
+    /// <summary>
+    /// Gets or sets a value indicating the behavior for crystalaria.
+    /// </summary>
+    public CrystalariumBehavior CrystalariumBehavior { get; set; } = CrystalariumBehavior.Vanilla;
 
+    /// <summary>
+    /// Gets or sets a value indicating the behavior for signs.
+    /// </summary>
     public SignBehavior SignBehavior { get; set; } = SignBehavior.Vanilla;
 
     /// <summary>

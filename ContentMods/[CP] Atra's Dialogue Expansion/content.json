@@ -66,6 +66,12 @@
     "Changes": [
         {
             "Action": "Include",
+            "LogName": "Basic Dialogue",
+            "FromFile": "assets/base_dialogue/toc.json",
+            "When": {"Day|contains=0": false}
+        },
+        {
+            "Action": "Include",
             "LogName": "Dialogue Changes: base",
             "FromFile": "{{FirstValidFile: assets/{{language}}/base.json, assets/default/base.json}}",
             "When": {"Day|contains=0": false}

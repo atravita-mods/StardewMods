@@ -1,0 +1,13 @@
+{
+    "Changes": [
+        {
+            "Action": "Include",
+            "LogName": "Clint - base",
+            "FromFile": "assets/base_dialogue/clint/mid.json",
+            "When": {
+                "EnableFor|contains=Clint": true,
+                "Query: {{Hearts:Clint}} >=4": true
+            }
+        }
+    ]
+}

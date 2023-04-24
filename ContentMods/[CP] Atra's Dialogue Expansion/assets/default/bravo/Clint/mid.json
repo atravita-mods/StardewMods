@@ -29,10 +29,26 @@
         "Action": "EditData",
         "Target": "Characters/Dialogue/Clint",
         "Entries": {
+            "winter_Wed6": "Between you and I, @, I'm glad how toasty this place is in winter.#$e#Pretty cold when I have to brave the elements to go to the saloon, though.",
+
+            "6{{YearRemainder}}": "I'd consider moving elsewhere, but I'm not sure I could afford the rent.#$e#My family has owned this building for as long as I can remember. Helps a lot with my expenses.",
+            "7{{YearRemainder}}": "I've got a cousin in Grampleton who's a glassblower.#$e#He's attached to one of the local universities, he does custom glassware for them. Cushy job, somehow."
+        },
+        "When": {"YearModulus": 1}
+    },
+    {
+        "LogName": "Clint mid-hearts",
+        "Action": "EditData",
+        "Target": "Characters/Dialogue/Clint",
+        "Entries": {
             "6_2": "Got a commission from %place for a pile of swords. That'll be nice for the ole' balance sheet.",
             "8_2": "What would I've done if I didn't become a blacksmith? Err, @, I'm not sure actually.$s#$b#Didn't really have an idea of what I wanted to become as a kid. Just followed my father's footsteps.",
             "10_2": "My family has been blacksmiths in this here town for as long as I can remember....",
             "12_2": "We used to have a lot more coal coming out of that mine. It's been dryin' up lately, I feel.",
+            "14_2": "Heya, @, what have you been up to?#$b#Me? Just the same old, same old.",
+            "16_2": "Got any tools you'd like me to upgrade?",
+            "18_2": "It's important to temper your swords correctly. If you don't, they may shatter when you strike things.",
+            "22_2": "Marlon just placed another order for swords.$h#$b#I hope he'll be satisfied with the ones I make!"
         },
         "When": {"YearModulus": 2}
     },

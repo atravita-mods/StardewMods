@@ -133,6 +133,7 @@
   "gate-removal-message": "Hold down {{keybind}} to remove gates easily",
   "invalid-special-order": "Special Order {{order}} seems to be invalid; was not added to your quest log.",
   "rain-totem.message": "Mayor Lewis wouldn't appreciate rain tomorrow...",
+  "emergency-divorce.message": "Emergency divorce from {{spouse}} performed. See log for details.",
 
   // Config errors and messages
   "IllFormatedConfig": "Config file seems ill-formated, using default. Please use Generic Mod Config Menu to configure.",

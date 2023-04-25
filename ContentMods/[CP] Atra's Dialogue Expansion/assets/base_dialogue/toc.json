@@ -2,6 +2,23 @@
     "Changes": [
         {
             "Action": "Include",
+            "LogName": "Misc items",
+            "FromFile": "assets/base_dialogue/misc.json",
+            "When": {
+                "Random: true, true, false": true
+            }
+        },
+        {
+            "Action": "Include",
+            "LogName": "Alex - base",
+            "FromFile": "assets/base_dialogue/Alex/mid.json",
+            "When": {
+                "EnableFor|contains=Alex": true,
+                "Query: {{Hearts:Alex}} >= 4": true
+            }
+        },
+        {
+            "Action": "Include",
             "LogName": "Clint - base",
             "FromFile": "assets/base_dialogue/Clint/mid.json",
             "When": {

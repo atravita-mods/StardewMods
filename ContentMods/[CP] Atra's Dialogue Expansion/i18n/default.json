@@ -80,13 +80,22 @@
     "great": "great",
     "incredible": "incredible",
     "absurd": "absurd",
+    "exciting": "so exciting",
     "boring": "so boring",
+
+/***************
+* Misc repetitive strings
+****************/
+    "purchased.1.high.1": "{0}! Picked up a {1} {2} from Pierre's the other day. It was amazing! Filled the house with a {3} smell...I loved it!$h#$e#Glad Pierre's getting new stock!",
 
 /***************
 * Fancier dialogue
 ***************/
     "george-sports.sun": "@, you gonna watch the game? The {{first}} are playing the {{second}}!",
     "george-sports.mon": "Hey, @, did you catch the game last night? Wasn't it {{reaction}}?",
+
+    "alex-sports.sun": "@, you planning on watching the game? The {{first}} are playing the {{second}}! I'm so excited!",
+    "alex-sports.mon": "Wow, @, did you catch the game last night? Wasn't it {{reaction}}?",
 
 /***************
 * Birthday related

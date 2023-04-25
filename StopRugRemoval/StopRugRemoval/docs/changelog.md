@@ -11,7 +11,8 @@
 
 #### Version 1.1.4
 * Null current locations now will re-check the netlocation ref first. (Apparently they're less than reliable?)
-
+* Crosscheck player spouse on load.
+* New behavior options for signs and crystalaria.
 
 #### Version 1.1.3
 * Fix integration with GrowableGiantCrops/MoreGrassStarters.

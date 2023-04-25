@@ -8,6 +8,8 @@
 * Something for mushroom boxen? (1.6 - reduce to one day?)
 * Make good draw code for all of the fertilizers. (don't forget domesticated fish - maybe some more jumping...)
 * Soil Rebalance Fertilizer?
+* Bountiful Fruit Tree Fertilizer?
+* Fertilizer to ignore season checks?
 
 #### Version 0.4.0
 * Buff the bountiful bush fertilizer.

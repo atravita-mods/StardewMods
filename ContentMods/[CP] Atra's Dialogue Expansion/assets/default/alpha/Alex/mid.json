@@ -12,6 +12,16 @@
         }
     },
     {
+        "LogName": "Alex - mid hearts - Y1",
+        "Action": "EditData",
+        "Target" :"Characters/Dialogue/Alex",
+        "When": {"YearModulus": "1"},
+        "Entries": {
+            // intentional Y1 only.
+            "1": "I'm gonna be famous one day, @, just you wait."
+        }
+    },
+    {
         "LogName": "Alex - mid hearts",
         "Action": "EditData",
         "Target": "Characters/Dialogue/Alex",
@@ -19,7 +29,7 @@
         "Entries": {
             "Resort_Towel_2": "Come join me, @, I'm working on my tan!",
 
-            "Sun8": "@, you planning on watching the game? The {{i18n:sports.team.{{Random:01, 02, 03, 04, 05, 06, 07, 08|key=sports_team}} }} are playing the {{i18n:sports.team.{{Random:02, 03, 04, 05, 06, 07, 08, 01|key=sports_team}} }}! I'm so excited!",
+            
 
             "winter_Mon4": "Maybe I should take up hockey?",
             "winter_Wed8": "Probably gonna go lift weights.#$e#Working out outside is so much more fun, though.",
@@ -33,7 +43,8 @@
             "11_2": "Sam and I went running this morning. Company's always nice on a long run.#$b#Hey, @, would you ever be interested?",
             "13_2": "Grandma thinks I might make a good physical trainer some day.",
             "14_2": "It's important to adapt exercises to what you can do.#$b#Trying to do something too hard will just get you injured.#$e#In middle school I broke my ankle and had to sit out for weeks because I tried to copy a skateboard trick from Sam.",
-            "15_2": "Haley and I are thinking of going down to %place to catch a %name Taylor concert. You in?$h"
+            "15_2": "Haley and I are thinking of going down to %place to catch a %name Taylor concert. You in?$h",
+            "17_2": "I love nothing more than running along the beach.$h"
         }
     },
     {

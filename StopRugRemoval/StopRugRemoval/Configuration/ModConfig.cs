@@ -242,15 +242,15 @@ internal sealed class ModConfig
         {
             if (loc is SlimeHutch or Town or IslandWest || loc.IsFarm || loc.IsGreenhouse)
             {
-                changed |= this.SafeLocationMap.TryAdd(loc.NameOrUniqueName, IsSafeLocationEnum.Safe);
+                changed |= this.SafeLocationMap.TryAdd(loc.Name, IsSafeLocationEnum.Safe);
             }
             else if (loc is MineShaft or VolcanoDungeon or BugLand)
             {
-                changed |= this.SafeLocationMap.TryAdd(loc.NameOrUniqueName, IsSafeLocationEnum.Dangerous);
+                changed |= this.SafeLocationMap.TryAdd(loc.Name, IsSafeLocationEnum.Dangerous);
             }
             else
             {
-                changed |= this.SafeLocationMap.TryAdd(loc.NameOrUniqueName, IsSafeLocationEnum.Dynamic);
+                changed |= this.SafeLocationMap.TryAdd(loc.Name, IsSafeLocationEnum.Dynamic);
             }
         });
 

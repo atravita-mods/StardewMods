@@ -46,7 +46,7 @@ internal static class DummySpringSchedule
             Label isnull = helper.Generator.DefineLabel();
 
             /* Injecting:
-             * if (arg1 == "spring" && GetDummpSpringSchedule(npc) is string ret)
+             * if (arg1 == "spring" && GetDummySpringSchedule(npc) is string ret)
              * {
              *     return ret;
              * }

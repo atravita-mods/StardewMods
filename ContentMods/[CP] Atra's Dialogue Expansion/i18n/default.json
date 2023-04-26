@@ -86,7 +86,9 @@
 /***************
 * Misc repetitive strings
 ****************/
+
     "purchased.1.high.1": "{0}! Picked up a {1} {2} from Pierre's the other day. It was amazing! Filled the house with a {3} smell...I loved it!$h#$e#Glad Pierre's getting new stock!",
+    "purchased.1.high.2": "Oh, heya {0}! Got myself a {1} {2} from Pierre's the other day.#$e#It was the best {2} I've seen in a long time!$h#$e#Filled my house with a lovely {3} smell.#$e#You know, {0}, I'm glad Pierre's carrying more {2}.$h",
 
 /***************
 * Fancier dialogue

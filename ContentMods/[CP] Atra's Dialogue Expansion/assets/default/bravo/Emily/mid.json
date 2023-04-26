@@ -1,5 +1,15 @@
 {"Changes":[
     // Emily is the older, more responsible sibling (if a bit New Age about it.)
+
+    // Todo: lines about parrot?
+    {
+        "LogName": "Emily - base dialogue",
+        "Action": "EditData",
+        "Target": "Characters/Dialogue/Emily",
+        "Entries":{
+            "1{{YearRemainder}}": "Mom and Dad sent us another letter the other day. I wonder how they've been?$s"
+        }
+    },
     {
         "LogName": "Emily mid-hearts, Y1",
         "Action": "EditData",
@@ -40,9 +50,13 @@
         "Action": "EditData",
         "Target": "Characters/Dialogue/Emily",
         "Entries": {
-            "1_2": "I believe that if you're kind to nature, nature will be kind to you in turn.",
+            "2_2": "I believe that if you're kind to nature, nature will be kind to you in turn.",
             "3_2": "Haley has always been the baby of the family.#$b#She's only a few years younger than I am, but our parents definitely spoiled her more.#$e#Sometimes I worry.",
             "5_2": "I like doing flatfelled seams, even if they're a lot of work. They're so much more durable!$h",
+            "7_2": "We used to love visiting castles with our parents.$s",
+            "8_2": "I've considered moving away from Pelican Town, yes.#$e#No, don't get me wrong, I love it here, but our local employment options can be...lacking.$s#$e#If I want a future that's not just being a barmaid I may need to leave.#$b#I really don't want to, though.",
+            "9_2": "Pelican Town is so beautiful. I wish I could spend more time exploring the forest.$s#$b#I've got work all the time though.",
+            "11_2": "Gus wakes up at the crack of dawn to make bread for the Saloon. Honestly, I'm not quite sure when he sleeps...#$b#Probably the hardest working man in all of this town. And the best boss I could ask for.$h",
 
             "Tue10": "I've made most of my clothing, I love to sew.$h#$b#Plus, you get better clothing if you make it yourself.",
 
@@ -58,6 +72,13 @@
         "Target": "Characters/Dialogue/Emily",
         "Entries": {
             "7_2": "I've been doing a lot of lace insertion work lately. It's so pretty but so tedious.",
+            "8_2": "@, do you think I could sell the clothing I make?",
+            "9_2": "Made a lovely pizza with a cauliflower base the other day. Haley hated it though.",
+            "11_2": "Gus gave me some spaghetti to take home the other day.$h#$b#To be honest, @, if Gus didn't give Haley and me food I'm not sure what we'd be eating most nights.$s",
+            "13_2": "Started knitting a new set of socks the other day. Socks are so fast and easy to knit, and most people like them as presents.#$b#Except Haley.",
+            "14_2": "Gus gave us some day-old bread the other day and we made sandwiches with pickled daikon and falafel. Haley loved it too!$h",
+            "15_2": "I made some {{i18n: dishes.adult.{{Random: 01, 02, 03, 04, 05, 06, 07, 08, 09}} }} the other day. It was delicious!$h",
+            "16_2": "Ugh, I wish Haley would do her share of the chores without me having to remind her all the time.$s",
         },
         "When": {"YearModulus": "3"}
     },

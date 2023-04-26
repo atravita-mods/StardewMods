@@ -17,7 +17,8 @@ internal static class CrystalariumPatches
     {
         __state = null;
         if (!ModEntry.Config.Enabled || ModEntry.Config.CrystalariumBehavior == CrystalariumBehavior.Vanilla
-            || __instance.heldObject.Value is null || __instance.Name != "Crystalarium")
+            || __instance.heldObject.Value is null || __instance.heldObject.Value.ParentSheetIndex == __instance.ParentSheetIndex
+            || __instance.Name != "Crystalarium")
         {
             return true;
         }

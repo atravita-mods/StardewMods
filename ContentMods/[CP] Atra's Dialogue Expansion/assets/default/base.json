@@ -1,4 +1,8 @@
 {
+    /******************************
+    * This file is mostly for specific static strings that really could do with a change.
+    ******************************/
+
     "Changes": [
         {
             "LogName": "Generic spouse dialogue.",
@@ -103,6 +107,7 @@
             "Entries": {
                 "{{TaxDay}}": "Dunno what the state is doing with all my tax dollars.$s#$b#Such a process, every year, to file them. Takes Caroline a week!",
                 "spring_27": "Gotta make sure to stock tulip bulbs for Ms. Mullner!",
+                "spring_27_2": "Gotta make sure to stock tulip bulbs for Ms. Mullner!",
             },
             "When": {
                 "EnableFor|contains=Pierre": true
@@ -179,6 +184,17 @@
             },
             "Entries": {
                 "Abigail": "I love the woods in the rain.#$b#So peaceful, away from the rest of the town.#$e#I don't think anyone else goes out there."
+            }
+        },
+        {
+            "LogName": "Sebastian - strings",
+            "Action": "EditData",
+            "Entries":{
+                "rain.000": "It's so peaceful out here, isn't it?",
+            },
+            "When": {
+                "EnableFor|contains=Sebastian": true,
+                "Query: {{Hearts:Sebastian}} >= 6": true,
             }
         },
         {

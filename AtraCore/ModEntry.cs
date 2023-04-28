@@ -12,6 +12,7 @@ using AtraCore.Framework.EventCommands.AllowRepeatCommand;
 using AtraCore.Framework.Internal;
 using AtraCore.Framework.ItemManagement;
 using AtraCore.Framework.QueuePlayerAlert;
+using AtraCore.HarmonyPatches;
 using AtraCore.HarmonyPatches.DrawPrismaticPatches;
 using AtraCore.Utilities;
 
@@ -68,6 +69,8 @@ internal sealed class ModEntry : Mod
         EventCommandManager.Add(new RemoveMailCommand("atravita_" + nameof(RemoveMailCommand), this.Monitor));
         EventCommandManager.Add(new AllowRepeatAfter("atravita_" + nameof(AllowRepeatAfter), this.Monitor));
 
+        QuestTracker.Init(helper.Multiplayer, this.ModManifest.UniqueID);
+
 #if DEBUG
         if (!helper.ModRegistry.IsLoaded("DigitalCarbide.SpriteMaster"))
         {
@@ -76,7 +79,6 @@ internal sealed class ModEntry : Mod
         }
 #endif
     }
-
 
     private void OnGameLaunched(object? sender, GameLaunchedEventArgs e)
     {

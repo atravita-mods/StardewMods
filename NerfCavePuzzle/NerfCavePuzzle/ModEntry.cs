@@ -53,7 +53,7 @@ internal sealed class ModEntry : Mod
         DataHelper = helper.Data;
         MultiplayerHelper = helper.Multiplayer;
         InputHelper = helper.Input;
-        UniqueID = this.ModManifest.UniqueID;
+        UniqueID = string.Intern(this.ModManifest.UniqueID);
 
         this.Monitor.Log($"Starting up: {this.ModManifest.UniqueID} - {typeof(ModEntry).Assembly.FullName}");
 

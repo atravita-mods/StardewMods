@@ -136,29 +136,29 @@ internal static class AssetEditor
         if (!editor.Data.ContainsKey("spring") && !editor.Data.ContainsKey("default"))
         {
             string character = e.NameWithoutLocale.BaseName.GetNthChunk('/', 2).ToString();
-            Globals.ModMonitor.Log($"Found NPC {character} without either a spring or default schedule. This may cause issues.", LogLevel.Info);
+            Globals.ModMonitor.LogOnce($"Found NPC {character} without either a spring or default schedule. This may cause issues.", LogLevel.Info);
             contentManager ??= new(Game1.content.ServiceProvider, Game1.content.RootDirectory);
             try
             {
                 Dictionary<string, string> original = contentManager.LoadBase<Dictionary<string, string>>(e.NameWithoutLocale.BaseName);
                 if (original.TryGetValue("spring", out string? data))
                 {
-                    Globals.ModMonitor.Log($"Original spring schedule found: {data}. Adding back", LogLevel.Info);
+                    Globals.ModMonitor.LogOnce($"Original spring schedule found for {character}: {data}. Adding back", LogLevel.Info);
                     editor.Data["spring"] = data;
                     return;
                 }
                 else if (original.TryGetValue("default", out string? @default))
                 {
-                    Globals.ModMonitor.Log($"Original default schedule found: {@default}. Adding back", LogLevel.Info);
+                    Globals.ModMonitor.LogOnce($"Original default schedule found for {character}: {@default}. Adding back", LogLevel.Info);
                     editor.Data["default"] = @default;
                     return;
                 }
             }
             catch (Exception ex)
             {
-                Globals.ModMonitor.Log($"Could not find original schedule for {character}:\n\n{ex}");
+                Globals.ModMonitor.LogOnce($"Could not find original schedule for {character}:\n\n{ex}");
             }
-            Globals.ModMonitor.Log($"Could not restore spring schedule for {character}.", LogLevel.Info);
+            Globals.ModMonitor.LogOnce($"Could not restore spring schedule for {character}.", LogLevel.Info);
         }
     }
 

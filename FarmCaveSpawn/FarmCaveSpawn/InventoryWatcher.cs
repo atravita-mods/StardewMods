@@ -31,7 +31,7 @@ internal static class InventoryWatcher
     /// Sets useful fields.
     /// </summary>
     /// <param name="uniqueID">Unique ID of this mod.</param>
-    internal static void Initialize(string uniqueID) => UniqueID = uniqueID;
+    internal static void Initialize(string uniqueID) => UniqueID = string.Intern(uniqueID);
 
     /// <inheritdoc cref="IGameLoopEvents.SaveLoaded"/>
     internal static void Load(IMultiplayerHelper multi, IDataHelper data)
@@ -90,6 +90,7 @@ internal static class InventoryWatcher
         return false;
     }
 
+    /// <inheritdoc cref="IMultiplayerEvents.PeerConnected"/>
     internal static void OnPeerConnected(PeerConnectedEventArgs e, IMultiplayerHelper multi)
     {
         if (Context.IsMainPlayer && model is not null)
@@ -102,6 +103,7 @@ internal static class InventoryWatcher
         }
     }
 
+    /// <inheritdoc cref="IMultiplayerEvents.ModMessageReceived"/>
     internal static void OnModMessageRecieved(ModMessageReceivedEventArgs e)
     {
         if (e.FromModID != UniqueID || Context.ScreenId != 0)

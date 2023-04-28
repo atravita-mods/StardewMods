@@ -10,6 +10,14 @@
         },
         {
             "Action": "Include",
+            "LogName": "Generic marriage items",
+            "FromFile": "assets/base_dialogue/marriage_generic.json",
+            "When": {
+                "Random: true, false, false": true
+            }
+        },
+        {
+            "Action": "Include",
             "LogName": "Alex - base",
             "FromFile": "assets/base_dialogue/Alex/mid.json",
             "When": {

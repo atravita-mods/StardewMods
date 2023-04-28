@@ -37,7 +37,7 @@
             "4_2": "@! I saw a new exercise on social media the other day. Can't wait to try it out.#$e#Basically, you kneel on the ground, and get someone to hold your feet still...$#b#Then you lean forward until your nose is on the floor. It's surprisingly hard!",
             "6_2": "There's nothing like a nice early morning run.$h",
             "7_2": "If I don't work out, I don't feel right.$s",
-            "10_2": "Nothing like some nice fresh salmon for dinner!$h#$b#My granny's a great cook, and I'm definitely learning a lot from her.",
+            "10_2": "Nothing like some nice fresh salmon for dinner!$h%revealtasteAlex212#$b#My granny's a great cook, and I'm definitely learning a lot from her.",
             "11_2": "Sam and I went running this morning. Company's always nice on a long run.#$b#Hey, @, would you ever be interested?",
             "13_2": "Grandma thinks I might make a good physical trainer some day.",
             "14_2": "It's important to adapt exercises to what you can do.#$b#Trying to do something too hard will just get you injured.#$e#In middle school I broke my ankle and had to sit out for weeks because I tried to copy a skateboard trick from Sam.",
@@ -45,6 +45,17 @@
             "17_2": "I love nothing more than running along the beach.$h",
             "18_2": "Have you ever used a foam roller, @? Helps loosen those muscles right up.$h",
             "19_2": "Wasn't paying attention the other day, tripped over a tree root.$s#$e#Hopefully I didn't twist my ankle.$s",
+        }
+    },
+    {
+        "LogName": "Alex - mid hearts - Y2 - marriage",
+        "Action": "EditData",
+        "Target": "Characters/Dialogue/MarriageDialogueAlex",
+        "When": {"YearModulus": "2"},
+        "Entries": {
+            "Indoor_Day_3": "#$c .5#Heya, @, I made you some salmon! Just like my grannie's old recipe[212]$h.#Made you some fish for today! You're gonna need the protein! [212 213 214]",
+
+            "Good_0": "@, I love you so so much!",
         }
     },
     {
@@ -57,7 +68,9 @@
             "spring_Sun4": "It's an election year, @!#$b#Do I think the Governor is going to get re-elected? Of course I do, he always gets re-elected.",
             "summer_Wed10": "Might go take a swim in the ocean today. @, you in?$h",
 
-            "2_2": "My grandparents are the most important people in the world to me.$h"
+            "2_2": "My grandparents are the most important people in the world to me.$h",
+            "3_2": "When I was young, I'd bike around and deliver the newspaper. But most people don't want paper newspapers anymore.#$b#It's all TV and online news now. Even Gramps doesn't read the paper anymore.#$e#Man I'm starting to sound like him, am I?",
+            "4_2": "@, what sport did you play in high school?"
         }
     }
 ]}

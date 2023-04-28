@@ -90,6 +90,19 @@
     "purchased.1.high.1": "{0}! Picked up a {1} {2} from Pierre's the other day. It was amazing! Filled the house with a {3} smell...I loved it!$h#$e#Glad Pierre's getting new stock!",
     "purchased.1.high.2": "Oh, heya {0}! Got myself a {1} {2} from Pierre's the other day.#$e#It was the best {2} I've seen in a long time!$h#$e#Filled my house with a lovely {3} smell.#$e#You know, {0}, I'm glad Pierre's carrying more {2}.$h",
 
+/*******************
+* Marriage generic
+********************/
+    "spring-14": "Heya, @, I made you some breakfast! I hope you're hungry.",
+    "rainy-day-0.0": "Oh, @, looks like it's raining out! Try to stay dry as best you can.",
+    "rainy-day-0.1": "I know, I know, I worry.",
+
+    "one-kid.0": "@, I'm so happy we have %kid1. Our little family is finally complete!",
+    "one-kid.0.spring": "Ah, did you see what %kid1 brought in? It's a little butterfly! Now....where did I put that...",
+    "one-kid.0.summer": "Thinking of taking %kid1 to the beach today, if that's cool with you.",
+
+    "two-kids.0": "Mmmmm. I made breakfast for the kids! They sure are hungry at this age. Here, saved you some!",
+
 /***************
 * Fancier dialogue
 ***************/

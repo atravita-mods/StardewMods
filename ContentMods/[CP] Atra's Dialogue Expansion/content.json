@@ -18,6 +18,23 @@
         }
     },
     "DynamicTokens": [
+        // Free Love compat
+        // In "normal" files we use the generic file and allow more specific to override.
+        // but this means every spouse in a Free Love save suddenly says the same thing
+        // so we just edit the main spouse file in that case.
+        {
+            "Name": "MarriageDialoguePath",
+            "Value": "Characters/Dialogue/MarriageDialogue"
+        },
+        {
+            "Name": "MarriageDialoguePath",
+            "Value": "Characters/Dialogue/MarriageDialogue{{Spouse}}",
+            "When": {
+                "HasMod": "aedenthorn.FreeLove",
+            }
+        },
+
+        // taxes
         {
             "Name": "TaxDay",
             "Value": "spring_20"
@@ -29,10 +46,14 @@
                 "Year|contains=1": false,
             }
         },
+
+        // shuffle randoms.
         {
             "Name": "DialogueRandom",
             "Value": "{{Random:alpha, bravo, charlie, delta}}",
         },
+
+        // year nonsense
         {
             "Name": "YearModulus",
             "Value": "{{Query: {{Year}} % 5}}"
@@ -51,17 +72,37 @@
                 "Year|contains=1": false
             }
         },
+
+        // pet nonsense
         {
             "Name": "HasPet",
             "Value": "{{HasSeenEvent:HostPlayer|contains=1590166, 897405}}",
         },
         {
             "Name": "HasPet",
-            "Value": false,
+            "Value": "false",
             "When": {
                 "HasFlag:HostPlayer": "rejectedPet"
             }
-        }
+        },
+
+        // random sports shuffling
+        {
+            "Name": "FirstSportsTeam",
+            "Value": "{{i18n:sports.team.{{Random:01, 02, 03, 04, 05, 06, 07, 08|key=sports_team}} }}"
+        },
+        {
+            "Name": "SecondSportsTeam",
+            "Value": "{{i18n:sports.team.{{Random:02, 03, 04, 05, 06, 07, 08, 01|key=sports_team}} }}"
+        },
+        {
+            // 50% chance of being offset two instead.
+            "Name": "SecondSportsTeam",
+            "Value": "{{i18n:sports.team.{{Random: 03, 04, 05, 06, 07, 08, 01, 02|key=sports_team}} }}",
+            "When": {
+                "Random: true, false": true
+            }
+        },
     ],
     "Changes": [
         {

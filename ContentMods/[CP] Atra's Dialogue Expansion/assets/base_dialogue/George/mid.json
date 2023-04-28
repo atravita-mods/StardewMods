@@ -8,7 +8,7 @@
                 "HasFlag": "saloonSportsRoom"
             },
             "Entries": {
-                "Sun6": "{{i18n:george-sports.sun|first= {{i18n:sports.team.{{Random:01, 02, 03, 04, 05, 06, 07, 08|key=sports_team}} }} | second= {{i18n:sports.team.{{Random:02, 03, 04, 05, 06, 07, 08, 01|key=sports_team}} }} }}",
+                "Sun6": "{{i18n:george-sports.sun|first= {{FirstSportsTeam}} | second= {{SecondSportsTeam}} }}",
                 "Mon6": "{{i18n:george-sports.mon|reaction = {{i18n: {{Random:great, incredible, absurd, boring}} }} }}"
             }
         }

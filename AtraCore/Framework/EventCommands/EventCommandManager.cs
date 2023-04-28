@@ -17,7 +17,7 @@ namespace AtraCore.Framework.EventCommands;
 [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Harmony convention.")]
 public static class EventCommandManager
 {
-    private static Dictionary<string, IEventCommand> _commands = new(StringComparer.OrdinalIgnoreCase);
+    private static readonly Dictionary<string, IEventCommand> _commands = new(StringComparer.OrdinalIgnoreCase);
 
     /// <summary>
     /// Adds an event command to the dictionary.
@@ -31,7 +31,7 @@ public static class EventCommandManager
         Guard.IsNotNull(command.Monitor);
         ModEntry.ModMonitor.DebugOnlyLog($"Adding event command {command.Name}.");
 
-        return _commands.TryAdd(command.Name, command);
+        return _commands.TryAdd(string.IsInterned(command.Name) ?? command.Name, command);
     }
 
     [HarmonyPriority(Priority.High)]

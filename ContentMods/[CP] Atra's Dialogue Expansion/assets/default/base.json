@@ -7,7 +7,7 @@
         {
             "LogName": "Generic spouse dialogue.",
             "Action": "EditData",
-            "Target": "Characters/Dialogue/MarriageDialogue{{Spouse}}",
+            "Target": "{{MarriageDialoguePath}}",
             "Entries": {
                 "{{TheMightyAmondee.CustomTokens/AnniversarySeason}}_{{TheMightyAmondee.CustomTokens/AnniversaryDay}}": "Oh, honey, it's our anniversary today!#$b#Soooo....you've got anything planned?"
             },

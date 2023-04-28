@@ -1,0 +1,16 @@
+{"Changes":[
+    {
+        "Action": "EditData",
+        "LogName": "Marriage - generic",
+        "Target": "{{MarriageDialoguePath}}",
+        "Entries": {
+            "spring_14": "{{i18n: spring-14}}[210 211]$h",
+            "Rainy_Day_0": "{{i18n: rainy-day-0.0}}#$e#{{i18n: rainy-day-0.1}}$s",
+            "OneKid_0": "{{i18n: one-kid.0.{{season}}| default = one-kid.0}}$h",
+            "TwoKids_0": "{{i18n: two-kids.0.{{season}} | default = two-kids.0}}[194 195 210 211]$h",
+        },
+        "When": {
+            "HasValue: {{Spouse}}": true
+        }
+    }
+]}

@@ -1,13 +1,26 @@
 {"Changes":[
     // Emily is the older, more responsible sibling (if a bit New Age about it.)
+    // Emily should get additional special lines when the player's luck is high.
 
     // Todo: lines about parrot?
+
+    // paternal grandparents are from Pelican Town, but neither sister was born here.
+    // Father is a traveling salesperson (possibly equipment for hospitals?). Mother was a lawyer. High-powered, money-making, always-traveling parents.
     {
         "LogName": "Emily - base dialogue",
         "Action": "EditData",
         "Target": "Characters/Dialogue/Emily",
         "Entries":{
             "1{{YearRemainder}}": "Mom and Dad sent us another letter the other day. I wonder how they've been?$s"
+        }
+    },
+    {
+        "LogName": "Emily - parrot",
+        "Action": "EditData",
+        "Target": "Characters/Dialogue/Emily",
+        "When": {"HasSeenEvent": 463391}, // parrot event.
+        "Entries": {
+            "27{{YearRemainder}}": "Oh, @, I had a great time singing with my parrot friend the other day! I think he's healing well.$h",
         }
     },
     {
@@ -57,6 +70,8 @@
             "8_2": "I've considered moving away from Pelican Town, yes.#$e#No, don't get me wrong, I love it here, but our local employment options can be...lacking.$s#$e#If I want a future that's not just being a barmaid I may need to leave.#$b#I really don't want to, though.",
             "9_2": "Pelican Town is so beautiful. I wish I could spend more time exploring the forest.$s#$b#I've got work all the time though.",
             "11_2": "Gus wakes up at the crack of dawn to make bread for the Saloon. Honestly, I'm not quite sure when he sleeps...#$b#Probably the hardest working man in all of this town. And the best boss I could ask for.$h",
+            "12_2": "My father was originally from Pelican Town, but he moved away for college.#$e#We moved back when I was around five or so? Mom and Dad wanted a safer, quieter place to raise kids.",
+            "13_2": "Dad was a traveling salesman. Always gone on a trip to some location or another.#$e#Mom had to travel a lot for her law practice too.",
 
             "Tue10": "I've made most of my clothing, I love to sew.$h#$b#Plus, you get better clothing if you make it yourself.",
 

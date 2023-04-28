@@ -496,7 +496,7 @@ internal sealed class ModEntry : Mod
         ModContentHelper = helper.ModContent;
         ModMonitor = this.Monitor;
         DIRPATH = helper.DirectoryPath;
-        UNIQUEID = this.ModManifest.UniqueID;
+        UNIQUEID = string.Intern(this.ModManifest.UniqueID);
         Config = AtraUtils.GetConfigOrDefault<ModConfig>(helper, this.Monitor);
 
         helper.Events.GameLoop.GameLaunched += this.OnGameLaunched;

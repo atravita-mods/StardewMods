@@ -4,7 +4,7 @@
         "Target": "Characters/Dialogue/Alex",
         "LogName": "Alex Base",
         "Entries": {
-            "Sun8": "{{i18n:alex-sports-sun|first = {{i18n:sports.team.{{Random:01, 02, 03, 04, 05, 06, 07, 08|key=sports_team}} }} | second = {{i18n:sports.team.{{Random:02, 03, 04, 05, 06, 07, 08, 01|key=sports_team}} }} }}$h",
+            "Sun8": "{{i18n:alex-sports-sun|first = {{FirstSportsTeam}} | second = {{SecondSportsTeam}} }}$h",
             "Mon8": "{{i18n.alex-sports-mon|reaction = {{i18n: {{Random:great, incredible, absurd, exciting}} }} }}$h"
         }
     }

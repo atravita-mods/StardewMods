@@ -46,7 +46,7 @@ internal static class PickFarmEventTranspiler
                 new(OpCodes.Br, jumpPoint),
             });
 
-            helper.Print();
+            // helper.Print();
             return helper.Render();
         }
         catch (Exception ex)

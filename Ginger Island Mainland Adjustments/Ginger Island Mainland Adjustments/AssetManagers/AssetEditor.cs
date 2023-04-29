@@ -33,6 +33,8 @@ internal static class AssetEditor
     private static readonly PerScreen<TickCache<bool>> HasSeenPamEvent = new(
         static () => new(() => Game1.player?.eventsSeen?.Contains(PAMEVENT) == true));
 
+    private static readonly HashSet<string> Failed = new();
+
     /// <summary>
     /// The dialogue prefix.
     /// </summary>
@@ -138,25 +140,29 @@ internal static class AssetEditor
             string character = e.NameWithoutLocale.BaseName.GetNthChunk('/', 2).ToString();
             Globals.ModMonitor.LogOnce($"Found NPC {character} without either a spring or default schedule. This may cause issues.", LogLevel.Info);
             contentManager ??= new(Game1.content.ServiceProvider, Game1.content.RootDirectory);
-            try
+            if (!Failed.Contains(character))
             {
-                Dictionary<string, string> original = contentManager.LoadBase<Dictionary<string, string>>(e.NameWithoutLocale.BaseName);
-                if (original.TryGetValue("spring", out string? data))
+                try
                 {
-                    Globals.ModMonitor.LogOnce($"Original spring schedule found for {character}: {data}. Adding back", LogLevel.Info);
-                    editor.Data["spring"] = data;
-                    return;
+                    Dictionary<string, string> original = contentManager.LoadBase<Dictionary<string, string>>(e.NameWithoutLocale.BaseName);
+                    if (original.TryGetValue("spring", out string? data))
+                    {
+                        Globals.ModMonitor.LogOnce($"Original spring schedule found for {character}: {data}. Adding back", LogLevel.Info);
+                        editor.Data["spring"] = data;
+                        return;
+                    }
+                    else if (original.TryGetValue("default", out string? @default))
+                    {
+                        Globals.ModMonitor.LogOnce($"Original default schedule found for {character}: {@default}. Adding back", LogLevel.Info);
+                        editor.Data["default"] = @default;
+                        return;
+                    }
                 }
-                else if (original.TryGetValue("default", out string? @default))
+                catch (Exception ex)
                 {
-                    Globals.ModMonitor.LogOnce($"Original default schedule found for {character}: {@default}. Adding back", LogLevel.Info);
-                    editor.Data["default"] = @default;
-                    return;
+                    Globals.ModMonitor.LogOnce($"Could not find original schedule for {character}:\n\n{ex}");
+                    Failed.Add(character);
                 }
-            }
-            catch (Exception ex)
-            {
-                Globals.ModMonitor.LogOnce($"Could not find original schedule for {character}:\n\n{ex}");
             }
             Globals.ModMonitor.LogOnce($"Could not restore spring schedule for {character}.", LogLevel.Info);
         }

@@ -92,7 +92,7 @@
             "11_2": "Gus gave me some spaghetti to take home the other day.$h#$b#To be honest, @, if Gus didn't give Haley and me food I'm not sure what we'd be eating most nights.$s",
             "13_2": "Started knitting a new set of socks the other day. Socks are so fast and easy to knit, and most people like them as presents.#$b#Except Haley.",
             "14_2": "Gus gave us some day-old bread the other day and we made sandwiches with pickled daikon and falafel. Haley loved it too!$h",
-            "15_2": "I made some {{i18n: dishes.adult.{{Random: 01, 02, 03, 04, 05, 06, 07, 08, 09}} }} the other day. It was delicious!$h",
+            "15_2": "I made some {{i18n: dishes.adult.{{Random: 03, 04, 05, 06, 07, 08, 09, 01, 02}} }} the other day. It was delicious!$h",
             "16_2": "Ugh, I wish Haley would do her share of the chores without me having to remind her all the time.$s",
         },
         "When": {"YearModulus": "3"}

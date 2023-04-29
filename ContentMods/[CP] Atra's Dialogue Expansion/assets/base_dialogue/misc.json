@@ -4,7 +4,7 @@
         "LogName": "ExtraDialogue",
         "Target": "Data/ExtraDialogue",
         "Entries": {
-            "PurchasedItem_1_QualityHigh": "{{i18n:purchased.1.high.{{YearModulus}} | default = purchased.1.high.1 }}",
+            "PurchasedItem_1_QualityHigh": "{{i18n:purchased.1.high.{{YearModulus}} | default = {{i18n: purchased.1.high.1 }} }}",
         }
     }
 ]}

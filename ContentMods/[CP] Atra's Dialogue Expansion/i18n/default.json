@@ -93,7 +93,15 @@
 /*******************
 * Marriage generic
 ********************/
+    "spring-1": "Ah, a fresh new year! @, what are you looking forward to?",
+    "spring-1.3": "Oh, is it spring again? Definitely looking forward to not being cold all the time.$h",
     "spring-14": "Heya, @, I made you some breakfast! I hope you're hungry.",
+
+    "winter-16": "@! It's so cold outside, I made us some soup. Hopefully this will warm us up!",
+    "winter-16.2": "Oh, @! Today felt like a good day for some nice soup!",
+
+    "bad-4": "My head hurts. Maybe I'll go back to sleep.",
+
     "rainy-day-0.0": "Oh, @, looks like it's raining out! Try to stay dry as best you can.",
     "rainy-day-0.1": "I know, I know, I worry.",
 
@@ -111,6 +119,13 @@
 
     "alex-sports.sun": "@, you planning on watching the game? The {{first}} are playing the {{second}}! I'm so excited!",
     "alex-sports.mon": "Wow, @, did you catch the game last night? Wasn't it {{reaction}}?",
+
+    "shane-sports.sun": "Heya, @. Planning on catching the game tonight? The {{first}} against the {{second}}.",
+    "shane-sports.sun.01": "It's gonna be one heck of a game!",
+    "shane-sports.sun.02": "It's definitely gonna be the game of the year!",
+    "shane-sports.sun.03": "I'm microwaving so many pepper poppers for tonight!",
+    "shane-sports.sun.04": "Or maybe not, the teams are pretty imbalanced...",
+    "shane-sports.mon": "Oh, @, did you catch the game last night! It was {{reaction}}!",
 
 /***************
 * Birthday related

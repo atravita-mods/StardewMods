@@ -42,6 +42,15 @@
                 "EnableFor|contains=George": true,
                 "Query: {{Hearts:George}} >= 6": true
             }
-        }
+        },
+        {
+            "Action": "Include",
+            "LogName": "Shane - base",
+            "FromFile": "assets/base_dialogue/Shane/mid.json",
+            "When": {
+                "EnableFor|contains=Shane": true,
+                "Query: {{Hearts:Shane}} >= 6": true
+            }
+        },
     ]
 }

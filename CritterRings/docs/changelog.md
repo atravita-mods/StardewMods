@@ -1,6 +1,9 @@
 ﻿Changelog
 ==============
 
+## Version 0.1.5
+* Fix bunny poof showing up when it really shouldn't in multiplayer.
+
 ## Version 0.1.4
 * More y-velocity fiddling
 * Integration with my camera panning mod.

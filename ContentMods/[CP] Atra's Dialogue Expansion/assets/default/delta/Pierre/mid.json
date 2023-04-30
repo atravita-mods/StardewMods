@@ -21,6 +21,7 @@
             "summer_Thu6": "My, isn't it a hot day today! Wish we stocked more ice cream, that'd sell like crazy on a day like this.",
             "summer_Fri6": "It's Friday, @! Looking forward to the weekend?#$b#Me? Of course I am, I get the most customers on weekends.$h",
 
+            "1_2": "I wish Abby had more ambition in her life.$s",
             "6_2": "My father? He really wasn't ever in my life.$s#$b#It was just me, my mother, and my sister, in a tiny apartment in Zuzu City.",
             "8_2": "I worked for a Joja grocery store, back when we lived in Zuzu.$#b#Clerked for them, on the night shift. Am so glad I no longer have that job.#$e#Managing this store is hard work but at least I get to keep all my earnings.",
             "11_2": "Harvey says I've gotta do something about my blood pressure, it keeps creeping up way too high.#$e#He thinks I should start taking medication for it, but I don't want to.",
@@ -35,6 +36,20 @@
         "When": { "YearModulus": "2" }
     },
     {
+        "LogName": "Pierre mid-hearts, Y2",
+        "Action": "EditData",
+        "Target": "Characters/Dialogue/Pierre",
+        "Entries": {
+            "3_2": "It's a lot easier to run this shop without Joja open.$h",
+            "4_2": "That Joja shop also was a fulfillment center for online orders. One of the reasons why they built that there, we're in a good spot to supply both Zuzu City and %place.#$b#Our rent is pretty cheap too.",
+            "7_2": "I wonder if Abigail would be better off with a different major? She doesn't really like her current one.$s",
+        },
+        "When": {
+            "YearModulus": "2",
+            "IsCommunityCenterComplete": true,
+        }
+    },
+    {
         "LogName": "Pierre mid-hearts, Y3",
         "Action": "EditData",
         "Target": "Characters/Dialogue/Pierre",
@@ -43,10 +58,12 @@
             "5_2": "My suppliers want to raise their prices...#$b#I can't pass on price increases though...",
             "7_2": "Before I moved to Pelican Town? I was a night manager at a gas station in Zuzu City.#$e#Dangerous work, and definitely a young man's job.#$b#I hated having to work nights. It takes more out of you than what most people expect.$s",
             "9_2": "I met Caroline when she was in college and I was working nights at a grocery store.#$b#Working for Joja let me save up enough money to buy this place...",
-            "11_2": "Ugh, the prices of everything's going up, especially fuel.",
+            "11_2": "Ugh, the prices of everything's going up, especially fuel.$s",
+            "12_2": "@, I'm trying my best not to pass on price increases at the moment, but it's hard, it's really hard.$s",
             "13_2": "My worst nightmare would be losing this store.#$b#All our savings are tied up in this place. If it goes under we're done for.",
             "15_2": "I used to be an amateur boxer, back when we lived in Zuzu City.#$b#Was great fun, never made much money from it.#$b#Kept me in excellent shape though. My left hook is still pretty good.",
-            "17_2": "Maybe I should take Caroline out for dinner.She'll probably like {{i18n:restaurant.{{Random:01, 02, 03, 04, 05, 06}} }}, right?"
+            "17_2": "Maybe I should take Caroline out for dinner.She'll probably like {{i18n:restaurant.{{Random:01, 02, 03, 04, 05, 06}} }}, right?",
+            "18_2": "Heya @, got any nice produce to sell to me?"
         },
         "When": { "YearModulus": "3"}
     }
@@ -62,7 +79,7 @@
             "9_2": "Ugh, I think the store has a leak. I'm not very handy, so we're probably gonna have to get Robin to take a look at it.",
             "17_2": "I suspect we have a leak in the ceiling.#$b#Between you and I, @, I'm not good at dealing with things like this.#$e#Guess I should get Robin to look at my roof...",
             "19_2": "@, I just want you to know, you'll never find better seeds that the ones I sell. Never.",
-            "21_2": "Have you considered buying any of my fertilizers?"
+            "21_2": "#$c .9#Have you considered buying any of my fertilizers?#Heyyy, @, have you considered buying any of my fertilizers? Here's a free sample![368]"
         },
         "When": { "YearModulus": "4"}
     }

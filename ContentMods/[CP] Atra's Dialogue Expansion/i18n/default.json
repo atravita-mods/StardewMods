@@ -94,12 +94,27 @@
 * Marriage generic
 ********************/
     "spring-1": "Ah, a fresh new year! @, what are you looking forward to?",
-    "spring-1.3": "Oh, is it spring again? Definitely looking forward to not being cold all the time.$h",
+    "spring-1.2": "What a wonderful day! The snow's finally all melted.",
+    "spring-1.3": "Oh, is it spring again? Definitely looking forward to not being cold all the time.",
+    "spring-1.4": "Ah, nothing's better than the first spring day of the year!",
+    "spring-1.5": "You know, even after so long living in the valley, I don't think I'll ever get bored of just how nice spring is.",
     "spring-14": "Heya, @, I made you some breakfast! I hope you're hungry.",
 
+    "summer-8": "Oh, good morning, @! Made you some coffee, I know you work hard.",
+
+    "fall-12": "@, I felt like baking today. How is it?",
+    "fall-28.01": "@! I was just at Pierre's the other day, and I picked up some items!",
+    "fall-28.02": "Oh, @, I just remembered, picked up some items from Pierre for you!",
+    "fall-28.03": "Heya @, I swung by Pierre's the other day and picked up some items!",
+    "fall-28.04": "Oh, @, I picked up some items from Pierre's the other day!",
     "winter-16": "@! It's so cold outside, I made us some soup. Hopefully this will warm us up!",
     "winter-16.2": "Oh, @! Today felt like a good day for some nice soup!",
 
+    "good-0": "@, some days I can't believe how lucky I am. I love you.",
+    "good-2": "We're so lucky, aren't we? I'm so glad we found each other.",
+
+    "bad-2": "@, I think we should get divorced.",
+    "bad-3": "Do you still love me, @?",
     "bad-4": "My head hurts. Maybe I'll go back to sleep.",
 
     "rainy-day-0.0": "Oh, @, looks like it's raining out! Try to stay dry as best you can.",
@@ -110,6 +125,9 @@
     "one-kid.0.summer": "Thinking of taking %kid1 to the beach today, if that's cool with you.",
 
     "two-kids.0": "Mmmmm. I made breakfast for the kids! They sure are hungry at this age. Here, saved you some!",
+    "two-kids.2a": "No one told me how much laundry two kids would generate! But I love them, so I don't mind.",
+    "two-kids.2b": "Do you think %kid1 has my eyes?",
+    "two-kids.3": "@, what do you think %kid2 will become when they grow up?",
 
 /***************
 * Fancier dialogue

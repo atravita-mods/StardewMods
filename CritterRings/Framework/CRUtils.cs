@@ -369,7 +369,7 @@ Continue: ;
             {
                 light = true,
             };
-            MultiplayerHelpers.GetMultiplayer().broadcastSprites(loc, tas);
+            loc.temporarySprites.Add(tas);
         }
     }
 }

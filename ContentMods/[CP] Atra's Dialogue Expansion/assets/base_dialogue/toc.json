@@ -5,7 +5,8 @@
             "LogName": "Misc items",
             "FromFile": "assets/base_dialogue/misc.json",
             "When": {
-                "Random: true, true, false": true
+                "Random: true, true, false": true,
+                "EnableGeneric": true
             }
         },
         {
@@ -13,7 +14,8 @@
             "LogName": "Generic marriage items",
             "FromFile": "assets/base_dialogue/marriage_generic.json",
             "When": {
-                "Random: true, false, false": true
+                "Random: true, false, false": true,
+                "EnableGeneric": true
             }
         },
         {

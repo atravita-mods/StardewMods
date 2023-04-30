@@ -15,6 +15,10 @@
         "MapStrings": {
             "AllowValues": "true, false",
             "Default": "true",
+        },
+        "EnableGeneric": {
+            "AllowValues": "true, false",
+            "Default": "true"
         }
     },
     "DynamicTokens": [
@@ -138,6 +142,12 @@
             "LogName": "MapStrings",
             "When": {"MapStrings": true},
             "FromFile": "assets/mapstrings.json"
+        },
+        {
+            "Action": "Include",
+            "LogName": "GIMA",
+            "When": {"HasMod": "atravita.GingerIslandMainlandAdjustments"},
+            "FromFile": "assets/integration/gima.json"
         }
     ],
 }

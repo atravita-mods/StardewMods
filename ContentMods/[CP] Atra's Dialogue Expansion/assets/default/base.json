@@ -15,6 +15,7 @@
                 "HasMod": "TheMightyAmondee.CustomTokens",
                 "HasValue: {{Spouse}}": true,
                 "EnableFor|contains={{Spouse}}": true,
+                "EnableGeneric": true
             }
         },
         {

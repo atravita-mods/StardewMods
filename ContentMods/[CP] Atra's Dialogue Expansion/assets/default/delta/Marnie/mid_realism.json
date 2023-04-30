@@ -25,7 +25,19 @@
             "5_2": "My dear Bessie stepped on a nail the other day. Poor darling, I need to do a better job making sure their pen doesn't have dangerous items in it.",
             "7_2": "I try to keep my dairy organic. It's better for the cows, most of the time.",
             "18_2": "Most dairy farms don't keep bulls around. It's too dangerous, usually.#$b#Bulls can be quite unpredictable.",
-            "23_2": "We're not allowed to use antibiotics, lest we lose our organic certification."
+            "23_2": "We're not allowed to use antibiotics, lest we lose our organic certification.",
+            "24_2": "Gotta go shovel out the cows' pen. That'll probably take an entire day.#$b#Makes for good fertilizer, though!$h"
+        }
+    },
+    {
+        "LogName": "Marnie mid-hearts",
+        "Action": "EditData",
+        "Target": "Characters/Dialogue/Marnie",
+        "When": { "YearModulus": "3" },
+        "Entries": {
+            "5_2": "%Marnie looks exhausted.#$e#Oh, @, how have you been doing?#$b#I'm just a little tired, I'm not sure how much longer I can wake up every day at four in the morning to milk the cows.",
+            "6_2": "The chickens love following the cows around as the cows graze. They eat the bugs the cow patties attract.$h#$b#Nature never wastes anything.$h",
+            "8_2": "My Bessie gave birth to a fresh calf this morning.$h#$b#No matter how many times it happens, it's always special to me.$h"
         }
     }
 ]}

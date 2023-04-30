@@ -31,7 +31,8 @@
             "Resort_Dance_2": "@, come dance with me!$h",
 
             "Mon8": "@, I think there's something very special about you.",
-
+            
+            "2{{YearRemainder}}": "Made some overnight oats the other day, with fresh strawberries!$h",
             "4{{YearRemainder}}": "Ugh, I think our sink is leaking. Gotta go find a plumber, I guess.$s",
             "6{{YearRemainder}}": "@! Look at this new yarn my mother sent me! Isn't it so soft?$h",
             "11{{YearRemainder}}": "I love taking walks, whenever I have the time to do so.$h#$b#One of the best parts of living here.$h",

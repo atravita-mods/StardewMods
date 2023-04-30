@@ -18,7 +18,7 @@ namespace StopRugRemoval.HarmonyPatches.Niceties;
 /// A patch to try to unfuck schedules.
 /// I think this may be antisocial causing issues.
 /// </summary>
-[HarmonyPatch(typeof(NPC))]
+[HarmonyPatch]
 internal static class ScheduleErrorFixer
 {
     #region delegates
@@ -40,7 +40,7 @@ internal static class ScheduleErrorFixer
     #endregion
 
     [HarmonyPriority(Priority.First)]
-    [HarmonyPatch(nameof(NPC.parseMasterSchedule))]
+    [HarmonyPatch(typeof(NPC), nameof(NPC.parseMasterSchedule))]
     [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Harmony Convention")]
     private static void Prefix(string rawData, NPC __instance)
     {
@@ -119,21 +119,35 @@ internal static class ScheduleErrorFixer
             }
         }
     }
-}
 
-/// <summary>
-/// Prevent characters from being warped to a null location.
-/// </summary>
-[HarmonyPatch(typeof(Game1))]
-internal static class ScheduleNullWarp
-{
+    /// <summary>
+    /// Prevent characters from being warped to a null location.
+    /// </summary>
     [HarmonyPrefix]
-    [HarmonyPatch(nameof(Game1.warpCharacter), new[] { typeof(NPC), typeof(GameLocation), typeof(Vector2) })]
+    [HarmonyPatch(typeof(Game1), nameof(Game1.warpCharacter), new[] { typeof(NPC), typeof(GameLocation), typeof(Vector2) })]
     private static bool PrefixCharacterWarp(NPC character, GameLocation? targetLocation)
     {
+        if (character is null)
+        {
+            // weird. Someone called Game1.warpCharacter with a null character, just let that explode.
+            return true;
+        }
+
+        if (character.currentLocation is null)
+        {
+            NetLocationRef backing = _getLocationRef.Value(character);
+            NetString currLoc = _getLocationName.Value(backing);
+            ModEntry.ModMonitor.Log($"{character.Name} has null currentLocation while attempting to warp. NetLocationRef reports {currLoc}", LogLevel.Info);
+            if (!string.IsNullOrEmpty(currLoc))
+            {
+                ModEntry.ModMonitor.Log($"Forcing refresh for backing NetLocationRef.", LogLevel.Info);
+                _markDirty.Value(backing, true);
+            }
+        }
+
         if (targetLocation is null)
         {
-            ModEntry.ModMonitor.Log($"Someone has requested {character?.Name} warp to a null location at game time {Game1.timeOfDay}. Surpressing that.", LogLevel.Error);
+            ModEntry.ModMonitor.Log($"Someone has requested {character.Name} warp to a null location at game time {Game1.timeOfDay}. Suppressing that.", LogLevel.Error);
             return false;
         }
         return true;

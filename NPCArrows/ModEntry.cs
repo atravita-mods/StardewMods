@@ -58,7 +58,7 @@ internal sealed class ModEntry : Mod
     {
         Vector2 pos = character.Position + new Vector2(32f, 64f);
 
-        Vector2 arrowPos = Game1.GlobalToLocal(Game1.uiViewport, pos);
+        Vector2 arrowPos = Game1.GlobalToLocal(Game1.viewport, pos);
         Direction direction = Direction.None;
 
         if (arrowPos.X <= 0)
@@ -88,13 +88,13 @@ internal sealed class ModEntry : Mod
             return;
         }
 
-        arrowPos = Utility.snapToInt(arrowPos);
+        arrowPos = Utility.snapToInt(Utility.ModifyCoordinatesForUIScale(arrowPos));
 
         spriteBatch.Draw(
             texture: AssetManager.ArrowTexture,
             position: arrowPos,
             sourceRectangle: null,
-            color: Color.MediumPurple,
+            color: Color.Coral,
             rotation: direction.GetRotationFacing(),
             origin: new Vector2(2f, 2f),
             scale: Game1.pixelZoom,

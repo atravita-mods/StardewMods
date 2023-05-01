@@ -110,7 +110,8 @@ public sealed class TapGiantCrop : ITapGiantCropsAPI
 
         int giantCropIndx = giantCrop.parentSheetIndex.Value;
 
-        SObject? returnobj = AssetManager.GetOverrideItem(giantCropIndx);
+        OverrideObject? @override = AssetManager.GetOverrideItem(giantCropIndx);
+        SObject? returnobj = @override?.obj?.getOne() as SObject; 
 
         if (returnobj is null)
         {
@@ -144,7 +145,9 @@ public sealed class TapGiantCrop : ITapGiantCropsAPI
 
         if (returnobj is not null)
         {
-            int days = returnobj.Price / (25 * giantCrop.width.Value * giantCrop.height.Value);
+            int days = @override?.duration is int overrideDuration
+                ? overrideDuration
+                : returnobj.Price / (25 * giantCrop.width.Value * giantCrop.height.Value);
             if (tapper.ParentSheetIndex == 264)
             {
                 days /= 2;

@@ -22,7 +22,7 @@ internal static class EscapedChildFixer
         {
             if (__instance.currentLocation is not FarmHouse)
             {
-                ModEntry.ModMonitor.Log($"Child {__instance.Name} seems to have escaped the farmhouse, sending them back.", LogLevel.Trace);
+                ModEntry.ModMonitor.Log($"Child {__instance.Name} seems to have escaped the farmhouse, sending them back. Current location {__instance.currentLocation?.NameOrUniqueName}", LogLevel.Trace);
 
                 Farmer parent = Game1.MasterPlayer;
 

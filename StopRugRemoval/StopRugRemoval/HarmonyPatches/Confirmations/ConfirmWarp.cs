@@ -71,7 +71,7 @@ internal static class ConfirmWarp
     /// Applies the patch to the wand.
     /// </summary>
     /// <param name="harmony">Harmony instance.</param>
-    /// <remarks>Seperate so these patches are not applied if player is using Better Return Scepter.</remarks>
+    /// <remarks>Separate so these patches are not applied if player is using Better Return Scepter.</remarks>
     internal static void ApplyWandPatches(Harmony harmony)
     {
         harmony.Patch(
@@ -212,15 +212,23 @@ internal static class ConfirmWarp
     private static bool PrefixBuildingAction(Building __instance, Vector2 tileLocation, Farmer who, ref bool __result)
     {
         if (Game1.eventUp || Game1.isFestival() || Game1.fadeToBlack || Game1.player.swimming.Value || Game1.player.onBridge.Value
-            || !ModEntry.Config.Enabled || Game1.activeClickableMenu is not null)
+            || !ModEntry.Config.Enabled)
         {
             return true;
         }
+
         if (!__instance.occupiesTile(tileLocation) || !__instance.buildingType.Value.EndsWith("Obelisk", StringComparison.OrdinalIgnoreCase)
             || !who.IsLocalPlayer || __instance.daysOfConstructionLeft.Value > 0)
         {
             return true;
         }
+
+        if (Game1.activeClickableMenu is not null)
+        {
+            // I have a menu open already, avoid warping.
+            return false;
+        }
+
         WarpLocation location = __instance.buildingType.Value switch
         {
             "Earth Obelisk" => WarpLocation.Mountain,
@@ -276,10 +284,13 @@ internal static class ConfirmWarp
         {
             return true;
         }
-        if (Game1.eventUp || Game1.isFestival() || Game1.fadeToBlack || Game1.player.swimming.Value || Game1.player.onBridge.Value || !ModEntry.Config.Enabled
-            || Game1.activeClickableMenu is not null)
+        if (Game1.eventUp || Game1.isFestival() || Game1.fadeToBlack || Game1.player.swimming.Value || Game1.player.onBridge.Value || !ModEntry.Config.Enabled)
         {
             return true;
+        }
+        if (Game1.activeClickableMenu is not null)
+        {
+            return false;
         }
 
         if (!HaveConfirmed.Value
@@ -314,9 +325,13 @@ internal static class ConfirmWarp
     private static bool PrefixIslandWest(IslandWest __instance, string action, Farmer who, Location tileLocation)
     {
         if (Game1.eventUp || Game1.isFestival() || Game1.fadeToBlack || Game1.player.swimming.Value || Game1.player.onBridge.Value
-            || !ModEntry.Config.Enabled || Game1.activeClickableMenu is not null)
+            || !ModEntry.Config.Enabled)
         {
             return true;
+        }
+        if (Game1.activeClickableMenu is not null)
+        {
+            return false;
         }
         if (action == "FarmObelisk" && !HaveConfirmed.Value
             && (IsLocationConsideredDangerous(__instance) ? ModEntry.Config.WarpsInDangerousAreas : ModEntry.Config.WarpsInSafeAreas)

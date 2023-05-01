@@ -22,7 +22,19 @@ public sealed class ObjectDefinition
     /// Gets or sets identifier for the preserve.
     /// </summary>
     public string? Preserve { get; set; } = null;
+
+    /// <summary>
+    /// Gets or sets a price override for the object.
+    /// </summary>
+    public string? PriceOverride { get; set; } = null;
+
+    /// <summary>
+    /// Gets or sets a duration override for the object.
+    /// </summary>
+    public string? DurationOverride { get; set; } = null;
 }
+
+internal readonly record struct OverrideObject(SObject? obj, int? duration);
 
 /// <summary>
 /// Manages assets for this mod.
@@ -32,7 +44,7 @@ internal static class AssetManager
 {
     private static IAssetName assetName = null!;
 
-    private static readonly Dictionary<int, SObject> OverridesCache = new();
+    private static readonly Dictionary<int, OverrideObject> OverridesCache = new();
     private static Lazy<Dictionary<int, ObjectDefinition>> overrides = new(() => Game1.content.Load<Dictionary<int, ObjectDefinition>>(assetName.BaseName));
 
     /// <summary>
@@ -49,11 +61,11 @@ internal static class AssetManager
     /// </summary>
     /// <param name="input">ParentSheetIndex.</param>
     /// <returns>The tapper's product if an override is found.</returns>
-    internal static SObject? GetOverrideItem(int input)
+    internal static OverrideObject? GetOverrideItem(int input)
     {
-        if (OverridesCache.TryGetValue(input, out SObject? obj))
+        if (OverridesCache.TryGetValue(input, out OverrideObject obj))
         {
-            return obj.getOne() as SObject;
+            return obj;
         }
 
         if (overrides.Value.TryGetValue(input, out ObjectDefinition? objectDefinition))
@@ -69,7 +81,7 @@ internal static class AssetManager
                 return null; // not valid
             }
 
-            SObject ret = new(id, 1);
+            SObject @object = new(id, 1);
 
             if (objectDefinition.Preserve is not null)
             {
@@ -80,12 +92,24 @@ internal static class AssetManager
 
                 if (preserveId > 0)
                 {
-                    ret.preservedParentSheetIndex.Value = preserveId;
+                    @object.preservedParentSheetIndex.Value = preserveId;
                 }
             }
 
+            if (objectDefinition.PriceOverride is not null && int.TryParse(objectDefinition.PriceOverride, out int priceOverride) && priceOverride > 0)
+            {
+                @object.Price = priceOverride;
+            }
+
+            int? duration = null;
+            if (objectDefinition.DurationOverride is not null && int.TryParse(objectDefinition.DurationOverride, out int durationOverride) && durationOverride > 0)
+            {
+                duration = durationOverride;
+            }
+
+            OverrideObject ret = new(@object, duration);
             OverridesCache[input] = ret;
-            return ret.getOne() as SObject;
+            return ret;
         }
 
         return null;

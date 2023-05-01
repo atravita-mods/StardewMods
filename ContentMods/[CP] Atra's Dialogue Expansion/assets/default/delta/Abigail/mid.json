@@ -10,6 +10,9 @@
             "movieTheater": "Oh, a movie theater! @, would you like to go sometime?$h",
             "7{{YearRemainder}}": "I hate group projects.$s#$b#Trying to get my teammates to do their work when we're all remote is stupid hard.",
             "10{{YearRemainder}}": "Sam and I are thinking about going down to %place to catch a concert. You in?$h",
+            "15{{YearRemainder}}": "%Abigail looks exhausted#$b#Heyyya, @, I was up all night cramming for a test. Again. Think I passed, though!",
+            
+            // Ginger Island
             "Resort_Shore_3": "I think I'm starting to sunburn.$s",
             "Resort_Bar_2": "Heya @, what drink're you looking forward to?"
         }

@@ -55,9 +55,9 @@ internal static class CrystalariumPatches
     }
 
     [HarmonyPatch(nameof(SObject.performObjectDropInAction))]
-    private static void Postfix(Farmer who, SObject __state, bool __result)
+    private static void Postfix(Farmer who, SObject? __state, bool __result)
     {
-        if (__result)
+        if (__result && __state is not null)
         {
             who.addItemByMenuIfNecessary(__state);
         }

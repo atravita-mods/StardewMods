@@ -147,7 +147,7 @@
             "Action": "Include",
             "LogName": "GIMA",
             "When": {"HasMod": "atravita.GingerIslandMainlandAdjustments"},
-            "FromFile": "assets/integration/gima.json"
+            "FromFile": "assets/integrations/gima.json"
         }
     ],
 }

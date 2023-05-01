@@ -23,7 +23,7 @@
         "LogName": "George mid-hearts - Y2",
         "Action": "EditData",
         "Target":"Characters/Dialogue/George",
-        "When": {"YearRemainder": 2},
+        "When": {"YearModulus": 2},
         "Entries": {
             "1_2": "Evelyn and I've been living in this here valley for a very long time, @. My family's been living here for as long as we can remember.$h#$b#Ain't no place like our dear Pelican Town.",
             "3_2": "Pelican Town used to be so much bigger, back when the mines were still active.#$b#Now? I don't know how the younguns' are gonna find jobs around these parts.",
@@ -40,7 +40,7 @@
         "LogName": "George mid-hearts - Y3",
         "Action": "EditData",
         "Target":"Characters/Dialogue/George",
-        "When": {"YearRemainder": 3},
+        "When": {"YearModulus": 3},
         "Entries": {
             "1_2": "@, this year's cost-of-living adjustment for my pension isn't keeping up with inflation at all.#$b#Guess Evelyn and I will have to scrimp and save more than usual...",
             "3_2": "Did I take my mornin' meds? I can't remember...$s",

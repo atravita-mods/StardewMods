@@ -190,6 +190,7 @@
         {
             "LogName": "Sebastian - strings",
             "Action": "EditData",
+            "Target": "Strings/schedules/Sebastian",
             "Entries":{
                 "rain.000": "It's so peaceful out here, isn't it?",
             },

@@ -16,6 +16,7 @@ namespace StopRugRemoval.HarmonyPatches;
 /// Patches against SObject.
 /// </summary>
 [HarmonyPatch(typeof(SObject))]
+[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "HarmonyConvention")]
 internal static class SObjectPatches
 {
     /// <summary>
@@ -32,7 +33,6 @@ internal static class SObjectPatches
     /// <returns>True to continue to vanilla function, false otherwise.</returns>
     [HarmonyPrefix]
     [HarmonyPatch("canPlaceWildTreeSeed")]
-    [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "HarmonyConvention")]
     private static bool PrefixWildTrees(GameLocation location, Vector2 tile, ref bool __result)
     {
         try
@@ -62,7 +62,6 @@ internal static class SObjectPatches
 
     [HarmonyPrefix]
     [HarmonyPatch(nameof(SObject.onExplosion))]
-    [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "HarmonyConvention")]
     private static void PrefixOnExplosion(SObject __instance, Farmer who, GameLocation location)
     {
         try
@@ -87,7 +86,6 @@ internal static class SObjectPatches
     /// <param name="t">tool used.</param>
     [HarmonyPrefix]
     [HarmonyPatch(nameof(SObject.performToolAction))]
-    [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "HarmonyConvention")]
     private static bool PrefixPerformToolAction(SObject __instance, Tool t, ref bool __result)
     {
         __result = t is not Hoe || !__instance.IsScarecrow();
@@ -105,7 +103,6 @@ internal static class SObjectPatches
     /// <returns>True to continue to vanilla function, false otherwise.</returns>
     [HarmonyPrefix]
     [HarmonyPatch(nameof(SObject.placementAction))]
-    [SuppressMessage("StyleCop", "SA1313", Justification = "Style prefered by Harmony")]
     private static bool PrefixPlacementAction(SObject __instance, GameLocation location, int x, int y, ref bool __result)
     {
         try

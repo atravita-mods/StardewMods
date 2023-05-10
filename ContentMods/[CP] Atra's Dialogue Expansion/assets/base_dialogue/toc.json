@@ -54,5 +54,13 @@
                 "Query: {{Hearts:Shane}} >= 6": true
             }
         },
+        {
+            "Action": "Include",
+            "LogName": "Lewis - base",
+            "FromFile": "assets/base_dialogue/Lewis/mid.json",
+            "When": {
+                "EnableFor|contains=Lewis": true,
+            }
+        }
     ]
 }

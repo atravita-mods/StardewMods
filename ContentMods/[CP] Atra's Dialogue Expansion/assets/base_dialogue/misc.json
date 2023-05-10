@@ -5,6 +5,7 @@
         "Target": "Data/ExtraDialogue",
         "Entries": {
             "PurchasedItem_1_QualityHigh": "{{i18n:purchased.1.high.{{YearModulus}} | default = {{i18n: purchased.1.high.1 }} }}",
+            "Town_DumpsterDiveComment_Adult": "{{i18n:dumpster-adult.{{season}} | default = {{i18n:dumpster-adult}} }}$s"
         }
     }
 ]}

@@ -119,7 +119,8 @@
             "Action": "EditData",
             "Target": "Characters/Dialogue/Caroline",
             "Entries": {
-                "{{TaxDay}}": "I wish it didn't take so long to do our taxes.#$b#Neither Pierre nor I are organized enough to get them done early."
+                "{{TaxDay}}": "I wish it didn't take so long to do our taxes.#$b#Neither Pierre nor I are organized enough to get them done early.",
+                "Tue": "Tuesdays are our aerobics club days. Say, @, you wanna join us?$h",
             },
             "When": {
                 "EnableFor|contains=Caroline": true

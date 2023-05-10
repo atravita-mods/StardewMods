@@ -1,0 +1,12 @@
+{"Changes":[
+    {
+        "LogName": "Lewis mid-hearts",
+        "Action": "EditData",
+        "Target": "Characters/Dialogue/Lewis",
+        "Entries": {
+            "8{{YearRemainder}}": "Between you and I, @, I'm so glad a no pill mill has decided to set up shop here.",
+            "10{{YearRemainder}}": "Before I moved here? I was an accountant at an auditing firm."
+        },
+        "When": {"YearModulus": "1"},
+    }
+]}

@@ -62,7 +62,16 @@
         }
     },
     {
-        "LogName": "Alex - mid hearts",
+        "LogName" :"Alex - mid hearts - Y3",
+        "Action": "EditData",
+        "Target": "Characters/Dialogue/Alex",
+        "When": {"YearModulus": "3"},
+        "Entries": {
+            "3_2": "Emily gave me a recipe for a chia seed smoothie the other day! Plenty of protein in it, and it tastes great!$h"
+        }
+    },
+    {
+        "LogName": "Alex - mid hearts - Y4",
         "Action": "EditData",
         "Target": "Characters/Dialogue/Alex",
         "When": {"YearModulus": "4"},
@@ -75,5 +84,16 @@
             "3_2": "When I was young, I'd bike around and deliver the newspaper. But most people don't want paper newspapers anymore.#$b#It's all TV and online news now. Even Gramps doesn't read the paper anymore.#$e#Man I'm starting to sound like him, am I?",
             "4_2": "@, what sport did you play in high school?"
         }
+    },
+    {
+        "Action": "EditData",
+        "LogName":"Alex - mid hearts - Y5",
+        "Target": "Characters/Dialogue/Alex",
+        "Entries": {
+            "1_2": "Ah, start of the new month, what new exercises should I do?$h",
+            "3_2": "@, I did five hundred squats yesterday. Five hundred!#$b#Assuming I didn't miscount.",
+            "4_2": "@, I'm thinking of going ice skating some day. You got time for that?"
+        },
+        "When": {"YearModulus": 0},
     }
 ]}

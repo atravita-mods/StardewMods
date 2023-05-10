@@ -28,6 +28,16 @@
     },
     {
         "Action": "Include",
+        "LogName": "Lewis - mid hearts",
+        "FromFile": "assets/default/charlie/Lewis/mid_realism.json",
+        "When": {
+            "EnableFor": "Lewis",
+            "Query: {{Hearts:Lewis}} >= 6": true,
+            "IncreasedRealism": true
+        }
+    },
+    {
+        "Action": "Include",
         "LogName": "Maru - mid hearts",
         "FromFile": "assets/default/charlie/Maru/mid.json",
         "When": {

@@ -152,7 +152,7 @@ internal sealed class ModEntry : Mod
             tile = farm.GetRandomTileImpl();
             if (tile is null)
             {
-                this.Monitor.Log("Failed to find a free tile.");
+                this.Monitor.DebugOnlyLog("Failed to find a free tile.");
             }
         }
 

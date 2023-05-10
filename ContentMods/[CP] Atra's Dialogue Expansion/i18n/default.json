@@ -12,7 +12,6 @@
     "sports.team.06": "Gators",
     "sports.team.07": "Hawks",
     "sports.team.08": "Panthers",
-
     // generic video games
     "video.game.01": "Atomic Rising",
     "video.game.02": "Clusterbot",
@@ -23,7 +22,6 @@
     "video.game.07": "Wing Edge",
     "video.game.08": "Phantomheart",
     "video.game.09": "Crowns and Monsters",
-
     // clothing brand names.
     "clothing.brand.01": "Couture par Oiseau",
     "clothing.brand.02": "Azure",
@@ -33,7 +31,6 @@
     "clothing.brand.06": "Mode par Essence",
     "clothing.brand.07": "Esprit",
     "clothing.brand.08": "Petal Rose",
-
     //restaurant names
     "restaurant.01": "Slice of Heaven Pizzeria",
     "restaurant.02": "The Bake 'n Take Pizzeria",
@@ -41,7 +38,6 @@
     "restaurant.04": "Fire and Ice",
     "restaurant.05": "l'Ambiance d'Hiver",
     "restaurant.06": "Citronnelle",
-
     // generic dishes - free free to replace with
     // whatever adults eat in your country.
     "dishes.adult.01": "beer cheese soup",
@@ -53,7 +49,6 @@
     "dishes.adult.07": "mustard-brined pork",
     "dishes.adult.08": "beef stroganoff",
     "dishes.adult.09": "wild fennel stir-fry",
-
     // dishes aimed at children
     "dishes.child.01": "toasted ravioli",
     "dishes.child.02": "dino nuggets",
@@ -64,7 +59,6 @@
     "dishes.child.07": "chili",
     "dishes.child.08": "cornbread",
     "dishes.child.09": "milkshake",
-
     // deserts
     "dishes.dessert.01": "cherry pie",
     "dishes.dessert.02": "frozen custard",
@@ -75,7 +69,6 @@
     "dishes.dessert.07": "cake",
     "dishes.dessert.08": "sugar cream pie",
     "dishes.dessert.09": "cheesecake",
-
     // sports dialogue
     "great": "great",
     "incredible": "incredible",
@@ -89,19 +82,21 @@
 
     "purchased.1.high.1": "{0}! Picked up a {1} {2} from Pierre's the other day. It was amazing! Filled the house with a {3} smell...I loved it!$h#$e#Glad Pierre's getting new stock!",
     "purchased.1.high.2": "Oh, heya {0}! Got myself a {1} {2} from Pierre's the other day.#$e#It was the best {2} I've seen in a long time!$h#$e#Filled my house with a lovely {3} smell.#$e#You know, {0}, I'm glad Pierre's carrying more {2}.$h",
+    "dumpster-adult": "Oh, @, that's disgusting.",
+    "dumpster-adult.spring": "Do you...do you need some help or something?",
+    "dumpster-adult.winter": "Are times this hard for you?",
 
 /*******************
 * Marriage generic
 ********************/
+
     "spring-1": "Ah, a fresh new year! @, what are you looking forward to?",
     "spring-1.2": "What a wonderful day! The snow's finally all melted.",
     "spring-1.3": "Oh, is it spring again? Definitely looking forward to not being cold all the time.",
     "spring-1.4": "Ah, nothing's better than the first spring day of the year!",
     "spring-1.5": "You know, even after so long living in the valley, I don't think I'll ever get bored of just how nice spring is.",
     "spring-14": "Heya, @, I made you some breakfast! I hope you're hungry.",
-
     "summer-8": "Oh, good morning, @! Made you some coffee, I know you work hard.",
-
     "fall-12": "@, I felt like baking today. How is it?",
     "fall-28.01": "@! I was just at Pierre's the other day, and I picked up some items!",
     "fall-28.02": "Oh, @, I just remembered, picked up some items from Pierre for you!",
@@ -109,21 +104,17 @@
     "fall-28.04": "Oh, @, I picked up some items from Pierre's the other day!",
     "winter-16": "@! It's so cold outside, I made us some soup. Hopefully this will warm us up!",
     "winter-16.2": "Oh, @! Today felt like a good day for some nice soup!",
-
     "good-0": "@, some days I can't believe how lucky I am. I love you.",
     "good-2": "We're so lucky, aren't we? I'm so glad we found each other.",
-
     "bad-2": "@, I think we should get divorced.",
     "bad-3": "Do you still love me, @?",
     "bad-4": "My head hurts. Maybe I'll go back to sleep.",
-
     "rainy-day-0.0": "Oh, @, looks like it's raining out! Try to stay dry as best you can.",
     "rainy-day-0.1": "I know, I know, I worry.",
-
     "one-kid.0": "@, I'm so happy we have %kid1. Our little family is finally complete!",
     "one-kid.0.spring": "Ah, did you see what %kid1 brought in? It's a little butterfly! Now....where did I put that...",
     "one-kid.0.summer": "Thinking of taking %kid1 to the beach today, if that's cool with you.",
-
+    "one-kid.0.fall": "Mmmm, I can't wait until %kid1 is old enough that I can bake an apple pie with them.",
     "two-kids.0": "Mmmmm. I made breakfast for the kids! They sure are hungry at this age. Here, saved you some!",
     "two-kids.2a": "No one told me how much laundry two kids would generate! But I love them, so I don't mind.",
     "two-kids.2b": "Do you think %kid1 has my eyes?",
@@ -132,12 +123,11 @@
 /***************
 * Fancier dialogue
 ***************/
+
     "george-sports.sun": "@, you gonna watch the game? The {{first}} are playing the {{second}}!",
     "george-sports.mon": "Hey, @, did you catch the game last night? Wasn't it {{reaction}}?",
-
     "alex-sports.sun": "@, you planning on watching the game? The {{first}} are playing the {{second}}! I'm so excited!",
     "alex-sports.mon": "Wow, @, did you catch the game last night? Wasn't it {{reaction}}?",
-
     "shane-sports.sun": "Heya, @. Planning on catching the game tonight? The {{first}} against the {{second}}.",
     "shane-sports.sun.01": "It's gonna be one heck of a game!",
     "shane-sports.sun.02": "It's definitely gonna be the game of the year!",
@@ -148,7 +138,97 @@
 /***************
 * Birthday related
 ****************/
+
     "clint-emily-birthday": "It's Emily's birthday tomorrow. Should I get her something?",
+
+/***************
+* Lewis in the community center
+***************/
+
+    // In front of the vault:
+    "lewis-cc-vault.spring.1": "Ah, the town coffers are doing a little better now that more people have been moving in!",
+    "lewis-cc-vault.summer.1": "I wonder if we should invest in more telecommunications for our little town?",
+    "lewis-cc-vault.fall.1": "I'm very thankful that I've been able to call Pelican Town my home for all these years.",
+    "lewis-cc-vault.winter.1": "I'm glad that this town is growing again.",
+    "lewis-cc-vault.spring.2": "So, @, what are you planning on planting this spring?",
+    "lewis-cc-vault.summer.2": "We used to have many more farmers in this valley. But our soil isn't the best, and with the mines so close, it became harder to sell food produced in this valley.#$b#I guess the mine closure did have some upsides.",
+    "lewis-cc-value.fall.2": "Pelican Town used to be a major mining town. We supplied Grampleton's steel mills for decades.#$b#Sadly, those steel mills have been closed for a long time, too. Off-shoring.",
+    "lewis-cc-vault.winter.2": "It's nice having a little breathing room at last in the town's budget.",
+    "lewis-cc-vault.spring.3": "Ugh, inflation isn't making my job any easier.#$e#We do have a rainy day fund but I'd rather not touch it.",
+    "lewis-cc-vault.summer.3": "I need to find money from somewhere to buy new textbooks for the kids...but where?",
+    "lewis-cc-vault.fall.3": "Our central bank's increased interest rates again. @, I'm not sure what I should do.",
+    "lewis-cc-vault.winter.3": "I would love to issue more bonds but I'm not sure we can pay these increased interest rates.",
+    "lewis-cc-vault.spring.4": "@, we need to grow our population base if we want to survive as a town.",
+    "lewis-cc-vault.summer.4": "Did I remember to collect taxes from the fella who lives in that tower out West?",
+    "lewis-cc-vault.fall.4": "This is the time of year to be grateful for what we have. I'm so grateful we still have our small town here.",
+    "lewis-cc-vault.winter.4": "Sometimes I wonder if it'd just be better to let Grampleton or Zuzu absorb us.",
+    "lewis-cc-vault.spring.0": "We're close enough to Zuzu that we make a good transportation hub for them.#$b#Maybe I should lean into that.",
+    "lewis-cc-vault.summer.0": "One of the nice things about Pelican Town is that our property costs are relatively low, so our cost of living isn't too high.",
+    "lewis-cc-vault.fall.0": "My biggest goal, @, is to make sure the economy of Pelican Town is stable and thriving.",
+    "lewis-cc-vault.winter.0": "Ah, @, another winter! How have you've been?#$b#As the year's coming to a close, are you happy with what you've accomplished?",
+
+    // in front of the filing cabinet.
+    "lewis-cc-filing.spring.1": "I'm also in charge of making sure our local businesses follow the regulations the Governor sets forth.",
+    "lewis-cc-filing.summer.1": "I wish the Governor wasn't so heavy-handed with these regulations. Pelican Town is very different from Grampleton, after all.",
+    "lewis-cc-filing.fall.1": "%Lewis is grumbling to himself.#$b#Paperwork, paperwork, always more paperwork.",
+    "lewis-cc-filing.winter.1": "I don't mind handing your tax paperwork for you. I was an accountant before I became Mayor, so it's no problem for me!",
+    "lewis-cc-filing.spring.2": "Let's see...what are this year's new regulations...",
+    "lewis-cc-filing.summer.2": "I do handle marriages and divorces for this valley. Thankfully, there's not that many divorces.",
+    "lewis-cc-filing.fall.2": "@, would you be upset if we got a movie company out here to do some filming? They're looking for a nice romantic farm to film on.",
+    "lewis-cc-filing.winter.2": "Pelican Town used to be much larger, back when the mines were still producing.#$b#They provided good jobs. Dangerous jobs, yes, but good jobs.",
+    "lewis-cc-filing.spring.3": "@, with the economy as fragile as it is, I'm not sure what I should do.$s",
+    "lewis-cc-filing.summer.3": "Like you, I moved here so I'd have a quieter life.",
+    "lewis-cc-filing.fall.3": "Before I moved here? I was an accountant. Just one more little working bee in a big firm.",
+    "lewis-cc-filing.winter.3": "Brr, it's quite cold in here today! My hands are freezing.",
+    "lewis-cc-filing.spring.4": "Let's see, m-n-o-p...oh, @, just doing some spring cleaning today.$h",
+    "lewis-cc-filing.summer.4": "@, you growing any blueberries? Those sell pretty well!#$b#Your grandfather used to grow field after field of blueberries.",
+    "lewis-cc-filing.fall.4": "We get enough wind around here to make some nice wind farms, and I can get a grant from the government for those...#$b#Plus, those would bring jobs to the valley, at least for a while.",
+    "lewis-cc-filing.winter.4": "I got to go climb a wind turbine the other day. @, they're huge! And very chilly at the top.",
+    "lewis-cc-filing.spring.0": "Well, @, I'm glad the economy is finally on the upswing.",
+    "lewis-cc-filing.summer.0": "I'm glad we have a doctor here, @. Most towns our size can't sustain a doctor's practice.#$b#Of course, government grants really help here.",
+    "lewis-cc-filing.fall.0": "Clint? His family has been blacksmiths in this region for as long as I can remember.#$b#Used to make good business arming the miners. I wonder what he does now?",
+    "lewis-cc-filing.winter.0": "Ah, @! You've been in this valley for a long time now, what do you think of the management?",
+
+    // desk
+    "lewis-cc-desk.spring.1": "Oh, hi, @! Just reading a letter the mayor of %place sent me!",
+    "lewis-cc-desk.summer.1": "You know, @, I think we should do more with this community center. You've got any ideas?",
+    "lewis-cc-desk.fall.1": "Maybe we should do more community events here?",
+    "lewis-cc-desk.winter.1": "The paperwork is really endless, @.",
+    "lewis-cc-desk.spring.2": "Do you think encouraging more development around the valley is a good idea, @?",
+    "lewis-cc-desk.summer.2": "Looks like Accel caused another forest fire with their power lines.#$b#@, I'd love to bring more industry to this here valley, but sometimes it feels like there's no good options.",
+    "lewis-cc-desk.fall.2": "I tried to convince a local regional hospital to move here but they said that we're a bit too remote for them.$s",
+    "lewis-cc-desk.winter.2": "That JojaMart? It wasn't just for our little town here, it was also one of their fulfillment centers.#$b#They'd stage packages here for half the southern seaboard!#$b#I did hope they'd build up the infrastructure some more, especially since they need a lot of trucking.",
+    "lewis-cc-desk.spring.3": "Was talking to the mayor of %place the other day. They're trying to see if they can get a little hospital.",
+    "lewis-cc-desk.summer.3": "We've got decent hiking trails, maybe we should lean into that?",
+    "lewis-cc-desk.fall.3": "I like going up to that mountain lake sometimes, to walk and clear my head. I hear there's a lot of great fishing to be had there, too.",
+    "lewis-cc-desk.winter.3": "Ugh, @, I've been on the phone all morning, trying to get a sanitation crew to come out here.$s",
+    "lewis-cc-desk.spring.4": "It's finally the start of a new year, @! Anything in particular you're looking forward to?",
+    "lewis-cc-desk.summer.4": "I'm so glad that Penny was willing to take over the schooling for the children.#$b#When they're a bit older they'll take the bus to Grampleton, but long bus rides are hard on little kids.",
+    "lewis-cc-desk.fall.4": "The Stardew Valley Fair is our premiere tourist event. We've had it for as long as I can remember!",
+    "lewis-cc-desk.spring.0": "It's important that we prioritize Vincent and Jas's education. They are, after all, our future.",
+    "lewis-cc-desk.summer.0": "As long as we keep the Governor happy, he'll mostly leave us alone.#$b#Of course, he mostly cares that the taxes were collected correctly.",
+    "lewis-cc-desk.fall.0": "We don't need any bureaucrats telling us what to do.$s#$b#Sometimes, I do regret being one of those bureaucrats in a my past career.#$b#It was too easy to get lost in the numbers and lose sight of the people.",
+    "lewis-cc-desk.winter.0": "You'd think there'd be a lot less for me to do during winter, but everything seems to want to break in these cold months.#$b#Also doesn't help that it's too cold to fix potholes correctly.",
+
+    // bulletin board
+    "lewis-cc-bulletin.spring.1": "Maybe I should get this old bulletin board back up and running.",
+    "lewis-cc-bulletin.summer.1": "I wonder, maybe we should put on more community events?#$b#@, what do you think of a square dance club?",
+    "lewis-cc-bulletin.fall.1": "Maybe I've been taking the small town community spirit for granted...",
+    "lewis-cc-bulletin.winter.1": "@, my focus has mostly been on the economic health of this town, not the social health. But maybe I should focus more on building up the community...",
+    "lewis-cc-bulletin.spring.2": "Part of living in a small town like this one is taking care of each other.",
+
+    "lewis-cc-bulletin.spring.3": "@, I'm trying to cut taxes as much as I can. I know with the economy the way it is, businesspeople like Marnie really do need as much help as we can give.",
+
+    // in front of the fireplace:
+    "lewis-cc-fireplace.spring.1": "Your gramps used to come to down after a long day's work.",
+    "lewis-cc-fireplace.summer.1": "Ah, I'd love to open a cold one and stay here to chat, @.$h",
+    "lewis-cc-fireplace.fall.1": "Ah, it's almost time to light this fireplace!",
+    "lewis-cc-fireplace.winter.1": "This is a nice warm place to gather in winter.$h",
+    "lewis-cc-fireplace.spring.2": "Gotta make sure this place is nicely tidied up!$h#$b#Get the HVAC people out here, clean out the chimney a bit...",
+    "lewis-cc-fireplace.summer.2": "Hmm, what should I have for dinner tonight? Gus's spaghetti seems tempting.",
+    "lewis-cc-fireplace.fall.2": "I know some people stay in Pelican Town simply because we have significantly lower rent than the city.#$b#But honestly, @, I would never want to live anywhere else.",
+    "lewis-cc-fireplace.winter.2": "There's something special about the sense of community you can get in a small town like this one.#$b#Of course, that can be a double-edged sword",
+    "lewis-cc-fireplace.spring.3": "Another new year, @! Between you and I, I'm very grateful this place exists again.",
 
 /****************
 * Map strings
@@ -160,37 +240,30 @@
     "penny-teaching.summer.1": "'A Brief History of the Ferngill Republic'",
     "penny-teaching.fall.1": "'Toys and Cakes: Economics for Third Grade'",
     "penny-teaching.winter.1": "'Botany for Elementary School: Worksheets'",
-
     "penny-teaching.spring.2": "'From the Past: Ancient Ferngill History'",
     "penny-teaching.summer.2": "'The Ones Who Need More: How to Teach Less Gifted Students.'",
     "penny-teaching.fall.2": "'Animals And You: Basic Anatomy for Young Children'",
     "penny-teaching.winter.2": "'A Basic Guide to Grammar'",
-
     "penny-teaching.spring.3": "'Introducing Multiplication'",
     "penny-teaching.summer.3": "'Teach Your Child To Program'",
     "penny-teaching.fall.3": "'Algebra for the Precocious Elementary School Student'",
     "penny-teaching.winter.3": "'Distracted: How To Keep The Attention of Students Despite Modern Technology.'",
-
     "penny-teaching.spring.4": "'Teaching the Times Table: Why Memorization Still Matters'",
     "penny-teaching.summer.4": "'A Gentle Breeze Blows: Short Stories for the Advanced Elementary School Student'",
     "penny-teaching.winter.4": "'Simple Kitchen Science Experiments: Elementary School Edition'",
-
-    "penny-teaching.spring.5": "'The Five Paragraph Essay And You'",
-    "penny-teaching.summer.5": "'Geometry for Young Minds, Workbook Edition'",
-    "penny-teaching.fall.5": "'Attentionomics: Keeping Students' Attention in the Modern Era'",
-    "penny-teaching.winter.5": "'101 Things Every Middle Schooler Should Know'",
-
+    "penny-teaching.spring.0": "'The Five Paragraph Essay And You'",
+    "penny-teaching.summer.0": "'Geometry for Young Minds, Workbook Edition'",
+    "penny-teaching.fall.0": "'Attentionomics: Keeping Students' Attention in the Modern Era'",
+    "penny-teaching.winter.0": "'101 Things Every Middle Schooler Should Know'",
     // Harvey's room
     "harvey-fridge.spring": "There's a very sad head of lettuce",
     "harvey-fridge.summer": "It's full of frozen dinners and one sad box of tofu.",
     "harvey-fridge.fall": "There's half a casserole and some TV dinners.",
     "harvey-fridge.winter": "There's an entire fruitcake and some veggies definitely past their prime.",
-
     "harvey-table.spring": "'Amateur Ham Radio'",
     "harvey-table.summer": "'Tabletop Games: A Quick Guide'",
     "harvey-table.fall": "'Fifty Steps To Getting Your Pilot's License'",
     "harvey-table.winter": "'Building Your Own Radio'",
-
     "harvey-tele.start": "It's a pretty standard TV set.",
     "harvey-tele.spring.00": "There's a program on about planes from the great war.",
     "harvey-tele.spring.01": "A medical drama is on.",
@@ -204,70 +277,63 @@
     "harvey-tele.winter.00": "The TV is off for once.",
     "harvey-tele.winter.01": "Currently playing: a program about mysterious plane crashes.",
     "harvey-tele.winter.02": "There's a program about historical war planes playing.",
-
     // Haley:
     // Haley photography books:
     "haley-photography.1": "'Tips And Tricks To Low Light Photography'",
     "haley-photography.2": "'All This Green: A Guide to Taking Good Pictures of Nature'",
     "haley-photography.3": "'Striking: How to Photograph Fashion'",
     "haley-photography.4": "'Postprocessing-and-You: How to Make Bad Photos Look Good'",
-    "haley-photography.5": "'Long Exposure Shots: A How To Guide.'",
-
+    "haley-photography.0": "'Long Exposure Shots: A How To Guide.'",
     // Letters to Haley and Emily,
     "haley-parents-intro.01": "To our dearest daughters:",
     "haley-parents-intro.02": "To our darlings:",
     "haley-parents-intro.03": "To our sweetest girls:",
-
     "haley-parents-totally-returning.1": "How have the two of you been doing? We miss you.",
     "haley-parents-totally-returning.2": "Are you enjoying your taste of freedom without us?",
     "haley-parents-totally-returning.3": "We miss you and hope that you miss us too.",
     "haley-parents-totally-returning.4": "How have the two of you been doing without us?",
-    "haley-parents-totally-returning.5": "Have you two been well and receiving our letters?",
-
+    "haley-parents-totally-returning.0": "Have you two been well and receiving our letters?",
     "haley-parents-vacation.spring.1": "We've been having a wonderful time shopping the streets of %place.",
     "haley-parents-vacation.spring.2": "We've just docked in %place after a nice long cruise",
     "haley-parents-vacation.spring.3": "We made a stop to go sightseeing in %place.",
     "haley-parents-vacation.spring.4": "We've been touring %place's wineries.",
-    "haley-parents-vacation.spring.5": "We just got done with a long bike ride through the mountains of %place.",
+    "haley-parents-vacation.spring.0": "We just got done with a long bike ride through the mountains of %place.",
     "haley-parents-vacation.summer.1": "Just got done with a nice long hike through the mountains of %place.",
     "haley-parents-vacation.summer.2": "We spent a very enjoyable day in the Museum of Modern Art.",
     "haley-parents-vacation.summer.3": "We truly enjoyed our street food tour of %place. Maybe we should take the two of you later?",
     "haley-parents-vacation.summer.4": "We've just gotten done climbing the tallest mountain near %place.",
-    "haley-parents-vacation.summer.5": "Just settled back in a hotel after a two-week backpacking trip. Showers are wonderful things.",
+    "haley-parents-vacation.summer.0": "Just settled back in a hotel after a two-week backpacking trip. Showers are wonderful things.",
     "haley-parents-vacation.fall.1": "We went skydiving! Mom was terrified, Dad loved it.",
     "haley-parents-vacation.fall.2": "Took a nice trip to a beach today.",
     "haley-parents-vacation.fall.3": "Just got off the plane at %place today. Looking forward to exploring!",
     "haley-parents-vacation.fall.4": "Spent the day trying out the local foods at %place!",
-    "haley-parents-vacation.fall.5": "We spent most of the day hiking near %place.",
+    "haley-parents-vacation.fall.0": "We spent most of the day hiking near %place.",
     "haley-parents-vacation.winter.1": "Just got back from a nice day on the slopes. Nothing like a nice mug of hot chocolate after a long day skiing.",
     "haley-parents-vacation.winter.2": "Spent the day exploring the history museum in %place!",
     "haley-parents-vacation.winter.3": "Enjoyed looking at the monuments in %place today.",
     "haley-parents-vacation.winter.4": "Visited the castles around %place today.",
-    "haley-parents-vacation.winter.5": "Spent most of the last week at a resort.",
-
+    "haley-parents-vacation.winter.0": "Spent most of the last week at a resort.",
     "haley-parents-advice.spring.1": "Make sure to take care of yourselves!",
     "haley-parents-advice.spring.2": "Keep an eye on the house's upkeep!",
     "haley-parents-advice.spring.3": "Keep the chores divided evenly between the two of you.",
     "haley-parents-advice.spring.4": "Always make sure to take some time for yourself every day.",
-    "haley-parents-advice.spring.5": "Keep to your budget.",
+    "haley-parents-advice.spring.0": "Keep to your budget.",
     "haley-parents-advice.summer.1": "Remember to go to sleep on time every night!",
     "haley-parents-advice.summer.2": "Try to eat healthy!",
     "haley-parents-advice.summer.3": "Don't forget to sweep under the couch!",
     "haley-parents-advice.summer.4": "Take care of each other!",
-    "haley-parents-advice.summer.5": "Remember to wear sunscreen every day.",
+    "haley-parents-advice.summer.0": "Remember to wear sunscreen every day.",
     "haley-parents-advice.fall.1": "Keep in touch!",
     "haley-parents-advice.fall.2": "Wash your hands and cover your nose when coughing.",
     "haley-parents-advice.fall.3": "Keep the weather in mind when getting dressed!",
     "haley-parents-advice.fall.4": "Always try to make a good first impression.",
-    "haley-parents-advice.fall.5": "Remember to be kind.",
+    "haley-parents-advice.fall.0": "Remember to be kind.",
     "haley-parents-advice.winter.1": "Always remember how fortunate you've been.",
     "haley-parents-advice.winter.2": "Remember to stay warm!",
     "haley-parents-advice.winter.3": "Try to make more friends.",
     "haley-parents-advice.winter.4": "Make sure to keep the bills paid.",
-    "haley-parents-advice.winter.5": "Try to enjoy your youth while you still have it.",
-
+    "haley-parents-advice.winter.0": "Try to enjoy your youth while you still have it.",
     "haley-parents-signoff": "Love, Mom & Dad",
-
     // Marnie
     "animalshop-sink.spring.00": "A sink. It's full of dirty dishes.",
     "animalshop-sink.spring.01": "Looks like the microwave's plate is in here.",
@@ -281,7 +347,6 @@
     "animalshop-sink.winter.00": "The remnants of a nice spaghetti dinner.",
     "animalshop-sink.winter.01": "Oh, it looks like someone was making something fancy!",
     "animalshop-sink.winter.02": "The sink seems clogged with grease.",
-
     // Shane
     // video game console.
     "shane-videogame.spring": "It's a dusty Mega Station. The game inside appears to be a {{game}}.",

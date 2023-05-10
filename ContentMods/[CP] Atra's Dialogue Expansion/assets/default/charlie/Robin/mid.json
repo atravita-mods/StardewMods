@@ -8,6 +8,14 @@
         }
     },
     {
+        "LogName": "Robin extra",
+        "Action": "EditData",
+        "Target": "Data/ExtraDialogue",
+        "Entries": {
+            "Robin_Instant": "Oh, your new {0} is a prefab, so it's already done!$h"
+        }
+    },
+    {
         "Action": "EditData",
         "LogName": "Robin mid-hearts, Y1",
         "Target": "Characters/Dialogue/Robin",

@@ -30,7 +30,7 @@
         "LogName": "Gus Y2",
         "Action": "EditData",
         "Target": "Characters/Dialogue/Gus",
-        "When": { "YearRemainder": "2"},
+        "When": { "YearModulus": "2"},
         "Entries": {
             "SeedShop6": "Ah, @, nice seeing you here! Just picking up some fresh produce. Nothing but the best for my family spaghetti recipe!$h",
             "summerSeedShop6": "@, have you cooked anything interesting recently? Our little valley has so many nice ingredients just out for the taking, if you're willing to forage.$h",
@@ -44,7 +44,7 @@
         "LogName": "Gus Y3",
         "Action": "EditData",
         "Target": "Characters/Dialogue/Gus",
-        "When": { "YearRemainder": "3"},
+        "When": { "YearModulus": "3"},
         "Entries": {
             "fall_15_2": "Hey, @, any fall dishes you're looking forward to cooking?#$e#Made some excellent stuffing the other day. Here, have some![239]"
         }

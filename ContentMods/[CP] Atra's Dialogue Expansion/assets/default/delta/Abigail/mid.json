@@ -11,7 +11,7 @@
             "7{{YearRemainder}}": "I hate group projects.$s#$b#Trying to get my teammates to do their work when we're all remote is stupid hard.",
             "10{{YearRemainder}}": "Sam and I are thinking about going down to %place to catch a concert. You in?$h",
             "15{{YearRemainder}}": "%Abigail looks exhausted#$b#Heyyya, @, I was up all night cramming for a test. Again. Think I passed, though!",
-            
+
             // Ginger Island
             "Resort_Shore_3": "I think I'm starting to sunburn.$s",
             "Resort_Bar_2": "Heya @, what drink're you looking forward to?"
@@ -35,7 +35,8 @@
             "18_2": "%Abigail appears to be exhausted.#$b#Sorry, @, I was up alllllll night playing {{i18n:video.game.{{Random:01, 02, 03, 04, 05, 06, 07, 08, 09}} }}. How have you been?",
             "19_2": "Have any new games worth playing come out recently?",
             "22_2": "Dad gives me an allowance, but it isn't very much.$s",
-            "24_2": "I wonder if I'll ever be as good at art as Leah is...#$b#Probably not. She draws all the time, I don't have the time for that."
+            "24_2": "I wonder if I'll ever be as good at art as Leah is...#$b#Probably not. She draws all the time, I don't have the time for that.",
+            "25_2": "@, I don't know what I want to do with my life.#$b#I don't want to become the owner of a grocery store, but I'm not sure what else I can do.$s",
         },
         "When": {
             "YearModulus": "2"
@@ -55,6 +56,8 @@
             "12_2": "Ugh, everything hurts. I had to spend hours yesterday helping Dad with the stockroom.$a",
             "16_2": "Mom and I spent forever trying to balance the books yesterday.$a",
             "18_2": "Dad thinks I should get out of this town. He says there's more 'opportunity' away from here.#$b#I'm not sure, though, @.",
+            "19_2": "Say, @, did you ever go to college?",
+            "25_2": "Dad won't say it, but I know money is a lot tighter than what he'd like.$s"
         },
         "When": {
             "YearModulus": "3"

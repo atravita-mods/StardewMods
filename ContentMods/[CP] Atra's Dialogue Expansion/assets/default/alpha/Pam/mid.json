@@ -5,7 +5,7 @@
             "Action": "EditData",
             "Target": "Characters/Dialogue/Pam",
             "When": {
-                "YearRemainder": "2"
+                "YearModulus": "2"
             },
             "Entries": {
                 "6_2": "A tasteless TV dinner tonight, or something I can't afford from the saloon? Choices, choices....",
@@ -19,10 +19,11 @@
             "Action": "EditData",
             "Target": "Characters/Dialogue/Pam",
             "When": {
-                "HasSeenEvent|contains=99210002": false
+                "HasSeenEvent|contains=99210002": false,
+                "YearModulus": 2
             },
             "Entries": {
-                "24_2": "Hmmm....boxed red wine or boxed white wine for tonight?",
+                "24_2": "Hmmm....boxed red wine or boxed white wine for tonight?"
             }
         }
     ]

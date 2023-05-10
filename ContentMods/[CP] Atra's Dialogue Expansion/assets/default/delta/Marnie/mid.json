@@ -71,12 +71,12 @@
         "Entries": {
             "Resort_Bar": "Mmmm, what should I have? I'm in the mood for something fruity and fun!$h",
 
-            "1_2": "This farm has been in my family for five generations. I'm very proud to be running it.#$e#I'm not sure who'll run it after me.",
+            "1_2": "This farm has been in my family for five generations. I'm very proud to be running it.#$e#I'm not sure who'll run this ranch after me.$s",
             "7_2": "There's no eggs better than farm-fresh eggs!$h",
             "18_2": "Cost of feed's going up, but I ain't getting paid any more for my eggs or milk.#$b#@, I think there's collusion going on.$s#$e#Not sure what to do, it's just little old me against all the ag companies.$s",
             "19_2": "I make quite a bit of cheese as well, on my farm.#$b#There's nothing like farm fresh cheese!",
             "22_2": "%Marnie looks tired.#$b#*Yawn*. Oh, @, hi! Just had to get up very early this morning to herd some cows back into their pen.",
-            "23_2": "Tried to make some {{i18n:dishes.adult.{{Random:01, 02, 03, 04, 05, 06, 07, 08, 09}} }} the other day.#$b#Made a mess of the kitchen and burned it though.",
+            "23_2": "Tried to make some {{i18n:dishes.adult.{{Random:01, 02, 03, 04, 05, 06, 07, 08, 09}} }} the other day.#$b#Made a mess of the kitchen and burned it though.$s"
         }
     }
 ]}

@@ -37,7 +37,11 @@
         "Entries": {
             "5_2": "%Marnie looks exhausted.#$e#Oh, @, how have you been doing?#$b#I'm just a little tired, I'm not sure how much longer I can wake up every day at four in the morning to milk the cows.",
             "6_2": "The chickens love following the cows around as the cows graze. They eat the bugs the cow patties attract.$h#$b#Nature never wastes anything.$h",
-            "8_2": "My Bessie gave birth to a fresh calf this morning.$h#$b#No matter how many times it happens, it's always special to me.$h"
+            "8_2": "My Bessie gave birth to a fresh calf this morning.$h#$b#No matter how many times it happens, it's always special to me.$h",
+            "10_2": "Been thinking of moving to milking three times a day. That'd be a lot more work, but it's more comfortable for the cows and they'll produce more milk.",
+
+            "24_2": "When you have animals depending on you, it's much harder to take a day off.",
+            "26_2": "Ugh, the price of barley has gone way up.$s"
         }
     }
 ]}

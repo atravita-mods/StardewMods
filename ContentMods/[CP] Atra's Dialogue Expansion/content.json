@@ -89,6 +89,22 @@
                 "HasFlag:HostPlayer": "rejectedPet"
             }
         },
+        
+        // movies!
+        {
+            "Name": "MovieStatus",
+            "Value": "None",
+        },
+        {
+            "Name": "MovieStatus",
+            "Value": "CC",
+            "When": {"HasFlag:hostPlayer": "ccMovieTheater"}
+        },
+        {
+            "Name": "MovieStatus",
+            "Value": "Joja",
+            "When": {"HasFlag:hostPlayer": "ccMovieTheaterJoja"}
+        },
 
         // random sports shuffling
         {

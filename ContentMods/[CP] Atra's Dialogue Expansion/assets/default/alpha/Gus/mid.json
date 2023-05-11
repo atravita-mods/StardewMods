@@ -27,6 +27,15 @@
         }
     },
     {
+        "LogName": "Gus Y1",
+        "Action": "EditData",
+        "Target": "Characters/Dialogue/Gus",
+        "When": { "YearModulus": "1"},
+        "Entries": {
+            "1": "I've been living in Pelican Town for...nearly twelve years now?#$b#Boy, it's been a long time...$h"
+        }
+    },
+    {
         "LogName": "Gus Y2",
         "Action": "EditData",
         "Target": "Characters/Dialogue/Gus",

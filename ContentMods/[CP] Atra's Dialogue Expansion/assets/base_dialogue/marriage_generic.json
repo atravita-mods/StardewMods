@@ -42,5 +42,17 @@
             "Year|contains=1,2": false,
             "HasValue: {{Spouse}}": true
         }
+    },
+    {
+        "Action":"EditData",
+        "LogName": "Marriage - generic - movies",
+        "Target": "{{MarriageDialoguePath}}",
+        "Entries": {
+            "Good_1": "#$c .9#{{i18n:movies-good.{{season}} }}$h#{{i18n:movies-good.{{season}} }} {{i18n:with-ticket}}[809]$h"
+        },
+        "When": {
+            "MovieStatus|contains=None": false,
+            "Random: true, false": true,
+        }
     }
 ]}

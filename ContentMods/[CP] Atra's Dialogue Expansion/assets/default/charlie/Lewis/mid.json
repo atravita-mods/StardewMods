@@ -7,7 +7,8 @@
             "Entries": {
                 "movieTheater": "@! A movie theater seems to have appeared in the valley!$h#$e#$c 0.3#Here's a ticket![809]#It's nice to have more entertainment options available in the valley#$e#",
                 "dumped_Guys": "I can't believe you'd be so cruel, dating all of them like that.$s",
-                "Saloon_Entry": "Heya, Gus! Whatcha got?"
+                "Saloon_Entry": "Heya, Gus! Whatcha got?",
+                "Resort_Chair": "Ahhhh, a nice chance to rest my old tired feet.$h",
             }
         },
         {
@@ -26,7 +27,8 @@
             "Entries": {
                 "winter_Tue4": "@, you've got any good ideas of how to improve our town?#$b#I've been looking into telecommunications grants. We could do with better internet coverage.",
                 "winter_Wed8": "@, I'm glad you've come to Pelican Town. With you here, our exports have been doing better than ever!",
-                "winter_Thu8": "Picked up quite a bit of cheese from Marnie's last night. She does produce some excellent cheese, if I may say so myself.",
+                "winter_Thu8": "Picked up quite a bit of cheese from Marnie's last night. She does produce some excellent cheese, if I may say so myself.$h",
+                "winter_Fri8": "Winter is hard on my old bones. But I'll still be by to pick up your shipping!$h",
 
                 "1{{YearRemainder}}": "Neighboring town lowered its property taxes to try to get more young professionals to move in.#$b#Young remote professionals make a lot of money and are good for the tax base.",
                 "2{{YearRemainder}}": "It's not easy, being mayor of a small town. We're so small that we're economically quite fragile.",
@@ -34,6 +36,23 @@
                 "Saloon_Entry": "Hmmm, what's for dinner tonight?",
 
                 "IslandSouth_Entry": "Vacation time!"
+            }
+        },
+        {
+            "LogName": "Lewis: mid hearts, y2",
+            "Action": "EditData",
+            "Target": "Characters/Dialogue/Lewis",
+            "When": {"YearModulus": "2"},
+            "Entries":{
+                "fall_Fri10": "Mmm, in fall Gus sometimes carries my favorite dish, the autumn's bounty!%revealtasteLewis235$h",
+                "winter_Fri8": "Economically we're still a lot more fragile than I'd like.",
+
+                "18_2": "Pelican Town is an excellent location for wine production!$h",
+                "20_2": "@, do you produce truffle oil? I hear it's quite lucrative.$h",
+                "22_2": "There's nothing like a nice cup of tea to start the day.$h",
+
+                "Saloon_Entry": "Anything new on the menu?/Whatcha got?",
+                "IslandSouth_Entry": "Mmmm, sun!",
             }
         }
     ]

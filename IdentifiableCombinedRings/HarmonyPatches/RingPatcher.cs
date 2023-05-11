@@ -18,6 +18,7 @@ internal class RingPatcher
     /// <param name="__instance">Combined ring to check.</param>
     /// <param name="__result">Output (the Display Name).</param>
     [HarmonyPostfix]
+    [HarmonyPriority(Priority.High)]
     [HarmonyPatch(nameof(Ring.DisplayName), MethodType.Getter)]
     [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification ="Harmony convention")]
     public static void PostfixGetDisplayName(Ring __instance, ref string __result)

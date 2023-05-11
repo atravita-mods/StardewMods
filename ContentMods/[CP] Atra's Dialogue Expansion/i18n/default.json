@@ -106,6 +106,10 @@
     "winter-16.2": "Oh, @! Today felt like a good day for some nice soup!",
     "good-0": "@, some days I can't believe how lucky I am. I love you.",
     "good-2": "We're so lucky, aren't we? I'm so glad we found each other.",
+    "movies-good.spring": "Oh, @, I think %name Taylor has a new movie out! You interested?",
+    "movies-good.summer": "Mmmmm, @, we don't have enough time to ourselves recently. Would you want to go to a movie?",
+    "movies-good.fall": "Ahhh, I hear there's a great new blockbuster out. Maybe we should go watch it?",
+    "with-ticket": "Look, @, I got you a ticket!",
     "bad-2": "@, I think we should get divorced.",
     "bad-3": "Do you still love me, @?",
     "bad-4": "My head hurts. Maybe I'll go back to sleep.",
@@ -114,7 +118,7 @@
     "one-kid.0": "@, I'm so happy we have %kid1. Our little family is finally complete!",
     "one-kid.0.spring": "Ah, did you see what %kid1 brought in? It's a little butterfly! Now....where did I put that...",
     "one-kid.0.summer": "Thinking of taking %kid1 to the beach today, if that's cool with you.",
-    "one-kid.0.fall": "Mmmm, I can't wait until %kid1 is old enough that I can bake an apple pie with them.",
+    "one-kid.0.fall": "Mmmmm, I can't wait until %kid1 is old enough that I can bake an apple pie with them.",
     "two-kids.0": "Mmmmm. I made breakfast for the kids! They sure are hungry at this age. Here, saved you some!",
     "two-kids.2a": "No one told me how much laundry two kids would generate! But I love them, so I don't mind.",
     "two-kids.2b": "Do you think %kid1 has my eyes?",
@@ -216,8 +220,11 @@
     "lewis-cc-bulletin.fall.1": "Maybe I've been taking the small town community spirit for granted...",
     "lewis-cc-bulletin.winter.1": "@, my focus has mostly been on the economic health of this town, not the social health. But maybe I should focus more on building up the community...",
     "lewis-cc-bulletin.spring.2": "Part of living in a small town like this one is taking care of each other.",
-
+    "lewis-cc-bulletin.summer.2": "@, I'm thinking of starting a square dance club...",
+    "lewis-cc-bulletin.fall.2": "One of the reasons why I invited Joja to our little town in the first place is I thought they'd bring their logistics engine here.#$b#Heaven knows we need better roads",
+    "lewis-cc-bulletin.winter.2": "Joja did provide jobs, but they didn't pay enough to live off of, even in a town as small as this one with rents as low as ours.",
     "lewis-cc-bulletin.spring.3": "@, I'm trying to cut taxes as much as I can. I know with the economy the way it is, businesspeople like Marnie really do need as much help as we can give.",
+    "lewis-cc-bulletin.summer.3": "I originally brought in Joja because they said they'd provide new jobs. But jobs that barely pay more than minimum wage aren't worth that much.#$b#",
 
     // in front of the fireplace:
     "lewis-cc-fireplace.spring.1": "Your gramps used to come to down after a long day's work.",

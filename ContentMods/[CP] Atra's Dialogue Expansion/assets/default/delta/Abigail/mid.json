@@ -8,7 +8,7 @@
         "Target": "Characters/Dialogue/Abigail",
         "Entries": {
             "movieTheater": "Oh, a movie theater! @, would you like to go sometime?$h",
-            "7{{YearRemainder}}": "I hate group projects.$s#$b#Trying to get my teammates to do their work when we're all remote is stupid hard.",
+            "7{{YearRemainder}}": "I hate group projects.$s#$b#Trying to get my teammates to do their work when we're all remote is stupid hard.$a",
             "10{{YearRemainder}}": "Sam and I are thinking about going down to %place to catch a concert. You in?$h",
             "15{{YearRemainder}}": "%Abigail looks exhausted#$b#Heyyya, @, I was up all night cramming for a test. Again. Think I passed, though!",
 
@@ -22,11 +22,12 @@
         "Action": "EditData",
         "Target": "Characters/Dialogue/Abigail",
         "Entries": {
-            "Fri4": "Spending another Friday evening at the Saloon. Guess there's not much else to do in a small town",
+            "Fri4": "Spending another Friday evening at the Saloon. Guess there's not much else to do in a small town.$s",
 
             "Sun8": "Between you and I, @, I'm not sure I'm cut out for college.#$b#Dad says that if I drop out, I'll have to start paying rent, though.",
             "Mon8": "I'd love to see more movies, but Dad doesn't give me an allowance big enough to see movies often.#$b#Also, I'm saving up for a new video game.#$e#Maybe I should ask for a small salary, for the work I do for him around the shop.$s",
 
+            "1_2": "Ugh, Mayor Lewis wants to put together a square dance club. @, do I look like someone who would square dance?$s",
             "6_2": "I've got so much homework I need to do.$s",
             "8_2": "Linear algebra is kicking my ass.#$b#Say, @, you any good at math?",
             "12_2": "Ugh, I hate doing the dishes.$s#$b#Of all my chores, that's probably the one I hate the most.",
@@ -57,7 +58,8 @@
             "16_2": "Mom and I spent forever trying to balance the books yesterday.$a",
             "18_2": "Dad thinks I should get out of this town. He says there's more 'opportunity' away from here.#$b#I'm not sure, though, @.",
             "19_2": "Say, @, did you ever go to college?",
-            "25_2": "Dad won't say it, but I know money is a lot tighter than what he'd like.$s"
+            "25_2": "Dad won't say it, but I know money is a lot tighter than what he'd like.$s",
+            "28_2": "I wish dad would let me become an adventurer. That seems more fun.$s",
         },
         "When": {
             "YearModulus": "3"

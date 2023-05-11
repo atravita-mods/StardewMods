@@ -1,5 +1,13 @@
 {"Changes":[
     {
+        "LogName": "Lewis movies - CC",
+        "Action": "EditData",
+        "When": {"MovieStatus": "CC"},
+        "Entries": {
+            "12{{YearRemainder}}": "Between you and I, @, I'm not sure we would have a movie theater in town at all if the building didn't just show up one day.#$b#Even as is I'm not sure how they turn a profit."
+        }
+    },
+    {
         "LogName": "Lewis mid-hearts",
         "Action": "EditData",
         "Target": "Characters/Dialogue/Lewis",
@@ -8,5 +16,26 @@
             "10{{YearRemainder}}": "Before I moved here? I was an accountant at an auditing firm."
         },
         "When": {"YearModulus": "1"},
+    },
+    {
+        "LogName": "Lewis mid-hearts - Y2",
+        "Action":"EditData",
+        "Target": "Characters/Dialogue/Lewis",
+        "Entries": {
+            "10_2": "It's important to me for this town to be economically diverse. I don't want to rely on a single industry, like the way we used to rely on those mines.",
+            "12_2": "Tourism could be a nice way to make money. We've got good hiking trails nearby.",
+            "14_2": "@, have you ever considered holding apple picking sessions on your farm? They're more lucrative than I expected!$h",
+            "16_2": "We used to be a major flower exporter. Our climate is excellent for them."
+        },
+        "When": {"YearModulus": "2"}
+    },
+    {
+        "LogName": "Lewis mid-hearts - Y3",
+        "Action":"EditData",
+        "Target": "Characters/Dialogue/Lewis",
+        "Entries": {
+            "10_2": "The mayor before me? He was an old cattle farmer. Ran a dairy across from Marnie's.#$b#He retired, though, sold his place and went off to live in the city. Felt like he was getting too old for that type of work."
+        },
+        "When": {"YearModulus": "3"}
     }
 ]}

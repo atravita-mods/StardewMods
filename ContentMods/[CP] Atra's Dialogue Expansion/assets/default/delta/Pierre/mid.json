@@ -83,5 +83,26 @@
             "21_2": "#$c .9#Have you considered buying any of my fertilizers?#Heyyy, @, have you considered buying any of my fertilizers? Here's a free sample![368]"
         },
         "When": { "YearModulus": "4"}
+    },
+    {
+        "Action": "EditData",
+        "LogName": "Pierre mid-hearts, Y4, post stocklist",
+        "Target": "Characters/Dialogue/Pierre",
+        "Entries": {
+            "15_2": "You know, @, maybe I should carry a more limited selection of items. Just things guaranteed to turn a profit.$s"
+        },
+        "When": {
+            "YearModulus": "4",
+            "HasFlag": "PierreStocklist"
+        }
+    },
+    {
+        "Action": "EditData",
+        "LogName":"Pierre mid-hearts, Y5",
+        "Target": "Characters/Dialogue/Pierre",
+        "Entries": {
+            "1_2": "@! Don't be afraid to let me know if there's something else you think I should carry!"
+        },
+        "When": {"YearModulus": "5"}
     }
 ]}

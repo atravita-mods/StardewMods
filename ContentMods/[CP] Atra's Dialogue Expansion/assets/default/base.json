@@ -115,6 +115,19 @@
             }
         },
         {
+            "Action": "EditData",
+            "LogName": "Pierre post-stocklist",
+            "Target": "Characters/Dialogue/Pierre",
+            "Entries": {
+                "winter_Mon": "Man, @, I'm glad you've found my old stocklist, I've got so much more to sell!$h",
+                "winter_Mon4": "@, interested in any seeds today? Gotta be prepared for spring!$h",
+            },
+            "When": {
+                "HasFlag" :"PierreStocklist",
+                "EnableFor|contains=Pierre": true
+            }
+        },
+        {
             "LogName": "Caroline base dialogue",
             "Action": "EditData",
             "Target": "Characters/Dialogue/Caroline",

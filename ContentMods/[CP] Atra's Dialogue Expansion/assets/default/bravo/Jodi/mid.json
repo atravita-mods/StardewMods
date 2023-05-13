@@ -9,6 +9,7 @@
         "LogName": "Jodi mid-hearts",
         "Target": "Characters/Dialogue/Jodi",
         "Entries": {
+            "1{{YearRemainder}}": "Kent was gone for long periods of time when Sam was young. Without this community, I'm not sure how I could have raised him.",
             "2{{YearRemainder}}": "Sometimes I feel like all I do is cook and clean.$s",
             "7{{YearRemainder}}": "Sam left the laundry in the washer the other day, and it started smelling of mildew.$s#$b#As much as I love my boys, I wonder if I babied them too much...",
             "9{{YearRemainder}}": "I found an interesting recipe in last week's edition of Homemaker's Weekly, but I'm not sure it's something I can get Vincent to eat.",
@@ -28,6 +29,7 @@
             "2_2": "I started knitting a scarf. Emily thought it'd be a good idea.#$b#I'm not very good, though.",
             "3_2": "Vincent isn't doing particularly well in his classes.#$b#He's still very young though, it's more important he has fun at his age.",
             "5_2": "Let's see....what still needs doing?",
+            "6_2": "I'm so glad Kent is back with us.",
 
             // GIMA extras
             "Resort_Approach_HouseWives": "@, Caroline and I are off to the island today! You want to come with?$h"
@@ -43,6 +45,7 @@
         "Entries": {
             "2_2": "Ugh, Kent's pension doesn't go nearly as far as it used to.$s",
             "7_2": "I'd like to get some new houseplants, but online shipping is so much more expensive than it was this time last year.$s",
+            "8_2": "Why are eggs suddenly so much more expensive...#$b#Say, @, you're not getting paid any more for your eggs, right? Who's taking the extra money, then?$a"
         },
         "When": {
             "YearModulus": "3"

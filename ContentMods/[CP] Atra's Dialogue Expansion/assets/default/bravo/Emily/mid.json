@@ -41,7 +41,8 @@
             "18{{YearRemainder}}": "Started working on a new dress! I'm thinking cute little cap sleeves and a full circle skirt...$h",
             "19{{YearRemainder}}": "Sometimes when the Saloon isn't busy Gus lets me rest my feet and knit for a while.#$b#Did you know that Joja cashiers aren't allowed to sit down? I can't imagine how much their feet must hurt.",
             "25{{YearRemainder}}": "The month is almost over. Say, @, what are you planning for next month?",
-            "26{{YearRemainder}}": "Circle skirts are so easy to make!#$b#Until I have to hem them. Getting the hem even isn't as easy.$s"
+            "26{{YearRemainder}}": "Circle skirts are so easy to make!#$b#Until I have to hem them. Getting the hem even isn't as easy.$s",
+            "27{{YearRemainder}}": "@, what do you think of kale salads?"
         },
         "When": {"YearModulus": "1"}
     },

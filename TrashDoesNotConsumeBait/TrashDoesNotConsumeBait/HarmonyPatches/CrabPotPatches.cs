@@ -7,12 +7,11 @@ namespace TrashDoesNotConsumeBait.HarmonyPatches;
 /// <summary>
 /// Patches on CrabPot to restore bait if the object was trash.
 /// </summary>
-[HarmonyPatch(typeof(CrabPot))]
+[HarmonyPatch(typeof(CrabPot), nameof(CrabPot.checkForAction)]
+[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Harmony convention")]
 internal static class CrabPotPatches
 {
     [HarmonyPriority(Priority.First)]
-    [HarmonyPatch(nameof(CrabPot.checkForAction))]
-    [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Harmony convention")]
     private static void Prefix(CrabPot __instance, bool justCheckingForActivity, out SObject? __state)
     {
         if (!justCheckingForActivity && ModEntry.Config.CrabPotTrashDoesNotEatBait && __instance.heldObject.Value?.IsTrashItem() == true)
@@ -25,8 +24,6 @@ internal static class CrabPotPatches
         }
     }
 
-    [HarmonyPatch(nameof(CrabPot.checkForAction))]
-    [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Harmony convention")]
     private static void Postfix(CrabPot __instance, bool justCheckingForActivity, SObject? __state)
     {
         if (!justCheckingForActivity && __state is not null && __instance.bait.Value is null)

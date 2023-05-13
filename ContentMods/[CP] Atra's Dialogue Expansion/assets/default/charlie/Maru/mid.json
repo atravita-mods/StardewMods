@@ -3,6 +3,8 @@
     // In canon, she's kinda generic scientist. Leans robotics.
     // Working at Harvey's. Has probably an associates degree.
 
+    // We're probably going to lean her more biomedical engineering here.
+
     {
         "LogName": "Rain -- during winter.",
         "Action": "EditData",
@@ -13,13 +15,26 @@
         }
     },
     {
-        "LogName": "Maru, mid hearts",
+        "LogName": "Maru, mid hearts - y1",
+        "Action": "EditData",
+        "Target": "Characters/Dialogue/Maru",
+        "When": {"YearModulus": "1"},
+        "Entries":{
+            "1{{YearRemainder}}": "Saw a really interesting paper out of %name group on bipedal robots the other day!#$b#They've got a new algorithm to help the robot keep its balance.",
+            "2{{YearRemainder}}": "One of the difficulties of creating a good robotic limb is just power management. Batteries can be quite heavy.$s",
+            "3{{YearRemainder}}": "I wish I had a better relationship with my brother. Think of all the things we could build together!",
+            "4{{YearRemainder}}": "Penny and I spent yesterday building robots with the kids. It's a fun little science project to do with them."
+        }
+    },
+    {
+        "LogName": "Maru, mid hearts - y2",
         "Action": "EditData",
         "Target": "Characters/Dialogue/Maru",
         "When": {"YearModulus": "2"},
         "Entries":{
             "1": "@, why did you decide to come to Pelican Town?",
             "1_2": "Ah, @, it's the start of a new month! What do you have planned?",
+            "2_2": "Since my dad works there, I can audit classes at Grampleton University for free.#$b#It's fun taking classes in new things!",
             "8_2": "Sometimes I wonder if Sebastian would be happier living in the city.#$b#He doesn't really like living with other people though.",
             "9_2": "I like working at the clinic. Dad says I should be doing more with my life, though.",
             "11_2": "Mom wishes she could have sent Sebastian to college. She says....no, never mind.",
@@ -27,7 +42,8 @@
             "14_2": "Dad? Dad's an ecologist. He's partnered with Grampleton University.",
             "15_2": "I really enjoy building things. Not sure where I'm going with my current project, but it's sure fun to just play around.",
             "17_2": "Dad bought me unleaded solder. It's really not the same.",
-            "19_2": "I wish I got along better with my brother.$s"
+            "19_2": "I wish I got along better with my brother.$s",
+            "20_2": "Do you have any fresh strawberries? Penny and I are thinking of doing a DNA extraction with the kids. Fun little kitchen science experiment.#$b#Strawberries are best because they're hexaploid, so they have a lot of DNA you can extract.$h"
         }
     },
     {

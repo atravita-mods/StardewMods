@@ -13,7 +13,8 @@
         "Target": "Characters/Dialogue/Lewis",
         "Entries": {
             "8{{YearRemainder}}": "Between you and I, @, I'm so glad a no pill mill has decided to set up shop here.",
-            "10{{YearRemainder}}": "Before I moved here? I was an accountant at an auditing firm."
+            "10{{YearRemainder}}": "Before I moved here? I was an accountant at an auditing firm.",
+            "CommunityCenter_Entry": "Anyone around?"
         },
         "When": {"YearModulus": "1"},
     },
@@ -22,6 +23,8 @@
         "Action":"EditData",
         "Target": "Characters/Dialogue/Lewis",
         "Entries": {
+            "CommunityCenter_Entry": "Anything happening?",
+
             "10_2": "It's important to me for this town to be economically diverse. I don't want to rely on a single industry, like the way we used to rely on those mines.",
             "12_2": "Tourism could be a nice way to make money. We've got good hiking trails nearby.",
             "14_2": "@, have you ever considered holding apple picking sessions on your farm? They're more lucrative than I expected!$h",

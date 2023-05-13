@@ -1,4 +1,12 @@
 {
+/****************
+* Grammar bits
+****************/
+
+    // this isn't great because it's very English-specific.
+    "he": "he",
+    "she": "she",
+
 /***************
 * For randomization: A bunch of randomized nouns.
 ****************/
@@ -85,6 +93,10 @@
     "dumpster-adult": "Oh, @, that's disgusting.",
     "dumpster-adult.spring": "Do you...do you need some help or something?",
     "dumpster-adult.winter": "Are times this hard for you?",
+    "gift-tastes-ending-allergic.spring": "We're trying to figure out if {{pronouns}} has an allergy to that.",
+    "gift-tastes-ending-allergic.summer": "That was part of a food poisoning incident {{pronouns}} had.",
+    "gift-tastes-ending-allergic.fall": "That's just something {{pronouns}} never developed a taste for.",
+    "gift-tastes-ending-allergic.winter": "I think {{pronouns}} just had a bad experience with that.",
 
 /*******************
 * Marriage generic
@@ -225,6 +237,9 @@
     "lewis-cc-bulletin.winter.2": "Joja did provide jobs, but they didn't pay enough to live off of, even in a town as small as this one with rents as low as ours.",
     "lewis-cc-bulletin.spring.3": "@, I'm trying to cut taxes as much as I can. I know with the economy the way it is, businesspeople like Marnie really do need as much help as we can give.",
     "lewis-cc-bulletin.summer.3": "I originally brought in Joja because they said they'd provide new jobs. But jobs that barely pay more than minimum wage aren't worth that much.#$b#",
+    "lewis-cc-bulletin.fall.3": "Part of living in a rural community - everyone pitches in when they can!",
+    "lewis-cc-bulletin.winter.3": "My truck? Oh, that parking is pretty tight but it's the only place I can park.",
+    "lewis-cc-bulletin.spring.4": "Ah, a nice new spring! It's finally warm enough to fix potholes again.",
 
     // in front of the fireplace:
     "lewis-cc-fireplace.spring.1": "Your gramps used to come to down after a long day's work.",

@@ -10,7 +10,7 @@
     },
     {
         "Action": "EditData",
-        "LogName": "StringsFromCS",
+        "LogName": "StringsFromCSFiles",
         "Target": "Strings/StringsFromCSFiles.json",
         "Entries": {
             "NPC.cs.4176": " {{i18n:gift-tastes-ending-allergic.{{season}}|pronouns = {{i18n: he}} }}",

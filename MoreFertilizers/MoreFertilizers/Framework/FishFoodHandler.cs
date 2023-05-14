@@ -119,19 +119,29 @@ internal static class FishFoodHandler
         {
             return;
         }
-        UnsavedLocationsHandler newHandler = new();
+
         foreach ((string loc, int value) in UnsavedLocHandler.FishFoodLocationMap)
         {
             if (value > 1)
             {
-                newHandler.FishFoodLocationMap[loc] = value - 1;
+                UnsavedLocHandler.FishFoodLocationMap[loc] = value - 1;
+            }
+            else
+            {
+                UnsavedLocHandler.FishFoodLocationMap.Remove(loc);
             }
         }
-        UnsavedLocHandler = newHandler;
 
         Task broadcast = Task.Run(() => BroadcastHandler(multiplayer));
 
-        helper.WriteSaveData(FISHFOODSAVESTRING, newHandler);
+        if (UnsavedLocHandler.FishFoodLocationMap.Count > 0)
+        {
+            helper.WriteSaveData(FISHFOODSAVESTRING, UnsavedLocHandler);
+        }
+        else
+        {
+            helper.WriteSaveData<UnsavedLocationsHandler>(FISHFOODSAVESTRING, null);
+        }
 
         Utility.ForAllLocations(static (GameLocation? loc) =>
         {

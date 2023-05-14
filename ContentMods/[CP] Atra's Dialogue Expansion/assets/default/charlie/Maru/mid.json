@@ -11,7 +11,7 @@
         "Target": "Characters/Dialogue/rainy",
         "When": {"Season": "winter"},
         "Entries":{
-            "Maru": "Strange that it's raining in winter.$s",
+            "Maru": "#$c .5#Strange that it's raining in winter.$s#We didn't used to get rain in winter like this. Dad says this might be due to climate change.$s#"
         }
     },
     {
@@ -23,7 +23,10 @@
             "1{{YearRemainder}}": "Saw a really interesting paper out of %name group on bipedal robots the other day!#$b#They've got a new algorithm to help the robot keep its balance.",
             "2{{YearRemainder}}": "One of the difficulties of creating a good robotic limb is just power management. Batteries can be quite heavy.$s",
             "3{{YearRemainder}}": "I wish I had a better relationship with my brother. Think of all the things we could build together!",
-            "4{{YearRemainder}}": "Penny and I spent yesterday building robots with the kids. It's a fun little science project to do with them."
+            "4{{YearRemainder}}": "Penny and I spent yesterday building robots with the kids. It's a fun little science project to do with them.",
+            "5{{YearRemainder}}": "Harvey pays me pretty well, and lets me read when there isn't any other work to do.$h",
+            "6{{YearRemainder}}": "There's a lot more paperwork that goes on in a doctor's office than I would have thought when I started this job.$s",
+            "7{{YearRemainder}}": "The fax machine at work broke. Do you know how expensive it is to get someone out here to fix a fax machine?$s"
         }
     },
     {

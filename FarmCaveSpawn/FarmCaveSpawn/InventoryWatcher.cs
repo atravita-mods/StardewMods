@@ -12,6 +12,8 @@ namespace FarmCaveSpawn;
 public sealed class InventoryManagerModel
 {
     public HashSet<string> Saplings { get; set; } = new();
+
+    public HashSet<string> Fruits { get; set; } = new();
 }
 
 /// <summary>

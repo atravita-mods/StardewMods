@@ -1,0 +1,11 @@
+{"Changes":[
+    {
+        "LogName": "Demetrius mid-hearts, Y2, bats",
+        "Action": "EditData",
+        "Target": "Characters/Dialogue/Demetrius",
+        "Entries": {
+            "7_2": "Many people don't like bats because they're vectors of disease.#$b#But they're very important to the ecosystem.#$e#Also, bats are adorable.$h"
+        },
+        "When": { "YearModulus": "2"}
+    }
+]}

@@ -10,6 +10,16 @@
     },
     {
         "Action": "Include",
+        "LogName": "Demetrius - mid hearts",
+        "FromFile": "assets/default/charlie/Demetrius/{{FarmCave}}.json",
+        "When": {
+            "EnableFor": "Demetrius",
+            "Query: {{Hearts:Demetrius}} >= 6": true,
+            "HasFile:{{Target}}": true,
+        }
+    },
+    {
+        "Action": "Include",
         "LogName": "Leah - mid hearts",
         "FromFile": "assets/default/charlie/Leah/mid.json",
         "When": {

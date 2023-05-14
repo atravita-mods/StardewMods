@@ -147,7 +147,7 @@ internal static class SlimeProduceCompat
             })
             .Remove(1);
 
-            helper.Print();
+            // helper.Print();
             return helper.Render();
         }
         catch (Exception ex)

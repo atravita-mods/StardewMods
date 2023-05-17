@@ -48,7 +48,7 @@ internal static class JumpTouchAction
                 new(OpCodes.Brtrue, jumpPast),
             }, withLabels: labelsToMove);
 
-            helper.Print();
+            // helper.Print();
             return helper.Render();
         }
         catch (Exception ex)

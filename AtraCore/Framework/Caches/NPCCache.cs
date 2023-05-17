@@ -42,6 +42,24 @@ public static class NPCCache
     {
         Guard.IsNotNullOrWhiteSpace(name);
 
+        // in multiplayer, we need to guard against the clones. So always search the current location, and replace the cache instance if needed.
+        if (Context.IsMultiplayer && (!Context.IsMainPlayer || Context.IsSplitScreen)
+            && Game1.currentLocation is not null)
+        {
+
+            foreach (NPC? character in Game1.currentLocation.characters)
+            {
+                if (!character.eventActor && character.isVillager() && character.Name == name)
+                {
+                    if (character.GetType() == typeof(NPC))
+                    {
+                        cache[string.IsInterned(name) ?? name] = new(character);
+                    }
+                    return character;
+                }
+            }
+        }
+
         if (cache.TryGetValue(name, out WeakReference<NPC>? val))
         {
             if (val.TryGetTarget(out NPC? target))
@@ -67,7 +85,7 @@ public static class NPCCache
             ModEntry.ModMonitor.Log($"Searching movie theater for npc {name}");
             foreach (NPC? character in theater.characters)
             {
-                if (character.isVillager() && character.Name == name)
+                if (!character.eventActor && character.isVillager() && character.Name == name)
                 {
                     npc = character;
                     break;

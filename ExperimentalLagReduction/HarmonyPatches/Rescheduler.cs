@@ -54,12 +54,38 @@ internal static class Rescheduler
     private static readonly ThreadLocal<Stopwatch> _stopwatch = new(() => new());
 #endif
 
+    internal static int CacheCount => pathCache.Count;
+
+    internal static List<string>? GetPathFromCache(string start, string end, int gender) => pathCache.TryGetValue((start, end, gender), out var val) ? val : null;
+
+    internal static void PrintCache()
+    {
+        foreach (((string start, string end, int gender) key, List<string>? value) in pathCache)
+        {
+            ModEntry.ModMonitor.Log($"( {key.start} -> {key.end} ({key.gender})) == " + (value is not null ? string.Join("->", value) + $" [{value.Count}]" : "no path found" ), LogLevel.Info);
+        }
+    }
+
     [HarmonyPrefix]
     [HarmonyPriority(Priority.VeryLow)]
     [HarmonyPatch(nameof(NPC.populateRoutesFromLocationToLocationList))]
     private static bool PrefixPopulateRoutes()
     {
         pathCache.Clear();
+
+#if DEBUG
+        _stopwatch.Value ??= new();
+        _stopwatch.Value.Start();
+#endif
+
+        // pre-seed town a bit, since Town is basically a hub.
+        _ = GetPathFor(Game1.getLocationFromName("Town"), null, NPC.undefined, 3);
+
+#if DEBUG
+        _stopwatch.Value.Stop();
+        ModEntry.ModMonitor.Log($"Total time so far: {_stopwatch.Value.ElapsedMilliseconds} ms, {pathCache.Count} total routes cached", LogLevel.Info);
+#endif
+
         return false;
     }
 
@@ -81,11 +107,16 @@ internal static class Rescheduler
             __result = cached;
             if (__result is null)
             {
+                if (__instance.Gender == NPC.undefined)
+                {
+                    goto skip;
+                }
                 ModEntry.ModMonitor.Log($"{__instance.Name} requested path from {startingLocation} to {endingLocation} where no valid path was found.", LogLevel.Warn);
             }
             return false;
         }
 
+        skip:
         if (__instance.Gender == NPC.undefined && pathCache.TryGetValue((startingLocation, endingLocation, NPC.male), out cached))
         {
             __result = cached;
@@ -149,6 +180,10 @@ internal static class Rescheduler
         {
             ModEntry.ModMonitor.LogOnce($"{__instance.Name} requested path from {startingLocation} to {endingLocation} where no valid path was found.", LogLevel.Warn);
         }
+        else
+        {
+            ModEntry.ModMonitor.DebugOnlyLog($"Found path for {__instance.Name} from {startingLocation} to {endingLocation}: {string.Join("->", __result)} with {__result.Count} segments.");
+        }
         return false;
     }
 
@@ -170,7 +205,7 @@ internal static class Rescheduler
 
                 if (Game1.getLocationFromName(node.name) is not GameLocation current)
                 {
-                    ModEntry.ModMonitor.LogOnce($"A warp references {node.name} which could not be found. This is probably an issue.", LogLevel.Warn);
+                    ModEntry.ModMonitor.LogOnce($"A warp references {node.name} which could not be found.", LogLevel.Trace);
                     continue;
                 }
 
@@ -187,26 +222,6 @@ internal static class Rescheduler
                         if (end.Name == node.name)
                         {
                             return route;
-                        }
-
-                        // if we have A->B and B->D, then we can string the path together already.
-                        if (pathCache.TryGetValue((node.name, end.Name, ungendered), out List<string>? prev) && prev is not null)
-                        {
-                            List<string> routeStart = new(route);
-                            routeStart.RemoveAt(routeStart.Count - 1);
-                            routeStart.AddRange(prev);
-
-                            pathCache.TryAdd((start.Name, end.Name, node.genderConstraint), routeStart);
-                            return routeStart;
-                        }
-                        else if (pathCache.TryGetValue((node.name, end.Name, genderConstrainedToCurrentSearch), out List<string>? genderedPrev) && genderedPrev is not null)
-                        {
-                            List<string> routeStart = new(route);
-                            routeStart.RemoveAt(routeStart.Count - 1);
-                            routeStart.AddRange(genderedPrev);
-
-                            pathCache.TryAdd((start.Name, end.Name, genderConstrainedToCurrentSearch), routeStart);
-                            return routeStart;
                         }
                     }
                 }

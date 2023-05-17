@@ -1,5 +1,8 @@
 ﻿using AtraShared.ConstantsAndEnums;
 using AtraShared.Utils.Extensions;
+
+using ExperimentalLagReduction.HarmonyPatches;
+
 using HarmonyLib;
 using StardewModdingAPI.Events;
 
@@ -23,6 +26,37 @@ internal sealed class ModEntry : Mod
         ModMonitor = this.Monitor;
         this.Monitor.Log($"Starting up: {this.ModManifest.UniqueID} - {typeof(ModEntry).Assembly.FullName}");
         helper.Events.GameLoop.GameLaunched += this.OnGameLaunch;
+
+        helper.ConsoleCommands.Add("av.elr.print_report", "todo", this.Report);
+        helper.ConsoleCommands.Add("av.elr.get_path_from", "todo", this.GetPath);
+        helper.ConsoleCommands.Add("av.elr.dump_cache", "todo", static (_, _) => Rescheduler.PrintCache());
+    }
+
+    private void GetPath(string arg1, string[] args)
+    {
+        if (args.Length != 3)
+        {
+            ModMonitor.Log("Expected three arguments", LogLevel.Error);
+        }
+        if (!int.TryParse(args[2], out int gender) || gender < 0 || gender > 2)
+        {
+            ModMonitor.Log("Expected int gender", LogLevel.Error);
+        }
+        var path = Rescheduler.GetPathFromCache(args[0], args[1], gender);
+        if (path is not null)
+        {
+            ModMonitor.Log(string.Join("->", path), LogLevel.Info);
+        }
+        else
+        {
+            ModMonitor.Log($"That path was not cached.", LogLevel.Info);
+        }
+    }
+
+    private void Report(string command, string[] args)
+    {
+        ModMonitor.Log($"Total locations: {Game1.locations.Count}", LogLevel.Info);
+        ModMonitor.Log($"Cached locations: {Rescheduler.CacheCount}", LogLevel.Info);
     }
 
     /// <inheritdoc cref="IGameLoopEvents.GameLaunched"/>

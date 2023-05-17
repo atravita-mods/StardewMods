@@ -1,9 +1,9 @@
-﻿using System.Collections.Concurrent;
+﻿#define TRACELOG
+
+using System.Collections.Concurrent;
 using System.Diagnostics;
 
 using AtraShared.Utils.Extensions;
-
-using CommunityToolkit.Diagnostics;
 
 using HarmonyLib;
 
@@ -103,7 +103,7 @@ internal static class Rescheduler
         if (pathCache.TryGetValue((startingLocation, endingLocation, ungendered), out List<string>? cached)
             || pathCache.TryGetValue((startingLocation, endingLocation, gender), out cached))
         {
-            ModEntry.ModMonitor.DebugOnlyLog($"Got macro schedule for {__instance.Name} from cache: {startingLocation} -> {endingLocation}");
+            ModEntry.ModMonitor.TraceOnlyLog($"Got macro schedule for {__instance.Name} from cache: {startingLocation} -> {endingLocation}");
             __result = cached;
             if (__result is null)
             {
@@ -182,7 +182,7 @@ internal static class Rescheduler
         }
         else
         {
-            ModEntry.ModMonitor.DebugOnlyLog($"Found path for {__instance.Name} from {startingLocation} to {endingLocation}: {string.Join("->", __result)} with {__result.Count} segments.");
+            ModEntry.ModMonitor.TraceOnlyLog($"Found path for {__instance.Name} from {startingLocation} to {endingLocation}: {string.Join("->", __result)} with {__result.Count} segments.");
         }
         return false;
     }
@@ -222,6 +222,30 @@ internal static class Rescheduler
                         if (end.Name == node.name)
                         {
                             return route;
+                        }
+
+                        // if we have A->B and B->D, then we can string the path together already.
+                        if (pathCache.TryGetValue((node.name, end.Name, ungendered), out List<string>? prev)
+                            && prev?.Count > 2 && CompletelyDistinct(route, prev))
+                        {
+                            ModEntry.ModMonitor.TraceOnlyLog($"Partial route found: {start.Name} -> {node.name} + {node.name} -> {end.Name}", LogLevel.Info);
+                            List<string> routeStart = new(route);
+                            routeStart.RemoveAt(routeStart.Count - 1);
+                            routeStart.AddRange(prev);
+
+                            pathCache.TryAdd((start.Name, end.Name, node.genderConstraint), routeStart);
+                            return routeStart;
+                        }
+                        else if (pathCache.TryGetValue((node.name, end.Name, genderConstrainedToCurrentSearch), out List<string>? genderedPrev)
+                            && genderedPrev?.Count > 2 && CompletelyDistinct(route, genderedPrev))
+                        {
+                            ModEntry.ModMonitor.TraceOnlyLog($"Partial route found: {start.Name} -> {node.name} + {node.name} -> {end.Name}", LogLevel.Info);
+                            List<string> routeStart = new(route);
+                            routeStart.RemoveAt(routeStart.Count - 1);
+                            routeStart.AddRange(genderedPrev);
+
+                            pathCache.TryAdd((start.Name, end.Name, genderConstrainedToCurrentSearch), routeStart);
+                            return routeStart;
                         }
                     }
                 }
@@ -263,11 +287,26 @@ internal static class Rescheduler
         }
     }
 
-    private static List<string> Unravel(MacroNode node, int capacityReserve = 0)
+    private static bool CompletelyDistinct(List<string> route, List<string> prev)
     {
-        Guard.IsGreaterThanOrEqualTo(capacityReserve, 0);
+        for (int i = 0; i < prev.Count; i++)
+        {
+            string? second = prev[i];
+            for (int j = route.Count - 2; j >= 0; j--)
+            {
+                string? first = route[j];
+                if (first == second)
+                {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
 
-        List<string> ret = new(node.depth + 1 + capacityReserve);
+    private static List<string> Unravel(MacroNode node)
+    {
+        List<string> ret = new(node.depth + 1);
         for (int i = 0; i <= node.depth; i++)
         {
             ret.Add(string.Empty);
@@ -278,7 +317,8 @@ internal static class Rescheduler
         {
             ret[workingNode.depth] = workingNode.name;
             workingNode = workingNode.prev;
-        } while (workingNode is not null);
+        }
+        while (workingNode is not null);
 
         return ret;
     }
@@ -312,11 +352,7 @@ internal static class Rescheduler
                 ModEntry.ModMonitor.Log(ex.ToString());
             }
         }
-        if (location.warps?.Count is null or 0)
-        {
-            ModEntry.ModMonitor.Log($"Failed to find warps for {location.NameOrUniqueName}");
-        }
-        else
+        if (location.warps?.Count is not null and not 0)
         {
             foreach (Warp? warp in location.warps)
             {

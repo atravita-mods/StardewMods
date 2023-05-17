@@ -56,7 +56,7 @@ internal sealed class ModEntry : Mod
     private void Report(string command, string[] args)
     {
         ModMonitor.Log($"Total locations: {Game1.locations.Count}", LogLevel.Info);
-        ModMonitor.Log($"Cached locations: {Rescheduler.CacheCount}", LogLevel.Info);
+        ModMonitor.Log($"Cached routes: {Rescheduler.CacheCount}", LogLevel.Info);
     }
 
     /// <inheritdoc cref="IGameLoopEvents.GameLaunched"/>

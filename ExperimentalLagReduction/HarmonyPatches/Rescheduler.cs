@@ -3,6 +3,8 @@
 using System.Collections.Concurrent;
 using System.Diagnostics;
 
+using AtraBase.Collections;
+
 using AtraShared.Utils.Extensions;
 
 using HarmonyLib;
@@ -56,13 +58,30 @@ internal static class Rescheduler
 
     internal static int CacheCount => pathCache.Count;
 
-    internal static List<string>? GetPathFromCache(string start, string end, int gender) => pathCache.TryGetValue((start, end, gender), out var val) ? val : null;
+    internal static List<string>? GetPathFromCache(string start, string end, int gender) => pathCache.TryGetValue((start, end, gender), out List<string>? val) ? val : null;
 
     internal static void PrintCache()
     {
+        Counter<int> counter = new();
+
         foreach (((string start, string end, int gender) key, List<string>? value) in pathCache)
         {
             ModEntry.ModMonitor.Log($"( {key.start} -> {key.end} ({key.gender})) == " + (value is not null ? string.Join("->", value) + $" [{value.Count}]" : "no path found" ), LogLevel.Info);
+
+            if (value is null)
+            {
+                counter[0]++;
+            }
+            else
+            {
+                counter[value.Count]++;
+            }
+        }
+
+        ModEntry.ModMonitor.Log($"In total: {pathCache.Count} routes cached", LogLevel.Info);
+        foreach ((int key, int value) in counter)
+        {
+            ModEntry.ModMonitor.Log($"    {value} of length {key}", LogLevel.Info);
         }
     }
 
@@ -79,7 +98,7 @@ internal static class Rescheduler
 #endif
 
         // pre-seed town a bit, since Town is basically a hub.
-        _ = GetPathFor(Game1.getLocationFromName("Town"), null, NPC.undefined, 3);
+        _ = GetPathFor(Game1.getLocationFromName("Town"), null, ungendered, 3);
 
 #if DEBUG
         _stopwatch.Value.Stop();
@@ -205,7 +224,7 @@ internal static class Rescheduler
 
                 if (Game1.getLocationFromName(node.name) is not GameLocation current)
                 {
-                    ModEntry.ModMonitor.LogOnce($"A warp references {node.name} which could not be found.", LogLevel.Trace);
+                    ModEntry.ModMonitor.LogOnce($"A warp references {node.name} which could not be found.", LogLevel.Warn);
                     continue;
                 }
 
@@ -225,11 +244,13 @@ internal static class Rescheduler
                         }
 
                         // if we have A->B and B->D, then we can string the path together already.
+                        // avoiding trivial one-step stitching because this is more expensive to do.
                         if (pathCache.TryGetValue((node.name, end.Name, ungendered), out List<string>? prev)
                             && prev?.Count > 2 && CompletelyDistinct(route, prev))
                         {
                             ModEntry.ModMonitor.TraceOnlyLog($"Partial route found: {start.Name} -> {node.name} + {node.name} -> {end.Name}", LogLevel.Info);
-                            List<string> routeStart = new(route);
+                            List<string> routeStart = new(route.Count + prev.Count - 1);
+                            routeStart.AddRange(route);
                             routeStart.RemoveAt(routeStart.Count - 1);
                             routeStart.AddRange(prev);
 
@@ -240,7 +261,8 @@ internal static class Rescheduler
                             && genderedPrev?.Count > 2 && CompletelyDistinct(route, genderedPrev))
                         {
                             ModEntry.ModMonitor.TraceOnlyLog($"Partial route found: {start.Name} -> {node.name} + {node.name} -> {end.Name}", LogLevel.Info);
-                            List<string> routeStart = new(route);
+                            List<string> routeStart = new(route.Count + genderedPrev.Count - 1);
+                            routeStart.AddRange(route);
                             routeStart.RemoveAt(routeStart.Count - 1);
                             routeStart.AddRange(genderedPrev);
 
@@ -340,34 +362,16 @@ internal static class Rescheduler
         _current.Value ??= new();
         _current.Value.Clear();
 
-        if (location.warps?.Count is null or 0)
-        {
-            try
-            {
-                location.updateWarps();
-            }
-            catch (Exception ex)
-            {
-                ModEntry.ModMonitor.Log($"Failed attempt to parse warps for {location.NameOrUniqueName}, see log for error.", LogLevel.Error);
-                ModEntry.ModMonitor.Log(ex.ToString());
-            }
-        }
         if (location.warps?.Count is not null and not 0)
         {
             foreach (Warp? warp in location.warps)
             {
                 string? name = GetActualLocation(warp.TargetName);
-                if (name is null || visited.Contains(name))
+                if (name is not null && !visited.Contains(name))
                 {
-                    continue;
+                    _current.Value.Add(name);
                 }
-                _current.Value.Add(name);
             }
-        }
-
-        if (location.doors?.Count() is 0 or null)
-        {
-            location.updateDoors();
         }
 
         if (location.doors?.Count() is not 0 and not null)
@@ -375,11 +379,10 @@ internal static class Rescheduler
             foreach (string? door in location.doors.Values)
             {
                 string? name = GetActualLocation(door);
-                if (name is null || visited.Contains(name))
+                if (name is not null && !visited.Contains(name))
                 {
-                    continue;
+                    _current.Value.Add(name);
                 }
-                _current.Value.Add(name);
             }
         }
 
@@ -394,13 +397,13 @@ internal static class Rescheduler
     private static string? GetActualLocation(string name)
     {
         // exclude cellars entirely.
-        if (name.StartsWith("Cellar") && long.TryParse(name["Cellar".Length..], out _))
+        if (name.StartsWith("Cellar", StringComparison.Ordinal) && long.TryParse(name["Cellar".Length..], out _))
         {
             return null;
         }
         return name switch
         {
-            "Farm" or "Woods" or "Backwoods" or "Tunnel" or "Volcano" => null,
+            "Farm" or "Woods" or "Backwoods" or "Tunnel" or "Volcano" or "VolcanoEntrance" => null,
             "BoatTunnel" => "IslandSouth",
             _ => name,
         };

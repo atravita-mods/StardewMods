@@ -29,6 +29,9 @@
 2. If you pause time, NPCs will tend to get stuck at schedule points. Unfortunately for Ginger Island, this usually ends with NPCs trapped in the changing room. If you go to Ginger Island and see no one there, try unpausing time. Or just leave them trapped in the changing room....(or I guess, disable changing)
 3. The debugging console commands basically only work for the host in multiplayer.
 
+### Version 1.1.9
+* You may now sit on the chairs in the Resort.
+
 ### Version 1.1.8
 * Fix assumption in scheduling code that schedules will have at least two points.
 * GIMA will now try to re-add the `default` or `spring` schedule if a mod tries removing that from a vanilla character. This is because the game expects one of those two schedules to exist and uses it as a default, and removing both may cause a crash.

@@ -1,10 +1,13 @@
 ﻿using AtraShared.ConstantsAndEnums;
 using AtraShared.Utils.Extensions;
 
+using ExperimentalLagReduction.Framework;
 using ExperimentalLagReduction.HarmonyPatches;
 
 using HarmonyLib;
 using StardewModdingAPI.Events;
+
+using AtraUtils = AtraShared.Utils.Utils;
 
 namespace ExperimentalLagReduction;
 
@@ -16,6 +19,8 @@ internal sealed class ModEntry : Mod
     /// </summary>
     internal static IMonitor ModMonitor { get; private set; } = null!;
 
+    internal static ModConfig Config { get; private set; } = null!;
+
     /// <inheritdoc />
     public override void Entry(IModHelper helper)
     {
@@ -26,6 +31,8 @@ internal sealed class ModEntry : Mod
         ModMonitor = this.Monitor;
         this.Monitor.Log($"Starting up: {this.ModManifest.UniqueID} - {typeof(ModEntry).Assembly.FullName}");
         helper.Events.GameLoop.GameLaunched += this.OnGameLaunch;
+
+        Config = AtraUtils.GetConfigOrDefault<ModConfig>(helper, this.Monitor);
 
         helper.ConsoleCommands.Add("av.elr.print_report", "todo", this.Report);
         helper.ConsoleCommands.Add("av.elr.get_path_from", "todo", this.GetPath);

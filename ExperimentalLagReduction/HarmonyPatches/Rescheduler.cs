@@ -2,12 +2,15 @@
 
 using System.Collections.Concurrent;
 using System.Diagnostics;
+using System.Xml.Linq;
 
 using AtraBase.Collections;
 
 using AtraShared.Utils.Extensions;
 
 using HarmonyLib;
+
+using StardewValley;
 
 namespace ExperimentalLagReduction.HarmonyPatches;
 
@@ -50,7 +53,7 @@ internal static class Rescheduler
 
     private static readonly ThreadLocal<Queue<MacroNode>> _queue = new(static () => new());
 
-    private static readonly ThreadLocal<HashSet<string>> _current = new(() => new());
+    private static readonly ThreadLocal<List<string>> _current = new(() => new());
 
 #if DEBUG
     private static readonly ThreadLocal<Stopwatch> _stopwatch = new(() => new());
@@ -217,11 +220,10 @@ internal static class Rescheduler
 
             int startGender = GetGenderConstraint(start.Name);
             _queue.Value.Enqueue(new(start.Name, null, startGender));
+            _visited.Value.Add(start.Name);
 
             while (_queue.Value.TryDequeue(out MacroNode? node))
             {
-                _visited.Value.Add(node.name);
-
                 if (Game1.getLocationFromName(node.name) is not GameLocation current)
                 {
                     ModEntry.ModMonitor.LogOnce($"A warp references {node.name} which could not be found.", LogLevel.Warn);
@@ -245,6 +247,7 @@ internal static class Rescheduler
 
                         // if we have A->B and B->D, then we can string the path together already.
                         // avoiding trivial one-step stitching because this is more expensive to do.
+                        // this isn't technically correct (especially for cycles) but it works pretty well most of the time.
                         if (pathCache.TryGetValue((node.name, end.Name, ungendered), out List<string>? prev)
                             && prev?.Count > 2 && CompletelyDistinct(route, prev))
                         {
@@ -275,17 +278,9 @@ internal static class Rescheduler
                 if (node.depth < limit)
                 {
                     // queue next
-                    foreach (string name in FindWarpsFrom(current, _visited.Value))
+                    foreach (string name in FindWarpsFrom(current, _visited.Value, node.genderConstraint))
                     {
-                        int genderConstraint = GetTightestGenderConstraint(node.genderConstraint, GetGenderConstraint(name));
-
-                        // this path cannot possibly be valid due to genderlocking
-                        if (genderConstraint == invalid_gender)
-                        {
-                            continue;
-                        }
-
-                        MacroNode next = new(name, node, genderConstraint);
+                        MacroNode next = new(name, node, GetTightestGenderConstraint(node.genderConstraint, GetGenderConstraint(name)));
                         _queue.Value.Enqueue(next);
                     }
                 }
@@ -352,7 +347,7 @@ internal static class Rescheduler
     /// <param name="visited">Previous visited locations.</param>
     /// <returns>IEnumerable of location names.</returns>
     /// <remarks>Stardew maps can have "duplicate" edges, must de-duplicate. This function takes ownership over the _current static hashset and should be the only function that mutates that.</remarks>
-    private static IEnumerable<string> FindWarpsFrom(GameLocation? location, HashSet<string> visited)
+    private static IEnumerable<string> FindWarpsFrom(GameLocation? location, HashSet<string> visited, int gender)
     {
         if (location is null)
         {
@@ -366,8 +361,9 @@ internal static class Rescheduler
         {
             foreach (Warp? warp in location.warps)
             {
-                string? name = GetActualLocation(warp.TargetName);
-                if (name is not null && !visited.Contains(name))
+                if (GetActualLocation(warp.TargetName) is string name
+                    && GetTightestGenderConstraint(gender, GetGenderConstraint(name)) != invalid_gender
+                    && visited.Add(name))
                 {
                     _current.Value.Add(name);
                 }
@@ -378,8 +374,9 @@ internal static class Rescheduler
         {
             foreach (string? door in location.doors.Values)
             {
-                string? name = GetActualLocation(door);
-                if (name is not null && !visited.Contains(name))
+                if (GetActualLocation(door) is string name
+                    && GetTightestGenderConstraint(gender, GetGenderConstraint(name)) != invalid_gender
+                    && visited.Add(name))
                 {
                     _current.Value.Add(name);
                 }

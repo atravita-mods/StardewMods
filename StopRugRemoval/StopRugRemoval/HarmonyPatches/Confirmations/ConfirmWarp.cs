@@ -212,7 +212,7 @@ internal static class ConfirmWarp
     private static bool PrefixBuildingAction(Building __instance, Vector2 tileLocation, Farmer who, ref bool __result)
     {
         if (Game1.eventUp || Game1.isFestival() || Game1.fadeToBlack || Game1.player.swimming.Value || Game1.player.onBridge.Value
-            || !ModEntry.Config.Enabled)
+            || !ModEntry.Config.Enabled || Game1.activeClickableMenu is DialogueAndAction)
         {
             return true;
         }
@@ -284,7 +284,8 @@ internal static class ConfirmWarp
         {
             return true;
         }
-        if (Game1.eventUp || Game1.isFestival() || Game1.fadeToBlack || Game1.player.swimming.Value || Game1.player.onBridge.Value || !ModEntry.Config.Enabled)
+        if (Game1.eventUp || Game1.isFestival() || Game1.fadeToBlack || Game1.player.swimming.Value || Game1.player.onBridge.Value || !ModEntry.Config.Enabled
+            || Game1.activeClickableMenu is DialogueAndAction)
         {
             return true;
         }
@@ -325,7 +326,7 @@ internal static class ConfirmWarp
     private static bool PrefixIslandWest(IslandWest __instance, string action, Farmer who, Location tileLocation)
     {
         if (Game1.eventUp || Game1.isFestival() || Game1.fadeToBlack || Game1.player.swimming.Value || Game1.player.onBridge.Value
-            || !ModEntry.Config.Enabled)
+            || !ModEntry.Config.Enabled || Game1.activeClickableMenu is DialogueAndAction)
         {
             return true;
         }

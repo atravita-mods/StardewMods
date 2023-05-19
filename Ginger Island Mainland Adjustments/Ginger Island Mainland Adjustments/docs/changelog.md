@@ -31,6 +31,7 @@
 
 ### Version 1.1.9
 * You may now sit on the chairs in the Resort.
+* Default GIReturn dialogue now appears.
 
 ### Version 1.1.8
 * Fix assumption in scheduling code that schedules will have at least two points.

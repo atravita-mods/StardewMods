@@ -154,11 +154,11 @@ internal static class DialoguePatches
                 __instance.currentMarriageDialogue.Clear();
                 if (Game1.player.getFriendshipHeartLevelForNPC(__instance.Name) > 9)
                 {
-                    __instance.CurrentDialogue.Push(new Dialogue(I18n.GILeaveDefaultHappy(__instance.getTermOfSpousalEndearment()), __instance));
+                    __instance.CurrentDialogue.Push(new Dialogue(I18n.GIReturnDefaultHappy(__instance.getTermOfSpousalEndearment()), __instance));
                 }
                 else
                 {
-                    __instance.CurrentDialogue.Push(new Dialogue(I18n.GILeaveDefaultUnhappy(), __instance));
+                    __instance.CurrentDialogue.Push(new Dialogue(I18n.GIReturnDefaultUnhappy(), __instance));
                 }
             }
         }

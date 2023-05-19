@@ -9,5 +9,17 @@
             "Mon4": "@, you've got any interesting books you want to read?",
             "1_2": "I'd love to decorate more, but Mum doesn't approve.#$b#She thinks it's spending money we don't have."
         }
+    },
+    {
+        "LogName": "Penny - Marriage Y2",
+        "Action": "EditData",
+        "Target": "Characters/Dialogue/MarriageDialoguePenny",
+        "When" : {"YearModulus": "2"},
+        "Entries": {
+            "summer_10": "@, hot days like this make me wonder what sleeping outside under the stars would be like...",
+
+            "patio_Penny": "Just doing a little reading outside, %endearment. The weather is lovely today!",
+            "Indoor_Night_1": "Mmmm, might take my hair down early tonight.#$b#There's a bobby pin stabbing me.$s"
+        }
     }
 ]}

@@ -4,8 +4,21 @@
         "Action": "EditData",
         "Target": "Characters/Dialogue/Demetrius",
         "Entries": {
-            "7_2": "Many people don't like bats because they're vectors of disease.#$b#But they're very important to the ecosystem.#$e#Also, bats are adorable.$h"
+            "7_2": "Many people don't like bats because they're vectors of disease.#$b#But they're very important to the ecosystem.#$e#Also, bats are adorable.$h",
+            "8_2": "About one fifth of mammalian species are bats! They're the only mammals that can fly.$h",
+            "9_2": "Bats are exceptionally long-lived for mammals. They'll often live three times longer than other similarly-sized mammals.$h"
         },
         "When": { "YearModulus": "2"}
+    },
+    {
+        "LogName": "Demetrius mid-hearts, Y3, bats",
+        "Action": "EditData",
+        "Target": "Characters/Dialogue/Demetrius",
+        "Entries": {
+            "7_2": "In order to support the respiratory demands of flight, bats can actually exchange carbon dioxide for oxygen through their wings.$h#$e#Birds have evolved an extraordinary respiratory system, bats breathe through their wings. Isn't this marvelous?$h",
+            "10_2": "Bat guano is commonly used as fertilizer! It's quite rich in nitrogen.",
+            "12_2": "Bats help reduce the use of pesticides because they'll eat agricultural pests!"
+        },
+        "When": { "YearModulus": "3"}
     }
 ]}

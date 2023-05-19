@@ -16,4 +16,7 @@ internal sealed class ModConfig
 
     [GMCMSection("Scheduler", 0)]
     public bool AllowModAddedDoors { get; set; } = true;
+
+    [GMCMSection("Scheduler", 0)]
+    public bool AllowPartialPaths { get; set; } = true;
 }

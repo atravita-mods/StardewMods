@@ -8,6 +8,11 @@ internal static class DoorsForAll
     [HarmonyPatch(nameof(GameLocation.loadObjects))]
     private static void Postfix(GameLocation __instance)
     {
+        if (!ModEntry.Config.AllowModAddedDoors)
+        {
+            return;
+        }
+
         if (__instance.warps?.Count is null or 0)
         {
             try

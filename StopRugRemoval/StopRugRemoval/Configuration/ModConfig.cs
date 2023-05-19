@@ -173,6 +173,10 @@ internal sealed class ModConfig
     /// </summary>
     public SignBehavior SignBehavior { get; set; } = SignBehavior.Vanilla;
 
+    public bool DressersAllowWeapons { get; set; } = true;
+
+    public bool DressersAllowBobbers { get; set; } = true;
+
     /// <summary>
     /// Gets or sets a value indicating whether or not to confirm bomb placement in safe areas.
     /// </summary>

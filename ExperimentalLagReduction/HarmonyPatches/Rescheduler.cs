@@ -5,6 +5,7 @@ using System.Diagnostics;
 using System.Xml.Linq;
 
 using AtraBase.Collections;
+using AtraBase.Models.Result;
 
 using AtraShared.Utils.Extensions;
 
@@ -63,7 +64,40 @@ internal static class Rescheduler
 
     internal static int CacheCount => pathCache.Count;
 
-    internal static List<string>? GetPathFromCache(string start, string end, int gender) => pathCache.TryGetValue((start, end, gender), out List<string>? val) ? val : null;
+    internal static bool TryGetPathFromCache(string start, string end, int gender, out List<string>? path)
+    {
+        List<string>? ShorterNonNull(List<string>? left, List<string>? right)
+        {
+            if (left is null)
+            {
+                return right;
+            }
+            if (right is null)
+            {
+                return left;
+            }
+
+            return left.Count >= right.Count ? left : right;
+        }
+
+        bool foundGeneric = pathCache.TryGetValue((start, end, ungendered), out path);
+
+        bool foundMale = false;
+        if (gender != NPC.female && pathCache.TryGetValue((start, end, NPC.male), out List<string>? male))
+        {
+            foundMale = true;
+            path = ShorterNonNull(path, male);
+        }
+
+        bool foundFemale = false;
+        if (gender != NPC.male && pathCache.TryGetValue((start, end, NPC.male), out List<string>? female))
+        {
+            foundFemale = true;
+            path = ShorterNonNull(path, female);
+        }
+
+        return foundGeneric || foundMale || foundFemale;
+    }
 
     internal static void PrintCache()
     {
@@ -90,128 +124,7 @@ internal static class Rescheduler
         }
     }
 
-    [HarmonyPrefix]
-    [HarmonyPriority(Priority.VeryLow)]
-    [HarmonyPatch(nameof(NPC.populateRoutesFromLocationToLocationList))]
-    private static bool PrefixPopulateRoutes()
-    {
-        pathCache.Clear();
-
-#if DEBUG
-        _stopwatch.Value ??= new();
-        _stopwatch.Value.Restart();
-#endif
-
-        // pre-seed town a bit, since Town is basically a hub.
-        _ = GetPathFor(Game1.getLocationFromName("Town"), null, ungendered, 3);
-
-#if DEBUG
-        _stopwatch.Value.Stop();
-        ModEntry.ModMonitor.Log($"Total time so far: {_stopwatch.Value.ElapsedMilliseconds} ms, {pathCache.Count} total routes cached", LogLevel.Info);
-#endif
-
-        return false;
-    }
-
-    [HarmonyPrefix]
-    [HarmonyPatch("getLocationRoute")]
-    [HarmonyPriority(Priority.VeryLow)]
-    private static bool PrefixGetLocationRoute(string startingLocation, string endingLocation, NPC __instance, ref List<string>? __result)
-    {
-        int gender = __instance.Gender switch
-        {
-            NPC.undefined => NPC.female,
-            _ => __instance.Gender,
-        };
-
-        if (pathCache.TryGetValue((startingLocation, endingLocation, ungendered), out List<string>? cached)
-            || pathCache.TryGetValue((startingLocation, endingLocation, gender), out cached))
-        {
-            ModEntry.ModMonitor.TraceOnlyLog($"Got macro schedule for {__instance.Name} from cache: {startingLocation} -> {endingLocation}");
-            __result = cached;
-            if (__result is null)
-            {
-                if (__instance.Gender == NPC.undefined)
-                {
-                    goto skip;
-                }
-                ModEntry.ModMonitor.Log($"{__instance.Name} requested path from {startingLocation} to {endingLocation} where no valid path was found.", LogLevel.Warn);
-            }
-            return false;
-        }
-
-        skip:
-        if (__instance.Gender == NPC.undefined && pathCache.TryGetValue((startingLocation, endingLocation, NPC.male), out cached))
-        {
-            __result = cached;
-            if (__result is null)
-            {
-                ModEntry.ModMonitor.Log($"{__instance.Name} requested path from {startingLocation} to {endingLocation} where no valid path was found.", LogLevel.Warn);
-            }
-            return false;
-        }
-
-        #region validation
-
-        __result = null;
-        if (GetActualLocation(endingLocation) is null)
-        {
-            ModEntry.ModMonitor.Log($"{__instance.Name} requested path to {endingLocation} which is blacklisted from pathing", LogLevel.Warn);
-            return false;
-        }
-
-        GameLocation start = Game1.getLocationFromName(startingLocation);
-        if (start is null)
-        {
-            ModEntry.ModMonitor.Log($"NPC {__instance.Name} requested path starting at {startingLocation}, which does not exist.", LogLevel.Error);
-            return false;
-        }
-        int startGender = GetTightestGenderConstraint(__instance.Gender, GetGenderConstraint(startingLocation));
-        if (startGender == invalid_gender)
-        {
-            ModEntry.ModMonitor.Log($"NPC {__instance.Name} requested path starting at {startingLocation}, which is not allowed due to their gender.", LogLevel.Error);
-            return false;
-        }
-
-        GameLocation end = Game1.getLocationFromName(endingLocation);
-        if (end is null)
-        {
-            ModEntry.ModMonitor.Log($"NPC {__instance.Name} requested path ending at {endingLocation}, which does not exist.", LogLevel.Error);
-            return false;
-        }
-        int endGender = GetTightestGenderConstraint(__instance.Gender, GetGenderConstraint(endingLocation));
-        if (endGender == invalid_gender)
-        {
-            ModEntry.ModMonitor.Log($"NPC {__instance.Name} requested path ending at {endingLocation}, which is not allowed due to their gender.", LogLevel.Error);
-            return false;
-        }
-
-        #endregion
-
-#if DEBUG
-        _stopwatch.Value ??= new();
-        _stopwatch.Value.Start();
-#endif
-
-        __result = GetPathFor(start, end, __instance.Gender);
-
-#if DEBUG
-        _stopwatch.Value.Stop();
-        ModEntry.ModMonitor.Log($"Total time so far: {_stopwatch.Value.ElapsedMilliseconds} ms, {pathCache.Count} total routes cached", LogLevel.Info);
-#endif
-
-        if (__result is null)
-        {
-            ModEntry.ModMonitor.LogOnce($"{__instance.Name} requested path from {startingLocation} to {endingLocation} where no valid path was found.", LogLevel.Warn);
-        }
-        else
-        {
-            ModEntry.ModMonitor.TraceOnlyLog($"Found path for {__instance.Name} from {startingLocation} to {endingLocation}: {string.Join("->", __result)} with {__result.Count} segments.");
-        }
-        return false;
-    }
-
-    private static List<string>? GetPathFor(GameLocation start, GameLocation? end, int gender, int limit = int.MaxValue)
+    internal static List<string>? GetPathFor(GameLocation start, GameLocation? end, int gender, bool allowPartialPaths, int limit = int.MaxValue)
     {
         if (limit <= 0)
         {
@@ -253,10 +166,22 @@ internal static class Rescheduler
                     // found destination, return it.
                     if (end.Name == node.name)
                     {
+                        if (node.genderConstraint == ungendered && route.Count > 3)
+                        {
+                            int total = route.Count;
+                            int count = total - 1;
+                            do
+                            {
+                                List<string> segment = route.GetRange(total - count, count);
+                                pathCache.TryAdd((segment[0], segment[^1], ungendered), segment);
+                                count--;
+                            }
+                            while (count > 1);
+                        }
                         return route;
                     }
 
-                    if (ModEntry.Config.AllowPartialPaths)
+                    if (allowPartialPaths)
                     {
                         // if we have A->B and B->D, then we can string the path together already.
                         // avoiding trivial one-step stitching because this is more expensive to do.
@@ -307,7 +232,7 @@ internal static class Rescheduler
                 {
                     NPC.male => "male",
                     NPC.female => "female",
-                    NPC.undefined => "none",
+                    _ => "none",
                 };
 
                 ModEntry.ModMonitor.Log($"Scheduler could not find route from {start.Name} to {end.Name} while honoring gender {genderstring}", LogLevel.Warn);
@@ -322,6 +247,104 @@ internal static class Rescheduler
             _queue.Value?.Clear();
             return null;
         }
+    }
+
+    [HarmonyPrefix]
+    [HarmonyPriority(Priority.VeryLow)]
+    [HarmonyPatch(nameof(NPC.populateRoutesFromLocationToLocationList))]
+    private static bool PrefixPopulateRoutes()
+    {
+        pathCache.Clear();
+
+#if DEBUG
+        _stopwatch.Value ??= new();
+        _stopwatch.Value.Restart();
+#endif
+
+        // pre-seed town a bit, since Town is basically a hub.
+        _ = GetPathFor(Game1.getLocationFromName("Town"), null, ungendered, false, 3);
+
+#if DEBUG
+        _stopwatch.Value.Stop();
+        ModEntry.ModMonitor.Log($"Total time so far: {_stopwatch.Value.ElapsedMilliseconds} ms, {pathCache.Count} total routes cached", LogLevel.Info);
+#endif
+
+        return false;
+    }
+
+    [HarmonyPrefix]
+    [HarmonyPatch("getLocationRoute")]
+    [HarmonyPriority(Priority.VeryLow)]
+    private static bool PrefixGetLocationRoute(string startingLocation, string endingLocation, NPC __instance, ref List<string>? __result)
+    {
+        if (TryGetPathFromCache(startingLocation, endingLocation, __instance.Gender, out __result))
+        {
+            ModEntry.ModMonitor.TraceOnlyLog($"Got macro schedule for {__instance.Name} from cache: {startingLocation} -> {endingLocation}");
+            if (__result is null)
+            {
+                ModEntry.ModMonitor.Log($"{__instance.Name} requested path from {startingLocation} to {endingLocation} where no valid path was found.", LogLevel.Warn);
+            }
+            return false;
+        }
+
+        #region validation
+
+        __result = null;
+        if (GetActualLocation(endingLocation) is null)
+        {
+            ModEntry.ModMonitor.Log($"{__instance.Name} requested path to {endingLocation} which is blacklisted from pathing", LogLevel.Warn);
+            return false;
+        }
+
+        GameLocation start = Game1.getLocationFromName(startingLocation);
+        if (start is null)
+        {
+            ModEntry.ModMonitor.Log($"NPC {__instance.Name} requested path starting at {startingLocation}, which does not exist.", LogLevel.Error);
+            return false;
+        }
+        int startGender = GetTightestGenderConstraint(__instance.Gender, GetGenderConstraint(startingLocation));
+        if (startGender == invalid_gender)
+        {
+            ModEntry.ModMonitor.Log($"NPC {__instance.Name} requested path starting at {startingLocation}, which is not allowed due to their gender.", LogLevel.Error);
+            return false;
+        }
+
+        GameLocation end = Game1.getLocationFromName(endingLocation);
+        if (end is null)
+        {
+            ModEntry.ModMonitor.Log($"NPC {__instance.Name} requested path ending at {endingLocation}, which does not exist.", LogLevel.Error);
+            return false;
+        }
+        int endGender = GetTightestGenderConstraint(__instance.Gender, GetGenderConstraint(endingLocation));
+        if (endGender == invalid_gender)
+        {
+            ModEntry.ModMonitor.Log($"NPC {__instance.Name} requested path ending at {endingLocation}, which is not allowed due to their gender.", LogLevel.Error);
+            return false;
+        }
+
+        #endregion
+
+#if DEBUG
+        _stopwatch.Value ??= new();
+        _stopwatch.Value.Start();
+#endif
+
+        __result = GetPathFor(start, end, __instance.Gender, ModEntry.Config.AllowPartialPaths);
+
+#if DEBUG
+        _stopwatch.Value.Stop();
+        ModEntry.ModMonitor.Log($"Total time so far: {_stopwatch.Value.ElapsedMilliseconds} ms, {pathCache.Count} total routes cached", LogLevel.Info);
+#endif
+
+        if (__result is null)
+        {
+            ModEntry.ModMonitor.LogOnce($"{__instance.Name} requested path from {startingLocation} to {endingLocation} where no valid path was found.", LogLevel.Warn);
+        }
+        else
+        {
+            ModEntry.ModMonitor.TraceOnlyLog($"Found path for {__instance.Name} from {startingLocation} to {endingLocation}: {string.Join("->", __result)} with {__result.Count} segments.");
+        }
+        return false;
     }
 
     private static bool CompletelyDistinct(List<string> route, List<string> prev)

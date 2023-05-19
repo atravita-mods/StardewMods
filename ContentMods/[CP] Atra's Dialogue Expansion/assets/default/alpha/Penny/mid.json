@@ -19,7 +19,23 @@
             "summer_10": "@, hot days like this make me wonder what sleeping outside under the stars would be like...",
 
             "patio_Penny": "Just doing a little reading outside, %endearment. The weather is lovely today!",
-            "Indoor_Night_1": "Mmmm, might take my hair down early tonight.#$b#There's a bobby pin stabbing me.$s"
+            "Indoor_Night_1": "Mmmm, might take my hair down early tonight.#$b#There's a bobby pin stabbing me.$s",
+            "Bad_0": "@, are we doing poorly financially? Should I take a job in Grampleton?$s",
+
+            "fall_6": "Gotta order new textbooks for the kiddos...I hope the town will have enough funds...$s"
+        }
+    },
+    {
+        "LogName": "Penny - Marriage Y3",
+        "Action": "EditData",
+        "Target": "Characters/Dialogue/MarriageDialoguePenny",
+        "When" : {"YearModulus": "3"},
+        "Entries": {
+            "patio_Penny": "Just enjoying a good book outside today, @!#$b#Is there anything that needs doing?",
+
+            "Rainy_Night_1": "@, to be honest, I'm glad I'm no longer living with my mother.#$b#As much as I love her, I now get that I can't save her.",
+
+            "TwoKids_0": "I can't wait to start teaching %kid1 and %kid2!$h"
         }
     }
 ]}

@@ -49,10 +49,16 @@ internal sealed class ModEntry : Mod
         {
             ModMonitor.Log("Expected int gender", LogLevel.Error);
         }
-        var path = Rescheduler.GetPathFromCache(args[0], args[1], gender);
-        if (path is not null)
+        if (Rescheduler.TryGetPathFromCache(args[0], args[1], gender, out var path))
         {
-            ModMonitor.Log(string.Join("->", path), LogLevel.Info);
+            if (path is not null)
+            {
+                ModMonitor.Log(string.Join("->", path), LogLevel.Info);
+            }
+            else
+            {
+                ModMonitor.Log("That path is invalid.", LogLevel.Info);
+            }
         }
         else
         {

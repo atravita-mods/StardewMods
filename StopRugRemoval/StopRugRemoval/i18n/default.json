@@ -126,6 +126,11 @@
   "RemoveDuplicateNPCs.title": "Remove Duplicated NPCs",
   "RemoveDuplicateNPCs.description": "Remove duplicated NPCs if one is found.",
 
+  "DressersAllowBobbers.title": "Dressers Allow Bobbers",
+  "DressersAllowBobbers.description": "If enabled, dressers will store bobbers.",
+  "DressersAllowWeapons.title": "Dressers Allow Weapons",
+  "DressersAllowWeapons.description": "If enabled, dressers will store weapons.",
+
   // Messages to the player.
   "rug-removal-message": "Remove all items on rug before removing rug!",
   "table-removal-message": "Hold down {{keybind}} to remove object from table.",

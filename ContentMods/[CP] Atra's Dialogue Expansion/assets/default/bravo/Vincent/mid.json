@@ -4,6 +4,9 @@
         "LogName": "Vincent mid-hearts",
         "Target": "Characters/Dialogue/Vincent",
         "Entries": {
+            "summer_Mon8": "Mom made stewed spinach yesterday. Yuck.$s",
+            "summer_Tue8": "I wonder if I can get Sam to buy me an ice cream...",
+
             "2{{YearRemainder}}": "My ear hurts.$s",
             "4{{YearRemainder}}": "I don't wanna go to school.$s#$b#You think I could pretend to be sick?",
             "17{{YearRemainder}}": "Look what I found, @!$h[721]"

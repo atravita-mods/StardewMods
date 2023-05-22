@@ -8,6 +8,14 @@
         }
     },
     {
+        "LogName": "Shane - strings",
+        "Action": "EditData",
+        "Target": "Strings/schedules/Shane",
+        "Entries": {
+            "marriage_Sun.000": "Go {{Random: {{FirstSportsTeam}}, {{SecondSportsTeam}} }}!#$b#$c .5#Look, @, isn't that a great play?#Oh come on, ref, that's unfair!"
+        }
+    },
+    {
         "LogName": "Shane - post six heart - marriage.",
         "Action": "EditData",
         "Target": "Characters/Dialogue/MarriageDialogueShane",

@@ -9,7 +9,9 @@
             },
             "Entries": {
                 "Sun6": "{{i18n:george-sports.sun|first= {{FirstSportsTeam}} | second= {{SecondSportsTeam}} }}",
-                "Mon6": "{{i18n:george-sports.mon|reaction = {{i18n: {{Random:great, incredible, absurd, boring}} }} }}"
+                "Mon6": "{{i18n:george-sports.mon|reaction = {{i18n: {{Random:great, incredible, absurd, boring}} }} }}",
+
+                "summer_19": "{{i18n:george-sports-specific}}$h",
             }
         }
     ]

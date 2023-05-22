@@ -19,6 +19,20 @@
         "EnableGeneric": {
             "AllowValues": "true, false",
             "Default": "true"
+        },
+        "EnableSpouseLocational": {
+            "AllowValues": "true, false",
+            "Default": "true",
+        },
+        "EnableFestival": {
+            "AllowValues": "true, false",
+            "Default": "true",
+        },
+        "ScheduleChanges":{
+            "AllowValues": "Abigail, Alex, Caroline, Clint, Demetrius, Elliott, Emily, Evelyn, George, Gus, Haley, Harvey, Jodi, Kent, Leah, Lewis, Marnie, Maru, Pam, Penny, Pierre, Robin, Sam, Sandy, Sebastian, Shane, Vincent, Willy",
+            "AllowMultiple": true,
+            "Default": "Abigail, Alex, Caroline, Clint, Demetrius, Elliott, Emily, Evelyn, George, Gus, Haley, Harvey, Jodi, Kent, Leah, Lewis, Marnie, Maru, Pam, Penny, Pierre, Robin, Sam, Sandy, Sebastian, Shane, Vincent, Willy",
+            "AllowBlank": true
         }
     },
     "DynamicTokens": [
@@ -35,6 +49,7 @@
             "Value": "Characters/Dialogue/MarriageDialogue{{Spouse}}",
             "When": {
                 "HasMod": "aedenthorn.FreeLove",
+                "HasValue: {{Spouse}}": true,
             }
         },
 
@@ -164,6 +179,14 @@
             "LogName": "GIMA",
             "When": {"HasMod": "atravita.GingerIslandMainlandAdjustments"},
             "FromFile": "assets/integrations/gima.json"
+        },
+        {
+            "Action": "Include",
+            "LogName": "ScheduleChanges",
+            "When": {
+                "HasValue: ScheduleChanges": true
+            },
+            "FromFile": "assets/schedules/toc.json"
         }
     ],
 }

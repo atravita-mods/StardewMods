@@ -4,10 +4,17 @@ using StardewModdingAPI.Events;
 
 namespace GingerIslandMainlandAdjustments.DialogueChanges;
 
+/// <summary>
+/// Handles adding dialogue?
+/// </summary>
 internal static class MarriageDialogueHandler
 {
+    /// <summary>
+    /// Handles adding marriage dialogue on day start.
+    /// Using a low event priority to slot after Custom NPC Exclusions.
+    /// </summary>
     [EventPriority(EventPriority.Low - 2000)]
-    internal static void OnDayStart(object? sender, DayStartedEventArgs e)
+    internal static void OnDayStart()
     {
         try
         {

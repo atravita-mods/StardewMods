@@ -23,7 +23,7 @@ public sealed class GameLocationNameComparer : EqualityComparer<GameLocation>
         {
             return false;
         }
-        return lhs.Name == rhs.Name;
+        return ReferenceEquals(lhs, rhs) || lhs.Name == rhs.Name;
     }
 
     /// <inheritdoc />
@@ -53,7 +53,7 @@ public sealed class GameLocationUniqueNameComparer : EqualityComparer<GameLocati
         {
             return false;
         }
-        return lhs.NameOrUniqueName == rhs.NameOrUniqueName;
+        return ReferenceEquals(lhs, rhs) || lhs.NameOrUniqueName == rhs.NameOrUniqueName;
     }
 
     /// <inheritdoc />

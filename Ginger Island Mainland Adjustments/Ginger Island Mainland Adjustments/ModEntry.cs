@@ -38,7 +38,7 @@ internal sealed class ModEntry : Mod
         // Register events
         helper.Events.GameLoop.GameLaunched += this.OnGameLaunched;
         helper.Events.GameLoop.TimeChanged += this.OnTimeChanged;
-        helper.Events.GameLoop.DayStarted += MarriageDialogueHandler.OnDayStart;
+        helper.Events.GameLoop.DayStarted += static (_, _) => MarriageDialogueHandler.OnDayStart();
         helper.Events.GameLoop.DayEnding += this.OnDayEnding;
         helper.Events.GameLoop.ReturnedToTitle += this.ReturnedToTitle;
         helper.Events.GameLoop.SaveLoaded += this.OnSaveLoaded;

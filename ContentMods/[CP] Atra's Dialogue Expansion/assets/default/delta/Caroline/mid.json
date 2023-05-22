@@ -9,7 +9,7 @@
         "Action": "EditData",
         "Target": "Characters/Dialogue/Caroline",
         "When": {"Weather: valley": "Rain, Storm"},
-        "Entries": {"SeedShop_Entry": "Oh, it's really pouring out there"}
+        "Entries": {"SeedShop_Entry": "Oh, it's really pouring out there."}
     },
     {
         "LogName": "Rain -- during winter.",
@@ -117,9 +117,10 @@
             "winter_Mon8": "The winter's been horrid this year. Maybe I should check in on George and Evelyn?",
 
             "1_2": "Inflation's been pretty bad this year, everything's getting more expensive.#$b#Most of our suppliers have raised their prices. And fuel's gone up by a lot.",
-            "3_2": "I remember growing up in this valley. Pelican Town was bigger back then, we had three separate restaurants!#$b#It's shrunk over time after the mines closed and economic opportunities left.#$e#But with your farm here, and Leah and Elliott, maybe the town's growing again?",
+            "3_2": "I remember growing up in this valley. Pelican Town was bigger back then, we had three separate restaurants!#$b#It's shrunk over time after the mines closed and economic opportunities left.#$e#But with your farm here, and Leah and Elliott, maybe the town's growing again?#$b#Maybe we'll get another restaurant!",
             "11_2": "Maybe Abby would be more interested in music as a major? She does love playing her flute...",
-            "13_2": "I wish I could get Pierre to join us for aerobics club sometimes. But he always says he's too busy.",
+            "12_2": "We could consider trying to get Abby enrolled in a conservatory. Being a musician is hard work, but if it's what she loves...",
+            "13_2": "I wish I could get Pierre to join us for aerobics club sometimes. But he always says he's too busy.#$b#Think some exercise would do him good...",
 
             // Ginger Island lines.
             "Resort_Bar_2": "I wonder if Gus'll sell any Long Island Iced Tea if I asked about it?$h"
@@ -147,6 +148,7 @@
         },
         "Entries": {
             "7_2": "Was talking to Robin the other day.#$b#You know, @, we'd try our best to support Abigail if she wanted to move out. I'm not sure she wants to, though.",
+            "9_2": "I asked Abby last night if she'd be happier living in the city.#$b#I'd miss her if she moved out, of course, but maybe it's necessary.$s"
         }
     }
 ]}

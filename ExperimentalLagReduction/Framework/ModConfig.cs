@@ -11,6 +11,13 @@ internal sealed class ModConfig
 {
     public bool OverrideGiftTastes { get; set; } = true;
 
+    public bool ForceLazyTextureLoad { get; set; } =
+        #if DEBUG
+            true;
+        #else
+            false;
+        #endif
+
     [GMCMSection("Scheduler", 0)]
     public bool UseAlternativeScheduler { get; set; } = true;
 

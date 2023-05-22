@@ -24,6 +24,9 @@ namespace GingerIslandMainlandAdjustments.ScheduleManager;
 /// </summary>
 internal static class GIScheduler
 {
+    #region delegates
+    #endregion
+
     private static readonly int[] TIMESLOTS = new int[] { 1200, 1400, 1600 };
 
     /// <summary>
@@ -143,7 +146,7 @@ internal static class GIScheduler
             return;
         }
 
-        List<NPC> visitors = GenerateVistorList(random, Globals.Config.Capacity, explorers);
+        List<NPC> visitors = GenerateVisitorList(random, Globals.Config.Capacity, explorers);
         Dictionary<string, string> animationDescriptions = Globals.GameContentHelper.Load<Dictionary<string, string>>("Data/animationDescriptions");
 
         GIScheduler.Bartender = SetBartender(visitors);
@@ -158,19 +161,12 @@ internal static class GIScheduler
             {
                 Globals.ModMonitor.DebugLog($"Calculated island schedule for {npc.Name}");
                 npc.islandScheduleName.Value = "island";
+                Game1.netWorldState.Value.IslandVisitors[npc.Name] = true;
+                ConsoleCommands.IslandSchedules[npc.Name] = schedules[npc];
             }
             else
             {
                 npc.islandScheduleName.Value = string.Empty;
-            }
-        }
-
-        foreach (NPC visitor in schedules.Keys)
-        {
-            if (visitor.islandScheduleName.Value is "island")
-            {
-                Game1.netWorldState.Value.IslandVisitors[visitor.Name] = true;
-                ConsoleCommands.IslandSchedules[visitor.Name] = schedules[visitor];
             }
         }
 
@@ -206,7 +202,7 @@ internal static class GIScheduler
             if (explorerGroups.Count > 0)
             {
                 CurrentAdventureGroup = explorerGroups[random.Next(explorerGroups.Count)];
-                CurrentAdventurers = ExplorerGroups[CurrentAdventureGroup].Where((NPC npc) => IslandSouth.CanVisitIslandToday(npc)).Take(3).ToHashSet();
+                CurrentAdventurers = ExplorerGroups[CurrentAdventureGroup].Where(IslandSouth.CanVisitIslandToday).Take(3).ToHashSet();
                 return (CurrentAdventurers, CurrentAdventureGroup);
             }
         }
@@ -221,7 +217,7 @@ internal static class GIScheduler
     /// <param name="explorers">Hashset of explorers.</param>
     /// <returns>Visitor List.</returns>
     /// <remarks>For a deterministic island list, use a Random seeded with the uniqueID + number of days played.</remarks>
-    private static List<NPC> GenerateVistorList(Random random, int capacity, HashSet<NPC> explorers)
+    private static List<NPC> GenerateVisitorList(Random random, int capacity, HashSet<NPC> explorers)
     {
         CurrentGroup = null;
         CurrentVisitingGroup = null;
@@ -390,7 +386,7 @@ internal static class GIScheduler
         NPC? musician = null;
         if (animationDescriptions.ContainsKey("sam_beach_towel"))
         {
-            musician = visitors.Find((NPC npc) => npc.Name.Equals("Sam", StringComparison.OrdinalIgnoreCase));
+            musician = visitors.Find(static (NPC npc) => npc.Name.Equals("Sam", StringComparison.OrdinalIgnoreCase));
         }
         if (musician is null || random.NextDouble() < 0.25)
         {
@@ -415,7 +411,7 @@ internal static class GIScheduler
     /// <returns>A list of filled <see cref="GingerIslandTimeSlot"/>s.</returns>
     private static List<GingerIslandTimeSlot> AssignIslandSchedules(Random random, List<NPC> visitors, Dictionary<string, string> animationDescriptions)
     {
-        Dictionary<NPC, string> lastactivity = new();
+        Dictionary<NPC, string> lastactivity = new(visitors.Count);
         List<GingerIslandTimeSlot> activities = TIMESLOTS.Select((i) => new GingerIslandTimeSlot(i, Bartender, Musician, random, visitors)).ToList();
 
         foreach (GingerIslandTimeSlot activity in activities)
@@ -435,7 +431,7 @@ internal static class GIScheduler
     /// <returns>Dictionary of NPC->raw schedule strings.</returns>
     private static Dictionary<NPC, string> RenderIslandSchedules(Random random, List<NPC> visitors, List<GingerIslandTimeSlot> activities)
     {
-        Dictionary<NPC, string> completedSchedules = new();
+        Dictionary<NPC, string> completedSchedules = new(visitors.Count);
 
         foreach (NPC visitor in visitors)
         {

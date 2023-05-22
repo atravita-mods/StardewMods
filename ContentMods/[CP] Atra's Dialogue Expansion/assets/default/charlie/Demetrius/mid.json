@@ -10,7 +10,7 @@
         "When": { "HasFlag": "Island_FirstParrot" },
         "Entries":
         {
-            "Resort": "The mushrooms around here are extraordinary!$h#$e#I have never seen any mushrooms like these!"
+            "Resort": "The mushrooms around here are extraordinary!$h#$b#I have never seen any mushrooms like these!$h"
         }
     },
     {
@@ -44,10 +44,10 @@
             "16_2": "It's always reviewer two, isn't it? Always.$a",
             "18_2": "Gotta order more reagents soon, we're running low on HCl.",
 
-
             "ScienceHouse_22_20": "I'm so sorry, @, I've got so much work I need to get done before next Monday.",
             "summerScienceHouse_22_20": "Just need to gather a little more data for a proposal.",
             "fallScienceHouse_22_20": "Sometimes I feel like I spend more time writing proposals than anything else.$s",
+            "winterScienceHouse_22_20": "Sorry, @, I've got a talk I need to prepare for.",
             "fallMountain_45_8": "Some of these trees are more than a hundred years old. I hope you weren't planning on cutting them down."
         },
         "When": { "YearModulus": "2" }
@@ -62,9 +62,11 @@
             "16_2": "Sometimes I wonder what I could have done to be more successful in my career...$s",
             "18_2": "Between you and I, @, writing proposals is the worst part of my job.",
             "20_2": "Tree fertilizer can make trees grow much faster, but I wonder if it affects the quality of their wood.#$b#Generally fast-growing trees can't produce as dense of wood.",
+
             "summerScienceHouse_22_20": "It's been so hot lately, I suspect the trees are stressed.",
             "fallScienceHouse_22_20": "Got a conference coming up, @, hoping I can get myself a talk.",
-            "winterScienceHouse_22_20": "My collaborator claims his equipment is broken again.#$b#We're far closer to the submission deadline for this paper than I'd like..."
+            "winterScienceHouse_22_20": "My collaborator claims his equipment is broken again.#$b#We're far closer to the submission deadline for this paper than I'd like...",
+            "fallMountain_45_8": "Funding has been a lot tighter this year than it was last year.#$b#I didn't even get my inflation adjustment. I'm making less actual money this year than last.$s"
         },
         "When": { "YearModulus": "3"}
     },
@@ -74,6 +76,7 @@
         "Target": "Characters/Dialogue/Demetrius",
         "Entries": {
             "2_2": "Before Pelican Town was a mining town, it was a forestry.#$b#But that was a long time ago, and the forest has had a bit of a chance to recover.",
+            "18_4": "@, did you know that the oldest mushrooms are more than two thousand years old?"
         },
         "When": { "YearModulus": "4"}
     }

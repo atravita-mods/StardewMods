@@ -33,6 +33,8 @@
                 "1{{YearRemainder}}": "Neighboring town lowered its property taxes to try to get more young professionals to move in.#$b#Young remote professionals make a lot of money and are good for the tax base.",
                 "2{{YearRemainder}}": "It's not easy, being mayor of a small town. We're so small that we're economically quite fragile.",
                 "3{{YearRemainder}}": "I've been talking to a green energy company recently. They're thinking about renting out some land 'round these parts for windmills.#$b#What do you think? You've got some land to rent to them?",
+                "4": "Swing by the saloon for Gus's spaghetti some time. If you've never had it, you're missing out.",
+                "4_2": "I really don't talk to Demetrius much. I think he's a scientist, affiliated with Grampleton University?#$b#Never quite understood the research that man was doing.",
                 "Saloon_Entry": "Hmmm, what's for dinner tonight?",
 
                 "IslandSouth_Entry": "Vacation time!"
@@ -47,12 +49,25 @@
                 "fall_Fri10": "Mmm, in fall Gus sometimes carries my favorite dish, the autumn's bounty!%revealtasteLewis235$h",
                 "winter_Fri8": "Economically we're still a lot more fragile than I'd like.",
 
+                "1_2": "Leah sometimes asks me to ship some of the forage she collects. She's a talented forager!",
+
                 "18_2": "Pelican Town is an excellent location for wine production!$h",
                 "20_2": "@, do you produce truffle oil? I hear it's quite lucrative.$h",
                 "22_2": "There's nothing like a nice cup of tea to start the day.$h",
 
                 "Saloon_Entry": "Anything new on the menu?/Whatcha got?",
                 "IslandSouth_Entry": "Mmmm, sun!",
+            }
+        },
+        {
+            "LogName": "Lewis: mid hearts, y3",
+            "Action": "EditData",
+            "Target": "Characters/Dialogue/Lewis",
+            "When": {"YearModulus": "3"},
+            "Entries":{
+                "1_2": "We're lucky in that we have good foraging opportunities around here. I guess if things get really bad that's at least something.",
+
+                "IslandSouth_Entry": "Oh, vacation!",
             }
         }
     ]

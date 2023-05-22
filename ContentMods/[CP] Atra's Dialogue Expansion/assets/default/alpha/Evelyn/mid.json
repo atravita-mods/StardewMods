@@ -13,6 +13,14 @@
         "Action": "EditData",
         "Target": "Characters/Dialogue/Evelyn",
         "Entries": {
+            "15{{YearRemainder}}": "I worry about Alex sometimes.#$b#My darling boy wants to go pro, but he never really wants to make any steps towards that."
+        },
+        "When": {"YearModulus": "1"}
+    },
+    {
+        "Action": "EditData",
+        "Target": "Characters/Dialogue/Evelyn",
+        "Entries": {
             "15_2": "Honey, I just made some cookies. Please have one, dearie. [223]$h"
         },
         "When": {"YearModulus": "2"}

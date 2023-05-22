@@ -1,0 +1,11 @@
+{"Changes": [
+    {
+        // disable Sebastian's rain schedule in winter.
+        "Action": "EditData",
+        "When": {"Season": "winter"},
+        "Target": "Characters/schedules/Sebastian",
+        "Entries": {
+            "rain": "GOTO spring",
+        }
+    }
+]}

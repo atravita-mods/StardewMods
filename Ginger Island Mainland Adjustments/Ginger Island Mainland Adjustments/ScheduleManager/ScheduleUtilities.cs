@@ -231,6 +231,18 @@ internal static class ScheduleUtilities
         {
             Dictionary<int, SchedulePathDescription>? schedule = null;
 
+            if (!rawData.StartsWith("0 ") && npc.currentLocation.Name != npc.DefaultMap && npc.DefaultPosition != Vector2.Zero)
+            {
+                Globals.ModMonitor.Log($"Warping {npc.Name} back to their default location....");
+                GameLocation? location = Game1.getLocationFromName(npc.DefaultMap);
+                if (location is null)
+                {
+                    Globals.ModMonitor.Log($"NPC {npc.Name} has default map {npc.DefaultMap} which could not be found!", LogLevel.Warn);
+                    return false;
+                }
+                Game1.warpCharacter(npc, location, npc.DefaultPosition / 64f);
+            }
+
             try
             {
                 schedule = npc.parseMasterSchedule(rawData);

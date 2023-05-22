@@ -1,5 +1,14 @@
 {"Changes":[
     {
+        "LogName": "Demetrius mid-hearts, Y1, bats",
+        "Action": "EditData",
+        "Target": "Characters/Dialogue/Demetrius",
+        "Entries": {
+            "9": "If you want, our local mountains are excellent places to forage for mushrooms! Just be careful, some species are poisonous."
+        },
+        "When": { "YearModulus": "1"}
+    },
+    {
         "LogName": "Demetrius mid-hearts, Y2, bats",
         "Action": "EditData",
         "Target": "Characters/Dialogue/Demetrius",

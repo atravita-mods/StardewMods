@@ -57,11 +57,16 @@ public static class EventCommandManager
                     __instance.CurrentCommand++;
                     __instance.checkForNextCommand(location, time);
                 }
-                else if (handler.Apply(__instance, location, time, split, out error))
+                else if (handler.Apply(__instance, location, time, split, out string? applyError))
                 {
+                    if (!string.IsNullOrEmpty(applyError))
+                    {
+                        handler.Monitor.Log($"Error returned: {applyError}", LogLevel.Warn);
+                    }
                     __instance.CurrentCommand++;
                     __instance.checkForNextCommand(location, time);
                 }
+
                 return false;
             }
         }

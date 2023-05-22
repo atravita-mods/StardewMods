@@ -64,7 +64,7 @@ public static class SObjectExtensions
         => obj is not null && !obj.bigCraftable.Value && (obj.ParentSheetIndex >= 168 && obj.ParentSheetIndex < 173);
 
     /// <summary>
-    /// Returns true for an item that would be considered alcohol.
+    /// Returns true for an item that would be considered alcohol. Taken from BuffsDisplay.tryToAddDrinkBuff
     /// </summary>
     /// <param name="obj">SObject.</param>
     /// <returns>True if alcohol.</returns>

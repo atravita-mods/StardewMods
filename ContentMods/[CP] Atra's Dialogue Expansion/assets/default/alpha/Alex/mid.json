@@ -76,13 +76,14 @@
         "Target": "Characters/Dialogue/Alex",
         "When": {"YearModulus": "4"},
         "Entries": {
-            "Fri10": "I've gotta stay strong for Grandma and Grandpa. I'm all they've got, now",
+            "Fri10": "I've gotta stay strong for Grandma and Grandpa. I'm all they've got, now.",
             "spring_Sun4": "It's an election year, @!#$b#Do I think the Governor is going to get re-elected? Of course I do, he always gets re-elected.",
             "summer_Wed10": "Might go take a swim in the ocean today. @, you in?$h",
 
             "2_2": "My grandparents are the most important people in the world to me.$h",
             "3_2": "When I was young, I'd bike around and deliver the newspaper. But most people don't want paper newspapers anymore.#$b#It's all TV and online news now. Even Gramps doesn't read the paper anymore.#$e#Man I'm starting to sound like him, am I?",
-            "4_2": "@, what sport did you play in high school?"
+            "4_2": "@, what sport did you play in high school?",
+            "6_2": "Lewis has been mayor for as long as I can remember. That's some job security, eh?#$b#Have I considered running? Sure. But it sounds boring."
         }
     },
     {

@@ -20,9 +20,6 @@
             "summer_8": "{{i18n: summer-8}}[253]$h",
             "fall_12": "{{i18n: fall-12}}[608 607 604]$h",
             "winter_16": "{{i18n: winter-16.{{YearModulus}}| default = {{i18n: winter-18}} }}[199 218 219 236]$h"
-        },
-        "When": {
-            "HasValue: {{Spouse}}": true
         }
     },
     {
@@ -39,8 +36,7 @@
             "fall_28": "{{i18n:fall-28.{{Random:01, 02, 03, 04}} }}[368 370 371 465 466 480 245 246]$h",
         },
         "When": {
-            "Year|contains=1,2": false,
-            "HasValue: {{Spouse}}": true
+            "Year|contains=1,2": false
         }
     },
     {

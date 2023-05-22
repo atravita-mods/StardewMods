@@ -25,8 +25,9 @@ namespace PamTries;
 internal sealed class ModEntry : Mod
 {
     private static readonly string[] SyncedConversationTopics = new string[2] { "PamTriesRehab", "PamTriesRehabHoneymoon" };
+    private static PamMood mood = PamMood.neutral;
+
     private Random? random;
-    private PamMood mood = PamMood.neutral;
     private MigrationManager? migrator;
 
     /// <summary>
@@ -38,6 +39,8 @@ internal sealed class ModEntry : Mod
     /// Gets the scheduling tools for this mod.
     /// </summary>
     internal static ScheduleUtilityFunctions ScheduleUtilityFunctions { get; private set; } = null!;
+
+    internal static PamMood PamMood => mood;
 
     /// <inheritdoc />
     public override void Entry(IModHelper helper)
@@ -173,7 +176,7 @@ internal sealed class ModEntry : Mod
             {
                 if (Context.IsWorldReady)
                 {
-                    return new[] { this.mood.ToStringFast() };
+                    return new[] { mood.ToStringFast() };
                 }
                 return null;
             });
@@ -216,15 +219,15 @@ internal sealed class ModEntry : Mod
         double chance = this.random.NextDouble();
         if (chance < moodchances[0])
         {
-            this.mood = PamMood.bad;
+            mood = PamMood.bad;
         }
         else if (chance < moodchances[1])
         {
-            this.mood = PamMood.neutral;
+            mood = PamMood.neutral;
         }
         else
         {
-            this.mood = PamMood.good;
+            mood = PamMood.good;
         }
     }
 

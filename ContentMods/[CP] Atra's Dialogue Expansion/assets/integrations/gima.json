@@ -4,10 +4,11 @@
         "Action": "EditData",
         "Target": "Mods/atravita_Ginger_Island_Adjustments_groups",
         "Entries": {
-            "HouseWives": "Jodi, Caroline"
+            "HouseWives": "Jodi, Caroline",
+            "CraftingFriends": "Leah, Robin, Emily"
         },
         "When": {
             "Year|contains=1": false
         }
-    },
+    }
 ]}

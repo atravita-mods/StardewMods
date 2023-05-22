@@ -5,29 +5,24 @@
 
     "Changes": [
         {
-            "LogName": "Generic spouse dialogue.",
+            "LogName": "Leah - base",
             "Action": "EditData",
-            "Target": "{{MarriageDialoguePath}}",
-            "Entries": {
-                "{{TheMightyAmondee.CustomTokens/AnniversarySeason}}_{{TheMightyAmondee.CustomTokens/AnniversaryDay}}": "Oh, honey, it's our anniversary today!#$b#Soooo....you've got anything planned?"
+            "Target": "Characters/Dialogue/Leah",
+            "Entries":{
+                "{{TaxDay}}": "Nothing sucks more than having to figure out what I did last year so I can file my taxes.$s"
             },
-            "When": {
-                "HasMod": "TheMightyAmondee.CustomTokens",
-                "HasValue: {{Spouse}}": true,
-                "EnableFor|contains={{Spouse}}": true,
-                "EnableGeneric": true
-            }
+            "When": {"EnableFor|contains=Leah": true}
         },
         {
-            "LogName": "Leah -- Married Dialogue",
+            "LogName": "Penny - marriage",
             "Action": "EditData",
-            "Target": "Characters/Dialogue/MarriageDialogueLeah",
+            "Target": "Characters/Dialogue/MarriageDialoguePenny",
             "Entries": {
-                "{{TheMightyAmondee.CustomTokens/AnniversarySeason}}_{{TheMightyAmondee.CustomTokens/AnniversaryDay}}": "It's our anniversary, dear! Don't you think we should do something fun today?"
+                "winter_3": "Oh, it's winter again, isn't it? What are you planning on doing this winter?#$b#I trust you to handle the finances, %endearment."
             },
             "When": {
-                "HasMod": "TheMightyAmondee.CustomTokens",
-                "EnableFor|contains=Leah": true
+                "EnableFor|contains=Penny": true,
+                "Year|contains = 1,2": false
             }
         },
         {
@@ -83,7 +78,7 @@
                 "{{TaxDay}}": "%Marnie looks exhausted.#$b#Sorry, @, I was up all night trying to file my taxes...#$e#Why do I always leave things like this to the last minute...",
                 // block off her vanilla line about Shane **just** moving in after Y1
                 "Tue": "Between you and I, I think this good country air does Shane well.$h",
-                "Tue_inlaw_Shane": "I'm glad Shane found you, @. I think he's been doing better, recently.$h",
+                "Tue_inlaw_Shane": "I'm glad Shane found you, @. I think he's been doing better, recently.$h"
             },
             "When": {
                 "EnableFor|contains=Marnie": true,
@@ -108,7 +103,7 @@
             "Entries": {
                 "{{TaxDay}}": "Dunno what the state is doing with all my tax dollars.$s#$b#Such a process, every year, to file them. Takes Caroline a week!",
                 "spring_27": "Gotta make sure to stock tulip bulbs for Ms. Mullner!",
-                "spring_27_2": "Gotta make sure to stock tulip bulbs for Ms. Mullner!",
+                "spring_27_2": "Gotta make sure to stock tulip bulbs for Ms. Mullner!"
             },
             "When": {
                 "EnableFor|contains=Pierre": true
@@ -120,7 +115,7 @@
             "Target": "Characters/Dialogue/Pierre",
             "Entries": {
                 "winter_Mon": "Man, @, I'm glad you've found my old stocklist, I've got so much more to sell!$h",
-                "winter_Mon4": "@, interested in any seeds today? Gotta be prepared for spring!$h",
+                "winter_Mon4": "@, interested in any seeds today? Gotta be prepared for spring!$h"
             },
             "When": {
                 "HasFlag" :"PierreStocklist",
@@ -133,7 +128,7 @@
             "Target": "Characters/Dialogue/Caroline",
             "Entries": {
                 "{{TaxDay}}": "I wish it didn't take so long to do our taxes.#$b#Neither Pierre nor I are organized enough to get them done early.",
-                "Tue": "Tuesdays are our aerobics club days. Say, @, you wanna join us?$h",
+                "Tue": "Tuesdays are our aerobics club days. Say, @, you wanna join us?$h"
             },
             "When": {
                 "EnableFor|contains=Caroline": true

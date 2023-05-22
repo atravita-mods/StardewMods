@@ -51,7 +51,7 @@ public sealed class ModConfig
     public WearIslandClothing WearIslandClothing { get; set; } = WearIslandClothing.Default;
 
     /// <summary>
-    /// Gets or sets a value indicating whether whether to use the game's GI scheduler
+    /// Gets or sets a value indicating whether to use the game's GI scheduler
     /// or mine.
     /// </summary>
     public bool UseThisScheduler { get; set; } = true;

@@ -3,8 +3,12 @@
         "LogName": "Sam, mid hearts",
         "Action": "EditData",
         "Target": "Characters/Dialogue/Sam",
+        "When": {"YearModulus": "1"},
         "Entries":{
+            "summer_Mon8": "Ugh, I wish I could go to the beach today...",
+
             "1{{YearRemainder}}": "Ugh, it's laundry day again. I wish I didn't have to do the laundry.$s",
+            "2{{YearRemainder}}": "I'd love to save up some money, take Vincent on a nice trip someday...",
             "7{{YearRemainder}}": "Just wanna go skateboarding today...not sure I have the time for it though.",
             "8{{YearRemainder}}": "Sebastian showed me a video game the other day that looked super fun. {{i18n:video.game.{{Random:01, 02, 03, 04, 05, 06, 07, 08, 09}} }}, have you heard of it?",
             "10{{YearRemainder}}": "Soooo, @, what do you usually do for fun?",

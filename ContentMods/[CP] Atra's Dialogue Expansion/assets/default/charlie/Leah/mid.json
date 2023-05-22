@@ -1,3 +1,5 @@
+// she should really be friends with Robin, eh?
+
 {"Changes":[
     {
         "LogName": "Leah - mid hearts",
@@ -19,12 +21,20 @@
         "When": {"YearModulus": 1}
     },
     {
+        "LogName": "Leah - mid hearts",
+        "Action": "EditData",
+        "Target": "Characters/Dialogue/Leah",
+        "Entries": {
+            "1_2": "I prefer woodworking, but my paintings sell decently well.#$b#I'd love to have a painting in an exhibition some day."
+        },
+        "When": {"YearModulus": 2}
+    },
+    {
         "LogName": "Leah -- Extended Dialogue",
         "Action": "EditData",
         "Target": "Characters/Dialogue/Leah",
         "Entries": {
-            "movieTheater": "Heard that a movie theater's coming to town!$h#$e$To be honest, movies are certainly something I've missed.",
-            "{{TaxDay}}": "Nothing sucks more than having to figure out what I did last year so I can file my taxes.$s"
+            "movieTheater": "Heard that a movie theater's coming to town!$h#$e$To be honest, movies are certainly something I've missed."
         }
     }
 ]}

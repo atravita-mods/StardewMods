@@ -20,13 +20,17 @@
         "Target": "Characters/Dialogue/Maru",
         "When": {"YearModulus": "1"},
         "Entries":{
-            "1{{YearRemainder}}": "Saw a really interesting paper out of %name group on bipedal robots the other day!#$b#They've got a new algorithm to help the robot keep its balance.",
+            "1": "@, why did you decide to come to Pelican Town?",
+            "1_2": "@, you've been in Pelican Town for quite a while now, haven't you? Are you glad you picked here for your new home?",
             "2{{YearRemainder}}": "One of the difficulties of creating a good robotic limb is just power management. Batteries can be quite heavy.$s",
             "3{{YearRemainder}}": "I wish I had a better relationship with my brother. Think of all the things we could build together!",
             "4{{YearRemainder}}": "Penny and I spent yesterday building robots with the kids. It's a fun little science project to do with them.",
             "5{{YearRemainder}}": "Harvey pays me pretty well, and lets me read when there isn't any other work to do.$h",
             "6{{YearRemainder}}": "There's a lot more paperwork that goes on in a doctor's office than I would have thought when I started this job.$s",
-            "7{{YearRemainder}}": "The fax machine at work broke. Do you know how expensive it is to get someone out here to fix a fax machine?$s"
+            "7{{YearRemainder}}": "The fax machine at work broke. Do you know how expensive it is to get someone out here to fix a fax machine?$s",
+            "8{{YearRemainder}}": "Saw a really interesting paper out of %name group on bipedal robots the other day!#$b#They've got a new algorithm to help the robot keep its balance.",
+            "9{{YearRemainder}}": "Sometimes, I stop and think....how much of my brain is spent on just keeping my balance? It's amazing how easy this is for humans, and how hard it is for robots.$h",
+            "10{{YearRemainder}}": "%Maru is speaking to herself.#$b#Hmmm. How much torque do I need?#$e#Oh, @, I didn't see you there!"
         }
     },
     {
@@ -35,7 +39,6 @@
         "Target": "Characters/Dialogue/Maru",
         "When": {"YearModulus": "2"},
         "Entries":{
-            "1": "@, why did you decide to come to Pelican Town?",
             "1_2": "Ah, @, it's the start of a new month! What do you have planned?",
             "2_2": "Since my dad works there, I can audit classes at Grampleton University for free.#$b#It's fun taking classes in new things!",
             "8_2": "Sometimes I wonder if Sebastian would be happier living in the city.#$b#He doesn't really like living with other people though.",
@@ -50,12 +53,12 @@
         }
     },
     {
-        "LogName": "Maru -- Married Dialogue",
+        "LogName": "Maru, mid hearts - y4",
         "Action": "EditData",
-        "Target": "Characters/Dialogue/MarriageDialogueMaru",
-        "Entries": {
-            "{{TheMightyAmondee.CustomTokens/AnniversarySeason}}_{{TheMightyAmondee.CustomTokens/AnniversaryDay}}": "Oh, honey, it's our anniversary today! Wanna go do something fun?$h"
-        },
-        "When": {"HasMod" :"TheMightyAmondee.CustomTokens"}
+        "Target": "Characters/Dialogue/Maru",
+        "When": {"YearModulus": "4"},
+        "Entries":{
+            "1_2": "I know some people have floated the idea of my mother becoming mayor after Mayor Lewis retires, but, honestly, I think she loves her woodworking more."
+        }
     }
 ]}

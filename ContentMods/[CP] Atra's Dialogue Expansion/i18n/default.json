@@ -140,8 +140,10 @@
 * Fancier dialogue
 ***************/
 
+    // gridball.
     "george-sports.sun": "@, you gonna watch the game? The {{first}} are playing the {{second}}!",
     "george-sports.mon": "Hey, @, did you catch the game last night? Wasn't it {{reaction}}?",
+    "george-sports-specific": "You know, @, I used to be a pretty good gridball player when I was young.",
     "alex-sports.sun": "@, you planning on watching the game? The {{first}} are playing the {{second}}! I'm so excited!",
     "alex-sports.mon": "Wow, @, did you catch the game last night? Wasn't it {{reaction}}?",
     "shane-sports.sun": "Heya, @. Planning on catching the game tonight? The {{first}} against the {{second}}.",
@@ -150,6 +152,15 @@
     "shane-sports.sun.03": "I'm microwaving so many pepper poppers for tonight!",
     "shane-sports.sun.04": "Or maybe not, the teams are pretty imbalanced...",
     "shane-sports.mon": "Oh, @, did you catch the game last night! It was {{reaction}}!",
+
+/***************
+* Anniversary!
+***************/
+
+    "anniversary-day.generic": "Oh, honey, it's our anniversary today!#$b#Soooo....you've got anything planned?",
+    "anniversary-day.Leah": "It's our anniversary, dear! Don't you think we should do something fun today?",
+    "anniversary-day.Penny": "Oh, @, it's our anniversary today!#$b#Sometimes I can't believe how nice our lives are. Is there something you'd like to do for today?#$b#Or maybe let's cook something together...",
+    "anniversary-day.Maru": "Oh, honey, it's our anniversary today! Wanna go do something fun?",
 
 /***************
 * Birthday related

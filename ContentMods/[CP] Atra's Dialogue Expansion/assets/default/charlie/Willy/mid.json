@@ -4,7 +4,9 @@
         "Action": "EditData",
         "Target": "Characters/Dialogue/Willy",
         "Entries": {
-            "6_2": "My family's been from these parts as far as I can remember."
+            "6_2": "My family's been from the Fern Islands as far as I can remember.",
+            "7_2": "Catfish are my favorite fish.#$b#They make for a good fish fry too!",
+            "8_2": "When I was younger, I'd head out to sea for months at a time."
         },
         "When": {
             "YearModulus": "2"

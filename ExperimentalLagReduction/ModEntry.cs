@@ -19,6 +19,9 @@ internal sealed class ModEntry : Mod
     /// </summary>
     internal static IMonitor ModMonitor { get; private set; } = null!;
 
+    /// <summary>
+    /// The Config instance for this mod.
+    /// </summary>
     internal static ModConfig Config { get; private set; } = null!;
 
     /// <inheritdoc />
@@ -37,6 +40,8 @@ internal sealed class ModEntry : Mod
         helper.ConsoleCommands.Add("av.elr.print_report", "todo", this.Report);
         helper.ConsoleCommands.Add("av.elr.get_path_from", "todo", this.GetPath);
         helper.ConsoleCommands.Add("av.elr.dump_cache", "todo", static (_, _) => Rescheduler.PrintCache());
+
+        OverrideGiftTastes.Initialize(helper.GameContent);
     }
 
     private void GetPath(string arg1, string[] args)
@@ -75,6 +80,9 @@ internal sealed class ModEntry : Mod
     /// <inheritdoc cref="IGameLoopEvents.GameLaunched"/>
     private void OnGameLaunch(object? sender, GameLaunchedEventArgs e)
     {
+        this.Helper.Events.Content.AssetsInvalidated += (_, e) => OverrideGiftTastes.Reset(e.NamesWithoutLocale);
+        this.Helper.Events.GameLoop.DayEnding += (_, _) => OverrideGiftTastes.Reset();
+
         this.ApplyPatches(new Harmony(this.ModManifest.UniqueID));
     }
 
@@ -88,6 +96,7 @@ internal sealed class ModEntry : Mod
         try
         {
             harmony.PatchAll(typeof(ModEntry).Assembly);
+            RedirectToLazyLoad.ApplyPatches(new Harmony(harmony.Id + "_lazy"));
         }
         catch (Exception ex)
         {

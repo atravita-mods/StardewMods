@@ -4,6 +4,7 @@ using System.Runtime;
 #endif
 
 using AtraCore.Framework.Caches;
+using AtraCore.Framework.ReflectionManager;
 
 using AtraShared.Schedules.DataModels;
 using AtraShared.Utils;
@@ -12,6 +13,8 @@ using AtraShared.Utils.Extensions;
 using GingerIslandMainlandAdjustments.AssetManagers;
 using GingerIslandMainlandAdjustments.CustomConsoleCommands;
 using GingerIslandMainlandAdjustments.ScheduleManager.DataModels;
+
+using Microsoft.Xna.Framework;
 
 using StardewModdingAPI.Utilities;
 
@@ -25,9 +28,16 @@ namespace GingerIslandMainlandAdjustments.ScheduleManager;
 internal static class GIScheduler
 {
     #region delegates
+
+    private static readonly Lazy<Func<NPC, string, string, List<string>>> GetLocationRouteLazy = new(() =>
+        typeof(NPC).GetCachedMethod("getLocationRoute", ReflectionCache.FlagTypes.InstanceFlags)
+        .CreateDelegate<Func<NPC, string, string, List<string>>>());
+
     #endregion
 
     private static readonly int[] TIMESLOTS = new int[] { 1200, 1400, 1600 };
+
+    #region groups
 
     /// <summary>
     /// Dictionary of possible island groups. Null is a cache miss.
@@ -45,33 +55,41 @@ internal static class GIScheduler
     /// Gets the current group headed off to the island.
     /// </summary>
     /// <remarks>null means no current group.</remarks>
-    public static string? CurrentGroup { get; private set; }
+    internal static string? CurrentGroup { get; private set; }
 
     /// <summary>
     /// Gets the current visiting group.
     /// </summary>
     /// <remarks>Used primarily for setting group-based dialogue...</remarks>
-    public static HashSet<NPC>? CurrentVisitingGroup { get; private set; }
+    internal static HashSet<NPC>? CurrentVisitingGroup { get; private set; }
 
     /// <summary>
     /// Gets the name of the current adventure group.
     /// </summary>
-    public static string? CurrentAdventureGroup { get; private set; }
+    internal static string? CurrentAdventureGroup { get; private set; }
+
+    #endregion
+
+    #region individuals
 
     /// <summary>
     /// Gets the current adventure group.
     /// </summary>
-    public static HashSet<NPC>? CurrentAdventurers { get; private set; }
+    internal static HashSet<NPC>? CurrentAdventurers { get; private set; }
 
     /// <summary>
     /// Gets the current bartender.
     /// </summary>
-    public static NPC? Bartender { get; private set; }
+    internal static NPC? Bartender { get; private set; }
 
     /// <summary>
     /// Gets the current musician.
     /// </summary>
-    public static NPC? Musician { get; private set; }
+    internal static NPC? Musician { get; private set; }
+
+    #endregion
+
+    private static readonly Point SaloonStart = new(8, 11);
 
     /// <summary>
     /// Gets island groups. Will automatically load if null.
@@ -432,11 +450,27 @@ internal static class GIScheduler
     private static Dictionary<NPC, string> RenderIslandSchedules(Random random, List<NPC> visitors, List<GingerIslandTimeSlot> activities)
     {
         Dictionary<NPC, string> completedSchedules = new(visitors.Count);
+        int saloon_offset = 0;
 
         foreach (NPC visitor in visitors)
         {
             bool should_dress = IslandSouth.HasIslandAttire(visitor);
             List<SchedulePoint> scheduleList = new();
+
+            if (Globals.Config.StageFarNpcsAtSaloon)
+            {
+                var maplist = GetLocationRouteLazy.Value(visitor, visitor.DefaultMap, "IslandSouth");
+                if (maplist is null || maplist.Count > 8)
+                {
+                    Globals.ModMonitor.Log($"{visitor.Name} has a long way to travel, so staging them at the Saloon.");
+                    scheduleList.Add(new SchedulePoint(
+                        random: random,
+                        npc: visitor,
+                        map: "Saloon",
+                        time: 0,
+                        point: new(SaloonStart.X + ++saloon_offset, SaloonStart.Y)));
+                }
+            }
 
             if (should_dress)
             {

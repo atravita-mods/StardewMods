@@ -1,7 +1,6 @@
 {"Changes":[
 // Lean into rural doctor difficulties.
 // Harvey's not making too much money, he has to deal with "insurers", he has substandard equipment, and he has student loans.
-
     {
         "LogName": "Harvey mid-hearts",
         "Action": "EditData",

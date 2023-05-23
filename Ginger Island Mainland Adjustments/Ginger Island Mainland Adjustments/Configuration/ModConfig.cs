@@ -70,6 +70,8 @@ public sealed class ModConfig
         set => this.capacity = Math.Clamp(value, 0, 15);
     }
 
+    public bool StageFarNpcsAtSaloon { get; set; } = true;
+
     /// <summary>
     /// Probability for a group to visit over just individuals.
     /// </summary>

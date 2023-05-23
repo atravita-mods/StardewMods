@@ -60,5 +60,14 @@
         "Entries":{
             "1_2": "I know some people have floated the idea of my mother becoming mayor after Mayor Lewis retires, but, honestly, I think she loves her woodworking more."
         }
+    },
+    {
+        "LogName": "Maru, mid hearts - y5",
+        "Action": "EditData",
+        "Target": "Characters/Dialogue/Maru",
+        "When": {"YearModulus": "0"},
+        "Entries": {
+            "1_2": "Ugh, I gotta make a trip to the post office sooner or later...$s"
+        }
     }
 ]}

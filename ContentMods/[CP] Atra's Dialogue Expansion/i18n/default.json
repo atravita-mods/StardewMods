@@ -140,6 +140,9 @@
 * Fancier dialogue
 ***************/
 
+    // locational
+    "harvey-bed": "Did you happen to bring any coffee with you?",
+    
     // gridball.
     "george-sports.sun": "@, you gonna watch the game? The {{first}} are playing the {{second}}!",
     "george-sports.mon": "Hey, @, did you catch the game last night? Wasn't it {{reaction}}?",

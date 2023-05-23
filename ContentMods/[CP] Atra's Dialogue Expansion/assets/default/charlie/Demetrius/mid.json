@@ -76,7 +76,8 @@
         "Target": "Characters/Dialogue/Demetrius",
         "Entries": {
             "2_2": "Before Pelican Town was a mining town, it was a forestry.#$b#But that was a long time ago, and the forest has had a bit of a chance to recover.",
-            "18_4": "@, did you know that the oldest mushrooms are more than two thousand years old?"
+            "18_2": "@, did you know that the oldest mushrooms are more than two thousand years old?",
+            "19_2": "It's really weird we celebrate romantic holidays with the cut off reproductive organs of plants, isn't it?"
         },
         "When": { "YearModulus": "4"}
     }

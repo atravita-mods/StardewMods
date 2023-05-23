@@ -129,7 +129,7 @@ internal sealed class ModEntry : Mod
             {
                 new(OpCodes.Ldsfld, typeof(ModEntry).GetCachedField(nameof(modMonitor), ReflectionCache.FlagTypes.StaticFlags)),
                 new(OpCodes.Ldstr, "Truffles Over"),
-                new(OpCodes.Ldc_I4_1),
+                new(OpCodes.Ldc_I4_1), // LogLevel.Debug
                 new(OpCodes.Callvirt, typeof(IMonitor).GetCachedMethod(nameof(IMonitor.Log), ReflectionCache.FlagTypes.InstanceFlags)),
             });
 #endif

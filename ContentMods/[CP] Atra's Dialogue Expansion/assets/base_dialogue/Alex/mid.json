@@ -1,7 +1,8 @@
 {"Changes":[
     {
         // Alex will **always** talk about sports
-        // other NPCs join in if the saloon sports is enabled.
+        // other NPCs join in if the saloon sports is repaired.
+        
         "Action": "EditData",
         "Target": "Characters/Dialogue/Alex",
         "LogName": "Alex Base",

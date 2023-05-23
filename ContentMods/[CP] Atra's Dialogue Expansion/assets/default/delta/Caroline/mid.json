@@ -28,6 +28,7 @@
             "Resort_Entering": "Ah, a nice day of rest and relaxation!$h",
             "Resort_Bar_2": "I could do with a Long Island Iced Tea right about now",
 
+            "1{{YearRemainder}}": "My parents used to raise horses here when I was young.#$e#No lack of land around here!",
             "6{{YearRemainder}}": "I do miss riding horses. I had a lot more time for stuff like that when I was young.#$b#Also, horses can be quite expensive to maintain.",
             "9{{YearRemainder}}": "Gosh, @, I was up way too late last night trying to balance the books.#$b#Apologies if I don't feel like chatting.",
             "11{{YearRemainder}}": "Think I might order some new tea...Let's see, what have I not had recently?",
@@ -121,6 +122,10 @@
             "11_2": "Maybe Abby would be more interested in music as a major? She does love playing her flute...",
             "12_2": "We could consider trying to get Abby enrolled in a conservatory. Being a musician is hard work, but if it's what she loves...",
             "13_2": "I wish I could get Pierre to join us for aerobics club sometimes. But he always says he's too busy.#$b#Think some exercise would do him good...",
+            "14_2": "Some days I wish we could have a cat or a dog, but Pierre's allergic.#$e#I grew up with cats around, you know. You gotta have them out here, they take care of the mice.",
+            "15_2": "Sometimes we do sell some of the produce I produce in my garden, but usually we just eat that.",
+            "16_2": "Pierre's the type of guy who wants steak and potatoes on the dinner table every evening. That can't be good for his blood pressure.$s",
+            "17_2": "Picked some beans yesterday for dinner. Nothing's really like fresh veggies you grew yourself, right?",
 
             // Ginger Island lines.
             "Resort_Bar_2": "I wonder if Gus'll sell any Long Island Iced Tea if I asked about it?$h"
@@ -148,7 +153,7 @@
         },
         "Entries": {
             "7_2": "Was talking to Robin the other day.#$b#You know, @, we'd try our best to support Abigail if she wanted to move out. I'm not sure she wants to, though.",
-            "9_2": "I asked Abby last night if she'd be happier living in the city.#$b#I'd miss her if she moved out, of course, but maybe it's necessary.$s"
+            "9_2": "I asked Abby last night if she'd be happier living in the city.#$b#I'd miss her if she moved out, of course, but maybe it's necessary.$s",
         }
     }
 ]}

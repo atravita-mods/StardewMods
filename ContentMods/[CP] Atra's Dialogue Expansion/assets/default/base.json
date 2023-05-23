@@ -54,7 +54,7 @@
             "Action": "EditData",
             "Target": "Characters/Dialogue/Lewis",
             "Entries": {
-                "{{TaxDay}}": "We've all gotta do our duty, @, and that duty includes paying our taxes."
+                "{{TaxDay}}": "We've all gotta do our duty, @, and that duty includes paying our taxes.#$e#Now, did I collect the taxes of that guy who lives out west?"
             },
             "When": {
                 "EnableFor|contains=Lewis": true
@@ -101,7 +101,7 @@
             "Action": "EditData",
             "Target": "Characters/Dialogue/Pierre",
             "Entries": {
-                "{{TaxDay}}": "Dunno what the state is doing with all my tax dollars.$s#$b#Such a process, every year, to file them. Takes Caroline a week!",
+                "{{TaxDay}}": "Dunno what the state is doing with all my taxes.$s#$b#Such a process, every year, to file them. Takes Caroline a week!",
                 "spring_27": "Gotta make sure to stock tulip bulbs for Ms. Mullner!",
                 "spring_27_2": "Gotta make sure to stock tulip bulbs for Ms. Mullner!"
             },

@@ -6,7 +6,7 @@
             "FromFile": "assets/base_dialogue/misc.json",
             "When": {
                 "Random: true, true, false": true,
-                "EnableGeneric": true,
+                "EnableGeneric": true
             }
         },
         {
@@ -44,6 +44,16 @@
             "When": {
                 "EnableFor|contains=George": true,
                 "Query: {{Hearts:George}} >= 6": true
+            }
+        },
+        {
+            "Action": "Include",
+            "LogName": "Harvey - base",
+            "FromFile": "assets/base_dialogue/Harvey/mid.json",
+            "When": {
+                "EnableFor|contains=Harvey": true,
+                "Query: {{Hearts:Harvey}} >= 4": true,
+                "DialogueRandom": "alpha, charlie"
             }
         },
         {

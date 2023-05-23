@@ -9,7 +9,8 @@
 
             "2{{YearRemainder}}": "My ear hurts.$s",
             "4{{YearRemainder}}": "I don't wanna go to school.$s#$b#You think I could pretend to be sick?",
-            "17{{YearRemainder}}": "Look what I found, @!$h[721]"
+            "17{{YearRemainder}}": "Look what I found, @!$h[721]",
+            "18{{YearRemainder}}": "Mom let us have pizza yesterday!$h",
         },
         "When": {
             "YearModulus": "1"

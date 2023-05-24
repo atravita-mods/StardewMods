@@ -49,7 +49,8 @@
             "15_2": "I really enjoy building things. Not sure where I'm going with my current project, but it's sure fun to just play around.",
             "17_2": "Dad bought me unleaded solder. It's really not the same.",
             "19_2": "I wish I got along better with my brother.$s",
-            "20_2": "Do you have any fresh strawberries? Penny and I are thinking of doing a DNA extraction with the kids. Fun little kitchen science experiment.#$b#Strawberries are best because they're hexaploid, so they have a lot of DNA you can extract.$h"
+            "20_2": "Do you have any fresh strawberries? Penny and I are thinking of doing a DNA extraction with the kids. Fun little kitchen science experiment.#$b#Strawberries are best because they're hexaploid, so they have a lot of DNA you can extract.$h",
+            "22_2": "I saw an owl last night when I was looking at the stars!"
         }
     },
     {
@@ -58,7 +59,8 @@
         "Target": "Characters/Dialogue/Maru",
         "When": {"YearModulus": "4"},
         "Entries":{
-            "1_2": "I know some people have floated the idea of my mother becoming mayor after Mayor Lewis retires, but, honestly, I think she loves her woodworking more."
+            "1_2": "I know some people have floated the idea of my mother becoming mayor after Mayor Lewis retires, but, honestly, I think she loves her woodworking more.",
+            "2_2": "Owls have special feathers along the edges their wings that let them fly silently.#$b#Isn't biology cool?$h"
         }
     },
     {

@@ -1,4 +1,6 @@
-﻿using CommunityToolkit.Diagnostics;
+﻿using AtraShared.ConstantsAndEnums;
+
+using CommunityToolkit.Diagnostics;
 
 using ExperimentalLagReduction.HarmonyPatches;
 
@@ -17,6 +19,6 @@ public sealed class API : IExperimentalLagReductionAPI
         {
             return path;
         }
-        return Rescheduler.GetPathFor(start, end, gender, allowPartialPaths);
+        return Rescheduler.GetPathFor(start, end, (Gender)gender, allowPartialPaths);
     }
 }

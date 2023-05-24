@@ -17,9 +17,9 @@ namespace ExperimentalLagReduction.HarmonyPatches;
 [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Harmony Convention.")]
 internal static class OverrideGiftTastes
 {
-    private static IAssetName giftTastes = null!;
+    private static readonly ConcurrentDictionary<(string NPC, int itemID), int> Cache = new();
 
-    private static readonly ConcurrentDictionary<(string NPC, int itemID), int> _cache = new();
+    private static IAssetName giftTastes = null!;
 
     private enum GiftPriority
     {
@@ -45,54 +45,23 @@ internal static class OverrideGiftTastes
         if (assets is null || assets.Contains(giftTastes))
         {
             ModEntry.ModMonitor.Log($"Clearing gift tastes cache.");
-            _cache.Clear();
+            Cache.Clear();
         }
     }
 
-    [HarmonyPrefix]
-    [HarmonyPriority(Priority.Last)]
-    [HarmonyPatch(nameof(NPC.getGiftTasteForThisItem))]
-    private static bool GetGiftTastePrefix(NPC __instance, Item item, ref int __result)
-    {
-        if (!ModEntry.Config.OverrideGiftTastes)
-        {
-            return true;
-        }
-
-        __result = NPC.gift_taste_neutral;
-        if (item is not SObject obj)
-        {
-            return false;
-        }
-
-        if (ModEntry.Config.UseGiftTastesCache && _cache.TryGetValue((__instance.Name, obj.ParentSheetIndex), out var cacheTaste))
-        {
-            ModEntry.ModMonitor.TraceOnlyLog($"Got gift taste for {obj.Name} for {__instance.Name} from cache.");
-            __result = cacheTaste;
-            return false;
-        }
-
-        __result = GetGiftTaste(__instance, obj);
-        return false;
-    }
-
-    [HarmonyPriority(Priority.Last)]
-    [HarmonyPatch(nameof(NPC.getGiftTasteForThisItem))]
-    private static void Postfix(NPC __instance, Item item, ref int __result)
-    {
-        if (ModEntry.Config.UseGiftTastesCache && item is SObject)
-        {
-            _cache[(__instance.Name, item.ParentSheetIndex)] = __result;
-        }
-    }
-
+    /// <summary>
+    /// Gets the gift taste for a specific object for a specific NPC.
+    /// </summary>
+    /// <param name="npc">NPC to check.</param>
+    /// <param name="obj">Object to check.</param>
+    /// <returns>Gift tastes.</returns>
     internal static int GetGiftTaste(NPC npc, SObject obj)
     {
         int? context_taste = null;
         int? category_taste = null;
 
         // handle individual tastes.
-        if (Game1.NPCGiftTastes.TryGetValue(npc.Name, out var taste) && !string.IsNullOrWhiteSpace(taste))
+        if (Game1.NPCGiftTastes.TryGetValue(npc.Name, out string? taste) && !string.IsNullOrWhiteSpace(taste))
         {
             StreamSplit stream = taste.StreamSplit('/', StringSplitOptions.TrimEntries);
 
@@ -103,7 +72,7 @@ internal static class OverrideGiftTastes
                 goto universal;
             }
 
-            switch (GetGiftPriority(stream.Current.Word.StreamSplit(null, StringSplitOptions.TrimEntries | StringSplitOptions.RemoveEmptyEntries), obj))
+            switch (GetGiftPriority(stream.Current.Word, obj))
             {
                 case GiftPriority.Individual:
                     ModEntry.ModMonitor.TraceOnlyLog($"NPC {npc.Name} loves {obj.Name} specifically");
@@ -122,7 +91,7 @@ internal static class OverrideGiftTastes
                 ModEntry.ModMonitor.LogOnce($"Gift tastes for {npc.Name} seem broken: {taste}");
                 goto universal;
             }
-            var likes = stream.Current.Word.StreamSplit();
+            ReadOnlySpan<char> likes = stream.Current.Word;
 
             // dislikes text and values
             if (!stream.MoveNext() || !stream.MoveNext())
@@ -130,7 +99,7 @@ internal static class OverrideGiftTastes
                 ModEntry.ModMonitor.LogOnce($"Gift tastes for {npc.Name} seem broken: {taste}");
                 goto universal;
             }
-            var dislikes = stream.Current.Word.StreamSplit();
+            ReadOnlySpan<char> dislikes = stream.Current.Word;
 
             // hates text and values.
             if (!stream.MoveNext() || !stream.MoveNext())
@@ -139,7 +108,7 @@ internal static class OverrideGiftTastes
                 goto universal;
             }
 
-            switch (GetGiftPriority(stream.Current.Word.StreamSplit(), obj))
+            switch (GetGiftPriority(stream.Current.Word, obj))
             {
                 case GiftPriority.Individual:
                     ModEntry.ModMonitor.TraceOnlyLog($"NPC {npc.Name} hates {obj.Name} specifically.");
@@ -186,7 +155,7 @@ internal static class OverrideGiftTastes
                 goto universal;
             }
 
-            switch (GetGiftPriority(stream.Current.Word.StreamSplit(), obj))
+            switch (GetGiftPriority(stream.Current.Word, obj))
             {
                 case GiftPriority.Individual:
                     ModEntry.ModMonitor.TraceOnlyLog($"NPC {npc.Name} is neutral {obj.Name} specifically.");
@@ -207,18 +176,20 @@ internal static class OverrideGiftTastes
         }
 
 universal:
+
+        // handle universal tastes.
         if (obj.Type.Contains("Arch"))
         {
             ModEntry.ModMonitor.TraceOnlyLog($"{obj.Name} is an arch item, which is treated special.");
             return npc.Name == "Penny" || npc.Name == "Dwarf" ? NPC.gift_taste_like : NPC.gift_taste_dislike;
         }
 
-        if (!Game1.NPCGiftTastes.TryGetValue("Universal_Love", out var universalLoves))
+        if (!Game1.NPCGiftTastes.TryGetValue("Universal_Love", out string? universalLoves))
         {
             ModEntry.ModMonitor.Log($"Universal loves seem missing, odd", LogLevel.Warn);
             return category_taste ?? NPC.gift_taste_neutral;
         }
-        switch (GetGiftPriority(universalLoves.StreamSplit(), obj))
+        switch (GetGiftPriority(universalLoves, obj))
         {
             case GiftPriority.Individual:
                 ModEntry.ModMonitor.DebugOnlyLog($"{obj.Name} is a universal love, so is loved by {npc.Name}");
@@ -231,12 +202,12 @@ universal:
                 break;
         }
 
-        if (!Game1.NPCGiftTastes.TryGetValue("Universal_Hate", out var universalHates))
+        if (!Game1.NPCGiftTastes.TryGetValue("Universal_Hate", out string? universalHates))
         {
             ModEntry.ModMonitor.Log($"Universal hates seem missing, odd", LogLevel.Warn);
             return category_taste ?? NPC.gift_taste_neutral;
         }
-        switch (GetGiftPriority(universalHates.StreamSplit(), obj))
+        switch (GetGiftPriority(universalHates, obj))
         {
             case GiftPriority.Individual:
                 ModEntry.ModMonitor.DebugOnlyLog($"{obj.Name} is a universal hate, so is hated by {npc.Name}");
@@ -249,12 +220,12 @@ universal:
                 break;
         }
 
-        if (!Game1.NPCGiftTastes.TryGetValue("Universal_Like", out var universalLikes))
+        if (!Game1.NPCGiftTastes.TryGetValue("Universal_Like", out string? universalLikes))
         {
             ModEntry.ModMonitor.Log($"Universal likes seem missing, odd", LogLevel.Warn);
             return category_taste ?? NPC.gift_taste_neutral;
         }
-        switch (GetGiftPriority(universalLikes.StreamSplit(), obj))
+        switch (GetGiftPriority(universalLikes, obj))
         {
             case GiftPriority.Individual:
                 ModEntry.ModMonitor.DebugOnlyLog($"{obj.Name} is a universal like, so is liked by {npc.Name}");
@@ -267,12 +238,12 @@ universal:
                 break;
         }
 
-        if (!Game1.NPCGiftTastes.TryGetValue("Universal_Dislike", out var universalDislike))
+        if (!Game1.NPCGiftTastes.TryGetValue("Universal_Dislike", out string? universalDislike))
         {
             ModEntry.ModMonitor.Log($"Universal dislikes seem missing, odd", LogLevel.Warn);
             return category_taste ?? NPC.gift_taste_neutral;
         }
-        switch (GetGiftPriority(universalDislike.StreamSplit(), obj))
+        switch (GetGiftPriority(universalDislike, obj))
         {
             case GiftPriority.Individual:
                 ModEntry.ModMonitor.DebugOnlyLog($"{obj.Name} is a universal dislike, so is disliked by {npc.Name}");
@@ -285,12 +256,12 @@ universal:
                 break;
         }
 
-        if (!Game1.NPCGiftTastes.TryGetValue("Universal_Neutral", out var universalNeutrals))
+        if (!Game1.NPCGiftTastes.TryGetValue("Universal_Neutral", out string? universalNeutrals))
         {
             ModEntry.ModMonitor.Log($"Universal neutrals seem missing, odd", LogLevel.Warn);
             return category_taste ?? NPC.gift_taste_neutral;
         }
-        switch (GetGiftPriority(universalNeutrals.StreamSplit(), obj))
+        switch (GetGiftPriority(universalNeutrals, obj))
         {
             case GiftPriority.Individual:
                 ModEntry.ModMonitor.DebugOnlyLog($"{obj.Name} is a universal neutral, so is neutral to {npc.Name}");
@@ -327,16 +298,54 @@ universal:
         return NPC.gift_taste_neutral;
     }
 
+    [HarmonyPrefix]
+    [HarmonyPriority(Priority.Last)]
+    [HarmonyPatch(nameof(NPC.getGiftTasteForThisItem))]
+    private static bool GetGiftTastePrefix(NPC __instance, Item item, ref int __result)
+    {
+        if (!ModEntry.Config.OverrideGiftTastes)
+        {
+            return true;
+        }
+
+        __result = NPC.gift_taste_neutral;
+        if (item is not SObject obj)
+        {
+            return false;
+        }
+
+        if (ModEntry.Config.UseGiftTastesCache && Cache.TryGetValue((__instance.Name, obj.ParentSheetIndex), out int cacheTaste))
+        {
+            ModEntry.ModMonitor.TraceOnlyLog($"Got gift taste for {obj.Name} for {__instance.Name} from cache.");
+            __result = cacheTaste;
+            return false;
+        }
+
+        __result = GetGiftTaste(__instance, obj);
+        return false;
+    }
+
+    // use a postfix to cache so other mods can also harmony patch this.
+    [HarmonyPriority(Priority.Last)]
+    [HarmonyPatch(nameof(NPC.getGiftTasteForThisItem))]
+    private static void Postfix(NPC __instance, Item item, ref int __result)
+    {
+        if (ModEntry.Config.UseGiftTastesCache && item is SObject)
+        {
+            Cache[(__instance.Name, item.ParentSheetIndex)] = __result;
+        }
+    }
+
     /// <summary>
     /// Given a list of tastes, look up the best match for this item.
     /// </summary>
-    /// <param name="giftList">Gift list to look at.</param>
+    /// <param name="gifts">Gift list to look at.</param>
     /// <param name="obj">Object to look at.</param>
     /// <returns>Highest priority gift taste. Goes in order of Individual->ContextTag->Category->None.</returns>
-    private static GiftPriority? GetGiftPriority(StreamSplit giftList, SObject obj)
+    private static GiftPriority? GetGiftPriority(ReadOnlySpan<char> gifts, SObject obj)
     {
         GiftPriority priority = GiftPriority.None;
-        foreach (SpanSplitEntry giftItem in giftList)
+        foreach (SpanSplitEntry giftItem in gifts.StreamSplit(null, StringSplitOptions.TrimEntries | StringSplitOptions.RemoveEmptyEntries))
         {
             if (giftItem.Word.Length == 0)
             {

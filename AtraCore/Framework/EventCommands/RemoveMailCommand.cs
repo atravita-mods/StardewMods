@@ -31,7 +31,7 @@ internal sealed class RemoveMailCommand : IEventCommand
     /// <inheritdoc />
     public bool Validate(Event @event, GameLocation location, GameTime time, string[] args, out string? error)
     {
-        if (args.Length <= 2)
+        if (args.Length < 2)
         {
             error = "Event requires at least one mail flag to remove!";
             return false;

@@ -83,8 +83,8 @@ internal sealed class ModEntry : Mod
         if (Game1.getLocationFromName("IslandSouth") is IslandSouth islandSouth)
         {
             this.Monitor.DebugOnlyLog("Found IslandSouth.", LogLevel.Info);
-            ParrotUpgradePerch? perch = islandSouth.parrotUpgradePerches.FirstOrDefault(perch => perch.tilePosition.X == 17 && perch.tilePosition.Y == 22);
-            if (perch is not null && perch.currentState.Value != ParrotUpgradePerch.UpgradeState.Complete)
+            if (islandSouth.parrotUpgradePerches.FirstOrDefault(perch => perch.tilePosition.X == 17 && perch.tilePosition.Y == 22) is ParrotUpgradePerch perch
+                && perch.currentState.Value != ParrotUpgradePerch.UpgradeState.Complete)
             {
                 this.Monitor.DebugOnlyLog("Found perch, applying watching.", LogLevel.Info);
                 IslandSouthWatcher southWatcher = new(this.Helper.GameContent);

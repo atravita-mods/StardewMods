@@ -46,30 +46,34 @@ internal sealed class ModEntry : Mod
     /// <inheritdoc />
     public override void Entry(IModHelper helper)
     {
+        this.Monitor.Log($"Starting up: {this.ModManifest.UniqueID} - {typeof(ModEntry).Assembly.FullName}");
         I18n.Init(helper.Translation);
         ModMonitor = this.Monitor;
         AssetManager.Initialize(helper.GameContent);
+        QuestTracker.Init(helper.Multiplayer, this.ModManifest.UniqueID);
 
         // replace AtraBase's logger with SMAPI's logging service.
         AtraBase.Internal.Logger.Instance = new Logger(this.Monitor);
 
         Config = AtraUtils.GetConfigOrDefault<ModConfig>(helper, this.Monitor);
-        this.Monitor.Log($"Starting up: {this.ModManifest.UniqueID} - {typeof(ModEntry).Assembly.FullName}");
 
         helper.Events.Content.AssetRequested += this.OnAssetRequested;
 
         helper.Events.GameLoop.GameLaunched += this.OnGameLaunched;
         helper.Events.GameLoop.SaveLoaded += this.OnSaveLoaded;
-        helper.Events.GameLoop.DayEnding += this.OnDayEnd;
-        helper.Events.GameLoop.TimeChanged += this.OnTimeChanged;
+        helper.Events.GameLoop.Saving += (_, _) => QuestTracker.Write(this.Helper.Data);
+
         helper.Events.GameLoop.ReturnedToTitle += this.OnReturnedToTitle;
 
+        helper.Events.GameLoop.DayEnding += this.OnDayEnd;
+        helper.Events.GameLoop.TimeChanged += this.OnTimeChanged;
         helper.Events.Player.Warped += this.Player_Warped;
+
+        helper.Events.Multiplayer.PeerConnected += this.Multiplayer_PeerConnected;
+        helper.Events.Multiplayer.ModMessageReceived += this.Multiplayer_ModMessageReceived;
 
         EventCommandManager.Add(new RemoveMailCommand("atravita_" + nameof(RemoveMailCommand), this.Monitor));
         EventCommandManager.Add(new AllowRepeatAfter("atravita_" + nameof(AllowRepeatAfter), this.Monitor));
-
-        QuestTracker.Init(helper.Multiplayer, this.ModManifest.UniqueID);
 
 #if DEBUG
         if (!helper.ModRegistry.IsLoaded("DigitalCarbide.SpriteMaster"))
@@ -108,6 +112,7 @@ internal sealed class ModEntry : Mod
 
         MultiplayerHelpers.AssertMultiplayerVersions(this.Helper.Multiplayer, this.ModManifest, this.Monitor, this.Helper.Translation);
         DrawPrismatic.LoadPrismaticData();
+        QuestTracker.Load(this.Helper.Data);
 
         this.migrator = new(this.ModManifest, this.Helper, this.Monitor);
         if (!this.migrator.CheckVersionInfo())
@@ -124,6 +129,7 @@ internal sealed class ModEntry : Mod
     {
         NPCCache.Reset();
         AllowRepeatAfterHandler.Reset();
+        QuestTracker.Reset();
     }
 
     /// <inheritdoc cref="IGameLoopEvents.TimeChanged"/>
@@ -142,7 +148,7 @@ internal sealed class ModEntry : Mod
             return;
         }
 
-        int count = 5 - Game1.hudMessages.Count;
+        int count = 3 - Game1.hudMessages.Count;
         if (count > 0)
         {
             PlayerAlertHandler.DisplayFromQueue(count);
@@ -165,6 +171,20 @@ internal sealed class ModEntry : Mod
 
     private void OnAssetRequested(object? sender, AssetRequestedEventArgs e)
         => AssetManager.Apply(e);
+
+    #endregion
+
+    #region multiplayer
+
+    private void Multiplayer_ModMessageReceived(object? sender, ModMessageReceivedEventArgs e)
+    {
+        QuestTracker.OnMessageReceived(e);
+    }
+
+    private void Multiplayer_PeerConnected(object? sender, PeerConnectedEventArgs e)
+    {
+        QuestTracker.OnPeerConnected(e);
+    }
 
     #endregion
 

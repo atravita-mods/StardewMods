@@ -1,10 +1,18 @@
 {"Changes":[
     // Dreams of a better life, is a bit caught up in books.
     {
+        "LogName": "Penny - Marriage - in normal dialogue file",
+        "Action": "EditData",
+        "Target": "Characters/Dialogue/Penny",
+        "When": {"Relationship: Penny": "Married"},
+        "Entries": {
+            "Farmhouse_Entry": "Honey, I'm home!",
+        }
+    },
+    {
         "LogName": "Penny - Base Marriage",
         "Action": "EditData",
         "Target": "Characters/Dialogue/MarriageDialoguePenny",
-        "When" : {"YearModulus": "2"},
         "Entries": {
             "summer_10": "@, hot days like this make me wonder what sleeping outside under the stars would be like...",
 

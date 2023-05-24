@@ -1,16 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-using AtraShared.Integrations.GMCMAttributes;
+﻿using AtraShared.Integrations.GMCMAttributes;
 
 namespace ExperimentalLagReduction.Framework;
+
+/// <summary>
+/// The config class for this mod.
+/// </summary>
 internal sealed class ModConfig
 {
-    public bool OverrideGiftTastes { get; set; } = true;
-
+    /// <summary>
+    /// Gets or sets a value indicating whether or not animated sprites should, at best as possible, be forced to use lazy loads.
+    /// </summary>
+    [GMCMDefaultIgnore]
     public bool ForceLazyTextureLoad { get; set; } =
         #if DEBUG
             true;
@@ -18,6 +18,9 @@ internal sealed class ModConfig
             false;
         #endif
 
+    /// <summary>
+    /// Gets or sets a value indicating whether or not to use this mod's scheduler.
+    /// </summary>
     [GMCMSection("Scheduler", 0)]
     public bool UseAlternativeScheduler { get; set; } = true;
 
@@ -26,4 +29,10 @@ internal sealed class ModConfig
 
     [GMCMSection("Scheduler", 0)]
     public bool AllowPartialPaths { get; set; } = true;
+
+    [GMCMSection("GiftTastes", 10)]
+    public bool OverrideGiftTastes { get; set; } = true;
+
+    [GMCMSection("GiftTastes", 10)]
+    public bool UseGiftTastesCache { get; set; } = true;
 }

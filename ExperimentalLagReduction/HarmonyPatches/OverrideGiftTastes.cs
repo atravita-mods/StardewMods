@@ -1,4 +1,4 @@
-﻿#define TRACELOG
+﻿// #define TRACELOG
 
 using System.Collections.Concurrent;
 
@@ -29,9 +29,17 @@ internal static class OverrideGiftTastes
         Individual,
     }
 
+    /// <summary>
+    /// Initializes the asset names.
+    /// </summary>
+    /// <param name="parser">Game location helper.</param>
     internal static void Initialize(IGameContentHelper parser)
-        => parser.ParseAssetName("Data/NPCGiftTastes");
+        => giftTastes = parser.ParseAssetName("Data/NPCGiftTastes");
 
+    /// <summary>
+    /// Clears the cache.
+    /// </summary>
+    /// <param name="assets">Assets to reset, or null to reset unconditionally.</param>
     internal static void Reset(IReadOnlySet<IAssetName>? assets = null)
     {
         if (assets is null || assets.Contains(giftTastes))
@@ -57,7 +65,7 @@ internal static class OverrideGiftTastes
             return false;
         }
 
-        if (_cache.TryGetValue((__instance.Name, obj.ParentSheetIndex), out var cacheTaste))
+        if (ModEntry.Config.UseGiftTastesCache && _cache.TryGetValue((__instance.Name, obj.ParentSheetIndex), out var cacheTaste))
         {
             ModEntry.ModMonitor.TraceOnlyLog($"Got gift taste for {obj.Name} for {__instance.Name} from cache.");
             __result = cacheTaste;
@@ -72,7 +80,7 @@ internal static class OverrideGiftTastes
     [HarmonyPatch(nameof(NPC.getGiftTasteForThisItem))]
     private static void Postfix(NPC __instance, Item item, ref int __result)
     {
-        if (item is SObject)
+        if (ModEntry.Config.UseGiftTastesCache && item is SObject)
         {
             _cache[(__instance.Name, item.ParentSheetIndex)] = __result;
         }

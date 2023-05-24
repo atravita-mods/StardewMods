@@ -1,19 +1,13 @@
-﻿#define TRACELOG
+﻿// #define TRACELOG
 
 using System.Collections.Concurrent;
 using System.Diagnostics;
-using System.Xml.Linq;
 
 using AtraBase.Collections;
-using AtraBase.Models.Result;
 
 using AtraShared.Utils.Extensions;
 
-using CommunityToolkit.Diagnostics;
-
 using HarmonyLib;
-
-using StardewValley;
 
 namespace ExperimentalLagReduction.HarmonyPatches;
 
@@ -62,11 +56,22 @@ internal static class Rescheduler
     private static readonly ThreadLocal<Stopwatch> _stopwatch = new(() => new());
 #endif
 
+    /// <summary>
+    /// Gets the number of paths cached.
+    /// </summary>
     internal static int CacheCount => pathCache.Count;
 
+    /// <summary>
+    /// Given the start, end, and a gender constraint, grab the path from the cache, or null if not found.
+    /// </summary>
+    /// <param name="start">Start location.</param>
+    /// <param name="end">End location.</param>
+    /// <param name="gender">Gender constraint, or <see cref="NPC.undefined"/> for not constrained.</param>
+    /// <param name="path">The path, if found.</param>
+    /// <returns>True if found, false otherwise.</returns>
     internal static bool TryGetPathFromCache(string start, string end, int gender, out List<string>? path)
     {
-        List<string>? ShorterNonNull(List<string>? left, List<string>? right)
+        static List<string>? ShorterNonNull(List<string>? left, List<string>? right)
         {
             if (left is null)
             {
@@ -77,7 +82,7 @@ internal static class Rescheduler
                 return left;
             }
 
-            return left.Count >= right.Count ? left : right;
+            return left.Count <= right.Count ? left : right;
         }
 
         bool foundGeneric = pathCache.TryGetValue((start, end, ungendered), out path);
@@ -99,6 +104,9 @@ internal static class Rescheduler
         return foundGeneric || foundMale || foundFemale;
     }
 
+    /// <summary>
+    /// Prints all cache values and also a summary.
+    /// </summary>
     internal static void PrintCache()
     {
         Counter<int> counter = new();
@@ -117,13 +125,22 @@ internal static class Rescheduler
             }
         }
 
-        ModEntry.ModMonitor.Log($"In total: {pathCache.Count} routes cached", LogLevel.Info);
+        ModEntry.ModMonitor.Log($"In total: {pathCache.Count} routes cached for {Game1.locations.Count} locations.", LogLevel.Info);
         foreach ((int key, int value) in counter)
         {
             ModEntry.ModMonitor.Log($"    {value} of length {key}", LogLevel.Info);
         }
     }
 
+    /// <summary>
+    /// Calculates the path between one game location to another, getting it from the cache if necessary.
+    /// </summary>
+    /// <param name="start">Start location.</param>
+    /// <param name="end">End location.</param>
+    /// <param name="gender">Gender constraints (use <see cref="NPC.undefined"/> for no constraints).</param>
+    /// <param name="allowPartialPaths">Whether or not to allow piecing together paths to make a full path. This can make the algo pick a less-optimal path, but it's unlikely and is much faster.</param>
+    /// <param name="limit">Search limit.</param>
+    /// <returns>Path, or null if not found.</returns>
     internal static List<string>? GetPathFor(GameLocation start, GameLocation? end, int gender, bool allowPartialPaths, int limit = int.MaxValue)
     {
         if (limit <= 0)

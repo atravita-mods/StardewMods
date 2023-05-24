@@ -171,6 +171,22 @@
 
     "clint-emily-birthday": "It's Emily's birthday tomorrow. Should I get her something?",
 
+/****************
+* Harvey listening to the radio
+*****************/
+
+    "harvey-radio.spring.1": "When I was a kid, I wanted to become a pilot.",
+    "harvey-radio.summer.1": "Sam showed this website that archives pilot transmissions. Some of them are quite funny.#$b#Some are a little...say, terrifying.",
+    "harvey-radio.fall.1": "Did you hear about the jetliner that almost landed on a taxiway?",
+    "harvey-radio.winter.1": "I can't believe we let %name Taylor still fly. Came within fifty feet of a jetliner's tail AND landed on a taxiway.",
+    "harvey-radio.spring.2": "I cannot believe how careless Accel was! How do you not build in a backup detector?$a",
+    "harvey-radio.summer.2": "Now Accel wants to have only one pilot in the cockpit. That...makes no sense!$a",
+    "harvey-radio.fall.2": "It'll be a sad day when the queen of the skies retires.#$b#Such a beautiful, beautiful plane.",
+    "harvey-radio.winter.2": "Every time I fly, I have to remind myself that planes are deliberately quite over-engineered, and that even losing an engine is fine.#$b#Doesn't make it any less scary though.",
+    "harvey-radio.spring.3": "Pretty sure I lost one of the pieces of a model plane I was working on.$s#$b#Now I really don't want to work on it.",
+    "harvey-radio.summer.3": "I'm thinking of going to a conference, but to be frank, @, it requires me to get on a plane.",
+    "harvey-radio.fall.3": "To be honest, @, one of the reasons why I wanted to be a pilot was just...when I was a kid, I thought pilots were cool.",
+
 /***************
 * Lewis in the community center
 ***************/
@@ -254,6 +270,8 @@
     "lewis-cc-bulletin.fall.3": "Part of living in a rural community - everyone pitches in when they can!",
     "lewis-cc-bulletin.winter.3": "My truck? Oh, that parking is pretty tight but it's the only place I can park.",
     "lewis-cc-bulletin.spring.4": "Ah, a nice new spring! It's finally warm enough to fix potholes again.",
+    "lewis-cc-bulletin.summer.4": "You know what, @, we should probably do something about all the trash in the river...$s",
+    "lewis-cc-bulletin.fall.4": "Say, @, you think the town would be interested in, say, cooking lessons?", 
 
     // in front of the fireplace:
     "lewis-cc-fireplace.spring.1": "Your gramps used to come to down after a long day's work.",
@@ -269,6 +287,8 @@
     "lewis-cc-fireplace.fall.3": "You know, @, I bet we could make some money around here if we set up some nice photo opportunities.#$b#Aren't our trees lovely this time of year? I hear those social media people love spots like this...",
     "lewis-cc-fireplace.winter.3": "@, join us in the Saloon for a nice round of drinks tonight? Gonna need that after walking through this bitter cold",
     "lewis-cc-fireplace.spring.4": "You know, @, I'm glad Gus still does good business with the saloon. Isn't easy to run a business in a town as small as this one.#$b#I go there as often as I can.",
+    "lewis-cc-fireplace.summer.4": "Sometimes, after a long day's work, I come here to rewind.#$b#This used to be the heart of the town, you know.",
+    "lewis-cc-fireplace.fall.4": "Back when I lived in the city, there was a little corner pub we'd all go to after work.#$b#I wonder if that's still around.",
 
 /****************
 * Map strings

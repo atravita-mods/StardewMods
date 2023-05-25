@@ -182,6 +182,9 @@ internal static class Rescheduler
                             }
                             while (count > 1);
                         }
+
+                        _visited.Value.Clear();
+                        _queue.Value.Clear();
                         return route;
                     }
 
@@ -200,6 +203,9 @@ internal static class Rescheduler
                             routeStart.AddRange(prev);
 
                             PathCache.TryAdd((start.Name, end.Name, node.GenderConstraint), routeStart);
+
+                            _visited.Value.Clear();
+                            _queue.Value.Clear();
                             return routeStart;
                         }
                         else if (PathCache.TryGetValue((node.Name, end.Name, genderConstrainedToCurrentSearch), out List<string>? genderedPrev)
@@ -212,6 +218,9 @@ internal static class Rescheduler
                             routeStart.AddRange(genderedPrev);
 
                             PathCache.TryAdd((start.Name, end.Name, genderConstrainedToCurrentSearch), routeStart);
+
+                            _visited.Value.Clear();
+                            _queue.Value.Clear();
                             return routeStart;
                         }
                     }

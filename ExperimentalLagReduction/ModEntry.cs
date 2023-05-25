@@ -1,4 +1,5 @@
 ﻿using AtraShared.ConstantsAndEnums;
+using AtraShared.Integrations;
 using AtraShared.Utils.Extensions;
 
 using ExperimentalLagReduction.Framework;
@@ -20,7 +21,7 @@ internal sealed class ModEntry : Mod
     internal static IMonitor ModMonitor { get; private set; } = null!;
 
     /// <summary>
-    /// The Config instance for this mod.
+    /// Gets the config instance for this mod.
     /// </summary>
     internal static ModConfig Config { get; private set; } = null!;
 
@@ -48,6 +49,16 @@ internal sealed class ModEntry : Mod
         this.Helper.Events.GameLoop.DayEnding += (_, _) => OverrideGiftTastes.Reset();
 
         this.ApplyPatches(new Harmony(this.ModManifest.UniqueID));
+
+        // GMCM
+        GMCMHelper helper = new(this.Monitor, this.Helper.Translation, this.Helper.ModRegistry, this.ModManifest);
+        if (helper.TryGetAPI())
+        {
+            helper.Register(
+                reset: () => Config = new(),
+                save: () => this.Helper.AsyncWriteConfig(this.Monitor, Config))
+            .GenerateDefaultGMCM(() => Config);
+        }
     }
 
     /// <summary>

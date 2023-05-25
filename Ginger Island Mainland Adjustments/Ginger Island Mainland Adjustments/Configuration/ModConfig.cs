@@ -14,25 +14,6 @@ public sealed class ModConfig
     public const DayOfWeek DEFAULT_GUS_VISIT_DAY = DayOfWeek.Tuesday;
 
     /// <summary>
-    /// Attempts to parse a string into a DayOfWeek.
-    /// Returns the default if not possible.
-    /// </summary>
-    /// <param name="rawstring">Raw string to parse.</param>
-    /// <returns>Day of week as enum.</returns>
-    [Pure]
-    public static DayOfWeek TryParseDayOfWeekOrGetDefault(string rawstring)
-        => Enum.TryParse(rawstring, true, out DayOfWeek dayOfWeek) ? dayOfWeek : DEFAULT_GUS_VISIT_DAY;
-
-    /// <summary>
-    /// Attempts to parse a raw string into a WearIslandClothing. Returns default if not parsable.
-    /// </summary>
-    /// <param name="rawstring">Raw string to parse.</param>
-    /// <returns>WearIslandClothing as enum.</returns>
-    [Pure]
-    public static WearIslandClothing TryParseWearIslandClothingOrGetDefault(string rawstring)
-        => Enum.TryParse(rawstring, true, out WearIslandClothing islandclothing) ? islandclothing : WearIslandClothing.Default;
-
-    /// <summary>
     /// Gets or sets a value indicating whether EnforceGITiming is enabled.
     /// When enabled, rejects time points too close together.
     /// And warns for them.

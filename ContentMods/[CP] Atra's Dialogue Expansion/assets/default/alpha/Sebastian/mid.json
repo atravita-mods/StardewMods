@@ -30,7 +30,9 @@
             "3_2": "Did you hear of the story of the printer that wouldn't print on Tuesdays?#$b#Man, there's always interesting bugs in the world.",
 
             "SebastianRoom_9_4": "%Sebastian seems to be on a call.#$b#I saw your email; is there anything in particular we could change?",
-            "summerSebastianRoom_9_4": "I have so much work I need to do, @. Sorry, but I don't have time to chat today.#$e#What, @, I have a performance review coming up, I need to focus$a."
+            "summerSebastianRoom_9_4": "#$c .5#I have so much work I need to do, @. Sorry, but I don't have time to chat today.#What, @, I have a performance review coming up, I need to focus$a.#",
+            "fallSebastianRoom_9_4": "Ugh, I have so many emails I need to reply to.$s",
+            "winterSebastianRoom_9_4": "%Sebastian looks a little bleary-eyed.#$b#Sorry, @, I was up all night debugging.$s"
         },
         "When": {
             "YearModulus": "3"
@@ -42,8 +44,11 @@
         "Target": "Characters/Dialogue/Sebastian",
         "Entries": {
             "8_2": "Did you see the story about the guy who couldn't send an email with a distance greater than 500 mi? That one was amusing.$h",
+            "10_2": "All my coworkers are like, have you heard of this new programming language? It has so much more static analysis, apparently.#$b#Frankly, I'm tired of hearing about it.",
 
-            "SebastianRoom_9_4": "%Sebastian seems to be on a call.#$b#I'm not sure I understand the third requirement.#$b#Exactly what hardware are we expected to support here?"
+            "SebastianRoom_9_4": "%Sebastian seems to be on a call.#$b#I'm not sure I understand the third requirement.#$b#Exactly what hardware are we expected to support here?",
+            "summerSebastianRoom_9_4": "@, sorry, I don't have time to speak today. I've got a very hairy bug to track down.",
+            "fallSebastianRoom_9_4": "Ugh, we're updating dependencies today, so nothing works and I haven't the clue why."
         },
         "When": {
             "YearModulus": "4"

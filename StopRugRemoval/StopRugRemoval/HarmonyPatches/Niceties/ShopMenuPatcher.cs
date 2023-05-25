@@ -1,17 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-using HarmonyLib;
+﻿using HarmonyLib;
 
 using StardewValley.Menus;
-using StardewValley.Tools;
 
 namespace StopRugRemoval.HarmonyPatches.Niceties;
 
+/// <summary>
+/// Adds patches to shop menu to make dressers take takes and weapons.
+/// </summary>
 [HarmonyPatch(typeof(ShopMenu))]
+[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Harmony convention.")]
 internal static class ShopMenuPatcher
 {
     [HarmonyPatch(nameof(ShopMenu.setUpStoreForContext))]

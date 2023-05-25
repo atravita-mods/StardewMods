@@ -8,7 +8,11 @@ using StardewValley.Minigames;
 
 namespace StopRugRemoval.HarmonyPatches.Niceties;
 
+/// <summary>
+/// Holds patches for the crane game.
+/// </summary>
 [HarmonyPatch(typeof(CraneGame.Claw))]
+[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Harmony convention.")]
 internal static class CraneGamePatches
 {
     private static readonly Lazy<Action<CraneGame.Claw, int>> SetDropChance = new(
@@ -17,7 +21,6 @@ internal static class CraneGamePatches
             .GetInstanceFieldSetter<CraneGame.Claw, int>());
 
     [HarmonyPatch(nameof(CraneGame.Claw.GrabObject))]
-    [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Named For Harmony.")]
     private static void Postfix(CraneGame.Claw __instance)
         => SetDropChance.Value(__instance, ModEntry.Config.CraneGameDifficulty);
 }

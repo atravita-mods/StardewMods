@@ -42,6 +42,9 @@ internal sealed class ModEntry : Mod
         ConsoleCommandManager.Register(helper.ConsoleCommands);
     }
 
+    /// <inheritdoc />
+    public override object? GetApi() => new API();
+
     /// <inheritdoc cref="IGameLoopEvents.GameLaunched"/>
     private void OnGameLaunch(object? sender, GameLaunchedEventArgs e)
     {

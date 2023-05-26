@@ -138,6 +138,12 @@
                 "Random: true, false": true
             }
         },
+
+        // Random video game
+        {
+            "Name": "VideoGame",
+            "Value": "{{i18n:video.game.{{Random:01, 02, 03, 04, 05, 06, 07, 08, 09}} }}"
+        }
     ],
     "Changes": [
         {
@@ -183,9 +189,7 @@
         {
             "Action": "Include",
             "LogName": "ScheduleChanges",
-            "When": {
-                "HasValue: ScheduleChanges": true
-            },
+            "When": { "HasValue: ScheduleChanges": true },
             "FromFile": "assets/schedules/toc.json"
         }
     ],

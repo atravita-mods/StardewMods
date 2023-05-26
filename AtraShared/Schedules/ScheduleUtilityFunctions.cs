@@ -482,7 +482,7 @@ public class ScheduleUtilityFunctions
             lastPoint = rawSchedule.AsSpan(slashloc + 1);
         }
 
-        if (lastPoint.TrySplitOnce(' ', out var first, out var second))
+        if (lastPoint.TrySplitOnce(' ', out ReadOnlySpan<char> first, out ReadOnlySpan<char> second))
         {
             return second;
         }

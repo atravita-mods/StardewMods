@@ -65,8 +65,8 @@ internal static class AllowRepeatAfterHandler
 
     internal static void DayEnd()
     {
-        var now = SDate.Now();
-        var days = now.DaysSinceStart;
+        SDate now = SDate.Now();
+        int days = now.DaysSinceStart;
         if (eventsToRepeat.Value.TryGetValue(days, out HashSet<int>? eventsToForget))
         {
             ModEntry.ModMonitor.Log($"Forgetting events for {now}: {string.Join(',', eventsToForget.Select(evt => evt.ToString()))}");
@@ -91,7 +91,7 @@ internal static class AllowRepeatAfterHandler
     internal static void Add(int id, int days)
     {
         days += SDate.Now().DaysSinceStart;
-        if (!eventsToRepeat.Value.TryGetValue(days, out var events))
+        if (!eventsToRepeat.Value.TryGetValue(days, out HashSet<int>? events))
         {
             eventsToRepeat.Value[days] = events = new();
         }

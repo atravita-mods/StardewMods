@@ -6,6 +6,7 @@ using AtraBase.Toolkit;
 
 using AtraCore.Config;
 using AtraCore.Framework.Caches;
+using AtraCore.Framework.ConsoleCommands;
 using AtraCore.Framework.DialogueManagement;
 using AtraCore.Framework.EventCommands;
 using AtraCore.Framework.EventCommands.AllowRepeatCommand;
@@ -74,6 +75,8 @@ internal sealed class ModEntry : Mod
 
         EventCommandManager.Add(new RemoveMailCommand("atravita_" + nameof(RemoveMailCommand), this.Monitor));
         EventCommandManager.Add(new AllowRepeatAfter("atravita_" + nameof(AllowRepeatAfter), this.Monitor));
+
+        CommandManager.Register(helper.ConsoleCommands);
 
 #if DEBUG
         if (!helper.ModRegistry.IsLoaded("DigitalCarbide.SpriteMaster"))

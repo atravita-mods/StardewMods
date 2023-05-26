@@ -1,4 +1,6 @@
-﻿using CommunityToolkit.Diagnostics;
+﻿using System.Collections.Concurrent;
+
+using CommunityToolkit.Diagnostics;
 
 using StardewValley.Locations;
 
@@ -9,8 +11,13 @@ namespace AtraCore.Framework.Caches;
 /// </summary>
 public static class NPCCache
 {
-    private static readonly Dictionary<string, WeakReference<NPC>> cache = new();
+    private static readonly ConcurrentDictionary<string, WeakReference<NPC>> cache = new();
 
+    /// <summary>
+    /// Inserts a specific NPC instance into the cache.
+    /// </summary>
+    /// <param name="npc">NPC instance to insert.</param>
+    /// <returns>True if inserted, false otherwise.</returns>
     public static bool TryInsert(NPC npc)
     {
         Guard.IsNotNull(npc);
@@ -46,7 +53,6 @@ public static class NPCCache
         if (Context.IsMultiplayer && (!Context.IsMainPlayer || Context.IsSplitScreen)
             && Game1.currentLocation is not null)
         {
-
             foreach (NPC? character in Game1.currentLocation.characters)
             {
                 if (!character.eventActor && character.isVillager() && character.Name == name)
@@ -68,7 +74,7 @@ public static class NPCCache
             }
             else
             {
-                cache.Remove(name);
+                cache.TryRemove(name, out _);
             }
         }
 

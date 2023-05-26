@@ -155,5 +155,18 @@
             "7_2": "Was talking to Robin the other day.#$b#You know, @, we'd try our best to support Abigail if she wanted to move out. I'm not sure she wants to, though.",
             "9_2": "I asked Abby last night if she'd be happier living in the city.#$b#I'd miss her if she moved out, of course, but maybe it's necessary.$s",
         }
+    },
+    {
+        "LogName": "Caroline: mid hearts. Y3",
+        "Action": "EditData",
+        "Target": "Characters/Dialogue/Caroline",
+        "When": { "YearModulus": "4" },
+        "Entries": {
+            "1_2": "Sometimes, I feel like we're pushing Abby to grow up too quickly.#$b#I had her when I was fairly young. That type of responsibility really makes you grow up fast.",
+            "3_2": "I was a pretty decent pianist when I was young. Nothing like Abigail's talent, of course.",
+            "4_2": "Pierre actually has a quite decent singing voice, although he doesn't like performing for other people.",
+            "5_2": "That weird band Pierre likes so much is going to be playing in Grampleton next Friday. Maybe I should get Pierre some tickets...#$b#Not sure that fits in the budget though.",
+            "6_2": "Pierre gets up at five in the morning to make sure the store is in good shape."
+        }
     }
 ]}

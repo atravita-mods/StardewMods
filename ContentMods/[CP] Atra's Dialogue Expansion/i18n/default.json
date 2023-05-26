@@ -171,6 +171,10 @@
 
     "clint-emily-birthday": "It's Emily's birthday tomorrow. Should I get her something?",
 
+    "sebastian-birthday.self.1": "Oh, it's my birthday today, isn't it? I guess I should do something social about it.",
+    "sebastian-birthday.self.2": "One more year around the sun, eh? Guess I'll see if Abby and Sam are up for a game of tabletop today.",
+    "sebastian-birthday.self.3": "I'm not really one for celebrating my birthday, but my mother wants to, so I guess...",
+
 /****************
 * Harvey listening to the radio
 *****************/
@@ -273,6 +277,9 @@
     "lewis-cc-bulletin.summer.4": "You know what, @, we should probably do something about all the trash in the river...$s",
     "lewis-cc-bulletin.fall.4": "Say, @, you think the town would be interested in, say, cooking lessons? Wouldn't that be a nice, wholesome group activity?",
     "lewis-cc-bulletin.winter.4": "@, you glad you picked Pelican Town to be your home?#$b#So am I, @. So am I.",
+    "lewis-cc-bulletin.spring.0": "Pelican Town used to be much bigger, back when the mines were active.#$b#Many people have moved out.#$b#But maybe things are finally on the upswing for our little town.",
+    "lewis-cc-bulletin.summer.0": "I'm hoping that if telecommunications improve, we'll be able to get some more remote professionals.#$b#They're a great injection of money into our economy.",
+    "lewis-cc-bulletin.fall.0": "Hmm, I think we might need to make some repairs to that playground...",
 
     // in front of the fireplace:
     "lewis-cc-fireplace.spring.1": "Your gramps used to come to down after a long day's work.",

@@ -2,9 +2,16 @@
     // Sebastian is a contractor mostly working on javascript mobile games. He lacks a college degree and 
     // feels that people don't respect him because of that. He also finds it harder to find employment (probably true)
 
-    
     {
-        "LogName": "Sebastian mid-hearts",
+        "LogName": "Sebastian base",
+        "Action": "EditData",
+        "Target": "Characters/Dialogue/Sebastian",
+        "Entries": {
+            "winter_15_2": "@, I got a five percent raise this year! Biggest one they've ever given me!$h"
+        }
+    },
+    {
+        "LogName": "Sebastian mid-hearts - y2",
         "Action": "EditData",
         "Target": "Characters/Dialogue/Sebastian",
         "Entries": {
@@ -21,13 +28,12 @@
         }
     },
     {
-        "LogName": "Sebastian mid-hearts",
+        "LogName": "Sebastian mid-hearts - y3",
         "Action": "EditData",
         "Target": "Characters/Dialogue/Sebastian",
         "Entries": {
-            "winter_15_2": "@, I got a five percent raise this year! Biggest one they've ever given me!$h",
-
             "3_2": "Did you hear of the story of the printer that wouldn't print on Tuesdays?#$b#Man, there's always interesting bugs in the world.",
+            "4_2": "Why is everyone obsessed over functional programming languages?",
 
             "SebastianRoom_9_4": "%Sebastian seems to be on a call.#$b#I saw your email; is there anything in particular we could change?",
             "summerSebastianRoom_9_4": "#$c .5#I have so much work I need to do, @. Sorry, but I don't have time to chat today.#What, @, I have a performance review coming up, I need to focus$a.#",
@@ -39,7 +45,7 @@
         }
     },
     {
-        "LogName": "Sebastian mid-hearts",
+        "LogName": "Sebastian mid-hearts - y4",
         "Action": "EditData",
         "Target": "Characters/Dialogue/Sebastian",
         "Entries": {

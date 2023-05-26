@@ -11,7 +11,8 @@
         "Action": "EditData",
         "Target": "Characters/Dialogue/Emily",
         "Entries":{
-            "1{{YearRemainder}}": "Mom and Dad sent us another letter the other day. I wonder how they've been?$s"
+            "1{{YearRemainder}}": "Mom and Dad sent us another letter the other day. I wonder how they've been?$s",
+            "Saloon_Entry": "Gus, I'm here!/Ah, work!/Gus, what needs doing?"
         }
     },
     {

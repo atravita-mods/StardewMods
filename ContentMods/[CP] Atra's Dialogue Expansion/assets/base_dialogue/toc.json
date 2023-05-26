@@ -75,6 +75,15 @@
         },
         {
             "Action": "Include",
+            "LogName": "Sebastian - base",
+            "FromFile": "assets/base_dialogue/Sebastian/mid.json",
+            "When": {
+                "EnableFor|contains=Sebastian": true,
+                "Query: {{Hearts:Sebastian}} >= 4": true
+            }
+        },
+        {
+            "Action": "Include",
             "LogName": "Misc items",
             "FromFile": "assets/base_dialogue/anniversary.json",
             "When": {

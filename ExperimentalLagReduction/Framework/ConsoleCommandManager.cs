@@ -156,6 +156,8 @@ internal static class ConsoleCommandManager
 
             SObject obj = new(id, 1);
 
+            // fine for this to be non-exhaustive, it's only used in a console command.
+            // let it throw.
             string taste = OverrideGiftTastes.GetGiftTaste(npc, obj) switch
             {
                 NPC.gift_taste_hate => "hate",

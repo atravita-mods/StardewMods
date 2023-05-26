@@ -43,12 +43,13 @@ public static class Utils
         {
             return helper.ReadConfig<T>();
         }
-        catch
+        catch (Exception ex)
         {
             monitor.Log(
                 helper.Translation.Get("IllFormatedConfig")
                     .Default("Config file seems ill-formated, using default. Please use Generic Mod Config Menu to configure."),
                 LogLevel.Warn);
+            monitor.Log(ex.ToString());
             return new();
         }
     }

@@ -18,6 +18,8 @@
         "Action": "EditData",
         "Target": "Characters/Dialogue/Evelyn",
         "Entries": {
+            "fall_Tue10": "Penny's like a granddaughter to me. She's a super sweet girl.",
+
             "15{{YearRemainder}}": "I worry about Alex sometimes.#$b#My darling boy wants to go pro, but he never really wants to make any steps towards that."
         },
         "When": {"YearModulus": "1"}
@@ -29,5 +31,13 @@
             "15_2": "Honey, I just made some cookies. Please have one, dearie. [223]$h"
         },
         "When": {"YearModulus": "2"}
+    },
+    {
+        "Action": "EditData",
+        "Target": "Characters/Dialogue/Evelyn",
+        "Entries": {
+            "15_2": "Ugh, we might have to cut back to a smaller cable package.$s"
+        },
+        "When": {"YearModulus": "4"}
     }
 ]}

@@ -10,6 +10,7 @@ using AtraCore.Framework.ConsoleCommands;
 using AtraCore.Framework.DialogueManagement;
 using AtraCore.Framework.EventCommands;
 using AtraCore.Framework.EventCommands.AllowRepeatCommand;
+using AtraCore.Framework.EventCommands.RelationshipCommands;
 using AtraCore.Framework.Internal;
 using AtraCore.Framework.ItemManagement;
 using AtraCore.Framework.QueuePlayerAlert;
@@ -73,8 +74,11 @@ internal sealed class ModEntry : Mod
         helper.Events.Multiplayer.PeerConnected += this.Multiplayer_PeerConnected;
         helper.Events.Multiplayer.ModMessageReceived += this.Multiplayer_ModMessageReceived;
 
-        EventCommandManager.Add(new RemoveMailCommand("atravita_" + nameof(RemoveMailCommand), this.Monitor));
+        EventCommandManager.Add(new RemoveMail("atravita_" + nameof(RemoveMail), this.Monitor));
         EventCommandManager.Add(new AllowRepeatAfter("atravita_" + nameof(AllowRepeatAfter), this.Monitor));
+        SetRelationship setrelationship = new("atravita_" + nameof(SetRelationship), this.Monitor, this.Helper.Multiplayer, this.ModManifest.UniqueID);
+        EventCommandManager.Add(setrelationship);
+        helper.Events.Multiplayer.ModMessageReceived += setrelationship.ProcessMoveRequest;
 
         CommandManager.Register(helper.ConsoleCommands);
 

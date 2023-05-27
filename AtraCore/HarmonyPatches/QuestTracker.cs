@@ -18,6 +18,7 @@ namespace AtraCore.HarmonyPatches;
 public static class QuestTracker
 {
     private const string MESSAGETYPE = "QuestTracker";
+    private const string MESSAGEREMOVE = "QuestTrackerRemove";
     private const string BROADCAST = "QuestTrackerBroadcast";
 
     private static Dictionary<long, HashSet<int>> finishedQuests = new();
@@ -115,13 +116,36 @@ public static class QuestTracker
 
     #region multiplayer
 
+    /// <inheritdoc cref="IMultiplayerEvents.PeerConnected"/>
     internal static void OnPeerConnected(PeerConnectedEventArgs e)
     {
         Broadcast(e.Peer.PlayerID);
     }
 
+    /// <inheritdoc cref="IMultiplayerEvents.ModMessageReceived"/>
     internal static void OnMessageReceived(ModMessageReceivedEventArgs e)
     {
+        static (long id, int questID)? ParseMessage(string message)
+        {
+            if (!message.TrySplitOnce(':', out ReadOnlySpan<char> first, out ReadOnlySpan<char> second))
+            {
+                ModEntry.ModMonitor.Log($"Received invalid message {message}", LogLevel.Error);
+                return null;
+            }
+            if (!long.TryParse(first, out long id))
+            {
+                ModEntry.ModMonitor.Log($"Could not parse {first.ToString()} as unique Id", LogLevel.Error);
+                return null;
+            }
+            if (!int.TryParse(second, out int questID))
+            {
+                ModEntry.ModMonitor.Log($"Could not parse {second.ToString()} as quest Id", LogLevel.Error);
+                return null;
+            }
+
+            return (id, questID);
+        }
+
         if (e.FromModID != uniqueID)
         {
             return;
@@ -132,29 +156,32 @@ public static class QuestTracker
                 finishedQuests = e.ReadAs<Dictionary<long, HashSet<int>>>();
                 return;
             case MESSAGETYPE:
-                string message = e.ReadAs<string>();
-                if (!message.TrySplitOnce(':', out ReadOnlySpan<char> first, out ReadOnlySpan<char> second))
+            {
+                (long id, int questID)? pair = ParseMessage(e.ReadAs<string>());
+                if (pair is not null)
                 {
-                    ModEntry.ModMonitor.Log($"Received invalid message {message}", LogLevel.Error);
-                    return;
+                    (long id, int questID) = pair.Value;
+                    if (!finishedQuests.TryGetValue(id, out HashSet<int>? set))
+                    {
+                        finishedQuests[id] = set = new();
+                    }
+                    set.Add(questID);
                 }
-                if (!long.TryParse(first, out long id))
-                {
-                    ModEntry.ModMonitor.Log($"Could not parse {first.ToString()} as unique Id", LogLevel.Error);
-                    return;
-                }
-                if (!int.TryParse(second, out int questID))
-                {
-                    ModEntry.ModMonitor.Log($"Could not parse {second.ToString()} as quest Id", LogLevel.Error);
-                    return;
-                }
-
-                if (!finishedQuests.TryGetValue(id, out HashSet<int>? set))
-                {
-                    finishedQuests[id] = set = new();
-                }
-                set.Add(questID);
                 break;
+            }
+            case MESSAGEREMOVE:
+            {
+                (long id, int questID)? pair = ParseMessage(e.ReadAs<string>());
+                if (pair is not null)
+                {
+                    (long id, int questID) = pair.Value;
+                    if (finishedQuests.TryGetValue(id, out HashSet<int>? set))
+                    {
+                        set.Remove(questID);
+                    }
+                }
+                break;
+            }
         }
     }
 

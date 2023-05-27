@@ -9,21 +9,21 @@ namespace AtraCore.Framework.EventCommands;
 /// <summary>
 /// Removes the following mail.
 /// </summary>
-internal sealed class RemoveMailCommand : IEventCommand
+internal sealed class RemoveMail : IEventCommand
 {
     /// <summary>
-    /// Initializes a new instance of the <see cref="RemoveMailCommand"/> class.
+    /// Initializes a new instance of the <see cref="RemoveMail"/> class.
     /// </summary>
     /// <param name="name">Name of the command.</param>
     /// <param name="monitor">Monitor to use.</param>
-    public RemoveMailCommand(string name, IMonitor monitor)
+    public RemoveMail(string name, IMonitor monitor)
     {
         this.Name = name;
         this.Monitor = monitor;
     }
 
     /// <inheritdoc />
-    public string Name { get; init; }
+    public string Name { get; init; }   
 
     /// <inheritdoc />
     public IMonitor Monitor { get; init; }

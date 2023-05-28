@@ -1,4 +1,6 @@
-﻿using AtraCore.Interfaces;
+﻿using AtraBase.Toolkit.Extensions;
+
+using AtraCore.Interfaces;
 
 using AtraShared.Utils.Extensions;
 
@@ -31,7 +33,7 @@ public static class EventCommandManager
         Guard.IsNotNull(command.Monitor);
         ModEntry.ModMonitor.DebugOnlyLog($"Adding event command {command.Name}.");
 
-        return _commands.TryAdd(string.IsInterned(command.Name) ?? command.Name, command);
+        return _commands.TryAdd(string.Intern(command.Name) ?? command.Name, command);
     }
 
     [HarmonyPriority(Priority.High)]
@@ -48,7 +50,7 @@ public static class EventCommandManager
             {
                 if (!handler.Validate(__instance, location, time, split, out string? error))
                 {
-                    handler.Monitor.Log($"Custom command {split[0]} cannot process {string.Join(',', split)}", LogLevel.Warn);
+                    handler.Monitor.Log($"Custom command {split[0]} cannot process {string.Join(' ', split.SkipToSegment(1))}", LogLevel.Warn);
                     if (!string.IsNullOrEmpty(error))
                     {
                         handler.Monitor.Log($"Error returned: {error}", LogLevel.Warn);

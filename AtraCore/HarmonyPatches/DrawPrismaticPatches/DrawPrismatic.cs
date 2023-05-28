@@ -1,17 +1,20 @@
 ﻿using System.Reflection;
 using System.Reflection.Emit;
 using System.Runtime.CompilerServices;
+
 using AtraBase.Toolkit;
 using AtraBase.Toolkit.Extensions;
-using AtraBase.Toolkit.Reflection;
 
 using AtraCore.Framework.ItemManagement;
 using AtraCore.Framework.ReflectionManager;
 using AtraCore.Models;
+
 using AtraShared.ConstantsAndEnums;
 using AtraShared.Utils.Extensions;
 using AtraShared.Utils.HarmonyHelper;
+
 using HarmonyLib;
+
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
@@ -31,6 +34,8 @@ internal static class DrawPrismatic
 {
     private static readonly SortedList<ItemTypeEnum, Dictionary<int, Lazy<Texture2D>>> PrismaticMasks = new();
     private static readonly SortedList<ItemTypeEnum, HashSet<int>> PrismaticFull = new();
+
+    private static readonly Harmony harmony = new("atravita.AtraCore.PrismaticDraw");
 
     #region LOADDATA
 
@@ -250,7 +255,7 @@ internal static class DrawPrismatic
                     origin: new Vector2(8f, 8f) * scaleSize,
                     scale: scaleSize * 4f,
                     effects: SpriteEffects.None,
-                    layerDepth: layerDepth + 0.01f);
+                    layerDepth: MathF.BitIncrement(layerDepth));
             }
         }
         catch (Exception ex)
@@ -576,7 +581,7 @@ internal static class DrawPrismatic
                     origin: new Vector2(8f, 8f) * scaleSize,
                     scale: scaleSize * 4f,
                     effects: SpriteEffects.None,
-                    layerDepth: layerDepth + 0.001f);
+                    layerDepth: MathF.BitIncrement(layerDepth));
             }
         }
         catch (Exception ex)
@@ -637,7 +642,7 @@ internal static class DrawPrismatic
                     origin: new Vector2(8f, 8f) * scaleSize,
                     scale: scaleSize * 4f,
                     effects: SpriteEffects.None,
-                    layerDepth: layerDepth + 0.001f);
+                    layerDepth: MathF.BitIncrement(layerDepth));
             }
         }
         catch (Exception ex)

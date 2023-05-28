@@ -44,7 +44,7 @@
             "19{{YearRemainder}}": "Sometimes when the Saloon isn't busy Gus lets me rest my feet and knit for a while.#$b#Did you know that Joja cashiers aren't allowed to sit down? I can't imagine how much their feet must hurt.",
             "25{{YearRemainder}}": "The month is almost over. Say, @, what are you planning for next month?",
             "26{{YearRemainder}}": "Circle skirts are so easy to make!#$b#Until I have to hem them. Getting the hem even isn't as easy.$s",
-            "27{{YearRemainder}}": "@, what do you think of kale salads?"
+            "28{{YearRemainder}}": "@, what do you think of kale salads?"
         },
         "When": {"YearModulus": "1"}
     },
@@ -78,6 +78,7 @@
             "12_2": "My father was originally from Pelican Town, but he moved away for college.#$e#We moved back when I was around five or so? Mom and Dad wanted a safer, quieter place to raise kids.",
             "13_2": "Dad was a traveling salesman. Always gone on a trip to some location or another.#$e#Mom had to travel a lot for her law practice too.",
             "14_2": "Mom and Dad write us letters sometimes. I hope they're enjoying their retirement...",
+            "15_2": "Maybe I should convince Haley to take a photography class?",
 
             "Tue10": "I've made most of my clothing, I love to sew.$h#$b#Plus, you get better clothing if you make it yourself.",
 

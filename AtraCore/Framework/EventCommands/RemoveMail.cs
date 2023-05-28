@@ -23,7 +23,7 @@ internal sealed class RemoveMail : IEventCommand
     }
 
     /// <inheritdoc />
-    public string Name { get; init; }   
+    public string Name { get; init; }
 
     /// <inheritdoc />
     public IMonitor Monitor { get; init; }

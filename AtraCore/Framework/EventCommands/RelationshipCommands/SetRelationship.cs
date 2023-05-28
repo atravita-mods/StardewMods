@@ -58,25 +58,52 @@ internal sealed class SetRelationship : IEventCommand
             return false;
         }
 
-        NPC? npc = NPCCache.GetByVillagerName(args[1], searchTheater: true);
-        if (npc is null)
+        if (string.IsNullOrWhiteSpace(args[1]))
         {
-            error = $"Could not find NPC by name {npc}";
+            error = $"NPC name may not be empty";
             return false;
         }
 
-        if (!npc.CanSocialize)
+        if (NPCCache.GetByVillagerName(args[1], searchTheater: true) is not NPC npc)
         {
-            error = $"NPC {npc.Name} is antisocial";
+            error = $"Could not find NPC by name {args[1]}";
             return false;
         }
 
-        if (!FriendshipEnumExtensions.TryParse(args[2], out FriendshipEnum friendship, ignoreCase: true) || !FriendshipEnumExtensions.IsDefined(friendship))
+        try
+        {
+            if (!npc.CanSocialize)
+            {
+                error = $"NPC {npc.Name} is antisocial";
+                return false;
+            }
+        }
+        catch (Exception ex)
+        {
+            error = $"Error checking if {npc.Name} is antisocial, weird.";
+            this.Monitor.Log(ex.ToString());
+            return false;
+        }
+
+        if (!FriendshipEnumExtensions.TryParse(args[2], out FriendshipEnum friendship, ignoreCase: true))
         {
             error = $"Could not parse {args[2]} as valid friendship value.";
             return false;
         }
 
+        if (!FriendshipEnumExtensions.IsDefined(friendship))
+        {
+            error = $"Could not parse {args[2]} as valid friendship value.";
+            return false;
+        }
+
+        if (friendship == FriendshipEnum.Engaged && Game1.player.isEngaged() && npc.Name != Game1.player.spouse)
+        {
+            error = $"Farmer is already engaged, becoming engaged again will not end well.";
+            return false;
+        }
+
+        // extra value to set post-command friendship OR days until wedding.
         if (args.Length == 4 && !int.TryParse(args[3], out _))
         {
             error = $"Could not parse {args[3]} as integer.";
@@ -168,6 +195,7 @@ internal sealed class SetRelationship : IEventCommand
                 if (Context.IsMainPlayer)
                 {
                     npc.reloadDefaultLocation();
+                    ClearNPCSchedule(npc);
                 }
                 else
                 {
@@ -191,6 +219,7 @@ internal sealed class SetRelationship : IEventCommand
             if (Context.IsMainPlayer)
             {
                 MoveNPCtoFarmerHome(npc, Game1.player);
+                ClearNPCSchedule(npc);
             }
             else
             {
@@ -287,6 +316,7 @@ internal sealed class SetRelationship : IEventCommand
         if (home.Equals(DEFAULT, StringComparison.OrdinalIgnoreCase))
         {
             npc.reloadDefaultLocation();
+            ClearNPCSchedule(npc);
         }
         else if (long.TryParse(home, out long id) && FarmerHelpers.GetFarmerById(id) is Farmer farmer)
         {
@@ -298,6 +328,20 @@ internal sealed class SetRelationship : IEventCommand
         }
     }
 
+    private static void ClearNPCSchedule(NPC npc)
+    {
+        npc.followSchedule = false;
+        if (npc.Schedule is not null)
+        {
+            npc.Schedule = null;
+        }
+        npc.controller = null;
+        npc.temporaryController = null;
+        npc.InvalidateMasterSchedule();
+        npc.Halt();
+        Game1.warpCharacter(npc, npc.DefaultMap, npc.DefaultPosition / Game1.tileSize);
+    }
+
     private static void MoveNPCtoFarmerHome(NPC npc, Farmer farmer)
     {
         // derived from Game1.prepareSpouseForWedding
@@ -307,6 +351,7 @@ internal sealed class SetRelationship : IEventCommand
         {
             npc.DefaultPosition = Utility.PointToVector2(house.getSpouseBedSpot(npc.Name)) * 64f;
         }
+        ClearNPCSchedule(npc);
     }
 
     private void SendMoveRequest(string message)

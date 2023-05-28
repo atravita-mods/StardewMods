@@ -4,6 +4,16 @@
         "LogName": "Vincent mid-hearts",
         "Target": "Characters/Dialogue/Vincent",
         "Entries": {
+            "spring_14": "Maybe Mom will buy some chocolate now that it's on sale?$h",
+
+            "summer_Wed10": "I asked Sam if he'd teach me how to skateboard some day.#$b#He said I was too little.$s"
+        },
+    },
+    {
+        "Action": "EditData",
+        "LogName": "Vincent mid-hearts",
+        "Target": "Characters/Dialogue/Vincent",
+        "Entries": {
             "summer_Mon8": "Mom made stewed spinach yesterday. Yuck.$s",
             "summer_Tue8": "I wonder if I can get Sam to buy me an ice cream...",
 

@@ -43,14 +43,14 @@ Simply remove this mod from your mods folder.
 
 ## NPC-specific notes.
 
-* **Abigail**:
+* **Abigail**: Abby's thing is that she's in college and she really doesn't like her major, which of course Pierre picked for her.
 * **Alex**: 
-* **Caroline**:
+* **Caroline**: Ah, long-suffering, used-to-be-fun Caroline! Gave her a more active role in the general store, as well as a lot more backstory.
 * **Clint**:
 * **Demetrius**: Now has a research topic! He's primarily studying the interactions between fungi and trees and how that contributes to ecological diversity.
 * **Elliott**:
-* **Emily**:
-* **Evelyn**:
+* **Emily**: Anyone else noticed that homegirl works 56 hours a week? Gus should be really giving you medical and retirement benefits, girl.
+* **Evelyn**: I love, love Evelyn. I headcanon that she really did step in to help raise Penny after Pam....you know.
 * **George**:
 * **Gus**:
 * **Haley**:

@@ -6,6 +6,11 @@
     // this isn't great because it's very English-specific.
     "he": "he",
     "she": "she",
+    "her": "her",
+    "him": "him",
+    "his": "his",
+    "hers": "hers",
+    "theirs": "theirs",
 
 /***************
 * For randomization: A bunch of randomized nouns.
@@ -190,6 +195,9 @@
     "harvey-radio.spring.3": "Pretty sure I lost one of the pieces of a model plane I was working on.$s#$b#Now I really don't want to work on it.",
     "harvey-radio.summer.3": "I'm thinking of going to a conference, but to be frank, @, it requires me to get on a plane.",
     "harvey-radio.fall.3": "To be honest, @, one of the reasons why I wanted to be a pilot was just...when I was a kid, I thought pilots were cool.",
+    "harvey-radio.winter.3": "I bet this snow would look lovely from a plane...#$b#Much less fun to have to walk through it.",
+    "harvey-radio.spring.4": "@, have you ever wanted to fly a plane before?",
+    "harvey-radio.summer.4": "It's amazing just how much coordination it takes to keep planes from flying into each other.",
 
 /***************
 * Lewis in the community center
@@ -280,6 +288,7 @@
     "lewis-cc-bulletin.spring.0": "Pelican Town used to be much bigger, back when the mines were active.#$b#Many people have moved out.#$b#But maybe things are finally on the upswing for our little town.",
     "lewis-cc-bulletin.summer.0": "I'm hoping that if telecommunications improve, we'll be able to get some more remote professionals.#$b#They're a great injection of money into our economy.",
     "lewis-cc-bulletin.fall.0": "Hmm, I think we might need to make some repairs to that playground...",
+    "lewis-cc-bulletin.winter.0": "Winter's a quiet time around here, it's too cold to do much.#$b#Can't really do much construction work now.",
 
     // in front of the fireplace:
     "lewis-cc-fireplace.spring.1": "Your gramps used to come to down after a long day's work.",
@@ -297,6 +306,7 @@
     "lewis-cc-fireplace.spring.4": "You know, @, I'm glad Gus still does good business with the saloon. Isn't easy to run a business in a town as small as this one.#$b#I go there as often as I can.",
     "lewis-cc-fireplace.summer.4": "Sometimes, after a long day's work, I come here to rewind.#$b#This used to be the heart of the town, you know.",
     "lewis-cc-fireplace.fall.4": "Back when I lived in the city, there was a little corner pub we'd all go to after work.#$b#I wonder if that's still around.",
+    "lewis-cc-fireplace.winter.4": "Between you and I, @, what I miss most from the city is good, fresh sushi.",
 
 /****************
 * Map strings

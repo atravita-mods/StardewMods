@@ -1,10 +1,20 @@
-{"Changes":[
-    {
-        "Action": "Include",
-        "LogName": "Sebastian schedules",
-        "FromFile": "assets/schedules/Sebastian.json",
-        "When":{
-            "ScheduleChanges|contains=Sebastian": true
+{
+    "Changes": [
+        {
+            "Action": "Include",
+            "LogName": "Harvey schedules",
+            "FromFile": "assets/schedules/Harvey.json",
+            "When": {
+                "ScheduleChanges|contains=Harvey": true
+            }
+        },
+        {
+            "Action": "Include",
+            "LogName": "Sebastian schedules",
+            "FromFile": "assets/schedules/Sebastian.json",
+            "When": {
+                "ScheduleChanges|contains=Sebastian": true
+            }
         }
-    }
-]}
+    ]
+}

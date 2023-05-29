@@ -123,6 +123,8 @@ internal static class ConsoleCommandManager
 #if DEBUG
         ModEntry.ModMonitor.Log($"Timing: {string.Join(", ", Rescheduler.Watches.Select(static watch => $"{watch.ElapsedMilliseconds} ms"))}", LogLevel.Info);
         ModEntry.ModMonitor.Log($"Total: {Rescheduler.Watches.Sum(static watch => watch.ElapsedMilliseconds)} ms", LogLevel.Info);
+
+        ModEntry.ModMonitor.Log($"Cache hit percentage: {Rescheduler.CacheHitRatio * 100}%", LogLevel.Info);
 #endif
     }
 

@@ -1,4 +1,8 @@
-﻿using HarmonyLib;
+﻿using AtraBase.Toolkit.Reflection;
+
+using AtraCore.Framework.ReflectionManager;
+
+using HarmonyLib;
 
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -12,8 +16,16 @@ namespace LessMiniShippingBin;
 /// </summary>
 [HarmonyPatch(typeof(Chest))]
 [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Harmony convention")]
-internal class ChestPatches
+internal static class ChestPatches
 {
+    #region delegates
+
+    private static Lazy<Func<Chest, int>> GetCurrentLidFrame = new(() =>
+        typeof(Chest).GetCachedField("currentLidFrame", ReflectionCache.FlagTypes.InstanceFlags)
+                     .GetInstanceFieldGetter<Chest, int>());
+
+    #endregion
+
     /// <summary>
     /// Postfix against the chest capacity.
     /// </summary>
@@ -52,11 +64,17 @@ internal class ChestPatches
             && !__instance.giftbox.Value && __instance.playerChest.Value && !__instance.localKickStartTile.HasValue
             && __instance.items.Count > 0 && __instance.items[0] is Item itemToDraw)
         {
+            int startframe = __instance.startingLidFrame.Value;
+            int currentFrame = GetCurrentLidFrame.Value(__instance);
+            float alphaAdjustment = __instance.lidFrameCount.Value > 1
+                ? 1 - ((currentFrame - startframe) / (float)(__instance.lidFrameCount.Value - 1))
+                : 1;
+
             itemToDraw.drawInMenu(
                 spriteBatch,
                 location: Game1.GlobalToLocal(Game1.viewport, new Vector2(x * 64, (y * 64) - 40)),
                 scaleSize: 1,
-                transparency: alpha,
+                transparency: alpha * alphaAdjustment,
                 layerDepth: Math.Max(0f, ((y * 64f) + 80f) / 10000f),
                 drawStackNumber: StackDrawType.Hide);
         }

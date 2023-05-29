@@ -13,6 +13,10 @@ internal static class CommandManager
 {
     private const string Prefix = "av.ac.";
 
+    /// <summary>
+    /// Registers the console commands for this mod.
+    /// </summary>
+    /// <param name="helper">Command helper.</param>
     internal static void Register(ICommandHelper helper)
     {
         helper.Add(
@@ -54,12 +58,12 @@ internal static class CommandManager
 
         for (int i = 1; i < args.Length; i++)
         {
-            if (!int.TryParse(args[i], out var id))
+            if (!int.TryParse(args[i], out int id))
             {
                 ModEntry.ModMonitor.Log($"Could not parse {args[i]} as an integer.", LogLevel.Warn);
                 continue;
             }
-            if (!quests.TryGetValue(id, out var quest))
+            if (!quests.TryGetValue(id, out string? quest))
             {
                 ModEntry.ModMonitor.Log($"{id} is not a valid quest.", LogLevel.Warn);
                 continue;

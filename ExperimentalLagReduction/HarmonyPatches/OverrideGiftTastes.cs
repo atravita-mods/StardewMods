@@ -192,7 +192,7 @@ universal:
         switch (GetGiftPriority(universalLoves, obj))
         {
             case GiftPriority.Individual:
-                ModEntry.ModMonitor.DebugOnlyLog($"{obj.Name} is a universal love, so is loved by {npc.Name}");
+                ModEntry.ModMonitor.TraceOnlyLog($"{obj.Name} is a universal love, so is loved by {npc.Name}");
                 return NPC.gift_taste_love;
             case GiftPriority.Category:
                 category_taste ??= NPC.gift_taste_love;
@@ -210,7 +210,7 @@ universal:
         switch (GetGiftPriority(universalHates, obj))
         {
             case GiftPriority.Individual:
-                ModEntry.ModMonitor.DebugOnlyLog($"{obj.Name} is a universal hate, so is hated by {npc.Name}");
+                ModEntry.ModMonitor.TraceOnlyLog($"{obj.Name} is a universal hate, so is hated by {npc.Name}");
                 return NPC.gift_taste_hate;
             case GiftPriority.Category:
                 category_taste ??= NPC.gift_taste_hate;
@@ -228,7 +228,7 @@ universal:
         switch (GetGiftPriority(universalLikes, obj))
         {
             case GiftPriority.Individual:
-                ModEntry.ModMonitor.DebugOnlyLog($"{obj.Name} is a universal like, so is liked by {npc.Name}");
+                ModEntry.ModMonitor.TraceOnlyLog($"{obj.Name} is a universal like, so is liked by {npc.Name}");
                 return NPC.gift_taste_like;
             case GiftPriority.Category:
                 category_taste ??= NPC.gift_taste_like;
@@ -246,7 +246,7 @@ universal:
         switch (GetGiftPriority(universalDislike, obj))
         {
             case GiftPriority.Individual:
-                ModEntry.ModMonitor.DebugOnlyLog($"{obj.Name} is a universal dislike, so is disliked by {npc.Name}");
+                ModEntry.ModMonitor.TraceOnlyLog($"{obj.Name} is a universal dislike, so is disliked by {npc.Name}");
                 return NPC.gift_taste_dislike;
             case GiftPriority.Category:
                 category_taste ??= NPC.gift_taste_dislike;
@@ -264,7 +264,7 @@ universal:
         switch (GetGiftPriority(universalNeutrals, obj))
         {
             case GiftPriority.Individual:
-                ModEntry.ModMonitor.DebugOnlyLog($"{obj.Name} is a universal neutral, so is neutral to {npc.Name}");
+                ModEntry.ModMonitor.TraceOnlyLog($"{obj.Name} is a universal neutral, so is neutral to {npc.Name}");
                 return NPC.gift_taste_neutral;
             case GiftPriority.Category:
                 category_taste ??= NPC.gift_taste_neutral;

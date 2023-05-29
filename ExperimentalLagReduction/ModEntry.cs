@@ -40,6 +40,9 @@ internal sealed class ModEntry : Mod
 
         OverrideGiftTastes.Initialize(helper.GameContent);
         ConsoleCommandManager.Register(helper.ConsoleCommands);
+
+        AssetManager.Initialize(helper.GameContent);
+        helper.Events.Content.AssetRequested += static (_, e) => AssetManager.Apply(e);
     }
 
     /// <inheritdoc />

@@ -1,4 +1,4 @@
-﻿// #define TRACELOG
+﻿#define TRACELOG
 
 using System.Collections.Concurrent;
 using System.Diagnostics;
@@ -7,6 +7,8 @@ using AtraBase.Collections;
 
 using AtraShared.ConstantsAndEnums;
 using AtraShared.Utils.Extensions;
+
+using ExperimentalLagReduction.Framework;
 
 using HarmonyLib;
 
@@ -33,12 +35,17 @@ internal static class Rescheduler
     private static readonly ThreadLocal<List<(string map, Gender gender)>> _current = new(() => new());
 
 #if DEBUG
-    private static readonly ThreadLocal<Stopwatch> _stopwatch = new(() => new());
+    private static readonly ThreadLocal<Stopwatch> _stopwatch = new(() => new(), trackAllValues: true);
 
     /// <summary>
     /// Gets the defined watches.
     /// </summary>
     internal static IList<Stopwatch> Watches => _stopwatch.Values;
+
+    private static int cacheHits = 0;
+    private static int cacheMisses = 0;
+
+    internal static float CacheHitRatio => (float)cacheHits / (cacheMisses + cacheHits);
 #endif
 
     #endregion
@@ -269,22 +276,92 @@ internal static class Rescheduler
     [HarmonyPatch(nameof(NPC.populateRoutesFromLocationToLocationList))]
     private static bool PrefixPopulateRoutes()
     {
-        PathCache.Clear();
+        try
+        {
+#if DEBUG
+            ModEntry.ModMonitor.Log($"Resetting all timers.", LogLevel.Info);
+            foreach (Stopwatch watch in _stopwatch.Values)
+            {
+                watch.Reset();
+            }
+#endif
+
+            PathCache.Clear();
+            PrePopulateCache();
+
+            return false;
+        }
+        catch (Exception ex)
+        {
+            ModEntry.ModMonitor.Log($"Mod failed while trying to pre-populate pathfinding cache.", LogLevel.Error);
+            ModEntry.ModMonitor.Log(ex.ToString());
+            return true;
+        }
+    }
+
+    private static void PrePopulateCache()
+    {
+        if (!ModEntry.Config.PrePopulateCache)
+        {
+            return;
+        }
 
 #if DEBUG
         _stopwatch.Value ??= new();
-        _stopwatch.Value.Restart();
+        _stopwatch.Value.Start();
 #endif
 
-        // pre-seed town a bit, since Town is basically a hub.
-        _ = GetPathFor(Game1.getLocationFromName("Town"), null, Ungendered, false, 3);
+        foreach ((string center, string radius) in AssetManager.GetPrepopulate())
+        {
+            GameLocation? loc = Game1.getLocationFromName(center);
+            if (loc is null)
+            {
+                ModEntry.ModMonitor.LogOnce($"Could not find location {center} for prepopulating locations for macro scheduler, skipping.", LogLevel.Warn);
+                continue;
+            }
+
+            if (!int.TryParse(radius, out int limit))
+            {
+                ModEntry.ModMonitor.LogOnce($"Could not parse radius {radius} for {center}, setting to three.", LogLevel.Warn);
+                limit = 3;
+            }
+
+            if (limit < 1 || limit > 4)
+            {
+                ModEntry.ModMonitor.LogOnce($"Radius {radius} for {center} is out of bounds, clamping.", LogLevel.Warn);
+                limit = Math.Clamp(limit, 1, 4);
+            }
+
+            Task.Factory.StartNew(() => Prefetch(loc, limit))
+            .ContinueWith(task =>
+            {
+                if (task.Status == TaskStatus.Faulted)
+                {
+                    ModEntry.ModMonitor.Log($"Cache prepopulation failed. Check log for details.", LogLevel.Error);
+                    ModEntry.ModMonitor.Log(task.Exception?.ToString() ?? "no stack trace?");
+                }
+            });
+        }
 
 #if DEBUG
         _stopwatch.Value.Stop();
-        ModEntry.ModMonitor.Log($"Total time so far: {_stopwatch.Value.ElapsedMilliseconds} ms, {PathCache.Count} total routes cached", LogLevel.Info);
+        ModEntry.ModMonitor.Log($"Total time so far: {_stopwatch.Value.ElapsedMilliseconds} ms, {PathCache.Count} total routes cached. Prefetch started.", LogLevel.Info);
+#endif
+    }
+
+    private static void Prefetch(GameLocation loc, int limit)
+    {
+#if DEBUG
+        _stopwatch.Value ??= new();
+        _stopwatch.Value.Start();
 #endif
 
-        return false;
+        _ = GetPathFor(loc, null, Ungendered, false, limit);
+
+#if DEBUG
+        _stopwatch.Value.Stop();
+        ModEntry.ModMonitor.Log($"Prefetch done for {loc.Name}. Total time so far: {_stopwatch.Value.ElapsedMilliseconds} ms, {PathCache.Count} total routes cached", LogLevel.Info);
+#endif
     }
 
     [HarmonyPrefix]
@@ -294,6 +371,8 @@ internal static class Rescheduler
     {
         if (TryGetPathFromCache(startingLocation, endingLocation, __instance.Gender, out __result))
         {
+            Interlocked.Increment(ref cacheHits);
+
             ModEntry.ModMonitor.TraceOnlyLog($"Got macro schedule for {__instance.Name} from cache: {startingLocation} -> {endingLocation}");
             if (__result is null)
             {
@@ -344,6 +423,7 @@ internal static class Rescheduler
         _stopwatch.Value.Start();
 #endif
 
+        Interlocked.Increment(ref cacheMisses);
         __result = GetPathFor(start, end, (Gender)__instance.Gender, ModEntry.Config.AllowPartialPaths);
 
 #if DEBUG

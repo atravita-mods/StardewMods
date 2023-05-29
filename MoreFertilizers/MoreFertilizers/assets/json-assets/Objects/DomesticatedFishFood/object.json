@@ -7,5 +7,6 @@
   "PurchasePrice": 200,
   "PurchaseFrom": "Willy",
   "CanPurchase": true,
-  "PurchaseRequirements": [ "Hn willyBugWadCutscene", "y 2", "d Mon Tue Wed Thu Fri" ]
+  "PurchaseRequirements": [ "Hn willyBugWadCutscene", "y 2", "d Mon Tue Wed Thu Fri" ],
+  "ContextTags": [ "color_green" ]
 }

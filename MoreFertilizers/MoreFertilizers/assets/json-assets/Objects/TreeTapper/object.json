@@ -7,5 +7,6 @@
   "PurchasePrice": 150,
   "PurchaseFrom": "Robin",
   "CanPurchase": true,
-  "PurchaseRequirements": [ "y 2", "n robinResource", "d Mon Tue Thu Fri Sat", "f Robin 1500" ]
+  "PurchaseRequirements": [ "y 2", "n robinResource", "d Mon Tue Thu Fri Sat", "f Robin 1500" ],
+  "ContextTags": [ "color_green" ]
 }

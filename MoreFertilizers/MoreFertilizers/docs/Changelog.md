@@ -16,6 +16,7 @@
 * Added the Everlasting Fruit Tree Fertilizer
     - Out of season fruit trees will produce up to one (1) fruit.
 * Added config option to disable particle effects.
+* Added color context tags.
 
 #### Version 0.3.4
 * Fix integration with DGA.

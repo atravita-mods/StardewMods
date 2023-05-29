@@ -7,5 +7,6 @@
   "PurchasePrice": 100,
   "PurchaseFrom": "Sandy",
   "CanPurchase": true,
-  "PurchaseRequirements": null
+  "PurchaseRequirements": null,
+  "ContextTags": [ "color_pink" ]
 }

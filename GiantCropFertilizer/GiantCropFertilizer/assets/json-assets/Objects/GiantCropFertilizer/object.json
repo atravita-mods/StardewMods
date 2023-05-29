@@ -1,7 +1,8 @@
 ﻿{
   "Name": "Giant Crop Fertilizer",
-  "Price":  "100",
+  "Price": "100",
   "Category": -19,
   "Edibility": -300,
-  "TranslationKey": "giant-crop-fertilizer"
+  "TranslationKey": "giant-crop-fertilizer",
+  "ContextTags": [ "color_pink" ]
 }

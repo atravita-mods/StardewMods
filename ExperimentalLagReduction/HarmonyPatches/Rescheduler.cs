@@ -37,15 +37,23 @@ internal static class Rescheduler
 #if DEBUG
     private static readonly ThreadLocal<Stopwatch> _stopwatch = new(() => new(), trackAllValues: true);
 
+    private static int cacheHits = 0;
+    private static int cacheMisses = 0;
+
     /// <summary>
     /// Gets the defined watches.
     /// </summary>
     internal static IList<Stopwatch> Watches => _stopwatch.Values;
 
-    private static int cacheHits = 0;
-    private static int cacheMisses = 0;
-
+    /// <summary>
+    /// Gets the cache hit ratio.
+    /// </summary>
     internal static float CacheHitRatio => (float)cacheHits / (cacheMisses + cacheHits);
+
+    /// <summary>
+    /// Gets the total number of cache hits.
+    /// </summary>
+    internal static int CacheHits => cacheHits;
 #endif
 
     #endregion
@@ -333,7 +341,7 @@ internal static class Rescheduler
             }
 
             Task.Factory.StartNew(() => Prefetch(loc, limit))
-            .ContinueWith(task =>
+            .ContinueWith(static task =>
             {
                 if (task.Status == TaskStatus.Faulted)
                 {

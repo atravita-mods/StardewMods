@@ -28,9 +28,9 @@ internal static class Rescheduler
 
     private static readonly ConcurrentDictionary<(string start, string end, Gender gender), List<string>?> PathCache = new();
 
-    private static readonly ThreadLocal<HashSet<string>> _visited = new(static () => new());
+    private static readonly ThreadLocal<HashSet<string>> _visited = new(static () => new(capacity: 32));
 
-    private static readonly ThreadLocal<Queue<MacroNode>> _queue = new(static () => new());
+    private static readonly ThreadLocal<Queue<MacroNode>> _queue = new(static () => new(capacity: 32));
 
 #if DEBUG
     private static readonly ThreadLocal<Stopwatch> _stopwatch = new(() => new(), trackAllValues: true);

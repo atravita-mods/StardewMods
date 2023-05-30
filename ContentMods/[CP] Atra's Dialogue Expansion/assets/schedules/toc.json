@@ -10,6 +10,30 @@
         },
         {
             "Action": "Include",
+            "LogName": "Alex schedules",
+            "FromFile": "assets/schedules/Alex.json",
+            "When": {
+                "ScheduleChanges|contains=Alex": true
+            }
+        },
+        {
+            "Action": "Include",
+            "LogName": "Elliott schedules",
+            "FromFile": "assets/schedules/Elliott.json",
+            "When": {
+                "ScheduleChanges|contains=Elliott": true
+            }
+        },
+        {
+            "Action": "Include",
+            "LogName": "Emily schedules",
+            "FromFile": "assets/schedules/Emily.json",
+            "When": {
+                "ScheduleChanges|contains=Emily": true
+            }
+        },
+        {
+            "Action": "Include",
             "LogName": "Harvey schedules",
             "FromFile": "assets/schedules/Harvey.json",
             "When": {

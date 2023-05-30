@@ -1,12 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-using AtraBase.Collections;
-
-using StardewModdingAPI.Events;
+﻿using StardewModdingAPI.Events;
 
 namespace ExperimentalLagReduction.Framework;
 
@@ -19,7 +11,7 @@ internal static class AssetManager
 
     internal static void Initialize(IGameContentHelper parser)
         => reschedulerPopulate = parser.ParseAssetName("Mods/atravita/Rescheduler_Populate");
-    
+
     /// <inheritdoc cref="IContentEvents.AssetRequested"/>
     internal static void Apply(AssetRequestedEventArgs e)
     {
@@ -33,5 +25,5 @@ internal static class AssetManager
     /// Gets the dictionary of locations to pre-populate for.
     /// </summary>
     /// <returns>Location->radius dictionary.</returns>
-    internal static Dictionary<string, string> GetPrepopulate() => Game1.temporaryContent.Load<Dictionary<string, string>>(reschedulerPopulate.BaseName);
+    internal static Dictionary<string, string> GetPrepopulate() => Game1.content.Load<Dictionary<string, string>>(reschedulerPopulate.BaseName);
 }

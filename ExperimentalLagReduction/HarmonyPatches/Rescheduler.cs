@@ -1,15 +1,15 @@
 ﻿#define TRACELOG
 
-using System.Collections.Concurrent;
+#if DEBUG
 using System.Diagnostics;
+#endif
 
+using System.Collections.Concurrent;
+using System.Runtime.InteropServices;
 using AtraBase.Collections;
-
 using AtraShared.ConstantsAndEnums;
 using AtraShared.Utils.Extensions;
-
 using ExperimentalLagReduction.Framework;
-
 using HarmonyLib;
 
 namespace ExperimentalLagReduction.HarmonyPatches;
@@ -31,8 +31,6 @@ internal static class Rescheduler
     private static readonly ThreadLocal<HashSet<string>> _visited = new(static () => new());
 
     private static readonly ThreadLocal<Queue<MacroNode>> _queue = new(static () => new());
-
-    private static readonly ThreadLocal<List<(string map, Gender gender)>> _current = new(() => new());
 
 #if DEBUG
     private static readonly ThreadLocal<Stopwatch> _stopwatch = new(() => new(), trackAllValues: true);
@@ -161,11 +159,8 @@ internal static class Rescheduler
             // seed with initial
             MacroNode startNode = new(start.Name, null, GetGenderConstraint(start.Name));
             _visited.Value.Add(start.Name);
-            foreach ((string name, Gender genderConstraint) in FindWarpsFrom(start, _visited.Value, startNode.GenderConstraint))
-            {
-                MacroNode next = new(name, startNode, genderConstraint);
-                _queue.Value.Enqueue(next);
-            }
+
+            FindWarpsFrom(startNode, start, _visited.Value, startNode.GenderConstraint, _queue.Value);
 
             while (_queue.Value.TryDequeue(out MacroNode? node))
             {
@@ -244,11 +239,7 @@ internal static class Rescheduler
                 if (node.Depth < limit)
                 {
                     // queue next
-                    foreach ((string name, Gender genderConstraint) in FindWarpsFrom(current, _visited.Value, node.GenderConstraint))
-                    {
-                        MacroNode next = new(name, node, genderConstraint);
-                        _queue.Value.Enqueue(next);
-                    }
+                    FindWarpsFrom(node, current, _visited.Value, node.GenderConstraint, _queue.Value);
                 }
             }
 
@@ -287,11 +278,17 @@ internal static class Rescheduler
         try
         {
 #if DEBUG
-            ModEntry.ModMonitor.Log($"Resetting all timers.", LogLevel.Info);
-            foreach (Stopwatch watch in _stopwatch.Values)
+            if (_stopwatch.Values.Count > 0)
             {
-                watch.Reset();
+                ModEntry.ModMonitor.Log($"Resetting all timers.", LogLevel.Info);
+                foreach (Stopwatch watch in _stopwatch.Values)
+                {
+                    watch.Reset();
+                }
             }
+
+            StackFrame sf = new();
+            ModEntry.ModMonitor.Log(sf.ToString());
 #endif
 
             PathCache.Clear();
@@ -319,6 +316,19 @@ internal static class Rescheduler
         _stopwatch.Value.Start();
 #endif
 
+        ModEntry.ModMonitor.TraceOnlyLog($"Locations cache contains {Game1._locationLookup.Count} entries.");
+        if (Game1.locations.Count > Game1._locationLookup.Count)
+        {
+            foreach (GameLocation? location in Game1.locations)
+            {
+                Game1._locationLookup.TryAdd(location.Name, location);
+            }
+            ModEntry.ModMonitor.TraceOnlyLog($"Locations cache prepopulated with {Game1._locationLookup.Count} entries.");
+#if DEBUG
+            ModEntry.ModMonitor.Log($"This took {_stopwatch.Value.ElapsedMilliseconds} ms");
+#endif
+        }
+
         foreach ((string center, string radius) in AssetManager.GetPrepopulate())
         {
             GameLocation? loc = Game1.getLocationFromName(center);
@@ -341,14 +351,17 @@ internal static class Rescheduler
             }
 
             Task.Factory.StartNew(() => Prefetch(loc, limit))
-            .ContinueWith(static task =>
-            {
-                if (task.Status == TaskStatus.Faulted)
+            .ContinueWith(
+                continuationAction: static (task, _) =>
                 {
-                    ModEntry.ModMonitor.Log($"Cache prepopulation failed. Check log for details.", LogLevel.Error);
-                    ModEntry.ModMonitor.Log(task.Exception?.ToString() ?? "no stack trace?");
-                }
-            });
+                    if (task.Status == TaskStatus.Faulted)
+                    {
+                        ModEntry.ModMonitor.Log($"Cache prepopulation failed. Check log for details.", LogLevel.Error);
+                        ModEntry.ModMonitor.Log(task.Exception?.ToString() ?? "no stack trace?");
+                    }
+                },
+                state: null,
+                continuationOptions: TaskContinuationOptions.OnlyOnFaulted);
         }
 
 #if DEBUG
@@ -379,7 +392,9 @@ internal static class Rescheduler
     {
         if (TryGetPathFromCache(startingLocation, endingLocation, __instance.Gender, out __result))
         {
+#if DEBUG
             Interlocked.Increment(ref cacheHits);
+#endif
 
             ModEntry.ModMonitor.TraceOnlyLog($"Got macro schedule for {__instance.Name} from cache: {startingLocation} -> {endingLocation}");
             if (__result is null)
@@ -392,7 +407,7 @@ internal static class Rescheduler
         #region validation
 
         __result = null;
-        if (GetActualLocation(endingLocation) is null)
+        if (GetActualLocation(endingLocation) is not string actualEnd)
         {
             ModEntry.ModMonitor.Log($"{__instance.Name} requested path to {endingLocation} which is blacklisted from pathing", LogLevel.Warn);
             return false;
@@ -411,16 +426,16 @@ internal static class Rescheduler
             return false;
         }
 
-        GameLocation end = Game1.getLocationFromName(endingLocation);
+        GameLocation end = Game1.getLocationFromName(actualEnd);
         if (end is null)
         {
-            ModEntry.ModMonitor.Log($"NPC {__instance.Name} requested path ending at {endingLocation}, which does not exist.", LogLevel.Error);
+            ModEntry.ModMonitor.Log($"NPC {__instance.Name} requested path ending at {actualEnd}, which does not exist.", LogLevel.Error);
             return false;
         }
-        Gender endGender = GetTightestGenderConstraint((Gender)__instance.Gender, GetGenderConstraint(endingLocation));
+        Gender endGender = GetTightestGenderConstraint((Gender)__instance.Gender, GetGenderConstraint(actualEnd));
         if (endGender == Gender.Invalid)
         {
-            ModEntry.ModMonitor.Log($"NPC {__instance.Name} requested path ending at {endingLocation}, which is not allowed due to their gender.", LogLevel.Error);
+            ModEntry.ModMonitor.Log($"NPC {__instance.Name} requested path ending at {actualEnd}, which is not allowed due to their gender.", LogLevel.Error);
             return false;
         }
 
@@ -429,9 +444,9 @@ internal static class Rescheduler
 #if DEBUG
         _stopwatch.Value ??= new();
         _stopwatch.Value.Start();
-#endif
 
         Interlocked.Increment(ref cacheMisses);
+#endif
         __result = GetPathFor(start, end, (Gender)__instance.Gender, ModEntry.Config.AllowPartialPaths);
 
 #if DEBUG
@@ -450,31 +465,33 @@ internal static class Rescheduler
         return false;
     }
 
-    #endregion
+#endregion
 
     #region helpers
 
     private static bool CompletelyDistinct(List<string> route, List<string> prev)
     {
-        for (int i = 0; i < prev.Count; i++)
+        Span<string> first = CollectionsMarshal.AsSpan(prev);
+        Span<string> second = CollectionsMarshal.AsSpan(route)[..^1];
+
+        foreach (string? x in first)
         {
-            string? second = prev[i];
-            for (int j = route.Count - 2; j >= 0; j--)
+            foreach (string? y in second)
             {
-                string? first = route[j];
-                if (first == second)
+                if (x == y)
                 {
                     return false;
                 }
             }
         }
+
         return true;
     }
 
     private static List<string> Unravel(MacroNode node)
     {
         List<string> ret = new(node.Depth + 1);
-        for (int i = 0; i <= node.Depth; i++)
+        for (int i = 0; i <= node.Depth; ++i)
         {
             ret.Add(string.Empty);
         }
@@ -493,19 +510,17 @@ internal static class Rescheduler
     /// <summary>
     /// Gets the locations leaving a specific place, keeping in mind the locations already visited.
     /// </summary>
+    /// <param name="start">Node to start from.</param>
     /// <param name="location">Location to look at.</param>
     /// <param name="visited">Previous visited locations.</param>
-    /// <returns>IEnumerable of location names.</returns>
-    /// <remarks>Stardew maps can have "duplicate" edges, must de-duplicate. This function takes ownership over the _current static hashset and should be the only function that mutates that.</remarks>
-    private static IEnumerable<(string map, Gender gender)> FindWarpsFrom(GameLocation? location, HashSet<string> visited, Gender gender)
+    /// <param name="gender">Current gender constraint for the path.</param>
+    /// <param name="queue">Queue to add to.</param>
+    private static void FindWarpsFrom(MacroNode start, GameLocation? location, HashSet<string> visited, Gender gender, Queue<MacroNode> queue)
     {
         if (location is null)
         {
-            return Enumerable.Empty<(string map, Gender gender)>();
+            return;
         }
-
-        _current.Value ??= new();
-        _current.Value.Clear();
 
         if (location.warps?.Count is not null and not 0)
         {
@@ -516,7 +531,7 @@ internal static class Rescheduler
                     Gender genderConstraint = GetTightestGenderConstraint(gender, GetGenderConstraint(name));
                     if (genderConstraint != Gender.Invalid && visited.Add(name))
                     {
-                        _current.Value.Add((name, genderConstraint));
+                        queue.Enqueue(new(name, start, genderConstraint));
                     }
                 }
             }
@@ -531,13 +546,11 @@ internal static class Rescheduler
                     Gender genderConstraint = GetTightestGenderConstraint(gender, GetGenderConstraint(name));
                     if (genderConstraint != Gender.Invalid && visited.Add(name))
                     {
-                        _current.Value.Add((name, genderConstraint));
+                        queue.Enqueue(new(name, start, genderConstraint));
                     }
                 }
             }
         }
-
-        return _current.Value;
     }
 
     /// <summary>

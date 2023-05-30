@@ -60,7 +60,7 @@ internal static class AssetManager
     {
         try
         {
-            return Game1.content.Load<Dictionary<string, DrawPrismaticModel>>(AtraCoreConstants.PrismaticMaskData);
+            return Game1.temporaryContent.Load<Dictionary<string, DrawPrismaticModel>>(AtraCoreConstants.PrismaticMaskData);
         }
         catch
         {

@@ -42,7 +42,7 @@ internal static class OverrideGiftTastes
     /// <param name="assets">Assets to reset, or null to reset unconditionally.</param>
     internal static void Reset(IReadOnlySet<IAssetName>? assets = null)
     {
-        if (assets is null || assets.Contains(giftTastes))
+        if (!Cache.IsEmpty && (assets is null || assets.Contains(giftTastes)))
         {
             ModEntry.ModMonitor.Log($"Clearing gift tastes cache.");
             Cache.Clear();

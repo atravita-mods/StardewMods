@@ -2,7 +2,11 @@
 
 namespace ExperimentalLagReduction.HarmonyPatches;
 
+/// <summary>
+/// Patches location loading to add doors everywhere.
+/// </summary>
 [HarmonyPatch(typeof(GameLocation))]
+[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Harmony Convention.")]
 internal static class DoorsForAll
 {
     [HarmonyPatch(nameof(GameLocation.loadObjects))]

@@ -1,0 +1,12 @@
+{
+    "Changes":[
+        {
+            "Action": "EditData",
+            "Target": "Characters/schedules/Abigail",
+            "Entries": {
+                // restore her going to the night market.
+                "marriage_winter_15": "830 SeedShop 6 19 0 \"Strings\\schedules\\Abigail:marriage_Mon.000\"/1430 Beach 30 34 2 \"Strings\\schedules\\Abigail:winter_15.000\"/2400 BusStop -1 23 3"
+            }
+        }
+    ]
+}

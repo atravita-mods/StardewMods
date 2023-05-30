@@ -1,4 +1,6 @@
-﻿using AtraBase.Toolkit.Extensions;
+﻿// Ignore Spelling: viewport
+
+using AtraBase.Toolkit.Extensions;
 
 using CommunityToolkit.Diagnostics;
 
@@ -112,18 +114,18 @@ public static class GameLocationExtensions
     /// <summary>
     /// Whether or not a tile is covered by a Front or AlwaysFront tile at this location.
     /// </summary>
-    /// <param name="loc">GameLocation.</param>
+    /// <param name="location">GameLocation.</param>
     /// <param name="tileLocation">Tile.</param>
     /// <param name="viewport">Viewport.</param>
     /// <returns>True if covered, false otherwise.</returns>
-    public static bool IsTileViewable(this GameLocation? loc, XLocation tileLocation, XRectangle viewport)
+    public static bool IsTileViewable(this GameLocation? location, XLocation tileLocation, XRectangle viewport)
     {
-        if (loc is null)
+        if (location is null)
         {
             return false;
         }
 
-        return (loc.map.GetLayer("Front")?.PickTile(new XLocation(tileLocation.X * 64, tileLocation.Y * 64), viewport.Size)
-            ?? loc.map.GetLayer("AlwaysFront")?.PickTile(new XLocation(tileLocation.X * 64, tileLocation.Y * 64), viewport.Size)) is null;
+        return (location.map.GetLayer("Front")?.PickTile(new XLocation(tileLocation.X * 64, tileLocation.Y * 64), viewport.Size)
+            ?? location.map.GetLayer("AlwaysFront")?.PickTile(new XLocation(tileLocation.X * 64, tileLocation.Y * 64), viewport.Size)) is null;
     }
 }

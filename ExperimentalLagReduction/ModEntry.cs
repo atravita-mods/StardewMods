@@ -1,4 +1,6 @@
-﻿using AtraShared.ConstantsAndEnums;
+﻿// Ignore Spelling: Api
+
+using AtraShared.ConstantsAndEnums;
 using AtraShared.Integrations;
 using AtraShared.Utils.Extensions;
 

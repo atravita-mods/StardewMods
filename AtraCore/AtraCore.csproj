@@ -20,7 +20,7 @@
   <PropertyGroup>
     <BundleExtraAssemblies>System,ThirdParty</BundleExtraAssemblies>
     <IgnoreModFilePatterns>
-         \.xcf$, <!-- GIMP files-->
+         $(IgnoreModFilePatterns),
          System.*.dll$, <!-- System would bundle these.-->
          ^Microsoft.(?!.*(Toolkit.Diagnostics.dll)), <!-- Everyone but MS.Toolkit.Diagnostics-->
          ^runtimes[/\\].*, 

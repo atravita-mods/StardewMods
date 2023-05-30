@@ -134,12 +134,12 @@ public static class QuestTracker
             }
             if (!long.TryParse(first, out long id))
             {
-                ModEntry.ModMonitor.Log($"Could not parse {first.ToString()} as unique Id", LogLevel.Error);
+                ModEntry.ModMonitor.Log($"Could not parse {first.ToString()} as unique id", LogLevel.Error);
                 return null;
             }
             if (!int.TryParse(second, out int questID))
             {
-                ModEntry.ModMonitor.Log($"Could not parse {second.ToString()} as quest Id", LogLevel.Error);
+                ModEntry.ModMonitor.Log($"Could not parse {second.ToString()} as quest id", LogLevel.Error);
                 return null;
             }
 
@@ -185,7 +185,7 @@ public static class QuestTracker
         }
     }
 
-    private static void Broadcast(long? Id = null)
+    private static void Broadcast(long? id = null)
     {
         if (Context.IsMainPlayer)
         {
@@ -193,7 +193,7 @@ public static class QuestTracker
                 message: finishedQuests,
                 messageType: BROADCAST,
                 modIDs: new[] { uniqueID },
-                playerIDs: Id is null ? multi.GetConnectedPlayers().Where(p => !p.IsSplitScreen).Select(p => p.PlayerID).ToArray() : new[] { Id.Value }
+                playerIDs: id is null ? multi.GetConnectedPlayers().Where(p => !p.IsSplitScreen).Select(p => p.PlayerID).ToArray() : new[] { id.Value }
             );
         }
     }

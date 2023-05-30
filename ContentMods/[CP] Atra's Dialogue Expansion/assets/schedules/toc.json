@@ -2,10 +2,42 @@
     "Changes": [
         {
             "Action": "Include",
+            "LogName": "Abigail schedules",
+            "FromFile": "assets/schedules/Abigail.json",
+            "When": {
+                "ScheduleChanges|contains=Abigail": true
+            }
+        },
+        {
+            "Action": "Include",
             "LogName": "Harvey schedules",
             "FromFile": "assets/schedules/Harvey.json",
             "When": {
                 "ScheduleChanges|contains=Harvey": true
+            }
+        },
+        {
+            "Action": "Include",
+            "LogName": "Leah schedules",
+            "FromFile": "assets/schedules/Leah.json",
+            "When": {
+                "ScheduleChanges|contains=Leah": true
+            }
+        },
+        {
+            "Action": "Include",
+            "LogName": "Lewis schedules",
+            "FromFile": "assets/schedules/Lewis.json",
+            "When": {
+                "ScheduleChanges|contains=Lewis": true
+            }
+        },
+        {
+            "Action": "Include",
+            "LogName": "Penny schedules",
+            "FromFile": "assets/schedules/Penny.json",
+            "When": {
+                "ScheduleChanges|contains=Penny": true
             }
         },
         {

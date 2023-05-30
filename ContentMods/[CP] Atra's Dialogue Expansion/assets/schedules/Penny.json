@@ -1,0 +1,25 @@
+{
+    "Changes": [
+        {
+            "Action": "EditData",
+            "Target": "Characters/schedules/Penny",
+            "Entries": {
+                // casing issue in vanilla causes this one to never appear.
+                // it's cute though.
+                "summer_Sun": "800 Town 96 18 3/1200 ScienceHouse 8 5 2 penny_sit_down/1800 Trailer 12 6 0 penny_dishes/2100 Trailer 4 9 1 penny_sleep",
+
+                // restore Penny going to the night market.
+                "marriage_winter_15": "1030 CommunityCenter 23 17 2 penny_read/1500 CommunityCenter 46 13 0/1600 Beach 35 36 2 \"Strings\\schedules\\Penny:winter_15.000\"/2350 BusStop -1 23 3",
+            }
+        },
+        {
+            "Action": "EditData",
+            "Target": "Characters/schedules/Penny",
+            "When": {"Season": "summer"},
+            "Entries": {
+                // keep the Maru visit even if she's married.
+                "marriage_Sun": "800 Town 96 18 3/1200 ScienceHouse 8 5 2 penny_sit_down/1900 BusStop -1 23 3"
+            }
+        }
+    ]
+}

@@ -252,7 +252,7 @@ internal sealed class ModEntry : Mod
                         Match match = matches[0];
                         parseloc = location[..^match.Value.Length];
                         locLimits.Update(match, namedOnly: true);
-                        this.Monitor.DebugOnlyLog($"Found and parsed sublocation: {parseloc} + ({locLimits["x1"]};{locLimits["y1"]});({locLimits["x2"]};{locLimits["y2"]})");
+                        this.Monitor.DebugOnlyLog($"Found and parsed sub-location: {parseloc} + ({locLimits["x1"]};{locLimits["y1"]});({locLimits["x2"]};{locLimits["y2"]})");
                     }
                     else if (matches.Count >= 2)
                     {
@@ -414,7 +414,7 @@ END:
         List<string> denylist = this.GetData(AssetManager.DENYLIST_LOCATION);
         List<int> treeFruits = new();
 
-        Dictionary<int, string> fruittrees = this.Helper.GameContent.Load<Dictionary<int, string>>("Data/fruitTrees");
+        Dictionary<int, string> fruittrees = Game1.content.Load<Dictionary<int, string>>("Data/fruitTrees");
         ReadOnlySpan<char> currentseason = Game1.currentSeason.AsSpan().Trim();
         foreach ((int saplingIndex, string tree) in fruittrees)
         {

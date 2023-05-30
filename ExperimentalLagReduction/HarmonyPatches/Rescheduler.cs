@@ -281,14 +281,13 @@ internal static class Rescheduler
             if (_stopwatch.Values.Count > 0)
             {
                 ModEntry.ModMonitor.Log($"Resetting all timers.", LogLevel.Info);
-                foreach (Stopwatch watch in _stopwatch.Values)
+                for (int i = 0; i < _stopwatch.Values.Count; i++)
                 {
-                    watch.Reset();
+                    _stopwatch.Values[i] = new();
                 }
             }
 
-            StackFrame sf = new();
-            ModEntry.ModMonitor.Log(sf.ToString());
+            ModEntry.ModMonitor.Log((new StackTrace()).ToString());
 #endif
 
             PathCache.Clear();
@@ -343,8 +342,7 @@ internal static class Rescheduler
                 ModEntry.ModMonitor.LogOnce($"Could not parse radius {radius} for {center}, setting to three.", LogLevel.Warn);
                 limit = 3;
             }
-
-            if (limit < 1 || limit > 4)
+            else if (limit < 1 || limit > 4)
             {
                 ModEntry.ModMonitor.LogOnce($"Radius {radius} for {center} is out of bounds, clamping.", LogLevel.Warn);
                 limit = Math.Clamp(limit, 1, 4);
@@ -388,6 +386,7 @@ internal static class Rescheduler
     [HarmonyPrefix]
     [HarmonyPatch("getLocationRoute")]
     [HarmonyPriority(Priority.VeryLow)]
+    [SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1123:Do not place regions within elements", Justification = "Preference.")]
     private static bool PrefixGetLocationRoute(string startingLocation, string endingLocation, NPC __instance, ref List<string>? __result)
     {
         if (TryGetPathFromCache(startingLocation, endingLocation, __instance.Gender, out __result))

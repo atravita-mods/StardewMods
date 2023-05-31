@@ -17,7 +17,7 @@ internal static class AssetManager
     {
         if (e.Name.IsEquivalentTo(reschedulerPopulate))
         {
-            e.LoadFrom(static () => new Dictionary<string, string>() { ["Town"] = "3", ["Mountain"] = "2", ["Forest"] = "2" }, AssetLoadPriority.Exclusive);
+            e.LoadFrom(static () => new Dictionary<string, string>() { ["Town"] = "3", ["Mountain"] = "2", ["Forest"] = "2", ["IslandSouth"] = "2" }, AssetLoadPriority.Exclusive);
         }
     }
 

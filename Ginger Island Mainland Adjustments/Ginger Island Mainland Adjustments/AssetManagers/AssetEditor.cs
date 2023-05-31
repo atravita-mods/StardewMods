@@ -5,6 +5,8 @@ using AtraCore.Framework.Caches;
 using AtraShared.Caching;
 using AtraShared.Utils.Extensions;
 
+using Microsoft.Xna.Framework.Content;
+
 using StardewModdingAPI.Events;
 using StardewModdingAPI.Utilities;
 using StardewValley.Locations;
@@ -145,6 +147,10 @@ internal static class AssetEditor
         Globals.ModMonitor.DebugOnlyLog($"Checking schedule {e.NameWithoutLocale}", LogLevel.Info);
 
         IAssetDataForDictionary<string, string> editor = e.AsDictionary<string, string>();
+        if (editor.Data.Count == 0)
+        {
+            return;
+        }
         if (!editor.Data.ContainsKey("spring") && !editor.Data.ContainsKey("default"))
         {
             string character = e.NameWithoutLocale.BaseName.GetNthChunk('/', 2).ToString();
@@ -168,9 +174,15 @@ internal static class AssetEditor
                         return;
                     }
                 }
+                catch (ContentLoadException)
+                {
+                    Globals.ModMonitor.Log($"Could not find original schedule for {character}.");
+                    Failed.Add(character);
+                }
                 catch (Exception ex)
                 {
-                    Globals.ModMonitor.LogOnce($"Could not find original schedule for {character}:\n\n{ex}");
+                    Globals.ModMonitor.Log($"Something went very wrong looking up backup schedule for {character}, huh.", LogLevel.Error);
+                    Globals.ModMonitor.Log(ex.ToString());
                     Failed.Add(character);
                 }
             }

@@ -58,6 +58,14 @@
         },
         {
             "Action": "Include",
+            "LogName": "Maru schedules",
+            "FromFile": "assets/schedules/Maru.json",
+            "When": {
+                "ScheduleChanges|contains=Maru": true
+            }
+        },
+        {
+            "Action": "Include",
             "LogName": "Penny schedules",
             "FromFile": "assets/schedules/Penny.json",
             "When": {

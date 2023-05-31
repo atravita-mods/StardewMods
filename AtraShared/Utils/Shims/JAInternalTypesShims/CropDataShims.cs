@@ -77,7 +77,7 @@ internal static class CropDataShims
     /// </summary>
     public static Func<object, IList<string>?>? GetSeedRestrictions => getSeedRestrictions.Value;
 
-    private static Lazy<Func<object, int>?> getSeedPurchase = new(() =>
+    private static readonly Lazy<Func<object, int>?> getSeedPurchase = new(() =>
     {
         Type cropData = AccessTools.TypeByName("JsonAssets.Data.CropData");
 

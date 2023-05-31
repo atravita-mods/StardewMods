@@ -122,7 +122,7 @@ public static class JsonAssetsShims
         return ret;
     }
 
-    private static Lazy<Dictionary<string, string>?> jaCropCache = new(SetUpJAIntegration);
+    private static readonly Lazy<Dictionary<string, string>?> jaCropCache = new(SetUpJAIntegration);
 
     /// <summary>
     /// Gets a name->preconditions map of JA crops, or null if JA was not installed/reflection failed.

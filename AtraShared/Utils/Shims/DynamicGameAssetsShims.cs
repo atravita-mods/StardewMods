@@ -14,7 +14,7 @@ public static class DynamicGameAssetsShims
     /// </summary>
     public static Func<object, bool>? IsDGAGiantCrop => isDGAGiantCrop.Value;
 
-    private static Lazy<Func<object, bool>?> isDGAGiantCrop = new(() =>
+    private static readonly Lazy<Func<object, bool>?> isDGAGiantCrop = new(() =>
     {
         try
         {

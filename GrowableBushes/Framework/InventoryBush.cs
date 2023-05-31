@@ -1,5 +1,6 @@
 ﻿using System.Xml.Serialization;
 
+using AtraCore;
 using AtraCore.Framework.ReflectionManager;
 using AtraCore.Utilities;
 
@@ -613,7 +614,7 @@ public sealed class InventoryBush : SObject
             numberOfLoops: 0,
             position: landingPos,
             flicker: false,
-            flipped: Game1.random.NextDouble() < 0.5,
+            flipped: Singletons.Random.NextDouble() < 0.5,
             layerDepth: (landingPos.Y + 40f) / 10000f,
             alphaFade: 0.01f,
             color: Color.White,

@@ -5,6 +5,7 @@ using System.Runtime.CompilerServices;
 using AtraBase.Toolkit;
 using AtraBase.Toolkit.Reflection;
 
+using AtraCore;
 using AtraCore.Framework.ReflectionManager;
 
 using AtraShared.ConstantsAndEnums;
@@ -92,7 +93,7 @@ internal sealed class ModEntry : Mod
             modMonitor.Log($"Failed while trying to generate random for pig {id}:\n\n{ex}", LogLevel.Error);
         }
 
-        return Game1.random;
+        return Singletons.Random;
     }
 
     private static IEnumerable<CodeInstruction>? Transpiler(IEnumerable<CodeInstruction> instructions, ILGenerator gen, MethodBase original)

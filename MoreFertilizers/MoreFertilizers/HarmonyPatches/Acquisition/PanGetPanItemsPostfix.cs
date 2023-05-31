@@ -1,4 +1,6 @@
-﻿using HarmonyLib;
+﻿using AtraCore;
+
+using HarmonyLib;
 using StardewValley.Locations;
 using StardewValley.Tools;
 
@@ -15,7 +17,7 @@ internal static class PanGetPanItemsPostfix
     [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Harmony Convention")]
     private static void Postfix(GameLocation location, ref List<Item> __result)
     {
-        if (Game1.random.NextDouble() > 0.05)
+        if (Singletons.Random.NextDouble() > 0.05)
         {
             return;
         }
@@ -34,7 +36,7 @@ internal static class PanGetPanItemsPostfix
         }
         else if (location is Sewer)
         {
-            if (ModEntry.SecretJojaFertilizerID != -1 && Game1.random.NextDouble() < 0.1
+            if (ModEntry.SecretJojaFertilizerID != -1 && Singletons.Random.NextDouble() < 0.1
                 && Utility.hasFinishedJojaRoute())
             {
                 __result.Add(new SObject(ModEntry.SecretJojaFertilizerID, 2));

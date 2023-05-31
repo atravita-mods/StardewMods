@@ -84,6 +84,14 @@
         },
         {
             "Action": "Include",
+            "LogName": "Spouse-related items",
+            "FromFile": "assets/base_dialogue/{{Spouse}}/spousal.json",
+            "When": {
+                "HasValue: {{Spouse}}": true
+            }
+        },
+        {
+            "Action": "Include",
             "LogName": "Misc items",
             "FromFile": "assets/base_dialogue/anniversary.json",
             "When": {

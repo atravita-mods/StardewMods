@@ -1,6 +1,8 @@
 ﻿#if DEBUG
 using System.Diagnostics;
 using System.Runtime;
+
+using AtraCore;
 #endif
 
 using AtraCore.Framework.Caches;
@@ -296,7 +298,7 @@ internal static class GIScheduler
                 HashSet<NPC>? group = IslandGroups[CurrentGroup];
                 if (CurrentGroup == "allSpouses" && group.Count > capacity)
                 {
-                    group = group.OrderBy((_) => Game1.random.Next()).Take(capacity).ToHashSet();
+                    group = group.OrderBy((_) => Singletons.Random.Next()).Take(capacity).ToHashSet();
                 }
 
                 visitors.AddRange(group);

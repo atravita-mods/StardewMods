@@ -1,4 +1,6 @@
-﻿using AtraShared.Menuing;
+﻿using AtraCore;
+
+using AtraShared.Menuing;
 using AtraShared.Utils;
 using AtraShared.Utils.Extensions;
 using HarmonyLib;
@@ -69,7 +71,7 @@ internal static class SObjectPatches
             if (__instance.IsSpawnedObject && ModEntry.Config.SaveBombedForage && ModEntry.Config.Enabled)
             {
                 // The SObject does not have its location anymore. Just spawn near the farmer, I guess?
-                location.debris.Add(new Debris(__instance, who.Position + new Vector2(Game1.random.Next(-128, 128), Game1.random.Next(-128, 128))));
+                location.debris.Add(new Debris(__instance, who.Position + new Vector2(Singletons.Random.Next(-128, 128), Singletons.Random.Next(-128, 128))));
                 ModEntry.ModMonitor.DebugOnlyLog(__instance.DisplayName + ' ' + __instance.TileLocation.ToString(), LogLevel.Warn);
             }
         }

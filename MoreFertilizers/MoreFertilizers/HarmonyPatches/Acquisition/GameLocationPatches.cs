@@ -1,4 +1,6 @@
-﻿using HarmonyLib;
+﻿using AtraCore;
+
+using HarmonyLib;
 using Microsoft.Xna.Framework;
 using StardewModdingAPI.Utilities;
 using StardewValley.Monsters;
@@ -27,7 +29,7 @@ internal static class GameLocationPatches
     [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Harmony Convention")]
     private static void Postfix(GameLocation __instance, Monster monster, int x, int y, Farmer who)
     {
-        if(__instance is not Farm || who is null || Game1.random.NextDouble() > ((monster is RockGolem ? 2.5 : 1 ) * DropChance.Value) || monster.MaxHealth < MIN_MONSTER_HEALTH)
+        if(__instance is not Farm || who is null || Singletons.Random.NextDouble() > ((monster is RockGolem ? 2.5 : 1 ) * DropChance.Value) || monster.MaxHealth < MIN_MONSTER_HEALTH)
         {
             return;
         }
@@ -46,7 +48,7 @@ internal static class GameLocationPatches
                             new Debris(
                                 item: new SObject(
                                     parentSheetIndex: fertilizerToDrop,
-                                    initialStack: Game1.random.Next(1, Math.Clamp(monster.MaxHealth / MIN_MONSTER_HEALTH, 1, 4))),
+                                    initialStack: Singletons.Random.Next(1, Math.Clamp(monster.MaxHealth / MIN_MONSTER_HEALTH, 1, 4))),
                                 debrisOrigin: new Vector2(x, y),
                                 targetLocation: who.Position)));
                 }

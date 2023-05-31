@@ -22,17 +22,17 @@ namespace StopRugRemoval.HarmonyPatches.Niceties;
 internal static class ScheduleErrorFixer
 {
     #region delegates
-    private static Lazy<Func<NPC, NetLocationRef>> _getLocationRef = new(() =>
+    private static readonly Lazy<Func<NPC, NetLocationRef>> _getLocationRef = new(() =>
         typeof(NPC).GetCachedField("currentLocationRef", ReflectionCache.FlagTypes.InstanceFlags)
                    .GetInstanceFieldGetter<NPC, NetLocationRef>()
     );
 
-    private static Lazy<Action<NetLocationRef, bool>> _markDirty = new(() =>
+    private static readonly Lazy<Action<NetLocationRef, bool>> _markDirty = new(() =>
         typeof(NetLocationRef).GetCachedField("_dirty", ReflectionCache.FlagTypes.InstanceFlags)
                               .GetInstanceFieldSetter<NetLocationRef, bool>()
     );
 
-    private static Lazy<Func<NetLocationRef, NetString>> _getLocationName = new(() =>
+    private static readonly Lazy<Func<NetLocationRef, NetString>> _getLocationName = new(() =>
         typeof(NetLocationRef).GetCachedField("locationName", ReflectionCache.FlagTypes.InstanceFlags)
                               .GetInstanceFieldGetter<NetLocationRef, NetString>()
     );

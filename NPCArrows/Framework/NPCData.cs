@@ -34,7 +34,7 @@ internal sealed class NPCData
 
 internal static class NPCDataManager
 {
-    private static PerScreen<Dictionary<string, NPCData>> npcData = new(() => new ());
+    private static readonly PerScreen<Dictionary<string, NPCData>> npcData = new(() => new ());
 
-    private static PerScreen<Dictionary<SObject, NPCData>> giftCache = new(() => new ());
+    private static readonly PerScreen<Dictionary<SObject, NPCData>> giftCache = new(() => new ());
 }

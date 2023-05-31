@@ -1,4 +1,8 @@
-﻿using CommunityToolkit.Diagnostics;
+﻿// Ignore Spelling: npc
+
+using AtraCore;
+
+using CommunityToolkit.Diagnostics;
 
 using Microsoft.Xna.Framework;
 
@@ -82,10 +86,7 @@ public static class NPCExtensions
         {
             return null;
         }
-        if (random is null)
-        {
-            random = Game1.random;
-        }
+        random ??= Game1.random;
         if (npc.Dialogue?.ContainsKey(basekey) == true)
         {
             int index = 1;

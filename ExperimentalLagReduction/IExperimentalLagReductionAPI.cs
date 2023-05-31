@@ -16,4 +16,9 @@ public interface IExperimentalLagReductionAPI
     /// <param name="allowPartialPaths">Whether or not to allow partial path piecing. Partial piecing is faster, but may cause NPCs to use slightly longer paths.</param>
     /// <returns>The map-to-map travel list, or null if not possible.</returns>
     public List<string>? GetPathFor(GameLocation start, GameLocation end, int gender, bool allowPartialPaths);
+
+    /// <summary>
+    /// Forcibly clears the gift cache.
+    /// </summary>
+    public void ResetGiftCache();
 }

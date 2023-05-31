@@ -1,4 +1,6 @@
-﻿using HarmonyLib;
+﻿using AtraCore;
+
+using HarmonyLib;
 
 using StardewValley.Monsters;
 
@@ -17,7 +19,7 @@ internal static class PostfixGreenSlime
     {
         if (ModEntry.PrismaticSlimeEgg != -1
             && __instance.prismatic.Value
-            && Game1.random.Next(2) == 0)
+            && Singletons.Random.Next(2) == 0)
         {
             __result.Add(new SObject(ModEntry.PrismaticSlimeEgg, 1));
         }

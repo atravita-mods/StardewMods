@@ -4,6 +4,7 @@ using System.Reflection.Emit;
 using AtraBase.Toolkit.Extensions;
 using AtraBase.Toolkit.Reflection;
 
+using AtraCore;
 using AtraCore.Framework.ReflectionManager;
 
 using AtraShared.Menuing;
@@ -154,7 +155,7 @@ internal static class IslandCaveWestDifficultyTranspiler
         {
             if (ModEntry.Config.PauseBetweenRounds && localPhase != 0)
             {
-                Game1.showGlobalMessage(I18n.GetByKey($"PauseBetweenRounds_{Game1.random.Next(6)}"));
+                Game1.showGlobalMessage(I18n.GetByKey($"PauseBetweenRounds_{Singletons.Random.Next(6)}"));
                 return DELAYVALUE;
             }
         }

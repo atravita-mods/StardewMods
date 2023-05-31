@@ -1,4 +1,6 @@
-﻿using AtraShared.ConstantsAndEnums;
+﻿// Ignore Spelling: API
+
+using AtraShared.ConstantsAndEnums;
 
 using CommunityToolkit.Diagnostics;
 
@@ -21,4 +23,7 @@ public sealed class API : IExperimentalLagReductionAPI
         }
         return Rescheduler.GetPathFor(start, end, (Gender)gender, allowPartialPaths);
     }
+
+    /// <inheritdoc />
+    public void ResetGiftCache() => OverrideGiftTastes.Reset();
 }

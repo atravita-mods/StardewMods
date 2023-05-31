@@ -20,7 +20,7 @@ internal static class ChestPatches
 {
     #region delegates
 
-    private static Lazy<Func<Chest, int>> GetCurrentLidFrame = new(() =>
+    private static readonly Lazy<Func<Chest, int>> GetCurrentLidFrame = new(() =>
         typeof(Chest).GetCachedField("currentLidFrame", ReflectionCache.FlagTypes.InstanceFlags)
                      .GetInstanceFieldGetter<Chest, int>());
 

@@ -14,7 +14,7 @@ internal static class AllowRepeatAfterHandler
     /// <summary>
     /// A mapping of events to forget and the in-game day to forget them on.
     /// </summary>
-    private static PerScreen<Dictionary<int, HashSet<int>>> eventsToRepeat = new(() => new());
+    private static readonly PerScreen<Dictionary<int, HashSet<int>>> eventsToRepeat = new(() => new());
 
     /// <summary>
     /// Empties and resets the events to repeat file.

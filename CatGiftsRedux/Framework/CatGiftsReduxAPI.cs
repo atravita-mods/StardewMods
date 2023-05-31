@@ -3,8 +3,8 @@
 /// <inheritdoc />
 public class CatGiftsReduxAPI : ICatGiftReduxAPI
 {
-    private ModEntry us;
-    private IModInfo them;
+    private readonly ModEntry us;
+    private readonly IModInfo them;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="CatGiftsReduxAPI"/> class.

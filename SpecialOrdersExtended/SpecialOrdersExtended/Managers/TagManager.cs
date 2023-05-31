@@ -1,4 +1,5 @@
-﻿using System.Numerics;
+﻿using System.Collections.Concurrent;
+using System.Numerics;
 
 using AtraBase.Toolkit.Extensions;
 
@@ -44,7 +45,7 @@ internal static class TagManager
     /// </summary>
     internal static void ResetRandom()
     {
-        if (Game1.stats.DaysPlayed % 7 == 0)
+        if (Game1.dayOfMonth % 7 == 0)
         {
             random = null;
         }
@@ -54,7 +55,7 @@ internal static class TagManager
 
 #region cache
 
-    private static readonly Dictionary<string, bool> Cache = new();
+    private static readonly ConcurrentDictionary<string, bool> Cache = new();
     private static int lastTick = -1;
 
     /// <summary>

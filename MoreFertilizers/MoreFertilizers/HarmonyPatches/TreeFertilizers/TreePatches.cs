@@ -1,4 +1,6 @@
-﻿using AtraShared.Utils.Extensions;
+﻿using AtraCore;
+
+using AtraShared.Utils.Extensions;
 using HarmonyLib;
 
 using Microsoft.Xna.Framework;
@@ -43,17 +45,17 @@ internal static class TreePatches
     [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Harmony convention")]
     private static void PostfixDraw(Tree __instance)
     {
-        if (__instance.modData.ContainsKey(CanPlaceHandler.TreeTapperFertilizer) && Game1.random.Next(256) == 0)
+        if (__instance.modData.ContainsKey(CanPlaceHandler.TreeTapperFertilizer) && Singletons.Random.Next(256) == 0)
         {
             __instance.currentLocation.temporarySprites.Add(
                 new TemporaryAnimatedSprite(
                     rowInAnimationTexture: 4,
-                    position: (__instance.currentTileLocation * Game1.tileSize) + new Vector2(Game1.random.Next(-32, 32), Game1.random.Next(-128, -14)),
+                    position: (__instance.currentTileLocation * Game1.tileSize) + new Vector2(Singletons.Random.Next(-32, 32), Singletons.Random.Next(-128, -14)),
                     color: Color.Yellow,
                     animationLength: 8,
                     flipped: Game1.random.Next(2) == 0,
                     animationInterval: 150,
-                    layerDepth: ((__instance.currentTileLocation.Y * Game1.tileSize) + Game1.random.Next(100)) / 10000f
+                    layerDepth: ((__instance.currentTileLocation.Y * Game1.tileSize) + Singletons.Random.Next(100)) / 10000f
                 )
                 {
                     scaleChange = 0.01f,

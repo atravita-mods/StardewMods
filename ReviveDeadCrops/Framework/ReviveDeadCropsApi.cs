@@ -1,6 +1,9 @@
-﻿using AtraBase.Toolkit.Extensions;
+﻿// Ignore Spelling: Api loc
+
+using AtraBase.Toolkit.Extensions;
 using AtraBase.Toolkit.Reflection;
 
+using AtraCore;
 using AtraCore.Framework.ReflectionManager;
 using AtraCore.Utilities;
 
@@ -148,7 +151,7 @@ public class ReviveDeadCropsApi : IReviveDeadCropsApi
             numberOfLoops: 0,
             position: tile * 64f,
             flicker: false,
-            flipped: Game1.random.NextDouble() < 0.5,
+            flipped: Singletons.Random.NextDouble() < 0.5,
             layerDepth: 1f,
             alphaFade: 0.01f,
             color: Color.White,

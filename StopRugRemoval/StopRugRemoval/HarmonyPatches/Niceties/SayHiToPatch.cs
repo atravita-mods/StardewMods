@@ -1,4 +1,6 @@
-﻿using HarmonyLib;
+﻿using AtraCore;
+
+using HarmonyLib;
 using Microsoft.Xna.Framework;
 
 namespace StopRugRemoval.HarmonyPatches.Niceties;
@@ -33,7 +35,7 @@ internal static class SayHiToPatch
         if (Game1.player.currentLocation == l && l.Name.Equals("Saloon", StringComparison.OrdinalIgnoreCase)
             && __instance.isVillager())
         {
-            if (__instance.isMoving() && ___textAboveHeadTimer < 0 && Game1.random.NextDouble() < 0.5)
+            if (__instance.isMoving() && ___textAboveHeadTimer < 0 && Singletons.Random.NextDouble() < 0.5)
             {
                 // Invert the check here to favor the farmer. :(
                 // Goddamnit greet me more often plz.

@@ -1,5 +1,7 @@
 ﻿using System.Reflection;
 using System.Reflection.Emit;
+
+using AtraCore;
 using AtraCore.Framework.ReflectionManager;
 using AtraShared.Utils.Extensions;
 using AtraShared.Utils.HarmonyHelper;
@@ -16,12 +18,12 @@ internal static class FishingTreasureTranspiler
 {
     private static SObject? GetPossibleRandomFertilizer()
     {
-        if (Game1.random.NextDouble() < 0.10)
+        if (Singletons.Random.NextDouble() < 0.1)
         {
             int fertilizerToDrop = Game1.player.fishingLevel.Value.GetRandomFertilizerFromLevel();
             if (fertilizerToDrop != -1)
             {
-                return new SObject(fertilizerToDrop, Game1.random.Next(1, 4 + (int)(Game1.player.DailyLuck * 20)));
+                return new SObject(fertilizerToDrop, Singletons.Random.Next(1, 4 + (int)(Game1.player.DailyLuck * 20)));
             }
         }
         return null;

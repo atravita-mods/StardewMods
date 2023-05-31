@@ -1,4 +1,6 @@
-﻿using AtraShared.Menuing;
+﻿using AtraCore;
+
+using AtraShared.Menuing;
 
 using StardewModdingAPI.Events;
 using StardewModdingAPI.Utilities;
@@ -30,13 +32,13 @@ internal static class JojaSample
     {
         if (e.NewLocation is JojaMart && e.IsLocalPlayer
             && MenuingExtensions.IsNormalGameplay() && !HaveRecievedSampleToday.Value
-            && !Game1.eventUp && Game1.CurrentEvent is null && Game1.random.NextDouble() <= 0.15)
+            && !Game1.eventUp && Game1.CurrentEvent is null && Singletons.Random.NextDouble() <= 0.1)
         {
             string[] jojaEventstring = new[]
             {
             "continue/-100 -100/farmer 13 28 0 Morris 13 22 2/makeInvisible 21 22 1 3/ignoreCollisions farmer/",
             "ignoreCollisions Morris/skippable/viewport 13 25/move Morris 0 2 2/pause 400/",
-            $"speak Morris \"{I18n.GetByKey($"joja.event.{Game1.random.Next(3)}")}\"/pause 400/end",
+            $"speak Morris \"{I18n.GetByKey($"joja.event.{Singletons.Random.Next(3)}")}\"/pause 400/end",
             };
 
             Event jojaEvent = new(string.Join(string.Empty, jojaEventstring))
@@ -46,7 +48,7 @@ internal static class JojaSample
                     DelayedAction.functionAfterDelay(
                         () =>
                         {
-                            e.Player.addItemByMenuIfNecessaryElseHoldUp(new SObject(ModEntry.JojaFertilizerID, Game1.random.Next(2, 6)));
+                            e.Player.addItemByMenuIfNecessaryElseHoldUp(new SObject(ModEntry.JojaFertilizerID, Singletons.Random.Next(2, 6)));
                         }, 100);
                 },
             };

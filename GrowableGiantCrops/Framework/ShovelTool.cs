@@ -1,10 +1,13 @@
-﻿using System.Reflection;
+﻿// Ignore Spelling: Craftable loc
+
+using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Xml.Serialization;
 
 using AtraBase.Toolkit.Extensions;
 using AtraBase.Toolkit.Reflection;
 
+using AtraCore;
 using AtraCore.Framework.Caches;
 using AtraCore.Framework.ReflectionManager;
 using AtraCore.Utilities;
@@ -491,7 +494,7 @@ public class ShovelTool : Tool
             numberOfLoops: 0,
             position: landingPos,
             flicker: false,
-            flipped: Game1.random.NextDouble() < 0.5,
+            flipped: Singletons.Random.NextDouble() < 0.5,
             layerDepth: (landingPos.Y + 40f) / 10000f,
             alphaFade: 0.01f,
             color: Color.White,
@@ -714,7 +717,7 @@ public class ShovelTool : Tool
             new Vector2(pickupTile.X * 64f, pickupTile.Y * 64f),
             color: Color.White,
             animationLength: 8,
-            flipped: Game1.random.Next(2) == 0,
+            flipped: Singletons.Random.Next(2) == 0,
             animationInterval: 50f));
 
         return true;

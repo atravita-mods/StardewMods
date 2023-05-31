@@ -8,6 +8,7 @@ using AtraBase.Toolkit;
 using AtraBase.Toolkit.Extensions;
 using AtraBase.Toolkit.StringHandler;
 
+using AtraCore;
 using AtraCore.Framework.ItemManagement;
 
 using AtraShared.ConstantsAndEnums;
@@ -464,7 +465,7 @@ END:
             && this.SpawnedFruitToday
             && this.config.UseMineCave)
         { // The following code is copied out of the game and adds the bat sprites to the mines.
-            if (Game1.random.NextDouble() < 0.12)
+            if (Singletons.Random.NextDouble() < 0.12)
             {
                 TemporaryAnimatedSprite redbat = new(
                     textureName: @"LooseSprites\Cursors",
@@ -472,7 +473,7 @@ END:
                     animationInterval: 80f,
                     animationLength: 4,
                     numberOfLoops: 9999,
-                    position: new Vector2(Game1.random.Next(mine.map.Layers[0].LayerWidth), Game1.random.Next(mine.map.Layers[0].LayerHeight)),
+                    position: new Vector2(Singletons.Random.Next(mine.map.Layers[0].LayerWidth), Singletons.Random.Next(mine.map.Layers[0].LayerHeight)),
                     flicker: false,
                     flipped: false,
                     layerDepth: 1f,
@@ -489,7 +490,7 @@ END:
                     motion = new Vector2(0f, -8f),
                 };
                 mine.TemporarySprites.Add(redbat);
-                if (Game1.random.NextDouble() < 0.15)
+                if (Singletons.Random.NextDouble() < 0.15)
                 {
                     mine.localSound("batScreech");
                 }
@@ -498,11 +499,11 @@ END:
                     DelayedAction.playSoundAfterDelay("batFlap", (320 * i) + 240);
                 }
             }
-            else if (Game1.random.NextDouble() < 0.24)
+            else if (Singletons.Random.NextDouble() < 0.24)
             {
                 BatTemporarySprite batsprite = new(
                     new Vector2(
-                        Game1.random.NextDouble() < 0.5 ? 0 : mine.map.DisplayWidth - 64,
+                        Singletons.Random.NextDouble() < 0.5 ? 0 : mine.map.DisplayWidth - 64,
                         mine.map.DisplayHeight - 64));
                 mine.TemporarySprites.Add(batsprite);
             }

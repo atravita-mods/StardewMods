@@ -1,6 +1,7 @@
 ﻿using System.Reflection;
 using System.Reflection.Emit;
 
+using AtraCore;
 using AtraCore.Framework.Caches;
 using AtraCore.Framework.ReflectionManager;
 using AtraShared.Utils.Extensions;
@@ -102,7 +103,7 @@ internal static class PhoneHandler
                     {
                         if (Game1.IsVisitingIslandToday(pam.Name))
                         {
-                            Game1.drawDialogue(pam, Game1.content.LoadString($"Strings\\Characters:Pam_Island_{Game1.random.Next(1, 4)}"));
+                            Game1.drawDialogue(pam, Game1.content.LoadString($"Strings\\Characters:Pam_Island_{Singletons.Random.Next(1, 4)}"));
                         }
                         else if (Utility.IsHospitalVisitDay(pam.Name))
                         {
@@ -115,7 +116,7 @@ internal static class PhoneHandler
                         }
                         else if (MultiplayerSharedState.PamsSchedule.Contains("BusStop 11 10"))
                         {
-                            Game1.drawDialogue(pam, Game1.content.LoadString($"Strings\\Characters:Pam_Bus_{Game1.random.Next(1, 4)}"));
+                            Game1.drawDialogue(pam, Game1.content.LoadString($"Strings\\Characters:Pam_Bus_{Singletons.Random.Next(1, 4)}"));
                         }
                         else
                         {

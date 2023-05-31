@@ -1,4 +1,5 @@
-﻿using AtraCore.Interfaces;
+﻿using AtraCore;
+using AtraCore.Interfaces;
 using AtraCore.Utilities;
 
 using Microsoft.Xna.Framework;
@@ -45,7 +46,7 @@ internal sealed class AddSpecialOrderCommand : IEventCommand
     {
         try
         {
-            SpecialOrder order = SpecialOrder.GetSpecialOrder(args[1], Game1.random.Next());
+            SpecialOrder order = SpecialOrder.GetSpecialOrder(args[1], Singletons.Random.Next());
             Game1.player.team.specialOrders.Add(order);
             MultiplayerHelpers.GetMultiplayer().globalChatInfoMessage("AcceptedSpecialOrder", Game1.player.Name, order.GetName());
         }

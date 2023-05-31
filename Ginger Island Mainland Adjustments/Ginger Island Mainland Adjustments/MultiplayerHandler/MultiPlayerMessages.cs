@@ -17,7 +17,7 @@ public static class MultiplayerSharedState
 {
     private const string SCHEDULEMESSAGE = "GIMAScheduleUpdateMessage";
 
-    private static PerScreen<TickCache<bool>> hasSeenEvent = new(
+    private static readonly PerScreen<TickCache<bool>> hasSeenEvent = new(
         static () => new (static () => Game1.player.eventsSeen.Contains(AssetEditor.PAMEVENT)));
 
     /// <summary>

@@ -1,4 +1,6 @@
-﻿using HarmonyLib;
+﻿using AtraCore;
+
+using HarmonyLib;
 using Microsoft.Xna.Framework;
 using StardewValley.Monsters;
 
@@ -24,7 +26,7 @@ internal static class PostfixBigSlimeConstructor
             if (__instance.heldObject is not null
                 && mineArea >= 120
                 && Game1.mine?.GetAdditionalDifficulty() is > 0
-                && Game1.random.NextDouble() < 0.05)
+                && Singletons.Random.NextDouble() < 0.05)
             {
                 __instance.heldObject.Value = new SObject(ModEntry.GiantCropFertilizerID, 1);
             }

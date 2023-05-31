@@ -68,7 +68,7 @@ internal static class OverrideGiftTastes
             // love text and values.
             if (!stream.MoveNext() || !stream.MoveNext())
             {
-                ModEntry.ModMonitor.LogOnce($"Gift tastes for {npc.Name} seem broken: {taste}");
+                ModEntry.ModMonitor.LogOnce($"Gift tastes for {npc.Name} seem broken: {taste}", LogLevel.Warn);
                 goto universal;
             }
 
@@ -88,7 +88,7 @@ internal static class OverrideGiftTastes
             // like text and values
             if (!stream.MoveNext() || !stream.MoveNext())
             {
-                ModEntry.ModMonitor.LogOnce($"Gift tastes for {npc.Name} seem broken: {taste}");
+                ModEntry.ModMonitor.LogOnce($"Gift tastes for {npc.Name} seem broken: {taste}", LogLevel.Warn);
                 goto universal;
             }
             ReadOnlySpan<char> likes = stream.Current.Word;
@@ -96,7 +96,7 @@ internal static class OverrideGiftTastes
             // dislikes text and values
             if (!stream.MoveNext() || !stream.MoveNext())
             {
-                ModEntry.ModMonitor.LogOnce($"Gift tastes for {npc.Name} seem broken: {taste}");
+                ModEntry.ModMonitor.LogOnce($"Gift tastes for {npc.Name} seem broken: {taste}", LogLevel.Warn);
                 goto universal;
             }
             ReadOnlySpan<char> dislikes = stream.Current.Word;
@@ -104,7 +104,7 @@ internal static class OverrideGiftTastes
             // hates text and values.
             if (!stream.MoveNext() || !stream.MoveNext())
             {
-                ModEntry.ModMonitor.LogOnce($"Gift tastes for {npc.Name} seem broken: {taste}");
+                ModEntry.ModMonitor.LogOnce($"Gift tastes for {npc.Name} seem broken: {taste}", LogLevel.Warn);
                 goto universal;
             }
 
@@ -151,7 +151,7 @@ internal static class OverrideGiftTastes
             // neutrals text and values
             if (!stream.MoveNext() || !stream.MoveNext())
             {
-                ModEntry.ModMonitor.LogOnce($"Gift tastes for {npc.Name} seem broken: {taste}");
+                ModEntry.ModMonitor.LogOnce($"Gift tastes for {npc.Name} seem broken: {taste}", LogLevel.Warn);
                 goto universal;
             }
 

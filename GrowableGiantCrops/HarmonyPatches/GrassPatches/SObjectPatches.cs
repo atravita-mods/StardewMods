@@ -86,7 +86,7 @@ internal static class SObjectPatches
     /// </summary>
     internal static Func<int, SObject>? InstantiateMoreGrassStarter => instantiateMoreGrassStarter.Value;
 
-    private static Lazy<Func<Grass, bool>?> isMoreGrassGrass = new(() =>
+    private static readonly Lazy<Func<Grass, bool>?> isMoreGrassGrass = new(() =>
     {
         Type? moreGrass = AccessTools.TypeByName("MoreGrassStarters.CustomGrass");
         if (moreGrass is null)
@@ -104,7 +104,7 @@ internal static class SObjectPatches
     /// </summary>
     internal static Func<Grass, bool>? IsMoreGrassGrass => isMoreGrassGrass.Value;
 
-    private static Lazy<Func<int, Grass>?> instantiateMoreGrassGrass = new(() =>
+    private static readonly Lazy<Func<int, Grass>?> instantiateMoreGrassGrass = new(() =>
     {
         Type? moreGrass = AccessTools.TypeByName("MoreGrassStarters.CustomGrass");
         if (moreGrass is null)
@@ -124,7 +124,7 @@ internal static class SObjectPatches
     /// </summary>
     internal static Func<int, Grass>? InstantiateMoreGrassGrass => instantiateMoreGrassGrass.Value;
 
-    private static Lazy<Func<SObject, int?>?> getMoreGrassStarterIndex = new(() =>
+    private static readonly Lazy<Func<SObject, int?>?> getMoreGrassStarterIndex = new(() =>
     {
         Type? moreGrass = AccessTools.TypeByName("MoreGrassStarters.GrassStarterItem");
         if (moreGrass is null)
@@ -159,7 +159,7 @@ internal static class SObjectPatches
     #region draw patches
 
     private static AssetHolder? texture;
-    private static Dictionary<string, int> offsets = new()
+    private static readonly Dictionary<string, int> offsets = new()
     {
         ["spring"] = 0,
         ["summer"] = 20,

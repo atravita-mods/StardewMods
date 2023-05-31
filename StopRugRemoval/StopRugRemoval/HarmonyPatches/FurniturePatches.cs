@@ -1,4 +1,6 @@
-﻿using AtraShared.Utils.Extensions;
+﻿using AtraCore;
+
+using AtraShared.Utils.Extensions;
 
 using HarmonyLib;
 
@@ -137,7 +139,7 @@ internal class FurniturePatches
             else if (__instance.ParentSheetIndex == 1971 && who.currentLocation is GameLocation loc)
             {
                 // clicked on a butterfly hutch!
-                Vector2 v = new(Game1.random.Next(-2, 4), Game1.random.Next(-1, 1));
+                Vector2 v = new(Singletons.Random.Next(-2, 4), Singletons.Random.Next(-1, 1));
                 loc.instantiateCrittersList();
                 loc.addCritter(new Butterfly(__instance.TileLocation + v).setStayInbounds(stayInbounds: true));
             }

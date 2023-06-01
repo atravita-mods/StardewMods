@@ -1,4 +1,4 @@
-﻿// Ignore Spelling: Craftable loc
+﻿// Ignore Spelling: Craftable loc Api
 
 using System.Reflection;
 using System.Runtime.InteropServices;
@@ -152,7 +152,7 @@ public class ShovelTool : Tool
     /// <param name="location">The game location.</param>
     /// <param name="x">pixel x.</param>
     /// <param name="y">pixel y.</param>
-    /// <param name="power">The power level of the tool</param>
+    /// <param name="power">The power level of the tool.</param>
     /// <param name="who">Last farmer to use.</param>
     public override void DoFunction(GameLocation location, int x, int y, int power, Farmer who)
     {
@@ -629,6 +629,15 @@ public class ShovelTool : Tool
         return true;
     }
 
+    /// <summary>
+    /// Handles picking up a mushroom box.
+    /// </summary>
+    /// <param name="location">Location to pick up the mushroom box from.</param>
+    /// <param name="who">The farmer to use.</param>
+    /// <param name="pickupTile">The tile to pick up from.</param>
+    /// <param name="energy">The amount of energy to take.</param>
+    /// <param name="object">The actual instance to pick up.</param>
+    /// <returns>True if handled, false otherwise.</returns>
     protected virtual bool HandleMushroomBox(GameLocation location, Farmer who, Vector2 pickupTile, int energy, SObject @object)
     {
         if (@object.readyForHarvest.Value)
@@ -705,6 +714,14 @@ public class ShovelTool : Tool
         return false;
     }
 
+    /// <summary>
+    /// Makes a hoe dirt at a specific location.
+    /// </summary>
+    /// <param name="location">Game location to make the hoedirt.</param>
+    /// <param name="who">Farmer who is doing the action.</param>
+    /// <param name="pickupTile">Tile to make the hoedirt.</param>
+    /// <param name="energy">Amount of energy to take.</param>
+    /// <returns>true if handled, false otherwise.</returns>
     protected virtual bool MakeHoeDirt(GameLocation location, Farmer who, Vector2 pickupTile, int energy)
     {
         who.Stamina -= energy;

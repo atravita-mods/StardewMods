@@ -11,7 +11,7 @@ using HarmonyLib;
 using StardewValley.BellsAndWhistles;
 using StardewValley.TerrainFeatures;
 
-namespace CritterRings.HarmonyPatches;
+namespace CritterRings.HarmonyPatches.BunnyRing;
 
 /// <summary>
 /// A transpiler to prevent rabbits from harvesting walnuts.

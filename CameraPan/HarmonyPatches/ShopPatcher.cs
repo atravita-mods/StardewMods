@@ -14,6 +14,6 @@ internal static class ShopPatcher
     [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Named for Harmony.")]
     private static void Postfix(Dictionary<ISalable, int[]> __result)
     {
-        __result.Add(new SObject(ModEntry.CAMERA_ID, 1), new[] {2_000, ShopMenu.infiniteStock});
+        __result.Add(new SObject(ModEntry.CAMERA_ID, 1), new[] { 2_000, ShopMenu.infiniteStock });
     }
 }

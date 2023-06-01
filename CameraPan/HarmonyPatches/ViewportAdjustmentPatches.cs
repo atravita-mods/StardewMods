@@ -29,7 +29,6 @@ namespace CameraPan.HarmonyPatches;
 [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Named for Harmony.")]
 internal static class ViewportAdjustmentPatches
 {
-
     private static readonly PerScreen<CameraBehavior> cameraBehavior = new(() => CameraBehavior.Both);
 
     /// <summary>
@@ -97,6 +96,7 @@ internal static class ViewportAdjustmentPatches
     /// </summary>
     /// <returns>True if panning should be allowed.</returns>
     [MethodImpl(TKConstants.Hot)]
+    [SuppressMessage("StyleCop.CSharp.OrderingRules", "SA1202:Elements should be ordered by access", Justification = "Reviewed.")]
     internal static bool ShouldOffset() => !IsGamePanning && !IsInEvent() && cameraBehavior.Value.HasFlagFast(CameraBehavior.Offset);
 
     [MethodImpl(TKConstants.Hot)]

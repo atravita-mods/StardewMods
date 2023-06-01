@@ -5,7 +5,10 @@
         "Target": "Characters/Dialogue/Gus",
         "Entries": {
             "movieTheater": "Looks like I have competition now.$s#$b#Something new for people to do on a Friday night.#$e#Would be nice to see a movie sometime...$h",
-            "SeedShop_Entry": "Whatcha got, Pierre?/Anything particularly nice today?/Where's my grocery list..."
+            "SeedShop_Entry": "Whatcha got, Pierre?/Anything particularly nice today?/Where's my grocery list...",
+            "summer_Fri10": "Weather like this makes me want to go make some piña coladas...and getting caught in the rain...$h",
+
+            "summer_4{{YearRemainder}}": "Gotta get ready for inspections..."
         }
     },
     {
@@ -32,7 +35,11 @@
         "Target": "Characters/Dialogue/Gus",
         "When": { "YearModulus": "1"},
         "Entries": {
-            "1": "I've been living in Pelican Town for...nearly twelve years now?#$b#Boy, it's been a long time...$h"
+            "1": "I've been living in Pelican Town for...nearly twelve years now?#$b#Boy, it's been a long time...$h",
+            "1_2": "There's really nothing like fresh bread in the morning, isn't there?",
+
+            "2{{YearRemainder}}": "There's plenty of dishes I'd love to try on the menu some day, if I ever have the time to develop them properly.",
+            "3{{YearRemainder}}": "Try a nice Stardew red with my house spaghetti! There's no better pairing than that."
         }
     },
     {
@@ -44,9 +51,12 @@
             "SeedShop6": "Ah, @, nice seeing you here! Just picking up some fresh produce. Nothing but the best for my family spaghetti recipe!$h",
             "summerSeedShop6": "@, have you cooked anything interesting recently? Our little valley has so many nice ingredients just out for the taking, if you're willing to forage.$h",
             "fallSeedShop6": "Let's see, where did I put my grocery list?",
+
             "1_2": "I've always dreamed of owning a restaurant.$h",
             "2_2": "Have you ever tried my spaghetti? I'm told it's to die for.$h",
-            "3_2": "I spent many years as a line cook at a middling restaurant in Zuzu City. They mostly did pizzas.",
+            "3_2": "I spent many years as a line cook at a middling restaurant in Zuzu City. They mostly did pizzas.%revealtasteGus206",
+            "4_2": "Bread is a lot of work, but incredibly rewarding!#$b#There's nothing like the smell of freshly baked bread.",
+            "5_2": "There's nothing like a nicely aged local wine with a well-cooked meal, eh?",
         }
     },
     {
@@ -55,6 +65,10 @@
         "Target": "Characters/Dialogue/Gus",
         "When": { "YearModulus": "3"},
         "Entries": {
+            "fall_Sun10": "Between you and I, @, my least favorite kitchen chore is cleaning the deep fryers.#$b#But it has to be done...#$b#Of course I'm not going to make Emily do a chore I hate.",
+
+            "14_2": "I'm the last surviving restaurant in this here town, and business isn't easy.#$b#Many people cut back on eating out when the economy goes bad.$s",
+            "16_2": "Hmmm, this feels like a great time of year for glazed yams...%revealtasteGus208",
             "fall_15_2": "Hey, @, any fall dishes you're looking forward to cooking?#$e#Made some excellent stuffing the other day. Here, have some![239]"
         }
     }

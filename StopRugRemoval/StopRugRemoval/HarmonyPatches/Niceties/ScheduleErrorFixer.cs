@@ -19,9 +19,11 @@ namespace StopRugRemoval.HarmonyPatches.Niceties;
 /// I think this may be antisocial causing issues.
 /// </summary>
 [HarmonyPatch]
+[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1309:Field names should not begin with underscore", Justification = "Reviewed.")]
 internal static class ScheduleErrorFixer
 {
     #region delegates
+
     private static readonly Lazy<Func<NPC, NetLocationRef>> _getLocationRef = new(() =>
         typeof(NPC).GetCachedField("currentLocationRef", ReflectionCache.FlagTypes.InstanceFlags)
                    .GetInstanceFieldGetter<NPC, NetLocationRef>()

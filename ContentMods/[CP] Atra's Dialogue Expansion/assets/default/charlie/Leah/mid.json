@@ -29,7 +29,9 @@
             "2_2": "Ohh, there's a film festival happening next week in %place. @, do you think I should go?",
             "3_2": "Don't tell anyone, but there's little I love more than a sappy romance movie.#$b#I don't care they aren't realistic, they're cute.",
             "4_2": "Hmmm....what should I have for dinner...I wonder what I can forage...",
-            "5_2": "It helps that I can forage some excellent ingredients from our local forests!#$b#Helps me save so much money on food."
+            "5_2": "It helps that I can forage some excellent ingredients from our local forests!#$b#Helps me save so much money on food.",
+            "6_2": "Every now and then I get the itch to do some baking...#$b#My cabin doesn't really have a good kitchen, though.",
+            "7_2": "Back when I used to live in the city, there was a great little noodle joint just under my apartment. I used to go there all the time.$h"
         },
         "When": {"YearModulus": 2}
     },

@@ -8,9 +8,9 @@
         "Action": "EditData",
         "Target": "Characters/Dialogue/Demetrius",
         "When": { "HasFlag": "Island_FirstParrot" },
-        "Entries":
-        {
-            "Resort": "The mushrooms around here are extraordinary!$h#$b#I have never seen any mushrooms like these!$h"
+        "Entries": {
+            "Resort": "The mushrooms around here are extraordinary!$h#$b#I have never seen any mushrooms like these!$h",
+            "19_2": "I'd love to study some of those magma caps found on Ginger Island some day. I can't believe the conditions these mushrooms can survive!%revealtasteDemetrius851"
         }
     },
     {
@@ -31,7 +31,10 @@
             "fallScienceHouse_22_20": "I'd love to talk, @, but I have a grant submission coming up that I need to work on.",
             "summerScienceHouse_22_20": "I have so many measurements I need to make today...$s",
             "fallMountain_45_8": "We're lucky to have so much old growth forest around here.#$b#It takes decades for a forest to develop properly.",
-            "summer_2{{YearRemainder}}": "I better not forget our anniversary this year, Robin will really hate it if I forget again."
+            "summer_2{{YearRemainder}}": "I better not forget our anniversary this year, Robin will really hate it if I forget again.",
+
+            "spring_Mon10": "Mmmm, there's nothing like a nice fresh strawberry in spring, right?[400]$h",
+            "spring_Tue10": "I love how the valley comes alive in spring.$h"
         },
         "When": { "YearModulus": "1" }
     },
@@ -47,6 +50,7 @@
             "16_2": "It's always reviewer two, isn't it? Always.$a",
             "18_2": "Gotta order more reagents soon, we're running low on HCl.",
             "19_2": "Maru was helping me with minipreps the other day. Lab work is so much more fun when you're working with someone.",
+            "20_2": "Sometimes I go down to the beach to collect shells.#$b#There's no real scientific reason to do so, they're just pretty.#$e#$c .2#Here, I found this one the other day.[394 393]#Summer, especially, a lot of shells wash up.#",
 
             "ScienceHouse_22_20": "I'm so sorry, @, I've got so much work I need to get done before next Monday.",
             "summerScienceHouse_22_20": "Just need to gather a little more data for a proposal.",
@@ -81,7 +85,10 @@
         "Entries": {
             "2_2": "Before Pelican Town was a mining town, it was a forestry.#$b#But that was a long time ago, and the forest has had a bit of a chance to recover.",
             "18_2": "@, did you know that the oldest mushrooms are more than two thousand years old?",
-            "19_2": "It's really weird we celebrate romantic holidays with the cut off reproductive organs of plants, isn't it?"
+            "19_2": "It's really weird we celebrate romantic holidays with the cut off reproductive organs of plants, isn't it?",
+
+            "fallScienceHouse_22_20": "I've got so much work I need to do...$s",
+            "winterScienceHouse_22_20": "More glassware to wash, always more glassware to wash...$s"
         },
         "When": { "YearModulus": "4"}
     }

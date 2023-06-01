@@ -37,8 +37,18 @@
         "Action":"EditData",
         "Target": "Characters/Dialogue/Lewis",
         "Entries": {
-            "12_2": "Ugh, the stock market is going insane right now, I have to keep myself from looking too much at my portfolio.#$b#I try to remind myself that buying and holding is the best strategy, but it's hard sometimes."
+            "12_2": "Ugh, the stock market is going insane right now, I have to keep myself from looking too much at my portfolio.#$b#I try to remind myself that buying and holding is the best strategy, but it's hard sometimes.",
+            "15_2": "We're actually in a great location for hydro power. Maybe I can convince a hydro plant to come out here?"
         },
         "When": {"YearModulus": "3"}
+    },
+    {
+        "LogName": "Lewis mid-hearts - Y3",
+        "Action":"EditData",
+        "Target": "Characters/Dialogue/Lewis",
+        "Entries": {
+            "12_2": "I've never been married. My first priority has been this town for a very long time.",
+        },
+        "When": {"YearModulus": "4"}
     }
 ]}

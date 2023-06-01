@@ -10,5 +10,14 @@
 
         },
         "When": { "YearModulus": "2"}
+    },
+    {
+        "LogName": "Demetrius mid-hearts, Y2, mushrooms",
+        "Action": "EditData",
+        "Target": "Characters/Dialogue/Demetrius",
+        "Entries": {
+            "7_2": "Mushrooms are actually closer to animals than plants!",
+        },
+        "When": { "YearModulus": "3"}
     }
 ]}

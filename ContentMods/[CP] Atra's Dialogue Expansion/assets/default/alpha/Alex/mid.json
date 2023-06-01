@@ -36,6 +36,7 @@
             "winter_Mon4": "Maybe I should take up hockey?#$e#@, you think I'd be good at hockey?#$e#What am I'm saying, I'm good at everything.",
             "winter_Wed8": "Probably gonna go lift weights.#$e#Working out outside is so much more fun, though.",
             "winter_Sat10": "Hey @, what's your favorite hockey club?#$e#I've been thinking of going to a game sometime, you in?",
+            "winter_Sun10": "After a nice session lifting weights, I love taking a dip in the spa.$h",
 
             "Fri8": "You know what, @? While I'd love to go pro some day, I'm not sure I should leave my Grandma and Grandpa alone right now.",
             "4_2": "@! I saw a new exercise on social media the other day. Can't wait to try it out.#$e#Basically, you kneel on the ground, and get someone to hold your feet still...#$b#Then you lean forward until your nose is on the floor. It's surprisingly hard!",
@@ -62,6 +63,8 @@
             "Good_0": "@, I love you so so much!",
 
             "summer_Alex": "#$c .5#Mmmm. Such a nice day, maybe I should go swimming?#Summer's my favorite season, I've always have the most energy.$h",
+
+            "JoshHouse_Entry": "Granny, I'm home!"
         }
     },
     {

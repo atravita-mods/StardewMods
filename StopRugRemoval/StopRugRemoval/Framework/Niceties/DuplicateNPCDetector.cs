@@ -15,6 +15,9 @@ namespace StopRugRemoval.Framework.Niceties;
 /// </summary>
 internal static class DuplicateNPCDetector
 {
+    [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1309:Field names should not begin with underscore", Justification = "Preference.")]
+    private static readonly ThreadLocal<List<NPC>> _pooled = new(() => new());
+
     /// <inheritdoc cref="IGameLoopEvents.DayEnding"/>
     internal static void DayEnd()
     {
@@ -32,10 +35,13 @@ internal static class DuplicateNPCDetector
             return;
         }
 
-        HashSet<string> found = new();
-        bool leoMoved = Game1.MasterPlayer.mailReceived.Contains("LeoMoved");
+        _pooled.Value ??= new();
+        _pooled.Value.Clear();
 
-        foreach (NPC? character in Utility.getAllCharacters())
+        _ = Utility.getAllCharacters(_pooled.Value);
+        HashSet<string> found = new(_pooled.Value.Count);
+        bool leoMoved = Game1.MasterPlayer.mailReceived.Contains("LeoMoved");
+        foreach (NPC? character in _pooled.Value)
         {
             found.Add(character.Name);
 
@@ -69,6 +75,7 @@ internal static class DuplicateNPCDetector
                 }
             }
         }
+        _pooled.Value.Clear();
 
         foreach ((string name, string dispo) in Game1.content.Load<Dictionary<string, string>>("Data\\NPCDispositions"))
         {

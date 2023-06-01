@@ -647,6 +647,15 @@ public class ShovelTool : Tool
         return this.HandleBigCraftable(location, who, pickupTile, energy, @object, 128);
     }
 
+    /// <summary>
+    /// Handles picking up a slime incubator.
+    /// </summary>
+    /// <param name="location">Game location to pick up from.</param>
+    /// <param name="who">Farmer doing the pickup.</param>
+    /// <param name="pickupTile">Tile to pick up from.</param>
+    /// <param name="energy">Amount of energy to deduct.</param>
+    /// <param name="object">The object instance to pick up.</param>
+    /// <returns>True if handled, false otherwise.</returns>
     protected virtual bool HandleSlimeIncubator(GameLocation location, Farmer who, Vector2 pickupTile, int energy, SObject @object)
     {
         if (@object.MinutesUntilReady <= 0)
@@ -659,6 +668,16 @@ public class ShovelTool : Tool
 
 #warning - 1.6 has nice methods for this.
 
+    /// <summary>
+    /// Handles picking up a big craftable.
+    /// </summary>
+    /// <param name="location">The game location to pick up from.</param>
+    /// <param name="who">The farmer doing pickup.</param>
+    /// <param name="pickupTile">The tile being picked up from.</param>
+    /// <param name="energy">The amount of energy to deduct.</param>
+    /// <param name="object"></param>
+    /// <param name="idx"></param>
+    /// <returns>true if handled, false otherwise.</returns>
     protected virtual bool HandleBigCraftable(GameLocation location, Farmer who, Vector2 pickupTile, int energy, SObject @object, int idx)
     {
         who.Stamina -= energy;

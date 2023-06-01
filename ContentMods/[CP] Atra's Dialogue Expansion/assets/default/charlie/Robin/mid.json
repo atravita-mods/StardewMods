@@ -5,8 +5,10 @@
         "LogName": "Robin Movies",
         "Action": "EditData",
         "Target": "Characters/Dialogue/Robin",
+        "When": {"MovieStatus|contains=None": false},
         "Entries": {
-            "movieTheater": "Oh, @, did you hear? We've got a new movie theater! Demetrius and I used to go out and watch movies in a little drive-in theater all the time when we were dating...$h"
+            "movieTheater": "Oh, @, did you hear? We've got a new movie theater! Demetrius and I used to go out and watch movies in a little drive-in theater all the time when we were dating...$h",
+            "summer_Fri10": "Hmmm, @, do you think I could get Demetrius to take me to the movie theater sometime?#$b#He's a big fan of nature documentaries..."
         }
     },
     {

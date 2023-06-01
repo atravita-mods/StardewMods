@@ -28,7 +28,9 @@
         "Action": "EditData",
         "Target": "Characters/Dialogue/Evelyn",
         "Entries": {
-            "15_2": "Honey, I just made some cookies. Please have one, dearie. [223]$h"
+            "spring_Mon10": "Oh, it's a lovely spring, isn't it, @#$e#Perfect weather for planting tulips! They're my favorite flower.[427]$h", 
+
+            "15_2": "Honey, I just made some cookies. Please have one, dearie.[223]$h"
         },
         "When": {"YearModulus": "2"}
     },

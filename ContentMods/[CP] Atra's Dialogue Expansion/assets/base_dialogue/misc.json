@@ -11,7 +11,7 @@
     {
         "Action": "EditData",
         "LogName": "StringsFromCSFiles",
-        "Target": "Strings/StringsFromCSFiles.json",
+        "Target": "Strings/StringsFromCSFiles",
         "Entries": {
             "NPC.cs.4176": " {{i18n:gift-tastes-ending-allergic.{{season}}|pronouns = {{i18n: he}} }}",
             "NPC.cs.4178": " {{i18n:gift-tastes-ending-allergic.{{season}}|pronouns = {{i18n: she}} }}"

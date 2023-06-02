@@ -28,7 +28,10 @@
         "Action": "EditData",
         "Target": "Characters/Dialogue/Evelyn",
         "Entries": {
-            "spring_Mon10": "Oh, it's a lovely spring, isn't it, @#$e#Perfect weather for planting tulips! They're my favorite flower.[427]$h", 
+            "Mon10": "Oh, it's a lovely spring, isn't it, @#$e#Perfect weather for planting tulips! They're my favorite flower.[427]$h",
+            "summer_Mon10": "Summer spangles are Caroline's favorite flowers. I make sure to grow some in the community gardens every year.%revealtasteCaroline593",
+            "fall_Mon10": "Penny loves poppies. I always make sure to have a few around this time of year for her.%revealtastePenny376",
+            "winter_Mon10": "@, did you grow any fairy roses? They're Jas's favorite flower.$h%revealtasteJas595",
 
             "15_2": "Honey, I just made some cookies. Please have one, dearie.[223]$h"
         },

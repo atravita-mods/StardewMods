@@ -52,7 +52,7 @@ Simply remove this mod from your mods folder.
 * **Emily**: Anyone else noticed that homegirl works 56 hours a week? Gus should be really giving you medical and retirement benefits, girl.
 * **Evelyn**: I love, love Evelyn. I headcanon that she really did step in to help raise Penny after Pam....you know.
 * **George**:
-* **Gus**:
+* **Gus**: Gus has such, such cozy vibes, doesn't he?
 * **Haley**:
 * **Harvey**:
 * **Jodi**:

@@ -3,6 +3,8 @@
     // Demetrius should give off eternal postdoc vibes. He tries to break out of it, but a combination of his own poor social skills + racism makes it harder for him.
     // Also, insert random bat facts. Bats are adorable.
 
+    // Between Robin and Demetrius, they'll have a reasonable split of chores.
+
     {
         "LogName": "Demetrius Volcano",
         "Action": "EditData",
@@ -33,8 +35,14 @@
             "fallMountain_45_8": "We're lucky to have so much old growth forest around here.#$b#It takes decades for a forest to develop properly.",
             "summer_2{{YearRemainder}}": "I better not forget our anniversary this year, Robin will really hate it if I forget again.",
 
-            "spring_Mon10": "Mmmm, there's nothing like a nice fresh strawberry in spring, right?[400]$h",
-            "spring_Tue10": "I love how the valley comes alive in spring.$h"
+            "Mon10": "Mmmm, there's nothing like a nice fresh strawberry in spring, right?[400]$h",
+            "Tue10": "I love how the valley comes alive in spring.$h",
+            "summer_Mon10": "Hmmm, what should I cook today?",
+            "summer_Tue10": "It's so, so hot in town, but it's lovely and cool in the mountains...$h",
+            "fall_Mon10": "Argh, so much vacuuming to do...$s",
+            "fall_Tue10": "I wish the house would clean itself sometimes...",
+            "winter_Mon10": "I don't tend to do much fieldwork in winter, because everything goes dormant.",
+            "winter_Tue10": "I have so much mopping I need to do.$s"
         },
         "When": { "YearModulus": "1" }
     },
@@ -52,6 +60,10 @@
             "18_2": "Gotta order more reagents soon, we're running low on HCl.",
             "19_2": "Maru was helping me with minipreps the other day. Lab work is so much more fun when you're working with someone.",
             "20_2": "Sometimes I go down to the beach to collect shells.#$b#There's no real scientific reason to do so, they're just pretty.#$e#$c .2#Here, I found this one the other day.[394 393]#Summer, especially, a lot of shells wash up.#",
+            "21_2": "I made some extra coffee this morning. Here, have some![395]$h",
+            "22_2": "Robin is usually pretty practical, but she does like some frilly things sometimes...",
+
+            "fall_Thu10": "In fall, we get so many common mushrooms fruiting. They're quite tasty![404]$h",
 
             "ScienceHouse_22_20": "I'm so sorry, @, I've got so much work I need to get done before next Monday.",
             "summerScienceHouse_22_20": "Just need to gather a little more data for a proposal.",
@@ -72,6 +84,7 @@
             "18_2": "Between you and I, @, writing proposals is the worst part of my job.",
             "20_2": "Tree fertilizer can make trees grow much faster, but I wonder if it affects the quality of their wood.#$b#Generally fast-growing trees can't produce as dense of wood.",
 
+            "ScienceHouse_22_20": "I've got a paper I have to write, so of course all I want to do is make a blackberry cobbler and mop the entire house or something...",
             "summerScienceHouse_22_20": "It's been so hot lately, I suspect the trees are stressed.",
             "fallScienceHouse_22_20": "Got a conference coming up, @, hoping I can get myself a talk.",
             "winterScienceHouse_22_20": "My collaborator claims his equipment is broken again.#$b#We're far closer to the submission deadline for this paper than I'd like...",
@@ -87,6 +100,8 @@
             "2_2": "Before Pelican Town was a mining town, it was a forestry.#$b#But that was a long time ago, and the forest has had a bit of a chance to recover.",
             "18_2": "@, did you know that the oldest mushrooms are more than two thousand years old?",
             "19_2": "It's really weird we celebrate romantic holidays with the cut off reproductive organs of plants, isn't it?",
+
+            "winter_Mon10": "There are only a few plants that flower during winter, but crocus is one of them.[418]",
 
             "fallScienceHouse_22_20": "I've got so much work I need to do...$s",
             "winterScienceHouse_22_20": "More glassware to wash, always more glassware to wash...$s"

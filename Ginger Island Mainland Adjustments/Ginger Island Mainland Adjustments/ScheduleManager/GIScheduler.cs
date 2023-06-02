@@ -5,6 +5,7 @@ using System.Runtime;
 using AtraCore;
 #endif
 
+using AtraCore;
 using AtraCore.Framework.Caches;
 using AtraCore.Framework.ReflectionManager;
 
@@ -38,6 +39,11 @@ internal static class GIScheduler
     #endregion
 
     private static readonly int[] TIMESLOTS = new int[] { 1200, 1400, 1600 };
+
+    /// <summary>
+    /// The starting point where NPCs staged at the saloon start.
+    /// </summary>
+    private static readonly Point SaloonStart = new(8, 11);
 
     #region groups
 
@@ -90,8 +96,6 @@ internal static class GIScheduler
     internal static NPC? Musician { get; private set; }
 
     #endregion
-
-    private static readonly Point SaloonStart = new(8, 11);
 
     /// <summary>
     /// Gets island groups. Will automatically load if null.
@@ -284,7 +288,7 @@ internal static class GIScheduler
                 // Filter out groups where one member can't make it or are too big
                 // Except for spouses, we'll just randomly pick until we hit the capacity later.
                 if ((IslandGroups[key].Count <= capacity - visitors.Count || key == "allSpouses")
-                    && IslandGroups[key].All((NPC npc) => valid_visitors.Contains(npc)))
+                    && IslandGroups[key].All(valid_visitors.Contains))
                 {
                     groupkeys.Add(key);
                 }
@@ -368,7 +372,7 @@ internal static class GIScheduler
             }
         }
 
-        Globals.ModMonitor.DebugOnlyLog($"{visitors.Count} vistors: {string.Join(", ", visitors.Select((NPC npc) => npc.Name))}");
+        Globals.ModMonitor.DebugOnlyLog($"{visitors.Count} visitors: {string.Join(", ", visitors.Select((NPC npc) => npc.Name))}");
         IslandSouthPatches.ClearCache();
 
         return visitors;
@@ -381,11 +385,11 @@ internal static class GIScheduler
     /// <returns>Bartender if it can find one, null otherwise.</returns>
     private static NPC? SetBartender(List<NPC> visitors)
     {
-        NPC? bartender = visitors.Find((NPC npc) => npc.Name.Equals("Gus", StringComparison.OrdinalIgnoreCase));
+        NPC? bartender = visitors.Find(static (NPC npc) => npc.Name.Equals("Gus", StringComparison.OrdinalIgnoreCase));
         if (bartender is null)
         { // Gus not visiting, go find another bartender
             HashSet<NPC> bartenders = AssetLoader.GetSpecialCharacter(SpecialCharacterType.Bartender);
-            bartender = visitors.Find((NPC npc) => bartenders.Contains(npc));
+            bartender = visitors.Find(bartenders.Contains);
         }
         if (bartender is not null)
         {
@@ -461,7 +465,7 @@ internal static class GIScheduler
 
             if (Globals.Config.StageFarNpcsAtSaloon)
             {
-                var maplist = GetLocationRouteLazy.Value(visitor, visitor.DefaultMap, "IslandSouth");
+                List<string>? maplist = GetLocationRouteLazy.Value(visitor, visitor.DefaultMap, "IslandSouth");
                 if (maplist is null || maplist.Count > 8)
                 {
                     Globals.ModMonitor.Log($"{visitor.Name} has a long way to travel, so staging them at the Saloon.");

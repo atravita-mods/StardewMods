@@ -20,7 +20,9 @@
         "Target": "Characters/Dialogue/Penny",
         "When": {"YearModulus": "3"},
         "Entries": {
-            "3_2": "When we lived in the trailer, Mrs. Mullner would let me do laundry in her washer.#$b#She's always been so nice to my mother and I.$h"
+            "3_2": "When we lived in the trailer, Mrs. Mullner would let me do laundry in her washer.#$b#She's always been so nice to my mother and I.$h",
+            "4_2": "I made some extra poppyseed muffins, @, do you want one?$h[651]",
+            "5_2": "I have so much mopping I need to do.$s"
         }
     }
 ]}

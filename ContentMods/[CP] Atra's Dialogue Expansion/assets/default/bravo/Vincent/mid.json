@@ -26,5 +26,16 @@
         "When": {
             "YearModulus": "1"
         }
+    },
+        {
+        "Action": "EditData",
+        "LogName": "Vincent mid-hearts Y3",
+        "Target": "Characters/Dialogue/Vincent",
+        "Entries": {
+            "2_2": "Look, @, at this pretty feather I've found![444]"
+        },
+        "When": {
+            "YearModulus": "3"
+        }
     }
 ]}

@@ -6,7 +6,11 @@ using StardewValley.Locations;
 
 namespace GingerIslandMainlandAdjustments.DialogueChanges;
 
+/// <summary>
+/// Adds patches to make groups work for Resort_Entering and Resort_Leaving.
+/// </summary>
 [HarmonyPatch(typeof(IslandSouth))]
+[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Harmony convention")]
 internal static class PatchesOnIslandSouth
 {
     [HarmonyPatch(nameof(IslandSouth.GetLocationOverrideDialogue))]

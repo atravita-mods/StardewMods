@@ -13,11 +13,12 @@ namespace GingerIslandMainlandAdjustments.MultiplayerHandler;
 /// Class to handle multiplayer shared state.
 /// </summary>
 [HarmonyPatch(typeof(NPC))]
+[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Harmony convention")]
 public static class MultiplayerSharedState
 {
     private const string SCHEDULEMESSAGE = "GIMAScheduleUpdateMessage";
 
-    private static readonly PerScreen<TickCache<bool>> hasSeenEvent = new(
+    private static readonly PerScreen<TickCache<bool>> HasSeenEvent = new(
         static () => new (static () => Game1.player.eventsSeen.Contains(AssetEditor.PAMEVENT)));
 
     /// <summary>
@@ -57,12 +58,11 @@ public static class MultiplayerSharedState
 
     [HarmonyPostfix]
     [HarmonyPatch(nameof(NPC.parseMasterSchedule))]
-    [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Harmony convention")]
     private static void PostfixGetMasterSchedule(NPC __instance)
     {
         try
         {
-            if (Context.IsMainPlayer && hasSeenEvent.Value.GetValue() && __instance?.Name.Equals("Pam", StringComparison.OrdinalIgnoreCase) == true
+            if (Context.IsMainPlayer && HasSeenEvent.Value.GetValue() && __instance?.Name.Equals("Pam", StringComparison.OrdinalIgnoreCase) == true
                 && __instance.TryGetScheduleEntry(__instance.dayScheduleName.Value, out string? rawstring)
                 && Globals.UtilitySchedulingFunctions.TryFindGOTOschedule(__instance, SDate.Now(), rawstring, out string redirectedstring))
             {

@@ -1,4 +1,6 @@
-﻿using System.Runtime.CompilerServices;
+﻿// Ignore Spelling: Api
+
+using System.Runtime.CompilerServices;
 
 using AtraBase.Toolkit;
 using AtraBase.Toolkit.Extensions;
@@ -25,12 +27,11 @@ using AtraUtils = AtraShared.Utils.Utils;
 
 namespace CameraPan;
 
-// TODO: draw a big arrow pointing towards the player if the player is off screen?
-
 /// <inheritdoc />
 [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1310:Field names should not contain underscore", Justification = "Constants.")]
 [SuppressMessage("StyleCop.CSharp.OrderingRules", "SA1204:Static elements should appear before instance elements", Justification = "Reviewed.")]
 [SuppressMessage("StyleCop.CSharp.OrderingRules", "SA1201:Elements should appear in the correct order", Justification = "Accessors kept near backing fields.")]
+[SuppressMessage("StyleCop.CSharp.OrderingRules", "SA1202:Elements should be ordered by access", Justification = "Reviewed.")]
 internal sealed class ModEntry : Mod
 {
     /// <summary>
@@ -60,7 +61,7 @@ internal sealed class ModEntry : Mod
     {
         get => enabled.Value;
         set => enabled.Value = value;
-    } 
+    }
 
     private static readonly PerScreen<bool> snapOnNextTick = new(() => true);
 
@@ -200,6 +201,9 @@ internal sealed class ModEntry : Mod
         harmony.Snitch(this.Monitor, harmony.Id, transpilersOnly: true);
     }
 
+    /// <summary>
+    /// Creates or moves my little camera button.
+    /// </summary>
     internal static void CreateOrModifyButton()
     {
         if (Game1.dayTimeMoneyBox?.position is Vector2 position)
@@ -536,7 +540,7 @@ internal sealed class ModEntry : Mod
             return;
         }
 
-        arrowPos = Utility.snapToInt( Utility.ModifyCoordinatesForUIScale(arrowPos));
+        arrowPos = Utility.snapToInt(Utility.ModifyCoordinatesForUIScale(arrowPos));
 
         s.Draw(
             texture: AssetManager.ArrowTexture,

@@ -1,4 +1,4 @@
-﻿// Ignore Spelling: viewport
+﻿// Ignore Spelling: viewport Hoedirt
 
 using AtraBase.Toolkit.Extensions;
 
@@ -60,23 +60,20 @@ public static class GameLocationExtensions
                     monitor.Log($"No festival file found for today....did someone screw with the time?\n\n{ex}", LogLevel.Warn);
                     return false;
                 }
-                if (festivalData.TryGetValue("conditions", out string? val))
+                if (festivalData.TryGetValue("conditions", out string? val) && val.TrySplitOnce('/', out ReadOnlySpan<char> locName, out ReadOnlySpan<char> times))
                 {
-                    string[]? splits = val.Split('/');
-                    if (splits.Length >= 2)
+                    if (!locName.Equals(location.Name, StringComparison.OrdinalIgnoreCase))
                     {
-                        if (!location.Name.Equals(splits[0], StringComparison.OrdinalIgnoreCase))
+                        return false;
+                    }
+                    if (times.TrySplitOnce(' ', out ReadOnlySpan<char> start, out _ )
+                        && int.TryParse(start, out int startTime) && Game1.timeOfDay < startTime)
+                    {
+                        if (alertPlayer)
                         {
-                            return false;
+                            Game1.drawObjectDialogue(Game1.content.LoadString(@"Strings\StringsFromCSFiles:Game1.cs.2973"));
                         }
-                        if (int.TryParse(splits[1].GetNthChunk(' ', 0), out int startTime) && Game1.timeOfDay < startTime)
-                        {
-                            if (alertPlayer)
-                            {
-                                Game1.drawObjectDialogue(Game1.content.LoadString(@"Strings\StringsFromCSFiles:Game1.cs.2973"));
-                            }
-                            return true;
-                        }
+                        return true;
                     }
                 }
             }
@@ -86,6 +83,19 @@ public static class GameLocationExtensions
             monitor.Log($"Mod failed while trying to find festival days....\n\n{ex}", LogLevel.Error);
         }
         return false;
+    }
+
+    /// <summary>
+    /// Checks to see if hoedirt can be created here. Derived from Hoe.
+    /// </summary>
+    /// <param name="location">Game location to pick up from.</param>
+    /// <param name="tile">Tile to make hoedirt at.</param>
+    /// <returns>True if hoedirt can be created, false otherwise.</returns>
+    public static bool CanCreateHoedirtAt(this GameLocation location, Vector2 tile)
+    {
+        Guard.IsNotNull(location);
+        return location.doesTileHaveProperty((int)tile.X, (int)tile.Y, "Diggable", "Back") is not null
+                        && !location.isTileOccupied(tile) && location.isTilePassable(new XLocation((int)tile.X, (int)tile.Y), Game1.viewport);
     }
 
     /// <summary>

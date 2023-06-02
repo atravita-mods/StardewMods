@@ -29,7 +29,10 @@
         "Target": "Characters/Dialogue/Haley",
         "When": {"YearRemainder": 3},
         "Entries": {
+            "summer_Tue10": "I would love an iced coffee right about now...",
+
             "1_2": "Emily asked me to photograph some of her designs the other day.#$b#She certainly has an unique style, but it works well for her.$h",
+            "2_2": "I found this flower the other day while I was out taking pictures. Isn't it beautiful?[421]%revealtasteHaley421"
         }
     }
 ]}

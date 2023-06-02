@@ -30,6 +30,7 @@
         "Target": "Characters/Dialogue/Clint",
         "Entries": {
             "winter_Wed6": "Between you and I, @, I'm glad how toasty this place is in winter.#$e#Pretty cold when I have to brave the elements to go to the saloon, though.",
+            "spring_Tue6": "Feel free to bring your geodes to me, I'll crack them open for a small fee...",
 
             "6{{YearRemainder}}": "I'd consider moving elsewhere, but I'm not sure I could afford the rent.#$e#My family has owned this building for as long as I can remember. Helps a lot with my expenses.",
             "7{{YearRemainder}}": "I've got a cousin in Grampleton who's a glassblower.#$e#He's attached to one of the local universities, he does custom glassware for them. Cushy job, somehow."
@@ -48,7 +49,8 @@
             "14_2": "Heya, @, what have you been up to?#$b#Me? Just the same old, same old.",
             "16_2": "Got any tools you'd like me to upgrade?",
             "18_2": "It's important to temper your swords correctly. If you don't, they may shatter when you strike things.",
-            "22_2": "Marlon just placed another order for swords.$h#$b#I hope he'll be satisfied with the ones I make!"
+            "22_2": "Marlon just placed another order for swords.$h#$b#I hope he'll be satisfied with the ones I make!",
+            "23_2": "What should I have for dinner...should I go to the Saloon?"
         },
         "When": {"YearModulus": 2}
     },

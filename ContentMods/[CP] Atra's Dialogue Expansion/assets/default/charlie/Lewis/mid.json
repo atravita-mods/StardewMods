@@ -66,6 +66,8 @@
             "Target": "Characters/Dialogue/Lewis",
             "When": {"YearModulus": "3"},
             "Entries":{
+                "summer_Mon10": "Blueberries are my favorite fruit, and summer is the best season to plant them. Think I'm gonna try my hand at it this year![481]",
+
                 "1_2": "We're lucky in that we have good foraging opportunities around here. I guess if things get really bad that's at least something.",
                 "10_2": "The mayor before me? He was an old cattle farmer. Ran a dairy across from Marnie's.#$b#He retired, though, sold his place and went off to live in the city. Felt like he was getting too old for that type of work.",
                 "13_2": "There's a lot we can do to modernize this here town without losing our small-town charm.#$b#For example, we've only recently gotten off single-wire earth return.",

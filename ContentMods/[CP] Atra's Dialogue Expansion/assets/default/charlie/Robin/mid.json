@@ -34,6 +34,7 @@
             "8{{YearRemainder}}": "I love taking walks around here.#$b#When Demetrius and I were first dating, we'd take long walks around the lake we were living by. I miss those days.$s",
             "9{{YearRemainder}}": "Sometimes I wish Demetrius was better at lab safety.$s",
             "10{{YearRemainder}}": "To be honest, I'm not actually quite sure what my husband studies...",
+            "11{{YearRemainder}}": "Demetrius and I used to walk out to the farmers market all the time when we were dating. There was a vendor who sold the best goat cheese...%revealtasteRobin426"
         },
         "When": {
             "YearModulus": "1"
@@ -51,7 +52,8 @@
             "6_2": "My biggest regret in life is that I couldn't provide a college education for my children.#$b#We just...couldn't afford it, after all the debt my first husband left us in.",
             "7_2": "I wish Demetrius and Sebastian got along better, but I'm not sure how to fix their relationship now...$s",
             "8_2": "Maru helps Demetrius out in the lab sometimes. I'm glad those two work well together.$h",
-            "9_2": "I'm glad Demetrius doesn't have to work with strong acids as often as he did at the start of his career.$h"
+            "9_2": "I'm glad Demetrius doesn't have to work with strong acids as often as he did at the start of his career.$h",
+            "10_2": "I'd love to own a dog, but that just isn't feasible with my husband's lab in the house.$s"
         },
         "When": {
             "YearModulus": "2"
@@ -62,7 +64,8 @@
         "LogName": "Robin mid-hearts, Y3",
         "Target": "Characters/Dialogue/Robin",
         "Entries": {
-            "2_2": "Sometimes I wonder if Sebastian would be happier living in the city.#$b#There would probably be more job opportunities there, but the rent is quite steep.#$b#Of course, I'd help him to the best of my ability."
+            "2_2": "Sometimes I wonder if Sebastian would be happier living in the city.#$b#There would probably be more job opportunities there, but the rent is quite steep.#$b#Of course, I'd help him to the best of my ability.",
+            "3_2": "Penny is a very nice young woman. I'm proud of what she's accomplished, all things considering."
         },
         "When": {
             "YearModulus": "3"

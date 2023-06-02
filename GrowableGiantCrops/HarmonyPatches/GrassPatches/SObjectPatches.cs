@@ -158,7 +158,6 @@ internal static class SObjectPatches
 
     #region draw patches
 
-    private static AssetHolder? texture;
     private static readonly Dictionary<string, int> offsets = new()
     {
         ["spring"] = 0,
@@ -171,6 +170,8 @@ internal static class SObjectPatches
         ["5"] = 120,
         ["6"] = 140,
     };
+
+    private static AssetHolder? texture;
 
     [MethodImpl(TKConstants.Hot)]
     private static bool GetDrawParts(SObject obj, [NotNullWhen(true)] out Texture2D? tex, out int offset)

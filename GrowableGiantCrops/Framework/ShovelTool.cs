@@ -26,8 +26,6 @@ using StardewValley.Locations;
 using StardewValley.Objects;
 using StardewValley.TerrainFeatures;
 
-using XLocation = xTile.Dimensions.Location;
-
 namespace GrowableGiantCrops.Framework;
 
 /// <summary>
@@ -362,14 +360,10 @@ public class ShovelTool : Tool
                 }
             }
 
-            // derived from Hoe - this makes hoedirt.
-            if (location.doesTileHaveProperty((int)pickupTile.X, (int)pickupTile.Y, "Diggable", "Back") is null
-                || location.isTileOccupied(pickupTile) || !location.isTilePassable(new XLocation((int)pickupTile.X, (int)pickupTile.Y), Game1.viewport))
+            if (location.CanCreateHoedirtAt(pickupTile))
             {
-                return;
+                this.MakeHoeDirt(location, who, pickupTile, smallItemEnergy);
             }
-
-            this.MakeHoeDirt(location, who, pickupTile, smallItemEnergy);
         }
         catch (Exception ex)
         {

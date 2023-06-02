@@ -22,6 +22,15 @@
     {
         "Action": "EditData",
         "Target": "Characters/Dialogue/Gus",
+        "When": {"IsCommunityCenterComplete": true},
+        "Entries": {
+            "11{{YearRemainder}}": "The community center used to be the heart of town. Sometimes, I wish it was used more.$s",
+            "12{{YearRemainder}}": "Sometimes I take the extra food we have and place it in the pantry of the community center, in case someone needs it."
+        }
+    },
+    {
+        "Action": "EditData",
+        "Target": "Characters/Dialogue/Gus",
         "Entries": {
             "Town4": "Oh, @! Heard you're having a kid soon. You excited?",
             "Saloon_Fri": "Oh, @! How have you been? Heard on the grapevine you're having a kiddo soon. Here, take this.[236]$h.#$b#I hear parenting takes a lot out of you..."
@@ -53,7 +62,8 @@
             "7{{YearRemainder}}": "I've been working on a new pasta recipe, hoping to debut that soon...",
             "8{{YearRemainder}}": "Friend of mine from culinary school is now working at this fancy dinner place in Zuzu city.#$b#Very highly reviewed restaurant.#$e#But personally, @, I prefer a homey place like this.$h",
             "9{{YearRemainder}}": "Some of the best food I've had was from street food vendors in %place.#$b#All you need to cook well is love for the craft.",
-            "10{{YearRemainder}}": "Emily is actually quite a decent chef too! Sometimes she'll help me develop a recipe or two."
+            "10{{YearRemainder}}": "Emily is actually quite a decent chef too! Sometimes she'll help me develop a recipe or two.",
+            "11{{YearRemainder}}": "I've never been married, this restaurant is my first and only love.$h"
         }
     },
     {
@@ -84,7 +94,8 @@
             "16_2": "If I had more money...I'd love to travel more. See the world a little more, taste all the different dishes people make...",
             "17_2": "I don't believe anyone should ever have to go hungry, @.#$b#Look at all the bounties our world produces, and tell me we can't share that.",
             "18_2": "A little anchovy really helps bring out the flavor for many tomato-based sauces.",
-            "19_2": "A friend sent me some dried algae. It's surprisingly good!"
+            "19_2": "A friend sent me some dried algae. It's surprisingly good!",
+            "20_2": "I love that every day I get to wake up and run my restaurant."
         }
     },
     {
@@ -104,6 +115,7 @@
             "23_2": "High alcohol wines don't tend to go well with spicy dishes, I always make sure to have something sweet and drinkable on the menu.",
             "24_2": "Brioche doughs are quite difficult to make, but very, very worth your time to do.#$b#A good brioche is rich but so, so light.$h",
             "25_2": "There are some days where I want little more than a nice, fresh salad from all our lovely local ingredients.",
+            "26_2": "I hope we'll see you around the Saloon more often, @!$h",
 
             "fall_15_2": "Hey, @, any fall dishes you're looking forward to cooking?#$e#Made some excellent stuffing the other day. Here, have some![239]",
             "fall_16_2": "Hmmm, this feels like a great time of year for glazed yams...%revealtasteGus208"

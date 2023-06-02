@@ -13,6 +13,15 @@
         }
     },
     {
+        "LogName": "Pierre mid-hearts, Y1",
+        "Action": "EditData",
+        "Target": "Characters/Dialogue/Pierre",
+        "Entries": {
+            "1{{YearRemainder}}": "I'd love to travel more, but we haven't got that type of money.$s"
+        },
+        "When": { "YearModulus": "1" }
+    },
+    {
         "LogName": "Pierre mid-hearts, Y2",
         "Action": "EditData",
         "Target": "Characters/Dialogue/Pierre",

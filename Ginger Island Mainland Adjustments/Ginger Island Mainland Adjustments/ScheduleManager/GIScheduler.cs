@@ -462,11 +462,9 @@ internal static class GIScheduler
         int saloon_offset = 0;
 
         StringBuilder sb = StringBuilderCache.Acquire();
-        List<SchedulePoint> scheduleList = new();
 
         foreach (NPC visitor in visitors)
         {
-            scheduleList.Clear();
             sb.Clear();
 
             if (Globals.Config.StageFarNpcsAtSaloon)
@@ -477,12 +475,13 @@ internal static class GIScheduler
                     if (maplist is null || maplist.Count > 8)
                     {
                         Globals.ModMonitor.Log($"{visitor.Name} has a long way to travel, so staging them at the Saloon.");
-                        scheduleList.Add(new SchedulePoint(
+                        new SchedulePoint(
                             random: random,
                             npc: visitor,
                             map: "Saloon",
                             time: 0,
-                            point: new(SaloonStart.X + ++saloon_offset, SaloonStart.Y)));
+                            point: new(SaloonStart.X + ++saloon_offset, SaloonStart.Y)).AppendToStringBuilder(sb);
+                        sb.Append('/');
                     }
                 }
                 catch (Exception ex)
@@ -495,44 +494,44 @@ internal static class GIScheduler
             bool should_dress = IslandSouth.HasIslandAttire(visitor);
             if (should_dress)
             {
-                scheduleList.Add(new SchedulePoint(
+                new SchedulePoint(
                     random: random,
                     npc: visitor,
                     map: "IslandSouth",
                     time: 1150,
                     point: IslandSouth.GetDressingRoomPoint(visitor),
                     animation: "change_beach",
-                    isarrivaltime: true));
+                    isarrivaltime: true).AppendToStringBuilder(sb);
+                sb.Append('/');
             }
 
-            foreach (GingerIslandTimeSlot activity in activities)
+            for (int i = 0; i < activities.Count; i++)
             {
+                GingerIslandTimeSlot activity = activities[i];
                 if (activity.Assignments.TryGetValue(visitor, out SchedulePoint? schedulePoint))
                 {
-                    scheduleList.Add(schedulePoint);
+                    if (i == 0 && !should_dress)
+                    {
+                        schedulePoint.IsArrivalTime = true;
+                    }
+                    schedulePoint.AppendToStringBuilder(sb);
+                    sb.Append('/');
                 }
             }
 
             if (should_dress)
             {
-                scheduleList.Add(new SchedulePoint(
+                new SchedulePoint(
                     random: random,
                     npc: visitor,
                     map: "IslandSouth",
                     time: 1730,
                     point: IslandSouth.GetDressingRoomPoint(visitor),
                     animation: "change_normal",
-                    isarrivaltime: true));
-            }
-
-            scheduleList[0].IsArrivalTime = true; // set the first slot, whatever it is, to be the arrival time.
-
-            // render the schedule points to strings
-            foreach (SchedulePoint schedulePoint in scheduleList)
-            {
-                schedulePoint.AppendToStringBuilder(sb);
+                    isarrivaltime: true).AppendToStringBuilder(sb);
                 sb.Append('/');
             }
+
             if (visitor.Name.Equals("Gus", StringComparison.OrdinalIgnoreCase))
             {
                 // Gus needs to tend bar. Hardcoded same as vanilla.

@@ -1,11 +1,11 @@
-﻿// Ignore Spelling: xstart yend xend ystart loc tileloc
+﻿// Ignore Spelling: xstart yend xend ystart loc tileloc Utils
 
 using System.Buffers;
 
-using AtraCore;
-
 using CommunityToolkit.Diagnostics;
+
 using Microsoft.Xna.Framework;
+
 using StardewValley.Buildings;
 using StardewValley.Locations;
 

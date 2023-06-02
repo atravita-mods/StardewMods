@@ -6,7 +6,7 @@
         "Target": "Characters/Dialogue/Penny",
         "When": {"Relationship: Penny": "Married"},
         "Entries": {
-            "Farmhouse_Entry": "Honey, I'm home!",
+            "Farmhouse_Entry": "Honey, I'm home!"
         }
     },
     {

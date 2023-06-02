@@ -5,7 +5,7 @@
         "When": {"Season": "winter"},
         "Target": "Characters/schedules/Sebastian",
         "Entries": {
-            "rain": "GOTO spring",
+            "rain": "GOTO spring"
         }
     },
     {

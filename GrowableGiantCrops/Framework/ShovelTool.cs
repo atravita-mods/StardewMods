@@ -571,7 +571,7 @@ public class ShovelTool : Tool
     }
 
     /// <summary>
-    /// Handles a grass
+    /// Handles a grass.
     /// </summary>
     /// <param name="location">the game location.</param>
     /// <param name="who">the relevant farmer.</param>
@@ -708,7 +708,7 @@ public class ShovelTool : Tool
     /// <returns>True if handled, false otherwise.</returns>
     protected virtual bool HandleTree(GameLocation location, Farmer who, Vector2 pickupTile, int energy, Tree tree)
     {
-        if (tree.growthStage.Value == 0 && tree.treeType.Value is not Tree.palmTree or Tree.palmTree2)
+        if (tree.growthStage.Value == 0 && (tree.treeType.Value <= Tree.pineTree || tree.treeType.Value == Tree.mahoganyTree))
         {
             who.Stamina -= energy;
             location.playSound("woodyHit");

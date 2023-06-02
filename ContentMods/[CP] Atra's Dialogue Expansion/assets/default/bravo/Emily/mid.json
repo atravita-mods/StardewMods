@@ -79,6 +79,9 @@
             "13_2": "Dad was a traveling salesman. Always gone on a trip to some location or another.#$e#Mom had to travel a lot for her law practice too.",
             "14_2": "Mom and Dad write us letters sometimes. I hope they're enjoying their retirement...",
             "15_2": "Maybe I should convince Haley to take a photography class?",
+            "16_2": "@, I'm thinking of taking up spinning.",
+            "17_2": "I believe food should be both good for you and good for the planet.$h",
+            "18_2": "I hope, @, you aren't using too many commercial fertilizers. They aren't very good at staying in the soil, so they tend to run off and cause algae blooms.",
 
             "Tue10": "I've made most of my clothing, I love to sew.$h#$b#Plus, you get better clothing if you make it yourself.",
 
@@ -101,7 +104,21 @@
             "14_2": "Gus gave us some day-old bread the other day and we made sandwiches with pickled daikon and falafel. Haley loved it too!$h",
             "15_2": "I made some {{i18n: dishes.adult.{{Random: 03, 04, 05, 06, 07, 08, 09, 01, 02}} }} the other day. It was delicious!$h",
             "16_2": "Ugh, I wish Haley would do her share of the chores without me having to remind her all the time.$s",
+            "17_2": "There are some days I really miss my parents.#$b#I do hope they enjoy...whatever place they're at now."
         },
         "When": {"YearModulus": "3"}
+    },
+    {
+        "LogName": "Emily mid-hearts, Y3",
+        "Action": "EditData",
+        "Target": "Characters/Dialogue/Emily",
+        "Entries": {
+            "17_2": "Hi @! Something told me you'll need this today[226].#$e#I...really don't know, it was just a feeling?",
+            "19_2": "We've got some extra salad yesterday at the Saloon. You look like you might need this?[196]"
+        },
+        "When": {
+            "YearModulus": "3",
+            "Query: {{DailyLuck}} < -0": true
+        }
     },
 ]}

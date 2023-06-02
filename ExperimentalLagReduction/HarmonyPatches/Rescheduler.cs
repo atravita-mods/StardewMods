@@ -111,7 +111,7 @@ internal static class Rescheduler
     {
         Counter<int> counter = new();
 
-        foreach (((string start, string end, Gender gender) key, List<string>? value) in PathCache)
+        foreach (((string start, string end, Gender gender) key, List<string>? value) in PathCache.OrderBy(static kvp => kvp.Key.start).ThenBy(static kvp => kvp.Value?.Count ?? -1))
         {
             ModEntry.ModMonitor.Log($"( {key.start} -> {key.end} ({key.gender.ToStringFast()})) == " + (value is not null ? string.Join("->", value) + $" [{value.Count}]" : "no path found" ), LogLevel.Info);
 
@@ -126,7 +126,7 @@ internal static class Rescheduler
         }
 
         ModEntry.ModMonitor.Log($"In total: {PathCache.Count} routes cached for {Game1.locations.Count} locations.", LogLevel.Info);
-        foreach ((int key, int value) in counter)
+        foreach ((int key, int value) in counter.OrderBy(static kvp => kvp.Value))
         {
             ModEntry.ModMonitor.Log($"    {value} of length {key}", LogLevel.Info);
         }

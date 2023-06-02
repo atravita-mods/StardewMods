@@ -87,7 +87,17 @@ public sealed class SchedulePoint
     public override string ToString()
     {
         StringBuilder sb = StringBuilderCache.Acquire();
+        this.AppendToStringBuilder(sb);
+        return StringBuilderCache.GetStringAndRelease(sb);
+    }
 
+    /// <summary>
+    /// Appends the data in this schedulepoint to a stringbuilder.
+    /// </summary>
+    /// <param name="sb">stringbuilder instance to use.</param>
+    /// <returns>Same stringbuilder.</returns>
+    public StringBuilder AppendToStringBuilder(StringBuilder sb)
+    {
         if (this.IsArrivalTime)
         {
             sb.Append('a');
@@ -111,6 +121,6 @@ public sealed class SchedulePoint
               .Append(this.dialoguekey)
               .Append('"');
         }
-        return StringBuilderCache.GetStringAndRelease(sb);
+        return sb;
     }
 }

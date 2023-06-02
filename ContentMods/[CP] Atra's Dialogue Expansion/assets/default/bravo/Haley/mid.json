@@ -23,6 +23,15 @@
         }
     },
     {
+        "LogName": "Haley does chores",
+        "Action": "EditData",
+        "Target": "Characters/Dialogue/Haley",
+        "When": { "HasDialogueAnswer": 45 },
+        "Entries": {
+            "summer_Fri10": "Ugh, gotta clean the living room, since that's my chore now.$s"
+        }
+    },
+    {
         "LogName": "Haley - Y1",
         "Action": "EditData",
         "Target": "Characters/Dialogue/Haley",

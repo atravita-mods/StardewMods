@@ -1,9 +1,12 @@
 ﻿#if DEBUG
 using System.Diagnostics;
 using System.Runtime;
+using System.Text;
+
+using AtraBase.Toolkit;
+#endif
 
 using AtraCore;
-#endif
 
 using AtraCore;
 using AtraCore.Framework.Caches;
@@ -458,26 +461,38 @@ internal static class GIScheduler
         Dictionary<NPC, string> completedSchedules = new(visitors.Count);
         int saloon_offset = 0;
 
+        StringBuilder sb = StringBuilderCache.Acquire();
+        List<SchedulePoint> scheduleList = new();
+
         foreach (NPC visitor in visitors)
         {
-            bool should_dress = IslandSouth.HasIslandAttire(visitor);
-            List<SchedulePoint> scheduleList = new();
+            scheduleList.Clear();
+            sb.Clear();
 
             if (Globals.Config.StageFarNpcsAtSaloon)
             {
-                List<string>? maplist = GetLocationRouteLazy.Value(visitor, visitor.DefaultMap, "IslandSouth");
-                if (maplist is null || maplist.Count > 8)
+                try
                 {
-                    Globals.ModMonitor.Log($"{visitor.Name} has a long way to travel, so staging them at the Saloon.");
-                    scheduleList.Add(new SchedulePoint(
-                        random: random,
-                        npc: visitor,
-                        map: "Saloon",
-                        time: 0,
-                        point: new(SaloonStart.X + ++saloon_offset, SaloonStart.Y)));
+                    List<string>? maplist = GetLocationRouteLazy.Value(visitor, visitor.DefaultMap, "IslandSouth");
+                    if (maplist is null || maplist.Count > 8)
+                    {
+                        Globals.ModMonitor.Log($"{visitor.Name} has a long way to travel, so staging them at the Saloon.");
+                        scheduleList.Add(new SchedulePoint(
+                            random: random,
+                            npc: visitor,
+                            map: "Saloon",
+                            time: 0,
+                            point: new(SaloonStart.X + ++saloon_offset, SaloonStart.Y)));
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Globals.ModMonitor.Log($"Failed while checking if visitor has a long way to travel.", LogLevel.Error);
+                    Globals.ModMonitor.Log(ex.ToString());
                 }
             }
 
+            bool should_dress = IslandSouth.HasIslandAttire(visitor);
             if (should_dress)
             {
                 scheduleList.Add(new SchedulePoint(
@@ -512,25 +527,30 @@ internal static class GIScheduler
 
             scheduleList[0].IsArrivalTime = true; // set the first slot, whatever it is, to be the arrival time.
 
-            // render the schedule points to strings before appending the remainder schedules
-            // which are already strings.
-            List<string> schedPointString = scheduleList.Select((SchedulePoint pt) => pt.ToString()).ToList();
+            // render the schedule points to strings
+            foreach (SchedulePoint schedulePoint in scheduleList)
+            {
+                schedulePoint.AppendToStringBuilder(sb);
+                sb.Append('/');
+            }
             if (visitor.Name.Equals("Gus", StringComparison.OrdinalIgnoreCase))
             {
                 // Gus needs to tend bar. Hardcoded same as vanilla.
-                schedPointString.Add("1800 Saloon 10 18 2/2430 bed");
+                sb.Append("1800 Saloon 10 18 2/2430 bed");
+            }
+            else if (ScheduleUtilities.FindProperGISchedule(visitor, SDate.Now()) is string giSchedule)
+            {
+                sb.Append(giSchedule);
             }
             else
             {
-                // Try to find a GI remainder schedule, if any.
-                schedPointString.Add(ScheduleUtilities.FindProperGISchedule(visitor, SDate.Now())
-                        // Child2NPC NPCs don't understand "bed", must send them to the bus stop spouse dropoff.
-                        ?? (Globals.IsChildToNPC?.Invoke(visitor) == true ? "1800 BusStop -1 23 3" : "1800 bed"));
+                sb.Append(Globals.IsChildToNPC?.Invoke(visitor) == true ? "1800 BusStop -1 23 3" : "1800 bed");
             }
-            completedSchedules[visitor] = string.Join('/', schedPointString);
+            completedSchedules[visitor] = string.Join('/', sb.ToString());
             Globals.ModMonitor.DebugOnlyLog($"For {visitor.Name}, created island schedule {completedSchedules[visitor]}");
         }
 
+        StringBuilderCache.Release(sb);
         return completedSchedules;
     }
 }

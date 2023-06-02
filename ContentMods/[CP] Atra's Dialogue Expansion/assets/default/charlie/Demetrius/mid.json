@@ -29,6 +29,7 @@
         "Action": "EditData",
         "Target": "Characters/Dialogue/Demetrius",
         "Entries": {
+            "ScienceHouse_Entry": "Ah, home sweet home!",
             "ScienceHouse_22_20": "I've got so much data I need to analyze.$s",
             "fallScienceHouse_22_20": "I'd love to talk, @, but I have a grant submission coming up that I need to work on.",
             "summerScienceHouse_22_20": "I have so many measurements I need to make today...$s",
@@ -42,7 +43,10 @@
             "fall_Mon10": "Argh, so much vacuuming to do...$s",
             "fall_Tue10": "I wish the house would clean itself sometimes...",
             "winter_Mon10": "I don't tend to do much fieldwork in winter, because everything goes dormant.",
-            "winter_Tue10": "I have so much mopping I need to do.$s"
+            "winter_Tue10": "I have so much mopping I need to do.$s",
+
+            "3{{YearRemainder}}": "Joja dumped a lot of trash into the waters around here back when they were operating that mine.#$b#We're still fishing trash out of the river.",
+            "4{{YearRemainder}}": "Mining can cause quite a bit of ecological damage if not carried out carefully.#$b#Joja let quite a few dangerous chemicals leak more than a few times."
         },
         "When": { "YearModulus": "1" }
     },
@@ -51,6 +55,7 @@
         "Action": "EditData",
         "Target": "Characters/Dialogue/Demetrius",
         "Entries": {
+            "ScienceHouse_Entry": "Heya Robin, I'm home!",
             "1_2": "@, did you know that banana trees aren't actually trees, but rather a monocot?#$b#Amazing what they can do despite not having lignin!",
             "2_2": "Caffeine is actually highly toxic against insects!#$b#But it doesn't make a good agricultural insecticide, it decays in sunlight.",
             "3_2": "Lignin is really an amazing structural protein, and is why trees can grow to the heights they do!",
@@ -83,6 +88,7 @@
             "16_2": "Sometimes I wonder what I could have done to be more successful in my career...$s",
             "18_2": "Between you and I, @, writing proposals is the worst part of my job.",
             "20_2": "Tree fertilizer can make trees grow much faster, but I wonder if it affects the quality of their wood.#$b#Generally fast-growing trees can't produce as dense of wood.",
+            "22_2": "Sometimes, I come across interesting artifacts.#$b#I wonder what civilizations lived here before we did?",
 
             "ScienceHouse_22_20": "I've got a paper I have to write, so of course all I want to do is make a blackberry cobbler and mop the entire house or something...",
             "summerScienceHouse_22_20": "It's been so hot lately, I suspect the trees are stressed.",
@@ -100,6 +106,8 @@
             "2_2": "Before Pelican Town was a mining town, it was a forestry.#$b#But that was a long time ago, and the forest has had a bit of a chance to recover.",
             "18_2": "@, did you know that the oldest mushrooms are more than two thousand years old?",
             "19_2": "It's really weird we celebrate romantic holidays with the cut off reproductive organs of plants, isn't it?",
+            "20_2": "My dad used to take us out fishing when I was very young. I was never any good, though.",
+            "21_2": "There are plenty of fish that live in this mountain lake! Fish are a very important part of the ecosystem.$h",
 
             "winter_Mon10": "There are only a few plants that flower during winter, but crocus is one of them.[418]",
 

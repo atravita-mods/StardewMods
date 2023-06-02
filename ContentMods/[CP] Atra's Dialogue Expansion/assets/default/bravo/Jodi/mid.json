@@ -45,7 +45,8 @@
         "Entries": {
             "2_2": "Ugh, Kent's pension doesn't go nearly as far as it used to.$s",
             "7_2": "I'd like to get some new houseplants, but online shipping is so much more expensive than it was this time last year.$s",
-            "8_2": "Why are eggs suddenly so much more expensive...#$b#Say, @, you're not getting paid any more for your eggs, right? Who's taking the extra money, then?$a"
+            "8_2": "Why are eggs suddenly so much more expensive...#$b#Say, @, you're not getting paid any more for your eggs, right? Who's taking the extra money, then?$a",
+            "22_2": "There are so many chores I need to do...$s#$b#It's like chores never end..."
         },
         "When": {
             "YearModulus": "3"

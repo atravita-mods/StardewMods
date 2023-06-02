@@ -8,6 +8,7 @@
         "Target": "Characters/Dialogue/Evelyn",
         "Entries": {
             "movieTheater": "@, there's a movie theater in town again! I can't wait to take George out, he used to love movies.#$b#Action movies were his absolute favorite, he loved the %name Smith series.$h",
+            "spring_7{{YearRemainder}}": "Leeks are George's favorite. Won't you bring us any you find, dearie?%revealtasteGeorge20",
             "winter_7{{YearRemainder}}": "@, it's almost the Feast of the Winter Star! I'm always looking forward to the Feast around this time of year.",
             "winter_8{{YearRemainder}}": "Oh, I should bring the good doctor a casserole, shouldn't I? The man works so hard, he doesn't take care of himself.",
 

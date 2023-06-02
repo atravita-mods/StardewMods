@@ -4,7 +4,11 @@
         "Action": "EditData",
         "Target": "Characters/Dialogue/Sandy",
         "Entries": {
+            "summer_Tue10": "It's so hot and dry outside, I'm glad I have air conditioning in here...$h",
+
             "6_2": "Ohh, @, did you do something new with your hair?",
+            "7_2": "@, do you think I should start carrying some snacks or something like that?",
+            "8_2": "I found this coconut this morning, before I opened up the store. Here, you take it.[88]$h",
         },
         "When": { "YearModulus": "2"}
     },

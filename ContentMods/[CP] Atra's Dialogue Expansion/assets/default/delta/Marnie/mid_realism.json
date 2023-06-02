@@ -46,5 +46,14 @@
             "24_2": "When you have animals depending on you, it's much harder to take a day off.",
             "26_2": "Ugh, the price of barley has gone way up.$s"
         }
+    },
+    {
+        "LogName": "Marnie mid-hearts",
+        "Action": "EditData",
+        "Target": "Characters/Dialogue/Marnie",
+        "When": { "YearModulus": "4" },
+        "Entries": {
+            "5_2": "I've got to buy more barley to feed to the cows, but the price of barley has gone insane over the last year...$s#$b#Might need to figure otu something else, for feeding them."
+        }
     }
 ]}

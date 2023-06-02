@@ -1,6 +1,4 @@
-﻿// Ignore Spelling: npc
-
-using AtraCore;
+﻿// Ignore Spelling: npc basekey
 
 using CommunityToolkit.Diagnostics;
 
@@ -86,8 +84,12 @@ public static class NPCExtensions
         {
             return null;
         }
+        if (npc.Dialogue?.Count is null or 0)
+        {
+            return null;
+        }
         random ??= Game1.random;
-        if (npc.Dialogue?.ContainsKey(basekey) == true)
+        if (npc.Dialogue.ContainsKey(basekey))
         {
             int index = 1;
             while (npc.Dialogue.ContainsKey($"{basekey}_{++index}"))

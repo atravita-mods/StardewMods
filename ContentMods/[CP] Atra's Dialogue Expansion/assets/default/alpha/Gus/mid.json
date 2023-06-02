@@ -39,7 +39,12 @@
             "1_2": "There's really nothing like fresh bread in the morning, isn't there?",
 
             "2{{YearRemainder}}": "There's plenty of dishes I'd love to try on the menu some day, if I ever have the time to develop them properly.",
-            "3{{YearRemainder}}": "Try a nice Stardew red with my house spaghetti! There's no better pairing than that."
+            "3{{YearRemainder}}": "Try a nice Stardew red with my house spaghetti! There's no better pairing than that.",
+            "5{{YearRemainder}}": "Good food, good wine, is there anything better in life?",
+            "6{{YearRemainder}}": "I like good, hearty home-style food. Pasta, pizza, things that will fill your heart and soul.",
+            "7{{YearRemainder}}": "I've been working on a new pasta recipe, hoping to debut that soon...",
+            "8{{YearRemainder}}": "Friend of mine from culinary school is now working at this fancy dinner place in Zuzu city.#$b#Very highly reviewed restaurant.#$e#But personally, @, I prefer a homey place like this.$h",
+            "9{{YearRemainder}}": "Some of the best food I've had was from street food vendors in %place.#$b#All you need to cook well is love for the craft."
         }
     },
     {
@@ -57,6 +62,18 @@
             "3_2": "I spent many years as a line cook at a middling restaurant in Zuzu City. They mostly did pizzas.%revealtasteGus206",
             "4_2": "Bread is a lot of work, but incredibly rewarding!#$b#There's nothing like the smell of freshly baked bread.",
             "5_2": "There's nothing like a nicely aged local wine with a well-cooked meal, eh?",
+            "6_2": "The place I used to work for was...pretentious in a way that was pleasant.#$b#I'm glad I'm my own boss now.",
+            "7_2": "Some people believe that in order to be a chef, you have to own the best equipment and the best knives.#$b#That's not true. All you really need is to love cooking.$h",
+            "8_2": "One of the friends I made back in culinary school opened a new restaurant over in %place. I've been meaning to go there at some point.",
+            "9_2": "Emily? She's a great girl, a very hard worker, very very kind. I couldn't have asked for a better waitress.$h",
+            "10_2": "Between you and I, there's nothing better than a nice glass of orange juice in the morning.",
+            "11_2": "I get up very early in the morning to proof the dough for bread.#$b#But there's nothing better than freshly baked bread, so it's definitely worth it.$h",
+            "12_2": "I've been developing a new recipe. Chili with cornbread, something Mayor Lewis might like...",
+            "13_2": "Waiting on a new shipment of beer. Been thinking of branching out a bit, serving a few more local brews.#$b#Hey, @, you've got anything?",
+            "14_2": "One of the nice things of living so close to the ocean, we get excellent seafood.#$b#My fish tacos are to die for, @. You should try one sometime.",
+            "15_2": "I love branching out, cooking things from cultures that aren't my own.",
+            "16_2": "If I had more money...I'd love to travel more. See the world a little more, taste all the different dishes people make...",
+            "17_2": "I don't believe anyone should ever have to go hungry, @.#$b#Look at all the bounties our world produces, and tell me we can't share that."
         }
     },
     {
@@ -68,8 +85,27 @@
             "fall_Sun10": "Between you and I, @, my least favorite kitchen chore is cleaning the deep fryers.#$b#But it has to be done...#$b#Of course I'm not going to make Emily do a chore I hate.",
 
             "14_2": "I'm the last surviving restaurant in this here town, and business isn't easy.#$b#Many people cut back on eating out when the economy goes bad.$s",
-            "16_2": "Hmmm, this feels like a great time of year for glazed yams...%revealtasteGus208",
-            "fall_15_2": "Hey, @, any fall dishes you're looking forward to cooking?#$e#Made some excellent stuffing the other day. Here, have some![239]"
+            "17_2": "I wanted to make my restaurant a place that would feel like home. A place people could gather and relax.#$b#I'm very proud of the place I built.$h",
+            "18_2": "When cooking, ingredients matter so, so much. You're not going to make a good dish with bad produce.",
+            "19_2": "I'm not going to spread gossip from this bar, @, what kind of bartender do you take me for?",
+            "20_2": "I'll make sure Emily is paid before I take money for myself. She's at the start of her life, she could do so much.#$b#Also, I live simply, I don't need much.$h",
+            "22_2": "White wine and some escargot, is there anything better?",
+            "23_2": "High alcohol wines don't tend to go well with spicy dishes, I always make sure to have something sweet and drinkable on the menu.",
+            "24_2": "Brioche doughs are quite difficult to make, but very, very worth your time to do.#$b#A good brioche is rich but so, so light.$h",
+            "25_2": "There are some days where I want little more than a nice, fresh salad from all our lovely local ingredients.",
+            "fall_15_2": "Hey, @, any fall dishes you're looking forward to cooking?#$e#Made some excellent stuffing the other day. Here, have some![239]",
+            "fall_16_2": "Hmmm, this feels like a great time of year for glazed yams...%revealtasteGus208"
+        }
+    },
+    {
+        "LogName": "Gus Y3",
+        "Action": "EditData",
+        "Target": "Characters/Dialogue/Gus",
+        "When": { "YearModulus": "4"},
+        "Entries": {
+            "fall_Sun10": "Between you and I, @, my least favorite kitchen chore is cleaning the deep fryers.#$b#But it has to be done...#$b#Of course I'm not going to make Emily do a chore I hate.",
+
+            "14_2": "Today feels like an excellent day to cook some curry...",
         }
     }
 ]}

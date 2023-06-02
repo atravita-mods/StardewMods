@@ -1,4 +1,4 @@
-﻿// Ignore Spelling: xstart yend xend ystart loc
+﻿// Ignore Spelling: xstart yend xend ystart loc tileloc
 
 using System.Buffers;
 
@@ -37,6 +37,9 @@ public static class GameLocationUtils
     /// <param name="mp">Multiplayer instance - used to broadcast sprites.</param>
     public static void ExplodeBomb(GameLocation loc, int whichBomb, Vector2 tileloc, Multiplayer mp)
     {
+        Guard.IsNotNull(loc);
+        Guard.IsNotNull(mp);
+
         int bombID = Random.Next();
         loc.playSound("thudStep");
         TemporaryAnimatedSprite tas_bomb = new(
@@ -131,6 +134,9 @@ public static class GameLocationUtils
     /// <remarks>Mostly copied from FishPond.showObjectThrownIntoPondAnimation.</remarks>
     public static void DrawWaterSplash(GameLocation loc, Vector2 nonTileLocation, Multiplayer mp, int delayTime)
     {
+        Guard.IsNotNull(loc);
+        Guard.IsNotNull(mp);
+
         mp.broadcastSprites(
             loc,
             new TemporaryAnimatedSprite(

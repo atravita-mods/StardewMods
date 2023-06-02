@@ -38,7 +38,8 @@
         "Target": "Characters/Dialogue/Lewis",
         "Entries": {
             "12_2": "Ugh, the stock market is going insane right now, I have to keep myself from looking too much at my portfolio.#$b#I try to remind myself that buying and holding is the best strategy, but it's hard sometimes.",
-            "15_2": "We're actually in a great location for hydro power. Maybe I can convince a hydro plant to come out here?"
+            "15_2": "We're actually in a great location for hydro power. Maybe I can convince a hydro plant to come out here?",
+            "16_2": "It's surprisingly hard to get a grant to get things repaired.#$b#Politicians like new shiny things with their names on it, upkeep isn't as...popular.$s"
         },
         "When": {"YearModulus": "3"}
     },

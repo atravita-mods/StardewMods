@@ -675,8 +675,8 @@ public class ShovelTool : Tool
     /// <param name="who">The farmer doing pickup.</param>
     /// <param name="pickupTile">The tile being picked up from.</param>
     /// <param name="energy">The amount of energy to deduct.</param>
-    /// <param name="object"></param>
-    /// <param name="idx"></param>
+    /// <param name="object">The object to pick up.</param>
+    /// <param name="idx">The parent sheet index to set to.</param>
     /// <returns>true if handled, false otherwise.</returns>
     protected virtual bool HandleBigCraftable(GameLocation location, Farmer who, Vector2 pickupTile, int energy, SObject @object, int idx)
     {
@@ -697,6 +697,15 @@ public class ShovelTool : Tool
         return true;
     }
 
+    /// <summary>
+    /// Handles picking up a tree.
+    /// </summary>
+    /// <param name="location">The game location to pick up from.</param>
+    /// <param name="who">The farmer doing the picking up.</param>
+    /// <param name="pickupTile">The tile from which pickup is done.</param>
+    /// <param name="energy">How much energy to subtract from the player.</param>
+    /// <param name="tree">The tree instance.</param>
+    /// <returns>True if handled, false otherwise.</returns>
     protected virtual bool HandleTree(GameLocation location, Farmer who, Vector2 pickupTile, int energy, Tree tree)
     {
         if (tree.growthStage.Value == 0 && tree.treeType.Value is not Tree.palmTree or Tree.palmTree2)
@@ -720,6 +729,14 @@ public class ShovelTool : Tool
         return false;
     }
 
+    /// <summary>
+    /// Handles removing a fruit tree.
+    /// </summary>
+    /// <param name="location">The game location to grab the fruit tree from.</param>
+    /// <param name="who">The farmer in question.</param>
+    /// <param name="pickupTile">The tile to pick up from.</param>
+    /// <param name="energy">The amount of energy to deduct.</param>
+    /// <returns>True if handled, false otherwise.</returns>
     protected virtual bool HandleFruitTree(GameLocation location, Farmer who, Vector2 pickupTile, int energy)
     {
         if (Api.TryPickUpFruitTree(location, pickupTile, ModEntry.Config.PlacedOnly) is InventoryFruitTree inventoryFruitTree)

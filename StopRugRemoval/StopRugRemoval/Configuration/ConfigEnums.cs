@@ -50,21 +50,3 @@ public enum IsSafeLocationEnum
     /// </summary>
     Dynamic,
 }
-
-/// <summary>
-/// Controls the behavior of signs.
-/// </summary>
-public enum SignBehavior
-{
-    Vanilla,
-    Break,
-    Keybind
-}
-
-public enum CrystalariumBehavior
-{
-    Vanilla,
-    Break,
-    Swap,
-    Keybind
-}

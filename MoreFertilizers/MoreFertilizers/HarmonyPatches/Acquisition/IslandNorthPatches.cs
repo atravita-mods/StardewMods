@@ -11,7 +11,7 @@ namespace MoreFertilizers.HarmonyPatches.Acquisition;
 /// Patches against IslandNorth to put the fertilizer into the shop.
 /// </summary>
 [HarmonyPatch(typeof(IslandNorth))]
-[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Harmony Convention")]
+[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = StyleCopConstants.NamedForHarmony)]
 internal static class IslandNorthPatches
 {
     [HarmonyPostfix]

@@ -11,7 +11,7 @@ namespace MoreFertilizers.HarmonyPatches;
 /// Holds patches against SObject.
 /// </summary>
 [HarmonyPatch(typeof(SObject))]
-[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Harmony Convention")]
+[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = StyleCopConstants.NamedForHarmony)]
 internal static class SObjectPatches
 {
     /// <summary>

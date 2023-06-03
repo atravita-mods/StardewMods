@@ -19,7 +19,7 @@ namespace GrowableBushes.Framework;
 /// Manages Caroline's bush shop.
 /// </summary>
 [HarmonyPatch(typeof(Utility))]
-[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Harmony convention.")]
+[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = StyleCopConstants.NamedForHarmony)]
 internal static class ShopManager
 {
     private const string BUILDING = "Buildings";

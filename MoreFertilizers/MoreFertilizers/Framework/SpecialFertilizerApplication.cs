@@ -15,7 +15,7 @@ namespace MoreFertilizers.Framework;
 /// Handles applying special fertilizers.
 /// </summary>
 [HarmonyPatch(typeof(Utility))]
-[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Harmony Convention")]
+[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = StyleCopConstants.NamedForHarmony)]
 internal static class SpecialFertilizerApplication
 {
     private const int PLACEMENTRADIUS = 2;

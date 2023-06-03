@@ -17,6 +17,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)ConstantsAndEnums\ItemTypeEnum.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ConstantsAndEnums\Seasons.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)constantsandenums\Skills.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)constantsandenums\StyleCopConstants.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)constantsandenums\WalletItems.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ConstantsAndEnums\Weathers.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Content\RawTexData\IRawTextureDataExtensions.cs" />

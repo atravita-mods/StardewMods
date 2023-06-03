@@ -14,7 +14,7 @@ namespace GrowableGiantCrops.HarmonyPatches.ItemPatches;
 /// <summary>
 /// Patches JA to also deshuffle inventory giant crops.
 /// </summary>
-[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Harmony convention.")]
+[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = StyleCopConstants.NamedForHarmony)]
 internal static class DeshufflePatch
 {
     /// <summary>

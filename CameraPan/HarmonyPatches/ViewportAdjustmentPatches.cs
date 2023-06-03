@@ -26,7 +26,7 @@ namespace CameraPan.HarmonyPatches;
 /// Adjusts the viewport based on the offset vector.
 /// </summary>
 [HarmonyPatch(typeof(Game1))]
-[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Named for Harmony.")]
+[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = StyleCopConstants.NamedForHarmony)]
 internal static class ViewportAdjustmentPatches
 {
     private static readonly PerScreen<CameraBehavior> cameraBehavior = new(() => CameraBehavior.Both);

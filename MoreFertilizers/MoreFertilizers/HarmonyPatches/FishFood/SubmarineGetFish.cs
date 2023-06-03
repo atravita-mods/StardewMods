@@ -9,10 +9,10 @@ namespace MoreFertilizers.HarmonyPatches.FishFood;
 /// Classes that holds patches against Submarine's GetFish.
 /// </summary>
 [HarmonyPatch(typeof(Submarine))]
+[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = StyleCopConstants.NamedForHarmony)]
 internal static class SubmarineGetFish
 {
     [HarmonyPatch(nameof(Submarine.getFish))]
-    [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Required for Harmony")]
     private static bool Prefix(GameLocation __instance, ref SObject __result)
     {
         try

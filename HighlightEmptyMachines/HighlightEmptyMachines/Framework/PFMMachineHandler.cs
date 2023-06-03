@@ -225,6 +225,6 @@ Continue:
     /// <param name="allowedSeasons">Whether there's season limitations.</param>
     /// <param name="allowedWeathers">Whether there's weather limitations.</param>
     /// <param name="validLocations">Whether there's location limitations.</param>
-    [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Stylecop doesn't understand records.")]
+    [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = StyleCopErrorConsts.IsRecord)]
     internal readonly record struct PFMMachineData(bool OutdoorsOnly, List<string>? ValidLocations, StardewSeasons AllowedSeasons, StardewWeather AllowedWeathers);
 }

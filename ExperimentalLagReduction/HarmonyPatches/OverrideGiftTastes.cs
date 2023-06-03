@@ -14,7 +14,7 @@ namespace ExperimentalLagReduction.HarmonyPatches;
 /// Overrides the NPC gift tastes.
 /// </summary>
 [HarmonyPatch(typeof(NPC))]
-[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Harmony Convention.")]
+[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = StyleCopConstants.NamedForHarmony)]
 internal static class OverrideGiftTastes
 {
     private static readonly ConcurrentDictionary<(string NPC, int itemID), int> Cache = new();

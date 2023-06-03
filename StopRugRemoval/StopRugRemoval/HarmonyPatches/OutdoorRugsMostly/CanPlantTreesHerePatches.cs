@@ -1,5 +1,8 @@
 ﻿using System.Reflection;
 using AtraBase.Toolkit.Reflection;
+
+using AtraShared.Utils.Extensions;
+
 using HarmonyLib;
 using StardewValley.Objects;
 
@@ -9,6 +12,7 @@ namespace StopRugRemoval.HarmonyPatches.OutdoorRugsMostly;
 /// I think this prevents the cursor from turning green when trying to place a tree on a rug.
 /// </summary>
 [HarmonyPatch]
+[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = StyleCopConstants.NamedForHarmony)]
 internal static class CanPlantTreesHerePatches
 {
     /// <summary>
@@ -36,7 +40,6 @@ internal static class CanPlantTreesHerePatches
     /// <param name="tile_y">Tile Y.</param>
     /// <param name="__result">Result to replace the original with.</param>
     /// <returns>True to continue to original, false to skip.</returns>
-    [SuppressMessage("StyleCop", "SA1313", Justification = "Style prefered by Harmony")]
     internal static bool Prefix(GameLocation __instance, int tile_x, int tile_y, ref bool __result)
     {
         try
@@ -54,7 +57,7 @@ internal static class CanPlantTreesHerePatches
         }
         catch (Exception ex)
         {
-            ModEntry.ModMonitor.Log($"Encountered error in prefix on GameLocation.CanPlantTrees Here\n\n{ex}", LogLevel.Error);
+            ModEntry.ModMonitor.LogError("preventing planting trees on rugs", ex);
         }
         return true;
     }

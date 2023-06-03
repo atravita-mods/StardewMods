@@ -15,7 +15,7 @@ namespace GingerIslandMainlandAdjustments.ScheduleManager;
 /// Handles patches on the NPC class to allow beach fishing.
 /// </summary>
 [HarmonyPatch(typeof(NPC))]
-[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Convention set by Harmony")]
+[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = StyleCopConstants.NamedForHarmony)]
 internal static class NPCPatches
 {
     /// <summary>

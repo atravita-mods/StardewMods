@@ -18,7 +18,7 @@ namespace StopRugRemoval.HarmonyPatches;
 /// Patches against SObject.
 /// </summary>
 [HarmonyPatch(typeof(SObject))]
-[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "HarmonyConvention")]
+[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = StyleCopConstants.NamedForHarmony)]
 internal static class SObjectPatches
 {
     /// <summary>

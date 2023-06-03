@@ -11,7 +11,7 @@ namespace StopRugRemoval.HarmonyPatches.OutdoorRugsMostly;
 /// Patches on GameLocation to allow me to place rugs anywhere.
 /// </summary>
 [HarmonyPatch(typeof(GameLocation))]
-[SuppressMessage("StyleCop", "SA1313", Justification = "Harmony convention")]
+[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = StyleCopConstants.NamedForHarmony)]
 internal class GameLocationPatches
 {
     [HarmonyPostfix]

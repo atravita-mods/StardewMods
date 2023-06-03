@@ -14,7 +14,7 @@ namespace GingerIslandMainlandAdjustments.DialogueChanges;
 /// Class to handle patching of NPCs for dialogue.
 /// </summary>
 [HarmonyPatch(typeof(NPC))]
-[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Convention used by Harmony")]
+[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = StyleCopConstants.NamedForHarmony)]
 internal static class DialoguePatches
 {
     private const string ANTISOCIAL = "Resort_Antisocial";

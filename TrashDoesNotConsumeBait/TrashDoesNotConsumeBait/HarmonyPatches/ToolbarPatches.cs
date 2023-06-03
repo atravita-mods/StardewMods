@@ -9,6 +9,7 @@ namespace TrashDoesNotConsumeBait.HarmonyPatches;
 /// Class that holds patches against the tool bar.
 /// </summary>
 [HarmonyPatch(typeof(Toolbar))]
+[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = StyleCopConstants.NamedForHarmony)]
 internal static class ToolbarPatches
 {
     /***********
@@ -17,7 +18,6 @@ internal static class ToolbarPatches
      * *********/
     [HarmonyPostfix]
     [HarmonyPatch(nameof(Toolbar.receiveRightClick))]
-    [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Harmony convention")]
     private static void PostfixRightClick(List<ClickableComponent> ___buttons, int x, int y)
     {
         try

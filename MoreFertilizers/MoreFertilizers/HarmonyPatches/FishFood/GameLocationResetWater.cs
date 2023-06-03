@@ -8,7 +8,7 @@ namespace MoreFertilizers.HarmonyPatches.FishFood;
 /// Resets the water color to the fed fish color if needed.
 /// </summary>
 [HarmonyPatch(typeof(GameLocation))]
-[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Harmony Convention")]
+[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = StyleCopConstants.NamedForHarmony)]
 internal static class GameLocationResetWater
 {
     [UsedImplicitly]

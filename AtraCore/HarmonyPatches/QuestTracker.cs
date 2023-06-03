@@ -15,6 +15,7 @@ namespace AtraCore.HarmonyPatches;
 /// Patches to handle quests.
 /// </summary>
 [HarmonyPatch]
+[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = StyleCopConstants.NamedForHarmony)]
 public static class QuestTracker
 {
     private const string MESSAGETYPE = "QuestTracker";
@@ -214,7 +215,6 @@ public static class QuestTracker
         }
     }
 
-    [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Named for Harmony.")]
     private static void Postfix(Quest __instance)
     {
         if (__instance.id?.Value is int id)

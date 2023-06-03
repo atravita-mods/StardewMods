@@ -20,6 +20,7 @@ namespace StopRugRemoval.HarmonyPatches.Niceties;
 /// </summary>
 [HarmonyPatch]
 [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1309:Field names should not begin with underscore", Justification = "Reviewed.")]
+[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = StyleCopConstants.NamedForHarmony)]
 internal static class ScheduleErrorFixer
 {
     #region delegates
@@ -43,7 +44,6 @@ internal static class ScheduleErrorFixer
 
     [HarmonyPriority(Priority.First)]
     [HarmonyPatch(typeof(NPC), nameof(NPC.parseMasterSchedule))]
-    [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Harmony Convention")]
     private static void Prefix(string rawData, NPC __instance)
     {
         if (__instance.currentLocation is not null || !__instance.isVillager())

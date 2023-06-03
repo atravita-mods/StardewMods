@@ -12,10 +12,10 @@ namespace GrowableGiantCrops.HarmonyPatches.ToolPatches;
 /// Patches on tools.
 /// </summary>
 [HarmonyPatch(typeof(Tool))]
+[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = StyleCopConstants.NamedForHarmony)]
 internal static class PatchesOnTool
 {
     [HarmonyPatch(nameof(Tool.isHeavyHitter))]
-    [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Harmony convention.")]
     private static bool Prefix(Tool __instance, ref bool __result)
     {
         if (__instance is ShovelTool)

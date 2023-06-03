@@ -23,6 +23,7 @@ namespace StopRugRemoval.HarmonyPatches.Confirmations;
 /// Holds patches about confirming warps.
 /// </summary>
 [HarmonyPatch]
+[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = StyleCopConstants.NamedForHarmony)]
 internal static class ConfirmWarp
 {
     /// <summary>
@@ -134,7 +135,6 @@ internal static class ConfirmWarp
 
     [HarmonyPrefix]
     [HarmonyPatch(typeof(SObject), nameof(SObject.performUseAction))]
-    [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Harmony convention.")]
     private static bool PrefixTotemWarp(SObject __instance, GameLocation location, ref bool __result)
     {
         if (Game1.eventUp || Game1.isFestival() || Game1.fadeToBlack || Game1.player.swimming.Value || Game1.player.onBridge.Value
@@ -207,7 +207,6 @@ internal static class ConfirmWarp
     [HarmonyPrefix]
     [HarmonyPriority(Priority.First)]
     [HarmonyPatch(typeof(Building), nameof(Building.doAction))]
-    [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Harmony Convention")]
     private static bool PrefixBuildingAction(Building __instance, Vector2 tileLocation, Farmer who, ref bool __result)
     {
         if (Game1.eventUp || Game1.isFestival() || Game1.fadeToBlack || Game1.player.swimming.Value || Game1.player.onBridge.Value
@@ -276,7 +275,6 @@ internal static class ConfirmWarp
         return true;
     }
 
-    [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Harmony Convention")]
     private static bool PrefixWand(Wand __instance, GameLocation location, int x, int y, int power, Farmer who)
     {
         if (!who.IsLocalPlayer)
@@ -321,7 +319,6 @@ internal static class ConfirmWarp
 
     [HarmonyPrefix]
     [HarmonyPatch(typeof(IslandWest), nameof(IslandWest.performAction))]
-    [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Harmony Convention")]
     private static bool PrefixIslandWest(IslandWest __instance, string action, Farmer who, Location tileLocation)
     {
         if (Game1.eventUp || Game1.isFestival() || Game1.fadeToBlack || Game1.player.swimming.Value || Game1.player.onBridge.Value

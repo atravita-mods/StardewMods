@@ -6,9 +6,12 @@ using StardewValley.TerrainFeatures;
 
 namespace GiantCropFertilizer.HarmonyPatches;
 
+#warning - remove in Stardew 1.6
+
 /// <summary>
 /// Fixes the issue where giant crops are not properly handled in the save on maps that are not Farm or IslandWest.
 /// </summary>
+[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = StyleCopConstants.NamedForHarmony)]
 internal static class FixSaveThing
 {
     /// <summary>
@@ -22,7 +25,6 @@ internal static class FixSaveThing
             postfix: new HarmonyMethod(typeof(FixSaveThing), nameof(Postfix)));
     }
 
-    [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Harmony convention.")]
     private static void Postfix(GameLocation __instance, GameLocation l)
     {
         // game handles these two.
@@ -36,14 +38,14 @@ internal static class FixSaveThing
         // Keep track of occupied tiles here.
         HashSet<Vector2> prev = new(l.resourceClumps.Count);
 
-        foreach (var clump in __instance.resourceClumps)
+        foreach (ResourceClump? clump in __instance.resourceClumps)
         {
             prev.Add(clump.tile.Value);
         }
 
         // restore previous giant crops.
         int count = 0;
-        foreach (var clump in l.resourceClumps)
+        foreach (ResourceClump? clump in l.resourceClumps)
         {
             if (clump is GiantCrop crop && prev.Add(crop.tile.Value))
             {

@@ -8,10 +8,10 @@ namespace MoreFertilizers.HarmonyPatches.Niceties;
 /// Adds a context tag for organic produce.
 /// </summary>
 [HarmonyPatch(typeof(Item))]
+[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = StyleCopConstants.NamedForHarmony)]
 internal static class ItemPatcher
 {
     [HarmonyPatch("_PopulateContextTags")]
-    [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Harmony Convention")]
     private static void Postfix(Item __instance, HashSet<string> tags)
     {
         try

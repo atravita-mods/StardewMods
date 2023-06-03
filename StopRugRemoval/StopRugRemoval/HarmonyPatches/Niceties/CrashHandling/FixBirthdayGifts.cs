@@ -14,11 +14,11 @@ namespace StopRugRemoval.HarmonyPatches.Niceties.CrashHandling;
 /// Holds patches that fixes the birthday gift crash.
 /// </summary>
 [HarmonyPatch]
+[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = StyleCopConstants.NamedForHarmony)]
 internal static class FixBirthdayGifts
 {
     [HarmonyFinalizer]
     [HarmonyPatch(typeof(NPC), nameof(NPC.getFavoriteItem))]
-    [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Harmony convention.")]
     private static Exception? FinalizeGiftSelection(Exception __exception, ref SObject? __result, NPC __instance)
     {
         if (__exception is not null)

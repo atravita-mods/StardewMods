@@ -16,7 +16,7 @@ namespace GrowableBushes.HarmonyPatches;
 /// Patches on bushes.
 /// </summary>
 [HarmonyPatch(typeof(Bush))]
-[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Harmony convention.")]
+[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = StyleCopConstants.NamedForHarmony)]
 internal static class BushPatches
 {
     #region delegates

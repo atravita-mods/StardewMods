@@ -22,7 +22,7 @@ namespace IdentifiableCombinedRings.HarmonyPatches;
 /// Holds patches on combined rings.
 /// </summary>
 [HarmonyPatch(typeof(CombinedRing))]
-[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Harmony convention")]
+[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = StyleCopConstants.NamedForHarmony)]
 internal class CombinedRingPatcher
 {
     /// <inheritdoc cref="CombinedRing.drawInMenu(SpriteBatch, Vector2, float, float, float, StackDrawType, Color, bool)"/>

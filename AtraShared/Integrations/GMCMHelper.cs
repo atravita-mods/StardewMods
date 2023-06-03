@@ -34,7 +34,7 @@ public sealed class GMCMHelper : IntegrationHelper
 
 #region cache
 
-    [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Stylecop doesn't understand records.")]
+    [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = StyleCopErrorConsts.IsRecord)]
     private readonly record struct CacheKey(Type Config, Type TEnum);
 
     private static readonly ConcurrentDictionary<CacheKey, MethodInfo> enumCache = new();

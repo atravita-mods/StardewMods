@@ -11,7 +11,7 @@ namespace CritterRings.HarmonyPatches;
 /// Adds the rings to Marlon's shop.
 /// </summary>
 [HarmonyPatch(typeof(Utility))]
-[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Harmony convention.")]
+[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = StyleCopConstants.NamedForHarmony)]
 internal static class ShopPatcher
 {
     [HarmonyPatch(nameof(Utility.getAdventureShopStock))]

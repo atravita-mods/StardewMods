@@ -14,6 +14,7 @@ namespace MoreFertilizers.HarmonyPatches.Acquisition;
 /// Holds patches against GameLocation so monsters on farm drop fertilizer.
 /// </summary>
 [HarmonyPatch(typeof(GameLocation))]
+[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = StyleCopConstants.NamedForHarmony)]
 internal static class GameLocationPatches
 {
 #pragma warning disable SA1310 // Field names should not contain underscore. Reviewed.
@@ -28,7 +29,6 @@ internal static class GameLocationPatches
     internal static void Reinitialize() => DropChance.Value = DEFAULT_DROP_CHANCE;
 
     [HarmonyPatch(nameof(GameLocation.monsterDrop))]
-    [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Harmony Convention")]
     private static void Postfix(GameLocation __instance, Monster monster, int x, int y, Farmer who)
     {
         if(__instance is not Farm || who is null || Singletons.Random.NextDouble() > ((monster is RockGolem ? 2.5 : 1 ) * DropChance.Value) || monster.MaxHealth < MIN_MONSTER_HEALTH)

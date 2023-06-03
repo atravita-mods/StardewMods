@@ -17,11 +17,11 @@ namespace StopRugRemoval.HarmonyPatches;
 /// And to prevent me from removing rugs when I'm not supposed to....
 /// </summary>
 [HarmonyPatch(typeof(Furniture))]
+[SuppressMessage("StyleCop", "SA1313", Justification = StyleCopConstants.NamedForHarmony)]
 internal class FurniturePatches
 {
     private static int ticks;
 
-    [SuppressMessage("StyleCop", "SA1313", Justification = "Style prefered by Harmony")]
     [HarmonyPostfix]
     [HarmonyPatch(nameof(Furniture.canBeRemoved))]
     private static void PostfixCanBeRemoved(Furniture __instance, ref Farmer __0, ref bool __result)
@@ -63,7 +63,6 @@ internal class FurniturePatches
 #if DEBUG
     [HarmonyPrefix]
     [HarmonyPatch(nameof(Furniture.canBePlacedHere))]
-    [SuppressMessage("StyleCop", "SA1313", Justification = "Style prefered by Harmony")]
     private static bool PrefixCanBePlacedHere(Furniture __instance, GameLocation l, Vector2 tile, ref bool __result)
     {
         try
@@ -113,7 +112,6 @@ internal class FurniturePatches
     [HarmonyPrefix]
     [HarmonyPriority(Priority.First)]
     [HarmonyPatch(nameof(Furniture.clicked))]
-    [SuppressMessage("StyleCop", "SA1313", Justification = "Style prefered by Harmony")]
     private static bool PrefixClicked(Furniture __instance, Farmer who, ref bool __result)
     {
         try
@@ -154,7 +152,6 @@ internal class FurniturePatches
 
     [HarmonyPrefix]
     [HarmonyPatch(nameof(Furniture.DoesTileHaveProperty))]
-    [SuppressMessage("StyleCop", "SA1313", Justification = "Style prefered by Harmony")]
     private static bool PrefixDoesTileHaveProperty(Furniture __instance, int tile_x, int tile_y, string property_name, string layer_name, ref string property_value, ref bool __result)
     {
         try

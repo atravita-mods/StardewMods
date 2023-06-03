@@ -66,11 +66,11 @@ internal static class CropAndFertilizerManager
     private static bool hadStocklistLastCheck = false;
     private static bool requiresReset = true;
 
-    [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "StyleCop doesn't understand records.")]
-    private record CropEntry(StardewSeasons Seasons, string GrowthData);
+    [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = StyleCopErrorConsts.IsRecord)]
+    private readonly record struct CropEntry(StardewSeasons Seasons, string GrowthData);
 
-    [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "StyleCop doesn't understand records.")]
-    private record CropCondition(Profession Profession, int Fertilizer);
+    [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = StyleCopErrorConsts.IsRecord)]
+    private readonly record struct CropCondition(Profession Profession, int Fertilizer);
 
     #region API
 
@@ -82,13 +82,13 @@ internal static class CropAndFertilizerManager
             return null;
         }
 
-        var seasonIndex = season.ToSeasonIndex();
-        var seasonDict = DaysPerCondition[seasonIndex];
+        int seasonIndex = season.ToSeasonIndex();
+        Dictionary<CropCondition, Dictionary<int, int>> seasonDict = DaysPerCondition[seasonIndex];
 
         // check with specific fertilizer.
-        CropCondition? key = new(profession, fertilizer);
+        CropCondition key = new(profession, fertilizer);
         if (seasonDict.TryGetValue(key, out Dictionary<int, int>? daysDict)
-            && daysDict.TryGetValue(crop, out var days))
+            && daysDict.TryGetValue(crop, out int days))
         {
             return days;
         }
@@ -111,11 +111,11 @@ internal static class CropAndFertilizerManager
             return null;
         }
 
-        var seasonIndex = season.ToSeasonIndex();
-        var seasonDict = DaysPerCondition[seasonIndex];
+        int seasonIndex = season.ToSeasonIndex();
+        Dictionary<CropCondition, Dictionary<int, int>> seasonDict = DaysPerCondition[seasonIndex];
 
-        CropCondition? key = new(profession, fertilizer);
-        if (seasonDict.TryGetValue(key, out var daysDict))
+        CropCondition key = new(profession, fertilizer);
+        if (seasonDict.TryGetValue(key, out Dictionary<int, int>? daysDict))
         {
             return new ReadOnlyDictionary<int, int>(daysDict);
         }
@@ -130,7 +130,7 @@ internal static class CropAndFertilizerManager
             return null;
         }
 
-        if (LastGrowthPerCrop[season.ToSeasonIndex()].Value?.TryGetValue(crop, out var val) == true)
+        if (LastGrowthPerCrop[season.ToSeasonIndex()].Value?.TryGetValue(crop, out List<KeyValuePair<CropCondition, int>>? val) == true)
         {
             return val.Select((kvp) => new KeyValuePair<KeyValuePair<Profession, int>, int>(new KeyValuePair<Profession, int>(kvp.Key.Profession, kvp.Key.Fertilizer), kvp.Value))
                       .OrderBy((kvp) => kvp.Value)
@@ -305,19 +305,19 @@ SUCCESS:
 
     private static Dictionary<int, List<KeyValuePair<CropCondition, int>>>? GenerateReverseMap(int season)
     {
-        var seasonDict = DaysPerCondition[season];
+        Dictionary<CropCondition, Dictionary<int, int>> seasonDict = DaysPerCondition[season];
         if (seasonDict?.Count is 0 or null)
         {
             return null;
         }
 
-        var result = new Dictionary<int, List<KeyValuePair<CropCondition, int>>>();
+        Dictionary<int, List<KeyValuePair<CropCondition, int>>> result = new Dictionary<int, List<KeyValuePair<CropCondition, int>>>();
 
         foreach ((CropCondition condition, Dictionary<int, int> dictionary) in seasonDict)
         {
-            foreach (var (crop, days) in dictionary)
+            foreach ((int crop, int days) in dictionary)
             {
-                if (!result.TryGetValue(crop, out var pairs))
+                if (!result.TryGetValue(crop, out List<KeyValuePair<CropCondition, int>>? pairs))
                 {
                     result[crop] = pairs = new();
                 }
@@ -336,7 +336,7 @@ SUCCESS:
             ModEntry.ModMonitor.Log($"Could not find farmer for {profession}, continuing.");
             return;
         }
-        var seasonDict = DaysPerCondition[seasonIndex];
+        Dictionary<CropCondition, Dictionary<int, int>> seasonDict = DaysPerCondition[seasonIndex];
 
         if (!seasonDict.TryGetValue(new CropCondition(profession, 0), out Dictionary<int, int>? unfertilized))
         {

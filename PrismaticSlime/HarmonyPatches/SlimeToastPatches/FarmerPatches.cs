@@ -11,7 +11,7 @@ namespace PrismaticSlime.HarmonyPatches.SlimeToastPatches;
 /// Holds patches against Farmer.
 /// </summary>
 [HarmonyPatch(typeof(Farmer))]
-[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Harmony convention.")]
+[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = StyleCopConstants.NamedForHarmony)]
 internal static class FarmerPatches
 {
     /// <summary>

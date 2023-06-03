@@ -10,6 +10,7 @@ namespace PamTries.HarmonyPatches;
 /// Watches the scheduler to check if Pam's driving the bus today.
 /// </summary>
 [HarmonyPatch(typeof(NPC))]
+[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = StyleCopConstants.NamedForHarmony)]
 internal static class SchedulingWatcher
 {
     /// <summary>
@@ -18,7 +19,6 @@ internal static class SchedulingWatcher
     internal static bool DidPamDriveBusToday { get; private set; } = false;
 
     [HarmonyPatch(nameof(NPC.parseMasterSchedule))]
-    [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Harmony convention")]
     private static void Postfix(NPC __instance)
     {
         try

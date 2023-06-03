@@ -9,11 +9,11 @@ namespace MoreFertilizers.HarmonyPatches.BushFertilizers;
 /// Patches against bushes.
 /// </summary>
 [HarmonyPatch(typeof(Bush))]
+[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = StyleCopConstants.NamedForHarmony)]
 internal static class BushPatches
 {
     [HarmonyPostfix]
     [HarmonyPatch(nameof(Bush.getAge))]
-    [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Harmony Convention.")]
     private static void PostfixGetAge(Bush __instance, ref int __result)
     {
         if (__instance.modData?.GetBool(CanPlaceHandler.RapidBush) == true)

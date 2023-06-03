@@ -18,7 +18,7 @@ namespace ExperimentalLagReduction.HarmonyPatches;
 /// Re-does the scheduler so it's faster.
 /// </summary>
 [HarmonyPatch(typeof(NPC))]
-[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Harmony Convention.")]
+[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = StyleCopConstants.NamedForHarmony)]
 [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1309:Field names should not begin with underscore", Justification = "Preference.")]
 internal static class Rescheduler
 {

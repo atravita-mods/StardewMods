@@ -10,8 +10,8 @@ namespace PamTries.HarmonyPatches;
 /// <summary>
 /// Makes it so Pam doesn't like alcohol items.
 /// </summary>
-[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Harmony Convention.")]
 [HarmonyPatch(typeof(NPC))]
+[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = StyleCopConstants.NamedForHarmony)]
 internal static class PamGiftTastes
 {
     private static readonly TickCache<bool> HasSeenNineHeart = new(() => FarmerHelpers.GetFarmers().Any(farmer => farmer.eventsSeen.Contains(503180)));

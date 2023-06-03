@@ -12,6 +12,7 @@ namespace SpecialOrdersExtended.HarmonyPatches;
 /// Holds patches against Special Orders.
 /// </summary>
 [HarmonyPatch(typeof(SpecialOrder))]
+[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = StyleCopConstants.NamedForHarmony)]
 internal static class SpecialOrderPatches
 {
     /// <summary>
@@ -39,7 +40,6 @@ internal static class SpecialOrderPatches
 
     [HarmonyPostfix]
     [HarmonyPatch(nameof(SpecialOrder.OnFail))]
-    [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Harmony Convention.")]
     private static void PostfixOnFail(SpecialOrder __instance) => DialogueManager.ClearOnFail(__instance.questKey.Value);
 
     // Suppress the middle-of-night Special Order updates until
@@ -50,7 +50,6 @@ internal static class SpecialOrderPatches
     [HarmonyPrefix]
     [HarmonyPriority(Priority.HigherThanNormal)]
     [HarmonyPatch(nameof(SpecialOrder.SetDuration))]
-    [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Harmony convention.")]
     private static bool PrefixSetDuration(SpecialOrder __instance)
     {
         try
@@ -65,7 +64,7 @@ internal static class SpecialOrderPatches
         }
         catch (Exception ex)
         {
-            ModEntry.ModMonitor.Log($"Mod failed while trying to override special order duration!\n\n{ex}");
+            ModEntry.ModMonitor.LogError("overriding special order duration", ex);
         }
         return true;
     }
@@ -73,7 +72,6 @@ internal static class SpecialOrderPatches
     [HarmonyPostfix]
     [HarmonyPriority(Priority.HigherThanNormal)]
     [HarmonyPatch(nameof(SpecialOrder.IsTimedQuest))]
-    [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Harmony convention.")]
     private static void HandleUntimed(SpecialOrder __instance, ref bool __result)
     {
         if (__result && AssetManager.Untimed.Value.Contains(__instance.questKey.Value))

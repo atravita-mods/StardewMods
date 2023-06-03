@@ -10,6 +10,7 @@ namespace IdentifiableCombinedRings.HarmonyPatches;
 /// Class to hold patches on the Ring class.
 /// </summary>
 [HarmonyPatch(typeof(Ring))]
+[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = StyleCopConstants.NamedForHarmony)]
 internal class RingPatcher
 {
     /// <summary>
@@ -20,8 +21,7 @@ internal class RingPatcher
     [HarmonyPostfix]
     [HarmonyPriority(Priority.High)]
     [HarmonyPatch(nameof(Ring.DisplayName), MethodType.Getter)]
-    [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification ="Harmony convention")]
-    public static void PostfixGetDisplayName(Ring __instance, ref string __result)
+    private static void PostfixGetDisplayName(Ring __instance, ref string __result)
     {
         if (__instance is CombinedRing combinedRing)
         {

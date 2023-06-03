@@ -22,6 +22,7 @@ namespace SpecialOrdersExtended.HarmonyPatches;
 /// Handles loading custom emoji.
 /// </summary>
 [HarmonyPatch(typeof(SpecialOrdersBoard))]
+[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = StyleCopConstants.NamedForHarmony)]
 internal static class CustomEmoji
 {
     private static readonly HashSet<string> Failed = new(); // hashset of failed loads.
@@ -67,7 +68,6 @@ internal static class CustomEmoji
     [MethodImpl(TKConstants.Hot)]
     [HarmonyPatch("GetPortraitForRequester")]
     [HarmonyPriority(Priority.LowerThanNormal)]
-    [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Named for harmony.")]
     private static void Postfix(ref KeyValuePair<Texture2D, Rectangle>? __result, string requester_name)
     {
         if (requester_name is null)

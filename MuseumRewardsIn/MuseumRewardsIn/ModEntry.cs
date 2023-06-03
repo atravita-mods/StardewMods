@@ -23,6 +23,7 @@ namespace MuseumRewardsIn;
 
 /// <inheritdoc />
 [HarmonyPatch(typeof(Utility))]
+[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = StyleCopConstants.NamedForHarmony)]
 internal sealed class ModEntry : Mod
 {
     private const string BUILDING = "Buildings";
@@ -115,7 +116,6 @@ internal sealed class ModEntry : Mod
     /// </summary>
     /// <param name="__result">shop inventory to add to.</param>
     [HarmonyPatch(nameof(Utility.getAllFurnituresForFree))]
-    [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Harmony convention.")]
     [SuppressMessage("StyleCop.CSharp.OrderingRules", "SA1204:Static elements should appear before instance elements", Justification = "Reviewed.")]
     private static void Postfix(Dictionary<ISalable, int[]> __result)
     {

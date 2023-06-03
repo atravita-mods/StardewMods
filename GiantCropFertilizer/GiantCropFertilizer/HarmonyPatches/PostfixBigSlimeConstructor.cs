@@ -12,11 +12,11 @@ namespace GiantCropFertilizer.HarmonyPatches;
 /// Holds patches against BigSlime's Vector2, int constructor.
 /// </summary>
 [HarmonyPatch(typeof(BigSlime))]
+[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = StyleCopConstants.NamedForHarmony)]
 internal static class PostfixBigSlimeConstructor
 {
     [UsedImplicitly]
     [HarmonyPatch(MethodType.Constructor, typeof(Vector2), typeof(int))]
-    [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Harmony Convention")]
     private static void Postfix(BigSlime __instance, int mineArea)
     {
         if (__instance.heldObject?.Value is not null || ModEntry.GiantCropFertilizerID == -1)

@@ -13,10 +13,10 @@ namespace StopRugRemoval.HarmonyPatches.Niceties.CrashHandling;
 /// Holds patches to make special orders less fragile.
 /// </summary>
 [HarmonyPatch(typeof(SpecialOrder))]
+[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = StyleCopConstants.NamedForHarmony)]
 internal static class SpecialOrderCrash
 {
     [HarmonyPatch(nameof(SpecialOrder.GetSpecialOrder))]
-    [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Harmony convention")]
     private static Exception? Finalizer(string key, ref SpecialOrder? __result, Exception? __exception)
     {
         if (__exception is not null)

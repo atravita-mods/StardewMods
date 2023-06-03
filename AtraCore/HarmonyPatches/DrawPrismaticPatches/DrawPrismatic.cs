@@ -30,6 +30,7 @@ namespace AtraCore.HarmonyPatches.DrawPrismaticPatches;
 /// Draws things with a prismatic tint or overlay.
 /// </summary>
 [HarmonyPatch]
+[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = StyleCopConstants.NamedForHarmony)]
 internal static class DrawPrismatic
 {
     private static readonly SortedList<ItemTypeEnum, Dictionary<int, Lazy<Texture2D>>> PrismaticMasks = new();
@@ -215,7 +216,6 @@ internal static class DrawPrismatic
     [HarmonyPrefix]
     [MethodImpl(TKConstants.Hot)]
     [HarmonyPatch(typeof(SObject), nameof(SObject.drawInMenu))]
-    [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Harmony Convention.")]
     private static void PrefixSObjectDrawInMenu(SObject __instance, ref Color color)
     {
         try
@@ -256,7 +256,6 @@ internal static class DrawPrismatic
     [HarmonyPostfix]
     [MethodImpl(TKConstants.Hot)]
     [HarmonyPatch(typeof(SObject), nameof(SObject.drawInMenu))]
-    [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Harmony Convention.")]
     private static void PostfixSObjectDrawInMenu(
         SObject __instance,
         SpriteBatch spriteBatch,
@@ -559,7 +558,6 @@ internal static class DrawPrismatic
     [HarmonyPrefix]
     [MethodImpl(TKConstants.Hot)]
     [HarmonyPatch(typeof(Ring), nameof(Ring.drawInMenu))]
-    [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Harmony Convention.")]
     private static void PrefixRingDrawInMenu(Ring __instance, ref Color color)
     {
         try
@@ -581,7 +579,6 @@ internal static class DrawPrismatic
     [HarmonyPostfix]
     [MethodImpl(TKConstants.Hot)]
     [HarmonyPatch(typeof(Ring), nameof(Ring.drawInMenu))]
-    [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Harmony Convention.")]
     private static void PostfixRingDrawInMenu(
         Ring __instance,
         SpriteBatch spriteBatch,
@@ -622,7 +619,6 @@ internal static class DrawPrismatic
     [HarmonyPrefix]
     [MethodImpl(TKConstants.Hot)]
     [HarmonyPatch(typeof(Boots), nameof(Boots.drawInMenu))]
-    [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Harmony Convention.")]
     private static void PrefixBootsDrawInMenu(Boots __instance, ref Color color)
     {
         try
@@ -644,7 +640,6 @@ internal static class DrawPrismatic
     [HarmonyPostfix]
     [MethodImpl(TKConstants.Hot)]
     [HarmonyPatch(typeof(Boots), nameof(Boots.drawInMenu))]
-    [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Harmony Convention.")]
     private static void PostfixBootsDrawInMenu(
         Ring __instance,
         SpriteBatch spriteBatch,

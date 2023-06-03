@@ -11,7 +11,7 @@ namespace PrismaticSlime.HarmonyPatches.JellyPatches;
 /// A patch to handle NPCs receiving the prismatic slime jelly.
 /// </summary>
 [HarmonyPatch(typeof(NPC))]
-[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Harmony convention.")]
+[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = StyleCopConstants.NamedForHarmony)]
 internal static class NPCTryRecieveActiveItemPatches
 {
     [HarmonyPatch(nameof(NPC.tryToReceiveActiveObject))]

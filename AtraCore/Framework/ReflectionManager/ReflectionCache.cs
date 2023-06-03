@@ -1,6 +1,7 @@
 ﻿using System.Reflection;
 using AtraBase.Caching;
 using AtraBase.Collections;
+using AtraBase.Toolkit;
 using AtraBase.Toolkit.Reflection;
 using CommunityToolkit.Diagnostics;
 
@@ -9,7 +10,6 @@ namespace AtraCore.Framework.ReflectionManager;
 /// <summary>
 /// A class for cached reflection.
 /// </summary>
-[SuppressMessage("StyleCop.CSharp.OrderingRules", "SA1201:Elements should appear in the correct order", Justification = "Records break stylecop :(.")]
 public static class ReflectionCache
 {
     /// <summary>
@@ -46,7 +46,7 @@ public static class ReflectionCache
     /// <param name="FlagTypes"></param>
     /// <param name="MemberType"></param>
     /// <param name="Params"></param>
-    [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "This is a record lol.")]
+    [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = StyleCopErrorConsts.IsRecord)]
     private readonly record struct ReflectionCacheMember(Type Type, string Name, FlagTypes FlagTypes, MemberTypes MemberType, Type[]? Params)
     {
         public override int GetHashCode()

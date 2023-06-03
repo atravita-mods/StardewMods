@@ -19,6 +19,7 @@ namespace StopRugRemoval.HarmonyPatches;
 /// Class to hold patches to place grass.
 /// </summary>
 [HarmonyPatch]
+[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = StyleCopConstants.NamedForHarmony)]
 internal static class PlantGrassUnder
 {
     private static Func<bool>? isSmartBuildingInBuildMode = null;
@@ -52,7 +53,6 @@ internal static class PlantGrassUnder
     /// <param name="__2">The farmer doing the placing.</param>
     /// <param name="__result">The result to substitute in.</param>
     [HarmonyPostfix]
-    [SuppressMessage("StyleCop", "SA1313", Justification = "Style preferred by Harmony")]
     public static void PostfixPerformObjectDropInAction(SObject __instance, Item __0, bool __1, Farmer __2, ref bool __result)
     {
         if (__result // Placed something already

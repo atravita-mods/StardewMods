@@ -19,7 +19,7 @@ namespace GrowableGiantCrops.HarmonyPatches;
 /// Holds patches that lets NPCs trample resource clumps.
 /// </summary>
 [HarmonyPatch(typeof(Character))]
-[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Harmony convention.")]
+[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = StyleCopConstants.NamedForHarmony)]
 internal static class CharacterTramplePatches
 {
     private static readonly Api Api = new();

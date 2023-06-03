@@ -17,6 +17,7 @@ namespace ForgeMenuChoice.HarmonyPatches;
 /// </summary>
 /// <remarks>Also used to patch SpaceCore's forge menu.</remarks>
 [HarmonyPatch(typeof(ForgeMenu))]
+[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = StyleCopConstants.NamedForHarmony)]
 internal static class ForgeMenuPatches
 {
     private static readonly PerScreen<List<BaseEnchantment>> PossibleEnchantmentPerscreen = new(() => new());
@@ -86,7 +87,6 @@ internal static class ForgeMenuPatches
     [HarmonyPrefix]
     [HarmonyPriority(Priority.High)]
     [HarmonyPatch(nameof(ForgeMenu.IsValidCraft))]
-    [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Harmony convention")]
     internal static bool PrefixIsValidCraft(Item __0, Item __1, ref bool __result)
     {
         try

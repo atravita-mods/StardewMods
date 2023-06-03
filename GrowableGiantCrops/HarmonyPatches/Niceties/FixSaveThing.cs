@@ -11,6 +11,7 @@ namespace GrowableGiantCrops.HarmonyPatches.Niceties;
 /// <summary>
 /// Fixes the issue where giant crops are not properly handled in the save on maps that are not Farm or IslandWest.
 /// </summary>
+[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = StyleCopConstants.NamedForHarmony)]
 internal static class FixSaveThing
 {
     /// <summary>
@@ -25,7 +26,6 @@ internal static class FixSaveThing
             postfix: new HarmonyMethod(typeof(FixSaveThing).StaticMethodNamed(nameof(Postfix)), Priority.High));
     }
 
-    [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Harmony convention.")]
     private static void Postfix(GameLocation __instance, GameLocation l)
     {
         // game handles these two.

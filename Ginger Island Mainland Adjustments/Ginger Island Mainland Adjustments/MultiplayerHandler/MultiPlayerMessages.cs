@@ -13,7 +13,7 @@ namespace GingerIslandMainlandAdjustments.MultiplayerHandler;
 /// Class to handle multiplayer shared state.
 /// </summary>
 [HarmonyPatch(typeof(NPC))]
-[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Harmony convention")]
+[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = StyleCopConstants.NamedForHarmony)]
 public static class MultiplayerSharedState
 {
     private const string SCHEDULEMESSAGE = "GIMAScheduleUpdateMessage";

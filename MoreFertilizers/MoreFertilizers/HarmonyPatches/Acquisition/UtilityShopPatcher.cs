@@ -12,11 +12,11 @@ namespace MoreFertilizers.HarmonyPatches.Acquisition;
 /// Holds patches against Utility for shops.
 /// </summary>
 [HarmonyPatch(typeof(Utility))]
+[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = StyleCopConstants.NamedForHarmony)]
 internal static class UtilityShopPatcher
 {
     [HarmonyPostfix]
     [HarmonyPatch(nameof(Utility.getShopStock))]
-    [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Harmony convention")]
     private static void PostfixGetShopStock(bool Pierres, ref List<Item> __result)
     {
         if (Pierres)
@@ -39,7 +39,6 @@ internal static class UtilityShopPatcher
 
     [HarmonyPostfix]
     [HarmonyPatch(nameof(Utility.getQiShopStock))]
-    [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Harmony convention")]
     private static void PostfixGetCasinoShop(Dictionary<ISalable, int[]> __result)
     {
         try
@@ -57,7 +56,6 @@ internal static class UtilityShopPatcher
 
     [HarmonyPostfix]
     [HarmonyPatch(nameof(Utility.getJojaStock))]
-    [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Harmony convention")]
     private static void PostfixJojaStock(Dictionary<ISalable, int[]> __result)
     {
         try
@@ -77,7 +75,6 @@ internal static class UtilityShopPatcher
 
     [HarmonyPostfix]
     [HarmonyPatch(nameof(Utility.GetQiChallengeRewardStock))]
-    [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Harmony Convention.")]
     private static void PostfixQiGemShop(Dictionary<ISalable, int[]> __result)
     {
         try

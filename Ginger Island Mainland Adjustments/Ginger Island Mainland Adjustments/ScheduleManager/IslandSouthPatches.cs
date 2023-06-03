@@ -13,6 +13,7 @@ namespace GingerIslandMainlandAdjustments.ScheduleManager;
 /// Patches for the IslandSouth class.
 /// </summary>
 [HarmonyPatch(typeof(IslandSouth))]
+[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = StyleCopConstants.NamedForHarmony)]
 internal static class IslandSouthPatches
 {
     /// <summary>
@@ -66,7 +67,6 @@ internal static class IslandSouthPatches
     [HarmonyPostfix]
     [HarmonyPriority(Priority.Last)]
     [HarmonyPatch(nameof(IslandSouth.CanVisitIslandToday))]
-    [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Convention used by Harmony")]
     private static void ExtendCanGoToIsland(NPC npc, ref bool __result)
     {
         try
@@ -177,10 +177,9 @@ internal static class IslandSouthPatches
     /// <param name="character">NPC in question.</param>
     /// <param name="__result">Result returned to original function.</param>
     /// <returns>True to continue to the vanilla function, false otherwise.</returns>
-    /// <exception cref="UnexpectedEnumValueException{WearIslandClothing}">Unexpected enum value.</exception>
     [HarmonyPrefix]
+    [HarmonyPriority(Priority.VeryLow)]
     [HarmonyPatch(nameof(IslandSouth.HasIslandAttire))]
-    [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Convention used by Harmony")]
     private static bool PrefixHasIslandAttire(NPC character, ref bool __result)
     {
         try

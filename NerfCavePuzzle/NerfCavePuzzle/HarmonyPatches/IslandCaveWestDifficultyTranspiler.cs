@@ -51,6 +51,7 @@ public sealed class DataModel
 /// Transpilers! Yay.
 /// </summary>
 [HarmonyPatch(typeof(IslandWestCave1))]
+[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = StyleCopConstants.NamedForHarmony)]
 internal static class IslandCaveWestDifficultyTranspiler
 {
     private const string SAVEKEY = "CAVE_FAILED_TIMES";
@@ -243,7 +244,6 @@ internal static class IslandCaveWestDifficultyTranspiler
 
     [HarmonyPostfix]
     [HarmonyPatch(nameof(IslandWestCave1.performAction))]
-    [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Harmony convention")]
     private static void PostFixPerformAction(IslandWestCave1 __instance, string action, Farmer who)
     {
         try

@@ -12,7 +12,7 @@ using StardewValley.Tools;
 /// Patches to make sure the player doesn't move in certain times.
 /// </summary>
 [HarmonyPatch]
-[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Named for Harmony.")]
+[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = StyleCopConstants.NamedForHarmony)]
 internal static class JumpPatches
 {
     [HarmonyPrefix]

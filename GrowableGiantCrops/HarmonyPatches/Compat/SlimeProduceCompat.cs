@@ -21,7 +21,7 @@ namespace GrowableGiantCrops.HarmonyPatches.Compat;
 /// <summary>
 /// Compat for Slime Produce.
 /// </summary>
-[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Named for Harmony.")]
+[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = StyleCopConstants.NamedForHarmony)]
 internal static class SlimeProduceCompat
 {
     /// <summary>

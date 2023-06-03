@@ -19,7 +19,7 @@ namespace GrowableGiantCrops.HarmonyPatches.Compat;
 /// <summary>
 /// Patches MoreGrassStarters.
 /// </summary>
-[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Harmony Convention.")]
+[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = StyleCopConstants.NamedForHarmony)]
 internal static class MoreGrassStartersCompat
 {
     /// <summary>

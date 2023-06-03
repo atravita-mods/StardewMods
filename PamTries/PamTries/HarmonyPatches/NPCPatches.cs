@@ -10,7 +10,7 @@ namespace PamTries.HarmonyPatches;
 /// Class that holds patches against NPC so Pam can fish.
 /// </summary>
 [HarmonyPatch(typeof(NPC))]
-[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Convention set by Harmony.")]
+[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = StyleCopConstants.NamedForHarmony)]
 internal static class NPCPatches
 {
     /// <summary>
@@ -51,7 +51,6 @@ internal static class NPCPatches
     [UsedImplicitly]
     [HarmonyPostfix]
     [HarmonyPatch("finishRouteBehavior")]
-    [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Convention set by Harmony.")]
     private static void EndFishBehavior(NPC __instance, string __0)
     {
         try

@@ -12,13 +12,13 @@ namespace PamTries.HarmonyPatches;
 /// Patches on events to hide Pam while she's at rehab.
 /// </summary>
 [HarmonyPatch(typeof(Event))]
+[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = StyleCopConstants.NamedForHarmony)]
 internal static class EventPatches
 {
     private static bool ShouldHidePam() => Game1.player.activeDialogueEvents.ContainsKey("PamTriesRehab");
 
     [HarmonyPostfix]
     [HarmonyPatch(nameof(Event.tryToLoadFestival))]
-    [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Harmony Convention.")]
     private static void PostfixSetup(Event __instance)
     {
         if (ShouldHidePam())

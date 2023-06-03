@@ -12,6 +12,7 @@ namespace GrowableGiantCrops.HarmonyPatches.GrassPatches;
 /// Patches on grass.
 /// </summary>
 [HarmonyPatch(typeof(Grass))]
+[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = StyleCopConstants.NamedForHarmony)]
 internal static class GrassPatches
 {
     /// <summary>
@@ -22,7 +23,6 @@ internal static class GrassPatches
     /// <returns>False to skip original, true to continue to original</returns>
     [HarmonyPrefix]
     [HarmonyPatch(nameof(Grass.performToolAction))]
-    [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Harmony convention.")]
     private static bool PrefixToolAction(Grass __instance, ref bool __result)
     {
         if (ModEntry.Config.ShouldPlacedGrassIgnoreScythe && __instance.modData?.ContainsKey(SObjectPatches.ModDataKey) == true)
@@ -40,7 +40,6 @@ internal static class GrassPatches
     /// <param name="__result">True to remove, false otherwise.</param>
     [HarmonyPostfix]
     [HarmonyPatch(nameof(Grass.seasonUpdate))]
-    [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Harmony convention.")]
     private static void PostfixSeasonUpdate(Grass __instance, ref bool __result)
     {
         if (!__result)

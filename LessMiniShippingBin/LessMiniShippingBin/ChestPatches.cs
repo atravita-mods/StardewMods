@@ -17,7 +17,7 @@ namespace LessMiniShippingBin;
 /// Patches against StardewValley.Objects.Chest.
 /// </summary>
 [HarmonyPatch(typeof(Chest))]
-[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Harmony convention")]
+[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = StyleCopConstants.NamedForHarmony)]
 internal static class ChestPatches
 {
     #region delegates

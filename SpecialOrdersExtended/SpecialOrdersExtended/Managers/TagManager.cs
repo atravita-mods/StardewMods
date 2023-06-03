@@ -18,6 +18,7 @@ namespace SpecialOrdersExtended.Managers;
 /// </summary>
 [HarmonyPatch(typeof(SpecialOrder))]
 [SuppressMessage("StyleCop.CSharp.OrderingRules", "SA1201:Elements should appear in the correct order", Justification = "Reviewed.")]
+[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = StyleCopConstants.NamedForHarmony)]
 internal static class TagManager
 {
 #region random
@@ -78,7 +79,6 @@ internal static class TagManager
     [HarmonyPrefix]
     [HarmonyPatch("CheckTag")]
     [HarmonyPriority(Priority.VeryHigh)]
-    [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Naming convention for Harmony")]
     private static bool PrefixCheckTag(ref bool __result, string tag)
     {
         {
@@ -405,7 +405,6 @@ internal static class TagManager
     [HarmonyPostfix]
     [HarmonyPriority(Priority.Last - 200)]
     [HarmonyPatch("CheckTag")]
-    [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Naming convention for Harmony")]
     private static void WatchTag(bool __result, string __0)
     {
         if (ModEntry.Config.UseTagCache)

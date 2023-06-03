@@ -19,7 +19,7 @@ namespace GrowableBushes.HarmonyPatches;
 /// Holds patches that lets NPCs trample bushes.
 /// </summary>
 [HarmonyPatch(typeof(Character))]
-[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Harmony convention.")]
+[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = StyleCopConstants.NamedForHarmony)]
 internal static class CharacterTramplePatches
 {
     [MethodImpl(TKConstants.Hot)]

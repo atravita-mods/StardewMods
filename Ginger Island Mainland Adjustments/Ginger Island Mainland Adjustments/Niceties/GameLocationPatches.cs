@@ -10,7 +10,7 @@ namespace GingerIslandMainlandAdjustments.Niceties;
 /// Holds patches against GameLocation to prevent trampling of objects on IslandWest.
 /// </summary>
 [HarmonyPatch(typeof(GameLocation))]
-[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Harmony convention")]
+[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = StyleCopConstants.NamedForHarmony)]
 internal class GameLocationPatches
 {
     /// <summary>

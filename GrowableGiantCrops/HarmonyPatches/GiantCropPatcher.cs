@@ -14,7 +14,7 @@ namespace GrowableGiantCrops.HarmonyPatches;
 /// Holds patches to remove the tapper before the big crop is destroyed.
 /// </summary>
 [HarmonyPatch(typeof(GiantCrop))]
-[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Harmony convention.")]
+[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = StyleCopConstants.NamedForHarmony)]
 internal static class GiantCropPatcher
 {
     [HarmonyPriority(Priority.High)]

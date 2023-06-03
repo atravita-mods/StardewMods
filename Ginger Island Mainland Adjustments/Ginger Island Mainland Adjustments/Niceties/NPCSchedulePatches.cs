@@ -9,7 +9,7 @@ namespace GingerIslandMainlandAdjustments.Niceties;
 /// It's a little faster.
 /// </summary>
 [HarmonyPatch(typeof(NPC))]
-[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Harmony convention")]
+[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = StyleCopConstants.NamedForHarmony)]
 internal static class NPCSchedulePatches
 {
     [HarmonyPriority(Priority.Last)]

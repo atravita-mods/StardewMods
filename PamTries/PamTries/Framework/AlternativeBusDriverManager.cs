@@ -7,7 +7,7 @@ using StardewModdingAPI.Events;
 
 namespace PamTries.Framework;
 
-[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "StyleCop doesn't understand records.")]
+[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = StyleCopErrorConsts.IsRecord)]
 public sealed record ScheduleData(int TimesPamDrivenThisWeek);
 
 /// <summary>

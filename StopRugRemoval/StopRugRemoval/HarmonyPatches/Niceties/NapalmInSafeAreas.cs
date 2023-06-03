@@ -12,11 +12,11 @@ namespace StopRugRemoval.HarmonyPatches.Niceties;
 /// Holds patches to defang napalm rings in safe areas.
 /// </summary>
 [HarmonyPatch(typeof(Ring))]
+[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = StyleCopConstants.NamedForHarmony)]
 internal static class NapalmInSafeAreas
 {
     [HarmonyPriority(Priority.Last)]
     [HarmonyPatch(nameof(Ring.onMonsterSlay))]
-    [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Harmony Convention.")]
     private static bool Prefix(Ring __instance, GameLocation location)
     {
         if (ModEntry.Config.NapalmInSafeAreas)

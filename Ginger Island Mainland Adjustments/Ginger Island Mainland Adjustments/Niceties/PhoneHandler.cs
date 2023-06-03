@@ -17,6 +17,7 @@ namespace GingerIslandMainlandAdjustments.Niceties;
 /// Class that handles patches against GameLocation...to handle the phone.
 /// </summary>
 [HarmonyPatch]
+[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = StyleCopConstants.NamedForHarmony)]
 internal static class PhoneHandler
 {
     /// <summary>
@@ -75,7 +76,6 @@ internal static class PhoneHandler
     /// <param name="__result">Result.</param>
     [HarmonyPostfix]
     [HarmonyPatch(typeof(GameLocation), nameof(GameLocation.answerDialogueAction), new Type[] { typeof(string), typeof(string[]) })]
-    [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Harmony convention")]
     private static void PostfixAnswerDialogueAction(GameLocation __instance, string questionAndAnswer, ref bool __result)
     {
         if (questionAndAnswer.Equals("telephone_PamBus", StringComparison.OrdinalIgnoreCase))

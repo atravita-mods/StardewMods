@@ -10,11 +10,11 @@ namespace PrismaticSlime.HarmonyPatches.EggPatches;
 /// Adds the prismatic slime egg as a possible drop to prismatic slimes.
 /// </summary>
 [HarmonyPatch(typeof(GreenSlime))]
+[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = StyleCopConstants.NamedForHarmony)]
 internal static class PostfixGreenSlime
 {
     [UsedImplicitly]
     [HarmonyPatch(nameof(GreenSlime.getExtraDropItems))]
-    [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Harmony convention.")]
     private static void Postfix(GreenSlime __instance,  List<Item> __result)
     {
         if (ModEntry.PrismaticSlimeEgg != -1

@@ -19,6 +19,7 @@ namespace TapGiantCrops;
 
 /// <inheritdoc />
 [HarmonyPatch(typeof(Utility))]
+[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = StyleCopConstants.NamedForHarmony)]
 internal sealed class ModEntry : Mod
 {
     private static readonly TapGiantCrop Api = new();
@@ -128,7 +129,6 @@ internal sealed class ModEntry : Mod
 
     [HarmonyPriority(Priority.High)]
     [HarmonyPatch(nameof(Utility.playerCanPlaceItemHere))]
-    [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Harmony Convention")]
     [SuppressMessage("StyleCop.CSharp.OrderingRules", "SA1204:Static elements should appear before instance elements", Justification = "Reviewed.")]
     private static bool Prefix(GameLocation location, Item item, int x, int y, Farmer f, ref bool __result)
     {

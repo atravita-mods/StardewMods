@@ -8,7 +8,7 @@ namespace GrowableGiantCrops.HarmonyPatches.GrassPatches;
 /// Adds patches against Item.
 /// </summary>
 [HarmonyPatch(typeof(Item))]
-[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Harmony convention.")]
+[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = StyleCopConstants.NamedForHarmony)]
 internal static class ItemPatches
 {
     [HarmonyPrefix]

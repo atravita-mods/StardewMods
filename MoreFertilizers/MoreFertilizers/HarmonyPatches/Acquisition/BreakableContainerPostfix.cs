@@ -11,10 +11,10 @@ namespace MoreFertilizers.HarmonyPatches.Acquisition;
 /// Postfix to add fertilizers to breakable barrels in the mines.
 /// </summary>
 [HarmonyPatch(typeof(BreakableContainer))]
+[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = StyleCopConstants.NamedForHarmony)]
 internal static class BreakableContainerPostfix
 {
     [HarmonyPatch(nameof(BreakableContainer.releaseContents))]
-    [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Harmony Convention")]
     private static void Postfix(GameLocation location, BreakableContainer __instance, NetInt ___containerType)
     {
         if (Singletons.Random.NextDouble() > 0.01 + (Game1.player.DailyLuck / 20) + (Math.Min(3, Game1.player.LuckLevel) / 100.0))

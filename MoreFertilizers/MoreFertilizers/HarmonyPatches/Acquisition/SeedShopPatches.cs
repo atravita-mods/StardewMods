@@ -13,7 +13,7 @@ namespace MoreFertilizers.HarmonyPatches.Acquisition;
 /// Patches against Locations.SeedShop.
 /// </summary>
 [HarmonyPatch(typeof(SeedShop))]
-[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Harmony Convention.")]
+[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = StyleCopConstants.NamedForHarmony)]
 internal static class SeedShopPatches
 {
     [HarmonyPostfix]

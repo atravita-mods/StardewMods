@@ -13,11 +13,11 @@ namespace StopRugRemoval.HarmonyPatches.Niceties.CrashHandling;
 /// Returns escaped children.
 /// </summary>
 [HarmonyPatch(typeof(Child))]
+[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = StyleCopConstants.NamedForHarmony)]
 internal static class EscapedChildFixer
 {
     [HarmonyPriority(Priority.Last)]
     [HarmonyPatch(nameof(Child.dayUpdate))]
-    [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Named For Harmony.")]
     private static bool Prefix(Child __instance)
     {
         try

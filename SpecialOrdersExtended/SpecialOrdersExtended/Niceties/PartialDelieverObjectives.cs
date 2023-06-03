@@ -14,15 +14,24 @@ namespace SpecialOrdersExtended.Niceties;
 /// Holds patches against DeliverObjective to allow partial deliveries.
 /// </summary>
 [HarmonyPatch(typeof(DeliverObjective))]
+[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = StyleCopConstants.NamedForHarmony)]
 internal static class PartialDelieverObjectives
 {
     [HarmonyPatch(nameof(DeliverObjective.ShouldShowProgress))]
-    [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Harmony Convention.")]
     private static void Postfix(ref bool __result)
         => __result = true;
 
     private static void PlayChime()
-        => Game1.currentLocation.playSound("discoverMineral");
+    {
+        try
+        {
+            Game1.currentLocation.playSound("discoverMineral");
+        }
+        catch (Exception ex)
+        {
+            ModEntry.ModMonitor.LogError("playing chime", ex);
+        }
+    }
 
     [HarmonyPatch(nameof(DeliverObjective.OnItemDelivered))]
     private static IEnumerable<CodeInstruction>? Transpiler(IEnumerable<CodeInstruction> instructions, ILGenerator gen, MethodBase original)

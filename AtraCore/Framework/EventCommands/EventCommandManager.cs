@@ -16,7 +16,7 @@ namespace AtraCore.Framework.EventCommands;
 /// Handles event commands.
 /// </summary>
 [HarmonyPatch(typeof(Event))]
-[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Harmony convention.")]
+[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = StyleCopConstants.NamedForHarmony)]
 public static class EventCommandManager
 {
     private static readonly Dictionary<string, IEventCommand> _commands = new(StringComparer.OrdinalIgnoreCase);

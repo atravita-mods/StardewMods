@@ -8,7 +8,7 @@ namespace TrashDoesNotConsumeBait.HarmonyPatches;
 /// Patches on CrabPot to restore bait if the object was trash.
 /// </summary>
 [HarmonyPatch(typeof(CrabPot), nameof(CrabPot.checkForAction))]
-[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Harmony convention")]
+[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = StyleCopConstants.NamedForHarmony)]
 internal static class CrabPotPatches
 {
     [HarmonyPriority(Priority.First)]

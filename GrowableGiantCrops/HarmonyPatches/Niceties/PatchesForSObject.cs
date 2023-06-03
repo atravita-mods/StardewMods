@@ -17,7 +17,7 @@ namespace GrowableGiantCrops.HarmonyPatches.Niceties;
 /// Holds patches on SObject for misc stuff.
 /// </summary>
 [HarmonyPatch(typeof(SObject))]
-[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Harmony convention.")]
+[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = StyleCopConstants.NamedForHarmony)]
 internal static class PatchesForSObject
 {
     /// <summary>

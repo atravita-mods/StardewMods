@@ -15,7 +15,7 @@ namespace StopRugRemoval.HarmonyPatches.Niceties;
 /// Fixes the secret note spawning code.
 /// </summary>
 [HarmonyPatch(typeof(GameLocation))]
-[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Harmony convention.")]
+[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = StyleCopConstants.NamedForHarmony)]
 internal static class FixSecretNotes
 {
     // we're doing this as an internal optimization and intentionally not saving it in ModData

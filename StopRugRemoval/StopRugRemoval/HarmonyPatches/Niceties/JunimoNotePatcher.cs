@@ -8,10 +8,10 @@ namespace StopRugRemoval.HarmonyPatches.Niceties;
 /// Patches the jumino menu so paging can be done with arrow keys.
 /// </summary>
 [HarmonyPatch(typeof(JunimoNoteMenu))]
+[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = StyleCopConstants.NamedForHarmony)]
 internal static class JunimoNotePatcher
 {
     [HarmonyPatch(nameof(JunimoNoteMenu.receiveKeyPress))]
-    [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Harmony convention.")]
     private static void Postfix(JunimoNoteMenu __instance, Keys key, bool ___specificBundlePage)
     {
         if (__instance.fromGameMenu && !___specificBundlePage)

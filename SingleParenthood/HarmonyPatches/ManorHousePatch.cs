@@ -10,6 +10,7 @@ namespace SingleParenthood.HarmonyPatches;
 /// Patches manor house to adjust the divorce book action.
 /// </summary>
 [HarmonyPatch(typeof(ManorHouse))]
+[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = StyleCopConstants.NamedForHarmony)]
 internal static class ManorHousePatch
 {
     private static void ChildMenu()
@@ -45,7 +46,6 @@ internal static class ManorHousePatch
     }
 
     [HarmonyPatch(nameof(ManorHouse.performAction))]
-    [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Harmony Convention")]
     private static bool Prefix(ManorHouse __instance, string action)
     {
         if (action is "DivorceBook"

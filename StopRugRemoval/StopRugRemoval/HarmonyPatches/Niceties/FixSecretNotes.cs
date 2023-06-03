@@ -78,7 +78,7 @@ internal static class FixSecretNotes
         }
         catch (Exception ex)
         {
-            ModEntry.ModMonitor.Log($"Failed while trying to generate a secret note:\n\n{ex}", LogLevel.Error);
+            ModEntry.ModMonitor.LogError("generating a secret note", ex);
         }
 
         return true;

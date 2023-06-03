@@ -39,9 +39,9 @@ internal static class JumpTouchAction
             .Advance(4)
             .StoreBranchDest()
             .AdvanceToStoredLabel()
-            .DefineAndAttachLabel(out var jumpPast)
+            .DefineAndAttachLabel(out Label jumpPast)
             .Pop()
-            .GetLabels(out var labelsToMove)
+            .GetLabels(out IList<Label>? labelsToMove)
             .Insert(new CodeInstruction[]
             { // insert if (!IsActiveJump() && this.lastTouchActionLocation.Equals(Vector2.Zero))
                 new(OpCodes.Call, typeof(JumpTouchAction).GetCachedMethod(nameof(IsActiveJump), ReflectionCache.FlagTypes.StaticFlags)),
@@ -53,8 +53,7 @@ internal static class JumpTouchAction
         }
         catch (Exception ex)
         {
-            ModEntry.ModMonitor.Log($"Ran into error transpiling {original.FullDescription()}.\n\n{ex}", LogLevel.Error);
-            original?.Snitch(ModEntry.ModMonitor);
+            ModEntry.ModMonitor.LogTranspilerError(original, ex);
         }
         return null;
     }

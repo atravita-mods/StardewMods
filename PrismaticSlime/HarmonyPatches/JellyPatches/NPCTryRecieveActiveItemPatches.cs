@@ -114,7 +114,7 @@ internal static class NPCTryRecieveActiveItemPatches
             }
             catch (Exception ex)
             {
-                ModEntry.ModMonitor.Log($"Failed while trying to override NPC.{nameof(NPC.tryToReceiveActiveObject)}\n\n{ex}", LogLevel.Error);
+                ModEntry.ModMonitor.LogError($"overriding NPC.{nameof(NPC.tryToReceiveActiveObject)}", ex);
             }
         }
 

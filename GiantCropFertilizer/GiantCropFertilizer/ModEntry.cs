@@ -321,7 +321,7 @@ internal sealed class ModEntry : Mod
         }
         catch (Exception ex)
         {
-            this.Monitor.Log($"Failed in deshuffling IDs in SF buildings:\n\n{ex}", LogLevel.Error);
+            this.Monitor.LogError("deshuffling IDs in SF buildings", ex);
         }
         this.oldID = -1;
         this.newID = -1;

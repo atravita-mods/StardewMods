@@ -133,8 +133,7 @@ internal sealed class ModEntry : Mod
         }
         catch (Exception ex)
         {
-            ModMonitor.Log($"Mod crashed while transpiling mine death methods:\n\n{ex}", LogLevel.Error);
-            original.Snitch(ModMonitor);
+            ModMonitor.LogTranspilerError(original, ex);
         }
         return null;
     }

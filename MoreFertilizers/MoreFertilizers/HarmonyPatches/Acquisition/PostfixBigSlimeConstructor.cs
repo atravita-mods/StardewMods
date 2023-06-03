@@ -1,5 +1,7 @@
 ﻿using AtraCore;
 
+using AtraShared.Utils.Extensions;
+
 using HarmonyLib;
 using Microsoft.Xna.Framework;
 using StardewValley.Monsters;
@@ -59,7 +61,7 @@ internal static class PostfixBigSlimeConstructor
         }
         catch (Exception ex)
         {
-            ModEntry.ModMonitor.Log($"Failed in postfix for BigSlime's constructor.\n\n{ex}", LogLevel.Error);
+            ModEntry.ModMonitor.LogError("adding fertilizers to big slimes", ex);
         }
     }
 }

@@ -1,4 +1,6 @@
-﻿using AtraShared.ConstantsAndEnums;
+﻿// Ignore Spelling: Api
+
+using AtraShared.ConstantsAndEnums;
 using AtraShared.Menuing;
 using AtraShared.Utils.Extensions;
 
@@ -51,7 +53,7 @@ internal sealed class ModEntry : Mod
     /// <inheritdoc cref="IGameLoopEvents.DayEnding"/>
     private void OnDayEnding(object? sender, DayEndingEventArgs e)
     {
-        Utility.ForAllLocations((location) =>
+        Utility.ForAllLocations(static (location) =>
         {
             if (location?.resourceClumps is null)
             {
@@ -74,7 +76,7 @@ internal sealed class ModEntry : Mod
                             tapper.heldObject.Value = output.Value.obj;
                             int days = output.Value.days;
                             tapper.MinutesUntilReady = Utility.CalculateMinutesUntilMorning(Game1.timeOfDay, Math.Max(1, days));
-                            this.Monitor.DebugOnlyLog($"Assigning product to tapper at {location.NameOrUniqueName} {offset}", LogLevel.Info);
+                            ModMonitor.DebugOnlyLog($"Assigning product to tapper at {location.NameOrUniqueName} {offset}", LogLevel.Info);
                         }
                     }
                 }
@@ -134,7 +136,7 @@ internal sealed class ModEntry : Mod
         {
             if (Utility.withinRadiusOfPlayer(x, y, 2, f) && item is SObject obj)
             {
-                Vector2 tile = new(MathF.Floor(x / 64f), MathF.Floor(y / 64f));
+                Vector2 tile = new(MathF.Floor(x / Game1.tileSize), MathF.Floor(y / Game1.tileSize));
                 if (Api.CanPlaceTapper(location, tile, obj))
                 {
                     __result = true;
@@ -144,7 +146,7 @@ internal sealed class ModEntry : Mod
         }
         catch (Exception ex)
         {
-            ModMonitor.Log($"Attempt to prefix Utility.playerCanPlaceItemHere has failed:\n\n{ex}", LogLevel.Error);
+            ModMonitor.LogError("adding tapper to Utility.playerCanPlaceItemHere", ex);
         }
         return true;
     }

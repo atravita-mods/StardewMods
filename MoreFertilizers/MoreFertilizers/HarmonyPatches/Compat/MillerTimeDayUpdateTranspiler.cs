@@ -33,7 +33,7 @@ internal static class MillerTimeDayUpdateTranspiler
         }
         catch (Exception ex)
         {
-            ModEntry.ModMonitor.Log($"Mod failed while transpiling Miller Time. Integration may not work.\n\n{ex}", LogLevel.Error);
+            ModEntry.ModMonitor.LogError("transpiling Miller Time", ex);
         }
     }
 
@@ -82,8 +82,7 @@ internal static class MillerTimeDayUpdateTranspiler
         }
         catch (Exception ex)
         {
-            ModEntry.ModMonitor.Log($"Mod crashed while transpiling Miller Time:\n\n{ex}", LogLevel.Error);
-            original?.Snitch(ModEntry.ModMonitor);
+            ModEntry.ModMonitor.LogTranspilerError(original, ex);
         }
         return null;
     }

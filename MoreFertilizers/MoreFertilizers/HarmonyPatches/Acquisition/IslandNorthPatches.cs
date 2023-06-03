@@ -1,4 +1,7 @@
-﻿using HarmonyLib;
+﻿using AtraShared.Utils.Extensions;
+
+using HarmonyLib;
+
 using StardewValley.Locations;
 using StardewValley.Menus;
 
@@ -8,11 +11,11 @@ namespace MoreFertilizers.HarmonyPatches.Acquisition;
 /// Patches against IslandNorth to put the fertilizer into the shop.
 /// </summary>
 [HarmonyPatch(typeof(IslandNorth))]
+[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Harmony Convention")]
 internal static class IslandNorthPatches
 {
     [HarmonyPostfix]
     [HarmonyPatch(nameof(IslandNorth.getIslandMerchantTradeStock))]
-    [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Harmony Convention")]
     private static void PostfixShop(Dictionary<ISalable, int[]> __result)
     {
         try
@@ -33,7 +36,7 @@ internal static class IslandNorthPatches
         }
         catch (Exception ex)
         {
-            ModEntry.ModMonitor.Log($"Ran into errors adding stock to Island North!\n\n{ex}", LogLevel.Error);
+            ModEntry.ModMonitor.LogError("adding stock to Island North", ex);
         }
     }
 }

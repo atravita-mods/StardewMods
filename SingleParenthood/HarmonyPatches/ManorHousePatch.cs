@@ -91,7 +91,7 @@ internal static class ManorHousePatch
             }
             catch (Exception ex)
             {
-                ModEntry.ModMonitor.Log($"Failed while overriding divorce book.\n\n{ex}", LogLevel.Error);
+                ModEntry.ModMonitor.LogError("overriding divorce book", ex);
             }
         }
         return true;

@@ -109,7 +109,7 @@ internal sealed class ModEntry : Mod
         }
         catch (Exception ex)
         {
-            this.Monitor.Log($"Failed while trying to read events to repeat file: {ex}", LogLevel.Error);
+            this.Monitor.LogError("reading events to repeat file", ex);
         }
 
         if (Context.IsSplitScreen && Context.ScreenId != 0)

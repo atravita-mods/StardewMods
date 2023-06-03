@@ -1,4 +1,6 @@
-﻿using HarmonyLib;
+﻿using AtraShared.Utils.Extensions;
+
+using HarmonyLib;
 
 using Microsoft.Xna.Framework;
 
@@ -27,7 +29,7 @@ internal static class DwarfShopPatches
         }
         catch (Exception ex)
         {
-            ModEntry.ModMonitor.Log($"Failed to add a decorative boulder to the dwarf's shop stock:\n\n{ex}", LogLevel.Error);
+            ModEntry.ModMonitor.LogError("adding a decorative boulder to the dwarf's shop stock", ex);
         }
     }
 }

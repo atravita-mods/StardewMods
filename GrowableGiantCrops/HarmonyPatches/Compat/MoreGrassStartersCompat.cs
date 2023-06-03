@@ -19,12 +19,14 @@ namespace GrowableGiantCrops.HarmonyPatches.Compat;
 /// <summary>
 /// Patches MoreGrassStarters.
 /// </summary>
+[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Harmony Convention.")]
 internal static class MoreGrassStartersCompat
 {
     /// <summary>
     /// Applies the patches for this class.
     /// </summary>
     /// <param name="harmony">My harmony instance.</param>
+    /// <param name="registry">The modregistery.</param>
     internal static void ApplyPatch(Harmony harmony, IModRegistry registry)
     {
         try
@@ -63,11 +65,10 @@ internal static class MoreGrassStartersCompat
         }
         catch (Exception ex)
         {
-            ModEntry.ModMonitor.Log($"Failed to patch More Grass Starters.\n\n{ex}", LogLevel.Error);
+            ModEntry.ModMonitor.LogError("patching More Grass Starters", ex);
         }
     }
 
-    [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Harmony Convention.")]
     private static void Postfix(SObject __instance, GameLocation location, int x, int y, bool __result)
     {
         if (!__result || __instance?.modData?.GetBool(SObjectPatches.ModDataKey) != true)
@@ -86,7 +87,7 @@ internal static class MoreGrassStartersCompat
         }
         catch (Exception ex)
         {
-            ModEntry.ModMonitor.Log($"Failed while trying to override health of MGS grass:\n\n{ex}", LogLevel.Error);
+            ModEntry.ModMonitor.LogError("overriding health of MGS grass", ex);
         }
     }
 
@@ -128,8 +129,7 @@ internal static class MoreGrassStartersCompat
         }
         catch (Exception ex)
         {
-            ModEntry.ModMonitor.Log($"Mod crashed while transpiling {original.FullDescription()}:\n\n{ex}", LogLevel.Error);
-            original.Snitch(ModEntry.ModMonitor);
+            ModEntry.ModMonitor.LogTranspilerError(original, ex);
         }
         return null;
     }

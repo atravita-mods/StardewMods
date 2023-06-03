@@ -104,7 +104,7 @@ internal static class IslandCaveWestDifficultyTranspiler
         }
         catch (Exception ex)
         {
-            ModEntry.ModMonitor.Log($"Failed in trying to save the failure count.\n\n{ex}", LogLevel.Error);
+            ModEntry.ModMonitor.LogError("saving the failure count", ex);
         }
     }
 
@@ -129,7 +129,7 @@ internal static class IslandCaveWestDifficultyTranspiler
         }
         catch (Exception ex)
         {
-            ModEntry.ModMonitor.Log($"Failed while trying to read failure count.\n\n{ex}", LogLevel.Error);
+            ModEntry.ModMonitor.LogError("reading the failure count", ex);
             return 0;
         }
     }
@@ -161,7 +161,7 @@ internal static class IslandCaveWestDifficultyTranspiler
         }
         catch (Exception ex)
         {
-            ModEntry.ModMonitor.Log($"Failed while trying to set a different phase\n\n{ex}", LogLevel.Error);
+            ModEntry.ModMonitor.LogError("setting a different phase", ex);
         }
         return IslandWestCave1.PHASE_PLAY_SEQUENCE;
     }
@@ -235,8 +235,7 @@ internal static class IslandCaveWestDifficultyTranspiler
         }
         catch (Exception ex)
         {
-            ModEntry.ModMonitor.Log($"Ran into errors transpiling IslandWestCave1.UpdateWhenCurrentLocation.\n\n{ex}", LogLevel.Error);
-            original?.Snitch(ModEntry.ModMonitor);
+            ModEntry.ModMonitor.LogTranspilerError(original, ex);
         }
         return null;
     }
@@ -293,7 +292,7 @@ internal static class IslandCaveWestDifficultyTranspiler
         }
         catch (Exception ex)
         {
-            ModEntry.ModMonitor.Log($"Failed while postfixing PerformAction in the cave...{ex}", LogLevel.Error);
+            ModEntry.ModMonitor.LogError("postfixing PerformAction in the cave", ex);
         }
     }
 
@@ -331,8 +330,7 @@ internal static class IslandCaveWestDifficultyTranspiler
         }
         catch (Exception ex)
         {
-            ModEntry.ModMonitor.Log($"Ran into errors transpiling IslandWestCave1.enterValue.\n\n{ex}", LogLevel.Error);
-            original?.Snitch(ModEntry.ModMonitor);
+            ModEntry.ModMonitor.LogTranspilerError(original, ex);
         }
         return null;
     }

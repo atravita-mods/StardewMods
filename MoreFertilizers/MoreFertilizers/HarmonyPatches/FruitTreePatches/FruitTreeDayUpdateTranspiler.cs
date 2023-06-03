@@ -33,7 +33,7 @@ internal static class FruitTreeDayUpdateTranspiler
         }
         catch (Exception ex)
         {
-            ModEntry.ModMonitor.Log($"Mod crashed while transpiling DGA. Integration may not work correctly.\n\n{ex}", LogLevel.Error);
+            ModEntry.ModMonitor.LogError("transpiling DGA", ex);
         }
     }
 
@@ -50,7 +50,7 @@ internal static class FruitTreeDayUpdateTranspiler
         }
         catch (Exception ex)
         {
-            ModEntry.ModMonitor.LogOnce($"Crash while calculating extra growth for fruit trees!\n\n{ex}", LogLevel.Error);
+            ModEntry.ModMonitor.LogError($"calculating extra growth for fruit trees", ex);
         }
         return 0;
     }
@@ -93,7 +93,7 @@ internal static class FruitTreeDayUpdateTranspiler
         }
         catch (Exception ex)
         {
-            ModEntry.ModMonitor.Log($"Mod crashed while transpiling FruitTree.DayUpdate:\n\n{ex}", LogLevel.Error);
+            ModEntry.ModMonitor.LogTranspilerError(original, ex);
         }
         return null;
     }

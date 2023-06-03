@@ -1,4 +1,5 @@
 ﻿using AtraShared.ConstantsAndEnums;
+using AtraShared.Utils.Extensions;
 
 using HarmonyLib;
 
@@ -39,7 +40,7 @@ internal static class FarmerPatches
         }
         catch (Exception ex)
         {
-            ModEntry.ModMonitor.Log($"Failed while trying to add prismatic toast buff\n\n{ex}", LogLevel.Error);
+            ModEntry.ModMonitor.LogError("adding prismatic toast buff", ex);
         }
     }
 }

@@ -1,5 +1,7 @@
 ﻿using AtraCore.Framework.ReflectionManager;
 
+using AtraShared.Utils.Extensions;
+
 using HarmonyLib;
 
 using SpecialOrdersExtended.Managers;
@@ -31,7 +33,7 @@ internal static class SpecialOrderPatches
         }
         catch (Exception ex)
         {
-            ModEntry.ModMonitor.Log($"Failed in apply board update patch:\n\n{ex}", LogLevel.Error);
+            ModEntry.ModMonitor.LogError("applying board update patch", ex);
         }
     }
 

@@ -2,8 +2,11 @@
 
 using AtraCore;
 using AtraCore.Framework.ReflectionManager;
-using AtraCore.Utilities;
+
+using AtraShared.Utils.Extensions;
+
 using Microsoft.Xna.Framework;
+
 using StardewValley.BellsAndWhistles;
 using StardewValley.Locations;
 using StardewValley.TerrainFeatures;
@@ -40,13 +43,17 @@ internal static class CRUtils
             try
             {
                 ICue cue = Game1.soundBank.GetCue("toolCharge");
+                if (cue is null)
+                {
+                    return;
+                }
                 cue.SetVariable("Pitch", (Singletons.Random.Next(12, 16) + charge ) * 100);
                 cue.Play();
             }
             catch (Exception ex)
             {
                 ModEntry.Config.PlayAudioEffects = false;
-                ModEntry.ModMonitor.Log($"Failed while trying to play charge-up cue!\n\n{ex}", LogLevel.Error);
+                ModEntry.ModMonitor.LogError("playing charge-up cue", ex);
             }
         }
     }
@@ -65,7 +72,7 @@ internal static class CRUtils
             catch (Exception ex)
             {
                 ModEntry.Config.PlayAudioEffects = false;
-                ModEntry.ModMonitor.Log($"Failed while trying to play hopping noise.\n\n{ex}", LogLevel.Error);
+                ModEntry.ModMonitor.LogError("playing hopping noise", ex);
             }
         }
     }

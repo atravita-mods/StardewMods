@@ -3,6 +3,8 @@
 using AtraBase.Toolkit;
 using AtraBase.Toolkit.Extensions;
 
+using AtraShared.Utils.Extensions;
+
 using HarmonyLib;
 using Microsoft.Xna.Framework;
 using StardewValley.Locations;
@@ -13,6 +15,7 @@ namespace GingerIslandMainlandAdjustments.ScheduleManager;
 /// Handles patches on the NPC class to allow beach fishing.
 /// </summary>
 [HarmonyPatch(typeof(NPC))]
+[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Convention set by Harmony")]
 internal static class NPCPatches
 {
     /// <summary>
@@ -62,7 +65,6 @@ internal static class NPCPatches
     /// <param name="__0">animation key.</param>
     [HarmonyPostfix]
     [HarmonyPatch("startRouteBehavior")]
-    [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Convention set by Harmony")]
     private static void StartFishBehavior(NPC __instance, string __0)
     {
         try
@@ -82,7 +84,7 @@ internal static class NPCPatches
         }
         catch (Exception ex)
         {
-            Globals.ModMonitor.Log($"Ran into errors in postfix for startRouteBehavior\n\n{ex}", LogLevel.Error);
+            Globals.ModMonitor.LogError("postfixing startRouteBehavior", ex);
         }
     }
 
@@ -94,7 +96,6 @@ internal static class NPCPatches
     /// <remarks>Force the reset no matter which map the NPC is currently on.</remarks>
     [HarmonyPostfix]
     [HarmonyPatch("finishRouteBehavior")]
-    [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Convention set by Harmony")]
     private static void EndFishBehavior(NPC __instance, string __0)
     {
         try
@@ -112,7 +113,7 @@ internal static class NPCPatches
         }
         catch (Exception ex)
         {
-            Globals.ModMonitor.Log($"Ran into errors in postfix for endRouteBehavior\n\n{ex}", LogLevel.Error);
+            Globals.ModMonitor.LogError("postfixing finishRouteBehavior", ex);
         }
     }
 

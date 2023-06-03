@@ -136,7 +136,7 @@ internal sealed class ModEntry : Mod
         }
         catch (Exception ex)
         {
-            ModMonitor.Log($"Failed to patch NPC::checkForNewCurrentDialogue for Special Orders Dialogue. Dialogue will be disabled\n\n{ex}", LogLevel.Error);
+            ModMonitor.LogError("patching NPC::checkForNewCurrentDialogue for Special Orders Dialogue", ex);
         }
 
         if (ModsThatHandleTheBoard.All(uniqueID => !this.Helper.ModRegistry.IsLoaded(uniqueID)))
@@ -229,7 +229,7 @@ internal sealed class ModEntry : Mod
         }
         catch (Exception ex)
         {
-            this.Monitor.Log($"Failed in loading temporary files:\n\n{ex}", LogLevel.Error);
+            this.Monitor.LogError("loading temporary files", ex);
         }
     }
 
@@ -242,7 +242,7 @@ internal sealed class ModEntry : Mod
         }
         catch (Exception ex)
         {
-            this.Monitor.Log($"Failed in saving temporary files:\n\n{ex}", LogLevel.Error);
+            this.Monitor.LogError("saving temporary files", ex);
         }
     }
 

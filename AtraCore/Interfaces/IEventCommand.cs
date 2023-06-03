@@ -7,7 +7,6 @@ namespace AtraCore.Interfaces;
 /// </summary>
 public interface IEventCommand
 {
-
     /// <summary>
     /// Gets the name of the command. For compatibility, prefix with your name.
     /// </summary>

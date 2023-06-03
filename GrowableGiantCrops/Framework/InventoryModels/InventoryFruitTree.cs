@@ -430,7 +430,7 @@ public sealed class InventoryFruitTree : SObject
         }
         catch (Exception ex)
         {
-            ModEntry.ModMonitor.Log($"Failed to load fruit tree asset\n\n{ex}", LogLevel.Error);
+            ModEntry.ModMonitor.LogError("loading fruit tree asset", ex);
         }
         return false;
     }
@@ -458,10 +458,20 @@ public sealed class InventoryFruitTree : SObject
             return;
         }
 
-        Dictionary<int, string> data = Game1.content.Load<Dictionary<int, string>>(@"Data\fruitTrees");
-        if (!data.TryGetValue(this.ParentSheetIndex, out string? treeInfo)
-            || !int.TryParse(treeInfo.GetNthChunk('/'), out int treeIndex))
+        int treeIndex;
+
+        try
         {
+            Dictionary<int, string> data = Game1.content.Load<Dictionary<int, string>>(@"Data\fruitTrees");
+            if (!data.TryGetValue(this.ParentSheetIndex, out string? treeInfo)
+                || !int.TryParse(treeInfo.GetNthChunk('/'), out treeIndex))
+            {
+                return;
+            }
+        }
+        catch (Exception ex)
+        {
+            ModEntry.ModMonitor.LogError("looking up fruittree data", ex);
             return;
         }
 

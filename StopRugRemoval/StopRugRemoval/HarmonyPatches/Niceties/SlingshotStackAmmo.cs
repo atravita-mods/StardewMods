@@ -1,4 +1,5 @@
-﻿using HarmonyLib;
+﻿using AtraShared.Utils.Extensions;
+using HarmonyLib;
 using StardewValley.Tools;
 
 namespace StopRugRemoval.HarmonyPatches.Niceties;
@@ -41,7 +42,7 @@ internal static class SlingshotStackAmmo
         }
         catch (Exception ex)
         {
-            ModEntry.ModMonitor.Log($"Failed in overriding Slingshot.{nameof(Slingshot.attach)}\n\n{ex}", LogLevel.Error);
+            ModEntry.ModMonitor.LogError($"overriding Slingshot.{nameof(Slingshot.attach)}", ex);
         }
         return true;
     }

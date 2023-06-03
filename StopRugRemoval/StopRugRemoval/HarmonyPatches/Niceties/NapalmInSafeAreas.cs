@@ -1,4 +1,6 @@
-﻿using HarmonyLib;
+﻿using AtraShared.Utils.Extensions;
+
+using HarmonyLib;
 
 using StardewValley.Objects;
 
@@ -31,7 +33,7 @@ internal static class NapalmInSafeAreas
         }
         catch (Exception ex)
         {
-            ModEntry.ModMonitor.Log($"Failed when trying to prevent napalm ring in safe areas:\n\n{ex}", LogLevel.Error);
+            ModEntry.ModMonitor.LogError("prevent napalm ring in safe areas", ex);
         }
         return true;
     }

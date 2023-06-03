@@ -8,6 +8,7 @@ using AtraCore.Utilities;
 
 using AtraShared.ConstantsAndEnums;
 using AtraShared.Utils;
+using AtraShared.Utils.Extensions;
 
 using HarmonyLib;
 
@@ -49,8 +50,7 @@ internal sealed class SetRelationship : IEventCommand
         }
         catch (Exception ex)
         {
-            ModEntry.ModMonitor.Log($"Mod failed while trying to create delegate for free love's spouse reload", LogLevel.Error);
-            ModEntry.ModMonitor.Log(ex.ToString());
+            ModEntry.ModMonitor.LogError("trying to create delegate for free love's spouse reload", ex);
             return null;
         }
     });
@@ -287,8 +287,7 @@ internal sealed class SetRelationship : IEventCommand
                 }
                 catch (Exception ex)
                 {
-                    ModEntry.ModMonitor.Log($"Call to Farmer.doDivorce failed for {Game1.player.Name}", LogLevel.Error);
-                    ModEntry.ModMonitor.Log(ex.ToString());
+                    ModEntry.ModMonitor.LogError($"calling Farmer.doDivorce for {Game1.player.Name}", ex);
                 }
             }
         }

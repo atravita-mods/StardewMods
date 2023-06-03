@@ -1,5 +1,7 @@
 ﻿using AtraCore;
 
+using AtraShared.Utils.Extensions;
+
 using HarmonyLib;
 using Microsoft.Xna.Framework;
 using StardewModdingAPI.Utilities;
@@ -57,7 +59,7 @@ internal static class GameLocationPatches
         }
         catch (Exception ex)
         {
-            ModEntry.ModMonitor.Log($"Mod failed while adding additional monster drops!\n\n{ex}", LogLevel.Error);
+            ModEntry.ModMonitor.LogError("adding additional monster drops", ex);
         }
     }
 }

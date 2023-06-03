@@ -37,7 +37,7 @@ internal static class FixBirthdayGifts
                 }
             }
 
-            ModEntry.ModMonitor.Log($"Failed to find replacement gift for {__instance.Name}, surpressing original exception.", LogLevel.Error);
+            ModEntry.ModMonitor.Log($"Failed to find replacement gift for {__instance.Name}, suppressing original exception.", LogLevel.Error);
             __result = null;
         }
         return null;
@@ -78,8 +78,7 @@ internal static class FixBirthdayGifts
         }
         catch (Exception ex)
         {
-            ModEntry.ModMonitor.Log($"Ran into error transpiling {original.FullDescription()}.\n\n{ex}", LogLevel.Error);
-            original?.Snitch(ModEntry.ModMonitor);
+            ModEntry.ModMonitor.LogTranspilerError(original, ex);
         }
         return null;
     }

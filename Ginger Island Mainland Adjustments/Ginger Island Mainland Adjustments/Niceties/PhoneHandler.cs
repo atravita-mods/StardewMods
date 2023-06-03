@@ -62,8 +62,7 @@ internal static class PhoneHandler
         }
         catch (Exception ex)
         {
-            Globals.ModMonitor.Log($"Mod crashed while transpiling {original.FullDescription()}:\n\n{ex}", LogLevel.Error);
-            original.Snitch(Globals.ModMonitor);
+            Globals.ModMonitor.LogTranspilerError(original, ex);
         }
         return null;
     }
@@ -151,7 +150,7 @@ internal static class PhoneHandler
                 }
                 catch (Exception ex)
                 {
-                    Globals.ModMonitor.Log($"Error handling Pam's phone call {ex}", LogLevel.Error);
+                    Globals.ModMonitor.LogError("handling Pam's phone call", ex);
                 }
             },
             GameLocation.PHONE_RING_DURATION);

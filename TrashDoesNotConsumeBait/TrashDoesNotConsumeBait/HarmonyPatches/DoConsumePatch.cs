@@ -74,7 +74,7 @@ internal static class DoConsumePatch
         }
         catch (Exception ex)
         {
-            ModEntry.ModMonitor.Log($"Mod failed while trying to replace bait.\n\n{ex}", LogLevel.Error);
+            ModEntry.ModMonitor.LogError("replacing bait", ex);
         }
         return null;
     }
@@ -122,7 +122,7 @@ internal static class DoConsumePatch
         }
         catch (Exception ex)
         {
-            ModEntry.ModMonitor.Log($"Mod failed while trying to replace tackle.\n\n{ex}", LogLevel.Error);
+            ModEntry.ModMonitor.LogError("replacing tackle", ex);
         }
         return null;
     }
@@ -254,8 +254,7 @@ internal static class DoConsumePatch
         }
         catch (Exception ex)
         {
-            ModEntry.ModMonitor.Log($"Mod crashed while transpiling {original.FullDescription()}:\n\n{ex}", LogLevel.Error);
-            original.Snitch(ModEntry.ModMonitor);
+            ModEntry.ModMonitor.LogTranspilerError(original, ex);
         }
         return null;
     }

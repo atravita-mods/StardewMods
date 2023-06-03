@@ -2,6 +2,8 @@
 using AtraCore.Interfaces;
 using AtraCore.Utilities;
 
+using AtraShared.Utils.Extensions;
+
 using Microsoft.Xna.Framework;
 
 namespace SpecialOrdersExtended.Niceties;
@@ -52,7 +54,7 @@ internal sealed class AddSpecialOrderCommand : IEventCommand
         }
         catch (Exception ex)
         {
-            ModEntry.ModMonitor.Log($"Mod failed while attempting to adding a special order:\n\n{ex}", LogLevel.Error);
+            ModEntry.ModMonitor.LogError("adding a special order", ex);
         }
 
         error = null;

@@ -2,6 +2,8 @@
 
 using AtraCore.Framework.ReflectionManager;
 
+using AtraShared.Utils.Extensions;
+
 using HarmonyLib;
 
 using Microsoft.Xna.Framework;
@@ -53,7 +55,7 @@ internal static class RingPatches
         }
         catch (Exception ex)
         {
-            ModEntry.ModMonitor.Log($"Failed when trying to dequip ring!\n\n{ex}", LogLevel.Error);
+            ModEntry.ModMonitor.LogError("dequipping ring", ex);
         }
     }
 
@@ -75,7 +77,7 @@ internal static class RingPatches
         }
         catch (Exception ex)
         {
-            ModEntry.ModMonitor.Log($"Failed when trying to deal with new location!\n\n{ex}", LogLevel.Error);
+            ModEntry.ModMonitor.LogError("dealing with new location", ex);
         }
     }
 
@@ -97,7 +99,7 @@ internal static class RingPatches
         }
         catch (Exception ex)
         {
-            ModEntry.ModMonitor.Log($"Failed when trying to leave location!\n\n{ex}", LogLevel.Error);
+            ModEntry.ModMonitor.LogError("leaving location", ex);
         }
     }
 
@@ -143,7 +145,7 @@ internal static class RingPatches
         }
         catch (Exception ex)
         {
-            ModEntry.ModMonitor.Log($"Failed when trying to equip ring!\n\n{ex}", LogLevel.Error);
+            ModEntry.ModMonitor.LogError("equipping ring", ex);
         }
     }
 

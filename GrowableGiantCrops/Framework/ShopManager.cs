@@ -33,6 +33,7 @@ namespace GrowableGiantCrops.Framework;
 /// </summary>
 [HarmonyPatch(typeof(Utility))]
 [SuppressMessage("StyleCop.CSharp.OrderingRules", "SA1214:Readonly fields should appear before non-readonly fields", Justification = "Reviewed.")]
+[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Harmony convention.")]
 internal static class ShopManager
 {
     private const string BUILDING = "Buildings";
@@ -181,7 +182,7 @@ internal static class ShopManager
                 interval = 50000f,
                 totalNumberOfLoops = 9999,
                 scale = 4f,
-                layerDepth = (((tile.Y - 0.5f) * Game1.tileSize) / 10000f) + 0.01f, // a little offset so it doesn't show up on the floor.
+                layerDepth = MathF.BitIncrement((((tile.Y - 0.5f) * Game1.tileSize) / 10000f) + 0.01f), // a little offset so it doesn't show up on the floor.
                 id = 777f,
             });
         }
@@ -330,7 +331,6 @@ internal static class ShopManager
     /// </summary>
     /// <param name="__result">shop inventory to add to.</param>
     [HarmonyPatch(nameof(Utility.getAllFurnituresForFree))]
-    [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Harmony convention.")]
     private static void Postfix(Dictionary<ISalable, int[]> __result)
     {
         try
@@ -339,7 +339,7 @@ internal static class ShopManager
         }
         catch (Exception ex)
         {
-            ModEntry.ModMonitor.Log($"Failed while trying to add grass to the catalogue\n\n{ex}", LogLevel.Error);
+            ModEntry.ModMonitor.LogError("adding grass to the catalogue", ex);
         }
     }
 

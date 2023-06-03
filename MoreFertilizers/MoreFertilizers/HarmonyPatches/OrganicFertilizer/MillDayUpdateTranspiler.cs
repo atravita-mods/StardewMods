@@ -48,7 +48,7 @@ internal static class MillDayUpdateTranspiler
         }
         catch (Exception ex)
         {
-            ModEntry.ModMonitor.Log($"Error in making mill item organic!\n\n{ex}", LogLevel.Error);
+            ModEntry.ModMonitor.LogError("making mill item organic", ex);
         }
         return output;
     }
@@ -108,7 +108,7 @@ internal static class MillDayUpdateTranspiler
         }
         catch (Exception ex)
         {
-            ModEntry.ModMonitor.Log($"Mod crashed while transpiling Crop.harvest:\n\n{ex}", LogLevel.Error);
+            ModEntry.ModMonitor.LogTranspilerError(original, ex);
         }
         return null;
     }

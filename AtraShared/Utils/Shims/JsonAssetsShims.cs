@@ -1,4 +1,6 @@
-﻿using System.Reflection;
+﻿// Ignore Spelling: Ja
+
+using System.Reflection;
 using System.Text;
 
 using AtraBase.Toolkit;
@@ -212,8 +214,7 @@ breakcontinue:
         }
         catch (Exception ex)
         {
-            modMonitor.Log($"Something appears to have gone wrong with JA integration:", LogLevel.Error);
-            modMonitor.Log(ex.ToString());
+            modMonitor.LogError("checking JA for crop data", ex);
             return null;
         }
     }

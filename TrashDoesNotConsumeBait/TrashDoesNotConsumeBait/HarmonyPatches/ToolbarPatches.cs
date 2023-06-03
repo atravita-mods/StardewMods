@@ -1,4 +1,5 @@
-﻿using HarmonyLib;
+﻿using AtraShared.Utils.Extensions;
+using HarmonyLib;
 using StardewValley.Menus;
 using StardewValley.Tools;
 
@@ -67,7 +68,7 @@ internal static class ToolbarPatches
         }
         catch (Exception ex)
         {
-            ModEntry.ModMonitor.Log($"Patch failed while trying to swap out bait or tackle...\n\n{ex}", LogLevel.Error);
+            ModEntry.ModMonitor.LogError("swapping out bait or tackle", ex);
         }
     }
 }

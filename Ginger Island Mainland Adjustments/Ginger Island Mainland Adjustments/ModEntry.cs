@@ -1,4 +1,6 @@
 ﻿using AtraCore.Utilities;
+
+using AtraShared.ConstantsAndEnums;
 using AtraShared.Menuing;
 using AtraShared.MigrationManager;
 using AtraShared.Utils.Extensions;
@@ -184,7 +186,7 @@ internal sealed class ModEntry : Mod
         }
         catch (Exception ex)
         {
-            Globals.ModMonitor.Log($"{I18n.HarmonyCrash()} {Globals.GithubLocation}{Environment.NewLine}{ex}", LogLevel.Error);
+            Globals.ModMonitor.Log(string.Format(ErrorMessageConsts.HARMONYCRASH, ex), LogLevel.Error);
         }
 
         harmony.Snitch(Globals.ModMonitor, this.ModManifest.UniqueID, transpilersOnly: true);

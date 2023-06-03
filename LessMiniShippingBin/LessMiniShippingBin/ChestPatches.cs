@@ -2,6 +2,8 @@
 
 using AtraCore.Framework.ReflectionManager;
 
+using AtraShared.Utils.Extensions;
+
 using HarmonyLib;
 
 using Microsoft.Xna.Framework;
@@ -52,7 +54,7 @@ internal static class ChestPatches
         }
         catch (Exception ex)
         {
-            ModEntry.ModMonitor.Log($"Failed in overwriting {__instance.SpecialChestType} capacity\n\n{ex}", LogLevel.Error);
+            ModEntry.ModMonitor.LogError($"overwriting {__instance.SpecialChestType} capacity", ex);
         }
     }
 
@@ -75,7 +77,7 @@ internal static class ChestPatches
                 location: Game1.GlobalToLocal(Game1.viewport, new Vector2(x * 64, (y * 64) - 40)),
                 scaleSize: 1,
                 transparency: alpha * alphaAdjustment,
-                layerDepth: Math.Max(0f, ((y * 64f) + 80f) / 10000f),
+                layerDepth: MathF.BitIncrement(Math.Max(0f, ((y * 64f) + 80f) / 10000f)),
                 drawStackNumber: StackDrawType.Hide);
         }
     }

@@ -94,6 +94,29 @@ internal static class DrawPrismatic
     #endregion
 
     #region Helpers
+
+    /// <summary>
+    /// Untracks a specific item from the prismatic draw code.
+    /// </summary>
+    /// <param name="item">Item to untrack.</param>
+    /// <returns>True if successful, false otherwise.</returns>
+    internal static bool TryUntrack(Item item)
+    {
+        try
+        {
+            if (item.GetItemType() is ItemTypeEnum type)
+            {
+                return (PrismaticFull.TryGetValue(type, out HashSet<int>? set) && set.Remove(item.ParentSheetIndex))
+                    | (PrismaticMasks.TryGetValue(type, out Dictionary<int, Lazy<Texture2D>>? maskSet) && maskSet.Remove(item.ParentSheetIndex));
+            }
+        }
+        catch (Exception ex)
+        {
+            ModEntry.ModMonitor.LogError($"trying to untrack item {item.Name} from prismatic draw.", ex);
+        }
+        return false;
+    }
+
     [MethodImpl(TKConstants.Hot)]
     private static bool ShouldDrawAsFullColored(this Item item)
     => item.GetItemType() is ItemTypeEnum type && PrismaticFull.TryGetValue(type, out HashSet<int>? set)
@@ -135,7 +158,7 @@ internal static class DrawPrismatic
                 rotation: 0f,
                 origin: Vector2.Zero,
                 effects: SpriteEffects.None,
-                layerDepth: drawDepth + 0.001f);
+                layerDepth: MathF.BitIncrement(drawDepth));
         }
     }
 
@@ -153,7 +176,7 @@ internal static class DrawPrismatic
                 origin: Vector2.Zero,
                 scale: 4f,
                 effects: SpriteEffects.None,
-                layerDepth: drawDepth + 0.001f);
+                layerDepth: MathF.BitIncrement(drawDepth));
         }
     }
 
@@ -176,7 +199,7 @@ internal static class DrawPrismatic
         b.Draw(texture, position, sourceRectangle, color, rotation, origin, scale, effects, layerDepth);
         if (obj.GetColorMask() is Texture2D tex)
         {
-            b.Draw(tex, position, null, Utility.GetPrismaticColor(), rotation, origin, scale, effects, layerDepth + 0.001f);
+            b.Draw(tex, position, null, Utility.GetPrismaticColor(), rotation, origin, scale, effects, MathF.BitIncrement(layerDepth));
         }
     }
     #endregion
@@ -204,7 +227,8 @@ internal static class DrawPrismatic
         }
         catch (Exception ex)
         {
-            ModEntry.ModMonitor.Log($"Failed in drawing prismatic item\n\n{ex}", LogLevel.Error);
+            ModEntry.ModMonitor.LogError($"drawing prismatic item", ex);
+            TryUntrack(__instance);
         }
         return;
     }
@@ -223,8 +247,7 @@ internal static class DrawPrismatic
         }
         catch (Exception ex)
         {
-            ModEntry.ModMonitor.Log($"Mod crashed while transpiling {original.GetFullName()}\n\n{ex}", LogLevel.Error);
-            original.Snitch(ModEntry.ModMonitor);
+            ModEntry.ModMonitor.LogTranspilerError(original, ex);
         }
         return null;
     }
@@ -260,7 +283,8 @@ internal static class DrawPrismatic
         }
         catch (Exception ex)
         {
-            ModEntry.ModMonitor.Log($"Failed in drawing prismatic mask\n\n{ex}", LogLevel.Error);
+            ModEntry.ModMonitor.LogError("drawing prismatic mask", ex);
+            TryUntrack(__instance);
         }
         return;
     }
@@ -336,8 +360,7 @@ internal static class DrawPrismatic
         }
         catch (Exception ex)
         {
-            ModEntry.ModMonitor.Log($"Mod crashed while transpiling {original.GetFullName()}\n\n{ex}", LogLevel.Error);
-            original.Snitch(ModEntry.ModMonitor);
+            ModEntry.ModMonitor.LogTranspilerError(original, ex);
         }
         return null;
     }
@@ -380,8 +403,7 @@ internal static class DrawPrismatic
         }
         catch (Exception ex)
         {
-            ModEntry.ModMonitor.Log($"Mod crashed while transpiling {original.GetFullName()}\n\n{ex}", LogLevel.Error);
-            original.Snitch(ModEntry.ModMonitor);
+            ModEntry.ModMonitor.LogTranspilerError(original, ex);
         }
         return null;
     }
@@ -524,8 +546,7 @@ internal static class DrawPrismatic
         }
         catch (Exception ex)
         {
-            ModEntry.ModMonitor.Log($"Mod crashed while transpiling {original.GetFullName()}\n\n{ex}", LogLevel.Error);
-            original.Snitch(ModEntry.ModMonitor);
+            ModEntry.ModMonitor.LogTranspilerError(original, ex);
         }
         return null;
     }
@@ -550,7 +571,8 @@ internal static class DrawPrismatic
         }
         catch (Exception ex)
         {
-            ModEntry.ModMonitor.Log($"Failed in drawing prismatic ring\n\n{ex}", LogLevel.Error);
+            ModEntry.ModMonitor.LogError("drawing prismatic ring", ex);
+            TryUntrack(__instance);
         }
         return;
     }
@@ -586,7 +608,8 @@ internal static class DrawPrismatic
         }
         catch (Exception ex)
         {
-            ModEntry.ModMonitor.Log($"Failed in drawing prismatic mask\n\n{ex}", LogLevel.Error);
+            ModEntry.ModMonitor.LogError("drawing prismatic mask", ex);
+            TryUntrack(__instance);
         }
         return;
     }
@@ -611,7 +634,8 @@ internal static class DrawPrismatic
         }
         catch (Exception ex)
         {
-            ModEntry.ModMonitor.Log($"Failed in drawing prismatic boots\n\n{ex}", LogLevel.Error);
+            ModEntry.ModMonitor.LogError("drawing prismatic boots", ex);
+            TryUntrack(__instance);
         }
         return;
     }
@@ -647,7 +671,8 @@ internal static class DrawPrismatic
         }
         catch (Exception ex)
         {
-            ModEntry.ModMonitor.Log($"Failed in drawing prismatic mask\n\n{ex}", LogLevel.Error);
+            ModEntry.ModMonitor.LogError("drawing prismatic mask", ex);
+            TryUntrack(__instance);
         }
         return;
     }

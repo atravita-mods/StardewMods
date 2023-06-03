@@ -1,4 +1,6 @@
 ﻿using AtraBase.Toolkit;
+
+using AtraShared.Utils.Extensions;
 using GingerIslandMainlandAdjustments.AssetManagers;
 using GingerIslandMainlandAdjustments.Configuration;
 using HarmonyLib;
@@ -50,7 +52,7 @@ internal static class IslandSouthPatches
             }
             catch (Exception ex)
             {
-                Globals.ModMonitor.Log($"Errors generating ginger island schedules, defaulting to vanilla code\n\n{ex}", LogLevel.Error);
+                Globals.ModMonitor.LogError("generating island schedules", ex);
             }
         }
         return true;
@@ -132,7 +134,7 @@ internal static class IslandSouthPatches
                 {
                     case ScheduleStrictness.Default:
                     {
-                        if (!Exclusions.TryGetValue(npc, out string[]? exclusions) || !exclusions.Any((a) => a.Equals("AllowOnSpecialDays", StringComparison.OrdinalIgnoreCase)))
+                        if (!Exclusions.TryGetValue(npc, out string[]? exclusions) || !exclusions.Any(static (a) => a.Equals("AllowOnSpecialDays", StringComparison.OrdinalIgnoreCase)))
                         {
                             goto case ScheduleStrictness.Strict;
                         }
@@ -164,7 +166,7 @@ internal static class IslandSouthPatches
         }
         catch (Exception ex)
         {
-            Globals.ModMonitor.Log($"Error in postfix for CanVisitIslandToday for {npc.Name}: \n\n{ex}", LogLevel.Warn);
+            Globals.ModMonitor.LogError("adjusting CanVisitIslandToday", ex);
         }
         return;
     }
@@ -211,7 +213,7 @@ internal static class IslandSouthPatches
         }
         catch (Exception ex)
         {
-            Globals.ModMonitor.Log($"Error in prefix for HasIslandAttire for {character.Name}: \n\n{ex}", LogLevel.Warn);
+            Globals.ModMonitor.LogError($"adjusting HasIslandAttire for {character.Name}", ex);
         }
         return true;
     }

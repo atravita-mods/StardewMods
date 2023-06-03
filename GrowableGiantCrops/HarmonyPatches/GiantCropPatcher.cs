@@ -1,4 +1,6 @@
-﻿using GrowableGiantCrops.Framework;
+﻿using AtraShared.Utils.Extensions;
+
+using GrowableGiantCrops.Framework;
 using GrowableGiantCrops.Framework.InventoryModels;
 using HarmonyLib;
 
@@ -12,11 +14,11 @@ namespace GrowableGiantCrops.HarmonyPatches;
 /// Holds patches to remove the tapper before the big crop is destroyed.
 /// </summary>
 [HarmonyPatch(typeof(GiantCrop))]
+[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Harmony convention.")]
 internal static class GiantCropPatcher
 {
     [HarmonyPriority(Priority.High)]
     [HarmonyPatch(nameof(GiantCrop.performToolAction))]
-    [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Harmony convention.")]
     private static bool Prefix(GiantCrop __instance, Tool t)
     {
         if (t is not ShovelTool)
@@ -53,7 +55,7 @@ internal static class GiantCropPatcher
         }
         catch (Exception ex)
         {
-            ModEntry.ModMonitor.Log($"Failed while popping the tapper off {ex}", LogLevel.Error);
+            ModEntry.ModMonitor.LogError("popping the tapper off", ex);
         }
         return true;
     }

@@ -1,6 +1,10 @@
-﻿using System.Diagnostics;
+﻿// Ignore Spelling: pred
+
+using System.Diagnostics;
+using System.Reflection;
 using System.Runtime.CompilerServices;
 using AtraBase.Toolkit;
+using AtraBase.Toolkit.Extensions;
 
 namespace AtraShared.Utils.Extensions;
 
@@ -9,6 +13,35 @@ namespace AtraShared.Utils.Extensions;
 /// </summary>
 public static class LogExtensions
 {
+    /// <summary>
+    /// Logs an exception.
+    /// </summary>
+    /// <param name="monitor">Logging instance to use.</param>
+    /// <param name="action">The current actions being taken when the exception happened.</param>
+    /// <param name="ex">The exception.</param>
+    [DebuggerHidden]
+    [MethodImpl(TKConstants.Hot)]
+    public static void LogError(this IMonitor monitor, string action, Exception ex)
+    {
+        monitor.Log($"Mod failed while {action}, see log for details.", LogLevel.Error);
+        monitor.Log(ex.ToString());
+    }
+
+    /// <summary>
+    /// Logs an exception.
+    /// </summary>
+    /// <param name="monitor">Logging instance to use.</param>
+    /// <param name="method">The current method being transpiled.</param>
+    /// <param name="ex">The exception.</param>
+    [DebuggerHidden]
+    public static void LogTranspilerError(this IMonitor monitor, MethodBase method, Exception ex)
+    {
+        monitor.Log($"Mod crashed while transpiling {method.GetFullName()}, see log for details.", LogLevel.Error);
+        monitor.Log(ex.ToString());
+        monitor.Log($"Other patches on this method:");
+        method.Snitch(monitor);
+    }
+
     /// <summary>
     /// Logs to level (DEBUG by default) if compiled with the DEBUG flag
     /// Logs to verbose otherwise.

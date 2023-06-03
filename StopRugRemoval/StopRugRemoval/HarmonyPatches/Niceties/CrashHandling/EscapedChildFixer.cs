@@ -1,4 +1,6 @@
-﻿using HarmonyLib;
+﻿using AtraShared.Utils.Extensions;
+
+using HarmonyLib;
 
 using Microsoft.Xna.Framework;
 
@@ -22,7 +24,7 @@ internal static class EscapedChildFixer
         {
             if (__instance.currentLocation is not FarmHouse)
             {
-                ModEntry.ModMonitor.Log($"Child {__instance.Name} seems to have escaped the farmhouse, sending them back. Current location {__instance.currentLocation?.NameOrUniqueName}", LogLevel.Trace);
+                ModEntry.ModMonitor.Log($"Child {__instance.Name} seems to have escaped the farmhouse, sending them back. Current location {__instance.currentLocation?.NameOrUniqueName}", LogLevel.Debug);
 
                 Farmer parent = Game1.MasterPlayer;
 
@@ -53,7 +55,7 @@ internal static class EscapedChildFixer
         }
         catch (Exception ex)
         {
-            ModEntry.ModMonitor.Log($"Failed while trying to return child to farmhouse:\n\n{ex}", LogLevel.Error);
+            ModEntry.ModMonitor.LogError("returning child to farmhouse", ex);
         }
 
         return true;

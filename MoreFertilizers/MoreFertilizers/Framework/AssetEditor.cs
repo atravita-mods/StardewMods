@@ -57,7 +57,7 @@ internal static class AssetEditor
             }
             catch (Exception ex)
             {
-                ModEntry.ModMonitor.Log($"{filename} may not be valid:\n\n{ex}", LogLevel.Error);
+                ModEntry.ModMonitor.LogError($"reading from {filename}", ex);
             }
         }
         ModEntry.ModMonitor.Log($"Found {i} Special Orders");

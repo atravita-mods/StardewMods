@@ -1,14 +1,14 @@
 ﻿#if DEBUG
 using System.Diagnostics;
 using System.Runtime;
+#endif
+
 using System.Text;
 
 using AtraBase.Toolkit;
-#endif
 
 using AtraCore;
 
-using AtraCore;
 using AtraCore.Framework.Caches;
 using AtraCore.Framework.ReflectionManager;
 
@@ -495,8 +495,7 @@ internal static class GIScheduler
                 }
                 catch (Exception ex)
                 {
-                    Globals.ModMonitor.Log($"Failed while checking if visitor has a long way to travel.", LogLevel.Error);
-                    Globals.ModMonitor.Log(ex.ToString());
+                    Globals.ModMonitor.LogError($"checking if visitor has a long way to travel.", ex);
                 }
             }
 

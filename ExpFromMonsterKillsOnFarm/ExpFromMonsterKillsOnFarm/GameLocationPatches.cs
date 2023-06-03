@@ -54,7 +54,7 @@ internal class GameLocationPatches
         }
         catch (Exception ex)
         {
-            ModEntry.ModMonitor.Log($"Failed in granting combat xp on farm\n\n{ex}", LogLevel.Error);
+            ModEntry.ModMonitor.LogError("granting combat ex on farm", ex);
         }
     }
 }

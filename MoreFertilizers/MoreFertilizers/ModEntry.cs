@@ -1201,7 +1201,7 @@ internal sealed class ModEntry : Mod
         }
         catch (Exception ex)
         {
-            this.Monitor.Log($"Failed while attempting to deshuffle in SF buildings:\n\n{ex}", LogLevel.Error);
+            this.Monitor.LogError("deshuffling in SF buildings", ex);
         }
         this.idmap = null;
         this.solidFoundationsAPI = null;
@@ -1242,7 +1242,7 @@ internal sealed class ModEntry : Mod
             }
             catch (Exception ex)
             {
-                this.Monitor.Log($"Failed while attempting to run migrations.\n\n{ex}");
+                this.Monitor.LogError("attempting to run migrations", ex);
             }
         }
         else

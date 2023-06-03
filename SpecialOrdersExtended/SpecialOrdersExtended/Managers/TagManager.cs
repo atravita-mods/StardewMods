@@ -397,7 +397,7 @@ internal static class TagManager
         }
         catch (Exception ex)
         {
-            ModEntry.ModMonitor.Log($"Failed while checking tag {tag}\n{ex}", LogLevel.Error);
+            ModEntry.ModMonitor.LogError($"checking tag {tag}", ex);
         }
         return true; // continue to base code.
     }
@@ -479,6 +479,10 @@ internal static class TagManager
             catch (Exception ex) when (ex is InvalidOperationException or NullReferenceException)
             {
                 ModEntry.ModMonitor.Log(I18n.SkillNotFound(profession, skill), LogLevel.Debug);
+            }
+            catch (Exception ex)
+            {
+                ModEntry.ModMonitor.LogError("looking up profession", ex);
             }
         }
         return professionNumber;

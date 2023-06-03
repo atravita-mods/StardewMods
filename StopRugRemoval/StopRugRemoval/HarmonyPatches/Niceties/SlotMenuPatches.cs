@@ -39,7 +39,7 @@ internal static class TokenPurchasePatch
         }
         catch (Exception ex)
         {
-            ModEntry.ModMonitor.Log($"Failed while buying club coins?\n\n{ex}", LogLevel.Error);
+            ModEntry.ModMonitor.LogError("buying club coins?", ex);
         }
     }
 
@@ -201,8 +201,7 @@ internal static class SlotMenuPatches
         }
         catch (Exception ex)
         {
-            ModEntry.ModMonitor.Log($"Ran into error transpiling Slots.ctor!\n\n{ex}", LogLevel.Error);
-            original?.Snitch(ModEntry.ModMonitor);
+            ModEntry.ModMonitor.LogTranspilerError(original, ex);
         }
         return null;
     }
@@ -237,8 +236,7 @@ internal static class SlotMenuPatches
         }
         catch (Exception ex)
         {
-            ModEntry.ModMonitor.Log($"Ran into error transpiling Slots.draw!\n\n{ex}", LogLevel.Error);
-            original?.Snitch(ModEntry.ModMonitor);
+            ModEntry.ModMonitor.LogTranspilerError(original, ex);
         }
         return null;
     }

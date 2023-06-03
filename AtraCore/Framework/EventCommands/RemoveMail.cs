@@ -61,7 +61,7 @@ internal sealed class RemoveMail : IEventCommand
         }
         catch (Exception ex)
         {
-            ModEntry.ModMonitor.Log($"Mod failed while trying to remove mail:\n\n{ex}", LogLevel.Error);
+            ModEntry.ModMonitor.LogError("trying to remove mail", ex);
         }
 
         error = null;

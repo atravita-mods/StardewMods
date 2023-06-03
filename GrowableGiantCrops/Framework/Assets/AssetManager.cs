@@ -101,7 +101,7 @@ internal static class AssetManager
         }
         catch (Exception ex)
         {
-            ModEntry.ModMonitor.Log($"Failed while creating error tex:\n\n{ex}", LogLevel.Error);
+            ModEntry.ModMonitor.LogError("creating error texture", ex);
         }
         finally
         {
@@ -189,7 +189,7 @@ internal static class AssetManager
         }
         catch (Exception ex)
         {
-            ModEntry.ModMonitor.Log($"Failed to generate reverse fruit tree lookup map:\n\n{ex}", LogLevel.Error);
+            ModEntry.ModMonitor.LogError("generating fruit tree lookup map", ex);
             return new Dictionary<int, int>();
         }
         Dictionary<int, int> map = new(data.Count);

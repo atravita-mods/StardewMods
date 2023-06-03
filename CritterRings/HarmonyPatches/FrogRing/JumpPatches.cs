@@ -25,7 +25,6 @@ internal static class JumpPatches
     private static bool PrefixUseTool()
         => ModEntry.CurrentJumper?.IsValid(out Farmer? _) != true;
 
-
     [HarmonyPostfix]
     [MethodImpl(TKConstants.Hot)]
     [HarmonyPatch(typeof(Farmer), nameof(Farmer.getDrawLayer))]

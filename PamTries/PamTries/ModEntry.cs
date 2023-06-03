@@ -1,6 +1,7 @@
 ﻿using AtraCore.Framework.Caches;
 using AtraCore.Utilities;
 
+using AtraShared.ConstantsAndEnums;
 using AtraShared.Integrations;
 using AtraShared.Integrations.Interfaces.ContentPatcher;
 using AtraShared.MigrationManager;
@@ -75,7 +76,7 @@ internal sealed class ModEntry : Mod
         }
         catch (Exception ex)
         {
-            ModMonitor.Log($"Mod crashed while applying Harmony patches.\n\n{ex}", LogLevel.Error);
+            ModMonitor.Log(string.Format(ErrorMessageConsts.HARMONYCRASH, ex), LogLevel.Error);
         }
         harmony.Snitch(this.Monitor, uniqueID: harmony.Id, transpilersOnly: true);
     }
@@ -112,8 +113,8 @@ internal sealed class ModEntry : Mod
 
         if (Context.IsMainPlayer)
         {
-            if (Game1.getLocationFromName("Trailer_Big") is GameLocation bigtrailer && bigtrailer.Objects.TryGetValue(new Vector2(26, 9), out var sign)
-                && sign.bigCraftable.Value && sign.ParentSheetIndex == 34)
+            if (Game1.getLocationFromName("Trailer_Big") is GameLocation bigtrailer && bigtrailer.Objects.TryGetValue(new Vector2(26, 9), out SObject? sign)
+                && sign.bigCraftable.Value && sign.ParentSheetIndex == 34 && sign.Fragility != SObject.fragility_Indestructable)
             {
                 this.Monitor.Log($"Preventing player from stealing Pam's Yoba shrine.");
                 sign.Fragility = SObject.fragility_Indestructable;

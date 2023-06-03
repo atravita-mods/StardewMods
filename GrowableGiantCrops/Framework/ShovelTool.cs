@@ -367,7 +367,7 @@ public class ShovelTool : Tool
         }
         catch (Exception ex)
         {
-            ModEntry.ModMonitor.Log($"Unexpected error in using shovel:\n\n{ex}", LogLevel.Error);
+            ModEntry.ModMonitor.LogError("using shovel", ex);
         }
     }
 

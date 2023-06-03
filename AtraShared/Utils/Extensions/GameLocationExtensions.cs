@@ -5,6 +5,7 @@ using AtraBase.Toolkit.Extensions;
 using CommunityToolkit.Diagnostics;
 
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Content;
 
 using StardewValley.Locations;
 using StardewValley.Monsters;
@@ -55,9 +56,14 @@ public static class GameLocationExtensions
                 {
                     festivalData = Game1.temporaryContent.Load<Dictionary<string, string>>($@"Data\Festivals\{Game1.currentSeason}{Game1.dayOfMonth}");
                 }
+                catch (ContentLoadException)
+                {
+                    monitor.Log("No festival file found for today....did someone screw with the time?", LogLevel.Warn);
+                    return false;
+                }
                 catch (Exception ex)
                 {
-                    monitor.Log($"No festival file found for today....did someone screw with the time?\n\n{ex}", LogLevel.Warn);
+                    monitor.Log($"Badly formatted festival file for today:\n\n{ex}", LogLevel.Warn);
                     return false;
                 }
                 if (festivalData.TryGetValue("conditions", out string? val) && val.TrySplitOnce('/', out ReadOnlySpan<char> locName, out ReadOnlySpan<char> times))
@@ -80,7 +86,7 @@ public static class GameLocationExtensions
         }
         catch (Exception ex)
         {
-            monitor.Log($"Mod failed while trying to find festival days....\n\n{ex}", LogLevel.Error);
+            monitor.LogError("finding festival days", ex);
         }
         return false;
     }

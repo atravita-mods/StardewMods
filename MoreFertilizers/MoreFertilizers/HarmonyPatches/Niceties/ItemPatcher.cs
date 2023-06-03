@@ -29,7 +29,7 @@ internal static class ItemPatcher
         }
         catch (Exception ex)
         {
-            ModEntry.ModMonitor.Log($"Failed in adding context tags!\n\n{ex}", LogLevel.Error);
+            ModEntry.ModMonitor.LogError("adding context tags", ex);
         }
     }
 }

@@ -1,8 +1,13 @@
-﻿using HarmonyLib;
+﻿using AtraShared.Utils.Extensions;
+
+using HarmonyLib;
+
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+
 using StardewModdingAPI.Events;
 using StardewModdingAPI.Utilities;
+
 using StardewValley.Menus;
 
 namespace ForgeMenuChoice.HarmonyPatches;
@@ -110,7 +115,7 @@ internal static class ForgeMenuPatches
         }
         catch (Exception ex)
         {
-            ModEntry.ModMonitor.Log($"Error in postfixing IsValidCraft:\n{ex}", LogLevel.Error);
+            ModEntry.ModMonitor.LogError("postfixing IsValidCraft", ex);
         }
         return true;
     }

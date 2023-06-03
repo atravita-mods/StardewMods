@@ -40,6 +40,12 @@ public static class EventCommandManager
     [HarmonyPatch(nameof(Event.tryEventCommand))]
     private static bool Prefix(Event __instance, GameLocation location, GameTime time, string[] split)
     {
+        static void AdvanceEventCommand(Event __instance, GameLocation location, GameTime time)
+        {
+            __instance.CurrentCommand++;
+            __instance.checkForNextCommand(location, time);
+        }
+
         try
         {
             if (split.Length == 0)
@@ -56,15 +62,13 @@ public static class EventCommandManager
                         handler.Monitor.Log($"Error returned: {error}", LogLevel.Warn);
                     }
 
-                    __instance.CurrentCommand++;
-                    __instance.checkForNextCommand(location, time);
+                    AdvanceEventCommand(__instance, location, time);
                 }
                 else
                 {
                     if (handler.Apply(__instance, location, time, split, out string? applyError))
                     {
-                        __instance.CurrentCommand++;
-                        __instance.checkForNextCommand(location, time);
+                        AdvanceEventCommand(__instance, location, time);
                     }
 
                     if (!string.IsNullOrEmpty(applyError))
@@ -78,9 +82,8 @@ public static class EventCommandManager
         }
         catch (Exception ex)
         {
-            ModEntry.ModMonitor.Log($"Failed while trying to execute a custom event command: {ex}", LogLevel.Error);
-            __instance.CurrentCommand++;
-            __instance.checkForNextCommand(location, time);
+            ModEntry.ModMonitor.LogError("execute a custom event command", ex);
+            AdvanceEventCommand(__instance, location, time);
         }
 
         return true;

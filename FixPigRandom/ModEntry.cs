@@ -90,7 +90,7 @@ internal sealed class ModEntry : Mod
         }
         catch (Exception ex)
         {
-            modMonitor.Log($"Failed while trying to generate random for pig {id}:\n\n{ex}", LogLevel.Error);
+            modMonitor.LogError($"generating random for pig {id}", ex);
         }
 
         return Singletons.Random;
@@ -140,8 +140,7 @@ internal sealed class ModEntry : Mod
         }
         catch (Exception ex)
         {
-            modMonitor.Log($"Ran into error transpiling {original.FullDescription()}\n\n{ex}", LogLevel.Error);
-            original.Snitch(modMonitor);
+            modMonitor.LogTranspilerError(original, ex);
         }
         return null;
     }
@@ -175,8 +174,7 @@ internal sealed class ModEntry : Mod
         }
         catch (Exception ex)
         {
-            modMonitor.Log($"Ran into error transpiling {original.FullDescription()}\n\n{ex}", LogLevel.Error);
-            original.Snitch(modMonitor);
+            modMonitor.LogTranspilerError(original, ex);
         }
         return null;
     }

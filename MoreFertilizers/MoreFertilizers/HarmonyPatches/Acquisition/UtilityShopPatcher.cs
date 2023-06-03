@@ -1,5 +1,7 @@
 ﻿using AtraCore;
 
+using AtraShared.Utils.Extensions;
+
 using HarmonyLib;
 
 using StardewValley.Menus;
@@ -30,7 +32,7 @@ internal static class UtilityShopPatcher
             }
             catch (Exception ex)
             {
-                ModEntry.ModMonitor.Log($"Failed in adding to Pierre's stock!{ex}", LogLevel.Error);
+                ModEntry.ModMonitor.LogError("adding to Pierre's stock", ex);
             }
         }
     }
@@ -49,7 +51,7 @@ internal static class UtilityShopPatcher
         }
         catch (Exception ex)
         {
-            ModEntry.ModMonitor.Log($"Failed in adding to casino's stock!{ex}", LogLevel.Error);
+            ModEntry.ModMonitor.LogError("adding to casino's stock", ex);
         }
     }
 
@@ -69,7 +71,7 @@ internal static class UtilityShopPatcher
         }
         catch (Exception ex)
         {
-            ModEntry.ModMonitor.Log($"Failed while trying to add Secret Joja Fertilizer to JojaMart.\n\n{ex}", LogLevel.Error);
+            ModEntry.ModMonitor.LogError("adding Secret Joja Fertilizer to JojaMart", ex);
         }
     }
 
@@ -78,15 +80,22 @@ internal static class UtilityShopPatcher
     [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Harmony Convention.")]
     private static void PostfixQiGemShop(Dictionary<ISalable, int[]> __result)
     {
-        if (ModEntry.EverlastingFertilizerID != -1)
+        try
         {
-            SObject obj = new(ModEntry.EverlastingFertilizerID, 1);
-            __result.Add(obj, new[] { 0, ShopMenu.infiniteStock, 858, 1 });
+            if (ModEntry.EverlastingFertilizerID != -1)
+            {
+                SObject obj = new(ModEntry.EverlastingFertilizerID, 1);
+                __result.Add(obj, new[] { 0, ShopMenu.infiniteStock, 858, 1 });
+            }
+            if (ModEntry.EverlastingFruitTreeFertilizerID != -1)
+            {
+                SObject obj = new(ModEntry.EverlastingFruitTreeFertilizerID, 1);
+                __result.Add(obj, new[] { 0, ShopMenu.infiniteStock, 858, 1 });
+            }
         }
-        if (ModEntry.EverlastingFruitTreeFertilizerID != -1)
+        catch (Exception ex)
         {
-            SObject obj = new(ModEntry.EverlastingFruitTreeFertilizerID, 1);
-            __result.Add(obj, new[] { 0, ShopMenu.infiniteStock, 858, 1 });
+            ModEntry.ModMonitor.LogError("adding to qi's shop", ex);
         }
     }
 }

@@ -3,6 +3,8 @@
 using System.Reflection;
 using System.Reflection.Emit;
 using AtraBase.Toolkit.Reflection;
+
+using AtraShared.Utils.Extensions;
 using AtraShared.Utils.HarmonyHelper;
 using AtraShared.Wrappers;
 
@@ -47,7 +49,7 @@ internal static class ReplaceBeverage
         }
         catch (Exception ex)
         {
-            ModEntry.ModMonitor.Log($"Transpiler for Night Market Beverages failed with error {ex}", LogLevel.Error);
+            ModEntry.ModMonitor.LogTranspilerError(original, ex);
         }
         return null;
     }

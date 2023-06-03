@@ -13,12 +13,12 @@ namespace PrismaticSlime.HarmonyPatches.RingPatches;
 /// Holds patches against BigSlime's Vector2, int constructor.
 /// </summary>
 [HarmonyPatch(typeof(BigSlime))]
+[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Harmony Convention")]
 internal static class PostfixBigSlimeConstructor
 {
     [UsedImplicitly]
     [HarmonyPostfix]
     [HarmonyPatch(MethodType.Constructor, typeof(Vector2), typeof(int))]
-    [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Harmony Convention")]
     private static void PostfixConstructor(BigSlime __instance)
     {
         if (__instance.heldObject?.Value is not null || __instance.heldObject is null)
@@ -35,7 +35,7 @@ internal static class PostfixBigSlimeConstructor
         }
         catch (Exception ex)
         {
-            ModEntry.ModMonitor.Log($"Failed in postfix for BigSlime's constructor.\n\n{ex}", LogLevel.Error);
+            ModEntry.ModMonitor.LogError("adding ring to big slimes", ex);
         }
     }
 
@@ -43,7 +43,6 @@ internal static class PostfixBigSlimeConstructor
     [UsedImplicitly]
     [HarmonyPostfix]
     [HarmonyPatch(nameof(BigSlime.getExtraDropItems))]
-    [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Harmony convention.")]
     private static void GetExtraDropItemsPostfix(List<Item> __result)
     {
         if (ModEntry.PrismaticSlimeRing == -1)

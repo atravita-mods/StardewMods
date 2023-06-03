@@ -135,7 +135,7 @@ public static class AssetLoader
         }
         catch (Exception ex)
         {
-            ModEntry.ModMonitor.Log($"Error: journal scrap 9 not found.\n\n{ex}", LogLevel.Error);
+            ModEntry.ModMonitor.LogError("reading tooltip data from journal scrap 9", ex);
         }
         return tooltipdata;
     }

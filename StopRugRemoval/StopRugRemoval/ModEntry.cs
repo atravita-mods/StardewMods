@@ -336,6 +336,7 @@ internal sealed class ModEntry : Mod
                 }
 
 #warning - review and remove in stardew 1.6
+
                 // crosscheck and fix jukeboxes.
                 string song = loc.miniJukeboxTrack.Value;
                 if (!string.IsNullOrEmpty(song))
@@ -352,7 +353,7 @@ internal sealed class ModEntry : Mod
                     }
                     catch (Exception ex)
                     {
-                        ModMonitor.Log($"Failed while trying to retrieve song {song} - {ex}.", LogLevel.Error);
+                        ModMonitor.LogError($"retrieving song {song}", ex);
                         loc.miniJukeboxTrack.Value = string.Empty;
                     }
                 }

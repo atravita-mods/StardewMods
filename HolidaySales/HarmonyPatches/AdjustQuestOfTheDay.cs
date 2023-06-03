@@ -1,5 +1,5 @@
-﻿using HarmonyLib;
-
+﻿using AtraShared.Utils.Extensions;
+using HarmonyLib;
 using AtraUtils = AtraShared.Utils.Utils;
 
 namespace HolidaySales.HarmonyPatches;
@@ -42,7 +42,7 @@ internal static class AdjustQuestOfTheDay
             }
             catch (Exception ex)
             {
-                ModEntry.ModMonitor.Log($"Mod failed while adjusting Daily Quest\n\n{ex}", LogLevel.Error);
+                ModEntry.ModMonitor.LogError("adjusting Daily Quest", ex);
             }
         }
         return true;

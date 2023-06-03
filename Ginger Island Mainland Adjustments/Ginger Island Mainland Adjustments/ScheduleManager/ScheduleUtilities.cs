@@ -211,7 +211,7 @@ internal static class ScheduleUtilities
             }
             catch (Exception ex)
             {
-                Globals.ModMonitor.Log($"Ran into issues parsing schedule {rawData} for {npc.Name}.\n\n{ex}", LogLevel.Error);
+                Globals.ModMonitor.LogError($"parsing schedule '{rawData}' for '{npc.Name}'", ex);
             }
             npc.DefaultMap = prevmap;
             npc.DefaultPosition = prevposition;
@@ -249,7 +249,7 @@ internal static class ScheduleUtilities
             }
             catch (Exception ex)
             {
-                Globals.ModMonitor.Log($"parseMasterSchedule failed for npc {npc.Name} with rawdata {rawData}: {ex}");
+                Globals.ModMonitor.LogError($"parsing schedule for npc '{npc.Name}' with rawdata '{rawData}'", ex);
             }
             if (schedule is not null)
             {

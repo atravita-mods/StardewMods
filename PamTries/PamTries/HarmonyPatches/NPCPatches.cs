@@ -1,4 +1,7 @@
-﻿using HarmonyLib;
+﻿using AtraShared.Utils.Extensions;
+
+using HarmonyLib;
+
 using Microsoft.Xna.Framework;
 
 namespace PamTries.HarmonyPatches;
@@ -7,6 +10,7 @@ namespace PamTries.HarmonyPatches;
 /// Class that holds patches against NPC so Pam can fish.
 /// </summary>
 [HarmonyPatch(typeof(NPC))]
+[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Convention set by Harmony.")]
 internal static class NPCPatches
 {
     /// <summary>
@@ -17,7 +21,6 @@ internal static class NPCPatches
     [UsedImplicitly]
     [HarmonyPostfix]
     [HarmonyPatch("startRouteBehavior")]
-    [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Convention set by Harmony.")]
     private static void StartFishBehavior(NPC __instance, string __0)
     {
         try
@@ -36,7 +39,7 @@ internal static class NPCPatches
         }
         catch (Exception ex)
         {
-            ModEntry.ModMonitor.Log($"Failed to adjust startRouteBehavior for Pam\n{ex}", LogLevel.Error);
+            ModEntry.ModMonitor.LogError("adjusting startRouteBehavior for Pam", ex);
         }
     }
 
@@ -66,7 +69,7 @@ internal static class NPCPatches
         }
         catch (Exception ex)
         {
-            ModEntry.ModMonitor.Log($"Failed to adjust finishRouteBehavior for Pam\n{ex}", LogLevel.Error);
+            ModEntry.ModMonitor.LogError("adjusting finishRouteBehavior for Pam", ex);
         }
     }
 }

@@ -4,6 +4,9 @@ using System.Reflection.Emit;
 using AtraBase.Toolkit.Reflection;
 
 using AtraCore.Framework.ReflectionManager;
+
+using AtraShared.Utils.Extensions;
+
 using AtraShared.Utils.HarmonyHelper;
 using HarmonyLib;
 
@@ -16,6 +19,10 @@ namespace ForgeMenuChoice.HarmonyPatches;
 [HarmonyPatch(typeof(Tool))]
 internal static class GetEnchantmentPatch
 {
+    /// <summary>
+    /// Applies a patch against EnchantableScythes.
+    /// </summary>
+    /// <param name="harmony">My harmony instance.</param>
     internal static void ApplyPatch(Harmony harmony)
     {
         try
@@ -28,7 +35,7 @@ internal static class GetEnchantmentPatch
         }
         catch (Exception ex)
         {
-            ModEntry.ModMonitor.Log($"Mod crashed while transpiling EnchantableScythes. Integration may not work correctly.\n\n{ex}", LogLevel.Error);
+            ModEntry.ModMonitor.LogError("transpiling EnchantableScythes", ex);
         }
     }
 
@@ -37,7 +44,7 @@ internal static class GetEnchantmentPatch
     /// </summary>
     /// <param name="base_item">Tool.</param>
     /// <param name="item">Thing to enchant with.</param>
-    /// <returns>Enchanment to substitute in.</returns>
+    /// <returns>Enchantment to substitute in.</returns>
     private static BaseEnchantment SubstituteEnchantment(Item base_item, Item item)
     {
         try
@@ -51,7 +58,7 @@ internal static class GetEnchantmentPatch
         }
         catch (Exception ex)
         {
-            ModEntry.ModMonitor.Log($"Failed in forcing selection of enchantment.\n\n{ex}", LogLevel.Error);
+            ModEntry.ModMonitor.LogError("forcing selection of enchantment", ex);
         }
         return BaseEnchantment.GetEnchantmentFromItem(base_item, item);
     }
@@ -76,7 +83,7 @@ internal static class GetEnchantmentPatch
         }
         catch (Exception ex)
         {
-            ModEntry.ModMonitor.Log($"Ran into errors transpiling {original.FullDescription()} to use selection.\n\n{ex}", LogLevel.Error);
+            ModEntry.ModMonitor.LogTranspilerError(original, ex);
         }
         return null;
     }

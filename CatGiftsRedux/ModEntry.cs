@@ -1,4 +1,6 @@
-﻿using AtraBase.Collections;
+﻿// Ignore Spelling: Api
+
+using AtraBase.Collections;
 using AtraBase.Models.WeightedRandom;
 using AtraBase.Toolkit.Extensions;
 
@@ -180,8 +182,7 @@ internal sealed class ModEntry : Mod
                 }
                 catch (Exception ex)
                 {
-                    this.Monitor.Log($"Picker failed to select an item. See log for details.", LogLevel.Error);
-                    this.Monitor.Log(ex.ToString());
+                    this.Monitor.LogError("picking item", ex);
                     continue;
                 }
 

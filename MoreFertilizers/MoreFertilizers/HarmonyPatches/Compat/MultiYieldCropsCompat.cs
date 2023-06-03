@@ -32,7 +32,7 @@ internal static class MultiYieldCropsCompat
         }
         catch (Exception ex)
         {
-            ModEntry.ModMonitor.Log($"Mod crashed while transpiling MultiYieldCrops. Integration may not work correctly.\n\n{ex}", LogLevel.Error);
+            ModEntry.ModMonitor.LogError("transpiling MultiYieldCrops", ex);
         }
     }
 
@@ -79,7 +79,7 @@ internal static class MultiYieldCropsCompat
         }
         catch (Exception ex)
         {
-            ModEntry.ModMonitor.Log($"Failed in adjusting MultiYieldCrop or PFMAutomate item.\n\n{ex}", LogLevel.Error);
+            ModEntry.ModMonitor.LogError("adjusting MultiYieldCrop or PFMAutomate item", ex);
         }
         return obj;
     }
@@ -159,7 +159,7 @@ internal static class MultiYieldCropsCompat
         }
         catch (Exception ex)
         {
-            ModEntry.ModMonitor.Log($"Mod crashed while transpiling MultiYieldCrops:\n\n{ex}", LogLevel.Error);
+            ModEntry.ModMonitor.LogTranspilerError(original, ex);
         }
         return null;
     }

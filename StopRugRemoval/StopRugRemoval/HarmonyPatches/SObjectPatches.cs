@@ -44,8 +44,8 @@ internal static class SObjectPatches
                 return true;
             }
 
-            int posX = ((int)tile.X * 64) + 32;
-            int posY = ((int)tile.Y * 64) + 32;
+            int posX = ((int)tile.X * Game1.tileSize) + 32;
+            int posY = ((int)tile.Y * Game1.tileSize) + 32;
             foreach (Furniture f in location.furniture)
             {
                 if (f.furniture_type.Value == Furniture.rug && f.getBoundingBox(f.TileLocation).Contains(posX, posY))
@@ -57,7 +57,7 @@ internal static class SObjectPatches
         }
         catch (Exception ex)
         {
-            ModEntry.ModMonitor.Log($"Errored while trying to prevent tree growth\n\n{ex}.", LogLevel.Error);
+            ModEntry.ModMonitor.LogError("preventing tree planting", ex);
         }
         return true;
     }
@@ -70,14 +70,15 @@ internal static class SObjectPatches
         {
             if (__instance.IsSpawnedObject && ModEntry.Config.SaveBombedForage && ModEntry.Config.Enabled)
             {
+#warning - objects will have their positions set correctly in 1.6
                 // The SObject does not have its location anymore. Just spawn near the farmer, I guess?
                 location.debris.Add(new Debris(__instance, who.Position + new Vector2(Singletons.Random.Next(-128, 128), Singletons.Random.Next(-128, 128))));
-                ModEntry.ModMonitor.DebugOnlyLog(__instance.DisplayName + ' ' + __instance.TileLocation.ToString(), LogLevel.Warn);
+                ModEntry.ModMonitor.DebugOnlyLog(__instance.DisplayName + ' ' + __instance.TileLocation.ToString());
             }
         }
         catch (Exception ex)
         {
-            ModEntry.ModMonitor.Log($"Error while creating debris.{ex}", LogLevel.Error);
+            ModEntry.ModMonitor.LogError("creating debris", ex);
         }
     }
 
@@ -127,7 +128,7 @@ internal static class SObjectPatches
                 && (IsLocationConsideredDangerous(location) ? ModEntry.Config.BombsInDangerousAreas : ModEntry.Config.BombsInSafeAreas)
                     .HasFlag(Context.IsMultiplayer ? ConfirmationEnum.InMultiplayerOnly : ConfirmationEnum.NotInMultiplayer))
             {
-                // handle the case where a bomb has already been placed?
+                // handle the case where a bomb has already been placed.
                 Vector2 loc = new(x, y);
                 foreach (TemporaryAnimatedSprite tas in location.temporarySprites)
                 {
@@ -168,7 +169,7 @@ internal static class SObjectPatches
         }
         catch (Exception ex)
         {
-            ModEntry.ModMonitor.Log($"Mod failed while trying to prevent tree planting\n\n{ex}", LogLevel.Error);
+            ModEntry.ModMonitor.LogError("postfixing SObject.placementAction", ex);
         }
         return true;
     }

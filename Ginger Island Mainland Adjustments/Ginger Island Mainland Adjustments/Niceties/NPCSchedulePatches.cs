@@ -1,4 +1,6 @@
-﻿using HarmonyLib;
+﻿using AtraShared.Utils.Extensions;
+
+using HarmonyLib;
 
 namespace GingerIslandMainlandAdjustments.Niceties;
 
@@ -25,8 +27,7 @@ internal static class NPCSchedulePatches
         }
         catch (Exception ex)
         {
-            Globals.ModMonitor.Log($"Failed while skipping past NPCs that don't actually have schedules", LogLevel.Error);
-            Globals.ModMonitor.Log(ex.ToString());
+            Globals.ModMonitor.LogError("skipping past NPCs that don't actually have schedules", ex);
         }
         return true;
     }

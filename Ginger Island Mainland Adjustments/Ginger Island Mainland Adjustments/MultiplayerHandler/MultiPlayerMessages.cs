@@ -73,7 +73,7 @@ public static class MultiplayerSharedState
         }
         catch (Exception ex)
         {
-            Globals.ModMonitor.Log($"Error in postfixing get master schedule to get Pam's schedule.\n\n{ex}", LogLevel.Error);
+            Globals.ModMonitor.LogError("postfixing get master schedule to get Pam's schedule", ex);
         }
     }
 }

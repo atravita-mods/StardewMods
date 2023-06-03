@@ -15,6 +15,7 @@ namespace MoreFertilizers.Framework;
 /// Handles applying special fertilizers.
 /// </summary>
 [HarmonyPatch(typeof(Utility))]
+[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Harmony Convention")]
 internal static class SpecialFertilizerApplication
 {
     private const int PLACEMENTRADIUS = 2;
@@ -103,7 +104,6 @@ internal static class SpecialFertilizerApplication
     [HarmonyPrefix]
     [HarmonyPriority(Priority.VeryHigh)]
     [HarmonyPatch(nameof(Utility.playerCanPlaceItemHere))]
-    [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Harmony Convention")]
     private static bool PrefixPlayerCanPlaceItemHere(GameLocation location, Item item, int x, int y, Farmer f, ref bool __result)
     {
         if (!TypeUtils.IsExactlyOfType(item, out SObject? obj) || obj.bigCraftable.Value)
@@ -113,7 +113,7 @@ internal static class SpecialFertilizerApplication
 
         try
         {
-            Vector2 tile = new(x / 64, y / 64);
+            Vector2 tile = new(x / Game1.tileSize, y / Game1.tileSize);
             if (PlaceHandler.CanPlaceFertilizer(obj, location, tile) &&
                 Utility.withinRadiusOfPlayer(x, y, PLACEMENTRADIUS, f))
             {
@@ -129,7 +129,7 @@ internal static class SpecialFertilizerApplication
         }
         catch (Exception ex)
         {
-            ModEntry.ModMonitor.Log($"Attempt to prefix Utility.playerCanPlaceItemHere has failed:\n\n{ex}", LogLevel.Error);
+            ModEntry.ModMonitor.LogError("prefixing Utility.playerCanPlaceItemHere", ex);
         }
         return true;
     }

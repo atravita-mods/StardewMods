@@ -2,9 +2,12 @@
 
 using AtraBase.Toolkit;
 
+using AtraShared.Utils.Extensions;
+
 using HarmonyLib;
 
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 
 using SpecialOrdersExtended.Managers;
@@ -26,6 +29,10 @@ internal static class CustomEmoji
 
     private static IGameContentHelper parser = null!;
 
+    /// <summary>
+    /// Initializes the asset cache.
+    /// </summary>
+    /// <param name="gameContentHelper">Game content helper.</param>
     internal static void Init(IGameContentHelper gameContentHelper) => parser = gameContentHelper;
 
     /// <summary>
@@ -110,11 +117,15 @@ internal static class CustomEmoji
                     ModEntry.ModMonitor.Log($"{data} appears to be requesting an out of bounds rectangle.", LogLevel.Warn);
                 }
             }
+            catch (ContentLoadException)
+            {
+                Failed.Add(texLoc.BaseName);
+                ModEntry.ModMonitor.Log($"'{data.AssetName}' could not be found.", LogLevel.Warn);
+            }
             catch (Exception ex)
             {
                 Failed.Add(texLoc.BaseName);
-                ModEntry.ModMonitor.LogOnce($"Failed to load {data.AssetName}.", LogLevel.Error);
-                ModEntry.ModMonitor.Log(ex.ToString());
+                ModEntry.ModMonitor.LogError($"loading {data.AssetName}", ex);
             }
         }
 

@@ -449,7 +449,7 @@ SUCCESS:
                 }
                 catch (Exception ex)
                 {
-                    ModEntry.ModMonitor.Log($"Failed while trying to check event preconditions: {ex}", LogLevel.Error);
+                    ModEntry.ModMonitor.LogError("checking event preconditions", ex);
                     return false;
                 }
 

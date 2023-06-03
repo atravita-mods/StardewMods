@@ -181,8 +181,7 @@ internal static class AssetEditor
                 }
                 catch (Exception ex)
                 {
-                    Globals.ModMonitor.Log($"Something went very wrong looking up backup schedule for {character}, huh.", LogLevel.Error);
-                    Globals.ModMonitor.Log(ex.ToString());
+                    Globals.ModMonitor.LogError($"looking up backup schedule for {character}", ex);
                     Failed.Add(character);
                 }
             }

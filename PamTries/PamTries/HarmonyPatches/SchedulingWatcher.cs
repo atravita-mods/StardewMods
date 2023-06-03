@@ -32,7 +32,7 @@ internal static class SchedulingWatcher
         }
         catch (Exception ex)
         {
-            ModEntry.ModMonitor.Log($"Error in postfixing get master schedule to get Pam's schedule.\n\n{ex}", LogLevel.Error);
+            ModEntry.ModMonitor.LogError("postfixing get master schedule to get Pam's schedule", ex);
         }
     }
 }

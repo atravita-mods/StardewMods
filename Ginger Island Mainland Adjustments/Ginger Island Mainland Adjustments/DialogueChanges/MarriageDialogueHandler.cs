@@ -5,7 +5,7 @@ using StardewModdingAPI.Events;
 namespace GingerIslandMainlandAdjustments.DialogueChanges;
 
 /// <summary>
-/// Handles adding dialogue?
+/// Handles adding marriage dialogue.
 /// </summary>
 internal static class MarriageDialogueHandler
 {
@@ -22,7 +22,7 @@ internal static class MarriageDialogueHandler
             {
                 if (spouse.TryApplyMarriageDialogueIfExisting("GILeave_" + spouse.Name))
                 {
-                    Globals.ModMonitor.DebugOnlyLog($"Setting GILeave_{spouse?.Name}", LogLevel.Trace);
+                    Globals.ModMonitor.DebugOnlyLog($"Setting GILeave_{spouse.Name}", LogLevel.Trace);
                 }
                 else if (Game1.player is not null)
                 {
@@ -42,7 +42,7 @@ internal static class MarriageDialogueHandler
         }
         catch (Exception ex)
         {
-            Globals.ModMonitor.Log($"Error in setting GILeave dialogue:\n{ex}", LogLevel.Error);
+            Globals.ModMonitor.LogError("setting GILeave dialogue", ex);
         }
     }
 }

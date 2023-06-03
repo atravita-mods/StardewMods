@@ -1,4 +1,5 @@
-﻿using HarmonyLib;
+﻿using AtraShared.Utils.Extensions;
+using HarmonyLib;
 using Microsoft.Xna.Framework;
 using StardewValley.TerrainFeatures;
 using StardewValley.Tools;
@@ -51,7 +52,7 @@ internal static class GiantCropPatcher
         }
         catch (Exception ex)
         {
-            ModEntry.ModMonitor.Log($"Failed while popping the tapper off {ex}", LogLevel.Error);
+            ModEntry.ModMonitor.LogError("popping the tapper off", ex);
         }
         return true;
     }

@@ -261,7 +261,7 @@ internal static class Rescheduler
         }
         catch (Exception ex)
         {
-            ModEntry.ModMonitor.Log($"Error in rescheduler {ex}", LogLevel.Error);
+            ModEntry.ModMonitor.LogError("macropathfinding", ex);
             _visited.Value?.Clear();
             _queue.Value?.Clear();
             return null;
@@ -297,8 +297,7 @@ internal static class Rescheduler
         }
         catch (Exception ex)
         {
-            ModEntry.ModMonitor.Log($"Mod failed while trying to pre-populate pathfinding cache.", LogLevel.Error);
-            ModEntry.ModMonitor.Log(ex.ToString());
+            ModEntry.ModMonitor.LogError("pre-populating pathfinding cache.", ex);
             return true;
         }
     }
@@ -415,26 +414,26 @@ internal static class Rescheduler
         GameLocation start = Game1.getLocationFromName(startingLocation);
         if (start is null)
         {
-            ModEntry.ModMonitor.Log($"NPC {__instance.Name} requested path starting at {startingLocation}, which does not exist.", LogLevel.Error);
+            ModEntry.ModMonitor.Log($"NPC {__instance.Name} requested path starting at {startingLocation}, which does not exist.", LogLevel.Warn);
             return false;
         }
         Gender startGender = GetTightestGenderConstraint((Gender)__instance.Gender, GetGenderConstraint(startingLocation));
         if (startGender == Gender.Invalid)
         {
-            ModEntry.ModMonitor.Log($"NPC {__instance.Name} requested path starting at {startingLocation}, which is not allowed due to their gender.", LogLevel.Error);
+            ModEntry.ModMonitor.Log($"NPC {__instance.Name} requested path starting at {startingLocation}, which is not allowed due to their gender.", LogLevel.Warn);
             return false;
         }
 
         GameLocation end = Game1.getLocationFromName(actualEnd);
         if (end is null)
         {
-            ModEntry.ModMonitor.Log($"NPC {__instance.Name} requested path ending at {actualEnd}, which does not exist.", LogLevel.Error);
+            ModEntry.ModMonitor.Log($"NPC {__instance.Name} requested path ending at {actualEnd}, which does not exist.", LogLevel.Warn);
             return false;
         }
         Gender endGender = GetTightestGenderConstraint((Gender)__instance.Gender, GetGenderConstraint(actualEnd));
         if (endGender == Gender.Invalid)
         {
-            ModEntry.ModMonitor.Log($"NPC {__instance.Name} requested path ending at {actualEnd}, which is not allowed due to their gender.", LogLevel.Error);
+            ModEntry.ModMonitor.Log($"NPC {__instance.Name} requested path ending at {actualEnd}, which is not allowed due to their gender.", LogLevel.Warn);
             return false;
         }
 

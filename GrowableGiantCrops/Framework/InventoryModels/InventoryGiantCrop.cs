@@ -496,8 +496,7 @@ public sealed class InventoryGiantCrop : SObject
         }
         catch (Exception ex)
         {
-            ModEntry.ModMonitor.Log($"Failed in attempting to acquire texture and boundaries for {this.Name} - {this.ParentSheetIndex}, see log for details.", LogLevel.Error);
-            ModEntry.ModMonitor.Log(ex.ToString());
+            ModEntry.ModMonitor.LogError($"acquiring texture and boundaries for {this.Name} - {this.ParentSheetIndex}", ex);
         }
     }
 

@@ -26,7 +26,7 @@ internal static class SubmarineGetFish
         }
         catch (Exception ex)
         {
-            ModEntry.ModMonitor.Log($"Failed in replacing submarine getfish!{ex}", LogLevel.Error);
+            ModEntry.ModMonitor.LogError("replacing submarine getfish", ex);
         }
         return true;
     }

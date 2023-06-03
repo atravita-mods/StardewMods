@@ -12,6 +12,9 @@ using HarmonyLib;
 
 namespace MoreFertilizers.HarmonyPatches.EverlastingFertilizer;
 
+/// <summary>
+/// Holds patches against Crop.newDay for the Everlasting fertilizer.
+/// </summary>
 [HarmonyPatch(typeof(Crop))]
 internal static class CropNewDayTranspiler
 {
@@ -32,7 +35,7 @@ internal static class CropNewDayTranspiler
         }
         catch (Exception ex)
         {
-            ModEntry.ModMonitor.Log($"Mod crashed while transpiling DGA. Integration may not work correctly.\n\n{ex}", LogLevel.Error);
+            ModEntry.ModMonitor.LogError($"transpiling DGA", ex);
         }
     }
 
@@ -70,8 +73,7 @@ internal static class CropNewDayTranspiler
         }
         catch (Exception ex)
         {
-            ModEntry.ModMonitor.Log($"Mod crashed while transpiling {original.FullDescription()}:\n\n{ex}", LogLevel.Error);
-            original.Snitch(ModEntry.ModMonitor);
+            ModEntry.ModMonitor.LogTranspilerError(original, ex);
         }
         return null;
     }

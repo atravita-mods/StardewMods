@@ -79,12 +79,6 @@ internal static class Globals
     internal static SaveDataModel? SaveDataModel { get; private set; }
 
     /// <summary>
-    /// Gets the github location for this mod.
-    /// </summary>
-    /// <remarks>Used to direct bug reports.</remarks>
-    internal static string GithubLocation { get; } = "https://github.com/atravita-mods/Ginger-Island-Mainland-Adjustments/issues";
-
-    /// <summary>
     /// Gets a reference to  of Child2NPC's ModEntry.IsChildNPC.
     /// </summary>
     /// <remarks>Null if C2NPC is not installed or method not found.</remarks>

@@ -2,6 +2,8 @@
 
 using AtraBase.Toolkit;
 
+using AtraShared.Utils.Extensions;
+
 using HarmonyLib;
 
 using IdentifiableCombinedRings.DataModels;
@@ -20,6 +22,7 @@ namespace IdentifiableCombinedRings.HarmonyPatches;
 /// Holds patches on combined rings.
 /// </summary>
 [HarmonyPatch(typeof(CombinedRing))]
+[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Harmony convention")]
 internal class CombinedRingPatcher
 {
     /// <inheritdoc cref="CombinedRing.drawInMenu(SpriteBatch, Vector2, float, float, float, StackDrawType, Color, bool)"/>
@@ -28,7 +31,6 @@ internal class CombinedRingPatcher
     [HarmonyPriority(Priority.Low)]
     [MethodImpl(TKConstants.Hot)]
     [HarmonyPatch(nameof(CombinedRing.drawInMenu))]
-    [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Harmony convention")]
     public static bool PrefixGetDisplayName(
         CombinedRing __instance,
         SpriteBatch spriteBatch,
@@ -67,20 +69,38 @@ internal class CombinedRingPatcher
                     color * transparency,
                     0f,
                     new Vector2(8f, 8f) * scaleSize,
-                    scaleSize * 4f,
+                    scaleSize * Game1.pixelZoom,
                     SpriteEffects.None,
                     layerDepth);
                 return false;
             }
 
-            combinedRings[0].drawInMenu(spriteBatch, location + new Vector2(8f, 0f), scaleSize * .8f, transparency, layerDepth, drawStackNumber, color, drawShadow);
-            combinedRings[1].drawInMenu(spriteBatch, location + new Vector2(-16f, 12f), scaleSize * .8f, transparency, layerDepth, drawStackNumber, color, drawShadow);
+            const float scaleAdjustment = 0.8f;
+
+            combinedRings[0].drawInMenu(
+                spriteBatch,
+                location + new Vector2(8f, 0f),
+                scaleSize * scaleAdjustment,
+                transparency,
+                layerDepth,
+                drawStackNumber,
+                color,
+                drawShadow);
+            combinedRings[1].drawInMenu(
+                spriteBatch,
+                location + new Vector2(-16f, 12f),
+                scaleSize * scaleAdjustment,
+                transparency,
+                MathF.BitIncrement(layerDepth),
+                drawStackNumber,
+                color,
+                drawShadow);
 
             return false;
         }
         catch (Exception ex)
         {
-            Globals.ModMonitor.Log($"Failed while overriding drawing for combined ring:\n\n{ex}", LogLevel.Error);
+            Globals.ModMonitor.LogError("overriding drawing for combined ring", ex);
         }
 
         return true;

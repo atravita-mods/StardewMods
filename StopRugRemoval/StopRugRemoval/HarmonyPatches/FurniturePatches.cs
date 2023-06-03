@@ -56,7 +56,7 @@ internal class FurniturePatches
         }
         catch (Exception ex)
         {
-            ModEntry.ModMonitor.Log($"Ran into issues with postfix for Furniture::CanBeRemoved for {__instance.Name}\n\n{ex}", LogLevel.Error);
+            ModEntry.ModMonitor.LogError("preventing rug removal", ex);
         }
     }
 
@@ -147,7 +147,7 @@ internal class FurniturePatches
         }
         catch (Exception ex)
         {
-            ModEntry.ModMonitor.Log($"Ran into errors preventing removal of item from table for {who.Name}\n\n{ex}", LogLevel.Error);
+            ModEntry.ModMonitor.LogError("preventing removal of item from table", ex);
             return true;
         }
     }
@@ -170,7 +170,7 @@ internal class FurniturePatches
         }
         catch (Exception ex)
         {
-            ModEntry.ModMonitor.Log($"Failed in preventing spawning on rugs at {tile_x} {tile_y}\n\n{ex}", LogLevel.Error);
+            ModEntry.ModMonitor.LogError($"preventing spawning on rugs at {tile_x} {tile_y}", ex);
         }
         return true;
     }

@@ -1,4 +1,6 @@
-﻿using GrowableGiantCrops.Framework;
+﻿using AtraShared.Utils.Extensions;
+
+using GrowableGiantCrops.Framework;
 using GrowableGiantCrops.Framework.Assets;
 using GrowableGiantCrops.Framework.InventoryModels;
 
@@ -67,7 +69,7 @@ internal static class SeasonalTreeUpdates
         }
         catch (Exception ex)
         {
-            ModEntry.ModMonitor.Log($"Failed to overwrite tree textures:\n\n{ex}", LogLevel.Error);
+            ModEntry.ModMonitor.LogError("overwriting tree textures", ex);
         }
         return true;
     }
@@ -76,23 +78,30 @@ internal static class SeasonalTreeUpdates
     [HarmonyPatch(nameof(Tree.dayUpdate))]
     private static void PrefixDayUpdate(Tree __instance, GameLocation environment)
     {
-        if (!ModEntry.Config.PalmTreeBehavior.HasFlagFast(PalmTreeBehavior.Stump) || __instance.health.Value <= -100f || environment is Desert or MineShaft or IslandLocation
-            || __instance.modData?.ContainsKey(InventoryTree.ModDataKey) != true)
+        try
         {
-            return;
-        }
+            if (!ModEntry.Config.PalmTreeBehavior.HasFlagFast(PalmTreeBehavior.Stump) || __instance.health.Value <= -100f || environment is Desert or MineShaft or IslandLocation
+                || __instance.modData?.ContainsKey(InventoryTree.ModDataKey) != true)
+            {
+                return;
+            }
 
-        if (__instance.treeType.Value is Tree.palmTree or Tree.palmTree2)
+            if (__instance.treeType.Value is Tree.palmTree or Tree.palmTree2)
+            {
+                if (Game1.GetSeasonForLocation(__instance.currentLocation) == "winter")
+                {
+                    __instance.stump.Value = true;
+                }
+                else if (Game1.dayOfMonth <= 1 && Game1.IsSpring)
+                {
+                    __instance.stump.Value = false;
+                    __instance.health.Value = 10f;
+                }
+            }
+        }
+        catch (Exception ex)
         {
-            if (Game1.GetSeasonForLocation(__instance.currentLocation) == "winter")
-            {
-                __instance.stump.Value = true;
-            }
-            else if (Game1.dayOfMonth <= 1 && Game1.IsSpring)
-            {
-                __instance.stump.Value = false;
-                __instance.health.Value = 10f;
-            }
+            ModEntry.ModMonitor.LogError("updating tree texture", ex);
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using AtraBase.Toolkit.Reflection;
+﻿using AtraBase.Toolkit;
+using AtraBase.Toolkit.Reflection;
 using AtraCore.Framework.ReflectionManager;
 using AtraShared.Utils.Extensions;
 using HarmonyLib;
@@ -10,6 +11,7 @@ namespace MoreFertilizers.HarmonyPatches;
 /// Holds patches against SObject.
 /// </summary>
 [HarmonyPatch(typeof(SObject))]
+[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Harmony Convention")]
 internal static class SObjectPatches
 {
     /// <summary>
@@ -28,14 +30,13 @@ internal static class SObjectPatches
         }
         catch (Exception ex)
         {
-            ModEntry.ModMonitor.Log($"Mod crashed while transpiling DGA. Integration may not work correctly.\n\n{ex}", LogLevel.Error);
+            ModEntry.ModMonitor.LogError("transpiling DGA", ex);
         }
     }
 
     [HarmonyPostfix]
     [HarmonyPriority(Priority.VeryLow)]
     [HarmonyPatch(nameof(SObject.performObjectDropInAction))]
-    [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Harmony Convention")]
     private static void PostfixDropInAction(SObject __instance, Item dropInItem, bool probe, bool __result)
     {
         if (!probe && __result)
@@ -60,19 +61,18 @@ internal static class SObjectPatches
             }
             catch (Exception ex)
             {
-                ModEntry.ModMonitor.Log($"Failed in setting organic for {dropInItem.Name} for machine {__instance.Name}\n\n{ex}", LogLevel.Error);
+                ModEntry.ModMonitor.LogError($"Failed in setting organic for {dropInItem.Name} for machine {__instance.Name}", ex);
             }
         }
     }
 
     [HarmonyPrefix]
     [HarmonyPatch(nameof(SObject.HighlightFertilizers))]
-    [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Harmony Convention")]
     private static bool PrefixHighlightFertilizers(Item i, ref bool __result)
     {
         try
         {
-            if (__result && i is SObject obj && !obj.bigCraftable.Value
+            if (__result && TypeUtils.IsExactlyOfType(i, out SObject? obj) && !obj.bigCraftable.Value
                 && obj.ParentSheetIndex != -1 && ModEntry.SpecialFertilizerIDs.Contains(obj.ParentSheetIndex))
             {
                 __result = false;
@@ -81,14 +81,13 @@ internal static class SObjectPatches
         }
         catch (Exception ex)
         {
-            ModEntry.ModMonitor.LogOnce($"Mod failed while adjusting highlighting fertilizers for enricher!\n\n{ex}", LogLevel.Error);
+            ModEntry.ModMonitor.LogError("adjusting highlighted fertilizers for enricher", ex);
         }
         return true;
     }
 
     [HarmonyPostfix]
     [HarmonyPatch("loadDisplayName")]
-    [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Harmony Convention")]
     private static void PostfixLoadDisplayName(SObject __instance, ref string __result)
     {
         if (__instance.modData?.GetBool(CanPlaceHandler.Organic) == true)

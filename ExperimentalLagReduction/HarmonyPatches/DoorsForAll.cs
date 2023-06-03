@@ -1,4 +1,6 @@
-﻿using HarmonyLib;
+﻿using AtraShared.Utils.Extensions;
+
+using HarmonyLib;
 
 namespace ExperimentalLagReduction.HarmonyPatches;
 
@@ -25,8 +27,7 @@ internal static class DoorsForAll
             }
             catch (Exception ex)
             {
-                ModEntry.ModMonitor.Log($"Failed attempt to parse warps for {__instance.NameOrUniqueName}, see log for error.", LogLevel.Error);
-                ModEntry.ModMonitor.Log(ex.ToString());
+                ModEntry.ModMonitor.LogError($"parsing warps for {__instance.NameOrUniqueName}", ex);
             }
         }
 
@@ -38,8 +39,7 @@ internal static class DoorsForAll
             }
             catch (Exception ex)
             {
-                ModEntry.ModMonitor.Log($"Failed attempt to parse doors for {__instance.NameOrUniqueName}, see log for error.", LogLevel.Error);
-                ModEntry.ModMonitor.Log(ex.ToString());
+                ModEntry.ModMonitor.LogError($"parsing doors for {__instance.NameOrUniqueName}", ex);
             }
         }
     }

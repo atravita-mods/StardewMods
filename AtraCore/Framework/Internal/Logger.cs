@@ -21,6 +21,13 @@ internal class Logger : ILogger
         => this.monitor.Log(message, LogLevel.Error);
 
     /// <inheritdoc />
+    public void Error(string message,  Exception exception)
+    {
+        this.monitor.Log(message, LogLevel.Error);
+        this.monitor.Log(exception.ToString());
+    }
+
+    /// <inheritdoc />
     public void Info(string message)
         => this.monitor.Log(message, LogLevel.Info);
 

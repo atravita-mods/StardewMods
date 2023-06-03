@@ -1,5 +1,7 @@
 ﻿using AtraBase.Toolkit;
 
+using AtraShared.Utils.Extensions;
+
 using CommunityToolkit.Diagnostics;
 
 using StardewModdingAPI.Utilities;
@@ -15,6 +17,18 @@ internal static class AllowRepeatAfterHandler
     /// A mapping of events to forget and the in-game day to forget them on.
     /// </summary>
     private static readonly PerScreen<Dictionary<int, HashSet<int>>> eventsToRepeat = new(() => new());
+
+    /// <summary>
+    /// Gets the save key used to look up our saved data.
+    /// </summary>
+    private static string SaveKey
+    {
+        get
+        {
+            Guard.IsNotNullOrEmpty(Constants.SaveFolderName); // should not be null if a save is loaded but might be if the player does some save edits.
+            return $"{Constants.SaveFolderName.GetStableHashCode()}_{Game1.player.UniqueMultiplayerID}";
+        }
+    }
 
     /// <summary>
     /// Empties and resets the events to repeat file.
@@ -33,8 +47,7 @@ internal static class AllowRepeatAfterHandler
     /// <param name="helper">Data helper.</param>
     internal static void Load(IDataHelper helper)
     {
-        Guard.IsNotNull(Constants.SaveFolderName); // should not be null if a save is loaded but might be if the player does some save edits.
-        eventsToRepeat.Value = helper.ReadGlobalData<Dictionary<int, HashSet<int>>>($"{Constants.SaveFolderName.GetStableHashCode()}_{Game1.player.UniqueMultiplayerID}")
+        eventsToRepeat.Value = helper.ReadGlobalData<Dictionary<int, HashSet<int>>>(SaveKey)
             ?? new();
     }
 
@@ -44,8 +57,10 @@ internal static class AllowRepeatAfterHandler
     /// <param name="helper">Data helper.</param>
     internal static void Save(IDataHelper helper)
     {
-        Guard.IsNotNull(Constants.SaveFolderName);
-        Task.Run(() => helper.WriteGlobalData($"{Constants.SaveFolderName.GetStableHashCode()}_{Game1.player.UniqueMultiplayerID}", eventsToRepeat.Value))
+        // check key on main thread in case it throws.
+        string key = SaveKey;
+
+        Task.Run(() => helper.WriteGlobalData(key, eventsToRepeat.Value.Count == 0 ? null : eventsToRepeat.Value))
             .ContinueWith(task =>
             {
                 if (task.Status == TaskStatus.RanToCompletion)
@@ -63,6 +78,9 @@ internal static class AllowRepeatAfterHandler
             });
     }
 
+    /// <summary>
+    /// Removes the events seen if there's any tracked.
+    /// </summary>
     internal static void DayEnd()
     {
         SDate now = SDate.Now();
@@ -88,6 +106,11 @@ internal static class AllowRepeatAfterHandler
         }
     }
 
+    /// <summary>
+    /// Adds an event to the list to remove.
+    /// </summary>
+    /// <param name="id">int id of the event.</param>
+    /// <param name="days">number of days to offset by.</param>
     internal static void Add(int id, int days)
     {
         days += SDate.Now().DaysSinceStart;
@@ -96,6 +119,9 @@ internal static class AllowRepeatAfterHandler
             eventsToRepeat.Value[days] = events = new();
         }
 
-        events.Add(id);
+        if (events.Add(id))
+        {
+            ModEntry.ModMonitor.Log($"Tracking event '{id}' to be forgotten on day {days}.");
+        }
     }
 }

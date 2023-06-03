@@ -1,4 +1,6 @@
-﻿using AtraShared.Utils;
+﻿// Ignore Spelling: Npcs
+
+using AtraShared.Utils;
 
 namespace GingerIslandMainlandAdjustments.Configuration;
 
@@ -26,10 +28,16 @@ public sealed class ModConfig
     /// </summary>
     public bool RequireResortDialogue { get; set; } = true;
 
+    private WearIslandClothing wearIslandClothing = WearIslandClothing.Default;
+
     /// <summary>
     /// Gets or sets a value indicating whether or not Islanders should wear their beach outfits.
     /// </summary>
-    public WearIslandClothing WearIslandClothing { get; set; } = WearIslandClothing.Default;
+    public WearIslandClothing WearIslandClothing
+    {
+        get => this.wearIslandClothing;
+        set => this.wearIslandClothing = WearIslandClothingExtensions.IsDefined(value) ? value : WearIslandClothing.Default;
+    }
 
     /// <summary>
     /// Gets or sets a value indicating whether to use the game's GI scheduler
@@ -51,6 +59,9 @@ public sealed class ModConfig
         set => this.capacity = Math.Clamp(value, 0, 15);
     }
 
+    /// <summary>
+    /// Gets or sets a value indicating whether or not NPCs too far from the resort should be staged at the saloon.
+    /// </summary>
     public bool StageFarNpcsAtSaloon { get; set; } = true;
 
     /// <summary>

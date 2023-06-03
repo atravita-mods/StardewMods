@@ -1,4 +1,6 @@
 ﻿using AtraShared.Niceties;
+using AtraShared.Utils.Extensions;
+
 using HarmonyLib;
 using Microsoft.Xna.Framework.Audio;
 using StardewValley.Menus;
@@ -33,7 +35,7 @@ internal static class PreventJukeboxCrash
                 }
                 catch (Exception ex)
                 {
-                    ModEntry.ModMonitor.Log($"Failed in checking jukebox songs for invalid cues for cue {name}\n\n{ex}", LogLevel.Error);
+                    ModEntry.ModMonitor.LogError($"Failed in checking jukebox songs for invalid cues for cue {name}", ex);
                 }
             }
             else

@@ -12,9 +12,9 @@ using StardewValley.Locations;
 namespace PamTries.HarmonyPatches;
 
 [HarmonyPatch(typeof(GameLocation))]
+[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Harmony Convention.")]
 internal class BusDriverSchedulePatch
 {
-
     /// <summary>
     /// Gets or sets the current bus driver.
     /// </summary>
@@ -23,7 +23,6 @@ internal class BusDriverSchedulePatch
     internal static string GetCurrentDriver() => CurrentDriver;
 
     [HarmonyPatch(nameof(GameLocation.busLeave))]
-    [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Harmony Convention.")]
     private static bool Prefix(GameLocation __instance)
     {
         ModEntry.ModMonitor.Log("Reached BusLeave!", LogLevel.Alert);

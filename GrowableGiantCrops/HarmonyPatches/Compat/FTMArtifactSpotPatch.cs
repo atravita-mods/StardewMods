@@ -4,6 +4,8 @@ using AtraBase.Toolkit.Reflection;
 
 using AtraCore.Framework.ReflectionManager;
 
+using AtraShared.Utils.Extensions;
+
 using FastExpressionCompiler.LightExpression;
 
 using GrowableGiantCrops.Framework;
@@ -15,6 +17,7 @@ namespace GrowableGiantCrops.HarmonyPatches.Compat;
 /// <summary>
 /// Patches for FTM's burial spot.
 /// </summary>
+[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Harmony convention.")]
 internal static class FTMArtifactSpotPatch
 {
     #region delegates
@@ -59,11 +62,10 @@ internal static class FTMArtifactSpotPatch
         }
         catch (Exception ex)
         {
-            ModEntry.ModMonitor.Log($"Failed to patch FTM to support artifact spots.\n\n{ex}", LogLevel.Error);
+            ModEntry.ModMonitor.LogError("patching FTM to support artifact spots.", ex);
         }
     }
 
-    [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Harmony convention.")]
     private static bool Prefix(SObject __instance, Tool t, GameLocation location, ref bool __result)
     {
         if (t is not ShovelTool shovel)
@@ -92,7 +94,7 @@ internal static class FTMArtifactSpotPatch
         }
         catch (Exception ex)
         {
-            ModEntry.ModMonitor.Log($"Failed while trying to use shovel on FTM artifact spot:\n\n{ex}", LogLevel.Error);
+            ModEntry.ModMonitor.LogError("using shovel on FTM artifact spot", ex);
         }
 
         return true;

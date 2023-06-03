@@ -1,4 +1,6 @@
-﻿using AtraShared.Utils.Extensions;
+﻿using AtraCore;
+
+using AtraShared.Utils.Extensions;
 using HarmonyLib;
 using MoreFertilizers.Framework;
 using StardewValley.Locations;
@@ -20,7 +22,7 @@ internal static class SubmarineGetFish
             if (__instance?.modData?.GetInt(CanPlaceHandler.FishFood) > 0)
             {
                 int[] fishies = new[] { 800, 799, 798, 154, 155, 149 };
-                __result = new SObject(fishies[Game1.random.Next(fishies.Length)], 1);
+                __result = new SObject(fishies[Singletons.Random.Next(fishies.Length)], 1);
                 return false;
             }
         }

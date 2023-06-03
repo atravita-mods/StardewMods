@@ -1,4 +1,5 @@
-﻿using AtraBase.Toolkit.Reflection;
+﻿using AtraBase.Toolkit.Extensions;
+using AtraBase.Toolkit.Reflection;
 
 using AtraCore;
 using AtraCore.Framework.ReflectionManager;
@@ -166,7 +167,7 @@ internal static class CRUtils
             count *= ModEntry.Config.CritterSpawnMultiplier;
             for (int i = 0; i < count; i++)
             {
-                critters.Add(new Butterfly(Game1.player.getTileLocation(), Singletons.Random.Next(2) == 0).setStayInbounds(true));
+                critters.Add(new Butterfly(Game1.player.getTileLocation(), Singletons.Random.OfChance(0.5)).setStayInbounds(true));
             }
         }
     }
@@ -187,7 +188,7 @@ internal static class CRUtils
                 Frog? frog = null;
 
                 // try for a frog that leaps into water.
-                if (loc.waterTiles is not null && Singletons.Random.Next(2) == 0)
+                if (loc.waterTiles is not null && Singletons.Random.OfChance(0.5))
                 {
                     for (int j = 0; j < 3; j++)
                     {
@@ -201,7 +202,7 @@ internal static class CRUtils
                             continue;
                         }
 
-                        bool flipped = Singletons.Random.Next(2) == 0;
+                        bool flipped = Singletons.Random.OfChance(0.5);
                         for (int x = 1; x < 11; x++)
                         {
                             if (!loc.isTileOnMap(xCoord + x, yCoord))
@@ -240,7 +241,7 @@ breakbreak:
             {
                 Vector2 owlPos;
 
-                if (Singletons.Random.Next(3) == 0)
+                if (Singletons.Random.RollDice(3))
                 {
                     Vector2 pos = Game1.player.Position;
                     float deltaY = pos.Y + 128;
@@ -321,7 +322,7 @@ breakbreak:
                     continue;
                 }
 
-                bool flipped = Singletons.Random.Next(2) == 0;
+                bool flipped = Singletons.Random.OfChance(0.5);
                 Vector2 startTile = bush.tilePosition.Value;
                 startTile.X += flipped ? 2 : -2;
                 int distance = Singletons.Random.Next(5, 12);
@@ -367,7 +368,7 @@ Continue: ;
                 numberOfLoops: 0,
                 position: (tile - Vector2.One) * Game1.tileSize,
                 flicker: false,
-                flipped: Singletons.Random.NextDouble() < 0.5,
+                flipped: Singletons.Random.OfChance(0.5),
                 layerDepth: 1f,
                 alphaFade: 0.01f,
                 color: Color.White,

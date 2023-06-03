@@ -1,12 +1,21 @@
 ﻿using System.Reflection;
 using System.Reflection.Emit;
+
+using AtraBase.Toolkit.Extensions;
 using AtraBase.Toolkit.Reflection;
+
+using AtraCore;
 using AtraCore.Framework.ReflectionManager;
+
 using AtraShared.Utils.Extensions;
 using AtraShared.Utils.HarmonyHelper;
+
 using HarmonyLib;
+
 using MoreFertilizers.Framework;
+
 using Netcode;
+
 using StardewValley.TerrainFeatures;
 
 namespace MoreFertilizers.HarmonyPatches.FruitTreePatches;
@@ -42,7 +51,7 @@ internal static class FruitTreeDayUpdateTranspiler
         try
         {
             if (tree.modData?.GetInt(CanPlaceHandler.FruitTreeFertilizer) is int result
-                && Game1.random.NextDouble() <= 0.15 * result)
+                && Singletons.Random.OfChance(0.15 * result))
             {
                 ModEntry.ModMonitor.LogIfVerbose(() => $"Speeding up fruit tree at {tree.currentTileLocation}");
                 return 1;

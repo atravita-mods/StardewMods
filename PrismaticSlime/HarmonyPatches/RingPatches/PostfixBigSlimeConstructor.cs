@@ -1,4 +1,6 @@
-﻿using AtraCore;
+﻿using AtraBase.Toolkit.Extensions;
+
+using AtraCore;
 
 using AtraShared.Utils.Extensions;
 
@@ -28,7 +30,7 @@ internal static class PostfixBigSlimeConstructor
         try
         {
             if (ModEntry.PrismaticSlimeRing != -1
-                && Singletons.Random.NextDouble() < 0.008 + Math.Min(Game1.player.team.AverageDailyLuck() / 10.0, 0.01) + Math.Min(Game1.player.LuckLevel / 400.0, 0.01))
+                && Singletons.Random.OfChance(0.008 + Math.Min(Game1.player.team.AverageDailyLuck() / 10.0, 0.01) + Math.Min(Game1.player.LuckLevel / 400.0, 0.01)))
             {
                 __instance.heldObject.Value = new SObject(ModEntry.PrismaticSlimeRing, 1);
             }

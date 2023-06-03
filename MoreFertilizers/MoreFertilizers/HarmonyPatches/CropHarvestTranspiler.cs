@@ -6,6 +6,7 @@ using AtraBase.Toolkit;
 using AtraBase.Toolkit.Extensions;
 using AtraBase.Toolkit.Reflection;
 
+using AtraCore;
 using AtraCore.Framework.ReflectionManager;
 
 using AtraShared.Utils.Extensions;
@@ -75,13 +76,13 @@ internal static class CropHarvestTranspiler
             }
             else if (dirt.fertilizer.Value == ModEntry.DeluxeJojaFertilizerID)
             {
-                return Game1.random.Next(5) == 0 ? 2 : 1;
+                return Singletons.Random.OfChance(0.2) ? 2 : 1;
             }
             else if (dirt.fertilizer.Value == ModEntry.SecretJojaFertilizerID)
             {
                 return hasQualityMod
-                    ? ((Game1.random.Next(4) != 0 || dirt.HasJojaCrop()) ? -2 : 1)
-                    : ((Game1.random.Next(2) == 0 && !dirt.HasJojaCrop()) ? 1 : 0);
+                    ? ((Singletons.Random.OfChance(0.75) || dirt.HasJojaCrop()) ? -2 : 1)
+                    : ((Singletons.Random.OfChance(0.5) && !dirt.HasJojaCrop()) ? 1 : 0);
             }
         }
         return prevQual;
@@ -150,7 +151,7 @@ internal static class CropHarvestTranspiler
     private static int IncrementForBountiful(int prevValue, HoeDirt? dirt)
     {
         if (ModEntry.BountifulFertilizerID != -1 && dirt?.fertilizer?.Value == ModEntry.BountifulFertilizerID
-            && Game1.random.Next(10) == 0)
+            && Singletons.Random.OfChance(0.1))
         {
             ModEntry.ModMonitor.DebugOnlyLog("IncrementedOnceForBountiful", LogLevel.Info);
             return prevValue * 2;
@@ -172,7 +173,7 @@ internal static class CropHarvestTranspiler
     private static int AdjustRegrow(int prevValue, HoeDirt? dirt)
     {
         if (ModEntry.SecretJojaFertilizerID != -1 && dirt?.fertilizer?.Value == ModEntry.SecretJojaFertilizerID
-            && (Game1.random.Next(2) == 0 || dirt.HasJojaCrop()))
+            && (Singletons.Random.OfChance(0.5) || dirt.HasJojaCrop()))
         {
             return Math.Max(1, ((hasQualityMod ? 0.65 : 0.8) * prevValue).RandomRoundProportional());
         }
@@ -182,7 +183,7 @@ internal static class CropHarvestTranspiler
     [MethodImpl(TKConstants.Hot)]
     private static void DropSeedsForSeedyFertilizer(int x, int y, HoeDirt? dirt, JunimoHarvester? jumino)
     {
-        if (dirt?.crop is not null && Game1.random.Next(10) == 0
+        if (dirt?.crop is not null && Singletons.Random.OfChance(0.1)
             && ModEntry.SeedyFertilizerID != -1 && dirt.fertilizer?.Value == ModEntry.SeedyFertilizerID)
         {
             dirt.crop.InferSeedIndex();
@@ -190,7 +191,7 @@ internal static class CropHarvestTranspiler
 
             if (Game1Wrappers.ObjectInfo.ContainsKey(seedIndex))
             {
-                SObject seeds = new(seedIndex, Game1.random.Next(3));
+                SObject seeds = new(seedIndex, Singletons.Random.Next(3));
                 if (jumino is null)
                 {
                     Game1.createItemDebris(seeds, new Vector2((x * Game1.tileSize) + 32, (y * Game1.tileSize) + 32), -1, dirt.currentLocation);

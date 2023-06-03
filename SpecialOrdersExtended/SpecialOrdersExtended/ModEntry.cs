@@ -1,6 +1,7 @@
 ﻿using System.Reflection;
 using AtraBase.Toolkit.Reflection;
 
+using AtraCore;
 using AtraCore.Framework.EventCommands;
 using AtraCore.Framework.ReflectionManager;
 using AtraCore.Utilities;
@@ -418,7 +419,7 @@ internal sealed class ModEntry : Mod
         ModMonitor.Log($"{I18n.Analyzing()} {key}", LogLevel.Debug);
         try
         {
-            SpecialOrder? specialOrder = SpecialOrder.GetSpecialOrder(key, Game1.random.Next());
+            SpecialOrder? specialOrder = SpecialOrder.GetSpecialOrder(key, Singletons.Random.Next());
             if (specialOrder is not null)
             {
                 ModMonitor.Log($"\t{key} {I18n.Parsable()}", LogLevel.Debug);

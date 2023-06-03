@@ -332,7 +332,7 @@ END:
     private void PlaceFruit(GameLocation location, Vector2 tile)
     {
         int fruitToPlace = Utility.GetRandom(
-            this.TreeFruit.Count > 0 && this.Random.NextDouble() < (this.config.TreeFruitChance / 100f) ? this.TreeFruit : this.BASE_FRUIT,
+            this.TreeFruit.Count > 0 && this.Random.OfChance(this.config.TreeFruitChance / 100f) ? this.TreeFruit : this.BASE_FRUIT,
             this.Random);
 
         if (!DataToItemMap.IsActuallyRing(fruitToPlace))
@@ -344,7 +344,7 @@ END:
 
     [MethodImpl(TKConstants.Hot)]
     private bool CanSpawnFruitHere(GameLocation location, Vector2 tile)
-        => this.Random.NextDouble() < this.config.SpawnChance / 100f
+        => this.Random.OfChance(this.config.SpawnChance / 100f)
             && location.IsTileViewable(new XLocation((int)tile.X, (int)tile.Y), Game1.viewport)
             && location.isTileLocationTotallyClearAndPlaceableIgnoreFloors(tile);
 
@@ -465,7 +465,7 @@ END:
             && this.SpawnedFruitToday
             && this.config.UseMineCave)
         { // The following code is copied out of the game and adds the bat sprites to the mines.
-            if (Singletons.Random.NextDouble() < 0.12)
+            if (Singletons.Random.OfChance(0.12))
             {
                 TemporaryAnimatedSprite redbat = new(
                     textureName: @"LooseSprites\Cursors",
@@ -490,7 +490,7 @@ END:
                     motion = new Vector2(0f, -8f),
                 };
                 mine.TemporarySprites.Add(redbat);
-                if (Singletons.Random.NextDouble() < 0.15)
+                if (Singletons.Random.OfChance(0.15))
                 {
                     mine.localSound("batScreech");
                 }
@@ -499,11 +499,11 @@ END:
                     DelayedAction.playSoundAfterDelay("batFlap", (320 * i) + 240);
                 }
             }
-            else if (Singletons.Random.NextDouble() < 0.24)
+            else if (Singletons.Random.OfChance(0.24))
             {
                 BatTemporarySprite batsprite = new(
                     new Vector2(
-                        Singletons.Random.NextDouble() < 0.5 ? 0 : mine.map.DisplayWidth - 64,
+                        Singletons.Random.OfChance(0.5) ? 0 : mine.map.DisplayWidth - 64,
                         mine.map.DisplayHeight - 64));
                 mine.TemporarySprites.Add(batsprite);
             }

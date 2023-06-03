@@ -1,4 +1,6 @@
-﻿using AtraCore;
+﻿using AtraBase.Toolkit.Extensions;
+
+using AtraCore;
 
 using AtraShared.Utils.Extensions;
 
@@ -27,7 +29,7 @@ internal class HoeDirtDrawPatch
 
         try
         {
-            if (__instance.fertilizer.Value != -1 && __instance.fertilizer.Value == ModEntry.MiraculousBeveragesID && Singletons.Random.Next(512) == 0)
+            if (__instance.fertilizer.Value != -1 && __instance.fertilizer.Value == ModEntry.MiraculousBeveragesID && Singletons.Random.RollDice(512))
             {
                 __instance.currentLocation.TemporarySprites.Add(new TemporaryAnimatedSprite(
                     Game1.mouseCursorsName,

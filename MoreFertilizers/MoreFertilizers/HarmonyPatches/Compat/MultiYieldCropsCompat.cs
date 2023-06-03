@@ -1,11 +1,19 @@
 ﻿using System.Reflection;
 using System.Reflection.Emit;
+
+using AtraBase.Toolkit.Extensions;
 using AtraBase.Toolkit.Reflection;
+
+using AtraCore;
 using AtraCore.Framework.ReflectionManager;
+
 using AtraShared.Utils.Extensions;
 using AtraShared.Utils.HarmonyHelper;
+
 using HarmonyLib;
+
 using MoreFertilizers.Framework;
+
 using StardewValley.Characters;
 
 namespace MoreFertilizers.HarmonyPatches.Compat;
@@ -66,7 +74,7 @@ internal static class MultiYieldCropsCompat
             }
             else if (fertilizer == ModEntry.DeluxeJojaFertilizerID)
             {
-                obj.Quality = Game1.random.NextDouble() < 0.2 ? 2 : 1;
+                obj.Quality = Singletons.Random.OfChance(0.2) ? 2 : 1;
                 obj.modData?.SetBool(CanPlaceHandler.Joja, true);
                 obj.MarkContextTagsDirty();
             }
@@ -85,7 +93,7 @@ internal static class MultiYieldCropsCompat
     }
 
     private static bool IsBountifulFertilizer(int fertilizer)
-        => fertilizer != -1 && fertilizer == ModEntry.BountifulFertilizerID && Game1.random.NextDouble() < 0.1;
+        => fertilizer != -1 && fertilizer == ModEntry.BountifulFertilizerID && Singletons.Random.OfChance(0.1);
 
 #pragma warning disable SA1116 // Split parameters should start on line after declaration
     private static IEnumerable<CodeInstruction>? Transpiler(IEnumerable<CodeInstruction> instructions, ILGenerator gen, MethodBase original)

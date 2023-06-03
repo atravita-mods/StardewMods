@@ -1,4 +1,6 @@
-﻿using AtraCore;
+﻿using AtraBase.Toolkit.Extensions;
+
+using AtraCore;
 
 using AtraShared.Utils.Extensions;
 
@@ -27,17 +29,17 @@ internal static class PostfixBigSlimeConstructor
         {
             if (mineArea >= 120
                 && Game1.mine?.GetAdditionalDifficulty() is > 0
-                && Singletons.Random.NextDouble() < 0.13)
+                && Singletons.Random.OfChance(0.13))
             {
-                if (ModEntry.DeluxeFruitTreeFertilizerID != -1 && Singletons.Random.NextDouble() < 0.33)
+                if (ModEntry.DeluxeFruitTreeFertilizerID != -1 && Singletons.Random.OfChance(0.33))
                 {
                     __instance.heldObject.Value = new SObject(ModEntry.DeluxeFruitTreeFertilizerID, 1);
                 }
-                else if (ModEntry.DeluxeFishFoodID != -1 && Singletons.Random.NextDouble() < 0.5)
+                else if (ModEntry.DeluxeFishFoodID != -1 && Singletons.Random.OfChance(0.5))
                 {
                     __instance.heldObject.Value = new SObject(ModEntry.DeluxeFishFoodID, 1);
                 }
-                else if (ModEntry.SecretJojaFertilizerID != -1 && (Utility.hasFinishedJojaRoute() || Singletons.Random.NextDouble() < 0.2))
+                else if (ModEntry.SecretJojaFertilizerID != -1 && (Utility.hasFinishedJojaRoute() || Singletons.Random.OfChance(0.2)))
                 {
                     __instance.heldObject.Value = new SObject(ModEntry.SecretJojaFertilizerID, 1);
                 }
@@ -46,14 +48,14 @@ internal static class PostfixBigSlimeConstructor
             if (ModEntry.LuckyFertilizerID != -1
                 && mineArea >= 120
                 && Game1.mine?.GetAdditionalDifficulty() is <= 0
-                && Singletons.Random.NextDouble() < 0.04)
+                && Singletons.Random.OfChance(0.04))
             {
                 __instance.heldObject.Value = new SObject(ModEntry.LuckyFertilizerID, 1);
                 return;
             }
             if (ModEntry.WisdomFertilizerID != -1
                 && mineArea <= 120
-                && Singletons.Random.NextDouble() < 0.15)
+                && Singletons.Random.OfChance(0.15))
             { // big slimes are exceptionally rare in the normal mines.
                 __instance.heldObject.Value = new SObject(ModEntry.WisdomFertilizerID, 1);
                 return;

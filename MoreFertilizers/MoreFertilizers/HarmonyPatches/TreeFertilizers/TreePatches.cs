@@ -1,4 +1,6 @@
-﻿using AtraCore;
+﻿using AtraBase.Toolkit.Extensions;
+
+using AtraCore;
 
 using AtraShared.Utils.Extensions;
 using HarmonyLib;
@@ -34,7 +36,7 @@ internal static class TreePatches
         try
         {
             if (__instance.modData?.GetBool(CanPlaceHandler.TreeTapperFertilizer) == true
-                && tapper_instance.heldObject?.Value is not null && Singletons.Random.Next(8) == 0)
+                && tapper_instance.heldObject?.Value is not null && Singletons.Random.RollDice(6))
             {
                 ModEntry.ModMonitor.DebugOnlyLog($"Boosting tapper yield of tree at {__instance.currentTileLocation}.");
                 tapper_instance.heldObject.Value.Stack++;
@@ -52,7 +54,7 @@ internal static class TreePatches
     {
         try
         {
-            if (ModEntry.Config.DrawParticleEffects && __instance.modData.ContainsKey(CanPlaceHandler.TreeTapperFertilizer) && Singletons.Random.Next(256) == 0)
+            if (ModEntry.Config.DrawParticleEffects && __instance.modData.ContainsKey(CanPlaceHandler.TreeTapperFertilizer) && Singletons.Random.RollDice(256))
             {
                 __instance.currentLocation.temporarySprites.Add(
                     new TemporaryAnimatedSprite(
@@ -60,7 +62,7 @@ internal static class TreePatches
                         position: (__instance.currentTileLocation * Game1.tileSize) + new Vector2(Singletons.Random.Next(-32, 32), Singletons.Random.Next(-128, -14)),
                         color: Color.Yellow,
                         animationLength: 8,
-                        flipped: Singletons.Random.Next(2) == 0,
+                        flipped: Singletons.Random.OfChance(0.5),
                         animationInterval: 150,
                         layerDepth: ((__instance.currentTileLocation.Y * Game1.tileSize) + Singletons.Random.Next(100)) / 10000f
                     )

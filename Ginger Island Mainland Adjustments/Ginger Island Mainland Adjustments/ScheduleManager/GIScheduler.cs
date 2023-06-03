@@ -6,6 +6,7 @@ using System.Runtime;
 using System.Text;
 
 using AtraBase.Toolkit;
+using AtraBase.Toolkit.Extensions;
 
 using AtraCore;
 
@@ -223,7 +224,7 @@ internal static class GIScheduler
     /// <returns>An explorer group (of up to three explorers), or an empty hashset if there's no group today.</returns>
     private static (HashSet<NPC> group, string groupname) GenerateExplorerGroup(Random random)
     {
-        if (random.NextDouble() <= Globals.Config.ExplorerChance)
+        if (random.OfChance(Globals.Config.ExplorerChance))
         {
             List<string> explorerGroups = ExplorerGroups.Keys.ToList();
             if (explorerGroups.Count > 0)
@@ -283,7 +284,7 @@ internal static class GIScheduler
             Globals.SaveDataModel.NPCsForTomorrow.Clear();
         }
 
-        if (random.NextDouble() < Globals.Config.GroupChance)
+        if (random.OfChance(Globals.Config.GroupChance))
         {
             List<string> groupkeys = new(IslandGroups.Count);
             foreach (string key in IslandGroups.Keys)
@@ -317,7 +318,7 @@ internal static class GIScheduler
         // Add Gus (even if we go over capacity, he has a specific standing spot).
         if (NPCCache.GetByVillagerName("Gus") is NPC gus && !visitors.Contains(gus) && valid_visitors.Contains(gus)
             && Globals.Config.GusDayAsShortString().Equals(Game1.shortDayNameFromDayOfSeason(Game1.dayOfMonth), StringComparison.OrdinalIgnoreCase)
-            && Globals.Config.GusChance > random.NextDouble())
+            && random.OfChance(Globals.Config.GusChance))
         {
             Globals.ModMonitor.DebugOnlyLog($"Forcibly adding Gus.");
             visitors.Add(gus);
@@ -420,7 +421,7 @@ internal static class GIScheduler
         {
             musician = visitors.Find(static (NPC npc) => npc.Name.Equals("Sam", StringComparison.OrdinalIgnoreCase));
         }
-        if (musician is null || random.NextDouble() < 0.25)
+        if (musician is null || random.OfChance(0.25))
         {
             HashSet<NPC> musicians = AssetLoader.GetSpecialCharacter(SpecialCharacterType.Musician);
             if (musicians.Count > 0)
@@ -540,19 +541,8 @@ internal static class GIScheduler
                 sb.Append('/');
             }
 
-            if (visitor.Name.Equals("Gus", StringComparison.OrdinalIgnoreCase))
-            {
-                // Gus needs to tend bar. Hardcoded same as vanilla.
-                sb.Append("1800 Saloon 10 18 2/2430 bed");
-            }
-            else if (ScheduleUtilities.FindProperGISchedule(visitor, SDate.Now()) is string giSchedule)
-            {
-                sb.Append(giSchedule);
-            }
-            else
-            {
-                sb.Append(Globals.IsChildToNPC?.Invoke(visitor) == true ? "1800 BusStop -1 23 3" : "1800 bed");
-            }
+            sb.AppendCorrectRemainderSchedule(visitor);
+
             completedSchedules[visitor] = string.Join('/', sb.ToString());
             Globals.ModMonitor.DebugOnlyLog($"For {visitor.Name}, created island schedule {completedSchedules[visitor]}");
         }

@@ -2,6 +2,8 @@
 
 using System.Buffers;
 
+using AtraBase.Toolkit.Extensions;
+
 using CommunityToolkit.Diagnostics;
 
 using Microsoft.Xna.Framework;
@@ -162,7 +164,7 @@ public static class GameLocationUtils
                 numberOfLoops: 0,
                 position: nonTileLocation,
                 flicker: false,
-                flipped: Random.NextDouble() < 0.5,
+                flipped: Random.OfChance(0.5),
                 layerDepth: (nonTileLocation.Y + 1f) / 10000f,
                 alphaFade: 0.01f,
                 color: Color.White,
@@ -184,7 +186,7 @@ public static class GameLocationUtils
                 numberOfLoops: 0,
                 position: nonTileLocation + new Vector2(Random.Next(-32, 32), Random.Next(-16, 32)),
                 flicker: false,
-                flipped: Game1.random.NextDouble() < 0.5,
+                flipped: Random.OfChance(0.5),
                 layerDepth: (nonTileLocation.Y + 1f) / 10000f,
                 alphaFade: 0.01f,
                 color: Color.White,
@@ -206,7 +208,7 @@ public static class GameLocationUtils
                 numberOfLoops: 0,
                 position: nonTileLocation + new Vector2(Random.Next(-32, 32), Random.Next(-16, 32)),
                 flicker: false,
-                flipped: Game1.random.NextDouble() < 0.5,
+                flipped: Random.OfChance(0.5),
                 layerDepth: (nonTileLocation.Y + 1f) / 10000f,
                 alphaFade: 0.01f,
                 color: Color.White,

@@ -1,4 +1,5 @@
 ﻿using AtraBase.Models.Result;
+using AtraBase.Toolkit.Extensions;
 
 using AtraCore;
 
@@ -98,7 +99,7 @@ internal static class FixSecretNotes
         Seen.Value ??= new();
         Seen.Value.Clear();
 
-        foreach (var id in who.secretNotesSeen)
+        foreach (int id in who.secretNotesSeen)
         {
             if (id < GameLocation.JOURNAL_INDEX)
             {
@@ -117,7 +118,7 @@ internal static class FixSecretNotes
         // find a note that the farmer has not seen.
         Unseen.Value ??= new();
         Unseen.Value.Clear();
-        foreach (var id in secretNoteData.Keys)
+        foreach (int id in secretNoteData.Keys)
         {
             if (id < GameLocation.JOURNAL_INDEX && !Seen.Value.Contains(id))
             {
@@ -138,7 +139,7 @@ internal static class FixSecretNotes
         // copied from game code.
         double fractionOfNotesRemaining = (Unseen.Value.Count - 1) / Math.Max(1f, Unseen.Value.Count + Seen.Value.Count - 1);
         double chanceForNewNote = ModEntry.Config.MinNoteChance + ((ModEntry.Config.MaxNoteChance - ModEntry.Config.MinNoteChance) * fractionOfNotesRemaining);
-        if (Singletons.Random.NextDouble() >= chanceForNewNote)
+        if (!Singletons.Random.OfChance(chanceForNewNote))
         {
             return new(null);
         }
@@ -166,7 +167,7 @@ internal static class FixSecretNotes
         Seen.Value ??= new();
         Seen.Value.Clear();
 
-        foreach (var id in who.secretNotesSeen)
+        foreach (int id in who.secretNotesSeen)
         {
             if (id >= GameLocation.JOURNAL_INDEX)
             {
@@ -185,7 +186,7 @@ internal static class FixSecretNotes
         // find a scrap that the farmer has not seen.
         Unseen.Value ??= new();
         Unseen.Value.Clear();
-        foreach (var id in secretNoteData.Keys)
+        foreach (int id in secretNoteData.Keys)
         {
             if (id >= GameLocation.JOURNAL_INDEX && !Seen.Value.Contains(id))
             {
@@ -206,7 +207,7 @@ internal static class FixSecretNotes
         // copied from game code.
         double fractionOfNotesRemaining = (Unseen.Value.Count - 1) / Math.Max(1f, Unseen.Value.Count + Seen.Value.Count - 1);
         double chanceForNewNote = ModEntry.Config.MinNoteChance + ((ModEntry.Config.MaxNoteChance - ModEntry.Config.MinNoteChance) * fractionOfNotesRemaining);
-        if (Singletons.Random.NextDouble() >= chanceForNewNote)
+        if (!Singletons.Random.OfChance(chanceForNewNote))
         {
             Unseen.Value.Clear();
             Seen.Value.Clear();

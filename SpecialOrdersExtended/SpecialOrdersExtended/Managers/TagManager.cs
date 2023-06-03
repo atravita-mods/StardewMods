@@ -389,7 +389,7 @@ internal static class TagManager
                     return false;
                 case "random":
                     // random_x
-                    return float.TryParse(vals[1], out float result) && Random.NextDouble() < result; // not convinced on this implementation. Should I save values instead?
+                    return float.TryParse(vals[1], out float result) && Random.OfChance(result); // not convinced on this implementation. Should I save values instead?
                 default:
                     // Not a tag I recognize, return true.
                     return true;

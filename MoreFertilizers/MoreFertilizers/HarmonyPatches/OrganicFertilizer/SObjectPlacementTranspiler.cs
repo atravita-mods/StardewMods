@@ -1,6 +1,9 @@
 ﻿using System.Reflection;
 using System.Reflection.Emit;
 
+using AtraBase.Toolkit.Extensions;
+
+using AtraCore;
 using AtraCore.Framework.ReflectionManager;
 
 using AtraShared.Utils.Extensions;
@@ -25,7 +28,7 @@ internal static class SObjectPlacementTranspiler
         if (dirt?.fertilizer?.Value == HoeDirt.noFertilizer
             && ModEntry.OrganicFertilizerID != -1
             && obj.modData?.GetBool(CanPlaceHandler.Organic) == true
-            && Game1.random.Next(2) == 0)
+            && Singletons.Random.OfChance(0.5))
         {
             dirt.fertilizer.Value = ModEntry.OrganicFertilizerID;
         }

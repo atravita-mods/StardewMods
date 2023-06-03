@@ -1,11 +1,16 @@
 ﻿using System.Reflection;
 using System.Reflection.Emit;
 
+using AtraBase.Toolkit.Extensions;
+
 using AtraCore;
 using AtraCore.Framework.ReflectionManager;
+
 using AtraShared.Utils.Extensions;
 using AtraShared.Utils.HarmonyHelper;
+
 using HarmonyLib;
+
 using StardewValley.Tools;
 
 namespace MoreFertilizers.HarmonyPatches.Acquisition;
@@ -18,7 +23,7 @@ internal static class FishingTreasureTranspiler
 {
     private static SObject? GetPossibleRandomFertilizer()
     {
-        if (Singletons.Random.NextDouble() < 0.1)
+        if (Singletons.Random.OfChance(0.1))
         {
             int fertilizerToDrop = Game1.player.fishingLevel.Value.GetRandomFertilizerFromLevel();
             if (fertilizerToDrop != -1)

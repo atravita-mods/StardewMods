@@ -1,4 +1,6 @@
-﻿using AtraCore;
+﻿using AtraBase.Toolkit.Extensions;
+
+using AtraCore;
 
 using HarmonyLib;
 using Netcode;
@@ -17,24 +19,24 @@ internal static class BreakableContainerPostfix
     [HarmonyPatch(nameof(BreakableContainer.releaseContents))]
     private static void Postfix(GameLocation location, BreakableContainer __instance, NetInt ___containerType)
     {
-        if (Singletons.Random.NextDouble() > 0.01 + (Game1.player.DailyLuck / 20) + (Math.Min(3, Game1.player.LuckLevel) / 100.0))
+        if (!Singletons.Random.OfChance(0.01 + (Game1.player.DailyLuck / 20) + (Math.Min(3, Game1.player.LuckLevel) / 100.0)))
         {
             return;
         }
         int objectID = ___containerType.Value switch
         {
             BreakableContainer.barrel => location is MineShaft shaft && shaft.GetAdditionalDifficulty() > 0
-                ? (Singletons.Random.Next(3) == 0 ? ModEntry.TreeTapperFertilizerID : ModEntry.MiraculousBeveragesID)
-                : (Singletons.Random.Next(2) == 0 ? ModEntry.LuckyFertilizerID : ModEntry.PaddyCropFertilizerID),
+                ? (Singletons.Random.RollDice(3) ? ModEntry.TreeTapperFertilizerID : ModEntry.MiraculousBeveragesID)
+                : (Singletons.Random.RollDice(2) ? ModEntry.LuckyFertilizerID : ModEntry.PaddyCropFertilizerID),
             BreakableContainer.frostBarrel => location is MineShaft shaft && shaft.GetAdditionalDifficulty() > 0
-                ? (Singletons.Random.Next(3) == 0 ? ModEntry.RapidBushFertilizerID : ModEntry.DeluxeFruitTreeFertilizerID)
-                : (Singletons.Random.Next(2) == 0 ? ModEntry.SeedyFertilizerID : ModEntry.WisdomFertilizerID),
+                ? (Singletons.Random.RollDice(3) ? ModEntry.RapidBushFertilizerID : ModEntry.DeluxeFruitTreeFertilizerID)
+                : (Singletons.Random.RollDice(2) ? ModEntry.SeedyFertilizerID : ModEntry.WisdomFertilizerID),
             BreakableContainer.darkBarrel => location is MineShaft shaft && shaft.GetAdditionalDifficulty() > 0
-                ? (Utility.hasFinishedJojaRoute() && Singletons.Random.Next(16) == 0 ? ModEntry.SecretJojaFertilizerID : ModEntry.DeluxeJojaFertilizerID)
-                : (Singletons.Random.Next(2) == 0 ? ModEntry.JojaFertilizerID : ModEntry.RadioactiveFertilizerID),
+                ? (Utility.hasFinishedJojaRoute() && Singletons.Random.RollDice(16) ? ModEntry.SecretJojaFertilizerID : ModEntry.DeluxeJojaFertilizerID)
+                : (Singletons.Random.RollDice(2) ? ModEntry.JojaFertilizerID : ModEntry.RadioactiveFertilizerID),
             BreakableContainer.desertBarrel => (location is MineShaft shaft && shaft.GetAdditionalDifficulty() > 0)
-                ? (Singletons.Random.Next(2) == 0 ? ModEntry.BountifulFertilizerID : ModEntry.FruitTreeFertilizerID)
-                : (Singletons.Random.Next(3) == 0 ? ModEntry.BountifulBushID : ModEntry.OrganicFertilizerID),
+                ? (Singletons.Random.RollDice(2) ? ModEntry.BountifulFertilizerID : ModEntry.FruitTreeFertilizerID)
+                : (Singletons.Random.RollDice(3) ? ModEntry.BountifulBushID : ModEntry.OrganicFertilizerID),
             BreakableContainer.volcanoBarrel =>
                 Singletons.Random.Next(5) switch
                 {

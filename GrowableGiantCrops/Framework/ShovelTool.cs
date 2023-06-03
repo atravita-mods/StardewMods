@@ -488,7 +488,7 @@ public class ShovelTool : Tool
             numberOfLoops: 0,
             position: landingPos,
             flicker: false,
-            flipped: Singletons.Random.NextDouble() < 0.5,
+            flipped: Singletons.Random.OfChance(0.5),
             layerDepth: (landingPos.Y + 40f) / 10000f,
             alphaFade: 0.01f,
             color: Color.White,
@@ -761,10 +761,10 @@ public class ShovelTool : Tool
         location.checkForBuriedItem((int)pickupTile.X, (int)pickupTile.Y, explosion: false, detectOnly: false, who);
         MultiplayerHelpers.GetMultiplayer().broadcastSprites(location, new TemporaryAnimatedSprite(
             rowInAnimationTexture: 12,
-            new Vector2(pickupTile.X * 64f, pickupTile.Y * 64f),
+            position: pickupTile * Game1.tileSize,
             color: Color.White,
             animationLength: 8,
-            flipped: Singletons.Random.Next(2) == 0,
+            flipped: Singletons.Random.OfChance(0.5),
             animationInterval: 50f));
 
         return true;

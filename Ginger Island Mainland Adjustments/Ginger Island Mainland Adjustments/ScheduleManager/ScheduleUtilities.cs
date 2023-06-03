@@ -1,4 +1,6 @@
-﻿using AtraShared.Utils.Extensions;
+﻿using System.Text;
+
+using AtraShared.Utils.Extensions;
 using Microsoft.Xna.Framework;
 using StardewModdingAPI.Utilities;
 
@@ -18,6 +20,30 @@ internal static class ScheduleUtilities
     /// Removes schedule cache.
     /// </summary>
     internal static void ClearCache() => Schedules.Clear();
+
+    /// <summary>
+    /// Appends the correct GI remainder schedule to a schedule being generated.
+    /// </summary>
+    /// <param name="sb">Stringbuilder that contains the schedule.</param>
+    /// <param name="visitor">the visitor.</param>
+    /// <returns>same sb instance.</returns>
+    internal static StringBuilder AppendCorrectRemainderSchedule(this StringBuilder sb, NPC visitor)
+    {
+        if (visitor.Name.Equals("Gus", StringComparison.OrdinalIgnoreCase))
+        {
+            // Gus needs to tend bar. Hardcoded same as vanilla.
+            sb.Append("1800 Saloon 10 18 2/2430 bed");
+        }
+        else if (ScheduleUtilities.FindProperGISchedule(visitor, SDate.Now()) is string giSchedule)
+        {
+            sb.Append(giSchedule);
+        }
+        else
+        {
+            sb.Append(Globals.IsChildToNPC?.Invoke(visitor) == true ? "1800 BusStop -1 23 3" : "1800 bed");
+        }
+        return sb;
+    }
 
     /// <summary>
     /// Find the correct schedule for an NPC for a given date. Looks into the schedule assets first

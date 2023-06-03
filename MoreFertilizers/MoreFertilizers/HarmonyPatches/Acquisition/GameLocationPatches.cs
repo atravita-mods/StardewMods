@@ -1,4 +1,6 @@
-﻿using AtraCore;
+﻿using AtraBase.Toolkit.Extensions;
+
+using AtraCore;
 
 using AtraShared.Utils.Extensions;
 
@@ -31,7 +33,8 @@ internal static class GameLocationPatches
     [HarmonyPatch(nameof(GameLocation.monsterDrop))]
     private static void Postfix(GameLocation __instance, Monster monster, int x, int y, Farmer who)
     {
-        if(__instance is not Farm || who is null || Singletons.Random.NextDouble() > ((monster is RockGolem ? 2.5 : 1 ) * DropChance.Value) || monster.MaxHealth < MIN_MONSTER_HEALTH)
+        if(__instance is not Farm || who is null || monster.MaxHealth < MIN_MONSTER_HEALTH
+          || !Singletons.Random.OfChance((monster is RockGolem ? 2.5 : 1 ) * DropChance.Value))
         {
             return;
         }

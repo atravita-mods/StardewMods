@@ -151,7 +151,7 @@ public class ReviveDeadCropsApi : IReviveDeadCropsApi
             numberOfLoops: 0,
             position: tile * 64f,
             flicker: false,
-            flipped: Singletons.Random.NextDouble() < 0.5,
+            flipped: Singletons.Random.OfChance(0.5),
             layerDepth: 1f,
             alphaFade: 0.01f,
             color: Color.White,

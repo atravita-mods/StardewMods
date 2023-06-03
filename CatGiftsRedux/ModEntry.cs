@@ -141,7 +141,7 @@ internal sealed class ModEntry : Mod
 
         Random random = RandomUtils.GetSeededRandom(-47, "atravita.CatGiftsRedux");
         double chance = ((pet.friendshipTowardFarmer.Value / 1000.0) * (this.config.MaxChance - this.config.MinChance)) + this.config.MinChance;
-        if (random.NextDouble() > chance)
+        if (!random.OfChance(chance))
         {
             this.Monitor.DebugOnlyLog("Failed friendship probability check");
             return;

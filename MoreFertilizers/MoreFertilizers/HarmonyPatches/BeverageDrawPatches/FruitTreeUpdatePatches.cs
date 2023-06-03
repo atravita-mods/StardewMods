@@ -1,6 +1,7 @@
 ﻿using System.Runtime.CompilerServices;
 
 using AtraBase.Toolkit;
+using AtraBase.Toolkit.Extensions;
 
 using AtraCore;
 
@@ -34,14 +35,14 @@ internal static class FruitTreeUpdatePatches
 
         try
         {
-            if (__instance.modData.ContainsKey(CanPlaceHandler.MiraculousBeverages) && Singletons.Random.Next(512) == 0)
+            if (__instance.modData.ContainsKey(CanPlaceHandler.MiraculousBeverages) && Singletons.Random.RollDice(512))
             {
                 __instance.currentLocation.TemporarySprites.Add(new TemporaryAnimatedSprite(
                     Game1.mouseCursorsName,
                     new Rectangle(372, 1956, 10, 10),
                     new Vector2(
-                        (__instance.currentTileLocation.X * 64f) + Singletons.Random.Next(-64, 96),
-                        (__instance.currentTileLocation.Y * 64f) + Singletons.Random.Next(-256, -128)),
+                        (__instance.currentTileLocation.X * Game1.tileSize) + Singletons.Random.Next(-64, 96),
+                        (__instance.currentTileLocation.Y * Game1.tileSize) + Singletons.Random.Next(-256, -128)),
                     flipped: false,
                     0.002f,
                     Color.LimeGreen)
@@ -55,7 +56,7 @@ internal static class FruitTreeUpdatePatches
                 });
             }
             else if (__instance.growthStage.Value == FruitTree.treeStage && __instance.modData.ContainsKey(CanPlaceHandler.EverlastingFruitTreeFertilizer)
-                && Singletons.Random.Next(512) == 0)
+                && Singletons.Random.RollDice(512))
             {
                 Utility.addSprinklesToLocation(
                   l: __instance.currentLocation,

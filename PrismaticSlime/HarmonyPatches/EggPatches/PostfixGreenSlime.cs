@@ -1,4 +1,6 @@
-﻿using AtraCore;
+﻿using AtraBase.Toolkit.Extensions;
+
+using AtraCore;
 
 using HarmonyLib;
 
@@ -19,7 +21,7 @@ internal static class PostfixGreenSlime
     {
         if (ModEntry.PrismaticSlimeEgg != -1
             && __instance.prismatic.Value
-            && Singletons.Random.Next(2) == 0)
+            && Singletons.Random.OfChance(0.5))
         {
             __result.Add(new SObject(ModEntry.PrismaticSlimeEgg, 1));
         }

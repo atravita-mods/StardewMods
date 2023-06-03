@@ -33,6 +33,8 @@
 ### Version 1.1.9
 * You may now sit on the chairs in the Resort.
 * Default GIReturn dialogue now appears.
+* Fix `Resort_Leaving_<GroupName>` and `Resort_Entering_<GroupName>` keys.
+* Performance improvements.
 
 ### Version 1.1.8
 * Fix assumption in scheduling code that schedules will have at least two points.

@@ -1,4 +1,6 @@
-﻿using AtraBase.Toolkit.Extensions;
+﻿using System.Reflection;
+
+using AtraBase.Toolkit.Extensions;
 
 using AtraCore.Framework.Caches;
 using AtraCore.Interfaces;
@@ -6,6 +8,8 @@ using AtraCore.Utilities;
 
 using AtraShared.ConstantsAndEnums;
 using AtraShared.Utils;
+
+using HarmonyLib;
 
 using Microsoft.Xna.Framework;
 
@@ -23,6 +27,34 @@ internal sealed class SetRelationship : IEventCommand
     private const string RequestNPCMove = "RequestNPCMove";
 
     private const string DEFAULT = "DEFAULT";
+
+    #region delegates
+    private static readonly Lazy<Action<Farmer>?> _freeLoveReload = new(() =>
+    {
+        try
+        {
+            Type freeLoveEntry = AccessTools.TypeByName("FreeLove.ModEntry");
+            if (freeLoveEntry is null)
+            {
+                ModEntry.ModMonitor.Log($"Free love not found");
+                return null;
+            }
+
+            MethodInfo? reload = freeLoveEntry.GetMethod("ReloadSpouses", AccessTools.all, binder: null, new[] { typeof(Farmer) }, null);
+            if (reload is null)
+            {
+                return null;
+            }
+            return reload.CreateDelegate<Action<Farmer>>();
+        }
+        catch (Exception ex)
+        {
+            ModEntry.ModMonitor.Log($"Mod failed while trying to create delegate for free love's spouse reload", LogLevel.Error);
+            ModEntry.ModMonitor.Log(ex.ToString());
+            return null;
+        }
+    });
+    #endregion
 
     /// <summary>
     /// Initializes a new instance of the <see cref="SetRelationship"/> class.
@@ -182,52 +214,6 @@ internal sealed class SetRelationship : IEventCommand
             Game1.player.friendshipData[args[1]] = friendship = new();
         }
 
-        // fix NPC housing.
-        if (past is FriendshipEnum.Married or FriendshipEnum.Roommate)
-        {
-            if (next is FriendshipEnum.Married or FriendshipEnum.Roommate)
-            {
-                friendship.RoommateMarriage = !friendship.RoommateMarriage;
-            }
-            else
-            {
-                // send the NPC home.
-                if (Context.IsMainPlayer)
-                {
-                    npc.reloadDefaultLocation();
-                    ClearNPCSchedule(npc);
-                }
-                else
-                {
-                    this.SendMoveRequest($"{npc.Name}:{DEFAULT}");
-                }
-
-                // we call this so FreeLove is updated too
-                try
-                {
-                    Game1.player.doDivorce();
-                }
-                catch (Exception ex)
-                {
-                    ModEntry.ModMonitor.Log($"Call to Farmer.doDivorce failed for {Game1.player.Name}", LogLevel.Error);
-                    ModEntry.ModMonitor.Log(ex.ToString());
-                }
-            }
-        }
-        else if (next is FriendshipEnum.Married or FriendshipEnum.Roommate)
-        {
-            if (Context.IsMainPlayer)
-            {
-                MoveNPCtoFarmerHome(npc, Game1.player);
-                ClearNPCSchedule(npc);
-            }
-            else
-            {
-                this.SendMoveRequest($"{npc.Name}:{Game1.player.UniqueMultiplayerID}");
-            }
-            Game1.player.spouse = npc.Name;
-        }
-
         switch (next)
         {
             case FriendshipEnum.Friendly:
@@ -276,6 +262,47 @@ internal sealed class SetRelationship : IEventCommand
             case FriendshipEnum.Unmet:
                 Game1.player.friendshipData.Remove(npc.Name);
                 break;
+        }
+
+        // fix NPC housing.
+        if (past is FriendshipEnum.Married or FriendshipEnum.Roommate)
+        {
+            if (next is not FriendshipEnum.Married and not FriendshipEnum.Roommate)
+            {
+                // send the NPC home.
+                if (Context.IsMainPlayer)
+                {
+                    npc.reloadDefaultLocation();
+                    ClearNPCSchedule(npc);
+                }
+                else
+                {
+                    this.SendMoveRequest($"{npc.Name}:{DEFAULT}");
+                }
+
+                // we call this so FreeLove is updated too
+                try
+                {
+                    Game1.player.doDivorce();
+                }
+                catch (Exception ex)
+                {
+                    ModEntry.ModMonitor.Log($"Call to Farmer.doDivorce failed for {Game1.player.Name}", LogLevel.Error);
+                    ModEntry.ModMonitor.Log(ex.ToString());
+                }
+            }
+        }
+        else if (next is FriendshipEnum.Married or FriendshipEnum.Roommate)
+        {
+            if (Context.IsMainPlayer)
+            {
+                MoveNPCtoFarmerHome(npc, Game1.player);
+                ClearNPCSchedule(npc);
+            }
+            else
+            {
+                this.SendMoveRequest($"{npc.Name}:{Game1.player.UniqueMultiplayerID}");
+            }
         }
 
         error = null;
@@ -352,6 +379,7 @@ internal sealed class SetRelationship : IEventCommand
             npc.DefaultPosition = Utility.PointToVector2(house.getSpouseBedSpot(npc.Name)) * 64f;
         }
         ClearNPCSchedule(npc);
+        _freeLoveReload.Value?.Invoke(Game1.player);
     }
 
     private void SendMoveRequest(string message)

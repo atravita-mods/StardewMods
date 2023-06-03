@@ -1,5 +1,13 @@
 {"Changes":[
     {
+        "LogName": "Haley - Y1",
+        "Action": "EditData",
+        "Target": "Characters/Dialogue/Haley",
+        "Entries":{
+            "5{{YearRemainder}}": "Emily made a lovely looking lace dress the other day. I've been dying to ask her if I can try it on...",
+        }
+    },
+    {
         "LogName": "Haley high-hearts, Y2",
         "Action": "EditData",
         "Target": "Characters/Dialogue/Haley",

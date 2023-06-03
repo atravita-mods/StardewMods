@@ -389,10 +389,15 @@ internal static class GIScheduler
     private static NPC? SetBartender(List<NPC> visitors)
     {
         NPC? bartender = visitors.Find(static (NPC npc) => npc.Name.Equals("Gus", StringComparison.OrdinalIgnoreCase));
+
+        // Gus not visiting, go find another bartender
         if (bartender is null)
-        { // Gus not visiting, go find another bartender
+        {
             HashSet<NPC> bartenders = AssetLoader.GetSpecialCharacter(SpecialCharacterType.Bartender);
-            bartender = visitors.Find(bartenders.Contains);
+            if (bartenders.Count > 0)
+            {
+                bartender = visitors.Where(bartenders.Contains).OrderBy(_ => Singletons.Random.Next()).FirstOrDefault();
+            }
         }
         if (bartender is not null)
         {
@@ -418,7 +423,11 @@ internal static class GIScheduler
         if (musician is null || random.NextDouble() < 0.25)
         {
             HashSet<NPC> musicians = AssetLoader.GetSpecialCharacter(SpecialCharacterType.Musician);
-            musician = visitors.Find((NPC npc) => musicians.Contains(npc) && animationDescriptions.ContainsKey($"{npc.Name.ToLowerInvariant()}_beach_towel")) ?? musician;
+            if (musicians.Count > 0)
+            {
+                musician = visitors.Where((NPC npc) => musicians.Contains(npc) && animationDescriptions.ContainsKey($"{npc.Name.ToLowerInvariant()}_beach_towel"))
+                                   .OrderBy(_ => Singletons.Random.Next()).FirstOrDefault() ?? musician;
+            }
         }
         if (musician is not null && !musician.Name.Equals("Gus", StringComparison.OrdinalIgnoreCase))
         {

@@ -1,6 +1,10 @@
-﻿using AtraShared.Utils.Extensions;
+﻿using AtraShared.ConstantsAndEnums;
+using AtraShared.Utils.Extensions;
+
 using HarmonyLib;
+
 using MoreFertilizers.Framework;
+
 using StardewValley.TerrainFeatures;
 
 namespace MoreFertilizers.HarmonyPatches.BushFertilizers;

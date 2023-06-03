@@ -1,4 +1,7 @@
-﻿using HarmonyLib;
+﻿using AtraShared.ConstantsAndEnums;
+
+using HarmonyLib;
+
 using StardewValley.TerrainFeatures;
 
 namespace MoreFertilizers.HarmonyPatches;

@@ -1,9 +1,12 @@
 ﻿using System.Reflection;
 using System.Reflection.Emit;
+
 using AtraBase.Toolkit.Reflection;
 
+using AtraShared.ConstantsAndEnums;
 using AtraShared.Utils.Extensions;
 using AtraShared.Utils.HarmonyHelper;
+
 using HarmonyLib;
 
 namespace PamTries.HarmonyPatches;
@@ -51,9 +54,9 @@ internal static class EventPatches
                 new(OpCodes.Ldarg_0),
                 new(OpCodes.Ldstr, "Elliott"),
             })
-            .DefineAndAttachLabel(out var jumppoint)
+            .DefineAndAttachLabel(out Label jumppoint)
             .Pop()
-            .GetLabels(out var labelsToMove)
+            .GetLabels(out IList<Label>? labelsToMove)
             .Insert(new CodeInstruction[]
             {
                 new(OpCodes.Call, typeof(EventPatches).StaticMethodNamed(nameof(ShouldHidePam))),
@@ -72,7 +75,7 @@ internal static class EventPatches
             .StoreBranchDest()
             .Push()
             .AdvanceToStoredLabel()
-            .DefineAndAttachLabel(out var jumppass)
+            .DefineAndAttachLabel(out Label jumppass)
             .Pop()
             .Advance(1)
             .Insert(new CodeInstruction[]

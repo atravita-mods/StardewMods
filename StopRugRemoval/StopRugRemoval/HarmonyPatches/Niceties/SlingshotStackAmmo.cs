@@ -1,5 +1,8 @@
-﻿using AtraShared.Utils.Extensions;
+﻿using AtraShared.ConstantsAndEnums;
+using AtraShared.Utils.Extensions;
+
 using HarmonyLib;
+
 using StardewValley.Tools;
 
 namespace StopRugRemoval.HarmonyPatches.Niceties;

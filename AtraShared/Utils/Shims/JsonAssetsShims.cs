@@ -26,7 +26,7 @@ namespace AtraShared.Utils.Shims;
 /// <summary>
 /// Holds shims against ja.
 /// </summary>
-[SuppressMessage("StyleCop.CSharp.OrderingRules", "SA1201:Elements should appear in the correct order", Justification = "Fields kept near accessors.")]
+[SuppressMessage("StyleCop.CSharp.OrderingRules", "SA1201:Elements should appear in the correct order", Justification = StyleCopErrorConsts.AccessorsNearFields)]
 public static class JsonAssetsShims
 {
     private const int EventID = int.MinValue + 4993;

@@ -1,10 +1,16 @@
 ﻿using System.Reflection;
 using System.Reflection.Emit;
+
 using AtraCore.Framework.ReflectionManager;
+
+using AtraShared.ConstantsAndEnums;
 using AtraShared.Utils.Extensions;
 using AtraShared.Utils.HarmonyHelper;
+
 using HarmonyLib;
+
 using Netcode;
+
 using StardewValley.Menus;
 
 namespace StopRugRemoval.HarmonyPatches.Niceties.CrashHandling;
@@ -21,7 +27,8 @@ internal static class SpecialOrderCrash
     {
         if (__exception is not null)
         {
-            ModEntry.ModMonitor.Log($"Detected invalid special order {key}\n\n{__exception}", LogLevel.Error);
+            ModEntry.ModMonitor.Log($"Detected invalid special order {key}.", LogLevel.Error);
+            ModEntry.ModMonitor.Log(__exception.ToString());
             __result = null;
         }
         return null;

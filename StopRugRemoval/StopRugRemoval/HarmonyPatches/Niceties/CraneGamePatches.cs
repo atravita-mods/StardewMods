@@ -2,6 +2,9 @@
 
 using AtraCore.Framework.ReflectionManager;
 
+using AtraShared.ConstantsAndEnums;
+using AtraShared.Utils.Extensions;
+
 using HarmonyLib;
 
 using StardewValley.Minigames;
@@ -22,5 +25,14 @@ internal static class CraneGamePatches
 
     [HarmonyPatch(nameof(CraneGame.Claw.GrabObject))]
     private static void Postfix(CraneGame.Claw __instance)
-        => SetDropChance.Value(__instance, ModEntry.Config.CraneGameDifficulty);
+    {
+        try
+        {
+            SetDropChance.Value(__instance, ModEntry.Config.CraneGameDifficulty);
+        }
+        catch (Exception ex)
+        {
+            ModEntry.ModMonitor.LogError("overriding crane game difficulty", ex);
+        }
+    }
 }

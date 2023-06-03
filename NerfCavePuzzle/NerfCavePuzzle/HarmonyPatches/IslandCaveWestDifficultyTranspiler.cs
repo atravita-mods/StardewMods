@@ -7,6 +7,7 @@ using AtraBase.Toolkit.Reflection;
 using AtraCore;
 using AtraCore.Framework.ReflectionManager;
 
+using AtraShared.ConstantsAndEnums;
 using AtraShared.Menuing;
 using AtraShared.Utils.Extensions;
 using AtraShared.Utils.HarmonyHelper;

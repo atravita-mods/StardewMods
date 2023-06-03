@@ -256,8 +256,7 @@ internal sealed class ModEntry : Mod
             this.Monitor.Log($"Could not get ID from JA.");
         }
 
-        int storedID;
-        if (this.Helper.Data.ReadSaveData<string>(SAVESTRING) is not string savedIdstring || !int.TryParse(savedIdstring, out storedID))
+        if (this.Helper.Data.ReadSaveData<string>(SAVESTRING) is not string savedIdstring || !int.TryParse(savedIdstring, out int storedID))
         {
             if (this.Helper.Data.ReadGlobalData<GiantCropFertilizerIDStorage>(SAVESTRING) is not GiantCropFertilizerIDStorage storedIDCls
                 || storedIDCls.ID == -1)

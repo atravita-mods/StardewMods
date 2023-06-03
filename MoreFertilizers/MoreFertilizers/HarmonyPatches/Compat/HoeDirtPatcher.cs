@@ -1,7 +1,12 @@
 ﻿using AtraBase.Toolkit.Reflection;
+
 using AtraCore.Framework.ReflectionManager;
+
+using AtraShared.ConstantsAndEnums;
 using AtraShared.Utils.Extensions;
+
 using HarmonyLib;
+
 using StardewValley.TerrainFeatures;
 
 namespace MoreFertilizers.HarmonyPatches.Compat;

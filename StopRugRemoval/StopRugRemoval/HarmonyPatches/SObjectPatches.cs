@@ -1,12 +1,17 @@
 ﻿using AtraCore;
 
+using AtraShared.ConstantsAndEnums;
 using AtraShared.Menuing;
 using AtraShared.Utils;
 using AtraShared.Utils.Extensions;
+
 using HarmonyLib;
+
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
+
 using StardewModdingAPI.Utilities;
+
 using StardewValley.Objects;
 using StardewValley.Tools;
 

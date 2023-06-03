@@ -30,12 +30,12 @@ internal static class PickFarmEventTranspiler
                 OpCodes.Brfalse_S,
             })
             .Advance(1)
-            .DefineAndAttachLabel(out var isNotNull)
+            .DefineAndAttachLabel(out Label isNotNull)
             .Push()
             .Advance(1)
             .StoreBranchDest()
             .AdvanceToStoredLabel()
-            .DefineAndAttachLabel(out var jumpPoint)
+            .DefineAndAttachLabel(out Label jumpPoint)
             .Pop()
             .Insert(new CodeInstruction[]
             {

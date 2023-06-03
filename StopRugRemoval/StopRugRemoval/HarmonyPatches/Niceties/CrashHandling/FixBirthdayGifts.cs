@@ -1,11 +1,17 @@
 ﻿using System.Reflection;
 using System.Reflection.Emit;
+
 using AtraBase.Toolkit.Extensions;
 using AtraBase.Toolkit.StringHandler;
+
 using AtraCore.Framework.ReflectionManager;
+
+using AtraShared.ConstantsAndEnums;
 using AtraShared.Utils.Extensions;
 using AtraShared.Utils.HarmonyHelper;
+
 using HarmonyLib;
+
 using Netcode;
 
 namespace StopRugRemoval.HarmonyPatches.Niceties.CrashHandling;

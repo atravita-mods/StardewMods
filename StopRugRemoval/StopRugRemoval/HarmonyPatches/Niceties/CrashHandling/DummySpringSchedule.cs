@@ -3,6 +3,7 @@ using System.Reflection.Emit;
 
 using AtraCore.Framework.ReflectionManager;
 
+using AtraShared.ConstantsAndEnums;
 using AtraShared.Utils.Extensions;
 using AtraShared.Utils.HarmonyHelper;
 
@@ -10,6 +11,9 @@ using HarmonyLib;
 
 namespace StopRugRemoval.HarmonyPatches.Niceties.CrashHandling;
 
+/// <summary>
+/// Sticks in the NPCs default location as their spring schedule if they lack one.
+/// </summary>
 [HarmonyPatch]
 internal static class DummySpringSchedule
 {
@@ -24,7 +28,7 @@ internal static class DummySpringSchedule
     }
 
     [HarmonyPatch(typeof(NPC), nameof(NPC.getMasterScheduleEntry))]
-    [SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1116:Split parameters should start on line after declaration", Justification = "Reviewed.")]
+    [SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1116:Split parameters should start on line after declaration", Justification = StyleCopConstants.SplitParametersIntentional)]
     private static IEnumerable<CodeInstruction>? Transpiler(IEnumerable<CodeInstruction> instructions, ILGenerator gen, MethodBase original)
     {
         try
@@ -41,8 +45,8 @@ internal static class DummySpringSchedule
                 OpCodes.Ret,
             })
             .Advance(5)
-            .GetLabels(out var labelsToMove)
-            .DefineAndAttachLabel(out var skip);
+            .GetLabels(out IList<Label>? labelsToMove)
+            .DefineAndAttachLabel(out Label skip);
             Label isnull = helper.Generator.DefineLabel();
 
             /* Injecting:

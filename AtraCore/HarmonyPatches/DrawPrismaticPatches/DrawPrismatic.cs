@@ -410,7 +410,7 @@ internal static class DrawPrismatic
     [UsedImplicitly]
     [HarmonyTranspiler]
     [HarmonyBefore("Digus.ProducerFrameworkMod")]
-    [SuppressMessage("SMAPI.CommonErrors", "AvoidNetField:Avoid Netcode types when possible", Justification = "Used for matching only.")]
+    [SuppressMessage("SMAPI.CommonErrors", "AvoidNetField:Avoid Netcode types when possible", Justification = StyleCopConstants.UsedForMatchingOnly)]
     [HarmonyPatch(typeof(SObject), nameof(SObject.draw), new[] { typeof(SpriteBatch), typeof(int), typeof(int), typeof(float) } )]
     private static IEnumerable<CodeInstruction>? TranspileSObjectDraw(IEnumerable<CodeInstruction> instructions, ILGenerator gen, MethodBase original)
     {

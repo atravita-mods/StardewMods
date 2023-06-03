@@ -1,4 +1,6 @@
-﻿using HarmonyLib;
+﻿using AtraShared.ConstantsAndEnums;
+
+using HarmonyLib;
 
 using StardewValley.Menus;
 

@@ -3,6 +3,8 @@
 using AtraBase.Toolkit.Extensions;
 using AtraBase.Toolkit.Reflection;
 
+using AtraShared.ConstantsAndEnums;
+
 using HarmonyLib;
 
 using StardewModdingAPI.Events;

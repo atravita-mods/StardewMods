@@ -4,6 +4,8 @@ using AtraBase.Toolkit.StringHandler;
 
 using AtraCore.Framework.ReflectionManager;
 
+using AtraShared.ConstantsAndEnums;
+
 using HarmonyLib;
 using Microsoft.Xna.Framework;
 

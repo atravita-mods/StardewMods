@@ -2,6 +2,8 @@
 
 using AtraCore;
 
+using AtraShared.ConstantsAndEnums;
+
 using HarmonyLib;
 
 using StardewValley.Monsters;

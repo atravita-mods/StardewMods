@@ -1,5 +1,9 @@
-﻿using HarmonyLib;
+﻿using AtraShared.ConstantsAndEnums;
+
+using HarmonyLib;
+
 using Microsoft.Xna.Framework.Input;
+
 using StardewValley.Menus;
 
 namespace StopRugRemoval.HarmonyPatches.Niceties;

@@ -1,14 +1,15 @@
-﻿using Microsoft.Xna.Framework.Graphics;
+﻿using AtraBase.Toolkit;
+
+using Microsoft.Xna.Framework.Graphics;
 
 using StardewModdingAPI.Events;
-
-using StardewValley.Minigames;
 
 namespace CameraPan.Framework;
 
 /// <summary>
 /// Manages assets for this mod.
 /// </summary>
+[SuppressMessage("StyleCop.CSharp.OrderingRules", "SA1201:Elements should appear in the correct order", Justification = StyleCopErrorConsts.AccessorsNearFields)]
 internal static class AssetManager
 {
     private static IAssetName arrowLocation = null!;
@@ -23,6 +24,9 @@ internal static class AssetManager
 
     private static Lazy<Texture2D> dartsTexture = new(() => Game1.temporaryContent.Load<Texture2D>(dartsLocation.BaseName));
 
+    /// <summary>
+    /// Gets the texture of the darts.
+    /// </summary>
     internal static Texture2D DartsTexture => dartsTexture.Value;
 
     /// <summary>

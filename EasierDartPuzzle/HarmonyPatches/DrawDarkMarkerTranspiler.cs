@@ -52,7 +52,7 @@ internal static class DrawDarkMarkerTranspiler
             .Advance(2)
             .StoreBranchDest()
             .AdvanceToStoredLabel()
-            .GetLabels(out var labels, clear: true)
+            .GetLabels(out IList<Label>? labels, clear: true)
             .Insert(new CodeInstruction[]
             {
                 new(OpCodes.Ldarg_1), // spritebatch

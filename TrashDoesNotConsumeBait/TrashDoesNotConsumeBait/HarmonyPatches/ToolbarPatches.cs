@@ -1,5 +1,8 @@
-﻿using AtraShared.Utils.Extensions;
+﻿using AtraShared.ConstantsAndEnums;
+using AtraShared.Utils.Extensions;
+
 using HarmonyLib;
+
 using StardewValley.Menus;
 using StardewValley.Tools;
 

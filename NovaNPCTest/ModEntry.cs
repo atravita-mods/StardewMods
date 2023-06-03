@@ -42,7 +42,7 @@ internal sealed class ModEntry : Mod
 
         ModMonitor.Log($"Checking {npc.Name}, is currently at {npc.currentLocation.NameOrUniqueName}");
 
-        var scheduleKey = npc.dayScheduleName.Value;
+        string scheduleKey = npc.dayScheduleName.Value;
 
         if (scheduleKey.EndsWith("_Replacement"))
         {
@@ -50,19 +50,19 @@ internal sealed class ModEntry : Mod
             return;
         }
 
-        if (!npc.TryGetScheduleEntry(scheduleKey, out var entry))
+        if (!npc.TryGetScheduleEntry(scheduleKey, out string? entry))
         {
             ModMonitor.Log($"With schedule key {scheduleKey} that apparently doesn't correspond to a schedule. What.");
             return;
         }
 
-        if (!Scheduler.TryFindGOTOschedule(npc, SDate.Now(), entry, out var schedule))
+        if (!Scheduler.TryFindGOTOschedule(npc, SDate.Now(), entry, out string? schedule))
         {
             ModMonitor.Log($"With schedule key {scheduleKey} that apparently doesn't correspond to a schedule that could be resolved: {entry}.");
             return;
         }
 
-        var claimedMap = Game1.getLocationFromName(npc.currentLocation.NameOrUniqueName);
+        GameLocation? claimedMap = Game1.getLocationFromName(npc.currentLocation.NameOrUniqueName);
         if (claimedMap is not null)
         {
             if (!ReferenceEquals(claimedMap, npc.currentLocation))
@@ -85,7 +85,7 @@ internal sealed class ModEntry : Mod
             {
 
                 ModMonitor.Log($"Performing hard warp");
-                var target = schedule.GetNthChunk('/').StreamSplit();
+                StreamSplit target = schedule.GetNthChunk('/').StreamSplit();
                 _ = target.MoveNext(); // time
 
                 if (!target.MoveNext())
@@ -94,20 +94,20 @@ internal sealed class ModEntry : Mod
                     return;
                 }
 
-                var loc = Game1.getLocationFromName(target.Current.ToString());
+                GameLocation? loc = Game1.getLocationFromName(target.Current.ToString());
                 if (loc is null)
                 {
                     ModMonitor.Log($"Location could not be found from schedule {schedule}", LogLevel.Warn);
                     return;
                 }
 
-                if (!target.MoveNext() || !int.TryParse(target.Current, out var x))
+                if (!target.MoveNext() || !int.TryParse(target.Current, out int x))
                 {
                     ModMonitor.Log($"X coords could not be parsed from schedule {schedule}", LogLevel.Warn);
                     return;
                 }
 
-                if (!target.MoveNext() || !int.TryParse(target.Current, out var y))
+                if (!target.MoveNext() || !int.TryParse(target.Current, out int y))
                 {
                     ModMonitor.Log($"Y coords could not be parsed from schedule {schedule}", LogLevel.Warn);
                     return;

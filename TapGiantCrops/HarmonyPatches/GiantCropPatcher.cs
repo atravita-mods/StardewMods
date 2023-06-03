@@ -1,6 +1,10 @@
-﻿using AtraShared.Utils.Extensions;
+﻿using AtraShared.ConstantsAndEnums;
+using AtraShared.Utils.Extensions;
+
 using HarmonyLib;
+
 using Microsoft.Xna.Framework;
+
 using StardewValley.TerrainFeatures;
 using StardewValley.Tools;
 

@@ -1,4 +1,5 @@
-﻿using AtraBase.Toolkit.Extensions;
+﻿using AtraBase.Toolkit;
+using AtraBase.Toolkit.Extensions;
 
 using NetEscapades.EnumGenerators;
 
@@ -9,7 +10,7 @@ namespace AtraShared.ConstantsAndEnums;
 /// </summary>
 [Flags]
 [EnumExtensions]
-[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1602:Enumeration items should be documented", Justification = "Self evident.")]
+[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1602:Enumeration items should be documented", Justification = StyleCopErrorConsts.SelfEvident)]
 public enum BuffEnum
 {
     Farming = 1 << Buff.farming,

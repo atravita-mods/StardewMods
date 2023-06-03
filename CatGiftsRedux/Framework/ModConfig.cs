@@ -1,4 +1,6 @@
-﻿using AtraShared.ConstantsAndEnums;
+﻿using AtraBase.Toolkit;
+
+using AtraShared.ConstantsAndEnums;
 using AtraShared.Integrations.GMCMAttributes;
 
 namespace CatGiftsRedux.Framework;
@@ -12,7 +14,7 @@ public record WeightedItemData(ItemRecord Item, double Weight);
 /// <summary>
 /// The config class for this mod.
 /// </summary>
-[SuppressMessage("StyleCop.CSharp.OrderingRules", "SA1201:Elements should appear in the correct order", Justification = "Fields kept near accessors.")]
+[SuppressMessage("StyleCop.CSharp.OrderingRules", "SA1201:Elements should appear in the correct order", Justification = StyleCopErrorConsts.AccessorsNearFields)]
 public sealed class ModConfig
 {
     /// <summary>

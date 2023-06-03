@@ -1,18 +1,28 @@
 ﻿using System.Reflection;
 using System.Reflection.Emit;
+
 using AtraCore.Framework.ReflectionManager;
+
+using AtraShared.ConstantsAndEnums;
 using AtraShared.Menuing;
 using AtraShared.Utils.Extensions;
 using AtraShared.Utils.HarmonyHelper;
+
 using HarmonyLib;
+
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
+
 using NetEscapades.EnumGenerators;
+
 using StardewModdingAPI.Utilities;
+
 using StardewValley.Buildings;
 using StardewValley.Locations;
 using StardewValley.Tools;
+
 using StopRugRemoval.Configuration;
+
 using xTile.Dimensions;
 
 using AtraUtils = AtraShared.Utils.Utils;

@@ -2,10 +2,13 @@
 
 using AtraCore;
 
+using AtraShared.ConstantsAndEnums;
 using AtraShared.Utils.Extensions;
 
 using HarmonyLib;
+
 using Microsoft.Xna.Framework;
+
 using StardewValley.Monsters;
 using StardewValley.Objects;
 

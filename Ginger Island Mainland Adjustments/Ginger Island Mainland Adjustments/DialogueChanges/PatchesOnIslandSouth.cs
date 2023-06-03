@@ -1,4 +1,6 @@
-﻿using GingerIslandMainlandAdjustments.ScheduleManager;
+﻿using AtraShared.ConstantsAndEnums;
+
+using GingerIslandMainlandAdjustments.ScheduleManager;
 
 using HarmonyLib;
 

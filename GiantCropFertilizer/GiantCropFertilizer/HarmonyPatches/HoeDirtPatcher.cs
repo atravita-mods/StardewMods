@@ -1,12 +1,16 @@
 ﻿using AtraCore.Framework.ReflectionManager;
+
+using AtraShared.ConstantsAndEnums;
 using AtraShared.Utils.Extensions;
+
 using HarmonyLib;
+
 using StardewValley.TerrainFeatures;
 
 namespace GiantCropFertilizer.HarmonyPatches;
 
 /// <summary>
-/// Holds patches against HoeDirt that replaces our fertlizer.
+/// Holds patches against HoeDirt that replaces our fertilizer.
 /// This way MultiFertlizer doesn't clear us...
 /// </summary>
 [HarmonyPatch]

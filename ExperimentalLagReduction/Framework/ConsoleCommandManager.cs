@@ -101,7 +101,7 @@ internal static class ConsoleCommandManager
                     return;
                 }
 
-                var calcPath = Rescheduler.GetPathFor(startLocation, endLocation, gender, ModEntry.Config.AllowPartialPaths);
+                List<string>? calcPath = Rescheduler.GetPathFor(startLocation, endLocation, gender, ModEntry.Config.AllowPartialPaths);
 
                 if (calcPath is null)
                 {

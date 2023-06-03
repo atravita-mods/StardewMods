@@ -1,4 +1,6 @@
-﻿namespace AtraShared.Integrations.Interfaces;
+﻿// Ignore Spelling: Api
+
+namespace AtraShared.Integrations.Interfaces;
 
 /// <summary>
 /// The API for Save Anywhere.

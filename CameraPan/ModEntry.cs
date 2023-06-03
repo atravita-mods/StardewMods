@@ -30,7 +30,7 @@ namespace CameraPan;
 /// <inheritdoc />
 [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1310:Field names should not contain underscore", Justification = "Constants.")]
 [SuppressMessage("StyleCop.CSharp.OrderingRules", "SA1204:Static elements should appear before instance elements", Justification = "Reviewed.")]
-[SuppressMessage("StyleCop.CSharp.OrderingRules", "SA1201:Elements should appear in the correct order", Justification = "Accessors kept near backing fields.")]
+[SuppressMessage("StyleCop.CSharp.OrderingRules", "SA1201:Elements should appear in the correct order", Justification = StyleCopErrorConsts.AccessorsNearFields)]
 [SuppressMessage("StyleCop.CSharp.OrderingRules", "SA1202:Elements should be ordered by access", Justification = "Reviewed.")]
 internal sealed class ModEntry : Mod
 {
@@ -455,7 +455,7 @@ internal sealed class ModEntry : Mod
         if (enabled.Value && ViewportAdjustmentPatches.ShouldOffset()
             && this.clickAndDragScrollPosition.Value is not null && Config.ClickAndDragBehavior == ClickAndDragBehavior.AutoScroll)
         {
-            var basePos = this.clickAndDragScrollPosition.Value.Value.ToVector2();
+            Vector2 basePos = this.clickAndDragScrollPosition.Value.Value.ToVector2();
             foreach (Direction direction in DirectionExtensions.Cardinal)
             {
                 e.SpriteBatch.Draw(

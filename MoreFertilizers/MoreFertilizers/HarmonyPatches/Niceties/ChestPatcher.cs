@@ -1,6 +1,8 @@
-﻿using AtraShared.Utils.Extensions;
+﻿using AtraShared.ConstantsAndEnums;
+using AtraShared.Utils.Extensions;
 
 using HarmonyLib;
+
 using StardewValley.Objects;
 
 namespace MoreFertilizers.HarmonyPatches.Niceties;

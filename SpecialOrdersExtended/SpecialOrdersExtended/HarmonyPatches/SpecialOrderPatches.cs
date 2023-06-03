@@ -1,5 +1,6 @@
 ﻿using AtraCore.Framework.ReflectionManager;
 
+using AtraShared.ConstantsAndEnums;
 using AtraShared.Utils.Extensions;
 
 using HarmonyLib;

@@ -1,9 +1,14 @@
 ﻿using System.Reflection;
 using System.Reflection.Emit;
+
+using AtraShared.ConstantsAndEnums;
 using AtraShared.Utils.Extensions;
 using AtraShared.Utils.HarmonyHelper;
+
 using GrowableGiantCrops.Framework;
+
 using HarmonyLib;
+
 using StardewValley.Tools;
 
 namespace GrowableGiantCrops.HarmonyPatches.ToolPatches;
@@ -27,7 +32,7 @@ internal static class PatchesOnTool
     }
 
     [HarmonyPatch(nameof(Tool.Update))]
-    [SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1116:Split parameters should start on line after declaration", Justification = "Reviewed.")]
+    [SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1116:Split parameters should start on line after declaration", Justification = StyleCopConstants.SplitParametersIntentional)]
     private static IEnumerable<CodeInstruction>? Transpiler(IEnumerable<CodeInstruction> instructions, ILGenerator gen, MethodBase original)
     {
         try

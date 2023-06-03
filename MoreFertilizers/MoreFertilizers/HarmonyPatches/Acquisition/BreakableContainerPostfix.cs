@@ -2,8 +2,12 @@
 
 using AtraCore;
 
+using AtraShared.ConstantsAndEnums;
+
 using HarmonyLib;
+
 using Netcode;
+
 using StardewValley.Locations;
 using StardewValley.Objects;
 

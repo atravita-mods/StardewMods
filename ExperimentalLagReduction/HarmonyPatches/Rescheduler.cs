@@ -6,10 +6,14 @@ using System.Diagnostics;
 
 using System.Collections.Concurrent;
 using System.Runtime.InteropServices;
+
 using AtraBase.Collections;
+
 using AtraShared.ConstantsAndEnums;
 using AtraShared.Utils.Extensions;
+
 using ExperimentalLagReduction.Framework;
+
 using HarmonyLib;
 
 namespace ExperimentalLagReduction.HarmonyPatches;

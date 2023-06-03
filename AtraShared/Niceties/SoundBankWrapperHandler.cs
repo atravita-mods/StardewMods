@@ -31,14 +31,14 @@ public static class SoundBankWrapperHandler
         FieldInfo? field = typeof(SoundBank).GetCachedField("_cues", ReflectionCache.FlagTypes.InstanceFlags);
 
         // Get the _cues private field from the soundbank.
-        var param = Expression.ParameterOf<SoundBank>("soundbank");
-        var fieldgetter = Expression.Field(param, field);
+        ParameterExpression param = Expression.ParameterOf<SoundBank>("soundbank");
+        MemberExpression fieldgetter = Expression.Field(param, field);
 
         // Call the .Keys property.
-        var getter = typeof(Dictionary<string, CueDefinition>)
+        MethodInfo getter = typeof(Dictionary<string, CueDefinition>)
                         .GetCachedProperty(nameof(Dictionary<string, CueDefinition>.Keys), ReflectionCache.FlagTypes.InstanceFlags)
                         .GetGetMethod()!;
-        var express = Expression.Call(fieldgetter, getter);
+        MethodCallExpression express = Expression.Call(fieldgetter, getter);
         return Expression.Lambda<Func<SoundBank, ICollection<string>>>(express, param).CompileFast();
     });
 
@@ -52,13 +52,13 @@ public static class SoundBankWrapperHandler
         FieldInfo? field = typeof(SoundBank).GetCachedField("_cues", ReflectionCache.FlagTypes.InstanceFlags);
 
         // Get the _cues private field from the soundbank.
-        var param = Expression.ParameterOf<SoundBank>("soundbank");
-        var name = Expression.ParameterOf<string>("name");
-        var fieldgetter = Expression.Field(param, field);
+        ParameterExpression param = Expression.ParameterOf<SoundBank>("soundbank");
+        ParameterExpression name = Expression.ParameterOf<string>("name");
+        MemberExpression fieldgetter = Expression.Field(param, field);
 
         // call the ContainsKey
-        var containsKey = typeof(Dictionary<string, CueDefinition>).GetCachedMethod(nameof(Dictionary<string, CueDefinition>.ContainsKey), ReflectionCache.FlagTypes.InstanceFlags);
-        var express = Expression.Call(fieldgetter, containsKey, name);
+        MethodInfo containsKey = typeof(Dictionary<string, CueDefinition>).GetCachedMethod(nameof(Dictionary<string, CueDefinition>.ContainsKey), ReflectionCache.FlagTypes.InstanceFlags);
+        MethodCallExpression express = Expression.Call(fieldgetter, containsKey, name);
         return Expression.Lambda<Func<SoundBank, string, bool>>(express, param, name).CompileFast();
     });
 

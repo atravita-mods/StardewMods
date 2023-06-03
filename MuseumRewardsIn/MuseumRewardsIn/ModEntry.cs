@@ -2,6 +2,7 @@
 
 using AtraCore.Framework.Caches;
 
+using AtraShared.ConstantsAndEnums;
 using AtraShared.Integrations;
 using AtraShared.ItemManagement;
 using AtraShared.Menuing;
@@ -189,7 +190,7 @@ internal sealed class ModEntry : Mod
             }
         }
 
-        var shop = new ShopMenu(sellables, who: "Gunther") { storeContext = SHOPNAME };
+        ShopMenu shop = new ShopMenu(sellables, who: "Gunther") { storeContext = SHOPNAME };
         if (config.AllowBuyBacks)
         {
             shop.categoriesToSellHere.Add(SObject.mineralsCategory);

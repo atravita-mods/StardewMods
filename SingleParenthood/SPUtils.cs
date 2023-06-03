@@ -8,7 +8,7 @@ internal static class SPUtils
 
     internal static bool AllKidsOutOfCrib(this List<Child> kids)
     {
-        foreach (var kid in kids)
+        foreach (Child kid in kids)
         {
             if (kid.Age <= Child.crawler)
             {

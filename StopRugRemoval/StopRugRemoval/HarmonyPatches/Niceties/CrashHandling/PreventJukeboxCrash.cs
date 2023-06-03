@@ -1,8 +1,11 @@
-﻿using AtraShared.Niceties;
+﻿using AtraShared.ConstantsAndEnums;
+using AtraShared.Niceties;
 using AtraShared.Utils.Extensions;
 
 using HarmonyLib;
+
 using Microsoft.Xna.Framework.Audio;
+
 using StardewValley.Menus;
 
 namespace StopRugRemoval.HarmonyPatches.Niceties.CrashHandling;

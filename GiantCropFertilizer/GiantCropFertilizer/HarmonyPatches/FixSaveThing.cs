@@ -1,6 +1,11 @@
 ﻿using AtraCore.Framework.ReflectionManager;
+
+using AtraShared.ConstantsAndEnums;
+
 using HarmonyLib;
+
 using Microsoft.Xna.Framework;
+
 using StardewValley.Locations;
 using StardewValley.TerrainFeatures;
 

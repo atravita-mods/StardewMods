@@ -1,4 +1,6 @@
-﻿using AtraCore.Utilities;
+﻿// Ignore Spelling: Api
+
+using AtraCore.Utilities;
 
 using AtraShared.ConstantsAndEnums;
 using AtraShared.Integrations;

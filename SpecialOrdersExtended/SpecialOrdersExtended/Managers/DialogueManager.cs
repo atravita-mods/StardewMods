@@ -1,14 +1,21 @@
-﻿using AtraBase.Toolkit;
+﻿// Ignore Spelling: Perscreened
+
+using AtraBase.Toolkit;
+
 using AtraCore.Framework.DialogueManagement;
+
 using AtraShared;
+using AtraShared.ConstantsAndEnums;
 using AtraShared.Utils.Extensions;
+
 using SpecialOrdersExtended.DataModels;
+
 using StardewModdingAPI.Utilities;
 
 namespace SpecialOrdersExtended.Managers;
 
 /// <summary>
-/// Static. Handles logic, patches, and console commands related to the special order dialogues.
+/// Static. Handles logic, patches, and console commands related to the special order dialogue.
 /// </summary>
 [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = StyleCopConstants.NamedForHarmony)]
 internal class DialogueManager
@@ -21,7 +28,7 @@ internal class DialogueManager
     /// <summary>
     /// Gets the current perscreened dialogue log.
     /// </summary>
-    public static DialogueLog? PerscreenedDialogueLog
+    internal static DialogueLog? PerscreenedDialogueLog
         => InternalDialogueLog.Value;
 
     /// <summary>

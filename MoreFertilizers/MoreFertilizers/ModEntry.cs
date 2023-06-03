@@ -1,4 +1,6 @@
-﻿#if DEBUG
+﻿// Ignore Spelling: Api
+
+#if DEBUG
 using System.Diagnostics;
 #endif
 using System.Runtime.CompilerServices;
@@ -41,7 +43,6 @@ using AtraUtils = AtraShared.Utils.Utils;
 namespace MoreFertilizers;
 
 /// <inheritdoc />
-[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1124:Do not use regions", Justification = "Reviewed.")]
 internal sealed class ModEntry : Mod
 {
     private const string SavedIDKey = "MFSavedObjectID";

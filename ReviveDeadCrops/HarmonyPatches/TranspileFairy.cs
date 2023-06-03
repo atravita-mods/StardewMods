@@ -19,7 +19,7 @@ internal static class TranspileFairy
 {
     private static void AnimateReviveCrop(GameLocation location, Vector2 tile)
     {
-        if (location.terrainFeatures.TryGetValue(tile, out var terrain) && terrain is HoeDirt dirt
+        if (location.terrainFeatures.TryGetValue(tile, out TerrainFeature? terrain) && terrain is HoeDirt dirt
             && dirt.crop?.dead.Value == true)
         {
             dirt.crop.dead.Value = false;
@@ -49,7 +49,7 @@ internal static class TranspileFairy
                 new(OpCodes.Ldfld, typeof(FairyEvent).GetCachedField("f", ReflectionCache.FlagTypes.InstanceFlags)),
                 new(OpCodes.Ldfld),
             })
-            .GetLabels(out var labels)
+            .GetLabels(out IList<Label>? labels)
             .Insert(new CodeInstruction[]
             {
                 new(OpCodes.Ldarg_0),

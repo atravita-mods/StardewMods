@@ -2,12 +2,15 @@
 
 using AtraCore;
 
+using AtraShared.ConstantsAndEnums;
 using AtraShared.Utils.Extensions;
+
 using HarmonyLib;
 
 using Microsoft.Xna.Framework;
 
 using MoreFertilizers.Framework;
+
 using StardewValley.TerrainFeatures;
 
 namespace MoreFertilizers.HarmonyPatches.TreeFertilizers;

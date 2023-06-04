@@ -9,6 +9,7 @@ using Microsoft.Xna.Framework;
 
 using StardewValley.BellsAndWhistles;
 using StardewValley.Objects;
+using StardewValley.TerrainFeatures;
 
 namespace StopRugRemoval.HarmonyPatches;
 

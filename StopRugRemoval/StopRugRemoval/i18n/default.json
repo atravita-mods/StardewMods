@@ -162,5 +162,8 @@
   // Casino!
   "bet1k": "Bet1000",
   "bet10k": "Bet10000",
-  "BuyCasino": "Buy casino coins? 10 g each!"
+  "BuyCasino": "Buy casino coins? 10 g each!",
+
+  // buff tooltips
+  "duration": "Duration"
 }

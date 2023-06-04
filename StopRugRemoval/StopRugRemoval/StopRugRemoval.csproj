@@ -33,4 +33,8 @@
     <Using Alias="SObject" Include="StardewValley.Object" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Framework\Menus\" />
+  </ItemGroup>
+
 </Project>

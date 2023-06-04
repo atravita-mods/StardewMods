@@ -34,7 +34,9 @@
             "8{{YearRemainder}}": "I love taking walks around here.#$b#When Demetrius and I were first dating, we'd take long walks around the lake we were living by. I miss those days.$s",
             "9{{YearRemainder}}": "Sometimes I wish Demetrius was better at lab safety.$s",
             "10{{YearRemainder}}": "To be honest, I'm not actually quite sure what my husband studies...",
-            "11{{YearRemainder}}": "Demetrius and I used to walk out to the farmers market all the time when we were dating. There was a vendor who sold the best goat cheese...%revealtasteRobin426"
+            "11{{YearRemainder}}": "Demetrius and I used to walk out to the farmers market all the time when we were dating. There was a vendor who sold the best goat cheese...%revealtasteRobin426",
+            "12{{YearRemainder}}": "Growing up here, there were always plenty of dogs around...I miss having a dog.$s",
+            "13{{YearRemainder}}": "If I weren't a carpenter...You know, @, I've wanted to be a carpenter most of my life.#$b#I just really enjoy building things, you know?$h"
         },
         "When": {
             "YearModulus": "1"

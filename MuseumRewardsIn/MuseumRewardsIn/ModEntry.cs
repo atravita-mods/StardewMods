@@ -190,7 +190,7 @@ internal sealed class ModEntry : Mod
             }
         }
 
-        ShopMenu shop = new ShopMenu(sellables, who: "Gunther") { storeContext = SHOPNAME };
+        ShopMenu shop = new(sellables, who: "Gunther") { storeContext = SHOPNAME };
         if (config.AllowBuyBacks)
         {
             shop.categoriesToSellHere.Add(SObject.mineralsCategory);

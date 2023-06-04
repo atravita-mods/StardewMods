@@ -44,7 +44,17 @@
         }
     },
     {
-        "LogName": "Marnie mid-hearts",
+        "LogName": "Marnie mid-hearts Y1",
+        "Action": "EditData",
+        "Target": "Characters/Dialogue/Marnie",
+        "When": {"YearModulus": "1"},
+        "Entries": {
+            "Resort_Bar": "Maybe I should get a nice Long Island Iced Tea?",
+            "Resort_Wander": "@, you've definitely done well here, this place is lovely!$h"
+        }
+    },
+    {
+        "LogName": "Marnie mid-hearts Y2",
         "Action": "EditData",
         "Target": "Characters/Dialogue/Marnie",
         "When": { "YearModulus": "2" },

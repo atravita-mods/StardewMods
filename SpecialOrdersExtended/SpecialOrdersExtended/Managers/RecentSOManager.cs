@@ -5,6 +5,8 @@ using AtraShared.Utils.Extensions;
 
 using SpecialOrdersExtended.DataModels;
 
+using StardewValley.Network;
+
 namespace SpecialOrdersExtended.Managers;
 
 /// <summary>
@@ -122,7 +124,7 @@ internal class RecentSOManager
         }
 
         // Grab my completed orders
-        StardewValley.Network.NetStringDictionary<bool, Netcode.NetBool>? completedOrders = Game1.player?.team?.completedSpecialOrders;
+        NetStringDictionary<bool, Netcode.NetBool>? completedOrders = Game1.player?.team?.completedSpecialOrders;
 
         if (completedOrders is null)
         { // This should not happen, but just in case?

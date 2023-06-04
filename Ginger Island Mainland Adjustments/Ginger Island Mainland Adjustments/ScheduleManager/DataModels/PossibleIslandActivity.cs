@@ -125,7 +125,7 @@ internal readonly struct PossibleIslandActivity
     /// Whether or not an animation is one we should avoid repeating.
     /// </summary>
     /// <returns>true if animation is unique, false otherwise.</returns>
-    [MemberNotNullWhen(returnValue: true, "animation")]
+    [MemberNotNullWhen(returnValue: true, nameof(animation))]
     private bool IsAnimationUnique()
         => !string.IsNullOrEmpty(this.animation)
             && !this.animation.StartsWith("square_");

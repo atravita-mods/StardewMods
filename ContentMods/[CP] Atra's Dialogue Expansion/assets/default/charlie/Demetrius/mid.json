@@ -83,6 +83,8 @@
         "Action": "EditData",
         "Target": "Characters/Dialogue/Demetrius",
         "Entries": {
+            "ScienceHouse_Entry": "Honey, I'm home!",
+            
             "fall_1_2": "Now that it's fall, I think I'll try growing some pumpkins for Robin again.%revealtasteRobin276#$b#They're her favorite vegetable. Here, I have a few extra seeds, want them? [490]#$e#Tried growing them a few years ago, I'm not the best gardener. Think I over-watered them.",
             "6_2": "Did you see that paper by the %name group out of %place University? Amazing, isn't it?$h",
             "16_2": "Sometimes I wonder what I could have done to be more successful in my career...$s",

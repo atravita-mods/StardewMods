@@ -55,9 +55,11 @@
                 "20_2": "@, do you produce truffle oil? I hear it's quite lucrative.$h",
                 "22_2": "There's nothing like a nice cup of tea to start the day.$h%revealtasteLewis614",
                 "23_2": "Planning festivals is only a small part of my day.$h",
+                "24_2": "I used to really enjoy going to musicals back when I lived in the city...#$b#@, what do you miss most about the city?",
 
                 "Saloon_Entry": "Anything new on the menu?/Whatcha got?",
                 "IslandSouth_Entry": "Mmmm, sun!",
+                "ManorHouse_Entry": "Ah, home sweet home!"
             }
         },
         {
@@ -71,6 +73,7 @@
                 "1_2": "We're lucky in that we have good foraging opportunities around here. I guess if things get really bad that's at least something.",
                 "10_2": "The mayor before me? He was an old cattle farmer. Ran a dairy across from Marnie's.#$b#He retired, though, sold his place and went off to live in the city. Felt like he was getting too old for that type of work.",
                 "13_2": "There's a lot we can do to modernize this here town without losing our small-town charm.#$b#For example, we've only recently gotten off single-wire earth return.",
+                "15_2": "@, I'm thinking of heading down to the city to see a play.#$b#Hmmm, maybe I could convince...no, she's probably too busy...",
 
                 "IslandSouth_Entry": "Oh, vacation!"
             }

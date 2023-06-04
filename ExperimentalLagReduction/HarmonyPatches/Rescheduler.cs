@@ -118,19 +118,11 @@ internal static class Rescheduler
         foreach (((string start, string end, Gender gender) key, List<string>? value) in PathCache.OrderBy(static kvp => kvp.Key.start).ThenBy(static kvp => kvp.Value?.Count ?? -1))
         {
             ModEntry.ModMonitor.Log($"( {key.start} -> {key.end} ({key.gender.ToStringFast()})) == " + (value is not null ? string.Join("->", value) + $" [{value.Count}]" : "no path found" ), LogLevel.Info);
-
-            if (value is null)
-            {
-                counter[0]++;
-            }
-            else
-            {
-                counter[value.Count]++;
-            }
+            counter[value?.Count ?? 0]++;
         }
 
         ModEntry.ModMonitor.Log($"In total: {PathCache.Count} routes cached for {Game1.locations.Count} locations.", LogLevel.Info);
-        foreach ((int key, int value) in counter.OrderBy(static kvp => kvp.Value))
+        foreach ((int key, int value) in counter)
         {
             ModEntry.ModMonitor.Log($"    {value} of length {key}", LogLevel.Info);
         }
@@ -291,7 +283,7 @@ internal static class Rescheduler
                 }
             }
 
-            ModEntry.ModMonitor.Log((new StackTrace()).ToString());
+            ModEntry.ModMonitor.Log(new StackTrace().ToString(), LogLevel.Info);
 #endif
 
             PathCache.Clear();
@@ -327,7 +319,7 @@ internal static class Rescheduler
             }
             ModEntry.ModMonitor.TraceOnlyLog($"Locations cache prepopulated with {Game1._locationLookup.Count} entries.");
 #if DEBUG
-            ModEntry.ModMonitor.Log($"This took {_stopwatch.Value.ElapsedMilliseconds} ms");
+            ModEntry.ModMonitor.TraceOnlyLog($"This took {_stopwatch.Value.Elapsed.TotalMilliseconds:F2} ms");
 #endif
         }
 
@@ -367,7 +359,7 @@ internal static class Rescheduler
 
 #if DEBUG
         _stopwatch.Value.Stop();
-        ModEntry.ModMonitor.Log($"Total time so far: {_stopwatch.Value.ElapsedMilliseconds} ms, {PathCache.Count} total routes cached. Prefetch started.", LogLevel.Info);
+        ModEntry.ModMonitor.Log($"Total time so far: {_stopwatch.Value.Elapsed.TotalMilliseconds:F2} ms, {PathCache.Count} total routes cached. Prefetch started.", LogLevel.Info);
 #endif
     }
 
@@ -382,7 +374,7 @@ internal static class Rescheduler
 
 #if DEBUG
         _stopwatch.Value.Stop();
-        ModEntry.ModMonitor.Log($"Prefetch done for {loc.Name}. Total time so far: {_stopwatch.Value.ElapsedMilliseconds} ms, {PathCache.Count} total routes cached", LogLevel.Info);
+        ModEntry.ModMonitor.Log($"Prefetch done for {loc.Name}. Total time so far: {_stopwatch.Value.Elapsed.TotalMilliseconds:F2} ms, {PathCache.Count} total routes cached", LogLevel.Info);
 #endif
     }
 
@@ -450,20 +442,20 @@ internal static class Rescheduler
         Interlocked.Increment(ref cacheMisses);
 #endif
         __result = GetPathFor(start, end, (Gender)__instance.Gender, ModEntry.Config.AllowPartialPaths);
-
-#if DEBUG
-        _stopwatch.Value.Stop();
-        ModEntry.ModMonitor.Log($"Total time so far: {_stopwatch.Value.ElapsedMilliseconds} ms, {PathCache.Count} total routes cached", LogLevel.Info);
-#endif
-
         if (__result is null)
         {
             ModEntry.ModMonitor.LogOnce($"{__instance.Name} requested path from {startingLocation} to {endingLocation} where no valid path was found.", LogLevel.Warn);
         }
+#if DEBUG
         else
         {
             ModEntry.ModMonitor.TraceOnlyLog($"Found path for {__instance.Name} from {startingLocation} to {endingLocation}: {string.Join("->", __result)} with {__result.Count} segments.");
         }
+
+        _stopwatch.Value.Stop();
+        ModEntry.ModMonitor.Log($"Total time so far: {_stopwatch.Value.Elapsed.TotalMilliseconds:F2} ms, {PathCache.Count} total routes cached", LogLevel.Info);
+#endif
+
         return false;
     }
 

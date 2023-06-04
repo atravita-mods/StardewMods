@@ -21,7 +21,8 @@
             "4{{YearRemainder}}": "I don't wanna go to school.$s#$b#You think I could pretend to be sick?",
             "17{{YearRemainder}}": "Look what I found, @!$h[721]",
             "18{{YearRemainder}}": "Mom let us have pizza yesterday!$h",
-            "19{{YearRemainder}}": "Mom bought us some grapes! Here, have one![398]$h#$b#Grapes are my favorite!"
+            "19{{YearRemainder}}": "Mom bought us some grapes! Here, have one![398]$h#$b#Grapes are my favorite!",
+            "20{{YearRemainder}}": "Miss Penny was teaching me my times tables!#$b#She says adults use these all the time. {{Title}} @, do you use times tables?"
         },
         "When": {
             "YearModulus": "1"

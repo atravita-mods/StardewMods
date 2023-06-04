@@ -225,7 +225,7 @@ internal sealed class ModEntry : Mod
             }
 #if DEBUG
             sw.Stop();
-            this.Monitor.Log($"PFM compat took {sw.ElapsedMilliseconds} ms.");
+            this.Monitor.LogTimespan("PFM compat", sw);
 #endif
         }
         else

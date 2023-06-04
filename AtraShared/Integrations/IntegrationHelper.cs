@@ -113,7 +113,7 @@ public class IntegrationHelper
         }
 #if DEBUG
         sw.Stop();
-        this.Monitor.Log($"Mapping {apiid} took {sw.ElapsedMilliseconds} milliseconds", LogLevel.Info);
+        this.Monitor.LogTimespan($"Mapping {apiid}", sw);
 #endif
         return api is not null;
     }

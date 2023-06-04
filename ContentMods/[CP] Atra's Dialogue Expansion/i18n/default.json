@@ -11,6 +11,16 @@
     "his": "his",
     "hers": "hers",
     "theirs": "theirs",
+    "mister": "Mister",
+    "miss": "miss",
+
+/********************
+* Config
+***********************/
+
+    "config.GenderedTitle.name": "Gendered Title",
+    "config.GenderedTitle.description": "The title (like 'Miss' or 'Mister') you would like the game to use for you.",
+    "config.EnableFor.name": "Enable For",
 
 /***************
 * For randomization: A bunch of randomized nouns.

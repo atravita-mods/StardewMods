@@ -87,7 +87,8 @@
             "LogName": "Spouse-related items",
             "FromFile": "assets/base_dialogue/{{Spouse}}/spousal.json",
             "When": {
-                "HasValue: {{Spouse}}": true
+                "HasValue: {{Spouse}}": true,
+                "HasFile: {{FromFile}}": true,
             }
         },
         {

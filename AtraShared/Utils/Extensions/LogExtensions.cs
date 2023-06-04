@@ -13,6 +13,22 @@ namespace AtraShared.Utils.Extensions;
 /// </summary>
 public static class LogExtensions
 {
+    #region helpers
+
+    /// <summary>
+    /// Logs a stopwatch.
+    /// </summary>
+    /// <param name="monitor">Monitor instance to use.</param>
+    /// <param name="action">Action being performed.</param>
+    /// <param name="sw">Stopwatch to log.</param>
+    /// <param name="level">The level to log at.</param>
+    [DebuggerHidden]
+    [Conditional("DEBUG")]
+    public static void LogTimespan(this IMonitor monitor, string action, Stopwatch sw, LogLevel level = LogLevel.Info)
+    {
+        monitor.Log($"{action} took {sw.Elapsed.TotalMilliseconds:F2} ms.", level);
+    }
+
     /// <summary>
     /// Logs an exception.
     /// </summary>
@@ -41,6 +57,8 @@ public static class LogExtensions
         monitor.Log($"Other patches on this method:");
         method.Snitch(monitor);
     }
+
+    #endregion
 
     /// <summary>
     /// Logs to level (DEBUG by default) if compiled with the DEBUG flag

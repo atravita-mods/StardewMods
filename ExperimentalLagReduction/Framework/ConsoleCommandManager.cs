@@ -121,8 +121,8 @@ internal static class ConsoleCommandManager
         ModEntry.ModMonitor.Log($"Cached routes: {Rescheduler.CacheCount}", LogLevel.Info);
 
 #if DEBUG
-        ModEntry.ModMonitor.Log($"Timing: {string.Join(", ", Rescheduler.Watches.Select(static watch => $"{watch.ElapsedMilliseconds} ms"))}", LogLevel.Info);
-        ModEntry.ModMonitor.Log($"Total: {Rescheduler.Watches.Sum(static watch => watch.ElapsedMilliseconds)} ms", LogLevel.Info);
+        ModEntry.ModMonitor.Log($"Timing: {string.Join(", ", Rescheduler.Watches.Select(static watch => $"{watch.Elapsed.TotalMilliseconds:F2} ms"))}", LogLevel.Info);
+        ModEntry.ModMonitor.Log($"Total: {Rescheduler.Watches.Sum(static watch => watch.Elapsed.TotalMilliseconds):F2} ms", LogLevel.Info);
 
         ModEntry.ModMonitor.Log($"Cache hit percentage: {Rescheduler.CacheHitRatio * 100}%", LogLevel.Info);
         ModEntry.ModMonitor.Log($"{Rescheduler.CacheHits} hits out of {Rescheduler.CacheCount} routes cached: {((float)Rescheduler.CacheHits / Rescheduler.CacheCount) * 100}%", LogLevel.Info);

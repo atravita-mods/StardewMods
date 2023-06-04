@@ -169,7 +169,7 @@ internal static class GIScheduler
             GIScheduler.ClearCache();
 #if DEBUG
             stopwatch.Stop();
-            Globals.ModMonitor.Log($"GI Scheduler did not need to run, took {stopwatch.ElapsedMilliseconds} ms anyways", LogLevel.Info);
+            Globals.ModMonitor.Log($"GI Scheduler did not need to run, took {stopwatch.Elapsed.TotalMilliseconds:F2} ms anyways", LogLevel.Info);
 #endif
             return;
         }
@@ -203,7 +203,7 @@ internal static class GIScheduler
 
 #if DEBUG
         stopwatch.Stop();
-        Globals.ModMonitor.Log($"Schedule generation took {stopwatch.ElapsedMilliseconds} ms.", LogLevel.Info);
+        Globals.ModMonitor.LogTimespan("Schedule generation", stopwatch);
 
         if (Context.IsSplitScreen && Context.ScreenId != 0)
         {

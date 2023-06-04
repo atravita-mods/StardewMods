@@ -212,7 +212,7 @@ internal sealed class ModEntry : Mod
         harmony.Snitch(this.Monitor, uniqueID: harmony.Id, transpilersOnly: true);
 #if DEBUG
         sw.Stop();
-        this.Monitor.Log($"Took {sw.ElapsedMilliseconds} ms to apply harmony patches.", LogLevel.Info);
+        this.Monitor.LogTimespan("Applying harmony patches", sw);
 #endif
     }
 

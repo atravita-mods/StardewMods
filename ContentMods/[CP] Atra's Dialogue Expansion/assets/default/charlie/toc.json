@@ -15,7 +15,7 @@
         "When": {
             "EnableFor": "Demetrius",
             "Query: {{Hearts:Demetrius}} >= 6": true,
-            "HasFile:{{Target}}": true,
+            "HasFile:{{FromFile}}": true,
         }
     },
     {

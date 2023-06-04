@@ -270,7 +270,7 @@ internal sealed class ModEntry : Mod
 
 #if DEBUG
         sw.Stop();
-        this.Monitor.Log($"took {sw.ElapsedMilliseconds} ms to apply harmony patches", LogLevel.Info);
+        this.Monitor.LogTimespan("Applying harmony patches", sw);
 #endif
     }
 

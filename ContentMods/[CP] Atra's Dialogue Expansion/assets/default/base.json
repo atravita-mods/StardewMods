@@ -41,7 +41,7 @@
             "LogName": "Robin - after upgrades",
             "Action": "EditData",
             "Target": "Characters/Dialogue/Robin",
-            "When": {"FarmhouseUpgrade|contains:0,1,2": false},
+            "When": {"Query: {{FarmhouseUpgrade > 3}}": true},
             "Entries": {
                 "winter_Mon": "I've always loved this time of year. The snow in the mountains is beautiful. Even when I have to walk through it."
             }

@@ -2,6 +2,9 @@
     "$schema": "https://smapi.io/schemas/content-patcher.json",
     "Format": "1.28.0",
     "ConfigSchema": {
+        "GenderedTitle": {
+            "AllowBlank": true,
+        },
         "EnableFor": {
             "AllowValues": "Abigail, Alex, Caroline, Clint, Demetrius, Elliott, Emily, Evelyn, George, Gus, Haley, Harvey, Jodi, Kent, Leah, Lewis, Marnie, Maru, Pam, Penny, Pierre, Robin, Sam, Sandy, Sebastian, Shane, Vincent, Willy",
             "AllowMultiple": true,
@@ -51,6 +54,23 @@
                 "HasMod": "aedenthorn.FreeLove",
                 "HasValue: {{Spouse}}": true,
             }
+        },
+
+        // title
+        {
+            "Name": "Title",
+            "Value": "{{i18n:miss}}",
+            "When": {"PlayerGender": "Female"}
+        },
+        {
+            "Name": "Title",
+            "Value": "{{i18n:mister}}",
+            "When": {"PlayerGender": "Male"}
+        },
+        {
+            "Name": "Title",
+            "Value": "{{GenderedTitle}}",
+            "When": {"HasValue: {{GenderedTitle}}": true}
         },
 
         // taxes

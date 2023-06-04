@@ -32,6 +32,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Integrations\Interfaces\IMoreGrassStarters.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Niceties\AssetNameComparer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)niceties\GameLocationComparer.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)utils\extensions\BuffExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Utils\Extensions\CropExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Utils\Extensions\FarmerTeamExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Utils\Extensions\IAssetDataForMapsExtensions.cs" />

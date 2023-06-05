@@ -118,7 +118,7 @@ internal static class AssetCache
                 {
                     if (!holder.TryGetTarget(out AssetHolder? target))
                     {
-                        Cache.TryRemove(asset.BaseName, out WeakReference<AssetHolder> _);
+                        Cache.TryRemove(asset.BaseName, out _);
                     }
                     else
                     {
@@ -144,7 +144,7 @@ internal static class AssetCache
             }
             else
             {
-                Cache.TryRemove(asset.BaseName, out WeakReference<AssetHolder> _);
+                Cache.TryRemove(asset.BaseName, out _);
             }
         }
         Failed.Remove(asset);

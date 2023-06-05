@@ -1,4 +1,6 @@
-﻿using System.Text.RegularExpressions;
+﻿// Ignore Spelling: Loc Qual prevtime Oschedule npc
+
+using System.Text.RegularExpressions;
 using AtraBase.Toolkit.Extensions;
 using AtraBase.Toolkit.Reflection;
 using AtraBase.Toolkit.StringHandler;

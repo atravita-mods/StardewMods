@@ -1,4 +1,6 @@
-﻿using AtraShared.Integrations.GMCMAttributes;
+﻿// Ignore Spelling: Crystalarium Bobbers Dressup
+
+using AtraShared.Integrations.GMCMAttributes;
 using StardewModdingAPI.Utilities;
 using StardewValley.Locations;
 
@@ -44,16 +46,19 @@ internal sealed class ModConfig
     /// <summary>
     /// Gets or sets a value indicating whether or not to prevent the removal of items from a table.
     /// </summary>
+    [GMCMSection("Placement", 0)]
     public bool PreventRemovalFromTable { get; set; } = true;
 
     /// <summary>
     /// Gets or sets a value indicating whether grass should be placed under objects.
     /// </summary>
+    [GMCMSection("Placement", 0)]
     public bool PlaceGrassUnder { get; set; } = true;
 
     /// <summary>
     /// Gets or sets a value indicating whether jukeboxes should be playable everywhere.
     /// </summary>
+    [GMCMSection("Placement", 0)]
     public bool JukeboxesEverywhere { get; set; } = true;
 
     /// <summary>
@@ -140,6 +145,7 @@ internal sealed class ModConfig
     /// <summary>
     /// Gets or sets keybind to use to remove an item from a table.
     /// </summary>
+    [GMCMSection("Placement", 0)]
     public KeybindList FurniturePlacementKey { get; set; } = KeybindList.Parse("LeftShift + Z");
 
     /// <summary>
@@ -150,6 +156,7 @@ internal sealed class ModConfig
     /// <summary>
     /// Gets or sets a value indicating whether SObjects that are bombed that are forage should be saved.
     /// </summary>
+    [GMCMSection("Bombs", 50)]
     public bool SaveBombedForage { get; set; } = false;
 
     /// <summary>
@@ -161,6 +168,7 @@ internal sealed class ModConfig
     /// <summary>
     /// Gets or sets a value indicating whether or not napalm rings should affect safe areas.
     /// </summary>
+    [GMCMSection("Bombs", 50)]
     public bool NapalmInSafeAreas { get; set; } = true;
 
     /// <summary>
@@ -173,9 +181,23 @@ internal sealed class ModConfig
     /// </summary>
     public SignBehavior SignBehavior { get; set; } = SignBehavior.Vanilla;
 
+    /// <summary>
+    /// Gets or sets a value indicating whether dressers should allow weapons.
+    /// </summary>
+    [GMCMSection("Dresser", 35)]
     public bool DressersAllowWeapons { get; set; } = true;
 
-    public bool DressersAllowBobbers { get; set; } = true;
+    /// <summary>
+    /// Gets or sets a value indicating whether dressers should allow tackle.
+    /// </summary>
+    [GMCMSection("Dresser", 35)]
+    public bool DressersAllowBobbers { get; set; } = false;
+
+    /// <summary>
+    /// Gets or sets a value indicating whether the little mini farmer dress up menu should be drawn.
+    /// </summary>
+    [GMCMSection("Dresser", 35)]
+    public bool DresserDressup { get; set; } = true;
 
     /// <summary>
     /// Gets or sets a value indicating whether or not to confirm bomb placement in safe areas.

@@ -2,42 +2,85 @@
 using Microsoft.Xna.Framework.Graphics;
 
 using StardewValley.Menus;
+using StardewValley.Objects;
 
 namespace StopRugRemoval.Framework.Menus;
 
 /// <summary>
-/// A little mini menu for farmer customization.
+/// A little mini menu for farmer customization, mostly taken from <see cref="InventoryPage"/>.
 /// </summary>
 internal sealed class MiniFarmerMenu : IClickableMenu
 {
-    private readonly List<ClickableComponent> equipmentIcons = new();
+    private readonly List<IInventorySlot<Item>> equipmentIcons = new();
     private ClickableComponent portrait;
     private Rectangle backdrop;
 
-    internal ShopMenu shopMenu { get; init; }
+#region hover
+    private Item? hoverItem;
+    private string? hoverText;
+    private string? hoverTitle;
+#endregion
 
     /// <summary>
     /// Initializes a new instance of the <see cref="MiniFarmerMenu"/> class.
     /// </summary>
     /// <param name="shopMenu">ShopMenu to hang out with.</param>
     internal MiniFarmerMenu(ShopMenu shopMenu)
-        : base(shopMenu.xPositionOnScreen - 128, shopMenu.yPositionOnScreen + 384 + 64 + 32, 384, 256)
+        : base(shopMenu.xPositionOnScreen - 128, shopMenu.yPositionOnScreen + 480 - 16, 384, 256 - 4)
     {
-        this.shopMenu = shopMenu;
+        this.ShopMenu = shopMenu;
         this.AssignClickableComponents();
     }
 
+    /// <summary>
+    /// Gets the shop (dresser) menu associated with this instance.
+    /// </summary>
+    internal ShopMenu ShopMenu { get; init; }
+
+    /// <inheritdoc />
+    public override void performHoverAction(int x, int y)
+    {
+        foreach (IInventorySlot<Item> equip in this.equipmentIcons)
+        {
+            if (equip.TryHover(x, y, out Item? newHoveredItem))
+            {
+                if (newHoveredItem is null)
+                {
+                    this.hoverItem = null;
+                    this.hoverText = this.hoverTitle = string.Empty;
+                }
+                else if (!ReferenceEquals(this.hoverItem, newHoveredItem))
+                {
+                    this.hoverItem = newHoveredItem;
+                    this.hoverText = newHoveredItem.getDescription();
+                    this.hoverTitle = newHoveredItem.DisplayName;
+                }
+            }
+        }
+    }
+
+    /// <inheritdoc />
     public override void draw(SpriteBatch b)
     {
         // draw backdrop
-        drawTextureBox(b, this.xPositionOnScreen, this.yPositionOnScreen, this.width, this.height, Color.White);
+        drawTextureBox(
+            b,
+            texture: Game1.mouseCursors,
+            sourceRect: new Rectangle(384, 373, 18, 18),
+            x: this.xPositionOnScreen,
+            y: this.yPositionOnScreen,
+            width: this.width,
+            height: this.height,
+            color: Color.White,
+            scale: Game1.pixelZoom);
 
         // draw equipment icons
-        foreach (var com in this.equipmentIcons)
+        foreach (IInventorySlot<Item> equip in this.equipmentIcons)
         {
-            b.Draw(Game1.staminaRect, com.bounds, Color.LimeGreen);
+            equip.Draw(b);
         }
 
+        // draw farmer.
         bool isDarkOut = Game1.timeOfDay >= 1900;
         b.Draw(
             isDarkOut ? Game1.nightbg : Game1.daybg,
@@ -74,10 +117,22 @@ internal sealed class MiniFarmerMenu : IClickableMenu
             Game1.player);
         }
         FarmerRenderer.isDrawingForUI = false;
+
+        if (!string.IsNullOrEmpty(this.hoverText))
+        {
+            drawToolTip(b, this.hoverText, this.hoverTitle, this.hoverItem);
+        }
+
+        this.drawMouse(b);
     }
 
+    /// <inheritdoc />
     public override void gameWindowSizeChanged(Rectangle oldBounds, Rectangle newBounds)
-        => base.gameWindowSizeChanged(oldBounds, newBounds);
+    {
+        this.xPositionOnScreen = this.ShopMenu.xPositionOnScreen - 128;
+        this.yPositionOnScreen = this.ShopMenu.yPositionOnScreen + 480 - 16;
+        this.AssignClickableComponents();
+    }
 
     [MemberNotNull(nameof(portrait))]
     private void AssignClickableComponents()
@@ -97,77 +152,48 @@ internal sealed class MiniFarmerMenu : IClickableMenu
 
         // equipment icons.
         this.equipmentIcons.Clear();
-        this.equipmentIcons.Add(new ClickableComponent(
-            new Rectangle(
+
+        this.equipmentIcons.Add(new InventorySlot<Ring>(
+            type: InventorySlotType.Ring,
             x: this.xPositionOnScreen + 32,
             y: this.yPositionOnScreen + 32,
-            width: 64,
-            height: 64), "Left Ring")
-        {
-            myID = InventoryPage.region_ring1,
-            downNeighborID = InventoryPage.region_ring2,
-            rightNeighborID = InventoryPage.region_hat,
-        });
-        this.equipmentIcons.Add(new ClickableComponent(
-            new Rectangle(
+            name: "Left Ring",
+            getItem: static () => Game1.player.leftRing.Value,
+            setItem: static (value) => Game1.player.leftRing.Value = value));
+        this.equipmentIcons.Add(new InventorySlot<Ring>(
+            type: InventorySlotType.Ring,
             x: this.xPositionOnScreen + 32,
             y: this.yPositionOnScreen + 32 + 64,
-            width: 64,
-            height: 64), "Right Ring")
-        {
-            myID = 103,
-            upNeighborID = 102,
-            downNeighborID = 104,
-            rightNeighborID = 108,
-        });
-        this.equipmentIcons.Add(new ClickableComponent(
-            new Rectangle(
+            name: "Right Ring",
+            getItem: static () => Game1.player.rightRing.Value,
+            setItem: static (value) => Game1.player.rightRing.Value = value));
+        this.equipmentIcons.Add(new InventorySlot<Boots>(
+            type: InventorySlotType.Boots,
             x: this.xPositionOnScreen + 32,
             y: this.yPositionOnScreen + 32 + 128,
-            width: 64,
-            height: 64), "Boots")
-        {
-            myID = 104,
-            upNeighborID = 103,
-            rightNeighborID = 109,
-        });
-        this.equipmentIcons.Add(new ClickableComponent(
-            new Rectangle(
+            name: "Boots",
+            getItem: static () => Game1.player.boots.Value,
+            setItem: static value => Game1.player.boots.Value = value));
+        this.equipmentIcons.Add(new InventorySlot<Hat>(
+            type: InventorySlotType.Hat,
             x: this.xPositionOnScreen + this.width - 64 - 32,
             y: this.yPositionOnScreen + 32,
-            width: 64,
-            height: 64), "Hat")
-        {
-            myID = 101,
-            leftNeighborID = 102,
-            downNeighborID = 108,
-            upNeighborID = Game1.player.MaxItems - 12,
-            rightNeighborID = 105,
-        });
-        this.equipmentIcons.Add(new ClickableComponent(
-            new Rectangle(
+            name: "Hat",
+            getItem: static () => Game1.player.hat.Value,
+            setItem: static value => Game1.player.hat.Value = value));
+        this.equipmentIcons.Add(new InventorySlot<Clothing>(
+            type: InventorySlotType.Clothing,
             x: this.xPositionOnScreen + this.width - 64 - 32,
             y: this.yPositionOnScreen + 32 + 64,
-            width: 64,
-            height: 64), "Shirt")
-        {
-            myID = 108,
-            upNeighborID = 101,
-            downNeighborID = 109,
-            rightNeighborID = 105,
-            leftNeighborID = 103,
-        });
-        this.equipmentIcons.Add(new ClickableComponent(
-            new Rectangle(
+            name: "Shirt",
+            getItem: static () => Game1.player.shirtItem.Value,
+            setItem: static value => Game1.player.shirtItem.Value = value));
+        this.equipmentIcons.Add(new InventorySlot<Clothing>(
+            type: InventorySlotType.Clothing,
             x: this.xPositionOnScreen + this.width - 64 - 32,
             y: this.yPositionOnScreen + 32 + 128,
-            width: 64,
-            height: 64), "Pants")
-        {
-            myID = 109,
-            upNeighborID = 108,
-            rightNeighborID = 105,
-            leftNeighborID = 104,
-        });
+            name: "Pants",
+            getItem: static () => Game1.player.pantsItem.Value,
+            setItem: static value => Game1.player.pantsItem.Value = value));
     }
 }

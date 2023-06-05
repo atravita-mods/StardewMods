@@ -13,6 +13,7 @@
 * Null current locations now will re-check the netlocation ref first. (Apparently they're less than reliable?)
 * Crosscheck player spouse on load.
 * New behavior options for signs and crystalaria.
+* Tooltips now have buff durations.
 
 #### Version 1.1.3
 * Fix integration with GrowableGiantCrops/MoreGrassStarters.

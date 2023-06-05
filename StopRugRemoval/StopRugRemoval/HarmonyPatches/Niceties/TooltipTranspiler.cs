@@ -33,6 +33,7 @@ namespace StopRugRemoval.HarmonyPatches.Niceties;
 [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = StyleCopConstants.NamedForHarmony)]
 internal static class TooltipTranspiler
 {
+    [MethodImpl(TKConstants.Hot)]
     private static string? GetTooltipDuration(Item? hoveredItem)
     {
         if (hoveredItem is SObject obj && Game1Wrappers.ObjectInfo.TryGetValue(obj.ParentSheetIndex, out string? data)
@@ -44,6 +45,7 @@ internal static class TooltipTranspiler
         return null;
     }
 
+    [MethodImpl(TKConstants.Hot)]
     private static int GetAdditionalSpaceIfNeeded(string? duration) => duration is not null ? 34 : 0;
 
     [MethodImpl(TKConstants.Hot)]
@@ -152,7 +154,7 @@ internal static class TooltipTranspiler
             })
             .Insert(incrementY.ToArray());
 
-            helper.Print();
+            // helper.Print();
             return helper.Render();
         }
         catch (Exception ex)

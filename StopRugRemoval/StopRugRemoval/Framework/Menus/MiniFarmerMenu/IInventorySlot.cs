@@ -38,6 +38,13 @@ internal interface IInventorySlot<out TObject>
     bool TryHover(int x, int y, out Item? newHoveredItem);
 
     /// <summary>
+    /// Gets whether or not this particular inventory slot can accept this item.
+    /// </summary>
+    /// <param name="item">Item to check.</param>
+    /// <returns>True if acceptable, false otherwise.</returns>
+    bool CanAcceptItem(Item? item);
+
+    /// <summary>
     /// Tries to assign an item to this slot.
     /// </summary>
     /// <param name="item">The item to assign.</param>

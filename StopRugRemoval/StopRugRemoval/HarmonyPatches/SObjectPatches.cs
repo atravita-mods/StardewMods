@@ -1,4 +1,6 @@
-﻿using AtraCore;
+﻿using AtraBase.Toolkit;
+
+using AtraCore;
 
 using AtraShared.ConstantsAndEnums;
 using AtraShared.Menuing;
@@ -128,8 +130,7 @@ internal static class SObjectPatches
                 }
             }
             if (!HaveConfirmedBomb.Value && ModEntry.Config.Enabled
-                && !__instance.bigCraftable.Value && __instance is not Furniture
-                && __instance.ParentSheetIndex is 286 or 287 or 288
+                && __instance.IsBomb() && ReferenceEquals(__instance, Game1.player.ActiveObject)
                 && (IsLocationConsideredDangerous(location) ? ModEntry.Config.BombsInDangerousAreas : ModEntry.Config.BombsInSafeAreas)
                     .HasFlag(Context.IsMultiplayer ? ConfirmationEnum.InMultiplayerOnly : ConfirmationEnum.NotInMultiplayer))
             {
@@ -155,13 +156,19 @@ internal static class SObjectPatches
                 {
                     () =>
                     {
-                        Game1.player.reduceActiveItemByOne();
+                        if (Game1.player.ActiveObject.IsBomb())
+                        {
+                            Game1.player.reduceActiveItemByOne();
+                        }
                         GameLocationUtils.ExplodeBomb(Game1.player.currentLocation, __instance.ParentSheetIndex, loc, ModEntry.Multiplayer());
                     },
                     () =>
                     {
                         HaveConfirmedBomb.Value = true;
-                        Game1.player.reduceActiveItemByOne();
+                        if (Game1.player.ActiveObject.IsBomb())
+                        {
+                            Game1.player.reduceActiveItemByOne();
+                        }
                         GameLocationUtils.ExplodeBomb(Game1.player.currentLocation, __instance.ParentSheetIndex, loc, ModEntry.Multiplayer());
                     },
                 };
@@ -174,7 +181,7 @@ internal static class SObjectPatches
         }
         catch (Exception ex)
         {
-            ModEntry.ModMonitor.LogError("postfixing SObject.placementAction", ex);
+            ModEntry.ModMonitor.LogError("prefixing SObject.placementAction", ex);
         }
         return true;
     }

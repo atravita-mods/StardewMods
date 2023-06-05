@@ -52,9 +52,12 @@ internal class InventorySlot<TObject> : IInventorySlot<TObject>
     }
 
     /// <inheritdoc />
+    public bool IsInBounds(int x, int y) => this.clickable.containsPoint(x, y);
+
+    /// <inheritdoc />
     public bool TryHover(int x, int y, out Item? newHoveredItem)
     {
-        if (this.clickable.containsPoint(x, y))
+        if (this.IsInBounds(x, y))
         {
             newHoveredItem = this.getItem();
             this.clickable.scale = Math.Min(this.clickable.scale + 0.05f, 1.1f);
@@ -66,32 +69,19 @@ internal class InventorySlot<TObject> : IInventorySlot<TObject>
     }
 
     /// <inheritdoc />
+    public virtual bool CanAcceptItem(Item? item) => item is null || item is TObject;
+
+    /// <inheritdoc />
     public virtual bool AssignItem(Item? item, out Item? prev, bool playSound)
     {
-        if (item is null || item is TObject)
+        if (this.CanAcceptItem(item))
         {
             prev = this.getItem();
             this.setItem(item as TObject);
 
-            if (!playSound)
+            if (playSound)
             {
-                return true;
-            }
-
-            if (item is TObject)
-            {
-                this.type.PlayEquipSound();
-            }
-            else
-            {
-                try
-                {
-                    Game1.playSound("dwop");
-                }
-                catch (Exception ex)
-                {
-                    ModEntry.ModMonitor.LogError("playing dequip sound", ex);
-                }
+                this.PlayEquipDequipSounds(item);
             }
             return true;
         }
@@ -99,6 +89,22 @@ internal class InventorySlot<TObject> : IInventorySlot<TObject>
         return false;
     }
 
-    /// <inheritdoc />
-    public bool IsInBounds(int x, int y) => this.clickable.containsPoint(x, y);
+    private void PlayEquipDequipSounds(Item? item)
+    {
+        if (item is TObject)
+        {
+            this.type.PlayEquipSound();
+        }
+        else
+        {
+            try
+            {
+                Game1.playSound("dwop");
+            }
+            catch (Exception ex)
+            {
+                ModEntry.ModMonitor.LogError("playing dequip sound", ex);
+            }
+        }
+    }
 }

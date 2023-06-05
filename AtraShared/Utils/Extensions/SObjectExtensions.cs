@@ -61,7 +61,15 @@ public static class SObjectExtensions
     /// <param name="obj">SObject to check.</param>
     /// <returns>true if it's a trash item, false otherwise.</returns>
     public static bool IsTrashItem(this SObject obj)
-        => obj is not null && !obj.bigCraftable.Value && (obj.ParentSheetIndex >= 168 && obj.ParentSheetIndex < 173);
+        => obj is not null && obj.GetType() == typeof(SObject) && !obj.bigCraftable.Value && (obj.ParentSheetIndex >= 168 && obj.ParentSheetIndex < 173);
+
+    /// <summary>
+    /// Gets whether or not an SObject is a bomb.
+    /// </summary>
+    /// <param name="obj">SObject to check.</param>
+    /// <returns>true if it's a bomb, false otherwise.</returns>
+    public static bool IsBomb(this SObject obj)
+        => obj is not null && obj.GetType() == typeof(SObject) && !obj.bigCraftable.Value && obj.ParentSheetIndex is 286 or 287 or 288;
 
     /// <summary>
     /// Returns true for an item that would be considered alcohol. Taken from BuffsDisplay.tryToAddDrinkBuff

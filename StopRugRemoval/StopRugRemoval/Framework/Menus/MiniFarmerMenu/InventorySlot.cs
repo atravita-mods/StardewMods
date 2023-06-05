@@ -1,15 +1,17 @@
-﻿using Microsoft.Xna.Framework;
+﻿using AtraShared.Utils.Extensions;
+
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
 using StardewValley.Menus;
 
-namespace StopRugRemoval.Framework.Menus;
+namespace StopRugRemoval.Framework.Menus.MiniFarmerMenu;
 
 /// <summary>
 /// A slot that corresponds to an inventory slot.
 /// </summary>
 /// <typeparam name="TObject">The type of the backing field.</typeparam>
-internal sealed class InventorySlot<TObject> : IInventorySlot<TObject>
+internal class InventorySlot<TObject> : IInventorySlot<TObject>
     where TObject : Item
 {
     private readonly InventorySlotType type;
@@ -33,6 +35,9 @@ internal sealed class InventorySlot<TObject> : IInventorySlot<TObject>
         this.getItem = getItem;
         this.setItem = setItem;
     }
+
+    /// <inheritdoc />
+    public string Name => this.clickable.name;
 
     /// <inheritdoc />
     public void Draw(SpriteBatch b)
@@ -60,41 +65,40 @@ internal sealed class InventorySlot<TObject> : IInventorySlot<TObject>
         return false;
     }
 
-    internal bool AssignItem(Item item, out Item? prev)
+    /// <inheritdoc />
+    public virtual bool AssignItem(Item? item, out Item? prev, bool playSound)
     {
         if (item is null || item is TObject)
         {
             prev = this.getItem();
             this.setItem(item as TObject);
+
+            if (!playSound)
+            {
+                return true;
+            }
+
+            if (item is TObject)
+            {
+                this.type.PlayEquipSound();
+            }
+            else
+            {
+                try
+                {
+                    Game1.playSound("dwop");
+                }
+                catch (Exception ex)
+                {
+                    ModEntry.ModMonitor.LogError("playing dequip sound", ex);
+                }
+            }
             return true;
         }
         prev = null;
         return false;
     }
-}
 
-/// <summary>
-/// The type of item this is. Used for drawing the menu background.
-/// </summary>
-internal enum InventorySlotType
-{
-    /// <summary>
-    /// A <see cref="StardewValley.Objects.Hat"/>
-    /// </summary>
-    Hat = 42,
-
-    /// <summary>
-    /// A <see cref="StardewValley.Objects.Ring"/>
-    /// </summary>
-    Ring = 41,
-
-    /// <summary>
-    /// A pair of <see cref="StardewValley.Objects.Boots"/>
-    /// </summary>
-    Boots = 40,
-
-    /// <summary>
-    /// A <see cref="StardewValley.Objects.Clothing"/>
-    /// </summary>
-    Clothing = 69,
+    /// <inheritdoc />
+    public bool IsInBounds(int x, int y) => this.clickable.containsPoint(x, y);
 }

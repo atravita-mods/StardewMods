@@ -1,10 +1,12 @@
-﻿using Microsoft.Xna.Framework;
+﻿using AtraShared.Utils.Extensions;
+
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
 using StardewValley.Menus;
 using StardewValley.Objects;
 
-namespace StopRugRemoval.Framework.Menus;
+namespace StopRugRemoval.Framework.Menus.MiniFarmerMenu;
 
 /// <summary>
 /// A little mini menu for farmer customization, mostly taken from <see cref="InventoryPage"/>.
@@ -15,11 +17,11 @@ internal sealed class MiniFarmerMenu : IClickableMenu
     private ClickableComponent portrait;
     private Rectangle backdrop;
 
-#region hover
+    #region hover
     private Item? hoverItem;
     private string? hoverText;
     private string? hoverTitle;
-#endregion
+    #endregion
 
     /// <summary>
     /// Initializes a new instance of the <see cref="MiniFarmerMenu"/> class.
@@ -134,17 +136,34 @@ internal sealed class MiniFarmerMenu : IClickableMenu
         this.AssignClickableComponents();
     }
 
+    public override void receiveLeftClick(int x, int y, bool playSound = true)
+    {
+        foreach (IInventorySlot<Item> item in this.equipmentIcons)
+        {
+            if (item.IsInBounds(x, y))
+            {
+                var heldItem = Utility.PerformSpecialItemPlaceReplacement(this.ShopMenu.heldItem as Item);
+                if (item.AssignItem(heldItem, out Item? prev, playSound))
+                {
+                    this.ShopMenu.heldItem = prev;
+                }
+            }
+        }
+
+        base.receiveLeftClick(x, y, playSound);
+    }
+
     [MemberNotNull(nameof(portrait))]
     private void AssignClickableComponents()
     {
         this.backdrop = new Rectangle(
-            x: this.xPositionOnScreen + (this.width / 2) - 64,
+            x: this.xPositionOnScreen + this.width / 2 - 64,
             y: this.yPositionOnScreen + 32,
             width: 128,
             height: 192);
         this.portrait = new ClickableComponent(
             new Rectangle(
-            x: this.xPositionOnScreen + (this.width / 2) - 32,
+            x: this.xPositionOnScreen + this.width / 2 - 32,
             y: this.yPositionOnScreen + 64,
             width: 64,
             height: 96),
@@ -153,15 +172,13 @@ internal sealed class MiniFarmerMenu : IClickableMenu
         // equipment icons.
         this.equipmentIcons.Clear();
 
-        this.equipmentIcons.Add(new InventorySlot<Ring>(
-            type: InventorySlotType.Ring,
+        this.equipmentIcons.Add(new RingSlot(
             x: this.xPositionOnScreen + 32,
             y: this.yPositionOnScreen + 32,
             name: "Left Ring",
             getItem: static () => Game1.player.leftRing.Value,
             setItem: static (value) => Game1.player.leftRing.Value = value));
-        this.equipmentIcons.Add(new InventorySlot<Ring>(
-            type: InventorySlotType.Ring,
+        this.equipmentIcons.Add(new RingSlot(
             x: this.xPositionOnScreen + 32,
             y: this.yPositionOnScreen + 32 + 64,
             name: "Right Ring",

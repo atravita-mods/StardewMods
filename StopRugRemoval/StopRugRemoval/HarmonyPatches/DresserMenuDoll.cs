@@ -13,8 +13,7 @@ using Microsoft.Xna.Framework.Graphics;
 using StardewModdingAPI.Utilities;
 
 using StardewValley.Menus;
-
-using StopRugRemoval.Framework.Menus;
+using StopRugRemoval.Framework.Menus.MiniFarmerMenu;
 
 namespace StopRugRemoval.HarmonyPatches;
 
@@ -127,5 +126,17 @@ internal static class DresserMenuDoll
                 ModEntry.ModMonitor.LogError("cleaning up smol menu", ex);
             }
         }
+    }
+
+    [HarmonyPrefix]
+    [HarmonyPriority(Priority.High)]
+    private static bool PrefixRecieveClick(ShopMenu __instance, int x, int y, bool playSound)
+    {
+        if (IsActive(__instance, out MiniFarmerMenu? mini) && mini.isWithinBounds(x, y))
+        {
+            mini.receiveLeftClick(x, y, playSound);
+            return false;
+        }
+        return true;
     }
 }

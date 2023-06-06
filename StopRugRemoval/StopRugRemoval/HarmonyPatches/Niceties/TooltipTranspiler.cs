@@ -1,12 +1,10 @@
-﻿using System;
-using System.Reflection;
+﻿using System.Reflection;
 using System.Reflection.Emit;
 using System.Runtime.CompilerServices;
 using System.Text;
 
 using AtraBase.Toolkit;
 using AtraBase.Toolkit.Extensions;
-using AtraBase.Toolkit.Reflection;
 
 using AtraCore.Framework.ReflectionManager;
 
@@ -20,8 +18,6 @@ using HarmonyLib;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-using StardewModdingAPI.Utilities;
-
 using StardewValley.Menus;
 
 namespace StopRugRemoval.HarmonyPatches.Niceties;
@@ -30,7 +26,6 @@ namespace StopRugRemoval.HarmonyPatches.Niceties;
 /// Transpiles the tooltip to add the buff duration.
 /// </summary>
 [HarmonyPatch]
-[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = StyleCopConstants.NamedForHarmony)]
 internal static class TooltipTranspiler
 {
     [MethodImpl(TKConstants.Hot)]
@@ -39,6 +34,10 @@ internal static class TooltipTranspiler
         if (hoveredItem is SObject obj && Game1Wrappers.ObjectInfo.TryGetValue(obj.ParentSheetIndex, out string? data)
             && int.TryParse(data.GetNthChunk('/', 8), out int minutesDuration) && minutesDuration > 0)
         {
+            if (obj.Quality != 0)
+            {
+                minutesDuration += minutesDuration / 2;
+            }
             TimeSpan ts = BuffExtensions.ActualTime(minutesDuration);
             return $"{I18n.Duration()}: {(int)ts.TotalMinutes}:{ts.Seconds:D2}";
         }

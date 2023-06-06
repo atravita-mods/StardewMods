@@ -21,6 +21,20 @@
     "config.GenderedTitle.name": "Gendered Title",
     "config.GenderedTitle.description": "The title (like 'Miss' or 'Mister') you would like the game to use for you.",
     "config.EnableFor.name": "Enable For",
+    "config.IncreasedRealism.name": "Increased Realism",
+    "config.IncreasedRealism.description": "If enabled, lines that deviate from game mechanics in favor of more real-life specifics will be enabled. For example, if enabled, Marnie will talk about milking cows twice a day. This is not an adult content rating, unless your idea of adult content is, like, details about the finances of the dairy industry.",
+    "config.MapStrings.name": "Map Strings",
+    "config.MapStrings.description": "If enabled, there will be new bits of flavor text across various maps.",
+    "config.EnableGeneric.name": "Enable Generic",
+    "config.EnableGeneric.description": "If enabled, some generic lines for spouses will be included.",
+
+    "config.EnableSpouseLocational.name": "Spouse Locational",
+    "config.EnableSpouseLocational.description": "If enabled, certain spouses will have lines while they're walking around, but these lines are very high priority and tend to overwrite schedule lines.",
+
+    "config.EnableFestival.name": "Enable Festival",
+    "config.EnableFestival.description": "Currently does nothing, but will eventually enable this mod's festival lines.",
+
+    "config.ScheduleChanges.name": "Schedule Changes",
 
 /***************
 * For randomization: A bunch of randomized nouns.

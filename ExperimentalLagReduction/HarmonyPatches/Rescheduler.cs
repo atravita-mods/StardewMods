@@ -313,6 +313,7 @@ internal static class Rescheduler
         ModEntry.ModMonitor.TraceOnlyLog($"Locations cache contains {Game1._locationLookup.Count} entries.");
         if (Game1.locations.Count > Game1._locationLookup.Count)
         {
+            Game1._locationLookup.EnsureCapacity(Game1.locations.Count + 4);
             foreach (GameLocation? location in Game1.locations)
             {
                 Game1._locationLookup.TryAdd(location.Name, location);

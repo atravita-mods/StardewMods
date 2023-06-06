@@ -149,7 +149,7 @@ internal sealed class MiniFarmerMenu : IClickableMenu
                 Item heldItem = Utility.PerformSpecialItemPlaceReplacement(this.ShopMenu.heldItem as Item);
                 if (item.AssignItem(heldItem, out Item? prev, playSound))
                 {
-                    this.ShopMenu.heldItem = prev;
+                    this.ShopMenu.heldItem = Utility.PerformSpecialItemGrabReplacement(prev);
                 }
             }
         }
@@ -188,8 +188,7 @@ internal sealed class MiniFarmerMenu : IClickableMenu
             name: "Right Ring",
             getItem: static () => Game1.player.rightRing.Value,
             setItem: static (value) => Game1.player.rightRing.Value = value));
-        this.equipmentIcons.Add(new InventorySlot<Boots>(
-            type: InventorySlotType.Boots,
+        this.equipmentIcons.Add(new BootsSlot(
             x: this.xPositionOnScreen + 32,
             y: this.yPositionOnScreen + 32 + 128,
             name: "Boots",

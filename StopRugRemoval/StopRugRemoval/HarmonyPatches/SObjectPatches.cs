@@ -1,6 +1,4 @@
-﻿using AtraBase.Toolkit;
-
-using AtraCore;
+﻿using AtraCore;
 
 using AtraShared.ConstantsAndEnums;
 using AtraShared.Menuing;
@@ -115,6 +113,10 @@ internal static class SObjectPatches
     [HarmonyPatch(nameof(SObject.placementAction))]
     private static bool PrefixPlacementAction(SObject __instance, GameLocation location, int x, int y, ref bool __result)
     {
+        if (!ReferenceEquals(__instance, Game1.player.ActiveObject) || !ModEntry.Config.Enabled)
+        {
+            return true;
+        }
         try
         {
             if (ModEntry.Config.PreventPlantingOnRugs && __instance.isSapling())
@@ -129,8 +131,7 @@ internal static class SObjectPatches
                     }
                 }
             }
-            if (!HaveConfirmedBomb.Value && ModEntry.Config.Enabled
-                && __instance.IsBomb() && ReferenceEquals(__instance, Game1.player.ActiveObject)
+            if (!HaveConfirmedBomb.Value && __instance.IsBomb()
                 && (IsLocationConsideredDangerous(location) ? ModEntry.Config.BombsInDangerousAreas : ModEntry.Config.BombsInSafeAreas)
                     .HasFlag(Context.IsMultiplayer ? ConfirmationEnum.InMultiplayerOnly : ConfirmationEnum.NotInMultiplayer))
             {

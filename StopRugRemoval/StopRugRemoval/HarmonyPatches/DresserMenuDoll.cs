@@ -1,4 +1,6 @@
-﻿using System.Runtime.CompilerServices;
+﻿using System.Reflection.Emit;
+using System.Reflection;
+using System.Runtime.CompilerServices;
 
 using AtraBase.Toolkit;
 
@@ -14,6 +16,8 @@ using StardewModdingAPI.Utilities;
 
 using StardewValley.Menus;
 using StopRugRemoval.Framework.Menus.MiniFarmerMenu;
+using AtraCore.Framework.ReflectionManager;
+using AtraShared.Utils.HarmonyHelper;
 
 namespace StopRugRemoval.HarmonyPatches;
 
@@ -59,9 +63,7 @@ internal static class DresserMenuDoll
         }
     }
 
-    [HarmonyPostfix]
-    [HarmonyPatch(nameof(ShopMenu.draw))]
-    private static void PostfixDraw(ShopMenu __instance, SpriteBatch b)
+    private static void DrawMenu(ShopMenu __instance, SpriteBatch b)
     {
         if (IsActive(__instance, out MiniFarmerMenu? mini))
         {
@@ -74,6 +76,37 @@ internal static class DresserMenuDoll
                 ModEntry.ModMonitor.LogError("drawing mini farmer menu", ex);
             }
         }
+    }
+
+    [HarmonyTranspiler]
+    [HarmonyPatch(nameof(ShopMenu.draw))]
+    private static IEnumerable<CodeInstruction>? TranspileDraw(IEnumerable<CodeInstruction> instructions, ILGenerator gen, MethodBase original)
+    {
+        try
+        {
+            ILHelper helper = new(original, instructions, ModEntry.ModMonitor, gen);
+            helper.FindNext(new CodeInstructionWrapper[]
+            {
+                OpCodes.Ldarg_0,
+                (OpCodes.Ldfld, typeof(ShopMenu).GetCachedField(nameof(ShopMenu.inventory), ReflectionCache.FlagTypes.InstanceFlags)),
+                OpCodes.Ldarg_1,
+                (OpCodes.Callvirt, typeof(IClickableMenu).GetCachedMethod<SpriteBatch>(nameof(IClickableMenu.draw), ReflectionCache.FlagTypes.InstanceFlags)),
+            })
+            .Advance(4)
+            .Insert(new CodeInstruction[]
+            {
+                new(OpCodes.Ldarg_0),
+                new(OpCodes.Ldarg_1),
+                new(OpCodes.Call, typeof(DresserMenuDoll).GetCachedMethod(nameof(DrawMenu), ReflectionCache.FlagTypes.StaticFlags)),
+            });
+            helper.Print();
+            return helper.Render();
+        }
+        catch (Exception ex)
+        {
+            ModEntry.ModMonitor.LogTranspilerError(original, ex);
+        }
+        return null;
     }
 
     [HarmonyPostfix]
@@ -130,6 +163,7 @@ internal static class DresserMenuDoll
 
     [HarmonyPrefix]
     [HarmonyPriority(Priority.High)]
+    [HarmonyPatch(nameof(ShopMenu.receiveLeftClick))]
     private static bool PrefixRecieveClick(ShopMenu __instance, int x, int y, bool playSound)
     {
         if (IsActive(__instance, out MiniFarmerMenu? mini) && mini.isWithinBounds(x, y))

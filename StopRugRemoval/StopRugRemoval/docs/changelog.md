@@ -14,6 +14,7 @@
 * Crosscheck player spouse on load.
 * New behavior options for signs and crystalaria.
 * Tooltips now have buff durations.
+* Bomb confirm should now work better with other mods. 
 
 #### Version 1.1.3
 * Fix integration with GrowableGiantCrops/MoreGrassStarters.

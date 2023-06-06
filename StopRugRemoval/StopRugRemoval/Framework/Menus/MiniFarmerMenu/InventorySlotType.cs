@@ -26,9 +26,14 @@ internal enum InventorySlotType
     Boots = 40,
 
     /// <summary>
-    /// A <see cref="StardewValley.Objects.Clothing"/>
+    /// Pants, <seealso cref="StardewValley.Objects.Clothing"/>
     /// </summary>
-    Clothing = 69,
+    Pants = 68,
+
+    /// <summary>
+    /// A shirt, <seealso cref="StardewValley.Objects.Clothing"/>
+    /// </summary>
+    Shirt = 69,
 }
 
 /// <summary>

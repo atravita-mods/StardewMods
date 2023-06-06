@@ -57,8 +57,12 @@ internal sealed class MiniFarmerMenu : IClickableMenu
                     this.hoverText = newHoveredItem.getDescription();
                     this.hoverTitle = newHoveredItem.DisplayName;
                 }
+                return;
             }
         }
+
+        this.hoverItem = null;
+        this.hoverText = this.hoverTitle = string.Empty;
     }
 
     /// <inheritdoc />
@@ -124,8 +128,6 @@ internal sealed class MiniFarmerMenu : IClickableMenu
         {
             drawToolTip(b, this.hoverText, this.hoverTitle, this.hoverItem);
         }
-
-        this.drawMouse(b);
     }
 
     /// <inheritdoc />
@@ -136,13 +138,14 @@ internal sealed class MiniFarmerMenu : IClickableMenu
         this.AssignClickableComponents();
     }
 
+    /// <inheritdoc />
     public override void receiveLeftClick(int x, int y, bool playSound = true)
     {
         foreach (IInventorySlot<Item> item in this.equipmentIcons)
         {
             if (item.IsInBounds(x, y))
             {
-                var heldItem = Utility.PerformSpecialItemPlaceReplacement(this.ShopMenu.heldItem as Item);
+                Item heldItem = Utility.PerformSpecialItemPlaceReplacement(this.ShopMenu.heldItem as Item);
                 if (item.AssignItem(heldItem, out Item? prev, playSound))
                 {
                     this.ShopMenu.heldItem = prev;
@@ -157,13 +160,13 @@ internal sealed class MiniFarmerMenu : IClickableMenu
     private void AssignClickableComponents()
     {
         this.backdrop = new Rectangle(
-            x: this.xPositionOnScreen + this.width / 2 - 64,
+            x: this.xPositionOnScreen + (this.width / 2) - 64,
             y: this.yPositionOnScreen + 32,
             width: 128,
             height: 192);
         this.portrait = new ClickableComponent(
             new Rectangle(
-            x: this.xPositionOnScreen + this.width / 2 - 32,
+            x: this.xPositionOnScreen + (this.width / 2) - 32,
             y: this.yPositionOnScreen + 64,
             width: 64,
             height: 96),
@@ -198,15 +201,15 @@ internal sealed class MiniFarmerMenu : IClickableMenu
             name: "Hat",
             getItem: static () => Game1.player.hat.Value,
             setItem: static value => Game1.player.hat.Value = value));
-        this.equipmentIcons.Add(new InventorySlot<Clothing>(
-            type: InventorySlotType.Clothing,
+        this.equipmentIcons.Add(new ClothingSlot(
+            type: InventorySlotType.Shirt,
             x: this.xPositionOnScreen + this.width - 64 - 32,
             y: this.yPositionOnScreen + 32 + 64,
             name: "Shirt",
             getItem: static () => Game1.player.shirtItem.Value,
             setItem: static value => Game1.player.shirtItem.Value = value));
-        this.equipmentIcons.Add(new InventorySlot<Clothing>(
-            type: InventorySlotType.Clothing,
+        this.equipmentIcons.Add(new ClothingSlot(
+            type: InventorySlotType.Pants,
             x: this.xPositionOnScreen + this.width - 64 - 32,
             y: this.yPositionOnScreen + 32 + 128,
             name: "Pants",

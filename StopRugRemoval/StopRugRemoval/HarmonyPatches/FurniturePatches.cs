@@ -7,6 +7,8 @@ using HarmonyLib;
 
 using Microsoft.Xna.Framework;
 
+using StardewModdingAPI.Utilities;
+
 using StardewValley.BellsAndWhistles;
 using StardewValley.Objects;
 using StardewValley.TerrainFeatures;
@@ -21,7 +23,7 @@ namespace StopRugRemoval.HarmonyPatches;
 [SuppressMessage("StyleCop", "SA1313", Justification = StyleCopConstants.NamedForHarmony)]
 internal class FurniturePatches
 {
-    private static int ticks;
+    private static readonly PerScreen<int> ticks = new(createNewState: static () => 0);
 
     [HarmonyPostfix]
     [HarmonyPatch(nameof(Furniture.canBeRemoved))]
@@ -38,13 +40,13 @@ internal class FurniturePatches
             }
 
             Rectangle bounds = __instance.boundingBox.Value;
-            int tileX = bounds.X / 64;
-            int tileY = bounds.Y / 64;
+            int tileX = bounds.X / Game1.tileSize;
+            int tileY = bounds.Y / Game1.tileSize;
             ModEntry.ModMonitor.DebugOnlyLog($"Checking rug: {bounds.X / 64f}, {bounds.Y / 64f}, W/H {bounds.Width / 64f}/{bounds.Height / 64f}", LogLevel.Debug);
 
-            for (int x = 0; x < bounds.Width / 64; x++)
+            for (int x = 0; x < bounds.Width / Game1.tileSize; x++)
             {
-                for (int y = 0; y < bounds.Height / 64; y++)
+                for (int y = 0; y < bounds.Height / Game1.tileSize; y++)
                 {
                     if (!currentLocation.isTileLocationTotallyClearAndPlaceable(x + tileX, y + tileY))
                     {
@@ -127,10 +129,10 @@ internal class FurniturePatches
                 && ModEntry.Config.PreventRemovalFromTable
                 && !ModEntry.Config.FurniturePlacementKey.IsDown())
             {
-                if (Game1.ticks > ticks + 60)
+                if (Game1.ticks > ticks.Value + 60)
                 {
                     Game1.showRedMessage(I18n.TableRemovalMessage(keybind: ModEntry.Config.FurniturePlacementKey));
-                    ticks = Game1.ticks;
+                    ticks.Value = Game1.ticks;
                 }
                 __result = false;
                 return false;

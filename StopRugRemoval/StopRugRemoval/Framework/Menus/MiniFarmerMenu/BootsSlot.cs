@@ -19,4 +19,16 @@ internal sealed class BootsSlot : InventorySlot<Boots>
         : base(InventorySlotType.Boots, x, y, name, getItem, setItem)
     {
     }
+
+    /// <inheritdoc />
+    public override bool AssignItem(Item? item, out Item? prev, bool playSound)
+    {
+        if (base.AssignItem(item, out prev, playSound))
+        {
+            (prev as Boots)?.onUnequip();
+            (item as Boots)?.onEquip();
+            return true;
+        }
+        return false;
+    }
 }

@@ -1,4 +1,6 @@
-﻿using AtraShared.Utils.Extensions;
+﻿// Ignore Spelling: Clickable
+
+using AtraShared.Utils.Extensions;
 
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -14,11 +16,6 @@ namespace StopRugRemoval.Framework.Menus.MiniFarmerMenu;
 internal class InventorySlot<TObject> : IInventorySlot<TObject>
     where TObject : Item
 {
-    private readonly InventorySlotType type;
-    private readonly ClickableComponent clickable;
-    private readonly Func<TObject?> getItem;
-    private readonly Action<TObject?> setItem;
-
     /// <summary>
     /// Initializes a new instance of the <see cref="InventorySlot{TObject}"/> class.
     /// </summary>
@@ -30,41 +27,61 @@ internal class InventorySlot<TObject> : IInventorySlot<TObject>
     /// <param name="setItem">A function that sets an item into this slot.</param>
     internal InventorySlot(InventorySlotType type, int x, int y, string name, Func<TObject?> getItem, Action<TObject?> setItem)
     {
-        this.type = type;
-        this.clickable = new ClickableComponent(new Rectangle(x, y, 64, 64), name);
-        this.getItem = getItem;
-        this.setItem = setItem;
+        this.Type = type;
+        this.Clickable = new ClickableComponent(new Rectangle(x, y, 64, 64), name);
+        this.GetItem = getItem;
+        this.SetItem = setItem;
     }
 
+    /// <summary>
+    /// Gets the type of wearable this inventory slot refers to.
+    /// </summary>
+    protected InventorySlotType Type { get; init; }
+
+    /// <summary>
+    /// Gets the clickable component for this inventory slot.
+    /// </summary>
+    protected ClickableComponent Clickable { get; init; }
+
+    /// <summary>
+    /// Gets a function that gets the wearable instance.
+    /// </summary>
+    protected Func<TObject?> GetItem { get; init; }
+
+    /// <summary>
+    /// Gets a function that sets the wearable instance.
+    /// </summary>
+    protected Action<TObject?> SetItem { get; init; }
+
     /// <inheritdoc />
-    public string Name => this.clickable.name;
+    public string Name => this.Clickable.name;
 
     /// <inheritdoc />
     public void Draw(SpriteBatch b)
     {
-        TObject? item = this.getItem();
+        TObject? item = this.GetItem();
         b.Draw(
             texture: Game1.menuTexture,
-            destinationRectangle: this.clickable.bounds,
-            sourceRectangle: Game1.getSourceRectForStandardTileSheet(Game1.menuTexture, item is null ? (int)this.type : 10),
+            destinationRectangle: this.Clickable.bounds,
+            sourceRectangle: Game1.getSourceRectForStandardTileSheet(Game1.menuTexture, item is null ? (int)this.Type : 10),
             color: Color.White);
-        item?.drawInMenu(b, new Vector2(this.clickable.bounds.X, this.clickable.bounds.Y), this.clickable.scale, 1f, 0.866f, StackDrawType.Hide);
+        item?.drawInMenu(b, new Vector2(this.Clickable.bounds.X, this.Clickable.bounds.Y), this.Clickable.scale, 1f, 0.866f, StackDrawType.Hide);
     }
 
     /// <inheritdoc />
-    public bool IsInBounds(int x, int y) => this.clickable.containsPoint(x, y);
+    public bool IsInBounds(int x, int y) => this.Clickable.containsPoint(x, y);
 
     /// <inheritdoc />
     public bool TryHover(int x, int y, out Item? newHoveredItem)
     {
         if (this.IsInBounds(x, y))
         {
-            newHoveredItem = this.getItem();
-            this.clickable.scale = Math.Min(this.clickable.scale + 0.05f, 1.1f);
+            newHoveredItem = this.GetItem();
+            this.Clickable.scale = Math.Min(this.Clickable.scale + 0.05f, 1.1f);
             return true;
         }
         newHoveredItem = null;
-        this.clickable.scale = Math.Max(1, this.clickable.scale - 0.025f);
+        this.Clickable.scale = Math.Max(1, this.Clickable.scale - 0.025f);
         return false;
     }
 
@@ -76,8 +93,8 @@ internal class InventorySlot<TObject> : IInventorySlot<TObject>
     {
         if (this.CanAcceptItem(item))
         {
-            prev = this.getItem();
-            this.setItem(item as TObject);
+            prev = this.GetItem();
+            this.SetItem(item as TObject);
 
             if (playSound)
             {
@@ -93,7 +110,7 @@ internal class InventorySlot<TObject> : IInventorySlot<TObject>
     {
         if (item is TObject)
         {
-            this.type.PlayEquipSound();
+            this.Type.PlayEquipSound();
         }
         else
         {

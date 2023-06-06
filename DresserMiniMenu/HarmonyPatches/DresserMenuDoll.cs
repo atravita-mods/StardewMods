@@ -65,7 +65,7 @@ internal static class DresserMenuDoll
             }
             else if (__instance.storeContext == "Dresser")
             {
-                MiniMenu.Value = new(__instance);
+                MiniMenu.Value = new(__instance, Game1.player);
             }
         }
         catch (Exception ex)
@@ -169,6 +169,7 @@ internal static class DresserMenuDoll
         {
             try
             {
+                MiniMenu.Value.BeforeExit();
                 MiniMenu.Value.exitThisMenu();
                 MiniMenu.Value = null;
             }

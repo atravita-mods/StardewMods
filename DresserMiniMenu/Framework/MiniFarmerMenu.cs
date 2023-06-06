@@ -15,9 +15,13 @@ internal sealed class MiniFarmerMenu : IClickableMenu
 {
     private static bool blockRingSlots = false;
 
+    private readonly int lastFacingDirection;
     private readonly List<IInventorySlot<Item>> equipmentIcons = new();
     private ClickableComponent portrait;
     private Rectangle backdrop;
+
+    private ClickableTextureComponent leftArrow;
+    private ClickableTextureComponent rightArrow;
 
     #region hover
     private Item? hoverItem;
@@ -29,12 +33,21 @@ internal sealed class MiniFarmerMenu : IClickableMenu
     /// Initializes a new instance of the <see cref="MiniFarmerMenu"/> class.
     /// </summary>
     /// <param name="shopMenu">ShopMenu to hang out with.</param>
-    internal MiniFarmerMenu(ShopMenu shopMenu)
+    /// <param name="farmer">The farmer instance for this menu.</param>
+    internal MiniFarmerMenu(ShopMenu shopMenu, Farmer farmer)
         : base(shopMenu.xPositionOnScreen - 128, shopMenu.yPositionOnScreen + 480 - 16, 384, 256 - 4)
     {
         this.ShopMenu = shopMenu;
+        this.FarmerRef = farmer;
+        this.lastFacingDirection = farmer.FacingDirection;
+        this.FarmerRef.faceDirection(Game1.down);
         this.AssignClickableComponents();
     }
+
+    /// <summary>
+    /// Gets the farmer instance associated with this menu.
+    /// </summary>
+    internal Farmer FarmerRef { get; init; }
 
     /// <summary>
     /// Gets the shop (dresser) menu associated with this instance.
@@ -44,6 +57,9 @@ internal sealed class MiniFarmerMenu : IClickableMenu
     /// <inheritdoc />
     public override void performHoverAction(int x, int y)
     {
+        this.leftArrow.tryHover(x, y);
+        this.rightArrow.tryHover(x, y);
+
         foreach (IInventorySlot<Item> equip in this.equipmentIcons)
         {
             if (equip.TryHover(x, y, out Item? newHoveredItem))
@@ -95,36 +111,40 @@ internal sealed class MiniFarmerMenu : IClickableMenu
             this.backdrop,
             Color.White);
         FarmerRenderer.isDrawingForUI = true;
-        Game1.player.FarmerRenderer.draw(
+
+        // Much thanks to PeacefulEnd, who showed me the way to draw a spinny farmer correctly.
+        this.FarmerRef.FarmerRenderer.draw(
             b,
-            new FarmerSprite.AnimationFrame(0, Game1.player.bathingClothes.Value ? 108 : 0, secondaryArm: false, flip: false),
-            Game1.player.bathingClothes.Value ? 108 : 0,
-            new Rectangle(0, Game1.player.bathingClothes.Value ? 576 : 0, 16, 32),
+            this.FarmerRef.FarmerSprite.CurrentAnimationFrame,
+            this.FarmerRef.FarmerSprite.CurrentFrame,
+            this.FarmerRef.FarmerSprite.SourceRect,
             new Vector2(this.portrait.bounds.X, this.portrait.bounds.Y),
             Vector2.Zero,
             0.8f,
-            Game1.down,
             Color.White,
             0f,
             1f,
-            Game1.player);
+            this.FarmerRef);
         if (isDarkOut)
         {
-            Game1.player.FarmerRenderer.draw(
+            this.FarmerRef.FarmerRenderer.draw(
             b,
-            new FarmerSprite.AnimationFrame(0, Game1.player.bathingClothes.Value ? 108 : 0, secondaryArm: false, flip: false),
-            Game1.player.bathingClothes.Value ? 108 : 0,
-            new Rectangle(0, Game1.player.bathingClothes.Value ? 576 : 0, 16, 32),
+            this.FarmerRef.FarmerSprite.CurrentAnimationFrame,
+            this.FarmerRef.FarmerSprite.CurrentFrame,
+            this.FarmerRef.FarmerSprite.SourceRect,
             new Vector2(this.portrait.bounds.X, this.portrait.bounds.Y),
             Vector2.Zero,
             0.8f,
-            Game1.down,
             Color.DarkBlue * 0.3f,
             0f,
             1f,
-            Game1.player);
+            this.FarmerRef);
         }
+
         FarmerRenderer.isDrawingForUI = false;
+
+        this.leftArrow.draw(b);
+        this.rightArrow.draw(b);
 
         if (!string.IsNullOrEmpty(this.hoverText))
         {
@@ -143,14 +163,27 @@ internal sealed class MiniFarmerMenu : IClickableMenu
     /// <inheritdoc />
     public override void receiveLeftClick(int x, int y, bool playSound = true)
     {
-        foreach (IInventorySlot<Item> item in this.equipmentIcons)
+        if (this.leftArrow.containsPoint(x, y))
         {
-            if (item.IsInBounds(x, y))
+            int facing = (this.FarmerRef.FacingDirection + 1) % 4;
+            this.FarmerRef.faceDirection(facing);
+        }
+        else if (this.rightArrow.containsPoint(x, y))
+        {
+            int facing = (this.FarmerRef.FacingDirection + 3) % 4;
+            this.FarmerRef.faceDirection(facing);
+        }
+        else
+        {
+            foreach (IInventorySlot<Item> item in this.equipmentIcons)
             {
-                Item heldItem = Utility.PerformSpecialItemPlaceReplacement(this.ShopMenu.heldItem as Item);
-                if (item.AssignItem(heldItem, out Item? prev, playSound))
+                if (item.IsInBounds(x, y))
                 {
-                    this.ShopMenu.heldItem = Utility.PerformSpecialItemGrabReplacement(prev);
+                    Item heldItem = Utility.PerformSpecialItemPlaceReplacement(this.ShopMenu.heldItem as Item);
+                    if (item.AssignItem(heldItem, out Item? prev, playSound))
+                    {
+                        this.ShopMenu.heldItem = Utility.PerformSpecialItemGrabReplacement(prev);
+                    }
                 }
             }
         }
@@ -163,7 +196,17 @@ internal sealed class MiniFarmerMenu : IClickableMenu
     /// </summary>
     internal static void DisableRingSlots() => blockRingSlots = true;
 
+    /// <summary>
+    /// A method to call before exiting the menu.
+    /// </summary>
+    internal void BeforeExit()
+    {
+        this.FarmerRef.faceDirection(this.lastFacingDirection);
+    }
+
     [MemberNotNull(nameof(portrait))]
+    [MemberNotNull(nameof(leftArrow))]
+    [MemberNotNull(nameof(rightArrow))]
     private void AssignClickableComponents()
     {
         this.backdrop = new Rectangle(
@@ -178,6 +221,23 @@ internal sealed class MiniFarmerMenu : IClickableMenu
             width: 64,
             height: 96),
             name: "Portrait");
+
+        this.leftArrow = new(new Rectangle(
+            x: this.backdrop.X,
+            y: this.backdrop.Bottom - 44,
+            width: 48,
+            height: 44),
+            Game1.mouseCursors,
+            new Rectangle(352, 495, 12, 11),
+            Game1.pixelZoom);
+        this.rightArrow = new(new Rectangle(
+            x: this.backdrop.Right - 48,
+            y: this.backdrop.Bottom - 44,
+            width: 48,
+            height: 44),
+            Game1.mouseCursors,
+            new Rectangle(365, 495, 12, 11),
+            Game1.pixelZoom);
 
         // equipment icons.
         this.equipmentIcons.Clear();

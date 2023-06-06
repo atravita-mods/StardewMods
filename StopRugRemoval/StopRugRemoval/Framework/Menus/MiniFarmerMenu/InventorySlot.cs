@@ -33,6 +33,9 @@ internal class InventorySlot<TObject> : IInventorySlot<TObject>
         this.SetItem = setItem;
     }
 
+    /// <inheritdoc />
+    public string Name => this.Clickable.name;
+
     /// <summary>
     /// Gets the type of wearable this inventory slot refers to.
     /// </summary>
@@ -52,9 +55,6 @@ internal class InventorySlot<TObject> : IInventorySlot<TObject>
     /// Gets a function that sets the wearable instance.
     /// </summary>
     protected Action<TObject?> SetItem { get; init; }
-
-    /// <inheritdoc />
-    public string Name => this.Clickable.name;
 
     /// <inheritdoc />
     public void Draw(SpriteBatch b)

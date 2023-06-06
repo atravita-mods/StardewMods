@@ -25,7 +25,7 @@ internal sealed class ClothingSlot : InventorySlot<Clothing>
     internal ClothingSlot(InventorySlotType type, int x, int y, string name, Func<Clothing?> getItem, Action<Clothing?> setItem)
         : base(type, x, y, name, getItem, setItem)
     {
-        if (type is not InventorySlotType.Pants or InventorySlotType.Shirt)
+        if (type is not InventorySlotType.Pants && type is not InventorySlotType.Shirt)
         {
             ThrowHelper.ThrowArgumentException($"type must be InventorySlotType.Pants or InventorySlotType.Shirt");
         }

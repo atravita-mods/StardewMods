@@ -1,4 +1,6 @@
-﻿using AtraBase.Toolkit.Extensions;
+﻿// Ignore Spelling: Craftable Impl loc
+
+using AtraBase.Toolkit.Extensions;
 
 using AtraShared.Wrappers;
 

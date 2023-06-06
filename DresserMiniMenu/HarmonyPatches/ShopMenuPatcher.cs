@@ -4,7 +4,7 @@ using HarmonyLib;
 
 using StardewValley.Menus;
 
-namespace StopRugRemoval.HarmonyPatches.Niceties;
+namespace DresserMiniMenu.HarmonyPatches.Niceties;
 
 /// <summary>
 /// Adds patches to shop menu to make dressers take takes and weapons.
@@ -16,8 +16,7 @@ internal static class ShopMenuPatcher
     [HarmonyPatch(nameof(ShopMenu.setUpStoreForContext))]
     private static void Postfix(ShopMenu __instance)
     {
-        if (ModEntry.Config.Enabled
-            && __instance.storeContext == "Dresser")
+        if (__instance.storeContext == "Dresser")
         {
             if (ModEntry.Config.DressersAllowBobbers)
             {

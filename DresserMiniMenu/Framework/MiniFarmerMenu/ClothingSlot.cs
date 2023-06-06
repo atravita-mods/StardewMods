@@ -2,7 +2,7 @@
 
 using StardewValley.Objects;
 
-namespace StopRugRemoval.Framework.Menus.MiniFarmerMenu;
+namespace DresserMiniMenu.Framework.Menus.MiniFarmerMenu;
 
 /// <summary>
 /// A slot for clothing.

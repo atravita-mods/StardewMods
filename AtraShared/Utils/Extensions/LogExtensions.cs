@@ -3,8 +3,10 @@
 using System.Diagnostics;
 using System.Reflection;
 using System.Runtime.CompilerServices;
+
 using AtraBase.Toolkit;
-using AtraBase.Toolkit.Extensions;
+
+using HarmonyLib;
 
 namespace AtraShared.Utils.Extensions;
 
@@ -52,7 +54,7 @@ public static class LogExtensions
     [DebuggerHidden]
     public static void LogTranspilerError(this IMonitor monitor, MethodBase method, Exception ex)
     {
-        monitor.Log($"Mod crashed while transpiling {method.GetFullName()}, see log for details.", LogLevel.Error);
+        monitor.Log($"Mod crashed while transpiling {method.FullDescription()}, see log for details.", LogLevel.Error);
         monitor.Log(ex.ToString());
         monitor.Log($"Other patches on this method:");
         method.Snitch(monitor);

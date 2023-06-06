@@ -1,11 +1,16 @@
-﻿using System.Reflection.Emit;
-using System.Reflection;
+﻿using System.Reflection;
+using System.Reflection.Emit;
 using System.Runtime.CompilerServices;
 
 using AtraBase.Toolkit;
 
+using AtraCore.Framework.ReflectionManager;
+
 using AtraShared.ConstantsAndEnums;
 using AtraShared.Utils.Extensions;
+using AtraShared.Utils.HarmonyHelper;
+
+using DresserMiniMenu.Framework;
 
 using HarmonyLib;
 
@@ -15,11 +20,8 @@ using Microsoft.Xna.Framework.Graphics;
 using StardewModdingAPI.Utilities;
 
 using StardewValley.Menus;
-using StopRugRemoval.Framework.Menus.MiniFarmerMenu;
-using AtraCore.Framework.ReflectionManager;
-using AtraShared.Utils.HarmonyHelper;
 
-namespace StopRugRemoval.HarmonyPatches;
+namespace DresserMiniMenu.HarmonyPatches;
 
 /// <summary>
 /// Holds patches against ShopMenu to make minimenu a thing.
@@ -28,19 +30,21 @@ namespace StopRugRemoval.HarmonyPatches;
 [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = StyleCopConstants.NamedForHarmony)]
 internal static class DresserMenuDoll
 {
-    private static readonly PerScreen<MiniFarmerMenu?> _miniMenu = new();
+    private static readonly PerScreen<MiniFarmerMenu?> MiniMenu = new();
 
     [MethodImpl(TKConstants.Hot)]
     private static bool IsActive(ShopMenu instance, [NotNullWhen(true)] out MiniFarmerMenu? current)
     {
-        if (_miniMenu.Value?.ShopMenu is not null && ReferenceEquals(instance, _miniMenu.Value?.ShopMenu))
+        if (MiniMenu.Value?.ShopMenu is not null && ReferenceEquals(instance, MiniMenu.Value?.ShopMenu))
         {
-            current = _miniMenu.Value;
+            current = MiniMenu.Value;
             return true;
         }
         current = null;
         return false;
     }
+
+    private static bool IsActive(ShopMenu instance) => IsActive(instance, out _);
 
     [HarmonyPostfix]
     [HarmonyPatch(nameof(ShopMenu.setUpStoreForContext))]
@@ -50,11 +54,11 @@ internal static class DresserMenuDoll
         {
             if (!ModEntry.Config.DresserDressup)
             {
-                _miniMenu.Value = null;
+                MiniMenu.Value = null;
             }
             else if (__instance.storeContext == "Dresser")
             {
-                _miniMenu.Value = new(__instance);
+                MiniMenu.Value = new(__instance);
             }
         }
         catch (Exception ex)
@@ -99,7 +103,8 @@ internal static class DresserMenuDoll
                 new(OpCodes.Ldarg_1),
                 new(OpCodes.Call, typeof(DresserMenuDoll).GetCachedMethod(nameof(DrawMenu), ReflectionCache.FlagTypes.StaticFlags)),
             });
-            helper.Print();
+
+            // helper.Print();
             return helper.Render();
         }
         catch (Exception ex)
@@ -147,12 +152,12 @@ internal static class DresserMenuDoll
     [HarmonyPatch("cleanupBeforeExit")]
     private static void PrefixShutdown(ShopMenu __instance)
     {
-        if (_miniMenu.Value?.ShopMenu is not null && ReferenceEquals(__instance, _miniMenu.Value.ShopMenu))
+        if (MiniMenu.Value?.ShopMenu is not null && ReferenceEquals(__instance, MiniMenu.Value.ShopMenu))
         {
             try
             {
-                _miniMenu.Value.exitThisMenu();
-                _miniMenu.Value = null;
+                MiniMenu.Value.exitThisMenu();
+                MiniMenu.Value = null;
             }
             catch (Exception ex)
             {

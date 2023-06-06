@@ -1,6 +1,6 @@
 ﻿using Microsoft.Xna.Framework.Graphics;
 
-namespace StopRugRemoval.Framework.Menus.MiniFarmerMenu;
+namespace DresserMiniMenu.Framework.Menus.MiniFarmerMenu;
 
 /// <summary>
 /// An inventory slot.

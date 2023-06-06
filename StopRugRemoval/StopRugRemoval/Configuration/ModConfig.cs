@@ -182,24 +182,6 @@ internal sealed class ModConfig
     public SignBehavior SignBehavior { get; set; } = SignBehavior.Vanilla;
 
     /// <summary>
-    /// Gets or sets a value indicating whether dressers should allow weapons.
-    /// </summary>
-    [GMCMSection("Dresser", 35)]
-    public bool DressersAllowWeapons { get; set; } = true;
-
-    /// <summary>
-    /// Gets or sets a value indicating whether dressers should allow tackle.
-    /// </summary>
-    [GMCMSection("Dresser", 35)]
-    public bool DressersAllowBobbers { get; set; } = false;
-
-    /// <summary>
-    /// Gets or sets a value indicating whether the little mini farmer dress up menu should be drawn.
-    /// </summary>
-    [GMCMSection("Dresser", 35)]
-    public bool DresserDressup { get; set; } = true;
-
-    /// <summary>
     /// Gets or sets a value indicating whether or not to confirm bomb placement in safe areas.
     /// </summary>
     [GMCMDefaultIgnore]

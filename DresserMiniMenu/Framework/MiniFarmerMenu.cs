@@ -1,4 +1,5 @@
 ﻿using AtraShared.Utils.Extensions;
+using DresserMiniMenu.Framework.Menus.MiniFarmerMenu;
 
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -6,7 +7,7 @@ using Microsoft.Xna.Framework.Graphics;
 using StardewValley.Menus;
 using StardewValley.Objects;
 
-namespace StopRugRemoval.Framework.Menus.MiniFarmerMenu;
+namespace DresserMiniMenu.Framework;
 
 /// <summary>
 /// A little mini menu for farmer customization, mostly taken from <see cref="InventoryPage"/>.
@@ -160,13 +161,13 @@ internal sealed class MiniFarmerMenu : IClickableMenu
     private void AssignClickableComponents()
     {
         this.backdrop = new Rectangle(
-            x: this.xPositionOnScreen + (this.width / 2) - 64,
+            x: this.xPositionOnScreen + this.width / 2 - 64,
             y: this.yPositionOnScreen + 32,
             width: 128,
             height: 192);
         this.portrait = new ClickableComponent(
             new Rectangle(
-            x: this.xPositionOnScreen + (this.width / 2) - 32,
+            x: this.xPositionOnScreen + this.width / 2 - 32,
             y: this.yPositionOnScreen + 64,
             width: 64,
             height: 96),

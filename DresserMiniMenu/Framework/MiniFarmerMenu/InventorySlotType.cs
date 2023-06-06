@@ -2,7 +2,7 @@
 
 using NetEscapades.EnumGenerators;
 
-namespace StopRugRemoval.Framework.Menus;
+namespace DresserMiniMenu.Framework.Menus.MiniFarmerMenu;
 
 /// <summary>
 /// The type of item this is. Used for drawing the menu background.

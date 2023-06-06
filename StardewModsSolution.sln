@@ -120,9 +120,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CameraPan", "CameraPan\Came
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NPCArrows", "NPCArrows\NPCArrows.csproj", "{BDD2422A-52C7-4025-ABEA-2F878495F0EF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NovaNPCTest", "NovaNPCTest\NovaNPCTest.csproj", "{03C0C719-0365-49AF-B45A-16C38D767F01}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NovaNPCTest", "NovaNPCTest\NovaNPCTest.csproj", "{03C0C719-0365-49AF-B45A-16C38D767F01}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PokeBerries", "PokeBerries\PokeBerries.csproj", "{30385075-E142-4D12-9741-47191CF3ABDE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PokeBerries", "PokeBerries\PokeBerries.csproj", "{30385075-E142-4D12-9741-47191CF3ABDE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DresserMiniMenu", "DresserMiniMenu\DresserMiniMenu.csproj", "{F4410992-BC43-4922-990A-1B0544E24984}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -330,6 +332,10 @@ Global
 		{30385075-E142-4D12-9741-47191CF3ABDE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{30385075-E142-4D12-9741-47191CF3ABDE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{30385075-E142-4D12-9741-47191CF3ABDE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F4410992-BC43-4922-990A-1B0544E24984}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F4410992-BC43-4922-990A-1B0544E24984}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F4410992-BC43-4922-990A-1B0544E24984}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F4410992-BC43-4922-990A-1B0544E24984}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

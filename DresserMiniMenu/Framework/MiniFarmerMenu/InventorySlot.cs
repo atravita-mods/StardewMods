@@ -7,7 +7,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 using StardewValley.Menus;
 
-namespace StopRugRemoval.Framework.Menus.MiniFarmerMenu;
+namespace DresserMiniMenu.Framework.Menus.MiniFarmerMenu;
 
 /// <summary>
 /// A slot that corresponds to an inventory slot.

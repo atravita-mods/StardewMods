@@ -17,8 +17,9 @@ internal sealed class RingSlot : InventorySlot<Ring>
     /// <param name="name">slot name.</param>
     /// <param name="getItem">function to get the ring.</param>
     /// <param name="setItem">function to set the ring.</param>
-    internal RingSlot(int x, int y, string name, Func<Ring?> getItem, Action<Ring?> setItem)
-        : base(InventorySlotType.Ring, x, y, name, getItem, setItem)
+    /// <param name="isActive">Whether or not this slot is active.</param>
+    internal RingSlot(int x, int y, string name, Func<Ring?> getItem, Action<Ring?> setItem, bool isActive = true)
+        : base(InventorySlotType.Ring, x, y, name, getItem, setItem, isActive)
     {
     }
 

@@ -1,5 +1,4 @@
-﻿using AtraShared.Utils.Extensions;
-using DresserMiniMenu.Framework.Menus.MiniFarmerMenu;
+﻿using DresserMiniMenu.Framework.Menus.MiniFarmerMenu;
 
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -14,6 +13,8 @@ namespace DresserMiniMenu.Framework;
 /// </summary>
 internal sealed class MiniFarmerMenu : IClickableMenu
 {
+    private static bool blockRingSlots = false;
+
     private readonly List<IInventorySlot<Item>> equipmentIcons = new();
     private ClickableComponent portrait;
     private Rectangle backdrop;
@@ -157,17 +158,22 @@ internal sealed class MiniFarmerMenu : IClickableMenu
         base.receiveLeftClick(x, y, playSound);
     }
 
+    /// <summary>
+    /// Disables the ring slots.
+    /// </summary>
+    internal static void DisableRingSlots() => blockRingSlots = true;
+
     [MemberNotNull(nameof(portrait))]
     private void AssignClickableComponents()
     {
         this.backdrop = new Rectangle(
-            x: this.xPositionOnScreen + this.width / 2 - 64,
+            x: this.xPositionOnScreen + (this.width / 2) - 64,
             y: this.yPositionOnScreen + 32,
             width: 128,
             height: 192);
         this.portrait = new ClickableComponent(
             new Rectangle(
-            x: this.xPositionOnScreen + this.width / 2 - 32,
+            x: this.xPositionOnScreen + (this.width / 2) - 32,
             y: this.yPositionOnScreen + 64,
             width: 64,
             height: 96),
@@ -181,13 +187,15 @@ internal sealed class MiniFarmerMenu : IClickableMenu
             y: this.yPositionOnScreen + 32,
             name: "Left Ring",
             getItem: static () => Game1.player.leftRing.Value,
-            setItem: static (value) => Game1.player.leftRing.Value = value));
+            setItem: static (value) => Game1.player.leftRing.Value = value,
+            isActive: !blockRingSlots));
         this.equipmentIcons.Add(new RingSlot(
             x: this.xPositionOnScreen + 32,
             y: this.yPositionOnScreen + 32 + 64,
             name: "Right Ring",
             getItem: static () => Game1.player.rightRing.Value,
-            setItem: static (value) => Game1.player.rightRing.Value = value));
+            setItem: static (value) => Game1.player.rightRing.Value = value,
+            isActive: !blockRingSlots));
         this.equipmentIcons.Add(new BootsSlot(
             x: this.xPositionOnScreen + 32,
             y: this.yPositionOnScreen + 32 + 128,

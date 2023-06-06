@@ -1,4 +1,8 @@
-﻿using AtraShared.ConstantsAndEnums;
+﻿#if DEBUG
+using System.Diagnostics;
+#endif
+
+using AtraShared.ConstantsAndEnums;
 using AtraShared.Integrations;
 using AtraShared.Utils.Extensions;
 
@@ -34,7 +38,13 @@ internal sealed class ModEntry : Mod
 
         this.Monitor.Log($"Starting up: {this.ModManifest.UniqueID} - {typeof(ModEntry).Assembly.FullName}");
         helper.Events.GameLoop.GameLaunched += this.OnGameLaunch;
+#if DEBUG
+        Stopwatch sw = Stopwatch.StartNew();
+#endif
         this.ApplyPatches(new Harmony(this.ModManifest.UniqueID));
+#if DEBUG
+        this.Monitor.LogTimespan("Applying harmony patches", sw);
+#endif
     }
 
     private void ApplyPatches(Harmony harmony)

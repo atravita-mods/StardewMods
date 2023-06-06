@@ -32,6 +32,13 @@ internal static class DresserMenuDoll
 {
     private static readonly PerScreen<MiniFarmerMenu?> MiniMenu = new();
 
+    /// <summary>
+    /// Checks to see whether or not this instance of a ShopMenu has an active MiniFarmerMenu associated with it.
+    /// </summary>
+    /// <param name="instance">Shop menu instance.</param>
+    /// <returns>True if it has an active minifarmermenu, false otherwise.</returns>
+    internal static bool IsActive(ShopMenu instance) => IsActive(instance, out _);
+
     [MethodImpl(TKConstants.Hot)]
     private static bool IsActive(ShopMenu instance, [NotNullWhen(true)] out MiniFarmerMenu? current)
     {
@@ -44,7 +51,7 @@ internal static class DresserMenuDoll
         return false;
     }
 
-    private static bool IsActive(ShopMenu instance) => IsActive(instance, out _);
+    #region setup
 
     [HarmonyPostfix]
     [HarmonyPatch(nameof(ShopMenu.setUpStoreForContext))]
@@ -66,6 +73,27 @@ internal static class DresserMenuDoll
             ModEntry.ModMonitor.LogError("setting up mini dresser menu", ex);
         }
     }
+
+    [HarmonyPostfix]
+    [HarmonyPatch(nameof(ShopMenu.gameWindowSizeChanged))]
+    private static void PostfixResize(ShopMenu __instance, Rectangle oldBounds, Rectangle newBounds)
+    {
+        if (IsActive(__instance, out MiniFarmerMenu? mini))
+        {
+            try
+            {
+                mini.gameWindowSizeChanged(oldBounds, newBounds);
+            }
+            catch (Exception ex)
+            {
+                ModEntry.ModMonitor.LogError("changing window size for mini farmer menu", ex);
+            }
+        }
+    }
+
+    #endregion
+
+    #region draw methods.
 
     private static void DrawMenu(ShopMenu __instance, SpriteBatch b)
     {
@@ -114,22 +142,7 @@ internal static class DresserMenuDoll
         return null;
     }
 
-    [HarmonyPostfix]
-    [HarmonyPatch(nameof(ShopMenu.gameWindowSizeChanged))]
-    private static void PostfixResize(ShopMenu __instance, Rectangle oldBounds, Rectangle newBounds)
-    {
-        if (IsActive(__instance, out MiniFarmerMenu? mini))
-        {
-            try
-            {
-                mini.gameWindowSizeChanged(oldBounds, newBounds);
-            }
-            catch (Exception ex)
-            {
-                ModEntry.ModMonitor.LogError("changing window size for mini farmer menu", ex);
-            }
-        }
-    }
+    #endregion
 
     [HarmonyPostfix]
     [HarmonyPatch(nameof(ShopMenu.performHoverAction))]
@@ -166,16 +179,87 @@ internal static class DresserMenuDoll
         }
     }
 
+    #region interaction
+
     [HarmonyPrefix]
     [HarmonyPriority(Priority.High)]
     [HarmonyPatch(nameof(ShopMenu.receiveLeftClick))]
     private static bool PrefixRecieveClick(ShopMenu __instance, int x, int y, bool playSound)
     {
-        if (IsActive(__instance, out MiniFarmerMenu? mini) && mini.isWithinBounds(x, y))
+        try
         {
-            mini.receiveLeftClick(x, y, playSound);
-            return false;
+            if (IsActive(__instance, out MiniFarmerMenu? mini))
+            {
+                if (mini.isWithinBounds(x, y))
+                {
+                    mini.receiveLeftClick(x, y, playSound);
+                    return false;
+                }
+                else if (mini.ShopMenu?.heldItem is not null)
+                {
+                    if (mini.ShopMenu.IsWithinShopMenu(x, y)
+                        && mini.ShopMenu.onSell(mini.ShopMenu.heldItem))
+                    {
+                        mini.ShopMenu.heldItem = null;
+                        return false;
+                    }
+                }
+                else if (mini.ShopMenu?.inventory.leftClick(x, y, null, playSound) is Item pickup)
+                {
+                    mini.ShopMenu.heldItem = pickup;
+                    return false;
+                }
+            }
         }
+        catch (Exception ex)
+        {
+            ModEntry.ModMonitor.LogError("handling left click on smol menu", ex);
+        }
+
         return true;
     }
+
+    [HarmonyPrefix]
+    [HarmonyPriority(Priority.High)]
+    [HarmonyPatch(nameof(ShopMenu.receiveRightClick))]
+    private static bool PrefixRecieveRightClick(ShopMenu __instance, int x, int y, bool playSound)
+    {
+        try
+        {
+            if (IsActive(__instance, out MiniFarmerMenu? mini))
+            {
+                if (mini.isWithinBounds(x, y))
+                {
+                    mini.receiveLeftClick(x, y, playSound);
+                    return false;
+                }
+                else if (mini.ShopMenu?.heldItem is not null)
+                {
+                    if (mini.ShopMenu.IsWithinShopMenu(x, y)
+                        && mini.ShopMenu.onSell(mini.ShopMenu.heldItem))
+                    {
+                        mini.ShopMenu.heldItem = null;
+                        return false;
+                    }
+                }
+                else if (mini.ShopMenu?.inventory.rightClick(x, y, null, playSound) is Item pickup)
+                {
+                    mini.ShopMenu.heldItem = pickup;
+                    return false;
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            ModEntry.ModMonitor.LogError("handling right click on smol menu", ex);
+        }
+
+        return true;
+    }
+
+    #endregion
+
+    private static bool IsWithinShopMenu(this ShopMenu shop, int x, int y)
+        => x >= shop.xPositionOnScreen && x < shop.xPositionOnScreen + shop.width
+        && y >= shop.yPositionOnScreen && y < shop.yPositionOnScreen + shop.height - 220;
 }

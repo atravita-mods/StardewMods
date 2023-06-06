@@ -7,6 +7,8 @@ using Microsoft.Xna.Framework.Graphics;
 
 using StardewValley.Menus;
 
+using AtraUtils = AtraShared.Utils.Utils;
+
 namespace DresserMiniMenu.Framework.Menus.MiniFarmerMenu;
 
 /// <summary>
@@ -25,12 +27,14 @@ internal class InventorySlot<TObject> : IInventorySlot<TObject>
     /// <param name="name">The name of the component.</param>
     /// <param name="getItem">A function that gets the relevant item.</param>
     /// <param name="setItem">A function that sets an item into this slot.</param>
-    internal InventorySlot(InventorySlotType type, int x, int y, string name, Func<TObject?> getItem, Action<TObject?> setItem)
+    /// <param name="isActive">Whether or not this slot should be active.</param>
+    internal InventorySlot(InventorySlotType type, int x, int y, string name, Func<TObject?> getItem, Action<TObject?> setItem, bool isActive = true)
     {
         this.Type = type;
         this.Clickable = new ClickableComponent(new Rectangle(x, y, 64, 64), name);
         this.GetItem = getItem;
         this.SetItem = setItem;
+        this.IsActive = isActive;
     }
 
     /// <inheritdoc />
@@ -56,6 +60,11 @@ internal class InventorySlot<TObject> : IInventorySlot<TObject>
     /// </summary>
     protected Action<TObject?> SetItem { get; init; }
 
+    /// <summary>
+    /// Gets a value indicating whether this inventory slot should be interactable.
+    /// </summary>
+    protected bool IsActive { get; init; }
+
     /// <inheritdoc />
     public void Draw(SpriteBatch b)
     {
@@ -64,8 +73,23 @@ internal class InventorySlot<TObject> : IInventorySlot<TObject>
             texture: Game1.menuTexture,
             destinationRectangle: this.Clickable.bounds,
             sourceRectangle: Game1.getSourceRectForStandardTileSheet(Game1.menuTexture, item is null ? (int)this.Type : 10),
-            color: Color.White);
-        item?.drawInMenu(b, new Vector2(this.Clickable.bounds.X, this.Clickable.bounds.Y), this.Clickable.scale, 1f, 0.866f, StackDrawType.Hide);
+            color: this.IsActive ? Color.White : Color.DarkGray);
+        item?.drawInMenu(
+            b,
+            new Vector2(this.Clickable.bounds.X, this.Clickable.bounds.Y),
+            this.Clickable.scale,
+            1f,
+            0.866f,
+            StackDrawType.Hide,
+            this.IsActive ? Color.White : Color.SlateGray,
+            true);
+        if (!this.IsActive)
+        {
+            b.Draw(
+                texture: AtraUtils.Pixel,
+                destinationRectangle: this.Clickable.bounds,
+                color: Color.DarkGray * 0.5f);
+        }
     }
 
     /// <inheritdoc />
@@ -77,7 +101,10 @@ internal class InventorySlot<TObject> : IInventorySlot<TObject>
         if (this.IsInBounds(x, y))
         {
             newHoveredItem = this.GetItem();
-            this.Clickable.scale = Math.Min(this.Clickable.scale + 0.05f, 1.1f);
+            if (this.IsActive)
+            {
+                this.Clickable.scale = Math.Min(this.Clickable.scale + 0.05f, 1.1f);
+            }
             return true;
         }
         newHoveredItem = null;
@@ -86,12 +113,12 @@ internal class InventorySlot<TObject> : IInventorySlot<TObject>
     }
 
     /// <inheritdoc />
-    public virtual bool CanAcceptItem(Item? item) => item is null || item is TObject;
+    public virtual bool CanAcceptItem(Item? item) => this.IsActive && (item is null || item is TObject);
 
     /// <inheritdoc />
     public virtual bool AssignItem(Item? item, out Item? prev, bool playSound)
     {
-        if (this.CanAcceptItem(item))
+        if (this.IsActive && this.CanAcceptItem(item))
         {
             prev = this.GetItem();
             this.SetItem(item as TObject);

@@ -22,8 +22,9 @@ internal sealed class ClothingSlot : InventorySlot<Clothing>
     /// <param name="name">The name, for debugging.</param>
     /// <param name="getItem">The function that gets the item.</param>
     /// <param name="setItem">The function that sets the item.</param>
-    internal ClothingSlot(InventorySlotType type, int x, int y, string name, Func<Clothing?> getItem, Action<Clothing?> setItem)
-        : base(type, x, y, name, getItem, setItem)
+    /// <param name="isActive">Whether or not this slot should be active.</param>
+    internal ClothingSlot(InventorySlotType type, int x, int y, string name, Func<Clothing?> getItem, Action<Clothing?> setItem, bool isActive = true)
+        : base(type, x, y, name, getItem, setItem, isActive)
     {
         if (type is not InventorySlotType.Pants && type is not InventorySlotType.Shirt)
         {

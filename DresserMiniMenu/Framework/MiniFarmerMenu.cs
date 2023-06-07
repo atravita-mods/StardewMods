@@ -389,11 +389,19 @@ internal sealed class MiniFarmerMenu : IClickableMenu
                 switch (i % 3)
                 {
                     case 0: // top
-                        slot.Clickable.downNeighborID = slot.Clickable.myID + 1;
+                        if (i != this.equipmentIcons.Count - 1)
+                        {
+                            slot.Clickable.downNeighborID = slot.Clickable.myID + 1;
+                        }
+
                         slot.Clickable.upNeighborID = this.ShopMenu.forSaleButtons[^1].myID;
                         break;
                     case 1: // middle
-                        slot.Clickable.downNeighborID = slot.Clickable.myID + 1;
+                        if (i != this.equipmentIcons.Count - 1)
+                        {
+                            slot.Clickable.downNeighborID = slot.Clickable.myID + 1;
+                        }
+
                         slot.Clickable.upNeighborID = slot.Clickable.myID - 1;
                         break;
                     case 2: // bottom.
@@ -405,7 +413,7 @@ internal sealed class MiniFarmerMenu : IClickableMenu
             List<ClickableComponent> inventoryButtons = this.ShopMenu.inventory.GetBorder(InventoryMenu.BorderSide.Left);
             for (int i = this.equipmentIcons.Count - 1; i > this.equipmentIcons.Count - 4; i--)
             {
-                var inventoryID = i % 3;
+                int inventoryID = i % 3;
                 if (inventoryButtons.Count <= inventoryID)
                 {
                     continue;

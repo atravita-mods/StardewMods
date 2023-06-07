@@ -1,4 +1,6 @@
-﻿using DresserMiniMenu.Framework.Menus.MiniFarmerMenu;
+﻿using AtraShared.Utils.Extensions;
+
+using DresserMiniMenu.Framework.Menus.MiniFarmerMenu;
 
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -346,62 +348,78 @@ internal sealed class MiniFarmerMenu : IClickableMenu
             getItem: static () => Game1.player.pantsItem.Value,
             setItem: static value => Game1.player.pantsItem.Value = value));
 
-        for (int i = 0; i < this.equipmentIcons.Count; i++)
-        {
-            IInventorySlot<Item> slot = this.equipmentIcons[i];
-            slot.Clickable.myID = EQUIPMENT + i;
+        this.AssignIds();
+    }
 
-            // right edge
-            if (i < 3)
+    private void AssignIds()
+    {
+        try
+        {
+            for (int i = 0; i < this.equipmentIcons.Count; i++)
             {
-                slot.Clickable.rightNeighborID = LEFTARROW;
-            }
-            else
-            {
-                // the second row is to the right of the portrait.
-                if (i < 6)
+                IInventorySlot<Item> slot = this.equipmentIcons[i];
+                slot.Clickable.myID = EQUIPMENT + i;
+
+                // right edge
+                if (i < 3)
                 {
-                    slot.Clickable.leftNeighborID = RIGHTARROW;
+                    slot.Clickable.rightNeighborID = LEFTARROW;
                 }
                 else
                 {
-                    slot.Clickable.leftNeighborID = EQUIPMENT + i - 3;
+                    // the second row is to the right of the portrait.
+                    if (i < 6)
+                    {
+                        slot.Clickable.leftNeighborID = RIGHTARROW;
+                    }
+                    else
+                    {
+                        slot.Clickable.leftNeighborID = EQUIPMENT + i - 3;
+                    }
+
+                    // assign the one to the right.
+                    int right = i + 3;
+                    if (right < this.equipmentIcons.Count)
+                    {
+                        slot.Clickable.rightNeighborID = EQUIPMENT + right;
+                    }
                 }
 
-                // assign the one to the right.
-                int right = i + 3;
-                if (right < this.equipmentIcons.Count)
+                // assign up and down.
+                switch (i % 3)
                 {
-                    slot.Clickable.rightNeighborID = EQUIPMENT + right;
+                    case 0: // top
+                        slot.Clickable.downNeighborID = slot.Clickable.myID + 1;
+                        slot.Clickable.upNeighborID = this.ShopMenu.forSaleButtons[^1].myID;
+                        break;
+                    case 1: // middle
+                        slot.Clickable.downNeighborID = slot.Clickable.myID + 1;
+                        slot.Clickable.upNeighborID = slot.Clickable.myID - 1;
+                        break;
+                    case 2: // bottom.
+                        slot.Clickable.upNeighborID = slot.Clickable.myID - 1;
+                        break;
                 }
             }
 
-
-            // assign up and down.
-            switch (i % 3)
+            List<ClickableComponent> inventoryButtons = this.ShopMenu.inventory.GetBorder(InventoryMenu.BorderSide.Left);
+            for (int i = this.equipmentIcons.Count - 1; i > this.equipmentIcons.Count - 4; i--)
             {
-                case 0: // top
-                    slot.Clickable.downNeighborID = slot.Clickable.myID + 1;
-                    slot.Clickable.upNeighborID = this.ShopMenu.forSaleButtons[^1].myID;
-                    break;
-                case 1: // middle
-                    slot.Clickable.downNeighborID = slot.Clickable.myID + 1;
-                    slot.Clickable.upNeighborID = slot.Clickable.myID - 1;
-                    break;
-                case 2: // bottom.
-                    slot.Clickable.upNeighborID = slot.Clickable.myID - 1;
-                    break;
+                var inventoryID = i % 3;
+                if (inventoryButtons.Count <= inventoryID)
+                {
+                    continue;
+                }
+                IInventorySlot<Item> slot = this.equipmentIcons[i];
+                ClickableComponent inventoryButton = inventoryButtons[inventoryID];
+
+                slot.Clickable.rightNeighborID = inventoryButton.myID;
+                inventoryButton.leftNeighborID = slot.Clickable.myID;
             }
         }
-
-        List<ClickableComponent> inventoryButtons = this.ShopMenu.inventory.GetBorder(InventoryMenu.BorderSide.Left);
-        for (int i = this.equipmentIcons.Count - 1; i > this.equipmentIcons.Count - 4; i--)
+        catch (Exception ex)
         {
-            IInventorySlot<Item> slot = this.equipmentIcons[i];
-            ClickableComponent inventoryButton = inventoryButtons[i % 3];
-
-            slot.Clickable.rightNeighborID = inventoryButton.myID;
-            inventoryButton.leftNeighborID = slot.Clickable.myID;
+            ModEntry.ModMonitor.LogError("assigning clickable component IDs", ex);
         }
     }
 }

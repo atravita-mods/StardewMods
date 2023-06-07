@@ -22,10 +22,10 @@ internal sealed class MiniFarmerMenu : IClickableMenu
     private static bool blockRingSlots = false;
 
     private readonly int lastFacingDirection;
-    private readonly List<IInventorySlot<Item>> equipmentIcons = new();
-    private ClickableComponent portrait;
-    private Rectangle backdrop;
 
+    private readonly List<IInventorySlot<Item>> equipmentIcons = new();
+    private Rectangle portrait;
+    private Rectangle backdrop;
     private ClickableTextureComponent leftArrow;
     private ClickableTextureComponent rightArrow;
 
@@ -124,7 +124,7 @@ internal sealed class MiniFarmerMenu : IClickableMenu
             this.FarmerRef.FarmerSprite.CurrentAnimationFrame,
             this.FarmerRef.FarmerSprite.CurrentFrame,
             this.FarmerRef.FarmerSprite.SourceRect,
-            new Vector2(this.portrait.bounds.X, this.portrait.bounds.Y),
+            new Vector2(this.portrait.X, this.portrait.Y),
             Vector2.Zero,
             0.8f,
             Color.White,
@@ -138,7 +138,7 @@ internal sealed class MiniFarmerMenu : IClickableMenu
             this.FarmerRef.FarmerSprite.CurrentAnimationFrame,
             this.FarmerRef.FarmerSprite.CurrentFrame,
             this.FarmerRef.FarmerSprite.SourceRect,
-            new Vector2(this.portrait.bounds.X, this.portrait.bounds.Y),
+            new Vector2(this.portrait.X, this.portrait.Y),
             Vector2.Zero,
             0.8f,
             Color.DarkBlue * 0.3f,
@@ -269,19 +269,18 @@ internal sealed class MiniFarmerMenu : IClickableMenu
             y: this.yPositionOnScreen + 32,
             width: 128,
             height: 192);
-        this.portrait = new ClickableComponent(
-            new Rectangle(
+        this.portrait = new(
             x: this.xPositionOnScreen + (this.width / 2) - 32,
             y: this.yPositionOnScreen + 64,
             width: 64,
-            height: 96),
-            name: "Portrait");
+            height: 96);
 
+        const int ArrowHeight = 44;
         this.leftArrow = new(new Rectangle(
             x: this.backdrop.X,
-            y: this.backdrop.Bottom - 44,
+            y: this.backdrop.Bottom - ArrowHeight,
             width: 48,
-            height: 44),
+            height: ArrowHeight),
             Game1.mouseCursors,
             new Rectangle(352, 495, 12, 11),
             Game1.pixelZoom)
@@ -292,9 +291,9 @@ internal sealed class MiniFarmerMenu : IClickableMenu
         };
         this.rightArrow = new(new Rectangle(
             x: this.backdrop.Right - 48,
-            y: this.backdrop.Bottom - 44,
+            y: this.backdrop.Bottom - ArrowHeight,
             width: 48,
-            height: 44),
+            height: ArrowHeight),
             Game1.mouseCursors,
             new Rectangle(365, 495, 12, 11),
             Game1.pixelZoom)

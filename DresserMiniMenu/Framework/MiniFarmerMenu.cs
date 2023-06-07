@@ -351,24 +351,33 @@ internal sealed class MiniFarmerMenu : IClickableMenu
             IInventorySlot<Item> slot = this.equipmentIcons[i];
             slot.Clickable.myID = EQUIPMENT + i;
 
+            // right edge
             if (i < 3)
             {
                 slot.Clickable.rightNeighborID = LEFTARROW;
             }
-            else if (i < 6)
+            else
             {
-                slot.Clickable.leftNeighborID = RIGHTARROW;
+                // the second row is to the right of the portrait.
+                if (i < 6)
+                {
+                    slot.Clickable.leftNeighborID = RIGHTARROW;
+                }
+                else
+                {
+                    slot.Clickable.leftNeighborID = EQUIPMENT + i - 3;
+                }
+
+                // assign the one to the right.
                 int right = i + 3;
                 if (right < this.equipmentIcons.Count)
                 {
                     slot.Clickable.rightNeighborID = EQUIPMENT + right;
                 }
             }
-            else
-            {
-                slot.Clickable.leftNeighborID = EQUIPMENT + i - 3;
-            }
 
+
+            // assign up and down.
             switch (i % 3)
             {
                 case 0: // top

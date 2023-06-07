@@ -11,7 +11,6 @@ using AtraShared.Utils.Extensions;
 using AtraShared.Utils.HarmonyHelper;
 
 using DresserMiniMenu.Framework;
-
 using HarmonyLib;
 
 using Microsoft.Xna.Framework;
@@ -39,8 +38,14 @@ internal static class DresserMenuDoll
     /// <returns>True if it has an active minifarmermenu, false otherwise.</returns>
     internal static bool IsActive(ShopMenu instance) => IsActive(instance, out _);
 
+    /// <summary>
+    /// Checks to see whether or not this instance of a ShopMenu has an active MiniFarmerMenu associated with it.
+    /// </summary>
+    /// <param name="instance">Shop menu instance.</param>
+    /// <param name="current">The current minifarmermenu.</param>
+    /// <returns>True if it has an active minifarmermenu, false otherwise.</returns>
     [MethodImpl(TKConstants.Hot)]
-    private static bool IsActive(ShopMenu instance, [NotNullWhen(true)] out MiniFarmerMenu? current)
+    internal static bool IsActive(ShopMenu instance, [NotNullWhen(true)] out MiniFarmerMenu? current)
     {
         if (MiniMenu.Value?.ShopMenu is not null && ReferenceEquals(instance, MiniMenu.Value?.ShopMenu))
         {
@@ -63,7 +68,7 @@ internal static class DresserMenuDoll
             {
                 MiniMenu.Value = null;
             }
-            else if (__instance.storeContext == "Dresser")
+            else if (__instance.storeContext == ShopMenuPatcher.DRESSER)
             {
                 MiniMenu.Value = new(__instance, Game1.player);
             }

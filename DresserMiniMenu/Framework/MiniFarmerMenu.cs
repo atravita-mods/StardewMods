@@ -191,10 +191,44 @@ internal sealed class MiniFarmerMenu : IClickableMenu
         base.receiveLeftClick(x, y, playSound);
     }
 
+    /// <inheritdoc />
+    public override void emergencyShutDown()
+    {
+        base.emergencyShutDown();
+
+        // try to not lose someone's items.
+        // add to inventory, and if that doesn't work, add to the dresser
+        // and if THAT doesn't work, drop it at the player's feet.
+        if (this.ShopMenu.heldItem is not null && !this.FarmerRef.addItemToInventoryBool(this.ShopMenu.heldItem as Item)
+            && !this.ShopMenu.onSell(this.ShopMenu.heldItem))
+        {
+            Game1.currentLocation.debris.Add(new(this.ShopMenu.heldItem as Item, this.FarmerRef.Position));
+        }
+
+        this.ShopMenu.heldItem = null;
+    }
+
     /// <summary>
     /// Disables the ring slots.
     /// </summary>
     internal static void DisableRingSlots() => blockRingSlots = true;
+
+    /// <summary>
+    /// Checks to see if the menu can hold this item.
+    /// </summary>
+    /// <param name="item">The item to check.</param>
+    /// <returns>True if the menu can take this item.</returns>
+    internal bool CanAcceptThisItem(Item item)
+    {
+        foreach (IInventorySlot<Item> slot in this.equipmentIcons)
+        {
+            if (slot.CanAcceptItem(item))
+            {
+                return true;
+            }
+        }
+        return false;
+    }
 
     /// <summary>
     /// A method to call before exiting the menu.

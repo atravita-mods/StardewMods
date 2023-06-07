@@ -1,5 +1,7 @@
 ﻿using Microsoft.Xna.Framework.Graphics;
 
+using StardewValley.Menus;
+
 namespace DresserMiniMenu.Framework.Menus.MiniFarmerMenu;
 
 /// <summary>
@@ -13,6 +15,11 @@ internal interface IInventorySlot<out TObject>
     /// The name of this inventory slot.
     /// </summary>
     string Name { get; }
+
+    /// <summary>
+    /// Gets the clickable component for this inventory slot.
+    /// </summary>
+    ClickableComponent Clickable { get; }
 
     /// <summary>
     /// Draws the inventory slot.

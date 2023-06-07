@@ -13,6 +13,10 @@ namespace DresserMiniMenu.Framework;
 /// </summary>
 internal sealed class MiniFarmerMenu : IClickableMenu
 {
+    private const int LEFTARROW = 1000;
+    private const int RIGHTARROW = 1010;
+    private const int EQUIPMENT = 1030;
+
     private static bool blockRingSlots = false;
 
     private readonly int lastFacingDirection;
@@ -238,6 +242,21 @@ internal sealed class MiniFarmerMenu : IClickableMenu
         this.FarmerRef.faceDirection(this.lastFacingDirection);
     }
 
+    /// <summary>
+    /// Adds my clickable components to the menu's list.
+    /// </summary>
+    /// <param name="menu">Shopmenu to add to.</param>
+    internal void AddClickables(ShopMenu menu)
+    {
+        menu.allClickableComponents.Add(this.leftArrow);
+        menu.allClickableComponents.Add(this.rightArrow);
+
+        foreach (IInventorySlot<Item> slot in this.equipmentIcons)
+        {
+            menu.allClickableComponents.Add(slot.Clickable);
+        }
+    }
+
     [MemberNotNull(nameof(portrait))]
     [MemberNotNull(nameof(leftArrow))]
     [MemberNotNull(nameof(rightArrow))]
@@ -263,7 +282,12 @@ internal sealed class MiniFarmerMenu : IClickableMenu
             height: 44),
             Game1.mouseCursors,
             new Rectangle(352, 495, 12, 11),
-            Game1.pixelZoom);
+            Game1.pixelZoom)
+        {
+            myID = LEFTARROW,
+            leftNeighborID = EQUIPMENT,
+            rightNeighborID = RIGHTARROW,
+        };
         this.rightArrow = new(new Rectangle(
             x: this.backdrop.Right - 48,
             y: this.backdrop.Bottom - 44,
@@ -271,11 +295,15 @@ internal sealed class MiniFarmerMenu : IClickableMenu
             height: 44),
             Game1.mouseCursors,
             new Rectangle(365, 495, 12, 11),
-            Game1.pixelZoom);
+            Game1.pixelZoom)
+        {
+            myID = RIGHTARROW,
+            leftNeighborID = LEFTARROW,
+            rightNeighborID = EQUIPMENT + 4,
+        };
 
         // equipment icons.
         this.equipmentIcons.Clear();
-
         this.equipmentIcons.Add(new RingSlot(
             x: this.xPositionOnScreen + 32,
             y: this.yPositionOnScreen + 32,
@@ -317,5 +345,54 @@ internal sealed class MiniFarmerMenu : IClickableMenu
             name: "Pants",
             getItem: static () => Game1.player.pantsItem.Value,
             setItem: static value => Game1.player.pantsItem.Value = value));
+
+        for (int i = 0; i < this.equipmentIcons.Count; i++)
+        {
+            IInventorySlot<Item> slot = this.equipmentIcons[i];
+            slot.Clickable.myID = EQUIPMENT + i;
+
+            if (i < 3)
+            {
+                slot.Clickable.rightNeighborID = LEFTARROW;
+            }
+            else if (i < 6)
+            {
+                slot.Clickable.leftNeighborID = RIGHTARROW;
+                int right = i + 3;
+                if (right < this.equipmentIcons.Count)
+                {
+                    slot.Clickable.rightNeighborID = EQUIPMENT + right;
+                }
+            }
+            else
+            {
+                slot.Clickable.leftNeighborID = EQUIPMENT + i - 3;
+            }
+
+            switch (i % 3)
+            {
+                case 0: // top
+                    slot.Clickable.downNeighborID = slot.Clickable.myID + 1;
+                    slot.Clickable.upNeighborID = this.ShopMenu.forSaleButtons[^1].myID;
+                    break;
+                case 1: // middle
+                    slot.Clickable.downNeighborID = slot.Clickable.myID + 1;
+                    slot.Clickable.upNeighborID = slot.Clickable.myID - 1;
+                    break;
+                case 2: // bottom.
+                    slot.Clickable.upNeighborID = slot.Clickable.myID - 1;
+                    break;
+            }
+        }
+
+        List<ClickableComponent> inventoryButtons = this.ShopMenu.inventory.GetBorder(InventoryMenu.BorderSide.Left);
+        for (int i = this.equipmentIcons.Count - 1; i > this.equipmentIcons.Count - 4; i--)
+        {
+            IInventorySlot<Item> slot = this.equipmentIcons[i];
+            ClickableComponent inventoryButton = inventoryButtons[i % 3];
+
+            slot.Clickable.rightNeighborID = inventoryButton.myID;
+            inventoryButton.leftNeighborID = slot.Clickable.myID;
+        }
     }
 }

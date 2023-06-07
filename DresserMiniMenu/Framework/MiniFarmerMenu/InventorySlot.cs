@@ -40,15 +40,13 @@ internal class InventorySlot<TObject> : IInventorySlot<TObject>
     /// <inheritdoc />
     public string Name => this.Clickable.name;
 
+    /// <inheritdoc />
+    public ClickableComponent Clickable { get; init; }
+
     /// <summary>
     /// Gets the type of wearable this inventory slot refers to.
     /// </summary>
     protected InventorySlotType Type { get; init; }
-
-    /// <summary>
-    /// Gets the clickable component for this inventory slot.
-    /// </summary>
-    protected ClickableComponent Clickable { get; init; }
 
     /// <summary>
     /// Gets a function that gets the wearable instance.

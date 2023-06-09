@@ -31,14 +31,9 @@ using AtraUtils = AtraShared.Utils.Utils;
 namespace AtraCore;
 
 /// <inheritdoc />
-internal sealed class ModEntry : Mod
+internal sealed class ModEntry : BaseMod
 {
     private MigrationManager? migrator;
-
-    /// <summary>
-    /// Gets the logger for this mod.
-    /// </summary>
-    internal static IMonitor ModMonitor { get; private set; } = null!;
 
     /// <summary>
     /// Gets the config for this mod.
@@ -48,9 +43,9 @@ internal sealed class ModEntry : Mod
     /// <inheritdoc />
     public override void Entry(IModHelper helper)
     {
-        this.Monitor.Log($"Starting up: {this.ModManifest.UniqueID} - {typeof(ModEntry).Assembly.FullName}");
+        base.Entry(helper);
+
         I18n.Init(helper.Translation);
-        ModMonitor = this.Monitor;
         AssetManager.Initialize(helper.GameContent);
         QuestTracker.Init(helper.Multiplayer, this.ModManifest.UniqueID);
 

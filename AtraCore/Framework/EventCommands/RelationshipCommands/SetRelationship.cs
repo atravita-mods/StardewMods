@@ -302,6 +302,14 @@ internal sealed class SetRelationship : IEventCommand
             {
                 this.SendMoveRequest($"{npc.Name}:{Game1.player.UniqueMultiplayerID}");
             }
+            try
+            {
+                _freeLoveReload.Value?.Invoke(Game1.player);
+            }
+            catch (Exception ex)
+            {
+                ModEntry.ModMonitor.LogError("asking Free Love to refresh spouse cache", ex);
+            }
         }
 
         error = null;
@@ -378,7 +386,15 @@ internal sealed class SetRelationship : IEventCommand
             npc.DefaultPosition = Utility.PointToVector2(house.getSpouseBedSpot(npc.Name)) * 64f;
         }
         ClearNPCSchedule(npc);
-        _freeLoveReload.Value?.Invoke(Game1.player);
+
+        try
+        {
+            _freeLoveReload.Value?.Invoke(farmer);
+        }
+        catch (Exception ex)
+        {
+            ModEntry.ModMonitor.LogError("asking Free Love to refresh spouse cache", ex);
+        }
     }
 
     private void SendMoveRequest(string message)

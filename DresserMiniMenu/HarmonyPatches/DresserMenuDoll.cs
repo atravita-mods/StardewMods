@@ -15,6 +15,7 @@ using HarmonyLib;
 
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
 
 using StardewModdingAPI.Utilities;
 
@@ -30,6 +31,7 @@ namespace DresserMiniMenu.HarmonyPatches;
 internal static class DresserMenuDoll
 {
     private static readonly PerScreen<MiniFarmerMenu?> MiniMenu = new();
+    private static readonly PerScreen<int> LastKeyboardTick = new(() => 0);
 
     /// <summary>
     /// Checks to see whether or not this instance of a ShopMenu has an active MiniFarmerMenu associated with it.
@@ -187,6 +189,31 @@ internal static class DresserMenuDoll
 
     #region interaction
 
+    [HarmonyPostfix]
+    [HarmonyPatch(nameof(ShopMenu.switchTab))]
+    private static void PostfixSwitchTab(ShopMenu __instance)
+    {
+        if (IsActive(__instance, out MiniFarmerMenu? mini))
+        {
+            mini.ApplyFilter();
+        }
+    }
+
+    [HarmonyPostfix]
+    [HarmonyPatch(nameof(ShopMenu.update))]
+    private static void PostfixUpdate(ShopMenu __instance, GameTime time)
+    {
+        if (IsActive(__instance, out MiniFarmerMenu? mini))
+        {
+            mini.update(time);
+            if (Game1.ticks > LastKeyboardTick.Value + 20)
+            {
+                LastKeyboardTick.Value = Game1.ticks;
+                mini.UpdateForFilter();
+            }
+        }
+    }
+
     [HarmonyPrefix]
     [HarmonyPriority(Priority.High)]
     [HarmonyPatch(nameof(ShopMenu.receiveLeftClick))]
@@ -196,7 +223,11 @@ internal static class DresserMenuDoll
         {
             if (IsActive(__instance, out MiniFarmerMenu? mini))
             {
-                if (mini.isWithinBounds(x, y))
+                if (mini.TryClickFloatingElements(x, y, playSound))
+                {
+                    return false;
+                }
+                else if (mini.isWithinBounds(x, y))
                 {
                     mini.receiveLeftClick(x, y, playSound);
                     return false;
@@ -262,6 +293,12 @@ internal static class DresserMenuDoll
 
         return true;
     }
+
+    [HarmonyPrefix]
+    [HarmonyPriority(Priority.High)]
+    [HarmonyPatch(nameof(ShopMenu.receiveKeyPress))]
+    private static bool PrefixKeyPress(ShopMenu __instance)
+        => !IsActive(__instance, out MiniFarmerMenu? mini) || !mini.HasKeyboard;
 
     #endregion
 

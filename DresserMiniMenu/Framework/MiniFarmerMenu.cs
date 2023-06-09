@@ -8,6 +8,8 @@ using Microsoft.Xna.Framework.Graphics;
 using StardewValley.Menus;
 using StardewValley.Objects;
 
+using AtraUtils = AtraShared.Utils.Utils;
+
 namespace DresserMiniMenu.Framework;
 
 /// <summary>
@@ -19,18 +21,34 @@ internal sealed class MiniFarmerMenu : IClickableMenu
     private const int RIGHTARROW = 1010;
     private const int EQUIPMENT = 1030;
 
+    private const int BASEWIDTH = 384;
+    private const int BASEHEIGHT = 252;
     private static bool blockRingSlots = false;
-
     private readonly int lastFacingDirection;
 
+    #region clickables
     private readonly List<IInventorySlot<Item>> equipmentIcons = new();
     private Rectangle portrait;
     private Rectangle backdrop;
-    private ClickableTextureComponent leftArrow;
-    private ClickableTextureComponent rightArrow;
+    private ClickableTextureComponent rotateLeftArrow;
+    private ClickableTextureComponent rotateRightArrow;
+
+    // hair
+    private ClickableTextureComponent leftHairArrow;
+    private ClickableTextureComponent rightHairArrow;
+    int hairIndex;
+    #endregion
+
+    #region floating
+    private Rectangle floating;
+    private string? lastFilter;
+    private readonly TextBox textbox = new(null, null, Game1.smallFont, Game1.textColor);
+    private Rectangle effectiveTextboxArea;
+    #endregion
 
     #region hover
-    private Item? hoverItem;
+    [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1306:Field names should begin with lower-case letter", Justification = "Named for Lookup Anything.")]
+    private Item? HoveredItem;
     private string? hoverText;
     private string? hoverTitle;
     #endregion
@@ -41,13 +59,21 @@ internal sealed class MiniFarmerMenu : IClickableMenu
     /// <param name="shopMenu">ShopMenu to hang out with.</param>
     /// <param name="farmer">The farmer instance for this menu.</param>
     internal MiniFarmerMenu(ShopMenu shopMenu, Farmer farmer)
-        : base(shopMenu.xPositionOnScreen - 128, shopMenu.yPositionOnScreen + 480 - 16, 384, 256 - 4)
+        : base(shopMenu.xPositionOnScreen - 128, shopMenu.yPositionOnScreen + 480 - 16, BASEWIDTH, BASEHEIGHT)
     {
         this.ShopMenu = shopMenu;
         this.FarmerRef = farmer;
         this.lastFacingDirection = farmer.FacingDirection;
         this.FarmerRef.faceDirection(Game1.down);
         this.AssignClickableComponents();
+
+        // textbox functions
+        this.textbox.OnBackspacePressed += this.OnBackspacePressed;
+        this.textbox.OnTabPressed += this.OnEntered;
+        this.textbox.OnEnterPressed += this.OnEntered;
+
+        // hair
+        this.hairIndex = Farmer.GetAllHairstyleIndices().IndexOf(farmer.hair.Value);
     }
 
     /// <summary>
@@ -60,11 +86,19 @@ internal sealed class MiniFarmerMenu : IClickableMenu
     /// </summary>
     internal ShopMenu ShopMenu { get; init; }
 
+    /// <summary>
+    /// Gets a value indicating whether or not this menu should take all keyboard input.
+    /// </summary>
+    internal bool HasKeyboard => this.textbox.Selected;
+
     /// <inheritdoc />
     public override void performHoverAction(int x, int y)
     {
-        this.leftArrow.tryHover(x, y);
-        this.rightArrow.tryHover(x, y);
+        this.leftHairArrow.tryHover(x, y);
+        this.rightHairArrow.tryHover(x, y);
+
+        this.rotateLeftArrow.tryHover(x, y);
+        this.rotateRightArrow.tryHover(x, y);
 
         foreach (IInventorySlot<Item> equip in this.equipmentIcons)
         {
@@ -72,12 +106,12 @@ internal sealed class MiniFarmerMenu : IClickableMenu
             {
                 if (newHoveredItem is null)
                 {
-                    this.hoverItem = null;
+                    this.HoveredItem = null;
                     this.hoverText = this.hoverTitle = string.Empty;
                 }
-                else if (!ReferenceEquals(this.hoverItem, newHoveredItem))
+                else if (!ReferenceEquals(this.HoveredItem, newHoveredItem))
                 {
-                    this.hoverItem = newHoveredItem;
+                    this.HoveredItem = newHoveredItem;
                     this.hoverText = newHoveredItem.getDescription();
                     this.hoverTitle = newHoveredItem.DisplayName;
                 }
@@ -85,7 +119,7 @@ internal sealed class MiniFarmerMenu : IClickableMenu
             }
         }
 
-        this.hoverItem = null;
+        this.HoveredItem = null;
         this.hoverText = this.hoverTitle = string.Empty;
     }
 
@@ -149,12 +183,24 @@ internal sealed class MiniFarmerMenu : IClickableMenu
 
         FarmerRenderer.isDrawingForUI = false;
 
-        this.leftArrow.draw(b);
-        this.rightArrow.draw(b);
+        var hair = this.FarmerRef.hair.Value.ToString();
+        var hairSize = Game1.smallFont.MeasureString(hair);
+        Utility.drawTextWithShadow(b, hair, Game1.smallFont, new (this.backdrop.X + (this.backdrop.Width / 2) - (hairSize.X / 2), this.backdrop.Y - 24), Game1.textColor);
+        this.leftHairArrow.draw(b);
+        this.rightHairArrow.draw(b);
+
+        this.rotateLeftArrow.draw(b);
+        this.rotateRightArrow.draw(b);
+
+        // floating bar
+#if DEBUG
+        b.Draw(AtraUtils.Pixel, this.floating, Color.Aquamarine);
+#endif
+        this.textbox.Draw(b);
 
         if (!string.IsNullOrEmpty(this.hoverText))
         {
-            drawToolTip(b, this.hoverText, this.hoverTitle, this.hoverItem);
+            drawToolTip(b, this.hoverText, this.hoverTitle, this.HoveredItem);
         }
     }
 
@@ -169,15 +215,27 @@ internal sealed class MiniFarmerMenu : IClickableMenu
     /// <inheritdoc />
     public override void receiveLeftClick(int x, int y, bool playSound = true)
     {
-        if (this.leftArrow.containsPoint(x, y))
+        if (this.rotateLeftArrow.containsPoint(x, y))
         {
             int facing = (this.FarmerRef.FacingDirection + 1) % 4;
             this.FarmerRef.faceDirection(facing);
         }
-        else if (this.rightArrow.containsPoint(x, y))
+        else if (this.rotateRightArrow.containsPoint(x, y))
         {
             int facing = (this.FarmerRef.FacingDirection + 3) % 4;
             this.FarmerRef.faceDirection(facing);
+        }
+        else if (this.leftHairArrow.containsPoint(x, y))
+        {
+            var all_hair = Farmer.GetAllHairstyleIndices();
+            this.hairIndex = (this.hairIndex - 1 + all_hair.Count) % all_hair.Count;
+            this.FarmerRef.changeHairStyle(all_hair[this.hairIndex]);
+        }
+        else if (this.rightHairArrow.containsPoint(x, y))
+        {
+            var all_hair = Farmer.GetAllHairstyleIndices();
+            this.hairIndex = (this.hairIndex + 1) % all_hair.Count;
+            this.FarmerRef.changeHairStyle(all_hair[this.hairIndex]);
         }
         else
         {
@@ -195,6 +253,33 @@ internal sealed class MiniFarmerMenu : IClickableMenu
         }
 
         base.receiveLeftClick(x, y, playSound);
+    }
+
+    /// <inheritdoc />
+    public override void update(GameTime time)
+    {
+        base.update(time);
+        this.textbox.Update();
+    }
+
+    /// <summary>
+    /// Handles clicks on the floating submenu.
+    /// </summary>
+    /// <param name="x">X location.</param>
+    /// <param name="y">Y location.</param>
+    /// <param name="playSound">Whether or not sounds should be played.</param>
+    /// <returns>Whether the click was handled.</returns>
+    public bool TryClickFloatingElements(int x, int y, bool playSound = true)
+    {
+        if (this.floating.Contains(x, y))
+        {
+            if (this.effectiveTextboxArea.Contains(x, y))
+            {
+                this.textbox.SelectMe();
+                return true;
+            }
+        }
+        return false;
     }
 
     /// <inheritdoc />
@@ -250,8 +335,8 @@ internal sealed class MiniFarmerMenu : IClickableMenu
     /// <param name="menu">Shopmenu to add to.</param>
     internal void AddClickables(ShopMenu menu)
     {
-        menu.allClickableComponents.Add(this.leftArrow);
-        menu.allClickableComponents.Add(this.rightArrow);
+        menu.allClickableComponents.Add(this.rotateLeftArrow);
+        menu.allClickableComponents.Add(this.rotateRightArrow);
 
         foreach (IInventorySlot<Item> slot in this.equipmentIcons)
         {
@@ -259,27 +344,90 @@ internal sealed class MiniFarmerMenu : IClickableMenu
         }
     }
 
+    /// <summary>
+    /// Updates the filter given the text in the box.
+    /// </summary>
+    /// <param name="force">Force update even if nothing has changed.</param>
+    internal void UpdateForFilter(bool force = false)
+    {
+        if (!force && this.lastFilter == this.textbox.Text)
+        {
+            return;
+        }
+
+        this.lastFilter = this.textbox.Text;
+        this.ShopMenu.applyTab();
+        this.ApplyFilter();
+    }
+
+    /// <summary>
+    /// Applies the current filters the list of items in the dresser-shop. Doesn't actually reset it first.
+    /// </summary>
+    internal void ApplyFilter()
+    {
+        if (!string.IsNullOrWhiteSpace(this.textbox.Text))
+        {
+            string filter = this.textbox.Text.Trim();
+            List<ISalable> filtered = new(this.ShopMenu.forSale.Count);
+            foreach (ISalable? item in this.ShopMenu.forSale)
+            {
+                if (item.DisplayName.Contains(filter, StringComparison.InvariantCultureIgnoreCase))
+                {
+                    filtered.Add(item);
+                }
+            }
+            this.ShopMenu.forSale = filtered;
+        }
+
+        if (Game1.options.snappyMenus && Game1.options.gamepadControls)
+        {
+            this.snapCursorToCurrentSnappedComponent();
+        }
+        this.ShopMenu.currentItemIndex = Math.Clamp(this.ShopMenu.currentItemIndex, 0, Math.Max(0, this.ShopMenu.forSale.Count - 4));
+    }
+
     [MemberNotNull(nameof(portrait))]
-    [MemberNotNull(nameof(leftArrow))]
-    [MemberNotNull(nameof(rightArrow))]
+    [MemberNotNull(nameof(rotateLeftArrow))]
+    [MemberNotNull(nameof(rotateRightArrow))]
+    [MemberNotNull(nameof(leftHairArrow))]
+    [MemberNotNull(nameof(rightHairArrow))]
     private void AssignClickableComponents()
     {
         this.backdrop = new Rectangle(
             x: this.xPositionOnScreen + (this.width / 2) - 64,
-            y: this.yPositionOnScreen + 32,
+            y: this.yPositionOnScreen + 32 + 8,
             width: 128,
             height: 192);
         this.portrait = new(
             x: this.xPositionOnScreen + (this.width / 2) - 32,
-            y: this.yPositionOnScreen + 64,
+            y: this.yPositionOnScreen + 64 + 8,
             width: 64,
             height: 96);
 
         const int ArrowHeight = 44;
-        this.leftArrow = new(new Rectangle(
-            x: this.backdrop.X,
+        const int ArrowWidth = 48;
+        this.leftHairArrow = new(new Rectangle(
+            x: this.backdrop.X - 8,
+            y: this.backdrop.Y - ArrowHeight + 20,
+            width: ArrowWidth,
+            height: ArrowHeight
+            ),
+            Game1.mouseCursors,
+            new Rectangle(352, 495, 12, 11),
+            3);
+        this.rightHairArrow = new(new Rectangle(
+            x: this.backdrop.Right - 33 + 8,
+            y: this.backdrop.Y - ArrowHeight + 20,
+            width: ArrowWidth,
+            height: ArrowHeight),
+            Game1.mouseCursors,
+            new Rectangle(365, 495, 12, 11),
+            3);
+
+        this.rotateLeftArrow = new(new Rectangle(
+            x: this.backdrop.X - 8,
             y: this.backdrop.Bottom - ArrowHeight,
-            width: 48,
+            width: ArrowWidth,
             height: ArrowHeight),
             Game1.mouseCursors,
             new Rectangle(352, 495, 12, 11),
@@ -289,10 +437,10 @@ internal sealed class MiniFarmerMenu : IClickableMenu
             leftNeighborID = EQUIPMENT,
             rightNeighborID = RIGHTARROW,
         };
-        this.rightArrow = new(new Rectangle(
-            x: this.backdrop.Right - 48,
+        this.rotateRightArrow = new(new Rectangle(
+            x: this.backdrop.Right - ArrowWidth + 8,
             y: this.backdrop.Bottom - ArrowHeight,
-            width: 48,
+            width: ArrowWidth,
             height: ArrowHeight),
             Game1.mouseCursors,
             new Rectangle(365, 495, 12, 11),
@@ -346,6 +494,15 @@ internal sealed class MiniFarmerMenu : IClickableMenu
             name: "Pants",
             getItem: static () => Game1.player.pantsItem.Value,
             setItem: static value => Game1.player.pantsItem.Value = value));
+
+        // hoverbar.
+        this.floating = new(this.xPositionOnScreen + BASEWIDTH + 8, this.yPositionOnScreen + BASEHEIGHT + 8, 720, 80);
+        this.textbox.X = this.floating.X + 8;
+        this.textbox.Y = this.floating.Y + 16;
+        this.textbox.Width = 256;
+        this.textbox.Height = 192;
+
+        this.effectiveTextboxArea = new Rectangle(this.textbox.X, this.textbox.Y - 8, this.textbox.Width + 8, 72);
 
         this.AssignIds();
     }
@@ -429,4 +586,23 @@ internal sealed class MiniFarmerMenu : IClickableMenu
             ModEntry.ModMonitor.LogError("assigning clickable component IDs", ex);
         }
     }
+
+    #region searchbox
+    private void OnEntered(TextBox sender)
+    {
+        this.UpdateForFilter();
+    }
+
+    private void OnBackspacePressed(TextBox sender)
+    {
+        if (!string.IsNullOrEmpty(sender.Text))
+        {
+            sender.Text = sender.Text[..^1];
+        }
+        if (string.IsNullOrWhiteSpace(sender.Text))
+        {
+            this.UpdateForFilter();
+        }
+    }
+    #endregion
 }

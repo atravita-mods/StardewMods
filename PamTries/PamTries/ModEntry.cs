@@ -1,4 +1,5 @@
 ﻿using AtraCore.Framework.Caches;
+using AtraCore.Framework.Internal;
 using AtraCore.Utilities;
 
 using AtraShared.ConstantsAndEnums;
@@ -23,7 +24,7 @@ using StardewModdingAPI.Events;
 namespace PamTries;
 
 /// <inheritdoc />
-internal sealed class ModEntry : Mod
+internal sealed class ModEntry : BaseMod
 {
     private static readonly string[] SyncedConversationTopics = new string[2] { "PamTriesRehab", "PamTriesRehabHoneymoon" };
     private static PamMood mood = PamMood.neutral;
@@ -32,27 +33,23 @@ internal sealed class ModEntry : Mod
     private MigrationManager? migrator;
 
     /// <summary>
-    /// Gets the logger for this mod.
-    /// </summary>
-    internal static IMonitor ModMonitor { get; private set; } = null!;
-
-    /// <summary>
     /// Gets the scheduling tools for this mod.
     /// </summary>
     internal static ScheduleUtilityFunctions ScheduleUtilityFunctions { get; private set; } = null!;
 
+    /// <summary>
+    /// Gets the value of Pam's mood.
+    /// </summary>
     internal static PamMood PamMood => mood;
 
     /// <inheritdoc />
     public override void Entry(IModHelper helper)
     {
+        base.Entry(helper);
+
         I18n.Init(helper.Translation);
         ScheduleUtilityFunctions = new(this.Monitor, this.Helper.Translation);
         AssetManager.Initialize(helper.GameContent);
-
-        this.Monitor.Log($"Starting up: {this.ModManifest.UniqueID} - {typeof(ModEntry).Assembly.FullName}");
-
-        ModMonitor = this.Monitor;
 
         helper.Events.GameLoop.GameLaunched += this.OnGameLaunch;
         helper.Events.GameLoop.DayStarted += this.DayStarted;

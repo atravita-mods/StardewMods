@@ -1,5 +1,7 @@
 ﻿#if DEBUG
 using System.Diagnostics;
+
+using AtraCore.Framework.Internal;
 #endif
 
 using AtraShared.ConstantsAndEnums;
@@ -17,13 +19,8 @@ using AtraUtils = AtraShared.Utils.Utils;
 namespace DresserMiniMenu;
 
 /// <inheritdoc />
-internal sealed class ModEntry : Mod
+internal sealed class ModEntry : BaseMod
 {
-    /// <summary>
-    /// Gets the logger for this file.
-    /// </summary>
-    internal static IMonitor ModMonitor { get; private set; } = null!;
-
     /// <summary>
     /// Gets the config instance for this mod.
     /// </summary>
@@ -32,11 +29,10 @@ internal sealed class ModEntry : Mod
     /// <inheritdoc/>
     public override void Entry(IModHelper helper)
     {
-        ModMonitor = this.Monitor;
+        base.Entry(helper);
         I18n.Init(helper.Translation);
         Config = AtraUtils.GetConfigOrDefault<ModConfig>(helper, this.Monitor);
 
-        this.Monitor.Log($"Starting up: {this.ModManifest.UniqueID} - {typeof(ModEntry).Assembly.FullName}");
         helper.Events.GameLoop.GameLaunched += this.OnGameLaunch;
 #if DEBUG
         Stopwatch sw = Stopwatch.StartNew();

@@ -5,6 +5,8 @@ using System.Runtime.CompilerServices;
 using AtraBase.Toolkit;
 using AtraBase.Toolkit.Extensions;
 
+using AtraCore.Framework.Internal;
+
 using AtraShared.ConstantsAndEnums;
 using AtraShared.Integrations;
 using AtraShared.Utils;
@@ -32,7 +34,7 @@ namespace CameraPan;
 [SuppressMessage("StyleCop.CSharp.OrderingRules", "SA1204:Static elements should appear before instance elements", Justification = "Reviewed.")]
 [SuppressMessage("StyleCop.CSharp.OrderingRules", "SA1201:Elements should appear in the correct order", Justification = StyleCopErrorConsts.AccessorsNearFields)]
 [SuppressMessage("StyleCop.CSharp.OrderingRules", "SA1202:Elements should be ordered by access", Justification = "Reviewed.")]
-internal sealed class ModEntry : Mod
+internal sealed class ModEntry : BaseMod
 {
     /// <summary>
     /// The integer ID of the camera item.
@@ -93,11 +95,6 @@ internal sealed class ModEntry : Mod
     private static StringUtils stringUtils = null!;
 
     /// <summary>
-    /// Gets the logging instance for this mod.
-    /// </summary>
-    internal static IMonitor ModMonitor { get; private set; } = null!;
-
-    /// <summary>
     /// Gets a message to draw if the camera button is hovered over.
     /// </summary>
     internal static string CameraHoverMessage { get; private set; } = string.Empty;
@@ -121,7 +118,7 @@ internal sealed class ModEntry : Mod
     public override void Entry(IModHelper helper)
     {
         I18n.Init(helper.Translation);
-        ModMonitor = this.Monitor;
+        base.Entry(helper);
         Config = AtraUtils.GetConfigOrDefault<ModConfig>(helper, this.Monitor);
         stringUtils = new StringUtils(this.Monitor);
 

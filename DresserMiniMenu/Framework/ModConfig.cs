@@ -21,4 +21,9 @@ public sealed class ModConfig
     /// Gets or sets a value indicating whether the little mini farmer dress up menu should be drawn.
     /// </summary>
     public bool DresserDressup { get; set; } = true;
+
+    /// <summary>
+    /// Gets or sets a value indicating whether or not to draw in the hair selection arrows.
+    /// </summary>
+    public bool HairArrows { get; set; } = true;
 }

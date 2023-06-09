@@ -12,5 +12,8 @@
   "DressersAllowWeapons.title": "Dressers Allow Weapons",
   "DressersAllowWeapons.description": "If enabled, dressers will store weapons.",
   "DresserDressup.title": "Dresser Dressup",
-  "DresserDressup.description": "If enabled, allows you to get dressed from the dresser."
+  "DresserDressup.description": "If enabled, allows you to get dressed from the dresser.",
+
+  "HairArrows.title": "Hair Arrows",
+  "HairArrows.description": "If enabled, allows selection of hair on the mini dresser menu."
 }

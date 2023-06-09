@@ -19,6 +19,12 @@ internal class InventorySlot<TObject> : IInventorySlot<TObject>
     where TObject : Item
 {
     /// <summary>
+    /// The size of an inventory icon.
+    /// </summary>
+    [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1310:Field names should not contain underscore", Justification = "Reviewed.")]
+    internal const int INVENTORY_SLOT_SIZE = 64;
+
+    /// <summary>
     /// Initializes a new instance of the <see cref="InventorySlot{TObject}"/> class.
     /// </summary>
     /// <param name="type">The type of the inventory item.</param>
@@ -31,7 +37,7 @@ internal class InventorySlot<TObject> : IInventorySlot<TObject>
     internal InventorySlot(InventorySlotType type, int x, int y, string name, Func<TObject?> getItem, Action<TObject?> setItem, bool isActive = true)
     {
         this.Type = type;
-        this.Clickable = new ClickableComponent(new Rectangle(x, y, 64, 64), name);
+        this.Clickable = new ClickableComponent(new Rectangle(x, y, INVENTORY_SLOT_SIZE, INVENTORY_SLOT_SIZE), name);
         this.GetItem = getItem;
         this.SetItem = setItem;
         this.IsActive = isActive;
@@ -92,6 +98,23 @@ internal class InventorySlot<TObject> : IInventorySlot<TObject>
 
     /// <inheritdoc />
     public bool IsInBounds(int x, int y) => this.Clickable.containsPoint(x, y);
+
+    /// <summary>
+    /// Updates the position of this inventory slot.
+    /// </summary>
+    /// <param name="x">New X position.</param>
+    /// <param name="y">New Y position.</param>
+    public void UpdatePosition(int? x, int? y)
+    {
+        if (x is not null)
+        {
+            this.Clickable.bounds.X = x.Value;
+        }
+        if (y is not null)
+        {
+            this.Clickable.bounds.Y = y.Value;
+        }
+    }
 
     /// <inheritdoc />
     public bool TryHover(int x, int y, out Item? newHoveredItem)

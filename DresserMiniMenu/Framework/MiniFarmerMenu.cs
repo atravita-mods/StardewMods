@@ -34,8 +34,8 @@ internal sealed class MiniFarmerMenu : IClickableMenu
     private ClickableTextureComponent rotateRightArrow;
 
     // hair
-    private ClickableTextureComponent leftHairArrow;
-    private ClickableTextureComponent rightHairArrow;
+    private ClickableTextureComponent? leftHairArrow;
+    private ClickableTextureComponent? rightHairArrow;
     int hairIndex;
     #endregion
 
@@ -94,8 +94,8 @@ internal sealed class MiniFarmerMenu : IClickableMenu
     /// <inheritdoc />
     public override void performHoverAction(int x, int y)
     {
-        this.leftHairArrow.tryHover(x, y);
-        this.rightHairArrow.tryHover(x, y);
+        this.leftHairArrow?.tryHover(x, y);
+        this.rightHairArrow?.tryHover(x, y);
 
         this.rotateLeftArrow.tryHover(x, y);
         this.rotateRightArrow.tryHover(x, y);
@@ -150,9 +150,9 @@ internal sealed class MiniFarmerMenu : IClickableMenu
             isDarkOut ? Game1.nightbg : Game1.daybg,
             this.backdrop,
             Color.White);
-        FarmerRenderer.isDrawingForUI = true;
 
         // Much thanks to PeacefulEnd, who showed me the way to draw a spinny farmer correctly.
+        FarmerRenderer.isDrawingForUI = true;
         this.FarmerRef.FarmerRenderer.draw(
             b,
             this.FarmerRef.FarmerSprite.CurrentAnimationFrame,
@@ -180,14 +180,21 @@ internal sealed class MiniFarmerMenu : IClickableMenu
             1f,
             this.FarmerRef);
         }
-
         FarmerRenderer.isDrawingForUI = false;
 
-        var hair = this.FarmerRef.hair.Value.ToString();
-        var hairSize = Game1.smallFont.MeasureString(hair);
-        Utility.drawTextWithShadow(b, hair, Game1.smallFont, new (this.backdrop.X + (this.backdrop.Width / 2) - (hairSize.X / 2), this.backdrop.Y - 24), Game1.textColor);
-        this.leftHairArrow.draw(b);
-        this.rightHairArrow.draw(b);
+        if (ModEntry.Config.HairArrows)
+        {
+            string hair = this.FarmerRef.hair.Value.ToString();
+            Vector2 hairSize = Game1.smallFont.MeasureString(hair);
+            Utility.drawTextWithShadow(
+                b,
+                hair,
+                Game1.smallFont,
+                new(this.backdrop.X + (this.backdrop.Width / 2) - (hairSize.X / 2), this.backdrop.Y - 24),
+                Game1.textColor);
+            this.leftHairArrow?.draw(b);
+            this.rightHairArrow?.draw(b);
+        }
 
         this.rotateLeftArrow.draw(b);
         this.rotateRightArrow.draw(b);
@@ -225,15 +232,15 @@ internal sealed class MiniFarmerMenu : IClickableMenu
             int facing = (this.FarmerRef.FacingDirection + 3) % 4;
             this.FarmerRef.faceDirection(facing);
         }
-        else if (this.leftHairArrow.containsPoint(x, y))
+        else if (this.leftHairArrow?.containsPoint(x, y) == true)
         {
-            var all_hair = Farmer.GetAllHairstyleIndices();
+            List<int> all_hair = Farmer.GetAllHairstyleIndices();
             this.hairIndex = (this.hairIndex - 1 + all_hair.Count) % all_hair.Count;
             this.FarmerRef.changeHairStyle(all_hair[this.hairIndex]);
         }
-        else if (this.rightHairArrow.containsPoint(x, y))
+        else if (this.rightHairArrow?.containsPoint(x, y) == true)
         {
-            var all_hair = Farmer.GetAllHairstyleIndices();
+            List<int> all_hair = Farmer.GetAllHairstyleIndices();
             this.hairIndex = (this.hairIndex + 1) % all_hair.Count;
             this.FarmerRef.changeHairStyle(all_hair[this.hairIndex]);
         }
@@ -389,40 +396,42 @@ internal sealed class MiniFarmerMenu : IClickableMenu
     [MemberNotNull(nameof(portrait))]
     [MemberNotNull(nameof(rotateLeftArrow))]
     [MemberNotNull(nameof(rotateRightArrow))]
-    [MemberNotNull(nameof(leftHairArrow))]
-    [MemberNotNull(nameof(rightHairArrow))]
     private void AssignClickableComponents()
     {
         this.backdrop = new Rectangle(
             x: this.xPositionOnScreen + (this.width / 2) - 64,
-            y: this.yPositionOnScreen + 32 + 8,
+            y: this.yPositionOnScreen + 32,
             width: 128,
             height: 192);
         this.portrait = new(
             x: this.xPositionOnScreen + (this.width / 2) - 32,
-            y: this.yPositionOnScreen + 64 + 8,
+            y: this.yPositionOnScreen + 64,
             width: 64,
             height: 96);
 
         const int ArrowHeight = 44;
         const int ArrowWidth = 48;
-        this.leftHairArrow = new(new Rectangle(
-            x: this.backdrop.X - 8,
-            y: this.backdrop.Y - ArrowHeight + 20,
-            width: ArrowWidth,
-            height: ArrowHeight
-            ),
-            Game1.mouseCursors,
-            new Rectangle(352, 495, 12, 11),
-            3);
-        this.rightHairArrow = new(new Rectangle(
-            x: this.backdrop.Right - 33 + 8,
-            y: this.backdrop.Y - ArrowHeight + 20,
-            width: ArrowWidth,
-            height: ArrowHeight),
-            Game1.mouseCursors,
-            new Rectangle(365, 495, 12, 11),
-            3);
+        if (ModEntry.Config.HairArrows)
+        {
+            this.backdrop.Y += 8;
+            this.portrait.Y += 8;
+            this.leftHairArrow = new(new Rectangle(
+                x: this.backdrop.X - 8,
+                y: this.backdrop.Y - ArrowHeight + 20,
+                width: ArrowWidth,
+                height: ArrowHeight),
+                Game1.mouseCursors,
+                new Rectangle(352, 495, 12, 11),
+                3);
+            this.rightHairArrow = new(new Rectangle(
+                x: this.backdrop.Right - 33 + 8,
+                y: this.backdrop.Y - ArrowHeight + 20,
+                width: ArrowWidth,
+                height: ArrowHeight),
+                Game1.mouseCursors,
+                new Rectangle(365, 495, 12, 11),
+                3);
+        }
 
         this.rotateLeftArrow = new(new Rectangle(
             x: this.backdrop.X - 8,

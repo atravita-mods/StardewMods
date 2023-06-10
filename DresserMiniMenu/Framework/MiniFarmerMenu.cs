@@ -1,8 +1,7 @@
 ﻿using AtraShared.Niceties;
 using AtraShared.Utils.Extensions;
 
-using DresserMiniMenu.Framework.Menus.MiniFarmerMenuButtons;
-using DresserMiniMenu.Framework.MiniFarmerMenuButtons;
+using DresserMiniMenu.Framework.MiniFarmerMenuIcons;
 
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -38,7 +37,7 @@ internal sealed class MiniFarmerMenu : IClickableMenu
     // hair
     private ClickableTextureComponent? leftHairArrow;
     private ClickableTextureComponent? rightHairArrow;
-    int hairIndex;
+    private int hairIndex;
     #endregion
 
     #region floating
@@ -415,12 +414,13 @@ internal sealed class MiniFarmerMenu : IClickableMenu
             this.ShopMenu.forSale = filtered;
         }
 
+        this.ShopMenu.currentItemIndex = Math.Clamp(this.ShopMenu.currentItemIndex, 0, Math.Max(0, this.ShopMenu.forSale.Count - 4));
+        this.PerformSort();
+
         if (Game1.options.snappyMenus && Game1.options.gamepadControls)
         {
             this.snapCursorToCurrentSnappedComponent();
         }
-        this.ShopMenu.currentItemIndex = Math.Clamp(this.ShopMenu.currentItemIndex, 0, Math.Max(0, this.ShopMenu.forSale.Count - 4));
-        this.PerformSort();
     }
 
     private void PerformSort()

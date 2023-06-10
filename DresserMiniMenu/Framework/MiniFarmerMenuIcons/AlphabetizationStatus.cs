@@ -1,4 +1,4 @@
-﻿namespace DresserMiniMenu.Framework.MiniFarmerMenuButtons;
+﻿namespace DresserMiniMenu.Framework.MiniFarmerMenuIcons;
 
 internal enum AlphabetizationStatus
 {

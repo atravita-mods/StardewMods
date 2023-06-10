@@ -2,7 +2,7 @@
 
 using NetEscapades.EnumGenerators;
 
-namespace DresserMiniMenu.Framework.Menus.MiniFarmerMenuButtons;
+namespace DresserMiniMenu.Framework.MiniFarmerMenuIcons;
 
 /// <summary>
 /// The type of item this is. Used for drawing the menu background.

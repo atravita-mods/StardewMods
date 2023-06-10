@@ -1,6 +1,6 @@
 ﻿using StardewValley.Objects;
 
-namespace DresserMiniMenu.Framework.Menus.MiniFarmerMenuButtons;
+namespace DresserMiniMenu.Framework.MiniFarmerMenuIcons;
 
 /// <summary>
 /// An inventory slot corresponding to boots.

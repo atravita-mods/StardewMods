@@ -2,7 +2,7 @@
 
 using StardewValley.Objects;
 
-namespace DresserMiniMenu.Framework.Menus.MiniFarmerMenuButtons;
+namespace DresserMiniMenu.Framework.MiniFarmerMenuIcons;
 
 /// <summary>
 /// An inventory slot that holds a ring.

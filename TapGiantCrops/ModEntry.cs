@@ -1,5 +1,7 @@
 ﻿// Ignore Spelling: Api
 
+using AtraCore.Framework.Internal;
+
 using AtraShared.ConstantsAndEnums;
 using AtraShared.Menuing;
 using AtraShared.Utils.Extensions;
@@ -20,20 +22,16 @@ namespace TapGiantCrops;
 /// <inheritdoc />
 [HarmonyPatch(typeof(Utility))]
 [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = StyleCopConstants.NamedForHarmony)]
-internal sealed class ModEntry : Mod
+internal sealed class ModEntry : BaseMod
 {
     private static readonly TapGiantCrop Api = new();
-
-    /// <summary>
-    /// Gets the logger for this mod.
-    /// </summary>
-    internal static IMonitor ModMonitor { get; private set; } = null!;
 
     /// <inheritdoc />
     public override void Entry(IModHelper helper)
     {
-        ModMonitor = this.Monitor;
+        I18n.Init(helper.Translation);
         AssetManager.Initialize(helper.GameContent);
+        base.Entry(helper);
 
         helper.Events.Input.ButtonPressed += this.OnButtonPressed;
         helper.Events.GameLoop.DayEnding += this.OnDayEnding;
@@ -42,8 +40,6 @@ internal sealed class ModEntry : Mod
 
         helper.Events.Content.AssetRequested += static (_, e) => AssetManager.Load(e);
         helper.Events.Content.AssetsInvalidated += static (_, e) => AssetManager.Reset(e.NamesWithoutLocale);
-
-        this.Monitor.Log($"Starting up: {this.ModManifest.UniqueID} - {typeof(ModEntry).Assembly.FullName}");
 
         this.ApplyPatches(new Harmony(this.ModManifest.UniqueID));
     }

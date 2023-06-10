@@ -75,8 +75,14 @@ internal static class CustomEmoji
         {
             return;
         }
-
-        __result ??= GetEntry(requester_name);
+        try
+        {
+            __result ??= GetEntry(requester_name);
+        }
+        catch (Exception ex)
+        {
+            ModEntry.ModMonitor.LogError("overriding emoji", ex);
+        }
     }
 
     [MethodImpl(TKConstants.Hot)]

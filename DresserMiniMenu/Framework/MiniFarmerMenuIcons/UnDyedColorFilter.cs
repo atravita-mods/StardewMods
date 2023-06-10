@@ -21,7 +21,7 @@ internal class UnDyedColorFilter : BaseColorFilter
             AssetManager.Icons,
             new(this.Location.X + 4, this.Location.Y + 4),
             new Rectangle(46, 97, 7, 7),
-            selected ? Color.White : Color.Gray * 0.7f,
+            selected ? Color.Gray * 0.7f : Color.White,
             0f,
             Vector2.Zero,
             Game1.pixelZoom,

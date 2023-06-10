@@ -13,7 +13,7 @@ internal abstract class BaseColorFilter
     /// </summary>
     protected const int SIZE = 36; // px
 
-    private Rectangle location = new Rectangle(0, 0, SIZE, SIZE);
+    private Rectangle location = new(0, 0, SIZE, SIZE);
 
     /// <summary>
     /// Gets the location of this color filter button.
@@ -30,7 +30,7 @@ internal abstract class BaseColorFilter
         b.Draw(
             AssetManager.Icons,
             new(this.location.X, this.location.Y),
-            new Rectangle(29, 96, 9, 9),
+            new Rectangle(selected ? 29 : 37, 96, 9, 9),
             Color.White,
             0f,
             Vector2.Zero,

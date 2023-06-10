@@ -3,6 +3,7 @@ using System.Reflection.Emit;
 using System.Runtime.CompilerServices;
 
 using AtraBase.Toolkit;
+using AtraBase.Toolkit.Reflection;
 
 using AtraCore.Framework.ReflectionManager;
 
@@ -20,6 +21,9 @@ using Microsoft.Xna.Framework.Input;
 using StardewModdingAPI.Utilities;
 
 using StardewValley.Menus;
+using StardewValley.Objects;
+
+using static StardewValley.Menus.CoopMenu;
 
 namespace DresserMiniMenu.HarmonyPatches;
 
@@ -32,6 +36,13 @@ internal static class DresserMenuDoll
 {
     private static readonly PerScreen<MiniFarmerMenu?> MiniMenu = new();
     private static readonly PerScreen<int> LastKeyboardTick = new(() => 0);
+
+    #region delegates
+    private static readonly Lazy<Func<ShopMenu, int>> _getCurrentTab = new(() =>
+        typeof(ShopMenu).GetCachedField("currentTab", ReflectionCache.FlagTypes.InstanceFlags)
+        .GetInstanceFieldGetter<ShopMenu, int>()
+    );
+    #endregion
 
     /// <summary>
     /// Checks to see whether or not this instance of a ShopMenu has an active MiniFarmerMenu associated with it.
@@ -73,11 +84,63 @@ internal static class DresserMenuDoll
             else if (__instance.storeContext == ShopMenuPatcher.DRESSER)
             {
                 MiniMenu.Value = new(__instance, Game1.player);
+                __instance.tabButtons.Add(new ClickableTextureComponent(
+                    new Rectangle(0, 0, 64, 64),
+                    AssetManager.Icons,
+                    new Rectangle(53, 96, 16, 16),
+                    4f)
+                {
+                    myID = 99999 + __instance.tabButtons.Count,
+                    upNeighborID = -99998,
+                    downNeighborID = -99998,
+                    rightNeighborID = 3546,
+                });
+                __instance.repositionTabs();
             }
         }
         catch (Exception ex)
         {
             ModEntry.ModMonitor.LogError("setting up mini dresser menu", ex);
+        }
+    }
+
+    [HarmonyPostfix]
+    [HarmonyPatch(nameof(ShopMenu.applyTab))]
+    private static void Postfix(ShopMenu __instance)
+    {
+        try
+        {
+            if (__instance.storeContext == ShopMenuPatcher.DRESSER && _getCurrentTab.Value(__instance) == 6)
+            {
+                __instance.forSale.Clear();
+                foreach (ISalable? item in __instance.itemPriceAndStock.Keys)
+                {
+                    if (item is not Item actual)
+                    {
+                        __instance.forSale.Add(item);
+                        continue;
+                    }
+                    if (actual is Clothing)
+                    {
+                        // tabs 2 and 3
+                        continue;
+                    }
+                    switch (actual.Category)
+                    {
+                        case SObject.hatCategory: // tab 1
+                        case SObject.bootsCategory: // tab 4
+                        case SObject.ringCategory: // tab 5
+                            continue;
+                        default:
+                            __instance.forSale.Add(item);
+                            break;
+                    }
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            ModEntry.ModMonitor.LogError("Adjusting for misc tab", ex);
         }
     }
 

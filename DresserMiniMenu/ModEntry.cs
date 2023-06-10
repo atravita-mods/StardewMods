@@ -1,8 +1,8 @@
 ﻿#if DEBUG
 using System.Diagnostics;
+#endif
 
 using AtraCore.Framework.Internal;
-#endif
 
 using AtraShared.ConstantsAndEnums;
 using AtraShared.Integrations;
@@ -31,6 +31,7 @@ internal sealed class ModEntry : BaseMod
     {
         base.Entry(helper);
         I18n.Init(helper.Translation);
+        AssetManager.Initialize(helper.GameContent, helper.DirectoryPath);
         Config = AtraUtils.GetConfigOrDefault<ModConfig>(helper, this.Monitor);
 
         helper.Events.GameLoop.GameLaunched += this.OnGameLaunch;
@@ -41,6 +42,11 @@ internal sealed class ModEntry : BaseMod
 #if DEBUG
         this.Monitor.LogTimespan("Applying harmony patches", sw);
 #endif
+
+        this.Helper.Events.Content.AssetRequested += static (_, e) => AssetManager.Apply(e);
+        this.Helper.Events.Content.AssetsInvalidated += static (_, e) => AssetManager.Reset(e.NamesWithoutLocale);
+        this.Helper.Events.Content.LocaleChanged += static (_, _) => AssetManager.Reset();
+        this.Helper.Events.GameLoop.DayEnding += static (_, _) => AssetManager.Reset();
     }
 
     private void ApplyPatches(Harmony harmony)

@@ -1,24 +1,19 @@
-﻿using AtraShared.ConstantsAndEnums;
+﻿using AtraCore.Framework.Internal;
+
+using AtraShared.ConstantsAndEnums;
 
 using HarmonyLib;
 
 namespace DrawFishPondsOverGrass;
 
 /// <inheritdoc/>
-internal sealed class ModEntry : Mod
+internal sealed class ModEntry : BaseMod
 {
-    /// <summary>
-    /// Gets the logger for this file.
-    /// </summary>
-    internal static IMonitor ModMonitor { get; private set; } = null!;
-
     /// <inheritdoc/>
     public override void Entry(IModHelper helper)
     {
-        ModMonitor = this.Monitor;
+        base.Entry(helper);
         this.ApplyPatches(new Harmony(this.ModManifest.UniqueID));
-
-        this.Monitor.Log($"Starting up: {this.ModManifest.UniqueID} - {typeof(ModEntry).Assembly.FullName}");
     }
 
     /// <summary>

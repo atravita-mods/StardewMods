@@ -1,4 +1,6 @@
-﻿namespace AtraCore.Framework.Internal;
+﻿using StardewModdingAPI.Events;
+
+namespace AtraCore.Framework.Internal;
 
 /// <inheritdoc />
 public abstract class BaseMod : Mod

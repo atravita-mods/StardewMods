@@ -1,4 +1,5 @@
-﻿using AtraCore.Utilities;
+﻿using AtraCore.Framework.Internal;
+using AtraCore.Utilities;
 
 using AtraShared.ConstantsAndEnums;
 using AtraShared.Integrations;
@@ -25,7 +26,7 @@ namespace CritterRings;
 /// <inheritdoc />
 [HarmonyPatch]
 [SuppressMessage("StyleCop.CSharp.OrderingRules", "SA1201:Elements should appear in the correct order", Justification = "Reviewed.")]
-internal sealed class ModEntry : Mod
+internal sealed class ModEntry : BaseMod
 {
     /// <summary>
     /// A buff corresponding to the bunny ring.
@@ -41,11 +42,6 @@ internal sealed class ModEntry : Mod
     /// Gets the config instance for this mod.
     /// </summary>
     internal static ModConfig Config { get; private set; } = null!;
-
-    /// <summary>
-    /// Gets the logger for this mod.
-    /// </summary>
-    internal static IMonitor ModMonitor { get; private set; } = null!;
 
     /// <summary>
     /// Gets the API for CameraPan.
@@ -159,11 +155,10 @@ internal sealed class ModEntry : Mod
     public override void Entry(IModHelper helper)
     {
         I18n.Init(helper.Translation);
-        ModMonitor = this.Monitor;
+        base.Entry(helper);
         Config = AtraUtils.GetConfigOrDefault<ModConfig>(helper, this.Monitor);
         helper.Events.GameLoop.GameLaunched += this.OnGameLaunched;
 
-        this.Monitor.Log($"Starting up: {this.ModManifest.UniqueID} - {typeof(ModEntry).Assembly.FullName}");
         this.ApplyPatches(new Harmony(this.ModManifest.UniqueID));
         AssetManager.Initialize(helper.GameContent);
     }

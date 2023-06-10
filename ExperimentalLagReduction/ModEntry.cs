@@ -1,5 +1,7 @@
 ﻿// Ignore Spelling: Api
 
+using AtraCore.Framework.Internal;
+
 using AtraShared.ConstantsAndEnums;
 using AtraShared.Integrations;
 using AtraShared.Utils.Extensions;
@@ -15,13 +17,8 @@ using AtraUtils = AtraShared.Utils.Utils;
 namespace ExperimentalLagReduction;
 
 /// <inheritdoc />
-internal sealed class ModEntry : Mod
+internal sealed class ModEntry : BaseMod
 {
-    /// <summary>
-    /// Gets the logger for this mod.
-    /// </summary>
-    internal static IMonitor ModMonitor { get; private set; } = null!;
-
     /// <summary>
     /// Gets the config instance for this mod.
     /// </summary>
@@ -32,10 +29,8 @@ internal sealed class ModEntry : Mod
     {
         // initialize translations.
         I18n.Init(helper.Translation);
+        base.Entry(helper);
 
-        // statics
-        ModMonitor = this.Monitor;
-        this.Monitor.Log($"Starting up: {this.ModManifest.UniqueID} - {typeof(ModEntry).Assembly.FullName}");
         helper.Events.GameLoop.GameLaunched += this.OnGameLaunch;
 
         Config = AtraUtils.GetConfigOrDefault<ModConfig>(helper, this.Monitor);

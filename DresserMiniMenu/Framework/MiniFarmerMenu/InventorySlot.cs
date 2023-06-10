@@ -9,7 +9,7 @@ using StardewValley.Menus;
 
 using AtraUtils = AtraShared.Utils.Utils;
 
-namespace DresserMiniMenu.Framework.Menus.MiniFarmerMenu;
+namespace DresserMiniMenu.Framework.Menus.MiniFarmerMenuButtons;
 
 /// <summary>
 /// A slot that corresponds to an inventory slot.

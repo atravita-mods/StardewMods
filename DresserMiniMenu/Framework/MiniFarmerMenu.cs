@@ -1,6 +1,8 @@
-﻿using AtraShared.Utils.Extensions;
+﻿using AtraShared.Niceties;
+using AtraShared.Utils.Extensions;
 
-using DresserMiniMenu.Framework.Menus.MiniFarmerMenu;
+using DresserMiniMenu.Framework.Menus.MiniFarmerMenuButtons;
+using DresserMiniMenu.Framework.MiniFarmerMenuButtons;
 
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -44,6 +46,8 @@ internal sealed class MiniFarmerMenu : IClickableMenu
     private string? lastFilter;
     private readonly TextBox textbox = new(null, null, Game1.smallFont, Game1.textColor);
     private Rectangle effectiveTextboxArea;
+    private Rectangle alphabetization;
+    private AlphabetizationStatus status = AlphabetizationStatus.None;
     #endregion
 
     #region hover
@@ -204,6 +208,21 @@ internal sealed class MiniFarmerMenu : IClickableMenu
         b.Draw(AtraUtils.Pixel, this.floating, Color.Aquamarine);
 #endif
         this.textbox.Draw(b);
+        drawTextureBox(
+            b,
+            texture: Game1.mouseCursors,
+            sourceRect: new Rectangle(384, 373, 18, 18),
+            x: this.alphabetization.X - 16,
+            y: this.alphabetization.Y - 16,
+            width: this.alphabetization.Width + 32,
+            height: this.alphabetization.Height + 32,
+            color: Color.White,
+            scale: Game1.pixelZoom);
+        b.Draw(
+            AssetManager.Icons,
+            this.alphabetization,
+            new Rectangle(0, this.status == AlphabetizationStatus.Backward ? 48 : 0, 100, 48),
+            this.status == AlphabetizationStatus.None ? Color.Gray * 0.7f : Color.White);
 
         if (!string.IsNullOrEmpty(this.hoverText))
         {
@@ -283,6 +302,16 @@ internal sealed class MiniFarmerMenu : IClickableMenu
             if (this.effectiveTextboxArea.Contains(x, y))
             {
                 this.textbox.SelectMe();
+                return true;
+            }
+            if (this.alphabetization.Contains(x, y))
+            {
+                this.status++;
+                if (this.status > AlphabetizationStatus.Backward)
+                {
+                    this.status = AlphabetizationStatus.None;
+                }
+                this.PerformSort();
                 return true;
             }
         }
@@ -391,11 +420,28 @@ internal sealed class MiniFarmerMenu : IClickableMenu
             this.snapCursorToCurrentSnappedComponent();
         }
         this.ShopMenu.currentItemIndex = Math.Clamp(this.ShopMenu.currentItemIndex, 0, Math.Max(0, this.ShopMenu.forSale.Count - 4));
+        this.PerformSort();
+    }
+
+    private void PerformSort()
+    {
+        if (this.status == AlphabetizationStatus.None)
+        {
+            return;
+        }
+        StringComparer comparer = AtraUtils.GetCurrentLanguageComparer(true);
+        this.ShopMenu.forSale.Sort(new SalableNameComparer(comparer));
+
+        if (this.status == AlphabetizationStatus.Backward)
+        {
+            this.ShopMenu.forSale.Reverse();
+        }
     }
 
     [MemberNotNull(nameof(portrait))]
     [MemberNotNull(nameof(rotateLeftArrow))]
     [MemberNotNull(nameof(rotateRightArrow))]
+    [MemberNotNull(nameof(alphabetization))]
     private void AssignClickableComponents()
     {
         this.backdrop = new Rectangle(
@@ -433,6 +479,7 @@ internal sealed class MiniFarmerMenu : IClickableMenu
                 3);
         }
 
+        // rotation arrows.
         this.rotateLeftArrow = new(new Rectangle(
             x: this.backdrop.X - 8,
             y: this.backdrop.Bottom - ArrowHeight,
@@ -512,6 +559,12 @@ internal sealed class MiniFarmerMenu : IClickableMenu
         this.textbox.Height = 192;
 
         this.effectiveTextboxArea = new Rectangle(this.textbox.X, this.textbox.Y - 8, this.textbox.Width + 8, 72);
+
+        this.alphabetization = new (
+            this.textbox.X + 256 + 32 + 24,
+            this.textbox.Y,
+            100,
+            48);
 
         this.AssignIds();
     }

@@ -2,7 +2,7 @@
 
 using StardewValley.Menus;
 
-namespace DresserMiniMenu.Framework.Menus.MiniFarmerMenu;
+namespace DresserMiniMenu.Framework.Menus.MiniFarmerMenuButtons;
 
 /// <summary>
 /// An inventory slot.

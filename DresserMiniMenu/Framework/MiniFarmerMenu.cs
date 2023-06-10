@@ -47,6 +47,9 @@ internal sealed class MiniFarmerMenu : IClickableMenu
     private Rectangle effectiveTextboxArea;
     private Rectangle alphabetization;
     private AlphabetizationStatus status = AlphabetizationStatus.None;
+
+    private readonly BaseColorFilter[] colorFilters;
+    private BaseColorFilter? selectedFilter = null;
     #endregion
 
     #region hover
@@ -68,6 +71,22 @@ internal sealed class MiniFarmerMenu : IClickableMenu
         this.FarmerRef = farmer;
         this.lastFacingDirection = farmer.FacingDirection;
         this.FarmerRef.faceDirection(Game1.down);
+
+        // color filters
+        this.colorFilters = new BaseColorFilter[]
+        {
+            new RegularColorFilter(Color.Black),
+            new RegularColorFilter(Color.Gray),
+            new RegularColorFilter(Color.White),
+            new RegularColorFilter(Color.Red),
+            new RegularColorFilter(Color.Yellow),
+            new RegularColorFilter(Color.Green),
+            new RegularColorFilter(Color.Blue),
+            new RegularColorFilter(Color.Purple),
+            new UnDyedColorFilter(),
+            new PrismaticColorFilter(),
+        };
+
         this.AssignClickableComponents();
 
         // textbox functions
@@ -222,6 +241,10 @@ internal sealed class MiniFarmerMenu : IClickableMenu
             this.alphabetization,
             new Rectangle(0, this.status == AlphabetizationStatus.Backward ? 48 : 0, 100, 48),
             this.status == AlphabetizationStatus.None ? Color.Gray * 0.7f : Color.White);
+        foreach (BaseColorFilter color in this.colorFilters)
+        {
+            color.Draw(b, ReferenceEquals(this.selectedFilter, color));
+        }
 
         if (!string.IsNullOrEmpty(this.hoverText))
         {
@@ -313,6 +336,23 @@ internal sealed class MiniFarmerMenu : IClickableMenu
                 this.PerformSort();
                 return true;
             }
+            foreach (var filter in this.colorFilters)
+            {
+                if (filter.Contains(x, y))
+                {
+                    if (ReferenceEquals(filter, this.selectedFilter))
+                    {
+                        this.selectedFilter = null;
+                    }
+                    else
+                    {
+                        this.selectedFilter = filter;
+                    }
+                    this.ShopMenu.applyTab();
+                    this.ApplyFilter();
+                    return true;
+                }
+            }
         }
         return false;
     }
@@ -400,13 +440,14 @@ internal sealed class MiniFarmerMenu : IClickableMenu
     /// </summary>
     internal void ApplyFilter()
     {
-        if (!string.IsNullOrWhiteSpace(this.textbox.Text))
+        if (!string.IsNullOrWhiteSpace(this.textbox.Text) || this.selectedFilter is not null)
         {
             string filter = this.textbox.Text.Trim();
             List<ISalable> filtered = new(this.ShopMenu.forSale.Count);
             foreach (ISalable? item in this.ShopMenu.forSale)
             {
-                if (item.DisplayName.Contains(filter, StringComparison.InvariantCultureIgnoreCase))
+                if ((this.selectedFilter is null || (item is Item actual && this.selectedFilter.Filter(actual)))
+                    && (string.IsNullOrEmpty(filter) || item.DisplayName.Contains(filter, StringComparison.InvariantCultureIgnoreCase)))
                 {
                     filtered.Add(item);
                 }
@@ -565,6 +606,21 @@ internal sealed class MiniFarmerMenu : IClickableMenu
             this.textbox.Y,
             100,
             48);
+
+        int x = this.alphabetization.Right;
+        for (int i = 0; i < this.colorFilters.Length; i++)
+        {
+            int y = this.alphabetization.Y - 16;
+            if (i % 2 == 0)
+            {
+                x += 40;
+            }
+            else
+            {
+                y += 40;
+            }
+            this.colorFilters[i].Reposition(x, y);
+        }
 
         this.AssignIds();
     }

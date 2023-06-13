@@ -4,6 +4,7 @@ using AtraBase.Collections;
 using AtraBase.Models.WeightedRandom;
 using AtraBase.Toolkit.Extensions;
 
+using AtraCore.Framework.Internal;
 using AtraCore.Framework.ItemManagement;
 
 using AtraShared.ConstantsAndEnums;
@@ -29,7 +30,7 @@ using Utils = CatGiftsRedux.Framework.Utils;
 namespace CatGiftsRedux;
 
 /// <inheritdoc />
-internal sealed class ModEntry : Mod
+internal sealed class ModEntry : BaseMod<ModEntry>
 {
     private const string SAVEKEY = "GiftsThisWeek";
     private static int maxPrice;
@@ -50,11 +51,6 @@ internal sealed class ModEntry : Mod
     private IDynamicGameAssetsApi? dgaAPI;
 
     /// <summary>
-    /// Gets the logging instance for this class.
-    /// </summary>
-    internal static IMonitor ModMonitor { get; private set; } = null!;
-
-    /// <summary>
     /// Gets the string utilities for this mod.
     /// </summary>
     internal static StringUtils StringUtils { get; private set; } = null!;
@@ -63,9 +59,10 @@ internal sealed class ModEntry : Mod
     public override void Entry(IModHelper helper)
     {
         I18n.Init(helper.Translation);
+        base.Entry(helper);
+
         AssetManager.Initialize(helper.GameContent);
         this.config = AtraUtils.GetConfigOrDefault<ModConfig>(helper, this.Monitor);
-        ModMonitor = this.Monitor;
         StringUtils = new(this.Monitor);
         this.dataObjectInfo = helper.GameContent.ParseAssetName("Data/ObjectInformation");
 
@@ -75,8 +72,6 @@ internal sealed class ModEntry : Mod
         helper.Events.GameLoop.DayStarted += this.OnDayLaunched;
         helper.Events.Content.AssetRequested += static (_, e) => AssetManager.Apply(e);
         helper.Events.Content.AssetsInvalidated += this.OnAssetInvalidated;
-
-        this.Monitor.Log($"Starting up: {this.ModManifest.UniqueID} - {typeof(ModEntry).Assembly.FullName}");
     }
 
     /// <inheritdoc />

@@ -3,7 +3,6 @@ using System.Diagnostics;
 #endif
 
 using AtraBase.Toolkit.Extensions;
-using AtraBase.Toolkit.Shims.NetSeven;
 
 using AtraShared.Utils.Extensions;
 
@@ -20,6 +19,7 @@ namespace ExperimentalLagReduction.HarmonyPatches;
 internal class RewriteMissedLevelUpRecipes
 {
     private const int SKILLCOUNT = 5; // the total number of skills.
+    private static readonly char[] SkillCaps = new[] { 'F', 'M', 'C', 'L' };
 
     /// <summary>
     /// Rewrites <see cref="LevelUpMenu.AddMissedLevelRecipes"/> to be faster and less likely to throw exceptions.
@@ -61,11 +61,6 @@ internal class RewriteMissedLevelUpRecipes
             {
                 foreach ((string index, string recipe) in CraftingRecipe.craftingRecipes)
                 {
-                    if (farmer.craftingRecipes.ContainsKey(index))
-                    {
-                        continue;
-                    }
-
                     if (ShouldUnlock(recipe.GetNthChunk('/', 4), buffer, maxLevel) && farmer.craftingRecipes.TryAdd(index, 0))
                     {
                         ModEntry.ModMonitor.Log($"Added crafting recipe {index} which was missing from skill level up for {farmer.Name}.");
@@ -75,11 +70,6 @@ internal class RewriteMissedLevelUpRecipes
 
             foreach ((string index, string recipe) in CraftingRecipe.cookingRecipes)
             {
-                if (farmer.cookingRecipes.ContainsKey(index))
-                {
-                    continue;
-                }
-
                 if (ShouldUnlock(recipe.GetNthChunk('/', 3), buffer, maxLevel) && farmer.cookingRecipes.TryAdd(index, 0))
                 {
                     ModEntry.ModMonitor.Log($"Added cooking recipe {index} which was missing from skill level up for {farmer.Name}.");
@@ -138,6 +128,14 @@ internal class RewriteMissedLevelUpRecipes
             return false;
         }
 
+        // every skill has at least one uppercase letter in it, with the skills starting with either 'F', 'M', 'L', or 'C'.
+        // faster to do a little search first.
+        int capIndex = unlock.IndexOfAny(SkillCaps);
+        if (capIndex < 0)
+        {
+            return false;
+        }
+
         // We're looking for a single number here.
         // This matches the game's behavior even if it's weird.
         int level = ParseLowestDigit(unlock);
@@ -146,21 +144,7 @@ internal class RewriteMissedLevelUpRecipes
             return false;
         }
 
-        // every skill has at least one uppercase letter in it.
-        bool foundLetter = false;
-        foreach (char c in unlock)
-        {
-            if (CharExtensions.IsAsciiLetterUpper(c))
-            {
-                foundLetter = true;
-                break;
-            }
-        }
-        if (!foundLetter)
-        {
-            return false;
-        }
-
+        unlock = unlock[capIndex..];
         for (int i = 0; i < levelArray.Length; i++)
         {
             if (levelArray[i] < level)

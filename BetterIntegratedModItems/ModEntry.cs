@@ -1,5 +1,6 @@
 ﻿using AtraBase.Toolkit;
 
+using AtraCore.Framework.Internal;
 using AtraCore.Utilities;
 
 using AtraShared.ConstantsAndEnums;
@@ -22,7 +23,7 @@ using AtraUtils = AtraShared.Utils.Utils;
 namespace BetterIntegratedModItems;
 
 /// <inheritdoc />
-internal sealed class ModEntry : Mod
+internal sealed class ModEntry : BaseMod<ModEntry>
 {
     private const string LOCATIONWATCHER = "location.data";
     private const string DATAPACKAGE = "DATAPACKAGE";
@@ -34,11 +35,6 @@ internal sealed class ModEntry : Mod
     /// Raised when a new location is encountered.
     /// </summary>
     internal event EventHandler<LocationSeenEventArgs>? OnLocationSeen;
-
-    /// <summary>
-    /// Gets the logger for this mod.
-    /// </summary>
-    internal static IMonitor ModMonitor { get; private set; } = null!;
 
     /// <summary>
     /// Gets the config instance for this mod.
@@ -55,8 +51,8 @@ internal sealed class ModEntry : Mod
     public override void Entry(IModHelper helper)
     {
         // bind helpers.
-        ModMonitor = this.Monitor;
         I18n.Init(helper.Translation);
+        base.Entry(helper);
 
         // AssetManager.Initialize(helper.GameContent);
         Config = AtraUtils.GetConfigOrDefault<ModConfig>(helper, this.Monitor);
@@ -69,8 +65,6 @@ internal sealed class ModEntry : Mod
 
         helper.Events.Multiplayer.PeerConnected += this.OnPeerConnected;
         helper.Events.Multiplayer.ModMessageReceived += this.OnModMessageRecieved;
-
-        this.Monitor.Log($"Starting up: {this.ModManifest.UniqueID} - {typeof(ModEntry).Assembly.FullName}");
     }
 
     /// <inheritdoc cref="IGameLoopEvents.GameLaunched"/>

@@ -26,7 +26,7 @@ namespace CritterRings;
 /// <inheritdoc />
 [HarmonyPatch]
 [SuppressMessage("StyleCop.CSharp.OrderingRules", "SA1201:Elements should appear in the correct order", Justification = "Reviewed.")]
-internal sealed class ModEntry : BaseMod
+internal sealed class ModEntry : BaseMod<ModEntry>
 {
     /// <summary>
     /// A buff corresponding to the bunny ring.

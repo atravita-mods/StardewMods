@@ -24,7 +24,7 @@ using StardewModdingAPI.Events;
 namespace PamTries;
 
 /// <inheritdoc />
-internal sealed class ModEntry : BaseMod
+internal sealed class ModEntry : BaseMod<ModEntry>
 {
     private static readonly string[] SyncedConversationTopics = new string[2] { "PamTriesRehab", "PamTriesRehabHoneymoon" };
     private static PamMood mood = PamMood.neutral;

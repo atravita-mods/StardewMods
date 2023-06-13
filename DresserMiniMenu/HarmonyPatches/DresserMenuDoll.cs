@@ -256,9 +256,16 @@ internal static class DresserMenuDoll
     [HarmonyPatch(nameof(ShopMenu.switchTab))]
     private static void PostfixSwitchTab(ShopMenu __instance)
     {
-        if (IsActive(__instance, out MiniFarmerMenu? mini))
+        try
         {
-            mini.ApplyFilter();
+            if (IsActive(__instance, out MiniFarmerMenu? mini))
+            {
+                mini.ApplyFilter();
+            }
+        }
+        catch (Exception ex)
+        {
+            ModEntry.ModMonitor.LogError("adjusting filters", ex);
         }
     }
 
@@ -266,14 +273,21 @@ internal static class DresserMenuDoll
     [HarmonyPatch(nameof(ShopMenu.update))]
     private static void PostfixUpdate(ShopMenu __instance, GameTime time)
     {
-        if (IsActive(__instance, out MiniFarmerMenu? mini))
+        try
         {
-            mini.update(time);
-            if (Game1.ticks > LastKeyboardTick.Value + 20)
+            if (IsActive(__instance, out MiniFarmerMenu? mini))
             {
-                LastKeyboardTick.Value = Game1.ticks;
-                mini.UpdateForFilter();
+                mini.update(time);
+                if (Game1.ticks > LastKeyboardTick.Value + 20)
+                {
+                    LastKeyboardTick.Value = Game1.ticks;
+                    mini.UpdateForFilter();
+                }
             }
+        }
+        catch (Exception ex)
+        {
+            ModEntry.ModMonitor.LogError("adjusting filters", ex);
         }
     }
 

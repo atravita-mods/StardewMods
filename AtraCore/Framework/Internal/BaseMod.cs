@@ -1,9 +1,10 @@
-﻿using StardewModdingAPI.Events;
+﻿namespace AtraCore.Framework.Internal;
 
-namespace AtraCore.Framework.Internal;
+// this little generic trickery means that each mod gets separate statics.
 
 /// <inheritdoc />
-public abstract class BaseMod : Mod
+public abstract class BaseMod<T> : Mod
+    where T : Mod
 {
     /// <summary>
     /// Gets the logger for this mod.

@@ -5,7 +5,7 @@ namespace AtraShared.Niceties;
 /// </summary>
 public sealed class SalableNameComparer : Comparer<ISalable>
 {
-    private StringComparer _comparer;
+    private readonly StringComparer _comparer;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="SalableNameComparer"/> class.

@@ -22,7 +22,7 @@ namespace TapGiantCrops;
 /// <inheritdoc />
 [HarmonyPatch(typeof(Utility))]
 [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = StyleCopConstants.NamedForHarmony)]
-internal sealed class ModEntry : BaseMod
+internal sealed class ModEntry : BaseMod<ModEntry>
 {
     private static readonly TapGiantCrop Api = new();
 

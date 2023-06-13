@@ -89,23 +89,20 @@ internal static class Rescheduler
             return left.Count <= right.Count ? left : right;
         }
 
-        bool foundGeneric = PathCache.TryGetValue((start, end, Ungendered), out path);
-
-        bool foundMale = false;
+        bool found = PathCache.TryGetValue((start, end, Ungendered), out path);
         if (gender != NPC.female && PathCache.TryGetValue((start, end, Gender.Male), out List<string>? male))
         {
-            foundMale = true;
+            found = true;
             path = ShorterNonNull(path, male);
         }
 
-        bool foundFemale = false;
         if (gender != NPC.male && PathCache.TryGetValue((start, end, Gender.Female), out List<string>? female))
         {
-            foundFemale = true;
+            found = true;
             path = ShorterNonNull(path, female);
         }
 
-        return foundGeneric || foundMale || foundFemale;
+        return found;
     }
 
     /// <summary>
@@ -408,12 +405,24 @@ internal static class Rescheduler
             return false;
         }
 
+        if (startingLocation == "Backwoods")
+        {
+            ModEntry.ModMonitor.Log($"{__instance.Name} requested path starting at {startingLocation} which is blacklisted from pathing", LogLevel.Warn);
+            return false;
+        }
+
         GameLocation start = Game1.getLocationFromName(startingLocation);
         if (start is null)
         {
             ModEntry.ModMonitor.Log($"NPC {__instance.Name} requested path starting at {startingLocation}, which does not exist.", LogLevel.Warn);
             return false;
         }
+        if (start is Farm)
+        {
+            ModEntry.ModMonitor.Log($"NPC {__instance.Name} requested path starting at {startingLocation}, which as a farm is blacklisted from pathing.", LogLevel.Warn);
+            return false;
+        }
+
         Gender startGender = GetTightestGenderConstraint((Gender)__instance.Gender, GetGenderConstraint(startingLocation));
         if (startGender == Gender.Invalid)
         {

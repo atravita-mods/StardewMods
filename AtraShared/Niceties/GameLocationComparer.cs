@@ -1,3 +1,5 @@
+// Ignore Spelling: lhs rhs
+
 namespace AtraShared.Niceties;
 
 /// <summary>

@@ -31,7 +31,7 @@ using AtraUtils = AtraShared.Utils.Utils;
 namespace AtraCore;
 
 /// <inheritdoc />
-internal sealed class ModEntry : BaseMod
+internal sealed class ModEntry : BaseMod<ModEntry>
 {
     private MigrationManager? migrator;
 

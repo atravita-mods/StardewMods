@@ -17,7 +17,7 @@ using AtraUtils = AtraShared.Utils.Utils;
 namespace ExperimentalLagReduction;
 
 /// <inheritdoc />
-internal sealed class ModEntry : BaseMod
+internal sealed class ModEntry : BaseMod<ModEntry>
 {
     /// <summary>
     /// Gets the config instance for this mod.

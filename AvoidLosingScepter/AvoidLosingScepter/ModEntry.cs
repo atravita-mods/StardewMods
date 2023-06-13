@@ -12,7 +12,7 @@ using StardewValley.Tools;
 namespace AvoidLosingScepter;
 
 /// <inheritdoc />
-internal sealed class ModEntry : BaseMod
+internal sealed class ModEntry : BaseMod<ModEntry>
 {
     /// <inheritdoc />
     public override void Entry(IModHelper helper)

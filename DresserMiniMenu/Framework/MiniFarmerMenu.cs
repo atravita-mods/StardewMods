@@ -16,6 +16,7 @@ namespace DresserMiniMenu.Framework;
 /// <summary>
 /// A little mini menu for farmer customization, mostly taken from <see cref="InventoryPage"/>.
 /// </summary>
+[SuppressMessage("StyleCop.CSharp.OrderingRules", "SA1214:Readonly fields should appear before non-readonly fields", Justification = "Fields ordered by use.")]
 internal sealed class MiniFarmerMenu : IClickableMenu
 {
     private const int LEFTARROW = 1000;
@@ -222,18 +223,15 @@ internal sealed class MiniFarmerMenu : IClickableMenu
         this.rotateRightArrow.draw(b);
 
         // floating bar
-#if DEBUG
-        b.Draw(AtraUtils.Pixel, this.floating, Color.Aquamarine);
-#endif
         this.textbox.Draw(b);
         drawTextureBox(
             b,
             texture: Game1.mouseCursors,
             sourceRect: new Rectangle(384, 373, 18, 18),
             x: this.alphabetization.X - 16,
-            y: this.alphabetization.Y - 16,
+            y: this.alphabetization.Y - 20,
             width: this.alphabetization.Width + 32,
-            height: this.alphabetization.Height + 32,
+            height: this.alphabetization.Height + 36,
             color: Color.White,
             scale: Game1.pixelZoom);
         b.Draw(
@@ -324,6 +322,10 @@ internal sealed class MiniFarmerMenu : IClickableMenu
             if (this.effectiveTextboxArea.Contains(x, y))
             {
                 this.textbox.SelectMe();
+                if (playSound)
+                {
+                    PlayShwip();
+                }
                 return true;
             }
             if (this.alphabetization.Contains(x, y))
@@ -333,10 +335,11 @@ internal sealed class MiniFarmerMenu : IClickableMenu
                 {
                     this.status = AlphabetizationStatus.None;
                 }
+                PlayShwip();
                 this.PerformSort();
                 return true;
             }
-            foreach (var filter in this.colorFilters)
+            foreach (BaseColorFilter filter in this.colorFilters)
             {
                 if (filter.Contains(x, y))
                 {
@@ -348,6 +351,7 @@ internal sealed class MiniFarmerMenu : IClickableMenu
                     {
                         this.selectedFilter = filter;
                     }
+                    PlayShwip();
                     this.ShopMenu.applyTab();
                     this.ApplyFilter();
                     return true;
@@ -417,6 +421,15 @@ internal sealed class MiniFarmerMenu : IClickableMenu
         {
             menu.allClickableComponents.Add(slot.Clickable);
         }
+
+        if (this.rightHairArrow is not null)
+        {
+            menu.allClickableComponents.Add(this.rightHairArrow);
+        }
+        if (this.leftHairArrow is not null)
+        {
+            menu.allClickableComponents.Add(this.leftHairArrow);
+        }
     }
 
     /// <summary>
@@ -464,6 +477,18 @@ internal sealed class MiniFarmerMenu : IClickableMenu
         }
     }
 
+    private static void PlayShwip()
+    {
+        try
+        {
+            Game1.playSound("shwip");
+        }
+        catch (Exception ex)
+        {
+            ModEntry.ModMonitor.LogError("playing shwip", ex);
+        }
+    }
+
     private void PerformSort()
     {
         if (this.status == AlphabetizationStatus.None)
@@ -482,7 +507,6 @@ internal sealed class MiniFarmerMenu : IClickableMenu
     [MemberNotNull(nameof(portrait))]
     [MemberNotNull(nameof(rotateLeftArrow))]
     [MemberNotNull(nameof(rotateRightArrow))]
-    [MemberNotNull(nameof(alphabetization))]
     private void AssignClickableComponents()
     {
         this.backdrop = new Rectangle(
@@ -593,12 +617,11 @@ internal sealed class MiniFarmerMenu : IClickableMenu
             setItem: static value => Game1.player.pantsItem.Value = value));
 
         // hoverbar.
-        this.floating = new(this.xPositionOnScreen + BASEWIDTH + 8, this.yPositionOnScreen + BASEHEIGHT + 8, 720, 80);
+        this.floating = new(this.xPositionOnScreen + this.width + 8, this.yPositionOnScreen + BASEHEIGHT + 8, 720, 80);
         this.textbox.X = this.floating.X + 8;
         this.textbox.Y = this.floating.Y + 16;
         this.textbox.Width = 256;
         this.textbox.Height = 192;
-
         this.effectiveTextboxArea = new Rectangle(this.textbox.X, this.textbox.Y - 8, this.textbox.Width + 8, 72);
 
         this.alphabetization = new (

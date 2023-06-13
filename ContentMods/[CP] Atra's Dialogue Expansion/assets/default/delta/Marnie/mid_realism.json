@@ -54,7 +54,8 @@
         "Target": "Characters/Dialogue/Marnie",
         "When": { "YearModulus": "4" },
         "Entries": {
-            "5_2": "I've got to buy more barley to feed to the cows, but the price of barley has gone insane over the last year...$s#$b#Might need to figure otu something else, for feeding them."
+            "5_2": "I've got to buy more barley to feed to the cows, but the price of barley has gone insane over the last year...$s#$b#Might need to figure otu something else, for feeding them.",
+            "6_2": "Bessie got some rocks lodged into her hoof the other day...Poor darling, that looked quite painful.$s"
         }
     }
 ]}

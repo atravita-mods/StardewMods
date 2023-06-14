@@ -41,6 +41,24 @@
     },
     {
         "Action": "EditData",
+        "LogName": "Jodi - Y2",
+        "Target": "Characters/Dialogue/Jodi",
+        "When": {"Year": "3"},
+        "Entries": {
+            "winter_Sun10": "Kent's been back for about a year now...#$b#I think he's...slowly getting better."
+        }
+    },
+    {
+        "Action": "EditData",
+        "LogName": "Jodi - Y2",
+        "Target": "Characters/Dialogue/Jodi",
+        "When": {"Year": "3", "Day|contains=25,26,27,28": false},
+        "Entries": {
+            "winter_Fri10": "It's almost Winter Star. Kent's first Winter Star back.#$b#It's...bittersweet.$s"
+        }
+    },
+    {
+        "Action": "EditData",
         "LogName": "Jodi mid-hearts",
         "Target": "Characters/Dialogue/Jodi",
         "Entries": {

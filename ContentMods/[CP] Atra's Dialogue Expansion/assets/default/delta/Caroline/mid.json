@@ -98,6 +98,7 @@
         },
         "Entries": {
             "5_2": "I miss being young and free-spirited.$s#$b#And here I am, trying to get Abigail to behave more like an adult.$s",
+            "6_2": "@! I got a little extra fertilizer. Would you like some?[368]$h",
             "13_2": "Gosh, I wish I wasn't so busy all the time running the shop.#$b#Would love to go vacation more often.",
             "15_2": "@, come enjoy a cup of tea with me![614]$h",
             "17_2": "Jodi gave me a recipe for {{i18n:dishes.adult.{{Random:01, 02, 03, 04, 05, 06, 07, 08, 09}} }}! She says it's great.",

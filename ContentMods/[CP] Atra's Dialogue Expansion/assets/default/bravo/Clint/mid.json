@@ -33,7 +33,8 @@
             "spring_Tue6": "Feel free to bring your geodes to me, I'll crack them open for a small fee...",
 
             "6{{YearRemainder}}": "I'd consider moving elsewhere, but I'm not sure I could afford the rent.#$e#My family has owned this building for as long as I can remember. Helps a lot with my expenses.",
-            "7{{YearRemainder}}": "I've got a cousin in Grampleton who's a glassblower.#$e#He's attached to one of the local universities, he does custom glassware for them. Cushy job, somehow."
+            "7{{YearRemainder}}": "I've got a cousin in Grampleton who's a glassblower.#$e#He's attached to one of the local universities, he does custom glassware for them. Cushy job, somehow.",
+            "8{{YearRemainder}}": "I sell ore, too, if you need it.#$b#It's not too expensive, I can order in bulk, but my suppliers aren't exactly giving it away either."
         },
         "When": {"YearModulus": 1}
     },

@@ -12,6 +12,18 @@
         }
     },
     {
+        "LogName": "George - alpha",
+        "Action": "EditData",
+        "When": {
+            "EnableFor|contains: George": true,
+            "DialogueRandom": "alpha"
+        },
+        "Target": "Data/mail",
+        "Entries": {
+            "George": "{{i18n:george-mail-greeting.{{Random:0,1}} }}^{{i18n: george-mail-alpha.{{Random:0,1}} }}^^   -{{i18n:George}}%item object 378 5 380 5 382 5 384 5 %%[#]{{i18n:gift-from|person={{i18n:George}} }}"
+        }
+    },
+    {
         "LogName": "Haley - mail - base",
         "Action": "EditData",
         "When": {"EnableFor|contains: Haley": true},

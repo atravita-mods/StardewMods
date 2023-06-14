@@ -18,6 +18,7 @@
 * Small bits
 ********************/
     "Clint": "Clint",
+    "George": "George",
     "Haley": "Haley",
     "Harvey": "Harvey",
     "Robin": "Robin",
@@ -356,6 +357,11 @@
 
     "haley-mail-greeting": "Heya, @!",
     "haley-mail-object": "Saw this flower, and thought of you. Figured you should have it!",
+
+    "george-mail-greeting.0": "Hey, @.",
+    "george-mail-greeting.1": "@,",
+    "george-mail-alpha.0": "Found some spare ore the other day, figured you could use it more than I.",
+    "george-mail-alpha.1": "Got some nice ore here, figured you could put it to good use.",
 
     "harvey-mail-greeting": "Hi, @",
     "harvey-mail-text": "Made some extra coffee the other day, figured you could use it. It might be a bit cold.",

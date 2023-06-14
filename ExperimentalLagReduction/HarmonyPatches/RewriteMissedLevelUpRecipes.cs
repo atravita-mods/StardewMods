@@ -51,14 +51,14 @@ internal class RewriteMissedLevelUpRecipes
             }
             ModEntry.ModMonitor.DebugOnlyLog($"Current levels after removing current level ups for {farmer.Name} => {string.Join(',', buffer)}");
 
-#if DEBUG
-            Stopwatch sw = Stopwatch.StartNew();
-#endif
             int maxLevel = buffer.Max();
 
             // crafting and cooking are entirely separate, we will handle them on separate threads.
             Task crafting = Task.Run(() =>
             {
+#if DEBUG
+                Stopwatch stopwatch = Stopwatch.StartNew();
+#endif
                 foreach ((string index, string recipe) in CraftingRecipe.craftingRecipes)
                 {
                     if (ShouldUnlock(recipe.GetNthChunk('/', 4), buffer, maxLevel) && farmer.craftingRecipes.TryAdd(index, 0))
@@ -66,7 +66,15 @@ internal class RewriteMissedLevelUpRecipes
                         ModEntry.ModMonitor.Log($"Added crafting recipe {index} which was missing from skill level up for {farmer.Name}.");
                     }
                 }
+#if DEBUG
+                stopwatch.Stop();
+                ModEntry.ModMonitor.LogTimespan("Checking over crafting recipes", stopwatch);
+#endif
             });
+
+#if DEBUG
+            Stopwatch sw = Stopwatch.StartNew();
+#endif
 
             foreach ((string index, string recipe) in CraftingRecipe.cookingRecipes)
             {
@@ -76,10 +84,16 @@ internal class RewriteMissedLevelUpRecipes
                 }
             }
 
-            crafting.Wait();
-
 #if DEBUG
-            ModEntry.ModMonitor.LogTimespan("Checking over recipes", sw);
+            ModEntry.ModMonitor.LogTimespan("Checking over cooking recipes", sw);
+#endif
+
+            // make sure the other thread is also finished.
+            // Stardew really isn't thread safe.
+            crafting.Wait();
+#if DEBUG
+            sw.Stop();
+            ModEntry.ModMonitor.LogTimespan("Checking over all recipes", sw);
 #endif
 
             return false;

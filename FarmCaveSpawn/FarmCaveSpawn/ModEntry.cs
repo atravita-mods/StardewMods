@@ -9,6 +9,7 @@ using AtraBase.Toolkit.Extensions;
 using AtraBase.Toolkit.StringHandler;
 
 using AtraCore;
+using AtraCore.Framework.Internal;
 using AtraCore.Framework.ItemManagement;
 
 using AtraShared.ConstantsAndEnums;
@@ -30,7 +31,7 @@ using XLocation = xTile.Dimensions.Location;
 namespace FarmCaveSpawn;
 
 /// <inheritdoc />
-internal sealed class ModEntry : Mod
+internal sealed class ModEntry : BaseMod<ModEntry>
 {
     /// <summary>
     /// Sublocation-parsing regex.
@@ -85,9 +86,9 @@ internal sealed class ModEntry : Mod
     {
         I18n.Init(helper.Translation);
         AssetManager.Initialize(helper.GameContent);
+        base.Entry(helper);
 
         this.config = AtraUtils.GetConfigOrDefault<ModConfig>(helper, this.Monitor);
-        this.Monitor.Log($"Starting up: {this.ModManifest.UniqueID} - {typeof(ModEntry).Assembly.FullName}");
 
         helper.Events.GameLoop.DayStarted += this.SpawnFruit;
         helper.Events.GameLoop.GameLaunched += this.SetUpConfig;

@@ -15,6 +15,15 @@
     "miss": "miss",
 
 /********************
+* Small bits
+********************/
+    "Clint": "Clint",
+    "Haley": "Haley",
+    "Harvey": "Harvey",
+    "Robin": "Robin",
+    "Sandy": "Sandy",
+
+/********************
 * Config
 ***********************/
 
@@ -222,6 +231,7 @@
     "harvey-radio.winter.3": "I bet this snow would look lovely from a plane...#$b#Much less fun to have to walk through it.",
     "harvey-radio.spring.4": "@, have you ever wanted to fly a plane before?",
     "harvey-radio.summer.4": "It's amazing just how much coordination it takes to keep planes from flying into each other.",
+    "harvey-radio.fall.4": "So many flights canceled this week...the regulators won't be happy about this...$s",
 
 /***************
 * Lewis in the community center
@@ -332,6 +342,39 @@
     "lewis-cc-fireplace.fall.4": "Back when I lived in the city, there was a little corner pub we'd all go to after work.#$b#I wonder if that's still around.",
     "lewis-cc-fireplace.winter.4": "Between you and I, @, what I miss most from the city is good, fresh sushi.",
     "lewis-cc-fireplace.spring.0": "It's important to take a break sometimes, you know, and just chill in front of a fireplace...#$b#Even if it 's a bit too warm today for a fireplace...",
+    "lewis-cc-fireplace.summer.0": "I'm glad the economy is getting better, it means I can rest a little more.$h",
+
+/************
+* Mail
+*************/
+    "gift-from": "A Gift From {{person}}",
+
+    "clint-mail-greeting.0": "Oh, um, hi.",
+    "clint-mail-greeting.1": "Uh, hi, @!",
+    "clint-mail-alpha.0": "Got some extra supplies, figured you might need some.",
+    "clint-mail-alpha.1": "I've got some excess ore, figured you might need some.",
+
+    "haley-mail-greeting": "Heya, @!",
+    "haley-mail-object": "Saw this flower, and thought of you. Figured you should have it!",
+
+    "harvey-mail-greeting": "Hi, @",
+    "harvey-mail-text": "Made some extra coffee the other day, figured you could use it. It might be a bit cold.",
+
+    "robin-mail-greeting.0": "Hey!",
+    "robin-mail-greeting.1": "Hey there!",
+    "robin-mail-greeting.2": "Heya!",
+    "robin-mail-alpha.0": "Got some extra materials floating about, figured you could use them.",
+    "robin-mail-alpha.1": "Was doing a bit of shop cleanup, figured you could use these materials...",
+
+    "sandy-mail-greeting": "Oh, hey, @!",
+    "sandy-mail-alpha.0": "I do so miss you.",
+    "sandy-mail-alpha.1": "I do wish you could visit more often.",
+    "sandy-mail-alpha-middle": "It's really lonely out here in the desert.",
+    "sandy-mail-alpha-ending.0": "I've taken to rearranging flowers in my spare time.",
+    "sandy-mail-alpha-ending.1": "Emily's also been too busy to see me.",
+    "sandy-mail-alpha-ending.2": "Please don't forget about me.",
+    "sandy-mail-alpha.item": "I've attached something to remember me by.",
+    "sandy-mail-alpha.visit": "Come and thank me in person!",
 
 /****************
 * Map strings

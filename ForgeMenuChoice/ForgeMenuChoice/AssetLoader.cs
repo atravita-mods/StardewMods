@@ -1,4 +1,5 @@
-﻿using AtraBase.Toolkit.StringHandler;
+﻿using AtraBase.Toolkit.Extensions;
+using AtraBase.Toolkit.StringHandler;
 using AtraShared.Utils.Extensions;
 using Microsoft.Xna.Framework.Graphics;
 using StardewModdingAPI.Events;
@@ -16,7 +17,7 @@ public static class AssetLoader
     private static readonly string UiTexturePath = PathUtilities.NormalizePath("assets/Forge-Buttons.png");
     private static IAssetName uiAssetPath = null!;
     private static IAssetName tooltipDataPath = null!;
-    private static Lazy<Texture2D> uiElementLazy = new(() => ModEntry.GameContentHelper.Load<Texture2D>(uiAssetPath));
+    private static Lazy<Texture2D> uiElementLazy = new(() => Game1.temporaryContent.Load<Texture2D>(uiAssetPath.BaseName));
     private static Lazy<Dictionary<string, string>> tooltipDataLazy = new(GrabAndWrapTooltips);
 
     /// <summary>
@@ -52,7 +53,7 @@ public static class AssetLoader
     {
         if (uiElementLazy.IsValueCreated && (assets is null || assets.Contains(uiAssetPath)))
         {
-            uiElementLazy = new(() => ModEntry.GameContentHelper.Load<Texture2D>(uiAssetPath));
+            uiElementLazy = new(() => Game1.temporaryContent.Load<Texture2D>(uiAssetPath.BaseName));
         }
         if (tooltipDataLazy.IsValueCreated && (assets is null || assets.Contains(tooltipDataPath)))
         {
@@ -91,7 +92,7 @@ public static class AssetLoader
         // the journal scrap 1008 is the only in-game descriptions of enchantments. We'll need to grab data from there.
         try
         {
-            IDictionary<int, string> secretnotes = ModEntry.GameContentHelper.Load<Dictionary<int, string>>(@"Data\SecretNotes");
+            IDictionary<int, string> secretnotes = Game1.content.Load<Dictionary<int, string>>(@"Data\SecretNotes");
             StreamSplit secretNote8 = secretnotes[1008].StreamSplit('^', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
 
             // The secret note, of course, has its data in the localized name. We'll need to map that to the internal name.
@@ -108,8 +109,8 @@ public static class AssetLoader
             }
 
             // For each enchantment, look up its description from the secret note and
-            // and prepopulate the data file with that.
-            // Russian needs to be handled seperately.
+            // and pre-populate the data file with that.
+            // Russian needs to be handled separately.
             foreach (BaseEnchantment enchantment in BaseEnchantment.GetAvailableEnchantments())
             {
                 if (ModEntry.TranslationHelper.TryGetTranslation("enchantment." + enchantment.GetName(), out Translation i18nname))
@@ -142,7 +143,7 @@ public static class AssetLoader
 
     private static Dictionary<string, string> GrabAndWrapTooltips()
     {
-        Dictionary<string, string> tooltips = ModEntry.GameContentHelper.Load<Dictionary<string, string>>(tooltipDataPath);
+        Dictionary<string, string> tooltips = Game1.temporaryContent.Load<Dictionary<string, string>>(tooltipDataPath.BaseName);
         foreach ((string k, string v) in tooltips)
         {
             tooltips[k] = ModEntry.StringUtils.ParseAndWrapText(v, Game1.smallFont, 300);

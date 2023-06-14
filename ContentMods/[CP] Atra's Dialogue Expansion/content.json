@@ -206,6 +206,12 @@
         },
         {
             "Action": "Include",
+            "LogName": "Mail",
+            "When": {"EnableMail": true, "Year|contains=1": false},
+            "FromFile": "assets/mail.json",
+        },
+        {
+            "Action": "Include",
             "LogName": "GIMA",
             "When": {"HasMod": "atravita.GingerIslandMainlandAdjustments"},
             "FromFile": "assets/integrations/gima.json"

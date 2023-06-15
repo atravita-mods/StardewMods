@@ -1,8 +1,6 @@
-﻿using Newtonsoft.Json.Linq;
-using Newtonsoft.Json;
-using OneSixMyMod.Models;
+﻿namespace OneSixMyMod;
 
-namespace OneSixMyMod;
+using Newtonsoft.Json;
 
 /// <summary>
 /// Helpers to get the right file location.
@@ -18,6 +16,13 @@ internal static class FileHelpers
         return JsonConvert.DeserializeObject<TModel>(concat);
     }
 
+    /// <summary>
+    /// Tries to get a single file by a specific name for a directory.
+    /// </summary>
+    /// <param name="dir">Directory to search in.</param>
+    /// <param name="fileName">Name of the file.</param>
+    /// <param name="file">The relevant fileinfo.</param>
+    /// <returns>True if found, false otherwise.</returns>
     internal static bool TryGetSingleFile(this DirectoryInfo? dir, string? fileName, [NotNullWhen(true)] out FileInfo? file)
     {
         file = null;
@@ -43,8 +48,7 @@ internal static class FileHelpers
     /// <exception cref="InvalidDataException">No clue how you could manage two directories in some places, will need to fix later.</exception>
     internal static (DirectoryInfo unpacked, DirectoryInfo mods)? GetStardewPath(string? initial)
     {
-        // bit of a hat trick to make sure to get 1.6
-        DirectoryInfo dir = new(initial ?? Environment.CurrentDirectory);
+        DirectoryInfo dir = new (initial ?? Environment.CurrentDirectory);
         while (true)
         {
             Console.WriteLine($"Checking {dir.FullName}");
@@ -62,7 +66,7 @@ internal static class FileHelpers
                 DirectoryInfo? unpacked;
                 if (unpackedCandidates.Length == 0)
                 {
-                    Console.WriteLine("Hmmm, default unpacked dir does not seem to exist. You need to unpack Stardew to use the convertor.");
+                    Console.WriteLine("Hmmm, default unpacked dir does not seem to exist. You need to unpack Stardew to use the converter.");
                     unpacked = GetDirOf(dir, "unpacked");
                     if (unpacked is null)
                     {
@@ -131,6 +135,7 @@ internal static class FileHelpers
             {
                 continue;
             }
+
             dir = new (next);
         }
     }

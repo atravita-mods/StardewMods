@@ -1,41 +1,68 @@
-﻿using Newtonsoft.Json;
+﻿using System.Collections.Concurrent;
 
+using Newtonsoft.Json;
+
+using OneSixMyMod.Models;
 using OneSixMyMod.Models.JsonAssets;
 
 namespace OneSixMyMod;
 
 internal static class ProcessJsonAssets
 {
-    internal static async Task ProcessJAMod(DirectoryInfo mods, DirectoryInfo unpacked, DirectoryInfo JAMod, string uniqueID, CancellationToken token)
+    internal static async Task<IEnumerable<KeyValuePair<string, string>>> ProcessJAMod(DirectoryInfo mods, DirectoryInfo unpacked, Manifest manifest, CancellationToken token)
     {
         if (token.IsCancellationRequested)
         {
-            return;
+            return Enumerable.Empty<KeyValuePair<string, string>>();
+        }
+
+        if (manifest.Location is not DirectoryInfo modDir)
+        {
+            throw new ArgumentException($"Directory information for {manifest.UniqueID} required.");
+        }
+
+        ConcurrentDictionary<string, string> itemMap = new();
+
+        // load objects
+        var objects = new DirectoryInfo(Path.Combine(modDir.FullName, "Objects"));
+        if (objects.Exists)
+        {
+            await Parallel.ForEachAsync(
+                objects.EnumerateDirectories(),
+                token,
+                async (obj, token) =>
+                {
+                    if (token.IsCancellationRequested || obj.Name.StartsWith('.') || !obj.TryGetSingleFile("object.json", out FileInfo? file))
+                    {
+                        return;
+                    }
+                });
         }
 
         // Load crops
-        var crops = new DirectoryInfo(Path.Combine(JAMod.FullName, "Crops"));
+        var crops = new DirectoryInfo(Path.Combine(modDir.FullName, "Crops"));
         if (crops.Exists)
         {
-            foreach (var crop in crops.EnumerateDirectories())
-            {
-                if (crop.Name.StartsWith('.') || !crop.TryGetSingleFile("crop.json", out var file))
+            await Parallel.ForEachAsync(
+                crops.EnumerateDirectories(),
+                token,
+                async (crop, token) =>
                 {
-                    continue;
-                }
+                    if (token.IsCancellationRequested || crop.Name.StartsWith('.') || !crop.TryGetSingleFile("crop.json", out FileInfo? file))
+                    {
+                        return;
+                    }
 
-                CropModel? cropModel = await file.ReadJsonFile<CropModel>(token);
-                if (cropModel is null)
-                {
-                    continue;
-                }
-
-                Console.WriteLine(cropModel);
-            }
+                    CropModel? cropModel = await file.ReadJsonFile<CropModel>(token);
+                    if (cropModel is null)
+                    {
+                        return;
+                    }
+                });
         }
 
         // Load shirts
-        var shirts = new DirectoryInfo(Path.Combine(JAMod.FullName, "Shirts"));
+        var shirts = new DirectoryInfo(Path.Combine(modDir.FullName, "Shirts"));
         if (shirts.Exists)
         {
             foreach (var shirt in shirts.EnumerateDirectories())
@@ -50,9 +77,16 @@ internal static class ProcessJsonAssets
                 {
                     continue;
                 }
-
-                // load shirt textures.
             }
         }
+
+        // Forge cannot be ported at this time.
+        var forge = new DirectoryInfo(Path.Combine(modDir.FullName, "Forge"));
+        if (forge.Exists && forge.GetDirectories().Any())
+        {
+            manifest.MigrationFailureReason.Add("Forge recipes cannot be converted.");
+        }
+
+        return itemMap;
     }
 }

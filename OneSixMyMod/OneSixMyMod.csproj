@@ -21,6 +21,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Folder Include="Models\BFAV\" />
     <Folder Include="Models\ProducerFrameworkMod\" />
     <Folder Include="Models\ShopTileFramework\" />
   </ItemGroup>
@@ -29,6 +30,8 @@
     <PackageReference Include="CommunityToolkit.Diagnostics" Version="8.0.0" />
     <PackageReference Include="FastExpressionCompiler.LightExpression" Version="3.3.3" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+    <PackageReference Include="SkiaSharp" Version="2.88.3" />
+    <PackageReference Include="SkiaSharp.NativeAssets.Linux" Version="2.88.3" />
 
     <PackageReference Include="StyleCop.Analyzers" Version="1.1.118">
       <PrivateAssets>all</PrivateAssets>

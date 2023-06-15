@@ -1,16 +1,23 @@
-﻿using System.Collections.Concurrent;
+﻿namespace OneSixMyMod;
 
-using Newtonsoft.Json;
+using System.Collections.Concurrent;
 
 using OneSixMyMod.Models;
-
-namespace OneSixMyMod;
 
 /// <summary>
 /// The entry point.
 /// </summary>
 public static class Program
 {
+    private static readonly Dictionary<string, Version> SupportedMods = new (StringComparer.OrdinalIgnoreCase)
+    {
+        ["Pathoschild.ContentPatcher"] = new Version(2, 0),
+        ["Cherry.ShopTileFramework"] = new Version(0, 0),
+        ["Digus.ProducerFrameworkMod"] = new Version(0, 0),
+        ["spacechase0.JsonAssets"] = new Version(0, 0),
+        ["Paritee.BetterFarmAnimalVariety"] = new Version(0, 0),
+    };
+
     public static async Task Main(string[] args)
     {
         (DirectoryInfo unpacked, DirectoryInfo mods)? dirs = FileHelpers.GetStardewPath(args.Length == 0 ? null : args[0]);
@@ -21,17 +28,19 @@ public static class Program
         }
 
         Console.WriteLine("Reading in mod data");
-        ConcurrentDictionary<string, ConcurrentQueue<(string, DirectoryInfo)>> queues = new (StringComparer.OrdinalIgnoreCase);
+        ConcurrentDictionary<string, ConcurrentQueue<Manifest>> queues = new (StringComparer.OrdinalIgnoreCase);
         await ProcessModsDir(dirs.Value.mods, queues);
 
-        if (queues.TryGetValue("spacechase0.JsonAssets", out ConcurrentQueue<(string, DirectoryInfo)>? queue))
+        if (queues.TryGetValue("spacechase0.JsonAssets", out ConcurrentQueue<Manifest>? queue))
         {
             Console.WriteLine($"Reading in data from {queue.Count} Json Assets Mods");
-            await Parallel.ForEachAsync(queue, async (val, token) => await ProcessJsonAssets.ProcessJAMod(dirs.Value.mods, dirs.Value.unpacked, val.Item2, val.Item1, token));
+            await Parallel.ForEachAsync(
+                source: queue,
+                body: async (val, token) => await ProcessJsonAssets.ProcessJAMod(dirs.Value.mods, dirs.Value.unpacked, val, token));
         }
     }
 
-    private static async Task ProcessModsDir(DirectoryInfo mods, ConcurrentDictionary<string, ConcurrentQueue<(string, DirectoryInfo)>> queues)
+    private static async Task ProcessModsDir(DirectoryInfo mods, ConcurrentDictionary<string, ConcurrentQueue<Manifest>> queues)
     {
         await Parallel.ForEachAsync(mods.GetDirectories(), async (dir, token) =>
         {
@@ -58,11 +67,20 @@ public static class Program
                 {
                     return;
                 }
+
+                if (!SupportedMods.ContainsKey(model.ContentPackFor.UniqueID))
+                {
+                    Console.WriteLine($"{model.UniqueID} is unsupported, you will need to convert manually.");
+                    return;
+                }
+
                 if (!queues.TryGetValue(model.ContentPackFor.UniqueID, out var queue))
                 {
-                    queues[model.ContentPackFor.UniqueID] = queue = new();
+                    queues[model.ContentPackFor.UniqueID] = queue = new ();
                 }
-                queue.Enqueue((model.UniqueID, dir));
+
+                model.Location = dir;
+                queue.Enqueue(model);
                 Console.WriteLine("Found content pack, queuing " + dir.FullName);
             }
             catch (Exception ex)

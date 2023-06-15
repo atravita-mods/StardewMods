@@ -48,6 +48,7 @@ internal static class Program
         {
             using FileStream sr = new (File.OpenHandle(filename), FileAccess.Read);
 
+            // we'll parse this ourselves cuz we can't trust the data not to have duplicates.
             CsvOptions options = new ()
             {
                 HeaderMode = HeaderMode.HeaderAbsent,
@@ -124,7 +125,7 @@ internal static class Program
     private static async Task WriteFiles(DirectoryInfo directory)
     {
         // write the small files.
-        Parallel.ForEach(Data, async (d) => await WriteFile(d.Key, d.Value, directory));
+        await Parallel.ForEachAsync(Data, async (d, token) => await WriteFile(d.Key, d.Value, directory, token));
 
         // write the include.
         await WriteIncludes(directory);
@@ -162,70 +163,74 @@ internal static class Program
         }
     }
 
-    private static async Task WriteFile(string name, ConcurrentDictionary<GiftTasteLevel, ConcurrentBag<string>> tastes, DirectoryInfo directory)
+    private static async Task WriteFile(string name, ConcurrentDictionary<GiftTasteLevel, ConcurrentBag<string>> tastes, DirectoryInfo directory, CancellationToken token)
     {
+        if (token.IsCancellationRequested)
+        {
+            return;
+        }
         try
         {
             using StreamWriter sw = File.CreateText(Path.Combine(directory.FullName, $"gift-tastes-{name}.json"));
             using JsonWriter writer = new JsonTextWriter(sw);
             writer.Formatting = Formatting.Indented;
 
-            await writer.WriteStartObjectAsync();
-            await writer.WritePropertyNameAsync("Changes");
-            await writer.WriteStartArrayAsync();
-            await writer.WriteStartObjectAsync();
+            await writer.WriteStartObjectAsync(token);
+            await writer.WritePropertyNameAsync("Changes", token);
+            await writer.WriteStartArrayAsync(token);
+            await writer.WriteStartObjectAsync(token);
 
-            await writer.WritePropertyNameAsync("Action");
-            await writer.WriteValueAsync("EditData");
+            await writer.WritePropertyNameAsync("Action", token);
+            await writer.WriteValueAsync("EditData", token);
 
-            await writer.WritePropertyNameAsync("Target");
-            await writer.WriteValueAsync("Data/NPCGiftTastes");
+            await writer.WritePropertyNameAsync("Target", token);
+            await writer.WriteValueAsync("Data/NPCGiftTastes", token);
 
-            await writer.WritePropertyNameAsync("LogName");
-            await writer.WriteValueAsync($"Gift tastes: {name}");
+            await writer.WritePropertyNameAsync("LogName", token);
+            await writer.WriteValueAsync($"Gift tastes: {name}", token);
 
-            await writer.WritePropertyNameAsync("TextOperations");
-            await writer.WriteStartArrayAsync();
+            await writer.WritePropertyNameAsync("TextOperations", token);
+            await writer.WriteStartArrayAsync(token);
 
             foreach ((GiftTasteLevel taste, ConcurrentBag<string> items) in tastes)
             {
-                await writer.WriteCommentAsync(taste.ToStringFast());
-                await writer.WriteStartObjectAsync();
+                await writer.WriteCommentAsync(taste.ToStringFast(), token);
+                await writer.WriteStartObjectAsync(token);
 
-                await writer.WritePropertyNameAsync("Operation");
-                await writer.WriteValueAsync("Append");
+                await writer.WritePropertyNameAsync("Operation", token);
+                await writer.WriteValueAsync("Append", token);
 
-                await writer.WritePropertyNameAsync("Target");
-                await writer.WriteStartArrayAsync();
+                await writer.WritePropertyNameAsync("Target", token);
+                await writer.WriteStartArrayAsync(token);
 
                 if (name == "Universal")
                 {
-                    await writer.WriteValueAsync("Entries");
-                    await writer.WriteValueAsync($"Universal_{taste.ToStringFast()}");
+                    await writer.WriteValueAsync("Entries", token);
+                    await writer.WriteValueAsync($"Universal_{taste.ToStringFast()}", token);
                 }
                 else
                 {
-                    await writer.WriteValueAsync("Fields");
-                    await writer.WriteValueAsync(name);
-                    await writer.WriteValueAsync((int)taste);
+                    await writer.WriteValueAsync("Fields", token);
+                    await writer.WriteValueAsync(name, token);
+                    await writer.WriteValueAsync((int)taste, token);
                 }
 
-                await writer.WriteEndArrayAsync();
+                await writer.WriteEndArrayAsync(token);
 
-                await writer.WritePropertyNameAsync("Value");
-                await writer.WriteValueAsync(string.Join(' ', items));
+                await writer.WritePropertyNameAsync("Value", token);
+                await writer.WriteValueAsync(string.Join(' ', items), token);
 
-                await writer.WritePropertyNameAsync("Delimiter");
-                await writer.WriteValueAsync(" ");
+                await writer.WritePropertyNameAsync("Delimiter", token);
+                await writer.WriteValueAsync(" ", token);
 
-                await writer.WriteEndAsync();
+                await writer.WriteEndAsync(token);
             }
 
-            await writer.WriteEndAsync();
-            await writer.WriteEndAsync();
+            await writer.WriteEndAsync(token);
+            await writer.WriteEndAsync(token);
 
-            await writer.WriteEndArrayAsync();
-            await writer.WriteEndObjectAsync();
+            await writer.WriteEndArrayAsync(token);
+            await writer.WriteEndObjectAsync(token);
         }
         catch (Exception ex)
         {

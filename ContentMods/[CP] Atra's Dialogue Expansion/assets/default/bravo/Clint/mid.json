@@ -31,6 +31,7 @@
         "Entries": {
             "winter_Wed6": "Between you and I, @, I'm glad how toasty this place is in winter.#$e#Pretty cold when I have to brave the elements to go to the saloon, though.",
             "spring_Tue6": "Feel free to bring your geodes to me, I'll crack them open for a small fee...",
+            "fall_Wed8": "Sometimes, when I'm lying in bed awake at night, I wonder what happens to all the swords I make.",
 
             "6{{YearRemainder}}": "I'd consider moving elsewhere, but I'm not sure I could afford the rent.#$e#My family has owned this building for as long as I can remember. Helps a lot with my expenses.",
             "7{{YearRemainder}}": "I've got a cousin in Grampleton who's a glassblower.#$e#He's attached to one of the local universities, he does custom glassware for them. Cushy job, somehow.",
@@ -43,6 +44,7 @@
         "Action": "EditData",
         "Target": "Characters/Dialogue/Clint",
         "Entries": {
+            "winter_Wed10": "I've got a cousin in Grampleton who makes hard candies now, the old fashioned way. Made him his cooling table, his candy cutters, and, of course, the candy hook.$h",
             "6_2": "Got a commission from %place for a pile of swords. That'll be nice for the ole' balance sheet.",
             "8_2": "What would I've done if I didn't become a blacksmith? Err, @, I'm not sure actually.$s#$b#Didn't really have an idea of what I wanted to become as a kid. Just followed my father's footsteps.",
             "10_2": "My family has been blacksmiths in this here town for as long as I can remember....",

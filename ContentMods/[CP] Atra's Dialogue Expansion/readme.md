@@ -3,7 +3,7 @@ Atra's Mundane Dialogue Expansion
 
 This mod adds a lot of new dialogue, mostly focused on the mundane parts of small town life.
 
-To be honest, I've always felt like there was part of Stardew's dialogue that just seemed...missing. Many of the characters felt just...not grounded to me. The employed NPCs never seemed to talk about their jobs. What **is** Demetrius's topic of research anyways?
+To be honest, I've always felt like there was part of Stardew's dialogue that just seemed...missing. Many of the characters felt just...not grounded to me. The employed NPCs never seemed to talk about their jobs. What **is** Demetrius's topic of research anyways? Why does Sebastian not feel like a programmer?
 
 Additionally, dialogue tends to stagnant, and stagnant fairly quickly. There's only so many lines, and mostly they don't change over time.
 

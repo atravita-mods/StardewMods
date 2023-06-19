@@ -23,7 +23,6 @@
   <ItemGroup>
     <Folder Include="Models\BFAV\" />
     <Folder Include="Models\ProducerFrameworkMod\" />
-    <Folder Include="Models\ShopTileFramework\" />
   </ItemGroup>
 
   <ItemGroup>

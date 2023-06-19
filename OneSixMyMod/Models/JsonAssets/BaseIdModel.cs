@@ -1,6 +1,4 @@
-﻿using System.Drawing;
-
-namespace OneSixMyMod.Models.JsonAssets;
+﻿namespace OneSixMyMod.Models.JsonAssets;
 
 /// <summary>
 /// The base JA data model, which everything else inherits from.
@@ -21,3 +19,14 @@ public record BaseIdModel(
 public record Ingredient(
     object Object,
     int Count);
+
+/// <summary>
+/// Used for additional purchase info from JA.
+/// </summary>
+/// <param name="PurchasePrice">Cost of the item.</param>
+/// <param name="PurchaseFrom">Who to purchase it from.</param>
+/// <param name="PurchaseRequirements">The requirements.</param>
+public record PurchaseData(
+    int PurchasePrice,
+    string? PurchaseFrom,
+    string[]? PurchaseRequirements);

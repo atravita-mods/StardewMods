@@ -11,16 +11,6 @@
         },
         {
             "Action": "Include",
-            "LogName": "Generic marriage items",
-            "FromFile": "assets/base_dialogue/marriage_generic.json",
-            "When": {
-                "Random: true, false, false": true,
-                "HasValue: {{Spouse}}": true,
-                "EnableGeneric": true
-            }
-        },
-        {
-            "Action": "Include",
             "LogName": "Alex - base",
             "FromFile": "assets/base_dialogue/Alex/mid.json",
             "When": {
@@ -84,21 +74,10 @@
         },
         {
             "Action": "Include",
-            "LogName": "Spouse-related items",
-            "FromFile": "assets/base_dialogue/{{Spouse}}/spousal.json",
+            "LogName": "Spouse lines",
+            "FromFile": "assets/base_dialogue/spouse_toc.json",
             "When": {
-                "HasValue: {{Spouse}}": true,
-                "HasFile: {{FromFile}}": true,
-            }
-        },
-        {
-            "Action": "Include",
-            "LogName": "Misc items",
-            "FromFile": "assets/base_dialogue/anniversary.json",
-            "When": {
-                "EnableGeneric": true,
-                "HasValue: {{Spouse}}": true,
-                "EnableFor|contains={{Spouse}}": true
+                "HasValue: {{Spouse}}": true
             }
         }
     ]

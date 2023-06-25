@@ -64,6 +64,7 @@
             "9{{YearRemainder}}": "Some of the best food I've had was from street food vendors in %place.#$b#All you need to cook well is love for the craft.",
             "10{{YearRemainder}}": "Emily is actually quite a decent chef too! Sometimes she'll help me develop a recipe or two.",
             "11{{YearRemainder}}": "I've never been married, this restaurant is my first and only love.$h",
+            "13{{YearRemainder}}": "I've never had the instinct for mixology some people have.#$b#To be honest, I'm more comfortable in the kitchen, but booze has a higher profit margin.",
             "14{{YearRemainder}}": "As I've always said, if you have time to lean, you have time to clean.$h#$b#Always got more work to do in the restaurant!"
         }
     },
@@ -107,6 +108,10 @@
         "Entries": {
             "fall_Sun10": "Between you and I, @, my least favorite kitchen chore is cleaning the deep fryers.#$b#But it has to be done...#$b#Of course I'm not going to make Emily do a chore I hate.",
 
+            "2_2": "I couldn't ask for a better employee than Emily. She's so sweet all the time, and so efficient at serving.",
+            "3_2": "If you want, go put a new track on on the jukebox some time.",
+            "12_2": "Maybe I should get some live music sometimes...Sam might be interested...",
+            "13_2": "Been thinking of adding some gumbo to the menu, or perhaps some red beans and rice...",
             "14_2": "I'm the last surviving restaurant in this here town, and business isn't easy.#$b#Many people cut back on eating out when the economy goes bad.$s",
             "17_2": "I wanted to make my restaurant a place that would feel like home. A place people could gather and relax.#$b#I'm very proud of the place I built.$h",
             "18_2": "When cooking, ingredients matter so, so much. You're not going to make a good dish with bad produce.",
@@ -130,11 +135,12 @@
         "When": { "YearModulus": "4"},
         "Entries": {
             "fall_Sun10": "Between you and I, @, my least favorite kitchen chore is cleaning the deep fryers.#$b#But it has to be done...#$b#Of course I'm not going to make Emily do a chore I hate.",
-
+            "3_2": "There's nothing that reminds people of home more than the food they ate as a kid.",
             "14_2": "Today feels like an excellent day to cook some curry...",
             "15_2": "The one dish I truly, truly dislike is coleslaw. My mother used to make that all the time when I was growing up.%revealtasteGus648",
             "16_2": "When cooking vegetables, it's important to avoid cooking them to death.#$b#Veggies have a certain crispness and freshness that's important to preserve",
-            "17_2": "I'm making a few adjustments to my spaghetti recipe. Of course, I'm always making adjustments, gotta make everything to the best of my ability.$h"
+            "17_2": "I'm making a few adjustments to my spaghetti recipe. Of course, I'm always making adjustments, gotta make everything to the best of my ability.$h",
+            "23_2": "Let's see, I need to make some more stock, and buy more beer, and make more simple syrup..."
         }
     },
     {
@@ -143,7 +149,8 @@
         "Target": "Characters/Dialogue/Gus",
         "When": { "YearModulus": "0"},
         "Entries": {
-            "1_2": "I've been reconsidering my wine and alcohol list, and I think I want to focus more on locally-produced brews.#$b#Say, @, you producing anything interesting?"
+            "1_2": "I've been reconsidering my wine and alcohol list, and I think I want to focus more on locally-produced brews.#$b#Say, @, you producing anything interesting?",
+            "2_2": "I've always wanted to own one of those places that feels like a second home, you know? A place where anyone can come to relax."
         }
     }
 ]}

@@ -38,6 +38,14 @@
         },
         {
             "Action": "Include",
+            "LogName":  "Gus",
+            "FromFile": "assets/base_dialogue/Gus/base.json",
+            "When": {
+                "EnableFor|contains=Gus": true
+            }
+        },
+        {
+            "Action": "Include",
             "LogName": "Harvey - base",
             "FromFile": "assets/base_dialogue/Harvey/mid.json",
             "When": {

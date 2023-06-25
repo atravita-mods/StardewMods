@@ -111,7 +111,8 @@
             "18_2": "There are some days I really miss my parents.#$b#I do hope they enjoy...whatever place they're at now.",
             "20_2": "Zuzu city has a great little thrift shop for crafters.I should see if I can get some time to go there sometimes...",
             "21_2": "I'm thinking of making some collard greens soup...",
-            "22_2": "You know, I wasn't actually that interested in dance when I was a kid. That used to be more Haley's thing."
+            "22_2": "You know, I wasn't actually that interested in dance when I was a kid. That used to be more Haley's thing.",
+            "23_2": "Haley was actually quite a good student when she was young..."
         },
         "When": {"YearModulus": "3"}
     },
@@ -127,5 +128,15 @@
             "YearModulus": "3",
             "Query: {{DailyLuck}} < 0": true
         }
+    },
+    {
+        "LogName": "Emily mid-hearts, Y3",
+        "Action": "EditData",
+        "Target": "Characters/Dialogue/Emily",
+        "Entries": {
+            "7_2": "There's enough resources in our lovely world for everyone, but we need to take care of it.",
+            "12_2": "I wish my sister was more responsible.$s"
+        },
+        "When": {"YearModulus": "4"}
     },
 ]}

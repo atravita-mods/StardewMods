@@ -75,7 +75,8 @@
             "15_2": "I used to be an amateur boxer, back when we lived in Zuzu City.#$b#Was great fun, never made much money from it.#$b#Kept me in excellent shape though. My left hook is still pretty good.",
             "17_2": "Maybe I should take Caroline out for dinner.She'll probably like {{i18n:restaurant.{{Random:01, 02, 03, 04, 05, 06}} }}, right?",
             "18_2": "Heya @, got any nice produce to sell to me?",
-            "19_2": "I think Abby got most of her musical talents from Caroline."
+            "19_2": "I think Abby got most of her musical talents from Caroline.",
+            "20_2": "Sometimes Leah brings me a few mushrooms to sell. I pay her what I can for them, of course."
         },
         "When": { "YearModulus": "3"}
     }

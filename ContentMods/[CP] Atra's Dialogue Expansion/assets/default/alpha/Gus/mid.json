@@ -65,7 +65,9 @@
             "10{{YearRemainder}}": "Emily is actually quite a decent chef too! Sometimes she'll help me develop a recipe or two.",
             "11{{YearRemainder}}": "I've never been married, this restaurant is my first and only love.$h",
             "13{{YearRemainder}}": "I've never had the instinct for mixology some people have.#$b#To be honest, I'm more comfortable in the kitchen, but booze has a higher profit margin.",
-            "14{{YearRemainder}}": "As I've always said, if you have time to lean, you have time to clean.$h#$b#Always got more work to do in the restaurant!"
+            "14{{YearRemainder}}": "As I've always said, if you have time to lean, you have time to clean.$h#$b#Always got more work to do in the restaurant!",
+            "15{{YearRemainder}}": "I should go pick up some more farm-fresh cheese from Marnie.$h",
+            "16{{YearRemainder}}": "We're not directly off the highway, so there's not much external traffic here, but sometimes I get a tourist or two."
         }
     },
     {
@@ -107,6 +109,7 @@
         "When": { "YearModulus": "3"},
         "Entries": {
             "fall_Sun10": "Between you and I, @, my least favorite kitchen chore is cleaning the deep fryers.#$b#But it has to be done...#$b#Of course I'm not going to make Emily do a chore I hate.",
+            "summer_Tue10": "Sometimes Leah brings in mushrooms for me, and I'll use them.#$b#Freshly foraged mushrooms...",
 
             "2_2": "I couldn't ask for a better employee than Emily. She's so sweet all the time, and so efficient at serving.",
             "3_2": "If you want, go put a new track on on the jukebox some time.",
@@ -136,11 +139,14 @@
         "Entries": {
             "fall_Sun10": "Between you and I, @, my least favorite kitchen chore is cleaning the deep fryers.#$b#But it has to be done...#$b#Of course I'm not going to make Emily do a chore I hate.",
             "3_2": "There's nothing that reminds people of home more than the food they ate as a kid.",
+            "5_2": "It's a bartender's responsibility to never overserve their guests.#$b#It's not about plying the customers with as much alcohol as possible.",
             "14_2": "Today feels like an excellent day to cook some curry...",
             "15_2": "The one dish I truly, truly dislike is coleslaw. My mother used to make that all the time when I was growing up.%revealtasteGus648",
             "16_2": "When cooking vegetables, it's important to avoid cooking them to death.#$b#Veggies have a certain crispness and freshness that's important to preserve",
             "17_2": "I'm making a few adjustments to my spaghetti recipe. Of course, I'm always making adjustments, gotta make everything to the best of my ability.$h",
-            "23_2": "Let's see, I need to make some more stock, and buy more beer, and make more simple syrup..."
+            "23_2": "Let's see, I need to make some more stock, and buy more beer, and make more simple syrup...",
+            "24_2": "Maybe I should swing by Willy's and pick up some fresh fish...",
+            "25_2": "There's nothing like local, fresh ingredients when it comes to making good food.$h"
         }
     },
     {
@@ -150,7 +156,8 @@
         "When": { "YearModulus": "0"},
         "Entries": {
             "1_2": "I've been reconsidering my wine and alcohol list, and I think I want to focus more on locally-produced brews.#$b#Say, @, you producing anything interesting?",
-            "2_2": "I've always wanted to own one of those places that feels like a second home, you know? A place where anyone can come to relax."
+            "2_2": "I've always wanted to own one of those places that feels like a second home, you know? A place where anyone can come to relax.",
+            "15_2": "I do some sales at lunchtime, but the bulk of my customers come by mostly for dinner."
         }
     }
 ]}

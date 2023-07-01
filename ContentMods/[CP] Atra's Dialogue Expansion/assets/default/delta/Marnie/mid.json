@@ -92,5 +92,14 @@
             "22_2": "%Marnie looks tired.#$b#*Yawn*. Oh, @, hi! Just had to get up very early this morning to herd some cows back into their pen.",
             "23_2": "Tried to make some {{i18n:dishes.adult.{{Random:01, 02, 03, 04, 05, 06, 07, 08, 09}} }} the other day.#$b#Made a mess of the kitchen and burned it though.$s"
         }
+    },
+    {
+        "LogName": "Marnie mid-hearts",
+        "Action": "EditData",
+        "Target": "Characters/Dialogue/Marnie",
+        "When": { "YearModulus": "4" },
+        "Entries": {
+            "2_2": "I do supply some restaurants directly, they prize the fresh eggs and farmmade-cheese.#$b#Of course, I also sell direct to Gus sometimes."
+        }
     }
 ]}

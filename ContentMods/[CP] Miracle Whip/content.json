@@ -32,9 +32,13 @@
         {
             "Action": "EditData",
             "Target": "Data/ConcessionTastes",
-            "TargetField": ["*", "DislikedTags"],
+            "TargetField": ["*"],
             "Entries": {
-                999: "Horrid",
+                "DislikedTags": [
+                    "Black Licorice",
+                    "Joja",
+                    "Horrid",
+                  ],
             }
         }
     ]

@@ -27,7 +27,7 @@
             "4{{YearRemainder}}": "Penny and I spent yesterday building robots with the kids. It's a fun little science project to do with them.",
             "5{{YearRemainder}}": "Harvey pays me pretty well, and lets me read when there isn't any other work to do.$h",
             "6{{YearRemainder}}": "There's a lot more paperwork that goes on in a doctor's office than I would have thought when I started this job.$s",
-            "7{{YearRemainder}}": "The fax machine at work broke. Do you know how expensive it is to get someone out here to fix a fax machine?$s",
+            "7{{YearRemainder}}": "The fax machine at work broke. Do you know how expensive it is to get someone out here to fix a fax machine?$s#$b#I would fix it myself but it's full of proprietary parts.$s",
             "8{{YearRemainder}}": "Saw a really interesting paper out of %name group on bipedal robots the other day!#$b#They've got a new algorithm to help the robot keep its balance.",
             "9{{YearRemainder}}": "Sometimes, I stop and think....how much of my brain is spent on just keeping my balance? It's amazing how easy this is for humans, and how hard it is for robots.$h",
             "10{{YearRemainder}}": "%Maru is speaking to herself.#$b#Hmmm. How much torque do I need?#$e#Oh, @, I didn't see you there!"
@@ -50,7 +50,7 @@
             "17_2": "Dad bought me unleaded solder. It's really not the same.",
             "19_2": "I wish I got along better with my brother.$s",
             "20_2": "Do you have any fresh strawberries? Penny and I are thinking of doing a DNA extraction with the kids. Fun little kitchen science experiment.#$b#Strawberries are best because they're hexaploid, so they have a lot of DNA you can extract.$h",
-            "22_2": "I saw an owl last night when I was looking at the stars!"
+            "22_2": "I saw an owl last night when I was looking at the stars!",
         }
     },
     {

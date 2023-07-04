@@ -1,0 +1,11 @@
+{
+    "Changes": [
+        {
+            "Action": "EditData",
+            "Target": "Characters/Dialogue/MarriageDialogueHarvey",
+            "Entries": {
+                "GILeave_Harvey": "@, I'll be enjoying a nice day at Ginger Island today.#$b#I spend so much of my time inside, it'll be good for me to get some sun.$s",
+            }
+        }
+    ]
+}

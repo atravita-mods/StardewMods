@@ -1,0 +1,11 @@
+{
+    "Changes":[
+        {
+            "Action": "EditData",
+            "Target": "Characters/Dialogue/Maru",
+            "Entries": {
+                "23_2": "Was helping Marnie with some of her machines the other day...#$b#She had a crowd gate that wasn't holding pressure correctly...",
+            }
+        }
+    ]
+}

@@ -21,5 +21,13 @@
             "5_2": "When you're my age, all the kids think they can tell you what to do."
         },
         "When": {"YearModulus": "3"}
+    },
+    {
+        "Action":"EditData",
+        "Target":"Characters/Dialogue/George",
+        "Entries":{
+            "2_2": "Doc says I might need cataract surgery. @, I'm...I'm not sure.#$b#Does the idea of surgery scare you too?",
+        },
+        "When": {"YearModulus": "4"}
     }
 ]}

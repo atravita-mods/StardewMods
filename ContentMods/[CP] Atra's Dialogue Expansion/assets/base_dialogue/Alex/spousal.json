@@ -1,0 +1,17 @@
+{
+    "Changes": [
+        {
+            "LogName": "Evelyn - inlaw",
+            "Action": "EditData",
+            "Target": "Characters/Dialogue/Evelyn",
+            "When": {
+                "EnableFor|contains=Evelyn": true,
+                "HasValue: {{ChildNames}}": false,
+                "HavingChild| contains=@{{playerName}}": false,
+            },
+            "Entries": {
+                "spring_Fri8_inlaw_Alex": "Oh, I'd love to have great-grandchildren before I die, @."
+            }
+        }
+    ]
+}

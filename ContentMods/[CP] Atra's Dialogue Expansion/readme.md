@@ -46,7 +46,7 @@ Simply remove this mod from your mods folder.
 * **Abigail**: Abby's thing is that she's in college and she really doesn't like her major, which of course Pierre picked for her.
 * **Alex**: 
 * **Caroline**: Ah, long-suffering, used-to-be-fun Caroline! Gave her a more active role in the general store, as well as a lot more backstory.
-* **Clint**:
+* **Clint**: Clint I had the hardest time placing - after all, he's a traditional RPG blacksmith, which doesn't fit very well with approximately ~2005. So I'm leaning more artisan with him, he takes commissions. 
 * **Demetrius**: Now has a research topic! He's primarily studying the interactions between fungi and trees and how that contributes to ecological diversity.
 * **Elliott**:
 * **Emily**: Anyone else noticed that homegirl works 56 hours a week? Gus should be really giving you medical and retirement benefits, girl.
@@ -73,7 +73,7 @@ Simply remove this mod from your mods folder.
 * **Willy**:
 
 ## Compatibility
-This mod should be compatible with most other mods, even other dialogue mods. I've tried to use dialogue keys that aren't commonly used. Additionally, each NPC can be enabled or disabled seperately.
+This mod should be compatible with most other mods, even other dialogue mods. I've tried to use dialogue keys that aren't commonly used. Additionally, each NPC can be enabled or disabled separately.
 
 ## License
 The MIT license over my entire repository covers this, but this is also dual license'd [CC-4.0](https://creativecommons.org/licenses/by/4.0/). You may pick either license.

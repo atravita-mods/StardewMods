@@ -1,5 +1,14 @@
 {"Changes":[
     {
+        "LogName":"Harvey mid-hearts - Y2",
+        "Action": "EditData",
+        "Target": "Characters/Dialogue/Harvey",
+        "Entries": {
+            "5_2": "I really do prefer reading papers on paper still, even if it's less convenient.#$b#I'll go back and annotate on the computer afterwards, but it feels like I get more out of reading from an actual paper.",
+            "8_2": "Ugh, I've got so much continuing education to do, and I'm not sure when I'll have the time..."
+        }
+    },
+    {
         "LogName": "Harvey mid-hearts - Y4",
         "Action": "EditData",
         "Target": "Characters/Dialogue/Harvey",
@@ -16,7 +25,8 @@
         "Action": "EditData",
         "Target": "Characters/Dialogue/Harvey",
         "Entries": {
-            "13_2": "That friend of mine, the one who's taking pilot lessons? He had to make a crash landing in a field the other day.#$b#Engine failed, it was pretty scary."
+            "13_2": "That friend of mine, the one who's taking pilot lessons? He had to make a crash landing in a field the other day.#$b#Engine failed, it was pretty scary.",
+            "15_2": "How is Mayor Lewis so good at Junimo Kart? I can't get past the first level.$s"
         },
         "When": { "YearModulus": "0" }
     }

@@ -1,0 +1,16 @@
+{
+    "Changes": [
+        {
+            "Action": "EditData",
+            "LogName": "Demetrius - inlaw - high hearts with Maru.",
+            "Target": "Characters/Dialogue/Demetrius",
+            "When": {
+                "EnableFor|contains=Demetrius": true,
+                "Query: {{Hearts:Maru}} >= 10": true,
+            },
+            "Entries": {
+                "spring_Mon10_inlaw_Maru": "You know, I'm glad Maru found you. I can see how happy you make her."
+            }
+        }
+    ]
+}

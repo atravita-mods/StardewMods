@@ -102,6 +102,7 @@
         "Action": "EditData",
         "Target": "Characters/Dialogue/Emily",
         "Entries": {
+            "6_2": "If I sell some dresses, maybe I can buy a serger...",
             "7_2": "I've been doing a lot of lace insertion work lately. It's so pretty but so tedious.",
             "8_2": "@, do you think I could sell the clothing I make?",
             "9_2": "Made a lovely pizza with a cauliflower base the other day. Haley hated it though.",

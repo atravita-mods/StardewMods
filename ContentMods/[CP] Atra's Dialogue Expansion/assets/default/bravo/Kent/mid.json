@@ -4,11 +4,12 @@
         "LogName": "Kent mid-hearts",
         "Target": "Characters/Dialogue/Kent",
         "Entries": {
-            "2{{YearRemainder}}": "I feel like I'm stuck in place, never really getting better, never really getting worse.$s",
-            "4{{YearRemainder}}": "Couldn't sleep last night. Kept on having nightmares."
+            "2_2": "I feel like I'm stuck in place, never really getting better, never really getting worse.$s",
+            "4_2": "Couldn't sleep last night. Kept on having nightmares.",
+            "6_2": "Maybe we should get a second bed, I keep on disturbing Jodi with my nightmares."
         },
         "When": {
-            "YearModulus": "1"
+            "YearModulus": "2"
         }
     }
 ]}

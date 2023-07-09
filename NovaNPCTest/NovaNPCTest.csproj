@@ -7,10 +7,10 @@
   </PropertyGroup>
 
   <PropertyGroup>
-    <Name>Nova NPC Test</Name>
-    <Description>Adds museum rewards to a store.</Description>
+    <Name>Eli and Dylan Code</Name>
+    <Description>Code unit for Eli and Dylan.</Description>
     <UpdateKeys>-1</UpdateKeys>
-    <Version>0.1.0</Version>
+    <Version>0.1.1</Version>
   </PropertyGroup>
 
   <PropertyGroup>

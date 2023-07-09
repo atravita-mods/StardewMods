@@ -73,7 +73,8 @@
         "Target": "Characters/Dialogue/Alex",
         "When": {"YearModulus": "3"},
         "Entries": {
-            "3_2": "Emily gave me a recipe for a chia seed smoothie the other day! Plenty of protein in it, and it tastes great!$h"
+            "3_2": "Emily gave me a recipe for a chia seed smoothie the other day! Plenty of protein in it, and it tastes great!$h",
+            "5_2": "You know, @, if my sports career never happens, maybe I should go into politics?#$b#I do have a 'winning smile'.$h"
         }
     },
     {
@@ -83,7 +84,7 @@
         "When": {"YearModulus": "4"},
         "Entries": {
             "Fri10": "I've gotta stay strong for Grandma and Grandpa. I'm all they've got, now.",
-            "spring_Sun4": "It's an election year, @!#$b#Do I think the Governor is going to get re-elected? Of course I do, he always gets re-elected.",
+            "summer_Sun4": "It's an election year, @!#$b#Do I think the Governor is going to get re-elected? Of course I do, he always gets re-elected.",
             "summer_Wed10": "Might go take a swim in the ocean today. @, you in?$h",
 
             "2_2": "My grandparents are the most important people in the world to me.$h",

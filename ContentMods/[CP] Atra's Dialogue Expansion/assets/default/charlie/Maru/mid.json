@@ -30,7 +30,8 @@
             "7{{YearRemainder}}": "The fax machine at work broke. Do you know how expensive it is to get someone out here to fix a fax machine?$s#$b#I would fix it myself but it's full of proprietary parts.$s",
             "8{{YearRemainder}}": "Saw a really interesting paper out of %name group on bipedal robots the other day!#$b#They've got a new algorithm to help the robot keep its balance.",
             "9{{YearRemainder}}": "Sometimes, I stop and think....how much of my brain is spent on just keeping my balance? It's amazing how easy this is for humans, and how hard it is for robots.$h",
-            "10{{YearRemainder}}": "%Maru is speaking to herself.#$b#Hmmm. How much torque do I need?#$e#Oh, @, I didn't see you there!"
+            "10{{YearRemainder}}": "%Maru is speaking to herself.#$b#Hmmm. How much torque do I need?#$e#Oh, @, I didn't see you there!",
+            "11{{YearRemainder}}": "Hmmm, think I need a bigger battery...",
         }
     },
     {
@@ -41,7 +42,7 @@
         "Entries":{
             "1_2": "Ah, @, it's the start of a new month! What do you have planned?",
             "2_2": "Since my dad works there, I can audit classes at Grampleton University for free.#$b#It's fun taking classes in new things!",
-            "8_2": "Sometimes I wonder if Sebastian would be happier living in the city.#$b#He doesn't really like living with other people though.",
+            "8_2": "Sometimes I wonder if Sebastian would be happier living in the city.#$b#He doesn't really like living with other people though, and the city's so expensive it's hard to get by without roommates.",
             "9_2": "I like working at the clinic. Dad says I should be doing more with my life, though.",
             "11_2": "Mom wishes she could have sent Sebastian to college. She says....no, never mind.",
             "13_2": "Say, @, you planting anything interesting on that farm of yours?",
@@ -61,7 +62,8 @@
         "Entries":{
             "1_2": "I know some people have floated the idea of my mother becoming mayor after Mayor Lewis retires, but, honestly, I think she loves her woodworking more.",
             "2_2": "Owls have special feathers along the edges their wings that let them fly silently.#$b#Isn't biology cool?$h",
-            "3_2": "Dad thinks I should...uh, 'further my education'."
+            "3_2": "Dad thinks I should...uh, 'further my education'.",
+            "4_2": "Saturating math? Who makes a processor like that anymore?"
         }
     },
     {

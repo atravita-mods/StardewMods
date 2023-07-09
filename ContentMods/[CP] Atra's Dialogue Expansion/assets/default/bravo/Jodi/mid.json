@@ -4,6 +4,7 @@
     // On one hand, she enjoys parts of homemaking, and takes a **lot** of pride in setting up a good home.
     // On the other, she gets tired of being The Homemaker.
 
+    // did at some point want to be a journalist.
     {
         "Action": "EditData",
         "LogName": "Jodi mid-hearts",
@@ -65,7 +66,8 @@
             "2_2": "Ugh, Kent's pension doesn't go nearly as far as it used to.$s",
             "7_2": "I'd like to get some new houseplants, but online shipping is so much more expensive than it was this time last year.$s",
             "8_2": "Why are eggs suddenly so much more expensive...#$b#Say, @, you're not getting paid any more for your eggs, right? Who's taking the extra money, then?$a",
-            "22_2": "There are so many chores I need to do...$s#$b#It's like chores never end..."
+            "22_2": "There are so many chores I need to do...$s#$b#It's like chores never end...",
+            "25_2": "When I was young? I wanted to be a journalist.#$b#Actually went to college for that, but dropped out after two years to raise Sam."
         },
         "When": {
             "YearModulus": "3"

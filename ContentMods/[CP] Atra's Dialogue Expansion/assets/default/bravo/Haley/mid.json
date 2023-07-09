@@ -4,9 +4,9 @@
         "Action": "EditData",
         "Target": "Characters/Dialogue/Haley",
         "Entries": {
-            "winter_Wed10": "It's hard ordering clothing online. So difficult finding the right size, and it's hard to know what something will look like on me.#$e#Not that I don't look good in anything.$h",
-
+            "summer_Thu10": "I wonder when Mum and Dad are going to write to us again?$s",
             "summer_Fri8": "@, is there any point in me practicing my signature, when I'm likely to change my name when I get married?",
+            "winter_Wed10": "It's hard ordering clothing online. So difficult finding the right size, and it's hard to know what something will look like on me.#$e#Not that I don't look good in anything.$h",
 
             "6_2": "@! My mother sent me a new mascara from %place! What do you think of it?$h#$e#It's a tubing mascara, so a lot less likely to smudge."
         }

@@ -18,7 +18,8 @@
             "2_2": "Evelyn says I've become more hard of hearing lately.#$e#Lifetime of working in the mines have damaged my ears.",
             "3_2": "I know the young kiddos think they'll replace us old miners with their newfangled technology, but until they've got it I don't believe them.",
             "4_2": "Now doc wants me to cut back on the sodium.#$b#Doc, I'm getting old, does it really matter anymore?",
-            "5_2": "When you're my age, all the kids think they can tell you what to do."
+            "5_2": "When you're my age, all the kids think they can tell you what to do.",
+            "6_2": "Ugh, I'm really feeling my age today, @.#$b#Just want to go back to bed.",
         },
         "When": {"YearModulus": "3"}
     },

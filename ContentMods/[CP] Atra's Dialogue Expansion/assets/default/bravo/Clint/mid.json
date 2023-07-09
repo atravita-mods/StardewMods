@@ -30,7 +30,7 @@
         "Target": "Characters/Dialogue/Clint",
         "Entries": {
             "winter_Wed6": "Between you and I, @, I'm glad how toasty this place is in winter.#$e#Pretty cold when I have to brave the elements to go to the saloon, though.",
-            "spring_Tue6": "Feel free to bring your geodes to me, I'll crack them open for a small fee...",
+            "fall_Tue6": "Feel free to bring your geodes to me, I'll crack them open for a small fee...",
             "fall_Wed8": "Sometimes, when I'm lying in bed awake at night, I wonder what happens to all the swords I make.",
 
             "6{{YearRemainder}}": "I'd consider moving elsewhere, but I'm not sure I could afford the rent.#$e#My family has owned this building for as long as I can remember. Helps a lot with my expenses.",

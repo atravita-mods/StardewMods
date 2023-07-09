@@ -253,10 +253,15 @@ internal static class ShopManager
     /// <summary>
     /// Clears the shop state.
     /// </summary>
-    internal static void Reset()
+    /// <param name="toTitle">Whether or not this is a return to the title screen.</param>
+    internal static void Reset(bool toTitle = false)
     {
         Stock.Value = null;
         NodeStock.Value = null;
+        if (toTitle)
+        {
+            HaveSentAllRobinMail.ResetAllScreens();
+        }
     }
 
     /// <inheritdoc cref="IGameLoopEvents.DayEnding"/>

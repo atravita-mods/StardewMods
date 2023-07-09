@@ -1,0 +1,14 @@
+{"Changes":[
+    {
+        "LogName": "Pam - inlaw",
+        "Action": "EditData",
+        "Target": "Characters/Dialogue/Pam",
+        "When": {
+            "Query: {{Hearts:Penny}} >= 10": true,
+            "EnableFor|contains=Pam": true,
+        },
+        "Entries": {
+            "summer_Fri10_inlaw_Penny": "Glad you're treating my girl right, @.#$b#Take care of her, she deserves it."
+        }
+    }
+]}

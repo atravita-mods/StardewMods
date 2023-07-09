@@ -1,23 +1,35 @@
-﻿using Microsoft.Xna.Framework;
+﻿using HarmonyLib;
+
+using Microsoft.Xna.Framework;
 
 using StardewModdingAPI.Events;
 using StardewModdingAPI.Utilities;
 
 namespace NovaNPCTest;
 
+/// <inheritdoc />
 internal sealed class ModEntry : Mod
 {
     internal static IMonitor ModMonitor { get; private set; } = null!;
 
     internal static ScheduleUtilityFunctions Scheduler { get; set; } = null!;
 
+    internal static Dictionary<string, int[]>? PortraitsToShake { get; private set; }
+
+    internal static IReflectionHelper ReflectionHelper { get; private set; } = null!;
+
     public override void Entry(IModHelper helper)
     {
         I18n.Init(helper.Translation);
         ModMonitor = this.Monitor;
         Scheduler = new ScheduleUtilityFunctions(this.Monitor, this.Helper.Translation);
+        ReflectionHelper = helper.Reflection;
+
+        PortraitsToShake = helper.Data.ReadJsonFile<Dictionary<string, int[]>>("assets/portrait_shake.json");
 
         helper.Events.GameLoop.DayStarted += this.OnDayStart;
+
+        this.ApplyPatches(new(this.ModManifest.UniqueID));
     }
 
     [EventPriority(EventPriority.Low - 10000)]
@@ -25,6 +37,18 @@ internal sealed class ModEntry : Mod
     {
         this.CheckSchedule(Game1.getCharacterFromName("Nova.Dylan"));
         this.CheckSchedule(Game1.getCharacterFromName("Nova.Eli"));
+    }
+
+    private void ApplyPatches(Harmony harmony)
+    {
+        try
+        {
+            harmony.PatchAll(typeof(ModEntry).Assembly);
+        }
+        catch (Exception ex)
+        {
+            ModMonitor.Log(string.Format("Mod crashed while applying harmony patches:\n\n{0}", ex), LogLevel.Error);
+        }
     }
 
     private void CheckSchedule(NPC? npc)
@@ -52,7 +76,7 @@ internal sealed class ModEntry : Mod
 
         if (!npc.TryGetScheduleEntry(scheduleKey, out string? entry))
         {
-            ModMonitor.Log($"With schedule key {scheduleKey} that apparently doesn't correspond to a schedule. What.");
+            ModMonitor.Log($"With schedule key {scheduleKey} that apparently doesn't correspond to a schedule. What.", LogLevel.Warn);
             return;
         }
 

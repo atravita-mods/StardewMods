@@ -1,0 +1,16 @@
+{
+    "Changes": [
+        {
+            "LogName": "Marnie - inlaw dialogue",
+            "Target": "Characters/Dialogue/Marnie",
+            "When": {
+                "EnableFor|contains=Marnie": true,
+                "Query: {{Hearts: Shane}} >= 10": true,
+            },
+            "Entries": {
+                "summer_Fri4_inlaw_Shane": "How has Shane been doing, by the way?",
+                "fall_Fri4_inlaw_Shane": "Jas really misses her uncle Shane. Maybe I should take her to visit you guys more often?"
+            }
+        }
+    ]
+}

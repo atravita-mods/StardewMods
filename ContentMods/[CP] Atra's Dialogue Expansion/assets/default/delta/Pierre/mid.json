@@ -9,7 +9,10 @@
         "Entries": {
             "movieTheater": "@, have you heard? We've got a movie theater now! Think I'll take Caroline out on a date...",
             "winter_7{{YearRemainder}}": "Gotta start stocking Winter Star gifts soon. It's the busiest retail season of the year...$h",
-            "Resort_Chair": "Ah, a chance to rest my feet!$h"
+            "Resort_Chair": "Ah, a chance to rest my feet!$h",
+
+            // day before the flower dance
+            "spring_23": "Sorry, @, can't talk now, I'm getting ready for the flower dance tomorrow.#$b#We make pretty good money doing souvenirs for the festivals."
         }
     },
     {

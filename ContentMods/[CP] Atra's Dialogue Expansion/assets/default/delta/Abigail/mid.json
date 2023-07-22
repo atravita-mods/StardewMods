@@ -39,7 +39,8 @@
             "22_2": "Dad gives me an allowance, but it isn't very much.$s",
             "24_2": "I wonder if I'll ever be as good at art as Leah is...#$b#Probably not. She draws all the time, I don't have the time for that.",
             "25_2": "@, I don't know what I want to do with my life.#$b#I don't want to become the owner of a grocery store, but I'm not sure what else I can do.$s",
-            "26_2": "There's a music festival next month. I'd love to go, but I haven't the money.$s"
+            "26_2": "There's a music festival next month. I'd love to go, but I haven't the money.$s",
+            "28_2": "Ugh, I've got an essay due tomorrow but I haven't started yet.$s"
         },
         "When": {
             "YearModulus": "2"
@@ -54,6 +55,7 @@
 
             "fall_Tue6": "Fall's my favorite season. I love how the trees look with their new colors.$h",
 
+            "5_2": "Ugh, I still have a foreign language requirement to get through. @, what language do you think I should pick?",
             "6_2": "Between you and I, @, I wish dad would let me change my major.#$b#I'm really not cut out for business administration.",
             "10_2": "Dad wants me to restock shelves for him.#$b#No, he doesn't pay me...$s",
             "12_2": "Ugh, everything hurts. I had to spend hours yesterday helping Dad with the stockroom.$a",
@@ -73,7 +75,8 @@
         "Target": "Characters/Dialogue/Abigail",
         "Entries": {
             "winter_Wed10": "Ugh, nothing ever interesting happens in this town, I'm so bored.",
-            "6_2": "Oh, looks like %name Taylor is performing in Grampleton next Friday. Should I get tickets?"
+            "6_2": "Oh, looks like %name Taylor is performing in Grampleton next Friday. Should I get tickets?",
+            "7_2": "Math has never been my strong suit, unfortunately.#$b#Wish pops wasn't pushing me so hard to get a business degree.$s"
         },
         "When": {
             "YearModulus": "4"

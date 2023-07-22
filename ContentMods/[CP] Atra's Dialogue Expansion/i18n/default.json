@@ -552,5 +552,12 @@
     "shane-videogame.spring": "It's a dusty Mega Station. The game inside appears to be a {{game}}.",
     "shane-videogame.summer": "The Mega Station has been left on. Looks like Shane was playing {{game}}.",
     "shane-videogame.fall": "A Mega Station. Looks like Shane left a game inside. It's {{game}}.",
-    "shane-videogame.winter": "Looks like Shane's Mega Station. He's been playing {{game}}, it appears."
+    "shane-videogame.winter": "Looks like Shane's Mega Station. He's been playing {{game}}, it appears.",
+
+    /****************************
+    * Special order dialogue
+    ****************************/
+    "alex-leeks-special-order": "Hi, @! Just want to thank you for gathering all those leeks for gramps. I haven't seen him that happy in a long while.",
+    "willy-bait-special-order.00": "Can't wait to get to fishing with all that fresh bait you provided!",
+    "willy-bait-special.order.01": "The catfish are gonna love it."
 }

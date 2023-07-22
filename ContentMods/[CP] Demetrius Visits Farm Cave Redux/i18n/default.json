@@ -1,0 +1,64 @@
+{
+    // Config
+    "config.XPosition.name": "X Position",
+    "config.XPosition.description": "Demetrius's x position. You probably don't need to change this.",
+
+    "config.YPosition.name": "Y Position",
+    "config.YPosition.description": "Demetrius's y position. You probably don't need to change this.",
+
+    "config.DemetriusVisitDay.name": "Demetrius Visit Day",
+    "config.DemetriusVisitDay.description": "Select which day Demetrius visits the farm cave. If you select a specific day, he will visit once per month. If you select a day of the week, he'll visit once per week.",
+    
+    "config.OnlyIfRainingOrWinter.name": "Raining Or Winter Only",
+    "config.OnlyIfRainingOrWinter.description": "Whether or not Demetrius should only visit on raining days or during winter (when he would otherwise stay indoors only.)",
+
+    "config.OverrideUnlock.name": "Override Unlock",
+    "config.OverrideUnlock.description": "If enabled, Demetrius will show up regardless of whether or not he's set up the farm cave.",
+
+    // bats
+    "demetrius.Bats.Spring.00": "Isn't it amazing, @, how bats can fly? They're the only group of mammals that can, and that's likely what helps them be so diverse.",
+    "demetrius.Bats.Spring.01": "We actually don't have many bat specimens in the fossil record, as they are generally small and their bones are light.",
+    "demetrius.Bats.Spring.02": "Bats, like birds, live much much longer than you'd expect, given their size. They can live up to thirty years!",
+    "demetrius.Bats.Spring.03": "Bat guano makes for excellent fertilizer. Before the invention of chemical fertilizers, countries would literally export bat poop!",
+    "demetrius.Bats.Spring.04": "Ugh, I have so many grants I need to write...",
+    "demetrius.Bats.Spring.05": "So much work to do...$s",
+    "demetrius.Bats.Spring.06": "The majority of bats eat insects. They help reduce the need for pesticides.",
+    "demetrius.Bats.Spring.07": "Vertebrates only have evolved flight three times - once for birds, once for bats, and once for pterodactyls.",
+    "demetrius.Bats.Spring.08": "When I was a kid, I'd go out hiking in our local woods and pick up sharks teeth.#$b#Such a reminder of how much our little planet changes over time, the place I grew up was a shallow sea millions of years ago.",
+    "demetrius.Bats.Spring.09": "Between you and I, @, I wish I didn't have to prompt my collaborator so often about getting his edits in.",
+
+    "demetrius.Bats.Summer.00": "I'm glad you've decided to host some bats here, @. Loss of habitat is one of the main things threatening bats these days.#$b#It's only a small thing but small things add up.",
+    "demetrius.Bats.Summer.01": "Fruit bats are major pollinators, too! Among other things, they'll pollinate mango and banana trees.",
+    "demetrius.Bats.Summer.02": "Because bats use echolocation to navigate, bat-pollinated flowers are usually pale. They sometimes have acoustic features, too, to make them more obvious.",
+    "demetrius.Bats.Summer.03": "To get through cold winters, most bats hibernate, although some migrate.",
+    "demetrius.Bats.Summer.04": "The wings of bats are homologous to our hands. In fact, that their scientific name - chiroptera - translates to 'hand wing'.",
+    "demetrius.Bats.Summer.05": "Bats have special adaptations that let them roost upside down without all their blood flowing to their head.$h",
+    "demetrius.Bats.Summer.06": "Compared to birds, bats have much more flexible wings. That's because their wings are homologous to our hands, not our arms.",
+    "demetrius.Bats.Summer.07": "We got our paper accepted for publication!$h",
+    "demetrius.Bats.Summer.08": "Did you know bats can reach up to 100 miles per hour?$h",
+    "demetrius.Bats.Summer.09": "Part of the difficulty of studying bats is that they appear, basically fully formed, in the fossil record.#$b#We don't have good examples of transitional forms.",
+
+    "demetrius.Bats.Fall.00": "Because bats reproduce slowly, they are extremely sensitive to habitat destruction.$s",
+
+    // mushies!
+    "demetrius.Mushrooms.Spring.00": "Some fungi, when they infect ants, can reprogram the ants to climb and hang upside down from a leaf. This helps them disperse their spores.",
+    "demetrius.Mushrooms.Spring.01": "I've got a paper submission I really need to gather more data for, *sigh*.",
+    "demetrius.Mushrooms.Spring.02": "Mushrooms form a close symbiotic relationship with plants. They help trees share nutrients in times of stress.",
+    "demetrius.Mushrooms.Spring.03": "Without mushrooms and other decomposers, organic material would build up and the carbon cycle would slow down drastically.#$b#That actually happened once, you know, when lignin first evolved and nothing could break it down.",
+    "demetrius.Mushrooms.Spring.04": "It's amazing, how many different species of mushroom live in here...",
+    "demetrius.Mushrooms.Spring.05": "Mushrooms are actually far more closely related to us than they are to plants!",
+    "demetrius.Mushrooms.Spring.06": "If you go out foraging, you can often find edible mushrooms. Just be careful in your identification.",
+    "demetrius.Mushrooms.Spring.07": "Some species of ants actually farm fungi. Leafcutter ants, for example, bring back cuttings of leaves to feed a fungus they grow in their nests.",
+    "demetrius.Mushrooms.Spring.08": "Mushrooms are some of the oldest and largest organisms on this plant.#$b#But since all we see is the fruiting caps, it's sometime hard to notice.",
+    "demetrius.Mushrooms.Spring.09": "Grants, grants, grants, always more grants to write...",
+
+    "demetrius.Mushrooms.Summer.00": "Single-celled fungi are called yeast, and are a major part of cooking, helping us make both bread and beer.$h#$b#And both of those are quite nice.",
+    "demetrius.Mushrooms.Summer.01": "Apart from what they do for us ecologically, mushrooms are quite tasty.#$b#Dried mushrooms really are nature's stock cube, and they'll add a nice depth of flavor to many stocks and soups.",
+    "demetrius.Mushrooms.Summer.02": "There's apparently a species of mushroom that tastes quite a bit like chicken, although I've never had the opportunity to try it myself.",
+    "demetrius.Mushrooms.Summer.03": "Mushrooms use chitin as their structural protein. It's the same protein that forms the exoskeletons of insects.",
+    "demetrius.Mushrooms.Summer.04": "A few species of mushrooms even glow in the dark!",
+    "demetrius.Mushrooms.Summer.05": "Trees often use the symbiotic network they form with mushrooms to communicate with other trees.",
+    "demetrius.Mushrooms.Summer.06": "Lichens are a symbiosis between a fungi and either an algae or a photosynthetic bacteria. They're some of the hardiest creatures on our planet and can grow nearly everywhere.",
+    "demetrius.Mushrooms.Summer.07": "Mushrooms are actually the fruiting bodies of fungi. But fungi can also reproduce asexually.",
+    "demetrius.Mushrooms.Summer.08": "We often get antibiotics from fungi. Penicillin, for example, was originally extracted from Penicillium molds."
+}

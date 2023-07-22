@@ -18,8 +18,8 @@
         "When": {"HasSeenEvent": 463391}, // parrot event.
         "Entries": {
             "summer_Tue10": "I think Emily's parrot might be able to say a few words!$h",
-            "8_2": "Took some really nice photo's of Emily's parrot the other day. I think it enjoys posing for me.$h",
-            "16_2": "Emily's parrot pooped on my favorite dress yesterday.$s#$b#Of course I don't blame it, it's just an animal. Doesn't mean I'm not mad about it though."
+            "8{{YearRemainder}}": "Took some really nice photos of Emily's parrot the other day. I think it enjoys posing for me.$h",
+            "16{{YearRemainder}}": "Emily's parrot pooped on my favorite dress yesterday.$s#$b#Of course I don't blame it, it's just an animal. Doesn't mean I'm not mad about it though."
         }
     },
     {

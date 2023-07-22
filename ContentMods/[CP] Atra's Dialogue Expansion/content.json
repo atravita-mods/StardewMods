@@ -218,6 +218,12 @@
         },
         {
             "Action": "Include",
+            "LogName": "SOTE",
+            "When": {"HasMod": "atravita.SpecialOrdersExtended"},
+            "FromFile": "assets/integrations/sote.json"
+        },
+        {
+            "Action": "Include",
             "LogName": "ScheduleChanges",
             "When": { "HasValue: ScheduleChanges": true },
             "FromFile": "assets/schedules/toc.json"

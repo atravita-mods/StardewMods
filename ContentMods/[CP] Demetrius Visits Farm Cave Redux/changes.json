@@ -1,0 +1,45 @@
+{
+    "Changes": [
+        {
+            "LogName": "Add farm cave visit schedule",
+            "Action": "EditData",
+            "Target": "Characters/schedules/Demetrius",
+            "Entries": {
+                "{{DemetriusVisitDay}}": "0 FarmCave {{XPosition}} {{YPosition}} 1 demetrius_notes/610 FarmCave {{XPosition}} {{YPosition}} 1 demetrius_notes"
+            },
+            "When": {
+                "Query: NOT({{OnlyIfRainingOrWinter}}) OR {{Weather:valley|contains=rain, storm}} OR {{Season|contains=winter}}": true,
+            },
+        },
+        {
+            "LogName": "Override rain schedule",
+            "Action": "EditData",
+            "Target": "Characters/schedules/Demetrius",
+            "Entries": {
+                "rain": "GOTO {{DemetriusVisitDay}}"
+            },
+            "When": {
+                "Weather:valley": "rain, storm",
+                "Query: '{{DayOfWeek}}' LIKE '{{DemetriusVisitDay}}*'": true
+            }
+        },
+        {
+            "Action": "EditData",
+            "Target": "Characters/Dialogue/Demetrius",
+            "Entries": {
+                "FarmCave": "{{i18n:demetrius.{{FarmCave}}.{{Season}}.{{Random:00,01,02,03,04,05,06,07,08,09}} }}"
+            },
+            "When": {
+                "FarmCave": "Bats, Mushrooms",
+            }
+        },
+        {
+            // Demetrius will destroy mushie boxes if he's allowed to walk around without nondestructive NPCs.
+            "Action": "Include",
+            "FromFile": "movement.json",
+            "When": {
+                "HasMod": "MadaraUchiha.NonDestructiveNPCs",
+            }
+        }
+    ]
+}

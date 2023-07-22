@@ -1,0 +1,22 @@
+{
+    "Changes": [
+        {
+            "LogName": "Alex - special orders dialogue",
+            "Action": "EditData",
+            "Target": "Characters/Dialogue/Alex",
+            "Entries": {
+                "Evelyn_Completed": "{{i18n:alex-leeks-special-order}}$h"
+            },
+            "When": {"EnableFor|contains=Alex": true},
+        },
+        {
+            "LogName": "Willy - special orders dialogue",
+            "Action": "EditData",
+            "Target": "Characters/Dialogue/Willy",
+            "When": {"EnableFor|contains=Willy": true},
+            "Entries": {
+                "Willy_Completed": "{{i18n:willy-bait-special-order.00}}#$b#{{i18n: willy-bait-special.order.01}}$h"
+            }
+        }
+    ]
+}

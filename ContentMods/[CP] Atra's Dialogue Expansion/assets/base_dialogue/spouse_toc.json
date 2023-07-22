@@ -18,7 +18,7 @@
             "When": {
                 "HasValue: {{Spouse}}": true,
                 "HasFile: {{FromFile}}": true,
-                "EnableFor|contains={{Spouse}}": true,
+                "EnableFor": "{{Spouse}}",
             }
         },
         {
@@ -28,7 +28,7 @@
             "When": {
                 "EnableGeneric": true,
                 "HasValue: {{Spouse}}": true,
-                "EnableFor|contains={{Spouse}}": true,
+                "EnableFor": "{{Spouse}}",
                 "Relationship: {{Spouse}}": "Married" // avoid doing this for roommates.
             }
         }

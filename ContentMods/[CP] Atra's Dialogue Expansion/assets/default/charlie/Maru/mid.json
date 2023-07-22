@@ -72,7 +72,8 @@
         "Target": "Characters/Dialogue/Maru",
         "When": {"YearModulus": "0"},
         "Entries": {
-            "1_2": "Ugh, I gotta make a trip to the post office sooner or later...$s"
+            "1_2": "Ugh, I gotta make a trip to the post office sooner or later...$s",
+            "2_2": "I can't find my good screwdriver set.$s"
         }
     }
 ]}

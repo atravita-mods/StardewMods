@@ -21,7 +21,8 @@
         "Entries": {
             "fall_Tue10": "Penny's like a granddaughter to me. She's a super sweet girl.",
 
-            "15{{YearRemainder}}": "I worry about Alex sometimes.#$b#My darling boy wants to go pro, but he never really wants to make any steps towards that."
+            "15{{YearRemainder}}": "I worry about Alex sometimes.#$b#My darling boy wants to go pro, but he never really wants to make any steps towards that.",
+            "16{{YearRemainder}}": "We didn't get a microwave until fairly late. I never trusted those. Not sure if they're safe, the way they zap your food."
         },
         "When": {"YearModulus": "1"}
     },
@@ -34,7 +35,8 @@
             "fall_Mon10": "Penny loves poppies. I always make sure to have a few around this time of year for her.%revealtastePenny376",
             "winter_Mon10": "@, did you grow any fairy roses? They're Jas's favorite flower.$h%revealtasteJas595",
 
-            "15_2": "Honey, I just made some cookies. Please have one, dearie.[223]$h"
+            "15_2": "Honey, I just made some cookies. Please have one, dearie.[223]$h",
+            "16_2": "George bought me a washing machine for our tenth anniversary. I can't believe we used to wash all our clothing by hand!"
         },
         "When": {"YearModulus": "2"}
     },

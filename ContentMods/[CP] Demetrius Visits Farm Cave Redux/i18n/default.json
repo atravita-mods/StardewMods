@@ -1,11 +1,5 @@
 {
     // Config
-    "config.XPosition.name": "X Position",
-    "config.XPosition.description": "Demetrius's x position. You probably don't need to change this.",
-
-    "config.YPosition.name": "Y Position",
-    "config.YPosition.description": "Demetrius's y position. You probably don't need to change this.",
-
     "config.DemetriusVisitDay.name": "Demetrius Visit Day",
     "config.DemetriusVisitDay.description": "Select which day Demetrius visits the farm cave. If you select a specific day, he will visit once per month. If you select a day of the week, he'll visit once per week.",
     
@@ -15,9 +9,27 @@
     "config.OverrideUnlock.name": "Override Unlock",
     "config.OverrideUnlock.description": "If enabled, Demetrius will show up regardless of whether or not he's set up the farm cave.",
 
+    "config.EnableDialogue.name": "Enable Dialogue",
+    "config.EnableDialogue.description": "Whether or not the dialogue from this mod should be enabled",
+
+    "config.section.Position.name": "Position",
+    "config.section.Position.description": "Controls the tiles Demetrius stands on and leaves the farmcave from.",
+
+    "config.XPosition.name": "X Position",
+    "config.XPosition.description": "Demetrius's x position. You probably don't need to change this.",
+
+    "config.YPosition.name": "Y Position",
+    "config.YPosition.description": "Demetrius's y position. You probably don't need to change this.",
+
+    "config.XWarp.name": "Warp X",
+    "config.XWarp.description": "The X location of the tile Demetrius leaves the farm cave from. You probably don't need to change this",
+
+    "config.YWarp.name": "Warp Y",
+    "config.YWarp.description": "The y location of the tile Demetrius leaves the farm cave from. You probably don't need to change this",
+
     // bats
     "demetrius.Bats.Spring.00": "Isn't it amazing, @, how bats can fly? They're the only group of mammals that can, and that's likely what helps them be so diverse.",
-    "demetrius.Bats.Spring.01": "We actually don't have many bat specimens in the fossil record, as they are generally small and their bones are light.",
+    "demetrius.Bats.Spring.01": "We actually don't have many bat specimens in the fossil record, as they are generally small and their bones are light.#$b#Of the specimens we do have, for most we have only their jaw.",
     "demetrius.Bats.Spring.02": "Bats, like birds, live much much longer than you'd expect, given their size. They can live up to thirty years!",
     "demetrius.Bats.Spring.03": "Bat guano makes for excellent fertilizer. Before the invention of chemical fertilizers, countries would literally export bat poop!",
     "demetrius.Bats.Spring.04": "Ugh, I have so many grants I need to write...",
@@ -39,6 +51,13 @@
     "demetrius.Bats.Summer.09": "Part of the difficulty of studying bats is that they appear, basically fully formed, in the fossil record.#$b#We don't have good examples of transitional forms.",
 
     "demetrius.Bats.Fall.00": "Because bats reproduce slowly, they are extremely sensitive to habitat destruction.$s",
+    "demetrius.Bats.Fall.01": "And that's all the data I need for Figure 2...hopefully!$h",
+    "demetrius.Bats.Fall.02": "Many bats live in the tropics only, where they are very susceptible to habitat destruction.",
+    "demetrius.Bats.Fall.03": "Painted bats are known for their bright coloration, unlike most bats, which tend towards drab colors.#$b#Scientists think that being bright orange may make them appear to be flowers or fruit when they roost",
+    "demetrius.Bats.Fall.04": "Because they tend to be nocturnal, bats use echolocation to navigate! Some bats can even change their calls to account for Doppler shift!#$b#Of course, they have perfectly serviceable vision as well, the idiom 'blind as a bat' doesn't really fit.#$b#In fact, bats that don't echolocate have vision far exceeding ours.",
+
+    "demetrius.Bats.Winter.00": "Thanks, @, for letting me keep tabs on this little bat population here.#$b#It's certainly been very helpful for my research!$$h",
+    "demetrius.Bats.Winter.05": "Some bats, the ones that tend to drink nectar, can even see ultraviolet light! Others have perfectly serviceable cone cells.#$b#The idiom 'blind as a bat' really doesn't make much sense, doesn't it?",
 
     // mushies!
     "demetrius.Mushrooms.Spring.00": "Some fungi, when they infect ants, can reprogram the ants to climb and hang upside down from a leaf. This helps them disperse their spores.",
@@ -60,5 +79,28 @@
     "demetrius.Mushrooms.Summer.05": "Trees often use the symbiotic network they form with mushrooms to communicate with other trees.",
     "demetrius.Mushrooms.Summer.06": "Lichens are a symbiosis between a fungi and either an algae or a photosynthetic bacteria. They're some of the hardiest creatures on our planet and can grow nearly everywhere.",
     "demetrius.Mushrooms.Summer.07": "Mushrooms are actually the fruiting bodies of fungi. But fungi can also reproduce asexually.",
-    "demetrius.Mushrooms.Summer.08": "We often get antibiotics from fungi. Penicillin, for example, was originally extracted from Penicillium molds."
+    "demetrius.Mushrooms.Summer.08": "We often get antibiotics from fungi. Penicillin, for example, was originally extracted from Penicillium molds.",
+    "demetrius.Mushrooms.Summer.09": "I got a poster in my field's premier conference!$h#$b#But that means I need to make a poster.$s",
+
+    "demetrius.Mushrooms.Fall.00": "Humans have apparently been using yeast to brew mead for more than 9000 years. What a long tradition, eh?",
+    "demetrius.Mushrooms.Fall.01": "Yeasts, which are single-celled fungi,are often used as model eukaryotic organisms.#$b#They're also used to make bread, of course.",
+    "demetrius.Mushrooms.Fall.02": "You know, @, Figure 2 is going to be amazing.#$b#I've put so much work into this paper, it better get accepted...",
+    "demetrius.Mushrooms.Fall.03": "There are even some fungi that grow in the digestive tracts of ruminants like cows and sheep, where they help break down fiber!$h#$b#Fungi are really everywhere, aren't they? Well, I guess we should be glad fun-guys are everywhere!$h#$b#...Get it?",
+    "demetrius.Mushrooms.Fall.04": "While we typically associate fall with mushrooms, they can actually be foraged in most every season.",
+    "demetrius.Mushrooms.Fall.05": "Saw a paper recently where they were using fungi to break down plastics.#$b#Isn't it amazing, what nature can do?",
+    "demetrius.Mushrooms.Fall.06": "And yet another paper rejected. I have in mind a few other journals I can send it to, but it's hard to not take every rejection personally.$s",
+    "demetrius.Mushrooms.Fall.07": "Some fungi can sequester heavy metals and radioactive elements, which makes then ideal for remediation.",
+    "demetrius.Mushrooms.Fall.08": "Despite superficial similarities, slime molds aren't considered fungi.#$b#You can think of slime molds as single-celled organisms that gather into a mass during difficult times.",
+    "demetrius.Mushrooms.Fall.09": "Unlike most of our cells, the cells of fungi can have multiple nuclei.#$b#No, I'm not sure what evolutionary benefit that has.",
+
+    "demetrius.Mushrooms.Winter.00": "Just collecting some data for my supplementary info section now. Gotta shore everything up, keep reviewer 2 happy.",
+    "demetrius.Mushrooms.Winter.01": "Mushrooms are nutritionally quite good for you, @!$h#$b#Except for the ones that are poisonous, of course.",
+    "demetrius.Mushrooms.Winter.02": "When fungi partner with plants, that's called mycorrhiza. Some of these mycorrhiza even excrete enzymes to protect their plant hosts from certain bacteria.",
+    "demetrius.Mushrooms.Winter.03": "Mycorrhiza help provide their plants with trace minerals and other nutrients, and in return the plants provide energy.#$b#Plants might send ten to twenty percent of the energy they produce to their mushroom friends.",
+    "demetrius.Mushrooms.Winter.04": "Mushrooms usually reproduces by sending out spores. These spores can remain dormant for years, waiting for the right conditions.",
+    "demetrius.Mushrooms.Winter.05": "Fungi are as important to ecosystem as plants and animals are, @.#$b#If we don't take good care of the plant we have, who will?$s",
+    "demetrius.Mushrooms.Winter.06": "We have evidence of mycorrhiza forming symbiotic relationships with plants as early as 400 million years ago!#$b#I can't even begin to comprehend timescales like that, @.",
+    "demetrius.Mushrooms.Winter.07": "Multiple lineages of fungi seem capable of forming mycorrhiza, so this appears to have evolved multiple times.#$b#It must be important, if evolution keeps trying this.",
+    "demetrius.Mushrooms.Winter.08": "About three quarters of all plant species form mycorrhiza with at least some species of fungi. Some orchids are even completely dependent and would die without their fungus friends.$h",
+    "demetrius.Mushrooms.Winter.09": "Mycorrhiza also help transfer nutrients and energy between plants when they need it.#$b#Mature trees, for example, sometimes give sugar to smaller saplings nearby through the mycorrhiza."
 }

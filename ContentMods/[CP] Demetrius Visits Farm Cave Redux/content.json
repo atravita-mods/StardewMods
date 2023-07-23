@@ -2,12 +2,6 @@
     "$schema": "https://smapi.io/schemas/content-patcher.json",
     "Format": "1.29.0",
     "ConfigSchema": {
-        "XPosition": {
-            "Default": 3
-        },
-        "YPosition": {
-            "Default": 5
-        },
         "DemetriusVisitDay": {
             "AllowValues": "Mon, Tue, Wed, Thu, Fri, Sat, Sun, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28",
             "Default": "Tue"
@@ -19,17 +13,52 @@
         "OverrideUnlock": {
             "AllowValues": "true, false",
             "Default": "false"
+        },
+        "EnableDialogue": {
+            "AllowValues": "true, false",
+            "Default": "true",
+        },
+        // the positions Demetrius stands in.
+        "XPosition": {
+            "Section": "Positions",
+            "Default": 3
+        },
+        "YPosition": {
+            "Section": "Positions",
+            "Default": 5
+        },
+        // The positions Demetrius should warp from.
+        "XWarp": {
+            "Section": "Positions",
+            "Default": 8
+        },
+        "YWarp": {
+            "Section": "Positions",
+            "Default": 11
         }
     },
     "DynamicTokens": [
         {
             "Name": "DemetriusRemainderSchedule",
-            "Value": "1600 Saloon 23 22 3/2100 bed"
+            "Value": "1600 ScienceHouse 27 9 0/2040 ScienceHouse 28 9 0/2100 ScienceHouse 15 4 0/2230 bed"
         },
         {
             "Name": "DemetriusRemainderSchedule",
             "Value": "1600 Saloon 23 22 3/1920 Saloon 24 22 3 demetrius_dance/2100 bed",
-            "When": {"DayOfWeek": "Friday"} // go dance with your wife.
+            "When": {
+                "DayOfWeek": "Friday"
+            } // go dance with your wife.
+        },
+        {
+            "Name": "DialogueVariant",
+            "Value": "{{FarmCave}}",
+        },
+        {
+            "Name": "DialogueVariant",
+            "Value": "{{Random:Bats, Mushrooms}}",
+            "When": {
+                "FarmCave": "None"
+            }
         }
     ],
     "Changes": [
@@ -37,7 +66,7 @@
             "Action": "Include",
             "FromFile": "changes.json",
             "When": {
-                "Query: {{OverrideUnlock}} OR NOT({{FarmCave|contains=None}}) OR ({{HasMod|contains=aedenthorn.FarmCaveFramework}} AND {{DaysPlayed}} > 28)": true,
+                "Query: {{OverrideUnlock}} OR NOT({{FarmCave|contains=None}}) OR ({{HasMod|contains=aedenthorn.FarmCaveFramework}} AND {{HasSeenEvent|contains=65}})": true,
             }
         }
     ]

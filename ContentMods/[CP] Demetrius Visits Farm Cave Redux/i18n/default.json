@@ -38,6 +38,7 @@
     "demetrius.Bats.Spring.07": "Vertebrates only have evolved flight three times - once for birds, once for bats, and once for pterodactyls.",
     "demetrius.Bats.Spring.08": "When I was a kid, I'd go out hiking in our local woods and pick up sharks teeth.#$b#Such a reminder of how much our little planet changes over time, the place I grew up was a shallow sea millions of years ago.",
     "demetrius.Bats.Spring.09": "Between you and I, @, I wish I didn't have to prompt my collaborator so often about getting his edits in.",
+    "demetrius.Bats.Spring.10": "%Demetrius looks exhausted.#$b#Sorry, @, I was up half the night yesterday trying to get Figure 2 to stay on page 2.$s",
 
     "demetrius.Bats.Summer.00": "I'm glad you've decided to host some bats here, @. Loss of habitat is one of the main things threatening bats these days.#$b#It's only a small thing but small things add up.",
     "demetrius.Bats.Summer.01": "Fruit bats are major pollinators, too! Among other things, they'll pollinate mango and banana trees.",
@@ -49,15 +50,28 @@
     "demetrius.Bats.Summer.07": "We got our paper accepted for publication!$h",
     "demetrius.Bats.Summer.08": "Did you know bats can reach up to 100 miles per hour?$h",
     "demetrius.Bats.Summer.09": "Part of the difficulty of studying bats is that they appear, basically fully formed, in the fossil record.#$b#We don't have good examples of transitional forms.",
+    "demetrius.Bats.Summer.10": "Got rejected for another grant. It's hard getting scientific funding these days.$s",
 
     "demetrius.Bats.Fall.00": "Because bats reproduce slowly, they are extremely sensitive to habitat destruction.$s",
     "demetrius.Bats.Fall.01": "And that's all the data I need for Figure 2...hopefully!$h",
     "demetrius.Bats.Fall.02": "Many bats live in the tropics only, where they are very susceptible to habitat destruction.",
     "demetrius.Bats.Fall.03": "Painted bats are known for their bright coloration, unlike most bats, which tend towards drab colors.#$b#Scientists think that being bright orange may make them appear to be flowers or fruit when they roost",
     "demetrius.Bats.Fall.04": "Because they tend to be nocturnal, bats use echolocation to navigate! Some bats can even change their calls to account for Doppler shift!#$b#Of course, they have perfectly serviceable vision as well, the idiom 'blind as a bat' doesn't really fit.#$b#In fact, bats that don't echolocate have vision far exceeding ours.",
+    "demetrius.Bats.Fall.05": "Getting population estimates for the bats...#$b#Well, @, I just stand here and count them. It's very tedious work.$s#$b#I'm just joking with you, we actually use thermal imagers.",
+    "demetrius.Bats.Fall.06": "Most bats eat insects, and some eat primarily fruit or nectar. Only three species survive by drinking blood.#$b#The vampire bats even share blood if any of them didn't manage to feed that day.",
+    "demetrius.Bats.Fall.07": "I'd love to be able to fly like a bat one day. Doesn't that look so fun, @?",
+    "demetrius.Bats.Fall.08": "Many bats live only in forests, roosting in the holes produced by woodpeckers.#$b#Unfortunately, logging threatens the habitats of these poor owls.$s",
+    "demetrius.Bats.Fall.10": "Even all these years later I still get nightmares about accidentally forgetting to go to a final exam.$s#$b#I've been out of school for how long and I still get them.$s",
 
     "demetrius.Bats.Winter.00": "Thanks, @, for letting me keep tabs on this little bat population here.#$b#It's certainly been very helpful for my research!$$h",
+    "demetrius.Bats.Winter.01": "Many bats hibernate through the winters, when food supplies are low.#$b#Powered flight takes a lot of energy, of course.",
+    "demetrius.Bats.Winter.02": "I've always wondered, for migratory bats, how do they navigate?#$b#Current science seems to point at the earth's magnetic field, and also the location of sunrise and sunset.",
+    "demetrius.Bats.Winter.03": "Bats usually have their pups in spring. So these here, they'll be having pups soon!",
+    "demetrius.Bats.Winter.04": "Apparently, bats can eavesdrop on other bats.#$b#One of the ways migratory bats find good homes at the end of their migrations is by eavesdropping on the locals.",
     "demetrius.Bats.Winter.05": "Some bats, the ones that tend to drink nectar, can even see ultraviolet light! Others have perfectly serviceable cone cells.#$b#The idiom 'blind as a bat' really doesn't make much sense, doesn't it?",
+    "demetrius.Bats.Winter.06": "Not every bat echolocates. Most of the larger ones done, for example. We think that might be because their echolocation is tied heavily to the rate they flap their wings, so it's less efficient for big bats.",
+    "demetrius.Bats.Winter.07": "Have you ever considered, @, how demanding flight really is, physiologically?#$b#A bat's heart can beat over a thousand times per minute in flight, but it slows to twelve beats per minute when they're hibernating.#$b#In contrast, yours and mine go between about seventy to about two hundred beats per minute.",
+    "demetrius.Bats.Winter.10": "I've got my end-of-year report coming up, which means now I need to remember what I did all year.#$b#@, I can barely remember what I ate for lunch yesterday, never mind what I did this year...$s",
 
     // mushies!
     "demetrius.Mushrooms.Spring.00": "Some fungi, when they infect ants, can reprogram the ants to climb and hang upside down from a leaf. This helps them disperse their spores.",
@@ -70,6 +84,7 @@
     "demetrius.Mushrooms.Spring.07": "Some species of ants actually farm fungi. Leafcutter ants, for example, bring back cuttings of leaves to feed a fungus they grow in their nests.",
     "demetrius.Mushrooms.Spring.08": "Mushrooms are some of the oldest and largest organisms on this plant.#$b#But since all we see is the fruiting caps, it's sometime hard to notice.",
     "demetrius.Mushrooms.Spring.09": "Grants, grants, grants, always more grants to write...",
+    "demetrius.Mushrooms.Spring.10": "You know, @, it's nice to have my lab space in my home. Back when I lived in Zuzu City, my commute was horrid.$h",
 
     "demetrius.Mushrooms.Summer.00": "Single-celled fungi are called yeast, and are a major part of cooking, helping us make both bread and beer.$h#$b#And both of those are quite nice.",
     "demetrius.Mushrooms.Summer.01": "Apart from what they do for us ecologically, mushrooms are quite tasty.#$b#Dried mushrooms really are nature's stock cube, and they'll add a nice depth of flavor to many stocks and soups.",
@@ -81,17 +96,19 @@
     "demetrius.Mushrooms.Summer.07": "Mushrooms are actually the fruiting bodies of fungi. But fungi can also reproduce asexually.",
     "demetrius.Mushrooms.Summer.08": "We often get antibiotics from fungi. Penicillin, for example, was originally extracted from Penicillium molds.",
     "demetrius.Mushrooms.Summer.09": "I got a poster in my field's premier conference!$h#$b#But that means I need to make a poster.$s",
+    "demetrius.Mushrooms.Summer.10": "Just got a grant for new equipment, @, I'm so excited.$h",
 
-    "demetrius.Mushrooms.Fall.00": "Humans have apparently been using yeast to brew mead for more than 9000 years. What a long tradition, eh?",
-    "demetrius.Mushrooms.Fall.01": "Yeasts, which are single-celled fungi,are often used as model eukaryotic organisms.#$b#They're also used to make bread, of course.",
+    "demetrius.Mushrooms.Fall.00": "Humans have apparently been using yeast to brew mead for more than 9000 years. What a long tradition, eh?#$b#Say, @, have you dropped by the Saloon lately? Is Gus carrying anything new?",
+    "demetrius.Mushrooms.Fall.01": "Yeasts, which are single-celled fungi, are often used as model eukaryotic organisms.#$b#They're also used to make bread, of course.$h",
     "demetrius.Mushrooms.Fall.02": "You know, @, Figure 2 is going to be amazing.#$b#I've put so much work into this paper, it better get accepted...",
-    "demetrius.Mushrooms.Fall.03": "There are even some fungi that grow in the digestive tracts of ruminants like cows and sheep, where they help break down fiber!$h#$b#Fungi are really everywhere, aren't they? Well, I guess we should be glad fun-guys are everywhere!$h#$b#...Get it?",
+    "demetrius.Mushrooms.Fall.03": "There are even some fungi that grow in the digestive tracts of ruminants like cows and sheep, where they help break down fiber!$h#$b#Fungi are really everywhere, aren't they? Well, I guess we should be glad fun-guys are everywhere!$h#$b#...Get it?$h",
     "demetrius.Mushrooms.Fall.04": "While we typically associate fall with mushrooms, they can actually be foraged in most every season.",
     "demetrius.Mushrooms.Fall.05": "Saw a paper recently where they were using fungi to break down plastics.#$b#Isn't it amazing, what nature can do?",
     "demetrius.Mushrooms.Fall.06": "And yet another paper rejected. I have in mind a few other journals I can send it to, but it's hard to not take every rejection personally.$s",
     "demetrius.Mushrooms.Fall.07": "Some fungi can sequester heavy metals and radioactive elements, which makes then ideal for remediation.",
     "demetrius.Mushrooms.Fall.08": "Despite superficial similarities, slime molds aren't considered fungi.#$b#You can think of slime molds as single-celled organisms that gather into a mass during difficult times.",
-    "demetrius.Mushrooms.Fall.09": "Unlike most of our cells, the cells of fungi can have multiple nuclei.#$b#No, I'm not sure what evolutionary benefit that has.",
+    "demetrius.Mushrooms.Fall.09": "Unlike most of our cells, the cells of fungi can have multiple nuclei.#$b#No, I'm not sure what evolutionary benefit that has. Some people say it helps cells produce more proteins.",
+    "demetrius.Mushrooms.Fall.10": "Did you see that new paper out of Grampleton University? With all that sequencing data?#$b#It's amazing just how quickly sequencing is getting cheaper these days.",
 
     "demetrius.Mushrooms.Winter.00": "Just collecting some data for my supplementary info section now. Gotta shore everything up, keep reviewer 2 happy.",
     "demetrius.Mushrooms.Winter.01": "Mushrooms are nutritionally quite good for you, @!$h#$b#Except for the ones that are poisonous, of course.",
@@ -102,5 +119,6 @@
     "demetrius.Mushrooms.Winter.06": "We have evidence of mycorrhiza forming symbiotic relationships with plants as early as 400 million years ago!#$b#I can't even begin to comprehend timescales like that, @.",
     "demetrius.Mushrooms.Winter.07": "Multiple lineages of fungi seem capable of forming mycorrhiza, so this appears to have evolved multiple times.#$b#It must be important, if evolution keeps trying this.",
     "demetrius.Mushrooms.Winter.08": "About three quarters of all plant species form mycorrhiza with at least some species of fungi. Some orchids are even completely dependent and would die without their fungus friends.$h",
-    "demetrius.Mushrooms.Winter.09": "Mycorrhiza also help transfer nutrients and energy between plants when they need it.#$b#Mature trees, for example, sometimes give sugar to smaller saplings nearby through the mycorrhiza."
+    "demetrius.Mushrooms.Winter.09": "Mycorrhiza also help transfer nutrients and energy between plants when they need it.#$b#Mature trees, for example, sometimes give sugar to smaller saplings nearby through the mycorrhiza.",
+    "demetrius.Mushrooms.Winter.10": "Gotta write my end-of-year report soon.#$b#I keep complaining that grants are the worst part of my job, but no, this end-of-year report is the worst part of my job.$s"
 }

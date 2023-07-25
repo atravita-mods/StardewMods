@@ -60,7 +60,8 @@
     "demetrius.Bats.Fall.05": "Getting population estimates for the bats...#$b#Well, @, I just stand here and count them. It's very tedious work.$s#$b#I'm just joking with you, we actually use thermal imagers.",
     "demetrius.Bats.Fall.06": "Most bats eat insects, and some eat primarily fruit or nectar. Only three species survive by drinking blood.#$b#The vampire bats even share blood if any of them didn't manage to feed that day.",
     "demetrius.Bats.Fall.07": "I'd love to be able to fly like a bat one day. Doesn't that look so fun, @?",
-    "demetrius.Bats.Fall.08": "Many bats live only in forests, roosting in the holes produced by woodpeckers.#$b#Unfortunately, logging threatens the habitats of these poor owls.$s",
+    "demetrius.Bats.Fall.08": "Many bats live only in forests, roosting in the holes produced by woodpeckers.#$b#Unfortunately, logging threatens the habitats of these poor bats.$s",
+    "demetrius.Bats.Fall.09": "Pesticides are a double threat to bats. Not only do they kill the insects that bats feed on, they may accumulate in the bats themselves and poison them over time.$s",
     "demetrius.Bats.Fall.10": "Even all these years later I still get nightmares about accidentally forgetting to go to a final exam.$s#$b#I've been out of school for how long and I still get them.$s",
 
     "demetrius.Bats.Winter.00": "Thanks, @, for letting me keep tabs on this little bat population here.#$b#It's certainly been very helpful for my research!$$h",
@@ -71,6 +72,8 @@
     "demetrius.Bats.Winter.05": "Some bats, the ones that tend to drink nectar, can even see ultraviolet light! Others have perfectly serviceable cone cells.#$b#The idiom 'blind as a bat' really doesn't make much sense, doesn't it?",
     "demetrius.Bats.Winter.06": "Not every bat echolocates. Most of the larger ones done, for example. We think that might be because their echolocation is tied heavily to the rate they flap their wings, so it's less efficient for big bats.",
     "demetrius.Bats.Winter.07": "Have you ever considered, @, how demanding flight really is, physiologically?#$b#A bat's heart can beat over a thousand times per minute in flight, but it slows to twelve beats per minute when they're hibernating.#$b#In contrast, yours and mine go between about seventy to about two hundred beats per minute.",
+    "demetrius.Bats.Winter.08": "I've been attaching little radio transmitters to these bats, so we can track their movements.$h#$b#These little transmitters have certainly gotten so much smaller over the last few years, letting us use them with the bats.$h",
+    "demetrius.Bats.Winter.09": "Did you know, @, some bats migrate hundreds or even thousands of miles in winter? We're not quite sure what causes a bat to decide to migrate and how they choose their destination.",
     "demetrius.Bats.Winter.10": "I've got my end-of-year report coming up, which means now I need to remember what I did all year.#$b#@, I can barely remember what I ate for lunch yesterday, never mind what I did this year...$s",
 
     // mushies!

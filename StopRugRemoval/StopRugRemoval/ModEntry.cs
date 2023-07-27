@@ -1,4 +1,6 @@
-﻿using AtraBase.Toolkit.Extensions;
+﻿using System.Diagnostics;
+
+using AtraBase.Toolkit.Extensions;
 
 using AtraCore.Framework.Caches;
 using AtraCore.Framework.QueuePlayerAlert;
@@ -328,6 +330,8 @@ internal sealed class ModEntry : Mod
         {
             VolcanoChestAdjuster.LoadData(this.Helper.Data, this.Helper.Multiplayer);
 
+            Stopwatch sw = Stopwatch.StartNew();
+
             Utility.ForAllLocations(action: static (GameLocation loc) =>
             {
                 if (loc is null)
@@ -336,6 +340,20 @@ internal sealed class ModEntry : Mod
                 }
 
 #warning - review and remove in stardew 1.6
+
+                // crosscheck and remove nulls in GameLocation.characters
+                // Game and mods do not like this.
+                if (loc.characters is not null)
+                {
+                    for (int i = loc.characters.Count - 1; i >= 0; i--)
+                    {
+                        if (loc.characters[i] is null)
+                        {
+                            ModMonitor.Log($"Found null in characters list for {loc.NameOrUniqueName}, removing.", LogLevel.Warn);
+                            loc.characters.RemoveAt(i);
+                        }
+                    }
+                }
 
                 // crosscheck and fix jukeboxes.
                 string song = loc.miniJukeboxTrack.Value;
@@ -376,6 +394,8 @@ internal sealed class ModEntry : Mod
                     islandHouse.fridge?.Value?.clearNulls();
                 }
             });
+
+            this.Monitor.LogTimespan("Sanity checking locations", sw, LogLevel.Trace);
         }
     }
 

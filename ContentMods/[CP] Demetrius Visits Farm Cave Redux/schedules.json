@@ -13,7 +13,8 @@
             "Action": "EditData",
             "Target": "Characters/schedules/Demetrius",
             "Entries": {
-                "rain": "GOTO {{DemetriusVisitDay}}"
+                "rain": "GOTO {{DemetriusVisitDay}}",
+                "rain2": null,
             },
             "When": {
                 "Weather:valley": "rain, storm",

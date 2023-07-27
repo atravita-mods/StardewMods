@@ -5,6 +5,8 @@
 
     // Between Robin and Demetrius, they'll have a reasonable split of chores.
 
+    // he actually seems to do the cooking if you look at his schedule?
+
     {
         "LogName": "Demetrius Volcano",
         "Action": "EditData",
@@ -58,6 +60,7 @@
         "Target": "Characters/Dialogue/Demetrius",
         "Entries": {
             "ScienceHouse_Entry": "Heya Robin, I'm home!",
+
             "1_2": "@, did you know that banana trees aren't actually trees, but rather a monocot?#$b#Amazing what they can do despite not having lignin!",
             "2_2": "Caffeine is actually highly toxic against insects!#$b#But it doesn't make a good agricultural insecticide, it decays in sunlight.",
             "3_2": "Lignin is really an amazing structural protein, and is why trees can grow to the heights they do!",
@@ -71,6 +74,7 @@
             "22_2": "Robin is usually pretty practical, but she does like some frilly things sometimes...",
 
             "fall_Thu10": "In fall, we get so many common mushrooms fruiting. They're quite tasty![404]$h",
+            "winter_Mon10": "I'd love to take a trip on that submarine some day...",
 
             "ScienceHouse_22_20": "I'm so sorry, @, I've got so much work I need to get done before next Monday.",
             "summerScienceHouse_22_20": "Just need to gather a little more data for a proposal.",

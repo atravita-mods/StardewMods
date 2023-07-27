@@ -45,6 +45,7 @@
     "config.EnableFestival.description": "Currently does nothing, but will eventually enable this mod's festival lines.",
 
     "config.ScheduleChanges.name": "Schedule Changes",
+    "config.ScheduleChanges.description": "Makes minor schedule changes for immersion.",
 
 /***************
 * For randomization: A bunch of randomized nouns.

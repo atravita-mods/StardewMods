@@ -128,7 +128,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DresserMiniMenu", "DresserM
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GiftTasteCSV", "GiftTasteCSV\GiftTasteCSV.csproj", "{35EA3F99-33E8-490B-B180-CCCF20DC4DD4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OneSixMyMod", "OneSixMyMod\OneSixMyMod.csproj", "{0CF9B517-0F07-46A1-92FC-659454D17889}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OneSixMyMod", "OneSixMyMod\OneSixMyMod.csproj", "{0CF9B517-0F07-46A1-92FC-659454D17889}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -29,6 +29,12 @@
         },
         {
             "Action": "Include",
+            "LogName": "Demetrius - base",
+            "FromFile": "assets/base_dialogue/Demetrius/base.json",
+            "When": {"EnableFor": "Demetrius"}
+        },
+        {
+            "Action": "Include",
             "LogName": "George - base",
             "FromFile": "assets/base_dialogue/George/mid.json",
             "When": {

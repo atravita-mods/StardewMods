@@ -9,7 +9,7 @@
                 "Query: {{Hearts:Maru}} >= 10": true,
             },
             "Entries": {
-                "spring_Mon10_inlaw_Maru": "You know, I'm glad Maru found you. I can see how happy you make her."
+                "spring_Mon10_inlaw_Maru": "{{i18n:demetrius-maru-spring-mon10}}$h"
             }
         }
     ]

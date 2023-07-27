@@ -196,6 +196,21 @@
     "shane-sports.sun.04": "Or maybe not, the teams are pretty imbalanced...",
     "shane-sports.mon": "Oh, @, did you catch the game last night! It was {{reaction}}!",
 
+    // Additional GIMA
+    "gi_leave_harvey_0": "@, I'll be enjoying a nice day at Ginger Island today.",
+    "gi_leave_harvey_1": "I spend so much of my time inside, it'll be good for me to get some sun.",
+
+    // divorce strings
+    "demetrius-divorced-from-maru": "Well, I wish you hadn't broken my dear Maru's heart.",
+
+    // marriage strings
+    "demetrius-maru-spring-mon10": "You know, I'm glad Maru found you. I can see how happy you make her.",
+    "evelyn-alex-childless": "Oh, I'd love to have great-grandchildren before I die, @.",
+    "marnie-shane-summer-fri4": "How has Shane been doing, by the way?",
+    "marine-shane-fall-fri4": "Jas really misses her uncle Shane. Maybe I should take her to visit you guys more often?",
+    "pam-penny-summer-fri10_0": "Glad you're treating my girl right, @.",
+    "pam-penny-summer-fri10_1": "Take care of her, she deserves it.",
+
 /***************
 * Anniversary!
 ***************/

@@ -6,7 +6,7 @@
             "Target": "Characters/Dialogue/Demetrius",
             "When": {"Relationship: Maru": "Divorced"},
             "Entries": {
-                "ScienceHouse": "Well, I wish you hadn't broken my dear Maru's heart.$s"
+                "ScienceHouse": "{{i18n: demetrius-divorced-from-maru}}$s"
             }
         }
     ]

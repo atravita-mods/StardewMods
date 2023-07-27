@@ -8,8 +8,8 @@
                 "Query: {{Hearts: Shane}} >= 10": true,
             },
             "Entries": {
-                "summer_Fri4_inlaw_Shane": "How has Shane been doing, by the way?",
-                "fall_Fri4_inlaw_Shane": "Jas really misses her uncle Shane. Maybe I should take her to visit you guys more often?"
+                "summer_Fri4_inlaw_Shane": "{{i18n:marnie-shane-summer-fri4}}$h",
+                "fall_Fri4_inlaw_Shane": "{{i18n:marine-shane-fall-fri4}}"
             }
         }
     ]

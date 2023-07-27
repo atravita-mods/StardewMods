@@ -8,7 +8,7 @@
             "EnableFor|contains=Pam": true,
         },
         "Entries": {
-            "summer_Fri10_inlaw_Penny": "Glad you're treating my girl right, @.#$b#Take care of her, she deserves it."
+            "summer_Fri10_inlaw_Penny": "{{i18n: pam-penny-summer-fri10_0}}$h#$b#{{i18n:pam-penny-summer-fri10_1}}"
         }
     }
 ]}

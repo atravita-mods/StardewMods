@@ -330,7 +330,9 @@ internal sealed class ModEntry : Mod
         {
             VolcanoChestAdjuster.LoadData(this.Helper.Data, this.Helper.Multiplayer);
 
+#if DEBUG
             Stopwatch sw = Stopwatch.StartNew();
+#endif
 
             Utility.ForAllLocations(action: static (GameLocation loc) =>
             {
@@ -394,8 +396,9 @@ internal sealed class ModEntry : Mod
                     islandHouse.fridge?.Value?.clearNulls();
                 }
             });
-
+#if DEBUG
             this.Monitor.LogTimespan("Sanity checking locations", sw, LogLevel.Trace);
+#endif
         }
     }
 

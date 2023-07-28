@@ -10,5 +10,13 @@
         "Entries": {
             "summer_Fri10_inlaw_Penny": "{{i18n: pam-penny-summer-fri10_0}}$h#$b#{{i18n:pam-penny-summer-fri10_1}}"
         }
-    }
+    },
+    {
+        "LogName": "Penny - Marriage - in normal dialogue file",
+        "Action": "EditData",
+        "Target": "Characters/Dialogue/Penny",
+        "Entries": {
+            "Farmhouse_Entry": "{{i18n:penny-homecoming}}"
+        }
+    },
 ]}

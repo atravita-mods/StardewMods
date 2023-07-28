@@ -55,12 +55,19 @@ internal static class SpecialOrderPatches
     {
         try
         {
-            Dictionary<string, int> overrides = AssetManager.GetDurationOverride().ToDictionary(kvp => kvp.Key, kvp => int.TryParse(kvp.Value, out int value) ? value : 0);
-            if (overrides.TryGetValue(__instance.questKey.Value, out int duration))
+            Dictionary<string, string> overrides = AssetManager.GetDurationOverride();
+            if (overrides.TryGetValue(__instance.questKey.Value, out string val))
             {
-                WorldDate? date = new(Game1.year, Game1.currentSeason, Game1.dayOfMonth);
-                __instance.dueDate.Value = date.TotalDays + (duration == -1 ? 99 : duration);
-                return false;
+                if (int.TryParse(val, out int duration))
+                {
+                    WorldDate? date = new(Game1.year, Game1.currentSeason, Game1.dayOfMonth);
+                    __instance.dueDate.Value = date.TotalDays + (duration == -1 ? 99 : duration);
+                    return false;
+                }
+                else
+                {
+                    ModEntry.ModMonitor.LogOnce($"Special order {__instance.questKey.Value} specified {val} as override which was not parsable as integer.", LogLevel.Error);
+                }
             }
         }
         catch (Exception ex)

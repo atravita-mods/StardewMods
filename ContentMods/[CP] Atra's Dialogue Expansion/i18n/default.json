@@ -211,6 +211,9 @@
     "pam-penny-summer-fri10_0": "Glad you're treating my girl right, @.",
     "pam-penny-summer-fri10_1": "Take care of her, she deserves it.",
 
+    // entry strings
+    "penny-homecoming": "Honey, I'm home!",
+
 /***************
 * Anniversary!
 ***************/
@@ -295,6 +298,9 @@
     "harvey-radio.fall.4": "So many flights canceled this week...the regulators won't be happy about this...$s",
     "harvey-radio.winter.4": "I wonder if our dear regulators are going to approve those insane new plane seats Accel is pushing...#$b#No one wants to stand for the entire flight!$a",
     "harvey-radio.spring.0": "Friend of mine is taking pilot lessons now...I guess being a big city doctor means he has the budget for it.",
+    "harvey-radio.summer.0": "Pilot school is just so, so expensive, @. I wish I could afford it, even as a hobby.$s",
+    "harvey-radio.fall.0": "It's quite embarrassing, how old the software that powers the airline industry is.#$b#Only slightly more embarrassing is the state of the software than handles patient records.$s",
+    "harvey-radio.winter.0": "You've been here for a while, @. How much are you enjoying the change of pace?",
 
 /***************
 * Lewis in the community center
@@ -574,6 +580,7 @@
     * Special order dialogue
     ****************************/
     "alex-leeks-special-order": "Hi, @! Just want to thank you for gathering all those leeks for gramps. I haven't seen him that happy in a long while.",
+    "evelyn-leeks-special-order": "Thanks for gathering all the leeks for my dear George, @! I'm glad you care for him as much as I do.",
     "willy-bait-special-order.00": "Can't wait to get to fishing with all that fresh bait you provided!",
     "willy-bait-special.order.01": "The catfish are gonna love it."
 }

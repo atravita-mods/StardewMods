@@ -18,6 +18,12 @@ public interface IExperimentalLagReductionAPI
     public List<string>? GetPathFor(GameLocation start, GameLocation end, int gender, bool allowPartialPaths);
 
     /// <summary>
+    /// Asks the pathfinder cache to clear nulls only (ie, paths that cannot be reached.)
+    /// </summary>
+    /// <returns>True if values were removed, false otherwise.</returns>
+    public bool ClearPathNulls();
+
+    /// <summary>
     /// Forcibly clears the gift cache.
     /// </summary>
     public void ResetGiftCache();

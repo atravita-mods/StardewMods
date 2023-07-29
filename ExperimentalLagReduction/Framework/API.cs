@@ -12,6 +12,9 @@ namespace ExperimentalLagReduction.Framework;
 public sealed class API : IExperimentalLagReductionAPI
 {
     /// <inheritdoc />
+    public bool ClearPathNulls() => Rescheduler.ClearNulls();
+
+    /// <inheritdoc />
     public List<string>? GetPathFor(GameLocation start, GameLocation end, int gender, bool allowPartialPaths)
     {
         Guard.IsNotNull(start);

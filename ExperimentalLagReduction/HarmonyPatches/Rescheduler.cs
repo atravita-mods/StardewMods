@@ -65,6 +65,20 @@ internal static class Rescheduler
     /// </summary>
     internal static int CacheCount => PathCache.Count;
 
+    /// <inheritdoc cref="IExperimentalLagReductionAPI.ClearPathNulls"/>
+    internal static bool ClearNulls()
+    {
+        bool ret = false;
+        foreach (((string start, string end, Gender gender) k, List<string>? v) in PathCache)
+        {
+            if (v is null)
+            {
+                ret |= PathCache.TryRemove(k, out _);
+            }
+        }
+        return ret;
+    }
+
     /// <summary>
     /// Given the start, end, and a gender constraint, grab the path from the cache, or null if not found.
     /// </summary>

@@ -57,7 +57,8 @@ internal static class TreePatches
     {
         try
         {
-            if (ModEntry.Config.DrawParticleEffects && __instance.modData.ContainsKey(CanPlaceHandler.TreeTapperFertilizer) && Singletons.Random.RollDice(256))
+            if (ModEntry.Config.DrawParticleEffects && Utility.isOnScreen(__instance.currentTileLocation * Game1.tileSize, 6)
+                && __instance.modData.ContainsKey(CanPlaceHandler.TreeTapperFertilizer) && Singletons.Random.RollDice(256))
             {
                 __instance.currentLocation.temporarySprites.Add(
                     new TemporaryAnimatedSprite(

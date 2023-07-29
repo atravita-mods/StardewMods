@@ -28,7 +28,7 @@ internal static class BushDrawPatch
     {
         try
         {
-            if (ModEntry.Config.DrawParticleEffects && Utility.isOnScreen(__instance.currentTileLocation * Game1.tileSize, 5)
+            if (ModEntry.Config.DrawParticleEffects && Utility.isOnScreen(__instance.currentTileLocation * Game1.tileSize, 256)
                 && __instance.modData.ContainsKey(CanPlaceHandler.MiraculousBeverages) && Singletons.Random.RollDice(512))
             {
                 __instance.currentLocation.TemporarySprites.Add(new TemporaryAnimatedSprite(

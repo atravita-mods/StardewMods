@@ -29,7 +29,7 @@ internal static class FruitTreeUpdatePatches
     [HarmonyPatch(nameof(FruitTree.draw))]
     private static void Postfix(FruitTree __instance)
     {
-        if (!ModEntry.Config.DrawParticleEffects || !Utility.isOnScreen(__instance.currentTileLocation * Game1.tileSize, 6))
+        if (!ModEntry.Config.DrawParticleEffects || !Utility.isOnScreen(__instance.currentTileLocation * Game1.tileSize, 256))
         {
             return;
         }

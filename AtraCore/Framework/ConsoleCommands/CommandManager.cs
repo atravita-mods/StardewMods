@@ -11,7 +11,7 @@ namespace AtraCore.Framework.ConsoleCommands;
 /// </summary>
 internal static class CommandManager
 {
-    private const string Prefix = "av.ac.";
+    private const string Prefix = "av.ac";
 
     /// <summary>
     /// Registers the console commands for this mod.
@@ -20,9 +20,18 @@ internal static class CommandManager
     internal static void Register(ICommandHelper helper)
     {
         helper.Add(
+            name: $"{Prefix}.toggle_debug",
+            documentation: "toggle the game's debug mode",
+            callback: ToggleDebugMode);
+        helper.Add(
             name: $"{Prefix}.add_quest",
             documentation: "adds a quest to be tracked.",
             callback: AddQuest);
+    }
+
+    private static void ToggleDebugMode(string command, string[] args)
+    {
+        Game1.debugMode = !Game1.debugMode;
     }
 
     private static void AddQuest(string command, string[] args)

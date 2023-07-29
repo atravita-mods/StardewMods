@@ -19,6 +19,11 @@ internal sealed class ModConfig
         #endif
 
     /// <summary>
+    /// Gets or sets a value indicating whether or not to cull out of bound draws.
+    /// </summary>
+    public bool CullDraws { get; set; } = true;
+
+    /// <summary>
     /// Gets or sets a value indicating whether or not to use this mod's scheduler.
     /// </summary>
     [GMCMSection("Scheduler", 0)]

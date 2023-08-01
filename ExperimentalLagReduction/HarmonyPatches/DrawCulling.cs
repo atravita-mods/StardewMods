@@ -20,6 +20,9 @@ using StardewValley.TerrainFeatures;
 
 namespace ExperimentalLagReduction.HarmonyPatches;
 
+/// <summary>
+/// Patches to disable the draw functions when the target isn't even close to being on screen.
+/// </summary>
 [HarmonyPatch]
 [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = StyleCopConstants.NamedForHarmony)]
 internal static class DrawCulling
@@ -89,5 +92,33 @@ internal static class DrawCulling
             return true;
         }
         return alpha > 0f && Utility.isOnScreen(__instance.Position, 256);
+    }
+
+    [HarmonyPrefix]
+    [HarmonyPriority(Priority.Last)]
+    [MethodImpl(TKConstants.Hot)]
+    [HarmonyPatch(typeof(ResourceClump), nameof(ResourceClump.draw), new[] { typeof(SpriteBatch), typeof(Vector2) })]
+    private static bool PrefixClumpDraw(ResourceClump __instance, Vector2 tileLocation)
+    {
+        if (!ModEntry.Config.CullDraws)
+        {
+            return true;
+        }
+        var effectivePosition = (__instance.tile.Value + Vector2.One) * Game1.tileSize;
+        return Utility.isOnScreen(effectivePosition, 128);
+    }
+
+    [HarmonyPrefix]
+    [HarmonyPriority(Priority.Last)]
+    [MethodImpl(TKConstants.Hot)]
+    [HarmonyPatch(typeof(GiantCrop), nameof(GiantCrop.draw), new[] { typeof(SpriteBatch), typeof(Vector2) })]
+    private static bool PrefixGiantCropDraw(GiantCrop __instance, Vector2 tileLocation)
+    {
+        if (!ModEntry.Config.CullDraws)
+        {
+            return true;
+        }
+        var effectivePosition = (tileLocation + (Vector2.One * 1.5f)) * Game1.tileSize;
+        return Utility.isOnScreen(effectivePosition, 256);
     }
 }

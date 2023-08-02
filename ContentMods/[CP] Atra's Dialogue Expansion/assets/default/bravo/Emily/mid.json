@@ -10,8 +10,9 @@
         "LogName": "Emily - base dialogue",
         "Action": "EditData",
         "Target": "Characters/Dialogue/Emily",
-        "Entries":{
+        "Entries": {
             "1{{YearRemainder}}": "Mom and Dad sent us another letter the other day. I wonder how they've been?$s",
+            "7{{YearRemainder}}": "@, my favorite fabric store is having a sale! What should I get?$h",
             "Saloon_Entry": "Gus, I'm here!/Ah, work!/Gus, what needs doing?",
 
             "spring_Fri10": "You know, @, I'm glad you came into my life.$h",
@@ -89,7 +90,7 @@
             "18_2": "I hope, @, you aren't using too many commercial fertilizers. They aren't very good at staying in the soil, so they tend to run off and cause algae blooms.",
             "19_2": "I got some very tasty kombucha from Pierre's the other day.#$b#You know, I've always wanted to make my own....",
 
-            "Tue10": "I've made most of my clothing, I love to sew.$h#$b#Plus, you get better clothing if you make it yourself.",
+            "Tue10": "I've made most of my clothing, I love to sew.$h#$b#Plus, you get better clothing if you make it yourself.#$e#Maybe I should make you something....",
 
             "Sun6": "Our parents? I'm not quite sure where they're traveling these days...$s",
             "summer_Sun": "@, what have you been up to?$h",
@@ -115,7 +116,8 @@
             "20_2": "Zuzu city has a great little thrift shop for crafters.I should see if I can get some time to go there sometimes...",
             "21_2": "I'm thinking of making some collard greens soup...",
             "22_2": "You know, I wasn't actually that interested in dance when I was a kid. That used to be more Haley's thing.",
-            "23_2": "Haley was actually quite a good student when she was young..."
+            "23_2": "Haley was actually quite a good student when she was young...",
+            "24_2": "If we don't protect the environment, who will?"
         },
         "When": {"YearModulus": "3"}
     },

@@ -6,6 +6,16 @@
             "Entries": {
                 "GILeave_Harvey": "{{i18n:gi_leave_harvey_0}}#$b#$s{{i18n:gi_leave_harvey_1}}",
             }
+        },
+        {
+            "Action": "EditData",
+            "Target": "Characters/Dialogue/Evelyn",
+            "Entries": {
+                "winter_Tue_inlaw_Harvey": "{{i18n:evelyn-harvey-winter-tue_0}}$h#$b#{{i18n:evelyn-harvey-winter-tue_1}}"
+            },
+            "When": {
+                "EnableFor": "Evelyn",
+            }
         }
     ]
 }

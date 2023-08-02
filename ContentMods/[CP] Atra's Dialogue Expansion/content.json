@@ -68,6 +68,14 @@
         },
         {
             "Name": "Title",
+            "Value": "{{i18n:mrs}}",
+            "When": {
+                "PlayerGender": "Female",
+                "HasValue: {{Spouse}}": true
+            }
+        },
+        {
+            "Name": "Title",
             "Value": "{{i18n:mister}}",
             "When": {"PlayerGender": "Male"}
         },

@@ -1,0 +1,10 @@
+{"Changes": [
+    {
+        "Action":"EditData",
+        "Target": "Characters/schedules/Sam",
+        "Entries": {
+            // restore night festival schedule.
+            "marriage_winter_17": "1000 SamHouse 17 15 2 sam_guitar/1700 Beach 11 34 3 \"Strings\\schedules\\Sam:winter_17.000\"/2400 bed"
+        }
+    }
+]}

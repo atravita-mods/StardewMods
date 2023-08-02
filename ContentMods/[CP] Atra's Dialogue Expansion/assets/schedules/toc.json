@@ -5,7 +5,7 @@
             "LogName": "Abigail schedules",
             "FromFile": "assets/schedules/Abigail.json",
             "When": {
-                "ScheduleChanges|contains=Abigail": true
+                "ScheduleChanges": "Abigail"
             }
         },
         {
@@ -13,7 +13,7 @@
             "LogName": "Alex schedules",
             "FromFile": "assets/schedules/Alex.json",
             "When": {
-                "ScheduleChanges|contains=Alex": true
+                "ScheduleChanges": "Alex"
             }
         },
         {
@@ -21,7 +21,7 @@
             "LogName": "Elliott schedules",
             "FromFile": "assets/schedules/Elliott.json",
             "When": {
-                "ScheduleChanges|contains=Elliott": true
+                "ScheduleChanges": "Elliott"
             }
         },
         {
@@ -29,7 +29,7 @@
             "LogName": "Emily schedules",
             "FromFile": "assets/schedules/Emily.json",
             "When": {
-                "ScheduleChanges|contains=Emily": true
+                "ScheduleChanges": "Emily"
             }
         },
         {
@@ -37,7 +37,7 @@
             "LogName": "Harvey schedules",
             "FromFile": "assets/schedules/Harvey.json",
             "When": {
-                "ScheduleChanges|contains=Harvey": true
+                "ScheduleChanges": "Harvey"
             }
         },
         {
@@ -45,7 +45,7 @@
             "LogName": "Leah schedules",
             "FromFile": "assets/schedules/Leah.json",
             "When": {
-                "ScheduleChanges|contains=Leah": true
+                "ScheduleChanges": "Leah"
             }
         },
         {
@@ -53,7 +53,7 @@
             "LogName": "Lewis schedules",
             "FromFile": "assets/schedules/Lewis.json",
             "When": {
-                "ScheduleChanges|contains=Lewis": true
+                "ScheduleChanges": "Lewis"
             }
         },
         {
@@ -61,7 +61,7 @@
             "LogName": "Maru schedules",
             "FromFile": "assets/schedules/Maru.json",
             "When": {
-                "ScheduleChanges|contains=Maru": true
+                "ScheduleChanges": "Maru"
             }
         },
         {
@@ -69,7 +69,15 @@
             "LogName": "Penny schedules",
             "FromFile": "assets/schedules/Penny.json",
             "When": {
-                "ScheduleChanges|contains=Penny": true
+                "ScheduleChanges": "Penny"
+            }
+        },
+        {
+            "Action": "Include",
+            "LogName": "Sam schedules",
+            "FromFile": "assets/schedules/Sam.json",
+            "When": {
+                "ScheduleChanges": "Sam"
             }
         },
         {
@@ -77,7 +85,7 @@
             "LogName": "Sebastian schedules",
             "FromFile": "assets/schedules/Sebastian.json",
             "When": {
-                "ScheduleChanges|contains=Sebastian": true
+                "ScheduleChanges": "Sebastian"
             }
         }
     ]

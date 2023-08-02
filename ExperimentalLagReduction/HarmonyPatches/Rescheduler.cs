@@ -210,8 +210,8 @@ internal static class Rescheduler
                         // if we have A->B and B->D, then we can string the path together already.
                         // avoiding trivial one-step stitching because this is more expensive to do.
                         // this isn't technically correct (especially for cycles) but it works pretty well most of the time.
-                        if (PathCache.TryGetValue((node.Name, end.Name, Ungendered), out List<string>? prev)
-                            && prev?.Count > 2 && CompletelyDistinct(route, prev))
+                        if (PathCache.TryGetValue((node.Name, end.Name, Ungendered), out List<string>? prev) && prev is not null
+                            && prev.Count > 2 && CompletelyDistinct(route, prev))
                         {
                             ModEntry.ModMonitor.TraceOnlyLog($"Partial route found: {start.Name} -> {node.Name} + {node.Name} -> {end.Name}", LogLevel.Info);
                             List<string> routeStart = new(route.Count + prev.Count - 1);
@@ -225,8 +225,8 @@ internal static class Rescheduler
                             _queue.Value.Clear();
                             return routeStart;
                         }
-                        else if (PathCache.TryGetValue((node.Name, end.Name, genderConstrainedToCurrentSearch), out List<string>? genderedPrev)
-                            && genderedPrev?.Count > 2 && CompletelyDistinct(route, genderedPrev))
+                        else if (PathCache.TryGetValue((node.Name, end.Name, genderConstrainedToCurrentSearch), out List<string>? genderedPrev) && genderedPrev is not null
+                            && genderedPrev.Count > 2 && CompletelyDistinct(route, genderedPrev))
                         {
                             ModEntry.ModMonitor.TraceOnlyLog($"Partial route found: {start.Name} -> {node.Name} + {node.Name} -> {end.Name}", LogLevel.Info);
                             List<string> routeStart = new(route.Count + genderedPrev.Count - 1);

@@ -4,7 +4,7 @@
         "Target": "Characters/schedules/Harvey",
         "Entries": {
             // restore Harvey going to the night market.
-            "marriage_winter_15": "840 Hospital 6 15 2/1200 HarveyRoom 4 5 1 harvey_radio/1600 HarveyRoom 11 5 3 harvey_read/1700 Beach 37 31 0 \"Strings\\schedules\\Harvey:winter_15.000\"/2400 HarveyRoom 13 4 1 harvey_sleep",
+            "marriage_winter_15": "840 Hospital 6 15 2/1200 HarveyRoom 4 5 1 harvey_radio/1600 HarveyRoom 11 5 3 harvey_read/1700 Beach 37 31 0 \"Strings\\schedules\\Harvey:winter_15.000\"/2400 bed",
         }
     },
     {
@@ -13,7 +13,7 @@
         "When": {"IsCommunityCenterComplete": true},
         "Target": "Characters/schedules/Harvey",
         "Entries": {
-            "rain2": "800 HarveyRoom 19 7 0/840 Hospital 6 15 2/1200 HarveyRoom 4 5 1 harvey_radio/1400 HarveyRoom 11 5 3 harvey_read/1600 CommunityCenter 31 9 0/2200 HarveyRoom 13 4 1 harvey_sleep"
+            "rain2": "800 HarveyRoom 19 7 0/840 Hospital 6 15 2/1200 HarveyRoom 4 5 1 harvey_radio/1400 HarveyRoom 11 5 3 harvey_read/1600 CommunityCenter 31 9 0/2200 bed"
         }
     },
     {

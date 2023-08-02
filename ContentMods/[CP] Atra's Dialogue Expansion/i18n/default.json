@@ -13,6 +13,7 @@
     "theirs": "theirs",
     "mister": "Mister",
     "miss": "Misses",
+    "mrs": "Mrs.",
 
 /********************
 * Small bits
@@ -210,6 +211,8 @@
     "marine-shane-fall-fri4": "Jas really misses her uncle Shane. Maybe I should take her to visit you guys more often?",
     "pam-penny-summer-fri10_0": "Glad you're treating my girl right, @.",
     "pam-penny-summer-fri10_1": "Take care of her, she deserves it.",
+    "evelyn-harvey-winter-tue_0": "You know, @, I'm glad the good doc has you.",
+    "evelyn-harvey-winter-tue_1": "We were afraid he was too married to his work.",
 
     // entry strings
     "penny-homecoming": "Honey, I'm home!",

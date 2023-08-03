@@ -432,12 +432,9 @@ public sealed class InventoryGiantCrop : SObject
         }
     }
 
-    private float GetScaleSize()
-    {
-        this.PopulateTileSize();
-        return 3.5f / Math.Max(1, this.tileSize.X);
-    }
-
+    /// <summary>
+    /// Gets the tile size of this giant crop.
+    /// </summary>
     private void PopulateTileSize()
     {
         if (this.tileSize == default)
@@ -452,6 +449,12 @@ public sealed class InventoryGiantCrop : SObject
                 this.tileSize = new(3, 3);
             }
         }
+    }
+
+    private float GetScaleSize()
+    {
+        this.PopulateTileSize();
+        return 3.5f / Math.Max(1, this.tileSize.X);
     }
 
     /// <summary>

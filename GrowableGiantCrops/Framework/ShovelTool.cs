@@ -1,6 +1,7 @@
-﻿// Ignore Spelling: Craftable loc Api
+﻿// Ignore Spelling: Craftable loc Api Hoedirt LECLAIR
 
 using System.Reflection;
+using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Xml.Serialization;
 
@@ -36,6 +37,11 @@ namespace GrowableGiantCrops.Framework;
 public class ShovelTool : Tool
 {
     /// <summary>
+    /// The mod-data string used to mark GiantCropTweaks protected hoedirt.
+    /// </summary>
+    protected internal const string LECLAIR_PROTECT = "leclair.giantcroptweaks/UnderCrop";
+
+    /// <summary>
     /// The API instance.
     /// </summary>
     protected static readonly Api Api = new();
@@ -45,7 +51,7 @@ public class ShovelTool : Tool
     /// <summary>
     /// Gets the mine rock count on a specific mineshaft level.
     /// </summary>
-    internal static readonly Lazy<Func<MineShaft, int>> MineRockCountGetter = new(() =>
+    protected internal static readonly Lazy<Func<MineShaft, int>> MineRockCountGetter = new(() =>
         (typeof(MineShaft).GetCachedProperty("stonesLeftOnThisLevel", ReflectionCache.FlagTypes.InstanceFlags)
              .GetGetMethod(nonPublic: true) ?? ReflectionThrowHelper.ThrowMethodNotFoundException<MethodInfo>("stonesLeftOnThisLevelGetter"))
              .CreateDelegate<Func<MineShaft, int>>());
@@ -53,12 +59,15 @@ public class ShovelTool : Tool
     /// <summary>
     /// Sets the mine rock count on a specific mineshaft level.
     /// </summary>
-    internal static readonly Lazy<Action<MineShaft, int>> MineRockCountSetter = new(() =>
+    protected internal static readonly Lazy<Action<MineShaft, int>> MineRockCountSetter = new(() =>
         (typeof(MineShaft).GetCachedProperty("stonesLeftOnThisLevel", ReflectionCache.FlagTypes.InstanceFlags)
              .GetSetMethod(nonPublic: true) ?? ReflectionThrowHelper.ThrowMethodNotFoundException<MethodInfo>("stonesLeftOnThisLevelSetter"))
              .CreateDelegate<Action<MineShaft, int>>());
 
-    private static readonly Lazy<Func<MineShaft, bool>> HasLadderSpawnedGetter = new(() =>
+    /// <summary>
+    /// Gets whether or not a ladder has appeared on a specific mine level.
+    /// </summary>
+    protected static readonly Lazy<Func<MineShaft, bool>> HasLadderSpawnedGetter = new(() =>
         typeof(MineShaft).GetCachedField("ladderHasSpawned", ReflectionCache.FlagTypes.InstanceFlags)
              .GetInstanceFieldGetter<MineShaft, bool>());
 
@@ -202,6 +211,11 @@ public class ShovelTool : Tool
             // Handle clumps and giant crops.
             if (Api.TryPickUpClumpOrGiantCrop(location, pickupTile, ModEntry.Config.PlacedOnly) is SObject inventoryClump)
             {
+                // Must remember to remove Khloe's protection markers.
+                if (inventoryClump is InventoryGiantCrop crop)
+                {
+                    RemoveProtectionFromHoedirt(location, pickupTile, crop);
+                }
                 ModEntry.ModMonitor.DebugOnlyLog($"Picking up {inventoryClump.Name}.", LogLevel.Info);
                 who.Stamina -= bigItemEnergy;
                 this.GiveItemOrMakeDebris(location, who, inventoryClump);
@@ -441,6 +455,40 @@ public class ShovelTool : Tool
     #endregion
 
     #region helpers
+
+    /// <summary>
+    /// Removes the protection markers from under a giant crop.
+    /// </summary>
+    /// <param name="location">Game location to grab from.</param>
+    /// <param name="pickupTile">Tile to pick up from.</param>
+    /// <param name="crop">Crop grabbed.</param>
+    /// <remarks>Kept alone as a separate method in case other mods need to patch it.</remarks>
+    /// <returns>The number of protection markers removed.</returns>
+    [MethodImpl(MethodImplOptions.NoInlining)]
+    protected static int RemoveProtectionFromHoedirt(GameLocation location, Vector2 pickupTile, InventoryGiantCrop crop)
+    {
+        Point size = crop.TileSize;
+        int start_x = (int)pickupTile.X;
+        int start_y = (int)pickupTile.Y;
+        int count = 0;
+        for (int hx = start_x; hx < start_x + size.X; hx++)
+        {
+            for (int hy = start_y; hy < start_y + size.Y; hy++)
+            {
+                if (location.terrainFeatures.TryGetValue(new(hx, hy), out TerrainFeature? terrainFeature) && terrainFeature is HoeDirt hoeDirt)
+                {
+                    if (hoeDirt.modData?.Remove(LECLAIR_PROTECT) == true)
+                    {
+                        count++;
+                    }
+                }
+            }
+        }
+
+        ModEntry.ModMonitor.Log($"Removed {count} Giant Crop Tweaks protection markers for {crop.Name}");
+
+        return count;
+    }
 
     /// <inheritdoc cref="IGrowableGiantCropsAPI.DrawAnimations(GameLocation, Vector2, string?, Rectangle, Point)"/>
     protected internal static void AddAnimations(GameLocation loc, Vector2 tile, string? texturePath, Rectangle sourceRect, Point tileSize, Color? color = null)

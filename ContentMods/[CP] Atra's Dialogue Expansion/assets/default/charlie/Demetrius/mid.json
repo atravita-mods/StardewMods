@@ -14,6 +14,7 @@
         "When": { "HasFlag": "Island_FirstParrot" },
         "Entries": {
             "Resort": "The mushrooms around here are extraordinary!$h#$b#I have never seen any mushrooms like these!$h",
+            "Resort_Pier_2": "Some of the largest organisms in the ocean eat plankton.#$b#Can you believe it, @? Both blue whales and basking sharks live off of plankton!",
             "19_2": "I'd love to study some of those magma caps found on Ginger Island some day. I can't believe the conditions these mushrooms can survive!%revealtasteDemetrius851"
         }
     },
@@ -31,7 +32,9 @@
         "Action": "EditData",
         "Target": "Characters/Dialogue/Demetrius",
         "Entries": {
+            "Resort_Pier": "Look, @, a mola mola!#$b#Despite their odd appearance, they're actually quite new to the seas, evolving only seventy million years ago!",
             "ScienceHouse_Entry": "Ah, home sweet home!",
+
             "ScienceHouse_22_20": "I've got so much data I need to analyze.$s",
             "fallScienceHouse_22_20": "I'd love to talk, @, but I have a grant submission coming up that I need to work on.",
             "summerScienceHouse_22_20": "I have so many measurements I need to make today...$s",
@@ -50,7 +53,8 @@
             "3{{YearRemainder}}": "Joja dumped a lot of trash into the waters around here back when they were operating that mine.#$b#We're still fishing trash out of the river.",
             "4{{YearRemainder}}": "Mining can cause quite a bit of ecological damage if not carried out carefully.#$b#Joja let quite a few dangerous chemicals leak more than a few times.",
             "7{{YearRemainder}}": "The mines...Joja was mostly in it for the coal, I think.#$b$So was Accel before them.",
-            "8{{YearRemainder}}": "Burning coal is pretty terrible for the environment.#$b#Sulfur compounds in the coal make acid rain, which greatly weakens the trees."
+            "8{{YearRemainder}}": "Burning coal is pretty terrible for the environment.#$b#Sulfur compounds in the coal make acid rain, which greatly weakens the trees.",
+            "9{{YearRemainder}}": "Up to the north lives a species of shark that lives for hundreds of years.#$b#It has an insanely slow metabolism, so it seems like time itself is stretched out for these animals!" // they're called Greenland sharks, unfortunately.
         },
         "When": { "YearModulus": "1" }
     },
@@ -116,6 +120,7 @@
             "19_2": "It's really weird we celebrate romantic holidays with the cut off reproductive organs of plants, isn't it?",
             "20_2": "My dad used to take us out fishing when I was very young. I was never any good, though.",
             "21_2": "There are plenty of fish that live in this mountain lake! Fish are a very important part of the ecosystem.$h",
+            "22_2": "Many fish rely on swim bladders to maintain neutral buoyancy with the water, but this restricts them to only a small depth range.",
 
             "winter_Mon10": "There are only a few plants that flower during winter, but crocus is one of them.[418]",
 

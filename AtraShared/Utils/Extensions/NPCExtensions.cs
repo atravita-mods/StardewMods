@@ -140,4 +140,18 @@ public static class NPCExtensions
             _ => tile,
         };
     }
+
+    /// <summary>
+    /// Warps an npc to their default map and position.
+    /// </summary>
+    /// <param name="npc">NPC to warp.</param>
+    public static void WarpHome(this NPC npc)
+    {
+        Guard.IsNotNull(npc);
+
+        GameLocation? target = Game1.getLocationFromName(npc.DefaultMap);
+        Guard.IsNotNull(target);
+
+        Game1.warpCharacter(npc, target, npc.DefaultPosition / Game1.tileSize);
+    }
 }

@@ -44,7 +44,8 @@
         "Action": "EditData",
         "Target": "Characters/Dialogue/Evelyn",
         "Entries": {
-            "15_2": "Ugh, we might have to cut back to a smaller cable package.$s"
+            "15_2": "Ugh, we might have to cut back to a smaller cable package.$s",
+            "16_2": "I do wish George would go outside more often, that would be better for him than watching that TV all the time.$s"
         },
         "When": {"YearModulus": "4"}
     }

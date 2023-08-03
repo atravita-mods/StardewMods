@@ -10,9 +10,9 @@
             "TwoKids_0": "{{i18n: two-kids.0.{{season}} | default = {{i18n: two-kids.0}} }}[194 195 210 211]$h",
             "TwoKids_3": "{{i18n: two-kids.3}}",
 
-            "Bad_2": "{{i18n: bad-2}}$s",
+            "Bad_2": "#$c .5#{{i18n: bad-2a}}$s#{{i18n: bad-2b}}$a",
             "Bad_3": "{{i18n: bad-3}}$s",
-            "Bad_4": "{{i18n: bad-4}}$s",
+            "Bad_4": "{{i18n: bad-4a}}$s",
 
             // additional specific day dialogue.
             "spring_1": "{{i18n: spring-1.{{YearModulus}}| default = {{i18n: spring-1}} }}$h",

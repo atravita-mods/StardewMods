@@ -1,5 +1,3 @@
-using System.Reflection;
-
 using AtraBase.Toolkit;
 
 using CommunityToolkit.Diagnostics;
@@ -11,7 +9,7 @@ using static System.Numerics.BitOperations;
 namespace AtraShared.ConstantsAndEnums;
 
 /// <summary>
-/// Wallet items as flags....
+/// Skills as flags....
 /// </summary>
 [Flags]
 [EnumExtensions]
@@ -36,12 +34,12 @@ public static partial class SkillsExtensions
     private static readonly Skills[] _all = GetValues().Where(a => PopCount((uint)a) == 1).ToArray();
 
     /// <summary>
-    /// Gets a span containing all wallet items.
+    /// Gets a span containing all vanilla skills.
     /// </summary>
     public static ReadOnlySpan<Skills> All => new(_all);
 
     /// <summary>
-    /// Checks if this specific farmer has a specific skill level
+    /// Checks if this specific farmer has a specific skill level.
     /// </summary>
     /// <param name="farmer">Farmer to check.</param>
     /// <param name="skills">Skill to check for.</param>

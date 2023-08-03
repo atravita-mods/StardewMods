@@ -484,8 +484,10 @@ public class ShovelTool : Tool
                 }
             }
         }
-
-        ModEntry.ModMonitor.Log($"Removed {count} Giant Crop Tweaks protection markers for {crop.Name}");
+        if (count > 0)
+        {
+            ModEntry.ModMonitor.Log($"Removed {count} Giant Crop Tweaks protection markers for {crop.Name}");
+        }
 
         return count;
     }

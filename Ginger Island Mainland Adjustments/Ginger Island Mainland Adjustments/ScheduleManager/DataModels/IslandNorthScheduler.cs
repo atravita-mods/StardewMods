@@ -112,6 +112,7 @@ internal static class IslandNorthScheduler
                   .AppendCorrectRemainderSchedule(explorer);
 
                 string renderedSchedule = sb.ToString();
+                sb.Clear();
 
                 Globals.ModMonitor.DebugOnlyLog($"Calculated island north schedule for {explorer.Name}: {renderedSchedule}");
                 explorer.islandScheduleName.Value = "island";

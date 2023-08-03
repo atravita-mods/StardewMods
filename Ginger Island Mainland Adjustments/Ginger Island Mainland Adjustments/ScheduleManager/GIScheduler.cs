@@ -544,6 +544,7 @@ internal static class GIScheduler
             sb.AppendCorrectRemainderSchedule(visitor);
 
             completedSchedules[visitor] = string.Join('/', sb.ToString());
+            sb.Clear();
             Globals.ModMonitor.DebugOnlyLog($"For {visitor.Name}, created island schedule {completedSchedules[visitor]}");
         }
 

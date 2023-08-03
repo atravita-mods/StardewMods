@@ -23,7 +23,9 @@
 
             "1_2": "When I was young, we had a little corner shop that sold the best burgers and fries.",
             "2_2": "Ugh, I think I'm out of protein powder. Gotta order more online.",
-            "3_2": "Selling ice cream at the little stand? That was my summer job ever since high school. Makes me a little money."
+            "3{{YearRemainder}}": "Selling ice cream at the little stand? That was my summer job ever since high school. Makes me a little money.",
+            "5{{YearRemainder}}": "Boy am I glad to not be in high school anymore. I had to wake up at like three in the morning to make practice at five.",
+            "6{{YearRemainder}}": "I train six days a week, every week.$h"
         }
     },
     {

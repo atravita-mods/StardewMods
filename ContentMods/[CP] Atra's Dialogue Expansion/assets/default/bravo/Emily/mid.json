@@ -12,7 +12,7 @@
         "Target": "Characters/Dialogue/Emily",
         "Entries": {
             "1{{YearRemainder}}": "Mom and Dad sent us another letter the other day. I wonder how they've been?$s",
-            "7{{YearRemainder}}": "@, my favorite fabric store is having a sale! What should I get?$h",
+            "15{{YearRemainder}}": "@, my favorite fabric store is having a sale! What should I get?$h",
             "Saloon_Entry": "Gus, I'm here!/Ah, work!/Gus, what needs doing?",
 
             "spring_Fri10": "You know, @, I'm glad you came into my life.$h",
@@ -140,7 +140,9 @@
         "Target": "Characters/Dialogue/Emily",
         "Entries": {
             "7_2": "There's enough resources in our lovely world for everyone, but we need to take care of it.",
-            "12_2": "I wish my sister was more responsible.$s"
+            "12_2": "I wish my sister was more responsible.$s",
+            "14_2": "It's so easy to order things online from Joja, but it comes with so much plastic packaging.$s",
+            "16_2": "Joja is considering removing free unlimited returns.#$b#Honestly, @, I'm not against that, I think it'll cut down on impulse buys."
         },
         "When": {"YearModulus": "4"}
     },

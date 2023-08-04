@@ -33,9 +33,14 @@ internal sealed class AddSpecialOrderCommand : IEventCommand
     /// <inheritdoc />
     public bool Validate(Event @event, GameLocation location, GameTime time, string[] args, out string? error)
     {
-        if (args.Length != 2)
+        if (args.Length is not 2 or 3)
         {
-            error = "Expected a single argument, the internal name of the order";
+            error = "Expected at most two arguments, the internal name of the order, and an optional boolean `duplicate` argument.";
+            return false;
+        }
+        if (args.Length == 3 && bool.TryParse(args[2], out _))
+        {
+            error = "Expected argument 2 `duplicate` to be a boolean.";
             return false;
         }
 
@@ -48,9 +53,14 @@ internal sealed class AddSpecialOrderCommand : IEventCommand
     {
         try
         {
-            SpecialOrder order = SpecialOrder.GetSpecialOrder(args[1], Singletons.Random.Next());
-            Game1.player.team.specialOrders.Add(order);
-            MultiplayerHelpers.GetMultiplayer().globalChatInfoMessage("AcceptedSpecialOrder", Game1.player.Name, order.GetName());
+            // if duplicates allowed, or if no duplicate found.
+            if ((args.Length == 3 && bool.TryParse(args[2], out bool val) && val)
+                || !Game1.player.team.specialOrders.Any(order => order.questKey.Value == args[1])
+            {
+                SpecialOrder order = SpecialOrder.GetSpecialOrder(args[1], Singletons.Random.Next());
+                Game1.player.team.specialOrders.Add(order);
+                MultiplayerHelpers.GetMultiplayer().globalChatInfoMessage("AcceptedSpecialOrder", Game1.player.Name, order.GetName());
+            }
         }
         catch (Exception ex)
         {

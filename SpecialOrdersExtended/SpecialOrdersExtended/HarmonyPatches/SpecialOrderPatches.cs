@@ -56,7 +56,7 @@ internal static class SpecialOrderPatches
         try
         {
             Dictionary<string, string> overrides = AssetManager.GetDurationOverride();
-            if (overrides.TryGetValue(__instance.questKey.Value, out string val))
+            if (overrides.TryGetValue(__instance.questKey.Value, out string? val))
             {
                 if (int.TryParse(val, out int duration))
                 {

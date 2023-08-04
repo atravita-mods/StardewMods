@@ -153,19 +153,19 @@ internal sealed class SetRelationship : IEventCommand
     {
         if (args.Length != 3 || args.Length != 4)
         {
-            error = "Event requires exactly two or three arguments.";
+            error = "Event command requires exactly two or three arguments.";
             return true;
         }
 
         NPC? npc = NPCCache.GetByVillagerName(args[1], searchTheater: true);
         if (npc is null)
         {
-            error = $"Could not find NPC by name {npc}";
+            error = $"Could not find NPC by name {args[1]}";
             return true;
         }
 
         FriendshipEnum past;
-        if (Game1.player.friendshipData.TryGetValue(args[1], out Friendship? friendship))
+        if (Game1.player.friendshipData.TryGetValue(npc.Name, out Friendship? friendship))
         {
             past = friendship.RoommateMarriage ? FriendshipEnum.Roommate : (FriendshipEnum)friendship.Status;
         }

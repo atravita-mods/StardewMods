@@ -1,4 +1,6 @@
-﻿#if DEBUG
+﻿#define TRACELOG
+
+#if DEBUG
 using System.Diagnostics;
 #endif
 
@@ -39,7 +41,7 @@ internal class RewriteMissedLevelUpRecipes
             {
                 buffer[i] = farmer.GetUnmodifiedSkillLevel(i);
             }
-            ModEntry.ModMonitor.DebugOnlyLog($"Current levels for {farmer.Name} => {string.Join(',', buffer)}");
+            ModEntry.ModMonitor.TraceOnlyLog($"Current levels for {farmer.Name} => {string.Join(',', buffer)}");
 
             // account for levels not "locked in" yet.
             foreach ((int skill, int level) in farmer.newLevels)
@@ -49,7 +51,7 @@ internal class RewriteMissedLevelUpRecipes
                     buffer[skill] = Math.Max(level - 1, 0);
                 }
             }
-            ModEntry.ModMonitor.DebugOnlyLog($"Current levels after removing current level ups for {farmer.Name} => {string.Join(',', buffer)}");
+            ModEntry.ModMonitor.TraceOnlyLog($"Current levels after removing current level ups for {farmer.Name} => {string.Join(',', buffer)}");
 
             int maxLevel = buffer.Max();
 
@@ -100,7 +102,7 @@ internal class RewriteMissedLevelUpRecipes
         }
         catch (Exception ex)
         {
-            ModEntry.ModMonitor.LogError("overriding default recipes", ex);
+            ModEntry.ModMonitor.LogError("overriding level up recipes crosscheck", ex);
             return true;
         }
     }

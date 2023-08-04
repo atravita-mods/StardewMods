@@ -7,6 +7,7 @@
             "movieTheater": "Looks like I have competition now.$s#$b#Something new for people to do on a Friday night.#$e#Would be nice to see a movie sometime...$h",
             "SeedShop_Entry": "Whatcha got, Pierre?/Anything particularly nice today?/Where's my grocery list...",
             "summer_Fri10": "Weather like this makes me want to go make some piña coladas...and getting caught in the rain...$h",
+            "summer_Sat10": "I believe that with all the lovely food our planet gives us, no one should go hungry.",
 
             "summer_4{{YearRemainder}}": "Gotta get ready for inspections...",
 
@@ -157,7 +158,9 @@
         "Entries": {
             "1_2": "I've been reconsidering my wine and alcohol list, and I think I want to focus more on locally-produced brews.#$b#Say, @, you producing anything interesting?",
             "2_2": "I've always wanted to own one of those places that feels like a second home, you know? A place where anyone can come to relax.",
-            "15_2": "I do some sales at lunchtime, but the bulk of my customers come by mostly for dinner."
+            "3_2": "I don't think I do enough business to really justify beer on tap, but I do wish sometimes I could have one of those systems. Just to play with.",
+            "15_2": "I do some sales at lunchtime, but the bulk of my customers come by mostly for dinner.",
+            "16_2": "Friend of mine who went to culinary school with me just opened a new bar over in Zuzu City. He's making bank."
         }
     }
 ]}

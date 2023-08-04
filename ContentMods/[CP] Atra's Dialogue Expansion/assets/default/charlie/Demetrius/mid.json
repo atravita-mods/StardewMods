@@ -80,10 +80,16 @@
             "fall_Thu10": "In fall, we get so many common mushrooms fruiting. They're quite tasty![404]$h",
             "winter_Mon10": "I'd love to take a trip on that submarine some day...",
 
+            // in front of the kitchen.
+            "ScienceHouse_27_9": "Let's see, what should I cook...what ingredients do I have...",
+
+            // in his lab.
             "ScienceHouse_22_20": "I'm so sorry, @, I've got so much work I need to get done before next Monday.",
             "summerScienceHouse_22_20": "Just need to gather a little more data for a proposal.",
             "fallScienceHouse_22_20": "Sometimes I feel like I spend more time writing proposals than anything else.$s",
             "winterScienceHouse_22_20": "Sorry, @, I've got a talk I need to prepare for.",
+
+            // standing next to the mountains.
             "fallMountain_45_8": "Some of these trees are more than a hundred years old. I hope you weren't planning on cutting them down."
         },
         "When": { "YearModulus": "2" }

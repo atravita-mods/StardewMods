@@ -302,8 +302,9 @@ universal:
     [HarmonyPrefix]
     [HarmonyPriority(Priority.Last)]
     [HarmonyPatch(nameof(NPC.getGiftTasteForThisItem))]
-    private static bool GetGiftTastePrefix(NPC __instance, Item item, ref int __result)
+    private static bool GetGiftTastePrefix(NPC __instance, Item item, ref int __result, out bool __state)
     {
+        __state = false;
         if (!ModEntry.Config.OverrideGiftTastes)
         {
             return true;
@@ -318,6 +319,7 @@ universal:
         if (ModEntry.Config.UseGiftTastesCache && Cache.TryGetValue((__instance.Name, obj.ParentSheetIndex), out int cacheTaste))
         {
             ModEntry.ModMonitor.TraceOnlyLog($"Got gift taste for {obj.Name} for {__instance.Name} from cache.");
+            __state = true;
             __result = cacheTaste;
             return false;
         }
@@ -329,9 +331,9 @@ universal:
     // use a postfix to cache so other mods can also harmony patch this.
     [HarmonyPriority(Priority.Last)]
     [HarmonyPatch(nameof(NPC.getGiftTasteForThisItem))]
-    private static void Postfix(NPC __instance, Item item, ref int __result)
+    private static void Postfix(NPC __instance, Item item, ref int __result, bool __state)
     {
-        if (ModEntry.Config.UseGiftTastesCache && item is SObject)
+        if (ModEntry.Config.UseGiftTastesCache && item is SObject && !__state)
         {
             Cache[(__instance.Name, item.ParentSheetIndex)] = __result;
         }
@@ -353,16 +355,16 @@ universal:
                 continue;
             }
 
-            if (int.TryParse(giftItem, out int loveID))
+            if (int.TryParse(giftItem, out int itemID))
             {
-                if (loveID >= 0)
+                if (itemID >= 0)
                 {
-                    if (loveID == obj.ParentSheetIndex)
+                    if (itemID == obj.ParentSheetIndex)
                     {
                         return GiftPriority.Individual;
                     }
                 }
-                else if (loveID == obj.Category && priority == GiftPriority.None)
+                else if (itemID == obj.Category && priority == GiftPriority.None)
                 {
                     priority = GiftPriority.Category;
                 }

@@ -11,7 +11,7 @@
             "Entries":{
                 "{{TaxDay}}": "Nothing sucks more than having to figure out what I did last year so I can file my taxes.$s"
             },
-            "When": {"EnableFor|contains=Leah": true}
+            "When": {"EnableFor": "Leah"}
         },
         {
             "LogName": "Penny - marriage",
@@ -21,7 +21,7 @@
                 "winter_3": "Oh, it's winter again, isn't it? What are you planning on doing this winter?#$b#I trust you to handle the finances, %endearment."
             },
             "When": {
-                "EnableFor|contains=Penny": true,
+                "EnableFor": "Penny",
                 "Year|contains = 1,2": false
             }
         },
@@ -34,14 +34,25 @@
                 "{{TaxDay}}": "You'd think that, since the government is the one who pays me, I wouldn't have to do all this work to pay my taxes.$s"
             },
             "When": {
-                "EnableFor|contains=Demetrius": true
+                "EnableFor": "Demetrius",
+            }
+        },
+        {
+            "LogName": "Emily base",
+            "Action": "EditData",
+            "Target": "Characters/Dialogue/Emily",
+            "Entries": {
+                "{{TaxDay}}": "Ugh, I hate having to file my taxes.#$b#Mine and Haley's, honestly maybe I should get her to do her own...."
+            },
+            "When": {
+                "EnableFor": "Emily",
             }
         },
         {
             "LogName": "Robin - after upgrades",
             "Action": "EditData",
             "Target": "Characters/Dialogue/Robin",
-            "When": {"Query: {{FarmhouseUpgrade > 3}}": true},
+            "When": {"Query: {{FarmhouseUpgrade}} > 3": true},
             "Entries": {
                 "winter_Mon": "I've always loved this time of year. The snow in the mountains is beautiful. Even when I have to walk through it."
             }
@@ -52,7 +63,7 @@
             "Target": "Characters/Dialogue/rainy",
             "When": {
                 "Season": "winter",
-                "EnableFor|contains=Elliott": true
+                "EnableFor": "Elliott"
             },
             "Entries": {
                 "Elliott": "A day like this is good for my productivity.#$e#It's not like I'd be going out in this weather.#$e#Maybe to the saloon. Later."
@@ -66,17 +77,17 @@
                 "{{TaxDay}}": "We've all gotta do our duty, @, and that duty includes paying our taxes.#$e#Now, did I collect the taxes of that guy who lives out west?"
             },
             "When": {
-                "EnableFor|contains=Lewis": true
+                "EnableFor": "Lewis",
             }
         },
         {
             "LogName": "Marnie - winter Y1",
             "Action": "EditData",
             "Target": "Characters/Dialogue/Marnie",
-            "When": {"Year": "1"},
+            "When": {"Year": "1", "EnableFor": "Marnie"},
             "Entries": {
                 "fall_27": "Make sure to have plenty of hay for winter! It's too cold for animals to go out for most of our winters, so they won't have a chance to eat grass outside."
-            }
+            },
         },
         {
             // This block is to remove vanilla Marnie lines that no longer make sense past Y1.
@@ -90,7 +101,7 @@
                 "Tue_inlaw_Shane": "I'm glad Shane found you, @. I think he's been doing better, recently.$h"
             },
             "When": {
-                "EnableFor|contains=Marnie": true,
+                "EnableFor": "Marnie",
                 "Year|contains=1": false
             }
         },
@@ -102,7 +113,7 @@
                 "{{TaxDay}}": "Why I've gotta pay taxes to fund this stupid war, I'll never know."
             },
             "When": {
-                "EnableFor|contains=Pam": true
+                "EnableFor": "Pam"
             }
         },
         {
@@ -115,7 +126,7 @@
                 "spring_27_2": "Gotta make sure to stock tulip bulbs for Ms. Mullner!"
             },
             "When": {
-                "EnableFor|contains=Pierre": true
+                "EnableFor": "Pierre"
             }
         },
         {
@@ -128,7 +139,7 @@
             },
             "When": {
                 "HasFlag" :"PierreStocklist",
-                "EnableFor|contains=Pierre": true
+                "EnableFor": "Pierre"
             }
         },
         {
@@ -140,7 +151,7 @@
                 "Tue": "Tuesdays are our aerobics club days. Say, @, you wanna join us?$h"
             },
             "When": {
-                "EnableFor|contains=Caroline": true
+                "EnableFor": "Caroline"
             }
         },
         {
@@ -151,7 +162,7 @@
                 "summer_Mon": "Between you and I, @, being open seven days a week is quite tiring.#$b#I wish I could take more time to garden, but sadly we have to run the store."
             },
             "When": {
-                "EnableFor|contains=Caroline": true,
+                "EnableFor": "Caroline",
                 "IsCommunityCenterComplete": true
             }
         },
@@ -162,7 +173,7 @@
             "When": {
                 "Season": "winter",
                 "Day": 28,
-                "EnableFor|contains=Gus": true
+                "EnableFor": "Gus"
             },
             "Entries": {
                 "IslandSouth_14_21": "$1 atravitaGusNewYear#Happy New Year, @! Have one on me today. May the next year be even better![873]#$e#Are you enjoying the party, @?"
@@ -174,7 +185,7 @@
             "Target": "Characters/Dialogue/Sandy",
             "When": {
                 "HasFlag": "ccMovieTheater",
-                "EnableFor|contains=Sandy": true
+                "EnableFor": "Sandy"
             },
             "Entries": {
                 "movieTheater": "I heard you guys have a theater now!$h#$b#I'm so excited! I love movies.",
@@ -187,7 +198,7 @@
             "Target": "Characters/Dialogue/rainy",
             "When": {
                 "Season": "winter",
-                "EnableFor|contains=Evelyn": true
+                "EnableFor": "Evelyn"
             },
             "Entries": {
                 "Evelyn": "Weather like this...we didn't use to get rain during winter.$s#$e#The snow'll become slush and that's difficult for George."
@@ -199,7 +210,7 @@
             "Target": "Characters/Dialogue/rainy",
             "When": {
                 "HasFlag": "beenToWoods",
-                "EnableFor|contains=Abigail": true
+                "EnableFor": "Abigail"
             },
             "Entries": {
                 "Abigail": "I love the woods in the rain.#$b#So peaceful, away from the rest of the town.#$e#I don't think anyone else goes out there."
@@ -213,7 +224,7 @@
                 "rain.000": "It's so peaceful out here, isn't it?",
             },
             "When": {
-                "EnableFor|contains=Sebastian": true,
+                "EnableFor": "Sebastian",
                 "Query: {{Hearts:Sebastian}} >= 6": true,
             }
         },
@@ -223,7 +234,7 @@
             "Target": "Characters/Dialogue/Alex",
             "When": {
                 "Year|contains = 1,2": false,
-                "EnableFor|contains=Alex": true
+                "EnableFor": "Alex"
             },
             "Entries": {
                 // Slowly remove references to "going pro"
@@ -240,7 +251,8 @@
             "Action": "EditData",
             "Target": "Characters/Dialogue/MarriageDialogueAlex",
             "When": {
-                "Season|contains=winter": false
+                "Season|contains=winter": false,
+                "EnableFor": "Alex"
             },
             "Entries": {
                 // vanilla line claims you can't run in rain, which is flat wrong.

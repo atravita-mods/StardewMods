@@ -2,6 +2,8 @@
 
     // High school jock exterior hides a more responsible interior.
     // still trying to defend his mother.
+
+    // grew up in Pelican Town.
     {
         "LogName": "Rain -- during winter.",
         "Action": "EditData",
@@ -77,7 +79,8 @@
         "When": {"YearModulus": "3"},
         "Entries": {
             "3_2": "Emily gave me a recipe for a chia seed smoothie the other day! Plenty of protein in it, and it tastes great!$h",
-            "5_2": "You know, @, if my sports career never happens, maybe I should go into politics?#$b#I do have a 'winning smile'.$h"
+            "5_2": "You know, @, if my sports career never happens, maybe I should go into politics?#$b#I do have a 'winning smile'.$h",
+            "6_2": "We used to have to bus for more than an hour to get to the nearest high school.#$e#Won't be so bad for Jas and Vincent, though, there's a newer high school closer to us now."
         }
     },
     {
@@ -104,7 +107,7 @@
         "Entries": {
             "1_2": "Ah, start of the new month, what new exercises should I do?$h",
             "3_2": "@, I did five hundred squats yesterday. Five hundred!#$b#Assuming I didn't miscount.",
-            "4_2": "@, I'm thinking of going ice skating some day. You got time for that?"
+            "4_2": "@, I'm thinking of going ice skating some day. You got time for that?#$b#We'll have to go down into the city for that, though."
         },
         "When": {"YearModulus": 0}
     }

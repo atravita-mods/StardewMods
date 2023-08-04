@@ -20,6 +20,8 @@ using StardewValley.Locations;
 
 namespace AtraCore.Framework.EventCommands.RelationshipCommands;
 
+#warning - TODO: make sure breakups also remove planned weddings.
+
 /// <summary>
 /// Lets you set the relationship status between the current player and an NPC.
 /// </summary>
@@ -219,10 +221,17 @@ internal sealed class SetRelationship : IEventCommand
             case FriendshipEnum.Friendly:
                 friendship.Status = FriendshipStatus.Friendly;
 
-                if (past == FriendshipEnum.Dating)
+                if (past is FriendshipEnum.Dating or FriendshipEnum.Engaged)
                 {
                     MultiplayerHelpers.GetMultiplayer().globalChatInfoMessage("BreakUp", Game1.player.Name, npc.displayName);
                     friendship.Points = value;
+
+                    // make sure to break off the engagement too.
+                    friendship.WeddingDate = null;
+                    if (Game1.player.spouse == npc.Name)
+                    {
+                        Game1.player.spouse = null;
+                    }
                 }
                 break;
             case FriendshipEnum.Dating:

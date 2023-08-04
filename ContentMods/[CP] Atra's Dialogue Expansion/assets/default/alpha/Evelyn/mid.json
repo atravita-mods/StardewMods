@@ -12,6 +12,8 @@
             "winter_7{{YearRemainder}}": "@, it's almost the Feast of the Winter Star! I'm always looking forward to the Feast around this time of year.",
             "winter_8{{YearRemainder}}": "Oh, I should bring the good doctor a casserole, shouldn't I? The man works so hard, he doesn't take care of himself.",
 
+            "summer_Tue10": "Ah, @, don't the flowers in the town gardens smell so lovely?$h",
+
             "JoshHouse_Entry": "George, I'm home!"
         }
     },
@@ -36,7 +38,8 @@
             "winter_Mon10": "@, did you grow any fairy roses? They're Jas's favorite flower.$h%revealtasteJas595",
 
             "15_2": "Honey, I just made some cookies. Please have one, dearie.[223]$h",
-            "16_2": "George bought me a washing machine for our tenth anniversary. I can't believe we used to wash all our clothing by hand!"
+            "16_2": "George bought me a washing machine for our tenth anniversary. I can't believe we used to wash all our clothing by hand!",
+            "17_2": "When I was your age, @, we didn't have all this technology.#$b#Frankly, I'm not sure it really makes our lives better...",
         },
         "When": {"YearModulus": "2"}
     },

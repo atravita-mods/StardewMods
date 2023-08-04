@@ -33,7 +33,7 @@ internal sealed class RemoveMail : IEventCommand
     {
         if (args.Length < 2)
         {
-            error = "Event requires at least one mail flag to remove!";
+            error = "Event command requires at least one mail flag to remove!";
             return false;
         }
 

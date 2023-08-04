@@ -38,7 +38,7 @@ internal sealed class AddSpecialOrderCommand : IEventCommand
             error = "Expected at most two arguments, the internal name of the order, and an optional boolean `duplicate` argument.";
             return false;
         }
-        if (args.Length == 3 && bool.TryParse(args[2], out _))
+        if (args.Length == 3 && !bool.TryParse(args[2], out _))
         {
             error = "Expected argument 2 `duplicate` to be a boolean.";
             return false;

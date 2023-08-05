@@ -33,12 +33,14 @@ internal static class Utils
     /// Check if the object should not be given by a random picker. Basically, no golden walnuts (73), qi gems (858), Qi beans or fruit unless the special order is active.
     /// 289 = ostrich egg, 928 is a golden egg.
     /// Or something that doesn't exist in Data/ObjectInformation.
+    /// Or quest items.
     /// </summary>
     /// <param name="id">int id of the item to check.</param>
     /// <returns>true to forbid it.</returns>
     internal static bool ForbiddenFromRandomPicking(int id)
         => !Game1Wrappers.ObjectInfo.TryGetValue(id, out string? objectData) || id == 73 || id == 858
         || (id is 289 or 928 && !isPerfectFarm.GetValue())
+        || objectData.GetNthChunk('/', SObject.objectInfoTypeIndex).Equals("Quest", StringComparison.OrdinalIgnoreCase)
         || (!islandUnlocked.GetValue() && id is 69 or 91 or 829 or 835 or 886 or 903)
         || (!isQiQuestActive.GetValue() && objectData.GetNthChunk('/', SObject.objectInfoNameIndex).Contains("Qi", StringComparison.OrdinalIgnoreCase));
 

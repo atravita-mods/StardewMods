@@ -6,7 +6,9 @@
         "Entries": {
             "spring_14": "Maybe Mom will buy some chocolate now that it's on sale?$h",
 
-            "summer_Wed10": "I asked Sam if he'd teach me how to skateboard some day.#$b#He said I was too little.$s"
+            "summer_Wed10": "I asked Sam if he'd teach me how to skateboard some day.#$b#He said I was too little.$s",
+
+            "IslandSouth_Entry": "Do I need to put on sunscreen?"
         },
     },
     {
@@ -38,6 +40,10 @@
             "2_2": "Look, @, at this pretty feather I've found![444]",
             "3_2": "@, why do giraffes have such long necks?",
             "5_2": "Miss Penny is trying to teach us about the water cycle. {{Title}} @, what is the water cycle?",
+            "6_2": "I wanna go fishing too!#$e#{{Title}} @, do you think Sam will take me fishing?",
+            "7_2": "Do you think I can get Dad to take me to the Zuzu City Aquarium?",
+
+            "8_2": "Mom and Dad went to the city for a day. Said it was something for Dad.#$b#They said it might help bring Dad back? But he's back?"
         },
         "When": {
             "YearModulus": "3"

@@ -203,7 +203,10 @@
     "gi_leave_harvey_1": "I spend so much of my time inside, it'll be good for me to get some sun.",
 
     // divorce strings
-    "demetrius-divorced-from-maru": "Well, I wish you hadn't broken my dear Maru's heart.",
+    "demetrius-divorced-from-maru-a": "Well, I wish you hadn't broken my dear Maru's heart.",
+    "demetrius-divorced-from-maru-b": "I have nothing to say to you.",
+
+    "vincent-divorced-from-sam": "Mom says I shouldn't talk to you.",
 
     // marriage strings
     "demetrius-maru-spring-mon10": "You know, I'm glad Maru found you. I can see how happy you make her.",
@@ -212,6 +215,9 @@
     "marine-shane-fall-fri4": "Jas really misses her uncle Shane. Maybe I should take her to visit you guys more often?",
     "pam-penny-summer-fri10_0": "Glad you're treating my girl right, @.",
     "pam-penny-summer-fri10_1": "Take care of her, she deserves it.",
+    "vincent-penny-tue-a": "Miss Penny is so pretty, isn't she?",
+    "vincent-penny-tue-b": "I hope she'll be my teacher forever and ever.",
+    "evelyn-penny-winter-mon4": "@, I'm so glad Penny found you. Girl deserves someone nice in her life.",
     "evelyn-harvey-winter-tue_0": "You know, @, I'm glad the good doc has you.",
     "evelyn-harvey-winter-tue_1": "We were afraid he was too married to his work.",
 
@@ -236,6 +242,8 @@
     "sebastian-birthday.self.1": "Oh, it's my birthday today, isn't it? I guess I should do something social about it.",
     "sebastian-birthday.self.2": "One more year around the sun, eh? Guess I'll see if Abby and Sam are up for a game of tabletop today.",
     "sebastian-birthday.self.3": "I'm not really one for celebrating my birthday, but my mother wants to, so I guess...",
+
+    "vincent-birthday.self": "{{title}} @, it's my birthday today! I'm going to have the best cake in the world!",
 
 /***************
 * Gus early mornings

@@ -6,7 +6,8 @@
             "Target": "Characters/Dialogue/Demetrius",
             "When": {"Relationship: Maru": "Divorced"},
             "Entries": {
-                "ScienceHouse": "{{i18n: demetrius-divorced-from-maru}}$s"
+                "ScienceHouse": "{{i18n: demetrius-divorced-from-maru-a}}$s",
+                "Mountain": "{{i18n: demetrius-divorced-from-maru-b}}$s",
             }
         }
     ]

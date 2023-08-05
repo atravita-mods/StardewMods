@@ -1,0 +1,24 @@
+{
+    "$schema": "https://smapi.io/schemas/content-patcher.json",
+    "Format": "1.29.0",
+    "Changes": [
+        {
+            "Action": "Load",
+            "FromFile": "assets/{{TargetWithoutPath}}.png",
+            "Target": "Buildings/Gold Clock_PaintMask, Buildings/Junimo Hut_PaintMask, Buildings/Fish Pond_PaintMask, Buildings/Well_PaintMask, Buildings/Slime Hutch_PaintMask, Buildings/Mill_PaintMask, Buildings/Greenhouse_PaintMask",
+        },
+        {
+            "Action": "EditData",
+            "Target": "Data/PaintData",
+            "Entries": {
+                "Gold Clock": "Building/-20 5/Face/-25 0/Gems/-50 25",
+                "Junimo Hut": "Building/-20 5/Roof/-25 0/Bag/-25 0",
+                "Fish Pond": "Rim/-25 5/Water/-25 0/Decor/-15 0",
+                "Well": "Base/-25 5/Roof/-25 0/Water/-15 15",
+                "Slime Hutch": "Building/-20 5/Goo/-25 25/Door/-25 0",
+                "Mill": "Building/-20 5/Roof/-25 0/Trim/-15 0",
+                "Greenhouse": "Building/-20 5/Roof/-25 0/Trim/-15 0",
+            }
+        }
+    ]
+}

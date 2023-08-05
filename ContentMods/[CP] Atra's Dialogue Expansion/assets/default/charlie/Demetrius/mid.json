@@ -32,7 +32,7 @@
         "Action": "EditData",
         "Target": "Characters/Dialogue/Demetrius",
         "Entries": {
-            "Resort_Pier": "Look, @, a mola mola!#$b#Despite their odd appearance, they're actually quite new to the seas, evolving only seventy million years ago!",
+            "Resort_Pier": "Look, @, a mola mola!#$b#Despite their odd appearance, they're actually quite new to the seas, evolving only about seventy million years ago!",
             "ScienceHouse_Entry": "Ah, home sweet home!",
 
             "ScienceHouse_22_20": "I've got so much data I need to analyze.$s",
@@ -54,7 +54,8 @@
             "4{{YearRemainder}}": "Mining can cause quite a bit of ecological damage if not carried out carefully.#$b#Joja let quite a few dangerous chemicals leak more than a few times.",
             "7{{YearRemainder}}": "The mines...Joja was mostly in it for the coal, I think.#$b$So was Accel before them.",
             "8{{YearRemainder}}": "Burning coal is pretty terrible for the environment.#$b#Sulfur compounds in the coal make acid rain, which greatly weakens the trees.",
-            "9{{YearRemainder}}": "Up to the north lives a species of shark that lives for hundreds of years.#$b#It has an insanely slow metabolism, so it seems like time itself is stretched out for these animals!" // they're called Greenland sharks, unfortunately.
+            "9{{YearRemainder}}": "Up to the north lives a species of shark that lives for hundreds of years.#$b#It has an insanely slow metabolism, so it seems like time itself is stretched out for these animals!", // they're called Greenland sharks, unfortunately.
+            "10{{YearRemainder}}": "@, have you ever considered cultivating mushrooms?"
         },
         "When": { "YearModulus": "1" }
     },
@@ -67,12 +68,12 @@
 
             "1_2": "@, did you know that banana trees aren't actually trees, but rather a monocot?#$b#Amazing what they can do despite not having lignin!",
             "2_2": "Caffeine is actually highly toxic against insects!#$b#But it doesn't make a good agricultural insecticide, it decays in sunlight.",
-            "3_2": "Lignin is really an amazing structural protein, and is why trees can grow to the heights they do!",
+            "3_2": "Lignin is really an amazing structural protein, and is why trees can grow to the heights they do.",
             "6_2": "I hope my collaborator can get his edits in soon....$s",
             "7_2": "%Demetrius looks exhausted.#$b#*Yawn*. Sorry, @, I was up all night attempting to get my typesetting software to put figure one on page one.$s",
             "16_2": "It's always reviewer two, isn't it? Always.$a",
             "18_2": "Gotta order more reagents soon, we're running low on HCl.",
-            "19_2": "Maru was helping me with minipreps the other day. Lab work is so much more fun when you're working with someone.",
+            "19_2": "Maru was helping me with minipreps the other day. Lab work is so much more fun when you're working with someone.$h",
             "20_2": "Sometimes I go down to the beach to collect shells.#$b#There's no real scientific reason to do so, they're just pretty.#$e#$c .2#Here, I found this one the other day.[394 393]#Summer, especially, a lot of shells wash up.#",
             "21_2": "I made some extra coffee this morning. Here, have some![395]$h",
             "22_2": "Robin is usually pretty practical, but she does like some frilly things sometimes...",

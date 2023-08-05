@@ -7,7 +7,10 @@
             "Entries": {
                 // birthday
                 "spring_10": "{{i18n:vincent-birthday.self|title={{Title}} }}$h",
-                "spring_10_2": "{{i18n:vincent-birthday.self|title={{Title}} }}$h"
+                "spring_10_2": "{{i18n:vincent-birthday.self|title={{Title}} }}$h",
+
+                // Ginger Island additional
+                "Resort_Pier": "{{i18n:vincent_pier}}$h"
             }
         },
         {

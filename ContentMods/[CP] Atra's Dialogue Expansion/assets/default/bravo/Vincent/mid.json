@@ -26,7 +26,8 @@
             "17{{YearRemainder}}": "Look what I found, @!$h[721]",
             "18{{YearRemainder}}": "Mom let us have pizza yesterday!$h",
             "19{{YearRemainder}}": "Mom bought us some grapes! Here, have one![398]$h#$b#Grapes are my favorite!",
-            "20{{YearRemainder}}": "Miss Penny was teaching me my times tables!#$b#She says adults use these all the time. {{Title}} @, do you use times tables?"
+            "20{{YearRemainder}}": "Miss Penny was teaching me my times tables!#$b#She says adults use these all the time. {{Title}} @, do you use times tables?",
+            "22{{YearRemainder}}": "Mom and Dad dragged us out to the city yesterday.#$b#Only good thing was that I got to have {{i18n: dishes.dessert.{{Random:01,02,03,04,05,06,07,08,09}} }}."
         },
         "When": {
             "YearModulus": "1"
@@ -43,7 +44,8 @@
             "6_2": "I wanna go fishing too!#$e#{{Title}} @, do you think Sam will take me fishing?",
             "7_2": "Do you think I can get Dad to take me to the Zuzu City Aquarium?",
 
-            "8_2": "Mom and Dad went to the city for a day. Said it was something for Dad.#$b#They said it might help bring Dad back? But he's back?"
+            "8_2": "Mom and Dad went to the city for a day. Said it was something for Dad.#$b#They said it might help bring Dad back? But he's back?",
+            "9_2": "I hope Mom's making {{i18n: dishes.child.{{Random:01,02,03,04,05,06,07,08,09}} }} for dinner tonight.",
         },
         "When": {
             "YearModulus": "3"

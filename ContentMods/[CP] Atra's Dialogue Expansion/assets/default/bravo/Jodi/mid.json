@@ -43,11 +43,13 @@
     },
     {
         "Action": "EditData",
-        "LogName": "Jodi - Y2",
+        "LogName": "Jodi - Y3",
         "Target": "Characters/Dialogue/Jodi",
         "When": {"Year": "3"},
         "Entries": {
-            "winter_Sun10": "Kent's been back for about a year now...#$b#I think he's...slowly getting better."
+            "winter_Sun10": "Kent's been back for about a year now...#$b#I think he's...slowly getting better.",
+
+            "Resort_Approach_HouseWives": "Oh, @! The girls and I are headed off to Ginger Island today.$h",
         }
     },
     {

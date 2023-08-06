@@ -9,6 +9,16 @@
                 "ScienceHouse": "{{i18n: demetrius-divorced-from-maru-a}}$s",
                 "Mountain": "{{i18n: demetrius-divorced-from-maru-b}}$s",
             }
+        },
+        {
+            "Action": "EditData",
+            "LogName": "Divorced From Sebastian",
+            "Target": "Characters/Dialogue/Demetrius",
+            "When": {"Relationship: Sebastian": "Divorced"},
+            "Entries": {
+                "ScienceHouse": "{{i18n: demetrius-divorced-from-sebastian-a}}$s",
+                "Mountain": "{{i18n: demetrius-divorced-from-sebastian-b}}$s",
+            }
         }
     ]
 }

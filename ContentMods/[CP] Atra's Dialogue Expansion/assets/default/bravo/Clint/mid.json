@@ -28,16 +28,21 @@
         "LogName": "Clint mid-hearts",
         "Action": "EditData",
         "Target": "Characters/Dialogue/Clint",
+        "When": {"YearModulus": 1},
         "Entries": {
             "winter_Wed6": "Between you and I, @, I'm glad how toasty this place is in winter.#$e#Pretty cold when I have to brave the elements to go to the saloon, though.",
             "fall_Tue6": "Feel free to bring your geodes to me, I'll crack them open for a small fee...",
-            "fall_Wed8": "Sometimes, when I'm lying in bed awake at night, I wonder what happens to all the swords I make.",
+            "fall_Wed8": "Sometimes, when I'm lying in bed awake at night, I wonder what happens to all the swords I make.$s",
 
             "6{{YearRemainder}}": "I'd consider moving elsewhere, but I'm not sure I could afford the rent.#$e#My family has owned this building for as long as I can remember. Helps a lot with my expenses.",
             "7{{YearRemainder}}": "I've got a cousin in Grampleton who's a glassblower.#$e#He's attached to one of the local universities, he does custom glassware for them. Cushy job, somehow.",
-            "8{{YearRemainder}}": "I sell ore, too, if you need it.#$b#It's not too expensive, I can order in bulk, but my suppliers aren't exactly giving it away either."
-        },
-        "When": {"YearModulus": 1}
+            "8{{YearRemainder}}": "I sell ore, too, if you need it.#$b#It's not too expensive, I can order in bulk, but my suppliers aren't exactly giving it away either.",
+            "9{{YearRemainder}}": "My doctor says I should go outside more. I'm not quite sure what I'd do with myself outside, though.",
+
+            // Additional Ginger Island
+            "Resort_Wander": "Wow, @, this place is beautiful...if a little too hot.",
+            "Resort_Pier": "@, do you think that's a shark?",
+        }
     },
     {
         "LogName": "Clint mid-hearts",
@@ -53,7 +58,8 @@
             "16_2": "Got any tools you'd like me to upgrade?",
             "18_2": "It's important to temper your swords correctly. If you don't, they may shatter when you strike things.",
             "22_2": "Marlon just placed another order for swords.$h#$b#I hope he'll be satisfied with the ones I make!",
-            "23_2": "What should I have for dinner...should I go to the Saloon?"
+            "23_2": "What should I have for dinner...should I go to the Saloon?",
+            "24_2": "My doctor says I should take up a hobby, but I'm not sure what.#$b#Maybe I'll start knitting, like Emily...#$b#Or maybe I should make jewelery?"
         },
         "When": {"YearModulus": 2}
     },
@@ -67,7 +73,7 @@
             "14_2": "I'm really hoping I can drum up some more commissions, I need the money.$s",
             "16_2": "Thing about downturns...people want less bespoke work, makes it hard for artisans like me.",
             "18_2": "If I could start my life over? I...I don't know what I would do, @.",
-            "19_2": "Some days I wish I was braver, but the mines scare me so much.",
+            "19_2": "Some days I wish I was braver, but the mines scare me so much.$s",
             "24_2": "If I could start my life over...what would I be...#$b#You know, @, I'm not sure...$s",
             "25_2": "Junimo Kart...no, that's not really my type of thing, sorry.#$b#Lewis is pretty good though, he might be able to give you a few pointers."
         },

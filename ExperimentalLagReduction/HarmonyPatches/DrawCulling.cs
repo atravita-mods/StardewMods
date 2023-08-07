@@ -15,7 +15,9 @@ using Microsoft.Xna.Framework.Graphics;
 using Netcode;
 
 using StardewValley.Characters;
+using StardewValley.Network;
 using StardewValley.Objects;
+using StardewValley.Projectiles;
 using StardewValley.TerrainFeatures;
 
 namespace ExperimentalLagReduction.HarmonyPatches;
@@ -31,6 +33,14 @@ internal static class DrawCulling
     private static Lazy<Func<Furniture, NetVector2>> _getDrawPosition = new(() =>
         typeof(Furniture).GetCachedField("drawPosition", ReflectionCache.FlagTypes.InstanceFlags)
                          .GetInstanceFieldGetter<Furniture, NetVector2>());
+
+    private static Lazy<Func<Projectile, NetPosition>> _getProjectilePosition = new(() =>
+        typeof(Projectile).GetCachedField("position", ReflectionCache.FlagTypes.InstanceFlags)
+                          .GetInstanceFieldGetter<Projectile, NetPosition>());
+
+    private static Lazy<Func<Projectile, float>> _getProjectileAlpha = new(() =>
+        typeof(Projectile).GetCachedField("startingAlpha", ReflectionCache.FlagTypes.InstanceFlags)
+                          .GetInstanceFieldGetter<Projectile, float>());
     #endregion
 
     [HarmonyPrefix]
@@ -121,4 +131,12 @@ internal static class DrawCulling
         var effectivePosition = (tileLocation + (Vector2.One * 1.5f)) * Game1.tileSize;
         return Utility.isOnScreen(effectivePosition, 256);
     }
+
+    [HarmonyPrefix]
+    [HarmonyPriority(Priority.Last)]
+    [MethodImpl(TKConstants.Hot)]
+    [HarmonyPatch(typeof(Projectile), nameof(Projectile.draw), new[] { typeof(SpriteBatch)})]
+    private static bool PrefixProjectileDraw(Projectile __instance)
+        => !ModEntry.Config.CullDraws
+            || (Utility.isOnScreen(_getProjectilePosition.Value(__instance), 256) && _getProjectileAlpha.Value(__instance) > 0f);
 }

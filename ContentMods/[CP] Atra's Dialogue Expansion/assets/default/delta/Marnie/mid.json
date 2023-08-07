@@ -15,6 +15,17 @@
         }
     },
     {
+        // Pregnancy line!
+        "Action": "EditData",
+        "Target": "Characters/Dialogue/Marnie",
+        "Entries": {
+            "Town6": "Oh, @, heard on the grapevine you're expecting a kid! Have you picked a name yet?"
+        },
+        "When": {
+            "HavingChild": "@{{playerName}}"
+        }
+    },
+    {
         "LogName": "Marnie mid-hearts",
         "Action": "EditData",
         "Target": "Characters/Dialogue/Marnie",
@@ -34,6 +45,7 @@
 
             // GIMA
             "Resort_Pier": "Look, @! Look how clear the water is!$h",
+            "Resort_Pier_2": "Oh, @, do you think that's a shark?",
             
             // Base daily lines.
             "4{{YearRemainder}}": "Our hoof trimmer is going to be stopping by in the next few days. Do you want me to see if he has time for you?",

@@ -39,7 +39,8 @@
         "Action": "EditData",
         "Target": "Characters/Dialogue/Penny",
         "Entries": {
-            "Farmhouse_Entry": "{{i18n:penny-homecoming}}"
+            "Farmhouse_Entry": "{{i18n:penny-homecoming}}",
+            "Trailer_Entry": "{{i18n:penny-greet-Pam}}"
         }
     },
 ]}

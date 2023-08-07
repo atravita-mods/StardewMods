@@ -28,6 +28,17 @@
         }
     },
     {
+        // Pregnancy line!
+        "Action": "EditData",
+        "Target": "Characters/Dialogue/Demetrius",
+        "Entries": {
+            "ScienceHouse6": "Oh, congratulations, @. Heard you guys are expecting!$h#$b#A child is such a responsibility.$h"
+        },
+        "When": {
+            "HavingChild": "@{{playerName}}"
+        }
+    },
+    {
         "LogName": "Demetrius mid-hearts, year 1",
         "Action": "EditData",
         "Target": "Characters/Dialogue/Demetrius",
@@ -107,6 +118,7 @@
             "6_2": "Did you see that paper by the %name group out of %place University? Amazing, isn't it?$h",
             "16_2": "Sometimes I wonder what I could have done to be more successful in my career...$s",
             "18_2": "Between you and I, @, writing proposals is the worst part of my job.",
+            "19_2": "%Demetrius seems pre-occupied.#$b#Why do things keep on evolving into crabs, actually?",
             "20_2": "Tree fertilizer can make trees grow much faster, but I wonder if it affects the quality of their wood.#$b#Generally fast-growing trees can't produce as dense of wood.",
             "22_2": "Sometimes, I come across interesting artifacts.#$b#I wonder what civilizations lived here before we did?",
 

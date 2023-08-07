@@ -34,7 +34,7 @@
         "Target": "Characters/Dialogue/Gus",
         "Entries": {
             "Town4": "Oh, @! Heard you're having a kid soon. You excited?",
-            "Saloon_Fri": "Oh, @! How have you been? Heard on the grapevine you're having a kiddo soon. Here, take this.[236]$h.#$b#I hear parenting takes a lot out of you..."
+            "Saloon_Fri": "$1 atravitaGusExpectingGift#Oh, @! How have you been? Heard on the grapevine you're having a kiddo soon. Here, take this.[236]$h#$e#@, you lookin' forward to having a new kiddo?#$b#I hear parenting takes a lot out of you..."
         },
         "When": { "HavingChild": "@{{playerName}}"}
     },

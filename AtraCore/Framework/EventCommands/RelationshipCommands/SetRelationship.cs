@@ -31,6 +31,8 @@ internal sealed class SetRelationship : IEventCommand
 
     private const string DEFAULT = "DEFAULT";
 
+    private const char Sep = 'Ω';
+
     #region delegates
     private static readonly Lazy<Action<Farmer>?> _freeLoveReload = new(() =>
     {
@@ -286,7 +288,7 @@ internal sealed class SetRelationship : IEventCommand
                 }
                 else
                 {
-                    this.SendMoveRequest($"{npc.Name}:{DEFAULT}");
+                    this.SendMoveRequest($"{npc.Name}{Sep}{DEFAULT}");
                 }
 
                 // we call this so FreeLove is updated too
@@ -309,7 +311,7 @@ internal sealed class SetRelationship : IEventCommand
             }
             else
             {
-                this.SendMoveRequest($"{npc.Name}:{Game1.player.UniqueMultiplayerID}");
+                this.SendMoveRequest($"{npc.Name}{Sep}{Game1.player.UniqueMultiplayerID}");
             }
             try
             {
@@ -339,7 +341,7 @@ internal sealed class SetRelationship : IEventCommand
 
         string message = e.ReadAs<string>();
 
-        if (!message.TrySplitOnce(':', out ReadOnlySpan<char> first, out ReadOnlySpan<char> second))
+        if (!message.TrySplitOnce(Sep, out ReadOnlySpan<char> first, out ReadOnlySpan<char> second))
         {
             ModEntry.ModMonitor.Log($"Failed to parse message: {message} while handling move request.", LogLevel.Warn);
             return;

@@ -4,6 +4,15 @@
             "LogName": "George mid-hearts - post sports",
             "Action": "EditData",
             "Target": "Characters/Dialogue/George",
+            "Entries": {
+                "JoshHouse_Entry": "{{i18n:george-homecoming}}",
+                "IslandSouth_Entry": "{{i18n:george-vacation-bubbles}}"
+            }
+        },
+        {
+            "LogName": "George mid-hearts - post sports",
+            "Action": "EditData",
+            "Target": "Characters/Dialogue/George",
             "When": {
                 "HasFlag": "saloonSportsRoom"
             },

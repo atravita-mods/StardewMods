@@ -71,9 +71,14 @@ internal sealed class ModEntry : BaseMod<ModEntry>
 
         EventCommandManager.Add(new RemoveMail("atravita_" + nameof(RemoveMail), this.Monitor));
         EventCommandManager.Add(new AllowRepeatAfter("atravita_" + nameof(AllowRepeatAfter), this.Monitor));
+
         SetRelationship setrelationship = new("atravita_" + nameof(SetRelationship), this.Monitor, this.Helper.Multiplayer, this.ModManifest.UniqueID);
         EventCommandManager.Add(setrelationship);
         helper.Events.Multiplayer.ModMessageReceived += setrelationship.ProcessMoveRequest;
+
+        SetInvisible invisible = new("atravita_" + nameof(SetInvisible), this.Monitor, this.Helper.Multiplayer, this.ModManifest.UniqueID);
+        EventCommandManager.Add(invisible);
+        helper.Events.Multiplayer.ModMessageReceived += invisible.ProcessSetInvisibleRequest;
 
         CommandManager.Register(helper.ConsoleCommands);
 

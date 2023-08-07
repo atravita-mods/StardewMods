@@ -18,7 +18,8 @@
             "13": "So, @, why did you decide to move to such a small town?",
             "13_2": "You've been here for a while, @, do you regret moving to such a tiny little town?",
             "14{{YearRemainder}}": "Ugh, I really don't feel like cooking dinner tonight.#$b#And the dishes, I'll probably end up doing the dishes too.$s",
-            "15{{YearRemainder}}": "I wish I could get the boys to eat veggies more often..."
+            "15{{YearRemainder}}": "I wish I could get the boys to eat veggies more often...",
+            "16{{YearRemainder}}": "If we had a bit more money, I'd love to get one of those little robot vacuums."
         },
         "When": {
             "YearModulus": "1"

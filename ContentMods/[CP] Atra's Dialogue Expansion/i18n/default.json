@@ -217,6 +217,8 @@
     "demetrius-sebastian-summer-fri10-a": "You know, @, I do regret not getting to know my stepson better.",
     "demetrius-sebastian-summer-fri10-b": "But I'm glad he managed to find you.",
     "demetrius-sebastian-summer-fri10-c": "So. Welcome to the family.",
+    "sebastian-maru-fall-sun10-a": "Heya, @, how're you doing?",
+    "sebastian-maru-fall-sun10-b": "Do tell Maru that she should come visit us more often!",
     "evelyn-alex-childless": "Oh, I'd love to have great-grandchildren before I die, @.",
     "marnie-shane-summer-fri4": "How has Shane been doing, by the way?",
     "marine-shane-fall-fri4": "Jas really misses her uncle Shane. Maybe I should take her to visit you guys more often?",
@@ -229,7 +231,11 @@
     "evelyn-harvey-winter-tue_1": "We were afraid he was too married to his work.",
 
     // entry strings
+    "george-homecoming": "I'm home!/Evelyn, I'm home!/Ah, home sweet home!",
+    "george-vacation-bubbles": "Ah, it's so warm!",
+
     "penny-homecoming": "Honey, I'm home!",
+    "penny-greet-Pam": "Mom, how are you?/Mom, you home?/Mom! I'm here to visit!",
 
 /***************
 * Anniversary!

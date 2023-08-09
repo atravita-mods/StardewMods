@@ -5,6 +5,7 @@ using System.Diagnostics;
 using AtraBase.Toolkit;
 
 using AtraCore.Config;
+using AtraCore.Framework.ActionCommandHandler;
 using AtraCore.Framework.Caches;
 using AtraCore.Framework.ConsoleCommands;
 using AtraCore.Framework.DialogueManagement;
@@ -98,6 +99,9 @@ internal sealed class ModEntry : BaseMod<ModEntry>
         this.Helper.Events.Content.AssetsInvalidated += this.OnAssetInvalidation;
 
         this.ApplyPatches(new Harmony(this.ModManifest.UniqueID));
+
+        // actions
+        ActionCommandHandler.RegisterActionCommand("kitchen", KitchenCommand.ApplyKitchenCommand);
     }
 
     /// <inheritdoc cref="IGameLoopEvents.SaveLoaded"/>

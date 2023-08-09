@@ -115,6 +115,8 @@ public sealed class InventoryGiantCrop : SObject
         this.ParentSheetIndex = intID;
         this.Name = InventoryGiantCropPrefix + GGCUtils.GetNameOfSObject(intID);
         this.Stack = initialStack;
+
+        this.modData?.SetInt(ModDataKey, this.ParentSheetIndex);
     }
 
     #region reflection

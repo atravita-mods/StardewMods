@@ -5,7 +5,7 @@
             "Action": "EditData",
             "Target": "Characters/Dialogue/Haley",
             "Entries": {
-                "winter_Fri10": "As much as I love Emily, sometimes I wish I could convince her to check in with me before she, like, knits me an entire ill-fitting sweater again.$s#$b#I love her, but that's just not my style, you know?"
+                "winter_Fri8": "As much as I love Emily, sometimes I wish I could convince her to check in with me before she, like, knits me an entire ill-fitting sweater again.$s#$b#I love her, but that's just not my style, you know?"
             }
         },
         {
@@ -28,7 +28,7 @@
             },
             "Entries": {
                 "summer_Mon6": "Does this dress look good on me?",
-                "summer_Tue10": "Ah, the weather is lovely today, @!$h#$b#Kinda want to go camping, do you think I could convince Emily to take a day off work?",
+                "summer_Tue8": "Ah, the weather is lovely today, @!$h#$b#Kinda want to go camping, do you think I could convince Emily to take a day off work?",
                 "1_2": "Mother sent me some photos from her vacation.#$b#They're taking a cruise out of %place.#$e#Go with them?...I...I'm not sure about that.",
                 "3_2": "Hey @, Father sent me a gift card to the athleisure store in %place. Wanna go check it out?",
                 "5_2": "@, what do you think of this new foundation? Mother bought it for me.",
@@ -54,7 +54,7 @@
                 "YearModulus": 3
             },
             "Entries": {
-                "summer_Tue10": "I would love an iced coffee right about now...",
+                "summer_Tue8": "I would love an iced coffee right about now...",
                 "1_2": "Emily asked me to photograph some of her designs the other day.#$b#She certainly has an unique style, but it works well for her.$h",
                 "2_2": "I found this flower the other day while I was out taking pictures. Isn't it beautiful?[421]%revealtasteHaley421",
                 "4_2": "Maybe if I rearranged my closet I could get all my dresses to fit?",

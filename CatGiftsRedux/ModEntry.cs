@@ -3,6 +3,7 @@
 using AtraBase.Collections;
 using AtraBase.Models.WeightedRandom;
 using AtraBase.Toolkit.Extensions;
+using AtraBase.Toolkit.StringHandler;
 
 using AtraCore.Framework.Internal;
 using AtraCore.Framework.ItemManagement;
@@ -400,11 +401,30 @@ internal sealed class ModEntry : BaseMod<ModEntry>
 
         foreach (int key in DataToItemMap.GetAll(ItemTypeEnum.SObject))
         {
-            if (Game1.objectInformation.TryGetValue(key, out string? data)
-                && int.TryParse(data.GetNthChunk('/', SObject.objectInfoPriceIndex), out int price)
-                && price * difficulty < maxPrice
-                && !data.GetNthChunk('/', SObject.objectInfoNameIndex).Contains("Qi", StringComparison.OrdinalIgnoreCase))
+            if (Game1.objectInformation.TryGetValue(key, out string? data))
             {
+                StreamSplit splits = data.StreamSplit('/');
+
+                // field 0 - internal name.
+                if (!splits.MoveNext() || splits.Current.Contains("Qi", StringComparison.OrdinalIgnoreCase))
+                {
+                    continue;
+                }
+
+                // field 1 - price.
+                if (!splits.MoveNext() || !int.TryParse(splits.Current, out int price) || price * difficulty >= maxPrice)
+                {
+                    continue;
+                }
+
+                _ = splits.MoveNext();
+
+                // field 3 - category
+                if (!splits.MoveNext() || splits.Current.Word.Equals("Quest", StringComparison.OrdinalIgnoreCase))
+                {
+                    continue;
+                }
+
                 ret.Add(new(maxPrice - price, key));
             }
         }

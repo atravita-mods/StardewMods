@@ -47,7 +47,7 @@ internal static class DrawCulling
     [MethodImpl(TKConstants.Hot)]
     [HarmonyPriority(Priority.Last)]
     [HarmonyPatch(typeof(Furniture), nameof(Furniture.draw))]
-    private static bool PrefixFurnitureDraw(Furniture __instance, int x, int y)
+    private static bool PrefixFurnitureDraw(Furniture __instance)
     {
         if (!Furniture.isDrawingLocationFurniture || !ModEntry.Config.CullDraws)
         {
@@ -78,59 +78,30 @@ internal static class DrawCulling
     [HarmonyPrefix]
     [HarmonyPriority(Priority.Last)]
     [MethodImpl(TKConstants.Hot)]
-    [HarmonyPatch(typeof(Bush), nameof(Bush.draw), new[] { typeof(SpriteBatch), typeof(Vector2) } )]
+    [HarmonyPatch(typeof(Bush), nameof(Bush.draw), new[] { typeof(SpriteBatch), typeof(Vector2) })]
     private static bool PrefixBushDraw(Bush __instance, Vector2 tileLocation)
-    {
-        if (!ModEntry.Config.CullDraws)
-        {
-            return true;
-        }
-
-        Vector2 effectivePosition = tileLocation + (Vector2.UnitX * (__instance.size / 2f));
-
-        return Utility.isOnScreen(effectivePosition, 256);
-    }
+        => !ModEntry.Config.CullDraws || Utility.isOnScreen(tileLocation + (Vector2.UnitX * (__instance.size.Value / 2f)), 256);
 
     [HarmonyPrefix]
     [HarmonyPriority(Priority.Last)]
     [MethodImpl(TKConstants.Hot)]
     [HarmonyPatch(typeof(Character), nameof(Character.draw), new[] { typeof(SpriteBatch), typeof(float) })]
     private static bool PrefixCharacterDraw(Character __instance, float alpha)
-    {
-        if (!ModEntry.Config.CullDraws)
-        {
-            return true;
-        }
-        return alpha > 0f && Utility.isOnScreen(__instance.Position, 256);
-    }
+        => !ModEntry.Config.CullDraws || (alpha > 0f && Utility.isOnScreen(__instance.Position, 256));
 
     [HarmonyPrefix]
     [HarmonyPriority(Priority.Last)]
     [MethodImpl(TKConstants.Hot)]
     [HarmonyPatch(typeof(ResourceClump), nameof(ResourceClump.draw), new[] { typeof(SpriteBatch), typeof(Vector2) })]
     private static bool PrefixClumpDraw(ResourceClump __instance, Vector2 tileLocation)
-    {
-        if (!ModEntry.Config.CullDraws)
-        {
-            return true;
-        }
-        var effectivePosition = (__instance.tile.Value + Vector2.One) * Game1.tileSize;
-        return Utility.isOnScreen(effectivePosition, 128);
-    }
+        => !ModEntry.Config.CullDraws || Utility.isOnScreen((__instance.tile.Value + Vector2.One) * Game1.tileSize, 128);
 
     [HarmonyPrefix]
     [HarmonyPriority(Priority.Last)]
     [MethodImpl(TKConstants.Hot)]
     [HarmonyPatch(typeof(GiantCrop), nameof(GiantCrop.draw), new[] { typeof(SpriteBatch), typeof(Vector2) })]
-    private static bool PrefixGiantCropDraw(GiantCrop __instance, Vector2 tileLocation)
-    {
-        if (!ModEntry.Config.CullDraws)
-        {
-            return true;
-        }
-        var effectivePosition = (tileLocation + (Vector2.One * 1.5f)) * Game1.tileSize;
-        return Utility.isOnScreen(effectivePosition, 256);
-    }
+    private static bool PrefixGiantCropDraw(Vector2 tileLocation)
+        => !ModEntry.Config.CullDraws || Utility.isOnScreen((tileLocation + (Vector2.One * 1.5f)) * Game1.tileSize, 256);
 
     [HarmonyPrefix]
     [HarmonyPriority(Priority.Last)]

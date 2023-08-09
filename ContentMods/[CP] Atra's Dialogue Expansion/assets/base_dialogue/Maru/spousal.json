@@ -21,7 +21,7 @@
                 "Query: {{Hearts:Maru}} >= 10": true
             },
             "Entries": {
-                "fall_Sun10_inlaw_Maru": "{{i18n:sebastian-maru-fall-sun10-a}}#$b#{{i18n:sebastian-maru-fall-sun10-b}}"
+                "fall_Sun8_inlaw_Maru": "{{i18n:sebastian-maru-fall-sun10-a}}#$b#{{i18n:sebastian-maru-fall-sun10-b}}"
             }
         }
     ]

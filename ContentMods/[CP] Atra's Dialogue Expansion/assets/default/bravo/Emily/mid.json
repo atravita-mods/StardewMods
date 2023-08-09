@@ -15,7 +15,8 @@
             "15{{YearRemainder}}": "@, my favorite fabric store is having a sale! What should I get?$h",
             "Saloon_Entry": "Gus, I'm here!/Ah, work!/Gus, what needs doing?",
 
-            "spring_Fri10": "You know, @, I'm glad you came into my life.$h",
+            "spring_Fri8": "You know, @, I'm glad you came into my life.$h",
+            "summer_Tue8": "@, which of the town flowers are your favorite?",
 
             "winter_4": "It's getting close to the Feast of the Winter Star. Maybe I should start making Haley a sweater?",
         }
@@ -44,6 +45,7 @@
             "7{{YearRemainder}}": "I upcycled a tablecloth into a skirt the other day. I should show you it some day!$h",
             "11{{YearRemainder}}": "I love taking walks, whenever I have the time to do so.$h#$b#One of the best parts of living here.$h",
             "13{{YearRemainder}}": "I'm hoping at some point to move away and see if I can make it as a fashion designer.",
+            "14{{YearRemainder}}": "Maybe we should consider getting a better recycling program here?",
             "17{{YearRemainder}}": "Have I considered moving out of town? Of course I have, but Pelican Town is my home.",
             "18{{YearRemainder}}": "Started working on a new dress! I'm thinking cute little cap sleeves and a full circle skirt...$h",
             "19{{YearRemainder}}": "Sometimes when the Saloon isn't busy Gus lets me rest my feet and knit for a while.#$b#Did you know that Joja cashiers aren't allowed to sit down? I can't imagine how much their feet must hurt.",
@@ -78,8 +80,8 @@
             "3_2": "Haley has always been the baby of the family.#$b#She's only a few years younger than I am, but our parents definitely spoiled her more.#$e#Sometimes I worry.",
             "5_2": "I like doing flatfelled seams, even if they're a lot of work. They're so much more durable!$h",
             "7_2": "We used to love visiting castles with our parents.$s",
-            "8_2": "I've considered moving away from Pelican Town, yes.#$e#No, don't get me wrong, I love it here, but our local employment options can be...lacking.$s#$e#If I want a future that's not just being a barmaid I may need to leave.#$b#I really don't want to, though.",
-            "9_2": "Pelican Town is so beautiful. I wish I could spend more time exploring the forest.$s#$b#I've got work all the time though.",
+            "8_2": "I've considered moving away from Pelican Town, yes.#$e#No, don't get me wrong, I love it here, but our local employment options can be...lacking.$s#$e#If I want a future that's not just being a barmaid I may need to leave.#$b#I really don't want to, though.$s",
+            "9_2": "Pelican Town is so beautiful. I wish I could spend more time exploring the forest.#$b#I've got work all the time though.$s",
             "11_2": "Gus wakes up at the crack of dawn to make bread for the Saloon. Honestly, I'm not quite sure when he sleeps...#$b#Probably the hardest working man in all of this town. And the best boss I could ask for.$h",
             "12_2": "My father was originally from Pelican Town, but he moved away for college.#$e#We moved back when I was around five or so? Mom and Dad wanted a safer, quieter place to raise kids.",
             "13_2": "Dad was a traveling salesman. Always gone on a trip to some location or another.#$e#Mom had to travel a lot for her law practice too.",
@@ -92,9 +94,10 @@
             "20_2": "You know, given where we live, you'd think composting programs would be more popular.$s#$b#It's not like in the city, where you just don't have enough room to compost.",
             "22_2": "Oh, @! Gus and I were thinking of making a ten-bean soup to add to the menu, what do you think?",
 
-            "Tue10": "I've made most of my clothing, I love to sew.$h#$b#Plus, you get better clothing if you make it yourself.#$e#Maybe I should make you something....",
+            "Tue8": "I've made most of my clothing, I love to sew.$h#$b#Plus, you get better clothing if you make it yourself.#$e#Maybe I should make you something....",
 
             "Sun6": "Our parents? I'm not quite sure where they're traveling these days...$s",
+            "summer_Mon8": "Oh, @, aren't the flowers in town lovely?$h",
             "summer_Sun": "@, what have you been up to?$h",
             "summer_Sat6": "@, you've ever just taken a day for yourself? The lovely weather these days makes me really want to!",
 
@@ -149,7 +152,8 @@
             "12_2": "I wish my sister was more responsible.$s",
             "14_2": "It's so easy to order things online from Joja, but it comes with so much plastic packaging.$s",
             "16_2": "Joja is considering removing free unlimited returns.#$b#Honestly, @, I'm not against that, I think it'll cut down on impulse buys.",
-            "17_2": "I should cook more with collard greens, they're quite good for you."
+            "17_2": "I should cook more with collard greens, they're quite good for you.",
+            "19_2": "With the mines, we really need to worry about groundwater pollution.$s",
         },
         "When": {"YearModulus": "4"}
     },

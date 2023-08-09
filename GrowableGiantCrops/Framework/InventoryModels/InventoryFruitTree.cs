@@ -94,7 +94,7 @@ public sealed class InventoryFruitTree : SObject
         {
             Dictionary<int, string> data = Game1.content.Load<Dictionary<int, string>>(@"Data\fruitTrees");
             int replacement = data.Keys.FirstOrDefault();
-            ModEntry.ModMonitor.Log($"Tree {saplingIndex} doesn't seem to be a valid tree. Setting to default: {replacement}", LogLevel.Error);
+            ModEntry.ModMonitor.Log($"Tree {saplingIndex} doesn't seem to be a valid fruit tree. Setting to default: {replacement}", LogLevel.Error);
             saplingIndex = replacement;
         }
 
@@ -104,6 +104,8 @@ public sealed class InventoryFruitTree : SObject
         this.growthStage.Value = growthStage;
         this.Stack = initialStack;
         this.Name = InventoryTreePrefix + GGCUtils.GetNameOfSObject(saplingIndex);
+
+        this.modData?.SetInt(ModDataKey, this.ParentSheetIndex);
     }
 
     /// <summary>

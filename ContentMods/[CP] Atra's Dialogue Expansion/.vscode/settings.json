@@ -104,6 +104,7 @@
         "inprogress",
         "inputSeparator",
         "IsCommunityCenterComplete",
+        "IsJojaMartComplete",
         "IslandSouth",
         "ItemToRemoveOnEnd",
         "Jas's",
@@ -148,9 +149,7 @@
         "Phantomheart",
         "PlayerGender",
         "playerName",
-        "playerName",
         "quinoa",
-        "RandomizedElements",
         "RandomizedElements",
         "rejectedPet",
         "RequiredCount",
@@ -209,5 +208,6 @@
         "YearModulus",
         "YearRemainder",
         "Zuzu",
+        "Heros"
     ]
 }

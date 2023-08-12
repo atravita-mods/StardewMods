@@ -220,8 +220,12 @@ internal static class ShopManager
             return;
         }
 
+        int x = (int)e.Cursor.GrabTile.X;
+        int y = (int)e.Cursor.GrabTile.Y;
+
         if (Game1.currentLocation.Name == "ScienceHouse"
-            && Game1.currentLocation.doesTileHaveProperty((int)e.Cursor.GrabTile.X, (int)e.Cursor.GrabTile.Y, "Action", BUILDING) == RESOURCE_SHOP_NAME
+            && (Game1.currentLocation.doesTileHaveProperty(x, y, "Action", BUILDING) == RESOURCE_SHOP_NAME
+                || Game1.currentLocation.doesTileHaveProperty(x, y + 1, "Action", BUILDING) == RESOURCE_SHOP_NAME)
             && Game1.player.hasOrWillReceiveMail(RESOURCE_SHOP_NAME))
         {
             input.SurpressClickInput();
@@ -239,7 +243,8 @@ internal static class ShopManager
             Game1.activeClickableMenu = shop;
         }
         else if (Game1.currentLocation.Name == "WitchHut"
-            && Game1.currentLocation.doesTileHaveProperty((int)e.Cursor.GrabTile.X, (int)e.Cursor.GrabTile.Y, "Action", BUILDING) == GIANT_CROP_SHOP_NAME)
+            && (Game1.currentLocation.doesTileHaveProperty(x, y, "Action", BUILDING) == GIANT_CROP_SHOP_NAME
+            || Game1.currentLocation.doesTileHaveProperty(x, y, "Action", BUILDING) == GIANT_CROP_SHOP_NAME))
         {
             input.SurpressClickInput();
 

@@ -130,6 +130,18 @@
             }
         },
         {
+            "LogName": "Pierre - post CC",
+            "Action": "EditData",
+            "Target": "Characters/Dialogue/Pierre",
+            "Entries": {
+                "Fri": "$c .5#Without Joja here, it almost feels like I can breathe a little again.#How's the farm doing? Any seeds you'd like to buy?$h",
+            },
+            "When": {
+                "EnableFor": "Pierre",
+                "IsCommunityCenterComplete": true
+            }
+        },
+        {
             "Action": "EditData",
             "LogName": "Pierre post-stocklist",
             "Target": "Characters/Dialogue/Pierre",

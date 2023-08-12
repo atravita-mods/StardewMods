@@ -2,6 +2,8 @@
     // Always be sellin', insufficiently appreciative of all of Caroline's work.
     // Raised in poverty and terrified of being poor.
     // QUITE conservative.
+
+    // I wonder if his secret stash is just, like, comics or something.
     {
         "LogName": "Pierre mid-hearts",
         "Action": "EditData",
@@ -12,7 +14,23 @@
             "Resort_Chair": "Ah, a chance to rest my feet!$h",
 
             // day before the flower dance
-            "spring_23": "Sorry, @, can't talk now, I'm getting ready for the flower dance tomorrow.#$b#We make pretty good money doing souvenirs for the festivals."
+            "spring_23": "Sorry, @, can't talk now, I'm getting ready for the flower dance tomorrow.#$b#We make pretty good money doing souvenirs for the festivals.",
+
+            // additional heart lines
+            "summer_Fri6": "Have you seen the new action flick, {{i18n:action.movie{{Random:01,02,03,04,05,06,07,08,09}}, starring %name Anderson?#$b#Maybe I can convince Caroline to come watch it with me...",
+            "summer_Sat6": "There's nothing nicer than fresh veggies in a good salad dressing.#$b#Caroline makes an vinaigrette that's to die for.$h",
+            "fall_Sun8": "@, do you think I should start offering, say, complementary tea?#$b#Might help bring people in..."
+        }
+    },
+    {
+        "LogName": "Pierre, Joja completed",
+        "Action": "EditData",
+        "Target": "Characters/Dialogue/Pierre",
+        "When": {
+            "IsJojaMartComplete": true
+        },
+        "Entries": {
+            "winter_Wed8": "You know, @, I...sometimes wonder if I should try moving back to Zuzu City, see if I can find better markets there."
         }
     },
     {
@@ -20,7 +38,9 @@
         "Action": "EditData",
         "Target": "Characters/Dialogue/Pierre",
         "Entries": {
-            "1{{YearRemainder}}": "I'd love to travel more, but we haven't got that type of money.$s"
+            "1{{YearRemainder}}": "I'd love to travel more, but we haven't got that type of money.$s",
+            "3{{YearRemainder}}": "When I was young, I really thought I'd be able to become fabulously wealthy by running my own store.#$b#Sadly, places like Joja are sucking away the entire market.",
+            "5{{YearRemainder}}": "I...feel like I've got no energy these days.#$b#I just get up and run this store. That's all I do.$s"
         },
         "When": { "YearModulus": "1" }
     },
@@ -37,6 +57,7 @@
             "6_2": "My father? He really wasn't ever in my life.$s#$b#It was just me, my mother, and my sister, in a tiny apartment in Zuzu City.",
             "8_2": "I worked for a Joja grocery store, back when we lived in Zuzu.#$b#Clerked for them, on the night shift. Am so glad I no longer have that job.#$e#Managing this store is hard work but at least I get to keep all my earnings.",
             "11_2": "Harvey says I've gotta do something about my blood pressure, it keeps creeping up way too high.#$e#He thinks I should start taking medication for it, but I don't want to.",
+            "12_2": "When we were young, Caroline and I would catch the afternoon matinee all the time.#$b#Cheaper, and it worked better with my schedule.",
             "17_2": "I grew up poor. I wouldn't ever want that for my family.$s#$b#Caroline thinks I work too much, but we need to keep the store running.$s",
             "19_2": "We used to have a lot more farmers down in the valley. Unfortunately, our soil isn't the best, and a lot blows away each year.#$b#Say, could I interest you in one of my fertilizers?",
             "21_2": "Got a good deal on rent in our place. Helps that this town's pretty small.$h#$b#That does mean I don't get many customers, though.",

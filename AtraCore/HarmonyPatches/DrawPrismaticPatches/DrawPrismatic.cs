@@ -3,7 +3,6 @@ using System.Reflection.Emit;
 using System.Runtime.CompilerServices;
 
 using AtraBase.Toolkit;
-using AtraBase.Toolkit.Extensions;
 
 using AtraCore.Framework.ItemManagement;
 using AtraCore.Framework.ReflectionManager;

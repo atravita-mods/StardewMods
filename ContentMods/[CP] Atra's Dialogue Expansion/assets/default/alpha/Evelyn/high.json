@@ -1,0 +1,11 @@
+{"Changes":[
+    {
+        "Action": "EditData",
+        "LogName": "Evelyn - high hearts, y2",
+        "Target": "Characters/Dialogue/Evelyn",
+        "When": {"YearModulus": "2"},
+        "Entries": {
+            "19_2": "Emily and Haley...those two girls used to play all the time together when they were kids.#$b#I wonder what happened?"
+        }
+    }
+]}

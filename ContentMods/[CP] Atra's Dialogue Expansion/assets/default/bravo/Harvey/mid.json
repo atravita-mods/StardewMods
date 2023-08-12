@@ -56,6 +56,17 @@
                 "HasPet": true
             }
         },
+                {
+            "LogName": "Harvey mid-hearts y4 with pet",
+            "Action": "EditData",
+            "Target": "Characters/Dialogue/Harvey",
+            "Entries": {
+                "12_2": "I've been looking at those pod coffee machines. The ones with the little single use pods.#$b#They're really expensive, though.$s"
+            },
+            "When": {
+                "YearModulus": "4",
+            }
+        },
         {
             "LogName": "Rain -- during winter.",
             "Action": "EditData",

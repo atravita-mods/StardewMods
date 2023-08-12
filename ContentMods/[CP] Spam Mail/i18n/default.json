@@ -1,0 +1,25 @@
+{
+    /*********
+    * Mail
+    **********/
+
+    "CircusMail.Title": "The Greatest Show On Earth",
+    "CircusMail.Text": "Two weeks only, the Cirque de La Lune's in town! Featuring death-defying acrobatics, ferocious tamed lions, mind-bending magic shows, and, of course, clowns! Visit us in Zuzu City while we're here!",
+
+    "Aquarium.Title": "Zuzu City Aquarium Presents: Denizens of the Deep!",
+    "Aquarium.Text": "Ever interested in the crazy weird creatures that inhabit the depths of the ocean! Now you have an opportunity to meet them! For two weeks only, our Denizens of the Deep exhibit will let you see anglerfish, rattails, and even vampire squid!",
+
+    // anyone else remember Medieval Times? 
+    "Castle.Title": "Jousting, Knights, and Festivities!",
+    "Castle.Description": "Come see an unique attraction in Castle Village! Featuring dynamic jousts, expert horsemanship, and a feast fit for kings! Only 1000$ per person!",
+
+    "JojaMail.Summer.Title": "It's Summer!",
+    "JojaMail.Summer.Text.1": "Summer's the best, isn't it? Pools, ice cream, and, best of all, NO SCHOOL. Come to Joja for our Galatic Ice Cream (limited edition!), freezy pops, and edible pool noodles!",
+
+    "JojaMail.Fall.Title": "Back to School!",
+    "JojaMail.Fall.Title.1": "Get all the school supplies your child needs cheap from Joja! Loose leaf paper, binders, and new spirals all around!"
+
+    /*********
+    * Dialogue
+    *********/
+}

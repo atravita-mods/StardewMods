@@ -1,7 +1,5 @@
 ﻿using AtraBase.Toolkit;
 
-using AtraShared.Utils.Extensions;
-
 using CommunityToolkit.Diagnostics;
 
 using StardewModdingAPI.Utilities;

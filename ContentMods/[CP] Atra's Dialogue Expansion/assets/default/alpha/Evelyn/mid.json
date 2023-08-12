@@ -21,17 +21,18 @@
     {
         "Action": "EditData",
         "Target": "Characters/Dialogue/Evelyn",
+        "When": {"YearModulus": "1"},
         "Entries": {
             "fall_Tue10": "Penny's like a granddaughter to me. She's a super sweet girl.",
 
             "15{{YearRemainder}}": "I worry about Alex sometimes.#$b#My darling boy wants to go pro, but he never really wants to make any steps towards that.",
             "16{{YearRemainder}}": "We didn't get a microwave until fairly late. I never trusted those. Not sure if they're safe, the way they zap your food."
-        },
-        "When": {"YearModulus": "1"}
+        }
     },
     {
         "Action": "EditData",
         "Target": "Characters/Dialogue/Evelyn",
+        "When": {"YearModulus": "2"},
         "Entries": {
             "Mon10": "Oh, it's a lovely spring, isn't it, @#$e#Perfect weather for planting tulips! They're my favorite flower.[427]$h",
             "summer_Mon10": "Summer spangles are Caroline's favorite flowers. I make sure to grow some in the community gardens every year.%revealtasteCaroline593",
@@ -41,9 +42,8 @@
             "15_2": "Honey, I just made some cookies. Please have one, dearie.[223]$h",
             "16_2": "George bought me a washing machine for our tenth anniversary. I can't believe we used to wash all our clothing by hand!",
             "17_2": "When I was your age, @, we didn't have all this technology.#$b#Frankly, I'm not sure it really makes our lives better...",
-            "18_2": "Alex is talking less about going pro these days...#$b#I've gotta get my grandson something to do with his life."
+            "18_2": "Alex is talking less about going pro these days...#$b#I've gotta get my grandson something to do with his life.",
         },
-        "When": {"YearModulus": "2"}
     },
     {
         "Action": "EditData",

@@ -1,11 +1,13 @@
-﻿using AtraShared.Integrations;
+﻿using AtraCore.Framework.Internal;
+
+using AtraShared.Integrations;
 using SpaceCore;
 using StardewModdingAPI.Events;
 
 namespace QualityRings;
 
 /// <inheritdoc />
-internal sealed class ModEntry : Mod
+internal sealed class ModEntry : BaseMod<ModEntry>
 {
     private static IApi? spacecoreAPI;
 
@@ -14,8 +16,8 @@ internal sealed class ModEntry : Mod
     /// <inheritdoc />
     public override void Entry(IModHelper helper)
     {
+        base.Entry(helper);
         helper.Events.GameLoop.GameLaunched += this.OnGameLaunched;
-        this.Monitor.Log($"Starting up: {this.ModManifest.UniqueID} - {typeof(ModEntry).Assembly.FullName}");
     }
 
     private void OnGameLaunched(object? sender, GameLaunchedEventArgs e)

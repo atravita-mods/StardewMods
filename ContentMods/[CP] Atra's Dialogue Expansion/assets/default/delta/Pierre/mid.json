@@ -3,7 +3,7 @@
     // Raised in poverty and terrified of being poor.
     // QUITE conservative.
 
-    // I wonder if his secret stash is just, like, comics or something.
+    // I wonder if his secret stash is just, like, comics or something. Anyways, soft spot for action movies.
     {
         "LogName": "Pierre mid-hearts",
         "Action": "EditData",
@@ -31,6 +31,15 @@
         },
         "Entries": {
             "winter_Wed8": "You know, @, I...sometimes wonder if I should try moving back to Zuzu City, see if I can find better markets there."
+        }
+    },
+    {
+        "LogName": "Pierre - Movie theater",
+        "Action": "EditData",
+        "Target": "Characters/Dialogue/Pierre",
+        "When": { "MovieStatus": "CC" },
+        "Entries": {
+            "fall_Sat8": "Heya, @? Anything interesting at the movie theater recently?#$b#Been thinking I should treat Caroline to a night out sometime...",
         }
     },
     {

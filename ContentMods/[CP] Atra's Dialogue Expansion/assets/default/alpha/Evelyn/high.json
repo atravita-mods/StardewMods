@@ -5,7 +5,8 @@
         "Target": "Characters/Dialogue/Evelyn",
         "When": {"YearModulus": "2"},
         "Entries": {
-            "19_2": "Emily and Haley...those two girls used to play all the time together when they were kids.#$b#I wonder what happened?"
+            "19_2": "Emily and Haley...those two girls used to play all the time together when they were kids.#$b#I wonder what happened?",
+            "22_2": "Sam...I remember him being quite a handful when he was growing up."
         }
     }
 ]}

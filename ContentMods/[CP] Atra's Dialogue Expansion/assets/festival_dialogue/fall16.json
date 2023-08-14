@@ -1,0 +1,33 @@
+// Stardew Fair, fall16
+{
+    "Changes": [
+        {
+            "Action": "EditData",
+            "LogName": "Abby - normal",
+            "Target": "Data/Festivals/fall16",
+            "When": { "EnableFor": "Abigail" },
+            "Entries": {
+                "Abigail_y2": "You think Lewis will ever change up these fair games?",
+                "Abigail_spouse_y2": "Gosh, aren't fair games supposed to be weighted against you? These are easy!$h",
+            }
+        },
+        {
+            "Action": "EditData",
+            "LogName": "Alex - normal",
+            "Target": "Data/Festivals/fall16",
+            "When": { "EnableFor": "Alex" },
+            "Entries": {
+                "Alex_y2": "I got a perfect score in the slingshot game!"
+            }
+        },
+        {
+            "Action": "EditData",
+            "LogName": "Caroline - normal",
+            "Target": "Data/Festivals/fall16",
+            "When": { "EnableFor": "Caroline" },
+            "Entries": {
+                "Caroline_y2": "We've been picking out the best veggies for weeks! Pierre's carefully studied everything that comes out of my garden.$h"
+            }
+        }
+    ]
+}

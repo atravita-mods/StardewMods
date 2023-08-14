@@ -18,10 +18,14 @@
 /********************
 * Small bits
 ********************/
+    "Caroline": "Caroline",
     "Clint": "Clint",
+    "Evelyn": "Evelyn",
     "George": "George",
     "Haley": "Haley",
     "Harvey": "Harvey",
+    "Linus": "Linus",
+    "Pam": "Pam",
     "Robin": "Robin",
     "Sandy": "Sandy",
 
@@ -44,6 +48,9 @@
 
     "config.EnableFestival.name": "Enable Festival",
     "config.EnableFestival.description": "Currently does nothing, but will eventually enable this mod's festival lines.",
+
+    "config.EnableMail.name": "Enable Mail",
+    "config.EnableMail.description": "Adds more variety to some repetitive mail (after Y1).",
 
     "config.ScheduleChanges.name": "Schedule Changes",
     "config.ScheduleChanges.description": "Makes minor schedule changes for immersion.",
@@ -244,6 +251,7 @@
     "evelyn-harvey-winter-tue_1": "We were afraid he was too married to his work.",
 
     // entry strings
+    "alex-vacation-bubbles" : "Ah, sun!/Gotta work on my tan!/Ah, vacation!",
     "george-homecoming": "I'm home!/Evelyn, I'm home!/Ah, home sweet home!",
     "george-vacation-bubbles": "Ah, it's so warm!",
 
@@ -463,6 +471,11 @@
     "clint-mail-alpha.0": "Got some extra supplies, figured you might need some.",
     "clint-mail-alpha.1": "I've got some excess ore, figured you might need some.",
 
+    "evelyn-mail-greeting.0": "Hello, my darling,",
+    "evelyn-mail-greeting.1": "My dear @,",
+    "evelyn-mail-alpha.0": "From my kitchen to yours, some food for you. Make sure to take care!",
+    "evelyn-mail-alpha.1": "I've made you some meals, you really should take care to eat better.",
+
     "haley-mail-greeting": "Heya, @!",
     "haley-mail-object": "Saw this flower, and thought of you. Figured you should have it!",
 
@@ -473,6 +486,11 @@
 
     "harvey-mail-greeting": "Hi, @",
     "harvey-mail-text": "Made some extra coffee the other day, figured you could use it. It might be a bit cold.",
+
+    "linus-mail-greeting.0": "Hello @,",
+    "linus-mail.greeting.1": "My dearest @,",
+    "linus-mail-alpha.0": "The forest has been rich in mushrooms lately. Please, have some.",
+    "linus-mail-alpha.1": "I have enjoyed a great abundance recently, and I'd like to share it with you.",
 
     "robin-mail-greeting.0": "Hey!",
     "robin-mail-greeting.1": "Hey there!",

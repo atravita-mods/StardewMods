@@ -30,7 +30,8 @@
         "Entries":{
             "2_2": "Doc says I might need cataract surgery. @, I'm...I'm not sure.#$b#Does the idea of surgery scare you too?",
             "3_2": "My eyesight isn't what it used to be, @.$s",
-            "6_2": "Ugh, I might need cataract surgery...but when?$s"
+            "6_2": "Ugh, I might need cataract surgery...but when?$s",
+            "17_2": "%George is grumbling to himself.#$b#'d think your pension would be guaranteed, but it looks like the money men can even screw that up.$s"
         },
         "When": {"YearModulus": "4"}
     }

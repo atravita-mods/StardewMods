@@ -8,7 +8,9 @@
         "LogName": "Alex Base",
         "Entries": {
             "Sun8": "{{i18n:alex-sports-sun|first = {{FirstSportsTeam}} | second = {{SecondSportsTeam}} }}$h",
-            "Mon8": "{{i18n.alex-sports-mon|reaction = {{i18n: {{Random:great, incredible, absurd, exciting}} }} }}$h"
+            "Mon8": "{{i18n.alex-sports-mon|reaction = {{i18n: {{Random:great, incredible, absurd, exciting}} }} }}$h",
+
+            "IslandSouth_Entry": "{{i18n: alex-vacation-bubbles}}",
         }
     }
 ]}

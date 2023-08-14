@@ -89,6 +89,7 @@
         "HasSeenEvent",
         "HasValue",
         "HavingChild",
+        "Heros",
         "hexaploid",
         "heya",
         "Heya",
@@ -207,7 +208,6 @@
         "winterSebastianRoom",
         "YearModulus",
         "YearRemainder",
-        "Zuzu",
-        "Heros"
+        "Zuzu"
     ]
 }

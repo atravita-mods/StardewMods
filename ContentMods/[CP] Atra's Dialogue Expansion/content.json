@@ -197,17 +197,6 @@
             "When": {"Day|contains=0": false}
         },
         {
-            "Action": "EditData",
-            "LogName": "EventRepeater",
-            "Target": "Mods/EventRepeater/MailToRepeat",
-            "When": {"DayOfWeek" : "Monday"},
-            "Entries": {
-                "atravitaDialogueLeahBeach": "null",
-                "atravitaGusNewYear": "null",
-                "atravitaGusExpectingGift": "null",
-            }
-        },
-        {
             "Action": "Include",
             "LogName": "MapStrings",
             "When": {"MapStrings": true},
@@ -236,6 +225,25 @@
             "LogName": "ScheduleChanges",
             "When": { "HasValue: ScheduleChanges": true },
             "FromFile": "assets/schedules/toc.json"
-        }
+        },
+        {
+            "Action": "Include",
+            "LogName": "Festival Changes",
+            "FromFile": "assets/festival_dialogue/{{Season}}{{Day}}.json",
+            "When": {
+                "HasFile": "{{FromFile}}"
+            }
+        },
+        {
+            "Action": "EditData",
+            "LogName": "EventRepeater",
+            "Target": "Mods/EventRepeater/MailToRepeat",
+            "When": {"DayOfWeek" : "Monday"},
+            "Entries": {
+                "atravitaDialogueLeahBeach": "null",
+                "atravitaGusNewYear": "null",
+                "atravitaGusExpectingGift": "null",
+            }
+        },
     ],
 }

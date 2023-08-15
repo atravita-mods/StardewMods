@@ -118,7 +118,7 @@ internal sealed class SetInvisible : IEventCommand
     /// <param name="e">event args.</param>
     internal void ProcessSetInvisibleRequest(object? sender, ModMessageReceivedEventArgs e)
     {
-        if (Context.IsMainPlayer || e.FromModID != this.UniqueID || e.Type != RequestSetInvisible)
+        if (!Context.IsMainPlayer || e.FromModID != this.UniqueID || e.Type != RequestSetInvisible)
         {
             return;
         }
@@ -131,7 +131,7 @@ internal sealed class SetInvisible : IEventCommand
             return;
         }
 
-        if (NPCCache.GetByVillagerName(first.ToString()) is not NPC npc)
+        if (NPCCache.GetByVillagerName(first.ToString(), searchTheater: true) is not NPC npc)
         {
             ModEntry.ModMonitor.Log($"Failed to find NPC of name {first.ToString()} while handling invisible request.", LogLevel.Warn);
             return;

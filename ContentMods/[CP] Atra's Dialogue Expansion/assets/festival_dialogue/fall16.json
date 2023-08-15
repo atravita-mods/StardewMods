@@ -5,7 +5,9 @@
             "Action": "EditData",
             "LogName": "Abby - normal",
             "Target": "Data/Festivals/fall16",
-            "When": { "EnableFor": "Abigail" },
+            "When": {
+                "EnableFor": "Abigail"
+            },
             "Entries": {
                 "Abigail_y2": "You think Lewis will ever change up these fair games?",
                 "Abigail_spouse_y2": "Gosh, aren't fair games supposed to be weighted against you? These are easy!$h",
@@ -15,7 +17,9 @@
             "Action": "EditData",
             "LogName": "Alex - normal",
             "Target": "Data/Festivals/fall16",
-            "When": { "EnableFor": "Alex" },
+            "When": {
+                "EnableFor": "Alex"
+            },
             "Entries": {
                 "Alex_y2": "I got a perfect score in the slingshot game!"
             }
@@ -24,9 +28,104 @@
             "Action": "EditData",
             "LogName": "Caroline - normal",
             "Target": "Data/Festivals/fall16",
-            "When": { "EnableFor": "Caroline" },
+            "When": {
+                "EnableFor": "Caroline"
+            },
             "Entries": {
                 "Caroline_y2": "We've been picking out the best veggies for weeks! Pierre's carefully studied everything that comes out of my garden.$h"
+            }
+        },
+        {
+            "Action": "EditData",
+            "LogName": "Clint - normal",
+            "Target": "Data/Festivals/fall16",
+            "When": {
+                "EnableFor": "Clint"
+            },
+            "Entries": {
+                "Clint_y2": "These are the best swords I've produced this year$h#$b#Of course, they'll be sold immediately after this..."
+            }
+        },
+        {
+            "Action": "EditData",
+            "LogName": "Demetrius - normal",
+            "Target": "Data/Festivals/fall16",
+            "When": {
+                "EnableFor": "Demetrius"
+            },
+            "Entries": {
+                "Demetrius_y2": "I wonder...should I bring the poster I've been working on some year?#$b#I kid, I kid, I know that's not the point of this event.",
+                "Demetrius_y3": "Robin and Leah both do excellent work!$h#$b#But of course, I'll always prefer my wife's carpentry.$h"
+            }
+        },
+        {
+            "Action": "EditData",
+            "LogName": "Elliott - normal",
+            "Target": "Data/Festivals/fall16",
+            "When": {
+                "EnableFor": "Elliott"
+            },
+            "Entries": {
+                "Elliott_y2": "Do you think I can enter a dramatic reading into the fair?",
+                "Elliott_spouse_y2": "There's something different about fair food, isn't there?"
+            }
+        },
+        {
+            "Action": "EditData",
+            "LogName": "Emily - normal",
+            "Target": "Data/Festivals/fall16",
+            "When": {
+                "EnableFor": "Emily"
+            },
+            "Entries": {
+                "Emily_y2": "Maybe I should try to enter a dress or two into the fair some year?$h",
+                "Emily_spouse": "Darling, do you think I should enter a dress or two into the fair?"
+            }
+        },
+        {
+            "Action": "EditData",
+            "LogName": "Evelyn - normal",
+            "Target": "Data/Festivals/fall16",
+            "When": {
+                "EnableFor": "Evelyn"
+            },
+            "Entries": {
+                "Evelyn_y2": "Gus has been cooking the same thing year after year since he's been here, and it's delicious every time!$h",
+            }
+        },
+        {
+            "Action": "EditData",
+            "LogName": "George - normal",
+            "Target": "Data/Festivals/fall16",
+            "When": {
+                "EnableFor": "George"
+            },
+            "Entries": {
+                "George_y2": "The one time in the year Evelyn lets me eat stuff like this, @. I'll enjoy it while it lasts.",
+            }
+        },
+        {
+            "Action": "EditData",
+            "LogName": "Gus - normal",
+            "Target": "Data/Festivals/fall16",
+            "When": {
+                "EnableFor": "Gus"
+            },
+            "Entries": {
+                "Gus_y2": "I don't usually enter the fair itself, I prefer just cooking for everyone!$h",
+                "Gus_y3": "@, do you think I should add anything to the menu for next year?"
+            }
+        },
+        {
+            "Action": "EditData",
+            "LogName": "Haley - normal",
+            "Target": "Data/Festivals/fall16",
+            "When": {
+                "EnableFor": "Haley"
+            },
+            "Entries": {
+                "Haley_spouse_y2": "Our grange display is the best of them all!$h",
+                "Haley_y2": "I'm not playing any of the fair games, I don't want to mess up my hair."
             }
         }
     ]

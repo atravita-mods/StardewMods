@@ -334,7 +334,7 @@ internal sealed class SetRelationship : IEventCommand
     /// <param name="e">event args.</param>
     internal void ProcessMoveRequest(object? sender, ModMessageReceivedEventArgs e)
     {
-        if (Context.IsMainPlayer || e.FromModID != this.UniqueID || e.Type != RequestNPCMove)
+        if (!Context.IsMainPlayer || e.FromModID != this.UniqueID || e.Type != RequestNPCMove)
         {
             return;
         }
@@ -347,7 +347,7 @@ internal sealed class SetRelationship : IEventCommand
             return;
         }
 
-        if (NPCCache.GetByVillagerName(first.ToString()) is not NPC npc)
+        if (NPCCache.GetByVillagerName(first.ToString(), searchTheater: true) is not NPC npc)
         {
             ModEntry.ModMonitor.Log($"Failed to find NPC of name {first.ToString()} while handling move request.", LogLevel.Warn);
             return;

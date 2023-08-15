@@ -115,9 +115,9 @@ internal sealed class ModEntry : BaseMod<ModEntry>
             List<int> shirts = new();
             List<int> pants = new();
 
-            foreach (var id in clothing.Values)
+            foreach (int id in clothing.Values)
             {
-                if (!Game1.clothingInformation.TryGetValue(id, out var data))
+                if (!Game1.clothingInformation.TryGetValue(id, out string? data))
                 {
                     continue;
                 }

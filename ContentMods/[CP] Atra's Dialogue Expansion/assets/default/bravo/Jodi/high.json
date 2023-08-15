@@ -18,6 +18,7 @@
         "Target": "Characters/Dialogue/Jodi",
         "Entries": {
             "3_2": "Kent wasn't around very much when the kids were growing up. Sometimes, we regret that.$s#$e#Oh well, can't change the past now.",
+            "5_2": "I'd love to cook some new recipes every now and then, but I'm not sure Sam or Kent would eat them...$s",
         },
         "When": { "YearModulus": "3" }
     },

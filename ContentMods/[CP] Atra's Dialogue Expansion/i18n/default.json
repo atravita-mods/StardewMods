@@ -632,11 +632,60 @@
     "shane-videogame.fall": "A Mega Station. Looks like Shane left a game inside. It's {{game}}.",
     "shane-videogame.winter": "Looks like Shane's Mega Station. He's been playing {{game}}, it appears.",
 
+    /***************************
+    * Festival Dialogue
+    * **************************/
+
+    // Stardew Fair
+    "abby-y2-fair": "You think Lewis will ever change up these fair games?",
+    "abby-y2-fair-spouse": "Gosh, aren't fair games supposed to be weighted against you? These are easy!",
+    "alex-y2-fair": "I got a perfect score in the slingshot game!",
+    "alex-y2-fair-spouse": "Let's see how good of a score I can get on the strength game this year!",
+    "caroline-y2-fair": "We've been picking out the best veggies for weeks! Pierre's carefully studied everything that comes out of my garden.",
+    "caroline-y3-fair": "Best of luck this year! May the best grange display win.",
+    "caroline-y4-fair": "We've picked new cultivars for this year's fair! Hopefully these heritage blueberries score better.",
+    "clint-y2-fair.0": "These are the best swords I've produced this year.",
+    "clint-y2-fair.1": "Of course, they'll be sold immediately after this...",
+    "clint-y3-fair": "Every year I try to remember to learn a few new techniques for this fair, and every year I forget.",
+    "demetrius-y2-fair.0": "I wonder...should I bring the poster I've been working on some year?",
+    "demetrius-y2-fair.1": "I kid, I kid, I know that's not the point of this event.",
+    "demetrius-y3-fair.0": "Robin and Leah both do excellent work!",
+    "demetrius-y3-fair.1": "But of course, I'll always prefer my wife's carpentry.",
+    "elliott-y2-fair": "Do you think I can enter a dramatic reading into the fair?",
+    "elliott-y2-fair-spouse": "There's something different about fair food, isn't there?",
+    "emily-y2-fair": "Maybe I should try to enter a dress or two into the fair some year?",
+    "emily-y2-fair-spouse": "Darling, do you think I should enter a dress or two into the fair?",
+    "evelyn-y2-fair": "Gus has been cooking the same thing year after year since he's been here, and it's delicious every time!",
+    "george-y2-fair": "The one time in the year Evelyn lets me eat stuff like this, @. I'll enjoy it while it lasts.",
+    "gus-y2-fair": "I don't usually enter the fair itself, I prefer just cooking for everyone!",
+    "gus-y3-fair": "@, do you think I should add anything to the menu for next year?",
+    "haley-y2-fair-spouse": "Our grange display is the best of them all!",
+    "haley-y2-fair": "I'm not playing any of the fair games, I don't want to mess up my hair.",
+    "harvey-y2-fair-spouse.0": "Gosh, I'm really not used to having so many people around.",
+    "harvey-y2-fair-spouse.1": "I'll...just be waiting for you over here, okay, my dear?",
+    "harvey-y2-fair": "Gus's secret sauce even makes eggplant burgers taste better!",
+    "jas-y2-fair": "Uncle Shane has been selecting the friendliest chickens for this for weeks!",
+    "jas-y3-fair": "Come pet the cows, they're so friendly!",
+    "jodi-y2-fair.0": "I never liked clowns, even when I was little.",
+    "jodi-y2-fair.1": "Frankly, I find them more scary than funny.",
+    "jodi-y3-fair.0": "Sam used to love this fair when he was young.",
+    "jodi-y3-fair.1": "Might have been the funnel cakes, though.",
+    "kent-y2-fair.0": "Frankly, I could do a better job than this clown...",
+    "kent-y2-fair.1": "Hmmm, maybe I should talk to the Mayor about this, we could do with a little extra money.",
+    "leah-y2-fair": "@, you think I should try entering a sculpture or two into the fair some year?",
+    "leah-y2-fair-spouse": "@, you think we should enter a sculpture of mine into the fair sometimes?",
+    "leo-y2-fair": "The burgers Gus makes are ahhh-mazing!",
+    "lewis-y2-fair.0": "It's our biggest festival of the year! It's taken me weeks to set this up.",
+    "lewis-y2-fair.1": "You participating in the grange display this year?",
+    "lewis-y2-fair.2": "Let me know when you're ready to be judged!",
+
     /****************************
     * Special order dialogue
     ****************************/
     "alex-leeks-special-order": "Hi, @! Just want to thank you for gathering all those leeks for gramps. I haven't seen him that happy in a long while.",
     "evelyn-leeks-special-order": "Thanks for gathering all the leeks for my dear George, @! I'm glad you care for him as much as I do.",
+    "gus-leeks-special-order": "@, you're a good person. George doesn't get enough kindness in his life.",
+    "gus-omelet-special-order": "There isn't anything better than farm-fresh eggs, isn't there?",
     "willy-bait-special-order.00": "Can't wait to get to fishing with all that fresh bait you provided!",
     "willy-bait-special.order.01": "The catfish are gonna love it."
 }

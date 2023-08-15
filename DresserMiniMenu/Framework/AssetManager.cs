@@ -39,7 +39,7 @@ internal static class AssetManager
             if (Game1.content.GetCurrentLanguage() is not LocalizedContentManager.LanguageCode.en)
             {
                 string localeFilename;
-                var locale = Game1.content.GetCurrentLanguage();
+                LocalizedContentManager.LanguageCode locale = Game1.content.GetCurrentLanguage();
                 if (locale != LocalizedContentManager.LanguageCode.mod)
                 {
                     localeFilename = $"assets/icons.{Game1.content.LanguageCodeString(locale)}.png";

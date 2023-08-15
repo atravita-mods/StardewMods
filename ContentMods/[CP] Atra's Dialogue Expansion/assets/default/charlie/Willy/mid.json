@@ -4,6 +4,14 @@
         "Action": "EditData",
         "Target": "Characters/Dialogue/Willy",
         "Entries": {
+            "dumped_Guys": "@, I thought you were more honorable than that.#$e#Dating the whole town, that's not something I thought you would do.$s",
+        }
+    },
+    {
+        "LogName": "Willy mid-hearts",
+        "Action": "EditData",
+        "Target": "Characters/Dialogue/Willy",
+        "Entries": {
             "6{{YearRemainder}}": "I also sell tackle. Find them mighty useful for catching difficult fish..."
         },
         "When": {

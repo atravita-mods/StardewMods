@@ -9,8 +9,8 @@
                 "EnableFor": "Abigail"
             },
             "Entries": {
-                "Abigail_y2": "You think Lewis will ever change up these fair games?",
-                "Abigail_spouse_y2": "Gosh, aren't fair games supposed to be weighted against you? These are easy!$h",
+                "Abigail_y2": "{{i18n:abby-y2-fair}}",
+                "Abigail_spouse_y2": "{{i18n:abby-y2-fair-spouse}}$h",
             }
         },
         {
@@ -21,7 +21,8 @@
                 "EnableFor": "Alex"
             },
             "Entries": {
-                "Alex_y2": "I got a perfect score in the slingshot game!"
+                "Alex_y2": "{{i18n:alex-y2-fair}}$h",
+                "Alex_spouse_y2": "{{i18n:alex-y2-fair-spouse}}$h"
             }
         },
         {
@@ -32,7 +33,9 @@
                 "EnableFor": "Caroline"
             },
             "Entries": {
-                "Caroline_y2": "We've been picking out the best veggies for weeks! Pierre's carefully studied everything that comes out of my garden.$h"
+                "Caroline_y2": "{{i18n:caroline-y2-fair}}$h",
+                "Caroline_y3": "{{i18n:caroline-y3-fair}}$h",
+                "Caroline_y4": "{{i18n:caroline-y4-fair}}"
             }
         },
         {
@@ -43,7 +46,8 @@
                 "EnableFor": "Clint"
             },
             "Entries": {
-                "Clint_y2": "These are the best swords I've produced this year$h#$b#Of course, they'll be sold immediately after this..."
+                "Clint_y2": "{{i18n:clint-y2-fair.0}}$h#$b#{{i18n:clint-y2-fair.1}}$s",
+                "Clint_y3": "{{i18n:clint-y3-fair}}$s"
             }
         },
         {
@@ -54,8 +58,8 @@
                 "EnableFor": "Demetrius"
             },
             "Entries": {
-                "Demetrius_y2": "I wonder...should I bring the poster I've been working on some year?#$b#I kid, I kid, I know that's not the point of this event.",
-                "Demetrius_y3": "Robin and Leah both do excellent work!$h#$b#But of course, I'll always prefer my wife's carpentry.$h"
+                "Demetrius_y2": "{{i18n:demetrius-y2-fair.0}}#$b#{{i18n:demetrius-y2-fair.1}}",
+                "Demetrius_y3": "{{i18n:demetrius-y3-fair.0}}$h#$b#{{i18n:demetrius-y3-fair.1}}$h"
             }
         },
         {
@@ -66,8 +70,8 @@
                 "EnableFor": "Elliott"
             },
             "Entries": {
-                "Elliott_y2": "Do you think I can enter a dramatic reading into the fair?",
-                "Elliott_spouse_y2": "There's something different about fair food, isn't there?"
+                "Elliott_y2": "{{i18n:elliott-y2-fair}}",
+                "Elliott_spouse_y2": "{{i18n:elliott-y2-fair-spouse}}"
             }
         },
         {
@@ -78,8 +82,8 @@
                 "EnableFor": "Emily"
             },
             "Entries": {
-                "Emily_y2": "Maybe I should try to enter a dress or two into the fair some year?$h",
-                "Emily_spouse": "Darling, do you think I should enter a dress or two into the fair?"
+                "Emily_y2": "{{i18n:emily-y2-fair}}$h",
+                "Emily_spouse": "{{i18n:emily-y2-fair-spouse}}"
             }
         },
         {
@@ -90,7 +94,7 @@
                 "EnableFor": "Evelyn"
             },
             "Entries": {
-                "Evelyn_y2": "Gus has been cooking the same thing year after year since he's been here, and it's delicious every time!$h",
+                "Evelyn_y2": "{{i18n:evelyn-y2-fair}}$h",
             }
         },
         {
@@ -101,7 +105,7 @@
                 "EnableFor": "George"
             },
             "Entries": {
-                "George_y2": "The one time in the year Evelyn lets me eat stuff like this, @. I'll enjoy it while it lasts.",
+                "George_y2": "{{i18n:george-y2-fair}}",
             }
         },
         {
@@ -112,8 +116,8 @@
                 "EnableFor": "Gus"
             },
             "Entries": {
-                "Gus_y2": "I don't usually enter the fair itself, I prefer just cooking for everyone!$h",
-                "Gus_y3": "@, do you think I should add anything to the menu for next year?"
+                "Gus_y2": "{{i18n:gus-y2-fair}}$h",
+                "Gus_y3": "{{i18n:gus-y3-fair}}"
             }
         },
         {
@@ -124,8 +128,8 @@
                 "EnableFor": "Haley"
             },
             "Entries": {
-                "Haley_spouse_y2": "Our grange display is the best of them all!$h",
-                "Haley_y2": "I'm not playing any of the fair games, I don't want to mess up my hair."
+                "Haley_spouse_y2": "{{i18n:haley-y2-fair-spouse}}$h",
+                "Haley_y2": "{{i18n:haley-y2-fair}}"
             }
         },
         {
@@ -136,8 +140,8 @@
                 "EnableFor": "Harvey"
             },
             "Entries": {
-                "Harvey_spouse_y2": "Gosh, I'm really not used to having so many people around.#$b#I'll...just be waiting for you over here, okay, my dear?",
-                "Harvey_y2": "Gus's secret sauce even makes eggplant burgers taste better!$h"
+                "Harvey_spouse_y2": "{{i18n:harvey-y2-fair-spouse.0}}#$b#{{i18n:harvey-y2-fair-spouse.1}}",
+                "Harvey_y2": "{{i18n: harvey-y2-fair}}$h"
             }
         },
         {
@@ -148,7 +152,8 @@
                 "EnableFor": "Jas"
             },
             "Entries": {
-                "Jas_y2": "Uncle Shane has been selecting the friendliest chickens for this for weeks!$h",
+                "Jas_y2": "{{i18n:jas-y2-fair}}$h",
+                "Jas_y3": "{{i18n:jas-y3-fair}}$h"
             }
         },
         {
@@ -159,7 +164,8 @@
                 "EnableFor": "Jodi"
             },
             "Entries": {
-                "Jodi_y2": "I never liked clowns, even when I was little.#$e#Frankly, I find them more scary than funny.",
+                "Jodi_y2": "{{i18n:jodi-y2-fair.0}}#$b#{{i18n:jodi-y2-fair.1}}",
+                "Jodi_y3": "{{i18n:jodi-y3-fair.0}}#$b#{{i18n:jodi-y3-fair.1}}"
             }
         },
         {
@@ -170,8 +176,42 @@
                 "EnableFor": "Kent"
             },
             "Entries": {
-                "Kent_y2": "Frankly, I could do a better job than this clown...#$e#Hmmm, maybe I should talk to the Mayor about this, we could do with a little extra money.",
+                "Kent_y2": "{{i18n:kent-y2-fair.0}}#$e#{{i18n:kent-y2-fair.1}}",
             }
         },
+        {
+            "Action": "EditData",
+            "LogName": "Leah - normal",
+            "Target": "Data/Festivals/fall16",
+            "When": {
+                "EnableFor": "Leah"
+            },
+            "Entries": {
+                "Leah_y2": "{{i18n:leah-y2-fair}}",
+                "Leah_spouse_y2": "{{i18n:leah-y2-fair-spouse}}",
+            }
+        },
+        {
+            "Action": "EditData",
+            "LogName": "Leo - normal",
+            "Target": "Data/Festivals/fall16",
+            "When": {
+                "EnableFor": "Leo",
+            },
+            "Entries": {
+                "Leo_y2": "{{i18n:leo-y2-fair}}$h",
+            }
+        },
+        {
+            "Action": "EditData",
+            "LogName": "Lewis - normal",
+            "Target": "Data/Festivals/fall16",
+            "When": {
+                "EnableFor": "Lewis"
+            },
+            "Entries": {
+                "Lewis_y2": "{{i18n:lewis-y2-fair.0}}$h#$b#{{i18n:lewis-y2-fair.1}}#$e#{{i18n:lewis-y2-fair.2}}$h"
+            }
+        }
     ]
 }

@@ -28,7 +28,8 @@
             "10_2": "It's important to me for this town to be economically diverse. I don't want to rely on a single industry, like the way we used to rely on those mines.",
             "12_2": "Tourism could be a nice way to make money. We've got good hiking trails nearby.",
             "14_2": "@, have you ever considered holding apple picking sessions on your farm? They're more lucrative than I expected!$h",
-            "16_2": "We used to be a major flower exporter. Our climate is excellent for them."
+            "16_2": "We used to be a major flower exporter. Our climate is excellent for them.$h",
+            "17_2": "I read that the best grapes for wine are always kept a little stressed.",
         },
         "When": {"YearModulus": "2"}
     },
@@ -39,7 +40,9 @@
         "Entries": {
             "12_2": "Ugh, the stock market is going insane right now, I have to keep myself from looking too much at my portfolio.#$b#I try to remind myself that buying and holding is the best strategy, but it's hard sometimes.",
             "15_2": "We're actually in a great location for hydro power. Maybe I can convince a hydro plant to come out here?",
-            "16_2": "It's surprisingly hard to get a grant to get things repaired.#$b#Politicians like new shiny things with their names on it, upkeep isn't as...popular.$s"
+            "16_2": "It's surprisingly hard to get a grant to get things repaired.#$b#Politicians like new shiny things with their names on it, upkeep isn't as...popular.$s",
+
+            "CommunityCenter_Entry": "Heya, anything up?"
         },
         "When": {"YearModulus": "3"}
     },

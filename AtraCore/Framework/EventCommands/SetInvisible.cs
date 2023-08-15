@@ -53,7 +53,7 @@ internal sealed class SetInvisible : IEventCommand
             error = "Event command expects two arguments: the NPC's internal name and an optional number for the number of days.";
             return false;
         }
-        if (NPCCache.GetByVillagerName(args[1], searchTheater: true) is not NPC npc)
+        if (NPCCache.GetByVillagerName(args[1], searchTheater: true) is not NPC)
         {
             error = $"Could not find NPC by name {args[1]}";
             return false;

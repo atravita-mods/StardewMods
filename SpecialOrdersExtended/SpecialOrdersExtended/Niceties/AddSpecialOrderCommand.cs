@@ -55,7 +55,7 @@ internal sealed class AddSpecialOrderCommand : IEventCommand
         {
             // if duplicates allowed, or if no duplicate found.
             if ((args.Length == 3 && bool.TryParse(args[2], out bool val) && val)
-                || !Game1.player.team.specialOrders.Any(order => order.questKey.Value == args[1])
+                || !Game1.player.team.specialOrders.Any(order => order.questKey.Value == args[1]))
             {
                 SpecialOrder order = SpecialOrder.GetSpecialOrder(args[1], Singletons.Random.Next());
                 Game1.player.team.specialOrders.Add(order);

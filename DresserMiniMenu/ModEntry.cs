@@ -1,8 +1,8 @@
 ﻿#if DEBUG
 using System.Diagnostics;
+#endif
 
 using AtraBase.Toolkit.Extensions;
-#endif
 
 using AtraCore.Framework.Internal;
 
@@ -39,6 +39,9 @@ internal sealed class ModEntry : BaseMod<ModEntry>
     /// </summary>
     internal static int[]? ShirtIDs { get; private set; }
 
+    /// <summary>
+    /// Gets a list of pant IDs registered to JA, or null if not found.
+    /// </summary>
     internal static int[]? PantsIDs { get; private set; }
 
     internal static int[]? HatIDs { get; private set; }
@@ -118,7 +121,7 @@ internal sealed class ModEntry : BaseMod<ModEntry>
                 {
                     continue;
                 }
-                var type = data.GetNthChunk('/', 8).Trim();
+                ReadOnlySpan<char> type = data.GetNthChunk('/', 8).Trim();
                 if (type.Length == 0)
                 {
                     continue;
@@ -134,14 +137,8 @@ internal sealed class ModEntry : BaseMod<ModEntry>
                 }
             }
 
-            if (shirts.Count > 0)
-            {
-                ShirtIDs = shirts.ToArray();
-            }
-            if (pants.Count > 0)
-            {
-                PantsIDs = pants.ToArray();
-            }
+            ShirtIDs = shirts.Count == 0 ? null : shirts.ToArray();
+            PantsIDs = pants.Count == 0 ? null : pants.ToArray();
         }
 
         this.Monitor.Log($"Indexed {HatIDs?.Length ?? 0} hats, {ShirtIDs?.Length ?? 0} shirts, and {PantsIDs?.Length ?? 0} pants.");

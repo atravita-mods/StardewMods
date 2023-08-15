@@ -56,8 +56,8 @@
                 "HasPet": true
             }
         },
-                {
-            "LogName": "Harvey mid-hearts y4 with pet",
+        {
+            "LogName": "Harvey mid-hearts y4",
             "Action": "EditData",
             "Target": "Characters/Dialogue/Harvey",
             "Entries": {
@@ -65,6 +65,17 @@
             },
             "When": {
                 "YearModulus": "4",
+            }
+        },
+        {
+            "LogName": "Harvey mid-hearts y5",
+            "Action": "EditData",
+            "Target": "Characters/Dialogue/Harvey",
+            "Entries": {
+                "12_2": "I enjoy doing the crosswords in the paper, when I have the time to do them."
+            },
+            "When": {
+                "YearModulus": "0",
             }
         },
         {

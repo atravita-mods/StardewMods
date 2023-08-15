@@ -33,7 +33,7 @@ public sealed class TapGiantCrop : ITapGiantCropsAPI
     /// <summary>
     /// A method that shakes a giant crop.
     /// </summary>
-    /// <param name="crop">Crop to shake</param>
+    /// <param name="crop">Crop to shake.</param>
     internal static void ShakeGiantCrop(GiantCrop crop)
     {
         GiantCropSetShake(crop, 100f);

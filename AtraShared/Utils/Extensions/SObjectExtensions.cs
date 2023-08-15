@@ -74,7 +74,7 @@ public static class SObjectExtensions
         => obj is not null && obj.GetType() == typeof(SObject) && !obj.bigCraftable.Value && obj.ParentSheetIndex is 286 or 287 or 288;
 
     /// <summary>
-    /// Returns true for an item that would be considered alcohol. Taken from BuffsDisplay.tryToAddDrinkBuff
+    /// Returns true for an item that would be considered alcohol. Taken from BuffsDisplay.tryToAddDrinkBuff.
     /// </summary>
     /// <param name="obj">SObject.</param>
     /// <returns>True if alcohol.</returns>

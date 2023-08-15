@@ -1,4 +1,6 @@
-﻿using System.Collections.Concurrent;
+﻿// Ignore Spelling: npc
+
+using System.Collections.Concurrent;
 
 using CommunityToolkit.Diagnostics;
 
@@ -88,7 +90,7 @@ public static class NPCCache
         // so we'll leave you guys uncached for now.
         if (npc is null && searchTheater && Game1.getLocationFromName("MovieTheater") is MovieTheater theater)
         {
-            ModEntry.ModMonitor.Log($"Searching movie theater for npc {name}");
+            ModEntry.ModMonitor.Log($"Searching movie theater for npc {name}.");
             foreach (NPC? character in theater.characters)
             {
                 if (!character.eventActor && character.isVillager() && character.Name == name)

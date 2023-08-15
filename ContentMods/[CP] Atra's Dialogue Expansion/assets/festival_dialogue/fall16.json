@@ -127,6 +127,51 @@
                 "Haley_spouse_y2": "Our grange display is the best of them all!$h",
                 "Haley_y2": "I'm not playing any of the fair games, I don't want to mess up my hair."
             }
-        }
+        },
+        {
+            "Action": "EditData",
+            "LogName": "Harvey - normal",
+            "Target": "Data/Festivals/fall16",
+            "When": {
+                "EnableFor": "Harvey"
+            },
+            "Entries": {
+                "Harvey_spouse_y2": "Gosh, I'm really not used to having so many people around.#$b#I'll...just be waiting for you over here, okay, my dear?",
+                "Harvey_y2": "Gus's secret sauce even makes eggplant burgers taste better!$h"
+            }
+        },
+        {
+            "Action": "EditData",
+            "LogName": "Jas - normal",
+            "Target": "Data/Festivals/fall16",
+            "When": {
+                "EnableFor": "Jas"
+            },
+            "Entries": {
+                "Jas_y2": "Uncle Shane has been selecting the friendliest chickens for this for weeks!$h",
+            }
+        },
+        {
+            "Action": "EditData",
+            "LogName": "Jodi - normal",
+            "Target": "Data/Festivals/fall16",
+            "When": {
+                "EnableFor": "Jodi"
+            },
+            "Entries": {
+                "Jodi_y2": "I never liked clowns, even when I was little.#$e#Frankly, I find them more scary than funny.",
+            }
+        },
+        {
+            "Action": "EditData",
+            "LogName": "Kent - normal",
+            "Target": "Data/Festivals/fall16",
+            "When": {
+                "EnableFor": "Kent"
+            },
+            "Entries": {
+                "Kent_y2": "Frankly, I could do a better job than this clown...#$e#Hmmm, maybe I should talk to the Mayor about this, we could do with a little extra money.",
+            }
+        },
     ]
 }

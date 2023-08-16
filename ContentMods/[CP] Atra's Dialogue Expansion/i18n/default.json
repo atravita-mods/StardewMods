@@ -638,9 +638,11 @@
 
     // Stardew Fair
     "abby-y2-fair": "You think Lewis will ever change up these fair games?",
+    "abby-y3-fair": "Heya, @, think my Dad has a good shot at beating you this year?",
     "abby-y2-fair-spouse": "Gosh, aren't fair games supposed to be weighted against you? These are easy!",
     "alex-y2-fair": "I got a perfect score in the slingshot game!",
     "alex-y2-fair-spouse": "Let's see how good of a score I can get on the strength game this year!",
+    "alex-y3-fair-spouse": "I'm gonna go eat my fill of those freshly grilled burgers!",
     "caroline-y2-fair": "We've been picking out the best veggies for weeks! Pierre's carefully studied everything that comes out of my garden.",
     "caroline-y3-fair": "Best of luck this year! May the best grange display win.",
     "caroline-y4-fair": "We've picked new cultivars for this year's fair! Hopefully these heritage blueberries score better.",
@@ -652,6 +654,7 @@
     "demetrius-y3-fair.0": "Robin and Leah both do excellent work!",
     "demetrius-y3-fair.1": "But of course, I'll always prefer my wife's carpentry.",
     "elliott-y2-fair": "Do you think I can enter a dramatic reading into the fair?",
+    "elliott-y3-fair": "Ah, there's little better than good food.",
     "elliott-y2-fair-spouse": "There's something different about fair food, isn't there?",
     "emily-y2-fair": "Maybe I should try to enter a dress or two into the fair some year?",
     "emily-y2-fair-spouse": "Darling, do you think I should enter a dress or two into the fair?",
@@ -692,6 +695,14 @@
     "penny-y2-fair.0": "Mom thinks she should try her hand at the grange display too some day.",
     "penny-y2-fair.1": "Maybe bring some fish or something. But Mayor Lewis is no fan of ish.",
     "penny-y2-fair-spouse": "Our grange display will be the best one, I just know it.",
+    "pierre-y2-fair": "May the best grange display win, @. I'm confident in mine this year.",
+    "pierre-y3-fair": "I've made sure to keep the best produce we get, @. Caroline and I will have the best display this fair!",
+    "robin-y2-fair": "Frankly, @, I don't have enough time normally to chat with Leah, so I'm glad these festivals exist to give everyone a break!",
+    "robin-y3-fair": "I'm very proud of the woodworking I did this year. Maybe I should have entered a few pieces into the fair?",
+    "sam-y2-fair.0": "Man, we used to have the best funnel cakes here.",
+    "sam-y2-fair.1": "Used to be the only time of year Mom let us have funnel cakes.",
+    "sam-y2-fair-spouse": "Gosh, I really should hang out with Sam and Abby more often, shouldn't I?",
+    "sam-y3-fair-spouse": "Heya, @, you having fun? Think I'll go take Vincent into the fishing booth later.",
 
     /****************************
     * Special order dialogue

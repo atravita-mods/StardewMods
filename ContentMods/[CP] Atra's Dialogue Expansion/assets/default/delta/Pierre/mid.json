@@ -30,7 +30,9 @@
             "IsJojaMartComplete": true
         },
         "Entries": {
-            "winter_Wed8": "You know, @, I...sometimes wonder if I should try moving back to Zuzu City, see if I can find better markets there."
+            "fall_Thu8": "Gosh, @, I don't know how long I can stay afloat, with this town turning into a Joja town.$s",
+            "winter_Wed8": "You know, @, I...sometimes wonder if I should try moving back to Zuzu City, see if I can find better markets there.",
+            "winter_Thu8": "You think Abby's been looking a bit pale lately?"
         }
     },
     {
@@ -39,7 +41,7 @@
         "Target": "Characters/Dialogue/Pierre",
         "When": {"IsCommunityCenterComplete": true},
         "Entries": {
-            "Thu2": "Without Joja here, I feel like finally I've got a chance.$h"
+            "Thu6": "Without Joja here, I feel like finally I've got a chance.$h"
         }
     },
     {
@@ -57,6 +59,7 @@
         "Target": "Characters/Dialogue/Pierre",
         "Entries": {
             "1{{YearRemainder}}": "I'd love to travel more, but we haven't got that type of money.$s",
+            "2": "I'm glad we've got a new farmer around, I'm sure we'll have a good working relationship.$h",
             "3{{YearRemainder}}": "When I was young, I really thought I'd be able to become fabulously wealthy by running my own store.#$b#Sadly, places like Joja are sucking away the entire market.",
             "5{{YearRemainder}}": "I...feel like I've got no energy these days.#$b#I just get up and run this store. That's all I do.$s",
 

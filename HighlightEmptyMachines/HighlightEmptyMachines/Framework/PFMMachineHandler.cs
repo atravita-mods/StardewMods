@@ -29,12 +29,12 @@ internal static class PFMMachineHandler
     /// <summary>
     /// Gets a list of conditional PFM machines.
     /// </summary>
-    internal static IEnumerable<int> ConditionalPFMMachines => Recipes.Keys;
+    internal static ICollection<int> ConditionalPFMMachines => Recipes.Keys;
 
     /// <summary>
     /// Gets a list of unconditional PFM machines.
     /// </summary>
-    internal static IEnumerable<int> UnconditionalPFMMachines => HasUnconditionalRecipe;
+    internal static ICollection<int> UnconditionalPFMMachines => HasUnconditionalRecipe;
 
     private static List<Dictionary<string, object>>? MachineRecipes => pfmAPI?.GetRecipes();
 
@@ -113,7 +113,11 @@ internal static class PFMMachineHandler
                 weather = StardewWeather.All;
             }
 
-            if (!outdoorsOnly && weather == StardewWeather.All && seasons == StardewSeasons.All)
+            string[]? validLocations = item.TryGetValue("RequiredLocation", out object? locs) && locs is List<string> locationList && locationList.Count > 0
+                    ? locationList.ToArray()
+                    : null;
+
+            if (!outdoorsOnly && weather == StardewWeather.All && seasons == StardewSeasons.All && validLocations is null)
             {
                 ModEntry.ModMonitor.DebugOnlyLog($"{intID} is unconditional.", LogLevel.Trace);
                 HasUnconditionalRecipe.Add(intID);
@@ -124,7 +128,7 @@ internal static class PFMMachineHandler
 
             PFMMachineData recipe = new(
                 OutdoorsOnly: outdoorsOnly,
-                ValidLocations: item.TryGetValue("RequiredLocation", out object? locs) && locs is List<string> locationList && locationList.Count > 0 ? locationList : null,
+                ValidLocations: validLocations,
                 AllowedSeasons: seasons,
                 AllowedWeathers: weather);
             Recipes[intID].Add(recipe);
@@ -146,9 +150,6 @@ internal static class PFMMachineHandler
         }
 
         ValidMachines.Clear();
-        StardewSeasons season = SeasonExtensions.GetSeasonFromGame(location);
-        StardewWeather weather = GetPFMWeather();
-        bool isOutDoors = location.IsOutdoors;
 
         // unconditional machines
         foreach (int machine in HasUnconditionalRecipe)
@@ -164,6 +165,15 @@ internal static class PFMMachineHandler
                 ValidMachines[machine] = MachineStatus.Disabled;
             }
         }
+
+        if (ConditionalPFMMachines.Count == 0)
+        {
+            return;
+        }
+
+        StardewSeasons season = SeasonExtensions.GetSeasonFromGame(location);
+        StardewWeather weather = GetPFMWeather();
+        bool isOutDoors = location.IsOutdoors;
 
         // conditional machines.
         foreach (int machine in ConditionalPFMMachines)
@@ -223,10 +233,10 @@ Continue:
     /// <summary>
     /// Initializes a new instance of the <see cref="PFMMachineData"/> struct.
     /// </summary>
-    /// <param name="outdoorsOnly">Whether the machine recipe is outdoors only.</param>
-    /// <param name="allowedSeasons">Whether there's season limitations.</param>
-    /// <param name="allowedWeathers">Whether there's weather limitations.</param>
-    /// <param name="validLocations">Whether there's location limitations.</param>
+    /// <param name="OutdoorsOnly">Whether the machine recipe is outdoors only.</param>
+    /// <param name="ValidLocations">Whether there's location limitations.</param>
+    /// <param name="AllowedSeasons">Whether there's season limitations.</param>
+    /// <param name="AllowedWeathers">Whether there's weather limitations.</param>
     [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = StyleCopErrorConsts.IsRecord)]
-    internal readonly record struct PFMMachineData(bool OutdoorsOnly, List<string>? ValidLocations, StardewSeasons AllowedSeasons, StardewWeather AllowedWeathers);
+    internal readonly record struct PFMMachineData(bool OutdoorsOnly, string[]? ValidLocations, StardewSeasons AllowedSeasons, StardewWeather AllowedWeathers);
 }

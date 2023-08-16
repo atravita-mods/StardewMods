@@ -10,6 +10,7 @@
             },
             "Entries": {
                 "Abigail_y2": "{{i18n:abby-y2-fair}}",
+                "Abigail_y3": "{{i18n:abby-y3-fair}}$h",
                 "Abigail_spouse_y2": "{{i18n:abby-y2-fair-spouse}}$h",
             }
         },
@@ -22,7 +23,8 @@
             },
             "Entries": {
                 "Alex_y2": "{{i18n:alex-y2-fair}}$h",
-                "Alex_spouse_y2": "{{i18n:alex-y2-fair-spouse}}$h"
+                "Alex_spouse_y2": "{{i18n:alex-y2-fair-spouse}}$h",
+                "Alex_spouse_y3": "{{i18n:alex-y3-fair-spouse}}$h"
             }
         },
         {
@@ -71,7 +73,8 @@
             },
             "Entries": {
                 "Elliott_y2": "{{i18n:elliott-y2-fair}}",
-                "Elliott_spouse_y2": "{{i18n:elliott-y2-fair-spouse}}"
+                "Elliott_y3": "{{i18n:elliott-y3-fair}}$h",
+                "Elliott_spouse_y2": "{{i18n:elliott-y2-fair-spouse}}$h"
             }
         },
         {
@@ -294,6 +297,43 @@
             "Entries": {
                 "Penny_y2": "{{i18n:penny-y2-fair.0}}#$e#{{i18n:penny-y2-fair.1}}",
                 "Penny_spouse_y2": "{{i18n:penny-y2-fair-spouse}}$h",
+            }
+        },
+        {
+            "Action": "EditData",
+            "LogName": "Pierre - normal",
+            "Target": "Data/Festivals/fall16",
+            "When": {
+                "EnableFor": "Pierre"
+            },
+            "Entries": {
+                "Pierre_y2": "{{i18n:pierre-y2-fair}}$h",
+                "Pierre_y3": "{{i18n:pierre-y3-fair}}$h"
+            }
+        },
+        {
+            "Action": "EditData",
+            "LogName": "Robin - normal",
+            "Target": "Data/Festivals/fall16",
+            "When": {
+                "EnableFor": "Robin"
+            },
+            "Entries": {
+                "Robin_y2": "{{i18n:robin-y2-fair}}$h",
+                "Robin_y3": "{{i18n:robin-y3-fair}}$h"
+            }
+        },
+        {
+            "Action": "EditData",
+            "LogName": "Sam - normal",
+            "Target": "Data/Festivals/fall16",
+            "When": {
+                "EnableFor": "Sam"
+            },
+            "Entries": {
+                "Sam_y2": "{{i18n:sam-y2-fair.0}}#$e#{{i18n:sam-y2-fair.1}}$h",
+                "Sam_spouse_y2": "{{i18n:sam-y2-fair-spouse}}$h",
+                "Sam_spouse_y3": "{{i18n:sam-y3-fair-spouse}}",
             }
         },
     ]

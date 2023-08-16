@@ -15,6 +15,14 @@
         }
     },
     {
+        "LogName": "Maru, mid hearts",
+        "Action": "EditData",
+        "Target": "Characters/Dialogue/Maru",
+        "Entries": {
+            "summer_Tue6": "Gosh, a nice ripe melon would be good in this oppressive heat.",
+        }
+    },
+    {
         "LogName": "Maru, mid hearts - y1",
         "Action": "EditData",
         "Target": "Characters/Dialogue/Maru",
@@ -35,6 +43,7 @@
             "10{{YearRemainder}}": "%Maru is speaking to herself.#$b#Hmmm. How much torque do I need?#$e#Oh, @, I didn't see you there!",
             "11{{YearRemainder}}": "Hmmm, think I need a bigger battery...",
             "12{{YearRemainder}}": "Ordering spare parts from Joja is convenient, but sometimes I wish more electronic shops still remained.", // Mouser I love you and I miss you.
+            "13{{YearRemainder}}": "Man, sometimes I wish I lived somewhere less...rural. I'd love to go out dancing more.$s"
         }
     },
     {

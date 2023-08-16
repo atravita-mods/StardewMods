@@ -212,6 +212,89 @@
             "Entries": {
                 "Lewis_y2": "{{i18n:lewis-y2-fair.0}}$h#$b#{{i18n:lewis-y2-fair.1}}#$e#{{i18n:lewis-y2-fair.2}}$h"
             }
-        }
+        },
+        {
+            "Action": "EditData",
+            "LogName": "Linus - normal",
+            "Target": "Data/Festivals/fall16",
+            "When": {
+                "EnableFor": "Linus"
+            },
+            "Entries": {
+                "Linus_y2": "{{i18n:linus-y2-fair}}$h"
+            }
+        },
+        {
+            "Action": "EditData",
+            "LogName": "Linus - higher hearts",
+            "Target": "Data/Festivals/fall16",
+            "When": {
+                "EnableFor": "Linus",
+                "Query: {{Hearts: Linus}} >= 8": true
+            },
+            "Entries": {
+                "Linus": "{{i18n:linus-y1-fair-high-hearts}}$h",
+            }
+        },
+        {
+            "Action": "EditData",
+            "LogName": "Marlon - normal",
+            "Target": "Data/Festivals/fall16",
+            "When": {
+                "EnableFor": "Marlon"
+            },
+            "Entries": {
+                "Marlon_y2": "{{i18n:marlon-y2-fair}}$h",
+                "Marlon_y3": "{{i18n:marlon-y3-fair}}$h"
+            }
+        },
+        {
+            "Action": "EditData",
+            "LogName": "Marnie - normal",
+            "Target": "Data/Festivals/fall16",
+            "When": {
+                "EnableFor": "Marnie"
+            },
+            "Entries": {
+                "Marnie_y2": "{{i18n:marnie-y2-fair}}$h",
+                "Marnie_y3": "{{i18n:marnie-y3-fair}}$s"
+            }
+        },
+        {
+            "Action": "EditData",
+            "LogName": "Maru - normal",
+            "Target": "Data/Festivals/fall16",
+            "When": {
+                "EnableFor": "Maru"
+            },
+            "Entries": {
+                "Maru_y2": "{{i18n:maru-y2-fair.0}}#$e#{{i18n:maru-y2-fair.1}}",
+                "Maru_spouse_y2": "{{i18n:maru-y2-fair-spouse}}",
+            }
+        },
+        {
+            "Action": "EditData",
+            "LogName": "Pam - normal",
+            "Target": "Data/Festivals/fall16",
+            "When": {
+                "EnableFor": "Pam"
+            },
+            "Entries": {
+                "Pam_y2": "{{i18n:pam-y2-fair}}$h",
+                "Pam_y3": "{{i18n:pam-y3-fair}}$s"
+            }
+        },
+        {
+            "Action": "EditData",
+            "LogName": "Penny - normal",
+            "Target": "Data/Festivals/fall16",
+            "When": {
+                "EnableFor": "Penny"
+            },
+            "Entries": {
+                "Penny_y2": "{{i18n:penny-y2-fair.0}}#$e#{{i18n:penny-y2-fair.1}}",
+                "Penny_spouse_y2": "{{i18n:penny-y2-fair-spouse}}$h",
+            }
+        },
     ]
 }

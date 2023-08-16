@@ -1,6 +1,6 @@
 {"Changes":[
     {
-        "LogName": "Sam, mid hearts",
+        "LogName": "Sam, mid hearts - y1",
         "Action": "EditData",
         "Target": "Characters/Dialogue/Sam",
         "When": {"YearModulus": "1"},
@@ -15,6 +15,15 @@
             "12{{YearRemainder}}": "Thinking of going skateboarding tomorrow, if it doesn't rain.",
             "14{{YearRemainder}}": "Alex and I got up early today to go running.#$e#Guess you don't need to do structured exercise, with all the farm work you have to do.",
             "15{{YearRemainder}}": "I heard a great song on the radio the other day.#$e#Can't remember what song it was anymore, though.$s"
+        }
+    },
+    {
+        "LogName": "Sam, mid hearts - y2",
+        "Action": "EditData",
+        "Target": "Characters/Dialogue/Sam",
+        "When": {"YearModulus": "2"},
+        "Entries":{
+            "1_2": "Ugh, is it just me or do all the songs on the radio sound the same these days?"
         }
     },
     {

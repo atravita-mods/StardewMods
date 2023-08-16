@@ -10,6 +10,8 @@
         "LogName": "Jodi mid-hearts",
         "Target": "Characters/Dialogue/Jodi",
         "Entries": {
+            "Resort_Approach_HouseWives": "Yoba, I've been looking forward to this vacation all week!$h",
+
             "1{{YearRemainder}}": "Kent was gone for long periods of time when Sam was young. Without this community, I'm not sure how I could have raised him.",
             "2{{YearRemainder}}": "Sometimes I feel like all I do is cook and clean.$s",
             "7{{YearRemainder}}": "Sam left the laundry in the washer the other day, and it started smelling of mildew.$s#$b#As much as I love my boys, I wonder if I babied them too much...",
@@ -70,6 +72,7 @@
             "2_2": "Ugh, Kent's pension doesn't go nearly as far as it used to.$s",
             "7_2": "I'd like to get some new houseplants, but online shipping is so much more expensive than it was this time last year.$s",
             "8_2": "Why are eggs suddenly so much more expensive...#$b#Say, @, you're not getting paid any more for your eggs, right? Who's taking the extra money, then?$a",
+            "9_2": "I try my best to cook everything from fresh ingredients.#$b#I spend a lot of time in the kitchen.$s",
             "22_2": "There are so many chores I need to do...$s#$b#It's like chores never end...",
             "25_2": "When I was young? I wanted to be a journalist.#$b#Actually went to college for that, but dropped out after two years to raise Sam.",
             "26_2": "Sometimes I feel like all I do is cook and clean.#$b#At least the lentil soup is easy to put together."

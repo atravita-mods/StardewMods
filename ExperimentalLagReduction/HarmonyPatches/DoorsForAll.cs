@@ -37,6 +37,7 @@ internal static class DoorsForAll
             try
             {
                 __instance.updateDoors();
+
             }
             catch (Exception ex)
             {

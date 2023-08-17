@@ -19,7 +19,7 @@ internal static class TeleportPlayer
     /// <returns>True if handled, false otherwise.</returns>
     internal static bool ApplyCommand(GameLocation loc, ArraySegment<string> parameters, Farmer who, Location location)
     {
-        if (who.IsLocalPlayer)
+        if (!who.IsLocalPlayer)
         {
             return false;
         }

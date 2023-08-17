@@ -128,6 +128,7 @@
             "15_2": "Sometimes we do sell some of the produce I produce in my garden, but usually we just eat that.",
             "16_2": "Pierre's the type of guy who wants steak and potatoes on the dinner table every evening. That can't be good for his blood pressure.$s",
             "17_2": "Picked some beans yesterday for dinner. Nothing's really like fresh veggies you grew yourself, right?",
+            "18_2": "Ugh, keeping this place clean is so much work, it's so big.$s",
 
             // Ginger Island lines.
             "Resort_Bar_2": "I wonder if Gus'll sell a boozy iced tea if I asked about it?$h"
@@ -168,7 +169,8 @@
             "3_2": "I was a pretty decent pianist when I was young. Nothing like Abigail's talent, of course.",
             "4_2": "Pierre actually has a quite decent singing voice, although he doesn't like performing for other people.",
             "5_2": "That weird band Pierre likes so much is going to be playing in Grampleton next Friday. Maybe I should get Pierre some tickets...#$b#Not sure that fits in the budget though.",
-            "6_2": "Pierre gets up at five in the morning to make sure the store is in good shape."
+            "6_2": "Pierre gets up at five in the morning to make sure the store is in good shape.",
+            "7_2": "Ugh, @, if we had the money for it, I'd love to buy a robot to clean for us.$s"
         }
     }
 ]}

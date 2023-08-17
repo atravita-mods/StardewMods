@@ -30,6 +30,8 @@ internal static class Rescheduler
 
     #region fields
 
+    private static bool PreCached = false;
+
     private static readonly ConcurrentDictionary<(string start, string end, Gender gender), List<string>?> PathCache = new();
 
     private static readonly ThreadLocal<HashSet<string>> _visited = new(static () => new(capacity: 32));
@@ -77,6 +79,102 @@ internal static class Rescheduler
             }
         }
         return ret;
+    }
+
+    /// <inheritdoc cref="IExperimentalLagReductionAPI.ClearMacroCache"/>
+    internal static bool ClearCache()
+    {
+        PreCached = false;
+        if (PathCache.IsEmpty)
+        {
+            return false;
+        }
+        PathCache.Clear();
+        return true;
+    }
+
+    /// <summary>
+    /// Tries to pre-populate the cache if player config allows and the cache has not been previously populated.
+    /// </summary>
+    /// <param name="parallel">whether or not to try to run off the main thread.</param>
+    /// <returns>True if runs, false otherwise. </returns>
+    internal static bool PrePopulateCache(bool parallel = true)
+    {
+        if (!ModEntry.Config.PrePopulateCache || PreCached)
+        {
+            return false;
+        }
+
+        PreCached = true;
+
+#if DEBUG
+        _stopwatch.Value ??= new();
+        _stopwatch.Value.Start();
+#endif
+
+        ModEntry.ModMonitor.TraceOnlyLog($"Locations cache contains {Game1._locationLookup.Count} entries.");
+        if (Game1.locations.Count > Game1._locationLookup.Count)
+        {
+            Game1._locationLookup.EnsureCapacity(Game1.locations.Count + 4);
+            foreach (GameLocation? location in Game1.locations)
+            {
+                Game1._locationLookup.TryAdd(location.Name, location);
+            }
+            ModEntry.ModMonitor.TraceOnlyLog($"Locations cache prepopulated with {Game1._locationLookup.Count} entries.");
+#if DEBUG
+            ModEntry.ModMonitor.TraceOnlyLog($"This took {_stopwatch.Value.Elapsed.TotalMilliseconds:F2} ms");
+#endif
+        }
+
+        foreach ((string center, string radius) in AssetManager.GetPrepopulate())
+        {
+            GameLocation? loc = Game1.getLocationFromName(center);
+            if (loc is null)
+            {
+                ModEntry.ModMonitor.LogOnce($"Could not find location {center} for prepopulating locations for macro scheduler, skipping.", LogLevel.Warn);
+                continue;
+            }
+
+            if (!int.TryParse(radius, out int limit))
+            {
+                ModEntry.ModMonitor.LogOnce($"Could not parse radius {radius} for {center}, setting to three.", LogLevel.Warn);
+                limit = 3;
+            }
+            else if (limit < 1 || limit > 4)
+            {
+                ModEntry.ModMonitor.LogOnce($"Radius {radius} for {center} is out of bounds, clamping.", LogLevel.Warn);
+                limit = Math.Clamp(limit, 1, 4);
+            }
+
+            Task task = new Task(() => Prefetch(loc, limit))
+                .ContinueWith(
+                    continuationAction: (t, _) =>
+                    {
+                        if (t.Status == TaskStatus.Faulted)
+                        {
+                            ModEntry.ModMonitor.Log($"Cache prepopulation failed. Check log for details.", LogLevel.Error);
+                            ModEntry.ModMonitor.Log(t.Exception?.ToString() ?? "no stack trace?");
+                        }
+                    },
+                    state: null,
+                    continuationOptions: TaskContinuationOptions.OnlyOnFaulted);
+
+            if (parallel)
+            {
+                task.Start();
+            }
+            else
+            {
+                task.RunSynchronously();
+            }
+        }
+
+#if DEBUG
+        _stopwatch.Value.Stop();
+        ModEntry.ModMonitor.Log($"Total time so far: {_stopwatch.Value.Elapsed.TotalMilliseconds:F2} ms, {PathCache.Count} total routes cached. Prefetch started.", LogLevel.Info);
+#endif
+
+        return true;
     }
 
     /// <summary>
@@ -297,8 +395,13 @@ internal static class Rescheduler
             ModEntry.ModMonitor.Log(new StackTrace().ToString(), LogLevel.Info);
 #endif
 
-            PathCache.Clear();
-            PrePopulateCache();
+            ClearCache();
+
+            // avoid pre-caching if we're in the middle of the day.
+            if (Game1.newDay || Game1.gameMode == Game1.loadingMode)
+            {
+                PrePopulateCache();
+            }
 
             return false;
         }
@@ -309,75 +412,10 @@ internal static class Rescheduler
         }
     }
 
-    private static void PrePopulateCache()
-    {
-        if (!ModEntry.Config.PrePopulateCache)
-        {
-            return;
-        }
-
-#if DEBUG
-        _stopwatch.Value ??= new();
-        _stopwatch.Value.Start();
-#endif
-
-        ModEntry.ModMonitor.TraceOnlyLog($"Locations cache contains {Game1._locationLookup.Count} entries.");
-        if (Game1.locations.Count > Game1._locationLookup.Count)
-        {
-            Game1._locationLookup.EnsureCapacity(Game1.locations.Count + 4);
-            foreach (GameLocation? location in Game1.locations)
-            {
-                Game1._locationLookup.TryAdd(location.Name, location);
-            }
-            ModEntry.ModMonitor.TraceOnlyLog($"Locations cache prepopulated with {Game1._locationLookup.Count} entries.");
-#if DEBUG
-            ModEntry.ModMonitor.TraceOnlyLog($"This took {_stopwatch.Value.Elapsed.TotalMilliseconds:F2} ms");
-#endif
-        }
-
-        foreach ((string center, string radius) in AssetManager.GetPrepopulate())
-        {
-            GameLocation? loc = Game1.getLocationFromName(center);
-            if (loc is null)
-            {
-                ModEntry.ModMonitor.LogOnce($"Could not find location {center} for prepopulating locations for macro scheduler, skipping.", LogLevel.Warn);
-                continue;
-            }
-
-            if (!int.TryParse(radius, out int limit))
-            {
-                ModEntry.ModMonitor.LogOnce($"Could not parse radius {radius} for {center}, setting to three.", LogLevel.Warn);
-                limit = 3;
-            }
-            else if (limit < 1 || limit > 4)
-            {
-                ModEntry.ModMonitor.LogOnce($"Radius {radius} for {center} is out of bounds, clamping.", LogLevel.Warn);
-                limit = Math.Clamp(limit, 1, 4);
-            }
-
-            Task.Factory.StartNew(() => Prefetch(loc, limit))
-            .ContinueWith(
-                continuationAction: static (task, _) =>
-                {
-                    if (task.Status == TaskStatus.Faulted)
-                    {
-                        ModEntry.ModMonitor.Log($"Cache prepopulation failed. Check log for details.", LogLevel.Error);
-                        ModEntry.ModMonitor.Log(task.Exception?.ToString() ?? "no stack trace?");
-                    }
-                },
-                state: null,
-                continuationOptions: TaskContinuationOptions.OnlyOnFaulted);
-        }
-
-#if DEBUG
-        _stopwatch.Value.Stop();
-        ModEntry.ModMonitor.Log($"Total time so far: {_stopwatch.Value.Elapsed.TotalMilliseconds:F2} ms, {PathCache.Count} total routes cached. Prefetch started.", LogLevel.Info);
-#endif
-    }
-
     private static void Prefetch(GameLocation loc, int limit)
     {
 #if DEBUG
+        ModEntry.ModMonitor.Log($"Prefetch started for {loc.Name} on thread {Thread.CurrentThread.ManagedThreadId}.", LogLevel.Info);
         _stopwatch.Value ??= new();
         _stopwatch.Value.Start();
 #endif
@@ -386,7 +424,7 @@ internal static class Rescheduler
 
 #if DEBUG
         _stopwatch.Value.Stop();
-        ModEntry.ModMonitor.Log($"Prefetch done for {loc.Name}. Total time so far: {_stopwatch.Value.Elapsed.TotalMilliseconds:F2} ms, {PathCache.Count} total routes cached", LogLevel.Info);
+        ModEntry.ModMonitor.Log($"Prefetch done for {loc.Name}. Total time so far: {_stopwatch.Value.Elapsed.TotalMilliseconds:F2} ms, {PathCache.Count} total routes cached.", LogLevel.Info);
 #endif
     }
 

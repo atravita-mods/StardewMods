@@ -22,7 +22,7 @@ internal static class KitchenCommand
     /// <returns>True if handled, false otherwise.</returns>
     internal static bool ApplyKitchenCommand(GameLocation loc, ArraySegment<string> parameters, Farmer who, Location location)
     {
-        if (who.IsLocalPlayer)
+        if (!who.IsLocalPlayer)
         {
             return false;
         }

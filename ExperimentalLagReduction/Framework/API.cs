@@ -28,5 +28,11 @@ public sealed class API : IExperimentalLagReductionAPI
     }
 
     /// <inheritdoc />
+    public bool ClearMacroCache() => Rescheduler.ClearCache();
+
+    /// <inheritdoc />
+    public bool PrePopulateCache(bool parallel) => Rescheduler.PrePopulateCache(parallel);
+
+    /// <inheritdoc />
     public void ResetGiftCache() => OverrideGiftTastes.Reset();
 }

@@ -37,7 +37,8 @@
             "11{{YearRemainder}}": "Demetrius and I used to walk out to the farmers market all the time when we were dating. There was a vendor who sold the best goat cheese...%revealtasteRobin426",
             "12{{YearRemainder}}": "Growing up here, there were always plenty of dogs around...I miss having a dog.$s",
             "13{{YearRemainder}}": "If I weren't a carpenter...You know, @, I've wanted to be a carpenter most of my life.#$b#I just really enjoy building things, you know?$h",
-            "15": "So, are you enjoying this little town? It's a lot quieter out here."
+            "15": "So, are you enjoying this little town? It's a lot quieter out here.",
+            "15_2": "Urgh, I need to vacuum so badly, but my shop vacuum is broken and we're waiting for parts to arrive."
         },
         "When": {
             "YearModulus": "1"

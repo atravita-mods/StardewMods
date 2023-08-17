@@ -32,6 +32,7 @@ internal sealed class ModEntry : BaseMod<ModEntry>
         base.Entry(helper);
 
         helper.Events.GameLoop.GameLaunched += this.OnGameLaunch;
+        helper.Events.GameLoop.DayEnding += this.CrosscheckCache;
 
         Config = AtraUtils.GetConfigOrDefault<ModConfig>(helper, this.Monitor);
 
@@ -40,6 +41,13 @@ internal sealed class ModEntry : BaseMod<ModEntry>
 
         AssetManager.Initialize(helper.GameContent);
         helper.Events.Content.AssetRequested += static (_, e) => AssetManager.Apply(e);
+    }
+
+    [EventPriority(EventPriority.Low - 250)]
+    private void CrosscheckCache(object? sender, DayEndingEventArgs e)
+    {
+        Rescheduler.ClearNulls();
+        Rescheduler.PrePopulateCache(false);
     }
 
     /// <inheritdoc />

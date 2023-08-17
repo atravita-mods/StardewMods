@@ -24,6 +24,19 @@ public interface IExperimentalLagReductionAPI
     public bool ClearPathNulls();
 
     /// <summary>
+    /// Clears the pathfinding cache, if it has values in it.
+    /// </summary>
+    /// <returns>True if cleared, false otherwise.</returns>
+    public bool ClearMacroCache();
+
+    /// <summary>
+    /// Asks the pathfinding cache to pre-populate itself.
+    /// </summary>
+    /// <param name="parallel">Whether or not to try running off the main thread.</param>
+    /// <returns>true if populated, false otherwise.</returns>
+    public bool PrePopulateCache(bool parallel);
+
+    /// <summary>
     /// Forcibly clears the gift cache.
     /// </summary>
     public void ResetGiftCache();

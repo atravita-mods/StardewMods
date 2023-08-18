@@ -6,9 +6,9 @@
             "AllowBlank": true,
         },
         "EnableFor": {
-            "AllowValues": "Abigail, Alex, Caroline, Clint, Demetrius, Elliott, Emily, Evelyn, George, Gus, Haley, Harvey, Jodi, Kent, Leah, Lewis, Marnie, Maru, Pam, Penny, Pierre, Robin, Sam, Sandy, Sebastian, Shane, Vincent, Willy",
+            "AllowValues": "Abigail, Alex, Caroline, Clint, Demetrius, Elliott, Emily, Evelyn, George, Gus, Haley, Harvey, Jodi, Kent, Leah, Lewis, Linus, Marnie, Maru, Pam, Penny, Pierre, Robin, Sam, Sandy, Sebastian, Shane, Vincent, Willy",
             "AllowMultiple": true,
-            "Default": "Abigail, Alex, Caroline, Clint, Demetrius, Elliott, Emily, Evelyn, George, Gus, Haley, Harvey, Jodi, Kent, Leah, Lewis, Marnie, Maru, Pam, Penny, Pierre, Robin, Sam, Sandy, Sebastian, Shane, Vincent, Willy",
+            "Default": "Abigail, Alex, Caroline, Clint, Demetrius, Elliott, Emily, Evelyn, George, Gus, Haley, Harvey, Jodi, Kent, Leah, Lewis, Linus, Marnie, Maru, Pam, Penny, Pierre, Robin, Sam, Sandy, Sebastian, Shane, Vincent, Willy",
             "AllowBlank": true
         },
         "IncreasedRealism": {
@@ -231,7 +231,7 @@
             "LogName": "Festival Changes",
             "FromFile": "assets/festival_dialogue/{{Season}}{{Day}}.json",
             "When": {
-                "HasFile": "{{FromFile}}"
+                "HasFile: {{FromFile}}": true
             }
         },
         {

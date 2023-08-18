@@ -146,8 +146,8 @@ internal static class Rescheduler
                 limit = Math.Clamp(limit, 1, 4);
             }
 
-            Task task = new Task(() => Prefetch(loc, limit))
-                .ContinueWith(
+            Task task = new(() => Prefetch(loc, limit));
+            task.ContinueWith(
                     continuationAction: (t, _) =>
                     {
                         if (t.Status == TaskStatus.Faulted)

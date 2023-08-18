@@ -19,6 +19,16 @@
             }
         },
         {
+            "LogName": "Harvey mid-hearts - Y1",
+            "Action": "EditData",
+            "Target": "Characters/Dialogue/Harvey",
+            "When": { "YearModulus": "1"},
+            "Entries": {
+                "1{{YearRemainder}}": "I'm always incredibly amazed by how the human body works, @. Just...how everything comes together to make us work.$h",
+                "2{{YearRemainder}}": "Did you know there's a muscle in the arm that not everyone has?#$b#It's called the palmaris longus muscle, and about fourteen percent of the population just doesn't have it anymore."
+            }
+        },
+        {
             "LogName": "Harvey mid-hearts - y2",
             "Action": "EditData",
             "Target": "Characters/Dialogue/Harvey",

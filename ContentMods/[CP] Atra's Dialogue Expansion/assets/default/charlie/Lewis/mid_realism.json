@@ -2,6 +2,7 @@
     {
         "LogName": "Lewis movies - CC",
         "Action": "EditData",
+        "Target": "Characters/Dialogue/Lewis",
         "When": {"MovieStatus": "CC"},
         "Entries": {
             "12{{YearRemainder}}": "Between you and I, @, I'm not sure we would have a movie theater in town at all if the building didn't just show up one day.#$b#Even as is I'm not sure how they turn a profit."

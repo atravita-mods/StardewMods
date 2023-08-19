@@ -636,6 +636,9 @@
     * Festival Dialogue
     * **************************/
 
+    // Dance of the Moonlight Jellies
+    "abby-y2-jellies": "Man, I'm not looking forward to school starting again",
+    
     // Stardew Fair
     "abby-y2-fair": "You think Lewis will ever change up these fair games?",
     "abby-y3-fair": "Heya, @, think my Dad has a good shot at beating you this year?",
@@ -657,6 +660,7 @@
     "elliott-y3-fair": "Ah, there's little better than good food.",
     "elliott-y2-fair-spouse": "There's something different about fair food, isn't there?",
     "emily-y2-fair": "Maybe I should try to enter a dress or two into the fair some year?",
+    "emily-y1-fair-spouse": "Ready for the range display? I think we'll do great!",
     "emily-y2-fair-spouse": "Darling, do you think I should enter a dress or two into the fair?",
     "evelyn-y2-fair": "Gus has been cooking the same thing year after year since he's been here, and it's delicious every time!",
     "george-y2-fair": "The one time in the year Evelyn lets me eat stuff like this, @. I'll enjoy it while it lasts.",
@@ -708,6 +712,13 @@
     "sebastian-y3-fair": "I wonder if I could commission Clint for a sword modeled like the one from {{videogame}}",
     "sebastian-y2-fair-spouse": "Heya, @, also avoiding the crowds for a bit?",
     "sebastian-y3-fair-spouse": "You know, maybe I should try my hand at the slingshot game one year...",
+    "shane-y2-fair": "Marnie and I pick our calmest, tamest animals for the petting zoo every year.",
+    "shane-y1-fair-spouse": "Heya, @!#$e#Man, I'm looking forward to grabbing a burger from Gus later.",
+    "shane-y2-fair-spouse": "Man, I'm beat.#$e#Come pet the animals, @, they're all super friendly!",
+    "vincent-y2-fair": "@, will you take me into the slingshot game?",
+    "vincent-y3-fair": "Let's go pet the cows!",
+    "willy-y2-fair": "I've been saving up my best fish for weeks, @! Let's see if I can beat you this year.",
+    "willy-y3-fair": "We've got such great fish in this valley, don't we, @? I'm putting all my best catches in my grange display.",
 
     /****************************
     * Special order dialogue

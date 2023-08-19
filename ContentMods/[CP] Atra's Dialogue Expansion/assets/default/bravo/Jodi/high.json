@@ -40,7 +40,8 @@
             "4_2": "Between you and I, @, I wish we had a bit more money. Would make things a lot easier.",
             "5_2": "Our range broke. I'm...I'm not sure what to do, we don't have the money for this.$s",
             "6_2": "Kent's not getting any cost-of-living adjustments in his pension this year. I'm not sure what we're going to do.$s",
-            "17_2": "Caroline's been trying to get me to start a garden too. She thinks it might be a good way for us to save some money."
+            "17_2": "Caroline's been trying to get me to start a garden too. She thinks it might be a good way for us to save some money.",
+            "25_2": "To be honest, @, JojaOnline is so handy...being able to order anything online and getting it within two days..."
         },
         "When": {"YearModulus": "4"}
     }

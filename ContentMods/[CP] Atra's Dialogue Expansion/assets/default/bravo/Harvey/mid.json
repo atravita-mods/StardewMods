@@ -15,6 +15,8 @@
             "Action": "EditData",
             "Target": "Characters/Dialogue/Harvey",
             "Entries": {
+                "fall_15": "Tomorrow's the Stardew Fair, when tourists from everywhere will be pouring in...",
+
                 "winter_26": "Evelyn bought me some new coffee this year. I'm so excited to try it.$h"
             }
         },

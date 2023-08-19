@@ -68,7 +68,7 @@ Simply remove this mod from your mods folder.
 * **Sam**:
 * **Sandy**:
 * **Sebastian**: The NPC that started this whole bloody project. Sebastian will now talk more about his job.
-* **Shane**:
+* **Shane**: Mostly skipped - seriously, just go install Immersive Shane if you want more of Shane, that mod is great.
 * **Vincent**:
 * **Willy**:
 

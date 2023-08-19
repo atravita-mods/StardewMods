@@ -12,9 +12,13 @@
             "movieTheater": "@, have you heard? We've got a movie theater now! Think I'll take Caroline out on a date...",
             "winter_7{{YearRemainder}}": "Gotta start stocking Winter Star gifts soon. It's the busiest retail season of the year...$h",
             "Resort_Chair": "Ah, a chance to rest my feet!$h",
+            "Resort_Pier": "Gosh, the water's so blue here...",
 
             // day before the flower dance
             "spring_23": "Sorry, @, can't talk now, I'm getting ready for the flower dance tomorrow.#$b#We make pretty good money doing souvenirs for the festivals.",
+
+            // day before the stardew valley fair.
+            "fall_15": "I'm so ready for the grange display tomorrow.#$b#@, may the best grange display win.$h",
 
             // additional heart lines
             "summer_Fri6": "Have you seen the new action flick, {{i18n:action.movie{{Random:01,02,03,04,05,06,07,08,09}}, starring %name Anderson?#$b#Maybe I can convince Caroline to come watch it with me...",

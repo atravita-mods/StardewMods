@@ -1,0 +1,14 @@
+// Summer 28 - Dance of the Moonlight Jellies
+{
+    "Changes": [
+        {
+            "LogName": "Abby - normal",
+            "Action": "EditData",
+            "Target": "Data/Festivals/summer28",
+            "When": {"EnableFor": "Abigail"},
+            "Entries": {
+                "Abigail_y2": "{{i18n:abby-y2-jellies}}$s",
+            }
+        }
+    ]
+}

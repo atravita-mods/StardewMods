@@ -4,7 +4,9 @@
         "Action": "EditData",
         "Target": "Characters/Dialogue/Shane",
         "Entries": {
-            "movieTheater": "Oh, heya @. Have you heard? We've got a new movie theater.#$b#I used to love going to the movies when I was a kid...$s"
+            "movieTheater": "Oh, heya @. Have you heard? We've got a new movie theater.#$b#I used to love going to the movies when I was a kid...$s",
+
+            "fall_15": "Heya @, you ready for the fair tomorrow? We've been preparing for weeks!$h"
         }
     },
     {

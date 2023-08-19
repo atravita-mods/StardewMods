@@ -86,7 +86,8 @@
             },
             "Entries": {
                 "Emily_y2": "{{i18n:emily-y2-fair}}$h",
-                "Emily_spouse": "{{i18n:emily-y2-fair-spouse}}"
+                "Emily_spouse": "{{i18n:emily-y1-fair-spouse}}$h",
+                "Emily_spouse_y2": "{{i18n:emily-y2-fair-spouse}}"
             }
         },
         {
@@ -349,6 +350,43 @@
                 "Sebastian_y3": "{{i18n:sebastian-y3-fair|videogame={{i18n:video.game.{{Random:01, 02, 03, 04, 05, 06, 07, 08, 09}} }}",
                 "Sebastian_spouse_y2": "{{i18n:sebastian-y2-fair-spouse}}$h",
                 "Sebastian_spouse_y3": "{{i18n:sebastian-y3-fair-spouse}}",
+            }
+        },
+        {
+            "Action": "EditData",
+            "LogName": "Shane - normal",
+            "Target": "Data/Festivals/fall16",
+            "When": {
+                "EnableFor": "Shane"
+            },
+            "Entries": {
+                "Shane_y2": "{{i18n:shane-y2-fair}}$h",
+                "Shane_spouse": "{{i18n:shane-y1-fair-spouse}}$h",
+                "Shane_spouse_y2": "{{i18n:shane-y2-fair-spouse}}"
+            }
+        },
+        {
+            "Action": "EditData",
+            "LogName": "Vincent - normal",
+            "Target": "Data/Festivals/fall16",
+            "When": {
+                "EnableFor": "Vincent"
+            },
+            "Entries": {
+                "Vincent_y2": "{{i18n:vincent-y2-fair}}$h",
+                "Vincent_y3": "{{i18n:vincent-y3-fair}}$h"
+            }
+        },
+        {
+            "Action": "EditData",
+            "LogName": "Willy - normal",
+            "Target": "Data/Festivals/fall16",
+            "When": {
+                "EnableFor": "Willy"
+            },
+            "Entries": {
+                "Willy_y2": "{{i18n:willy-y2-fair}}$h",
+                "Willy_y3": "{{i18n:willy-y3-fair}}$h"
             }
         },
     ]

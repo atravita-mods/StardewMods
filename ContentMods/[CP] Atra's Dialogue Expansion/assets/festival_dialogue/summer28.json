@@ -251,8 +251,70 @@
             "Target": "Data/Festivals/summer28",
             "When": {"EnableFor": "Pierre"},
             "Entries": {
-                "Pierre_y2": "{{i18n:pierre-y2-jellies}}$s"
+                "Pierre_y2": "{{i18n:pierre-y2-jellies}}$h"
             }
         },
+        {
+            "LogName": "Robin",
+            "Action": "EditData",
+            "Target": "Data/Festivals/summer28",
+            "When": {"EnableFor": "Robin"},
+            "Entries": {
+                "Robin_y2": "{{i18n:robin-y2-jellies}}$s",
+                "Robin_y3": "{{i18n:robin-y3-jellies}}$h",
+            }
+        },
+        {
+            "LogName": "Sam - normal",
+            "Action": "EditData",
+            "Target": "Data/Festivals/summer28",
+            "When": {"EnableFor": "Sam"},
+            "Entries": {
+                "Sam_y2": "{{i18n:sam-y2-jellies.00}}$s#$b#{{i18n:sam-y2-jellies.01}}",
+                "Sam_spouse": "{{i18n:sam-y1-jellies-spouse}}$s"
+            }
+        },
+        {
+            "LogName": "Sebastian - normal",
+            "Action": "EditData",
+            "Target": "Data/Festivals/summer28",
+            "When": {"EnableFor": "Sebastian"},
+            "Entries": {
+                "Sebastian_y2": "{{i18n:sebastian-y2-jellies.00}}$h#$e#{{i18n:sebastian-y2-jellies.01}}",
+                "Sebastian_spouse": "{{i18n:sebastian-y1-jellies-spouse}}"
+            }
+        },
+        {
+            "LogName": "Shane - normal",
+            "Action": "EditData",
+            "Target": "Data/Festivals/summer28",
+            "When": {"EnableFor": "Shane"},
+            "Entries": {
+                "Shane_y2": "{{i18n:shane-y2-jellies.00}}$h#$e#{{i18n:shane-y2-jellies.01}}",
+                "Shane_spouse": "{{i18n:shane-y1-jellies-spouse.00}}$h#$e#{{i18n:shane-y1-jellies-spouse.01}}"
+            }
+        },
+        {
+            "LogName": "Vincent",
+            "Action": "EditData",
+            "Target": "Data/Festivals/summer28",
+            "When": {"EnableFor": "Vincent"},
+            "Entries": {
+                "Vincent_y2": "{{i18n:vincent-y2-jellies}}$s"
+            }
+        },
+        {
+            // intentionally changing the vanilla line here too
+            // since that's wrong.
+            "LogName": "Willy",
+            "Action": "EditData",
+            "Target": "Data/Festivals/summer28",
+            "When": {"EnableFor": "Willy"},
+            "Entries": {
+                "Willy": "{{i18n:willy-y1-jellies}}",
+                "Willy_y2": "{{i18n:willy-y2-jellies}}"
+            }
+        },
+        // Intentionally skipping Wizard.
     ]
 }

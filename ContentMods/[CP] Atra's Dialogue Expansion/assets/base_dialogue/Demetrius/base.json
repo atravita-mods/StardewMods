@@ -5,7 +5,8 @@
             "LogName": "Demetrius - base dialogue",
             "Target": "Characters/Dialogue/Demetrius",
             "Entries": {
-                "summer_27{{YearRemainder}}": "{{i18n: demetrius-jellies-pre.01}}#$b#{{i18n: demetrius-jellies-pre.02}}",
+                "summer_25{{YearRemainder}}": "{{i18n:demetrius-summer-end.{{YearModulus}} }}",
+                "summer_27{{YearRemainder}}": "{{i18n: demetrius-jellies-pre.01}}#$b#{{i18n: demetrius-jellies-pre.02}}"
             }
         },
         {
@@ -15,7 +16,7 @@
             "When": {"Relationship: Maru": "Divorced"},
             "Entries": {
                 "ScienceHouse": "{{i18n: demetrius-divorced-from-maru-a}}$s",
-                "Mountain": "{{i18n: demetrius-divorced-from-maru-b}}$s",
+                "Mountain": "{{i18n: demetrius-divorced-from-maru-b}}$s"
             }
         },
         {
@@ -25,7 +26,7 @@
             "When": {"Relationship: Sebastian": "Divorced"},
             "Entries": {
                 "ScienceHouse": "{{i18n: demetrius-divorced-from-sebastian-a}}$s",
-                "Mountain": "{{i18n: demetrius-divorced-from-sebastian-b}}$s",
+                "Mountain": "{{i18n: demetrius-divorced-from-sebastian-b}}$s"
             }
         }
     ]

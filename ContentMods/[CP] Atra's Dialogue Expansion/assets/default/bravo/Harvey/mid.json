@@ -15,9 +15,9 @@
             "Action": "EditData",
             "Target": "Characters/Dialogue/Harvey",
             "Entries": {
-                "fall_15": "Tomorrow's the Stardew Fair, when tourists from everywhere will be pouring in...",
-
-                "winter_26": "Evelyn bought me some new coffee this year. I'm so excited to try it.$h"
+                "summer_27{{YearRemainder}}": "It's almost the end of summer, @. To be honest, I won't miss the heat.",
+                "fall_15{{YearRemainder}}": "Tomorrow's the Stardew Fair, when tourists from everywhere will be pouring in...",
+                "winter_26{{YearRemainder}}": "Evelyn bought me some new coffee this year. I'm so excited to try it.$h"
             }
         },
         {

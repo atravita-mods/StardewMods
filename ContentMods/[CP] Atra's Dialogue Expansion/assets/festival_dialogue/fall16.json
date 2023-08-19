@@ -10,7 +10,7 @@
             },
             "Entries": {
                 "Abigail_y2": "{{i18n:abby-y2-fair}}",
-                "Abigail_y3": "{{i18n:abby-y3-fair}}$h",
+                "Abigail_y3": "{{i18n:abby-y3-fair.01}}$h#$e#{{i18n:abby-y3-fair.02}}",
                 "Abigail_spouse_y2": "{{i18n:abby-y2-fair-spouse}}$h",
             }
         },

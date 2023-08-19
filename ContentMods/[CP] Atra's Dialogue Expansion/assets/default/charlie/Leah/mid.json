@@ -6,6 +6,9 @@
         "Action": "EditData",
         "Target": "Characters/Dialogue/Leah",
         "Entries": {
+            // specific days
+            "summer_27{{YearRemainder}}": "Summer's almost over, @. Are you ready for fall?",
+
             "1{{YearRemainder}}": "Start of a new month, @! What are you planning on getting done?",
             "3{{YearRemainder}}": "@, I got a new commission! I'm so excited.$h#$b#They're looking for a nice large landscape scene.",
             "5{{YearRemainder}}": "When I need inspiration, I take walks through the forest.#$b#I love living out here, so much inspiration so close to us.$h",
@@ -27,13 +30,17 @@
         "Action": "EditData",
         "Target": "Characters/Dialogue/Leah",
         "Entries": {
+            // specific days
+            "summer_27_2": "The moonlight jellies are visiting tomorrow. Will you be there?",
+
             "1_2": "I prefer woodworking, but my paintings sell decently well.#$b#I'd love to have a painting in an exhibition some day.",
             "2_2": "Ohh, there's a film festival happening next week in %place. @, do you think I should go?",
             "3_2": "Don't tell anyone, but there's little I love more than a sappy romance movie.#$b#I don't care they aren't realistic, they're cute.",
             "4_2": "Hmmm....what should I have for dinner...I wonder what I can forage...",
             "5_2": "It helps that I can forage some excellent ingredients from our local forests!#$b#Helps me save so much money on food.",
             "6_2": "Every now and then I get the itch to do some baking...#$b#My cabin doesn't really have a good kitchen, though.",
-            "7_2": "Back when I used to live in the city, there was a great little noodle joint just under my apartment. I used to go there all the time.$h"
+            "7_2": "Back when I used to live in the city, there was a great little noodle joint just under my apartment. I used to go there all the time.$h",
+            "8_2": "It's so so hard to make a living as an artist these days. Frankly, @, I worry for the next generation...$s"
         },
         "When": {"YearModulus": 2}
     },

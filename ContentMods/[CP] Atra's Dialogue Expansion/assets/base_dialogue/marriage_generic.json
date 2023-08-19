@@ -19,12 +19,16 @@
             "spring_14": "{{i18n: spring-14}}[210 211 201]$h",
             "summer_8": "{{i18n: summer-8}}[253]$h",
             "fall_12": "{{i18n: fall-12}}[608 607 604]$h",
-            "winter_16": "{{i18n: winter-16.{{YearModulus}}| default = {{i18n: winter-18}} }}[199 218 219 236]$h"
+            "winter_16": "{{i18n: winter-16.{{YearModulus}}| default = {{i18n: winter-18}} }}[199 218 219 236]$h",
+
+            // pre-festival dialogue
+            "summer_27": "{{i18n:summer-27}}$h",
+            "fall_15": "{{i18n:fall-15}}$h"
         }
     },
     {
         "Action": "EditData",
-        "LogName": "Marriage - generic",
+        "LogName": "Marriage - generic - later",
         "Target": "{{MarriageDialoguePath}}",
         "Entries": {
             "Good_0": "{{i18n:good-0}}$h",

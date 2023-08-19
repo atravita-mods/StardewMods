@@ -38,8 +38,10 @@
     "config.EnableFor.name": "Enable For",
     "config.IncreasedRealism.name": "Increased Realism",
     "config.IncreasedRealism.description": "If enabled, lines that deviate from game mechanics in favor of more real-life specifics will be enabled. For example, if enabled, Marnie will talk about milking cows twice a day. This is not an adult content rating, unless your idea of adult content is, like, details about the finances of the dairy industry.",
+
     "config.MapStrings.name": "Map Strings",
     "config.MapStrings.description": "If enabled, there will be new bits of flavor text across various maps.",
+
     "config.EnableGeneric.name": "Enable Generic",
     "config.EnableGeneric.description": "If enabled, some generic lines for spouses will be included.",
 
@@ -47,7 +49,7 @@
     "config.EnableSpouseLocational.description": "If enabled, certain spouses will have lines while they're walking around, but these lines are very high priority and tend to overwrite schedule lines.",
 
     "config.EnableFestival.name": "Enable Festival",
-    "config.EnableFestival.description": "Currently does nothing, but will eventually enable this mod's festival lines.",
+    "config.EnableFestival.description": "Enables this mod's festival lines.",
 
     "config.EnableMail.name": "Enable Mail",
     "config.EnableMail.description": "Adds more variety to some repetitive mail (after Y1).",
@@ -226,6 +228,11 @@
     "demetrius-divorced-from-maru-b": "I have nothing to say to you.",
     "demetrius-divorced-from-sebastian-a": "I don't think Sebastian wants to see you.",
     "demetrius-divorced-from-sebastian-b": "You didn't have to break my stepson's heart like that.",
+
+    "robin-divorced-from-maru-a": "You are no longer part of this family",
+    "robin-divorced-from-maru-b": "Listen, @, I still have to do business with you, but I don't have to like you.",
+    "robin-divorced-from-sebastian-a": "Sebastian doesn't want to talk to you, and neither do I.",
+    "robin-divorced-from-sebastian-b": "I had high hopes for you and Sebastian. Turns out I was wrong.",
 
     "vincent-divorced-from-sam": "Mom says I shouldn't talk to you.",
 
@@ -653,6 +660,9 @@
     "elliott-y1-jellies-spouse": "Isn't this romantic, my dear @? Imagine, us, the sea, a nice bottle of Stardew red...",
     "emily-y2-jellies.01": "I was watching a documentary the other day about all the interesting-looking creatures of the depths of the ocean.",
     "emily-y2-jellies.02": "It's amazing, right, what these organisms have to do to survive at such pressure and with no light.",
+    "emily-y2-jellies-spouse": "Look at how ethereal those jellies look, darling! Maybe I should make a dress like that...",
+    "evelyn-y2-jellies.01": "George took me on a date to the Zuzu City Aquarium once.",
+    "evelyn-y2-jellies.02": "All the sea creatures were beautiful, of course, but the moon jellies were majestic.",
 
     // Stardew Fair
     "abby-y2-fair": "You think Lewis will ever change up these fair games?",

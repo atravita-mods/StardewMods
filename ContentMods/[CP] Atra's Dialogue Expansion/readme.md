@@ -38,6 +38,8 @@ Simply remove this mod from your mods folder.
 * **IncreasedRealism**: These are primarily lines that deviate from game mechanics in favor of more real-life specifics. For example, if enabled, Marnie will talk about milking cows twice a day. This is not an adult content rating, unless your idea of adult content is, like, details about the finances of the dairy industry.
 * **MapStrings**: Whether or not to edit certain map strings.
 * **EnableGeneric**: Some lines are generic and apply to any spouse. Disable this if you don't want that.
+* **EnableFestival**: Enables this mod's festival lines.
+* **EnableMail**: Adds some variety to repeated mail.
 * **EnableSpouseLocational**: This enables spouses off the farm to have dialogue, but overwrites all schedule dialogue for them.
 * **ScheduleChanges**: Some NPCs have optional schedule variations. Choose which ones to enable.
 

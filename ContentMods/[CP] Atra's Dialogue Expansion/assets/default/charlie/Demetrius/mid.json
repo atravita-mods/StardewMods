@@ -89,6 +89,7 @@
             "1_2": "@, did you know that banana trees aren't actually trees, but rather a monocot?#$b#Amazing what they can do despite not having lignin!",
             "2_2": "Caffeine is actually highly toxic against insects!#$b#But it doesn't make a good agricultural insecticide, it decays in sunlight.",
             "3_2": "Lignin is really an amazing structural protein, and is why trees can grow to the heights they do.",
+            "4_2": "I used to love taking Maru to the Zuzu City Aquarium when she was young....#$e#Sebastian? Well, he never wanted to go with us.$s",
             "6_2": "I hope my collaborator can get his edits in soon....$s",
             "7_2": "%Demetrius looks exhausted.#$b#*Yawn*. Sorry, @, I was up all night attempting to get my typesetting software to put figure one on page one.$s",
             "16_2": "It's always reviewer two, isn't it? Always.$a",
@@ -149,6 +150,9 @@
         "Action": "EditData",
         "Target": "Characters/Dialogue/Demetrius",
         "Entries": {
+            // specific day.
+            "summer_26_2": "Every time I look into what siphonophores are, I just get more and more confused.$s",
+
             "2_2": "Before Pelican Town was a mining town, it was a forestry town.#$b#But that was a long time ago, and the forest has had a bit of a chance to recover.",
             "3_2": "It's very important to practice sustainable logging.#$b#Forests take a long time to recover after they've been improperly logged.",
             "5_2": "One good thing about Joja - at least they don't engage in open pit mining.",

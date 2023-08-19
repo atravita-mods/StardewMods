@@ -67,8 +67,18 @@
             "Target": "Data/Festivals/summer28",
             "When": {"EnableFor": "Emily"},
             "Entries": {
-                "Emily_y2": "{{i18n:emily-y2-jellies.01}}$h#$e#{{i18n:emily-y2-jellies.02}}"
+                "Emily_y2": "{{i18n:emily-y2-jellies.01}}$h#$e#{{i18n:emily-y2-jellies.02}}",
+                "Emily_spouse": "{{i18n:emily-y2-jellies-spouse}}",
             }
         },
+        {
+            "LogName": "Evelyn - normal",
+            "Action": "EditData",
+            "Target": "Data/Festivals/summer28",
+            "When": {"EnableFor": "Evelyn"},
+            "Entries": {
+                "Evelyn_y2": "{{i18n:evelyn-y2-jellies.01}}$h#$e#{{i18n:evelyn-y2-jellies.02}}"
+            }
+        }
     ]
 }

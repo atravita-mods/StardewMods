@@ -62,6 +62,12 @@
         },
         {
             "Action": "Include",
+            "LogName": "Robin - base",
+            "FromFile": "assets/base_dialogue/Robin/base.json",
+            "When": {"EnableFor": "Robin"}
+        },
+        {
+            "Action": "Include",
             "LogName": "Shane - base",
             "FromFile": "assets/base_dialogue/Shane/mid.json",
             "When": {

@@ -1,0 +1,29 @@
+// Halloween festival
+{
+    "Changes":[
+        {
+            "Action": "EditData",
+            "LogName": "Abby - normal",
+            "Target": "Data/Festivals/fall27",
+            "When": {
+                "EnableFor": "Abigail"
+            },
+            "Entries": {
+                "Abigail_y2": "%{{i18n:abby-y2-halloween.00}}#$b${{i18n:abby-y2-halloween.01}}",
+                "Abigail_spouse_y2": "{{i18n:abby-y2-halloween-spouse}}"
+            }
+        },
+        {
+            "Action": "EditData",
+            "LogName": "Alex - normal",
+            "Target": "Data/Festivals/fall27",
+            "When": {
+                "EnableFor": "Alex"
+            },
+            "Entries": {
+                "Alex_y2": "%{{i18n:alex-y2-halloween.00}}#$e${{i18n:alex-y2-halloween.01}}",
+                "Alex_spouse": "{{i18n:alex-y1-halloween-spouse}}"
+            }
+        }
+    ]
+}

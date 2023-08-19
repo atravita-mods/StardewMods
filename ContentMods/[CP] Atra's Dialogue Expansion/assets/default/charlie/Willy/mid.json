@@ -12,7 +12,8 @@
         "Action": "EditData",
         "Target": "Characters/Dialogue/Willy",
         "Entries": {
-            "6{{YearRemainder}}": "I also sell tackle. Find them mighty useful for catching difficult fish..."
+            "6{{YearRemainder}}": "I also sell tackle. Find them mighty useful for catching difficult fish...",
+            "7{{YearRemainder}}": "How am I supposed to compete against those big ships that scrape the sea bottom?$s"
         },
         "When": {
             "YearModulus": "1"

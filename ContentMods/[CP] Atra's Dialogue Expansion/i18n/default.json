@@ -664,6 +664,7 @@
     "demetrius-y2-jellies.02": "This is known as the Diel vertical migration.",
     "demetrius-y3-jellies": "Bioluminescence is quite common among the denizens of the sea, actually. But these jellies are quite pretty.",
     "elliott-y2-jellies": "Isn't this romantic, @? This is exactly the type of place I'd pick for a setting for a romance.",
+    "elliott-y3-jellies": "Between you and I, @, I'd love to turn in early tonight but there's just too much commotion on this beach for that.",
     "elliott-y1-jellies-spouse": "Isn't this romantic, my dear @? Imagine, us, the sea, a nice bottle of Stardew red...",
     "emily-y2-jellies.01": "I was watching a documentary the other day about all the interesting-looking creatures of the depths of the ocean.",
     "emily-y2-jellies.02": "It's amazing, right, what these organisms have to do to survive at such pressure and with no light.",
@@ -688,6 +689,14 @@
     "linus-y1-jellies": "Oh, @, these jellies can travel all the way here from Ginger Island. Just imagine, these little creatures drifting on the ocean currents for so far...", // replacement Y1 line when the island is unlocked.
     "linus-y2-jellies": "The earth is wonderful to us, isn't she? So much beauty she provides us.",
     "marnie-y2-jellies": "I wonder if I can get Mayor Lewis to fix up the docks a little bit.",
+    "maru-y2-jellies.00": "Dad talked my ear off about siphonophores the entire time we were walking down here.",
+    "maru-y2-jellies.01": "Siphonophores aren't even jellyfish, but it's hard to get him to stop once he's started.",
+    "maru-y1-jellies-spouse": "Ah, it's almost fall, @. I can feel the chill in the air tonight.",
+    "pam-y2-jellies": "I forgot there wasn't food at this festival and now I'm hungry.",
+    "penny-y1-jellies-spouse": "It's so peaceful out here at night, isn't it, @? Maybe I should come out here to read more often.",
+    "penny-y2-jellies.00": "It's getting chilly out. I can feel fall coming around the corner...",
+    "penny-y2-jellies.01": "Fall really isn't my favorite season, @.",
+    "pierre-y2-jellies": "So, @, what are you planning on planting tomorrow?",
 
     // Stardew Fair
     "abby-y2-fair": "You think Lewis will ever change up these fair games?",

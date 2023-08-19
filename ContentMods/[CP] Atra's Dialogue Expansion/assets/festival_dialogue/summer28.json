@@ -58,6 +58,7 @@
             "When": {"EnableFor": "Elliott"},
             "Entries": {
                 "Elliott_y2": "{{i18n:elliott-y2-jellies}}$h",
+                "Elliott_y3": "{{i18n:elliott-y3-jellies}}$s",
                 "Elliott_spouse": "{{i18n:elliott-y1-jellies-spouse}}$h"
             }
         },
@@ -213,6 +214,44 @@
             "When": {"EnableFor": "Marnie"},
             "Entries": {
                 "Marnie_y2": "{{i18n:marnie-y2-jellies}}"
+            }
+        },
+        {
+            "LogName": "Maru - normal",
+            "Action": "EditData",
+            "Target": "Data/Festivals/summer28",
+            "When": {"EnableFor": "Maru"},
+            "Entries": {
+                "Maru_y2": "{{i18n:maru-y2-jellies.00}}$s#$b#{{i18n:maru-y2-jellies.01}}",
+                "Maru_spouse": "{{i18n:maru-y1-jellies-spouse}}"
+            }
+        },
+        {
+            "LogName": "Pam",
+            "Action": "EditData",
+            "Target": "Data/Festivals/summer28",
+            "When": {"EnableFor": "Pam"},
+            "Entries": {
+                "Pam_y2": "{{i18n:pam-y2-jellies}}$s"
+            }
+        },
+        {
+            "LogName": "Penny - normal",
+            "Action": "EditData",
+            "Target": "Data/Festivals/summer28",
+            "When": {"EnableFor": "Penny"},
+            "Entries": {
+                "Penny_y2": "{{i18n:penny-y2-jellies.00}}$s#$b#{{i18n:penny-y2-jellies.01}}",
+                "Penny_spouse": "{{i18n:penny-y1-jellies-spouse}}"
+            }
+        },
+        {
+            "LogName": "Pierre",
+            "Action": "EditData",
+            "Target": "Data/Festivals/summer28",
+            "When": {"EnableFor": "Pierre"},
+            "Entries": {
+                "Pierre_y2": "{{i18n:pierre-y2-jellies}}$s"
             }
         },
     ]

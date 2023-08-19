@@ -15,6 +15,7 @@
         "Entries": {
             "Resort": "The mushrooms around here are extraordinary!$h#$b#I have never seen any mushrooms like these!$h",
             "Resort_Pier_2": "Some of the largest organisms in the ocean eat plankton.#$b#Can you believe it, @? Both blue whales and basking sharks live off of plankton!",
+            "Resort_Pier_3": "I hear that you can see some lovely jellyfish here after dark!",
             "19_2": "I'd love to study some of those magma caps found on Ginger Island some day. I can't believe the conditions these mushrooms can survive!%revealtasteDemetrius851"
         }
     },
@@ -50,7 +51,10 @@
             "fallScienceHouse_22_20": "I'd love to talk, @, but I have a grant submission coming up that I need to work on.",
             "summerScienceHouse_22_20": "I have so many measurements I need to make today...$s",
             "fallMountain_45_8": "We're lucky to have so much old growth forest around here.#$b#It takes decades for a forest to develop properly.",
+
+            // specific days
             "summer_2{{YearRemainder}}": "I better not forget our anniversary this year, Robin will really hate it if I forget again.",
+            "summer_26{{YearRemainder}}": "Jellyfish are among the oldest and simplest animals, but in their simplicity they are quite successful.",
 
             "Mon10": "Mmmm, there's nothing like a nice fresh strawberry in spring, right?[400]$h",
             "Tue10": "I love how the valley comes alive in spring.$h",
@@ -79,6 +83,9 @@
         "Entries": {
             "ScienceHouse_Entry": "Heya Robin, I'm home!",
 
+            //specific days
+            "summer_26_2": "Hmm, apparently the rate of jellyfish blooms have gone up in recent years, likely due to warming ocean waters.$s",
+
             "1_2": "@, did you know that banana trees aren't actually trees, but rather a monocot?#$b#Amazing what they can do despite not having lignin!",
             "2_2": "Caffeine is actually highly toxic against insects!#$b#But it doesn't make a good agricultural insecticide, it decays in sunlight.",
             "3_2": "Lignin is really an amazing structural protein, and is why trees can grow to the heights they do.",
@@ -86,11 +93,11 @@
             "7_2": "%Demetrius looks exhausted.#$b#*Yawn*. Sorry, @, I was up all night attempting to get my typesetting software to put figure one on page one.$s",
             "16_2": "It's always reviewer two, isn't it? Always.$a",
             "18_2": "Gotta order more reagents soon, we're running low on HCl.",
-            "19_2": "Maru was helping me with minipreps the other day. Lab work is so much more fun when you're working with someone.$h",
             "20_2": "Sometimes I go down to the beach to collect shells.#$b#There's no real scientific reason to do so, they're just pretty.#$e#$c .2#Here, I found this one the other day.[394 393]#Summer, especially, a lot of shells wash up.#",
             "21_2": "I made some extra coffee this morning. Here, have some![395]$h",
             "22_2": "Robin is usually pretty practical, but she does like some frilly things sometimes...",
             "23_2": "Sebastian? He's a grown adult now, he can take care of himself.#$e#I do wish we had a better relationship, but I think Robin can be proud of the man he's become.",
+            "24_2": "Maru was helping me with minipreps the other day. Lab work is so much more fun when you're working with someone.$h",
 
             "fall_Thu10": "In fall, we get so many common mushrooms fruiting. They're quite tasty![404]$h",
             "winter_Mon10": "I'd love to take a trip on that submarine some day...",
@@ -116,15 +123,18 @@
         "Entries": {
             "ScienceHouse_Entry": "Honey, I'm home!",
 
+            //specific days
+            "summer_26_2": "Mola mola are a significant predator of jellyfish, capable of following jellyfish down to the depths of the ocean as the jellies engage in the Diel vertical migration.",
             "fall_1_2": "Now that it's fall, I think I'll try growing some pumpkins for Robin again.%revealtasteRobin276#$b#They're her favorite vegetable. Here, I have a few extra seeds, want them? [490]#$e#Tried growing them a few years ago, I'm not the best gardener. Think I over-watered them.",
+
             "6_2": "Did you see that paper by the %name group out of %place University? Amazing, isn't it?$h",
             "8_2": "I know one of Robin's biggest regrets was that we couldn't afford to send Sebastian to college...$s",
             "16_2": "Sometimes I wonder what I could have done to be more successful in my career...$s",
             "18_2": "Between you and I, @, writing proposals is the worst part of my job.",
-            "19_2": "%Demetrius seems pre-occupied.#$b#Why do things keep on evolving into crabs, actually?",
             "20_2": "Tree fertilizer can make trees grow much faster, but I wonder if it affects the quality of their wood.#$b#Generally fast-growing trees can't produce as dense of wood.",
             "22_2": "Sometimes, I come across interesting artifacts.#$b#I wonder what civilizations lived here before we did?",
             "23_2": "Some plants are insectivorous; they get their nitrogen by eating insects and spiders because the soil they grow in is very low in nitrogen.",
+            "24_2": "%Demetrius seems pre-occupied.#$b#Why do things keep on evolving into crabs, actually?",
 
             "ScienceHouse_22_20": "I've got a paper I have to write, so of course all I want to do is make a blackberry cobbler and mop the entire house or something...",
             "summerScienceHouse_22_20": "It's been so hot lately, I suspect the trees are stressed.",
@@ -143,8 +153,8 @@
             "3_2": "It's very important to practice sustainable logging.#$b#Forests take a long time to recover after they've been improperly logged.",
             "5_2": "One good thing about Joja - at least they don't engage in open pit mining.",
             "7_2": "That mine...it was economically good for the town, but Accel and then Joja definitely allowed more runoff than they should have.$s",
+            "14_2": "It's really weird we celebrate romantic holidays with the cut off reproductive organs of plants, isn't it?",
             "18_2": "@, did you know that the oldest mushrooms are more than two thousand years old?",
-            "19_2": "It's really weird we celebrate romantic holidays with the cut off reproductive organs of plants, isn't it?",
             "20_2": "My dad used to take us out fishing when I was very young. I was never any good, though.$s",
             "21_2": "There are plenty of fish that live in this mountain lake! Fish are a very important part of the ecosystem.$h",
             "22_2": "Many fish rely on swim bladders to maintain neutral buoyancy with the water, but this restricts them to only a small depth range.",

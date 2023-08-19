@@ -15,6 +15,17 @@
         }
     },
     {
+        "LogName":"Clint mid-hearts",
+        "Action": "EditData",
+        "Target": "Characters/Dialogue/Clint",
+        "Entries": {
+            "summer_Fri8": "Gosh, it's so hot out...$s",
+
+            // before the stardew valley fair
+            "fall_15{{YearRemainder}}": "I'm so ready for the Stardew Fair, @, I've been working on my grange display for weeks!$h",
+        }
+    },
+    {
         "Action": "EditData",
         "Target": "Characters/Dialogue/Clint",
         "Entries": {

@@ -638,7 +638,22 @@
 
     // Dance of the Moonlight Jellies
     "abby-y2-jellies": "Man, I'm not looking forward to school starting again",
-    
+    "abby-y1-jellies-spouse": "And another summer over. @, you looking forward to fall?",
+    "alex-y2-jellies": "Gosh, it's so peaceful, isn't it?",
+    "alex-y1-jellies-spouse": "Man, I wish I remembered to eat before this festival.",
+    "caroline-y2-jellies": "*Yawns*. Gosh, @, I'm getting old. I just want to go to sleep.",
+    "clint-y2-jellies": "Glad it's gonna cool off soon, will make working the forge less miserable.",
+    "demetrius-jellies-pre.01": "The town gathers to celebrate the arrival of the 'Moonlight Jellies' every year, but that's really not how jellyfish work.",
+    "demetrius-jellies-pre.02": "Jellies don't really control where they go, they drift along with the currents, trapping anything they can get with their tentacles.",
+    "demetrius-y1-jellies": "Isn't it curious, how the currents change to bring us these jellyfish every year?",
+    "demetrius-y2-jellies.01": "The 'Moonlight Jelly' rises in the water column each day near nightfall, and descends at sunrise.",
+    "demetrius-y2-jellies.02": "This is known as the Diel vertical migration.",
+    "demetrius-y3-jellies": "Bioluminescence is quite common among the denizens of the sea, actually. But these jellies are quite pretty.",
+    "elliott-y2-jellies": "Isn't this romantic, @? This is exactly the type of place I'd pick for a setting for a romance.",
+    "elliott-y1-jellies-spouse": "Isn't this romantic, my dear @? Imagine, us, the sea, a nice bottle of Stardew red...",
+    "emily-y2-jellies.01": "I was watching a documentary the other day about all the interesting-looking creatures of the depths of the ocean.",
+    "emily-y2-jellies.02": "It's amazing, right, what these organisms have to do to survive at such pressure and with no light.",
+
     // Stardew Fair
     "abby-y2-fair": "You think Lewis will ever change up these fair games?",
     "abby-y3-fair": "Heya, @, think my Dad has a good shot at beating you this year?",
@@ -717,6 +732,7 @@
     "shane-y2-fair-spouse": "Man, I'm beat.#$e#Come pet the animals, @, they're all super friendly!",
     "vincent-y2-fair": "@, will you take me into the slingshot game?",
     "vincent-y3-fair": "Let's go pet the cows!",
+    "vincent-y4-fair": "How many star tokens do you have, @? Can I have some?",
     "willy-y2-fair": "I've been saving up my best fish for weeks, @! Let's see if I can beat you this year.",
     "willy-y3-fair": "We've got such great fish in this valley, don't we, @? I'm putting all my best catches in my grange display.",
 

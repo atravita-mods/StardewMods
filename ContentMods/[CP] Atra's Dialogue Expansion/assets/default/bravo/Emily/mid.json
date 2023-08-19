@@ -148,6 +148,7 @@
         "LogName": "Emily mid-hearts, Y4",
         "Action": "EditData",
         "Target": "Characters/Dialogue/Emily",
+        "When": {"YearModulus": "4"},
         "Entries": {
             "7_2": "There's enough resources in our lovely world for everyone, but we need to take care of it.",
             "12_2": "I wish my sister was more responsible.$s",
@@ -156,7 +157,18 @@
             "17_2": "I should cook more with collard greens, they're quite good for you.",
             "19_2": "With the mines, we really need to worry about groundwater pollution.$s",
             "20_2": "I'd love to go down to Zuzu City and see a musical, but I'm not sure who I can drag with me.#$b#Hmm, Sam, maybe?"
-        },
-        "When": {"YearModulus": "4"}
+        }
     },
+    {
+        "LogName": "Emily - base dialogue",
+        "Action": "EditData",
+        "Target": "Characters/Dialogue/Emily",
+        "When": {
+            "YearModulus": "4",
+            "Spouse: anyPlayer | contains=Emily": false,
+        },
+        "Entries": {
+            "22_2": "@, do you think I will ever find a love as enduring as George and Evelyn's?"
+        }
+    }
 ]}

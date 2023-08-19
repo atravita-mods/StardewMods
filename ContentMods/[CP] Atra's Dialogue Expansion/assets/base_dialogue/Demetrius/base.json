@@ -2,6 +2,14 @@
     "Changes":[
         {
             "Action": "EditData",
+            "LogName": "Demetrius - base dialogue",
+            "Target": "Characters/Dialogue/Demetrius",
+            "Entries": {
+                "summer_27{{YearRemainder}}": "{{i18n: demetrius-jellies-pre.01}}#$b#{{i18n: demetrius-jellies-pre.02}}",
+            }
+        },
+        {
+            "Action": "EditData",
             "LogName": "Divorced From Maru",
             "Target": "Characters/Dialogue/Demetrius",
             "When": {"Relationship: Maru": "Divorced"},

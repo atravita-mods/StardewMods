@@ -374,7 +374,8 @@
             },
             "Entries": {
                 "Vincent_y2": "{{i18n:vincent-y2-fair}}$h",
-                "Vincent_y3": "{{i18n:vincent-y3-fair}}$h"
+                "Vincent_y3": "{{i18n:vincent-y3-fair}}$h",
+                "Vincent_y4": "{{i18n:vincent-y3-fair}}"
             }
         },
         {

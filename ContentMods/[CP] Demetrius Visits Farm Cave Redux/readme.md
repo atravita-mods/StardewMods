@@ -28,5 +28,8 @@ Simply remove this mod from your mods folder.
 * **XPosition/YPosition**: Sets the location Demetrius should stand in.
 * **XWarp/YWarp**: Sets the location Demetrius should leave the farm cave from. This should be set one square away from the actual exit. You probably don't need to change this.
 
+## Much Thanks To
+* Yveltal0892 for the Chinese translation!
+
 ## License
 The MIT license over my entire repository covers this, but this is also dual license'd [CC-4.0](https://creativecommons.org/licenses/by/4.0/). You may pick either license.

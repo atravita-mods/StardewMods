@@ -3,7 +3,7 @@
    "Name": "Demetrius Visits Farm Cave Redux",
    "Author": "atravita",
    "Description": "Makes Demetrius visit the farm cave.",
-   "Version": "0.1.0",
+   "Version": "0.1.1",
    "UniqueID": "atravita.CP.DemetriusVisitsFarmCave",
    "ContentPackFor": {
        "UniqueID": "Pathoschild.ContentPatcher"

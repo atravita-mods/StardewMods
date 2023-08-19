@@ -3,6 +3,9 @@
         "Action": "EditData",
         "Target": "Characters/Dialogue/George",
         "Entries": {
+            // specific days
+            "fall_15_2": "Gonna be the Stardew Fair tomorrow, @.#$b#Me, participating? Nah. Not something I want to do anymore.",
+
             "2_2": "Take care of your knees when you've still got them.$s",
             "15_2": "It's nice that Alex is still livin' with us. I need more help than what my dear wife Evelyn can provide some days.",
             "19_2": "I remember when the mines were first being developed. The town was so happy. We needed the economic activity.#$b#Didn't consider how polluting they'd be.$s",

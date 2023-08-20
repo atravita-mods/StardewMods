@@ -9,6 +9,8 @@
             "summer_Fri10": "Weather like this makes me want to go make some piña coladas...and getting caught in the rain...$h",
             "summer_Sat10": "I believe that with all the lovely food our planet gives us, no one should go hungry.",
 
+            // specific days
+            "spring_12{{YearRemainder}}": "The Egg Festival is tomorrow! I've got so much cooking I need to do.$h",
             "summer_4{{YearRemainder}}": "Gotta get ready for inspections...",
 
             // null out the high priority location dialogue

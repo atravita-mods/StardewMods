@@ -262,5 +262,44 @@
                 "Marnie_y4": "{{i18n:marnie-y4-egg.00}}#$e#{{i18n:marnie-y4-egg.01}}"
             }
         },
+        {
+            "Action": "EditData",
+            "LogName": "Maru - normal",
+            "Target": "Data/Festivals/spring13",
+            "When": {
+                "EnableFor": "Maru"
+            },
+            "Entries": {
+                "Maru_y3": "{{i18n:maru-y3-egg.00}}#$e#{{i18n:maru-y3-egg.01}}",
+                "Maru_spouse_y2": "{{i18n:maru-y2-egg-spouse}}$h",
+                "Maru_spouse_y3": "{{i18n:maru-y3-egg-spouse}}$h"
+            }
+        },
+        // skipping Pam because Pam Tries has like five years of lines for her.
+        {
+            "Action": "EditData",
+            "LogName": "Maru - normal",
+            "Target": "Data/Festivals/spring13",
+            "When": {
+                "EnableFor": "Penny"
+            },
+            "Entries": {
+                "Penny_y3": "{{i18n:penny-y3-egg.00}}#$e#{{i18n:penny-y3-egg.01}}",
+                "Penny_spouse_y2": "{{i18n:penny-y2-egg-spouse}}$s",
+                "Penny_spouse_y3": "{{i18n:penny-y3-egg-spouse.00}}#$e#{{i18n:penny-y3-egg-spouse.01}}"
+            }
+        },
+        {
+            "Action": "EditData",
+            "LogName": "Pierre - normal",
+            "Target": "Data/Festivals/spring13",
+            "When": {
+                "EnableFor": "Pierre",
+            },
+            "Entries": {
+                "Pierre_y3": "{{i18n:pierre-y3-egg}}",
+                "Pierre_y4": "{{i18n:pierre-y4-egg.00}}#$e#{{i18n:pierre-y4-egg.01}}"
+            }
+        },
     ]
 }

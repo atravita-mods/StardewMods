@@ -191,7 +191,8 @@
             },
             "Entries": {
                 "Jodi_y2": "{{i18n:jodi-y2-halloween}}",
-                "Jodi_y3": "{{i18n:jodi-y3-halloween}}"
+                "Jodi_y3": "{{i18n:jodi-y3-halloween}}",
+                "Jodi_y4": "{{i18n:jodi-y4-halloween}}$s",
             }
         },
         {
@@ -238,6 +239,7 @@
             },
             "Entries": {
                 "Lewis_y2": "{{i18n:lewis-y2-halloween.00}}$h#$e#{{i18n:lewis-y2-halloween.01}}",
+                "Lewis_y3": "{{i18n:lewis-y3-halloween.00}}$h#$e#{{i18n:lewis-y3-halloween.01}}",
             }
         },
         {
@@ -306,6 +308,65 @@
             },
             "Entries": {
                 "Pam_y2": "{{i18n:pam-y2-halloween}}$h",
+            }
+        },
+        {
+            "Action": "EditData",
+            "LogName": "Penny - normal",
+            "Target": "Data/Festivals/fall27",
+            "When": {
+                "EnableFor": "Penny"
+            },
+            "Entries": {
+                "Penny_y2": "{{i18n:penny-y2-halloween}}",
+                "Penny_spouse_y2": "{{i18n:penny-y2-halloween-spouse}}$s"
+            }
+        },
+        {
+            "Action": "EditData",
+            "LogName": "Pierre - normal",
+            "Target": "Data/Festivals/fall27",
+            "When": {
+                "EnableFor": "Pierre"
+            },
+            "Entries": {
+                "Pierre": "{{i18n:pierre-y1-halloween}}$h",
+                "Pierre_y2": "{{i18n:pierre-y2-halloween}}",
+            }
+        },
+        {
+            "Action": "EditData",
+            "LogName": "Pierre - normal",
+            "Target": "Data/Festivals/fall27",
+            "When": {
+                "EnableFor": "Pierre",
+                "Relationship: Abigail": "Married",
+            },
+            "Entries": {
+                "Pierre_y2": "{{i18n:pierre-y2-halloween-married-to-abby}}$h",
+            }
+        },
+        {
+            "Action": "EditData",
+            "LogName": "Robin - normal",
+            "Target": "Data/Festivals/fall27",
+            "When": {
+                "EnableFor": "Robin"
+            },
+            "Entries": {
+                "Robin_y2": "{{i18n:robin-y2-halloween}}$h",
+            }
+        },
+        {
+            "Action": "EditData",
+            "LogName": "Sam - normal",
+            "Target": "Data/Festivals/fall27",
+            "When": {
+                "EnableFor": "Sam"
+            },
+            "Entries": {
+                "Sam_y2": "{{i18n:sam-y2-halloween}}",
+                "Sam_spouse_y2": "{{i18n:sam-y2-halloween-spouse}}$h"
             }
         },
     ]

@@ -20,6 +20,9 @@
             // day before the stardew valley fair.
             "fall_15{{YearRemainder}}": "I'm so ready for the grange display tomorrow.#$b#@, may the best grange display win.$h",
 
+            // Day before Spirit's Eve.
+            "fall_26{{YearRemainder}}": "It's gonna be winter soon, @. Always my hardest season, financially.$s",
+
             // additional heart lines
             "summer_Fri6": "Have you seen the new action flick, {{i18n:action.movie{{Random:01,02,03,04,05,06,07,08,09}}, starring %name Anderson?#$b#Maybe I can convince Caroline to come watch it with me...",
             "summer_Sat6": "There's nothing nicer than fresh veggies in a good salad dressing.#$b#Caroline makes an vinaigrette that's to die for.$h",
@@ -36,7 +39,10 @@
         "Entries": {
             "fall_Thu8": "Gosh, @, I don't know how long I can stay afloat, with this town turning into a Joja town.$s",
             "winter_Wed8": "You know, @, I...sometimes wonder if I should try moving back to Zuzu City, see if I can find better markets there.",
-            "winter_Thu8": "You think Abby's been looking a bit pale lately?"
+            "winter_Thu8": "You think Abby's been looking a bit pale lately?",
+            "winter_Thu8_inlaw_Abigail": "I'm so glad Abby married you, @. I'm not sure I could have financially supported her for much longer...",
+
+            "4": "Gosh, money is just so, so tight these days."
         }
     },
     {

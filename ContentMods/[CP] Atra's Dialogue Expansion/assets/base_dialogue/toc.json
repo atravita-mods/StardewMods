@@ -62,6 +62,12 @@
         },
         {
             "Action": "Include",
+            "LogName": "Maru - base",
+            "FromFile": "assets/base_dialogue/Maru/base.json",
+            "When": {"EnableFor": "Maru"}
+        },
+        {
+            "Action": "Include",
             "LogName": "Robin - base",
             "FromFile": "assets/base_dialogue/Robin/base.json",
             "When": {"EnableFor": "Robin"}

@@ -236,6 +236,9 @@
     "robin-divorced-from-sebastian-a": "Sebastian doesn't want to talk to you, and neither do I.",
     "robin-divorced-from-sebastian-b": "I had high hopes for you and Sebastian. Turns out I was wrong.",
 
+    "maru-divorced-from-sebastian-a": "Gosh, @, why break my brother's heart like that?",
+    "maru-divorced-from-sebastian-b": "Look, @, you're no longer part of our family. I don't want to talk to you.",
+
     "vincent-divorced-from-sam": "Mom says I shouldn't talk to you.",
 
     // marriage strings
@@ -750,6 +753,7 @@
     "jas-y3-halloween": "Maybe next year Aunt Marnie will let me go into the maze...",
     "jodi-y2-halloween": "Spirit's Eve used to be Sam's favorite festival.All the candy, I guess.",
     "jodi-y3-halloween": "Gosh, @, maybe it is about time for me to start allowing Vincent into the maze...",
+    "jodi-y4-halloween": "@, to be honest, I'm not sure how much I should trust this maze...something about it spooks me out.",
     "kent-y2-halloween": "Bit of a bite in the air tonight, isn't there? It'll get cold soon.",
     "kent-y3-halloween": "We're not letting Vincent into that maze, Jodi. I don't want to go in there after him.",
     "leah-y2-halloween": "Gus really outdid himself this year. The pumpkin pie is to die for!",
@@ -757,6 +761,8 @@
     "leo-y2-halloween": "{{title}} @, I don't feel so good.",
     "lewis-y2-halloween.00": "This is a relatively new festival, @, but it certainly delights the younger ones!",
     "lewis-y2-halloween.01": "To be frank, I'm not sure how that maze works...",
+    "lewis-y3-halloween.00": "Ready to brave that maze again this year, @?",
+    "lewis-y3-halloween.01": "To be honest, I'm not sure how I got talked into allowing it...",
     "linus-y2-halloween": "The maze always delights, doesn't it?",
     "marlon-y2-halloween": "We have to freshly capture these skeletons every year.",
     "marnie-y2-halloween": "Mmmm, nothing like Gus's pumpkin pie!",
@@ -764,6 +770,14 @@
     "maru-y2-halloween": "This year, this year I'll figure it out!",
     "maru-y2-halloween-spouse": "Oh, @, I'm so glad to see you...go ahead, I want to figure this out myself.",
     "pam-y2-halloween": "Mmm, nothing like a good pumpkin ale.",
+    "penny-y2-halloween": "Oh, this house, this house looks so strange to me.",
+    "penny-y2-halloween-spouse": "@, I'm not sure how I got here...",
+    "pierre-y1-halloween": "I've got plenty of spooky goods for your to browse!",
+    "pierre-y2-halloween": "Honestly, @, I'm just here to sell things. We make so much of our money at the festivals....",
+    "pierre-y2-halloween-married-to-abby": "Abigail really likes this festival, I think she likes trying that maze every year.",
+    "robin-y2-halloween": "Gonna start snowing again soon, @. You weatherproofed your house yet?",
+    "sam-y2-halloween": "I'm so so close, I can feel it.",
+    "sam-y2-halloween-spouse": "Oh, @, you found me! Let's finish this maze together.",
 
     // Stardew Fair
     "abby-y2-fair": "You think Lewis will ever change up these fair games?",

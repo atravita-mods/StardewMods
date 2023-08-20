@@ -28,6 +28,9 @@
             "Resort_Entering": "Ah, a nice day of rest and relaxation!$h",
             "Resort_Bar_2": "I could do with a Long Island Iced Tea right about now",
 
+            // before egg hunt
+            "spring_12{{YearRemainder}}": "Abby's been training so hard for the egg hunt, I rarely see her train harder.",
+
             "1{{YearRemainder}}": "My parents used to raise horses here when I was young.#$e#No lack of land around here!",
             "6{{YearRemainder}}": "I do miss riding horses. I had a lot more time for stuff like that when I was young.#$b#Also, horses can be quite expensive to maintain.",
             "9{{YearRemainder}}": "Gosh, @, I was up way too late last night trying to balance the books.#$b#Apologies if I don't feel like chatting.",

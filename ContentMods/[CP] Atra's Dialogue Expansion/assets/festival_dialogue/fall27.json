@@ -369,5 +369,42 @@
                 "Sam_spouse_y2": "{{i18n:sam-y2-halloween-spouse}}$h"
             }
         },
+        {
+            "Action": "EditData",
+            "LogName": "Sebastian - normal",
+            "Target": "Data/Festivals/fall27",
+            "When": {
+                "EnableFor": "Sebastian"
+            },
+            "Entries": {
+                "Sebastian_y2": "{{i18n:sebastian-y2-halloween}}",
+                "Sebastian_spouse_y2": "{{i18n:sebastian-y2-halloween-spouse}}$h"
+            }
+        },
+        {
+            "Action": "EditData",
+            "LogName": "Shane - normal",
+            "Target": "Data/Festivals/fall27",
+            "When": {
+                "EnableFor": "Shane"
+            },
+            "Entries": {
+                "Shane_y2": "{{i18n:shane-y2-halloween}}$h",
+                "Shane_y3": "{{i18n:shane-y3-halloween}}",
+                "Shane_spouse_y2": "{{i18n:shane-y2-halloween-spouse}}$h"
+            }
+        },
+        {
+            "Action": "EditData",
+            "LogName": "Vincent - normal",
+            "Target": "Data/Festivals/fall27",
+            "When": {
+                "EnableFor": "Vincent"
+            },
+            "Entries": {
+                "Vincent_y2": "{{i18n:vincent-y2-halloween|title={{Title}} }}",
+                "Vincent_y3": "{{i18n:vincent-y3-halloween}}",
+            }
+        },
     ]
 }

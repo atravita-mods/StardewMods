@@ -650,6 +650,10 @@
     /***************************
     * Festival Dialogue
     * **************************/
+    // Egg festival
+    "abby-y2-egg-spouse": "We might be married but I'm still better at egg hunt than you are.",
+    "abby-y3-egg.00": "Abigail looks like she's concentrating very deeply.",
+    "abby-y3-egg.01": "Go away, I'm focusing for the egg hunt.",
 
     // Dance of the Moonlight Jellies
     "abby-y2-jellies": "Man, I'm not looking forward to school starting again",
@@ -778,6 +782,13 @@
     "robin-y2-halloween": "Gonna start snowing again soon, @. You weatherproofed your house yet?",
     "sam-y2-halloween": "I'm so so close, I can feel it.",
     "sam-y2-halloween-spouse": "Oh, @, you found me! Let's finish this maze together.",
+    "sebastian-y2-halloween": "Gosh, I feel like I've been studying this skeletons for hours and I still don't understand.",
+    "sebastian-y2-halloween-spouse": "These skeletons are nicely spooky, aren't they, dear?",
+    "shane-y2-halloween": "To be honest, I really don't understand this festival, but, hey, not gonna say no to free food.",
+    "shane-y3-halloween": "Those skeletons are quite a sight, aren't they?",
+    "shane-y2-halloween-spouse": "Go have fun in the maze, darling. I'm just gonna stay here and enjoy some free crab cakes.",
+    "vincent-y2-halloween": "{{title}} @, would you take me into the maze?",
+    "vincent-y3-halloween": "I'm a big boy now, I'm not scared of no maze!",
 
     // Stardew Fair
     "abby-y2-fair": "You think Lewis will ever change up these fair games?",

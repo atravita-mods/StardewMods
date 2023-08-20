@@ -1,0 +1,17 @@
+// spring 13, egg festival.
+{
+    "Changes": [
+        {
+            "Action": "EditData",
+            "LogName": "Abby - normal",
+            "Target": "Data/Festivals/spring13",
+            "When": {
+                "EnableFor": "Abigail"
+            },
+            "Entries": {
+                "Abigail_y3": "%{{i18n:abby-y3-egg.00}}#$b${{i18n:abby-y3-egg.01}}$h",
+                "Abigail_spouse_y2": "{{i18n:abby-y2-egg-spouse}}$h"
+            }
+        },
+    ]
+}

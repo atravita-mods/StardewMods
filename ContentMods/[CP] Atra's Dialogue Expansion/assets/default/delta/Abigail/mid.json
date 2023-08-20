@@ -11,6 +11,7 @@
             "movieTheater": "Oh, a movie theater! @, would you like to go sometime?$h",
 
             // day-specific
+            "spring_12{{YearRemainder}}": "You ready for the egg hunt tomorrow, @? I'm gonna smoke you!$h",
             "summer_27{{YearRemainder}}": "Ugh, I'm not ready for summer to end.$s",
 
             // general
@@ -33,6 +34,9 @@
 
             "Sun8": "Between you and I, @, I'm not sure I'm cut out for college.#$b#Dad says that if I drop out, I'll have to start paying rent, though.",
             "Mon8": "I'd love to see more movies, but Dad doesn't give me an allowance big enough to see movies often.#$b#Also, I'm saving up for a new video game.#$e#Maybe I should ask for a small salary, for the work I do for him around the shop.$s",
+
+            // before egg hunt
+            "spring_12{{YearRemainder}}": "This year I'll beat you at the egg hunt I swear.",
 
             "1_2": "Ugh, Mayor Lewis wants to put together a square dance club. @, do I look like someone who would square dance?$s",
             "2_2": "I wish I could convince my father that adventuring is a perfectly reasonable career. Look at Marlon, he does it!",
@@ -61,6 +65,9 @@
         "Entries": {
             "summer_Sun6": "Haley showed me her new sunscreen. It feels so much lighter on my skin!#$b#Do you wear sunscreen, @? You probably do, you're under the sun farming all day.",
 
+            // before egg hunt
+            "spring_12{{YearRemainder}}": "Mom thinks I'm getting too old for the egg hunt, but I'm still having fun.$h",
+
             "fall_Tue6": "Fall's my favorite season. I love how the trees look with their new colors.$h",
 
             "5_2": "Ugh, I still have a foreign language requirement to get through. @, what language do you think I should pick?",
@@ -83,6 +90,10 @@
         "Target": "Characters/Dialogue/Abigail",
         "Entries": {
             "winter_Wed10": "Ugh, nothing ever interesting happens in this town, I'm so bored.",
+
+            // before egg hunt
+            "spring_12{{YearRemainder}}": "$y 'Think I should let the kids win the egg hunt this year?_Yes_Hmmph, I guess....I'll consider it._No_You're right, @, they'll know if I pander to them.'",
+            
             "6_2": "Oh, looks like %name Taylor is performing in Grampleton next Friday. Should I get tickets?",
             "7_2": "Math has never been my strong suit, unfortunately.#$b#Wish pops wasn't pushing me so hard to get a business degree.$s"
         },

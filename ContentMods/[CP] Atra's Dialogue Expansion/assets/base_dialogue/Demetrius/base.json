@@ -6,7 +6,9 @@
             "Target": "Characters/Dialogue/Demetrius",
             "Entries": {
                 "summer_25{{YearRemainder}}": "{{i18n:demetrius-summer-end.{{YearModulus}} }}",
-                "summer_27{{YearRemainder}}": "{{i18n: demetrius-jellies-pre.01}}#$b#{{i18n: demetrius-jellies-pre.02}}"
+                "summer_27{{YearRemainder}}": "{{i18n: demetrius-jellies-pre.01}}#$b#{{i18n: demetrius-jellies-pre.02}}",
+
+                "ScienceHouse_Entry": "{{i18n:demetrius-homecoming}}"
             }
         },
         {

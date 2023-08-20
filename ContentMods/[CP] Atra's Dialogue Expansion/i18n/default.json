@@ -166,7 +166,7 @@
     "spring-1.2": "What a wonderful day! The snow's finally all melted.",
     "spring-1.3": "Oh, is it spring again? Definitely looking forward to not being cold all the time.",
     "spring-1.4": "Ah, nothing's better than the first spring day of the year!",
-    "spring-1.5": "You know, even after so long living in the valley, I don't think I'll ever get bored of just how nice spring is.",
+    "spring-1.0": "You know, even after so long living in the valley, I don't think I'll ever get bored of just how nice spring is.",
     "spring-14": "Heya, @, I made you some breakfast! I hope you're hungry.",
     "summer-8": "Oh, good morning, @! Made you some coffee, I know you work hard.",
     "summer-27": "Are you excited for the Midnight Jellies tomorrow, @? I sure am!",
@@ -239,6 +239,8 @@
     "vincent-divorced-from-sam": "Mom says I shouldn't talk to you.",
 
     // marriage strings
+    "caroline-abigail-fall-mon10-a": "Fall has always been Abigail's favorite season, you know.",
+    "caroline-abigail-fall-mon10-b": "Can you tell her to visit more often? We miss her.",
     "demetrius-maru-spring-mon10": "You know, I'm glad Maru found you. I can see how happy you make her.",
     "demetrius-sebastian-summer-fri10-a": "You know, @, I do regret not getting to know my stepson better.",
     "demetrius-sebastian-summer-fri10-b": "But I'm glad he managed to find you.",
@@ -264,6 +266,7 @@
     "george-homecoming": "I'm home!/Evelyn, I'm home!/Ah, home sweet home!",
     "george-vacation-bubbles": "Ah, it's so warm!",
 
+    "demetrius-homecoming": "Ah, home sweet home!/Robin, I'm back!",
     "penny-homecoming": "Honey, I'm home!",
     "penny-greet-Pam": "Mom, how are you?/Mom, you home?/Mom! I'm here to visit!",
 
@@ -749,6 +752,18 @@
     "jodi-y3-halloween": "Gosh, @, maybe it is about time for me to start allowing Vincent into the maze...",
     "kent-y2-halloween": "Bit of a bite in the air tonight, isn't there? It'll get cold soon.",
     "kent-y3-halloween": "We're not letting Vincent into that maze, Jodi. I don't want to go in there after him.",
+    "leah-y2-halloween": "Gus really outdid himself this year. The pumpkin pie is to die for!",
+    "leah-y2-halloween-spouse": "You go have fun in that maze, darling. I'll just be here enjoying this blackberry cordial.",
+    "leo-y2-halloween": "{{title}} @, I don't feel so good.",
+    "lewis-y2-halloween.00": "This is a relatively new festival, @, but it certainly delights the younger ones!",
+    "lewis-y2-halloween.01": "To be frank, I'm not sure how that maze works...",
+    "linus-y2-halloween": "The maze always delights, doesn't it?",
+    "marlon-y2-halloween": "We have to freshly capture these skeletons every year.",
+    "marnie-y2-halloween": "Mmmm, nothing like Gus's pumpkin pie!",
+    "marnie-y3-halloween-realism": "Well, I just got done with stocking up on alfalfa for winter, I'm ready to take a break.",
+    "maru-y2-halloween": "This year, this year I'll figure it out!",
+    "maru-y2-halloween-spouse": "Oh, @, I'm so glad to see you...go ahead, I want to figure this out myself.",
+    "pam-y2-halloween": "Mmm, nothing like a good pumpkin ale.",
 
     // Stardew Fair
     "abby-y2-fair": "You think Lewis will ever change up these fair games?",

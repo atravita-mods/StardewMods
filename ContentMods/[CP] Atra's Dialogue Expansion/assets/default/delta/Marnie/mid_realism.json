@@ -4,6 +4,9 @@
         "Action": "EditData",
         "Target": "Characters/Dialogue/Marnie",
         "Entries": {
+            // specific days
+            "fall_12{{YearRemainder}}": "Ugh, I've got so much alfalfa I need to harvest for winter.",
+
             "8{{YearRemainder}}": "I've got {{Range: 5,10}} cows to artificially inseminate tomorrow morning. It'll be a long day...",
             "12{{YearRemainder}}": "Happier cows produce better milk.$h",
             "25{{YearRemainder}}": "Ugh, we seem to have a digital dermatitis outbreak among my cows.#$b#I'll need to get a vet in, might need to get antibiotics administered.",
@@ -54,7 +57,7 @@
         "Target": "Characters/Dialogue/Marnie",
         "When": { "YearModulus": "4" },
         "Entries": {
-            "5_2": "I've got to buy more barley to feed to the cows, but the price of barley has gone insane over the last year...$s#$b#Might need to figure otu something else, for feeding them.",
+            "5_2": "I've got to buy more barley to feed to the cows, but the price of barley has gone insane over the last year...$s#$b#Might need to figure out something else, for feeding them.",
             "6_2": "Bessie got some rocks lodged into her hoof the other day...Poor darling, that looked quite painful.$s"
         }
     }

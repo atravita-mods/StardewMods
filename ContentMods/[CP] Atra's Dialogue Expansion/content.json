@@ -180,6 +180,15 @@
     "Changes": [
         {
             "Action": "Include",
+            "LogName": "Festival Changes",
+            "FromFile": "assets/festival_dialogue/{{Season}}{{Day}}.json",
+            "When": {
+                "HasValue: {{DayEvent}}": true,
+                "HasFile: {{FromFile}}": true,
+            }
+        },
+        {
+            "Action": "Include",
             "LogName": "Basic Dialogue",
             "FromFile": "assets/base_dialogue/toc.json",
             "When": {"Day|contains=0": false}
@@ -225,14 +234,6 @@
             "LogName": "ScheduleChanges",
             "When": { "HasValue: ScheduleChanges": true },
             "FromFile": "assets/schedules/toc.json"
-        },
-        {
-            "Action": "Include",
-            "LogName": "Festival Changes",
-            "FromFile": "assets/festival_dialogue/{{Season}}{{Day}}.json",
-            "When": {
-                "HasFile: {{FromFile}}": true
-            }
         },
         {
             "Action": "EditData",

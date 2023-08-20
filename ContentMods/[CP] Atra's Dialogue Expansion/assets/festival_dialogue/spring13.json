@@ -278,7 +278,7 @@
         // skipping Pam because Pam Tries has like five years of lines for her.
         {
             "Action": "EditData",
-            "LogName": "Maru - normal",
+            "LogName": "Penny - normal",
             "Target": "Data/Festivals/spring13",
             "When": {
                 "EnableFor": "Penny"
@@ -299,6 +299,69 @@
             "Entries": {
                 "Pierre_y3": "{{i18n:pierre-y3-egg}}",
                 "Pierre_y4": "{{i18n:pierre-y4-egg.00}}#$e#{{i18n:pierre-y4-egg.01}}"
+            }
+        },
+        {
+            "Action": "EditData",
+            "LogName": "Robin - normal",
+            "Target": "Data/Festivals/spring13",
+            "When": {
+                "EnableFor": "Robin"
+            },
+            "Entries": {
+                "Robin_y3": "{{i18n:robin-y3-egg}}",
+                "Robin_y4": "{{i18n:robin-y4-egg.00}}#$e#{{i18n:robin-y4-egg.01}}"
+            }
+        },
+        {
+            "Action": "EditData",
+            "LogName": "Sam - normal",
+            "Target": "Data/Festivals/spring13",
+            "When": {
+                "EnableFor": "Sam"
+            },
+            "Entries": {
+                "Sam_y2": "{{i18n:sam-y2-egg}}",
+                "Sam_y3": "{{i18n:sam-y3-egg.00}}#$e#{{i18n:sam-y3-egg.01}}",
+                "Sam_spouse_y2": "{{i18n:sam-y2-egg-spouse}}$h",
+                "Sam_spouse_y3": "{{i18n:sam-y3-egg-spouse.00}}#$e#{{i18n:sam-y3-egg-spouse.01}}"
+            }
+        },
+        {
+            "Action": "EditData",
+            "LogName": "Shane - normal",
+            "Target": "Data/Festivals/spring13",
+            "When": {
+                "EnableFor": "Shane"
+            },
+            "Entries": {
+                "Shane_y3": "{{i18n:shane-y3-egg.00}}#$e#{{i18n:shane-y3-egg.01}}$h",
+                "Shane_spouse": "{{i18n:shane-y1-egg-spouse}}$h",
+                "Shane_spouse_y2": "{{i18n:shane-y2-egg-spouse.00}}#$e#{{i18n:shane-y2-egg-spouse.01}}"
+            }
+        },
+        {
+            "Action": "EditData",
+            "LogName": "Vincent - normal",
+            "Target": "Data/Festivals/spring13",
+            "When": {
+                "EnableFor": "Vincent"
+            },
+            "Entries": {
+                "Vincent_y3": "{{i18n:vincent-y3-egg}}$h",
+                "Vincent_y4": "{{i18n:vincent-y4-egg.00}}$s#$e#{{i18n:vincent-y4-egg.01}}"
+            }
+        },
+        {
+            "Action": "EditData",
+            "LogName": "Willy - normal",
+            "Target": "Data/Festivals/spring13",
+            "When": {
+                "EnableFor": "Willy"
+            },
+            "Entries": {
+                "Willy_y3": "{{i18n:willy-y3-egg}}$s",
+                "Willy_y4": "{{i18n:willy-y4-egg.00}}$h#$e#{{i18n:willy-y4-egg.01}}"
             }
         },
     ]

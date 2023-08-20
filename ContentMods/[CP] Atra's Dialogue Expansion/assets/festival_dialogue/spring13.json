@@ -72,6 +72,30 @@
         },
         {
             "Action": "EditData",
+            "LogName": "Emily - normal",
+            "Target": "Data/Festivals/spring13",
+            "When": {
+                "EnableFor": "Emily"
+            },
+            "Entries": {
+                "Emily_y3": "{{i18n:emily-y3-egg.00}}#$b${{i18n:emily-y3-egg.01}}$h",
+                "Emily_spouse": "{{i18n:emily-y1-egg-spouse}}$h",
+                "Emily_spouse_y2": "{{i18n:emily-y2-egg-spouse}}$h"
+            }
+        },
+        {
+            "Action": "EditData",
+            "LogName": "Evelyn - normal",
+            "Target": "Data/Festivals/spring13",
+            "When": {
+                "EnableFor": "Evelyn"
+            },
+            "Entries": {
+                "Evelyn_y3": "{{i18n:evelyn-y3-egg.00}}$h#$e#{{i18n:evelyn-y3-egg.01}}$h"
+            }
+        },
+        {
+            "Action": "EditData",
             "LogName": "Harvey - normal",
             "Target": "Data/Festivals/spring13",
             "When": {

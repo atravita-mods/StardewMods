@@ -7,7 +7,7 @@
             "Entries": {
                 "Evelyn_Completed": "{{i18n:alex-leeks-special-order}}$h"
             },
-            "When": {"EnableFor": "Alex"},
+            "When": {"EnableFor": "Alex"}
         },
         {
             "LogName": "Evelyn - special orders dialogue",
@@ -16,7 +16,7 @@
             "Entries": {
                 "Evelyn_Completed": "{{i18n:evelyn-leeks-special-order}}$h"
             },
-            "When": {"EnableFor": "Evelyn"},
+            "When": {"EnableFor": "Evelyn"}
         },
         {
             "LogName": "Gus - special order dialogue",
@@ -24,7 +24,7 @@
             "Target": "Characters/Dialogue/Gus",
             "Entries": {
                 "Evelyn_Completed": "{{i18n:gus-leeks-special-order}}$h",
-                "Gus_Completed": "{{i18n:gus-omelet-special-order}}$h",
+                "Gus_Completed": "{{i18n:gus-omelet-special-order}}$h"
             },
             "When": {"EnableFor": "Gus"}
         },

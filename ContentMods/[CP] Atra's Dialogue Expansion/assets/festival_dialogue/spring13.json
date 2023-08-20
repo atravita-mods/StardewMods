@@ -226,5 +226,41 @@
                 "Lewis_y3": "{{i18n:lewis-y3-egg.00}}$h#$e#{{i18n:lewis-y3-egg.01}}"
             }
         },
+        {
+            "Action": "EditData",
+            "LogName": "Linus - normal",
+            "Target": "Data/Festivals/spring13",
+            "When": {
+                "EnableFor": "Linus",
+            },
+            "Entries": {
+                "Linus_y3": "{{i18n:linus-y3-egg}}$h",
+                "Linus_y4": "{{i18n:linus-y4-egg.00}}$h#$e#{{i18n:linus-y4-egg.01}}"
+            }
+        },
+        {
+            "Action": "EditData",
+            "LogName": "Marlon - normal",
+            "Target": "Data/Festivals/spring13",
+            "When": {
+                "EnableFor": "Marlon",
+            },
+            "Entries": {
+                "Marlon_y3": "{{i18n:marlon-y3-egg}}",
+                "Marlon_y4": "{{i18n:marlon-y4-egg.00}}#$e#{{i18n:marlon-y4-egg.01}}"
+            }
+        },
+        {
+            "Action": "EditData",
+            "LogName": "Marnie - normal",
+            "Target": "Data/Festivals/spring13",
+            "When": {
+                "EnableFor": "Marnie",
+            },
+            "Entries": {
+                "Marnie_y3": "{{i18n:marnie-y3-egg}}$h",
+                "Marnie_y4": "{{i18n:marnie-y4-egg.00}}#$e#{{i18n:marnie-y4-egg.01}}"
+            }
+        },
     ]
 }

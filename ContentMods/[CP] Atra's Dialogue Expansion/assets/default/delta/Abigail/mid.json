@@ -102,6 +102,18 @@
         }
     },
     {
+        "LogName": "Abigail mid-hearts",
+        "Action": "EditData",
+        "Target": "Characters/Dialogue/Abigail",
+        "Entries": {
+            // before egg hunt
+            "spring_12{{YearRemainder}}": "I've been training so hard for this hunt, I'll definitely beat you this year!$h"
+        },
+        "When": {
+            "YearModulus": "0"
+        }
+    },
+    {
         "LogName": "Rain -- during winter.",
         "Action": "EditData",
         "Target": "Characters/Dialogue/rainy",

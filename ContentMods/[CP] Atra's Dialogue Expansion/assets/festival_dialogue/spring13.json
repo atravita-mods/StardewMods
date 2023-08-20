@@ -13,5 +13,73 @@
                 "Abigail_spouse_y2": "{{i18n:abby-y2-egg-spouse}}$h"
             }
         },
+        {
+            "Action": "EditData",
+            "LogName": "Abby - normal",
+            "Target": "Data/Festivals/spring13",
+            "When": {
+                "EnableFor": "Abigail"
+            },
+            "Entries": {
+                "Alex_y3": "{{i18n:alex-y3-egg.00}}#$b${{i18n:alex-y3-egg.01}}$h",
+                "Alex_spouse_y2": "{{i18n:alex-y2-egg-spouse}}$h"
+            }
+        },
+        {
+            "Action": "EditData",
+            "LogName": "Caroline - normal",
+            "Target": "Data/Festivals/spring13",
+            "When": {
+                "EnableFor": "Caroline"
+            },
+            "Entries": {
+                "Caroline_y3": "{{i18n:caroline-y3-egg.00}}#$b${{i18n:caroline-y3-egg.01}}$h"
+            }
+        },
+        {
+            "Action": "EditData",
+            "LogName": "Clint - normal",
+            "Target": "Data/Festivals/spring13",
+            "When": {
+                "EnableFor": "Clint"
+            },
+            "Entries": {
+                "Clint_y3": "{{i18n:clint-y3-egg.00}}"
+            }
+        },
+        {
+            "Action": "EditData",
+            "LogName": "Demetrius - normal",
+            "Target": "Data/Festivals/spring13",
+            "When": {
+                "EnableFor": "Demetrius"
+            },
+            "Entries": {
+                "Demetrius_y3": "{{i18n:demetrius-y3-egg.00}}$h#$e#{{i18n:demetrius-y3-egg.01}}$h"
+            }
+        },
+        {
+            "Action": "EditData",
+            "LogName": "Elliott - normal",
+            "Target": "Data/Festivals/spring13",
+            "When": {
+                "EnableFor": "Elliott"
+            },
+            "Entries": {
+                "Elliott_y3": "{{i18n:elliott-y3-egg.00}}#$b${{i18n:elliott-y3-egg.01}}$h",
+                "Elliott_spouse_y2": "{{i18n:elliott-y2-egg-spouse}}$h"
+            }
+        },
+        {
+            "Action": "EditData",
+            "LogName": "Harvey - normal",
+            "Target": "Data/Festivals/spring13",
+            "When": {
+                "EnableFor": "Harvey"
+            },
+            "Entries": {
+                "Harvey_y3": "{{i18n:harvey-y3-egg.00}}$s#$e#{{i18n:harvey-y3-egg.01}}"
+            }
+        },
     ]
 }

@@ -125,6 +125,9 @@
         "Action": "EditData",
         "Target": "Characters/Dialogue/Pierre",
         "Entries": {
+            // specific days
+            "spring_11_2": "Hey @, you looking forward to the egg hunt tomorrow? Abigail says she's gonna destroy you this year!$h",
+            
             "3_2": "Everything's harder when the economy goes bad like this.#$b#Government'll bail out the big guys and there's welfare payments for the poor, but people like me get squeezed.",
             "5_2": "My suppliers want to raise their prices...#$b#I can't pass on price increases though...",
             "7_2": "Before I moved to Pelican Town? I was a night manager at a gas station in Zuzu City.#$e#Dangerous work, and definitely a young man's job.#$b#I hated having to work nights. It takes more out of you than what most people expect.$s",
@@ -153,6 +156,7 @@
             "7_2": "I know Caroline would like it if I cooked more often. But I'm always so busy with the store.#$b#I do the dishes for her, though, when it's not Abigail's turn to do them.",
             "9_2": "Ugh, I think the store has a leak. I'm not very handy, so we're probably gonna have to get Robin to take a look at it.",
             "11_2": "How much of my life have I spent behind the counter?$s",
+            "12_2": "Mayor Lewis wants to bring in some windmills, says Zuzu Electric is willing to pay top dollar to rent land for theirs.#$b#Protecting the environment AND making money? Of course I'm in!$h",
             "17_2": "I suspect we have a leak in the ceiling.#$b#Between you and I, @, I'm not good at dealing with things like this.#$e#Guess I should get Robin to look at my roof...",
             "19_2": "@, I just want you to know, you'll never find better seeds that the ones I sell. Never.",
             "21_2": "#$c .9#Have you considered buying any of my fertilizers?#Heyyy, @, have you considered buying any of my fertilizers? Here's a free sample![368]"

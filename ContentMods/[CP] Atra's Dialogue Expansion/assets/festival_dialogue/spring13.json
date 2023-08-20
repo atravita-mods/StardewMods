@@ -96,13 +96,134 @@
         },
         {
             "Action": "EditData",
+            "LogName": "George - normal",
+            "Target": "Data/Festivals/spring13",
+            "When": {
+                "EnableFor": "George"
+            },
+            "Entries": {
+                "George_y3": "{{i18n:george-y3-egg.00}}$s#$e#{{i18n:george-y3-egg.01}}$h"
+            }
+        },
+        {
+            "Action": "EditData",
+            "LogName": "Gus - normal",
+            "Target": "Data/Festivals/spring13",
+            "When": {
+                "EnableFor": "Gus"
+            },
+            "Entries": {
+                "Gus_y3": "{{i18n:gus-y3-egg.00}}$h#$e#{{i18n:gus-y3-egg.01}}$h"
+            }
+        },
+        {
+            "Action": "EditData",
+            "LogName": "Haley - normal",
+            "Target": "Data/Festivals/spring13",
+            "When": {
+                "EnableFor": "Haley"
+            },
+            "Entries": {
+                "Haley_y3": "{{i18n:haley-y3-egg.00}}#$b${{i18n:haley-y3-egg.01}}$h",
+                "Haley_spouse_y2": "{{i18n:haley-y2-egg-spouse}}$h"
+            }
+        },
+        {
+            "Action": "EditData",
             "LogName": "Harvey - normal",
             "Target": "Data/Festivals/spring13",
             "When": {
                 "EnableFor": "Harvey"
             },
             "Entries": {
-                "Harvey_y3": "{{i18n:harvey-y3-egg.00}}$s#$e#{{i18n:harvey-y3-egg.01}}"
+                "Harvey_y3": "{{i18n:harvey-y3-egg.00}}$s#$e#{{i18n:harvey-y3-egg.01}}",
+                "Harvey_spouse_y2": "{{i18n:harvey-y2-egg-spouse}}$h",
+                "Harvey_spouse_y3": "{{i18n:harvey-y3-egg-spouse}}$h"
+            }
+        },
+        {
+            "Action": "EditData",
+            "LogName": "Jas - normal",
+            "Target": "Data/Festivals/spring13",
+            "When": {
+                "EnableFor": "Jas"
+            },
+            "Entries": {
+                "Jas_y3": "{{i18n:jas-y3-egg}}$h"
+            }
+        },
+        {
+            "Action": "EditData",
+            "LogName": "Jodi - normal",
+            "Target": "Data/Festivals/spring13",
+            "When": {
+                "EnableFor": "Jodi"
+            },
+            "Entries": {
+                "Jodi_y3": "{{i18n:jodi-y3-egg}}$h"
+            }
+        },
+        {
+            "Action": "EditData",
+            "LogName": "Kent - normal",
+            "Target": "Data/Festivals/spring13",
+            "When": {
+                "EnableFor": "Kent",
+            },
+            "Entries": {
+                "Kent_y2": "{{i18n:kent-y2-egg}}$h",
+                "Kent_y3": "{{i18n:kent-y3-egg}}"
+            }
+        },
+        {
+            // Adds a line for Kent to use the first year he's back.
+            "Action": "EditData",
+            "LogName": "Kent - first",
+            "Target": "Data/Festivals/spring13",
+            "When": {
+                "EnableFor": "Kent",
+                "When": {
+                    "Year": "2"
+                }
+            },
+            "Entries": {
+                "Kent_y2": "{{i18n:kent-y2-egg-return}}"
+            }
+        },
+        {
+            "Action": "EditData",
+            "LogName": "Leah - normal",
+            "Target": "Data/Festivals/spring13",
+            "When": {
+                "EnableFor": "Leah"
+            },
+            "Entries": {
+                "Leah_y3": "{{i18n:leah-y3-egg.00}}$h#$e#{{i18n:leah-y3-egg.01}}",
+                "Leah_spouse_y2": "{{i18n:leah-y2-egg-spouse}}$h",
+                "Leah_spouse_y3": "{{i18n:leah-y3-egg-spouse}}$h"
+            }
+        },
+        {
+            "Action": "EditData",
+            "LogName": "Leo - normal",
+            "Target": "Data/Festivals/spring13",
+            "When": {
+                "EnableFor": "Leo"
+            },
+            "Entries": {
+                "Leo_y2": "{{i18n:leo-y2-egg}}"
+            }
+        },
+        {
+            "Action": "EditData",
+            "LogName": "Lewis - normal",
+            "Target": "Data/Festivals/spring13",
+            "When": {
+                "EnableFor": "Lewis",
+            },
+            "Entries": {
+                "Lewis_y2": "{{i18n:lewis-y2-egg}}$h",
+                "Lewis_y3": "{{i18n:lewis-y3-egg.00}}$h#$e#{{i18n:lewis-y3-egg.01}}"
             }
         },
     ]

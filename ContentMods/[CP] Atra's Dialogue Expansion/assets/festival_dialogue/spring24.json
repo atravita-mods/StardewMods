@@ -43,6 +43,7 @@
         },
         "Entries": {
             "Clint_y2": "{{i18n:clint-y2-dance}}$s",
+            "Clint_y3": "{{i18n:clint-y3-dance}}"
         }
     },
     {
@@ -66,6 +67,7 @@
         },
         "Entries": {
             "Demetrius_y2": "{{i18n:demetrius-y2-dance}}$h","Demetrius_y3": "{{i18n:demetrius-y3-dance}}$h",
+            "Demetrius_y4": "{{i18n:demetrius-y4-dance}}$h",
         }
     },
 ]}

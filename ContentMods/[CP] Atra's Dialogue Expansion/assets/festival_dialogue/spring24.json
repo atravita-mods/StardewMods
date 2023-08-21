@@ -70,4 +70,29 @@
             "Demetrius_y4": "{{i18n:demetrius-y4-dance}}$h",
         }
     },
+    {
+        "Action": "EditData",
+        "LogName": "Caroline - normal",
+        "Target": "Data/Festivals/spring24",
+        "When": {
+            "EnableFor": "Elliott"
+        },
+        "Entries": {
+            "Elliott_y2": "{{i18n:elliott-y2-dance.00}}$h#$e#{{i18n:elliott-y2-dance.01}}",
+            "Elliott_spouse": "{{i18n:elliott-y1-dance-spouse}}$h"
+        }
+    },
+    {
+        "Action": "EditData",
+        "LogName": "Caroline - normal",
+        "Target": "Data/Festivals/spring24",
+        "When": {
+            "EnableFor": "Emily"
+        },
+        "Entries": {
+            "Emily_y2": "{{i18n:emily-y2-dance.00}}$h#$e#{{i18n:emily-y2-dance.01}}",
+            "Emily_spouse": "{{i18n:emily-y1-dance-spouse}}$h",
+            "Emily_spouse_y2": "{{i18n:emily-y2-dance-spouse}}$h"
+        }
+    },
 ]}

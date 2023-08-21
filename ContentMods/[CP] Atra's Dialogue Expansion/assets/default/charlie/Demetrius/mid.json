@@ -6,7 +6,7 @@
     // Between Robin and Demetrius, they'll have a reasonable split of chores.
 
     // he actually seems to do the cooking if you look at his schedule?
-
+    // he's the scientific cook, Robin is the "shoot from the hip" cook.
     {
         "LogName": "Demetrius Volcano",
         "Action": "EditData",
@@ -14,6 +14,7 @@
         "When": { "HasFlag": "Island_FirstParrot" },
         "Entries": {
             "Resort": "The mushrooms around here are extraordinary!$h#$b#I have never seen any mushrooms like these!$h",
+            "Resort_Shore_2": "Octopi are among the most intelligent animals...and they only live about two years!",
             "Resort_Pier_2": "Some of the largest organisms in the ocean eat plankton.#$b#Can you believe it, @? Both blue whales and basking sharks live off of plankton!",
             "Resort_Pier_3": "I hear that you can see some lovely jellyfish here after dark!",
             "19_2": "I'd love to study some of those magma caps found on Ginger Island some day. I can't believe the conditions these mushrooms can survive!%revealtasteDemetrius851"
@@ -73,6 +74,7 @@
             "9{{YearRemainder}}": "Up to the north lives a species of shark that lives for hundreds of years.#$b#It has an insanely slow metabolism, so it seems like time itself is stretched out for these animals!", // they're called Greenland sharks, unfortunately.
             "10{{YearRemainder}}": "@, have you ever considered cultivating mushrooms?",
             "12{{YearRemainder}}": "Maru asked me to help explain mycorrhiza to Vincent and Jas....#$b#@, I'm not very good at explaining my research to kids...$s",
+            "13{{YearRemainder}}": "I'd love to make some bread again, but we only have 350g of bread flour remaining and I need at least 400g.$s"
         },
         "When": { "YearModulus": "1" }
     },

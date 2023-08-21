@@ -273,6 +273,18 @@
     "penny-homecoming": "Honey, I'm home!",
     "penny-greet-Pam": "Mom, how are you?/Mom, you home?/Mom! I'm here to visit!",
 
+    // misc
+
+    // Demetrius has a few lines that don't really make sense if you have any real understanding of math. I'm replacing them because I want him to appear to have a math background.
+    // ie, sinusoidal is, like, by definition, the most predictable function. So if Demetrius is trying to model Robin's mood as a sinusoid, he's either (a) saying she's PMSing or (b) he's using the wrong function. I doubt either is the intent here.
+    "demetrius-fri4.00": "Robin has a temper. I try my best to stay on her good side.",
+    "demetrius-fri4.01": "I try my best to predict her moods but I'm not good at it.",
+    // Piecewise function is a fancy way of saying "I gave up making
+    // a nonpiecewise function fit my data." It's awkward. It's weird.
+    "demetrius-winter-sat.00": "Hmmm...I wonder how much the seasonal change in nitrogen levels is affected by the snowpack...",
+    "demetrius-winter-sat.01": "We do have historical snowpack data for the last century and a half...",
+    "demetrius-winter-sat.02": "Oh, I didn't see you there, @, do you need anything?",
+
 /***************
 * Anniversary!
 ***************/
@@ -745,6 +757,13 @@
     "demetrius-y2-dance": "I used to take Robin out for dances all the time, when we were young.",
     "demetrius-y3-dance": "Neither Robin nor I grew up here, so sometimes I wonder what it'd be like to dance with her at this festival...",
     "demetrius-y4-dance": "You can tell which type of pollinator a flower is trying to attract by just looking at the shape and color. Bee-pollinated flowers, for example, are usually bright blue or yellow.",
+    "elliott-y2-dance.00": "I do enjoy a good dance every now and then.",
+    "elliott-y2-dance.01": "Perhaps we should organize dances more often?",
+    "elliott-y1-dance-spouse": "You look wonderful, my dear. Care to join me for a dance?",
+    "emily-y2-dance.00": "I made my flower dance dress this year!",
+    "emily-y2-dance.01": "Of course, I also made Haley's. What do you think?",
+    "emily-y1-dance-spouse": "Gus and I have been working on the food for days! Isn't it amazing?",
+    "emily-y2-dance-spouse": "I do enjoy a good opportunity to wear a beautiful dress. My @, will you dance with me today?",
 
     // Dance of the Moonlight Jellies
     "abby-y2-jellies": "Man, I'm not looking forward to school starting again",

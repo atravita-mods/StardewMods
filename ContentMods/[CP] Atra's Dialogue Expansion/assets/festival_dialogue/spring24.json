@@ -57,4 +57,15 @@
             "Clint": "{{i18n:clint-dance-no-emily}}$s",
         }
     },
+    {
+        "Action": "EditData",
+        "LogName": "Demetrius - normal",
+        "Target": "Data/Festivals/spring24",
+        "When": {
+            "EnableFor": "Demetrius"
+        },
+        "Entries": {
+            "Demetrius_y2": "{{i18n:demetrius-y2-dance}}$h","Demetrius_y3": "{{i18n:demetrius-y3-dance}}$h",
+        }
+    },
 ]}

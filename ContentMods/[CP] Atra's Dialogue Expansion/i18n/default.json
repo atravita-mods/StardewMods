@@ -733,6 +733,15 @@
     "willy-y4-egg.00": "Weather like this just makes me want to set sail and fish.",
     "willy-y4-egg.01": "Spend the day out on them waters, see what I can catch...",
 
+    // Flower Dance
+    "abby-y2-dance.00": "@, you think we could get rid of this festival? I don't think anyone likes the dance.",
+    "abby-y1-dance-spouse": "Ugh, @, dance with me? That way I won't feel so awkward.",
+    "alex-y2-dance.00": "Everyone looks fantastic today.",
+    "alex-y1-dance-spouse": "You look great as always, my love. Dance with me?",
+    "caroline-y2-dance.00": "Maybe this year I'll get Pierre to dance with me...",
+    "clint-dance-no-emily": "Gosh, @, I've never been brave enough to ask someone to dance with me.",
+    "clint-y2-dance": "I've been practicing this with my therapist, but now I'm not sure I can go through with asking someone to dance with me...",
+
     // Dance of the Moonlight Jellies
     "abby-y2-jellies": "Man, I'm not looking forward to school starting again",
     "abby-y1-jellies-spouse": "And another summer over. @, you looking forward to fall?",

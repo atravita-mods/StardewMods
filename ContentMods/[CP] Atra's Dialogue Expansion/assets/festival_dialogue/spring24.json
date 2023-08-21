@@ -1,0 +1,60 @@
+{"Changes":[
+    {
+        "Action": "EditData",
+        "LogName": "Abby - normal",
+        "Target": "Data/Festivals/spring24",
+        "When": {
+            "EnableFor": "Abigail"
+        },
+        "Entries": {
+            "Abigail_y2": "{{i18n:abby-y2-dance.00}}",
+            "Abigail_spouse": "{{i18n:abby-y1-dance-spouse}}"
+        }
+    },
+    {
+        "Action": "EditData",
+        "LogName": "Caroline - normal",
+        "Target": "Data/Festivals/spring24",
+        "When": {
+            "EnableFor": "Alex"
+        },
+        "Entries": {
+            "Alex_y2": "{{i18n:alex-y2-dance.00}}$h",
+            "Alex_spouse": "{{i18n:alex-y1-dance-spouse}}"
+        }
+    },
+    {
+        "Action": "EditData",
+        "LogName": "Caroline - normal",
+        "Target": "Data/Festivals/spring24",
+        "When": {
+            "EnableFor": "Caroline"
+        },
+        "Entries": {
+            "Caroline_y2": "{{i18n:caroline-y2-dance.00}}",
+        }
+    },
+    {
+        "Action": "EditData",
+        "LogName": "Clint - normal",
+        "Target": "Data/Festivals/spring24",
+        "When": {
+            "EnableFor": "Clint"
+        },
+        "Entries": {
+            "Clint_y2": "{{i18n:clint-y2-dance}}$s",
+        }
+    },
+    {
+        "Action": "EditData",
+        "LogName": "Clint - Emily taken",
+        "Target": "Data/Festivals/spring24",
+        "When": {
+            "EnableFor": "Clint",
+            "Query: {{Spouse:anyPlayer|contains=Emily}} OR {{Relationship:Emily|contains=Married,Dating}}": true
+        },
+        "Entries": {
+            "Clint": "{{i18n:clint-dance-no-emily}}$s",
+        }
+    },
+]}

@@ -4,6 +4,7 @@
     // Used to be young and fun, a little anxious about getting old.
 
     // Parents raised horses.
+    // Grew up in Stardew, moved away for college, moved back. (Pierre did not originate from the area.)
     {
         "LogName": "Rain - SeedShop",
         "Action": "EditData",
@@ -30,6 +31,9 @@
 
             // before egg hunt
             "spring_12{{YearRemainder}}": "Abby's been training so hard for the egg hunt, I rarely see her train harder.",
+            
+            // before flower dance
+            "spring_23{{YearRemainder}}": "Oh, @, it's the flower dance tomorrow! Will you be dancing?#$e#Personally, I greatly enjoyed it when I was young. I had few opportunities to put on a pretty dress.#$e#It's not really Abby's thing, though.",
 
             "1{{YearRemainder}}": "My parents used to raise horses here when I was young.#$e#No lack of land around here!",
             "6{{YearRemainder}}": "I do miss riding horses. I had a lot more time for stuff like that when I was young.#$b#Also, horses can be quite expensive to maintain.",
@@ -58,7 +62,7 @@
             "fall_Mon6": "Think I'll take a walk around. Maybe head out to the woods.",
             "winter_Mon6": "There's nothing like fresh tea from a plant you've grown yourself.",
 
-            "1{{YearRemainder}}": "Hey, @, how have you been? Join me for a cup of tea?[614]",
+            "2{{YearRemainder}}": "Hey, @, how have you been? Join me for a cup of tea?[614]",
             "4{{YearRemainder}}": "Ugh, @, I wish I had more time to garden.$s#$e#Say, take these and plant them for me? I haven't the time to do much gardening myself lately.[770]",
             "17{{YearRemainder}}": "Ever since Pierre decided that the shop should be open seven days a week, I've felt like I've always been at work.$s#$b#Wish I could just get a little time to drink a nice cup of tea.",
             "21{{YearRemainder}}": "Used to enjoy going out to the forest to gather mushrooms. We would sometimes sell them, helped when we needed the money.",
@@ -76,6 +80,10 @@
 
             "Mon4": "I love helping Evelyn out with the town gardens.$h",
             "winter_Mon4": "Gotta help Evelyn prepare the flower garden for next year, it'll be glorious!$h",
+
+            // specific day lines
+            // before egg hunt
+            "spring_12_2": "It'll be the egg hunt tomorrow! I wonder what interesting egg dishes Gus will put together this year?",
 
             // GIMA lines
             "Resort_Bar_2": "Mmmmmm. I wonder what's in this?$h",

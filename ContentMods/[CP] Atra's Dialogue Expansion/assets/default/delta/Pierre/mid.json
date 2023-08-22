@@ -14,6 +14,8 @@
             "Resort_Chair": "Ah, a chance to rest my feet!$h",
             "Resort_Pier": "Gosh, the water's so blue here...",
 
+            "spring_12{{YearRemainder}}": "Oh, I've gotta remember to get some flower seeds for Evelyn, so she can plant the flowers for the flower dance!$h",
+
             // day before the flower dance
             "spring_23{{YearRemainder}}": "Sorry, @, can't talk now, I'm getting ready for the flower dance tomorrow.#$b#We make pretty good money doing souvenirs for the festivals.",
 

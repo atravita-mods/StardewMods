@@ -66,8 +66,9 @@
             "EnableFor": "Demetrius"
         },
         "Entries": {
-            "Demetrius_y2": "{{i18n:demetrius-y2-dance}}$h","Demetrius_y3": "{{i18n:demetrius-y3-dance}}$h",
-            "Demetrius_y4": "{{i18n:demetrius-y4-dance}}$h",
+            "Demetrius_y2": "{{i18n:demetrius-y2-dance}}$h",
+            "Demetrius_y3": "{{i18n:demetrius-y3-dance}}$h",
+            "Demetrius_y4": "{{i18n:demetrius-y4-dance}}$h"
         }
     },
     {
@@ -93,6 +94,58 @@
             "Emily_y2": "{{i18n:emily-y2-dance.00}}$h#$e#{{i18n:emily-y2-dance.01}}",
             "Emily_spouse": "{{i18n:emily-y1-dance-spouse}}$h",
             "Emily_spouse_y2": "{{i18n:emily-y2-dance-spouse}}$h"
+        }
+    },
+    {
+        "Action": "EditData",
+        "LogName": "Evelyn - normal",
+        "Target": "Data/Festivals/spring24",
+        "When": {
+            "EnableFor": "Evelyn"
+        },
+        "Entries": {
+            "Evelyn_y2": "{{i18n:evelyn-y2-dance}}$h",
+            "Evelyn_y3": "{{i18n:evelyn-y3-dance}}$h",
+            "Evelyn_y4": "{{i18n:evelyn-y4-dance}}$h",
+        }
+    },
+    {
+        "Action": "EditData",
+        "LogName": "George - normal",
+        "Target": "Data/Festivals/spring24",
+        "When": {
+            "EnableFor": "George"
+        },
+        "Entries": {
+            "George_y2": "{{i18n:george-y2-dance}}$s",
+            "George_y3": "{{i18n:george-y3-dance}}",
+            "George_y4": "{{i18n:george-y4-dance}}$s",
+        }
+    },
+    {
+        "Action": "EditData",
+        "LogName": "George - normal",
+        "Target": "Data/Festivals/spring24",
+        "When": {
+            "EnableFor": "Gus"
+        },
+        "Entries": {
+            "Gus_y2": "{{i18n:gus-y2-dance}}$h",
+            "Gus_y3": "{{i18n:gus-y3-dance}}$h",
+            "Gus_y4": "{{i18n:gus-y4-dance}}$h",
+        }
+    },
+    {
+        "Action": "EditData",
+        "LogName": "Caroline - normal",
+        "Target": "Data/Festivals/spring24",
+        "When": {
+            "EnableFor": "Haley"
+        },
+        "Entries": {
+            "Haley_y2": "{{i18n:haley-y2-dance.00}}$h#$e#{{i18n:haley-y2-dance.01}}$h",
+            "Haley_spouse": "{{i18n:haley-y1-dance-spouse}}$h",
+            "Haley_spouse_y2": "{{i18n:haley-y2-dance-spouse}}$h"
         }
     },
 ]}

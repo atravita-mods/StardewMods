@@ -276,9 +276,9 @@
     // misc
 
     // Demetrius has a few lines that don't really make sense if you have any real understanding of math. I'm replacing them because I want him to appear to have a math background.
-    // ie, sinusoidal is, like, by definition, the most predictable function. So if Demetrius is trying to model Robin's mood as a sinusoid, he's either (a) saying she's PMSing or (b) he's using the wrong function. I doubt either is the intent here.
+    // ie, sinusoidal is, like, by definition, the most predictable function. So if Demetrius is trying to model Robin's mood as a sinusoid, he's either (a) saying she's PMSing or (b) he's assuming that her mood should be very predictable. I doubt either is the intent here.
     "demetrius-fri4.00": "Robin has a temper. I try my best to stay on her good side.",
-    "demetrius-fri4.01": "I try my best to predict her moods but I'm not good at it.",
+    "demetrius-fri4.01": "I do try to predict her moods but I'm not good at it.",
     // Piecewise function is a fancy way of saying "I gave up making
     // a nonpiecewise function fit my data." It's awkward. It's weird.
     "demetrius-winter-sat.00": "Hmmm...I wonder how much the seasonal change in nitrogen levels is affected by the snowpack...",
@@ -764,6 +764,19 @@
     "emily-y2-dance.01": "Of course, I also made Haley's. What do you think?",
     "emily-y1-dance-spouse": "Gus and I have been working on the food for days! Isn't it amazing?",
     "emily-y2-dance-spouse": "I do enjoy a good opportunity to wear a beautiful dress. My @, will you dance with me today?",
+    "evelyn-y2-dance": "Our little town used to be famous for its flowers. Used to be our biggest export.",
+    "evelyn-y3-dance": "I do really enjoy putting together the flower arrangements every year. Aren't these lovely?",
+    "evelyn-y4-dance": "I remember many years ago, when Pam and Caroline and Marnie were the ones dancing...Pam used to be quite good looking in her youth, you know.",
+    "george-y2-dance": "Hrmph. Evelyn loves these flowers but they're horrid for my allergies...",
+    "george-y3-dance": "Pushing my wheelchair across that tiny bridge wasn't easy, let me tell you that....and I still have to go back...",
+    "george-y4-dance": "Gosh, @, I wish I could still take my dear Evelyn out dancing.",
+    "gus-y2-dance": "I'm exceptionally proud of the jelly this year!",
+    "gus-y3-dance": "Do try the rose hip tea, Evelyn and Caroline grew those flowers especially for it!",
+    "gus-y4-dance": "We're almost at summer, @, it's almost the season for ice cream.",
+    "haley-y2-dance.00": "Do you like my dress? Emily made it for me.",
+    "haley-y2-dance.01": "She's so talented, isn't she?",
+    "haley-y1-dance-spouse": "We make a striking pair, don't we? Come, @, come dance with me.",
+    "haley-y2-dance-spouse": "I'll never turn down the chance to put on a pretty dress and dance a bit. Come dance with me, @?",
 
     // Dance of the Moonlight Jellies
     "abby-y2-jellies": "Man, I'm not looking forward to school starting again",

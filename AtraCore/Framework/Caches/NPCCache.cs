@@ -80,7 +80,7 @@ public static class NPCCache
             }
         }
 
-        NPC? npc = Game1.getCharacterFromName(name, mustBeVillager: true, useLocationsListOnly: false);
+        NPC? npc = Game1.getCharacterFromName(name, mustBeVillager: true);
         if (npc is not null && npc.GetType() == typeof(NPC))
         {
             cache[string.IsInterned(name) ?? name] = new(npc);

@@ -130,7 +130,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GiftTasteCSV", "GiftTasteCS
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OneSixMyMod", "OneSixMyMod\OneSixMyMod.csproj", "{0CF9B517-0F07-46A1-92FC-659454D17889}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MapAndTileProperties", "MapAndTileProperties\MapAndTileProperties.csproj", "{A965FD3A-5869-468F-B86A-741F7E1F36D4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MapAndTileProperties", "MapAndTileProperties\MapAndTileProperties.csproj", "{A965FD3A-5869-468F-B86A-741F7E1F36D4}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "NewFolder1", "NewFolder1", "{34A476FC-0211-42B7-B7F5-D47BF732E1FF}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

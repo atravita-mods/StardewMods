@@ -11,6 +11,7 @@ using AtraShared.Utils.Extensions;
 using Microsoft.Xna.Framework;
 using StardewModdingAPI.Utilities;
 using StardewValley.Network;
+using StardewValley.Pathfinding;
 
 namespace AtraShared.Schedules;
 
@@ -130,7 +131,7 @@ public class ScheduleUtilityFunctions
                 // GOTO season
                 if (newKey.Equals("Season", StringComparison.OrdinalIgnoreCase))
                 {
-                    newKey = date.Season.ToLowerInvariant();
+                    newKey = date.SeasonKey.ToLowerInvariant();
                 }
 
                 // GOTO newKey

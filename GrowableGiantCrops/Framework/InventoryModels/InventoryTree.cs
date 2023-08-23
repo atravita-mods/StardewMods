@@ -182,7 +182,7 @@ public sealed class InventoryTree : SObject
     #region placement
 
     /// <inheritdoc />
-    public override bool canBePlacedHere(GameLocation l, Vector2 tile)
+    public override bool canBePlacedHere(GameLocation l, Vector2 tile, CollisionMask collisionMask = CollisionMask.All, bool showError = false)
         => this.CanPlace(l, tile, ModEntry.Config.RelaxedPlacement);
 
     /// <summary>
@@ -203,7 +203,7 @@ public sealed class InventoryTree : SObject
         int x = (int)tile.X;
         int y = (int)tile.Y;
 
-        return (GGCUtils.CanPlantTreesAtLocation(l, relaxed, x, y, true) || l.CanPlantTreesHere(309, x, y)) // 309 is one of the wild trees.
+        return (GGCUtils.CanPlantTreesAtLocation(l, relaxed, x, y, true) || l.CanPlantTreesHere("309", x, y)) // 309 is one of the wild trees.
             && l.terrainFeatures?.ContainsKey(tile) == false
             && GGCUtils.IsTilePlaceableForResourceClump(l, x, y, relaxed)
             && (relaxed || this.isStump.Value || this.growthStage.Value < Tree.treeStage || !HasAdultTreesAround(l, x, y));
@@ -232,7 +232,7 @@ public sealed class InventoryTree : SObject
 
         Tree tree = new(this.ParentSheetIndex, this.growthStage.Value)
         {
-            currentTileLocation = placementTile,
+            Tile = placementTile,
         };
         tree.stump.Value = this.isStump.Value;
         if (ModEntry.Config.PreserveModData)
@@ -243,7 +243,7 @@ public sealed class InventoryTree : SObject
 
         if ((this.ParentSheetIndex == Tree.mushroomTree || (tree.IsPalmTree() && ModEntry.Config.PalmTreeBehavior.HasFlagFast(PalmTreeBehavior.Stump)))
             && this.growthStage.Value == Tree.treeStage
-            && location.IsOutdoors && Game1.GetSeasonForLocation(location) == "winter")
+            && location.IsOutdoors && location.GetSeason() == Season.Winter)
         {
             tree.stump.Value = true;
         }

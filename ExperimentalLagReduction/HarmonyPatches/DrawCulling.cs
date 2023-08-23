@@ -94,7 +94,7 @@ internal static class DrawCulling
     [MethodImpl(TKConstants.Hot)]
     [HarmonyPatch(typeof(ResourceClump), nameof(ResourceClump.draw), new[] { typeof(SpriteBatch), typeof(Vector2) })]
     private static bool PrefixClumpDraw(ResourceClump __instance, Vector2 tileLocation)
-        => !ModEntry.Config.CullDraws || Utility.isOnScreen((__instance.tile.Value + Vector2.One) * Game1.tileSize, 128);
+        => !ModEntry.Config.CullDraws || Utility.isOnScreen((__instance.Tile.Value + Vector2.One) * Game1.tileSize, 128);
 
     [HarmonyPrefix]
     [HarmonyPriority(Priority.Last)]

@@ -284,12 +284,9 @@ public static class GameLocationUtils
         foreach (GameLocation location in Game1.locations)
         {
             yield return location;
-            if (location is BuildableGameLocation buildableloc)
+            foreach (GameLocation loc in YieldInteriorLocations(location))
             {
-                foreach (GameLocation loc in YieldInteriorLocations(buildableloc))
-                {
-                    yield return loc;
-                }
+                yield return loc;
             }
         }
     }
@@ -302,42 +299,36 @@ public static class GameLocationUtils
     {
         foreach (GameLocation? loc in Game1.locations)
         {
-            if (loc is BuildableGameLocation buildable)
+            foreach (Building? building in GetBuildings(loc))
             {
-                foreach (Building? building in GetBuildings(buildable))
-                {
-                    yield return building;
-                }
+                yield return building;
             }
         }
     }
 
-    private static IEnumerable<GameLocation> YieldInteriorLocations(BuildableGameLocation loc)
+    private static IEnumerable<GameLocation> YieldInteriorLocations(GameLocation loc)
     {
         foreach (Building building in loc.buildings)
         {
             if (building.indoors?.Value is GameLocation indoorloc)
             {
                 yield return indoorloc;
-                if (indoorloc is BuildableGameLocation buildableIndoorLoc)
+                foreach (GameLocation nestedLocation in YieldInteriorLocations(indoorloc))
                 {
-                    foreach (GameLocation nestedLocation in YieldInteriorLocations(buildableIndoorLoc))
-                    {
-                        yield return nestedLocation;
-                    }
+                    yield return nestedLocation;
                 }
             }
         }
     }
 
-    private static IEnumerable<Building> GetBuildings(BuildableGameLocation loc)
+    private static IEnumerable<Building> GetBuildings(GameLocation loc)
     {
         foreach (Building building in loc.buildings)
         {
             yield return building;
-            if (building.indoors?.Value is BuildableGameLocation buildable)
+            if (building.indoors?.Value is GameLocation interiorLoc)
             {
-                foreach (Building interiorBuilding in GetBuildings(buildable))
+                foreach (Building interiorBuilding in GetBuildings(interiorLoc))
                 {
                     yield return interiorBuilding;
                 }

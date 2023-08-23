@@ -50,7 +50,7 @@ public class NoMatchFoundException : InvalidOperationException
 public static partial class ILHelperThrowHelper
 {
 #if NET6_0_OR_GREATER
-    [StaticTraceHidden]
+    [StackTraceHidden]
 #endif
     [DoesNotReturn]
     [DebuggerHidden]
@@ -61,7 +61,7 @@ public static partial class ILHelperThrowHelper
     }
 
 #if NET6_0_OR_GREATER
-    [StaticTraceHidden]
+    [StackTraceHidden]
 #endif
     [DoesNotReturn]
     [DebuggerHidden]
@@ -72,7 +72,7 @@ public static partial class ILHelperThrowHelper
     }
 
 #if NET6_0_OR_GREATER
-    [StaticTraceHidden]
+    [StackTraceHidden]
 #endif
     [DoesNotReturn]
     [DebuggerHidden]
@@ -83,7 +83,7 @@ public static partial class ILHelperThrowHelper
     }
 
 #if NET6_0_OR_GREATER
-    [StaticTraceHidden]
+    [StackTraceHidden]
 #endif
     [DoesNotReturn]
     [DebuggerHidden]
@@ -94,7 +94,7 @@ public static partial class ILHelperThrowHelper
     }
 
 #if NET6_0_OR_GREATER
-    [StaticTraceHidden]
+    [StackTraceHidden]
 #endif
     [DoesNotReturn]
     [DebuggerHidden]
@@ -105,7 +105,7 @@ public static partial class ILHelperThrowHelper
     }
 
 #if NET6_0_OR_GREATER
-    [StaticTraceHidden]
+    [StackTraceHidden]
 #endif
     [DoesNotReturn]
     [DebuggerHidden]
@@ -116,7 +116,7 @@ public static partial class ILHelperThrowHelper
     }
 
 #if NET6_0_OR_GREATER
-    [StaticTraceHidden]
+    [StackTraceHidden]
 #endif
     [DoesNotReturn]
     [DebuggerHidden]
@@ -127,7 +127,7 @@ public static partial class ILHelperThrowHelper
     }
 
 #if NET6_0_OR_GREATER
-    [StaticTraceHidden]
+    [StackTraceHidden]
 #endif
     [DoesNotReturn]
     [DebuggerHidden]

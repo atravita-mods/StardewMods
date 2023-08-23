@@ -13,17 +13,20 @@ namespace AtraShared.ItemManagement;
 /// </summary>
 public static class ItemUtils
 {
+    [Obsolete("Favor string ids")]
+    public static Item? GetItemFromIdentifier(string type, int id) => GetItemFromIdentifier(type, id.ToString());
+
     /// <summary>
     /// Get an item from the string identifier system.
     /// Returns null if it's not something that can be handled.
     /// </summary>
     /// <param name="type">Identifier string (like "O" or "B").</param>
-    /// <param name="id">int id.</param>
+    /// <param name="id">string itemid.</param>
     /// <returns>Item if possible.</returns>
     /// <remarks>Carries the no-inlining attribute so other mods can patch this.</remarks>
     [Pure]
     [MethodImpl(MethodImplOptions.NoInlining)]
-    public static Item? GetItemFromIdentifier(string type, int id)
+    public static Item? GetItemFromIdentifier(string type, string id)
     => type switch
     {
         "F" or "f" => Furniture.GetFurnitureInstance(id),
@@ -39,6 +42,9 @@ public static class ItemUtils
         _ => null,
     };
 
+    [Obsolete("Prefer string based IDs")]
+    public static Item? GetItemFromIdentifier(ItemTypeEnum type, int id) => GetItemFromIdentifier(type, id.ToString());
+
     /// <summary>
     /// Get an item using the enum as a category.
     /// Returns null if it's not something that can be handled.
@@ -49,7 +55,7 @@ public static class ItemUtils
     /// <remarks>Carries the no-inlining attribute so other mods can patch this.</remarks>
     [Pure]
     [MethodImpl(MethodImplOptions.NoInlining)]
-    public static Item? GetItemFromIdentifier(ItemTypeEnum type, int id)
+    public static Item? GetItemFromIdentifier(ItemTypeEnum type, string id)
         => type switch
         {
             ItemTypeEnum.Furniture => Furniture.GetFurnitureInstance(id),

@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-using StardewModdingAPI.Utilities;
+﻿using StardewModdingAPI.Utilities;
 
 using StardewValley.Network;
 
@@ -56,7 +50,7 @@ internal class ScheduleUtilityFunctions
                 // GOTO season
                 if (newKey.Equals("Season", StringComparison.OrdinalIgnoreCase))
                 {
-                    newKey = date.Season.ToLowerInvariant();
+                    newKey = date.SeasonKey.ToLowerInvariant();
                 }
 
                 // GOTO newKey

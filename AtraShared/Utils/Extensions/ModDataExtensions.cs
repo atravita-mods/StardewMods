@@ -6,6 +6,8 @@ using AtraBase.Toolkit.Extensions;
 
 using Microsoft.Xna.Framework;
 
+using StardewValley.Mods;
+
 namespace AtraShared.Utils.Extensions;
 
 /// <summary>

@@ -29,7 +29,7 @@ public static class NPCExtensions
             dialogue = dialogue.Replace(MarriageDialogueReference.ENDEARMENT_TOKEN, npc.getTermOfSpousalEndearment(), StringComparison.Ordinal);
 
             npc.CurrentDialogue.Clear();
-            npc.CurrentDialogue.Push(new Dialogue(dialogue, npc) { removeOnNextMove = true });
+            npc.CurrentDialogue.Push(new Dialogue(npc, $"{npc.LoadedDialogueKey}:{dialogueKey}", dialogue) { removeOnNextMove = true });
         }
     }
 

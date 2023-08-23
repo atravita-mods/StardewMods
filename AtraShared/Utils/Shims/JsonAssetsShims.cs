@@ -30,7 +30,7 @@ namespace AtraShared.Utils.Shims;
 [SuppressMessage("StyleCop.CSharp.OrderingRules", "SA1201:Elements should appear in the correct order", Justification = StyleCopErrorConsts.AccessorsNearFields)]
 public static class JsonAssetsShims
 {
-    private const int EventID = int.MinValue + 4993;
+    private const string EventID = "atravita.AtraCore.TestEvent";
     private static bool initialized = false;
 
     private static IMonitor modMonitor = null!;
@@ -116,13 +116,7 @@ public static class JsonAssetsShims
         {
             return false;
         }
-        bool replace = Game1.player.eventsSeen.Remove(EventID);
-        bool ret = farmhouse.checkEventPrecondition($"{EventID}/{conditions}") != -1;
-        if (replace)
-        {
-            Game1.player.eventsSeen.Add(EventID);
-        }
-        return ret;
+        return farmhouse.checkEventPrecondition($"{EventID}/{conditions}", false) != "-1";
     }
 
     private static readonly Lazy<Dictionary<string, string>?> jaCropCache = new(SetUpJAIntegration);

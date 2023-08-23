@@ -98,9 +98,8 @@ public static partial class SeasonExtensions
     /// </summary>
     /// <param name="loc">GameLocation.</param>
     /// <returns>Season.</returns>
-#warning - need to fix in Stardew 1.6.
     public static StardewSeasons GetSeasonFromGame(GameLocation? loc)
-        => GetSeasonFromIndex(Utility.getSeasonNumber(Game1.GetSeasonForLocation(loc)));
+        => GetSeasonFromIndex((loc ?? Game1.getFarm()).GetSeasonIndex());
 
     /// <summary>
     /// Gets the season enum matching the game's season index.

@@ -1,4 +1,6 @@
-﻿namespace AtraShared.Utils.Extensions;
+﻿using StardewValley.Pathfinding;
+
+namespace AtraShared.Utils.Extensions;
 
 /// <summary>
 /// Extension methods on Stardew's SchedulePathDescription class.

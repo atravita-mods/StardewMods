@@ -113,7 +113,7 @@ public static class SObjectExtensions
     /// </summary>
     /// <param name="bigCraftableIndex">Bigcraftable.</param>
     /// <returns>public name if found.</returns>
-    public static string GetBigCraftableName(this int bigCraftableIndex)
+    public static string GetBigCraftableName(this string bigCraftableIndex)
     {
         if (Game1.bigCraftablesInformation.TryGetValue(bigCraftableIndex, out string? value))
         {
@@ -131,7 +131,7 @@ public static class SObjectExtensions
     /// </summary>
     /// <param name="bigCraftableIndex">Index of the bigcraftable.</param>
     /// <returns>Name of the bigcraftable.</returns>
-    public static string GetBigCraftableTranslatedName(this int bigCraftableIndex)
+    public static string GetBigCraftableTranslatedName(this string bigCraftableIndex)
     {
         if (Game1.bigCraftablesInformation?.TryGetValue(bigCraftableIndex, out string? value) == true)
         {

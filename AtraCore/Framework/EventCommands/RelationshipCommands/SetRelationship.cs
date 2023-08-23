@@ -248,7 +248,7 @@ internal sealed class SetRelationship : IEventCommand
                 Game1.player.spouse = npc.Name;
                 WorldDate weddingDate = new(Game1.Date);
                 weddingDate.TotalDays += value;
-                while (!Game1.canHaveWeddingOnDay(weddingDate.DayOfMonth, weddingDate.Season))
+                while (!Game1.canHaveWeddingOnDay(weddingDate.DayOfMonth, weddingDate.SeasonKey))
                 {
                     weddingDate.TotalDays++;
                 }
@@ -375,10 +375,9 @@ internal sealed class SetRelationship : IEventCommand
 
     private static void ClearNPCSchedule(NPC npc)
     {
-        npc.followSchedule = false;
         if (npc.Schedule is not null)
         {
-            npc.Schedule = null;
+            npc.ClearSchedule();
         }
         npc.controller = null;
         npc.temporaryController = null;

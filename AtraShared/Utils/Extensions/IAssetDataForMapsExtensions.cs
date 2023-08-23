@@ -1,7 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 
 using xTile.Dimensions;
-using xTile.ObjectModel;
 
 using XTile = xTile.Tiles.Tile;
 
@@ -23,14 +22,14 @@ public static class IAssetDataForMapsExtensions
     /// <param name="placementTile">tile to edit.</param>
     public static void AddTileProperty(this IAssetDataForMap map, IMonitor monitor, string layer, string key, string property, Vector2 placementTile)
     {
-        XTile? tile = map.Data.GetLayer(layer).PickTile(
+        XTile? tile = map.Data.GetLayer(layer)?.PickTile(
             new Location((int)placementTile.X * Game1.tileSize, (int)placementTile.Y * Game1.tileSize),
             Game1.viewport.Size);
         if (tile is null)
         {
-            monitor.Log($"Tile could not be edited for shop, please let atra know!", LogLevel.Warn);
+            monitor.Log($"Tile could not be edited for {property}, please let atra know!", LogLevel.Warn);
             return;
         }
-        tile.Properties[key] = new PropertyValue(property);
+        tile.Properties[key] = property;
     }
 }

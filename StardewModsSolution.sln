@@ -132,7 +132,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OneSixMyMod", "OneSixMyMod\
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MapAndTileProperties", "MapAndTileProperties\MapAndTileProperties.csproj", "{A965FD3A-5869-468F-B86A-741F7E1F36D4}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "NewFolder1", "NewFolder1", "{34A476FC-0211-42B7-B7F5-D47BF732E1FF}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Deprecated", "Deprecated", "{51E1CEE0-2A1B-475C-B9D6-1AF57100DDBF}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -359,6 +359,9 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{5265C6D3-EFAF-4753-938F-64B030411340} = {51E1CEE0-2A1B-475C-B9D6-1AF57100DDBF}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {D2799BF4-19A3-4855-A5FB-847B5FF8611D}

@@ -249,9 +249,10 @@ internal sealed class ModEntry : BaseMod<ModEntry>
         ViewportAdjustmentPatches.SetCameraBehaviorForConfig(Config, Game1.currentLocation);
 
         bool changed = false;
-        Utility.ForAllLocations(location =>
+        Utility.ForEachLocation(location =>
         {
             changed |= Config.PerMapCameraBehavior.TryAdd(location.Name, PerMapCameraBehavior.ByIndoorsOutdoors);
+            return true; // check every location.
         });
 
         if (changed)
@@ -313,7 +314,7 @@ internal sealed class ModEntry : BaseMod<ModEntry>
     internal static void Reset()
     {
         offset.Value = Point.Zero;
-        target.Value = new(Game1.player.getStandingX(), Game1.player.getStandingY());
+        target.Value = Game1.player.StandingPixel;
     }
 
     /// <summary>
@@ -674,8 +675,10 @@ internal sealed class ModEntry : BaseMod<ModEntry>
 
         offset.Value = new(xAdjustment, yAdjustment);
 
-        int x = Game1.player.getStandingX() + xAdjustment;
-        int y = Game1.player.getStandingY() + yAdjustment;
+        var standingPoint = Game1.player.StandingPixel;
+
+        int x = standingPoint.X + xAdjustment;
+        int y = standingPoint.Y + yAdjustment;
 
         if (SnapOnNextTick)
         {

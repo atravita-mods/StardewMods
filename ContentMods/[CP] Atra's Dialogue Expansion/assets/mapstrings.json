@@ -19,7 +19,7 @@
             "HaleyHouse.13": "{{i18n: haley-photography.{{YearModulus}} }}",
         },
         "When": {
-            "EnableFor|contains=Haley": true,
+            "EnableFor": "Haley",
         }
     },
     {
@@ -32,7 +32,7 @@
             "HarveyRoom.14": "{{i18n: harvey-tele.start}}{{i18n:harvey-tele.{{Season}}.{{Random: 00,01,02}} }}",
         },
         "When": {
-            "EnableFor|Contains=Harvey": true,
+            "EnableFor": "Harvey",
             "Year|contains=1": false,
         }
     },
@@ -44,7 +44,7 @@
             "Trailer.1": "{{i18n:penny-teaching.{{Season}}.{{YearModulus}} }}"
         },
         "When": {
-            "EnableFor|Contains=Penny": true,
+            "EnableFor": "Penny",
         }
     },
     {
@@ -52,7 +52,7 @@
         "Action": "EditData",
         "Target": "Strings/StringsFromMaps",
         "When": {
-            "EnableFor|Contains=Shane": true,
+            "EnableFor": "Shane",
             "Random: 1,2": 1,
         },
         "Entries":{
@@ -64,7 +64,7 @@
         "Action": "EditData",
         "Target": "Strings/StringsFromMaps",
         "When": {
-            "EnableFor|Contains=Marnie": true,
+            "EnableFor": "Marnie",
         },
         "Entries": {
             "AnimalShop.19": "{{i18n:animalshop-sink.{{Season}}.{{Random: 00, 01, 02}} }}"

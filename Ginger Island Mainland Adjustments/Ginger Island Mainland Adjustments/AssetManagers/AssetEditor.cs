@@ -27,10 +27,10 @@ internal static class AssetEditor
     /// <summary>
     /// The integer key of Pam's heart event.
     /// </summary>
-    internal const int PAMEVENT = 99219999;
+    internal const string PAMEVENT = "99219999";
 
     private static readonly PerScreen<TickCache<bool>> HasSeenNineHeart = new(
-    static () => new(() => Game1.player?.eventsSeen?.Contains(503180) == true));
+    static () => new(() => Game1.player?.eventsSeen?.Contains("503180") == true));
 
     private static readonly PerScreen<TickCache<bool>> HasSeenPamEvent = new(
         static () => new(() => Game1.player?.eventsSeen?.Contains(PAMEVENT) == true));

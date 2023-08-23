@@ -20,10 +20,19 @@
     "JojaMail.Fall.Title": "Back to School!",
     "JojaMail.Fall.Text.1": "Get all the school supplies your child needs cheap from Joja! Loose leaf paper, binders, and new spirals all around!",
 
+    "JojaMail.Winter.Title": "Hot Chocolate For All!",
+    "JojaMail.Winter.Text.1": "Come in to your local JojaMart, get a free cup of hot cocoa on us!",
+    "JojaMail.Winter.Text.2": "Required minimum 2000$ purchase to qualify for free hot cocoa.",
+
     // Medications, because WTF America
     "SkinImplants.Title": "Fix Your Jawline!",
     "SkinImplants.Text.1": "Ever thought your jawline needed a little work? Well, come by Doctor Hendricks today for our patented jawline injection! This is the only outpatient procedure guaranteed to firm up those jowls and sharpen that jawline. 30% off for the next two weeks!",
-    "SkinImplants.Text.2": "There is a small risk the needle may puncture a vein, which may lead to numbness, blindness, or even death."
+    "SkinImplants.Text.2": "There is a small risk the needle may puncture a vein, which may lead to numbness, blindness, or even death.",
+
+    // vacation
+    "IslandVacation.Title": "Take off to a Tropical Paradise",
+    "IslandVacation.Text.1": "Enjoy a nice pina colada on the white sandy beaches of Ginger Island! Just 1000$ for a ticket!",
+    "IslandVacation.Text.2": "Departs daily from the Pelican Town Beach.",
 
     /*********
     * Dialogue

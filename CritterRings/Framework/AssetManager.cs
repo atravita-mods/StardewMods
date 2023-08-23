@@ -14,7 +14,7 @@ internal static class AssetManager
     private static Lazy<Texture2D> buffTex = new(() => Game1.content.Load<Texture2D>(buffTextureLocation.BaseName));
 
     /// <summary>
-    /// The location of the buff icon texture.
+    /// Gets the location of the buff icon texture.
     /// </summary>
     internal static Texture2D BuffTexture => buffTex.Value;
 

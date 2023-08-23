@@ -22,7 +22,6 @@ internal static class EventPatches
         DelayedAction.functionAfterDelay(
             () =>
             {
-                Microsoft.Xna.Framework.Point pos = Game1.player.getStandingXY();
                 ModEntry.Reset();
                 ModEntry.SnapOnNextTick = true;
             },

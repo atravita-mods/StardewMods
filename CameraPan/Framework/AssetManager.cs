@@ -14,6 +14,7 @@ internal static class AssetManager
 {
     private static IAssetName arrowLocation = null!;
     private static IAssetName dartsLocation = null!;
+    private static IAssetName shopsLocation = null!;
 
     private static Lazy<Texture2D> arrowTexture = new(() => Game1.content.Load<Texture2D>(arrowLocation.BaseName));
 
@@ -37,6 +38,7 @@ internal static class AssetManager
     {
         arrowLocation = parser.ParseAssetName("Mods/atravita.CameraPan/Arrow");
         dartsLocation = parser.ParseAssetName("Minigames/Darts");
+        shopsLocation = parser.ParseAssetName("Data/Shops");
     }
 
     /// <summary>

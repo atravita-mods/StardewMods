@@ -41,6 +41,7 @@ public sealed class API : ICameraAPI
     {
         ModEntry.ModMonitor.Log($"{this.callerUniqueID} hard resetting.");
         ModEntry.Reset();
+        ModEntry.SnapOnNextTick = true;
     }
 
     /// <inheritdoc />
@@ -48,6 +49,5 @@ public sealed class API : ICameraAPI
     {
         ModEntry.ModMonitor.Log($"{this.callerUniqueID} resetting.");
         ModEntry.Reset();
-        ModEntry.SnapOnNextTick = true;
     }
 }

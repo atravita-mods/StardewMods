@@ -1,8 +1,4 @@
-﻿using System.Reflection;
-
-using AtraCore.Framework.ReflectionManager;
-
-using HarmonyLib;
+﻿using HarmonyLib;
 
 using StardewValley.Menus;
 

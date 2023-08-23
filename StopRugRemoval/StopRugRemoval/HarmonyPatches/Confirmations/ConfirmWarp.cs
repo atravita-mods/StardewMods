@@ -190,13 +190,13 @@ internal static class ConfirmWarp
                 .HasFlag(Context.IsMultiplayer ? ConfirmationEnum.InMultiplayerOnly : ConfirmationEnum.NotInMultiplayer))
         {
             ModEntry.InputHelper.SurpressClickInput();
-            List<Response> responses = new()
+            Response[] responses = new[]
             {
                 new Response("WarpsYes", I18n.Yes()).SetHotKey(Keys.Y),
                 new Response("WarpsNo", I18n.No()).SetHotKey(Keys.Escape),
             };
 
-            List<Action?> actions = new()
+            Action?[] actions = new[]
             {
                 () =>
                 {
@@ -262,13 +262,13 @@ internal static class ConfirmWarp
                 .HasFlag(Context.IsMultiplayer ? ConfirmationEnum.InMultiplayerOnly : ConfirmationEnum.NotInMultiplayer))
         {
             ModEntry.InputHelper.SurpressClickInput();
-            List<Response> responses = new()
+            Response[] responses = new[]
             {
                 new Response("WarpsYes", I18n.Yes()).SetHotKey(Keys.Y),
                 new Response("WarpsNo", I18n.No()).SetHotKey(Keys.Escape),
             };
 
-            List<Action?> actions = new()
+            Action?[] actions = new[]
             {
                 () =>
                 {

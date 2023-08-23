@@ -200,6 +200,24 @@
             "Entries": {
                 "Jodi_y3": "{{i18n:jodi-y3-dance-sam-married}}$h#$e#{{i18n:jodi-y3-dance-sam-married.00}}$h",
             }
-        }
+        },
+        {
+            // kent is special since he comes back y2
+            // and that line is...wow.
+            // Leave it year 2, but make it seem like he heals a bit after that.
+            "Action": "EditData",
+            "LogName": "Kent - normal",
+            "Target": "Data/Festivals/spring24",
+            "When": {
+                "EnableFor": "Kent",
+                "Year|contains=1,2": false
+            },
+            "Entries": {
+                "Kent": "{{i18n:kent-y1-dance}}",
+                "Kent_y2": "{{i18n:kent-y2-dance}}",
+                "Kent_y3": "%{{i18n:kent-y3-dance.00}}#$b#{{i18n:kent-y3-dance.01}}#$b#{{i18n:kent-y3-dance.02}}$u",
+                "Kent_y4": "{{i18n:kent-y4-dance}}"
+            }
+        },
     ]
 }

@@ -43,4 +43,20 @@
             "Trailer_Entry": "{{i18n:penny-greet-Pam}}"
         }
     },
+    {
+        "LogName": "Penny - fix marriage schedule",
+        "Action": "EditData",
+        "Target": "Characters/Dialogue/MarriageDialoguePenny",
+        "When": {
+            "Weather: valley": "Rain, Storm",
+            "ScheduleChanges": "Penny"
+        },
+        "Entries": {
+            // instead of ushering around two students that aren't with her
+            // I've replaced Penny's schedule with one of her rain schedules
+            // and have to update dialogue to match.
+            "jobLeave_Penny": "{{i18n:jobLeave-Penny-rain}}$h",
+            "jobReturn_Penny": "{{i18n:jobReturn-Penny-rain}}$h",
+        }
+    }
 ]}

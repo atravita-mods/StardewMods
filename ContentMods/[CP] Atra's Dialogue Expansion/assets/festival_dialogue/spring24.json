@@ -9,6 +9,7 @@
             },
             "Entries": {
                 "Abigail_y2": "{{i18n:abby-y2-dance.00}}",
+                "Abigail_y3": "{{i18n:abby-y3-dance.00}}$a",
                 "Abigail_spouse": "{{i18n:abby-y1-dance-spouse}}"
             }
         },
@@ -54,7 +55,7 @@
             "Target": "Data/Festivals/spring24",
             "When": {
                 "EnableFor": "Clint",
-                "Query: {{Spouse:anyPlayer|contains=Emily}} OR {{Relationship:Emily|contains=Married,Dating}}": true
+                "Query: {{Spouse:anyPlayer|contains=Emily}} OR {{Relationship:Emily|contains=Married,Dating,Engaged}}": true
             },
             "Entries": {
                 "Clint": "{{i18n:clint-dance-no-emily}}$s",
@@ -195,7 +196,7 @@
             "Target": "Data/Festivals/spring24",
             "When": {
                 "EnableFor": "Jodi",
-                "Query: {{Spouse:anyPlayer|contains=Sam}} OR {{Relationship:Sam|contains=Married,Dating}}": true
+                "Query: {{Spouse:anyPlayer|contains=Sam}} OR {{Relationship:Sam|contains=Married,Dating,Engaged}}": true
             },
             "Entries": {
                 "Jodi_y3": "{{i18n:jodi-y3-dance-sam-married}}$h#$e#{{i18n:jodi-y3-dance-sam-married.00}}$h",
@@ -307,6 +308,32 @@
             },
             "Entries": {
                 "Linus_y3": "{{i18n:linus-y3-dance-married}}$h",
+            }
+        },
+        {
+            "Action": "EditData",
+            "LogName": "Marlon - normal",
+            "Target": "Data/Festivals/spring24",
+            "When": {
+                "EnableFor": "Marlon"
+            },
+            "Entries": {
+                "Marlon_y2": "{{i18n:marlon-y2-dance}}$s",
+                "Marlon_y3": "{{i18n:marlon-y3-dance}}$h",
+                "Marlon_y4": "{{i18n:marlon-y4-dance}}"
+            }
+        },
+                {
+            "Action": "EditData",
+            "LogName": "Maru - normal",
+            "Target": "Data/Festivals/spring24",
+            "When": {
+                "EnableFor": "Maru"
+            },
+            "Entries": {
+                "Maru_y2": "{{i18n:maru-y2-dance.00}}#$e#{{i18n:maru-y2-dance.01}}$h",
+                "Maru_spouse": "{{i18n:maru-y1-dance-spouse.00}}#$e#{{i18n:maru-y1-dance-spouse.01}}$h",
+                "Maru_spouse_y2": "{{i18n:maru-y2-dance-spouse}}$h"
             }
         },
     ]

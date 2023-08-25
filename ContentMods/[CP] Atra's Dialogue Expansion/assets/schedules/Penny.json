@@ -20,6 +20,14 @@
                 // keep the Maru visit even if she's married.
                 "marriage_Sun": "800 Town 96 18 3/1200 ScienceHouse 8 5 2 penny_sit_down/1900 bed"
             }
+        },
+        {
+            "Action": "EditData",
+            "Target": "Characters/schedules/Penny",
+            "When": {"Weather:valley": "Rain, Storm"},
+            "Entries": {
+                "marriageJob": "810 Town 104 89 2 \"Strings\\schedules\\Penny:rain2.000\"/1200 ArchaeologyHouse 20 5 0/1600 bed"
+            }
         }
     ]
 }

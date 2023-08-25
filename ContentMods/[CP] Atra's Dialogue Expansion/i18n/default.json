@@ -264,6 +264,9 @@
     "evelyn-harvey-winter-tue_0": "You know, @, I'm glad the good doc has you.",
     "evelyn-harvey-winter-tue_1": "We were afraid he was too married to his work.",
 
+    "jobLeave-Penny-rain": "Hey, @, I'm gonna go out and take a walk to the library today! Make sure to stay dry.",
+    "jobReturn-Penny-rain": "I had a great day at the library, @. I'm so glad we have it in town.",
+
     // entry strings
     "alex-vacation-bubbles" : "Ah, sun!/Gotta work on my tan!/Ah, vacation!",
     "george-homecoming": "I'm home!/Evelyn, I'm home!/Ah, home sweet home!",
@@ -747,6 +750,7 @@
 
     // Flower Dance
     "abby-y2-dance.00": "@, you think we could get rid of this festival? I don't think anyone likes the dance.",
+    "abby-y3-dance.00": "I really wouldn't dance if my dad didn't make me, but he thinks we should try harder to be part of the community.",
     "abby-y1-dance-spouse": "Ugh, @, dance with me? That way I won't feel so awkward.",
     "alex-y2-dance.00": "Everyone looks fantastic today.",
     "alex-y1-dance-spouse": "You look great as always, my love. Dance with me?",
@@ -815,6 +819,13 @@
     "linus-y3-dance": "Anyone catch your eye, @?",
     "linus-y3-dance-married": "Enjoying your time in our lovely valley, @? Are you planning on dancing this year?",
     "linus-y4-dance": "It's almost the end of spring. The weather'll start getting really hot soon...",
+    "marlon-y2-dance": "You know, @, I used to enjoy a good dance or two, especially after a nice round of drinks...",
+    "marlon-y3-dance": "Some say this dance is a celebration of the fertility of the valley.",
+    "marlon-y4-dance": "Are you asking me if anyone caught my eye, @? Well, maybe....",
+    "maru-y2-dance.00": "All right, let's get this awkward dance over with.",
+    "maru-y2-dance.01": "At least the food is as good as always.",
+    "maru-y1-dance-spouse.00": "Gosh, this dance is going to be as awkward as ever.",
+    "maru-y1-dance-spouse.01": "Everyone does look quite nice though.",
 
     // Dance of the Moonlight Jellies
     "abby-y2-jellies": "Man, I'm not looking forward to school starting again",

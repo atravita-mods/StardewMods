@@ -12,6 +12,7 @@
 
             // day-specific
             "spring_12{{YearRemainder}}": "You ready for the egg hunt tomorrow, @? I'm gonna smoke you!$h",
+            "spring_23{{YearRemainder}}": "I really don't want to dance at the flower dance tomorrow.$a",
             "summer_27{{YearRemainder}}": "Ugh, I'm not ready for summer to end.$s",
 
             // general

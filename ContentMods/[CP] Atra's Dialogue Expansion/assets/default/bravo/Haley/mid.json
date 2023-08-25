@@ -4,6 +4,10 @@
         "Action": "EditData",
         "Target": "Characters/Dialogue/Haley",
         "Entries": {
+
+            // lead up to the flower dance.
+            "spring_23{{YearRemainder}}": "The Flower Dance is tomorrow, @, and I've got the perfect dress for it!$h",
+
             "summer_Thu6": "I wonder when Mum and Dad are going to write to us again?$s",
             "summer_Fri8": "@, is there any point in me practicing my signature, when I'm likely to change my name when I get married?",
             "winter_Wed6": "It's hard ordering clothing online. So difficult finding the right size, and it's hard to know what something will look like on me.#$e#Not that I don't look good in anything.$h",
@@ -41,6 +45,9 @@
             "summer_Sun6": "Might take a walk later, on the beach. You think I'll find any interesting shells?",
 
             "winter_Tue2": "You're looking quite pale, @.",
+
+            // flower dance!
+            "spring_22{{YearRemainder}}": "I've got to go find some nice flowers to wear in my hair for the flower dance.",
 
             "4{{YearRemainder}}": "@, I think our sink is leaking. Do you know how hard it is to get a plumber around these parts?$s",
             "6{{YearRemainder}}": "@, do you believe love is destiny?",

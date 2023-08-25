@@ -246,7 +246,7 @@
         },
         {
             "Action": "EditData",
-            "LogName":"Leo - higher hearts",
+            "LogName": "Leo - higher hearts",
             "Target": "Data/Festivals/spring24",
             "When": {
                 "EnableFor": "Leo",
@@ -323,7 +323,7 @@
                 "Marlon_y4": "{{i18n:marlon-y4-dance}}"
             }
         },
-                {
+        {
             "Action": "EditData",
             "LogName": "Maru - normal",
             "Target": "Data/Festivals/spring24",
@@ -334,6 +334,31 @@
                 "Maru_y2": "{{i18n:maru-y2-dance.00}}#$e#{{i18n:maru-y2-dance.01}}$h",
                 "Maru_spouse": "{{i18n:maru-y1-dance-spouse.00}}#$e#{{i18n:maru-y1-dance-spouse.01}}$h",
                 "Maru_spouse_y2": "{{i18n:maru-y2-dance-spouse}}$h"
+            }
+        },
+        {
+            // Pam Tries has plenty of Pam lines.
+            "Action": "EditData",
+            "LogName": "Pam - normal",
+            "Target": "Data/Festivals/spring24",
+            "When": {
+                "EnableFor": "Pam"
+            },
+            "Entries": {
+                "Pam_y2": "{{i18n:pam-y2-dance}}$s",
+            }
+        },
+        {
+            "Action": "EditData",
+            "LogName": "Penny - normal",
+            "Target": "Data/Festivals/spring24",
+            "When": {
+                "EnableFor": "Penny"
+            },
+            "Entries": {
+                "Penny_y2": "{{i18n:penny-y2-dance.00}}#$e#{{i18n:penny-y2-dance.01}}$s",
+                "Penny_spouse": "{{i18n:penny-y1-dance-spouse}}$h",
+                "Penny_spouse_y2": "{{i18n:penny-y2-dance-spouse.00}}#$e#{{i18n:penny-y2-dance-spouse.01}}$h",
             }
         },
     ]

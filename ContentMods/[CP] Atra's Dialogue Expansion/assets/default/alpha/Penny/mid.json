@@ -15,7 +15,10 @@
         "Action": "EditData",
         "Target": "Characters/Dialogue/Penny",
         "Entries": {
-            "winter_27": "@, do you have any resolutions for the new year?"
+            "spring_12{{YearRemainder}}": "It's going to be the Egg Festival tomorrow! The kids always love it.$h",
+            "spring_23{{YearRemainder}}": "@, what if no one wants to dance with me tomorrow?$s",
+
+            "winter_27{{YearRemainder}}": "@, do you have any resolutions for the new year?"
         }
     },
     {

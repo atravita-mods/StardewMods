@@ -8,7 +8,7 @@
         },
         "When": {
             "EnableFor|contains=Haley": true,
-            "EnableFor|Contains=Emily": true
+            "EnableFor|contains=Emily": true
         }
     },
     {

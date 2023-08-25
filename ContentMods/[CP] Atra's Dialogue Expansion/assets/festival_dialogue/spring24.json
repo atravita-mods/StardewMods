@@ -219,5 +219,95 @@
                 "Kent_y4": "{{i18n:kent-y4-dance}}"
             }
         },
+        {
+            "Action": "EditData",
+            "LogName": "Leah - normal",
+            "Target": "Data/Festivals/spring24",
+            "When": {
+                "EnableFor": "Leah"
+            },
+            "Entries": {
+                "Leah_y2": "{{i18n:leah-y2-dance.00}}#$e#{{i18n:leah-y2-dance.01}}",
+                "Leah_spouse": "{{i18n:leah-y1-dance-spouse.00}}#$e#{{i18n:leah-y1-dance-spouse.01}}$h",
+                "Leah_spouse_y2": "{{i18n:leah-y2-dance-spouse}}$h"
+            }
+        },
+        {
+            "Action": "EditData",
+            "LogName": "Leo - normal",
+            "Target": "Data/Festivals/spring24",
+            "When": {
+                "EnableFor": "Leo"
+            },
+            "Entries": {
+                "Leo_y2": "{{i18n:leo-y2-dance}}$h",
+            }
+        },
+        {
+            "Action": "EditData",
+            "LogName":"Leo - higher hearts",
+            "Target": "Data/Festivals/spring24",
+            "When": {
+                "EnableFor": "Leo",
+                "Query: {{Hearts:Leo}} >= 8": true
+            },
+            "Entries": {
+                "Leo_y3": "{{i18n:leo-y3-dance}}$h",
+                "Leo_y4": "{{i18n:leo-y4-dance}}"
+            }
+        },
+        {
+            "Action": "EditData",
+            "LogName": "Lewis - player married.",
+            "Target": "Data/Festivals/spring24",
+            "When": {
+                "EnableFor": "Lewis",
+                "HasValue: {{Spouse}}": true
+            },
+            "Entries": {
+                "Lewis": "{{i18n:lewis-y1-dance-married}}",
+                "Lewis_y2": "{{i18n:lewis-y2-dance-married}}$h",
+                "Lewis_y3": "{{i18n:lewis-y3-dance-married}}$h",
+            }
+        },
+        {
+            "Action": "EditData",
+            "LogName": "Lewis - player unmarried.",
+            "Target": "Data/Festivals/spring24",
+            "When": {
+                "EnableFor": "Lewis",
+                "HasValue: {{Spouse}}": false
+            },
+            "Entries": {
+                "Lewis_y2": "{{i18n:lewis-y2-dance-unmarried}}$h",
+                "Lewis_y3": "{{i18n:lewis-y3-dance-unmarried}}$s",
+                "Lewis_y4": "{{i18n:lewis-y4-dance-unmarried}}#$e#{{i18n:lewis-y4-dance-unmarried.00}}"
+            }
+        },
+        {
+            "Action": "EditData",
+            "LogName": "Linus - normal",
+            "Target": "Data/Festivals/spring24",
+            "When": {
+                "EnableFor": "Linus"
+            },
+            "Entries": {
+                "Linus_y2": "{{i18n:linus-y2-dance}}$h",
+                "Linus_y3": "{{i18n:linus-y3-dance}}$h",
+                "Linus_y4": "{{i18n:linus-y4-dance}}"
+            }
+        },
+        {
+            "Action": "EditData",
+            "LogName": "Linus - normal",
+            "Target": "Data/Festivals/spring24",
+            "When": {
+                "EnableFor": "Linus",
+                "HasValue: {{Spouse}}": true
+            },
+            "Entries": {
+                "Linus_y3": "{{i18n:linus-y3-dance-married}}$h",
+            }
+        },
     ]
 }

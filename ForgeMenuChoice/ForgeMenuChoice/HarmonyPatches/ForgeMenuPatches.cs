@@ -93,7 +93,7 @@ internal static class ForgeMenuPatches
         try
         {
             // 74 - prismatic shard.
-            if (__0 is Tool tool && Utility.IsNormalObjectAtParentSheetIndex(__1, 74))
+            if (__0 is Tool tool && __1.QualifiedItemId == "(O)74")
             {
                 PossibleEnchantments.Clear();
                 HashSet<Type> enchants = tool.enchantments.Select((a) => a.GetType()).ToHashSet();

@@ -49,7 +49,7 @@ internal static class GetEnchantmentPatch
     {
         try
         {
-            if (Utility.IsNormalObjectAtParentSheetIndex(item, 74) && ForgeMenuPatches.CurrentSelection is not null)
+            if (item.QualifiedItemId == "(O)74" && ForgeMenuPatches.CurrentSelection is not null)
             {
                 BaseEnchantment output = ForgeMenuPatches.CurrentSelection;
                 ForgeMenuPatches.TrashMenu();

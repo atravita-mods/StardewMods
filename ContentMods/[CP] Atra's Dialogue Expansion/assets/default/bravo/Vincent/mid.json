@@ -55,7 +55,9 @@
                 "8_2": "Mom and Dad went to the city for a day. Said it was something for Dad.#$b#They said it might help bring Dad back? But he's back?",
                 "9_2": "I hope Mom's making {{i18n: dishes.child.{{Random:01,02,03,04,05,06,07,08,09}} }} for dinner tonight.",
                 "10_2": "Mom's making broccoli tonight.$s",
-                "12_2": "Mom won't let me have popcorn anymore.$s"
+                "12_2": "Mom won't let me have popcorn anymore.$s",
+
+                "22_2": "I wanna go ice skating too!"
             },
             "When": {
                 "YearModulus": "3"

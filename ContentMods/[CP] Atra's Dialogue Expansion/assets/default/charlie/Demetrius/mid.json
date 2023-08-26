@@ -151,6 +151,7 @@
         "LogName": "Demetrius mid-hearts, Y4",
         "Action": "EditData",
         "Target": "Characters/Dialogue/Demetrius",
+        "When": { "YearModulus": "4"},
         "Entries": {
             // specific day.
             "summer_26_2": "Every time I look into what siphonophores are, I just get more and more confused.$s",
@@ -173,7 +174,15 @@
 
             "fallScienceHouse_22_20": "I've got so much work I need to do...$s",
             "winterScienceHouse_22_20": "More glassware to wash, always more glassware to wash...$s"
-        },
-        "When": { "YearModulus": "4"}
+        }
+    },
+    {
+        "LogName": "Demetrius mid-hearts, Y5",
+        "Action": "EditData",
+        "Target": "Characters/Dialogue/Demetrius",
+        "When": { "YearModulus": "0"},
+        "Entries": {
+            "2_2": "Leaf slugs are quite adorable little animals that steal the chloroplasts from the algae they eat.#$b#They then use those chloroplasts to photosynthesize.#$e#Isn't biology cool?$h",
+        }
     }
 ]}

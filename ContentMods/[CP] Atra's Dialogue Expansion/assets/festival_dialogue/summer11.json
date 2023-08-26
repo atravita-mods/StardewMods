@@ -28,7 +28,58 @@
     },
     {
         "Action": "EditData",
-        "LogName": "Vincent - normal",
+        "LogName": "Caroline - normal",
+        "Target": "Data/Festivals/summer11",
+        "When": {
+            "EnableFor": "Caroline"
+        },
+        "Entries": {
+            "Caroline_y2": "{{i18n:caroline-y2-luau}}$h",
+            "Caroline_y3": "{{i18n:caroline-y3-luau}}$s",
+            "Caroline_y4": "{{i18n:caroline-y4-luau}}$h#$e#{{i18n:caroline-y4-luau.00}}"
+        }
+    },
+    {
+        "Action": "EditData",
+        "LogName": "Clint - normal",
+        "Target": "Data/Festivals/summer11",
+        "When": {
+            "EnableFor": "Clint"
+        },
+        "Entries": {
+            "Clint_y2": "{{i18n:clint-y2-luau.00}}$s#$e{{clint-y2-luau.01}}",
+            "Clint_y3": "{{i18n:clint-y3-luau}}",
+            "Clint_y4": "{{i18n:clint-y4-luau}}$h"
+        }
+    },
+    {
+        "Action": "EditData",
+        "LogName": "Demetrius - normal",
+        "Target": "Data/Festivals/summer11",
+        "When": {
+            "EnableFor": "Demetrius"
+        },
+        "Entries": {
+            "Demetrius_y2": "{{i18n:demetrius-y2-luau}}$s",
+            "Demetrius_y3": "{{i18n:demetrius-y3-luau}}$s",
+            "Demetrius_y4": "{{i18n:demetrius-y4-luau.00}}$s#$e#{{i18n:demetrius-y4-luau.01}}"
+        }
+    },
+    {
+        "Action": "EditData",
+        "LogName": "Elliott - normal",
+        "Target": "Data/Festivals/summer11",
+        "When": {
+            "EnableFor": "Elliott"
+        },
+        "Entries": {
+            "Elliott_y2": "{{i18n:elliott-y2-luau.00}}#$b${{i18n:elliott-y2-luau.01}}$s",
+            "Elliott_spouse_y2": "{{i18n:elliott-y2-luau-spouse}}#$e#{{i18n:elliott-y2-luau-spouse.01}}$s"
+        }
+    },
+    {
+        "Action": "EditData",
+        "LogName": "Willy - normal",
         "Target": "Data/Festivals/summer11",
         "When": {
             "EnableFor": "Willy"

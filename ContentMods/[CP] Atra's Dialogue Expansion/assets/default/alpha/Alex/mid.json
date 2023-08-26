@@ -19,6 +19,9 @@
         "Target" :"Characters/Dialogue/Alex",
         "When": {"YearModulus": "1"},
         "Entries": {
+            // specific days
+            "summer_10{{YearRemainder}}": "Hey, @, will you be a the luau tomorrow?$h",
+
             // intentional Y1 only.
             "1": "I'm gonna be famous one day, @, just you wait.",
             "2": "One day, I'm gonna go pro and be all over TV.#$e#And I'll have all the branded footwear I could ever want.$h",

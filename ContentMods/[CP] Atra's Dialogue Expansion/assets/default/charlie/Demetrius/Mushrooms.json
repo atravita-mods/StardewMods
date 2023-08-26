@@ -12,11 +12,12 @@
         "When": { "YearModulus": "2"}
     },
     {
-        "LogName": "Demetrius mid-hearts, Y2, mushrooms",
+        "LogName": "Demetrius mid-hearts, Y3, mushrooms",
         "Action": "EditData",
         "Target": "Characters/Dialogue/Demetrius",
         "Entries": {
             "7_2": "Mushrooms are actually closer to animals than plants!",
+            "8_2": "There are a few species of mushroom that are even bioluminescent!#$e#I've always wanted to cultivate a few around our house, so we can see at night.$h"
         },
         "When": { "YearModulus": "3"}
     }

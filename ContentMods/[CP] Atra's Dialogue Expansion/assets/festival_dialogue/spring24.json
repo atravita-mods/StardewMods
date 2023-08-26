@@ -466,7 +466,7 @@
         },
         {
             "Action": "EditData",
-            "LogName": "Vincent - normal",
+            "LogName": "Willy - normal",
             "Target": "Data/Festivals/spring24",
             "When": {
                 "EnableFor": "Willy"

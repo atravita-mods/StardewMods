@@ -29,7 +29,8 @@
             "When": { "YearModulus": "1"},
             "Entries": {
                 "1{{YearRemainder}}": "I'm always incredibly amazed by how the human body works, @. Just...how everything comes together to make us work.$h",
-                "2{{YearRemainder}}": "Did you know there's a muscle in the arm that not everyone has?#$b#It's called the palmaris longus muscle, and about fourteen percent of the population just doesn't have it anymore."
+                "2{{YearRemainder}}": "Did you know there's a muscle in the arm that not everyone has?#$b#It's called the palmaris longus muscle, and about fourteen percent of the population just doesn't have it anymore.",
+                "3{{YearRemainder}}": "One thing I miss from working in the city - I can't just send bloodwork downstairs and get it within a few hours anymore.$s"
             }
         },
         {
@@ -56,6 +57,8 @@
             "Action": "EditData",
             "Target": "Characters/Dialogue/Harvey",
             "Entries": {
+                "summer_Mon8": "Be careful, when you're working out there, to not get sunburned.#$e#You are wearing sunscreen, right?",
+
                 "6_2": "I got into medicine because I wanted to help people. But these days I feel like I'm doing more paperwork than anything else...$s",
                 "8_2": "Between you and I, I get nightmares sometimes.#$b#I'm always terrified that someone here might have an emergency beyond my abilities to treat.#$b#We're so far from the nearest hospital.",
                 "9_2": "I also take care of everyone's teeth. This town isn't large enough to have both a dentist and a doctor.#$b#Say, how good are your teeth?$h",

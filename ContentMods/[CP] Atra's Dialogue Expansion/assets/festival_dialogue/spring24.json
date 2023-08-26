@@ -426,5 +426,43 @@
                 "Shane_spouse_y2": "{{i18n:shane-y2-dance-spouse.00}}#$e#{{i18n:shane-y2-dance-spouse.01}}$h",
             }
         },
+        {
+            "Action": "EditData",
+            "LogName": "Vincent - normal",
+            "Target": "Data/Festivals/spring24",
+            "When": {
+                "EnableFor": "Vincent"
+            },
+            "Entries": {
+                "Vincent_y2": "{{i18n:vincent-y2-dance}}$h",
+                "Vincent_y3": "{{i18n:vincent-y3-dance}}",
+                "Vincent_y4": "{{i18n:vincent-y4-dance|title={{Title}} }}$h"
+            }
+        },
+        {
+            "Action": "EditData",
+            "LogName": "Vincent - Penny - taken",
+            "Target": "Data/Festivals/spring24",
+            "When": {
+                "EnableFor": "Vincent",
+                "Query: {{Spouse:anyPlayer|contains=Penny}} OR {{Relationship:Penny|contains=Married,Engaged}}": true
+            },
+            "Entries": {
+                "Vincent_y2": "{{i18n:vincent-y2-dance-penny-taken|title={{Title}} }}$h",
+            }
+        },
+        {
+            "Action": "EditData",
+            "LogName": "Vincent - normal",
+            "Target": "Data/Festivals/spring24",
+            "When": {
+                "EnableFor": "Willy"
+            },
+            "Entries": {
+                "Willy_y2": "{{i18n:willy-y2-dance}}",
+                "Willy_y3": "{{i18n:willy-y3-dance}}",
+                "Willy_y4": "{{i18n:willy-y4-dance}}$h"
+            }
+        }
     ]
 }

@@ -188,13 +188,50 @@
     {
         "Action": "EditData",
         "LogName": "Jas - normal",
-        "Target": "Data/Festivals/summer",
+        "Target": "Data/Festivals/summer11",
         "When": {
             "EnableFor": "Jas"
         },
         "Entries": {
             "Jas_y2": "{{i18n:jas-y2-luau.00}}$s#$e#{{i18n:jas-y2-luau.01|title={{Title}} }}",
             "Jas_y3": "{{i18n:jas-y3-luau}}$s"
+        }
+    },
+    {
+        "Action": "EditData",
+        "LogName": "Jodi - normal",
+        "Target": "Data/Festivals/summer11",
+        "When": {
+            "EnableFor": "Jodi"
+        },
+        "Entries": {
+            "Jodi_y2": "{{i18n:jodi-y2-luau}}",
+            "Jodi_y3": "{{i18n:jodi-y3-luau}}",
+            "Jodi_y4": "{{i18n:jodi-y4-luau}}$s",
+        }
+    },
+    {
+        "Action": "EditData",
+        "LogName": "Kent - normal",
+        "Target": "Data/Festivals/summer11",
+        "When": {
+            "EnableFor": "Kent"
+        },
+        "Entries": {
+            "Kent_y2": "{{i18n:kent-y2-luau}}",
+            "Kent_y3": "{{i18n:kent-y3-luau}}$s"
+        }
+    },
+    {
+        "Action": "EditData",
+        "LogName": "Leah - normal",
+        "Target": "Data/Festivals/summer11",
+        "When": {
+            "EnableFor": "Leah"
+        },
+        "Entries": {
+            "Leah_y2": "{{i18n:leah-y2-luau}}$h",
+            "Leah_spouse_y2": "{{i18n:leah-y2-luau-spouse}}$s#$e#{{i18n:leah-y2-luau-spouse.00}}"
         }
     },
     {

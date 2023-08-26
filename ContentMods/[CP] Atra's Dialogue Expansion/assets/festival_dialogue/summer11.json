@@ -236,6 +236,18 @@
     },
     {
         "Action": "EditData",
+        "LogName": "Leo - normal",
+        "Target": "Data/Festivals/summer11",
+        "When": {
+            "EnableFor": "Leo"
+        },
+        "Entries": {
+            "Leo_y2": "{{i18n:leo-y2-luau}}",
+            "Leo_y3": "{{i18n:leo-y3-luau}}$h"
+        }
+    },
+    {
+        "Action": "EditData",
         "LogName": "Willy - normal",
         "Target": "Data/Festivals/summer11",
         "When": {

@@ -202,7 +202,7 @@
         {
             "Action": "Include",
             "LogName": "Dialogue Changes: Randomized",
-            "FromFile": "{{FirstValidFile: assets/{{language}}/{{DialogueRandom}}/toc.json, assets/default/{{DialogueRandom}}/toc.json}}",
+            "FromFile": "assets/toc/{{DialogueRandom}}.json",
             "When": {"Day|contains=0": false}
         },
         {

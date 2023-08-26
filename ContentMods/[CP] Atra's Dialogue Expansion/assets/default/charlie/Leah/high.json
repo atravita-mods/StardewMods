@@ -1,0 +1,18 @@
+{"Changes":[
+    {
+        "Action": "EditData",
+        "Target": "Characters/Dialogue/Leah",
+        "When": {"YearModulus": 1},
+        "Entries": {
+            "28{{YearRemainder}}": "I grew up in poverty, so I'm perfectly used to living on small amounts of money.#$e#My father taught me how to forage.$h"
+        }
+    },
+    {
+        "Action": "EditData",
+        "Target": "Characters/Dialogue/Leah",
+        "When": {"YearModulus": 2},
+        "Entries": {
+            "25": "I was the first person in my family who went to college. Couldn't have done it without scholarships."
+        }
+    }
+]}

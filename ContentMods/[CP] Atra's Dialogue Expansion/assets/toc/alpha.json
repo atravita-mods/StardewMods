@@ -2,7 +2,7 @@
     {
         "Action": "Include",
         "LogName": "Alex - mid hearts",
-        "FromFile": "assets/default/alpha/Alex/mid.json",
+        "FromFile": "{{FirstValidFile: assets/{{language}}/alpha/Alex/mid.json, assets/default/alpha/Alex/mid.json}}",
         "When": {
             "EnableFor": "Alex",
             "Query: {{Hearts:Alex}} >= 6": true
@@ -11,7 +11,7 @@
     {
         "Action": "Include",
         "LogName": "Elliott - mid hearts",
-        "FromFile": "assets/default/alpha/Elliott/mid.json",
+        "FromFile": "{{FirstValidFile: assets/{{language}}/alpha/Elliott/mid.json, assets/default/alpha/Elliott/mid.json}}",
         "When": {
             "EnableFor": "Elliott",
             "Query: {{Hearts:Elliott}} >= 6": true
@@ -20,7 +20,7 @@
     {
         "Action": "Include",
         "LogName": "Evelyn - mid hearts",
-        "FromFile": "assets/default/alpha/Evelyn/mid.json",
+        "FromFile": "{{FirstValidFile: assets/{{language}}/alpha/Evelyn/mid.json, assets/default/alpha/Evelyn/mid.json}}",
         "When": {
             "EnableFor": "Evelyn",
             "Query: {{Hearts:Evelyn}} >= 6": true
@@ -29,7 +29,7 @@
     {
         "Action": "Include",
         "LogName": "Evelyn - mid hearts",
-        "FromFile": "assets/default/alpha/Evelyn/high.json",
+        "FromFile": "{{FirstValidFile: assets/{{language}}/alpha/Evelyn/mid.json, assets/default/alpha/Evelyn/mid.json}}",
         "When": {
             "EnableFor": "Evelyn",
             "Query: {{Hearts:Evelyn}} >= 9": true
@@ -38,7 +38,7 @@
     {
         "Action": "Include",
         "LogName": "George - mid hearts",
-        "FromFile": "assets/default/alpha/George/mid.json",
+        "FromFile": "{{FirstValidFile: assets/{{language}}/alpha/George/mid.json, assets/default/alpha/George/mid.json}}",
         "When": {
             "EnableFor": "George",
             "Query: {{Hearts:George}} >= 6": true
@@ -47,7 +47,7 @@
     {
         "Action": "Include",
         "LogName": "George - high hearts",
-        "FromFile": "assets/default/alpha/George/high.json",
+        "FromFile": "{{FirstValidFile: assets/{{language}}/alpha/George/high.json, assets/default/alpha/George/high.json}}",
         "When": {
             "EnableFor": "George",
             "Query: {{Hearts:George}} >= 9": true
@@ -56,7 +56,7 @@
     {
         "Action": "Include",
         "LogName": "Gus - mid hearts",
-        "FromFile": "assets/default/alpha/Gus/mid.json",
+        "FromFile": "{{FirstValidFile: assets/{{language}}/alpha/Gus/mid.json, assets/default/alpha/Gus/mid.json}}",
         "When": {
             "EnableFor": "Gus",
             "Query: {{Hearts:Gus}} >= 6": true
@@ -65,7 +65,7 @@
     {
         "Action": "Include",
         "LogName": "Pam - mid hearts",
-        "FromFile": "assets/default/alpha/Pam/mid.json",
+        "FromFile": "{{FirstValidFile: assets/{{language}}/alpha/Pam/mid.json, assets/default/alpha/Pam/mid.json}}",
         "When": {
             "EnableFor": "Pam",
             "Query: {{Hearts:Pam}} >= 6": true
@@ -74,7 +74,7 @@
     {
         "Action": "Include",
         "LogName": "Penny - mid hearts",
-        "FromFile": "assets/default/alpha/Penny/mid.json",
+        "FromFile": "{{FirstValidFile: assets/{{language}}/alpha/Penny/mid.json, assets/default/alpha/Penny/mid.json}}",
         "When": {
             "EnableFor": "Penny",
             "Query: {{Hearts:Penny}} >= 6": true
@@ -82,8 +82,8 @@
     },
     {
         "Action": "Include",
-        "LogName": "Penny - mid hearts",
-        "FromFile": "assets/default/alpha/Penny/postevent.json",
+        "LogName": "Penny - mid hearts - post house",
+        "FromFile": "{{FirstValidFile: assets/{{language}}/alpha/Penny/postevent.json, assets/default/alpha/Penny/postevent.json}}",
         "When": {
             "EnableFor": "Penny",
             "Query: {{Hearts:Penny}} >= 6": true,
@@ -93,7 +93,7 @@
     {
         "Action": "Include",
         "LogName": "Sebastian - mid hearts",
-        "FromFile": "assets/default/alpha/Sebastian/mid.json",
+        "FromFile": "{{FirstValidFile: assets/{{language}}/alpha/Sebastian/mid.json, assets/default/alpha/Sebastian/mid.json}}",
         "When": {
             "EnableFor": "Sebastian",
             "Query: {{Hearts:Sebastian}} >= 6": true

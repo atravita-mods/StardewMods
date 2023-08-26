@@ -361,5 +361,70 @@
                 "Penny_spouse_y2": "{{i18n:penny-y2-dance-spouse.00}}#$e#{{i18n:penny-y2-dance-spouse.01}}$h",
             }
         },
+        // Skipping Pierre - you shouldn't be able to reach him anyways.
+        {
+            "Action": "EditData",
+            "LogName": "Robin - normal",
+            "Target": "Data/Festivals/spring24",
+            "When": {
+                "EnableFor": "Robin"
+            },
+            "Entries": {
+                "Robin_y2": "{{i18n:robin-y2-dance}}$h",
+                "Robin_y3": "{{i18n:robin-y3-dance}}",
+                "Robin_y4": "{{i18n:robin-y4-dance}}$h"
+            }
+        },
+        {
+            "Action": "EditData",
+            "LogName": "Robin - Sebastian married",
+            "Target": "Data/Festivals/spring24",
+            "When": {
+                "EnableFor": "Robin",
+                "Query: {{Spouse:anyPlayer|contains=Sebastian}} OR {{Relationship:Sebastian|contains=Married,Dating,Engaged}}": true
+            },
+            "Entries": {
+                "Robin_y2": "{{i18n:robin-y2-dance-sebastian-married}}$h#$e#{{i18n:robin-y2-dance-sebastian-married.00}}$h",
+            }
+        },
+        {
+            "Action": "EditData",
+            "LogName": "Sam - normal",
+            "Target": "Data/Festivals/spring24",
+            "When": {
+                "EnableFor": "Sam"
+            },
+            "Entries": {
+                "Sam_y2": "{{i18n:sam-y2-dance.00}}$s#$e#{{i18n:sam-y2-dance.01}}$3",
+                "Sam_spouse": "{{i18n:sam-y1-dance-spouse}}$l",
+                "Sam_spouse_y2": "{{i18n:sam-y2-dance-spouse.00}}#$e#{{i18n:sam-y2-dance-spouse.01}}$h",
+            }
+        },
+        {
+            "Action": "EditData",
+            "LogName": "Sebastian - normal",
+            "Target": "Data/Festivals/spring24",
+            "When": {
+                "EnableFor": "Sebastian"
+            },
+            "Entries": {
+                "Sebastian_y2": "{{i18n:sebastian-y2-dance.00}}#$e#{{i18n:sebastian-y2-dance.01}}$s",
+                "Sebastian_spouse": "{{i18n:sebastian-y1-dance-spouse}}#$e#{{i18n:sebastian-y1-dance-spouse.00}}",
+                "Sebastian_spouse_y2": "{{i18n:sebastian-y2-dance-spouse.00}}#$e#{{i18n:sebastian-y2-dance-spouse.01}}$h",
+            }
+        },
+        {
+            "Action": "EditData",
+            "LogName": "Shane - normal",
+            "Target": "Data/Festivals/spring24",
+            "When": {
+                "EnableFor": "Shane"
+            },
+            "Entries": {
+                "Shane_y2": "{{i18n:shane-y2-dance.00}}#$e#{{i18n:shane-y2-dance.01}}$s",
+                "Shane_spouse": "{{i18n:shane-y1-dance-spouse}}$h",
+                "Shane_spouse_y2": "{{i18n:shane-y2-dance-spouse.00}}#$e#{{i18n:shane-y2-dance-spouse.01}}$h",
+            }
+        },
     ]
 }

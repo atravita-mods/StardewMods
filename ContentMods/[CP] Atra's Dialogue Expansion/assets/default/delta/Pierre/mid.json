@@ -44,7 +44,10 @@
             "winter_Thu8": "You think Abby's been looking a bit pale lately?",
             "winter_Thu8_inlaw_Abigail": "I'm so glad Abby married you, @. I'm not sure I could have financially supported her for much longer...",
 
-            "4": "Gosh, money is just so, so tight these days."
+            "4": "Gosh, money is just so, so tight these days.",
+
+            // just before not-halloween.
+            "fall_26{{YearRemainder}}": "I can't talk right now, I need to prepare for the festival.#$e#We absolutely need to make more money.$s",
         }
     },
     {

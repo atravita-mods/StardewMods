@@ -7,7 +7,7 @@
             "When": {
                 "EnableFor|contains=Evelyn": true,
                 "HasValue: {{ChildNames}}": false,
-                "HavingChild| contains=@{{playerName}}": false,
+                "HavingChild|contains=@{{playerName}}": false,
             },
             "Entries": {
                 "Fri8_inlaw_Alex": "{{i18n:evelyn-alex-childless}}"

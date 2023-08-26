@@ -161,6 +161,44 @@
     },
     {
         "Action": "EditData",
+        "LogName": "Haley - normal",
+        "Target": "Data/Festivals/summer11",
+        "When": {
+            "EnableFor": "Haley"
+        },
+        "Entries": {
+            "Haley_y2": "{{i18n:haley-y2-luau.00}}#$b${{i18n:haley-y2-luau.01}}",
+            "Haley_spouse_y2": "{{i18n:haley-y2-luau-spouse}}$h",
+            "Haley_spouse_y3": "{{i18n:haley-y3-luau-spouse}}$h"
+        }
+    },
+    {
+        // deliberately leaving the vanilla line about Maru. Maybe Harvey is just socially awkward and doesn't mean much by it.
+        "Action": "EditData",
+        "LogName": "Harvey - normal",
+        "Target": "Data/Festivals/summer11",
+        "When": {
+            "EnableFor": "Harvey"
+        },
+        "Entries": {
+            "Harvey_y2": "{{i18n:harvey-y2-luau}}",
+            "Harvey_spouse_y2": "{{i18n:harvey-y2-luau-spouse}}"
+        }
+    },
+    {
+        "Action": "EditData",
+        "LogName": "Jas - normal",
+        "Target": "Data/Festivals/summer",
+        "When": {
+            "EnableFor": "Jas"
+        },
+        "Entries": {
+            "Jas_y2": "{{i18n:jas-y2-luau.00}}$s#$e#{{i18n:jas-y2-luau.01|title={{Title}} }}",
+            "Jas_y3": "{{i18n:jas-y3-luau}}$s"
+        }
+    },
+    {
+        "Action": "EditData",
         "LogName": "Willy - normal",
         "Target": "Data/Festivals/summer11",
         "When": {

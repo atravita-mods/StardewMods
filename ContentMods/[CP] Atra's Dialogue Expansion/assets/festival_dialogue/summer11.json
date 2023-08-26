@@ -74,6 +74,7 @@
         },
         "Entries": {
             "Elliott_y2": "{{i18n:elliott-y2-luau.00}}#$b${{i18n:elliott-y2-luau.01}}$s",
+            "Elliott_y3": "{{i18n:elliott-y3-luau}}$h",
             "Elliott_spouse_y2": "{{i18n:elliott-y2-luau-spouse}}#$e#{{i18n:elliott-y2-luau-spouse.01}}$s"
         }
     },
@@ -114,6 +115,48 @@
             "George_y2": "{{i18n:george-y2-luau}}$h",
             "George_y3": "{{i18n:george-y3-luau}}$s",
             "George_y4": "{{i18n:george-y4-luau}}$h"
+        }
+    },
+    {
+        "Action": "EditData",
+        "LogName": "Governor - no Joja.",
+        "Target": "Data/Festivals/summer11",
+        "When": {
+            "EnableFor": "Governor",
+            "IsJojaMartComplete": false
+        },
+        "Entries": {
+            "Governor_y2": "{{i18n:governor-y2-luau.00}}$h#$e#{{i18n:governor-y2-luau.01}}$h#$e#{{i18n:governor-y2-luau.02}}",
+            "Governor_y3": "{{i18n:governor-y3-luau.00}}$h#$e#{{i18n:governor-y3-luau.01}}$h",
+            "Governor_y4": "{{i18n:governor-y4-luau}}$h"
+        }
+    },
+    {
+        "Action": "EditData",
+        "LogName": "Governor - Joja.",
+        "Target": "Data/Festivals/summer11",
+        "When": {
+            "EnableFor": "Governor",
+            "IsJojaMartComplete": true
+        },
+        "Entries": {
+            "Governor": "{{i18n:governor-y1-luau-joja}}$h",
+            "Governor_y2": "{{i18n:governor-y2-luau-joja.00}}$h#$e#{{i18n:governor-y2-luau-joja.01}}$h#$e#{{i18n:governor-y2-luau-joja.02}}",
+            "Governor_y3": "{{i18n:governor-y3-luau-joja.00}}#$e#{{i18n:governor-y3-luau-joja.01}}$h",
+            "Governor_y4": "{{i18n:governor-y4-luau-joja}}$h"
+        }
+    },
+    {
+        "Action": "EditData",
+        "LogName": "Gus - normal",
+        "Target": "Data/Festivals/summer11",
+        "When": {
+            "EnableFor": "Gus"
+        },
+        "Entries": {
+            "Gus_y2": "{{i18n:gus-y2-luau}}$h",
+            "Gus_y3": "{{i18n:gus-y3-luau}}$h",
+            "Gus_y4": "{{i18n:gus-y4-luau}}$s"
         }
     },
     {

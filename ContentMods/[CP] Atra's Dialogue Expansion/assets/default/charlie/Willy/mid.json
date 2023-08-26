@@ -5,6 +5,9 @@
         "Target": "Characters/Dialogue/Willy",
         "Entries": {
             "dumped_Guys": "@, I thought you were more honorable than that.#$e#Dating the whole town, that's not something I thought you would do.$s",
+
+            // specific days
+            "summer_10{{YearRemainder}}": "I've caught so much fish for the luau's buffet tomorrow, @, it'll be a wonderful display of our sea's riches."
         }
     },
     {

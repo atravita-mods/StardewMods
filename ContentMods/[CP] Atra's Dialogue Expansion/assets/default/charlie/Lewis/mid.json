@@ -20,6 +20,15 @@
             "When": { "HavingChild": "@{{playerName}}"}
         },
         {
+            "LogName": "Lewis movies - CC",
+            "Action": "EditData",
+            "Target": "Characters/Dialogue/Lewis",
+            "When": {"MovieStatus": "CC"},
+            "Entries": {
+                "14{{YearRemainder}}": "Hmmm, maybe I should go watch a movie at the theater at some point? Gotta check up on how every business in this town is doing, of course.#$b#And %name Anderson has a new movie out, {{i18n: action.movie.{{Random:01, 02, 03, 04, 05, 06, 07, 08, 09}} }}!$h"
+            }
+        },
+        {
             "LogName": "Lewis: mid hearts, y1",
             "Action": "EditData",
             "Target": "Characters/Dialogue/Lewis",

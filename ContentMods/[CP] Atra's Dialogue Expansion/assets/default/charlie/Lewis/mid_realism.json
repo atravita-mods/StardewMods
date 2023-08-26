@@ -13,6 +13,9 @@
         "Action": "EditData",
         "Target": "Characters/Dialogue/Lewis",
         "Entries": {
+            // specific days
+            "summer_10{{YearRemainder}}": "The Governor will be here tomorrow! We have to impress him.",
+
             "8{{YearRemainder}}": "Between you and I, @, I'm so glad a no pill mill has decided to set up shop here.",
             "10{{YearRemainder}}": "Before I moved here? I was an accountant at an auditing firm.",
             "CommunityCenter_Entry": "Anyone around?"

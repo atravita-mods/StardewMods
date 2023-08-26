@@ -56,7 +56,8 @@
             },
             "Entries": {
                 "Demetrius_y2": "{{i18n:demetrius-y2-halloween}}",
-                "Demetrius_y3": "{{i18n:demetrius-y3-halloween}}"
+                "Demetrius_y3": "{{i18n:demetrius-y3-halloween}}",
+                "Demetrius_y4": "{{i18n:demetrius-y4-halloween}}$s"
             }
         },
         {

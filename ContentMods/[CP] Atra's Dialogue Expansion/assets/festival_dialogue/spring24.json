@@ -15,7 +15,7 @@
         },
         {
             "Action": "EditData",
-            "LogName": "Caroline - normal",
+            "LogName": "Alex - normal",
             "Target": "Data/Festivals/spring24",
             "When": {
                 "EnableFor": "Alex"
@@ -35,6 +35,19 @@
             },
             "Entries": {
                 "Caroline_y2": "{{i18n:caroline-y2-dance.00}}",
+                "Caroline_y3": "{{i18n:caroline-y3-dance.00}}#$e#{{i18n:caroline-y3-dance.01}}"
+            }
+        },
+        {
+            "Action": "EditData",
+            "LogName": "Caroline - abby taken",
+            "Target": "Data/Festivals/spring24",
+            "When": {
+                "EnableFor": "Caroline",
+                "Query: {{Spouse:anyPlayer|contains=Abigail}} OR {{Relationship:Abigail|contains=Married,Engaged}}": true
+            },
+            "Entries": {
+                "Caroline_y2": "{{i18n:caroline-y2-abby-taken}}$h",
             }
         },
         {

@@ -1,0 +1,43 @@
+{"Changes":[
+    {
+        "Action": "EditData",
+        "LogName": "Abby - normal",
+        "Target": "Data/Festivals/summer11",
+        "When": {
+            "EnableFor": "Abigail"
+        },
+        "Entries": {
+            "Abigail_y2": "{{i18n:abby-y2-luau.00}}",
+            "Abigail_y3": "{{i18n:abby-y3-luau.00}}$s",
+            "Abigail_spouse_y2": "{{i18n:abby-y2-luau-spouse}}#$e#{{i18n:abby-y2-luau-spouse.00}}$s"
+        }
+    },
+    {
+        "Action": "EditData",
+        "LogName": "Alex - normal",
+        "Target": "Data/Festivals/summer11",
+        "When": {
+            "EnableFor": "Alex"
+        },
+        "Entries": {
+            "Alex_y2": "{{i18n:alex-y2-luau.00}}$h",
+            "Alex_y3": "{{i18n:alex-y3-luau.00}}$h",
+            "Alex_spouse_y2": "{{i18n:alex-y2-luau-spouse}}$h",
+            "Alex_spouse_y3": "{{i18n:alex-y3-luau-spouse}}$h"
+        }
+    },
+    {
+        "Action": "EditData",
+        "LogName": "Vincent - normal",
+        "Target": "Data/Festivals/summer11",
+        "When": {
+            "EnableFor": "Willy"
+        },
+        "Entries": {
+            "Willy_y2": "{{i18n:willy-y2-luau}}$h",
+            "Willy_y3": "{{i18n:willy-y3-luau}}$s",
+            "Willy_y4": "{{i18n:willy-y4-luau}}$h"
+        }
+    }
+    // Wizard deliberately excluded, he has enough content.
+]}

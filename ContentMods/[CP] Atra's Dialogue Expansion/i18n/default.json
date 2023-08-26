@@ -756,6 +756,9 @@
     "alex-y1-dance-spouse": "You look great as always, my love. Dance with me?",
     "alex-y2-dance-spouse": "Wanna dance? Or do you want to just get out of here?",
     "caroline-y2-dance.00": "Maybe this year I'll get Pierre to dance with me...",
+    "caroline-y3-dance.00": "I remember doing this dance, too, when I was young.",
+    "caroline-y3-dance.01": "Only danced for a few years before I left for college, though.",
+    "caroline-y2-abby-taken": "I wonder if Abby will feel better about dancing in the festival this year?",
     "clint-dance-no-emily": "Gosh, @, I've never been brave enough to ask someone to dance with me.",
     "clint-y2-dance": "I've been practicing this with my therapist, but now I'm not sure I can go through with asking someone to dance with me...",
     "clint-y3-dance": "I wonder if that refreshments table has any food on it still.",
@@ -862,6 +865,19 @@
     "willy-y3-dance": "I wonder if there's anything interesting on that buffet table left...",
     "willy-y4-dance": "Me, dance? Well, not in a place like this, I don't think.",
 
+    // Luau
+    "abby-y2-luau.00": "Oh, @, I think I might have seen a whale!",
+    "abby-y3-luau.00": "I think I'm developing a sunburn.",
+    "abby-y2-luau-spouse": "Just doing a little ocean-gazing. @, I think I should come out here more often!",
+    "abby-y2-luau-spouse.00": "I might be getting a sunburn, though.",
+    "alex-y2-luau.00": "Gosh my abs look great today, don't they, @?",
+    "alex-y3-luau.00": "Heya @, wanna go hit up the dance floor later?",
+    "alex-y2-luau-spouse": "Good sun, good surf, and you in my life, I couldn't ask for a better life!",
+    "alex-y3-luau-spouse": "Hey, @, you wanna hit the dance floor later?$l",
+    "willy-y2-luau": "I put in an anchovy. Nature's MSG!",
+    "willy-y3-luau": "Those speakers, it's a little too much noise for me. I can even hear it in the shop.",
+    "willy-y4-luau": "Think I saw a shark out there.",
+
     // Dance of the Moonlight Jellies
     "abby-y2-jellies": "Man, I'm not looking forward to school starting again",
     "abby-y1-jellies-spouse": "And another summer over. @, you looking forward to fall?",
@@ -941,6 +957,7 @@
     "clint-y2-halloween": "The maze? Nah. I'd rather stand here and enjoy Gus's cooking.",
     "demetrius-y2-halloween": "I'd love to study those skeletons a bit more closely some day...",
     "demetrius-y3-halloween": "Maybe this year will be the year I brave that maze...",
+    "demetrius-y4-halloween": "Frankly, bats don't scare me at all. In fact, I find them quite adorable, and am more afraid they will go extinct.",
     "elliott-y2-halloween-spouse": "Go have fun in the maze, darling. I...I don't think that's my thing, though.",
     "elliott-y2-halloween.00": "Gosh, fall's almost over, and I feel like I've barely worked on my manuscript all season...",
     "elliott-y2-halloween.01": "The only thing scarier than that maze is writer's block.",

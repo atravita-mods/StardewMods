@@ -79,6 +79,45 @@
     },
     {
         "Action": "EditData",
+        "LogName": "Emily - normal",
+        "Target": "Data/Festivals/summer11",
+        "When": {
+            "EnableFor": "Emily"
+        },
+        "Entries": {
+            "Emily_y2": "{{i18n:emily-y2-luau.00}}#$b${{i18n:emily-y2-luau.01}}$h",
+            "Emily_spouse": "{{i18n:emily-y1-luau-spouse}}$h",
+            "Emily_spouse_y2": "{{i18n:emily-y2-luau-spouse}}$h"
+        }
+    },
+    {
+        "Action": "EditData",
+        "LogName": "Evelyn - normal",
+        "Target": "Data/Festivals/summer11",
+        "When": {
+            "EnableFor": "Evelyn"
+        },
+        "Entries": {
+            "Evelyn_y2": "{{i18n:evelyn-y2-luau}}",
+            "Evelyn_y3": "{{i18n:evelyn-y3-luau}}$s",
+            "Evelyn_y4": "{{i18n:evelyn-y4-luau}}$h"
+        }
+    },
+    {
+        "Action": "EditData",
+        "LogName": "George - normal",
+        "Target": "Data/Festivals/summer11",
+        "When": {
+            "EnableFor": "George"
+        },
+        "Entries": {
+            "George_y2": "{{i18n:george-y2-luau}}$h",
+            "George_y3": "{{i18n:george-y3-luau}}$s",
+            "George_y4": "{{i18n:george-y4-luau}}$h"
+        }
+    },
+    {
+        "Action": "EditData",
         "LogName": "Willy - normal",
         "Target": "Data/Festivals/summer11",
         "When": {

@@ -18,7 +18,9 @@
             "spring_Fri8": "You know, @, I'm glad you came into my life.$h",
             "summer_Tue8": "@, which of the town flowers are your favorite?",
 
-            "winter_4": "It's getting close to the Feast of the Winter Star. Maybe I should start making Haley a sweater?",
+            // specific days
+            "summer_10{{YearRemainder}}": "It'll be the luau tomorrow! I don't have to do much for it, so I can just have fun and dance.$h",
+            "winter_4{{YearRemainder}}": "It's getting close to the Feast of the Winter Star. Maybe I should start making Haley a sweater?",
         }
     },
     {

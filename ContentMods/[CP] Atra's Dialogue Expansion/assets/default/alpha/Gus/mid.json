@@ -12,6 +12,7 @@
             // specific days
             "spring_12{{YearRemainder}}": "The Egg Festival is tomorrow! I've got so much cooking I need to do.$h",
             "summer_4{{YearRemainder}}": "Gotta get ready for inspections...",
+            "summer_10{{YearRemainder}}": "I've been working on the buffet for the luau all week!#$b#Make sure to bring something tasty for the soup tomorrow!",
 
             // null out the high priority location dialogue
             "Saloon": null,
@@ -28,7 +29,10 @@
         "When": {"IsCommunityCenterComplete": true},
         "Entries": {
             "11{{YearRemainder}}": "The community center used to be the heart of town. Sometimes, I wish it was used more.$s",
-            "12{{YearRemainder}}": "Sometimes I take the extra food we have and place it in the pantry of the community center, in case someone needs it."
+            "12{{YearRemainder}}": "Sometimes I take the extra food we have and place it in the pantry of the community center, in case someone needs it.",
+
+            // specific days
+            "summer_9{{YearRemainder}}": "Lewis always wants us to butter up the Governor a little bit.#$b#He says that if we do well, the state government is more likely to give us grants."
         }
     },
     {

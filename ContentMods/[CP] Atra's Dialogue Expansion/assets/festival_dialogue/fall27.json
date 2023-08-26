@@ -33,7 +33,8 @@
                 "EnableFor": "Caroline"
             },
             "Entries": {
-                "Caroline_y2": "{{i18n:caroline-y2-halloween}}"
+                "Caroline_y2": "{{i18n:caroline-y2-halloween}}",
+                "Caroline_y3": "{{i18n:caroline-y3-halloween}}"
             }
         },
         {

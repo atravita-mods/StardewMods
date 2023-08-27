@@ -12,6 +12,15 @@
         }
     },
     {
+        "LogName":"Harvey mid-hearts - Y3",
+        "Action": "EditData",
+        "Target": "Characters/Dialogue/Harvey",
+        "When": { "YearModulus": "3" },
+        "Entries": {
+            "5_2": "I really wanted to partner with a telehealth agency to offer services I'm not trained for, like counseling, but then I found out they sold patient data.$s#$e#Money ruins everything, doesn't it?$s"
+        }
+    },
+    {
         "LogName": "Harvey mid-hearts - Y4",
         "Action": "EditData",
         "Target": "Characters/Dialogue/Harvey",
@@ -31,7 +40,8 @@
         "When": { "YearModulus": "0" },
         "Entries": {
             "13_2": "That friend of mine, the one who's taking pilot lessons? He had to make a crash landing in a field the other day.#$b#Engine failed, it was pretty scary.",
-            "15_2": "How is Mayor Lewis so good at Junimo Kart? I can't get past the first level.$s"
+            "15_2": "How is Mayor Lewis so good at Junimo Kart? I can't get past the first level.$s",
+            "16_2": "One of my friends from medical school is now a company doc.#$e#He says the pay is stable but he always has to be careful what he says.#$b#Company doesn't want to admit that it has asbestos surrounding its buried lines.#$e#Oh, I shouldn't have said that!", // see: https://cwa-union.org/news/entry/working_with_exposure_to_asbestos-containing_materials
         }
     }
 ]}

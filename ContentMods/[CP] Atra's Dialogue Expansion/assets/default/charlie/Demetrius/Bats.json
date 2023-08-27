@@ -27,9 +27,19 @@
         "Entries": {
             "7_2": "In order to support the respiratory demands of flight, bats can actually exchange carbon dioxide for oxygen through their wings.$h#$e#Birds have evolved an extraordinary respiratory system, bats breathe through their wings. Isn't this marvelous?$h",
             "10_2": "Bat guano is commonly used as fertilizer! It's quite rich in nitrogen.",
-            "12_2": "Bats help reduce the use of pesticides because they'll eat agricultural pests!",
+            "12_2": "Bats help reduce the use of pesticides because they'll eat agricultural pests.$h",
             "14_2": "%Demetrius looks very tired.#$b#*Yawn*. Oh, hi, @, I was up late last night observing the bats in our local caves!"
         },
         "When": { "YearModulus": "3"}
+    },
+    {
+        "LogName": "Demetrius mid-hearts, Y4, bats",
+        "Action": "EditData",
+        "Target": "Characters/Dialogue/Demetrius",
+        "When": { "YearModulus": "4"},
+        "Entries": {
+            "7_2": "Compared to most mammals of their size, bats are incredibly long lived. I've always wondered how they managed.",
+            "15_2": "Bats are far, far more capable of fighting off viruses than humans are.#$b#From rabies to coronaviruses, they seem far more capable of handling viruses than we are.",
+        }
     }
 ]}

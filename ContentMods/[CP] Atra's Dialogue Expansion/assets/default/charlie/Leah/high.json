@@ -12,7 +12,7 @@
         "Target": "Characters/Dialogue/Leah",
         "When": {"YearModulus": 2},
         "Entries": {
-            "25": "I was the first person in my family who went to college. Couldn't have done it without scholarships."
+            "25_2": "I was the first person in my family who went to college. Couldn't have done it without scholarships."
         }
     },
     {
@@ -20,7 +20,7 @@
         "Target": "Characters/Dialogue/Leah",
         "When": {"YearModulus": 3},
         "Entries": {
-            "25": "My father was always so supportive of everything I wanted to do. I appreciate him far more than words can say.$h"
+            "25_2": "My father was always so supportive of everything I wanted to do. I appreciate him far more than words can say.$h"
         }
     }
 ]}

@@ -207,7 +207,7 @@
         "Entries": {
             "Jodi_y2": "{{i18n:jodi-y2-luau}}",
             "Jodi_y3": "{{i18n:jodi-y3-luau}}",
-            "Jodi_y4": "{{i18n:jodi-y4-luau}}$s",
+            "Jodi_y4": "{{i18n:jodi-y4-luau}}$s"
         }
     },
     {
@@ -268,6 +268,90 @@
         "Entries": {
             "Linus_y2": "{{i18n:linus-y2-luau}}$h",
             "Linus_y3": "{{i18n:linus-y3-luau}}$h"
+        }
+    },
+    {
+        "Action": "EditData",
+        "LogName": "Marlon - normal",
+        "Target": "Data/Festivals/summer11",
+        "When": {
+            "EnableFor": "Marlon"
+        },
+        "Entries": {
+            "Marlon_y2": "{{i18n:marlon-y2-luau}}"
+        }
+    },
+    {
+        "Action": "EditData",
+        "LogName": "Marnie - normal",
+        "Target": "Data/Festivals/summer11",
+        "When": {
+            "EnableFor": "Marnie"
+        },
+        "Entries": {
+            "Marnie_y2": "{{i18n:marnie-y2-luau}}$h",
+            "Marnie_y3": "{{i18n:marnie-y3-luau}}$h"
+        }
+    },
+    {
+        "Action": "EditData",
+        "LogName": "Maru - normal",
+        "Target": "Data/Festivals/summer11",
+        "When": {
+            "EnableFor": "Maru"
+        },
+        "Entries": {
+            "Maru_y2": "{{i18n:maru-y2-luau}}$h",
+            "Maru_spouse_y2": "{{i18n:maru-y2-luau-spouse}}$s"
+        }
+    },
+    {
+        "Action": "EditData",
+        "LogName": "Pam - normal",
+        "Target": "Data/Festivals/summer11",
+        "When": {
+            "EnableFor": "Pam"
+        },
+        "Entries": {
+            "Pam_y2": "{{i18n:pam-y2-luau}}$h",
+        }
+    },
+    {
+        "Action": "EditData",
+        "LogName": "Penny - normal",
+        "Target": "Data/Festivals/summer11",
+        "When": {
+            "EnableFor": "Penny"
+        },
+        "Entries": {
+            "Penny_y2": "{{i18n:penny-y2-luau}}#$e#{{i18n:penny-y2-luau.00}}$s",
+            "Penny_spouse_y2": "{{i18n:penny-y2-luau-spouse}}"
+        }
+    },
+    {
+        "Action": "EditData",
+        "LogName": "Pierre - no Joja",
+        "Target": "Data/Festivals/summer11",
+        "When": {
+            "EnableFor": "Pierre",
+            "IsJojaMartComplete": false
+        },
+        "Entries": {
+            "Pierre_y2": "{{i18n:pierre-y2-luau}}",
+            "Pierre_y3": "{{i18n:pierre-y3-luau}}$h"
+        }
+    },
+    {
+        "Action": "EditData",
+        "LogName": "Pierre - Joja",
+        "Target": "Data/Festivals/summer11",
+        "When": {
+            "EnableFor": "Pierre",
+            "IsJojaMartComplete": true
+        },
+        "Entries": {
+            "Pierre_y2": "{{i18n:pierre-y2-luau-joja}}$s#$e#{{i18n:pierre-y2-luau-joja.00}}",
+            "Pierre_y3": "{{i18n:pierre-y3-luau-joja}}$s"
         }
     },
     {

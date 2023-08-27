@@ -114,6 +114,8 @@
         "Action": "EditData",
         "Target": "Characters/Dialogue/Emily",
         "Entries": {
+            "winter_Sun4": "Days like this make mean really want to knit!",
+
             "6_2": "If I sell some dresses, maybe I can buy a serger...",
             "7_2": "I've been doing a lot of lace insertion work lately. It's so pretty but so tedious.",
             "8_2": "@, do you think I could sell the clothing I make?",
@@ -167,7 +169,7 @@
         "Target": "Characters/Dialogue/Emily",
         "When": {
             "YearModulus": "4",
-            "Spouse: anyPlayer | contains=Emily": false,
+            "Query: {{Spouse:anyPlayer|contains=Emily}} OR {{Relationship:Emily|contains=Married, Engaged}}": false,
         },
         "Entries": {
             "22_2": "@, do you think I will ever find a love as enduring as George and Evelyn's?"

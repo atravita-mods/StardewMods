@@ -58,7 +58,7 @@
                 "Query: {{Spouse:anyPlayer|contains=Emily}} OR {{Relationship:Emily|contains=Married,Dating,Engaged}}": true
             },
             "Entries": {
-                "Clint": "{{i18n:clint-fishing-no-emily}}$s",
+                "Clint": "{{i18n:clint-fishing-no-emily}}$s"
             }
         },
         {
@@ -82,5 +82,64 @@
                 "Elliott_spouse_y2": "{{i18n:elliott-y2-fishing-spouse}}$h"
             }
         },
+        {
+            "LogName": "Emily - normal",
+            "Action": "EditData",
+            "Target": "Data/Festivals/winter8",
+            "When": {"EnableFor": "Emily"},
+            "Entries": {
+                "Emily_y2": "{{i18n:emily-y2-fishing.01}}$h#$e#{{i18n:emily-y2-fishing.02}}",
+                "Emily_spouse": "{{i18n:emily-y1-fishing-spouse}}$h",
+                "Emily_spouse_y2": "{{i18n:emily-y2-fishing-spouse}}$h"
+            }
+        },
+        {
+            "Action": "EditData",
+            "LogName": "Evelyn - normal",
+            "Target": "Data/Festivals/winter8",
+            "When": {
+                "EnableFor": "Evelyn"
+            },
+            "Entries": {
+                "Evelyn_y2": "{{i18n:evelyn-y2-fishing}}$h",
+                "Evelyn_y3": "{{i18n:evelyn-y3-fishing}}"
+            }
+        },
+        {
+            "Action": "EditData",
+            "LogName": "George - normal",
+            "Target": "Data/Festivals/winter8",
+            "When": {
+                "EnableFor": "George"
+            },
+            "Entries": {
+                "George_y2": "{{i18n:george-y2-fishing}}$s",
+                "George_y3": "{{i18n:george-y3-fishing}}$s"
+            }
+        },
+        {
+            "Action": "EditData",
+            "LogName": "Gus - normal",
+            "Target": "Data/Festivals/winter8",
+            "When": {
+                "EnableFor": "Gus"
+            },
+            "Entries": {
+                "Gus_y2": "{{i18n:gus-y2-fishing}}$s",
+                "Gus_y3": "{{i18n:gus-y3-fishing}}$h"
+            }
+        },
+        {
+            "Action": "EditData",
+            "LogName": "Gus - Joja",
+            "Target": "Data/Festivals/winter8",
+            "When": {
+                "EnableFor": "Gus",
+                "IsJojaMartComplete": true
+            },
+            "Entries": {
+                "Gus_y2": "{{i18n:gus-y2-fishing-joja}}$s",
+            }
+        }
     ]
 }

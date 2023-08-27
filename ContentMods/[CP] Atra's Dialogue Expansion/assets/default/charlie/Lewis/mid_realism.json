@@ -9,6 +9,17 @@
         }
     },
     {
+        "LogName": "Lewis mid-hearts - Joja",
+        "Action": "EditData",
+        "Target": "Characters/Dialogue/Lewis",
+        "When": {
+            "IsJojaMartComplete": true,
+        },
+        "Entries": {
+            "26{{YearRemainder}}": "With Joja here, with all the tax breaks we have to give to Joja, we get a lot less tax revenue.#$b#Makes everything so much more difficult."
+        }
+    },
+    {
         "LogName": "Lewis mid-hearts",
         "Action": "EditData",
         "Target": "Characters/Dialogue/Lewis",

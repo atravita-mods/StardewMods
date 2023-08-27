@@ -356,6 +356,70 @@
     },
     {
         "Action": "EditData",
+        "LogName": "Robin - normal",
+        "Target": "Data/Festivals/summer11",
+        "When": {
+            "EnableFor": "Robin"
+        },
+        "Entries": {
+            "Robin_y2": "{{i18n:robin-y2-luau}}$h",
+            "Robin_y3": "{{i18n:robin-y3-luau}}$h#$e#{{i18n:robin-y3-luau.01}}",
+            "Robin_y4": "{{i18n:robin-y4-luau.00}}$s"
+        }
+    },
+    {
+        "Action": "EditData",
+        "LogName": "Sam - normal",
+        "Target": "Data/Festivals/summer11",
+        "When": {
+            "EnableFor": "Sam"
+        },
+        "Entries": {
+            "Sam_y2": "{{i18n:sam-y2-luau}}$s#$e#{{i18n:sam-y2-luau.00}}$s",
+            "Sam_spouse_y2": "{{i18n:sam-y2-luau-spouse}}$l",
+            "Sam_spouse_y3": "{{i18n:sam-y3-luau-spouse}}$h"
+        }
+    },
+    // intentionally skip Sandy.
+    {
+        "Action": "EditData",
+        "LogName": "Sebastian - normal",
+        "Target": "Data/Festivals/summer11",
+        "When": {
+            "EnableFor": "Sebastian"
+        },
+        "Entries": {
+            "Sebastian_y2": "{{i18n:sebastian-y2-luau}}$s",
+            "Sebastian_spouse_y2": "{{i18n:sebastian-y2-luau-spouse}}$s"
+        }
+    },
+    {
+        "Action": "EditData",
+        "LogName": "Shane - normal",
+        "Target": "Data/Festivals/summer11",
+        "When": {
+            "EnableFor": "Shane"
+        },
+        "Entries": {
+            "Shane_y2": "{{i18n:shane-y2-luau}}$h",
+            "Shane_y3": "{{i18n:shane-y3-luau}}",
+            "Shane_spouse": "{{i18n:shane-y1-luau-spouse}}$h"
+        }
+    },
+    {
+        "Action": "EditData",
+        "LogName": "Vincent - normal",
+        "Target": "Data/Festivals/summer11",
+        "When": {
+            "EnableFor": "Vincent"
+        },
+        "Entries": {
+            "Vincent_y2": "{{i18n:vincent-y2-luau|title={{Title}} }}",
+            "Vincent_y3": "{{i18n:vincent-y3-luau}}",
+        }
+    },
+    {
+        "Action": "EditData",
         "LogName": "Willy - normal",
         "Target": "Data/Festivals/summer11",
         "When": {

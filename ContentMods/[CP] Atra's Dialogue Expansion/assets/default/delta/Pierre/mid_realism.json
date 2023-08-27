@@ -1,0 +1,15 @@
+{
+    "Changes": [
+        {
+            "LogName": "Pierre, Joja completed",
+            "Action": "EditData",
+            "Target": "Characters/Dialogue/Pierre",
+            "When": {
+                "IsJojaMartComplete": true
+            },
+            "Entries": {
+                "summer_Mon8": "What good is antitrust law if the government won't use it against Joja?$s"
+            }
+        },
+    ]
+}

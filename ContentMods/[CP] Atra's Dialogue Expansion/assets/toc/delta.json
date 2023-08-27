@@ -47,6 +47,16 @@
     },
     {
         "Action": "Include",
+        "LogName": "Pierre - mid hearts",
+        "FromFile": "{{FirstValidFile: assets/{{language}}/delta/Pierre/mid_realism.json, assets/default/delta/Pierre/mid_realism.json}}",
+        "When": {
+            "EnableFor": "Pierre",
+            "Query: {{Hearts:Pierre}} >= 6": true,
+            "IncreasedRealism": true
+        }
+    },
+    {
+        "Action": "Include",
         "LogName": "Sandy - mid hearts",
         "FromFile": "{{FirstValidFile: assets/{{language}}/delta/Sandy/mid.json, assets/default/delta/Sandy/mid.json}}",
         "When": {

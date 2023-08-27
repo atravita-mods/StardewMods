@@ -1194,6 +1194,18 @@
     "willy-y2-fair": "I've been saving up my best fish for weeks, @! Let's see if I can beat you this year.",
     "willy-y3-fair": "We've got such great fish in this valley, don't we, @? I'm putting all my best catches in my grange display.",
 
+    // Fishing Festival
+    "abby-y2-fishing.00": "Brrr! It's freezing out today.",
+    "abby-y3-fishing.00": "I can't seem to get the face to look right...",
+    "abby-y2-fishing-spouse": "I feel like I've been working on this snow goon for hours...",
+    "abby-y2-fishing-spouse.00": "It still doesn't look the way I want..",
+    "alex-y2-fishing.00": "Fishing usually isn't my sport but maybe I should try my hand at it.",
+    "alex-y3-fishing.00": "You know, @, I always wonder why we put this little pond here for this festival instead of just fishing out of the river...",
+    "alex-y2-fishing-spouse": "You've got it, @, I'll be rooting for you.",
+    "alex-y3-fishing-spouse": "Gosh, it's so cold today, isn't it?",
+    "caroline-y2-fishing": "Fishing has never really been my thing, but I guess we've got to support the community.",
+    "caroline-y3-fishing": "To be honest I'd rather be in my  greenhouse right now.",
+
     /****************************
     * Special order dialogue
     ****************************/

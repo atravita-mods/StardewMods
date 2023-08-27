@@ -62,6 +62,17 @@
             "When": {
                 "YearModulus": "3"
             }
-        }
+        },
+        {
+            "Action": "EditData",
+            "LogName": "Vincent mid-hearts Y4",
+            "Target": "Characters/Dialogue/Vincent",
+            "Entries": {
+                "2_2": "Can I have some chocolate, {{Title}} @?",
+            },
+            "When": {
+                "YearModulus": "4"
+            }
+        },
     ]
 }

@@ -1,0 +1,44 @@
+// fishing festival
+{
+    "Changes": [
+        {
+            "Action": "EditData",
+            "LogName": "Abby - normal",
+            "Target": "Data/Festivals/winter8",
+            "When": {
+                "EnableFor": "Abigail"
+            },
+            "Entries": {
+                "Abigail_y2": "{{i18n:abby-y2-fishing.00}}",
+                "Abigail_y3": "{{i18n:abby-y3-fishing.00}}$s",
+                "Abigail_spouse_y2": "{{i18n:abby-y2-fishing-spouse}}#$e#{{i18n:abby-y2-fishing-spouse.00}}$s"
+            }
+        },
+        {
+            "Action": "EditData",
+            "LogName": "Alex - normal",
+            "Target": "Data/Festivals/winter8",
+            "When": {
+                "EnableFor": "Alex"
+            },
+            "Entries": {
+                "Alex_y2": "{{i18n:alex-y2-fishing.00}}",
+                "Alex_y3": "{{i18n:alex-y3-fishing.00}}",
+                "Alex_spouse_y2": "{{i18n:alex-y2-fishing-spouse}}$h",
+                "Alex_spouse_y3": "{{i18n:alex-y3-fishing-spouse}}"
+            }
+        },
+        {
+            "Action": "EditData",
+            "LogName": "Caroline - normal",
+            "Target": "Data/Festivals/winter8",
+            "When": {
+                "EnableFor": "Caroline"
+            },
+            "Entries": {
+                "Caroline_y2": "{{i18n:caroline-y2-fishing}}",
+                "Caroline_y3": "{{i18n:caroline-y3-fishing}}"
+            }
+        },
+    ]
+}

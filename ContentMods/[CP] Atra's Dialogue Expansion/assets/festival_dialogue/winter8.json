@@ -140,6 +140,56 @@
             "Entries": {
                 "Gus_y2": "{{i18n:gus-y2-fishing-joja}}$s",
             }
+        },
+        {
+            "Action": "EditData",
+            "LogName": "Haley - normal",
+            "Target": "Data/Festivals/winter8",
+            "When": {
+                "EnableFor": "Haley"
+            },
+            "Entries": {
+                "Haley_y2": "{{i18n:haley-y2-fishing.00}}$h#$e#{{i18n:haley-y2-fishing.01}}",
+                "Haley_spouse_y2": "{{i18n:haley-y2-fishing-spouse}}$h"
+            }
+        },
+        {
+            "Action": "EditData",
+            "LogName": "Harvey - normal",
+            "Target": "Data/Festivals/winter8",
+            "When": {
+                "EnableFor": "Harvey"
+            },
+            "Entries": {
+                "Harvey_y2": "{{i18n:harvey-y2-fishing.00}}#$e#{{i18n:harvey-y2-fishing.01}}",
+                "Harvey_spouse_y2": "{{i18n:harvey-y2-fishing-spouse}}$h#$e#{{i18n:harvey-y2-fishing-spouse.00}}$l"
+            }
+        },
+        {
+            "Action": "EditData",
+            "LogName": "Jas - normal",
+            "Target": "Data/Festivals/winter8",
+            "When": {
+                "EnableFor": "Jas"
+            },
+            "Entries": {
+                "Jas_y2": "{{i18n:jas-y2-fishing}}$s",
+                "Jas_y3": "{{i18n:jas-y3-fishing|title={{Title}} }}$h",
+                "Jas_y4": "{{i18n:jas-y4-fishing}}$h"
+            }
+        },
+        {
+            "Action": "EditData",
+            "LogName": "Jodi - normal",
+            "Target": "Data/Festivals/winter8",
+            "When": {
+                "EnableFor": "Jodi"
+            },
+            "Entries": {
+                "Jodi_y2": "{{i18n:jodi-y2-fishing}}$h",
+                "Jodi_y3": "{{i18n:jodi-y3-fishing}}$h",
+                "Jodi_y4": "{{i18n:jodi-y4-fishing}}"
+            }
         }
     ]
 }

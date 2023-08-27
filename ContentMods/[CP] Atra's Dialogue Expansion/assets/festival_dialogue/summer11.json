@@ -248,6 +248,30 @@
     },
     {
         "Action": "EditData",
+        "LogName": "Lewis - normal",
+        "Target": "Data/Festivals/summer11",
+        "When": {
+            "EnableFor": "Lewis"
+        },
+        "Entries": {
+            "Lewis_y2": "{{i18n:lewis-y2-luau}}",
+            "Lewis_y3": "{{i18n:lewis-y3-luau}}$h#$e#{{i18n:lewis-y3-luau.00}}"
+        }
+    },
+    {
+        "Action": "EditData",
+        "LogName": "Linus - normal",
+        "Target": "Data/Festivals/summer11",
+        "When": {
+            "EnableFor": "Linus"
+        },
+        "Entries": {
+            "Linus_y2": "{{i18n:linus-y2-luau}}$h",
+            "Linus_y3": "{{i18n:linus-y3-luau}}$h"
+        }
+    },
+    {
+        "Action": "EditData",
         "LogName": "Willy - normal",
         "Target": "Data/Festivals/summer11",
         "When": {

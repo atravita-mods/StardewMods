@@ -48,6 +48,7 @@
 
             // just before not-halloween.
             "fall_26{{YearRemainder}}": "I can't talk right now, I need to prepare for the festival.#$e#We absolutely need to make more money.$s",
+            "winter_7{{YearRemainder}}": "Mayor Lewis doesn't want me running a booth during tomorrow's Festival.#$b#I wish I could, festival booths are a pretty good slice of our income.",
         }
     },
     {

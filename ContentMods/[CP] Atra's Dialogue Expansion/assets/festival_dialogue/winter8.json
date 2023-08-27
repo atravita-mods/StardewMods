@@ -40,5 +40,47 @@
                 "Caroline_y3": "{{i18n:caroline-y3-fishing}}"
             }
         },
+        {
+            "LogName": "Clint - normal",
+            "Action": "EditData",
+            "Target": "Data/Festivals/winter8",
+            "When": {"EnableFor":"Clint"},
+            "Entries": {
+                "Clint_y2": "{{i18n:clint-y2-fishing}}"
+            }
+        },
+        {
+            "Action": "EditData",
+            "LogName": "Clint - Emily taken",
+            "Target": "Data/Festivals/winter8",
+            "When": {
+                "EnableFor": "Clint",
+                "Query: {{Spouse:anyPlayer|contains=Emily}} OR {{Relationship:Emily|contains=Married,Dating,Engaged}}": true
+            },
+            "Entries": {
+                "Clint": "{{i18n:clint-fishing-no-emily}}$s",
+            }
+        },
+        {
+            "LogName": "Demetrius - normal",
+            "Action": "EditData",
+            "Target": "Data/Festivals/winter8",
+            "When": {"EnableFor":"Demetrius"},
+            "Entries": {
+                "Demetrius_y2": "{{i18n:demetrius-y2-fishing.01}}$h#$e#{{i18n:demetrius-y2-fishing.02}}",
+                "Demetrius_y3": "{{i18n:demetrius-y3-fishing}}"
+            }
+        },
+        {
+            "LogName": "Elliott - normal",
+            "Action": "EditData",
+            "Target": "Data/Festivals/winter8",
+            "When": {"EnableFor": "Elliott"},
+            "Entries": {
+                "Elliott_y2": "{{i18n:elliott-y2-fishing}}$h",
+                "Elliott_y3": "{{i18n:elliott-y3-fishing}}$s",
+                "Elliott_spouse_y2": "{{i18n:elliott-y2-fishing-spouse}}$h"
+            }
+        },
     ]
 }

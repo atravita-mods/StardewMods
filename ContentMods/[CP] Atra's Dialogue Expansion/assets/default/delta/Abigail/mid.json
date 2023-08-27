@@ -27,6 +27,15 @@
         }
     },
     {
+        "LogName": "Abigail mid-hearts - Joja",
+        "Action": "EditData",
+        "Target": "Characters/Dialogue/Abigail",
+        "When": {"IsJojaMartComplete": true},
+        "Entries": {
+            "fall_Wed6": "Feels like ever since Joja took over, Dad's done nothing but work.#$e#I'm afraid he'll have a heart attack if he keeps working like this.$s"
+        }
+    },
+    {
         "LogName": "Abigail mid-heart, Y2",
         "Action": "EditData",
         "Target": "Characters/Dialogue/Abigail",

@@ -22,9 +22,19 @@
         }
     },
     {
-        "LogName": "Caroline: mid hearts",
+        "LogName": "Caroline: mid hearts - CC",
         "Action": "EditData",
         "Target": "Characters/Dialogue/Caroline",
+        "When": {"IsCommunityCenterComplete": true},
+        "Entries": {
+            "24{{YearRemainder}}": "Now that Joja's gone, I hope Pierre'll be able to relax a bit more. All this stress isn't good for him."
+        }
+    },
+    {
+        "LogName": "Caroline: mid hearts - Y1",
+        "Action": "EditData",
+        "Target": "Characters/Dialogue/Caroline",
+        "When": {"YearModulus": "1"},
         "Entries": {
             "Resort_Entering": "Ah, a nice day of rest and relaxation!$h",
             "Resort_Bar_2": "I could do with a Long Island Iced Tea right about now",
@@ -46,8 +56,7 @@
             "28{{YearRemainder}}": "I grew up here in this valley. Only really left once, to go to college in Zuzu City.#$b#I love it here. It's my home.",
 
             "Resort_Approach": "@, I'm gonna go catch some sun over at Ginger Island today.$h"
-        },
-        "When": {"YearModulus": "1"}
+        }
     },
     {
         "LogName": "Caroline: mid hearts. Y1, CC",

@@ -30,7 +30,8 @@
             "Entries": {
                 "1{{YearRemainder}}": "I'm always incredibly amazed by how the human body works, @. Just...how everything comes together to make us work.$h",
                 "2{{YearRemainder}}": "Did you know there's a muscle in the arm that not everyone has?#$b#It's called the palmaris longus muscle, and about fourteen percent of the population just doesn't have it anymore.",
-                "3{{YearRemainder}}": "One thing I miss from working in the city - I can't just send bloodwork downstairs and get it within a few hours anymore.$s"
+                "3{{YearRemainder}}": "One thing I miss from working in the city - I can't just send bloodwork downstairs and get it within a few hours anymore.$s",
+                "4{{YearRemainder}}": "While I do have some medication samples on hand, I can't dispense medications normally. If you need anything that I don't carry, you'll need to get in contact with a mail-order pharmacy.",
             }
         },
         {

@@ -223,6 +223,7 @@
     "gi_leave_harvey_0": "@, I'll be enjoying a nice day at Ginger Island today.",
     "gi_leave_harvey_1": "I spend so much of my time inside, it'll be good for me to get some sun.",
 
+    "alex-resort-pier": "This water's so blue, I want to dive in.",
     "vincent_pier": "Look, a whale!",
 
     // divorce strings
@@ -1226,6 +1227,7 @@
     "gus-y3-fishing": "Hey, @, you think I should try my hand at fishing some day?",
     "haley-y2-fishing.00": "The way the sun is striking those igloos, that's a lovely picture.",
     "haley-y2-fishing.01": "It's so cold but I guess that's what photographers have to put up with.",
+    "haley-y3-fishing.00": "Gosh, that sculpture Leah's making is gorgeous, maybe I should go photograph it.",
     "haley-y2-fishing-spouse": "The way the the sun strikes the snow, it's lovely, isn't it?",
     "harvey-y2-fishing.00": "I asked Mayor Lewis once what we'd do if someone fell through the ice.",
     "harvey-y2-fishing.01": "He said we'd just pull them out, the water's not very deep.",
@@ -1237,6 +1239,24 @@
     "jodi-y2-fishing": "I used to love making snowmen when I was a kid. I'm glad Vincent seems to enjoy it too.",
     "jodi-y3-fishing": "Maybe we should take walks out here more often? The air is just so crisp.",
     "jodi-y4-fishing": "Mmmm, maybe I should make some hot chocolate after this...",
+    "kent-y2-fishing": "This festival is nice and peaceful, why couldn't they all be like this?",
+    "kent-y3-fishing.00": "Kent seems lost in thought.",
+    "kent-y3-fishing.01": "Hmmm, if I were fishing in this festival, how should I approach it?",
+    "kent-y3-fishing.02": "Oh, @, I didn't see you there!",
+    "kent-y4-fishing": "Should I try my hand at this ice fishing this year?",
+    "leah-y2-fishing.00": "Wow, do you see what Robin's doing?",
+    "leah-y2-fishing.01": "All her work is so gorgeous, sometimes I'm jealous.",
+    "leah-y1-fishing-spouse.00.male": "I've always wanted to do some more classical art.",
+    "leah-y1-fishing-spouse.00.female": "This mermaid I'm making, she's based off you, of course.",
+    "leah-y1-fishing-spouse.01": "Look, doesn't she look gorgeous?",
+    "leah-y2-fishing-spouse": "My fingers are freezing but I've got to finish this piece.",
+    "leo-y2-fishing": "I wanna spend a night in an igloo!",
+    "leo-y3-fishing": "@, do you think they'd let me fish in the festival?",
+    "leo-y4-fishing": "It's warm and toasty next to this fire.",
+    "lewis-y2-fishing": "To be honest I have no clue how this little fishing lake gets set up but we get to use it for this festival every year!",
+    "lewis-y2-fishing.00": "Whenever you're ready, we can start!",
+    "lewis-y3-fishing": "We always make sure to release the fish humanely at the end of each competition!",
+    "lewis-y2-fishing.01": "So just let me know when you're ready to fish!",
 
     /****************************
     * Special order dialogue

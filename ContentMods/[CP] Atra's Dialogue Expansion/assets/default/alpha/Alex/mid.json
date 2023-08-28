@@ -4,6 +4,9 @@
     // still trying to defend his mother.
 
     // grew up in Pelican Town.
+
+    // Personally I doubt he can become pro if he hasn't been scouted yet, so
+    // we're going to divert him to being a physical trainer.
     {
         "LogName": "Rain -- during winter.",
         "Action": "EditData",

@@ -180,6 +180,18 @@
     "Changes": [
         {
             "Action": "Include",
+            "LogName": "GIMA",
+            "When": {"HasMod": "atravita.GingerIslandMainlandAdjustments"},
+            "FromFile": "assets/integrations/gima.json"
+        },
+        {
+            "Action": "Include",
+            "LogName": "SOTE",
+            "When": {"HasMod": "atravita.SpecialOrdersExtended"},
+            "FromFile": "assets/integrations/sote.json"
+        },
+        {
+            "Action": "Include",
             "LogName": "Festival Changes",
             "FromFile": "assets/festival_dialogue/{{Season}}{{Day}}.json",
             "When": {
@@ -216,18 +228,6 @@
             "LogName": "Mail",
             "When": {"EnableMail": true, "Year|contains=1": false},
             "FromFile": "assets/mail.json",
-        },
-        {
-            "Action": "Include",
-            "LogName": "GIMA",
-            "When": {"HasMod": "atravita.GingerIslandMainlandAdjustments"},
-            "FromFile": "assets/integrations/gima.json"
-        },
-        {
-            "Action": "Include",
-            "LogName": "SOTE",
-            "When": {"HasMod": "atravita.SpecialOrdersExtended"},
-            "FromFile": "assets/integrations/sote.json"
         },
         {
             "Action": "Include",

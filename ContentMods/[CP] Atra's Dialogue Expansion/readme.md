@@ -68,11 +68,12 @@ Simply remove this mod from your mods folder.
 * **Pierre**:
 * **Robin**:
 * **Sam**:
-* **Sandy**:
+* **Sandy**: Also mostly skipped - go download Immersive Sandy if you want more for her.
 * **Sebastian**: The NPC that started this whole bloody project. Sebastian will now talk more about his job.
 * **Shane**: Mostly skipped - seriously, just go install Immersive Shane if you want more of Shane, that mod is great.
 * **Vincent**:
 * **Willy**:
+* **Wizard**: I'm gonna be honest, I couldn't really fit him into the theme of this mod. Plus the Wizard has no less than four separate mods focused on him alone, all with *wildly* differing fanons. So I'm skipping him. Go download any of the Romantic Rasmodius mods if you want more for him.
 
 ## Compatibility
 This mod should be compatible with most other mods, even other dialogue mods. I've tried to use dialogue keys that aren't commonly used. Additionally, each NPC can be enabled or disabled separately.

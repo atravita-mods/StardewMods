@@ -150,6 +150,7 @@
             },
             "Entries": {
                 "Haley_y2": "{{i18n:haley-y2-fishing.00}}$h#$e#{{i18n:haley-y2-fishing.01}}",
+                "Haley_y3": "{{i18n:haley-y3-fishing.00}}$h",
                 "Haley_spouse_y2": "{{i18n:haley-y2-fishing-spouse}}$h"
             }
         },
@@ -190,6 +191,68 @@
                 "Jodi_y3": "{{i18n:jodi-y3-fishing}}$h",
                 "Jodi_y4": "{{i18n:jodi-y4-fishing}}"
             }
-        }
+        },
+        {
+            "Action": "EditData",
+            "LogName": "Kent - normal",
+            "Target": "Data/Festivals/winter8",
+            "When": {
+                "EnableFor": "Kent"
+            },
+            "Entries": {
+                "Kent_y2": "{{i18n:kent-y2-fishing}}",
+                "Kent_y3": "%{{i18n:kent-y3-fishing.00}}#$b#{{i18n:kent-y3-fishing.01}}#$e#{{i18n:kent-y3-fishing.02}}",
+                "Kent_y4": "{{i18n:kent-y4-fishing}}"
+            }
+        },
+        {
+            "Action": "EditData",
+            "LogName": "Leah - normal",
+            "Target": "Data/Festivals/winter8",
+            "When": {
+                "EnableFor": "Leah"
+            },
+            "Entries": {
+                "Leah_y2": "{{i18n:leah-y2-fishing.00}}#$e#{{i18n:leah-y2-fishing.01}}",
+                "Leah_spouse": "{{i18n:leah-y1-fishing-spouse.00.male}}$h^{{leah-y1-fishing-spouse.00.female}}$l#$e#{{i18n:leah-y1-fishing-spouse.01}}$h",
+                "Leah_spouse_y2": "{{i18n:leah-y2-fishing-spouse}}$h"
+            }
+        },
+        {
+            "Action": "EditData",
+            "LogName": "Leo - normal",
+            "Target": "Data/Festivals/winter8",
+            "When": {
+                "EnableFor": "Leo"
+            },
+            "Entries": {
+                "Leo_y2": "{{i18n:leo-y2-fishing}}",
+            }
+        },
+        {
+            "Action": "EditData",
+            "LogName": "Leo - higher hearts",
+            "Target": "Data/Festivals/winter8",
+            "When": {
+                "EnableFor": "Leo",
+                "Query: {{Hearts:Leo}} >= 8": true
+            },
+            "Entries": {
+                "Leo_y3": "{{i18n:leo-y3-fishing}}",
+                "Leo_y4": "{{i18n:leo-y4-fishing}}$h"
+            }
+        },
+        {
+            "Action": "EditData",
+            "LogName": "Lewis - normal",
+            "Target": "Data/Festivals/winter8",
+            "When": {
+                "EnableFor": "Lewis"
+            },
+            "Entries": {
+                "Lewis_y2": "{{i18n:lewis-y2-fishing}}$h#$e#{{i18n:lewis-y2-fishing.00}}",
+                "Lewis_y3": "{{i18n:lewis-y3-fishing}}$h#$e#{{i18n:lewis-y2-fishing.01}}"
+            }
+        },
     ]
 }

@@ -10,5 +10,15 @@
         "When": {
             "Year|contains=1": false
         }
+    },
+    // additional GIMA dialogue
+    {
+        "LogName": "Alex - GIMA",
+        "Action": "EditData",
+        "Target": "Characters/Dialogue/Alex",
+        "When": {"EnableFor": "Alex"},
+        "Entries": {
+            "Resort_Pier": "{{i18n:alex-resort-pier}}$h"
+        }
     }
 ]}

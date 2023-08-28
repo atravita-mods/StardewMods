@@ -817,6 +817,7 @@
     "lewis-y3-dance-married": "When you first came to this village, @, I wasn't sure you'd stay. But look at you now!",
     "lewis-y2-dance-unmarried": "Are you planning on dancing this year, @? Best hurry up and ask someone quickly!",
     "lewis-y3-dance-unmarried": "Is there anyone I'd want to dance with? Errr....no, and my bum knee means I can't, anyways...",
+    "lewis-y3-dance-unmarried-better": "Is there anyone I'd want to dance with? Err, yes, but unfortunately I can't. My knee, you see.",
     "lewis-y4-dance-unmarried": "Plenty a young couple first danced here on this grass over the years.",
     "lewis-y4-dance-unmarried.00": "Of course, plenty of those young couples have since moved away...",
     "linus-y2-dance": "I'm just going to sneak in and grab a bite of food after the buffet clears out a bit.",
@@ -826,6 +827,15 @@
     "marlon-y2-dance": "You know, @, I used to enjoy a good dance or two, especially after a nice round of drinks...",
     "marlon-y3-dance": "Some say this dance is a celebration of the fertility of the valley.",
     "marlon-y4-dance": "Are you asking me if anyone caught my eye, @? Well, maybe....",
+    "marnie-y1-dance-better": "I wonder, maybe this year will be the year...",
+    "marnie-y1-dance-knows": "Everyone's so happy, I wish I could be happy for them.",
+    "marnie-y2-dance-better": "Maybe Lewis will find some time to dance with me today?",
+    "marnie-y2-dance-knows": "I...I wish we didn't have to hide.",
+    "marnie-y2-dance": "Usually it doesn't bother me as much...but a day like this...I wish I...uh..I wish I wasn't single.",
+    "marnie-y3-dance": "The flowers are lovely today, aren't they? Evelyn did a lovely job with them.",
+    "marnie-y4-dance-better": "Sometimes, after the main dance is over, some of us older couples will dance a bit in the waning sunlight.",
+    "marnie-y4-dance-knows": "Sometimes I wonder...will I ever find someone who will love me fully and completely?",
+    "marnie-y4-dance": "I wonder...I wonder if anyone wants to dance with me?",
     "maru-y2-dance.00": "All right, let's get this awkward dance over with.",
     "maru-y2-dance.01": "At least the food is as good as always.",
     "maru-y1-dance-spouse.00": "Gosh, this dance is going to be as awkward as ever.",
@@ -1256,7 +1266,7 @@
     "lewis-y2-fishing": "To be honest I have no clue how this little fishing lake gets set up but we get to use it for this festival every year!",
     "lewis-y2-fishing.00": "Whenever you're ready, we can start!",
     "lewis-y3-fishing": "We always make sure to release the fish humanely at the end of each competition!",
-    "lewis-y2-fishing.01": "So just let me know when you're ready to fish!",
+    "lewis-y3-fishing.01": "So just let me know when you're ready to fish!",
 
     /****************************
     * Special order dialogue

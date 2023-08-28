@@ -300,6 +300,19 @@
         },
         {
             "Action": "EditData",
+            "LogName": "Marnie - Marnie Deserves Better compat",
+            "Target": "Data/Festivals/spring24",
+            "When": {
+                "EnableFor": "Lewis",
+                "HasMod": "IMS.CP.MarnieDeservesBetter, nraittanna.LifeCycleMarnieLewis",
+                "HasSeenEvent": "59020016, 639373" // the Life Cycle event OR the town event.
+            },
+            "Entries": {
+                "Lewis_y3": "{{i18n:lewis-y3-dance-unmarried-better}}$s",
+            }
+        },
+        {
+            "Action": "EditData",
             "LogName": "Linus - normal",
             "Target": "Data/Festivals/spring24",
             "When": {
@@ -334,6 +347,48 @@
                 "Marlon_y2": "{{i18n:marlon-y2-dance}}$s",
                 "Marlon_y3": "{{i18n:marlon-y3-dance}}$h",
                 "Marlon_y4": "{{i18n:marlon-y4-dance}}"
+            }
+        },
+        {
+            "Action": "EditData",
+            "LogName": "Marnie - normal",
+            "Target": "Data/Festivals/spring24",
+            "When": {
+                "EnableFor": "Marnie"
+            },
+            "Entries": {
+                "Marnie_y2": "{{i18n:marnie-y2-dance}}$s",
+                "Marnie_y3": "{{i18n:marnie-y3-dance}}$h",
+                "Marnie_y4": "{{i18n:marnie-y4-dance}}$s"
+            }
+        },
+        {
+            "Action": "EditData",
+            "LogName": "Marnie - player knows",
+            "Target": "Data/Festivals/spring24",
+            "When": {
+                "EnableFor": "Marnie",
+                "HasSeenEvent": "639373" // town event
+            },
+            "Entries": {
+                "Marnie": "{{i18n:marnie-y1-dance-knows}}$s",
+                "Marnie_y2": "{{i18n:marnie-y2-dance-knows}}$s",
+                "Marnie_y4": "{{i18n:marnie-y4-dance-knows}}$s"
+            }
+        },
+        {
+            "Action": "EditData",
+            "LogName": "Marnie - Marnie Deserves Better compat",
+            "Target": "Data/Festivals/spring24",
+            "When": {
+                "EnableFor": "Marnie",
+                "HasMod": "IMS.CP.MarnieDeservesBetter, nraittanna.LifeCycleMarnieLewis",
+                "HasSeenEvent": "59020016, 639373" // the Life Cycle event OR the town event.
+            },
+            "Entries": {
+                "Marnie": "{{i18n:marnie-y1-dance-better}}$h",
+                "Marnie_y2": "{{i18n:marnie-y2-dance-better}}$h",
+                "Marnie_y4": "{{i18n:marnie-y4-dance-better}}$h"
             }
         },
         {

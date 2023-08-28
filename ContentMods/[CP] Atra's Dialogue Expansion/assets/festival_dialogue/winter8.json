@@ -251,8 +251,9 @@
             },
             "Entries": {
                 "Lewis_y2": "{{i18n:lewis-y2-fishing}}$h#$e#{{i18n:lewis-y2-fishing.00}}",
-                "Lewis_y3": "{{i18n:lewis-y3-fishing}}$h#$e#{{i18n:lewis-y2-fishing.01}}"
+                "Lewis_y3": "{{i18n:lewis-y3-fishing}}$h#$e#{{i18n:lewis-y3-fishing.01}}"
             }
         },
+        // I will write lines for Marlon if I can find him on the map.
     ]
 }

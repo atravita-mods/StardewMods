@@ -1274,6 +1274,29 @@
     "maru-y1-fishing-spouse-female": "Let's make a pair of snowwomen for us!",
     "maru-y1-fishing-kids": "Look, I'm making a little snow family!",
     "maru-y2-fishing-spouse": "Do you wanna go grab some hot chocolate after this?",
+    "pam-y2-fishing": "Maybe this year I'll beat Willy at last.",
+    "penny-y2-fishing.00": "I love making snowmen with the kids.",
+    "penny-y2-fishing-spouse": "Hey, @, you want to help me and Jas make a snowman?",
+    "pierre-y2-fishing": "I wanted to run a booth at this festival but Mayor Lewis said one booth was enough.",
+    "pierre-y3-fishing": "I never had the patience to learn how to fish, sadly.",
+    "pierre-y4-fishing": "Gosh, I don't know what to do with myself since I don't have anything I need to do for this festival.",
+    "robin-y2-fishing": "Look at that mermaid Leah's carving. Isn't it wonderful? She always does such lovely work.",
+    "robin-y3-fishing": "Maybe we should do an ice carving contest at some point?",
+    "sam-y2-fishing": "Tell me, @, do you think fishing is fun? I wonder if I should pick it up.",
+    "sam-y2-fishing-high": "Maybe I should pick up fishing, you and Willy make it look kinda fun!",
+    "sebastian-y2-fishing.00": "I'd love to make a snow-goon but Demetrius wouldn't approve.",
+    "sebastian-y1-fishing-spouse": "I wonder what's available at that shop over there...",
+    "shane-y2-fishing.00": "Dang, apparently there's no budget for a buffet at this festival.",
+    "shane-y2-fishing.01": "Maybe I'll go grab a pizza at the saloon later...",
+    "shane-y1-fishing-spouse.00": "Hey, dear, what're you up to?",
+    "shane-y1-fishing-spouse.01": "Me? I'm just slowly freezing over here, I wish Mayor Lewis would hurry up with the ice fishing bit.",
+    "vincent-y2-fishing": "{{title}} @, what happens if I fall in?",
+    "willy-y2-fishing": "Hey, @, you up for the fishing competition this year?",
+    "willy-y3-fishing": "Some days I wonder if I should let Pam win one day. It'd mean a lot to her.",
+
+    // winter star!
+    "abby-y2-xmas.00": "I wonder who's my secret gift giver this year...",
+    "abby-y3-xmas.00": "Aww, I don't think there's any more spicy tomato soup.",
 
     /****************************
     * Special order dialogue

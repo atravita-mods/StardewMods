@@ -287,5 +287,108 @@
                 "Maru_spouse": "{{i18n:maru-y1-fishing-kids}}$h"
             }
         },
+        {
+            "LogName": "Pam",
+            "Action": "EditData",
+            "Target": "Data/Festivals/winter8",
+            "When": {"EnableFor": "Pam"},
+            "Entries": {
+                "Pam_y2": "{{i18n:pam-y2-fishing}}$s"
+            }
+        },
+        {
+            "LogName": "Penny - normal",
+            "Action": "EditData",
+            "Target": "Data/Festivals/winter8",
+            "When": {"EnableFor": "Penny"},
+            "Entries": {
+                "Penny_y2": "{{i18n:penny-y2-fishing.00}}$h",
+                "Penny_spouse_y2": "{{i18n:penny-y2-fishing-spouse}}"
+            }
+        },
+        {
+            "LogName": "Pierre",
+            "Action": "EditData",
+            "Target": "Data/Festivals/winter8",
+            "When": {"EnableFor": "Pierre"},
+            "Entries": {
+                "Pierre_y2": "{{i18n:pierre-y2-fishing}}$s",
+                "Pierre_y3": "{{i18n:pierre-y3-fishing}}$s",
+                "Pierre_y4": "{{i18n:pierre-y4-fishing}}$s"
+            }
+        },
+        {
+            "LogName": "Robin",
+            "Action": "EditData",
+            "Target": "Data/Festivals/winter8",
+            "When": {"EnableFor": "Robin"},
+            "Entries": {
+                "Robin_y2": "{{i18n:robin-y2-fishing}}$h",
+                "Robin_y3": "{{i18n:robin-y3-fishing}}$h",
+            }
+        },
+        {
+            "LogName": "Sam - normal",
+            "Action": "EditData",
+            "Target": "Data/Festivals/winter8",
+            "When": {
+                "EnableFor": "Sam"
+            },
+            "Entries": {
+                "Sam_y2": "{{i18n:sam-y2-fishing}}",
+                "Sam_spouse_y2": "{{i18n:sam-y2-fishing-spouse}}$h"
+            }
+        },
+        {
+            "LogName": "Sam - normal",
+            "Action": "EditData",
+            "Target": "Data/Festivals/winter8",
+            "When": {
+                "EnableFor": "Sam",
+                "Query: {{SkillLevel: Fishing}} >= 8": true
+            },
+            "Entries": {
+                "Sam_y2": "{{i18n:sam-y2-fishing-high}}"
+            }
+        },
+        {
+            "LogName": "Sebastian - normal",
+            "Action": "EditData",
+            "Target": "Data/Festivals/winter8",
+            "When": {"EnableFor": "Sebastian"},
+            "Entries": {
+                "Sebastian_y2": "{{i18n:sebastian-y2-fishing.00}}$s",
+                "Sebastian_spouse_y2": "{{i18n:sebastian-y1-fishing-spouse}}"
+            }
+        },
+        {
+            "LogName": "Shane - normal",
+            "Action": "EditData",
+            "Target": "Data/Festivals/winter8",
+            "When": {"EnableFor": "Shane"},
+            "Entries": {
+                "Shane_y2": "{{i18n:shane-y2-fishing.00}}$s#$e#{{i18n:shane-y2-fishing.01}}",
+                "Shane_spouse": "{{i18n:shane-y1-fishing-spouse.00}}#$e#{{i18n:shane-y1-fishing-spouse.01}}"
+            }
+        },
+        {
+            "LogName": "Vincent",
+            "Action": "EditData",
+            "Target": "Data/Festivals/winter8",
+            "When": {"EnableFor": "Vincent"},
+            "Entries": {
+                "Vincent_y2": "{{i18n:vincent-y2-fishing|title={{Title}} }}$s"
+            }
+        },
+        {
+            "LogName": "Willy",
+            "Action": "EditData",
+            "Target": "Data/Festivals/winter8",
+            "When": {"EnableFor": "Willy"},
+            "Entries": {
+                "Willy_y2": "{{i18n:willy-y2-fishing}}",
+                "Willy_y3": "{{i18n:willy-y3-fishing}}"
+            }
+        },
     ]
 }

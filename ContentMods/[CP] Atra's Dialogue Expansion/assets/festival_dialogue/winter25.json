@@ -1,0 +1,17 @@
+{
+    "Changes":[
+        {
+            "Action": "EditData",
+            "LogName": "Abby - normal",
+            "Target": "Data/Festivals/winter25",
+            "When": {
+                "EnableFor": "Abigail"
+            },
+            "Entries": {
+                "Abigail_y2": "{{i18n:abby-y2-xmas.00}}",
+                "Abigail_y3": "{{i18n:abby-y3-xmas.00}}",
+                "Abigail_spouse_y2": "{{i18n:abby-y2-xmas-spouse}}#$e#{{i18n:abby-y2-xmas-spouse.00}}$s"
+            }
+        },
+    ]
+}

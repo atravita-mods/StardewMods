@@ -6,14 +6,18 @@
         "Entries": {
             "movieTheater": "Looks like I have competition now.$s#$b#Something new for people to do on a Friday night.#$e#Would be nice to see a movie sometime...$h",
             "SeedShop_Entry": "Whatcha got, Pierre?/Anything particularly nice today?/Where's my grocery list...",
+
+            // additional seasonal lines
             "summer_Fri10": "Weather like this makes me want to go make some piña coladas...and getting caught in the rain...$h",
             "summer_Sat10": "I believe that with all the lovely food our planet gives us, no one should go hungry.",
+            "winter_Mon10": "Emily says I should consider selling my candy canes online.#$b#I don't know, I guess that's another way I can make money...#$e#Maybe Sebastian will help me set up a website?",
 
             // specific days
             "spring_12{{YearRemainder}}": "The Egg Festival is tomorrow! I've got so much cooking I need to do.$h",
             "summer_4{{YearRemainder}}": "Gotta get ready for inspections...",
             "summer_10{{YearRemainder}}": "I've been working on the buffet for the luau all week!#$b#Make sure to bring something tasty for the soup tomorrow!",
             "winter_19{{YearRemainder}}": "The Feast of the Winter Star's coming up, so I've got a lot to get ready!$h",
+            "winter_20{{YearRemainder}}": "I've got so many candy canes I need to make, my entire shop smells so strongly of peppermint.",
 
             // null out the high priority location dialogue
             "Saloon": null,
@@ -76,7 +80,9 @@
             "14{{YearRemainder}}": "As I've always said, if you have time to lean, you have time to clean.$h#$b#Always got more work to do in the restaurant!",
             "15{{YearRemainder}}": "I should go pick up some more farm-fresh cheese from Marnie.$h",
             "16{{YearRemainder}}": "We're not directly off the highway, so there's not much external traffic here, but sometimes I get a tourist or two.",
-            "17{{YearRemainder}}": "I do make quite a bit of money each year catering the various festivals.#$b#It's good, steady income that helps keep the Saloon open.$h"
+            "17{{YearRemainder}}": "I do make quite a bit of money each year catering the various festivals.#$b#It's good, steady income that helps keep the Saloon open.$h",
+            "18{{YearRemainder}}": "Our little town is famous for its fresh fish.$h#$e#I try to cook with what ingredients we produce.",
+            "19{{YearRemainder}}": "Mayor Lewis usually hires me to cater our local festivals.#$b#Cooking at that scale is quite fun, and I won't turn down the money.$h",
         }
     },
     {

@@ -32,7 +32,9 @@
         "Target": "Characters/Dialogue/Haley",
         "When": { "HasDialogueAnswer": 45 },
         "Entries": {
-            "summer_Fri6": "Ugh, gotta clean the living room, since that's my chore now.$s"
+            "summer_Fri6": "Ugh, gotta clean the living room, since that's my chore now.$s",
+            "fall_Fri8": "I never really realized how much upkeep a house takes.#$b#Honestly, @, I'd love to live in a smaller place, except then I wouldn't know where I'd keep my clothing...",
+            "winter_Fri6": "Emily was dyeing some fabric the other day and it's now hanging up all over drying.$s",
         }
     },
     {

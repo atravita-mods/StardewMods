@@ -61,7 +61,7 @@ Simply remove this mod from your mods folder.
 * **Kent**:
 * **Leah**:
 * **Lewis**:
-* **Marnie**: 
+* **Marnie**: Marnie...honestly, I think canon Marnie's problem is that she doesn't seem to have...much, other than being Lewis's little secret. This mod mostly focuses on fleshing out Marnie-as-a-rancher and Marnie-as-an-aunt.
 * **Maru**: Mostly wanted to focus her a little bit instead of making her a catch-all nerd girl. Her interests are in biomedical engineering, especially robotic limbs. Also, playing up her friendship with Penny.
 * **Pam**: Kept it light in general with Pam since I've been working on a separate mod for her.
 * **Penny**:

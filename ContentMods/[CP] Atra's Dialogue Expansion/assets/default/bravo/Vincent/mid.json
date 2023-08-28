@@ -1,3 +1,4 @@
+// Vincent I feel is almost coded ADHD.
 {
     "Changes": [
         {
@@ -36,7 +37,7 @@
             "LogName": "Vincent mid-hearts Y2",
             "Target": "Characters/Dialogue/Vincent",
             "Entries": {
-                "10_2": "Mom let me have french fries!$h"
+                "10_2": "Mom let me have fries!$h"
             },
             "When": {
                 "YearModulus": "2"
@@ -47,6 +48,8 @@
             "LogName": "Vincent mid-hearts Y3",
             "Target": "Characters/Dialogue/Vincent",
             "Entries": {
+                "summer_Tue8": "{{Title}} @, may I have some ice cream?",
+
                 "2_2": "Look, @, at this pretty feather I've found![444]",
                 "3_2": "@, why do giraffes have such long necks?",
                 "5_2": "Miss Penny is trying to teach us about the water cycle. {{Title}} @, what is the water cycle?",
@@ -69,6 +72,8 @@
             "Target": "Characters/Dialogue/Vincent",
             "Entries": {
                 "2_2": "Can I have some chocolate, {{Title}} @?",
+                "4_2": "I wish mom would make more cookies.$s",
+                "6_2": "My favorite color is purple. What's yours?"
             },
             "When": {
                 "YearModulus": "4"

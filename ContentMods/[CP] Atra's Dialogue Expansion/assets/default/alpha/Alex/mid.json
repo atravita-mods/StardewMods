@@ -9,6 +9,8 @@
     // we're going to divert him to being a physical trainer.
 
     // Maybe slowly ease him into bouldering?
+
+    // slowly, slowly, but he will learn. I almost think he might be dyslexic? And might benefit from alternative learning programs?
     {
         "LogName": "Rain -- during winter.",
         "Action": "EditData",

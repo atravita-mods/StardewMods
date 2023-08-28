@@ -8,7 +8,8 @@
             "When": {"EnableFor": "Abigail"},
             "Entries": {
                 "Abigail_y2": "{{i18n:abby-y2-jellies}}$s",
-                "Abigail_spouse": "{{i18n:abby-y1-jellies-spouse}}"
+                "Abigail_spouse": "{{i18n:abby-y1-jellies-spouse}}",
+                "Abigail_spouse_y2": "{{i18n:abby-y2-jellies-spouse}}$h"
             }
         },
         {
@@ -17,7 +18,7 @@
             "Target": "Data/Festivals/summer28",
             "When": {"EnableFor": "Alex"},
             "Entries": {
-                "Alex_y2": "{{i18n:alex-y2-jellies}}$s",
+                "Alex_y2": "{{i18n:alex-y2-jellies}}$h",
                 "Alex_spouse": "{{i18n:alex-y1-jellies-spouse}}$s"
             }
         },
@@ -27,7 +28,8 @@
             "Target": "Data/Festivals/summer28",
             "When": {"EnableFor": "Caroline"},
             "Entries": {
-                "Caroline_y2": "{{i18n:caroline-y2-jellies}}$s"
+                "Caroline_y2": "{{i18n:caroline-y2-jellies}}$s",
+                "Caroline_y3": "{{i18n:caroline-y3-jellies}}#$e#{{i18n:caroline-y3-jellies.00}}$s"
             }
         },
         {
@@ -49,6 +51,19 @@
                 "Demetrius": "{{i18n:demetrius-y1-jellies}}$h",
                 "Demetrius_y2": "{{i18n:demetrius-y2-jellies.01}}$h#$e#{{i18n:demetrius-y2-jellies.02}}",
                 "Demetrius_y3": "{{i18n:demetrius-y3-jellies}}"
+            }
+        },
+        {
+            // plastic baggies are bad :(
+            "LogName": "Demetrius - joja",
+            "Action": "EditData",
+            "Target": "Data/Festivals/summer28",
+            "When": {
+                "EnableFor": "Demetrius",
+                "IsJojaMartComplete": true
+            },
+            "Entries": {
+                "Demetrius_y3": "{{i18n:demetrius-y3-jellies-joja}}$s"
             }
         },
         {
@@ -261,7 +276,7 @@
             "When": {"EnableFor": "Robin"},
             "Entries": {
                 "Robin_y2": "{{i18n:robin-y2-jellies}}$s",
-                "Robin_y3": "{{i18n:robin-y3-jellies}}$h",
+                "Robin_y3": "{{i18n:robin-y3-jellies}}$h"
             }
         },
         {
@@ -314,7 +329,7 @@
                 "Willy": "{{i18n:willy-y1-jellies}}",
                 "Willy_y2": "{{i18n:willy-y2-jellies}}"
             }
-        },
+        }
         // Intentionally skipping Wizard.
     ]
 }

@@ -24,7 +24,8 @@
                 "Alex_y2": "{{i18n:alex-y2-xmas.00}}",
                 "Alex_y3": "{{i18n:alex-y3-xmas.00}}",
                 "Alex_spouse_y2": "{{i18n:alex-y2-xmas-spouse}}$h",
-                "Alex_spouse_y3": "{{i18n:alex-y3-xmas-spouse}}"
+                "Alex_spouse_y3": "{{i18n:alex-y3-xmas-spouse}}",
+                "Alex_spouse_y4": "{{i18n:alex-y4-xmas-spouse}}$l"
             }
         },
         {
@@ -80,5 +81,87 @@
                 "Emily_spouse_y2": "{{i18n:emily-y2-xmas-spouse}}$h"
             }
         },
+        {
+            "LogName": "Evelyn - normal",
+            "Action": "EditData",
+            "Target": "Data/Festivals/winter25",
+            "When": {"EnableFor": "Evelyn"},
+            "Entries": {
+                "Evelyn_y2": "{{i18n:evelyn-y2-xmas.01}}$h#$e#{{i18n:evelyn-y2-xmas.02}}"
+            }
+        },
+        {
+            "Action": "EditData",
+            "LogName": "George - normal",
+            "Target": "Data/Festivals/winter25",
+            "When": {
+                "EnableFor": "George"
+            },
+            "Entries": {
+                "George_y2": "{{i18n:george-y2-xmas}}"
+            }
+        },
+        {
+            "Action": "EditData",
+            "LogName": "Gus - normal",
+            "Target": "Data/Festivals/winter25",
+            "When": {
+                "EnableFor": "Gus"
+            },
+            "Entries": {
+                "Gus_y2": "{{i18n:gus-y2-xmas.00}}$h#$e#{{i18n:gus-y2-xmas.01}}#$e#{{i18n:gus-y2-xmas.02}}#$b#{{i18n:gus-y2-xmas.03}}#$e#{{i18n:gus-y2-xmas.04}}#$baguette#{{i18n:gus-y2-xmas.05}}$h"
+            }
+        },
+        {
+            "Action": "EditData",
+            "LogName": "Haley - normal",
+            "Target": "Data/Festivals/winter25",
+            "When": {
+                "EnableFor": "Haley"
+            },
+            "Entries": {
+                "Haley_y2": "{{i18n:haley-y2-xmas.00}}$h#$e#{{i18n:haley-y2-xmas.01}}",
+                "Haley_y3": "{{i18n:haley-y3-xmas.00}}$h",
+                "Haley_spouse_y2": "{{i18n:haley-y2-xmas-spouse}}$h"
+            }
+        },
+        {
+            "Action": "EditData",
+            "LogName": "Harvey - normal",
+            "Target": "Data/Festivals/winter25",
+            "When": {
+                "EnableFor": "Harvey"
+            },
+            "Entries": {
+                "Harvey_y2": "{{i18n:harvey-y2-xmas.00}}$h#$e#{{i18n:harvey-y2-xmas.01}}",
+                "Harvey_spouse_y2": "{{i18n:harvey-y2-xmas-spouse}}$h#$e#{{i18n:harvey-y2-xmas-spouse.00}}$h"
+            }
+        },
+        {
+            "Action": "EditData",
+            "LogName": "Jas - normal",
+            "Target": "Data/Festivals/winter25",
+            "When": {
+                "EnableFor": "Jas"
+            },
+            "Entries": {
+                "Jas_y2": "{{i18n:jas-y2-xmas|title={{Title}}}}$h",
+                "Jas_y3": "{{i18n:jas-y3-xmas}}$h",
+                "Jas_y4": "{{i18n:jas-y4-xmas}}$h"
+            }
+        },
+        // Jodi family gets special stuff for Y2
+        {
+            "Action": "EditData",
+            "LogName": "Jodi - Y2",
+            "Target": "Data/Festivals/winter25",
+            "When": {
+                "EnableFor": "Jodi",
+                "Year": "2"
+            },
+            "Entries": {
+                "Jodi_y2": "{{i18n:jodi-xmas-kent-return}}"
+            }
+        }
     ]
 }

@@ -16,6 +16,7 @@
                 "summer_Mon6": "Gosh, it's so hot out today.$s",
 
                 "5{{YearRemainder}}": "Emily made a lovely looking lace dress the other day. I've been dying to ask her if I can try it on...",
+                "6{{YearRemainder}}": "I ordered a dress online but it's a size too big. Now I'll need to go to the post office to return it.$s"
             },
             "When": {
                 "YearModulus": 1

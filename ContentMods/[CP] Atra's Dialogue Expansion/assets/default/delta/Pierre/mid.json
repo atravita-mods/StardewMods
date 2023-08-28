@@ -25,6 +25,9 @@
             // Day before Spirit's Eve.
             "fall_26{{YearRemainder}}": "It's gonna be winter soon, @. Always my hardest season, financially.$s",
 
+            // lead up to the winter star.
+            "winter_19{{YearRemainder}}": "I've got so many winter star gifts stocked!$h#$e#Maybe I'll pull some market share from the Night Market this year...",
+
             // additional heart lines
             "summer_Fri6": "Have you seen the new action flick, {{i18n:action.movie{{Random:01,02,03,04,05,06,07,08,09}}, starring %name Anderson?#$b#Maybe I can convince Caroline to come watch it with me...",
             "summer_Sat6": "There's nothing nicer than fresh veggies in a good salad dressing.#$b#Caroline makes an vinaigrette that's to die for.$h",
@@ -49,6 +52,7 @@
             // just before not-halloween.
             "fall_26{{YearRemainder}}": "I can't talk right now, I need to prepare for the festival.#$e#We absolutely need to make more money.$s",
             "winter_7{{YearRemainder}}": "Mayor Lewis doesn't want me running a booth during tomorrow's Festival.#$b#I wish I could, festival booths are a pretty good slice of our income.",
+            "winter_19{{YearRemainder}}": "Gosh, @, the pre-Winter-Star period is usually a good time for the store, but right now I'm not sure.#$e#I really, really don't want to close this store but I might have to, the way this is going...$s",
         }
     },
     {

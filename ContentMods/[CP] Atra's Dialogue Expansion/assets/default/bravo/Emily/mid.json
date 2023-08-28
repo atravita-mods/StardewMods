@@ -21,7 +21,8 @@
             // specific days
             "summer_10{{YearRemainder}}": "It'll be the luau tomorrow! I don't have to do much for it, so I can just have fun and dance.$h",
             "winter_4{{YearRemainder}}": "It's getting close to the Feast of the Winter Star. Maybe I should start making Haley a sweater?",
-            "fall_20{{YearRemainder}}": "Oh, the Spirit's Eve is coming up, isn't it? I've gotta work on my costume.#$e#I don't think anyone is ever too old for a good Spirit's Eve costume."
+            "fall_20{{YearRemainder}}": "Oh, the Spirit's Eve is coming up, isn't it? I've gotta work on my costume.#$e#I don't think anyone is ever too old for a good Spirit's Eve costume.",
+            "winter_19{{YearRemainder}}": "These days I'm mostly helping Gus make our famous candy canes.$h#$e#They're a lot of work, but they're definitely worth it."
         }
     },
     {

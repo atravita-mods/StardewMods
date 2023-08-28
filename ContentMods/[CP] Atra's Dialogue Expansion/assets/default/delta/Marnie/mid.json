@@ -19,7 +19,8 @@
         "Action": "EditData",
         "Target": "Characters/Dialogue/Marnie",
         "Entries": {
-            "Town6": "Oh, @, heard on the grapevine you're expecting a kid! Have you picked a name yet?"
+            "Town6": "Oh, @, heard on the grapevine you're expecting a kid! Have you picked a name yet?",
+            "AnimalShop6": "Hey, @, I've heard the good news. When're you expecting the new kid?",
         },
         "When": {
             "HavingChild": "@{{playerName}}"
@@ -60,13 +61,30 @@
         }
     },
     {
+        "LogName": "Marnie mid-hearts - Joja",
+        "Action": "EditData",
+        "Target": "Characters/Dialogue/Marnie",
+        "When": {"IsJojaMartComplete": true},
+        "Entries": {
+            "summer_Mon8": "With poor little me trapped between the arg companies, I can barely make any money.$s",
+            "fall_Mon8": "They sell you their equipment but forbid you from trying to fix it. How is that fair?$s"
+        }
+    },
+    {
         "LogName": "Marnie mid-hearts Y1",
         "Action": "EditData",
         "Target": "Characters/Dialogue/Marnie",
         "When": {"YearModulus": "1"},
         "Entries": {
+            // additional Ginger island lines
             "Resort_Bar": "Maybe I should get a nice Long Island Iced Tea?",
-            "Resort_Wander": "@, you've definitely done well here, this place is lovely!$h"
+            "Resort_Wander": "@, you've definitely done well here, this place is lovely!$h",
+            "Resort_Wander_2": "Gosh, @, this sand is so clean.$h",
+
+            "IslandSouth_Entry": "Yay, vacation!",
+
+            "10{{YearRemainder}}": "The cows, they need to be milked every day. It makes it hard for ranchers to take any time off.$s",
+            "11{{YearRemainder}}": "I wonder...I wonder how long I can wake up at four AM like this...",
         }
     },
     {

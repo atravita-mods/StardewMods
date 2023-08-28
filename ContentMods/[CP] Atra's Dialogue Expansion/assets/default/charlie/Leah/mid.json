@@ -10,9 +10,12 @@
         "Entries": {
             "movieTheater": "Heard that a movie theater's coming to town!$h#$e$To be honest, movies are certainly something I've missed.",
 
-            // before fall festival
+            // before festivals
             "summer_27{{YearRemainder}}": "One day I'll be able to capture the beauty of the Moonlight Jellies....",
-            "fall_15{{YearRemainder}}": "Oh, the Stardew Valley Fair is tomorrow, isn't it?#$b#I wonder...I wonder if Lewis would let me enter some of my sculptures."
+            "fall_15{{YearRemainder}}": "Oh, the Stardew Valley Fair is tomorrow, isn't it?#$b#I wonder...I wonder if Lewis would let me enter some of my sculptures.",
+
+            // flesh out seasonal lines
+            "winter_Tue8": "Winter's the season when I'm the busiest. Many people commission paintings or sculptures as Winter Star gifts.$h#$e#Hey, @, do you have a special someone you'd like a gift for?",
         }
     },
     {

@@ -5,7 +5,11 @@
             "Action": "EditData",
             "Target": "Characters/Dialogue/Gus",
             "Entries": {
-                "Saloon_16_4": "{{i18n: gus-mornings.{{Season}}.{{Random:01,02,03,04,05,06,07,08,09,10}} }}"
+                // locational - Gus sitting on his couch in the mornings.
+                "Saloon_16_4": "{{i18n: gus-mornings.{{Season}}.{{Random:01,02,03,04,05,06,07,08,09,10}} }}",
+
+                // before major festivals
+                "winter_24{{YearRemainder}}": "{{i18n:gus-pre-winter-star.{{YearModulus}} }}$h",
             }
         }
     ]

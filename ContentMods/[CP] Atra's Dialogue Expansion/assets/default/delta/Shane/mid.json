@@ -28,5 +28,14 @@
         "Entries": {
             "summer_Shane": "Ugh, I'm no fan of the summer heat. And no, sparkling water is NOT the same.$s#$b#Maybe I'll go get some ice to put on my neck...$s",
         }
+    },
+    {
+        "Action": "EditData",
+        "LogName": "Shane - mid - y1",
+        "When": {"YearModulus": "1"},
+        "Target": "Characters/Dialogue/Shane",
+        "Entries": {
+            "1{{YearRemainder}}": "Gosh, I don't have any energy today. Maybe I should go grab a pizza from Gus's?$s"
+        }
     }
 ]}

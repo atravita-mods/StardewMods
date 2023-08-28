@@ -10,7 +10,33 @@
             "Entries": {
                 "Abigail_y2": "{{i18n:abby-y2-xmas.00}}",
                 "Abigail_y3": "{{i18n:abby-y3-xmas.00}}",
-                "Abigail_spouse_y2": "{{i18n:abby-y2-xmas-spouse}}#$e#{{i18n:abby-y2-xmas-spouse.00}}$s"
+                "Abigail_spouse_y2": "{{i18n:abby-y2-xmas-spouse}}#$e#{{i18n:abby-y2-xmas-spouse.00}}$l"
+            }
+        },
+        {
+            "Action": "EditData",
+            "LogName": "Alex - normal",
+            "Target": "Data/Festivals/winter25",
+            "When": {
+                "EnableFor": "Alex"
+            },
+            "Entries": {
+                "Alex_y2": "{{i18n:alex-y2-xmas.00}}",
+                "Alex_y3": "{{i18n:alex-y3-xmas.00}}",
+                "Alex_spouse_y2": "{{i18n:alex-y2-xmas-spouse}}$h",
+                "Alex_spouse_y3": "{{i18n:alex-y3-xmas-spouse}}"
+            }
+        },
+        {
+            "Action": "EditData",
+            "LogName": "Caroline - normal",
+            "Target": "Data/Festivals/winter25",
+            "When": {
+                "EnableFor": "Caroline"
+            },
+            "Entries": {
+                "Caroline_y2": "{{i18n:caroline-y2-xmas}}$h",
+                "Caroline_y3": "{{i18n:caroline-y3-xmas}}$s"
             }
         },
     ]

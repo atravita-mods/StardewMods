@@ -677,7 +677,7 @@
     "caroline-y3-egg.01": "Of course, I haven't competed since college.",
     "clint-y3-egg.00": "Yuck, warm egg salad.",
     "demetrius-y3-egg.00": "I was just talking to Doc Harvey over here about a recent paper from %place.",
-    "demetrius-y3-egg.01": "Even fifteen minutes of being outside each days does wonders for your health.",
+    "demetrius-y3-egg.01": "Even fifteen minutes of being outside each day does wonders for your health.",
     "elliott-y3-egg.00": "I do greatly enjoy events like this.",
     "elliott-y3-egg.01": "Since antiquity, humanity has gathered to celebrate the return of spring!",
     "elliott-y2-egg-spouse": "I'm just going to help myself to a little more of Gus's cooking...",
@@ -1297,6 +1297,14 @@
     // winter star!
     "abby-y2-xmas.00": "I wonder who's my secret gift giver this year...",
     "abby-y3-xmas.00": "Aww, I don't think there's any more spicy tomato soup.",
+    "abby-y2-xmas-spouse": "What am I grateful for...",
+    "abby-y2-xmas-spouse.00": "Well, I have a lot to be grateful for...",
+    "alex-y2-xmas.00": "I'm grateful for my gramps and my grandma, of course!",
+    "alex-y3-xmas.00": "It's almost spring, isn't it, @? You ready?",
+    "alex-y2-xmas-spouse": "Winter Star is the best time for family, of course!",
+    "alex-y3-xmas-spouse": "Year's almost over, @. This year was good to us, wasn't it?",
+    "caroline-y2-xmas": "The food is as good as always!",
+    "caroline-y3-xmas": "I asked Pierre if he could just not run the stall this year, but he said that we couldn't give up the revenue that booth generates.",
 
     /****************************
     * Special order dialogue

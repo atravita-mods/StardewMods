@@ -255,5 +255,37 @@
             }
         },
         // I will write lines for Marlon if I can find him on the map.
+        {
+            "LogName": "Marnie",
+            "Action": "EditData",
+            "Target": "Data/Festivals/winter8",
+            "When": {"EnableFor": "Marnie"},
+            "Entries": {
+                "Marnie_y2": "{{i18n:marnie-y2-fishing}}"
+            }
+        },
+        {
+            "LogName": "Maru - normal",
+            "Action": "EditData",
+            "Target": "Data/Festivals/winter8",
+            "When": {"EnableFor": "Maru"},
+            "Entries": {
+                "Maru_y2": "{{i18n:maru-y2-fishing.00}}#$b#{{i18n:maru-y2-fishing.01}}",
+                "Maru_spouse": "{{i18n:maru-y1-fishing-spouse-male}}$h^{{i18n:maru-y1-fishing-spouse-female}}$h",
+                "Maru_spouse_y2": "{{i18n:maru-y2-fishing-spouse}}$l"
+            }
+        },
+        {
+            "LogName": "Maru - married with child(ren)",
+            "Action": "EditData",
+            "Target": "Data/Festivals/winter8",
+            "When": {
+                "EnableFor": "Maru",
+                "HasValue: {{ChildGenders}}": true
+            },
+            "Entries": {
+                "Maru_spouse": "{{i18n:maru-y1-fishing-kids}}$h"
+            }
+        },
     ]
 }

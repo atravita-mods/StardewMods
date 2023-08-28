@@ -48,5 +48,37 @@
                 "Clint_y2": "{{i18n:clint-y2-xmas}}$s"
             }
         },
+        {
+            "LogName": "Demetrius - normal",
+            "Action": "EditData",
+            "Target": "Data/Festivals/winter25",
+            "When": {"EnableFor":"Demetrius"},
+            "Entries": {
+                "Demetrius_y2": "{{i18n:demetrius-y2-xmas.01}}$h#$e#{{i18n:demetrius-y2-xmas.02}}",
+                "Demetrius_y3": "{{i18n:demetrius-y3-xmas}}"
+            }
+        },
+        {
+            "LogName": "Elliott - normal",
+            "Action": "EditData",
+            "Target": "Data/Festivals/winter25",
+            "When": {"EnableFor": "Elliott"},
+            "Entries": {
+                "Elliott_y2": "{{i18n:elliott-y2-xmas}}$h",
+                "Elliott_y3": "{{i18n:elliott-y3-xmas}}$h",
+                "Elliott_spouse_y2": "{{i18n:elliott-y2-xmas-spouse}}$h#$e#{{i18n:elliott-y2-xmas-spouse.00}}"
+            }
+        },
+        {
+            "LogName": "Emily - normal",
+            "Action": "EditData",
+            "Target": "Data/Festivals/winter25",
+            "When": {"EnableFor": "Emily"},
+            "Entries": {
+                "Emily_y2": "{{i18n:emily-y2-xmas.01}}$h#$e#{{i18n:emily-y2-xmas.02}}",
+                "Emily_spouse": "{{i18n:emily-y1-xmas-spouse}}$l",
+                "Emily_spouse_y2": "{{i18n:emily-y2-xmas-spouse}}$h"
+            }
+        },
     ]
 }

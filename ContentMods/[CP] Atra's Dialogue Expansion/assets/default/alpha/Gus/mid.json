@@ -13,6 +13,7 @@
             "spring_12{{YearRemainder}}": "The Egg Festival is tomorrow! I've got so much cooking I need to do.$h",
             "summer_4{{YearRemainder}}": "Gotta get ready for inspections...",
             "summer_10{{YearRemainder}}": "I've been working on the buffet for the luau all week!#$b#Make sure to bring something tasty for the soup tomorrow!",
+            "winter_19{{YearRemainder}}": "The Feast of the Winter Star's coming up, so I've got a lot to get ready!$h",
 
             // null out the high priority location dialogue
             "Saloon": null,

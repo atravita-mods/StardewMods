@@ -25,7 +25,8 @@
         "Target": "Characters/Dialogue/Robin",
         "Entries": {
             // specific days
-            "fall_25": "It's almost winter, isn't it? Gotta make sure everyone's prepared, we get harsh winters around here...",
+            "fall_25{{YearRemainder}}": "It's almost winter, isn't it? Gotta make sure everyone's prepared, we get harsh winters around here...",
+            "winter_20{{YearRemainder}}": "Oh, what should I get Demetrius for Winter Star this year? Hmmm, maybe a pair of socks?",
 
             "2": "Welcome to the valley, @! How have you been settling in?$h",
             "2_2": "Many of the houses in town are quite old, and thus take a considerable amount of work to maintain.",

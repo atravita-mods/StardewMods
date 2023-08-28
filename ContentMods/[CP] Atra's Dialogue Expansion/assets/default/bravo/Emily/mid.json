@@ -47,6 +47,7 @@
             "4{{YearRemainder}}": "Ugh, I think our sink is leaking. Gotta go find a plumber, I guess.$s",
             "6{{YearRemainder}}": "@! Look at this new yarn my mother sent me! Isn't it so soft?$h",
             "7{{YearRemainder}}": "I upcycled a tablecloth into a skirt the other day. I should show you it some day!$h",
+            "8{{YearRemainder}}": "I wonder when Sandy and I can both get time off to go to a fabric store some day...",
             "11{{YearRemainder}}": "I love taking walks, whenever I have the time to do so.$h#$b#One of the best parts of living here.$h",
             "12{{YearRemainder}}": "The dress I'm currently making, it's just layers upon layers of ruffles.",
             "13{{YearRemainder}}": "I'm hoping at some point to move away and see if I can make it as a fashion designer.",
@@ -132,7 +133,8 @@
             "22_2": "You know, I wasn't actually that interested in dance when I was a kid. That used to be more Haley's thing.",
             "23_2": "Haley was actually quite a good student when she was young...",
             "24_2": "If we don't protect the environment, who will?",
-            "25_2": "Should we try adding something healthier to the Saloon menu? Like lentil soup?#$b#Hmm. I'm not sure how well that'd sell."
+            "25_2": "Should we try adding something healthier to the Saloon menu? Like lentil soup?#$b#Hmm. I'm not sure how well that'd sell.",
+            "26_2": "There's a bunch of little online fabric shops I like.#$e#I'd love to go in person more but I have to help Gus with the Saloon."
         },
         "When": {"YearModulus": "3"}
     },
@@ -161,7 +163,8 @@
             "16_2": "Joja is considering removing free unlimited returns.#$b#Honestly, @, I'm not against that, I think it'll cut down on impulse buys.",
             "17_2": "I should cook more with collard greens, they're quite good for you.",
             "19_2": "With the mines, we really need to worry about groundwater pollution.$s",
-            "20_2": "I'd love to go down to Zuzu City and see a musical, but I'm not sure who I can drag with me.#$b#Hmm, Sam, maybe?"
+            "20_2": "I'd love to go down to Zuzu City and see a musical, but I'm not sure who I can drag with me.#$b#Hmm, Sam, maybe?",
+            "21_2": "There's a new dress design I've been working on, with these lovely bishop sleeves as the main design element.$h"
         }
     },
     {
@@ -175,5 +178,14 @@
         "Entries": {
             "22_2": "@, do you think I will ever find a love as enduring as George and Evelyn's?"
         }
-    }
+    },
+    {
+        "LogName": "Emily mid-hearts, Y5",
+        "Action": "EditData",
+        "Target": "Characters/Dialogue/Emily",
+        "When": {"YearModulus": "0"},
+        "Entries": {
+            "7_2": "Recently, I've been really wanting to work with chiffon and other sheer fabrics.#$e#They're so fiddly to work with but the effect they give..."
+        }
+    },
 ]}

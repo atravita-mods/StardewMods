@@ -10,7 +10,9 @@
         "Action": "EditData",
         "Target": "Characters/Dialogue/Caroline",
         "When": {"Weather: valley": "Rain, Storm"},
-        "Entries": {"SeedShop_Entry": "Oh, it's really pouring out there."}
+        "Entries": {
+            "SeedShop_Entry": "Oh, it's really pouring out there."
+        }
     },
     {
         "LogName": "Rain -- during winter.",
@@ -27,7 +29,10 @@
         "Target": "Characters/Dialogue/Caroline",
         "When": {"IsCommunityCenterComplete": true},
         "Entries": {
-            "24{{YearRemainder}}": "Now that Joja's gone, I hope Pierre'll be able to relax a bit more. All this stress isn't good for him."
+            "24{{YearRemainder}}": "Now that Joja's gone, I hope Pierre'll be able to relax a bit more. All this stress isn't good for him.",
+
+            // specific days
+            "winter_26{{YearRemainder}}": "Oh, I must have had too much eggnog yesterday.$s",
         }
     },
     {

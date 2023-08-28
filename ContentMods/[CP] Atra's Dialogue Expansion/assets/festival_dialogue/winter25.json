@@ -39,5 +39,14 @@
                 "Caroline_y3": "{{i18n:caroline-y3-xmas}}$s"
             }
         },
+        {
+            "LogName": "Clint - normal",
+            "Action": "EditData",
+            "Target": "Data/Festivals/winter25",
+            "When": {"EnableFor":"Clint"},
+            "Entries": {
+                "Clint_y2": "{{i18n:clint-y2-xmas}}$s"
+            }
+        },
     ]
 }

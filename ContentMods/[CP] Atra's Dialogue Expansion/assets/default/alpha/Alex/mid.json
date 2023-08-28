@@ -7,6 +7,8 @@
 
     // Personally I doubt he can become pro if he hasn't been scouted yet, so
     // we're going to divert him to being a physical trainer.
+
+    // Maybe slowly ease him into bouldering?
     {
         "LogName": "Rain -- during winter.",
         "Action": "EditData",

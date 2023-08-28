@@ -881,6 +881,11 @@
     "abby-y3-luau.00": "I think I'm developing a sunburn.",
     "abby-y2-luau-spouse": "Just doing a little ocean-gazing. @, I think I should come out here more often!",
     "abby-y2-luau-spouse.00": "I might be getting a sunburn, though.",
+    "alex-pre-luau.1": "Hey, @, am I gonna find you at the luau tomorrow?",
+    "alex-pre-luau.2": "I'm so ready for the luau tomorrow, I've been doing situps all week.",
+    "alex-pre-luau.3": "There's really nothing like a beach party, @. You gonna be there?",
+    "alex-pre-luau.4": "I wonder what food Gus is putting together for the luau tomorrow...",
+    "alex-pre-luau.0": "Heyyyy @, you gonna be at the luau? Be there, don't be square!",
     "alex-y2-luau.00": "Gosh my abs look great today, don't they, @?",
     "alex-y3-luau.00": "Heya @, wanna go hit up the dance floor later?",
     "alex-y2-luau-spouse": "Good sun, good surf, and you in my life, I couldn't ask for a better life!",
@@ -1305,12 +1310,13 @@
     "alex-y3-xmas-spouse": "Year's almost over, @. This year was good to us, wasn't it?",
     "caroline-y2-xmas": "The food is as good as always!",
     "caroline-y3-xmas": "I asked Pierre if he could just not run the stall this year, but he said that we couldn't give up the revenue that booth generates.",
+    "clint-y2-xmas": "And yet another year is over and nothing has changed in my life.",
 
     /****************************
     * Special order dialogue
     ****************************/
     "alex-leeks-special-order": "Hi, @! Just want to thank you for gathering all those leeks for gramps. I haven't seen him that happy in a long while.",
-    "demetrius-specific-fish-special-order": "Thanks for helping me balance the ecosystem! It's very important that everyting stays in balance.",
+    "demetrius-specific-fish-special-order": "Thanks for helping me balance the ecosystem! It's very important that everything stays in balance.",
     "evelyn-leeks-special-order": "Thanks for gathering all the leeks for my dear George, @! I'm glad you care for him as much as I do.",
     "gus-leeks-special-order": "@, you're a good person. George doesn't get enough kindness in his life.",
     "gus-omelet-special-order": "There isn't anything better than farm-fresh eggs, isn't there?",

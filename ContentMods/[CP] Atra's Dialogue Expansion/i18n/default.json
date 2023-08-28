@@ -296,15 +296,19 @@
 ***************/
 
     "anniversary-day.generic": "Oh, honey, it's our anniversary today!#$b#Soooo....you've got anything planned?",
+    "anniversary-day.Alex": "Oh, hey, it's our anniversary, isn't it, @?#$b#Say, @, you wanna have some fun today?$l",
     "anniversary-day.Leah": "It's our anniversary, dear! Don't you think we should do something fun today?",
-    "anniversary-day.Penny": "Oh, @, it's our anniversary today!#$b#Sometimes I can't believe how nice our lives are. Is there something you'd like to do for today?#$b#Or maybe let's cook something together...",
     "anniversary-day.Maru": "Oh, honey, it's our anniversary today! Wanna go do something fun?",
+    "anniversary-day.Penny": "Oh, @, it's our anniversary today!#$b#Sometimes I can't believe how nice our lives are. Is there something you'd like to do for today?#$b#Or maybe let's cook something together...",
 
 /***************
 * Birthday related
 ****************/
 
     "clint-emily-birthday": "It's Emily's birthday tomorrow. Should I get her something?",
+    "clint-birthday-self.00": "And yet another year older, another year still single.$s",
+    "clint-birthday-self.01": "Gosh, @, is it my birthday again? So soon?$s#$e#It feels like time is just flying by.",
+    "clint-birthday-self.02": "The downside of being born just after Winter Star - when I was growing up, I'd only get one set of presents...$s",
 
     "sebastian-birthday.self.1": "Oh, it's my birthday today, isn't it? I guess I should do something social about it.",
     "sebastian-birthday.self.2": "One more year around the sun, eh? Guess I'll see if Abby and Sam are up for a game of tabletop today.",
@@ -1316,6 +1320,7 @@
     "alex-y3-xmas-spouse": "Year's almost over, @. This year was good to us, wasn't it?",
     "alex-y4-xmas-spouse": "Mmmm. Think the eggnog's stronger than I thought.",
     "caroline-y2-xmas": "The food is as good as always!",
+    "caroline-y2-xmas-married-to-abby": "Hi, @! Come join us at our family table.",
     "caroline-y3-xmas": "I asked Pierre if he could just not run the stall this year, but he said that we couldn't give up the revenue that booth generates.",
     "clint-y2-xmas": "And yet another year is over and nothing has changed in my life.",
     "demetrius-y2-xmas.01": "My secret friend gave me this caffeine mug!",
@@ -1355,6 +1360,34 @@
     "jas-y3-xmas": "I wonder what Uncle Shane got for me?",
     "jas-y4-xmas": "Oh, I got a new doll!",
     "jodi-xmas-kent-return": "I'm so thankful for Kent's safe return.",
+    "jodi-y2-xmas": "Mmmm. Gus makes a great eggnog, doesn't he? *hic*",
+    "jodi-y3-xmas": "I've got my husband and my kids with me, who could ask for anything better?",
+    "jodi-y4-xmas": "Today can be a cheat day in the diet.",
+    "jodi-y3-xmas-married-to-sam": "Come join us, @, you're family now!",
+    "kent-xmas-kent-return": "I'm so grateful to be back with my family for this Winter Star.",
+    "kent-y2-xmas": "Hey, @. What are you grateful for this year?",
+    "kent-y3-xmas.01": "Growing up, Winter Star was always my favorite.",
+    "kent-y3-xmas.02": "Always was so excited to see what I got under the tree.",
+    "kent-y4-xmas": "Jodi got me some new tools for Winter Star. Things I'm definitely looking forward to using.",
+    "leah-y2-xmas.00": "Sometimes, I wonder just how I managed to get this life.",
+    "leah-y2-xmas.01": "It's a simple life, but it's the one I want.",
+    "leah-y3-xmas": "I wonder...would there be a way to carve those candy canes into interesting shapes? Might give it a try next year.",
+    "leah-y2-xmas-spouse-kids": "Our family is all I need, @. Our farm, our kids, you, me, I'm so proud of what we've built together.",
+    "leah-y2-xmas-spouse": "I appreciate you, @, and the life we've built.",
+    "leah-y3-xmas-spouse": "I'm so glad both you and I decided to move here, @. I can't imagine our life any other way.",
+    "leo-y2-xmas": "Where I come from, it doesn't get cold like this.",
+    "leo-y3-xmas": "I wish I could have my parrot family here with me too.",
+    "leo-y4-xmas": "@, I'm glad you and Linus accept me.",
+    "leo-y4-xmas.00": "When I first moved here, I thought no one would.",
+    "lewis-y2-xmas": "The legend of the Winter Star is quite important to our little town.",
+    "lewis-y2-xmas.00": "You should get Willy to tell it to you. HE tells it best.",
+    "lewis-y3-xmas": "How has this year been treating you, @?",
+    "lewis-y3-xmas.01": "Thanks to you, our little town has never looked better!",
+    "linus-y2-xmas": "I always make sure to give thanks to the abundance of the land during the Winter Star.",
+    "linus-y3-xmas": "I'm glad to be living here, @. Are you glad to be here?",
+    "vincent-xmas-kent-return": "I'm so happy Daddy's back now.",
+    "vincent-y2-xmas": "I wanna see what I'll get!",
+    "vincent-y3-xmas": "@, do you think I'll get a new action figure this year?",
 
     /****************************
     * Special order dialogue

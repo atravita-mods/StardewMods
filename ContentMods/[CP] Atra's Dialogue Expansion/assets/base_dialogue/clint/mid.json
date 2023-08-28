@@ -5,8 +5,8 @@
             "Action": "EditData",
             "Target": "Characters/Dialogue/Clint",
             "Entries": {
-                "spring_26": "{{i18n:clint-emily-birthday}}",
-                "spring_26_2": "{{i18n:clint-emily-birthday}}"
+                "spring_26{{YearRemainder}}": "{{i18n:clint-emily-birthday}}",
+                "winter_26{{YearRemainder}}": "{{i18n:clint-birthday-self.{{Random:00,01,02}}}}"
             }
         }
     ]

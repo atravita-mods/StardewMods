@@ -227,17 +227,6 @@
             },
             "Entries": {
                 "Leo_y2": "{{i18n:leo-y2-fishing}}",
-            }
-        },
-        {
-            "Action": "EditData",
-            "LogName": "Leo - higher hearts",
-            "Target": "Data/Festivals/winter8",
-            "When": {
-                "EnableFor": "Leo",
-                "Query: {{Hearts:Leo}} >= 8": true
-            },
-            "Entries": {
                 "Leo_y3": "{{i18n:leo-y3-fishing}}",
                 "Leo_y4": "{{i18n:leo-y4-fishing}}$h"
             }

@@ -41,6 +41,18 @@
             }
         },
         {
+            "Action": "EditData",
+            "LogName": "Caroline - married to abby",
+            "Target": "Data/Festivals/winter25",
+            "When": {
+                "EnableFor": "Caroline",
+                "Relationship: Abigail": "Married, Engaged"
+            },
+            "Entries": {
+                "Caroline_y2": "{{i18n:caroline-y2-xmas-married-to-abby}}$h",
+            }
+        },
+        {
             "LogName": "Clint - normal",
             "Action": "EditData",
             "Target": "Data/Festivals/winter25",
@@ -162,6 +174,164 @@
             "Entries": {
                 "Jodi_y2": "{{i18n:jodi-xmas-kent-return}}"
             }
-        }
+        },
+        {
+            "Action": "EditData",
+            "LogName": "Jodi - normal",
+            "Target": "Data/Festivals/winter25",
+            "When": {
+                "EnableFor": "Jodi",
+                "Year|contains=1,2": false
+            },
+            "Entries": {
+                "Jodi_y2": "{{i18n:jodi-y2-xmas}}$h",
+                "Jodi_y3": "{{i18n:jodi-y3-xmas}}$h",
+                "Jodi_y4": "{{i18n:jodi-y4-xmas}}$h"
+            }
+        },
+        {
+            "Action": "EditData",
+            "LogName": "Jodi - player married to Sam",
+            "Target": "Data/Festivals/winter25",
+            "When": {
+                "EnableFor": "Jodi",
+                "Relationship: Sam": "Married, Engaged"
+            },
+            "Entries": {
+                "Jodi_y3": "{{i18n:jodi-y3-xmas-married-to-sam}}$h"
+            }
+        },
+        {
+            "Action": "EditData",
+            "LogName": "Kent - Y2",
+            "Target": "Data/Festivals/winter25",
+            "When": {
+                "EnableFor": "Kent",
+                "Year": "2"
+            },
+            "Entries": {
+                "Kent_y2": "{{i18n:kent-xmas-kent-return}}$h"
+            }
+        },
+        {
+            "Action": "EditData",
+            "LogName": "Kent - normal",
+            "Target": "Data/Festivals/winter25",
+            "When": {
+                "EnableFor": "Kent",
+                "Year|contains=1,2,3": false
+            },
+            "Entries": {
+                "Kent_y2": "{{i18n:kent-y2-xmas}}",
+                "Kent_y3": "{{i18n:kent-y3-xmas.01}}#$e#{{i18n:kent-y3-xmas.02}}$h",
+                "Kent_y4": "{{i18n:kent-y4-xmas}}$h"
+            }
+        },
+        {
+            "Action": "EditData",
+            "LogName": "Leah - normal",
+            "Target": "Data/Festivals/winter25",
+            "When": {
+                "EnableFor": "Leah"
+            },
+            "Entries": {
+                "Leah_y2": "{{i18n:leah-y2-xmas.00}}#$e#{{i18n:leah-y2-xmas.01}}$h",
+                "Leah_y3": "{{i18n:leah-y3-xmas}}$h",
+                "Leah_spouse_y2": "{{i18n:leah-y2-xmas-spouse}}$h",
+                "Leah_spouse_y3": "{{i18n:leah-y3-xmas-spouse}}$h"
+            }
+        },
+        {
+            "Action": "EditData",
+            "LogName": "Leah - kids",
+            "Target": "Data/Festivals/winter25",
+            "When": {
+                "EnableFor": "Leah",
+                "HasValue:{{ChildGenders|valueAt=1}}": true
+            },
+            "Entries": {
+                "Leah_spouse_y2": "{{i18n:leah-y2-xmas-spouse-kids}}$h"
+            }
+        },
+        {
+            "Action": "EditData",
+            "LogName": "Leo - normal",
+            "Target": "Data/Festivals/winter25",
+            "When": {
+                "EnableFor": "Leo"
+            },
+            "Entries": {
+                "Leo_y2": "{{i18n:leo-y2-xmas}}",
+            }
+        },
+        {
+            "Action": "EditData",
+            "LogName": "Leo - higher hearts",
+            "Target": "Data/Festivals/winter25",
+            "When": {
+                "EnableFor": "Leo",
+                "Query: {{Hearts:Leo}} >= 8": true
+            },
+            "Entries": {
+                "Leo_y3": "{{i18n:leo-y3-xmas}}$s",
+                "Leo_y4": "{{i18n:leo-y4-xmas}}$h#$e#{{i18n:leo-y4-xmas.00}}"
+            }
+        },
+        {
+            "Action": "EditData",
+            "LogName": "Lewis - normal",
+            "Target": "Data/Festivals/winter25",
+            "When": { "EnableFor": "Lewis"},
+            "Entries": {
+                "Lewis_y2": "{{i18n:lewis-y2-xmas}}#$e#{{i18n:lewis-y2-xmas.00}}"
+            }
+        },
+        {
+            "Action": "EditData",
+            "LogName": "Lewis - normal",
+            "Target": "Data/Festivals/winter25",
+            "When": {
+                "EnableFor": "Lewis",
+                "IsCommunityCenterComplete": true
+            },
+            "Entries": {
+                "Lewis_y3": "{{i18n:lewis-y3-xmas}}$h#$e#{{i18n:lewis-y3-xmas.01}}"
+            }
+        },
+        {
+            "Action": "EditData",
+            "LogName": "Linus - normal",
+            "Target": "Data/Festivals/winter25",
+            "When": {"EnableFor": "Linus"},
+            "Entries": {
+                "Linus_y2": "{{i18n:linus-y2-xmas}}$h",
+                "Linus_y3": "{{i18n:linus-y3-xmas}}$h",
+            }
+        },
+        {
+            "Action": "EditData",
+            "LogName": "Vincent - Y2",
+            "Target": "Data/Festivals/winter25",
+            "When": {
+                "EnableFor": "Vincent",
+                "Year": "2"
+            },
+            "Entries": {
+                "Vincent_y2": "{{i18n:vincent-xmas-kent-return}}$h"
+            }
+        },
+        {
+            "Action": "EditData",
+            "LogName": "Vincent - normal",
+            "Target": "Data/Festivals/winter25",
+            "When": {
+                "EnableFor": "Vincent",
+                "Year|contains=1,2": false
+            },
+            "Entries": {
+                "Vincent_y2": "{{i18n:vincent-y2-xmas}}",
+                "Vincent_y3": "{{i18n:vincent-y3-xmas}}"
+            }
+        },
     ]
 }

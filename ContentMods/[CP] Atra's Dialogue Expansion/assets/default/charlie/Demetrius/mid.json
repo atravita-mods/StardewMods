@@ -172,7 +172,9 @@
             "26_2": "There is life everywhere on our planet, from the tops of mountains to the deepest part of the oceans. Isn't that amazing?",
 
             "winter_Mon10": "There are only a few plants that flower during winter, but crocus is one of them.[418]",
+            "winter_Tue10": "In general, animals who live in colder climates are larger, since that allows them a lower surface-area-to-volume ratio.#$b#This lets them better conserve heat.$h",
 
+            "summerScienceHouse_22_20": "I need to do inventory and see what consumables I need to re-order. I think I'm almost out of conical tubes.",
             "fallScienceHouse_22_20": "I've got so much work I need to do...$s",
             "winterScienceHouse_22_20": "More glassware to wash, always more glassware to wash...$s"
         }

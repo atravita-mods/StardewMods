@@ -75,6 +75,9 @@ Simply remove this mod from your mods folder.
 * **Willy**:
 * **Wizard**: I'm gonna be honest, I couldn't really fit him into the theme of this mod. Plus the Wizard has no less than four separate mods focused on him alone, all with *wildly* differing fanons. So I'm skipping him. Go download any of the Romantic Rasmodius mods if you want more for him.
 
+## Quick notes:
+* On profanity: I was originally going to do a profanity filter. But when I started writing, I found that I didn't actually *want* to use swear words. I don't know. Stardew is just too wholesome for it.
+
 ## Compatibility
 This mod should be compatible with most other mods, even other dialogue mods. I've tried to use dialogue keys that aren't commonly used. Additionally, each NPC can be enabled or disabled separately.
 

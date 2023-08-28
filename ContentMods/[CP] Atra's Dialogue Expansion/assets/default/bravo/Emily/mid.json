@@ -21,6 +21,7 @@
             // specific days
             "summer_10{{YearRemainder}}": "It'll be the luau tomorrow! I don't have to do much for it, so I can just have fun and dance.$h",
             "winter_4{{YearRemainder}}": "It's getting close to the Feast of the Winter Star. Maybe I should start making Haley a sweater?",
+            "fall_20{{YearRemainder}}": "Oh, the Spirit's Eve is coming up, isn't it? I've gotta work on my costume.#$e#I don't think anyone is ever too old for a good Spirit's Eve costume."
         }
     },
     {
@@ -36,6 +37,7 @@
         "LogName": "Emily mid-hearts, Y1",
         "Action": "EditData",
         "Target": "Characters/Dialogue/Emily",
+        "When": {"YearModulus": "1"},
         "Entries": {
             "Resort_Dance_2": "@, come dance with me!$h",
 
@@ -56,8 +58,7 @@
             "26{{YearRemainder}}": "Circle skirts are so easy to make!#$b#Until I have to hem them. Getting the hem even isn't as easy.$s",
             "27{{YearRemainder}}": "I saw a lace dress in one of Haley's magazines the other day, and I really want to see if I can replicate it.",
             "28{{YearRemainder}}": "@, what do you think of kale salads?"
-        },
-        "When": {"YearModulus": "1"}
+        }
     },
     {
         "LogName": "Emily mid-hearts, Y1 high luck",

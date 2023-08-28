@@ -132,6 +132,7 @@
 
             "6_2": "Did you see that paper by the %name group out of %place University? Amazing, isn't it?$h",
             "8_2": "I know one of Robin's biggest regrets was that we couldn't afford to send Sebastian to college...$s",
+            "10_2": "You know, vampires aren't really realistic, blood isn't actually that calorically dense.#$b#Every species that drinks blood has to get rid of the excess liquid in blood while they drink somehow.",
             "16_2": "Sometimes I wonder what I could have done to be more successful in my career...$s",
             "18_2": "Between you and I, @, writing proposals is the worst part of my job.",
             "20_2": "Tree fertilizer can make trees grow much faster, but I wonder if it affects the quality of their wood.#$b#Generally fast-growing trees can't produce as dense of wood.",
@@ -183,6 +184,7 @@
         "When": { "YearModulus": "0"},
         "Entries": {
             "2_2": "Leaf slugs are quite adorable little animals that steal the chloroplasts from the algae they eat.#$b#They then use those chloroplasts to photosynthesize.#$e#Isn't biology cool?$h",
+            "3_2": "These days, I've been watching documentaries on the deep sea before I go to bed.#$e#It's so different from the science I usually do, so it's so fascinating!$h"
         }
     }
 ]}

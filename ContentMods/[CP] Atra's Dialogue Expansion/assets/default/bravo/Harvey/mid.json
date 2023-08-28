@@ -19,7 +19,7 @@
                 "spring_12{{YearRemainder}}": "Looking forward to the Egg Festival tomorrow, @?",
                 "summer_27{{YearRemainder}}": "It's almost the end of summer, @. To be honest, I won't miss the heat.",
                 "fall_15{{YearRemainder}}": "Tomorrow's the Stardew Fair, when tourists from everywhere will be pouring in...",
-                "winter_26{{YearRemainder}}": "Evelyn bought me some new coffee this year. I'm so excited to try it.$h"
+                "winter_26{{YearRemainder}}": "Evelyn bought me some new coffee this year. I'm so excited to try it.$h%revealtasteHarvey395"
             }
         },
         {
@@ -32,6 +32,8 @@
                 "2{{YearRemainder}}": "Did you know there's a muscle in the arm that not everyone has?#$b#It's called the palmaris longus muscle, and about fourteen percent of the population just doesn't have it anymore.",
                 "3{{YearRemainder}}": "One thing I miss from working in the city - I can't just send bloodwork downstairs and get it within a few hours anymore.$s",
                 "4{{YearRemainder}}": "While I do have some medication samples on hand, I can't dispense medications normally. If you need anything that I don't carry, you'll need to get in contact with a mail-order pharmacy.",
+                "5{{YearRemainder}}": "Hey, @! Growing any interesting veggies these days?",
+                "winter_26{{YearRemainder}}": "Emily bought me some posh pickles from %place. They certainly seem...quite interesting.%revealtasteHarvey342",
             }
         },
         {
@@ -89,7 +91,7 @@
             "Action": "EditData",
             "Target": "Characters/Dialogue/Harvey",
             "Entries": {
-                "12_2": "I've been looking at those pod coffee machines. The ones with the little single use pods.#$b#They're really expensive, though.$s"
+                "11_2": "I've been looking at those pod coffee machines. The ones with the little single use pods.#$b#They're really expensive, though.$s",
             },
             "When": {
                 "YearModulus": "4",

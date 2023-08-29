@@ -1,0 +1,16 @@
+{
+    "Changes":[
+        {
+            "LogName": "Willy - base",
+            "Action": "EditData",
+            "Target": "Characters/Dialogue/Willy",
+            "Entries": {
+                // Make Willy reject bait - it's wayyyyy too easy accidentally to hand him bait, haha.
+                "reject_685": "{{i18n:willy-rejects-bait}}$h", // bait
+                "reject_703": "{{i18n:willy-rejects-bait}}$h", // magnet
+                "reject_774": "{{i18n:willy-rejects-bait}}$h", // wild bait
+                "reject_908": "{{i18n:willy-rejects-bait}}$h" // magic bait
+            }
+        }
+    ]
+}

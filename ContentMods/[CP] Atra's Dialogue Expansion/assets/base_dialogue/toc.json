@@ -109,6 +109,14 @@
         },
         {
             "Action": "Include",
+            "LogName": "Willy - base",
+            "FromFile": "assets/base_dialogue/Willy/base.json",
+            "When": {
+                "EnableFor": "Willy"
+            }
+        },
+        {
+            "Action": "Include",
             "LogName": "Spouse lines",
             "FromFile": "assets/base_dialogue/spouse_toc.json",
             "When": {

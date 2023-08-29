@@ -49,7 +49,7 @@
                 "Relationship: Abigail": "Married, Engaged"
             },
             "Entries": {
-                "Caroline_y2": "{{i18n:caroline-y2-xmas-married-to-abby}}$h",
+                "Caroline_y2": "{{i18n:caroline-y2-xmas-married-to-abby}}$h"
             }
         },
         {
@@ -261,7 +261,7 @@
                 "EnableFor": "Leo"
             },
             "Entries": {
-                "Leo_y2": "{{i18n:leo-y2-xmas}}",
+                "Leo_y2": "{{i18n:leo-y2-xmas}}"
             }
         },
         {
@@ -313,8 +313,7 @@
             "LogName": "Marlon - normal",
             "Target": "Data/Festivals/winter25",
             "When": {
-                "EnableFor": "Marlon",
-                "HasMod|contains=FlashShifter.StardewValleyExpandedCP": false
+                "EnableFor": "Marlon"
             },
             "Entries": {
                 "Marlon_y2": "{{i18n:marlon-y2-xmas}}"
@@ -327,7 +326,59 @@
             "When": {"EnableFor": "Marnie"},
             "Entries": {
                 "Marnie_y2": "{{i18n:marnie-y2-xmas}}",
-                "Marnie_y3": "{{i18n:marnie-y3-xmas-better}}$h#$e#{{i18n:marnie-y3-xmas-better.00}}",
+                "Marnie_y3": "{{i18n:marnie-y3-xmas-better}}$h#$e#{{i18n:marnie-y3-xmas-better.00}}"
+            }
+        },
+        {
+            "LogName": "Maru - normal",
+            "Action": "EditData",
+            "Target": "Data/Festivals/winter25",
+            "When": {"EnableFor": "Maru"},
+            "Entries": {
+                "Maru_y2": "{{i18n:maru-y2-xmas.00}}#$b#{{i18n:maru-y2-xmas.01}}",
+                "Maru_spouse_y2": "{{i18n:maru-y2-xmas-spouse}}$h"
+            }
+        },
+        {
+            "LogName": "Pam",
+            "Action": "EditData",
+            "Target": "Data/Festivals/winter25",
+            "When": {"EnableFor": "Pam"},
+            "Entries": {
+                "Pam_y2": "{{i18n:pam-y2-xmas}}$h"
+            }
+        },
+        {
+            "LogName": "Penny - normal",
+            "Action": "EditData",
+            "Target": "Data/Festivals/winter25",
+            "When": {"EnableFor": "Penny"},
+            "Entries": {
+                "Penny_y2": "{{i18n:penny-y2-xmas.00}}$s",
+                "Penny_spouse_y2": "{{i18n:penny-y2-xmas-spouse}}$s#$b#{{i18n:penny-y2-xmas-spouse.00}}"
+            }
+        },
+        {
+            "LogName": "Penny - normal",
+            "Action": "EditData",
+            "Target": "Data/Festivals/winter25",
+            "When": {
+                "EnableFor": "Penny",
+                "Spouse:anyPlayer": "Penny"
+            },
+            "Entries": {
+                "Penny_y2": "{{i18n:penny-y2-xmas-married-other}}$s",
+            }
+        },
+        {
+            "LogName": "Pierre",
+            "Action": "EditData",
+            "Target": "Data/Festivals/winter25",
+            "When": {"EnableFor": "Pierre"},
+            "Entries": {
+                "Pierre_y2": "{{i18n:pierre-y2-xmas}}$h",
+                "Pierre_y3": "{{i18n:pierre-y3-xmas}}$h",
+                "Pierre_y4": "{{i18n:pierre-y4-xmas}}$h"
             }
         },
         {

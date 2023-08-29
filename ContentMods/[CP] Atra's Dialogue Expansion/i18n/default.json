@@ -202,6 +202,8 @@
 /***************
 * Fancier dialogue
 ***************/
+    // reject dialogue
+    "willy-rejects-bait": "Did you mean to give that to me, @? I'm no fish.",
 
     // locational
     "harvey-bed": "Did you happen to bring any coffee with you?",
@@ -1389,6 +1391,15 @@
     "marnie-y2-xmas": "These Winter Star trees, they're lovely, aren't they?",
     "marnie-y3-xmas-better": "The Feast of the Winter Star is a great time to celebrate with family and reflect on what you're grateful for.",
     "marnie-y3-xmas-better.00": "Myself personally, I'm grateful for my family and friends.",
+    "maru-y2-xmas.00": "Heya, @!",
+    "maru-y2-xmas.01": "You enjoying the feast too?",
+    "maru-y2-xmas-spouse": "It's nice spending some time with family. I should visit more often.",
+    "pam-y2-xmas": "Mmm, this eggnog's great, isn't it, @?",
+    "penny-y2-xmas.00": "Days like this are meant for happy families, I guess",
+    "penny-y2-xmas-married-other": "Days like this, I wonder how things would be different for my mother if my father never left...",
+    "penny-y2-xmas-spouse": "Days like this I wonder how my dad's doing...",
+    "penny-y2-xmas-spouse.00": "I'm so glad I have you now, but I can't help but think of the father I never had.",
+    "pierre-y2-xmas": "Hey, @, any last minute Winter Star gifts to buy?",
     "robin-y1-xmas-inlaw": "Hey, @, join us at the family table!",
     "vincent-xmas-kent-return": "I'm so happy Daddy's back now.",
     "vincent-y2-xmas": "I wanna see what I'll get!",

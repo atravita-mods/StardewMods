@@ -310,6 +310,27 @@
         },
         {
             "Action": "EditData",
+            "LogName": "Marlon - normal",
+            "Target": "Data/Festivals/winter25",
+            "When": {
+                "EnableFor": "Marlon",
+                "HasMod|contains=FlashShifter.StardewValleyExpandedCP": false
+            },
+            "Entries": {
+                "Marlon_y2": "{{i18n:marlon-y2-xmas}}"
+            }
+        },
+        {
+            "LogName": "Marnie",
+            "Action": "EditData",
+            "Target": "Data/Festivals/winter25",
+            "When": {"EnableFor": "Marnie"},
+            "Entries": {
+                "Marnie_y2": "{{i18n:marnie-y2-xmas}}"
+            }
+        },
+        {
+            "Action": "EditData",
             "LogName": "Vincent - Y2",
             "Target": "Data/Festivals/winter25",
             "When": {

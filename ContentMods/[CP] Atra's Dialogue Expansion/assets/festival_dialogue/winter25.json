@@ -326,7 +326,20 @@
             "Target": "Data/Festivals/winter25",
             "When": {"EnableFor": "Marnie"},
             "Entries": {
-                "Marnie_y2": "{{i18n:marnie-y2-xmas}}"
+                "Marnie_y2": "{{i18n:marnie-y2-xmas}}",
+                "Marnie_y3": "{{i18n:marnie-y3-xmas-better}}$h#$e#{{i18n:marnie-y3-xmas-better.00}}",
+            }
+        },
+        {
+            "LogName": "Robin - married to Sebby or Maru",
+            "Action": "EditData",
+            "Target": "Data/Festivals/winter25",
+            "When": {
+                "EnableFor": "Robin",
+                "Query: {{Relationship:Maru|contains=Married,Engaged}} OR {{Relationship:Sebastian|contains=Married,Engaged}}": true
+            },
+            "Entries": {
+                "Robin": "{{i18n:robin-y1-xmas-inlaw}}$h"
             }
         },
         {

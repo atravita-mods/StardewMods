@@ -305,7 +305,7 @@
             "When": {"EnableFor": "Linus"},
             "Entries": {
                 "Linus_y2": "{{i18n:linus-y2-xmas}}$h",
-                "Linus_y3": "{{i18n:linus-y3-xmas}}$h",
+                "Linus_y3": "{{i18n:linus-y3-xmas}}$h"
             }
         },
         {
@@ -359,7 +359,20 @@
             }
         },
         {
-            "LogName": "Penny - normal",
+            "LogName": "Penny - married with kids",
+            "Action": "EditData",
+            "Target": "Data/Festivals/winter25",
+            "When": {
+                "EnableFor": "Penny",
+                "HasValue:{{ChildGenders|valueAt=1}}": true,
+                "Query: {{Hearts:Penny}} >= 12": true
+            },
+            "Entries": {
+                "Penny_spouse_y3": "{{i18n:penny-y3-xmas-spouse}}$h#$b#{{i18n:penny-y3-xmas-spouse.00}}"
+            }
+        },
+        {
+            "LogName": "Penny - married to other players",
             "Action": "EditData",
             "Target": "Data/Festivals/winter25",
             "When": {
@@ -382,6 +395,16 @@
             }
         },
         {
+            "LogName": "Robin",
+            "Action": "EditData",
+            "Target": "Data/Festivals/winter25",
+            "When": {"EnableFor": "Robin"},
+            "Entries": {
+                "Robin_y2": "{{i18n:robin-y2-xmas}}$h",
+                "Robin_y3": "{{i18n:robin-y3-xmas}}$h",
+            }
+        },
+        {
             "LogName": "Robin - married to Sebby or Maru",
             "Action": "EditData",
             "Target": "Data/Festivals/winter25",
@@ -391,6 +414,76 @@
             },
             "Entries": {
                 "Robin": "{{i18n:robin-y1-xmas-inlaw}}$h"
+            }
+        },
+        {
+            "LogName": "Robin - married to Sebby or Maru",
+            "Action": "EditData",
+            "Target": "Data/Festivals/winter25",
+            "When": {
+                "EnableFor": "Robin",
+                "Query: {{Relationship:Maru|contains=Married}} OR {{Relationship:Sebastian|contains=Married}}": true,
+                "HasValue:{{ChildGenders|valueAt=1}}": true
+            },
+            "Entries": {
+                "Robin_y3": "{{i18n:robin-y3-xmas-inlaw-kids}}$h"
+            }
+        },
+        {
+            "LogName": "Sam - normal",
+            "Action": "EditData",
+            "Target": "Data/Festivals/winter25",
+            "When": {
+                "EnableFor": "Sam"
+            },
+            "Entries": {
+                "Sam_y2": "{{i18n:sam-y2-xmas}}$h",
+                "Sam_spouse_y2": "{{i18n:sam-y2-xmas-spouse}}$l"
+            }
+        },
+        {
+            "LogName": "Sam - has children",
+            "Action": "EditData",
+            "Target": "Data/Festivals/winter25",
+            "When": {
+                "EnableFor": "Sam",
+                "HasValue:{{ChildGenders|valueAt=1}}": true
+            },
+            "Entries": {
+                "Sam_spouse_y2": "{{i18n:sam-y2-xmas-spouse-kids}}$h",
+                "Sam_spouse_y3": "{{i18n:sam-y3-xmas-spouse-kids}}$h"
+            }
+        },
+        {
+            "LogName": "Sebastian - normal",
+            "Action": "EditData",
+            "Target": "Data/Festivals/winter25",
+            "When": {"EnableFor": "Sebastian"},
+            "Entries": {
+                "Sebastian_y2": "{{i18n:sebastian-y2-xmas.00}}$s",
+                "Sebastian_spouse_y2": "{{i18n:sebastian-y2-xmas-spouse}}"
+            }
+        },
+        {
+            "LogName": "Sebastian - has kids",
+            "Action": "EditData",
+            "Target": "Data/Festivals/winter25",
+            "When": {
+                "EnableFor": "Sebastian",
+                "HasValue:{{ChildGenders|valueAt=1}}": true,
+            },
+            "Entries": {
+                "Sebastian_spouse_y2": "{{i18n:sebastian-y2-xmas-spouse-kids}}"
+            }
+        },
+        {
+            "LogName": "Shane - normal",
+            "Action": "EditData",
+            "Target": "Data/Festivals/winter25",
+            "When": {"EnableFor": "Shane"},
+            "Entries": {
+                "Shane_y2": "{{i18n:shane-y2-xmas.00}}$h",
+                "Shane_spouse": "{{i18n:shane-y1-xmas-spouse.00}}#$e#{{i18n:shane-y1-xmas-spouse.01}}$h"
             }
         },
         {
@@ -418,5 +511,15 @@
                 "Vincent_y3": "{{i18n:vincent-y3-xmas}}"
             }
         },
+        {
+            "LogName": "Willy",
+            "Action": "EditData",
+            "Target": "Data/Festivals/winter25",
+            "When": {"EnableFor": "Willy"},
+            "Entries": {
+                "Willy_y2": "{{i18n:willy-y2-xmas}}$h",
+                "Willy_y3": "{{i18n:willy-y3-xmas}}$h"
+            }
+        }
     ]
 }

@@ -23,7 +23,18 @@
 
             // pre-festival dialogue
             "summer_27": "{{i18n:summer-27}}$h",
-            "fall_15": "{{i18n:fall-15}}$h"
+            "fall_15": "{{i18n:fall-15}}$h",
+        }
+    },
+    {
+        "Action": "EditData",
+        "LogName":"Marriage - generic - kids",
+        "Target": "{{MarriageDialoguePath}}",
+        "When": {
+            "HasValue: {{ChildGenders:valueAt=1}}": true
+        },
+        "Entries": {
+            "winter_20": "{{i18n:winter-20.{{Random:00,01,02}} }}$h"
         }
     },
     {

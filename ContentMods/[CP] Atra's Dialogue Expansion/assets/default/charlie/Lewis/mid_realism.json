@@ -23,52 +23,24 @@
         "LogName": "Lewis mid-hearts",
         "Action": "EditData",
         "Target": "Characters/Dialogue/Lewis",
+        "When": {"YearModulus": "1"},
         "Entries": {
             // specific days
             "summer_10{{YearRemainder}}": "The Governor will be here tomorrow! We have to impress him.",
 
-            "8{{YearRemainder}}": "Between you and I, @, I'm so glad a no pill mill has decided to set up shop here.",
-            "10{{YearRemainder}}": "Before I moved here? I was an accountant at an auditing firm.",
-            "CommunityCenter_Entry": "Anyone around?"
-        },
-        "When": {"YearModulus": "1"},
-    },
-    {
-        "LogName": "Lewis mid-hearts - Y2",
-        "Action":"EditData",
-        "Target": "Characters/Dialogue/Lewis",
-        "Entries": {
-            "CommunityCenter_Entry": "Anything happening?",
-
-            "10_2": "It's important to me for this town to be economically diverse. I don't want to rely on a single industry, like the way we used to rely on those mines.",
-            "12_2": "Tourism could be a nice way to make money. We've got good hiking trails nearby.",
-            "14_2": "@, have you ever considered holding apple picking sessions on your farm? They're more lucrative than I expected!$h",
-            "16_2": "We used to be a major flower exporter. Our climate is excellent for them.$h",
-            "17_2": "I read that the best grapes for wine are always kept a little stressed.",
-        },
-        "When": {"YearModulus": "2"}
+            "8{{YearRemainder}}": "Between you and I, @, I'm so glad a no pill mill has decided to set up shop here."
+        }
     },
     {
         "LogName": "Lewis mid-hearts - Y3",
         "Action":"EditData",
         "Target": "Characters/Dialogue/Lewis",
+        "When": {"YearModulus": "3"},
         "Entries": {
             "12_2": "Ugh, the stock market is going insane right now, I have to keep myself from looking too much at my portfolio.#$b#I try to remind myself that buying and holding is the best strategy, but it's hard sometimes.",
-            "15_2": "We're actually in a great location for hydro power. Maybe I can convince a hydro plant to come out here?",
+            
             "16_2": "It's surprisingly hard to get a grant to get things repaired.#$b#Politicians like new shiny things with their names on it, upkeep isn't as...popular.$s",
-            "17_2": "Maybe we should pivot our economy to focus more on tourism?",
-
-            "CommunityCenter_Entry": "Heya, anything up?"
-        },
-        "When": {"YearModulus": "3"}
-    },
-    {
-        "LogName": "Lewis mid-hearts - Y3",
-        "Action":"EditData",
-        "Target": "Characters/Dialogue/Lewis",
-        "Entries": {
-            "12_2": "I've never been married. My first priority has been this town for a very long time.",
-        },
-        "When": {"YearModulus": "4"}
+            "17_2": "Maybe we should pivot our economy to focus more on tourism?"
+        }
     }
 ]}

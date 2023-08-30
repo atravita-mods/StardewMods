@@ -75,7 +75,8 @@
             "Entries": {
                 "Elliott_y2": "{{i18n:elliott-y2-fair}}",
                 "Elliott_y3": "{{i18n:elliott-y3-fair}}$h",
-                "Elliott_spouse_y2": "{{i18n:elliott-y2-fair-spouse}}$h"
+                "Elliott_spouse_y2": "{{i18n:elliott-y2-fair-spouse}}$h",
+                "Elliott_spouse_y3": "{{i18n:elliott-y3-fair-spouse}}$h"
             }
         },
         {

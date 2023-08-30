@@ -20,6 +20,7 @@
         "Target": "Characters/Dialogue/Clint",
         "Entries": {
             "summer_Fri8": "Gosh, it's so hot out...$s",
+            "winter_Thu8": "Something about winter just feels so..depressing.#$b#My doctor says it might be seasonal...something something?$s",
 
             // before the stardew valley fair
             "fall_15{{YearRemainder}}": "I'm so ready for the Stardew Fair, @, I've been working on my grange display for weeks!$h",

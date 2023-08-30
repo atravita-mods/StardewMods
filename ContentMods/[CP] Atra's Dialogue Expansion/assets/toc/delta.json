@@ -19,6 +19,15 @@
     },
     {
         "Action": "Include",
+        "LogName": "Jas - mid hearts",
+        "FromFile": "{{FirstValidFile: assets/{{language}}/delta/Jas/mid.json, assets/default/delta/Jas/mid.json}}",
+        "When": {
+            "EnableFor": "Jas",
+            "Query: {{Hearts:Jas}} >= 6": true
+        }
+    },
+    {
+        "Action": "Include",
         "LogName": "Marnie - mid hearts",
         "FromFile": "{{FirstValidFile: assets/{{language}}/delta/Marnie/mid.json, assets/default/delta/Marnie/mid.json}}",
         "When": {

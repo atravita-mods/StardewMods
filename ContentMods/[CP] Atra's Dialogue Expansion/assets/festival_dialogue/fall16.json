@@ -23,6 +23,7 @@
             },
             "Entries": {
                 "Alex_y2": "{{i18n:alex-y2-fair}}$h",
+                "Alex_y3": "{{i18n:alex-y3-fair}}",
                 "Alex_spouse_y2": "{{i18n:alex-y2-fair-spouse}}$h",
                 "Alex_spouse_y3": "{{i18n:alex-y3-fair-spouse}}$h"
             }

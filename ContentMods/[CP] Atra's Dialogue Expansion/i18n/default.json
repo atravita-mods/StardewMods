@@ -172,6 +172,7 @@
     "summer-27": "Are you excited for the Midnight Jellies tomorrow, @? I sure am!",
     "fall-12": "@, I felt like baking today. How is it?",
     "fall-15": "You ready to crush everyone at the Stardew Valley Fair tomorrow, @?",
+    "fall-15-kids": "I'm so excited to be able to take the kids to the Stardew Valley Fair tomorrow!",
     "fall-28.01": "@! I was just at Pierre's the other day, and I picked up some items!",
     "fall-28.02": "Oh, @, I just remembered, picked up some items from Pierre for you!",
     "fall-28.03": "Heya @, I swung by Pierre's the other day and picked up some items!",
@@ -242,6 +243,8 @@
     "robin-divorced-from-sebastian-a": "Sebastian doesn't want to talk to you, and neither do I.",
     "robin-divorced-from-sebastian-b": "I had high hopes for you and Sebastian. Turns out I was wrong.",
 
+    "maru-divorced-from-penny-a": "Penny deserves better than you, @.",
+    "maru-divorced-from-penny-b": "Look, all Penny wanted was a family of her own. I will always take her side in this.",
     "maru-divorced-from-sebastian-a": "Gosh, @, why break my brother's heart like that?",
     "maru-divorced-from-sebastian-b": "Look, @, you're no longer part of our family. I don't want to talk to you.",
 
@@ -262,6 +265,8 @@
     "evelyn-alex-childless": "Oh, I'd love to have great-grandchildren before I die, @.",
     "marnie-shane-summer-fri4": "How has Shane been doing, by the way?",
     "marine-shane-fall-fri4": "Jas really misses her uncle Shane. Maybe I should take her to visit you guys more often?",
+    "maru-penny-winter-mon4-a": "Heya, @. How are you and Penny doing?",
+    "maru-penny-winter-mon4-b": "I'm glad the two of you are doing well.",
     "jas-shane-summer-fri4": "Uncle Shane seems happier now.",
     "jas-shane-fall-fri4": "You treat my uncle Shane right, you hear?",
     "pam-penny-summer-fri10_0": "Glad you're treating my girl right, @.",
@@ -276,12 +281,14 @@
     "jobReturn-Penny-rain": "I had a great day at the library, @. I'm so glad we have it in town.",
 
     // entry strings
+    "homecoming-generic": "Ah, home sweet home!",
+    "homecoming-love": "Honey, I'm home!",
+
     "alex-vacation-bubbles" : "Ah, sun!/Gotta work on my tan!/Ah, vacation!",
     "george-homecoming": "I'm home!/Evelyn, I'm home!/Ah, home sweet home!",
     "george-vacation-bubbles": "Ah, it's so warm!",
 
     "demetrius-homecoming": "Ah, home sweet home!/Robin, I'm back!",
-    "penny-homecoming": "Honey, I'm home!",
     "penny-greet-Pam": "Mom, how are you?/Mom, you home?/Mom! I'm here to visit!",
 
     // misc
@@ -1143,11 +1150,15 @@
     "vincent-y3-halloween": "I'm a big boy now, I'm not scared of no maze!",
 
     // Stardew Fair
+    "fair-prelude-lewis.00": "I still have a lot that needs setting up for the Stardew valley fair tomorrow, @, but it's going to be great! Are you going to have a booth?",
+    "fair-prelude-lewis.01": "Pierre is always super serious about his booth. You think you're up to challenging him?",
+    "fair-prelude-lewis.02": "Gotta make sure the Stardew Valley Fair is fun for all ages! We get quite a few tourists.",
     "abby-y2-fair": "You think Lewis will ever change up these fair games?",
     "abby-y3-fair.01": "Heya, @, think my Dad has a good shot at beating you this year?",
     "abby-y3-fair.02": "He's been working on that grange display for weeks.",
     "abby-y2-fair-spouse": "Gosh, aren't fair games supposed to be weighted against you? These are easy!",
     "alex-y2-fair": "I got a perfect score in the slingshot game!",
+    "alex-y3-fair": "I'm gonna figure out this fishing game even if it takes me every bit of money I have.",
     "alex-y2-fair-spouse": "Let's see how good of a score I can get on the strength game this year!",
     "alex-y3-fair-spouse": "I'm gonna go eat my fill of those freshly grilled burgers!",
     "caroline-y2-fair": "We've been picking out the best veggies for weeks! Pierre's carefully studied everything that comes out of my garden.",

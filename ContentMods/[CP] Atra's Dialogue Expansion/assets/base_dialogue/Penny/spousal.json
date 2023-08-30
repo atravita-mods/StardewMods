@@ -35,11 +35,23 @@
         }
     },
     {
+        "LogName": "Maru - inlaw",
+        "Action": "EditData",
+        "Target": "Characters/Dialogue/Maru",
+        "When": {
+            "Query: {{Hearts:Penny}} >= 10": true,
+            "EnableFor": "Maru"
+        },
+        "Entries": {
+            "winter_Mon4_inlaw_Penny": "{{i18n: maru-penny-winter-mon4-a}}#$e#{{i18n: maru-penny-winter-mon4-b}}$h"
+        }
+    },
+    {
         "LogName": "Penny - Marriage - in normal dialogue file",
         "Action": "EditData",
         "Target": "Characters/Dialogue/Penny",
         "Entries": {
-            "Farmhouse_Entry": "{{i18n:penny-homecoming}}",
+            "Farmhouse_Entry": "{{i18n:homecoming-love}}",
             "Trailer_Entry": "{{i18n:penny-greet-Pam}}"
         }
     },

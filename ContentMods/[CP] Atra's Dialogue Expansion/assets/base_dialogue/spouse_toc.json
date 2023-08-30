@@ -12,6 +12,18 @@
             }
         },
         {
+            "Action": "EditData",
+            "LogName": "Generic Spouse Entry",
+            "Target": "Characters/Dialogue/{{Spouse}}",
+            "When": {
+                "HasValue: {{Spouse}}": true,
+                "EnableFor": "{{Spouse}}"
+            },
+            "Entries": {
+                "Farmhouse_Entry": "{{i18n:homecoming-love}}"
+            }
+        },
+        {
             "Action": "Include",
             "LogName": "Spouse-related items",
             "FromFile": "assets/base_dialogue/{{Spouse}}/spousal.json",

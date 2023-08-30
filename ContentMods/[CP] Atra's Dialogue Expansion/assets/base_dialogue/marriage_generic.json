@@ -34,6 +34,7 @@
             "HasValue: {{ChildGenders:valueAt=1}}": true
         },
         "Entries": {
+            "fall_15": "{{i18n:fall-15-kids}}$h",
             "winter_20": "{{i18n:winter-20.{{Random:00,01,02}} }}$h"
         }
     },

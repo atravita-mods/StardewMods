@@ -11,14 +11,15 @@
                 "Resort_Chair": "Ahhhh, a nice chance to rest my old tired feet.$h",
 
                 // specific days
-                "summer_13{{YearRemainder}}": "We absolutely need the Governor's goodwill, he controls the budget for the state."
+                "summer_13{{YearRemainder}}": "We absolutely need the Governor's goodwill, he controls the budget for the state.",
             }
         },
         {
             "Action": "EditData",
             "Target": "Characters/Dialogue/Lewis",
             "Entries": {
-                "Town4": "@! I hear you're going to have a child soon! Have you picked out a name yet?"
+                "Town4": "@! I hear you're going to have a child soon! Have you picked out a name yet?",
+                "ManorHouse4": "Oh, @, I hear you're going to have a kid soon. Are you excited?$h"
             },
             "When": { "HavingChild": "@{{playerName}}"}
         },
@@ -49,6 +50,7 @@
                 "4_2": "I really don't talk to Demetrius much. I think he's a scientist, affiliated with Grampleton University?#$b#Never quite understood the research that man was doing.",
                 "10{{YearRemainder}}": "Before I moved here? I was an accountant at an auditing firm.",
                 "15": "@! How have you been settling in?",
+                "15_2": "I think we're finally doing better financially, as a town.#$b#It's so difficult, with more and more economic power concentrating in cities.",
 
                 "Saloon_Entry": "Hmmm, what's for dinner tonight?",
                 "IslandSouth_Entry": "Vacation time!",
@@ -66,6 +68,7 @@
 
                 "1_2": "Leah sometimes asks me to ship some of the forage she collects. She's a talented forager!",
                 "4_2": "@, do you think we should invest in some table tennis for the Community Center?",
+                "5_2": "To be honest @, I'm a terrible cook. I usually get most of my meals from the saloon.#$b#Gus's prices are more than fair.",
 
                 "10_2": "It's important to me for this town to be economically diverse. I don't want to rely on a single industry, like the way we used to rely on those mines.",
                 "12_2": "Tourism could be a nice way to make money. We've got good hiking trails nearby.",

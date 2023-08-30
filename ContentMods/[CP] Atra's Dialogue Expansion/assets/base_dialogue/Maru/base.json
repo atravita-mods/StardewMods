@@ -9,6 +9,16 @@
                 "ScienceHouse": "{{i18n: maru-divorced-from-sebastian-a}}$s",
                 "Mountain": "{{i18n: maru-divorced-from-sebastian-b}}$s",
             }
+        },
+        {
+            "Action": "EditData",
+            "LogName": "Divorced From Penny",
+            "Target": "Characters/Dialogue/Maru",
+            "When": {"Relationship: Penny": "Divorced"},
+            "Entries": {
+                "ScienceHouse": "{{i18n: maru-divorced-from-penny-a}}$s",
+                "Mountain": "{{i18n: maru-divorced-from-penny-b}}$s",
+            }
         }
     ]
 }

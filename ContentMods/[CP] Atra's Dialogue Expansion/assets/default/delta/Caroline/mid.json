@@ -24,6 +24,15 @@
         }
     },
     {
+        "LogName": "Caroline: mid hearts",
+        "Action": "EditData",
+        "Target": "Characters/Dialogue/Caroline",
+        "Entries": {
+            // before fair
+            "fall_15{{YearRemainder}}": "Pierre has been working on his grange display for weeks. Let's see how we fare against you tomorrow!$h",
+        }
+    },
+    {
         "LogName": "Caroline: mid hearts - CC",
         "Action": "EditData",
         "Target": "Characters/Dialogue/Caroline",

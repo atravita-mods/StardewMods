@@ -49,6 +49,7 @@
                 "7_2": "Sorry if I'm grumpy, I was up all night entering data into the electronic medical record.$s#$b#Say, @, would you happen to have a spare coffee?",
                 "9_2": "Stay safe out there, @. Don't get hurt too often.",
                 "11_2": "Alex came to me the other day, asked me if I'd teach him anatomy. Says he's thinking of becoming a personal trainer.#$b#You know, @, that might be a good career for him.",
+                "14_2": "Do you think I should put an ad out in the newspaper? To try to get more patients?",
                 "22_2": "Saw a new study from %place Biologics, their new chemotherapy agent doubled the five-year survival rate for non-alcoholic primary hepatic malignancy.",
                 "26_2": "I don't eat as well as I should. Often I don't have enough time or energy after a long workday to do anything but toss a frozen meal into the microwave.#$b#And then there's all the charting I still need to do.",
                 "28_2": "One of the difficult things of practicing medicine in a small town is the lack of equipment.#$b#We've got an x-ray machine and an ultrasound. That's it.#$e#Sometimes I worry I provide substandard care because I can't get access to a CT machine.$s"
@@ -103,7 +104,10 @@
             "Action": "EditData",
             "Target": "Characters/Dialogue/Harvey",
             "Entries": {
-                "12_2": "I enjoy doing the crosswords in the paper, when I have the time to do them."
+                "12_2": "I enjoy doing the crosswords in the paper, when I have the time to do them.",
+                "13_2": "I went into medicine to help people, not stare at an electronic medical record all day.$s#$b#I wish someone would make a software that works better.",
+                "15_2": "How is Mayor Lewis so good at Junimo Kart? I can't get past the first level.$s",
+                "26_2": "Gosh, @, I try to avoid thinking of myself as old, but sometimes my back disagrees.$s"
             },
             "When": {
                 "YearModulus": "0",

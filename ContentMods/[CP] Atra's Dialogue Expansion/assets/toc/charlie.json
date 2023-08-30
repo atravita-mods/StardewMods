@@ -96,6 +96,15 @@
     },
     {
         "Action": "Include",
+        "LogName": "Robin - mid hearts",
+        "FromFile": "{{FirstValidFile: assets/{{language}}/charlie/Robin/high.json, assets/default/charlie/Robin/high.json}}",
+        "When": {
+            "EnableFor": "Robin",
+            "Query: {{Hearts:Robin}} >= 9": true,
+        }
+    },
+    {
+        "Action": "Include",
         "LogName": "Sam - mid hearts",
         "FromFile": "{{FirstValidFile: assets/{{language}}/charlie/Sam/mid.json, assets/default/charlie/Sam/mid.json}}",
         "When": {

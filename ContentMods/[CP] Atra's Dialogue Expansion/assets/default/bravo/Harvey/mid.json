@@ -7,6 +7,7 @@
             "Action": "EditData",
             "Target": "Characters/Dialogue/MarriageDialogueHarvey",
             "Entries": {
+                "Indoor_Day_3": "@, would you like me to help you with your sunscreen before you go out today?",
                 "Indoor_Night_3": "Oh, @, let me give you a foot rub tonight.#$b#You must be tired, working all day outside..."
             }
         },
@@ -29,11 +30,14 @@
             "Target": "Characters/Dialogue/Harvey",
             "When": { "YearModulus": "1"},
             "Entries": {
+                "winter_Thu8": "Brr, it's cold out, isn't it! Try to avoid catching a cold!",
+
                 "1{{YearRemainder}}": "I'm always incredibly amazed by how the human body works, @. Just...how everything comes together to make us work.$h",
                 "2{{YearRemainder}}": "Did you know there's a muscle in the arm that not everyone has?#$b#It's called the palmaris longus muscle, and about fourteen percent of the population just doesn't have it anymore.",
                 "3{{YearRemainder}}": "One thing I miss from working in the city - I can't just send bloodwork downstairs and get it within a few hours anymore.$s",
                 "4{{YearRemainder}}": "While I do have some medication samples on hand, I can't dispense medications normally. If you need anything that I don't carry, you'll need to get in contact with a mail-order pharmacy.",
                 "5{{YearRemainder}}": "Hey, @! Growing any interesting veggies these days?",
+                "6{{YearRemainder}}": "%Harvey looks distracted.#$b#Oh, hi, @! I was just thinking about a paper I read this morning on the factors that increase a patient's chance to develop dementia.",
                 "winter_26{{YearRemainder}}": "Emily bought me some posh pickles from %place. They certainly seem...quite interesting.%revealtasteHarvey342",
             }
         },
@@ -64,12 +68,14 @@
             "Target": "Characters/Dialogue/Harvey",
             "Entries": {
                 "summer_Mon8": "Be careful, when you're working out there, to not get sunburned.#$e#You are wearing sunscreen, right?",
+                "fall_Tue8": "I'd love to go to aerobics more, but I always feel so awkward...$s",
 
                 "6_2": "I got into medicine because I wanted to help people. But these days I feel like I'm doing more paperwork than anything else...$s",
                 "8_2": "Between you and I, I get nightmares sometimes.#$b#I'm always terrified that someone here might have an emergency beyond my abilities to treat.#$b#We're so far from the nearest hospital.",
                 "9_2": "I also take care of everyone's teeth. This town isn't large enough to have both a dentist and a doctor.#$b#Say, how good are your teeth?$h",
                 "10_2": "The last doc who was here....well, he was a company doc. Worked for the mines, took care of the miners.#$b#Frankly, @, I'm glad I'm not on anyone's payroll anymore.",
                 "11_2": "I came out here because I wanted a slower pace of life.#$b#In the city, the money-men lean on us to see so many patients in a day, it's hard to connect with anyone.#$e#Of course, I wouldn't be able to afford the move if the government didn't have programs to help me with medical school debt.#$e#Sometimes, still, I feel like the clinic is barely hanging on, financially.",
+                "12_2": "To be honest, @, if Mrs. Mueller didn't give me casseroles so often, I'm not quite sure what I'd eat.",
                 "13_2": "I really should get a new coffee maker...my current one seems to be on the brink of breaking...$s"
             },
             "When": {
@@ -93,6 +99,8 @@
             "Action": "EditData",
             "Target": "Characters/Dialogue/Harvey",
             "Entries": {
+                "summer_Tue8": "Oh, is it an election year? Is anyone running against the Governor?#$b#Yeah, I didn't think so.",
+
                 "11_2": "I've been looking at those pod coffee machines. The ones with the little single use pods.#$b#They're really expensive, though.$s",
             },
             "When": {

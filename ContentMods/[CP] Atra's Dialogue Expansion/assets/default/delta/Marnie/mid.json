@@ -134,6 +134,8 @@
         "Target": "Characters/Dialogue/Marnie",
         "When": { "YearModulus": "4" },
         "Entries": {
+            "summer_Mon8": "Oh, is it another election year already?#$b#Does it really matter if we vote? The Governor's always going to win his election no matter what we do.",
+
             "2_2": "I do supply some restaurants directly, they prize the fresh eggs and farmmade-cheese.#$b#Of course, I also sell direct to Gus sometimes."
         }
     }

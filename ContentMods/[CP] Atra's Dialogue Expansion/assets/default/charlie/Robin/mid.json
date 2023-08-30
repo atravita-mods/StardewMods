@@ -86,6 +86,8 @@
         "LogName": "Robin mid-hearts, Y4",
         "Target": "Characters/Dialogue/Robin",
         "Entries": {
+            "summer_Fri10": "Gosh, @, is it another election year already? Feels like the last election just ended.#$b#I swear, these politicians start campaigning again immediately after they get elected.",
+
             "2_2": "The economic downturn isn't good for Demetrius. The first thing the government tries to cut is the budget for science.",
         },
         "When": {

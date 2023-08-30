@@ -154,13 +154,27 @@
             "21_2": "Emily came in the other day and asked if we carried quinoa.#$b#I can't carry everything everyone wants, since most products have a shelf-life, but I try to."
         },
         "When": { "YearModulus": "3"}
-    }
-    ,
+    },
+    {
+        "LogName": "Pierre, Joja completed - Y3",
+        "Action": "EditData",
+        "Target": "Characters/Dialogue/Pierre",
+        "When": {
+            "YearModulus": "3",
+            "IsJojaMartComplete": true
+        },
+        "Entries": {
+            "winter_Wed10": "You know, next year is an election year. Maybe it's time to get a new Governor...",
+            "22_2": "Monopolies really can get away with raising prices in times like these, eh."
+        }
+    },
     {
         "LogName": "Pierre mid-hearts, Y4",
         "Action": "EditData",
         "Target": "Characters/Dialogue/Pierre",
         "Entries": {
+            "summer_Thu6": "If I hear one more campaign ad I'm going to go insane.",
+            
             "3_2": "I grew up poor, @, and I wouldn't wish that on anyone.",
             "5_2": "Maybe I should carry more boxed meals? They're certainly more convenient than cooking...",
             "7_2": "I know Caroline would like it if I cooked more often. But I'm always so busy with the store.#$b#I do the dishes for her, though, when it's not Abigail's turn to do them.",

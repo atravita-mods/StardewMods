@@ -1,6 +1,14 @@
 {
     "Changes": [
         {
+            "LogName": "Base Alex Spousal",
+            "Action": "EditData",
+            "Target": "Characters/Dialogue/Alex",
+            "Entries": {
+                "JoshHouse_Entry": "{{i18n: alex-greet-Evelyn}}"
+            }
+        },
+        {
             "LogName": "Evelyn - inlaw",
             "Action": "EditData",
             "Target": "Characters/Dialogue/Evelyn",

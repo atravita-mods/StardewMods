@@ -21,7 +21,11 @@
                 "summer_10{{YearRemainder}}": "Oh, right, the luau's tomorrow. Guess I'll go, maybe.#$b#Last year I got sunburned...$s",
                 "summer_27{{YearRemainder}}": "It's almost the end of summer, @. To be honest, I won't miss the heat.",
                 "fall_15{{YearRemainder}}": "Tomorrow's the Stardew Fair, when tourists from everywhere will be pouring in...",
-                "winter_26{{YearRemainder}}": "Evelyn bought me some new coffee this year. I'm so excited to try it.$h%revealtasteHarvey395"
+                "winter_26{{YearRemainder}}": "Evelyn bought me some new coffee this year. I'm so excited to try it.$h%revealtasteHarvey395",
+
+                // base extra seasonal lines
+                "summer_Wed8": "Make sure to stay hydrated with this heat!",
+                "winter_Wed8": "When it's so cold and dry outside, our nasal passages help hydrate and heat the air for our lungs."
             }
         },
         {
@@ -38,6 +42,7 @@
                 "4{{YearRemainder}}": "While I do have some medication samples on hand, I can't dispense medications normally. If you need anything that I don't carry, you'll need to get in contact with a mail-order pharmacy.",
                 "5{{YearRemainder}}": "Hey, @! Growing any interesting veggies these days?",
                 "6{{YearRemainder}}": "%Harvey looks distracted.#$b#Oh, hi, @! I was just thinking about a paper I read this morning on the factors that increase a patient's chance to develop dementia.",
+                "7{{YearRemainder}}": "We're not sure if people catch more colds in the winter because it's cold, or simply because they spend more time indoors with other people.",
                 "winter_26{{YearRemainder}}": "Emily bought me some posh pickles from %place. They certainly seem...quite interesting.%revealtasteHarvey342",
             }
         },
@@ -102,6 +107,7 @@
                 "summer_Tue8": "Oh, is it an election year? Is anyone running against the Governor?#$b#Yeah, I didn't think so.",
 
                 "11_2": "I've been looking at those pod coffee machines. The ones with the little single use pods.#$b#They're really expensive, though.$s",
+                "14_2": "I always feel like I should be exercising more often.$s"
             },
             "When": {
                 "YearModulus": "4",

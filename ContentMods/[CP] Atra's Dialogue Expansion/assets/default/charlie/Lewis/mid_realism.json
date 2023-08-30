@@ -40,7 +40,25 @@
             "12_2": "Ugh, the stock market is going insane right now, I have to keep myself from looking too much at my portfolio.#$b#I try to remind myself that buying and holding is the best strategy, but it's hard sometimes.",
             
             "16_2": "It's surprisingly hard to get a grant to get things repaired.#$b#Politicians like new shiny things with their names on it, upkeep isn't as...popular.$s",
-            "17_2": "Maybe we should pivot our economy to focus more on tourism?"
+            "17_2": "Maybe we should pivot our economy to focus more on tourism?",
+        }
+    },
+    {
+        "LogName": "Lewis mid-hearts - Y4",
+        "Action":"EditData",
+        "Target": "Characters/Dialogue/Lewis",
+        "When": {"YearModulus": "4"},
+        "Entries": {
+            "12_2": "One of our neighboring small towns resorted to inviting in a...let's say, undesirable industry in. Because they promised jobs.#$b#Now they're difficult to get rid of without tanking their local economy.$s",
+        }
+    },
+    {
+        "LogName": "Lewis mid-hearts - Y5",
+        "Action":"EditData",
+        "Target": "Characters/Dialogue/Lewis",
+        "When": {"YearModulus": "0"},
+        "Entries": {
+            "14_2": "Accel is looking for a new place to for one of their campuses.#$b#They're...well, they pay well, so having one of them is definitely an economic boon.#$b#But the tax breaks they expect..."
         }
     }
 ]}

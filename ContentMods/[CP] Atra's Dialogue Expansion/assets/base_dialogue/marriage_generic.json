@@ -23,7 +23,7 @@
 
             // pre-festival dialogue
             "summer_27": "{{i18n:summer-27}}$h",
-            "fall_15": "{{i18n:fall-15}}$h",
+            "fall_15": "{{i18n:fall-15}}$h"
         }
     },
     {
@@ -45,6 +45,7 @@
         "Entries": {
             "Good_0": "{{i18n:good-0}}$h",
             "Good_2": "{{i18n:good-2}}$h",
+            "Good_3": "{{i18n:good-3a}}#$b#{{i18n:good-3b}}$h",
 
             "TwoKids_2": "#$c .5#{{i18n:two-kids.2a}}$h#{{i18n:two-kids.2b}}$h#",
 
@@ -64,7 +65,7 @@
         },
         "When": {
             "MovieStatus|contains=None": false,
-            "Random: true, false": true,
+            "Random: true, false": true
         }
     }
 ]}

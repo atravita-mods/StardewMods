@@ -19,7 +19,10 @@
             "Entries": {
                 "summer_Mon8": "Mom made stewed spinach yesterday. Yuck.$s",
                 "summer_Tue8": "I wonder if I can get Sam to buy me an ice cream...",
+
                 "1": "I miss daddy. I hope he's alright over there.",
+                "1_2": "Daddy's back...but...he...he sometimes seems like he's not here.",
+
                 "2{{YearRemainder}}": "My ear hurts.$s",
                 "4{{YearRemainder}}": "I don't wanna go to school.$s#$b#You think I could pretend to be sick?",
                 "17{{YearRemainder}}": "Look what I found, @!$h[721]",
@@ -73,7 +76,8 @@
             "Entries": {
                 "2_2": "Can I have some chocolate, {{Title}} @?",
                 "4_2": "I wish mom would make more cookies.$s",
-                "6_2": "My favorite color is purple. What's yours?"
+                "6_2": "My favorite color is purple. What's yours?",
+                "22_2": "I wanna go to the zoo, {{Title}} @, will you take me?"
             },
             "When": {
                 "YearModulus": "4"

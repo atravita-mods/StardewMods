@@ -11,6 +11,8 @@
     // Maybe slowly ease him into bouldering?
 
     // slowly, slowly, but he will learn. I almost think he might be dyslexic? And might benefit from alternative learning programs?
+
+    // really should take an interest in your pet.
     {
         "LogName": "Rain -- during winter.",
         "Action": "EditData",
@@ -43,6 +45,18 @@
             "9{{YearRemainder}}": "Gotta work on my squat form today. And no, it's not an excuse to look at myself in the mirror.",
 
             "summer_Sun8": "Hey, @, you wanna play some frisbee?"
+        }
+    },
+    {
+        "LogName": "Alex - mid hearts - Y1 - with pet",
+        "Action": "EditData",
+        "Target": "Characters/Dialogue/Alex",
+        "When": {
+            "YearModulus": "1",
+            "HasPet": true
+        },
+        "Entries": {
+            "10{{YearRemainder}}": "Hey, how is %pet doing?",
         }
     },
     {

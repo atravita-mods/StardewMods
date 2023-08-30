@@ -202,10 +202,10 @@
             "LogName": "Leo - normal",
             "Target": "Data/Festivals/fall16",
             "When": {
-                "EnableFor": "Leo",
+                "EnableFor": "Leo"
             },
             "Entries": {
-                "Leo_y2": "{{i18n:leo-y2-fair}}$h",
+                "Leo_y2": "{{i18n:leo-y2-fair}}$h"
             }
         },
         {
@@ -239,7 +239,7 @@
                 "Query: {{Hearts: Linus}} >= 8": true
             },
             "Entries": {
-                "Linus": "{{i18n:linus-y1-fair-high-hearts}}$h",
+                "Linus": "{{i18n:linus-y1-fair-high-hearts}}$h"
             }
         },
         {
@@ -275,7 +275,7 @@
             },
             "Entries": {
                 "Maru_y2": "{{i18n:maru-y2-fair.0}}#$e#{{i18n:maru-y2-fair.1}}",
-                "Maru_spouse_y2": "{{i18n:maru-y2-fair-spouse}}",
+                "Maru_spouse_y2": "{{i18n:maru-y2-fair-spouse}}"
             }
         },
         {
@@ -299,7 +299,7 @@
             },
             "Entries": {
                 "Penny_y2": "{{i18n:penny-y2-fair.0}}#$e#{{i18n:penny-y2-fair.1}}",
-                "Penny_spouse_y2": "{{i18n:penny-y2-fair-spouse}}$h",
+                "Penny_spouse_y2": "{{i18n:penny-y2-fair-spouse}}$h"
             }
         },
         {
@@ -336,7 +336,7 @@
             "Entries": {
                 "Sam_y2": "{{i18n:sam-y2-fair.0}}#$e#{{i18n:sam-y2-fair.1}}$h",
                 "Sam_spouse_y2": "{{i18n:sam-y2-fair-spouse}}$h",
-                "Sam_spouse_y3": "{{i18n:sam-y3-fair-spouse}}",
+                "Sam_spouse_y3": "{{i18n:sam-y3-fair-spouse}}"
             }
         },
         // Sandy intentionally skipped.
@@ -351,7 +351,7 @@
                 "Sebastian_y2": "{{i18n:sebastian-y2-fair.0}}$s#$e#{{i18n:sebastian-y2-fair.1}}",
                 "Sebastian_y3": "{{i18n:sebastian-y3-fair|videogame={{i18n:video.game.{{Random:01, 02, 03, 04, 05, 06, 07, 08, 09}} }}",
                 "Sebastian_spouse_y2": "{{i18n:sebastian-y2-fair-spouse}}$h",
-                "Sebastian_spouse_y3": "{{i18n:sebastian-y3-fair-spouse}}",
+                "Sebastian_spouse_y3": "{{i18n:sebastian-y3-fair-spouse}}"
             }
         },
         {
@@ -391,6 +391,6 @@
                 "Willy_y2": "{{i18n:willy-y2-fair}}$h",
                 "Willy_y3": "{{i18n:willy-y3-fair}}$h"
             }
-        },
+        }
     ]
 }

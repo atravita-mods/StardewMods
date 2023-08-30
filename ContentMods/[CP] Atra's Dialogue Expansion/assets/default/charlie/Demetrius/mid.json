@@ -8,6 +8,24 @@
     // he actually seems to do the cooking if you look at his schedule?
     // he's the scientific cook, Robin is the "shoot from the hip" cook.
     {
+        "LogName": "Demetrius mid-hearts",
+        "Action": "EditData",
+        "Target": "Characters/Dialogue/Demetrius",
+        "Entries": {
+            "Mon10": "Mmmm, there's nothing like a nice fresh strawberry in spring, right?[400]$h",
+            "Tue10": "I love how the valley comes alive in spring.$h",
+            "summer_Mon10": "Hmmm, what should I cook today?",
+            "summer_Tue10": "It's so, so hot in town, but it's lovely and cool in the mountains...$h",
+            "summer_Wed10": "Robin says I should cultivate a better relationship with Sebastian.#$b#I...I'm not sure how to...",
+            "fall_Mon10": "Argh, so much vacuuming to do...$s",
+            "fall_Tue10": "I wish the house would clean itself sometimes...",
+            "fall_Thu10": "In fall, we get so many common mushrooms fruiting. They're quite tasty![404]$h",
+            "winter_Mon10": "I don't tend to do much fieldwork in winter, because everything goes dormant.",
+            "winter_Tue10": "I have so much mopping I need to do.$s",
+            "winter_Thu10": "I'd love to take a trip on that submarine some day..."
+        }
+    },
+    {
         "LogName": "Demetrius Volcano",
         "Action": "EditData",
         "Target": "Characters/Dialogue/Demetrius",
@@ -56,16 +74,7 @@
             // specific days
             "summer_2{{YearRemainder}}": "I better not forget our anniversary this year, Robin will really hate it if I forget again.",
             "summer_26{{YearRemainder}}": "Jellyfish are among the oldest and simplest animals, but in their simplicity they are quite successful.",
-
-            "Mon10": "Mmmm, there's nothing like a nice fresh strawberry in spring, right?[400]$h",
-            "Tue10": "I love how the valley comes alive in spring.$h",
-            "summer_Mon10": "Hmmm, what should I cook today?",
-            "summer_Tue10": "It's so, so hot in town, but it's lovely and cool in the mountains...$h",
-            "summer_Wed10": "Robin says I should cultivate a better relationship with Sebastian.#$b#I...I'm not sure how to...",
-            "fall_Mon10": "Argh, so much vacuuming to do...$s",
-            "fall_Tue10": "I wish the house would clean itself sometimes...",
-            "winter_Mon10": "I don't tend to do much fieldwork in winter, because everything goes dormant.",
-            "winter_Tue10": "I have so much mopping I need to do.$s",
+            "winter_7{{YearRemainder}}": "I wonder who makes the igloos at the ice festival?",
 
             "3{{YearRemainder}}": "Joja dumped a lot of trash into the waters around here back when they were operating that mine.#$b#We're still fishing trash out of the river.",
             "4{{YearRemainder}}": "Mining can cause quite a bit of ecological damage if not carried out carefully.#$b#Joja let quite a few dangerous chemicals leak more than a few times.",
@@ -74,7 +83,9 @@
             "9{{YearRemainder}}": "Up to the north lives a species of shark that lives for hundreds of years.#$b#It has an insanely slow metabolism, so it seems like time itself is stretched out for these animals!", // they're called Greenland sharks, unfortunately.
             "10{{YearRemainder}}": "@, have you ever considered cultivating mushrooms?",
             "12{{YearRemainder}}": "Maru asked me to help explain mycorrhiza to Vincent and Jas....#$b#@, I'm not very good at explaining my research to kids...$s",
-            "13{{YearRemainder}}": "I'd love to make some bread again, but we only have 350g of bread flour remaining and I need at least 400g.$s"
+            "13{{YearRemainder}}": "I'd love to make some bread again, but we only have 350g of bread flour remaining and I need at least 400g.$s",
+            "14{{YearRemainder}}": "Did you know most of the strawberries you eat are hexaploid?#$b#In fact, plants actually quite often double all their DNA.$h",
+            "16{{YearRemainder}}": "Peanuts are excellent things to plant, since they harbor bacteria that help fix nitrogen.$h"
         },
         "When": { "YearModulus": "1" }
     },
@@ -87,6 +98,7 @@
 
             //specific days
             "summer_26_2": "Hmm, apparently the rate of jellyfish blooms have gone up in recent years, likely due to warming ocean waters.$s",
+            "winter_7_2": "You know, I've...never really wondered who puts that little lake there for the ice festival...$s#$#b#Seems...like a lot of work.",
 
             "1_2": "@, did you know that banana trees aren't actually trees, but rather a monocot?#$b#Amazing what they can do despite not having lignin!",
             "2_2": "Caffeine is actually highly toxic against insects!#$b#But it doesn't make a good agricultural insecticide, it decays in sunlight.",
@@ -101,9 +113,6 @@
             "22_2": "Robin is usually pretty practical, but she does like some frilly things sometimes...",
             "23_2": "Sebastian? He's a grown adult now, he can take care of himself.#$e#I do wish we had a better relationship, but I think Robin can be proud of the man he's become.",
             "24_2": "Maru was helping me with minipreps the other day. Lab work is so much more fun when you're working with someone.$h",
-
-            "fall_Thu10": "In fall, we get so many common mushrooms fruiting. They're quite tasty![404]$h",
-            "winter_Mon10": "I'd love to take a trip on that submarine some day...",
 
             // in front of the kitchen.
             "ScienceHouse_27_9": "Let's see, what should I cook...what ingredients do I have...",
@@ -135,6 +144,7 @@
             "10_2": "You know, vampires aren't really realistic, blood isn't actually that calorically dense.#$b#Every species that drinks blood has to get rid of the excess liquid in blood while they drink somehow.",
             "16_2": "Sometimes I wonder what I could have done to be more successful in my career...$s",
             "18_2": "Between you and I, @, writing proposals is the worst part of my job.",
+            "19_2": "I really need to order more miniprep kits.$s",
             "20_2": "Tree fertilizer can make trees grow much faster, but I wonder if it affects the quality of their wood.#$b#Generally fast-growing trees can't produce as dense of wood.",
             "22_2": "Sometimes, I come across interesting artifacts.#$b#I wonder what civilizations lived here before we did?",
             "23_2": "Some plants are insectivorous; they get their nitrogen by eating insects and spiders because the soil they grow in is very low in nitrogen.",

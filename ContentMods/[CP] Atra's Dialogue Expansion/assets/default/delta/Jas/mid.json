@@ -9,6 +9,14 @@
                 "2{{YearRemainder}}": "Miss Maru showed us a crazy science experiment. She set her hand on fire and it didn't burn!",
                 "3{{YearRemainder}}": "Auntie Marnie says I'm learning lots from Miss Penny."
             }
+        },
+        {
+            "Action": "EditData",
+            "Target": "Characters/Dialogue/Jas",
+            "When": {"YearModulus": "2"},
+            "Entries": {
+                "2_2": "Miss Penny has been teaching us grammar! Like how to use \"has been\".$h"
+            }
         }
     ]
 }

@@ -26,6 +26,16 @@
         }
     },
     {
+        "LogName": "Emily - Haley unmarried",
+        "Action": "EditData",
+        "When": {
+            "Query: {{Spouse:anyPlayer|contains=Haley}} OR {{Relationship:Haley|contains=Married, Engaged}}": true
+        },
+        "Entries": {
+            "3{{YearRemainder}}": "I wish my sister had more of a sense of direction in her life."
+        }
+    },
+    {
         "LogName": "Emily - parrot",
         "Action": "EditData",
         "Target": "Characters/Dialogue/Emily",
@@ -186,7 +196,10 @@
         "Target": "Characters/Dialogue/Emily",
         "When": {"YearModulus": "0"},
         "Entries": {
-            "7_2": "Recently, I've been really wanting to work with chiffon and other sheer fabrics.#$e#They're so fiddly to work with but the effect they give..."
+            "7_2": "Recently, I've been really wanting to work with chiffon and other sheer fabrics.#$e#They're so fiddly to work with but the effect they give...",
+            "12_2": "Ugh, I cut half the pieces of the dress I was working on backwards.#$b#What a waste of fabric.",
+            "15_2": "I picked up some of the prettiest polka-dotted fabric I've seen in a while! And for cheap!$h",
+            "16_2": "I've been thinking about making myself a beret lately. @, what do you think?"
         }
     },
 ]}

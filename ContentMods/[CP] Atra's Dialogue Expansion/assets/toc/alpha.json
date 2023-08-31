@@ -10,6 +10,27 @@
     },
     {
         "Action": "Include",
+        "LogName": "Alex - pets - translated",
+        "FromFile":"assets/{{language}}/alpha/Alex/{{PreferredPet}}.json",
+        "When": {
+            "EnableFor": "Alex",
+            "Query: {{Hearts:Alex}} >= 6": true,
+            "HasFile:{{FromFile}}": true
+        }
+    },
+    {
+        "Action": "Include",
+        "LogName": "Alex - pets - English",
+        "FromFile":"assets/default/alpha/Alex/{{PreferredPet}}.json",
+        "When": {
+            "EnableFor": "Alex",
+            "Query: {{Hearts:Alex}} >= 6": true,
+            "HasFile: {{FromFile}}": true,
+            "HasFile: assets/{{language}}/alpha/Alex/{{PreferredPet}}.json": false
+        }
+    },
+    {
+        "Action": "Include",
         "LogName": "Elliott - mid hearts",
         "FromFile": "{{FirstValidFile: assets/{{language}}/alpha/Elliott/mid.json, assets/default/alpha/Elliott/mid.json}}",
         "When": {

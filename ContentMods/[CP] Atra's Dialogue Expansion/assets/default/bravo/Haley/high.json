@@ -12,23 +12,19 @@
             "LogName": "Haley - Y1",
             "Action": "EditData",
             "Target": "Characters/Dialogue/Haley",
+            "When": { "YearModulus": 1 },
             "Entries": {
                 "summer_Mon6": "Gosh, it's so hot out today.$s",
 
                 "5{{YearRemainder}}": "Emily made a lovely looking lace dress the other day. I've been dying to ask her if I can try it on...",
                 "6{{YearRemainder}}": "I ordered a dress online but it's a size too big. Now I'll need to go to the post office to return it.$s"
-            },
-            "When": {
-                "YearModulus": 1
             }
         },
         {
             "LogName": "Haley high-hearts, Y2",
             "Action": "EditData",
             "Target": "Characters/Dialogue/Haley",
-            "When": {
-                "YearModulus": 2
-            },
+            "When": { "YearModulus": 2 },
             "Entries": {
                 "summer_Mon6": "Does this dress look good on me?",
                 "summer_Tue8": "Ah, the weather is lovely today, @!$h#$b#Kinda want to go camping, do you think I could convince Emily to take a day off work?",
@@ -53,9 +49,7 @@
             "LogName": "Haley high-hearts, Y3",
             "Action": "EditData",
             "Target": "Characters/Dialogue/Haley",
-            "When": {
-                "YearModulus": 3
-            },
+            "When": { "YearModulus": 3 },
             "Entries": {
                 "summer_Tue8": "I would love an iced coffee right about now...",
                 "winter_Tue8": "Brr! It's so cold, I wish I had a new jacket.",

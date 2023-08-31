@@ -7,8 +7,9 @@
     // did at some point want to be a journalist.
     {
         "Action": "EditData",
-        "LogName": "Jodi mid-hearts",
+        "LogName": "Jodi mid-hearts - Y1",
         "Target": "Characters/Dialogue/Jodi",
+        "When": { "YearModulus": "1" },
         "Entries": {
             "Resort_Approach_HouseWives": "Yoba, I've been looking forward to this vacation all week!$h",
 
@@ -22,15 +23,13 @@
             "14{{YearRemainder}}": "Ugh, I really don't feel like cooking dinner tonight.#$b#And the dishes, I'll probably end up doing the dishes too.$s",
             "15{{YearRemainder}}": "I wish I could get the boys to eat veggies more often...",
             "16{{YearRemainder}}": "If we had a bit more money, I'd love to get one of those little robot vacuums."
-        },
-        "When": {
-            "YearModulus": "1"
         }
     },
     {
         "Action": "EditData",
         "LogName": "Jodi mid-hearts",
         "Target": "Characters/Dialogue/Jodi",
+        "When": { "YearModulus": "2" },
         "Entries": {
             "2_2": "I started knitting a scarf. Emily thought it'd be a good idea.#$b#I'm not very good, though.",
             "3_2": "Vincent isn't doing particularly well in his classes.#$b#He's still very young though, it's more important he has fun at his age.",
@@ -39,21 +38,27 @@
             "8_2": "I've got so much cleaning I need to do...#$b#Frankly some days I feel like I don't do anything but clean.",
 
             // GIMA extras
-            "Resort_Approach_HouseWives": "@, Caroline and I are off to the island today! You want to come with?$h"
-        },
-        "When": {
-            "YearModulus": "2"
+            "Resort_Approach_HouseWives": "@, Caroline and I are off to the island today! You want to come with?$h",
+            "Resort_Pier": "Blue water, white sand, what could be better?"
         }
     },
     {
         "Action": "EditData",
         "LogName": "Jodi - Y3",
         "Target": "Characters/Dialogue/Jodi",
-        "When": {"Year": "3"},
+        "When": {"Year": "3" },
         "Entries": {
             "winter_Sun10": "Kent's been back for about a year now...#$b#I think he's...slowly getting better.",
 
             "Resort_Approach_HouseWives": "Oh, @! The girls and I are headed off to Ginger Island today.$h",
+
+            "2_2": "Ugh, Kent's pension doesn't go nearly as far as it used to.$s",
+            "7_2": "I'd like to get some new houseplants, but online shipping is so much more expensive than it was this time last year.$s",
+            "8_2": "Why are eggs suddenly so much more expensive...#$b#Say, @, you're not getting paid any more for your eggs, right? Who's taking the extra money, then?$a",
+            "9_2": "I try my best to cook everything from fresh ingredients.#$b#I spend a lot of time in the kitchen.$s",
+            "22_2": "There are so many chores I need to do...$s#$b#It's like chores never end...",
+            "25_2": "When I was young? I wanted to be a journalist.#$b#Actually went to college for that, but dropped out after two years to raise Sam.",
+            "26_2": "Sometimes I feel like all I do is cook and clean.#$b#At least the lentil soup is easy to put together."
         }
     },
     {
@@ -69,17 +74,11 @@
         "Action": "EditData",
         "LogName": "Jodi mid-hearts",
         "Target": "Characters/Dialogue/Jodi",
+        "When": { "YearModulus": "4"},
         "Entries": {
-            "2_2": "Ugh, Kent's pension doesn't go nearly as far as it used to.$s",
-            "7_2": "I'd like to get some new houseplants, but online shipping is so much more expensive than it was this time last year.$s",
-            "8_2": "Why are eggs suddenly so much more expensive...#$b#Say, @, you're not getting paid any more for your eggs, right? Who's taking the extra money, then?$a",
-            "9_2": "I try my best to cook everything from fresh ingredients.#$b#I spend a lot of time in the kitchen.$s",
-            "22_2": "There are so many chores I need to do...$s#$b#It's like chores never end...",
-            "25_2": "When I was young? I wanted to be a journalist.#$b#Actually went to college for that, but dropped out after two years to raise Sam.",
-            "26_2": "Sometimes I feel like all I do is cook and clean.#$b#At least the lentil soup is easy to put together."
-        },
-        "When": {
-            "YearModulus": "3"
+            "2_2": "We're testing out a new budgeting system. Hopefully it works better for us.",
+            "4_2": "Ugh, we didn't get our cost-of-living adjustment this year.$s",
+            "22_2": "Am I getting more wrinkles? I think I'm getting more wrinkles.$s"
         }
     }
 ]}

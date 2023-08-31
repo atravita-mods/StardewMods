@@ -172,6 +172,7 @@
             "5_2": "One good thing about Joja - at least they don't engage in open pit mining.",
             "7_2": "That mine...it was economically good for the town, but Accel and then Joja definitely allowed more runoff than they should have.$s",
             "8_2": "Maru was telling me about dark matter the other day.#$e#That's not my field, so I'm not quite sure I followed everything she was talking about, but if it makes her happy, it makes me happy.",
+
             "14_2": "It's really weird we celebrate romantic holidays with the cut off reproductive organs of plants, isn't it?",
             "18_2": "@, did you know that the oldest mushrooms are more than two thousand years old?",
             "20_2": "My dad used to take us out fishing when I was very young. I was never any good, though.$s",
@@ -197,7 +198,9 @@
         "When": { "YearModulus": "0"},
         "Entries": {
             "2_2": "Leaf slugs are quite adorable little animals that steal the chloroplasts from the algae they eat.#$b#They then use those chloroplasts to photosynthesize.#$e#Isn't biology cool?$h",
-            "3_2": "These days, I've been watching documentaries on the deep sea before I go to bed.#$e#It's so different from the science I usually do, so it's so fascinating!$h"
+            "3_2": "These days, I've been watching documentaries on the deep sea before I go to bed.#$e#It's so different from the science I usually do, so it's so fascinating!$h",
+            "10_2": "Most of my lab supplies come in kits these days.#$b#They can be kinda expensive but they're so much more convenient.",
+            "28_2": "Some snakes are capable of gliding a little between tall trees. They flatten their ribs to present the biggest cross section they can.#$b#We call them flying snakes, and they can cover more than ten meters horizontally."
         }
     }
 ]}

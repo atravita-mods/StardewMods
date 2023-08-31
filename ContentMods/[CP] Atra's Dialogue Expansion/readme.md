@@ -46,11 +46,11 @@ Simply remove this mod from your mods folder.
 ## NPC-specific notes.
 
 * **Abigail**: Abby's thing is that she's in college and she really doesn't like her major, which of course Pierre picked for her.
-* **Alex**: 
+* **Alex**: Alex...Alex I focused more on his family. I don't think I took away from the hot jock vibe, I just tried to pull him towards a more realistic career plan.
 * **Caroline**: Ah, long-suffering, used-to-be-fun Caroline! Gave her a more active role in the general store, as well as a lot more backstory.
 * **Clint**: Clint I had the hardest time placing - after all, he's a traditional RPG blacksmith, which doesn't fit very well with approximately ~2005. So I'm leaning more artisan with him, he takes commissions. 
 * **Demetrius**: Now has a research topic! He's primarily studying the interactions between fungi and trees and how that contributes to ecological diversity.
-* **Elliott**:
+* **Elliott**: First, go install Realistic Writer Elliott. 
 * **Emily**: Anyone else noticed that homegirl works 56 hours a week? Gus should be really giving you medical and retirement benefits, girl.
 * **Evelyn**: I love, love Evelyn. I headcanon that she really did step in to help raise Penny after Pam....you know.
 * **George**:
@@ -60,7 +60,7 @@ Simply remove this mod from your mods folder.
 * **Jodi**:
 * **Kent**:
 * **Leah**:
-* **Lewis**:
+* **Lewis**: Lewis is interesting to me, since base game barely gives him any mayoral duties.
 * **Marlon**: Well, he got a few extra festival lines, but I'm mostly skipping him. *If you have Stardew Valley Expanded installed even the festival lines won't show up.*
 * **Marnie**: Marnie...honestly, I think canon Marnie's problem is that she doesn't seem to have...much, other than being Lewis's little secret. This mod mostly focuses on fleshing out Marnie-as-a-rancher and Marnie-as-an-aunt.
 * **Maru**: Mostly wanted to focus her a little bit instead of making her a catch-all nerd girl. Her interests are in biomedical engineering, especially robotic limbs. Also, playing up her friendship with Penny.
@@ -82,6 +82,8 @@ Simply remove this mod from your mods folder.
 
 ## Compatibility
 This mod should be compatible with most other mods, even other dialogue mods. I've tried to use dialogue keys that aren't commonly used. Additionally, each NPC can be enabled or disabled separately.
+
+I do have a distinct characterization for some characters (see above for details) which may not match other mods.
 
 ## License
 The MIT license over my entire repository covers this, but this is also dual license'd [CC-4.0](https://creativecommons.org/licenses/by/4.0/). You may pick either license.

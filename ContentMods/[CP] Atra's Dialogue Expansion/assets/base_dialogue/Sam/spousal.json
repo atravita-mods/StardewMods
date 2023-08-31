@@ -1,0 +1,15 @@
+{
+    "Changes": [
+        {
+            "Action": "EditData",
+            "Target": "Characters/Dialogue/Jodi",
+            "When": {
+                "EnableFor": "Jodi",
+                "Query: {{Hearts:Sam}} >= 10": true
+            },
+            "Entries": {
+                "Thu_inlaw_Sam": "{{jodi-sam-thu}}$h"
+            }
+        }
+    ]
+}

@@ -103,6 +103,18 @@
             }
         },
         {
+            "LogName": "Evelyn - player married to Alex",
+            "Action": "EditData",
+            "Target": "Data/Festivals/winter25",
+            "When": {
+                "EnableFor": "Evelyn",
+                "Relationship: Alex": "Married, Engaged"
+            },
+            "Entries": {
+                "Evelyn_y3": "{{i18n:evelyn-y3-xmas.01}}$h#$e#{{i18n:evelyn-y3-xmas.02}}"
+            }
+        },
+        {
             "Action": "EditData",
             "LogName": "George - normal",
             "Target": "Data/Festivals/winter25",

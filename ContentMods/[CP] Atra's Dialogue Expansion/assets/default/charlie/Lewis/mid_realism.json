@@ -15,7 +15,7 @@
         "When": { "IsJojaMartComplete": true },
         "Entries": {
             "12{{YearRemainder}}": "With Joja here, with all the tax breaks we have to give to Joja, we get a lot less tax revenue.#$b#Makes everything so much more difficult.",
-            "26{{YearRemainder}}": "It's really a race to the bottom, isn't it?#$b#All these little towns competing with tax breaks, trying to lure in big companies.#$b#It's a game I don't want to play anymore."
+            "26{{YearRemainder}}": "It's really a race to the bottom, isn't it?#$b#All these little towns competing with tax breaks, trying to lure in big companies.#$b#It's a game I don't want to play anymore.$s"
         }
     },
     {

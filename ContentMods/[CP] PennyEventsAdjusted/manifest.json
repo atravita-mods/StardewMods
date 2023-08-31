@@ -1,7 +1,7 @@
 {"$schema": "https://smapi.io/schemas/manifest.json",
    "Name": "[CP] Penny 8 Heart Event Adjusted",
    "Author": "atravita",
-   "Version": "1.0.5",
+   "Version": "1.0.6",
    "Description": "Adjusts Penny's 8 heart event to take into account whether or not you have kids",
    "UniqueID": "atravita.PennyEventAdjusted",
    "UpdateKeys": ["Nexus:9865", "ModDrop:1068201"],
@@ -9,5 +9,11 @@
    "ContentPackFor": {
       "UniqueID": "Pathoschild.ContentPatcher",
       "MinimumVersion": "1.28.0"
-	}
+	},
+   "Dependencies": [
+      {
+         "UniqueID": "FlashShifter.StardewValleyExpandedCP",
+         "IsRequired": false,
+      },
+   ]
 }

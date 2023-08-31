@@ -61,6 +61,7 @@ Simply remove this mod from your mods folder.
 * **Kent**:
 * **Leah**:
 * **Lewis**:
+* **Marlon**: Well, he got a few extra festival lines, but I'm mostly skipping him. *If you have Stardew Valley Expanded installed even the festival lines won't show up.*
 * **Marnie**: Marnie...honestly, I think canon Marnie's problem is that she doesn't seem to have...much, other than being Lewis's little secret. This mod mostly focuses on fleshing out Marnie-as-a-rancher and Marnie-as-an-aunt.
 * **Maru**: Mostly wanted to focus her a little bit instead of making her a catch-all nerd girl. Her interests are in biomedical engineering, especially robotic limbs. Also, playing up her friendship with Penny.
 * **Pam**: Kept it light in general with Pam since I've been working on a separate mod for her.
@@ -76,7 +77,8 @@ Simply remove this mod from your mods folder.
 * **Wizard**: I'm gonna be honest, I couldn't really fit him into the theme of this mod. Plus the Wizard has no less than four separate mods focused on him alone, all with *wildly* differing fanons. So I'm skipping him. Go download any of the Romantic Rasmodius mods if you want more for him.
 
 ## Quick notes:
-* On profanity: I was originally going to do a profanity filter. But when I started writing, I found that I didn't actually *want* to use swear words. I don't know. Stardew is just too wholesome for it.
+* **On profanity**: I was originally going to do a profanity filter. But when I started writing, I found that I didn't actually *want* to use swear words. I don't know. Stardew is just too wholesome for it.
+* **On Stardew's magic**: None of the references to magic were removed, mundaneness was just the focus of this mod. I mostly ignored magical characters, they often had other mods that would cover them. *In general, other than a few places I found scientifically inaccurate, I left vanilla lines alone.*
 
 ## Compatibility
 This mod should be compatible with most other mods, even other dialogue mods. I've tried to use dialogue keys that aren't commonly used. Additionally, each NPC can be enabled or disabled separately.

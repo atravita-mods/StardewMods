@@ -7,7 +7,9 @@
         "Entries": {
             "181928/f Penny 2000/t 900 1600": null
         },
-        "When": {"Weather|contains=Rain, Storm": true}
+        "When": {
+            "Weather": "Rain, Storm",
+        }
     },
     {
         "LogName": "Eight-heart event, with one kid",
@@ -77,6 +79,22 @@
         "When": {
             "Weather|contains=Rain, Storm": false,
             "Relationship:Penny|contains=Married": true,
+            "HasMod|contains=FlashShifter.StardewValleyExpandedCP": false
+        }
+    },
+    {
+        "LogName": "Eight heart event, married to Penny",
+        "Action": "EditData",
+        "Target": "Data/Events/Forest",
+        "Fields": {
+            "181928/f Penny 2000/w sunny/t 900 1600":{
+                17: "speak Penny \"{{i18n:ask-speaker1}}#$b#{{i18n:ask-speaker2}}$h\""
+            },
+        },
+        "When": {
+            "Weather|contains=Rain, Storm": false,
+            "Relationship:Penny|contains=Married": true,
+            "HasMod": "FlashShifter.StardewValleyExpandedCP"
         }
     },
     {

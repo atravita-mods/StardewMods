@@ -44,6 +44,7 @@
 
             // specific days
             "winter_26{{YearRemainder}}": "Oh, I must have had too much eggnog yesterday.$s",
+            "summer_20{{YearRemainder}}": "@, I've been thinking of growing more flowers in my greenhouse. What should I grow?"
         }
     },
     {

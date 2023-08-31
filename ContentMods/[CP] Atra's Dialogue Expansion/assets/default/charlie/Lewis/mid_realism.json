@@ -12,11 +12,10 @@
         "LogName": "Lewis mid-hearts - Joja",
         "Action": "EditData",
         "Target": "Characters/Dialogue/Lewis",
-        "When": {
-            "IsJojaMartComplete": true,
-        },
+        "When": { "IsJojaMartComplete": true },
         "Entries": {
-            "26{{YearRemainder}}": "With Joja here, with all the tax breaks we have to give to Joja, we get a lot less tax revenue.#$b#Makes everything so much more difficult."
+            "12{{YearRemainder}}": "With Joja here, with all the tax breaks we have to give to Joja, we get a lot less tax revenue.#$b#Makes everything so much more difficult.",
+            "26{{YearRemainder}}": "It's really a race to the bottom, isn't it?#$b#All these little towns competing with tax breaks, trying to lure in big companies.#$b#It's a game I don't want to play anymore."
         }
     },
     {
@@ -41,6 +40,7 @@
             
             "16_2": "It's surprisingly hard to get a grant to get things repaired.#$b#Politicians like new shiny things with their names on it, upkeep isn't as...popular.$s",
             "17_2": "Maybe we should pivot our economy to focus more on tourism?",
+            "18_2": "Just waiting for the new jobs report to drop...gosh, I'm hoping for good news."
         }
     },
     {

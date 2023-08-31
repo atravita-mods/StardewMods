@@ -62,7 +62,7 @@
                 "9_2": "I hope Mom's making {{i18n: dishes.child.{{Random:01,02,03,04,05,06,07,08,09}} }} for dinner tonight.",
                 "10_2": "Mom's making broccoli tonight.$s",
                 "12_2": "Mom won't let me have popcorn anymore.$s",
-
+                "14_2": "My favorite color is purple. What's yours?",
                 "22_2": "I wanna go ice skating too!"
             },
             "When": {

@@ -117,13 +117,13 @@ internal static class DuplicateNPCDetector
                 }
                 else
                 {
-                    if (!defaultpos.MoveNext() || int.TryParse(defaultpos.Current, out x))
+                    if (!defaultpos.MoveNext() || !int.TryParse(defaultpos.Current, out x))
                     {
                         ModEntry.ModMonitor.Log($"Badly formatted dispo for npc {name}  - {dispo}", LogLevel.Warn);
                         continue;
                     }
 
-                    if (!defaultpos.MoveNext() || int.TryParse(defaultpos.Current, out y))
+                    if (!defaultpos.MoveNext() || !int.TryParse(defaultpos.Current, out y))
                     {
                         ModEntry.ModMonitor.Log($"Badly formatted dispo for npc {name}  - {dispo}", LogLevel.Warn);
                         continue;

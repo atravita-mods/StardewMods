@@ -133,7 +133,8 @@
                 "EnableFor": "Gus"
             },
             "Entries": {
-                "Gus_y2": "{{i18n:gus-y2-xmas.00}}$h#$e#{{i18n:gus-y2-xmas.01}}#$e#{{i18n:gus-y2-xmas.02}}#$b#{{i18n:gus-y2-xmas.03}}#$e#{{i18n:gus-y2-xmas.04}}#$baguette#{{i18n:gus-y2-xmas.05}}$h"
+                "Gus_y2": "{{i18n:gus-y2-xmas.00}}$h#$e#{{i18n:gus-y2-xmas.01}}#$e#{{i18n:gus-y2-xmas.02}}#$b#{{i18n:gus-y2-xmas.03}}#$e#{{i18n:gus-y2-xmas.04}}#$b#{{i18n:gus-y2-xmas.05}}$h",
+                "Gus_y3": "{{i18n:gus-y3-xmas.00}}$h#$b#{{i18n:gus-y3-xmas.01}}#$e#{{i18n:gus-y3-xmas.02}}#$b#{{i18n:gus-y3-xmas.03}}$h"
             }
         },
         {

@@ -275,6 +275,7 @@
             },
             "Entries": {
                 "Marnie_y2": "{{i18n:marnie-y2-halloween}}$h",
+                "Marnie_y3": "{{i18n:marnie-y3-halloween}}$h"
             }
         },
         {
@@ -286,7 +287,7 @@
                 "IncreasedRealism": true
             },
             "Entries": {
-                "Marnie_y3": "{{i18n:marnie-y3-halloween-realism}}",
+                "Marnie_y3": "{{i18n:marnie-y3-halloween-realism}}"
             }
         },
         {

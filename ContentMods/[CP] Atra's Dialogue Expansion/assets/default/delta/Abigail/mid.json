@@ -117,7 +117,9 @@
         "Target": "Characters/Dialogue/Abigail",
         "Entries": {
             // before egg hunt
-            "spring_12{{YearRemainder}}": "I've been training so hard for this hunt, I'll definitely beat you this year!$h"
+            "spring_12{{YearRemainder}}": "I've been training so hard for this hunt, I'll definitely beat you this year!$h",
+
+            "4_2": "Dad had me mopping the store for hours.#$b#It's pretty big, especially when you consider the aerobics area and the church.$s"
         },
         "When": {
             "YearModulus": "0"

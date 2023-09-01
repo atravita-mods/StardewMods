@@ -95,10 +95,13 @@
             "summerSeedShop6": "@, have you cooked anything interesting recently? Our little valley has so many nice ingredients just out for the taking, if you're willing to forage.$h",
             "fallSeedShop6": "Let's see, where did I put my grocery list?",
 
+            // winter star
+            "winter_23_2": "Let's see, I've gotta make my famous cinnamon eggnog for the Feast of the Winter Star.$h",
+
             "1_2": "I've always dreamed of owning a restaurant.$h",
             "2_2": "Have you ever tried my spaghetti? I'm told it's to die for.$h",
             "3_2": "I spent many years as a line cook at a middling restaurant in Zuzu City. They mostly did pizzas.%revealtasteGus206",
-            "4_2": "Bread is a lot of work, but incredibly rewarding!#$b#There's nothing like the smell of freshly baked bread.",
+            "4_2": "Bread is a lot of work, but incredibly rewarding.#$b#There's nothing like the smell of freshly baked bread.$h",
             "5_2": "There's nothing like a nicely aged local wine with a well-cooked meal, eh?",
             "6_2": "The place I used to work for was...pretentious in a way that was pleasant.#$b#I'm glad I'm my own boss now.",
             "7_2": "Some people believe that in order to be a chef, you have to own the best equipment and the best knives.#$b#That's not true. All you really need is to love cooking.$h",

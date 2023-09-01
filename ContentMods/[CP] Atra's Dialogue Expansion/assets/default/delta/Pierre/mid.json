@@ -5,6 +5,15 @@
 
     // I wonder if his secret stash is just, like, comics or something. Anyways, soft spot for action movies.
     {
+        "LogName": "Pierre speech bubbles",
+        "Action": "EditData",
+        "Target": "Strings/SpeechBubbles",
+        "Entries": {
+            "SeedShop_Pierre_Winter": "Need Winter Star gifts?",
+            "SeedShop_Pierre_NotWinter": "Need seeds?"
+        }
+    },
+    {
         "LogName": "Pierre mid-hearts",
         "Action": "EditData",
         "Target": "Characters/Dialogue/Pierre",
@@ -42,6 +51,7 @@
             "IsJojaMartComplete": true
         },
         "Entries": {
+            "summer_Thu8": "Well, @, worst comes to worst, I guess I can always try my luck elsewhere.#$b#But where can I find a place without a JojaMart?$s",
             "fall_Thu8": "Gosh, @, I don't know how long I can stay afloat, with this town turning into a Joja town.$s",
             "winter_Wed8": "You know, @, I...sometimes wonder if I should try moving back to Zuzu City, see if I can find better markets there.",
             "winter_Thu8": "You think Abby's been looking a bit pale lately?",

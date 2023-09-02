@@ -22,7 +22,7 @@ public class ReviveDeadCropsApi : IReviveDeadCropsApi
     /// </summary>
     internal const string REVIVED_PLANT_MARKER = "atravita.RevivedPlant";
 
-    private const int FAIRY_DUST = 872;
+    private const string FAIRY_DUST = "(O)872";
 
     private static readonly Lazy<Action<FruitTree, float>> ShakeTimerSetter = new(
     () => typeof(FruitTree)
@@ -99,23 +99,12 @@ public class ReviveDeadCropsApi : IReviveDeadCropsApi
     {
         // it's alive!
         crop.dead.Value = false;
-        if (crop.rowInSpriteSheet.Value != Crop.rowOfWildSeeds && crop.netSeedIndex.Value == -1)
-        {
-            crop.InferSeedIndex();
-        }
-
-        int seedIndex = crop.rowInSpriteSheet.Value != Crop.rowOfWildSeeds ? crop.netSeedIndex.Value : crop.whichForageCrop.Value;
-
-        Dictionary<int, string> cropData = Game1.content.Load<Dictionary<int, string>>("Data\\Crops");
 
         // make sure that the raised value is set again.
-        if (cropData.TryGetValue(seedIndex, out string? data))
+        var data = crop.GetData();
+        if (data.IsRaised)
         {
-            ReadOnlySpan<char> segment = data.GetNthChunk('/', 7);
-            if (segment.Trim().Equals("true", StringComparison.OrdinalIgnoreCase))
-            {
-                crop.raisedSeeds.Value = true;
-            }
+            crop.raisedSeeds.Value = true;
         }
 
         // grow it completely.
@@ -127,7 +116,7 @@ public class ReviveDeadCropsApi : IReviveDeadCropsApi
     {
         if (tree.struckByLightningCountdown.Value > 0)
         {
-            tree.performUseAction(tree.currentTileLocation, Game1.currentLocation ?? tree.currentLocation);
+            tree.performUseAction(tree.Tile);
             tree.struckByLightningCountdown.Value = 0;
         }
         if (tree.stump.Value)

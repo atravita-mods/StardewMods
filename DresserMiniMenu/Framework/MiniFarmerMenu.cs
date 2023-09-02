@@ -589,7 +589,8 @@ internal sealed class MiniFarmerMenu : IClickableMenu
             getItem: static () => Game1.player.rightRing.Value,
             setItem: static (value) => Game1.player.rightRing.Value = value,
             isActive: !blockRingSlots));
-        this.equipmentIcons.Add(new BootsSlot(
+        this.equipmentIcons.Add(new InventorySlot<Boots>(
+            type: InventorySlotType.Boots,
             x: this.xPositionOnScreen + 32,
             y: this.yPositionOnScreen + 32 + 128,
             name: "Boots",

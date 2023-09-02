@@ -4,6 +4,8 @@ using AtraShared.Wrappers;
 
 using StardewModdingAPI.Events;
 
+using StardewValley.Extensions;
+
 namespace FarmCaveSpawn;
 
 /// <summary>
@@ -65,7 +67,7 @@ internal static class InventoryWatcher
     {
         foreach (Item item in e.Added)
         {
-            if (item is SObject obj && obj.isSapling() && Game1Wrappers.ObjectInfo.TryGetValue(obj.ParentSheetIndex, out string? data))
+            if (item.HasTypeObject() && item is SObject obj && obj.isSapling() && Game1Wrappers.ObjectInfo.TryGetValue(obj.ItemId, out string? data))
             {
                 string name = data.GetNthChunk('/').ToString();
                 if (!string.IsNullOrWhiteSpace(name) && model?.Saplings?.Add(name) == true)

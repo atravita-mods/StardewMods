@@ -70,7 +70,7 @@ internal static class PlantGrassUnder
             if (__0 is SObject starter && !(isSmartBuildingInBuildMode?.Invoke() == true))
             {
                 Grass? grass = null;
-                if (Utility.IsNormalObjectAtParentSheetIndex(starter, 297))
+                if (starter.QualifiedItemId == "(O)297")
                 {
                     grass ??= growableGiantCropsAPI?.GetMatchingGrass(starter) ?? new Grass(Grass.springGrass, 4);
                 }

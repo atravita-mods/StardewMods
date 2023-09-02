@@ -400,6 +400,35 @@
     "harvey-radio.fall.0": "It's quite embarrassing, how old the software that powers the airline industry is.#$b#Only slightly more embarrassing is the state of the software than handles patient records.$s",
     "harvey-radio.winter.0": "You've been here for a while, @. How much are you enjoying the change of pace?",
 
+/**************
+* Sebastian at work
+***************/
+
+    "sebastian-work.spring": "%Sebastian seems to be on a call.#$b#%name, I needed this reviewed last week! Could you please help me convince everyone to help keep things moving?",
+    "sebastian-work.summer": "Sorry, @, I'm working and need to focus right now.",
+    "sebastian-work.fall": "Work? Nah, @, I can implement A-star in my sleep.",
+    "sebastian-work.winter": "Sorry, @, I need to work on my performance report. Why do they make me do this every year?$s",
+
+    "sebastian-work.spring.2": "Well, it looks like my coworker has set a new record for 'least useful commit message'.",
+    "sebastian-work.summer.2": "%Sebastian is muttering under his breath.#$b#$c .5#Gosh, how many times do I have to correct this? This needs to be a culturally invariant comparison.#Which direction was negative one in a comparer again? I can never remember...#",
+    "sebastian-work.fall.2": "Heya, @, can't talk today. Something in this mess of callbacks is borked and it's really hard to follow.",
+    "sebastian-work.winter.2": "And yet another performance report to write.$s",
+
+    "sebastian-work.spring.3": "%Sebastian seems to be on a call.#$b#$c .5#I saw your email; is there anything in particular we could change?#Well, Jane, do you have a better idea? Because I don't.#",
+    "sebastian-work.summer.3": "#$c .5#I have so much work I need to do, @. Sorry, but I don't have time to chat today.#What, @, I have a performance review coming up, I need to focus$a.#",
+    "sebastian-work.fall.3": "Ugh, I have so many emails I need to reply to.$s",
+    "sebastian-work.winter.3": "%Sebastian looks a little bleary-eyed.#$b#$c .5#Sorry, @, I was up all night debugging.$s#You know, @, sometimes I wonder why I got into this field. Spent six hours last night and it was just a bloody typo.#",
+
+    // NOTE: y4 is Sebby's job search year. Spring - worried. Laid off summer, search fall + winter, gets job again the next spring.
+    "sebastian-work.spring.4": "@, I'm worried. There's word of layoffs.",
+    "sebastian-work.fall.4": "And yet another day spent sending out applications.",
+    "sebastian-work.winter.4": "You know, @, I almost would rather be filling out another bloody performance review over applying for jobs.",
+    "sebastian-work.winter.4.00": "%Sebastian seems to have an interview, you should avoid bothering him",
+
+    "sebastian-work.spring.0": "%Sebastian seems to be on a call.#$b#I'm not sure I understand the third requirement.#$b#Exactly what hardware are we expected to support here?",
+    "sebastian-work.summer.0": "@, sorry, I don't have time to speak today. I've got a very hairy bug to track down.",
+    "sebastian-work.fall.0": "Ugh, we're updating dependencies today, so nothing works and I haven't the clue why.",
+
 /***************
 * Lewis in the community center
 ***************/

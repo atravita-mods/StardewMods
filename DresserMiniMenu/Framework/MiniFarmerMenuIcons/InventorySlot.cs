@@ -142,7 +142,7 @@ internal class InventorySlot<TObject> : IInventorySlot<TObject>
         if (this.IsActive && this.CanAcceptItem(item))
         {
             prev = this.GetItem();
-            this.SetItem(item as TObject);
+            Game1.player.Equip(prev as TObject, item as TObject, this.SetItem);
 
             if (playSound)
             {

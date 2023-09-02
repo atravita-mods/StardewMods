@@ -51,7 +51,7 @@ internal static class DoConsumePatch
                     {
                         continue;
                     }
-                    else if (Utility.IsNormalObjectAtParentSheetIndex(obj, original.ParentSheetIndex))
+                    else if (obj.QualifiedItemId == original.QualifiedItemId)
                     {
                         replacementIndex = i;
                         break;
@@ -99,7 +99,7 @@ internal static class DoConsumePatch
                     {
                         continue;
                     }
-                    else if (Utility.IsNormalObjectAtParentSheetIndex(obj, original.ParentSheetIndex))
+                    else if (obj.QualifiedItemId == original.QualifiedItemId)
                     {
                         replacementIndex = i;
                         break;

@@ -8,6 +8,8 @@ using Microsoft.Xna.Framework.Graphics;
 
 using StardewModdingAPI.Events;
 
+using StardewValley;
+
 namespace StopRugRemoval.Framework.Niceties;
 
 /// <summary>
@@ -15,8 +17,7 @@ namespace StopRugRemoval.Framework.Niceties;
 /// </summary>
 internal static class DuplicateNPCDetector
 {
-    [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1309:Field names should not begin with underscore", Justification = "Preference.")]
-    private static readonly ThreadLocal<List<NPC>> _pooled = new(() => new());
+
 
     /// <inheritdoc cref="IGameLoopEvents.DayEnding"/>
     internal static void DayEnd()
@@ -35,39 +36,50 @@ internal static class DuplicateNPCDetector
             return;
         }
 
-        _pooled.Value ??= new();
-        _pooled.Value.Clear();
-
-        _ = Utility.getAllCharacters(_pooled.Value);
-        HashSet<string> found = new(_pooled.Value.Count);
+        Dictionary<string, string> characters = Game1.content.Load<Dictionary<string, string>>("Data\\NPCDispositions");
         bool leoMoved = Game1.MasterPlayer.mailReceived.Contains("LeoMoved");
-        foreach (NPC? character in _pooled.Value)
+        HashSet<string> found = new(characters.Count);
+        NPC? leo = null;
+
+        Utility.ForEachVillager((npc) =>
         {
-            found.Add(character.Name);
-
-            if (character.Name == "Leo" && leoMoved && character.DefaultMap != "LeoTreeHouse")
+            found.Add(npc.Name);
+            if (leoMoved && npc.Name == "Leo" && npc.DefaultMap != "LeoTreeHouse")
             {
-                ModEntry.ModMonitor.Log("Fixing Leo's move.", LogLevel.Info);
+                leo = npc;
+            }
+            return true;
+        });
 
+        if (leo is not null)
+        {
+            ModEntry.ModMonitor.Log("Fixing Leo's move.", LogLevel.Info);
+
+            if (Game1.getLocationFromName("LeoTreeHouse") is not GameLocation leoTreeHouse)
+            {
+                ModEntry.ModMonitor.Log($"Attempted to fix up Leo's location, cannot find his treehouse.", LogLevel.Warn);
+            }
+            else
+            {
                 try
                 {
                     // derived from the OnRequestLeoMoveEvent.
-                    character.DefaultMap = "LeoTreeHouse";
-                    character.DefaultPosition = new Vector2(5f, 4f) * 64f;
-                    character.faceDirection(2);
-                    character.InvalidateMasterSchedule();
-                    if (character.Schedule is not null)
+                    leo.DefaultMap = "LeoTreeHouse";
+                    leo.DefaultPosition = new Vector2(5f, 4f) * 64f;
+                    leo.faceDirection(2);
+                    leo.InvalidateMasterSchedule();
+                    if (leo.Schedule is not null)
                     {
-                        character.ClearSchedule();
+                        leo.ClearSchedule();
                     }
-                    character.controller = null;
-                    character.temporaryController = null;
-                    Game1.warpCharacter(character, Game1.getLocationFromName("LeoTreeHouse"), new Vector2(5f, 4f));
-                    character.Halt();
-                    character.ignoreScheduleToday = false;
+                    leo.controller = null;
+                    leo.temporaryController = null;
+                    Game1.warpCharacter(leo, leoTreeHouse, new Vector2(5f, 4f));
+                    leo.Halt();
+                    leo.ignoreScheduleToday = false;
 
                     // fix up his schedule too.
-                    character.TryLoadSchedule();
+                    leo.TryLoadSchedule();
                 }
                 catch (Exception ex)
                 {
@@ -75,9 +87,8 @@ internal static class DuplicateNPCDetector
                 }
             }
         }
-        _pooled.Value.Clear();
 
-        foreach ((string name, string dispo) in Game1.content.Load<Dictionary<string, string>>("Data\\NPCDispositions"))
+        foreach ((string name, string dispo) in characters)
         {
             if (found.Contains(name) || (Game1.year <= 1 && name == "Kent") || (name == "Leo" && !Game1.MasterPlayer.hasOrWillReceiveMail("addedParrotBoy")))
             {

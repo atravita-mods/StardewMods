@@ -9,10 +9,6 @@ namespace DresserMiniMenu.Framework.MiniFarmerMenuIcons;
 /// </summary>
 internal sealed class ClothingSlot : InventorySlot<Clothing>
 {
-    private const int SHIRT = 0;
-    private const int PANTS = 1;
-    private const int ACCESSORY = 2;
-
     /// <summary>
     /// Initializes a new instance of the <see cref="ClothingSlot"/> class.
     /// </summary>
@@ -47,9 +43,11 @@ internal sealed class ClothingSlot : InventorySlot<Clothing>
 
         return (item as Clothing)?.clothesType.Value switch
         {
-            PANTS => this.Type == InventorySlotType.Pants,
-            SHIRT => this.Type == InventorySlotType.Shirt,
+            Clothing.ClothesType.PANTS => this.Type == InventorySlotType.Pants,
+            Clothing.ClothesType.SHIRT => this.Type == InventorySlotType.Shirt,
             _ => false,
         };
+
+#warning - check if clothing needs to do the onequip/ondequip thing.
     }
 }

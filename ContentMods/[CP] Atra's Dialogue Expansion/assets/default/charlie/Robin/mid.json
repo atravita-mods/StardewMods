@@ -12,6 +12,14 @@
         }
     },
     {
+        "LogName": "Robin speech bubbles",
+        "Action": "EditData",
+        "Target": "Strings/SpeechBubbles",
+        "Entries": {
+            "ScienceHouse_Robin_CloseFriends": "Heya, @, whatcha need?"
+        }
+    },
+    {
         "LogName": "Robin extra",
         "Action": "EditData",
         "Target": "Data/ExtraDialogue",

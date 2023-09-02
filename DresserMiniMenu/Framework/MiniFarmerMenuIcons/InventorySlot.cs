@@ -22,7 +22,7 @@ internal class InventorySlot<TObject> : IInventorySlot<TObject>
     /// The size of an inventory icon.
     /// </summary>
     [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1310:Field names should not contain underscore", Justification = "Reviewed.")]
-    internal const int INVENTORY_SLOT_SIZE = 64;
+    internal const int INVENTORY_SLOT_SIZE = 64; // px
 
     /// <summary>
     /// Initializes a new instance of the <see cref="InventorySlot{TObject}"/> class.

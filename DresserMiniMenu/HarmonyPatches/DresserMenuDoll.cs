@@ -81,7 +81,7 @@ internal static class DresserMenuDoll
             {
                 MiniMenu.Value = null;
             }
-            else if (__instance.storeContext == ShopMenuPatcher.DRESSER)
+            else if (__instance.ShopId == ShopMenuPatcher.DRESSER)
             {
                 MiniMenu.Value = new(__instance, Game1.player);
                 __instance.tabButtons.Add(new ClickableTextureComponent(
@@ -110,7 +110,7 @@ internal static class DresserMenuDoll
     {
         try
         {
-            if (__instance.storeContext == ShopMenuPatcher.DRESSER && _getCurrentTab.Value(__instance) == 6)
+            if (__instance.ShopId == ShopMenuPatcher.DRESSER && _getCurrentTab.Value(__instance) == 6)
             {
                 __instance.forSale.Clear();
                 foreach (ISalable? item in __instance.itemPriceAndStock.Keys)

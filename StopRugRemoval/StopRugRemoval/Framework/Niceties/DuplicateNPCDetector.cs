@@ -58,7 +58,7 @@ internal static class DuplicateNPCDetector
                     character.InvalidateMasterSchedule();
                     if (character.Schedule is not null)
                     {
-                        character.Schedule = null;
+                        character.ClearSchedule();
                     }
                     character.controller = null;
                     character.temporaryController = null;
@@ -67,7 +67,7 @@ internal static class DuplicateNPCDetector
                     character.ignoreScheduleToday = false;
 
                     // fix up his schedule too.
-                    character.Schedule = character.getSchedule(Game1.dayOfMonth);
+                    character.TryLoadSchedule();
                 }
                 catch (Exception ex)
                 {
@@ -144,7 +144,7 @@ internal static class DuplicateNPCDetector
                 map.addCharacter(npc);
                 try
                 {
-                    npc.Schedule = npc.getSchedule(Game1.dayOfMonth);
+                    npc.TryLoadSchedule();
                 }
                 catch (Exception ex)
                 {

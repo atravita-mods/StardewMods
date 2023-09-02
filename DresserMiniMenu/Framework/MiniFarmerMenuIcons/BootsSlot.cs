@@ -26,8 +26,8 @@ internal sealed class BootsSlot : InventorySlot<Boots>
     {
         if (base.AssignItem(item, out prev, playSound))
         {
-            (prev as Boots)?.onUnequip();
-            (item as Boots)?.onEquip();
+            (prev as Boots)?.onUnequip(Game1.player);
+            (item as Boots)?.onEquip(Game1.player);
             return true;
         }
         return false;

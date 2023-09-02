@@ -7,7 +7,7 @@
             "Entries": {
                 // lines that don't make sense.
                 "Fri4": "{{i18n:demetrius-fri4.00}}#$e#{{i18n:demetrius-fri4.01}}$u",
-                "winter_Sat": "{{i18n:demetrius-winter-sat.00}}#$e#{{i18n:demetrius-winter-sat.01}}#$e#{{demetrius-winter-sat.02}}$u",
+                "winter_Sat": "{{i18n:demetrius-winter-sat.00}}#$e#{{i18n:demetrius-winter-sat.01}}#$e#{{i18n:demetrius-winter-sat.02}}$u",
 
                 // headed into the moonlight jellies festival. 
                 "summer_25{{YearRemainder}}": "{{i18n:demetrius-summer-end.{{YearModulus}} }}",

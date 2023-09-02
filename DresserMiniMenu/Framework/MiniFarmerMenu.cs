@@ -406,6 +406,7 @@ internal sealed class MiniFarmerMenu : IClickableMenu
     internal void BeforeExit()
     {
         this.FarmerRef.faceDirection(this.lastFacingDirection);
+        this.textbox.Selected = false;
     }
 
     /// <summary>

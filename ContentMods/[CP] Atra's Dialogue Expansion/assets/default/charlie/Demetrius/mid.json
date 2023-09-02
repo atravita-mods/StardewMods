@@ -22,7 +22,9 @@
             "fall_Thu10": "In fall, we get so many common mushrooms fruiting. They're quite tasty![404]$h",
             "winter_Mon10": "I don't tend to do much fieldwork in winter, because everything goes dormant.",
             "winter_Tue10": "I have so much mopping I need to do.$s",
-            "winter_Thu10": "I'd love to take a trip on that submarine some day..."
+            "winter_Thu10": "I'd love to take a trip on that submarine some day...",
+
+            "Resort_Pier": "Look, @, a mola mola!#$b#Despite their odd appearance, they're actually quite new to the seas, evolving only about seventy million years ago!",
         }
     },
     {
@@ -63,7 +65,6 @@
         "Action": "EditData",
         "Target": "Characters/Dialogue/Demetrius",
         "Entries": {
-            "Resort_Pier": "Look, @, a mola mola!#$b#Despite their odd appearance, they're actually quite new to the seas, evolving only about seventy million years ago!",
             "ScienceHouse_Entry": "Ah, home sweet home!",
 
             "ScienceHouse_22_20": "I've got so much data I need to analyze.$s",
@@ -124,6 +125,7 @@
             "winterScienceHouse_22_20": "Sorry, @, I've got a talk I need to prepare for.",
 
             // standing next to the mountains.
+            "summerMountain_45_8": "Oh, look, @, a butterfly!",
             "fallMountain_45_8": "Some of these trees are more than a hundred years old. I hope you weren't planning on cutting them down."
         },
         "When": { "YearModulus": "2" }

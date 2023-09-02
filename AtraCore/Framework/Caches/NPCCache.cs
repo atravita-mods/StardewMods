@@ -8,12 +8,21 @@ using StardewValley.Locations;
 
 namespace AtraCore.Framework.Caches;
 
+#warning - todo - a way to iterate through these.
+
 /// <summary>
 /// A smol cache for NPCs.
 /// </summary>
 public static class NPCCache
 {
     private static readonly ConcurrentDictionary<string, WeakReference<NPC>> cache = new();
+
+    /// <summary>
+    /// Checks to see if a specific name is in the cache.
+    /// </summary>
+    /// <param name="name">Name to check.</param>
+    /// <returns>true if exists in cache, false otherwise.</returns>
+    public static bool ContainsKey(string name) => cache.ContainsKey(name);
 
     /// <summary>
     /// Inserts a specific NPC instance into the cache.

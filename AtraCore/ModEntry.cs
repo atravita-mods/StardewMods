@@ -101,7 +101,7 @@ internal sealed class ModEntry : BaseMod<ModEntry>
         this.ApplyPatches(new Harmony(this.ModManifest.UniqueID));
 
         // actions
-        ActionCommandHandler.RegisterActionCommand("kitchen", KitchenCommand.ApplyKitchenCommand);
+        ActionCommandHandler.RegisterActionCommand("atravita.teleport", TeleportPlayer.ApplyCommand);
     }
 
     /// <inheritdoc cref="IGameLoopEvents.SaveLoaded"/>

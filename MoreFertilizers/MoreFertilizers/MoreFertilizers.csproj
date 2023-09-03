@@ -21,7 +21,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\AtraCore\AtraCore.csproj" private="false" />
     <ProjectReference Include="..\..\Pintail\Pintail\Pintail.csproj" private="false" />
-    <Reference Include="Newtonsoft.Json" HintPath="$(GamePath)\smapi-internal\Newtonsoft.Json.dll" private="false"/>
+    <Reference Include="Newtonsoft.Json" HintPath="$(GamePath)\smapi-internal\Newtonsoft.Json.dll" private="false" />
   </ItemGroup>
 
   <ItemGroup>
@@ -32,6 +32,10 @@
     <Using Alias="NotNullAttribute" Include="System.Diagnostics.CodeAnalysis.NotNullAttribute" />
     <Using Alias="Object" Include="System.Object" />
     <Using Alias="SObject" Include="StardewValley.Object" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Legacy\" />
   </ItemGroup>
 
 </Project>

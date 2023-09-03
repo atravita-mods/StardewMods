@@ -101,8 +101,7 @@ public class ReviveDeadCropsApi : IReviveDeadCropsApi
         crop.dead.Value = false;
 
         // make sure that the raised value is set again.
-        var data = crop.GetData();
-        if (data.IsRaised)
+        if (crop.GetData()?.IsRaised == true)
         {
             crop.raisedSeeds.Value = true;
         }
@@ -140,7 +139,7 @@ public class ReviveDeadCropsApi : IReviveDeadCropsApi
             numberOfLoops: 0,
             position: tile * 64f,
             flicker: false,
-            flipped: Singletons.Random.OfChance(0.5),
+            flipped: Random.Shared.OfChance(0.5),
             layerDepth: 1f,
             alphaFade: 0.01f,
             color: Color.White,
@@ -151,6 +150,6 @@ public class ReviveDeadCropsApi : IReviveDeadCropsApi
         {
             light = true,
         };
-        MultiplayerHelpers.GetMultiplayer().broadcastSprites(loc, tas);
+        Game1.Multiplayer.broadcastSprites(loc, tas);
     }
 }

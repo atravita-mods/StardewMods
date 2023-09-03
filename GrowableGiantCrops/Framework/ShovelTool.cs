@@ -451,7 +451,7 @@ public class ShovelTool : Tool
     }
 
     /// <inheritdoc />
-    public override bool actionWhenPurchased() => false;
+    public override bool actionWhenPurchased(string shopId) => false;
 
     /// <inheritdoc />
     /// <remarks>forbid attachments.</remarks>
@@ -517,7 +517,7 @@ public class ShovelTool : Tool
             return;
         }
 
-        Multiplayer mp = MultiplayerHelpers.GetMultiplayer();
+        Multiplayer mp = Game1.Multiplayer;
 
         float deltaY = -50f - (sourceRect.Height * 2);
         const float gravity = 0.0025f;

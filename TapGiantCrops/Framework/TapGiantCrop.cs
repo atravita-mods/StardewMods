@@ -1,4 +1,6 @@
-﻿using AtraBase.Toolkit.Extensions;
+﻿// Ignore Spelling: loc
+
+using AtraBase.Toolkit.Extensions;
 using AtraBase.Toolkit.Reflection;
 
 using AtraCore.Framework.ReflectionManager;
@@ -50,15 +52,11 @@ public sealed class TapGiantCrop : ITapGiantCropsAPI
     {
         Guard.IsNotNull(loc);
         Guard.IsNotNull(obj);
-        if (loc.objects.ContainsKey(tile))
+        if (loc.objects.ContainsKey(tile) || !obj.IsTapper())
         {
             return false;
         }
-        if (obj.Name.Contains("Tapper", StringComparison.OrdinalIgnoreCase))
-        {
-            return GetGiantCropAt(loc, tile) is not null;
-        }
-        return false;
+        return GetGiantCropAt(loc, tile) is not null;
     }
 
     /// <inheritdoc />
@@ -107,7 +105,7 @@ public sealed class TapGiantCrop : ITapGiantCropsAPI
         int giantCropIndx = giantCrop.parentSheetIndex.Value;
 
         OverrideObject? @override = AssetManager.GetOverrideItem(giantCropIndx);
-        SObject? returnobj = @override?.obj?.getOne() as SObject; 
+        SObject? returnobj = @override?.obj?.getOne() as SObject;
 
         if (returnobj is null)
         {
@@ -144,10 +142,11 @@ public sealed class TapGiantCrop : ITapGiantCropsAPI
             int days = @override?.duration is int overrideDuration
                 ? overrideDuration
                 : returnobj.Price / (25 * giantCrop.width.Value * giantCrop.height.Value);
-            if (tapper.ParentSheetIndex == 264)
+            if (tapper.GetTapperMultiplier() is float multiplier)
             {
-                days /= 2;
+                days = (int)(days / multiplier);
             }
+
             return (returnobj, Math.Max(1, days));
         }
 

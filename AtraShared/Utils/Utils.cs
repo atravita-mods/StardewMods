@@ -5,6 +5,8 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using StardewModdingAPI.Utilities;
 
+using StardewValley.GameData.Machines;
+
 namespace AtraShared.Utils;
 
 /// <summary>
@@ -205,4 +207,7 @@ public static class Utils
             return (season, day + 1);
         }
     }
+
+    public static Dictionary<string, MachineData> GetMachineData()
+        => Game1.content.Load<Dictionary<string, MachineData>>("Data\\Machines");
 }

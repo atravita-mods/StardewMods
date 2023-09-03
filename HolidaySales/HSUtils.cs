@@ -68,7 +68,7 @@ internal static class HSUtils
     /// <returns>true if the store is closed, false otherwise.</returns>
     internal static bool StoresClosedForFestival()
     {
-        if (IsFestivalDayAdjustedForConfig(Game1.dayOfMonth, Game1.currentSeason, "Town"))
+        if (IsFestivalDayAdjustedForConfig(Game1.dayOfMonth, Game1.season, "Town"))
         {
             return Utility.getStartTimeOfFestival() < 1900;
         }
@@ -82,7 +82,7 @@ internal static class HSUtils
     /// <param name="season">Season (as string).</param>
     /// <param name="mapname">Map to search for.</param>
     /// <returns>If it should be considered a festival day for this specific config.</returns>
-    internal static bool IsFestivalDayAdjustedForConfig(int day, string season, string mapname)
+    internal static bool IsFestivalDayAdjustedForConfig(int day, Season season, string mapname)
     {
         return ModEntry.Config.StoreFestivalBehavior switch
         {
@@ -100,9 +100,9 @@ internal static class HSUtils
     /// <param name="season">season.</param>
     /// <param name="mapname">the map name.</param>
     /// <returns>true if it should be considered a festival day.</returns>
-    internal static bool IsFestivalDayForMap(int day, string season, string mapname)
+    internal static bool IsFestivalDayForMap(int day, Season season, string mapname)
     {
-        string? s = season + day;
+        string? s = Utility.getSeasonKey(season) + day;
         if (Game1.temporaryContent.Load<Dictionary<string, string>>(@"Data\Festivals\FestivalDates").ContainsKey(s))
         {
             int index = mapname.IndexOf('_');

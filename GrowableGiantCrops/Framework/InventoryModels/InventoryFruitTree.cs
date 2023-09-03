@@ -2,6 +2,7 @@
 
 using AtraBase.Toolkit.Extensions;
 
+using AtraShared.ConstantsAndEnums;
 using AtraShared.Utils.Extensions;
 using AtraShared.Wrappers;
 
@@ -177,7 +178,6 @@ public sealed class InventoryFruitTree : SObject
         {
             GreenHouseTree = location.IsGreenhouse || ((this.ParentSheetIndex == 69 || this.ParentSheetIndex == 835) && location is IslandWest),
             GreenHouseTileTree = location.doesTileHavePropertyNoNull((int)placementTile.X, (int)placementTile.Y, "Type", "Back") == "Stone",
-            currentTileLocation = placementTile,
         };
         fruitTree.struckByLightningCountdown.Value = this.struckByLightning.Value;
         fruitTree.daysUntilMature.Value = this.daysUntilMature.Value;
@@ -187,7 +187,7 @@ public sealed class InventoryFruitTree : SObject
         }
         fruitTree.modData?.SetInt(ModDataKey, this.ParentSheetIndex);
 
-        fruitTree.shake(placementTile, true, location);
+        fruitTree.shake(placementTile, true;
         location.terrainFeatures[placementTile] = fruitTree;
         location.playSound("dirtyHit");
         DelayedAction.playSoundAfterDelay("coin", 100);
@@ -381,7 +381,7 @@ public sealed class InventoryFruitTree : SObject
     }
 
     /// <inheritdoc />
-    public override bool isForage(GameLocation location) => false;
+    public override bool isForage() => false;
 
     /// <inheritdoc />
     protected override string loadDisplayName() => I18n.FruitTree_Name(this.GetSaplingDisplayName());
@@ -395,7 +395,7 @@ public sealed class InventoryFruitTree : SObject
         tags.Add("category_inventory_fruit_tree");
         tags.Add($"id_inventoryFruitTree_{this.ParentSheetIndex}");
         tags.Add("quality_none");
-        tags.Add("item_" + this.SanitizeContextTag(this.Name));
+        tags.Add("item_" + ItemContextTagManager.SanitizeContextTag(this.Name));
     }
 
     private string GetSaplingDisplayName()
@@ -473,7 +473,7 @@ public sealed class InventoryFruitTree : SObject
         }
 
         // derived from FruitTree.draw
-        int season = Utility.getSeasonNumber(loc is Desert or MineShaft ? "spring" : Game1.GetSeasonForLocation(loc));
+        int season = (int)(loc is Desert or MineShaft ? Season.Spring : Game1.GetSeasonForLocation(loc));
 
         const int HEIGHT = 80;
         const int WIDTH = 48;

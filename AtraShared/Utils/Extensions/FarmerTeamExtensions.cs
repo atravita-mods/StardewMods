@@ -1,5 +1,7 @@
 ﻿using CommunityToolkit.Diagnostics;
 
+using StardewValley.SpecialOrders;
+
 namespace AtraShared.Utils.Extensions;
 
 /// <summary>
@@ -25,7 +27,7 @@ public static class FarmerTeamExtensions
 
         foreach (SpecialOrder? order in farmerTeam.specialOrders)
         {
-            if (order.questKey.Value == special_order_key && order.questState.Value is SpecialOrder.QuestState.Complete or SpecialOrder.QuestState.InProgress)
+            if (order.questKey.Value == special_order_key && order.questState.Value is SpecialOrderStatus.Complete or SpecialOrderStatus.InProgress)
             {
                 return true;
             }

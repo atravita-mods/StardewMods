@@ -8,6 +8,8 @@ using CommunityToolkit.Diagnostics;
 
 using Microsoft.Xna.Framework;
 
+using StardewValley.TerrainFeatures;
+
 namespace AtraShared.Utils.Extensions;
 
 /// <summary>
@@ -15,6 +17,7 @@ namespace AtraShared.Utils.Extensions;
 /// </summary>
 public static class SObjectExtensions
 {
+
     /// <summary>
     /// Creates a TAS that represents a parabolic arc.
     /// </summary>
@@ -88,7 +91,7 @@ public static class SObjectExtensions
     /// </summary>
     /// <param name="sObjectInd">Index of the item to check.</param>
     /// <returns>The category index if found, or 0 otherwise.</returns>
-    public static int GetCategoryFromIndex(this int sObjectInd)
+    public static int GetCategoryFromIndex(this string sObjectInd)
     {
         if (!Game1Wrappers.ObjectInfo.TryGetValue(sObjectInd, out string? data))
         {
@@ -171,5 +174,28 @@ public static class SObjectExtensions
                 : Game1.player.craftingRecipes.TryAdd(recipeName, 0);
         }
         return false;
+    }
+
+    /// <summary>
+    /// Gets the speed multiplier associated with the tapper, or null if it's not a tapper.
+    /// </summary>
+    /// <param name="obj">Object to check.</param>
+    /// <returns>Speed multiplier for a tapper, or null if not a tapper.</returns>
+    /// <remarks>Derived from <see cref="Tree.UpdateTapperProduct"/>.</remarks>
+    public static float? GetTapperMultiplier(this SObject obj)
+    {
+        if (obj.IsTapper())
+        {
+            const string tapperPrefix = "tapper_multiplier_";
+            foreach (string contextTag in obj.GetContextTags())
+            {
+                if (contextTag.StartsWith(tapperPrefix) && float.TryParse(contextTag.AsSpan(tapperPrefix.Length), out float multiplier))
+                {
+                    return multiplier;
+                }
+            }
+            return 1f;
+        }
+        return null;
     }
 }

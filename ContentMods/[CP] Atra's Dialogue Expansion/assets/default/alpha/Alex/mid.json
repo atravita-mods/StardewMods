@@ -23,6 +23,15 @@
         }
     },
     {
+        "LogName": "Alex - strings",
+        "Action": "EditData",
+        "Target": "Strings/schedules/Alex",
+        "Entries": {
+            "summer_16.000": "Gosh, @, I think I might have shin splits.$s",
+            "summer_16.001": "Alright, doc, how bad is it?"
+        }
+    },
+    {
         "LogName": "Alex - mid hearts - Y1",
         "Action": "EditData",
         "Target" :"Characters/Dialogue/Alex",

@@ -1,7 +1,4 @@
-﻿using System.Reflection;
-using AtraBase.Toolkit.Reflection;
-
-using AtraCore;
+﻿using AtraCore;
 using AtraCore.Framework.EventCommands;
 using AtraCore.Framework.ReflectionManager;
 using AtraCore.Utilities;
@@ -18,9 +15,11 @@ using HarmonyLib;
 using SpecialOrdersExtended.HarmonyPatches;
 using SpecialOrdersExtended.Managers;
 using SpecialOrdersExtended.Niceties;
+
 using StardewModdingAPI.Events;
 
-using StardewValley.GameData;
+using StardewValley.GameData.SpecialOrders;
+using StardewValley.SpecialOrders;
 
 using AtraUtils = AtraShared.Utils.Utils;
 
@@ -65,14 +64,6 @@ internal sealed class ModEntry : Mod
     /// Gets the config class for this mod.
     /// </summary>
     internal static ModConfig Config { get; private set; } = null!;
-
-    [SuppressMessage("StyleCop.CSharp.OrderingRules", "SA1201:Elements should appear in the correct order", Justification = "Field kept near accessors.")]
-    private static readonly Lazy<Func<string, bool>> CheckTagLazy = new(
-        typeof(SpecialOrder)
-            .GetCachedMethod("CheckTag", ReflectionCache.FlagTypes.StaticFlags)
-            .CreateDelegate<Func<string, bool>>);
-
-    private static Func<string, bool> CheckTagDelegate => CheckTagLazy.Value;
 
     [SuppressMessage("StyleCop.CSharp.OrderingRules", "SA1201:Elements should appear in the correct order", Justification = "Reviewed.")]
     private MigrationManager? migrator;
@@ -374,7 +365,7 @@ internal sealed class ModEntry : Mod
             {
                 base_tag = span.ToString();
             }
-            ModMonitor.Log($"{tag}: {(match == CheckTagDelegate(base_tag) ? I18n.True() : I18n.False())}", LogLevel.Debug);
+            ModMonitor.Log($"{tag}: {(match == SpecialOrder.CheckTag(base_tag) ? I18n.True() : I18n.False())}", LogLevel.Debug);
         }
     }
 
@@ -441,7 +432,7 @@ internal sealed class ModEntry : Mod
         }
 
         bool seen = Game1.MasterPlayer.team.completedSpecialOrders.ContainsKey(key);
-        if (order.Repeatable != "True" && seen)
+        if (!order.Repeatable && seen)
         {
             ModMonitor.Log($"\t{I18n.Nonrepeatable()}", LogLevel.Debug);
             return false;
@@ -450,7 +441,7 @@ internal sealed class ModEntry : Mod
         {
             ModMonitor.Log($"\t{I18n.RepeatableSeen()}", LogLevel.Debug);
         }
-        if (Game1.dayOfMonth >= 16 && order.Duration == "Month")
+        if (Game1.dayOfMonth >= 16 && order.Duration == QuestDuration.Month)
         {
             ModMonitor.Log($"\t{I18n.MonthLongLate(cutoff: 16)}");
             return false;
@@ -476,7 +467,7 @@ internal sealed class ModEntry : Mod
                     trimmed_tag = tag;
                 }
 
-                if (CheckTagDelegate(trimmed_tag) != match)
+                if (SpecialOrder.CheckTag(trimmed_tag) != match)
                 {
                     ModMonitor.Log($"\t\t{I18n.TagFailed()}: {tag}", LogLevel.Debug);
                 }

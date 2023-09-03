@@ -536,7 +536,7 @@ internal sealed class ModEntry : Mod
                 }
                 else if (terrainFeature is FruitTree fruitTree)
                 {
-                    this.Monitor.Log($"{e.Cursor.Tile} is on {fruitTree.treeType.Value} with {fruitTree.daysUntilMature.Value}.", LogLevel.Info);
+                    this.Monitor.Log($"{e.Cursor.Tile} is on {fruitTree.treeId.Value} with {fruitTree.daysUntilMature.Value}.", LogLevel.Info);
                 }
                 else if (terrainFeature is Tree tree)
                 {
@@ -552,7 +552,8 @@ internal sealed class ModEntry : Mod
                     this.Monitor.Log($"{e.Cursor.Tile} has {fertilizer} fertilizer.", LogLevel.Info);
                 }
             }
-            if (Game1.currentLocation?.modData?.GetInt(CanPlaceHandler.FishFood) is > 0)
+            if (Game1.currentLocation?.isWaterTile((int)e.Cursor.Tile.X, (int)e.Cursor.Tile.Y) == true
+                && Game1.currentLocation.modData?.GetInt(CanPlaceHandler.FishFood) is > 0)
             {
                 this.Monitor.Log($"FishFood: Remaining time: {Game1.currentLocation?.modData?.GetInt(CanPlaceHandler.FishFood)}", LogLevel.Info);
             }

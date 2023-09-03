@@ -4,6 +4,8 @@ using AtraShared.Utils.Extensions;
 using GingerIslandMainlandAdjustments.Utils;
 using StardewModdingAPI.Utilities;
 
+using StardewValley.Pathfinding;
+
 namespace GingerIslandMainlandAdjustments.CustomConsoleCommands;
 
 /// <summary>

@@ -11,7 +11,7 @@
   "RecolorFruitTrees.description": "Whether or not fruit trees should be tinted to show that they've been fertilized.",
   "RecolorTrees.title": "Recolor Trees",
   "RecolorTrees.description": "Whether or not non-fruit trees should be tinted to show that they've been fertilized.",
-  "DrawParticleEffects.title": "Draw Particle Effets",
+  "DrawParticleEffects.title": "Draw Particle Effects",
   "DrawParticleEffects.description": "If enabled, some fertilizers will have little particle effects (like sparkles, or the little green clouds for Miraculous Beverages).",
   "BanRaisedSeeds.title": "Ban Raised Seeds",
   "BanRaisedSeeds.description": "Whether or not raised seeds should be banned from the radioactive fertilizer.",

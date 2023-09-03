@@ -80,7 +80,7 @@ internal static class DrawCulling
     [MethodImpl(TKConstants.Hot)]
     [HarmonyPatch(typeof(Bush), nameof(Bush.draw), new[] { typeof(SpriteBatch), typeof(Vector2) })]
     private static bool PrefixBushDraw(Bush __instance, Vector2 tileLocation)
-        => !ModEntry.Config.CullDraws || Utility.isOnScreen(tileLocation + (Vector2.UnitX * (__instance.size.Value / 2f)), 256);
+        => !ModEntry.Config.CullDraws || Utility.isOnScreen((tileLocation + (Vector2.UnitX * (__instance.size.Value / 2f)) * Game1.tileSize), 256);
 
     [HarmonyPrefix]
     [HarmonyPriority(Priority.Last)]

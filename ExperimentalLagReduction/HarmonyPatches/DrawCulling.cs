@@ -18,7 +18,6 @@ using StardewValley.Characters;
 using StardewValley.Network;
 using StardewValley.Objects;
 using StardewValley.Projectiles;
-using StardewValley.TerrainFeatures;
 
 namespace ExperimentalLagReduction.HarmonyPatches;
 
@@ -78,30 +77,9 @@ internal static class DrawCulling
     [HarmonyPrefix]
     [HarmonyPriority(Priority.Last)]
     [MethodImpl(TKConstants.Hot)]
-    [HarmonyPatch(typeof(Bush), nameof(Bush.draw), new[] { typeof(SpriteBatch), typeof(Vector2) })]
-    private static bool PrefixBushDraw(Bush __instance, Vector2 tileLocation)
-        => !ModEntry.Config.CullDraws || Utility.isOnScreen((tileLocation + (Vector2.UnitX * (__instance.size.Value / 2f)) * Game1.tileSize), 256);
-
-    [HarmonyPrefix]
-    [HarmonyPriority(Priority.Last)]
-    [MethodImpl(TKConstants.Hot)]
     [HarmonyPatch(typeof(Character), nameof(Character.draw), new[] { typeof(SpriteBatch), typeof(float) })]
     private static bool PrefixCharacterDraw(Character __instance, float alpha)
         => !ModEntry.Config.CullDraws || (alpha > 0f && Utility.isOnScreen(__instance.Position, 256));
-
-    [HarmonyPrefix]
-    [HarmonyPriority(Priority.Last)]
-    [MethodImpl(TKConstants.Hot)]
-    [HarmonyPatch(typeof(ResourceClump), nameof(ResourceClump.draw), new[] { typeof(SpriteBatch), typeof(Vector2) })]
-    private static bool PrefixClumpDraw(ResourceClump __instance, Vector2 tileLocation)
-        => !ModEntry.Config.CullDraws || Utility.isOnScreen((__instance.Tile + Vector2.One) * Game1.tileSize, 128);
-
-    [HarmonyPrefix]
-    [HarmonyPriority(Priority.Last)]
-    [MethodImpl(TKConstants.Hot)]
-    [HarmonyPatch(typeof(GiantCrop), nameof(GiantCrop.draw), new[] { typeof(SpriteBatch), typeof(Vector2) })]
-    private static bool PrefixGiantCropDraw(Vector2 tileLocation)
-        => !ModEntry.Config.CullDraws || Utility.isOnScreen((tileLocation + (Vector2.One * 1.5f)) * Game1.tileSize, 256);
 
     [HarmonyPrefix]
     [HarmonyPriority(Priority.Last)]

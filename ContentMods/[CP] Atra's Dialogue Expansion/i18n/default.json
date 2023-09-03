@@ -406,6 +406,7 @@
 
     "sebastian-work.spring": "%Sebastian seems to be on a call.#$b#%name, I needed this reviewed last week! Could you please help me convince everyone to help keep things moving?",
     "sebastian-work.summer": "Sorry, @, I'm working and need to focus right now.",
+    "sebastian-work.summer.1.00": "%Sebastian appears to be in a meeting.",
     "sebastian-work.fall": "Work? Nah, @, I can implement A-star in my sleep.",
     "sebastian-work.winter": "Sorry, @, I need to work on my performance report. Why do they make me do this every year?$s",
 
@@ -421,6 +422,7 @@
 
     // NOTE: y4 is Sebby's job search year. Spring - worried. Laid off summer, search fall + winter, gets job again the next spring.
     "sebastian-work.spring.4": "@, I'm worried. There's word of layoffs.",
+    "sebastian-work.summer.4": "Gosh, @, I've got so much work I've got to do.#$b#$c .5#We had another round of layoffs, so the rest of us have even more tasks we need to do.#Still, it's better than getting laid off I guess.#",
     "sebastian-work.fall.4": "And yet another day spent sending out applications.",
     "sebastian-work.winter.4": "You know, @, I almost would rather be filling out another bloody performance review over applying for jobs.",
     "sebastian-work.winter.4.00": "%Sebastian seems to have an interview, you should avoid bothering him",
@@ -428,6 +430,7 @@
     "sebastian-work.spring.0": "%Sebastian seems to be on a call.#$b#I'm not sure I understand the third requirement.#$b#Exactly what hardware are we expected to support here?",
     "sebastian-work.summer.0": "@, sorry, I don't have time to speak today. I've got a very hairy bug to track down.",
     "sebastian-work.fall.0": "Ugh, we're updating dependencies today, so nothing works and I haven't the clue why.",
+    "sebastian-work.winter.0": "Got my performance report to write, again.$a#$c .5#New job, same as old job.#Well, it beats being unemployed.#",
 
 /***************
 * Lewis in the community center

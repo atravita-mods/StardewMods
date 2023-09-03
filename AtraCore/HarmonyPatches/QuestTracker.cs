@@ -24,7 +24,9 @@ public static class QuestTracker
     private const string MESSAGEREMOVE = "QuestTrackerRemove";
     private const string BROADCAST = "QuestTrackerBroadcast";
 
-    private static Dictionary<long, HashSet<int>> finishedQuests = new();
+    private const char SEP = 'Ω';
+
+    private static Dictionary<long, HashSet<string>> finishedQuests = new();
     private static IMultiplayerHelper multi = null!;
     private static string uniqueID = null!;
 
@@ -33,7 +35,7 @@ public static class QuestTracker
     /// </summary>
     /// <param name="questID">ID of the quest.</param>
     /// <returns>True if quest completed, false otherwise.</returns>
-    public static bool HasCompletedQuest(int questID) => HasCompletedQuest(Game1.player, questID);
+    public static bool HasCompletedQuest(string questID) => HasCompletedQuest(Game1.player, questID);
 
     /// <summary>
     /// Checks if the current player has a specific quest finished.
@@ -41,8 +43,8 @@ public static class QuestTracker
     /// <param name="player">The specific player to check.</param>
     /// <param name="questID">ID of the quest.</param>
     /// <returns>True if quest completed, false otherwise.</returns>
-    public static bool HasCompletedQuest(Farmer player, int questID)
-        => finishedQuests.TryGetValue(player.UniqueMultiplayerID, out HashSet<int>? questSet)
+    public static bool HasCompletedQuest(Farmer player, string questID)
+        => finishedQuests.TryGetValue(player.UniqueMultiplayerID, out HashSet<string>? questSet)
             && questSet.Contains(questID);
 
     /// <summary>
@@ -61,7 +63,7 @@ public static class QuestTracker
     /// </summary>
     /// <param name="questID">Quest id to track.</param>
     /// <returns>True if changed, false otherwise.</returns>
-    internal static bool TrackQuest(int questID) => TrackQuest(Game1.player, questID);
+    internal static bool TrackQuest(string questID) => TrackQuest(Game1.player, questID);
 
     /// <summary>
     /// Tracks that a specific farmer has finished a specific quest.
@@ -69,16 +71,16 @@ public static class QuestTracker
     /// <param name="farmer">ID of farmer.</param>
     /// <param name="questID">ID of quest.</param>
     /// <returns>True if added, false otherwise.</returns>
-    internal static bool TrackQuest(Farmer farmer, int questID)
+    internal static bool TrackQuest(Farmer farmer, string questID)
     {
-        if (!finishedQuests.TryGetValue(farmer.UniqueMultiplayerID, out HashSet<int>? set))
+        if (!finishedQuests.TryGetValue(farmer.UniqueMultiplayerID, out HashSet<string>? set))
         {
             finishedQuests[farmer.UniqueMultiplayerID] = set = new();
         }
         if (set.Add(questID))
         {
             multi.SendMessage(
-                message: farmer.UniqueMultiplayerID + ":" + questID,
+                message: $"{farmer.UniqueMultiplayerID}{SEP}{questID}",
                 messageType: MESSAGETYPE,
                 modIDs: new[] { uniqueID },
                 playerIDs: multi.GetConnectedPlayers().Where(p => !p.IsSplitScreen).Select(p => p.PlayerID).ToArray());
@@ -95,7 +97,7 @@ public static class QuestTracker
     {
         if (Context.IsMainPlayer)
         {
-            finishedQuests = helper.ReadSaveData<Dictionary<long, HashSet<int>>>(MESSAGETYPE) ?? new();
+            finishedQuests = helper.ReadSaveData<Dictionary<long, HashSet<string>>>(MESSAGETYPE) ?? new();
             Broadcast();
         }
     }
@@ -128,9 +130,9 @@ public static class QuestTracker
     /// <inheritdoc cref="IMultiplayerEvents.ModMessageReceived"/>
     internal static void OnMessageReceived(ModMessageReceivedEventArgs e)
     {
-        static (long id, int questID)? ParseMessage(string message)
+        static (long id, string questID)? ParseMessage(string message)
         {
-            if (!message.TrySplitOnce(':', out ReadOnlySpan<char> first, out ReadOnlySpan<char> second))
+            if (!message.TrySplitOnce(SEP, out ReadOnlySpan<char> first, out ReadOnlySpan<char> second))
             {
                 ModEntry.ModMonitor.Log($"Received invalid message {message}", LogLevel.Error);
                 return null;
@@ -140,13 +142,8 @@ public static class QuestTracker
                 ModEntry.ModMonitor.Log($"Could not parse {first.ToString()} as unique id", LogLevel.Error);
                 return null;
             }
-            if (!int.TryParse(second, out int questID))
-            {
-                ModEntry.ModMonitor.Log($"Could not parse {second.ToString()} as quest id", LogLevel.Error);
-                return null;
-            }
 
-            return (id, questID);
+            return (id, second.ToString());
         }
 
         if (e.FromModID != uniqueID)
@@ -156,15 +153,15 @@ public static class QuestTracker
         switch (e.Type)
         {
             case BROADCAST:
-                finishedQuests = e.ReadAs<Dictionary<long, HashSet<int>>>();
+                finishedQuests = e.ReadAs<Dictionary<long, HashSet<string>>>();
                 return;
             case MESSAGETYPE:
             {
-                (long id, int questID)? pair = ParseMessage(e.ReadAs<string>());
+                (long id, string questID)? pair = ParseMessage(e.ReadAs<string>());
                 if (pair is not null)
                 {
-                    (long id, int questID) = pair.Value;
-                    if (!finishedQuests.TryGetValue(id, out HashSet<int>? set))
+                    (long id, string questID) = pair.Value;
+                    if (!finishedQuests.TryGetValue(id, out HashSet<string>? set))
                     {
                         finishedQuests[id] = set = new();
                     }
@@ -174,11 +171,11 @@ public static class QuestTracker
             }
             case MESSAGEREMOVE:
             {
-                (long id, int questID)? pair = ParseMessage(e.ReadAs<string>());
+                (long id, string questID)? pair = ParseMessage(e.ReadAs<string>());
                 if (pair is not null)
                 {
-                    (long id, int questID) = pair.Value;
-                    if (finishedQuests.TryGetValue(id, out HashSet<int>? set))
+                    (long id, string questID) = pair.Value;
+                    if (finishedQuests.TryGetValue(id, out HashSet<string>? set))
                     {
                         set.Remove(questID);
                     }
@@ -219,7 +216,7 @@ public static class QuestTracker
 
     private static void Postfix(Quest __instance)
     {
-        if (__instance.id?.Value is int id)
+        if (__instance.id?.Value is string id)
         {
             TrackQuest(id);
         }

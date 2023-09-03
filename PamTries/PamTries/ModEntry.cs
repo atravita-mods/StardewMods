@@ -26,6 +26,7 @@ namespace PamTries;
 /// <inheritdoc />
 internal sealed class ModEntry : BaseMod<ModEntry>
 {
+    private const string PAM_REHAB_EVENT = "99210002";
     private static readonly string[] SyncedConversationTopics = new string[2] { "PamTriesRehab", "PamTriesRehabHoneymoon" };
     private static PamMood mood = PamMood.neutral;
 
@@ -111,7 +112,7 @@ internal sealed class ModEntry : BaseMod<ModEntry>
         if (Context.IsMainPlayer)
         {
             if (Game1.getLocationFromName("Trailer_Big") is GameLocation bigtrailer && bigtrailer.Objects.TryGetValue(new Vector2(26, 9), out SObject? sign)
-                && sign.bigCraftable.Value && sign.ParentSheetIndex == 34 && sign.Fragility != SObject.fragility_Indestructable)
+                && sign.QualifiedItemId == "(BC)34" && sign.Fragility != SObject.fragility_Indestructable)
             {
                 this.Monitor.Log($"Preventing player from stealing Pam's Yoba shrine.");
                 sign.Fragility = SObject.fragility_Indestructable;
@@ -203,7 +204,7 @@ internal sealed class ModEntry : BaseMod<ModEntry>
             moodchances[0] = 0.1;
             moodchances[1] = 0.5;
         }
-        else if (Game1.MasterPlayer.eventsSeen.Contains(99210002))
+        else if (Game1.MasterPlayer.eventsSeen.Contains(PAM_REHAB_EVENT))
         {// rehab event
             moodchances[0] = 0.2;
             moodchances[1] = 0.6;
@@ -252,7 +253,7 @@ internal sealed class ModEntry : BaseMod<ModEntry>
             pam.Sprite.SpriteWidth = 16;
             pam.Sprite.ignoreSourceRectUpdates = false;
             pam.Sprite.UpdateSourceRect();
-            pam.drawOffset.Value = Vector2.Zero;
+            pam.drawOffset = Vector2.Zero;
             pam.IsInvisible = false;
 
             if (Game1.player.activeDialogueEvents.TryGetValue("PamTriesRehab", out int days) && days > 1)
@@ -286,19 +287,19 @@ internal sealed class ModEntry : BaseMod<ModEntry>
         {
             foreach (Farmer farmer in Game1.getAllFarmers())
             {
-                if (!farmer.eventsSeen.Contains(99210001))
+                if (!farmer.eventsSeen.Contains("99210001"))
                 {
-                    farmer.eventsSeen.Add(99210001);
+                    farmer.eventsSeen.Add("99210001");
                 }
             }
         }
-        if (Game1.getAllFarmers().Any((Farmer farmer) => farmer.eventsSeen.Contains(99210002)))
+        if (Game1.getAllFarmers().Any((Farmer farmer) => farmer.eventsSeen.Contains(PAM_REHAB_EVENT)))
         {
             foreach (Farmer farmer in Game1.getAllFarmers())
             {
-                if (!farmer.eventsSeen.Contains(99210002))
+                if (!farmer.eventsSeen.Contains(PAM_REHAB_EVENT))
                 {
-                    farmer.eventsSeen.Add(99210002);
+                    farmer.eventsSeen.Add(PAM_REHAB_EVENT);
                 }
             }
         }

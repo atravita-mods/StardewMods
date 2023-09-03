@@ -64,7 +64,7 @@ internal static class DoConsumePatch
                 if (replacementIndex is not null && Game1.player.Items[replacementIndex.Value] is SObject returnObj)
                 {
                     Game1.player.Items[replacementIndex.Value] = null;
-                    Game1.showGlobalMessage(original.ParentSheetIndex == returnObj.ParentSheetIndex
+                    Game1.showGlobalMessage(original.QualifiedItemId == returnObj.QualifiedItemId
                         ? I18n.BaitReplacedSame(original.DisplayName)
                         : I18n.BaitReplaced(original.DisplayName, returnObj.DisplayName));
                     return returnObj;
@@ -112,7 +112,7 @@ internal static class DoConsumePatch
                 if (replacementIndex is not null && Game1.player.Items[replacementIndex.Value] is SObject returnObj)
                 {
                     Game1.player.Items[replacementIndex.Value] = null;
-                    Game1.showGlobalMessage(original.ParentSheetIndex == returnObj.ParentSheetIndex
+                    Game1.showGlobalMessage(original.QualifiedItemId == returnObj.QualifiedItemId
                         ? I18n.TackleReplacedSame(original.DisplayName)
                         : I18n.TackleReplaced(original.DisplayName, returnObj.DisplayName));
                     return returnObj;

@@ -3,13 +3,14 @@ using AtraBase.Toolkit.Reflection;
 
 using AtraCore.Framework.ReflectionManager;
 
-using AtraShared.ConstantsAndEnums;
 using AtraShared.Utils.Extensions;
 using AtraShared.Utils.Shims;
 using AtraShared.Wrappers;
 
 using CommunityToolkit.Diagnostics;
+
 using Microsoft.Xna.Framework;
+
 using StardewValley.TerrainFeatures;
 
 namespace TapGiantCrops.Framework;
@@ -103,11 +104,6 @@ public sealed class TapGiantCrop : ITapGiantCropsAPI
     [Pure]
     public (SObject obj, int days)? GetTapperProduct(GiantCrop giantCrop, SObject tapper)
     {
-        if (DynamicGameAssetsShims.IsDGAGiantCrop?.Invoke(giantCrop) == true || giantCrop.parentSheetIndex?.Value is null)
-        {
-            return null;
-        }
-
         int giantCropIndx = giantCrop.parentSheetIndex.Value;
 
         OverrideObject? @override = AssetManager.GetOverrideItem(giantCropIndx);
@@ -132,7 +128,7 @@ public sealed class TapGiantCrop : ITapGiantCropsAPI
         if (returnobj is null && giantCropIndx.GetCategoryFromIndex() == SObject.flowersCategory)
         {
             string flowerdata = Game1Wrappers.ObjectInfo[giantCropIndx];
-            returnobj = new SObject(340, 1); // honey index.
+            returnobj = new SObject("(O)340", 1); // honey index.
             string honeyName = $"{flowerdata.GetNthChunk('/', 0).ToString()} Honey";
 
             returnobj.Name = honeyName;
@@ -156,14 +152,14 @@ public sealed class TapGiantCrop : ITapGiantCropsAPI
         }
 
         // fallback - return sap.
-        return (new SObject(92, 20), 2);
+        return (new SObject("92", 20), 2);
     }
 
     /// <summary>
     /// Initializes the API (gets the keg instance used to find the output).
     /// </summary>
     internal void Init()
-        => this.keg = new(Vector2.Zero, (int)VanillaMachinesEnum.Keg);
+        => this.keg = new(Vector2.Zero, "(BC)12");
 
     private static GiantCrop? GetGiantCropAt(GameLocation loc, Vector2 tile)
     {
@@ -171,12 +167,12 @@ public sealed class TapGiantCrop : ITapGiantCropsAPI
         {
             foreach (ResourceClump? clump in loc.resourceClumps)
             {
-                if (clump is GiantCrop crop && !(DynamicGameAssetsShims.IsDGAGiantCrop?.Invoke(crop) == true))
+                if (clump is GiantCrop crop)
                 {
                     Vector2 offset = tile;
                     offset.Y -= crop.height.Value - 1;
                     offset.X -= crop.width.Value / 2;
-                    if (crop.tile.Value.X.WithinMargin(offset.X) && crop.tile.Value.Y.WithinMargin(offset.Y))
+                    if (crop.Tile.X.WithinMargin(offset.X) && crop.Tile.Y.WithinMargin(offset.Y))
                     {
                         return crop;
                     }
@@ -186,13 +182,12 @@ public sealed class TapGiantCrop : ITapGiantCropsAPI
         if (FarmTypeManagerShims.GetEmbeddedResourceClump is not null && loc.largeTerrainFeatures is not null)
         {
             LargeTerrainFeature terrain = loc.getLargeTerrainFeatureAt((int)tile.X, (int)tile.Y);
-            if (terrain is not null && FarmTypeManagerShims.GetEmbeddedResourceClump(terrain) is GiantCrop crop
-                && !(DynamicGameAssetsShims.IsDGAGiantCrop?.Invoke(crop) == true))
+            if (terrain is not null && FarmTypeManagerShims.GetEmbeddedResourceClump(terrain) is GiantCrop crop)
             {
                 Vector2 offset = tile;
                 offset.Y -= crop.height.Value - 1;
                 offset.X -= crop.width.Value / 2;
-                if (crop.tile.Value.X.WithinMargin(offset.X) && crop.tile.Value.Y.WithinMargin(offset.Y))
+                if (crop.Tile.X.WithinMargin(offset.X) && crop.Tile.Y.WithinMargin(offset.Y))
                 {
                     return crop;
                 }

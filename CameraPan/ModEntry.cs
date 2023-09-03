@@ -37,9 +37,9 @@ namespace CameraPan;
 internal sealed class ModEntry : BaseMod<ModEntry>
 {
     /// <summary>
-    /// The integer ID of the camera item.
+    /// The qualified ID of the camera item.
     /// </summary>
-    internal const int CAMERA_ID = 106;
+    internal const string CAMERA_ID = "(BC)106";
 
     /// <summary>
     /// The integer ID used to note hud messages from this mod.
@@ -575,7 +575,7 @@ internal sealed class ModEntry : BaseMod<ModEntry>
 
         if (Config.ToggleBehavior == ToggleBehavior.Camera)
         {
-            enabled.Value = Game1.player.ActiveObject is SObject obj && obj.bigCraftable.Value && obj.ParentSheetIndex == CAMERA_ID;
+            enabled.Value = Game1.player.ActiveObject.QualifiedItemId == CAMERA_ID;
         }
 
         int xAdjustment = offset.Value.X;

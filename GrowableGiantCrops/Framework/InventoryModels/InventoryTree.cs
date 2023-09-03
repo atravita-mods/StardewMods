@@ -71,7 +71,7 @@ public sealed class InventoryTree : SObject
     public InventoryTree()
         : base()
     {
-        this.NetFields.AddFields(this.growthStage, this.isStump);
+        this.NetFields.AddField(this.growthStage).AddField(this.isStump);
         this.Category = InventoryTreeCategory;
         this.Price = 0;
         this.CanBeSetDown = true;
@@ -447,12 +447,7 @@ public sealed class InventoryTree : SObject
     #region misc
 
     /// <inheritdoc />
-    public override Item getOne()
-    {
-        InventoryTree tree = new((TreeIndexes)this.ParentSheetIndex, 1, this.growthStage.Value, this.isStump.Value);
-        tree._GetOneFrom(this);
-        return tree;
-    }
+    protected override Item GetOneNew() => new InventoryTree((TreeIndexes)this.ParentSheetIndex, 1, this.growthStage.Value, this.isStump.Value);
 
     /// <inheritdoc />
     public override int maximumStackSize() => ModEntry.Config.AllowLargeItemStacking ? 999 : 1;
@@ -476,10 +471,7 @@ public sealed class InventoryTree : SObject
     public override bool isPlaceable() => true;
 
     /// <inheritdoc />
-    public override bool canBePlacedInWater() => false;
-
-    /// <inheritdoc />
-    public override bool isForage(GameLocation location) => false;
+    public override bool isForage() => false;
 
     /// <inheritdoc />
     public override bool canStackWith(ISalable other)

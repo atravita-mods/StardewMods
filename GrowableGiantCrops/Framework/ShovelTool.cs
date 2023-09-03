@@ -84,15 +84,11 @@ public class ShovelTool : Tool
             indexOfMenuItemView: 0,
             stackable: false,
             numAttachmentSlots: 0)
-        => this.Stackable = false;
+    {
+    }
 
     /// <inheritdoc />
-    public override Item getOne()
-    {
-        ShovelTool newShovel = new();
-        newShovel._GetOneFrom(this);
-        return newShovel;
-    }
+    protected override Item GetOneNew() => new ShovelTool();
 
     #region functionality
 
@@ -182,10 +178,31 @@ public class ShovelTool : Tool
                 {
                     Game1.showRedMessage(I18n.FruitTree_Forbidden());
                 }
-                else if (message.TrySplitOnce(':', out ReadOnlySpan<char> first, out ReadOnlySpan<char> second)
-                    && NPCCache.GetByVillagerName(first.Trim().ToString()) is NPC npc)
+                else if (message.TrySplitOnce(':', out ReadOnlySpan<char> first, out ReadOnlySpan<char> second))
                 {
-                    Game1.drawDialogue(npc, second.Trim().ToString());
+                    string name = first.Trim().ToString();
+                    NPC? npc = NPCCache.GetByVillagerName(name);
+                    if (npc is null)
+                    {
+                        try
+                        {
+                            npc = new NPC(
+                                sprite: null,
+                                position: Vector2.Zero,
+                                defaultMap: string.Empty,
+                                facingDirection: 0,
+                                name,
+                                datable: false,
+                                schedule: null,
+                                portrait: Game1.temporaryContent.Load<Texture2D>("Portraits\\" + name));
+                        }
+                        catch (Exception ex)
+                        {
+                            ModEntry.ModMonitor.LogError($"creating NPC {name}", ex);
+                            return;
+                        }
+                    }
+                    Game1.DrawDialogue(new(npc, null, second.Trim().ToString()));
                 }
                 else
                 {
@@ -194,7 +211,7 @@ public class ShovelTool : Tool
                 return;
             }
 
-            GGCUtils.GetLargeObjectAtLocation(location, x, y, false)?.performToolAction(this, 0, pickupTile, location);
+            GGCUtils.GetLargeObjectAtLocation(location, x, y, false)?.performToolAction(this, 0, pickupTile);
 
             int bigItemEnergy = this.IsEfficient ? 0 : ModEntry.Config.ShovelEnergy;
 
@@ -301,7 +318,7 @@ public class ShovelTool : Tool
                     }
                 }
 
-                if (@object.performToolAction(this, location))
+                if (@object.performToolAction(this))
                 {
                     who.Stamina -= smallItemEnergy;
                     if (FTMArtifactSpotPatch.IsBuriedItem?.Invoke(@object) != true)
@@ -355,7 +372,7 @@ public class ShovelTool : Tool
                             || location.NameOrUniqueName == "Custom_Ridgeside_RidgesideVillage"))
                     {
                         Game1.showRedMessage(I18n.FruitTree_Forbidden());
-                        fruitTree.shake(pickupTile, true, location);
+                        fruitTree.shake(pickupTile, true);
                         return;
                     }
 
@@ -363,10 +380,10 @@ public class ShovelTool : Tool
                     {
                         return;
                     }
-                    fruitTree.shake(pickupTile, true, location);
+                    fruitTree.shake(pickupTile, true);
                 }
 
-                if (terrain.performToolAction(this, 0, pickupTile, location))
+                if (terrain.performToolAction(this, 0, pickupTile))
                 {
                     who.Stamina -= smallItemEnergy;
                     location.terrainFeatures.Remove(pickupTile);
@@ -725,9 +742,9 @@ public class ShovelTool : Tool
     protected virtual bool HandleBigCraftable(GameLocation location, Farmer who, Vector2 pickupTile, int energy, SObject @object, int idx)
     {
         who.Stamina -= energy;
-        @object.ParentSheetIndex = idx;
+        @object.ResetParentSheetIndex();
         @object.heldObject.Value = null;
-        @object.performRemoveAction(pickupTile, location);
+        @object.performRemoveAction();
         this.GiveItemOrMakeDebris(location, who, @object);
         AddAnimations(
             loc: location,
@@ -752,7 +769,8 @@ public class ShovelTool : Tool
     /// <returns>True if handled, false otherwise.</returns>
     protected virtual bool HandleTree(GameLocation location, Farmer who, Vector2 pickupTile, int energy, Tree tree)
     {
-        if (tree.growthStage.Value == 0 && (tree.treeType.Value <= Tree.pineTree || tree.treeType.Value == Tree.mahoganyTree))
+#warning - ahhhh trees
+        if (tree.growthStage.Value == 0)
         {
             who.Stamina -= energy;
             location.playSound("woodyHit");

@@ -71,7 +71,7 @@ public sealed class InventoryFruitTree : SObject
     public InventoryFruitTree()
         : base()
     {
-        this.NetFields.AddFields(this.daysUntilMature, this.struckByLightning, this.growthStage);
+        this.NetFields.AddField(this.daysUntilMature).AddField(this.struckByLightning).AddField(this.growthStage);
         this.Category = InventoryTreeCategory;
         this.Price = 0;
         this.CanBeSetDown = true;
@@ -324,7 +324,7 @@ public sealed class InventoryFruitTree : SObject
                 origin: Vector2.Zero,
                 scale: 4f,
                 effects: SpriteEffects.None,
-                layerDepth: Math.Max(0f, (f.getStandingY() + 3) / 10000f));
+                layerDepth: Math.Max(0f, (f.StandingPixel.Y + 3) / 10000f));
         }
     }
 
@@ -335,16 +335,14 @@ public sealed class InventoryFruitTree : SObject
     #region misc
 
     /// <inheritdoc />
-    public override Item getOne()
+    protected override Item GetOneNew()
     {
-        InventoryFruitTree fruitTree = new(
+        return new InventoryFruitTree(
             saplingIndex: this.ParentSheetIndex,
             initialStack: 1,
             growthStage: this.growthStage.Value,
             daysUntilMature: this.daysUntilMature.Value,
             struckByLightning: this.struckByLightning.Value);
-        fruitTree._GetOneFrom(this);
-        return fruitTree;
     }
 
     /// <inheritdoc />
@@ -367,9 +365,6 @@ public sealed class InventoryFruitTree : SObject
 
     /// <inheritdoc />
     public override bool isPlaceable() => true;
-
-    /// <inheritdoc />
-    public override bool canBePlacedInWater() => false;
 
     /// <inheritdoc />
     public override bool canStackWith(ISalable other)

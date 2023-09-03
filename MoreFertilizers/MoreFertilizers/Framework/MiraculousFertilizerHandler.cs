@@ -21,7 +21,7 @@ internal static class MiraculousFertilizerHandler
     /// </summary>
     internal static void Initialize()
     {
-        keg = new SObject(Vector2.Zero, (int)VanillaMachinesEnum.Keg);
+        keg = new SObject(Vector2.Zero, "(BC)12");
     }
 
     /// <summary>

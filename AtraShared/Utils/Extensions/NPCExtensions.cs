@@ -63,7 +63,7 @@ public static class NPCExtensions
                 npc.CurrentDialogue.Clear();
                 npc.currentMarriageDialogue.Clear();
             }
-            npc.CurrentDialogue.Push(new Dialogue(dialogue, npc) { removeOnNextMove = clearOnMovement });
+            npc.CurrentDialogue.Push(new Dialogue(npc, null, dialogue) { removeOnNextMove = clearOnMovement });
             return true;
         }
     }

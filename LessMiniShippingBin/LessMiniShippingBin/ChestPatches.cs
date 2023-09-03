@@ -65,7 +65,7 @@ internal static class ChestPatches
     {
         if ((__instance.fridge.Value ? ModEntry.Config.DrawFirstItemFridge : ModEntry.Config.DrawFirstItem)
             && !__instance.giftbox.Value && __instance.playerChest.Value && !__instance.localKickStartTile.HasValue
-            && __instance.items.Count > 0 && __instance.items[0] is Item itemToDraw)
+            && __instance.Items.Count > 0 && __instance.Items[0] is Item itemToDraw)
         {
             int startframe = __instance.startingLidFrame.Value;
             int currentFrame = GetCurrentLidFrame.Value(__instance);

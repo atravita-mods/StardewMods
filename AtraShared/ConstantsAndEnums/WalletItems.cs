@@ -56,7 +56,7 @@ public static partial class WalletItemsExtensions
         switch (items)
         {
             case WalletItems.BearsKnowledge:
-                return farmer.eventsSeen.Contains(2120303);
+                return farmer.eventsSeen.Contains("2120303");
             case WalletItems.ClubCard:
                 return farmer.hasClubCard;
             case WalletItems.RustyKey:
@@ -66,7 +66,7 @@ public static partial class WalletItemsExtensions
             case WalletItems.SpecialCharm:
                 return farmer.hasSpecialCharm;
             case WalletItems.SpringOnion:
-                return farmer.eventsSeen.Contains(3910979);
+                return farmer.eventsSeen.Contains("3910979");
             case WalletItems.TranslationGuide:
                 return farmer.canUnderstandDwarves;
             case WalletItems.TownKey:

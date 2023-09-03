@@ -157,7 +157,7 @@ internal static class ConfirmWarp
         // rain totem is 681
         if (__instance.ParentSheetIndex == 681 && !__instance.bigCraftable.Value)
         {
-            (string season, int day) = AtraUtils.GetTomorrow(Game1.currentSeason, Game1.dayOfMonth);
+            (Season season, int day) = AtraUtils.GetTomorrow(Game1.season, Game1.dayOfMonth);
             if (Utility.isFestivalDay(day, season))
             {
                 __result = false;
@@ -306,13 +306,13 @@ internal static class ConfirmWarp
                  .HasFlag(Context.IsMultiplayer ? ConfirmationEnum.InMultiplayerOnly : ConfirmationEnum.NotInMultiplayer))
         {
             ModEntry.InputHelper.SurpressClickInput();
-            List<Response> responses = new()
+            Response[] responses = new[]
             {
                 new Response("WarpsYes", I18n.Yes()).SetHotKey(Keys.Y),
                 new Response("WarpsNo", I18n.No()).SetHotKey(Keys.Escape),
             };
 
-            List<Action?> actions = new()
+            Action?[] actions = new[]
             {
                 () =>
                 {
@@ -344,13 +344,13 @@ internal static class ConfirmWarp
             && (IsLocationConsideredDangerous(__instance) ? ModEntry.Config.WarpsInDangerousAreas : ModEntry.Config.WarpsInSafeAreas)
                  .HasFlag(Context.IsMultiplayer ? ConfirmationEnum.InMultiplayerOnly : ConfirmationEnum.NotInMultiplayer))
         {
-            List<Response> responses = new()
+            Response[] responses = new[]
             {
                 new Response("WarpsYes", I18n.Yes()).SetHotKey(Keys.Y),
                 new Response("WarpsNo", I18n.No()).SetHotKey(Keys.Escape),
             };
 
-            List<Action?> actions = new()
+            Action?[] actions = new[]
             {
                 () =>
                 {

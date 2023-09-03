@@ -73,7 +73,7 @@ internal static class RingPatches
         {
             if (__instance.ParentSheetIndex == ModEntry.FireFlyRing)
             {
-                __instance.onEquip(who, environment);
+                __instance.onEquip(who);
             }
         }
         catch (Exception ex)

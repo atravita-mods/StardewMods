@@ -80,7 +80,7 @@ internal static class DrawCulling
     [MethodImpl(TKConstants.Hot)]
     [HarmonyPatch(typeof(Bush), nameof(Bush.draw), new[] { typeof(SpriteBatch), typeof(Vector2) })]
     private static bool PrefixBushDraw(Bush __instance, Vector2 tileLocation)
-        => !ModEntry.Config.CullDraws || Utility.isOnScreen(tileLocation + (Vector2.UnitX * (__instance.size.Value / 2f)), 256);
+        => !ModEntry.Config.CullDraws || Utility.isOnScreen((tileLocation + (Vector2.UnitX * (__instance.size.Value / 2f)) * Game1.tileSize), 256);
 
     [HarmonyPrefix]
     [HarmonyPriority(Priority.Last)]
@@ -94,7 +94,7 @@ internal static class DrawCulling
     [MethodImpl(TKConstants.Hot)]
     [HarmonyPatch(typeof(ResourceClump), nameof(ResourceClump.draw), new[] { typeof(SpriteBatch), typeof(Vector2) })]
     private static bool PrefixClumpDraw(ResourceClump __instance, Vector2 tileLocation)
-        => !ModEntry.Config.CullDraws || Utility.isOnScreen((__instance.Tile.Value + Vector2.One) * Game1.tileSize, 128);
+        => !ModEntry.Config.CullDraws || Utility.isOnScreen((__instance.Tile + Vector2.One) * Game1.tileSize, 128);
 
     [HarmonyPrefix]
     [HarmonyPriority(Priority.Last)]
@@ -109,5 +109,5 @@ internal static class DrawCulling
     [HarmonyPatch(typeof(Projectile), nameof(Projectile.draw), new[] { typeof(SpriteBatch)})]
     private static bool PrefixProjectileDraw(Projectile __instance)
         => !ModEntry.Config.CullDraws
-            || (Utility.isOnScreen(_getProjectilePosition.Value(__instance), 256) && _getProjectileAlpha.Value(__instance) > 0f);
+            || (Utility.isOnScreen(_getProjectilePosition.Value(__instance).Value, 256) && _getProjectileAlpha.Value(__instance) > 0f);
 }

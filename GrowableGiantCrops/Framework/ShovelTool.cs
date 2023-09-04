@@ -827,7 +827,7 @@ public class ShovelTool : Tool
         location.playSound("hoeHit");
         Game1.removeSquareDebrisFromTile((int)pickupTile.X, (int)pickupTile.Y);
         location.checkForBuriedItem((int)pickupTile.X, (int)pickupTile.Y, explosion: false, detectOnly: false, who);
-        MultiplayerHelpers.GetMultiplayer().broadcastSprites(location, new TemporaryAnimatedSprite(
+        Game1.Multiplayer.broadcastSprites(location, new TemporaryAnimatedSprite(
             rowInAnimationTexture: 12,
             position: pickupTile * Game1.tileSize,
             color: Color.White,

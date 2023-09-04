@@ -9,6 +9,8 @@ using AtraShared.Utils.HarmonyHelper;
 
 using HarmonyLib;
 
+using StardewValley.SpecialOrders.Objectives;
+
 namespace SpecialOrdersExtended.Niceties;
 
 /// <summary>

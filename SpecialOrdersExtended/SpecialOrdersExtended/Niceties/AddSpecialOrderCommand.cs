@@ -6,6 +6,8 @@ using AtraShared.Utils.Extensions;
 
 using Microsoft.Xna.Framework;
 
+using StardewValley.SpecialOrders;
+
 namespace SpecialOrdersExtended.Niceties;
 
 /// <summary>
@@ -59,7 +61,7 @@ internal sealed class AddSpecialOrderCommand : IEventCommand
             {
                 SpecialOrder order = SpecialOrder.GetSpecialOrder(args[1], Singletons.Random.Next());
                 Game1.player.team.specialOrders.Add(order);
-                MultiplayerHelpers.GetMultiplayer().globalChatInfoMessage("AcceptedSpecialOrder", Game1.player.Name, order.GetName());
+                Game1.Multiplayer.globalChatInfoMessage("AcceptedSpecialOrder", Game1.player.Name, order.GetName());
             }
         }
         catch (Exception ex)

@@ -1,7 +1,5 @@
 ﻿using AtraBase.Toolkit;
 
-using AtraCore.Utilities;
-
 using AtraShared.ConstantsAndEnums;
 using AtraShared.Utils;
 using AtraShared.Utils.Extensions;
@@ -13,7 +11,6 @@ using Microsoft.Xna.Framework;
 using StardewModdingAPI.Events;
 
 using StardewValley.Buildings;
-using StardewValley.Locations;
 
 namespace MoreFertilizers.Framework;
 
@@ -52,10 +49,10 @@ internal static class SpecialFertilizerApplication
         {
             placementtile = Game1.player.FacingDirection switch
             {
-                Game1.up => Game1.player.getTileLocation() - new Vector2(0, 3),
-                Game1.down => Game1.player.getTileLocation() + new Vector2(0, 3),
-                Game1.left => Game1.player.getTileLocation() - new Vector2(3, 0),
-                _ => Game1.player.getTileLocation() + new Vector2(3, 0)
+                Game1.up => Game1.player.Tile - new Vector2(0, 3),
+                Game1.down => Game1.player.Tile + new Vector2(0, 3),
+                Game1.left => Game1.player.Tile - new Vector2(3, 0),
+                _ => Game1.player.Tile + new Vector2(3, 0)
             };
         }
 
@@ -70,9 +67,9 @@ internal static class SpecialFertilizerApplication
         if (obj.ParentSheetIndex == ModEntry.FishFoodID || obj.ParentSheetIndex == ModEntry.DeluxeFishFoodID || obj.ParentSheetIndex == ModEntry.DomesticatedFishFoodID)
         {
             Vector2 placementpixel = (placementtile * 64f) + new Vector2(32f, 32f);
-            if (obj.ParentSheetIndex == ModEntry.DomesticatedFishFoodID && Game1.currentLocation is BuildableGameLocation loc)
+            if (obj.ParentSheetIndex == ModEntry.DomesticatedFishFoodID)
             {
-                foreach (Building b in loc.buildings)
+                foreach (Building b in Game1.currentLocation.buildings)
                 {
                     if (b is FishPond fishPond && b.occupiesTile(placementtile))
                     {
@@ -84,7 +81,7 @@ internal static class SpecialFertilizerApplication
             Game1.player.FaceFarmerTowardsPosition(placementpixel);
             Game1.playSound("throwDownITem");
 
-            Multiplayer? mp = MultiplayerHelpers.GetMultiplayer();
+            Multiplayer? mp = Game1.Multiplayer;
             float time = obj.ParabolicThrowItem(Game1.player.Position - new Vector2(0, 128), placementpixel, mp, Game1.currentLocation);
 
             GameLocationUtils.DrawWaterSplash(Game1.currentLocation, placementpixel, mp, (int)time);

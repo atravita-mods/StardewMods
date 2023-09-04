@@ -53,7 +53,7 @@ internal static class SObjectPatches
             int posY = ((int)tile.Y * Game1.tileSize) + 32;
             foreach (Furniture f in location.furniture)
             {
-                if (f.furniture_type.Value == Furniture.rug && f.getBoundingBox(f.TileLocation).Contains(posX, posY))
+                if (f.furniture_type.Value == Furniture.rug && f.GetBoundingBox().Contains(posX, posY))
                 {
                     __result = false;
                     return false;
@@ -123,7 +123,7 @@ internal static class SObjectPatches
             {
                 foreach (Furniture f in location.furniture)
                 {
-                    if (f.getBoundingBox(f.TileLocation).Contains(x, y))
+                    if (f.GetBoundingBox().Contains(x, y))
                     {
                         Game1.showRedMessage(I18n.RugPlantingMessage());
                         __result = false;
@@ -146,14 +146,14 @@ internal static class SObjectPatches
                     }
                 }
 
-                List<Response> responses = new()
+                Response[] responses = new[]
                 {
                     new Response("BombsYes", I18n.YesOne()).SetHotKey(Keys.Y),
                     new Response("BombsArea", I18n.YesArea()),
                     new Response("BombsNo", I18n.No()).SetHotKey(Keys.Escape),
                 };
 
-                List<Action?> actions = new()
+                Action?[] actions = new[]
                 {
                     () =>
                     {
@@ -161,7 +161,7 @@ internal static class SObjectPatches
                         {
                             Game1.player.reduceActiveItemByOne();
                         }
-                        GameLocationUtils.ExplodeBomb(Game1.player.currentLocation, __instance.ParentSheetIndex, loc, ModEntry.Multiplayer());
+                        GameLocationUtils.ExplodeBomb(Game1.player.currentLocation, __instance.ParentSheetIndex, loc, Game1.Multiplayer);
                     },
                     () =>
                     {
@@ -170,7 +170,7 @@ internal static class SObjectPatches
                         {
                             Game1.player.reduceActiveItemByOne();
                         }
-                        GameLocationUtils.ExplodeBomb(Game1.player.currentLocation, __instance.ParentSheetIndex, loc, ModEntry.Multiplayer());
+                        GameLocationUtils.ExplodeBomb(Game1.player.currentLocation, __instance.ParentSheetIndex, loc, Game1.Multiplayer);
                     },
                 };
 

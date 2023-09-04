@@ -225,7 +225,7 @@ internal sealed class SetRelationship : IEventCommand
 
                 if (past is FriendshipEnum.Dating or FriendshipEnum.Engaged)
                 {
-                    MultiplayerHelpers.GetMultiplayer().globalChatInfoMessage("BreakUp", Game1.player.Name, npc.displayName);
+                    Game1.Multiplayer.globalChatInfoMessage("BreakUp", Game1.player.Name, npc.displayName);
                     friendship.Points = value;
 
                     // make sure to break off the engagement too.
@@ -240,7 +240,7 @@ internal sealed class SetRelationship : IEventCommand
                 friendship.Status = FriendshipStatus.Dating;
                 if (past is FriendshipEnum.Friendly or FriendshipEnum.Unmet)
                 {
-                    MultiplayerHelpers.GetMultiplayer().globalChatInfoMessage("Dating", Game1.player.Name, npc.displayName);
+                    Game1.Multiplayer.globalChatInfoMessage("Dating", Game1.player.Name, npc.displayName);
                 }
                 break;
             case FriendshipEnum.Engaged:

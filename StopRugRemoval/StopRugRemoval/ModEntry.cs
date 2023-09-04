@@ -46,11 +46,6 @@ internal sealed class ModEntry : Mod
     #region accessors
 
     /// <summary>
-    /// Gets a function that gets Game1.multiplayer.
-    /// </summary>
-    internal static Func<Multiplayer> Multiplayer => MultiplayerHelpers.GetMultiplayer;
-
-    /// <summary>
     /// Gets the logger for this file.
     /// </summary>
     internal static IMonitor ModMonitor { get; private set; } = null!;
@@ -334,14 +329,12 @@ internal sealed class ModEntry : Mod
             Stopwatch sw = Stopwatch.StartNew();
 #endif
 
-            Utility.ForAllLocations(action: static (GameLocation loc) =>
+            Utility.ForEachLocation(action: static (GameLocation loc) =>
             {
                 if (loc is null)
                 {
-                    return;
+                    return true;
                 }
-
-#warning - review and remove in stardew 1.6
 
                 // crosscheck and remove nulls in GameLocation.characters
                 // Game and mods do not like this.
@@ -354,27 +347,6 @@ internal sealed class ModEntry : Mod
                             ModMonitor.Log($"Found null in characters list for {loc.NameOrUniqueName}, removing.", LogLevel.Warn);
                             loc.characters.RemoveAt(i);
                         }
-                    }
-                }
-
-                // crosscheck and fix jukeboxes.
-                string song = loc.miniJukeboxTrack.Value;
-                if (!string.IsNullOrEmpty(song))
-                {
-                    ModMonitor.DebugOnlyLog($"Checking jukebox {song}...");
-                    try
-                    {
-                        Game1.soundBank.GetCue(song);
-                    }
-                    catch (ArgumentException)
-                    {
-                        ModMonitor.Log($"Found missing soundtrack {song}, removing.", LogLevel.Warn);
-                        loc.miniJukeboxTrack.Value = string.Empty;
-                    }
-                    catch (Exception ex)
-                    {
-                        ModMonitor.LogError($"retrieving song {song}", ex);
-                        loc.miniJukeboxTrack.Value = string.Empty;
                     }
                 }
 
@@ -395,6 +367,8 @@ internal sealed class ModEntry : Mod
                 {
                     islandHouse.fridge?.Value?.clearNulls();
                 }
+
+                return true;
             });
 #if DEBUG
             this.Monitor.LogTimespan("Sanity checking locations", sw, LogLevel.Trace);

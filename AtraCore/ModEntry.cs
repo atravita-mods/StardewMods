@@ -42,12 +42,16 @@ internal sealed class ModEntry : BaseMod<ModEntry>
     /// </summary>
     internal static ModConfig Config { get; private set; } = null!;
 
+    internal static IGameContentHelper GameContentHelper { get; private set; } = null!;
+
     /// <inheritdoc />
     public override void Entry(IModHelper helper)
     {
         base.Entry(helper);
 
         I18n.Init(helper.Translation);
+        GameContentHelper = helper.GameContent;
+
         AssetManager.Initialize(helper.GameContent);
         QuestTracker.Init(helper.Multiplayer, this.ModManifest.UniqueID);
 

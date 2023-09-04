@@ -33,7 +33,7 @@ public static class GameLocationExtensions
     [SuppressMessage("StyleCop.CSharp.SpacingRules", "SA1008:Opening parenthesis should be spaced correctly", Justification = "Preference.")]
     public static bool IsDangerousLocation(this GameLocation location)
         => !location.IsFarm && !location.IsGreenhouse && location is not (SlimeHutch or Town or IslandWest)
-            && (location is MineShaft or VolcanoDungeon or BugLand || location.characters.Any((character) => character is Monster));
+            && (location is MineShaft or VolcanoDungeon or BugLand || location.characters.Any(static (character) => character is Monster));
 
     /// <summary>
     /// Returns true if there's a festival at a location and the player can't actually warp there yet.
@@ -101,7 +101,8 @@ public static class GameLocationExtensions
     {
         Guard.IsNotNull(location);
         return location.doesTileHaveProperty((int)tile.X, (int)tile.Y, "Diggable", "Back") is not null
-                        && !location.isTileOccupied(tile) && location.isTilePassable(new XLocation((int)tile.X, (int)tile.Y), Game1.viewport);
+            && !location.IsTileOccupiedBy(tile, CollisionMask.All, CollisionMask.None, useFarmerTile: true)
+            && location.isTilePassable(new XLocation((int)tile.X, (int)tile.Y), Game1.viewport);
     }
 
     /// <summary>

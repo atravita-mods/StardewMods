@@ -14,7 +14,7 @@ internal static class AllowRepeatAfterHandler
     /// <summary>
     /// A mapping of events to forget and the in-game day to forget them on.
     /// </summary>
-    private static readonly PerScreen<Dictionary<int, HashSet<int>>> eventsToRepeat = new(() => new());
+    private static readonly PerScreen<Dictionary<int, HashSet<string>>> eventsToRepeat = new(() => new());
 
     /// <summary>
     /// Gets the save key used to look up our saved data.
@@ -33,7 +33,7 @@ internal static class AllowRepeatAfterHandler
     /// </summary>
     internal static void Reset()
     {
-        foreach ((int _, Dictionary<int, HashSet<int>> value) in eventsToRepeat.GetActiveValues())
+        foreach ((int _, Dictionary<int, HashSet<string>> value) in eventsToRepeat.GetActiveValues())
         {
             value.Clear();
         }
@@ -45,7 +45,7 @@ internal static class AllowRepeatAfterHandler
     /// <param name="helper">Data helper.</param>
     internal static void Load(IDataHelper helper)
     {
-        eventsToRepeat.Value = helper.ReadGlobalData<Dictionary<int, HashSet<int>>>(SaveKey)
+        eventsToRepeat.Value = helper.ReadGlobalData<Dictionary<int, HashSet<string>>>(SaveKey)
             ?? new();
     }
 
@@ -83,9 +83,9 @@ internal static class AllowRepeatAfterHandler
     {
         SDate now = SDate.Now();
         int days = now.DaysSinceStart;
-        if (eventsToRepeat.Value.TryGetValue(days, out HashSet<int>? eventsToForget))
+        if (eventsToRepeat.Value.TryGetValue(days, out HashSet<string>? eventsToForget))
         {
-            ModEntry.ModMonitor.Log($"Forgetting events for {now}: {string.Join(',', eventsToForget.Select(evt => evt.ToString()))}");
+            ModEntry.ModMonitor.Log($"Forgetting events for {now}: {string.Join(',', eventsToForget)}");
 
             int count = 0;
 
@@ -109,10 +109,10 @@ internal static class AllowRepeatAfterHandler
     /// </summary>
     /// <param name="id">int id of the event.</param>
     /// <param name="days">number of days to offset by.</param>
-    internal static void Add(int id, int days)
+    internal static void Add(string id, int days)
     {
         days += SDate.Now().DaysSinceStart;
-        if (!eventsToRepeat.Value.TryGetValue(days, out HashSet<int>? events))
+        if (!eventsToRepeat.Value.TryGetValue(days, out HashSet<string>? events))
         {
             eventsToRepeat.Value[days] = events = new();
         }

@@ -45,7 +45,7 @@ internal static class BeehouseHandler
             return;
         }
 
-        if (!ModEntry.Config.VanillaMachines.SetDefault(VanillaMachinesEnum.BeeHouse, true))
+        if (!ModEntry.Config.VanillaMachines.SetDefault("(BC)10", true))
         {
             Status.Value = MachineStatus.Disabled;
             return;

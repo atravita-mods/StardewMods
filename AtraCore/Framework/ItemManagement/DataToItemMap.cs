@@ -25,8 +25,8 @@ public static class DataToItemMap
     /// <param name="type">type of the item.</param>
     /// <param name="name">name of the item.</param>
     /// <param name="resolveRecipesSeperately">Whether or not to ignore the recipe bit.</param>
-    /// <returns>Integer ID, or -1 if not found.</returns>
-    public static int GetID(ItemTypeEnum type, string name, bool resolveRecipesSeperately = false)
+    /// <returns>string ID, or null if not found.</returns>
+    public static string? GetID(ItemTypeEnum type, string name, bool resolveRecipesSeperately = false)
     {
         Guard.IsNotNullOrWhiteSpace(name, nameof(name));
 
@@ -43,15 +43,8 @@ public static class DataToItemMap
         {
             return id;
         }
-        return -1;
+        return null;
     }
-
-    /// <summary>
-    /// If the SObject index is actually a ring.
-    /// </summary>
-    /// <param name="id">int id</param>
-    /// <returns>true for rings, false otherwise.</returns>
-    public static bool IsActuallyRing(int id) => actuallyRings.Value.Contains(id);
 
     /// <summary>
     /// Gets all indexes associated with an asset type.

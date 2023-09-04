@@ -28,7 +28,7 @@ internal static class PatchesForSObject
 
     private const string ModDataKey = "atravita.GrowableGiantCrops.PlacedSlimeBall";
 
-    private static bool IsSmallTerrainObject(this SObject obj) => obj.Name == "Stone" || obj.Name.Contains("Weeds") || obj.Name.Contains("Twig");
+    private static bool IsSmallTerrainObject(this SObject obj) => obj.IsBreakableStone() || obj.IsWeeds() || obj.IsTwig();
 
     [HarmonyPostfix]
     [HarmonyPatch(nameof(SObject.placementAction))]
@@ -59,7 +59,7 @@ internal static class PatchesForSObject
             }
             else if (__instance?.bigCraftable?.Value == false)
             {
-                if (SObject.isWildTreeSeed(__instance.ParentSheetIndex)
+                if (SObject.isWildTreeSeed(__instance.ItemId)
                     && location.terrainFeatures.TryGetValue(new Vector2(x / Game1.tileSize, y / Game1.tileSize), out TerrainFeature? terrain)
                     && terrain is Tree tree)
                 {

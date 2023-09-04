@@ -32,8 +32,8 @@ namespace AtraCore.HarmonyPatches.DrawPrismaticPatches;
 [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = StyleCopConstants.NamedForHarmony)]
 internal static class DrawPrismatic
 {
-    private static readonly SortedList<ItemTypeEnum, Dictionary<int, Lazy<Texture2D>>> PrismaticMasks = new();
-    private static readonly SortedList<ItemTypeEnum, HashSet<int>> PrismaticFull = new();
+    private static readonly SortedList<ItemTypeEnum, Dictionary<string, Lazy<Texture2D>>> PrismaticMasks = new();
+    private static readonly SortedList<ItemTypeEnum, HashSet<string>> PrismaticFull = new();
 
     private static readonly Harmony harmony = new("atravita.AtraCore.PrismaticDraw");
 

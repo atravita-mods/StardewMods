@@ -70,10 +70,7 @@ internal sealed class AllowRepeatAfter : IEventCommand
         {
             foreach (string id in new ArraySegment<string>(args, 1, args.Length - 2))
             {
-                if (int.TryParse(id, out int intID))
-                {
-                    AllowRepeatAfterHandler.Add(intID, days);
-                }
+                AllowRepeatAfterHandler.Add(id, days);
             }
         }
 

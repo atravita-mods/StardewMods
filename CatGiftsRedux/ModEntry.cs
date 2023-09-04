@@ -23,6 +23,7 @@ using Microsoft.Xna.Framework;
 using StardewModdingAPI.Events;
 
 using StardewValley.Characters;
+using StardewValley.Extensions;
 using StardewValley.Objects;
 
 using AtraUtils = AtraShared.Utils.Utils;
@@ -44,7 +45,7 @@ internal sealed class ModEntry : BaseMod<ModEntry>
     // User defined items.
     private readonly HashSet<string> bannedItems = new();
     private readonly WeightedManager<ItemRecord> playerItemsManager = new();
-    private Lazy<WeightedManager<int>> allItemsWeighted = new(GenerateAllItems);
+    private Lazy<WeightedManager<string>> allItemsWeighted = new(GenerateAllItems);
 
     private IAssetName dataObjectInfo = null!;
 
@@ -230,10 +231,10 @@ internal sealed class ModEntry : BaseMod<ModEntry>
     }
 
     private SObject? RandomSeasonalForage(Random random)
-        => new(Utility.getRandomBasicSeasonalForageItem(Game1.currentSeason, random.Next()), 1);
+        => new(Utility.getRandomBasicSeasonalForageItem(Game1.season, random.Next()), 1);
 
     private SObject? RandomSeasonalItem(Random random)
-        => new(Utility.getRandomPureSeasonalItem(Game1.currentSeason, random.Next()), 1);
+        => new(Utility.getRandomPureSeasonalItem(Game1.season, random.Next()), 1);
 
     private SObject? GetFromForage(Random random)
     {
@@ -244,7 +245,7 @@ internal sealed class ModEntry : BaseMod<ModEntry>
             return null;
         }
 
-        string? map = Utility.GetRandom(this.config.ForageFromMaps);
+        string? map = Random.Shared.ChooseFrom(this.config.ForageFromMaps);
 
         GameLocation? loc = Game1.getLocationFromName(map);
         if (loc is null)
@@ -252,7 +253,7 @@ internal sealed class ModEntry : BaseMod<ModEntry>
             return null;
         }
 
-        List<SObject>? forage = loc.Objects.Values.Where((obj) => !obj.bigCraftable.Value && obj.isForage(loc)).ToList();
+        List<SObject>? forage = loc.Objects.Values.Where((obj) => !obj.bigCraftable.Value && obj.isForage()).ToList();
 
         if (forage.Count == 0)
         {
@@ -282,11 +283,6 @@ internal sealed class ModEntry : BaseMod<ModEntry>
             if (Utils.ForbiddenFromRandomPicking(id))
             {
                 continue;
-            }
-
-            if (DataToItemMap.IsActuallyRing(id))
-            {
-                return new Ring(id);
             }
 
             return new SObject(id, 1);
@@ -394,9 +390,9 @@ internal sealed class ModEntry : BaseMod<ModEntry>
     }
 
     [SuppressMessage("StyleCop.CSharp.OrderingRules", "SA1204:Static elements should appear before instance elements", Justification = "Reviewed.")]
-    private static WeightedManager<int> GenerateAllItems()
+    private static WeightedManager<string> GenerateAllItems()
     {
-        WeightedManager<int> ret = new();
+        WeightedManager<string> ret = new();
         float difficulty = Game1.player?.difficultyModifier ?? 1.0f;
 
         foreach (int key in DataToItemMap.GetAll(ItemTypeEnum.SObject))

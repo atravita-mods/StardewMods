@@ -44,7 +44,7 @@ public class ReviveDeadCropsApi : IReviveDeadCropsApi
     /// <inheritdoc />
     public bool CanApplyDust(GameLocation loc, Vector2 tile, SObject obj)
     {
-        if (!Utility.IsNormalObjectAtParentSheetIndex(obj, FAIRY_DUST))
+        if (obj.QualifiedItemId != FAIRY_DUST)
         {
             return false;
         }

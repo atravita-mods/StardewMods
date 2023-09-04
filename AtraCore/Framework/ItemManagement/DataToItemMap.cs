@@ -17,8 +17,6 @@ public static class DataToItemMap
 
     private static readonly SortedList<ItemTypeEnum, Lazy<Dictionary<string, int>>> nameToIDMap = new(8);
 
-    private static Lazy<HashSet<int>> actuallyRings = new(() => GetAll(ItemTypeEnum.Ring).ToHashSet());
-
     /// <summary>
     /// Given an ItemType and a name, gets the id.
     /// </summary>
@@ -166,10 +164,6 @@ public static class DataToItemMap
                     }
                     return mapping;
                 });
-            }
-            if (actuallyRings.IsValueCreated)
-            {
-                actuallyRings = new(GetAll(ItemTypeEnum.Ring).ToHashSet());
             }
         }
 

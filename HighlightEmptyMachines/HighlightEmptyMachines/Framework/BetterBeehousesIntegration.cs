@@ -17,6 +17,8 @@ namespace HighlightEmptyMachines.Framework;
 /// </summary>
 internal static class BeehouseHandler
 {
+    internal const string BeeHouse = "(BC)10";
+
     private static IBetterBeehousesAPI? api;
 
     /// <summary>

@@ -52,7 +52,7 @@ public class TappedGiantCrop : IMachine
 
     public MachineState GetState()
     {
-        AutomateBridge.ModMonitor.DebugOnlyLog($"Automate requested state of giant crop at {this.Location} - {this.crop.tile} - {this.tapper.heldObject.Value?.ParentSheetIndex ?? -1}");
+        AutomateBridge.ModMonitor.DebugOnlyLog($"Automate requested state of giant crop at {this.Location} - {this.crop.tile} - {this.tapper.heldObject.Value?.QualifiedItemId ?? "unknown"}");
         if (this.tapper.heldObject.Value is null)
         {
             return MachineState.Empty;

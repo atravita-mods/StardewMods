@@ -55,8 +55,8 @@ internal static class ShopManager
     private static WeightedManager<int>? weighted;
 
     // node shop state.
-    private static readonly PerScreen<Dictionary<int, int>?> NodeStock = new();
-    private static int[] nodes = null!;
+    private static readonly PerScreen<Dictionary<string, int>?> NodeStock = new();
+    private static string[] nodes = null!;
 
     #endregion
 
@@ -85,10 +85,10 @@ internal static class ShopManager
 
         stringUtils = new(ModEntry.ModMonitor);
 
-        HashSet<int> nodesList = new();
-        foreach ((int index, string data) in Game1.objectInformation)
+        HashSet<string> nodesList = new();
+        foreach ((string index, string data) in Game1.objectInformation)
         {
-            if (index == 390)
+            if (index == "390")
             {
                 continue;
             }

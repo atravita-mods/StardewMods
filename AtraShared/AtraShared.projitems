@@ -15,6 +15,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)constantsandenums\FriendshipEnum.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)constantsandenums\GenderEnum.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ConstantsAndEnums\ItemTypeEnum.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ConstantsAndEnums\MusicCues.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ConstantsAndEnums\Seasons.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)constantsandenums\Skills.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)constantsandenums\StyleCopConstants.cs" />

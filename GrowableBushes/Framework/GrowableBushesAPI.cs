@@ -1,4 +1,6 @@
-﻿using AtraShared.Utils.Extensions;
+﻿// Ignore Spelling: loc Growable
+
+using AtraShared.Utils.Extensions;
 
 using Microsoft.Xna.Framework;
 
@@ -69,7 +71,7 @@ public sealed class GrowableBushesAPI : IGrowableBushesAPI
                         loc.largeTerrainFeatures.RemoveAt(i);
                         InventoryBush pickedUpBush = new(size, 1)
                         {
-                            TileLocation = bush.tilePosition.Value,
+                            TileLocation = bush.Tile,
                         };
 
                         if (ModEntry.Config.PreserveModData)

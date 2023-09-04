@@ -80,13 +80,13 @@ internal static class InventoryWatcher
     }
 
     /// <summary>
-    /// Checks whether or not a specific <paramref name="parentSheetIndex"/> corresponds to a sapling seen before.
+    /// Checks whether or not a specific <paramref name="itemID"/> corresponds to a sapling seen before.
     /// </summary>
-    /// <param name="parentSheetIndex">Parent sheet index to check.</param>
+    /// <param name="itemID">Parent sheet index to check.</param>
     /// <returns>If the sapling has been viewed.</returns>
-    internal static bool HaveSeen(string parentSheetIndex)
+    internal static bool HaveSeen(string itemID)
     {
-        if (Game1Wrappers.ObjectInfo.TryGetValue(parentSheetIndex, out string? data))
+        if (Game1Wrappers.ObjectInfo.TryGetValue(itemID, out string? data))
         {
             string name = data.GetNthChunk('/').ToString();
             return model?.Saplings?.Contains(name) == true;

@@ -38,7 +38,7 @@ internal class SObjectDrawTranspiler
         }
         else if (ModEntry.Config.VanillaMachines.TryGetValue((VanillaMachinesEnum)obj.ParentSheetIndex, out bool val) && val)
         {
-            if (obj is Cask cask && Game1.currentLocation is GameLocation loc && !cask.IsValidCaskLocation(loc))
+            if (obj is Cask cask && Game1.currentLocation is GameLocation loc && !cask.IsValidCaskLocation())
             {
                 return ModEntry.Config.InvalidColor;
             }

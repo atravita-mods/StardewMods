@@ -6,11 +6,8 @@ using System.Text.RegularExpressions;
 using AtraBase.Models.RentedArrayHelpers;
 using AtraBase.Toolkit;
 using AtraBase.Toolkit.Extensions;
-using AtraBase.Toolkit.StringHandler;
 
-using AtraCore;
 using AtraCore.Framework.Internal;
-using AtraCore.Framework.ItemManagement;
 
 using AtraShared.ConstantsAndEnums;
 using AtraShared.Integrations;
@@ -23,6 +20,9 @@ using Microsoft.Xna.Framework;
 
 using StardewModdingAPI.Events;
 
+using StardewValley.Extensions;
+using StardewValley.GameData.FruitTrees;
+using StardewValley.Internal;
 using StardewValley.Locations;
 
 using AtraUtils = AtraShared.Utils.Utils;
@@ -47,17 +47,17 @@ internal sealed class ModEntry : BaseMod<ModEntry>
     /// <summary>
     /// The item IDs for the four basic forage fruit.
     /// </summary>
-    private readonly List<int> BASE_FRUIT = new() { 296, 396, 406, 410 };
+    private readonly List<string> BASE_FRUIT = new() { "(O)296", "(O)396", "(O)406", "(O)410" };
 
     /// <summary>
     /// A list of vanilla fruit.
     /// </summary>
-    private readonly List<int> VANILLA_FRUIT = new() { 613, 634, 635, 636, 637, 638 };
+    private readonly List<string> VANILLA_FRUIT = new() { "(O)613", "(O)634", "(O)635", "(O)636", "(O)637", "(O)638" };
 
     /// <summary>
     /// Item IDs for items produced by trees.
     /// </summary>
-    private List<int> TreeFruit = new();
+    private List<string> TreeFruit = new();
 
     private StardewSeasons season = StardewSeasons.None;
 
@@ -117,12 +117,9 @@ internal sealed class ModEntry : BaseMod<ModEntry>
     internal static void RequestFruitListReset() => ShouldResetFruitList = true;
 
     /// <summary>
-    /// Remove the list TreeFruit when no longer necessary, delete the Random as well.
+    /// Deletes the Random as well.
     /// </summary>
-    private void Cleanup()
-    {
-        this.random = null;
-    }
+    private void ResetRandom() => this.random = null;
 
     /// <summary>
     /// Generates the GMCM for this mod by looking at the structure of the config class.
@@ -321,7 +318,7 @@ internal sealed class ModEntry : BaseMod<ModEntry>
         }
 
 END:
-        this.Cleanup();
+        this.ResetRandom();
         return;
     }
 
@@ -332,22 +329,19 @@ END:
     /// <param name="tile">Tile to place fruit on.</param>
     private void PlaceFruit(GameLocation location, Vector2 tile)
     {
-        int fruitToPlace = Utility.GetRandom(
-            this.TreeFruit.Count > 0 && this.Random.OfChance(this.config.TreeFruitChance / 100f) ? this.TreeFruit : this.BASE_FRUIT,
-            this.Random);
+        string fruitToPlace = this.Random.ChooseFrom(this.TreeFruit.Count > 0 && this.Random.OfChance(this.config.TreeFruitChance / 100f) ? this.TreeFruit : this.BASE_FRUIT);
 
-        if (!DataToItemMap.IsActuallyRing(fruitToPlace))
-        {
-            location.Objects[tile] = new SObject(fruitToPlace, 1) { IsSpawnedObject = true };
-            this.Monitor.DebugOnlyLog($"Spawning item {fruitToPlace} at {location.Name}:{tile.X},{tile.Y}", LogLevel.Debug);
-        }
+        SObject fruit = ItemRegistry.Create<SObject>(fruitToPlace);
+        fruit.IsSpawnedObject = true;
+        location.setObject(tile, fruit);
+        this.Monitor.DebugOnlyLog($"Spawning item {fruitToPlace} at {location.Name}:{tile.X},{tile.Y}", LogLevel.Debug);
     }
 
     [MethodImpl(TKConstants.Hot)]
     private bool CanSpawnFruitHere(GameLocation location, Vector2 tile)
         => this.Random.OfChance(this.config.SpawnChance / 100f)
             && location.IsTileViewable(new XLocation((int)tile.X, (int)tile.Y), Game1.viewport)
-            && location.isTileLocationTotallyClearAndPlaceableIgnoreFloors(tile);
+            && location.CanItemBePlacedHere(tile);
 
     /// <summary>
     /// Console command to list valid fruits for spawning.
@@ -363,7 +357,7 @@ END:
         }
 
         List<string> fruitNames = new();
-        foreach (int objectID in this.GetTreeFruits())
+        foreach (string objectID in this.GetTreeFruits())
         {
             if (Game1Wrappers.ObjectInfo.TryGetValue(objectID, out string? val))
             {
@@ -404,7 +398,7 @@ END:
     /// Generate list of tree fruits valid for spawning, based on user config/deny list/data in Data/fruitTrees.
     /// </summary>
     /// <returns>A list of tree fruit.</returns>
-    private List<int> GetTreeFruits()
+    private List<string> GetTreeFruits()
     {
         this.Monitor.DebugOnlyLog("Generating tree fruit list");
 
@@ -414,50 +408,110 @@ END:
         }
 
         List<string> denylist = this.GetData(AssetManager.DENYLIST_LOCATION);
-        List<int> treeFruits = new();
+        List<string> treeFruits = new(Game1.fruitTreeData.Count / 2);
 
-        Dictionary<int, string> fruittrees = Game1.content.Load<Dictionary<int, string>>("Data/fruitTrees");
-        ReadOnlySpan<char> currentseason = Game1.currentSeason.AsSpan().Trim();
-        foreach ((int saplingIndex, string tree) in fruittrees)
+        bool enforceSeason = this.config.SeasonalOnly == SeasonalBehavior.SeasonalOnly || (this.config.SeasonalOnly == SeasonalBehavior.SeasonalExceptWinter && !Game1.IsWinter);
+        foreach ((string saplingIndex, FruitTreeData? tree) in Game1.fruitTreeData)
         {
             if (this.config.ProgressionMode && !InventoryWatcher.HaveSeen(saplingIndex))
             {
                 continue;
             }
 
-            SpanSplit treedata = tree.SpanSplit('/', StringSplitOptions.TrimEntries, expectedCount: 3);
-
-            if ((this.config.SeasonalOnly == SeasonalBehavior.SeasonalOnly || (this.config.SeasonalOnly == SeasonalBehavior.SeasonalExceptWinter && !Game1.IsWinter))
-                && !treedata[1].Contains(currentseason, StringComparison.OrdinalIgnoreCase)
-                && (!Game1.IsSummer || !treedata[1].Contains("island")))
+            if (enforceSeason && !tree.Seasons.Contains(Game1.season))
             {
                 continue;
             }
 
-            // 73 is the golden walnut. Let's not let players have that, or 858's Qi gems.
-            if (treedata.TryGetAtIndex(2, out SpanSplitEntry val) && int.TryParse(val, out int objectIndex) && objectIndex != 73 && objectIndex != 858)
+            foreach (FruitTreeFruitData? candidate in tree.Fruit)
             {
                 try
                 {
-                    SpanSplit fruit = Game1Wrappers.ObjectInfo[objectIndex].SpanSplit('/', expectedCount: 5);
-                    string fruitname = fruit[SObject.objectInfoNameIndex].ToString();
-                    if ((this.config.AllowAnyTreeProduct || (fruit[SObject.objectInfoTypeIndex].SpanSplit().TryGetAtIndex(1, out SpanSplitEntry cat) && int.TryParse(cat, out int category) && category == SObject.FruitsCategory))
-                        && (!this.config.EdiblesOnly || int.Parse(fruit[SObject.objectInfoEdibilityIndex]) >= 0)
-                        && int.Parse(fruit[SObject.objectInfoPriceIndex]) <= this.config.PriceCap
-                        && !denylist.Contains(fruitname)
-                        && (!this.config.NoBananasBeforeShrine || !fruitname.Equals("Banana", StringComparison.OrdinalIgnoreCase)
-                            || (Context.IsWorldReady && Game1.getLocationFromName("IslandEast") is IslandEast islandeast && islandeast.bananaShrineComplete.Value)))
+                    if (this.ProcessFruitTreFruitData(candidate) is not SObject item)
                     {
-                        treeFruits.Add(objectIndex);
+                        continue;
                     }
+
+                    if (!item.HasTypeObject())
+                    {
+                        continue;
+                    }
+
+                    // 73 is the golden walnut. Let's not let players have that, or 858's Qi gems.
+                    if (item.QualifiedItemId is "(O)73" or "(O)858")
+                    {
+                        continue;
+                    }
+
+                    if (!this.config.AllowAnyTreeProduct && item.Category != SObject.FruitsCategory)
+                    {
+                        continue;
+                    }
+
+                    if (this.config.EdiblesOnly && item.Edibility < 0)
+                    {
+                        continue;
+                    }
+
+                    if (this.config.PriceCap > item.salePrice())
+                    {
+                        continue;
+                    }
+
+                    if (denylist.Contains(item.Name) || denylist.Contains(item.ItemId))
+                    {
+                        continue;
+                    }
+
+                    if (this.config.NoBananasBeforeShrine && item.QualifiedItemId == "(O)91"
+                        && Game1.getLocationFromName("IslandEast") is IslandEast islandeast && !islandeast.bananaShrineComplete.Value)
+                    {
+                        continue;
+                    }
+
+                    treeFruits.Add(item.QualifiedItemId);
                 }
                 catch (Exception ex)
                 {
-                    this.Monitor.Log($"Ran into issue looking up item {objectIndex}\n{ex}", LogLevel.Warn);
+                    this.Monitor.Log($"Ran into issue looking up item {candidate.Id} for tree {saplingIndex}\n{ex}", LogLevel.Warn);
                 }
             }
         }
         return treeFruits;
+    }
+
+    // gets the fruit item associated with a specific fruit tree data drop.
+    // derived from FruitTree.TryCreateFruit
+    private SObject? ProcessFruitTreFruitData(FruitTreeFruitData data, bool enforceSeason = false)
+    {
+        if (!this.Random.OfChance(data.Chance))
+        {
+            return null;
+        }
+        if (data.Condition is not null
+            && !GameStateQuery.CheckConditions(data.Condition, Game1.getFarm(), null, null, null, this.Random, enforceSeason ? null : GameStateQuery.SeasonQueryKeys))
+        {
+            return null;
+        }
+        if (enforceSeason && data.Season.HasValue && data.Season != Game1.season)
+        {
+            return null;
+        }
+
+        SObject? item = ItemQueryResolver.TryResolveRandomItem(data, new ItemQueryContext(Game1.getFarm(), null, null), avoidRepeat: false, null, null, null, delegate (string query, string error)
+        {
+            this.Monitor.Log($"Failed parsing item query '{query}' for drop ID {data.Id}, skipping. Error '{error}'");
+        }) as SObject;
+        if (item is not null)
+        {
+            if (item.Stack <= 0)
+            {
+                return null;
+            }
+            item.Stack = 1;
+            item.Quality = SObject.lowQuality;
+        }
+        return item;
     }
 
     private void BellsAndWhistles(object? sender, OneSecondUpdateTickingEventArgs e)
@@ -466,7 +520,7 @@ END:
             && this.SpawnedFruitToday
             && this.config.UseMineCave)
         { // The following code is copied out of the game and adds the bat sprites to the mines.
-            if (Singletons.Random.OfChance(0.12))
+            if (Random.Shared.OfChance(0.12))
             {
                 TemporaryAnimatedSprite redbat = new(
                     textureName: @"LooseSprites\Cursors",
@@ -474,7 +528,7 @@ END:
                     animationInterval: 80f,
                     animationLength: 4,
                     numberOfLoops: 9999,
-                    position: new Vector2(Singletons.Random.Next(mine.map.Layers[0].LayerWidth), Singletons.Random.Next(mine.map.Layers[0].LayerHeight)),
+                    position: new Vector2(Random.Shared.Next(mine.map.Layers[0].LayerWidth), Random.Shared.Next(mine.map.Layers[0].LayerHeight)),
                     flicker: false,
                     flipped: false,
                     layerDepth: 1f,
@@ -491,7 +545,7 @@ END:
                     motion = new Vector2(0f, -8f),
                 };
                 mine.TemporarySprites.Add(redbat);
-                if (Singletons.Random.OfChance(0.15))
+                if (Random.Shared.OfChance(0.15))
                 {
                     mine.localSound("batScreech");
                 }
@@ -500,16 +554,18 @@ END:
                     DelayedAction.playSoundAfterDelay("batFlap", (320 * i) + 240);
                 }
             }
-            else if (Singletons.Random.OfChance(0.24))
+            else if (Random.Shared.OfChance(0.24))
             {
                 BatTemporarySprite batsprite = new(
                     new Vector2(
-                        Singletons.Random.OfChance(0.5) ? 0 : mine.map.DisplayWidth - 64,
+                        Random.Shared.OfChance(0.5) ? 0 : mine.map.DisplayWidth - 64,
                         mine.map.DisplayHeight - 64));
                 mine.TemporarySprites.Add(batsprite);
             }
         }
     }
+
+    #region migration
 
     /// <summary>
     /// Raised when save is loaded.
@@ -548,4 +604,6 @@ END:
         }
         this.Helper.Events.GameLoop.Saved -= this.WriteMigrationData;
     }
+
+    #endregion
 }

@@ -1,4 +1,6 @@
-﻿using AtraCore.Framework.Internal;
+﻿// Ignore Spelling: Api
+
+using AtraCore.Framework.Internal;
 
 using AtraShared.ConstantsAndEnums;
 using AtraShared.Menuing;

@@ -84,7 +84,7 @@ internal static class InventoryWatcher
     /// </summary>
     /// <param name="parentSheetIndex">Parent sheet index to check.</param>
     /// <returns>If the sapling has been viewed.</returns>
-    internal static bool HaveSeen(int parentSheetIndex)
+    internal static bool HaveSeen(string parentSheetIndex)
     {
         if (Game1Wrappers.ObjectInfo.TryGetValue(parentSheetIndex, out string? data))
         {

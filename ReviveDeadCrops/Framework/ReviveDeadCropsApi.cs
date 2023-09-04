@@ -3,13 +3,12 @@
 using AtraBase.Toolkit.Extensions;
 using AtraBase.Toolkit.Reflection;
 
-using AtraCore;
 using AtraCore.Framework.ReflectionManager;
-using AtraCore.Utilities;
 
 using AtraShared.Utils.Extensions;
 
 using Microsoft.Xna.Framework;
+
 using StardewValley.TerrainFeatures;
 
 namespace ReviveDeadCrops.Framework;
@@ -106,7 +105,6 @@ public class ReviveDeadCropsApi : IReviveDeadCropsApi
             crop.raisedSeeds.Value = true;
         }
 
-        // grow it completely.
         crop.growCompletely();
     }
 

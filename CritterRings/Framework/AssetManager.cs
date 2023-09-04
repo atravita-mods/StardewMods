@@ -2,6 +2,8 @@
 
 using StardewModdingAPI.Events;
 
+using StardewValley.GameData.Shops;
+
 namespace CritterRings.Framework;
 
 /// <summary>
@@ -11,7 +13,6 @@ internal static class AssetManager
 {
 #region asset names
     private static IAssetName dataObjectInfo = null!;
-    private static IAssetName dataContextTags = null!;
     private static IAssetName ringTextureLocation = null!;
     private static string ringTextureBackslashed = null!;
     private static IAssetName buffTextureLocation = null!;
@@ -32,7 +33,6 @@ internal static class AssetManager
     internal static void Initialize(IGameContentHelper parser)
     {
         dataObjectInfo = parser.ParseAssetName("Data/ObjectInformation");
-        dataContextTags = parser.ParseAssetName("Data/ObjectContextTags");
         ringTextureLocation = parser.ParseAssetName("Mods/atravita/CritterRings/RingTex");
         ringTextureBackslashed = ringTextureLocation.BaseName.Replace('/', '\\');
         buffTextureLocation = parser.ParseAssetName("Mods/atravita/CritterRings/BuffIcon");
@@ -61,6 +61,56 @@ internal static class AssetManager
                     editor[ModEntry.FireFlyRing] = $"atravita.FireFlyRing/1000/-300/Ring/{I18n.FireflyRing_Name()}/{I18n.FireflyRing_Description()}////1/{ringTextureBackslashed}";
                     editor[ModEntry.FrogRing] = $"atravita.FrogRing/1000/-300/Ring/{I18n.FrogRing_Name()}/{I18n.FrogRing_Description()}////5/{ringTextureBackslashed}";
                     editor[ModEntry.OwlRing] = $"atravita.OwlRing/1000/-300/Ring/{I18n.OwlRing_Name()}/{I18n.OwlRing_Description()}////4/{ringTextureBackslashed}";
+                },
+                priority: AssetEditPriority.Early);
+        }
+        else if (e.NameWithoutLocale.IsEquivalentTo(dataShops))
+        {
+            e.Edit(
+                apply: static (asset) =>
+                {
+                    IDictionary<string, ShopData> editor = asset.AsDictionary<string, ShopData>().Data;
+                    if (!editor.TryGetValue("AdventureShop", out var shop))
+                    {
+                        ModEntry.ModMonitor.Log($"Failed to find AdventureShop while editing.", LogLevel.Warn);
+                        return;
+                    }
+                    const int RING_COST = 2_500;
+                    const int LATE_RING_COST = 5_000;
+
+                    const string HasSkullKey = "atravita.AtraCore_HAS_WALLET_ITEM Current SkullKey";
+                    const string HasMagicInk = $"{HasSkullKey}, atravita.AtraCore_HAS_WALLET_ITEM Current MagicInk";
+
+                    shop.Items.Add(new()
+                    {
+                        ItemId = $"{ItemRegistry.type_object}{ModEntry.BunnyRing}",
+                        Price = LATE_RING_COST,
+                        Condition = HasMagicInk,
+                    });
+                    shop.Items.Add(new()
+                    {
+                        ItemId = $"{ItemRegistry.type_object}{ModEntry.ButterflyRing}",
+                        Price = RING_COST,
+                        Condition = HasSkullKey,
+                    });
+                    shop.Items.Add(new()
+                    {
+                        ItemId = $"{ItemRegistry.type_object}{ModEntry.FireFlyRing}",
+                        Price = LATE_RING_COST,
+                        Condition = HasMagicInk,
+                    });
+                    shop.Items.Add(new()
+                    {
+                        ItemId = $"{ItemRegistry.type_object}{ModEntry.FrogRing}",
+                        Price = RING_COST,
+                        Condition = HasSkullKey,
+                    });
+                    shop.Items.Add(new()
+                    {
+                        ItemId = $"{ItemRegistry.type_object}{ModEntry.OwlRing}",
+                        Price = RING_COST,
+                        Condition = HasSkullKey,
+                    });
                 },
                 priority: AssetEditPriority.Early);
         }

@@ -42,7 +42,7 @@ internal sealed class ModEntry : BaseMod<ModEntry>
     private readonly WeightedManager<Func<Random, Item?>> itemPickers = new();
 
     // User defined items.
-    private readonly DefaultDict<ItemTypeEnum, HashSet<int>> bannedItems = new();
+    private readonly HashSet<string> bannedItems = new();
     private readonly WeightedManager<ItemRecord> playerItemsManager = new();
     private Lazy<WeightedManager<int>> allItemsWeighted = new(GenerateAllItems);
 
@@ -184,7 +184,7 @@ internal sealed class ModEntry : BaseMod<ModEntry>
 
                 if (picked is null
                     || picked.salePrice() > this.config.MaxPriceForAllItems
-                    || (this.bannedItems.TryGetValue(picked.GetItemType(), out HashSet<int>? bannedItems) && bannedItems.Contains(picked.ParentSheetIndex)))
+                    || this.bannedItems.Contains(picked.QualifiedItemId))
                 {
                     continue;
                 }

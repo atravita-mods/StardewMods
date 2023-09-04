@@ -7,7 +7,9 @@
             "dumped_Guys": "@, I thought you were more honorable than that.#$e#Dating the whole town, that's not something I thought you would do.$s",
 
             // specific days
-            "summer_10{{YearRemainder}}": "I've caught so much fish for the luau's buffet tomorrow, @, it'll be a wonderful display of our sea's riches."
+            "summer_10{{YearRemainder}}": "I've caught so much fish for the luau's buffet tomorrow, @, it'll be a wonderful display of our sea's riches.",
+
+            "winter_Mon8": "It's mighty important for us to protect our fisheries, cuz we don't, we might have no fish in the future."
         }
     },
     {
@@ -16,7 +18,8 @@
         "Target": "Characters/Dialogue/Willy",
         "Entries": {
             "6{{YearRemainder}}": "I also sell tackle. Find them mighty useful for catching difficult fish...",
-            "7{{YearRemainder}}": "How am I supposed to compete against those big ships that scrape the sea bottom?$s"
+            "7{{YearRemainder}}": "How am I supposed to compete against those big ships that scrape the sea bottom?$s",
+            "8{{YearRemainder}}": "Some of these lobsters can be up to a hundred years old, @.#$b#We usually throw back the ones that're breeding, that way they'll make more lobsters.$h"
         },
         "When": {
             "YearModulus": "1"

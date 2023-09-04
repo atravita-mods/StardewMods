@@ -8,6 +8,7 @@ using CommunityToolkit.Diagnostics;
 
 using Microsoft.Xna.Framework;
 
+using StardewValley.Extensions;
 using StardewValley.TerrainFeatures;
 
 namespace AtraShared.Utils.Extensions;
@@ -66,7 +67,7 @@ public static class SObjectExtensions
     /// <param name="obj">SObject to check.</param>
     /// <returns>true if it's a trash item, false otherwise.</returns>
     public static bool IsTrashItem(this SObject obj)
-        => obj is not null && obj.GetType() == typeof(SObject) && !obj.bigCraftable.Value && (obj.ParentSheetIndex >= 168 && obj.ParentSheetIndex < 173);
+        => obj.HasTypeObject() && Utility.IsLegacyIdBetween(obj.ItemId, 168, 172);
 
     /// <summary>
     /// Gets whether or not an SObject is a bomb.
@@ -74,7 +75,7 @@ public static class SObjectExtensions
     /// <param name="obj">SObject to check.</param>
     /// <returns>true if it's a bomb, false otherwise.</returns>
     public static bool IsBomb(this SObject obj)
-        => obj is not null && obj.GetType() == typeof(SObject) && !obj.bigCraftable.Value && obj.ParentSheetIndex is 286 or 287 or 288;
+        => obj.HasTypeObject() && Utility.IsLegacyIdBetween(obj.ItemId, 286, 288);
 
     /// <summary>
     /// Returns true for an item that would be considered alcohol. Taken from BuffsDisplay.tryToAddDrinkBuff.
@@ -82,9 +83,8 @@ public static class SObjectExtensions
     /// <param name="obj">SObject.</param>
     /// <returns>True if alcohol.</returns>
     public static bool IsAlcoholItem(this SObject obj)
-    {
-        return obj.HasContextTag("alcohol_item") || obj.Name.Contains("Beer") || obj.Name.Contains("Wine") || obj.Name.Contains("Mead") || obj.Name.Contains("Pale Ale");
-    }
+        => obj.HasContextTag("alcohol_item") || obj.Name.Contains("Beer") || obj.Name.Contains("Wine")
+            || obj.Name.Contains("Mead") || obj.Name.Contains("Pale Ale");
 
     /// <summary>
     /// Gets the category number corresponding to an SObject's index.

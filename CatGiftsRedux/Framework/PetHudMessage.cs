@@ -3,6 +3,8 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
+using StardewValley.Characters;
+
 namespace CatGiftsRedux.Framework;
 
 /// <summary>
@@ -11,7 +13,8 @@ namespace CatGiftsRedux.Framework;
 internal sealed class PetHudMessage : HUDMessage
 {
     private readonly Item spawnedItem;
-    private readonly bool cat;
+    private readonly Pet pet;
+    private readonly Color color;
     private readonly float messageWidth;
 
     /// <summary>
@@ -23,11 +26,11 @@ internal sealed class PetHudMessage : HUDMessage
     /// <param name="fadeIn">Whether or not the boxen should fade in.</param>
     /// <param name="spawnedItem">The item spawned.</param>
     /// <param name="cat">Whether or not to draw a cat icon. (instead of the dog icon).</param>
-    public PetHudMessage(string message, Color color, float timeLeft, bool fadeIn, Item spawnedItem, bool cat)
-        : base(message, color, timeLeft, fadeIn)
+    public PetHudMessage(string message, Color color, float timeLeft, bool fadeIn, Item spawnedItem, Pet pet)
+        : base(message, timeLeft, fadeIn)
     {
         this.spawnedItem = spawnedItem;
-        this.cat = cat;
+        this.pet = pet;
         this.messageWidth = ModEntry.StringUtils.MeasureWord(Game1.smallFont, this.message);
     }
 

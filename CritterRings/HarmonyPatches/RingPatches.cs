@@ -9,11 +9,10 @@ using HarmonyLib;
 
 using Microsoft.Xna.Framework;
 
+using StardewValley.Buffs;
 using StardewValley.Objects;
 
 namespace CritterRings.HarmonyPatches;
-
-#warning - this will need to be refactored for 1.6
 
 /// <summary>
 /// Adds the other effects.
@@ -35,23 +34,24 @@ internal static class RingPatches
     #endregion
 
     [HarmonyPostfix]
-    [HarmonyPatch(nameof(Ring.onUnequip))]
-    private static void PostfixUnequip(Ring __instance, Farmer who, GameLocation location)
+    [HarmonyPatch(nameof(Ring.AddEquipmentEffects))]
+    private static void PostfixAddEffects(Ring __instance, BuffEffects effects)
     {
-        if (__instance.ParentSheetIndex < 0)
+        if (__instance.ItemId == ModEntry.ButterflyRing)
         {
-            return;
+            effects.MagneticRadius.Value += ButterflyMagneticism;
         }
+    }
 
+    [HarmonyPostfix]
+    [HarmonyPatch(nameof(Ring.onUnequip))]
+    private static void PostfixUnequip(Ring __instance, Farmer who)
+    {
         try
         {
-            if (__instance.ParentSheetIndex == ModEntry.ButterflyRing)
+            if (__instance.ItemId == ModEntry.FireFlyRing)
             {
-                who.MagneticRadius -= ButterflyMagneticism;
-            }
-            else if (__instance.ParentSheetIndex == ModEntry.FireFlyRing)
-            {
-                RemoveLightFrom(__instance, location);
+                RemoveLightFrom(__instance, who.currentLocation);
             }
         }
         catch (Exception ex)
@@ -64,16 +64,11 @@ internal static class RingPatches
     [HarmonyPatch(nameof(Ring.onNewLocation))]
     private static void PostfixNewLocation(Ring __instance, Farmer who, GameLocation environment)
     {
-        if (__instance.ParentSheetIndex < 0)
-        {
-            return;
-        }
-
         try
         {
-            if (__instance.ParentSheetIndex == ModEntry.FireFlyRing)
+            if (__instance.ItemId == ModEntry.FireFlyRing)
             {
-                __instance.onEquip(who);
+                AddLight(__instance, who, environment);
             }
         }
         catch (Exception ex)
@@ -86,14 +81,9 @@ internal static class RingPatches
     [HarmonyPatch(nameof(Ring.onLeaveLocation))]
     private static void PostfixLeaveLocation(Ring __instance, GameLocation environment)
     {
-        if (__instance.ParentSheetIndex < 0)
-        {
-            return;
-        }
-
         try
         {
-            if (__instance.ParentSheetIndex == ModEntry.FireFlyRing)
+            if (__instance.ItemId == ModEntry.FireFlyRing)
             {
                 RemoveLightFrom(__instance, environment);
             }
@@ -106,48 +96,44 @@ internal static class RingPatches
 
     [HarmonyPostfix]
     [HarmonyPatch(nameof(Ring.onEquip))]
-    private static void PostfixEquip(Ring __instance, Farmer who, GameLocation location)
+    private static void PostfixEquip(Ring __instance, Farmer who)
     {
-        if (__instance.ParentSheetIndex < 0)
-        {
-            return;
-        }
-
         try
         {
-            if (__instance.ParentSheetIndex == ModEntry.ButterflyRing)
+            if (__instance.ItemId == ModEntry.FireFlyRing)
             {
-                who.MagneticRadius += ButterflyMagneticism;
-            }
-            else if (__instance.ParentSheetIndex == ModEntry.FireFlyRing)
-            {
-                int startingID;
-                int lightID;
-                unchecked
-                {
-                    startingID = __instance.uniqueID.Value + (int)who.UniqueMultiplayerID;
-                    lightID = startingID;
-                    while (location.sharedLights.ContainsKey(lightID))
-                    {
-                        lightID++;
-                    }
-                }
-
-                lightIDSourceSetter.Value(__instance, lightID);
-                location.sharedLights[lightID] = new LightSource(
-                    textureIndex: 1,
-                    new Vector2(who.Position.X + 21f, who.Position.Y + 64f),
-                    radius: 12f,
-                    new Color(0, 80, 0),
-                    identifier: startingID,
-                    light_context: LightSource.LightContext.None,
-                    playerID: who.UniqueMultiplayerID);
+                AddLight(__instance, who, who.currentLocation);
             }
         }
         catch (Exception ex)
         {
             ModEntry.ModMonitor.LogError("equipping ring", ex);
         }
+    }
+
+    private static void AddLight(Ring __instance, Farmer who, GameLocation location)
+    {
+        int startingID;
+        int lightID;
+        unchecked
+        {
+            startingID = __instance.uniqueID.Value + (int)who.UniqueMultiplayerID;
+            lightID = startingID;
+            while (location.sharedLights.ContainsKey(lightID))
+            {
+                lightID++;
+            }
+        }
+
+        lightIDSourceSetter.Value(__instance, lightID);
+        location.sharedLights[lightID] = new LightSource(
+            textureIndex: 1,
+            new Vector2(who.Position.X + 21f, who.Position.Y + 64f),
+            radius: 12f,
+            new Color(0, 80, 0),
+            identifier: startingID,
+            light_context: LightSource.LightContext.None,
+            playerID: who.UniqueMultiplayerID);
     }
 
     private static void RemoveLightFrom(Ring __instance, GameLocation location)

@@ -5,9 +5,8 @@ namespace AtraCore.Framework.Caches.AssetCache;
 /// <summary>
 /// An asset holder for a texture.
 /// </summary>
-public sealed class TextureHolder : BaseAssetHolder<Texture2D?>
+public sealed class TextureHolder : BaseAssetHolder<Texture2D>
 {
-
     /// <summary>
     /// Initializes a new instance of the <see cref="TextureHolder"/> class.
     /// </summary>

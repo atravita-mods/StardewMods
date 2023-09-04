@@ -5,13 +5,15 @@
 /// </summary>
 /// <typeparam name="TAsset">The type of the asset.</typeparam>
 public class BaseAssetHolder<TAsset> : IAssetHolder<TAsset>
+    where TAsset: class
 {
     private readonly IAssetName assetName;
+    private readonly object LockObj = new();
 
     /// <summary>
     /// Whether the asset should be refreshed before it's accessed again.
     /// </summary>
-    private protected bool dirty = false;
+    private protected volatile bool dirty = false;
 
     /// <summary>
     /// The backing field for the asset itself.
@@ -51,7 +53,10 @@ public class BaseAssetHolder<TAsset> : IAssetHolder<TAsset>
     /// <inheritdoc />
     public virtual void Refresh()
     {
-        this.asset = Game1.content.Load<TAsset>(this.assetName.BaseName);
-        this.dirty = false;
+        lock (this.LockObj)
+        {
+            this.asset = Game1.content.Load<TAsset>(this.assetName.BaseName);
+            this.dirty = false;
+        }
     }
 }

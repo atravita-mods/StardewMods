@@ -8,9 +8,10 @@
 internal sealed class ProcessedAssetHolder<TAsset, TOutput> : IAssetHolder<TOutput>
 {
     private readonly IAssetName assetName;
+    private readonly Func<TAsset, TOutput> del;
+    private readonly object LockObj = new();
     private TOutput? cachedOutput;
-    private Func<TAsset, TOutput> del;
-    private bool dirty = false;
+    private volatile bool dirty = true;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="ProcessedAssetHolder{TAsset, TOutput}"/> class.
@@ -21,7 +22,6 @@ internal sealed class ProcessedAssetHolder<TAsset, TOutput> : IAssetHolder<TOutp
     {
         this.assetName = assetName;
         this.del = del;
-        this.Refresh();
     }
 
     /// <inheritdoc />
@@ -46,8 +46,10 @@ internal sealed class ProcessedAssetHolder<TAsset, TOutput> : IAssetHolder<TOutp
     /// <inheritdoc />
     public void Refresh()
     {
-        var asset = Game1.content.Load<TAsset>(this.assetName.BaseName);
-        this.cachedOutput = this.del(asset);
-        this.dirty = false;
+        lock (this.LockObj)
+        {
+            this.cachedOutput = this.del(Game1.content.Load<TAsset>(this.assetName.BaseName));
+            this.dirty = false;
+        }
     }
 }

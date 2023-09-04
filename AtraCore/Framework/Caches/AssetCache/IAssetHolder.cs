@@ -4,7 +4,7 @@
 /// A holder for an asset.
 /// </summary>
 /// <typeparam name="TOutput">The type of the output.</typeparam>
-public interface IAssetHolder<TOutput>
+public interface IAssetHolder<out TOutput>
 {
     /// <summary>
     /// Gets the value held by this AssetHolder, or null if it's (temporarily) not available.

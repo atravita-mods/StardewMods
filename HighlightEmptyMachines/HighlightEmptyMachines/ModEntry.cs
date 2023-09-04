@@ -1,5 +1,7 @@
 ﻿#if DEBUG
 using System.Diagnostics;
+
+using AtraCore.Framework.Internal;
 #endif
 
 using AtraShared.ConstantsAndEnums;
@@ -18,16 +20,11 @@ using AtraUtils = AtraShared.Utils.Utils;
 namespace HighlightEmptyMachines;
 
 /// <inheritdoc />
-internal sealed class ModEntry : Mod
+internal sealed class ModEntry : BaseMod<ModEntry>
 {
     private MigrationManager? migrator;
 
     private GMCMHelper? gmcmHelper = null;
-
-    /// <summary>
-    /// Gets the logger for this mod.
-    /// </summary>
-    internal static IMonitor ModMonitor { get; private set; } = null!;
 
     /// <summary>
     /// Gets the config instance for this mod.
@@ -43,7 +40,7 @@ internal sealed class ModEntry : Mod
     public override void Entry(IModHelper helper)
     {
         I18n.Init(helper.Translation);
-        ModMonitor = this.Monitor;
+        base.Entry(helper);
         TranslationHelper = helper.Translation;
 
         Config = AtraUtils.GetConfigOrDefault<ModConfig>(helper, this.Monitor);
@@ -54,8 +51,6 @@ internal sealed class ModEntry : Mod
 
         helper.Events.GameLoop.DayStarted += static (_, _) => BeehouseHandler.UpdateStatus(Game1.currentLocation);
         helper.Events.Player.Warped += static (_, e) => BeehouseHandler.UpdateStatus(e.NewLocation);
-
-        this.Monitor.Log($"Starting up: {this.ModManifest.UniqueID} - {typeof(ModEntry).Assembly.FullName}");
     }
 
     [EventPriority(EventPriority.Low)]

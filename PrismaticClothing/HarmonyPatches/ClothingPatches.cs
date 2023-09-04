@@ -13,12 +13,12 @@ namespace PrismaticClothing.HarmonyPatches;
 [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = StyleCopConstants.NamedForHarmony)]
 internal static class ClothingPatches
 {
-    [HarmonyPatch(nameof(Clothing.getOne))]
-    private static void Postfix(Clothing __instance, Item __result)
+    [HarmonyPatch("GetOneCopyFrom")]
+    private static void Postfix(Clothing __instance, Item source)
     {
-        if (__result is Clothing result)
+        if (source is Clothing original)
         {
-            result.isPrismatic.Value = __instance.isPrismatic.Value;
+            __instance.isPrismatic.Value = original.isPrismatic.Value;
         }
     }
 }

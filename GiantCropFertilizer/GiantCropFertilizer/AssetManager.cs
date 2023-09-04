@@ -5,6 +5,10 @@ using StardewModdingAPI.Events;
 using StardewValley.GameData.Shops;
 
 namespace GiantCropFertilizer;
+
+/// <summary>
+/// Manages assets for this mod.
+/// </summary>
 internal static class AssetManager
 {
     #region asset names

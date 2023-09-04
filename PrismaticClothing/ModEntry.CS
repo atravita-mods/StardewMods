@@ -1,24 +1,19 @@
-﻿using AtraShared.ConstantsAndEnums;
+﻿using AtraCore.Framework.Internal;
+
+using AtraShared.ConstantsAndEnums;
 using AtraShared.Utils.Extensions;
 using HarmonyLib;
 
 namespace PrismaticClothing;
 
 /// <inheritdoc/>
-internal sealed class ModEntry : Mod
+internal sealed class ModEntry : BaseMod<ModEntry>
 {
-    /// <summary>
-    /// Gets the logger for this mod.
-    /// </summary>
-    internal static IMonitor ModMonitor { get; private set; } = null!;
-
     /// <inheritdoc/>
     public override void Entry(IModHelper helper)
     {
-        ModMonitor = this.Monitor;
         I18n.Init(helper.Translation);
-
-        this.Monitor.Log($"Starting up: {this.ModManifest.UniqueID} - {typeof(ModEntry).Assembly.FullName}");
+        base.Entry(helper);
 
         this.ApplyPatches(new Harmony(this.ModManifest.UniqueID));
     }

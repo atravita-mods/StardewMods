@@ -2,10 +2,11 @@
 
 using AtraBase.Toolkit.Extensions;
 
-using AtraShared.ConstantsAndEnums;
 using AtraShared.Integrations;
 using AtraShared.Integrations.Interfaces;
 using AtraShared.Utils.Extensions;
+
+using HighlightEmptyMachines.Legacy;
 
 using StardewModdingAPI.Utilities;
 
@@ -52,11 +53,11 @@ internal static class BeehouseHandler
 
         if (api is null)
         {
-            Status.Value = (location.IsOutdoors && Game1.GetSeasonForLocation(location) != "winter") ? MachineStatus.Enabled : MachineStatus.Invalid;
+            Status.Value = (location.IsOutdoors && location.GetSeason() == Season.Winter) ? MachineStatus.Enabled : MachineStatus.Invalid;
         }
         else
         {
-            Status.Value = api.GetEnabledHere(location, Game1.GetSeasonForLocation(location) == "winter") ? MachineStatus.Enabled : MachineStatus.Invalid;
+            Status.Value = api.GetEnabledHere(location, location.GetSeason() == Season.Winter) ? MachineStatus.Enabled : MachineStatus.Invalid;
         }
 
         ModEntry.ModMonitor.DebugOnlyLog($"Current status of beehives is {Status.Value}");

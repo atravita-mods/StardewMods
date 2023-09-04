@@ -1,4 +1,6 @@
-﻿using System.Diagnostics;
+﻿// Ignore Spelling: Api
+
+using System.Diagnostics;
 
 using AtraCore.Utilities;
 
@@ -13,7 +15,6 @@ using GrowableGiantCrops.Framework.Assets;
 using GrowableGiantCrops.Framework.InventoryModels;
 using GrowableGiantCrops.HarmonyPatches.Compat;
 using GrowableGiantCrops.HarmonyPatches.ItemPatches;
-using GrowableGiantCrops.HarmonyPatches.Niceties;
 
 using HarmonyLib;
 
@@ -231,12 +232,6 @@ internal sealed class ModEntry : Mod
         try
         {
             harmony.PatchAll(typeof(ModEntry).Assembly);
-
-            if (new Version(1, 6) > new Version(Game1.version))
-            {
-                this.Monitor.Log("Applying patch to restore giant crops and clumps to save locations", LogLevel.Debug);
-                FixSaveThing.ApplyPatches(harmony);
-            }
 
             if (this.Helper.ModRegistry.IsLoaded("spacechase0.JsonAssets"))
             {

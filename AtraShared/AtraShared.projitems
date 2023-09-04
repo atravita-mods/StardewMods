@@ -36,6 +36,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)utils\extensions\BuffExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Utils\Extensions\CropExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Utils\Extensions\FarmerTeamExtensions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Utils\Extensions\IAssetDataForDictionariesExtension.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Utils\Extensions\IAssetDataForMapsExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Utils\Extensions\ReflectionExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Utils\Extensions\TreeExtensions.cs" />

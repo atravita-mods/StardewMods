@@ -66,15 +66,15 @@ internal sealed class ModEntry : BaseMod<ModEntry>
 
     internal const string uniqueID = "atravita.CritterRings";
 
-    internal const string BunnyRing = "atravita.BunnyRing";
+    internal const string BunnyRing = $"{uniqueID}_BunnyRing";
 
-    internal const string ButterflyRing = "atravita.ButterflyRing";
+    internal const string ButterflyRing = $"{uniqueID}_ButterflyRing";
 
-    internal const string FireFlyRing = "atravita.FireFlyRing";
+    internal const string FireFlyRing = $"{uniqueID}_FireFlyRing";
 
-    internal const string FrogRing = "atravita.FrogRing";
+    internal const string FrogRing = $"{uniqueID}_FrogRing";
 
-    internal const string OwlRing = "atravita.OwlRing";
+    internal const string OwlRing = $"{uniqueID}_OwlRing";
 
     #endregion
 
@@ -181,13 +181,13 @@ internal sealed class ModEntry : BaseMod<ModEntry>
             if (Game1.player.Stamina >= Config.BunnyRingStamina && !Game1.player.exhausted.Value)
             {
                 Buff buff = new(
-                id: BunnyBuffId,
-                displayName: I18n.BunnyRing_Name(),
-                description: I18n.BunnyBuff_Description(Config.BunnyRingBoost),
-                iconTexture: AssetManager.BuffTexture,
-                iconSheetIndex: 1,
-                duration: 20 * Game1.realMilliSecondsPerGameMinute, // 20 in game minutes
-                effects: new BuffEffects() { Speed = { 10 } });
+                    id: BunnyBuffId,
+                    displayName: I18n.BunnyRing_Name(),
+                    description: I18n.BunnyBuff_Description(Config.BunnyRingBoost),
+                    iconTexture: AssetManager.BuffTexture,
+                    iconSheetIndex: 1,
+                    duration: 20 * Game1.realMilliSecondsPerGameMinute, // 20 in game minutes
+                    effects: new BuffEffects() { Speed = { Config.BunnyRingBoost } });
                 Game1.player.applyBuff(buff);
 
                 Game1.player.Stamina -= Config.BunnyRingStamina;

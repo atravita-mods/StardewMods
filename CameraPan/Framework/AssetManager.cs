@@ -4,6 +4,8 @@ using Microsoft.Xna.Framework.Graphics;
 
 using StardewModdingAPI.Events;
 
+using StardewValley.GameData.Shops;
+
 namespace CameraPan.Framework;
 
 /// <summary>
@@ -50,6 +52,23 @@ internal static class AssetManager
         if (e.NameWithoutLocale.IsEquivalentTo(arrowLocation))
         {
             e.LoadFromModFile<Texture2D>("assets/arrow.png", AssetLoadPriority.Exclusive);
+        }
+        else if (e.NameWithoutLocale.IsEquivalentTo(shopsLocation))
+        {
+            e.Edit(static (asset) =>
+            {
+                if (!asset.AsDictionary<string, ShopData>().Data.TryGetValue("Carpenter", out ShopData? shop))
+                {
+                    ModEntry.ModMonitor.Log($"Could not find Robin's shop to edit.", LogLevel.Warn);
+                    return;
+                }
+
+                shop.Items.Add(new()
+                {
+                    ItemId = ModEntry.CAMERA_ID,
+                    Price = 2_000,
+                });
+            });
         }
     }
 

@@ -6,6 +6,16 @@
 public sealed class GiantCropFertilizerIDStorage
 {
     /// <summary>
+    /// The legacy name for the Giant Crop Fertilizer.
+    /// </summary>
+    internal const string LegacyItemName = "Giant Crop Fertilizer";
+
+    /// <summary>
+    /// The location in the save data where the object IDs were stored.
+    /// </summary>
+    internal const string SAVESTRING = "SavedObjectID";
+
+    /// <summary>
     /// Initializes a new instance of the <see cref="GiantCropFertilizerIDStorage"/> class.
     /// </summary>
     /// <remarks>This constructor is for Newtonsoft.</remarks>

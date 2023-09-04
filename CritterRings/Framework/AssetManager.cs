@@ -69,8 +69,7 @@ internal static class AssetManager
             e.Edit(
                 apply: static (asset) =>
                 {
-                    IDictionary<string, ShopData> editor = asset.AsDictionary<string, ShopData>().Data;
-                    if (!editor.TryGetValue("AdventureShop", out var shop))
+                    if (!asset.AsDictionary<string, ShopData>().Data.TryGetValue("AdventureShop", out ShopData? shop))
                     {
                         ModEntry.ModMonitor.Log($"Failed to find AdventureShop while editing.", LogLevel.Warn);
                         return;
@@ -86,30 +85,35 @@ internal static class AssetManager
                         ItemId = $"{ItemRegistry.type_object}{ModEntry.BunnyRing}",
                         Price = LATE_RING_COST,
                         Condition = HasMagicInk,
+                        IgnoreShopPriceModifiers = true,
                     });
                     shop.Items.Add(new()
                     {
                         ItemId = $"{ItemRegistry.type_object}{ModEntry.ButterflyRing}",
                         Price = RING_COST,
                         Condition = HasSkullKey,
+                        IgnoreShopPriceModifiers = true,
                     });
                     shop.Items.Add(new()
                     {
                         ItemId = $"{ItemRegistry.type_object}{ModEntry.FireFlyRing}",
-                        Price = LATE_RING_COST,
-                        Condition = HasMagicInk,
+                        Price = RING_COST,
+                        Condition = HasSkullKey,
+                        IgnoreShopPriceModifiers = true,
                     });
                     shop.Items.Add(new()
                     {
                         ItemId = $"{ItemRegistry.type_object}{ModEntry.FrogRing}",
-                        Price = RING_COST,
-                        Condition = HasSkullKey,
+                        Price = LATE_RING_COST,
+                        Condition = HasMagicInk,
+                        IgnoreShopPriceModifiers = true,
                     });
                     shop.Items.Add(new()
                     {
                         ItemId = $"{ItemRegistry.type_object}{ModEntry.OwlRing}",
-                        Price = RING_COST,
-                        Condition = HasSkullKey,
+                        Price = LATE_RING_COST,
+                        Condition = HasMagicInk,
+                        IgnoreShopPriceModifiers = true,
                     });
                 },
                 priority: AssetEditPriority.Early);

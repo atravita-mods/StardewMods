@@ -1,12 +1,12 @@
 ﻿using AtraBase.Toolkit.Extensions;
 
-using AtraCore;
-
 using AtraShared.ConstantsAndEnums;
 using AtraShared.Utils.Extensions;
 
 using HarmonyLib;
+
 using Microsoft.Xna.Framework;
+
 using StardewValley.Monsters;
 
 namespace GiantCropFertilizer.HarmonyPatches;
@@ -22,7 +22,7 @@ internal static class PostfixBigSlimeConstructor
     [HarmonyPatch(MethodType.Constructor, typeof(Vector2), typeof(int))]
     private static void Postfix(BigSlime __instance, int mineArea)
     {
-        if (__instance.heldObject?.Value is not null || ModEntry.GiantCropFertilizerID == -1)
+        if (__instance.heldObject?.Value is not null)
         {
             return;
         }
@@ -31,7 +31,7 @@ internal static class PostfixBigSlimeConstructor
             if (__instance.heldObject is not null
                 && mineArea >= 120
                 && Game1.mine?.GetAdditionalDifficulty() is > 0
-                && Singletons.Random.OfChance(0.05))
+                && Random.Shared.OfChance(0.05))
             {
                 __instance.heldObject.Value = new SObject(ModEntry.GiantCropFertilizerID, 1);
             }

@@ -1,10 +1,12 @@
-﻿namespace CritterRings.Models;
+﻿namespace CritterRings.Legacy;
 
 /// <summary>
 /// The class used to save Ids.
 /// </summary>
-public sealed class DataModel
+public sealed class LegacyIDTracker
 {
+    internal const string SAVEKEY = "item_ids";
+
     /// <summary>
     /// Gets or sets the ID of the butterfly ring.
     /// </summary>

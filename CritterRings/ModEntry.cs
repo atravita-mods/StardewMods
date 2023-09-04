@@ -9,11 +9,8 @@ using AtraShared.Utils.Extensions;
 
 using CritterRings.Framework;
 using CritterRings.Framework.Managers;
-using CritterRings.Models;
 
 using HarmonyLib;
-
-using Microsoft.Xna.Framework.Graphics;
 
 using StardewModdingAPI.Events;
 using StardewModdingAPI.Utilities;
@@ -35,8 +32,6 @@ internal sealed class ModEntry : BaseMod<ModEntry>
     /// A buff corresponding to the bunny ring.
     /// </summary>
     internal const string BunnyBuffId = "atravita.CritterRings_BunnyBuff";
-
-    private const string SAVEKEY = "item_ids";
 
     private MigrationManager? migrator;
 
@@ -64,17 +59,35 @@ internal sealed class ModEntry : BaseMod<ModEntry>
 
     #region ItemConsts
 
-    internal const string uniqueID = "atravita.CritterRings";
+    /// <summary>
+    /// The unique ID of this mod.
+    /// </summary>
+    internal const string UniqueID = "atravita.CritterRings";
 
-    internal const string BunnyRing = $"{uniqueID}_BunnyRing";
+    /// <summary>
+    /// The <see cref="Item.ItemId"/> of the bunny ring.
+    /// </summary>
+    internal const string BunnyRing = $"{UniqueID}_BunnyRing";
 
-    internal const string ButterflyRing = $"{uniqueID}_ButterflyRing";
+    /// <summary>
+    /// The <see cref="Item.ItemId"/> of the butterfly ring.
+    /// </summary>
+    internal const string ButterflyRing = $"{UniqueID}_ButterflyRing";
 
-    internal const string FireFlyRing = $"{uniqueID}_FireFlyRing";
+    /// <summary>
+    /// The <see cref="Item.ItemId"/> of the firefly ring.
+    /// </summary>
+    internal const string FireFlyRing = $"{UniqueID}_FireFlyRing";
 
-    internal const string FrogRing = $"{uniqueID}_FrogRing";
+    /// <summary>
+    /// The <see cref="Item.ItemId"/> of the frog ring.
+    /// </summary>
+    internal const string FrogRing = $"{UniqueID}_FrogRing";
 
-    internal const string OwlRing = $"{uniqueID}_OwlRing";
+    /// <summary>
+    /// The <see cref="Item.ItemId"/> of the owl ring.
+    /// </summary>
+    internal const string OwlRing = $"{UniqueID}_OwlRing";
 
     #endregion
 
@@ -199,6 +212,8 @@ internal sealed class ModEntry : BaseMod<ModEntry>
         }
     }
 
+    #region critter spawning
+
     /// <inheritdoc cref="IPlayerEvents.Warped"/>
     [EventPriority(EventPriority.Low)]
     private void OnWarp(object? sender, WarpedEventArgs e)
@@ -295,6 +310,8 @@ internal sealed class ModEntry : BaseMod<ModEntry>
             CRUtils.AddBunnies(critters, Game1.player.GetEffectsOfRingMultiplier(BunnyRing), BunnyManagers.Value.GetTrackedBushes());
         }
     }
+
+    #endregion
 
     /// <inheritdoc cref="IGameLoopEvents.SaveLoaded"/>
     private void OnSaveLoaded(object? sender, SaveLoadedEventArgs e)

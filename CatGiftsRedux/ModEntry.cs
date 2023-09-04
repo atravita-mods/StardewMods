@@ -22,6 +22,7 @@ using Microsoft.Xna.Framework;
 
 using StardewModdingAPI.Events;
 
+using StardewValley;
 using StardewValley.Characters;
 using StardewValley.Extensions;
 using StardewValley.Objects;
@@ -274,18 +275,21 @@ internal sealed class ModEntry : BaseMod<ModEntry>
         int tries = 3;
         do
         {
-            if (!this.allItemsWeighted.Value.GetValue(random).TryGetValue(out int id))
+            if (!this.allItemsWeighted.Value.GetValue(random).TryGetValue(out string? id))
             {
                 continue;
             }
 
             // confirm the item exists, ban Qi items or golden walnuts
-            if (Utils.ForbiddenFromRandomPicking(id))
+            if (id is null || Utils.ForbiddenFromRandomPicking(id))
             {
                 continue;
             }
 
-            return new SObject(id, 1);
+            if (ItemRegistry.Create(ItemRegistry.type_object + id, 1, 0, true) is SObject candidate)
+            {
+                return candidate;
+            }
         }
         while (tries-- > 0);
         return null;

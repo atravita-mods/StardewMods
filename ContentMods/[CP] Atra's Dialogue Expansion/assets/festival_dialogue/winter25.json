@@ -10,7 +10,7 @@
             "Entries": {
                 "Abigail_y2": "{{i18n:abby-y2-xmas.00}}",
                 "Abigail_y3": "{{i18n:abby-y3-xmas.00}}",
-                "Abigail_spouse_y2": "{{i18n:abby-y2-xmas-spouse}}#$e#{{i18n:abby-y2-xmas-spouse.00}}$l"
+                "Abigail_spouse_y2": "{{i18n:abby-y2-xmas-spouse}}#$b#{{i18n:abby-y2-xmas-spouse.00}}$l"
             }
         },
         {
@@ -79,7 +79,7 @@
             "Entries": {
                 "Elliott_y2": "{{i18n:elliott-y2-xmas}}$h",
                 "Elliott_y3": "{{i18n:elliott-y3-xmas}}$h",
-                "Elliott_spouse_y2": "{{i18n:elliott-y2-xmas-spouse}}$h#$e#{{i18n:elliott-y2-xmas-spouse.00}}"
+                "Elliott_spouse_y2": "{{i18n:elliott-y2-xmas-spouse}}$h#$b#{{i18n:elliott-y2-xmas-spouse.00}}"
             }
         },
         {
@@ -159,7 +159,7 @@
             },
             "Entries": {
                 "Harvey_y2": "{{i18n:harvey-y2-xmas.00}}$h#$e#{{i18n:harvey-y2-xmas.01}}",
-                "Harvey_spouse_y2": "{{i18n:harvey-y2-xmas-spouse}}$h#$e#{{i18n:harvey-y2-xmas-spouse.00}}$h"
+                "Harvey_spouse_y2": "{{i18n:harvey-y2-xmas-spouse}}$h#$b#{{i18n:harvey-y2-xmas-spouse.00}}$h"
             }
         },
         {
@@ -496,7 +496,7 @@
             "When": {"EnableFor": "Shane"},
             "Entries": {
                 "Shane_y2": "{{i18n:shane-y2-xmas.00}}$h",
-                "Shane_spouse": "{{i18n:shane-y1-xmas-spouse.00}}#$e#{{i18n:shane-y1-xmas-spouse.01}}$h"
+                "Shane_spouse": "{{i18n:shane-y1-xmas-spouse.00}}#$b#{{i18n:shane-y1-xmas-spouse.01}}$h"
             }
         },
         {

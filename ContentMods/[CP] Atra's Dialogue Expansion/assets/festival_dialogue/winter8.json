@@ -11,7 +11,7 @@
             "Entries": {
                 "Abigail_y2": "{{i18n:abby-y2-fishing.00}}",
                 "Abigail_y3": "{{i18n:abby-y3-fishing.00}}$s",
-                "Abigail_spouse_y2": "{{i18n:abby-y2-fishing-spouse}}#$e#{{i18n:abby-y2-fishing-spouse.00}}$s"
+                "Abigail_spouse_y2": "{{i18n:abby-y2-fishing-spouse}}#$b#{{i18n:abby-y2-fishing-spouse.00}}$s"
             }
         },
         {
@@ -163,7 +163,7 @@
             },
             "Entries": {
                 "Harvey_y2": "{{i18n:harvey-y2-fishing.00}}#$e#{{i18n:harvey-y2-fishing.01}}",
-                "Harvey_spouse_y2": "{{i18n:harvey-y2-fishing-spouse}}$h#$e#{{i18n:harvey-y2-fishing-spouse.00}}$l"
+                "Harvey_spouse_y2": "{{i18n:harvey-y2-fishing-spouse}}$h#$b#{{i18n:harvey-y2-fishing-spouse.00}}$l"
             }
         },
         {
@@ -214,7 +214,7 @@
             },
             "Entries": {
                 "Leah_y2": "{{i18n:leah-y2-fishing.00}}#$e#{{i18n:leah-y2-fishing.01}}",
-                "Leah_spouse": "{{i18n:leah-y1-fishing-spouse.00.male}}$h^{{leah-y1-fishing-spouse.00.female}}$l#$e#{{i18n:leah-y1-fishing-spouse.01}}$h",
+                "Leah_spouse": "{{i18n:leah-y1-fishing-spouse.00.male}}$h^{{leah-y1-fishing-spouse.00.female}}$l#$b#{{i18n:leah-y1-fishing-spouse.01}}$h",
                 "Leah_spouse_y2": "{{i18n:leah-y2-fishing-spouse}}$h"
             }
         },
@@ -357,7 +357,7 @@
             "When": {"EnableFor": "Shane"},
             "Entries": {
                 "Shane_y2": "{{i18n:shane-y2-fishing.00}}$s#$e#{{i18n:shane-y2-fishing.01}}",
-                "Shane_spouse": "{{i18n:shane-y1-fishing-spouse.00}}#$e#{{i18n:shane-y1-fishing-spouse.01}}"
+                "Shane_spouse": "{{i18n:shane-y1-fishing-spouse.00}}#$b#{{i18n:shane-y1-fishing-spouse.01}}"
             }
         },
         {

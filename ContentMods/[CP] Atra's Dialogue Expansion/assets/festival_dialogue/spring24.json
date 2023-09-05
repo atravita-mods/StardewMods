@@ -1,16 +1,29 @@
 {
+    // _spouse and _roommate lines do NOT work for this ONE festival.
     "Changes": [
         {
             "Action": "EditData",
             "LogName": "Abby - normal",
             "Target": "Data/Festivals/spring24",
             "When": {
-                "EnableFor": "Abigail"
+                "EnableFor": "Abigail",
+                "Relationship:Abigail|contains=Married": false
             },
             "Entries": {
                 "Abigail_y2": "{{i18n:abby-y2-dance.00}}",
-                "Abigail_y3": "{{i18n:abby-y3-dance.00}}$a",
-                "Abigail_spouse": "{{i18n:abby-y1-dance-spouse}}"
+                "Abigail_y3": "{{i18n:abby-y3-dance.00}}$a"
+            }
+        },
+        {
+            "Action": "EditData",
+            "LogName": "Abby - married",
+            "Target": "Data/Festivals/spring24",
+            "When": {
+                "EnableFor": "Abigail",
+                "Relationship:Abigail|contains=Married": true
+            },
+            "Entries": {
+                "Abigail": "{{i18n:abby-y1-dance-spouse}}"
             }
         },
         {
@@ -18,12 +31,24 @@
             "LogName": "Alex - normal",
             "Target": "Data/Festivals/spring24",
             "When": {
-                "EnableFor": "Alex"
+                "EnableFor": "Alex",
+                "Relationship:Alex|contains=Married": false
             },
             "Entries": {
-                "Alex_y2": "{{i18n:alex-y2-dance.00}}$h",
-                "Alex_spouse": "{{i18n:alex-y1-dance-spouse}}$h",
-                "Alex_spouse_y2": "{{i18n:alex-y2-dance-spouse}}$h"
+                "Alex_y2": "{{i18n:alex-y2-dance.00}}$h"
+            }
+        },
+        {
+            "Action": "EditData",
+            "LogName": "Alex - normal",
+            "Target": "Data/Festivals/spring24",
+            "When": {
+                "EnableFor": "Alex",
+                "Relationship:Alex|contains=Married": true
+            },
+            "Entries": {
+                "Alex": "{{i18n:alex-y1-dance-spouse}}$h",
+                "Alex_y2": "{{i18n:alex-y2-dance-spouse}}$h"
             }
         },
         {
@@ -92,11 +117,23 @@
             "LogName": "Elliott - normal",
             "Target": "Data/Festivals/spring24",
             "When": {
-                "EnableFor": "Elliott"
+                "EnableFor": "Elliott",
+                "Relationship:Elliott|contains=Married": false
             },
             "Entries": {
-                "Elliott_y2": "{{i18n:elliott-y2-dance.00}}$h#$e#{{i18n:elliott-y2-dance.01}}",
-                "Elliott_spouse": "{{i18n:elliott-y1-dance-spouse}}$h"
+                "Elliott_y2": "{{i18n:elliott-y2-dance.00}}$h#$e#{{i18n:elliott-y2-dance.01}}"
+            }
+        },
+        {
+            "Action": "EditData",
+            "LogName": "Elliott - married",
+            "Target": "Data/Festivals/spring24",
+            "When": {
+                "EnableFor": "Elliott",
+                "Relationship:Elliott|contains=Married": true
+            },
+            "Entries": {
+                "Elliott": "{{i18n:elliott-y1-dance-spouse}}$h"
             }
         },
         {
@@ -104,12 +141,24 @@
             "LogName": "Emily - normal",
             "Target": "Data/Festivals/spring24",
             "When": {
-                "EnableFor": "Emily"
+                "EnableFor": "Emily",
+                "Relationship:Emily|contains=Married": true
             },
             "Entries": {
-                "Emily_y2": "{{i18n:emily-y2-dance.00}}$h#$e#{{i18n:emily-y2-dance.01}}",
-                "Emily_spouse": "{{i18n:emily-y1-dance-spouse}}$h",
-                "Emily_spouse_y2": "{{i18n:emily-y2-dance-spouse}}$h"
+                "Emily_y2": "{{i18n:emily-y2-dance.00}}$h#$e#{{i18n:emily-y2-dance.01}}"
+            }
+        },
+        {
+            "Action": "EditData",
+            "LogName": "Emily - married",
+            "Target": "Data/Festivals/spring24",
+            "When": {
+                "EnableFor": "Emily",
+                "Relationship:Emily|contains=Married": true
+            },
+            "Entries": {
+                "Emily": "{{i18n:emily-y1-dance-spouse}}$h",
+                "Emily_y2": "{{i18n:emily-y2-dance-spouse}}$h"
             }
         },
         {
@@ -156,12 +205,37 @@
             "LogName": "Haley - normal",
             "Target": "Data/Festivals/spring24",
             "When": {
-                "EnableFor": "Haley"
+                "EnableFor": "Haley",
+                "Relationship:Haley|contains=Married": false
             },
             "Entries": {
-                "Haley_y2": "{{i18n:haley-y2-dance.00}}$h#$e#{{i18n:haley-y2-dance.01}}$h",
-                "Haley_spouse": "{{i18n:haley-y1-dance-spouse}}$h",
-                "Haley_spouse_y2": "{{i18n:haley-y2-dance-spouse}}$h"
+                "Haley_y2": "{{i18n:haley-y2-dance.00}}$h#$e#{{i18n:haley-y2-dance.01}}$h"
+            }
+        },
+        {
+            "Action": "EditData",
+            "LogName": "Haley - married but not to player",
+            "Target": "Data/Festivals/spring24",
+            "When": {
+                "EnableFor": "Haley",
+                "Relationship:Haley|contains=Married": false,
+                "Spouse:anyPlayer": "Haley"
+            },
+            "Entries": {
+                "Haley_y2": "{{i18n:haley-y2-dance-married-other}}$h#$e#{{i18n:haley-y2-dance-married-other.01}}$h"
+            }
+        },
+        {
+            "Action": "EditData",
+            "LogName": "Haley - married",
+            "Target": "Data/Festivals/spring24",
+            "When": {
+                "EnableFor": "Haley",
+                "Relationship:Haley|contains=Married": true
+            },
+            "Entries": {
+                "Haley": "{{i18n:haley-y1-dance-spouse}}$h",
+                "Haley_y2": "{{i18n:haley-y2-dance-spouse}}$h"
             }
         },
         {
@@ -169,12 +243,24 @@
             "LogName": "Harvey - normal",
             "Target": "Data/Festivals/spring24",
             "When": {
-                "EnableFor": "Harvey"
+                "EnableFor": "Harvey",
+                "Relationship:Harvey|contains=Married": false
             },
             "Entries": {
-                "Harvey_y2": "{{i18n:harvey-y2-dance.00}}#$e#{{i18n:harvey-y2-dance.01}}",
-                "Harvey_spouse": "{{i18n:harvey-y1-dance-spouse}}$h",
-                "Harvey_spouse_y2": "{{i18n:harvey-y2-dance-spouse}}$h"
+                "Harvey_y2": "{{i18n:harvey-y2-dance.00}}#$e#{{i18n:harvey-y2-dance.01}}"
+            }
+        },
+        {
+            "Action": "EditData",
+            "LogName": "Harvey - married",
+            "Target": "Data/Festivals/spring24",
+            "When": {
+                "EnableFor": "Harvey",
+                "Relationship:Harvey|contains=Married": true
+            },
+            "Entries": {
+                "Harvey": "{{i18n:harvey-y1-dance-spouse}}$h",
+                "Harvey_y2": "{{i18n:harvey-y2-dance-spouse}}$h"
             }
         },
         {
@@ -238,12 +324,24 @@
             "LogName": "Leah - normal",
             "Target": "Data/Festivals/spring24",
             "When": {
-                "EnableFor": "Leah"
+                "EnableFor": "Leah",
+                "Relationship:Leah|contains=Married": false
             },
             "Entries": {
-                "Leah_y2": "{{i18n:leah-y2-dance.00}}#$e#{{i18n:leah-y2-dance.01}}",
-                "Leah_spouse": "{{i18n:leah-y1-dance-spouse.00}}#$e#{{i18n:leah-y1-dance-spouse.01}}$h",
-                "Leah_spouse_y2": "{{i18n:leah-y2-dance-spouse}}$h"
+                "Leah_y2": "{{i18n:leah-y2-dance.00}}#$e#{{i18n:leah-y2-dance.01}}"
+            }
+        },
+        {
+            "Action": "EditData",
+            "LogName": "Leah - married",
+            "Target": "Data/Festivals/spring24",
+            "When": {
+                "EnableFor": "Leah",
+                "Relationship:Leah|contains=Married": true
+            },
+            "Entries": {
+                "Leah": "{{i18n:leah-y1-dance-spouse.00}}#$e#{{i18n:leah-y1-dance-spouse.01}}$h",
+                "Leah_y2": "{{i18n:leah-y2-dance-spouse}}$h"
             }
         },
         {
@@ -396,12 +494,24 @@
             "LogName": "Maru - normal",
             "Target": "Data/Festivals/spring24",
             "When": {
-                "EnableFor": "Maru"
+                "EnableFor": "Maru",
+                "Relationship:Maru|contains=Married": false
             },
             "Entries": {
-                "Maru_y2": "{{i18n:maru-y2-dance.00}}#$e#{{i18n:maru-y2-dance.01}}$h",
-                "Maru_spouse": "{{i18n:maru-y1-dance-spouse.00}}#$e#{{i18n:maru-y1-dance-spouse.01}}$h",
-                "Maru_spouse_y2": "{{i18n:maru-y2-dance-spouse}}$h"
+                "Maru_y2": "{{i18n:maru-y2-dance.00}}#$e#{{i18n:maru-y2-dance.01}}$h"
+            }
+        },
+        {
+            "Action": "EditData",
+            "LogName": "Maru - married",
+            "Target": "Data/Festivals/spring24",
+            "When": {
+                "EnableFor": "Maru",
+                "Relationship:Maru|contains=Married": true
+            },
+            "Entries": {
+                "Maru": "{{i18n:maru-y1-dance-spouse.00}}#$e#{{i18n:maru-y1-dance-spouse.01}}$h",
+                "Maru_y2": "{{i18n:maru-y2-dance-spouse}}$h"
             }
         },
         {
@@ -421,12 +531,24 @@
             "LogName": "Penny - normal",
             "Target": "Data/Festivals/spring24",
             "When": {
-                "EnableFor": "Penny"
+                "EnableFor": "Penny",
+                "Relationship:Penny|contains=Married": false
             },
             "Entries": {
-                "Penny_y2": "{{i18n:penny-y2-dance.00}}#$e#{{i18n:penny-y2-dance.01}}$s",
-                "Penny_spouse": "{{i18n:penny-y1-dance-spouse}}$h",
-                "Penny_spouse_y2": "{{i18n:penny-y2-dance-spouse.00}}#$e#{{i18n:penny-y2-dance-spouse.01}}$h",
+                "Penny_y2": "{{i18n:penny-y2-dance.00}}#$e#{{i18n:penny-y2-dance.01}}$s"
+            }
+        },
+        {
+            "Action": "EditData",
+            "LogName": "Penny - married",
+            "Target": "Data/Festivals/spring24",
+            "When": {
+                "EnableFor": "Penny",
+                "Relationship:Penny|contains=Married": true
+            },
+            "Entries": {
+                "Penny": "{{i18n:penny-y1-dance-spouse}}$h",
+                "Penny_y2": "{{i18n:penny-y2-dance-spouse.00}}#$e#{{i18n:penny-y2-dance-spouse.01}}$h",
             }
         },
         // Skipping Pierre - you shouldn't be able to reach him anyways.
@@ -460,12 +582,24 @@
             "LogName": "Sam - normal",
             "Target": "Data/Festivals/spring24",
             "When": {
-                "EnableFor": "Sam"
+                "EnableFor": "Sam",
+                "Relationship:Sam|contains=Married": false
             },
             "Entries": {
-                "Sam_y2": "{{i18n:sam-y2-dance.00}}$s#$e#{{i18n:sam-y2-dance.01}}$3",
-                "Sam_spouse": "{{i18n:sam-y1-dance-spouse}}$l",
-                "Sam_spouse_y2": "{{i18n:sam-y2-dance-spouse.00}}#$e#{{i18n:sam-y2-dance-spouse.01}}$h",
+                "Sam_y2": "{{i18n:sam-y2-dance.00}}$s#$e#{{i18n:sam-y2-dance.01}}$3"
+            }
+        },
+        {
+            "Action": "EditData",
+            "LogName": "Sam - married",
+            "Target": "Data/Festivals/spring24",
+            "When": {
+                "EnableFor": "Sam",
+                "Relationship:Sam|contains=Married": true
+            },
+            "Entries": {
+                "Sam": "{{i18n:sam-y1-dance-spouse}}$l",
+                "Sam_y2": "{{i18n:sam-y2-dance-spouse.00}}#$e#{{i18n:sam-y2-dance-spouse.01}}$h"
             }
         },
         {
@@ -473,12 +607,24 @@
             "LogName": "Sebastian - normal",
             "Target": "Data/Festivals/spring24",
             "When": {
-                "EnableFor": "Sebastian"
+                "EnableFor": "Sebastian",
+                "Relationship:Sebastian|contains=Married": false
             },
             "Entries": {
-                "Sebastian_y2": "{{i18n:sebastian-y2-dance.00}}#$e#{{i18n:sebastian-y2-dance.01}}$s",
-                "Sebastian_spouse": "{{i18n:sebastian-y1-dance-spouse}}#$e#{{i18n:sebastian-y1-dance-spouse.00}}",
-                "Sebastian_spouse_y2": "{{i18n:sebastian-y2-dance-spouse.00}}#$e#{{i18n:sebastian-y2-dance-spouse.01}}$h",
+                "Sebastian_y2": "{{i18n:sebastian-y2-dance.00}}#$e#{{i18n:sebastian-y2-dance.01}}$s"
+            }
+        },
+        {
+            "Action": "EditData",
+            "LogName": "Sebastian - married",
+            "Target": "Data/Festivals/spring24",
+            "When": {
+                "EnableFor": "Sebastian",
+                "Relationship:Sebastian|contains=Married": true
+            },
+            "Entries": {
+                "Sebastian": "{{i18n:sebastian-y1-dance-spouse}}#$e#{{i18n:sebastian-y1-dance-spouse.00}}",
+                "Sebastian_y2": "{{i18n:sebastian-y2-dance-spouse.00}}#$e#{{i18n:sebastian-y2-dance-spouse.01}}$h"
             }
         },
         {
@@ -486,12 +632,24 @@
             "LogName": "Shane - normal",
             "Target": "Data/Festivals/spring24",
             "When": {
-                "EnableFor": "Shane"
+                "EnableFor": "Shane",
+                "Relationship:Shane|contains=Married": false
             },
             "Entries": {
-                "Shane_y2": "{{i18n:shane-y2-dance.00}}#$e#{{i18n:shane-y2-dance.01}}$s",
-                "Shane_spouse": "{{i18n:shane-y1-dance-spouse}}$h",
-                "Shane_spouse_y2": "{{i18n:shane-y2-dance-spouse.00}}#$e#{{i18n:shane-y2-dance-spouse.01}}$h",
+                "Shane_y2": "{{i18n:shane-y2-dance.00}}#$e#{{i18n:shane-y2-dance.01}}$s"
+            }
+        },
+        {
+            "Action": "EditData",
+            "LogName": "Shane - married",
+            "Target": "Data/Festivals/spring24",
+            "When": {
+                "EnableFor": "Shane",
+                "Relationship:Shane|contains=Married": true
+            },
+            "Entries": {
+                "Shane": "{{i18n:shane-y1-dance-spouse}}$h",
+                "Shane_y2": "{{i18n:shane-y2-dance-spouse.00}}#$e#{{i18n:shane-y2-dance-spouse.01}}$h"
             }
         },
         {

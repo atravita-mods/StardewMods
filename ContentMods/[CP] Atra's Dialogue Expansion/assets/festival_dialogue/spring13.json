@@ -286,7 +286,7 @@
             "Entries": {
                 "Penny_y3": "{{i18n:penny-y3-egg.00}}#$e#{{i18n:penny-y3-egg.01}}",
                 "Penny_spouse_y2": "{{i18n:penny-y2-egg-spouse}}$s",
-                "Penny_spouse_y3": "{{i18n:penny-y3-egg-spouse.00}}#$e#{{i18n:penny-y3-egg-spouse.01}}"
+                "Penny_spouse_y3": "{{i18n:penny-y3-egg-spouse.00}}#$b#{{i18n:penny-y3-egg-spouse.01}}"
             }
         },
         {
@@ -324,7 +324,7 @@
                 "Sam_y2": "{{i18n:sam-y2-egg}}",
                 "Sam_y3": "{{i18n:sam-y3-egg.00}}#$e#{{i18n:sam-y3-egg.01}}",
                 "Sam_spouse_y2": "{{i18n:sam-y2-egg-spouse}}$h",
-                "Sam_spouse_y3": "{{i18n:sam-y3-egg-spouse.00}}#$e#{{i18n:sam-y3-egg-spouse.01}}"
+                "Sam_spouse_y3": "{{i18n:sam-y3-egg-spouse.00}}#$b#{{i18n:sam-y3-egg-spouse.01}}"
             }
         },
         {
@@ -337,7 +337,7 @@
             "Entries": {
                 "Shane_y3": "{{i18n:shane-y3-egg.00}}#$e#{{i18n:shane-y3-egg.01}}$h",
                 "Shane_spouse": "{{i18n:shane-y1-egg-spouse}}$h",
-                "Shane_spouse_y2": "{{i18n:shane-y2-egg-spouse.00}}#$e#{{i18n:shane-y2-egg-spouse.01}}"
+                "Shane_spouse_y2": "{{i18n:shane-y2-egg-spouse.00}}#$b#{{i18n:shane-y2-egg-spouse.01}}"
             }
         },
         {

@@ -28,6 +28,8 @@
         "Action": "EditData",
         "Target": "Characters/Dialogue/Caroline",
         "Entries": {
+            "Resort_Pier": "Mmm. You know, I could retire here...",
+
             // before fair
             "fall_15{{YearRemainder}}": "Pierre has been working on his grange display for weeks. Let's see how we fare against you tomorrow!$h",
 

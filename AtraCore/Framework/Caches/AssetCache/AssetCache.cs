@@ -3,13 +3,13 @@
 using AtraShared.Niceties;
 using AtraShared.Utils.Extensions;
 
-using CommunityToolkit.Diagnostics;
-
 using HarmonyLib;
 
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
+
 using StardewModdingAPI.Events;
+
 using System.Collections.Concurrent;
 
 namespace AtraCore.Framework.Caches.AssetCache;
@@ -36,7 +36,7 @@ public static class AssetCache
     /// <param name="key">string asset path.</param>
     /// <returns>AssetHolder, or null if could not be resolved.</returns>
     internal static BaseAssetHolder<TAsset>? Get<TAsset>(string? key)
-        where TAsset: class
+        where TAsset : class
     {
         if (string.IsNullOrEmpty(key))
         {

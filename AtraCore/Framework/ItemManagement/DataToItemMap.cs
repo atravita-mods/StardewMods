@@ -1,4 +1,6 @@
-﻿using AtraBase.Toolkit.Extensions;
+﻿using System.Runtime.InteropServices;
+
+using AtraBase.Toolkit.Extensions;
 
 using AtraShared.ConstantsAndEnums;
 using AtraShared.Utils.Extensions;
@@ -15,7 +17,7 @@ public static class DataToItemMap
 {
     private static readonly SortedList<ItemTypeEnum, IAssetName> enumToAssetMap = new(7);
 
-    private static readonly SortedList<ItemTypeEnum, Lazy<Dictionary<string, int>>> nameToIDMap = new(8);
+    private static readonly SortedList<ItemTypeEnum, Lazy<Dictionary<string, (string id, bool repeat)>>> nameToIDMap = new(8);
 
     /// <summary>
     /// Given an ItemType and a name, gets the id.
@@ -36,22 +38,13 @@ public static class DataToItemMap
         {
             type = ItemTypeEnum.SObject;
         }
-        if (nameToIDMap.TryGetValue(type, out Lazy<Dictionary<string, int>>? asset)
-            && asset.Value.TryGetValue(name, out int id))
+        if (nameToIDMap.TryGetValue(type, out Lazy<Dictionary<string, (string, bool)>>? asset)
+            && asset.Value.TryGetValue(name, out (string id, bool repeat) pair))
         {
-            return id;
+            return pair.id;
         }
         return null;
     }
-
-    /// <summary>
-    /// Gets all indexes associated with an asset type.
-    /// </summary>
-    /// <param name="type">Asset type.</param>
-    /// <returns>ienumerable of ints.</returns>
-    /// <remarks>Use this to filter out weird duplicates and stuff.</remarks>
-    public static IEnumerable<int> GetAll(ItemTypeEnum type)
-        => nameToIDMap.TryGetValue(type, out Lazy<Dictionary<string, int>>? asset) ? asset.Value.Values : Enumerable.Empty<int>();
 
     /// <summary>
     /// Sets up various maps.
@@ -84,82 +77,71 @@ public static class DataToItemMap
 
         if (ShouldReset(enumToAssetMap[ItemTypeEnum.SObject]))
         {
-            if (!nameToIDMap.TryGetValue(ItemTypeEnum.SObject, out Lazy<Dictionary<string, int>>? sobj) || sobj.IsValueCreated)
+            if (!nameToIDMap.TryGetValue(ItemTypeEnum.SObject, out var sobj) || sobj.IsValueCreated)
             {
                 nameToIDMap[ItemTypeEnum.SObject] = new(() =>
                 {
                     ModEntry.ModMonitor.DebugOnlyLog("Building map to resolve normal objects.", LogLevel.Info);
 
-                    Dictionary<string, int> mapping = new(Game1Wrappers.ObjectInfo.Count)
+                    Dictionary<string, (string id, bool duplicate)> mapping = new(Game1Wrappers.ObjectInfo.Count)
                     {
                         // Special cases
-                        ["Egg"] = 176,
-                        ["Brown Egg"] = 180,
-                        ["Large Egg"] = 174,
-                        ["Large Brown Egg"] = 182,
-                        ["Strange Doll"] = 126,
-                        ["Strange Doll 2"] = 127,
+                        ["Brown Egg"] = ("180", false),
+                        ["Large Brown Egg"] = ("182", false),
+                        ["Strange Doll 2"] = ("127", false),
                     };
 
+                    HashSet<string> preAdded = mapping.Values.Select(pair => pair.id).ToHashSet();
+
                     // Processing from the data.
-                    foreach ((int id, string data) in Game1Wrappers.ObjectInfo)
+                    foreach ((string id, string data) in Game1Wrappers.ObjectInfo)
                     {
-                        // category asdf should never end up in the player inventory.
-                        ReadOnlySpan<char> cat = data.GetNthChunk('/', SObject.objectInfoTypeIndex);
-                        if (cat.Equals("asdf", StringComparison.OrdinalIgnoreCase))
+                        if (ItemHelperUtils.ObjectFilter(id, data) || preAdded.Contains(id))
                         {
                             continue;
                         }
 
-                        ReadOnlySpan<char> name = data.GetNthChunk('/', SObject.objectInfoNameIndex);
-                        if (name.Equals("Stone", StringComparison.OrdinalIgnoreCase) && id != 390)
+                        string name = data.GetNthChunk('/', SObject.objectInfoNameIndex).ToString();
+                        var val = CollectionsMarshal.GetValueRefOrAddDefault(mapping, name, out bool exists);
+                        if (exists)
                         {
-                            continue;
+                            val.duplicate = true;
                         }
-                        if (name.Equals("Weeds", StringComparison.OrdinalIgnoreCase)
-                            || name.Equals("SupplyCrate", StringComparison.OrdinalIgnoreCase)
-                            || name.Equals("Twig", StringComparison.OrdinalIgnoreCase)
-                            || name.Equals("Rotten Plant", StringComparison.OrdinalIgnoreCase)
-                            || name.Equals("Warp Totem: Qi's Arena", StringComparison.OrdinalIgnoreCase)
-                            || name.Equals("???", StringComparison.OrdinalIgnoreCase)
-                            || name.Equals("DGA Dummy Object", StringComparison.OrdinalIgnoreCase)
-                            || name.Equals("Egg", StringComparison.OrdinalIgnoreCase)
-                            || name.Equals("Large Egg", StringComparison.OrdinalIgnoreCase)
-                            || name.Equals("Strange Doll", StringComparison.OrdinalIgnoreCase)
-                            || name.Equals("Lost Book", StringComparison.OrdinalIgnoreCase))
+                        else
                         {
-                            continue;
-                        }
-                        if (!mapping.TryAdd(name.ToString(), id))
-                        {
-                            ModEntry.ModMonitor.Log($"{name.ToString()} with {id} seems to be a duplicate SObject and may not be resolved correctly.", LogLevel.Warn);
+                            val = new(id, false);
                         }
                     }
                     return mapping;
                 });
             }
-            if (!nameToIDMap.TryGetValue(ItemTypeEnum.Ring, out Lazy<Dictionary<string, int>>? rings) || rings.IsValueCreated)
+            if (!nameToIDMap.TryGetValue(ItemTypeEnum.Ring, out var rings) || rings.IsValueCreated)
             {
                 nameToIDMap[ItemTypeEnum.Ring] = new(() =>
                 {
                     ModEntry.ModMonitor.DebugOnlyLog("Building map to resolve rings.", LogLevel.Info);
 
-                    Dictionary<string, int> mapping = new(10);
-                    foreach ((int id, string data) in Game1Wrappers.ObjectInfo)
+                    Dictionary<string, (string id, bool duplicate)> mapping = new(10);
+                    foreach ((string id, string data) in Game1Wrappers.ObjectInfo)
                     {
                         ReadOnlySpan<char> cat = data.GetNthChunk('/', 3);
 
                         // wedding ring (801) isn't a real ring.
                         // JA rings are registered as "Basic -96"
-                        if (id == 801 || (!cat.Equals("Ring", StringComparison.Ordinal) && !cat.Equals("Basic -96", StringComparison.Ordinal)))
+                        if (id == "801" || (!cat.Equals("Ring", StringComparison.Ordinal) && !cat.Equals("Basic -96", StringComparison.Ordinal)))
                         {
                             continue;
                         }
 
-                        string? name = data.GetNthChunk('/', SObject.objectInfoNameIndex).ToString();
-                        if (!mapping.TryAdd(name, id))
+                        string name = data.GetNthChunk('/', SObject.objectInfoNameIndex).ToString();
+                        var val = CollectionsMarshal.GetValueRefOrAddDefault(mapping, name, out bool exists);
+                        if (exists)
                         {
-                            ModEntry.ModMonitor.Log($"{name} with {id} seems to be a duplicate Ring and may not be resolved correctly.", LogLevel.Warn);
+                            val.duplicate = true;
+                        }
+                        else
+                        {
+                            val = new(id, false);
                         }
                     }
                     return mapping;
@@ -168,7 +150,7 @@ public static class DataToItemMap
         }
 
         if (ShouldReset(enumToAssetMap[ItemTypeEnum.Boots])
-            && (!nameToIDMap.TryGetValue(ItemTypeEnum.Boots, out Lazy<Dictionary<string, int>>? boots) || boots.IsValueCreated))
+            && (!nameToIDMap.TryGetValue(ItemTypeEnum.Boots, out var boots) || boots.IsValueCreated))
         {
             nameToIDMap[ItemTypeEnum.Boots] = new(() =>
             {

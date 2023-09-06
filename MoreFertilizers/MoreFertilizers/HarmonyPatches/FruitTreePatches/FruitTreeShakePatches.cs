@@ -19,11 +19,6 @@ namespace MoreFertilizers.HarmonyPatches.FruitTreePatches;
 [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = StyleCopConstants.NamedForHarmony)]
 internal static class FruitTreeShakePatches
 {
-    internal static void ApplyDGAPatch(Harmony harmony)
-    {
-#warning - do the DGA patch here too. Probably will need seperate patches.
-    }
-
     [HarmonyPatch(nameof(FruitTree.shake))]
     private static void Prefix(FruitTree __instance, out int __state)
     {

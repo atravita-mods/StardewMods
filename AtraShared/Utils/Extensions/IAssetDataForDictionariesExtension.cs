@@ -25,7 +25,7 @@ public static class IAssetDataForDictionariesExtension
         }
 
         IDictionary<string, string> data = contextTagAsset.Data;
-        if (data.TryGetValue(key, out var prev))
+        if (data.TryGetValue(key, out string? prev))
         {
             data[key] = prev + ", " + items;
         }

@@ -141,9 +141,9 @@ public static class AssetCache
         {
             foreach (IAssetName asset in assets)
             {
-                if (Cache.TryGetValue(asset.BaseName, out var holder))
+                if (Cache.TryGetValue(asset.BaseName, out WeakReference<IAssetHolder<object>>? holder))
                 {
-                    if (!holder.TryGetTarget(out var target))
+                    if (!holder.TryGetTarget(out IAssetHolder<object>? target))
                     {
                         Cache.TryRemove(asset.BaseName, out _);
                     }

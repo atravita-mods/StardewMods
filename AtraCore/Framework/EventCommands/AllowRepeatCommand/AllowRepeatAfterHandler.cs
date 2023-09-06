@@ -82,25 +82,45 @@ internal static class AllowRepeatAfterHandler
     internal static void DayEnd()
     {
         SDate now = SDate.Now();
-        int days = now.DaysSinceStart;
-        if (eventsToRepeat.Value.TryGetValue(days, out HashSet<string>? eventsToForget))
+        HashSet<string> toForget = new();
+        List<int> daysHandled = new();
+        foreach ((int days, HashSet<string>? eventsToForget) in eventsToRepeat.Value)
         {
-            ModEntry.ModMonitor.Log($"Forgetting events for {now}: {string.Join(',', eventsToForget)}");
+            if (days > now.DaysSinceStart)
+            {
+                continue;
+            }
+            daysHandled.Add(days);
+            foreach (string evt in eventsToForget)
+            {
+                toForget.Add(evt);
+            }
+        }
+
+        if (daysHandled.Count == 0)
+        {
+            return;
+        }
+
+        if (toForget.Count > 0)
+        {
+            ModEntry.ModMonitor.Log($"For day '{now}', forgetting events {string.Join(", ", toForget)}");
 
             int count = 0;
-
             for (int i = Game1.player.eventsSeen.Count - 1; i >= 0; i--)
             {
-                if (eventsToForget.Contains(Game1.player.eventsSeen[i]))
+                if (toForget.Contains(Game1.player.eventsSeen[i]))
                 {
                     Game1.player.eventsSeen.RemoveAt(i);
                     count++;
                 }
             }
+            ModEntry.ModMonitor.Log($"{count} events forgotten.");
+        }
 
-            ModEntry.ModMonitor.Log($"{count} events forgotten");
-
-            eventsToRepeat.Value.Remove(days);
+        foreach (int day in daysHandled)
+        {
+            eventsToRepeat.Value.Remove(day);
         }
     }
 

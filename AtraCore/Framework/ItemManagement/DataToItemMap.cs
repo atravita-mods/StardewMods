@@ -92,7 +92,7 @@ public static class DataToItemMap
 
         if (ShouldReset(enumToAssetMap[ItemTypeEnum.SObject]))
         {
-            if (!nameToIDMap.TryGetValue(ItemTypeEnum.SObject, out var sobj) || sobj.IsValueCreated)
+            if (!nameToIDMap.TryGetValue(ItemTypeEnum.SObject, out Lazy<Dictionary<string, (string id, bool repeat)>>? sobj) || sobj.IsValueCreated)
             {
                 nameToIDMap[ItemTypeEnum.SObject] = new(() =>
                 {
@@ -122,7 +122,7 @@ public static class DataToItemMap
                             ModEntry.ModMonitor.Log($"Object with id {id} has no internal name.");
                             continue;
                         }
-                        var val = CollectionsMarshal.GetValueRefOrAddDefault(mapping, name, out bool exists);
+                        (string id, bool duplicate) val = CollectionsMarshal.GetValueRefOrAddDefault(mapping, name, out bool exists);
                         if (exists)
                         {
                             val.duplicate = true;
@@ -135,7 +135,7 @@ public static class DataToItemMap
                     return mapping;
                 });
             }
-            if (!nameToIDMap.TryGetValue(ItemTypeEnum.Ring, out var rings) || rings.IsValueCreated)
+            if (!nameToIDMap.TryGetValue(ItemTypeEnum.Ring, out Lazy<Dictionary<string, (string id, bool repeat)>>? rings) || rings.IsValueCreated)
             {
                 nameToIDMap[ItemTypeEnum.Ring] = new(() =>
                 {
@@ -159,7 +159,7 @@ public static class DataToItemMap
                             ModEntry.ModMonitor.Log($"Ring with id {id} has no internal name.");
                             continue;
                         }
-                        var val = CollectionsMarshal.GetValueRefOrAddDefault(mapping, name, out bool exists);
+                        (string id, bool duplicate) val = CollectionsMarshal.GetValueRefOrAddDefault(mapping, name, out bool exists);
                         if (exists)
                         {
                             val.duplicate = true;
@@ -175,7 +175,7 @@ public static class DataToItemMap
         }
 
         if (ShouldReset(enumToAssetMap[ItemTypeEnum.Boots])
-            && (!nameToIDMap.TryGetValue(ItemTypeEnum.Boots, out var boots) || boots.IsValueCreated))
+            && (!nameToIDMap.TryGetValue(ItemTypeEnum.Boots, out Lazy<Dictionary<string, (string id, bool repeat)>>? boots) || boots.IsValueCreated))
         {
             nameToIDMap[ItemTypeEnum.Boots] = new(() =>
             {
@@ -190,7 +190,7 @@ public static class DataToItemMap
                         ModEntry.ModMonitor.Log($"Boots with id {id} has no internal name.");
                         continue;
                     }
-                    var val = CollectionsMarshal.GetValueRefOrAddDefault(mapping, name, out bool exists);
+                    (string id, bool duplicate) val = CollectionsMarshal.GetValueRefOrAddDefault(mapping, name, out bool exists);
                     if (exists)
                     {
                         val.duplicate = true;
@@ -204,7 +204,7 @@ public static class DataToItemMap
             });
         }
         if (ShouldReset(enumToAssetMap[ItemTypeEnum.BigCraftable])
-            && (!nameToIDMap.TryGetValue(ItemTypeEnum.BigCraftable, out var bc) || bc.IsValueCreated))
+            && (!nameToIDMap.TryGetValue(ItemTypeEnum.BigCraftable, out Lazy<Dictionary<string, (string id, bool repeat)>>? bc) || bc.IsValueCreated))
         {
             nameToIDMap[ItemTypeEnum.BigCraftable] = new(() =>
             {
@@ -251,7 +251,7 @@ public static class DataToItemMap
                         ModEntry.ModMonitor.Log($"BigCraftable with id {id} has no internal name.");
                         continue;
                     }
-                    var val = CollectionsMarshal.GetValueRefOrAddDefault(mapping, name, out bool exists);
+                    (string id, bool duplicate) val = CollectionsMarshal.GetValueRefOrAddDefault(mapping, name, out bool exists);
                     if (exists)
                     {
                         val.duplicate = true;
@@ -265,7 +265,7 @@ public static class DataToItemMap
             });
         }
         if (ShouldReset(enumToAssetMap[ItemTypeEnum.Shirts])
-            && (!nameToIDMap.TryGetValue(ItemTypeEnum.Shirts, out var shirts) || shirts.IsValueCreated))
+            && (!nameToIDMap.TryGetValue(ItemTypeEnum.Shirts, out Lazy<Dictionary<string, (string id, bool repeat)>>? shirts) || shirts.IsValueCreated))
         {
             nameToIDMap[ItemTypeEnum.Shirts] = new(() =>
             {
@@ -296,7 +296,7 @@ public static class DataToItemMap
                         ModEntry.ModMonitor.Log($"Shirt with id {id} has no internal name.");
                         continue;
                     }
-                    var val = CollectionsMarshal.GetValueRefOrAddDefault(mapping, data.Name, out bool exists);
+                    (string id, bool duplicate) val = CollectionsMarshal.GetValueRefOrAddDefault(mapping, data.Name, out bool exists);
                     if (exists)
                     {
                         val.duplicate = true;
@@ -310,7 +310,7 @@ public static class DataToItemMap
             });
         }
         if (ShouldReset(enumToAssetMap[ItemTypeEnum.Pants])
-            && (!nameToIDMap.TryGetValue(ItemTypeEnum.Pants, out var pants) || pants.IsValueCreated))
+            && (!nameToIDMap.TryGetValue(ItemTypeEnum.Pants, out Lazy<Dictionary<string, (string id, bool repeat)>>? pants) || pants.IsValueCreated))
         {
             nameToIDMap[ItemTypeEnum.Pants] = new(() =>
             {
@@ -325,7 +325,7 @@ public static class DataToItemMap
                         ModEntry.ModMonitor.Log($"Pants with id {id} has no internal name.");
                         continue;
                     }
-                    var val = CollectionsMarshal.GetValueRefOrAddDefault(mapping, data.Name, out bool exists);
+                    (string id, bool duplicate) val = CollectionsMarshal.GetValueRefOrAddDefault(mapping, data.Name, out bool exists);
                     if (exists)
                     {
                         val.duplicate = true;
@@ -339,7 +339,7 @@ public static class DataToItemMap
             });
         }
         if (ShouldReset(enumToAssetMap[ItemTypeEnum.Furniture])
-            && (!nameToIDMap.TryGetValue(ItemTypeEnum.Furniture, out var furniture) || furniture.IsValueCreated))
+            && (!nameToIDMap.TryGetValue(ItemTypeEnum.Furniture, out Lazy<Dictionary<string, (string id, bool repeat)>>? furniture) || furniture.IsValueCreated))
         {
             nameToIDMap[ItemTypeEnum.Furniture] = new(() =>
             {
@@ -354,7 +354,7 @@ public static class DataToItemMap
                         ModEntry.ModMonitor.Log($"Furniture with id {id} has no internal name.");
                         continue;
                     }
-                    var val = CollectionsMarshal.GetValueRefOrAddDefault(mapping, name, out bool exists);
+                    (string id, bool duplicate) val = CollectionsMarshal.GetValueRefOrAddDefault(mapping, name, out bool exists);
                     if (exists)
                     {
                         val.duplicate = true;
@@ -368,7 +368,7 @@ public static class DataToItemMap
             });
         }
         if (ShouldReset(enumToAssetMap[ItemTypeEnum.Hat])
-            && (!nameToIDMap.TryGetValue(ItemTypeEnum.Hat, out var hats) || hats.IsValueCreated))
+            && (!nameToIDMap.TryGetValue(ItemTypeEnum.Hat, out Lazy<Dictionary<string, (string id, bool repeat)>>? hats) || hats.IsValueCreated))
         {
             nameToIDMap[ItemTypeEnum.Hat] = new(() =>
             {
@@ -384,7 +384,7 @@ public static class DataToItemMap
                         ModEntry.ModMonitor.Log($"Hat with id {id} has no internal name.");
                         continue;
                     }
-                    var val = CollectionsMarshal.GetValueRefOrAddDefault(mapping, name, out bool exists);
+                    (string id, bool duplicate) val = CollectionsMarshal.GetValueRefOrAddDefault(mapping, name, out bool exists);
                     if (exists)
                     {
                         val.duplicate = true;

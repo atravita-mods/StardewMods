@@ -11,7 +11,8 @@ using AtraShared.Utils.Extensions;
 
 using StardewModdingAPI.Events;
 using StardewModdingAPI.Utilities;
-using StardewValley.GameData;
+
+using StardewValley.GameData.SpecialOrders;
 
 namespace MoreFertilizers.Framework;
 

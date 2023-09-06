@@ -26,26 +26,6 @@ namespace MoreFertilizers.HarmonyPatches.FruitTreePatches;
 [HarmonyPatch(typeof(FruitTree))]
 internal static class FruitTreeDayUpdateTranspiler
 {
-    /// <summary>
-    /// Applies the fruit tree update patch to DGA too.
-    /// </summary>
-    /// <param name="harmony">Harmony instance.</param>
-    internal static void ApplyDGAPatch(Harmony harmony)
-    {
-        try
-        {
-            Type dgaFruitTree = AccessTools.TypeByName("DynamicGameAssets.Game.CustomFruitTree")
-                ?? ReflectionThrowHelper.ThrowMethodNotFoundException<Type>("DGA Fruit Trees");
-            harmony.Patch(
-                original: dgaFruitTree.GetCachedMethod("dayUpdate", ReflectionCache.FlagTypes.InstanceFlags),
-                transpiler: new HarmonyMethod(typeof(FruitTreeDayUpdateTranspiler), nameof(Transpiler)));
-        }
-        catch (Exception ex)
-        {
-            ModEntry.ModMonitor.LogError("transpiling DGA", ex);
-        }
-    }
-
     private static int CalculateExtraGrowth(FruitTree tree)
     {
         try
@@ -53,7 +33,7 @@ internal static class FruitTreeDayUpdateTranspiler
             if (tree.modData?.GetInt(CanPlaceHandler.FruitTreeFertilizer) is int result
                 && Singletons.Random.OfChance(0.15 * result))
             {
-                ModEntry.ModMonitor.LogIfVerbose(() => $"Speeding up fruit tree at {tree.currentTileLocation}");
+                ModEntry.ModMonitor.LogIfVerbose(() => $"Speeding up fruit tree at {tree.Tile}");
                 return 1;
             }
         }

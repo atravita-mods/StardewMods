@@ -10,7 +10,6 @@ using HarmonyLib;
 using MoreFertilizers.Framework;
 
 using StardewValley.Objects;
-using StardewValley.TerrainFeatures;
 
 namespace MoreFertilizers.HarmonyPatches.OrganicFertilizer;
 
@@ -29,8 +28,8 @@ internal static class IndoorPotPlacement
             return;
         }
         if (dropInItem?.modData?.GetBool(CanPlaceHandler.Organic) == true
-            && __instance.hoeDirt?.Value?.fertilizer?.Value is HoeDirt.noFertilizer
-            && ModEntry.OrganicFertilizerID != -1
+            && __instance.hoeDirt?.Value?.fertilizer is { } fertilizer
+            && fertilizer.Value is null
             && Singletons.Random.OfChance(0.5))
         {
             __instance.hoeDirt.Value.fertilizer.Value = ModEntry.OrganicFertilizerID;

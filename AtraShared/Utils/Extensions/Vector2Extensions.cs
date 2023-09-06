@@ -38,7 +38,7 @@ public static class Vector2Extensions
     public static Vector2 Rotate(this Vector2 self, float rad)
     {
 #if NET6_0_OR_GREATER
-        var (sin, cos) = MathF.SinCos(rad);
+        (float sin, float cos) = MathF.SinCos(rad);
 #else
         float sin = MathF.Sin(rad);
         float cos = MathF.Cos(rad);

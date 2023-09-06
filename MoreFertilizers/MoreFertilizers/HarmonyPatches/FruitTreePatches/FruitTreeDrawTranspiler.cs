@@ -20,26 +20,6 @@ namespace MoreFertilizers.HarmonyPatches.FruitTreePatches;
 internal static class FruitTreeDrawTranspiler
 {
     /// <summary>
-    /// Applies this patch to DGA.
-    /// </summary>
-    /// <param name="harmony">Harmony instance.</param>
-    internal static void ApplyDGAPatch(Harmony harmony)
-    {
-        try
-        {
-            Type dgaFruitTree = AccessTools.TypeByName("DynamicGameAssets.Game.CustomFruitTree")
-                ?? ReflectionThrowHelper.ThrowMethodNotFoundException<Type>("DGA Fruit Trees");
-            harmony.Patch(
-                original: dgaFruitTree.GetCachedMethod("draw", ReflectionCache.FlagTypes.InstanceFlags),
-                transpiler: new HarmonyMethod(typeof(FruitTreeDrawTranspiler), nameof(Transpiler)));
-        }
-        catch (Exception ex)
-        {
-            ModEntry.ModMonitor.LogError("transpiling DGA", ex);
-        }
-    }
-
-    /// <summary>
     /// Applies this patch to AT.
     /// </summary>
     /// <param name="harmony">Harmony instance.</param>

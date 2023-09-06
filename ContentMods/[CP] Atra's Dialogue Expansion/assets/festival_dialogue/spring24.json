@@ -20,10 +20,11 @@
             "Target": "Data/Festivals/spring24",
             "When": {
                 "EnableFor": "Abigail",
-                "Relationship:Abigail|contains=Married": true
+                "Relationship:Abigail": "Married"
             },
             "Entries": {
-                "Abigail": "{{i18n:abby-y1-dance-spouse}}"
+                "Abigail": "{{i18n:abby-y1-dance-spouse}}",
+                "Abigail_y2": "{{i18n:abby-y2-dance-spouse}}$s"
             }
         },
         {
@@ -44,7 +45,7 @@
             "Target": "Data/Festivals/spring24",
             "When": {
                 "EnableFor": "Alex",
-                "Relationship:Alex|contains=Married": true
+                "Relationship:Alex": "Married"
             },
             "Entries": {
                 "Alex": "{{i18n:alex-y1-dance-spouse}}$h",
@@ -130,7 +131,7 @@
             "Target": "Data/Festivals/spring24",
             "When": {
                 "EnableFor": "Elliott",
-                "Relationship:Elliott|contains=Married": true
+                "Relationship:Elliott": "Married"
             },
             "Entries": {
                 "Elliott": "{{i18n:elliott-y1-dance-spouse}}$h"
@@ -154,7 +155,7 @@
             "Target": "Data/Festivals/spring24",
             "When": {
                 "EnableFor": "Emily",
-                "Relationship:Emily|contains=Married": true
+                "Relationship:Emily": "Married"
             },
             "Entries": {
                 "Emily": "{{i18n:emily-y1-dance-spouse}}$h",
@@ -231,7 +232,7 @@
             "Target": "Data/Festivals/spring24",
             "When": {
                 "EnableFor": "Haley",
-                "Relationship:Haley|contains=Married": true
+                "Relationship:Haley": "Married"
             },
             "Entries": {
                 "Haley": "{{i18n:haley-y1-dance-spouse}}$h",
@@ -256,7 +257,7 @@
             "Target": "Data/Festivals/spring24",
             "When": {
                 "EnableFor": "Harvey",
-                "Relationship:Harvey|contains=Married": true
+                "Relationship:Harvey": "Married"
             },
             "Entries": {
                 "Harvey": "{{i18n:harvey-y1-dance-spouse}}$h",
@@ -337,7 +338,7 @@
             "Target": "Data/Festivals/spring24",
             "When": {
                 "EnableFor": "Leah",
-                "Relationship:Leah|contains=Married": true
+                "Relationship:Leah": "Married"
             },
             "Entries": {
                 "Leah": "{{i18n:leah-y1-dance-spouse.00}}#$e#{{i18n:leah-y1-dance-spouse.01}}$h",
@@ -498,7 +499,8 @@
                 "Relationship:Maru|contains=Married": false
             },
             "Entries": {
-                "Maru_y2": "{{i18n:maru-y2-dance.00}}#$e#{{i18n:maru-y2-dance.01}}$h"
+                "Maru_y2": "{{i18n:maru-y2-dance.00}}#$e#{{i18n:maru-y2-dance.01}}$h",
+                "Maru_y3": "{{i18n:maru-y3-dance.00}}$s"
             }
         },
         {
@@ -507,7 +509,7 @@
             "Target": "Data/Festivals/spring24",
             "When": {
                 "EnableFor": "Maru",
-                "Relationship:Maru|contains=Married": true
+                "Relationship:Maru": "Married"
             },
             "Entries": {
                 "Maru": "{{i18n:maru-y1-dance-spouse.00}}#$e#{{i18n:maru-y1-dance-spouse.01}}$h",
@@ -544,7 +546,7 @@
             "Target": "Data/Festivals/spring24",
             "When": {
                 "EnableFor": "Penny",
-                "Relationship:Penny|contains=Married": true
+                "Relationship:Penny": "Married"
             },
             "Entries": {
                 "Penny": "{{i18n:penny-y1-dance-spouse}}$h",
@@ -595,7 +597,7 @@
             "Target": "Data/Festivals/spring24",
             "When": {
                 "EnableFor": "Sam",
-                "Relationship:Sam|contains=Married": true
+                "Relationship:Sam": "Married"
             },
             "Entries": {
                 "Sam": "{{i18n:sam-y1-dance-spouse}}$l",
@@ -620,7 +622,7 @@
             "Target": "Data/Festivals/spring24",
             "When": {
                 "EnableFor": "Sebastian",
-                "Relationship:Sebastian|contains=Married": true
+                "Relationship:Sebastian": "Married"
             },
             "Entries": {
                 "Sebastian": "{{i18n:sebastian-y1-dance-spouse}}#$e#{{i18n:sebastian-y1-dance-spouse.00}}",
@@ -645,7 +647,7 @@
             "Target": "Data/Festivals/spring24",
             "When": {
                 "EnableFor": "Shane",
-                "Relationship:Shane|contains=Married": true
+                "Relationship:Shane": "Married"
             },
             "Entries": {
                 "Shane": "{{i18n:shane-y1-dance-spouse}}$h",

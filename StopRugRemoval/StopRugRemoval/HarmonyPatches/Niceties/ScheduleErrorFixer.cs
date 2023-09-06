@@ -7,9 +7,9 @@ using AtraCore.Framework.ReflectionManager;
 using AtraShared.ConstantsAndEnums;
 
 using HarmonyLib;
+
 using Microsoft.Xna.Framework;
 
-using Netcode;
 using StardewModdingAPI.Utilities;
 
 using StardewValley.Network;
@@ -32,16 +32,6 @@ internal static class ScheduleErrorFixer
                    .GetInstanceFieldGetter<NPC, NetLocationRef>()
     );
 
-    private static readonly Lazy<Action<NetLocationRef, bool>> _markDirty = new(() =>
-        typeof(NetLocationRef).GetCachedField("_dirty", ReflectionCache.FlagTypes.InstanceFlags)
-                              .GetInstanceFieldSetter<NetLocationRef, bool>()
-    );
-
-    private static readonly Lazy<Func<NetLocationRef, NetString>> _getLocationName = new(() =>
-        typeof(NetLocationRef).GetCachedField("locationName", ReflectionCache.FlagTypes.InstanceFlags)
-                              .GetInstanceFieldGetter<NetLocationRef, NetString>()
-    );
-
     #endregion
 
     [HarmonyPriority(Priority.First)]
@@ -57,11 +47,11 @@ internal static class ScheduleErrorFixer
         ModEntry.ModMonitor.Log($"Multiplayer: {Context.IsMultiplayer}? Host: {Context.IsMainPlayer}? The current day is {SDate.Now()}.", LogLevel.Info);
 
         NetLocationRef backing = _getLocationRef.Value(__instance);
-        NetString expectedName = _getLocationName.Value(backing);
-        if (!string.IsNullOrWhiteSpace(expectedName.Value))
+        var expectedName = backing.LocationName;
+        if (!string.IsNullOrWhiteSpace(expectedName))
         {
             ModEntry.ModMonitor.Log($"Location Ref has value {expectedName}, marking dirty.", LogLevel.Info);
-            _markDirty.Value(backing, true);
+            backing.Update(true);
         }
 
         if (__instance.currentLocation is not null)
@@ -140,12 +130,12 @@ internal static class ScheduleErrorFixer
         if (character.currentLocation is null)
         {
             NetLocationRef backing = _getLocationRef.Value(character);
-            NetString currLoc = _getLocationName.Value(backing);
+            var currLoc = backing.LocationName;
             ModEntry.ModMonitor.Log($"{character.Name} has null currentLocation while attempting to warp. NetLocationRef reports {currLoc}", LogLevel.Info);
             if (!string.IsNullOrEmpty(currLoc))
             {
                 ModEntry.ModMonitor.Log($"Forcing refresh for backing NetLocationRef.", LogLevel.Info);
-                _markDirty.Value(backing, true);
+                backing.Update(true);
             }
         }
 

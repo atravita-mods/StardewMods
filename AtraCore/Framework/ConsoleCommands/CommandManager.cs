@@ -62,14 +62,15 @@ internal static class CommandManager
             return;
         }
 
-        Dictionary<int, string> quests = Game1.temporaryContent.Load<Dictionary<int, string>>("Data/Quests");
+        Dictionary<string, string> quests = Game1.temporaryContent.Load<Dictionary<string, string>>("Data/Quests");
         ModEntry.ModMonitor.Log($"Tracking quests for player {player.Name}", LogLevel.Info);
 
         for (int i = 1; i < args.Length; i++)
         {
-            if (!int.TryParse(args[i], out int id))
+            string id = args[i];
+            if (string.IsNullOrEmpty(id))
             {
-                ModEntry.ModMonitor.Log($"Could not parse {args[i]} as an integer.", LogLevel.Warn);
+                ModEntry.ModMonitor.Log($"Id {id} cannot be null or empty.", LogLevel.Warn);
                 continue;
             }
             if (!quests.TryGetValue(id, out string? quest))

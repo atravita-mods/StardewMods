@@ -1,8 +1,10 @@
 ﻿using Microsoft.Xna.Framework;
+
 using StardewModdingAPI.Events;
 using StardewModdingAPI.Utilities;
+
 using StardewValley.Locations;
-using StardewValley.Menus;
+
 using AtraUtils = AtraShared.Utils.Utils;
 
 namespace GingerIslandMainlandAdjustments.Niceties;
@@ -23,7 +25,7 @@ internal static class ShopHandler
     /// <param name="e">Button pressed event arguments.</param>
     internal static void HandleSandyShop(ButtonPressedEventArgs e)
     {
-        if (HandlingShop.Value || !(Game1.currentLocation?.Name?.Equals("SandyHouse", StringComparison.OrdinalIgnoreCase) == true))
+        if (HandlingShop.Value || Game1.currentLocation?.Name != "SandyHouse")
         {
             return;
         }
@@ -33,22 +35,16 @@ internal static class ShopHandler
         {
             return;
         }
-        IReflectedMethod? onSandyShop = Globals.ReflectionHelper.GetMethod(sandyHouse, "onSandyShopPurchase");
-        IReflectedMethod? getSandyStock = Globals.ReflectionHelper.GetMethod(sandyHouse, "sandyShopStock");
-        if (onSandyShop is not null && getSandyStock is not null)
+
+        HandlingShop.Value = true; // Do not want to intercept any more clicks until shop menu is finished.
+        Globals.InputHelper.Suppress(e.Button);
+        Game1.player.FacingDirection = Game1.up;
+        Game1.drawObjectDialogue(I18n.SandyAwayShopMessage());
+        Game1.afterDialogues = () =>
         {
-            HandlingShop.Value = true; // Do not want to intercept any more clicks until shop menu is finished.
-            Globals.InputHelper.Suppress(e.Button);
-            Game1.player.FacingDirection = Game1.up;
-            Game1.drawObjectDialogue(I18n.SandyAwayShopMessage());
-            Game1.afterDialogues = () =>
-            {
-                Game1.activeClickableMenu = new ShopMenu(
-                        itemPriceAndStock: getSandyStock.Invoke<Dictionary<ISalable, int[]>>(),
-                        on_purchase: (ISalable sellable, Farmer who, int amount) => onSandyShop.Invoke<bool>(sellable, who, amount));
-                HandlingShop.Value = false;
-            };
-        }
+            Utility.OpenShopMenu("Sandy", sandyHouse, forceOpen: true);
+            HandlingShop.Value = false;
+        };
     }
 
     /// <summary>
@@ -73,7 +69,7 @@ internal static class ShopHandler
         Game1.drawObjectDialogue(I18n.WillyAwayShopMessage());
         Game1.afterDialogues = () =>
         {
-            Game1.activeClickableMenu = new ShopMenu(itemPriceAndStock: Utility.getFishShopStock(Game1.player));
+            Utility.OpenShopMenu("FishShop", fishShop, forceOpen: true);
             HandlingShop.Value = false;
         };
     }

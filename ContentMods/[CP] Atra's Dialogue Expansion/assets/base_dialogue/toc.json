@@ -11,7 +11,24 @@
         },
         {
             "Action": "Include",
+            "LogName": "Abigail - adventurer",
+            "FromFile": "assets/base_dialogue/Abigail/adventurer.json",
+            "When": {
+                "HasFlag": "beenToWoods",
+                "EnableFor": "Abigail"
+            },
+        },
+        {
+            "Action": "Include",
             "LogName": "Alex - base",
+            "FromFile": "assets/base_dialogue/Alex/base.json",
+            "When": {
+                "EnableFor": "Alex"
+            }
+        },
+        {
+            "Action": "Include",
+            "LogName": "Alex - mid",
             "FromFile": "assets/base_dialogue/Alex/mid.json",
             "When": {
                 "EnableFor": "Alex",
@@ -20,7 +37,15 @@
         },
         {
             "Action": "Include",
-            "LogName": "Clint - base",
+            "LogName": "Caroline - base",
+            "FromFile": "assets/base_dialogue/Caroline/base.json",
+            "When": {
+                "EnableFor": "Caroline"
+            }
+        },
+        {
+            "Action": "Include",
+            "LogName": "Clint - mid hearts",
             "FromFile": "assets/base_dialogue/Clint/mid.json",
             "When": {
                 "EnableFor": "Clint",
@@ -81,14 +106,40 @@
         {
             "Action": "Include",
             "LogName": "Maru - base",
+            "FromFile": "assets/base_dialogue/Marnie/base.json",
+            "When": {"EnableFor": "Marnie"}
+        },
+        {
+            "Action": "Include",
+            "LogName": "Maru - base",
             "FromFile": "assets/base_dialogue/Maru/base.json",
             "When": {"EnableFor": "Maru"}
+        },
+        {
+            "Action": "Include",
+            "LogName":  "Pam",
+            "FromFile": "assets/base_dialogue/Pam/base.json",
+            "When": {
+                "EnableFor": "Pam"
+            }
+        },
+        {
+            "Action": "Include",
+            "LogName": "Pierre - base",
+            "FromFile": "assets/base_dialogue/Pierre/base.json",
+            "When": {"EnableFor": "Pierre"}
         },
         {
             "Action": "Include",
             "LogName": "Robin - base",
             "FromFile": "assets/base_dialogue/Robin/base.json",
             "When": {"EnableFor": "Robin"}
+        },
+        {
+            "Action": "Include",
+            "LogName": "Sandy - base",
+            "FromFile": "assets/base_dialogue/Sandy/base.json",
+            "When": {"EnableFor": "Sandy"}
         },
         {
             "Action": "Include",
@@ -139,6 +190,14 @@
             "FromFile": "assets/base_dialogue/spouse_toc.json",
             "When": {
                 "HasValue: {{Spouse}}": true
+            }
+        },
+        {
+            "Action": "Include",
+            "LogName": "Winter rain",
+            "FromFile": "assets/base_dialogue/winter_rain.json",
+            "When": {
+                "Season": "winter"
             }
         }
     ]

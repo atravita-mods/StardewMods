@@ -1,0 +1,24 @@
+{
+    "Changes": [
+        {
+            "LogName": "Sandy Movies",
+            "Action": "EditData",
+            "Target": "Characters/Dialogue/Sandy",
+            "When": {
+                "MovieStatus|contains=None": false
+            },
+            "Entries": {
+                "movieTheater": "{{i18n:sandy-movies-a}}$h#$b#sandy-movies-b}}",
+                "Fri10": "{{i18n:sandy-fri10.00}}$h#$b#{{i18n:sandy-fri10.01}}#$e#$c .5#{{i18n:sandy-fri10.02a}}#$e#{{i18n:sandy-fri10.02b}}"
+            }
+        },
+        {
+            "LogName": "Sandy taxes",
+            "Action": "EditData",
+            "Target": "Characters/Dialogue/Sandy",
+            "Entries": {
+                "{{TaxDay}}": "{{i18n:sandy-tax-day}}$s"
+            }
+        }
+    ]
+}

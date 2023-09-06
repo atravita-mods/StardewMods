@@ -1,0 +1,12 @@
+{
+    "Changes": [
+        {
+            "LogName": "Rain -- after secret woods",
+            "Action": "EditData",
+            "Target": "Characters/Dialogue/rainy",
+            "Entries": {
+                "Abigail": "{{i18n:abby-adventure.00}}#$b#{{i18n:abby-adventure.01}}#$e#{{i18n:abby-adventure.02}}"
+            }
+        }
+    ]
+}

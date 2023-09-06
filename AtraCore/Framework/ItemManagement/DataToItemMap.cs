@@ -10,6 +10,7 @@ using CommunityToolkit.Diagnostics;
 
 using StardewValley.GameData.Pants;
 using StardewValley.GameData.Shirts;
+using StardewValley.GameData.Weapons;
 
 namespace AtraCore.Framework.ItemManagement;
 
@@ -22,6 +23,7 @@ public static class DataToItemMap
 
     private static readonly SortedList<ItemTypeEnum, Lazy<Dictionary<string, (string id, bool repeat)>>> nameToIDMap = new(9);
 
+
     public static bool IsValidId(ItemTypeEnum type, string id)
     {
         type &= ~ItemTypeEnum.Recipe;
@@ -29,7 +31,32 @@ public static class DataToItemMap
         {
             type = ItemTypeEnum.SObject;
         }
+
+#pragma warning disable CS0618 // Type or member is obsolete - special handling for obsolete former member.
+        if (type == ItemTypeEnum.Clothing)
+        {
+            ModEntry.ModMonitor.LogOnce($"Searches for clothing are deprecated as of Stardew 1.6. Please specify Shirts or Pants separately.", LogLevel.Warn);
+            return IsValidId(ItemTypeEnum.Pants, id) || IsValidId(ItemTypeEnum.Shirts,id);
+        }
+#pragma warning restore CS0618 // Type or member is obsolete
+
+        return type switch
+        {
+            ItemTypeEnum.BigCraftable => Game1.bigCraftablesInformation.ContainsKey(id),
+            ItemTypeEnum.Boots => Game1.content.Load<Dictionary<string, string>>(enumToAssetMap[ItemTypeEnum.Boots].BaseName).ContainsKey(id),
+            ItemTypeEnum.Shirts => Game1.shirtData.ContainsKey(id),
+            ItemTypeEnum.Pants => Game1.pantsData.ContainsKey(id),
+            ItemTypeEnum.Furniture => Game1.content.Load<Dictionary<string, string>>(enumToAssetMap[ItemTypeEnum.Furniture].BaseName).ContainsKey(id),
+            ItemTypeEnum.Hat => Game1.content.Load<Dictionary<string, string>>(enumToAssetMap[ItemTypeEnum.Hat].BaseName).ContainsKey(id),
+            ItemTypeEnum.Ring => Game1.objectInformation.TryGetValue(id, out var data) && !ItemHelperUtils.RingFilter(id, data),
+            ItemTypeEnum.SObject => Game1.objectInformation.ContainsKey(id),
+            ItemTypeEnum.Tool => Game1.toolData.ContainsKey(id),
+            ItemTypeEnum.Weapon => Game1.weaponData.ContainsKey(id),
+            _ => false,
+        };
     }
+
+#todo - wallpaper and flooring? Which I've skipped soooo far....
 
     /// <summary>
     /// Given an ItemType and a name, gets the id.
@@ -153,11 +180,7 @@ public static class DataToItemMap
                     Dictionary<string, (string id, bool duplicate)> mapping = new(10);
                     foreach ((string id, string data) in Game1Wrappers.ObjectInfo)
                     {
-                        ReadOnlySpan<char> cat = data.GetNthChunk('/', 3);
-
-                        // wedding ring (801) isn't a real ring.
-                        // JA rings are registered as "Basic -96"
-                        if (id == "801" || (!cat.Equals("Ring", StringComparison.Ordinal) && !cat.Equals("Basic -96", StringComparison.Ordinal)))
+                        if (ItemHelperUtils.RingFilter(id, data))
                         {
                             continue;
                         }
@@ -389,6 +412,37 @@ public static class DataToItemMap
                 {
                     string name = data.GetNthChunk('/', SObject.objectInfoNameIndex).ToString();
                     if (name.Length == 0)
+                    {
+                        ModEntry.ModMonitor.Log($"Hat with id {id} has no internal name.");
+                        continue;
+                    }
+                    (string id, bool duplicate) val = CollectionsMarshal.GetValueRefOrAddDefault(mapping, name, out bool exists);
+                    if (exists)
+                    {
+                        val.duplicate = true;
+                    }
+                    else
+                    {
+                        val = new(id, false);
+                    }
+                }
+                return mapping;
+            });
+        }
+
+        if (ShouldReset(enumToAssetMap[ItemTypeEnum.Weapon])
+            && (!nameToIDMap.TryGetValue(ItemTypeEnum.Weapon, out Lazy<Dictionary<string, (string id, bool repeat)>>? weapons) || weapons.IsValueCreated))
+        {
+            nameToIDMap[ItemTypeEnum.Weapon] = new(() =>
+            {
+                ModEntry.ModMonitor.DebugOnlyLog("Building map to resolve Weapons", LogLevel.Info);
+
+                Dictionary<string, (string id, bool duplicate)> mapping = new(Game1.weaponData.Count);
+
+                foreach ((string id, WeaponData? data) in Game1.weaponData)
+                {
+                    string? name = data.Name;
+                    if (string.IsNullOrEmpty(name))
                     {
                         ModEntry.ModMonitor.Log($"Hat with id {id} has no internal name.");
                         continue;

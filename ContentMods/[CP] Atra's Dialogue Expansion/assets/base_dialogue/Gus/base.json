@@ -11,6 +11,18 @@
                 // before major festivals
                 "winter_24{{YearRemainder}}": "{{i18n:gus-pre-winter-star.{{YearModulus}} }}$h",
             }
-        }
+        },
+        {
+            "LogName": "Gus New Years At Resort",
+            "Action": "EditData",
+            "Target": "Characters/Dialogue/Gus",
+            "When": {
+                "Season": "winter",
+                "Day": 28
+            },
+            "Entries": {
+                "IslandSouth_14_21": "$1 atravitaGusNewYear#{{i18n:gus-new-years-resort.00}}[873]#$e#{{i18n:gus-new-years-resort.01}}"
+            }
+        },
     ]
 }

@@ -8,5 +8,13 @@
             // sebby at work
             "SebastianRoom_9_4": "{{i18n:sebastian-work.{{Season}}.{{YearModulus}}.{{Random:00,01,02}}|default= {{i18n:sebastian-work.{{Season}}.{{YearModulus}}|default={{i18n: sebastian-work.{{Season}} }} }} }}"
         }
+    },
+    {
+        "LogName": "Sebastian - strings",
+        "Action": "EditData",
+        "Target": "Strings/schedules/Sebastian",
+        "Entries":{
+            "rain.000": "{{i18n:sebastian-rain}}"
+        }
     }
 ]}

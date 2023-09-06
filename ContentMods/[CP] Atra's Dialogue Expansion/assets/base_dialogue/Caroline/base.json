@@ -1,0 +1,22 @@
+{"Changes":[
+    {
+        "LogName": "Caroline base dialogue",
+        "Action": "EditData",
+        "Target": "Characters/Dialogue/Caroline",
+        "Entries": {
+            "{{TaxDay}}": "{{i18n:caroline-tax-day.00}}$s#$b#{{i18n:caroline-tax-day.01}}"
+        }
+    },
+    {
+        "LogName": "Caroline post-CC dialogue",
+        "Action": "EditData",
+        "Target": "Characters/Dialogue/Caroline",
+        "Entries": {
+            "summer_Mon": "{{i18n:caroline-summer-mon.00}}#$b#{{i18n:caroline-summer-mon.01}}",
+            "Tue": "{{i18n:caroline-tue}}$h"
+        },
+        "When": {
+            "IsCommunityCenterComplete": true
+        }
+    },
+]}

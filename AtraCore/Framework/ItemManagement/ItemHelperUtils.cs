@@ -67,4 +67,20 @@ public static class ItemHelperUtils
 
         return false;
     }
+
+    public static bool RingFilter(string id, string data)
+    {
+        Guard.IsNotNullOrEmpty(id);
+        Guard.IsNotNullOrEmpty(data);
+
+        // wedding ring (801) isn't a real ring.
+        // JA rings are registered as "Basic -96"
+        if (id == "801")
+        {
+            return true;
+        }
+
+        ReadOnlySpan<char> cat = data.GetNthChunk('/', 3);
+        return !cat.Equals("Ring", StringComparison.Ordinal) && !cat.Equals("Basic -96", StringComparison.Ordinal);
+    }
 }

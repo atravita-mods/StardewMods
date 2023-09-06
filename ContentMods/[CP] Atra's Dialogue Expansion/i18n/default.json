@@ -209,12 +209,21 @@
 * Fancier dialogue
 ***************/
     // tax day
+    "caroline-tax-day.00": "I wish it didn't take so long to do our taxes.",
+    "caroline-tax-day.01": "Neither Pierre nor I are organized enough to get them done early.",
     "demetrius-tax-day": "You'd think that, since the government is the one who pays me, I wouldn't have to do all this work to pay my taxes.",
     "emily-tax-day.00": "Ugh, I hate having to file my taxes.",
     "emily-tax-day.01": "Mine and Haley's, honestly maybe I should get her to do her own....",
     "leah-tax-day": "Nothing sucks more than having to figure out what I did last year so I can file my taxes.",
     "lewis-tax-day.00": "We've all gotta do our duty, @, and that duty includes paying our taxes.",
     "lewis-tax-day.01": "Now, did I collect the taxes of that guy who lives out west?",
+    "pam-tax-day": "Why I've gotta pay taxes to fund this stupid war, I'll never know.",
+    "pierre-tax-day.00": "Dunno what the state is doing with all my taxes.",
+    "pierre-tax-day.01": "Such a process, every year, to file them. Takes Caroline a week!",
+    "marnie-tax-day.00": "Marnie looks exhausted.",
+    "marnie-tax-day.01": "Sorry, @, I was up all night trying to file my taxes...",
+    "marnie-tax-day.02": "Why do I always leave things like this to the last minute...",
+    "sandy-tax-day": "I really never know how I'm supposed to fill out my taxes every year. So many categories, so much paperwork.",
 
     // reject dialogue
     "willy-rejects-bait": "Did you mean to give that to me, @? I'm no fish.",
@@ -311,7 +320,33 @@
     "demetrius-movie-a": "Sorry, I'm not one for movies anymore.",
     "demetrius-movie-b": "I don't usually watch movies, @, unless it's with Robin.",
 
+    // winter rain
+    "alex-married-nonwinter-rain": "Make sure to stay dry as best you can today, %endearment!",
+    "evelyn-winter-rain.00": "Weather like this...we didn't use to get rain during winter.",
+    "evelyn-winter-rain.01": "The snow'll become slush and that's difficult for George.",
+    "elliott-winter-rain.00": "A day like this is good for my productivity.",
+    "elliott-winter-rain.01": "It's not like I'd be going out in this weather.",
+    "elliott-winter-rain.02": "Maybe to the saloon. Later.",
+
     // misc
+    // abby follows you to the secret woods
+    "abby-adventure.00": "I love the woods in the rain.",
+    "abby-adventure.01": "So peaceful, away from the rest of the town.",
+    "abby-adventure.02": "I don't think anyone else goes out there.",
+
+    // alex slowly loses references to going pro.
+    "alex-mon8": "@, I've been thinkin' about what I should be doing with my life. Grandma says I'd be a good physical trainer.",
+    "alex-summer-wed": "Summer's my favorite season! I like to get up bright and early with the sun.",
+    "alex-fall-mon": "Argh, why are there so many muscle names to remember?",
+    "alex-fall-mon2": "Studying, studying, studying, is there any way I can get out of studying?",
+    "alex-winter-wed8.00": "I've been looking for good exercises I can do indoors.",
+    "alex-winter-wed8.01": "Usually the cold doesn't bother me that much, but the snow is hard to run in.",
+    "alex-resort-towel-3": "Gotta work on my tan, @.",
+
+    // caroline no longer gets a break after CC closes
+    "caroline-summer-mon.00": "Between you and I, @, being open seven days a week is quite tiring.",
+    "caroline-summer-mon.01": "I wish I could take more time to garden, but sadly we have to run the store.",
+    "caroline-tue": "Tuesdays are our aerobics club days. Say, @, you wanna join us?",
 
     // Demetrius has a few lines that don't really make sense if you have any real understanding of math. I'm replacing them because I want him to appear to have a math background.
     // ie, sinusoidal is, like, by definition, the most predictable function. So if Demetrius is trying to model Robin's mood as a sinusoid, he's either (a) saying she's PMSing or (b) he's assuming that her mood should be very predictable. I doubt either is the intent here.
@@ -322,8 +357,36 @@
     "demetrius-winter-sat.00": "Hmmm...I wonder how much the seasonal change in nitrogen levels is affected by the snowpack...",
     "demetrius-winter-sat.01": "We do have historical snowpack data for the last century and a half...",
     "demetrius-winter-sat.02": "Oh, I didn't see you there, @, do you need anything?",
+
+    // gus gives you something on new years.
+    "gus-new-years-resort.00": "Happy New Year, @! Have one on me today. May the next year be even better!",
+    "gus-new-years-resort.01": "Are you enjoying the party, @?",
+
+    // marnie has a few lines that don't make sense if Shane's been in the valley for a while.
+    "marnie-tue": "Between you and I, I think this good country air does Shane well.",
+    "marnie-tue-inlaw-shane-true": "I'm glad Shane found you, @. I think he's been doing better, recently.$h",
+    "marnie-tue-inlaw-shane-false": "You take care of Shane, won't you?#$b#I....I'm not hearing good things from him, you catch my drift?$s",
+
+    // Pierre gets different lines after you complete CC and also after you give him the stocklist.
+    "pierre-fri-a": "Without Joja here, it almost feels like I can breathe a little again.",
+    "pierre-fri-b": "How's the farm doing? Any seeds you'd like to buy?",
+    "pierre-tulips": "Gotta make sure to stock tulip bulbs for Ms. Mullner!",
+    "pierre-winter-mon": "Man, @, I'm glad you've found my old stocklist, I've got so much more to sell!",
+    "pierre-winter-mon4": "@, interested in any seeds today? Gotta be prepared for spring!",
+
     // When you've finished upgrading your house, replace Robin line.
     "robin-winter-mon": "I've always loved this time of year. The snow in the mountains is beautiful. Even when I have to walk through it.",
+
+    // sandy loves movies!
+    "sandy-movies-a": "I heard you guys have a theater now!",
+    "sandy-movies-b": "I'm so excited! I love movies.",
+    "sandy-fri10.00": "So...have you seen a good movie recently?",
+    "sandy-fri10.01": "I hear The Mysteries of %place is good.",
+    "sandy-fri10.02a": "Say, I'd love to see a movie with you.",
+    "sandy-fri10.02b": "It's always a treat to see you.",
+
+    // Sebastian is nicer to you when you catch him gazing at the sea
+    "sebastian-rain": "It's so peaceful out here, isn't it?",
 
 /***************
 * Anniversary!

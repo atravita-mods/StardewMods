@@ -16,6 +16,14 @@
                 "23_2": "Autograbbers are such an interesting piece of technology, aren't they?",
                 "24_2": "Single instruction multiple data? Sounds like something Sebastian might find interesting, but most of the microprocessors I use don't support things like that."
             }
+        },
+        {
+            "Action": "EditData",
+            "Target": "Characters/Dialogue/Maru",
+            "When": {"YearModulus": "4"},
+            "Entries": {
+                "23_2": "I swear, it feels like every third day there's a new article about longer-lasting batteries but none of them have made it to market.$s"
+            }
         }
     ]
 }

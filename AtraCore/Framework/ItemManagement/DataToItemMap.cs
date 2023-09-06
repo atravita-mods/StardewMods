@@ -345,13 +345,23 @@ public static class DataToItemMap
             {
                 ModEntry.ModMonitor.DebugOnlyLog("Building map to resolve Furniture", LogLevel.Info);
 
-                Dictionary<string, int> mapping = new(300);
-                foreach ((int id, string data) in Game1.content.Load<Dictionary<int, string>>(enumToAssetMap[ItemTypeEnum.Furniture].BaseName))
+                Dictionary<string, (string id, bool duplicate)> mapping = new(300);
+                foreach ((string id, string data) in Game1.content.Load<Dictionary<string, string>>(enumToAssetMap[ItemTypeEnum.Furniture].BaseName))
                 {
                     string name = data.GetNthChunk('/', SObject.objectInfoNameIndex).ToString();
-                    if (!mapping.TryAdd(name, id))
+                    if (name.Length == 0)
                     {
-                        ModEntry.ModMonitor.Log($"{name} with {id} seems to be a duplicate Furniture Item and may not be resolved correctly.", LogLevel.Warn);
+                        ModEntry.ModMonitor.Log($"Furniture with id {id} has no internal name.");
+                        continue;
+                    }
+                    var val = CollectionsMarshal.GetValueRefOrAddDefault(mapping, name, out bool exists);
+                    if (exists)
+                    {
+                        val.duplicate = true;
+                    }
+                    else
+                    {
+                        val = new(id, false);
                     }
                 }
                 return mapping;
@@ -364,16 +374,24 @@ public static class DataToItemMap
             {
                 ModEntry.ModMonitor.DebugOnlyLog("Building map to resolve Hats", LogLevel.Info);
 
-                Dictionary<string, int> mapping = new(100);
+                Dictionary<string, (string id, bool duplicate)> mapping = new(100);
 
-                foreach ((int id, string data) in Game1.content.Load<Dictionary<int, string>>(enumToAssetMap[ItemTypeEnum.Hat].BaseName))
+                foreach ((string id, string data) in Game1.content.Load<Dictionary<string, string>>(enumToAssetMap[ItemTypeEnum.Hat].BaseName))
                 {
-                    ReadOnlySpan<char> nameSpan = data.GetNthChunk('/', SObject.objectInfoNameIndex);
-
-                    string name = nameSpan.ToString();
-                    if (!mapping.TryAdd(name, id))
+                    string name = data.GetNthChunk('/', SObject.objectInfoNameIndex).ToString();
+                    if (name.Length == 0)
                     {
-                        ModEntry.ModMonitor.Log($"{name} with {id} seems to be a duplicate Hat and may not be resolved correctly.", LogLevel.Warn);
+                        ModEntry.ModMonitor.Log($"Hat with id {id} has no internal name.");
+                        continue;
+                    }
+                    var val = CollectionsMarshal.GetValueRefOrAddDefault(mapping, name, out bool exists);
+                    if (exists)
+                    {
+                        val.duplicate = true;
+                    }
+                    else
+                    {
+                        val = new(id, false);
                     }
                 }
                 return mapping;

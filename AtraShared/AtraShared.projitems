@@ -64,7 +64,6 @@
     <Compile Include="$(MSBuildThisFileDirectory)Content\RawTexData\RawDataImpl.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Content\RawTexData\RawDataRented.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Niceties\Records.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Niceties\SoundBankWrapperHandler.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Utils\DateHelper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Integrations\GMCMHelper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Integrations\Interfaces\IBetterSprinklersAPI.cs" />

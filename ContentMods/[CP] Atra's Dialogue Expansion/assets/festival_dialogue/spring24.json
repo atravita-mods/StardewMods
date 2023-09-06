@@ -72,7 +72,7 @@
                 "Query: {{Spouse:anyPlayer|contains=Abigail}} OR {{Relationship:Abigail|contains=Married,Engaged}}": true
             },
             "Entries": {
-                "Caroline_y2": "{{i18n:caroline-y2-abby-taken}}$h",
+                "Caroline_y2": "{{i18n:caroline-y2-abby-taken}}$h"
             }
         },
         {
@@ -96,7 +96,7 @@
                 "Query: {{Spouse:anyPlayer|contains=Emily}} OR {{Relationship:Emily|contains=Married,Dating,Engaged}}": true
             },
             "Entries": {
-                "Clint": "{{i18n:clint-dance-no-emily}}$s",
+                "Clint": "{{i18n:clint-dance-no-emily}}$s"
             }
         },
         {
@@ -171,7 +171,7 @@
             "Entries": {
                 "Evelyn_y2": "{{i18n:evelyn-y2-dance}}$h",
                 "Evelyn_y3": "{{i18n:evelyn-y3-dance}}$h",
-                "Evelyn_y4": "{{i18n:evelyn-y4-dance}}$h",
+                "Evelyn_y4": "{{i18n:evelyn-y4-dance}}$h"
             }
         },
         {
@@ -184,7 +184,7 @@
             "Entries": {
                 "George_y2": "{{i18n:george-y2-dance}}$s",
                 "George_y3": "{{i18n:george-y3-dance}}",
-                "George_y4": "{{i18n:george-y4-dance}}$s",
+                "George_y4": "{{i18n:george-y4-dance}}$s"
             }
         },
         {
@@ -197,7 +197,7 @@
             "Entries": {
                 "Gus_y2": "{{i18n:gus-y2-dance}}$h",
                 "Gus_y3": "{{i18n:gus-y3-dance}}$h",
-                "Gus_y4": "{{i18n:gus-y4-dance}}$h",
+                "Gus_y4": "{{i18n:gus-y4-dance}}$h"
             }
         },
         {
@@ -298,7 +298,7 @@
                 "Query: {{Spouse:anyPlayer|contains=Sam}} OR {{Relationship:Sam|contains=Married,Dating,Engaged}}": true
             },
             "Entries": {
-                "Jodi_y3": "{{i18n:jodi-y3-dance-sam-married}}$h#$e#{{i18n:jodi-y3-dance-sam-married.00}}$h",
+                "Jodi_y3": "{{i18n:jodi-y3-dance-sam-married}}$h#$e#{{i18n:jodi-y3-dance-sam-married.00}}$h"
             }
         },
         {
@@ -352,7 +352,7 @@
                 "EnableFor": "Leo"
             },
             "Entries": {
-                "Leo_y2": "{{i18n:leo-y2-dance}}$h",
+                "Leo_y2": "{{i18n:leo-y2-dance}}$h"
             }
         },
         {
@@ -379,7 +379,7 @@
             "Entries": {
                 "Lewis": "{{i18n:lewis-y1-dance-married}}",
                 "Lewis_y2": "{{i18n:lewis-y2-dance-married}}$h",
-                "Lewis_y3": "{{i18n:lewis-y3-dance-married}}$h",
+                "Lewis_y3": "{{i18n:lewis-y3-dance-married}}$h"
             }
         },
         {
@@ -406,7 +406,7 @@
                 "HasSeenEvent": "59020016, 639373" // the Life Cycle event OR the town event.
             },
             "Entries": {
-                "Lewis_y3": "{{i18n:lewis-y3-dance-unmarried-better}}$s",
+                "Lewis_y3": "{{i18n:lewis-y3-dance-unmarried-better}}$s"
             }
         },
         {
@@ -431,7 +431,7 @@
                 "HasValue: {{Spouse}}": true
             },
             "Entries": {
-                "Linus_y3": "{{i18n:linus-y3-dance-married}}$h",
+                "Linus_y3": "{{i18n:linus-y3-dance-married}}$h"
             }
         },
         {
@@ -523,7 +523,7 @@
                 "EnableFor": "Pam"
             },
             "Entries": {
-                "Pam_y2": "{{i18n:pam-y2-dance}}$s",
+                "Pam_y2": "{{i18n:pam-y2-dance}}$s"
             }
         },
         {
@@ -548,7 +548,7 @@
             },
             "Entries": {
                 "Penny": "{{i18n:penny-y1-dance-spouse}}$h",
-                "Penny_y2": "{{i18n:penny-y2-dance-spouse.00}}#$e#{{i18n:penny-y2-dance-spouse.01}}$h",
+                "Penny_y2": "{{i18n:penny-y2-dance-spouse.00}}#$e#{{i18n:penny-y2-dance-spouse.01}}$h"
             }
         },
         // Skipping Pierre - you shouldn't be able to reach him anyways.
@@ -574,7 +574,7 @@
                 "Query: {{Spouse:anyPlayer|contains=Sebastian}} OR {{Relationship:Sebastian|contains=Married,Dating,Engaged}}": true
             },
             "Entries": {
-                "Robin_y2": "{{i18n:robin-y2-dance-sebastian-married}}$h#$e#{{i18n:robin-y2-dance-sebastian-married.00}}$h",
+                "Robin_y2": "{{i18n:robin-y2-dance-sebastian-married}}$h#$e#{{i18n:robin-y2-dance-sebastian-married.00}}$h"
             }
         },
         {

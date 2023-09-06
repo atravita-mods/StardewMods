@@ -393,7 +393,7 @@
                 "Spouse:anyPlayer": "Penny"
             },
             "Entries": {
-                "Penny_y2": "{{i18n:penny-y2-xmas-married-other}}$s",
+                "Penny_y2": "{{i18n:penny-y2-xmas-married-other}}$s"
             }
         },
         {
@@ -414,7 +414,7 @@
             "When": {"EnableFor": "Robin"},
             "Entries": {
                 "Robin_y2": "{{i18n:robin-y2-xmas}}$h",
-                "Robin_y3": "{{i18n:robin-y3-xmas}}$h",
+                "Robin_y3": "{{i18n:robin-y3-xmas}}$h"
             }
         },
         {
@@ -483,7 +483,7 @@
             "Target": "Data/Festivals/winter25",
             "When": {
                 "EnableFor": "Sebastian",
-                "HasValue:{{ChildGenders|valueAt=1}}": true,
+                "HasValue:{{ChildGenders|valueAt=1}}": true
             },
             "Entries": {
                 "Sebastian_spouse_y2": "{{i18n:sebastian-y2-xmas-spouse-kids}}"

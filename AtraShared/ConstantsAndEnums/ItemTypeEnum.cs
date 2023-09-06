@@ -29,19 +29,25 @@ public enum ItemTypeEnum : uint
     Boots = 0b1 << 4 | SObject,
 
     /// <summary>
-    /// Clothing - <see cref="StardewValley.Objects.Clothing" />
+    /// Shirts - <see cref="StardewValley.Objects.Clothing" />
     /// </summary>
-    Clothing = 0b1 << 5,
+    Shirts = 0b1 << 5,
+
+    /// <summary>
+    /// Pants - <see cref="StardewValley.Objects.Clothing" />
+    /// </summary>
+    Pants = 0b1 << 12,
+
+    /// <summary>
+    /// Obsolete and used to support old data, the combination of shirts and pants.
+    /// </summary>
+    [Obsolete("Shirts and pants used to be combined.")]
+    Clothing = Shirts | Pants,
 
     /// <summary>
     /// A colored SObject - <see cref="StardewValley.Objects.ColoredObject" />
     /// </summary>
     ColoredSObject = 0b1 << 3 | SObject,
-
-    /// <summary>
-    /// An item managed by DGA.
-    /// </summary>
-    DGAItem = 0b1 << 15,
 
     /// <summary>
     /// A furniture item. <see cref="StardewValley.Objects.Furniture"/>
@@ -101,20 +107,6 @@ public enum ItemTypeEnum : uint
 public static class ItemExtensions
 {
     /// <summary>
-    /// Gets whether or not something is a DGA item.
-    /// </summary>
-    private static readonly Lazy<Func<object, bool>?> isDGAItem = new(() =>
-    {
-        return AccessTools.TypeByName("DynamicGameAssets.Game.IDGAItem, DynamicGameAssets")?.GetTypeIs();
-    });
-
-    /// <summary>
-    /// Gets whether or not something is a DGA item.
-    /// (note - if null, DGA was not installed or could not be found.)
-    /// </summary>
-    public static Func<object, bool>? IsDGAItem => isDGAItem.Value;
-
-    /// <summary>
     /// Tries to get the ItemTypeEnum for a specific item.
     /// </summary>
     /// <param name="item">Item to check.</param>
@@ -127,8 +119,8 @@ public static class ItemExtensions
             case Boots:
                 ret = ItemTypeEnum.Boots;
                 break;
-            case Clothing:
-                ret = ItemTypeEnum.Clothing;
+            case Clothing clothing:
+                ret = clothing.clothesType.Value == Clothing.ClothesType.SHIRT ? ItemTypeEnum.Shirts : ItemTypeEnum.Pants;
                 break;
             case Hat:
                 ret = ItemTypeEnum.Hat;
@@ -162,11 +154,6 @@ public static class ItemExtensions
             }
             default:
                 return ItemTypeEnum.Unknown;
-        }
-
-        if (IsDGAItem?.Invoke(item) == true)
-        {
-            ret |= ItemTypeEnum.DGAItem;
         }
 
         return ret;

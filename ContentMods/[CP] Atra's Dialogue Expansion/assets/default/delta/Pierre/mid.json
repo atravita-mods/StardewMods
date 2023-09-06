@@ -38,7 +38,7 @@
             "winter_19{{YearRemainder}}": "I've got so many winter star gifts stocked!$h#$e#Maybe I'll pull some market share from the Night Market this year...",
 
             // additional heart lines
-            "summer_Fri6": "Have you seen the new action flick, {{i18n:action.movie{{Random:01,02,03,04,05,06,07,08,09}}, starring %name Anderson?#$b#Maybe I can convince Caroline to come watch it with me...",
+            "summer_Fri6": "Have you seen the new action flick, {{i18n:action.movie{{Random:01,02,03,04,05,06,07,08,09}} }}, starring %name Anderson?#$b#Maybe I can convince Caroline to come watch it with me...",
             "summer_Sat6": "There's nothing nicer than fresh veggies in a good salad dressing.#$b#Caroline makes an vinaigrette that's to die for.$h",
             "fall_Sun8": "@, do you think I should start offering, say, complementary tea?#$b#Might help bring people in..."
         }

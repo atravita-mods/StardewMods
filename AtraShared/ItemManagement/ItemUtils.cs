@@ -65,7 +65,7 @@ public static class ItemUtils
             ItemTypeEnum.Boots => new Boots(id),
             ItemTypeEnum.Weapon => new MeleeWeapon(id),
             ItemTypeEnum.Hat => new Hat(id),
-            ItemTypeEnum.Clothing => new Clothing(id),
+            ItemTypeEnum.Shirts => new Clothing(id),
             _ => null,
         };
 }

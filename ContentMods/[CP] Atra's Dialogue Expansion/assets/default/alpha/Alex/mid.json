@@ -51,7 +51,8 @@
             "6{{YearRemainder}}": "I train six days a week, every week.$h",
             "7{{YearRemainder}}": "Got any farm-fresh eggs, @? Nothing like a nice egg in the morning.$h",
             "8{{YearRemainder}}": "Pops used to take me fishing, back when...#$b#No, no reason to dwell on that.",
-            "9{{YearRemainder}}": "Gotta work on my squat form today. And no, it's not an excuse to look at myself in the mirror.",
+            "9{{YearRemainder}}": "Gotta work on my squat form today.#$b#And no, it's not an excuse to look at myself in the mirror.$h",
+            "10{{YearRemainder}}": "Sometimes it feels like everyone is just tryin' to sell you some supplement or another.$s",
 
             "summer_Sun8": "Hey, @, you wanna play some frisbee?"
         }

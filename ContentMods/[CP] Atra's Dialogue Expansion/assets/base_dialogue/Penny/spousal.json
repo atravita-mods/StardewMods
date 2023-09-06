@@ -29,7 +29,8 @@
             "EnableFor": "Evelyn"
         },
         "Entries": {
-            "winter_Mon4_inlaw_Penny": "{{i18n: evelyn-penny-winter-mon4}}$h"
+            "winter_Mon4_inlaw_Penny": "{{i18n: evelyn-penny-winter-mon4}}$h",
+            "fall_Tue4_inlaw_Penny": "{{i18n: evelyn-penny-fall-tue4}}$h",
         }
     },
     {

@@ -313,7 +313,7 @@
             "EnableFor": "Pam"
         },
         "Entries": {
-            "Pam_y2": "{{i18n:pam-y2-luau}}$h",
+            "Pam_y2": "{{i18n:pam-y2-luau}}$h"
         }
     },
     {
@@ -415,7 +415,7 @@
         },
         "Entries": {
             "Vincent_y2": "{{i18n:vincent-y2-luau|title={{Title}} }}",
-            "Vincent_y3": "{{i18n:vincent-y3-luau}}",
+            "Vincent_y3": "{{i18n:vincent-y3-luau}}"
         }
     },
     {

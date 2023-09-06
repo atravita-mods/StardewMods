@@ -8,6 +8,9 @@ using AtraShared.Wrappers;
 
 using CommunityToolkit.Diagnostics;
 
+using StardewValley.GameData.Pants;
+using StardewValley.GameData.Shirts;
+
 namespace AtraCore.Framework.ItemManagement;
 
 /// <summary>
@@ -15,22 +18,22 @@ namespace AtraCore.Framework.ItemManagement;
 /// </summary>
 public static class DataToItemMap
 {
-    private static readonly SortedList<ItemTypeEnum, IAssetName> enumToAssetMap = new(7);
+    private static readonly SortedList<ItemTypeEnum, IAssetName> enumToAssetMap = new(8);
 
-    private static readonly SortedList<ItemTypeEnum, Lazy<Dictionary<string, (string id, bool repeat)>>> nameToIDMap = new(8);
+    private static readonly SortedList<ItemTypeEnum, Lazy<Dictionary<string, (string id, bool repeat)>>> nameToIDMap = new(9);
 
     /// <summary>
     /// Given an ItemType and a name, gets the id.
     /// </summary>
     /// <param name="type">type of the item.</param>
     /// <param name="name">name of the item.</param>
-    /// <param name="resolveRecipesSeperately">Whether or not to ignore the recipe bit.</param>
+    /// <param name="resolveRecipesSeparately">Whether or not to ignore the recipe bit.</param>
     /// <returns>string ID, or null if not found.</returns>
-    public static string? GetID(ItemTypeEnum type, string name, bool resolveRecipesSeperately = false)
+    public static string? GetID(ItemTypeEnum type, string name, bool resolveRecipesSeparately = false)
     {
         Guard.IsNotNullOrWhiteSpace(name, nameof(name));
 
-        if (!resolveRecipesSeperately)
+        if (!resolveRecipesSeparately)
         {
             type &= ~ItemTypeEnum.Recipe;
         }
@@ -38,9 +41,20 @@ public static class DataToItemMap
         {
             type = ItemTypeEnum.SObject;
         }
+#pragma warning disable CS0618 // Type or member is obsolete - special handling for obsolete former member.
+        if (type == ItemTypeEnum.Clothing)
+        {
+            ModEntry.ModMonitor.LogOnce($"Searches for clothing are deprecated as of Stardew 1.6. Please specify Shirts or Pants separately.", LogLevel.Warn);
+            return GetID(ItemTypeEnum.Pants, name, resolveRecipesSeparately) ?? GetID(ItemTypeEnum.Shirts, name, resolveRecipesSeparately);
+        }
+#pragma warning restore CS0618 // Type or member is obsolete
         if (nameToIDMap.TryGetValue(type, out Lazy<Dictionary<string, (string, bool)>>? asset)
             && asset.Value.TryGetValue(name, out (string id, bool repeat) pair))
         {
+            if (pair.repeat)
+            {
+                ModEntry.ModMonitor.LogOnce($"Internal name '{name}' corresponds to multiple {type} and may not be resolved correctly.", LogLevel.Warn);
+            }
             return pair.id;
         }
         return null;
@@ -57,7 +71,8 @@ public static class DataToItemMap
         // nothing is nice. So are boots, but they have their own data asset as well.
         enumToAssetMap.Add(ItemTypeEnum.BigCraftable, helper.ParseAssetName(@"Data\BigCraftablesInformation"));
         enumToAssetMap.Add(ItemTypeEnum.Boots, helper.ParseAssetName(@"Data\Boots"));
-        enumToAssetMap.Add(ItemTypeEnum.Clothing, helper.ParseAssetName(@"Data\ClothingInformation"));
+        enumToAssetMap.Add(ItemTypeEnum.Shirts, helper.ParseAssetName(@"Data\Shirts"));
+        enumToAssetMap.Add(ItemTypeEnum.Pants, helper.ParseAssetName(@"Data\Pants"));
         enumToAssetMap.Add(ItemTypeEnum.Furniture, helper.ParseAssetName(@"Data\Furniture"));
         enumToAssetMap.Add(ItemTypeEnum.Hat, helper.ParseAssetName(@"Data\hats"));
         enumToAssetMap.Add(ItemTypeEnum.SObject, helper.ParseAssetName(@"Data\ObjectInformation"));
@@ -102,6 +117,11 @@ public static class DataToItemMap
                         }
 
                         string name = data.GetNthChunk('/', SObject.objectInfoNameIndex).ToString();
+                        if (name.Length == 0)
+                        {
+                            ModEntry.ModMonitor.Log($"Object with id {id} has no internal name.");
+                            continue;
+                        }
                         var val = CollectionsMarshal.GetValueRefOrAddDefault(mapping, name, out bool exists);
                         if (exists)
                         {
@@ -134,6 +154,11 @@ public static class DataToItemMap
                         }
 
                         string name = data.GetNthChunk('/', SObject.objectInfoNameIndex).ToString();
+                        if (name.Length == 0)
+                        {
+                            ModEntry.ModMonitor.Log($"Ring with id {id} has no internal name.");
+                            continue;
+                        }
                         var val = CollectionsMarshal.GetValueRefOrAddDefault(mapping, name, out bool exists);
                         if (exists)
                         {
@@ -160,6 +185,11 @@ public static class DataToItemMap
                 foreach ((string id, string data) in Game1.content.Load<Dictionary<string, string>>(enumToAssetMap[ItemTypeEnum.Boots].BaseName))
                 {
                     string name = data.GetNthChunk('/', SObject.objectInfoNameIndex).ToString();
+                    if (name.Length == 0)
+                    {
+                        ModEntry.ModMonitor.Log($"Boots with id {id} has no internal name.");
+                        continue;
+                    }
                     var val = CollectionsMarshal.GetValueRefOrAddDefault(mapping, name, out bool exists);
                     if (exists)
                     {
@@ -186,17 +216,17 @@ public static class DataToItemMap
                     ["Tub o' Flowers"] = Game1.season is Season.Fall or Season.Winter ? ("109", false) : ("108", false),
                     ["Rarecrow 1"] = ("110", false),
                     ["Rarecrow 2"] = ("113", false),
-                    ["Rarecrow 3"] = 126,
-                    ["Rarecrow 4"] = 136,
-                    ["Rarecrow 5"] = 137,
-                    ["Rarecrow 6"] = 138,
-                    ["Rarecrow 7"] = 139,
-                    ["Rarecrow 8"] = 140,
-                    ["Seasonal Plant 1"] = 188,
-                    ["Seasonal Plant 2"] = 192,
-                    ["Seasonal Plant 3"] = 196,
-                    ["Seasonal Plant 4"] = 200,
-                    ["Seasonal Plant 5"] = 204,
+                    ["Rarecrow 3"] = ("126", false),
+                    ["Rarecrow 4"] = ("136", false),
+                    ["Rarecrow 5"] = ("137", false),
+                    ["Rarecrow 6"] = ("138", false),
+                    ["Rarecrow 7"] = ("139", false),
+                    ["Rarecrow 8"] = ("140", false),
+                    ["Seasonal Plant 1"] = ("188", false),
+                    ["Seasonal Plant 2"] = ("192", false),
+                    ["Seasonal Plant 3"] = ("196", false),
+                    ["Seasonal Plant 4"] = ("200", false),
+                    ["Seasonal Plant 5"] = ("204", false),
                 };
 
                 // House plants :P
@@ -204,63 +234,112 @@ public static class DataToItemMap
                 {
                     mapping["House Plant " + i.ToString()] = (i.ToString(), false);
                 }
+                HashSet<string> preAdded = mapping.Values.Select(pair => pair.id).ToHashSet();
+                preAdded.Add("108");
+                preAdded.Add("109");
+
                 foreach ((string id, string data) in Game1.bigCraftablesInformation)
                 {
-                    ReadOnlySpan<char> nameSpan = data.GetNthChunk('/', SObject.objectInfoNameIndex);
-                    if (nameSpan.Equals("House Plant", StringComparison.OrdinalIgnoreCase)
-                        || nameSpan.Equals("Wood Chair", StringComparison.OrdinalIgnoreCase)
-                        || nameSpan.Equals("Door", StringComparison.OrdinalIgnoreCase)
-                        || nameSpan.Equals("Locked Door", StringComparison.OrdinalIgnoreCase)
-                        || nameSpan.Equals("Tub o' Flowers", StringComparison.OrdinalIgnoreCase)
-                        || nameSpan.Equals("Seasonal Plant", StringComparison.OrdinalIgnoreCase)
-                        || nameSpan.Equals("Rarecrow", StringComparison.OrdinalIgnoreCase)
-                        || nameSpan.Equals("Crate", StringComparison.OrdinalIgnoreCase)
-                        || nameSpan.Equals("Barrel", StringComparison.OrdinalIgnoreCase))
+                    if (preAdded.Contains(id) || ItemHelperUtils.BigCraftableFilter(id, data))
                     {
                         continue;
                     }
 
-                    string name = nameSpan.ToString();
-                    if (!mapping.TryAdd(name, id))
+                    string name = data.GetNthChunk('/', SObject.objectInfoNameIndex).ToString();
+                    if (name.Length == 0)
                     {
-                        ModEntry.ModMonitor.Log($"{name} with {id} seems to be a duplicate BigCraftable and may not be resolved correctly.", LogLevel.Warn);
+                        ModEntry.ModMonitor.Log($"BigCraftable with id {id} has no internal name.");
+                        continue;
+                    }
+                    var val = CollectionsMarshal.GetValueRefOrAddDefault(mapping, name, out bool exists);
+                    if (exists)
+                    {
+                        val.duplicate = true;
+                    }
+                    else
+                    {
+                        val = new(id, false);
                     }
                 }
                 return mapping;
             });
         }
-        if (ShouldReset(enumToAssetMap[ItemTypeEnum.Clothing])
-            && (!nameToIDMap.TryGetValue(ItemTypeEnum.Clothing, out Lazy<Dictionary<string, int>>? clothing) || clothing.IsValueCreated))
+        if (ShouldReset(enumToAssetMap[ItemTypeEnum.Shirts])
+            && (!nameToIDMap.TryGetValue(ItemTypeEnum.Shirts, out var shirts) || shirts.IsValueCreated))
         {
-            nameToIDMap[ItemTypeEnum.Clothing] = new(() =>
+            nameToIDMap[ItemTypeEnum.Shirts] = new(() =>
             {
-                ModEntry.ModMonitor.DebugOnlyLog("Building map to resolve Clothing", LogLevel.Info);
+                ModEntry.ModMonitor.DebugOnlyLog("Building map to resolve Shirts.", LogLevel.Info);
 
-                Dictionary<string, int> mapping = new(Game1.clothingInformation.Count)
+                Dictionary<string, (string id, bool duplicate)> mapping = new(Game1.shirtData.Count)
                 {
-                    ["Prismatic Shirt"] = 1999,
-                    ["Dark Prismatic Shirt"] = 1998,
+                    ["Shirt 1"] = ("1022", false),
+                    ["Shirt 2"] = ("1023", false),
+                    ["Dark Prismatic Shirt"] = ("1998", false),
                 };
+                HashSet<string> preAdded = mapping.Values.Select(pair => pair.id).ToHashSet();
 
-                foreach ((int id, string data) in Game1.clothingInformation)
+                foreach ((string id, ShirtData? data) in Game1.shirtData)
                 {
-                    ReadOnlySpan<char> nameSpan = data.GetNthChunk('/', SObject.objectInfoNameIndex);
-                    if (nameSpan.Equals("Prismatic Shirt", StringComparison.OrdinalIgnoreCase))
+                    if (Game1.pantsData.ContainsKey(id))
+                    {
+                        ModEntry.ModMonitor.LogOnce($"ID '{id}' is shared between pants and shirts, this is likely to cause issues.", LogLevel.Warn);
+                    }
+
+                    if (preAdded.Contains(id))
                     {
                         continue;
                     }
 
-                    string name = nameSpan.ToString();
-                    if (!mapping.TryAdd(name, id))
+                    if (string.IsNullOrEmpty(data.Name))
                     {
-                        ModEntry.ModMonitor.Log($"{name} with {id} seems to be a duplicate ClothingItem and may not be resolved correctly.", LogLevel.Warn);
+                        ModEntry.ModMonitor.Log($"Shirt with id {id} has no internal name.");
+                        continue;
+                    }
+                    var val = CollectionsMarshal.GetValueRefOrAddDefault(mapping, data.Name, out bool exists);
+                    if (exists)
+                    {
+                        val.duplicate = true;
+                    }
+                    else
+                    {
+                        val = new(id, false);
+                    }
+                }
+                return mapping;
+            });
+        }
+        if (ShouldReset(enumToAssetMap[ItemTypeEnum.Pants])
+            && (!nameToIDMap.TryGetValue(ItemTypeEnum.Pants, out var pants) || pants.IsValueCreated))
+        {
+            nameToIDMap[ItemTypeEnum.Pants] = new(() =>
+            {
+                ModEntry.ModMonitor.DebugOnlyLog("Building map to resolve Pants.", LogLevel.Info);
+
+                Dictionary<string, (string id, bool duplicate)> mapping = new(Game1.pantsData.Count);
+
+                foreach ((string id, PantsData? data) in Game1.pantsData)
+                {
+                    if (string.IsNullOrEmpty(data.Name))
+                    {
+                        ModEntry.ModMonitor.Log($"Pants with id {id} has no internal name.");
+                        continue;
+                    }
+                    var val = CollectionsMarshal.GetValueRefOrAddDefault(mapping, data.Name, out bool exists);
+                    if (exists)
+                    {
+                        val.duplicate = true;
+                    }
+                    else
+                    {
+                        val = new(id, false);
                     }
                 }
                 return mapping;
             });
         }
         if (ShouldReset(enumToAssetMap[ItemTypeEnum.Furniture])
-            && (!nameToIDMap.TryGetValue(ItemTypeEnum.Furniture, out Lazy<Dictionary<string, int>>? furniture) || furniture.IsValueCreated))
+            && (!nameToIDMap.TryGetValue(ItemTypeEnum.Furniture, out var furniture) || furniture.IsValueCreated))
         {
             nameToIDMap[ItemTypeEnum.Furniture] = new(() =>
             {
@@ -279,7 +358,7 @@ public static class DataToItemMap
             });
         }
         if (ShouldReset(enumToAssetMap[ItemTypeEnum.Hat])
-            && (!nameToIDMap.TryGetValue(ItemTypeEnum.Hat, out Lazy<Dictionary<string, int>>? hats) || hats.IsValueCreated))
+            && (!nameToIDMap.TryGetValue(ItemTypeEnum.Hat, out var hats) || hats.IsValueCreated))
         {
             nameToIDMap[ItemTypeEnum.Hat] = new(() =>
             {

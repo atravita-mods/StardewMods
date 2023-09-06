@@ -22,6 +22,15 @@ public static class DataToItemMap
 
     private static readonly SortedList<ItemTypeEnum, Lazy<Dictionary<string, (string id, bool repeat)>>> nameToIDMap = new(9);
 
+    public static bool IsValidId(ItemTypeEnum type, string id)
+    {
+        type &= ~ItemTypeEnum.Recipe;
+        if (type == ItemTypeEnum.ColoredSObject)
+        {
+            type = ItemTypeEnum.SObject;
+        }
+    }
+
     /// <summary>
     /// Given an ItemType and a name, gets the id.
     /// </summary>

@@ -35,6 +35,15 @@
         },
         {
             "Action": "Include",
+            "LogName": "Emily - mid",
+            "FromFile": "assets/base_dialogue/Emily/mid.json",
+            "When": {
+                "EnableFor": "Emily",
+                "Query: {{Hearts:Emily}} >= 4": true
+            }
+        },
+        {
+            "Action": "Include",
             "LogName": "George - base",
             "FromFile": "assets/base_dialogue/George/mid.json",
             "When": {
@@ -58,6 +67,15 @@
                 "EnableFor": "Harvey",
                 "Query: {{Hearts:Harvey}} >= 4": true,
                 "DialogueRandom": "alpha, charlie"
+            }
+        },
+        {
+            "Action": "Include",
+            "LogName": "Leah - base",
+            "FromFile": "assets/base_dialogue/Leah/mid.json",
+            "When": {
+                "EnableFor": "Leah",
+                "Query: {{Hearts:Leah}} >= 4": true
             }
         },
         {

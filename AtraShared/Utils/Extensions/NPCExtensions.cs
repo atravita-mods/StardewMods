@@ -47,25 +47,19 @@ public static class NPCExtensions
         bool add = false,
         bool clearOnMovement = false)
     {
-        string dialogue = npc.tryToGetMarriageSpecificDialogueElseReturnDefault(dialogueKey);
-        if (string.IsNullOrWhiteSpace(dialogue))
+        var dialogue = new MarriageDialogueReference("MarriageDialogue", dialogueKey).GetDialogue(npc);
+        if (dialogue.TranslationKey is not null)
         {
-            return false;
-        }
-        else
-        {
-            // make endearment token work. This is basically copied from game code.
-            dialogue = dialogue.Replace(MarriageDialogueReference.ENDEARMENT_TOKEN_LOWER, npc.getTermOfSpousalEndearment().ToLower(), StringComparison.Ordinal);
-            dialogue = dialogue.Replace(MarriageDialogueReference.ENDEARMENT_TOKEN, npc.getTermOfSpousalEndearment(), StringComparison.Ordinal);
-
             if (!add)
             {
                 npc.CurrentDialogue.Clear();
                 npc.currentMarriageDialogue.Clear();
             }
-            npc.CurrentDialogue.Push(new Dialogue(npc, null, dialogue) { removeOnNextMove = clearOnMovement });
+            dialogue.removeOnNextMove = clearOnMovement;
+            npc.CurrentDialogue.Push(dialogue);
             return true;
         }
+        return false;
     }
 
     /// <summary>

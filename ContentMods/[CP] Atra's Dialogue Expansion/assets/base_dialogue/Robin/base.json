@@ -18,5 +18,14 @@
             "ScienceHouse": "{{i18n: robin-divorced-from-sebastian-a}}$s",
             "Mountain": "{{i18n: robin-divorced-from-sebastian-b}}$s",
         }
+    },
+    {
+        "LogName": "Robin - after upgrades",
+        "Action": "EditData",
+        "Target": "Characters/Dialogue/Robin",
+        "When": {"Query: {{FarmhouseUpgrade}} > 2": true},
+        "Entries": {
+            "winter_Mon": "{{i18n:robin-winter-mon}}"
+        }
     }
 ]}

@@ -5,6 +5,8 @@
             "LogName": "Demetrius - base dialogue",
             "Target": "Characters/Dialogue/Demetrius",
             "Entries": {
+                "{{TaxDay}}": "{{i18n:demetrius-tax-day}}$s",
+
                 // lines that don't make sense.
                 "Fri4": "{{i18n:demetrius-fri4.00}}#$e#{{i18n:demetrius-fri4.01}}$u",
                 "winter_Sat": "{{i18n:demetrius-winter-sat.00}}#$e#{{i18n:demetrius-winter-sat.01}}#$e#{{i18n:demetrius-winter-sat.02}}$u",
@@ -13,7 +15,10 @@
                 "summer_25{{YearRemainder}}": "{{i18n:demetrius-summer-end.{{YearModulus}} }}",
                 "summer_27{{YearRemainder}}": "{{i18n: demetrius-jellies-pre.01}}#$b#{{i18n: demetrius-jellies-pre.02}}",
 
-                "ScienceHouse_Entry": "{{i18n:demetrius-homecoming}}"
+                "ScienceHouse_Entry": "{{i18n:demetrius-homecoming}}",
+
+                // some CTs
+                "movieTheater": "{{i18n:demetrius-movie-start}}#$e#$c 0.5#{{i18n:demetrius-movie-a}}#{{i18n:demetrius-movie-b}}"
             }
         },
         {

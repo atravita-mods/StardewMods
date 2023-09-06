@@ -208,6 +208,14 @@
 /***************
 * Fancier dialogue
 ***************/
+    // tax day
+    "demetrius-tax-day": "You'd think that, since the government is the one who pays me, I wouldn't have to do all this work to pay my taxes.",
+    "emily-tax-day.00": "Ugh, I hate having to file my taxes.",
+    "emily-tax-day.01": "Mine and Haley's, honestly maybe I should get her to do her own....",
+    "leah-tax-day": "Nothing sucks more than having to figure out what I did last year so I can file my taxes.",
+    "lewis-tax-day.00": "We've all gotta do our duty, @, and that duty includes paying our taxes.",
+    "lewis-tax-day.01": "Now, did I collect the taxes of that guy who lives out west?",
+
     // reject dialogue
     "willy-rejects-bait": "Did you mean to give that to me, @? I'm no fish.",
 
@@ -284,6 +292,9 @@
     "jobLeave-Penny-rain": "Hey, @, I'm gonna go out and take a walk to the library today! Make sure to stay dry.",
     "jobReturn-Penny-rain": "I had a great day at the library, @. I'm so glad we have it in town.",
 
+    "penny-winter-3.00": "Oh, it's winter again, isn't it? What are you planning on doing this winter?",
+    "penny-winter-3.01": "I trust you to handle the finances, %endearment.",
+
     // entry strings
     "homecoming-generic": "Ah, home sweet home!",
     "homecoming-love": "Honey, I'm home!",
@@ -294,6 +305,11 @@
     "george-homecoming": "I'm home!/Evelyn, I'm home!/Ah, home sweet home!",
     "george-vacation-bubbles": "Ah, it's so warm!",
     "penny-greet-Pam": "Mom, how are you?/Mom, you home?/Mom! I'm here to visit!",
+
+    // conversation topics
+    "demetrius-movie-start": "Oh, a movie theater?",
+    "demetrius-movie-a": "Sorry, I'm not one for movies anymore.",
+    "demetrius-movie-b": "I don't usually watch movies, @, unless it's with Robin.",
 
     // misc
 
@@ -306,6 +322,8 @@
     "demetrius-winter-sat.00": "Hmmm...I wonder how much the seasonal change in nitrogen levels is affected by the snowpack...",
     "demetrius-winter-sat.01": "We do have historical snowpack data for the last century and a half...",
     "demetrius-winter-sat.02": "Oh, I didn't see you there, @, do you need anything?",
+    // When you've finished upgrading your house, replace Robin line.
+    "robin-winter-mon": "I've always loved this time of year. The snow in the mountains is beautiful. Even when I have to walk through it.",
 
 /***************
 * Anniversary!

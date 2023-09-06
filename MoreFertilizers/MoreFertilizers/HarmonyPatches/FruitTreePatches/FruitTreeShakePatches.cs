@@ -3,8 +3,6 @@ using AtraShared.Utils.Extensions;
 
 using HarmonyLib;
 
-using Microsoft.Xna.Framework;
-
 using MoreFertilizers.Framework;
 
 using StardewValley.TerrainFeatures;
@@ -20,29 +18,22 @@ namespace MoreFertilizers.HarmonyPatches.FruitTreePatches;
 internal static class FruitTreeShakePatches
 {
     [HarmonyPatch(nameof(FruitTree.shake))]
-    private static void Prefix(FruitTree __instance, out int __state)
+    private static void Prefix(FruitTree __instance)
     {
-        __state = __instance.fruitsOnTree.Value;
-    }
-
-    [HarmonyPatch(nameof(FruitTree.shake))]
-    private static void Postfix(FruitTree __instance, int __state, Vector2 tileLocation)
-    {
-        if (__instance.struckByLightningCountdown.Value > 0 || __state == 0 || __instance.fruitsOnTree.Value != 0
+        if (__instance.struckByLightningCountdown.Value > 0 || __instance.fruit.Count == 0 
             || __instance.modData?.GetBool(CanPlaceHandler.MiraculousBeverages) != true)
         {
             return;
         }
 
-        do
+        int count = __instance.fruit.Count;
+        for (int i = count; i >= 0; i++)
         {
-            ModEntry.ModMonitor.DebugOnlyLog($"Checking for beverages: state {__state}.");
-
-            if (MiraculousFertilizerHandler.GetBeverage(__instance.indexOfFruit.Value) is SObject output)
+            SObject? obj = __instance.fruit[i] as SObject;
+            if (obj is not null && MiraculousFertilizerHandler.GetBeverage(obj) is SObject output)
             {
-                Game1.createItemDebris(output, tileLocation * 64f, -1);
+                __instance.fruit.Add(output);
             }
         }
-        while (--__state > 0);
     }
 }

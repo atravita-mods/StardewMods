@@ -5,59 +5,6 @@
 
     "Changes": [
         {
-            "LogName": "Leah - base",
-            "Action": "EditData",
-            "Target": "Characters/Dialogue/Leah",
-            "Entries":{
-                "{{TaxDay}}": "Nothing sucks more than having to figure out what I did last year so I can file my taxes.$s"
-            },
-            "When": {"EnableFor": "Leah"}
-        },
-        {
-            "LogName": "Penny - marriage",
-            "Action": "EditData",
-            "Target": "Characters/Dialogue/MarriageDialoguePenny",
-            "Entries": {
-                "winter_3": "Oh, it's winter again, isn't it? What are you planning on doing this winter?#$b#I trust you to handle the finances, %endearment."
-            },
-            "When": {
-                "EnableFor": "Penny",
-                "Year|contains = 1,2": false
-            }
-        },
-        {
-            "LogName": "Demetrius - base",
-            "Action": "EditData",
-            "Target": "Characters/Dialogue/Demetrius",
-            "Entries": {
-                "movieTheater": "Oh, a movie theater?$k#$e#$c 0.5#Sorry, I'm not one for movies.#I don't usually watch movies",
-                "{{TaxDay}}": "You'd think that, since the government is the one who pays me, I wouldn't have to do all this work to pay my taxes.$s"
-            },
-            "When": {
-                "EnableFor": "Demetrius",
-            }
-        },
-        {
-            "LogName": "Emily base",
-            "Action": "EditData",
-            "Target": "Characters/Dialogue/Emily",
-            "Entries": {
-                "{{TaxDay}}": "Ugh, I hate having to file my taxes.#$b#Mine and Haley's, honestly maybe I should get her to do her own...."
-            },
-            "When": {
-                "EnableFor": "Emily",
-            }
-        },
-        {
-            "LogName": "Robin - after upgrades",
-            "Action": "EditData",
-            "Target": "Characters/Dialogue/Robin",
-            "When": {"Query: {{FarmhouseUpgrade}} > 3": true},
-            "Entries": {
-                "winter_Mon": "I've always loved this time of year. The snow in the mountains is beautiful. Even when I have to walk through it."
-            }
-        },
-        {
             "LogName": "Rain -- during winter - Elliott.",
             "Action": "EditData",
             "Target": "Characters/Dialogue/rainy",
@@ -67,17 +14,6 @@
             },
             "Entries": {
                 "Elliott": "A day like this is good for my productivity.#$e#It's not like I'd be going out in this weather.#$e#Maybe to the saloon. Later."
-            }
-        },
-        {
-            "LogName": "Lewis base dialogue",
-            "Action": "EditData",
-            "Target": "Characters/Dialogue/Lewis",
-            "Entries": {
-                "{{TaxDay}}": "We've all gotta do our duty, @, and that duty includes paying our taxes.#$e#Now, did I collect the taxes of that guy who lives out west?"
-            },
-            "When": {
-                "EnableFor": "Lewis",
             }
         },
         {

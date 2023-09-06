@@ -9,6 +9,7 @@ using CommunityToolkit.Diagnostics;
 using Microsoft.Xna.Framework;
 
 using StardewValley.Extensions;
+using StardewValley.ItemTypeDefinitions;
 using StardewValley.TerrainFeatures;
 
 namespace AtraShared.Utils.Extensions;
@@ -40,11 +41,13 @@ public static class SObjectExtensions
             velocity -= MathF.Sqrt(2 * MathF.Abs(delta.Y + 80) * gravity);
         }
         float time = (MathF.Sqrt(Math.Max((velocity * velocity) + (gravity * delta.Y * 2f), 0)) / gravity) - (velocity / gravity);
+
+        ParsedItemData parsedItemDefintion = ItemRegistry.GetDataOrErrorItem(obj.QualifiedItemId);
         mp.broadcastSprites(
             loc,
             new TemporaryAnimatedSprite(
-                textureName: Game1.objectSpriteSheetName,
-                sourceRect: Game1.getSourceRectForStandardTileSheet(Game1.objectSpriteSheet, obj.ParentSheetIndex, 16, 16),
+                textureName: parsedItemDefintion.GetTextureName(),
+                sourceRect: parsedItemDefintion.GetSourceRect(0, obj.ParentSheetIndex),
                 position: start,
                 flipped: false,
                 alphaFade: 0f,

@@ -1,0 +1,12 @@
+{
+    "Changes": [
+        {
+            "LogName": "Leah - base",
+            "Action": "EditData",
+            "Target": "Characters/Dialogue/Leah",
+            "Entries":{
+                "{{TaxDay}}": "{{i18n:leah-tax-day}}$s"
+            }
+        }
+    ]
+}

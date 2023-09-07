@@ -30,9 +30,9 @@ internal static class GiantCropPatcher
 
         try
         {
-            for (int x = (int)__instance.tile.X; x < (int)__instance.tile.X + __instance.width.Value; x++)
+            for (int x = (int)__instance.Tile.X; x < (int)__instance.Tile.X + __instance.width.Value; x++)
             {
-                for (int y = (int)__instance.tile.Y; y < (int)__instance.tile.Y + __instance.width.Value; y++)
+                for (int y = (int)__instance.Tile.Y; y < (int)__instance.Tile.Y + __instance.width.Value; y++)
                 {
                     Vector2 tile = new(x, y);
                     if (Game1.currentLocation.objects.TryGetValue(tile, out SObject? obj)
@@ -46,7 +46,7 @@ internal static class GiantCropPatcher
                         obj.readyForHarvest.Value = false;
 
                         TapGiantCrop.ShakeGiantCrop(__instance);
-                        obj.performRemoveAction(obj.TileLocation, Game1.currentLocation);
+                        obj.performRemoveAction();
                         Game1.createItemDebris(obj, tile * 64f, -1);
                         Game1.currentLocation.objects.Remove(tile);
                         return false;

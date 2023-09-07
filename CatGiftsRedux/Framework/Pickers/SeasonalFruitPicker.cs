@@ -1,11 +1,6 @@
-﻿using AtraBase.Toolkit.Extensions;
+﻿using AtraShared.Utils.Extensions;
 
-using AtraCore.Framework.ItemManagement;
-
-using AtraShared.Utils.Extensions;
-using AtraShared.Wrappers;
-
-using StardewValley.Objects;
+using StardewValley.Extensions;
 
 namespace CatGiftsRedux.Framework.Pickers;
 
@@ -18,11 +13,9 @@ internal static class SeasonalFruitPicker
     {
         ModEntry.ModMonitor.DebugOnlyLog("Picked Seasonal Fruit");
 
-        List<KeyValuePair<int, string>>? fruittrees = Game1.content.Load<Dictionary<int, string>>(@"Data\fruitTrees")
-                                      .Where((kvp) => kvp.Value.GetNthChunk('/', 1).Contains(Game1.currentSeason, StringComparison.OrdinalIgnoreCase))
-                                      .ToList();
+        var content = Game1.fruitTreeData.Values.Where(tree => tree.Seasons.Contains(Game1.season)).ToList();
 
-        if (fruittrees.Count == 0)
+        if (content.Count == 0)
         {
             return null;
         }
@@ -30,21 +23,13 @@ internal static class SeasonalFruitPicker
         int tries = 3;
         do
         {
-            KeyValuePair<int, string> fruit = fruittrees[random.Next(fruittrees.Count)];
+            var fruit = random.ChooseFrom(content);
+            var drop = random.ChooseFrom(fruit.Fruit);
 
-            if (int.TryParse(fruit.Value.GetNthChunk('/', 2), out int id))
+            if (!Utils.ForbiddenFromRandomPicking(drop.ItemId) && !GameStateQuery.CheckConditions(drop.Condition, Game1.getFarm(), random: random)
+                && ItemRegistry.Create(ItemRegistry.type_object + drop.ItemId) is SObject obj)
             {
-                if (Utils.ForbiddenFromRandomPicking(id))
-                {
-                    continue;
-                }
-
-                if (DataToItemMap.IsActuallyRing(id))
-                {
-                    return new Ring(id);
-                }
-
-                return new SObject(id, 1);
+                return obj;
             }
         }
         while (tries-- > 3);

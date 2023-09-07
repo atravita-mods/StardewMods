@@ -36,8 +36,12 @@ internal static class Utils
     /// </summary>
     /// <param name="itemID">itemID of the item to check.</param>
     /// <returns>true to forbid it.</returns>
-    internal static bool ForbiddenFromRandomPicking(string itemID)
+    internal static bool ForbiddenFromRandomPicking(string? itemID)
     {
+        if (itemID is null)
+        {
+            return true;
+        }
         switch (itemID)
         {
             case "73":

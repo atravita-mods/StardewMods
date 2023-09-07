@@ -12,7 +12,20 @@
             // pre-luau
             "summer_10{{YearRemainder}}": "{{i18n:alex-pre-luau.{{YearModulus}} }}$h",
 
-            "IslandSouth_Entry": "{{i18n: alex-vacation-bubbles}}",
+            "IslandSouth_Entry": "{{i18n: alex-vacation-bubbles}}"
+        }
+    },
+    {
+        "Action": "EditData",
+        "Target": "Strings/schedules/Alex",
+        "LogName": "Alex strings",
+        "Entries": {
+            "winter_17.000": "Have you seen the mermaid show? It's my favorite...",
+            "marriage_Mon.000": "I'm going to hang out here all day. My grandparents aren't getting any younger...",
+            "summer_16.000": "Hi. Eh, I just twisted my ankle. Seeing if I can get it taped.",
+            "summer_16.001": "Yeah, yeah... I'm good, doc. Just tape it up, okay?",
+            "Sun.000": "%Alex is completely engrossed in the game. He doesn't notice your presence.",
+            "Sun.000_married": "Hey, @! You can watch the game with us if you want, but no pressure if you're busy."
         }
     }
 ]}

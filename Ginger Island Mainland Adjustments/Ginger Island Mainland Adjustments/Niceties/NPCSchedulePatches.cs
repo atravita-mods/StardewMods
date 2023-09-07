@@ -14,15 +14,15 @@ namespace GingerIslandMainlandAdjustments.Niceties;
 internal static class NPCSchedulePatches
 {
     [HarmonyPriority(Priority.Last)]
-    [HarmonyPatch(nameof(NPC.getSchedule))]
-    private static bool Prefix(NPC __instance, ref Dictionary<int, SchedulePathDescription>? __result)
+    [HarmonyPatch(nameof(NPC.TryLoadSchedule), new Type[]{ })]
+    private static bool Prefix(NPC __instance, ref bool __result)
     {
         try
         {
             if (__instance.getMasterScheduleRawData()?.Count is null or 0)
             {
-                __instance.followSchedule = false;
-                __result = null;
+                __instance.ClearSchedule();
+                __result = false;
                 return false;
             }
         }

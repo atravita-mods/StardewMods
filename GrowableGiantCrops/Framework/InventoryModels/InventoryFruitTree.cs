@@ -2,7 +2,6 @@
 
 using AtraBase.Toolkit.Extensions;
 
-using AtraShared.ConstantsAndEnums;
 using AtraShared.Utils.Extensions;
 using AtraShared.Wrappers;
 
@@ -187,7 +186,7 @@ public sealed class InventoryFruitTree : SObject
         }
         fruitTree.modData?.SetInt(ModDataKey, this.ParentSheetIndex);
 
-        fruitTree.shake(placementTile, true;
+        fruitTree.shake(placementTile, true);
         location.terrainFeatures[placementTile] = fruitTree;
         location.playSound("dirtyHit");
         DelayedAction.playSoundAfterDelay("coin", 100);

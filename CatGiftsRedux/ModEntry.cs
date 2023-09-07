@@ -51,7 +51,6 @@ internal sealed class ModEntry : BaseMod<ModEntry>
     private IAssetName dataObjectInfo = null!;
 
     private ModConfig config = null!;
-    private IDynamicGameAssetsApi? dgaAPI;
 
     /// <summary>
     /// Gets the string utilities for this mod.
@@ -147,7 +146,7 @@ internal sealed class ModEntry : BaseMod<ModEntry>
 
         Vector2? tile = null;
 
-        if (pet is Dog)
+        if (pet.petType.Value != Pet.type_cat)
         {
             tile = farm.GetRandomTileImpl();
             if (tile is null)
@@ -207,16 +206,6 @@ internal sealed class ModEntry : BaseMod<ModEntry>
         if (!this.playerItemsManager.GetValue(random).TryGetValue(out ItemRecord? entry) || entry is null)
         {
             return null;
-        }
-
-        if (entry.Type.HasFlag(ItemTypeEnum.DGAItem))
-        {
-            if (this.dgaAPI is null)
-            {
-                this.Monitor.LogOnce("DGA item requested but DGA was not installed, ignored.", LogLevel.Warn);
-            }
-
-            return this.dgaAPI?.SpawnDGAItem(entry.Identifier) as Item;
         }
 
         if (!int.TryParse(entry.Identifier, out int id))
@@ -303,9 +292,6 @@ internal sealed class ModEntry : BaseMod<ModEntry>
     /// <inheritdoc cref="IGameLoopEvents.GameLaunched"/>
     private void OnGameLaunch(object? sender, GameLaunchedEventArgs e)
     {
-        IntegrationHelper integration = new(this.Monitor, this.Helper.Translation, this.Helper.ModRegistry, LogLevel.Trace);
-        integration.TryGetAPI("spacechase0.DynamicGameAssets", "1.4.3", out this.dgaAPI);
-
         GMCMHelper helper = new(this.Monitor, this.Helper.Translation, this.Helper.ModRegistry, this.ModManifest);
         if (helper.TryGetAPI())
         {

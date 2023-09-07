@@ -42,21 +42,21 @@ public static class DataToItemMap
 
         return type switch
         {
-            ItemTypeEnum.BigCraftable => Game1.bigCraftablesInformation.ContainsKey(id),
-            ItemTypeEnum.Boots => Game1.content.Load<Dictionary<string, string>>(enumToAssetMap[ItemTypeEnum.Boots].BaseName).ContainsKey(id),
-            ItemTypeEnum.Shirts => Game1.shirtData.ContainsKey(id),
-            ItemTypeEnum.Pants => Game1.pantsData.ContainsKey(id),
-            ItemTypeEnum.Furniture => Game1.content.Load<Dictionary<string, string>>(enumToAssetMap[ItemTypeEnum.Furniture].BaseName).ContainsKey(id),
-            ItemTypeEnum.Hat => Game1.content.Load<Dictionary<string, string>>(enumToAssetMap[ItemTypeEnum.Hat].BaseName).ContainsKey(id),
-            ItemTypeEnum.Ring => Game1.objectInformation.TryGetValue(id, out var data) && !ItemHelperUtils.RingFilter(id, data),
-            ItemTypeEnum.SObject => Game1.objectInformation.ContainsKey(id),
-            ItemTypeEnum.Tool => Game1.toolData.ContainsKey(id),
-            ItemTypeEnum.Weapon => Game1.weaponData.ContainsKey(id),
+            ItemTypeEnum.BigCraftable => ItemRegistry.GetTypeDefinition(ItemRegistry.type_bigCraftable)?.Exists(id) == true,
+            ItemTypeEnum.Boots => ItemRegistry.GetTypeDefinition(ItemRegistry.type_boots)?.Exists(id) == true,
+            ItemTypeEnum.Shirts => ItemRegistry.GetTypeDefinition(ItemRegistry.type_shirt)?.Exists(id) == true,
+            ItemTypeEnum.Pants => ItemRegistry.GetTypeDefinition(ItemRegistry.type_pants)?.Exists(id) == true,
+            ItemTypeEnum.Furniture => ItemRegistry.GetTypeDefinition(ItemRegistry.type_furniture)?.Exists(id) == true,
+            ItemTypeEnum.Hat => ItemRegistry.GetTypeDefinition(ItemRegistry.type_hat)?.Exists(id) == true,
+            ItemTypeEnum.Ring => Game1.objectInformation.TryGetValue(id, out string? data) && !ItemHelperUtils.RingFilter(id, data),
+            ItemTypeEnum.SObject => ItemRegistry.GetTypeDefinition(ItemRegistry.type_object)?.Exists(id) == true,
+            ItemTypeEnum.Tool => ItemRegistry.GetTypeDefinition(ItemRegistry.type_tool)?.Exists(id) == true,
+            ItemTypeEnum.Weapon => ItemRegistry.GetTypeDefinition(ItemRegistry.type_weapon)?.Exists(id) == true,
+            ItemTypeEnum.Wallpaper => ItemRegistry.GetTypeDefinition(ItemRegistry.type_wallpaper)?.Exists(id) == true,
+            ItemTypeEnum.Flooring => ItemRegistry.GetTypeDefinition(ItemRegistry.type_floorpaper)?.Exists(id) == true,
             _ => false,
         };
     }
-
-#todo - wallpaper and flooring? Which I've skipped soooo far....
 
     /// <summary>
     /// Given an ItemType and a name, gets the id.

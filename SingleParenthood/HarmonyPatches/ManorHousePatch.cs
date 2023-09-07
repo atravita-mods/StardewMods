@@ -67,14 +67,14 @@ internal static class ManorHousePatch
             {
                 if (Game1.player.isMarried())
                 {
-                    List<Response> responses = new()
+                    Response[] responses = new Response[]
                     {
                         new("atravita.child", I18n.Adoption()),
                         new("atravita.divorce", I18n.Divorce()),
                         new("atravita.close", I18n.Leave()),
                     };
 
-                    List<Action?> actions = new()
+                    Action?[] actions = new[]
                     {
                         ChildMenu,
                         () =>

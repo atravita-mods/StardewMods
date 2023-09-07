@@ -102,12 +102,12 @@ internal static class PTUtilities
         }
         if (Game1.getAllFarmers().Any((Farmer farmer) => farmer.mailForTomorrow.Contains("atravita_PamTries_PennyThanks")))
         {
-            Game1.player.eventsSeen.Add(99210001);
+            Game1.player.eventsSeen.Add("99210001");
             modMonitor.Log("Syncing event 9921001");
         }
-        if (Game1.getAllFarmers().Any((Farmer farmer) => farmer.eventsSeen.Contains(99210002)))
+        if (Game1.getAllFarmers().Any((Farmer farmer) => farmer.eventsSeen.Contains("99210002")))
         {
-            Game1.player.eventsSeen.Add(99210002);
+            Game1.player.eventsSeen.Add("99210002");
             modMonitor.Log("Syncing event 99210002");
         }
     }

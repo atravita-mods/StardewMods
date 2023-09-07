@@ -273,14 +273,14 @@ internal static class IslandCaveWestDifficultyTranspiler
                     {
                         if (ModEntry.Config.AllowReAsks && Game1.activeClickableMenu is null)
                         {
-                            List<Response> responses = new(__instance.createYesNoResponses());
-                            List<Action?> actions = new()
+                            Response[] responses = __instance.createYesNoResponses();
+                            Action?[] actions = new[]
                             {
                                 () =>
                                 {
-                                __instance.currentCrystalSequenceIndex.Value = 0;
-                                __instance.currentPlaybackCrystalSequenceIndex = 0;
-                                __instance.netPhase.Value = IslandWestCave1.PHASE_PLAY_SEQUENCE;
+                                    __instance.currentCrystalSequenceIndex.Value = 0;
+                                    __instance.currentPlaybackCrystalSequenceIndex = 0;
+                                    __instance.netPhase.Value = IslandWestCave1.PHASE_PLAY_SEQUENCE;
                                 },
                             };
 

@@ -130,7 +130,7 @@ internal static class CRUtils
             return false;
         }
 
-        if (!ModEntry.Config.FrogsSpawnInCold && ((Game1.GetSeasonForLocation(loc) == "winter" && loc is not Desert or IslandLocation) || shaft?.getMineArea() == 40))
+        if (!ModEntry.Config.FrogsSpawnInCold && (loc.GetSeason() == Season.Winter || shaft?.getMineArea() == 40))
         {
             return false;
         }
@@ -150,7 +150,7 @@ internal static class CRUtils
             count *= ModEntry.Config.CritterSpawnMultiplier;
             for (int i = 0; i < count; i++)
             {
-                critters.Add(new Firefly(Game1.player.getTileLocation()));
+                critters.Add(new Firefly(Game1.player.Tile));
             }
         }
     }
@@ -158,16 +158,17 @@ internal static class CRUtils
     /// <summary>
     /// Spawns butterflies around the player.
     /// </summary>
+    /// <param name="location">The Location to spawn at.</param>
     /// <param name="critters">Critters list to add to.</param>
     /// <param name="count">Number of butterflies to spawn.</param>
-    internal static void SpawnButterfly(List<Critter>? critters, int count)
+    internal static void SpawnButterfly(GameLocation location, List<Critter>? critters, int count)
     {
         if (critters is not null && count > 0)
         {
             count *= ModEntry.Config.CritterSpawnMultiplier;
             for (int i = 0; i < count; i++)
             {
-                critters.Add(new Butterfly(Game1.player.getTileLocation(), Singletons.Random.OfChance(0.5)).setStayInbounds(true));
+                critters.Add(new Butterfly(location, Game1.player.Tile, Random.Shared.OfChance(0.5)).setStayInbounds(true));
             }
         }
     }
@@ -219,7 +220,7 @@ internal static class CRUtils
                     }
                 }
 breakbreak:
-                frog ??= new(Game1.player.getTileLocation());
+                frog ??= new(Game1.player.Tile);
                 FrogTimerSetter.Value(frog, Singletons.Random.Next(2000, 5000));
                 critters.Add(frog);
             }
@@ -241,12 +242,12 @@ breakbreak:
             {
                 Vector2 owlPos;
 
-                if (Singletons.Random.RollDice(3))
+                if (Random.Shared.RollDice(3))
                 {
                     Vector2 pos = Game1.player.Position;
                     float deltaY = pos.Y + 128;
                     owlPos = new Vector2(
-                    x: Math.Clamp(pos.X - (deltaY / 4), 0, (loc.Map.Layers[0].LayerWidth - 1) * Game1.tileSize) + Singletons.Random.Next(-256, 128),
+                    x: Math.Clamp(pos.X - (deltaY / 4), 0, (loc.Map.Layers[0].LayerWidth - 1) * Game1.tileSize) + Random.Shared.Next(-256, 128),
                     y: -128);
                 }
                 else
@@ -261,7 +262,7 @@ breakbreak:
                     {
                         critters.Add(owl);
                     },
-                    timer: (i * 150) + Singletons.Random.Next(-50, 150));
+                    delay: (i * 150) + Random.Shared.Next(-50, 150));
             }
         }
     }
@@ -280,7 +281,7 @@ breakbreak:
             foreach ((Vector2 position, bool flipped) in FindBunnySpawnTile(
                 loc: Game1.currentLocation,
                 bushes: bushes,
-                playerTile: Game1.player.getTileLocation(),
+                playerTile: Game1.player.Tile,
                 count: count * 2))
             {
                 GameLocation location = Game1.currentLocation;
@@ -292,7 +293,7 @@ breakbreak:
                         SpawnRabbit(critters, position, location, flipped);
                     }
                 },
-                timer: delay += Singletons.Random.Next(250, 750));
+                delay: delay += Singletons.Random.Next(250, 750));
             }
         }
     }
@@ -314,7 +315,7 @@ breakbreak:
                 yield break;
             }
 
-            if (Vector2.DistanceSquared(bush.tilePosition.Value, playerTile) <= 225)
+            if (Vector2.DistanceSquared(bush.Tile, playerTile) <= 225)
             {
                 if (bush.size.Value == Bush.walnutBush && bush.tileSheetOffset.Value == 1)
                 {
@@ -322,17 +323,17 @@ breakbreak:
                     continue;
                 }
 
-                bool flipped = Singletons.Random.OfChance(0.5);
-                Vector2 startTile = bush.tilePosition.Value;
+                bool flipped = Random.Shared.OfChance(0.5);
+                Vector2 startTile = bush.Tile;
                 startTile.X += flipped ? 2 : -2;
-                int distance = Singletons.Random.Next(5, 12);
+                int distance = Random.Shared.Next(5, 12);
 
                 for (int i = distance; i > 0; i--)
                 {
                     Vector2 tile = startTile;
                     startTile.X += flipped ? 1 : -1;
                     if (!bush.getBoundingBox().Intersects(new Rectangle((int)startTile.X * 64, (int)startTile.Y * 64, 64, 64))
-                        && (!loc.isTileLocationTotallyClearAndPlaceable(startTile) || loc.isWaterTile((int)startTile.X, (int)startTile.Y)))
+                        && !loc.CanSpawnCharacterHere(startTile))
                     {
                         if (distance > 3)
                         {
@@ -353,7 +354,7 @@ Continue: ;
     {
         if (critters is not null)
         {
-            Rabbit rabbit = new(tile, flipped);
+            Rabbit rabbit = new(loc, tile, flipped);
             // make the rabbit hang around for a little longer.
             // so it doesn't immediately exist stage left.
             CharacterTimerSetter.Value(rabbit, Singletons.Random.Next(750, 1500));

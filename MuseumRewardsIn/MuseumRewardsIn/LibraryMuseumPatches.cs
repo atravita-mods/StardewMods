@@ -35,7 +35,7 @@ internal static class LibraryMuseumPatches
         }
     }
 
-    [HarmonyPatch(nameof(LibraryMuseum.collectedReward))]
+    [HarmonyPatch(nameof(LibraryMuseum.OnRewardCollected))]
     private static void Postfix(Item item)
     {
         if (item.specialItem == true)

@@ -27,9 +27,9 @@ internal static class BusStopPatch
     private static bool ShouldAllowBus(GameLocation loc)
     {
         Vector2 bustile = new(11f, 10f);
-        foreach(NPC npc in loc.getCharacters())
+        foreach(NPC npc in loc.characters)
         {
-            if (npc.isVillager() && npc.getTileLocation().Equals(bustile))
+            if (npc.isVillager() && npc.Tile.Equals(bustile))
             {
                 ModEntry.ModMonitor.DebugOnlyLog($"Subbing in {npc.Name} as the bus driver.", LogLevel.Info);
                 return true;

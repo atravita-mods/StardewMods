@@ -15,7 +15,6 @@ using StardewModdingAPI.Events;
 using StardewValley.TerrainFeatures;
 
 using TapGiantCrops.Framework;
-using TapGiantCrops.HarmonyPatches;
 
 namespace TapGiantCrops;
 
@@ -50,21 +49,21 @@ internal sealed class ModEntry : BaseMod<ModEntry>
     /// <inheritdoc cref="IGameLoopEvents.DayEnding"/>
     private void OnDayEnding(object? sender, DayEndingEventArgs e)
     {
-        Utility.ForAllLocations(static (location) =>
+        Utility.ForEachLocation(static (location) =>
         {
             if (location?.resourceClumps is null)
             {
-                return;
+                return true;
             }
 
             foreach (ResourceClump? feature in location.resourceClumps)
             {
                 if (feature is GiantCrop crop)
                 {
-                    Vector2 offset = crop.tile.Value;
+                    Vector2 offset = crop.Tile;
                     offset.X += crop.width.Value / 2;
                     offset.Y += crop.height.Value - 1;
-                    if (location.objects.TryGetValue(offset, out SObject? tapper) && tapper.Name.Contains("Tapper", StringComparison.Ordinal)
+                    if (location.objects.TryGetValue(offset, out SObject? tapper) && tapper.IsTapper()
                         && tapper.heldObject is not null && tapper.heldObject.Value is null)
                     {
                         (SObject obj, int days)? output = Api.GetTapperProduct(crop, tapper);
@@ -78,6 +77,7 @@ internal sealed class ModEntry : BaseMod<ModEntry>
                     }
                 }
             }
+            return true;
         });
     }
 
@@ -90,14 +90,6 @@ internal sealed class ModEntry : BaseMod<ModEntry>
         try
         {
             harmony.PatchAll(typeof(ModEntry).Assembly);
-
-            if (new Version(1, 6) > new Version(Game1.version) &&
-                !this.Helper.ModRegistry.IsLoaded("atravita.GrowableGiantCrops") &&
-                (this.Helper.ModRegistry.Get("spacechase0.MoreGiantCrops") is not IModInfo giant || giant.Manifest.Version.IsOlderThan("1.2.0")))
-            {
-                this.Monitor.Log("Applying patch to restore giant crops to save locations", LogLevel.Debug);
-                FixSaveThing.ApplyPatches(harmony);
-            }
         }
         catch (Exception ex)
         {

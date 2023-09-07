@@ -12,7 +12,6 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
 using StardewValley.Buildings;
-using StardewValley.Locations;
 using StardewValley.TerrainFeatures;
 
 using XLocation = xTile.Dimensions.Location;
@@ -323,7 +322,7 @@ public sealed class InventoryBush : SObject
                 origin: Vector2.Zero,
                 scale: 4f,
                 effects: SpriteEffects.None,
-                layerDepth: Math.Max(0f, (f.getStandingY() + 3) / 10000f));
+                layerDepth: Math.Max(0f, (f.StandingPixel.Y + 3) / 10000f));
         }
     }
 
@@ -344,11 +343,9 @@ public sealed class InventoryBush : SObject
     #region misc
 
     /// <inheritdoc />
-    public override Item getOne()
+    protected override Item GetOneNew()
     {
-        InventoryBush bush = new((BushSizes)this.ParentSheetIndex, 1);
-        bush._GetOneFrom(this);
-        return bush;
+        return new InventoryBush((BushSizes)this.ParentSheetIndex, 1);
     }
 
     /// <inheritdoc />
@@ -373,10 +370,7 @@ public sealed class InventoryBush : SObject
     public override bool isPlaceable() => true;
 
     /// <inheritdoc />
-    public override bool canBePlacedInWater() => false;
-
-    /// <inheritdoc />
-    public override bool isForage(GameLocation location) => false;
+    public override bool isForage() => false;
 
     /// <inheritdoc />
     public override bool canStackWith(ISalable other)
@@ -423,7 +417,7 @@ public sealed class InventoryBush : SObject
         tags.Add("category_inventory_bush");
         tags.Add($"id_inventoryBush_{this.ParentSheetIndex}");
         tags.Add("quality_none");
-        tags.Add("item_" + this.SanitizeContextTag(this.Name));
+        tags.Add("item_" + ItemContextTagManager.SanitizeContextTag(this.Name));
     }
 
     #endregion
@@ -473,14 +467,11 @@ public sealed class InventoryBush : SObject
             }
         }
 
-        if (location is IAnimalLocation hasAnimals)
+        foreach (FarmAnimal? animal in location.Animals.Values)
         {
-            foreach (FarmAnimal? animal in hasAnimals.Animals.Values)
+            if (animal.GetBoundingBox().Intersects(position))
             {
-                if (animal.GetBoundingBox().Intersects(position))
-                {
-                    return false;
-                }
+                return false;
             }
         }
 
@@ -490,16 +481,15 @@ public sealed class InventoryBush : SObject
         }
 
         Vector2 tile = new(tileX, tileY);
-        if (location is BuildableGameLocation buildable)
+
+        foreach (Building? building in location.buildings)
         {
-            foreach (Building? building in buildable.buildings)
+            if (!building.isTilePassable(tile))
             {
-                if (!building.isTilePassable(tile))
-                {
-                    return false;
-                }
+                return false;
             }
         }
+
 
         if (location.terrainFeatures?.ContainsKey(tile) == true
             || location.Objects?.ContainsKey(tile) == true)
@@ -513,7 +503,7 @@ public sealed class InventoryBush : SObject
 
     private static int GetSeason(GameLocation loc)
     {
-        return Utility.getSeasonNumber(loc is Desert or IslandLocation ? "summer" : Game1.GetSeasonForLocation(loc));
+        return loc.GetSeasonIndex();
     }
 
     // derived from Bush.setUpSourceRect
@@ -557,7 +547,7 @@ public sealed class InventoryBush : SObject
     /// Draw some graphics for being picked up.
     /// </summary>
     /// <param name="location">game location picked up from.</param>
-    /// <param name="tile">Tile pikced up from.</param>
+    /// <param name="tile">Tile picked up from.</param>
     internal void DrawPickUpGraphics(GameLocation location, Vector2 tile)
     {
         if (this.sourceRect == default)

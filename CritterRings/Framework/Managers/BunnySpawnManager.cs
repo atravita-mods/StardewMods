@@ -189,7 +189,7 @@ internal sealed class BunnySpawnManager : IDisposable
         {
             if (feature is Bush bush)
             {
-                this.monitor.DebugOnlyLog($"Bush added at {bush.tilePosition}");
+                this.monitor.DebugOnlyLog($"Bush added at {bush.Tile}");
                 this.watchedBushes ??= this.location?.largeTerrainFeatures?.OfType<Bush>()?.ToList() ?? new();
                 this.watchedBushes.Add(bush);
             }
@@ -199,7 +199,7 @@ internal sealed class BunnySpawnManager : IDisposable
         {
             if (feature is Bush bush && this.watchedBushes?.Remove(bush) == true)
             {
-                this.monitor.DebugOnlyLog($"Bush removed at {bush.tilePosition}");
+                this.monitor.DebugOnlyLog($"Bush removed at {bush.Tile}");
             }
         }
     }

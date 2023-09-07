@@ -246,7 +246,7 @@ internal sealed class ModEntry : BaseMod<ModEntry>
         }
         else if (e.NewLocation.ShouldSpawnButterflies() && Game1.player.isWearingRing(ButterflyRing))
         {
-            CRUtils.SpawnButterfly(critters, 3);
+            CRUtils.SpawnButterfly(e.NewLocation, critters, 3);
         }
         if (e.NewLocation is not Caldera && Game1.player.isWearingRing(BunnyRing))
         {
@@ -287,7 +287,7 @@ internal sealed class ModEntry : BaseMod<ModEntry>
         }
         else if (Game1.currentLocation.ShouldSpawnButterflies())
         {
-            CRUtils.SpawnButterfly(critters, Game1.player.GetEffectsOfRingMultiplier(ButterflyRing));
+            CRUtils.SpawnButterfly(Game1.currentLocation, critters, Game1.player.GetEffectsOfRingMultiplier(ButterflyRing));
         }
         if (Game1.currentLocation.ShouldSpawnFrogs())
         {

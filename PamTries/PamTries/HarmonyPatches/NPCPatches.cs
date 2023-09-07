@@ -30,11 +30,11 @@ internal static class NPCPatches
             {
                 __instance.extendSourceRect(0, 32);
                 __instance.Sprite.tempSpriteHeight = 64;
-                __instance.drawOffset.Value = new Vector2(0f, 96f);
+                __instance.drawOffset = new Vector2(0f, 96f);
                 __instance.Sprite.ignoreSourceRectUpdates = false;
                 if (Utility.isOnScreen(Utility.Vector2ToPoint(__instance.Position), 64, __instance.currentLocation))
                 {
-                    __instance.currentLocation.playSoundAt("slosh", __instance.getTileLocation());
+                    __instance.currentLocation.playSound("slosh", __instance.Tile);
                 }
             }
         }
@@ -62,7 +62,7 @@ internal static class NPCPatches
                 __instance.Sprite.SpriteWidth = 16;
                 __instance.Sprite.SpriteHeight = 32;
                 __instance.Sprite.UpdateSourceRect();
-                __instance.drawOffset.Value = Vector2.Zero;
+                __instance.drawOffset = Vector2.Zero;
                 __instance.Halt();
                 __instance.movementPause = 1;
             }

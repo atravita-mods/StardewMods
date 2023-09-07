@@ -16,25 +16,25 @@ namespace HighlightEmptyMachines.Framework;
 /// </summary>
 internal static class PFMMachineHandler
 {
-    private static readonly PerScreen<Dictionary<int, MachineStatus>> ValidMachinesPerScreen = new(() => new Dictionary<int, MachineStatus>());
-    private static readonly DefaultDict<int, HashSet<PFMMachineData>> Recipes = new(() => new HashSet<PFMMachineData>());
-    private static readonly HashSet<int> HasUnconditionalRecipe = new();
+    private static readonly PerScreen<Dictionary<string, MachineStatus>> ValidMachinesPerScreen = new(() => new Dictionary<string, MachineStatus>());
+    private static readonly DefaultDict<string, HashSet<PFMMachineData>> Recipes = new(() => new HashSet<PFMMachineData>());
+    private static readonly HashSet<string> HasUnconditionalRecipe = new();
     private static IProducerFrameworkModAPI? pfmAPI = null;
 
     /// <summary>
     /// Gets a lookup table between machines and their current status.
     /// </summary>
-    internal static Dictionary<int, MachineStatus> ValidMachines => ValidMachinesPerScreen.Value;
+    internal static Dictionary<string, MachineStatus> ValidMachines => ValidMachinesPerScreen.Value;
 
     /// <summary>
     /// Gets a list of conditional PFM machines.
     /// </summary>
-    internal static ICollection<int> ConditionalPFMMachines => Recipes.Keys;
+    internal static ICollection<string> ConditionalPFMMachines => Recipes.Keys;
 
     /// <summary>
     /// Gets a list of unconditional PFM machines.
     /// </summary>
-    internal static ICollection<int> UnconditionalPFMMachines => HasUnconditionalRecipe;
+    internal static ICollection<string> UnconditionalPFMMachines => HasUnconditionalRecipe;
 
     private static List<Dictionary<string, object>>? MachineRecipes => pfmAPI?.GetRecipes();
 
@@ -56,7 +56,7 @@ internal static class PFMMachineHandler
     internal static void PrintPFMRecipes(string command, string[] args)
     {
         ModEntry.ModMonitor.Log("PFM Machine Recipes", LogLevel.Info);
-        foreach ((int id, HashSet<PFMMachineData> v) in Recipes)
+        foreach ((string id, HashSet<PFMMachineData> v) in Recipes)
         {
             ModEntry.ModMonitor.Log($"Looking at machine {id.GetBigCraftableName()}", LogLevel.Info);
             foreach (PFMMachineData recipe in v)
@@ -84,7 +84,7 @@ internal static class PFMMachineHandler
 
         foreach (Dictionary<string, object>? item in recipes)
         {
-            if (!item.TryGetValue("MachineID", out object? id) || id is not int intID || HasUnconditionalRecipe.Contains(intID))
+            if (!item.TryGetValue("MachineID", out object? id) || id is not string itemID || HasUnconditionalRecipe.Contains(itemID))
             {
                 continue;
             }
@@ -119,9 +119,9 @@ internal static class PFMMachineHandler
 
             if (!outdoorsOnly && weather == StardewWeather.All && seasons == StardewSeasons.All && validLocations is null)
             {
-                ModEntry.ModMonitor.DebugOnlyLog($"{intID} is unconditional.", LogLevel.Trace);
-                HasUnconditionalRecipe.Add(intID);
-                Recipes.Remove(intID);
+                ModEntry.ModMonitor.DebugOnlyLog($"{itemID} is unconditional.", LogLevel.Trace);
+                HasUnconditionalRecipe.Add(itemID);
+                Recipes.Remove(itemID);
 
                 continue;
             }
@@ -131,7 +131,7 @@ internal static class PFMMachineHandler
                 ValidLocations: validLocations,
                 AllowedSeasons: seasons,
                 AllowedWeathers: weather);
-            Recipes[intID].Add(recipe);
+            Recipes[itemID].Add(recipe);
         }
 
         ModEntry.ModMonitor.DebugOnlyLog($"{recipes.Count} recipes indexed - {Recipes.Count} conditional machines and - {HasUnconditionalRecipe.Count} unconditional machines.");
@@ -152,7 +152,7 @@ internal static class PFMMachineHandler
         ValidMachines.Clear();
 
         // unconditional machines
-        foreach (int machine in HasUnconditionalRecipe)
+        foreach (string machine in HasUnconditionalRecipe)
         {
             if (ModEntry.Config.ProducerFrameworkModMachines.TryGetValue(machine.GetBigCraftableName(), out bool setting) && setting)
             {
@@ -176,7 +176,7 @@ internal static class PFMMachineHandler
         bool isOutDoors = location.IsOutdoors;
 
         // conditional machines.
-        foreach (int machine in ConditionalPFMMachines)
+        foreach (string machine in ConditionalPFMMachines)
         {
             if (ModEntry.Config.ProducerFrameworkModMachines.TryGetValue(machine.GetBigCraftableName(), out bool setting) && setting)
             {
@@ -211,7 +211,7 @@ Continue:
     /// <returns>Weather enum.</returns>
     private static StardewWeather GetPFMWeather()
     {
-        if (Utility.isFestivalDay(Game1.dayOfMonth, Game1.currentSeason) || (SaveGame.loaded?.weddingToday ?? Game1.weddingToday))
+        if (Utility.isFestivalDay(Game1.dayOfMonth, Game1.season) || (SaveGame.loaded?.weddingToday ?? Game1.weddingToday))
         {
             return StardewWeather.Sunny;
         }

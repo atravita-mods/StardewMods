@@ -1,7 +1,5 @@
 ﻿using System.Diagnostics;
 
-using Microsoft.Xna.Framework;
-
 using StardewValley.TerrainFeatures;
 
 namespace LastDayToPlantRedux.Framework;
@@ -17,18 +15,16 @@ internal class DummyHoeDirt : HoeDirt
     /// Initializes a new instance of the <see cref="DummyHoeDirt"/> class.
     /// </summary>
     /// <param name="fertilizer">Fertilizer to use.</param>
-    public DummyHoeDirt(int fertilizer)
+    public DummyHoeDirt(string fertilizer)
     {
-        this.currentLocation = Game1.getFarm();
+        this.Location = Game1.getFarm();
         this.fertilizer.Value = fertilizer;
     }
 
     /// <summary>
     /// nop'ed.
     /// </summary>
-    /// <param name="environment">location.</param>
-    /// <param name="tileLocation">tile.</param>
-    public override void dayUpdate(GameLocation environment, Vector2 tileLocation)
+    public override void dayUpdate()
     {
     }
 

@@ -56,38 +56,34 @@ internal static class DrawPrismatic
 
         foreach (DrawPrismaticModel? model in models.Values)
         {
-            if (!int.TryParse(model.Identifier, out int id))
+            string? id = DataToItemMap.IsValidId(model.ItemType, model.Identifier) ? model.Identifier : DataToItemMap.GetID(model.ItemType, model.Identifier);
+
+            if (id is null)
             {
-                id = DataToItemMap.GetID(model.ItemType, model.Identifier);
-                if (id == -1)
-                {
-                    ModEntry.ModMonitor.Log($"Could not resolve {model.ItemType}, {model.Identifier}, skipping.", LogLevel.Warn);
-                    continue;
-                }
+                ModEntry.ModMonitor.Log($"Could not resolve {model.ItemType}, {model.Identifier}, skipping.", LogLevel.Warn);
+                continue;
             }
 
             // Handle the full prismatics.
             if (string.IsNullOrWhiteSpace(model.Mask))
             {
-                if (!PrismaticFull.TryGetValue(model.ItemType, out HashSet<int>? set))
+                if (!PrismaticFull.TryGetValue(model.ItemType, out HashSet<string>? set))
                 {
-                    set = new();
+                    PrismaticFull[model.ItemType] = set = new();
                 }
                 set.Add(id);
-                PrismaticFull[model.ItemType] = set;
             }
             else
             {
                 // handle the ones that have masks.
-                if (!PrismaticMasks.TryGetValue(model.ItemType, out Dictionary<int, Lazy<Texture2D>>? masks))
+                if (!PrismaticMasks.TryGetValue(model.ItemType, out var masks))
                 {
-                    masks = new();
+                    PrismaticMasks[model.ItemType] = masks = new();
                 }
                 if (!masks.TryAdd(id, new(() => Game1.content.Load<Texture2D>(model.Mask))))
                 {
                     ModEntry.ModMonitor.Log($"{model.ItemType} - {model.Identifier} appears to be a duplicate, ignoring", LogLevel.Warn);
                 }
-                PrismaticMasks[model.ItemType] = masks;
             }
         }
     }
@@ -106,8 +102,8 @@ internal static class DrawPrismatic
         {
             if (item.GetItemType() is ItemTypeEnum type)
             {
-                return (PrismaticFull.TryGetValue(type, out HashSet<int>? set) && set.Remove(item.ParentSheetIndex))
-                    | (PrismaticMasks.TryGetValue(type, out Dictionary<int, Lazy<Texture2D>>? maskSet) && maskSet.Remove(item.ParentSheetIndex));
+                return (PrismaticFull.TryGetValue(type, out HashSet<string>? set) && set.Remove(item.ItemId))
+                    | (PrismaticMasks.TryGetValue(type, out Dictionary<string, Lazy<Texture2D>>? maskSet) && maskSet.Remove(item.ItemId));
             }
         }
         catch (Exception ex)
@@ -119,31 +115,22 @@ internal static class DrawPrismatic
 
     [MethodImpl(TKConstants.Hot)]
     private static bool ShouldDrawAsFullColored(this Item item)
-    => item.GetItemType() is ItemTypeEnum type && PrismaticFull.TryGetValue(type, out HashSet<int>? set)
-        && set.Contains(item.ParentSheetIndex);
-
-    [MethodImpl(TKConstants.Hot)]
-    private static bool ShouldDrawAsFullColored(this Ring ring)
-        => PrismaticFull.TryGetValue(ItemTypeEnum.Ring, out HashSet<int>? set)
-            && set.Contains(ring.indexInTileSheet.Value);
+    => item.GetItemType() is ItemTypeEnum type && PrismaticFull.TryGetValue(type, out HashSet<string>? set)
+        && set.Contains(item.ItemId);
 
     [MethodImpl(TKConstants.Hot)]
     private static Color ReplaceDrawColorForItem(Color prevcolor, Item item)
         => item.ShouldDrawAsFullColored() ? Utility.GetPrismaticColor() : prevcolor;
 
     [MethodImpl(TKConstants.Hot)]
-    private static Color ReplaceDrawColorForItem(Color prevcolor, ItemTypeEnum type, int parentSheetIndex)
-        => PrismaticFull.TryGetValue(type, out HashSet<int>? set) && set.Contains(parentSheetIndex) ? Utility.GetPrismaticColor() : prevcolor;
+    private static Color ReplaceDrawColorForItem(Color prevcolor, ItemTypeEnum type, string itemId)
+        => PrismaticFull.TryGetValue(type, out HashSet<string>? set) && set.Contains(itemId) ? Utility.GetPrismaticColor() : prevcolor;
 
     [MethodImpl(TKConstants.Hot)]
     private static Texture2D? GetColorMask(this Item item)
-        => item.GetItemType() is ItemTypeEnum type && PrismaticMasks.TryGetValue(type, out Dictionary<int, Lazy<Texture2D>>? masks)
-            && masks.TryGetValue(item.ParentSheetIndex, out Lazy<Texture2D>? mask) ? mask?.Value : null;
+        => item.GetItemType() is ItemTypeEnum type && PrismaticMasks.TryGetValue(type, out Dictionary<string, Lazy<Texture2D>>? masks)
+            && masks.TryGetValue(item.ItemId, out Lazy<Texture2D>? mask) ? mask?.Value : null;
 
-    [MethodImpl(TKConstants.Hot)]
-    private static Texture2D? GetColorMask(this Ring ring)
-    => PrismaticMasks.TryGetValue(ItemTypeEnum.Ring, out Dictionary<int, Lazy<Texture2D>>? masks)
-        && masks.TryGetValue(ring.indexInTileSheet.Value, out Lazy<Texture2D>? mask) ? mask?.Value : null;
 
     [MethodImpl(TKConstants.Hot)]
     private static void DrawColorMask(Item item, SpriteBatch b, Rectangle position, float drawDepth)
@@ -163,9 +150,9 @@ internal static class DrawPrismatic
     }
 
     [MethodImpl(TKConstants.Hot)]
-    private static void DrawColorMask(ItemTypeEnum type, int parentSheetIndex, SpriteBatch b, int x, int y, float drawDepth)
+    private static void DrawColorMask(ItemTypeEnum type, string itemID, SpriteBatch b, int x, int y, float drawDepth)
     {
-        if (PrismaticMasks.TryGetValue(type, out Dictionary<int, Lazy<Texture2D>>? masks) && masks.TryGetValue(parentSheetIndex, out Lazy<Texture2D>? mask))
+        if (PrismaticMasks.TryGetValue(type, out Dictionary<string, Lazy<Texture2D>>? masks) && masks.TryGetValue(itemID, out Lazy<Texture2D>? mask))
         {
             b.Draw(
                 texture: mask.Value,

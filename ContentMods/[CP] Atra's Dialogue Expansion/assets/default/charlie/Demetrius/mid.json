@@ -41,15 +41,6 @@
         }
     },
     {
-        "LogName": "Rain -- during winter.",
-        "Action": "EditData",
-        "Target": "Characters/Dialogue/rainy",
-        "When": {"Season": "winter"},
-        "Entries":{
-            "Demetrius": "Rare to see winter storms around here....Something in the weather seems different."
-        }
-    },
-    {
         // Pregnancy line!
         "Action": "EditData",
         "Target": "Characters/Dialogue/Demetrius",
@@ -66,10 +57,6 @@
         "Target": "Characters/Dialogue/Demetrius",
         "Entries": {
             "ScienceHouse_Entry": "Ah, home sweet home!",
-
-            "ScienceHouse_22_20": "I've got so much data I need to analyze.$s",
-            "fallScienceHouse_22_20": "I'd love to talk, @, but I have a grant submission coming up that I need to work on.",
-            "summerScienceHouse_22_20": "I have so many measurements I need to make today...$s",
             "fallMountain_45_8": "We're lucky to have so much old growth forest around here.#$b#It takes decades for a forest to develop properly.",
 
             // specific days
@@ -118,12 +105,6 @@
             // in front of the kitchen.
             "ScienceHouse_27_9": "Let's see, what should I cook...what ingredients do I have...",
 
-            // in his lab.
-            "ScienceHouse_22_20": "I'm so sorry, @, I've got so much work I need to get done before next Monday.",
-            "summerScienceHouse_22_20": "Just need to gather a little more data for a proposal.",
-            "fallScienceHouse_22_20": "Sometimes I feel like I spend more time writing proposals than anything else.$s",
-            "winterScienceHouse_22_20": "Sorry, @, I've got a talk I need to prepare for.",
-
             // standing next to the mountains.
             "summerMountain_45_8": "Oh, look, @, a butterfly!",
             "fallMountain_45_8": "Some of these trees are more than a hundred years old. I hope you weren't planning on cutting them down."
@@ -152,10 +133,6 @@
             "23_2": "Some plants are insectivorous; they get their nitrogen by eating insects and spiders because the soil they grow in is very low in nitrogen.",
             "24_2": "%Demetrius seems pre-occupied.#$b#Why do things keep on evolving into crabs, actually?",
 
-            "ScienceHouse_22_20": "I've got a paper I have to write, so of course all I want to do is make a blackberry cobbler and mop the entire house or something...",
-            "summerScienceHouse_22_20": "It's been so hot lately, I suspect the trees are stressed.",
-            "fallScienceHouse_22_20": "Got a conference coming up, @, hoping I can get myself a talk.",
-            "winterScienceHouse_22_20": "My collaborator claims his equipment is broken again.#$b#We're far closer to the submission deadline for this paper than I'd like...",
             "fallMountain_45_8": "Funding has been a lot tighter this year than it was last year.#$b#I didn't even get my inflation adjustment. I'm making less actual money this year than last.$s"
         },
         "When": { "YearModulus": "3"}
@@ -186,11 +163,7 @@
             "26_2": "There is life everywhere on our planet, from the tops of mountains to the deepest part of the oceans. Isn't that amazing?",
 
             "winter_Mon10": "There are only a few plants that flower during winter, but crocus is one of them.[418]",
-            "winter_Tue10": "In general, animals who live in colder climates are larger, since that allows them a lower surface-area-to-volume ratio.#$b#This lets them better conserve heat.$h",
-
-            "summerScienceHouse_22_20": "I need to do inventory and see what consumables I need to re-order. I think I'm almost out of conical tubes.",
-            "fallScienceHouse_22_20": "I've got so much work I need to do...$s",
-            "winterScienceHouse_22_20": "More glassware to wash, always more glassware to wash...$s"
+            "winter_Tue10": "In general, animals who live in colder climates are larger, since that allows them a lower surface-area-to-volume ratio.#$b#This lets them better conserve heat.$h"
         }
     },
     {

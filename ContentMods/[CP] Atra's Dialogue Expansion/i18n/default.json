@@ -322,6 +322,7 @@
 
     // winter rain
     "alex-married-nonwinter-rain": "Make sure to stay dry as best you can today, %endearment!",
+    "demetrius-winter-rain": "Rare to see winter storms around here....Something in the weather seems different.",
     "evelyn-winter-rain.00": "Weather like this...we didn't use to get rain during winter.",
     "evelyn-winter-rain.01": "The snow'll become slush and that's difficult for George.",
     "elliott-winter-rain.00": "A day like this is good for my productivity.",
@@ -412,6 +413,34 @@
     "sebastian-birthday.self.3": "I'm not really one for celebrating my birthday, but my mother wants to, so I guess...",
 
     "vincent-birthday.self": "{{title}} @, it's my birthday today! I'm going to have the best cake in the world!",
+
+/***************
+* Demetrius in his lab
+***************/
+    "demetrius-work-home.spring.00": "I've got so much data I need to analyze.$s",
+    "demetrius-work-home.summer.00": "I have so many measurements I need to make today...$s",
+    "demetrius-work-home.fall.00": "I'd love to talk, @, but I have a grant submission coming up that I need to work on.",
+    "demetrius-work-home.winter.00": "Sometimes I feel like I spend more time writing proposals than anything else.$s",
+
+    "demetrius-work-home.spring.01": "This paper better get accepted, I've worked so hard on it.$s",
+    "demetrius-work-home.summer.01": "Just need to gather a little more data for a proposal.",
+    "demetrius-work-home.fall.01": "Sorry, @, I've got a talk I need to prepare for.",
+    "demetrius-work-home.winter.01": "I'm so sorry, @, I've got so much work I need to get done before next Monday.",
+
+    "demetrius-work-home.spring.02": "I've got a paper I have to write, so of course all I want to do is make a blackberry cobbler and mop the entire house or something...",
+    "demetrius-work-home.summer.02": "It's been so hot lately, I suspect the trees are stressed.",
+    "demetrius-work-home.fall.02": "Got a conference coming up, @, hoping I can get myself a talk.",
+    "demetrius-work-home.winter.02": "My collaborator claims his equipment is broken again.#$b#We're far closer to the submission deadline for this paper than I'd like...",
+
+    "demetrius-work-home.spring.03": "I need to do inventory and see what consumables I need to re-order. I think I'm almost out of conical tubes.",
+    "demetrius-work-home.summer.03": "I've got so much work I need to do...$s",
+    "demetrius-work-home.fall.03": "More glassware to wash, always more glassware to wash...$s",
+    "demetrius-work-home.winter.03": "I've always wondered...well, given how much plastic in the kits we use, how sustainable we're being.$s#$b#Scientists of previous generations used a lot more metal and glassware, we tend to just use disposables.",
+
+    "demetrius-work-home.spring.04": "The only thing worse than a paper getting rejected is a proposal getting rejected...$s",
+    "demetrius-work-home.summer.04": "Sometimes it feels like I write ten proposals to get a single acceptance...",
+    "demetrius-work-home.fall.04": "I can't make heads or tails of this data. I hope it isn't contaminated.$s",
+    "demetrius-work-home.winter.04": "Sometimes it feels like half my job is writing proposals these days...$s",
 
 /***************
 * Gus early mornings

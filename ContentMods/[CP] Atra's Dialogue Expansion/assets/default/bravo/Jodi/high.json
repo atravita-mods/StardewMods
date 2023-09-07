@@ -7,7 +7,9 @@
             "fall_3{{YearRemainder}}": "Mmmm nothing like some pumpkin pie around this time of year.[608]",
             "fall_5{{YearRemainder}}": "I feel like making potato gratin today...but it's so many dishes...",
 
-            "winter_12{{YearRemainder}}": "Maybe I should take up knitting. Emily makes it look so relaxing."
+            "winter_12{{YearRemainder}}": "Maybe I should take up knitting. Emily makes it look so relaxing.",
+
+            "summer_Tue8": "Marnie leaves that little girl alone far more often than she should, I think.$s"
         }
     },
     {
@@ -18,7 +20,7 @@
             "2_2": "Hey @, I made a bunch of extra roasted hazelnuts the other day. It's Kent's favorite food.%revealtasteKent607.#$b#Here, have some.$h[607]",
             "17_2": "Made something fancy today, but neither Kent nor Vincent would eat it. Here, have some.[618]",
             "18_2": "Watching the news makes me anxious. I know I shouldn't, but I watch anyways.",
-            "19_2": "I got a recipe for steamed salmon and broccoli from Caroline that I'm dying to try out.",
+            "19_2": "I got a recipe for steamed salmon and broccoli from Caroline that I'm dying to try out."
         },
         "When": { "YearModulus": "2" }
     },
@@ -31,7 +33,7 @@
             "5_2": "I'd love to cook some new recipes every now and then, but I'm not sure Sam or Kent would eat them...$s",
             "7_2": "The worst part of living in a town this small is the lack of medical services.#$b#As much as I respect Dr. Harvey, he's not a specialist.",
             "10_2": "Kent's meds are delayed. Again. I hate this mail order pharmacy.$a",
-            "18_2": "Sometimes I wish I didn't have Sam so early.#$b#I love him more than words can say but I do wish I started having kids a little later."
+            "18_2": "Sometimes I wish I didn't have Sam so early.#$b#I love him more than words can say, but I do wish I started having kids a little later."
         },
         "When": { "YearModulus": "3" }
     },

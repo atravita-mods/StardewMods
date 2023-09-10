@@ -15,7 +15,8 @@
         "Target": "Characters/Dialogue/Evelyn",
         "When": {"YearModulus": "3"},
         "Entries": {
-            "19_2": "Penny...George and I had to take her under our wing a little bit after Pam, you know.#$e#Pam's had a hard life, we did what we could for Penny."
+            "19_2": "Penny...George and I had to take her under our wing a little bit after Pam, you know.#$e#Pam's had a hard life, we did what we could for Penny.#$e#As they say, it takes a town, it was the least we could do.",
+            "22_2": "Penny's certainly grown up well, hasn't she?$h"
         }
     }
 ]}

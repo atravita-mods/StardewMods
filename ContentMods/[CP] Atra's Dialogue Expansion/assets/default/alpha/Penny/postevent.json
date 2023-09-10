@@ -27,5 +27,14 @@
             "4_2": "I made some extra poppyseed muffins, @, do you want one?$h[651]",
             "5_2": "I have so much mopping I need to do.$s"
         }
+    },
+    {
+        "LogName": "Penny - Y4",
+        "Action": "EditData",
+        "Target": "Characters/Dialogue/Penny",
+        "When": {"YearModulus": "4"},
+        "Entries": {
+            "3_2": "Ugh, I hope either Mom or I get a raise soon, this inflation is brutal.$s"
+        }
     }
 ]}

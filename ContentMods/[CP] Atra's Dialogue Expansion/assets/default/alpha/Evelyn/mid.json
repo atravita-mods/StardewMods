@@ -24,6 +24,17 @@
     },
     {
         "Action": "EditData",
+        "LogName": "Alex - not taken.",
+        "Target": "Characters/Dialogue/Evelyn",
+        "When": {
+            "Query: {{Spouse:anyPlayer|contains=Alex}} OR {{Relationship:Alex|contains=Married, Dating, Engaged}}": false
+        },
+        "Entries": {
+            "4{{YearRemainder}}": "I wonder when Alex'll get married and start a family of his own..."
+        }
+    },
+    {
+        "Action": "EditData",
         "Target": "Characters/Dialogue/Evelyn",
         "When": {"YearModulus": "1"},
         "Entries": {

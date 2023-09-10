@@ -387,7 +387,9 @@
     "sandy-fri10.02b": "It's always a treat to see you.",
 
     // Sebastian is nicer to you when you catch him gazing at the sea
-    "sebastian-rain": "It's so peaceful out here, isn't it?",
+    "sebastian-rain.00": "It's so peaceful out here, isn't it?",
+    "sebastian-rain.01": "Somewhere like this, it lets me think.$h",
+    "sebastian-rain.02": "@, do you enjoy being alone with your thoughts sometimes?",
 
 /***************
 * Anniversary!
@@ -524,7 +526,9 @@
     "sebastian-work.spring.2": "Well, it looks like my coworker has set a new record for 'least useful commit message'.",
     "sebastian-work.summer.2": "%Sebastian is muttering under his breath.#$b#$c .5#Gosh, how many times do I have to correct this? This needs to be a culturally invariant comparison.#Which direction was negative one in a comparer again? I can never remember...#",
     "sebastian-work.fall.2": "Heya, @, can't talk today. Something in this mess of callbacks is borked and it's really hard to follow.",
+    "sebastian-work.fall.2.00": "Somehow I have to refactor all of this pathfinding code to be somewhat sane...$s",
     "sebastian-work.winter.2": "And yet another performance report to write.$s",
+    "sebastian-work.winter.2.00": "My code works, and I have no clue why.$s",
 
     "sebastian-work.spring.3": "%Sebastian seems to be on a call.#$b#$c .5#I saw your email; is there anything in particular we could change?#Well, Jane, do you have a better idea? Because I don't.#",
     "sebastian-work.summer.3": "#$c .5#I have so much work I need to do, @. Sorry, but I don't have time to chat today.#What, @, I have a performance review coming up, I need to focus$a.#",

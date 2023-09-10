@@ -14,7 +14,7 @@
         "Action": "EditData",
         "Target": "Strings/schedules/Sebastian",
         "Entries":{
-            "rain.000": "{{i18n:sebastian-rain}}"
+            "rain.000": "{{i18n:sebastian-rain.{{Random:00,01,02}}}}"
         }
     }
 ]}

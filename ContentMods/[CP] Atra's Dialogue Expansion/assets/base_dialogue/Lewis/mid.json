@@ -16,5 +16,15 @@
             // pre-festival
             "fall_15{{YearRemainder}}": "{{i18n:fair-prelude-lewis.{{Random:00,01,02}} }}$h"
         }
+    },
+    {
+        "Action": "EditData",
+        "LogName": "Lewis strings",
+        "Target": "Strings/schedules/Lewis",
+        "Entries": {
+            "Tue.000": "{{i18n: lewis-shopping.{{Season}}.{{Random:00,01,02}} }}",
+
+            "6.000": "{{i18n: lewis-clint.{{Season}}.{{Random:00,01,02}} }}"
+        }
     }
 ]}

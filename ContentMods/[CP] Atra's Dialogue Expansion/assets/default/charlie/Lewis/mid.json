@@ -54,6 +54,7 @@
                 "10{{YearRemainder}}": "Before I moved here? I was an accountant at an auditing firm.",
                 "15": "@! How have you been settling in?",
                 "15_2": "I think we're finally doing better financially, as a town.#$b#It's so difficult, with more and more economic power concentrating in cities.",
+                "16{{YearRemainder}}": "This is a quiet little town. We really don't get much crime around here.$h",
 
                 "Saloon_Entry": "Hmmm, what's for dinner tonight?",
                 "IslandSouth_Entry": "Vacation time!",

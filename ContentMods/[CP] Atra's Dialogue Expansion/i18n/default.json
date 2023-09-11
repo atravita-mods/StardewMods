@@ -556,7 +556,7 @@
     "sebastian-work.winter.0": "Got my performance report to write, again.$a#$c .5#New job, same as old job.#Well, it beats being unemployed.#",
 
 /***************
-* Lewis in the community center
+* Lewis in the community center and game strings
 ***************/
 
     // In front of the vault:
@@ -667,6 +667,32 @@
     "lewis-cc-fireplace.summer.0": "I'm glad the economy is getting better, it means I can rest a little more.$h",
     "lewis-cc-fireplace.fall.0": "Fall is my favorite season. It has the best events to plan.$h",
     "lewis-cc-fireplace.winter.0": "When I first got here, I thought I could really fix this place up. After all, I had most of a career helping companies fix themselves up financially.#$b#But this place has humbled me over the years. No amount of book learning really replaces direct experience.$h#$b#I love our little town, and I'm glad you've decided to come here too.",
+
+    "lewis-shopping.spring.00": "LEt's see...what else is Pierre carrying these days...",
+    "lewis-shopping.spring.01": "I could get the ingredients to make a nice spring salad.$h",
+    "lewis-shopping.spring.02": "%Lewis is mumbling to himself.#$b#Do I need more vinegar? Well, it's not on the shopping list...",
+    "lewis-shopping.summer.00": "I wonder if Pierre's carrying anything new?",
+    "lewis-shopping.summer.01": "Pierre's prices are a little higher, but the quality of his products are unparalleled!",
+    "lewis-shopping.summer.02": "Hmm....maybe I should get a nice fresh melon...",
+    "lewis-shopping.fall.00": "Gosh, it's pumpkin pie season, isn't it? Maybe I should make one for...",
+    "lewis-shopping.fall.01": "I wonder if Pierre's carrying any new teas? Sometimes Caroline finds a new one or two.",
+    "lewis-shopping.fall.02": "Let's see...what groceries do I need?",
+    "lewis-shopping.winter.00": "It's almost the Feast of the Winter Star! Perfect time to pick up some gifts.",
+    "lewis-shopping.winter.01": "There isn't much that grows in winter, but there's always preserved fruits and veggies!$h",
+    "lewis-shopping.winter.02": "Hmmm....what should I get for dinner today...or maybe I should swing by the Saloon?",
+
+    "lewis-clint.spring.00": "Just picking up Clint's businesses taxes, nothing more...",
+    "lewis-clint.spring.01": "Let's see...and how much did you make off swords last season?",
+    "lewis-clint.spring.02": "Hmmm, so, Clint, could you repair some machinery for Marnie?",
+    "lewis-clint.summer.00": "Gosh, it's sweltering in here, how do you manage, Clint?",
+    "lewis-clint.summer.01": "So, how were sales last season?",
+    "lewis-clint.summer.02": "Made any nice swords recently?",
+    "lewis-clint.fall.00": "How've you've been, Clint, I assume this weather is treating you better?",
+    "lewis-clint.fall.01": "Let's see...how much in taxes does Clint owe to the town now?",
+    "lewis-clint.fall.02": "Say, Clint, have you consider branching out into other business ventures as well?#$b#I may be in the market for a cast iron fence...",
+    "lewis-clint.winter.00": "It's so nice and warm with that forge there...",
+    "lewis-clint.winter.01": "%Lewis is muttering to himself.#$b#Maybe I should see if she needs any new tools...#$e#What? Oh, no, I was talking about someone else...",
+    "lewis-clint.winter.02": "It's such a cherry season, but I still have to collect taxes.",
 
 /************
 * Mail

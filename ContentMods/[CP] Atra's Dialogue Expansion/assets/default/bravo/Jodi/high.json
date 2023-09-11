@@ -8,7 +8,6 @@
             "fall_5{{YearRemainder}}": "I feel like making potato gratin today...but it's so many dishes...",
 
             "winter_12{{YearRemainder}}": "Maybe I should take up knitting. Emily makes it look so relaxing.",
-            "winter_15{{YearRemainder}}": "I need to prepare Winter Star gifts for the children...gonna have to shuffle around the budget a bit for this...",
 
             "summer_Tue8": "Marnie leaves that little girl alone far more often than she should, I think.$s"
         }
@@ -21,7 +20,8 @@
             "2_2": "Hey @, I made a bunch of extra roasted hazelnuts the other day. It's Kent's favorite food.%revealtasteKent607.#$b#Here, have some.$h[607]",
             "17_2": "Made something fancy today, but neither Kent nor Vincent would eat it. Here, have some.[618]",
             "18_2": "Watching the news makes me anxious. I know I shouldn't, but I watch anyways.",
-            "19_2": "I got a recipe for steamed salmon and broccoli from Caroline that I'm dying to try out."
+            "19_2": "I got a recipe for steamed salmon and broccoli from Caroline that I'm dying to try out.",
+            "20_2": "I saw a video for hand-pulled noodles, and I'm really tempted to try making them.$h#$b#They'll take so much time though, I don't know when I can do that.$s"
         },
         "When": { "YearModulus": "2" }
     },

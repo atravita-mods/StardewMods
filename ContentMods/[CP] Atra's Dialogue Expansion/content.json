@@ -86,7 +86,7 @@
                 "HasMod": "Hana.GNMTokens",
                 "HasValue: {{Hana.GNMTokens/Title}}": true
             }
-        }
+        },
         {
             "Name": "Title",
             "Value": "{{GenderedTitle}}",

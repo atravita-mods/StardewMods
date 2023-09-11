@@ -1,5 +1,13 @@
 {"Changes":[
     {
+        "LogName": "Penny",
+        "Action": "EditData",
+        "Target": "Characters/Dialogue/Penny",
+        "Entries": {
+            "winter_24{{YearRemainder}}": "I wonder if my mom's going to get me something for Winter Star this year, or she'll forget again...$s",
+        }
+    },
+    {
         "LogName": "Penny - Y1",
         "Action": "EditData",
         "Target": "Characters/Dialogue/Penny",

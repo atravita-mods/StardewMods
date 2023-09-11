@@ -96,6 +96,14 @@
         },
         {
             "Action": "Include",
+            "LogName": "Jodi - base",
+            "FromFile": "assets/base_dialogue/Jodi/base.json",
+            "When": {
+                "EnableFor": "Jodi",
+            }
+        },
+        {
+            "Action": "Include",
             "LogName": "Leah - base",
             "FromFile": "assets/base_dialogue/Leah/mid.json",
             "When": {

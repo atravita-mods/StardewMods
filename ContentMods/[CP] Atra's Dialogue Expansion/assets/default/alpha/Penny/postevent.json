@@ -1,5 +1,14 @@
 {"Changes":[
     {
+        "LogName": "Penny - Y1",
+        "Action": "EditData",
+        "Target": "Characters/Dialogue/Penny",
+        "When": {"YearModulus": "1"},
+        "Entries": {
+            "11{{YearRemainder}}": "Mom used to bring me books she came across in gas stations.#$b#Generally simple, cheap romances, but I loved them all the same."
+        }
+    },
+    {
         "LogName": "Penny - Y2",
         "Action": "EditData",
         "Target": "Characters/Dialogue/Penny",
@@ -14,7 +23,8 @@
             "14_2": "Mom says I spend too much time taking care of her.#$b#I'm not sure how not to, though.$s",
             "16_2": "Mom brought me a book today. Said she picked it up at a gas station while she was out driving that bus.$h",
             "17_2": "We really should cook more, that'd be so much better for our budget over buying TV dinners.$s",
-            "18_2": "$d joja#All the unhealthy food is so much cheaper at Joja over the fresh fruits and veggies.$s|Now that's Joja's closed, Mom's been shopping more at Pierre's. It's...good for the town, maybe, but not our budget."
+            "18_2": "$d joja#All the unhealthy food is so much cheaper at Joja over the fresh fruits and veggies.$s|Now that's Joja's closed, Mom's been shopping more at Pierre's. It's...good for the town, maybe, but not our budget.",
+            "19_2": "Books have always been my escape from reality, @.#$e#No matter what was going on in my life, I could always disappear into a good book."
         }
     },
     {

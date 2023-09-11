@@ -214,8 +214,20 @@
             },
             "Entries": {
                 "Leah_y2": "{{i18n:leah-y2-fishing.00}}#$e#{{i18n:leah-y2-fishing.01}}",
-                "Leah_spouse": "{{i18n:leah-y1-fishing-spouse.00.male}}$h^{{leah-y1-fishing-spouse.00.female}}$l#$b#{{i18n:leah-y1-fishing-spouse.01}}$h",
+                "Leah_spouse": "{{i18n:leah-y1-fishing-spouse.00.neutral}}$h^{{leah-y1-fishing-spouse.00.female}}$l#$b#{{i18n:leah-y1-fishing-spouse.01}}$h",
                 "Leah_spouse_y2": "{{i18n:leah-y2-fishing-spouse}}$h"
+            }
+        },
+        {
+            "Action": "EditData",
+            "LogName": "Leah - gender neutral",
+            "Target": "Data/Festivals/winter8",
+            "When": {
+                "EnableFor": "Leah",
+                "HasMod": "Hana.GenderNeutralityMod"
+            },
+            "Entries": {
+                "Leah_spouse": "{{i18n:leah-y1-fishing-spouse.00.neutral}}$h#$b#{{i18n:leah-y1-fishing-spouse.01}}$h"
             }
         },
         {
@@ -262,6 +274,18 @@
                 "Maru_y2": "{{i18n:maru-y2-fishing.00}}#$b#{{i18n:maru-y2-fishing.01}}",
                 "Maru_spouse": "{{i18n:maru-y1-fishing-spouse-male}}$h^{{i18n:maru-y1-fishing-spouse-female}}$h",
                 "Maru_spouse_y2": "{{i18n:maru-y2-fishing-spouse}}$l"
+            }
+        },
+        {
+            "LogName": "Maru - gender neutral",
+            "Action": "EditData",
+            "Target": "Data/Festivals/winter8",
+            "When": {
+                "EnableFor": "Maru",
+                "HasMod": "Hana.GenderNeutralityMod"
+            },
+            "Entries": {
+                "Maru_spouse": "{{i18n:maru-y1-fishing-spouse-neutral}}$h"
             }
         },
         {

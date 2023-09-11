@@ -6,7 +6,7 @@
             "Target": "Characters/Dialogue/Demetrius",
             "When": {
                 "EnableFor": "Demetrius",
-                "Query: {{Hearts:Maru}} >= 10": true,
+                "Query: {{Hearts:Maru}} >= 10": true
             },
             "Entries": {
                 "spring_Mon10_inlaw_Maru": "{{i18n:demetrius-maru-spring-mon10}}$h"

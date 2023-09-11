@@ -1,6 +1,17 @@
 {
     "Changes": [
         {
+            "LogName": "Sandy - divorced from Emily",
+            "Action": "EditData",
+            "Target": "Characters/Dialogue/Sandy",
+            "When": {
+                "Relationship:Emily": "Divorced"
+            },
+            "Entries": {
+                "SandyHouse": "{{i18n:sandy-divorced-from-emily}}$s"
+            }
+        },
+        {
             "LogName": "Sandy Movies",
             "Action": "EditData",
             "Target": "Characters/Dialogue/Sandy",

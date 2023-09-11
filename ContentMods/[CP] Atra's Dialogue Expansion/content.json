@@ -81,6 +81,14 @@
         },
         {
             "Name": "Title",
+            "Value": "{{Hana.GNMTokens/Title}}",
+            "When": {
+                "HasMod": "Hana.GNMTokens",
+                "HasValue: {{Hana.GNMTokens/Title}}": true
+            }
+        }
+        {
+            "Name": "Title",
             "Value": "{{GenderedTitle}}",
             "When": {"HasValue: {{GenderedTitle}}": true}
         },

@@ -1,14 +1,27 @@
 {
     "Changes": [
     {
+        "LogName": "Remove vanilla 8 heart in rain.",
+        "Action": "EditData",
+        "Target": "Data/Events/Forest",
+        "Entries": {
+            "181928/f Penny 2000/t 900 1600": null,
+        },
+        "When": {
+            "Weather: valley": "Rain, Storm",
+        }
+    },
+    {
         "LogName": "Vanilla eight-heart (no kids)",
         "Action": "EditData",
         "Target": "Data/Events/Forest",
         "Entries": {
-            "181928/f Penny 2000/t 900 1600": null
+            "181928/f Penny 2000/t 900 1600": null,
+            "181928/f Penny 2000/w sunny/t 900 1600": null // SVE
         },
         "When": {
-            "Weather": "Rain, Storm",
+            "Season": "Winter",
+            "DisableInWinter": true
         }
     },
     {

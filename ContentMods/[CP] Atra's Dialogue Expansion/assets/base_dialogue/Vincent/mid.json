@@ -6,8 +6,11 @@
             "Target": "Characters/Dialogue/Vincent",
             "Entries": {
                 // birthday
-                "spring_10": "{{i18n:vincent-birthday.self|title={{Title}} }}$h",
-                "spring_10_2": "{{i18n:vincent-birthday.self|title={{Title}} }}$h",
+                "spring_10{{YearRemainder}}": "{{i18n:vincent-birthday.self|title={{Title}} }}$h",
+
+                // Winter star
+                "winter_24{{YearRemainder}}": "{{i18n:vincent-xmas-pre|title={{Title}} }}$h",
+                "winter_26{{YearRemainder}}": "{{i18n:vincent-xmas-post.{{Random:00, 01, 02}}|title={{Title}} }}$h",
 
                 // Ginger Island additional
                 "Resort_Pier": "{{i18n:vincent_pier}}$h"

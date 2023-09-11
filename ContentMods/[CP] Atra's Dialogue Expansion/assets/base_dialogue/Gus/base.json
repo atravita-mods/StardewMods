@@ -9,7 +9,7 @@
                 "Saloon_16_4": "{{i18n: gus-mornings.{{Season}}.{{Random:01,02,03,04,05,06,07,08,09,10}} }}",
 
                 // before major festivals
-                "winter_24{{YearRemainder}}": "{{i18n:gus-pre-winter-star.{{YearModulus}} }}$h",
+                "winter_24{{YearRemainder}}": "{{i18n:gus-pre-winter-star.{{YearModulus}} }}$h"
             }
         },
         {

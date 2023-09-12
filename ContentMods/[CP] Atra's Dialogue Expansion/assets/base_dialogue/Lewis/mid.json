@@ -24,6 +24,7 @@
         "Entries": {
             "Tue.000": "{{i18n: lewis-shopping.{{Season}}.{{Random:00,01,02}} }}",
 
+            "1.000": "{{i18n: lewis-willy.{{Season}}.{{Random:00,01,02}} }}",
             "6.000": "{{i18n: lewis-clint.{{Season}}.{{Random:00,01,02}} }}"
         }
     }

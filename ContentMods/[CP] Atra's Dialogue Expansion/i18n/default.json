@@ -668,7 +668,7 @@
     "lewis-cc-fireplace.fall.0": "Fall is my favorite season. It has the best events to plan.$h",
     "lewis-cc-fireplace.winter.0": "When I first got here, I thought I could really fix this place up. After all, I had most of a career helping companies fix themselves up financially.#$b#But this place has humbled me over the years. No amount of book learning really replaces direct experience.$h#$b#I love our little town, and I'm glad you've decided to come here too.",
 
-    "lewis-shopping.spring.00": "LEt's see...what else is Pierre carrying these days...",
+    "lewis-shopping.spring.00": "Let's see...what else is Pierre carrying these days...",
     "lewis-shopping.spring.01": "I could get the ingredients to make a nice spring salad.$h",
     "lewis-shopping.spring.02": "%Lewis is mumbling to himself.#$b#Do I need more vinegar? Well, it's not on the shopping list...",
     "lewis-shopping.summer.00": "I wonder if Pierre's carrying anything new?",
@@ -680,6 +680,19 @@
     "lewis-shopping.winter.00": "It's almost the Feast of the Winter Star! Perfect time to pick up some gifts.",
     "lewis-shopping.winter.01": "There isn't much that grows in winter, but there's always preserved fruits and veggies!$h",
     "lewis-shopping.winter.02": "Hmmm....what should I get for dinner today...or maybe I should swing by the Saloon?",
+
+    "lewis-willy.spring.00": "These fish do look quite fresh!$h",
+    "lewis-willy.spring.01": "So, Willy, what's good this season?",
+    "lewis-willy.spring.02": "Ah, I see it's catfish season...",
+    "lewis-willy.summer.00": "What've you been catching lately, Willy?",
+    "lewis-willy.summer.01": "You know, given the beaches we have, I wonder if we can get more tourists on it...",
+    "lewis-willy.summer.02": "You know, my paps enjoyed fishing, back in the day...",
+    "lewis-willy.fall.00": "The Governor's thinking about changing the law to allow more commercial fishing here. Willy, @, what do you think?",
+    "lewis-willy.fall.01": "How are the crab pots doing?",
+    "lewis-willy.fall.02": "So, what are the best fall fish?",
+    "lewis-willy.winter.00": "You're not going to find fresher fish anywhere else in the Valley! Perfect for dinner...if you like fish.",
+    "lewis-willy.winter.01": "Just going around town, collecting taxes...",
+    "lewis-willy.winter.02": "Willy here's been telling me of the sturgeon he's caught!",
 
     "lewis-clint.spring.00": "Just picking up Clint's businesses taxes, nothing more...",
     "lewis-clint.spring.01": "Let's see...and how much did you make off swords last season?",

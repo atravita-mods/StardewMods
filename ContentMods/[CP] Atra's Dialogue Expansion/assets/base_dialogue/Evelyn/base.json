@@ -1,0 +1,14 @@
+{
+    "Changes":[
+        {
+            "Action": "EditData",
+            "Target": "Characters/Dialogue/Evelyn",
+            "Entries": {
+                "Thu": "{{i18n:evelyn-thu.00}}#$b#{{i18n: evelyn-thu.01}}$h"
+            },
+            "When": {
+                "HasSeenEvent": "19"
+            }
+        }
+    ]
+}

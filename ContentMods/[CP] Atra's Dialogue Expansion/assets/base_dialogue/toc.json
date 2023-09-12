@@ -69,6 +69,14 @@
         },
         {
             "Action": "Include",
+            "LogName": "Evelyn - mid",
+            "FromFile": "assets/base_dialogue/Evelyn/mid.json",
+            "When": {
+                "EnableFor": "Evelyn"
+            }
+        },
+        {
+            "Action": "Include",
             "LogName": "George - base",
             "FromFile": "assets/base_dialogue/George/mid.json",
             "When": {

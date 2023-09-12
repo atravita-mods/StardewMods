@@ -363,6 +363,10 @@
     "demetrius-winter-sat.01": "We do have historical snowpack data for the last century and a half...",
     "demetrius-winter-sat.02": "Oh, I didn't see you there, @, do you need anything?",
 
+    // Change Evelyn line after she gives you the cookie recipe.
+    "evelyn-thu.00": "I'll be baking cookies today, @",
+    "evelyn-thu.01": "Say, did you ever make any cookies with the recipe I gave you?",
+
     // gus gives you something on new years.
     "gus-new-years-resort.00": "Happy New Year, @! Have one on me today. May the next year be even better!",
     "gus-new-years-resort.01": "Are you enjoying the party, @?",

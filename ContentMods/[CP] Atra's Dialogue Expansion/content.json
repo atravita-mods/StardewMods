@@ -161,6 +161,27 @@
             "When": {"HasFlag:hostPlayer": "ccMovieTheaterJoja"}
         },
 
+        // Marnie relationship status
+        {
+            "Name": "MarnieStatus",
+            "Value": "Unknown"
+        },
+        {
+            "Name": "MarnieStatus",
+            "Value": "Known",
+            "When": {
+                "HasSeenEvent": "639373" // town event
+            }
+        },
+        {
+            "Name": "MarnieStatus",
+            "Value": "Better",
+            "When": {
+                "HasMod": "IMS.CP.MarnieDeservesBetter, nraittanna.LifeCycleMarnieLewis",
+                "HasSeenEvent": "59020016, 639373" // the Life Cycle event OR the town event.
+            }
+        },
+
         // random sports shuffling
         {
             "Name": "FirstSportsTeam",

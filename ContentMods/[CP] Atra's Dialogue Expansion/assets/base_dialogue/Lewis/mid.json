@@ -25,7 +25,10 @@
             "Tue.000": "{{i18n: lewis-shopping.{{Season}}.{{Random:00,01,02}} }}",
 
             "1.000": "{{i18n: lewis-willy.{{Season}}.{{Random:00,01,02}} }}",
-            "6.000": "{{i18n: lewis-clint.{{Season}}.{{Random:00,01,02}} }}"
+            "6.000": "{{i18n: lewis-clint.{{Season}}.{{Random:00,01,02}} }}",
+            "15.000": "{{i18n: lewis-robin.{{Season}}.{{Random:00,01,02}} }}"
+
+            // TODO: Marnie (3.000) and library (6.001) both of which require more conditional edits?
         }
     }
 ]}

@@ -258,6 +258,8 @@
     "demetrius-divorced-from-sebastian-a": "I don't think Sebastian wants to see you.",
     "demetrius-divorced-from-sebastian-b": "You didn't have to break my stepson's heart like that.",
 
+    "caroline-divorced-from-abby": "I'm taking Abigail's side in your divorce, I hope you understand.",
+
     "sandy-divorced-from-emily": "What business brings you here today, @?",
 
     "robin-divorced-from-maru-a": "You are no longer part of this family",
@@ -710,6 +712,19 @@
     "lewis-clint.winter.00": "It's so nice and warm with that forge there...",
     "lewis-clint.winter.01": "%Lewis is muttering to himself.#$b#Maybe I should see if she needs any new tools...#$e#What? Oh, no, I was talking about someone else...",
     "lewis-clint.winter.02": "It's such a cherry season, but I still have to collect taxes.",
+
+    "lewis-robin.spring.00": "Now that it's warmer, building season can start again!$h",
+    "lewis-robin.spring.01": "So, what needs fixing around our little town?",
+    "lewis-robin.spring.02": "How to say this...how to say this...#$b#Robin, I think my house has a leak, could you please take a look?",
+    "lewis-robin.summer.00": "So, how has business been lately?",
+    "lewis-robin.summer.01": "Gosh, it's been so hot lately I've been wondering if I should get air conditioning installed...",
+    "lewis-robin.summer.02": "You know, Robin, now that the town is growing again, do you think we could try to get some more housing built?",
+    "lewis-robin.fall.00": "The mountains are lovely this time of year, aren't they, Robin and @?",
+    "lewis-robin.fall.01": "Just checking in with Robin here, seeing if she needs anything from me.#$b#Other than lower taxes.",
+    "lewis-robin.fall.02": "How's the furniture market doing, Robin?",
+    "lewis-robin.winter.00": "Brr, it's cold out! I'm not looking forward to the long trek back to town.$s",
+    "lewis-robin.winter.01": "Robin here works outdoors in any weather, hot or cold, rain or shine.#$b#I'm always amazed at the work she does!",
+    "lewis-robin.winter.02": "Business been good, Robin?",
 
 /************
 * Mail

@@ -19,4 +19,15 @@
             "IsCommunityCenterComplete": true
         }
     },
+    {
+        "LogName": "Caroline - divorced from Abby",
+        "Action": "EditData",
+        "Target": "Characters/Dialogue/Caroline",
+        "Entries": {
+            "SeedShop": "{{i18n:caroline-divorced-from-abby}}$s"
+        },
+        "When": {
+            "Relationship:Abigail": "Divorced"
+        }
+    }
 ]}

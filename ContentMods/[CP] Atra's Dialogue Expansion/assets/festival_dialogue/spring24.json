@@ -403,8 +403,7 @@
             "Target": "Data/Festivals/spring24",
             "When": {
                 "EnableFor": "Lewis",
-                "HasMod": "IMS.CP.MarnieDeservesBetter, nraittanna.LifeCycleMarnieLewis",
-                "HasSeenEvent": "59020016, 639373" // the Life Cycle event OR the town event.
+                "MarnieStatus": "Better"
             },
             "Entries": {
                 "Lewis_y3": "{{i18n:lewis-y3-dance-unmarried-better}}$s"
@@ -467,7 +466,7 @@
             "Target": "Data/Festivals/spring24",
             "When": {
                 "EnableFor": "Marnie",
-                "HasSeenEvent": "639373" // town event
+                "MarnieStatus": "Known"
             },
             "Entries": {
                 "Marnie": "{{i18n:marnie-y1-dance-knows}}$s",
@@ -481,8 +480,7 @@
             "Target": "Data/Festivals/spring24",
             "When": {
                 "EnableFor": "Marnie",
-                "HasMod": "IMS.CP.MarnieDeservesBetter, nraittanna.LifeCycleMarnieLewis",
-                "HasSeenEvent": "59020016, 639373" // the Life Cycle event OR the town event.
+                "MarnieStatus": "Better"
             },
             "Entries": {
                 "Marnie": "{{i18n:marnie-y1-dance-better}}$h",

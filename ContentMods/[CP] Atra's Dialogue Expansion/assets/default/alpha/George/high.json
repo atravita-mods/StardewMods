@@ -3,6 +3,16 @@
         "Action": "EditData",
         "Target": "Characters/Dialogue/George",
         "Entries": {
+            "summer_Mon10": "Doc's not gonna like how swollen my ankles are, nosiree.$s",
+        },
+        "When": {
+            "HasSeenEvent": "18" // event where George tells you about his accident
+        }
+    },
+    {
+        "Action": "EditData",
+        "Target": "Characters/Dialogue/George",
+        "Entries": {
             // specific days
             "fall_15_2": "Gonna be the Stardew Fair tomorrow, @.#$b#Me, participating? Nah. Not something I want to do anymore.",
 

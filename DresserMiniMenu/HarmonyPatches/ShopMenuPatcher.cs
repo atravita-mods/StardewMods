@@ -22,7 +22,7 @@ internal static class ShopMenuPatcher
     [HarmonyPatch(nameof(ShopMenu.setUpStoreForContext))]
     private static void Postfix(ShopMenu __instance)
     {
-        if (__instance.storeContext == DRESSER)
+        if (__instance.ShopId == DRESSER)
         {
             if (ModEntry.Config.DressersAllowBobbers)
             {
@@ -38,7 +38,7 @@ internal static class ShopMenuPatcher
     [HarmonyPatch(nameof(ShopMenu.highlightItemToSell))]
     private static bool Prefix(ShopMenu __instance, Item i, ref bool __result)
     {
-        if (i is Pan && __instance.storeContext == DRESSER)
+        if (i is Pan && __instance.ShopId == DRESSER)
         {
             __result = true;
             return false;

@@ -26,7 +26,7 @@ internal static class BaseSightPatch
             return;
         }
 
-        if (ModEntry.OwlRing > 0 && Game1.player.isWearingRing(ModEntry.OwlRing))
+        if (Game1.player.isWearingRing(ModEntry.OwlRing))
         {
             threshold /= 2;
             threshold += threshold / 2;

@@ -22,7 +22,7 @@ internal sealed class ModEntry : Mod
     /// <summary>
     /// Int Id of the prismatic jelly.
     /// </summary>
-    internal const int PrismaticJelly = 876;
+    internal const string PrismaticJelly = "(O)876";
 
     private const string SAVEKEY = "item_ids";
 

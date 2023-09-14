@@ -232,12 +232,7 @@ internal sealed class ModEntry : Mod
         }
 
         // NPC sanity checking
-        this.Helper.Events.GameLoop.DayEnding += static (_, _) => DuplicateNPCDetector.DayEnd();
-
-        if (!this.Helper.ModRegistry.IsLoaded("spacechase0.CustomNPCFixes") && new Version(1, 6) > new Version(Game1.version))
-        {
-            this.Helper.Events.GameLoop.DayStarted += static (_, _) => DuplicateNPCDetector.DayStart();
-        }
+        this.Helper.Events.GameLoop.DayStarted += static (_, _) => DuplicateNPCDetector.DayStart();
 
         if (!this.Helper.ModRegistry.IsLoaded("violetlizabet.CP.NoAlcohol"))
         {
@@ -261,7 +256,7 @@ internal sealed class ModEntry : Mod
         {
             string spouseName = Game1.player.spouse;
             ModMonitor.Log($"Player married to {spouseName} but spouse instance not found.", LogLevel.Warn);
-            if (Game1.content.Load<Dictionary<string, string>>("Data\\NPCDispositions").ContainsKey(spouseName))
+            if (Game1.characterData.ContainsKey(spouseName))
             {
                 ModMonitor.Log($"{spouseName} accounted for NPCDispos. We expect them to be respawned later.", LogLevel.Info);
             }

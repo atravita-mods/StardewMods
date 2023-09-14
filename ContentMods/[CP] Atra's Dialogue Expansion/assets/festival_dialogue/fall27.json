@@ -135,12 +135,11 @@
         },
         {
             "Action": "EditData",
-            "LogName": "Haley - normal",
+            "LogName": "Haley - child singular",
             "Target": "Data/Festivals/fall27",
             "When": {
                 "EnableFor": "Haley",
-                "HasValue: {{ChildGenders}}": true,
-                "HasValue: {{ChildGenders|valueAt=1}}": false,
+                "ChildStatus": "One",
                 "Spouse": "Haley"
             },
             "Entries": {
@@ -149,11 +148,11 @@
         },
         {
             "Action": "EditData",
-            "LogName": "Haley - normal",
+            "LogName": "Haley - multiple kids",
             "Target": "Data/Festivals/fall27",
             "When": {
                 "EnableFor": "Haley",
-                "HasValue: {{ChildGenders|valueAt=1}}": true,
+                "ChildStatus": "Multiple",
                 "Spouse": "Haley"
             },
             "Entries": {

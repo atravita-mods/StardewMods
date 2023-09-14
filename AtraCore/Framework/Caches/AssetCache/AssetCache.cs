@@ -1,16 +1,11 @@
-﻿using AtraBase.Toolkit;
-
+﻿using System.Collections.Concurrent;
+using AtraBase.Toolkit;
 using AtraShared.Niceties;
 using AtraShared.Utils.Extensions;
-
 using HarmonyLib;
-
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
-
 using StardewModdingAPI.Events;
-
-using System.Collections.Concurrent;
 
 namespace AtraCore.Framework.Caches.AssetCache;
 public static class AssetCache

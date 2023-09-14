@@ -12,6 +12,7 @@ using AtraCore.Framework.DialogueManagement;
 using AtraCore.Framework.EventCommands;
 using AtraCore.Framework.EventCommands.AllowRepeatCommand;
 using AtraCore.Framework.EventCommands.RelationshipCommands;
+using AtraCore.Framework.EventPreconditions;
 using AtraCore.Framework.GameStateQueries;
 using AtraCore.Framework.Internal;
 using AtraCore.Framework.ItemManagement;
@@ -98,6 +99,9 @@ internal sealed class ModEntry : BaseMod<ModEntry>
         // initialize data caches
         DataToItemMap.Init(this.Helper.GameContent);
         this.Helper.Events.Content.AssetsInvalidated += this.OnAssetInvalidation;
+
+        // add event commands and preconditions.
+        Event.RegisterCustomPrecondition("atravita_PlayerRelationship", PlayerRelationshipPreconditions.PlayerRelationshipStatus);
 
         this.ApplyPatches(new Harmony(this.ModManifest.UniqueID));
 

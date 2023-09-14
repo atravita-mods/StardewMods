@@ -260,7 +260,7 @@
             "Target": "Data/Festivals/winter25",
             "When": {
                 "EnableFor": "Leah",
-                "HasValue:{{ChildGenders|valueAt=1}}": true
+                "ChildStatus": "Multiple"
             },
             "Entries": {
                 "Leah_spouse_y2": "{{i18n:leah-y2-xmas-spouse-kids}}$h"
@@ -377,7 +377,7 @@
             "Target": "Data/Festivals/winter25",
             "When": {
                 "EnableFor": "Penny",
-                "HasValue:{{ChildGenders|valueAt=1}}": true,
+                "ChildStatus": "Multiple",
                 "Query: {{Hearts:Penny}} >= 12": true
             },
             "Entries": {
@@ -436,7 +436,7 @@
             "When": {
                 "EnableFor": "Robin",
                 "Query: {{Relationship:Maru|contains=Married}} OR {{Relationship:Sebastian|contains=Married}}": true,
-                "HasValue:{{ChildGenders|valueAt=1}}": true
+                "ChildStatus": "Multiple"
             },
             "Entries": {
                 "Robin_y3": "{{i18n:robin-y3-xmas-inlaw-kids}}$h"
@@ -460,7 +460,7 @@
             "Target": "Data/Festivals/winter25",
             "When": {
                 "EnableFor": "Sam",
-                "HasValue:{{ChildGenders|valueAt=1}}": true
+                "ChildStatus": "Multiple"
             },
             "Entries": {
                 "Sam_spouse_y2": "{{i18n:sam-y2-xmas-spouse-kids}}$h",
@@ -483,7 +483,7 @@
             "Target": "Data/Festivals/winter25",
             "When": {
                 "EnableFor": "Sebastian",
-                "HasValue:{{ChildGenders|valueAt=1}}": true
+                "ChildStatus": "Multiple"
             },
             "Entries": {
                 "Sebastian_spouse_y2": "{{i18n:sebastian-y2-xmas-spouse-kids}}"

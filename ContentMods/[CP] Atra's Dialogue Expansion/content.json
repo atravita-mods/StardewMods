@@ -144,6 +144,56 @@
                 "HasFlag:HostPlayer": "rejectedPet"
             }
         },
+
+        // child status
+        {
+            // no children, not pregnant
+            "Name": "ChildStatus",
+            "Value": "None",
+        },
+        {
+            // No children, expecting
+            "Name": "ChildStatus",
+            "Value": "Expecting",
+            "When": { "HavingChild": "@{{playerName}}" }
+        },
+        {
+            "Name": "ChildStatus",
+            "Value": "One",
+            "When": { "HasValue: {{ChildGenders}}": true }
+        },
+        {
+            "Name": "ChildStatus",
+            "Value": "Multiple",
+            "When": { "HasValue: {{ChildGenders|valueAt=1}}": true }
+        },
+        {
+            "Name": "ChildStatus",
+            "Value": "One",
+            "When": {
+                "HasMod: Candidus42.LittleNPCs": true,
+                "HasValue: {{Candidus42.LittleNPCs/FirstLittleNPCName}}": true,
+                "HasValue: {{ChildGenders}}": false
+            }
+        },
+        {
+            "Name": "ChildStatus",
+            "Value": "Multiple",
+            "When": {
+                "HasMod: Candidus42.LittleNPCs": true,
+                "HasValue: {{Candidus42.LittleNPCs/FirstLittleNPCName}}": true,
+                "HasValue: {{ChildGenders}}": true
+            }
+        },
+        {
+            "Name": "ChildStatus",
+            "Value": "Multiple",
+            "When": {
+                "HasMod: Candidus42.LittleNPCs": true,
+                "HasValue: {{Candidus42.LittleNPCs/SecondLittleNPCName}}": true,
+            }
+        },
+
         
         // movies!
         {

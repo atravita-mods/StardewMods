@@ -31,7 +31,7 @@
         "LogName":"Marriage - generic - kids",
         "Target": "{{MarriageDialoguePath}}",
         "When": {
-            "HasValue: {{ChildGenders:valueAt=1}}": true
+            "ChildStatus": "Multiple"
         },
         "Entries": {
             "fall_15": "{{i18n:fall-15-kids}}$h",

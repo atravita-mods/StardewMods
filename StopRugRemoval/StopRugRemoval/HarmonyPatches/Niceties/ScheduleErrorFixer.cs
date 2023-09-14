@@ -76,23 +76,21 @@ internal static class ScheduleErrorFixer
         { // Attempt to first just assign their position from their default map.
             __instance.currentLocation = location;
         }
-        else if (Game1.content.Load<Dictionary<string, string>>(@"Data\NPCDispositions").TryGetValue(__instance.Name, out string? dispo))
-        { // Okay, if that didn't work, try getting from NPCDispositions.
-            ReadOnlySpan<char> pos = dispo.GetNthChunk('/', 10);
-            if (pos.Length != 0)
+        else if (Game1.characterData.TryGetValue(__instance.Name, out var dispo))
+        {
+            // Okay, if that didn't work, try getting from NPCDispositions.
+            foreach (var home in dispo.Home)
             {
-                SpanSplit locParts = pos.SpanSplit(expectedCount: 3);
-                string defaultMap = locParts[0].ToString();
-                if (Game1.getLocationFromName(defaultMap) is GameLocation loc)
+                if (home is not null && GameStateQuery.CheckConditions(home.Condition))
                 {
-                    __instance.DefaultMap = defaultMap;
-                    __instance.currentLocation = loc;
-                }
-                if (locParts.TryGetAtIndex(1, out SpanSplitEntry strX) && int.TryParse(strX, out int x)
-                    && locParts.TryGetAtIndex(2, out SpanSplitEntry strY) && int.TryParse(strY, out int y))
-                {
-                    __instance.DefaultPosition = new Vector2(x * 64, y * 64);
-                    return;
+                    if (Game1.getLocationFromName(home.Location) is GameLocation loc)
+                    {
+                        __instance.DefaultMap = home.Location;
+                        __instance.currentLocation = loc;
+                        __instance.DefaultPosition = home.Tile.ToVector2() * 64f;
+                        return;
+                    }
+                    break;
                 }
             }
         }

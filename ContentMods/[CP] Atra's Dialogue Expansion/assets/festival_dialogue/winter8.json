@@ -294,7 +294,7 @@
             "Target": "Data/Festivals/winter8",
             "When": {
                 "EnableFor": "Maru",
-                "HasValue: {{ChildGenders}}": true
+                "ChildStatus": "One, Multiple"
             },
             "Entries": {
                 "Maru_spouse": "{{i18n:maru-y1-fishing-kids}}$h"

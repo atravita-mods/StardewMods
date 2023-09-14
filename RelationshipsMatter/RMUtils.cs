@@ -16,7 +16,7 @@ internal static class RMUtils
 
     internal static void Init(IGameContentHelper parser)
     {
-        asset = parser.ParseAssetName("Data/NPCDispositions");
+        asset = parser.ParseAssetName("Data/Characters");
     }
 
     internal static void Reset(IReadOnlySet<IAssetName>? assets)
@@ -31,14 +31,14 @@ internal static class RMUtils
     {
         Dictionary<string, HashSet<string>>? ret = new();
 
-        Dictionary<string, string>? dispos = Game1.temporaryContent.Load<Dictionary<string, string>>(asset.BaseName);
+        var dispos = Game1.characterData;
 
-        foreach((string npc, string dispo) in dispos)
+        foreach((string npc, var dispo) in dispos)
         {
             HashSet<string> relations = new();
 
             // get the love interest.
-            string love = dispo.GetNthChunk('/', 6).ToString();
+            string love = dispo.LoveInterest.Trim();
 
             if (NPCCache.GetByVillagerName(love) is not null)
             {
@@ -46,16 +46,12 @@ internal static class RMUtils
             }
 
             // get other relatives - this is of the form `name 'relationship'` ie `Marnie 'aunt'`.
-            StreamSplit relatives = dispo.GetNthChunk('/', 9).StreamSplit(options: StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
-            while (relatives.MoveNext())
+            foreach (var relative in dispo.FriendsAndFamily.Keys)
             {
-                string? relative = relatives.Current.ToString();
                 if (NPCCache.GetByVillagerName(relative) is not null)
                 {
                     relations.Add(relative);
                 }
-
-                _ = relatives.MoveNext();
             }
 
             ret[npc] = relations;

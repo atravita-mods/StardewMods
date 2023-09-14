@@ -14,8 +14,7 @@
             "Target": "Characters/Dialogue/Evelyn",
             "When": {
                 "EnableFor|contains=Evelyn": true,
-                "HasValue: {{ChildNames}}": false,
-                "HavingChild|contains=@{{playerName}}": false
+                "ChildStatus": "None"
             },
             "Entries": {
                 "Fri8_inlaw_Alex": "{{i18n:evelyn-alex-childless}}"
@@ -27,7 +26,7 @@
             "Target": "Characters/Dialogue/Evelyn",
             "When": {
                 "EnableFor|contains=Evelyn": true,
-                "HasValue: {{ChildNames|valueAt=1}}": true
+                "ChildStatus": "Multiple"
             },
             "Entries": {
                 "summer_Fri8_inlaw_Alex": "{{i18n:evelyn-alex-summer-fri8}}"

@@ -7,12 +7,14 @@ using AtraCore.Framework.ReflectionManager;
 
 using AtraShared.Utils.Extensions;
 using AtraShared.Utils.Shims;
-using AtraShared.Wrappers;
 
 using CommunityToolkit.Diagnostics;
 
 using Microsoft.Xna.Framework;
 
+using StardewValley.GameData.GiantCrops;
+using StardewValley.Internal;
+using StardewValley.ItemTypeDefinitions;
 using StardewValley.TerrainFeatures;
 
 namespace TapGiantCrops.Framework;
@@ -102,39 +104,69 @@ public sealed class TapGiantCrop : ITapGiantCropsAPI
     [Pure]
     public (SObject obj, int days)? GetTapperProduct(GiantCrop giantCrop, SObject tapper)
     {
-        int giantCropIndx = giantCrop.parentSheetIndex.Value;
+        GiantCropData? data = giantCrop.GetData();
 
-        OverrideObject? @override = AssetManager.GetOverrideItem(giantCropIndx);
-        SObject? returnobj = @override?.obj?.getOne() as SObject;
-
-        if (returnobj is null)
+        SObject? returnobj = null;
+        OverrideObject? @override = null;
+        if (data?.HarvestItems is { } items)
         {
-            // find a keg output.
-            SObject crop = new(giantCropIndx, 999);
-            this.keg.heldObject.Value = null;
-            this.keg.performObjectDropInAction(crop, false, Game1.player);
-            SObject? heldobj = this.keg.heldObject.Value;
-            this.keg.heldObject.Value = null;
-            if (heldobj?.getOne() is SObject obj)
+            ItemQueryContext context = new(giantCrop.Location, Game1.player, Random.Shared);
+            foreach (GiantCropHarvestItemData? drop in items)
             {
-                returnobj = obj;
-            }
-        }
+                // derived from GiantCrop.TryGetDrop
+                if (!Random.Shared.OfChance(drop.Chance))
+                {
+                    continue;
+                }
+                if (drop.Condition != null && !GameStateQuery.CheckConditions(drop.Condition, giantCrop.Location))
+                {
+                    return null;
+                }
 
-        // special case: giant flowers make honey
-        // this makes no sense.
-        if (returnobj is null && giantCropIndx.GetCategoryFromIndex() == SObject.flowersCategory)
-        {
-            string flowerdata = Game1Wrappers.ObjectInfo[giantCropIndx];
-            returnobj = new SObject("(O)340", 1); // honey index.
-            string honeyName = $"{flowerdata.GetNthChunk('/', 0).ToString()} Honey";
+                Item item = ItemQueryResolver.TryResolveRandomItem(
+                    data: drop,
+                    context,
+                    logError: static (string query, string error) =>
+                {
+                    ModEntry.ModMonitor.Log($"Failed parsing {query}: {error}", LogLevel.Info);
+                });
 
-            returnobj.Name = honeyName;
-            if (int.TryParse(flowerdata.GetNthChunk('/', SObject.objectInfoPriceIndex), out int price))
-            {
-                returnobj.Price += 2 * price;
+                if (item is not SObject dropIn)
+                {
+                    continue;
+                }
+
+                @override = AssetManager.GetOverrideItem(dropIn.QualifiedItemId);
+                returnobj = @override?.obj?.getOne() as SObject;
+
+                if (returnobj is not null)
+                {
+                    break;
+                }
+
+                // reset override
+                @override = null;
+
+                // find a keg output.
+                this.keg.heldObject.Value = null;
+                this.keg.performObjectDropInAction(dropIn, false, Game1.player);
+                SObject? heldobj = this.keg.heldObject.Value;
+                this.keg.heldObject.Value = null;
+                if (heldobj?.getOne() is SObject obj)
+                {
+                    returnobj = obj;
+                    break;
+                }
+
+                if (dropIn.Category == SObject.flowersCategory)
+                {
+                    returnobj = (ItemRegistry.GetTypeDefinition("(O)") as ObjectDataDefinition)?.CreateFlavoredHoney(dropIn);
+                    if (returnobj is not null)
+                    {
+                        break;
+                    }
+                }
             }
-            returnobj.preservedParentSheetIndex.Value = giantCropIndx;
         }
 
         if (returnobj is not null)

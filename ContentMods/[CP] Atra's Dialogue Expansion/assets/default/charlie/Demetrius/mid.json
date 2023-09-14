@@ -73,7 +73,8 @@
             "12{{YearRemainder}}": "Maru asked me to help explain mycorrhiza to Vincent and Jas....#$b#@, I'm not very good at explaining my research to kids...$s",
             "13{{YearRemainder}}": "I'd love to make some bread again, but we only have 350g of bread flour remaining and I need at least 400g.$s",
             "14{{YearRemainder}}": "Did you know most of the strawberries you eat are hexaploid?#$b#In fact, plants actually quite often double all their DNA.$h",
-            "16{{YearRemainder}}": "Peanuts are excellent things to plant, since they harbor bacteria that help fix nitrogen.$h"
+            "16{{YearRemainder}}": "Peanuts are excellent things to plant, since they harbor bacteria that help fix nitrogen.$h",
+            "17": "Robin grew up here, but I'm also a transplant to this little town.$h"
         },
         "When": { "YearModulus": "1" }
     },

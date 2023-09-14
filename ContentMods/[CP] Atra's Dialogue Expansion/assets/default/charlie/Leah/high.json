@@ -4,6 +4,7 @@
         "Target": "Characters/Dialogue/Leah",
         "When": {"YearModulus": 1},
         "Entries": {
+            "17": "Be careful when picking mushrooms! Some can be quite poisonous.#$b#My father taught me how to identify good mushrooms.",
             "28{{YearRemainder}}": "I grew up in poverty, so I'm perfectly used to living on small amounts of money.#$e#My father taught me how to forage.$h"
         }
     },

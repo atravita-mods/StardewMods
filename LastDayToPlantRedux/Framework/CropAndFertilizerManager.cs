@@ -12,8 +12,6 @@ using AtraShared.Utils.Extensions;
 using AtraShared.Utils.Shims;
 using AtraShared.Wrappers;
 
-using StardewValley.TerrainFeatures;
-
 namespace LastDayToPlantRedux.Framework;
 
 // fertilizers are filtered while loading, while seeds (which I expect more change for) are filtered while calculating.
@@ -344,12 +342,13 @@ SUCCESS:
             seasonDict[new CropCondition(profession, 0)] = unfertilized;
         }
 
+        var farm = Game1.getFarm();
         // set up unfertilized.
         foreach (int crop in currentCrops)
         {
             if (!unfertilized.ContainsKey(crop))
             {
-                Crop c = new(crop, 0, 0);
+                Crop c = new(crop, 0, 0, farm);
                 DummyHoeDirt? dirt = Dirts[0];
                 dirt.crop = c;
                 dirt.nearWaterForPaddy.Value = c.isPaddyCrop() ? 1 : 0;
@@ -382,7 +381,7 @@ SUCCESS:
             {
                 if (!dict.ContainsKey(crop))
                 {
-                    Crop c = new(crop, 0, 0);
+                    Crop c = new(crop, 0, 0, farm);
                     DummyHoeDirt? dirt = Dirts[fertilizer];
                     dirt.crop = c;
                     dirt.nearWaterForPaddy.Value = c.isPaddyCrop() ? 1 : 0;
@@ -554,7 +553,7 @@ breakcontinue:
                 continue;
             }
 
-            dirt.fertilizer.Value = HoeDirt.noFertilizer;
+            dirt.fertilizer.Value = null;
             if (!dirt.plant(index, 0, 0, Game1.player, true, Game1.getFarm()))
             {
                 continue;

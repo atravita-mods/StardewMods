@@ -19,7 +19,7 @@ namespace CritterRings.HarmonyPatches.OwlRing;
 internal static class LavaLurkNerf
 {
     private static float AdjustLavaLurkDistance(float original, Farmer farmer)
-        => (ModEntry.OwlRing > 0 && farmer.isWearingRing(ModEntry.OwlRing)) ? original / 2 : original;
+        => farmer.isWearingRing(ModEntry.OwlRing) ? original / 2 : original;
 
     [HarmonyPatch(nameof(LavaLurk.TargetInRange))]
     private static IEnumerable<CodeInstruction>? Transpiler(IEnumerable<CodeInstruction> instructions, ILGenerator gen, MethodBase original)

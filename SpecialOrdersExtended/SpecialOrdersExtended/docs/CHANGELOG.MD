@@ -19,6 +19,7 @@ Changelog
 
 #### Version 1.2.0
 * `atravita_addSpecialOrder` command now no longer adds duplicate orders by default.
+* Refactored tag checking. Of note: Previously, "extra" data near the end would be ignored. That will no longer be the case.
 
 #### Version 1.1.2
 * Fix accidental case sensitivity in some tags.

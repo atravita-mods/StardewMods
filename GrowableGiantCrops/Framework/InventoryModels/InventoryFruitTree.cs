@@ -87,18 +87,15 @@ public sealed class InventoryFruitTree : SObject
     /// <param name="growthStage">Growth stage of the tree.</param>
     /// <param name="daysUntilMature">Number of days until the tree is mature.</param>
     /// <param name="struckByLightning">Whether or not the tree has been struck by lightning.</param>
-    public InventoryFruitTree(int saplingIndex, int initialStack, int growthStage,  int daysUntilMature, int struckByLightning)
+    public InventoryFruitTree(string saplingIndex, int initialStack, int growthStage,  int daysUntilMature, int struckByLightning)
         : this()
     {
         if (!IsValidFruitTree(saplingIndex))
         {
-            Dictionary<int, string> data = Game1.content.Load<Dictionary<int, string>>(@"Data\fruitTrees");
-            int replacement = data.Keys.FirstOrDefault();
-            ModEntry.ModMonitor.Log($"Tree {saplingIndex} doesn't seem to be a valid fruit tree. Setting to default: {replacement}", LogLevel.Error);
-            saplingIndex = replacement;
+            saplingIndex = "ERROR ITEM";
         }
 
-        this.ParentSheetIndex = saplingIndex;
+        this.ItemId = saplingIndex;
         this.daysUntilMature.Value = daysUntilMature;
         this.struckByLightning.Value = struckByLightning;
         this.growthStage.Value = growthStage;
@@ -397,17 +394,6 @@ public sealed class InventoryFruitTree : SObject
         tags.Add("item_" + ItemContextTagManager.SanitizeContextTag(this.Name));
     }
 
-    private string GetSaplingDisplayName()
-    {
-        if (Game1Wrappers.ObjectInfo.TryGetValue(this.ParentSheetIndex, out string? data))
-        {
-            return data.GetNthChunk('/', objectInfoDisplayNameIndex).ToString();
-        }
-        else
-        {
-            return "UNKNOWN";
-        }
-    }
     #endregion
 
     #region helpers
@@ -417,19 +403,7 @@ public sealed class InventoryFruitTree : SObject
     /// </summary>
     /// <param name="saplingIndex">The index of the sapling.</param>
     /// <returns>True if it corresponds to a key in Data\fruitTrees, false otherwise.</returns>
-    internal static bool IsValidFruitTree(int saplingIndex)
-    {
-        try
-        {
-            Dictionary<int, string> data = Game1.content.Load<Dictionary<int, string>>(@"Data\fruitTrees");
-            return data.ContainsKey(saplingIndex);
-        }
-        catch (Exception ex)
-        {
-            ModEntry.ModMonitor.LogError("loading fruit tree asset", ex);
-        }
-        return false;
-    }
+    internal static bool IsValidFruitTree(string saplingIndex) => Game1.fruitTreeData.ContainsKey(saplingIndex);
 
     /// <summary>
     /// resets the source rectangle, used to transition between maps of different seasons.

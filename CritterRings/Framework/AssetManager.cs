@@ -56,7 +56,7 @@ internal static class AssetManager
                 apply: static (asset) =>
                 {
                     IDictionary<string, string> editor = asset.AsDictionary<string, string>().Data;
-                    editor[ModEntry.BunnyRing] = $"atravita.BunnyRing/1000/-300/Ring/{I18n.BunnyRing_Name()}/{I18n.BunnyRing_Description()}////4/{ringTextureBackslashed}";
+                    editor[ModEntry.BunnyRing] = $"atravita.BunnyRing/1000/-300/Ring/{I18n.BunnyRing_Name()}/{I18n.BunnyRing_Description()}////3/{ringTextureBackslashed}";
                     editor[ModEntry.ButterflyRing] = $"atravita.ButterflyRing/1000/-300/Ring/{I18n.ButterflyRing_Name()}/{I18n.ButterflyRing_Description()}////0/{ringTextureBackslashed}";
                     editor[ModEntry.FireFlyRing] = $"atravita.FireFlyRing/1000/-300/Ring/{I18n.FireflyRing_Name()}/{I18n.FireflyRing_Description()}////1/{ringTextureBackslashed}";
                     editor[ModEntry.FrogRing] = $"atravita.FrogRing/1000/-300/Ring/{I18n.FrogRing_Name()}/{I18n.FrogRing_Description()}////5/{ringTextureBackslashed}";

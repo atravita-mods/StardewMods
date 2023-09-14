@@ -61,7 +61,7 @@ internal static class AssetManager
     /// </summary>
     /// <param name="input">ParentSheetIndex.</param>
     /// <returns>The tapper's product if an override is found.</returns>
-    internal static OverrideObject? GetOverrideItem(int input)
+    internal static OverrideObject? GetOverrideItem(string qualID)
     {
         if (OverridesCache.TryGetValue(input, out OverrideObject obj))
         {

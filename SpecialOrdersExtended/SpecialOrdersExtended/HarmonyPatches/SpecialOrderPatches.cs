@@ -7,6 +7,8 @@ using HarmonyLib;
 
 using SpecialOrdersExtended.Managers;
 
+using StardewValley.SpecialOrders;
+
 namespace SpecialOrdersExtended.HarmonyPatches;
 
 /// <summary>

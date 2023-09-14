@@ -12,6 +12,8 @@ using SpecialOrdersExtended.DataModels;
 
 using StardewModdingAPI.Utilities;
 
+using StardewValley.SpecialOrders;
+
 namespace SpecialOrdersExtended.Managers;
 
 /// <summary>
@@ -302,10 +304,10 @@ internal class DialogueManager
                 string baseKey = __1 ? specialOrder.questKey.Value : Game1.currentSeason + specialOrder.questKey.Value;
                 baseKey += specialOrder.questState.Value switch
                 {
-                    SpecialOrder.QuestState.InProgress => "_InProgress",
-                    SpecialOrder.QuestState.Failed => "_Failed",
-                    SpecialOrder.QuestState.Complete => "_Completed",
-                    _ => throw new UnexpectedEnumValueException<SpecialOrder.QuestState>(specialOrder.questState.Value),
+                    SpecialOrderStatus.InProgress => "_InProgress",
+                    SpecialOrderStatus.Failed => "_Failed",
+                    SpecialOrderStatus.Complete => "_Completed",
+                    _ => throw new UnexpectedEnumValueException<SpecialOrderStatus>(specialOrder.questState.Value),
                 };
                 __result = FindBestDialogue(baseKey, __instance, __0);
                 if (__result)
@@ -314,7 +316,7 @@ internal class DialogueManager
                 }
 
                 // Handle repeat orders!
-                if (specialOrder.questState.Value == SpecialOrder.QuestState.InProgress && Game1.player.team.completedSpecialOrders.ContainsKey(specialOrder.questKey.Value))
+                if (specialOrder.questState.Value == SpecialOrderStatus.InProgress && Game1.player.team.completedSpecialOrders.ContainsKey(specialOrder.questKey.Value))
                 {
                     __result = FindBestDialogue((__1 ? specialOrder.questKey.Value : Game1.currentSeason + specialOrder.questKey.Value) + "_RepeatOrder", __instance, __0);
                     if (__result)
@@ -340,7 +342,7 @@ internal class DialogueManager
             // Handle available order dialogue.
             if (SpecialOrder.IsSpecialOrdersBoardUnlocked())
             {
-                HashSet<string> currentOrders = Game1.player.team.specialOrders.Where(s => s?.questKey is not null).Select((SpecialOrder s) => s.questKey.Value).ToHashSet();
+                HashSet<string> currentOrders = Game1.player.team.specialOrders.Where(s => s?.questKey is not null).Select(static (SpecialOrder s) => s.questKey.Value).ToHashSet();
                 foreach (SpecialOrder specialOrder in Game1.player.team.availableSpecialOrders)
                 {
                     if (specialOrder?.questKey is null)
@@ -378,11 +380,17 @@ internal class DialogueManager
         {// I have already said this dialogue
             return false;
         }
+        Dialogue? dialogue = npc.TryGetDialogue(dialogueKey);
+        if (dialogue is null)
+        {
+            return false;
+        }
+        dialogue.removeOnNextMove = true;
 
         QueuedDialogueManager.PushCurrentDialogueToQueue(npc);
 
         // Push my dialogue onto their stack.
-        npc.CurrentDialogue.Push(new Dialogue(npc.Dialogue[dialogueKey], npc) { removeOnNextMove = true });
+        npc.CurrentDialogue.Push(dialogue);
         if (ModEntry.Config.Verbose)
         {
             ModEntry.ModMonitor.Log(I18n.Dialogue_FoundKey(dialogueKey), LogLevel.Debug);

@@ -6,6 +6,7 @@ using AtraShared.Utils.Extensions;
 using SpecialOrdersExtended.DataModels;
 
 using StardewValley.Network;
+using StardewValley.SpecialOrders;
 
 namespace SpecialOrdersExtended.Managers;
 
@@ -110,7 +111,7 @@ internal class RecentSOManager
         // Check for any completed orders in the current orders.
         foreach (SpecialOrder order in currentOrders.Values)
         {
-            if (order.questState.Value == SpecialOrder.QuestState.Complete)
+            if (order.questState.Value == SpecialOrderStatus.Complete)
             {
                 if (TryAdd(order.questKey.Value))
                 {

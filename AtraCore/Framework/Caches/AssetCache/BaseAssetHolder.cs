@@ -5,7 +5,7 @@
 /// </summary>
 /// <typeparam name="TAsset">The type of the asset.</typeparam>
 public class BaseAssetHolder<TAsset> : IAssetHolder<TAsset>
-    where TAsset: class
+    where TAsset : class
 {
     private readonly IAssetName assetName;
     private readonly object LockObj = new();

@@ -91,7 +91,7 @@ internal static class AssetManager
         }
     }
 
-    private static bool TryParseToRing(ReadOnlySpan<char> span, out int ringID)
+    private static bool TryParseToRing(ReadOnlySpan<char> span, out string ringID)
     {
         span = span.Trim();
         if (int.TryParse(span, out ringID) && ringID > 0 && DataToItemMap.IsActuallyRing(ringID))

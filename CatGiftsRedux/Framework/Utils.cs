@@ -111,7 +111,7 @@ internal static class Utils
         ModEntry.ModMonitor.DebugOnlyLog($"Placing {item.DisplayName} at {location.NameOrUniqueName} - {tile}");
 
         PlayerAlertHandler.AddMessage(
-            message: new PetHudMessage(I18n.PetMessage(pet.Name, item.DisplayName), Color.PaleGreen, 2000, true, item, pet),
+            message: new PetHudMessage(I18n.PetMessage(pet.Name, item.DisplayName), 2000, true, item, pet),
             soundCue: pet.GetPetData()?.ContentSound ?? "Cowboy_Footstep");
 
         if (item.HasTypeObject() && !location.Objects.ContainsKey(tile))

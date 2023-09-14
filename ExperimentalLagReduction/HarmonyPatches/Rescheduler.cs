@@ -5,7 +5,6 @@ using System.Diagnostics;
 #endif
 
 using System.Collections.Concurrent;
-using System.Runtime.InteropServices;
 
 using AtraBase.Collections;
 
@@ -15,13 +14,16 @@ using AtraShared.Utils.Extensions;
 using ExperimentalLagReduction.Framework;
 
 using HarmonyLib;
+using StardewValley.Pathfinding;
+using StardewValley.Locations;
+using StardewValley.Minigames;
 
 namespace ExperimentalLagReduction.HarmonyPatches;
 
 /// <summary>
 /// Re-does the scheduler so it's faster.
 /// </summary>
-[HarmonyPatch(typeof(NPC))]
+[HarmonyPatch(typeof(WarpPathfindingCache))]
 [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = StyleCopConstants.NamedForHarmony)]
 [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1309:Field names should not begin with underscore", Justification = "Preference.")]
 internal static class Rescheduler
@@ -30,9 +32,9 @@ internal static class Rescheduler
 
     #region fields
 
-    private static bool PreCached = false;
+    private static bool preCached = false;
 
-    private static readonly ConcurrentDictionary<(string start, string end, Gender gender), List<string>?> PathCache = new();
+    private static readonly ConcurrentDictionary<(string start, string end, Gender gender), string[]?> PathCache = new();
 
     private static readonly ThreadLocal<HashSet<string>> _visited = new(static () => new(capacity: 32));
 
@@ -71,7 +73,7 @@ internal static class Rescheduler
     internal static bool ClearNulls()
     {
         bool ret = false;
-        foreach (((string start, string end, Gender gender) k, List<string>? v) in PathCache)
+        foreach (((string start, string end, Gender gender) k, string[]? v) in PathCache)
         {
             if (v is null)
             {
@@ -84,7 +86,7 @@ internal static class Rescheduler
     /// <inheritdoc cref="IExperimentalLagReductionAPI.ClearMacroCache"/>
     internal static bool ClearCache()
     {
-        PreCached = false;
+        preCached = false;
         if (PathCache.IsEmpty)
         {
             return false;
@@ -100,12 +102,12 @@ internal static class Rescheduler
     /// <returns>True if runs, false otherwise. </returns>
     internal static bool PrePopulateCache(bool parallel = true)
     {
-        if (!ModEntry.Config.PrePopulateCache || PreCached)
+        if (!ModEntry.Config.PrePopulateCache || preCached)
         {
             return false;
         }
 
-        PreCached = true;
+        preCached = true;
 
 #if DEBUG
         _stopwatch.Value ??= new();
@@ -185,9 +187,9 @@ internal static class Rescheduler
     /// <param name="gender">Gender constraint, or <see cref="NPC.undefined"/> for not constrained.</param>
     /// <param name="path">The path, if found.</param>
     /// <returns>True if found, false otherwise.</returns>
-    internal static bool TryGetPathFromCache(string start, string end, int gender, out List<string>? path)
+    internal static bool TryGetPathFromCache(string start, string end, int gender, out string[]? path)
     {
-        static List<string>? ShorterNonNull(List<string>? left, List<string>? right)
+        static string[]? ShorterNonNull(string[]? left, string[]? right)
         {
             if (left is null)
             {
@@ -198,17 +200,17 @@ internal static class Rescheduler
                 return left;
             }
 
-            return left.Count <= right.Count ? left : right;
+            return left.Length <= right.Length ? left : right;
         }
 
         bool found = PathCache.TryGetValue((start, end, Ungendered), out path);
-        if (gender != NPC.female && PathCache.TryGetValue((start, end, Gender.Male), out List<string>? male))
+        if (gender != NPC.female && PathCache.TryGetValue((start, end, Gender.Male), out string[]? male))
         {
             found = true;
             path = ShorterNonNull(path, male);
         }
 
-        if (gender != NPC.male && PathCache.TryGetValue((start, end, Gender.Female), out List<string>? female))
+        if (gender != NPC.male && PathCache.TryGetValue((start, end, Gender.Female), out string[]? female))
         {
             found = true;
             path = ShorterNonNull(path, female);
@@ -224,10 +226,10 @@ internal static class Rescheduler
     {
         Counter<int> counter = new();
 
-        foreach (((string start, string end, Gender gender) key, List<string>? value) in PathCache.OrderBy(static kvp => kvp.Key.start).ThenBy(static kvp => kvp.Value?.Count ?? -1))
+        foreach (((string start, string end, Gender gender) key, string[]? value) in PathCache.OrderBy(static kvp => kvp.Key.start).ThenBy(static kvp => kvp.Value?.Length ?? -1))
         {
-            ModEntry.ModMonitor.Log($"( {key.start} -> {key.end} ({key.gender.ToStringFast()})) == " + (value is not null ? string.Join("->", value) + $" [{value.Count}]" : "no path found" ), LogLevel.Info);
-            counter[value?.Count ?? 0]++;
+            ModEntry.ModMonitor.Log($"( {key.start} -> {key.end} ({key.gender.ToStringFast()})) == " + (value is not null ? string.Join("->", value) + $" [{value.Length}]" : "no path found" ), LogLevel.Info);
+            counter[value?.Length ?? 0]++;
         }
 
         ModEntry.ModMonitor.Log($"In total: {PathCache.Count} routes cached for {Game1.locations.Count} locations.", LogLevel.Info);
@@ -246,7 +248,7 @@ internal static class Rescheduler
     /// <param name="allowPartialPaths">Whether or not to allow piecing together paths to make a full path. This can make the algo pick a less-optimal path, but it's unlikely and is much faster.</param>
     /// <param name="limit">Search limit.</param>
     /// <returns>Path, or null if not found.</returns>
-    internal static List<string>? GetPathFor(GameLocation start, GameLocation? end, Gender gender, bool allowPartialPaths, int limit = int.MaxValue)
+    internal static string[]? GetPathFor(GameLocation start, GameLocation? end, Gender gender, bool allowPartialPaths, int limit = int.MaxValue)
     {
         if (limit <= 0)
         {
@@ -276,7 +278,7 @@ internal static class Rescheduler
                 }
 
                 // insert into cache
-                List<string> route = Unravel(node);
+                string[] route = Unravel(node);
                 PathCache.TryAdd((start.Name, node.Name, node.GenderConstraint), route);
                 Gender genderConstrainedToCurrentSearch = GetTightestGenderConstraint(gender, node.GenderConstraint);
 
@@ -285,17 +287,16 @@ internal static class Rescheduler
                     // found destination, return it.
                     if (end.Name == node.Name)
                     {
-                        if (node.GenderConstraint == Ungendered && route.Count > 3)
+                        if (node.GenderConstraint == Ungendered && route.Length > 3)
                         {
-                            int total = route.Count;
-                            int count = total - 1;
+                            int index = route.Length - 2;
                             do
                             {
-                                List<string> segment = route.GetRange(total - count, count);
+                                string[] segment = route[index..];
                                 PathCache.TryAdd((segment[0], segment[^1], Ungendered), segment);
-                                count--;
+                                index--;
                             }
-                            while (count > 1);
+                            while (index > 0);
                         }
 
                         _visited.Value.Clear();
@@ -308,14 +309,13 @@ internal static class Rescheduler
                         // if we have A->B and B->D, then we can string the path together already.
                         // avoiding trivial one-step stitching because this is more expensive to do.
                         // this isn't technically correct (especially for cycles) but it works pretty well most of the time.
-                        if (PathCache.TryGetValue((node.Name, end.Name, Ungendered), out List<string>? prev) && prev is not null
-                            && prev.Count > 2 && CompletelyDistinct(route, prev))
+                        if (PathCache.TryGetValue((node.Name, end.Name, Ungendered), out string[]? prev) && prev is not null
+                            && prev.Length > 2 && CompletelyDistinct(route, prev))
                         {
                             ModEntry.ModMonitor.TraceOnlyLog($"Partial route found: {start.Name} -> {node.Name} + {node.Name} -> {end.Name}", LogLevel.Info);
-                            List<string> routeStart = new(route.Count + prev.Count - 1);
-                            routeStart.AddRange(route);
-                            routeStart.RemoveAt(routeStart.Count - 1);
-                            routeStart.AddRange(prev);
+                            string[] routeStart = new string[route.Length + prev.Length - 1];
+                            Array.Copy(route, routeStart, route.Length - 1);
+                            Array.Copy(prev, 0, routeStart, route.Length - 1, prev.Length);
 
                             PathCache.TryAdd((start.Name, end.Name, node.GenderConstraint), routeStart);
 
@@ -323,14 +323,13 @@ internal static class Rescheduler
                             _queue.Value.Clear();
                             return routeStart;
                         }
-                        else if (PathCache.TryGetValue((node.Name, end.Name, genderConstrainedToCurrentSearch), out List<string>? genderedPrev) && genderedPrev is not null
-                            && genderedPrev.Count > 2 && CompletelyDistinct(route, genderedPrev))
+                        else if (PathCache.TryGetValue((node.Name, end.Name, genderConstrainedToCurrentSearch), out string[]? genderedPrev) && genderedPrev is not null
+                            && genderedPrev.Length > 2 && CompletelyDistinct(route, genderedPrev))
                         {
                             ModEntry.ModMonitor.TraceOnlyLog($"Partial route found: {start.Name} -> {node.Name} + {node.Name} -> {end.Name}", LogLevel.Info);
-                            List<string> routeStart = new(route.Count + genderedPrev.Count - 1);
-                            routeStart.AddRange(route);
-                            routeStart.RemoveAt(routeStart.Count - 1);
-                            routeStart.AddRange(genderedPrev);
+                            string[] routeStart = new string[route.Length + genderedPrev.Length - 1];
+                            Array.Copy(route, routeStart, route.Length - 1);
+                            Array.Copy(genderedPrev, 0, routeStart, route.Length - 1, genderedPrev.Length);
 
                             PathCache.TryAdd((start.Name, end.Name, genderConstrainedToCurrentSearch), routeStart);
 
@@ -377,7 +376,7 @@ internal static class Rescheduler
 
     [HarmonyPrefix]
     [HarmonyPriority(Priority.VeryLow)]
-    [HarmonyPatch(nameof(NPC.populateRoutesFromLocationToLocationList))]
+    [HarmonyPatch(nameof(WarpPathfindingCache.PopulateCache))]
     private static bool PrefixPopulateRoutes()
     {
         try
@@ -396,6 +395,11 @@ internal static class Rescheduler
 #endif
 
             ClearCache();
+
+            for (int i = 1; i <= Game1.netWorldState.Value.HighestPlayerLimit; i++)
+            {
+                WarpPathfindingCache.IgnoreLocationNames.Add("Cellar" + i);
+            }
 
             // avoid pre-caching if we're in the middle of the day.
             if (Game1.newDay || Game1.gameMode == Game1.loadingMode)
@@ -429,21 +433,21 @@ internal static class Rescheduler
     }
 
     [HarmonyPrefix]
-    [HarmonyPatch("getLocationRoute")]
+    [HarmonyPatch(nameof(WarpPathfindingCache.GetLocationRoute))]
     [HarmonyPriority(Priority.VeryLow)]
     [SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1123:Do not place regions within elements", Justification = "Preference.")]
-    private static bool PrefixGetLocationRoute(string startingLocation, string endingLocation, NPC __instance, ref List<string>? __result)
+    private static bool PrefixGetLocationRoute(string startingLocation, string endingLocation, int gender, ref string[]? __result)
     {
-        if (TryGetPathFromCache(startingLocation, endingLocation, __instance.Gender, out __result))
+        if (TryGetPathFromCache(startingLocation, endingLocation, gender, out __result))
         {
 #if DEBUG
             Interlocked.Increment(ref cacheHits);
 #endif
 
-            ModEntry.ModMonitor.TraceOnlyLog($"Got macro schedule for {__instance.Name} from cache: {startingLocation} -> {endingLocation}");
+            ModEntry.ModMonitor.TraceOnlyLog($"Got macro schedule from cache: {startingLocation} -> {endingLocation}");
             if (__result is null)
             {
-                ModEntry.ModMonitor.Log($"{__instance.Name} requested path from {startingLocation} to {endingLocation} where no valid path was found.", LogLevel.Warn);
+                ModEntry.ModMonitor.Log($"Gender {gender} requested path from {startingLocation} to {endingLocation} where no valid path was found.", LogLevel.Warn);
             }
             return false;
         }
@@ -451,47 +455,42 @@ internal static class Rescheduler
         #region validation
 
         __result = null;
+        if (GetActualLocation(startingLocation) is not string actualStart)
+        {
+            ModEntry.ModMonitor.Log($"Requested path to {endingLocation} is blacklisted from pathing", LogLevel.Warn);
+            return false;
+        }
+
         if (GetActualLocation(endingLocation) is not string actualEnd)
         {
-            ModEntry.ModMonitor.Log($"{__instance.Name} requested path to {endingLocation} which is blacklisted from pathing", LogLevel.Warn);
+            ModEntry.ModMonitor.Log($"Requested path to {endingLocation} is blacklisted from pathing", LogLevel.Warn);
             return false;
         }
 
-        if (startingLocation == "Backwoods")
-        {
-            ModEntry.ModMonitor.Log($"{__instance.Name} requested path starting at {startingLocation} which is blacklisted from pathing", LogLevel.Warn);
-            return false;
-        }
-
-        GameLocation start = Game1.getLocationFromName(startingLocation);
+        GameLocation start = Game1.getLocationFromName(actualStart);
         if (start is null)
         {
-            ModEntry.ModMonitor.Log($"NPC {__instance.Name} requested path starting at {startingLocation}, which does not exist.", LogLevel.Warn);
-            return false;
-        }
-        if (start is Farm)
-        {
-            ModEntry.ModMonitor.Log($"NPC {__instance.Name} requested path starting at {startingLocation}, which as a farm is blacklisted from pathing.", LogLevel.Warn);
+            ModEntry.ModMonitor.Log($"Requested path starting at {startingLocation}, which does not exist.", LogLevel.Warn);
             return false;
         }
 
-        Gender startGender = GetTightestGenderConstraint((Gender)__instance.Gender, GetGenderConstraint(startingLocation));
+        Gender startGender = GetTightestGenderConstraint((Gender)gender, GetGenderConstraint(startingLocation));
         if (startGender == Gender.Invalid)
         {
-            ModEntry.ModMonitor.Log($"NPC {__instance.Name} requested path starting at {startingLocation}, which is not allowed due to their gender.", LogLevel.Warn);
+            ModEntry.ModMonitor.Log($"Requested path starting at {startingLocation}, which is not allowed due to gender constraint {gender}.", LogLevel.Warn);
             return false;
         }
 
         GameLocation end = Game1.getLocationFromName(actualEnd);
         if (end is null)
         {
-            ModEntry.ModMonitor.Log($"NPC {__instance.Name} requested path ending at {actualEnd}, which does not exist.", LogLevel.Warn);
+            ModEntry.ModMonitor.Log($"Requested path starting at {endingLocation}, which does not exist.", LogLevel.Warn);
             return false;
         }
-        Gender endGender = GetTightestGenderConstraint((Gender)__instance.Gender, GetGenderConstraint(actualEnd));
+        Gender endGender = GetTightestGenderConstraint((Gender)gender, GetGenderConstraint(actualEnd));
         if (endGender == Gender.Invalid)
         {
-            ModEntry.ModMonitor.Log($"NPC {__instance.Name} requested path ending at {actualEnd}, which is not allowed due to their gender.", LogLevel.Warn);
+            ModEntry.ModMonitor.Log($"Requested path starting at {endingLocation}, which is not allowed due to gender constraint {gender}.", LogLevel.Warn);
             return false;
         }
 
@@ -503,15 +502,15 @@ internal static class Rescheduler
 
         Interlocked.Increment(ref cacheMisses);
 #endif
-        __result = GetPathFor(start, end, (Gender)__instance.Gender, ModEntry.Config.AllowPartialPaths);
+        __result = GetPathFor(start, end, (Gender)gender, ModEntry.Config.AllowPartialPaths);
         if (__result is null)
         {
-            ModEntry.ModMonitor.LogOnce($"{__instance.Name} requested path from {startingLocation} to {endingLocation} where no valid path was found.", LogLevel.Warn);
+            ModEntry.ModMonitor.LogOnce($"Requested path from {startingLocation} to {endingLocation} for gender {gender} where no valid path was found.", LogLevel.Warn);
         }
 #if DEBUG
         else
         {
-            ModEntry.ModMonitor.TraceOnlyLog($"Found path for {__instance.Name} from {startingLocation} to {endingLocation}: {string.Join("->", __result)} with {__result.Count} segments.");
+            ModEntry.ModMonitor.TraceOnlyLog($"Found path from {startingLocation} to {endingLocation} (gender '{gender}'): {string.Join("->", __result)} with {__result.Length} segments.");
         }
 
         _stopwatch.Value.Stop();
@@ -525,10 +524,10 @@ internal static class Rescheduler
 
     #region helpers
 
-    private static bool CompletelyDistinct(List<string> route, List<string> prev)
+    private static bool CompletelyDistinct(string[] route, string[] prev)
     {
-        Span<string> first = CollectionsMarshal.AsSpan(prev);
-        Span<string> second = CollectionsMarshal.AsSpan(route)[..^1];
+        Span<string> first = new Span<string>(prev);
+        Span<string> second = new Span<string>(route)[..^1];
 
         foreach (string? x in first)
         {
@@ -544,13 +543,9 @@ internal static class Rescheduler
         return true;
     }
 
-    private static List<string> Unravel(MacroNode node)
+    private static string[] Unravel(MacroNode node)
     {
-        List<string> ret = new(node.Depth + 1);
-        for (int i = 0; i <= node.Depth; ++i)
-        {
-            ret.Add(string.Empty);
-        }
+        string[] ret = new string[node.Depth + 1];
 
         MacroNode? workingNode = node;
         do
@@ -616,17 +611,15 @@ internal static class Rescheduler
     /// <returns>The actual location name for a specific location.</returns>
     private static string? GetActualLocation(string name)
     {
-        // exclude cellars entirely.
-        if (name.StartsWith("Cellar", StringComparison.Ordinal) && long.TryParse(name["Cellar".Length..], out _))
+        if (WarpPathfindingCache.IgnoreLocationNames.Contains(name))
         {
             return null;
         }
-        return name switch
+        if (VolcanoDungeon.IsGeneratedLevel(name, out _) || MineShaft.IsGeneratedLevel(name, out _))
         {
-            "Farm" or "Woods" or "Backwoods" or "Tunnel" or "Volcano" or "VolcanoEntrance" => null,
-            "BoatTunnel" => "IslandSouth",
-            _ => name,
-        };
+            return null;
+        }
+        return WarpPathfindingCache.OverrideTargetNames.TryGetValue(name, out string? target) ? target : name;
     }
 
     #endregion
@@ -639,12 +632,7 @@ internal static class Rescheduler
     /// <param name="name">Name of map.</param>
     /// <returns>Gender to restrict to.</returns>
     private static Gender GetGenderConstraint(string name)
-        => name switch
-        {
-            "BathHouse_MensLocker" => Gender.Male,
-            "BathHouse_WomensLocker" => Gender.Female,
-            _ => Ungendered,
-        };
+        => WarpPathfindingCache.GenderRestrictions.TryGetValue(name, out var gender) ? (Gender)gender : Ungendered;
 
     /// <summary>
     /// Given two gender constraints, return the tighter of the two.

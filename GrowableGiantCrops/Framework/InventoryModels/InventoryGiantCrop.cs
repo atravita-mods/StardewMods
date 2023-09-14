@@ -430,7 +430,7 @@ public sealed class InventoryGiantCrop : SObject
                 origin: Vector2.Zero,
                 scale: 4f,
                 effects: SpriteEffects.None,
-                layerDepth: Math.Max(0f, (f.getStandingY() + 3) / 10000f));
+                layerDepth: Math.Max(0f, (f.StandingPixel.Y + 3) / 10000f));
         }
     }
 
@@ -520,13 +520,11 @@ public sealed class InventoryGiantCrop : SObject
     #region misc
 
     /// <inheritdoc />
-    public override Item getOne()
+    protected override Item GetOneNew()
     {
-        InventoryGiantCrop crop = string.IsNullOrEmpty(this.stringID.Value)
-            ? new(this.ParentSheetIndex, 1)
-            : new(this.stringID.Value, this.ParentSheetIndex, 1);
-        crop._GetOneFrom(this);
-        return crop;
+        return string.IsNullOrEmpty(this.stringID.Value)
+            ? new InventoryGiantCrop(this.ParentSheetIndex, 1)
+            : new InventoryGiantCrop(this.stringID.Value, this.ParentSheetIndex, 1);
     }
 
     /// <inheritdoc />
@@ -542,7 +540,7 @@ public sealed class InventoryGiantCrop : SObject
     public override bool canBeTrashed() => true;
 
     /// <inheritdoc />
-    public override bool isForage(GameLocation location) => false;
+    public override bool isForage() => false;
 
     /// <inheritdoc />
     public override string getCategoryName() => I18n.GiantCropCategory();
@@ -552,9 +550,6 @@ public sealed class InventoryGiantCrop : SObject
 
     /// <inheritdoc />
     public override bool isPlaceable() => true;
-
-    /// <inheritdoc />
-    public override bool canBePlacedInWater() => false;
 
     /// <inheritdoc />
     public override bool canStackWith(ISalable other)
@@ -581,7 +576,7 @@ public sealed class InventoryGiantCrop : SObject
         tags.Add("category_inventory_giant_crop");
         tags.Add($"id_inventoryGiantCrop_{this.ParentSheetIndex}");
         tags.Add("quality_none");
-        tags.Add("item_" + this.SanitizeContextTag(this.Name));
+        tags.Add("item_" + ItemContextTagManager.SanitizeContextTag(this.Name));
     }
 
     private string GetProductDisplayName()

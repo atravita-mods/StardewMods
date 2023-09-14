@@ -4,6 +4,7 @@ using AtraShared.Utils.Extensions;
 using HarmonyLib;
 
 using StardewValley.Monsters;
+using StardewValley.SpecialOrders;
 
 namespace ExpFromMonsterKillsOnFarm;
 

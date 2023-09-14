@@ -5,6 +5,8 @@ using HarmonyLib;
 
 using Microsoft.Xna.Framework;
 
+using PrismaticSlime.Framework;
+
 namespace PrismaticSlime.HarmonyPatches.SlimeToastPatches;
 
 /// <summary>
@@ -17,12 +19,12 @@ internal static class FarmerPatches
     /// <summary>
     /// The ID number for the prismatic jelly toast buff.
     /// </summary>
-    internal const int BuffId = 15157;
+    internal const string BuffId = "atravita.PrismaticJellyToast";
 
     [HarmonyPatch(nameof(Farmer.doneEating))]
     private static void Prefix(Farmer __instance)
     {
-        if (!Utility.IsNormalObjectAtParentSheetIndex(__instance.itemToEat, ModEntry.PrismaticJellyToast))
+        if (__instance.itemToEat.QualifiedItemId != $"{ItemRegistry.type_object}{ModEntry.PrismaticJellyToast}")
         {
             return;
         }
@@ -30,13 +32,13 @@ internal static class FarmerPatches
         try
         {
             BuffEnum buffenum = BuffEnumExtensions.GetRandomBuff();
-            Buff buff = buffenum.GetBuffOf(5, 2600, "Prismatic Toast", I18n.PrismaticJellyToast_Name());
-            buff.which = BuffId;
-            buff.sheetIndex = 0;
+            Buff buff = buffenum.GetBuffOf(5, 2600, "Prismatic Toast", I18n.PrismaticJellyToast_Name(), id: BuffId);
+            buff.iconTexture = AssetManager.BuffTexture;
+            buff.iconSheetIndex = 0;
             buff.description = I18n.PrismaticJellyBuff_Description(buffenum.ToStringFast());
             buff.glow = Color.HotPink;
 
-            Game1.buffsDisplay.addOtherBuff(buff);
+            Game1.player.applyBuff(buff);
         }
         catch (Exception ex)
         {

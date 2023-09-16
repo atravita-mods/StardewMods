@@ -252,6 +252,9 @@
     "alex-resort-pier": "This water's so blue, I want to dive in.",
     "vincent_pier": "Look, a whale!",
 
+    // expecting grandchildren
+    "robin-expecting-grandchild": "Oh, @, I'm so looking forward to having a new grandchild!",
+
     // divorce strings
     "demetrius-divorced-from-maru-a": "Well, I wish you hadn't broken my dear Maru's heart.",
     "demetrius-divorced-from-maru-b": "I have nothing to say to you.",
@@ -266,6 +269,8 @@
     "robin-divorced-from-maru-b": "Listen, @, I still have to do business with you, but I don't have to like you.",
     "robin-divorced-from-sebastian-a": "Sebastian doesn't want to talk to you, and neither do I.",
     "robin-divorced-from-sebastian-b": "I had high hopes for you and Sebastian. Turns out I was wrong.",
+
+    "divorced-from-family-generic": "Oh, hi.#$b#Look, do you need something or do you want to leave me alone?",
 
     "maru-divorced-from-penny-a": "Penny deserves better than you, @.",
     "maru-divorced-from-penny-b": "Look, all Penny wanted was a family of her own. I will always take her side in this.",
@@ -387,6 +392,9 @@
 
     // When you've finished upgrading your house, replace Robin line.
     "robin-winter-mon": "I've always loved this time of year. The snow in the mountains is beautiful. Even when I have to walk through it.",
+    // Robin also implies you've never met Sebastian even if you're, like, besties with him.
+    "robin-fri": "I wish my son'd come out of his room more often, I'm not quite sure what he does in there all day.#$b#I mean, I know he has work, but even beyond that, he tends to just...stay in his room.",
+    "robin-fri-sebby-married": "I'm glad my son's finally found someone. I was so worried he'd never get married, holded up in his room like that.",
 
     // sandy loves movies!
     "sandy-movies-a": "I heard you guys have a theater now!",

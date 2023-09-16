@@ -15,6 +15,12 @@
         "Action": "EditData",
         "Target": "Characters/Dialogue/Penny",
         "Entries": {
+            "Mon4": "@, you've got any interesting books you want to read?",
+
+            "summer_Mon8": "Ma wasn't around much when I was young. She was always driving that big truck.#$b#$c .5#Mrs. Mullner would take care of me.#I'd ride around with her sometimes, though.",
+            "fall_Tue8": "Dad was never good at holding down a job. Then one day he just up and left...",
+
+            // pre-festival
             "spring_12{{YearRemainder}}": "It's going to be the Egg Festival tomorrow! The kids always love it.$h",
             "spring_23{{YearRemainder}}": "@, what if no one wants to dance with me tomorrow?$s",
 
@@ -27,14 +33,10 @@
         "Target": "Characters/Dialogue/Penny",
         "When": {"YearModulus": "2"},
         "Entries": {
-            "Mon4": "@, you've got any interesting books you want to read?",
-
-            "summer_Mon8": "Ma wasn't around much when I was young. She was always driving that big truck.#$b#$c .5#Mrs. Mullner would take care of me.#I'd ride around with her sometimes, though.",
-            "fall_Tue8": "Dad was never good at holding down a job. Then one day he just up and left...",
-
             "1_2": "I'd love to decorate more, but Mum doesn't approve.#$b#She thinks it's spending money we don't have.",
             "2_2": "Back when Mom used to drive that truck around, she'd bring me soup from a small restaurant near one of the truck stops she frequented.%revealtastePenny218#$b#Tom Kha soup, I still love that.",
-            "3_2": "I hate how big companies can abuse bankruptcy to get themselves out of lawsuits.$s"
+            "3_2": "I hate how big companies can abuse bankruptcy to get themselves out of lawsuits.$s",
+            "5_2": "One of the things I truly love about the library is the interlibrary loan system.#$b#We can borrow books from any library within the state, and they'll just ship the book to our library!$h"
         }
     },
     {

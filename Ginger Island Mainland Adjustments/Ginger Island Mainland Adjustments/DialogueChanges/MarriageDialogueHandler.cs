@@ -30,11 +30,11 @@ internal static class MarriageDialogueHandler
                     spouse.currentMarriageDialogue.Clear();
                     if (Game1.player.getFriendshipHeartLevelForNPC(spouse.Name) > 9)
                     {
-                        spouse.CurrentDialogue.Push(new Dialogue(I18n.GILeaveDefaultHappy(spouse.getTermOfSpousalEndearment()), spouse));
+                        spouse.CurrentDialogue.Push(new Dialogue(spouse, null, I18n.GILeaveDefaultHappy(spouse.getTermOfSpousalEndearment())));
                     }
                     else
                     {
-                        spouse.CurrentDialogue.Push(new Dialogue(I18n.GILeaveDefaultUnhappy(), spouse));
+                        spouse.CurrentDialogue.Push(new Dialogue(spouse, null, I18n.GILeaveDefaultUnhappy()));
                     }
                     Globals.ModMonitor.DebugOnlyLog($"Setting default GILeave dialogue.", LogLevel.Trace);
                 }

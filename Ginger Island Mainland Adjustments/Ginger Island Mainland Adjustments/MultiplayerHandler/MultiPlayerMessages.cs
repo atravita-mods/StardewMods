@@ -66,7 +66,7 @@ public static class MultiplayerSharedState
     {
         try
         {
-            if (Context.IsMainPlayer && HasSeenEvent.Value.GetValue() && __instance?.Name.Equals("Pam", StringComparison.OrdinalIgnoreCase) == true
+            if (Context.IsMainPlayer && __instance?.Name.Equals("Pam", StringComparison.OrdinalIgnoreCase) == true
                 && __instance.TryGetScheduleEntry(__instance.dayScheduleName.Value, out string? rawstring)
                 && Globals.UtilitySchedulingFunctions.TryFindGOTOschedule(__instance, SDate.Now(), rawstring, out string redirectedstring))
             {

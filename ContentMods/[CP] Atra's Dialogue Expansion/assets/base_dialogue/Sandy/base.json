@@ -8,7 +8,8 @@
                 "Relationship:Emily": "Divorced"
             },
             "Entries": {
-                "SandyHouse": "{{i18n:sandy-divorced-from-emily}}$s"
+                "SandyHouse": "{{i18n:sandy-divorced-from-emily}}$s",
+                "Desert": "{{i18n:divorced-from-family-generic}}$s"
             }
         },
         {

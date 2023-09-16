@@ -59,7 +59,7 @@ internal static class GGCUtils
         {
             foreach (ResourceClump? clump in loc.resourceClumps)
             {
-                if (clump is not null && clump.getBoundingBox(clump.tile.Value).Contains(nonTileX, nonTileY)
+                if (clump is not null && clump.getBoundingBox().Contains(nonTileX, nonTileY)
                     && (!placedOnly || clump.modData?.ContainsKey(InventoryResourceClump.ResourceModdata) == true))
                 {
                     return clump;
@@ -70,27 +70,6 @@ internal static class GGCUtils
         if (placedOnly)
         {
             return null;
-        }
-
-        // handle secret woods clumps
-        if (loc is Woods woods)
-        {
-            foreach (ResourceClump? stump in woods.stumps)
-            {
-                if (stump is not null && stump.getBoundingBox(stump.tile.Value).Contains(nonTileX, nonTileY))
-                {
-                    return stump;
-                }
-            }
-        }
-
-        // the log blocking off the secret forest.
-        if (loc is Forest forest)
-        {
-            if (forest.log is not null && forest.log.getBoundingBox(forest.log.tile.Value).Contains(nonTileX, nonTileX))
-            {
-                return forest.log;
-            }
         }
 
         LargeTerrainFeature? terrain = loc.getLargeTerrainFeatureAt(nonTileX / Game1.tileSize, nonTileY / Game1.tileSize);
@@ -121,7 +100,7 @@ internal static class GGCUtils
             for (int i = loc.resourceClumps.Count - 1; i >= 0; i--)
             {
                 ResourceClump? clump = loc.resourceClumps[i];
-                if (clump is not null && clump.getBoundingBox(clump.tile.Value).Contains(nonTileX, nonTileY)
+                if (clump is not null && clump.getBoundingBox().Contains(nonTileX, nonTileY)
                     && (!placedOnly || clump.modData?.ContainsKey(InventoryResourceClump.ResourceModdata) == true))
                 {
                     loc.resourceClumps.RemoveAt(i);
@@ -133,31 +112,6 @@ internal static class GGCUtils
         if (placedOnly)
         {
             return null;
-        }
-
-        // handle secret woods clumps
-        if (loc is Woods woods)
-        {
-            for (int i = woods.stumps.Count - 1; i >= 0; i--)
-            {
-                ResourceClump? clump = woods.stumps[i];
-                if (clump is not null && clump.getBoundingBox(clump.tile.Value).Contains(nonTileX, nonTileY))
-                {
-                    woods.stumps.RemoveAt(i);
-                    return clump;
-                }
-            }
-        }
-
-        // the log blocking off the secret forest.
-        if (loc is Forest forest)
-        {
-            if (forest.log is not null && forest.log.getBoundingBox(forest.log.tile.Value).Contains(nonTileX, nonTileY))
-            {
-                ResourceClump log = forest.log;
-                forest.log = null;
-                return log;
-            }
         }
 
         if (loc.largeTerrainFeatures is not null)
@@ -216,22 +170,21 @@ internal static class GGCUtils
 
         foreach (ResourceClump? clump in location.resourceClumps)
         {
-            if (clump.getBoundingBox(clump.currentTileLocation).Intersects(position))
+            if (clump.getBoundingBox().Intersects(position))
             {
                 return false;
             }
         }
 
-        if (location is IAnimalLocation hasAnimals)
+
+        foreach (FarmAnimal? animal in location.Animals.Values)
         {
-            foreach (FarmAnimal? animal in hasAnimals.Animals.Values)
+            if (animal.GetBoundingBox().Intersects(position))
             {
-                if (animal.GetBoundingBox().Intersects(position))
-                {
-                    return false;
-                }
+                return false;
             }
         }
+
 
         if (relaxed)
         {
@@ -239,16 +192,15 @@ internal static class GGCUtils
         }
 
         Vector2 tile = new(tileX, tileY);
-        if (location is BuildableGameLocation buildable)
+
+        foreach (Building? building in location.buildings)
         {
-            foreach (Building? building in buildable.buildings)
+            if (!building.isTilePassable(tile))
             {
-                if (!building.isTilePassable(tile))
-                {
-                    return false;
-                }
+                return false;
             }
         }
+
 
         if ((location.terrainFeatures?.TryGetValue(tile, out TerrainFeature? terrain) == true
             && (terrain is not HoeDirt dirt || dirt.crop is not null))
@@ -265,7 +217,7 @@ internal static class GGCUtils
     /// </summary>
     /// <param name="idx">index of that SOBject.</param>
     /// <returns>Name or placeholder if not found.</returns>
-    internal static string GetNameOfSObject(int idx)
+    internal static string GetNameOfSObject(string idx)
         => Game1Wrappers.ObjectInfo.TryGetValue(idx, out string? data)
             ? data.GetNthChunk('/').ToString()
             : "NoNameFound";

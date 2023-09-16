@@ -73,7 +73,7 @@
         "Action": "EditData",
         "Target": "Characters/Dialogue/Abigail",
         "Entries": {
-            "summer_Sun6": "Haley showed me her new sunscreen. It feels so much lighter on my skin!#$b#Do you wear sunscreen, @? You probably do, you're under the sun farming all day.",
+            "summer_Sun6": "#$c .5#Haley showed me her new sunscreen. It feels so much lighter on my skin!#Do you wear sunscreen, @? You probably do, you're under the sun farming all day.",
 
             // before egg hunt
             "spring_12{{YearRemainder}}": "Mom thinks I'm getting too old for the egg hunt, but I'm still having fun.$h",

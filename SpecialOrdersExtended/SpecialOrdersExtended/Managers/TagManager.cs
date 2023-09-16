@@ -118,7 +118,7 @@ internal static class TagManager
                 }
 
                 // SAFETY: length was checked earlier, caps to 256
-                Span<char> tagName = stackalloc char[first.Length];
+                Span<char> tagName = stackalloc char[first.Length + 10];
                 int copiedCount = first.ToLowerInvariant(tagName);
                 if (copiedCount < 0)
                 {

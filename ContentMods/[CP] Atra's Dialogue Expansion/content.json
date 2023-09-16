@@ -249,6 +249,16 @@
             }
         },
 
+        // Random dishes
+        {
+            "Name": "Dish",
+            "Value": "{{i18n:dishes.adult.{{Random:01, 02, 03, 04, 05, 06, 07, 08, 10}} }}"
+        },
+        {
+            "Name": "Restaurant",
+            "Value": "{{i18n:restaurant.{{Random:01, 02, 03, 04, 05, 06}} }}"
+        },
+
         // Random video game
         {
             "Name": "VideoGame",
@@ -304,7 +314,7 @@
         {
             "Action": "Include",
             "LogName": "ScheduleChanges",
-            "When": { "HasValue: ScheduleChanges": true },
+            "When": { "ScheduleChanges": true },
             "FromFile": "assets/schedules/toc.json"
         },
         {

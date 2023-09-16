@@ -52,7 +52,8 @@
         "Target": "Characters/Dialogue/Penny",
         "When": {"YearModulus": "4"},
         "Entries": {
-            "3_2": "Ugh, I hope either Mom or I get a raise soon, this inflation is brutal.$s"
+            "3_2": "Ugh, I hope either Mom or I get a raise soon, this inflation is brutal.$s",
+            "13_2": "I was trying to cook {{Dish}} again recently, but it's much harder than I thought it would be."
         }
     }
 ]}

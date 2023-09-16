@@ -61,7 +61,8 @@
         "Target": "Characters/Dialogue/Robin",
         "When":{
             "HavingChild": "@{{playerName}}",
-            "Spouse": "Maru, Sebastian"
+            "Spouse": "Maru, Sebastian",
+            "DialogueRandom": "alpha"
         },
         "Entries": {
             "ScienceHouse": "{{i18n:robin-expecting-grandchild}}$h"

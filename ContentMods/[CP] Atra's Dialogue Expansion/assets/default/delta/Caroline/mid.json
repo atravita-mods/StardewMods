@@ -95,7 +95,7 @@
             "17{{YearRemainder}}": "Ever since Pierre decided that the shop should be open seven days a week, I've felt like I've always been at work.$s#$b#Wish I could just get a little time to drink a nice cup of tea.",
             "21{{YearRemainder}}": "Used to enjoy going out to the forest to gather mushrooms. We would sometimes sell them, helped when we needed the money.",
             "23{{YearRemainder}}": "Lewis handles most of the good export out of this county, and we're now handling most of the imports.$h",
-            "27{{YearRemainder}}": "I wonder if I can convince Pierre to take me to {{i18n:restaurant.{{Random:01, 02, 03, 04, 05, 06}} }}. I hear their {{i18n:dishes.adult.{{Random:01, 02, 03, 04, 05, 06, 07, 08, 09}} }} is to die for."
+            "27{{YearRemainder}}": "I wonder if I can convince Pierre to take me to {{Restaurant}}. I hear their {{Dish}} is to die for."
         }
     },
     {
@@ -125,7 +125,7 @@
             "13_2": "I should see if Evelyn needs more help with those gardens, I do love working on them with her.$h",
             "19_2": "Abby has a test she's cramming for, so I'm trying to find some of her favorite snacks.",
             "20_2": "Jodi's always been a much better cook than I could ever be.",
-            "28_2": "@, what else do you think we should carry?",
+            "28_2": "@, what else do you think we should carry?"
         }
     },
     {
@@ -141,13 +141,13 @@
             "6_2": "@! I got a little extra fertilizer. Would you like some?[368]$h",
             "13_2": "Gosh, I wish I wasn't so busy all the time running the shop.#$b#Would love to go vacation more often.",
             "15_2": "@, come enjoy a cup of tea with me![614]$h",
-            "17_2": "Jodi gave me a recipe for {{i18n:dishes.adult.{{Random:01, 02, 03, 04, 05, 06, 07, 08, 09}} }}! She says it's great.",
+            "17_2": "Jodi gave me a recipe for {{Dish}}! She says it's great.",
             "18_2": "Argh, I'm not sure I want to spend the energy trying to convince Abby to do the dishes tonight.#$b#Frankly, @, it's sometimes easier to just do them myself.",
 
             // GIMA lines.
             "Resort_2": "Heya, @, what're you up to today? Planning to take a nice day off?",
             "Resort_Bar_3": "Oh, hey, @! How's the sun and shore treating you?#$b#*hic* I'm really enjoying this place!$h",
-            "Resort_Approach": "@, I'm so excited to be going on vacation today!",
+            "Resort_Approach": "@, I'm so excited to be going on vacation today!"
         }
     },
     {
@@ -195,7 +195,7 @@
         },
         "Entries": {
             "7_2": "Was talking to Robin the other day.#$b#You know, @, we'd try our best to support Abigail if she wanted to move out. I'm not sure she wants to, though.",
-            "9_2": "I asked Abby last night if she'd be happier living in the city.#$b#I'd miss her if she moved out, of course, but maybe it's necessary.$s",
+            "9_2": "I asked Abby last night if she'd be happier living in the city.#$b#I'd miss her if she moved out, of course, but maybe it's necessary.$s"
         }
     },
     {

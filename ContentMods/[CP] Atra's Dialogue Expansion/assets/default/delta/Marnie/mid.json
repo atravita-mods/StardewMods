@@ -20,7 +20,7 @@
         "Target": "Characters/Dialogue/Marnie",
         "Entries": {
             "Town6": "Oh, @, heard on the grapevine you're expecting a kid! Have you picked a name yet?",
-            "AnimalShop6": "Hey, @, I've heard the good news. When're you expecting the new kid?",
+            "AnimalShop6": "Hey, @, I've heard the good news. When're you expecting the new kid?"
         },
         "When": {
             "HavingChild": "@{{playerName}}"

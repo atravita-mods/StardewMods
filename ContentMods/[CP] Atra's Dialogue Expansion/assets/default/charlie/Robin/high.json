@@ -9,5 +9,13 @@
         "When": {
             "YearModulus": "4"
         }
+    },
+    {
+        "Action": "EditData",
+        "LogName": "Robin high-hearts, Y5",
+        "Target": "Characters/Dialogue/Robin",
+        "Entries": {
+            "3_2": "I've got a new design for a bed I've been thinking over....wonder when I'll have the free time to work on it..."
+        }
     }
 ]}

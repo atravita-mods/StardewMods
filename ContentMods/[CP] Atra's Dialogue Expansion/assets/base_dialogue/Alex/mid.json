@@ -12,6 +12,8 @@
             // pre-luau
             "summer_10{{YearRemainder}}": "{{i18n:alex-pre-luau.{{YearModulus}} }}$h",
 
+            "summer_13{{YearRemainder}}": "{{i18n:alex-birthday-self}}$h",
+
             "IslandSouth_Entry": "{{i18n: alex-vacation-bubbles}}"
         }
     }

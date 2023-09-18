@@ -4,7 +4,9 @@
             "Action": "EditData",
             "Target": "Characters/Dialogue/MarriageDialogueHarvey",
             "Entries": {
-                "GILeave_Harvey": "{{i18n:gi_leave_harvey_0}}#$b#$s{{i18n:gi_leave_harvey_1}}"
+                "GILeave_Harvey": "{{i18n:gi_leave_harvey_0}}#$b#$s{{i18n:gi_leave_harvey_1}}",
+
+                "summer_2": "{{i18n:harvey-summer-2a}}#$b#{{i18n:harvey-summer-2b}}"
             }
         },
         {

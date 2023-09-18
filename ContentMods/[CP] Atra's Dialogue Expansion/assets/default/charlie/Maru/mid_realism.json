@@ -22,7 +22,9 @@
             "Target": "Characters/Dialogue/Maru",
             "When": {"YearModulus": "4"},
             "Entries": {
-                "23_2": "I swear, it feels like every third day there's a new article about longer-lasting batteries but none of them have made it to market.$s"
+                "23_2": "I swear, it feels like every third day there's a new article about longer-lasting batteries but none of them have made it to market.$s",
+                "24_2": "Nanorobotics always amazes me. Just, the sheer scale at which they must work at, how much control they need.",
+                "25_2": "Computers have been improving so fast for so long, I wonder how long this streak will continue..."
             }
         }
     ]

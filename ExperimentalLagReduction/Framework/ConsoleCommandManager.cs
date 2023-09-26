@@ -70,7 +70,7 @@ internal static class ConsoleCommandManager
             }
         }
 
-        if (Rescheduler.TryGetPathFromCache(args[0], args[1], (int)gender, out List<string>? path))
+        if (Rescheduler.TryGetPathFromCache(args[0], args[1], (int)gender, out string[]? path))
         {
             if (path is not null)
             {
@@ -101,7 +101,7 @@ internal static class ConsoleCommandManager
                     return;
                 }
 
-                List<string>? calcPath = Rescheduler.GetPathFor(startLocation, endLocation, gender, ModEntry.Config.AllowPartialPaths);
+                string[]? calcPath = Rescheduler.GetPathFor(startLocation, endLocation, gender, ModEntry.Config.AllowPartialPaths);
 
                 if (calcPath is null)
                 {
@@ -146,18 +146,18 @@ internal static class ConsoleCommandManager
 
         for (int i = 1; i < args.Length; i++)
         {
-            string contender = args[i];
-            if (!int.TryParse(contender, out int id) || !Game1Wrappers.ObjectInfo.ContainsKey(id))
+            string? contender = args[i];
+            if (!Game1Wrappers.ObjectData.ContainsKey(contender))
             {
-                id = DataToItemMap.GetID(ItemTypeEnum.SObject, contender);
+                contender = DataToItemMap.GetID(ItemTypeEnum.SObject, contender);
             }
-            if (id < 0)
+            if (contender is null)
             {
-                ModEntry.ModMonitor.Log($"{contender} doesn't seem to be a valid item.", LogLevel.Warn);
+                ModEntry.ModMonitor.Log($"{args[i]} doesn't seem to be a valid item.", LogLevel.Warn);
                 continue;
             }
 
-            SObject obj = new(id, 1);
+            SObject obj = new(contender, 1);
 
             // fine for this to be non-exhaustive, it's only used in a console command.
             // let it throw.

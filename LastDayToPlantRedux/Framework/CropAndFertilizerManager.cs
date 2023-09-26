@@ -12,6 +12,8 @@ using AtraShared.Utils.Extensions;
 using AtraShared.Utils.Shims;
 using AtraShared.Wrappers;
 
+using StardewValley.GameData.Objects;
+
 namespace LastDayToPlantRedux.Framework;
 
 // fertilizers are filtered while loading, while seeds (which I expect more change for) are filtered while calculating.
@@ -190,20 +192,14 @@ internal static class CropAndFertilizerManager
                     continue;
                 }
 
-                if (!Game1Wrappers.ObjectInfo.TryGetValue(index, out string? data))
+                if (!Game1Wrappers.ObjectData.TryGetValue(index, out ObjectData data))
                 {
                     continue;
                 }
 
-                ReadOnlySpan<char> name = data.GetNthChunk('/', SObject.objectInfoDisplayNameIndex);
-
-                if (name.Length == 0)
-                {
-                    continue;
-                }
                 hasCrops = true;
 
-                sb.Append(I18n.CropInfo(name.ToString(), days));
+                sb.Append(I18n.CropInfo(data.Name, days));
                 if (condition.Fertilizer != 0)
                 {
                     sb.Append(I18n.CropInfo_Fertilizer(fertilizers[condition.Fertilizer]));
@@ -418,7 +414,7 @@ SUCCESS:
             return false;
         }
 
-        if (!Game1Wrappers.ObjectInfo.TryGetValue(crop, out string? data))
+        if (!Game1Wrappers.ObjectData.TryGetValue(crop, out string? data))
         {
             return false;
         }
@@ -538,7 +534,7 @@ breakcontinue:
 
         DummyHoeDirt dirt = new(0);
 
-        foreach ((int index, string vals) in Game1Wrappers.ObjectInfo)
+        foreach ((int index, string vals) in Game1Wrappers.ObjectData)
         {
             ReadOnlySpan<char> catName = vals.GetNthChunk('/', SObject.objectInfoTypeIndex);
             int spaceIndx = catName.GetLastIndexOfWhiteSpace();

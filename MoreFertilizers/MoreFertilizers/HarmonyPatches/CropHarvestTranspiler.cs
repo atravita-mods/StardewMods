@@ -189,7 +189,7 @@ internal static class CropHarvestTranspiler
             dirt.crop.InferSeedIndex();
             int seedIndex = dirt.crop.rowInSpriteSheet.Value != Crop.rowOfWildSeeds ? dirt.crop.netSeedIndex.Value : dirt.crop.whichForageCrop.Value;
 
-            if (Game1Wrappers.ObjectInfo.ContainsKey(seedIndex))
+            if (Game1Wrappers.ObjectData.ContainsKey(seedIndex))
             {
                 SObject seeds = new(seedIndex, Singletons.Random.Next(3));
                 if (jumino is null)

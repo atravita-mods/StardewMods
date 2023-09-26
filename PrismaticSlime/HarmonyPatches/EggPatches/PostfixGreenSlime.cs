@@ -1,7 +1,5 @@
 ﻿using AtraBase.Toolkit.Extensions;
 
-using AtraCore;
-
 using AtraShared.ConstantsAndEnums;
 
 using HarmonyLib;
@@ -21,9 +19,8 @@ internal static class PostfixGreenSlime
     [HarmonyPatch(nameof(GreenSlime.getExtraDropItems))]
     private static void Postfix(GreenSlime __instance,  List<Item> __result)
     {
-        if (ModEntry.PrismaticSlimeEgg != -1
-            && __instance.prismatic.Value
-            && Singletons.Random.OfChance(0.5))
+        if (__instance.prismatic.Value
+            && Random.Shared.OfChance(0.5))
         {
             __result.Add(new SObject(ModEntry.PrismaticSlimeEgg, 1));
         }

@@ -15,12 +15,12 @@ public sealed class API : IExperimentalLagReductionAPI
     public bool ClearPathNulls() => Rescheduler.ClearNulls();
 
     /// <inheritdoc />
-    public List<string>? GetPathFor(GameLocation start, GameLocation end, int gender, bool allowPartialPaths)
+    public string[]? GetPathFor(GameLocation start, GameLocation end, int gender, bool allowPartialPaths)
     {
         Guard.IsNotNull(start);
         Guard.IsNotNull(end);
 
-        if (Rescheduler.TryGetPathFromCache(start.Name, end.Name, gender, out List<string>? path))
+        if (Rescheduler.TryGetPathFromCache(start.Name, end.Name, gender, out string[]? path))
         {
             return path;
         }

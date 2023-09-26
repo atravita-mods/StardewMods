@@ -119,5 +119,15 @@
             "EnableFor": "Sebastian",
             "Query: {{Hearts:Sebastian}} >= 6": true
         }
+    },
+    {
+        "Action": "Include",
+        "LogName": "Sebastian - mid hearts",
+        "FromFile": "{{FirstValidFile: assets/{{language}}/alpha/Sebastian/mid_realism.json, assets/default/alpha/Sebastian/mid_realism.json}}",
+        "When": {
+            "EnableFor": "Sebastian",
+            "IncreasedRealism": true,
+            "Query: {{Hearts:Sebastian}} >= 6": true
+        }
     }
 ]}

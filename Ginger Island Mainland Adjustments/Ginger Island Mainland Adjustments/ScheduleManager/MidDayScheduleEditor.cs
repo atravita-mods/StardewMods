@@ -7,6 +7,8 @@ using Microsoft.Xna.Framework;
 using StardewModdingAPI.Events;
 using StardewModdingAPI.Utilities;
 
+using StardewValley.Pathfinding;
+
 namespace GingerIslandMainlandAdjustments.ScheduleManager;
 
 /// <summary>
@@ -103,7 +105,7 @@ internal static class MidDayScheduleEditor
         keys.Sort();
         if (keys.Count == 0 || keys[^1] != GIEndTime)
         {
-            Globals.ModMonitor.DebugOnlyLog($"Recieved {npc.Name} to adjust but last schedule key is not {GIEndTime}");
+            Globals.ModMonitor.DebugOnlyLog($"Received {npc.Name} to adjust but last schedule key is not {GIEndTime}");
             return false;
         }
         string? schedule = ScheduleUtilities.FindProperGISchedule(npc, SDate.Now());

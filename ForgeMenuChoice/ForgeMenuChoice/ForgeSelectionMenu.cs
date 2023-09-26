@@ -4,6 +4,8 @@ using AtraShared.Utils.Extensions;
 
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+
+using StardewValley.Enchantments;
 using StardewValley.Menus;
 
 namespace ForgeMenuChoice;

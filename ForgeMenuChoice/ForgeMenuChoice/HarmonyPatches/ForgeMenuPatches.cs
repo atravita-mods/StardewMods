@@ -9,6 +9,7 @@ using Microsoft.Xna.Framework.Graphics;
 using StardewModdingAPI.Events;
 using StardewModdingAPI.Utilities;
 
+using StardewValley.Enchantments;
 using StardewValley.Menus;
 
 namespace ForgeMenuChoice.HarmonyPatches;

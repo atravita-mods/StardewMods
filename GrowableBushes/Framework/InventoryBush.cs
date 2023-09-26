@@ -95,6 +95,11 @@ public sealed class InventoryBush : SObject
     #region placement
 
     /// <inheritdoc />
+    public override bool canBePlacedHere(GameLocation l, Vector2 tile, CollisionMask collisionMask = CollisionMask.All, bool showError = false)
+        => base.canBePlacedHere(l, tile, collisionMask, showError);
+
+
+    /// <inheritdoc />
     public override bool canBePlacedHere(GameLocation l, Vector2 tile)
         => this.CanPlace(l, tile, ModEntry.Config.RelaxedPlacement);
 

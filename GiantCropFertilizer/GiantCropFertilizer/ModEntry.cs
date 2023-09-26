@@ -52,19 +52,7 @@ internal sealed class ModEntry : BaseMod<ModEntry>
         try
         {
             harmony.PatchAll(typeof(ModEntry).Assembly);
-
-            if (this.Helper.ModRegistry.Get("spacechase0.MultiFertilizer") is IModInfo info
-                && info.Manifest.Version.IsOlderThan("1.0.6"))
-            {
-                this.Monitor.Log("Found MultiFertilizer, applying compat patches", LogLevel.Info);
-                HoeDirtPatcher.ApplyPatches(harmony);
-                MultiFertilizerDrawTranspiler.ApplyPatches(harmony);
-            }
-            else
-            {
-                HoeDirtDrawTranspiler.ApplyPatches(harmony);
-            }
-
+            HoeDirtDrawTranspiler.ApplyPatches(harmony);
             if (!this.Helper.ModRegistry.IsLoaded("spacechase0.MoreGiantCrops"))
             {
                 RemoveFarmCheck.ApplyPatches(harmony);
@@ -137,7 +125,7 @@ internal sealed class ModEntry : BaseMod<ModEntry>
         }
     }
 
-    /// <inheritdoc cref="IGameLoopEvents.Save"/>
+    /// <inheritdoc cref="IGameLoopEvents.Saved"/>
     /// <remarks>
     /// Writes migration data then detaches the migrator.
     /// </remarks>

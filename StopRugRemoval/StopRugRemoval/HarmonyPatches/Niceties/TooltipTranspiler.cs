@@ -31,7 +31,7 @@ internal static class TooltipTranspiler
     [MethodImpl(TKConstants.Hot)]
     private static string? GetTooltipDuration(Item? hoveredItem)
     {
-        if (hoveredItem is SObject obj && Game1Wrappers.ObjectInfo.TryGetValue(obj.ParentSheetIndex, out string? data)
+        if (hoveredItem is SObject obj && Game1Wrappers.ObjectData.TryGetValue(obj.ParentSheetIndex, out string? data)
             && int.TryParse(data.GetNthChunk('/', 8), out int minutesDuration) && minutesDuration > 0)
         {
             if (obj.Quality != 0)

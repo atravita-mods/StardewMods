@@ -34,7 +34,7 @@ public sealed class ObjectDefinition
     public string? DurationOverride { get; set; } = null;
 }
 
-internal readonly record struct OverrideObject(SObject? obj, int? duration);
+internal readonly record struct OverrideObject(SObject? obj, int? duration, int? price);
 
 /// <summary>
 /// Manages assets for this mod.
@@ -44,8 +44,8 @@ internal static class AssetManager
 {
     private static IAssetName assetName = null!;
 
-    private static readonly Dictionary<int, OverrideObject> OverridesCache = new();
-    private static Lazy<Dictionary<int, ObjectDefinition>> overrides = new(() => Game1.content.Load<Dictionary<int, ObjectDefinition>>(assetName.BaseName));
+    private static readonly Dictionary<string, OverrideObject> OverridesCache = new();
+    private static Lazy<Dictionary<string, ObjectDefinition>> overrides = new(() => Game1.content.Load<Dictionary<string, ObjectDefinition>>(assetName.BaseName));
 
     /// <summary>
     /// Initializes the asset manager.
@@ -63,12 +63,12 @@ internal static class AssetManager
     /// <returns>The tapper's product if an override is found.</returns>
     internal static OverrideObject? GetOverrideItem(string qualID)
     {
-        if (OverridesCache.TryGetValue(input, out OverrideObject obj))
+        if (OverridesCache.TryGetValue(qualID, out OverrideObject obj))
         {
             return obj;
         }
 
-        if (overrides.Value.TryGetValue(input, out ObjectDefinition? objectDefinition))
+        if (overrides.Value.TryGetValue(qualID, out ObjectDefinition? objectDefinition))
         {
             if (!int.TryParse(objectDefinition.Object, out int id))
             {
@@ -134,7 +134,7 @@ internal static class AssetManager
         {
             if (overrides.IsValueCreated)
             {
-                overrides = new(() => Game1.content.Load<Dictionary<int, ObjectDefinition>>(assetName.BaseName));
+                overrides = new(() => Game1.content.Load<Dictionary<string, ObjectDefinition>>(assetName.BaseName));
             }
             OverridesCache.Clear();
         }

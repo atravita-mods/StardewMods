@@ -6,8 +6,6 @@ using AtraShared.Integrations;
 using AtraShared.Integrations.Interfaces;
 using AtraShared.Utils.Extensions;
 
-using HighlightEmptyMachines.Legacy;
-
 using StardewModdingAPI.Utilities;
 
 namespace HighlightEmptyMachines.Framework;

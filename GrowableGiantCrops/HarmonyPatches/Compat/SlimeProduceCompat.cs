@@ -31,6 +31,11 @@ internal static class SlimeProduceCompat
     internal const string SlimeBall = "atravita.PickedUpSlimeball";
 
     /// <summary>
+    /// The qualified item id of a slime ball.
+    /// </summary>
+    internal const string SlimeBallQualId = "(BC)56";
+
+    /// <summary>
     /// Applies these patches.
     /// </summary>
     /// <param name="harmony">My harmony instance.</param>
@@ -106,7 +111,7 @@ internal static class SlimeProduceCompat
     [MethodImpl(TKConstants.Hot)]
     internal static Color ReplaceDrawColorForSlimeEgg(Color prevColor, SObject item)
     {
-        if (prevColor == Color.White && item.Name == "Slime Ball" && item.orderData?.Value is not null
+        if (prevColor == Color.White && item.QualifiedItemId == SlimeBallQualId && item.orderData?.Value is not null
             && uint.TryParse(item.orderData.Value.GetNthChunk('/'), out uint packed))
         {
             return new(packed);

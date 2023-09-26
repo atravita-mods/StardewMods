@@ -36,6 +36,7 @@ public sealed class ModConfig
 
     /// <summary>
     /// Gets or sets a mapping that sets whether coloration of vanilla machines should be enabled.
+    /// Mapping is between qualified item ids->whether or not it should be enabled.
     /// </summary>
     [GMCMDefaultIgnore]
     public Dictionary<string, bool> VanillaMachines { get; set; } = new();

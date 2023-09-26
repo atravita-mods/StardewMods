@@ -71,7 +71,7 @@ internal static class AssetManager
                 continue;
             }
 
-            if (!TryParseToRing(first, out int firstring) || !TryParseToRing(second, out int secondring))
+            if (!TryParseToRing(first, out string? firstring) || !TryParseToRing(second, out string? secondring))
             {
                 Globals.ModMonitor.Log($"'{identifiers}' refer to rings that could not be resolved, skipping.", LogLevel.Warn);
                 continue;
@@ -83,7 +83,7 @@ internal static class AssetManager
                 continue;
             }
 
-            RingPair pair = firstring > secondring
+            RingPair pair = firstring.CompareTo(secondring) > 0
                 ? new(secondring, firstring)
                 : new(firstring, secondring);
 
@@ -91,15 +91,18 @@ internal static class AssetManager
         }
     }
 
-    private static bool TryParseToRing(ReadOnlySpan<char> span, out string ringID)
+    private static bool TryParseToRing(ReadOnlySpan<char> span, [NotNullWhen(true)] out string? ringID)
     {
-        span = span.Trim();
-        if (int.TryParse(span, out ringID) && ringID > 0 && DataToItemMap.IsActuallyRing(ringID))
+        string id = ringID = span.Trim().ToString();
+        if (!Game1.objectData.TryGetValue(id, out var data))
         {
-            return true;
+            ringID = DataToItemMap.GetID(ItemTypeEnum.Ring, span.ToString());
+            if (ringID is not null)
+            {
+                _ = Game1.objectData.TryGetValue(id, out data);
+            }
         }
 
-        ringID = DataToItemMap.GetID(ItemTypeEnum.Ring, span.ToString());
-        return ringID > 0;
+        return ringID is not null && (data?.Type == "Ring" || data?.Category == SObject.ringCategory);
     }
 }

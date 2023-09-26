@@ -25,6 +25,7 @@ using StardewModdingAPI.Events;
 using StardewValley;
 using StardewValley.Characters;
 using StardewValley.Extensions;
+using StardewValley.GameData.Objects;
 using StardewValley.Objects;
 
 using AtraUtils = AtraShared.Utils.Utils;
@@ -66,7 +67,7 @@ internal sealed class ModEntry : BaseMod<ModEntry>
         AssetManager.Initialize(helper.GameContent);
         this.config = AtraUtils.GetConfigOrDefault<ModConfig>(helper, this.Monitor);
         StringUtils = new(this.Monitor);
-        this.dataObjectInfo = helper.GameContent.ParseAssetName("Data/ObjectInformation");
+        this.dataObjectInfo = helper.GameContent.ParseAssetName("Data/Objects");
 
         helper.Events.GameLoop.GameLaunched += this.OnGameLaunch;
         helper.Events.GameLoop.SaveLoaded += this.OnSaveLoaded;
@@ -385,34 +386,25 @@ internal sealed class ModEntry : BaseMod<ModEntry>
         WeightedManager<string> ret = new();
         float difficulty = Game1.player?.difficultyModifier ?? 1.0f;
 
-        foreach (int key in DataToItemMap.GetAll(ItemTypeEnum.SObject))
+        foreach ((string id, ObjectData data) in Game1.objectData)
         {
-            if (Game1.objectInformation.TryGetValue(key, out string? data))
+            if (ItemHelperUtils.ObjectFilter(id, data))
             {
-                StreamSplit splits = data.StreamSplit('/');
-
-                // field 0 - internal name.
-                if (!splits.MoveNext() || splits.Current.Contains("Qi", StringComparison.OrdinalIgnoreCase))
-                {
-                    continue;
-                }
-
-                // field 1 - price.
-                if (!splits.MoveNext() || !int.TryParse(splits.Current, out int price) || price * difficulty >= maxPrice)
-                {
-                    continue;
-                }
-
-                _ = splits.MoveNext();
-
-                // field 3 - category
-                if (!splits.MoveNext() || splits.Current.Word.Equals("Quest", StringComparison.OrdinalIgnoreCase))
-                {
-                    continue;
-                }
-
-                ret.Add(new(maxPrice - price, key));
+                continue;
             }
+
+            if (data.Name.Contains("Qi", StringComparison.Ordinal))
+            {
+                continue;
+            }
+
+            int price = data.Price;
+            if (price * difficulty >= maxPrice)
+            {
+                continue;
+            }
+
+            ret.Add(new(maxPrice - price, id));
         }
 
         return ret;

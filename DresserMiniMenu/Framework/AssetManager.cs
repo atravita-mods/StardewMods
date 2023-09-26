@@ -12,7 +12,7 @@ internal static class AssetManager
     private static IAssetName iconName = null!;
     private static string directoryPath = null!;
 
-    private static Lazy<Texture2D> _icons = new(() => Game1.temporaryContent.Load<Texture2D>(iconName.BaseName));
+    private static Lazy<Texture2D> _icons = new(() => Game1.content.Load<Texture2D>(iconName.BaseName));
 
     /// <summary>
     /// Gets the texture used for our icons.

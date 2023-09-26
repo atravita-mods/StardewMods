@@ -16,7 +16,7 @@ internal static class ItemPatches
     [HarmonyPatch(nameof(Item.canStackWith))]
     private static bool PrefixCanStackWith(Item __instance, ISalable other, ref bool __result)
     {
-        if (other is null || __instance.ParentSheetIndex != SObjectPatches.GrassStarterIndex)
+        if (other is null || __instance.QualifiedItemId != SObjectPatches.GrassStarterQualId)
         {
             return true;
         }

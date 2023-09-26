@@ -9,6 +9,7 @@ using HarmonyLib;
 
 using Microsoft.Xna.Framework;
 
+using StardewValley.Extensions;
 using StardewValley.Monsters;
 using StardewValley.Objects;
 
@@ -32,8 +33,7 @@ internal static class PostfixBigSlimeConstructor
         }
         try
         {
-            if (ModEntry.PrismaticSlimeRing != -1
-                && Singletons.Random.OfChance(0.008 + Math.Min(Game1.player.team.AverageDailyLuck() / 10.0, 0.01) + Math.Min(Game1.player.LuckLevel / 400.0, 0.01)))
+            if (Singletons.Random.OfChance(0.008 + Math.Min(Game1.player.team.AverageDailyLuck() / 10.0, 0.01) + Math.Min(Game1.player.LuckLevel / 400.0, 0.01)))
             {
                 __instance.heldObject.Value = new SObject(ModEntry.PrismaticSlimeRing, 1);
             }
@@ -50,23 +50,14 @@ internal static class PostfixBigSlimeConstructor
     [HarmonyPatch(nameof(BigSlime.getExtraDropItems))]
     private static void GetExtraDropItemsPostfix(List<Item> __result)
     {
-        if (ModEntry.PrismaticSlimeRing == -1)
-        {
-            return;
-        }
-
         for (int i = 0; i < __result.Count; i++)
         {
-            if (__result[i].ParentSheetIndex == ModEntry.PrismaticSlimeRing)
+            Item item = __result[i];
+            if (item.ItemId == ModEntry.PrismaticSlimeRing && item.HasTypeObject())
             {
-                if (__result[i] is not SObject oldring || oldring.bigCraftable.Value || oldring.GetType() != typeof(SObject))
-                {
-                    continue;
-                }
-
                 ModEntry.ModMonitor.DebugOnlyLog("Fixing ring to be prismatic ring");
                 __result[i] = new Ring(ModEntry.PrismaticSlimeRing);
-                __result[i].modData.CopyModDataFrom(oldring.modData);
+                __result[i].modData.CopyModDataFrom(item.modData);
             }
         }
     }

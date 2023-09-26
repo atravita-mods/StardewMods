@@ -24,7 +24,7 @@ internal static class AssetManager
     /// <param name="parser">Game content helper.</param>
     internal static void Init(IGameContentHelper parser)
     {
-        dataObjectInfo = parser.ParseAssetName("Data/ObjectInformation");
+        dataObjectInfo = parser.ParseAssetName("Data/Objects");
         dataShops = parser.ParseAssetName("Data/Shops");
         textureLocation = parser.ParseAssetName("Mods/atravita/GiantCropFertilizer/Object");
         textureLocationBackslashed = textureLocation.BaseName.Replace('/', '\\');

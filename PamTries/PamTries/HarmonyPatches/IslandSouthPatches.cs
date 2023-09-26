@@ -18,7 +18,7 @@ internal static class IslandSouthPatches
     {
         if (__result && Game1.dayOfMonth is 6 or 16
             && npc.Name.Equals("Pam", StringComparison.OrdinalIgnoreCase)
-            && Game1.getAllFarmers().Any(f => f.eventsSeen.Contains(99210002)))
+            && Game1.getAllFarmers().Any(f => f.eventsSeen.Contains("99210002")))
         {
             __result = false;
         }

@@ -39,7 +39,7 @@ internal static class RadioactiveFertilizerHandler
     internal static void Initialize(IGameContentHelper parser, IModRegistry registry, ITranslationHelper translation)
     {
         crops = parser.ParseAssetName("Data/Crops");
-        objects = parser.ParseAssetName("Data/ObjectInformation");
+        objects = parser.ParseAssetName("Data/Objects");
 
         IntegrationHelper helper = new(ModEntry.ModMonitor, translation, registry);
         _ = helper.TryGetAPI("atravita.LastDayToPlantRedux", null, out api);
@@ -200,7 +200,7 @@ internal static class RadioactiveFertilizerHandler
 
             if (data.GetNthChunk('/', 1).Contains(season, StringComparison.OrdinalIgnoreCase)
                 && int.TryParse(data.GetNthChunk('/', 3), out int obj)
-                && Game1Wrappers.ObjectInfo.TryGetValue(obj, out string? objData)
+                && Game1Wrappers.ObjectData.TryGetValue(obj, out string? objData)
                 && int.TryParse(objData.GetNthChunk('/', SObject.objectInfoPriceIndex), out int price)
                 && price > 0)
             {

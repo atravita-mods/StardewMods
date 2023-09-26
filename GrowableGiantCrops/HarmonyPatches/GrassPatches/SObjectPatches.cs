@@ -42,9 +42,14 @@ internal static class SObjectPatches
     internal const string ModDataKey = "atravita.GrowableGiantCrop.GrassType";
 
     /// <summary>
-    /// The ParentSheetIndex of a grass starter.
+    /// The unqualified item ID of a grass starter.
     /// </summary>
-    internal const int GrassStarterIndex = 297;
+    internal const string GrassStarterId = "297";
+
+    /// <summary>
+    /// The qualified item ID of a grass starter.
+    /// </summary>
+    internal const string GrassStarterQualId = $"{ItemRegistry.type_object}{GrassStarterId}";
 
     private static readonly Api Api = new();
 
@@ -179,7 +184,7 @@ internal static class SObjectPatches
     {
         tex = null;
         offset = 0;
-        if (obj.ParentSheetIndex != GrassStarterIndex || obj.modData?.TryGetValue(ModDataKey, out string? idx) != true)
+        if (obj.QualifiedItemId != GrassStarterQualId || obj.modData?.TryGetValue(ModDataKey, out string? idx) != true)
         {
             return false;
         }
@@ -194,7 +199,7 @@ internal static class SObjectPatches
         if (idx == "1")
         {
             GameLocation loc = Game1.currentLocation;
-            idx = loc is not Desert && loc is not IslandLocation && loc.IsOutdoors ? Game1.GetSeasonForLocation(loc) : "spring";
+            idx = loc is not Desert && loc is not IslandLocation && loc.IsOutdoors ? loc.GetSeasonKey() : "spring";
         }
 
         return offsets.TryGetValue(idx, out offset);
@@ -248,7 +253,7 @@ internal static class SObjectPatches
             origin: Vector2.Zero,
             scale: 4f,
             effects: SpriteEffects.None,
-            layerDepth: Math.Max(0f, (f.getStandingY() + 3) / 10000f));
+            layerDepth: Math.Max(0f, (f.StandingPixel.Y + 3) / 10000f));
 
         return false;
     }

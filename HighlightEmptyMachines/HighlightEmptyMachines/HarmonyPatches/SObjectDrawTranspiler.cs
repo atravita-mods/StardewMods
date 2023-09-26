@@ -27,7 +27,7 @@ internal class SObjectDrawTranspiler
         {
             return Color.White;
         }
-        if (PFMMachineHandler.ValidMachines.TryGetValue(obj.ParentSheetIndex, out MachineStatus status))
+        if (PFMMachineHandler.ValidMachines.TryGetValue(obj.QualifiedItemId, out MachineStatus status))
         {
             return status switch
             {
@@ -36,13 +36,13 @@ internal class SObjectDrawTranspiler
                 _ => Color.White,
             };
         }
-        else if (ModEntry.Config.VanillaMachines.TryGetValue((VanillaMachinesEnum)obj.ParentSheetIndex, out bool val) && val)
+        else if (ModEntry.Config.VanillaMachines.TryGetValue(obj.QualifiedItemId, out bool val) && val)
         {
-            if (obj is Cask cask && Game1.currentLocation is GameLocation loc && !cask.IsValidCaskLocation())
+            if (obj is Cask cask && !cask.IsValidCaskLocation())
             {
                 return ModEntry.Config.InvalidColor;
             }
-            else if (obj.ParentSheetIndex == (int)VanillaMachinesEnum.BeeHouse && BeehouseHandler.Status.Value == MachineStatus.Invalid)
+            else if (obj.QualifiedItemId == BeehouseHandler.BeeHouse && BeehouseHandler.Status.Value == MachineStatus.Invalid)
             {
                 return ModEntry.Config.InvalidColor;
             }

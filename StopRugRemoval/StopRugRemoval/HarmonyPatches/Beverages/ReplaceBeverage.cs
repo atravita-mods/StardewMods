@@ -60,7 +60,7 @@ internal static class ReplaceBeverage
     private static List<string> GetBeverageIDs()
     {
         List<string> beverageIds = new();
-        foreach ((string key, string value) in Game1Wrappers.ObjectInfo)
+        foreach ((string key, string value) in Game1Wrappers.ObjectData)
         {
             if (value.GetNthChunk('/', 6).Contains("drink", StringComparison.OrdinalIgnoreCase))
             {

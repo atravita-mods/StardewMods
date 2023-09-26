@@ -1,4 +1,6 @@
-﻿namespace SpecialOrdersExtended.Tokens;
+﻿using StardewValley.SpecialOrders;
+
+namespace SpecialOrdersExtended.Tokens;
 
 /// <summary>
 /// Token that gets all current special orders.

@@ -8,6 +8,8 @@ using AtraShared.Wrappers;
 
 using CommunityToolkit.Diagnostics;
 
+using StardewValley.GameData.BigCraftables;
+using StardewValley.GameData.Objects;
 using StardewValley.GameData.Pants;
 using StardewValley.GameData.Shirts;
 using StardewValley.GameData.Weapons;
@@ -48,7 +50,7 @@ public static class DataToItemMap
             ItemTypeEnum.Pants => ItemRegistry.GetTypeDefinition(ItemRegistry.type_pants)?.Exists(id) == true,
             ItemTypeEnum.Furniture => ItemRegistry.GetTypeDefinition(ItemRegistry.type_furniture)?.Exists(id) == true,
             ItemTypeEnum.Hat => ItemRegistry.GetTypeDefinition(ItemRegistry.type_hat)?.Exists(id) == true,
-            ItemTypeEnum.Ring => Game1.objectInformation.TryGetValue(id, out string? data) && !ItemHelperUtils.RingFilter(id, data),
+            ItemTypeEnum.Ring => Game1.objectData.TryGetValue(id, out ObjectData? data) && !ItemHelperUtils.RingFilter(id, data),
             ItemTypeEnum.SObject => ItemRegistry.GetTypeDefinition(ItemRegistry.type_object)?.Exists(id) == true,
             ItemTypeEnum.Tool => ItemRegistry.GetTypeDefinition(ItemRegistry.type_tool)?.Exists(id) == true,
             ItemTypeEnum.Weapon => ItemRegistry.GetTypeDefinition(ItemRegistry.type_weapon)?.Exists(id) == true,
@@ -134,7 +136,7 @@ public static class DataToItemMap
                 {
                     ModEntry.ModMonitor.DebugOnlyLog("Building map to resolve normal objects.", LogLevel.Info);
 
-                    Dictionary<string, (string id, bool duplicate)> mapping = new(Game1Wrappers.ObjectInfo.Count)
+                    Dictionary<string, (string id, bool duplicate)> mapping = new(Game1Wrappers.ObjectData.Count)
                     {
                         // Special cases
                         ["Brown Egg"] = ("180", false),
@@ -145,19 +147,14 @@ public static class DataToItemMap
                     HashSet<string> preAdded = mapping.Values.Select(pair => pair.id).ToHashSet();
 
                     // Processing from the data.
-                    foreach ((string id, string data) in Game1Wrappers.ObjectInfo)
+                    foreach ((string id, ObjectData data) in Game1Wrappers.ObjectData)
                     {
                         if (ItemHelperUtils.ObjectFilter(id, data) || preAdded.Contains(id))
                         {
                             continue;
                         }
 
-                        string name = data.GetNthChunk('/', SObject.objectInfoNameIndex).ToString();
-                        if (name.Length == 0)
-                        {
-                            ModEntry.ModMonitor.Log($"Object with id {id} has no internal name.");
-                            continue;
-                        }
+                        string name = data.Name;
                         (string id, bool duplicate) val = CollectionsMarshal.GetValueRefOrAddDefault(mapping, name, out bool exists);
                         if (exists)
                         {
@@ -178,19 +175,14 @@ public static class DataToItemMap
                     ModEntry.ModMonitor.DebugOnlyLog("Building map to resolve rings.", LogLevel.Info);
 
                     Dictionary<string, (string id, bool duplicate)> mapping = new(10);
-                    foreach ((string id, string data) in Game1Wrappers.ObjectInfo)
+                    foreach ((string id, ObjectData data) in Game1Wrappers.ObjectData)
                     {
                         if (ItemHelperUtils.RingFilter(id, data))
                         {
                             continue;
                         }
 
-                        string name = data.GetNthChunk('/', SObject.objectInfoNameIndex).ToString();
-                        if (name.Length == 0)
-                        {
-                            ModEntry.ModMonitor.Log($"Ring with id {id} has no internal name.");
-                            continue;
-                        }
+                        string name = data.Name;
                         (string id, bool duplicate) val = CollectionsMarshal.GetValueRefOrAddDefault(mapping, name, out bool exists);
                         if (exists)
                         {
@@ -216,7 +208,7 @@ public static class DataToItemMap
                 Dictionary<string, (string id, bool duplicate)> mapping = new(20);
                 foreach ((string id, string data) in Game1.content.Load<Dictionary<string, string>>(enumToAssetMap[ItemTypeEnum.Boots].BaseName))
                 {
-                    string name = data.GetNthChunk('/', SObject.objectInfoNameIndex).ToString();
+                    string name = data.GetNthChunk('/').ToString();
                     if (name.Length == 0)
                     {
                         ModEntry.ModMonitor.Log($"Boots with id {id} has no internal name.");
@@ -242,7 +234,7 @@ public static class DataToItemMap
             {
                 ModEntry.ModMonitor.DebugOnlyLog("Building map to resolve BigCraftables", LogLevel.Info);
 
-                Dictionary<string, (string id, bool duplicate)> mapping = new(Game1.bigCraftablesInformation.Count)
+                Dictionary<string, (string id, bool duplicate)> mapping = new(Game1.bigCraftableData.Count)
                 {
                     // special cases
                     ["Tub o' Flowers"] = Game1.season is Season.Fall or Season.Winter ? ("109", false) : ("108", false),
@@ -270,19 +262,14 @@ public static class DataToItemMap
                 preAdded.Add("108");
                 preAdded.Add("109");
 
-                foreach ((string id, string data) in Game1.bigCraftablesInformation)
+                foreach ((string id, BigCraftableData? data) in Game1.bigCraftableData)
                 {
                     if (preAdded.Contains(id) || ItemHelperUtils.BigCraftableFilter(id, data))
                     {
                         continue;
                     }
 
-                    string name = data.GetNthChunk('/', SObject.objectInfoNameIndex).ToString();
-                    if (name.Length == 0)
-                    {
-                        ModEntry.ModMonitor.Log($"BigCraftable with id {id} has no internal name.");
-                        continue;
-                    }
+                    string name = data.Name;
                     (string id, bool duplicate) val = CollectionsMarshal.GetValueRefOrAddDefault(mapping, name, out bool exists);
                     if (exists)
                     {
@@ -380,7 +367,7 @@ public static class DataToItemMap
                 Dictionary<string, (string id, bool duplicate)> mapping = new(300);
                 foreach ((string id, string data) in Game1.content.Load<Dictionary<string, string>>(enumToAssetMap[ItemTypeEnum.Furniture].BaseName))
                 {
-                    string name = data.GetNthChunk('/', SObject.objectInfoNameIndex).ToString();
+                    string name = data.GetNthChunk('/').ToString();
                     if (name.Length == 0)
                     {
                         ModEntry.ModMonitor.Log($"Furniture with id {id} has no internal name.");
@@ -410,7 +397,7 @@ public static class DataToItemMap
 
                 foreach ((string id, string data) in Game1.content.Load<Dictionary<string, string>>(enumToAssetMap[ItemTypeEnum.Hat].BaseName))
                 {
-                    string name = data.GetNthChunk('/', SObject.objectInfoNameIndex).ToString();
+                    string name = data.GetNthChunk('/').ToString();
                     if (name.Length == 0)
                     {
                         ModEntry.ModMonitor.Log($"Hat with id {id} has no internal name.");

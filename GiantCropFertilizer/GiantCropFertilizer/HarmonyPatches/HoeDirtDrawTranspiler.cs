@@ -32,11 +32,11 @@ internal static class HoeDirtDrawTranspiler
     /// <summary>
     /// Gets the correct color for the fertilizer.
     /// </summary>
-    /// <param name="fertilizer">Fertilizer ID.</param>
+    /// <param name="dirt">hoedirt</param>
     /// <returns>A color.</returns>
     [MethodImpl(TKConstants.Hot)]
-    private static Color GetColor(int fertilizer)
-        => ModEntry.GiantCropFertilizerID != -1 && ModEntry.GiantCropFertilizerID == fertilizer ? Color.Purple : Color.White;
+    private static Color ReplaceColor(Color prev, HoeDirt? dirt)
+        => dirt?.fertilizer?.Value == ModEntry.GiantCropFertilizerID ? Color.Purple : prev;
 
     private static IEnumerable<CodeInstruction>? Transpiler(IEnumerable<CodeInstruction> instructions, ILGenerator gen, MethodBase original)
     {
@@ -44,23 +44,20 @@ internal static class HoeDirtDrawTranspiler
         {
             ILHelper helper = new(original, instructions, ModEntry.ModMonitor, gen);
             helper.FindNext(new CodeInstructionWrapper[]
-                {
-                    new(OpCodes.Ldarg_0),
-                    new(SpecialCodeInstructionCases.LdLoc),
-                    new(OpCodes.Call, typeof(HoeDirt).GetCachedMethod(nameof(HoeDirt.GetFertilizerSourceRect), ReflectionCache.FlagTypes.InstanceFlags)),
-                })
-            .Advance(1);
-
-            // Grab the relevant local.
-            CodeInstruction local = helper.CurrentInstruction.Clone();
-
-            helper.FindNext(new CodeInstructionWrapper[]
-                {
+            {
+                OpCodes.Ldarg_0,
+                (OpCodes.Call, typeof(HoeDirt).GetCachedMethod(nameof(HoeDirt.GetFertilizerSourceRect), ReflectionCache.FlagTypes.InstanceFlags)),
+            })
+            .FindNext(new CodeInstructionWrapper[]
+            {
                     new(OpCodes.Call, typeof(Color).GetCachedProperty("White", ReflectionCache.FlagTypes.StaticFlags).GetGetMethod()),
-                })
-            .GetLabels(out IList<Label> labels, clear: true)
-            .ReplaceInstruction(OpCodes.Call, typeof(HoeDirtDrawTranspiler).GetCachedMethod(nameof(GetColor), ReflectionCache.FlagTypes.StaticFlags))
-            .Insert(new CodeInstruction[] { local }, withLabels: labels);
+            })
+            .Advance(1)
+            .Insert(new CodeInstruction[]
+            {
+                new(OpCodes.Ldarg_0),
+                new(OpCodes.Call, typeof(HoeDirtDrawTranspiler).GetCachedMethod(nameof(ReplaceColor), ReflectionCache.FlagTypes.StaticFlags)),
+            });
 
             // helper.Print();
             return helper.Render();

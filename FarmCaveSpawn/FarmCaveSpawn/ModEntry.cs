@@ -359,13 +359,9 @@ END:
         List<string> fruitNames = new();
         foreach (string objectID in this.GetTreeFruits())
         {
-            if (Game1Wrappers.ObjectInfo.TryGetValue(objectID, out string? val))
+            if (Game1Wrappers.ObjectData.TryGetValue(objectID, out var data))
             {
-                ReadOnlySpan<char> name = val.GetNthChunk('/', SObject.objectInfoDisplayNameIndex);
-                if (name.Length > 0)
-                {
-                    fruitNames.Add(name.ToString());
-                }
+                fruitNames.Add(TokenParser.ParseText(data.DisplayName));
             }
         }
         StringBuilder sb = StringBuilderCache.Acquire(fruitNames.Count * 6);

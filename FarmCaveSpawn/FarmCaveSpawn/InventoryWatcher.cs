@@ -67,9 +67,9 @@ internal static class InventoryWatcher
     {
         foreach (Item item in e.Added)
         {
-            if (item.HasTypeObject() && item is SObject obj && obj.isSapling() && Game1Wrappers.ObjectInfo.TryGetValue(obj.ItemId, out string? data))
+            if (item.HasTypeObject() && item is SObject obj && obj.isSapling() && Game1Wrappers.ObjectData.TryGetValue(obj.ItemId, out var data))
             {
-                string name = data.GetNthChunk('/').ToString();
+                string name = data.Name;
                 if (!string.IsNullOrWhiteSpace(name) && model?.Saplings?.Add(name) == true)
                 {
                     multi.SendMessage(name, SAPLING, new[] { UniqueID });
@@ -86,7 +86,7 @@ internal static class InventoryWatcher
     /// <returns>If the sapling has been viewed.</returns>
     internal static bool HaveSeen(string itemID)
     {
-        if (Game1Wrappers.ObjectInfo.TryGetValue(itemID, out string? data))
+        if (Game1Wrappers.ObjectData.TryGetValue(itemID, out string? data))
         {
             string name = data.GetNthChunk('/').ToString();
             return model?.Saplings?.Contains(name) == true;

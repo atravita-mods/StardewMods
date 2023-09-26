@@ -68,7 +68,7 @@ internal sealed class ModEntry : BaseMod<ModEntry>
         try
         {
 #if DEBUG
-            BusDriverTranspile.ApplyPatch(harmony);
+            BusDriverReplacement.ApplyPatch(harmony);
 #endif
             harmony.PatchAll(typeof(ModEntry).Assembly);
         }

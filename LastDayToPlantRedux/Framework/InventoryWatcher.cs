@@ -1,7 +1,9 @@
 ﻿using AtraBase.Toolkit;
-using AtraBase.Toolkit.Extensions;
 
 using StardewModdingAPI.Events;
+
+using StardewValley.Extensions;
+using StardewValley.GameData.Objects;
 
 namespace LastDayToPlantRedux.Framework;
 
@@ -11,7 +13,7 @@ namespace LastDayToPlantRedux.Framework;
 public sealed class InventoryManagerModel
 {
     /// <summary>
-    /// Gets or sets a hashet of seeds the player has seen before.
+    /// Gets or sets a hashset of seeds the player has seen before.
     /// </summary>
     public HashSet<string> Seeds { get; set; } = new();
 
@@ -105,7 +107,7 @@ internal static class InventoryWatcher
     {
         foreach (Item? item in e.Added)
         {
-            if (item is SObject obj && !obj.bigCraftable.Value && !obj.isSapling()
+            if (item is SObject obj && obj.HasTypeObject() && !obj.isSapling()
                 && (obj.Category == SObject.SeedsCategory || obj.Category == SObject.fertilizerCategory))
             {
                 if (!IsModelLoaded)
@@ -114,18 +116,10 @@ internal static class InventoryWatcher
                 }
 
                 // find the name out of Game1.objectinfo if possible.
-                string name;
-                if (Game1.objectInformation?.TryGetValue(obj.ParentSheetIndex, out string? data) == true)
-                {
-                    name = data.GetNthChunk('/', SObject.objectInfoNameIndex).ToString();
-                }
-                else
-                {
-                    name = obj.Name;
-                }
+                string name = Game1.objectData.TryGetValue(obj.ItemId, out ObjectData? data) == true ? data.Name : obj.Name;
 
-                if (obj.Category == SObject.SeedsCategory && !SObject.isWildTreeSeed(obj.ParentSheetIndex)
-                    && !name.Equals("Mixed Seeds", StringComparison.OrdinalIgnoreCase) && model.Seeds.Add(name))
+                if (obj.Category == SObject.SeedsCategory && !SObject.isWildTreeSeed(obj.ItemId)
+                    && name != "Mixed Seeds" && model.Seeds.Add(name))
                 {
                     HasSeedChanges = true;
                 }

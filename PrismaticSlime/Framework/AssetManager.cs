@@ -1,9 +1,7 @@
 ﻿using AtraCore;
 using AtraCore.Models;
 
-using AtraShared.Caching;
 using AtraShared.ConstantsAndEnums;
-using AtraShared.Utils;
 
 using Microsoft.Xna.Framework.Graphics;
 
@@ -26,6 +24,9 @@ internal static class AssetManager
 
     private static Lazy<Texture2D> buffTex = new(() => Game1.content.Load<Texture2D>(buffTextureLocation.BaseName));
 
+    /// <summary>
+    /// The texture for the buffs.
+    /// </summary>
     internal static Texture2D BuffTexture => buffTex.Value;
 
     /// <summary>
@@ -34,7 +35,7 @@ internal static class AssetManager
     /// <param name="parser">Game content helper.</param>
     internal static void Initialize(IGameContentHelper parser)
     {
-        objectData = parser.ParseAssetName("Data/ObjectInformation");
+        objectData = parser.ParseAssetName("Data/Objects");
 
         ringMask = parser.ParseAssetName("Mods/atravita_Prismatic_Ring/Texture");
         toastMask = parser.ParseAssetName("Mods/atravita_Prismatic_Toast/Texture");
@@ -58,9 +59,9 @@ internal static class AssetManager
     /// <param name="e">Event arguments.</param>
     internal static void Apply(AssetRequestedEventArgs e)
     {
-        if (ModEntry.PrismaticSlimeEgg != -1 && e.NameWithoutLocale.IsEquivalentTo(objectData))
+        if (e.NameWithoutLocale.IsEquivalentTo(objectData))
         {
-            e.Edit(EditObjects);
+            e.Edit(AddObjects);
         }
         else if (e.NameWithoutLocale.IsEquivalentTo(maskLocation))
         {
@@ -80,7 +81,7 @@ internal static class AssetManager
         }
     }
 
-    private static void EditObjects(IAssetData asset)
+    private static void AddObjects(IAssetData asset)
     {
         IAssetDataForDictionary<int, string>? editor = asset.AsDictionary<int, string>();
         if (editor.Data.TryGetValue(ModEntry.PrismaticSlimeEgg, out string? val))

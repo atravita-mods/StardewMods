@@ -64,7 +64,7 @@ internal static class MFUtilities
             return false;
         }
 
-        string data = Game1Wrappers.ObjectInfo[crop.indexOfHarvest.Value];
+        string data = Game1Wrappers.ObjectData[crop.indexOfHarvest.Value];
         int index = data.IndexOf('/');
         if (index >= 0)
         {
@@ -121,7 +121,7 @@ internal static class MFUtilities
             id = DataToItemMap.GetID(ItemTypeEnum.SObject, identifier);
         }
 
-        if (id < -1 || !Game1Wrappers.ObjectInfo.TryGetValue(id, out string? data))
+        if (id < -1 || !Game1Wrappers.ObjectData.TryGetValue(id, out string? data))
         {
             ModEntry.ModMonitor.Log($"{identifier} could not be resolved, skipping");
             return null;

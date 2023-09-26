@@ -575,14 +575,16 @@ internal sealed class MiniFarmerMenu : IClickableMenu
 
         // equipment icons.
         this.equipmentIcons.Clear();
-        this.equipmentIcons.Add(new RingSlot(
+        this.equipmentIcons.Add(new InventorySlot<Ring>(
+            type: InventorySlotType.Ring,
             x: this.xPositionOnScreen + 32,
             y: this.yPositionOnScreen + 32,
             name: "Left Ring",
             getItem: static () => Game1.player.leftRing.Value,
             setItem: static (value) => Game1.player.leftRing.Value = value,
             isActive: !blockRingSlots));
-        this.equipmentIcons.Add(new RingSlot(
+        this.equipmentIcons.Add(new InventorySlot<Ring>(
+            type: InventorySlotType.Ring,
             x: this.xPositionOnScreen + 32,
             y: this.yPositionOnScreen + 32 + 64,
             name: "Right Ring",

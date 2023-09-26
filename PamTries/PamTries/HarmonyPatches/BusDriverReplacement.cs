@@ -10,7 +10,7 @@ using HarmonyLib;
 
 namespace PamTries.HarmonyPatches;
 
-internal static class BusDriverTranspile
+internal static class BusDriverReplacement
 {
     internal static void ApplyPatch(Harmony harmony)
     {
@@ -18,7 +18,7 @@ internal static class BusDriverTranspile
         {
             harmony.Patch(
             original: typeof(GameLocation).InstanceMethodNamed(nameof(GameLocation.UpdateWhenCurrentLocation)),
-            transpiler: new HarmonyMethod(typeof(BusDriverTranspile).StaticMethodNamed(nameof(BusDriverTranspile.Transpiler))));
+            transpiler: new HarmonyMethod(typeof(BusDriverReplacement).StaticMethodNamed(nameof(BusDriverReplacement.Transpiler))));
         }
         catch (Exception ex)
         {

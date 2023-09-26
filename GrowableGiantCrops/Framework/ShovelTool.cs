@@ -23,6 +23,7 @@ using GrowableGiantCrops.HarmonyPatches.GrassPatches;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
+using StardewValley.ItemTypeDefinitions;
 using StardewValley.Locations;
 using StardewValley.Objects;
 using StardewValley.TerrainFeatures;
@@ -291,7 +292,7 @@ public class ShovelTool : Tool
                         }
                         case "Slime Ball":
                         {
-                            if (this.HandleBigCraftable(location, who, pickupTile, smallItemEnergy, @object, 56))
+                            if (this.HandleBigCraftable(location, who, pickupTile, smallItemEnergy, @object))
                             {
                                 @object.modData?.SetBool(SlimeProduceCompat.SlimeBall, true);
                                 return;
@@ -308,7 +309,7 @@ public class ShovelTool : Tool
                         }
                         case "Boulder":
                         {
-                            if (this.HandleBigCraftable(location, who, pickupTile, smallItemEnergy, @object, 78))
+                            if (this.HandleBigCraftable(location, who, pickupTile, smallItemEnergy, @object))
                             {
                                 @object.Fragility = SObject.fragility_Removable;
                                 return;
@@ -645,12 +646,17 @@ public class ShovelTool : Tool
         who.Stamina -= energy;
         SObject starter = Api.GetMatchingStarter(grass);
         this.GiveItemOrMakeDebris(location, who, starter);
-        AddAnimations(
-            loc: location,
-            tile: pickupTile,
-            texturePath: Game1.objectSpriteSheetName,
-            sourceRect: GameLocation.getSourceRectForObject(SObjectPatches.GrassStarterIndex),
-            new Point(1, 1));
+
+        ParsedItemData? grassData = ItemRegistry.GetData(SObjectPatches.GrassStarterQualId);
+        if (grassData is not null)
+        {
+            AddAnimations(
+                loc: location,
+                tile: pickupTile,
+                texturePath: grassData.GetTextureName(),
+                sourceRect: grassData.GetSourceRect(),
+                new Point(1, 1));
+        }
         location.terrainFeatures.Remove(pickupTile);
 
         return true;
@@ -705,7 +711,8 @@ public class ShovelTool : Tool
         {
             location.debris.Add(new Debris(@object.heldObject.Value, who.Position));
         }
-        return this.HandleBigCraftable(location, who, pickupTile, energy, @object, 128);
+        @object.Fragility = SObject.fragility_Removable;
+        return this.HandleBigCraftable(location, who, pickupTile, energy, @object);
     }
 
     /// <summary>
@@ -724,7 +731,7 @@ public class ShovelTool : Tool
             location.debris.Add(new Debris(@object.heldObject.Value, who.Position));
         }
         @object.Fragility = SObject.fragility_Removable;
-        return this.HandleBigCraftable(location, who, pickupTile, energy, @object, 156);
+        return this.HandleBigCraftable(location, who, pickupTile, energy, @object);
     }
 
 #warning - 1.6 has nice methods for this.
@@ -739,20 +746,25 @@ public class ShovelTool : Tool
     /// <param name="object">The object to pick up.</param>
     /// <param name="idx">The parent sheet index to set to.</param>
     /// <returns>true if handled, false otherwise.</returns>
-    protected virtual bool HandleBigCraftable(GameLocation location, Farmer who, Vector2 pickupTile, int energy, SObject @object, int idx)
+    protected virtual bool HandleBigCraftable(GameLocation location, Farmer who, Vector2 pickupTile, int energy, SObject @object)
     {
         who.Stamina -= energy;
         @object.ResetParentSheetIndex();
         @object.heldObject.Value = null;
         @object.performRemoveAction();
         this.GiveItemOrMakeDebris(location, who, @object);
-        AddAnimations(
-            loc: location,
-            tile: pickupTile - Vector2.UnitY,
-            texturePath: Game1.bigCraftableSpriteSheetName,
-            sourceRect: SObject.getSourceRectForBigCraftable(idx),
-            new Point(1, 2),
-            color: SlimeProduceCompat.ReplaceDrawColorForSlimeEgg(Color.White, @object));
+
+        ParsedItemData? data = ItemRegistry.GetData(@object.QualifiedItemId);
+        if (data is not null)
+        {
+            AddAnimations(
+                loc: location,
+                tile: pickupTile - Vector2.UnitY,
+                texturePath: data.GetTextureName(),
+                sourceRect: data.GetSourceRect(),
+                new Point(1, 2),
+                color: SlimeProduceCompat.ReplaceDrawColorForSlimeEgg(Color.White, @object));
+        }
         location.objects.Remove(pickupTile);
 
         return true;
@@ -832,7 +844,7 @@ public class ShovelTool : Tool
             position: pickupTile * Game1.tileSize,
             color: Color.White,
             animationLength: 8,
-            flipped: Singletons.Random.OfChance(0.5),
+            flipped: Random.Shared.OfChance(0.5),
             animationInterval: 50f));
 
         return true;

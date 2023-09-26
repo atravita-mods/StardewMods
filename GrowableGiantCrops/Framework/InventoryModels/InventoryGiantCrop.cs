@@ -581,7 +581,7 @@ public sealed class InventoryGiantCrop : SObject
 
     private string GetProductDisplayName()
     {
-        if (Game1Wrappers.ObjectInfo.TryGetValue(this.ParentSheetIndex, out string? data))
+        if (Game1Wrappers.ObjectData.TryGetValue(this.ParentSheetIndex, out string? data))
         {
             return data.GetNthChunk('/', objectInfoDisplayNameIndex).ToString();
         }

@@ -2,6 +2,7 @@
     {
         "Action": "EditData",
         "Target": "Characters/Dialogue/Sebastian",
+        "When": { "Relationship:Maru|contains=Divorced": false },
         "Entries": {
             "winter_10": "{{i18n: sebastian-birthday-self.{{Random:1,2,3}} }}",
 
@@ -15,6 +16,17 @@
         "Target": "Strings/schedules/Sebastian",
         "Entries":{
             "rain.000": "{{i18n:sebastian-rain.{{Random:00,01,02}}}}"
+        }
+    },
+    {
+        "LogName": "Sebastian - divorced form Maru",
+        "Action": "EditData",
+        "Target": "Characters/Dialogue/Sebastian",
+        "When": { "Relationship:Maru": "Divorced" },
+        "Entries": {
+            "SebastianRoom": "{{i18n:sebastian-divorced-from-maru}}$s",
+            "ScienceHouse": "{{i18n:sebastian-divorced-from-maru-b}}$a",
+            "Mountain": "{{i18n:sebastian-divorced-from-maru-c}}$a"
         }
     }
 ]}

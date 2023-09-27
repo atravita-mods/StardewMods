@@ -280,6 +280,10 @@
     "maru-divorced-from-sebastian-a": "Gosh, @, why break my brother's heart like that?",
     "maru-divorced-from-sebastian-b": "Look, @, you're no longer part of our family. I don't want to talk to you.",
 
+    "sebastian-divorced-from-maru": "What do you want, @?",
+    "sebastian-divorced-from-maru-b": "I'm not sure you're welcome here.",
+    "sebastian-divorced-from-maru-c": "I don't want to talk to you.",
+
     "vincent-divorced-from-sam": "Mom says I shouldn't talk to you.",
 
     // marriage strings
@@ -321,6 +325,9 @@
 
     "harvey-summer-2a": "Sometimes, I'd love to give out some discounts on healthcare, but I can't.",
     "harvey-summer-2b": "If I don't charge the patient, I'm not allowed to charge their insurance.",
+
+    "sebby-marriage-summer-2a": "You know, I haven't the slightest clue what Demetrius' research topic is.",
+    "sebby-marriage-summer-2b": "Is that bad of me?",
 
     // entry strings
     "homecoming-generic": "Ah, home sweet home!",
@@ -572,13 +579,16 @@
 
     // NOTE: y4 is Sebby's job search year. Spring - worried. Laid off summer, search fall + winter, gets job again the next spring.
     "sebastian-work.spring.4": "@, I'm worried. There's word of layoffs.",
+    "sebastian-work.spring.4.00": "Another group of people got laid off this week, it's not looking good.$s",
     "sebastian-work.summer.4": "Gosh, @, I've got so much work I've got to do.#$b#$c .5#We had another round of layoffs, so the rest of us have even more tasks we need to do.#Still, it's better than getting laid off I guess.#",
     "sebastian-work.fall.4": "And yet another day spent sending out applications.",
     "sebastian-work.winter.4": "You know, @, I almost would rather be filling out another bloody performance review over applying for jobs.",
     "sebastian-work.winter.4.00": "%Sebastian seems to have an interview, you should avoid bothering him",
 
     "sebastian-work.spring.0": "%Sebastian seems to be on a call.#$b#I'm not sure I understand the third requirement.#$b#Exactly what hardware are we expected to support here?",
+    "sebastian-work.spring.0.00": "%Sebastian appears to be taking a call.#$b#I'm sorry, they're using a MAC address for WHAT?",
     "sebastian-work.summer.0": "@, sorry, I don't have time to speak today. I've got a very hairy bug to track down.",
+    "sebastian-work.summer.0.00": "%Sebastian seems to be on a video call.#$b#I'm not convinced the two systems can be made to work together, but I'll try my best.",
     "sebastian-work.fall.0": "Ugh, we're updating dependencies today, so nothing works and I haven't the clue why.",
     "sebastian-work.winter.0": "Got my performance report to write, again.$a#$c .5#New job, same as old job.#Well, it beats being unemployed.#",
 

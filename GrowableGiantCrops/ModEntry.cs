@@ -27,20 +27,7 @@ namespace GrowableGiantCrops;
 /// <inheritdoc />
 internal sealed class ModEntry : Mod
 {
-    private static int[]? moreGiantCropsIds;
-    private static int[]? jaCropIds;
-
     private MigrationManager? migrator;
-
-    /// <summary>
-    /// Gets the product IDs recognized by More Giant Crops.
-    /// </summary>
-    internal static int[] MoreGiantCropsIds => moreGiantCropsIds ?? Array.Empty<int>();
-
-    /// <summary>
-    /// Gets the product IDs recognized by JsonAssets.
-    /// </summary>
-    internal static int[] JACropIds => jaCropIds ?? Array.Empty<int>();
 
     /// <summary>
     /// Gets the logger for this mod.
@@ -53,11 +40,6 @@ internal sealed class ModEntry : Mod
     internal static ModConfig Config { get; private set; } = null!;
 
     #region APIs
-    internal static IJsonAssetsAPI? JaAPI { get; private set; }
-
-    internal static IMoreGiantCropsAPI? MoreGiantCropsAPI { get; private set; }
-
-    internal static IGiantCropTweaks? GiantCropTweaksAPI { get; private set; }
 
     internal static IGrowableBushesAPI? GrowableBushesAPI { get; private set; }
     #endregion
@@ -87,36 +69,6 @@ internal sealed class ModEntry : Mod
 
     /// <inheritdoc />
     public override object? GetApi() => new Api();
-
-    #region helpers
-
-    /// <summary>
-    /// Get the total number of valid IDs.
-    /// </summary>
-    /// <returns>Count of valid IDs.</returns>
-    internal static int GetTotalValidIndexes() => 3 + JACropIds.Length + MoreGiantCropsIds.Length;
-
-    /// <summary>
-    /// Gets all valid giant crop indexes.
-    /// </summary>
-    /// <returns>All valid indexes for giant crops.</returns>
-    internal static IEnumerable<int> YieldAllGiantCropIndexes()
-    {
-        yield return 190;
-        yield return 254;
-        yield return 276;
-
-        foreach (int item in JACropIds)
-        {
-            yield return item;
-        }
-
-        foreach (int item in MoreGiantCropsIds)
-        {
-            yield return item;
-        }
-    }
-    #endregion
 
     /// <inheritdoc cref="IGameLoopEvents.GameLaunched"/>
     private void OnGameLaunched(object? sender, GameLaunchedEventArgs e)
@@ -166,18 +118,6 @@ internal sealed class ModEntry : Mod
         // optional APIs
         {
             IntegrationHelper optional = new(this.Monitor, this.Helper.Translation, this.Helper.ModRegistry, LogLevel.Trace);
-            if (optional.TryGetAPI("spacechase0.JsonAssets", "1.10.10", out IJsonAssetsAPI? jaAPI))
-            {
-                JaAPI = jaAPI;
-            }
-            if (optional.TryGetAPI("spacechase0.MoreGiantCrops", "1.2.0", out IMoreGiantCropsAPI? mgAPI))
-            {
-                MoreGiantCropsAPI = mgAPI;
-            }
-            if (optional.TryGetAPI("leclair.giantcroptweaks", "0.1.0", out IGiantCropTweaks? gcAPI))
-            {
-                GiantCropTweaksAPI = gcAPI;
-            }
             if (optional.TryGetAPI("atravita.GrowableBushes", "0.0.1", out IGrowableBushesAPI? growable))
             {
                 GrowableBushesAPI = growable;
@@ -275,10 +215,6 @@ internal sealed class ModEntry : Mod
     /// <remarks>Used to load in this mod's data models.</remarks>
     private void SaveLoaded(object? sender, SaveLoadedEventArgs e)
     {
-        // load giant crop indexes.
-        moreGiantCropsIds = MoreGiantCropsAPI?.RegisteredCrops() ?? Array.Empty<int>();
-        jaCropIds = JaAPI?.GetGiantCropIndexes() ?? Array.Empty<int>();
-
         // sanity checks.
         MultiplayerHelpers.AssertMultiplayerVersions(this.Helper.Multiplayer, this.ModManifest, this.Monitor, this.Helper.Translation);
 

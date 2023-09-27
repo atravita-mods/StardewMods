@@ -4,6 +4,8 @@ using HighlightEmptyMachines.Legacy;
 
 using Microsoft.Xna.Framework;
 
+using StardewValley.GameData.Machines;
+
 namespace HighlightEmptyMachines;
 
 /// <summary>
@@ -54,15 +56,9 @@ public sealed class ModConfig
 
     internal void Populate()
     {
-        foreach (VanillaMachinesEnum machine in Enum.GetValues<VanillaMachinesEnum>())
+        foreach (var (machine, data) in Game1.content.Load<Dictionary<string, MachineData>>("Data\\Machines"))
         {
-            this.VanillaMachines.TryAdd(machine, true);
+            this.VanillaMachines.TryAdd(machine, !data.IsIncubator);
         }
-        this.VanillaMachines[VanillaMachinesEnum.SeedMaker] = false;
-        this.VanillaMachines[VanillaMachinesEnum.RecyclingMachine] = false;
-        this.VanillaMachines[VanillaMachinesEnum.CharcoalKiln] = false;
-        this.VanillaMachines[VanillaMachinesEnum.Incubator] = false;
-        this.VanillaMachines[VanillaMachinesEnum.SlimeIncubator] = false;
-        this.VanillaMachines[VanillaMachinesEnum.OstrichIncubator] = false;
     }
 }

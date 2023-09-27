@@ -13,7 +13,7 @@
             "Action": "EditData",
             "Target": "Characters/Dialogue/Evelyn",
             "When": {
-                "EnableFor|contains=Evelyn": true,
+                "EnableFor": "Evelyn",
                 "ChildStatus": "None"
             },
             "Entries": {
@@ -25,7 +25,7 @@
             "Action": "EditData",
             "Target": "Characters/Dialogue/Evelyn",
             "When": {
-                "EnableFor|contains=Evelyn": true,
+                "EnableFor": "Evelyn",
                 "ChildStatus": "Multiple"
             },
             "Entries": {

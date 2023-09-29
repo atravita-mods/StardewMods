@@ -19,6 +19,7 @@ internal static class Game1Patcher
     /// <param name="f">Farmer.</param>
     /// <param name="currentToolIndex">the current tool index.</param>
     /// <returns>true to continue on to the vanilla method, false to skip.</returns>
+    [HarmonyPriority(Priority.VeryHigh)] // slot in in front of mods that add tool tiers since I handle this.
     [HarmonyPatch(nameof(Game1.drawTool), new[] { typeof(Farmer), typeof(int) })]
     private static bool Prefix(Farmer f, int currentToolIndex)
     {
@@ -34,22 +35,6 @@ internal static class Game1Patcher
         if (f.FacingDirection == Game1.up)
         {
             tool_draw_layer_offset = -0.002f;
-        }
-
-        if (Game1.pickingTool)
-        {
-            int yLocation = (int)fPosition.Y - 128;
-            Game1.spriteBatch.Draw(
-                texture: shovel.GetTexture(),
-                new Vector2(fPosition.X, yLocation),
-                sourceRectangle: sourceRectangleForTool,
-                color: Color.White,
-                rotation: 0f,
-                origin: Vector2.Zero,
-                scale: 1f,
-                effects: SpriteEffects.None,
-                layerDepth: Math.Max(0f, tool_draw_layer_offset + ((f.getStandingY() + 32) / 10000f)));
-            return false;
         }
 
         shovel.draw(Game1.spriteBatch);

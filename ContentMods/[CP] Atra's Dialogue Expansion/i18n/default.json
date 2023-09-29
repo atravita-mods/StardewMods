@@ -210,6 +210,10 @@
 /***************
 * Fancier dialogue
 ***************/
+    // marnie tutorial
+    "marnie-summer-12": "Animals really do prefer natural grass when they can get it, it makes them a lot happier!",
+    "marnie-fall-27": "Make sure to have plenty of hay for winter! It's too cold for animals to go out for most of our winters, so they won't have a chance to eat grass outside.",
+
     // tax day
     "caroline-tax-day.00": "I wish it didn't take so long to do our taxes.",
     "caroline-tax-day.01": "Neither Pierre nor I are organized enough to get them done early.",
@@ -227,6 +231,8 @@
     "marnie-tax-day.01": "Sorry, @, I was up all night trying to file my taxes...",
     "marnie-tax-day.02": "Why do I always leave things like this to the last minute...",
     "sandy-tax-day": "I really never know how I'm supposed to fill out my taxes every year. So many categories, so much paperwork.",
+
+    "sebastian-tax-day": "Ugh, I hate having to get all my paperwork straight for tax season.$s",
 
     // reject dialogue
     "willy-rejects-bait": "Did you mean to give that to me, @? I'm no fish.",
@@ -274,6 +280,11 @@
     "robin-divorced-from-sebastian-b": "I had high hopes for you and Sebastian. Turns out I was wrong.",
 
     "divorced-from-family-generic": "Oh, hi.#$b#Look, do you need something or do you want to leave me alone?",
+    "divorced-from-family-generic-b": "Could you do us a favor and leave us alone?",
+    "divorced-from-family-generic-home": "You are no longer welcome here.",
+
+    "marnie-divorced-from-shane": "Shane deserved better than you @.",
+    "marnie-divorced-from-shane-tue": "Shane has had enough to deal with his life without you, @. I'd appreciate it if you could leave us alone.",
 
     "maru-divorced-from-penny-a": "Penny deserves better than you, @.",
     "maru-divorced-from-penny-b": "Look, all Penny wanted was a family of her own. I will always take her side in this.",
@@ -436,12 +447,14 @@
 /***************
 * Birthday related
 ****************/
-    "alex-birthday-self": "",
+    "alex-birthday-self": "It's my birthday today, @! It's a great day to have some fun out in the sun.",
 
     "caroline-abby-birthday-pre": "It's Abby's birthday tomorrow. I should get her something but I'm not sure what we can afford.",
     "caroline-abby-birthday-pre-CC": "Oh, it's Abby's birthday tomorrow, isn't it? I really should remember to get her a gift. Let's see...what about {{videogame}}?",
     "caroline-birthday-self": "It's my birthday again, I guess. Another year older...",
     "caroline-birthday-self-CC": "Oh, is it my birthday again? I wonder if Pierre will have some free time this year, for us to get a nice dinner...",
+    "caroline-birthday-pierre-a": "Pierre doesn't usually like celebrating his birthday. Says it just means he's a year older, again.",
+    "caroline-birthday-pierre-b": "But I'd still like to make his favorite dish, fried calamari!",
 
     "clint-emily-birthday": "It's Emily's birthday tomorrow. Should I get her something?",
     "clint-birthday-self.00": "And yet another year older, another year still single.$s",
@@ -1412,7 +1425,8 @@
     "abby-y2-fair": "You think Lewis will ever change up these fair games?",
     "abby-y3-fair.01": "Heya, @, think my Dad has a good shot at beating you this year?",
     "abby-y3-fair.02": "He's been working on that grange display for weeks.",
-    "abby-y2-fair-spouse": "Gosh, aren't fair games supposed to be weighted against you? These are easy!",
+    "abby-y2-fair-spouse": "Gosh, aren't fair games supposed to be weighted against you? These are too easy!",
+    "abby-y3-fair-spouse": "Mmm, I wonder what Gus's cooking up this year.",
     "alex-y2-fair": "I got a perfect score in the slingshot game!",
     "alex-y3-fair": "I'm gonna figure out this fishing game even if it takes me every bit of money I have.",
     "alex-y2-fair-spouse": "Let's see how good of a score I can get on the strength game this year!",

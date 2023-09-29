@@ -10,7 +10,8 @@
         "Entries": {
             "ScienceHouse": "{{i18n: robin-divorced-from-maru-a}}$s",
             "Mountain": "{{i18n: robin-divorced-from-maru-b}}$s",
-            "Town": "{{i18n: divorced-from-family-generic}}$s"
+            "Town": "{{i18n: divorced-from-family-generic}}$s",
+            "Tue": "{{i18n:divorced-from-family-generic-b}}$a"
         }
     },
     {
@@ -23,7 +24,8 @@
         },
         "Entries": {
             "ScienceHouse": "{{i18n: robin-divorced-from-sebastian-a}}$s",
-            "Mountain": "{{i18n: robin-divorced-from-sebastian-b}}$s"
+            "Mountain": "{{i18n: robin-divorced-from-sebastian-b}}$s",
+            "Tue": "{{i18n: divorced-from-family-generic-home}}$a"
         }
     },
     {

@@ -51,7 +51,8 @@
             "12{{YearRemainder}}": "Growing up here, there were always plenty of dogs around...I miss having a dog.$s",
             "13{{YearRemainder}}": "If I weren't a carpenter...You know, @, I've wanted to be a carpenter most of my life.#$b#I just really enjoy building things, you know?$h",
             "15": "So, are you enjoying this little town? It's a lot quieter out here.",
-            "15_2": "Urgh, I need to vacuum so badly, but my shop vacuum is broken and we're waiting for parts to arrive."
+            "15_2": "Urgh, I need to vacuum so badly, but my shop vacuum is broken and we're waiting for parts to arrive.",
+            "16{{YearRemainder}}": "I've always got new ideas for furniture in my head.$h"
         },
         "When": {
             "YearModulus": "1"
@@ -75,7 +76,9 @@
             "10_2": "I'd love to own a dog, but that just isn't feasible with my husband's lab in the house.$s",
             "15_2": "Surprisingly, charcuterie boards sell quite well! I make quite a few of those to sell.",
             "16_2": "That lab of Demetrius's - I designed it, we did have to run it past the safety department of the university he's associated with though.",
-            "17_2": "*sigh*. As smart as my husband is, I wish he would leave the mains electrical work to me."
+            "17_2": "*sigh*. As smart as my husband is, I wish he would leave the mains electrical work to me.",
+
+            "Resort_Bar_2": "Mmmm, there's nothing like a pina colada on the beach.$h"
         },
         "When": {
             "YearModulus": "2"
@@ -106,9 +109,11 @@
         "Entries": {
             "summer_Fri10": "Gosh, @, is it another election year already? Feels like the last election just ended.#$b#I swear, these politicians start campaigning again immediately after they get elected.",
             "fall_Thu10": "I enjoy being able to work for myself, to be able to take on projects I'm interested in.$h",
+            "fall_Fri10": "I wish I could have provided better for Sebastian.#$b#It's just...we thought programmers would be less credentialist than academics, and I guess...yes, but not as much as we hoped.$s",
 
             "2_2": "The economic downturn isn't good for Demetrius. The first thing the government tries to cut is the budget for science.",
-            "15_2": "Demetrius's lab might look simple, but there's a lot of ventilation built in to keep it a safe space for him to work."
+            "15_2": "Demetrius's lab might look simple, but there's a lot of ventilation built in to keep it a safe space for him to work.",
+            "16_2": "Maybe if Demetrius wasn't so busy all the time, we could go hiking in the mountains more often..."
         },
         "When": {
             "YearModulus": "4"

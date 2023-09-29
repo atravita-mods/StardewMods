@@ -4,6 +4,7 @@
         "Target": "Characters/Dialogue/Sebastian",
         "When": { "Relationship:Maru|contains=Divorced": false },
         "Entries": {
+            "{{TaxDay}}": "{{i18n:sebastian-tax-day}}",
             "winter_10": "{{i18n: sebastian-birthday-self.{{Random:1,2,3}} }}",
 
             // sebby at work

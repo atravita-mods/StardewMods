@@ -218,8 +218,8 @@ internal static class GGCUtils
     /// <param name="idx">index of that SOBject.</param>
     /// <returns>Name or placeholder if not found.</returns>
     internal static string GetNameOfSObject(string idx)
-        => Game1Wrappers.ObjectData.TryGetValue(idx, out string? data)
-            ? data.GetNthChunk('/').ToString()
+        => Game1Wrappers.ObjectData.TryGetValue(idx, out var data)
+            ? data.Name
             : "NoNameFound";
 
     /// <summary>

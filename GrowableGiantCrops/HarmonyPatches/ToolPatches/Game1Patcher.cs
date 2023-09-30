@@ -31,11 +31,7 @@ internal static class Game1Patcher
         int xindex = (currentToolIndex * 16) % shovel.GetTexture().Width;
         Rectangle sourceRectangleForTool = new(xindex, shovel.UpgradeLevel * 32, 16, 32);
         Vector2 fPosition = f.getLocalPosition(Game1.viewport) + f.jitter + f.armOffset;
-        float tool_draw_layer_offset = 0f;
-        if (f.FacingDirection == Game1.up)
-        {
-            tool_draw_layer_offset = -0.002f;
-        }
+        float tool_draw_layer_offset = f.FacingDirection == Game1.up ? -0.002f : 0f;
 
         shovel.draw(Game1.spriteBatch);
 
@@ -115,7 +111,7 @@ internal static class Game1Patcher
                         position = Utility.snapToInt(new Vector2(fPosition.X, fPosition.Y - 60f));
                         break;
                     default:
-                        return true;
+                        return false;
                 }
                 break;
             case Game1.left:

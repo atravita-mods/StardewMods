@@ -679,8 +679,6 @@ internal sealed class ModEntry : Mod
                 && dga.Manifest.Version.IsNewerThan("1.4.1"))
             {
                 this.Monitor.Log("Found Dynamic Game Assets, applying compat patches", LogLevel.Info);
-                FruitTreeDayUpdateTranspiler.ApplyDGAPatch(harmony);
-                FruitTreeDrawTranspiler.ApplyDGAPatch(harmony);
                 CropHarvestTranspiler.ApplyDGAPatch(harmony);
                 SObjectPatches.ApplyDGAPatch(harmony);
                 CropNewDayTranspiler.ApplyDGAPatches(harmony);

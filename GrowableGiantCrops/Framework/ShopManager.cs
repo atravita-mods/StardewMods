@@ -519,7 +519,7 @@ internal static class ShopManager
 
         for (int i = 0; i < totalCount; i++)
         {
-            Option<int> picked = weighted.GetValue();
+            Option<string> picked = weighted.GetValue();
             if (picked.IsNone)
             {
                 continue;
@@ -552,8 +552,8 @@ internal static class ShopManager
     }
 
     private static int? PriceNode(string idx)
-        => Game1Wrappers.ObjectData.TryGetValue(idx, out string? info)
-            ? info.GetNthChunk('/').Equals("Stone", StringComparison.OrdinalIgnoreCase) ? 2_750 : 1_000
+        => Game1Wrappers.ObjectData.TryGetValue(idx, out var info)
+            ? info.Name.Equals("Stone", StringComparison.OrdinalIgnoreCase) ? 2_750 : 1_000
             : null;
 
     #endregion

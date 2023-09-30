@@ -7,6 +7,8 @@ using Microsoft.Xna.Framework.Graphics;
 
 using StardewModdingAPI.Events;
 
+using StardewValley.GameData.Objects;
+
 namespace PrismaticSlime.Framework;
 
 /// <summary>
@@ -83,15 +85,14 @@ internal static class AssetManager
 
     private static void AddObjects(IAssetData asset)
     {
-        IAssetDataForDictionary<int, string>? editor = asset.AsDictionary<int, string>();
-        if (editor.Data.TryGetValue(ModEntry.PrismaticSlimeEgg, out string? val))
+        var editor = asset.AsDictionary<string, ObjectData>().Data;
+
+        editor[ModEntry.PrismaticSlimeEgg] = new()
         {
-            editor.Data[ModEntry.PrismaticSlimeEgg] = val.Replace("Basic -20", "Basic");
-        }
-        else
-        {
-            ModEntry.ModMonitor.Log($"Could not find {ModEntry.PrismaticSlimeEgg} in ObjectInformation to edit! This mod may not function properly.", LogLevel.Error);
-        }
+            Name = ModEntry.PrismaticSlimeEgg,
+        };
+
+        finish
     }
 
     private static void EditPrismaticMasks(IAssetData asset)

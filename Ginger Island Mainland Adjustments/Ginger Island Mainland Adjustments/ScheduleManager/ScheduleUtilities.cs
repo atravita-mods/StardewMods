@@ -4,6 +4,8 @@ using AtraShared.Utils.Extensions;
 using Microsoft.Xna.Framework;
 using StardewModdingAPI.Utilities;
 
+using StardewValley.Pathfinding;
+
 namespace GingerIslandMainlandAdjustments.ScheduleManager;
 
 /// <summary>
@@ -51,8 +53,9 @@ internal static class ScheduleUtilities
     /// </summary>
     /// <param name="npc">NPC to look for.</param>
     /// <param name="date">Date to search.</param>
+    /// <param name="key">The schedule key used.</param>
     /// <returns>A schedule string if it can, null if it can't find one.</returns>
-    internal static string? FindProperGISchedule(NPC npc, SDate date)
+    internal static string? FindProperGISchedule(NPC npc, SDate date, out string? key)
     {
         string scheduleKey = BASE_SCHEDULE_KEY;
         if (npc.isMarried())
@@ -60,24 +63,23 @@ internal static class ScheduleUtilities
             Globals.ModMonitor.DebugOnlyLog($"{npc.Name} is married, using married GI schedules");
             scheduleKey += "_married";
         }
-        int hearts = Utility.GetAllPlayerFriendshipLevel(npc) / 250;
 
         // GIRemainder_Season_Day
-        string checkKey = $"{scheduleKey}_{date.Season}_{date.Day}";
-        string? scheduleEntry;
-        if (npc.hasMasterScheduleEntry(checkKey)
-            && Globals.UtilitySchedulingFunctions.TryFindGOTOschedule(npc, date, npc.getMasterScheduleEntry(checkKey), out scheduleEntry)
+        key = $"{scheduleKey}_{date.Season}_{date.Day}";
+        if (npc.hasMasterScheduleEntry(key)
+            && Globals.UtilitySchedulingFunctions.TryFindGOTOschedule(npc, date, npc.getMasterScheduleEntry(key), out string? scheduleEntry)
             && scheduleEntry.StartsWith(POST_GI_START_TIME))
         {
             return scheduleEntry;
         }
 
         // GIRemainder_intDay_heartlevel
+        int hearts = Utility.GetAllPlayerFriendshipLevel(npc) / 250;
         for (int heartLevel = Math.Max((hearts / 2) * 2, 0); heartLevel > 0; heartLevel--)
         {
-            checkKey = $"{scheduleKey}_{date.Day}_{heartLevel}";
-            if (npc.hasMasterScheduleEntry(checkKey)
-                && Globals.UtilitySchedulingFunctions.TryFindGOTOschedule(npc, date, npc.getMasterScheduleEntry(checkKey), out scheduleEntry)
+            key = $"{scheduleKey}_{date.Day}_{heartLevel}";
+            if (npc.hasMasterScheduleEntry(key)
+                && Globals.UtilitySchedulingFunctions.TryFindGOTOschedule(npc, date, npc.getMasterScheduleEntry(key), out scheduleEntry)
                 && scheduleEntry.StartsWith(POST_GI_START_TIME))
             {
                 return scheduleEntry;
@@ -85,9 +87,9 @@ internal static class ScheduleUtilities
         }
 
         // GIRemainder_Day
-        checkKey = $"{scheduleKey}_{date.Day}";
-        if (npc.hasMasterScheduleEntry(checkKey)
-            && Globals.UtilitySchedulingFunctions.TryFindGOTOschedule(npc, date, npc.getMasterScheduleEntry(checkKey), out scheduleEntry)
+        key = $"{scheduleKey}_{date.Day}";
+        if (npc.hasMasterScheduleEntry(key)
+            && Globals.UtilitySchedulingFunctions.TryFindGOTOschedule(npc, date, npc.getMasterScheduleEntry(key), out scheduleEntry)
             && scheduleEntry.StartsWith(POST_GI_START_TIME))
         {
             return scheduleEntry;
@@ -96,9 +98,9 @@ internal static class ScheduleUtilities
         // GIRemainder_rain
         if (Game1.IsRainingHere(npc.currentLocation))
         {
-            checkKey = $"{scheduleKey}_rain";
-            if (npc.hasMasterScheduleEntry(checkKey)
-                && Globals.UtilitySchedulingFunctions.TryFindGOTOschedule(npc, date, npc.getMasterScheduleEntry(checkKey), out scheduleEntry)
+            key = $"{scheduleKey}_rain";
+            if (npc.hasMasterScheduleEntry(key)
+                && Globals.UtilitySchedulingFunctions.TryFindGOTOschedule(npc, date, npc.getMasterScheduleEntry(key), out scheduleEntry)
                 && scheduleEntry.StartsWith(POST_GI_START_TIME))
             {
                 return scheduleEntry;
@@ -108,9 +110,9 @@ internal static class ScheduleUtilities
         // GIRemainder_season_DayOfWeekHearts
         for (int heartLevel = Math.Max((hearts / 2) * 2, 0); heartLevel > 0; heartLevel -= 2)
         {
-            checkKey = $"{scheduleKey}_{date.Season}_{Game1.shortDayNameFromDayOfSeason(date.Day)}{heartLevel}";
-            if (npc.hasMasterScheduleEntry(checkKey)
-                && Globals.UtilitySchedulingFunctions.TryFindGOTOschedule(npc, date, npc.getMasterScheduleEntry(checkKey), out scheduleEntry)
+            key = $"{scheduleKey}_{date.Season}_{Game1.shortDayNameFromDayOfSeason(date.Day)}{heartLevel}";
+            if (npc.hasMasterScheduleEntry(key)
+                && Globals.UtilitySchedulingFunctions.TryFindGOTOschedule(npc, date, npc.getMasterScheduleEntry(key), out scheduleEntry)
                 && scheduleEntry.StartsWith(POST_GI_START_TIME))
             {
                 return scheduleEntry;
@@ -118,9 +120,9 @@ internal static class ScheduleUtilities
         }
 
         // GIRemainder_season_DayOfWeek
-        checkKey = $"{scheduleKey}_{date.Season}_{Game1.shortDayNameFromDayOfSeason(date.Day)}";
-        if (npc.hasMasterScheduleEntry(checkKey)
-            && Globals.UtilitySchedulingFunctions.TryFindGOTOschedule(npc, date, npc.getMasterScheduleEntry(checkKey), out scheduleEntry)
+        key = $"{scheduleKey}_{date.Season}_{Game1.shortDayNameFromDayOfSeason(date.Day)}";
+        if (npc.hasMasterScheduleEntry(key)
+            && Globals.UtilitySchedulingFunctions.TryFindGOTOschedule(npc, date, npc.getMasterScheduleEntry(key), out scheduleEntry)
             && scheduleEntry.StartsWith(POST_GI_START_TIME))
         {
             return scheduleEntry;
@@ -129,9 +131,9 @@ internal static class ScheduleUtilities
         // GIRemainder_DayOfWeekHearts
         for (int heartLevel = Math.Max((hearts / 2) * 2, 0); heartLevel > 0; heartLevel -= 2)
         {
-            checkKey = $"{scheduleKey}_{Game1.shortDayNameFromDayOfSeason(date.Day)}{heartLevel}";
-            if (npc.hasMasterScheduleEntry(checkKey)
-                && Globals.UtilitySchedulingFunctions.TryFindGOTOschedule(npc, date, npc.getMasterScheduleEntry(checkKey), out scheduleEntry)
+            key = $"{scheduleKey}_{Game1.shortDayNameFromDayOfSeason(date.Day)}{heartLevel}";
+            if (npc.hasMasterScheduleEntry(key)
+                && Globals.UtilitySchedulingFunctions.TryFindGOTOschedule(npc, date, npc.getMasterScheduleEntry(key), out scheduleEntry)
                 && scheduleEntry.StartsWith(POST_GI_START_TIME))
             {
                 return scheduleEntry;
@@ -139,9 +141,9 @@ internal static class ScheduleUtilities
         }
 
         // GIRemainder_DayOfWeek
-        checkKey = $"{scheduleKey}_{Game1.shortDayNameFromDayOfSeason(date.Day)}";
-        if (npc.hasMasterScheduleEntry(checkKey)
-            && Globals.UtilitySchedulingFunctions.TryFindGOTOschedule(npc, date, npc.getMasterScheduleEntry(checkKey), out scheduleEntry)
+        key = $"{scheduleKey}_{Game1.shortDayNameFromDayOfSeason(date.Day)}";
+        if (npc.hasMasterScheduleEntry(key)
+            && Globals.UtilitySchedulingFunctions.TryFindGOTOschedule(npc, date, npc.getMasterScheduleEntry(key), out scheduleEntry)
             && scheduleEntry.StartsWith(POST_GI_START_TIME))
         {
             return scheduleEntry;
@@ -150,9 +152,9 @@ internal static class ScheduleUtilities
         // GIRemainderHearts
         for (int heartLevel = Math.Max((hearts / 2) * 2, 0); heartLevel > 0; heartLevel -= 2)
         {
-            checkKey = $"{scheduleKey}_{heartLevel}";
-            if (npc.hasMasterScheduleEntry(checkKey)
-                && Globals.UtilitySchedulingFunctions.TryFindGOTOschedule(npc, date, npc.getMasterScheduleEntry(checkKey), out scheduleEntry)
+            key = $"{scheduleKey}_{heartLevel}";
+            if (npc.hasMasterScheduleEntry(key)
+                && Globals.UtilitySchedulingFunctions.TryFindGOTOschedule(npc, date, npc.getMasterScheduleEntry(key), out scheduleEntry)
                 && scheduleEntry.StartsWith(POST_GI_START_TIME))
             {
                 return scheduleEntry;
@@ -160,9 +162,9 @@ internal static class ScheduleUtilities
         }
 
         // GIREmainder_season
-        checkKey = $"{scheduleKey}_{date.Season}";
-        if (npc.hasMasterScheduleEntry(checkKey)
-            && Globals.UtilitySchedulingFunctions.TryFindGOTOschedule(npc, date, npc.getMasterScheduleEntry(checkKey), out scheduleEntry)
+        key = $"{scheduleKey}_{date.Season}";
+        if (npc.hasMasterScheduleEntry(key)
+            && Globals.UtilitySchedulingFunctions.TryFindGOTOschedule(npc, date, npc.getMasterScheduleEntry(key), out scheduleEntry)
             && scheduleEntry.StartsWith(POST_GI_START_TIME))
         {
             return scheduleEntry;
@@ -177,6 +179,7 @@ internal static class ScheduleUtilities
         }
 
         Globals.ModMonitor.Log(I18n.NOGISCHEDULEFOUND(npc: npc.Name));
+        key = null;
         return null;
     }
 
@@ -216,7 +219,7 @@ internal static class ScheduleUtilities
                 return false;
             }
         }
-        else if ((npc.DefaultMap.Equals("FarmHouse", StringComparison.OrdinalIgnoreCase) || npc.DefaultMap.Contains("Cabin", StringComparison.OrdinalIgnoreCase))
+        else if ((npc.DefaultMap.Equals("FarmHouse", StringComparison.Ordinal) || npc.DefaultMap.Contains("Cabin", StringComparison.Ordinal))
                   && !npc.isMarried())
         {
             // lie to parse master schedule
@@ -295,9 +298,9 @@ internal static class ScheduleUtilities
     /// </summary>
     internal static void FixUpSchedules()
     {
-        foreach (NPC npc in Game1.getLocationFromName("FarmHouse").getCharacters())
+        foreach (NPC npc in Game1.getLocationFromName("FarmHouse").characters)
         {
-            if (Globals.IsChildToNPC?.Invoke(npc) == true && npc.Schedule is null
+            if (npc.Schedule is null && Globals.IsChildToNPC?.Invoke(npc) == true
                 && ScheduleUtilities.Schedules.TryGetValue(npc.Name, out Dictionary<int, SchedulePathDescription>? schedule))
             {
                 Globals.ModMonitor.Log($"Fixing up schedule for {npc.Name}, which appears to have been nulled.", LogLevel.Warn);

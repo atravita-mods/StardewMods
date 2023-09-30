@@ -50,7 +50,7 @@ internal static class CanPlantTreesHerePatches
             int ypos = (tile_y * 64) + 32;
             foreach (Furniture f in __instance.furniture)
             {
-                if (f.getBoundingBox(f.TileLocation).Contains(xpos, ypos))
+                if (f.GetBoundingBox().Contains(xpos, ypos))
                 {
                     __result = false;
                     return false;

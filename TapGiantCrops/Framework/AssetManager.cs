@@ -1,12 +1,12 @@
-﻿using AtraBase.Collections;
+﻿namespace TapGiantCrops.Framework;
+
+using AtraBase.Collections;
 
 using AtraCore.Framework.ItemManagement;
 
 using AtraShared.ConstantsAndEnums;
 
 using StardewModdingAPI.Events;
-
-namespace TapGiantCrops.Framework;
 
 /// <summary>
 /// A data class indicating an SObject with optional preserve values.
@@ -34,7 +34,7 @@ public sealed class ObjectDefinition
     public string? DurationOverride { get; set; } = null;
 }
 
-internal readonly record struct OverrideObject(SObject? obj, int? duration, int? price);
+internal readonly record struct OverrideObject(SObject? obj, int? duration);
 
 /// <summary>
 /// Manages assets for this mod.
@@ -59,7 +59,7 @@ internal static class AssetManager
     /// <summary>
     /// Gets the relevant override item given a certain input parent sheet index.
     /// </summary>
-    /// <param name="input">ParentSheetIndex.</param>
+    /// <param name="qualID">The qualified item ID.</param>
     /// <returns>The tapper's product if an override is found.</returns>
     internal static OverrideObject? GetOverrideItem(string qualID)
     {
@@ -70,31 +70,26 @@ internal static class AssetManager
 
         if (overrides.Value.TryGetValue(qualID, out ObjectDefinition? objectDefinition))
         {
-            if (!int.TryParse(objectDefinition.Object, out int id))
+            var objId = objectDefinition.Object;
+            if (!Game1.objectData.ContainsKey(objId))
             {
-                id = DataToItemMap.GetID(ItemTypeEnum.SObject, objectDefinition.Object);
+                objId = DataToItemMap.GetID(ItemTypeEnum.SObject, objectDefinition.Object);
             }
 
-            if (id < 0)
+            if (objId is null)
             {
                 ModEntry.ModMonitor.Log($"{objectDefinition.Object} corresponds to an object that could not be resolved", LogLevel.Warn);
                 return null; // not valid
             }
 
-            SObject @object = new(id, 1);
+            SObject? @object = null;
 
             if (objectDefinition.Preserve is not null)
             {
-                if (!int.TryParse(objectDefinition.Preserve, out int preserveId))
-                {
-                    preserveId = DataToItemMap.GetID(ItemTypeEnum.SObject, objectDefinition.Preserve);
-                }
-
-                if (preserveId > 0)
-                {
-                    @object.preservedParentSheetIndex.Value = preserveId;
-                }
+                @object = GeneratePreservesIfPossible(objectDefinition.Preserve, objId);
             }
+
+            @object ??= new(objId, 1);
 
             if (objectDefinition.PriceOverride is not null && int.TryParse(objectDefinition.PriceOverride, out int priceOverride) && priceOverride > 0)
             {
@@ -108,7 +103,7 @@ internal static class AssetManager
             }
 
             OverrideObject ret = new(@object, duration);
-            OverridesCache[input] = ret;
+            OverridesCache[qualID] = ret;
             return ret;
         }
 
@@ -138,5 +133,42 @@ internal static class AssetManager
             }
             OverridesCache.Clear();
         }
+    }
+
+    private static SObject? GeneratePreservesIfPossible(string? preserveId, string? objId)
+    {
+        if (preserveId is null)
+        {
+            return null;
+        }
+
+        if (!Game1.objectData.ContainsKey(preserveId))
+        {
+            preserveId = DataToItemMap.GetID(ItemTypeEnum.SObject, preserveId);
+        }
+
+        if (preserveId is null)
+        {
+            return null;
+        }
+
+        SObject.PreserveType? preserveType = objId switch
+        {
+            "447" => SObject.PreserveType.AgedRoe,
+            "340" => SObject.PreserveType.Honey,
+            "344" => SObject.PreserveType.Jelly,
+            "350" => SObject.PreserveType.Juice,
+            "342" => SObject.PreserveType.Pickle,
+            "812" => SObject.PreserveType.Roe,
+            "348" => SObject.PreserveType.Wine,
+            _ => null,
+        };
+
+        if (preserveType is not null)
+        {
+            return ItemRegistry.GetObjectTypeDefinition().CreateFlavoredItem(preserveType.Value, new SObject(preserveId, 1));
+        }
+
+        return null;
     }
 }

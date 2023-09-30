@@ -1,4 +1,6 @@
-﻿using System.Runtime.CompilerServices;
+﻿namespace GrowableGiantCrops.HarmonyPatches.ToolPatches;
+
+using System.Runtime.CompilerServices;
 
 using AtraBase.Toolkit;
 
@@ -9,8 +11,6 @@ using GrowableGiantCrops.Framework;
 using HarmonyLib;
 
 using StardewValley.Enchantments;
-
-namespace GrowableGiantCrops.HarmonyPatches.ToolPatches;
 
 /// <summary>
 /// Patches for enchantments for the shovel.

@@ -64,7 +64,7 @@ internal static class FixSecretNotes
         try
         {
             __result = null;
-            Option<SObject?> option = __instance.GetLocationContext() == GameLocation.LocationContext.Island
+            Option<SObject?> option = __instance.InIslandContext()
                        ? TryGenerateJournalScrap(who)
                        : TryGenerateSecretNote(who);
 
@@ -146,7 +146,7 @@ internal static class FixSecretNotes
         }
 
         int noteID = Unseen.Value.ElementAt(Singletons.Random.Next(Unseen.Value.Count));
-        SObject note = new(79, 1);
+        SObject note = new("79", 1);
         note.Name += " #" + noteID;
 
         Unseen.Value.Clear();
@@ -216,7 +216,7 @@ internal static class FixSecretNotes
         }
 
         int scrapID = Unseen.Value.Min();
-        SObject note = new(842, 1);
+        SObject note = new("842", 1);
         note.Name += " #" + (scrapID - GameLocation.JOURNAL_INDEX);
 
         Unseen.Value.Clear();

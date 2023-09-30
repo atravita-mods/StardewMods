@@ -1,7 +1,11 @@
-﻿using AtraShared.ConstantsAndEnums;
+﻿using AtraCore.Framework.ReflectionManager;
+
+using AtraShared.ConstantsAndEnums;
 
 using HarmonyLib;
 using Microsoft.Xna.Framework;
+
+using StardewValley.Pathfinding;
 
 namespace GingerIslandMainlandAdjustments.ScheduleManager;
 
@@ -22,8 +26,8 @@ internal static class ScheduleDebugPatches
     internal static void ApplyPatches(Harmony harmony)
     {
         harmony.Patch(
-            original: AccessTools.Method(typeof(NPC), "pathfindToNextScheduleLocation"),
-            finalizer: new HarmonyMethod(typeof(ScheduleDebugPatches), nameof(ScheduleDebugPatches.FinalizePathfinder)));
+            original: typeof(NPC).GetCachedMethod(nameof(NPC.pathfindToNextScheduleLocation), ReflectionCache.FlagTypes.InstanceFlags),
+            finalizer: new HarmonyMethod(typeof(ScheduleDebugPatches), nameof(FinalizePathfinder)));
     }
 
     /// <summary>
@@ -33,8 +37,7 @@ internal static class ScheduleDebugPatches
     {
         foreach (NPC npc in FailedNPCs)
         {
-            npc.Schedule = null;
-            npc.followSchedule = false;
+            npc.ClearSchedule();
         }
         FailedNPCs.Clear();
     }
@@ -49,9 +52,6 @@ internal static class ScheduleDebugPatches
     /// <param name="endingLocation">Ending map.</param>
     /// <param name="endingX">Ending X.</param>
     /// <param name="endingY">Ending Y.</param>
-    /// <param name="finalFacingDirection">Facing direction for NPC.</param>
-    /// <param name="endBehavior">End animation.</param>
-    /// <param name="endMessage">End message for NPC to say.</param>
     /// <param name="__exception">Exception raised, if any.</param>
     /// <param name="__result">The result of the function (an empty schedulePoint).</param>
     /// <returns>null to suppress the exception.</returns>
@@ -63,9 +63,6 @@ internal static class ScheduleDebugPatches
         string endingLocation,
         int endingX,
         int endingY,
-        int finalFacingDirection,
-        string endBehavior,
-        string endMessage,
         Exception __exception,
         ref SchedulePathDescription __result)
     {
@@ -73,7 +70,7 @@ internal static class ScheduleDebugPatches
         if (__exception is not null)
         {
             Globals.ModMonitor.Log($"Encountered error parsing schedule for {__instance.Name}, {startingLocation} {startingX} {startingY} to {endingLocation} {endingX} {endingY}.\n\n{__exception}", LogLevel.Error);
-            __result = new SchedulePathDescription(new Stack<Point>(), 2, null, null);
+            __result = new SchedulePathDescription(new Stack<Point>(), 2, null, null, endingLocation, new Point(endingX, endingY));
             FailedNPCs.Add(__instance);
         }
         return null;

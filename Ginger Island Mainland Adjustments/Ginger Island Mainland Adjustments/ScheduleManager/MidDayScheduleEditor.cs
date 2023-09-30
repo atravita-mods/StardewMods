@@ -108,9 +108,12 @@ internal static class MidDayScheduleEditor
             Globals.ModMonitor.DebugOnlyLog($"Received {npc.Name} to adjust but last schedule key is not {GIEndTime}");
             return false;
         }
-        string? schedule = ScheduleUtilities.FindProperGISchedule(npc, SDate.Now());
-        Dictionary<int, SchedulePathDescription>? remainderSchedule = ParseGIRemainderSchedule(schedule, npc);
+        if (ScheduleUtilities.FindProperGISchedule(npc, SDate.Now(), out string? key) is not string schedule || key is null)
+        {
+            return false;
+        }
 
+        Dictionary<int, SchedulePathDescription>? remainderSchedule = ParseGIRemainderSchedule(key, schedule, npc);
         if (remainderSchedule is not null)
         {
             npc.Schedule.Update(remainderSchedule);
@@ -122,11 +125,12 @@ internal static class MidDayScheduleEditor
     /// Gets the SchedulePathDescription schedule for the schedule string,
     /// assumes a 1800 start on Ginger Island.
     /// </summary>
+    /// <param name="scheduleKey">The schedule key used.</param>
     /// <param name="schedule">Raw schedule string.</param>
     /// <param name="npc">NPC.</param>
     /// <returns>null if the schedule could not be parsed, a schedule otherwise.</returns>
     [ContractAnnotation("schedule:null => null")]
-    internal static Dictionary<int, SchedulePathDescription>? ParseGIRemainderSchedule(string? schedule, NPC npc)
+    internal static Dictionary<int, SchedulePathDescription>? ParseGIRemainderSchedule(string scheduleKey, string? schedule, NPC npc)
     {
         if (schedule is null)
         {
@@ -136,6 +140,6 @@ internal static class MidDayScheduleEditor
         Point lastStop = npc.Schedule[GIEndTime].route.Peek();
         int lasttime = GIEndTime - 10;
 
-        return Globals.UtilitySchedulingFunctions.ParseSchedule(schedule, npc, GIMap, lastStop, lasttime, Globals.Config.EnforceGITiming);
+        return Globals.UtilitySchedulingFunctions.ParseSchedule(scheduleKey, schedule, npc, GIMap, lastStop, lasttime, Globals.Config.EnforceGITiming);
     }
 }

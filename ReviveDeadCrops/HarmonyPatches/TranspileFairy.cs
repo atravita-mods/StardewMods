@@ -40,8 +40,6 @@ internal static class TranspileFairy
             helper.FindNext(new CodeInstructionWrapper[]
             {
                 new(OpCodes.Isinst, typeof(HoeDirt)),
-                new(OpCodes.Callvirt, typeof(HoeDirt).GetCachedProperty(nameof(HoeDirt.crop), ReflectionCache.FlagTypes.InstanceFlags).GetGetMethod()),
-                new(OpCodes.Ldfld, typeof(Crop).GetCachedField(nameof(Crop.currentPhase), ReflectionCache.FlagTypes.InstanceFlags)),
             })
             .FindPrev(new CodeInstructionWrapper[]
             {
@@ -59,7 +57,7 @@ internal static class TranspileFairy
                 new(OpCodes.Call, typeof(TranspileFairy).GetCachedMethod(nameof(AnimateReviveCrop), ReflectionCache.FlagTypes.StaticFlags)),
             }, withLabels: labels);
 
-            // helper.Print();
+            helper.Print();
             return helper.Render();
         }
         catch (Exception ex)
@@ -78,18 +76,15 @@ internal static class TranspileFairy
             ILHelper helper = new(original, instructions, ModEntry.ModMonitor, gen);
             helper.FindNext(new CodeInstructionWrapper[]
             {
-                new(OpCodes.Isinst, typeof(HoeDirt)),
-                new(OpCodes.Callvirt, typeof(HoeDirt).GetCachedProperty(nameof(HoeDirt.crop), ReflectionCache.FlagTypes.InstanceFlags).GetGetMethod()),
                 new(OpCodes.Callvirt, typeof(Crop).GetCachedMethod(nameof(Crop.growCompletely), ReflectionCache.FlagTypes.InstanceFlags)),
             })
-            .Advance(2)
             .Insert(new CodeInstruction[]
             {
                 new(OpCodes.Dup),
                 new(OpCodes.Call, typeof(TranspileFairy).GetCachedMethod(nameof(ActuallyReviveCrop), ReflectionCache.FlagTypes.StaticFlags)),
             });
 
-            // helper.Print();
+            helper.Print();
             return helper.Render();
         }
         catch (Exception ex)

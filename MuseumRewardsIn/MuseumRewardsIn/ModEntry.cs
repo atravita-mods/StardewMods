@@ -1,14 +1,8 @@
 ﻿namespace MuseumRewardsIn;
 
-using System.Text.RegularExpressions;
-
-using AtraCore.Framework.Caches;
 using AtraCore.Framework.Internal;
 
-using AtraShared.ConstantsAndEnums;
 using AtraShared.Integrations;
-using AtraShared.ItemManagement;
-using AtraShared.Menuing;
 using AtraShared.Utils.Extensions;
 
 using HarmonyLib;
@@ -17,48 +11,35 @@ using Microsoft.Xna.Framework;
 
 using StardewModdingAPI.Events;
 
+using StardewValley.Internal;
 using StardewValley.Locations;
-
-using StardewValley.Menus;
 
 using AtraUtils = AtraShared.Utils.Utils;
 
 /// <inheritdoc />
-[HarmonyPatch(typeof(Utility))]
-[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = StyleCopConstants.NamedForHarmony)]
 internal sealed class ModEntry : BaseMod<ModEntry>
 {
-    private const string BUILDING = "Buildings";
-    private const string SHOPNAME = "atravita.MuseumShop";
-
-    private static readonly Regex MuseumObject = new(
-        pattern: "^museumCollectedReward(?<type>[a-zA-Z]+)_(?<id>[0-9]+)_",
-        options: RegexOptions.Compiled,
-        matchTimeout: TimeSpan.FromMilliseconds(250));
-
-    private static Vector2 shopLoc = new(4, 9);
+    /// <summary>
+    /// String key used for the museum shop's item resolver.
+    /// </summary>
+    internal const string MUSEUM_RESOLVER = "atravita_MUSEUM_SHOP";
 
     /// <summary>
-    /// The config class for this mod.
+    /// Gets the config class for this mod.
     /// </summary>
-    /// <remarks>WARNING: NOT SET IN ENTRY.</remarks>
-    private static ModConfig config = null!;
-
-    private static IAssetName libraryHouse = null!;
+    internal static ModConfig Config { get; private set; } = null!;
 
     /// <inheritdoc />
     public override void Entry(IModHelper helper)
     {
         base.Entry(helper);
         AssetManager.Initialize(helper.GameContent);
-        libraryHouse = helper.GameContent.ParseAssetName("Maps/ArchaeologyHouse");
 
         helper.Events.GameLoop.GameLaunched += this.OnGameLaunched;
-        helper.Events.Input.ButtonPressed += this.OnButtonPressed;
         helper.Events.Player.Warped += this.OnWarped;
-        helper.Events.Content.AssetRequested += this.OnAssetRequested;
+        helper.Events.Content.AssetRequested += static (_, e) => AssetManager.Apply(e);
 
-        helper.Events.Content.AssetsInvalidated += this.OnAssetInvalidated;
+        helper.Events.Content.AssetsInvalidated += static (_, e) => AssetManager.Invalidate(e.NamesWithoutLocale);
 
         helper.Events.Player.InventoryChanged += static (_, e) => LibraryMuseumPatches.OnInventoryChanged(e.Added);
 
@@ -70,158 +51,41 @@ internal sealed class ModEntry : BaseMod<ModEntry>
 
     private void OnGameLaunched(object? sender, GameLaunchedEventArgs e)
     {
-        // move the default one to the left for SVE.
-        if (this.Helper.ModRegistry.IsLoaded("FlashShifter.SVECode"))
-        {
-            shopLoc = new(3, 9);
-        }
+        // Register custom item resolver
+        ItemQueryResolver.ItemResolvers[MUSEUM_RESOLVER] = MuseumShopBuilder.MuseumQuery;
 
-        config = AtraUtils.GetConfigOrDefault<ModConfig>(this.Helper, this.Monitor);
-        if (config.BoxLocation == new Vector2(-1, -1))
+        // move the default one to the left for SVE.
+        Vector2 shopLoc = this.Helper.ModRegistry.IsLoaded("FlashShifter.SVECode") ? new(3, 9) : new(4, 9);
+
+        Config = AtraUtils.GetConfigOrDefault<ModConfig>(this.Helper, this.Monitor);
+        if (Config.BoxLocation == new Vector2(-1, -1))
         {
-            config.BoxLocation = shopLoc;
-            this.Helper.AsyncWriteConfig(this.Monitor, config);
+            Config.BoxLocation = shopLoc;
+            this.Helper.AsyncWriteConfig(this.Monitor, Config);
         }
 
         GMCMHelper gmcm = new(this.Monitor, this.Helper.Translation, this.Helper.ModRegistry, this.ModManifest);
         if (gmcm.TryGetAPI())
         {
             gmcm.Register(
-                reset: static () => config = new(),
+                reset: static () => Config = new(),
                 save: () =>
                 {
-                    this.Helper.GameContent.InvalidateCacheAndLocalized(libraryHouse.BaseName);
-                    this.Helper.AsyncWriteConfig(this.Monitor, config);
+                    this.Helper.GameContent.InvalidateCacheAndLocalized(AssetManager.libraryHouse.BaseName);
+                    this.Helper.AsyncWriteConfig(this.Monitor, Config);
                 })
             .AddTextOption(
                 name: I18n.BoxLocation_Name,
-                getValue: static () => config.BoxLocation.X + ", " + config.BoxLocation.Y,
-                setValue: static (str) => config.BoxLocation = str.TryParseVector2(out Vector2 vec) ? vec : shopLoc,
+                getValue: static () => Config.BoxLocation.X + ", " + Config.BoxLocation.Y,
+                setValue: (str) => Config.BoxLocation = str.TryParseVector2(out Vector2 vec) ? vec : shopLoc,
                 tooltip: I18n.BoxLocation_Description)
             .AddBoolOption(
                 name: I18n.AllowBuyBacks_Name,
-                getValue: static () => config.AllowBuyBacks,
-                setValue: static (value) => config.AllowBuyBacks = value,
+                getValue: static () => Config.AllowBuyBacks,
+                setValue: static (value) => Config.AllowBuyBacks = value,
                 tooltip: I18n.AllowBuyBacks_Description);
         }
     }
-
-    /// <summary>
-    /// Postfix to add furniture to the catalog.
-    /// </summary>
-    /// <param name="__result">shop inventory to add to.</param>
-    [HarmonyPatch(nameof(Utility.getAllFurnituresForFree))]
-    [SuppressMessage("StyleCop.CSharp.OrderingRules", "SA1204:Static elements should appear before instance elements", Justification = "Reviewed.")]
-    private static void Postfix(Dictionary<ISalable, int[]> __result)
-    {
-        foreach (string mailflag in Game1.player.mailReceived)
-        {
-            Match match = MuseumObject.Match(mailflag);
-            if (match.Success && int.TryParse(match.Groups["id"].Value, out int id)
-                && match.Groups["type"].Value is "F" or "f")
-            {
-                if (ItemUtils.GetItemFromIdentifier(match.Groups["type"].Value, id) is Item item)
-                {
-                    if (__result.TryAdd(item, new int[] { 0, ShopMenu.infiniteStock }))
-                    {
-                        ModMonitor.DebugOnlyLog($"Adding {item.Name} to catalogue!", LogLevel.Info);
-                    }
-                    else
-                    {
-                        ModMonitor.Log($"Could not add {item.Name} to catalogue, may be a duplicate!", LogLevel.Warn);
-                    }
-                }
-            }
-        }
-    }
-
-    /// <inheritdoc cref="IInputEvents.ButtonPressed"/>
-    private void OnButtonPressed(object? sender, ButtonPressedEventArgs e)
-    {
-        if ((!e.Button.IsActionButton() && !e.Button.IsUseToolButton())
-            || !MenuingExtensions.IsNormalGameplay())
-        {
-            return;
-        }
-
-        if (Game1.currentLocation is not LibraryMuseum museum
-            || museum.doesTileHaveProperty((int)e.Cursor.GrabTile.X, (int)e.Cursor.GrabTile.Y, "Action", BUILDING) != SHOPNAME)
-        {
-            return;
-        }
-
-        this.Helper.Input.SurpressClickInput();
-
-        Dictionary<ISalable, int[]> sellables = new(20);
-
-        Dictionary<string, string> mail = this.Helper.GameContent.Load<Dictionary<string, string>>("Data/mail");
-
-        foreach (string mailflag in Game1.player.mailReceived)
-        {
-            Match match = MuseumObject.Match(mailflag);
-            if (match.Success && int.TryParse(match.Groups["id"].Value, out int id))
-            {
-                if (ItemUtils.GetItemFromIdentifier(match.Groups["type"].Value, id) is Item item
-                    && !(item is SObject obj && (obj.Category == SObject.SeedsCategory || obj.IsRecipe)))
-                {
-                    if (item.Name.StartsWith("Dwarvish Translation Guide")
-                        || item.Name.Equals("Stardrop", StringComparison.OrdinalIgnoreCase)
-                        || item.Name.Equals("Crystalarium", StringComparison.OrdinalIgnoreCase))
-                    {
-                        continue;
-                    }
-                    int[] selldata = new int[] { Math.Max(item.salePrice() * 2, 2000), ShopMenu.infiniteStock };
-                    sellables.TryAdd(item, selldata);
-                }
-            }
-            else if (AssetManager.MailFlags.Contains(mailflag) && mail.TryGetValue(mailflag, out string? mailstring))
-            {
-                foreach (SObject? item in mailstring.ParseItemsFromMail())
-                {
-                    int[] selldata = new int[] { Math.Max(item.salePrice() * 2, 2000), ShopMenu.infiniteStock };
-                    sellables.TryAdd(item, selldata);
-                }
-            }
-        }
-
-        ShopMenu shop = new(sellables, who: "Gunther") { storeContext = SHOPNAME };
-        if (config.AllowBuyBacks)
-        {
-            shop.categoriesToSellHere.Add(SObject.mineralsCategory);
-            shop.categoriesToSellHere.Add(SObject.GemCategory);
-
-            // TODO: hack in buybacks for Arch, which may not have a number?
-        }
-
-        if (NPCCache.GetByVillagerName("Gunther") is NPC gunter)
-        {
-            shop.portraitPerson = gunter;
-        }
-        shop.potraitPersonDialogue = I18n.ShopMessage();
-        Game1.activeClickableMenu = shop;
-    }
-
-    private void OnAssetRequested(object? sender, AssetRequestedEventArgs e)
-    {
-        if (e.NameWithoutLocale.IsEquivalentTo(libraryHouse))
-        {
-            e.Edit(
-                apply: (asset) => asset.AsMap().AddTileProperty(
-                    monitor: this.Monitor,
-                    layer: BUILDING,
-                    key: "Action",
-                    property: SHOPNAME,
-                    placementTile: config.BoxLocation),
-                priority: AssetEditPriority.Default + 10);
-        }
-        else
-        {
-            AssetManager.Apply(e);
-        }
-    }
-
-    private void OnAssetInvalidated(object? sender, AssetsInvalidatedEventArgs e)
-        => AssetManager.Invalidate(e.NamesWithoutLocale);
 
     private void OnWarped(object? sender, WarpedEventArgs e)
     {
@@ -231,15 +95,7 @@ internal sealed class ModEntry : BaseMod<ModEntry>
         }
         if (e.NewLocation is LibraryMuseum)
         {
-            Vector2 tile = config.BoxLocation; // default location of shop.
-            foreach (Vector2 v in AtraUtils.YieldAllTiles(e.NewLocation))
-            { // find the shop tile - a mod may have moved it.
-                if (e.NewLocation.doesTileHaveProperty((int)v.X, (int)v.Y, "Action", BUILDING)?.Equals(SHOPNAME, StringComparison.OrdinalIgnoreCase) == true)
-                {
-                    tile = v;
-                    break;
-                }
-            }
+            Vector2 tile = Config.BoxLocation; // default location of shop.
 
             this.Monitor.DebugOnlyLog($"Adding box to {tile}", LogLevel.Info);
 

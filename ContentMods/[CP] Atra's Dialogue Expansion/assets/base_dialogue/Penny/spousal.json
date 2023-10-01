@@ -12,6 +12,21 @@
         }
     },
     {
+        "LogName": "Pam - expecting grandchild",
+        "Action": "EditData",
+        "Target": "Characters/Dialogue/Pam",
+        "When": {
+            "Query: {{Hearts:Penny}} >= 10": true,
+            "EnableFor": "Pam",
+            "ChildStatus": "Expecting",
+            "DialogueRandom": "bravo, charlie"
+        },
+        "Entries": {
+            "BusStop": "{{i18n: pam-expecting-grandchild-initial}}$h",
+            "Trailer": "{{i18n: pam-expecting-grandchild-initial-b}}$h"
+        }
+    },
+    {
         "LogName": "Vincent - inlaw",
         "Action": "EditData",
         "Target": "Characters/Dialogue/Vincent",

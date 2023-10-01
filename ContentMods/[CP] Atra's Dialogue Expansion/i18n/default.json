@@ -263,6 +263,8 @@
 
     // expecting grandchildren
     "robin-expecting-grandchild": "Oh, @, I'm so looking forward to having a new grandchild!",
+    "pam-expecting-grandchild-initial": "@, I can't believe I'm gonna be a grandma!",
+    "pam-expecting-grandchild-initial-b": "You're gonna bring the new kiddo around to see their grandmama, won't you?",
 
     // divorce strings
     "demetrius-divorced-from-maru-a": "Well, I wish you hadn't broken my dear Maru's heart.",

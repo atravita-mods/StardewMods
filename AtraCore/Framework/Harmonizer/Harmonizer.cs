@@ -44,7 +44,7 @@ public sealed class Harmonizer
     }
 
     /// <summary>
-    /// The unique ID of this mod.
+    /// Gets the unique ID of this mod.
     /// </summary>
     public string UniqueID { get; init; }
 

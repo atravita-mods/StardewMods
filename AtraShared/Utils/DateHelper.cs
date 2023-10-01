@@ -24,8 +24,6 @@ public static class DateHelper
     /// <returns>True if the Winter Star letter is valid.</returns>
     public static bool IsWinterStarLetterValid(SDate date)
         => date.SeasonIndex == 3 && date.Day >= 18 && date.Day <= 25;
-
-#warning - fix in Stardew 1.6
     /// <summary>
     /// Whether or not the Winter Star letter is currently valid.
     /// </summary>

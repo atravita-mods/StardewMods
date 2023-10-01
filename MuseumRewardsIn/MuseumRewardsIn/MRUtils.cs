@@ -1,5 +1,5 @@
 ﻿using AtraBase.Toolkit.StringHandler;
-using Microsoft.Xna.Framework;
+
 using StardewValley.Objects;
 
 namespace MuseumRewardsIn;
@@ -14,70 +14,101 @@ internal static class MRUtils
     /// </summary>
     /// <param name="mail">The mail data to process.</param>
     /// <returns>The items attached.</returns>
-    internal static IEnumerable<SObject> ParseItemsFromMail(this string mail)
+    internal static IEnumerable<string> ParseItemsFromMail(this string mail)
     {
-        int startindex = mail.IndexOf("%item");
-        if (startindex < 0)
-        {
-            return Enumerable.Empty<SObject>();
-        }
+        List<string>? ret = null;
 
-        int endindex = mail.IndexOf("%%", startindex);
-        if (endindex < 0)
+        ReadOnlySpan<char> mailSpan = mail.AsSpan().Trim();
+        while (mailSpan.Length > 0)
         {
-            return Enumerable.Empty<SObject>();
-        }
-
-        ReadOnlySpan<char> substring = mail.AsSpan(startindex, endindex - startindex).Trim();
-        if (substring.Length <= 0)
-        {
-            return Enumerable.Empty<SObject>();
-        }
-
-        if (substring.StartsWith("object ", StringComparison.OrdinalIgnoreCase))
-        {
-            List<SObject> ret = new();
-
-            bool isItem = true;
-            foreach (SpanSplitEntry split in substring["object ".Length..].Trim().StreamSplit())
+            int startIndex = mailSpan.IndexOf("%item", StringComparison.Ordinal);
+            if (startIndex < 0)
             {
-                if (isItem && int.TryParse(split, out int index) && index > 0)
-                {
-                    ret.Add(new SObject(index, 1));
-                }
-                isItem = !isItem;
-            }
-            return ret;
-        }
-        else if (substring.StartsWith("bigobject ", StringComparison.OrdinalIgnoreCase))
-        {
-            List<SObject> ret = new();
-
-            foreach (SpanSplitEntry split in substring["bigobject ".Length..].Trim().StreamSplit())
-            {
-                if (int.TryParse(split, out int index) && index > 0)
-                {
-                    ret.Add(new SObject(Vector2.Zero, index));
-                }
+                break;
             }
 
-            return ret;
-        }
-        else if (substring.StartsWith("furniture ", StringComparison.OrdinalIgnoreCase))
-        {
-            List<SObject> ret = new();
-
-            foreach (SpanSplitEntry split in substring["furniture ".Length..].Trim().StreamSplit())
+            int endIndex = mailSpan[(startIndex + "%item".Length)..].IndexOf("%%", StringComparison.Ordinal);
+            if (endIndex < 0)
             {
-                if (int.TryParse(split, out int index) && index > 0)
-                {
-                    ret.Add(Furniture.GetFurnitureInstance(index));
-                }
+                break;
             }
 
-            return ret;
+            ReadOnlySpan<char> substring = mailSpan[startIndex..endIndex].Trim();
+            mailSpan = mailSpan[(endIndex + 2)..].Trim();
+
+            if (substring.Length <= 0)
+            {
+                continue;
+            }
+
+            if (substring.StartsWith("object ", StringComparison.OrdinalIgnoreCase))
+            {
+                ret ??= new();
+
+                bool isItem = true;
+                foreach (SpanSplitEntry split in substring["object ".Length..].Trim().StreamSplit(null, StringSplitOptions.TrimEntries | StringSplitOptions.RemoveEmptyEntries))
+                {
+                    if (isItem)
+                    {
+                        string item = $"{ItemRegistry.type_object}{split}";
+                        if (ItemRegistry.Exists(item))
+                        {
+                            ret.Add(item);
+                        }
+                    }
+                    isItem = !isItem;
+                }
+                return ret;
+            }
+            else if (substring.StartsWith("id", StringComparison.OrdinalIgnoreCase))
+            {
+                ret ??= new();
+                bool isItem = true;
+                foreach (SpanSplitEntry split in substring["id ".Length..].Trim().StreamSplit(null, StringSplitOptions.TrimEntries | StringSplitOptions.RemoveEmptyEntries))
+                {
+                    if (isItem)
+                    {
+                        string item = split.ToString();
+                        if (ItemRegistry.Exists(item))
+                        {
+                            ret.Add(item);
+                        }
+                    }
+                    isItem = !isItem;
+                }
+            }
+            else if (substring.StartsWith("bigobject ", StringComparison.OrdinalIgnoreCase))
+            {
+                ret ??= new();
+
+                foreach (SpanSplitEntry split in substring["bigobject ".Length..].Trim().StreamSplit(null, StringSplitOptions.TrimEntries | StringSplitOptions.RemoveEmptyEntries))
+                {
+                    string item = $"{ItemRegistry.type_bigCraftable}{split}";
+                    if (ItemRegistry.Exists(item))
+                    {
+                        ret.Add(item);
+                    }
+                }
+
+                return ret;
+            }
+            else if (substring.StartsWith("furniture ", StringComparison.OrdinalIgnoreCase))
+            {
+                ret ??= new();
+
+                foreach (SpanSplitEntry split in substring["furniture ".Length..].Trim().StreamSplit(null, StringSplitOptions.TrimEntries | StringSplitOptions.RemoveEmptyEntries))
+                {
+                    string item = $"{ItemRegistry.type_furniture}{split}";
+                    if (ItemRegistry.Exists(item))
+                    {
+                        ret.Add(item);
+                    }
+                }
+
+                return ret;
+            }
         }
 
-        return Enumerable.Empty<SObject>();
+        return ret ?? Enumerable.Empty<string>();
     }
 }

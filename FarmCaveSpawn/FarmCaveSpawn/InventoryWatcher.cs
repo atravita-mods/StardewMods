@@ -86,9 +86,9 @@ internal static class InventoryWatcher
     /// <returns>If the sapling has been viewed.</returns>
     internal static bool HaveSeen(string itemID)
     {
-        if (Game1Wrappers.ObjectData.TryGetValue(itemID, out string? data))
+        if (Game1Wrappers.ObjectData.TryGetValue(itemID, out var data))
         {
-            string name = data.GetNthChunk('/').ToString();
+            string name = data.Name;
             return model?.Saplings?.Contains(name) == true;
         }
         return false;

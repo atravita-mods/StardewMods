@@ -395,10 +395,10 @@ SUCCESS:
         }
     }
 
-    private static bool FilterCropsToUserConfig(int crop)
+    private static bool FilterCropsToUserConfig(string crop)
     {
         // mixed seeds.
-        if (crop == 770)
+        if (crop == "770")
         {
             return false;
         }
@@ -414,7 +414,7 @@ SUCCESS:
             return false;
         }
 
-        if (!Game1Wrappers.ObjectData.TryGetValue(crop, out string? data))
+        if (!Game1Wrappers.ObjectData.TryGetValue(crop, out var data))
         {
             return false;
         }

@@ -154,8 +154,6 @@ internal static class DoConsumePatch
             CodeInstruction stloc = ILHelper.GetStLoc(index);
             helper.FindNext(new CodeInstructionWrapper[]
             {
-                OpCodes.Ldarg_0,
-                OpCodes.Ldfld,
                 (OpCodes.Callvirt, typeof(Farmer).GetCachedProperty(nameof(Farmer.IsLocalPlayer), ReflectionCache.FlagTypes.InstanceFlags).GetGetMethod()),
                 OpCodes.Brfalse,
             })

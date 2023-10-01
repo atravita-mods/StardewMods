@@ -11,7 +11,7 @@
     <Description>Just some rings that spawn critters.</Description>
     <UpdateKeys>Nexus:15557</UpdateKeys>
     <Version>0.1.5</Version>
-    <BaseManifest>..\ja_dependencies.json</BaseManifest>
+    <BaseManifest>..\base_dependencies.json</BaseManifest>
   </PropertyGroup>
   
   <ItemGroup>

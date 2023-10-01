@@ -397,7 +397,6 @@ public class ScheduleUtilityFunctions
 
                 SchedulePathDescription newpath = npc.pathfindToNextScheduleLocation(
                     scheduleKey,
-                    npc,
                     previousMap,
                     lastx,
                     lasty,

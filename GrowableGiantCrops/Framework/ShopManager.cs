@@ -478,7 +478,7 @@ internal static class ShopManager
     private static Dictionary<int, int>? GenerateNodeShop()
     {
         Dictionary<int, int> chosen = new(4);
-        ShuffledYielder<int> shuffler = new(nodes);
+        ShuffledYielder<string> shuffler = new(nodes);
         int total = 4;
         while (shuffler.MoveNext() && total-- > 0)
         {

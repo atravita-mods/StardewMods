@@ -58,11 +58,6 @@ internal static class AdjustDartNumberTranspiler
             })
             .FindNext(new CodeInstructionWrapper[]
             {
-                new(OpCodes.Ldc_I4_S, 20),
-            })
-            .ReplaceInstruction(OpCodes.Call, typeof(AdjustDartNumberTranspiler).GetCachedMethod(nameof(GetMaximumDartNumber), ReflectionCache.FlagTypes.StaticFlags), keepLabels: true)
-            .FindNext(new CodeInstructionWrapper[]
-            {
                 new(OpCodes.Ldc_I4_S, 15),
             })
             .ReplaceInstruction(OpCodes.Call, typeof(AdjustDartNumberTranspiler).GetCachedMethod(nameof(GetMidddleDartNumber), ReflectionCache.FlagTypes.StaticFlags), keepLabels: true)
@@ -70,7 +65,12 @@ internal static class AdjustDartNumberTranspiler
              {
                  new(OpCodes.Ldc_I4_S, 10),
              })
-            .ReplaceInstruction(OpCodes.Call, typeof(AdjustDartNumberTranspiler).GetCachedMethod(nameof(GetMinimumDartNumber), ReflectionCache.FlagTypes.StaticFlags), keepLabels: true);
+            .ReplaceInstruction(OpCodes.Call, typeof(AdjustDartNumberTranspiler).GetCachedMethod(nameof(GetMinimumDartNumber), ReflectionCache.FlagTypes.StaticFlags), keepLabels: true)
+            .FindNext(new CodeInstructionWrapper[]
+            {
+                new(OpCodes.Ldc_I4_S, 20),
+            })
+            .ReplaceInstruction(OpCodes.Call, typeof(AdjustDartNumberTranspiler).GetCachedMethod(nameof(GetMaximumDartNumber), ReflectionCache.FlagTypes.StaticFlags), keepLabels: true);
 
             // helper.Print();
             return helper.Render();

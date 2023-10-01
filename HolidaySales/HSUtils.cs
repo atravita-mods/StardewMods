@@ -49,7 +49,7 @@ internal static class HSUtils
         helper.ForEachMatch(
             new CodeInstructionWrapper[]
             {
-                new(OpCodes.Call, typeof(Utility).GetCachedMethod(nameof(Utility.isFestivalDay), ReflectionCache.FlagTypes.StaticFlags)),
+                new(OpCodes.Call, typeof(Utility).GetCachedMethod(nameof(Utility.isFestivalDay), ReflectionCache.FlagTypes.StaticFlags, Type.EmptyTypes)),
             },
             (helper) =>
             {

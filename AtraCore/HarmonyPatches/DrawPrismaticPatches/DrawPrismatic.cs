@@ -220,25 +220,6 @@ internal static class DrawPrismatic
     }
 
     [UsedImplicitly]
-    [HarmonyTranspiler]
-    [HarmonyPatch(typeof(SObject), nameof(SObject.drawInMenu))]
-    private static IEnumerable<CodeInstruction>? TranspileSObjectDrawInMenu(IEnumerable<CodeInstruction> instructions, ILGenerator gen, MethodBase original)
-    {
-        try
-        {
-            ILHelper helper = new(original, instructions, ModEntry.ModMonitor, gen);
-            helper.AdjustUtilityTextColor();
-
-            return helper.Render();
-        }
-        catch (Exception ex)
-        {
-            ModEntry.ModMonitor.LogTranspilerError(original, ex);
-        }
-        return null;
-    }
-
-    [UsedImplicitly]
     [HarmonyPostfix]
     [MethodImpl(TKConstants.Hot)]
     [HarmonyPatch(typeof(SObject), nameof(SObject.drawInMenu))]

@@ -22,6 +22,10 @@ using StardewValley.Locations;
 using StardewValley.Menus;
 using StardewValley.Minigames;
 
+using XLocation = xTile.Dimensions.Location;
+using AtraUtils = AtraShared.Utils.Utils;
+using System.Globalization;
+
 namespace StopRugRemoval.HarmonyPatches.Niceties;
 
 /// <summary>
@@ -52,29 +56,45 @@ internal static class TokenPurchasePatch
         }
     }
 
-    [HarmonyPatch(nameof(GameLocation.performAction))]
-    private static bool Prefix(string action, Farmer who, ref bool __result)
+    [HarmonyPatch(nameof(GameLocation.performAction), new[] { typeof(string[]), typeof(Farmer), typeof(XLocation) })]
+    private static bool Prefix(string[] action, Farmer who, ref bool __result)
     {
-        if (who.IsLocalPlayer && ModEntry.Config.Enabled && action == "BuyQiCoins")
+        if (who.IsLocalPlayer && ModEntry.Config.Enabled && action.Length != 0 && action[0] == "BuyQiCoins")
         {
             try
             {
-                List<Response> responses = new(5);
-                List<Action?> actions = new(5);
-                for (int i = 10; i <= 10000; i *= 10)
+                int length = (int)Math.Log10(Game1.player.Money) - 1;
+                if (length <= 0)
                 {
-                    if (Game1.player.Money < i * 10)
-                    {
-                        break;
-                    }
-                    int copy = i; // prevent accidental capture. There's no explicit notation for that in C#
-
-                    // TODO: fix this to use the player's locale here.
-                    responses.Add(new Response(i.ToString(), i.ToString()));
-                    actions.Add(() => AttemptBuyTokens(copy));
+                    // player really doesn't have enough money to buy anything, defer to vanilla method.
+                    return true;
                 }
 
-                responses.Add(new Response("No", Game1.content.LoadString(@"Strings\Lexicon:QuestionDialogue_No")).SetHotKey(Keys.Escape));
+                Response[] responses = new Response[length + 1];
+                Action[] actions = new Action[length];
+
+                CultureInfo culture = AtraUtils.GetCurrentCulture();
+                ModEntry.ModMonitor.DebugOnlyLog($"Instantiating BuyQiCoins menu with {culture}.");
+
+                int coins = 10;
+                for (int i = 0; i < length; i++)
+                {
+                    int copy = coins; // prevent accidental capture. There's no explicit notation for that in C#
+
+                    Response response = new(
+                                            responseKey: copy.ToString("X", CultureInfo.InvariantCulture),
+                                            responseText: copy.ToString("N", culture));
+
+                    if ((i + 1).MapNumberToKey() is Keys hotkey)
+                    {
+                        response.SetHotKey(hotkey);
+                    }
+
+                    responses[i] = response;
+                    actions[i] = new Action(() => AttemptBuyTokens(copy));
+                }
+
+                responses[length] = new Response("No", Game1.content.LoadString(@"Strings\Lexicon:QuestionDialogue_No")).SetHotKey(Keys.Escape);
 
                 Game1.activeClickableMenu = new DialogueAndAction(I18n.BuyCasino(), responses, actions, ModEntry.InputHelper);
                 __result = true;

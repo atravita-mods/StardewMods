@@ -46,7 +46,7 @@ internal static class CharacterTramplePatches
                 {
                     bush.health = -1f;
                     Axe axe = new() { UpgradeLevel = 3 };
-                    bush.performToolAction(axe, 0, bush.currentTileLocation, currentLocation);
+                    bush.performToolAction(axe, 0, bush.Tile);
                     currentLocation.largeTerrainFeatures.RemoveAt(i);
                 }
             }

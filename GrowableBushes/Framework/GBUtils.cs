@@ -14,10 +14,16 @@ internal static class GBUtils
     /// <param name="environment">GameLocation to use.</param>
     internal static void SetUpSourceRectForEnvironment(this Bush bush, GameLocation environment)
     {
-        environment ??= bush.currentLocation;
-        GameLocation oldLoc = bush.currentLocation;
-        bush.currentLocation = environment;
-        bush.setUpSourceRect();
-        bush.currentLocation = oldLoc;
+        environment ??= bush.Location;
+        GameLocation oldLoc = bush.Location;
+        try
+        {
+            bush.Location = environment;
+            bush.setUpSourceRect();
+        }
+        finally
+        {
+            bush.Location = oldLoc;
+        }
     }
 }

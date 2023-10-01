@@ -29,7 +29,7 @@ internal static class FruitTreeUpdatePatches
     [HarmonyPatch(nameof(FruitTree.draw))]
     private static void Postfix(FruitTree __instance)
     {
-        if (!ModEntry.Config.DrawParticleEffects || !Utility.isOnScreen(__instance.currentTileLocation * Game1.tileSize, 256))
+        if (!ModEntry.Config.DrawParticleEffects || !Utility.isOnScreen(__instance.Tile * Game1.tileSize, 256))
         {
             return;
         }
@@ -38,12 +38,12 @@ internal static class FruitTreeUpdatePatches
         {
             if (__instance.modData.ContainsKey(CanPlaceHandler.MiraculousBeverages) && Singletons.Random.RollDice(512))
             {
-                __instance.currentLocation.TemporarySprites.Add(new TemporaryAnimatedSprite(
+                __instance.Location.TemporarySprites.Add(new TemporaryAnimatedSprite(
                     Game1.mouseCursorsName,
                     new Rectangle(372, 1956, 10, 10),
                     new Vector2(
-                        (__instance.currentTileLocation.X * Game1.tileSize) + Singletons.Random.Next(-64, 96),
-                        (__instance.currentTileLocation.Y * Game1.tileSize) + Singletons.Random.Next(-256, -128)),
+                        (__instance.Tile.X * Game1.tileSize) + Singletons.Random.Next(-64, 96),
+                        (__instance.Tile.Y * Game1.tileSize) + Singletons.Random.Next(-256, -128)),
                     flipped: false,
                     0.002f,
                     Color.LimeGreen)
@@ -60,9 +60,9 @@ internal static class FruitTreeUpdatePatches
                 && Singletons.Random.RollDice(512))
             {
                 Utility.addSprinklesToLocation(
-                  l: __instance.currentLocation,
-                  sourceXTile: (int)__instance.currentTileLocation.X,
-                  sourceYTile: (int)__instance.currentTileLocation.Y - 2,
+                  l: __instance.Location,
+                  sourceXTile: (int)__instance.Tile.X,
+                  sourceYTile: (int)__instance.Tile.Y - 2,
                   tilesWide: 3,
                   tilesHigh: 5,
                   totalSprinkleDuration: 400,

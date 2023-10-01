@@ -73,7 +73,7 @@ internal static class AssetEditor
     private static IAssetName LEWIS_DIALOGUE = null!;
     private static IAssetName RADIOACTIVE_DENYLIST = null!;
 
-    private static HashSet<int>? denylist = null;
+    private static HashSet<string>? denylist = null;
 
     /// <summary>
     /// Initializes the AssetEditor.
@@ -132,7 +132,7 @@ internal static class AssetEditor
     /// Gets a hashset of ids that should be excluded from the radioactive fertilizer.
     /// </summary>
     /// <returns>ids to exclude.</returns>
-    internal static HashSet<int> GetRadioactiveExclusions()
+    internal static HashSet<string> GetRadioactiveExclusions()
     {
         if (denylist is not null)
         {
@@ -141,13 +141,13 @@ internal static class AssetEditor
 
         ModEntry.ModMonitor.DebugOnlyLog("Resolving radioactive fertilizer denylist", LogLevel.Info);
 
-        HashSet<int> ret = new();
+        HashSet<string> ret = new();
         foreach (string item in Game1.content.Load<Dictionary<string, string>>(RADIOACTIVE_DENYLIST.BaseName).Keys)
         {
-            int? id = MFUtilities.ResolveID(item);
+            string? id = MFUtilities.ResolveID(item);
             if (id is not null)
             {
-                ret.Add(id.Value);
+                ret.Add(id);
             }
         }
 

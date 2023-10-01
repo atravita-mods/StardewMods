@@ -5,12 +5,12 @@ namespace MuseumRewardsIn;
 /// <summary>
 /// Manages assets for this mod.
 /// </summary>
-[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1310:Field names should not contain underscore", Justification = "Preference.")]
 internal static class AssetManager
 {
     private static Lazy<HashSet<string>> mailflags = new(GetMailFlagsForStore);
 
     private static IAssetName letters = null!;
+    private static IAssetName shops = null!;
 
     /// <summary>
     /// Gets a hashset of mailflags to process for gifts.
@@ -24,6 +24,7 @@ internal static class AssetManager
     internal static void Initialize(IGameContentHelper parser)
     {
         letters = parser.ParseAssetName("Mods/atravita/MuseumStore/Letters");
+        shops = parser.ParseAssetName("Data/Shops");
     }
 
     /// <summary>

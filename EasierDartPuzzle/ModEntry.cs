@@ -1,20 +1,20 @@
-﻿using AtraShared.ConstantsAndEnums;
+﻿namespace EasierDartPuzzle;
+
+using AtraCore.Framework.Internal;
+
+using AtraShared.ConstantsAndEnums;
 using AtraShared.Integrations;
 using AtraShared.Utils.Extensions;
+
 using HarmonyLib;
+
 using StardewModdingAPI.Events;
+
 using AtraUtils = AtraShared.Utils.Utils;
 
-namespace EasierDartPuzzle;
-
 /// <inheritdoc/>
-internal sealed class ModEntry : Mod
+internal sealed class ModEntry : BaseMod<ModEntry>
 {
-    /// <summary>
-    /// Gets the logger for this file.
-    /// </summary>
-    internal static IMonitor ModMonitor { get; private set; } = null!;
-
     /// <summary>
     /// Gets the config instance for this mod.
     /// </summary>
@@ -23,8 +23,9 @@ internal sealed class ModEntry : Mod
     /// <inheritdoc/>
     public override void Entry(IModHelper helper)
     {
-        ModMonitor = this.Monitor;
         I18n.Init(helper.Translation);
+        base.Entry(helper);
+
         AssetManager.Initialize(helper.GameContent);
         Config = AtraUtils.GetConfigOrDefault<ModConfig>(helper, this.Monitor);
         if (Config.MinDartCount > Config.MaxDartCount)
@@ -32,10 +33,6 @@ internal sealed class ModEntry : Mod
             (Config.MinDartCount, Config.MaxDartCount) = (Config.MaxDartCount, Config.MinDartCount);
             helper.AsyncWriteConfig(this.Monitor, Config);
         }
-
-        this.Monitor.Log($"Starting up: {this.ModManifest.UniqueID} - {typeof(ModEntry).Assembly.FullName}");
-
-        this.ApplyPatches(new Harmony(this.ModManifest.UniqueID));
 
         helper.Events.GameLoop.GameLaunched += this.OnGameLaunch;
 
@@ -58,6 +55,8 @@ internal sealed class ModEntry : Mod
     /// <inheritdoc cref="IGameLoopEvents.GameLaunched"/>
     private void OnGameLaunch(object? sender, GameLaunchedEventArgs e)
     {
+        this.ApplyPatches(new Harmony(this.ModManifest.UniqueID));
+
         GMCMHelper helper = new(this.Monitor, this.Helper.Translation, this.Helper.ModRegistry, this.ModManifest);
         if (helper.TryGetAPI())
         {

@@ -1,6 +1,9 @@
-﻿using System.Text.RegularExpressions;
+﻿namespace MuseumRewardsIn;
+
+using System.Text.RegularExpressions;
 
 using AtraCore.Framework.Caches;
+using AtraCore.Framework.Internal;
 
 using AtraShared.ConstantsAndEnums;
 using AtraShared.Integrations;
@@ -20,12 +23,10 @@ using StardewValley.Menus;
 
 using AtraUtils = AtraShared.Utils.Utils;
 
-namespace MuseumRewardsIn;
-
 /// <inheritdoc />
 [HarmonyPatch(typeof(Utility))]
 [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = StyleCopConstants.NamedForHarmony)]
-internal sealed class ModEntry : Mod
+internal sealed class ModEntry : BaseMod<ModEntry>
 {
     private const string BUILDING = "Buildings";
     private const string SHOPNAME = "atravita.MuseumShop";
@@ -45,19 +46,12 @@ internal sealed class ModEntry : Mod
 
     private static IAssetName libraryHouse = null!;
 
-    /// <summary>
-    /// Gets the logging instance for this mod.
-    /// </summary>
-    internal static IMonitor ModMonitor { get; private set; } = null!;
-
     /// <inheritdoc />
     public override void Entry(IModHelper helper)
     {
-        ModMonitor = this.Monitor;
+        base.Entry(helper);
         AssetManager.Initialize(helper.GameContent);
         libraryHouse = helper.GameContent.ParseAssetName("Maps/ArchaeologyHouse");
-
-        this.Monitor.Log($"Starting up: {this.ModManifest.UniqueID} - {typeof(ModEntry).Assembly.FullName}");
 
         helper.Events.GameLoop.GameLaunched += this.OnGameLaunched;
         helper.Events.Input.ButtonPressed += this.OnButtonPressed;

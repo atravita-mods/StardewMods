@@ -141,7 +141,7 @@ internal static class CropHarvestTranspiler
                 }
                 else
                 {
-                    Game1.createItemDebris(beverage, dirt.currentTileLocation * 64f, -1);
+                    Game1.createItemDebris(beverage, dirt.Tile * 64f, -1);
                 }
             }
         }
@@ -194,7 +194,7 @@ internal static class CropHarvestTranspiler
                 SObject seeds = new(seedIndex, Singletons.Random.Next(3));
                 if (jumino is null)
                 {
-                    Game1.createItemDebris(seeds, new Vector2((x * Game1.tileSize) + 32, (y * Game1.tileSize) + 32), -1, dirt.currentLocation);
+                    Game1.createItemDebris(seeds, new Vector2((x * Game1.tileSize) + 32, (y * Game1.tileSize) + 32), -1, dirt.Location);
                 }
                 else
                 {

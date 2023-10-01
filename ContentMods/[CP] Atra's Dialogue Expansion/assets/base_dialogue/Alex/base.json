@@ -15,7 +15,7 @@
             "fall_Mon2": "{{i18n:alex-fall-mon2}}$s",
 
             "winter_Wed8": "{{i18n:alex-winter-wed8.00}}#$b#{{i18n:alex-winter-wed8.01}}$s",
-            "Resort_Towel_3": "{{i18n:alex-resort-towel-3}}$h"
+            "Resort_Towel_3": "{{i18n:alex-resort-towel-3}}$h",
         }
     }
 ]}

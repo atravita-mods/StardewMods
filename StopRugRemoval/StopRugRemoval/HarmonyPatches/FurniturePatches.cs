@@ -25,44 +25,6 @@ internal class FurniturePatches
 {
     private static readonly PerScreen<int> ticks = new(createNewState: static () => 0);
 
-    [HarmonyPostfix]
-    [HarmonyPatch(nameof(Furniture.canBeRemoved))]
-    private static void PostfixCanBeRemoved(Furniture __instance, ref Farmer __0, ref bool __result)
-    {
-        try
-        {
-            if (!ModEntry.Config.Enabled || !ModEntry.Config.PreventRugRemoval
-                || !__result || ModEntry.Config.FurniturePlacementKey.IsDown()
-                || !__instance.furniture_type.Value.Equals(Furniture.rug)
-                || __0.currentLocation is not GameLocation currentLocation)
-            {
-                return;
-            }
-
-            Rectangle bounds = __instance.boundingBox.Value;
-            int tileX = bounds.X / Game1.tileSize;
-            int tileY = bounds.Y / Game1.tileSize;
-            ModEntry.ModMonitor.DebugOnlyLog($"Checking rug: {bounds.X / 64f}, {bounds.Y / 64f}, W/H {bounds.Width / 64f}/{bounds.Height / 64f}", LogLevel.Debug);
-
-            for (int x = 0; x < bounds.Width / Game1.tileSize; x++)
-            {
-                for (int y = 0; y < bounds.Height / Game1.tileSize; y++)
-                {
-                    if (!currentLocation.isTileLocationTotallyClearAndPlaceable(x + tileX, y + tileY))
-                    {
-                        Game1.showRedMessage(I18n.RugRemovalMessage());
-                        __result = false;
-                        return;
-                    }
-                }
-            }
-        }
-        catch (Exception ex)
-        {
-            ModEntry.ModMonitor.LogError("preventing rug removal", ex);
-        }
-    }
-
 #if DEBUG
     [HarmonyPrefix]
     [HarmonyPatch(nameof(Furniture.canBePlacedHere))]
@@ -142,7 +104,7 @@ internal class FurniturePatches
                 // clicked on a butterfly hutch!
                 Vector2 v = new(Singletons.Random.Next(-2, 4), Singletons.Random.Next(-1, 1));
                 loc.instantiateCrittersList();
-                loc.addCritter(new Butterfly(__instance.TileLocation + v).setStayInbounds(stayInbounds: true));
+                loc.addCritter(new Butterfly(loc, __instance.TileLocation + v).setStayInbounds(stayInbounds: true));
             }
             return true;
         }
@@ -159,7 +121,7 @@ internal class FurniturePatches
     {
         try
         {
-            if (__instance.getBoundingBox(__instance.TileLocation).Contains((tile_x * 64) + 32, (tile_y * 64) + 32)
+            if (__instance.GetBoundingBox().Contains((tile_x * 64) + 32, (tile_y * 64) + 32)
                 && layer_name.Equals("Back", StringComparison.OrdinalIgnoreCase)
                 && property_name.Equals("NoSpawn", StringComparison.OrdinalIgnoreCase))
             {

@@ -36,7 +36,7 @@ internal static class GiantCropPatcher
                 {
                     Vector2 tile = new(x, y);
                     if (Game1.currentLocation.objects.TryGetValue(tile, out SObject? obj)
-                        && obj.Name.Contains("Tapper", StringComparison.OrdinalIgnoreCase))
+                        && obj.IsTapper())
                     {
                         if (obj.readyForHarvest.Value && obj.heldObject.Value is SObject held)
                         {

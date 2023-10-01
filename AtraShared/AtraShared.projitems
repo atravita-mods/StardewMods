@@ -39,7 +39,9 @@
     <Compile Include="$(MSBuildThisFileDirectory)Utils\Extensions\FarmerTeamExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Utils\Extensions\IAssetDataForDictionariesExtension.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Utils\Extensions\IAssetDataForMapsExtensions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Utils\Extensions\KeyExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Utils\Extensions\ReflectionExtensions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Utils\Extensions\TokenParserExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Utils\Extensions\TreeExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Utils\FarmerHelpers.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Integrations\GMCMAttributes\GMCMDefaultColorAttribute.cs" />

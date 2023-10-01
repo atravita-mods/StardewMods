@@ -41,7 +41,7 @@
         "Target": "Characters/Dialogue/Emily",
         "When": {"HasSeenEvent": 463391}, // parrot event.
         "Entries": {
-            "27{{YearRemainder}}": "Oh, @, I had a great time singing with my parrot friend the other day! I think he's healing well.$h",
+            "27{{YearRemainder}}": "Oh, @, I had a great time singing with my parrot friend the other day! I think he's healing well.$h"
         }
     },
     {
@@ -66,9 +66,9 @@
             "17{{YearRemainder}}": "Have I considered moving out of town? Of course I have, but Pelican Town is my home.",
             "18{{YearRemainder}}": "Started working on a new dress! I'm thinking cute little cap sleeves and a full circle skirt...$h",
             "19{{YearRemainder}}": "Sometimes when the Saloon isn't busy Gus lets me rest my feet and knit for a while.#$b#Did you know that Joja cashiers aren't allowed to sit down? I can't imagine how much their feet must hurt.",
+            "24{{YearRemainder}}": "I saw a lace dress in one of Haley's magazines the other day, and I really want to see if I can replicate it.",
             "25{{YearRemainder}}": "The month is almost over. Say, @, what are you planning for next month?",
             "26{{YearRemainder}}": "Circle skirts are so easy to make!#$b#Until I have to hem them. Getting the hem even isn't as easy.$s",
-            "27{{YearRemainder}}": "I saw a lace dress in one of Haley's magazines the other day, and I really want to see if I can replicate it.",
             "28{{YearRemainder}}": "@, what do you think of kale salads?"
         }
     },
@@ -109,6 +109,7 @@
             "19_2": "I got some very tasty kombucha from Pierre's the other day.#$b#You know, I've always wanted to make my own....",
             "20_2": "You know, given where we live, you'd think composting programs would be more popular.$s#$b#It's not like in the city, where you just don't have enough room to compost.",
             "22_2": "Oh, @! Gus and I were thinking of making a ten-bean soup to add to the menu, what do you think?",
+            "23_2": "I've gotten into baking my own bread lately, after watching Gus do it for so long.#$b#It's a lot of work, but it's so much better than store-bought bread.",
 
             "Tue8": "I've made most of my clothing, I love to sew.$h#$b#Plus, you get better clothing if you make it yourself.#$e#Maybe I should make you something....",
 

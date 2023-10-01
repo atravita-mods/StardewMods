@@ -572,11 +572,12 @@
 * Sebastian at work
 ***************/
 
-    "sebastian-work.spring": "%Sebastian seems to be on a call.#$b#%name, I needed this reviewed last week! Could you please help me convince everyone to help keep things moving?",
-    "sebastian-work.summer": "Sorry, @, I'm working and need to focus right now.",
+    "sebastian-work.spring.1": "%Sebastian seems to be on a call.#$b#%name, I needed this reviewed last week! Could you please help me convince everyone to help keep things moving?",
+    "sebastian-work.summer.1": "Sorry, @, I'm working and need to focus right now.",
     "sebastian-work.summer.1.00": "%Sebastian appears to be in a meeting.",
-    "sebastian-work.fall": "Work? Nah, @, I can implement A-star in my sleep.",
-    "sebastian-work.winter": "Sorry, @, I need to work on my performance report. Why do they make me do this every year?$s",
+    "sebastian-work.fall.1": "Work? Nah, @, I can implement A-star in my sleep.",
+    "sebastian-work.winter.1": "Sorry, @, I need to work on my performance report. Why do they make me do this every year?$s",
+    "sebastian-work.winter.1.00": "I feel like we're just always running around hammering down bugs and not actually getting anywhere.$s",
 
     "sebastian-work.spring.2": "Well, it looks like my coworker has set a new record for 'least useful commit message'.",
     "sebastian-work.summer.2": "%Sebastian is muttering under his breath.#$b#$c .5#Gosh, how many times do I have to correct this? This needs to be a culturally invariant comparison.#Which direction was negative one in a comparer again? I can never remember...#",

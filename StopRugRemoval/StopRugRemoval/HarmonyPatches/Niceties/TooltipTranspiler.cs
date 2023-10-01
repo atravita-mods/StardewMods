@@ -1,10 +1,11 @@
-﻿using System.Reflection;
+﻿namespace StopRugRemoval.HarmonyPatches.Niceties;
+
+using System.Reflection;
 using System.Reflection.Emit;
 using System.Runtime.CompilerServices;
 using System.Text;
 
 using AtraBase.Toolkit;
-using AtraBase.Toolkit.Extensions;
 
 using AtraCore.Framework.ReflectionManager;
 
@@ -18,9 +19,10 @@ using HarmonyLib;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
+using StardewValley.Extensions;
+using StardewValley.GameData.Objects;
 using StardewValley.Menus;
 
-namespace StopRugRemoval.HarmonyPatches.Niceties;
 
 /// <summary>
 /// Transpiles the tooltip to add the buff duration.
@@ -31,9 +33,10 @@ internal static class TooltipTranspiler
     [MethodImpl(TKConstants.Hot)]
     private static string? GetTooltipDuration(Item? hoveredItem)
     {
-        if (hoveredItem is SObject obj && Game1Wrappers.ObjectData.TryGetValue(obj.ParentSheetIndex, out string? data)
-            && int.TryParse(data.GetNthChunk('/', 8), out int minutesDuration) && minutesDuration > 0)
+        if (hoveredItem is SObject obj && obj.HasTypeObject() && Game1Wrappers.ObjectData.TryGetValue(obj.ItemId, out ObjectData? data)
+            && data?.Buff?.Duration is > 0)
         {
+            int minutesDuration = data.Buff.Duration;
             if (obj.Quality != 0)
             {
                 minutesDuration += minutesDuration / 2;

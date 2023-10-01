@@ -38,7 +38,7 @@ internal static class LibraryMuseumPatches
     [HarmonyPatch(nameof(LibraryMuseum.OnRewardCollected))]
     private static void Postfix(Item item)
     {
-        if (item.specialItem == true)
+        if (item.specialItem)
         {
             item.modData?.SetBool(MUSEUM_MARKER, true);
         }

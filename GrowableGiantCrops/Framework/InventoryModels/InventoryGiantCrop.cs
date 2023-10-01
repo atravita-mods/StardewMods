@@ -18,7 +18,6 @@ using Microsoft.Xna.Framework.Graphics;
 
 using Netcode;
 
-using StardewValley;
 using StardewValley.TerrainFeatures;
 
 namespace GrowableGiantCrops.Framework.InventoryModels;
@@ -45,6 +44,9 @@ public sealed class InventoryGiantCrop : SObject
     /// </summary>
     internal const string GiantCropTweaksModDataKey = "leclair.giantcroptweaks/Id";
 
+    /// <summary>
+    /// The mod data key used to mark giant crops.
+    /// </summary>
     internal const string ModDataKey = $"{InventoryGiantCropPrefix}Id";
 
     /// <summary>
@@ -60,11 +62,19 @@ public sealed class InventoryGiantCrop : SObject
     #endregion
 
     /// <summary>
-    /// The string id, used to distinguish GiantCropTweaks giant crops.
+    /// The qualified object ID of the product of the giant crop.
     /// </summary>
     [SuppressMessage("StyleCop.CSharp.MaintainabilityRules", "SA1401:Fields should be private", Justification = "Public for serializer.")]
     [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1307:Accessible fields should begin with upper-case letter", Justification = "Reviewed.")]
-    public readonly NetString stringID = new(string.Empty);
+    public readonly NetString productID = new(string.Empty);
+
+    /// <summary>
+    /// Legacy string id, formerly used to distinguish GiantCropTweaks giant crops.
+    /// </summary>
+    [Obsolete("Originally used to support GiantCropTweaks")]
+    [SuppressMessage("StyleCop.CSharp.MaintainabilityRules", "SA1401:Fields should be private", Justification = "Public for serializer.")]
+    [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1307:Accessible fields should begin with upper-case letter", Justification = "Reviewed.")]
+    public string stringID = string.Empty;
 
     #region drawfields
     [XmlIgnore]
@@ -84,7 +94,7 @@ public sealed class InventoryGiantCrop : SObject
     public InventoryGiantCrop()
         : base()
     {
-        this.NetFields.AddField(this.stringID);
+        this.NetFields.AddField(this.productID);
         this.Category = GiantCropCategory;
         this.Price = 0;
         this.CanBeSetDown = true;
@@ -100,7 +110,7 @@ public sealed class InventoryGiantCrop : SObject
     public InventoryGiantCrop(string stringID, int intID, int initialStack)
         : this(intID, initialStack)
     {
-        this.stringID.Value = stringID;
+        this.stringID = stringID;
         this.Category = GiantCropTweaksCategory;
     }
 
@@ -580,16 +590,7 @@ public sealed class InventoryGiantCrop : SObject
     }
 
     private string GetProductDisplayName()
-    {
-        if (Game1Wrappers.ObjectData.TryGetValue(this.ParentSheetIndex, out string? data))
-        {
-            return data.GetNthChunk('/', objectInfoDisplayNameIndex).ToString();
-        }
-        else
-        {
-            return "UNKNOWN";
-        }
-    }
+        => Game1Wrappers.ObjectData.GetValueOrDefault(this.ItemId)?.DisplayName?.ParseTokens() ?? "UNKOWN";
     #endregion
 
     #region helpers

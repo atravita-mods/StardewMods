@@ -278,19 +278,19 @@ public sealed class CanPlaceHandler : IMoreFertilizersAPI
                 if (obj.ParentSheetIndex == ModEntry.FruitTreeFertilizerID || obj.ParentSheetIndex == ModEntry.DeluxeFruitTreeFertilizerID)
                 {
                     fruitTree.modData?.SetInt(FruitTreeFertilizer, obj.ParentSheetIndex == ModEntry.DeluxeFruitTreeFertilizerID ? 2 : 1);
-                    fruitTree.shake(fruitTree.currentTileLocation, true, fruitTree.currentLocation);
+                    fruitTree.shake(fruitTree.Tile, true);
                     return true;
                 }
                 if (obj.ParentSheetIndex == ModEntry.MiraculousBeveragesID)
                 {
-                    fruitTree.shake(fruitTree.currentTileLocation, true, fruitTree.currentLocation);
+                    fruitTree.shake(fruitTree.Tile, true);
                     fruitTree.modData?.SetBool(MiraculousBeverages, true);
                     return true;
                 }
                 if (obj.ParentSheetIndex == ModEntry.EverlastingFruitTreeFertilizerID)
                 {
-                    fruitTree.shake(fruitTree.currentTileLocation, true, fruitTree.currentLocation);
-                    Utility.addSprinklesToLocation(loc, (int)fruitTree.currentTileLocation.X, (int)fruitTree.currentTileLocation.Y - 2, 3, 5, 400, 10, Color.LightGoldenrodYellow);
+                    fruitTree.shake(fruitTree.Tile, true);
+                    Utility.addSprinklesToLocation(loc, (int)fruitTree.Tile.X, (int)fruitTree.Tile.Y - 2, 3, 5, 400, 10, Color.LightGoldenrodYellow);
                     fruitTree.modData?.SetBool(EverlastingFruitTreeFertilizer, true);
                     return true;
                 }
@@ -336,16 +336,16 @@ public sealed class CanPlaceHandler : IMoreFertilizersAPI
             {
                 if (largeterrainfeature is Bush bigBush && bigBush.size.Value == Bush.mediumBush && bigBush.getBoundingBox().Intersects(pos))
                 {
-                    BushShakeMethod(bigBush, bigBush.currentTileLocation, true);
+                    BushShakeMethod(bigBush, bigBush.Tile, true);
                     bigBush.modData?.SetBool(BountifulBush, true);
                     return true;
                 }
             }
         }
 
-        if (loc is BuildableGameLocation buildableLoc && obj.ParentSheetIndex == ModEntry.DomesticatedFishFoodID)
+        if (obj.ParentSheetIndex == ModEntry.DomesticatedFishFoodID)
         {
-            foreach (Building b in buildableLoc.buildings)
+            foreach (Building b in loc.buildings)
             {
                 if (b is FishPond && b.occupiesTile(tile))
                 {
@@ -365,9 +365,9 @@ public sealed class CanPlaceHandler : IMoreFertilizersAPI
         if (obj.ParentSheetIndex == ModEntry.FishFoodID || obj.ParentSheetIndex == ModEntry.DeluxeFishFoodID || obj.ParentSheetIndex == ModEntry.DomesticatedFishFoodID)
         {
             Vector2 placementtile = (tile * 64f) + new Vector2(32f, 32f);
-            if (obj.ParentSheetIndex == ModEntry.DomesticatedFishFoodID && Game1.currentLocation is BuildableGameLocation buildable)
+            if (obj.ParentSheetIndex == ModEntry.DomesticatedFishFoodID)
             {
-                foreach (Building b in buildable.buildings)
+                foreach (Building b in Game1.currentLocation.buildings)
                 {
                     if (b is FishPond pond && b.occupiesTile(tile))
                     {
@@ -411,7 +411,7 @@ public sealed class CanPlaceHandler : IMoreFertilizersAPI
             {
                 DelayedAction.functionAfterDelay(
                     func: static () => Game1.currentLocation.waterColor.Value = ModEntry.Config.WaterOverlayColor,
-                    timer: (int)time);
+                    delay: (int)time);
             }
         }
     }
@@ -420,19 +420,19 @@ public sealed class CanPlaceHandler : IMoreFertilizersAPI
     {
         if (obj.ParentSheetIndex == ModEntry.BountifulBushID)
         {
-            BushShakeMethod(teaBush, teaBush.currentTileLocation, true);
+            BushShakeMethod(teaBush, teaBush.Tile, true);
             teaBush.modData?.SetBool(BountifulBush, true);
             return true;
         }
         if (obj.ParentSheetIndex == ModEntry.RapidBushFertilizerID)
         {
-            BushShakeMethod(teaBush, teaBush.currentTileLocation, true);
+            BushShakeMethod(teaBush, teaBush.Tile, true);
             teaBush.modData?.SetBool(RapidBush, true);
             return true;
         }
         if (obj.ParentSheetIndex == ModEntry.MiraculousBeveragesID)
         {
-            BushShakeMethod(teaBush, teaBush.currentTileLocation, true);
+            BushShakeMethod(teaBush, teaBush.Tile, true);
             teaBush.modData?.SetBool(MiraculousBeverages, true);
             return true;
         }

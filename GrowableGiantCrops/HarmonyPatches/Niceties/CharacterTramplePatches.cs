@@ -42,7 +42,7 @@ internal static class CharacterTramplePatches
             for (int i = currentLocation.resourceClumps.Count - 1; i >= 0; i--)
             {
                 ResourceClump clump = currentLocation.resourceClumps[i];
-                if (!clump.getBoundingBox(clump.tile.Value).Contains(nextPosition))
+                if (!clump.getBoundingBox().Contains(nextPosition))
                 {
                     continue;
                 }

@@ -23,7 +23,7 @@ internal static class MFUtilities
     /// <param name="level">Int skill level.</param>
     /// <returns>Fertilizer ID (-1 if not found).</returns>
     internal static int GetRandomFertilizerFromLevel(this int level)
-        => Singletons.Random.Next(Math.Clamp((int)(level * 1.5) + 1, 0, 16)) switch
+        => Random.Shared.Next(Math.Clamp((int)(level * 1.5) + 1, 0, 16)) switch
             {
                 0 => ModEntry.LuckyFertilizerID,
                 1 => ModEntry.JojaFertilizerID,

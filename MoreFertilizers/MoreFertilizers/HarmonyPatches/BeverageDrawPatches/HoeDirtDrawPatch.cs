@@ -30,14 +30,14 @@ internal class HoeDirtDrawPatch
 
         try
         {
-            if (__instance.fertilizer.Value != -1 && __instance.fertilizer.Value == ModEntry.MiraculousBeveragesID && Singletons.Random.RollDice(512))
+            if (__instance.fertilizer.Value != -1 && __instance.fertilizer.Value == ModEntry.MiraculousBeveragesID && Random.Shared.RollDice(512))
             {
                 __instance.Location.TemporarySprites.Add(new TemporaryAnimatedSprite(
                     Game1.mouseCursorsName,
                     new Rectangle(372, 1956, 10, 10),
                     new Vector2(
-                        (__instance.Tile.X * 64f) + Singletons.Random.Next(32),
-                        (__instance.Tile.Y * 64f) + Singletons.Random.Next(-128, 0)),
+                        (__instance.Tile.X * 64f) + Random.Shared.Next(32),
+                        (__instance.Tile.Y * 64f) + Random.Shared.Next(-128, 0)),
                     flipped: false,
                     0.002f,
                     Color.LimeGreen)

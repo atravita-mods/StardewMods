@@ -33,7 +33,7 @@ internal static class PostfixBigSlimeConstructor
         }
         try
         {
-            if (Singletons.Random.OfChance(0.008 + Math.Min(Game1.player.team.AverageDailyLuck() / 10.0, 0.01) + Math.Min(Game1.player.LuckLevel / 400.0, 0.01)))
+            if (Random.Shared.OfChance(0.008 + Math.Min(Game1.player.team.AverageDailyLuck() / 10.0, 0.01) + Math.Min(Game1.player.LuckLevel / 400.0, 0.01)))
             {
                 __instance.heldObject.Value = new SObject(ModEntry.PrismaticSlimeRing, 1);
             }

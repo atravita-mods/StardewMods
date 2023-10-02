@@ -37,13 +37,13 @@ internal static class JojaSample
     {
         if (e.NewLocation is JojaMart && e.IsLocalPlayer
             && MenuingExtensions.IsNormalGameplay() && !HaveRecievedSampleToday.Value
-            && !Game1.eventUp && Game1.CurrentEvent is null && Singletons.Random.OfChance(0.1))
+            && !Game1.eventUp && Game1.CurrentEvent is null && Random.Shared.OfChance(0.1))
         {
             StringBuilder sb = StringBuilderCache.Acquire();
             sb.Append("continue/-100 -100/farmer 13 28 0 Morris 13 22 2/makeInvisible 21 22 1 3/ignoreCollisions farmer/")
               .Append("ignoreCollisions Morris/skippable/viewport 13 25/move Morris 0 2 2/pause 400/")
               .Append("speak Morris \"")
-              .Append(I18n.GetByKey($"joja.event.{Singletons.Random.Next(3)}"))
+              .Append(I18n.GetByKey($"joja.event.{Random.Shared.Next(3)}"))
               .Append("\"/pause 400/end");
             Event jojaEvent = new(StringBuilderCache.GetStringAndRelease(sb))
             {
@@ -52,7 +52,7 @@ internal static class JojaSample
                     DelayedAction.functionAfterDelay(
                         () =>
                         {
-                            e.Player.addItemByMenuIfNecessaryElseHoldUp(new SObject(ModEntry.JojaFertilizerID, Singletons.Random.Next(2, 6)));
+                            e.Player.addItemByMenuIfNecessaryElseHoldUp(new SObject(ModEntry.JojaFertilizerID, Random.Shared.Next(2, 6)));
                         }, 100);
                 },
             };

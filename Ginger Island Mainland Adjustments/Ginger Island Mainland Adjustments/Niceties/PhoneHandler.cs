@@ -100,14 +100,14 @@ internal static class PhoneHandler
                     }
                     else if (Game1.timeOfDay > 2200)
                     {
-                        Game1.drawDialogue(pam, Game1.content.LoadString("Strings\\Characters:Pam_Bus_Late"));
+                        Game1.DrawDialogue(pam, "Strings\\Characters:Pam_Bus_Late");
                         return;
                     }
                     else if (Game1.timeOfDay < 900)
                     {
                         if (Game1.IsVisitingIslandToday(pam.Name))
                         {
-                            Game1.drawDialogue(pam, Game1.content.LoadString($"Strings\\Characters:Pam_Island_{Singletons.Random.Next(1, 4)}"));
+                            Game1.drawDialogue(pam, Game1.content.LoadString($"Strings\\Characters:Pam_Island_{Random.Shared.Next(1, 4)}"));
                         }
                         else if (Utility.IsHospitalVisitDay(pam.Name))
                         {
@@ -120,7 +120,7 @@ internal static class PhoneHandler
                         }
                         else if (MultiplayerSharedState.PamsSchedule.Contains("BusStop 11 10"))
                         {
-                            Game1.drawDialogue(pam, Game1.content.LoadString($"Strings\\Characters:Pam_Bus_{Singletons.Random.Next(1, 4)}"));
+                            Game1.drawDialogue(pam, Game1.content.LoadString($"Strings\\Characters:Pam_Bus_{Random.Shared.Next(1, 4)}"));
                         }
                         else
                         {

@@ -25,6 +25,7 @@ using Microsoft.Xna.Framework;
 
 using StardewModdingAPI.Utilities;
 
+using StardewValley.Extensions;
 using StardewValley.Locations;
 
 namespace GingerIslandMainlandAdjustments.ScheduleManager;
@@ -300,7 +301,7 @@ internal static class GIScheduler
 
             if (groupkeys.Count > 0)
             {
-                CurrentGroup = Utility.GetRandom(groupkeys, random);
+                CurrentGroup = random.ChooseFrom(groupkeys);
                 Globals.ModMonitor.DebugOnlyLog($"Group {CurrentGroup} headed to Island.", LogLevel.Debug);
 
                 HashSet<NPC>? group = IslandGroups[CurrentGroup];

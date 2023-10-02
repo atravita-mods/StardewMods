@@ -430,11 +430,11 @@ SUCCESS:
                     goto case CropOptions.All;
                 }
 
-                if (crop < 3000)
+                if (Utility.IsLegacyIdBetween(crop, 0, 3000))
                 {
-                    return Game1.year > 1 || !(crop is 476 or 485 or 489); // the year2 seeds.
+                    return Game1.year > 1 || !(crop is "476" or "485" or "489"); // the year2 seeds.
                 }
-                string? name = data.GetNthChunk('/', 0).ToString();
+                string? name = data.Name;
                 try
                 {
                     if (JsonAssetsShims.IsAvailableSeed(name))
@@ -452,7 +452,7 @@ SUCCESS:
             }
             case CropOptions.Seen:
             {
-                string? name = data.GetNthChunk('/', 0).ToString();
+                string? name = data.Name;
                 return InventoryWatcher.Model?.Seeds?.Contains(name) != false;
             }
             default:

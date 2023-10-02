@@ -410,7 +410,7 @@ internal sealed class ModEntry : Mod
         ModMonitor.Log($"{I18n.Analyzing()} {key}", LogLevel.Debug);
         try
         {
-            SpecialOrder? specialOrder = SpecialOrder.GetSpecialOrder(key, Singletons.Random.Next());
+            SpecialOrder? specialOrder = SpecialOrder.GetSpecialOrder(key, Random.Shared.Next());
             if (specialOrder is not null)
             {
                 ModMonitor.Log($"\t{key} {I18n.Parsable()}", LogLevel.Debug);

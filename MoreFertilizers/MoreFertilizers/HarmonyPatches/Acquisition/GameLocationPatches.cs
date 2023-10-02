@@ -38,7 +38,7 @@ internal static class GameLocationPatches
     private static void Postfix(GameLocation __instance, Monster monster, int x, int y, Farmer who)
     {
         if(__instance is not Farm || who is null || monster.MaxHealth < MIN_MONSTER_HEALTH
-          || !Singletons.Random.OfChance((monster is RockGolem ? 2.5 : 1 ) * DropChance.Value))
+          || !Random.Shared.OfChance((monster is RockGolem ? 2.5 : 1 ) * DropChance.Value))
         {
             return;
         }
@@ -57,7 +57,7 @@ internal static class GameLocationPatches
                             new Debris(
                                 item: new SObject(
                                     parentSheetIndex: fertilizerToDrop,
-                                    initialStack: Singletons.Random.Next(1, Math.Clamp(monster.MaxHealth / MIN_MONSTER_HEALTH, 1, 4))),
+                                    initialStack: Random.Shared.Next(1, Math.Clamp(monster.MaxHealth / MIN_MONSTER_HEALTH, 1, 4))),
                                 debrisOrigin: new Vector2(x, y),
                                 targetLocation: who.Position)));
                 }

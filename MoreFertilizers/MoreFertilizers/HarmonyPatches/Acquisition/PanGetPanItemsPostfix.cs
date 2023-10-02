@@ -24,7 +24,7 @@ internal static class PanGetPanItemsPostfix
     {
         try
         {
-            if (!Singletons.Random.OfChance(0.04))
+            if (!Random.Shared.OfChance(0.04))
             {
                 return;
             }
@@ -43,7 +43,7 @@ internal static class PanGetPanItemsPostfix
             }
             else if (location is Sewer)
             {
-                if (ModEntry.SecretJojaFertilizerID != -1 && Singletons.Random.OfChance(0.1)
+                if (ModEntry.SecretJojaFertilizerID != -1 && Random.Shared.OfChance(0.1)
                     && Utility.hasFinishedJojaRoute())
                 {
                     __result.Add(new SObject(ModEntry.SecretJojaFertilizerID, 2));

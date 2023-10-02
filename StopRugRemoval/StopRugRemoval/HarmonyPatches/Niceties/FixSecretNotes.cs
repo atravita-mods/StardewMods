@@ -140,12 +140,12 @@ internal static class FixSecretNotes
         // copied from game code.
         double fractionOfNotesRemaining = (Unseen.Value.Count - 1) / Math.Max(1f, Unseen.Value.Count + Seen.Value.Count - 1);
         double chanceForNewNote = ModEntry.Config.MinNoteChance + ((ModEntry.Config.MaxNoteChance - ModEntry.Config.MinNoteChance) * fractionOfNotesRemaining);
-        if (!Singletons.Random.OfChance(chanceForNewNote))
+        if (!Random.Shared.OfChance(chanceForNewNote))
         {
             return new(null);
         }
 
-        int noteID = Unseen.Value.ElementAt(Singletons.Random.Next(Unseen.Value.Count));
+        int noteID = Unseen.Value.ElementAt(Random.Shared.Next(Unseen.Value.Count));
         SObject note = new("79", 1);
         note.Name += " #" + noteID;
 
@@ -208,7 +208,7 @@ internal static class FixSecretNotes
         // copied from game code.
         double fractionOfNotesRemaining = (Unseen.Value.Count - 1) / Math.Max(1f, Unseen.Value.Count + Seen.Value.Count - 1);
         double chanceForNewNote = ModEntry.Config.MinNoteChance + ((ModEntry.Config.MaxNoteChance - ModEntry.Config.MinNoteChance) * fractionOfNotesRemaining);
-        if (!Singletons.Random.OfChance(chanceForNewNote))
+        if (!Random.Shared.OfChance(chanceForNewNote))
         {
             Unseen.Value.Clear();
             Seen.Value.Clear();

@@ -64,7 +64,7 @@ internal static class UtilityShopPatcher
         try
         {
             if (ModEntry.SecretJojaFertilizerID != -1
-                && Game1.player.stats.IndividualMoneyEarned > 1_000_000 && Singletons.Random.OfChance(0.15)
+                && Game1.player.stats.IndividualMoneyEarned > 1_000_000 && Random.Shared.OfChance(0.15)
                 && Utility.doesMasterPlayerHaveMailReceivedButNotMailForTomorrow("ccMovieTheaterJoja"))
             {
                 __result.Add(new SObject(ModEntry.SecretJojaFertilizerID, 1), new[] { 500, 2 });

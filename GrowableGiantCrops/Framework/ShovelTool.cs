@@ -555,7 +555,7 @@ public class ShovelTool : Tool
             numberOfLoops: 0,
             position: landingPos,
             flicker: false,
-            flipped: Singletons.Random.OfChance(0.5),
+            flipped: Random.Shared.OfChance(0.5),
             layerDepth: (landingPos.Y + 40f) / 10000f,
             alphaFade: 0.01f,
             color: Color.White,

@@ -11,7 +11,7 @@
     <Name>More Fertilizers</Name>
     <Description>Adds more fertilizers to the game.</Description>
     <UpdateKeys>Nexus:11837</UpdateKeys>
-    <BaseManifest>..\..\ja_dependencies.json</BaseManifest>
+    <BaseManifest>..\..\base_dependencies.json</BaseManifest>
   </PropertyGroup>
 
   <PropertyGroup>

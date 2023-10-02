@@ -2,7 +2,7 @@
 ==============
 
 ## Version 0.2.0
-* Update for STardew 1.6
+* Update for Stardew 1.6
 
 ## Version 0.1.3
 * More ui scaling fixes

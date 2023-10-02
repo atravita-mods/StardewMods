@@ -74,7 +74,7 @@ internal static class MultiYieldCropsCompat
             }
             else if (fertilizer == ModEntry.DeluxeJojaFertilizerID)
             {
-                obj.Quality = Singletons.Random.OfChance(0.2) ? 2 : 1;
+                obj.Quality = Random.Shared.OfChance(0.2) ? 2 : 1;
                 obj.modData?.SetBool(CanPlaceHandler.Joja, true);
                 obj.MarkContextTagsDirty();
             }
@@ -93,7 +93,7 @@ internal static class MultiYieldCropsCompat
     }
 
     private static bool IsBountifulFertilizer(int fertilizer)
-        => fertilizer != -1 && fertilizer == ModEntry.BountifulFertilizerID && Singletons.Random.OfChance(0.1);
+        => fertilizer != -1 && fertilizer == ModEntry.BountifulFertilizerID && Random.Shared.OfChance(0.1);
 
 #pragma warning disable SA1116 // Split parameters should start on line after declaration
     private static IEnumerable<CodeInstruction>? Transpiler(IEnumerable<CodeInstruction> instructions, ILGenerator gen, MethodBase original)

@@ -75,7 +75,7 @@ internal sealed class ModEntry : Mod
             modMonitor.LogError($"generating random for pig {id}", ex);
         }
 
-        return Singletons.Random;
+        return Random.Shared;
     }
 
     private static IEnumerable<CodeInstruction>? Transpiler(IEnumerable<CodeInstruction> instructions, ILGenerator gen, MethodBase original)

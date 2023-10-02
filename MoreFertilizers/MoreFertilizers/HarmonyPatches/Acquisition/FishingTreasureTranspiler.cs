@@ -23,12 +23,12 @@ internal static class FishingTreasureTranspiler
 {
     private static SObject? GetPossibleRandomFertilizer()
     {
-        if (Singletons.Random.OfChance(0.1))
+        if (Random.Shared.OfChance(0.1))
         {
             int fertilizerToDrop = Game1.player.fishingLevel.Value.GetRandomFertilizerFromLevel();
             if (fertilizerToDrop != -1)
             {
-                return new SObject(fertilizerToDrop, Singletons.Random.Next(1, 4 + (int)(Game1.player.DailyLuck * 20)));
+                return new SObject(fertilizerToDrop, Random.Shared.Next(1, 4 + (int)(Game1.player.DailyLuck * 20)));
             }
         }
         return null;

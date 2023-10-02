@@ -36,14 +36,14 @@ internal static class FruitTreeUpdatePatches
 
         try
         {
-            if (__instance.modData.ContainsKey(CanPlaceHandler.MiraculousBeverages) && Singletons.Random.RollDice(512))
+            if (__instance.modData.ContainsKey(CanPlaceHandler.MiraculousBeverages) && Random.Shared.RollDice(512))
             {
                 __instance.Location.TemporarySprites.Add(new TemporaryAnimatedSprite(
                     Game1.mouseCursorsName,
                     new Rectangle(372, 1956, 10, 10),
                     new Vector2(
-                        (__instance.Tile.X * Game1.tileSize) + Singletons.Random.Next(-64, 96),
-                        (__instance.Tile.Y * Game1.tileSize) + Singletons.Random.Next(-256, -128)),
+                        (__instance.Tile.X * Game1.tileSize) + Random.Shared.Next(-64, 96),
+                        (__instance.Tile.Y * Game1.tileSize) + Random.Shared.Next(-256, -128)),
                     flipped: false,
                     0.002f,
                     Color.LimeGreen)
@@ -57,7 +57,7 @@ internal static class FruitTreeUpdatePatches
                 });
             }
             else if (__instance.growthStage.Value == FruitTree.treeStage && __instance.modData.ContainsKey(CanPlaceHandler.EverlastingFruitTreeFertilizer)
-                && Singletons.Random.RollDice(512))
+                && Random.Shared.RollDice(512))
             {
                 Utility.addSprinklesToLocation(
                   l: __instance.Location,

@@ -42,7 +42,7 @@ internal static class SayHiToPatch
             if (Game1.player.currentLocation == l && l.Name.Equals("Saloon", StringComparison.OrdinalIgnoreCase)
                 && __instance.isVillager())
             {
-                if (__instance.isMoving() && ___textAboveHeadTimer < 0 && Singletons.Random.OfChance(0.6))
+                if (__instance.isMoving() && ___textAboveHeadTimer < 0 && Random.Shared.OfChance(0.6))
                 {
                     // Invert the check here to favor the farmer. :(
                     // Goddamnit greet me more often plz.

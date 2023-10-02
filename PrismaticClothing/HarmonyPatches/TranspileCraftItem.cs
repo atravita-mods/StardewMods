@@ -46,14 +46,12 @@ internal static class TranspileCraftItem
             { // and insert if (right_item.QualifiedItemId == "(O)74" )
                 arg,
                 new(OpCodes.Callvirt, typeof(Item).GetCachedProperty(nameof(Item.QualifiedItemId), ReflectionCache.FlagTypes.InstanceFlags).GetGetMethod()),
-
-
                 new(OpCodes.Ldstr, "(O)74"), // prismatic shard
                 new(OpCodes.Call, typeof(string).GetCachedMethod("op_Equality", ReflectionCache.FlagTypes.StaticFlags)),
                 new(OpCodes.Brtrue, label),
             }, withLabels: labelsToMove);
 
-            helper.Print();
+            // helper.Print();
             return helper.Render();
         }
         catch (Exception ex)

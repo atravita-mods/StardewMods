@@ -690,7 +690,10 @@ ContinueSearchBackwards:
     /// <remarks>DOES NOT CHECK LABELS! YOU SHOULD PROBABLY PUT THEM BACK SOMEWHERE if cleared.</remarks>
     public ILHelper GetLabels(out IList<Label> labels, bool clear = true)
     {
-        labels = this.CurrentInstruction.labels.ToList();
+        labels = this.CurrentInstruction.labels.Count == 0
+            ? Array.Empty<Label>()
+            : this.CurrentInstruction.labels.ToArray();
+
         if (clear)
         {
             this.CurrentInstruction.labels.Clear();

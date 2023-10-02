@@ -20,8 +20,8 @@ namespace CritterRings.HarmonyPatches.BunnyRing;
 [HarmonyPatch(typeof(Rabbit))]
 internal static class RabbitTranspiler
 {
-    private static bool IsWalnutInBloom(LargeTerrainFeature? terrainFeature)
-        => terrainFeature is Bush bush && bush.size.Value == Bush.walnutBush && bush.tileSheetOffset.Value == 1;
+    private static bool IsWalnutInBloom(Bush bush)
+        => bush is not null && bush.size.Value == Bush.walnutBush && bush.tileSheetOffset.Value == 1;
 
     [HarmonyPatch("update")]
     [SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1116:Split parameters should start on line after declaration", Justification = StyleCopConstants.SplitParametersIntentional)]
@@ -34,12 +34,16 @@ internal static class RabbitTranspiler
             {
                 SpecialCodeInstructionCases.LdLoc,
                 (OpCodes.Isinst, typeof(Bush)),
+                SpecialCodeInstructionCases.StLoc,
+                SpecialCodeInstructionCases.LdLoc,
                 OpCodes.Brfalse_S,
-            });
+            })
+            .Push()
+            .Advance(2);
 
-            CodeInstruction loc = helper.CurrentInstruction.Clone();
+            CodeInstruction loc = helper.CurrentInstruction.ToLdLoc();
 
-            helper.Push()
+            helper
             .Advance(2)
             .StoreBranchDest()
             .AdvanceToStoredLabel()

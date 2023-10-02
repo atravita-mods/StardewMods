@@ -41,6 +41,7 @@ internal static class PatchTownMethods
             ILHelper helper = new(original, instructions, ModEntry.ModMonitor, gen);
             helper.AdjustIsFestivalCallForTown();
 
+            helper.Print();
             return helper.Render();
         }
         catch (Exception ex)

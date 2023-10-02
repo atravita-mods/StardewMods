@@ -94,7 +94,7 @@ internal sealed class ModEntry : Mod
             .Advance(1)
             .RemoveIncluding(new CodeInstructionWrapper[]
             {
-                (OpCodes.Call, typeof(Utility).GetCachedMethod(nameof(Utility.CreateRandom), ReflectionCache.FlagTypes.InstanceFlags, Type.EmptyTypes)),
+                (OpCodes.Call, typeof(Utility).GetCachedMethod(nameof(Utility.CreateRandom), ReflectionCache.FlagTypes.StaticFlags, Type.EmptyTypes)),
             })
             .Insert(new CodeInstruction[]
             {

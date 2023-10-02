@@ -16,6 +16,7 @@ using StardewModdingAPI.Events;
 
 using StardewValley.BellsAndWhistles;
 using StardewValley.Locations;
+using StardewValley.Objects;
 
 namespace GingerIslandMainlandAdjustments;
 
@@ -201,6 +202,9 @@ internal sealed class ModEntry : Mod
     {
         // Applies harmony patches.
         this.ApplyPatches(new Harmony(this.ModManifest.UniqueID));
+
+        // Add Pam's phone call
+        Phone.PhoneHandlers.Add(new PamPhoneHandler());
 
         // Generate the GMCM for this mod.
         GenerateGMCM.Initialize(this.ModManifest, this.Helper.Translation);

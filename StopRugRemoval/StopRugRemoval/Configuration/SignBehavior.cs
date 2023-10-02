@@ -7,5 +7,5 @@ public enum SignBehavior
 {
     Vanilla,
     Break,
-    Keybind
+    Keybind,
 }

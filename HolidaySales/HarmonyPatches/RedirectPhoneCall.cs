@@ -1,13 +1,18 @@
-﻿using System.Reflection;
+﻿namespace HolidaySales.HarmonyPatches;
+
+using System.Reflection;
 using System.Reflection.Emit;
-using AtraBase.Toolkit.Extensions;
+
 using AtraBase.Toolkit.Reflection;
+
 using AtraCore.Framework.ReflectionManager;
+
 using AtraShared.Utils.Extensions;
 using AtraShared.Utils.HarmonyHelper;
+
 using HarmonyLib;
 
-namespace HolidaySales.HarmonyPatches;
+using StardewValley.Objects;
 
 /// <summary>
 /// Patch to handle the phone.
@@ -22,33 +27,39 @@ internal static class RedirectPhoneCall
     /// <exception cref="MethodNotFoundException">Method wasn't found.</exception>
     internal static IEnumerable<MethodBase> TargetMethods()
     {
-        foreach (MethodInfo? method in typeof(GameLocation).GetMethods(BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public))
+        foreach (MethodInfo? method in typeof(DefaultPhoneHandler).GetMethods(BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public))
         {
-            if (method.Name.Contains("<answerDialogueAction>", StringComparison.Ordinal) && method.GetParameters().Length == 0
+            if (method.GetParameters().Length == 0
+                && method.Name.Contains("<Call", StringComparison.Ordinal)
                 && ShouldTranspileThisMethod(method))
             {
                 yield return method;
             }
         }
 
-        Type? inner = typeof(GameLocation).GetNestedType("<>c", BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public)
-            ?? ReflectionThrowHelper.ThrowMethodNotFoundException<Type>("phone inner class");
-
-        foreach (MethodInfo? method in inner.GetMethods(BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public))
+        var inners = typeof(DefaultPhoneHandler).GetNestedTypes(BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public);
+        foreach (var inner in inners)
         {
-            if (method.Name.Contains("<answerDialogueAction>", StringComparison.Ordinal) && method.GetParameters().Length == 0
-                && ShouldTranspileThisMethod(method))
+            if (!inner.Name.StartsWith("<>c", StringComparison.Ordinal))
             {
-                yield return method;
+                continue;
+            }
+
+            foreach (MethodInfo? method in inner.GetMethods(BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public))
+            {
+                if (method.GetParameters().Length == 0
+                    && method.Name.Contains("<Call", StringComparison.Ordinal)
+                    && ShouldTranspileThisMethod(method))
+                {
+                    yield return method;
+                }
             }
         }
-
-        yield break;
     }
 
     private static bool ShouldTranspileThisMethod(MethodInfo method)
         => PatchProcessor.GetOriginalInstructions(method)
-        .Any((instr) => instr.Calls(typeof(GameLocation).GetCachedMethod(nameof(GameLocation.AreStoresClosedForFestival), ReflectionCache.FlagTypes.StaticFlags)));
+        .Any(static (instr) => instr.Calls(typeof(GameLocation).GetCachedMethod(nameof(GameLocation.AreStoresClosedForFestival), ReflectionCache.FlagTypes.StaticFlags)));
 
     private static IEnumerable<CodeInstruction>? Transpiler(IEnumerable<CodeInstruction> instructions, ILGenerator gen, MethodBase original)
     {

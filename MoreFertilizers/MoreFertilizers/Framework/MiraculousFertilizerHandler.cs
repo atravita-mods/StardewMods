@@ -21,7 +21,7 @@ internal static class MiraculousFertilizerHandler
     /// </summary>
     internal static void Initialize()
     {
-        keg = new SObject(Vector2.Zero, "(BC)12");
+        keg = new SObject(Vector2.Zero, "12");
     }
 
     /// <summary>
@@ -29,7 +29,7 @@ internal static class MiraculousFertilizerHandler
     /// </summary>
     /// <param name="objindex">The index of the crop.</param>
     /// <returns>The beverage, if any.</returns>
-    internal static SObject? GetBeverage(int objindex)
+    internal static SObject? GetBeverage(string objindex)
         => GetBeverage(new SObject(objindex, 999));
 
     /// <summary>

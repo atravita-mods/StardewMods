@@ -43,7 +43,7 @@ internal static class AssetManager
     /// <summary>
     /// Gets the override texture associated with a ring pair.
     /// </summary>
-    /// <param name="first">One ring</param>
+    /// <param name="first">One ring.</param>
     /// <param name="second">The other ring.</param>
     /// <returns>Override texture if it exists.</returns>
     internal static Texture2D? GetOverrideTexture(string first, string second)
@@ -74,25 +74,25 @@ internal static class AssetManager
                 || !identifiers.TrySplitOnce(',', out ReadOnlySpan<char> first, out ReadOnlySpan<char> second)
                 || second.Contains(','))
             {
-                Globals.ModMonitor.Log($"'{model.RingIdentifiers ?? string.Empty}' was not a valid identifier set, skipping.", LogLevel.Warn);
+                ModEntry.ModMonitor.Log($"'{model.RingIdentifiers ?? string.Empty}' was not a valid identifier set, skipping.", LogLevel.Warn);
                 continue;
             }
 
             if (string.IsNullOrWhiteSpace(model.TextureLocation))
             {
-                Globals.ModMonitor.Log($"Texture cannot be null or whitespace", LogLevel.Warn);
+                ModEntry.ModMonitor.Log($"Texture cannot be null or whitespace", LogLevel.Warn);
                 continue;
             }
 
             if (!TryParseToRing(first, out string? firstring) || !TryParseToRing(second, out string? secondring))
             {
-                Globals.ModMonitor.Log($"'{identifiers}' refer to rings that could not be resolved, skipping.", LogLevel.Warn);
+                ModEntry.ModMonitor.Log($"'{identifiers}' refer to rings that could not be resolved, skipping.", LogLevel.Warn);
                 continue;
             }
 
             if (firstring == secondring)
             {
-                Globals.ModMonitor.Log($"'{identifiers}' refer to the same ring, skipping.", LogLevel.Warn);
+                ModEntry.ModMonitor.Log($"'{identifiers}' refer to the same ring, skipping.", LogLevel.Warn);
                 continue;
             }
 

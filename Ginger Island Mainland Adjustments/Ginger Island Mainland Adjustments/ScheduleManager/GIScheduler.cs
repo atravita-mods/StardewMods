@@ -142,8 +142,8 @@ internal static class GIScheduler
         Game1.netWorldState.Value.IslandVisitors.Clear();
         if (Game1.getLocationFromName("IslandSouth") is not IslandSouth island || !island.resortRestored.Value
             || !island.resortOpenToday.Value || Game1.IsRainingHere(island)
-            || Utility.isFestivalDay(Game1.Date.DayOfMonth, Game1.Date.Season)
-            || (Game1.Date.DayOfMonth >= 15 && Game1.Date.DayOfMonth <= 17 && Game1.IsWinter))
+            || Utility.isFestivalDay()
+            || Utility.IsPassiveFestivalDay())
         {
             return;
         }
@@ -186,7 +186,7 @@ internal static class GIScheduler
 
         foreach ((NPC npc, string schedule) in schedules)
         {
-            if (ScheduleUtilities.ParseMasterScheduleAdjustedForChild2NPC(npc, schedule))
+            if (ScheduleUtilities.ParseMasterScheduleAdjustedForChild2NPC(npc, "island", schedule))
             {
                 Globals.ModMonitor.DebugLog($"Calculated island schedule for {npc.Name}");
                 npc.islandScheduleName.Value = "island";
@@ -542,7 +542,7 @@ internal static class GIScheduler
                 sb.Append('/');
             }
 
-            sb.AppendCorrectRemainderSchedule(visitor);
+            sb.AppendCorrectRemainderSchedule(visitor, out _);
 
             completedSchedules[visitor] = string.Join('/', sb.ToString());
             sb.Clear();

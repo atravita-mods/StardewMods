@@ -171,7 +171,7 @@
             "Name": "ChildStatus",
             "Value": "One",
             "When": {
-                "HasMod: Candidus42.LittleNPCs": true,
+                "HasMod": "Candidus42.LittleNPCs",
                 "HasValue: {{Candidus42.LittleNPCs/FirstLittleNPCName}}": true,
                 "HasValue: {{ChildGenders}}": false
             }
@@ -180,7 +180,7 @@
             "Name": "ChildStatus",
             "Value": "Multiple",
             "When": {
-                "HasMod: Candidus42.LittleNPCs": true,
+                "HasMod": "Candidus42.LittleNPCs",
                 "HasValue: {{Candidus42.LittleNPCs/FirstLittleNPCName}}": true,
                 "HasValue: {{ChildGenders}}": true
             }
@@ -189,7 +189,7 @@
             "Name": "ChildStatus",
             "Value": "Multiple",
             "When": {
-                "HasMod: Candidus42.LittleNPCs": true,
+                "HasMod": "Candidus42.LittleNPCs",
                 "HasValue: {{Candidus42.LittleNPCs/SecondLittleNPCName}}": true,
             }
         },
@@ -314,7 +314,7 @@
         {
             "Action": "Include",
             "LogName": "ScheduleChanges",
-            "When": { "ScheduleChanges": true },
+            "When": { "HasValue: {{ScheduleChanges}}": true },
             "FromFile": "assets/schedules/toc.json"
         },
         {

@@ -1,4 +1,8 @@
-﻿using AtraShared.Integrations;
+﻿// Ignore Spelling: Api
+
+using AtraCore.Framework.Internal;
+
+using AtraShared.Integrations;
 using AtraShared.MigrationManager;
 using AtraShared.Utils.Extensions;
 using AtraShared.Utils.Shims;
@@ -15,15 +19,10 @@ using AtraUtils = AtraShared.Utils.Utils;
 namespace LastDayToPlantRedux;
 
 /// <inheritdoc />
-internal sealed class ModEntry : Mod
+internal sealed class ModEntry : BaseMod<ModEntry>
 {
     private readonly PerScreen<bool> hasSeeds = new(() => false);
     private MigrationManager? migrator;
-
-    /// <summary>
-    /// Gets the logger for this mod.
-    /// </summary>
-    internal static IMonitor ModMonitor { get; private set; } = null!;
 
     /// <summary>
     /// Gets the config instance for this mod.
@@ -34,11 +33,9 @@ internal sealed class ModEntry : Mod
     public override void Entry(IModHelper helper)
     {
         // bind helpers.
-        ModMonitor = this.Monitor;
+        base.Entry(helper);
         I18n.Init(helper.Translation);
         AssetManager.Initialize(helper.GameContent);
-
-        this.Monitor.Log($"Starting up: {this.ModManifest.UniqueID} - {typeof(ModEntry).Assembly.FullName}");
 
         Config = AtraUtils.GetConfigOrDefault<ModConfig>(helper, this.Monitor);
         helper.Events.GameLoop.GameLaunched += this.OnGameLaunched;

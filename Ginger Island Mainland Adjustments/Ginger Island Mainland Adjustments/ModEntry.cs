@@ -1,9 +1,13 @@
-﻿using AtraCore.Utilities;
+﻿namespace GingerIslandMainlandAdjustments;
+
+using AtraCore.Framework.Internal;
+using AtraCore.Utilities;
 
 using AtraShared.ConstantsAndEnums;
 using AtraShared.Menuing;
 using AtraShared.MigrationManager;
 using AtraShared.Utils.Extensions;
+
 using GingerIslandMainlandAdjustments.AssetManagers;
 using GingerIslandMainlandAdjustments.CustomConsoleCommands;
 using GingerIslandMainlandAdjustments.DialogueChanges;
@@ -11,18 +15,18 @@ using GingerIslandMainlandAdjustments.Integrations;
 using GingerIslandMainlandAdjustments.MultiplayerHandler;
 using GingerIslandMainlandAdjustments.Niceties;
 using GingerIslandMainlandAdjustments.ScheduleManager;
+
 using HarmonyLib;
+
 using StardewModdingAPI.Events;
 
 using StardewValley.BellsAndWhistles;
 using StardewValley.Locations;
 using StardewValley.Objects;
 
-namespace GingerIslandMainlandAdjustments;
-
 /// <inheritdoc />
 [UsedImplicitly]
-internal sealed class ModEntry : Mod
+internal sealed class ModEntry : BaseMod<ModEntry>
 {
     private bool haveFixedSchedulesToday = false;
 
@@ -31,10 +35,11 @@ internal sealed class ModEntry : Mod
     /// <inheritdoc />
     public override void Entry(IModHelper helper)
     {
+        base.Entry(helper);
+
         I18n.Init(helper.Translation);
         Globals.Initialize(helper, this.Monitor, this.ModManifest);
         AssetEditor.Initialize(helper.GameContent);
-        this.Monitor.Log($"Starting up: {this.ModManifest.UniqueID} - {typeof(ModEntry).Assembly.FullName}");
 
         ConsoleCommands.Register(this.Helper.ConsoleCommands);
 

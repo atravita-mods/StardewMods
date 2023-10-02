@@ -148,10 +148,19 @@ public sealed class TapGiantCrop : ITapGiantCropsAPI
                 @override = null;
 
                 // find a keg output.
-                this.keg.heldObject.Value = null;
-                this.keg.performObjectDropInAction(dropIn, false, Game1.player);
-                SObject? heldobj = this.keg.heldObject.Value;
-                this.keg.heldObject.Value = null;
+                SObject? heldobj = null;
+
+                try
+                {
+                    this.keg.heldObject.Value = null;
+                    this.keg.performObjectDropInAction(dropIn, false, Game1.player);
+                    heldobj = this.keg.heldObject.Value;
+                    this.keg.heldObject.Value = null;
+                }
+                catch (Exception ex)
+                {
+                    ModEntry.ModMonitor.LogError($"producing keg item with {dropIn.Name}", ex);
+                }
                 if (heldobj?.getOne() is SObject obj)
                 {
                     returnobj = obj;
@@ -190,7 +199,7 @@ public sealed class TapGiantCrop : ITapGiantCropsAPI
     /// Initializes the API (gets the keg instance used to find the output).
     /// </summary>
     internal void Init()
-        => this.keg = new(Vector2.Zero, "(BC)12");
+        => this.keg = new(Vector2.Zero, "12");
 
     private static GiantCrop? GetGiantCropAt(GameLocation loc, Vector2 tile)
     {

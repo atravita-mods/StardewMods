@@ -1,6 +1,4 @@
-﻿using AtraCore;
-
-using AtraShared.ConstantsAndEnums;
+﻿using AtraShared.ConstantsAndEnums;
 using AtraShared.Utils.Extensions;
 
 using HarmonyLib;
@@ -23,7 +21,7 @@ namespace StopRugRemoval.HarmonyPatches;
 [SuppressMessage("StyleCop", "SA1313", Justification = StyleCopConstants.NamedForHarmony)]
 internal class FurniturePatches
 {
-    private static readonly PerScreen<int> ticks = new(createNewState: static () => 0);
+    private static readonly PerScreen<int> Ticks = new(createNewState: static () => 0);
 
 #if DEBUG
     [HarmonyPrefix]
@@ -91,15 +89,15 @@ internal class FurniturePatches
                 && ModEntry.Config.PreventRemovalFromTable
                 && !ModEntry.Config.FurniturePlacementKey.IsDown())
             {
-                if (Game1.ticks > ticks.Value + 60)
+                if (Game1.ticks > Ticks.Value + 60)
                 {
                     Game1.showRedMessage(I18n.TableRemovalMessage(keybind: ModEntry.Config.FurniturePlacementKey));
-                    ticks.Value = Game1.ticks;
+                    Ticks.Value = Game1.ticks;
                 }
                 __result = false;
                 return false;
             }
-            else if (__instance.ParentSheetIndex == 1971 && who.currentLocation is GameLocation loc)
+            else if (__instance.QualifiedItemId == "(F)1971" && who.currentLocation is GameLocation loc)
             {
                 // clicked on a butterfly hutch!
                 Vector2 v = new(Random.Shared.Next(-2, 4), Random.Shared.Next(-1, 1));
@@ -122,8 +120,8 @@ internal class FurniturePatches
         try
         {
             if (__instance.GetBoundingBox().Contains((tile_x * 64) + 32, (tile_y * 64) + 32)
-                && layer_name.Equals("Back", StringComparison.OrdinalIgnoreCase)
-                && property_name.Equals("NoSpawn", StringComparison.OrdinalIgnoreCase))
+                && layer_name.Equals("Back", StringComparison.Ordinal)
+                && property_name.Equals("NoSpawn", StringComparison.Ordinal))
             {
                 property_value = "All";
                 __result = true;

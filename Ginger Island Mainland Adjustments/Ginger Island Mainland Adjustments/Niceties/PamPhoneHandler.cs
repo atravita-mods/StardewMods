@@ -46,86 +46,94 @@ internal sealed class PamPhoneHandler : IPhoneHandler
             return false;
         }
 
-        try
-        {
-            Game1.playSound(GameLocation.PHONE_PICKUP_SOUND);
-            if (NPCCache.GetByVillagerName("Pam") is not NPC pam)
-            {
-                Globals.ModMonitor.Log($"Pam cannot be found, ending phone call.", LogLevel.Warn);
-            }
-            else if (Game1.timeOfDay > 2200)
-            {
-                Game1.DrawDialogue(pam, "Strings\\Characters:Pam_Bus_Late");
-            }
-            else if (Game1.timeOfDay < 900)
-            {
-                if (Game1.IsVisitingIslandToday(pam.Name))
-                {
-                    Game1.DrawDialogue(pam, $"Strings\\Characters:Pam_Island_{Random.Shared.Next(1, 4)}");
-                }
-                else if (Utility.IsHospitalVisitDay(pam.Name))
-                {
-                    Game1.DrawDialogue(pam, "Strings\\Characters:Pam_Doctor");
-                }
-                else if (MultiplayerSharedState.PamsSchedule is null)
-                {
-                    Globals.ModMonitor.Log("Something very odd has happened. Pam's dayScheduleName is null", LogLevel.Debug);
-                    Game1.DrawDialogue(pam, "Strings\\Characters:Pam_Other");
-                }
-                else if (MultiplayerSharedState.PamsSchedule.Contains("BusStop 11 10"))
-                {
-                    Game1.DrawDialogue(pam, $"Strings\\Characters:Pam_Bus_{Random.Shared.Next(1, 4)}");
-                }
-                else
-                {
-                    Game1.DrawDialogue(pam, "Strings\\Characters:Pam_Other");
-                }
-            }
-            else
-            {
-                if (Game1.IsVisitingIslandToday(pam.Name))
-                {
-                    Game1.DrawDialogue(new Dialogue(pam, "Strings\\Characters:Pam_Voicemail_Island")
-                    {
-                        overridePortrait = Game1.temporaryContent.Load<Texture2D>("Portraits\\AnsweringMachine"),
-                    });
-                }
-                else if (Utility.IsHospitalVisitDay(pam.Name))
-                {
-                    Game1.DrawDialogue(new Dialogue(pam, "Strings\\Characters:Pam_Voicemail_Doctor")
-                    {
-                        overridePortrait = Game1.temporaryContent.Load<Texture2D>("Portraits\\AnsweringMachine"),
-                    });
-                }
-                else if (MultiplayerSharedState.PamsSchedule is null)
-                {
-                    Globals.ModMonitor.Log("Something very odd has happened. Pam's dayScheduleName is not found?", LogLevel.Debug);
-                    Game1.DrawDialogue(new Dialogue(pam, "Strings\\Characters:Pam_Voicemail_Other")
-                    {
-                        overridePortrait = Game1.temporaryContent.Load<Texture2D>("Portraits\\AnsweringMachine"),
-                    });
-                }
-                else if (MultiplayerSharedState.PamsSchedule.Contains("BusStop 11 10"))
-                {
-                    Game1.DrawDialogue(new Dialogue(pam, "Strings\\Characters:Pam_Voicemail_Bus")
-                    {
-                        overridePortrait = Game1.temporaryContent.Load<Texture2D>("Portraits\\AnsweringMachine"),
-                    });
-                }
-                else
-                {
-                    Game1.DrawDialogue(new Dialogue(pam, "Strings\\Characters:Pam_Voicemail_Other")
-                    {
-                        overridePortrait = Game1.temporaryContent.Load<Texture2D>("Portraits\\AnsweringMachine"),
-                    });
-                }
-            }
-        }
-        catch (Exception ex)
-        {
-            Globals.ModMonitor.LogError("handling Pam's phone call", ex);
-        }
+        GameLocation location = Game1.currentLocation;
+        location.playShopPhoneNumberSounds("PamBus");
+        Game1.player.freezePause = 4950;
 
+        DelayedAction.functionAfterDelay(
+            func: () =>
+            {
+                try
+                {
+                    Game1.playSound(GameLocation.PHONE_PICKUP_SOUND);
+                    if (NPCCache.GetByVillagerName("Pam") is not NPC pam)
+                    {
+                        Globals.ModMonitor.Log($"Pam cannot be found, ending phone call.", LogLevel.Warn);
+                    }
+                    else if (Game1.timeOfDay > 2200)
+                    {
+                        Game1.DrawDialogue(pam, "Strings\\Characters:Pam_Bus_Late");
+                    }
+                    else if (Game1.timeOfDay < 900)
+                    {
+                        if (Game1.IsVisitingIslandToday(pam.Name))
+                        {
+                            Game1.DrawDialogue(pam, $"Strings\\Characters:Pam_Island_{Random.Shared.Next(1, 4)}");
+                        }
+                        else if (Utility.IsHospitalVisitDay(pam.Name))
+                        {
+                            Game1.DrawDialogue(pam, "Strings\\Characters:Pam_Doctor");
+                        }
+                        else if (MultiplayerSharedState.PamsSchedule is null)
+                        {
+                            Globals.ModMonitor.Log("Something very odd has happened. Pam's dayScheduleName is null", LogLevel.Debug);
+                            Game1.DrawDialogue(pam, "Strings\\Characters:Pam_Other");
+                        }
+                        else if (MultiplayerSharedState.PamsSchedule.Contains("BusStop 11 10"))
+                        {
+                            Game1.DrawDialogue(pam, $"Strings\\Characters:Pam_Bus_{Random.Shared.Next(1, 4)}");
+                        }
+                        else
+                        {
+                            Game1.DrawDialogue(pam, "Strings\\Characters:Pam_Other");
+                        }
+                    }
+                    else
+                    {
+                        if (Game1.IsVisitingIslandToday(pam.Name))
+                        {
+                            Game1.DrawDialogue(new Dialogue(pam, "Strings\\Characters:Pam_Voicemail_Island")
+                            {
+                                overridePortrait = Game1.temporaryContent.Load<Texture2D>("Portraits\\AnsweringMachine"),
+                            });
+                        }
+                        else if (Utility.IsHospitalVisitDay(pam.Name))
+                        {
+                            Game1.DrawDialogue(new Dialogue(pam, "Strings\\Characters:Pam_Voicemail_Doctor")
+                            {
+                                overridePortrait = Game1.temporaryContent.Load<Texture2D>("Portraits\\AnsweringMachine"),
+                            });
+                        }
+                        else if (MultiplayerSharedState.PamsSchedule is null)
+                        {
+                            Globals.ModMonitor.Log("Something very odd has happened. Pam's dayScheduleName is not found?", LogLevel.Debug);
+                            Game1.DrawDialogue(new Dialogue(pam, "Strings\\Characters:Pam_Voicemail_Other")
+                            {
+                                overridePortrait = Game1.temporaryContent.Load<Texture2D>("Portraits\\AnsweringMachine"),
+                            });
+                        }
+                        else if (MultiplayerSharedState.PamsSchedule.Contains("BusStop 11 10"))
+                        {
+                            Game1.DrawDialogue(new Dialogue(pam, "Strings\\Characters:Pam_Voicemail_Bus")
+                            {
+                                overridePortrait = Game1.temporaryContent.Load<Texture2D>("Portraits\\AnsweringMachine"),
+                            });
+                        }
+                        else
+                        {
+                            Game1.DrawDialogue(new Dialogue(pam, "Strings\\Characters:Pam_Voicemail_Other")
+                            {
+                                overridePortrait = Game1.temporaryContent.Load<Texture2D>("Portraits\\AnsweringMachine"),
+                            });
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Globals.ModMonitor.LogError("handling Pam's phone call", ex);
+                }
+            },
+            delay: 4950);
         return true;
     }
 }

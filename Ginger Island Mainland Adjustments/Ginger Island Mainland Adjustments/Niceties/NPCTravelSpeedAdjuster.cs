@@ -3,6 +3,8 @@ using AtraShared.Utils.Extensions;
 
 using HarmonyLib;
 
+using StardewValley.Pathfinding;
+
 namespace GingerIslandMainlandAdjustments.Niceties;
 
 /// <summary>

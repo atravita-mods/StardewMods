@@ -1,4 +1,5 @@
-﻿using System.Reflection;
+﻿using System.Globalization;
+using System.Reflection;
 using System.Reflection.Emit;
 
 using AtraBase.Toolkit.Reflection;
@@ -22,9 +23,8 @@ using StardewValley.Locations;
 using StardewValley.Menus;
 using StardewValley.Minigames;
 
-using XLocation = xTile.Dimensions.Location;
 using AtraUtils = AtraShared.Utils.Utils;
-using System.Globalization;
+using XLocation = xTile.Dimensions.Location;
 
 namespace StopRugRemoval.HarmonyPatches.Niceties;
 

@@ -5,14 +5,12 @@ Makes Demetrius visit his little experiment in the farm cave sometimes. Also giv
 
 Demetrius will either come visit once per week or once per month, depending on settings. You can restrict him to only coming on days that are winter or raining, when otherwise he'd be indoors all day. If you have [Non Destructive NPCs](https://www.nexusmods.com/stardewvalley/mods/5176) installed, he'll leave at 4PM. Otherwise, he'll be there all day. This is because the default Stardew scheduler will not prevent NPCs from walking straight through and breaking the mushroom boxes, so if you don't have Non Destructive NPCs installed, he won't be allowed to move around.
 
-[Custom NPC Exclusions](https://www.nexusmods.com/stardewvalley/mods/7089) is used to prevent him from trying to go to Ginger Island on those days.
-
 Inspired by [Demetrius Visits Cave](https://www.nexusmods.com/stardewvalley/mods/5477?tab=description).
 
 ## Install
 
 1. Install the latest version of [SMAPI](https://smapi.io).
-2. Download and install [Content Patcher](https://www.nexusmods.com/stardewvalley/mods/1915) and [Custom NPC Exclusions](https://www.nexusmods.com/stardewvalley/mods/7089)
+2. Download and install [Content Patcher](https://www.nexusmods.com/stardewvalley/mods/1915).
 2. Download this mod and unzip it into `Stardew Valley/Mods`.
 3. Run the game using SMAPI.
 

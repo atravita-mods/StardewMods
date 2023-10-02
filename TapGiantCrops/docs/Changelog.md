@@ -3,6 +3,9 @@
 TOOD:
 Automate compat
 
+### Version 0.2.0
+* Update for Stardew 1.6
+
 ### Version 0.1.3
 * Fix integration with FTM.
 

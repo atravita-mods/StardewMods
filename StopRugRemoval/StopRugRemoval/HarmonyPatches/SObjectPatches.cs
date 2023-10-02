@@ -69,13 +69,13 @@ internal static class SObjectPatches
 
     [HarmonyPrefix]
     [HarmonyPatch(nameof(SObject.onExplosion))]
-    private static void PrefixOnExplosion(SObject __instance, Farmer who, GameLocation location)
+    private static void PrefixOnExplosion(SObject __instance)
     {
         try
         {
             if (__instance.IsSpawnedObject && ModEntry.Config.SaveBombedForage && ModEntry.Config.Enabled)
             {
-                location.debris.Add(new Debris(__instance, __instance.TileLocation * 64));
+                __instance.Location.debris.Add(new Debris(__instance, __instance.TileLocation * 64));
                 ModEntry.ModMonitor.DebugOnlyLog(__instance.DisplayName + ' ' + __instance.TileLocation.ToString());
             }
         }

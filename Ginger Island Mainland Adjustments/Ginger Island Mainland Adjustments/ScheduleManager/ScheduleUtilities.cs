@@ -16,7 +16,7 @@ internal static class ScheduleUtilities
     private const string BASE_SCHEDULE_KEY = "GIRemainder";
     private const string POST_GI_START_TIME = "1800"; // all GI schedules must start at 1800
 
-    private static readonly Dictionary<string, Dictionary<int, SchedulePathDescription>> Schedules = new();
+    private static readonly Dictionary<string, (string key, Dictionary<int, SchedulePathDescription> schedule)> Schedules = new();
 
     /// <summary>
     /// Removes schedule cache.
@@ -29,14 +29,15 @@ internal static class ScheduleUtilities
     /// <param name="sb">Stringbuilder that contains the schedule.</param>
     /// <param name="visitor">the visitor.</param>
     /// <returns>same sb instance.</returns>
-    internal static StringBuilder AppendCorrectRemainderSchedule(this StringBuilder sb, NPC visitor)
+    internal static StringBuilder AppendCorrectRemainderSchedule(this StringBuilder sb, NPC visitor, out string? key)
     {
+        key = null;
         if (visitor.Name.Equals("Gus", StringComparison.OrdinalIgnoreCase))
         {
             // Gus needs to tend bar. Hardcoded same as vanilla.
             sb.Append("1800 Saloon 10 18 2/2430 bed");
         }
-        else if (ScheduleUtilities.FindProperGISchedule(visitor, SDate.Now()) is string giSchedule)
+        else if (ScheduleUtilities.FindProperGISchedule(visitor, SDate.Now(), out key) is string giSchedule)
         {
             sb.Append(giSchedule);
         }
@@ -187,19 +188,20 @@ internal static class ScheduleUtilities
     /// Wraps npc.parseMasterSchedule to lie to it about the start location of the NPC, if the NPC lives in the farmhouse.
     /// </summary>
     /// <param name="npc">NPC in question.</param>
+    /// <param name="key">The schedule key.</param>
     /// <param name="rawData">Raw schedule string.</param>
     /// <returns>True if successful, false otherwise.</returns>
-    internal static bool ParseMasterScheduleAdjustedForChild2NPC(NPC npc, string rawData)
+    internal static bool ParseMasterScheduleAdjustedForChild2NPC(NPC npc, string key, string rawData)
     {
         if (Globals.IsChildToNPC?.Invoke(npc) == true)
         {
             // For a Child2NPC, we must handle their scheduling ourselves.
             if (Globals.UtilitySchedulingFunctions.TryFindGOTOschedule(npc, SDate.Now(), rawData, out string scheduleString))
             {
-                Dictionary<int, SchedulePathDescription>? schedule = Globals.UtilitySchedulingFunctions.ParseSchedule(scheduleString, npc, "BusStop", new Point(0, 23), 610, Globals.Config.EnforceGITiming);
+                Dictionary<int, SchedulePathDescription>? schedule = Globals.UtilitySchedulingFunctions.ParseSchedule(key, scheduleString, npc, "BusStop", new Point(0, 23), 610, Globals.Config.EnforceGITiming);
                 if (schedule is not null)
                 {
-                    npc.Schedule = schedule;
+                    npc.TryLoadSchedule(key, schedule);
                     if (Context.IsMainPlayer && npc.Schedule is not null
                         && Globals.ReflectionHelper.GetField<string>(npc, "_lastLoadedScheduleKey", false)?.GetValue() is string lastschedulekey)
                     {
@@ -236,7 +238,7 @@ internal static class ScheduleUtilities
             Dictionary<int, SchedulePathDescription>? schedule = null;
             try
             {
-                schedule = npc.parseMasterSchedule(rawData);
+                schedule = npc.parseMasterSchedule(key, rawData);
             }
             catch (Exception ex)
             {
@@ -247,8 +249,8 @@ internal static class ScheduleUtilities
 
             if (schedule is not null)
             {
-                npc.Schedule = schedule;
-                Schedules[npc.Name] = npc.Schedule;
+                npc.TryLoadSchedule(key, schedule);
+                Schedules[npc.Name] = (key, new(schedule));
                 return true;
             }
             else
@@ -274,7 +276,7 @@ internal static class ScheduleUtilities
 
             try
             {
-                schedule = npc.parseMasterSchedule(rawData);
+                schedule = npc.parseMasterSchedule(key, rawData);
             }
             catch (Exception ex)
             {
@@ -282,7 +284,7 @@ internal static class ScheduleUtilities
             }
             if (schedule is not null)
             {
-                npc.Schedule = schedule;
+                npc.TryLoadSchedule(key, schedule);
                 return true;
             }
             else
@@ -301,10 +303,10 @@ internal static class ScheduleUtilities
         foreach (NPC npc in Game1.getLocationFromName("FarmHouse").characters)
         {
             if (npc.Schedule is null && Globals.IsChildToNPC?.Invoke(npc) == true
-                && ScheduleUtilities.Schedules.TryGetValue(npc.Name, out Dictionary<int, SchedulePathDescription>? schedule))
+                && ScheduleUtilities.Schedules.TryGetValue(npc.Name, out (string key, Dictionary<int, SchedulePathDescription> schedule) pair))
             {
                 Globals.ModMonitor.Log($"Fixing up schedule for {npc.Name}, which appears to have been nulled.", LogLevel.Warn);
-                npc.Schedule = schedule;
+                npc.TryLoadSchedule(pair.key, pair.schedule);
                 ScheduleUtilities.Schedules.Remove(npc.Name);
             }
         }

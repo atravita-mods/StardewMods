@@ -109,7 +109,7 @@ internal static class IslandNorthScheduler
                     direction: explorerIndex).AppendToStringBuilder(sb);
 
                 sb.Append('/')
-                  .AppendCorrectRemainderSchedule(explorer);
+                  .AppendCorrectRemainderSchedule(explorer, out _);
 
                 string renderedSchedule = sb.ToString();
                 sb.Clear();
@@ -117,7 +117,7 @@ internal static class IslandNorthScheduler
                 Globals.ModMonitor.DebugOnlyLog($"Calculated island north schedule for {explorer.Name}: {renderedSchedule}");
                 explorer.islandScheduleName.Value = "island";
 
-                if (ScheduleUtilities.ParseMasterScheduleAdjustedForChild2NPC(explorer, renderedSchedule))
+                if (ScheduleUtilities.ParseMasterScheduleAdjustedForChild2NPC(explorer, "island", renderedSchedule))
                 {
                     Game1.netWorldState.Value.IslandVisitors[explorer.Name] = true;
                     ConsoleCommands.IslandSchedules[explorer.Name] = renderedSchedule;

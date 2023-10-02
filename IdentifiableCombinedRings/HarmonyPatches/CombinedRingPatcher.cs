@@ -99,7 +99,7 @@ internal class CombinedRingPatcher
         }
         catch (Exception ex)
         {
-            Globals.ModMonitor.LogError("overriding drawing for combined ring", ex);
+            ModEntry.ModMonitor.LogError("overriding drawing for combined ring", ex);
         }
 
         return true;

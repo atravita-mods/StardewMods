@@ -16,8 +16,14 @@ namespace AtraShared.ConstantsAndEnums;
 [SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1602:Enumeration items should be documented", Justification = StyleCopErrorConsts.SelfEvident)]
 public enum Skills
 {
+    /// <summary>
+    /// No skills.
+    /// </summary>
     None = 0,
 
+    /// <summary>
+    /// Farming.
+    /// </summary>
     Farming = 0b1 << Farmer.farmingSkill,
     Mining = 0b1 << Farmer.miningSkill,
     Fishing = 0b1 << Farmer.fishingSkill,

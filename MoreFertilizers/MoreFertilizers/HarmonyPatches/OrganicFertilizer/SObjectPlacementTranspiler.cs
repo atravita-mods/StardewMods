@@ -25,10 +25,15 @@ internal static class SObjectPlacementTranspiler
 {
     private static void AdjustPlantedObject(HoeDirt? dirt, SObject obj)
     {
-        if (dirt?.fertilizer?.Value == HoeDirt.noFertilizer
+        if (dirt is null)
+        {
+            return;
+        }
+
+        if (dirt.fertilizer.Value is null
             && ModEntry.OrganicFertilizerID != -1
             && obj.modData?.GetBool(CanPlaceHandler.Organic) == true
-            && Singletons.Random.OfChance(0.5))
+            && Random.Shared.OfChance(0.5))
         {
             dirt.fertilizer.Value = ModEntry.OrganicFertilizerID;
         }

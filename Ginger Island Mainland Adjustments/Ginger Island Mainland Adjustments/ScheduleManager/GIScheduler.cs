@@ -307,7 +307,7 @@ internal static class GIScheduler
                 HashSet<NPC>? group = IslandGroups[CurrentGroup];
                 if (CurrentGroup == "allSpouses" && group.Count > capacity)
                 {
-                    group = group.OrderBy((_) => Singletons.Random.Next()).Take(capacity).ToHashSet();
+                    group = group.OrderBy((_) => Random.Shared.Next()).Take(capacity).ToHashSet();
                 }
 
                 visitors.AddRange(group);
@@ -398,7 +398,7 @@ internal static class GIScheduler
             HashSet<NPC> bartenders = AssetLoader.GetSpecialCharacter(SpecialCharacterType.Bartender);
             if (bartenders.Count > 0)
             {
-                bartender = visitors.Where(bartenders.Contains).OrderBy(_ => Singletons.Random.Next()).FirstOrDefault();
+                bartender = visitors.Where(bartenders.Contains).OrderBy(_ => Random.Shared.Next()).FirstOrDefault();
             }
         }
         if (bartender is not null)
@@ -420,7 +420,7 @@ internal static class GIScheduler
         NPC? musician = null;
         if (animationDescriptions.ContainsKey("sam_beach_towel"))
         {
-            musician = visitors.Find(static (NPC npc) => npc.Name.Equals("Sam", StringComparison.OrdinalIgnoreCase));
+            musician = visitors.Find(static (NPC npc) => npc.Name.Equals("Sam", StringComparison.Ordinal));
         }
         if (musician is null || random.OfChance(0.25))
         {
@@ -428,10 +428,10 @@ internal static class GIScheduler
             if (musicians.Count > 0)
             {
                 musician = visitors.Where((NPC npc) => musicians.Contains(npc) && animationDescriptions.ContainsKey($"{npc.Name.ToLowerInvariant()}_beach_towel"))
-                                   .OrderBy(_ => Singletons.Random.Next()).FirstOrDefault() ?? musician;
+                                   .OrderBy(_ => Random.Shared.Next()).FirstOrDefault() ?? musician;
             }
         }
-        if (musician is not null && !musician.Name.Equals("Gus", StringComparison.OrdinalIgnoreCase))
+        if (musician is not null && !musician.Name.Equals("Gus", StringComparison.Ordinal))
         {
             musician.currentScheduleDelay = 0f;
             Globals.ModMonitor.DebugOnlyLog($"Found musician {musician.Name}", LogLevel.Debug);

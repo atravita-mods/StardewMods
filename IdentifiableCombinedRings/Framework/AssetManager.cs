@@ -43,9 +43,22 @@ internal static class AssetManager
     /// <summary>
     /// Gets the override texture associated with a ring pair.
     /// </summary>
-    /// <param name="pair">The ring pair. Note the smaller ID should be first.</param>
+    /// <param name="first">One ring</param>
+    /// <param name="second">The other ring.</param>
     /// <returns>Override texture if it exists.</returns>
-    internal static Texture2D? GetOverrideTexture(RingPair pair) => TextureOverrides.TryGetValue(pair, out Lazy<Texture2D>? tex) ? tex.Value : null;
+    internal static Texture2D? GetOverrideTexture(string first, string second)
+    {
+        if (TextureOverrides.Count == 0)
+        {
+            return null;
+        }
+
+        RingPair pair = first.CompareTo(second) > 0
+                ? new(second, first)
+                : new(first, second);
+
+        return TextureOverrides.GetValueOrDefault(pair)?.Value;
+    }
 
     /// <summary>
     /// Loads in the ring overrides.

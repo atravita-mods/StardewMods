@@ -55,7 +55,7 @@ internal class GameLocationPatches
             int posY = ((int)tileLocation.Y * 64) + 32;
             foreach (Furniture f in __instance.furniture)
             {
-                if (f.furniture_type.Value == Furniture.rug && f.getBoundingBox(f.TileLocation).Contains(posX, posY))
+                if (f.furniture_type.Value == Furniture.rug && f.GetBoundingBox().Contains(posX, posY))
                 {
                     return false;
                 }
@@ -78,7 +78,7 @@ internal class GameLocationPatches
             {
                 foreach (Furniture f in __instance.furniture)
                 {
-                    if (f.furniture_type.Value == Furniture.rug && f.getBoundingBox(f.TileLocation).Contains((xTile * 64) + 32, (yTile * 64) + 32))
+                    if (f.furniture_type.Value == Furniture.rug && f.GetBoundingBox().Contains((xTile * 64) + 32, (yTile * 64) + 32))
                     {
                         __result = "All";
                         return false;

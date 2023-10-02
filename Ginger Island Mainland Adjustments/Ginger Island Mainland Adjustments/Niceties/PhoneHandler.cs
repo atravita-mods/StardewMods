@@ -1,7 +1,6 @@
 ﻿using System.Reflection;
 using System.Reflection.Emit;
 
-using AtraCore;
 using AtraCore.Framework.Caches;
 using AtraCore.Framework.ReflectionManager;
 
@@ -107,48 +106,63 @@ internal static class PhoneHandler
                     {
                         if (Game1.IsVisitingIslandToday(pam.Name))
                         {
-                            Game1.drawDialogue(pam, Game1.content.LoadString($"Strings\\Characters:Pam_Island_{Random.Shared.Next(1, 4)}"));
+                            Game1.DrawDialogue(pam, $"Strings\\Characters:Pam_Island_{Random.Shared.Next(1, 4)}");
                         }
                         else if (Utility.IsHospitalVisitDay(pam.Name))
                         {
-                            Game1.drawDialogue(pam, Game1.content.LoadString("Strings\\Characters:Pam_Doctor"));
+                            Game1.DrawDialogue(pam, "Strings\\Characters:Pam_Doctor");
                         }
                         else if (MultiplayerSharedState.PamsSchedule is null)
                         {
                             Globals.ModMonitor.Log("Something very odd has happened. Pam's dayScheduleName is null", LogLevel.Debug);
-                            Game1.drawDialogue(pam, Game1.content.LoadString("Strings\\Characters:Pam_Other"));
+                            Game1.DrawDialogue(pam, "Strings\\Characters:Pam_Other");
                         }
                         else if (MultiplayerSharedState.PamsSchedule.Contains("BusStop 11 10"))
                         {
-                            Game1.drawDialogue(pam, Game1.content.LoadString($"Strings\\Characters:Pam_Bus_{Random.Shared.Next(1, 4)}"));
+                            Game1.DrawDialogue(pam, $"Strings\\Characters:Pam_Bus_{Random.Shared.Next(1, 4)}");
                         }
                         else
                         {
-                            Game1.drawDialogue(pam, Game1.content.LoadString("Strings\\Characters:Pam_Other"));
+                            Game1.DrawDialogue(pam, "Strings\\Characters:Pam_Other");
                         }
                     }
                     else
                     {
                         if (Game1.IsVisitingIslandToday(pam.Name))
                         {
-                            Game1.drawDialogue(pam, Game1.content.LoadString("Strings\\Characters:Pam_Voicemail_Island"), Game1.temporaryContent.Load<Texture2D>("Portraits\\AnsweringMachine"));
+                            Game1.DrawDialogue(new Dialogue(pam, "Strings\\Characters:Pam_Voicemail_Island")
+                            {
+                                overridePortrait = Game1.temporaryContent.Load<Texture2D>("Portraits\\AnsweringMachine"),
+                            });
                         }
                         else if (Utility.IsHospitalVisitDay(pam.Name))
                         {
-                            Game1.drawDialogue(pam, Game1.content.LoadString("Strings\\Characters:Pam_Voicemail_Doctor"), Game1.temporaryContent.Load<Texture2D>("Portraits\\AnsweringMachine"));
+                            Game1.DrawDialogue(new Dialogue(pam, "Strings\\Characters:Pam_Voicemail_Doctor")
+                            {
+                                overridePortrait = Game1.temporaryContent.Load<Texture2D>("Portraits\\AnsweringMachine"),
+                            });
                         }
                         else if (MultiplayerSharedState.PamsSchedule is null)
                         {
                             Globals.ModMonitor.Log("Something very odd has happened. Pam's dayScheduleName is not found?", LogLevel.Debug);
-                            Game1.drawDialogue(pam, Game1.content.LoadString("Strings\\Characters:Pam_Voicemail_Other"), Game1.temporaryContent.Load<Texture2D>("Portraits\\AnsweringMachine"));
+                            Game1.DrawDialogue(new Dialogue(pam, "Strings\\Characters:Pam_Voicemail_Other")
+                            {
+                                overridePortrait = Game1.temporaryContent.Load<Texture2D>("Portraits\\AnsweringMachine"),
+                            });
                         }
                         else if (MultiplayerSharedState.PamsSchedule.Contains("BusStop 11 10"))
                         {
-                            Game1.drawDialogue(pam, Game1.content.LoadString("Strings\\Characters:Pam_Voicemail_Bus"), Game1.temporaryContent.Load<Texture2D>("Portraits\\AnsweringMachine"));
+                            Game1.DrawDialogue(new Dialogue(pam, "Strings\\Characters:Pam_Voicemail_Bus")
+                            {
+                                overridePortrait = Game1.temporaryContent.Load<Texture2D>("Portraits\\AnsweringMachine"),
+                            });
                         }
                         else
                         {
-                            Game1.drawDialogue(pam, Game1.content.LoadString("Strings\\Characters:Pam_Voicemail_Other"), Game1.temporaryContent.Load<Texture2D>("Portraits\\AnsweringMachine"));
+                            Game1.DrawDialogue(new Dialogue(pam, "Strings\\Characters:Pam_Voicemail_Other")
+                            {
+                                overridePortrait = Game1.temporaryContent.Load<Texture2D>("Portraits\\AnsweringMachine"),
+                            });
                         }
                     }
                     __instance.answerDialogueAction(GameLocation.PHONE_HANGUP_SOUND, Array.Empty<string>());

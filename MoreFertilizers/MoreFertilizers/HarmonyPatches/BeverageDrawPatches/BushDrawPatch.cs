@@ -29,14 +29,14 @@ internal static class BushDrawPatch
         try
         {
             if (ModEntry.Config.DrawParticleEffects && Utility.isOnScreen(__instance.Tile * Game1.tileSize, 256)
-                && __instance.modData.ContainsKey(CanPlaceHandler.MiraculousBeverages) && Singletons.Random.RollDice(512))
+                && __instance.modData.ContainsKey(CanPlaceHandler.MiraculousBeverages) && Random.Shared.RollDice(512))
             {
                 __instance.Location.TemporarySprites.Add(new TemporaryAnimatedSprite(
                     Game1.mouseCursorsName,
                     new Rectangle(372, 1956, 10, 10),
                     new Vector2(
-                        (__instance.Tile.X * Game1.tileSize) + Singletons.Random.Next(64),
-                        (__instance.Tile.Y * Game1.tileSize) + Singletons.Random.Next(-128, 0)),
+                        (__instance.Tile.X * Game1.tileSize) + Random.Shared.Next(64),
+                        (__instance.Tile.Y * Game1.tileSize) + Random.Shared.Next(-128, 0)),
                     flipped: false,
                     0.002f,
                     Color.LimeGreen)

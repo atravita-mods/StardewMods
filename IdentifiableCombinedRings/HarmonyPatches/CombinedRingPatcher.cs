@@ -56,12 +56,10 @@ internal class CombinedRingPatcher
                 return true;
             }
 
-            int first = combinedRings[0].ParentSheetIndex;
-            int second = combinedRings[1].ParentSheetIndex;
+            string first = combinedRings[0].ItemId;
+            string second = combinedRings[1].ItemId;
 
-            RingPair pair = first > second ? new(second, first) : new(first, second);
-
-            if (AssetManager.GetOverrideTexture(pair) is Texture2D texture)
+            if (AssetManager.GetOverrideTexture(first, second) is Texture2D texture)
             {
                 spriteBatch.Draw(
                     texture,

@@ -246,7 +246,7 @@ internal sealed class ModConfig
 
         bool changed = false;
 
-        Utility.ForAllLocations(loc =>
+        Utility.ForEachLocation(loc =>
         {
             if (loc is SlimeHutch or Town or IslandWest || loc.IsFarm || loc.IsGreenhouse)
             {
@@ -260,6 +260,7 @@ internal sealed class ModConfig
             {
                 changed |= this.SafeLocationMap.TryAdd(loc.Name, IsSafeLocationEnum.Dynamic);
             }
+            return true;
         });
 
         return changed;

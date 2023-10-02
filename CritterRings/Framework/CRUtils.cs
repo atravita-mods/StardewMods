@@ -48,7 +48,7 @@ internal static class CRUtils
                 {
                     return;
                 }
-                cue.SetVariable("Pitch", (Singletons.Random.Next(12, 16) + charge ) * 100);
+                cue.SetVariable("Pitch", (Random.Shared.Next(12, 16) + charge ) * 100);
                 cue.Play();
             }
             catch (Exception ex)
@@ -189,7 +189,7 @@ internal static class CRUtils
                 Frog? frog = null;
 
                 // try for a frog that leaps into water.
-                if (loc.waterTiles is not null && Singletons.Random.OfChance(0.5))
+                if (loc.waterTiles is not null && Random.Shared.OfChance(0.5))
                 {
                     for (int j = 0; j < 3; j++)
                     {
@@ -203,7 +203,7 @@ internal static class CRUtils
                             continue;
                         }
 
-                        bool flipped = Singletons.Random.OfChance(0.5);
+                        bool flipped = Random.Shared.OfChance(0.5);
                         for (int x = 1; x < 11; x++)
                         {
                             if (!loc.isTileOnMap(xCoord + x, yCoord))
@@ -221,7 +221,7 @@ internal static class CRUtils
                 }
 breakbreak:
                 frog ??= new(Game1.player.Tile);
-                FrogTimerSetter.Value(frog, Singletons.Random.Next(2000, 5000));
+                FrogTimerSetter.Value(frog, Random.Shared.Next(2000, 5000));
                 critters.Add(frog);
             }
         }
@@ -253,7 +253,7 @@ breakbreak:
                 else
                 {
                     owlPos = new Vector2(
-                    x: Singletons.Random.Next(0, (loc.Map.Layers[0].LayerWidth - 1) * Game1.tileSize),
+                    x: Random.Shared.Next(0, (loc.Map.Layers[0].LayerWidth - 1) * Game1.tileSize),
                     y: -128);
                 }
                 Owl owl = new(owlPos);
@@ -293,7 +293,7 @@ breakbreak:
                         SpawnRabbit(critters, position, location, flipped);
                     }
                 },
-                delay: delay += Singletons.Random.Next(250, 750));
+                delay: delay += Random.Shared.Next(250, 750));
             }
         }
     }
@@ -305,7 +305,7 @@ breakbreak:
             yield break;
         }
 
-        Utility.Shuffle(Singletons.Random, bushes);
+        Utility.Shuffle(Random.Shared, bushes);
 
         count *= ModEntry.Config.CritterSpawnMultiplier;
         foreach (Bush bush in bushes)
@@ -357,7 +357,7 @@ Continue: ;
             Rabbit rabbit = new(loc, tile, flipped);
             // make the rabbit hang around for a little longer.
             // so it doesn't immediately exist stage left.
-            CharacterTimerSetter.Value(rabbit, Singletons.Random.Next(750, 1500));
+            CharacterTimerSetter.Value(rabbit, Random.Shared.Next(750, 1500));
             critters.Add(rabbit);
 
             // little TAS to hide the pop in.
@@ -369,7 +369,7 @@ Continue: ;
                 numberOfLoops: 0,
                 position: (tile - Vector2.One) * Game1.tileSize,
                 flicker: false,
-                flipped: Singletons.Random.OfChance(0.5),
+                flipped: Random.Shared.OfChance(0.5),
                 layerDepth: 1f,
                 alphaFade: 0.01f,
                 color: Color.White,

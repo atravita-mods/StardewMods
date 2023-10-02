@@ -590,7 +590,7 @@ public sealed class InventoryGiantCrop : SObject
     }
 
     private string GetProductDisplayName()
-        => Game1Wrappers.ObjectData.GetValueOrDefault(this.ItemId)?.DisplayName?.ParseTokens() ?? "UNKOWN";
+        => Game1Wrappers.ObjectData.GetValueOrGetDefault(this.ItemId)?.DisplayName?.ParseTokens() ?? "UNKOWN";
     #endregion
 
     #region helpers

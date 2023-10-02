@@ -46,13 +46,13 @@ internal static class SayHiToPatch
                 {
                     // Invert the check here to favor the farmer. :(
                     // Goddamnit greet me more often plz.
-                    Character? c = Utility.isThereAFarmerWithinDistance(__instance.getTileLocation(), 4, l);
+                    Character? c = Utility.isThereAFarmerWithinDistance(__instance.Tile, 4, l);
                     if (c is null)
                     {
-                        Vector2 loc = __instance.getTileLocation();
+                        Vector2 loc = __instance.Tile;
                         foreach (NPC npc in l.characters)
                         {
-                            if ((npc.getTileLocation() - loc).LengthSquared() <= 16 && __instance.isFacingToward(npc.getTileLocation()))
+                            if ((npc.Tile - loc).LengthSquared() <= 16 && __instance.isFacingToward(npc.Tile))
                             {
                                 c = npc;
                                 break;

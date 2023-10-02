@@ -1,9 +1,8 @@
 ﻿using AtraBase.Toolkit;
 using AtraBase.Toolkit.Extensions;
 
-using AtraCore;
-
 using AtraShared.Utils.Extensions;
+
 using StardewModdingAPI.Events;
 
 namespace PamTries.Framework;
@@ -23,7 +22,7 @@ internal static class AlternativeBusDriverManager
     /// </summary>
     /// <returns>Name of a possible bus driver.</returns>
     internal static string GetRandomBusDriver()
-        => Busdrivers.Count == 0 ? "Pam" : Busdrivers.ElementAt(Singletons.Random.Next(Busdrivers.Count));
+        => Busdrivers.Count == 0 ? "Pam" : Busdrivers.ElementAt(Random.Shared.Next(Busdrivers.Count));
 
     /// <summary>
     /// Listens to AssetReady to find valid bus drivers.

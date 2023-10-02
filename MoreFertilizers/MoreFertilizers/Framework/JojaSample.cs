@@ -3,8 +3,6 @@
 using AtraBase.Toolkit;
 using AtraBase.Toolkit.Extensions;
 
-using AtraCore;
-
 using AtraShared.Menuing;
 
 using StardewModdingAPI.Events;

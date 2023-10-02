@@ -12,6 +12,7 @@ using HarmonyLib;
 using Netcode;
 
 using StardewValley.Menus;
+using StardewValley.SpecialOrders;
 
 namespace StopRugRemoval.HarmonyPatches.Niceties.CrashHandling;
 

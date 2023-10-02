@@ -75,9 +75,7 @@ internal static class SObjectPatches
         {
             if (__instance.IsSpawnedObject && ModEntry.Config.SaveBombedForage && ModEntry.Config.Enabled)
             {
-#warning - objects will have their positions set correctly in 1.6
-                // The SObject does not have its location anymore. Just spawn near the farmer, I guess?
-                location.debris.Add(new Debris(__instance, who.Position + new Vector2(Random.Shared.Next(-128, 128), Random.Shared.Next(-128, 128))));
+                location.debris.Add(new Debris(__instance, __instance.TileLocation * 64));
                 ModEntry.ModMonitor.DebugOnlyLog(__instance.DisplayName + ' ' + __instance.TileLocation.ToString());
             }
         }

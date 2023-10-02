@@ -8,7 +8,7 @@ namespace LastDayToPlantRedux.Framework;
 public sealed class LastDayToPlantAPI : ILastDayToPlantAPI
 {
     /// <inheritdoc />
-    public int? GetDays(Profession profession, int fertilizer, int crop, StardewSeasons season)
+    public int? GetDays(Profession profession, string fertilizer, string crop, StardewSeasons season)
         => CropAndFertilizerManager.GetDays(profession, fertilizer, crop, season);
 
     /// <inheritdoc />

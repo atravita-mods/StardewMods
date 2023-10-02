@@ -8,32 +8,9 @@ namespace ExperimentalLagReduction.Framework;
 internal sealed class ModConfig
 {
     /// <summary>
-    /// Gets or sets a value indicating whether or not animated sprites should, at best as possible, be forced to use lazy loads.
-    /// </summary>
-    [GMCMDefaultIgnore]
-    public bool ForceLazyTextureLoad { get; set; } =
-        #if DEBUG
-            true;
-        #else
-            false;
-        #endif
-
-    /// <summary>
     /// Gets or sets a value indicating whether or not to cull out of bound draws.
     /// </summary>
     public bool CullDraws { get; set; } = true;
-
-    /// <summary>
-    /// Gets or sets a value indicating whether or not to use this mod's scheduler.
-    /// </summary>
-    [GMCMSection("Scheduler", 0)]
-    public bool UseAlternativeScheduler { get; set; } = true;
-
-    /// <summary>
-    /// Gets or sets a value indicating whether or not mod-added doors should be enabled for pathfinding.
-    /// </summary>
-    [GMCMSection("Scheduler", 0)]
-    public bool AllowModAddedDoors { get; set; } = true;
 
     /// <summary>
     /// Gets or sets a value indicating whether or not partial paths should be allowed.

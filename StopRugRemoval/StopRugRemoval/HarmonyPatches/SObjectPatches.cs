@@ -90,6 +90,7 @@ internal static class SObjectPatches
     /// </summary>
     /// <param name="__instance">SObject instance.</param>
     /// <param name="t">tool used.</param>
+    /// <param name="__result">Result of the function.</param>
     [HarmonyPrefix]
     [HarmonyPatch(nameof(SObject.performToolAction))]
     private static bool PrefixPerformToolAction(SObject __instance, Tool t, ref bool __result)

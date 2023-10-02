@@ -267,12 +267,15 @@
     "pam-expecting-grandchild-initial-b": "You're gonna bring the new kiddo around to see their grandmama, won't you?",
 
     // divorce strings
+    "caroline-divorced-from-abby": "I'm taking Abigail's side in your divorce, I hope you understand.",
+
     "demetrius-divorced-from-maru-a": "Well, I wish you hadn't broken my dear Maru's heart.",
     "demetrius-divorced-from-maru-b": "I have nothing to say to you.",
     "demetrius-divorced-from-sebastian-a": "I don't think Sebastian wants to see you.",
     "demetrius-divorced-from-sebastian-b": "You didn't have to break my stepson's heart like that.",
 
-    "caroline-divorced-from-abby": "I'm taking Abigail's side in your divorce, I hope you understand.",
+    "evelyn-divorced-from-alex": "Please leave us alone.",
+    "evelyn-divorced-from-alex-b": "You're no longer a member of this family.",
 
     "sandy-divorced-from-emily": "What business brings you here today, @?",
 

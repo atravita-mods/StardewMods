@@ -21,7 +21,7 @@ internal static class WoodChipperDrawTranspiler
 {
     [MethodImpl(TKConstants.Hot)]
     private static Color WoodChipperNeedsInputColor(WoodChipper obj)
-        => ModEntry.Config.VanillaMachines[VanillaMachinesEnum.WoodChipper]
+        => ModEntry.Config.VanillaMachines[obj.QualifiedItemId]
             && obj.heldObject.Value is null ? ModEntry.Config.EmptyColor : Color.White;
 
 #pragma warning disable SA1116 // Split parameters should start on line after declaration. Reviewed

@@ -160,8 +160,6 @@ internal sealed class ModEntry : BaseMod<ModEntry>
     {
         this.Helper.GameContent.InvalidateCacheAndLocalized(AssetLoader.ENCHANTMENT_NAMES_LOCATION);
 
-        // This is the games cache of enchantment names. I null it here to clear it.
-        this.Helper.Reflection.GetField<List<BaseEnchantment>?>(typeof(BaseEnchantment), "_enchantments").SetValue(null);
         AssetLoader.Refresh();
     }
 

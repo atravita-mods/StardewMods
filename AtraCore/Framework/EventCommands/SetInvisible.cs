@@ -1,4 +1,6 @@
-﻿using AtraBase.Toolkit.Extensions;
+﻿namespace AtraCore.Framework.EventCommands;
+
+using AtraBase.Toolkit.Extensions;
 
 using AtraCore.Framework.Caches;
 using AtraCore.Interfaces;
@@ -8,8 +10,6 @@ using AtraShared.Utils.Extensions;
 using Microsoft.Xna.Framework;
 
 using StardewModdingAPI.Events;
-
-namespace AtraCore.Framework.EventCommands;
 
 /// <summary>
 /// Used to set an NPC invisible for a specific number of days.
@@ -53,7 +53,7 @@ internal sealed class SetInvisible : IEventCommand
             error = "Event command expects two arguments: the NPC's internal name and an optional number for the number of days.";
             return false;
         }
-        if (NPCCache.GetByVillagerName(args[1], searchTheater: true) is not NPC)
+        if (NPCCache.GetByVillagerName(args[1], searchTheater: true) is null)
         {
             error = $"Could not find NPC by name {args[1]}";
             return false;

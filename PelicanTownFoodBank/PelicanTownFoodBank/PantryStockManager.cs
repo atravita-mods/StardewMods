@@ -118,9 +118,9 @@ internal static class PantryStockManager
 
     private static (List<int> cookingIngredients, List<int> cookedItems) GetOtherSellables()
     {
-        List<int> cookingIngredients = new(24);
-        List<int> cookedItems = new(24);
-        foreach ((int index, string data) in Game1Wrappers.ObjectData)
+        List<string> cookingIngredients = new(24);
+        List<string> cookedItems = new(24);
+        foreach ((var index, var data) in Game1Wrappers.ObjectData)
         {
             SpanSplit splits = data.SpanSplit('/');
             SpanSplit typesandcategory = splits[3].SpanSplit();

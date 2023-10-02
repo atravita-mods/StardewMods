@@ -9,6 +9,9 @@
 * Controllers probably won't be able to lock onto the arrows properly, owing to the....nontraditional menu setup here. It's likely not something I can fix, either. Use the LeftArrow/RightArrow keybinds (shoulder buttons by default).
 * I apply the chosen enchantment when forging, not before. So if you're using a predictor, it'll just show what the game would have picked. (This goes for Many Enchantment's debug logging as well.)
 
+#### Version 1.2.0
+* Update to Stardew 1.6
+
 #### Version 1.1.3
 * Fixes missing translations, my apologies!
 

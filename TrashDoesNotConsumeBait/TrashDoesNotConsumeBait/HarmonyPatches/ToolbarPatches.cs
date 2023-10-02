@@ -1,12 +1,12 @@
-﻿using AtraShared.ConstantsAndEnums;
+﻿namespace TrashDoesNotConsumeBait.HarmonyPatches;
+
+using AtraShared.ConstantsAndEnums;
 using AtraShared.Utils.Extensions;
 
 using HarmonyLib;
 
 using StardewValley.Menus;
 using StardewValley.Tools;
-
-namespace TrashDoesNotConsumeBait.HarmonyPatches;
 
 /// <summary>
 /// Class that holds patches against the tool bar.

@@ -1,9 +1,9 @@
-﻿using AtraShared.ConstantsAndEnums;
+﻿namespace TrashDoesNotConsumeBait.HarmonyPatches;
+
+using AtraShared.ConstantsAndEnums;
 using AtraShared.Utils.Extensions;
 using HarmonyLib;
 using StardewValley.Objects;
-
-namespace TrashDoesNotConsumeBait.HarmonyPatches;
 
 /// <summary>
 /// Patches on CrabPot to restore bait if the object was trash.

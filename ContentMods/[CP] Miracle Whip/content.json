@@ -3,21 +3,10 @@
     "Format": "1.29.0",
     "Changes": [
         {
-            "Action": "EditImage",
-            "FromFile": "concession.png",
-            "Target": "LooseSprites/Concessions",
-            "ToArea": {
-                "X": 0,
-                "Y": 64,
-                "Height": 16,
-                "Width": 16
-            }
-        },
-        {
             "Action": "EditData",
             "Target": "Data/Concessions",
             "Entries": {
-                32: {
+                "atravita.MiracleWhip": {
                     "ID": 32,
                     "Name": "Miracle Whip",
                     "DisplayName": "{{i18n: MiracleWhip.Name}}",
@@ -25,20 +14,18 @@
                     "Price": 39,
                     "ItemTags": [
                         "Horrid"
-                    ]
+                    ],
+                    "Texture": "{{InternalAssetKey: concession.png}}",
+                    "SpriteIndex": 0
                 }
             }
         },
         {
             "Action": "EditData",
             "Target": "Data/ConcessionTastes",
-            "TargetField": ["*"],
+            "TargetField": ["*", "DislikedTags"],
             "Entries": {
-                "DislikedTags": [
-                    "Black Licorice",
-                    "Joja",
-                    "Horrid",
-                  ],
+                999: "Horrid"
             }
         }
     ]

@@ -50,14 +50,6 @@
         },
         {
             "Action": "Include",
-            "LogName": "Lewis schedules",
-            "FromFile": "assets/schedules/Lewis.json",
-            "When": {
-                "ScheduleChanges": "Lewis"
-            }
-        },
-        {
-            "Action": "Include",
             "LogName": "Maru schedules",
             "FromFile": "assets/schedules/Maru.json",
             "When": {

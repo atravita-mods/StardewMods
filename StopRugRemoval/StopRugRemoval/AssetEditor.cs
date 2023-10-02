@@ -7,6 +7,8 @@ using Microsoft.Xna.Framework.Graphics;
 using StardewModdingAPI.Events;
 using StardewModdingAPI.Utilities;
 
+using StardewValley.GameData.WildTrees;
+
 namespace StopRugRemoval;
 
 /// <summary>
@@ -17,6 +19,7 @@ internal static class AssetEditor
 {
     private static IAssetName saloonEvents = null!;
     private static IAssetName betIconsPath = null!;
+    private static IAssetName wildTrees = null!;
     private static Lazy<Texture2D> betIconLazy = new(static () => Game1.content.Load<Texture2D>(betIconsPath.BaseName));
 
     private static readonly PerScreen<TickCache<bool>> HasSeenSaloonEvent = new(
@@ -43,6 +46,7 @@ internal static class AssetEditor
     {
         saloonEvents = parser.ParseAssetName("Data/Events/Saloon");
         betIconsPath = parser.ParseAssetName("Mods/atravita_StopRugRemoval_BetIcons");
+        wildTrees = parser.ParseAssetName("Data/WildTrees");
 
         const string dialogue = "Characters/Dialogue/";
         BirdieQuest.Add(parser.ParseAssetName($"{dialogue}Kent"), 864);
@@ -112,7 +116,7 @@ internal static class AssetEditor
                 },
                 AssetEditPriority.Late + 1000);
         }
-        else if (Context.IsWorldReady && e.NameWithoutLocale.IsEquivalentTo(betIconsPath))
+        else if (e.NameWithoutLocale.IsEquivalentTo(betIconsPath))
         { // The BET1k/10k icons have to be localized, so they're in the i18n folder.
             string filename = "BetIcons.png";
 
@@ -135,7 +139,35 @@ internal static class AssetEditor
             }
             e.LoadFromModFile<Texture2D>(Path.Combine("i18n", filename), AssetLoadPriority.Low);
         }
+        else if (ModEntry.Config.GoldenCoconutsOffIsland && e.NameWithoutLocale.IsEquivalentTo(wildTrees))
+        {
+            e.Edit(EditWildTrees);
+        }
     }
+
+    #region wild trees
+
+    private static void EditWildTrees(IAssetData data)
+    {
+        var editor = data.AsDictionary<string, WildTreeData>().Data;
+        EditCoconut(editor, "6");
+        EditCoconut(editor, "9");
+    }
+
+    private static void EditCoconut(IDictionary<string, WildTreeData> editor, string id)
+    {
+        if (editor.TryGetValue(id, out var bigPalm)
+            && bigPalm.SeedDropItems.FirstOrDefault(item => item.Id == "GoldenCoconut") is { } entry && entry.Condition is not null)
+        {
+            entry.Condition = entry.Condition.Replace("LOCATION_CONTEXT Target Island", "WORLD_STATE_FIELD GoldenCoconutCracked true");
+        }
+        else
+        {
+            ModEntry.ModMonitor.Log($"Can't find small palm tree.");
+        }
+    }
+
+    #endregion
 
     /// <inheritdoc cref="IContentEvents.AssetRequested"/>
     /// <remarks>

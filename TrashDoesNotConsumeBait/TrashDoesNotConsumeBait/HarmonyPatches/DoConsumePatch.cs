@@ -1,4 +1,6 @@
-﻿using System.Reflection;
+﻿namespace TrashDoesNotConsumeBait.HarmonyPatches;
+
+using System.Reflection;
 using System.Reflection.Emit;
 using System.Runtime.CompilerServices;
 
@@ -16,8 +18,6 @@ using HarmonyLib;
 using Netcode;
 
 using StardewValley.Tools;
-
-namespace TrashDoesNotConsumeBait.HarmonyPatches;
 
 /// <summary>
 /// Applies the harmony patch against DoDoneFishing that consumes the bait/tackle.
@@ -170,15 +170,18 @@ internal static class DoConsumePatch
             })
             .ReplaceInstruction(new(OpCodes.Call, typeof(DoConsumePatch).GetCachedMethod(nameof(DoConsumePatch.GetPreservingChance), ReflectionCache.FlagTypes.StaticFlags)), keepLabels: true)
             .FindNext(new CodeInstructionWrapper[]
-            {
+            { // var bait = this.GetBait();
                 OpCodes.Ldarg_0,
-                (OpCodes.Ldfld, typeof(Tool).GetCachedField(nameof(Tool.attachments), ReflectionCache.FlagTypes.InstanceFlags)),
-                OpCodes.Ldc_I4_0,
-                OpCodes.Callvirt,
+                (OpCodes.Call, typeof(FishingRod).GetCachedMethod(nameof(FishingRod.GetBait), ReflectionCache.FlagTypes.InstanceFlags)),
+                SpecialCodeInstructionCases.StLoc,
+            })
+            .FindNext(new CodeInstructionWrapper[]
+            { // if (bait is not null)
+                SpecialCodeInstructionCases.LdLoc,
                 OpCodes.Brfalse_S,
             })
             .Push()
-            .Advance(4)
+            .Advance(1)
             .StoreBranchDest()
             .AdvanceToStoredLabel()
             .DefineAndAttachLabel(out Label label)

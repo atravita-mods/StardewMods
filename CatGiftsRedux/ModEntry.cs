@@ -332,7 +332,7 @@ internal sealed class ModEntry : BaseMod<ModEntry>
 
             if (id != -1)
             {
-                this.bannedItems[item.Type].Add(id);
+                this.bannedItems.Add(id);
             }
         }
 

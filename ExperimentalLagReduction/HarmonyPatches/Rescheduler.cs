@@ -1,5 +1,7 @@
 ﻿// #define TRACELOG
 
+namespace ExperimentalLagReduction.HarmonyPatches;
+
 #if DEBUG
 using System.Diagnostics;
 #endif
@@ -14,11 +16,9 @@ using AtraShared.Utils.Extensions;
 using ExperimentalLagReduction.Framework;
 
 using HarmonyLib;
-using StardewValley.Pathfinding;
-using StardewValley.Locations;
-using StardewValley.Minigames;
 
-namespace ExperimentalLagReduction.HarmonyPatches;
+using StardewValley.Locations;
+using StardewValley.Pathfinding;
 
 /// <summary>
 /// Re-does the scheduler so it's faster.

@@ -17,7 +17,6 @@ namespace MoreFertilizers.Framework;
 /// <summary>
 /// Class that handles placement of special fertilizers.
 /// </summary>
-[SuppressMessage("StyleCop.CSharp.OrderingRules", "SA1201:Elements should appear in the correct order", Justification = "Reviewed.")]
 public sealed class CanPlaceHandler : IMoreFertilizersAPI
 {
     #region ModdataStrings
@@ -86,34 +85,6 @@ public sealed class CanPlaceHandler : IMoreFertilizersAPI
     /// Marks the prismatic fertilizer.
     /// </summary>
     public const string PrismaticFertilizer = "atravita.MoreFertilizer.Prismatic";
-    #endregion
-
-    #region reflection
-
-    /// <summary>
-    /// Stardew's Bush::shake.
-    /// </summary>
-    private static readonly BushShakeDel BushShakeMethod = typeof(Bush)
-        .GetCachedMethod("shake", ReflectionCache.FlagTypes.InstanceFlags)
-        .CreateDelegate<BushShakeDel>();
-
-    private delegate void BushShakeDel(
-        Bush bush,
-        Vector2 tileLocation,
-        bool doEvenIfStillShaking);
-
-    /// <summary>
-    /// Stardew's Tree::shake.
-    /// </summary>
-    private static readonly TreeShakeDel TreeShakeMethod = typeof(Tree)
-        .GetCachedMethod("shake", ReflectionCache.FlagTypes.InstanceFlags)
-        .CreateDelegate<TreeShakeDel>();
-
-    private delegate void TreeShakeDel(
-        Tree tree,
-        Vector2 tileLocation,
-        bool doEvenIfStillShaking,
-        GameLocation location);
     #endregion
 
     /// <inheritdoc />
@@ -234,9 +205,9 @@ public sealed class CanPlaceHandler : IMoreFertilizersAPI
             return ret;
         }
 
-        if(loc is BuildableGameLocation buildableLoc && obj.ParentSheetIndex == ModEntry.DomesticatedFishFoodID)
+        if(obj.ParentSheetIndex == ModEntry.DomesticatedFishFoodID)
         {
-            foreach(Building b in buildableLoc.buildings)
+            foreach(Building b in loc.buildings)
             {
                 if (b is FishPond && b.occupiesTile(tile))
                 {
@@ -302,7 +273,7 @@ public sealed class CanPlaceHandler : IMoreFertilizersAPI
             if (terrain is Tree tree
                 && (obj.ParentSheetIndex == ModEntry.TreeTapperFertilizerID))
             {
-                TreeShakeMethod(tree, tile, true, loc);
+                tree.shake(tile, true);
                 tree.modData?.SetBool(TreeTapperFertilizer, true);
                 return true;
             }
@@ -336,7 +307,7 @@ public sealed class CanPlaceHandler : IMoreFertilizersAPI
             {
                 if (largeterrainfeature is Bush bigBush && bigBush.size.Value == Bush.mediumBush && bigBush.getBoundingBox().Intersects(pos))
                 {
-                    BushShakeMethod(bigBush, bigBush.Tile, true);
+                    bigBush.shake(bigBush.Tile, true);
                     bigBush.modData?.SetBool(BountifulBush, true);
                     return true;
                 }
@@ -420,19 +391,19 @@ public sealed class CanPlaceHandler : IMoreFertilizersAPI
     {
         if (obj.ParentSheetIndex == ModEntry.BountifulBushID)
         {
-            BushShakeMethod(teaBush, teaBush.Tile, true);
+            teaBush.shake(teaBush.Tile, true);
             teaBush.modData?.SetBool(BountifulBush, true);
             return true;
         }
         if (obj.ParentSheetIndex == ModEntry.RapidBushFertilizerID)
         {
-            BushShakeMethod(teaBush, teaBush.Tile, true);
+            teaBush.shake(teaBush.Tile, true);
             teaBush.modData?.SetBool(RapidBush, true);
             return true;
         }
         if (obj.ParentSheetIndex == ModEntry.MiraculousBeveragesID)
         {
-            BushShakeMethod(teaBush, teaBush.Tile, true);
+            teaBush.shake(teaBush.Tile, true);
             teaBush.modData?.SetBool(MiraculousBeverages, true);
             return true;
         }

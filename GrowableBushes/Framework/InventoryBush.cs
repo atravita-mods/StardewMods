@@ -75,29 +75,11 @@ public sealed class InventoryBush : SObject
         _ = Bush.texture.Value;
     }
 
-    #region reflection
-
-    /// <summary>
-    /// Stardew's Bush::shake.
-    /// </summary>
-    [SuppressMessage("StyleCop.CSharp.OrderingRules", "SA1201:Elements should appear in the correct order", Justification = "Reflection delegate.")]
-    internal static readonly BushShakeDel BushShakeMethod = typeof(Bush)
-        .GetCachedMethod("shake", ReflectionCache.FlagTypes.InstanceFlags)
-        .CreateDelegate<BushShakeDel>();
-
-    internal delegate void BushShakeDel(
-        Bush bush,
-        Vector2 tileLocation,
-        bool doEvenIfStillShaking);
-
-    #endregion
-
     #region placement
 
     /// <inheritdoc />
     public override bool canBePlacedHere(GameLocation l, Vector2 tile, CollisionMask collisionMask = CollisionMask.All, bool showError = false)
         => base.canBePlacedHere(l, tile, collisionMask, showError);
-
 
     /// <inheritdoc />
     public override bool canBePlacedHere(GameLocation l, Vector2 tile)
@@ -193,7 +175,7 @@ public sealed class InventoryBush : SObject
         bush.modData.SetEnum(BushModData, size);
         location.largeTerrainFeatures.Add(bush);
         location.playSound("thudStep");
-        BushShakeMethod(bush, placementTile, true);
+        bush.shake(placementTile, true);
         return true;
     }
 

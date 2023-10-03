@@ -1,4 +1,8 @@
-﻿using AtraCore.Framework.Internal;
+﻿using System.Runtime.CompilerServices;
+
+using AtraBase.Toolkit;
+
+using AtraCore.Framework.Internal;
 using AtraCore.Utilities;
 
 using AtraShared.ConstantsAndEnums;
@@ -24,6 +28,11 @@ internal sealed class ModEntry : BaseMod<ModEntry>
     /// </summary>
     internal const string GiantCropFertilizerID = "atravita.GiantCropFertilizer";
 
+    /// <summary>
+    /// The <see cref="Item.QualifiedItemId" /> of the giant crop fertilizer.
+    /// </summary>
+    internal const string QualifiedGiantCropFertilizerID = $"{ItemRegistry.type_object}{GiantCropFertilizerID}";
+
     private MigrationManager? migrator;
 
     /// <summary>
@@ -43,6 +52,15 @@ internal sealed class ModEntry : BaseMod<ModEntry>
     }
 
     /// <summary>
+    /// Checks to see if a fertilizer string matches the giant crop fertilizer.
+    /// </summary>
+    /// <param name="fertilizer">Fertilizer to check.</param>
+    /// <returns>True if matches, false otherwise.</returns>
+    [MethodImpl(TKConstants.Hot)]
+    internal static bool IsGiantCropFertilizer(string? fertilizer)
+        => fertilizer is GiantCropFertilizerID or QualifiedGiantCropFertilizerID;
+
+    /// <summary>
     /// Applies the patches for this mod.
     /// </summary>
     /// <param name="harmony">This mod's harmony instance.</param>
@@ -53,10 +71,6 @@ internal sealed class ModEntry : BaseMod<ModEntry>
         {
             harmony.PatchAll(typeof(ModEntry).Assembly);
             HoeDirtDrawTranspiler.ApplyPatches(harmony);
-            if (!this.Helper.ModRegistry.IsLoaded("spacechase0.MoreGiantCrops"))
-            {
-                RemoveFarmCheck.ApplyPatches(harmony);
-            }
         }
         catch (Exception ex)
         {

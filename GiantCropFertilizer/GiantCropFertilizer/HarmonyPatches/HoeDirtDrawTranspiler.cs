@@ -32,11 +32,12 @@ internal static class HoeDirtDrawTranspiler
     /// <summary>
     /// Gets the correct color for the fertilizer.
     /// </summary>
+    /// <param name="prev">The previous fertilizer tint.</param>
     /// <param name="dirt">hoedirt</param>
     /// <returns>A color.</returns>
     [MethodImpl(TKConstants.Hot)]
     private static Color ReplaceColor(Color prev, HoeDirt? dirt)
-        => dirt?.fertilizer?.Value == ModEntry.GiantCropFertilizerID ? Color.Purple : prev;
+        => ModEntry.IsGiantCropFertilizer(dirt?.fertilizer.Value) ? Color.Purple : prev;
 
     private static IEnumerable<CodeInstruction>? Transpiler(IEnumerable<CodeInstruction> instructions, ILGenerator gen, MethodBase original)
     {
@@ -46,11 +47,11 @@ internal static class HoeDirtDrawTranspiler
             helper.FindNext(new CodeInstructionWrapper[]
             {
                 OpCodes.Ldarg_0,
-                (OpCodes.Call, typeof(HoeDirt).GetCachedMethod(nameof(HoeDirt.GetFertilizerSourceRect), ReflectionCache.FlagTypes.InstanceFlags)),
+                (OpCodes.Callvirt, typeof(HoeDirt).GetCachedMethod(nameof(HoeDirt.GetFertilizerSourceRect), ReflectionCache.FlagTypes.InstanceFlags)),
             })
             .FindNext(new CodeInstructionWrapper[]
             {
-                    new(OpCodes.Call, typeof(Color).GetCachedProperty("White", ReflectionCache.FlagTypes.StaticFlags).GetGetMethod()),
+                 new(OpCodes.Call, typeof(Color).GetCachedProperty(nameof(Color.White), ReflectionCache.FlagTypes.StaticFlags).GetGetMethod()),
             })
             .Advance(1)
             .Insert(new CodeInstruction[]

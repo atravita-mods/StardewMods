@@ -37,7 +37,7 @@ internal static class CropTranspiler
             ? (dirt as HoeDirt)?.fertilizer.Value
             : null;
         ModEntry.ModMonitor.DebugOnlyLog($"Testing fertilizer {fertilizer} with {ModEntry.GiantCropFertilizerID}", fertilizer is not null, LogLevel.Info);
-        return fertilizer == ModEntry.GiantCropFertilizerID ? ModEntry.Config.GiantCropChance : chance;
+        return ModEntry.IsGiantCropFertilizer(fertilizer) ? ModEntry.Config.GiantCropChance : chance;
     }
 
     /// <summary>
@@ -77,10 +77,11 @@ internal static class CropTranspiler
             })
             .FindNext(new CodeInstructionWrapper[]
             { // Locate the code that deletes the crop after a giant crop is created.
+                SpecialCodeInstructionCases.LdLoc,
                 new(OpCodes.Ldfld, typeof(GameLocation).GetCachedField(nameof(GameLocation.terrainFeatures), ReflectionCache.FlagTypes.InstanceFlags)),
                 new(SpecialCodeInstructionCases.Wildcard),
                 new(OpCodes.Callvirt),
-                new(OpCodes.Isinst, typeof(HoeDirt)),
+                new(OpCodes.Castclass, typeof(HoeDirt)),
                 new(OpCodes.Ldnull),
             })
             .FindNext(new CodeInstructionWrapper[]

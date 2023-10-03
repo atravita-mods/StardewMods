@@ -32,7 +32,14 @@ internal static class AssetManager
     ///<inheritdoc cref="IContentEvents.AssetRequested"/>
     internal static void Apply(AssetRequestedEventArgs e)
     {
-        if (e.NameWithoutLocale.IsEquivalentTo(textureLocation))
+        if (ModEntry.Config.AllowGiantCropsOffFarm && e.DataType == typeof(xTile.Map))
+        {
+            e.Edit(static asset =>
+            {
+                asset.AsMap().Data.Properties["AllowGiantCrops"] = new("T");
+            });
+        }
+        else if (e.NameWithoutLocale.IsEquivalentTo(textureLocation))
         {
             e.LoadFromModFile<Texture2D>("assets/object.png", AssetLoadPriority.Exclusive);
         }

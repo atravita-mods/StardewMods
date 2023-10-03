@@ -1,5 +1,9 @@
 ﻿// Ignore Spelling: Craftable Impl loc
 
+using AtraBase.Toolkit.Extensions;
+
+using AtraShared.Wrappers;
+
 using CommunityToolkit.Diagnostics;
 
 using Microsoft.Xna.Framework;
@@ -77,13 +81,13 @@ public static class SObjectExtensions
         => obj.HasTypeObject() && Utility.IsLegacyIdBetween(obj.ItemId, 286, 288);
 
     /// <summary>
-    /// Returns true for an item that would be considered alcohol. Taken from BuffsDisplay.tryToAddDrinkBuff.
+    /// Returns true for an item that would be considered alcohol. Taken from <see cref="SObject.GetFoodOrDrinkBuffs"/>.
     /// </summary>
     /// <param name="obj">SObject.</param>
     /// <returns>True if alcohol.</returns>
     public static bool IsAlcoholItem(this SObject obj)
-        => obj.HasContextTag("alcohol_item") || obj.Name.Contains("Beer") || obj.Name.Contains("Wine")
-            || obj.Name.Contains("Mead") || obj.Name.Contains("Pale Ale");
+        => obj.HasContextTag("alcohol_item") || obj.QualifiedItemId is "(O)346" or "(O)348" or "(O)459" or "(O)303"
+            || Game1Wrappers.ObjectData.GetValueOrGetDefault(obj.ItemId)?.Buff?.BuffId == "17";
 
     /// <summary>
     /// Consumes a recipe by teaching the player the recipe.

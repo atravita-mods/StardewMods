@@ -142,6 +142,12 @@ internal sealed class BunnySpawnManager : IDisposable
         /// <returns>this.</returns>
         internal LargeObjectListener ChangeLocation(GameLocation newLocation)
         {
+            // okay, I guess nothing actually changed?
+            if (ReferenceEquals(this.location, newLocation))
+            {
+                return this;
+            }
+
             this.monitor.DebugOnlyLog($"(Bunny Ring) Changing bushwatcher {this.location?.NameOrUniqueName} -> {newLocation.NameOrUniqueName}");
 
             if (this.location is not null)

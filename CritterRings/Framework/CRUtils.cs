@@ -367,7 +367,7 @@ Continue: ;
                 animationInterval: 120f,
                 animationLength: 5,
                 numberOfLoops: 0,
-                position: (tile - Vector2.One) * Game1.tileSize,
+                position: ((tile - Vector2.One) * Game1.tileSize) + new Vector2(4, 4),
                 flicker: false,
                 flipped: Random.Shared.OfChance(0.5),
                 layerDepth: 1f,

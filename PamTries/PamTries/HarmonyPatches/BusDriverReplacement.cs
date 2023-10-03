@@ -12,13 +12,15 @@ namespace PamTries.HarmonyPatches;
 
 internal static class BusDriverReplacement
 {
+    private static string GetCurrentDriver() => "Pam";
+
     internal static void ApplyPatch(Harmony harmony)
     {
         try
         {
             harmony.Patch(
             original: typeof(GameLocation).InstanceMethodNamed(nameof(GameLocation.UpdateWhenCurrentLocation)),
-            transpiler: new HarmonyMethod(typeof(BusDriverReplacement).StaticMethodNamed(nameof(BusDriverReplacement.Transpiler))));
+            transpiler: new HarmonyMethod(typeof(BusDriverReplacement).StaticMethodNamed(nameof(Transpiler))));
         }
         catch (Exception ex)
         {
@@ -39,7 +41,7 @@ internal static class BusDriverReplacement
                     new (SpecialCodeInstructionCases.StLoc),
                 })
                 .Advance(1)
-                .ReplaceInstruction(OpCodes.Call, typeof(BusDriverSchedulePatch).StaticMethodNamed(nameof(BusDriverSchedulePatch.GetCurrentDriver)), keepLabels: true);
+                .ReplaceInstruction(OpCodes.Call, typeof(BusDriverReplacement).StaticMethodNamed(nameof(BusDriverReplacement.GetCurrentDriver)), keepLabels: true);
             return helper.Render();
         }
         catch (Exception ex)

@@ -1,4 +1,8 @@
-﻿using AtraShared.ConstantsAndEnums;
+﻿namespace NPCArrows;
+
+using AtraCore.Framework.Internal;
+
+using AtraShared.ConstantsAndEnums;
 
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -7,23 +11,14 @@ using NPCArrows.Framework;
 
 using StardewModdingAPI.Events;
 
-using StardewValley;
-
-namespace NPCArrows;
-
 /// <inheritdoc />
-internal sealed class ModEntry : Mod
+internal sealed class ModEntry : BaseMod<ModEntry>
 {
-    /// <summary>
-    /// Gets the logging instance for this mod.
-    /// </summary>
-    internal static IMonitor ModMonitor { get; private set; } = null!;
-
     /// <inheritdoc />
     public override void Entry(IModHelper helper)
     {
         I18n.Init(helper.Translation);
-        ModMonitor = this.Monitor;
+        base.Entry(helper);
 
         AssetManager.Initialize(helper.GameContent);
 

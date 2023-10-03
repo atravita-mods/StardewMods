@@ -51,7 +51,7 @@ internal static class ScheduleRecursionFix
                     OpCodes.Ldarg_0,
                     (OpCodes.Ldstr, schedulestring),
                     (OpCodes.Call, typeof(NPC).GetCachedMethod(nameof(NPC.getMasterScheduleEntry), ReflectionCache.FlagTypes.InstanceFlags)),
-                    (OpCodes.Call, typeof(NPC).GetCachedMethod(nameof(NPC.parseMasterSchedule), ReflectionCache.FlagTypes.InstanceFlags)),
+                    (OpCodes.Callvirt, typeof(NPC).GetCachedMethod(nameof(NPC.parseMasterSchedule), ReflectionCache.FlagTypes.InstanceFlags)),
                 })
                 .GetLabels(out IList<Label>? defaultLabels)
                 .DefineAndAttachLabel(out Label defaultJump)

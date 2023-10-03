@@ -94,7 +94,7 @@ internal sealed class ModEntry : Mod
             .Advance(1)
             .RemoveIncluding(new CodeInstructionWrapper[]
             {
-                (OpCodes.Call, typeof(Utility).GetCachedMethod(nameof(Utility.CreateRandom), ReflectionCache.FlagTypes.StaticFlags, Type.EmptyTypes)),
+                (OpCodes.Call, typeof(Utility).GetCachedMethod(nameof(Utility.CreateRandom), ReflectionCache.FlagTypes.StaticFlags)),
             })
             .Insert(new CodeInstruction[]
             {
@@ -104,8 +104,8 @@ internal sealed class ModEntry : Mod
 #if DEBUG
             helper.FindNext(new CodeInstructionWrapper[]
             {
-                OpCodes.Ldc_I4_M1,
-                (OpCodes.Callvirt, typeof(Netcode.NetFieldBase<int, Netcode.NetInt>).GetCachedProperty("Value", ReflectionCache.FlagTypes.InstanceFlags).GetSetMethod()),
+                OpCodes.Ldnull,
+                (OpCodes.Callvirt, typeof(Netcode.NetFieldBase<string, Netcode.NetString>).GetCachedProperty("Value", ReflectionCache.FlagTypes.InstanceFlags).GetSetMethod()),
             })
             .Advance(2)
             .Insert(new CodeInstruction[]

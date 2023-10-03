@@ -9,7 +9,8 @@
 <!-- do I need to override reading secret notes too? -->
 <!-- fix the stupid integration issues with CM/SAAT -->
 
-#### Version 1.1.4
+#### Version 1.2.0
+*Updated for Stardew 1.6*
 * Null current locations now will re-check the netlocation ref first. (Apparently they're less than reliable?)
 * Crosscheck player spouse on load.
 * New behavior options for signs and crystalaria.

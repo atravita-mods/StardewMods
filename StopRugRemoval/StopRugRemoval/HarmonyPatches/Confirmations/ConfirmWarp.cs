@@ -112,7 +112,7 @@ internal static class ConfirmWarp
             .AdvanceToStoredLabel()
             .FindNext(new CodeInstructionWrapper[]
             { // new SObject(688,1)
-                new(OpCodes.Ldc_I4, 688),
+                new(OpCodes.Ldstr, "(O)688"),
             })
             .GetLabels(out IList<Label>? labels)
             .Insert(new CodeInstruction[]

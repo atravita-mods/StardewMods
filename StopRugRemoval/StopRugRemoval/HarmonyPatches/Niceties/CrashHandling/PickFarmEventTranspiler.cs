@@ -18,6 +18,8 @@ internal static class PickFarmEventTranspiler
     {
         try
         {
+            var methodInfo = typeof(Game1).GetMethods().Single(meth => meth.Name == nameof(Game1.getCharacterFromName) && !meth.IsGenericMethod);
+
             ILHelper helper = new(original, instructions, ModEntry.ModMonitor, gen);
 
             // switch Game1.getCharacterFromName(Game1.player.spouse).canGetPregnant() to
@@ -25,7 +27,7 @@ internal static class PickFarmEventTranspiler
             Label isNull = gen.DefineLabel();
             helper.FindNext(new CodeInstructionWrapper[]
             {
-                (OpCodes.Call, typeof(Game1).GetCachedMethod<string, bool>(nameof(Game1.getCharacterFromName), ReflectionCache.FlagTypes.StaticFlags)),
+                (OpCodes.Call, methodInfo),
                 (OpCodes.Callvirt, typeof(NPC).GetCachedMethod(nameof(NPC.canGetPregnant), ReflectionCache.FlagTypes.InstanceFlags)),
                 OpCodes.Brfalse_S,
             })

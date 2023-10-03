@@ -1,10 +1,19 @@
 ﻿using System.Reflection;
 using System.Reflection.Emit;
-using AtraBase.Toolkit.Reflection;
+
+using AtraBase.Toolkit.Extensions;
+
 using AtraCore.Framework.ReflectionManager;
+
 using AtraShared.Utils.Extensions;
 using AtraShared.Utils.HarmonyHelper;
+
 using HarmonyLib;
+
+using Microsoft.Xna.Framework;
+
+using StardewValley.Extensions;
+using StardewValley.GameData.GiantCrops;
 using StardewValley.TerrainFeatures;
 
 namespace GiantCropFertilizer.HarmonyPatches;
@@ -18,10 +27,15 @@ internal static class CropTranspiler
     /// <summary>
     /// Gets the chance for a big crop based on the fertilizer.
     /// </summary>
-    /// <param name="fertilizer">Fertilizer index.</param>
+    /// <param name="chance">The previous change value.</param>
+    /// <param name="crop">The crop to check.</param>
+    /// <param name="tilePosition">The tile position of the crop.</param>
     /// <returns>chance.</returns>
-    private static double GetChanceForFertilizer(double chance, string fertilizer)
+    private static double GetChanceForFertilizer(double chance, Crop crop, Vector2 tilePosition)
     {
+        string? fertilizer = crop?.currentLocation.terrainFeatures.TryGetValue(tilePosition, out TerrainFeature? dirt) == true
+            ? (dirt as HoeDirt)?.fertilizer.Value
+            : null;
         ModEntry.ModMonitor.DebugOnlyLog($"Testing fertilizer {fertilizer} with {ModEntry.GiantCropFertilizerID}", fertilizer is not null, LogLevel.Info);
         return fertilizer == ModEntry.GiantCropFertilizerID ? ModEntry.Config.GiantCropChance : chance;
     }
@@ -46,17 +60,19 @@ internal static class CropTranspiler
         try
         {
             ILHelper helper = new(original, instructions, ModEntry.ModMonitor, gen);
-            Type random = AccessTools.TypeByName("StardewValley.OneTimeRandom")
-                ?? ReflectionThrowHelper.ThrowMethodNotFoundException<Type>("StardewValley.OneTimeRandom");
             helper.FindNext(new CodeInstructionWrapper[]
-            { // Locate the randomness check for a giant crop.
-                new(OpCodes.Call, random.GetCachedMethod("GetDouble", ReflectionCache.FlagTypes.StaticFlags)),
-                new(OpCodes.Ldc_R8, 0.01d),
+            { // random.NextBool(giantCrop.Chance);
+                SpecialCodeInstructionCases.LdLoc,
+                (OpCodes.Ldfld, typeof(GiantCropData).GetCachedField(nameof(GiantCropData.Chance), ReflectionCache.FlagTypes.InstanceFlags)),
+                new(OpCodes.Call, typeof(RandomExtensions).GetCachedMethod<Random, float>(nameof(RandomExtensions.NextBool), ReflectionCache.FlagTypes.StaticFlags)),
+                OpCodes.Brfalse,
             })
             .Advance(2)
             .Insert(new CodeInstruction[]
             { // And replace the hard-coded number if necessary.
-                new(OpCodes.Ldarg_2),
+                new(OpCodes.Ldarg_0),
+                new(OpCodes.Ldarg_0),
+                new(OpCodes.Ldfld, typeof(Crop).GetCachedField("tilePosition", ReflectionCache.FlagTypes.InstanceFlags)), // sigh, gotta get the tile position now.
                 new(OpCodes.Call, typeof(CropTranspiler).GetCachedMethod(nameof(GetChanceForFertilizer), ReflectionCache.FlagTypes.StaticFlags)),
             })
             .FindNext(new CodeInstructionWrapper[]

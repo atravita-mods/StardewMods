@@ -1,4 +1,4 @@
-﻿// #define TRACELOG
+﻿#define TRACELOG
 
 namespace ExperimentalLagReduction.HarmonyPatches;
 
@@ -266,6 +266,7 @@ internal static class Rescheduler
             // seed with initial
             MacroNode startNode = new(start.Name, null, GetGenderConstraint(start.Name));
             _visited.Value.Add(start.Name);
+            string[]? ret = null;
 
             FindWarpsFrom(startNode, start, _visited.Value, startNode.GenderConstraint, _queue.Value);
 
@@ -280,6 +281,12 @@ internal static class Rescheduler
                 // insert into cache
                 string[] route = Unravel(node);
                 PathCache.TryAdd((start.Name, node.Name, node.GenderConstraint), route);
+
+                if (ret is not null)
+                {
+                    continue;
+                }
+
                 Gender genderConstrainedToCurrentSearch = GetTightestGenderConstraint(gender, node.GenderConstraint);
 
                 if (genderConstrainedToCurrentSearch != Gender.Invalid && end is not null)
@@ -299,12 +306,9 @@ internal static class Rescheduler
                             while (index > 0);
                         }
 
-                        _visited.Value.Clear();
-                        _queue.Value.Clear();
-                        return route;
+                        ret = route;
                     }
-
-                    if (allowPartialPaths)
+                    else if (allowPartialPaths)
                     {
                         // if we have A->B and B->D, then we can string the path together already.
                         // avoiding trivial one-step stitching because this is more expensive to do.
@@ -319,9 +323,7 @@ internal static class Rescheduler
 
                             PathCache.TryAdd((start.Name, end.Name, node.GenderConstraint), routeStart);
 
-                            _visited.Value.Clear();
-                            _queue.Value.Clear();
-                            return routeStart;
+                            ret = routeStart;
                         }
                         else if (PathCache.TryGetValue((node.Name, end.Name, genderConstrainedToCurrentSearch), out string[]? genderedPrev) && genderedPrev is not null
                             && genderedPrev.Length > 2 && CompletelyDistinct(route, genderedPrev))
@@ -333,18 +335,23 @@ internal static class Rescheduler
 
                             PathCache.TryAdd((start.Name, end.Name, genderConstrainedToCurrentSearch), routeStart);
 
-                            _visited.Value.Clear();
-                            _queue.Value.Clear();
-                            return routeStart;
+                            ret = routeStart;
                         }
                     }
                 }
 
-                if (node.Depth < limit)
+                if (node.Depth < limit && ret is null)
                 {
                     // queue next
                     FindWarpsFrom(node, current, _visited.Value, node.GenderConstraint, _queue.Value);
                 }
+            }
+
+            if (ret is not null)
+            {
+                _visited.Value.Clear();
+                _queue.Value.Clear();
+                return ret;
             }
 
             // queue exhausted.
@@ -611,6 +618,11 @@ internal static class Rescheduler
     /// <returns>The actual location name for a specific location.</returns>
     private static string? GetActualLocation(string name)
     {
+        if (WarpPathfindingCache.OverrideTargetNames.TryGetValue(name, out string? target))
+        {
+            name = target;
+        }
+
         if (WarpPathfindingCache.IgnoreLocationNames.Contains(name))
         {
             return null;
@@ -619,7 +631,7 @@ internal static class Rescheduler
         {
             return null;
         }
-        return WarpPathfindingCache.OverrideTargetNames.TryGetValue(name, out string? target) ? target : name;
+        return name;
     }
 
     #endregion

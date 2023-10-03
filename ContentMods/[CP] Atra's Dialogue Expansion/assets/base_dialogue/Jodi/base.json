@@ -3,6 +3,7 @@
         {
             "Action": "EditData",
             "LogName": "Jodi - base",
+            "Target": "Characters/Dialogue/Jodi",
             "Entries": {
                 "winter_15{{YearRemainder}}": "{{i18n: jodi-xmas-pre.{{Random: 00,01,02,03}}",
 

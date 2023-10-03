@@ -1,4 +1,6 @@
-﻿// #define TRACELOG
+﻿#define TRACELOG
+
+namespace ExperimentalLagReduction.HarmonyPatches;
 
 using System.Collections.Concurrent;
 
@@ -8,8 +10,6 @@ using AtraShared.ConstantsAndEnums;
 using AtraShared.Utils.Extensions;
 
 using HarmonyLib;
-
-namespace ExperimentalLagReduction.HarmonyPatches;
 
 /// <summary>
 /// Overrides the NPC gift tastes.

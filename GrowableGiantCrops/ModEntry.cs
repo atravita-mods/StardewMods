@@ -2,6 +2,7 @@
 
 using System.Diagnostics;
 
+using AtraCore.Framework.Internal;
 using AtraCore.Utilities;
 
 using AtraShared.ConstantsAndEnums;
@@ -25,33 +26,27 @@ using AtraUtils = AtraShared.Utils.Utils;
 namespace GrowableGiantCrops;
 
 /// <inheritdoc />
-internal sealed class ModEntry : Mod
+internal sealed class ModEntry : BaseMod<ModEntry>
 {
-    private MigrationManager? migrator;
+    private static PalmTreeBehavior lastPalmTreeBehavior;
 
-    /// <summary>
-    /// Gets the logger for this mod.
-    /// </summary>
-    internal static IMonitor ModMonitor { get; private set; } = null!;
+    private MigrationManager? migrator;
 
     /// <summary>
     /// Gets the config instance for this mod.
     /// </summary>
     internal static ModConfig Config { get; private set; } = null!;
 
-    #region APIs
-
     internal static IGrowableBushesAPI? GrowableBushesAPI { get; private set; }
-    #endregion
 
     /// <inheritdoc />
     public override void Entry(IModHelper helper)
     {
         I18n.Init(helper.Translation);
-        this.Monitor.Log($"Starting up: {this.ModManifest.UniqueID} - {typeof(ModEntry).Assembly.FullName}");
+        base.Entry(helper);
 
-        ModMonitor = this.Monitor;
         Config = AtraUtils.GetConfigOrDefault<ModConfig>(helper, this.Monitor);
+        lastPalmTreeBehavior = Config.PalmTreeBehavior;
 
         helper.Events.GameLoop.GameLaunched += this.OnGameLaunched;
         ConsoleCommands.RegisterCommands(helper.ConsoleCommands);
@@ -89,6 +84,9 @@ internal sealed class ModEntry : Mod
 
         this.Helper.Events.GameLoop.SaveLoaded += this.SaveLoaded;
 
+        // invalidations
+        AssetManager.Invalidate(this.Helper.GameContent);
+
         // shop
         ShopManager.Initialize(this.Helper.GameContent);
         this.Helper.Events.Content.AssetRequested += static (_, e) => ShopManager.OnAssetRequested(e);
@@ -109,8 +107,16 @@ internal sealed class ModEntry : Mod
         if (gmcmHelper.TryGetAPI())
         {
             gmcmHelper.Register(
-                reset: static () => Config = new(),
-                save: () => this.Helper.AsyncWriteConfig(this.Monitor, Config))
+                reset: () =>
+                {
+                    Config = new();
+                    this.UpdateForPalmTrees();
+                },
+                save: () =>
+                {
+                    this.Helper.AsyncWriteConfig(this.Monitor, Config);
+                    this.UpdateForPalmTrees();
+                })
             .AddParagraph(I18n.ModDescription)
             .GenerateDefaultGMCM(static () => Config);
         }
@@ -122,6 +128,15 @@ internal sealed class ModEntry : Mod
             {
                 GrowableBushesAPI = growable;
             }
+        }
+    }
+
+    private void UpdateForPalmTrees()
+    {
+        if (lastPalmTreeBehavior != Config.PalmTreeBehavior)
+        {
+            AssetManager.Invalidate(this.Helper.GameContent);
+            lastPalmTreeBehavior = Config.PalmTreeBehavior;
         }
     }
 

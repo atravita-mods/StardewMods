@@ -31,6 +31,7 @@
     {
         "LogName": "Marnie - divorced from Shane lines",
         "Action": "EditData",
+        "Target": "Characters/Dialogue/Marnie",
         "When": {"Relationship: Shane": "Divorced"},
         "Entries": {
             "AnimalHouse": "{{i18n:marnie-divorced-from-shane}}$s",

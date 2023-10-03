@@ -1,7 +1,7 @@
 {
     "Changes": [
         {
-            "LogName": "Lewis Movies",
+            "LogName": "Lewis - Base randomized",
             "Action": "EditData",
             "Target": "Characters/Dialogue/Lewis",
             "Entries": {
@@ -15,6 +15,8 @@
 
                 // specific days
                 "summer_13{{YearRemainder}}": "We absolutely need the Governor's goodwill, he controls the budget for the state.",
+
+                "winter_20{{YearRemainder}}": "The Feast of the Winter Star has been a tradition here for as long as I can remember.$h"
             }
         },
         {

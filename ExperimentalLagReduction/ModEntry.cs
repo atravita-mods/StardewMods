@@ -12,6 +12,8 @@ using ExperimentalLagReduction.HarmonyPatches;
 using HarmonyLib;
 using StardewModdingAPI.Events;
 
+using StardewValley.Pathfinding;
+
 using AtraUtils = AtraShared.Utils.Utils;
 
 namespace ExperimentalLagReduction;
@@ -60,6 +62,8 @@ internal sealed class ModEntry : BaseMod<ModEntry>
         this.Helper.Events.GameLoop.DayEnding += (_, _) => OverrideGiftTastes.Reset();
 
         this.ApplyPatches(new Harmony(this.ModManifest.UniqueID));
+
+        WarpPathfindingCache.IgnoreLocationNames.Add("VolcanoEntrance");
 
         // GMCM
         GMCMHelper helper = new(this.Monitor, this.Helper.Translation, this.Helper.ModRegistry, this.ModManifest);

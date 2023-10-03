@@ -9,7 +9,7 @@
         "Entries": {
             "{{TaxDay}}": "{{i18n:caroline-tax-day.00}}$s#$b#{{i18n:caroline-tax-day.01}}",
 
-            "spring_25{{YearRemainder}}": "{{i18n:caroline-birthday-pierre-a}}%revealtastePierre202#$b#{{caroline-birthday-pierre-b}}",
+            "spring_25{{YearRemainder}}": "{{i18n:caroline-birthday-pierre-a}}%revealtastePierre202#$b#{{i18n:caroline-birthday-pierre-b}}",
             "winter_7{{YearRemainder}}": "$d cc#{{i18n:caroline-birthday-self}}$s|{i18n:caroline-birthday-self-CC}}$h",
             "fall_6{{YearRemainder}}": "$d cc#{{i18n:caroline-abby-birthday-pre}}$h|{{i18n:caroline-abby-birthday-pre-CC|videogame={{VideoGame}} }}"
         }

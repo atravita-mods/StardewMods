@@ -20,7 +20,7 @@
                 "MovieStatus|contains=None": false
             },
             "Entries": {
-                "movieTheater": "{{i18n:sandy-movies-a}}$h#$b#sandy-movies-b}}",
+                "movieTheater": "{{i18n:sandy-movies-a}}$h#$b#{{i18n:sandy-movies-b}}",
                 "Fri10": "{{i18n:sandy-fri10.00}}$h#$b#{{i18n:sandy-fri10.01}}#$e#$c .5#{{i18n:sandy-fri10.02a}}#$e#{{i18n:sandy-fri10.02b}}"
             }
         },

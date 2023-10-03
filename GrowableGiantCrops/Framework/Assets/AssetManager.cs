@@ -1,14 +1,10 @@
-﻿using System.Buffers;
+﻿using AtraShared.Utils.Extensions;
 
-using AtraBase.Toolkit.Extensions;
-
-using AtraShared.Utils.Extensions;
-
-using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
 using StardewModdingAPI.Events;
 
+using StardewValley.GameData.WildTrees;
 using StardewValley.TerrainFeatures;
 
 namespace GrowableGiantCrops.Framework.Assets;
@@ -23,16 +19,9 @@ internal static class AssetManager
     /// </summary>
     internal const string GiantCropPrefix = "Mods/atravita.GrowableGiantCrops/";
 
-    private static IAssetName fruitTreeData = null!;
-
-    private static Lazy<Dictionary<int, int>> reverseFruitTreeMap = new(GenerateFruitTreeMap);
-
-    /// <summary>
-    /// An error texture, used to fill in if a JA/MGC texture is not found.
-    /// </summary>
-    private static Texture2D errorTex = null!;
-
     private static Lazy<Texture2D> toolTex = new(() => Game1.content.Load<Texture2D>(ToolTextureName!.BaseName));
+
+    private static IAssetName wildTrees = null!;
 
     /// <summary>
     /// Gets the tool texture.
@@ -81,7 +70,6 @@ internal static class AssetManager
     {
         ToolTextureName = parser.ParseAssetName($"{GiantCropPrefix}Shovel");
         ShopGraphics = parser.ParseAssetName($"{GiantCropPrefix}Shop");
-        fruitTreeData = parser.ParseAssetName(@"Data\fruitTrees");
 
         WinterBigPalm = parser.ParseAssetName($"{GiantCropPrefix}WinterBigPalm");
         WinterPalm = parser.ParseAssetName($"{GiantCropPrefix}WinterPalm");
@@ -89,50 +77,37 @@ internal static class AssetManager
         FallBigPalm = parser.ParseAssetName($"{GiantCropPrefix}FallBigPalm");
         FallPalm = parser.ParseAssetName($"{GiantCropPrefix}FallPalm");
 
-        const int TEX_WIDTH = 48;
-        const int TEX_HEIGHT = 64;
-        Color[] buffer = ArrayPool<Color>.Shared.Rent(TEX_WIDTH * TEX_HEIGHT);
-        try
+        wildTrees = parser.ParseAssetName("Data/WildTrees");
+    }
+
+    /// <inheritdoc cref="IContentEvents.AssetsInvalidated" />
+    internal static void Reset(IReadOnlySet<IAssetName>? assets = null)
+    {
+        if ((assets is null || assets.Contains(ToolTextureName)) && toolTex.IsValueCreated)
         {
-            Array.Fill(buffer, Color.MonoGameOrange, 0, TEX_WIDTH * TEX_HEIGHT);
-            Texture2D tex = new(Game1.graphics.GraphicsDevice, TEX_WIDTH, TEX_HEIGHT) { Name = GiantCropPrefix + "ErrorTex" };
-            tex.SetData(0, new Rectangle(0, 0, TEX_WIDTH, TEX_HEIGHT), buffer, 0, TEX_WIDTH * TEX_HEIGHT);
-            errorTex = tex;
+            toolTex = new(() => Game1.content.Load<Texture2D>(ToolTextureName.BaseName));
         }
-        catch (Exception ex)
-        {
-            ModEntry.ModMonitor.LogError("creating error texture", ex);
-        }
-        finally
-        {
-            ArrayPool<Color>.Shared.Return(buffer);
-        }
+    }
+
+    internal static void Invalidate(IGameContentHelper helper)
+    {
+        helper.InvalidateCacheAndLocalized(wildTrees.BaseName);
     }
 
     /// <inheritdoc cref="IContentEvents.AssetRequested" />
     internal static void OnAssetRequested(AssetRequestedEventArgs e)
     {
+        if (ModEntry.Config.PalmTreeBehavior.HasFlag(PalmTreeBehavior.Seasonal) && e.NameWithoutLocale.IsEquivalentTo(wildTrees))
+        {
+            e.Edit(EditWildTrees);
+        }
+
         if (!e.NameWithoutLocale.StartsWith(GiantCropPrefix, false, false))
         {
             return;
         }
 
-        if (int.TryParse(e.NameWithoutLocale.BaseName.GetNthChunk('/', 2), out int idx))
-        {
-            if (ModEntry.JaAPI?.TryGetGiantCropSprite(idx, out Lazy<Texture2D>? lazy) == true)
-            {
-                e.LoadFrom(() => lazy.Value, AssetLoadPriority.Exclusive);
-            }
-            else if (ModEntry.MoreGiantCropsAPI?.GetTexture(idx) is Texture2D tex)
-            {
-                e.LoadFrom(() => tex, AssetLoadPriority.Exclusive);
-            }
-            else
-            {
-                e.LoadFrom(() => errorTex, AssetLoadPriority.Exclusive);
-            }
-        }
-        else if (e.NameWithoutLocale.IsEquivalentTo(ToolTextureName))
+        if (e.NameWithoutLocale.IsEquivalentTo(ToolTextureName))
         {
             e.LoadFromModFile<Texture2D>("assets/textures/shovel.png", AssetLoadPriority.Exclusive);
         }
@@ -158,54 +133,42 @@ internal static class AssetManager
         }
     }
 
-    /// <inheritdoc cref="IContentEvents.AssetsInvalidated" />
-    internal static void Reset(IReadOnlySet<IAssetName>? assets = null)
+    private static void EditWildTrees(IAssetData data)
     {
-        if ((assets is null || assets.Contains(ToolTextureName)) && toolTex.IsValueCreated)
-        {
-            toolTex = new(() => Game1.content.Load<Texture2D>(ToolTextureName.BaseName));
-        }
-        if ((assets is null || assets.Contains(fruitTreeData)) && reverseFruitTreeMap.IsValueCreated)
-        {
-            reverseFruitTreeMap = new(GenerateFruitTreeMap);
-        }
-    }
+        var editor = data.AsDictionary<string, WildTreeData>().Data;
 
-    /// <summary>
-    /// Given a fruit tree index, looks up the sapling index.
-    /// </summary>
-    /// <param name="treeIndex"><see cref="FruitTree.treeType"/>.</param>
-    /// <returns>Sapling index, or null for not found.</returns>
-    internal static int? GetMatchingSaplingIndex(int treeIndex)
-        => reverseFruitTreeMap.Value.TryGetValue(treeIndex, out int saplingIndex) ? saplingIndex : null;
-
-    private static Dictionary<int, int> GenerateFruitTreeMap()
-    {
-        ModEntry.ModMonitor.DebugOnlyLog($"Generating reverse tree map");
-        Dictionary<int, string>? data;
-        try
+        if (editor.TryGetValue(Tree.palmTree, out var valleyTree))
         {
-            data = Game1.content.Load<Dictionary<int, string>>(fruitTreeData.BaseName);
-        }
-        catch (Exception ex)
-        {
-            ModEntry.ModMonitor.LogError("generating fruit tree lookup map", ex);
-            return new Dictionary<int, int>();
-        }
-        Dictionary<int, int> map = new(data.Count);
-
-        foreach ((int saplingIndex, string s) in data)
-        {
-            if (!int.TryParse(s.GetNthChunk('/'), out int treeIndex))
+            WildTreeTextureData winterTex = new()
             {
-                ModEntry.ModMonitor.Log($"Malformed tree data: {saplingIndex} - {s}, skipping", LogLevel.Warn);
-            }
-            if (!map.TryAdd(treeIndex, saplingIndex))
+                Season = Season.Winter,
+                Texture = WinterPalm.BaseName,
+            };
+
+            WildTreeTextureData fallTex = new()
             {
-                ModEntry.ModMonitor.Log($"Duplicate fruit tree saplingIndex: {saplingIndex} - {s}, skipping", LogLevel.Warn);
-            }
+                Season = Season.Fall,
+                Texture = FallPalm.BaseName,
+            };
+
+            valleyTree.Textures.InsertRange(0, new[] { winterTex, fallTex } );
         }
 
-        return map;
+        if (editor.TryGetValue(Tree.palmTree2, out var islandTree))
+        {
+            WildTreeTextureData winterTex = new()
+            {
+                Season = Season.Winter,
+                Texture = WinterBigPalm.BaseName,
+            };
+
+            WildTreeTextureData fallTex = new()
+            {
+                Season = Season.Fall,
+                Texture = FallBigPalm.BaseName,
+            };
+
+            islandTree.Textures.InsertRange(0, new[] { winterTex, fallTex });
+        }
     }
 }

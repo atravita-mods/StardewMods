@@ -2,6 +2,7 @@
 
 using StardewModdingAPI.Events;
 
+using StardewValley.GameData.Objects;
 using StardewValley.GameData.Shops;
 
 namespace GiantCropFertilizer;
@@ -15,7 +16,6 @@ internal static class AssetManager
     private static IAssetName dataObjectInfo = null!;
     private static IAssetName dataShops = null!;
     private static IAssetName textureLocation = null!;
-    private static string textureLocationBackslashed = null!;
     #endregion
 
     /// <summary>
@@ -27,7 +27,6 @@ internal static class AssetManager
         dataObjectInfo = parser.ParseAssetName("Data/Objects");
         dataShops = parser.ParseAssetName("Data/Shops");
         textureLocation = parser.ParseAssetName("Mods/atravita/GiantCropFertilizer/Object");
-        textureLocationBackslashed = textureLocation.BaseName.Replace('/', '\\');
     }
 
     ///<inheritdoc cref="IContentEvents.AssetRequested"/>
@@ -42,7 +41,18 @@ internal static class AssetManager
             e.Edit(
                 apply: static (asset) =>
                 {
-                    asset.AsDictionary<string, string>().Data[ModEntry.GiantCropFertilizerID] = $"Giant Crop Fertilizer/100/-300/Basic -19/{I18n.GiantCropFertilizer_Name()}{I18n.GiantCropFertilizer_Description()}////0/{textureLocationBackslashed}";
+                    asset.AsDictionary<string, ObjectData>().Data[ModEntry.GiantCropFertilizerID] = new()
+                    {
+                        Name = "Giant Crop Fertilizer",
+                        Price = 100,
+                        Edibility = -300,
+                        Category = SObject.fertilizerCategory,
+                        Type = "Basic",
+                        DisplayName = I18n.GiantCropFertilizer_Name(),
+                        Description = I18n.GiantCropFertilizer_Description(),
+                        Texture = textureLocation.BaseName,
+                        SpriteIndex = 0,
+                    };
                 },
                 priority: AssetEditPriority.Early);
         }

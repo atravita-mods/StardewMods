@@ -82,7 +82,6 @@ internal sealed class ModEntry : BaseMod<ModEntry>
         try
         {
             harmony.PatchAll(typeof(ModEntry).Assembly);
-            RedirectToLazyLoad.ApplyPatches(new Harmony(harmony.Id + "_lazy"));
         }
         catch (Exception ex)
         {

@@ -355,23 +355,30 @@ universal:
                 continue;
             }
 
-            if (int.TryParse(giftItem, out int itemID))
+            if (giftItem.Word.Equals(obj.ItemId))
             {
-                if (itemID >= 0)
-                {
-                    if (itemID == obj.ParentSheetIndex)
-                    {
-                        return GiftPriority.Individual;
-                    }
-                }
-                else if (itemID == obj.Category && priority == GiftPriority.None)
-                {
-                    priority = GiftPriority.Category;
-                }
+                return GiftPriority.Individual;
             }
-            else if (priority < GiftPriority.Context_Tag && obj.HasContextTag(giftItem.ToString()))
+
+            switch (priority)
             {
-                priority = GiftPriority.Context_Tag;
+                case GiftPriority.None:
+                {
+                    if(int.TryParse(giftItem, out int itemID) && itemID == obj.Category)
+                    {
+                        priority = GiftPriority.Category;
+                        break;
+                    }
+                    goto case GiftPriority.Category;
+                }
+                case GiftPriority.Category:
+                {
+                    if (obj.HasContextTag(giftItem.ToString()))
+                    {
+                        priority = GiftPriority.Context_Tag;
+                    }
+                    break;
+                }
             }
         }
 

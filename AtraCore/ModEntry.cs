@@ -141,6 +141,8 @@ internal sealed class ModEntry : BaseMod<ModEntry>
         DrawPrismatic.LoadPrismaticData();
         QuestTracker.Load(this.Helper.Data);
 
+        this.Helper.GameContent.InvalidateCacheAndLocalized("Data/Objects");
+
         this.migrator = new(this.ModManifest, this.Helper, this.Monitor);
         if (!this.migrator.CheckVersionInfo())
         {

@@ -25,7 +25,7 @@ internal static class PickFarmEventTranspiler
             Label isNull = gen.DefineLabel();
             helper.FindNext(new CodeInstructionWrapper[]
             {
-                (OpCodes.Call, typeof(Game1).GetCachedMethod<string, bool, bool>(nameof(Game1.getCharacterFromName), ReflectionCache.FlagTypes.StaticFlags)),
+                (OpCodes.Call, typeof(Game1).GetCachedMethod<string, bool>(nameof(Game1.getCharacterFromName), ReflectionCache.FlagTypes.StaticFlags)),
                 (OpCodes.Callvirt, typeof(NPC).GetCachedMethod(nameof(NPC.canGetPregnant), ReflectionCache.FlagTypes.InstanceFlags)),
                 OpCodes.Brfalse_S,
             })

@@ -202,11 +202,6 @@ internal static class ScheduleUtilities
                 if (schedule is not null)
                 {
                     npc.TryLoadSchedule(key, schedule);
-                    if (Context.IsMainPlayer && npc.Schedule is not null
-                        && Globals.ReflectionHelper.GetField<string>(npc, "_lastLoadedScheduleKey", false)?.GetValue() is string lastschedulekey)
-                    {
-                        npc.dayScheduleName.Value = lastschedulekey;
-                    }
                     return true;
                 }
                 else

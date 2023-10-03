@@ -2,6 +2,8 @@
 
 using AtraBase.Toolkit.Reflection;
 
+using AtraCore.Framework.ReflectionManager;
+
 using AtraShared.ConstantsAndEnums;
 using AtraShared.Utils.Extensions;
 
@@ -26,7 +28,7 @@ internal static class CanPlantTreesHerePatches
     {
         foreach (Type type in typeof(GameLocation).GetAssignableTypes(publiconly: true, includeAbstract: false))
         {
-            if (type.DeclaredInstanceMethodNamedOrNull(nameof(GameLocation.CanPlantTreesHere), new Type[] { typeof(int), typeof(int), typeof(int) }) is MethodBase method
+            if (type.GetCachedMethod(nameof(GameLocation.CanPlantTreesHere), ReflectionCache.FlagTypes.UnflattenedInstanceFlags, new Type[] { typeof(string), typeof(int), typeof(int), typeof(string).MakeByRefType() }) is MethodBase method
                 && method.DeclaringType == type)
             {
                 yield return method;
@@ -38,16 +40,16 @@ internal static class CanPlantTreesHerePatches
     /// Prefix to prevent planting trees on rugs.
     /// </summary>
     /// <param name="__instance">Game location.</param>
-    /// <param name="tile_x">Tile X.</param>
-    /// <param name="tile_y">Tile Y.</param>
+    /// <param name="tileX">Tile X.</param>
+    /// <param name="tileY">Tile Y.</param>
     /// <param name="__result">Result to replace the original with.</param>
     /// <returns>True to continue to original, false to skip.</returns>
-    internal static bool Prefix(GameLocation __instance, int tile_x, int tile_y, ref bool __result)
+    internal static bool Prefix(GameLocation __instance, int tileX, int tileY, ref bool __result)
     {
         try
         {
-            int xpos = (tile_x * 64) + 32;
-            int ypos = (tile_y * 64) + 32;
+            int xpos = (tileX * 64) + 32;
+            int ypos = (tileY * 64) + 32;
             foreach (Furniture f in __instance.furniture)
             {
                 if (f.GetBoundingBox().Contains(xpos, ypos))

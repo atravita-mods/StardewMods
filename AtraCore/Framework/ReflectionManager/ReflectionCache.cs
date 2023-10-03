@@ -115,7 +115,7 @@ public static class ReflectionCache
             Cache[cachekey] = constructor;
             return constructor;
         }
-        return ReflectionThrowHelper.ThrowMethodNotFoundException<ConstructorInfo>(type.FullName + "::.ctor" + string.Join(',', paramsList.Select((a) => a.FullName)));
+        return ReflectionThrowHelper.ThrowMethodNotFoundException<ConstructorInfo>($"{type.FullName}::.ctor<{string.Join(',', paramsList.Select((a) => a.FullName))}>");
     }
 
     /// <summary>
@@ -141,7 +141,7 @@ public static class ReflectionCache
             Cache[cachekey] = method;
             return method;
         }
-        return ReflectionThrowHelper.ThrowMethodNotFoundException<MethodInfo>(type.FullName + "::" + methodName);
+        return ReflectionThrowHelper.ThrowMethodNotFoundException<MethodInfo>($"{type.FullName}::{methodName}");
     }
 
     /// <summary>
@@ -168,7 +168,7 @@ public static class ReflectionCache
             Cache[cachekey] = method;
             return method;
         }
-        return ReflectionThrowHelper.ThrowMethodNotFoundException<MethodInfo>(type.FullName + "::" + methodName + string.Join(',', paramsList.Select((a) => a.FullName)));
+        return ReflectionThrowHelper.ThrowMethodNotFoundException<MethodInfo>($"{type.FullName}::{methodName}<{string.Join(',', paramsList.Select((a) => a.FullName))}>");
     }
 
     /// <summary>

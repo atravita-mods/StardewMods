@@ -38,13 +38,10 @@ internal static class DummySpringSchedule
             Label label = helper.Generator.DefineLabel();
             helper.FindLast(new CodeInstructionWrapper[]
             {
-                OpCodes.Ldarg_0,
-                OpCodes.Ldarg_1,
-                (OpCodes.Stfld, typeof(NPC).GetCachedField("_lastLoadedScheduleKey", ReflectionCache.FlagTypes.InstanceFlags)),
                 SpecialCodeInstructionCases.LdLoc,
                 OpCodes.Ret,
             })
-            .Advance(5)
+            .Advance(2)
             .GetLabels(out IList<Label>? labelsToMove)
             .DefineAndAttachLabel(out Label skip);
             Label isnull = helper.Generator.DefineLabel();

@@ -1,4 +1,6 @@
-﻿using Microsoft.Xna.Framework.Graphics;
+﻿using AtraShared.Utils.Extensions;
+
+using Microsoft.Xna.Framework.Graphics;
 
 using StardewModdingAPI.Events;
 
@@ -16,7 +18,6 @@ internal static class AssetManager
     private static IAssetName dataObjectInfo = null!;
     private static IAssetName objectStrings = null!;
     private static IAssetName ringTextureLocation = null!;
-    private static string ringTextureBackslashed = null!;
     private static IAssetName buffTextureLocation = null!;
     private static IAssetName dataShops = null!;
 #endregion
@@ -37,7 +38,6 @@ internal static class AssetManager
         dataObjectInfo = parser.ParseAssetName("Data/Objects");
         objectStrings = parser.ParseAssetName("Strings/Objects");
         ringTextureLocation = parser.ParseAssetName("Mods/atravita/CritterRings/RingTex");
-        ringTextureBackslashed = ringTextureLocation.BaseName.Replace('/', '\\');
         buffTextureLocation = parser.ParseAssetName("Mods/atravita/CritterRings/BuffIcon");
         dataShops = parser.ParseAssetName("Data/Shops");
     }
@@ -96,7 +96,7 @@ internal static class AssetManager
             Type = RING,
             Category = RING_ID,
             Price = PRICE,
-            Texture = ringTextureBackslashed,
+            Texture = ringTextureLocation.BaseName,
             SpriteIndex = 3,
         };
         editor[ModEntry.ButterflyRing] = new()
@@ -107,7 +107,7 @@ internal static class AssetManager
             Type = RING,
             Category = RING_ID,
             Price = PRICE,
-            Texture = ringTextureBackslashed,
+            Texture = ringTextureLocation.BaseName,
             SpriteIndex = 0,
         };
         editor[ModEntry.FireFlyRing] = new()
@@ -118,7 +118,7 @@ internal static class AssetManager
             Type = RING,
             Category = RING_ID,
             Price = PRICE,
-            Texture = ringTextureBackslashed,
+            Texture = ringTextureLocation.BaseName,
             SpriteIndex = 1,
         };
         editor[ModEntry.FrogRing] = new()
@@ -129,7 +129,7 @@ internal static class AssetManager
             Type = RING,
             Category = RING_ID,
             Price = PRICE,
-            Texture = ringTextureBackslashed,
+            Texture = ringTextureLocation.BaseName,
             SpriteIndex = 5,
         };
         editor[ModEntry.OwlRing] = new()
@@ -140,7 +140,7 @@ internal static class AssetManager
             Type = RING,
             Category = RING_ID,
             Price = PRICE,
-            Texture = ringTextureBackslashed,
+            Texture = ringTextureLocation.BaseName,
             SpriteIndex = 1,
         };
     }

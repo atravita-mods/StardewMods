@@ -93,7 +93,7 @@ internal sealed class BunnySpawnManager : IDisposable
     private void OnWarp(object? sender, WarpedEventArgs e)
     {
         if (this.farmerRef?.TryGetTarget(out Farmer? farmer) != true || this.disposedValue || farmer is null
-            || !ReferenceEquals(farmer, e.Player))
+            || !ReferenceEquals(farmer, e.Player) || ReferenceEquals(e.NewLocation, e.OldLocation) || e.NewLocation is null)
         {
             ModEntry.ModMonitor.DebugOnlyLog($"Warp event raised, not for us", LogLevel.Info);
             return;
@@ -144,17 +144,18 @@ internal sealed class BunnySpawnManager : IDisposable
         {
             this.monitor.DebugOnlyLog($"(Bunny Ring) Changing bushwatcher {this.location?.NameOrUniqueName} -> {newLocation.NameOrUniqueName}");
 
+            if (this.location is not null)
+            {
+                this.location.largeTerrainFeatures.OnValueAdded -= this.OnValueAdded;
+                this.location.largeTerrainFeatures.OnValueRemoved -= this.OnValueRemoved;
+            }
+
             if (newLocation.largeTerrainFeatures is not null)
             {
                 newLocation.largeTerrainFeatures.OnValueAdded += this.OnValueAdded;
                 newLocation.largeTerrainFeatures.OnValueRemoved += this.OnValueRemoved;
             }
 
-            if (this.location is not null)
-            {
-                this.location.largeTerrainFeatures.OnValueAdded -= this.OnValueAdded;
-                this.location.largeTerrainFeatures.OnValueRemoved -= this.OnValueRemoved;
-            }
             this.location = newLocation;
             this.watchedBushes = null;
             return this;

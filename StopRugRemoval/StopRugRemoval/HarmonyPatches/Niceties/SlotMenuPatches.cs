@@ -246,7 +246,7 @@ internal static class SlotMenuPatches
             {
                 new(OpCodes.Ldarg_0),
                 new(OpCodes.Ldfld, typeof(Slots).GetCachedField("showResult", ReflectionCache.FlagTypes.InstanceFlags)),
-                new(OpCodes.Brfalse_S),
+                new(OpCodes.Brfalse),
             })
             .Advance(2)
             .StoreBranchDest()

@@ -149,6 +149,14 @@
         },
         {
             "Action": "Include",
+            "LogName":  "Penny",
+            "FromFile": "assets/base_dialogue/Penny/base.json",
+            "When": {
+                "EnableFor": "Penny"
+            }
+        },
+        {
+            "Action": "Include",
             "LogName": "Pierre - base",
             "FromFile": "assets/base_dialogue/Pierre/base.json",
             "When": {"EnableFor": "Pierre"}

@@ -8,7 +8,7 @@
                 "Random: true, false, false": true,
                 "HasValue: {{Spouse}}": true,
                 "EnableGeneric": true,
-                "Spouse|contains = Wizard, Apples": false // avoid doing this for magical spouses.
+                "Spouse|contains = Wizard, Apples, Krobus": false // avoid doing this for magical spouses.
             }
         },
         {

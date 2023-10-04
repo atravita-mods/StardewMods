@@ -1,4 +1,6 @@
-﻿using AtraCore.Framework.Internal;
+﻿namespace CritterRings;
+
+using AtraCore.Framework.Internal;
 using AtraCore.Utilities;
 
 using AtraShared.ConstantsAndEnums;
@@ -20,8 +22,6 @@ using StardewValley.Buffs;
 using StardewValley.Locations;
 
 using AtraUtils = AtraShared.Utils.Utils;
-
-namespace CritterRings;
 
 /// <inheritdoc />
 [HarmonyPatch]

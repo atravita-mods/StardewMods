@@ -413,6 +413,10 @@
     "marnie-tue-inlaw-shane-true": "I'm glad Shane found you, @. I think he's been doing better, recently.$h",
     "marnie-tue-inlaw-shane-false": "You take care of Shane, won't you?#$b#I....I'm not hearing good things from him, you catch my drift?$s",
 
+    // Penny gets some different lines after you build her the house.
+    "penny-home-unmarried": "Gosh, I used to be so embarrassed about living in that trailer. I appreciate this house so so much, @.",
+    "penny-home-married": "You know, @, I really do feel like my life has gotten so much better since I'm no longer living in that trailer.",
+
     // Pierre gets different lines after you complete CC and also after you give him the stocklist.
     "pierre-fri-a": "Without Joja here, it almost feels like I can breathe a little again.",
     "pierre-fri-b": "How's the farm doing? Any seeds you'd like to buy?",

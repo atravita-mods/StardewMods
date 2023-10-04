@@ -1,4 +1,6 @@
-﻿using AtraBase.Toolkit.Reflection;
+﻿namespace ForgeMenuChoice;
+
+using AtraBase.Toolkit.Reflection;
 
 using AtraCore.Framework.Internal;
 using AtraCore.Framework.ReflectionManager;
@@ -17,8 +19,6 @@ using Microsoft.Xna.Framework.Graphics;
 using StardewModdingAPI.Events;
 
 using AtraUtils = AtraShared.Utils.Utils;
-
-namespace ForgeMenuChoice;
 
 /// <inheritdoc/>
 internal sealed class ModEntry : BaseMod<ModEntry>

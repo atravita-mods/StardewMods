@@ -77,7 +77,7 @@ internal static class BusStopPatch
                 .Insert(new CodeInstruction[]
                 {
                     new (OpCodes.Ldarg_0),
-                    new (OpCodes.Call, typeof(BusStopPatch).GetCachedMethod(nameof(BusStopPatch.ShouldAllowBus), ReflectionCache.FlagTypes.StaticFlags)),
+                    new (OpCodes.Call, typeof(BusStopPatch).GetCachedMethod(nameof(ShouldAllowBus), ReflectionCache.FlagTypes.StaticFlags)),
                 });
             return helper.Render();
         }

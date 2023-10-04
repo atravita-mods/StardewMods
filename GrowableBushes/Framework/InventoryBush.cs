@@ -92,10 +92,14 @@ public sealed class InventoryBush : SObject
     /// <param name="tile">Tile to check.</param>
     /// <param name="relaxed">If we should use relaxed restrictions.</param>
     /// <returns>Whether or not placement is allowed.</returns>
-    internal bool CanPlace(GameLocation l, Vector2 tile, bool relaxed)
+    internal bool CanPlace(GameLocation l, Vector2 tile, bool relaxed, CollisionMask collisionMask = CollisionMask.All, bool showError = false)
     {
-        if (l.largeTerrainFeatures is null || Utility.isPlacementForbiddenHere(l))
+        if (l?.largeTerrainFeatures is null || Utility.isPlacementForbiddenHere(l))
         {
+            if (showError && Game1.didPlayerJustClickAtAll(ignoreNonMouseHeldInput: true))
+            {
+                Game1.showRedMessage(Game1.content.LoadString("Strings\\StringsFromCSFiles:Object.cs.13053"));
+            }
             return false;
         }
 

@@ -1,10 +1,10 @@
-﻿using System.Runtime.CompilerServices;
+﻿namespace CritterRings.HarmonyPatches.FrogRing;
+
+using System.Runtime.CompilerServices;
 
 using AtraBase.Toolkit;
 
 using AtraShared.ConstantsAndEnums;
-
-using CritterRings;
 
 using HarmonyLib;
 

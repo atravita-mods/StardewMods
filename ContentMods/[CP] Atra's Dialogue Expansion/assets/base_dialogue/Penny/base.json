@@ -1,0 +1,22 @@
+{
+    "Changes": [
+        {
+            "Action": "EditData",
+            "When": {"HasSeenEvent": "503180"},
+            "Target": "Characters/Dialogue/Penny",
+            "Entries": {
+                "fall_Mon4": "{{i18n: penny-home-unmarried}}$h"
+            }
+        },
+        {
+            "Action": "EditData",
+            "When": {
+                "Query: {{Spouse:anyPlayer|contains=Penny}} OR {{Relationship:Penny|contains=Married}}": "true"
+            },
+            "Target": "Characters/Dialogue/Penny",
+            "Entries": {
+                "fall_Mon4": "{{i18n: penny-home-married}}$h"
+            }
+        }
+    ]
+}

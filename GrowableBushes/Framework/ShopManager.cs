@@ -1,4 +1,6 @@
-﻿using AtraCore.Framework.Caches;
+﻿namespace GrowableBushes.Framework;
+
+using AtraCore.Framework.Caches;
 
 using AtraShared.Caching;
 using AtraShared.ConstantsAndEnums;
@@ -13,8 +15,6 @@ using Microsoft.Xna.Framework;
 using StardewModdingAPI.Events;
 
 using StardewValley.Menus;
-
-namespace GrowableBushes.Framework;
 
 /// <summary>
 /// Manages Caroline's bush shop.

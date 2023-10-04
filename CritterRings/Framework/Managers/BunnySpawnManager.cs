@@ -1,10 +1,10 @@
-﻿using AtraShared.Utils.Extensions;
+﻿namespace CritterRings.Framework.Managers;
+
+using AtraShared.Utils.Extensions;
 
 using StardewModdingAPI.Events;
 
 using StardewValley.TerrainFeatures;
-
-namespace CritterRings.Framework.Managers;
 
 /// <summary>
 /// Monitors bushes.

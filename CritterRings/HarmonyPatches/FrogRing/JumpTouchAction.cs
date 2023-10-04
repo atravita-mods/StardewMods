@@ -1,5 +1,10 @@
-﻿using System.Reflection;
+﻿namespace CritterRings.HarmonyPatches.FrogRing;
+
+using System.Reflection;
 using System.Reflection.Emit;
+using System.Runtime.CompilerServices;
+
+using AtraBase.Toolkit;
 
 using AtraCore.Framework.ReflectionManager;
 
@@ -11,14 +16,13 @@ using HarmonyLib;
 
 using Microsoft.Xna.Framework;
 
-namespace CritterRings.HarmonyPatches.FrogRing;
-
 /// <summary>
 /// Skip touch actions if the player is jumping.
 /// </summary>
 [HarmonyPatch(typeof(GameLocation))]
 internal static class JumpTouchAction
 {
+    [MethodImpl(TKConstants.Hot)]
     private static bool IsActiveJump() => ModEntry.CurrentJumper?.IsValid(out Farmer? _) == true;
 
     [HarmonyPatch(nameof(GameLocation.UpdateWhenCurrentLocation))]

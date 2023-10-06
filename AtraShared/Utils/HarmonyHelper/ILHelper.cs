@@ -759,7 +759,7 @@ ContinueSearchBackwards:
                 return this;
             }
         }
-        return ILHelperThrowHelper.ThrowNoMatchFoundException<ILHelper>($"label {label} could not be found between {startindex} and {endindex}");
+        return ILHelperThrowHelper.ThrowNoMatchFoundException<ILHelper>($"label {label.GetHashCode()} could not be found between {startindex} and {endindex}");
     }
 
     /// <summary>
@@ -810,7 +810,7 @@ ContinueSearchBackwards:
                 return this;
             }
         }
-        return ILHelperThrowHelper.ThrowNoMatchFoundException<ILHelper>($"label {label} could not be found between {startindex} and {endindex}");
+        return ILHelperThrowHelper.ThrowNoMatchFoundException<ILHelper>($"label {label.GetHashCode()} could not be found between {startindex} and {endindex}");
     }
 
     /// <summary>

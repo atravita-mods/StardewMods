@@ -252,7 +252,19 @@ internal static class Rescheduler
     {
         if (limit <= 0)
         {
-            ModEntry.ModMonitor.Log($"Cannot call GetPathFor with a limit 0 or lower", LogLevel.Error);
+            ModEntry.ModMonitor.Log("Cannot call GetPathFor with a limit 0 or lower", LogLevel.Error);
+            return null;
+        }
+
+        if (start.ShouldExcludeFromNpcPathfinding())
+        {
+            ModEntry.ModMonitor.Log($"{start.NameOrUniqueName} has been excluded from the pathfinding system.", LogLevel.Warn);
+            return null;
+        }
+
+        if (end is not null && end.ShouldExcludeFromNpcPathfinding())
+        {
+            ModEntry.ModMonitor.Log($"{end.NameOrUniqueName} has been excluded from the pathfinding system.", LogLevel.Warn);
             return null;
         }
 
@@ -275,6 +287,12 @@ internal static class Rescheduler
                 if (Game1.getLocationFromName(node.Name) is not GameLocation current)
                 {
                     ModEntry.ModMonitor.LogOnce($"A warp references {node.Name} which could not be found.", LogLevel.Warn);
+                    continue;
+                }
+
+                if (current.ShouldExcludeFromNpcPathfinding())
+                {
+                    ModEntry.ModMonitor.DebugOnlyLog($"Reached map {current.Name} which has been excluded from the macropathfinder.");
                     continue;
                 }
 
@@ -533,7 +551,7 @@ internal static class Rescheduler
 
     private static bool CompletelyDistinct(string[] route, string[] prev)
     {
-        Span<string> first = new Span<string>(prev);
+        Span<string> first = new(prev);
         Span<string> second = new Span<string>(route)[..^1];
 
         foreach (string? x in first)

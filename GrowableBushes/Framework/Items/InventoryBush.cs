@@ -16,7 +16,7 @@ using StardewValley.TerrainFeatures;
 
 using XLocation = xTile.Dimensions.Location;
 
-namespace GrowableBushes.Framework;
+namespace GrowableBushes.Framework.Items;
 
 /// <summary>
 /// A bush in the inventory.
@@ -79,11 +79,7 @@ public sealed class InventoryBush : SObject
 
     /// <inheritdoc />
     public override bool canBePlacedHere(GameLocation l, Vector2 tile, CollisionMask collisionMask = CollisionMask.All, bool showError = false)
-        => base.canBePlacedHere(l, tile, collisionMask, showError);
-
-    /// <inheritdoc />
-    public override bool canBePlacedHere(GameLocation l, Vector2 tile)
-        => this.CanPlace(l, tile, ModEntry.Config.RelaxedPlacement);
+        => this.CanPlace(l, tile, ModEntry.Config.RelaxedPlacement, collisionMask, showError);
 
     /// <summary>
     /// Checks for placement restrictions.
@@ -91,6 +87,8 @@ public sealed class InventoryBush : SObject
     /// <param name="l">Game location.</param>
     /// <param name="tile">Tile to check.</param>
     /// <param name="relaxed">If we should use relaxed restrictions.</param>
+    /// <param name="collisionMask">The collision mask.</param>
+    /// <param name="showError">Whether or not to display an error to the player.</param>
     /// <returns>Whether or not placement is allowed.</returns>
     internal bool CanPlace(GameLocation l, Vector2 tile, bool relaxed, CollisionMask collisionMask = CollisionMask.All, bool showError = false)
     {
@@ -192,7 +190,7 @@ public sealed class InventoryBush : SObject
     {
         float draw_layer = Math.Max(
             0f,
-            ((y * 64) + 40) / 10000f) + (x * 1E-05f);
+            (y * 64 + 40) / 10000f) + x * 1E-05f;
         this.draw(spriteBatch, x, y, draw_layer, alpha);
     }
 
@@ -206,7 +204,7 @@ public sealed class InventoryBush : SObject
 
         if (this.sourceRect != default)
         {
-            Vector2 position = Game1.GlobalToLocal(Game1.viewport, new Vector2(xNonTile * 64, (yNonTile * 64) - (this.sourceRect.Height * 4) + 64));
+            Vector2 position = Game1.GlobalToLocal(Game1.viewport, new Vector2(xNonTile * 64, yNonTile * 64 - this.sourceRect.Height * 4 + 64));
             spriteBatch.Draw(
                 texture: Bush.texture.Value,
                 position,
@@ -239,7 +237,7 @@ public sealed class InventoryBush : SObject
         {
             spriteBatch.Draw(
                 texture: Game1.mouseCursors,
-                new Vector2(x + (x_offset * 64) - Game1.viewport.X, y - Game1.viewport.Y),
+                new Vector2(x + x_offset * 64 - Game1.viewport.X, y - Game1.viewport.Y),
                 new Rectangle(canPlaceHere ? 194 : 210, 388, 16, 16),
                 color: Color.White,
                 rotation: 0f,
@@ -277,13 +275,13 @@ public sealed class InventoryBush : SObject
                 this.GetScaleSize() * scaleSize,
                 SpriteEffects.None,
                 layerDepth);
-            if (((drawStackNumber == StackDrawType.Draw && this.maximumStackSize() > 1 && this.Stack > 1) || drawStackNumber == StackDrawType.Draw_OneInclusive)
+            if ((drawStackNumber == StackDrawType.Draw && this.maximumStackSize() > 1 && this.Stack > 1 || drawStackNumber == StackDrawType.Draw_OneInclusive)
                 && scaleSize > 0.3f && this.Stack != int.MaxValue)
             {
                 Utility.drawTinyDigits(
                     toDraw: this.Stack,
                     b: spriteBatch,
-                    position: location + new Vector2(64 - Utility.getWidthOfTinyDigitString(this.Stack, 3f * scaleSize) + (3f * scaleSize), 64f - (18f * scaleSize) + 2f),
+                    position: location + new Vector2(64 - Utility.getWidthOfTinyDigitString(this.Stack, 3f * scaleSize) + 3f * scaleSize, 64f - 18f * scaleSize + 2f),
                     scale: 3f * scaleSize,
                     layerDepth: 1f,
                     c: Color.White);
@@ -505,7 +503,7 @@ public sealed class InventoryBush : SObject
             case BushSizes.Small:
                 return new Rectangle(season * 32, 224, 16, 32);
             case BushSizes.SmallAlt:
-                return new Rectangle((season * 32) + 16, 224, 16, 32);
+                return new Rectangle(season * 32 + 16, 224, 16, 32);
             case BushSizes.Medium:
                 int y = Math.DivRem(season * 64, Bush.texture.Value.Bounds.Width, out int x);
                 return new Rectangle(x, y * 48, 32, 48);
@@ -565,14 +563,14 @@ public sealed class InventoryBush : SObject
         const float gravity = 0.0025f;
 
         float velocity = -0.7f - MathF.Sqrt(2 * 60f * gravity);
-        float time = (MathF.Sqrt((velocity * velocity) - (gravity * deltaY * 2f)) / gravity) - (velocity / gravity);
+        float time = MathF.Sqrt(velocity * velocity - gravity * deltaY * 2f) / gravity - velocity / gravity;
 
-        Vector2 landingPos = new Vector2(tile.X + Math.Max(0, (width / 2) - 1), tile.Y) * 64f;
+        Vector2 landingPos = new Vector2(tile.X + Math.Max(0, width / 2 - 1), tile.Y) * 64f;
 
         TemporaryAnimatedSprite bushTas = new(
             "TileSheets/bushes",
             this.sourceRect,
-            (tile * 64f) - new Vector2(0, this.sourceRect.Y / 16),
+            tile * 64f - new Vector2(0, this.sourceRect.Y / 16),
             false,
             0f,
             Color.White)

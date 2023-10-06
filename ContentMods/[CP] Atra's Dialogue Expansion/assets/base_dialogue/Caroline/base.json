@@ -11,7 +11,9 @@
 
             "spring_25{{YearRemainder}}": "{{i18n:caroline-birthday-pierre-a}}%revealtastePierre202#$b#{{i18n:caroline-birthday-pierre-b}}",
             "winter_7{{YearRemainder}}": "$d cc#{{i18n:caroline-birthday-self}}$s|{i18n:caroline-birthday-self-CC}}$h",
-            "fall_6{{YearRemainder}}": "$d cc#{{i18n:caroline-abby-birthday-pre}}$h|{{i18n:caroline-abby-birthday-pre-CC|videogame={{VideoGame}} }}"
+            "fall_6{{YearRemainder}}": "$d cc#{{i18n:caroline-abby-birthday-pre}}$h|{{i18n:caroline-abby-birthday-pre-CC|videogame={{VideoGame}} }}",
+
+            "winter_18{{YearRemainder}}": "{{i18n:caroline-flowers}}$h"
         }
     },
     {

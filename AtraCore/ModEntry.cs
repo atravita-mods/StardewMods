@@ -1,10 +1,13 @@
-﻿#if DEBUG
+﻿namespace AtraCore;
+
+#if DEBUG
 using System.Diagnostics;
 #endif
 
 using AtraBase.Toolkit;
 
 using AtraCore.Config;
+using AtraCore.Framework;
 using AtraCore.Framework.ActionCommandHandler;
 using AtraCore.Framework.Caches;
 using AtraCore.Framework.ConsoleCommands;
@@ -18,6 +21,7 @@ using AtraCore.Framework.Internal;
 using AtraCore.Framework.ItemManagement;
 using AtraCore.Framework.QueuePlayerAlert;
 using AtraCore.HarmonyPatches;
+using AtraCore.HarmonyPatches.CustomRingPatches;
 using AtraCore.HarmonyPatches.DrawPrismaticPatches;
 using AtraCore.Utilities;
 
@@ -30,8 +34,6 @@ using HarmonyLib;
 using StardewModdingAPI.Events;
 
 using AtraUtils = AtraShared.Utils.Utils;
-
-namespace AtraCore;
 
 /// <inheritdoc />
 internal sealed class ModEntry : BaseMod<ModEntry>
@@ -50,7 +52,8 @@ internal sealed class ModEntry : BaseMod<ModEntry>
 
         I18n.Init(helper.Translation);
         AssetManager.Initialize(helper.GameContent);
-        QuestTracker.Init(helper.Multiplayer, this.ModManifest.UniqueID);
+        QuestTracker.Initialize(helper.Multiplayer, this.ModManifest.UniqueID);
+        MultiplayerDispatch.Initialize(this.ModManifest.UniqueID);
 
         // replace AtraBase's logger with SMAPI's logging service.
         AtraBase.Internal.Logger.Instance = new Logger(this.Monitor);
@@ -172,15 +175,20 @@ internal sealed class ModEntry : BaseMod<ModEntry>
     /// <inheritdoc cref="IPlayerEvents.Warped"/>
     private void Player_Warped(object? sender, WarpedEventArgs e)
     {
-        if (!e.IsLocalPlayer || !PlayerAlertHandler.HasMessages())
+        if (!e.IsLocalPlayer)
         {
             return;
         }
 
-        int count = 3 - Game1.hudMessages.Count;
-        if (count > 0)
+        RingPatcher.Reset();
+
+        if (PlayerAlertHandler.HasMessages())
         {
-            PlayerAlertHandler.DisplayFromQueue(count);
+            int count = 3 - Game1.hudMessages.Count;
+            if (count > 0)
+            {
+                PlayerAlertHandler.DisplayFromQueue(count);
+            }
         }
     }
 
@@ -196,7 +204,10 @@ internal sealed class ModEntry : BaseMod<ModEntry>
     #region assets
 
     private void OnAssetInvalidation(object? sender, AssetsInvalidatedEventArgs e)
-        => DataToItemMap.Reset(e.NamesWithoutLocale);
+    {
+        DataToItemMap.Reset(e.NamesWithoutLocale);
+        AssetManager.Invalidate(e.NamesWithoutLocale);
+    }
 
     private void OnAssetRequested(object? sender, AssetRequestedEventArgs e)
         => AssetManager.Apply(e);

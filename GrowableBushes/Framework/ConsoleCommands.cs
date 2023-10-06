@@ -1,4 +1,6 @@
-﻿namespace GrowableBushes.Framework;
+﻿using GrowableBushes.Framework.Items;
+
+namespace GrowableBushes.Framework;
 
 /// <summary>
 /// Manages console commands for this mod.

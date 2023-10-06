@@ -4,9 +4,7 @@ using AtraBase.Toolkit;
 
 using AtraShared.ConstantsAndEnums;
 using AtraShared.Utils.Extensions;
-
-using GrowableBushes.Framework;
-
+using GrowableBushes.Framework.Items;
 using HarmonyLib;
 
 using Microsoft.Xna.Framework;

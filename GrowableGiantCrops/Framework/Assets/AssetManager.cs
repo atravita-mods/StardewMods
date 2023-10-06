@@ -97,7 +97,7 @@ internal static class AssetManager
     /// <inheritdoc cref="IContentEvents.AssetRequested" />
     internal static void OnAssetRequested(AssetRequestedEventArgs e)
     {
-        if (ModEntry.Config.PalmTreeBehavior.HasFlag(PalmTreeBehavior.Seasonal) && e.NameWithoutLocale.IsEquivalentTo(wildTrees))
+        if (ModEntry.Config.PalmTreeBehavior != PalmTreeBehavior.Default && e.NameWithoutLocale.IsEquivalentTo(wildTrees))
         {
             e.Edit(EditWildTrees);
         }
@@ -137,38 +137,54 @@ internal static class AssetManager
     {
         var editor = data.AsDictionary<string, WildTreeData>().Data;
 
-        if (editor.TryGetValue(Tree.palmTree, out var valleyTree))
+        if (editor.TryGetValue(Tree.palmTree, out WildTreeData? valleyTree))
         {
-            WildTreeTextureData winterTex = new()
+            if (ModEntry.Config.PalmTreeBehavior.HasFlagFast(PalmTreeBehavior.Seasonal))
             {
-                Season = Season.Winter,
-                Texture = WinterPalm.BaseName,
-            };
+                WildTreeTextureData winterTex = new()
+                {
+                    Season = Season.Winter,
+                    Texture = WinterPalm.BaseName,
+                };
 
-            WildTreeTextureData fallTex = new()
+                WildTreeTextureData fallTex = new()
+                {
+                    Season = Season.Fall,
+                    Texture = FallPalm.BaseName,
+                };
+
+                valleyTree.Textures.InsertRange(0, new[] { winterTex, fallTex });
+            }
+
+            if (ModEntry.Config.PalmTreeBehavior.HasFlagFast(PalmTreeBehavior.Stump))
             {
-                Season = Season.Fall,
-                Texture = FallPalm.BaseName,
-            };
-
-            valleyTree.Textures.InsertRange(0, new[] { winterTex, fallTex } );
+                valleyTree.IsStumpDuringWinter = true;
+            }
         }
 
-        if (editor.TryGetValue(Tree.palmTree2, out var islandTree))
+        if (editor.TryGetValue(Tree.palmTree2, out WildTreeData? islandTree))
         {
-            WildTreeTextureData winterTex = new()
+            if (ModEntry.Config.PalmTreeBehavior.HasFlagFast(PalmTreeBehavior.Seasonal))
             {
-                Season = Season.Winter,
-                Texture = WinterBigPalm.BaseName,
-            };
+                WildTreeTextureData winterTex = new()
+                {
+                    Season = Season.Winter,
+                    Texture = WinterBigPalm.BaseName,
+                };
 
-            WildTreeTextureData fallTex = new()
+                WildTreeTextureData fallTex = new()
+                {
+                    Season = Season.Fall,
+                    Texture = FallBigPalm.BaseName,
+                };
+
+                islandTree.Textures.InsertRange(0, new[] { winterTex, fallTex });
+            }
+
+            if (ModEntry.Config.PalmTreeBehavior.HasFlagFast(PalmTreeBehavior.Stump))
             {
-                Season = Season.Fall,
-                Texture = FallBigPalm.BaseName,
-            };
-
-            islandTree.Textures.InsertRange(0, new[] { winterTex, fallTex });
+                islandTree.IsStumpDuringWinter = true;
+            }
         }
     }
 }

@@ -7,7 +7,7 @@ using AtraShared.ConstantsAndEnums;
 using AtraShared.Menuing;
 using AtraShared.Utils;
 using AtraShared.Utils.Extensions;
-
+using GrowableBushes.Framework.Items;
 using HarmonyLib;
 
 using Microsoft.Xna.Framework;

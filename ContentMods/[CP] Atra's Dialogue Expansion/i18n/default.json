@@ -227,6 +227,9 @@
     "pam-tax-day": "Why I've gotta pay taxes to fund this stupid war, I'll never know.",
     "pierre-tax-day.00": "Dunno what the state is doing with all my taxes.",
     "pierre-tax-day.01": "Such a process, every year, to file them. Takes Caroline a week!",
+    "maru-tax-day": "Gosh, taxes are complicated.",
+    "maru-tax-day-a": "I always have to help Harvey with his, it's the forms always take me a few days.",
+    "maru-tax-day-b": "Dad always asks me to help him with his. Takes forever.",
     "marnie-tax-day.00": "Marnie looks exhausted.",
     "marnie-tax-day.01": "Sorry, @, I was up all night trying to file my taxes...",
     "marnie-tax-day.02": "Why do I always leave things like this to the last minute...",
@@ -273,6 +276,8 @@
     "demetrius-divorced-from-maru-b": "I have nothing to say to you.",
     "demetrius-divorced-from-sebastian-a": "I don't think Sebastian wants to see you.",
     "demetrius-divorced-from-sebastian-b": "You didn't have to break my stepson's heart like that.",
+
+    "emily-divorced-from-haley": "Hi! How can I help you?",
 
     "evelyn-divorced-from-alex": "Please leave us alone.",
     "evelyn-divorced-from-alex-b": "You're no longer a member of this family.",
@@ -389,6 +394,7 @@
     "caroline-summer-mon.00": "Between you and I, @, being open seven days a week is quite tiring.",
     "caroline-summer-mon.01": "I wish I could take more time to garden, but sadly we have to run the store.",
     "caroline-tue": "Tuesdays are our aerobics club days. Say, @, you wanna join us?",
+    "caroline-flowers": "I've got so many flowers started in my greenhouse for the community garden.",
 
     // Demetrius has a few lines that don't really make sense if you have any real understanding of math. I'm replacing them because I want him to appear to have a math background.
     // ie, sinusoidal is, like, by definition, the most predictable function. So if Demetrius is trying to model Robin's mood as a sinusoid, he's either (a) saying she's PMSing or (b) he's assuming that her mood should be very predictable. I doubt either is the intent here.
@@ -426,6 +432,7 @@
 
     // When you've finished upgrading your house, replace Robin line.
     "robin-winter-mon": "I've always loved this time of year. The snow in the mountains is beautiful. Even when I have to walk through it.",
+
     // Robin also implies you've never met Sebastian even if you're, like, besties with him.
     "robin-fri": "I wish my son'd come out of his room more often, I'm not quite sure what he does in there all day.#$b#I mean, I know he has work, but even beyond that, he tends to just...stay in his room.",
     "robin-fri-sebby-married": "I'm glad my son's finally found someone. I was so worried he'd never get married, holded up in his room like that.",
@@ -1081,6 +1088,7 @@
     "haley-y2-dance-married-other.01": "I'm still capable of winning the crown!",
     "haley-y1-dance-spouse": "We make a striking pair, don't we? Come, @, come dance with me.",
     "haley-y2-dance-spouse": "I'll never turn down the chance to put on a pretty dress and dance a bit. Come dance with me, @?",
+    "haley-y3-dance-spouse": "How do I look, my dear? Striking as always?",
     "harvey-y2-dance.00": "I wonder what's in that red jelly?",
     "harvey-y2-dance.01": "It tastes excellent, but that's...quite a vibrant red color....",
     "harvey-y1-dance-spouse": "My love, you look dashing today. Dance with me?",

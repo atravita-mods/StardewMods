@@ -1,6 +1,9 @@
-﻿using AtraBase.Collections;
+﻿namespace AtraCore;
+
+using AtraBase.Collections;
 using AtraBase.Toolkit.Extensions;
 
+using AtraCore.Framework.Models;
 using AtraCore.Models;
 
 using AtraShared.Utils.Extensions;
@@ -9,8 +12,6 @@ using Microsoft.Xna.Framework.Content;
 
 using StardewModdingAPI.Events;
 using StardewModdingAPI.Utilities;
-
-namespace AtraCore;
 
 /// <summary>
 /// Handles asset management for this mod.
@@ -21,6 +22,10 @@ internal static class AssetManager
     private static readonly string dataEvents = PathUtilities.NormalizeAssetName("Data/Events") + "/";
 
     private static IAssetName prismatic = null!;
+    private static IAssetName ringData = null!;
+
+    private static Lazy<Dictionary<string, RingExtModel>> _ringData = new(
+        static () => Game1.content.Load<Dictionary<string, RingExtModel>>(AtraCoreConstants.RingDataExt));
 
     /// <summary>
     /// Initializes the asset manager.
@@ -29,6 +34,7 @@ internal static class AssetManager
     internal static void Initialize(IGameContentHelper parser)
     {
         prismatic = parser.ParseAssetName(AtraCoreConstants.PrismaticMaskData);
+        ringData = parser.ParseAssetName(AtraCoreConstants.RingDataExt);
 
         // check and populate the event locations.
         foreach (string? location in new[] { "AdventureGuild", "Blacksmith", "WitchHut", "WitchSwamp", "Summit" })
@@ -73,7 +79,11 @@ internal static class AssetManager
     {
         if (e.NameWithoutLocale.IsEquivalentTo(prismatic))
         {
-            e.LoadFrom(EmptyContainers.GetEmptyDictionary<string, DrawPrismaticModel>, AssetLoadPriority.Low);
+            e.LoadFrom(EmptyContainers.GetEmptyDictionary<string, DrawPrismaticModel>, AssetLoadPriority.Exclusive);
+        }
+        else if (e.NameWithoutLocale.IsEquivalentTo(ringData))
+        {
+            e.LoadFrom(EmptyContainers.GetEmptyDictionary<string, RingExtModel>, AssetLoadPriority.Exclusive);
         }
         else if (e.NameWithoutLocale.StartsWith(dataEvents, false, false))
         {
@@ -84,4 +94,24 @@ internal static class AssetManager
             }
         }
     }
+
+    /// <inheritdoc cref="IContentEvents.AssetsInvalidated"/>
+    internal static void Invalidate(IReadOnlySet<IAssetName>? assets = null)
+    {
+        if (assets is null || assets.Contains(ringData))
+        {
+            if (_ringData.IsValueCreated)
+            {
+                _ringData = new(static () => Game1.content.Load<Dictionary<string, RingExtModel>>(AtraCoreConstants.RingDataExt));
+            }
+        }
+    }
+
+    /// <summary>
+    /// Gets the data associated with a specific ring, if it exists.
+    /// </summary>
+    /// <param name="ringID">The ring's Id.</param>
+    /// <returns>The ring data, if it exists.</returns>
+    internal static RingExtModel? GetRingData(string ringID)
+        => _ringData.Value.GetValueOrDefault(ringID);
 }

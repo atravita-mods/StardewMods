@@ -1,4 +1,6 @@
-﻿using System.Xml.Serialization;
+﻿namespace GrowableGiantCrops.Framework.InventoryModels;
+
+using System.Xml.Serialization;
 
 using AtraCore.Framework.ReflectionManager;
 
@@ -11,10 +13,9 @@ using Microsoft.Xna.Framework.Graphics;
 
 using Netcode;
 
+using StardewValley.GameData.WildTrees;
 using StardewValley.Locations;
 using StardewValley.TerrainFeatures;
-
-namespace GrowableGiantCrops.Framework.InventoryModels;
 
 /// <summary>
 /// A class that represents a normal tree in the inventory.
@@ -82,16 +83,18 @@ public sealed class InventoryTree : SObject
     /// <summary>
     /// Initializes a new instance of the <see cref="InventoryTree"/> class.
     /// </summary>
-    /// <param name="idx">The index of the tree.</param>
+    /// <param name="idx">The itemID</param>
     /// <param name="initialStack">The initial stack.</param>
     /// <param name="growthStage">The growth stage.</param>
     /// <param name="isStump">Whether or not the tree is a stump.</param>
-    public InventoryTree(TreeIndexes idx, int initialStack, int growthStage, bool isStump = false)
+    public InventoryTree(string itemId, int initialStack, int growthStage, bool isStump = false)
         : this()
     {
-        if (!TreeIndexesExtensions.IsDefined(idx))
+        this.ItemId = this.ValidateUnqualifiedItemId(itemId);
+
+        if (!Tree.GetWildTreeDataDictionary().ContainsKey(itemId))
         {
-            ModEntry.ModMonitor.Log($"Tree {idx.ToStringFast()} doesn't seem to be a valid tree. Setting to pine tree.", LogLevel.Error);
+            ModEntry.ModMonitor.Log($"Tree {itemId} doesn't seem to be a valid tree. Setting to pine tree.", LogLevel.Error);
             idx = TreeIndexes.Pine;
         }
 
@@ -99,7 +102,7 @@ public sealed class InventoryTree : SObject
         this.growthStage.Value = Math.Clamp(growthStage, Tree.seedStage, Tree.treeStage);
         this.isStump.Value = isStump;
         this.Stack = initialStack;
-        this.Name = InventoryTreePrefix + idx.ToStringFast();
+        this.Name = InventoryTreePrefix + blah;
 
         this.modData?.SetEnum(ModDataKey, idx);
     }
@@ -401,7 +404,7 @@ public sealed class InventoryTree : SObject
         }
         if (this.sourceRect != default && this.holder?.Get() is Texture2D tex)
         {
-            float layerDepth = Math.Max(0f, (f.getStandingY() + 3) / 10000f);
+            float layerDepth = Math.Max(0f, (f.StandingPixel.Y + 3) / 10000f);
             objectPosition.Y -= 2 * Game1.tileSize;
             if (this.growthStage.Value == Tree.treeStage && !this.isStump.Value)
             {
@@ -447,7 +450,7 @@ public sealed class InventoryTree : SObject
     #region misc
 
     /// <inheritdoc />
-    protected override Item GetOneNew() => new InventoryTree((TreeIndexes)this.ParentSheetIndex, 1, this.growthStage.Value, this.isStump.Value);
+    protected override Item GetOneNew() => new InventoryTree(this.ItemId, 1, this.growthStage.Value, this.isStump.Value);
 
     /// <inheritdoc />
     public override int maximumStackSize() => ModEntry.Config.AllowLargeItemStacking ? 999 : 1;
@@ -520,7 +523,7 @@ public sealed class InventoryTree : SObject
         tags.Add("category_inventory_tree");
         tags.Add($"id_inventoryTree_{this.ParentSheetIndex}");
         tags.Add("quality_none");
-        tags.Add("item_" + this.SanitizeContextTag(this.Name));
+        tags.Add("item_" + ItemContextTagManager.SanitizeContextTag(this.Name));
     }
 
     #endregion
@@ -539,6 +542,7 @@ public sealed class InventoryTree : SObject
 
     /// <summary>
     /// Populates the fields required for drawing for this particular location.
+    /// derived from <see cref="Tree"/>.ChooseTexture.
     /// </summary>
     /// <param name="loc">Gamelocation.</param>
     internal void PopulateDrawFields(GameLocation? loc = null)
@@ -549,62 +553,32 @@ public sealed class InventoryTree : SObject
             return;
         }
 
-        #warning probably need to fix this in 1.6
+        WildTreeData? data = Tree.GetWildTreeDataDictionary().GetValueOrDefault(this.ItemId);
 
-        // derived from Tree.loadTexture and Tree.draw
-        string season = loc is Desert or MineShaft ? "spring" : Game1.GetSeasonForLocation(loc);
-
-        string assetPath;
-        switch (this.ParentSheetIndex)
+        if (data?.Textures?.Count() is null or 0)
         {
-            case Tree.mushroomTree:
-                assetPath = @"TerrainFeatures\mushroom_tree";
-                break;
-            case Tree.palmTree:
-                if (ModEntry.Config.PalmTreeBehavior.HasFlagFast(PalmTreeBehavior.Seasonal))
-                {
-                    if (season == "fall")
-                    {
-                        assetPath = AssetManager.FallPalm.BaseName;
-                        break;
-                    }
-                    if (season == "winter")
-                    {
-                        assetPath = AssetManager.WinterPalm.BaseName;
-                        break;
-                    }
-                }
-                assetPath = @"TerrainFeatures\tree_palm";
-                break;
-            case Tree.palmTree2:
-                if (ModEntry.Config.PalmTreeBehavior.HasFlagFast(PalmTreeBehavior.Seasonal))
-                {
-                    if (season == "fall")
-                    {
-                        assetPath = AssetManager.FallBigPalm.BaseName;
-                        break;
-                    }
-                    if (season == "winter")
-                    {
-                        assetPath = AssetManager.WinterBigPalm.BaseName;
-                        break;
-                    }
-                }
-                assetPath = @"TerrainFeatures\tree_palm2";
-                break;
-            case Tree.pineTree:
-                if (season == "summer")
-                {
-                    assetPath = @"TerrainFeatures\tree3_spring";
-                    break;
-                }
-                goto default;
-            default:
-                assetPath = $@"TerrainFeatures\tree{this.ParentSheetIndex}_{season}";
-                break;
+            this.holder = AssetCache.Get(Game1.mouseCursorsName);
+            this.sourceRect = new(320, 496, 16, 16);
+            return;
         }
 
-        this.holder = AssetCache.Get(assetPath);
+        if (data.Textures.Count == 1)
+        {
+            this.holder = AssetCache.Get(data.Textures[0].Texture);
+        }
+        else
+        {
+            foreach (WildTreeTextureData? tex in data.Textures)
+            {
+                if ((!tex.Season.HasValue || tex.Season == loc.GetSeason())
+                    && GameStateQuery.CheckConditions(tex.Condition, loc))
+                {
+                    this.holder = AssetCache.Get(tex.Texture);
+                    break;
+                }
+            }
+        }
+
         if (this.holder is null)
         {
             return;

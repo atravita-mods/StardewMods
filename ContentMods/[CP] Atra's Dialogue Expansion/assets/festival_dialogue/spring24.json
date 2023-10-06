@@ -236,7 +236,8 @@
             },
             "Entries": {
                 "Haley": "{{i18n:haley-y1-dance-spouse}}$h",
-                "Haley_y2": "{{i18n:haley-y2-dance-spouse}}$h"
+                "Haley_y2": "{{i18n:haley-y2-dance-spouse}}$h",
+                "Haley_y3": "{{i18n:haley-y3-dance-spouse}}$h"
             }
         },
         {

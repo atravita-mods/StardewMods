@@ -1,5 +1,7 @@
 ﻿// Ignore Spelling: xstart yend xend ystart loc tileloc Utils
 
+namespace AtraShared.Utils;
+
 using System.Buffers;
 
 using AtraBase.Toolkit.Extensions;
@@ -9,11 +11,6 @@ using CommunityToolkit.Diagnostics;
 using Microsoft.Xna.Framework;
 
 using StardewValley.Buildings;
-using StardewValley.Locations;
-
-namespace AtraShared.Utils;
-
-// TODO: Remove checks for BuildableGameLocation in 1.6.
 
 /// <summary>
 /// Utility for gamelocations.

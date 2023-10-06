@@ -25,12 +25,19 @@ internal sealed class ModEntry : BaseMod<ModEntry>
 {
     private static readonly TapGiantCrop Api = new();
 
+    /// <summary>
+    /// Gets the game content helper.
+    /// </summary>
+    internal static IGameContentHelper GameContent { get; private set; } = null!;
+
     /// <inheritdoc />
     public override void Entry(IModHelper helper)
     {
         I18n.Init(helper.Translation);
         AssetManager.Initialize(helper.GameContent);
         base.Entry(helper);
+
+        GameContent = helper.GameContent;
 
         helper.Events.Input.ButtonPressed += this.OnButtonPressed;
         helper.Events.GameLoop.DayEnding += this.OnDayEnding;

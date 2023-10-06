@@ -9,6 +9,8 @@ namespace GrowableBushes.Framework;
 /// </summary>
 internal static class BushSizesExtraExtensions
 {
+    static readonly string[] valid = BushSizesExtensions.GetValues().Where(static a => a != BushSizes.Invalid).Select(static a => a.ToStringFast()).ToArray();
+
     /// <summary>
     /// Gets the <see cref="Bush.size"/> for the BushSizes.
     /// </summary>
@@ -59,4 +61,6 @@ internal static class BushSizesExtraExtensions
             _ => BushSizes.Invalid
         };
     }
+
+    internal static string[] GetValid() => valid;
 }

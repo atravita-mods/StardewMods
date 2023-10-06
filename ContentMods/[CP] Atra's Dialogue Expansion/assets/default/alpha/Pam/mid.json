@@ -30,7 +30,7 @@
                 "winter_Mon10": "Hmmm....boxed red wine or boxed white wine for tonight?"
             }
         },
-                {
+        {
             "LogName": "Pam - Y3",
             "Action": "EditData",
             "Target": "Characters/Dialogue/Pam",

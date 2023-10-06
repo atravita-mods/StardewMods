@@ -4,8 +4,23 @@
             "LogName": "Emily base",
             "Action": "EditData",
             "Target": "Characters/Dialogue/Emily",
+            "When": {
+                "Relationship:Haley|contains=Divorced": false
+            },
             "Entries": {
                 "{{TaxDay}}": "{{i18n:emily-tax-day.00}}#$b#{{i18n: emily-tax-day.01}}"
+            }
+        },
+        {
+            "LogName": "Emily - divorced from Haley",
+            "Action": "EditData",
+            "Target": "Characters/Dialogue/Emily",
+            "When": {
+                "Relationship:Haley": "Divorced",
+                "Relationship:Emily|contains=Dating, Engaged, Married": false
+            },
+            "Entries": {
+                "Saloon": "{{i18n:emily-divorced-from-haley}}$h"
             }
         }
     ]

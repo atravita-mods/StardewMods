@@ -52,7 +52,7 @@ public static class QuestTracker
     /// </summary>
     /// <param name="multiplayer">Multiplayer helper.</param>
     /// <param name="uniqueID">Unique ID.</param>
-    internal static void Init(IMultiplayerHelper multiplayer, string uniqueID)
+    internal static void Initialize(IMultiplayerHelper multiplayer, string uniqueID)
     {
         multi = multiplayer;
         QuestTracker.uniqueID = string.Intern(uniqueID);

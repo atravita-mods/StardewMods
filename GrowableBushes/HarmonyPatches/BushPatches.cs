@@ -6,7 +6,7 @@ using AtraShared.ConstantsAndEnums;
 using AtraShared.Utils.Extensions;
 
 using GrowableBushes.Framework;
-
+using GrowableBushes.Framework.Items;
 using HarmonyLib;
 
 using StardewValley.TerrainFeatures;

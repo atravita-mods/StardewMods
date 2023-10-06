@@ -1,5 +1,7 @@
 ﻿// Ignore Spelling: loc
 
+namespace TapGiantCrops.Framework;
+
 using AtraBase.Toolkit.Extensions;
 using AtraBase.Toolkit.Reflection;
 
@@ -16,8 +18,6 @@ using StardewValley.GameData.GiantCrops;
 using StardewValley.Internal;
 using StardewValley.ItemTypeDefinitions;
 using StardewValley.TerrainFeatures;
-
-namespace TapGiantCrops.Framework;
 
 /// <summary>
 /// API class for Tap Giant Crops.
@@ -183,7 +183,7 @@ public sealed class TapGiantCrop : ITapGiantCropsAPI
             int days = @override?.duration is int overrideDuration
                 ? overrideDuration
                 : returnobj.Price / (25 * giantCrop.width.Value * giantCrop.height.Value);
-            if (tapper.GetTapperMultiplier() is float multiplier)
+            if (AssetManager.GetTapperMultiplier(tapper.ItemId) is float multiplier)
             {
                 days = (int)(days / multiplier);
             }

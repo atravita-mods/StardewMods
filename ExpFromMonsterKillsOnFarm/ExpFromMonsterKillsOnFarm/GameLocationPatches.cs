@@ -1,12 +1,12 @@
-﻿using AtraShared.ConstantsAndEnums;
+﻿namespace ExpFromMonsterKillsOnFarm;
+
+using AtraShared.ConstantsAndEnums;
 using AtraShared.Utils.Extensions;
 
 using HarmonyLib;
 
 using StardewValley.Monsters;
 using StardewValley.SpecialOrders;
-
-namespace ExpFromMonsterKillsOnFarm;
 
 /// <summary>
 /// Patches on the GameLocation class.
@@ -23,7 +23,7 @@ internal class GameLocationPatches
     /// <param name="who">Farmer who killed monster.</param>
     /// <remarks>This function is always called when a monster dies.</remarks>
     [HarmonyPostfix]
-    [HarmonyPatch(nameof(GameLocation.monsterDrop))]
+    [HarmonyPatch("onMonsterKilled")]
     private static void AppendMonsterDrop(GameLocation __instance, Monster monster, Farmer who)
     {
         try

@@ -5,9 +5,7 @@ using AtraCore.Framework.ReflectionManager;
 
 using AtraShared.Utils.Extensions;
 using AtraShared.Utils.HarmonyHelper;
-
-using GrowableBushes.Framework;
-
+using GrowableBushes.Framework.Items;
 using HarmonyLib;
 
 using StardewValley.TerrainFeatures;

@@ -1,4 +1,6 @@
-﻿using System.Runtime.InteropServices;
+﻿namespace MuseumRewardsIn;
+
+using System.Runtime.InteropServices;
 
 using AtraBase.Models.RentedArrayHelpers;
 using AtraBase.Toolkit.StringHandler;
@@ -9,8 +11,6 @@ using StardewValley.Internal;
 using StardewValley.ItemTypeDefinitions;
 using StardewValley.Locations;
 
-namespace MuseumRewardsIn;
-
 /// <summary>
 /// Builds the museum shop.
 /// </summary>
@@ -19,9 +19,7 @@ internal static class MuseumShopBuilder
     /// <inheritdoc cref="ResolveItemQueryDelegate"/>
     internal static IList<ItemQueryResult> MuseumQuery(string key, string? arguments, ItemQueryContext context, bool avoidRepeat, HashSet<string>? avoidItemIds, Action<string, string> logError)
     {
-        LibraryMuseum? library = Game1.getLocationFromName("ArchaeologyHouse") as LibraryMuseum;
-
-        if (library is null)
+        if (Game1.getLocationFromName("ArchaeologyHouse") is not LibraryMuseum library)
         {
             return ItemQueryResolver.DefaultResolvers.ErrorResult(key, arguments, logError, "library could not be found");
         }
@@ -69,7 +67,6 @@ internal static class MuseumShopBuilder
                         remainder = args.Remainder.TrimStart();
                     }
                     while (remainder.Length > 0 && remainder[0] != '@');
-
                 }
                 else if (arg.Equals("@count", StringComparison.OrdinalIgnoreCase))
                 {
@@ -84,7 +81,7 @@ internal static class MuseumShopBuilder
                     }
                     else
                     {
-                        return ItemQueryResolver.DefaultResolvers.ErrorResult(key, arguments, logError, $"Received invalid value for @Count");
+                        return ItemQueryResolver.DefaultResolvers.ErrorResult(key, arguments, logError, $"received invalid value for @Count");
                     }
                 }
                 else

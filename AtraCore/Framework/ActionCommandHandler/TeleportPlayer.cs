@@ -1,67 +1,78 @@
-﻿using xTile.Dimensions;
+﻿using Microsoft.Xna.Framework;
 
 namespace AtraCore.Framework.ActionCommandHandler;
+
+// TODO
 
 /// <summary>
 /// An action command to teleport players.
 /// </summary>
 internal static class TeleportPlayer
 {
-    // <string area> <int x> <int y> [string prerequisite]
-
     /// <summary>
     /// Moves the player to a different location.
     /// </summary>
     /// <param name="loc">Game location this was called from.</param>
     /// <param name="parameters">Parameters.</param>
     /// <param name="who">The farmer in question.</param>
-    /// <param name="location">tile location.</param>
+    /// <param name="point">tile location.</param>
     /// <returns>True if handled, false otherwise.</returns>
-    internal static bool ApplyCommand(GameLocation loc, ArraySegment<string> parameters, Farmer who, Location location)
+    internal static bool ApplyCommand(GameLocation loc, string[] parameters, Farmer who, Point point)
     {
         if (!who.IsLocalPlayer)
         {
             return false;
         }
-        if (parameters.Count is not 3 or 4 or 5)
+
+        if (parameters.Length < 4 || parameters.Length > 6)
         {
-            ModEntry.ModMonitor.LogOnce($"Expected 3-5 params, {string.Join(' ', parameters)}", LogLevel.Warn);
+            loc.LogTileActionError(parameters, point.X, point.Y, "incorrect number of parameters (expected 4-6)");
             return false;
         }
 
-        GameLocation? destination = Game1.getLocationFromName(parameters[0]);
-        if (destination is null)
+        // <string area> <int x> <int y> [string prerequisite] [int facing]
+        if (!ArgUtility.TryGet(parameters, 1, out string? map, out string? error, false))
         {
-            ModEntry.ModMonitor.Log($"Could not find location {parameters[0]} for warp", LogLevel.Warn);
+            loc.LogTileActionError(parameters, point.X, point.Y, error);
+            return false;
+        }
+        if (Game1.getLocationFromName(map) is not GameLocation destination)
+        {
+            loc.LogTileActionError(parameters, point.X, point.Y, $"find destination for map {map}");
             return false;
         }
 
-        if (!int.TryParse(parameters[1], out int x) || !int.TryParse(parameters[2], out int y))
+        if (!ArgUtility.TryGetInt(parameters, 2, out var x, out error) || !ArgUtility.TryGetInt(parameters, 3, out var y, out error))
         {
-            ModEntry.ModMonitor.Log($"Could not parse destination ({parameters[1]}, {parameters[2]}) for warp", LogLevel.Warn);
+
+        }
+
+        if (!int.TryParse(parameters[2], out int x) || !int.TryParse(parameters[3], out int y))
+        {
+            ModEntry.ModMonitor.Log($"Could not parse destination ({parameters[2]}, {parameters[3]}) for warp", LogLevel.Warn);
             return false;
         }
 
         int? direction = null;
-        if (parameters.Count > 3)
+        if (parameters.Length > 4)
         {
             string? mail = null;
-            if (parameters.Count == 5)
+            if (parameters.Length == 6)
             {
-                if (!int.TryParse(parameters[3], out int facing))
+                if (!int.TryParse(parameters[4], out int facing))
                 {
-                    ModEntry.ModMonitor.Log($"Could not parse direction ({parameters[3]}) for warp", LogLevel.Warn);
+                    ModEntry.ModMonitor.Log($"Could not parse direction ({parameters[4]}) for warp", LogLevel.Warn);
                     return false;
                 }
 
                 direction = facing;
-                mail = parameters[4];
+                mail = parameters[5];
             }
-            else if (parameters.Count == 4)
+            else if (parameters.Length == 5)
             {
-                if (!int.TryParse(parameters[3], out int facing))
+                if (!int.TryParse(parameters[4], out int facing))
                 {
-                    mail = parameters[3];
+                    mail = parameters[4];
                 }
                 else
                 {

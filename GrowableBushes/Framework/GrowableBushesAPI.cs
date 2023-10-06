@@ -1,12 +1,12 @@
 ﻿// Ignore Spelling: loc Growable
 
-using AtraShared.Utils.Extensions;
+namespace GrowableBushes.Framework;
 
+using AtraShared.Utils.Extensions;
+using GrowableBushes.Framework.Items;
 using Microsoft.Xna.Framework;
 
 using StardewValley.TerrainFeatures;
-
-namespace GrowableBushes.Framework;
 
 /// <inheritdoc />
 public sealed class GrowableBushesAPI : IGrowableBushesAPI
@@ -67,7 +67,7 @@ public sealed class GrowableBushesAPI : IGrowableBushesAPI
                     BushSizes size = this.CanPickUpBush(bush, placedOnly);
                     if (size != BushSizes.Invalid)
                     {
-                        InventoryBush.BushShakeMethod(bush, tile, true);
+                        bush.shake(tile, true);
                         loc.largeTerrainFeatures.RemoveAt(i);
                         InventoryBush pickedUpBush = new(size, 1)
                         {

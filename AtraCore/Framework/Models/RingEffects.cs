@@ -14,16 +14,11 @@ using StardewValley.GameData.Objects;
 /// </summary>
 /// <param name="Color">The color to use.</param>
 /// <param name="Radius"></param>
-[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = StyleCopErrorConsts.IsRecord)]
-public sealed record LightData(Color Color, int Radius = -1)
+public sealed class LightData
 {
-    /// <summary>
-    /// Initializes a new instance of the <see cref="LightData"/> class that corresponds to default data.
-    /// </summary>
-    public LightData()
-        : this(new Color(0, 50, 170))
-    {
-    }
+    public Color Color { get; set; } = new(0, 50, 170);
+
+    public int Radius { get; set; } = -1;
 }
 
 /// <summary>
@@ -33,16 +28,13 @@ public sealed record LightData(Color Color, int Radius = -1)
 /// <param name="Texture">The texture of the buff, or null to use default.</param>
 /// <param name="SpriteIndex">The index of the sprite.</param>
 /// <param name="Duration">How long the buff should last for.</param>
-[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = StyleCopErrorConsts.IsRecord)]
-public record BuffDisplayAttributes(string? Texture, int SpriteIndex, int Duration)
+public sealed class BuffDisplayAttributes
 {
-    /// <summary>
-    /// Initializes a new instance of the <see cref="BuffDisplayAttributes"/> class.
-    /// </summary>
-    public BuffDisplayAttributes()
-        : this(null, 0, Game1.realMilliSecondsPerGameMinute * 10)
-    {
-    }
+    public string? Texture { get; set; }
+
+    public int SpriteIndex { get; set; }
+
+    public int Duration { get; set; } = Game1.realMilliSecondsPerGameMinute * 10;
 }
 
 /// <summary>

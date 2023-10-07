@@ -1,14 +1,17 @@
 ﻿// Ignore Spelling: pred
 
+namespace AtraShared.Utils.Extensions;
+
 using System.Diagnostics;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 
+using AtraBase.Internal;
 using AtraBase.Toolkit;
 
-using HarmonyLib;
+using AtraShared.Internal;
 
-namespace AtraShared.Utils.Extensions;
+using HarmonyLib;
 
 /// <summary>
 /// Extension methods for SMAPI's logging service.
@@ -106,15 +109,15 @@ public static class LogExtensions
     /// Logs to level (DEBUG by default) if compiled with the DEBUG flag only.
     /// </summary>
     /// <param name="monitor">SMAPI's logger.</param>
-    /// <param name="message">Message to log.</param>
     /// <param name="pred">Whether to log or not.</param>
+    /// <param name="message">Message to log.</param>
     /// <param name="level">Level to log at.</param>
-    /// <remarks>This exists because the entire function call is remvoed when compiled not debug
+    /// <remarks>This exists because the entire function call is removed when compiled not debug
     /// including the predicate code.</remarks>
     [DebuggerHidden]
     [Conditional("DEBUG")]
     [MethodImpl(TKConstants.Hot)]
-    public static void DebugOnlyLog(this IMonitor monitor, string message, bool pred, LogLevel level = LogLevel.Debug)
+    public static void DebugOnlyLog(this IMonitor monitor, bool pred, string message, LogLevel level = LogLevel.Debug)
     {
         if (pred)
         {
@@ -123,21 +126,22 @@ public static class LogExtensions
     }
 
     /// <summary>
-    /// Logs to level (TRACE by default) only if shouldLog is true.
+    /// Logs to level (DEBUG by default) if compiled with the DEBUG flag only.
     /// </summary>
     /// <param name="monitor">SMAPI's logger.</param>
+    /// <param name="pred">Whether to log or not.</param>
     /// <param name="message">Message to log.</param>
-    /// <param name="shouldLog">Whether the logging statement should be enabled or not.</param>
     /// <param name="level">Level to log at.</param>
-    /// <remarks>This is meant to prevent the creation of a bunch of strings if they're just going to be ignored anyways.
-    /// Must weigh the delegate against string creation, use sparingly.</remarks>
+    /// <remarks>This exists because the entire function call is removed when compiled not debug
+    /// including the predicate code.</remarks>
     [DebuggerHidden]
+    [Conditional("DEBUG")]
     [MethodImpl(TKConstants.Hot)]
-    public static void LogOnlyIf(this IMonitor monitor, Func<string> message, bool shouldLog, LogLevel level = LogLevel.Trace)
+    public static void DebugOnlyLog(this IMonitor monitor, bool pred, [InterpolatedStringHandlerArgument("pred")] ref PredicateInterpolatedStringHandler message, LogLevel level = LogLevel.Debug)
     {
-        if (shouldLog)
+        if (pred)
         {
-            monitor.Log(message(), level);
+            monitor.Log(message.ToString(), level);
         }
     }
 
@@ -151,11 +155,11 @@ public static class LogExtensions
     /// Must weigh the delegate against string creation, use sparingly.</remarks>
     [DebuggerHidden]
     [MethodImpl(TKConstants.Hot)]
-    public static void LogIfVerbose(this IMonitor monitor, Func<string> message, LogLevel level = LogLevel.Trace)
+    public static void LogIfVerbose(this IMonitor monitor, [InterpolatedStringHandlerArgument("monitor")] ref SmapiInterpolatedStringHandler message, LogLevel level = LogLevel.Trace)
     {
         if (monitor.IsVerbose)
         {
-            monitor.Log(message(), level);
+            monitor.Log(message.ToString(), level);
         }
     }
 }

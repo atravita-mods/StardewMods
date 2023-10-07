@@ -44,11 +44,6 @@ internal static class TeleportPlayer
 
         if (!ArgUtility.TryGetInt(parameters, 2, out var x, out error) || !ArgUtility.TryGetInt(parameters, 3, out var y, out error))
         {
-
-        }
-
-        if (!int.TryParse(parameters[2], out int x) || !int.TryParse(parameters[3], out int y))
-        {
             ModEntry.ModMonitor.Log($"Could not parse destination ({parameters[2]}, {parameters[3]}) for warp", LogLevel.Warn);
             return false;
         }

@@ -33,7 +33,7 @@ internal static class FruitTreeDayUpdateTranspiler
             if (tree.modData?.GetInt(CanPlaceHandler.FruitTreeFertilizer) is int result
                 && Random.Shared.OfChance(0.15 * result))
             {
-                ModEntry.ModMonitor.LogIfVerbose(() => $"Speeding up fruit tree at {tree.Tile}");
+                ModEntry.ModMonitor.LogIfVerbose($"Speeding up fruit tree at {tree.Tile}");
                 return 1;
             }
         }

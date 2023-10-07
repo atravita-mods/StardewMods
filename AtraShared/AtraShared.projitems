@@ -31,6 +31,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Integrations\Interfaces\IGrowableBushesAPI.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Integrations\Interfaces\IMoreGiantCropsAPI.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Integrations\Interfaces\IMoreGrassStarters.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Internal\SmapiInterpolatedStringHandler.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Niceties\AssetNameComparer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)niceties\GameLocationComparer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)niceties\ISalableComparer.cs" />

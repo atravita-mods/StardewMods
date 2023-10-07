@@ -36,7 +36,7 @@ internal static class CropTranspiler
         string? fertilizer = crop?.currentLocation.terrainFeatures.TryGetValue(tilePosition, out TerrainFeature? dirt) == true
             ? (dirt as HoeDirt)?.fertilizer.Value
             : null;
-        ModEntry.ModMonitor.DebugOnlyLog($"Testing fertilizer {fertilizer} with {ModEntry.GiantCropFertilizerID}", fertilizer is not null, LogLevel.Info);
+        ModEntry.ModMonitor.DebugOnlyLog(fertilizer is not null, $"Testing fertilizer {fertilizer} with {ModEntry.GiantCropFertilizerID}", LogLevel.Info);
         return ModEntry.IsGiantCropFertilizer(fertilizer) ? ModEntry.Config.GiantCropChance : chance;
     }
 

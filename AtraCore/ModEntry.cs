@@ -109,7 +109,7 @@ internal sealed class ModEntry : BaseMod<ModEntry>
         this.ApplyPatches(new Harmony(this.ModManifest.UniqueID));
 
         // actions
-        // ActionCommandHandler.RegisterActionCommand("atravita.teleport", TeleportPlayer.ApplyCommand);
+        GameLocation.RegisterTileAction("atravita.Teleport", TeleportPlayer.ApplyCommand);
 
         // add GSQ
         const string WALLET_ITEM = "atravita.AtraCore_HAS_WALLET_ITEM";

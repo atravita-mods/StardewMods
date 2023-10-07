@@ -1,4 +1,6 @@
-﻿using Microsoft.Xna.Framework;
+﻿using AtraShared.Utils.Extensions;
+
+using Microsoft.Xna.Framework;
 
 namespace AtraCore.Framework.ActionCommandHandler;
 
@@ -24,13 +26,13 @@ internal static class TeleportPlayer
             return false;
         }
 
-        if (parameters.Length < 4 || parameters.Length > 6)
+        if (parameters.Length < 4)
         {
-            loc.LogTileActionError(parameters, point.X, point.Y, "incorrect number of parameters (expected 4-6)");
+            loc.LogTileActionError(parameters, point.X, point.Y, "incorrect number of parameters (expected at least 4)");
             return false;
         }
 
-        // <string area> <int x> <int y> [string prerequisite] [int facing]
+        // <string area> <int x> <int y> [int facing] [string prerequisite]
         if (!ArgUtility.TryGet(parameters, 1, out string? map, out string? error, false))
         {
             loc.LogTileActionError(parameters, point.X, point.Y, error);
@@ -44,41 +46,29 @@ internal static class TeleportPlayer
 
         if (!ArgUtility.TryGetInt(parameters, 2, out var x, out error) || !ArgUtility.TryGetInt(parameters, 3, out var y, out error))
         {
-            ModEntry.ModMonitor.Log($"Could not parse destination ({parameters[2]}, {parameters[3]}) for warp", LogLevel.Warn);
+            loc.LogTileActionError(parameters, point.X, point.Y, error);
             return false;
         }
 
         int? direction = null;
         if (parameters.Length > 4)
         {
-            string? mail = null;
-            if (parameters.Length == 6)
+            int conditionsStart = 4;
+            if (int.TryParse(parameters[4], out var val))
             {
-                if (!int.TryParse(parameters[4], out int facing))
+                direction = val;
+                conditionsStart = 5;
+            }
+
+            if (ArgUtility.TryGetOptionalRemainder(parameters, conditionsStart, out var condition, out _)
+                && !string.IsNullOrWhiteSpace(condition))
+            {
+                ModEntry.ModMonitor.LogIfVerbose($"[Teleport] - checking {condition}");
+                if (!GameStateQuery.CheckConditions(condition))
                 {
-                    ModEntry.ModMonitor.Log($"Could not parse direction ({parameters[4]}) for warp", LogLevel.Warn);
+                    ModEntry.ModMonitor.LogIfVerbose($"[Teleport] action failed condition.");
                     return false;
                 }
-
-                direction = facing;
-                mail = parameters[5];
-            }
-            else if (parameters.Length == 5)
-            {
-                if (!int.TryParse(parameters[4], out int facing))
-                {
-                    mail = parameters[4];
-                }
-                else
-                {
-                    direction = facing;
-                }
-            }
-
-            if (mail is not null && !who.mailReceived.Contains(mail))
-            {
-                ModEntry.ModMonitor.Log($"Ignoring warp because mail flag '{mail}' not received.");
-                return false;
             }
         }
 

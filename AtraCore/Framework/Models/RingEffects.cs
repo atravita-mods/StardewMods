@@ -282,19 +282,33 @@ public sealed class BuffModel : ObjectBuffAttributesData
         return Expression.Lambda<Func<BuffModel, int>>(block, new ParameterExpression[] { model }).CompileFast();
     });
 
-    private static bool CheckTypeMatch(Type buffEffectsField, Type buffModelField)
+    private static readonly Lazy<Action<BuffModel, BuffModel>> _leftFold = new(() =>
     {
-        if (buffModelField == typeof(int) && buffEffectsField == typeof(NetInt))
+        List<Expression> expressions = new();
+
+        ParameterExpression left = Expression.ParameterOf<BuffModel>("left");
+        ParameterExpression right = Expression.ParameterOf<BuffModel>("right");
+
+        foreach (var field in typeof(BuffModel).GetFields())
         {
-            return true;
-        }
-        if (buffModelField == typeof(float) && buffEffectsField == typeof(NetFloat))
-        {
-            return true;
+            MemberExpression getter = Expression.Field(right, field);
+            MemberExpression setter = Expression.Field(left, field);
+            var sum = Expression.AddAssign(setter, getter);
+            expressions.Add(sum);
         }
 
-        return false;
-    }
+        foreach (var property in typeof(BuffModel).GetProperties())
+        {
+            MemberExpression getter = Expression.Property(right, property);
+            MemberExpression setter = Expression.Property(left, property);
+            var sum = Expression.AddAssign(setter, getter);
+            expressions.Add(sum);
+        }
+
+        BlockExpression block = Expression.Block(expressions);
+        ModEntry.ModMonitor.Log("Sum function generated:" + block.ToCSharpString());
+        return Expression.Lambda<Action<BuffModel, BuffModel>>(block, new ParameterExpression[] { left, right }).CompileFast();
+    });
 
     /// <inheritdoc cref="BuffEffects.CombatLevel"/>
     public int CombatLevel { get; set; } = 0;
@@ -321,6 +335,12 @@ public sealed class BuffModel : ObjectBuffAttributesData
     /// <remarks>This is unused in vanilla.</remarks>
     public float WeaponPrecisionMultiplier { get; set; } = 0f;
 
+    internal static BuffModel LeftFold(BuffModel left, BuffModel right)
+    {
+        _leftFold.Value(left, right);
+        return left;
+    }
+
     /// <summary>
     /// Generates a buff effect mirroring this data.
     /// </summary>
@@ -339,7 +359,25 @@ public sealed class BuffModel : ObjectBuffAttributesData
         return other;
     }
 
+    /// <summary>
+    /// Gets the number of extra rows this buff model will take up in the tooltip.
+    /// </summary>
+    /// <returns>Number of extra rows.</returns>
     internal int GetExtraRows() => _extraRows.Value(this);
+
+    private static bool CheckTypeMatch(Type buffEffectsField, Type buffModelField)
+    {
+        if (buffModelField == typeof(int) && buffEffectsField == typeof(NetInt))
+        {
+            return true;
+        }
+        if (buffModelField == typeof(float) && buffEffectsField == typeof(NetFloat))
+        {
+            return true;
+        }
+
+        return false;
+    }
 }
 
 /// <summary>

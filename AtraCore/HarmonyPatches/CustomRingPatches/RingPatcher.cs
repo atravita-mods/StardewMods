@@ -32,6 +32,9 @@ internal static class RingPatcher
     // maps the rings to their active effects
     private static readonly ConditionalWeakTable<Ring, RingEffects> _activeEffects = new();
 
+    // holds tooltip cache for combined rings
+    private static readonly ConditionalWeakTable<CombinedRing, RingEffects?> _combinedTooltips = new();
+
     #region delegates
     private static readonly Lazy<Func<Ring, int?>> lightIDSourceGetter = new(() =>
         typeof(Ring).GetCachedField("_lightSourceID", ReflectionCache.FlagTypes.InstanceFlags)
@@ -45,18 +48,22 @@ internal static class RingPatcher
     /// <summary>
     /// Called at warp, resets the tooltip map.
     /// </summary>
-    internal static void Reset() => _tooltipMap.Clear();
+    internal static void Reset()
+    {
+        _tooltipMap.Clear();
+        _combinedTooltips.Clear();
+    }
 
     [HarmonyPostfix]
     [HarmonyPatch(nameof(Ring.getExtraSpaceNeededForTooltipSpecialIcons))]
-    private static void PostfixExtraSpace(Ring __instance, ref Point __result, SpriteFont font)
+    private static void PostfixExtraSpace(Ring __instance, ref Point __result, SpriteFont font, int horizontalBuffer)
     {
         try
         {
-            if (GetRingEffect(__instance) is { } effects)
+            if (GetEffectsForTooltip(__instance) is { } effects)
             {
-                var extra_rows = 0;
-                var baseEffects = effects.BaseEffects;
+                int extra_rows = 0;
+                BuffModel baseEffects = effects.BaseEffects;
                 if (!string.IsNullOrWhiteSpace(effects.Condition))
                 {
                     extra_rows++;
@@ -73,11 +80,11 @@ internal static class RingPatcher
 
                 if (baseEffects.WeaponSpeedMultiplier != 0)
                 {
-                    __result.X = Math.Max(__result.X, (int)font.MeasureString(I18n.WeaponSpeed(baseEffects.WeaponSpeedMultiplier.FormatPercent())).X);
+                    __result.X = Math.Max(__result.X, (int)font.MeasureString(I18n.WeaponSpeed(baseEffects.WeaponSpeedMultiplier.FormatPercent())).X + horizontalBuffer + 1);
                 }
                 if (baseEffects.WeaponPrecisionMultiplier != 0)
                 {
-                    __result.X = Math.Max(__result.X, (int)font.MeasureString(I18n.WeaponPrecision(baseEffects.WeaponPrecisionMultiplier.FormatPercent())).X);
+                    __result.X = Math.Max(__result.X, (int)font.MeasureString(I18n.WeaponPrecision(baseEffects.WeaponPrecisionMultiplier.FormatPercent())).X + horizontalBuffer + 1);
                 }
             }
         }
@@ -94,9 +101,9 @@ internal static class RingPatcher
     {
         try
         {
-            if (GetRingEffect(__instance) is { } effects)
+            if (GetEffectsForTooltip(__instance) is { } effects)
             {
-                var height = Math.Max((int)font.MeasureString("TT").Y, 48);
+                int height = Math.Max((int)font.MeasureString("TT").Y, 48);
                 if (!string.IsNullOrWhiteSpace(effects.Condition))
                 {
                     DrawText(I18n.CurrentEffects(), x, ref y);
@@ -106,7 +113,7 @@ internal static class RingPatcher
                     DrawText(I18n.EmitsLight(), x, ref y);
                 }
 
-                var baseEffect = effects.BaseEffects;
+                BuffModel baseEffect = effects.BaseEffects;
                 if (baseEffect.FarmingLevel != 0)
                 {
                     DrawText(Game1.content.LoadString("Strings\\UI:ItemHover_Buff0", baseEffect.FarmingLevel.FormatNumber()), x, ref y);
@@ -250,7 +257,7 @@ internal static class RingPatcher
     {
         try
         {
-            if (_activeEffects.TryGetValue(__instance, out var effects))
+            if (_activeEffects.TryGetValue(__instance, out RingEffects? effects))
             {
                 if (effects.Light.Radius > 0)
                 {
@@ -293,11 +300,11 @@ internal static class RingPatcher
     [HarmonyPatch(nameof(Ring.onNewLocation))]
     private static void OnNewLocation(Ring __instance, Farmer who, GameLocation environment)
     {
-        if (_activeEffects.TryGetValue(__instance, out var ringEffects))
+        if (_activeEffects.TryGetValue(__instance, out RingEffects? ringEffects))
         {
             if (!string.IsNullOrWhiteSpace(ringEffects.Condition))
             {
-                var newEffect = AssetManager.GetRingData(__instance.ItemId)?.GetEffect(RingBuffTrigger.OnEquip, environment, who);
+                RingEffects? newEffect = AssetManager.GetRingData(__instance.ItemId)?.GetEffect(RingBuffTrigger.OnEquip, environment, who);
                 if (!ReferenceEquals(newEffect, ringEffects))
                 {
                     if (newEffect is not null)
@@ -334,7 +341,7 @@ internal static class RingPatcher
 
     private static RingEffects? GetRingEffect(Ring __instance)
     {
-        if (_activeEffects.TryGetValue(__instance, out var effects))
+        if (_activeEffects.TryGetValue(__instance, out RingEffects? effects))
         {
             _tooltipMap[__instance.ItemId] = effects;
             return effects;
@@ -350,6 +357,57 @@ internal static class RingPatcher
         }
 
         return ringEffects;
+    }
+
+    private static IEnumerable<RingEffects> GetAllRingEffects(Ring __instance)
+    {
+        if (__instance is CombinedRing combined)
+        {
+            foreach (var ring in combined.combinedRings)
+            {
+                foreach (var effect in GetAllRingEffects(ring))
+                {
+                    yield return effect;
+                }
+            }
+        }
+        else if (GetRingEffect(__instance) is { } ringEffect)
+        {
+            yield return ringEffect;
+        }
+    }
+
+    private static RingEffects? GetEffectsForTooltip(Ring instance)
+    {
+        if (instance is CombinedRing combined)
+        {
+            if (_combinedTooltips.TryGetValue(combined, out var val))
+            {
+                return val;
+            }
+            else if (GetAllRingEffects(combined).Any())
+            {
+                RingEffects combinedEffects = new();
+                foreach (var e in GetAllRingEffects(combined))
+                {
+                    if (e.Light.Radius > 0)
+                    {
+                        combinedEffects.Light.Radius = e.Light.Radius;
+                    }
+                    BuffModel.LeftFold(combinedEffects.BaseEffects, e.BaseEffects);
+                }
+                _combinedTooltips.AddOrUpdate(combined, combinedEffects);
+                return combinedEffects;
+            }
+            else
+            {
+                return null;
+            }
+        }
+        else
+        {
+            return GetRingEffect(instance);
+        }
     }
 
     private static void AddLight(int radius, Color color, Ring instance, Farmer player, GameLocation location)

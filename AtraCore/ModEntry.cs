@@ -8,7 +8,7 @@ using AtraBase.Toolkit;
 
 using AtraCore.Config;
 using AtraCore.Framework;
-using AtraCore.Framework.ActionCommandHandler;
+using AtraCore.Framework.ActionCommands;
 using AtraCore.Framework.Caches;
 using AtraCore.Framework.ConsoleCommands;
 using AtraCore.Framework.DialogueManagement;
@@ -53,7 +53,9 @@ internal sealed class ModEntry : BaseMod<ModEntry>
         I18n.Init(helper.Translation);
         AssetManager.Initialize(helper.GameContent);
         QuestTracker.Initialize(helper.Multiplayer, this.ModManifest.UniqueID);
+
         MultiplayerDispatch.Initialize(this.ModManifest.UniqueID);
+        helper.Events.Multiplayer.ModMessageReceived += static (_, e) => MultiplayerDispatch.Apply(e);
 
         // replace AtraBase's logger with SMAPI's logging service.
         AtraBase.Internal.Logger.Instance = new Logger(this.Monitor);

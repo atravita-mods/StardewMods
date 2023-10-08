@@ -1,10 +1,8 @@
-﻿using AtraShared.Utils.Extensions;
+﻿namespace AtraCore.Framework.ActionCommands;
+
+using AtraShared.Utils.Extensions;
 
 using Microsoft.Xna.Framework;
-
-namespace AtraCore.Framework.ActionCommandHandler;
-
-// TODO
 
 /// <summary>
 /// An action command to teleport players.
@@ -54,13 +52,13 @@ internal static class TeleportPlayer
         if (parameters.Length > 4)
         {
             int conditionsStart = 4;
-            if (int.TryParse(parameters[4], out var val))
+            if (int.TryParse(parameters[4], out int val))
             {
                 direction = val;
                 conditionsStart = 5;
             }
 
-            if (ArgUtility.TryGetOptionalRemainder(parameters, conditionsStart, out var condition, out _)
+            if (ArgUtility.TryGetOptionalRemainder(parameters, conditionsStart, out string? condition)
                 && !string.IsNullOrWhiteSpace(condition))
             {
                 ModEntry.ModMonitor.LogIfVerbose($"[Teleport] - checking {condition}");

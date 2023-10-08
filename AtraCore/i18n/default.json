@@ -7,5 +7,7 @@
   "api-too-old": "Please update {{apiName}}({{APIID}}) to at least version {{minversion}}. Current version {{currentversion}}. Integration disabled.",
 
   // ring text
-  "ring-precision":  "{0} Weapon Precision",
+  "ring-precision": "{0} Weapon Precision",
+  "current-effects": "Current Effects",
+  "glows": "Glows"
 }

@@ -1,4 +1,5 @@
-﻿using AtraShared.Utils.Extensions;
+﻿using AtraCore;
+using AtraCore.Framework.Models;
 
 using Microsoft.Xna.Framework.Graphics;
 
@@ -20,6 +21,7 @@ internal static class AssetManager
     private static IAssetName ringTextureLocation = null!;
     private static IAssetName buffTextureLocation = null!;
     private static IAssetName dataShops = null!;
+    private static IAssetName ringData = null!;
 #endregion
 
     private static Lazy<Texture2D> buffTex = new(() => Game1.content.Load<Texture2D>(buffTextureLocation.BaseName));
@@ -40,6 +42,7 @@ internal static class AssetManager
         ringTextureLocation = parser.ParseAssetName("Mods/atravita/CritterRings/RingTex");
         buffTextureLocation = parser.ParseAssetName("Mods/atravita/CritterRings/BuffIcon");
         dataShops = parser.ParseAssetName("Data/Shops");
+        ringData = parser.ParseAssetName(AtraCoreConstants.RingDataExt);
     }
 
     /// <inheritdoc cref="IContentEvents.AssetRequested"/>
@@ -70,6 +73,12 @@ internal static class AssetManager
             e.Edit(
                 apply: EditShops,
                 priority: AssetEditPriority.Early);
+        }
+        else if (e.NameWithoutLocale.IsEquivalentTo(ringData))
+        {
+            e.Edit(
+                apply: AddRingData,
+                priority: AssetEditPriority.Late);
         }
     }
 
@@ -142,6 +151,38 @@ internal static class AssetManager
             Price = PRICE,
             Texture = ringTextureLocation.BaseName,
             SpriteIndex = 1,
+        };
+    }
+
+    private static void AddRingData(IAssetData asset)
+    {
+        var editor = asset.AsDictionary<string, RingExtModel>().Data;
+        editor[ModEntry.ButterflyRing] = new()
+        {
+            Effects = new()
+            {
+                new()
+                {
+                    BaseEffects = new()
+                    {
+                        MagneticRadius = 128,
+                    },
+                },
+            },
+        };
+
+        editor[ModEntry.FireFlyRing] = new()
+        {
+            Effects = new()
+            {
+                new()
+                {
+                    Light = new()
+                    {
+                        Radius = 12,
+                    },
+                },
+            },
         };
     }
 

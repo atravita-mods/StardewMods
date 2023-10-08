@@ -394,6 +394,10 @@ internal static class RingPatcher
                     {
                         combinedEffects.Light.Radius = e.Light.Radius;
                     }
+                    if (!string.IsNullOrWhiteSpace(e.Condition))
+                    {
+                        combinedEffects.Condition = e.Condition;
+                    }
                     BuffModel.LeftFold(combinedEffects.BaseEffects, e.BaseEffects);
                 }
                 _combinedTooltips.AddOrUpdate(combined, combinedEffects);
@@ -401,6 +405,7 @@ internal static class RingPatcher
             }
             else
             {
+                _combinedTooltips.AddOrUpdate(combined, null);
                 return null;
             }
         }

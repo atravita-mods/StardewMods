@@ -2,40 +2,26 @@
 
 namespace AtraCore.Framework.Models;
 
+using System.Reflection;
+
 using AtraBase.Toolkit;
+using AtraBase.Toolkit.Reflection;
+
+using AtraCore.Framework.Caches.AssetCache;
+using AtraCore.Framework.ReflectionManager;
+
+using AtraShared.Utils.Extensions;
+
+using FastExpressionCompiler.LightExpression;
 
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+
+using Netcode;
 
 using StardewValley.Buffs;
 using StardewValley.GameData.Objects;
-
-/// <summary>
-/// A model to hold the light-ring like effects for a ring.
-/// </summary>
-/// <param name="Color">The color to use.</param>
-/// <param name="Radius"></param>
-public sealed class LightData
-{
-    public Color Color { get; set; } = new(0, 50, 170);
-
-    public int Radius { get; set; } = -1;
-}
-
-/// <summary>
-/// The attributes associated with displaying a <see cref="RingBuffTrigger.OnMonsterSlay"/> buff to the player.
-/// Ignored for <see cref="RingBuffTrigger.OnEquip"/> buffs.
-/// </summary>
-/// <param name="Texture">The texture of the buff, or null to use default.</param>
-/// <param name="SpriteIndex">The index of the sprite.</param>
-/// <param name="Duration">How long the buff should last for.</param>
-public sealed class BuffDisplayAttributes
-{
-    public string? Texture { get; set; }
-
-    public int SpriteIndex { get; set; }
-
-    public int Duration { get; set; } = Game1.realMilliSecondsPerGameMinute * 10;
-}
+using StardewValley.Objects;
 
 /// <summary>
 /// The possible times to trigger a buff from the ring.
@@ -52,6 +38,11 @@ public enum RingBuffTrigger
     /// Buffs are added when a monster is slain when the ring is equipped.
     /// </summary>
     OnMonsterSlay = 0b10,
+
+    /// <summary>
+    /// Buffs are added when the player is hit.
+    /// </summary>
+    OnPlayerHit = 0b100,
 }
 
 /// <summary>
@@ -84,7 +75,7 @@ public sealed class RingExtModel
     /// <param name="location">The location to use, or null for current location.</param>
     /// <param name="player">The player to use, or null for current player.</param>
     /// <returns>The ring effects.</returns>
-    internal RingEffects? GetEffect(RingBuffTrigger trigger, GameLocation? location, Farmer? player)
+    internal RingEffects? GetEffect(RingBuffTrigger trigger, GameLocation? location = null, Farmer? player = null)
     {
         location ??= Game1.currentLocation;
         player ??= Game1.player;
@@ -146,6 +137,38 @@ public sealed class RingEffects
     /// Gets or sets a value indicating when to apply the buffs from this ring.
     /// </summary>
     public RingBuffTrigger Trigger { get; set; } = RingBuffTrigger.OnEquip;
+
+    /// <summary>
+    /// Adds the buff defined by this ring instance to the player.
+    /// </summary>
+    /// <param name="instance">The ring instance.</param>
+    /// <param name="who">The farmer in question.</param>
+    internal void AddBuff(Ring instance, Farmer who)
+    {
+        string id = this.BuffID ?? instance.ItemId;
+        if (who.hasBuff(id))
+        {
+            return;
+        }
+
+        BuffDisplayAttributes attributes = this.DisplayAttributes;
+        Texture2D? tex = null;
+        if (attributes.Texture is string textureName)
+        {
+            tex = AssetCache.Get<Texture2D>(textureName)?.Value;
+        }
+
+        Buff buff = new(
+            id: id,
+            displayName: TokenParser.ParseText(attributes.DisplayName) ?? instance.DisplayName,
+            displaySource: instance.DisplayName,
+            iconTexture: tex,
+            iconSheetIndex: attributes.SpriteIndex,
+            duration: attributes.Duration,
+            effects: this.BaseEffects.ToBuffEffect()
+            );
+        who.applyBuff(buff);
+    }
 }
 
 /// <summary>
@@ -153,6 +176,126 @@ public sealed class RingEffects
 /// </summary>
 public sealed class BuffModel : ObjectBuffAttributesData
 {
+    private static readonly Lazy<Action<BuffEffects, BuffModel>> _merger = new(() =>
+    {
+        ModEntry.ModMonitor.DebugOnlyLog($"Generating merge function");
+
+        ParameterExpression effects = Expression.ParameterOf<BuffEffects>("effects");
+        ParameterExpression model = Expression.ParameterOf<BuffModel>("model");
+
+        List<Expression> expressions = new();
+
+        foreach (FieldInfo field in typeof(BuffModel).GetFields())
+        {
+            MemberInfo member = typeof(BuffEffects).GetMember(field.Name).SingleOrDefault() ?? ReflectionThrowHelper.ThrowMethodNotFoundException<MemberInfo>(field.Name);
+            MemberExpression getter = Expression.Field(model, field);
+            switch (member)
+            {
+                case FieldInfo asField:
+                    if (CheckTypeMatch(asField.FieldType, field.FieldType))
+                    {
+                        MemberExpression netField = Expression.Field(effects, asField);
+                        MemberExpression valueSetter = Expression.Property(netField, asField.FieldType.GetCachedProperty("Value", ReflectionCache.FlagTypes.InstanceFlags));
+                        BinaryExpression assign = Expression.AddAssign(valueSetter, getter);
+                        expressions.Add(assign);
+                    }
+
+                    break;
+                case PropertyInfo asProperty:
+                    if (CheckTypeMatch(asProperty.PropertyType, field.FieldType))
+                    {
+                        MemberExpression netField = Expression.Property(effects, asProperty);
+                        MemberExpression valueSetter = Expression.Property(netField, asProperty.PropertyType.GetCachedProperty("Value", ReflectionCache.FlagTypes.InstanceFlags));
+                        BinaryExpression assign = Expression.AddAssign(valueSetter, getter);
+                    }
+                    break;
+                default:
+                    ReflectionThrowHelper.ThrowMethodNotFoundException(field.Name);
+                    break;
+            }
+        }
+
+        foreach (PropertyInfo property in typeof(BuffModel).GetProperties())
+        {
+            MemberInfo member = typeof(BuffEffects).GetMember(property.Name).SingleOrDefault() ?? ReflectionThrowHelper.ThrowMethodNotFoundException<MemberInfo>(property.Name);
+            MemberExpression getter = Expression.Property(model, property);
+
+            switch (member)
+            {
+                case FieldInfo asField:
+                    if (CheckTypeMatch(asField.FieldType, property.PropertyType))
+                    {
+                        MemberExpression netField = Expression.Field(effects, asField);
+                        MemberExpression valueSetter = Expression.Property(netField, asField.FieldType.GetCachedProperty("Value", ReflectionCache.FlagTypes.InstanceFlags));
+                        BinaryExpression assign = Expression.AddAssign(valueSetter, getter);
+                        expressions.Add(assign);
+                    }
+
+                    break;
+                case PropertyInfo asProperty:
+                    if (CheckTypeMatch(asProperty.PropertyType, property.PropertyType))
+                    {
+                        MemberExpression netField = Expression.Property(effects, asProperty);
+                        MemberExpression valueSetter = Expression.Property(netField, asProperty.PropertyType.GetCachedProperty("Value", ReflectionCache.FlagTypes.InstanceFlags));
+                        BinaryExpression assign = Expression.AddAssign(valueSetter, getter);
+                    }
+                    break;
+                default:
+                    ReflectionThrowHelper.ThrowMethodNotFoundException(property.Name);
+                    break;
+            }
+        }
+
+        BlockExpression block = Expression.Block(expressions);
+        ModEntry.ModMonitor.Log("Ring merge function generated:" + block.ToCSharpString());
+        return Expression.Lambda<Action<BuffEffects, BuffModel>>(block, new ParameterExpression[] { effects, model }).CompileFast();
+    });
+
+    private static readonly Lazy<Func<BuffModel, int>> _extraRows = new(() =>
+    {
+        List<Expression> expressions = new();
+
+        ParameterExpression model = Expression.ParameterOf<BuffModel>("model");
+        ParameterExpression rows = Expression.ParameterOf<int>("rows");
+        var init = Expression.Assign(rows, Expression.ZeroConstant);
+        expressions.Add(init);
+
+        foreach (var field in typeof(BuffModel).GetFields())
+        {
+            MemberExpression getter = Expression.Field(model, field);
+            var greater = Expression.NotEqual(getter, field.FieldType == typeof(float) ? Expression.ConstantOf(0f) : Expression.ZeroConstant);
+            var elif = Expression.IfThen(greater, Expression.PreIncrementAssign(rows));
+            expressions.Add(elif);
+        }
+
+        foreach (var property in typeof(BuffModel).GetProperties())
+        {
+            MemberExpression getter = Expression.Property(model, property);
+            var greater = Expression.NotEqual(getter, property.PropertyType == typeof(float) ? Expression.ConstantOf(0f) : Expression.ZeroConstant);
+            var elif = Expression.IfThen(greater, Expression.PreIncrementAssign(rows));
+            expressions.Add(elif);
+        }
+
+        expressions.Add(rows);
+        BlockExpression block = Expression.Block(new ParameterExpression[] { rows }, expressions);
+        ModEntry.ModMonitor.Log("Height function generated:" + block.ToCSharpString());
+        return Expression.Lambda<Func<BuffModel, int>>(block, new ParameterExpression[] { model }).CompileFast();
+    });
+
+    private static bool CheckTypeMatch(Type buffEffectsField, Type buffModelField)
+    {
+        if (buffModelField == typeof(int) && buffEffectsField == typeof(NetInt))
+        {
+            return true;
+        }
+        if (buffModelField == typeof(float) && buffEffectsField == typeof(NetFloat))
+        {
+            return true;
+        }
+
+        return false;
+    }
+
     /// <inheritdoc cref="BuffEffects.CombatLevel"/>
     public int CombatLevel { get; set; } = 0;
 
@@ -177,4 +320,57 @@ public sealed class BuffModel : ObjectBuffAttributesData
     /// <inheritdoc cref="BuffEffects.WeaponPrecisionMultiplier"/>
     /// <remarks>This is unused in vanilla.</remarks>
     public float WeaponPrecisionMultiplier { get; set; } = 0f;
+
+    /// <summary>
+    /// Generates a buff effect mirroring this data.
+    /// </summary>
+    /// <returns>The buff effect.</returns>
+    internal BuffEffects ToBuffEffect()
+        => this.Merge(new());
+
+    /// <summary>
+    /// Merges this data with an existing buff effect.
+    /// </summary>
+    /// <param name="other">Buff effect to add to.</param>
+    /// <returns>The buff effect.</returns>
+    internal BuffEffects Merge(BuffEffects other)
+    {
+        _merger.Value(other, this);
+        return other;
+    }
+
+    internal int GetExtraRows() => _extraRows.Value(this);
+}
+
+/// <summary>
+/// A model to hold the light-ring like effects for a ring.
+/// </summary>
+public sealed class LightData
+{
+    public Color Color { get; set; } = new(0, 50, 170);
+
+    public int Radius { get; set; } = -1;
+}
+
+/// <summary>
+/// The attributes associated with displaying a <see cref="RingBuffTrigger.OnMonsterSlay"/> buff to the player.
+/// Ignored for <see cref="RingBuffTrigger.OnEquip"/> buffs.
+/// </summary>
+public sealed class BuffDisplayAttributes
+{
+    public string? Texture { get; set; }
+
+    public int SpriteIndex { get; set; } = -1;
+
+    public int Duration { get; set; } = Game1.realMilliSecondsPerGameMinute * 10;
+
+    /// <summary>
+    /// A tokenized string for the display name of a buff, or null to use the ring's name.
+    /// </summary>
+    public string? DisplayName { get; set; }
+
+    /// <summary>
+    /// A tokenized string for the description of a buff, or null to use the ring's description.
+    /// </summary>
+    public string? Description { get; set; }
 }

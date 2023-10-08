@@ -10,7 +10,8 @@
             "Entries": {
                 "Abigail_y2": "{{i18n:abby-y2-xmas.00}}",
                 "Abigail_y3": "{{i18n:abby-y3-xmas.00}}",
-                "Abigail_spouse_y2": "{{i18n:abby-y2-xmas-spouse}}#$b#{{i18n:abby-y2-xmas-spouse.00}}$l"
+                "Abigail_spouse_y2": "{{i18n:abby-y2-xmas-spouse}}#$b#{{i18n:abby-y2-xmas-spouse.00}}$l",
+                "Abigail_spouse_y3": "{{i18n:abby-y3-xmas-spouse}}"
             }
         },
         {
@@ -368,6 +369,7 @@
             "When": {"EnableFor": "Penny"},
             "Entries": {
                 "Penny_y2": "{{i18n:penny-y2-xmas.00}}$s",
+                "Penny_y3": "{{i18n:penny-y3-xmas.00}}#$b#{{i18n:penny-y3-xmas.01}}",
                 "Penny_spouse_y2": "{{i18n:penny-y2-xmas-spouse}}$s#$b#{{i18n:penny-y2-xmas-spouse.00}}"
             }
         },

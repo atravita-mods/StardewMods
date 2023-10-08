@@ -1,8 +1,10 @@
-﻿#if DEBUG
+﻿namespace HighlightEmptyMachines;
+
+#if DEBUG
 using System.Diagnostics;
+#endif
 
 using AtraCore.Framework.Internal;
-#endif
 
 using AtraShared.ConstantsAndEnums;
 using AtraShared.Integrations;
@@ -16,8 +18,6 @@ using HighlightEmptyMachines.Framework;
 using StardewModdingAPI.Events;
 
 using AtraUtils = AtraShared.Utils.Utils;
-
-namespace HighlightEmptyMachines;
 
 /// <inheritdoc />
 internal sealed class ModEntry : BaseMod<ModEntry>

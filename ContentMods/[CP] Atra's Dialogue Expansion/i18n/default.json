@@ -1296,6 +1296,7 @@
 
     // Dance of the Moonlight Jellies
     "abby-y2-jellies": "Man, I'm not looking forward to school starting again",
+    "abby-y3-jellies": "Have you ever wondered what the town would do if it rained during a festival?",
     "abby-y1-jellies-spouse": "And another summer over. @, you looking forward to fall?",
     "abby-y2-jellies-spouse": "Pumpkin pie season starts tomorrow, I can't wait!",
     "alex-y2-jellies": "Gosh, it's so peaceful, isn't it?",
@@ -1620,6 +1621,7 @@
     "abby-y3-xmas.00": "Aww, I don't think there's any more spicy tomato soup.",
     "abby-y2-xmas-spouse": "What am I grateful for...",
     "abby-y2-xmas-spouse.00": "Well, I have a lot to be grateful for...",
+    "abby-y3-xmas-spouse": "Let me know when you want to go home, my dear. I think I'm done with this festival.",
     "alex-y2-xmas.00": "I'm grateful for my gramps and my grandma, of course!",
     "alex-y3-xmas.00": "It's almost spring, isn't it, @? You ready?",
     "alex-y2-xmas-spouse": "Winter Star is the best time for family, of course!",
@@ -1713,6 +1715,8 @@
     "maru-y2-xmas-spouse": "It's nice spending some time with family. I should visit more often.",
     "pam-y2-xmas": "Mmm, this eggnog's great, isn't it, @?",
     "penny-y2-xmas.00": "Days like this are meant for happy families, I guess",
+    "penny-y3-xmas.00": "I hope Jas and Vincent like the gifts I got them...#$b#It isn't much, but hopefully they'll be happy.",
+    "penny-y3-xmas.01": "It isn't much, but hopefully they'll be happy.",
     "penny-y2-xmas-married-other": "Days like this, I wonder how things would be different for my mother if my father never left...",
     "penny-y2-xmas-spouse": "Days like this I wonder how my dad's doing...",
     "penny-y2-xmas-spouse.00": "I'm so glad I have you now, but I can't help but think of the father I never had.",

@@ -555,7 +555,7 @@ public sealed class InventoryTree : SObject
 
         WildTreeData? data = Tree.GetWildTreeDataDictionary().GetValueOrDefault(this.ItemId);
 
-        if (data?.Textures?.Count() is null or 0)
+        if (data?.Textures?.Count is null or 0)
         {
             this.holder = AssetCache.Get(Game1.mouseCursorsName);
             this.sourceRect = new(320, 496, 16, 16);

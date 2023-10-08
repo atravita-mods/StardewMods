@@ -8,6 +8,7 @@
             "When": {"EnableFor": "Abigail"},
             "Entries": {
                 "Abigail_y2": "{{i18n:abby-y2-jellies}}$s",
+                "Abigail_y3": "{{i18n:abby-y3-jellies}}",
                 "Abigail_spouse": "{{i18n:abby-y1-jellies-spouse}}",
                 "Abigail_spouse_y2": "{{i18n:abby-y2-jellies-spouse}}$h"
             }

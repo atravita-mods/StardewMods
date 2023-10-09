@@ -117,7 +117,7 @@ internal sealed class ModEntry : Mod
             });
 #endif
 
-            helper.Print();
+            // helper.Print();
             return helper.Render();
         }
         catch (Exception ex)

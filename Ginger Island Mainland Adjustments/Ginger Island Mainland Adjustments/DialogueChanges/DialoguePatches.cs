@@ -152,7 +152,7 @@ internal static class DialoguePatches
             {
                 __instance.CurrentDialogue.Clear();
                 __instance.currentMarriageDialogue.Clear();
-                var dialogue = Game1.player.getFriendshipHeartLevelForNPC(__instance.Name) > 9
+                Dialogue dialogue = Game1.player.getFriendshipHeartLevelForNPC(__instance.Name) > 9
                     ? new Dialogue(__instance, null, I18n.GIReturnDefaultHappy(__instance.getTermOfSpousalEndearment()))
                     : new Dialogue(__instance, null, I18n.GIReturnDefaultUnhappy());
                 __instance.CurrentDialogue.Push(dialogue);

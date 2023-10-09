@@ -42,7 +42,7 @@ internal static class NPCPatches
         {
             if (npcRef.TryGetTarget(out NPC? npc))
             {
-                var data = npc.GetData();
+                StardewValley.GameData.Characters.CharacterData? data = npc.GetData();
                 npc.Sprite.SpriteHeight = data?.Size.Y ?? 32;
                 npc.Sprite.SpriteWidth = data?.Size.X ?? 16;
                 npc.Sprite.ignoreSourceRectUpdates = false;
@@ -105,7 +105,7 @@ internal static class NPCPatches
             if (IsBeachFishAnimation(__instance, __0))
             {
                 __instance.reloadSprite();
-                var data = __instance.GetData();
+                StardewValley.GameData.Characters.CharacterData? data = __instance.GetData();
                 __instance.Sprite.SpriteWidth = data?.Size.X ?? 16;
                 __instance.Sprite.SpriteHeight = data?.Size.Y ?? 32;
                 __instance.Sprite.UpdateSourceRect();

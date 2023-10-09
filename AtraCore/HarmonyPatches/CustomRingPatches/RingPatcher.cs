@@ -5,6 +5,7 @@ using System.Runtime.CompilerServices;
 using AtraBase.Toolkit;
 using AtraBase.Toolkit.Reflection;
 
+using AtraCore.Framework.Caches.AssetCache;
 using AtraCore.Framework.Models;
 using AtraCore.Framework.ReflectionManager;
 
@@ -112,80 +113,99 @@ internal static class RingPatcher
                 }
                 if (effects.Light.Radius > 0)
                 {
+                    DrawIcon(AssetManager.RingTextures, 0, x, y, false);
                     DrawText(I18n.EmitsLight(), x, ref y);
                 }
 
                 BuffModel baseEffect = effects.BaseEffects;
                 if (baseEffect.FarmingLevel != 0)
                 {
+                    DrawIcon(Game1.mouseCursors, 1, x, y);
                     DrawText(Game1.content.LoadString("Strings\\UI:ItemHover_Buff0", baseEffect.FarmingLevel.FormatNumber()), x, ref y);
                 }
                 if (baseEffect.FishingLevel != 0)
                 {
+                    DrawIcon(Game1.mouseCursors, 2, x, y);
                     DrawText(Game1.content.LoadString("Strings\\UI:ItemHover_Buff1", baseEffect.FishingLevel.FormatNumber()), x, ref y);
                 }
                 if (baseEffect.MiningLevel != 0)
                 {
+                    DrawIcon(Game1.mouseCursors, 3, x, y);
                     DrawText(Game1.content.LoadString("Strings\\UI:ItemHover_Buff2", baseEffect.MiningLevel.FormatNumber()), x, ref y);
                 }
                 if (baseEffect.CombatLevel != 0)
                 {
+                    DrawIcon(Game1.mouseCursors, 14, x, y);
                     DrawText(Game1.content.LoadString("Strings\\UI:ItemHover_Buff3", baseEffect.CombatLevel.FormatNumber()), x, ref y);
                 }
                 if (baseEffect.LuckLevel != 0)
                 {
+                    DrawIcon(Game1.mouseCursors, 5, x, y);
                     DrawText(Game1.content.LoadString("Strings\\UI:ItemHover_Buff4", baseEffect.LuckLevel.FormatNumber()), x, ref y);
                 }
                 if (baseEffect.ForagingLevel != 0)
                 {
+                    DrawIcon(Game1.mouseCursors, 6, x, y);
                     DrawText(Game1.content.LoadString("Strings\\UI:ItemHover_Buff5", baseEffect.ForagingLevel.FormatNumber()), x, ref y);
                 }
                 if (baseEffect.MaxStamina != 0)
                 {
+                    DrawIcon(Game1.mouseCursors, 8, x, y);
                     DrawText(Game1.content.LoadString("Strings\\UI:ItemHover_Buff6", baseEffect.MaxStamina.FormatNumber()), x, ref y);
                 }
                 if (baseEffect.MagneticRadius != 0)
                 {
+                    DrawIcon(Game1.mouseCursors, 9, x, y);
                     DrawText(Game1.content.LoadString("Strings\\UI:ItemHover_Buff8", baseEffect.MagneticRadius.FormatNumber()), x, ref y);
                 }
                 if (baseEffect.Speed != 0)
                 {
+                    DrawIcon(Game1.mouseCursors, 10, x, y);
                     DrawText(Game1.content.LoadString("Strings\\UI:ItemHover_Buff9", baseEffect.Speed.FormatNumber()), x, ref y);
                 }
                 if (baseEffect.Defense != 0)
                 {
+                    DrawIcon(Game1.mouseCursors, 11, x, y);
                     DrawText(I18n.Defense(baseEffect.Defense.FormatNumber()), x, ref y);
                 }
                 if (baseEffect.Attack != 0)
                 {
+                    DrawIcon(Game1.mouseCursors, 12, x, y);
                     DrawText(Game1.content.LoadString("Strings\\UI:ItemHover_Buff11", baseEffect.Attack.FormatNumber()), x, ref y);
                 }
                 if (baseEffect.AttackMultiplier != 0)
                 {
+                    DrawIcon(Game1.mouseCursors, 12, x, y);
                     DrawText(Game1.content.LoadString("Strings\\UI:ItemHover_Buff11", baseEffect.AttackMultiplier.FormatPercent()), x, ref y);
                 }
                 if (baseEffect.Immunity != 0)
                 {
+                    DrawIcon(Game1.mouseCursors, 15, x, y);
                     DrawText(I18n.Immunity(baseEffect.Immunity.FormatNumber()), x, ref y);
                 }
                 if (baseEffect.CriticalChanceMultiplier != 0)
                 {
+                    DrawIcon(Game1.mouseCursors, 4, x, y);
                     DrawText(I18n.Critchance(baseEffect.CriticalChanceMultiplier.FormatPercent()), x, ref y);
                 }
                 if (baseEffect.CriticalPowerMultiplier != 0)
                 {
+                    DrawIcon(Game1.mouseCursors, 16, x, y);
                     DrawText(I18n.Critpower(baseEffect.CriticalPowerMultiplier.FormatPercent()), x, ref y);
                 }
                 if (baseEffect.KnockbackMultiplier != 0)
                 {
-                    DrawText(Game1.content.LoadString("Strings\\UI:ItemHover_Weight", baseEffect.KnockbackMultiplier.FormatPercent()), x, ref y);
+                    DrawIcon(Game1.mouseCursors, 7, x, y);
+                    DrawText(I18n.Knockback(baseEffect.KnockbackMultiplier.FormatPercent()), x, ref y);
                 }
                 if (baseEffect.WeaponSpeedMultiplier != 0)
                 {
+                    DrawIcon(Game1.mouseCursors, 13, x, y);
                     DrawText(I18n.WeaponSpeed(baseEffect.WeaponSpeedMultiplier.FormatPercent()), x, ref y);
                 }
                 if (baseEffect.WeaponPrecisionMultiplier != 0)
                 {
+                    DrawIcon(AssetManager.RingTextures, 1, x, y, false);
                     DrawText(I18n.WeaponPrecision(baseEffect.WeaponPrecisionMultiplier.FormatPercent()), x, ref y);
                 }
 
@@ -195,9 +215,24 @@ internal static class RingPatcher
                                 spriteBatch,
                                 text,
                                 font,
-                                new Vector2(x + 20, y + 28),
+                                new Vector2(x + 68, y + 28),
                                 Game1.textColor * 0.9f * alpha);
                     y += height;
+                }
+
+                void DrawIcon(Texture2D texture, int index, int x, int y, bool offset = true)
+                {
+                    Utility.drawWithShadow(
+                        spriteBatch,
+                        texture,
+                        new Vector2(x + 20, y + 20),
+                        new Rectangle(index * 10, offset ? 428 : 0, 10, 10),
+                        Color.White,
+                        0f,
+                        Vector2.Zero,
+                        4f,
+                        flipped: false,
+                        1f);
                 }
             }
         }

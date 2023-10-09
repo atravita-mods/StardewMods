@@ -9,6 +9,7 @@ using AtraCore.Models;
 using AtraShared.Utils.Extensions;
 
 using Microsoft.Xna.Framework.Content;
+using Microsoft.Xna.Framework.Graphics;
 
 using StardewModdingAPI.Events;
 using StardewModdingAPI.Utilities;
@@ -23,9 +24,18 @@ internal static class AssetManager
 
     private static IAssetName prismatic = null!;
     private static IAssetName ringData = null!;
+    private static IAssetName ringBuffIcons = null!;
 
     private static Lazy<Dictionary<string, RingExtModel>> _ringData = new(
         static () => Game1.content.Load<Dictionary<string, RingExtModel>>(AtraCoreConstants.RingDataExt));
+
+    private static Lazy<Texture2D> _ringTextures = new(
+        static () => Game1.content.Load<Texture2D>(ringBuffIcons.BaseName));
+
+    /// <summary>
+    /// Gets the additional ring buff icons.
+    /// </summary>
+    internal static Texture2D RingTextures => _ringTextures.Value;
 
     /// <summary>
     /// Initializes the asset manager.
@@ -35,6 +45,7 @@ internal static class AssetManager
     {
         prismatic = parser.ParseAssetName(AtraCoreConstants.PrismaticMaskData);
         ringData = parser.ParseAssetName(AtraCoreConstants.RingDataExt);
+        ringBuffIcons = parser.ParseAssetName("Mods/atravita/RingBuffIcons");
 
         // check and populate the event locations.
         foreach (string? location in new[] { "AdventureGuild", "Blacksmith", "WitchHut", "WitchSwamp", "Summit" })
@@ -85,6 +96,10 @@ internal static class AssetManager
         {
             e.LoadFrom(EmptyContainers.GetEmptyDictionary<string, RingExtModel>, AssetLoadPriority.Exclusive);
         }
+        else if (e.NameWithoutLocale.IsEquivalentTo(ringBuffIcons))
+        {
+            e.LoadFromModFile<Texture2D>("assets/BuffIcons.png", AssetLoadPriority.Exclusive);
+        }
         else if (e.NameWithoutLocale.StartsWith(dataEvents, false, false))
         {
             string loc = e.NameWithoutLocale.BaseName.GetNthChunk('/', 2).ToString();
@@ -103,6 +118,13 @@ internal static class AssetManager
             if (_ringData.IsValueCreated)
             {
                 _ringData = new(static () => Game1.content.Load<Dictionary<string, RingExtModel>>(AtraCoreConstants.RingDataExt));
+            }
+        }
+        if (assets is null || assets.Contains(ringBuffIcons))
+        {
+            if (_ringTextures.IsValueCreated)
+            {
+                _ringTextures = new(static () => Game1.content.Load<Texture2D>(ringBuffIcons.BaseName));
             }
         }
     }

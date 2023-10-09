@@ -6,6 +6,7 @@
             "Target": "Characters/Dialogue/Penny",
             "Entries": {
                 "fall_Mon4": "{{i18n: penny-home-unmarried}}$h",
+                "7{{YearRemainder}}": "{{i18n: penny-teaching-unmarried}}$s",
                 "Resort_Leaving_2": "{{i18n: penny-resort-leaving-2}}$h"
             }
         },
@@ -16,7 +17,8 @@
             },
             "Target": "Characters/Dialogue/Penny",
             "Entries": {
-                "fall_Mon4": "{{i18n: penny-home-married}}$h"
+                "fall_Mon4": "{{i18n: penny-home-married}}$h",
+                "7{{YearRemainder}}": "{{i18n: penny-teaching-married}}$h"
             }
         },
         {
@@ -27,7 +29,7 @@
             },
             "Target": "Characters/Dialogue/Penny",
             "Entries": {
-                "5{{YearRemainder}}": "Picked up a new book that explains addiction yesterday...#$b#Gosh, will I ever find a book that explains why my mom is the way she is?"
+                "5{{YearRemainder}}": "{{i18n:penny-addiction-reading.00}}#$b#{{i18n:penny-addiction-reading.01}}"
             }
         }
     ]

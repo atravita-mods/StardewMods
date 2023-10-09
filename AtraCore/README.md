@@ -18,6 +18,9 @@ Simply remove this mod from your Mods folder.
 * Works in single player, multiplayer, and split-screen mode. In multiplayer, all players should install.
 * Should be compatible with most other mods.
 
+## Much thanks to:
+* Elizabeth, for making the lightbulb/weapon precision buff icons!
+
 ## See also
 
 [Changelog](docs/changelog.md)

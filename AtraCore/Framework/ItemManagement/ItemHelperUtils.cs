@@ -25,7 +25,7 @@ public static class ItemHelperUtils
             return true;
         }
 
-        var name = data.Name;
+        string name = data.Name;
         if (name == "Stone" && id != "390")
         {
             return true;

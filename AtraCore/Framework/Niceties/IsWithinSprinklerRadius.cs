@@ -135,7 +135,7 @@ public sealed class IsWithinSprinklerRadiusHelper
             foreach (SObject obj in location.objects.Values)
             {
                 IEnumerable<Vector2> tiles;
-                if (int.TryParse(obj.ItemId, out var legacyID) && tilemap?.TryGetValue(legacyID, out Vector2[]? vector2s) == true)
+                if (int.TryParse(obj.ItemId, out int legacyID) && tilemap?.TryGetValue(legacyID, out Vector2[]? vector2s) == true)
                 { // got tile map from api, adjust from relative to absolute location.
                     tiles = vector2s.Select((v) => v + obj.TileLocation);
                 }

@@ -1,15 +1,13 @@
-﻿using AtraShared.Utils.Extensions;
+﻿namespace GrowableBushes.Framework;
 
 using StardewValley.TerrainFeatures;
-
-namespace GrowableBushes.Framework;
 
 /// <summary>
 /// Extension methods for BushSizes.
 /// </summary>
 internal static class BushSizesExtraExtensions
 {
-    static readonly string[] valid = BushSizesExtensions.GetValues().Where(static a => a != BushSizes.Invalid).Select(static a => a.ToStringFast()).ToArray();
+    private static readonly string[] _valid = BushSizesExtensions.GetValues().Where(static a => a != BushSizes.Invalid).Select(static a => a.ToStringFast()).ToArray();
 
     /// <summary>
     /// Gets the <see cref="Bush.size"/> for the BushSizes.
@@ -62,5 +60,9 @@ internal static class BushSizesExtraExtensions
         };
     }
 
-    internal static string[] GetValid() => valid;
+    /// <summary>
+    /// Gets all valid bush indexes.
+    /// </summary>
+    /// <returns></returns>
+    internal static IEnumerable<string> GetValid() => _valid;
 }

@@ -42,7 +42,7 @@ internal static class TeleportPlayer
             return false;
         }
 
-        if (!ArgUtility.TryGetInt(parameters, 2, out var x, out error) || !ArgUtility.TryGetInt(parameters, 3, out var y, out error))
+        if (!ArgUtility.TryGetInt(parameters, 2, out int x, out error) || !ArgUtility.TryGetInt(parameters, 3, out int y, out error))
         {
             loc.LogTileActionError(parameters, point.X, point.Y, error);
             return false;

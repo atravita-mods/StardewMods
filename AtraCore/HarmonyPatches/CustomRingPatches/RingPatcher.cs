@@ -241,8 +241,9 @@ internal static class RingPatcher
     {
         try
         {
-            RingEffects? effect = AssetManager.GetRingData(__instance.ItemId)?.GetEffect(RingBuffTrigger.OnMonsterSlay, location, who);
-            effect?.AddBuff(__instance, who);
+            AssetManager.GetRingData(__instance.ItemId)
+                ?.GetEffect(RingBuffTrigger.OnMonsterSlay, location, who)
+                ?.AddBuff(__instance, who);
         }
         catch (Exception ex)
         {
@@ -324,7 +325,7 @@ internal static class RingPatcher
             if (AssetManager.GetRingData(__instance.ItemId) is { } data)
             {
                 RingEffects? newEffect = data.GetEffect(RingBuffTrigger.OnEquip, environment, who);
-                _activeEffects.TryGetValue(__instance, out var ringEffects);
+                _activeEffects.TryGetValue(__instance, out RingEffects? ringEffects);
 
                 if (!ReferenceEquals(ringEffects, newEffect))
                 {
@@ -400,9 +401,9 @@ internal static class RingPatcher
     {
         if (__instance is CombinedRing combined)
         {
-            foreach (var ring in combined.combinedRings)
+            foreach (Ring? ring in combined.combinedRings)
             {
-                foreach (var effect in GetAllRingEffects(ring))
+                foreach (RingEffects effect in GetAllRingEffects(ring))
                 {
                     yield return effect;
                 }
@@ -418,14 +419,14 @@ internal static class RingPatcher
     {
         if (instance is CombinedRing combined)
         {
-            if (_combinedTooltips.TryGetValue(combined, out var val))
+            if (_combinedTooltips.TryGetValue(combined, out RingEffects? val))
             {
                 return val;
             }
             else if (GetAllRingEffects(combined).Any())
             {
                 RingEffects combinedEffects = new();
-                foreach (var e in GetAllRingEffects(combined))
+                foreach (RingEffects e in GetAllRingEffects(combined))
                 {
                     if (e.Light.Radius > 0)
                     {
@@ -468,7 +469,7 @@ internal static class RingPatcher
         }
 
         lightIDSourceSetter.Value(instance, lightID);
-        ModEntry.ModMonitor.DebugOnlyLog($"Adding {lightID}");
+        ModEntry.ModMonitor.TraceOnlyLog($"[DataRings] Adding light id {lightID}");
         location.sharedLights[lightID] = new LightSource(
             textureIndex: 1,
             new Vector2(player.Position.X + 21f, player.Position.Y + 64f),
@@ -484,7 +485,7 @@ internal static class RingPatcher
         int? lightID = lightIDSourceGetter.Value(__instance);
         if (lightID.HasValue)
         {
-            ModEntry.ModMonitor.DebugOnlyLog($"Removing {lightID.Value}");
+            ModEntry.ModMonitor.TraceOnlyLog($"[DataRings] Removing light id {lightID.Value}");
             location.removeLightSource(lightID.Value);
             lightIDSourceSetter.Value(__instance, null);
         }

@@ -58,8 +58,7 @@ internal static class FarmerPatches
     }
 
     private static void OnPlayerHit(this Ring ring, Farmer player)
-    {
-        RingEffects? effect = AssetManager.GetRingData(ring.ItemId)?.GetEffect(RingBuffTrigger.OnPlayerHit, player.currentLocation, player);
-        effect?.AddBuff(ring, player);
-    }
+        => AssetManager.GetRingData(ring.ItemId)
+            ?.GetEffect(RingBuffTrigger.OnPlayerHit, player.currentLocation, player)
+            ?.AddBuff(ring, player);
 }

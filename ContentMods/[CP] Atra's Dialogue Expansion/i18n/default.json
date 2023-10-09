@@ -257,12 +257,14 @@
     "shane-sports.sun.04": "Or maybe not, the teams are pretty imbalanced...",
     "shane-sports.mon": "Oh, @, did you catch the game last night! It was {{reaction}}!",
 
-    // Additional GIMA
+    // Additional GIMA and ginger island
     "gi_leave_harvey_0": "@, I'll be enjoying a nice day at Ginger Island today.",
     "gi_leave_harvey_1": "I spend so much of my time inside, it'll be good for me to get some sun.",
 
     "alex-resort-pier": "This water's so blue, I want to dive in.",
     "vincent_pier": "Look, a whale!",
+
+    "penny-resort-leaving-2": "Definitely looking forward to coming back here soon.",
 
     // expecting grandchildren
     "robin-expecting-grandchild": "Oh, @, I'm so looking forward to having a new grandchild!",

@@ -76,7 +76,7 @@ internal static class DrawPrismatic
             else
             {
                 // handle the ones that have masks.
-                if (!PrismaticMasks.TryGetValue(model.ItemType, out var masks))
+                if (!PrismaticMasks.TryGetValue(model.ItemType, out Dictionary<string, Lazy<Texture2D>>? masks))
                 {
                     PrismaticMasks[model.ItemType] = masks = new();
                 }

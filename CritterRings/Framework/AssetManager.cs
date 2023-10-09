@@ -188,7 +188,7 @@ internal static class AssetManager
 
     private static void AddStrings(IAssetData asset)
     {
-        var editor = asset.AsDictionary<string, string>().Data;
+        IDictionary<string, string> editor = asset.AsDictionary<string, string>().Data;
         const string NAME = "Name";
         const string DESCRIPTION = "Description";
 

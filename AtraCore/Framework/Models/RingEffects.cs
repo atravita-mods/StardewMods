@@ -246,7 +246,7 @@ public sealed class BuffModel : ObjectBuffAttributesData
         }
 
         BlockExpression block = Expression.Block(expressions);
-        ModEntry.ModMonitor.Log("Ring merge function generated:" + block.ToCSharpString());
+        ModEntry.ModMonitor.VerboseLog($"Ring merge function generated:{block.ToCSharpString()}");
         return Expression.Lambda<Action<BuffEffects, BuffModel>>(block, new ParameterExpression[] { effects, model }).CompileFast();
     });
 
@@ -256,28 +256,28 @@ public sealed class BuffModel : ObjectBuffAttributesData
 
         ParameterExpression model = Expression.ParameterOf<BuffModel>("model");
         ParameterExpression rows = Expression.ParameterOf<int>("rows");
-        var init = Expression.Assign(rows, Expression.ZeroConstant);
+        BinaryExpression init = Expression.Assign(rows, Expression.ZeroConstant);
         expressions.Add(init);
 
-        foreach (var field in typeof(BuffModel).GetFields())
+        foreach (FieldInfo field in typeof(BuffModel).GetFields())
         {
             MemberExpression getter = Expression.Field(model, field);
-            var greater = Expression.NotEqual(getter, field.FieldType == typeof(float) ? Expression.ConstantOf(0f) : Expression.ZeroConstant);
-            var elif = Expression.IfThen(greater, Expression.PreIncrementAssign(rows));
+            BinaryExpression greater = Expression.NotEqual(getter, field.FieldType == typeof(float) ? Expression.ConstantOf(0f) : Expression.ZeroConstant);
+            ConditionalExpression elif = Expression.IfThen(greater, Expression.PreIncrementAssign(rows));
             expressions.Add(elif);
         }
 
-        foreach (var property in typeof(BuffModel).GetProperties())
+        foreach (PropertyInfo property in typeof(BuffModel).GetProperties())
         {
             MemberExpression getter = Expression.Property(model, property);
-            var greater = Expression.NotEqual(getter, property.PropertyType == typeof(float) ? Expression.ConstantOf(0f) : Expression.ZeroConstant);
-            var elif = Expression.IfThen(greater, Expression.PreIncrementAssign(rows));
+            BinaryExpression greater = Expression.NotEqual(getter, property.PropertyType == typeof(float) ? Expression.ConstantOf(0f) : Expression.ZeroConstant);
+            ConditionalExpression elif = Expression.IfThen(greater, Expression.PreIncrementAssign(rows));
             expressions.Add(elif);
         }
 
         expressions.Add(rows);
         BlockExpression block = Expression.Block(new ParameterExpression[] { rows }, expressions);
-        ModEntry.ModMonitor.Log("Height function generated:" + block.ToCSharpString());
+        ModEntry.ModMonitor.VerboseLog($"Height function generated:{block.ToCSharpString()}");
         return Expression.Lambda<Func<BuffModel, int>>(block, new ParameterExpression[] { model }).CompileFast();
     });
 
@@ -288,24 +288,24 @@ public sealed class BuffModel : ObjectBuffAttributesData
         ParameterExpression left = Expression.ParameterOf<BuffModel>("left");
         ParameterExpression right = Expression.ParameterOf<BuffModel>("right");
 
-        foreach (var field in typeof(BuffModel).GetFields())
+        foreach (FieldInfo field in typeof(BuffModel).GetFields())
         {
             MemberExpression getter = Expression.Field(right, field);
             MemberExpression setter = Expression.Field(left, field);
-            var sum = Expression.AddAssign(setter, getter);
+            BinaryExpression sum = Expression.AddAssign(setter, getter);
             expressions.Add(sum);
         }
 
-        foreach (var property in typeof(BuffModel).GetProperties())
+        foreach (PropertyInfo property in typeof(BuffModel).GetProperties())
         {
             MemberExpression getter = Expression.Property(right, property);
             MemberExpression setter = Expression.Property(left, property);
-            var sum = Expression.AddAssign(setter, getter);
+            BinaryExpression sum = Expression.AddAssign(setter, getter);
             expressions.Add(sum);
         }
 
         BlockExpression block = Expression.Block(expressions);
-        ModEntry.ModMonitor.Log("Sum function generated:" + block.ToCSharpString());
+        ModEntry.ModMonitor.VerboseLog($"Sum function generated:{block.ToCSharpString()}");
         return Expression.Lambda<Action<BuffModel, BuffModel>>(block, new ParameterExpression[] { left, right }).CompileFast();
     });
 

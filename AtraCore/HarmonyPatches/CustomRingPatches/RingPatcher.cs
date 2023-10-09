@@ -45,6 +45,8 @@ internal static class RingPatcher
                     .GetInstanceFieldSetter<Ring, int?>());
     #endregion
 
+    #region tooltips
+
     /// <summary>
     /// Called at warp, resets the tooltip map.
     /// </summary>
@@ -97,7 +99,7 @@ internal static class RingPatcher
     [HarmonyPostfix]
     [MethodImpl(TKConstants.Hot)]
     [HarmonyPatch(nameof(Ring.drawTooltip))]
-    private static void drawTooltip(Ring __instance, SpriteBatch spriteBatch, ref int x, ref int y, SpriteFont font, float alpha)
+    private static void PostfixdrawTooltip(Ring __instance, SpriteBatch spriteBatch, ref int x, ref int y, SpriteFont font, float alpha)
     {
         try
         {
@@ -209,7 +211,10 @@ internal static class RingPatcher
 
     private static string FormatPercent(this float number) => (number > 0 ? "+" : string.Empty) + number.ToString("P0");
 
+    #endregion
+
     [HarmonyPostfix]
+    [HarmonyPriority(Priority.VeryLow)]
     [HarmonyPatch(nameof(Ring.CanCombine))]
     private static void PostfixCanCombine(Ring __instance, Ring ring, ref bool __result)
     {
@@ -217,9 +222,16 @@ internal static class RingPatcher
         {
             return;
         }
-        if (AssetManager.GetRingData(ring.ItemId)?.CanBeCombined == false || AssetManager.GetRingData(__instance.ItemId)?.CanBeCombined == false)
+        try
         {
-            __result = false;
+            if (AssetManager.GetRingData(ring.ItemId)?.CanBeCombined == false || AssetManager.GetRingData(__instance.ItemId)?.CanBeCombined == false)
+            {
+                __result = false;
+            }
+        }
+        catch (Exception ex)
+        {
+            ModEntry.ModMonitor.LogError("overriding combining rings", ex);
         }
     }
 
@@ -227,8 +239,15 @@ internal static class RingPatcher
     [HarmonyPatch(nameof(Ring.onMonsterSlay))]
     private static void PostfixMonsterSlay(Ring __instance, GameLocation location, Farmer who)
     {
-        RingEffects? effect = AssetManager.GetRingData(__instance.ItemId)?.GetEffect(RingBuffTrigger.OnMonsterSlay, location, who);
-        effect?.AddBuff(__instance, who);
+        try
+        {
+            RingEffects? effect = AssetManager.GetRingData(__instance.ItemId)?.GetEffect(RingBuffTrigger.OnMonsterSlay, location, who);
+            effect?.AddBuff(__instance, who);
+        }
+        catch (Exception ex)
+        {
+            ModEntry.ModMonitor.LogError("adding monster slay buff", ex);
+        }
     }
 
     [HarmonyPostfix]
@@ -287,7 +306,7 @@ internal static class RingPatcher
                     AddLight(lightEffect.Radius, lightEffect.Color, __instance, who, who.currentLocation);
                 }
                 _activeEffects.AddOrUpdate(__instance, effect);
-                ModEntry.ModMonitor.DebugOnlyLog($"Equip for {__instance.QualifiedItemId}");
+                ModEntry.ModMonitor.TraceOnlyLog($"Equip for {__instance.QualifiedItemId}");
             }
         }
         catch (Exception ex)
@@ -300,31 +319,42 @@ internal static class RingPatcher
     [HarmonyPatch(nameof(Ring.onNewLocation))]
     private static void OnNewLocation(Ring __instance, Farmer who, GameLocation environment)
     {
-        if (_activeEffects.TryGetValue(__instance, out RingEffects? ringEffects))
+        try
         {
-            if (!string.IsNullOrWhiteSpace(ringEffects.Condition))
+            if (AssetManager.GetRingData(__instance.ItemId) is { } data)
             {
-                RingEffects? newEffect = AssetManager.GetRingData(__instance.ItemId)?.GetEffect(RingBuffTrigger.OnEquip, environment, who);
-                if (!ReferenceEquals(newEffect, ringEffects))
+                RingEffects? newEffect = data.GetEffect(RingBuffTrigger.OnEquip, environment, who);
+                _activeEffects.TryGetValue(__instance, out var ringEffects);
+
+                if (!ReferenceEquals(ringEffects, newEffect))
                 {
-                    if (newEffect is not null)
-                    {
-                        _activeEffects.AddOrUpdate(__instance, newEffect);
-                        _tooltipMap[__instance.ItemId] = newEffect;
-                    }
-                    else
-                    {
-                        _activeEffects.Remove(__instance);
-                        _tooltipMap.Remove(__instance.ItemId);
-                    }
                     who.buffs.Dirty = true;
+                    UpdateCache(__instance, newEffect);
+                }
+
+                if (newEffect is not null && newEffect.Light.Radius > 0)
+                {
+                    AddLight(newEffect.Light.Radius, newEffect.Light.Color, __instance, who, environment);
+                }
+                ModEntry.ModMonitor.TraceOnlyLog($"NewLocation for {__instance.QualifiedItemId}");
+            }
+            static void UpdateCache(Ring __instance, RingEffects? newEffect)
+            {
+                if (newEffect is not null)
+                {
+                    _activeEffects.AddOrUpdate(__instance, newEffect);
+                    _tooltipMap[__instance.ItemId] = newEffect;
+                }
+                else
+                {
+                    _activeEffects.Remove(__instance);
+                    _tooltipMap.Remove(__instance.ItemId);
                 }
             }
-            if (ringEffects.Light.Radius > 0)
-            {
-                AddLight(ringEffects.Light.Radius, ringEffects.Light.Color, __instance, who, environment);
-            }
-            ModEntry.ModMonitor.DebugOnlyLog($"NewLocation for {__instance.QualifiedItemId}");
+        }
+        catch (Exception ex)
+        {
+            ModEntry.ModMonitor.LogError($"new location for {__instance.QualifiedItemId}", ex);
         }
     }
 
@@ -332,10 +362,17 @@ internal static class RingPatcher
     [HarmonyPatch(nameof(Ring.onLeaveLocation))]
     private static void OnLeaveLocation(Ring __instance, GameLocation environment)
     {
-        if (GetRingEffect(__instance)?.Light?.Radius > 0)
+        try
         {
-            RemoveLightFrom(__instance, environment);
-            ModEntry.ModMonitor.DebugOnlyLog($"LeaveLocation for {__instance.QualifiedItemId}");
+            if (GetRingEffect(__instance)?.Light?.Radius > 0)
+            {
+                RemoveLightFrom(__instance, environment);
+                ModEntry.ModMonitor.TraceOnlyLog($"LeaveLocation for {__instance.QualifiedItemId}");
+            }
+        }
+        catch (Exception ex)
+        {
+            ModEntry.ModMonitor.LogError($"leave location for {__instance.QualifiedItemId}", ex);
         }
     }
 

@@ -256,7 +256,7 @@ internal sealed class ModEntry : BaseMod<ModEntry>
                 BunnyManagers.Value = null;
             }
             BunnyManagers.Value ??= new(this.Monitor, Game1.player, this.Helper.Events.Player);
-            CRUtils.AddBunnies(critters, 5, BunnyManagers.Value.GetTrackedBushes());
+            CRUtils.AddBunnies(critters, 5, BunnyManagers.Value.GetTrackedBushes(), e.NewLocation);
         }
         if (Game1.player.isWearingRing(FrogRing) && e.NewLocation.ShouldSpawnFrogs())
         {

@@ -182,7 +182,7 @@ internal static class ConsoleCommands
                 continue;
             }
             int expectedRouteTime = schedulePathDescription.GetExpectedRouteTime();
-            sb.Append('\t').Append(key).Append(": ");
+            sb.Append('\t').Append(key).Append(": ").Append(schedulePathDescription.targetLocationName).Append(' ').Append(schedulePathDescription.targetTile);
             sb.AppendJoin(", ", schedulePathDescription.route).AppendLine();
             sb.Append("\t\t").Append(I18n.DisplaySchedule_ExpectedTime()).Append(expectedRouteTime).AppendLine(I18n.DisplaySchedule_ExpectedTime_Minutes());
             sb.Append("\t\t").Append(I18n.DisplaySchedule_ExpectedArrival()).AppendLine(Utility.ModifyTime(key, expectedRouteTime).ToString());

@@ -177,8 +177,6 @@ public sealed class BuffModel : ObjectBuffAttributesData
 {
     private static readonly Lazy<Action<BuffEffects, BuffModel>> _merger = new(() =>
     {
-        ModEntry.ModMonitor.DebugOnlyLog($"Generating merge function");
-
         ParameterExpression effects = Expression.ParameterOf<BuffEffects>("effects");
         ParameterExpression model = Expression.ParameterOf<BuffModel>("model");
 

@@ -355,7 +355,7 @@ universal:
                 continue;
             }
 
-            if (giftItem.Word.Equals(obj.ItemId))
+            if (giftItem.Word.Equals(obj.ItemId, StringComparison.Ordinal))
             {
                 return GiftPriority.Individual;
             }

@@ -5,7 +5,6 @@ using System.Runtime.CompilerServices;
 using AtraBase.Toolkit;
 using AtraBase.Toolkit.Reflection;
 
-using AtraCore.Framework.Caches.AssetCache;
 using AtraCore.Framework.Models;
 using AtraCore.Framework.ReflectionManager;
 
@@ -83,11 +82,15 @@ internal static class RingPatcher
 
                 if (baseEffects.WeaponSpeedMultiplier != 0)
                 {
-                    __result.X = Math.Max(__result.X, (int)font.MeasureString(I18n.WeaponSpeed(baseEffects.WeaponSpeedMultiplier.FormatPercent())).X + horizontalBuffer + 1);
+                    __result.X = Math.Max(
+                        __result.X,
+                        (int)font.MeasureString(I18n.WeaponSpeed(baseEffects.WeaponSpeedMultiplier.FormatPercent())).X + horizontalBuffer + 1);
                 }
                 if (baseEffects.WeaponPrecisionMultiplier != 0)
                 {
-                    __result.X = Math.Max(__result.X, (int)font.MeasureString(I18n.WeaponPrecision(baseEffects.WeaponPrecisionMultiplier.FormatPercent())).X + horizontalBuffer + 1);
+                    __result.X = Math.Max(
+                        __result.X,
+                        (int)font.MeasureString(I18n.WeaponPrecision(baseEffects.WeaponPrecisionMultiplier.FormatPercent())).X + horizontalBuffer + 1);
                 }
             }
         }

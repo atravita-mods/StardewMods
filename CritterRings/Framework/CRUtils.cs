@@ -273,18 +273,19 @@ breakbreak:
     /// <param name="critters">The critter list.</param>
     /// <param name="count">The number of bunnies to spawn.</param>
     /// <param name="bushes">The bushes on the map, for the bunnies to run towards.</param>
-    internal static void AddBunnies(List<Critter> critters, int count, List<Bush>? bushes)
+    /// <param name="location">The location to add to.</param>
+    internal static void AddBunnies(List<Critter> critters, int count, List<Bush>? bushes, GameLocation? location = null)
     {
-        if (critters is not null && count > 0)
+        location ??= Game1.currentLocation;
+        if (critters is not null && count > 0 && bushes is not null && location is not null)
         {
             int delay = 0;
             foreach ((Vector2 position, bool flipped) in FindBunnySpawnTile(
-                loc: Game1.currentLocation,
+                loc: location,
                 bushes: bushes,
                 playerTile: Game1.player.Tile,
                 count: count * 2))
             {
-                GameLocation location = Game1.currentLocation;
                 DelayedAction.functionAfterDelay(
                 func: () =>
                 {
@@ -298,9 +299,9 @@ breakbreak:
         }
     }
 
-    private static IEnumerable<(Vector2, bool)> FindBunnySpawnTile(GameLocation loc, List<Bush>? bushes, Vector2 playerTile, int count)
+    private static IEnumerable<(Vector2, bool)> FindBunnySpawnTile(GameLocation? loc, List<Bush>? bushes, Vector2 playerTile, int count)
     {
-        if (count <= 0 || bushes?.Count is null or 0)
+        if (count <= 0 || bushes?.Count is null or 0 || loc is null)
         {
             yield break;
         }
@@ -310,6 +311,11 @@ breakbreak:
         count *= ModEntry.Config.CritterSpawnMultiplier;
         foreach (Bush bush in bushes)
         {
+            if (bush is null)
+            {
+                continue;
+            }
+
             if (count <= 0)
             {
                 yield break;

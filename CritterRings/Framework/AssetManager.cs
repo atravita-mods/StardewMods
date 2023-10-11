@@ -42,7 +42,7 @@ internal static class AssetManager
         ringTextureLocation = parser.ParseAssetName("Mods/atravita/CritterRings/RingTex");
         buffTextureLocation = parser.ParseAssetName("Mods/atravita/CritterRings/BuffIcon");
         dataShops = parser.ParseAssetName("Data/Shops");
-        ringData = parser.ParseAssetName(AtraCoreConstants.RingDataExt);
+        ringData = parser.ParseAssetName(AtraCoreConstants.EquipData);
     }
 
     /// <inheritdoc cref="IContentEvents.AssetRequested"/>
@@ -156,7 +156,7 @@ internal static class AssetManager
 
     private static void AddRingData(IAssetData asset)
     {
-        var editor = asset.AsDictionary<string, RingExtModel>().Data;
+        var editor = asset.AsDictionary<string, EquipmentExtModel>().Data;
         editor[ModEntry.ButterflyRing] = new()
         {
             Effects = new()

@@ -9,8 +9,6 @@ using AtraBase.Toolkit.Reflection;
 using AtraCore.Framework.Caches.AssetCache;
 using AtraCore.Framework.ReflectionManager;
 
-using AtraShared.Utils.Extensions;
-
 using FastExpressionCompiler.LightExpression;
 
 using Microsoft.Xna.Framework;
@@ -23,10 +21,10 @@ using StardewValley.GameData.Objects;
 using StardewValley.Objects;
 
 /// <summary>
-/// The possible times to trigger a buff from the ring.
+/// The possible times to trigger a buff from the equipment.
 /// </summary>
 [Flags]
-public enum RingBuffTrigger
+public enum EquipmentBuffTrigger
 {
     /// <summary>
     /// Buffs are added when the ring is equipped.
@@ -47,7 +45,7 @@ public enum RingBuffTrigger
 /// <summary>
 /// A data model representing valid ring effects.
 /// </summary>
-public sealed class RingExtModel
+public sealed class EquipmentExtModel
 {
     private static readonly HashSet<string> NonDeterministicQueries = new(StringComparer.OrdinalIgnoreCase)
     {
@@ -60,7 +58,7 @@ public sealed class RingExtModel
     /// <summary>
     /// Gets or sets a list of the effects for this ring. Effects are checked in order.
     /// </summary>
-    public List<RingEffects> Effects { get; set; } = new();
+    public List<EquipEffects> Effects { get; set; } = new();
 
     /// <summary>
     /// Gets or sets a value indicating whether this ring should be eligible for combining. 
@@ -74,7 +72,7 @@ public sealed class RingExtModel
     /// <param name="location">The location to use, or null for current location.</param>
     /// <param name="player">The player to use, or null for current player.</param>
     /// <returns>The ring effects.</returns>
-    internal RingEffects? GetEffect(RingBuffTrigger trigger, GameLocation? location = null, Farmer? player = null)
+    internal EquipEffects? GetEffect(EquipmentBuffTrigger trigger, GameLocation? location = null, Farmer? player = null)
     {
         location ??= Game1.currentLocation;
         player ??= Game1.player;
@@ -84,10 +82,10 @@ public sealed class RingExtModel
             return null;
         }
 
-        foreach (RingEffects effect in this.Effects)
+        foreach (EquipEffects effect in this.Effects)
         {
             if (effect.Trigger.HasFlag(trigger)
-                && GameStateQuery.CheckConditions(effect.Condition, location, player, random: Random.Shared, ignoreQueryKeys: trigger == RingBuffTrigger.OnEquip ? NonDeterministicQueries : null))
+                && GameStateQuery.CheckConditions(effect.Condition, location, player, random: Random.Shared, ignoreQueryKeys: trigger == EquipmentBuffTrigger.OnEquip ? NonDeterministicQueries : null))
             {
                 return effect;
             }
@@ -100,7 +98,7 @@ public sealed class RingExtModel
 /// <summary>
 /// The effects possible on a ring.
 /// </summary>
-public sealed class RingEffects
+public sealed class EquipEffects
 {
     /// <summary>
     /// Gets or sets a Id to facilitate CP editing. This should be unique within the list.
@@ -118,7 +116,7 @@ public sealed class RingEffects
     public string? Condition { get; set; }
 
     /// <summary>
-    /// Gets or sets how to display buffs for <see cref="RingBuffTrigger.OnMonsterSlay"/>.
+    /// Gets or sets how to display buffs for <see cref="EquipmentBuffTrigger.OnMonsterSlay"/>.
     /// </summary>
     public BuffDisplayAttributes DisplayAttributes { get; set; } = new();
 
@@ -135,16 +133,16 @@ public sealed class RingEffects
     /// <summary>
     /// Gets or sets a value indicating when to apply the buffs from this ring.
     /// </summary>
-    public RingBuffTrigger Trigger { get; set; } = RingBuffTrigger.OnEquip;
+    public EquipmentBuffTrigger Trigger { get; set; } = EquipmentBuffTrigger.OnEquip;
 
     /// <summary>
-    /// Adds the buff defined by this ring instance to the player.
+    /// Adds the buff defined by this item instance to the player.
     /// </summary>
-    /// <param name="instance">The ring instance.</param>
+    /// <param name="instance">The item instance.</param>
     /// <param name="who">The farmer in question.</param>
-    internal void AddBuff(Ring instance, Farmer who)
+    internal void AddBuff(Item instance, Farmer who)
     {
-        string id = this.BuffID ?? instance.ItemId;
+        string id = this.BuffID ?? instance.QualifiedItemId;
         if (who.hasBuff(id))
         {
             return;
@@ -332,6 +330,12 @@ public sealed class BuffModel : ObjectBuffAttributesData
     /// <remarks>This is unused in vanilla.</remarks>
     public float WeaponPrecisionMultiplier { get; set; } = 0f;
 
+    /// <summary>
+    /// Performs a leftfold combine on two buff models.
+    /// </summary>
+    /// <param name="left">Left model.</param>
+    /// <param name="right">Right model.</param>
+    /// <returns>Left model, after getting right model combined into it.</returns>
     internal static BuffModel LeftFold(BuffModel left, BuffModel right)
     {
         _leftFold.Value(left, right);
@@ -388,8 +392,8 @@ public sealed class LightData
 }
 
 /// <summary>
-/// The attributes associated with displaying a <see cref="RingBuffTrigger.OnMonsterSlay"/> buff to the player.
-/// Ignored for <see cref="RingBuffTrigger.OnEquip"/> buffs.
+/// The attributes associated with displaying a <see cref="EquipmentBuffTrigger.OnMonsterSlay"/> buff to the player.
+/// Ignored for <see cref="EquipmentBuffTrigger.OnEquip"/> buffs.
 /// </summary>
 public sealed class BuffDisplayAttributes
 {

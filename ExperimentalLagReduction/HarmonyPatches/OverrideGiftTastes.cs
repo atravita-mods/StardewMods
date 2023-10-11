@@ -18,7 +18,7 @@ using HarmonyLib;
 [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = StyleCopConstants.NamedForHarmony)]
 internal static class OverrideGiftTastes
 {
-    private static readonly ConcurrentDictionary<(string NPC, int itemID), int> Cache = new();
+    private static readonly ConcurrentDictionary<(string NPC, string qualifiedItemID), int> Cache = new();
 
     private static IAssetName giftTastes = null!;
 
@@ -316,7 +316,7 @@ universal:
             return false;
         }
 
-        if (ModEntry.Config.UseGiftTastesCache && Cache.TryGetValue((__instance.Name, obj.ParentSheetIndex), out int cacheTaste))
+        if (ModEntry.Config.UseGiftTastesCache && Cache.TryGetValue((__instance.Name, obj.QualifiedItemId), out int cacheTaste))
         {
             ModEntry.ModMonitor.TraceOnlyLog($"Got gift taste for {obj.Name} for {__instance.Name} from cache.");
             __state = true;
@@ -324,8 +324,16 @@ universal:
             return false;
         }
 
-        __result = GetGiftTaste(__instance, obj);
-        return false;
+        try
+        {
+            __result = GetGiftTaste(__instance, obj);
+            return false;
+        }
+        catch (Exception ex)
+        {
+            ModEntry.ModMonitor.LogError($"overriding gift tastes for {item.QualifiedItemId}", ex);
+        }
+        return true;
     }
 
     // use a postfix to cache so other mods can also harmony patch this.
@@ -333,9 +341,9 @@ universal:
     [HarmonyPatch(nameof(NPC.getGiftTasteForThisItem))]
     private static void Postfix(NPC __instance, Item item, ref int __result, bool __state)
     {
-        if (ModEntry.Config.UseGiftTastesCache && item is SObject && !__state)
+        if (ModEntry.Config.UseGiftTastesCache && !__state)
         {
-            Cache[(__instance.Name, item.ParentSheetIndex)] = __result;
+            Cache[(__instance.Name, item.QualifiedItemId)] = __result;
         }
     }
 

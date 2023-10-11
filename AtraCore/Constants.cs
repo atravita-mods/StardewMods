@@ -15,7 +15,7 @@ public static class AtraCoreConstants
     public static readonly string PrismaticMaskData = PathUtilities.NormalizeAssetName("Mods/atravita/DrawPrismaticData");
 
     /// <summary>
-    /// The path to the Ring Data Extensions asset.
+    /// The path to the Equip Data Extensions asset.
     /// </summary>
-    public static readonly string RingDataExt = PathUtilities.NormalizeAssetName("Mods/atravita/RingData");
+    public static readonly string EquipData = PathUtilities.NormalizeAssetName("Mods/atravita/EquipData");
 }

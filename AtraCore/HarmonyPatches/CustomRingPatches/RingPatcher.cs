@@ -20,20 +20,22 @@ using StardewValley.Buffs;
 using StardewValley.Objects;
 
 /// <summary>
-/// Holds patches against the <see cref="Ring"/> class for custom rings.
+/// Holds patches for custom buffs on clothing.
 /// </summary>
-[HarmonyPatch(typeof(Ring))]
+[HarmonyPatch]
 [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = StyleCopConstants.NamedForHarmony)]
 internal static class RingPatcher
 {
     // maps the ring ID to the current effect of the ring for tooltips
-    private static readonly Dictionary<string, RingEffects> _tooltipMap = new();
+    private static readonly Dictionary<string, EquipEffects> _tooltipMap = new();
 
-    // maps the rings to their active effects
-    private static readonly ConditionalWeakTable<Ring, RingEffects> _activeEffects = new();
+    // maps the items to their active effects
+    private static readonly ConditionalWeakTable<Item, EquipEffects> _activeEffects = new();
 
     // holds tooltip cache for combined rings
-    private static readonly ConditionalWeakTable<CombinedRing, RingEffects?> _combinedTooltips = new();
+    private static readonly ConditionalWeakTable<CombinedRing, EquipEffects?> _combinedTooltips = new();
+
+    // holds references to active lights
 
     #region delegates
     private static readonly Lazy<Func<Ring, int?>> lightIDSourceGetter = new(() =>
@@ -57,41 +59,14 @@ internal static class RingPatcher
     }
 
     [HarmonyPostfix]
-    [HarmonyPatch(nameof(Ring.getExtraSpaceNeededForTooltipSpecialIcons))]
-    private static void PostfixExtraSpace(Ring __instance, ref Point __result, SpriteFont font, int horizontalBuffer)
+    [HarmonyPatch(typeof(Ring), nameof(Ring.getExtraSpaceNeededForTooltipSpecialIcons))]
+    private static void PostfixExtraSpaceRings(Ring __instance, ref Point __result, SpriteFont font, int horizontalBuffer)
     {
         try
         {
             if (GetEffectsForTooltip(__instance) is { } effects)
             {
-                int extra_rows = 0;
-                BuffModel baseEffects = effects.BaseEffects;
-                if (!string.IsNullOrWhiteSpace(effects.Condition))
-                {
-                    extra_rows++;
-                }
-
-                if (effects.Light.Radius > 0)
-                {
-                    extra_rows++;
-                }
-
-                extra_rows += baseEffects.GetExtraRows();
-
-                __result.Y += extra_rows * Math.Max((int)font.MeasureString("TT").Y, 48);
-
-                if (baseEffects.WeaponSpeedMultiplier != 0)
-                {
-                    __result.X = Math.Max(
-                        __result.X,
-                        (int)font.MeasureString(I18n.WeaponSpeed(baseEffects.WeaponSpeedMultiplier.FormatPercent())).X + horizontalBuffer + 1);
-                }
-                if (baseEffects.WeaponPrecisionMultiplier != 0)
-                {
-                    __result.X = Math.Max(
-                        __result.X,
-                        (int)font.MeasureString(I18n.WeaponPrecision(baseEffects.WeaponPrecisionMultiplier.FormatPercent())).X + horizontalBuffer + 1);
-                }
+                __result = AdjustExtraRows(__result, font, horizontalBuffer, effects);
             }
         }
         catch (Exception ex)
@@ -100,149 +75,190 @@ internal static class RingPatcher
         }
     }
 
+    private static Point AdjustExtraRows(Point __result, SpriteFont font, int horizontalBuffer, EquipEffects effects)
+    {
+        int extra_rows = 0;
+        BuffModel baseEffects = effects.BaseEffects;
+        if (!string.IsNullOrWhiteSpace(effects.Condition))
+        {
+            extra_rows++;
+        }
+
+        if (effects.Light.Radius > 0)
+        {
+            extra_rows++;
+        }
+
+        extra_rows += baseEffects.GetExtraRows();
+
+        __result.Y += extra_rows * Math.Max((int)font.MeasureString("TT").Y, 48);
+
+        if (baseEffects.WeaponSpeedMultiplier != 0)
+        {
+            __result.X = Math.Max(
+                __result.X,
+                (int)font.MeasureString(I18n.WeaponSpeed(baseEffects.WeaponSpeedMultiplier.FormatPercent())).X + horizontalBuffer + 1);
+        }
+        if (baseEffects.WeaponPrecisionMultiplier != 0)
+        {
+            __result.X = Math.Max(
+                __result.X,
+                (int)font.MeasureString(I18n.WeaponPrecision(baseEffects.WeaponPrecisionMultiplier.FormatPercent())).X + horizontalBuffer + 1);
+        }
+
+        return __result;
+    }
+
     [HarmonyPostfix]
     [MethodImpl(TKConstants.Hot)]
-    [HarmonyPatch(nameof(Ring.drawTooltip))]
+    [HarmonyPatch(typeof(Ring), nameof(Ring.drawTooltip))]
     private static void PostfixdrawTooltip(Ring __instance, SpriteBatch spriteBatch, ref int x, ref int y, SpriteFont font, float alpha)
     {
         try
         {
             if (GetEffectsForTooltip(__instance) is { } effects)
             {
-                int height = Math.Max((int)font.MeasureString("TT").Y, 48);
-                if (!string.IsNullOrWhiteSpace(effects.Condition))
-                {
-                    DrawText(I18n.CurrentEffects(), x, ref y);
-                }
-                if (effects.Light.Radius > 0)
-                {
-                    DrawIcon(AssetManager.RingTextures, 0, x, y, false);
-                    DrawText(I18n.EmitsLight(), x, ref y);
-                }
-
-                BuffModel baseEffect = effects.BaseEffects;
-                if (baseEffect.FarmingLevel != 0)
-                {
-                    DrawIcon(Game1.mouseCursors, 1, x, y);
-                    DrawText(Game1.content.LoadString("Strings\\UI:ItemHover_Buff0", baseEffect.FarmingLevel.FormatNumber()), x, ref y);
-                }
-                if (baseEffect.FishingLevel != 0)
-                {
-                    DrawIcon(Game1.mouseCursors, 2, x, y);
-                    DrawText(Game1.content.LoadString("Strings\\UI:ItemHover_Buff1", baseEffect.FishingLevel.FormatNumber()), x, ref y);
-                }
-                if (baseEffect.MiningLevel != 0)
-                {
-                    DrawIcon(Game1.mouseCursors, 3, x, y);
-                    DrawText(Game1.content.LoadString("Strings\\UI:ItemHover_Buff2", baseEffect.MiningLevel.FormatNumber()), x, ref y);
-                }
-                if (baseEffect.CombatLevel != 0)
-                {
-                    DrawIcon(Game1.mouseCursors, 14, x, y);
-                    DrawText(Game1.content.LoadString("Strings\\UI:ItemHover_Buff3", baseEffect.CombatLevel.FormatNumber()), x, ref y);
-                }
-                if (baseEffect.LuckLevel != 0)
-                {
-                    DrawIcon(Game1.mouseCursors, 5, x, y);
-                    DrawText(Game1.content.LoadString("Strings\\UI:ItemHover_Buff4", baseEffect.LuckLevel.FormatNumber()), x, ref y);
-                }
-                if (baseEffect.ForagingLevel != 0)
-                {
-                    DrawIcon(Game1.mouseCursors, 6, x, y);
-                    DrawText(Game1.content.LoadString("Strings\\UI:ItemHover_Buff5", baseEffect.ForagingLevel.FormatNumber()), x, ref y);
-                }
-                if (baseEffect.MaxStamina != 0)
-                {
-                    DrawIcon(Game1.mouseCursors, 8, x, y);
-                    DrawText(Game1.content.LoadString("Strings\\UI:ItemHover_Buff6", baseEffect.MaxStamina.FormatNumber()), x, ref y);
-                }
-                if (baseEffect.MagneticRadius != 0)
-                {
-                    DrawIcon(Game1.mouseCursors, 9, x, y);
-                    DrawText(Game1.content.LoadString("Strings\\UI:ItemHover_Buff8", baseEffect.MagneticRadius.FormatNumber()), x, ref y);
-                }
-                if (baseEffect.Speed != 0)
-                {
-                    DrawIcon(Game1.mouseCursors, 10, x, y);
-                    DrawText(Game1.content.LoadString("Strings\\UI:ItemHover_Buff9", baseEffect.Speed.FormatNumber()), x, ref y);
-                }
-                if (baseEffect.Defense != 0)
-                {
-                    DrawIcon(Game1.mouseCursors, 11, x, y);
-                    DrawText(I18n.Defense(baseEffect.Defense.FormatNumber()), x, ref y);
-                }
-                if (baseEffect.Attack != 0)
-                {
-                    DrawIcon(Game1.mouseCursors, 12, x, y);
-                    DrawText(Game1.content.LoadString("Strings\\UI:ItemHover_Buff11", baseEffect.Attack.FormatNumber()), x, ref y);
-                }
-                if (baseEffect.AttackMultiplier != 0)
-                {
-                    DrawIcon(Game1.mouseCursors, 12, x, y);
-                    DrawText(Game1.content.LoadString("Strings\\UI:ItemHover_Buff11", baseEffect.AttackMultiplier.FormatPercent()), x, ref y);
-                }
-                if (baseEffect.Immunity != 0)
-                {
-                    DrawIcon(Game1.mouseCursors, 15, x, y);
-                    DrawText(I18n.Immunity(baseEffect.Immunity.FormatNumber()), x, ref y);
-                }
-                if (baseEffect.CriticalChanceMultiplier != 0)
-                {
-                    DrawIcon(Game1.mouseCursors, 4, x, y);
-                    DrawText(I18n.Critchance(baseEffect.CriticalChanceMultiplier.FormatPercent()), x, ref y);
-                }
-                if (baseEffect.CriticalPowerMultiplier != 0)
-                {
-                    DrawIcon(Game1.mouseCursors, 16, x, y);
-                    DrawText(I18n.Critpower(baseEffect.CriticalPowerMultiplier.FormatPercent()), x, ref y);
-                }
-                if (baseEffect.KnockbackMultiplier != 0)
-                {
-                    DrawIcon(Game1.mouseCursors, 7, x, y);
-                    DrawText(I18n.Knockback(baseEffect.KnockbackMultiplier.FormatPercent()), x, ref y);
-                }
-                if (baseEffect.WeaponSpeedMultiplier != 0)
-                {
-                    DrawIcon(Game1.mouseCursors, 13, x, y);
-                    DrawText(I18n.WeaponSpeed(baseEffect.WeaponSpeedMultiplier.FormatPercent()), x, ref y);
-                }
-                if (baseEffect.WeaponPrecisionMultiplier != 0)
-                {
-                    DrawIcon(AssetManager.RingTextures, 1, x, y, false);
-                    DrawText(I18n.WeaponPrecision(baseEffect.WeaponPrecisionMultiplier.FormatPercent()), x, ref y);
-                }
-
-                void DrawText(string text, int x, ref int y)
-                {
-                    Utility.drawTextWithShadow(
-                                spriteBatch,
-                                text,
-                                font,
-                                new Vector2(x + 68, y + 28),
-                                Game1.textColor * 0.9f * alpha);
-                    y += height;
-                }
-
-                void DrawIcon(Texture2D texture, int index, int x, int y, bool offset = true)
-                {
-                    Utility.drawWithShadow(
-                        spriteBatch,
-                        texture,
-                        new Vector2(x + 20, y + 20),
-                        new Rectangle(index * 10, offset ? 428 : 0, 10, 10),
-                        Color.White,
-                        0f,
-                        Vector2.Zero,
-                        4f,
-                        flipped: false,
-                        1f);
-                }
+                y = DrawTooltipForBuffEffect(spriteBatch, x, y, font, alpha, effects);
             }
         }
         catch (Exception ex)
         {
             ModEntry.ModMonitor.LogError($"drawing ring tooltip for {__instance.QualifiedItemId}", ex);
         }
+    }
+
+    private static int DrawTooltipForBuffEffect(SpriteBatch spriteBatch, int x, int y, SpriteFont font, float alpha, EquipEffects effects)
+    {
+        int height = Math.Max((int)font.MeasureString("TT").Y, 48);
+        if (!string.IsNullOrWhiteSpace(effects.Condition))
+        {
+            DrawText(I18n.CurrentEffects(), x, ref y);
+        }
+        if (effects.Light.Radius > 0)
+        {
+            DrawIcon(AssetManager.RingTextures, 0, x, y, false);
+            DrawText(I18n.EmitsLight(), x, ref y);
+        }
+
+        BuffModel baseEffect = effects.BaseEffects;
+        if (baseEffect.FarmingLevel != 0)
+        {
+            DrawIcon(Game1.mouseCursors, 1, x, y);
+            DrawText(Game1.content.LoadString("Strings\\UI:ItemHover_Buff0", baseEffect.FarmingLevel.FormatNumber()), x, ref y);
+        }
+        if (baseEffect.FishingLevel != 0)
+        {
+            DrawIcon(Game1.mouseCursors, 2, x, y);
+            DrawText(Game1.content.LoadString("Strings\\UI:ItemHover_Buff1", baseEffect.FishingLevel.FormatNumber()), x, ref y);
+        }
+        if (baseEffect.MiningLevel != 0)
+        {
+            DrawIcon(Game1.mouseCursors, 3, x, y);
+            DrawText(Game1.content.LoadString("Strings\\UI:ItemHover_Buff2", baseEffect.MiningLevel.FormatNumber()), x, ref y);
+        }
+        if (baseEffect.CombatLevel != 0)
+        {
+            DrawIcon(Game1.mouseCursors, 14, x, y);
+            DrawText(Game1.content.LoadString("Strings\\UI:ItemHover_Buff3", baseEffect.CombatLevel.FormatNumber()), x, ref y);
+        }
+        if (baseEffect.LuckLevel != 0)
+        {
+            DrawIcon(Game1.mouseCursors, 5, x, y);
+            DrawText(Game1.content.LoadString("Strings\\UI:ItemHover_Buff4", baseEffect.LuckLevel.FormatNumber()), x, ref y);
+        }
+        if (baseEffect.ForagingLevel != 0)
+        {
+            DrawIcon(Game1.mouseCursors, 6, x, y);
+            DrawText(Game1.content.LoadString("Strings\\UI:ItemHover_Buff5", baseEffect.ForagingLevel.FormatNumber()), x, ref y);
+        }
+        if (baseEffect.MaxStamina != 0)
+        {
+            DrawIcon(Game1.mouseCursors, 8, x, y);
+            DrawText(Game1.content.LoadString("Strings\\UI:ItemHover_Buff6", baseEffect.MaxStamina.FormatNumber()), x, ref y);
+        }
+        if (baseEffect.MagneticRadius != 0)
+        {
+            DrawIcon(Game1.mouseCursors, 9, x, y);
+            DrawText(Game1.content.LoadString("Strings\\UI:ItemHover_Buff8", baseEffect.MagneticRadius.FormatNumber()), x, ref y);
+        }
+        if (baseEffect.Speed != 0)
+        {
+            DrawIcon(Game1.mouseCursors, 10, x, y);
+            DrawText(Game1.content.LoadString("Strings\\UI:ItemHover_Buff9", baseEffect.Speed.FormatNumber()), x, ref y);
+        }
+        if (baseEffect.Defense != 0)
+        {
+            DrawIcon(Game1.mouseCursors, 11, x, y);
+            DrawText(I18n.Defense(baseEffect.Defense.FormatNumber()), x, ref y);
+        }
+        if (baseEffect.Attack != 0)
+        {
+            DrawIcon(Game1.mouseCursors, 12, x, y);
+            DrawText(Game1.content.LoadString("Strings\\UI:ItemHover_Buff11", baseEffect.Attack.FormatNumber()), x, ref y);
+        }
+        if (baseEffect.AttackMultiplier != 0)
+        {
+            DrawIcon(Game1.mouseCursors, 12, x, y);
+            DrawText(Game1.content.LoadString("Strings\\UI:ItemHover_Buff11", baseEffect.AttackMultiplier.FormatPercent()), x, ref y);
+        }
+        if (baseEffect.Immunity != 0)
+        {
+            DrawIcon(Game1.mouseCursors, 15, x, y);
+            DrawText(I18n.Immunity(baseEffect.Immunity.FormatNumber()), x, ref y);
+        }
+        if (baseEffect.CriticalChanceMultiplier != 0)
+        {
+            DrawIcon(Game1.mouseCursors, 4, x, y);
+            DrawText(I18n.Critchance(baseEffect.CriticalChanceMultiplier.FormatPercent()), x, ref y);
+        }
+        if (baseEffect.CriticalPowerMultiplier != 0)
+        {
+            DrawIcon(Game1.mouseCursors, 16, x, y);
+            DrawText(I18n.Critpower(baseEffect.CriticalPowerMultiplier.FormatPercent()), x, ref y);
+        }
+        if (baseEffect.KnockbackMultiplier != 0)
+        {
+            DrawIcon(Game1.mouseCursors, 7, x, y);
+            DrawText(I18n.Knockback(baseEffect.KnockbackMultiplier.FormatPercent()), x, ref y);
+        }
+        if (baseEffect.WeaponSpeedMultiplier != 0)
+        {
+            DrawIcon(Game1.mouseCursors, 13, x, y);
+            DrawText(I18n.WeaponSpeed(baseEffect.WeaponSpeedMultiplier.FormatPercent()), x, ref y);
+        }
+        if (baseEffect.WeaponPrecisionMultiplier != 0)
+        {
+            DrawIcon(AssetManager.RingTextures, 1, x, y, false);
+            DrawText(I18n.WeaponPrecision(baseEffect.WeaponPrecisionMultiplier.FormatPercent()), x, ref y);
+        }
+
+        void DrawText(string text, int x, ref int y)
+        {
+            Utility.drawTextWithShadow(
+                        spriteBatch,
+                        text,
+                        font,
+                        new Vector2(x + 68, y + 28),
+                        Game1.textColor * 0.9f * alpha);
+            y += height;
+        }
+
+        void DrawIcon(Texture2D texture, int index, int x, int y, bool offset = true)
+        {
+            Utility.drawWithShadow(
+                spriteBatch,
+                texture,
+                new Vector2(x + 20, y + 20),
+                new Rectangle(index * 10, offset ? 428 : 0, 10, 10),
+                Color.White,
+                0f,
+                Vector2.Zero,
+                4f,
+                flipped: false,
+                1f);
+        }
+
+        return y;
     }
 
     private static string FormatNumber(this int number) => (number > 0 ? "+" : string.Empty) + number.ToString();
@@ -253,7 +269,7 @@ internal static class RingPatcher
 
     [HarmonyPostfix]
     [HarmonyPriority(Priority.VeryLow)]
-    [HarmonyPatch(nameof(Ring.CanCombine))]
+    [HarmonyPatch(typeof(Ring), nameof(Ring.CanCombine))]
     private static void PostfixCanCombine(Ring __instance, Ring ring, ref bool __result)
     {
         if (!__result)
@@ -262,7 +278,7 @@ internal static class RingPatcher
         }
         try
         {
-            if (AssetManager.GetRingData(ring.ItemId)?.CanBeCombined == false || AssetManager.GetRingData(__instance.ItemId)?.CanBeCombined == false)
+            if (AssetManager.GetRingData(ring.QualifiedItemId)?.CanBeCombined == false || AssetManager.GetRingData(__instance.QualifiedItemId)?.CanBeCombined == false)
             {
                 __result = false;
             }
@@ -274,13 +290,13 @@ internal static class RingPatcher
     }
 
     [HarmonyPostfix]
-    [HarmonyPatch(nameof(Ring.onMonsterSlay))]
+    [HarmonyPatch(typeof(Ring), nameof(Ring.onMonsterSlay))]
     private static void PostfixMonsterSlay(Ring __instance, GameLocation location, Farmer who)
     {
         try
         {
-            AssetManager.GetRingData(__instance.ItemId)
-                ?.GetEffect(RingBuffTrigger.OnMonsterSlay, location, who)
+            AssetManager.GetRingData(__instance.QualifiedItemId)
+                ?.GetEffect(EquipmentBuffTrigger.OnMonsterSlay, location, who)
                 ?.AddBuff(__instance, who);
         }
         catch (Exception ex)
@@ -290,8 +306,8 @@ internal static class RingPatcher
     }
 
     [HarmonyPostfix]
-    [HarmonyPatch(nameof(Ring.AddEquipmentEffects))]
-    private static void OnAddEffects(Ring __instance, BuffEffects effects)
+    [HarmonyPatch(typeof(Item), nameof(Item.AddEquipmentEffects))]
+    private static void OnAddEffects(Item __instance, BuffEffects effects)
     {
         try
         {
@@ -310,12 +326,12 @@ internal static class RingPatcher
     }
 
     [HarmonyPostfix]
-    [HarmonyPatch(nameof(Ring.onUnequip))]
+    [HarmonyPatch(typeof(Ring), nameof(Ring.onUnequip))]
     private static void OnUnequip(Ring __instance, Farmer who)
     {
         try
         {
-            if (_activeEffects.TryGetValue(__instance, out RingEffects? effects))
+            if (_activeEffects.TryGetValue(__instance, out EquipEffects? effects))
             {
                 if (effects.Light.Radius > 0)
                 {
@@ -332,7 +348,7 @@ internal static class RingPatcher
     }
 
     [HarmonyPostfix]
-    [HarmonyPatch(nameof(Ring.onEquip))]
+    [HarmonyPatch(typeof(Ring), nameof(Ring.onEquip))]
     private static void OnEquip(Ring __instance, Farmer who)
     {
         try
@@ -355,15 +371,15 @@ internal static class RingPatcher
     }
 
     [HarmonyPostfix]
-    [HarmonyPatch(nameof(Ring.onNewLocation))]
+    [HarmonyPatch(typeof(Ring), nameof(Ring.onNewLocation))]
     private static void OnNewLocation(Ring __instance, Farmer who, GameLocation environment)
     {
         try
         {
-            if (AssetManager.GetRingData(__instance.ItemId) is { } data)
+            if (AssetManager.GetRingData(__instance.QualifiedItemId) is { } data)
             {
-                RingEffects? newEffect = data.GetEffect(RingBuffTrigger.OnEquip, environment, who);
-                _activeEffects.TryGetValue(__instance, out RingEffects? ringEffects);
+                EquipEffects? newEffect = data.GetEffect(EquipmentBuffTrigger.OnEquip, environment, who);
+                _activeEffects.TryGetValue(__instance, out EquipEffects? ringEffects);
 
                 if (!ReferenceEquals(ringEffects, newEffect))
                 {
@@ -377,17 +393,17 @@ internal static class RingPatcher
                 }
                 ModEntry.ModMonitor.TraceOnlyLog($"NewLocation for {__instance.QualifiedItemId}");
             }
-            static void UpdateCache(Ring __instance, RingEffects? newEffect)
+            static void UpdateCache(Ring __instance, EquipEffects? newEffect)
             {
                 if (newEffect is not null)
                 {
                     _activeEffects.AddOrUpdate(__instance, newEffect);
-                    _tooltipMap[__instance.ItemId] = newEffect;
+                    _tooltipMap[__instance.QualifiedItemId] = newEffect;
                 }
                 else
                 {
                     _activeEffects.Remove(__instance);
-                    _tooltipMap.Remove(__instance.ItemId);
+                    _tooltipMap.Remove(__instance.QualifiedItemId);
                 }
             }
         }
@@ -398,7 +414,7 @@ internal static class RingPatcher
     }
 
     [HarmonyPostfix]
-    [HarmonyPatch(nameof(Ring.onLeaveLocation))]
+    [HarmonyPatch(typeof(Ring), nameof(Ring.onLeaveLocation))]
     private static void OnLeaveLocation(Ring __instance, GameLocation environment)
     {
         try
@@ -415,33 +431,33 @@ internal static class RingPatcher
         }
     }
 
-    private static RingEffects? GetRingEffect(Ring __instance)
+    private static EquipEffects? GetRingEffect(Item __instance)
     {
-        if (_activeEffects.TryGetValue(__instance, out RingEffects? effects))
+        if (_activeEffects.TryGetValue(__instance, out EquipEffects? effects))
         {
-            _tooltipMap[__instance.ItemId] = effects;
+            _tooltipMap[__instance.QualifiedItemId] = effects;
             return effects;
         }
 
-        if (!_tooltipMap.TryGetValue(__instance.ItemId, out RingEffects? ringEffects))
+        if (!_tooltipMap.TryGetValue(__instance.QualifiedItemId, out EquipEffects? ringEffects))
         {
-            ringEffects = AssetManager.GetRingData(__instance.ItemId)?.GetEffect(RingBuffTrigger.OnEquip);
+            ringEffects = AssetManager.GetRingData(__instance.QualifiedItemId)?.GetEffect(EquipmentBuffTrigger.OnEquip);
             if (ringEffects is not null)
             {
-                _tooltipMap[__instance.ItemId] = ringEffects;
+                _tooltipMap[__instance.QualifiedItemId] = ringEffects;
             }
         }
 
         return ringEffects;
     }
 
-    private static IEnumerable<RingEffects> GetAllRingEffects(Ring __instance)
+    private static IEnumerable<EquipEffects> GetAllRingEffects(Ring __instance)
     {
         if (__instance is CombinedRing combined)
         {
             foreach (Ring? ring in combined.combinedRings)
             {
-                foreach (RingEffects effect in GetAllRingEffects(ring))
+                foreach (EquipEffects effect in GetAllRingEffects(ring))
                 {
                     yield return effect;
                 }
@@ -453,18 +469,19 @@ internal static class RingPatcher
         }
     }
 
-    private static RingEffects? GetEffectsForTooltip(Ring instance)
+    // TODO - boots!
+    private static EquipEffects? GetEffectsForTooltip(Item instance)
     {
         if (instance is CombinedRing combined)
         {
-            if (_combinedTooltips.TryGetValue(combined, out RingEffects? val))
+            if (_combinedTooltips.TryGetValue(combined, out EquipEffects? val))
             {
                 return val;
             }
             else if (GetAllRingEffects(combined).Any())
             {
-                RingEffects combinedEffects = new();
-                foreach (RingEffects e in GetAllRingEffects(combined))
+                EquipEffects combinedEffects = new();
+                foreach (EquipEffects e in GetAllRingEffects(combined))
                 {
                     if (e.Light.Radius > 0)
                     {

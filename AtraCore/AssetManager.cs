@@ -23,14 +23,14 @@ internal static class AssetManager
     private static readonly string dataEvents = PathUtilities.NormalizeAssetName("Data/Events") + "/";
 
     private static IAssetName prismatic = null!;
-    private static IAssetName ringData = null!;
-    private static IAssetName ringBuffIcons = null!;
+    private static IAssetName equipData = null!;
+    private static IAssetName equipBuffIcons = null!;
 
-    private static Lazy<Dictionary<string, RingExtModel>> _ringData = new(
-        static () => Game1.content.Load<Dictionary<string, RingExtModel>>(AtraCoreConstants.RingDataExt));
+    private static Lazy<Dictionary<string, EquipmentExtModel>> _ringData = new(
+        static () => Game1.content.Load<Dictionary<string, EquipmentExtModel>>(AtraCoreConstants.EquipData));
 
     private static Lazy<Texture2D> _ringTextures = new(
-        static () => Game1.content.Load<Texture2D>(ringBuffIcons.BaseName));
+        static () => Game1.content.Load<Texture2D>(equipBuffIcons.BaseName));
 
     /// <summary>
     /// Gets the additional ring buff icons.
@@ -44,8 +44,8 @@ internal static class AssetManager
     internal static void Initialize(IGameContentHelper parser)
     {
         prismatic = parser.ParseAssetName(AtraCoreConstants.PrismaticMaskData);
-        ringData = parser.ParseAssetName(AtraCoreConstants.RingDataExt);
-        ringBuffIcons = parser.ParseAssetName("Mods/atravita/RingBuffIcons");
+        equipData = parser.ParseAssetName(AtraCoreConstants.EquipData);
+        equipBuffIcons = parser.ParseAssetName("Mods/atravita/EquipBuffIcons");
 
         // check and populate the event locations.
         foreach (string? location in new[] { "AdventureGuild", "Blacksmith", "WitchHut", "WitchSwamp", "Summit" })
@@ -92,11 +92,11 @@ internal static class AssetManager
         {
             e.LoadFrom(EmptyContainers.GetEmptyDictionary<string, DrawPrismaticModel>, AssetLoadPriority.Exclusive);
         }
-        else if (e.NameWithoutLocale.IsEquivalentTo(ringData))
+        else if (e.NameWithoutLocale.IsEquivalentTo(equipData))
         {
-            e.LoadFrom(EmptyContainers.GetEmptyDictionary<string, RingExtModel>, AssetLoadPriority.Exclusive);
+            e.LoadFrom(EmptyContainers.GetEmptyDictionary<string, EquipmentExtModel>, AssetLoadPriority.Exclusive);
         }
-        else if (e.NameWithoutLocale.IsEquivalentTo(ringBuffIcons))
+        else if (e.NameWithoutLocale.IsEquivalentTo(equipBuffIcons))
         {
             e.LoadFromModFile<Texture2D>("assets/BuffIcons.png", AssetLoadPriority.Exclusive);
         }
@@ -113,18 +113,18 @@ internal static class AssetManager
     /// <inheritdoc cref="IContentEvents.AssetsInvalidated"/>
     internal static void Invalidate(IReadOnlySet<IAssetName>? assets = null)
     {
-        if (assets is null || assets.Contains(ringData))
+        if (assets is null || assets.Contains(equipData))
         {
             if (_ringData.IsValueCreated)
             {
-                _ringData = new(static () => Game1.content.Load<Dictionary<string, RingExtModel>>(AtraCoreConstants.RingDataExt));
+                _ringData = new(static () => Game1.content.Load<Dictionary<string, EquipmentExtModel>>(AtraCoreConstants.EquipData));
             }
         }
-        if (assets is null || assets.Contains(ringBuffIcons))
+        if (assets is null || assets.Contains(equipBuffIcons))
         {
             if (_ringTextures.IsValueCreated)
             {
-                _ringTextures = new(static () => Game1.content.Load<Texture2D>(ringBuffIcons.BaseName));
+                _ringTextures = new(static () => Game1.content.Load<Texture2D>(equipBuffIcons.BaseName));
             }
         }
     }
@@ -134,6 +134,6 @@ internal static class AssetManager
     /// </summary>
     /// <param name="ringID">The ring's Id.</param>
     /// <returns>The ring data, if it exists.</returns>
-    internal static RingExtModel? GetRingData(string ringID)
+    internal static EquipmentExtModel? GetRingData(string ringID)
         => _ringData.Value.GetValueOrDefault(ringID);
 }

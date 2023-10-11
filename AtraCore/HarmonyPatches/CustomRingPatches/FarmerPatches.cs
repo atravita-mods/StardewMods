@@ -50,6 +50,11 @@ internal static class FarmerPatches
 
             __instance.leftRing.Value?.OnPlayerHit(__instance);
             __instance.rightRing.Value?.OnPlayerHit(__instance);
+
+            __instance.hat.Value?.OnPlayerHit(__instance);
+            __instance.shirtItem.Value?.OnPlayerHit(__instance);
+            __instance.pantsItem.Value?.OnPlayerHit(__instance);
+            __instance.boots.Value?.OnPlayerHit(__instance);
         }
         catch (Exception ex)
         {
@@ -57,8 +62,8 @@ internal static class FarmerPatches
         }
     }
 
-    private static void OnPlayerHit(this Ring ring, Farmer player)
-        => AssetManager.GetRingData(ring.ItemId)
-            ?.GetEffect(RingBuffTrigger.OnPlayerHit, player.currentLocation, player)
-            ?.AddBuff(ring, player);
+    private static void OnPlayerHit(this Item item, Farmer player)
+        => AssetManager.GetRingData(item.ItemId)
+            ?.GetEffect(EquipmentBuffTrigger.OnPlayerHit, player.currentLocation, player)
+            ?.AddBuff(item, player);
 }

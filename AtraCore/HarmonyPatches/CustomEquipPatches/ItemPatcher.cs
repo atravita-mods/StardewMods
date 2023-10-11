@@ -1,4 +1,6 @@
-﻿namespace AtraCore.HarmonyPatches.CustomRingPatches;
+﻿#define TRACELOG
+
+namespace AtraCore.HarmonyPatches.CustomEquipPatches;
 
 using System.Runtime.CompilerServices;
 
@@ -16,6 +18,7 @@ using HarmonyLib;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
+using StardewValley;
 using StardewValley.Buffs;
 using StardewValley.Objects;
 
@@ -24,8 +27,10 @@ using StardewValley.Objects;
 /// </summary>
 [HarmonyPatch]
 [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = StyleCopConstants.NamedForHarmony)]
-internal static class RingPatcher
+internal static class ItemPatcher
 {
+    private const string ModDataKey = "atravita.AtraCore.LightKey";
+
     // maps the ring ID to the current effect of the ring for tooltips
     private static readonly Dictionary<string, EquipEffects> _tooltipMap = new();
 
@@ -36,6 +41,7 @@ internal static class RingPatcher
     private static readonly ConditionalWeakTable<CombinedRing, EquipEffects?> _combinedTooltips = new();
 
     // holds references to active lights
+    private static readonly Dictionary<Item, LightSource> _lightSources = new();
 
     #region delegates
     private static readonly Lazy<Func<Ring, int?>> lightIDSourceGetter = new(() =>
@@ -289,21 +295,47 @@ internal static class RingPatcher
         }
     }
 
+    #region monster slay
+
     [HarmonyPostfix]
     [HarmonyPatch(typeof(Ring), nameof(Ring.onMonsterSlay))]
-    private static void PostfixMonsterSlay(Ring __instance, GameLocation location, Farmer who)
+    private static void PostfixRingMonsterSlay(Ring __instance, GameLocation location, Farmer who)
     {
         try
         {
-            AssetManager.GetRingData(__instance.QualifiedItemId)
-                ?.GetEffect(EquipmentBuffTrigger.OnMonsterSlay, location, who)
-                ?.AddBuff(__instance, who);
+            AddMonsterKillBuff(__instance, location, who);
         }
         catch (Exception ex)
         {
-            ModEntry.ModMonitor.LogError("adding monster slay buff", ex);
+            ModEntry.ModMonitor.LogError("adding ring monster slay buff", ex);
         }
     }
+
+    [HarmonyPostfix]
+    [HarmonyPatch(typeof(GameLocation), "onMonsterKilled")]
+    private static void PostfixMonsterSlay(Farmer who, GameLocation __instance)
+    {
+        try
+        {
+            who.hat.Value?.AddMonsterKillBuff(__instance, who);
+            who.shirtItem.Value?.AddMonsterKillBuff(__instance, who);
+            who.pantsItem.Value?.AddMonsterKillBuff(__instance, who);
+            who.boots.Value?.AddMonsterKillBuff(__instance, who);
+        }
+        catch (Exception ex)
+        {
+            ModEntry.ModMonitor.LogError($"adding monster slay buff", ex);
+        }
+    }
+
+    private static void AddMonsterKillBuff(this Item item, GameLocation location, Farmer who)
+    {
+        AssetManager.GetRingData(item.QualifiedItemId)
+                        ?.GetEffect(EquipmentBuffTrigger.OnMonsterSlay, location, who)
+                        ?.AddBuff(item, who);
+    }
+
+    #endregion
 
     [HarmonyPostfix]
     [HarmonyPatch(typeof(Item), nameof(Item.AddEquipmentEffects))]
@@ -311,10 +343,10 @@ internal static class RingPatcher
     {
         try
         {
-            if (GetRingEffect(__instance) is { } ringEffects)
+            if (GetEquipEffect(__instance) is { } active)
             {
-                _activeEffects.AddOrUpdate(__instance, ringEffects);
-                ringEffects.BaseEffects.Merge(effects);
+                _activeEffects.AddOrUpdate(__instance, active);
+                active.BaseEffects.Merge(effects);
 
                 ModEntry.ModMonitor.TraceOnlyLog($"Added Effects for {__instance.QualifiedItemId}");
             }
@@ -325,10 +357,18 @@ internal static class RingPatcher
         }
     }
 
+    #region equip/dequip
+
     [HarmonyPostfix]
-    [HarmonyPatch(typeof(Ring), nameof(Ring.onUnequip))]
-    private static void OnUnequip(Ring __instance, Farmer who)
+    [HarmonyPatch(typeof(Item), nameof(Item.onUnequip))]
+    private static void OnUnequip(Item __instance, Farmer who)
     {
+        // Ring.OnUnequip doesn't actually call base, but just in case.
+        if (__instance is Ring)
+        {
+            return;
+        }
+
         try
         {
             if (_activeEffects.TryGetValue(__instance, out EquipEffects? effects))
@@ -336,6 +376,7 @@ internal static class RingPatcher
                 if (effects.Light.Radius > 0)
                 {
                     RemoveLightFrom(__instance, who.currentLocation);
+                    _lightSources.Remove(__instance);
                 }
                 _activeEffects.Remove(__instance);
                 ModEntry.ModMonitor.TraceOnlyLog($"Unequip for {__instance.QualifiedItemId}");
@@ -348,17 +389,46 @@ internal static class RingPatcher
     }
 
     [HarmonyPostfix]
-    [HarmonyPatch(typeof(Ring), nameof(Ring.onEquip))]
-    private static void OnEquip(Ring __instance, Farmer who)
+    [HarmonyPatch(typeof(Ring), nameof(Ring.onUnequip))]
+    private static void OnUnequipRing(Ring __instance, Farmer who)
     {
         try
         {
-            if (GetRingEffect(__instance) is { } effect)
+            if (_activeEffects.TryGetValue(__instance, out EquipEffects? effects))
+            {
+                if (effects.Light.Radius > 0)
+                {
+                    RemoveRingLight(__instance, who.currentLocation);
+                }
+                _activeEffects.Remove(__instance);
+                ModEntry.ModMonitor.TraceOnlyLog($"Unequip for {__instance.QualifiedItemId}");
+            }
+        }
+        catch (Exception ex)
+        {
+            ModEntry.ModMonitor.LogError($"unequipping {__instance.QualifiedItemId}", ex);
+        }
+    }
+
+    [HarmonyPostfix]
+    [HarmonyPatch(typeof(Item), nameof(Item.onEquip))]
+    private static void OnEquip(Item __instance, Farmer who)
+    {
+        // Rings need to be handled separately since I need to be at the end of Ring.onEquip, and Ring.onEquip calls base at the START.
+        if (__instance is Ring)
+        {
+            return;
+        }
+
+        try
+        {
+            if (GetEquipEffect(__instance) is { } effect)
             {
                 LightData lightEffect = effect.Light;
                 if (lightEffect.Radius > 0)
                 {
-                    AddLight(lightEffect.Radius, lightEffect.Color, __instance, who, who.currentLocation);
+                    LightSource source = AddItemLight(lightEffect.Radius, lightEffect.Color, __instance, who, who.currentLocation);
+                    _lightSources[__instance] = source;
                 }
                 _activeEffects.AddOrUpdate(__instance, effect);
                 ModEntry.ModMonitor.TraceOnlyLog($"Equip for {__instance.QualifiedItemId}");
@@ -369,6 +439,33 @@ internal static class RingPatcher
             ModEntry.ModMonitor.LogError($"equipping {__instance.QualifiedItemId}", ex);
         }
     }
+
+    [HarmonyPostfix]
+    [HarmonyPatch(typeof(Ring), nameof(Ring.onEquip))]
+    private static void OnEquipRing(Ring __instance, Farmer who)
+    {
+        try
+        {
+            if (GetEquipEffect(__instance) is { } effect)
+            {
+                LightData lightEffect = effect.Light;
+                if (lightEffect.Radius > 0)
+                {
+                    AddRingLight(lightEffect.Radius, lightEffect.Color, __instance, who, who.currentLocation);
+                }
+                _activeEffects.AddOrUpdate(__instance, effect);
+                ModEntry.ModMonitor.TraceOnlyLog($"Equip for {__instance.QualifiedItemId}");
+            }
+        }
+        catch (Exception ex)
+        {
+            ModEntry.ModMonitor.LogError($"equipping {__instance.QualifiedItemId}", ex);
+        }
+    }
+
+    #endregion
+
+    // TODO: NewLocation/OldLocation for other equipment, also updating the light.
 
     [HarmonyPostfix]
     [HarmonyPatch(typeof(Ring), nameof(Ring.onNewLocation))]
@@ -389,7 +486,7 @@ internal static class RingPatcher
 
                 if (newEffect is not null && newEffect.Light.Radius > 0)
                 {
-                    AddLight(newEffect.Light.Radius, newEffect.Light.Color, __instance, who, environment);
+                    AddRingLight(newEffect.Light.Radius, newEffect.Light.Color, __instance, who, environment);
                 }
                 ModEntry.ModMonitor.TraceOnlyLog($"NewLocation for {__instance.QualifiedItemId}");
             }
@@ -419,9 +516,9 @@ internal static class RingPatcher
     {
         try
         {
-            if (GetRingEffect(__instance)?.Light?.Radius > 0)
+            if (GetEquipEffect(__instance)?.Light?.Radius > 0)
             {
-                RemoveLightFrom(__instance, environment);
+                RemoveRingLight(__instance, environment);
                 ModEntry.ModMonitor.TraceOnlyLog($"LeaveLocation for {__instance.QualifiedItemId}");
             }
         }
@@ -431,7 +528,7 @@ internal static class RingPatcher
         }
     }
 
-    private static EquipEffects? GetRingEffect(Item __instance)
+    private static EquipEffects? GetEquipEffect(Item __instance)
     {
         if (_activeEffects.TryGetValue(__instance, out EquipEffects? effects))
         {
@@ -463,7 +560,7 @@ internal static class RingPatcher
                 }
             }
         }
-        else if (GetRingEffect(__instance) is { } ringEffect)
+        else if (GetEquipEffect(__instance) is { } ringEffect)
         {
             yield return ringEffect;
         }
@@ -504,38 +601,53 @@ internal static class RingPatcher
         }
         else
         {
-            return GetRingEffect(instance);
+            return GetEquipEffect(instance);
         }
     }
 
-    private static void AddLight(int radius, Color color, Ring instance, Farmer player, GameLocation location)
+    private static LightSource AddItemLight(int radius, Color color, Item item, Farmer player, GameLocation location)
+    {
+        // rings have their own unique item ID, but other items don't. We're gonna cheat a little and use the hash code, which in C# is the sync block index unless defined otherwise.
+        // should be unique enough.
+        LightSource lightSource = GenerateLightSource(radius, color, item, player, location, item.GetHashCode(), out int lightID);
+        item.modData.SetInt(ModDataKey, lightID);
+        ModEntry.ModMonitor.TraceOnlyLog($"[DataRings] Adding light id {lightID}");
+        return lightSource;
+    }
+
+    private static void AddRingLight(int radius, Color color, Ring ring, Farmer player, GameLocation location)
+    {
+        _ = GenerateLightSource(radius, color, ring, player, location, ring.uniqueID.Value, out int lightID);
+        lightIDSourceSetter.Value(ring, lightID);
+        ModEntry.ModMonitor.TraceOnlyLog($"[DataRings] Adding light id {lightID}");
+    }
+
+    private static LightSource GenerateLightSource(int radius, Color color, Item item, Farmer player, GameLocation location, int uniqueItemID, out int lightID)
     {
         int startingID;
-        int lightID;
 
         unchecked
         {
-            startingID = instance.uniqueID.Value + (int)player.UniqueMultiplayerID;
-            lightID = startingID;
+            lightID = startingID = uniqueItemID + (int)player.UniqueMultiplayerID;
             while (location.sharedLights.ContainsKey(lightID))
             {
                 ++lightID;
             }
         }
 
-        lightIDSourceSetter.Value(instance, lightID);
-        ModEntry.ModMonitor.TraceOnlyLog($"[DataRings] Adding light id {lightID}");
-        location.sharedLights[lightID] = new LightSource(
-            textureIndex: 1,
-            new Vector2(player.Position.X + 21f, player.Position.Y + 64f),
-            radius,
-            color,
-            identifier: startingID,
-            light_context: LightSource.LightContext.None,
-            playerID: player.UniqueMultiplayerID);
+        LightSource lightSource = new(
+                    textureIndex: 1,
+                    new Vector2(player.Position.X + 21f, player.Position.Y + 64f),
+                    radius,
+                    color,
+                    identifier: startingID,
+                    light_context: LightSource.LightContext.None,
+                    playerID: player.UniqueMultiplayerID);
+        location.sharedLights[lightID] = lightSource;
+        return lightSource;
     }
 
-    private static void RemoveLightFrom(Ring __instance, GameLocation location)
+    private static void RemoveRingLight(Ring __instance, GameLocation location)
     {
         int? lightID = lightIDSourceGetter.Value(__instance);
         if (lightID.HasValue)
@@ -543,6 +655,17 @@ internal static class RingPatcher
             ModEntry.ModMonitor.TraceOnlyLog($"[DataRings] Removing light id {lightID.Value}");
             location.removeLightSource(lightID.Value);
             lightIDSourceSetter.Value(__instance, null);
+        }
+    }
+
+    private static void RemoveLightFrom(Item item, GameLocation location)
+    {
+        int? lightID = item.modData.GetInt(ModDataKey);
+        if (lightID.HasValue)
+        {
+            ModEntry.ModMonitor.TraceOnlyLog($"[DataRings] Removing light id {lightID.Value}");
+            location.removeLightSource(lightID.Value);
+            item.modData.Remove(ModDataKey);
         }
     }
 }

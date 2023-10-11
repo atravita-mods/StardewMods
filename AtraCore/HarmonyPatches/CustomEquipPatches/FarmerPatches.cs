@@ -1,4 +1,4 @@
-﻿namespace AtraCore.HarmonyPatches.CustomRingPatches;
+﻿namespace AtraCore.HarmonyPatches.CustomEquipPatches;
 
 using AtraCore.Framework.Models;
 

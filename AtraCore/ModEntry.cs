@@ -21,7 +21,7 @@ using AtraCore.Framework.Internal;
 using AtraCore.Framework.ItemManagement;
 using AtraCore.Framework.QueuePlayerAlert;
 using AtraCore.HarmonyPatches;
-using AtraCore.HarmonyPatches.CustomRingPatches;
+using AtraCore.HarmonyPatches.CustomEquipPatches;
 using AtraCore.HarmonyPatches.DrawPrismaticPatches;
 using AtraCore.Utilities;
 
@@ -182,7 +182,7 @@ internal sealed class ModEntry : BaseMod<ModEntry>
             return;
         }
 
-        RingPatcher.Reset();
+        ItemPatcher.Reset();
 
         if (PlayerAlertHandler.HasMessages())
         {

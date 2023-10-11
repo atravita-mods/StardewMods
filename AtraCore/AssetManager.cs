@@ -134,6 +134,6 @@ internal static class AssetManager
     /// </summary>
     /// <param name="ringID">The ring's Id.</param>
     /// <returns>The ring data, if it exists.</returns>
-    internal static EquipmentExtModel? GetRingData(string ringID)
+    internal static EquipmentExtModel? GetEquipData(string ringID)
         => _ringData.Value.GetValueOrDefault(ringID);
 }

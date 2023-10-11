@@ -5,7 +5,7 @@ namespace AtraCore.Framework.DialogueManagement;
 /// <summary>
 /// A dialogue to delay.
 /// </summary>
-public readonly struct DelayedDialogue : IComparable<DelayedDialogue>, IEquatable<DelayedDialogue>
+internal readonly struct DelayedDialogue : IComparable<DelayedDialogue>, IEquatable<DelayedDialogue>
 {
     private readonly int time;
     private readonly Dialogue dialogue;

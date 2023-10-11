@@ -1,4 +1,6 @@
-﻿using AtraBase.Collections;
+﻿// Ignore Spelling: npc
+
+using AtraBase.Collections;
 using CommunityToolkit.Diagnostics;
 using StardewModdingAPI.Utilities;
 

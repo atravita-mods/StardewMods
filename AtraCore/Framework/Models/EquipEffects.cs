@@ -190,8 +190,8 @@ public sealed class BuffModel : ObjectBuffAttributesData
                     if (CheckTypeMatch(asField.FieldType, field.FieldType))
                     {
                         MemberExpression netField = Expression.Field(effects, asField);
-                        MemberExpression valueSetter = Expression.Property(netField, asField.FieldType.GetCachedProperty("Value", ReflectionCache.FlagTypes.InstanceFlags));
-                        BinaryExpression assign = Expression.AddAssign(valueSetter, getter);
+                        MemberExpression value = Expression.Property(netField, asField.FieldType.GetCachedProperty("Value", ReflectionCache.FlagTypes.InstanceFlags));
+                        BinaryExpression assign = Expression.Assign(value, Expression.Add(value, getter));
                         expressions.Add(assign);
                     }
 
@@ -200,8 +200,8 @@ public sealed class BuffModel : ObjectBuffAttributesData
                     if (CheckTypeMatch(asProperty.PropertyType, field.FieldType))
                     {
                         MemberExpression netField = Expression.Property(effects, asProperty);
-                        MemberExpression valueSetter = Expression.Property(netField, asProperty.PropertyType.GetCachedProperty("Value", ReflectionCache.FlagTypes.InstanceFlags));
-                        BinaryExpression assign = Expression.AddAssign(valueSetter, getter);
+                        MemberExpression value = Expression.Property(netField, asProperty.PropertyType.GetCachedProperty("Value", ReflectionCache.FlagTypes.InstanceFlags));
+                        BinaryExpression assign = Expression.Assign(value, Expression.Add(value, getter));
                     }
                     break;
                 default:
@@ -221,8 +221,8 @@ public sealed class BuffModel : ObjectBuffAttributesData
                     if (CheckTypeMatch(asField.FieldType, property.PropertyType))
                     {
                         MemberExpression netField = Expression.Field(effects, asField);
-                        MemberExpression valueSetter = Expression.Property(netField, asField.FieldType.GetCachedProperty("Value", ReflectionCache.FlagTypes.InstanceFlags));
-                        BinaryExpression assign = Expression.AddAssign(valueSetter, getter);
+                        MemberExpression value = Expression.Property(netField, asField.FieldType.GetCachedProperty("Value", ReflectionCache.FlagTypes.InstanceFlags));
+                        BinaryExpression assign = Expression.Assign(value, Expression.Add(value, getter));
                         expressions.Add(assign);
                     }
 
@@ -231,8 +231,8 @@ public sealed class BuffModel : ObjectBuffAttributesData
                     if (CheckTypeMatch(asProperty.PropertyType, property.PropertyType))
                     {
                         MemberExpression netField = Expression.Property(effects, asProperty);
-                        MemberExpression valueSetter = Expression.Property(netField, asProperty.PropertyType.GetCachedProperty("Value", ReflectionCache.FlagTypes.InstanceFlags));
-                        BinaryExpression assign = Expression.AddAssign(valueSetter, getter);
+                        MemberExpression value = Expression.Property(netField, asProperty.PropertyType.GetCachedProperty("Value", ReflectionCache.FlagTypes.InstanceFlags));
+                        BinaryExpression assign = Expression.Assign(value, Expression.Add(value, getter));
                     }
                     break;
                 default:
@@ -242,8 +242,9 @@ public sealed class BuffModel : ObjectBuffAttributesData
         }
 
         BlockExpression block = Expression.Block(expressions);
-        ModEntry.ModMonitor.VerboseLog($"Ring merge function generated:{block.ToCSharpString()}");
-        return Expression.Lambda<Action<BuffEffects, BuffModel>>(block, new ParameterExpression[] { effects, model }).CompileFast();
+        var lambda = Expression.Lambda<Action<BuffEffects, BuffModel>>(block, new ParameterExpression[] { effects, model });
+        ModEntry.ModMonitor.VerboseLog($"Ring merge function generated:\n{lambda.ToCSharpString()}");
+        return lambda.CompileFast();
     });
 
     private static readonly Lazy<Func<BuffModel, int>> _extraRows = new(() =>
@@ -258,23 +259,24 @@ public sealed class BuffModel : ObjectBuffAttributesData
         foreach (FieldInfo field in typeof(BuffModel).GetFields())
         {
             MemberExpression getter = Expression.Field(model, field);
-            BinaryExpression greater = Expression.NotEqual(getter, field.FieldType == typeof(float) ? Expression.ConstantOf(0f) : Expression.ZeroConstant);
-            ConditionalExpression elif = Expression.IfThen(greater, Expression.PreIncrementAssign(rows));
+            BinaryExpression notequal = Expression.NotEqual(getter, field.FieldType == typeof(float) ? Expression.ConstantOf(0f) : Expression.ZeroConstant);
+            ConditionalExpression elif = Expression.IfThen(notequal, Expression.PreIncrementAssign(rows));
             expressions.Add(elif);
         }
 
         foreach (PropertyInfo property in typeof(BuffModel).GetProperties())
         {
             MemberExpression getter = Expression.Property(model, property);
-            BinaryExpression greater = Expression.NotEqual(getter, property.PropertyType == typeof(float) ? Expression.ConstantOf(0f) : Expression.ZeroConstant);
-            ConditionalExpression elif = Expression.IfThen(greater, Expression.PreIncrementAssign(rows));
+            BinaryExpression notequal = Expression.NotEqual(getter, property.PropertyType == typeof(float) ? Expression.ConstantOf(0f) : Expression.ZeroConstant);
+            ConditionalExpression elif = Expression.IfThen(notequal, Expression.PreIncrementAssign(rows));
             expressions.Add(elif);
         }
 
         expressions.Add(rows);
         BlockExpression block = Expression.Block(new ParameterExpression[] { rows }, expressions);
-        ModEntry.ModMonitor.VerboseLog($"Height function generated:{block.ToCSharpString()}");
-        return Expression.Lambda<Func<BuffModel, int>>(block, new ParameterExpression[] { model }).CompileFast();
+        var lambda = Expression.Lambda<Func<BuffModel, int>>(block, new ParameterExpression[] { model });
+        ModEntry.ModMonitor.VerboseLog($"Height function generated:\n{lambda.ToCSharpString()}");
+        return lambda.CompileFast();
     });
 
     private static readonly Lazy<Action<BuffModel, BuffModel>> _leftFold = new(() =>
@@ -288,7 +290,7 @@ public sealed class BuffModel : ObjectBuffAttributesData
         {
             MemberExpression getter = Expression.Field(right, field);
             MemberExpression setter = Expression.Field(left, field);
-            BinaryExpression sum = Expression.AddAssign(setter, getter);
+            BinaryExpression sum = Expression.Assign(setter, Expression.Add(setter, getter));
             expressions.Add(sum);
         }
 
@@ -296,13 +298,14 @@ public sealed class BuffModel : ObjectBuffAttributesData
         {
             MemberExpression getter = Expression.Property(right, property);
             MemberExpression setter = Expression.Property(left, property);
-            BinaryExpression sum = Expression.AddAssign(setter, getter);
+            BinaryExpression sum = Expression.Assign(setter, Expression.Add(setter, getter));
             expressions.Add(sum);
         }
 
         BlockExpression block = Expression.Block(expressions);
-        ModEntry.ModMonitor.VerboseLog($"Sum function generated:{block.ToCSharpString()}");
-        return Expression.Lambda<Action<BuffModel, BuffModel>>(block, new ParameterExpression[] { left, right }).CompileFast();
+        var lambda = Expression.Lambda<Action<BuffModel, BuffModel>>(block, new ParameterExpression[] { left, right });
+        ModEntry.ModMonitor.VerboseLog($"Sum function generated:\n{lambda.ToCSharpString()}");
+        return lambda.CompileFast();
     });
 
     /// <inheritdoc cref="BuffEffects.CombatLevel"/>
@@ -356,6 +359,10 @@ public sealed class BuffModel : ObjectBuffAttributesData
     /// <returns>The buff effect.</returns>
     internal BuffEffects Merge(BuffEffects other)
     {
+        if (other is null)
+        {
+            return null!;
+        }
         _merger.Value(other, this);
         return other;
     }

@@ -434,14 +434,14 @@ internal static class ItemPatcher
 
     [HarmonyPostfix]
     [HarmonyPatch(typeof(Item), nameof(Item.AddEquipmentEffects))]
-    private static void OnAddEffects(Item __instance, BuffEffects effects)
+    private static void OnAddEffects(Item __instance, ref BuffEffects effects)
     {
         try
         {
             if (GetEquipEffect(__instance) is { } active)
             {
                 _activeEffects.AddOrUpdate(__instance, active);
-                active.BaseEffects.Merge(effects);
+                effects = active.BaseEffects.Merge(effects);
 
                 ModEntry.ModMonitor.TraceOnlyLog($"Added Effects for {__instance.QualifiedItemId}");
             }

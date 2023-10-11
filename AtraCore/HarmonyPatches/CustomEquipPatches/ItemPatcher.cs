@@ -20,13 +20,12 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
 using StardewModdingAPI.Events;
+using StardewModdingAPI.Utilities;
 
 using StardewValley;
 using StardewValley.Buffs;
 using StardewValley.Locations;
 using StardewValley.Objects;
-
-// TODO: weapons?
 
 /// <summary>
 /// Holds patches for custom buffs on clothing.
@@ -38,7 +37,7 @@ internal static class ItemPatcher
     private const string ModDataKey = "atravita.AtraCore.LightKey";
 
     // maps the ring ID to the current effect of the ring for tooltips
-    private static readonly Dictionary<string, EquipEffects> _tooltipMap = new();
+    private static readonly PerScreen<Dictionary<string, EquipEffects>> _tooltipMap = new(() => new());
 
     // maps the items to their active effects
     private static readonly ConditionalWeakTable<Item, EquipEffects> _activeEffects = new();
@@ -50,7 +49,7 @@ internal static class ItemPatcher
     private static readonly ConditionalWeakTable<Boots, EquipEffects?> _bootsTooltips = new();
 
     // holds references to active lights
-    private static readonly Dictionary<Item, int> _lightSources = new();
+    private static readonly PerScreen<Dictionary<Item, int>> _lightSources = new(() => new());
 
     #region delegates
     private static readonly Lazy<Func<Ring, int?>> lightIDSourceGetter = new(() =>
@@ -73,7 +72,7 @@ internal static class ItemPatcher
     /// </summary>
     internal static void Reset()
     {
-        _tooltipMap.Clear();
+        _tooltipMap.Value.Clear();
         _combinedTooltips.Clear();
         _bootsTooltips.Clear();
     }
@@ -87,7 +86,11 @@ internal static class ItemPatcher
             if (__instance.TypeDefinitionId is "(H)" or "(S)" or "(P)" && GetEffectsForTooltip(__instance) is { } effects)
             {
                 Point temp = AdjustExtraRows(__result, font, horizontalBuffer, effects);
-                __result.Y = temp.Y + startingHeight;
+                if (__result.Y == 0)
+                {
+                    __result.Y += startingHeight;
+                }
+                __result.Y += temp.Y;
                 __result.X = Math.Max(Math.Max(__result.X, temp.X), minWidth);
             }
         }
@@ -362,9 +365,9 @@ internal static class ItemPatcher
         return y;
     }
 
-    private static string FormatNumber(this int number) => (number > 0 ? "+" : string.Empty) + number.ToString();
+    private static string FormatNumber(this int number) => $"{number:+#;-#}";
 
-    private static string FormatPercent(this float number) => (number > 0 ? "+" : string.Empty) + number.ToString("P0");
+    private static string FormatPercent(this float number) => $"{number:+#.#%;-#.#%}";
 
     #endregion
 
@@ -436,6 +439,11 @@ internal static class ItemPatcher
     [HarmonyPatch(typeof(Item), nameof(Item.AddEquipmentEffects))]
     private static void OnAddEffects(Item __instance, ref BuffEffects effects)
     {
+        if (__instance is Tool)
+        {
+            return;
+        }
+
         try
         {
             if (GetEquipEffect(__instance) is { } active)
@@ -469,7 +477,7 @@ internal static class ItemPatcher
                     if (effects.Light.Radius > 0)
                     {
                         RemoveItemLight(__instance, who.currentLocation);
-                        _lightSources.Remove(__instance);
+                        _lightSources.Value.Remove(__instance);
                     }
                     _activeEffects.Remove(__instance);
                     ModEntry.ModMonitor.TraceOnlyLog($"[DataEquips] Unequip for {__instance.QualifiedItemId}");
@@ -520,7 +528,7 @@ internal static class ItemPatcher
                     if (lightEffect.Radius > 0)
                     {
                         int source = AddItemLight(lightEffect.Radius, lightEffect.Color, __instance, who, who.currentLocation);
-                        _lightSources[__instance] = source;
+                        _lightSources.Value[__instance] = source;
                     }
                     _activeEffects.AddOrUpdate(__instance, effect);
                     ModEntry.ModMonitor.TraceOnlyLog($"[DataEquips] Equip for {__instance.QualifiedItemId}");
@@ -564,7 +572,7 @@ internal static class ItemPatcher
     internal static void UpdateLights()
     {
         var player = Game1.player;
-        if (player?.currentLocation is null || _lightSources.Count == 0 || !Context.IsWorldReady)
+        if (player?.currentLocation is null || _lightSources.Value.Count == 0 || !Context.IsWorldReady)
         {
             return;
         }
@@ -573,7 +581,7 @@ internal static class ItemPatcher
         offset.Y += 21f;
         offset += player.Position;
 
-        foreach (int light in _lightSources.Values)
+        foreach (int light in _lightSources.Value.Values)
         {
             player.currentLocation.repositionLightSource(light, offset);
         }
@@ -681,12 +689,12 @@ internal static class ItemPatcher
                 if (newEffect is not null)
                 {
                     _activeEffects.AddOrUpdate(item, newEffect);
-                    _tooltipMap[item.QualifiedItemId] = newEffect;
+                    _tooltipMap.Value[item.QualifiedItemId] = newEffect;
                 }
                 else
                 {
                     _activeEffects.Remove(item);
-                    _tooltipMap.Remove(item.QualifiedItemId);
+                    _tooltipMap.Value.Remove(item.QualifiedItemId);
                 }
             }
 
@@ -718,16 +726,16 @@ internal static class ItemPatcher
     {
         if (_activeEffects.TryGetValue(__instance, out EquipEffects? effects))
         {
-            _tooltipMap[__instance.QualifiedItemId] = effects;
+            _tooltipMap.Value[__instance.QualifiedItemId] = effects;
             return effects;
         }
 
-        if (!_tooltipMap.TryGetValue(__instance.QualifiedItemId, out EquipEffects? ringEffects))
+        if (!_tooltipMap.Value.TryGetValue(__instance.QualifiedItemId, out EquipEffects? ringEffects))
         {
             ringEffects = AssetManager.GetEquipData(__instance.QualifiedItemId)?.GetEffect(EquipmentBuffTrigger.OnEquip);
             if (ringEffects is not null)
             {
-                _tooltipMap[__instance.QualifiedItemId] = ringEffects;
+                _tooltipMap.Value[__instance.QualifiedItemId] = ringEffects;
             }
         }
 
@@ -829,7 +837,7 @@ internal static class ItemPatcher
         // rings have their own unique item ID, but other items don't. We're gonna cheat a little and use the hash code, which in C# is the sync block index unless defined otherwise.
         // should be unique enough.
         int lightID = GenerateLightSource(radius, color, item, player, location, item.GetHashCode());
-        item.modData.SetInt(ModDataKey, lightID);
+        item.SetTempData(ModDataKey, lightID);
         ModEntry.ModMonitor.TraceOnlyLog($"[DataEquips] Adding light id {lightID:X}");
         return lightID;
     }
@@ -880,12 +888,11 @@ internal static class ItemPatcher
 
     private static void RemoveItemLight(Item item, GameLocation location)
     {
-        int? lightID = item.modData.GetInt(ModDataKey);
-        if (lightID.HasValue)
+        if (item.TryGetTempData(ModDataKey, out int lightID))
         {
-            ModEntry.ModMonitor.TraceOnlyLog($"[DataEquips] Removing light id {lightID.Value:X}");
-            location.removeLightSource(lightID.Value);
-            item.modData.Remove(ModDataKey);
+            ModEntry.ModMonitor.TraceOnlyLog($"[DataEquips] Removing light id {lightID:X}");
+            location.removeLightSource(lightID);
+            item.tempData.Remove(ModDataKey);
         }
     }
 }

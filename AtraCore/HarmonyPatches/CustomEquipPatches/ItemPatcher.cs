@@ -34,8 +34,6 @@ using StardewValley.Objects;
 [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = StyleCopConstants.NamedForHarmony)]
 internal static class ItemPatcher
 {
-    private const string ModDataKey = "atravita.AtraCore.LightKey";
-
     // maps the ring ID to the current effect of the ring for tooltips
     private static readonly PerScreen<Dictionary<string, EquipEffects>> _tooltipMap = new(() => new());
 
@@ -477,7 +475,6 @@ internal static class ItemPatcher
                     if (effects.Light.Radius > 0)
                     {
                         RemoveItemLight(__instance, who.currentLocation);
-                        _lightSources.Value.Remove(__instance);
                     }
                     _activeEffects.Remove(__instance);
                     ModEntry.ModMonitor.TraceOnlyLog($"[DataEquips] Unequip for {__instance.QualifiedItemId}");
@@ -527,8 +524,7 @@ internal static class ItemPatcher
                     LightData lightEffect = effect.Light;
                     if (lightEffect.Radius > 0)
                     {
-                        int source = AddItemLight(lightEffect.Radius, lightEffect.Color, __instance, who, who.currentLocation);
-                        _lightSources.Value[__instance] = source;
+                        _ = AddItemLight(lightEffect.Radius, lightEffect.Color, __instance, who, who.currentLocation);
                     }
                     _activeEffects.AddOrUpdate(__instance, effect);
                     ModEntry.ModMonitor.TraceOnlyLog($"[DataEquips] Equip for {__instance.QualifiedItemId}");
@@ -837,7 +833,7 @@ internal static class ItemPatcher
         // rings have their own unique item ID, but other items don't. We're gonna cheat a little and use the hash code, which in C# is the sync block index unless defined otherwise.
         // should be unique enough.
         int lightID = GenerateLightSource(radius, color, item, player, location, item.GetHashCode());
-        item.SetTempData(ModDataKey, lightID);
+        _lightSources.Value[item] = lightID;
         ModEntry.ModMonitor.TraceOnlyLog($"[DataEquips] Adding light id {lightID:X}");
         return lightID;
     }
@@ -888,11 +884,11 @@ internal static class ItemPatcher
 
     private static void RemoveItemLight(Item item, GameLocation location)
     {
-        if (item.TryGetTempData(ModDataKey, out int lightID))
+        if (_lightSources.Value.TryGetValue(item, out var lightID))
         {
             ModEntry.ModMonitor.TraceOnlyLog($"[DataEquips] Removing light id {lightID:X}");
             location.removeLightSource(lightID);
-            item.tempData.Remove(ModDataKey);
+            _lightSources.Value.Remove(item);
         }
     }
 }

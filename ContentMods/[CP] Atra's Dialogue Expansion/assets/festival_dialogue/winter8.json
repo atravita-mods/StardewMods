@@ -214,7 +214,7 @@
             },
             "Entries": {
                 "Leah_y2": "{{i18n:leah-y2-fishing.00}}#$e#{{i18n:leah-y2-fishing.01}}",
-                "Leah_spouse": "{{i18n:leah-y1-fishing-spouse.00.neutral}}$h^{{leah-y1-fishing-spouse.00.female}}$l#$b#{{i18n:leah-y1-fishing-spouse.01}}$h",
+                "Leah_spouse": "{{i18n:leah-y1-fishing-spouse.00.neutral}}$h^{{i18n:leah-y1-fishing-spouse.00.female}}$l#$b#{{i18n:leah-y1-fishing-spouse.01}}$h",
                 "Leah_spouse_y2": "{{i18n:leah-y2-fishing-spouse}}$h"
             }
         },

@@ -28,6 +28,7 @@
         "Target": "Strings/StringsFromMaps",
         "Entries": {
             "HarveyRoom.7": "{{i18n:harvey-radio.{{Season}} }}",
+            "HarveyRoom.8": "{{i18n:harvey-medical.{{Season}}.{{Random:00,01,02}} }}",
             "HarveyRoom.12": "{{i18n:harvey-fridge.{{Season}} }}",
             "HarveyRoom.13": "{{i18n:harvey-table.{{Season}} }}",
             "HarveyRoom.14": "{{i18n: harvey-tele.start}}{{i18n:harvey-tele.{{Season}}.{{Random: 00,01,02}} }}",

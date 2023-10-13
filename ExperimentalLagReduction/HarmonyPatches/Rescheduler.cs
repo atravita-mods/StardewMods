@@ -292,7 +292,7 @@ internal static class Rescheduler
 
                 if (current.ShouldExcludeFromNpcPathfinding())
                 {
-                    ModEntry.ModMonitor.DebugOnlyLog($"Reached map {current.Name} which has been excluded from the macropathfinder.");
+                    ModEntry.ModMonitor.VerboseLog($"Reached map {current.Name} which has been excluded from the macropathfinder.");
                     continue;
                 }
 

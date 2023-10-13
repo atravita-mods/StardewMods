@@ -1,4 +1,6 @@
-﻿#define TRACELOG
+﻿// #define TRACELOG
+
+namespace ExperimentalLagReduction.HarmonyPatches;
 
 #if DEBUG
 using System.Diagnostics;
@@ -11,8 +13,6 @@ using AtraShared.Utils.Extensions;
 using HarmonyLib;
 
 using StardewValley.Menus;
-
-namespace ExperimentalLagReduction.HarmonyPatches;
 
 /// <summary>
 /// Re-writes the function that adds missed recipes.

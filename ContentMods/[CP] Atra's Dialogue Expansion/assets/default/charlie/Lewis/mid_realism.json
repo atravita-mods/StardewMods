@@ -5,7 +5,8 @@
         "Target": "Characters/Dialogue/Lewis",
         "When": {"MovieStatus": "CC"},
         "Entries": {
-            "12{{YearRemainder}}": "Between you and I, @, I'm not sure we would have a movie theater in town at all if the building didn't just show up one day.#$b#Even as is I'm not sure how they turn a profit."
+            "12{{YearRemainder}}": "Between you and I, @, I'm not sure we would have a movie theater in town at all if the building didn't just show up one day.#$b#Even as is I'm not sure how they turn a profit.",
+            "winter_Mon10": "I hear Joja left %place too, because the workers at their warehouse there wanted to unionize..."
         }
     },
     {

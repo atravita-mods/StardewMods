@@ -31,11 +31,11 @@
             "HarveyRoom.8": "{{i18n:harvey-medical.{{Season}}.{{Random:00,01,02}} }}",
             "HarveyRoom.12": "{{i18n:harvey-fridge.{{Season}} }}",
             "HarveyRoom.13": "{{i18n:harvey-table.{{Season}} }}",
-            "HarveyRoom.14": "{{i18n: harvey-tele.start}}{{i18n:harvey-tele.{{Season}}.{{Random: 00,01,02}} }}",
+            "HarveyRoom.14": "{{i18n: harvey-tele.start}}{{i18n:harvey-tele.{{Season}}.{{Random: 00,01,02}} }}"
         },
         "When": {
             "EnableFor": "Harvey",
-            "Year|contains=1": false,
+            "Year|contains=1": false
         }
     },
     {
@@ -46,7 +46,7 @@
             "Trailer.1": "{{i18n:penny-teaching.{{Season}}.{{YearModulus}} }}"
         },
         "When": {
-            "EnableFor": "Penny",
+            "EnableFor": "Penny"
         }
     },
     {
@@ -55,7 +55,7 @@
         "Target": "Strings/StringsFromMaps",
         "When": {
             "EnableFor": "Shane",
-            "Random: 1,2": 1,
+            "Random: 1,2": 1
         },
         "Entries":{
             "AnimalShop.10": "{{i18n: shane-videogame.{{season}}|game = {{i18n:video.game.{{Random:01, 02, 03, 04, 05, 06, 07, 08, 09}} }}}}"
@@ -66,7 +66,7 @@
         "Action": "EditData",
         "Target": "Strings/StringsFromMaps",
         "When": {
-            "EnableFor": "Marnie",
+            "EnableFor": "Marnie"
         },
         "Entries": {
             "AnimalShop.19": "{{i18n:animalshop-sink.{{Season}}.{{Random: 00, 01, 02}} }}"

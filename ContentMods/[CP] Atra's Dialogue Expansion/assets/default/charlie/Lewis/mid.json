@@ -1,4 +1,5 @@
 {
+    // is apparently a tea nerd.
     "Changes": [
         {
             "LogName": "Lewis - Base randomized",
@@ -119,7 +120,7 @@
             "Target": "Characters/Dialogue/Lewis",
             "When": {"YearModulus": "4"},
             "Entries": {
-                "12_2": "I've never been married. My first priority has been this town for a very long time.",
+                "13_2": "I've never been married. My first priority has been this town for a very long time.",
     
                 "CommunityCenter_Entry": "Anyone here?"
             }

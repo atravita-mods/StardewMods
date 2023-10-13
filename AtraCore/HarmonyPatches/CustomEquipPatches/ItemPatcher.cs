@@ -449,7 +449,7 @@ internal static class ItemPatcher
                 _activeEffects.AddOrUpdate(__instance, active);
                 effects = active.BaseEffects.Merge(effects);
 
-                ModEntry.ModMonitor.TraceOnlyLog($"Added Effects for {__instance.QualifiedItemId}");
+                ModEntry.ModMonitor.TraceOnlyLog($"[DataEquips] Added Effects for {__instance.QualifiedItemId}");
             }
         }
         catch (Exception ex)

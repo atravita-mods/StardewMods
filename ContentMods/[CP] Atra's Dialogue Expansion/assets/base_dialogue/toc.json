@@ -129,7 +129,7 @@
         },
         {
             "Action": "Include",
-            "LogName": "Maru - base",
+            "LogName": "Marnie - base",
             "FromFile": "assets/base_dialogue/Marnie/base.json",
             "When": {"EnableFor": "Marnie"}
         },

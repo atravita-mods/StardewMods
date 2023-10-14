@@ -124,7 +124,7 @@ public class RecentCompletedSO : AbstractDataModel
     {
         if (this.RecentOrdersCompleted.TryGetValue(orderKey, out uint dayCompleted))
         {
-            return dayCompleted + days > Game1.stats.daysPlayed;
+            return dayCompleted + days > Game1.stats.DaysPlayed;
         }
         return false;
     }
@@ -133,7 +133,7 @@ public class RecentCompletedSO : AbstractDataModel
     /// Gets all keys that were set within a certain number of days.
     /// </summary>
     /// <param name="days">Number of days to look at.</param>
-    /// <returns>IEnumerable of keys within the given timeframe.</returns>
+    /// <returns>IEnumerable of keys within the given time frame.</returns>
     internal IEnumerable<string> GetKeys(uint days)
         => this.RecentOrdersCompleted.Keys
             .Where(a => this.RecentOrdersCompleted[a] + days >= Game1.stats.DaysPlayed);

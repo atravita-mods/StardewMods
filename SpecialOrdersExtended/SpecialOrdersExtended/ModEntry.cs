@@ -93,10 +93,6 @@ internal sealed class ModEntry : Mod
             documentation: I18n.CheckTag_Description(),
             callback: this.ConsoleCheckTag);
         helper.ConsoleCommands.Add(
-            name: "list_available_stats",
-            documentation: I18n.ListAvailableStats_Description(),
-            callback: StatsManager.ConsoleListProperties);
-        helper.ConsoleCommands.Add(
             name: "special_orders_dialogue",
             documentation: $"{I18n.SpecialOrdersDialogue_Description()}\n\n{I18n.SpecialOrdersDialogue_Example()}\n    {I18n.SpecialOrdersDialogue_Usage()}\n    {I18n.SpecialOrdersDialogue_Save()}",
             callback: DialogueManager.ConsoleSpecialOrderDialogue);
@@ -296,9 +292,8 @@ internal sealed class ModEntry : Mod
             }
         }
 
-        StatsManager.ClearProperties(); // clear property cache, repopulate at next use
         RecentSOManager.GrabNewRecentlyCompletedOrders();
-        RecentSOManager.DayUpdate(Game1.stats.daysPlayed);
+        RecentSOManager.DayUpdate(Game1.stats.DaysPlayed);
         RecentSOManager.Save();
     }
 
@@ -506,7 +501,7 @@ internal sealed class ModEntry : Mod
             {
                 if (overrides.Contains(specialOrder.questKey.Value) && specialOrder.GetDaysLeft() < 50)
                 {
-                    this.Monitor.Log($"Overriding duration of untimed special order {specialOrder.questKey.Value}");
+                    this.Monitor.Log($"Overriding duration of un-timed special order {specialOrder.questKey.Value}");
                     specialOrder.dueDate.Value = date.TotalDays + 99;
                 }
             }

@@ -1,10 +1,10 @@
-﻿using AtraBase.Toolkit;
+﻿namespace AtraCore.Framework.EventCommands.AllowRepeatCommand;
+
+using AtraBase.Toolkit;
 
 using CommunityToolkit.Diagnostics;
 
 using StardewModdingAPI.Utilities;
-
-namespace AtraCore.Framework.EventCommands.AllowRepeatCommand;
 
 /// <summary>
 /// Handles repeating events.
@@ -82,45 +82,22 @@ internal static class AllowRepeatAfterHandler
     internal static void DayEnd()
     {
         SDate now = SDate.Now();
-        HashSet<string> toForget = new();
-        List<int> daysHandled = new();
+        int count = 0;
         foreach ((int days, HashSet<string>? eventsToForget) in eventsToRepeat.Value)
         {
             if (days > now.DaysSinceStart)
             {
                 continue;
             }
-            daysHandled.Add(days);
-            foreach (string evt in eventsToForget)
+            foreach (var evt in eventsToForget)
             {
-                toForget.Add(evt);
-            }
-        }
-
-        if (daysHandled.Count == 0)
-        {
-            return;
-        }
-
-        if (toForget.Count > 0)
-        {
-            ModEntry.ModMonitor.Log($"For day '{now}', forgetting events {string.Join(", ", toForget)}");
-
-            int count = 0;
-            for (int i = Game1.player.eventsSeen.Count - 1; i >= 0; i--)
-            {
-                if (toForget.Contains(Game1.player.eventsSeen[i]))
+                if (Game1.player.eventsSeen.Remove(evt))
                 {
-                    Game1.player.eventsSeen.RemoveAt(i);
-                    count++;
+                    ++count;
                 }
             }
             ModEntry.ModMonitor.Log($"{count} events forgotten.");
-        }
-
-        foreach (int day in daysHandled)
-        {
-            eventsToRepeat.Value.Remove(day);
+            eventsToRepeat.Value.Remove(days);
         }
     }
 

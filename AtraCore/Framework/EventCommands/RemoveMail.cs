@@ -46,16 +46,12 @@ internal sealed class RemoveMail : IEventCommand
     {
         try
         {
-            // We expect the average case is fewer than six values
-            // Arrays are faster for this use case.
-            ArraySegment<string> mailflags = new(args, 1, args.Length - 1);
-
-            for (int i = Game1.player.mailReceived.Count - 1; i >= 0; i--)
+            for (int i = 1; i < args.Length; i++)
             {
-                if (mailflags.Contains(Game1.player.mailReceived[i]))
+                string mailflag = args[i];
+                if (Game1.player.mailReceived.Remove(mailflag))
                 {
-                    this.Monitor.DebugOnlyLog($"Removing mail flag {Game1.player.mailReceived[i]}");
-                    Game1.player.mailReceived.RemoveAt(i);
+                    this.Monitor.DebugOnlyLog($"Removing mail flag {mailflag}");
                 }
             }
         }

@@ -106,7 +106,7 @@ internal static class ShopHandler
                 position = (new Vector2(tile.X, tile.Y - 1) * Game1.tileSize) + new Vector2(12f, 0f),
                 scale = 4f,
                 layerDepth = MathF.BitIncrement(((tile.Y - 0.5f) * Game1.tileSize / 10000f) + 0.01f), // a little offset so it doesn't show up on the floor.
-                id = 777f,
+                id = 777,
             });
         }
     }

@@ -190,7 +190,7 @@ internal static class GIScheduler
             {
                 Globals.ModMonitor.DebugLog($"Calculated island schedule for {npc.Name}");
                 npc.islandScheduleName.Value = "island";
-                Game1.netWorldState.Value.IslandVisitors[npc.Name] = true;
+                Game1.netWorldState.Value.IslandVisitors.Add(npc.Name);
                 ConsoleCommands.IslandSchedules[npc.Name] = schedules[npc];
             }
             else

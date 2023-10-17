@@ -119,7 +119,7 @@ internal static class IslandNorthScheduler
 
                 if (ScheduleUtilities.ParseMasterScheduleAdjustedForChild2NPC(explorer, "island", renderedSchedule))
                 {
-                    Game1.netWorldState.Value.IslandVisitors[explorer.Name] = true;
+                    Game1.netWorldState.Value.IslandVisitors.Add(explorer.Name);
                     ConsoleCommands.IslandSchedules[explorer.Name] = renderedSchedule;
                 }
             }

@@ -389,7 +389,7 @@ internal sealed class ModEntry : Mod
             {
                 ModMonitor.DebugOnlyLog($"\t{key} is valid");
                 validkeys.Add(key);
-                if (!Game1.MasterPlayer.team.completedSpecialOrders.ContainsKey(key))
+                if (!Game1.MasterPlayer.team.completedSpecialOrders.Contains(key))
                 {
                     unseenkeys.Add(key);
                 }
@@ -426,7 +426,7 @@ internal sealed class ModEntry : Mod
             return false;
         }
 
-        bool seen = Game1.MasterPlayer.team.completedSpecialOrders.ContainsKey(key);
+        bool seen = Game1.MasterPlayer.team.completedSpecialOrders.Contains(key);
         if (!order.Repeatable && seen)
         {
             ModMonitor.Log($"\t{I18n.Nonrepeatable()}", LogLevel.Debug);

@@ -122,7 +122,7 @@ internal static class ConsoleCommands
                 return;
             }
         }
-        if (Game1.netWorldState.Value.IslandVisitors.TryGetValue(npc.Name, out bool atIsland) && atIsland)
+        if (Game1.netWorldState.Value.IslandVisitors.Contains(npc.Name))
         {
             Globals.ModMonitor.Log('\t' + I18n.DisplaySchedule_ToIsland(npc.Name), level);
             if (IslandSchedules.TryGetValue(npc.Name, out string? schedulestring))

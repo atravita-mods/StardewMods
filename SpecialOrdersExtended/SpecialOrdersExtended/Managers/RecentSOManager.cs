@@ -125,7 +125,7 @@ internal class RecentSOManager
         }
 
         // Grab my completed orders
-        NetStringDictionary<bool, Netcode.NetBool>? completedOrders = Game1.player?.team?.completedSpecialOrders;
+        var completedOrders = Game1.player?.team?.completedSpecialOrders;
 
         if (completedOrders is null)
         { // This should not happen, but just in case?
@@ -137,7 +137,7 @@ internal class RecentSOManager
         {
             foreach (string cachedOrder in currentOrderCache)
             {
-                if (!currentOrders.ContainsKey(cachedOrder) && completedOrders.ContainsKey(cachedOrder))
+                if (!currentOrders.ContainsKey(cachedOrder) && completedOrders.Contains(cachedOrder))
                 {// A quest previously in the current quests is gone now
                  // and seems to have appeared in the completed orders
                     if (TryAdd(cachedOrder))

@@ -95,7 +95,7 @@ internal sealed class ModEntry : BaseMod<ModEntry>
         }
         if (e.NewLocation is LibraryMuseum)
         {
-            Vector2 tile = Config.BoxLocation; // default location of shop.
+            Vector2 tile = Config.BoxLocation;
 
             this.Monitor.DebugOnlyLog($"Adding box to {tile}", LogLevel.Info);
 
@@ -111,7 +111,7 @@ internal sealed class ModEntry : BaseMod<ModEntry>
                 position = (new Vector2(tile.X, tile.Y - 1) * Game1.tileSize) + (new Vector2(3f, 0f) * Game1.pixelZoom),
                 scale = Game1.pixelZoom,
                 layerDepth = Math.Clamp((((tile.Y - 0.5f) * Game1.tileSize) / 10000f) + 0.01f, 0f, 1.0f), // a little offset so it doesn't show up on the floor.
-                id = 777f,
+                id = 777,
             });
         }
         else

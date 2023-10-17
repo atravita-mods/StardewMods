@@ -316,7 +316,7 @@ internal class DialogueManager
                 }
 
                 // Handle repeat orders!
-                if (specialOrder.questState.Value == SpecialOrderStatus.InProgress && Game1.player.team.completedSpecialOrders.ContainsKey(specialOrder.questKey.Value))
+                if (specialOrder.questState.Value == SpecialOrderStatus.InProgress && Game1.player.team.completedSpecialOrders.Contains(specialOrder.questKey.Value))
                 {
                     __result = FindBestDialogue((__1 ? specialOrder.questKey.Value : Game1.currentSeason + specialOrder.questKey.Value) + "_RepeatOrder", __instance, __0);
                     if (__result)

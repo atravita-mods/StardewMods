@@ -54,10 +54,9 @@ internal static class MidDayScheduleEditor
         { // skip after 9AM, or if is not the main player, or if the fancy scheduler is on.
             return;
         }
-        foreach (string name in Game1.netWorldState.Value.IslandVisitors.Keys)
+        foreach (string name in Game1.netWorldState.Value.IslandVisitors)
         {
             if (name.Equals("Gus", StringComparison.OrdinalIgnoreCase) // Gus runs saloon, skip.
-                || !Game1.netWorldState.Value.IslandVisitors[name]
                 || (ScheduleAltered.TryGetValue(name, out bool hasbeenaltered) && hasbeenaltered))
             {
                 continue;

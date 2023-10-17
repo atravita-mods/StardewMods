@@ -1,8 +1,8 @@
-﻿using CommunityToolkit.Diagnostics;
+﻿namespace AtraShared.Utils.Extensions;
+
+using CommunityToolkit.Diagnostics;
 
 using StardewValley.SpecialOrders;
-
-namespace AtraShared.Utils.Extensions;
 
 /// <summary>
 /// Extensions for FarmerTeam.
@@ -20,7 +20,7 @@ public static class FarmerTeamExtensions
         Guard.IsNotNull(farmerTeam);
         Guard.IsNotNullOrEmpty(special_order_key);
 
-        if (farmerTeam.completedSpecialOrders.ContainsKey(special_order_key))
+        if (farmerTeam.completedSpecialOrders.Contains(special_order_key))
         {
             return true;
         }

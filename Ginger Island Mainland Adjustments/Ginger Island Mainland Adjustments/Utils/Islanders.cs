@@ -13,14 +13,7 @@ internal static class Islanders
     /// <returns>Sorted list of Islanders by name.</returns>
     internal static List<string> Get()
     {
-        List<string> islanders = new();
-        foreach (string name in Game1.netWorldState.Value.IslandVisitors.Keys)
-        {
-            if (Game1.IsVisitingIslandToday(name))
-            {
-                islanders.Add(name);
-            }
-        }
+        List<string> islanders = Game1.netWorldState.Value.IslandVisitors.ToList();
         return AtraUtils.ContextSort(islanders);
     }
 }

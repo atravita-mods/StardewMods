@@ -217,7 +217,7 @@
             "Target": "Data/Festivals/summer28",
             "When": {
                 "EnableFor": "Linus",
-                "HasFlag": "Island_FirstParrot"
+                "HasReadLetter": "Island_FirstParrot"
             },
             "Entries": {
                 "Linus": "{{i18n:linus-y1-jellies}}$h"

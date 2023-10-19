@@ -141,7 +141,7 @@
             "Name": "HasPet",
             "Value": "false",
             "When": {
-                "HasFlag:HostPlayer": "rejectedPet"
+                "HasReadLetter:HostPlayer": "rejectedPet"
             }
         },
 
@@ -202,12 +202,12 @@
         {
             "Name": "MovieStatus",
             "Value": "CC",
-            "When": {"HasFlag:hostPlayer": "ccMovieTheater"}
+            "When": {"HasReadLetter:hostPlayer": "ccMovieTheater"}
         },
         {
             "Name": "MovieStatus",
             "Value": "Joja",
-            "When": {"HasFlag:hostPlayer": "ccMovieTheaterJoja"}
+            "When": {"HasReadLetter:hostPlayer": "ccMovieTheaterJoja"}
         },
 
         // Marnie relationship status

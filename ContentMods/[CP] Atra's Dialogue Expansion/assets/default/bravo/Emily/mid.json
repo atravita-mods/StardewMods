@@ -176,7 +176,8 @@
             "17_2": "I should cook more with collard greens, they're quite good for you.",
             "19_2": "With the mines, we really need to worry about groundwater pollution.$s",
             "20_2": "I'd love to go down to Zuzu City and see a musical, but I'm not sure who I can drag with me.#$b#Hmm, Sam, maybe?",
-            "21_2": "There's a new dress design I've been working on, with these lovely bishop sleeves as the main design element.$h"
+            "21_2": "There's a new dress design I've been working on, with these lovely bishop sleeves as the main design element.$h",
+            "22_2": "We really do waste too much food, don't we."
         }
     },
     {
@@ -201,7 +202,8 @@
             "12_2": "Ugh, I cut half the pieces of the dress I was working on backwards.#$b#What a waste of fabric.",
             "15_2": "I picked up some of the prettiest polka-dotted fabric I've seen in a while! And for cheap!$h",
             "16_2": "I've been thinking about making myself a beret lately. @, what do you think?",
-            "17_2": "@, is your produce organic?"
+            "17_2": "@, is your produce organic?",
+            "22_2": "If we wasted less food, we could certainly feed everyone!"
         }
     },
 ]}

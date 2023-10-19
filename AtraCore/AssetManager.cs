@@ -22,9 +22,10 @@ internal static class AssetManager
     private static readonly HashSet<string> eventLocations = new(StringComparer.OrdinalIgnoreCase);
     private static readonly string dataEvents = PathUtilities.NormalizeAssetName("Data/Events") + "/";
 
-    private static IAssetName prismatic = null!;
     private static IAssetName equipData = null!;
     private static IAssetName equipBuffIcons = null!;
+    private static IAssetName musicOverride = null!;
+    private static IAssetName prismatic = null!;
 
     private static Lazy<Dictionary<string, EquipmentExtModel>> _ringData = new(
         static () => Game1.content.Load<Dictionary<string, EquipmentExtModel>>(AtraCoreConstants.EquipData));
@@ -43,9 +44,10 @@ internal static class AssetManager
     /// <param name="parser">GameContentHelper.</param>
     internal static void Initialize(IGameContentHelper parser)
     {
-        prismatic = parser.ParseAssetName(AtraCoreConstants.PrismaticMaskData);
         equipData = parser.ParseAssetName(AtraCoreConstants.EquipData);
         equipBuffIcons = parser.ParseAssetName("Mods/atravita/EquipBuffIcons");
+        musicOverride = parser.ParseAssetName(AtraCoreConstants.MusicNameOverride);
+        prismatic = parser.ParseAssetName(AtraCoreConstants.PrismaticMaskData);
 
         // check and populate the event locations.
         foreach (string? location in new[] { "AdventureGuild", "Blacksmith", "WitchHut", "WitchSwamp", "Summit" })
@@ -88,17 +90,21 @@ internal static class AssetManager
     /// <inheritdoc cref="IContentEvents.AssetRequested"/>
     internal static void Apply(AssetRequestedEventArgs e)
     {
-        if (e.NameWithoutLocale.IsEquivalentTo(prismatic))
-        {
-            e.LoadFrom(EmptyContainers.GetEmptyDictionary<string, DrawPrismaticModel>, AssetLoadPriority.Exclusive);
-        }
-        else if (e.NameWithoutLocale.IsEquivalentTo(equipData))
+        if (e.NameWithoutLocale.IsEquivalentTo(equipData))
         {
             e.LoadFrom(EmptyContainers.GetEmptyDictionary<string, EquipmentExtModel>, AssetLoadPriority.Exclusive);
         }
         else if (e.NameWithoutLocale.IsEquivalentTo(equipBuffIcons))
         {
             e.LoadFromModFile<Texture2D>("assets/BuffIcons.png", AssetLoadPriority.Exclusive);
+        }
+        else if (e.NameWithoutLocale.IsEquivalentTo(musicOverride))
+        {
+            e.LoadFrom(static () => new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase), AssetLoadPriority.Exclusive);
+        }
+        else if (e.NameWithoutLocale.IsEquivalentTo(prismatic))
+        {
+            e.LoadFrom(EmptyContainers.GetEmptyDictionary<string, DrawPrismaticModel>, AssetLoadPriority.Exclusive);
         }
         else if (e.NameWithoutLocale.StartsWith(dataEvents, false, false))
         {

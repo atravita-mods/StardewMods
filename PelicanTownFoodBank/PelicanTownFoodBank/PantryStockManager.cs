@@ -116,7 +116,7 @@ internal static class PantryStockManager
         return neededIngredients;
     }
 
-    private static (List<int> cookingIngredients, List<int> cookedItems) GetOtherSellables()
+    private static (List<string> cookingIngredients, List<string> cookedItems) GetOtherSellables()
     {
         List<string> cookingIngredients = new(24);
         List<string> cookedItems = new(24);
@@ -138,6 +138,7 @@ internal static class PantryStockManager
                 }
             }
         }
+
         return (cookingIngredients, cookedItems);
     }
 }

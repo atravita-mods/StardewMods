@@ -39,6 +39,17 @@
         }
     },
     {
+        "LogName": "Marnie map strings",
+        "Action": "EditData",
+        "Target": "Strings/StringsFromMaps",
+        "When": {
+            "EnableFor": "Marnie"
+        },
+        "Entries": {
+            "AnimalShop.19": "{{i18n:animalshop-sink.{{Season}}.{{Random: 00, 01, 02}} }}"
+        }
+    },
+    {
         "LogName": "Penny map strings",
         "Action": "EditData",
         "Target": "Strings/StringsFromMaps",
@@ -47,6 +58,17 @@
         },
         "When": {
             "EnableFor": "Penny"
+        }
+    },
+    {
+        "LogName": "Sam map strings",
+        "Action": "EditData",
+        "Target": "Strings/StringsFromMaps",
+        "When": {
+            "EnableFor": "Sam"
+        },
+        "Entries": {
+            "SamHouse.11": "{{i18n:sam-computer-initial}} {{i18n:sam-computer-videogame.{{season}}|videogame = {{VideoGame}} }}."
         }
     },
     {
@@ -59,17 +81,6 @@
         },
         "Entries":{
             "AnimalShop.10": "{{i18n: shane-videogame.{{season}}|game = {{i18n:video.game.{{Random:01, 02, 03, 04, 05, 06, 07, 08, 09}} }}}}"
-        }
-    },
-    {
-        "LogName": "Marnie map strings",
-        "Action": "EditData",
-        "Target": "Strings/StringsFromMaps",
-        "When": {
-            "EnableFor": "Marnie"
-        },
-        "Entries": {
-            "AnimalShop.19": "{{i18n:animalshop-sink.{{Season}}.{{Random: 00, 01, 02}} }}"
         }
     }
 ]}

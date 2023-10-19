@@ -7,9 +7,11 @@ using AtraShared.Utils.Extensions;
 using HarmonyLib;
 
 using StardewValley.Monsters;
-using StardewValley.Objects;
 using StardewValley.Tools;
 
+/// <summary>
+/// Patches against farmer for the equipment fun.
+/// </summary>
 [HarmonyPatch(typeof(Farmer))]
 internal static class FarmerPatches
 {

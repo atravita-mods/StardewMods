@@ -8,7 +8,7 @@
             "Mon8": "{{i18n:shane-sports-mon|reaction = {{i18n: {{Random:great, incredible, exciting}} }} }}$h"
         },
         "When": {
-            "HasFlag": "saloonSportsRoom"
+            "HasReadLetter": "saloonSportsRoom"
         }
     }
 ]}

@@ -975,6 +975,14 @@
     "animalshop-sink.winter.00": "The remnants of a nice spaghetti dinner.",
     "animalshop-sink.winter.01": "Oh, it looks like someone was making something fancy!",
     "animalshop-sink.winter.02": "The sink seems clogged with grease.",
+
+    // Sam - computer
+    "sam-computer-initial": "It's Sam's computer.",
+    "sam-computer-videogame.spring": "Looks like he's currently playing {{videogame}}",
+    "sam-computer-videogame.summer": "Next to it, there's an action figure from the video game {{videogame}}",
+    "sam-computer-videogame.fall": "There's a guide to the video game {{videogame}} next to the computer.",
+    "sam-computer-videogame.winter": "A copy of the game {{videogame}} rests on the keyboard.",
+
     // Shane
     // video game console.
     "shane-videogame.spring": "It's a dusty Mega Station. The game inside appears to be a {{game}}.",
@@ -1759,7 +1767,7 @@
     "shane-y2-xmas.00": "I would say this festival really isn't my thing, but, hey, there's a buffet, so I'm happy.",
     "shane-y1-xmas-spouse.00": "Hey, @. You happy with this year?",
     "shane-y1-xmas-spouse.01": "I'm so glad you're in my life.",
-    "vincent-xmas-pre": "{{title}} @, winter star's tomorrow!#$b#I'll get new toys!",
+    "vincent-xmas-pre": "{{title}} @, Winter Star's tomorrow!#$b#Maybe I'll get new toys!",
     "vincent-xmas-post.00": "{{title}} @, do you want to play with my new action figure with me?",
     "vincent-xmas-post.01": "Sam got me a video game! {{title}} @, can you help me set it up?",
     "vincent-xmas-post.02": "Mom got me my favorite comic! I'm so happy, {{title}} @!",

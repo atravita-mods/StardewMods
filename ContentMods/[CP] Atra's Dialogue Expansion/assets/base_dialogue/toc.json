@@ -14,7 +14,7 @@
             "LogName": "Abigail - adventurer",
             "FromFile": "assets/base_dialogue/Abigail/adventurer.json",
             "When": {
-                "HasFlag": "beenToWoods",
+                "HasReadLetter": "beenToWoods",
                 "EnableFor": "Abigail"
             }
         },

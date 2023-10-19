@@ -28,7 +28,7 @@
             "winter_Mon4": "{{i18n:pierre-winter-mon4}}$h"
         },
         "When": {
-            "HasFlag" :"PierreStocklist"
+            "HasReadLetter" :"PierreStocklist"
         }
     }
 ]}

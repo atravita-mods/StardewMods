@@ -16,7 +16,7 @@
         "LogName": "Willy boat fixed",
         "Action": "EditData",
         "Target": "Characters/Dialogue/Willy",
-        "When": { "HasFlag": "Island_FirstParrot" },
+        "When": { "HasReadLetter": "Island_FirstParrot" },
         "Entries": {
             "4{{YearRemainder}}": "Thinkin' of taking that boat of mine out for a fishing trip, what do you think, @?"
         }

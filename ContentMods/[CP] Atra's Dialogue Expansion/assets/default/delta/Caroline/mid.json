@@ -134,7 +134,7 @@
         "Target": "Characters/Dialogue/Caroline",
         "When": {
             "YearModulus": "2",
-            "HasFlag": "carolineSO"
+            "HasReadLetter": "carolineSO"
         },
         "Entries": {
             "5_2": "I miss being young and free-spirited.$s#$b#And here I am, trying to get Abigail to behave more like an adult.$s",
@@ -179,7 +179,7 @@
         "Target": "Characters/Dialogue/Caroline",
         "When": {
             "YearModulus": "3",
-            "HasFlag": "carolineSO"
+            "HasReadLetter": "carolineSO"
         },
         "Entries": {
             "5_2": "@, I made some bruschetta the other day. Do you want to try some?[618]",

@@ -14,7 +14,7 @@
             "Action": "EditData",
             "Target": "Characters/Dialogue/George",
             "When": {
-                "HasFlag": "saloonSportsRoom"
+                "HasReadLetter": "saloonSportsRoom"
             },
             "Entries": {
                 "Sun6": "{{i18n:george-sports.sun|first= {{FirstSportsTeam}} | second= {{SecondSportsTeam}} }}",

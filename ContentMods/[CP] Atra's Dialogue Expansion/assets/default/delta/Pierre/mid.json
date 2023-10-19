@@ -206,7 +206,7 @@
         },
         "When": {
             "YearModulus": "4",
-            "HasFlag": "PierreStocklist"
+            "HasReadLetter": "PierreStocklist"
         }
     },
     {

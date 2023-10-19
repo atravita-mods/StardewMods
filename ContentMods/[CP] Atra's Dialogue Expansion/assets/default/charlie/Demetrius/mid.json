@@ -32,7 +32,7 @@
         "LogName": "Demetrius Volcano",
         "Action": "EditData",
         "Target": "Characters/Dialogue/Demetrius",
-        "When": { "HasFlag": "Island_FirstParrot" },
+        "When": { "HasReadLetter": "Island_FirstParrot" },
         "Entries": {
             "Resort": "The mushrooms around here are extraordinary!$h#$b#I have never seen any mushrooms like these!$h",
             "Resort_Shore_2": "Octopi are among the most intelligent animals...and they only live about two years!",

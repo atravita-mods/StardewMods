@@ -109,7 +109,7 @@
             },
             "Entries": {
                 "Demetrius_y2": "{{i18n:demetrius-y2-dance}}$h",
-                "Demetrius_y3": "{{i18n:demetrius-y3-dance}}$h",
+                "Demetrius_y3": "{{i18n:demetrius-y3-dance}}$h#$b#{{i18n:demetrius-y3-dance-b}}",
                 "Demetrius_y4": "{{i18n:demetrius-y4-dance}}$h"
             }
         },

@@ -182,9 +182,7 @@
             "Target": "Data/Festivals/spring13",
             "When": {
                 "EnableFor": "Kent",
-                "When": {
-                    "Year": "2"
-                }
+                "Year": "2"
             },
             "Entries": {
                 "Kent_y2": "{{i18n:kent-y2-egg-return}}"

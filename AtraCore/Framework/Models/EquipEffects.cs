@@ -4,6 +4,7 @@ namespace AtraCore.Framework.Models;
 
 using System.Reflection;
 
+using AtraBase.Toolkit.Extensions;
 using AtraBase.Toolkit.Reflection;
 
 using AtraCore.Framework.Caches.AssetCache;
@@ -18,7 +19,6 @@ using Netcode;
 
 using StardewValley.Buffs;
 using StardewValley.GameData.Objects;
-using StardewValley.Objects;
 
 /// <summary>
 /// The possible times to trigger a buff from the equipment.
@@ -100,6 +100,8 @@ public sealed class EquipmentExtModel
 /// </summary>
 public sealed class EquipEffects
 {
+    private float healthRemainder = 0f;
+
     /// <summary>
     /// Gets or sets a Id to facilitate CP editing. This should be unique within the list.
     /// </summary>
@@ -129,6 +131,16 @@ public sealed class EquipEffects
     /// Gets or sets the lighting effect provided by this ring.
     /// </summary>
     public LightData Light { get; set; } = new();
+
+    /// <summary>
+    /// Gets or sets a value indicating how much health should be regenerated.
+    /// </summary>
+    public float HealthRegen { get; set; } = 0;
+
+    /// <summary>
+    /// Gets or sets a value indicating how much stamina should be regenerated.
+    /// </summary>
+    public float StaminaRegen { get; set; } = 0f;
 
     /// <summary>
     /// Gets or sets a value indicating when to apply the buffs from this ring.
@@ -165,6 +177,35 @@ public sealed class EquipEffects
             effects: this.BaseEffects.ToBuffEffect()
             );
         who.applyBuff(buff);
+    }
+
+    /// <summary>
+    /// Adds in the health/stamina regen.
+    /// </summary>
+    /// <param name="farmer">The farmer to add to.</param>
+    internal void AddRegen(Farmer farmer)
+    {
+        if (this.StaminaRegen > 0 && farmer.Stamina < farmer.MaxStamina)
+        {
+            float amount = Math.Min(this.StaminaRegen, farmer.MaxStamina - farmer.Stamina);
+            farmer.Stamina += amount;
+            farmer.currentLocation.debris.Add(new Debris(amount.RandomRoundProportional(), farmer.Position, Color.Green, 1f, farmer));
+        }
+        if (this.HealthRegen > 0 && farmer.health < farmer.maxHealth)
+        {
+            float amount = Math.Min(this.HealthRegen + this.healthRemainder, farmer.maxHealth - farmer.health);
+            int toAdd = (int)amount;
+            if (toAdd > 0)
+            {
+                farmer.health += toAdd;
+                farmer.currentLocation.debris.Add(new Debris(toAdd, farmer.Position, Color.Green, 1f, farmer));
+                this.healthRemainder = amount - toAdd;
+            }
+            else
+            {
+                this.healthRemainder = amount;
+            }
+        }
     }
 }
 

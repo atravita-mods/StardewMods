@@ -76,7 +76,7 @@ internal static class AssetManager
                 shop.Items.Add(new()
                 {
                     ItemId = $"{ItemRegistry.type_object}{ModEntry.GiantCropFertilizerID}",
-                    TradeItemId = "O(858)",
+                    TradeItemId = "(O)858",
                     TradeItemAmount = 5,
                 });
             });

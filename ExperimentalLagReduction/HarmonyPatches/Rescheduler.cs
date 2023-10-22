@@ -1,4 +1,4 @@
-﻿#define TRACELOG
+﻿// #define TRACELOG
 
 namespace ExperimentalLagReduction.HarmonyPatches;
 

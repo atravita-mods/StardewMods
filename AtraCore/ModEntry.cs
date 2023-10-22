@@ -73,7 +73,7 @@ internal sealed class ModEntry : BaseMod<ModEntry>
         helper.Events.GameLoop.DayEnding += this.OnDayEnd;
         helper.Events.GameLoop.TimeChanged += this.OnTimeChanged;
         helper.Events.Player.Warped += this.Player_Warped;
-        helper.Events.GameLoop.UpdateTicked += static (_, _) => ItemPatcher.UpdateLights();
+        helper.Events.GameLoop.UpdateTicked += static (_, e) => ItemPatcher.UpdateEquips(e);
         helper.Events.GameLoop.DayStarted += static (_, _) => ItemPatcher.OnDayStart();
 
         helper.Events.Multiplayer.PeerConnected += this.Multiplayer_PeerConnected;

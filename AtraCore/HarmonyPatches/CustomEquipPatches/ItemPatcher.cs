@@ -1,4 +1,4 @@
-﻿#define TRACELOG
+﻿// #define TRACELOG
 
 namespace AtraCore.HarmonyPatches.CustomEquipPatches;
 
@@ -27,7 +27,7 @@ using StardewValley.Buffs;
 using StardewValley.Locations;
 using StardewValley.Objects;
 
-// what about healing and stamina regen?
+// Lights in multiplayer? Probably need to handle those.
 
 /// <summary>
 /// Holds patches for custom buffs on clothing.
@@ -153,6 +153,16 @@ internal static class ItemPatcher
             extra_rows++;
         }
 
+        if (effects.HealthRegen > 0)
+        {
+            extra_rows++;
+        }
+
+        if (effects.StaminaRegen > 0)
+        {
+            extra_rows++;
+        }
+
         extra_rows += baseEffects.GetExtraRows();
 
         if (baseEffects.WeaponSpeedMultiplier != 0)
@@ -242,6 +252,18 @@ internal static class ItemPatcher
         {
             DrawIcon(AssetManager.RingTextures, 0, x, y, 0);
             DrawText(I18n.EmitsLight(), x, ref y);
+        }
+
+        if (effects.StaminaRegen > 0)
+        {
+            DrawIcon(Game1.mouseCursors, 0, x, y);
+            DrawText(I18n.RestoresStamina(effects.StaminaRegen.FormatNumber()), x, ref y);
+        }
+
+        if (effects.HealthRegen > 0)
+        {
+            DrawIcon(Game1.mouseCursors, 0, x, y, 438);
+            DrawText(I18n.RestoresHealth(effects.HealthRegen.FormatNumber()), x, ref y);
         }
 
         BuffModel baseEffect = effects.BaseEffects;
@@ -367,6 +389,8 @@ internal static class ItemPatcher
 
     private static string FormatNumber(this int number) => $"{number:+#;-#}";
 
+    private static string FormatNumber(this float number) => $"{number:+0.0;-0.0}";
+
     private static string FormatPercent(this float number) => $"{number:+#.#%;-#.#%}";
 
     #endregion
@@ -428,9 +452,13 @@ internal static class ItemPatcher
 
     private static void AddMonsterKillBuff(this Item item, GameLocation location, Farmer who)
     {
-        AssetManager.GetEquipData(item.QualifiedItemId)
-                        ?.GetEffect(EquipmentBuffTrigger.OnMonsterSlay, location, who)
-                        ?.AddBuff(item, who);
+        var effect = AssetManager.GetEquipData(item.QualifiedItemId)
+                        ?.GetEffect(EquipmentBuffTrigger.OnMonsterSlay, location, who);
+        if (effect is not null)
+        {
+            effect.AddBuff(item, who);
+            effect.AddRegen(who);
+        }
     }
 
     #endregion
@@ -567,21 +595,44 @@ internal static class ItemPatcher
     /// <summary>
     /// Updates the current lights.
     /// </summary>
-    internal static void UpdateLights()
+    internal static void UpdateEquips(UpdateTickedEventArgs e)
     {
-        var player = Game1.player;
-        if (player?.currentLocation is null || _lightSources.Value.Count == 0 || !Context.IsWorldReady)
+        var currentPlayer = Game1.player;
+        if (currentPlayer?.currentLocation is null || !Context.IsWorldReady || !Game1.game1.IsActive || !Game1.shouldTimePass())
         {
             return;
         }
 
-        Vector2 offset = player.shouldShadowBeOffset ? player.drawOffset : Vector2.Zero;
-        offset.Y += 21f;
-        offset += player.Position;
-
-        foreach (int light in _lightSources.Value.Values)
+        if (_lightSources.Value.Count != 0)
         {
-            player.currentLocation.repositionLightSource(light, offset);
+            Vector2 offset = currentPlayer.shouldShadowBeOffset ? currentPlayer.drawOffset : Vector2.Zero;
+            offset.Y += 21f;
+            offset += currentPlayer.Position;
+
+            foreach (int light in _lightSources.Value.Values)
+            {
+                currentPlayer.currentLocation.repositionLightSource(light, offset);
+            }
+        }
+
+        if (e.IsOneSecond)
+        {
+            currentPlayer.leftRing.Value?.OnSecondTicked(currentPlayer);
+            currentPlayer.rightRing.Value?.OnSecondTicked(currentPlayer);
+
+            currentPlayer.hat.Value?.OnSecondTicked(currentPlayer);
+            currentPlayer.shirtItem.Value?.OnSecondTicked(currentPlayer);
+            currentPlayer.pantsItem.Value?.OnSecondTicked(currentPlayer);
+            currentPlayer.boots.Value?.OnSecondTicked(currentPlayer);
+        }
+    }
+
+    private static void OnSecondTicked(this Item item, Farmer player)
+    {
+        if (_activeEffects.TryGetValue(item, out EquipEffects? effect))
+        {
+            ModEntry.ModMonitor.DebugOnlyLog($"Adding regen for {item.QualifiedItemId} - {effect.Id}.");
+            effect.AddRegen(player);
         }
     }
 
@@ -771,6 +822,14 @@ internal static class ItemPatcher
             {
                 copy.Light.Radius = bootsEffect.Light.Radius;
             }
+            if (bootsEffect.HealthRegen > 0)
+            {
+                copy.HealthRegen += bootsEffect.HealthRegen;
+            }
+            if (bootsEffect.StaminaRegen > 0)
+            {
+                copy.StaminaRegen += bootsEffect.StaminaRegen;
+            }
             if (!string.IsNullOrWhiteSpace(bootsEffect.Condition))
             {
                 copy.Condition = bootsEffect.Condition;
@@ -803,7 +862,15 @@ internal static class ItemPatcher
                 {
                     if (e.Light.Radius > 0)
                     {
-                        combinedEffects.Light.Radius = e.Light.Radius;
+                        combinedEffects.Light.Radius += e.Light.Radius;
+                    }
+                    if (e.HealthRegen > 0)
+                    {
+                        combinedEffects.HealthRegen += e.HealthRegen;
+                    }
+                    if (e.StaminaRegen > 0)
+                    {
+                        combinedEffects.StaminaRegen += e.StaminaRegen;
                     }
                     if (!string.IsNullOrWhiteSpace(e.Condition))
                     {
@@ -834,7 +901,7 @@ internal static class ItemPatcher
     {
         // rings have their own unique item ID, but other items don't. We're gonna cheat a little and use the hash code, which in C# is the sync block index unless defined otherwise.
         // should be unique enough.
-        int lightID = GenerateLightSource(radius, color, item, player, location, item.GetHashCode());
+        int lightID = GenerateLightSource(radius, color, player, location, item.GetHashCode());
         _lightSources.Value[item] = lightID;
         ModEntry.ModMonitor.TraceOnlyLog($"[DataEquips] Adding light id {lightID:X}");
         return lightID;
@@ -842,12 +909,12 @@ internal static class ItemPatcher
 
     private static void AddRingLight(int radius, Color color, Ring ring, Farmer player, GameLocation location)
     {
-        int lightID = GenerateLightSource(radius, color, ring, player, location, ring.uniqueID.Value);
+        int lightID = GenerateLightSource(radius, color, player, location, ring.uniqueID.Value);
         lightIDSourceSetter.Value(ring, lightID);
         ModEntry.ModMonitor.TraceOnlyLog($"[DataEquips] Adding light id {lightID:X}");
     }
 
-    private static int GenerateLightSource(int radius, Color color, Item item, Farmer player, GameLocation location, int uniqueItemID)
+    private static int GenerateLightSource(int radius, Color color, Farmer player, GameLocation location, int uniqueItemID)
     {
         int startingID;
         int lightID;

@@ -65,7 +65,13 @@ internal static class FarmerPatches
     }
 
     private static void OnPlayerHit(this Item item, Farmer player)
-        => AssetManager.GetEquipData(item.ItemId)
-            ?.GetEffect(EquipmentBuffTrigger.OnPlayerHit, player.currentLocation, player)
-            ?.AddBuff(item, player);
+    {
+        EquipEffects? effect = AssetManager.GetEquipData(item.ItemId)
+                                           ?.GetEffect(EquipmentBuffTrigger.OnPlayerHit, player.currentLocation, player);
+        if (effect is not null)
+        {
+            effect.AddBuff(item, player);
+            effect.AddRegen(player);
+        }
+    }
 }

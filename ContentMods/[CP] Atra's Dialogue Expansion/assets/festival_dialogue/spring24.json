@@ -698,7 +698,7 @@
                 "EnableFor": "Willy"
             },
             "Entries": {
-                "Willy_y2": "{{i18n:willy-y2-dance}}",
+                "Willy_y2": "{{i18n:willy-y2-dance}}#$e#{{i18n:willy-y2-dance.b}}",
                 "Willy_y3": "{{i18n:willy-y3-dance}}",
                 "Willy_y4": "{{i18n:willy-y4-dance}}$h"
             }

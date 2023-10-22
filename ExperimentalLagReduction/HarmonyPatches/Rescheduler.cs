@@ -444,7 +444,7 @@ internal static class Rescheduler
     private static void Prefetch(GameLocation loc, int limit)
     {
 #if DEBUG
-        ModEntry.ModMonitor.Log($"Prefetch started for {loc.Name} on thread {Thread.CurrentThread.ManagedThreadId}.", LogLevel.Info);
+        ModEntry.ModMonitor.Log($"Prefetch started for {loc.Name} on thread {Environment.CurrentManagedThreadId}.", LogLevel.Info);
         _stopwatch.Value ??= new();
         _stopwatch.Value.Start();
 #endif

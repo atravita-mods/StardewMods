@@ -47,7 +47,7 @@
             "EnableFor": "Clint"
         },
         "Entries": {
-            "Clint_y2": "{{i18n:clint-y2-luau.00}}$s#$e{{clint-y2-luau.01}}",
+            "Clint_y2": "{{i18n:clint-y2-luau.00}}$s#$e{{i18n:clint-y2-luau.01}}",
             "Clint_y3": "{{i18n:clint-y3-luau}}",
             "Clint_y4": "{{i18n:clint-y4-luau}}$h"
         }
@@ -118,32 +118,16 @@
         }
     },
     {
+        // NOTE: Governor does not use Y2 tokens apparently.
         "Action": "EditData",
-        "LogName": "Governor - no Joja.",
+        "LogName": "Governor",
         "Target": "Data/Festivals/summer11",
         "When": {
             "EnableFor": "Governor",
-            "IsJojaMartComplete": false
+            "Query: {{IsJojaMartComplete}} OR NOT ({{YearModulus|contains=1}})": true
         },
         "Entries": {
-            "Governor_y2": "{{i18n:governor-y2-luau.00}}$h#$e#{{i18n:governor-y2-luau.01}}$h#$e#{{i18n:governor-y2-luau.02}}",
-            "Governor_y3": "{{i18n:governor-y3-luau.00}}$h#$e#{{i18n:governor-y3-luau.01}}$h",
-            "Governor_y4": "{{i18n:governor-y4-luau}}$h"
-        }
-    },
-    {
-        "Action": "EditData",
-        "LogName": "Governor - Joja.",
-        "Target": "Data/Festivals/summer11",
-        "When": {
-            "EnableFor": "Governor",
-            "IsJojaMartComplete": true
-        },
-        "Entries": {
-            "Governor": "{{i18n:governor-y1-luau-joja}}$h",
-            "Governor_y2": "{{i18n:governor-y2-luau-joja.00}}$h#$e#{{i18n:governor-y2-luau-joja.01}}$h#$e#{{i18n:governor-y2-luau-joja.02}}",
-            "Governor_y3": "{{i18n:governor-y3-luau-joja.00}}#$e#{{i18n:governor-y3-luau-joja.01}}$h",
-            "Governor_y4": "{{i18n:governor-y4-luau-joja}}$h"
+            "Governor": "{{i18n:governor-y{{YearModulus}}-luau-joja-{{IsJojaMartComplete}} }}"
         }
     },
     {

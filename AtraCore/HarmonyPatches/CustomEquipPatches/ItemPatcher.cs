@@ -4,6 +4,7 @@ namespace AtraCore.HarmonyPatches.CustomEquipPatches;
 
 using System;
 using System.Runtime.CompilerServices;
+using System.Security.Cryptography;
 
 using AtraBase.Toolkit;
 using AtraBase.Toolkit.Reflection;
@@ -36,6 +37,8 @@ using StardewValley.Objects;
 [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = StyleCopConstants.NamedForHarmony)]
 internal static class ItemPatcher
 {
+    private const string LightKey = "atravita.EquipLight";
+
     // maps the ring ID to the current effect of the ring for tooltips
     private static readonly PerScreen<Dictionary<string, EquipEffects>> _tooltipMap = new(() => new());
 
@@ -598,9 +601,30 @@ internal static class ItemPatcher
     internal static void UpdateEquips(UpdateTickedEventArgs e)
     {
         var currentPlayer = Game1.player;
-        if (currentPlayer?.currentLocation is null || !Context.IsWorldReady || !Game1.game1.IsActive || !Game1.shouldTimePass())
+        if (!Context.IsWorldReady || currentPlayer.currentLocation is not GameLocation currentLocation)
         {
             return;
+        }
+
+        if (currentLocation.farmers.Count > 1)
+        {
+            bool capRadius = !currentLocation.IsOutdoors && currentLocation is not MineShaft && currentLocation is not VolcanoDungeon;
+            foreach (Farmer? player in currentLocation.farmers)
+            {
+                if (ReferenceEquals(player, currentPlayer))
+                {
+                    continue;
+                }
+
+                Vector2 offset = player.shouldShadowBeOffset ? player.drawOffset : Vector2.Zero;
+                offset.Y += 21f;
+                offset += player.Position;
+
+                player.hat.Value?.AdjustLight(currentLocation, offset, capRadius);
+                player.shirtItem.Value?.AdjustLight(currentLocation, offset, capRadius);
+                player.pantsItem.Value?.AdjustLight(currentLocation, offset, capRadius);
+                player.boots.Value?.AdjustLight(currentLocation, offset, capRadius);
+            }
         }
 
         if (_lightSources.Value.Count != 0)
@@ -615,7 +639,7 @@ internal static class ItemPatcher
             }
         }
 
-        if (e.IsOneSecond)
+        if (e.IsOneSecond && Game1.shouldTimePass())
         {
             currentPlayer.leftRing.Value?.OnSecondTicked(currentPlayer);
             currentPlayer.rightRing.Value?.OnSecondTicked(currentPlayer);
@@ -627,11 +651,23 @@ internal static class ItemPatcher
         }
     }
 
+    private static void AdjustLight(this Item item, GameLocation location, Vector2 position, bool capRadius)
+    {
+        if (item.modData.GetInt(LightKey) is int lightId)
+        {
+            location.repositionLightSource(lightId, position);
+            if (capRadius && location.getLightSource(lightId) is { } light)
+            {
+                light.radius.Value = 3f;
+            }
+        }
+    }
+
     private static void OnSecondTicked(this Item item, Farmer player)
     {
         if (_activeEffects.TryGetValue(item, out EquipEffects? effect))
         {
-            ModEntry.ModMonitor.DebugOnlyLog($"Adding regen for {item.QualifiedItemId} - {effect.Id}.");
+            ModEntry.ModMonitor.TraceOnlyLog($"Adding regen for {item.QualifiedItemId} - {effect.Id}.");
             effect.AddRegen(player);
         }
     }
@@ -902,6 +938,7 @@ internal static class ItemPatcher
         // rings have their own unique item ID, but other items don't. We're gonna cheat a little and use the hash code, which in C# is the sync block index unless defined otherwise.
         // should be unique enough.
         int lightID = GenerateLightSource(radius, color, player, location, item.GetHashCode());
+        item.modData.SetInt(LightKey, lightID);
         _lightSources.Value[item] = lightID;
         ModEntry.ModMonitor.TraceOnlyLog($"[DataEquips] Adding light id {lightID:X}");
         return lightID;
@@ -957,6 +994,7 @@ internal static class ItemPatcher
         {
             ModEntry.ModMonitor.TraceOnlyLog($"[DataEquips] Removing light id {lightID:X}");
             location.removeLightSource(lightID);
+            item.modData.Remove(LightKey);
             _lightSources.Value.Remove(item);
         }
     }

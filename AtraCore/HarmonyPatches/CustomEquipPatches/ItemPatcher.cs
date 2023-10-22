@@ -27,6 +27,8 @@ using StardewValley.Buffs;
 using StardewValley.Locations;
 using StardewValley.Objects;
 
+// what about healing and stamina regen?
+
 /// <summary>
 /// Holds patches for custom buffs on clothing.
 /// </summary>
@@ -178,7 +180,7 @@ internal static class ItemPatcher
         {
             if (GetEffectsForTooltip(__instance) is { } effects)
             {
-                y = DrawTooltipForBuffEffect(spriteBatch, x, y, font, alpha, effects);
+                y = DrawTooltipForEquipEffect(spriteBatch, x, y, font, alpha, effects);
             }
         }
         catch (Exception ex)
@@ -196,7 +198,7 @@ internal static class ItemPatcher
         {
             if (__instance.TypeDefinitionId is "(H)" or "(S)" or "(P)" && GetEffectsForTooltip(__instance) is { } effects)
             {
-                y = DrawTooltipForBuffEffect(spriteBatch, x, y, font, alpha, effects);
+                y = DrawTooltipForEquipEffect(spriteBatch, x, y, font, alpha, effects);
             }
 
         }
@@ -218,7 +220,7 @@ internal static class ItemPatcher
                 string description = Game1.parseText(__instance.description, Game1.smallFont, _getDescriptionWidth.Value(__instance));
                 Utility.drawTextWithShadow(spriteBatch, description, font, new Vector2(x + 16, y + 16 + 4), Game1.textColor);
                 y += (int)font.MeasureString(description).Y;
-                y = DrawTooltipForBuffEffect(spriteBatch, x, y, font, alpha, effects);
+                y = DrawTooltipForEquipEffect(spriteBatch, x, y, font, alpha, effects);
                 return false;
             }
         }
@@ -229,7 +231,7 @@ internal static class ItemPatcher
         return true;
     }
 
-    private static int DrawTooltipForBuffEffect(SpriteBatch spriteBatch, int x, int y, SpriteFont font, float alpha, EquipEffects effects)
+    private static int DrawTooltipForEquipEffect(SpriteBatch spriteBatch, int x, int y, SpriteFont font, float alpha, EquipEffects effects)
     {
         int height = Math.Max((int)font.MeasureString("TT").Y, 48);
         if (!string.IsNullOrWhiteSpace(effects.Condition))
@@ -238,7 +240,7 @@ internal static class ItemPatcher
         }
         if (effects.Light.Radius > 0)
         {
-            DrawIcon(AssetManager.RingTextures, 0, x, y, false);
+            DrawIcon(AssetManager.RingTextures, 0, x, y, 0);
             DrawText(I18n.EmitsLight(), x, ref y);
         }
 
@@ -330,7 +332,7 @@ internal static class ItemPatcher
         }
         if (baseEffect.WeaponPrecisionMultiplier != 0)
         {
-            DrawIcon(AssetManager.RingTextures, 1, x, y, false);
+            DrawIcon(AssetManager.RingTextures, 1, x, y, 0);
             DrawText(I18n.WeaponPrecision(baseEffect.WeaponPrecisionMultiplier.FormatPercent()), x, ref y);
         }
 
@@ -345,13 +347,13 @@ internal static class ItemPatcher
             y += height;
         }
 
-        void DrawIcon(Texture2D texture, int index, int x, int y, bool offset = true)
+        void DrawIcon(Texture2D texture, int index, int x, int y, int offset = 428)
         {
             Utility.drawWithShadow(
                 spriteBatch,
                 texture,
                 new Vector2(x + 20, y + 20),
-                new Rectangle(index * 10, offset ? 428 : 0, 10, 10),
+                new Rectangle(index * 10, offset, 10, 10),
                 Color.White,
                 0f,
                 Vector2.Zero,

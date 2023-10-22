@@ -4,7 +4,7 @@
         "Action": "EditData",
         "Target": "Characters/Dialogue/Pierre",
         "Entries": {
-            "{{TaxDay}}": "{{i18n:pierre-tax-day.00}}$s#$b#{{i18n:pierre-tax-day.01}}",
+            "{{TaxDay}}": "{{i18n:pierre-tax-day.00}}$s#$b#{{i18n:pierre-tax-day.01}}$a",
             "spring_27{{YearRemainder}}": "{{i18n:pierre-tulips}}$h"
         }
     },

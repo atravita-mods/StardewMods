@@ -101,7 +101,7 @@
                 "EnableFor": "Evelyn"
             },
             "Entries": {
-                "Evelyn_y2": "{{i18n:evelyn-y2-fair}}$h",
+                "Evelyn_y2": "{{i18n:evelyn-y2-fair}}$h"
             }
         },
         {
@@ -112,7 +112,7 @@
                 "EnableFor": "George"
             },
             "Entries": {
-                "George_y2": "{{i18n:george-y2-fair}}",
+                "George_y2": "{{i18n:george-y2-fair}}"
             }
         },
         {
@@ -183,7 +183,7 @@
                 "EnableFor": "Kent"
             },
             "Entries": {
-                "Kent_y2": "{{i18n:kent-y2-fair.0}}#$e#{{i18n:kent-y2-fair.1}}",
+                "Kent_y2": "{{i18n:kent-y2-fair.0}}#$e#{{i18n:kent-y2-fair.1}}"
             }
         },
         {
@@ -195,7 +195,7 @@
             },
             "Entries": {
                 "Leah_y2": "{{i18n:leah-y2-fair}}",
-                "Leah_spouse_y2": "{{i18n:leah-y2-fair-spouse}}",
+                "Leah_spouse_y2": "{{i18n:leah-y2-fair-spouse}}"
             }
         },
         {

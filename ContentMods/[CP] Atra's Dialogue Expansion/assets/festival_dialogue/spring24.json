@@ -283,12 +283,24 @@
             "LogName": "Jodi - normal",
             "Target": "Data/Festivals/spring24",
             "When": {
-                "EnableFor": "Jodi"
+                "EnableFor": "Jodi",
+                "Year|contains=1,2": false
             },
             "Entries": {
                 "Jodi_y2": "{{i18n:jodi-y2-dance}}$h",
                 "Jodi_y3": "{{i18n:jodi-y3-dance}}$h",
                 "Jodi_y4": "{{i18n:jodi-y4-dance}}"
+            }
+        },
+        {
+            "Action": "EditData",
+            "LogName": "Jodi - Kent just returned",
+            "When": {
+                "EnableFor": "Jodi",
+                "Year": 2
+            },
+            "Entries": {
+                "Jodi_y2": "{{i18n:jodi-y2-kent}}$s"
             }
         },
         {

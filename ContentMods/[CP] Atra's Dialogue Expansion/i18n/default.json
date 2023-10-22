@@ -409,6 +409,7 @@
     "demetrius-winter-sat.01": "We do have historical snowpack data for the last century and a half...",
     "demetrius-winter-sat.02": "Oh, I didn't see you there, @, do you need anything?",
 
+    "emily-haley-unmarried-3": "I wish my sister had more of a sense of direction in her life.",
     // Change Evelyn line after she gives you the cookie recipe.
     "evelyn-thu.00": "I'll be baking cookies today, @",
     "evelyn-thu.01": "Say, did you ever make any cookies with the recipe I gave you?",
@@ -1125,6 +1126,7 @@
     "jas-y2-dance": "My collar itches.",
     "jas-y3-dance": "Look at my dress, {{title}} @! Isn't it pretty?",
     "jas-y4-dance": "I wanna dance with you guys!",
+    "jodi-y2-kent": "Kent's still getting used to social events like this. We might leave a tad early.",
     "jodi-y2-dance": "Kent used to take me out dancing on Friday nights, back before we had children.",
     "jodi-y3-dance": "I wonder who Sam will dance with this year?",
     "jodi-y3-dance-sam-married": "Gosh, I didn't expect Sam to find someone so fast, but I'm glad he did.",

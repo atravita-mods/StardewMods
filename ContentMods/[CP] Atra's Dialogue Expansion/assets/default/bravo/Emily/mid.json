@@ -26,16 +26,6 @@
         }
     },
     {
-        "LogName": "Emily - Haley unmarried",
-        "Action": "EditData",
-        "When": {
-            "Query: {{Spouse:anyPlayer|contains=Haley}} OR {{Relationship:Haley|contains=Married, Engaged}}": true
-        },
-        "Entries": {
-            "3{{YearRemainder}}": "I wish my sister had more of a sense of direction in her life."
-        }
-    },
-    {
         "LogName": "Emily - parrot",
         "Action": "EditData",
         "Target": "Characters/Dialogue/Emily",

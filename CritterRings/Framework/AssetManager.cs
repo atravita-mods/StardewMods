@@ -150,7 +150,7 @@ internal static class AssetManager
             Category = RING_ID,
             Price = PRICE,
             Texture = ringTextureLocation.BaseName,
-            SpriteIndex = 1,
+            SpriteIndex = 4,
         };
     }
 

@@ -1,4 +1,8 @@
-﻿using AtraShared.ConstantsAndEnums;
+﻿// Ignore Spelling: Api
+
+using AtraCore.Framework.Internal;
+
+using AtraShared.ConstantsAndEnums;
 using AtraShared.Menuing;
 using AtraShared.Utils.Extensions;
 
@@ -17,20 +21,17 @@ namespace TapGiantCrops;
 
 /// <inheritdoc />
 [HarmonyPatch(typeof(Utility))]
-internal sealed class ModEntry : Mod
+[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = StyleCopConstants.NamedForHarmony)]
+internal sealed class ModEntry : BaseMod<ModEntry>
 {
     private static readonly TapGiantCrop Api = new();
-
-    /// <summary>
-    /// Gets the logger for this mod.
-    /// </summary>
-    internal static IMonitor ModMonitor { get; private set; } = null!;
 
     /// <inheritdoc />
     public override void Entry(IModHelper helper)
     {
-        ModMonitor = this.Monitor;
+        I18n.Init(helper.Translation);
         AssetManager.Initialize(helper.GameContent);
+        base.Entry(helper);
 
         helper.Events.Input.ButtonPressed += this.OnButtonPressed;
         helper.Events.GameLoop.DayEnding += this.OnDayEnding;
@@ -39,8 +40,6 @@ internal sealed class ModEntry : Mod
 
         helper.Events.Content.AssetRequested += static (_, e) => AssetManager.Load(e);
         helper.Events.Content.AssetsInvalidated += static (_, e) => AssetManager.Reset(e.NamesWithoutLocale);
-
-        this.Monitor.Log($"Starting up: {this.ModManifest.UniqueID} - {typeof(ModEntry).Assembly.FullName}");
 
         this.ApplyPatches(new Harmony(this.ModManifest.UniqueID));
     }
@@ -51,7 +50,7 @@ internal sealed class ModEntry : Mod
     /// <inheritdoc cref="IGameLoopEvents.DayEnding"/>
     private void OnDayEnding(object? sender, DayEndingEventArgs e)
     {
-        Utility.ForAllLocations((location) =>
+        Utility.ForAllLocations(static (location) =>
         {
             if (location?.resourceClumps is null)
             {
@@ -74,7 +73,7 @@ internal sealed class ModEntry : Mod
                             tapper.heldObject.Value = output.Value.obj;
                             int days = output.Value.days;
                             tapper.MinutesUntilReady = Utility.CalculateMinutesUntilMorning(Game1.timeOfDay, Math.Max(1, days));
-                            this.Monitor.DebugOnlyLog($"Assigning product to tapper at {location.NameOrUniqueName} {offset}", LogLevel.Info);
+                            ModMonitor.DebugOnlyLog($"Assigning product to tapper at {location.NameOrUniqueName} {offset}", LogLevel.Info);
                         }
                     }
                 }
@@ -126,7 +125,6 @@ internal sealed class ModEntry : Mod
 
     [HarmonyPriority(Priority.High)]
     [HarmonyPatch(nameof(Utility.playerCanPlaceItemHere))]
-    [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Harmony Convention")]
     [SuppressMessage("StyleCop.CSharp.OrderingRules", "SA1204:Static elements should appear before instance elements", Justification = "Reviewed.")]
     private static bool Prefix(GameLocation location, Item item, int x, int y, Farmer f, ref bool __result)
     {
@@ -134,7 +132,7 @@ internal sealed class ModEntry : Mod
         {
             if (Utility.withinRadiusOfPlayer(x, y, 2, f) && item is SObject obj)
             {
-                Vector2 tile = new(MathF.Floor(x / 64f), MathF.Floor(y / 64f));
+                Vector2 tile = new(MathF.Floor(x / Game1.tileSize), MathF.Floor(y / Game1.tileSize));
                 if (Api.CanPlaceTapper(location, tile, obj))
                 {
                     __result = true;
@@ -144,7 +142,7 @@ internal sealed class ModEntry : Mod
         }
         catch (Exception ex)
         {
-            ModMonitor.Log($"Attempt to prefix Utility.playerCanPlaceItemHere has failed:\n\n{ex}", LogLevel.Error);
+            ModMonitor.LogError("adding tapper to Utility.playerCanPlaceItemHere", ex);
         }
         return true;
     }

@@ -2,10 +2,15 @@
 
   "mod.description": "Lets you set the size of the mini shipping bin.",
 
-  "MiniShippingBinCapacity.title": "Mini Shipping Bin Capacity",
-  "MiniShippingBinCapacity.description": "Sets the capacity of the Mini Shipping Bin",
-  "JunimoCapacity.title": "Junimo Chest Capacity",
-  "JunimoCapacity.Junimo.description": "Sets the capacity of the Junimo Chest",
+  "MiniShippingCapacity.title": "Mini Shipping Bin Capacity",
+  "MiniShippingCapacity.description": "Sets the capacity of the Mini Shipping Bin",
+  "JuminoCapacity.title": "Junimo Chest Capacity",
+  "JuminoCapacity.description": "Sets the capacity of the Junimo Chest",
+
+  "DrawFirstItem.title": "Draw First Item",
+  "DrawFirstItem.description": "When enabled, the first item in a chest will be drawn in over it.",
+  "DrawFirstItemFridge.title": "Draw First Item (Fridge)",
+  "DrawFirstItemFridge.description":  "When enabled, the first item in a fridge will be drawn in over it.",
 
   "IllFormatedConfig": "Config file seems ill-formated, using default. Please use Generic Mod Config Menu to configure.",
   "GmcmNotFound": "Generic Mod Config Menu (https://www.nexusmods.com/stardewvalley/mods/5098) not found, integration disabled.",

@@ -1,7 +1,11 @@
-﻿using AtraBase.Collections;
+﻿// Ignore Spelling: Api
+
+using AtraBase.Collections;
 using AtraBase.Models.WeightedRandom;
 using AtraBase.Toolkit.Extensions;
+using AtraBase.Toolkit.StringHandler;
 
+using AtraCore.Framework.Internal;
 using AtraCore.Framework.ItemManagement;
 
 using AtraShared.ConstantsAndEnums;
@@ -27,7 +31,7 @@ using Utils = CatGiftsRedux.Framework.Utils;
 namespace CatGiftsRedux;
 
 /// <inheritdoc />
-internal sealed class ModEntry : Mod
+internal sealed class ModEntry : BaseMod<ModEntry>
 {
     private const string SAVEKEY = "GiftsThisWeek";
     private static int maxPrice;
@@ -48,11 +52,6 @@ internal sealed class ModEntry : Mod
     private IDynamicGameAssetsApi? dgaAPI;
 
     /// <summary>
-    /// Gets the logging instance for this class.
-    /// </summary>
-    internal static IMonitor ModMonitor { get; private set; } = null!;
-
-    /// <summary>
     /// Gets the string utilities for this mod.
     /// </summary>
     internal static StringUtils StringUtils { get; private set; } = null!;
@@ -61,9 +60,10 @@ internal sealed class ModEntry : Mod
     public override void Entry(IModHelper helper)
     {
         I18n.Init(helper.Translation);
+        base.Entry(helper);
+
         AssetManager.Initialize(helper.GameContent);
         this.config = AtraUtils.GetConfigOrDefault<ModConfig>(helper, this.Monitor);
-        ModMonitor = this.Monitor;
         StringUtils = new(this.Monitor);
         this.dataObjectInfo = helper.GameContent.ParseAssetName("Data/ObjectInformation");
 
@@ -73,8 +73,6 @@ internal sealed class ModEntry : Mod
         helper.Events.GameLoop.DayStarted += this.OnDayLaunched;
         helper.Events.Content.AssetRequested += static (_, e) => AssetManager.Apply(e);
         helper.Events.Content.AssetsInvalidated += this.OnAssetInvalidated;
-
-        this.Monitor.Log($"Starting up: {this.ModManifest.UniqueID} - {typeof(ModEntry).Assembly.FullName}");
     }
 
     /// <inheritdoc />
@@ -139,7 +137,7 @@ internal sealed class ModEntry : Mod
 
         Random random = RandomUtils.GetSeededRandom(-47, "atravita.CatGiftsRedux");
         double chance = ((pet.friendshipTowardFarmer.Value / 1000.0) * (this.config.MaxChance - this.config.MinChance)) + this.config.MinChance;
-        if (random.NextDouble() > chance)
+        if (!random.OfChance(chance))
         {
             this.Monitor.DebugOnlyLog("Failed friendship probability check");
             return;
@@ -152,7 +150,7 @@ internal sealed class ModEntry : Mod
             tile = farm.GetRandomTileImpl();
             if (tile is null)
             {
-                this.Monitor.Log("Failed to find a free tile.");
+                this.Monitor.DebugOnlyLog("Failed to find a free tile.");
             }
         }
 
@@ -180,8 +178,7 @@ internal sealed class ModEntry : Mod
                 }
                 catch (Exception ex)
                 {
-                    this.Monitor.Log($"Picker failed to select an item. See log for details.", LogLevel.Error);
-                    this.Monitor.Log(ex.ToString());
+                    this.Monitor.LogError("picking item", ex);
                     continue;
                 }
 
@@ -404,11 +401,30 @@ internal sealed class ModEntry : Mod
 
         foreach (int key in DataToItemMap.GetAll(ItemTypeEnum.SObject))
         {
-            if (Game1.objectInformation.TryGetValue(key, out string? data)
-                && int.TryParse(data.GetNthChunk('/', SObject.objectInfoPriceIndex), out int price)
-                && price * difficulty < maxPrice
-                && !data.GetNthChunk('/', SObject.objectInfoNameIndex).Contains("Qi", StringComparison.OrdinalIgnoreCase))
+            if (Game1.objectInformation.TryGetValue(key, out string? data))
             {
+                StreamSplit splits = data.StreamSplit('/');
+
+                // field 0 - internal name.
+                if (!splits.MoveNext() || splits.Current.Contains("Qi", StringComparison.OrdinalIgnoreCase))
+                {
+                    continue;
+                }
+
+                // field 1 - price.
+                if (!splits.MoveNext() || !int.TryParse(splits.Current, out int price) || price * difficulty >= maxPrice)
+                {
+                    continue;
+                }
+
+                _ = splits.MoveNext();
+
+                // field 3 - category
+                if (!splits.MoveNext() || splits.Current.Word.Equals("Quest", StringComparison.OrdinalIgnoreCase))
+                {
+                    continue;
+                }
+
                 ret.Add(new(maxPrice - price, key));
             }
         }

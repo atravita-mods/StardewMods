@@ -1,4 +1,6 @@
-﻿using AtraShared.Integrations.GMCMAttributes;
+﻿using AtraBase.Toolkit;
+
+using AtraShared.Integrations.GMCMAttributes;
 
 using Microsoft.Xna.Framework;
 
@@ -9,7 +11,7 @@ namespace CameraPan.Framework;
 /// <summary>
 /// The config class for this mod.
 /// </summary>
-[SuppressMessage("StyleCop.CSharp.OrderingRules", "SA1201:Elements should appear in the correct order", Justification = "Fields kept near accessors.")]
+[SuppressMessage("StyleCop.CSharp.OrderingRules", "SA1201:Elements should appear in the correct order", Justification = StyleCopErrorConsts.AccessorsNearFields)]
 public sealed class ModConfig
 {
     /// <summary>
@@ -141,7 +143,6 @@ public sealed class ModConfig
     /// </summary>
     [GMCMSection("Keybind", 10)]
     public KeybindList RightButton { get; set; } = new(new(SButton.Right), new(SButton.RightThumbstickRight));
-
 
     /// <summary>
     /// Gets or sets the behavior of the camera in an indoors location.

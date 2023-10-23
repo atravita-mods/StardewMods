@@ -1,0 +1,10 @@
+{
+   "Name": "Spam Mail",
+   "Author": "atravita",
+   "Description": "Adds some spam mail. It's cute, I promise.",
+   "Version": "0.1.0",
+   "UniqueID": "atravita.CP.SpamMail",
+   "ContentPackFor": {
+       "UniqueID": "Pathoschild.ContentPatcher"
+    }
+}

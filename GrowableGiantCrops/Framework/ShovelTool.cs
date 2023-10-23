@@ -1,10 +1,14 @@
-﻿using System.Reflection;
+﻿// Ignore Spelling: Craftable loc Api Hoedirt LECLAIR
+
+using System.Reflection;
+using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Xml.Serialization;
 
 using AtraBase.Toolkit.Extensions;
 using AtraBase.Toolkit.Reflection;
 
+using AtraCore;
 using AtraCore.Framework.Caches;
 using AtraCore.Framework.ReflectionManager;
 using AtraCore.Utilities;
@@ -23,8 +27,6 @@ using StardewValley.Locations;
 using StardewValley.Objects;
 using StardewValley.TerrainFeatures;
 
-using XLocation = xTile.Dimensions.Location;
-
 namespace GrowableGiantCrops.Framework;
 
 /// <summary>
@@ -35,6 +37,11 @@ namespace GrowableGiantCrops.Framework;
 public class ShovelTool : Tool
 {
     /// <summary>
+    /// The mod-data string used to mark GiantCropTweaks protected hoedirt.
+    /// </summary>
+    protected internal const string LECLAIR_PROTECT = "leclair.giantcroptweaks/UnderCrop";
+
+    /// <summary>
     /// The API instance.
     /// </summary>
     protected static readonly Api Api = new();
@@ -44,7 +51,7 @@ public class ShovelTool : Tool
     /// <summary>
     /// Gets the mine rock count on a specific mineshaft level.
     /// </summary>
-    internal static readonly Lazy<Func<MineShaft, int>> MineRockCountGetter = new(() =>
+    protected internal static readonly Lazy<Func<MineShaft, int>> MineRockCountGetter = new(() =>
         (typeof(MineShaft).GetCachedProperty("stonesLeftOnThisLevel", ReflectionCache.FlagTypes.InstanceFlags)
              .GetGetMethod(nonPublic: true) ?? ReflectionThrowHelper.ThrowMethodNotFoundException<MethodInfo>("stonesLeftOnThisLevelGetter"))
              .CreateDelegate<Func<MineShaft, int>>());
@@ -52,12 +59,15 @@ public class ShovelTool : Tool
     /// <summary>
     /// Sets the mine rock count on a specific mineshaft level.
     /// </summary>
-    internal static readonly Lazy<Action<MineShaft, int>> MineRockCountSetter = new(() =>
+    protected internal static readonly Lazy<Action<MineShaft, int>> MineRockCountSetter = new(() =>
         (typeof(MineShaft).GetCachedProperty("stonesLeftOnThisLevel", ReflectionCache.FlagTypes.InstanceFlags)
              .GetSetMethod(nonPublic: true) ?? ReflectionThrowHelper.ThrowMethodNotFoundException<MethodInfo>("stonesLeftOnThisLevelSetter"))
              .CreateDelegate<Action<MineShaft, int>>());
 
-    private static readonly Lazy<Func<MineShaft, bool>> HasLadderSpawnedGetter = new(() =>
+    /// <summary>
+    /// Gets whether or not a ladder has appeared on a specific mine level.
+    /// </summary>
+    protected static readonly Lazy<Func<MineShaft, bool>> HasLadderSpawnedGetter = new(() =>
         typeof(MineShaft).GetCachedField("ladderHasSpawned", ReflectionCache.FlagTypes.InstanceFlags)
              .GetInstanceFieldGetter<MineShaft, bool>());
 
@@ -149,7 +159,7 @@ public class ShovelTool : Tool
     /// <param name="location">The game location.</param>
     /// <param name="x">pixel x.</param>
     /// <param name="y">pixel y.</param>
-    /// <param name="power">The power level of the tool</param>
+    /// <param name="power">The power level of the tool.</param>
     /// <param name="who">Last farmer to use.</param>
     public override void DoFunction(GameLocation location, int x, int y, int power, Farmer who)
     {
@@ -201,6 +211,11 @@ public class ShovelTool : Tool
             // Handle clumps and giant crops.
             if (Api.TryPickUpClumpOrGiantCrop(location, pickupTile, ModEntry.Config.PlacedOnly) is SObject inventoryClump)
             {
+                // Must remember to remove Khloe's protection markers.
+                if (inventoryClump is InventoryGiantCrop crop)
+                {
+                    RemoveProtectionFromHoedirt(location, pickupTile, crop);
+                }
                 ModEntry.ModMonitor.DebugOnlyLog($"Picking up {inventoryClump.Name}.", LogLevel.Info);
                 who.Stamina -= bigItemEnergy;
                 this.GiveItemOrMakeDebris(location, who, inventoryClump);
@@ -359,18 +374,14 @@ public class ShovelTool : Tool
                 }
             }
 
-            // derived from Hoe - this makes hoedirt.
-            if (location.doesTileHaveProperty((int)pickupTile.X, (int)pickupTile.Y, "Diggable", "Back") is null
-                || location.isTileOccupied(pickupTile) || !location.isTilePassable(new XLocation((int)pickupTile.X, (int)pickupTile.Y), Game1.viewport))
+            if (location.CanCreateHoedirtAt(pickupTile))
             {
-                return;
+                this.MakeHoeDirt(location, who, pickupTile, smallItemEnergy);
             }
-
-            this.MakeHoeDirt(location, who, pickupTile, smallItemEnergy);
         }
         catch (Exception ex)
         {
-            ModEntry.ModMonitor.Log($"Unexpected error in using shovel:\n\n{ex}", LogLevel.Error);
+            ModEntry.ModMonitor.LogError("using shovel", ex);
         }
     }
 
@@ -445,6 +456,42 @@ public class ShovelTool : Tool
 
     #region helpers
 
+    /// <summary>
+    /// Removes the protection markers from under a giant crop.
+    /// </summary>
+    /// <param name="location">Game location to grab from.</param>
+    /// <param name="pickupTile">Tile to pick up from.</param>
+    /// <param name="crop">Crop grabbed.</param>
+    /// <remarks>Kept alone as a separate method in case other mods need to patch it.</remarks>
+    /// <returns>The number of protection markers removed.</returns>
+    [MethodImpl(MethodImplOptions.NoInlining)]
+    protected static int RemoveProtectionFromHoedirt(GameLocation location, Vector2 pickupTile, InventoryGiantCrop crop)
+    {
+        Point size = crop.TileSize;
+        int start_x = (int)pickupTile.X;
+        int start_y = (int)pickupTile.Y;
+        int count = 0;
+        for (int hx = start_x; hx < start_x + size.X; hx++)
+        {
+            for (int hy = start_y; hy < start_y + size.Y; hy++)
+            {
+                if (location.terrainFeatures.TryGetValue(new(hx, hy), out TerrainFeature? terrainFeature) && terrainFeature is HoeDirt hoeDirt)
+                {
+                    if (hoeDirt.modData?.Remove(LECLAIR_PROTECT) == true)
+                    {
+                        count++;
+                    }
+                }
+            }
+        }
+        if (count > 0)
+        {
+            ModEntry.ModMonitor.Log($"Removed {count} Giant Crop Tweaks protection markers for {crop.Name}");
+        }
+
+        return count;
+    }
+
     /// <inheritdoc cref="IGrowableGiantCropsAPI.DrawAnimations(GameLocation, Vector2, string?, Rectangle, Point)"/>
     protected internal static void AddAnimations(GameLocation loc, Vector2 tile, string? texturePath, Rectangle sourceRect, Point tileSize, Color? color = null)
     {
@@ -491,7 +538,7 @@ public class ShovelTool : Tool
             numberOfLoops: 0,
             position: landingPos,
             flicker: false,
-            flipped: Game1.random.NextDouble() < 0.5,
+            flipped: Singletons.Random.OfChance(0.5),
             layerDepth: (landingPos.Y + 40f) / 10000f,
             alphaFade: 0.01f,
             color: Color.White,
@@ -568,7 +615,7 @@ public class ShovelTool : Tool
     }
 
     /// <summary>
-    /// Handles a grass
+    /// Handles a grass.
     /// </summary>
     /// <param name="location">the game location.</param>
     /// <param name="who">the relevant farmer.</param>
@@ -626,6 +673,15 @@ public class ShovelTool : Tool
         return true;
     }
 
+    /// <summary>
+    /// Handles picking up a mushroom box.
+    /// </summary>
+    /// <param name="location">Location to pick up the mushroom box from.</param>
+    /// <param name="who">The farmer to use.</param>
+    /// <param name="pickupTile">The tile to pick up from.</param>
+    /// <param name="energy">The amount of energy to take.</param>
+    /// <param name="object">The actual instance to pick up.</param>
+    /// <returns>True if handled, false otherwise.</returns>
     protected virtual bool HandleMushroomBox(GameLocation location, Farmer who, Vector2 pickupTile, int energy, SObject @object)
     {
         if (@object.readyForHarvest.Value)
@@ -635,6 +691,15 @@ public class ShovelTool : Tool
         return this.HandleBigCraftable(location, who, pickupTile, energy, @object, 128);
     }
 
+    /// <summary>
+    /// Handles picking up a slime incubator.
+    /// </summary>
+    /// <param name="location">Game location to pick up from.</param>
+    /// <param name="who">Farmer doing the pickup.</param>
+    /// <param name="pickupTile">Tile to pick up from.</param>
+    /// <param name="energy">Amount of energy to deduct.</param>
+    /// <param name="object">The object instance to pick up.</param>
+    /// <returns>True if handled, false otherwise.</returns>
     protected virtual bool HandleSlimeIncubator(GameLocation location, Farmer who, Vector2 pickupTile, int energy, SObject @object)
     {
         if (@object.MinutesUntilReady <= 0)
@@ -647,6 +712,16 @@ public class ShovelTool : Tool
 
 #warning - 1.6 has nice methods for this.
 
+    /// <summary>
+    /// Handles picking up a big craftable.
+    /// </summary>
+    /// <param name="location">The game location to pick up from.</param>
+    /// <param name="who">The farmer doing pickup.</param>
+    /// <param name="pickupTile">The tile being picked up from.</param>
+    /// <param name="energy">The amount of energy to deduct.</param>
+    /// <param name="object">The object to pick up.</param>
+    /// <param name="idx">The parent sheet index to set to.</param>
+    /// <returns>true if handled, false otherwise.</returns>
     protected virtual bool HandleBigCraftable(GameLocation location, Farmer who, Vector2 pickupTile, int energy, SObject @object, int idx)
     {
         who.Stamina -= energy;
@@ -666,9 +741,18 @@ public class ShovelTool : Tool
         return true;
     }
 
+    /// <summary>
+    /// Handles picking up a tree.
+    /// </summary>
+    /// <param name="location">The game location to pick up from.</param>
+    /// <param name="who">The farmer doing the picking up.</param>
+    /// <param name="pickupTile">The tile from which pickup is done.</param>
+    /// <param name="energy">How much energy to subtract from the player.</param>
+    /// <param name="tree">The tree instance.</param>
+    /// <returns>True if handled, false otherwise.</returns>
     protected virtual bool HandleTree(GameLocation location, Farmer who, Vector2 pickupTile, int energy, Tree tree)
     {
-        if (tree.growthStage.Value == 0 && tree.treeType.Value is not Tree.palmTree or Tree.palmTree2)
+        if (tree.growthStage.Value == 0 && (tree.treeType.Value <= Tree.pineTree || tree.treeType.Value == Tree.mahoganyTree))
         {
             who.Stamina -= energy;
             location.playSound("woodyHit");
@@ -689,6 +773,14 @@ public class ShovelTool : Tool
         return false;
     }
 
+    /// <summary>
+    /// Handles removing a fruit tree.
+    /// </summary>
+    /// <param name="location">The game location to grab the fruit tree from.</param>
+    /// <param name="who">The farmer in question.</param>
+    /// <param name="pickupTile">The tile to pick up from.</param>
+    /// <param name="energy">The amount of energy to deduct.</param>
+    /// <returns>True if handled, false otherwise.</returns>
     protected virtual bool HandleFruitTree(GameLocation location, Farmer who, Vector2 pickupTile, int energy)
     {
         if (Api.TryPickUpFruitTree(location, pickupTile, ModEntry.Config.PlacedOnly) is InventoryFruitTree inventoryFruitTree)
@@ -702,6 +794,14 @@ public class ShovelTool : Tool
         return false;
     }
 
+    /// <summary>
+    /// Makes a hoe dirt at a specific location.
+    /// </summary>
+    /// <param name="location">Game location to make the hoedirt.</param>
+    /// <param name="who">Farmer who is doing the action.</param>
+    /// <param name="pickupTile">Tile to make the hoedirt.</param>
+    /// <param name="energy">Amount of energy to take.</param>
+    /// <returns>true if handled, false otherwise.</returns>
     protected virtual bool MakeHoeDirt(GameLocation location, Farmer who, Vector2 pickupTile, int energy)
     {
         who.Stamina -= energy;
@@ -711,10 +811,10 @@ public class ShovelTool : Tool
         location.checkForBuriedItem((int)pickupTile.X, (int)pickupTile.Y, explosion: false, detectOnly: false, who);
         MultiplayerHelpers.GetMultiplayer().broadcastSprites(location, new TemporaryAnimatedSprite(
             rowInAnimationTexture: 12,
-            new Vector2(pickupTile.X * 64f, pickupTile.Y * 64f),
+            position: pickupTile * Game1.tileSize,
             color: Color.White,
             animationLength: 8,
-            flipped: Game1.random.Next(2) == 0,
+            flipped: Singletons.Random.OfChance(0.5),
             animationInterval: 50f));
 
         return true;

@@ -35,5 +35,6 @@ internal sealed class ModConfig
     /// Gets or sets a value indicating whether or not the other quest will be made available
     /// once all quests of the type are finished.
     /// </summary>
+    [GMCMDefaultIgnore]
     public bool AllowNewQuestWhenFinished { get; set; } = true;
 }

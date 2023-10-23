@@ -7,5 +7,6 @@
   "PurchasePrice": 25,
   "PurchaseFrom": "JojaMart",
   "CanPurchase": true,
-  "PurchaseRequirements": [ "m 10000", ],
+  "PurchaseRequirements": [ "m 10000" ],
+  "ContextTags": [ "color_blue" ]
 }

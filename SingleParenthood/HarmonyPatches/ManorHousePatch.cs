@@ -1,7 +1,11 @@
-﻿using AtraShared.Menuing;
+﻿using AtraShared.ConstantsAndEnums;
+using AtraShared.Menuing;
 using AtraShared.Utils.Extensions;
+
 using HarmonyLib;
+
 using SingleParenthood.Framework;
+
 using StardewValley.Locations;
 
 namespace SingleParenthood.HarmonyPatches;
@@ -10,6 +14,7 @@ namespace SingleParenthood.HarmonyPatches;
 /// Patches manor house to adjust the divorce book action.
 /// </summary>
 [HarmonyPatch(typeof(ManorHouse))]
+[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = StyleCopConstants.NamedForHarmony)]
 internal static class ManorHousePatch
 {
     private static void ChildMenu()
@@ -45,7 +50,6 @@ internal static class ManorHousePatch
     }
 
     [HarmonyPatch(nameof(ManorHouse.performAction))]
-    [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Harmony Convention")]
     private static bool Prefix(ManorHouse __instance, string action)
     {
         if (action is "DivorceBook"
@@ -91,7 +95,7 @@ internal static class ManorHousePatch
             }
             catch (Exception ex)
             {
-                ModEntry.ModMonitor.Log($"Failed while overriding divorce book.\n\n{ex}", LogLevel.Error);
+                ModEntry.ModMonitor.LogError("overriding divorce book", ex);
             }
         }
         return true;

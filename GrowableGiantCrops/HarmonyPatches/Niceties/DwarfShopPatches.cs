@@ -1,4 +1,7 @@
-﻿using HarmonyLib;
+﻿using AtraShared.ConstantsAndEnums;
+using AtraShared.Utils.Extensions;
+
+using HarmonyLib;
 
 using Microsoft.Xna.Framework;
 
@@ -10,7 +13,7 @@ namespace GrowableGiantCrops.HarmonyPatches.Niceties;
 /// Patches on the dwarf's shop stock.
 /// </summary>
 [HarmonyPatch(typeof(Utility))]
-[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Named for Harmony.")]
+[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = StyleCopConstants.NamedForHarmony)]
 internal static class DwarfShopPatches
 {
     [HarmonyPriority(Priority.VeryLow)]
@@ -27,7 +30,7 @@ internal static class DwarfShopPatches
         }
         catch (Exception ex)
         {
-            ModEntry.ModMonitor.Log($"Failed to add a decorative boulder to the dwarf's shop stock:\n\n{ex}", LogLevel.Error);
+            ModEntry.ModMonitor.LogError("adding a decorative boulder to the dwarf's shop stock", ex);
         }
     }
 }

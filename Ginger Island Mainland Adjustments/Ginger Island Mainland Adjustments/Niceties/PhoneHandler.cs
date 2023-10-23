@@ -1,13 +1,19 @@
 ﻿using System.Reflection;
 using System.Reflection.Emit;
 
+using AtraCore;
 using AtraCore.Framework.Caches;
 using AtraCore.Framework.ReflectionManager;
+
+using AtraShared.ConstantsAndEnums;
 using AtraShared.Utils.Extensions;
 using AtraShared.Utils.HarmonyHelper;
+
 using GingerIslandMainlandAdjustments.AssetManagers;
 using GingerIslandMainlandAdjustments.MultiplayerHandler;
+
 using HarmonyLib;
+
 using Microsoft.Xna.Framework.Graphics;
 
 namespace GingerIslandMainlandAdjustments.Niceties;
@@ -16,6 +22,7 @@ namespace GingerIslandMainlandAdjustments.Niceties;
 /// Class that handles patches against GameLocation...to handle the phone.
 /// </summary>
 [HarmonyPatch]
+[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = StyleCopConstants.NamedForHarmony)]
 internal static class PhoneHandler
 {
     /// <summary>
@@ -61,8 +68,7 @@ internal static class PhoneHandler
         }
         catch (Exception ex)
         {
-            Globals.ModMonitor.Log($"Mod crashed while transpiling {original.FullDescription()}:\n\n{ex}", LogLevel.Error);
-            original.Snitch(Globals.ModMonitor);
+            Globals.ModMonitor.LogTranspilerError(original, ex);
         }
         return null;
     }
@@ -75,7 +81,6 @@ internal static class PhoneHandler
     /// <param name="__result">Result.</param>
     [HarmonyPostfix]
     [HarmonyPatch(typeof(GameLocation), nameof(GameLocation.answerDialogueAction), new Type[] { typeof(string), typeof(string[]) })]
-    [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Harmony convention")]
     private static void PostfixAnswerDialogueAction(GameLocation __instance, string questionAndAnswer, ref bool __result)
     {
         if (questionAndAnswer.Equals("telephone_PamBus", StringComparison.OrdinalIgnoreCase))
@@ -102,7 +107,7 @@ internal static class PhoneHandler
                     {
                         if (Game1.IsVisitingIslandToday(pam.Name))
                         {
-                            Game1.drawDialogue(pam, Game1.content.LoadString($"Strings\\Characters:Pam_Island_{Game1.random.Next(1, 4)}"));
+                            Game1.drawDialogue(pam, Game1.content.LoadString($"Strings\\Characters:Pam_Island_{Singletons.Random.Next(1, 4)}"));
                         }
                         else if (Utility.IsHospitalVisitDay(pam.Name))
                         {
@@ -115,7 +120,7 @@ internal static class PhoneHandler
                         }
                         else if (MultiplayerSharedState.PamsSchedule.Contains("BusStop 11 10"))
                         {
-                            Game1.drawDialogue(pam, Game1.content.LoadString($"Strings\\Characters:Pam_Bus_{Game1.random.Next(1, 4)}"));
+                            Game1.drawDialogue(pam, Game1.content.LoadString($"Strings\\Characters:Pam_Bus_{Singletons.Random.Next(1, 4)}"));
                         }
                         else
                         {
@@ -150,7 +155,7 @@ internal static class PhoneHandler
                 }
                 catch (Exception ex)
                 {
-                    Globals.ModMonitor.Log($"Error handling Pam's phone call {ex}", LogLevel.Error);
+                    Globals.ModMonitor.LogError("handling Pam's phone call", ex);
                 }
             },
             GameLocation.PHONE_RING_DURATION);

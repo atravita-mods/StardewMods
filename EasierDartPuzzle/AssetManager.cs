@@ -29,17 +29,17 @@ internal static class AssetManager
     private static void ApplyImpl(IAssetData asset)
     {
         IAssetDataForDictionary<string, string>? data = asset.AsDictionary<string, string>();
-        if (data.Data.TryGetValue("Pirates7_0", out var maxstring))
+        if (data.Data.TryGetValue("Pirates7_0", out string? maxstring))
         {
             data.Data["Pirates7_0"] = maxstring.Replace("20", AdjustDartNumberTranspiler.GetMaximumDartNumber().ToString());
         }
 
-        if (data.Data.TryGetValue("Pirates7_1", out var midstring))
+        if (data.Data.TryGetValue("Pirates7_1", out string? midstring))
         {
             data.Data["Pirates7_1"] = midstring.Replace("15", AdjustDartNumberTranspiler.GetMidddleDartNumber().ToString());
         }
 
-        if (data.Data.TryGetValue("Pirates7_2", out var minstring))
+        if (data.Data.TryGetValue("Pirates7_2", out string? minstring))
         {
             data.Data["Pirates7_2"] = minstring.Replace("10", AdjustDartNumberTranspiler.GetMinimumDartNumber().ToString());
         }

@@ -1,5 +1,10 @@
 ﻿{
   "mod.description": "Prevents rugs from being removed if there's something on the rug. Also some other things.",
+  // GMCM Sections
+  "Placement.title": "Placement",
+  "Dresser.title": "Dresser",
+  "Bombs.title": "Bombs",
+
   "Enabled.title": "Enabled",
   "Enabled.description": "Whether to enable or disable this mod.",
   "PreventRugRemoval.title": "Prevent Rug Removal",
@@ -41,6 +46,29 @@
 
   "BetIcons.title": "Bet1k/10k Icons",
   "BetIcons.description": "Whether or not to show the bet1k/bet10k icons.",
+
+  // sign and crystallarium stuff
+  "SignBehavior.title": "Sign Behavior",
+  "SignBehavior.description": "Select how you want signs to behave. Break: must break to change item on sign. Keybind: Hold keybind to change item on sign.",
+
+  "config.SignBehavior.Vanilla": "Vanilla",
+  "config.SignBehavior.Keybind": "Keybind",
+  "config.SignBehavior.Break": "Break",
+
+  "CrystalariumBehavior.title": "Crystalarium Behavior",
+  "CrystalariumBehavior.description": "Select how you want crystalarium to behave. Break: must break to change replicating crystal. Keybind: hold keybind to change replicating crystal. Swap: the crystal processing will go back into your inventory.",
+
+  "config.CrystalariumBehavior.Vanilla": "Vanilla",
+  "config.CrystalariumBehavior.Break": "Break",
+  "config.CrystalariumBehavior.Swap": "Swap",
+  "config.CrystalariumBehavior.Keybind": "Keybind",
+
+  "sign.require-break": "Break the sign to change the item!",
+  "sign.require-keybind": "Press {{keybind}} to change the item!",
+
+  "crystalarium.require-break": "Break the crystalarium to change the item!",
+  "crystalarium.require-keybind": "Press {{keybind}} to change the item!",
+  "crystalarium.inventory-full": "Can't swap, inventory full!",
 
   // secret notes gmmc
   "SecretNotesOverride.title": "Secret Note options",
@@ -110,6 +138,7 @@
   "gate-removal-message": "Hold down {{keybind}} to remove gates easily",
   "invalid-special-order": "Special Order {{order}} seems to be invalid; was not added to your quest log.",
   "rain-totem.message": "Mayor Lewis wouldn't appreciate rain tomorrow...",
+  "emergency-divorce.message": "Emergency divorce from {{spouse}} performed. See log for details.",
 
   // Config errors and messages
   "IllFormatedConfig": "Config file seems ill-formated, using default. Please use Generic Mod Config Menu to configure.",
@@ -133,5 +162,8 @@
   // Casino!
   "bet1k": "Bet1000",
   "bet10k": "Bet10000",
-  "BuyCasino": "Buy casino coins? 10 g each!"
+  "BuyCasino": "Buy casino coins? 10 g each!",
+
+  // buff tooltips
+  "duration": "Duration"
 }

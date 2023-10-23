@@ -82,7 +82,15 @@ internal static class VolcanoChestAdjuster
     /// <param name="multiplayerHelper">SMAPI's multiplayer helper.</param>
     internal static void SaveData(IDataHelper dataHelper, IMultiplayerHelper multiplayerHelper)
     {
-        dataHelper.WriteSaveData(SAVEDATAKEY, data);
+        if (data is not null && (data.CommonChest != -1 || data.RareChest != -1))
+        {
+            dataHelper.WriteSaveData(SAVEDATAKEY, data);
+        }
+        else
+        {
+            // erase data if it's not relevant.
+            dataHelper.WriteSaveData<VolcanoData>(SAVEDATAKEY, null);
+        }
         BroadcastData(multiplayerHelper);
     }
 
@@ -244,8 +252,7 @@ internal static class VolcanoChestAdjuster
         }
         catch (Exception ex)
         {
-            ModEntry.ModMonitor.Log($"Ran into error transpiling volcano dungeon to avoid repeat chest rewards..\n\n{ex}", LogLevel.Error);
-            original?.Snitch(ModEntry.ModMonitor);
+            ModEntry.ModMonitor.LogTranspilerError(original, ex);
         }
         return null;
     }

@@ -1,15 +1,23 @@
-﻿using AtraBase.Toolkit;
+﻿// Ignore Spelling: Perscreened
+
+using AtraBase.Toolkit;
+
 using AtraCore.Framework.DialogueManagement;
+
 using AtraShared;
+using AtraShared.ConstantsAndEnums;
 using AtraShared.Utils.Extensions;
+
 using SpecialOrdersExtended.DataModels;
+
 using StardewModdingAPI.Utilities;
 
 namespace SpecialOrdersExtended.Managers;
 
 /// <summary>
-/// Static. Handles logic, patches, and console commands related to the special order dialogues.
+/// Static. Handles logic, patches, and console commands related to the special order dialogue.
 /// </summary>
+[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = StyleCopConstants.NamedForHarmony)]
 internal class DialogueManager
 {
     /// <summary>
@@ -20,7 +28,7 @@ internal class DialogueManager
     /// <summary>
     /// Gets the current perscreened dialogue log.
     /// </summary>
-    public static DialogueLog? PerscreenedDialogueLog
+    internal static DialogueLog? PerscreenedDialogueLog
         => InternalDialogueLog.Value;
 
     /// <summary>
@@ -249,13 +257,20 @@ internal class DialogueManager
         {
             return;
         }
-        foreach (string dialogueKey in PerscreenedDialogueLog.SeenDialogues.Keys)
+        try
         {
-            if (dialogueKey.Contains(specialOrderKey))
+            foreach (string dialogueKey in PerscreenedDialogueLog.SeenDialogues.Keys)
             {
-                ModEntry.ModMonitor.DebugOnlyLog($"Removing key {dialogueKey}");
-                PerscreenedDialogueLog.SeenDialogues.Remove(dialogueKey);
+                if (dialogueKey.Contains(specialOrderKey))
+                {
+                    ModEntry.ModMonitor.DebugOnlyLog($"Removing key {dialogueKey}");
+                    PerscreenedDialogueLog.SeenDialogues.Remove(dialogueKey);
+                }
             }
+        }
+        catch (Exception ex)
+        {
+            ModEntry.ModMonitor.LogError("removing dialogue for failed orders", ex);
         }
     }
 
@@ -266,8 +281,6 @@ internal class DialogueManager
     /// <param name="__instance">NPC in question.</param>
     /// <param name="__0">NPC heart level.</param>
     /// <param name="__1">NoPreface in vanilla code - to preface with season or not.</param>
-    /// <exception cref="UnexpectedEnumValueException{SpecialOrder.QuestState}">Recieved unexpected enum value.</exception>
-    [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Convention used by Harmony")]
     internal static void PostfixCheckDialogue(ref bool __result, ref NPC __instance, int __0, bool __1)
     {
         try
@@ -348,7 +361,7 @@ internal class DialogueManager
         }
         catch (Exception ex)
         {
-            ModEntry.ModMonitor.Log($"{I18n.Dialogue_ErrorInPatchedFunction(__instance.Name)}\n{ex}", LogLevel.Error);
+            ModEntry.ModMonitor.LogError($"checking for new current dialogue for {__instance.Name}", ex);
         }
     }
 

@@ -1,0 +1,13 @@
+{
+    "Changes": [
+        {
+            "LogName": "Harvey: basic",
+            "Action": "EditData",
+            "Target": "Characters/Dialogue/Harvey",
+            "Entries": {
+                "HarveyRoom_13_4": "{{i18n:harvey-bed}}$a",
+                "HarveyRoom_4_5": "{{i18n:harvey-radio.{{season}}.{{YearModulus}} }}",
+            }
+        }
+    ]
+}

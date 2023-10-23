@@ -1,0 +1,10 @@
+{
+   "Name": "Miracle Whip",
+   "Author": "atravita",
+   "Description": "Adds miracle whip as a...concession item?.",
+   "Version": "0.1.0",
+   "UniqueID": "atravita.CP.MiracleWhip",
+   "ContentPackFor": {
+       "UniqueID": "Pathoschild.ContentPatcher"
+    }
+}

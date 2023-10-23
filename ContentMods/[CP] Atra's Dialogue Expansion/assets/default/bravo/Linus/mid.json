@@ -1,0 +1,11 @@
+{
+    "Changes": [
+        {
+            "Action": "EditData",
+            "Target": "Characters/Dialogue/Linus",
+            "Entries": {
+                "fall_Sun10": "Sometimes, if the weather is amiable, I'll go noodling for catfish."
+            }
+        }
+    ]
+}

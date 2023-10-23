@@ -1,0 +1,21 @@
+{
+    "Changes":[
+        {
+            "Action": "EditData",
+            "Target": "Characters/Dialogue/Maru",
+            "Entries": {
+                "23_2": "Was helping Marnie with some of her machines the other day...#$b#She had a crowd gate that wasn't holding pressure correctly...",
+            },
+            "When": {"YearModulus": 2}
+        },
+        {
+            "Action": "EditData",
+            "Target": "Characters/Dialogue/Maru",
+            "Entries": {
+                "23_2": "Autograbbers are such an interesting piece of technology, aren't they?",
+                "24_2": "Single instruction multiple data? Sounds like something Sebastian might find interesting, but most of the microprocessors I use don't support things like that."
+            },
+            "When": {"YearModulus": 3}
+        }
+    ]
+}

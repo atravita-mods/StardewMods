@@ -39,7 +39,7 @@ internal static class AutomateTranspiler
         }
         catch (Exception ex)
         {
-            ModEntry.ModMonitor.Log($"Mod failed while transpiling automate. Integration may not work.\n\n{ex}", LogLevel.Error);
+            ModEntry.ModMonitor.LogError("transpiling automate", ex);
         }
     }
 
@@ -65,7 +65,7 @@ internal static class AutomateTranspiler
             }
             catch (Exception ex)
             {
-                ModEntry.ModMonitor.Log($"Error in making Automate object organic\n\n{ex}", LogLevel.Error);
+                ModEntry.ModMonitor.LogError("making Automate object organic", ex);
             }
         }
         return obj;
@@ -107,7 +107,7 @@ internal static class AutomateTranspiler
         }
         catch (Exception ex)
         {
-            ModEntry.ModMonitor.Log($"Mod crashed while transpiling Automate:\n\n{ex}", LogLevel.Error);
+            ModEntry.ModMonitor.LogTranspilerError(original, ex);
         }
         return null;
     }

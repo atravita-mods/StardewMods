@@ -1,5 +1,10 @@
-﻿using HarmonyLib;
+﻿using AtraShared.ConstantsAndEnums;
+using AtraShared.Utils.Extensions;
+
+using HarmonyLib;
+
 using Microsoft.Xna.Framework;
+
 using StardewValley.TerrainFeatures;
 using StardewValley.Tools;
 
@@ -11,11 +16,11 @@ namespace TapGiantCrops.HarmonyPatches;
 /// Holds patches to remove the tapper before the big crop is destroyed.
 /// </summary>
 [HarmonyPatch(typeof(GiantCrop))]
+[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = StyleCopConstants.NamedForHarmony)]
 internal static class GiantCropPatcher
 {
     [HarmonyPriority(Priority.High)]
     [HarmonyPatch(nameof(GiantCrop.performToolAction))]
-    [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Harmony convention.")]
     private static bool Prefix(GiantCrop __instance, Tool t)
     {
         if (!t.isHeavyHitter() || t is MeleeWeapon)
@@ -51,7 +56,7 @@ internal static class GiantCropPatcher
         }
         catch (Exception ex)
         {
-            ModEntry.ModMonitor.Log($"Failed while popping the tapper off {ex}", LogLevel.Error);
+            ModEntry.ModMonitor.LogError("popping the tapper off", ex);
         }
         return true;
     }

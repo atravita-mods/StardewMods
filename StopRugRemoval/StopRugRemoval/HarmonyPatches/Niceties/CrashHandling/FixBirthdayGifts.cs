@@ -1,11 +1,17 @@
 ﻿using System.Reflection;
 using System.Reflection.Emit;
+
 using AtraBase.Toolkit.Extensions;
 using AtraBase.Toolkit.StringHandler;
+
 using AtraCore.Framework.ReflectionManager;
+
+using AtraShared.ConstantsAndEnums;
 using AtraShared.Utils.Extensions;
 using AtraShared.Utils.HarmonyHelper;
+
 using HarmonyLib;
+
 using Netcode;
 
 namespace StopRugRemoval.HarmonyPatches.Niceties.CrashHandling;
@@ -14,11 +20,11 @@ namespace StopRugRemoval.HarmonyPatches.Niceties.CrashHandling;
 /// Holds patches that fixes the birthday gift crash.
 /// </summary>
 [HarmonyPatch]
+[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = StyleCopConstants.NamedForHarmony)]
 internal static class FixBirthdayGifts
 {
     [HarmonyFinalizer]
     [HarmonyPatch(typeof(NPC), nameof(NPC.getFavoriteItem))]
-    [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Harmony convention.")]
     private static Exception? FinalizeGiftSelection(Exception __exception, ref SObject? __result, NPC __instance)
     {
         if (__exception is not null)
@@ -37,7 +43,7 @@ internal static class FixBirthdayGifts
                 }
             }
 
-            ModEntry.ModMonitor.Log($"Failed to find replacement gift for {__instance.Name}, surpressing original exception.", LogLevel.Error);
+            ModEntry.ModMonitor.Log($"Failed to find replacement gift for {__instance.Name}, suppressing original exception.", LogLevel.Error);
             __result = null;
         }
         return null;
@@ -78,8 +84,7 @@ internal static class FixBirthdayGifts
         }
         catch (Exception ex)
         {
-            ModEntry.ModMonitor.Log($"Ran into error transpiling {original.FullDescription()}.\n\n{ex}", LogLevel.Error);
-            original?.Snitch(ModEntry.ModMonitor);
+            ModEntry.ModMonitor.LogTranspilerError(original, ex);
         }
         return null;
     }

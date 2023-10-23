@@ -5,6 +5,9 @@ TODO:
    - Custom resource clumps and custom ore nodes?
    - Fix up grange draw?
 
+### Version 0.2.0
+* Fixed compat issues with Giant Crop Tweaks leading to zombie hoedirt.
+
 ### Version 0.1.4
 * Added option for the two hoe enchantments.
 * Grasses are now in the furniture catalogue. (They are, however, not free).

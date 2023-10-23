@@ -96,7 +96,7 @@ public sealed class Harmonizer
 
 #if DEBUG
         sw.Stop();
-        this.logger.Log($"Took {sw.ElapsedMilliseconds} to apply harmony patches");
+        this.logger.LogTimespan("Applying harmony patches", sw);
 #endif
     }
 

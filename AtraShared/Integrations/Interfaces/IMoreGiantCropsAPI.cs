@@ -32,7 +32,7 @@ using Microsoft.Xna.Framework.Graphics;
 namespace AtraShared.Integrations.Interfaces;
 
 /// <summary>
-/// API to interface with MoreGiantCrops
+/// API to interface with MoreGiantCrops.
 /// </summary>
 /// <remarks>Copied from: https://github.com/spacechase0/StardewValleyMods/blob/develop/MoreGiantCrops/IMoreGiantCropsAPI.cs .</remarks>
 public interface IMoreGiantCropsAPI

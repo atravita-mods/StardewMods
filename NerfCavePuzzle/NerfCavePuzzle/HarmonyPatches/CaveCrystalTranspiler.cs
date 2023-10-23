@@ -35,7 +35,7 @@ internal static class CaveCrystalTranspiler
         }
         catch (Exception ex)
         {
-            ModEntry.ModMonitor.Log($"Failed while transpiling CaveCrystal to make the flashes go slower.\n\n{ex}", LogLevel.Error);
+            ModEntry.ModMonitor.LogError("transpiling CaveCrystal to make the flashes go slower", ex);
         }
     }
 
@@ -52,7 +52,7 @@ internal static class CaveCrystalTranspiler
             {
                 new(OpCodes.Ldarg_0),
                 new(OpCodes.Ldc_R4, 1000f),
-                new(OpCodes.Stfld, typeof(IslandWestCave1).GetNestedType("CaveCrystal")?.InstanceFieldNamed("glowTimer") ?? ReflectionThrowHelper.ThrowMethodNotFoundException<FieldInfo>("IslandWestCave1+CaveCrystal")),
+                new(OpCodes.Stfld, typeof(IslandWestCave1).GetNestedType("CaveCrystal")?.GetCachedField("glowTimer", ReflectionCache.FlagTypes.InstanceFlags) ?? ReflectionThrowHelper.ThrowMethodNotFoundException<FieldInfo>("IslandWestCave1+CaveCrystal")),
             })
             .Advance(2)
             .Insert(new CodeInstruction[]
@@ -64,8 +64,7 @@ internal static class CaveCrystalTranspiler
         }
         catch (Exception ex)
         {
-            ModEntry.ModMonitor.Log($"Ran into errors transpiling CaveCrystal.activate.\n\n{ex}", LogLevel.Error);
-            original?.Snitch(ModEntry.ModMonitor);
+            ModEntry.ModMonitor.LogTranspilerError(original, ex);
         }
         return null;
     }
@@ -82,7 +81,7 @@ internal static class CaveCrystalTranspiler
                     new(OpCodes.Div),
                     new(OpCodes.Call, typeof(Utility).GetCachedMethod(nameof(Utility.Lerp), ReflectionCache.FlagTypes.StaticFlags)),
                 },
-                transformer: (helper) =>
+                transformer: static (helper) =>
                 {
                     helper.Advance(1)
                         .Insert(new CodeInstruction[]
@@ -96,8 +95,7 @@ internal static class CaveCrystalTranspiler
         }
         catch (Exception ex)
         {
-            ModEntry.ModMonitor.Log($"Ran into errors transpiling CaveCrystal.update.\n\n{ex}", LogLevel.Error);
-            original?.Snitch(ModEntry.ModMonitor);
+            ModEntry.ModMonitor.LogTranspilerError(original, ex);
         }
         return null;
     }

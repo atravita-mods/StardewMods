@@ -8,6 +8,8 @@ using AtraShared.Utils.Extensions;
 using AtraShared.Utils.HarmonyHelper;
 using HarmonyLib;
 
+using Microsoft.Xna.Framework.Content;
+
 namespace HolidaySales;
 
 /// <summary>
@@ -145,9 +147,13 @@ internal static class HSUtils
                     return false;
                 }
             }
+            catch (ContentLoadException)
+            {
+                ModEntry.ModMonitor.Log($"Festival data for {season} {day} was not found.", LogLevel.Warn);
+            }
             catch (Exception ex)
             {
-                ModEntry.ModMonitor.Log($"Error loading festival data for {season} {day}.\n\n{ex}", LogLevel.Error);
+                ModEntry.ModMonitor.LogError($"loading festival data for {season} {day}", ex);
             }
         }
         return false;

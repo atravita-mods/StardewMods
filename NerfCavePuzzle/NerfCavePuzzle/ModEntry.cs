@@ -1,9 +1,14 @@
 ﻿using AtraCore.Utilities;
+
+using AtraShared.ConstantsAndEnums;
 using AtraShared.Integrations;
 using AtraShared.MigrationManager;
 using AtraShared.Utils.Extensions;
+
 using HarmonyLib;
+
 using NerfCavePuzzle.HarmonyPatches;
+
 using StardewModdingAPI.Events;
 
 using AtraUtils = AtraShared.Utils.Utils;
@@ -53,7 +58,7 @@ internal sealed class ModEntry : Mod
         DataHelper = helper.Data;
         MultiplayerHelper = helper.Multiplayer;
         InputHelper = helper.Input;
-        UniqueID = this.ModManifest.UniqueID;
+        UniqueID = string.Intern(this.ModManifest.UniqueID);
 
         this.Monitor.Log($"Starting up: {this.ModManifest.UniqueID} - {typeof(ModEntry).Assembly.FullName}");
 
@@ -126,7 +131,7 @@ internal sealed class ModEntry : Mod
         }
         catch (Exception ex)
         {
-            ModMonitor.Log($"Mod failed while applying patches:\n{ex}", LogLevel.Error);
+            ModMonitor.Log(string.Format(ErrorMessageConsts.HARMONYCRASH, ex), LogLevel.Error);
         }
         harmony.Snitch(this.Monitor, UniqueID, transpilersOnly: true);
     }

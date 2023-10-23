@@ -1,4 +1,6 @@
-﻿using HarmonyLib;
+﻿using AtraShared.ConstantsAndEnums;
+
+using HarmonyLib;
 using Microsoft.Xna.Framework;
 
 namespace GingerIslandMainlandAdjustments.ScheduleManager;
@@ -8,6 +10,7 @@ namespace GingerIslandMainlandAdjustments.ScheduleManager;
 /// These will only be active if DebugMode is set to true.
 /// And thus: no harmony annotations.
 /// </summary>
+[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = StyleCopConstants.NamedForHarmony)]
 internal static class ScheduleDebugPatches
 {
     private static readonly List<NPC> FailedNPCs = new();
@@ -51,8 +54,7 @@ internal static class ScheduleDebugPatches
     /// <param name="endMessage">End message for NPC to say.</param>
     /// <param name="__exception">Exception raised, if any.</param>
     /// <param name="__result">The result of the function (an empty schedulePoint).</param>
-    /// <returns>null to surpress the exception.</returns>
-    [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Harmony convention")]
+    /// <returns>null to suppress the exception.</returns>
     private static Exception? FinalizePathfinder(
         NPC __instance,
         string startingLocation,

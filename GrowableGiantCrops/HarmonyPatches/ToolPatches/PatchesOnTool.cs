@@ -1,9 +1,14 @@
 ﻿using System.Reflection;
 using System.Reflection.Emit;
+
+using AtraShared.ConstantsAndEnums;
 using AtraShared.Utils.Extensions;
 using AtraShared.Utils.HarmonyHelper;
+
 using GrowableGiantCrops.Framework;
+
 using HarmonyLib;
+
 using StardewValley.Tools;
 
 namespace GrowableGiantCrops.HarmonyPatches.ToolPatches;
@@ -12,10 +17,10 @@ namespace GrowableGiantCrops.HarmonyPatches.ToolPatches;
 /// Patches on tools.
 /// </summary>
 [HarmonyPatch(typeof(Tool))]
+[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = StyleCopConstants.NamedForHarmony)]
 internal static class PatchesOnTool
 {
     [HarmonyPatch(nameof(Tool.isHeavyHitter))]
-    [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Harmony convention.")]
     private static bool Prefix(Tool __instance, ref bool __result)
     {
         if (__instance is ShovelTool)
@@ -27,7 +32,7 @@ internal static class PatchesOnTool
     }
 
     [HarmonyPatch(nameof(Tool.Update))]
-    [SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1116:Split parameters should start on line after declaration", Justification = "Reviewed.")]
+    [SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1116:Split parameters should start on line after declaration", Justification = StyleCopConstants.SplitParametersIntentional)]
     private static IEnumerable<CodeInstruction>? Transpiler(IEnumerable<CodeInstruction> instructions, ILGenerator gen, MethodBase original)
     {
         try
@@ -56,8 +61,7 @@ internal static class PatchesOnTool
         }
         catch (Exception ex)
         {
-            ModEntry.ModMonitor.Log($"Mod crashed while transpiling {original.FullDescription()}:\n\n{ex}", LogLevel.Error);
-            original.Snitch(ModEntry.ModMonitor);
+            ModEntry.ModMonitor.LogTranspilerError(original, ex);
         }
         return null;
     }

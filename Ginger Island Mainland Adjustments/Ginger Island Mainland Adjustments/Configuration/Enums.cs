@@ -1,4 +1,6 @@
-﻿namespace GingerIslandMainlandAdjustments.Configuration;
+﻿using NetEscapades.EnumGenerators;
+
+namespace GingerIslandMainlandAdjustments.Configuration;
 
 /// <summary>
 /// Enum for day of week, for the settings.
@@ -49,6 +51,7 @@ public enum DayOfWeek
 /// <summary>
 /// Whether or not NPCs should wear their beach outfits.
 /// </summary>
+[EnumExtensions]
 public enum WearIslandClothing
 {
     /// <summary>

@@ -101,8 +101,7 @@ internal sealed class ModEntry : Mod
         }
         catch (Exception ex)
         {
-            modMonitor.Log($"Ran into error transpiling {original.FullDescription()}\n\n{ex}", LogLevel.Error);
-            original.Snitch(modMonitor);
+            modMonitor.LogTranspilerError(original, ex);
         }
         return null;
     }

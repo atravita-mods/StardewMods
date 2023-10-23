@@ -4,10 +4,17 @@ using StardewModdingAPI.Events;
 
 namespace GingerIslandMainlandAdjustments.DialogueChanges;
 
+/// <summary>
+/// Handles adding marriage dialogue.
+/// </summary>
 internal static class MarriageDialogueHandler
 {
+    /// <summary>
+    /// Handles adding marriage dialogue on day start.
+    /// Using a low event priority to slot after Custom NPC Exclusions.
+    /// </summary>
     [EventPriority(EventPriority.Low - 2000)]
-    internal static void OnDayStart(object? sender, DayStartedEventArgs e)
+    internal static void OnDayStart()
     {
         try
         {
@@ -15,7 +22,7 @@ internal static class MarriageDialogueHandler
             {
                 if (spouse.TryApplyMarriageDialogueIfExisting("GILeave_" + spouse.Name))
                 {
-                    Globals.ModMonitor.DebugOnlyLog($"Setting GILeave_{spouse?.Name}", LogLevel.Trace);
+                    Globals.ModMonitor.DebugOnlyLog($"Setting GILeave_{spouse.Name}", LogLevel.Trace);
                 }
                 else if (Game1.player is not null)
                 {
@@ -35,7 +42,7 @@ internal static class MarriageDialogueHandler
         }
         catch (Exception ex)
         {
-            Globals.ModMonitor.Log($"Error in setting GILeave dialogue:\n{ex}", LogLevel.Error);
+            Globals.ModMonitor.LogError("setting GILeave dialogue", ex);
         }
     }
 }

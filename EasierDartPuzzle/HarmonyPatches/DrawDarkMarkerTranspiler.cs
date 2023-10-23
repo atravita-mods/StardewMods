@@ -2,7 +2,6 @@
 using System.Reflection.Emit;
 using System.Runtime.CompilerServices;
 using AtraBase.Toolkit;
-using AtraBase.Toolkit.Extensions;
 using AtraCore.Framework.ReflectionManager;
 using AtraShared.Utils.Extensions;
 using AtraShared.Utils.HarmonyHelper;
@@ -53,7 +52,7 @@ internal static class DrawDarkMarkerTranspiler
             .Advance(2)
             .StoreBranchDest()
             .AdvanceToStoredLabel()
-            .GetLabels(out var labels, clear: true)
+            .GetLabels(out IList<Label>? labels, clear: true)
             .Insert(new CodeInstruction[]
             {
                 new(OpCodes.Ldarg_1), // spritebatch
@@ -68,8 +67,7 @@ internal static class DrawDarkMarkerTranspiler
         }
         catch (Exception ex)
         {
-            ModEntry.ModMonitor.Log($"Ran into error transpiling {original.GetFullName()}!\n\n{ex}", LogLevel.Error);
-            original?.Snitch(ModEntry.ModMonitor);
+            ModEntry.ModMonitor.LogTranspilerError(original, ex);
         }
         return null;
     }

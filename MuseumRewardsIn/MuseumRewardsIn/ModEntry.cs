@@ -2,6 +2,7 @@
 
 using AtraCore.Framework.Caches;
 
+using AtraShared.ConstantsAndEnums;
 using AtraShared.Integrations;
 using AtraShared.ItemManagement;
 using AtraShared.Menuing;
@@ -23,6 +24,7 @@ namespace MuseumRewardsIn;
 
 /// <inheritdoc />
 [HarmonyPatch(typeof(Utility))]
+[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = StyleCopConstants.NamedForHarmony)]
 internal sealed class ModEntry : Mod
 {
     private const string BUILDING = "Buildings";
@@ -115,7 +117,6 @@ internal sealed class ModEntry : Mod
     /// </summary>
     /// <param name="__result">shop inventory to add to.</param>
     [HarmonyPatch(nameof(Utility.getAllFurnituresForFree))]
-    [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Harmony convention.")]
     [SuppressMessage("StyleCop.CSharp.OrderingRules", "SA1204:Static elements should appear before instance elements", Justification = "Reviewed.")]
     private static void Postfix(Dictionary<ISalable, int[]> __result)
     {
@@ -189,7 +190,7 @@ internal sealed class ModEntry : Mod
             }
         }
 
-        var shop = new ShopMenu(sellables, who: "Gunther") { storeContext = SHOPNAME };
+        ShopMenu shop = new(sellables, who: "Gunther") { storeContext = SHOPNAME };
         if (config.AllowBuyBacks)
         {
             shop.categoriesToSellHere.Add(SObject.mineralsCategory);

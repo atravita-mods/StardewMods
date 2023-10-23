@@ -1,0 +1,16 @@
+{
+    "Changes":[
+    {
+        "Action": "EditData",
+        "LogName": "Lewis positional",
+        "Target": "Characters/Dialogue/Lewis",
+        "Entries": {
+            "CommunityCenter_55_6": "{{i18n: lewis-cc-vault.{{season}}.{{YearModulus}} }}", // in front of vault.
+            "CommunityCenter_47_5": "{{i18n: lewis-cc-filing.{{season}}.{{YearModulus}} }}", // in front of the filing cabinet.
+            "CommunityCenter_51_4": "{{i18n: lewis-cc-desk.{{season}}.{{YearModulus}} }}", // next to the desk.
+            "CommunityCenter_47_13": "{{i18n: lewis-cc-bulletin.{{season}}.{{YearModulus}} }}", // next to the bulletin board
+            "CommunityCenter_33_9": "{{i18n: lewis-cc-fireplace.{{season}}.{{YearModulus}} }}" // in front of the fire place.
+        },
+        "When": {"DialogueRandom": "alpha, bravo"}
+    }
+]}

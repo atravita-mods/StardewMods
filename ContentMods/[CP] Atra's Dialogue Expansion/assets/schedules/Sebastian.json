@@ -1,0 +1,19 @@
+{"Changes": [
+    {
+        // disable Sebastian's rain schedule in winter.
+        "Action": "EditData",
+        "When": {"Season": "winter"},
+        "Target": "Characters/schedules/Sebastian",
+        "Entries": {
+            "rain": "GOTO spring"
+        }
+    },
+    {
+        "Action":"EditData",
+        "Target": "Characters/schedules/Sebastian",
+        "Entries": {
+            // restore night festival schedule.
+            "marriage_winter_16": "1030 ScienceHouse 6 20 0/1500 Saloon 42 21 3/1650 Beach 10 39 2 \"Strings\\schedules\\Sebastian:winter_16.000\"/2340 bed"
+        }
+    }
+]}

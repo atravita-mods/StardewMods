@@ -42,7 +42,7 @@ internal static class FruitTreesAvoidHoe
         }
         catch (Exception ex)
         {
-            ModEntry.ModMonitor.Log($"Ran into issue transpiling DGA fruit trees to remove damage from hoes\n\n{ex}.", LogLevel.Error);
+            ModEntry.ModMonitor.LogError("transpiling DGA to make fruit trees avoid hoes.", ex);
         }
     }
 
@@ -76,8 +76,7 @@ internal static class FruitTreesAvoidHoe
         }
         catch (Exception ex)
         {
-            ModEntry.ModMonitor.Log($"Ran into error transpiling fruit trees to avoid hoe damage.\n\n{ex}", LogLevel.Error);
-            original?.Snitch(ModEntry.ModMonitor);
+            ModEntry.ModMonitor.LogTranspilerError(original, ex);
         }
         return null;
     }

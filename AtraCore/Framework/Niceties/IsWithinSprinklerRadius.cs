@@ -26,7 +26,7 @@ public sealed class IsWithinSprinklerRadiusHelper
     private readonly HashSet<string> processedMaps = new();
 
     // helpers
-    private IMonitor monitor;
+    private readonly IMonitor monitor;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="IsWithinSprinklerRadiusHelper"/> class.

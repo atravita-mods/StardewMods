@@ -25,7 +25,7 @@ internal static class AddCrowsForExtendedToolsTranspiler
         }
         catch (Exception ex)
         {
-            ModEntry.ModMonitor.Log($"Failed in attempting to transpile Farm.AddCrows\n\n{ex}", LogLevel.Error);
+            ModEntry.ModMonitor.LogError("transpiling Farm.addCrows", ex);
         }
     }
 
@@ -51,8 +51,7 @@ internal static class AddCrowsForExtendedToolsTranspiler
         }
         catch (Exception ex)
         {
-            ModEntry.ModMonitor.Log($"Mod crashed while transpiling {original.FullDescription()}:\n\n{ex}", LogLevel.Error);
-            original?.Snitch(ModEntry.ModMonitor);
+            ModEntry.ModMonitor.LogTranspilerError(original, ex);
         }
         return null;
     }

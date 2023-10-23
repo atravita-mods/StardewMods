@@ -2,6 +2,9 @@
 
 using AtraCore.Framework.ReflectionManager;
 
+using AtraShared.ConstantsAndEnums;
+using AtraShared.Utils.Extensions;
+
 using HarmonyLib;
 
 using Microsoft.Xna.Framework;
@@ -16,7 +19,7 @@ namespace CritterRings.HarmonyPatches;
 /// Adds the other effects.
 /// </summary>
 [HarmonyPatch(typeof(Ring))]
-[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Harmony convention.")]
+[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = StyleCopConstants.NamedForHarmony)]
 internal static class RingPatches
 {
     private const int ButterflyMagneticism = 128;
@@ -53,7 +56,7 @@ internal static class RingPatches
         }
         catch (Exception ex)
         {
-            ModEntry.ModMonitor.Log($"Failed when trying to dequip ring!\n\n{ex}", LogLevel.Error);
+            ModEntry.ModMonitor.LogError("dequipping ring", ex);
         }
     }
 
@@ -75,7 +78,7 @@ internal static class RingPatches
         }
         catch (Exception ex)
         {
-            ModEntry.ModMonitor.Log($"Failed when trying to deal with new location!\n\n{ex}", LogLevel.Error);
+            ModEntry.ModMonitor.LogError("dealing with new location", ex);
         }
     }
 
@@ -97,7 +100,7 @@ internal static class RingPatches
         }
         catch (Exception ex)
         {
-            ModEntry.ModMonitor.Log($"Failed when trying to leave location!\n\n{ex}", LogLevel.Error);
+            ModEntry.ModMonitor.LogError("leaving location", ex);
         }
     }
 
@@ -143,7 +146,7 @@ internal static class RingPatches
         }
         catch (Exception ex)
         {
-            ModEntry.ModMonitor.Log($"Failed when trying to equip ring!\n\n{ex}", LogLevel.Error);
+            ModEntry.ModMonitor.LogError("equipping ring", ex);
         }
     }
 

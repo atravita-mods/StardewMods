@@ -10,6 +10,7 @@
 4. See if NPCs can go *into* Professor Snail's Tent?
 5. Add in tokens for islanders/current bartender/musicians. You won't be able to use these on day start, but may prevent clobbering on the resort shop tile? <!-- does this matter when 1.6 will fix the issue for good?-->
 7. Handle children better. Should they go with the spouse?
+8. All of the multiplayer code for current group dialogue.
 <!-- Move this mod's scheduler earlier so I can add in CP tokens. (so OnDayStarted or before?). Sadly, this is not feasible because CustomNPCExclusions expects the island schedules to be generated *after* CP is done updating tokens, and I would need to move it *before*. Would be a compat nightmare. see: https://github.com/Esca-MMC/CustomNPCExclusions/blob/master/CustomNPCExclusions/HarmonyPatch_IslandVisit.cs -->
 <!-- Finish the locations console command: https://docs.microsoft.com/en-us/windows/console/console-virtual-terminal-sequences to add bold -->
 <!-- Write a function to get the villager's schedule for today, that takes into account that if a location replacement is needed, the villager's daySchedule.Value will be X_Replacement -->
@@ -28,6 +29,12 @@
 1. NPCs may vanish if they go to `IslandSouthEast`. They reappear the next day. Therefore, that's been temporarily removed until I figure out why they disappear from `IslandSouthEast`. `IslandNorth` is fine.
 2. If you pause time, NPCs will tend to get stuck at schedule points. Unfortunately for Ginger Island, this usually ends with NPCs trapped in the changing room. If you go to Ginger Island and see no one there, try unpausing time. Or just leave them trapped in the changing room....(or I guess, disable changing)
 3. The debugging console commands basically only work for the host in multiplayer.
+
+### Version 1.1.9
+* You may now sit on the chairs in the Resort.
+* Default GIReturn dialogue now appears.
+* Fix `Resort_Leaving_<GroupName>` and `Resort_Entering_<GroupName>` keys.
+* Performance improvements.
 
 ### Version 1.1.8
 * Fix assumption in scheduling code that schedules will have at least two points.

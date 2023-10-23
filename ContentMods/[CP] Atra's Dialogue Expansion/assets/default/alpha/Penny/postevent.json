@@ -10,7 +10,22 @@
             "3_2": "You'd think we wouldn't have so many dishes to do, considering the fact that Mom mostly lives off of TV dinners...",
             "7_2": "Gotta swing by the post office to pick up our mail today.#$b#What am I waiting for? Just a copy of the latest Homes and Gardens magazine.#$e#I'd love, love to decorate more, but I haven't the time. It's hard enough just keeping our home clean.",
             "11_2": "@, are you planning on seeing the new movie with %name Taylor?",
-            "13_2": "If you weren't a farmer, @, what would you want to be?#$b#Me? I'm not sure. I think...I think I mostly want to be a mother.#$e#When I was a kid I wanted to be an archaeologist though."
+            "13_2": "If you weren't a farmer, @, what would you want to be?#$b#Me? I'm not sure. I think...I think I mostly want to be a mother.#$e#When I was a kid I wanted to be an archaeologist though.",
+            "14_2": "Mom says I spend too much time taking care of her.#$b#I'm not sure how not to, though.$s",
+            "16_2": "Mom brought me a book today. Said she picked it up at a gas station while she was out driving that bus.$h",
+            "17_2": "We really should cook more, that'd be so much better for our budget over buying TV dinners.$s",
+            "18_2": "$d joja#All the unhealthy food is so much cheaper at Joja over the fresh fruits and veggies.$s|Now that's Joja's closed, Mom's been shopping more at Pierre's. It's...good for the town, maybe, but not our budget."
+        }
+    },
+    {
+        "LogName": "Penny - Y3",
+        "Action": "EditData",
+        "Target": "Characters/Dialogue/Penny",
+        "When": {"YearModulus": "3"},
+        "Entries": {
+            "3_2": "When we lived in the trailer, Mrs. Mullner would let me do laundry in her washer.#$b#She's always been so nice to my mother and I.$h",
+            "4_2": "I made some extra poppyseed muffins, @, do you want one?$h[651]",
+            "5_2": "I have so much mopping I need to do.$s"
         }
     }
 ]}

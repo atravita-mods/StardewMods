@@ -1,21 +1,20 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Reflection;
 using System.Reflection.Emit;
-using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
-using AtraCore.Framework.ReflectionManager;
 
+using AtraShared.Utils.Extensions;
 using AtraShared.Utils.HarmonyHelper;
 
-using HarmonyLib;
-using AtraShared.Utils.Extensions;
-using StardewValley.Tools;
 using GrowableGiantCrops.Framework;
+
+using HarmonyLib;
+
+using StardewValley.Tools;
 
 namespace GrowableGiantCrops.HarmonyPatches.ToolPatches;
 
+/// <summary>
+/// A patch that makes sure the shovel is upgrade-able.
+/// </summary>
 [HarmonyPatch(typeof(GameLocation))]
 internal static class ShovelUpgradablePatch
 {
@@ -53,8 +52,7 @@ internal static class ShovelUpgradablePatch
         }
         catch (Exception ex)
         {
-            ModEntry.ModMonitor.Log($"Mod crashed while transpiling {original.FullDescription()}:\n\n{ex}", LogLevel.Error);
-            original.Snitch(ModEntry.ModMonitor);
+            ModEntry.ModMonitor.LogTranspilerError(original, ex);
         }
         return null;
     }

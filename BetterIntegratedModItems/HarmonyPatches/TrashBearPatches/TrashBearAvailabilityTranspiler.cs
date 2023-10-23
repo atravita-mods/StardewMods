@@ -6,6 +6,7 @@ using AtraBase.Toolkit;
 
 using AtraCore.Framework.ReflectionManager;
 
+using AtraShared.ConstantsAndEnums;
 using AtraShared.Utils.Extensions;
 using AtraShared.Utils.HarmonyHelper;
 
@@ -30,7 +31,7 @@ internal static class TrashBearAvailabilityTranspiler
 
     [HarmonyTranspiler]
     [HarmonyPatch("resetSharedState")]
-    [SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1116:Split parameters should start on line after declaration", Justification = "Preference.")]
+    [SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1116:Split parameters should start on line after declaration", Justification = StyleCopConstants.SplitParametersIntentional)]
     private static IEnumerable<CodeInstruction>? TranspileResetSharedState(IEnumerable<CodeInstruction> instructions, ILGenerator gen, MethodBase original)
     {
         try
@@ -76,15 +77,14 @@ internal static class TrashBearAvailabilityTranspiler
         }
         catch (Exception ex)
         {
-            ModEntry.ModMonitor.Log($"Mod crashed while transpiling {original.FullDescription()}:\n\n{ex}", LogLevel.Error);
-            original.Snitch(ModEntry.ModMonitor);
+            ModEntry.ModMonitor.LogTranspilerError(original, ex);
         }
         return null;
     }
 
     [HarmonyTranspiler]
     [HarmonyPatch("resetLocalState")]
-    [SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1116:Split parameters should start on line after declaration", Justification = "Preference.")]
+    [SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1116:Split parameters should start on line after declaration", Justification = StyleCopConstants.SplitParametersIntentional)]
     private static IEnumerable<CodeInstruction>? TranspileResetLocalState(IEnumerable<CodeInstruction> instructions, ILGenerator gen, MethodBase original)
     {
         try
@@ -134,15 +134,13 @@ internal static class TrashBearAvailabilityTranspiler
         }
         catch (Exception ex)
         {
-            ModEntry.ModMonitor.Log($"Mod crashed while transpiling {original.FullDescription()}:\n\n{ex}", LogLevel.Error);
-            original.Snitch(ModEntry.ModMonitor);
+            ModEntry.ModMonitor.LogTranspilerError(original, ex);
         }
         return null;
     }
 
     [HarmonyTranspiler]
     [HarmonyPatch(nameof(Forest.DayUpdate))]
-    [SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1116:Split parameters should start on line after declaration", Justification = "Preference.")]
     private static IEnumerable<CodeInstruction>? TranspileDayUpdate(IEnumerable<CodeInstruction> instructions, ILGenerator gen, MethodBase original)
     {
         try
@@ -154,7 +152,7 @@ internal static class TrashBearAvailabilityTranspiler
                 OpCodes.Ldc_I4_2,
                 OpCodes.Ble_S,
             })
-            .GetLabels(out var removedLabels)
+            .GetLabels(out IList<Label>? removedLabels)
             .Remove(3);
 
             helper.CurrentInstruction.labels.AddRange(removedLabels);
@@ -164,8 +162,7 @@ internal static class TrashBearAvailabilityTranspiler
         }
         catch (Exception ex)
         {
-            ModEntry.ModMonitor.Log($"Mod crashed while transpiling {original.FullDescription()}:\n\n{ex}", LogLevel.Error);
-            original.Snitch(ModEntry.ModMonitor);
+            ModEntry.ModMonitor.LogTranspilerError(original, ex);
         }
         return null;
     }

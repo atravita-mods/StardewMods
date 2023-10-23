@@ -1,14 +1,21 @@
-﻿using System.Collections.Concurrent;
+﻿// Ignore Spelling: tooltip Keybind
+
+using System.Collections.Concurrent;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 
 using AtraBase.Collections;
+using AtraBase.Toolkit;
+
 using AtraShared.Integrations.GMCMAttributes;
 using AtraShared.Integrations.Interfaces;
 using AtraShared.Utils;
 using AtraShared.Utils.Extensions;
+
 using CommunityToolkit.Diagnostics;
+
 using Microsoft.Xna.Framework;
+
 using StardewModdingAPI.Utilities;
 
 namespace AtraShared.Integrations;
@@ -34,7 +41,7 @@ public sealed class GMCMHelper : IntegrationHelper
 
 #region cache
 
-    [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Stylecop doesn't understand records.")]
+    [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = StyleCopErrorConsts.IsRecord)]
     private readonly record struct CacheKey(Type Config, Type TEnum);
 
     private static readonly ConcurrentDictionary<CacheKey, MethodInfo> enumCache = new();

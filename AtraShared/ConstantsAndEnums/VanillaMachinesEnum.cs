@@ -1,4 +1,5 @@
-﻿using AtraBase.Toolkit.Extensions;
+﻿using AtraBase.Toolkit;
+using AtraBase.Toolkit.Extensions;
 
 using AtraShared.Wrappers;
 
@@ -11,7 +12,7 @@ namespace AtraShared.ConstantsAndEnums;
 /// </summary>
 /// <remarks>Positive numbers refer to Big Craftables, negative ordinary SObjects.</remarks>
 [EnumExtensions]
-[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1602:Enumeration items should be documented", Justification = "Should be obvious enough.")]
+[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1602:Enumeration items should be documented", Justification = StyleCopErrorConsts.SelfEvident)]
 public enum VanillaMachinesEnum
 {
     /// <summary>

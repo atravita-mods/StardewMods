@@ -28,6 +28,15 @@
     },
     {
         "Action": "Include",
+        "LogName": "Evelyn - mid hearts",
+        "FromFile": "assets/default/alpha/Evelyn/high.json",
+        "When": {
+            "EnableFor": "Evelyn",
+            "Query: {{Hearts:Evelyn}} >= 9": true
+        }
+    },
+    {
+        "Action": "Include",
         "LogName": "George - mid hearts",
         "FromFile": "assets/default/alpha/George/mid.json",
         "When": {

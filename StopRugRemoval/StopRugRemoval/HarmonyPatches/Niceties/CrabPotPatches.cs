@@ -10,9 +10,9 @@ namespace StopRugRemoval.HarmonyPatches.Niceties;
 internal static class CrabPotPatches
 {
     /// <summary>
-    /// Surpresses drawing crabpots when an event is up.
+    /// Suppresses drawing crabpots when an event is up.
     /// </summary>
-    /// <returns>True to continue (and draw), false to surpress drawing.</returns>
+    /// <returns>True to continue (and draw), false to suppress drawing.</returns>
     [HarmonyPrefix]
     [HarmonyPatch(nameof(CrabPot.draw))]
     private static bool PrefixDraw()

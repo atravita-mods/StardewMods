@@ -1,0 +1,30 @@
+{
+    "$schema": "https://smapi.io/schemas/content-patcher.json",
+    "Format": "1.29.0",
+    "Changes": [
+        {
+            "Action": "Load",
+            "FromFile": "assets/{{TargetWithoutPath}}.png",
+            "Target": "Buildings/Fish Pond_PaintMask, Buildings/Gold Clock_PaintMask, Buildings/Greenhouse_PaintMask, Buildings/Junimo Hut_PaintMask, Buildings/Mill_PaintMask, Buildings/Shipping Bin_PaintMask, Buildings/Silo_PaintMask, Buildings/Slime Hutch_PaintMask, Buildings/Well_PaintMask, Buildings/Desert Obelisk_PaintMask, Buildings/Earth Obelisk_PaintMask, Buildings/Island Obelisk_PaintMask, Buildings/Water Obelisk_PaintMask",
+        },
+        {
+            "Action": "EditData",
+            "Target": "Data/PaintData",
+            "Entries": {
+                "Fish Pond": "Rim/-25 5/Water/-50 50/Decor/-15 0",
+                "Gold Clock": "Building/-20 5/Face/-25 0/Gems/-50 25",
+                "Greenhouse": "Building/-20 5/Roof/-25 0/Trim/-15 0",
+                "Junimo Hut": "Building/-20 5/Roof/-25 0/Bag/-25 0",
+                "Mill": "Building/-20 5/Roof/-25 0/Trim/-15 0",
+                "Shipping Bin": "Building/-20 5",
+                "Silo": "Building/-20 5/Roof/-25 0",
+                "Slime Hutch": "Building/-20 5/Goo/-25 25/Door/-25 0",
+                "Well": "Base/-25 5/Roof/-25 0/Water/-15 15",
+                "Desert Obelisk": "Base/-25 5/Roof/-25 0/Greenery/-15 0",
+                "Earth Obelisk": "Base/-25 5/Roof/-25 0/Mushrooms/-15 0",
+                "Island Obelisk": "Base/-25 5/Roof/-25 0/Greenery/-15 0",
+                "Water Obelisk": "Water/-25 5/Roof/-25 0/Sand/-15 0"
+            }
+        }
+    ]
+}

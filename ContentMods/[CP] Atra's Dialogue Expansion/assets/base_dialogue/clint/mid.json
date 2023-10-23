@@ -1,0 +1,13 @@
+{
+    "Changes": [
+        {
+            "LogName": "Clint base",
+            "Action": "EditData",
+            "Target": "Characters/Dialogue/Clint",
+            "Entries": {
+                "spring_26": "{{i18n:clint-emily-birthday}}",
+                "spring_26_2": "{{i18n:clint-emily-birthday}}"
+            }
+        }
+    ]
+}

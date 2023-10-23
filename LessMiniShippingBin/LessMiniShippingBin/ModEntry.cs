@@ -9,7 +9,7 @@ namespace LessMiniShippingBin;
 /// <inheritdoc />
 internal sealed class ModEntry : Mod
 {
-    // ModMonitor is set in Entry, which is as close I can reasonaby get to the constructor.
+    // ModMonitor is set in Entry, which is as close I can reasonably get to the constructor.
 
     /// <summary>
     /// Gets logger for this mod.

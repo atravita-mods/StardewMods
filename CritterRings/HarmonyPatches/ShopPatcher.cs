@@ -1,4 +1,7 @@
-﻿using HarmonyLib;
+﻿using AtraShared.ConstantsAndEnums;
+using AtraShared.Utils.Extensions;
+
+using HarmonyLib;
 
 using StardewValley.Menus;
 using StardewValley.Objects;
@@ -9,10 +12,10 @@ namespace CritterRings.HarmonyPatches;
 /// Adds the rings to Marlon's shop.
 /// </summary>
 [HarmonyPatch(typeof(Utility))]
+[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = StyleCopConstants.NamedForHarmony)]
 internal static class ShopPatcher
 {
     [HarmonyPatch(nameof(Utility.getAdventureShopStock))]
-    [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Harmony convention.")]
     private static void Postfix(Dictionary<ISalable, int[]> __result)
     {
         try
@@ -58,7 +61,7 @@ internal static class ShopPatcher
         }
         catch (Exception ex)
         {
-            ModEntry.ModMonitor.Log($"Failed when trying to add to adventure guild shop:\n\n{ex}", LogLevel.Error);
+            ModEntry.ModMonitor.LogError("adding to adventure guild shop:", ex);
         }
     }
 }

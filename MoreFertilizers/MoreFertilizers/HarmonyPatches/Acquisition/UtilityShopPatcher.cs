@@ -1,4 +1,11 @@
-﻿using HarmonyLib;
+﻿using AtraBase.Toolkit.Extensions;
+
+using AtraCore;
+
+using AtraShared.ConstantsAndEnums;
+using AtraShared.Utils.Extensions;
+
+using HarmonyLib;
 
 using StardewValley.Menus;
 
@@ -8,11 +15,11 @@ namespace MoreFertilizers.HarmonyPatches.Acquisition;
 /// Holds patches against Utility for shops.
 /// </summary>
 [HarmonyPatch(typeof(Utility))]
+[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = StyleCopConstants.NamedForHarmony)]
 internal static class UtilityShopPatcher
 {
     [HarmonyPostfix]
     [HarmonyPatch(nameof(Utility.getShopStock))]
-    [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Harmony convention")]
     private static void PostfixGetShopStock(bool Pierres, ref List<Item> __result)
     {
         if (Pierres)
@@ -28,14 +35,13 @@ internal static class UtilityShopPatcher
             }
             catch (Exception ex)
             {
-                ModEntry.ModMonitor.Log($"Failed in adding to Pierre's stock!{ex}", LogLevel.Error);
+                ModEntry.ModMonitor.LogError("adding to Pierre's stock", ex);
             }
         }
     }
 
     [HarmonyPostfix]
     [HarmonyPatch(nameof(Utility.getQiShopStock))]
-    [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Harmony convention")]
     private static void PostfixGetCasinoShop(Dictionary<ISalable, int[]> __result)
     {
         try
@@ -47,43 +53,49 @@ internal static class UtilityShopPatcher
         }
         catch (Exception ex)
         {
-            ModEntry.ModMonitor.Log($"Failed in adding to casino's stock!{ex}", LogLevel.Error);
+            ModEntry.ModMonitor.LogError("adding to casino's stock", ex);
         }
     }
 
     [HarmonyPostfix]
     [HarmonyPatch(nameof(Utility.getJojaStock))]
-    [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Harmony convention")]
     private static void PostfixJojaStock(Dictionary<ISalable, int[]> __result)
     {
         try
         {
-            if (ModEntry.SecretJojaFertilizerID != -1 && Utility.doesMasterPlayerHaveMailReceivedButNotMailForTomorrow("ccMovieTheaterJoja")
-                && Game1.player.stats.IndividualMoneyEarned > 1_000_000 && Game1.random.NextDouble() < 0.15)
+            if (ModEntry.SecretJojaFertilizerID != -1
+                && Game1.player.stats.IndividualMoneyEarned > 1_000_000 && Singletons.Random.OfChance(0.15)
+                && Utility.doesMasterPlayerHaveMailReceivedButNotMailForTomorrow("ccMovieTheaterJoja"))
             {
                 __result.Add(new SObject(ModEntry.SecretJojaFertilizerID, 1), new[] { 500, 2 });
             }
         }
         catch (Exception ex)
         {
-            ModEntry.ModMonitor.Log($"Failed while trying to add Secret Joja Fertilizer to JojaMart.\n\n{ex}", LogLevel.Error);
+            ModEntry.ModMonitor.LogError("adding Secret Joja Fertilizer to JojaMart", ex);
         }
     }
 
     [HarmonyPostfix]
     [HarmonyPatch(nameof(Utility.GetQiChallengeRewardStock))]
-    [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Harmony Convention.")]
     private static void PostfixQiGemShop(Dictionary<ISalable, int[]> __result)
     {
-        if (ModEntry.EverlastingFertilizerID != -1)
+        try
         {
-            SObject obj = new(ModEntry.EverlastingFertilizerID, 1);
-            __result.Add(obj, new[] { 0, ShopMenu.infiniteStock, 858, 1 });
+            if (ModEntry.EverlastingFertilizerID != -1)
+            {
+                SObject obj = new(ModEntry.EverlastingFertilizerID, 1);
+                __result.Add(obj, new[] { 0, ShopMenu.infiniteStock, 858, 1 });
+            }
+            if (ModEntry.EverlastingFruitTreeFertilizerID != -1)
+            {
+                SObject obj = new(ModEntry.EverlastingFruitTreeFertilizerID, 1);
+                __result.Add(obj, new[] { 0, ShopMenu.infiniteStock, 858, 1 });
+            }
         }
-        if (ModEntry.EverlastingFruitTreeFertilizerID != -1)
+        catch (Exception ex)
         {
-            SObject obj = new(ModEntry.EverlastingFruitTreeFertilizerID, 1);
-            __result.Add(obj, new[] { 0, ShopMenu.infiniteStock, 858, 1 });
+            ModEntry.ModMonitor.LogError("adding to qi's shop", ex);
         }
     }
 }

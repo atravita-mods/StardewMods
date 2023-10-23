@@ -1,5 +1,35 @@
 {"Changes":[
     // Emily is the older, more responsible sibling (if a bit New Age about it.)
+    // Emily should get additional special lines when the player's luck is high.
+
+    // Todo: lines about parrot?
+
+    // paternal grandparents are from Pelican Town, but neither sister was born here.
+    // Father is a traveling salesperson (possibly equipment for hospitals?). Mother was a lawyer. High-powered, money-making, always-traveling parents.
+    {
+        "LogName": "Emily - base dialogue",
+        "Action": "EditData",
+        "Target": "Characters/Dialogue/Emily",
+        "Entries": {
+            "1{{YearRemainder}}": "Mom and Dad sent us another letter the other day. I wonder how they've been?$s",
+            "15{{YearRemainder}}": "@, my favorite fabric store is having a sale! What should I get?$h",
+            "Saloon_Entry": "Gus, I'm here!/Ah, work!/Gus, what needs doing?",
+
+            "spring_Fri8": "You know, @, I'm glad you came into my life.$h",
+            "summer_Tue8": "@, which of the town flowers are your favorite?",
+
+            "winter_4": "It's getting close to the Feast of the Winter Star. Maybe I should start making Haley a sweater?",
+        }
+    },
+    {
+        "LogName": "Emily - parrot",
+        "Action": "EditData",
+        "Target": "Characters/Dialogue/Emily",
+        "When": {"HasSeenEvent": 463391}, // parrot event.
+        "Entries": {
+            "27{{YearRemainder}}": "Oh, @, I had a great time singing with my parrot friend the other day! I think he's healing well.$h",
+        }
+    },
     {
         "LogName": "Emily mid-hearts, Y1",
         "Action": "EditData",
@@ -8,15 +38,22 @@
             "Resort_Dance_2": "@, come dance with me!$h",
 
             "Mon8": "@, I think there's something very special about you.",
-
+            
+            "2{{YearRemainder}}": "Made some overnight oats the other day, with fresh strawberries!$h",
             "4{{YearRemainder}}": "Ugh, I think our sink is leaking. Gotta go find a plumber, I guess.$s",
             "6{{YearRemainder}}": "@! Look at this new yarn my mother sent me! Isn't it so soft?$h",
+            "7{{YearRemainder}}": "I upcycled a tablecloth into a skirt the other day. I should show you it some day!$h",
             "11{{YearRemainder}}": "I love taking walks, whenever I have the time to do so.$h#$b#One of the best parts of living here.$h",
+            "12{{YearRemainder}}": "The dress I'm currently making, it's just layers upon layers of ruffles.",
             "13{{YearRemainder}}": "I'm hoping at some point to move away and see if I can make it as a fashion designer.",
+            "14{{YearRemainder}}": "Maybe we should consider getting a better recycling program here?",
             "17{{YearRemainder}}": "Have I considered moving out of town? Of course I have, but Pelican Town is my home.",
             "18{{YearRemainder}}": "Started working on a new dress! I'm thinking cute little cap sleeves and a full circle skirt...$h",
             "19{{YearRemainder}}": "Sometimes when the Saloon isn't busy Gus lets me rest my feet and knit for a while.#$b#Did you know that Joja cashiers aren't allowed to sit down? I can't imagine how much their feet must hurt.",
-            "25{{YearRemainder}}": "The month is almost over. Say, @, what are you planning for next month?"
+            "25{{YearRemainder}}": "The month is almost over. Say, @, what are you planning for next month?",
+            "26{{YearRemainder}}": "Circle skirts are so easy to make!#$b#Until I have to hem them. Getting the hem even isn't as easy.$s",
+            "27{{YearRemainder}}": "I saw a lace dress in one of Haley's magazines the other day, and I really want to see if I can replicate it.",
+            "28{{YearRemainder}}": "@, what do you think of kale salads?"
         },
         "When": {"YearModulus": "1"}
     },
@@ -40,15 +77,33 @@
         "Action": "EditData",
         "Target": "Characters/Dialogue/Emily",
         "Entries": {
-            "1_2": "I believe that if you're kind to nature, nature will be kind to you in turn.",
+            "2_2": "I believe that if you're kind to nature, nature will be kind to you in turn.",
             "3_2": "Haley has always been the baby of the family.#$b#She's only a few years younger than I am, but our parents definitely spoiled her more.#$e#Sometimes I worry.",
             "5_2": "I like doing flatfelled seams, even if they're a lot of work. They're so much more durable!$h",
+            "7_2": "We used to love visiting castles with our parents.$s",
+            "8_2": "I've considered moving away from Pelican Town, yes.#$e#No, don't get me wrong, I love it here, but our local employment options can be...lacking.$s#$e#If I want a future that's not just being a barmaid I may need to leave.#$b#I really don't want to, though.$s",
+            "9_2": "Pelican Town is so beautiful. I wish I could spend more time exploring the forest.#$b#I've got work all the time though.$s",
+            "11_2": "Gus wakes up at the crack of dawn to make bread for the Saloon. Honestly, I'm not quite sure when he sleeps...#$b#Probably the hardest working man in all of this town. And the best boss I could ask for.$h",
+            "12_2": "My father was originally from Pelican Town, but he moved away for college.#$e#We moved back when I was around five or so? Mom and Dad wanted a safer, quieter place to raise kids.",
+            "13_2": "Dad was a traveling salesman. Always gone on a trip to some location or another.#$e#Mom had to travel a lot for her law practice too.",
+            "14_2": "Mom and Dad write us letters sometimes. I hope they're enjoying their retirement...",
+            "15_2": "Maybe I should convince Haley to take a photography class?",
+            "16_2": "@, I'm thinking of taking up spinning.",
+            "17_2": "I believe food should be both good for you and good for the planet.$h",
+            "18_2": "I hope, @, you aren't using too many commercial fertilizers. They aren't very good at staying in the soil, so they tend to run off and cause algae blooms.",
+            "19_2": "I got some very tasty kombucha from Pierre's the other day.#$b#You know, I've always wanted to make my own....",
+            "20_2": "You know, given where we live, you'd think composting programs would be more popular.$s#$b#It's not like in the city, where you just don't have enough room to compost.",
+            "22_2": "Oh, @! Gus and I were thinking of making a ten-bean soup to add to the menu, what do you think?",
 
-            "Tue10": "I've made most of my clothing, I love to sew.$h#$b#Plus, you get better clothing if you make it yourself.",
+            "Tue8": "I've made most of my clothing, I love to sew.$h#$b#Plus, you get better clothing if you make it yourself.#$e#Maybe I should make you something....",
 
             "Sun6": "Our parents? I'm not quite sure where they're traveling these days...$s",
+            "summer_Mon8": "Oh, @, aren't the flowers in town lovely?$h",
             "summer_Sun": "@, what have you been up to?$h",
             "summer_Sat6": "@, you've ever just taken a day for yourself? The lovely weather these days makes me really want to!",
+
+            // GIMA additional
+            "Resort_Pier": "We've really got to use less plastic, it washes out to sea and then the fish and turtles try to eat it.$s"
         },
         "When": {"YearModulus": "2"}
     },
@@ -57,8 +112,63 @@
         "Action": "EditData",
         "Target": "Characters/Dialogue/Emily",
         "Entries": {
+            "6_2": "If I sell some dresses, maybe I can buy a serger...",
             "7_2": "I've been doing a lot of lace insertion work lately. It's so pretty but so tedious.",
+            "8_2": "@, do you think I could sell the clothing I make?",
+            "9_2": "Made a lovely pizza with a cauliflower base the other day. Haley hated it though.",
+            "11_2": "Gus gave me some spaghetti to take home the other day.$h#$b#To be honest, @, if Gus didn't give Haley and me food I'm not sure what we'd be eating most nights.$s",
+            "13_2": "Started knitting a new set of socks the other day. Socks are so fast and easy to knit, and most people like them as presents.#$b#Except Haley.",
+            "14_2": "Gus gave us some day-old bread the other day and we made sandwiches with pickled daikon and falafel. Haley loved it too!$h",
+            "15_2": "I made some {{i18n: dishes.adult.{{Random: 03, 04, 05, 06, 07, 08, 09, 01, 02}} }} the other day. It was delicious!$h",
+            "16_2": "Ugh, I wish Haley would do her share of the chores without me having to remind her all the time.$s",
+            "18_2": "There are some days I really miss my parents.#$b#I do hope they enjoy...whatever place they're at now.",
+            "20_2": "Zuzu city has a great little thrift shop for crafters.I should see if I can get some time to go there sometimes...",
+            "21_2": "I'm thinking of making some collard greens soup...",
+            "22_2": "You know, I wasn't actually that interested in dance when I was a kid. That used to be more Haley's thing.",
+            "23_2": "Haley was actually quite a good student when she was young...",
+            "24_2": "If we don't protect the environment, who will?",
+            "25_2": "Should we try adding something healthier to the Saloon menu? Like lentil soup?#$b#Hmm. I'm not sure how well that'd sell."
         },
         "When": {"YearModulus": "3"}
     },
+    {
+        "LogName": "Emily mid-hearts, Y3",
+        "Action": "EditData",
+        "Target": "Characters/Dialogue/Emily",
+        "Entries": {
+            "17_2": "Hi @! Something told me you'll need this today[226].#$e#I...really don't know, it was just a feeling?",
+            "19_2": "We've got some extra salad yesterday at the Saloon. You look like you might need this?[196]"
+        },
+        "When": {
+            "YearModulus": "3",
+            "Query: {{DailyLuck}} < 0": true
+        }
+    },
+    {
+        "LogName": "Emily mid-hearts, Y4",
+        "Action": "EditData",
+        "Target": "Characters/Dialogue/Emily",
+        "When": {"YearModulus": "4"},
+        "Entries": {
+            "7_2": "There's enough resources in our lovely world for everyone, but we need to take care of it.",
+            "12_2": "I wish my sister was more responsible.$s",
+            "14_2": "It's so easy to order things online from Joja, but it comes with so much plastic packaging.$s",
+            "16_2": "Joja is considering removing free unlimited returns.#$b#Honestly, @, I'm not against that, I think it'll cut down on impulse buys.",
+            "17_2": "I should cook more with collard greens, they're quite good for you.",
+            "19_2": "With the mines, we really need to worry about groundwater pollution.$s",
+            "20_2": "I'd love to go down to Zuzu City and see a musical, but I'm not sure who I can drag with me.#$b#Hmm, Sam, maybe?"
+        }
+    },
+    {
+        "LogName": "Emily - base dialogue",
+        "Action": "EditData",
+        "Target": "Characters/Dialogue/Emily",
+        "When": {
+            "YearModulus": "4",
+            "Spouse: anyPlayer | contains=Emily": false,
+        },
+        "Entries": {
+            "22_2": "@, do you think I will ever find a love as enduring as George and Evelyn's?"
+        }
+    }
 ]}

@@ -1,0 +1,10 @@
+{"Changes": [
+    {
+        "Action":"EditData",
+        "Target": "Characters/schedules/Lewis",
+        "Entries": {
+            // fix winter_Sun
+            "winter_Sun": "800 ManorHouse 8 5 0/900 ManorHouse 7 5 0 square_5_1_0/1100 ArchaeologyHouse 22 9 3/1600 ManorHouse 7 5 0 square_5_1_0/2000 ManorHouse 3 6 0/2200 bed"
+        }
+    }
+]}

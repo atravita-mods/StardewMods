@@ -1,4 +1,5 @@
 ﻿using AtraBase.Models.RentedArrayHelpers;
+using AtraBase.Toolkit.Extensions;
 
 using AtraShared.Schedules.DataModels;
 using Microsoft.Xna.Framework;
@@ -81,7 +82,7 @@ internal readonly struct PossibleIslandActivity
             return null;
         }
         // Run a random chance to not pick this spot.
-        if (random.NextDouble() > (double)(overrideChanceMap?.Invoke(character) ?? this.chanceMap(character)))
+        if (!random.OfChance((double)(overrideChanceMap?.Invoke(character) ?? this.chanceMap(character))))
         {
             return null;
         }
@@ -124,7 +125,7 @@ internal readonly struct PossibleIslandActivity
     /// Whether or not an animation is one we should avoid repeating.
     /// </summary>
     /// <returns>true if animation is unique, false otherwise.</returns>
-    [MemberNotNullWhen(returnValue: true, "animation")]
+    [MemberNotNullWhen(returnValue: true, nameof(animation))]
     private bool IsAnimationUnique()
         => !string.IsNullOrEmpty(this.animation)
             && !this.animation.StartsWith("square_");

@@ -1,6 +1,12 @@
-﻿using System.Diagnostics;
+﻿// Ignore Spelling: pred
+
+using System.Diagnostics;
+using System.Reflection;
 using System.Runtime.CompilerServices;
+
 using AtraBase.Toolkit;
+
+using HarmonyLib;
 
 namespace AtraShared.Utils.Extensions;
 
@@ -9,6 +15,53 @@ namespace AtraShared.Utils.Extensions;
 /// </summary>
 public static class LogExtensions
 {
+    #region helpers
+
+    /// <summary>
+    /// Logs a stopwatch.
+    /// </summary>
+    /// <param name="monitor">Monitor instance to use.</param>
+    /// <param name="action">Action being performed.</param>
+    /// <param name="sw">Stopwatch to log.</param>
+    /// <param name="level">The level to log at.</param>
+    [DebuggerHidden]
+    [Conditional("DEBUG")]
+    public static void LogTimespan(this IMonitor monitor, string action, Stopwatch sw, LogLevel level = LogLevel.Info)
+    {
+        monitor.Log($"{action} took {sw.Elapsed.TotalMilliseconds:F2} ms.", level);
+    }
+
+    /// <summary>
+    /// Logs an exception.
+    /// </summary>
+    /// <param name="monitor">Logging instance to use.</param>
+    /// <param name="action">The current actions being taken when the exception happened.</param>
+    /// <param name="ex">The exception.</param>
+    [DebuggerHidden]
+    [MethodImpl(TKConstants.Hot)]
+    public static void LogError(this IMonitor monitor, string action, Exception ex)
+    {
+        monitor.Log($"Mod failed while {action}, see log for details.", LogLevel.Error);
+        monitor.Log(ex.ToString());
+    }
+
+    /// <summary>
+    /// Logs an exception.
+    /// </summary>
+    /// <param name="monitor">Logging instance to use.</param>
+    /// <param name="method">The current method being transpiled.</param>
+    /// <param name="ex">The exception.</param>
+    [DebuggerHidden]
+    public static void LogTranspilerError(this IMonitor monitor, MethodBase method, Exception ex)
+    {
+        monitor.Log($"Mod crashed while transpiling {method.FullDescription()}, see log for details.", LogLevel.Error);
+        monitor.Log(ex.ToString());
+        monitor.Log($"Other patches on this method:");
+        method.Snitch(monitor);
+    }
+
+    #endregion
+
     /// <summary>
     /// Logs to level (DEBUG by default) if compiled with the DEBUG flag
     /// Logs to verbose otherwise.

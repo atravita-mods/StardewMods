@@ -1,0 +1,92 @@
+{"Changes":[
+    {
+        "LogName": "Clint - alpha",
+        "Action": "EditData",
+        "When": {
+            "EnableFor": "Clint",
+            "DialogueRandom": "alpha"
+        },
+        "Target": "Data/mail",
+        "Entries": {
+            "Clint": "{{i18n:clint-mail-greeting.{{Random:0,1}} }}^{{i18n: clint-mail-alpha.{{Random:0,1}} }}^^   -{{i18n:Clint}}%item object 378 5 380 5 382 5 384 5 %%[#]{{i18n:gift-from|person={{i18n:Clint}} }}"
+        }
+    },
+    {
+        "LogName": "Evelyn - alpha",
+        "Action": "EditData",
+        "When": {
+            "EnableFor": "Evelyn",
+            "DialogueRandom": "alpha"
+        },
+        "Target": "Data/mail",
+        "Entries": {
+            "Evelyn": "{{i18n:evelyn-mail-greeting.{{Random:0,1}} }}^{{i18n: evelyn-mail-alpha.{{Random:0,1}} }}^^   -{{i18n:Evelyn}}%item object 215 1 218 1 219 1 220 1 223 1 224 1 %%[#]{{i18n:gift-from|person={{i18n:Evelyn}} }}"
+        }
+    },
+    {
+        "LogName": "George - alpha",
+        "Action": "EditData",
+        "When": {
+            "EnableFor": "George",
+            "DialogueRandom": "alpha"
+        },
+        "Target": "Data/mail",
+        "Entries": {
+            "George": "{{i18n:george-mail-greeting.{{Random:0,1}} }}^{{i18n: george-mail-alpha.{{Random:0,1}} }}^^   -{{i18n:George}}%item object 378 5 380 5 382 5 384 5 %%[#]{{i18n:gift-from|person={{i18n:George}} }}"
+        }
+    },
+    {
+        "LogName": "Haley - mail - base",
+        "Action": "EditData",
+        "When": {"EnableFor": "Haley"},
+        "Target": "Data/mail",
+        "Entries": {
+            "Haley": "{{i18n:haley-mail-greeting}}^{{i18n: haley-mail-object}}^^   -{{i18n:Haley}}%item object 421 1 595 1 591 1 376 1 %%[#]{{i18n:gift-from|person={{i18n:Haley}} }}"
+        }
+    },
+    {
+        "LogName": "Harvey - mail - base",
+        "Action": "EditData",
+        "When": {"EnableFor": "Harvey"},
+        "Target": "Data/mail",
+        "Entries": {
+            "Harvey": "{{i18n:harvey-mail-greeting}}^{{i18n:harvey-mail-text}}^^   -{{i18n:Harvey}} %item object 395 1 %%[#]{{i18n:gift-from|person={{i18n:Harvey}} }}"
+        }
+    },
+    {
+        "LogName": "Linus - alpha",
+        "Action": "EditData",
+        "When": {
+            "EnableFor": "Linus",
+            "DialogueRandom": "alpha"
+        },
+        "Target": "Data/mail",
+        "Entries": {
+            "Linus": "{{i18n:linus-mail-greeting.{{Random:0,1}} }}^{{i18n: linus-mail-alpha.{{Random:0,1}} }}^^   -{{i18n:Linus}}%item object 281 5 404 5 420 5 422 5 %%[#]{{i18n:gift-from|person={{i18n:Linus}} }}"
+        }
+    },
+    {
+        "LogName": "Robin - mail - alpha",
+        "Action": "EditData",
+        "When": {
+            "EnableFor": "Robin",
+            "DialogueRandom": "alpha"
+        },
+        "Target": "Data/mail",
+        "Entries": {
+            "Robin": "{{i18n:robin-mail-greeting.{{Random:0,1,2}} }}^{{i18n:robin-mail-alpha.{{Random:0,1}}}}^^   -{{i18n:Robin}} %item object 388 50 709 10 390 25 %%[#]{{i18n:gift-from|person={{i18n:Robin}} }}"
+        }
+    },
+    {
+        "LogName": "Sandy - mail - alpha",
+        "Action": "EditData",
+        "When": {
+            "EnableFor": "Sandy",
+            "DialogueRandom": "alpha"
+        },
+        "Target": "Data/mail",
+        "Entries": {
+            "Sandy": "{{i18n: sandy-mail-greeting}}^{{i18n: sandy-mail-alpha.{{Random:0,1}} }} {{i18n:sandy-mail-alpha-middle}} {{i18n:sandy-mail-alpha-ending.{{Random:0,1,2}} }} {{i18n: sandy-mail-alpha.item}} {{i18n:sandy-mail-alpha.visit}}^^   -{{i18n:Sandy}} %item object 421 2 597 2 591 2 593 3 595 1 %%[#]{{i18n:gift-from|person={{i18n:Sandy}} }}"
+        }
+    }
+]}

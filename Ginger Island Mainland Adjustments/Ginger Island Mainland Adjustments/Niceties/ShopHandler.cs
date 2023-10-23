@@ -29,7 +29,7 @@ internal static class ShopHandler
         }
         GameLocation sandyHouse = Game1.currentLocation;
         if (!Game1.IsVisitingIslandToday("Sandy") || sandyHouse.getCharacterFromName("Sandy") is not null // Sandy has not left the building.
-            || !AtraUtils.YieldSurroundingTiles(Globals.Helper.Input.GetCursorPosition().GrabTile).Any((Point v) => sandyHouse.doesTileHaveProperty(v.X, v.Y, "Action", "Buildings")?.Contains("Buy") == true))
+            || !AtraUtils.YieldSurroundingTiles(Globals.Helper.Input.GetCursorPosition().GrabTile).Any(predicate: (Point v) => sandyHouse.doesTileHaveProperty(v.X, v.Y, "Action", "Buildings")?.Contains("Buy") == true))
         {
             return;
         }
@@ -107,9 +107,9 @@ internal static class ShopHandler
                 sourceRectStartingPos = new Vector2(129f, 210f),
                 interval = 50000f,
                 totalNumberOfLoops = 9999,
-                position = (new Vector2(tile.X, tile.Y - 1) * Game1.tileSize) + (new Vector2(3f, 0f) * 4f),
+                position = (new Vector2(tile.X, tile.Y - 1) * Game1.tileSize) + new Vector2(12f, 0f),
                 scale = 4f,
-                layerDepth = (((tile.Y - 0.5f) * Game1.tileSize) / 10000f) + 0.01f, // a little offset so it doesn't show up on the floor.
+                layerDepth = MathF.BitIncrement(((tile.Y - 0.5f) * Game1.tileSize / 10000f) + 0.01f), // a little offset so it doesn't show up on the floor.
                 id = 777f,
             });
         }

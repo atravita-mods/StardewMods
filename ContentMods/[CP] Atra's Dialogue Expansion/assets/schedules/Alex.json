@@ -1,0 +1,12 @@
+{
+    "Changes":[
+        {
+            "Action": "EditData",
+            "Target": "Characters/schedules/Alex",
+            "Entries": {
+                // restore going to the night market.
+                "marriage_winter_17": "830 JoshHouse 6 18 2/1500 Beach 27 24 1 \"Strings\\schedules\\Alex:winter_17.000\"/2400 bed"
+            }
+        }
+    ]
+}

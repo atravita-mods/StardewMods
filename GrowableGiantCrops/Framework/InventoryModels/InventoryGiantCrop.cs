@@ -115,6 +115,8 @@ public sealed class InventoryGiantCrop : SObject
         this.ParentSheetIndex = intID;
         this.Name = InventoryGiantCropPrefix + GGCUtils.GetNameOfSObject(intID);
         this.Stack = initialStack;
+
+        this.modData?.SetInt(ModDataKey, this.ParentSheetIndex);
     }
 
     #region reflection
@@ -432,12 +434,9 @@ public sealed class InventoryGiantCrop : SObject
         }
     }
 
-    private float GetScaleSize()
-    {
-        this.PopulateTileSize();
-        return 3.5f / Math.Max(1, this.tileSize.X);
-    }
-
+    /// <summary>
+    /// Gets the tile size of this giant crop.
+    /// </summary>
     private void PopulateTileSize()
     {
         if (this.tileSize == default)
@@ -452,6 +451,12 @@ public sealed class InventoryGiantCrop : SObject
                 this.tileSize = new(3, 3);
             }
         }
+    }
+
+    private float GetScaleSize()
+    {
+        this.PopulateTileSize();
+        return 3.5f / Math.Max(1, this.tileSize.X);
     }
 
     /// <summary>
@@ -496,8 +501,7 @@ public sealed class InventoryGiantCrop : SObject
         }
         catch (Exception ex)
         {
-            ModEntry.ModMonitor.Log($"Failed in attempting to acquire texture and boundaries for {this.Name} - {this.ParentSheetIndex}, see log for details.", LogLevel.Error);
-            ModEntry.ModMonitor.Log(ex.ToString());
+            ModEntry.ModMonitor.LogError($"acquiring texture and boundaries for {this.Name} - {this.ParentSheetIndex}", ex);
         }
     }
 

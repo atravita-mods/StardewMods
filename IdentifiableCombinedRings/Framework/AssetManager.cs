@@ -61,13 +61,13 @@ internal static class AssetManager
                 || !identifiers.TrySplitOnce(',', out ReadOnlySpan<char> first, out ReadOnlySpan<char> second)
                 || second.Contains(','))
             {
-                Globals.ModMonitor.Log($"'{model.RingIdentifiers ?? string.Empty}' was not a valid identifier set, skipping.", LogLevel.Error);
+                Globals.ModMonitor.Log($"'{model.RingIdentifiers ?? string.Empty}' was not a valid identifier set, skipping.", LogLevel.Warn);
                 continue;
             }
 
             if (string.IsNullOrWhiteSpace(model.TextureLocation))
             {
-                Globals.ModMonitor.Log($"Texture cannot be null or whitespace", LogLevel.Error);
+                Globals.ModMonitor.Log($"Texture cannot be null or whitespace", LogLevel.Warn);
                 continue;
             }
 

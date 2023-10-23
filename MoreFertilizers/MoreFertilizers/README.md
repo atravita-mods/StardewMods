@@ -72,7 +72,7 @@ Run SMAPI at least once with this mod installed to generate the `config.json`, o
 * [Multi Yield Crops](https://www.nexusmods.com/stardewvalley/mods/6069) - fully supported.
 * [Smart Building](https://www.nexusmods.com/stardewvalley/mods/11158?tab=description) supports these fertilizers. Thank you so much, DecidedlyHuman!
 * [Teh's Fishing Overhaul](https://www.nexusmods.com/stardewvalley/mods/866).
-* [Walk of Life](https://www.nexusmods.com/stardewvalley/mods/8111).
+* [Walk of Life](https://www.nexusmods.com/stardewvalley/mods/8111)/[MARGO](https://www.nexusmods.com/stardewvalley/mods/14470).
 * The large framework mods (CP/BFAV/PFM/FTM/MFM, etc.) work with this mod.
 * Any of my other mods - I try not to cause **myself** compat issues.
 * Honestly most other mods should work fine, not many actually use transpilers.

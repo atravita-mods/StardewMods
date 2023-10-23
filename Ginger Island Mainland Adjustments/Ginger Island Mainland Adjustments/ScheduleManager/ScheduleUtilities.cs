@@ -1,4 +1,6 @@
-﻿using AtraShared.Utils.Extensions;
+﻿using System.Text;
+
+using AtraShared.Utils.Extensions;
 using Microsoft.Xna.Framework;
 using StardewModdingAPI.Utilities;
 
@@ -18,6 +20,30 @@ internal static class ScheduleUtilities
     /// Removes schedule cache.
     /// </summary>
     internal static void ClearCache() => Schedules.Clear();
+
+    /// <summary>
+    /// Appends the correct GI remainder schedule to a schedule being generated.
+    /// </summary>
+    /// <param name="sb">Stringbuilder that contains the schedule.</param>
+    /// <param name="visitor">the visitor.</param>
+    /// <returns>same sb instance.</returns>
+    internal static StringBuilder AppendCorrectRemainderSchedule(this StringBuilder sb, NPC visitor)
+    {
+        if (visitor.Name.Equals("Gus", StringComparison.OrdinalIgnoreCase))
+        {
+            // Gus needs to tend bar. Hardcoded same as vanilla.
+            sb.Append("1800 Saloon 10 18 2/2430 bed");
+        }
+        else if (ScheduleUtilities.FindProperGISchedule(visitor, SDate.Now()) is string giSchedule)
+        {
+            sb.Append(giSchedule);
+        }
+        else
+        {
+            sb.Append(Globals.IsChildToNPC?.Invoke(visitor) == true ? "1800 BusStop -1 23 3" : "1800 bed");
+        }
+        return sb;
+    }
 
     /// <summary>
     /// Find the correct schedule for an NPC for a given date. Looks into the schedule assets first
@@ -211,7 +237,7 @@ internal static class ScheduleUtilities
             }
             catch (Exception ex)
             {
-                Globals.ModMonitor.Log($"Ran into issues parsing schedule {rawData} for {npc.Name}.\n\n{ex}", LogLevel.Error);
+                Globals.ModMonitor.LogError($"parsing schedule '{rawData}' for '{npc.Name}'", ex);
             }
             npc.DefaultMap = prevmap;
             npc.DefaultPosition = prevposition;
@@ -231,13 +257,25 @@ internal static class ScheduleUtilities
         {
             Dictionary<int, SchedulePathDescription>? schedule = null;
 
+            if (!rawData.StartsWith("0 ") && npc.currentLocation.Name != npc.DefaultMap && npc.DefaultPosition != Vector2.Zero)
+            {
+                Globals.ModMonitor.Log($"Warping {npc.Name} back to their default location....");
+                GameLocation? location = Game1.getLocationFromName(npc.DefaultMap);
+                if (location is null)
+                {
+                    Globals.ModMonitor.Log($"NPC {npc.Name} has default map {npc.DefaultMap} which could not be found!", LogLevel.Warn);
+                    return false;
+                }
+                Game1.warpCharacter(npc, location, npc.DefaultPosition / 64f);
+            }
+
             try
             {
                 schedule = npc.parseMasterSchedule(rawData);
             }
             catch (Exception ex)
             {
-                Globals.ModMonitor.Log($"parseMasterSchedule failed for npc {npc.Name} with rawdata {rawData}: {ex}");
+                Globals.ModMonitor.LogError($"parsing schedule for npc '{npc.Name}' with rawdata '{rawData}'", ex);
             }
             if (schedule is not null)
             {

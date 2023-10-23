@@ -1,4 +1,6 @@
-﻿using System.Text;
+﻿// Ignore Spelling: Utils
+
+using System.Text;
 
 using AtraBase.Toolkit;
 using AtraBase.Toolkit.Reflection;

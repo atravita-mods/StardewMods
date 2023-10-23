@@ -25,7 +25,7 @@ internal static class MineShaftGetFishTranspiler
         {
             ILHelper helper = new(original, instructions, ModEntry.ModMonitor, gen);
 
-            // looking for three occurances of Game1.random.NextDouble() in that switch case.
+            // looking for three occurrences of Game1.random.NextDouble() in that switch case.
             helper.FindNext(new CodeInstructionWrapper[]
             {
                 new(OpCodes.Ldarg_0),
@@ -48,7 +48,7 @@ internal static class MineShaftGetFishTranspiler
                 new(OpCodes.Ldsfld, typeof(Game1).GetCachedField(nameof(Game1.random), ReflectionCache.FlagTypes.StaticFlags)),
                 new(OpCodes.Callvirt, typeof(Random).GetCachedMethod(nameof(Random.NextDouble), ReflectionCache.FlagTypes.InstanceFlags)),
             },
-            transformer: (helper) =>
+            transformer: static (helper) =>
             {
                 helper.FindNext(new CodeInstructionWrapper[]
                 {
@@ -74,8 +74,7 @@ internal static class MineShaftGetFishTranspiler
         }
         catch (Exception ex)
         {
-            ModEntry.ModMonitor.Log($"Mod crashed while transpiling MineShaft.GetFish:\n\n{ex}", LogLevel.Error);
-            original?.Snitch(ModEntry.ModMonitor);
+            ModEntry.ModMonitor.LogTranspilerError(original, ex);
         }
         return null;
     }

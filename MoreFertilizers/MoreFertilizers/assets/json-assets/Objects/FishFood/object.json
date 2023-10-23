@@ -7,5 +7,6 @@
   "PurchasePrice": 500,
   "PurchaseFrom": "Willy",
   "CanPurchase": true,
-  "PurchaseRequirements": [ "Hl jojaMember", "Hn ccFishTank", "d Mon Tue Thur Fri" ]
+  "PurchaseRequirements": [ "Hl jojaMember", "Hn ccFishTank", "d Mon Tue Thur Fri" ],
+  "ContextTags": [ "color_purple" ]
 }

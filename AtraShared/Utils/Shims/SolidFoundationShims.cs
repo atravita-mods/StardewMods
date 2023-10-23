@@ -6,7 +6,6 @@ namespace AtraShared.Utils.Shims;
 /// <summary>
 /// Shims for Solid Foundations.
 /// </summary>
-[SuppressMessage("StyleCop.CSharp.OrderingRules", "SA1201:Elements should appear in the correct order", Justification = "Preference.")]
 public static class SolidFoundationShims
 {
     /// <summary>

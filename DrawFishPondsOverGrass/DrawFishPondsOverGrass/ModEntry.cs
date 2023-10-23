@@ -1,22 +1,19 @@
-﻿using HarmonyLib;
+﻿using AtraCore.Framework.Internal;
+
+using AtraShared.ConstantsAndEnums;
+
+using HarmonyLib;
 
 namespace DrawFishPondsOverGrass;
 
 /// <inheritdoc/>
-internal sealed class ModEntry : Mod
+internal sealed class ModEntry : BaseMod<ModEntry>
 {
-    /// <summary>
-    /// Gets the logger for this file.
-    /// </summary>
-    internal static IMonitor ModMonitor { get; private set; } = null!;
-
     /// <inheritdoc/>
     public override void Entry(IModHelper helper)
     {
-        ModMonitor = this.Monitor;
+        base.Entry(helper);
         this.ApplyPatches(new Harmony(this.ModManifest.UniqueID));
-
-        this.Monitor.Log($"Starting up: {this.ModManifest.UniqueID} - {typeof(ModEntry).Assembly.FullName}");
     }
 
     /// <summary>
@@ -31,7 +28,7 @@ internal sealed class ModEntry : Mod
         }
         catch (Exception ex)
         {
-            ModMonitor.Log($"Mod crashed while applying harmony patches\n\n{ex}", LogLevel.Error);
+            ModMonitor.Log(string.Format(ErrorMessageConsts.HARMONYCRASH, ex), LogLevel.Error);
         }
 
         // no snitch necessary, this mod entirely uses ForEachMatch patches.

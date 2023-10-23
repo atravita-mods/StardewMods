@@ -1,4 +1,6 @@
-﻿using CommunityToolkit.Diagnostics;
+﻿// Ignore Spelling: npc basekey
+
+using CommunityToolkit.Diagnostics;
 
 using Microsoft.Xna.Framework;
 
@@ -22,6 +24,10 @@ public static class NPCExtensions
 
         if (!string.IsNullOrWhiteSpace(dialogueKey) && npc.Dialogue.TryGetValue(dialogueKey, out string? dialogue))
         {
+            // make endearment token work. This is basically copied from game code.
+            dialogue = dialogue.Replace(MarriageDialogueReference.ENDEARMENT_TOKEN_LOWER, npc.getTermOfSpousalEndearment().ToLower(), StringComparison.Ordinal);
+            dialogue = dialogue.Replace(MarriageDialogueReference.ENDEARMENT_TOKEN, npc.getTermOfSpousalEndearment(), StringComparison.Ordinal);
+
             npc.CurrentDialogue.Clear();
             npc.CurrentDialogue.Push(new Dialogue(dialogue, npc) { removeOnNextMove = true });
         }
@@ -78,11 +84,12 @@ public static class NPCExtensions
         {
             return null;
         }
-        if (random is null)
+        if (npc.Dialogue?.Count is null or 0)
         {
-            random = Game1.random;
+            return null;
         }
-        if (npc.Dialogue?.ContainsKey(basekey) == true)
+        random ??= Game1.random;
+        if (npc.Dialogue.ContainsKey(basekey))
         {
             int index = 1;
             while (npc.Dialogue.ContainsKey($"{basekey}_{++index}"))
@@ -132,5 +139,19 @@ public static class NPCExtensions
             Game1.right => tile + Vector2.UnitX,
             _ => tile,
         };
+    }
+
+    /// <summary>
+    /// Warps an npc to their default map and position.
+    /// </summary>
+    /// <param name="npc">NPC to warp.</param>
+    public static void WarpHome(this NPC npc)
+    {
+        Guard.IsNotNull(npc);
+
+        GameLocation? target = Game1.getLocationFromName(npc.DefaultMap);
+        Guard.IsNotNull(target);
+
+        Game1.warpCharacter(npc, target, npc.DefaultPosition / Game1.tileSize);
     }
 }

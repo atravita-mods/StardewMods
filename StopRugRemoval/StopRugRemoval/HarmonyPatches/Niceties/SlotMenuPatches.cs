@@ -1,15 +1,23 @@
 ﻿using System.Reflection;
 using System.Reflection.Emit;
+
 using AtraBase.Toolkit.Reflection;
+
 using AtraCore.Framework.ReflectionManager;
+
+using AtraShared.ConstantsAndEnums;
 using AtraShared.Menuing;
 using AtraShared.Utils.Extensions;
 using AtraShared.Utils.HarmonyHelper;
+
 using HarmonyLib;
+
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+
 using StardewModdingAPI.Utilities;
+
 using StardewValley.Locations;
 using StardewValley.Menus;
 using StardewValley.Minigames;
@@ -20,6 +28,7 @@ namespace StopRugRemoval.HarmonyPatches.Niceties;
 /// Patch that replaces the token purchase station with some more options.
 /// </summary>
 [HarmonyPatch(typeof(GameLocation))]
+[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = StyleCopConstants.NamedForHarmony)]
 internal static class TokenPurchasePatch
 {
     private static void AttemptBuyTokens(int tokens)
@@ -39,12 +48,11 @@ internal static class TokenPurchasePatch
         }
         catch (Exception ex)
         {
-            ModEntry.ModMonitor.Log($"Failed while buying club coins?\n\n{ex}", LogLevel.Error);
+            ModEntry.ModMonitor.LogError("buying club coins?", ex);
         }
     }
 
     [HarmonyPatch(nameof(GameLocation.performAction))]
-    [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Harmony Convention")]
     private static bool Prefix(string action, Farmer who, ref bool __result)
     {
         if (who.IsLocalPlayer && ModEntry.Config.Enabled && action == "BuyQiCoins")
@@ -74,7 +82,7 @@ internal static class TokenPurchasePatch
             }
             catch (Exception ex)
             {
-                ModEntry.ModMonitor.Log($"Mod failed while prefixing GameLocation.performAction.\n\n{ex}", LogLevel.Error);
+                ModEntry.ModMonitor.LogError("prefixing GameLocation.performAction", ex);
             }
         }
         return true;
@@ -85,6 +93,7 @@ internal static class TokenPurchasePatch
 /// Patches against the slot menu.
 /// </summary>
 [HarmonyPatch(typeof(Slots))]
+[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = StyleCopConstants.NamedForHarmony)]
 internal static class SlotMenuPatches
 {
     private const int HEIGHT = 52;
@@ -130,7 +139,6 @@ internal static class SlotMenuPatches
 
     [HarmonyPostfix]
     [HarmonyPatch(nameof(Slots.receiveLeftClick))]
-    [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Harmony convention")]
     private static void HandleClick(Slots __instance, ref bool ___spinning, int x, int y)
     {
         if (___spinning)
@@ -201,8 +209,7 @@ internal static class SlotMenuPatches
         }
         catch (Exception ex)
         {
-            ModEntry.ModMonitor.Log($"Ran into error transpiling Slots.ctor!\n\n{ex}", LogLevel.Error);
-            original?.Snitch(ModEntry.ModMonitor);
+            ModEntry.ModMonitor.LogTranspilerError(original, ex);
         }
         return null;
     }
@@ -237,8 +244,7 @@ internal static class SlotMenuPatches
         }
         catch (Exception ex)
         {
-            ModEntry.ModMonitor.Log($"Ran into error transpiling Slots.draw!\n\n{ex}", LogLevel.Error);
-            original?.Snitch(ModEntry.ModMonitor);
+            ModEntry.ModMonitor.LogTranspilerError(original, ex);
         }
         return null;
     }

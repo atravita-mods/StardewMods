@@ -1,5 +1,8 @@
 ﻿using AtraCore.Framework.ReflectionManager;
 
+using AtraShared.ConstantsAndEnums;
+using AtraShared.Utils.Extensions;
+
 using HarmonyLib;
 
 using SpecialOrdersExtended.Managers;
@@ -10,6 +13,7 @@ namespace SpecialOrdersExtended.HarmonyPatches;
 /// Holds patches against Special Orders.
 /// </summary>
 [HarmonyPatch(typeof(SpecialOrder))]
+[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = StyleCopConstants.NamedForHarmony)]
 internal static class SpecialOrderPatches
 {
     /// <summary>
@@ -31,13 +35,12 @@ internal static class SpecialOrderPatches
         }
         catch (Exception ex)
         {
-            ModEntry.ModMonitor.Log($"Failed in apply board update patch:\n\n{ex}", LogLevel.Error);
+            ModEntry.ModMonitor.LogError("applying board update patch", ex);
         }
     }
 
     [HarmonyPostfix]
     [HarmonyPatch(nameof(SpecialOrder.OnFail))]
-    [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Harmony Convention.")]
     private static void PostfixOnFail(SpecialOrder __instance) => DialogueManager.ClearOnFail(__instance.questKey.Value);
 
     // Suppress the middle-of-night Special Order updates until
@@ -48,22 +51,28 @@ internal static class SpecialOrderPatches
     [HarmonyPrefix]
     [HarmonyPriority(Priority.HigherThanNormal)]
     [HarmonyPatch(nameof(SpecialOrder.SetDuration))]
-    [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Harmony convention.")]
     private static bool PrefixSetDuration(SpecialOrder __instance)
     {
         try
         {
-            Dictionary<string, int> overrides = AssetManager.GetDurationOverride().ToDictionary(kvp => kvp.Key, kvp => int.TryParse(kvp.Value, out int value) ? value : 0);
-            if (overrides.TryGetValue(__instance.questKey.Value, out int duration))
+            Dictionary<string, string> overrides = AssetManager.GetDurationOverride();
+            if (overrides.TryGetValue(__instance.questKey.Value, out string? val))
             {
-                WorldDate? date = new(Game1.year, Game1.currentSeason, Game1.dayOfMonth);
-                __instance.dueDate.Value = date.TotalDays + (duration == -1 ? 99 : duration);
-                return false;
+                if (int.TryParse(val, out int duration))
+                {
+                    WorldDate? date = new(Game1.year, Game1.currentSeason, Game1.dayOfMonth);
+                    __instance.dueDate.Value = date.TotalDays + (duration == -1 ? 99 : duration);
+                    return false;
+                }
+                else
+                {
+                    ModEntry.ModMonitor.LogOnce($"Special order {__instance.questKey.Value} specified {val} as override which was not parsable as integer.", LogLevel.Error);
+                }
             }
         }
         catch (Exception ex)
         {
-            ModEntry.ModMonitor.Log($"Mod failed while trying to override special order duration!\n\n{ex}");
+            ModEntry.ModMonitor.LogError("overriding special order duration", ex);
         }
         return true;
     }
@@ -71,7 +80,6 @@ internal static class SpecialOrderPatches
     [HarmonyPostfix]
     [HarmonyPriority(Priority.HigherThanNormal)]
     [HarmonyPatch(nameof(SpecialOrder.IsTimedQuest))]
-    [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Harmony convention.")]
     private static void HandleUntimed(SpecialOrder __instance, ref bool __result)
     {
         if (__result && AssetManager.Untimed.Value.Contains(__instance.questKey.Value))

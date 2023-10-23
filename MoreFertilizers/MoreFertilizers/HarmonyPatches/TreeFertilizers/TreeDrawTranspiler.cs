@@ -46,7 +46,8 @@ internal static class TreeDrawTranspiler
         }
         catch (Exception ex)
         {
-            ModEntry.ModMonitor.LogOnce($"Crash while drawing trees!\n\n{ex}", LogLevel.Error);
+            ModEntry.ModMonitor.LogError("adjusting tree color", ex);
+            ModEntry.Config.RecolorTrees = false;
         }
         return prevcolor;
     }
@@ -92,8 +93,7 @@ internal static class TreeDrawTranspiler
         }
         catch (Exception ex)
         {
-            ModEntry.ModMonitor.Log($"Mod crashed while transpiling {original.FullDescription()}:\n\n{ex}", LogLevel.Error);
-            original.Snitch(ModEntry.ModMonitor);
+            ModEntry.ModMonitor.LogTranspilerError(original, ex);
         }
         return null;
     }

@@ -1,0 +1,13 @@
+{"$schema": "https://smapi.io/schemas/manifest.json",
+   "Name": "[CP] More Paint Masks",
+   "Author": "atravita",
+   "Version": "0.1.0",
+   "Description": "Makes more buildings paintable.",
+   "UniqueID": "atravita.CP.MorePaintMasks",
+   "UpdateKeys": ["Nexus:17700"],
+   "MinimumApiVersion": "3.15",
+   "ContentPackFor": {
+      "UniqueID": "Pathoschild.ContentPatcher",
+      "MinimumVersion": "1.28.0"
+	}
+}

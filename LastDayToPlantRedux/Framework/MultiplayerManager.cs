@@ -130,7 +130,7 @@ internal static class MultiplayerManager
             return true;
         }
         else if (AgriculturalistFarmer is null && farmer.professions.Contains(Farmer.agriculturist)
-            && !farmer.professions.Contains(Farmer.agriculturist + 100))
+            && (!farmer.professions.Contains(Farmer.agriculturist + 100) || !shouldCheckPrestiged))
         {
             ModEntry.ModMonitor.Log($"Assigning {farmer.Name} as argicultralist farmer.");
             AgriculturalistFarmer = new WeakReference<Farmer>(farmer);

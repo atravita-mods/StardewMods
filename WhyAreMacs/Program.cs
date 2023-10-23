@@ -6,7 +6,7 @@ namespace WhyAreMacs
     {
         static void Main(string[] args)
         {
-            foreach (var val in Enum.GetValues<Environment.SpecialFolder>())
+            foreach (Environment.SpecialFolder val in Enum.GetValues<Environment.SpecialFolder>())
             {
                 Console.WriteLine($"For specialfolder {val}, got {Environment.GetFolderPath(val)}");
             }

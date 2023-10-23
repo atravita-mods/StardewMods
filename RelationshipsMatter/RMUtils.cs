@@ -4,6 +4,10 @@ using AtraBase.Toolkit.StringHandler;
 using AtraCore.Framework.Caches;
 
 namespace RelationshipsMatter;
+
+/// <summary>
+/// Generalized utilities for this mod.
+/// </summary>
 internal static class RMUtils
 {
     private static Lazy<Dictionary<string, HashSet<string>>> relations = new(GenerateRelationsMap);

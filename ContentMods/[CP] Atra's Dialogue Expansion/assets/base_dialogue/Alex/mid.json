@@ -1,0 +1,16 @@
+{"Changes":[
+    {
+        // Alex will **always** talk about sports
+        // other NPCs join in if the saloon sports is repaired.
+        
+        "Action": "EditData",
+        "Target": "Characters/Dialogue/Alex",
+        "LogName": "Alex Base",
+        "Entries": {
+            "Sun8": "{{i18n:alex-sports-sun|first = {{FirstSportsTeam}} | second = {{SecondSportsTeam}} }}$h",
+            "Mon8": "{{i18n.alex-sports-mon|reaction = {{i18n: {{Random:great, incredible, absurd, exciting}} }} }}$h",
+
+            "IslandSouth_Entry": "{{i18n: alex-vacation-bubbles}}",
+        }
+    }
+]}

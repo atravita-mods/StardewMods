@@ -31,7 +31,7 @@ internal sealed class IslandSouthWatcher
         }
         catch (Exception ex)
         {
-            Globals.ModMonitor.Log($"Unexpected error refreshing NPC dialogue:\n\n{ex}", LogLevel.Error);
+            Globals.ModMonitor.LogError("refreshing NPC dialogue", ex);
         }
     }
 }

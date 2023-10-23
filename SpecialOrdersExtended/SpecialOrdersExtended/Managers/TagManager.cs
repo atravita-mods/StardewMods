@@ -1,4 +1,5 @@
-﻿using System.Numerics;
+﻿using System.Collections.Concurrent;
+using System.Numerics;
 
 using AtraBase.Toolkit.Extensions;
 
@@ -17,6 +18,7 @@ namespace SpecialOrdersExtended.Managers;
 /// </summary>
 [HarmonyPatch(typeof(SpecialOrder))]
 [SuppressMessage("StyleCop.CSharp.OrderingRules", "SA1201:Elements should appear in the correct order", Justification = "Reviewed.")]
+[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = StyleCopConstants.NamedForHarmony)]
 internal static class TagManager
 {
 #region random
@@ -44,7 +46,7 @@ internal static class TagManager
     /// </summary>
     internal static void ResetRandom()
     {
-        if (Game1.stats.DaysPlayed % 7 == 0)
+        if (Game1.dayOfMonth % 7 == 0)
         {
             random = null;
         }
@@ -54,7 +56,7 @@ internal static class TagManager
 
 #region cache
 
-    private static readonly Dictionary<string, bool> Cache = new();
+    private static readonly ConcurrentDictionary<string, bool> Cache = new();
     private static int lastTick = -1;
 
     /// <summary>
@@ -77,7 +79,6 @@ internal static class TagManager
     [HarmonyPrefix]
     [HarmonyPatch("CheckTag")]
     [HarmonyPriority(Priority.VeryHigh)]
-    [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Naming convention for Harmony")]
     private static bool PrefixCheckTag(ref bool __result, string tag)
     {
         {
@@ -388,7 +389,7 @@ internal static class TagManager
                     return false;
                 case "random":
                     // random_x
-                    return float.TryParse(vals[1], out float result) && Random.NextDouble() < result; // not convinced on this implementation. Should I save values instead?
+                    return float.TryParse(vals[1], out float result) && Random.OfChance(result); // not convinced on this implementation. Should I save values instead?
                 default:
                     // Not a tag I recognize, return true.
                     return true;
@@ -396,7 +397,7 @@ internal static class TagManager
         }
         catch (Exception ex)
         {
-            ModEntry.ModMonitor.Log($"Failed while checking tag {tag}\n{ex}", LogLevel.Error);
+            ModEntry.ModMonitor.LogError($"checking tag {tag}", ex);
         }
         return true; // continue to base code.
     }
@@ -404,7 +405,6 @@ internal static class TagManager
     [HarmonyPostfix]
     [HarmonyPriority(Priority.Last - 200)]
     [HarmonyPatch("CheckTag")]
-    [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Naming convention for Harmony")]
     private static void WatchTag(bool __result, string __0)
     {
         if (ModEntry.Config.UseTagCache)
@@ -478,6 +478,10 @@ internal static class TagManager
             catch (Exception ex) when (ex is InvalidOperationException or NullReferenceException)
             {
                 ModEntry.ModMonitor.Log(I18n.SkillNotFound(profession, skill), LogLevel.Debug);
+            }
+            catch (Exception ex)
+            {
+                ModEntry.ModMonitor.LogError("looking up profession", ex);
             }
         }
         return professionNumber;

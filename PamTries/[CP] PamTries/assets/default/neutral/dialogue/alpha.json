@@ -20,7 +20,7 @@
             "summer_Wed10": "#$c .5#What do ya do all day on that farm of yours?#Whatcha growin' on that farm of yours?#",
             "summer_Thu8": "#$c .5#Why is it so hard to lose weight?$s#Kiddo, it's no fun getting old.$s",
             "summer_Sun10": "Hard to tell how clothing is gunna look on you when none of the models in the catalogues look like you.$s#$e#Wish I knew how to sew. Pa did, but he never had the time to teach me.",
-            "summer_3_2": "Argh. I have to vacuum. Again.#$e#I swear the dust bunnies multiply by themselves...#$e#Maybe I'll buy one of those little vaccuum robots....",
+            "summer_3_2": "Argh. I have to vacuum. Again.#$e#I swear the dust bunnies multiply by themselves...#$e#Maybe I'll buy one of those little vacuum robots....",
             "fall_Mon10": "#$c .5#Argh. Why is there always more laundry to do?#You wouldn't think microwave meals would cause so many dishes...",
             "fall_Wed10": "The trailer? My ma left it to me. She always wanted to explore the world.#$b#She never got to. Had to raise me, and then she had to help me raise Penny.#$e#She died seven or so years ago. Never got the chance.",
             "fall_Sat10": "#$c .5#Wish I had the money to send Penny to college. She deserves a better future than what I can give her.$s#Penny prefers the small-town life, but sometimes I wonder where'd she be if I had the cash to send her to college. She's a smart girl.#",
@@ -33,6 +33,19 @@
             "winter_Sun10": "#$c .5#Wonder if I can convince Lewis to get the library to carry movies?#Thinkin' of ordering a movie or two. Say, @, seen anything interesting recently?#",
             "winter_14_2": "Electric price are goin' up again. Glad this house has gas heating.",
             "winter_24_2": "@, are you looking forward to the Feast of the Winter Star? I certainly am! The food will be excellent!"
+        }
+    },
+    {
+        "Action": "EditData",
+        "Target": "Characters/Dialogue/Pam",
+        "LogName": "Neutral dialogue, set alpha, post-rehab",
+        "When": {"HasSeenEvent": "99210002"},
+        "Entries": {
+            "reject_303": "I don't want that, @.",
+            "reject_346": "#$c .5#Come on, @, you really gotta make this harder for this old woman?#@, you're kidding me, right?#",
+            "reject_348": "@, I'm not taking that. You know why.",
+            "reject_459": "Kiddo, I ain't taking that. Now leave me alone.",
+            "reject_873": "You ain't gotta make this harder for me, kiddo."
         }
     }
 ]}

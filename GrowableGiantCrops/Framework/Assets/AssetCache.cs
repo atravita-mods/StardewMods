@@ -3,6 +3,7 @@
 using AtraShared.Niceties;
 using AtraShared.Utils.Extensions;
 
+using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 
 using StardewModdingAPI.Events;
@@ -73,11 +74,15 @@ internal static class AssetCache
                 return newHolder;
             }
         }
+        catch (ContentLoadException)
+        {
+            Failed.Add(parsed);
+            ModEntry.ModMonitor.Log($"Asset {parsed} does not exist, skipping.", LogLevel.Warn);
+        }
         catch (Exception ex)
         {
             Failed.Add(parsed);
-            ModEntry.ModMonitor.Log($"Failed to load {parsed}, see log for details.", LogLevel.Error);
-            ModEntry.ModMonitor.Log(ex.ToString());
+            ModEntry.ModMonitor.LogError($"loading {parsed}", ex);
         }
 
         return null;
@@ -113,7 +118,7 @@ internal static class AssetCache
                 {
                     if (!holder.TryGetTarget(out AssetHolder? target))
                     {
-                        Cache.TryRemove(asset.BaseName, out WeakReference<AssetHolder> _);
+                        Cache.TryRemove(asset.BaseName, out _);
                     }
                     else
                     {
@@ -139,7 +144,7 @@ internal static class AssetCache
             }
             else
             {
-                Cache.TryRemove(asset.BaseName, out WeakReference<AssetHolder> _);
+                Cache.TryRemove(asset.BaseName, out _);
             }
         }
         Failed.Remove(asset);

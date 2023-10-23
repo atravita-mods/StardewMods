@@ -1,8 +1,15 @@
 ﻿using AtraBase.Toolkit;
+
+using AtraShared.ConstantsAndEnums;
+using AtraShared.Utils.Extensions;
+
 using GingerIslandMainlandAdjustments.AssetManagers;
 using GingerIslandMainlandAdjustments.Configuration;
+
 using HarmonyLib;
+
 using Microsoft.Xna.Framework.Graphics;
+
 using StardewValley.Locations;
 
 namespace GingerIslandMainlandAdjustments.ScheduleManager;
@@ -11,6 +18,7 @@ namespace GingerIslandMainlandAdjustments.ScheduleManager;
 /// Patches for the IslandSouth class.
 /// </summary>
 [HarmonyPatch(typeof(IslandSouth))]
+[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = StyleCopConstants.NamedForHarmony)]
 internal static class IslandSouthPatches
 {
     /// <summary>
@@ -50,7 +58,7 @@ internal static class IslandSouthPatches
             }
             catch (Exception ex)
             {
-                Globals.ModMonitor.Log($"Errors generating ginger island schedules, defaulting to vanilla code\n\n{ex}", LogLevel.Error);
+                Globals.ModMonitor.LogError("generating island schedules", ex);
             }
         }
         return true;
@@ -64,7 +72,6 @@ internal static class IslandSouthPatches
     [HarmonyPostfix]
     [HarmonyPriority(Priority.Last)]
     [HarmonyPatch(nameof(IslandSouth.CanVisitIslandToday))]
-    [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Convention used by Harmony")]
     private static void ExtendCanGoToIsland(NPC npc, ref bool __result)
     {
         try
@@ -132,7 +139,7 @@ internal static class IslandSouthPatches
                 {
                     case ScheduleStrictness.Default:
                     {
-                        if (!Exclusions.TryGetValue(npc, out string[]? exclusions) || !exclusions.Any((a) => a.Equals("AllowOnSpecialDays", StringComparison.OrdinalIgnoreCase)))
+                        if (!Exclusions.TryGetValue(npc, out string[]? exclusions) || !exclusions.Any(static (a) => a.Equals("AllowOnSpecialDays", StringComparison.OrdinalIgnoreCase)))
                         {
                             goto case ScheduleStrictness.Strict;
                         }
@@ -164,7 +171,7 @@ internal static class IslandSouthPatches
         }
         catch (Exception ex)
         {
-            Globals.ModMonitor.Log($"Error in postfix for CanVisitIslandToday for {npc.Name}: \n\n{ex}", LogLevel.Warn);
+            Globals.ModMonitor.LogError("adjusting CanVisitIslandToday", ex);
         }
         return;
     }
@@ -175,10 +182,9 @@ internal static class IslandSouthPatches
     /// <param name="character">NPC in question.</param>
     /// <param name="__result">Result returned to original function.</param>
     /// <returns>True to continue to the vanilla function, false otherwise.</returns>
-    /// <exception cref="UnexpectedEnumValueException{WearIslandClothing}">Unexpected enum value.</exception>
     [HarmonyPrefix]
+    [HarmonyPriority(Priority.VeryLow)]
     [HarmonyPatch(nameof(IslandSouth.HasIslandAttire))]
-    [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Convention used by Harmony")]
     private static bool PrefixHasIslandAttire(NPC character, ref bool __result)
     {
         try
@@ -211,7 +217,7 @@ internal static class IslandSouthPatches
         }
         catch (Exception ex)
         {
-            Globals.ModMonitor.Log($"Error in prefix for HasIslandAttire for {character.Name}: \n\n{ex}", LogLevel.Warn);
+            Globals.ModMonitor.LogError($"adjusting HasIslandAttire for {character.Name}", ex);
         }
         return true;
     }

@@ -31,4 +31,14 @@ internal sealed class ModConfig
         get => this.juminocapcity;
         set => this.juminocapcity = Math.Clamp(value, 9, 48);
     }
+
+    /// <summary>
+    /// Gets or sets a value indicating whether or not to draw the first held item of a chest in front of it.
+    /// </summary>
+    public bool DrawFirstItem { get; set; } = false;
+
+    /// <summary>
+    /// Gets or sets a value indicating whether or not to draw the first held item for a fridge.
+    /// </summary>
+    public bool DrawFirstItemFridge { get; set; } = false;
 }

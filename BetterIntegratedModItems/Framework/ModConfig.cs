@@ -1,11 +1,13 @@
-﻿using AtraShared.Integrations.GMCMAttributes;
+﻿using AtraBase.Toolkit;
+
+using AtraShared.Integrations.GMCMAttributes;
 
 namespace BetterIntegratedModItems.Framework;
 
 /// <summary>
 /// The config class for this mod.
 /// </summary>
-[SuppressMessage("StyleCop.CSharp.OrderingRules", "SA1201:Elements should appear in the correct order", Justification = "Accessors kept near fields.")]
+[SuppressMessage("StyleCop.CSharp.OrderingRules", "SA1201:Elements should appear in the correct order", Justification = StyleCopErrorConsts.AccessorsNearFields)]
 internal sealed class ModConfig
 {
     public bool AffectDailyQuests { get; set; } = true;

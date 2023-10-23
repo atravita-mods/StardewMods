@@ -1,5 +1,7 @@
 ﻿using System.Reflection;
 using System.Reflection.Emit;
+
+using AtraCore.Framework.Internal;
 using AtraCore.Framework.ReflectionManager;
 using AtraShared.ConstantsAndEnums;
 using AtraShared.Utils.Extensions;
@@ -10,21 +12,14 @@ using StardewValley.Tools;
 namespace AvoidLosingScepter;
 
 /// <inheritdoc />
-internal sealed class ModEntry : Mod
+internal sealed class ModEntry : BaseMod<ModEntry>
 {
-    /// <summary>
-    /// Gets the logger for this mod.
-    /// </summary>
-    internal static IMonitor ModMonitor { get; private set; } = null!;
-
     /// <inheritdoc />
     public override void Entry(IModHelper helper)
     {
+        base.Entry(helper);
         I18n.Init(helper.Translation);
-        ModMonitor = this.Monitor;
-
         helper.Events.GameLoop.GameLaunched += (_, _) => this.ApplyPatches(new Harmony(this.ModManifest.UniqueID));
-        this.Monitor.Log($"Starting up: {this.ModManifest.UniqueID} - {typeof(ModEntry).Assembly.FullName}");
     }
 
     /// <summary>
@@ -133,8 +128,7 @@ internal sealed class ModEntry : Mod
         }
         catch (Exception ex)
         {
-            ModMonitor.Log($"Mod crashed while transpiling mine death methods:\n\n{ex}", LogLevel.Error);
-            original.Snitch(ModMonitor);
+            ModMonitor.LogTranspilerError(original, ex);
         }
         return null;
     }

@@ -1,14 +1,26 @@
+// his vanilla personality seems to be "has PTSD"?
+
 {"Changes":[
     {
         "Action": "EditData",
         "LogName": "Kent mid-hearts",
         "Target": "Characters/Dialogue/Kent",
         "Entries": {
-            "2{{YearRemainder}}": "I feel like I'm stuck in place, never really getting better, never really getting worse.$s",
-            "4{{YearRemainder}}": "Couldn't sleep last night. Kept on having nightmares."
+            "2_2": "I feel like I'm stuck in place, never really getting better, never really getting worse.$s",
+            "4_2": "Couldn't sleep last night. Kept on having nightmares.",
+            "6_2": "Maybe we should get a second bed, I keep on disturbing Jodi with my nightmares."
         },
         "When": {
-            "YearModulus": "1"
+            "YearModulus": "2"
         }
+    },
+    {
+        "Action": "EditData",
+        "LogName": "Kent mid-hearts",
+        "Target": "Characters/Dialogue/Kent",
+        "Entries": {
+            "5_2": "The range broke...I think it's just a capacitor that needs replacing, but those aren't easy to order out here.#$b#Placed a rush order from Joja, but shipping is an arm and a leg.#$e#Miss having an Accel components store nearby, but I think that branch of Accel's gone bankrupt." // Accel is apparently RadioShack now too.
+        },
+        "When": {"YearModulus": "4"}
     }
 ]}

@@ -5,7 +5,7 @@ Most users should download the mod from the [Nexus page](https://www.nexusmods.c
 
 ### Textures
 
-The additional icons for the slot machine can be retextured by targetting `Mods/atravita_StopRugRemoval_BetIcons` with Content Patcher.
+The additional icons for the slot machine can be re-textured by targeting `Mods/atravita_StopRugRemoval_BetIcons` with Content Patcher.
 
 ### Translations:
 

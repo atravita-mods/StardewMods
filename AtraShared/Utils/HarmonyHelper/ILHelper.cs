@@ -2,6 +2,9 @@
 // Label stuff?
 // MAKE SURE THE LABEL COUNTS ARE RIGHT. Inserting codes should add to the Important Labels! Check **any time** labels are removed.
 // Insert should probably just have a pattern that moves over the labels....
+
+// Ignore Spelling: Loc localindex Ld intendedendindex startindex startpos Dest
+
 using System.Diagnostics;
 using System.Reflection;
 using System.Reflection.Emit;
@@ -429,8 +432,7 @@ ContinueSearchBackwards:
                     .AppendJoin(", ", this.Codes[i].labels.Select(l => l.ToString()))
                     .AppendLine().Append("Important labels: ")
                     .AppendJoin(", ", this.importantLabels.Select(l => l.ToString()));
-                this.Monitor.Log(sb.ToString(), LogLevel.Error);
-                return ThrowHelper.ThrowInvalidOperationException<ILHelper>();
+                return ThrowHelper.ThrowInvalidOperationException<ILHelper>(sb.ToString());
             }
         }
         this.Codes.RemoveRange(this.Pointer, count);
@@ -479,7 +481,7 @@ ContinueSearchBackwards:
     /// <remarks>All labels and exception blocks are removed.</remarks>
     public ILHelper Copy(int startpos, int count, out IEnumerable<CodeInstruction> codes)
     {
-        codes = this.Codes.GetRange(startpos, count).Select((code) => code.Clone());
+        codes = this.Codes.GetRange(startpos, count).Select(static (code) => code.Clone());
         return this;
     }
 
@@ -588,8 +590,7 @@ ContinueSearchBackwards:
                 .AppendJoin(", ", this.CurrentInstruction.labels.Select(l => l.ToString()))
                 .AppendLine().Append("Important labels: ")
                 .AppendJoin(", ", this.importantLabels.Select(l => l.ToString()));
-            this.Monitor.Log(sb.ToString(), LogLevel.Error);
-            return ThrowHelper.ThrowInvalidOperationException<ILHelper>();
+            return ThrowHelper.ThrowInvalidOperationException<ILHelper>(sb.ToString());
         }
 
         // track new labels.
@@ -922,7 +923,7 @@ ContinueSearchBackwards:
 ContinueSearch:
             ;
         }
-        this.Monitor.Log($"ForEachMatch found {count} occurrences for {string.Join(", ", instructions.Select(i => i.ToString()))} for {this.Original.FullDescription()}.", LogLevel.Trace);
+        this.Monitor.Log($"ForEachMatch found {count} occurrences for {string.Join(", ", instructions.Select(static i => i.ToString()))} for {this.Original.FullDescription()}.", LogLevel.Trace);
         this.Pop();
         return this;
     }

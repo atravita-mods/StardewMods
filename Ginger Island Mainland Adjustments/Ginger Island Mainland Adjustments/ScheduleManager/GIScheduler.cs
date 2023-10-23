@@ -3,7 +3,15 @@ using System.Diagnostics;
 using System.Runtime;
 #endif
 
+using System.Text;
+
+using AtraBase.Toolkit;
+using AtraBase.Toolkit.Extensions;
+
+using AtraCore;
+
 using AtraCore.Framework.Caches;
+using AtraCore.Framework.ReflectionManager;
 
 using AtraShared.Schedules.DataModels;
 using AtraShared.Utils;
@@ -12,6 +20,8 @@ using AtraShared.Utils.Extensions;
 using GingerIslandMainlandAdjustments.AssetManagers;
 using GingerIslandMainlandAdjustments.CustomConsoleCommands;
 using GingerIslandMainlandAdjustments.ScheduleManager.DataModels;
+
+using Microsoft.Xna.Framework;
 
 using StardewModdingAPI.Utilities;
 
@@ -24,7 +34,22 @@ namespace GingerIslandMainlandAdjustments.ScheduleManager;
 /// </summary>
 internal static class GIScheduler
 {
+    #region delegates
+
+    private static readonly Lazy<Func<NPC, string, string, List<string>>> GetLocationRouteLazy = new(() =>
+        typeof(NPC).GetCachedMethod("getLocationRoute", ReflectionCache.FlagTypes.InstanceFlags)
+        .CreateDelegate<Func<NPC, string, string, List<string>>>());
+
+    #endregion
+
     private static readonly int[] TIMESLOTS = new int[] { 1200, 1400, 1600 };
+
+    /// <summary>
+    /// The starting point where NPCs staged at the saloon start.
+    /// </summary>
+    private static readonly Point SaloonStart = new(8, 11);
+
+    #region groups
 
     /// <summary>
     /// Dictionary of possible island groups. Null is a cache miss.
@@ -42,33 +67,39 @@ internal static class GIScheduler
     /// Gets the current group headed off to the island.
     /// </summary>
     /// <remarks>null means no current group.</remarks>
-    public static string? CurrentGroup { get; private set; }
+    internal static string? CurrentGroup { get; private set; }
 
     /// <summary>
     /// Gets the current visiting group.
     /// </summary>
     /// <remarks>Used primarily for setting group-based dialogue...</remarks>
-    public static HashSet<NPC>? CurrentVisitingGroup { get; private set; }
+    internal static HashSet<NPC>? CurrentVisitingGroup { get; private set; }
 
     /// <summary>
     /// Gets the name of the current adventure group.
     /// </summary>
-    public static string? CurrentAdventureGroup { get; private set; }
+    internal static string? CurrentAdventureGroup { get; private set; }
+
+    #endregion
+
+    #region individuals
 
     /// <summary>
     /// Gets the current adventure group.
     /// </summary>
-    public static HashSet<NPC>? CurrentAdventurers { get; private set; }
+    internal static HashSet<NPC>? CurrentAdventurers { get; private set; }
 
     /// <summary>
     /// Gets the current bartender.
     /// </summary>
-    public static NPC? Bartender { get; private set; }
+    internal static NPC? Bartender { get; private set; }
 
     /// <summary>
     /// Gets the current musician.
     /// </summary>
-    public static NPC? Musician { get; private set; }
+    internal static NPC? Musician { get; private set; }
+
+    #endregion
 
     /// <summary>
     /// Gets island groups. Will automatically load if null.
@@ -138,12 +169,12 @@ internal static class GIScheduler
             GIScheduler.ClearCache();
 #if DEBUG
             stopwatch.Stop();
-            Globals.ModMonitor.Log($"GI Scheduler did not need to run, took {stopwatch.ElapsedMilliseconds} ms anyways", LogLevel.Info);
+            Globals.ModMonitor.Log($"GI Scheduler did not need to run, took {stopwatch.Elapsed.TotalMilliseconds:F2} ms anyways", LogLevel.Info);
 #endif
             return;
         }
 
-        List<NPC> visitors = GenerateVistorList(random, Globals.Config.Capacity, explorers);
+        List<NPC> visitors = GenerateVisitorList(random, Globals.Config.Capacity, explorers);
         Dictionary<string, string> animationDescriptions = Globals.GameContentHelper.Load<Dictionary<string, string>>("Data/animationDescriptions");
 
         GIScheduler.Bartender = SetBartender(visitors);
@@ -158,19 +189,12 @@ internal static class GIScheduler
             {
                 Globals.ModMonitor.DebugLog($"Calculated island schedule for {npc.Name}");
                 npc.islandScheduleName.Value = "island";
+                Game1.netWorldState.Value.IslandVisitors[npc.Name] = true;
+                ConsoleCommands.IslandSchedules[npc.Name] = schedules[npc];
             }
             else
             {
                 npc.islandScheduleName.Value = string.Empty;
-            }
-        }
-
-        foreach (NPC visitor in schedules.Keys)
-        {
-            if (visitor.islandScheduleName.Value is "island")
-            {
-                Game1.netWorldState.Value.IslandVisitors[visitor.Name] = true;
-                ConsoleCommands.IslandSchedules[visitor.Name] = schedules[visitor];
             }
         }
 
@@ -179,7 +203,7 @@ internal static class GIScheduler
 
 #if DEBUG
         stopwatch.Stop();
-        Globals.ModMonitor.Log($"Schedule generation took {stopwatch.ElapsedMilliseconds} ms.", LogLevel.Info);
+        Globals.ModMonitor.LogTimespan("Schedule generation", stopwatch);
 
         if (Context.IsSplitScreen && Context.ScreenId != 0)
         {
@@ -200,13 +224,13 @@ internal static class GIScheduler
     /// <returns>An explorer group (of up to three explorers), or an empty hashset if there's no group today.</returns>
     private static (HashSet<NPC> group, string groupname) GenerateExplorerGroup(Random random)
     {
-        if (random.NextDouble() <= Globals.Config.ExplorerChance)
+        if (random.OfChance(Globals.Config.ExplorerChance))
         {
             List<string> explorerGroups = ExplorerGroups.Keys.ToList();
             if (explorerGroups.Count > 0)
             {
                 CurrentAdventureGroup = explorerGroups[random.Next(explorerGroups.Count)];
-                CurrentAdventurers = ExplorerGroups[CurrentAdventureGroup].Where((NPC npc) => IslandSouth.CanVisitIslandToday(npc)).Take(3).ToHashSet();
+                CurrentAdventurers = ExplorerGroups[CurrentAdventureGroup].Where(IslandSouth.CanVisitIslandToday).Take(3).ToHashSet();
                 return (CurrentAdventurers, CurrentAdventureGroup);
             }
         }
@@ -221,7 +245,7 @@ internal static class GIScheduler
     /// <param name="explorers">Hashset of explorers.</param>
     /// <returns>Visitor List.</returns>
     /// <remarks>For a deterministic island list, use a Random seeded with the uniqueID + number of days played.</remarks>
-    private static List<NPC> GenerateVistorList(Random random, int capacity, HashSet<NPC> explorers)
+    private static List<NPC> GenerateVisitorList(Random random, int capacity, HashSet<NPC> explorers)
     {
         CurrentGroup = null;
         CurrentVisitingGroup = null;
@@ -260,7 +284,7 @@ internal static class GIScheduler
             Globals.SaveDataModel.NPCsForTomorrow.Clear();
         }
 
-        if (random.NextDouble() < Globals.Config.GroupChance)
+        if (random.OfChance(Globals.Config.GroupChance))
         {
             List<string> groupkeys = new(IslandGroups.Count);
             foreach (string key in IslandGroups.Keys)
@@ -268,7 +292,7 @@ internal static class GIScheduler
                 // Filter out groups where one member can't make it or are too big
                 // Except for spouses, we'll just randomly pick until we hit the capacity later.
                 if ((IslandGroups[key].Count <= capacity - visitors.Count || key == "allSpouses")
-                    && IslandGroups[key].All((NPC npc) => valid_visitors.Contains(npc)))
+                    && IslandGroups[key].All(valid_visitors.Contains))
                 {
                     groupkeys.Add(key);
                 }
@@ -282,7 +306,7 @@ internal static class GIScheduler
                 HashSet<NPC>? group = IslandGroups[CurrentGroup];
                 if (CurrentGroup == "allSpouses" && group.Count > capacity)
                 {
-                    group = group.OrderBy((_) => Game1.random.Next()).Take(capacity).ToHashSet();
+                    group = group.OrderBy((_) => Singletons.Random.Next()).Take(capacity).ToHashSet();
                 }
 
                 visitors.AddRange(group);
@@ -294,7 +318,7 @@ internal static class GIScheduler
         // Add Gus (even if we go over capacity, he has a specific standing spot).
         if (NPCCache.GetByVillagerName("Gus") is NPC gus && !visitors.Contains(gus) && valid_visitors.Contains(gus)
             && Globals.Config.GusDayAsShortString().Equals(Game1.shortDayNameFromDayOfSeason(Game1.dayOfMonth), StringComparison.OrdinalIgnoreCase)
-            && Globals.Config.GusChance > random.NextDouble())
+            && random.OfChance(Globals.Config.GusChance))
         {
             Globals.ModMonitor.DebugOnlyLog($"Forcibly adding Gus.");
             visitors.Add(gus);
@@ -352,7 +376,7 @@ internal static class GIScheduler
             }
         }
 
-        Globals.ModMonitor.DebugOnlyLog($"{visitors.Count} vistors: {string.Join(", ", visitors.Select((NPC npc) => npc.Name))}");
+        Globals.ModMonitor.DebugOnlyLog($"{visitors.Count} visitors: {string.Join(", ", visitors.Select((NPC npc) => npc.Name))}");
         IslandSouthPatches.ClearCache();
 
         return visitors;
@@ -365,11 +389,16 @@ internal static class GIScheduler
     /// <returns>Bartender if it can find one, null otherwise.</returns>
     private static NPC? SetBartender(List<NPC> visitors)
     {
-        NPC? bartender = visitors.Find((NPC npc) => npc.Name.Equals("Gus", StringComparison.OrdinalIgnoreCase));
+        NPC? bartender = visitors.Find(static (NPC npc) => npc.Name.Equals("Gus", StringComparison.OrdinalIgnoreCase));
+
+        // Gus not visiting, go find another bartender
         if (bartender is null)
-        { // Gus not visiting, go find another bartender
+        {
             HashSet<NPC> bartenders = AssetLoader.GetSpecialCharacter(SpecialCharacterType.Bartender);
-            bartender = visitors.Find((NPC npc) => bartenders.Contains(npc));
+            if (bartenders.Count > 0)
+            {
+                bartender = visitors.Where(bartenders.Contains).OrderBy(_ => Singletons.Random.Next()).FirstOrDefault();
+            }
         }
         if (bartender is not null)
         {
@@ -390,12 +419,16 @@ internal static class GIScheduler
         NPC? musician = null;
         if (animationDescriptions.ContainsKey("sam_beach_towel"))
         {
-            musician = visitors.Find((NPC npc) => npc.Name.Equals("Sam", StringComparison.OrdinalIgnoreCase));
+            musician = visitors.Find(static (NPC npc) => npc.Name.Equals("Sam", StringComparison.OrdinalIgnoreCase));
         }
-        if (musician is null || random.NextDouble() < 0.25)
+        if (musician is null || random.OfChance(0.25))
         {
             HashSet<NPC> musicians = AssetLoader.GetSpecialCharacter(SpecialCharacterType.Musician);
-            musician = visitors.Find((NPC npc) => musicians.Contains(npc) && animationDescriptions.ContainsKey($"{npc.Name.ToLowerInvariant()}_beach_towel")) ?? musician;
+            if (musicians.Count > 0)
+            {
+                musician = visitors.Where((NPC npc) => musicians.Contains(npc) && animationDescriptions.ContainsKey($"{npc.Name.ToLowerInvariant()}_beach_towel"))
+                                   .OrderBy(_ => Singletons.Random.Next()).FirstOrDefault() ?? musician;
+            }
         }
         if (musician is not null && !musician.Name.Equals("Gus", StringComparison.OrdinalIgnoreCase))
         {
@@ -415,7 +448,7 @@ internal static class GIScheduler
     /// <returns>A list of filled <see cref="GingerIslandTimeSlot"/>s.</returns>
     private static List<GingerIslandTimeSlot> AssignIslandSchedules(Random random, List<NPC> visitors, Dictionary<string, string> animationDescriptions)
     {
-        Dictionary<NPC, string> lastactivity = new();
+        Dictionary<NPC, string> lastactivity = new(visitors.Count);
         List<GingerIslandTimeSlot> activities = TIMESLOTS.Select((i) => new GingerIslandTimeSlot(i, Bartender, Musician, random, visitors)).ToList();
 
         foreach (GingerIslandTimeSlot activity in activities)
@@ -435,66 +468,87 @@ internal static class GIScheduler
     /// <returns>Dictionary of NPC->raw schedule strings.</returns>
     private static Dictionary<NPC, string> RenderIslandSchedules(Random random, List<NPC> visitors, List<GingerIslandTimeSlot> activities)
     {
-        Dictionary<NPC, string> completedSchedules = new();
+        Dictionary<NPC, string> completedSchedules = new(visitors.Count);
+        int saloon_offset = 0;
+
+        StringBuilder sb = StringBuilderCache.Acquire();
 
         foreach (NPC visitor in visitors)
         {
-            bool should_dress = IslandSouth.HasIslandAttire(visitor);
-            List<SchedulePoint> scheduleList = new();
+            sb.Clear();
 
+            if (Globals.Config.StageFarNpcsAtSaloon)
+            {
+                try
+                {
+                    List<string>? maplist = GetLocationRouteLazy.Value(visitor, visitor.DefaultMap, "IslandSouth");
+                    if (maplist is null || maplist.Count > 8)
+                    {
+                        Globals.ModMonitor.Log($"{visitor.Name} has a long way to travel, so staging them at the Saloon.");
+                        new SchedulePoint(
+                            random: random,
+                            npc: visitor,
+                            map: "Saloon",
+                            time: 0,
+                            point: new(SaloonStart.X + ++saloon_offset, SaloonStart.Y)).AppendToStringBuilder(sb);
+                        sb.Append('/');
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Globals.ModMonitor.LogError($"checking if visitor has a long way to travel.", ex);
+                }
+            }
+
+            bool should_dress = IslandSouth.HasIslandAttire(visitor);
             if (should_dress)
             {
-                scheduleList.Add(new SchedulePoint(
+                new SchedulePoint(
                     random: random,
                     npc: visitor,
                     map: "IslandSouth",
                     time: 1150,
                     point: IslandSouth.GetDressingRoomPoint(visitor),
                     animation: "change_beach",
-                    isarrivaltime: true));
+                    isarrivaltime: true).AppendToStringBuilder(sb);
+                sb.Append('/');
             }
 
-            foreach (GingerIslandTimeSlot activity in activities)
+            for (int i = 0; i < activities.Count; i++)
             {
+                GingerIslandTimeSlot activity = activities[i];
                 if (activity.Assignments.TryGetValue(visitor, out SchedulePoint? schedulePoint))
                 {
-                    scheduleList.Add(schedulePoint);
+                    if (i == 0 && !should_dress)
+                    {
+                        schedulePoint.IsArrivalTime = true;
+                    }
+                    schedulePoint.AppendToStringBuilder(sb);
+                    sb.Append('/');
                 }
             }
 
             if (should_dress)
             {
-                scheduleList.Add(new SchedulePoint(
+                new SchedulePoint(
                     random: random,
                     npc: visitor,
                     map: "IslandSouth",
                     time: 1730,
                     point: IslandSouth.GetDressingRoomPoint(visitor),
                     animation: "change_normal",
-                    isarrivaltime: true));
+                    isarrivaltime: true).AppendToStringBuilder(sb);
+                sb.Append('/');
             }
 
-            scheduleList[0].IsArrivalTime = true; // set the first slot, whatever it is, to be the arrival time.
+            sb.AppendCorrectRemainderSchedule(visitor);
 
-            // render the schedule points to strings before appending the remainder schedules
-            // which are already strings.
-            List<string> schedPointString = scheduleList.Select((SchedulePoint pt) => pt.ToString()).ToList();
-            if (visitor.Name.Equals("Gus", StringComparison.OrdinalIgnoreCase))
-            {
-                // Gus needs to tend bar. Hardcoded same as vanilla.
-                schedPointString.Add("1800 Saloon 10 18 2/2430 bed");
-            }
-            else
-            {
-                // Try to find a GI remainder schedule, if any.
-                schedPointString.Add(ScheduleUtilities.FindProperGISchedule(visitor, SDate.Now())
-                        // Child2NPC NPCs don't understand "bed", must send them to the bus stop spouse dropoff.
-                        ?? (Globals.IsChildToNPC?.Invoke(visitor) == true ? "1800 BusStop -1 23 3" : "1800 bed"));
-            }
-            completedSchedules[visitor] = string.Join('/', schedPointString);
+            completedSchedules[visitor] = string.Join('/', sb.ToString());
+            sb.Clear();
             Globals.ModMonitor.DebugOnlyLog($"For {visitor.Name}, created island schedule {completedSchedules[visitor]}");
         }
 
+        StringBuilderCache.Release(sb);
         return completedSchedules;
     }
 }

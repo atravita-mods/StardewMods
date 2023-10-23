@@ -33,7 +33,7 @@ internal static class GetFishTranspiler
         }
         catch (Exception ex)
         {
-            ModEntry.ModMonitor.Log($"Error in adjusting fish chances at {loc.NameOrUniqueName}:\n\n{ex}", LogLevel.Error);
+            ModEntry.ModMonitor.LogError($"adjusting fish chances at {loc.NameOrUniqueName}", ex);
         }
         return prevChance;
     }
@@ -82,8 +82,7 @@ internal static class GetFishTranspiler
         }
         catch (Exception ex)
         {
-            ModEntry.ModMonitor.Log($"Mod crashed while transpiling GameLocation.GetFish:\n\n{ex}", LogLevel.Error);
-            original?.Snitch(ModEntry.ModMonitor);
+            ModEntry.ModMonitor.LogTranspilerError(original, ex);
         }
         return null;
     }

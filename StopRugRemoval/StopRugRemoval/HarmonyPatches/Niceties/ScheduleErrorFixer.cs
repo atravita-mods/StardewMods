@@ -1,8 +1,18 @@
 ﻿using AtraBase.Toolkit.Extensions;
+using AtraBase.Toolkit.Reflection;
 using AtraBase.Toolkit.StringHandler;
+
+using AtraCore.Framework.ReflectionManager;
+
+using AtraShared.ConstantsAndEnums;
+
 using HarmonyLib;
 using Microsoft.Xna.Framework;
+
+using Netcode;
 using StardewModdingAPI.Utilities;
+
+using StardewValley.Network;
 
 namespace StopRugRemoval.HarmonyPatches.Niceties;
 
@@ -10,12 +20,32 @@ namespace StopRugRemoval.HarmonyPatches.Niceties;
 /// A patch to try to unfuck schedules.
 /// I think this may be antisocial causing issues.
 /// </summary>
-[HarmonyPatch(typeof(NPC))]
+[HarmonyPatch]
+[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1309:Field names should not begin with underscore", Justification = "Reviewed.")]
+[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = StyleCopConstants.NamedForHarmony)]
 internal static class ScheduleErrorFixer
 {
+    #region delegates
+
+    private static readonly Lazy<Func<NPC, NetLocationRef>> _getLocationRef = new(() =>
+        typeof(NPC).GetCachedField("currentLocationRef", ReflectionCache.FlagTypes.InstanceFlags)
+                   .GetInstanceFieldGetter<NPC, NetLocationRef>()
+    );
+
+    private static readonly Lazy<Action<NetLocationRef, bool>> _markDirty = new(() =>
+        typeof(NetLocationRef).GetCachedField("_dirty", ReflectionCache.FlagTypes.InstanceFlags)
+                              .GetInstanceFieldSetter<NetLocationRef, bool>()
+    );
+
+    private static readonly Lazy<Func<NetLocationRef, NetString>> _getLocationName = new(() =>
+        typeof(NetLocationRef).GetCachedField("locationName", ReflectionCache.FlagTypes.InstanceFlags)
+                              .GetInstanceFieldGetter<NetLocationRef, NetString>()
+    );
+
+    #endregion
+
     [HarmonyPriority(Priority.First)]
-    [HarmonyPatch(nameof(NPC.parseMasterSchedule))]
-    [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Harmony Convention")]
+    [HarmonyPatch(typeof(NPC), nameof(NPC.parseMasterSchedule))]
     private static void Prefix(string rawData, NPC __instance)
     {
         if (__instance.currentLocation is not null || !__instance.isVillager())
@@ -23,8 +53,24 @@ internal static class ScheduleErrorFixer
             return;
         }
 
-        ModEntry.ModMonitor.Log($"{__instance.Name} seems to have a null current location, attempting to fix. Please inform their author! The current day is {SDate.Now()}, their attempted schedule string was {rawData}", LogLevel.Info);
+        ModEntry.ModMonitor.Log($"{__instance.Name} seems to have a null current location, attempting to fix.", LogLevel.Info);
+        ModEntry.ModMonitor.Log($"Multiplayer: {Context.IsMultiplayer}? Host: {Context.IsMainPlayer}? The current day is {SDate.Now()}.", LogLevel.Info);
 
+        NetLocationRef backing = _getLocationRef.Value(__instance);
+        NetString expectedName = _getLocationName.Value(backing);
+        if (!string.IsNullOrWhiteSpace(expectedName.Value))
+        {
+            ModEntry.ModMonitor.Log($"Location Ref has value {expectedName}, marking dirty.", LogLevel.Info);
+            _markDirty.Value(backing, true);
+        }
+
+        if (__instance.currentLocation is not null)
+        {
+            ModEntry.ModMonitor.Log("Successfully restored location reference!", LogLevel.Info);
+            return;
+        }
+
+        ModEntry.ModMonitor.Log($"Their attempted schedule string was {rawData}", LogLevel.Info);
         bool foundSchedule = ModEntry.UtilitySchedulingFunctions.TryFindGOTOschedule(__instance, SDate.Now(), rawData, out string? scheduleString);
         if (foundSchedule)
         {
@@ -77,21 +123,35 @@ internal static class ScheduleErrorFixer
             }
         }
     }
-}
 
-/// <summary>
-/// Prevent characters from being warped to a null location.
-/// </summary>
-[HarmonyPatch(typeof(Game1))]
-internal static class ScheduleNullWarp
-{
+    /// <summary>
+    /// Prevent characters from being warped to a null location.
+    /// </summary>
     [HarmonyPrefix]
-    [HarmonyPatch(nameof(Game1.warpCharacter), new[] { typeof(NPC), typeof(GameLocation), typeof(Vector2) })]
+    [HarmonyPatch(typeof(Game1), nameof(Game1.warpCharacter), new[] { typeof(NPC), typeof(GameLocation), typeof(Vector2) })]
     private static bool PrefixCharacterWarp(NPC character, GameLocation? targetLocation)
     {
+        if (character is null)
+        {
+            // weird. Someone called Game1.warpCharacter with a null character, just let that explode.
+            return true;
+        }
+
+        if (character.currentLocation is null)
+        {
+            NetLocationRef backing = _getLocationRef.Value(character);
+            NetString currLoc = _getLocationName.Value(backing);
+            ModEntry.ModMonitor.Log($"{character.Name} has null currentLocation while attempting to warp. NetLocationRef reports {currLoc}", LogLevel.Info);
+            if (!string.IsNullOrEmpty(currLoc))
+            {
+                ModEntry.ModMonitor.Log($"Forcing refresh for backing NetLocationRef.", LogLevel.Info);
+                _markDirty.Value(backing, true);
+            }
+        }
+
         if (targetLocation is null)
         {
-            ModEntry.ModMonitor.Log($"Someone has requested {character?.Name} warp to a null location at game time {Game1.timeOfDay}. Surpressing that.", LogLevel.Error);
+            ModEntry.ModMonitor.Log($"Someone has requested {character.Name} warp to a null location at game time {Game1.timeOfDay}. Suppressing that.", LogLevel.Error);
             return false;
         }
         return true;

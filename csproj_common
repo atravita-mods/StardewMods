@@ -28,10 +28,17 @@
 
   <PropertyGroup>
     <IgnoreModFilePatterns>\.xcf$</IgnoreModFilePatterns>
-    <EnableModZip Condition="$(Configuration) != 'Release'">False</EnableModZip>
+    <EnableModZip Condition="$(Configuration) == 'Debug'">False</EnableModZip>
     <ModZipPath>$(SolutionDir)\_releases</ModZipPath>
+    <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
+    <GenerateDocumentationFile>True</GenerateDocumentationFile>
+    <SignAssembly>True</SignAssembly>
+    <AssemblyOriginatorKeyFile>$(SolutionDir)keypair.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
 
+  <PropertyGroup>
+    <WarningLevel>9999</WarningLevel>
+  </PropertyGroup>
 
   <!--common packages everyone uses-->
   <ItemGroup>

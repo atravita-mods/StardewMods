@@ -1,0 +1,20 @@
+{"Changes":[
+    {
+        "Action": "EditData",
+        "LogName": "ExtraDialogue",
+        "Target": "Data/ExtraDialogue",
+        "Entries": {
+            "PurchasedItem_1_QualityHigh": "{{i18n:purchased.1.high.{{YearModulus}} | default = {{i18n: purchased.1.high.1 }} }}",
+            "Town_DumpsterDiveComment_Adult": "{{i18n:dumpster-adult.{{season}} | default = {{i18n:dumpster-adult}} }}$s"
+        }
+    },
+    {
+        "Action": "EditData",
+        "LogName": "StringsFromCSFiles",
+        "Target": "Strings/StringsFromCSFiles",
+        "Entries": {
+            "NPC.cs.4176": " {{i18n:gift-tastes-ending-allergic.{{season}}|pronouns = {{i18n: he}} }}",
+            "NPC.cs.4178": " {{i18n:gift-tastes-ending-allergic.{{season}}|pronouns = {{i18n: she}} }}"
+        }
+    }
+]}

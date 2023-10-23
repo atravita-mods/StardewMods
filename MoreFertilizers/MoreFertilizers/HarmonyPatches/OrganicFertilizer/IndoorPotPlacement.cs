@@ -1,6 +1,14 @@
-﻿using AtraShared.Utils.Extensions;
+﻿using AtraBase.Toolkit.Extensions;
+
+using AtraCore;
+
+using AtraShared.ConstantsAndEnums;
+using AtraShared.Utils.Extensions;
+
 using HarmonyLib;
+
 using MoreFertilizers.Framework;
+
 using StardewValley.Objects;
 using StardewValley.TerrainFeatures;
 
@@ -10,10 +18,10 @@ namespace MoreFertilizers.HarmonyPatches.OrganicFertilizer;
 /// Handles organic seeds for indoor pots.
 /// </summary>
 [HarmonyPatch(typeof(IndoorPot))]
+[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = StyleCopConstants.NamedForHarmony)]
 internal static class IndoorPotPlacement
 {
     [HarmonyPatch(nameof(IndoorPot.performObjectDropInAction))]
-    [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Harmony Convention")]
     private static void Postfix(IndoorPot __instance, Item? dropInItem, bool probe)
     {
         if (probe)
@@ -23,7 +31,7 @@ internal static class IndoorPotPlacement
         if (dropInItem?.modData?.GetBool(CanPlaceHandler.Organic) == true
             && __instance.hoeDirt?.Value?.fertilizer?.Value is HoeDirt.noFertilizer
             && ModEntry.OrganicFertilizerID != -1
-            && Game1.random.Next(2) == 0)
+            && Singletons.Random.OfChance(0.5))
         {
             __instance.hoeDirt.Value.fertilizer.Value = ModEntry.OrganicFertilizerID;
         }

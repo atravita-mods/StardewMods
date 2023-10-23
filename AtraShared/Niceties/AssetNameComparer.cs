@@ -29,7 +29,7 @@ public sealed class AssetNameComparer : EqualityComparer<IAssetName>
             return false;
         }
 
-        return lhs.Name.Equals(rhs.Name, StringComparison.OrdinalIgnoreCase);
+        return ReferenceEquals(lhs, rhs) || lhs.Name.Equals(rhs.Name, StringComparison.OrdinalIgnoreCase);
     }
 
     /// <inheritdoc />
@@ -67,7 +67,7 @@ public sealed class BaseAssetNameComparer : EqualityComparer<IAssetName>
             return false;
         }
 
-        return lhs.BaseName.Equals(rhs.BaseName, StringComparison.OrdinalIgnoreCase);
+        return ReferenceEquals(lhs, rhs) || lhs.BaseName.Equals(rhs.BaseName, StringComparison.OrdinalIgnoreCase);
     }
 
     /// <inheritdoc />

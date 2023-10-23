@@ -4,7 +4,29 @@
         "Action": "EditData",
         "Target": "Characters/Dialogue/Willy",
         "Entries": {
-            "6_2": "My family's been from these parts as far as I can remember."
+            "dumped_Guys": "@, I thought you were more honorable than that.#$e#Dating the whole town, that's not something I thought you would do.$s",
+        }
+    },
+    {
+        "LogName": "Willy mid-hearts",
+        "Action": "EditData",
+        "Target": "Characters/Dialogue/Willy",
+        "Entries": {
+            "6{{YearRemainder}}": "I also sell tackle. Find them mighty useful for catching difficult fish...",
+            "7{{YearRemainder}}": "How am I supposed to compete against those big ships that scrape the sea bottom?$s"
+        },
+        "When": {
+            "YearModulus": "1"
+        }
+    },
+    {
+        "LogName": "Willy mid-hearts",
+        "Action": "EditData",
+        "Target": "Characters/Dialogue/Willy",
+        "Entries": {
+            "6_2": "My family's been from the Fern Islands as far as I can remember.",
+            "7_2": "Catfish are my favorite fish.#$b#They make for a good fish fry too!",
+            "8_2": "When I was younger, I'd head out to sea for months at a time."
         },
         "When": {
             "YearModulus": "2"

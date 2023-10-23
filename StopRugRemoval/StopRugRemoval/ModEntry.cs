@@ -1,5 +1,9 @@
-﻿using AtraBase.Toolkit.Extensions;
+﻿using System.Diagnostics;
 
+using AtraBase.Toolkit.Extensions;
+
+using AtraCore.Framework.Caches;
+using AtraCore.Framework.QueuePlayerAlert;
 using AtraCore.Utilities;
 
 using AtraShared.ConstantsAndEnums;
@@ -256,6 +260,37 @@ internal sealed class ModEntry : Mod
         // This allows NPCs to say hi to the player. Yes, I'm that petty.
         Game1.player.displayName = Game1.player.Name;
 
+        // Crosscheck the player's spouse is still valid.
+        const string modData = "atravita.RememberedSpouse";
+        if (Game1.player.spouse is not null && NPCCache.GetByVillagerName(Game1.player.spouse, searchTheater: true) is null)
+        {
+            string spouseName = Game1.player.spouse;
+            ModMonitor.Log($"Player married to {spouseName} but spouse instance not found.", LogLevel.Warn);
+            if (Game1.content.Load<Dictionary<string, string>>("Data\\NPCDispositions").ContainsKey(spouseName))
+            {
+                ModMonitor.Log($"{spouseName} accounted for NPCDispos. We expect them to be respawned later.", LogLevel.Info);
+            }
+            else
+            {
+                ModMonitor.Log($"Cannot account for NPC spouse {spouseName}. Did you remove an NPC mod? Setting spouse to null.", LogLevel.Warn);
+                Game1.player.modData[modData] = Game1.player.spouse;
+                Game1.player.spouse = null;
+                PlayerAlertHandler.AddMessage(new(I18n.EmergencyDivorce_Message(spouseName), HUDMessage.error_type));
+            }
+        }
+        else if (!Game1.player.team.IsMarried(Game1.player.UniqueMultiplayerID) // player marriage.
+            && Game1.player.spouse is null && Game1.player.modData.TryGetValue(modData, out string? pastSpouse)
+            && Game1.player.friendshipData.TryGetValue(pastSpouse, out Friendship? friendship) && friendship.IsMarried())
+        {
+            ModMonitor.Log($"Checking past spouse {pastSpouse}.");
+            if (NPCCache.GetByVillagerName(pastSpouse, searchTheater: true) is not null)
+            {
+                ModMonitor.Log($"Past spouse found! Re-initiating marriage.", LogLevel.Info);
+                Game1.player.spouse = pastSpouse;
+                Game1.player.modData.Remove(modData);
+            }
+        }
+
         if (Context.IsSplitScreen && Context.ScreenId != 0)
         {
             return;
@@ -295,6 +330,10 @@ internal sealed class ModEntry : Mod
         {
             VolcanoChestAdjuster.LoadData(this.Helper.Data, this.Helper.Multiplayer);
 
+#if DEBUG
+            Stopwatch sw = Stopwatch.StartNew();
+#endif
+
             Utility.ForAllLocations(action: static (GameLocation loc) =>
             {
                 if (loc is null)
@@ -303,6 +342,21 @@ internal sealed class ModEntry : Mod
                 }
 
 #warning - review and remove in stardew 1.6
+
+                // crosscheck and remove nulls in GameLocation.characters
+                // Game and mods do not like this.
+                if (loc.characters is not null)
+                {
+                    for (int i = loc.characters.Count - 1; i >= 0; i--)
+                    {
+                        if (loc.characters[i] is null)
+                        {
+                            ModMonitor.Log($"Found null in characters list for {loc.NameOrUniqueName}, removing.", LogLevel.Warn);
+                            loc.characters.RemoveAt(i);
+                        }
+                    }
+                }
+
                 // crosscheck and fix jukeboxes.
                 string song = loc.miniJukeboxTrack.Value;
                 if (!string.IsNullOrEmpty(song))
@@ -319,7 +373,7 @@ internal sealed class ModEntry : Mod
                     }
                     catch (Exception ex)
                     {
-                        ModMonitor.Log($"Failed while trying to retrieve song {song} - {ex}.", LogLevel.Error);
+                        ModMonitor.LogError($"retrieving song {song}", ex);
                         loc.miniJukeboxTrack.Value = string.Empty;
                     }
                 }
@@ -342,6 +396,9 @@ internal sealed class ModEntry : Mod
                     islandHouse.fridge?.Value?.clearNulls();
                 }
             });
+#if DEBUG
+            this.Monitor.LogTimespan("Sanity checking locations", sw, LogLevel.Trace);
+#endif
         }
     }
 

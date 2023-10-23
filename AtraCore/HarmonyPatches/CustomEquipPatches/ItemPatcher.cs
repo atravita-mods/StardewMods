@@ -667,7 +667,6 @@ internal static class ItemPatcher
     {
         if (_activeEffects.TryGetValue(item, out EquipEffects? effect))
         {
-            ModEntry.ModMonitor.TraceOnlyLog($"Adding regen for {item.QualifiedItemId} - {effect.Id}.");
             effect.AddRegen(player);
         }
     }

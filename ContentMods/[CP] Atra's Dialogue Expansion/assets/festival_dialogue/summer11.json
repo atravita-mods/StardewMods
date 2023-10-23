@@ -21,9 +21,20 @@
         },
         "Entries": {
             "Alex_y2": "{{i18n:alex-y2-luau.00}}$h",
-            "Alex_y3": "{{i18n:alex-y3-luau.00}}$h",
             "Alex_spouse_y2": "{{i18n:alex-y2-luau-spouse}}$h",
             "Alex_spouse_y3": "{{i18n:alex-y3-luau-spouse}}$h"
+        }
+    },
+    {
+        "Action": "EditData",
+        "LogName": "Alex - higher hearts",
+        "Target": "Data/Festivals/summer11",
+        "When": {
+            "EnableFor": "Alex",
+            "Query: {{Hearts:Alex}} > 5": true
+        },
+        "Entries": {
+            "Alex_y3": "{{i18n:alex-y3-luau.00}}$h"
         }
     },
     {
@@ -47,8 +58,8 @@
             "EnableFor": "Clint"
         },
         "Entries": {
-            "Clint_y2": "{{i18n:clint-y2-luau.00}}$s#$e{{i18n:clint-y2-luau.01}}",
-            "Clint_y3": "{{i18n:clint-y3-luau}}",
+            "Clint_y2": "{{i18n:clint-y2-luau}}",
+            "Clint_y3": "{{i18n:clint-y3-luau.00}}$s#$e{{i18n:clint-y3-luau.01}}",
             "Clint_y4": "{{i18n:clint-y4-luau}}$h"
         }
     },
@@ -373,7 +384,7 @@
             "EnableFor": "Sebastian"
         },
         "Entries": {
-            "Sebastian_y2": "{{i18n:sebastian-y2-luau}}$s",
+            "Sebastian_y2": "{{i18n:sebastian-y2-luau}}$s#$e#{{i18n:sebastian-y2-luau.000}}",
             "Sebastian_spouse_y2": "{{i18n:sebastian-y2-luau-spouse}}$s"
         }
     },

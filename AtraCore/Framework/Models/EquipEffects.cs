@@ -4,7 +4,6 @@ namespace AtraCore.Framework.Models;
 
 using System.Reflection;
 
-using AtraBase.Toolkit.Extensions;
 using AtraBase.Toolkit.Reflection;
 
 using AtraCore.Framework.Caches.AssetCache;
@@ -187,9 +186,15 @@ public sealed class EquipEffects
     {
         if (this.StaminaRegen > 0 && farmer.Stamina < farmer.MaxStamina)
         {
+            int prev = (int)farmer.Stamina;
             float amount = Math.Min(this.StaminaRegen, farmer.MaxStamina - farmer.Stamina);
             farmer.Stamina += amount;
-            farmer.currentLocation.debris.Add(new Debris(amount.RandomRoundProportional(), farmer.Position, Color.Green, 1f, farmer));
+
+            int incremented = (int)farmer.Stamina - prev;
+            if (incremented > 0)
+            {
+                farmer.currentLocation.debris.Add(new Debris(incremented, farmer.Position, Color.Green, 1f, farmer));
+            }
         }
         if (this.HealthRegen > 0 && farmer.health < farmer.maxHealth)
         {
@@ -434,8 +439,14 @@ public sealed class BuffModel : ObjectBuffAttributesData
 /// </summary>
 public sealed class LightData
 {
+    /// <summary>
+    /// Gets or sets the color of the light.
+    /// </summary>
     public Color Color { get; set; } = new(0, 50, 170);
 
+    /// <summary>
+    /// Gets or sets the radius of the light.
+    /// </summary>
     public int Radius { get; set; } = -1;
 }
 

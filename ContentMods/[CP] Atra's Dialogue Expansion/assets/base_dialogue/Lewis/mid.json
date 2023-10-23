@@ -14,6 +14,7 @@
             "CommunityCenter_33_9": "{{i18n: lewis-cc-fireplace.{{season}}.{{YearModulus}} }}", // in front of the fire place.
 
             // pre-festival
+            "summer_10{{YearRemainder}}": "{{i18n: luau-prelude-lewis.{{IsJojaMartComplete}}.{{Random:00,01,02}} }}",
             "fall_15{{YearRemainder}}": "{{i18n:fair-prelude-lewis.{{Random:00,01,02}} }}$h"
         }
     },

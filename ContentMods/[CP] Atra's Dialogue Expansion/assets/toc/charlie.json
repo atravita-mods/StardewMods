@@ -118,7 +118,7 @@
         "FromFile": "{{FirstValidFile: assets/{{language}}/charlie/Willy/mid.json, assets/default/charlie/Willy/mid.json}}",
         "When": {
             "EnableFor": "Willy",
-            "Query: {{Hearts:Sam}} >= 6": true
+            "Query: {{Hearts:Willy}} >= 6": true
         }
     }
 ]}

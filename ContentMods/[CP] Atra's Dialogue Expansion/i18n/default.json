@@ -1284,6 +1284,13 @@
     "leah-y2-luau-spouse.00": "Gosh, @, I'm starting to sound old, am I?",
     "leo-y2-luau": "This is pretty fun! I like the music.",
     "leo-y3-luau": "I like Mr. Linus. He teaches me lots, he listens to me lots.",
+    // Day before the luau. True = jojamart complete.
+    "luau-prelude-lewis.true.00": "We've got to be on our best behavior tomorrow, I need to get us a new grant to get Penny some more schoolbooks for the kids.",
+    "luau-prelude-lewis.true.01": "With Joja here, absorbing so much commerce with such favorable tax breaks we really should not have given them, we're more dependent than ever on the goodwill of the Governor.$s",
+    "luau-prelude-lewis.true.02": "Say, @, will you be at the luau tomorrow?#$b#Bring something nice for the potluck if you're coming. We've got to impress the Governor!",
+    "luau-prelude-lewis.false.00": "Oh, @, are you looking forward to the luau tomorrow! It'll be interesting to see what that soup turns out like!$h",
+    "luau-prelude-lewis.false.01": "Weather looks like it's shaping up nice for the luau tomorrow.#$e#You know, @, the beach is one of our little town's best assets.$h",
+    "luau-prelude-lewis.false.02": "I've got so much work I still need to do for the luau tomorrow, @.#$b#It'll be great, as always.$h",
     "lewis-y2-luau": "Just to reiterate, we absolutely need to impress the governor! Hopefully, you've bought something nice for our soup.",
     "lewis-y3-luau": "Oh, @, I hope you've bought something for our little soup!",
     "lewis-y3-luau.00": "You know, this soup has been the tradition for as long as I can remember...",

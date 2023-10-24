@@ -98,8 +98,8 @@ internal sealed class ModEntry : BaseMod<ModEntry>
         Game1.player.mailReceived.Add(AssetManager.MailFlag);
 
         FarmerWatcher? watcher = new();
-        Game1.player.professions.OnArrayReplaced += watcher.Professions_OnArrayReplaced;
-        Game1.player.professions.OnElementChanged += watcher.Professions_OnElementChanged;
+        Game1.player.professions.OnValueAdded += watcher.OnValueChanged;
+        Game1.player.professions.OnValueRemoved += watcher.OnValueChanged;
 
         if (Context.ScreenId == 0)
         {

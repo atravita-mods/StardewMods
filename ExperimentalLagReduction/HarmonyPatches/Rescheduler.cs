@@ -698,14 +698,7 @@ internal static class Rescheduler
             this.Name = name;
             this.Prev = prev;
             this.GenderConstraint = genderConstraint;
-            if (prev?.Depth is int previousDepth)
-            {
-                this.Depth = previousDepth + 1;
-            }
-            else
-            {
-                this.Depth = 0;
-            }
+            this.Depth = prev?.Depth is int previousDepth ? previousDepth + 1 : 0;
         }
     }
 }

@@ -34,12 +34,25 @@
             "LogName": "Caroline - normal",
             "Target": "Data/Festivals/fall16",
             "When": {
-                "EnableFor": "Caroline"
+                "EnableFor": "Caroline",
+                "Relationship: Abigail | contains=Divorced": false
             },
             "Entries": {
                 "Caroline_y2": "{{i18n:caroline-y2-fair}}$h",
                 "Caroline_y3": "{{i18n:caroline-y3-fair}}$h",
                 "Caroline_y4": "{{i18n:caroline-y4-fair}}"
+            }
+        },
+        {
+            "Action": "EditData",
+            "LogName": "Caroline - divorced from Abby",
+            "Target": "Data/Festivals/fall16",
+            "When": {
+                "EnableFor": "Caroline",
+                "Relationship: Abigail": "Divorced"
+            },
+            "Entries": {
+                "Caroline": "{{i18n:caroline-fair-divorced-from-abby}}$a"
             }
         },
         {

@@ -1,4 +1,6 @@
-﻿using AtraShared.ConstantsAndEnums;
+﻿namespace GingerIslandMainlandAdjustments.Niceties;
+
+using AtraShared.ConstantsAndEnums;
 using AtraShared.Utils.Extensions;
 
 using HarmonyLib;
@@ -6,8 +8,6 @@ using HarmonyLib;
 using Microsoft.Xna.Framework;
 
 using StardewValley.Locations;
-
-namespace GingerIslandMainlandAdjustments.Niceties;
 
 /// <summary>
 /// Holds patches against GameLocation to prevent trampling of objects on IslandWest.

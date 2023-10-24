@@ -262,10 +262,13 @@
     "gi_leave_harvey_1": "I spend so much of my time inside, it'll be good for me to get some sun.",
 
     "alex-resort-pier": "This water's so blue, I want to dive in.",
-    "vincent_pier": "Look, a whale!",
 
     "penny-resort-entering-2": "Oh no, I forgot my sunscreen!",
     "penny-resort-leaving-2": "Definitely looking forward to coming back here soon.",
+
+    "vincent_pier": "Look, a whale!",
+    "vincent_wander": "A crab bit me!",
+    "vincent_islandnorth": "A coconut fell on my head!",
 
     // expecting grandchildren
     "robin-expecting-grandchild": "Oh, @, I'm so looking forward to having a new grandchild!",
@@ -1489,6 +1492,7 @@
     "caroline-y2-fair": "We've been picking out the best veggies for weeks! Pierre's carefully studied everything that comes out of my garden.",
     "caroline-y3-fair": "Best of luck this year! May the best grange display win.",
     "caroline-y4-fair": "We've picked new cultivars for this year's fair! Hopefully these heritage blueberries score better.",
+    "caroline-fair-divorced-from-abby": "This year, we'll win, I swear.",
     "clint-y2-fair.0": "These are the best swords I've produced this year.",
     "clint-y2-fair.1": "Of course, they'll be sold immediately after this...",
     "clint-y3-fair": "Every year I try to remember to learn a few new techniques for this fair, and every year I forget.",

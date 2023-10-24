@@ -1,11 +1,11 @@
-﻿using AtraShared.ConstantsAndEnums;
+﻿namespace GingerIslandMainlandAdjustments.Niceties;
+
+using AtraShared.ConstantsAndEnums;
 using AtraShared.Utils.Extensions;
 
 using HarmonyLib;
 
 using StardewValley.Pathfinding;
-
-namespace GingerIslandMainlandAdjustments.Niceties;
 
 /// <summary>
 /// Speeds up NPCs if they have a long way to travel to and from the resort.

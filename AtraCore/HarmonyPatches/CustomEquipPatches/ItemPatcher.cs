@@ -28,8 +28,6 @@ using StardewValley.Buffs;
 using StardewValley.Locations;
 using StardewValley.Objects;
 
-// Lights in multiplayer? Probably need to handle those.
-
 /// <summary>
 /// Holds patches for custom buffs on clothing.
 /// </summary>

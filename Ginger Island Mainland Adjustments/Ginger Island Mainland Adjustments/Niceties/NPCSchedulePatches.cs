@@ -1,9 +1,9 @@
-﻿using AtraShared.ConstantsAndEnums;
+﻿namespace GingerIslandMainlandAdjustments.Niceties;
+
+using AtraShared.ConstantsAndEnums;
 using AtraShared.Utils.Extensions;
 
 using HarmonyLib;
-
-namespace GingerIslandMainlandAdjustments.Niceties;
 
 /// <summary>
 /// A patch to skip actually scheduling if NPCs lack schedules.
@@ -14,7 +14,7 @@ namespace GingerIslandMainlandAdjustments.Niceties;
 internal static class NPCSchedulePatches
 {
     [HarmonyPriority(Priority.Last)]
-    [HarmonyPatch(nameof(NPC.TryLoadSchedule), new Type[]{ })]
+    [HarmonyPatch(nameof(NPC.TryLoadSchedule), new Type[] { })]
     private static bool Prefix(NPC __instance, ref bool __result)
     {
         try

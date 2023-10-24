@@ -1,12 +1,12 @@
-﻿using AtraShared.ConstantsAndEnums;
+﻿namespace GingerIslandMainlandAdjustments.DialogueChanges;
+
+using AtraShared.ConstantsAndEnums;
 
 using GingerIslandMainlandAdjustments.ScheduleManager;
 
 using HarmonyLib;
 
 using StardewValley.Locations;
-
-namespace GingerIslandMainlandAdjustments.DialogueChanges;
 
 /// <summary>
 /// Adds patches to make groups work for Resort_Entering and Resort_Leaving.

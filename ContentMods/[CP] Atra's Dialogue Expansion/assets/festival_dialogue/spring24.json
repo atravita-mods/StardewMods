@@ -295,6 +295,7 @@
         {
             "Action": "EditData",
             "LogName": "Jodi - Kent just returned",
+            "Target": "Data/Festivals/spring24",
             "When": {
                 "EnableFor": "Jodi",
                 "Year": 2

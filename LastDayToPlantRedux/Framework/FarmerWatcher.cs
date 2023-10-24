@@ -1,6 +1,4 @@
-﻿using Netcode;
-
-namespace LastDayToPlantRedux.Framework;
+﻿namespace LastDayToPlantRedux.Framework;
 
 /// <summary>
 /// Used to watch events on farmer.
@@ -10,20 +8,9 @@ internal class FarmerWatcher
 {
     private const int PRESTIGED = Farmer.agriculturist + 100;
 
-    [SuppressMessage("Style", "IDE0060:Remove unused parameter", Justification = "Used to listen to an event.")]
-    internal void Professions_OnArrayReplaced(NetList<int, NetInt> list, IList<int> before, IList<int> after)
+    internal void OnValueChanged(int value)
     {
-        if (before.Contains(Farmer.agriculturist) != after.Contains(Farmer.agriculturist)
-                || before.Contains(PRESTIGED) != after.Contains(PRESTIGED))
-        {
-            CropAndFertilizerManager.RequestReset();
-        }
-    }
-
-    [SuppressMessage("Style", "IDE0060:Remove unused parameter", Justification = "Used to listen to an event.")]
-    internal void Professions_OnElementChanged(NetList<int, NetInt> list, int index, int oldValue, int newValue)
-    {
-        if (oldValue == Farmer.agriculturist || newValue == Farmer.agriculturist || oldValue == PRESTIGED || newValue == PRESTIGED)
+        if (value == Farmer.agriculturist || value == PRESTIGED)
         {
             CropAndFertilizerManager.RequestReset();
         }

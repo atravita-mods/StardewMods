@@ -1,4 +1,6 @@
-﻿using AtraShared.ConstantsAndEnums;
+﻿namespace GingerIslandMainlandAdjustments.DialogueChanges;
+
+using AtraShared.ConstantsAndEnums;
 using AtraShared.Utils.Extensions;
 
 using GingerIslandMainlandAdjustments.ScheduleManager;
@@ -8,8 +10,6 @@ using HarmonyLib;
 using StardewModdingAPI.Utilities;
 
 using StardewValley.Locations;
-
-namespace GingerIslandMainlandAdjustments.DialogueChanges;
 
 /// <summary>
 /// Class to handle patching of NPCs for dialogue.

@@ -1,9 +1,12 @@
-﻿using Microsoft.Xna.Framework;
+﻿namespace AtraShared.ConstantsAndEnums;
 
+using AtraShared.Utils;
+
+using Microsoft.Xna.Framework;
+
+using StardewValley.GameData.Objects;
 using StardewValley.Objects;
 using StardewValley.Tools;
-
-namespace AtraShared.ConstantsAndEnums;
 
 /// <summary>
 /// An enum that represents the various types of objects in stardew.
@@ -17,7 +20,7 @@ public enum ItemTypeEnum : uint
     Unknown = 0,
 
     /// <summary>
-    /// A big craftable - <see cref="Game1.bigCraftablesInformation"/>
+    /// A big craftable - <see cref="Game1.bigCraftableData"/>
     /// Use the Vector2 constructor.
     /// </summary>
     BigCraftable = 0b1 << 1,
@@ -52,7 +55,7 @@ public enum ItemTypeEnum : uint
     /// A furniture item. <see cref="StardewValley.Objects.Furniture"/>
     /// </summary>
     /// <remarks>NOTICE: Don't try to use the usual constructor here.
-    /// <see cref="Furniture.GetFurnitureInstance(int, Vector2?) "/>
+    /// <see cref="Furniture.GetFurnitureInstance(string, Vector2?) "/>
     /// will create the correct item.</remarks>
     Furniture = 0b1 << 7,
 
@@ -68,7 +71,7 @@ public enum ItemTypeEnum : uint
     Ring = 0b1 << 2 | SObject,
 
     /// <summary>
-    /// Any normal object. <see cref="Game1.objectInformation" />
+    /// Any normal object. <see cref="Game1.objectData" />
     /// </summary>
     /// <remarks>NOTICE: this includes <see cref="Ring"/>, must handle rings carefully!</remarks>
     SObject = 0b1,
@@ -95,7 +98,7 @@ public enum ItemTypeEnum : uint
 
     /// <summary>
     /// Any item that should actually be the recipe form.
-    /// See <see cref="SObject.IsRecipe"/>
+    /// See <see cref="Item.IsRecipe"/>
     /// </summary>
     Recipe = 0b1 << 14,
 }
@@ -103,7 +106,7 @@ public enum ItemTypeEnum : uint
 /// <summary>
 /// Extensions for the ItemType Enum.
 /// </summary>
-public static class ItemExtensions
+public static class ItemTypeEnumExtensions
 {
     /// <summary>
     /// Tries to get the ItemTypeEnum for a specific item.
@@ -156,5 +159,38 @@ public static class ItemExtensions
         }
 
         return ret;
+    }
+
+    public static string? GetQualifiedId(ItemTypeEnum type, string id)
+    {
+        type &= ~ItemTypeEnum.Recipe;
+        if (type == ItemTypeEnum.ColoredSObject)
+        {
+            type = ItemTypeEnum.SObject;
+        }
+
+#pragma warning disable CS0618 // Type or member is obsolete - special handling for obsolete former member.
+        if (type == ItemTypeEnum.Clothing)
+        {
+            return GetQualifiedId(ItemTypeEnum.Pants, id) ?? GetQualifiedId(ItemTypeEnum.Shirts, id);
+        }
+#pragma warning restore CS0618 // Type or member is obsolete
+
+        return type switch
+        {
+            ItemTypeEnum.BigCraftable => ItemRegistry.GetTypeDefinition(ItemRegistry.type_bigCraftable)?.GetData(id).QualifiedItemId,
+            ItemTypeEnum.Boots => ItemRegistry.GetTypeDefinition(ItemRegistry.type_boots)?.GetData(id).QualifiedItemId,
+            ItemTypeEnum.Shirts => ItemRegistry.GetTypeDefinition(ItemRegistry.type_shirt)?.GetData(id).QualifiedItemId,
+            ItemTypeEnum.Pants => ItemRegistry.GetTypeDefinition(ItemRegistry.type_pants)?.GetData(id).QualifiedItemId,
+            ItemTypeEnum.Furniture => ItemRegistry.GetTypeDefinition(ItemRegistry.type_furniture)?.GetData(id).QualifiedItemId,
+            ItemTypeEnum.Hat => ItemRegistry.GetTypeDefinition(ItemRegistry.type_hat)?.GetData(id).QualifiedItemId,
+            ItemTypeEnum.Ring => Game1.objectData.TryGetValue(id, out ObjectData? data) && !ItemHelperUtils.RingFilter(id, data) ? $"{ItemRegistry.type_object}{id}" : null,
+            ItemTypeEnum.SObject => ItemRegistry.GetTypeDefinition(ItemRegistry.type_object)?.GetData(id).QualifiedItemId,
+            ItemTypeEnum.Tool => ItemRegistry.GetTypeDefinition(ItemRegistry.type_tool)?.GetData(id).QualifiedItemId,
+            ItemTypeEnum.Weapon => ItemRegistry.GetTypeDefinition(ItemRegistry.type_weapon)?.GetData(id).QualifiedItemId,
+            ItemTypeEnum.Wallpaper => ItemRegistry.GetTypeDefinition(ItemRegistry.type_wallpaper)?.GetData(id).QualifiedItemId,
+            ItemTypeEnum.Flooring => ItemRegistry.GetTypeDefinition(ItemRegistry.type_floorpaper)?.GetData(id).QualifiedItemId,
+            _ => null,
+        };
     }
 }

@@ -25,6 +25,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)CustomExceptions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ConstantsAndEnums\ErrorMessageConsts.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Integrations\GMCMAttributes\GMCMDefaultVectorAttribute.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Integrations\IntegrationHelper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)integrations\interfaces\ICameraAPI.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Integrations\Interfaces\IGrowableGiantCrops.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Integrations\Interfaces\IGiantCropTweaksAPI.cs" />
@@ -73,7 +74,6 @@
     <Compile Include="$(MSBuildThisFileDirectory)Integrations\Interfaces\ContentPatcher\IContentPatcherAPI.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Integrations\Interfaces\IFlexibleSprinklerAPI.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Integrations\Interfaces\IGenericModConfigMenuAPI.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Integrations\IntegrationHelper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Integrations\Interfaces\IGMCMOptionsAPI.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Integrations\Interfaces\IJsonAssetsAPI.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Integrations\Interfaces\ILineSprinklersAPI.cs" />
@@ -108,6 +108,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Utils\HarmonyHelper\ILHelperExceptions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Utils\HarmonyHelper\ILHelperExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Utils\Extensions\InputUtils.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Utils\ItemHelperUtils.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Utils\NPCHelpers.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Utils\RandomUtils.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Utils\Shims\FarmTypeManagerShims.cs" />

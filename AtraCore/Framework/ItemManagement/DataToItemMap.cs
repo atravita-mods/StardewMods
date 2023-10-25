@@ -1,8 +1,11 @@
-﻿using System.Runtime.InteropServices;
+﻿namespace AtraCore.Framework.ItemManagement;
+
+using System.Runtime.InteropServices;
 
 using AtraBase.Toolkit.Extensions;
 
 using AtraShared.ConstantsAndEnums;
+using AtraShared.Utils;
 using AtraShared.Utils.Extensions;
 using AtraShared.Wrappers;
 
@@ -14,8 +17,6 @@ using StardewValley.GameData.Pants;
 using StardewValley.GameData.Shirts;
 using StardewValley.GameData.Weapons;
 
-namespace AtraCore.Framework.ItemManagement;
-
 /// <summary>
 /// Handles looking up the id of an item by its name and type.
 /// </summary>
@@ -24,7 +25,6 @@ public static class DataToItemMap
     private static readonly SortedList<ItemTypeEnum, IAssetName> enumToAssetMap = new(8);
 
     private static readonly SortedList<ItemTypeEnum, Lazy<Dictionary<string, (string id, bool repeat)>>> nameToIDMap = new(9);
-
 
     public static bool IsValidId(ItemTypeEnum type, string id)
     {
@@ -38,7 +38,7 @@ public static class DataToItemMap
         if (type == ItemTypeEnum.Clothing)
         {
             ModEntry.ModMonitor.LogOnce($"Searches for clothing are deprecated as of Stardew 1.6. Please specify Shirts or Pants separately.", LogLevel.Warn);
-            return IsValidId(ItemTypeEnum.Pants, id) || IsValidId(ItemTypeEnum.Shirts,id);
+            return IsValidId(ItemTypeEnum.Pants, id) || IsValidId(ItemTypeEnum.Shirts, id);
         }
 #pragma warning restore CS0618 // Type or member is obsolete
 

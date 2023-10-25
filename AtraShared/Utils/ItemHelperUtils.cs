@@ -1,11 +1,12 @@
 ﻿// Ignore Spelling: Utils
 
+namespace AtraShared.Utils;
+
 using CommunityToolkit.Diagnostics;
 
 using StardewValley.GameData.BigCraftables;
 using StardewValley.GameData.Objects;
 
-namespace AtraCore.Framework.ItemManagement;
 public static class ItemHelperUtils
 {
     /// <summary>

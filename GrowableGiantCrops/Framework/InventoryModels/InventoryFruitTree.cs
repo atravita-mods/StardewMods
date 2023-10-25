@@ -169,9 +169,8 @@ public sealed class InventoryFruitTree : SObject
             return false;
         }
 
-        FruitTree fruitTree = new(this.ParentSheetIndex, this.growthStage.Value)
+        FruitTree fruitTree = new(this.ItemId, this.growthStage.Value)
         {
-            GreenHouseTree = location.IsGreenhouse || ((this.ParentSheetIndex == 69 || this.ParentSheetIndex == 835) && location is IslandWest),
             GreenHouseTileTree = location.doesTileHavePropertyNoNull((int)placementTile.X, (int)placementTile.Y, "Type", "Back") == "Stone",
         };
         fruitTree.struckByLightningCountdown.Value = this.struckByLightning.Value;
@@ -180,7 +179,7 @@ public sealed class InventoryFruitTree : SObject
         {
             fruitTree.modData.CopyModDataFrom(this.modData);
         }
-        fruitTree.modData?.SetInt(ModDataKey, this.ParentSheetIndex);
+        fruitTree.modData[ModDataKey] = this.ItemId;
 
         fruitTree.shake(placementTile, true);
         location.terrainFeatures[placementTile] = fruitTree;
@@ -333,7 +332,7 @@ public sealed class InventoryFruitTree : SObject
     protected override Item GetOneNew()
     {
         return new InventoryFruitTree(
-            saplingIndex: this.ParentSheetIndex,
+            saplingIndex: this.ItemId,
             initialStack: 1,
             growthStage: this.growthStage.Value,
             daysUntilMature: this.daysUntilMature.Value,

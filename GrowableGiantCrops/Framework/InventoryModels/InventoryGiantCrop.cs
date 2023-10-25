@@ -1,4 +1,6 @@
-﻿using System.Runtime.CompilerServices;
+﻿namespace GrowableGiantCrops.Framework.InventoryModels;
+
+using System.Runtime.CompilerServices;
 using System.Xml.Serialization;
 
 using AtraBase.Toolkit;
@@ -19,8 +21,6 @@ using Microsoft.Xna.Framework.Graphics;
 using Netcode;
 
 using StardewValley.TerrainFeatures;
-
-namespace GrowableGiantCrops.Framework.InventoryModels;
 
 // NOTE: remember that the lower left corner is the placement corner!
 

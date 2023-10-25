@@ -209,16 +209,13 @@ internal sealed class ModEntry : BaseMod<ModEntry>
             return null;
         }
 
-        if (!int.TryParse(entry.Identifier, out int id))
+        string? id = entry.Identifier;
+        if (!DataToItemMap.IsValidId(entry.Type, id))
         {
-            id = DataToItemMap.GetID(entry.Type, entry.Identifier);
+            id = DataToItemMap.GetID(entry.Type, id);
         }
 
-        if (id > 0)
-        {
-            return ItemUtils.GetItemFromIdentifier(entry.Type, id);
-        }
-        return null;
+        return id is not null ? ItemUtils.GetItemFromIdentifier(entry.Type, id) : null;
     }
 
     private SObject? RandomSeasonalForage(Random random)
@@ -231,7 +228,7 @@ internal sealed class ModEntry : BaseMod<ModEntry>
     {
         this.Monitor.DebugOnlyLog("Selected GetFromForage");
 
-        if (this.config.ForageFromMaps.Count == 0)
+        if (this.config.ForageFromMaps.Length == 0)
         {
             return null;
         }
@@ -325,20 +322,21 @@ internal sealed class ModEntry : BaseMod<ModEntry>
         this.bannedItems.Clear();
         foreach (ItemRecord? item in this.config.Denylist)
         {
-            if (!int.TryParse(item.Identifier, out int id))
+            string? id = item.Identifier;
+            if (!DataToItemMap.IsValidId(item.Type, item.Identifier))
             {
                 id = DataToItemMap.GetID(item.Type, item.Identifier);
             }
 
-            if (id != -1)
+            if (id is not null && ItemTypeEnumExtensions.GetQualifiedId(item.Type, id) is string qualID)
             {
-                this.bannedItems.Add(id);
+                this.bannedItems.Add(qualID);
             }
         }
 
         // Handle the player-added list.
         this.playerItemsManager.Clear();
-        if (this.config.UserDefinedItemList.Count > 0)
+        if (this.config.UserDefinedItemList.Length > 0)
         {
             this.playerItemsManager.AddRange(this.config.UserDefinedItemList.Select((item) => new WeightedItem<ItemRecord?>(item.Weight, item.Item)));
         }
@@ -354,7 +352,7 @@ internal sealed class ModEntry : BaseMod<ModEntry>
             this.AddPicker(this.config.UserDefinedListWeight, this.GetUserItem);
         }
 
-        if (this.config.ForageFromMaps.Count > 0)
+        if (this.config.ForageFromMaps.Length > 0)
         {
             this.AddPicker(this.config.ForageFromMapsWeight, this.GetFromForage);
         }

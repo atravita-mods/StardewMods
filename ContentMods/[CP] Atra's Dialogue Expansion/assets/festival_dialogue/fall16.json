@@ -57,6 +57,22 @@
         },
         {
             "Action": "EditData",
+            "LogName": "Caroline - normal - regular dialogue file",
+            "Target": "Characters/Dialogue/Caroline",
+            "When": {
+                "EnableFor": "Caroline",
+                "Relationship: Abigail | contains=Divorced": false
+            },
+            "Entries": {
+                "Fair_Judging": "{{i18n:caroline-fair-judging}}",
+                "Fair_Judged_PlayerLost_Skipped": "{{i18n:caroline-fair-judged-skipped}}$h",
+                "Fair_Judged_PlayerLost": "{{i18n:caroline-fair-judged-lost}}$h",
+                "Fair_Judged_PlayerWon": "{{i18n:caroline-fair-judged-won}}$h",
+                "Fair_Judged_PlayerLost_PurpleShorts": "{{i18n:caroline-fair-judged-shorts}}$a"
+            }
+        },
+        {
+            "Action": "EditData",
             "LogName": "Clint - normal",
             "Target": "Data/Festivals/fall16",
             "When": {

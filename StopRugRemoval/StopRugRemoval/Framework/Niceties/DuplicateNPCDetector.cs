@@ -1,34 +1,22 @@
-﻿using AtraBase.Toolkit.Extensions;
-using AtraBase.Toolkit.StringHandler;
+﻿namespace StopRugRemoval.Framework.Niceties;
 
 using AtraCore.Framework.Caches;
 
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-
 using StardewModdingAPI.Events;
-
-using StardewValley;
-using StardewValley.GameData.Characters;
-
-namespace StopRugRemoval.Framework.Niceties;
 
 /// <summary>
 /// Detects and tries to fix up duplicate NPCs.
-/// </summary>
+/// </summary>s
 internal static class DuplicateNPCDetector
 {
     /// <inheritdoc cref="IGameLoopEvents.DayStarted"/>
     internal static void DayStart()
     {
-        if (Context.IsMainPlayer)
+        if (!Context.IsMainPlayer)
         {
-            DetectDuplicateNPCs();
+            return;
         }
-    }
 
-    private static Dictionary<string, NPC> DetectDuplicateNPCs()
-    {
         Dictionary<string, NPC> found = new();
         foreach (GameLocation loc in Game1.locations)
         {
@@ -71,7 +59,5 @@ internal static class DuplicateNPCDetector
                 }
             }
         }
-
-        return found;
     }
 }

@@ -7,6 +7,7 @@ using AtraShared.Utils.Extensions;
 using HarmonyLib;
 
 using StardewValley.Monsters;
+using StardewValley.Objects;
 using StardewValley.Tools;
 
 /// <summary>
@@ -50,8 +51,8 @@ internal static class FarmerPatches
                 return;
             }
 
-            __instance.leftRing.Value?.OnPlayerHit(__instance);
-            __instance.rightRing.Value?.OnPlayerHit(__instance);
+            __instance.leftRing.Value?.OnPlayerHitRing(__instance);
+            __instance.rightRing.Value?.OnPlayerHitRing(__instance);
 
             __instance.hat.Value?.OnPlayerHit(__instance);
             __instance.shirtItem.Value?.OnPlayerHit(__instance);
@@ -73,5 +74,21 @@ internal static class FarmerPatches
             effect.AddBuff(item, player);
             effect.AddRegen(player);
         }
+    }
+
+    private static void OnPlayerHitRing(this Ring ring, Farmer player)
+    {
+        if (ring is CombinedRing combined)
+        {
+            foreach (Ring? subring in combined.combinedRings)
+            {
+                subring?.OnPlayerHitRing(player);
+            }
+        }
+        else
+        {
+            ring.OnPlayerHit(player);
+        }
+
     }
 }

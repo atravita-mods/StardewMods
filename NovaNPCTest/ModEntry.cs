@@ -66,7 +66,18 @@ internal sealed class ModEntry : Mod
 
         ModMonitor.Log($"Checking {npc.Name}, is currently at {npc.currentLocation.NameOrUniqueName}");
 
-        string scheduleKey = npc.dayScheduleName.Value;
+        string? scheduleKey = npc.dayScheduleName.Value;
+
+        if (scheduleKey is null)
+        {
+            npc.TryLoadSchedule();
+        }
+
+        if (scheduleKey is null)
+        {
+            ModMonitor.Log($"{npc.Name} seems to be missing a schedule today, huh.");
+            return;
+        }
 
         if (scheduleKey.EndsWith("_Replacement"))
         {

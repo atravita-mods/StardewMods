@@ -108,7 +108,7 @@ public class IntegrationHelper
         }
         catch (Exception ex)
         {
-            this.Monitor.LogError("mapping {apiid}", ex);
+            this.Monitor.LogError($"mapping {apiid}", ex);
             api = default;
         }
 #if DEBUG

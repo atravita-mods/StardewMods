@@ -4,7 +4,6 @@ namespace AtraCore.HarmonyPatches.CustomEquipPatches;
 
 using System;
 using System.Runtime.CompilerServices;
-using System.Security.Cryptography;
 
 using AtraBase.Toolkit;
 using AtraBase.Toolkit.Reflection;
@@ -38,10 +37,10 @@ internal static class ItemPatcher
     private const string LightKey = "atravita.EquipLight";
 
     // maps the ring ID to the current effect of the ring for tooltips
-    private static readonly PerScreen<Dictionary<string, EquipEffects>> _tooltipMap = new(() => new());
+    private static readonly PerScreen<Dictionary<string, EquipEffects>> _tooltipMap = new(static () => new());
 
     // maps the items to their active effects
-    private static readonly ConditionalWeakTable<Item, EquipEffects> _activeEffects = new();
+    private static readonly PerScreen<ConditionalWeakTable<Item, EquipEffects>> _activeEffects = new(static () => new());
 
     // holds tooltip cache for combined rings
     private static readonly ConditionalWeakTable<CombinedRing, EquipEffects?> _combinedTooltips = new();
@@ -50,7 +49,10 @@ internal static class ItemPatcher
     private static readonly ConditionalWeakTable<Boots, EquipEffects?> _bootsTooltips = new();
 
     // holds references to active lights
-    private static readonly PerScreen<Dictionary<Item, int>> _lightSources = new(() => new());
+    private static readonly PerScreen<Dictionary<Item, int>> _lightSources = new(static () => new());
+
+    // holds the remainder of health from the last round of health updates.
+    private static readonly PerScreen<float> _healthRemainder = new(static () => 0f);
 
     #region delegates
     private static readonly Lazy<Func<Ring, int?>> lightIDSourceGetter = new(() =>
@@ -453,7 +455,7 @@ internal static class ItemPatcher
 
     private static void AddMonsterKillBuff(this Item item, GameLocation location, Farmer who)
     {
-        var effect = AssetManager.GetEquipData(item.QualifiedItemId)
+        EquipEffects? effect = AssetManager.GetEquipData(item.QualifiedItemId)
                         ?.GetEffect(EquipmentBuffTrigger.OnMonsterSlay, location, who);
         if (effect is not null)
         {
@@ -477,7 +479,7 @@ internal static class ItemPatcher
         {
             if (GetEquipEffect(__instance) is { } active)
             {
-                _activeEffects.AddOrUpdate(__instance, active);
+                _activeEffects.Value.AddOrUpdate(__instance, active);
                 effects = active.BaseEffects.Merge(effects);
 
                 ModEntry.ModMonitor.TraceOnlyLog($"[DataEquips] Added Effects for {__instance.QualifiedItemId}");
@@ -501,13 +503,13 @@ internal static class ItemPatcher
         {
             try
             {
-                if (_activeEffects.TryGetValue(__instance, out EquipEffects? effects))
+                if (_activeEffects.Value.TryGetValue(__instance, out EquipEffects? effects))
                 {
                     if (effects.Light.Radius > 0)
                     {
                         RemoveItemLight(__instance, who.currentLocation);
                     }
-                    _activeEffects.Remove(__instance);
+                    _activeEffects.Value.Remove(__instance);
                     ModEntry.ModMonitor.TraceOnlyLog($"[DataEquips] Unequip for {__instance.QualifiedItemId}");
                 }
             }
@@ -524,13 +526,13 @@ internal static class ItemPatcher
     {
         try
         {
-            if (_activeEffects.TryGetValue(__instance, out EquipEffects? effects))
+            if (_activeEffects.Value.TryGetValue(__instance, out EquipEffects? effects))
             {
                 if (effects.Light.Radius > 0)
                 {
                     RemoveRingLight(__instance, who.currentLocation);
                 }
-                _activeEffects.Remove(__instance);
+                _activeEffects.Value.Remove(__instance);
                 ModEntry.ModMonitor.TraceOnlyLog($"[DataEquips] Unequip for {__instance.QualifiedItemId}");
             }
         }
@@ -557,7 +559,7 @@ internal static class ItemPatcher
                     {
                         _ = AddItemLight(lightEffect.Radius, lightEffect.Color, __instance, who, who.currentLocation);
                     }
-                    _activeEffects.AddOrUpdate(__instance, effect);
+                    _activeEffects.Value.AddOrUpdate(__instance, effect);
                     ModEntry.ModMonitor.TraceOnlyLog($"[DataEquips] Equip for {__instance.QualifiedItemId}");
                 }
             }
@@ -581,7 +583,7 @@ internal static class ItemPatcher
                 {
                     AddRingLight(lightEffect.Radius, lightEffect.Color, __instance, who, who.currentLocation);
                 }
-                _activeEffects.AddOrUpdate(__instance, effect);
+                _activeEffects.Value.AddOrUpdate(__instance, effect);
                 ModEntry.ModMonitor.TraceOnlyLog($"[DataEquips] Equip for {__instance.QualifiedItemId}");
             }
         }
@@ -639,13 +641,43 @@ internal static class ItemPatcher
 
         if (e.IsOneSecond && Game1.shouldTimePass())
         {
-            currentPlayer.leftRing.Value?.OnSecondTicked(currentPlayer);
-            currentPlayer.rightRing.Value?.OnSecondTicked(currentPlayer);
+            float health_regen = 0;
+            float stamina_regen = 0;
 
-            currentPlayer.hat.Value?.OnSecondTicked(currentPlayer);
-            currentPlayer.shirtItem.Value?.OnSecondTicked(currentPlayer);
-            currentPlayer.pantsItem.Value?.OnSecondTicked(currentPlayer);
-            currentPlayer.boots.Value?.OnSecondTicked(currentPlayer);
+            foreach (KeyValuePair<Item, EquipEffects> kvp in _activeEffects.Value)
+            {
+                EquipEffects effect = kvp.Value;
+                health_regen += effect.HealthRegen;
+                stamina_regen += effect.StaminaRegen;
+            }
+
+            if (stamina_regen > 0 && currentPlayer.Stamina < currentPlayer.MaxStamina)
+            {
+                int prev = (int)currentPlayer.Stamina;
+                float amount = Math.Min(stamina_regen, currentPlayer.MaxStamina - currentPlayer.Stamina);
+                currentPlayer.Stamina += amount;
+
+                int incremented = (int)currentPlayer.Stamina - prev;
+                if (incremented > 0)
+                {
+                    currentPlayer.currentLocation.debris.Add(new Debris(incremented, currentPlayer.Position, Color.Green, 1f, currentPlayer));
+                }
+            }
+            if (health_regen > 0 && currentPlayer.health < currentPlayer.maxHealth)
+            {
+                float amount = Math.Min(health_regen + _healthRemainder.Value, currentPlayer.maxHealth - currentPlayer.health);
+                int toAdd = (int)amount;
+                if (toAdd > 0)
+                {
+                    currentPlayer.health += toAdd;
+                    currentPlayer.currentLocation.debris.Add(new Debris(toAdd, currentPlayer.Position, Color.Green, 1f, currentPlayer));
+                    _healthRemainder.Value = amount - toAdd;
+                }
+                else
+                {
+                    _healthRemainder.Value = amount;
+                }
+            }
         }
     }
 
@@ -658,14 +690,6 @@ internal static class ItemPatcher
             {
                 light.radius.Value = 3f;
             }
-        }
-    }
-
-    private static void OnSecondTicked(this Item item, Farmer player)
-    {
-        if (_activeEffects.TryGetValue(item, out EquipEffects? effect))
-        {
-            effect.AddRegen(player);
         }
     }
 
@@ -763,19 +787,19 @@ internal static class ItemPatcher
         if (AssetManager.GetEquipData(item.QualifiedItemId) is { } data)
         {
             EquipEffects? newEffect = data.GetEffect(EquipmentBuffTrigger.OnEquip, environment, who);
-            _activeEffects.TryGetValue(item, out EquipEffects? ringEffects);
+            _activeEffects.Value.TryGetValue(item, out EquipEffects? ringEffects);
 
             if (!ReferenceEquals(ringEffects, newEffect))
             {
                 who.buffs.Dirty = true;
                 if (newEffect is not null)
                 {
-                    _activeEffects.AddOrUpdate(item, newEffect);
+                    _activeEffects.Value.AddOrUpdate(item, newEffect);
                     _tooltipMap.Value[item.QualifiedItemId] = newEffect;
                 }
                 else
                 {
-                    _activeEffects.Remove(item);
+                    _activeEffects.Value.Remove(item);
                     _tooltipMap.Value.Remove(item.QualifiedItemId);
                 }
             }
@@ -806,7 +830,7 @@ internal static class ItemPatcher
 
     private static EquipEffects? GetEquipEffect(Item __instance)
     {
-        if (_activeEffects.TryGetValue(__instance, out EquipEffects? effects))
+        if (_activeEffects.Value.TryGetValue(__instance, out EquipEffects? effects))
         {
             _tooltipMap.Value[__instance.QualifiedItemId] = effects;
             return effects;

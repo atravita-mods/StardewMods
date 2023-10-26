@@ -1,4 +1,4 @@
-﻿// Ignore Spelling: Utils
+﻿// Ignore Spelling: Utils Craftable
 
 namespace AtraShared.Utils;
 
@@ -7,6 +7,9 @@ using CommunityToolkit.Diagnostics;
 using StardewValley.GameData.BigCraftables;
 using StardewValley.GameData.Objects;
 
+/// <summary>
+/// Helper functions for items.
+/// </summary>
 public static class ItemHelperUtils
 {
     /// <summary>
@@ -26,24 +29,21 @@ public static class ItemHelperUtils
             return true;
         }
 
-        string name = data.Name;
-        if (name == "Stone" && id != "390")
+        switch (data.Name)
         {
-            return true;
+            case "Stone" when id != "390":
+            case "Weeds":
+            case "SupplyCrate":
+            case "Twig":
+            case "Rotten Plant":
+            case "Warp Totem: Qi's Arena":
+            case "???":
+            case "DGA Dummy Object":
+            case "Lost Book":
+                return true;
+            default:
+                return false;
         }
-        if (name == "Weeds"
-            || name == "SupplyCrate"
-            || name == "Twig"
-            || name == "Rotten Plant"
-            || name == "Warp Totem: Qi's Arena"
-            || name == "???"
-            || name == "DGA Dummy Object"
-            || name == "Lost Book")
-        {
-            return true;
-        }
-
-        return false;
     }
 
     /// <summary>
@@ -57,18 +57,18 @@ public static class ItemHelperUtils
         Guard.IsNotNullOrEmpty(id);
         Guard.IsNotNull(data);
 
-        string name = data.Name;
-        if (name == "Wood Chair"
-            || name == "Door"
-            || name == "Locked Door"
-            || name == "Obelisk"
-            || name == "Crate"
-            || name == "Barrel")
+        switch (data.Name)
         {
-            return true;
+            case "Wood Chair":
+            case "Door":
+            case "Locked Door":
+            case "Obelisk":
+            case "Crate":
+            case "Barrel":
+                return true;
+            default:
+                return false;
         }
-
-        return false;
     }
 
     /// <summary>

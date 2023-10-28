@@ -1,11 +1,11 @@
-﻿using AtraShared.ConstantsAndEnums;
+﻿namespace DresserMiniMenu.HarmonyPatches;
+
+using AtraShared.ConstantsAndEnums;
 
 using HarmonyLib;
 
 using StardewValley.Menus;
 using StardewValley.Tools;
-
-namespace DresserMiniMenu.HarmonyPatches;
 
 /// <summary>
 /// Adds patches to shop menu to make dressers take takes and weapons.

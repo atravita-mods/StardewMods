@@ -1,4 +1,6 @@
-﻿using System.Reflection;
+﻿namespace DresserMiniMenu.HarmonyPatches;
+
+using System.Reflection;
 using System.Reflection.Emit;
 using System.Runtime.CompilerServices;
 
@@ -24,8 +26,6 @@ using StardewValley.Menus;
 using StardewValley.Objects;
 
 using static StardewValley.Menus.CoopMenu;
-
-namespace DresserMiniMenu.HarmonyPatches;
 
 /// <summary>
 /// Holds patches against ShopMenu to make minimenu a thing.

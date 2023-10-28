@@ -54,6 +54,12 @@ internal static class ItemPatcher
     // holds the remainder of health from the last round of health updates.
     private static readonly PerScreen<float> _healthRemainder = new(static () => 0f);
 
+    internal static float HealthRemainder
+    {
+        get => _healthRemainder.Value;
+        set => _healthRemainder.Value = value;
+    }
+
     #region delegates
     private static readonly Lazy<Func<Ring, int?>> lightIDSourceGetter = new(() =>
         typeof(Ring).GetCachedField("_lightSourceID", ReflectionCache.FlagTypes.InstanceFlags)

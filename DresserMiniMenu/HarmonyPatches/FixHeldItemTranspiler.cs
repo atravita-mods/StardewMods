@@ -1,4 +1,6 @@
-﻿using System.Reflection;
+﻿namespace DresserMiniMenu.HarmonyPatches;
+
+using System.Reflection;
 using System.Reflection.Emit;
 
 using AtraCore.Framework.ReflectionManager;
@@ -9,8 +11,6 @@ using AtraShared.Utils.HarmonyHelper;
 using HarmonyLib;
 
 using StardewValley.Menus;
-
-namespace DresserMiniMenu.HarmonyPatches;
 
 /// <summary>
 /// Makes it so the held item is set correctly.

@@ -8,6 +8,7 @@ using AtraBase.Toolkit.Reflection;
 
 using AtraCore.Framework.Caches.AssetCache;
 using AtraCore.Framework.ReflectionManager;
+using AtraCore.HarmonyPatches.CustomEquipPatches;
 
 using FastExpressionCompiler.LightExpression;
 
@@ -99,8 +100,6 @@ public sealed class EquipmentExtModel
 /// </summary>
 public sealed class EquipEffects
 {
-    private float healthRemainder = 0f;
-
     /// <summary>
     /// Gets or sets a Id to facilitate CP editing. This should be unique within the list.
     /// </summary>
@@ -198,17 +197,17 @@ public sealed class EquipEffects
         }
         if (this.HealthRegen > 0 && farmer.health < farmer.maxHealth)
         {
-            float amount = Math.Min(this.HealthRegen + this.healthRemainder, farmer.maxHealth - farmer.health);
+            float amount = Math.Min(this.HealthRegen + ItemPatcher.HealthRemainder, farmer.maxHealth - farmer.health);
             int toAdd = (int)amount;
             if (toAdd > 0)
             {
                 farmer.health += toAdd;
                 farmer.currentLocation.debris.Add(new Debris(toAdd, farmer.Position, Color.Green, 1f, farmer));
-                this.healthRemainder = amount - toAdd;
+                ItemPatcher.HealthRemainder = amount - toAdd;
             }
             else
             {
-                this.healthRemainder = amount;
+                ItemPatcher.HealthRemainder = amount;
             }
         }
     }

@@ -130,6 +130,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MapAndTileProperties", "Map
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Deprecated", "Deprecated", "{51E1CEE0-2A1B-475C-B9D6-1AF57100DDBF}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EastScarp", "EastScarp\EastScarp.csproj", "{323E00C6-5326-4BEE-8922-95B4DCEED039}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -344,6 +346,10 @@ Global
 		{A965FD3A-5869-468F-B86A-741F7E1F36D4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A965FD3A-5869-468F-B86A-741F7E1F36D4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A965FD3A-5869-468F-B86A-741F7E1F36D4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{323E00C6-5326-4BEE-8922-95B4DCEED039}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{323E00C6-5326-4BEE-8922-95B4DCEED039}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{323E00C6-5326-4BEE-8922-95B4DCEED039}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{323E00C6-5326-4BEE-8922-95B4DCEED039}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -68,6 +68,7 @@ public abstract class LocationArea : Entry
 
 public sealed class AmbientSound: LocationArea
 {
+    public SpawnTrigger Trigger { get; set; }
     public string Sound { get; set; } = string.Empty;
 }
 
@@ -90,13 +91,31 @@ public struct RRange
     int Max { get; set; } = 1;
 }
 
+/// <summary>
+/// The event to trigger the spawn at.
+/// </summary>
 [Flags]
 public enum SpawnTrigger
 {
-    OnEntry = 0b1,
-    OnTimeChange = 0b10,
-    OnSecond = 0b100,
-    OnTick = 0b10000,
+    /// <summary>
+    /// When the player enters the map.
+    /// </summary>
+    OnEntry = 0x1,
+    
+    /// <summary>
+    /// When the clock changes.
+    /// </summary>
+    OnTimeChange = 0x2,
+
+    /// <summary>
+    /// Every second.
+    /// </summary>
+    OnSecond = 0x4,
+
+    /// <summary>
+    /// Every tick (60x a second.) Use sparingly.
+    /// </summary>
+    OnTick = 0x8,
 }
 
 public enum CritterType
@@ -141,6 +160,8 @@ public sealed class CritterSpawn: LocationArea
 
 public sealed class SeaMonsterSpawn : LocationArea
 {
+    public SpawnTrigger Trigger { get; set; } = SpawnTrigger.OnEntry;
+
     public float Chance { get; set; } = 0f;
 }
 
@@ -155,4 +176,6 @@ public sealed class Model
     public List<SeaMonsterSpawn> SeaMonsterSpawn { get; set; } = new();
 
     public List<WaterColor> WaterColor { get; set; } = new();
+
+    public List<CritterSpawn> Critters { get; set; } = new();
 }

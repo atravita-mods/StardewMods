@@ -1,10 +1,11 @@
-﻿using System.Diagnostics;
+﻿namespace StopRugRemoval;
+
+using System.Diagnostics;
 
 using AtraBase.Toolkit.Extensions;
 
 using AtraCore.Framework.Caches;
 using AtraCore.Framework.QueuePlayerAlert;
-using AtraCore.Utilities;
 
 using AtraShared.ConstantsAndEnums;
 using AtraShared.Integrations;
@@ -30,8 +31,6 @@ using StopRugRemoval.HarmonyPatches.Niceties.PhoneTiming;
 using StopRugRemoval.HarmonyPatches.Volcano;
 
 using AtraUtils = AtraShared.Utils.Utils;
-
-namespace StopRugRemoval;
 
 /// <summary>
 /// Entry class to the mod.

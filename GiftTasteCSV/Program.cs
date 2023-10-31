@@ -1,7 +1,4 @@
 ﻿using System.Collections.Concurrent;
-using System.Globalization;
-using System.Xml.Linq;
-
 using Csv;
 
 using GiftTasteCSV.Constants;

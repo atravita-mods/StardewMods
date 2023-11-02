@@ -1,7 +1,7 @@
 ﻿using System.Diagnostics;
 using AtraShared.ConstantsAndEnums;
 
-namespace AtraCore.Models;
+namespace AtraCore.Framework.Models;
 
 /// <summary>
 /// The model used for DrawPrismatic's CP integration.

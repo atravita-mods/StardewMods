@@ -115,10 +115,12 @@ internal sealed class ModEntry : Mod
         // check for monster spawn, skip if there's one already.
         if (data.SeaMonsterSpawn.Count > 0 && !location.temporarySprites.Any(static s => s is SeaMonsterTemporarySprite))
         {
-            foreach (var monsterSpawn in data.SeaMonsterSpawn)
-            {
-                SeaMonsterSpawner.SpawnMonster(monsterSpawn, trigger, location, player);
-            }
+            SeaMonsterSpawner.SpawnMonster(data.SeaMonsterSpawn, trigger, location, player);
+        }
+
+        if (data.Sounds.Count > 0 && Game1.soundBank is not DummySoundBank)
+        {
+            AudioManager.PlaySound(data.Sounds, trigger, location, player);
         }
     }
 }

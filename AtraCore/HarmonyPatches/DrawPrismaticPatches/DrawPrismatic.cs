@@ -5,8 +5,8 @@ using System.Runtime.CompilerServices;
 using AtraBase.Toolkit;
 
 using AtraCore.Framework.ItemManagement;
+using AtraCore.Framework.Models;
 using AtraCore.Framework.ReflectionManager;
-using AtraCore.Models;
 
 using AtraShared.ConstantsAndEnums;
 using AtraShared.Utils.Extensions;

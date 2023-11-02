@@ -61,5 +61,9 @@
     <PackageReference Update="Leclair.Stardew.ModManifestBuilder" Version="2.1.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Models\" />
+  </ItemGroup>
+
   <ProjectExtensions><VisualStudio><UserProperties manifest_1json__JsonSchema="https://smapi.io/schemas/manifest.json" /></VisualStudio></ProjectExtensions>
 </Project>

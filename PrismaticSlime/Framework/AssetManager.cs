@@ -1,5 +1,5 @@
 ﻿using AtraCore;
-using AtraCore.Models;
+using AtraCore.Framework.Models;
 
 using AtraShared.ConstantsAndEnums;
 

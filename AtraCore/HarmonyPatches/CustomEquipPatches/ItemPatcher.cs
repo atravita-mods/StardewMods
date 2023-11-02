@@ -54,6 +54,9 @@ internal static class ItemPatcher
     // holds the remainder of health from the last round of health updates.
     private static readonly PerScreen<float> _healthRemainder = new(static () => 0f);
 
+    /// <summary>
+    /// Gets or sets a value indicating the "remainder" of health not yet granted to the player.
+    /// </summary>
     internal static float HealthRemainder
     {
         get => _healthRemainder.Value;
@@ -117,7 +120,7 @@ internal static class ItemPatcher
         {
             if (GetEffectsForTooltip(__instance) is { } effects)
             {
-                var temp = AdjustExtraRows(__result, font, horizontalBuffer, effects);
+                Point temp = AdjustExtraRows(__result, font, horizontalBuffer, effects);
                 __result.Y += temp.Y;
                 __result.X = Math.Max(__result.X, temp.X);
             }
@@ -136,7 +139,7 @@ internal static class ItemPatcher
         {
             if (GetEffectsForTooltip(__instance) is { } effects)
             {
-                var temp = AdjustExtraRows(__result, font, horizontalBuffer, effects);
+                Point temp = AdjustExtraRows(__result, font, horizontalBuffer, effects);
                 __result.Y += temp.Y;
                 __result.Y -= __instance.getNumberOfDescriptionCategories() * 48; // remove vanilla extra space.
                 __result.X = Math.Max(__result.X, temp.X);
@@ -606,7 +609,7 @@ internal static class ItemPatcher
     /// </summary>
     internal static void UpdateEquips(UpdateTickedEventArgs e)
     {
-        var currentPlayer = Game1.player;
+        Farmer currentPlayer = Game1.player;
         if (!Context.IsWorldReady || currentPlayer.currentLocation is not GameLocation currentLocation)
         {
             return;
@@ -1017,7 +1020,7 @@ internal static class ItemPatcher
 
     private static void RemoveItemLight(Item item, GameLocation location)
     {
-        if (_lightSources.Value.TryGetValue(item, out var lightID))
+        if (_lightSources.Value.TryGetValue(item, out int lightID))
         {
             ModEntry.ModMonitor.TraceOnlyLog($"[DataEquips] Removing light id {lightID:X}");
             location.removeLightSource(lightID);

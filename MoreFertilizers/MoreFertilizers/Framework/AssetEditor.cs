@@ -2,7 +2,7 @@
 
 using AtraCore;
 using AtraCore.Framework.Caches;
-using AtraCore.Models;
+using AtraCore.Framework.Models;
 
 using AtraShared.Caching;
 using AtraShared.ConstantsAndEnums;

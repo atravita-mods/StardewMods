@@ -9,7 +9,7 @@ using StardewModdingAPI.Utilities;
 /// <inheritdoc />
 internal sealed class ModEntry : Mod
 {
-    private readonly PerScreen<Model?> _activeModel = new();
+    private readonly PerScreen<LocationDataModel?> _activeModel = new();
 
     /// <summary>Gets the logger for this mod.</summary>
     internal static IMonitor ModMonitor { get; private set; } = null!;
@@ -83,9 +83,9 @@ internal sealed class ModEntry : Mod
             return;
         }
 
-        this.Monitor.VerboseLog($"Switching from {e.OldLocation?.Name ?? "null"} to {e.NewLocation?.Name ?? "null" }");
+        this.Monitor.VerboseLog($"Switching from {e.OldLocation?.Name ?? "null"} to {e.NewLocation?.Name ?? "null"}.");
 
-        if (e.NewLocation is null || !AssetManager.Data.TryGetValue(e.NewLocation.Name, out Model? data))
+        if (e.NewLocation is null || !AssetManager.Data.TryGetValue(e.NewLocation.Name, out LocationDataModel? data))
         {
             this._activeModel.Value = null;
             return;
@@ -110,7 +110,7 @@ internal sealed class ModEntry : Mod
         SpawnCrittersAndMonsters(data, SpawnTrigger.OnEntry, e.NewLocation, e.Player);
     }
 
-    private static void SpawnCrittersAndMonsters(Model data, SpawnTrigger trigger, GameLocation location, Farmer player)
+    private static void SpawnCrittersAndMonsters(LocationDataModel data, SpawnTrigger trigger, GameLocation location, Farmer player)
     {
         // check for monster spawn, skip if there's one already.
         if (data.SeaMonsterSpawn.Count > 0 && !location.temporarySprites.Any(static s => s is SeaMonsterTemporarySprite))

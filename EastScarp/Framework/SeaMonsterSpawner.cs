@@ -19,10 +19,12 @@ internal static class SeaMonsterSpawner
                 return;
             }
 
-            if (Random.Shared.NextBool(spawn.Chance))
+            if (!Random.Shared.NextBool(spawn.Chance))
             {
                 return;
             }
+
+            var area = spawn.Area.ClampMap(location);
         }
     }
 }

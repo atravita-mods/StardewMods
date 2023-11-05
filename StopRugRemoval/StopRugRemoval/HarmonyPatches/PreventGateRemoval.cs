@@ -85,6 +85,7 @@ internal static class PreventGateRemoval
             {
                 (OpCodes.Ldstr, "(T)Pickaxe"),
             })
+            .Advance(1)
             .FindPrev(new CodeInstructionWrapper[]
             { // !value.IsPassable()
                 SpecialCodeInstructionCases.LdLoc,

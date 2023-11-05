@@ -51,6 +51,7 @@ internal static class AudioManager
 
             try
             {
+                ModEntry.ModMonitor.VerboseLog($"Playing sound cue {sound.Sound}");
                 int? pitch = null;
                 if (sound.Pitches?.Count is > 0)
                 {
@@ -71,6 +72,7 @@ internal static class AudioManager
                 {
                     _current.Value = new (newCue);
                 }
+                break;
             }
             catch (Exception ex)
             {

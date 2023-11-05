@@ -3,6 +3,7 @@
 namespace AtraCore.HarmonyPatches.CustomEquipPatches;
 
 using System;
+using System.Diagnostics;
 using System.Runtime.CompilerServices;
 
 using AtraBase.Toolkit;
@@ -607,6 +608,7 @@ internal static class ItemPatcher
     /// <summary>
     /// Updates the current lights.
     /// </summary>
+    [MethodImpl(TKConstants.Hot)]
     internal static void UpdateEquips(UpdateTickedEventArgs e)
     {
         Farmer currentPlayer = Game1.player;

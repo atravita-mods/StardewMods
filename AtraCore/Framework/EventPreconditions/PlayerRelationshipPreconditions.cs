@@ -1,4 +1,7 @@
 ﻿using AtraShared.ConstantsAndEnums;
+using AtraShared.Utils.Extensions;
+
+using StardewValley.Delegates;
 
 namespace AtraCore.Framework.EventPreconditions;
 
@@ -7,11 +10,12 @@ namespace AtraCore.Framework.EventPreconditions;
 /// </summary>
 internal static class PlayerRelationshipPreconditions
 {
-    internal static bool PlayerRelationshipStatus(GameLocation location, string event_id, string[] split)
+    /// <inheritdoc cref="EventPreconditionDelegate"/>
+    internal static bool PlayerRelationshipStatus(GameLocation location, string eventId, string[] split)
     {
-        if (FriendshipEnumExtensions.TryParse(split[1], out FriendshipEnum friendshipEnum))
+        if (split.Length < 2 || !FriendshipEnumExtensions.TryParse(split[1], out FriendshipEnum friendshipEnum, ignoreCase: true))
         {
-            ModEntry.ModMonitor.Log($"Checking event preconditions for '{event_id}' failed: unknown value for relationship: '{split[1]}'", LogLevel.Warn);
+            ModEntry.ModMonitor.Log($"Checking event preconditions for '{eventId}' failed: unknown value for relationship: '{split[1]}'", LogLevel.Warn);
             return false;
         }
 
@@ -34,11 +38,11 @@ internal static class PlayerRelationshipPreconditions
             }
             case FriendshipEnum.Married:
             {
-                return Game1.player.isMarried();
+                return Game1.player.IsMarried();
             }
             default:
             {
-                ModEntry.ModMonitor.Log($"Checking event preconditions for '{event_id}' failed: invalid value for relationship: '{split[1]}'", LogLevel.Warn);
+                ModEntry.ModMonitor.Log($"Checking event preconditions for '{eventId}' failed: invalid value for relationship: '{split[1]}'", LogLevel.Warn);
                 return false;
             }
         }

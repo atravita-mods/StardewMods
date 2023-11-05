@@ -130,7 +130,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MapAndTileProperties", "Map
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Deprecated", "Deprecated", "{51E1CEE0-2A1B-475C-B9D6-1AF57100DDBF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EastScarp", "EastScarp\EastScarp.csproj", "{323E00C6-5326-4BEE-8922-95B4DCEED039}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EastScarp", "EastScarp\EastScarp.csproj", "{323E00C6-5326-4BEE-8922-95B4DCEED039}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AtraBaseTests", "AtraBase\AtraBaseTests\AtraBaseTests.csproj", "{222DA76B-DC35-4382-A427-98992DBDC6F7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SinZsEventTester", "SinZsEventTester\SinZsEventTester.csproj", "{98697A86-1709-4C62-89D2-329738B386D3}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -350,6 +354,14 @@ Global
 		{323E00C6-5326-4BEE-8922-95B4DCEED039}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{323E00C6-5326-4BEE-8922-95B4DCEED039}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{323E00C6-5326-4BEE-8922-95B4DCEED039}.Release|Any CPU.Build.0 = Release|Any CPU
+		{222DA76B-DC35-4382-A427-98992DBDC6F7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{222DA76B-DC35-4382-A427-98992DBDC6F7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{222DA76B-DC35-4382-A427-98992DBDC6F7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{222DA76B-DC35-4382-A427-98992DBDC6F7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{98697A86-1709-4C62-89D2-329738B386D3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{98697A86-1709-4C62-89D2-329738B386D3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{98697A86-1709-4C62-89D2-329738B386D3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{98697A86-1709-4C62-89D2-329738B386D3}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -362,6 +374,7 @@ Global
 	EndGlobalSection
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
 		AtraBase\AtraBase\AtraBase.projitems*{0cf9b517-0f07-46a1-92fc-659454d17889}*SharedItemsImports = 5
+		AtraBase\AtraBase\AtraBase.projitems*{222da76b-dc35-4382-a427-98992dbdc6f7}*SharedItemsImports = 5
 		AtraBase\AtraBase\AtraBase.projitems*{2db924cc-3230-4c0a-8e9b-967cdeda2e23}*SharedItemsImports = 13
 		AtraBase\AtraBase\AtraBase.projitems*{3b016280-a267-4c67-affe-999c2b25e527}*SharedItemsImports = 5
 		AtraShared\AtraShared.projitems*{3b016280-a267-4c67-affe-999c2b25e527}*SharedItemsImports = 5

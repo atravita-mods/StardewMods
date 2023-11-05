@@ -275,7 +275,7 @@ public sealed class InventoryBush : SObject
                 this.GetScaleSize() * scaleSize,
                 SpriteEffects.None,
                 layerDepth);
-            if ((drawStackNumber == StackDrawType.Draw && this.maximumStackSize() > 1 && this.Stack > 1 || drawStackNumber == StackDrawType.Draw_OneInclusive)
+            if (((drawStackNumber == StackDrawType.Draw && this.maximumStackSize() > 1 && this.Stack > 1) || drawStackNumber == StackDrawType.Draw_OneInclusive)
                 && scaleSize > 0.3f && this.Stack != int.MaxValue)
             {
                 Utility.drawTinyDigits(
@@ -503,7 +503,7 @@ public sealed class InventoryBush : SObject
             case BushSizes.Small:
                 return new Rectangle(season * 32, 224, 16, 32);
             case BushSizes.SmallAlt:
-                return new Rectangle(season * 32 + 16, 224, 16, 32);
+                return new Rectangle((season * 32) + 16, 224, 16, 32);
             case BushSizes.Medium:
                 int y = Math.DivRem(season * 64, Bush.texture.Value.Bounds.Width, out int x);
                 return new Rectangle(x, y * 48, 32, 48);
@@ -563,14 +563,14 @@ public sealed class InventoryBush : SObject
         const float gravity = 0.0025f;
 
         float velocity = -0.7f - MathF.Sqrt(2 * 60f * gravity);
-        float time = MathF.Sqrt(velocity * velocity - gravity * deltaY * 2f) / gravity - velocity / gravity;
+        float time = (MathF.Sqrt(velocity * velocity - gravity * deltaY * 2f) / gravity) - (velocity / gravity);
 
         Vector2 landingPos = new Vector2(tile.X + Math.Max(0, width / 2 - 1), tile.Y) * 64f;
 
         TemporaryAnimatedSprite bushTas = new(
             "TileSheets/bushes",
             this.sourceRect,
-            tile * 64f - new Vector2(0, this.sourceRect.Y / 16),
+            (tile * 64f) - new Vector2(0, this.sourceRect.Y / 16),
             false,
             0f,
             Color.White)

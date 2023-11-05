@@ -41,4 +41,19 @@ public static class FarmerExtensions
             _ => Vector2.Zero,
         };
     }
+
+    /// <summary>
+    /// Basically a copy of the old IsMarried, just moved to an extension method.
+    /// </summary>
+    /// <param name="farmer">The farmer to check.</param>
+    /// <returns>Whether or not the farmer is married.</returns>
+    public static bool IsMarried(this Farmer farmer)
+    {
+        if (farmer.team.IsMarried(farmer.UniqueMultiplayerID))
+        {
+            return true;
+        }
+        return farmer.spouse is { } spouse && farmer.friendshipData.TryGetValue(spouse, out var friendship)
+            && friendship.IsMarried() && !friendship.RoommateMarriage;
+    }
 }

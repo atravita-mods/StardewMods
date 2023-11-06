@@ -1,0 +1,20 @@
+{
+  /*
+   | This file is automatically updated by ModManifestBuilder
+   | when the project is compiled.
+   | 
+   | Changes made to this file may be overwritten.
+   | 
+   */
+  "$schema": "https://smapi.io/schemas/manifest.json",
+  "UniqueID": "atravita.SinZsEventTester",
+  "Name": "Event tester",
+  "Author": "atravita",
+  "Version": "0.0.1-Debug",
+  "Description": "event tester",
+  "MinimumApiVersion": "3.18",
+  "EntryDll": "SinZsEventTester.dll",
+  "UpdateKeys": [
+    "-1"
+  ]
+}

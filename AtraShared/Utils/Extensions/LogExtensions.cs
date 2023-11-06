@@ -41,7 +41,6 @@ public static class LogExtensions
     /// <param name="action">The current actions being taken when the exception happened.</param>
     /// <param name="ex">The exception.</param>
     [DebuggerHidden]
-    [MethodImpl(TKConstants.Hot)]
     public static void LogError(this IMonitor monitor, string action, Exception ex)
     {
         monitor.Log($"Mod failed while {action}, see log for details.", LogLevel.Error);

@@ -20,7 +20,7 @@ using StardewValley.Menus;
 [HarmonyPatch(typeof(LevelUpMenu))]
 internal class RewriteMissedLevelUpRecipes
 {
-    private const int SKILLCOUNT = 5; // the total number of skills.
+    private const int SKILLCOUNT = 6; // the total number of skills. We'll sneakily include luck here.
     private static readonly char[] SkillCaps = new[] { 'F', 'M', 'C', 'L' };
 
     /// <summary>

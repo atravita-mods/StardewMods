@@ -47,6 +47,10 @@ internal static class AssetManager
         {
             e.LoadFromModFile<Dictionary<string, EmojiData>>("assets/emoji_data.json", AssetLoadPriority.Exclusive);
         }
+        else if (e.Name.IsEquivalentTo(durationOverride))
+        {
+            e.LoadFromModFile<Dictionary<string, string>>("assets/duration_override.json", AssetLoadPriority.Exclusive);
+        }
     }
 
     /// <inheritdoc cref="IContentEvents.AssetsInvalidated"/>

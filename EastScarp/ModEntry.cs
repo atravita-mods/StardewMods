@@ -1,7 +1,10 @@
 ﻿namespace EastScarp;
 
 using EastScarp.Framework;
+using EastScarp.HarmonyPatches;
 using EastScarp.Models;
+
+using HarmonyLib;
 
 using StardewModdingAPI.Events;
 using StardewModdingAPI.Utilities;
@@ -27,6 +30,25 @@ internal sealed class ModEntry : Mod
         helper.Events.GameLoop.TimeChanged += this.OnTimeChanged;
         helper.Events.GameLoop.OneSecondUpdateTicked += this.OnSecondTicked;
         helper.Events.GameLoop.UpdateTicked += this.OnTicked;
+
+        // emoji
+        CustomEmoji.Init(helper.GameContent);
+        helper.Events.Content.AssetReady += static (_, e) => CustomEmoji.Ready(e);
+        helper.Events.Content.AssetsInvalidated += static (_, e) => CustomEmoji.Reset(e.NamesWithoutLocale);
+
+        this.ApplyPatches(new(this.ModManifest.UniqueID));
+    }
+
+    private void ApplyPatches(Harmony harmony)
+    {
+        try
+        {
+            harmony.PatchAll(typeof(ModEntry).Assembly);
+        }
+        catch (Exception ex)
+        {
+            this.Monitor.LogError("applying harmony patches", ex);
+        }
     }
 
     private void OnTimeChanged(object? sender, TimeChangedEventArgs e)
@@ -116,6 +138,11 @@ internal sealed class ModEntry : Mod
         if (data.SeaMonsterSpawn.Count > 0 && !location.temporarySprites.Any(static s => s is SeaMonsterTemporarySprite))
         {
             SeaMonsterSpawner.SpawnMonster(data.SeaMonsterSpawn, trigger, location, player);
+        }
+
+        if (data.Critters.Count > 0)
+        {
+            Critters.SpawnCritter(data.Critters, trigger, location, player);
         }
 
         if (data.Sounds.Count > 0 && Game1.soundBank is not DummySoundBank)

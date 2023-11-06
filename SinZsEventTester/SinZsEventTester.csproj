@@ -7,14 +7,14 @@
   </PropertyGroup>
 
   <PropertyGroup>
-    <Name>East Scarp C#</Name>
-    <Description>ES C# component</Description>
-    <Version>0.1.0</Version>
+    <Name>Event tester</Name>
+    <Description>event tester</Description>
+    <Version>0.0.1</Version>
     <UpdateKeys>-1</UpdateKeys>
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="i18n\default.json" />
+    <Reference Include="Newtonsoft.Json" HintPath="$(GamePath)\smapi-internal\Newtonsoft.Json.dll" private="false" />
   </ItemGroup>
 
   <ItemGroup>
@@ -26,5 +26,6 @@
     <Using Alias="Object" Include="System.Object" />
     <Using Alias="SObject" Include="StardewValley.Object" />
   </ItemGroup>
+
 
 </Project>

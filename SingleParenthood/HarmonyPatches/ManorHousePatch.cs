@@ -35,7 +35,7 @@ internal static class ManorHousePatch
                 {
                     Game1.player.modData.SetEnum(ModEntry.Relationship, RelationshipType.Roommates);
                 }
-                else if (Game1.player.isMarried())
+                else if (Game1.player.IsMarried())
                 {
                     Game1.player.modData.SetEnum(ModEntry.Relationship, RelationshipType.Married);
                 }
@@ -65,7 +65,7 @@ internal static class ManorHousePatch
             }
             try
             {
-                if (Game1.player.isMarried())
+                if (Game1.player.IsMarried())
                 {
                     Response[] responses = new Response[]
                     {

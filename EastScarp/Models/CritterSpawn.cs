@@ -9,6 +9,8 @@ public sealed class CritterSpawn : LocationArea
 
     public CritterType Critter { get; set; }
 
+    public float Chance { get; set; }
+
     public float ChanceOnLand { get; set; }
 
     public float ChanceOnWater { get; set; }
